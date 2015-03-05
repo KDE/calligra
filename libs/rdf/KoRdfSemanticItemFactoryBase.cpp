@@ -25,14 +25,15 @@ class KoRdfSemanticItemFactoryBase::Private
 {
 public:
     Private(const QString &identifier)
-            : id(identifier) {
+        : id(identifier)
+    {
     }
 
     const QString id;
 };
 
 KoRdfSemanticItemFactoryBase::KoRdfSemanticItemFactoryBase(const QString &id)
-        : d(new Private(id))
+    : d(new Private(id))
 {
 }
 

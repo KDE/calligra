@@ -103,14 +103,14 @@ public:
     explicit Number(int num); //krazy:exclude=explicit
     explicit Number(long double num); //krazy:exclude=explicit
 
-    Number(const Number& n);
+    Number(const Number &n);
 
     ~Number();
 
     long double asFloat() const;
 
     // set/get
-    Number& operator= (const Number &n);
+    Number &operator= (const Number &n);
 
     // basic operations
     Number operator+ (const Number &n) const;
@@ -123,10 +123,12 @@ public:
     void operator*= (const Number &n);
     void operator/= (const Number &n);
 
-    void operator++ () {
+    void operator++ ()
+    {
         return operator+= (1);
     }
-    void operator-- () {
+    void operator-- ()
+    {
         return operator-= (1);
     }
 
@@ -139,13 +141,16 @@ public:
     bool operator<= (const Number &n) const;
     bool operator< (const Number &n) const;
     bool operator== (const Number &n) const;
-    bool operator!= (const Number &n) const {
+    bool operator!= (const Number &n) const
+    {
         return (!operator== (n));
     }
-    bool operator>= (const Number &n) const {
+    bool operator>= (const Number &n) const
+    {
         return (!operator< (n));
     }
-    bool operator> (const Number &n) const {
+    bool operator> (const Number &n) const
+    {
         return (!operator<= (n));
     }
 

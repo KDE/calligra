@@ -18,7 +18,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_lens_blur_filter.h"
 #include "kis_wdg_lens_blur.h"
 
@@ -38,7 +37,6 @@
 
 #include <math.h>
 
-
 KisLensBlurFilter::KisLensBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Lens Blur..."))
 {
     setSupportsPainting(true);
@@ -46,12 +44,12 @@ KisLensBlurFilter::KisLensBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisLensBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget *KisLensBlurFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP) const
 {
     return new KisWdgLensBlur(parent);
 }
 
-QSize KisLensBlurFilter::getKernelHalfSize(const KisFilterConfiguration* config)
+QSize KisLensBlurFilter::getKernelHalfSize(const KisFilterConfiguration *config)
 {
     QPolygonF iris = getIrisPolygon(config);
     QRect rect = iris.boundingRect().toAlignedRect();
@@ -62,9 +60,9 @@ QSize KisLensBlurFilter::getKernelHalfSize(const KisFilterConfiguration* config)
     return QSize(w, h);
 }
 
-KisFilterConfiguration* KisLensBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisLensBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("irisShape", "Pentagon (5)");
     config->setProperty("irisRadius", 5);
     config->setProperty("irisRotation", 0);
@@ -76,9 +74,11 @@ KisFilterConfiguration* KisLensBlurFilter::factoryConfiguration(const KisPaintDe
     return config;
 }
 
-QPolygonF KisLensBlurFilter::getIrisPolygon(const KisFilterConfiguration* config)
+QPolygonF KisLensBlurFilter::getIrisPolygon(const KisFilterConfiguration *config)
 {
-    KIS_ASSERT_RECOVER(config) { return QPolygonF(); }
+    KIS_ASSERT_RECOVER(config) {
+        return QPolygonF();
+    }
 
     QVariant value;
     config->getProperty("irisShape", value);
@@ -88,21 +88,30 @@ QPolygonF KisLensBlurFilter::getIrisPolygon(const KisFilterConfiguration* config
     config->getProperty("irisRotation", value);
     uint irisRotation = value.toUInt();
 
-    if (irisRadius < 1)
+    if (irisRadius < 1) {
         return QPolygon();
+    }
 
     QPolygonF irisShapePoly;
 
     int sides = 1;
     qreal angle = 0;
 
-    if (irisShape == "Triangle") sides = 3;
-    else if (irisShape == "Quadrilateral (4)") sides = 4;
-    else if (irisShape == "Pentagon (5)") sides = 5;
-    else if (irisShape == "Hexagon (6)") sides = 6;
-    else if (irisShape == "Heptagon (7)") sides = 7;
-    else if (irisShape == "Octagon (8)") sides = 8;
-    else return QPolygonF();
+    if (irisShape == "Triangle") {
+        sides = 3;
+    } else if (irisShape == "Quadrilateral (4)") {
+        sides = 4;
+    } else if (irisShape == "Pentagon (5)") {
+        sides = 5;
+    } else if (irisShape == "Hexagon (6)") {
+        sides = 6;
+    } else if (irisShape == "Heptagon (7)") {
+        sides = 7;
+    } else if (irisShape == "Octagon (8)") {
+        sides = 8;
+    } else {
+        return QPolygonF();
+    }
 
     for (int i = 0; i < sides; ++i) {
         irisShapePoly << QPointF(0.5 * cos(angle), 0.5 * sin(angle));
@@ -119,27 +128,31 @@ QPolygonF KisLensBlurFilter::getIrisPolygon(const KisFilterConfiguration* config
 }
 
 void KisLensBlurFilter::processImpl(KisPaintDeviceSP device,
-                                    const QRect& rect,
-                                    const KisFilterConfiguration* config,
-                                    KoUpdater* progressUpdater
-                                    ) const
+                                    const QRect &rect,
+                                    const KisFilterConfiguration *config,
+                                    KoUpdater *progressUpdater
+                                   ) const
 {
     QPoint srcTopLeft = rect.topLeft();
 
     Q_ASSERT(device != 0);
 
-    if (!config) config = new KisFilterConfiguration(id().id(), 1);
+    if (!config) {
+        config = new KisFilterConfiguration(id().id(), 1);
+    }
 
     QBitArray channelFlags;
     if (config) {
         channelFlags = config->channelFlags();
-    } 
+    }
     if (channelFlags.isEmpty() || !config) {
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
 
     QPolygonF transformedIris = getIrisPolygon(config);
-    if (transformedIris.isEmpty()) return;
+    if (transformedIris.isEmpty()) {
+        return;
+    }
 
     QRectF boundingRect = transformedIris.boundingRect();
 
@@ -175,7 +188,7 @@ void KisLensBlurFilter::processImpl(KisPaintDeviceSP device,
     painter.applyMatrix(kernel, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
 }
 
-QRect KisLensBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisLensBlurFilter::neededRect(const QRect &rect, const KisFilterConfiguration *_config) const
 {
     QVariant value;
     const int halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
@@ -184,7 +197,7 @@ QRect KisLensBlurFilter::neededRect(const QRect & rect, const KisFilterConfigura
     return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }
 
-QRect KisLensBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisLensBlurFilter::changedRect(const QRect &rect, const KisFilterConfiguration *_config) const
 {
     QVariant value;
     const int halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;

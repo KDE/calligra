@@ -35,23 +35,23 @@ private:
     KisRecordedActionCreatorFactoryRegistry();
     ~KisRecordedActionCreatorFactoryRegistry();
 public:
-    static KisRecordedActionCreatorFactoryRegistry* instance();
+    static KisRecordedActionCreatorFactoryRegistry *instance();
     /**
      * Add a factory of action creator.
      */
-    void add(KisRecordedActionCreatorFactory* factory);
+    void add(KisRecordedActionCreatorFactory *factory);
     /**
      * @return an creator for the given action, or a null pointer if there is
      *         no factory for that action.
      */
-    KisRecordedActionCreatorFactory* get(const QString& _id) const;
+    KisRecordedActionCreatorFactory *get(const QString &_id) const;
     /**
      * @return the list of creators
      */
     QList<KoID> creators() const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

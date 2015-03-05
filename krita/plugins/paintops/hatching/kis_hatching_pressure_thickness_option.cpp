@@ -24,14 +24,15 @@
 #include <kis_painter.h>
 #include <KoColor.h>
 
-
 KisHatchingPressureThicknessOption::KisHatchingPressureThicknessOption()
     : KisCurveOption(i18n("Thickness"), "Thickness", KisPaintOpOption::generalCategory(), false)
 {
 }
 
-double KisHatchingPressureThicknessOption::apply(const KisPaintInformation & info) const
+double KisHatchingPressureThicknessOption::apply(const KisPaintInformation &info) const
 {
-    if (!isChecked()) return 0.5;
+    if (!isChecked()) {
+        return 0.5;
+    }
     return computeValue(info);
 }

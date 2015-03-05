@@ -28,11 +28,11 @@
 
 class KisPainter;
 
-
 class KRITAUI_EXPORT FreehandStrokeStrategy : public KisPainterBasedStrokeStrategy
 {
 public:
-    class Data : public KisStrokeJobData {
+    class Data : public KisStrokeJobData
+    {
     public:
         enum DabType {
             POINT,
@@ -72,23 +72,22 @@ public:
              DabType _type,
              const vQPointF &_points)
             : node(_node), painterInfo(_painterInfo),
-            type(_type), points(_points)
+              type(_type), points(_points)
         {}
 
         Data(KisNodeSP _node, PainterInfo *_painterInfo,
              DabType _type,
              const QRectF &_rect)
             : node(_node), painterInfo(_painterInfo),
-            type(_type), rect(_rect)
+              type(_type), rect(_rect)
         {}
 
         Data(KisNodeSP _node, PainterInfo *_painterInfo,
              DabType _type,
              const QPainterPath &_path)
             : node(_node), painterInfo(_painterInfo),
-            type(_type), path(_path)
+              type(_type), path(_path)
         {}
-
 
         KisNodeSP node;
         PainterInfo *painterInfo;
@@ -114,7 +113,7 @@ public:
     FreehandStrokeStrategy(bool needsIndirectPainting,
                            const QString &indirectPaintingCompositeOp,
                            KisResourcesSnapshotSP resources,
-                           QVector<PainterInfo*> painterInfos,
+                           QVector<PainterInfo *> painterInfos,
                            const KUndo2MagicString &name);
 
     void doStrokeCallback(KisStrokeJobData *data);

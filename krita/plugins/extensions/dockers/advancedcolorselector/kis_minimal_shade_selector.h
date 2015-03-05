@@ -29,15 +29,15 @@ class KisColorSelectorBaseProxy;
 
 class KisMinimalShadeSelector : public KisColorSelectorBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit KisMinimalShadeSelector(QWidget *parent = 0);
     ~KisMinimalShadeSelector();
     void unsetCanvas();
-    void setCanvas(KisCanvas2* canvas);
+    void setCanvas(KisCanvas2 *canvas);
 
 protected:
-    void setColor(const KoColor& color);
+    void setColor(const KoColor &color);
     void mouseMoveEvent(QMouseEvent *);
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
@@ -46,14 +46,14 @@ public Q_SLOTS:
     void updateSettings();
 
 protected Q_SLOTS:
-    void canvasResourceChanged(int key, const QVariant& v);
+    void canvasResourceChanged(int key, const QVariant &v);
 
 protected:
     void paintEvent(QPaintEvent *);
-    virtual KisColorSelectorBase* createPopup() const;
+    virtual KisColorSelectorBase *createPopup() const;
 
 private:
-    QList<KisShadeSelectorLine*> m_shadingLines;
+    QList<KisShadeSelectorLine *> m_shadingLines;
     KoColor m_lastRealColor;
     QPointer<KisCanvas2> m_canvas;
 

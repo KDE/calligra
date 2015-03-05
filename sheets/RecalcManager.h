@@ -74,7 +74,7 @@ public:
      *
      * \see recalc()
      */
-    void regionChanged(const Region& region);
+    void regionChanged(const Region &region);
 
     /**
      * Recalculates the sheet \p sheet .
@@ -82,7 +82,7 @@ public:
      *
      * \see recalc()
      */
-    void recalcSheet(Sheet* const sheet);
+    void recalcSheet(Sheet *const sheet);
 
     /**
      * Recalculates the whole map.
@@ -127,7 +127,7 @@ private:
     Q_DISABLE_COPY(RecalcManager)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

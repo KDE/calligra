@@ -40,12 +40,10 @@
 #include <kis_paintop_preset.h>
 #include <kis_workspace_resource.h>
 
-
 #include <kis_brush_server.h>
 
 typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
-
 
 KisResourceServerProvider::KisResourceServerProvider()
 {
@@ -56,7 +54,7 @@ KisResourceServerProvider::KisResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
-    
+
     m_paintOpPresetServer = new KisPaintOpPresetResourceServer("kis_paintoppresets", "*.kpp");
     if (!QFileInfo(m_paintOpPresetServer->saveLocation()).exists()) {
         QDir().mkpath(m_paintOpPresetServer->saveLocation());
@@ -77,7 +75,6 @@ KisResourceServerProvider::KisResourceServerProvider()
         workspaceThread->barrier();
     }
 
-
     connect(this, SIGNAL(notifyBrushBlacklistCleanup()),
             brushServer, SLOT(slotRemoveBlacklistedResources()));
 
@@ -92,22 +89,25 @@ KisResourceServerProvider::~KisResourceServerProvider()
     delete m_workspaceServer;
 }
 
-KisResourceServerProvider* KisResourceServerProvider::instance()
+KisResourceServerProvider *KisResourceServerProvider::instance()
 {
     K_GLOBAL_STATIC(KisResourceServerProvider, s_instance);
     return s_instance;
 }
 
-
-KisPaintOpPresetResourceServer* KisResourceServerProvider::paintOpPresetServer(bool block)
+KisPaintOpPresetResourceServer *KisResourceServerProvider::paintOpPresetServer(bool block)
 {
-    if (block) paintOpPresetThread->barrier();
+    if (block) {
+        paintOpPresetThread->barrier();
+    }
     return m_paintOpPresetServer;
 }
 
-KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceServer(bool block)
+KoResourceServer< KisWorkspaceResource > *KisResourceServerProvider::workspaceServer(bool block)
 {
-    if (block) workspaceThread->barrier();
+    if (block) {
+        workspaceThread->barrier();
+    }
     return m_workspaceServer;
 }
 
@@ -115,6 +115,5 @@ void KisResourceServerProvider::brushBlacklistCleanup()
 {
     emit notifyBrushBlacklistCleanup();
 }
-
 
 #include "kis_resource_server_provider.moc"

@@ -28,8 +28,8 @@ void KoColorSpacesBenchmark::createRowsColumns()
 {
     QTest::addColumn<QString>("modelID");
     QTest::addColumn<QString>("depthID");
-    QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
-    foreach(const KoColorSpace* colorSpace, colorSpaces) {
+    QList<const KoColorSpace *> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
+    foreach (const KoColorSpace *colorSpace, colorSpaces) {
         QTest::newRow(colorSpace->name().toLatin1().data()) << colorSpace->colorModelId().id() << colorSpace->colorDepthId().id();
     }
 }
@@ -55,8 +55,9 @@ void KoColorSpacesBenchmark::benchmarkAlpha()
 {
     START_BENCHMARK
     QBENCHMARK {
-        quint8* data_it = data;
-        for (int i = 0; i < NB_PIXELS; ++i) {
+        quint8 *data_it = data;
+        for (int i = 0; i < NB_PIXELS; ++i)
+        {
             colorSpace->opacityU8(data_it);
             data_it += pixelSize;
         }
@@ -73,8 +74,9 @@ void KoColorSpacesBenchmark::benchmarkAlpha2()
 {
     START_BENCHMARK
     QBENCHMARK {
-        quint8* data_it = data;
-        for (int i = 0; i < NB_PIXELS; ++i) {
+        quint8 *data_it = data;
+        for (int i = 0; i < NB_PIXELS; ++i)
+        {
             colorSpace->opacityF(data_it);
             data_it += pixelSize;
         }
@@ -119,8 +121,9 @@ void KoColorSpacesBenchmark::benchmarkSetAlphaIndividualCall()
 {
     START_BENCHMARK
     QBENCHMARK {
-        quint8* data_it = data;
-        for (int i = 0; i < NB_PIXELS; ++i) {
+        quint8 *data_it = data;
+        for (int i = 0; i < NB_PIXELS; ++i)
+        {
             colorSpace->setOpacity(data_it, OPACITY_OPAQUE_U8, 1);
             data_it += pixelSize;
         }
@@ -137,8 +140,9 @@ void KoColorSpacesBenchmark::benchmarkSetAlpha2IndividualCall()
 {
     START_BENCHMARK
     QBENCHMARK {
-        quint8* data_it = data;
-        for (int i = 0; i < NB_PIXELS; ++i) {
+        quint8 *data_it = data;
+        for (int i = 0; i < NB_PIXELS; ++i)
+        {
             colorSpace->setOpacity(data_it, OPACITY_OPAQUE_F, 1);
             data_it += pixelSize;
         }

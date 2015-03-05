@@ -24,9 +24,9 @@
 #include <QInputMethodEvent>
 
 KexiDBDatePicker::KexiDBDatePicker(QWidget *parent)
-        : KDatePicker(parent)
-        , KexiFormDataItemInterface()
-        , m_dateEditFocused(false)
+    : KDatePicker(parent)
+    , KexiFormDataItemInterface()
+    , m_dateEditFocused(false)
 {
     connect(this, SIGNAL(dateChanged(QDate)), this, SLOT(slotValueChanged()));
     connect(this, SIGNAL(dateEntered(QDate)), this, SLOT(slotValueChanged()));
@@ -36,27 +36,29 @@ KexiDBDatePicker::~KexiDBDatePicker()
 {
 }
 
-void KexiDBDatePicker::setInvalidState(const QString& displayText)
+void KexiDBDatePicker::setInvalidState(const QString &displayText)
 {
     Q_UNUSED(displayText);
     m_invalidState = true;
     setEnabled(false);
     setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-    if (focusPolicy() & Qt::TabFocus)
+    if (focusPolicy() & Qt::TabFocus) {
         setFocusPolicy(Qt::ClickFocus);
+    }
     KDatePicker::setDate(QDate());
 }
 
 void KexiDBDatePicker::setEnabled(bool enabled)
 {
     // prevent the user from reenabling the widget when it is in invalid state
-    if (enabled && m_invalidState)
+    if (enabled && m_invalidState) {
         return;
+    }
     KDatePicker::setEnabled(enabled);
 }
 
-void KexiDBDatePicker::setValueInternal(const QVariant&, bool)
+void KexiDBDatePicker::setValueInternal(const QVariant &, bool)
 {
     KDatePicker::setDate(KexiDataItemInterface::originalValue().toDate());
 }
@@ -91,20 +93,20 @@ void KexiDBDatePicker::setReadOnly(bool set)
     m_readOnly = set;
 }
 
-QWidget* KexiDBDatePicker::widget()
+QWidget *KexiDBDatePicker::widget()
 {
     return this;
 }
 
 bool KexiDBDatePicker::cursorAtStart()
 {
-    const KLineEdit *lineEdit=findChild<KLineEdit*>();
+    const KLineEdit *lineEdit = findChild<KLineEdit *>();
     return lineEdit && lineEdit->hasFocus() && lineEdit->cursorPosition() == 0;
 }
 
 bool KexiDBDatePicker::cursorAtEnd()
 {
-    const KLineEdit *lineEdit = findChild<KLineEdit*>();
+    const KLineEdit *lineEdit = findChild<KLineEdit *>();
     return lineEdit && lineEdit->hasFocus() && lineEdit->cursorPosition() == lineEdit->text().length();
 }
 

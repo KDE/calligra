@@ -42,7 +42,7 @@ K_PLUGIN_FACTORY(RotateImageFactory, registerPlugin<RotateImage>();)
 K_EXPORT_PLUGIN(RotateImageFactory("krita"))
 
 RotateImage::RotateImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+    : KisViewPlugin(parent)
 {
 
     KisAction *action  = new KisAction(i18n("&Rotate Image..."), this);
@@ -108,9 +108,11 @@ void RotateImage::slotRotateImage()
 {
     KisImageWSP image = m_view->image();
 
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
-    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view->mainWindow(), "RotateImage");
+    DlgRotateImage *dlgRotateImage = new DlgRotateImage(m_view->mainWindow(), "RotateImage");
     Q_CHECK_PTR(dlgRotateImage);
 
     dlgRotateImage->setCaption(i18n("Rotate Image"));
@@ -134,20 +136,24 @@ void RotateImage::slotRotateImage180()
 
 void RotateImage::slotRotateImage270()
 {
-    m_view->imageManager()->rotateCurrentImage(- M_PI / 2 + M_PI*2);
+    m_view->imageManager()->rotateCurrentImage(- M_PI / 2 + M_PI * 2);
 }
 
 void RotateImage::slotMirrorImageVertical()
 {
     KisImageWSP image = m_view->image();
-    if (!image) return;
+    if (!image) {
+        return;
+    }
     m_view->nodeManager()->mirrorNode(image->rootLayer(), kundo2_i18n("Mirror Image Vertically"), Qt::Vertical);
 }
 
 void RotateImage::slotMirrorImageHorizontal()
 {
     KisImageWSP image = m_view->image();
-    if (!image) return;
+    if (!image) {
+        return;
+    }
     m_view->nodeManager()->mirrorNode(image->rootLayer(), kundo2_i18n("Mirror Image Horizontally"), Qt::Horizontal);
 }
 
@@ -155,9 +161,11 @@ void RotateImage::slotRotateLayer()
 {
     KisImageWSP image = m_view->image();
 
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
-    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view->mainWindow(), "RotateLayer");
+    DlgRotateImage *dlgRotateImage = new DlgRotateImage(m_view->mainWindow(), "RotateLayer");
     Q_CHECK_PTR(dlgRotateImage);
 
     dlgRotateImage->setCaption(i18n("Rotate Layer"));

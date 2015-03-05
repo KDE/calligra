@@ -22,7 +22,7 @@
 #include <QDropEvent>
 #include <QDebug>
 
-StencilListView::StencilListView(QWidget* parent) :
+StencilListView::StencilListView(QWidget *parent) :
     QListView(parent)
 {
     setFocusPolicy(Qt::NoFocus);
@@ -42,15 +42,16 @@ StencilListView::StencilListView(QWidget* parent) :
     setEditTriggers(QAbstractItemView::AnyKeyPressed);
 }
 
-void StencilListView::dragEnterEvent(QDragEnterEvent* event)
+void StencilListView::dragEnterEvent(QDragEnterEvent *event)
 {
     qDebug() << event->mimeData()->formats();
     // TODO
-    if (event->mimeData()->hasFormat("text/plain"))
+    if (event->mimeData()->hasFormat("text/plain")) {
         event->acceptProposedAction();
+    }
 }
 
-void StencilListView::dropEvent(QDropEvent* event)
+void StencilListView::dropEvent(QDropEvent *event)
 {
     // TODO
     event->acceptProposedAction();

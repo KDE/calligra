@@ -34,7 +34,7 @@
 
 KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
                                  int _sortingWeight, bool touched) :
-        m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight)
+    m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight)
 {
     m_dirs.append(dir);
 }
@@ -47,7 +47,7 @@ KoTemplateGroup::~KoTemplateGroup()
 bool KoTemplateGroup::isHidden() const
 {
 
-    QList<KoTemplate*>::const_iterator it = m_templates.begin();
+    QList<KoTemplate *>::const_iterator it = m_templates.begin();
     bool hidden = true;
     while (it != m_templates.end() && hidden) {
         hidden = (*it)->isHidden();
@@ -58,8 +58,9 @@ bool KoTemplateGroup::isHidden() const
 
 void KoTemplateGroup::setHidden(bool hidden) const
 {
-    foreach (KoTemplate* t, m_templates)
+    foreach (KoTemplate *t, m_templates) {
         t->setHidden(hidden);
+    }
 
     m_touched = true;
 }
@@ -91,8 +92,8 @@ bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch)
 
 KoTemplate *KoTemplateGroup::find(const QString &name) const
 {
-    QList<KoTemplate*>::const_iterator it = m_templates.begin();
-    KoTemplate* ret = NULL;
+    QList<KoTemplate *>::const_iterator it = m_templates.begin();
+    KoTemplate *ret = NULL;
 
     while (it != m_templates.end()) {
         if ((*it)->name() == name) {

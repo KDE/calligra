@@ -29,7 +29,6 @@
 #include "kis_liquify_transform_worker.h"
 #include "kis_dom_utils.h"
 
-
 ToolTransformArgs::ToolTransformArgs()
     : m_liquifyProperties(new KisLiquifyProperties())
 {
@@ -37,7 +36,7 @@ ToolTransformArgs::ToolTransformArgs()
     m_transformedCenter = QPointF(0, 0);
     m_originalCenter = QPointF(0, 0);
     m_rotationCenterOffset = QPointF(0, 0);
-    m_cameraPos = QVector3D(0,0,1024);
+    m_cameraPos = QVector3D(0, 0, 1024);
     m_aX = 0;
     m_aY = 0;
     m_aZ = 0;
@@ -59,7 +58,8 @@ ToolTransformArgs::ToolTransformArgs()
     m_editTransformPoints = false;
 }
 
-void ToolTransformArgs::setFilterId(const QString &id) {
+void ToolTransformArgs::setFilterId(const QString &id)
+{
     m_filter = KisFilterStrategyRegistry::instance()->value(id);
 
     if (m_filter) {
@@ -68,7 +68,7 @@ void ToolTransformArgs::setFilterId(const QString &id) {
     }
 }
 
-void ToolTransformArgs::init(const ToolTransformArgs& args)
+void ToolTransformArgs::init(const ToolTransformArgs &args)
 {
     m_mode = args.mode();
     m_transformedCenter = args.transformedCenter();
@@ -103,13 +103,13 @@ void ToolTransformArgs::clear()
     m_transfPoints.clear();
 }
 
-ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs& args)
+ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs &args)
     : m_liquifyProperties(args.m_liquifyProperties)
 {
     init(args);
 }
 
-ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
+ToolTransformArgs &ToolTransformArgs::operator=(const ToolTransformArgs &args)
 {
     clear();
 
@@ -119,7 +119,7 @@ ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
     return *this;
 }
 
-bool ToolTransformArgs::operator==(const ToolTransformArgs& other) const
+bool ToolTransformArgs::operator==(const ToolTransformArgs &other) const
 {
     return
         m_mode == other.m_mode &&
@@ -173,7 +173,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     m_transformedCenter = transformedCenter;
     m_originalCenter = originalCenter;
     m_rotationCenterOffset = rotationCenterOffset;
-    m_cameraPos = QVector3D(0,0,1024);
+    m_cameraPos = QVector3D(0, 0, 1024);
     m_aX = aX;
     m_aY = aY;
     m_aZ = aZ;
@@ -191,7 +191,6 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     m_editTransformPoints = false;
 }
 
-
 ToolTransformArgs::~ToolTransformArgs()
 {
     clear();
@@ -203,7 +202,7 @@ void ToolTransformArgs::translate(const QPointF &offset)
         m_originalCenter += offset;
         m_rotationCenterOffset += offset;
         m_transformedCenter += offset;
-    } else if(m_mode == WARP || m_mode == CAGE) {
+    } else if (m_mode == WARP || m_mode == CAGE) {
         {
             QVector<QPointF>::iterator it = m_origPoints.begin();
             QVector<QPointF>::iterator end = m_origPoints.end();
@@ -235,13 +234,14 @@ bool ToolTransformArgs::isIdentity() const
                 && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
                 && m_aX == 0 && m_aY == 0 && m_aZ == 0);
     } else if (m_mode == PERSPECTIVE_4POINT) {
-            return (m_transformedCenter == m_originalCenter && m_scaleX == 1
-                    && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
-                    && m_flattenedPerspectiveTransform.isIdentity());
-    } else if(m_mode == WARP || m_mode == CAGE) {
+        return (m_transformedCenter == m_originalCenter && m_scaleX == 1
+                && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
+                && m_flattenedPerspectiveTransform.isIdentity());
+    } else if (m_mode == WARP || m_mode == CAGE) {
         for (int i = 0; i < m_origPoints.size(); ++i)
-            if (m_origPoints[i] != m_transfPoints[i])
+            if (m_origPoints[i] != m_transfPoints[i]) {
                 return false;
+            }
 
         return true;
     } else if (m_mode == LIQUIFY) {
@@ -325,7 +325,9 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
     ToolTransformArgs args;
 
     int newMode = e.attribute("mode", "0").toInt();
-    if (newMode < 0 || newMode >= N_MODES) return ToolTransformArgs();
+    if (newMode < 0 || newMode >= N_MODES) {
+        return ToolTransformArgs();
+    }
 
     args.m_mode = (TransformMode) newMode;
 

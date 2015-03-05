@@ -44,21 +44,16 @@
 #include "psd_resource_block.h"
 #include "psd_image_data.h"
 
-
-
 QPair<PSDColorMode, quint16> colormodelid_to_psd_colormode(const QString &colorSpaceId, const QString &colorDepthId)
 {
     PSDColorMode colorMode = UNKNOWN;
     if (colorSpaceId == RGBAColorModelID.id()) {
         colorMode = RGB;
-    }
-    else if (colorSpaceId == CMYKAColorModelID.id()) {
+    } else if (colorSpaceId == CMYKAColorModelID.id()) {
         colorMode = CMYK;
-    }
-    else if (colorSpaceId == GrayAColorModelID.id()) {
+    } else if (colorSpaceId == GrayAColorModelID.id()) {
         colorMode = Grayscale;
-    }
-    else if (colorSpaceId == LABAColorModelID.id()) {
+    } else if (colorSpaceId == LABAColorModelID.id()) {
         colorMode = Lab;
     }
 
@@ -66,21 +61,16 @@ QPair<PSDColorMode, quint16> colormodelid_to_psd_colormode(const QString &colorS
 
     if (colorDepthId ==  Integer8BitsColorDepthID.id()) {
         depth = 8;
-    }
-    else if (colorDepthId == Integer16BitsColorDepthID.id()) {
+    } else if (colorDepthId == Integer16BitsColorDepthID.id()) {
         depth = 16;
-    }
-    else if (colorDepthId == Float16BitsColorDepthID.id()) {
+    } else if (colorDepthId == Float16BitsColorDepthID.id()) {
         depth = 32;
-    }
-    else if (colorDepthId == Float32BitsColorDepthID.id()) {
+    } else if (colorDepthId == Float32BitsColorDepthID.id()) {
         depth = 32;
     }
 
     return QPair<PSDColorMode, quint16>(colorMode, depth);
 }
-
-
 
 PSDSaver::PSDSaver(KisDocument *doc)
 {
@@ -99,17 +89,19 @@ KisImageWSP PSDSaver::image()
     return m_image;
 }
 
-
-KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
+KisImageBuilder_Result PSDSaver::buildFile(const KUrl &uri)
 {
-    if (!m_image)
+    if (!m_image) {
         return KisImageBuilder_RESULT_EMPTY;
+    }
 
-    if (uri.isEmpty())
+    if (uri.isEmpty()) {
         return KisImageBuilder_RESULT_NO_URI;
+    }
 
-    if (!uri.isLocalFile())
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_LOCAL;
+    }
 
     // Open file for writing
     QFile f(uri.toLocalFile());
@@ -126,7 +118,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     header.height = m_image->height();
 
     QPair<PSDColorMode, quint16> colordef = colormodelid_to_psd_colormode(m_image->colorSpace()->colorModelId().id(),
-                                                                          m_image->colorSpace()->colorDepthId().id());
+                                            m_image->colorSpace()->colorDepthId().id());
 
     if (colordef.first == UNKNOWN || colordef.second == 0 || colordef.second == 32) {
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
@@ -172,7 +164,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
         dbgFile << "Annotation:" << annotation->type() << annotation->description();
 
         if (annotation->type().startsWith(QString("PSD Resource Block:"))) { //
-            PSDResourceBlock *resourceBlock = dynamic_cast<PSDResourceBlock*>(annotation.data());
+            PSDResourceBlock *resourceBlock = dynamic_cast<PSDResourceBlock *>(annotation.data());
             if (resourceBlock) {
                 dbgFile << "Adding PSD Resource Block" << resourceBlock->identifier;
                 resourceSection.resources[(PSDResourceSection::PSDResourceID)resourceBlock->identifier] = resourceBlock;
@@ -204,7 +196,6 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
 
     }
 
-
     dbgFile << "resource section" << f.pos();
     if (!resourceSection.write(&f)) {
         dbgFile << "Failed to write resource section. Error:" << resourceSection.error << f.pos();
@@ -223,8 +214,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
             dbgFile << "failed to write layer section. Error:" << layerSection.error << f.pos();
             return KisImageBuilder_RESULT_FAILURE;
         }
-    }
-    else {
+    } else {
         // else write a zero length block
         dbgFile << "No layers, saving empty layers/mask block" << f.pos();
         psdwrite(&f, (quint32)0);
@@ -242,7 +232,6 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
 
     return KisImageBuilder_RESULT_OK;
 }
-
 
 void PSDSaver::cancel()
 {

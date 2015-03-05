@@ -21,14 +21,11 @@
 #include "kis_image.h"
 #include "kis_node_dummies_graph.h"
 
-
-struct KisDummiesFacadeBase::Private
-{
+struct KisDummiesFacadeBase::Private {
 public:
     KisImageWSP image;
     KisNodeSP savedRootNode;
 };
-
 
 KisDummiesFacadeBase::KisDummiesFacadeBase(QObject *parent)
     : QObject(parent),
@@ -52,7 +49,7 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
         m_d->image->disconnect(this);
 
         KisNodeDummy *rootDummy = this->rootDummy();
-        if(rootDummy) {
+        if (rootDummy) {
             slotRemoveNode(rootDummy->node());
         }
     }
@@ -86,7 +83,7 @@ KisImageWSP KisDummiesFacadeBase::image() const
 KisNodeSP KisDummiesFacadeBase::findFirstLayer(KisNodeSP root)
 {
     KisNodeSP child = root->firstChild();
-    while(child && !child->inherits("KisLayer")) {
+    while (child && !child->inherits("KisLayer")) {
         child = child->nextSibling();
     }
     return child;
@@ -104,7 +101,7 @@ void KisDummiesFacadeBase::slotLayersChanged()
 
 void KisDummiesFacadeBase::slotNodeActivationRequested(KisNodeSP node)
 {
-    if(!node->inherits("KisSelectionMask")) {
+    if (!node->inherits("KisSelectionMask")) {
         emit sigActivateNode(node);
     }
 }
@@ -137,7 +134,7 @@ void KisDummiesFacadeBase::slotContinueAddNode(KisNodeSP node, KisNodeSP parent,
     KisNodeDummy *aboveThisDummy = aboveThis ? dummyForNode(aboveThis) : 0;
     // Add one because this node does not exist yet
     int index = parentDummy && aboveThisDummy ?
-        parentDummy->indexOf(aboveThisDummy) + 1 : 0;
+                parentDummy->indexOf(aboveThisDummy) + 1 : 0;
     emit sigBeginInsertDummy(parentDummy, index, node->metaObject()->className());
 
     addNodeImpl(node, parent, aboveThis);

@@ -36,7 +36,7 @@ class KexiTimeTableEdit : public KexiInputTableEdit
 public:
     explicit KexiTimeTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
     virtual ~KexiTimeTableEdit();
-    virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
+    virtual void setupContents(QPainter *p, bool focused, const QVariant &val,
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
     virtual QVariant value();
     virtual bool valueIsNull();
@@ -45,15 +45,15 @@ public:
     virtual bool valueChanged();
 
     /*! Reimplemented after KexiInputTableEdit. */
-    virtual void handleAction(const QString& actionName);
+    virtual void handleAction(const QString &actionName);
 
     /*! Reimplemented after KexiInputTableEdit. */
-    virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
+    virtual void handleCopyAction(const QVariant &value, const QVariant &visibleValue);
 
 protected:
     //! helper
     void setValueInInternalEditor(const QVariant &value);
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
     QTime timeValue();
 
     //! Used to format and convert time values

@@ -65,20 +65,24 @@ public:
      * getters
      */
 
-    long   getRow() const {
+    long   getRow() const
+    {
         return _row;
     }
-    double getHeight() const {
+    double getHeight() const
+    {
         return _height;
     }
 
     /**
      * setters
      */
-    void setRow(int r) {
+    void setRow(int r)
+    {
         _row = r;
     }
-    void setHeight(double h) {
+    void setHeight(double h)
+    {
         _height = h;
     }
 
@@ -86,7 +90,7 @@ public:
      * Helpful functions
      */
     void     analyze(const QDomNode);
-    void     generate(QTextStream&);
+    void     generate(QTextStream &);
 
 private:
 

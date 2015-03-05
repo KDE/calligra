@@ -67,7 +67,7 @@ class KexiCommandLinkButtonPrivate
 {
 public:
     explicit KexiCommandLinkButtonPrivate(KexiCommandLinkButton *qq)
-     : isArrowVisible(false), q(qq) {}
+        : isArrowVisible(false), q(qq) {}
 
     void init();
     qreal titleSize() const;
@@ -84,10 +84,22 @@ public:
     int descriptionHeight(int width) const;
     QColor mergedColors(const QColor &a, const QColor &b, int value) const;
 
-    int topMargin() const { return 10; }
-    int leftMargin() const { return 7; }
-    int rightMargin() const { return 4; }
-    int bottomMargin() const { return 10; }
+    int topMargin() const
+    {
+        return 10;
+    }
+    int leftMargin() const
+    {
+        return 7;
+    }
+    int rightMargin() const
+    {
+        return 4;
+    }
+    int bottomMargin() const
+    {
+        return 10;
+    }
 
     QString description;
     QColor currentColor;
@@ -132,11 +144,10 @@ QFont KexiCommandLinkButtonPrivate::descriptionFont() const
 QRect KexiCommandLinkButtonPrivate::titleRect() const
 {
     QRect r = q->rect().adjusted(textOffset(), topMargin(), -rightMargin(), 0);
-    if (description.isEmpty())
-    {
+    if (description.isEmpty()) {
         QFontMetrics fm(titleFont());
         r.setTop(r.top() + qMax(0, (q->icon().actualSize(q->iconSize()).height()
-                 - fm.height()) / 2));
+                                    - fm.height()) / 2));
     }
 
     return r;
@@ -164,7 +175,7 @@ bool KexiCommandLinkButtonPrivate::usingVistaStyle() const
     //### This is a hack to detect if we are indeed running Vista style themed and not in classic
     // When we add api to query for this, we should change this implementation to use it.
     return q->style()->inherits("QWindowsVistaStyle")
-        && !q->style()->pixelMetric(QStyle::PM_ButtonShiftHorizontal);
+           && !q->style()->pixelMetric(QStyle::PM_ButtonShiftHorizontal);
 }
 
 void KexiCommandLinkButtonPrivate::init()
@@ -194,8 +205,9 @@ int KexiCommandLinkButtonPrivate::descriptionHeight(int widgetWidth) const
         layout.beginLayout();
         while (true) {
             QTextLine line = layout.createLine();
-            if (!line.isValid())
+            if (!line.isValid()) {
                 break;
+            }
             line.setLineWidth(lineWidth);
             line.setPosition(QPointF(0, descriptionheight));
             descriptionheight += line.height();
@@ -312,33 +324,35 @@ void KexiCommandLinkButton::paintEvent(QPaintEvent *)
     p.drawControl(QStyle::CE_PushButton, option);
     if (!icon().isNull())
         p.drawPixmap(d->leftMargin() + hOffset, d->topMargin() + vOffset,
-        icon().pixmap(pixmapSize, isEnabled() ? QIcon::Normal : QIcon::Disabled,
-                                  isChecked() ? QIcon::On : QIcon::Off));
+                     icon().pixmap(pixmapSize, isEnabled() ? QIcon::Normal : QIcon::Disabled,
+                                   isChecked() ? QIcon::On : QIcon::Off));
 
     //Draw title
     QColor textColor = palette().buttonText().color();
     if (isEnabled() && d->usingVistaStyle()) {
         textColor = QColor(21, 28, 85);
-        if (underMouse() && !isDown())
+        if (underMouse() && !isDown()) {
             textColor = QColor(7, 64, 229);
+        }
         //A simple text color transition
         d->currentColor = d->mergedColors(textColor, d->currentColor, 60);
         option.palette.setColor(QPalette::ButtonText, d->currentColor);
     }
     int arrowWidth = d->isArrowVisible ? 12 : 0;
     int textflags = Qt::TextShowMnemonic;
-    if (!style()->styleHint(QStyle::SH_UnderlineShortcut, &option, this))
+    if (!style()->styleHint(QStyle::SH_UnderlineShortcut, &option, this)) {
         textflags |= Qt::TextHideMnemonic;
+    }
 
     p.setFont(d->titleFont());
     p.drawItemText(d->titleRect().adjusted(0, 0, -arrowWidth, 0).translated(hOffset, vOffset),
-                    textflags, option.palette, isEnabled(), text(), QPalette::ButtonText);
+                   textflags, option.palette, isEnabled(), text(), QPalette::ButtonText);
 
     //Draw description
     textflags |= Qt::TextWordWrap | Qt::ElideRight;
     p.setFont(d->descriptionFont());
     p.drawItemText(d->descriptionRect().adjusted(0, 0, -arrowWidth, 0).translated(hOffset, vOffset), textflags,
-                    option.palette, isEnabled(), description(), QPalette::ButtonText);
+                   option.palette, isEnabled(), description(), QPalette::ButtonText);
 
     //Optional arrow
     if (d->isArrowVisible) {

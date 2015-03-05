@@ -32,19 +32,20 @@ public:
 public:
 
     void processImpl(KisPaintDeviceSP device,
-                     const QRect& applyRect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater) const;
-    static inline KoID id() {
+                     const QRect &applyRect,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater) const;
+    static inline KoID id()
+    {
         return KoID("raindrops", i18n("Raindrops"));
     }
 
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 private:
-    bool** CreateBoolArray(uint Columns, uint Rows) const;
-    void   FreeBoolArray(bool** lpbArray, uint Columns) const;
+    bool **CreateBoolArray(uint Columns, uint Rows) const;
+    void   FreeBoolArray(bool **lpbArray, uint Columns) const;
     uchar  LimitValues(int ColorValue) const;
 };
 

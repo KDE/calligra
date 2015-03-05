@@ -25,7 +25,6 @@
 
 class ToolTransformArgs;
 
-
 class TransformTransactionProperties
 {
 public:
@@ -33,78 +32,95 @@ public:
     {
     }
 
-TransformTransactionProperties(const QRectF &originalRect, ToolTransformArgs *currentConfig, KisNodeSP rootNode)
+    TransformTransactionProperties(const QRectF &originalRect, ToolTransformArgs *currentConfig, KisNodeSP rootNode)
         : m_originalRect(originalRect),
           m_currentConfig(currentConfig),
           m_rootNode(rootNode)
     {
     }
 
-    qreal originalHalfWidth() const {
+    qreal originalHalfWidth() const
+    {
         return m_originalRect.width() / 2.0;
     }
 
-    qreal originalHalfHeight() const {
+    qreal originalHalfHeight() const
+    {
         return m_originalRect.height() / 2.0;
     }
 
-    QRectF originalRect() const {
+    QRectF originalRect() const
+    {
         return m_originalRect;
     }
 
-    QPointF originalCenterGeometric() const {
+    QPointF originalCenterGeometric() const
+    {
         return m_originalRect.center();
     }
 
-    QPointF originalTopLeft() const {
+    QPointF originalTopLeft() const
+    {
         return m_originalRect.topLeft();
     }
 
-    QPointF originalBottomLeft() const {
+    QPointF originalBottomLeft() const
+    {
         return m_originalRect.bottomLeft();
     }
 
-    QPointF originalBottomRight() const {
+    QPointF originalBottomRight() const
+    {
         return m_originalRect.bottomRight();
     }
 
-    QPointF originalTopRight() const {
+    QPointF originalTopRight() const
+    {
         return m_originalRect.topRight();
     }
 
-    QPointF originalMiddleLeft() const {
+    QPointF originalMiddleLeft() const
+    {
         return QPointF(m_originalRect.left(), (m_originalRect.top() + m_originalRect.bottom()) / 2.0);
     }
 
-    QPointF originalMiddleRight() const {
+    QPointF originalMiddleRight() const
+    {
         return QPointF(m_originalRect.right(), (m_originalRect.top() + m_originalRect.bottom()) / 2.0);
     }
 
-    QPointF originalMiddleTop() const {
+    QPointF originalMiddleTop() const
+    {
         return QPointF((m_originalRect.left() + m_originalRect.right()) / 2.0, m_originalRect.top());
     }
 
-    QPointF originalMiddleBottom() const {
+    QPointF originalMiddleBottom() const
+    {
         return QPointF((m_originalRect.left() + m_originalRect.right()) / 2.0, m_originalRect.bottom());
     }
 
-    QPoint originalTopLeftAligned() const {
+    QPoint originalTopLeftAligned() const
+    {
         return m_originalRect.toAlignedRect().topLeft();
     }
 
-    QPoint originalBottomRightAligned() const {
+    QPoint originalBottomRightAligned() const
+    {
         return m_originalRect.toAlignedRect().bottomRight();
     }
 
-    ToolTransformArgs* currentConfig() const {
+    ToolTransformArgs *currentConfig() const
+    {
         return m_currentConfig;
     }
 
-    KisNodeSP rootNode() const {
+    KisNodeSP rootNode() const
+    {
         return m_rootNode;
     }
 
-    qreal basePreviewOpacity() const {
+    qreal basePreviewOpacity() const
+    {
         return 0.9 * qreal(m_rootNode->opacity()) / 255.0;
     }
 

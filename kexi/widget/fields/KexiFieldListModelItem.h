@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #ifndef KEXIFIELDLISTMODELITEM_H
 #define KEXIFIELDLISTMODELITEM_H
 
@@ -39,7 +38,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KEXIFIELDLISTMODELITEM_H

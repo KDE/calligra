@@ -48,7 +48,7 @@ class KPLATOUI_EXPORT AddRelationDialog : public KDialog
 {
     Q_OBJECT
 public:
-    AddRelationDialog(Project &project, Relation *rel, QWidget *p, const QString& caption=QString(), ButtonCodes buttons=Ok|Cancel);
+    AddRelationDialog(Project &project, Relation *rel, QWidget *p, const QString &caption = QString(), ButtonCodes buttons = Ok | Cancel);
     ~AddRelationDialog();
 
     virtual MacroCommand *buildCommand();
@@ -61,7 +61,7 @@ protected Q_SLOTS:
     void slotFinishStartToggled(bool);
     void slotFinishFinishToggled(bool);
     void slotStartStartToggled(bool);
-    void slotNodeRemoved( Node *node );
+    void slotNodeRemoved(Node *node);
 
 protected:
     Project &m_project;
@@ -70,20 +70,22 @@ protected:
     bool m_deleterelation;
 };
 
-
 class KPLATOUI_EXPORT ModifyRelationDialog : public AddRelationDialog
 {
     Q_OBJECT
 public:
-    explicit ModifyRelationDialog(Project &project, Relation *rel, QWidget *p=0);
+    explicit ModifyRelationDialog(Project &project, Relation *rel, QWidget *p = 0);
 
     virtual MacroCommand *buildCommand();
-    bool relationIsDeleted() { return m_deleted; }
+    bool relationIsDeleted()
+    {
+        return m_deleted;
+    }
 
 protected Q_SLOTS:
     void slotUser1();
 
-    void slotRelationRemoved( Relation *relation );
+    void slotRelationRemoved(Relation *relation);
 
 private:
     bool m_deleted;

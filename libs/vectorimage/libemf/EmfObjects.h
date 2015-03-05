@@ -4,15 +4,15 @@
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either 
+  License as published by the Free Software Foundation; either
   version 2.1 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public 
+  You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -22,7 +22,6 @@
 #include <QDataStream>
 #include <QRect> // also provides QSize
 #include <QString>
-
 
 /**
    Namespace for Enhanced Metafile (EMF) classes
@@ -39,12 +38,10 @@ namespace Libemf
 //
 // Note: Not all objects in section 2.2 are implemented yet.
 
-
 // ================================================================
 //                         class EmrTextObject
 
-
-/** 
+/**
  * Simple representation of an EmrText object
  *
  *  See MS-EMF Section 2.2.5 for details
@@ -56,7 +53,7 @@ public:
       The type of text to read
       */
     enum TextType { EightBitChars, SixteenBitChars };
-    
+
     /**
        Constructor for EmrText object
 
@@ -65,16 +62,16 @@ public:
        \param textType whether the text is normal (EightBitChars) or wide
        characters (SixteenBitChars)
     */
-    EmrTextObject( QDataStream &stream, quint32 size, TextType textType );
+    EmrTextObject(QDataStream &stream, quint32 size, TextType textType);
     ~EmrTextObject();
-    
+
     /// The reference point for the text output
     QPoint referencePoint() const;
-    
+
     /// Options for rectangle
     quint32 options() const;
 
-    // Clipping and/or opaquing rectangle 
+    // Clipping and/or opaquing rectangle
     QRect rectangle() const;
 
     /// The text to be output
@@ -91,13 +88,13 @@ private:
     QString m_textString;       // the text string to output
 
     // Convenience function to handle a 2-byte wide char stream
-    QString recordWChars( QDataStream &stream, int numChars );
+    QString recordWChars(QDataStream &stream, int numChars);
 
     // Convenience function to handle a 1-byte wide char stream
-    QString recordChars( QDataStream &stream, int numChars );
+    QString recordChars(QDataStream &stream, int numChars);
 
     // Routine to throw away a specific number of bytes
-    void soakBytes( QDataStream &stream, int numBytes );
+    void soakBytes(QDataStream &stream, int numBytes);
 };
 
 }

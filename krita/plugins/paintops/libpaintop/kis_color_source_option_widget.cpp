@@ -29,10 +29,9 @@
 #include "kis_color_source.h"
 #include <kis_paint_device.h>
 
-
 struct KisColorSourceOptionWidget::Private {
     KisColorSourceOption option;
-    QMap<QString, QRadioButton*> id2radio;
+    QMap<QString, QRadioButton *> id2radio;
 };
 
 KisColorSourceOptionWidget::KisColorSourceOptionWidget()
@@ -40,20 +39,20 @@ KisColorSourceOptionWidget::KisColorSourceOptionWidget()
     , d(new Private)
 {
     m_checkable = false;
-    QWidget* configurationWidget = new QWidget;
+    QWidget *configurationWidget = new QWidget;
 
-    QGroupBox* groupBox = new QGroupBox(configurationWidget);
+    QGroupBox *groupBox = new QGroupBox(configurationWidget);
     groupBox->setObjectName(QString::fromUtf8("groupBox"));
-    QVBoxLayout* verticalLayout = new QVBoxLayout(groupBox);
+    QVBoxLayout *verticalLayout = new QVBoxLayout(groupBox);
 
-    foreach(const KoID & id, KisColorSourceOption::sourceIds()) {
-        QRadioButton* radioButton = new QRadioButton(groupBox);
+    foreach (const KoID &id, KisColorSourceOption::sourceIds()) {
+        QRadioButton *radioButton = new QRadioButton(groupBox);
         radioButton->setText(id.name());
         d->id2radio[id.id()] = radioButton;
         connect(radioButton, SIGNAL(toggled(bool)), SLOT(sourceChanged()));
         verticalLayout->addWidget(radioButton);
     }
-    QVBoxLayout* verticalLayout_2 = new QVBoxLayout(configurationWidget);
+    QVBoxLayout *verticalLayout_2 = new QVBoxLayout(configurationWidget);
     verticalLayout_2->setMargin(0);
     verticalLayout_2->addWidget(groupBox);
     verticalLayout_2->addStretch();
@@ -67,15 +66,15 @@ KisColorSourceOptionWidget::~KisColorSourceOptionWidget()
     delete d;
 }
 
-void KisColorSourceOptionWidget::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisColorSourceOptionWidget::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     d->option.writeOptionSetting(setting);
 }
 
-void KisColorSourceOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisColorSourceOptionWidget::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     d->option.readOptionSetting(setting);
-    QRadioButton* rb = d->id2radio.value(d->option.colorSourceTypeId());
+    QRadioButton *rb = d->id2radio.value(d->option.colorSourceTypeId());
     if (rb) {
         rb->setChecked(true);
     }
@@ -83,7 +82,7 @@ void KisColorSourceOptionWidget::readOptionSetting(const KisPropertiesConfigurat
 
 void KisColorSourceOptionWidget::sourceChanged()
 {
-    for (QMap<QString, QRadioButton*>::iterator it = d->id2radio.begin(); it != d->id2radio.end(); ++it) {
+    for (QMap<QString, QRadioButton *>::iterator it = d->id2radio.begin(); it != d->id2radio.end(); ++it) {
         if (it.value()->isChecked()) {
             d->option.setColorSourceType(it.key());
             break;

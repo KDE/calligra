@@ -28,15 +28,14 @@ using namespace Calligra::Sheets;
 class RegionModel::Private
 {
 public:
-    Sheet* sheet;
+    Sheet *sheet;
     QRect range;
     bool overwriteMode;
 };
 
-
-RegionModel::RegionModel(const Region& region)
-        : SheetModel(region.lastSheet())
-        , d(new Private)
+RegionModel::RegionModel(const Region &region)
+    : SheetModel(region.lastSheet())
+    , d(new Private)
 {
     Q_ASSERT(region.isContiguous());
     Q_ASSERT(!region.isEmpty());

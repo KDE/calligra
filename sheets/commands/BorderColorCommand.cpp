@@ -34,7 +34,7 @@
 using namespace Calligra::Sheets;
 
 BorderColorCommand::BorderColorCommand()
-        : AbstractRegionCommand()
+    : AbstractRegionCommand()
 {
     setText(kundo2_i18n("Change Border Color"));
 }

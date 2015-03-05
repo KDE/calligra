@@ -38,14 +38,13 @@ public:
     KoRdfSemanticItemViewSitePrivate(hKoRdfSemanticItem si, const QString &xmlid)
         : m_xmlid(xmlid)
         , m_semItem(si)
-        {
-        }
+    {
+    }
 };
-
 
 KoRdfSemanticItemViewSite::KoRdfSemanticItemViewSite(hKoRdfSemanticItem si, const QString &xmlid)
     :
-    d (new KoRdfSemanticItemViewSitePrivate(si,xmlid))
+    d(new KoRdfSemanticItemViewSitePrivate(si, xmlid))
 {
 }
 
@@ -79,7 +78,7 @@ QString KoRdfSemanticItemViewSite::getProperty(const QString &prop, const QStrin
     const KoDocumentRdf *rdf = d->m_semItem->documentRdf();
     QSharedPointer<Soprano::Model> m = rdf->model();
     StatementIterator it = m->listStatements(ls, Node::createResourceNode(QUrl(fqprop)),
-                               Node(), rdf->manifestRdfNode());
+                           Node(), rdf->manifestRdfNode());
     QList<Statement> allStatements = it.allElements();
     foreach (Soprano::Statement s, allStatements) {
         return s.object().toString();
@@ -95,7 +94,7 @@ void KoRdfSemanticItemViewSite::setProperty(const QString &prop, const QString &
     Soprano::Node ls = linkingSubject();
     Soprano::Node pred = Node::createResourceNode(QUrl(fqprop));
     m->removeAllStatements(Statement(ls, pred, Node()));
-    m->addStatement(ls, pred,Node::createLiteralNode(v), documentRdf->manifestRdfNode());
+    m->addStatement(ls, pred, Node::createLiteralNode(v), documentRdf->manifestRdfNode());
 }
 
 hKoSemanticStylesheet KoRdfSemanticItemViewSite::stylesheet() const

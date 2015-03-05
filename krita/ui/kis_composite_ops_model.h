@@ -26,22 +26,29 @@
 class KoColorSpace;
 
 struct KoIDToQStringConverter {
-    QString operator() (const KoID &id) {
+    QString operator()(const KoID &id)
+    {
         return id.name();
     }
 };
 
-typedef KisCategorizedListModel<KoID,KoIDToQStringConverter> BaseKoIDCategorizedListModel;
+typedef KisCategorizedListModel<KoID, KoIDToQStringConverter> BaseKoIDCategorizedListModel;
 
 class KRITAUI_EXPORT KisCompositeOpListModel: public BaseKoIDCategorizedListModel
 {
 public:
-    static KisCompositeOpListModel* sharedInstance();
+    static KisCompositeOpListModel *sharedInstance();
 
-    virtual QString  categoryToString(const KoID& val) const { return val.name(); }
-    virtual QString  entryToString   (const KoID& val) const { return val.name(); }
-    virtual bool     setData         (const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole);
-    virtual QVariant data            (const QModelIndex& idx, int role=Qt::DisplayRole) const;
+    virtual QString  categoryToString(const KoID &val) const
+    {
+        return val.name();
+    }
+    virtual QString  entryToString(const KoID &val) const
+    {
+        return val.name();
+    }
+    virtual bool     setData(const QModelIndex &idx, const QVariant &value, int role = Qt::EditRole);
+    virtual QVariant data(const QModelIndex &idx, int role = Qt::DisplayRole) const;
 
     void validate(const KoColorSpace *cs);
     void readFavoriteCompositeOpsFromConfig();
@@ -63,12 +70,14 @@ public:
         initializeModel(KisCompositeOpListModel::sharedInstance());
     }
 
-    void validate(const KoColorSpace *cs) {
+    void validate(const KoColorSpace *cs)
+    {
         KisCompositeOpListModel::sharedInstance()->validate(cs);
     }
 
 protected:
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const {
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const
+    {
         return lessThanPriority(left, right, KisCompositeOpListModel::favoriteCategory().name());
     }
 };

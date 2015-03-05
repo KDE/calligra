@@ -46,7 +46,7 @@ class WidgetLibraryPrivate;
 class ActionGroup;
 class WidgetInfo;
 
-typedef QList<KAction*> ActionList;
+typedef QList<KAction *> ActionList;
 
 /**
  * This class searches for factories and provides KActions for widget creation.
@@ -67,7 +67,7 @@ public:
      "X-KFormDesigner-FactoryGroup" field will be loaded.
      Factory group names are case-insensitive. */
     explicit WidgetLibrary(QObject *parent = 0,
-                           const QStringList& supportedFactoryGroups = QStringList());
+                           const QStringList &supportedFactoryGroups = QStringList());
 
     virtual ~WidgetLibrary();
 
@@ -96,9 +96,9 @@ public:
      * - WidgetFactory::VerticalOrientation
      */
     WidgetFactory::CreateWidgetOption showOrientationSelectionPopup(
-        const QByteArray &classname, QWidget* parent, const QPoint& pos);
+        const QByteArray &classname, QWidget *parent, const QPoint &pos);
 
-    QVariant internalProperty(const QByteArray& classname, const QByteArray& property);
+    QVariant internalProperty(const QByteArray &classname, const QByteArray &property);
 
     QString displayName(const QByteArray &classname);
     QString namePrefix(const QByteArray &classname);
@@ -128,11 +128,11 @@ public:
     Examples are: custom properties "text" for label or button, "contents" for combobox... */
     QList<QByteArray> autoSaveProperties(const QByteArray &classname);
 
-    WidgetInfo* widgetInfoForClassName(const char* classname);
+    WidgetInfo *widgetInfoForClassName(const char *classname);
 
-    WidgetFactory* factoryForClassName(const char* className);
+    WidgetFactory *factoryForClassName(const char *className);
 
-    WidgetFactory* factory(const char* factoryName) const;
+    WidgetFactory *factory(const char *factoryName) const;
 
     /*! \return true if advanced properties like "mouseTracking" should
      be user-visible. True by default (in KFD), but Kexi set's this to false.
@@ -151,7 +151,7 @@ public:
      is asked for returning description string.
      Eventually, if even this failed, empty string is returned.
      @see WidgetFactory::propertyDescForName() */
-    QString propertyDescForName(WidgetInfo *winfo, const QByteArray& propertyName);
+    QString propertyDescForName(WidgetInfo *winfo, const QByteArray &propertyName);
 
     /*! \return The i18n'ed name of the property's value whose name is \a name.
      Works in the same way as propertyDescForName(): if actual library
@@ -159,23 +159,23 @@ public:
      to return such description.
      Eventually, if even this failed, empty string is returned.
      @see WidgetFactory::propertyDescForValue() */
-    QString propertyDescForValue(WidgetInfo *winfo, const QByteArray& name);
+    QString propertyDescForValue(WidgetInfo *winfo, const QByteArray &name);
 
     /*! Used by Form::createPropertiesForWidget() after creating properties. */
-    void setPropertyOptions(KoProperty::Set& set, const WidgetInfo& winfo, QWidget* w);
+    void setPropertyOptions(KoProperty::Set &set, const WidgetInfo &winfo, QWidget *w);
 
     /*! \return true if property sets should be reloaded for \a property property,
      \a classname class and widget \a w when a given property value changed. */
-    bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& classname, QWidget *w,
-            const QByteArray& property);
+    bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray &classname, QWidget *w,
+            const QByteArray &property);
 
     //! @return selectable item for @a item item.
     //! In most cases it is equal to @a item.
     //! See WidgetFactory::selectableItem(ObjectTreeItem*).
-    ObjectTreeItem* selectableItem(ObjectTreeItem* item);
+    ObjectTreeItem *selectableItem(ObjectTreeItem *item);
 
 Q_SIGNALS:
-    void widgetActionToggled(const QByteArray& _class);
+    void widgetActionToggled(const QByteArray &_class);
 
     //! Received by KexiFormPart::slotWidgetCreatedByFormsLibrary() so we can add drag/drop
     //! connection for the new widget
@@ -198,7 +198,7 @@ protected:
      */
     void loadFactories();
 
-    WidgetLibraryPrivate * const d;
+    WidgetLibraryPrivate *const d;
 };
 
 }

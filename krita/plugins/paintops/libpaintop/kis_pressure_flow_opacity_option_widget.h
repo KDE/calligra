@@ -33,13 +33,13 @@ class PAINTOP_EXPORT KisFlowOpacityOptionWidget: public KisCurveOptionWidget
 public:
     KisFlowOpacityOptionWidget();
 
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private Q_SLOTS:
     void slotSliderValueChanged();
 
 private:
-    KisDoubleSliderSpinBox* m_opacitySlider;
+    KisDoubleSliderSpinBox *m_opacitySlider;
 };
 
 #endif // KIS_PRESSURE_FLOW_OPACITY_OPTION_WIDGET_H

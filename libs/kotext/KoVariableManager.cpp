@@ -33,7 +33,7 @@ class KoVariableManagerPrivate
 {
 public:
     KoVariableManagerPrivate()
-            : lastId(KoInlineObject::VariableManagerStart) { }
+        : lastId(KoInlineObject::VariableManagerStart) { }
     KoInlineTextObjectManager *inlineObjectManager;
     QHash<QString, int> variableMapping;
     QHash<int, QString> userTypes;
@@ -43,7 +43,7 @@ public:
 };
 
 KoVariableManager::KoVariableManager(KoInlineTextObjectManager *inlineObjectManager)
-        : d(new KoVariableManagerPrivate)
+    : d(new KoVariableManagerPrivate)
 {
     d->inlineObjectManager = inlineObjectManager;
 }
@@ -135,20 +135,23 @@ QList<QString> KoVariableManager::userVariables() const
 void KoVariableManager::loadOdf(const KoXmlElement &bodyElement)
 {
     KoXmlElement element = KoXml::namedItemNS(bodyElement, KoXmlNS::text, "user-field-decls", KoXmlTextContentPrelude);
-    if (element.isNull())
+    if (element.isNull()) {
         return;
+    }
     KoXmlElement e;
-    forEachElement(e, element) {
-        if (e.namespaceURI() != KoXmlNS::text || e.localName() != "user-field-decl")
+    forEachElement (e, element) {
+        if (e.namespaceURI() != KoXmlNS::text || e.localName() != "user-field-decl") {
             continue;
+        }
         const QString name = e.attributeNS(KoXmlNS::text, "name");
         QString type = e.attributeNS(KoXmlNS::office, "value-type");
         QString value;
         if (type == "string") {
-            if (e.hasAttributeNS(KoXmlNS::office, "string-value"))
+            if (e.hasAttributeNS(KoXmlNS::office, "string-value")) {
                 value = e.attributeNS(KoXmlNS::office, "string-value");
-            else // if the string-value is not present then the content defines the value
+            } else { // if the string-value is not present then the content defines the value
                 value = e.toText().data();
+            }
         } else if (type == "boolean") {
             value = e.attributeNS(KoXmlNS::office, "boolean-value");
         } else if (type == "currency") {

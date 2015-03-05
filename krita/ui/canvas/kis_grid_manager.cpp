@@ -37,7 +37,7 @@
 #include "KisView.h"
 #include "kis_action.h"
 
-KisGridManager::KisGridManager(KisViewManager * parent) : QObject(parent)
+KisGridManager::KisGridManager(KisViewManager *parent) : QObject(parent)
 {
 
 }
@@ -47,11 +47,11 @@ KisGridManager::~KisGridManager()
 
 }
 
-void KisGridManager::setup(KisActionManager* actionManager)
+void KisGridManager::setup(KisActionManager *actionManager)
 {
     //there is no grid by default
 //     m_view->document()->gridData().setShowGrid(false);
-// 
+//
 //     KisConfig config;
 //     m_view->document()->gridData().setGrid(config.getGridHSpacing(), config.getGridVSpacing());
 
@@ -83,7 +83,7 @@ void KisGridManager::setup(KisActionManager* actionManager)
     m_gridFastConfig4x4->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("view_fast_grid_4x4", m_gridFastConfig4x4);
     connect(m_gridFastConfig4x4, SIGNAL(triggered()), this, SLOT(fastConfig4x4()));
-    
+
     m_gridFastConfig5x5  = new KisAction(i18n("5x5"), this);
     m_gridFastConfig5x5->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("view_fast_grid_5x5", m_gridFastConfig5x5);
@@ -93,7 +93,7 @@ void KisGridManager::setup(KisActionManager* actionManager)
     m_gridFastConfig8x8->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("view_fast_grid_8x8", m_gridFastConfig8x8);
     connect(m_gridFastConfig8x8, SIGNAL(triggered()), this, SLOT(fastConfig8x8()));
-        
+
     m_gridFastConfig10x10  = new KisAction(i18n("10x10"), this);
     m_gridFastConfig10x10->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("view_fast_grid_10x10", m_gridFastConfig10x10);
@@ -113,12 +113,12 @@ void KisGridManager::setup(KisActionManager* actionManager)
     m_gridFastConfig32x32->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("view_fast_grid_32x32", m_gridFastConfig32x32);
     connect(m_gridFastConfig32x32, SIGNAL(triggered()), this, SLOT(fastConfig32x32()));
-    
+
     m_gridFastConfig40x40  = new KisAction(i18n("40x40"), this);
     m_gridFastConfig40x40->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("view_fast_grid_40x40", m_gridFastConfig40x40);
     connect(m_gridFastConfig40x40, SIGNAL(triggered()), this, SLOT(fastConfig40x40()));
-    
+
     m_gridFastConfig64x64  = new KisAction(i18n("64x64"), this);
     m_gridFastConfig64x64->setActivationFlags(KisAction::ACTIVE_NODE);
     actionManager->addAction("view_fast_grid_64x64", m_gridFastConfig64x64);
@@ -138,7 +138,7 @@ void KisGridManager::setView(QPointer< KisView > imageView)
     }
     m_imageView = imageView;
     if (imageView) {
-        m_gridDecoration = qobject_cast<KisGridDecoration*>(imageView->canvasBase()->decoration("grid"));
+        m_gridDecoration = qobject_cast<KisGridDecoration *>(imageView->canvasBase()->decoration("grid"));
         if (!m_gridDecoration) {
             m_gridDecoration = new KisGridDecoration(imageView);
             imageView->canvasBase()->addDecoration(m_gridDecoration);
@@ -223,6 +223,5 @@ void KisGridManager::fastConfig64x64()
 {
     setFastConfig(64);
 }
-
 
 #include "kis_grid_manager.moc"

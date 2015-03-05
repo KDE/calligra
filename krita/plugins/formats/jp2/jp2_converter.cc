@@ -83,7 +83,7 @@ info_callback(const char *msg, void *client_data)
     fprintf(stdout, "[INFO] %s", msg);
 }
 
-KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
+KisImageBuilder_Result jp2Converter::decode(const KUrl &uri)
 {
     // decompression parameters
     opj_dparameters_t parameters;
@@ -121,7 +121,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     opj_setup_decoder(dinfo, &parameters);
 
     /* open a byte stream */
-    opj_cio_t *cio = opj_cio_open((opj_common_ptr) dinfo, (unsigned char*)src.data(), src.length());
+    opj_cio_t *cio = opj_cio_open((opj_common_ptr) dinfo, (unsigned char *)src.data(), src.length());
 
     // Setup an event manager
     opj_event_mgr_t event_mgr;    /* event manager */
@@ -160,7 +160,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     if (bitdepth == 0) {
         bitdepth = 8;
     }
-    const KoColorSpace* colorSpace = 0;
+    const KoColorSpace *colorSpace = 0;
     QVector<int> channelorder(components);
     if (!hasColorSpaceInfo) {
         if (components == 3) {
@@ -189,7 +189,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     }
     case CLRSPC_GRAY: {
         if (bitdepth == 16) {
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace( GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), "");
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), "");
         } else if (bitdepth == 8) {
             colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "");
         }
@@ -202,7 +202,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     }
     case CLRSPC_SYCC: {
         if (bitdepth == 16) {
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace( "YUV", Integer16BitsColorDepthID.id(), "");
+            colorSpace = KoColorSpaceRegistry::instance()->colorSpace("YUV", Integer16BitsColorDepthID.id(), "");
         } else if (bitdepth == 8) {
             colorSpace = KoColorSpaceRegistry::instance()->colorSpace("YUV", Integer8BitsColorDepthID.id(), "");
         }
@@ -238,7 +238,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     for (int v = 0; v < image->y1; ++v) {
         if (bitdepth == 16) {
             do {
-                quint16* px = reinterpret_cast<quint16*>(it->rawData());
+                quint16 *px = reinterpret_cast<quint16 *>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     px[channelorder[i]] = image->comps[i].data[pos];
                 }
@@ -248,7 +248,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
             } while (it->nextPixel());
         } else if (bitdepth == 8) {
             do {
-                quint8* px = reinterpret_cast<quint8*>(it->rawData());
+                quint8 *px = reinterpret_cast<quint8 *>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     px[channelorder[i]] = image->comps[i].data[pos];
                 }
@@ -263,12 +263,11 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     return KisImageBuilder_RESULT_OK;
 }
 
-
-
-KisImageBuilder_Result jp2Converter::buildImage(const KUrl& uri)
+KisImageBuilder_Result jp2Converter::buildImage(const KUrl &uri)
 {
-    if (uri.isEmpty())
+    if (uri.isEmpty()) {
         return KisImageBuilder_RESULT_NO_URI;
+    }
 
     if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, QApplication::activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
@@ -288,32 +287,34 @@ KisImageBuilder_Result jp2Converter::buildImage(const KUrl& uri)
     return result;
 }
 
-
 KisImageWSP jp2Converter::getImage()
 {
     return m_image;
 }
 
-
-KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP layer, const JP2ConvertOptions& options)
+KisImageBuilder_Result jp2Converter::buildFile(const KUrl &uri, KisPaintLayerSP layer, const JP2ConvertOptions &options)
 {
-    if (!layer)
+    if (!layer) {
         return KisImageBuilder_RESULT_INVALID_ARG;
+    }
 
     KisImageWSP kisimage = layer->image();
-    if (!kisimage)
+    if (!kisimage) {
         return KisImageBuilder_RESULT_EMPTY;
+    }
 
-    if (uri.isEmpty())
+    if (uri.isEmpty()) {
         return KisImageBuilder_RESULT_NO_URI;
+    }
 
-    if (!uri.isLocalFile())
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_LOCAL;
+    }
 
     // Init parameters
     opj_cparameters_t parameters;
     opj_set_default_encoder_parameters(&parameters);
-    parameters.cp_comment = (char*)"Created by Krita";
+    parameters.cp_comment = (char *)"Created by Krita";
     parameters.subsampling_dx = 1;
     parameters.subsampling_dy = 1;
     parameters.cp_disto_alloc = 1;
@@ -321,7 +322,6 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     parameters.numresolution = options.numberresolution;
     dbgFile << 100 - options.rate;
     parameters.tcp_rates[0] = options.rate;
-
 
     // Set the colorspace information
     OPJ_COLOR_SPACE clrspc;
@@ -340,7 +340,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
         channelorder[1] = KoBgrU16Traits::green_pos;
         channelorder[2] = KoBgrU16Traits::blue_pos;
     } else {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", layer->colorSpace()->name()));
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -351,7 +351,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
 //     } else if (layer->colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
 //         bitdepth = 16;
     } else {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", layer->colorSpace()->name()));
         return KisImageBuilder_RESULT_FAILURE;
     }
 
@@ -383,7 +383,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     for (int v = 0; v < height; ++v) {
         if (bitdepth == 16) {
             do {
-                quint16* px = reinterpret_cast<quint16*>(it->rawData());
+                quint16 *px = reinterpret_cast<quint16 *>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     image->comps[i].data[pos] = px[channelorder[i]];
                 }
@@ -392,7 +392,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
             } while (it->nextPixel());
         } else if (bitdepth == 8) {
             do {
-                quint8* px = reinterpret_cast<quint8*>(it->rawData());
+                quint8 *px = reinterpret_cast<quint8 *>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     image->comps[i].data[pos] = px[channelorder[i]];
                 }
@@ -440,12 +440,10 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     /* catch events using our callbacks and give a local context */
     opj_set_event_mgr((opj_common_ptr) cinfo, &event_mgr, stderr);
 
-
     /* setup the encoder parameters using the current image and using user parameters */
     opj_setup_encoder(cinfo, &parameters, image);
 
-    opj_cio_t* cio = opj_cio_open((opj_common_ptr) cinfo, 0, 0);
-
+    opj_cio_t *cio = opj_cio_open((opj_common_ptr) cinfo, 0, 0);
 
     /* encode the image */
     if (!opj_encode(cinfo, cio, image, parameters.index)) {
@@ -459,7 +457,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     fp.open(QIODevice::WriteOnly);
     int length = cio_tell(cio);
     dbgFile << "Length of the file to save: " << length;
-    fp.write((char*)cio->buffer, length);
+    fp.write((char *)cio->buffer, length);
     fp.close();
 
     opj_cio_close(cio);
@@ -468,13 +466,12 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     return KisImageBuilder_RESULT_OK;
 }
 
-
 void jp2Converter::cancel()
 {
     m_stop = true;
 }
 
-int jp2Converter::getFileFormat(const KUrl& uri) const
+int jp2Converter::getFileFormat(const KUrl &uri) const
 {
     QString extension = QFileInfo(uri.fileName()).suffix().toLower();
     if (extension == "j2k" || extension == "j2c") {

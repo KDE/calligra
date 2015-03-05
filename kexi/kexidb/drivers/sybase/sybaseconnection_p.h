@@ -27,7 +27,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <sqlfront.h>
 #include <sqldb.h>
 
-
 #ifdef SYBASEMIGRATE_H
 #define NAMESPACE KexiMigration
 #else
@@ -51,11 +50,11 @@ class SybaseConnectionInternal : public KexiDB::ConnectionInternal
 {
 
 public:
-    explicit SybaseConnectionInternal(KexiDB::Connection* connection);
+    explicit SybaseConnectionInternal(KexiDB::Connection *connection);
     virtual ~SybaseConnectionInternal();
 
     //! Connects to a Sybase database
-    bool db_connect(const KexiDB::ConnectionData& data);
+    bool db_connect(const KexiDB::ConnectionData &data);
 
     //! Disconnects from the database
     bool db_disconnect();
@@ -64,20 +63,20 @@ public:
     bool useDatabase(const QString &dbName = QString());
 
     //! Execute SQL statement on the database
-    bool executeSQL(const QString& statement);
+    bool executeSQL(const QString &statement);
 
     //! Stores last operation's result
     virtual void storeResult();
 
     //! Escapes a table, database or column name
-    QString escapeIdentifier(const QString& str) const;
+    QString escapeIdentifier(const QString &str) const;
 
     // message handler called by call back function
-    void messageHandler(DBINT msgno, int msgstate, int severity, char* msgtext
-                        , char* srvname, char* procname, int line);
+    void messageHandler(DBINT msgno, int msgstate, int severity, char *msgtext
+                        , char *srvname, char *procname, int line);
 
     // dbProcess-Connection map
-    static QMap<DBPROCESS*, SybaseConnectionInternal*> dbProcessConnectionMap;
+    static QMap<DBPROCESS *, SybaseConnectionInternal *> dbProcessConnectionMap;
 
     // Server specific stuff
     DBPROCESS *dbProcess;
@@ -88,13 +87,12 @@ public:
 
 };
 
-
 //! Internal Sybase cursor data.
 /*! Provides a low-level abstraction for iterating over Sybase result sets. */
 class SybaseCursorData : public SybaseConnectionInternal
 {
 public:
-    explicit SybaseCursorData(KexiDB::Connection* connection);
+    explicit SybaseCursorData(KexiDB::Connection *connection);
     virtual ~SybaseCursorData();
 
     //unsigned long *lengths;

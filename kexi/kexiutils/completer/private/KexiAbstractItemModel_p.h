@@ -91,21 +91,25 @@ public:
     void itemsAboutToBeMoved(const QModelIndex &srcParent, int srcFirst, int srcLast, const QModelIndex &destinationParent, int destinationChild, Qt::Orientation);
     void itemsMoved(const QModelIndex &srcParent, int srcFirst, int srcLast, const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
     bool allowMove(const QModelIndex &srcParent, int srcFirst, int srcLast, const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
-    
+
 #if 0
-    inline QModelIndex createIndex(int row, int column, void *data = 0) const {
+    inline QModelIndex createIndex(int row, int column, void *data = 0) const
+    {
         return q_func()->createIndex(row, column, data);
     }
 
-    inline QModelIndex createIndex(int row, int column, int id) const {
+    inline QModelIndex createIndex(int row, int column, int id) const
+    {
         return q_func()->createIndex(row, column, id);
     }
 
-    inline bool indexValid(const QModelIndex &index) const {
-         return (index.row() >= 0) && (index.column() >= 0) && (index.model() == q_func());
+    inline bool indexValid(const QModelIndex &index) const
+    {
+        return (index.row() >= 0) && (index.column() >= 0) && (index.model() == q_func());
     }
 #endif
-    inline void invalidatePersistentIndexes() {
+    inline void invalidatePersistentIndexes()
+    {
         foreach (QPersistentModelIndexData *data, persistent.indexes) {
             data->index = QModelIndex();
             data->model = 0;
@@ -118,9 +122,10 @@ public:
       clean the QPersistentModelIndex relative to the index if there is one.
       To be used before an index is invalided
       */
-    inline void invalidatePersistentIndex(const QModelIndex &index) {
+    inline void invalidatePersistentIndex(const QModelIndex &index)
+    {
         QHash<QModelIndex, QPersistentModelIndexData *>::iterator it = persistent.indexes.find(index);
-        if(it != persistent.indexes.end()) {
+        if (it != persistent.indexes.end()) {
             QPersistentModelIndexData *data = *it;
             persistent.indexes.erase(it);
             data->index = QModelIndex();
@@ -134,7 +139,6 @@ public:
         Change(const QModelIndex &p, int f, int l) : parent(p), first(f), last(l), needsAdjust(false) {}
         QModelIndex parent;
         int first, last;
-
 
         // In cases such as this:
         // - A
@@ -150,7 +154,10 @@ public:
         // rowsMoved signal.
         bool needsAdjust;
 
-        bool isValid() { return first >= 0 && last >= 0; }
+        bool isValid()
+        {
+            return first >= 0 && last >= 0;
+        }
     };
     QStack<Change> changes;
 
@@ -159,13 +166,13 @@ public:
         QHash<QModelIndex, QPersistentModelIndexData *> indexes;
         QStack<QVector<QPersistentModelIndexData *> > moved;
         QStack<QVector<QPersistentModelIndexData *> > invalidated;
-        void insertMultiAtEnd(const QModelIndex& key, QPersistentModelIndexData *data);
+        void insertMultiAtEnd(const QModelIndex &key, QPersistentModelIndexData *data);
     } persistent;
 
     Qt::DropActions supportedDragActions;
 
-    QHash<int,QByteArray> roleNames;
-    static const QHash<int,QByteArray> &defaultRoleNames();
+    QHash<int, QByteArray> roleNames;
+    static const QHash<int, QByteArray> &defaultRoleNames();
 };
 
 #endif // KEXIABSTRACTITEMMODEL_P_H

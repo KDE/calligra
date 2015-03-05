@@ -37,7 +37,7 @@ class KisDisplayFilter;
 class KRITAUI_EXPORT KisCanvasWidgetBase : public KisAbstractCanvasWidget
 {
 public:
-    KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter);
+    KisCanvasWidgetBase(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter);
 
     virtual ~KisCanvasWidgetBase();
 
@@ -45,20 +45,19 @@ public: // KisAbstractCanvasWidget
 
     virtual KoToolProxy *toolProxy() const;
 
-
     /// set the specified display filter on the canvas
     virtual void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
      * Draw the specified decorations on the view.
      */
-    virtual void drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const;
+    virtual void drawDecorations(QPainter &gc, const QRect &updateWidgetRect) const;
 
-    virtual void addDecoration(KisCanvasDecoration* deco);
-    virtual KisCanvasDecoration* decoration(const QString& id) const;
+    virtual void addDecoration(KisCanvasDecoration *deco);
+    virtual KisCanvasDecoration *decoration(const QString &id) const;
 
-    virtual void setDecorations(const QList<KisCanvasDecoration*> &);
-    virtual QList<KisCanvasDecoration*> decorations() const;
+    virtual void setDecorations(const QList<KisCanvasDecoration *> &);
+    virtual QList<KisCanvasDecoration *> decorations() const;
 
     virtual void setWrapAroundViewingMode(bool value);
 
@@ -74,8 +73,7 @@ public: // KisAbstractCanvasWidget
      */
     static QImage createCheckersImage(qint32 checkSize = -1);
 
-
-    KisCoordinatesConverter* coordinatesConverter() const;
+    KisCoordinatesConverter *coordinatesConverter() const;
 
 protected:
     KisCanvas2 *canvas() const;
@@ -94,7 +92,7 @@ protected:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 
 };
 

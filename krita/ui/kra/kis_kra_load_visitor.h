@@ -34,24 +34,24 @@ class KisKraLoadVisitor : public KisNodeVisitor
 {
 public:
 
-
     KisKraLoadVisitor(KisImageWSP image,
                       KoStore *store,
                       QMap<KisNode *, QString> &layerFilenames,
-                      const QString & name,
+                      const QString &name,
                       int syntaxVersion);
 
 public:
     void setExternalUri(const QString &uri);
 
-    bool visit(KisNode*) {
+    bool visit(KisNode *)
+    {
         return true;
     }
     bool visit(KisExternalLayer *);
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
-    bool visit(KisAdjustmentLayer* layer);
-    bool visit(KisGeneratorLayer* layer);
+    bool visit(KisAdjustmentLayer *layer);
+    bool visit(KisGeneratorLayer *layer);
     bool visit(KisCloneLayer *layer);
     bool visit(KisFilterMask *mask);
     bool visit(KisTransformMask *mask);
@@ -62,13 +62,13 @@ public:
 
 private:
 
-    bool loadPaintDevice(KisPaintDeviceSP device, const QString& location);
-    bool loadProfile(KisPaintDeviceSP device,  const QString& location);
-    bool loadFilterConfiguration(KisFilterConfiguration* kfc, const QString& location);
-    bool loadMetaData(KisNode* node);
+    bool loadPaintDevice(KisPaintDeviceSP device, const QString &location);
+    bool loadProfile(KisPaintDeviceSP device,  const QString &location);
+    bool loadFilterConfiguration(KisFilterConfiguration *kfc, const QString &location);
+    bool loadMetaData(KisNode *node);
     void initSelectionForMask(KisMask *mask);
-    bool loadSelection(const QString& location, KisSelectionSP dstSelection);
-    QString getLocation(KisNode* node, const QString& suffix = QString());
+    bool loadSelection(const QString &location, KisSelectionSP dstSelection);
+    QString getLocation(KisNode *node, const QString &suffix = QString());
 
 private:
     KisImageWSP m_image;

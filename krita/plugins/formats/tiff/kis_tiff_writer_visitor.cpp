@@ -44,39 +44,39 @@
 
 namespace
 {
-    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_format)
-    {
-        qDebug() << cs->id();
-        if (cs->id() == "GRAYA" || cs->id() == "GRAYAU16") {
-            color_type = PHOTOMETRIC_MINISBLACK;
-            return true;
-        }
-        if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
-            color_type = PHOTOMETRIC_RGB;
-            return true;
-        }
+bool writeColorSpaceInformation(TIFF *image, const KoColorSpace *cs, uint16 &color_type, uint16 &sample_format)
+{
+    qDebug() << cs->id();
+    if (cs->id() == "GRAYA" || cs->id() == "GRAYAU16") {
+        color_type = PHOTOMETRIC_MINISBLACK;
+        return true;
+    }
+    if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
+        color_type = PHOTOMETRIC_RGB;
+        return true;
+    }
 //        if (KoID(cs->id()) == KoID("RGBAF16") || KoID(cs->id()) == KoID("RGBAF32")) {
 //            color_type = PHOTOMETRIC_RGB;
 //            sample_format = SAMPLEFORMAT_IEEEFP;
 //            return true;
 //        }
-        if (cs->id() == "CMYK" || cs->id() == "CMYKAU16") {
-            color_type = PHOTOMETRIC_SEPARATED;
-            TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
-            return true;
-        }
-        if (cs->id() == "LABA") {
-            color_type = PHOTOMETRIC_CIELAB;
-            return true;
-        }
-
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", cs->name())) ;
-        return false;
-
+    if (cs->id() == "CMYK" || cs->id() == "CMYKAU16") {
+        color_type = PHOTOMETRIC_SEPARATED;
+        TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
+        return true;
     }
+    if (cs->id() == "LABA") {
+        color_type = PHOTOMETRIC_CIELAB;
+        return true;
+    }
+
+    QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot export images in %1.\n", cs->name()));
+    return false;
+
+}
 }
 
-KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*image, KisTIFFOptions* options)
+KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF *image, KisTIFFOptions *options)
     : m_image(image)
     , m_options(options)
 {
@@ -91,7 +91,7 @@ bool KisTIFFWriterVisitor::saveAlpha()
     return m_options->alpha;
 }
 
-bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8 depth, uint16 sample_format, uint8 nbcolorssamples, quint8* poses)
+bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8 depth, uint16 sample_format, uint8 nbcolorssamples, quint8 *poses)
 {
     if (depth == 32) {
         Q_ASSERT(sample_format == SAMPLEFORMAT_IEEEFP);
@@ -102,11 +102,12 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
             for (i = 0; i < nbcolorssamples; i++) {
                 *(dst++) = d[poses[i]];
             }
-            if (saveAlpha()) *(dst++) = d[poses[i]];
+            if (saveAlpha()) {
+                *(dst++) = d[poses[i]];
+            }
         } while (it->nextPixel());
         return true;
-    }
-    else if (depth == 16 ) {
+    } else if (depth == 16) {
         if (sample_format == SAMPLEFORMAT_IEEEFP) {
 #ifdef HAVE_OPENEXR
             half *dst = reinterpret_cast<half *>(buff);
@@ -116,13 +117,14 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
                 for (i = 0; i < nbcolorssamples; i++) {
                     *(dst++) = d[poses[i]];
                 }
-                if (saveAlpha()) *(dst++) = d[poses[i]];
+                if (saveAlpha()) {
+                    *(dst++) = d[poses[i]];
+                }
 
             } while (it->nextPixel());
             return true;
 #endif
-        }
-        else {
+        } else {
             quint16 *dst = reinterpret_cast<quint16 *>(buff);
             do {
                 const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
@@ -130,13 +132,14 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
                 for (i = 0; i < nbcolorssamples; i++) {
                     *(dst++) = d[poses[i]];
                 }
-                if (saveAlpha()) *(dst++) = d[poses[i]];
+                if (saveAlpha()) {
+                    *(dst++) = d[poses[i]];
+                }
 
             } while (it->nextPixel());
             return true;
         }
-    }
-    else if (depth == 8) {
+    } else if (depth == 8) {
         quint8 *dst = reinterpret_cast<quint8 *>(buff);
         do {
             const quint8 *d = it->oldRawData();
@@ -144,14 +147,15 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
             for (i = 0; i < nbcolorssamples; i++) {
                 *(dst++) = d[poses[i]];
             }
-            if (saveAlpha()) *(dst++) = d[poses[i]];
-            
+            if (saveAlpha()) {
+                *(dst++) = d[poses[i]];
+            }
+
         } while (it->nextPixel());
         return true;
     }
     return false;
 }
-
 
 bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 {
@@ -164,22 +168,22 @@ bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
     return visitAll(layer, true);
 }
 
-bool KisTIFFWriterVisitor::visit(KisGeneratorLayer* layer)
+bool KisTIFFWriterVisitor::visit(KisGeneratorLayer *layer)
 {
     // a generator layer has a nice paint device we can save.
     return saveLayerProjection(layer);
 }
 
-bool KisTIFFWriterVisitor::visit(KisExternalLayer* layer)
+bool KisTIFFWriterVisitor::visit(KisExternalLayer *layer)
 {
     // a shape layer has a nice paint device we can save.
-    if (qobject_cast<KisShapeLayer*>(layer)) {
+    if (qobject_cast<KisShapeLayer *>(layer)) {
         return saveLayerProjection(layer);
     }
     return true;
 }
 
-bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
+bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
 {
     dbgFile << "visiting on layer" << layer->name() << "";
     KisPaintDeviceSP pd = layer->projection();
@@ -222,7 +226,7 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
     TIFFSetField(image(), TIFFTAG_ROWSPERSTRIP, 8);
 
     // Save profile
-    const KoColorProfile* profile = pd->colorSpace()->profile();
+    const KoColorProfile *profile = pd->colorSpace()->profile();
     if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
         QByteArray ba = profile->rawData();
         TIFFSetField(image(), TIFFTAG_ICCPROFILE, ba.size(), ba.data());
@@ -236,28 +240,30 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
         KisHLineConstIteratorSP it = pd->createHLineConstIteratorNG(0, y, width);
         switch (color_type) {
         case PHOTOMETRIC_MINISBLACK: {
-                quint8 poses[] = { 0, 1 };
-                r = copyDataToStrips(it, buff, depth, sample_format, 1, poses);
-            }
-            break;
+            quint8 poses[] = { 0, 1 };
+            r = copyDataToStrips(it, buff, depth, sample_format, 1, poses);
+        }
+        break;
         case PHOTOMETRIC_RGB: {
-                quint8 poses[] = { 2, 1, 0, 3};
-                r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
-            }
-            break;
+            quint8 poses[] = { 2, 1, 0, 3};
+            r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
+        }
+        break;
         case PHOTOMETRIC_SEPARATED: {
-                quint8 poses[] = { 0, 1, 2, 3, 4 };
-                r = copyDataToStrips(it, buff, depth, sample_format, 4, poses);
-            }
-            break;
+            quint8 poses[] = { 0, 1, 2, 3, 4 };
+            r = copyDataToStrips(it, buff, depth, sample_format, 4, poses);
+        }
+        break;
         case PHOTOMETRIC_CIELAB: {
-                quint8 poses[] = { 0, 1, 2, 3 };
-                r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
-            }
-            break;
+            quint8 poses[] = { 0, 1, 2, 3 };
+            r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
+        }
+        break;
+        return false;
+        }
+        if (!r) {
             return false;
         }
-        if (!r) return false;
         TIFFWriteScanline(image(), buff, y, (tsample_t) - 1);
     }
     _TIFFfree(buff);

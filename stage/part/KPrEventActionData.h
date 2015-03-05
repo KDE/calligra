@@ -30,10 +30,10 @@ class KPrSoundCollection;
 class STAGE_EXPORT KPrEventActionData
 {
 public:
-    KPrEventActionData( KoShape * shape, KoEventAction * eventAction , KPrSoundCollection * soundCollection );
+    KPrEventActionData(KoShape *shape, KoEventAction *eventAction, KPrSoundCollection *soundCollection);
     ~KPrEventActionData();
 
-    KPrSoundCollection * soundCollection() const;
+    KPrSoundCollection *soundCollection() const;
 
     /**
      * Get the shape
@@ -51,7 +51,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KPREVENTACTIONDATA_H */

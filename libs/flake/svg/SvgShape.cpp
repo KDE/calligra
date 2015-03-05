@@ -19,7 +19,6 @@
 
 #include "SvgShape.h"
 
-
 SvgShape::~SvgShape()
 {
 }

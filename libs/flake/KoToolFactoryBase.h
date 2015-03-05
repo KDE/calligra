@@ -163,7 +163,8 @@ public:
      * @see toolType()
      * @see setToolType()
      */
-    static QString mainToolType() {
+    static QString mainToolType()
+    {
         return "main";
     }
     /**
@@ -175,7 +176,8 @@ public:
      * @see toolType()
      * @see setToolType()
      */
-    static QString navigationToolType() {
+    static QString navigationToolType()
+    {
         return "navigation";
     }
     /**
@@ -187,14 +189,15 @@ public:
      * @see toolType()
      * @see setToolType()
      */
-    static QString dynamicToolType() {
+    static QString dynamicToolType()
+    {
         return "dynamic";
     }
 
     /**
      * Set the default shortcut for activation of this tool.
      */
-    void setShortcut(const KShortcut & shortcut);
+    void setShortcut(const KShortcut &shortcut);
 
 protected:
     /**
@@ -230,10 +233,9 @@ protected:
      */
     void setActivationShapeId(const QString &activationShapeId);
 
-
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

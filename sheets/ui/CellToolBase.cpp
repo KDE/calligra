@@ -153,9 +153,9 @@
 
 using namespace Calligra::Sheets;
 
-CellToolBase::CellToolBase(KoCanvasBase* canvas)
-        : KoInteractionTool(canvas)
-        , d(new Private(this))
+CellToolBase::CellToolBase(KoCanvasBase *canvas)
+    : KoInteractionTool(canvas)
+    , d(new Private(this))
 {
     d->cellEditor = 0;
     d->externalEditor = 0;
@@ -181,9 +181,9 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // Create the extra and ones with extended names for the context menu.
     d->createPopupMenuActions();
-    
+
     // Create the actions.
-    KAction* action = 0;
+    KAction *action = 0;
 
     // -- cell style actions --
 
@@ -263,7 +263,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- horizontal alignment actions --
 
-    QActionGroup* groupAlign = new QActionGroup(this);
+    QActionGroup *groupAlign = new QActionGroup(this);
     action = new KToggleAction(koIcon("format-justify-left"), i18n("Align Left"), this);
     action->setIconText(i18n("Left"));
     addAction("alignLeft", action);
@@ -287,7 +287,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- vertical alignment actions --
 
-    QActionGroup* groupPos = new QActionGroup(this);
+    QActionGroup *groupPos = new QActionGroup(this);
     action = new KToggleAction(koIcon("text_top"), i18n("Align Top"), this);
     action->setIconText(i18n("Top"));
     addAction("alignTop", action);
@@ -357,7 +357,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setIcon(koIcon("format-stroke-color"));
     action->setToolTip(i18n("Select a new border color"));
     action->setText(i18n("Border Color"));
-    static_cast<KoColorPopupAction*>(action)->setCurrentColor(Qt::black);
+    static_cast<KoColorPopupAction *>(action)->setCurrentColor(Qt::black);
     addAction("borderColor", action);
     connect(action, SIGNAL(colorChanged(KoColor)), this, SLOT(borderColor(KoColor)));
 
@@ -725,12 +725,12 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("subtotals", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(subtotals()));
     action->setToolTip(i18n("Create different kind of subtotals to a list or database"));
-    
+
     action = new KAction(i18n("&Pivot Tables..."), this);
     addAction("Pivot", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(pivot()));
     action->setToolTip(i18n("Create Pivot Tables"));
-    
+
     action = new KAction(i18n("Area Name..."), this);
     addAction("setAreaName", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(setAreaName()));
@@ -755,9 +755,9 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     functionList.append("MIN");
     functionList.append("MAX");
     functionList.append(i18n("Others..."));
-    static_cast<KSelectAction*>(action)->setItems(functionList);
-    static_cast<KSelectAction*>(action)->setComboWidth(80);
-    static_cast<KSelectAction*>(action)->setCurrentItem(0);
+    static_cast<KSelectAction *>(action)->setItems(functionList);
+    static_cast<KSelectAction *>(action)->setComboWidth(80);
+    static_cast<KSelectAction *>(action)->setCurrentItem(0);
     connect(action, SIGNAL(triggered(QString)), this, SLOT(formulaSelection(QString)));
 
     // -- general editing actions --
@@ -897,15 +897,15 @@ void CellToolBase::paintSelection(QPainter &painter, const QRectF &paintRect)
     d->paintSelection(painter, paintRect);
 }
 
-void CellToolBase::mousePressEvent(KoPointerEvent* event)
+void CellToolBase::mousePressEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mousePressEvent(event);
 }
 
-void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
+void CellToolBase::mouseMoveEvent(KoPointerEvent *event)
 {
     // Special handling for drag'n'drop.
-    if (DragAndDropStrategy *const strategy = dynamic_cast<DragAndDropStrategy*>(currentStrategy())) {
+    if (DragAndDropStrategy *const strategy = dynamic_cast<DragAndDropStrategy *>(currentStrategy())) {
         // FIXME Stefan: QDrag*Event and QDropEvent are not handled by KoInteractionTool YET:
         // Cancel the strategy after the drag has started.
         if (strategy->dragStarted()) {
@@ -926,7 +926,7 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
 
     // Diagonal cursor, if the selection handle was hit.
     if (SelectionStrategy::hitTestReferenceSizeGrip(canvas(), selection(), position) ||
-        SelectionStrategy::hitTestSelectionSizeGrip(canvas(), selection(), position)) {
+            SelectionStrategy::hitTestSelectionSizeGrip(canvas(), selection(), position)) {
         if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
             useCursor(Qt::SizeBDiagCursor);
         } else {
@@ -957,10 +957,10 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
         kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
     } else {
         const Cell cell = Cell(selection()->activeSheet(), col, row).masterCell();
-        SheetView* const sheetView = this->sheetView(selection()->activeSheet());
+        SheetView *const sheetView = this->sheetView(selection()->activeSheet());
 
         QString url;
-        const CellView& cellView = sheetView->cellView(col, row);
+        const CellView &cellView = sheetView->cellView(col, row);
         if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
             url = cellView.testAnchor(sheetView, cell, cell.width() - position.x() + xpos, position.y() - ypos);
         } else {
@@ -977,13 +977,13 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
     KoInteractionTool::mouseMoveEvent(event);
 }
 
-void CellToolBase::mouseReleaseEvent(KoPointerEvent* event)
+void CellToolBase::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
     scrollToCell(selection()->cursor());
 }
 
-void CellToolBase::mouseDoubleClickEvent(KoPointerEvent* event)
+void CellToolBase::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event)
     cancelCurrentStrategy();
@@ -991,9 +991,9 @@ void CellToolBase::mouseDoubleClickEvent(KoPointerEvent* event)
     createEditor(false /* keep content */);
 }
 
-void CellToolBase::keyPressEvent(QKeyEvent* event)
+void CellToolBase::keyPressEvent(QKeyEvent *event)
 {
-    register Sheet * const sheet = selection()->activeSheet();
+    register Sheet *const sheet = selection()->activeSheet();
     if (!sheet) {
         return;
     }
@@ -1042,8 +1042,9 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
     case Qt::Key_Tab: /* a tab behaves just like a right/left arrow */
     case Qt::Key_Backtab:  /* and so does Shift+Tab */
         if (event->modifiers() & Qt::ControlModifier) {
-            if (!d->processControlArrowKey(event))
+            if (!d->processControlArrowKey(event)) {
                 return;
+            }
         } else {
             d->processArrowKey(event);
             return;
@@ -1056,34 +1057,38 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
         break;
 
     case Qt::Key_Home:
-        if (!d->processHomeKey(event))
+        if (!d->processHomeKey(event)) {
             return;
+        }
         break;
 
     case Qt::Key_End:
-        if (!d->processEndKey(event))
+        if (!d->processEndKey(event)) {
             return;
+        }
         break;
 
     case Qt::Key_PageUp:  /* Page Up */
-        if (!d->processPriorKey(event))
+        if (!d->processPriorKey(event)) {
             return;
+        }
         break;
 
     case Qt::Key_PageDown:   /* Page Down */
-        if (!d->processNextKey(event))
+        if (!d->processNextKey(event)) {
             return;
+        }
         break;
 
     case Qt::Key_Backspace:
     case Qt::Key_Delete:
-	clearContents();
-	break;
+        clearContents();
+        break;
 
     case Qt::Key_F2:
-	edit();
-	break;
-	
+        edit();
+        break;
+
     default:
         d->processOtherKey(event);
         return;
@@ -1091,7 +1096,7 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
     }
 }
 
-void CellToolBase::inputMethodEvent(QInputMethodEvent * event)
+void CellToolBase::inputMethodEvent(QInputMethodEvent *event)
 {
     // Send it to the embedded editor.
     if (editor()) {
@@ -1099,7 +1104,7 @@ void CellToolBase::inputMethodEvent(QInputMethodEvent * event)
     }
 }
 
-void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
     Q_UNUSED(shapes);
@@ -1110,14 +1115,13 @@ void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> 
     }
 
     useCursor(Qt::ArrowCursor);
-    
 
     // paint the selection rectangle
     selection()->update();
     populateWordCollection();
     // Initialize cell style selection action.
-    const StyleManager* styleManager = selection()->activeSheet()->map()->styleManager();
-    static_cast<KSelectAction*>(this->action("setStyle"))->setItems(styleManager->styleNames());
+    const StyleManager *styleManager = selection()->activeSheet()->map()->styleManager();
+    static_cast<KSelectAction *>(this->action("setStyle"))->setItems(styleManager->styleNames());
 
     // Establish connections.
     connect(selection(), SIGNAL(changed(Region)),
@@ -1187,17 +1191,18 @@ QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
 }
 
 // TODO: while this event sends the offset-adjusted position, the subsequent handleMouseMove calls do not. This means that they all contain the offset adjustment themselves, which is a needless duplication. Should be improved.
-KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
+KoInteractionStrategy *CellToolBase::createStrategy(KoPointerEvent *event)
 {
     // Get info about where the event occurred.
     QPointF position = event->point - offset(); // the shape offset, not the scrolling one.
 
     // Autofilling or merging, if the selection handle was hit.
     if (SelectionStrategy::hitTestSelectionSizeGrip(canvas(), selection(), position)) {
-        if (event->button() == Qt::LeftButton)
+        if (event->button() == Qt::LeftButton) {
             return new AutoFillStrategy(this, position, event->modifiers());
-        else if (event->button() == Qt::MidButton)
+        } else if (event->button() == Qt::MidButton) {
             return new MergeStrategy(this, position, event->modifiers());
+        }
     }
 
     // Pasting with the middle mouse button.
@@ -1241,7 +1246,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
             return 0; // Act directly; no further strategy needed.
         } else {
             const Cell cell = Cell(selection()->activeSheet(), col, row).masterCell();
-            SheetView* const sheetView = this->sheetView(selection()->activeSheet());
+            SheetView *const sheetView = this->sheetView(selection()->activeSheet());
 
             // Filter button hit.
             const double offsetX = canvas()->canvasController()->canvasOffsetX();
@@ -1258,7 +1263,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 
             // Hyperlink hit.
             QString url;
-            const CellView& cellView = sheetView->cellView(col, row);
+            const CellView &cellView = sheetView->cellView(col, row);
             if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
                 url = cellView.testAnchor(sheetView, cell, cell.width() - position.x() + xpos, position.y() - ypos);
             } else {
@@ -1273,18 +1278,25 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 
     // Do we want to drag and drop the selection?
     bool wantDragDrop = hitSelection;
-    if (event->modifiers() & Qt::ControlModifier) wantDragDrop = false;   // no drag&drop if Ctrl is pressed
+    if (event->modifiers() & Qt::ControlModifier) {
+        wantDragDrop = false;    // no drag&drop if Ctrl is pressed
+    }
     QRect selRect = selection()->boundingRect();
     // no drag&drop if it's a single cell, assume they want a selection
-    if ((selRect.width() <= 1) && (selRect.height() <= 1)) wantDragDrop = false;
-    if (selection()->referenceSelectionMode()) wantDragDrop = false;
-    if (wantDragDrop)
+    if ((selRect.width() <= 1) && (selRect.height() <= 1)) {
+        wantDragDrop = false;
+    }
+    if (selection()->referenceSelectionMode()) {
+        wantDragDrop = false;
+    }
+    if (wantDragDrop) {
         return new DragAndDropStrategy(this, position, event->modifiers());
+    }
 
     return new SelectionStrategy(this, position, event->modifiers());
 }
 
-void CellToolBase::selectionChanged(const Region& region)
+void CellToolBase::selectionChanged(const Region &region)
 {
     Q_UNUSED(region);
     if (!d->externalEditor) {
@@ -1367,14 +1379,14 @@ void CellToolBase::scrollToCell(const QPoint &location)
     const double pixelWidth = canvas()->viewConverter()->viewToDocumentX(1);
     const double pixelHeight = canvas()->viewConverter()->viewToDocumentY(1);
     QRectF rect(xpos, ypos, cell.width(), cell.height());
-    rect.adjust(-2*pixelWidth, -2*pixelHeight, +2*pixelWidth, +2*pixelHeight);
+    rect.adjust(-2 * pixelWidth, -2 * pixelHeight, +2 * pixelWidth, +2 * pixelHeight);
     rect = rect & QRectF(QPointF(0.0, 0.0), sheet->documentSize());
 
     // Scroll to cell.
     canvas()->canvasController()->ensureVisible(canvas()->viewConverter()->documentToView(rect), true);
 }
 
-CellEditorBase* CellToolBase::editor() const
+CellEditorBase *CellToolBase::editor() const
 {
     return d->cellEditor;
 }
@@ -1387,16 +1399,17 @@ void CellToolBase::setLastEditorWithFocus(Editor editor)
 bool CellToolBase::createEditor(bool clear, bool focus)
 {
     const Cell cell(selection()->activeSheet(), selection()->marker());
-    if (selection()->activeSheet()->isProtected() && !cell.style().notProtected())
+    if (selection()->activeSheet()->isProtected() && !cell.style().notProtected()) {
         return false;
+    }
 
     if (!editor()) {
-        d->cellEditor = new CellEditor(this, d->wordCollection,canvas()->canvasWidget());
+        d->cellEditor = new CellEditor(this, d->wordCollection, canvas()->canvasWidget());
         d->cellEditor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
         connect(action("permuteFixation"), SIGNAL(triggered(bool)),
                 d->cellEditor, SLOT(permuteFixation()));
 
-        if(d->externalEditor) {
+        if (d->externalEditor) {
             connect(d->cellEditor, SIGNAL(textChanged(QString)),
                     d->externalEditor, SLOT(setText(QString)));
             connect(d->externalEditor, SIGNAL(textChanged(QString)),
@@ -1404,7 +1417,7 @@ bool CellToolBase::createEditor(bool clear, bool focus)
             d->externalEditor->applyAction()->setEnabled(true);
             d->externalEditor->cancelAction()->setEnabled(true);
         }
-        
+
         double w = cell.width();
         double h = cell.height();
         double min_w = cell.width();
@@ -1419,8 +1432,9 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         // if sheet and cell direction don't match, then the editor's location
         // needs to be shifted backwards so that it's right above the cell's text
         if (w > 0 && ((sheetDir == Qt::RightToLeft && !rtlText) ||
-                      (sheetDir == Qt::LeftToRight && rtlText)))
+                      (sheetDir == Qt::LeftToRight && rtlText))) {
             xpos -= w - min_w;
+        }
 
         // paint editor above correct cell if sheet direction is RTL
         if (sheetDir == Qt::RightToLeft) {
@@ -1436,12 +1450,14 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         const Style style = cell.effectiveStyle();
         QPalette editorPalette(d->cellEditor->palette());
         QColor color = style.fontColor();
-        if (!color.isValid())
+        if (!color.isValid()) {
             color = canvas()->canvasWidget()->palette().text().color();
+        }
         editorPalette.setColor(QPalette::Text, color);
         color = style.backgroundColor();
-        if (!color.isValid())
+        if (!color.isValid()) {
             color = editorPalette.base().color();
+        }
         editorPalette.setColor(QPalette::Background, color);
         d->cellEditor->setPalette(editorPalette);
 
@@ -1453,45 +1469,47 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         const QRectF zoomedRect = canvas()->viewConverter()->documentToView(rect);
         d->cellEditor->setGeometry(zoomedRect.toRect().adjusted(1, 1, -1, -1));
         d->cellEditor->setMinimumSize(QSize((int)canvas()->viewConverter()->documentToViewX(min_w) - 1,
-                                       (int)canvas()->viewConverter()->documentToViewY(min_h) - 1));
+                                            (int)canvas()->viewConverter()->documentToViewY(min_h) - 1));
         d->cellEditor->show();
 
         // Laurent 2001-12-05
         // Don't add focus when we create a new editor and
         // we select text in edit widget otherwise we don't delete
         // selected text.
-        if (focus)
+        if (focus) {
             d->cellEditor->setFocus();
+        }
 
         // clear the selection rectangle
         selection()->update();
     }
 
-    if (!clear && !cell.isNull())
+    if (!clear && !cell.isNull()) {
         d->cellEditor->setText(cell.userInput());
+    }
     return true;
 }
 
 void CellToolBase::populateWordCollection()
 {
-  const CellStorage* cellstore=selection()->activeSheet()->cellStorage();
-  ValueConverter *conv=0,*conv2=0;
-  int lastrow=cellstore->rows();
-  int lastcolumn=cellstore->columns();
-  if( lastrow < 2000 && lastcolumn < 20) {
-  for (int j=1 ; j <= lastcolumn ; j++) {
-    for (int i=1; i<=lastrow ; i++) {
-      Value val=Cell( selection()->activeSheet(), j, i).value();
-      if(val.isString()) {
-	QString value=conv->toString( conv2->asString(val) );
-	
-	if(!d->wordCollection.values(j).contains(value)){
-	    d->wordCollection.insertMulti(j, value);
-	  }
-      }	 
+    const CellStorage *cellstore = selection()->activeSheet()->cellStorage();
+    ValueConverter *conv = 0, *conv2 = 0;
+    int lastrow = cellstore->rows();
+    int lastcolumn = cellstore->columns();
+    if (lastrow < 2000 && lastcolumn < 20) {
+        for (int j = 1; j <= lastcolumn; j++) {
+            for (int i = 1; i <= lastrow; i++) {
+                Value val = Cell(selection()->activeSheet(), j, i).value();
+                if (val.isString()) {
+                    QString value = conv->toString(conv2->asString(val));
+
+                    if (!d->wordCollection.values(j).contains(value)) {
+                        d->wordCollection.insertMulti(j, value);
+                    }
+                }
+            }
+        }
     }
-  }
-  }
 }
 
 void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
@@ -1522,7 +1540,7 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     canvas()->canvasWidget()->setFocus();
 }
 
-void CellToolBase::activeSheetChanged(Sheet* sheet)
+void CellToolBase::activeSheetChanged(Sheet *sheet)
 {
 #ifdef NDEBUG
     Q_UNUSED(sheet);
@@ -1565,13 +1583,17 @@ void CellToolBase::focusEditorRequested()
     // This screws up <Tab> though (David)
     if (selection()->originSheet() != selection()->activeSheet()) {
         // Always focus the external editor, if not on the origin sheet.
-        if (d->externalEditor) d->externalEditor->setFocus();
+        if (d->externalEditor) {
+            d->externalEditor->setFocus();
+        }
     } else {
         // Focus the last active editor, if on the origin sheet.
         if (d->lastEditorWithFocus == EmbeddedEditor) {
             editor()->widget()->setFocus();
         } else {
-            if (d->externalEditor) d->externalEditor->setFocus();
+            if (d->externalEditor) {
+                d->externalEditor->setFocus();
+            }
         }
     }
 }
@@ -1590,7 +1612,7 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
             }
         }
     }
-    DataManipulator* command = new DataManipulator();
+    DataManipulator *command = new DataManipulator();
     command->setSheet(selection()->activeSheet());
     command->setValue(Value(text));
     command->setParsing(true);
@@ -1598,8 +1620,9 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
     command->add(expandMatrix ? *selection() : Region(selection()->cursor(), selection()->activeSheet()));
     command->execute(canvas());
 
-    if (expandMatrix && selection()->isSingular())
+    if (expandMatrix && selection()->isSingular()) {
         selection()->initialize(*command);
+    }
 
     Cell cell = Cell(selection()->activeSheet(), selection()->marker());
     if (cell.value().isString() && !text.isEmpty() && !text.at(0).isDigit() && !cell.isFormula()) {
@@ -1626,7 +1649,7 @@ void CellToolBase::cellStyle()
 
 void CellToolBase::setDefaultStyle()
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setDefault();
     command->add(*selection());
@@ -1635,23 +1658,24 @@ void CellToolBase::setDefaultStyle()
 
 void CellToolBase::styleDialog()
 {
-    Map* const map = selection()->activeSheet()->map();
-    StyleManager* const styleManager = map->styleManager();
+    Map *const map = selection()->activeSheet()->map();
+    StyleManager *const styleManager = map->styleManager();
     QPointer<StyleManagerDialog> dialog = new StyleManagerDialog(canvas()->canvasWidget(), selection(), styleManager);
     dialog->exec();
     delete dialog;
 
-    static_cast<KSelectAction*>(action("setStyle"))->setItems(styleManager->styleNames());
-    if (selection()->activeSheet())
+    static_cast<KSelectAction *>(action("setStyle"))->setItems(styleManager->styleNames());
+    if (selection()->activeSheet()) {
         map->addDamage(new CellDamage(selection()->activeSheet(), Region(1, 1, maxCol(), maxRow()), CellDamage::Appearance));
+    }
     canvas()->canvasWidget()->update();
 }
 
-void CellToolBase::setStyle(const QString& stylename)
+void CellToolBase::setStyle(const QString &stylename)
 {
     kDebug() << "CellToolBase::setStyle(" << stylename << ")";
     if (selection()->activeSheet()->map()->styleManager()->style(stylename)) {
-        StyleCommand* command = new StyleCommand();
+        StyleCommand *command = new StyleCommand();
         command->setSheet(selection()->activeSheet());
         command->setParentName(stylename);
         command->add(*selection());
@@ -1671,8 +1695,9 @@ void CellToolBase::createStyleFromCell()
         styleName = KInputDialog::getText(i18n("Create Style From Cell"),
                                           i18n("Enter name:"), styleName, &ok, canvas()->canvasWidget());
 
-        if (!ok) // User pushed an OK button.
+        if (!ok) { // User pushed an OK button.
             return;
+        }
 
         styleName = styleName.trimmed();
 
@@ -1689,19 +1714,19 @@ void CellToolBase::createStyleFromCell()
     }
 
     const Style cellStyle = cell.style();
-    CustomStyle*  style = new CustomStyle(styleName);
+    CustomStyle  *style = new CustomStyle(styleName);
     style->merge(cellStyle);
 
     selection()->activeSheet()->map()->styleManager()->insertStyle(style);
     cell.setStyle(*style);
-    QStringList functionList(static_cast<KSelectAction*>(action("setStyle"))->items());
+    QStringList functionList(static_cast<KSelectAction *>(action("setStyle"))->items());
     functionList.push_back(styleName);
-    static_cast<KSelectAction*>(action("setStyle"))->setItems(functionList);
+    static_cast<KSelectAction *>(action("setStyle"))->setItems(functionList);
 }
 
 void CellToolBase::bold(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
     command->setFontBold(enable);
@@ -1715,7 +1740,7 @@ void CellToolBase::bold(bool enable)
 
 void CellToolBase::underline(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
     command->setFontUnderline(enable);
@@ -1729,7 +1754,7 @@ void CellToolBase::underline(bool enable)
 
 void CellToolBase::strikeOut(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
     command->setFontStrike(enable);
@@ -1741,10 +1766,9 @@ void CellToolBase::strikeOut(bool enable)
     }
 }
 
-
 void CellToolBase::italic(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
     command->setFontItalic(enable);
@@ -1756,9 +1780,9 @@ void CellToolBase::italic(bool enable)
     }
 }
 
-void CellToolBase::font(const QString& font)
+void CellToolBase::font(const QString &font)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
     command->setFontFamily(font.toLatin1());
@@ -1776,7 +1800,7 @@ void CellToolBase::font(const QString& font)
 
 void CellToolBase::fontSize(int size)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
     command->setFontSize(size);
@@ -1797,7 +1821,7 @@ void CellToolBase::increaseFontSize()
     const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
     const int size = style.fontSize();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
     command->setFontSize(size + 1);
@@ -1810,7 +1834,7 @@ void CellToolBase::decreaseFontSize()
     const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
     const int size = style.fontSize();
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Font"));
     command->setFontSize(size - 1);
@@ -1820,7 +1844,7 @@ void CellToolBase::decreaseFontSize()
 
 void CellToolBase::changeTextColor(const KoColor &color)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Text Color"));
     command->setFontColor(color.toQColor());
@@ -1830,7 +1854,7 @@ void CellToolBase::changeTextColor(const KoColor &color)
 
 void CellToolBase::alignLeft(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Horizontal Alignment"));
     command->setHorizontalAlignment(enable ? Style::Left : Style::HAlignUndefined);
@@ -1840,7 +1864,7 @@ void CellToolBase::alignLeft(bool enable)
 
 void CellToolBase::alignRight(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Horizontal Alignment"));
     command->setHorizontalAlignment(enable ? Style::Right : Style::HAlignUndefined);
@@ -1850,7 +1874,7 @@ void CellToolBase::alignRight(bool enable)
 
 void CellToolBase::alignCenter(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Horizontal Alignment"));
     command->setHorizontalAlignment(enable ? Style::Center : Style::HAlignUndefined);
@@ -1860,7 +1884,7 @@ void CellToolBase::alignCenter(bool enable)
 
 void CellToolBase::alignTop(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Vertical Alignment"));
     command->setVerticalAlignment(enable ? Style::Top : Style::VAlignUndefined);
@@ -1870,7 +1894,7 @@ void CellToolBase::alignTop(bool enable)
 
 void CellToolBase::alignBottom(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Vertical Alignment"));
     command->setVerticalAlignment(enable ? Style::Bottom : Style::VAlignUndefined);
@@ -1880,7 +1904,7 @@ void CellToolBase::alignBottom(bool enable)
 
 void CellToolBase::alignMiddle(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Vertical Alignment"));
     command->setVerticalAlignment(enable ? Style::Middle : Style::VAlignUndefined);
@@ -1890,36 +1914,38 @@ void CellToolBase::alignMiddle(bool enable)
 
 void CellToolBase::borderLeft()
 {
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
+    QColor color = static_cast<KoColorPopupAction *>(action("borderColor"))->currentColor();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
-    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
+    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
         command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
-    else
+    } else {
         command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
+    }
     command->add(*selection());
     command->execute(canvas());
 }
 
 void CellToolBase::borderRight()
 {
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
+    QColor color = static_cast<KoColorPopupAction *>(action("borderColor"))->currentColor();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
-    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
+    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
         command->setLeftBorderPen(QPen(color, 1, Qt::SolidLine));
-    else
+    } else {
         command->setRightBorderPen(QPen(color, 1, Qt::SolidLine));
+    }
     command->add(*selection());
     command->execute(canvas());
 }
 
 void CellToolBase::borderTop()
 {
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
+    QColor color = static_cast<KoColorPopupAction *>(action("borderColor"))->currentColor();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
     command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
@@ -1929,8 +1955,8 @@ void CellToolBase::borderTop()
 
 void CellToolBase::borderBottom()
 {
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
+    QColor color = static_cast<KoColorPopupAction *>(action("borderColor"))->currentColor();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
     command->setBottomBorderPen(QPen(color, 1, Qt::SolidLine));
@@ -1940,8 +1966,8 @@ void CellToolBase::borderBottom()
 
 void CellToolBase::borderAll()
 {
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
+    QColor color = static_cast<KoColorPopupAction *>(action("borderColor"))->currentColor();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
     command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
@@ -1956,7 +1982,7 @@ void CellToolBase::borderAll()
 
 void CellToolBase::borderRemove()
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
     command->setTopBorderPen(QPen(Qt::NoPen));
@@ -1971,8 +1997,8 @@ void CellToolBase::borderRemove()
 
 void CellToolBase::borderOutline()
 {
-    QColor color = static_cast<KoColorPopupAction*>(action("borderColor"))->currentColor();
-    StyleCommand* command = new StyleCommand();
+    QColor color = static_cast<KoColorPopupAction *>(action("borderColor"))->currentColor();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Border"));
     command->setTopBorderPen(QPen(color, 1, Qt::SolidLine));
@@ -1985,7 +2011,7 @@ void CellToolBase::borderOutline()
 
 void CellToolBase::borderColor(const KoColor &color)
 {
-    BorderColorCommand* command = new BorderColorCommand();
+    BorderColorCommand *command = new BorderColorCommand();
     command->setSheet(selection()->activeSheet());
     command->setColor(color.toQColor());
     command->add(*selection());
@@ -1994,7 +2020,7 @@ void CellToolBase::borderColor(const KoColor &color)
 
 void CellToolBase::wrapText(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Wrap Text"));
     command->setMultiRow(enable);
@@ -2006,7 +2032,7 @@ void CellToolBase::wrapText(bool enable)
 
 void CellToolBase::verticalText(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Vertical Text"));
     command->setVerticalText(enable);
@@ -2018,21 +2044,23 @@ void CellToolBase::verticalText(bool enable)
 
 void CellToolBase::increaseIndentation()
 {
-    IndentationCommand* command = new IndentationCommand();
+    IndentationCommand *command = new IndentationCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    if (!command->execute())
+    if (!command->execute()) {
         delete command;
+    }
 }
 
 void CellToolBase::decreaseIndentation()
 {
-    IndentationCommand* command = new IndentationCommand();
+    IndentationCommand *command = new IndentationCommand();
     command->setSheet(selection()->activeSheet());
     command->setReverse(true);
     command->add(*selection());
-    if (!command->execute())
+    if (!command->execute()) {
         delete command;
+    }
 }
 
 void CellToolBase::changeAngle()
@@ -2044,7 +2072,7 @@ void CellToolBase::changeAngle()
 
 void CellToolBase::percent(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Format Percent"));
     command->setFormatType(enable ? Format::Percentage : Format::Generic);
@@ -2054,7 +2082,7 @@ void CellToolBase::percent(bool enable)
 
 void CellToolBase::currency(bool enable)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Format Money"));
     command->setFormatType(enable ? Format::Money : Format::Generic);
@@ -2066,26 +2094,28 @@ void CellToolBase::currency(bool enable)
 
 void CellToolBase::increasePrecision()
 {
-    PrecisionCommand* command = new PrecisionCommand();
+    PrecisionCommand *command = new PrecisionCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    if (!command->execute())
+    if (!command->execute()) {
         delete command;
+    }
 }
 
 void CellToolBase::decreasePrecision()
 {
-    PrecisionCommand* command = new PrecisionCommand();
+    PrecisionCommand *command = new PrecisionCommand();
     command->setSheet(selection()->activeSheet());
     command->setReverse(true);
     command->add(*selection());
-    if (!command->execute())
+    if (!command->execute()) {
         delete command;
+    }
 }
 
 void CellToolBase::toUpperCase()
 {
-    CaseManipulator* command = new CaseManipulator;
+    CaseManipulator *command = new CaseManipulator;
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Switch to uppercase"));
     command->changeMode(CaseManipulator::Upper);
@@ -2095,7 +2125,7 @@ void CellToolBase::toUpperCase()
 
 void CellToolBase::toLowerCase()
 {
-    CaseManipulator* command = new CaseManipulator;
+    CaseManipulator *command = new CaseManipulator;
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Switch to lowercase"));
     command->changeMode(CaseManipulator::Lower);
@@ -2105,7 +2135,7 @@ void CellToolBase::toLowerCase()
 
 void CellToolBase::firstLetterToUpperCase()
 {
-    CaseManipulator* command = new CaseManipulator;
+    CaseManipulator *command = new CaseManipulator;
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("First letter uppercase"));
     command->changeMode(CaseManipulator::FirstUpper);
@@ -2115,7 +2145,7 @@ void CellToolBase::firstLetterToUpperCase()
 
 void CellToolBase::changeBackgroundColor(const KoColor &color)
 {
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Background Color"));
     command->setBackgroundColor(color.toQColor());
@@ -2132,7 +2162,7 @@ void CellToolBase::mergeCells()
     if (selection()->activeSheet()->map()->isProtected()) {
         return;
     }
-    MergeCommand* const command = new MergeCommand();
+    MergeCommand *const command = new MergeCommand();
     command->setSheet(selection()->activeSheet());
     command->setSelection(selection());
     command->setHorizontalMerge(false);
@@ -2150,7 +2180,7 @@ void CellToolBase::mergeCellsHorizontal()
     if (selection()->activeSheet()->map()->isProtected()) {
         return;
     }
-    MergeCommand* const command = new MergeCommand();
+    MergeCommand *const command = new MergeCommand();
     command->setSheet(selection()->activeSheet());
     command->setHorizontalMerge(true);
     command->setVerticalMerge(false);
@@ -2168,7 +2198,7 @@ void CellToolBase::mergeCellsVertical()
     if (selection()->activeSheet()->map()->isProtected()) {
         return;
     }
-    MergeCommand* const command = new MergeCommand();
+    MergeCommand *const command = new MergeCommand();
     command->setSheet(selection()->activeSheet());
     command->setHorizontalMerge(false);
     command->setVerticalMerge(true);
@@ -2186,7 +2216,7 @@ void CellToolBase::dissociateCells()
     if (selection()->activeSheet()->map()->isProtected()) {
         return;
     }
-    MergeCommand* const command = new MergeCommand();
+    MergeCommand *const command = new MergeCommand();
     command->setSheet(selection()->activeSheet());
     command->setReverse(true);
     command->setSelection(selection());
@@ -2196,9 +2226,9 @@ void CellToolBase::dissociateCells()
 
 void CellToolBase::resizeColumn()
 {
-    if (selection()->isRowSelected())
+    if (selection()->isRowSelected()) {
         KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
-    else {
+    } else {
         QPointer<ResizeColumn> dialog = new ResizeColumn(canvas()->canvasWidget(), selection());
         dialog->exec();
         delete dialog;
@@ -2207,7 +2237,7 @@ void CellToolBase::resizeColumn()
 
 void CellToolBase::insertColumn()
 {
-    InsertDeleteColumnManipulator* command = new InsertDeleteColumnManipulator();
+    InsertDeleteColumnManipulator *command = new InsertDeleteColumnManipulator();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
     command->execute(canvas());
@@ -2215,7 +2245,7 @@ void CellToolBase::insertColumn()
 
 void CellToolBase::deleteColumn()
 {
-    InsertDeleteColumnManipulator* command = new InsertDeleteColumnManipulator();
+    InsertDeleteColumnManipulator *command = new InsertDeleteColumnManipulator();
     command->setSheet(selection()->activeSheet());
     command->setReverse(true);
     command->add(*selection());
@@ -2229,7 +2259,7 @@ void CellToolBase::hideColumn()
         return;
     }
 
-    HideShowManipulator* command = new HideShowManipulator();
+    HideShowManipulator *command = new HideShowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setManipulateColumns(true);
     command->add(*selection());
@@ -2243,7 +2273,7 @@ void CellToolBase::showColumn()
         return;
     }
 
-    HideShowManipulator* command = new HideShowManipulator();
+    HideShowManipulator *command = new HideShowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setManipulateColumns(true);
     command->setReverse(true);
@@ -2260,38 +2290,42 @@ void CellToolBase::slotShowColumnDialog()
 
 void CellToolBase::equalizeColumn()
 {
-    if (selection()->isRowSelected())
+    if (selection()->isRowSelected()) {
         KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
-    else {
+    } else {
         const QRect range = selection()->lastRange();
-        const ColumnFormat* columnFormat = selection()->activeSheet()->columnFormat(range.left());
+        const ColumnFormat *columnFormat = selection()->activeSheet()->columnFormat(range.left());
         double size = columnFormat->width();
-        if (range.left() == range.right())
+        if (range.left() == range.right()) {
             return;
-        for (int i = range.left() + 1; i <= range.right(); ++i)
+        }
+        for (int i = range.left() + 1; i <= range.right(); ++i) {
             size = qMax(selection()->activeSheet()->columnFormat(i)->width(), size);
+        }
 
         if (size != 0.0) {
-            ResizeColumnManipulator* command = new ResizeColumnManipulator();
+            ResizeColumnManipulator *command = new ResizeColumnManipulator();
             command->setSheet(selection()->activeSheet());
             command->setSize(qMax(2.0, size));
             command->add(*selection());
-            if (!command->execute())
+            if (!command->execute()) {
                 delete command;
+            }
         } else { // hide
-            HideShowManipulator* command = new HideShowManipulator();
+            HideShowManipulator *command = new HideShowManipulator();
             command->setSheet(selection()->activeSheet());
             command->setManipulateColumns(true);
             command->add(*selection());
-            if (!command->execute())
+            if (!command->execute()) {
                 delete command;
+            }
         }
     }
 }
 
 void CellToolBase::adjustColumn()
 {
-    AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
+    AdjustColumnRowManipulator *command = new AdjustColumnRowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setAdjustColumn(true);
     command->add(*selection());
@@ -2300,9 +2334,9 @@ void CellToolBase::adjustColumn()
 
 void CellToolBase::resizeRow()
 {
-    if (selection()->isColumnSelected())
+    if (selection()->isColumnSelected()) {
         KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
-    else {
+    } else {
         QPointer<ResizeRow> dialog = new ResizeRow(canvas()->canvasWidget(), selection());
         dialog->exec();
         delete dialog;
@@ -2311,7 +2345,7 @@ void CellToolBase::resizeRow()
 
 void CellToolBase::insertRow()
 {
-    InsertDeleteRowManipulator* command = new InsertDeleteRowManipulator();
+    InsertDeleteRowManipulator *command = new InsertDeleteRowManipulator();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
     command->execute(canvas());
@@ -2319,7 +2353,7 @@ void CellToolBase::insertRow()
 
 void CellToolBase::deleteRow()
 {
-    InsertDeleteRowManipulator* command = new InsertDeleteRowManipulator();
+    InsertDeleteRowManipulator *command = new InsertDeleteRowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setReverse(true);
     command->add(*selection());
@@ -2333,7 +2367,7 @@ void CellToolBase::hideRow()
         return;
     }
 
-    HideShowManipulator* command = new HideShowManipulator();
+    HideShowManipulator *command = new HideShowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setManipulateRows(true);
     command->add(*selection());
@@ -2347,7 +2381,7 @@ void CellToolBase::showRow()
         return;
     }
 
-    HideShowManipulator* command = new HideShowManipulator();
+    HideShowManipulator *command = new HideShowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setManipulateRows(true);
     command->setReverse(true);
@@ -2364,13 +2398,14 @@ void CellToolBase::slotShowRowDialog()
 
 void CellToolBase::equalizeRow()
 {
-    if (selection()->isColumnSelected())
+    if (selection()->isColumnSelected()) {
         KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
-    else {
+    } else {
         const QRect range = selection()->lastRange();
         qreal size = selection()->activeSheet()->rowFormats()->rowHeight(range.top());
-        if (range.top() == range.bottom())
+        if (range.top() == range.bottom()) {
             return;
+        }
         for (int i = range.top() + 1; i <= range.bottom(); ++i) {
             int lastRow;
             size = qMax(selection()->activeSheet()->rowFormats()->rowHeight(i, &lastRow), static_cast<qreal>(size));
@@ -2378,26 +2413,28 @@ void CellToolBase::equalizeRow()
         }
 
         if (size != 0.0) {
-            ResizeRowManipulator* command = new ResizeRowManipulator();
+            ResizeRowManipulator *command = new ResizeRowManipulator();
             command->setSheet(selection()->activeSheet());
             command->setSize(qMax(qreal(2.0), size));
             command->add(*selection());
-            if (!command->execute())
+            if (!command->execute()) {
                 delete command;
+            }
         } else { // hide
-            HideShowManipulator* command = new HideShowManipulator();
+            HideShowManipulator *command = new HideShowManipulator();
             command->setSheet(selection()->activeSheet());
             command->setManipulateRows(true);
             command->add(*selection());
-            if (!command->execute())
+            if (!command->execute()) {
                 delete command;
+            }
         }
     }
 }
 
 void CellToolBase::adjustRow()
 {
-    AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
+    AdjustColumnRowManipulator *command = new AdjustColumnRowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setAdjustRow(true);
     command->add(*selection());
@@ -2406,7 +2443,7 @@ void CellToolBase::adjustRow()
 
 void CellToolBase::adjust()
 {
-    AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
+    AdjustColumnRowManipulator *command = new AdjustColumnRowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setAdjustColumn(true);
     command->setAdjustRow(true);
@@ -2430,7 +2467,7 @@ void CellToolBase::deleteCells()
 
 void CellToolBase::clearAll()
 {
-    DeleteCommand* command = new DeleteCommand();
+    DeleteCommand *command = new DeleteCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
     command->execute(canvas());
@@ -2439,10 +2476,11 @@ void CellToolBase::clearAll()
 void CellToolBase::clearContents()
 {
     // TODO Stefan: Actually this check belongs into the command!
-    if (selection()->activeSheet()->areaIsEmpty(*selection()))
+    if (selection()->activeSheet()->areaIsEmpty(*selection())) {
         return;
+    }
 
-    DataManipulator* command = new DataManipulator();
+    DataManipulator *command = new DataManipulator();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Clear Text"));
     // parsing gets set only so that parseUserInput is called as it should be,
@@ -2463,10 +2501,11 @@ void CellToolBase::comment()
 void CellToolBase::clearComment()
 {
     // TODO Stefan: Actually this check belongs into the command!
-    if (selection()->activeSheet()->areaIsEmpty(*selection(), Sheet::Comment))
+    if (selection()->activeSheet()->areaIsEmpty(*selection(), Sheet::Comment)) {
         return;
+    }
 
-    CommentCommand* command = new CommentCommand();
+    CommentCommand *command = new CommentCommand();
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Remove Comment"));
     command->setComment(QString());
@@ -2484,10 +2523,11 @@ void CellToolBase::conditional()
 void CellToolBase::clearConditionalStyles()
 {
     // TODO Stefan: Actually this check belongs into the command!
-    if (selection()->activeSheet()->areaIsEmpty(*selection(), Sheet::ConditionalCellAttribute))
+    if (selection()->activeSheet()->areaIsEmpty(*selection(), Sheet::ConditionalCellAttribute)) {
         return;
+    }
 
-    CondtionCommand* command = new CondtionCommand();
+    CondtionCommand *command = new CondtionCommand();
     command->setSheet(selection()->activeSheet());
     command->setConditionList(QLinkedList<Conditional>());
     command->add(*selection());
@@ -2514,7 +2554,7 @@ void CellToolBase::insertHyperlink()
     if (dialog->exec() == KDialog::Accepted) {
         cell = Cell(selection()->activeSheet(), marker);
 
-        LinkCommand* command = new LinkCommand(cell, dialog->text(), dialog->link());
+        LinkCommand *command = new LinkCommand(cell, dialog->text(), dialog->link());
         canvas()->addCommand(command);
 
         //refresh editWidget
@@ -2527,12 +2567,14 @@ void CellToolBase::clearHyperlink()
 {
     QPoint marker(selection()->marker());
     Cell cell(selection()->activeSheet(), marker);
-    if (!cell)
+    if (!cell) {
         return;
-    if (cell.link().isEmpty())
+    }
+    if (cell.link().isEmpty()) {
         return;
+    }
 
-    LinkCommand* command = new LinkCommand(cell, QString(), QString());
+    LinkCommand *command = new LinkCommand(cell, QString(), QString());
     canvas()->addCommand(command);
 
     selection()->emitModified();
@@ -2548,10 +2590,11 @@ void CellToolBase::validity()
 void CellToolBase::clearValidity()
 {
     // TODO Stefan: Actually this check belongs into the command!
-    if (selection()->activeSheet()->areaIsEmpty(*selection(), Sheet::Validity))
+    if (selection()->activeSheet()->areaIsEmpty(*selection(), Sheet::Validity)) {
         return;
+    }
 
-    ValidityCommand* command = new ValidityCommand();
+    ValidityCommand *command = new ValidityCommand();
     command->setSheet(selection()->activeSheet());
     command->setValidity(Validity()); // empty object removes validity
     command->add(*selection());
@@ -2577,7 +2620,7 @@ void CellToolBase::sortInc()
         return;
     }
 
-    SortManipulator* command = new SortManipulator();
+    SortManipulator *command = new SortManipulator();
     command->setSheet(selection()->activeSheet());
 
     // Entire row(s) selected ? Or just one row ? Sort by columns if yes.
@@ -2599,7 +2642,7 @@ void CellToolBase::sortDec()
         return;
     }
 
-    SortManipulator* command = new SortManipulator();
+    SortManipulator *command = new SortManipulator();
     command->setSheet(selection()->activeSheet());
 
     // Entire row(s) selected ? Or just one row ? Sort by rows if yes.
@@ -2616,7 +2659,7 @@ void CellToolBase::sortDec()
 
 void CellToolBase::autoFilter()
 {
-    AutoFilterCommand* command = new AutoFilterCommand();
+    AutoFilterCommand *command = new AutoFilterCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
     command->execute(canvas());
@@ -2624,7 +2667,7 @@ void CellToolBase::autoFilter()
 
 void CellToolBase::fillLeft()
 {
-    FillManipulator* command = new FillManipulator();
+    FillManipulator *command = new FillManipulator();
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Left);
     command->add(*selection());
@@ -2633,7 +2676,7 @@ void CellToolBase::fillLeft()
 
 void CellToolBase::fillRight()
 {
-    FillManipulator* command = new FillManipulator();
+    FillManipulator *command = new FillManipulator();
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Right);
     command->add(*selection());
@@ -2642,7 +2685,7 @@ void CellToolBase::fillRight()
 
 void CellToolBase::fillUp()
 {
-    FillManipulator* command = new FillManipulator();
+    FillManipulator *command = new FillManipulator();
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Up);
     command->add(*selection());
@@ -2651,7 +2694,7 @@ void CellToolBase::fillUp()
 
 void CellToolBase::fillDown()
 {
-    FillManipulator* command = new FillManipulator();
+    FillManipulator *command = new FillManipulator();
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Down);
     command->add(*selection());
@@ -2668,17 +2711,21 @@ void CellToolBase::autoSum()
     QRect sel = selection()->lastRange();
 
     if (sel.height() > 1) {
-        if (selection()->marker().y() == sel.top())
+        if (selection()->marker().y() == sel.top()) {
             sel.setTop(sel.top() + 1);
-        if (selection()->marker().y() == sel.bottom())
+        }
+        if (selection()->marker().y() == sel.bottom()) {
             sel.setBottom(sel.bottom() - 1);
+        }
     } else {
         if (sel.width() > 1) {
-            if (selection()->marker().x() == sel.left())
+            if (selection()->marker().x() == sel.left()) {
                 sel.setLeft(sel.left() + 1);
+            }
 
-            if (selection()->marker().x() == sel.right())
+            if (selection()->marker().x() == sel.right()) {
                 sel.setRight(sel.right() - 1);
+            }
         } else {
             sel = QRect();
 
@@ -2690,7 +2737,7 @@ void CellToolBase::autoSum()
             if ((selection()->marker().y() > 1) && Cell(selection()->activeSheet(), selection()->marker().x(), selection()->marker().y() - 1).value().isNumber()) {
                 // check cells above the current one
                 start = end = selection()->marker().y() - 1;
-                for (--start; (start > 0) && Cell(selection()->activeSheet(), selection()->marker().x(), start).value().isNumber(); --start) ;
+                for (--start; (start > 0) && Cell(selection()->activeSheet(), selection()->marker().x(), start).value().isNumber(); --start);
 
                 const Region region(QRect(QPoint(selection()->marker().x(), start + 1),
                                           QPoint(selection()->marker().x(), end)), selection()->activeSheet());
@@ -2703,7 +2750,7 @@ void CellToolBase::autoSum()
             } else if ((selection()->marker().x() > 1) && Cell(selection()->activeSheet(), selection()->marker().x() - 1, selection()->marker().y()).value().isNumber()) {
                 // check cells to the left of the current one
                 start = end = selection()->marker().x() - 1;
-                for (--start; (start > 0) && Cell(selection()->activeSheet(), start, selection()->marker().y()).value().isNumber(); --start) ;
+                for (--start; (start > 0) && Cell(selection()->activeSheet(), start, selection()->marker().y()).value().isNumber(); --start);
 
                 const Region region(QRect(QPoint(start + 1, selection()->marker().y()),
                                           QPoint(end, selection()->marker().y())), selection()->activeSheet());
@@ -2717,8 +2764,9 @@ void CellToolBase::autoSum()
         }
     }
 
-    if ((sel.width() > 1) && (sel.height() > 1))
+    if ((sel.width() > 1) && (sel.height() > 1)) {
         sel = QRect();
+    }
 
     createEditor();
 
@@ -2768,7 +2816,7 @@ void CellToolBase::specialCharDialogClosed()
     }
 }
 
-void CellToolBase::specialChar(QChar character, const QString& fontName)
+void CellToolBase::specialChar(QChar character, const QString &fontName)
 {
     const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
     if (style.fontFamily() != fontName) {
@@ -2786,8 +2834,9 @@ void CellToolBase::specialChar(QChar character, const QString& fontName)
 void CellToolBase::insertFormula()
 {
     if (! d->formulaDialog) {
-        if (! createEditor())
+        if (! createEditor()) {
             return;
+        }
         d->formulaDialog = new FormulaDialog(canvas()->canvasWidget(), selection(), editor());
     }
     d->formulaDialog->show(); // dialog deletes itself later
@@ -2818,8 +2867,9 @@ void CellToolBase::insertFromTextfile()
     QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::File);
     dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
     dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
-    if (!dialog->canceled())
+    if (!dialog->canceled()) {
         dialog->exec();
+    }
     delete dialog;
 }
 
@@ -2832,8 +2882,9 @@ void CellToolBase::insertFromClipboard()
     dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
     QString oldDelimiter = dialog->delimiter();
     dialog->setDelimiter(QString());
-    if (!dialog->canceled())
+    if (!dialog->canceled()) {
         dialog->exec();
+    }
     dialog->setDelimiter(oldDelimiter);
     delete dialog;
 }
@@ -2850,10 +2901,11 @@ void CellToolBase::textToColumns()
     QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::Column);
     dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
     dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
-    if (!dialog->canceled())
+    if (!dialog->canceled()) {
         dialog->exec();
-    else
+    } else {
         selection()->initialize(oldSelection);
+    }
     delete dialog;
 }
 
@@ -2867,7 +2919,7 @@ void CellToolBase::sortList()
 void CellToolBase::consolidate()
 {
     selection()->emitAboutToModify();
-    ConsolidateDialog * dialog = new ConsolidateDialog(canvas()->canvasWidget(), selection());
+    ConsolidateDialog *dialog = new ConsolidateDialog(canvas()->canvasWidget(), selection());
     dialog->show(); // dialog deletes itself later
 }
 
@@ -2875,7 +2927,7 @@ void CellToolBase::goalSeek()
 {
     selection()->emitAboutToModify();
 
-    GoalSeekDialog* dialog = new GoalSeekDialog(canvas()->canvasWidget(), selection());
+    GoalSeekDialog *dialog = new GoalSeekDialog(canvas()->canvasWidget(), selection());
     dialog->show(); // dialog deletes itself later
 }
 
@@ -2917,7 +2969,7 @@ void CellToolBase::namedAreaDialog()
     delete dialog;
 }
 
-void CellToolBase::formulaSelection(const QString& expression)
+void CellToolBase::formulaSelection(const QString &expression)
 {
     if (expression == i18n("Others...")) {
         insertFormula();
@@ -2925,7 +2977,7 @@ void CellToolBase::formulaSelection(const QString& expression)
     }
 
     createEditor();
-    FormulaDialog* dialog = new FormulaDialog(canvas()->canvasWidget(), selection(), editor(), expression);
+    FormulaDialog *dialog = new FormulaDialog(canvas()->canvasWidget(), selection(), editor(), expression);
     dialog->show(); // dialog deletes itself later
 }
 
@@ -2937,7 +2989,9 @@ void CellToolBase::edit()
     } else {
         // Switch focus.
         if (editor()->widget()->hasFocus()) {
-            if (d->externalEditor) d->externalEditor->setFocus();
+            if (d->externalEditor) {
+                d->externalEditor->setFocus();
+            }
         } else {
             editor()->widget()->setFocus();
         }
@@ -2958,13 +3012,13 @@ void CellToolBase::cut()
         str << doc;
         buffer.close();
 
-        QMimeData* mimeData = new QMimeData();
+        QMimeData *mimeData = new QMimeData();
         mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
         mimeData->setData("application/x-kspread-snippet", buffer.buffer());
 
         QApplication::clipboard()->setMimeData(mimeData);
 
-        DeleteCommand* command = new DeleteCommand();
+        DeleteCommand *command = new DeleteCommand();
         command->setText(kundo2_i18n("Cut"));
         command->setSheet(selection()->activeSheet());
         command->add(*selection());
@@ -2977,7 +3031,7 @@ void CellToolBase::cut()
 
 void CellToolBase::copy() const
 {
-    Selection* selection = const_cast<CellToolBase*>(this)->selection();
+    Selection *selection = const_cast<CellToolBase *>(this)->selection();
     if (!editor()) {
         QDomDocument doc = CopyCommand::saveAsXml(*selection);
 
@@ -2989,7 +3043,7 @@ void CellToolBase::copy() const
         str << doc;
         buffer.close();
 
-        QMimeData* mimeData = new QMimeData();
+        QMimeData *mimeData = new QMimeData();
         mimeData->setText(CopyCommand::saveAsPlainText(*selection));
         mimeData->setData("application/x-kspread-snippet", buffer.buffer());
 
@@ -3001,18 +3055,20 @@ void CellToolBase::copy() const
 
 bool CellToolBase::paste()
 {
-    if (!selection()->activeSheet()->map()->isReadWrite()) // don't paste into a read only document
+    if (!selection()->activeSheet()->map()->isReadWrite()) { // don't paste into a read only document
         return false;
+    }
 
-    const QMimeData* mimeData = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
+    const QMimeData *mimeData = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
 
     if (mimeData->hasFormat("application/vnd.oasis.opendocument.spreadsheet")) {
         QByteArray returnedTypeMime = "application/vnd.oasis.opendocument.spreadsheet";
         QByteArray arr = mimeData->data(returnedTypeMime);
-        if (arr.isEmpty())
+        if (arr.isEmpty()) {
             return false;
+        }
         QBuffer buffer(&arr);
-        KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
+        KoStore *store = KoStore::createStore(&buffer, KoStore::Read);
 
         KoOdfReadStore odfStore(store); // does not delete the store on destruction
         KoXmlDocument doc;
@@ -3020,7 +3076,7 @@ bool CellToolBase::paste()
         bool ok = odfStore.loadAndParse("content.xml", doc, errorMessage);
         if (!ok) {
             kError(32001) << "Error parsing content.xml: " << errorMessage << endl;
-	    delete store;
+            delete store;
             return false;
         }
 
@@ -3037,7 +3093,7 @@ bool CellToolBase::paste()
         KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
         if (realBody.isNull()) {
             kDebug(36005) << "Invalid OASIS OpenDocument file. No office:body tag found.";
-	    delete store;
+            delete store;
             return false;
         }
         KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
@@ -3046,7 +3102,7 @@ bool CellToolBase::paste()
             kError(36005) << "No office:spreadsheet found!" << endl;
             KoXmlElement childElem;
             QString localName;
-            forEachElement(childElem, realBody) {
+            forEachElement (childElem, realBody) {
                 localName = childElem.localName();
             }
             delete store;
@@ -3063,21 +3119,20 @@ bool CellToolBase::paste()
         bool result = selection()->activeSheet()->map()->loadOdf(body, context);
 
         if (!result) {
-	    delete store;
+            delete store;
             return false;
-	}
+        }
         selection()->activeSheet()->map()->namedAreaManager()->loadOdf(body);
-	delete store;
+        delete store;
     }
 
     if (!editor()) {
-        const QMimeData* mimedata = QApplication::clipboard()->mimeData();
+        const QMimeData *mimedata = QApplication::clipboard()->mimeData();
         if (!mimedata->hasFormat("application/x-kspread-snippet") &&
-            !mimedata->hasHtml() && mimedata->hasText() &&
-            mimeData->text().split('\n').count() >= 2 )
-        {
+                !mimedata->hasHtml() && mimedata->hasText() &&
+                mimeData->text().split('\n').count() >= 2) {
             insertFromClipboard();
-       } else {
+        } else {
             //kDebug(36005) <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
             PasteCommand *const command = new PasteCommand();
             command->setSheet(selection()->activeSheet());
@@ -3114,7 +3169,7 @@ void CellToolBase::pasteWithInsertion()
         command->setInsertionMode(PasteCommand::ShiftCells);
         command->execute(canvas());
     } else {
-        QPointer<PasteInsertDialog> dialog= new PasteInsertDialog(canvas()->canvasWidget(), selection());
+        QPointer<PasteInsertDialog> dialog = new PasteInsertDialog(canvas()->canvasWidget(), selection());
         dialog->exec();
         delete dialog;
     }
@@ -3136,8 +3191,9 @@ void CellToolBase::find()
     QPointer<FindDlg> dialog = new FindDlg(canvas()->canvasWidget(), "Find", d->findOptions, d->findStrings);
     dialog->setHasSelection(!selection()->isSingular());
     dialog->setHasCursor(true);
-    if (KFindDialog::Accepted != dialog->exec())
+    if (KFindDialog::Accepted != dialog->exec()) {
         return;
+    }
 
     // Save for next time
     d->findOptions = dialog->options();
@@ -3164,7 +3220,7 @@ void CellToolBase::find()
 // and d->findOptions.
 void CellToolBase::initFindReplace()
 {
-    KFind* findObj = d->find ? d->find : d->replace;
+    KFind *findObj = d->find ? d->find : d->replace;
     Q_ASSERT(findObj);
     connect(findObj, SIGNAL(highlight(QString,int,int)),
             this, SLOT(slotHighlight(QString,int,int)));
@@ -3172,7 +3228,7 @@ void CellToolBase::initFindReplace()
             this, SLOT(findNext()));
 
     bool bck = d->findOptions & KFind::FindBackwards;
-    Sheet* currentSheet = d->searchInSheets.currentSheet;
+    Sheet *currentSheet = d->searchInSheets.currentSheet;
 
     QRect region = (d->findOptions & KFind::SelectedText)
                    ? selection()->lastRange()
@@ -3197,7 +3253,7 @@ void CellToolBase::initFindReplace()
 
 void CellToolBase::findNext()
 {
-    KFind* findObj = d->find ? d->find : d->replace;
+    KFind *findObj = d->find ? d->find : d->replace;
     if (!findObj)  {
         find();
         return;
@@ -3207,32 +3263,36 @@ void CellToolBase::findNext()
     bool forw = !(d->findOptions & KFind::FindBackwards);
     while (res == KFind::NoMatch && !cell.isNull()) {
         if (findObj->needData()) {
-            if (d->typeValue == FindOption::Note)
+            if (d->typeValue == FindOption::Note) {
                 findObj->setData(cell.comment());
-            else
+            } else {
                 findObj->setData(cell.userInput());
+            }
             d->findPos = QPoint(cell.column(), cell.row());
             //kDebug() <<"setData(cell" << d->findPos << ')';
         }
 
         // Let KFind inspect the text fragment, and display a dialog if a match is found
-        if (d->find)
+        if (d->find) {
             res = d->find->find();
-        else
+        } else {
             res = d->replace->replace();
+        }
 
         if (res == KFind::NoMatch)  {
             // Go to next cell, skipping unwanted cells
             if (d->directionValue == FindOption::Row) {
-                if (forw)
+                if (forw) {
                     ++d->findPos.rx();
-                else
+                } else {
                     --d->findPos.rx();
+                }
             } else {
-                if (forw)
+                if (forw) {
                     ++d->findPos.ry();
-                else
+                } else {
                     --d->findPos.ry();
+                }
             }
             cell = findNextCell();
         }
@@ -3247,31 +3307,33 @@ void CellToolBase::findNext()
             findObj->resetCounts();
             findNext();
         } else { // done, close the 'find next' dialog
-            if (d->find)
+            if (d->find) {
                 d->find->closeFindNextDialog();
-            else {
+            } else {
                 canvas()->addCommand(d->replaceCommand);
                 d->replaceCommand = 0;
                 d->replace->closeReplaceNextDialog();
             }
         }
-    }
-    else if (!cell.isNull()) {
+    } else if (!cell.isNull()) {
         // move to the cell
-        if (cell.sheet() != selection()->activeSheet())
+        if (cell.sheet() != selection()->activeSheet()) {
             selection()->emitVisibleSheetRequested(cell.sheet());
-        selection()->initialize (Region (cell.column(), cell.row(), cell.sheet()), cell.sheet());
-        scrollToCell (selection()->cursor());
+        }
+        selection()->initialize(Region(cell.column(), cell.row(), cell.sheet()), cell.sheet());
+        scrollToCell(selection()->cursor());
     }
 }
 
 Cell CellToolBase::nextFindValidCell(int col, int row)
 {
     Cell cell = Cell(d->searchInSheets.currentSheet, col, row);
-    if (cell.isDefault() || cell.isPartOfMerged() || cell.isFormula())
+    if (cell.isDefault() || cell.isPartOfMerged() || cell.isFormula()) {
         cell = Cell();
-    if (d->typeValue == FindOption::Note && !cell.isNull() && cell.comment().isEmpty())
+    }
+    if (d->typeValue == FindOption::Note && !cell.isNull() && cell.comment().isEmpty()) {
         cell = Cell();
+    }
     return cell;
 }
 
@@ -3280,7 +3342,7 @@ Cell CellToolBase::findNextCell()
     // cellStorage()->firstInRow / cellStorage()->nextInRow would be faster at doing that,
     // but it doesn't seem to be easy to combine it with 'start a column d->find.x()'...
 
-    Sheet* sheet = d->searchInSheets.currentSheet;
+    Sheet *sheet = d->searchInSheets.currentSheet;
     Cell cell;
     bool forw = !(d->findOptions & KFind::FindBackwards);
     int col = d->findPos.x();
@@ -3292,11 +3354,15 @@ Cell CellToolBase::findNextCell()
         while (!cell && (row >= d->findTopRow) && (row <= d->findBottomRow) && (forw ? row <= maxRow : row >= 0)) {
             while (!cell && (forw ? col <= d->findRightColumn : col >= d->findLeftColumn)) {
                 cell = nextFindValidCell(col, row);
-                if (forw) ++col;
-                else --col;
+                if (forw) {
+                    ++col;
+                } else {
+                    --col;
+                }
             }
-            if (!cell.isNull())
+            if (!cell.isNull()) {
                 break;
+            }
             // Prepare looking in the next row
             if (forw)  {
                 col = d->findLeftColumn;
@@ -3311,11 +3377,15 @@ Cell CellToolBase::findNextCell()
         while (!cell && (forw ? col <= d->findRightColumn : col >= d->findLeftColumn)) {
             while (!cell && (row >= d->findTopRow) && (row <= d->findBottomRow) && (forw ? row <= maxRow : row >= 0)) {
                 cell = nextFindValidCell(col, row);
-                if (forw) ++row;
-                else --row;
+                if (forw) {
+                    ++row;
+                } else {
+                    --row;
+                }
             }
-            if (!cell.isNull())
+            if (!cell.isNull()) {
                 break;
+            }
             // Prepare looking in the next col
             if (forw)  {
                 row = d->findTopRow;
@@ -3338,7 +3408,7 @@ Cell CellToolBase::findNextCell()
 
 void CellToolBase::findPrevious()
 {
-    KFind* findObj = d->find ? d->find : d->replace;
+    KFind *findObj = d->find ? d->find : d->replace;
     if (!findObj)  {
         find();
         return;
@@ -3346,10 +3416,11 @@ void CellToolBase::findPrevious()
     //kDebug() <<"findPrevious";
     int opt = d->findOptions;
     bool forw = !(opt & KFind::FindBackwards);
-    if (forw)
+    if (forw) {
         d->findOptions = (opt | KFind::FindBackwards);
-    else
+    } else {
         d->findOptions = (opt & ~KFind::FindBackwards);
+    }
 
     findNext();
 
@@ -3361,8 +3432,9 @@ void CellToolBase::replace()
     QPointer<SearchDlg> dialog = new SearchDlg(canvas()->canvasWidget(), "Replace", d->findOptions, d->findStrings, d->replaceStrings);
     dialog->setHasSelection(!selection()->isSingular());
     dialog->setHasCursor(true);
-    if (KReplaceDialog::Accepted != dialog->exec())
+    if (KReplaceDialog::Accepted != dialog->exec()) {
         return;
+    }
 
     d->findOptions = dialog->options();
     d->findStrings = dialog->findHistory();
@@ -3376,8 +3448,9 @@ void CellToolBase::replace()
     //              will lead to an infinite loop (Bug #125535). The reason
     //              for this is unclear to me, but who cares and who would
     //              want to do something like this, häh?!
-    if (dialog->pattern() == "^" && dialog->replacement().isEmpty())
+    if (dialog->pattern() == "^" && dialog->replacement().isEmpty()) {
         return;
+    }
     d->replace = new KReplace(dialog->pattern(), dialog->replacement(), dialog->options());
 
     d->searchInSheets.currentSheet = selection()->activeSheet();
@@ -3395,10 +3468,11 @@ void CellToolBase::replace()
     // Refresh the editWidget
     // TODO - after a replacement only?
     Cell cell = Cell(activeSheet(), selection()->marker());
-    if (cell.userInput() != 0)
+    if (cell.userInput() != 0) {
         d->editWidget->setText(cell.userInput());
-    else
+    } else {
         d->editWidget->setText("");
+    }
 #endif
 }
 
@@ -3406,10 +3480,11 @@ void CellToolBase::slotHighlight(const QString &/*text*/, int /*matchingIndex*/,
 {
     selection()->initialize(d->findPos);
     KDialog *dialog = 0;
-    if (d->find)
+    if (d->find) {
         dialog = d->find->findNextDialog();
-    else
+    } else {
         dialog = d->replace->replaceNextDialog();
+    }
     kDebug() << " baseDialog :" << dialog;
     QRect globalRect(d->findPos, d->findEnd);
     globalRect.moveTopLeft(canvas()->canvasWidget()->mapToGlobal(globalRect.topLeft()));
@@ -3419,13 +3494,13 @@ void CellToolBase::slotHighlight(const QString &/*text*/, int /*matchingIndex*/,
 void CellToolBase::slotReplace(const QString &newText, int, int, int)
 {
     if (d->typeValue == FindOption::Value) {
-        DataManipulator* command = new DataManipulator(d->replaceCommand);
+        DataManipulator *command = new DataManipulator(d->replaceCommand);
         command->setParsing(true);
         command->setSheet(d->searchInSheets.currentSheet);
         command->setValue(Value(newText));
         command->add(Region(d->findPos, d->searchInSheets.currentSheet));
     } else if (d->typeValue == FindOption::Note) {
-        CommentCommand* command = new CommentCommand(d->replaceCommand);
+        CommentCommand *command = new CommentCommand(d->replaceCommand);
         command->setComment(newText);
         command->setSheet(d->searchInSheets.currentSheet);
         command->add(Region(d->findPos, d->searchInSheets.currentSheet));
@@ -3442,7 +3517,7 @@ void CellToolBase::gotoCell()
 
 void CellToolBase::spellCheck()
 {
-    SpellCheckCommand* command = new SpellCheckCommand(*selection(), canvas());
+    SpellCheckCommand *command = new SpellCheckCommand(*selection(), canvas());
     command->start();
 }
 
@@ -3459,8 +3534,8 @@ void CellToolBase::qTableView()
 {
 #ifndef NDEBUG
     QPointer<KDialog> dialog = new KDialog(canvas()->canvasWidget());
-    QTableView* const view = new QTableView(dialog);
-    SheetModel* const model = new SheetModel(selection()->activeSheet());
+    QTableView *const view = new QTableView(dialog);
+    SheetModel *const model = new SheetModel(selection()->activeSheet());
     view->setModel(model);
     dialog->setCaption("Read{Only,Write}TableModel Test");
     dialog->setMainWidget(view);
@@ -3528,7 +3603,7 @@ void CellToolBase::listChoosePopupMenu()
     double ty = sheet->rowPosition(selection()->marker().y());
     double h = cursorCell.height();
     if (sheetView(sheet)->obscuresCells(selection()->marker())) {
-        const CellView& cellView = sheetView(sheet)->cellView(selection()->marker().x(), selection()->marker().y());
+        const CellView &cellView = sheetView(sheet)->cellView(selection()->marker().x(), selection()->marker().y());
         h = cellView.cellHeight();
     }
     ty += h;
@@ -3549,12 +3624,12 @@ void CellToolBase::listChoosePopupMenu()
             this, SLOT(listChooseItemSelected(QAction*)));
 }
 
-
-void CellToolBase::listChooseItemSelected(QAction* action)
+void CellToolBase::listChooseItemSelected(QAction *action)
 {
     const Cell cell(selection()->activeSheet(), selection()->marker());
-    if (action->text() == cell.userInput())
+    if (action->text() == cell.userInput()) {
         return;
+    }
 
     DataManipulator *command = new DataManipulator;
     command->setSheet(selection()->activeSheet());

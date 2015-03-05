@@ -28,9 +28,9 @@
 const qreal OffsetLimit = 100.0;
 
 OffsetEffectConfigWidget::OffsetEffectConfigWidget(QWidget *parent)
-        : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
+    : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
 {
-    QGridLayout * g = new QGridLayout(this);
+    QGridLayout *g = new QGridLayout(this);
 
     g->addWidget(new QLabel(i18n("dx"), this), 0, 0);
     m_offsetX = new KDoubleNumInput(this);
@@ -47,16 +47,17 @@ OffsetEffectConfigWidget::OffsetEffectConfigWidget(QWidget *parent)
     connect(m_offsetY, SIGNAL(valueChanged(double)), this, SLOT(offsetChanged(double)));
 }
 
-bool OffsetEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
+bool OffsetEffectConfigWidget::editFilterEffect(KoFilterEffect *filterEffect)
 {
-    m_effect = dynamic_cast<OffsetEffect*>(filterEffect);
-    if (!m_effect)
+    m_effect = dynamic_cast<OffsetEffect *>(filterEffect);
+    if (!m_effect) {
         return false;
+    }
 
     m_offsetX->blockSignals(true);
     m_offsetY->blockSignals(true);
-    m_offsetX->setValue(m_effect->offset().x()*100.0);
-    m_offsetY->setValue(m_effect->offset().y()*100.0);
+    m_offsetX->setValue(m_effect->offset().x() * 100.0);
+    m_offsetY->setValue(m_effect->offset().y() * 100.0);
     m_offsetX->blockSignals(false);
     m_offsetY->blockSignals(false);
 
@@ -65,10 +66,11 @@ bool OffsetEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)
 
 void OffsetEffectConfigWidget::offsetChanged(double /*offset*/)
 {
-    if (!m_effect)
+    if (!m_effect) {
         return;
+    }
 
-    m_effect->setOffset(0.01*QPointF(m_offsetX->value(), m_offsetY->value()));
+    m_effect->setOffset(0.01 * QPointF(m_offsetX->value(), m_offsetY->value()));
     emit filterChanged();
 }
 

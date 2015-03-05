@@ -39,30 +39,35 @@ public:
     SortManipulator();
     virtual ~SortManipulator();
 
-    virtual bool process(Element* element);
+    virtual bool process(Element *element);
 
     /** true if rows are to be sorted, false if columns are */
-    void setSortRows(bool v) {
+    void setSortRows(bool v)
+    {
         m_rows = v;
     }
     /** skip first row/column, as it contains headers */
-    void setSkipFirst(bool v) {
+    void setSkipFirst(bool v)
+    {
         m_skipfirst = v;
     }
     /** set whether cell formats should be moved with data */
-    void setCopyFormat(bool v) {
+    void setCopyFormat(bool v)
+    {
         setChangeFormat(v);
     }
     /** set whether we will use a custom list */
-    void setUseCustomList(bool v) {
+    void setUseCustomList(bool v)
+    {
         m_usecustomlist = v;
     }
     /** set a custom list that will be used */
-    void setCustomList(QStringList l) {
+    void setCustomList(QStringList l)
+    {
         m_customlist = l;
     }
 
-    /** 
+    /**
      * Adds a sort criterion.
      * Sort criteria are used in order in which they're added.
      * \param index the column/row index. Indexed from 0.
@@ -96,7 +101,7 @@ protected:
     /** sorted order - which row/column will move to where */
     QMap<int, int> sorted;
 
-    CellStorage* m_cellStorage; // temporary
+    CellStorage *m_cellStorage; // temporary
     QHash<Cell, Style> m_styles; // temporary
     QHash<Cell, QString> m_formulas; // temporary; encoded formulas
 };

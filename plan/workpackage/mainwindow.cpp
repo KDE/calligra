@@ -62,48 +62,47 @@
 KPlatoWork_MainWindow::KPlatoWork_MainWindow()
     : KParts::MainWindow()
 {
-    kDebug(planworkDbg())<<this;
+    kDebug(planworkDbg()) << this;
 
-    m_part = new KPlatoWork::Part( this, this );
+    m_part = new KPlatoWork::Part(this, this);
 
     KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
- 
+
     KStandardAction::open(this, SLOT(slotFileOpen()), actionCollection());
 
 //     KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
 
     QAction *a = KStandardAction::undo(m_part->undoStack(), SLOT(undo()), actionCollection());
-    a->setEnabled( false );
-    connect( m_part->undoStack(), SIGNAL(canUndoChanged(bool)), a, SLOT(setEnabled(bool)) );
+    a->setEnabled(false);
+    connect(m_part->undoStack(), SIGNAL(canUndoChanged(bool)), a, SLOT(setEnabled(bool)));
 
     a = KStandardAction::redo(m_part->undoStack(), SLOT(redo()), actionCollection());
-    a->setEnabled( false );
-    connect( m_part->undoStack(), SIGNAL(canRedoChanged(bool)), a, SLOT(setEnabled(bool)) );
-    
-    setupGUI( KXmlGuiWindow::Default, "planwork_mainwindow.rc" );
+    a->setEnabled(false);
+    connect(m_part->undoStack(), SIGNAL(canRedoChanged(bool)), a, SLOT(setEnabled(bool)));
 
-    setCentralWidget( m_part->widget() );
-    createGUI( m_part );
-    connect( m_part, SIGNAL(captionChanged(QString,bool)), SLOT(setCaption(QString,bool)) );
+    setupGUI(KXmlGuiWindow::Default, "planwork_mainwindow.rc");
+
+    setCentralWidget(m_part->widget());
+    createGUI(m_part);
+    connect(m_part, SIGNAL(captionChanged(QString,bool)), SLOT(setCaption(QString,bool)));
 }
-
 
 KPlatoWork_MainWindow::~KPlatoWork_MainWindow()
 {
     kDebug(planworkDbg());
 }
 
-void KPlatoWork_MainWindow::setCaption( const QString & )
+void KPlatoWork_MainWindow::setCaption(const QString &)
 {
-    KParts::MainWindow::setCaption( QString() );
+    KParts::MainWindow::setCaption(QString());
 }
 
-void KPlatoWork_MainWindow::setCaption( const QString &, bool modified )
+void KPlatoWork_MainWindow::setCaption(const QString &, bool modified)
 {
-    KParts::MainWindow::setCaption( QString(), modified );
+    KParts::MainWindow::setCaption(QString(), modified);
 }
 
-bool KPlatoWork_MainWindow::openDocument(const KUrl & url)
+bool KPlatoWork_MainWindow::openDocument(const KUrl &url)
 {
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
         KMessageBox::error(0L, i18n("The file %1 does not exist.", url.url()));
@@ -111,31 +110,30 @@ bool KPlatoWork_MainWindow::openDocument(const KUrl & url)
 //        saveRecentFiles();
         return false;
     }
-    return m_part->openUrl( url );
+    return m_part->openUrl(url);
 }
 
 QString KPlatoWork_MainWindow::configFile() const
 {
-  //return readConfigFile( KStandardDirs::locate( "data", "koshell/koshell_shell.rc" ) );
-  return QString(); // use UI standards only for now
+    //return readConfigFile( KStandardDirs::locate( "data", "koshell/koshell_shell.rc" ) );
+    return QString(); // use UI standards only for now
 }
 
 //called from slotFileSave(), slotFileSaveAs(), queryClose(), slotEmailFile()
-bool KPlatoWork_MainWindow::saveDocument( bool saveas, bool silent )
+bool KPlatoWork_MainWindow::saveDocument(bool saveas, bool silent)
 {
-    kDebug(planworkDbg())<<saveas<<silent;
+    kDebug(planworkDbg()) << saveas << silent;
     KPlatoWork::Part *doc = rootDocument();
-    if ( doc == 0 ) {
+    if (doc == 0) {
         return true;
     }
-    return doc->saveWorkPackages( silent );
+    return doc->saveWorkPackages(silent);
 }
-
 
 bool KPlatoWork_MainWindow::queryClose()
 {
     KPlatoWork::Part *part = rootDocument();
-    if ( part == 0 ) {
+    if (part == 0) {
         return true;
     }
     return part->queryClose();
@@ -154,11 +152,10 @@ void KPlatoWork_MainWindow::slotFileSave()
 
 void KPlatoWork_MainWindow::slotFileOpen()
 {
-    QString file = KFileDialog::getOpenFileName( KUrl(), "*.planwork" );
-    if ( ! file.isEmpty() ) {
-        openDocument( file );
+    QString file = KFileDialog::getOpenFileName(KUrl(), "*.planwork");
+    if (! file.isEmpty()) {
+        openDocument(file);
     }
 }
-
 
 #include "mainwindow.moc"

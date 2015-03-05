@@ -45,16 +45,16 @@ public:
      * @brief Insert a new Custom SlideShow
      *
      * @param name The name of the new SlideShow
-     * @param slideShow a list of the pages in the desired order 
+     * @param slideShow a list of the pages in the desired order
      */
-    void insert( const QString &name, const QList<KoPAPageBase*> &slideShow );
+    void insert(const QString &name, const QList<KoPAPageBase *> &slideShow);
 
     /**
      * @brief Delete a Custom SlideShow by its name
      *
      * @param name The name of the SlideShow to be removed
      */
-    void remove( const QString &name );
+    void remove(const QString &name);
 
     /**
      * @brief Replaces a custom SlideShow with the given SlideShow
@@ -62,7 +62,7 @@ public:
      * @param name The name of the SlideShow to be updated
      * @param slideShow slideShow to be inserted
      */
-    void update( const QString &name, const QList<KoPAPageBase*> &slideShow );
+    void update(const QString &name, const QList<KoPAPageBase *> &slideShow);
 
     /**
      * @brief Replaces a custom SlideShow with the given SlideShow
@@ -70,7 +70,7 @@ public:
      * @param oldName The name of the SlideShow to be renamed
      * @param newName The new name of the SlideShow
      */
-    void rename( const QString &oldName, const QString &newName );
+    void rename(const QString &oldName, const QString &newName);
 
     /**
      * @brief Returns a list of the names of the known SlideShows
@@ -80,12 +80,12 @@ public:
 
     /**
      * @brief Ask if a name is in use and return the object
-     * 
+     *
      * @param name the name of the custom SlideShow to be retrived
      * @return a List of the Pages in the SlideShow if it was found
      *         a blank list if the SlideShow name was not found
      */
-    QList<KoPAPageBase*> getByName( const QString &name ) const;
+    QList<KoPAPageBase *> getByName(const QString &name) const;
 
     /**
      * @brief Return the object that match the give index in the list with the given name
@@ -94,7 +94,7 @@ public:
      / @param index the index of the slide to be retrived from the custom SlideShow
      * @return a Page in the SlideShow if it was found or a null pointer if not.
      */
-    KoPAPageBase* pageByIndex(const QString &name, int index) const;
+    KoPAPageBase *pageByIndex(const QString &name, int index) const;
 
     /**
      * @brief return the index of a page within a custom show
@@ -109,7 +109,7 @@ public:
     /**
      * @brief Insert a slide to the right of the given position of all the known custom SlideShows.
      * If the position is higher than the size of the list of the SlideShow, the slide is inserted at the end.
-     * 
+     *
      * @param slide slide to be inserted
      * @param position the position at which the slide will be inserted.
      * If it's 0 it will be prepended to the list, if it's the size it will be appended to the list.
@@ -124,7 +124,7 @@ public:
      * @param slideShow list of slides to be inserted
      * @param position the position at which the slide will be inserted
      */
-    void addSlidesToAll( const QList<KoPAPageBase*> &slideShow, unsigned int position );
+    void addSlidesToAll(const QList<KoPAPageBase *> &slideShow, unsigned int position);
 
     /**
      * @brief Deletes all the ocurrencies of a given slide from all the known custom SlideShows
@@ -138,14 +138,14 @@ public:
      *
      * @param slideShow list of slides to be removed
      */
-    void removeSlidesFromAll( const QList<KoPAPageBase*> &slideShow );
+    void removeSlidesFromAll(const QList<KoPAPageBase *> &slideShow);
 
     /**
      * @brief Save the slide shows
      *
      * @param context The saving context
      */
-    void saveOdf( KoPASavingContext & context );
+    void saveOdf(KoPASavingContext &context);
 
     /**
      * @brief Load the slide shows
@@ -153,7 +153,7 @@ public:
      * @param element The element containing the presentation:settings
      * @param context The loading context
      */
-    void loadOdf( const KoXmlElement & presentationSettings, KoPALoadingContext & context );
+    void loadOdf(const KoXmlElement &presentationSettings, KoPALoadingContext &context);
 
     /**
      * @brief Return the names of custom shows that contains the given page
@@ -168,7 +168,7 @@ Q_SIGNALS:
     void updated();
 
 private:
-    QMap< QString, QList<KoPAPageBase*> > m_customSlideShows;
+    QMap< QString, QList<KoPAPageBase *> > m_customSlideShows;
 
 };
 #endif /* KPRCUSTOMSLIDESHOWS_H */

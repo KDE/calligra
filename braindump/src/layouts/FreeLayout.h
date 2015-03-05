@@ -30,9 +30,9 @@ public:
     virtual ~FreeLayout();
 protected:
     virtual QRectF boundingBox() const;
-    virtual void shapeAdded(KoShape* _shape);
-    virtual void shapeRemoved(KoShape* _shape);
-    virtual void shapeGeometryChanged(KoShape* _shape);
+    virtual void shapeAdded(KoShape *_shape);
+    virtual void shapeRemoved(KoShape *_shape);
+    virtual void shapeGeometryChanged(KoShape *_shape);
     virtual void relayout();
 };
 
@@ -41,7 +41,7 @@ class FreeLayoutFactory : public LayoutFactory
 public:
     FreeLayoutFactory();
     virtual ~FreeLayoutFactory();
-    virtual Layout* createLayout() const;
+    virtual Layout *createLayout() const;
 };
 
 #endif

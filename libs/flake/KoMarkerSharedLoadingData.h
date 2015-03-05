@@ -39,7 +39,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOMARKERSHAREDLOADINGDATA_H */

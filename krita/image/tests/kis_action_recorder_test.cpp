@@ -39,11 +39,10 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
-
 void KisActionRecorderTest::testCreation()
 {
 
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImage image(0, 512, 512, colorSpace, "paintop registry test");
 
     KisActionRecorder test();
@@ -56,7 +55,7 @@ void KisActionRecorderTest::testFiles()
     progressUpdater.start(100);
 
     QDir dirSources(QString(FILES_DATA_DIR) + "/actionrecorder/sources");
-    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
+    foreach (QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
         if (!sourceFileInfo.isHidden() && !sourceFileInfo.isDir()) {
             qDebug() << "handling " << sourceFileInfo.fileName();
             QFileInfo resultFileInfo(QString(FILES_DATA_DIR) + "/actionrecorder/results/" + sourceFileInfo.fileName() + ".png");
@@ -96,7 +95,7 @@ void KisActionRecorderTest::testFiles()
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
 
             QPoint pt;
-            if(!TestUtil::compareQImages(pt, sourceImage, resultImage, 40)) {
+            if (!TestUtil::compareQImages(pt, sourceImage, resultImage, 40)) {
                 sourceImage.save("action_recorder_source_" + sourceFileInfo.fileName() + ".png");
                 resultImage.save("action_recorder_result_" + sourceFileInfo.fileName() + ".png");
                 qCritical() << "Failed to play action:" << sourceFileInfo.fileName() << "image differs at point" << pt;
@@ -105,7 +104,6 @@ void KisActionRecorderTest::testFiles()
         }
     }
 }
-
 
 QTEST_KDEMAIN(KisActionRecorderTest, GUI)
 #include "kis_action_recorder_test.moc"

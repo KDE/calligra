@@ -35,10 +35,11 @@ class PageLayout : public QObject
 {
     Q_OBJECT
 public:
-    PageLayout(QObject* parent, const KoPageLayout& pagelayout)
-            : QObject(parent), m_pagelayout(pagelayout) {}
+    PageLayout(QObject *parent, const KoPageLayout &pagelayout)
+        : QObject(parent), m_pagelayout(pagelayout) {}
     virtual ~PageLayout() {}
-    const KoPageLayout& pageLayout() const {
+    const KoPageLayout &pageLayout() const
+    {
         return m_pagelayout;
     }
 
@@ -50,7 +51,8 @@ public Q_SLOTS:
     * \li Portrait
     * \li Landscape
     */
-    QString orientation() {
+    QString orientation()
+    {
         switch (m_pagelayout.orientation) {
         case KoPageFormat::Portrait: return "Portrait";
         case KoPageFormat::Landscape: return "Landscape";
@@ -58,80 +60,100 @@ public Q_SLOTS:
         return QString();
     }
     /** Set page orientation */
-    void setOrientation(const QString& orientation) {
-        if (orientation == "Portrait") m_pagelayout.orientation = KoPageFormat::Portrait;
-        else if (orientation == "Landscape") m_pagelayout.orientation = KoPageFormat::Landscape;
+    void setOrientation(const QString &orientation)
+    {
+        if (orientation == "Portrait") {
+            m_pagelayout.orientation = KoPageFormat::Portrait;
+        } else if (orientation == "Landscape") {
+            m_pagelayout.orientation = KoPageFormat::Landscape;
+        }
     }
 
     /** Return page width in pt */
-    qreal width() {
+    qreal width()
+    {
         return m_pagelayout.width;
     }
     /** Set page width in pt */
-    void setWidth(qreal width) {
+    void setWidth(qreal width)
+    {
         m_pagelayout.width = width;
     }
 
     /** Return page height in pt */
-    qreal height() {
+    qreal height()
+    {
         return m_pagelayout.height;
     }
     /** Set page height in pt */
-    void setHeight(qreal height) {
+    void setHeight(qreal height)
+    {
         m_pagelayout.height = height;
     }
 
     /** Return left margin in pt */
-    qreal leftMargin() {
+    qreal leftMargin()
+    {
         return m_pagelayout.leftMargin;
     }
     /** Set left margin in pt */
-    void setLeftMargin(qreal leftMargin) {
+    void setLeftMargin(qreal leftMargin)
+    {
         m_pagelayout.leftMargin = leftMargin;
     }
 
     /** Return right margin in pt */
-    qreal rightMargin() {
+    qreal rightMargin()
+    {
         return m_pagelayout.rightMargin;
     }
     /** Set right margin in pt */
-    void setRightMargin(qreal rightMargin) {
+    void setRightMargin(qreal rightMargin)
+    {
         m_pagelayout.rightMargin = rightMargin;
     }
 
     /** Return top margin in pt */
-    qreal topMargin() {
+    qreal topMargin()
+    {
         return m_pagelayout.topMargin;
     }
     /** Set top margin in pt */
-    void setTopMargin(qreal topMargin) {
+    void setTopMargin(qreal topMargin)
+    {
         m_pagelayout.topMargin = topMargin;
     }
 
     /** Return bottom margin in pt */
-    qreal bottomMargin() {
+    qreal bottomMargin()
+    {
         return m_pagelayout.bottomMargin;
     }
     /** Set bottom margin in pt */
-    void setBottomMargin(qreal bottomMargin) {
+    void setBottomMargin(qreal bottomMargin)
+    {
         m_pagelayout.bottomMargin = bottomMargin;
     }
 
     /** Return margin on page edge in pt */
-    qreal pageEdge() {
+    qreal pageEdge()
+    {
         return m_pagelayout.pageEdge;
     }
     /** Set margin on page edge in pt */
-    void setPageEdge(qreal edge) {
+    void setPageEdge(qreal edge)
+    {
         m_pagelayout.pageEdge = edge;
     }
 
     /** Return margin on page-binding edge in pt */
-    qreal bindingSide() {
+    qreal bindingSide()
+    {
         return m_pagelayout.bindingSide;
     }
     /** Set margin on page-binding edge in pt */
-    void setBindingSide(qreal side) {
+    void setBindingSide(qreal side)
+    {
         m_pagelayout.bindingSide = side;
     }
 

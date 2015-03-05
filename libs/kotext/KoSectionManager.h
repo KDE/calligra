@@ -43,7 +43,7 @@ class KoSectionManagerPrivate;
 class KOTEXT_EXPORT KoSectionManager
 {
 public:
-    explicit KoSectionManager(QTextDocument* doc);
+    explicit KoSectionManager(QTextDocument *doc);
     ~KoSectionManager();
 
     /**
@@ -90,7 +90,7 @@ public Q_SLOTS:
     void unregisterSection(KoSection *section);
 
 protected:
-    KoSectionManagerPrivate * const d_ptr;
+    KoSectionManagerPrivate *const d_ptr;
 
 private:
     Q_DISABLE_COPY(KoSectionManager)

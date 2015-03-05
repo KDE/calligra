@@ -28,7 +28,7 @@ public:
 };
 
 KoEventAction::KoEventAction()
-        : d(new Private())
+    : d(new Private())
 {
 }
 

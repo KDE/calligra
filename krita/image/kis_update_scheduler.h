@@ -30,7 +30,6 @@ class KoProgressProxy;
 class KisProjectionUpdateListener;
 class KisSpontaneousJob;
 
-
 class KRITAIMAGE_EXPORT KisUpdateScheduler : public QObject, public KisStrokesFacade
 {
     Q_OBJECT
@@ -92,7 +91,6 @@ public:
      */
     void barrierLock();
 
-
     /**
      * Works like barrier lock, but returns false immediately if barrierLock
      * can't be acquired.
@@ -120,10 +118,10 @@ public:
      */
     void unblockUpdates();
 
-    void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect);
-    void updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect);
-    void fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect);
-    void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
+    void updateProjection(KisNodeSP node, const QRect &rc, const QRect &cropRect);
+    void updateProjectionNoFilthy(KisNodeSP node, const QRect &rc, const QRect &cropRect);
+    void fullRefreshAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);
+    void fullRefresh(KisNodeSP root, const QRect &rc, const QRect &cropRect);
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
     KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy);
@@ -168,9 +166,8 @@ private:
 
 protected:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
-
 
 class KisTestableUpdaterContext;
 class KisTestableSimpleUpdateQueue;
@@ -181,8 +178,8 @@ public:
     KisTestableUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener,
                                qint32 threadCount);
 
-    KisTestableUpdaterContext* updaterContext();
-    KisTestableSimpleUpdateQueue* updateQueue();
+    KisTestableUpdaterContext *updaterContext();
+    KisTestableSimpleUpdateQueue *updateQueue();
     using KisUpdateScheduler::processQueues;
 };
 

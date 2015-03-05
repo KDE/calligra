@@ -29,9 +29,9 @@ static const char version[] = CALLIGRA_VERSION_STRING;
 
 // This is all implemented here so that the executable and the part can share it
 // without sharing an object file.
-KAboutData * newKarbonAboutData()
+KAboutData *newKarbonAboutData()
 {
-    KAboutData * aboutData = new KAboutData(
+    KAboutData *aboutData = new KAboutData(
         "karbon", 0,
         ki18n("Karbon"),
         version,

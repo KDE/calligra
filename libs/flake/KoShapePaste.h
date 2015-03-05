@@ -45,14 +45,14 @@ public:
     KoShapePaste(KoCanvasBase *canvas, KoShapeLayer *parentLayer);
     virtual ~KoShapePaste();
 
-    QList<KoShape*> pastedShapes() const;
+    QList<KoShape *> pastedShapes() const;
 
 protected:
     /// reimplemented
-    virtual bool process(const KoXmlElement & body, KoOdfReadStore &odfStore);
+    virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOSHAPEPASTE_H */

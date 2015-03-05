@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef OPENCALCSTYLEEXPORT_H
 #define OPENCALCSTYLEEXPORT_H
 
@@ -58,10 +57,11 @@ class SheetStyle
 public:
     SheetStyle() : visible(true) {}
 
-    void copyData(SheetStyle const & ts) {
+    void copyData(SheetStyle const &ts)
+    {
         visible = ts.visible;
     }
-    static bool isEqual(SheetStyle const * const t1, SheetStyle const & t2);
+    static bool isEqual(SheetStyle const *const t1, SheetStyle const &t2);
 
     QString     name;
     bool        visible;
@@ -74,10 +74,11 @@ public:
 
     enum NumberType { Boolean, Date, Number, Percentage, Time };
 
-    void copyData(NumberStyle const & ts) {
+    void copyData(NumberStyle const &ts)
+    {
         type = ts.type;
     }
-    static bool isEqual(NumberStyle const * const t1, NumberStyle const & t2);
+    static bool isEqual(NumberStyle const *const t1, NumberStyle const &t2);
 
     QString     name;
 
@@ -90,11 +91,11 @@ class CellStyle
 public:
     CellStyle();
 
-    void copyData(CellStyle const & ts);
-    static bool isEqual(CellStyle const * const t1, CellStyle const & t2);
+    void copyData(CellStyle const &ts);
+    static bool isEqual(CellStyle const *const t1, CellStyle const &t2);
 
     // all except the number style
-    static void loadData(CellStyle & cs, const Calligra::Sheets::Cell& cell);
+    static void loadData(CellStyle &cs, const Calligra::Sheets::Cell &cell);
 
     QString     name;
 
@@ -124,8 +125,8 @@ class ColumnStyle : public Style
 public:
     ColumnStyle() : Style() {}
 
-    void copyData(ColumnStyle const & cs);
-    static bool isEqual(ColumnStyle const * const c1, ColumnStyle const & c2);
+    void copyData(ColumnStyle const &cs);
+    static bool isEqual(ColumnStyle const *const c1, ColumnStyle const &c2);
 };
 
 class RowStyle : public Style
@@ -133,8 +134,8 @@ class RowStyle : public Style
 public:
     RowStyle() : Style() {}
 
-    void copyData(RowStyle const & cs);
-    static bool isEqual(RowStyle const * const c1, RowStyle const & c2);
+    void copyData(RowStyle const &cs);
+    static bool isEqual(RowStyle const *const c1, RowStyle const &c2);
 };
 
 class OpenCalcStyles
@@ -143,34 +144,32 @@ public:
     OpenCalcStyles();
     ~OpenCalcStyles();
 
-    void    writeStyles(QDomDocument & doc, QDomElement & autoStyles);
-    void    writeFontDecl(QDomDocument & doc, QDomElement & content);
+    void    writeStyles(QDomDocument &doc, QDomElement &autoStyles);
+    void    writeFontDecl(QDomDocument &doc, QDomElement &content);
 
-    void    addFont(QFont const & font, bool def = false);
+    void    addFont(QFont const &font, bool def = false);
 
-    QString cellStyle(CellStyle const & cs);
-    QString columnStyle(ColumnStyle const & cs);
-    QString numberStyle(NumberStyle const & ns);
-    QString rowStyle(RowStyle const & rs);
-    QString sheetStyle(SheetStyle const & ts);
+    QString cellStyle(CellStyle const &cs);
+    QString columnStyle(ColumnStyle const &cs);
+    QString numberStyle(NumberStyle const &ns);
+    QString rowStyle(RowStyle const &rs);
+    QString sheetStyle(SheetStyle const &ts);
 
 private:
-    QList<CellStyle*>   m_cellStyles;
-    QList<ColumnStyle*> m_columnStyles;
-    QList<NumberStyle*> m_numberStyles;
-    QList<RowStyle*>    m_rowStyles;
-    QList<SheetStyle*>  m_sheetStyles;
-    QList<QFont*>       m_fontList;
+    QList<CellStyle *>   m_cellStyles;
+    QList<ColumnStyle *> m_columnStyles;
+    QList<NumberStyle *> m_numberStyles;
+    QList<RowStyle *>    m_rowStyles;
+    QList<SheetStyle *>  m_sheetStyles;
+    QList<QFont *>       m_fontList;
 
     QFont                 m_defaultFont;
 
-    void addCellStyles(QDomDocument & doc, QDomElement & autoStyles);
-    void addColumnStyles(QDomDocument & doc, QDomElement & autoStyles);
-    void addNumberStyles(QDomDocument & doc, QDomElement & autoStyles);
-    void addRowStyles(QDomDocument & doc, QDomElement & autoStyles);
-    void addSheetStyles(QDomDocument & doc, QDomElement & autoStyles);
+    void addCellStyles(QDomDocument &doc, QDomElement &autoStyles);
+    void addColumnStyles(QDomDocument &doc, QDomElement &autoStyles);
+    void addNumberStyles(QDomDocument &doc, QDomElement &autoStyles);
+    void addRowStyles(QDomDocument &doc, QDomElement &autoStyles);
+    void addSheetStyles(QDomDocument &doc, QDomElement &autoStyles);
 };
-
-
 
 #endif

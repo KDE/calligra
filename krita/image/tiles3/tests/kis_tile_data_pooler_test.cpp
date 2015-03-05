@@ -44,19 +44,19 @@ void KisTileDataPoolerTest::testCycles()
 
     KisTileDataStore::instance()->debugClear();
 
-    for(int i = 0; i < 12; i++) {
+    for (int i = 0; i < 12; i++) {
         KisTileData *td =
             KisTileDataStore::instance()->createDefaultTileData(pixelSize, &defaultPixel);
 
-        for(int j = 0; j < 1 + (2 - i % 3); j++) {
+        for (int j = 0; j < 1 + (2 - i % 3); j++) {
             td->acquire();
         }
 
-        if(!(i/6)) {
+        if (!(i / 6)) {
             td->markOld();
         }
 
-        if(!((i / 3) & 1)) {
+        if (!((i / 3) & 1)) {
             td->m_clonesStack.push(new KisTileData(*td));
         }
 
@@ -79,12 +79,12 @@ void KisTileDataPoolerTest::testCycles()
     KisTileDataStoreIterator *iter =
         KisTileDataStore::instance()->beginIteration();
 
-    while(iter->hasNext()) {
+    while (iter->hasNext()) {
         item = iter->next();
 
         int expectedClones;
 
-        switch(i) {
+        switch (i) {
         case 6:
         case 7:
         case 10:
@@ -101,7 +101,6 @@ void KisTileDataPoolerTest::testCycles()
         QCOMPARE(item->m_clonesStack.size(), expectedClones);
         i++;
     }
-
 
     KisTileDataStore::instance()->endIteration(iter);
     KisTileDataStore::instance()->debugClear();

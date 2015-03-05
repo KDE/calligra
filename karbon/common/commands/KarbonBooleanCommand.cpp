@@ -31,33 +31,34 @@
 class KarbonBooleanCommand::Private
 {
 public:
-    Private(KoShapeBasedDocumentBase * c)
-            : shapeBasedDocument(c), pathA(0), pathB(0), resultingPath(0)
-            , resultParent(0), resultParentCmd(0)
-            , operation(Intersection), isExecuted(false)
+    Private(KoShapeBasedDocumentBase *c)
+        : shapeBasedDocument(c), pathA(0), pathB(0), resultingPath(0)
+        , resultParent(0), resultParentCmd(0)
+        , operation(Intersection), isExecuted(false)
     {}
 
     ~Private()
     {
-        if (! isExecuted)
+        if (! isExecuted) {
             delete resultingPath;
+        }
     }
 
     KoShapeBasedDocumentBase *shapeBasedDocument;
-    KoPathShape * pathA;
-    KoPathShape * pathB;
-    KoPathShape * resultingPath;
-    KoShapeContainer * resultParent;
-    KUndo2Command * resultParentCmd;
+    KoPathShape *pathA;
+    KoPathShape *pathB;
+    KoPathShape *resultingPath;
+    KoShapeContainer *resultParent;
+    KUndo2Command *resultParentCmd;
     BooleanOperation operation;
     bool isExecuted;
 };
 
 KarbonBooleanCommand::KarbonBooleanCommand(
-    KoShapeBasedDocumentBase *shapeBasedDocument, KoPathShape* pathA, KoPathShape * pathB,
+    KoShapeBasedDocumentBase *shapeBasedDocument, KoPathShape *pathA, KoPathShape *pathB,
     BooleanOperation operation, KUndo2Command *parent
 )
-        : KUndo2Command(parent), d(new Private(shapeBasedDocument))
+    : KUndo2Command(parent), d(new Private(shapeBasedDocument))
 {
     Q_ASSERT(shapeBasedDocument);
 
@@ -111,16 +112,17 @@ void KarbonBooleanCommand::redo()
         d->resultingPath->setZIndex(d->pathA->zIndex());
         d->resultingPath->setFillRule(d->pathA->fillRule());
 
-        KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(d->pathA->parent());
+        KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(d->pathA->parent());
         if (group) {
-            QList<KoShape*> children;
+            QList<KoShape *> children;
             d->resultParentCmd = new KoShapeGroupCommand(group, children << d->resultingPath, this);
         }
     }
 
     if (d->shapeBasedDocument) {
-        if (d->resultParent)
+        if (d->resultParent) {
             d->resultParent->addShape(d->resultingPath);
+        }
         d->shapeBasedDocument->addShape(d->resultingPath);
     }
 
@@ -136,8 +138,9 @@ void KarbonBooleanCommand::undo()
     if (d->shapeBasedDocument && d->resultingPath) {
         if (! d->resultParentCmd) {
             d->resultParent = d->resultingPath->parent();
-            if (d->resultParent)
+            if (d->resultParent) {
                 d->resultParent->removeShape(d->resultingPath);
+            }
         }
         d->shapeBasedDocument->removeShape(d->resultingPath);
     }

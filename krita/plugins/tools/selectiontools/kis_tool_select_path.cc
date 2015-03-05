@@ -30,8 +30,7 @@
 #include "kis_selection_tool_helper.h"
 #include <KisView.h>
 
-
-KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
+KisToolSelectPath::KisToolSelectPath(KoCanvasBase *canvas)
     : DelegatedSelectPathTool(canvas,
                               KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
                               new __KisToolSelectPathLocalTool(canvas, this))
@@ -48,9 +47,11 @@ void KisToolSelectPath::requestStrokeCancellation()
     localTool()->cancelPath();
 }
 
-void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
+void KisToolSelectPath::mousePressEvent(KoPointerEvent *event)
 {
-    if (!selectionEditable()) return;
+    if (!selectionEditable()) {
+        return;
+    }
     DelegatedSelectPathTool::mousePressEvent(event);
 }
 
@@ -62,18 +63,18 @@ QList<QPointer<QWidget> > KisToolSelectPath::createOptionWidgets()
     return widgetsList;
 }
 
-
- __KisToolSelectPathLocalTool::__KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool)
-     : KoCreatePathTool(canvas), m_selectionTool(parentTool)
+__KisToolSelectPathLocalTool::__KisToolSelectPathLocalTool(KoCanvasBase *canvas, KisToolSelectPath *parentTool)
+    : KoCreatePathTool(canvas), m_selectionTool(parentTool)
 {
 }
 
 void __KisToolSelectPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (!kisCanvas)
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
+    if (!kisCanvas) {
         return;
+    }
 
     QTransform matrix;
     matrix.scale(kisCanvas->image()->xRes(), kisCanvas->image()->yRes());
@@ -81,14 +82,15 @@ void __KisToolSelectPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &p
     m_selectionTool->paintToolOutline(&painter, m_selectionTool->pixelToView(matrix.map(pathShape.outline())));
 }
 
-void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
+void __KisToolSelectPathLocalTool::addPathShape(KoPathShape *pathShape)
 {
     pathShape->normalize();
     pathShape->close();
 
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (!kisCanvas)
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
+    if (!kisCanvas) {
         return;
+    }
 
     KisImageWSP image = kisCanvas->image();
 

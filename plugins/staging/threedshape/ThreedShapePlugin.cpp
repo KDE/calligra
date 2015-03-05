@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "ThreedShapePlugin.h"
 
@@ -33,16 +32,14 @@
 #include "ThreedShapeFactory.h"
 //#include "ThreedToolFactory.h"
 
-
 K_PLUGIN_FACTORY(ThreedShapePluginFactory, registerPlugin<ThreedShapePlugin>();)
 K_EXPORT_PLUGIN(ThreedShapePluginFactory("calligra_shape_threed"))
 
 ThreedShapePlugin::ThreedShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new ThreedShapeFactory() );
+    KoShapeRegistry::instance()->add(new ThreedShapeFactory());
     //KoToolRegistry::instance()->add( new ThreedToolFactory() );
 }
-
 
 #include <ThreedShapePlugin.moc>

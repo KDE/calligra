@@ -30,8 +30,8 @@ class KRITAIMAGE_EXPORT KisNodeQueryPath
     KisNodeQueryPath();
 public:
     ~KisNodeQueryPath();
-    KisNodeQueryPath(const KisNodeQueryPath&);
-    KisNodeQueryPath& operator=(const KisNodeQueryPath&);
+    KisNodeQueryPath(const KisNodeQueryPath &);
+    KisNodeQueryPath &operator=(const KisNodeQueryPath &);
     QList<KisNodeSP> queryNodes(KisImageWSP image, KisNodeSP currentNode) const;
     bool isRelative() const;
     // Use "///" style because of the needed "/*"
@@ -50,11 +50,11 @@ public:
      * @param err if non null, it will be filled with an error message
      * @see toString for an explanation of the string format
      */
-    static KisNodeQueryPath fromString(const QString& path);
+    static KisNodeQueryPath fromString(const QString &path);
     static KisNodeQueryPath absolutePath(KisNodeSP node);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

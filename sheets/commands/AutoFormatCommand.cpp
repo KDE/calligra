@@ -39,23 +39,26 @@ AutoFormatCommand::~AutoFormatCommand()
 {
 }
 
-void AutoFormatCommand::setStyles(const QList<Style>& styles)
+void AutoFormatCommand::setStyles(const QList<Style> &styles)
 {
     m_styles = styles;
 }
 
 bool AutoFormatCommand::preProcessing()
 {
-    if (m_firstrun)
+    if (m_firstrun) {
         m_sheet->cellStorage()->startUndoRecording();
+    }
     // always reset the style of the processed region
     Style defaultStyle;
     defaultStyle.setDefault();
     Region::ConstIterator end(constEnd());
-    for (Region::ConstIterator it = constBegin(); it != end; ++it)
+    for (Region::ConstIterator it = constBegin(); it != end; ++it) {
         m_sheet->cellStorage()->setStyle(Region((*it)->rect()), defaultStyle);
-    if (m_firstrun)
+    }
+    if (m_firstrun) {
         m_sheet->cellStorage()->stopUndoRecording(this);
+    }
     return true;
 }
 
@@ -68,25 +71,28 @@ bool AutoFormatCommand::mainProcessing()
     return AbstractRegionCommand::mainProcessing();
 }
 
-bool AutoFormatCommand::process(Element* element)
+bool AutoFormatCommand::process(Element *element)
 {
     const QRect rect = element->rect();
 
     // Top left corner
-    if (!m_styles[0].isDefault())
+    if (!m_styles[0].isDefault()) {
         m_sheet->cellStorage()->setStyle(Region(rect.topLeft()), m_styles[0]);
+    }
     // Top row
     for (int col = rect.left() + 1; col <= rect.right(); ++col) {
         int pos = 1 + ((col - rect.left() - 1) % 2);
         Cell cell(m_sheet, col, rect.top());
         if (!cell.isPartOfMerged()) {
             Style style;
-            if (!m_styles[pos].isDefault())
+            if (!m_styles[pos].isDefault()) {
                 style = m_styles[pos];
+            }
 
             Style tmpStyle = (col == rect.left() + 1) ? m_styles[1] : m_styles[2];
-            if (!tmpStyle.isDefault())
+            if (!tmpStyle.isDefault()) {
                 style.setLeftBorderPen(tmpStyle.leftBorderPen());
+            }
 
             m_sheet->cellStorage()->setStyle(Region(col, rect.top()), style);
         }
@@ -98,12 +104,14 @@ bool AutoFormatCommand::process(Element* element)
         Cell cell(m_sheet, rect.left(), row);
         if (!cell.isPartOfMerged()) {
             Style style;
-            if (!m_styles[pos].isDefault())
+            if (!m_styles[pos].isDefault()) {
                 style = m_styles[pos];
+            }
 
             Style tmpStyle = (row == rect.top() + 1) ? m_styles[4] : m_styles[8];
-            if (!tmpStyle.isDefault())
+            if (!tmpStyle.isDefault()) {
                 style.setTopBorderPen(tmpStyle.topBorderPen());
+            }
 
             m_sheet->cellStorage()->setStyle(Region(rect.left(), row), style);
         }
@@ -115,14 +123,16 @@ bool AutoFormatCommand::process(Element* element)
             int pos = 5 + ((row - rect.top() - 1) % 2) * 4 + ((col - rect.left() - 1) % 2);
             Cell cell(m_sheet, col, row);
             if (!cell.isPartOfMerged()) {
-                if (!m_styles[pos].isDefault())
+                if (!m_styles[pos].isDefault()) {
                     m_sheet->cellStorage()->setStyle(Region(col, row), m_styles[pos]);
+                }
 
                 Style style;
-                if (col == rect.left() + 1)
+                if (col == rect.left() + 1) {
                     style = m_styles[ 5 + ((row - rect.top() - 1) % 2) * 4 ];
-                else
+                } else {
                     style = m_styles[ 6 + ((row - rect.top() - 1) % 2) * 4 ];
+                }
 
                 if (!style.isDefault()) {
                     Style tmpStyle;
@@ -130,10 +140,11 @@ bool AutoFormatCommand::process(Element* element)
                     m_sheet->cellStorage()->setStyle(Region(col, row), tmpStyle);
                 }
 
-                if (row == rect.top() + 1)
+                if (row == rect.top() + 1) {
                     style = m_styles[ 5 + ((col - rect.left() - 1) % 2)];
-                else
+                } else {
                     style = m_styles[ 9 + ((col - rect.left() - 1) % 2)];
+                }
 
                 if (!style.isDefault()) {
                     Style tmpStyle;

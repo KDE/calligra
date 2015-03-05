@@ -32,10 +32,10 @@
 #include <kdebug.h>
 
 KPrSoundEventAction::KPrSoundEventAction()
-: QObject()
-, KoEventAction()
-, m_media( 0 )
-, m_soundData( 0 )
+    : QObject()
+    , KoEventAction()
+    , m_media(0)
+    , m_soundData(0)
 {
     setId(KPrSoundEventActionId);
 }
@@ -46,75 +46,74 @@ KPrSoundEventAction::~KPrSoundEventAction()
     delete m_soundData;
 }
 
-bool KPrSoundEventAction::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool KPrSoundEventAction::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    KoXmlElement sound = KoXml::namedItemNS( element, KoXmlNS::presentation, "sound" );
+    KoXmlElement sound = KoXml::namedItemNS(element, KoXmlNS::presentation, "sound");
 
     bool retval = false;
 
-    if ( ! sound.isNull() ) {
-        KPrSoundCollection *soundCollection = context.documentResourceManager()->resource(KPresenter::SoundCollection).value<KPrSoundCollection*>();
+    if (! sound.isNull()) {
+        KPrSoundCollection *soundCollection = context.documentResourceManager()->resource(KPresenter::SoundCollection).value<KPrSoundCollection *>();
 
-        if ( soundCollection ) {
-            QString href = sound.attributeNS( KoXmlNS::xlink, "href" );
-            if ( !href.isEmpty() ) {
-                m_soundData = new KPrSoundData( soundCollection, href );
+        if (soundCollection) {
+            QString href = sound.attributeNS(KoXmlNS::xlink, "href");
+            if (!href.isEmpty()) {
+                m_soundData = new KPrSoundData(soundCollection, href);
                 retval = true;
             }
-        }
-        else {
+        } else {
             kWarning(33000) << "sound collection could not be found";
-            Q_ASSERT( soundCollection );
+            Q_ASSERT(soundCollection);
         }
     }
 
     return retval;
 }
 
-void KPrSoundEventAction::saveOdf( KoShapeSavingContext & context ) const
+void KPrSoundEventAction::saveOdf(KoShapeSavingContext &context) const
 {
-    context.xmlWriter().startElement( "presentation:event-listener" );
-    context.xmlWriter().addAttribute( "script:event-name", "dom:click" );
-    context.xmlWriter().addAttribute( "presentation:action", "sound" );
+    context.xmlWriter().startElement("presentation:event-listener");
+    context.xmlWriter().addAttribute("script:event-name", "dom:click");
+    context.xmlWriter().addAttribute("presentation:action", "sound");
 
     //<presentation:sound xlink:href="/opt/kde4t/share/sounds/KDE-Im-Contact-In.ogg" xlink:type="simple" xlink:show="new" xlink:actuate="onRequest"/>
-    context.xmlWriter().startElement( "presentation:sound" );
-    context.xmlWriter().addAttribute( "xlink:href", m_soundData->tagForSaving() );
-    context.xmlWriter().addAttribute( "xlink:type", "simple" );
-    context.xmlWriter().addAttribute( "xlink:actuate", "onRequest" );
+    context.xmlWriter().startElement("presentation:sound");
+    context.xmlWriter().addAttribute("xlink:href", m_soundData->tagForSaving());
+    context.xmlWriter().addAttribute("xlink:type", "simple");
+    context.xmlWriter().addAttribute("xlink:actuate", "onRequest");
     context.xmlWriter().endElement();
 
     context.xmlWriter().endElement();
 
-    context.addDataCenter( m_soundData->soundCollection() );
+    context.addDataCenter(m_soundData->soundCollection());
 }
 
 void KPrSoundEventAction::start()
 {
-    if ( m_soundData ) {
+    if (m_soundData) {
         finish();
-        m_media = Phonon::createPlayer( Phonon::MusicCategory,
-                                        Phonon::MediaSource(QUrl::fromLocalFile(m_soundData->nameOfTempFile())) );
-        connect( m_media, SIGNAL(finished()), this, SLOT(finished()) );
+        m_media = Phonon::createPlayer(Phonon::MusicCategory,
+                                       Phonon::MediaSource(QUrl::fromLocalFile(m_soundData->nameOfTempFile())));
+        connect(m_media, SIGNAL(finished()), this, SLOT(finished()));
         m_media->play();
     }
 }
 
 void KPrSoundEventAction::finish()
 {
-    if ( m_media ) {
+    if (m_media) {
         m_media->stop();
         finished();
     }
 }
 
-void KPrSoundEventAction::setSoundData( KPrSoundData * soundData )
+void KPrSoundEventAction::setSoundData(KPrSoundData *soundData)
 {
     delete m_soundData;
     m_soundData = soundData;
 }
 
-KPrSoundData * KPrSoundEventAction::soundData() const
+KPrSoundData *KPrSoundEventAction::soundData() const
 {
     return m_soundData;
 }

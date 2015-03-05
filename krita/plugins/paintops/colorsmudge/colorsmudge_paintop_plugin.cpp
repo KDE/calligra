@@ -35,8 +35,7 @@
 K_PLUGIN_FACTORY(ColorSmudgePaintOpPluginFactory, registerPlugin<ColorSmudgePaintOpPlugin>();)
 K_EXPORT_PLUGIN(ColorSmudgePaintOpPluginFactory("krita"))
 
-
-ColorSmudgePaintOpPlugin::ColorSmudgePaintOpPlugin(QObject* parent, const QVariantList&):
+ColorSmudgePaintOpPlugin::ColorSmudgePaintOpPlugin(QObject *parent, const QVariantList &):
     QObject(parent)
 {
     KisPaintOpRegistry::instance()->add(new KisSimplePaintOpFactory<KisColorSmudgeOp, KisBrushBasedPaintOpSettings, KisColorSmudgeOpSettingsWidget>(

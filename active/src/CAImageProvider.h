@@ -33,9 +33,9 @@ public:
 
     CAImageProvider();
     virtual ~CAImageProvider();
-        virtual QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize);
+    virtual QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 
-    void addImage(const QString& id, const QImage &image);
+    void addImage(const QString &id, const QImage &image);
     bool containsId(const QString &id);
 private:
 

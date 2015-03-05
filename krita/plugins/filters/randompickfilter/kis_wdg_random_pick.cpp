@@ -20,15 +20,14 @@
 
 #include "kis_wdg_random_pick.h"
 
-
 #include <QLayout>
 
 #include <filter/kis_filter_configuration.h>
 
 #include "ui_wdgrandompickoptions.h"
 
-KisWdgRandomPick::KisWdgRandomPick(KisFilter* /*nfilter*/, QWidget* parent)
-        : KisConfigWidget(parent)
+KisWdgRandomPick::KisWdgRandomPick(KisFilter * /*nfilter*/, QWidget *parent)
+    : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgRandomPickOptions();
     m_widget->setupUi(this);
@@ -46,7 +45,7 @@ KisWdgRandomPick::~KisWdgRandomPick()
     delete m_widget;
 }
 
-void KisWdgRandomPick::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgRandomPick::setConfiguration(const KisPropertiesConfiguration *config)
 {
     QVariant value;
     if (config->getProperty("level", value)) {
@@ -60,10 +59,9 @@ void KisWdgRandomPick::setConfiguration(const KisPropertiesConfiguration* config
     }
 }
 
-
-KisPropertiesConfiguration* KisWdgRandomPick::configuration() const
+KisPropertiesConfiguration *KisWdgRandomPick::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("randompick", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("randompick", 1);
     config->setProperty("level", this->widget()->intLevel->value());
     config->setProperty("windowsize", this->widget()->intWindowSize->value());
     config->setProperty("opacity", this->widget()->intOpacity->value());

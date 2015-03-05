@@ -47,29 +47,28 @@ struct KisRecordedShapePaintAction::Private {
 
 QString selectName(KisRecordedShapePaintAction::Shape s)
 {
-    switch(s)
-    {
-        case KisRecordedShapePaintAction::Ellipse:
-            return i18n("Ellipse");
-        case KisRecordedShapePaintAction::Rectangle:
-            return i18n("Rectangle");
+    switch (s) {
+    case KisRecordedShapePaintAction::Ellipse:
+        return i18n("Ellipse");
+    case KisRecordedShapePaintAction::Rectangle:
+        return i18n("Rectangle");
     }
     return QString();
 }
 
 KisRecordedShapePaintAction::KisRecordedShapePaintAction(
-    const KisNodeQueryPath& path,
+    const KisNodeQueryPath &path,
     const KisPaintOpPresetSP preset,
     Shape shape,
-    const QRectF& rect)
-        : KisRecordedPaintAction("ShapePaintAction", selectName(shape), path, preset)
-        , d(new Private)
+    const QRectF &rect)
+    : KisRecordedPaintAction("ShapePaintAction", selectName(shape), path, preset)
+    , d(new Private)
 {
     d->shape = shape;
     d->rectangle = rect;
 }
 
-KisRecordedShapePaintAction::KisRecordedShapePaintAction(const KisRecordedShapePaintAction& rhs) : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
+KisRecordedShapePaintAction::KisRecordedShapePaintAction(const KisRecordedShapePaintAction &rhs) : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
 {
 
 }
@@ -79,20 +78,19 @@ KisRecordedShapePaintAction::~KisRecordedShapePaintAction()
     delete d;
 }
 
-void KisRecordedShapePaintAction::playPaint(const KisPlayInfo&, KisPainter* painter) const
+void KisRecordedShapePaintAction::playPaint(const KisPlayInfo &, KisPainter *painter) const
 {
-    switch(d->shape)
-    {
-        case Ellipse:
-            painter->paintEllipse(d->rectangle);
-            break;
-        case Rectangle:
-            painter->paintRect(d->rectangle);
-            break;
+    switch (d->shape) {
+    case Ellipse:
+        painter->paintEllipse(d->rectangle);
+        break;
+    case Rectangle:
+        painter->paintRect(d->rectangle);
+        break;
     }
 }
 
-void KisRecordedShapePaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const
+void KisRecordedShapePaintAction::toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *context) const
 {
     KisRecordedPaintAction::toXML(doc, elt, context);
     QDomElement rectangleElt = doc.createElement("Rectangle");
@@ -101,25 +99,23 @@ void KisRecordedShapePaintAction::toXML(QDomDocument& doc, QDomElement& elt, Kis
     rectangleElt.setAttribute("width", d->rectangle.width());
     rectangleElt.setAttribute("height", d->rectangle.height());
     elt.appendChild(rectangleElt);
-    switch(d->shape)
-    {
-        case Ellipse:
-            elt.setAttribute("shape", "Ellipse");
-            break;
-        case Rectangle:
-            elt.setAttribute("shape", "Rectangle");
-            break;
+    switch (d->shape) {
+    case Ellipse:
+        elt.setAttribute("shape", "Ellipse");
+        break;
+    case Rectangle:
+        elt.setAttribute("shape", "Rectangle");
+        break;
     }
 }
 
-KisRecordedAction* KisRecordedShapePaintAction::clone() const
+KisRecordedAction *KisRecordedShapePaintAction::clone() const
 {
     return new KisRecordedShapePaintAction(*this);
 }
 
-
 KisRecordedShapePaintActionFactory::KisRecordedShapePaintActionFactory() :
-        KisRecordedPaintActionFactory("ShapePaintAction")
+    KisRecordedPaintActionFactory("ShapePaintAction")
 {
 }
 
@@ -128,7 +124,7 @@ KisRecordedShapePaintActionFactory::~KisRecordedShapePaintActionFactory()
 
 }
 
-KisRecordedAction* KisRecordedShapePaintActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext* context)
+KisRecordedAction *KisRecordedShapePaintActionFactory::fromXML(const QDomElement &elt, const KisRecordedActionLoadContext *context)
 {
     KisNodeQueryPath pathnode = nodeQueryPathFromXML(elt);
 
@@ -152,14 +148,13 @@ KisRecordedAction* KisRecordedShapePaintActionFactory::fromXML(const QDomElement
 
     KisRecordedShapePaintAction::Shape shape = KisRecordedShapePaintAction::Ellipse;
     QString shapeStr = elt.attribute("shape", "Ellipse");
-    if (shapeStr == "Ellipse")
-    {
+    if (shapeStr == "Ellipse") {
         shape = KisRecordedShapePaintAction::Ellipse;
     } else { // shapeStr == "Rectangle"
         shape = KisRecordedShapePaintAction::Rectangle;
     }
 
-    KisRecordedShapePaintAction* rplpa = new KisRecordedShapePaintAction(pathnode, paintOpPreset, shape, QRectF(x, y, width, height));
+    KisRecordedShapePaintAction *rplpa = new KisRecordedShapePaintAction(pathnode, paintOpPreset, shape, QRectF(x, y, width, height));
 
     setupPaintAction(rplpa, elt, context);
     return rplpa;

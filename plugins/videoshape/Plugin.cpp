@@ -25,14 +25,13 @@
 
 #include <kpluginfactory.h>
 
-
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
 K_EXPORT_PLUGIN(PluginFactory("calligra_shape_video"))
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new VideoShapeFactory() );
+    KoShapeRegistry::instance()->add(new VideoShapeFactory());
     KoToolRegistry::instance()->add(new VideoToolFactory());
 }
 

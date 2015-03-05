@@ -31,9 +31,8 @@
 #include <kis_cursor.h>
 #include <KisViewManager.h>
 
-
-KisToolGrid::KisToolGrid(KoCanvasBase * canvas)
-        : KisTool(canvas, KisCursor::moveCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas))
+KisToolGrid::KisToolGrid(KoCanvasBase *canvas)
+    : KisTool(canvas, KisCursor::moveCursor()), m_canvas(dynamic_cast<KisCanvas2 *>(canvas))
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_grid");
@@ -43,27 +42,30 @@ KisToolGrid::~KisToolGrid()
 {
 }
 
-void KisToolGrid::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolGrid::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
     m_canvas->updateCanvas();
 
-    KisCanvasDecoration* decoration = m_canvas->decoration("grid");
+    KisCanvasDecoration *decoration = m_canvas->decoration("grid");
     if (decoration && !decoration->visible()) {
-        m_canvas->viewManager()->showFloatingMessage( "The grid is not visible. Press Return to show it.",
-                                              koIcon("krita_tool_grid"));
+        m_canvas->viewManager()->showFloatingMessage("The grid is not visible. Press Return to show it.",
+                koIcon("krita_tool_grid"));
     }
 }
 
-inline QPointF modPoints(const QPointF &x1, const QPointF &x2) {
+inline QPointF modPoints(const QPointF &x1, const QPointF &x2)
+{
     return QPointF(std::fmod(x1.x(), x2.x()), std::fmod(x1.y(), x2.y()));
 }
 
-inline QPointF divPoints(const QPointF &x1, const QPointF &x2) {
+inline QPointF divPoints(const QPointF &x1, const QPointF &x2)
+{
     return QPointF(x1.x() / x2.x(), x1.y() / x2.y());
 }
 
-inline QPointF mulPoints(const QPointF &x1, const QPointF &x2) {
+inline QPointF mulPoints(const QPointF &x1, const QPointF &x2)
+{
     return QPointF(x1.x() * x2.x(), x1.y() * x2.y());
 }
 
@@ -100,8 +102,8 @@ void KisToolGrid::endPrimaryAction(KoPointerEvent *event)
 void KisToolGrid::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     if (action != Secondary &&
-        action != PickFgNode &&
-        action != PickFgImage) {
+            action != PickFgNode &&
+            action != PickFgImage) {
 
         KisTool::beginAlternateAction(event, action);
         return;
@@ -117,8 +119,8 @@ void KisToolGrid::beginAlternateAction(KoPointerEvent *event, AlternateAction ac
 void KisToolGrid::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     if (action != Secondary &&
-        action != PickFgNode &&
-        action != PickFgImage) {
+            action != PickFgNode &&
+            action != PickFgImage) {
 
         KisTool::continueAlternateAction(event, action);
         return;
@@ -146,8 +148,8 @@ void KisToolGrid::continueAlternateAction(KoPointerEvent *event, AlternateAction
 void KisToolGrid::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     if (action != Secondary &&
-        action != PickFgNode &&
-        action != PickFgImage) {
+            action != PickFgNode &&
+            action != PickFgImage) {
 
         KisTool::endAlternateAction(event, action);
         return;
@@ -156,16 +158,16 @@ void KisToolGrid::endAlternateAction(KoPointerEvent *event, AlternateAction acti
     setMode(KisTool::HOVER_MODE);
 }
 
-void KisToolGrid::paint(QPainter& gc, const KoViewConverter &converter)
+void KisToolGrid::paint(QPainter &gc, const KoViewConverter &converter)
 {
     Q_UNUSED(gc);
     Q_UNUSED(converter);
 }
 
-void KisToolGrid::keyPressEvent(QKeyEvent* event)
+void KisToolGrid::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return) {
-        KisCanvasDecoration* decoration = m_canvas->decoration("grid");
+        KisCanvasDecoration *decoration = m_canvas->decoration("grid");
         if (decoration) {
             decoration->setVisible(true);
         }

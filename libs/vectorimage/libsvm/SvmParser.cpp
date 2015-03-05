@@ -5,18 +5,17 @@
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either 
+  License as published by the Free Software Foundation; either
   version 2.1 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public 
+  You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 
 // Own
 #include "SvmParser.h"
@@ -43,22 +42,19 @@
 namespace Libsvm
 {
 
-
-static void soakBytes( QDataStream &stream, int numBytes )
+static void soakBytes(QDataStream &stream, int numBytes)
 {
     quint8 scratch;
-    for ( int i = 0; i < numBytes; ++i ) {
+    for (int i = 0; i < numBytes; ++i) {
         stream >> scratch;
     }
 }
-
 
 SvmParser::SvmParser()
     : mContext()
     , mBackend(0)
 {
 }
-
 
 static const struct ActionNames {
     int     actionNumber;
@@ -121,18 +117,17 @@ static const struct ActionNames {
     { META_COMMENT_ACTION,               "META_COMMENT_ACTION" }
 };
 
-
 void SvmParser::setBackend(SvmAbstractBackend *backend)
 {
     mBackend = backend;
 }
 
-
 bool SvmParser::parse(const QByteArray &data)
 {
     // Check the signature "VCLMTF"
-    if (!data.startsWith("VCLMTF"))
+    if (!data.startsWith("VCLMTF")) {
         return false;
+    }
 
     QBuffer buffer((QByteArray *) &data);
     buffer.open(QIODevice::ReadOnly);
@@ -157,7 +152,7 @@ bool SvmParser::parse(const QByteArray &data)
     kDebug(31000) << "size:" << header.width << header.height;
     kDebug(31000) << "actionCount:" << header.actionCount;
     kDebug(31000) << "================ SVM HEADER ================";
-#endif    
+#endif
 
     mBackend->init(header);
 
@@ -178,13 +173,13 @@ bool SvmParser::parse(const QByteArray &data)
         quint16  version;
         quint32  totalSize;
 
-        // Here starts the Action itself. The first two bytes is the action type. 
+        // Here starts the Action itself. The first two bytes is the action type.
         mainStream >> actionType;
 
         // The VersionCompat object
         mainStream >> version;
         mainStream >> totalSize;
-        
+
         char *rawData = new char[totalSize];
         mainStream.readRawData(rawData, totalSize);
         QByteArray dataArray(rawData, totalSize);
@@ -195,14 +190,15 @@ bool SvmParser::parse(const QByteArray &data)
 #if DEBUG_SVMPARSER
         {
             QString name;
-            if (actionType == 0)
+            if (actionType == 0) {
                 name = actionNames[0].actionName;
-            else if (100 <= actionType && actionType <= META_LAST_ACTION)
+            } else if (100 <= actionType && actionType <= META_LAST_ACTION) {
                 name = actionNames[actionType - 99].actionName;
-            else if (actionType == 512)
+            } else if (actionType == 512) {
                 name = "META_COMMENT_ACTION";
-            else
+            } else {
                 name = "(out of bounds)";
+            }
 
             kDebug(31000) << name << "(" << actionType << ")" << "version" << version
                           << "totalSize" << totalSize;
@@ -219,15 +215,14 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_LINE_ACTION:
             break;
-        case META_RECT_ACTION:
-            {
-                QRect  rect;
+        case META_RECT_ACTION: {
+            QRect  rect;
 
-                parseRect(stream, rect);
-                kDebug(31000) << "Rect:"  << rect;
-                mBackend->rect(mContext, rect);
-            }
-            break;
+            parseRect(stream, rect);
+            kDebug(31000) << "Rect:"  << rect;
+            mBackend->rect(mContext, rect);
+        }
+        break;
         case META_ROUNDRECT_ACTION:
             break;
         case META_ELLIPSE_ACTION:
@@ -238,128 +233,129 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_CHORD_ACTION:
             break;
-        case META_POLYLINE_ACTION:
-            {
-                QPolygon  polygon;
+        case META_POLYLINE_ACTION: {
+            QPolygon  polygon;
 
-                parsePolygon(stream, polygon);
-                kDebug(31000) << "Polyline:"  << polygon;
-                mBackend->polyLine(mContext, polygon);
+            parsePolygon(stream, polygon);
+            kDebug(31000) << "Polyline:"  << polygon;
+            mBackend->polyLine(mContext, polygon);
 
-                // FIXME: Version 2: Lineinfo, Version 3: polyflags
-                if (version > 1)
-                    soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
+            // FIXME: Version 2: Lineinfo, Version 3: polyflags
+            if (version > 1) {
+                soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
             }
-            break;
-        case META_POLYGON_ACTION:
-            {
-                QPolygon  polygon;
+        }
+        break;
+        case META_POLYGON_ACTION: {
+            QPolygon  polygon;
 
-                parsePolygon(stream, polygon);
-                kDebug(31000) << "Polygon:"  << polygon;
-                mBackend->polygon(mContext, polygon);
+            parsePolygon(stream, polygon);
+            kDebug(31000) << "Polygon:"  << polygon;
+            mBackend->polygon(mContext, polygon);
 
-                // FIXME: Version 2: Lineinfo, Version 3: polyflags
-                if (version > 1)
-                    soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
+            // FIXME: Version 2: Lineinfo, Version 3: polyflags
+            if (version > 1) {
+                soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
             }
-            break;
-        case META_POLYPOLYGON_ACTION:
-            {
-                quint16 polygonCount;
-                stream >> polygonCount;
-                //kDebug(31000) << "Number of polygons:"  << polygonCount;
+        }
+        break;
+        case META_POLYPOLYGON_ACTION: {
+            quint16 polygonCount;
+            stream >> polygonCount;
+            //kDebug(31000) << "Number of polygons:"  << polygonCount;
 
-                QList<QPolygon> polygons;
-                for (quint16 i = 0 ; i < polygonCount ; i++) {
+            QList<QPolygon> polygons;
+            for (quint16 i = 0; i < polygonCount; i++) {
+                QPolygon polygon;
+                parsePolygon(stream, polygon);
+                polygons << polygon;
+                //kDebug(31000) << "Polygon:"  << polygon;
+            }
+
+            if (version > 1) {
+                quint16 complexPolygonCount;
+                stream >> complexPolygonCount;
+                //kDebug(31000) << "Number of complex polygons:"  << complexPolygonCount;
+
+                // Parse the so called "complex polygons". For
+                // each one, there is an index and a polygon.  The
+                // index tells which of the original polygons to
+                // replace.
+                for (quint16 i = 0; i < complexPolygonCount; i++) {
+                    quint16 complexPolygonIndex;
+                    stream >> complexPolygonIndex;
+
                     QPolygon polygon;
                     parsePolygon(stream, polygon);
-                    polygons << polygon;
-                    //kDebug(31000) << "Polygon:"  << polygon;
+                    //kDebug(31000) << "polygon index:"  << complexPolygonIndex << polygon;
+
+                    // FIXME: The so called complex polygons have something to do
+                    //        with modifying the polygons, but I have not yet been
+                    //        able to understand how.  So until I do, we'll disable
+                    //        this.
+                    //polygons[complexPolygonIndex] = polygon;
                 }
-                
-                if (version > 1) {
-                    quint16 complexPolygonCount;
-                    stream >> complexPolygonCount;
-                    //kDebug(31000) << "Number of complex polygons:"  << complexPolygonCount;
-
-                    // Parse the so called "complex polygons". For
-                    // each one, there is an index and a polygon.  The
-                    // index tells which of the original polygons to
-                    // replace.
-                    for (quint16 i = 0; i < complexPolygonCount; i++) {
-                        quint16 complexPolygonIndex;
-                        stream >> complexPolygonIndex;
-
-                        QPolygon polygon;
-                        parsePolygon(stream, polygon);
-                        //kDebug(31000) << "polygon index:"  << complexPolygonIndex << polygon;
-
-                        // FIXME: The so called complex polygons have something to do
-                        //        with modifying the polygons, but I have not yet been
-                        //        able to understand how.  So until I do, we'll disable
-                        //        this.
-                        //polygons[complexPolygonIndex] = polygon;
-                    }
-                }
-                
-                mBackend->polyPolygon(mContext, polygons);
             }
-            break;
+
+            mBackend->polyPolygon(mContext, polygons);
+        }
+        break;
         case META_TEXT_ACTION:
             break;
-        case META_TEXTARRAY_ACTION:
-            {
-                QPoint   startPoint;
-                QString  string;
-                quint16  startIndex;
-                quint16  len;
-                quint32  dxArrayLen;
-                qint32  *dxArray = 0;
+        case META_TEXTARRAY_ACTION: {
+            QPoint   startPoint;
+            QString  string;
+            quint16  startIndex;
+            quint16  len;
+            quint32  dxArrayLen;
+            qint32  *dxArray = 0;
 
-                stream >> startPoint;
-                parseString(stream, string);
-                stream >> startIndex;
-                stream >> len;
-                stream >> dxArrayLen;
-                if (dxArrayLen > 0) {
-                    quint32 maxDxArrayLen = totalSize - stream.device()->pos();
-                    if (dxArrayLen > maxDxArrayLen) {
-                        qDebug() << "Defined dxArrayLen= " << dxArrayLen << "exceeds availalable size" << maxDxArrayLen;
-                        dxArrayLen = maxDxArrayLen;
-                    }
-
-                    dxArray = new qint32[dxArrayLen];
-
-                    for (uint i = 0; i < dxArrayLen; ++i)
-                        stream >> dxArray[i];
+            stream >> startPoint;
+            parseString(stream, string);
+            stream >> startIndex;
+            stream >> len;
+            stream >> dxArrayLen;
+            if (dxArrayLen > 0) {
+                quint32 maxDxArrayLen = totalSize - stream.device()->pos();
+                if (dxArrayLen > maxDxArrayLen) {
+                    qDebug() << "Defined dxArrayLen= " << dxArrayLen << "exceeds availalable size" << maxDxArrayLen;
+                    dxArrayLen = maxDxArrayLen;
                 }
 
-                if (version > 1) {
-                    quint16  len2;
+                dxArray = new qint32[dxArrayLen];
 
-                    stream >> len2;
-                    // FIXME: More here
+                for (uint i = 0; i < dxArrayLen; ++i) {
+                    stream >> dxArray[i];
                 }
+            }
+
+            if (version > 1) {
+                quint16  len2;
+
+                stream >> len2;
+                // FIXME: More here
+            }
 
 #if 0
-                kDebug(31000) << "Text: " << startPoint << string
-                              << startIndex << len;
-                if (dxArrayLen > 0) {
-                    kDebug(31000) << "dxArrayLen:" << dxArrayLen;
-                    for (uint i = 0; i < dxArrayLen; ++i)
-                        kDebug(31000) << dxArray[i];
+            kDebug(31000) << "Text: " << startPoint << string
+                          << startIndex << len;
+            if (dxArrayLen > 0) {
+                kDebug(31000) << "dxArrayLen:" << dxArrayLen;
+                for (uint i = 0; i < dxArrayLen; ++i) {
+                    kDebug(31000) << dxArray[i];
                 }
-                else
-                    kDebug(31000) << "dxArrayLen = 0";
-#endif
-                mBackend->textArray(mContext, startPoint, string, startIndex, len,
-                                    dxArrayLen, dxArray);
-
-                if (dxArrayLen)
-                    delete[] dxArray;
+            } else {
+                kDebug(31000) << "dxArrayLen = 0";
             }
-            break;
+#endif
+            mBackend->textArray(mContext, startPoint, string, startIndex, len,
+                                dxArrayLen, dxArray);
+
+            if (dxArrayLen) {
+                delete[] dxArray;
+            }
+        }
+        break;
         case META_STRETCHTEXT_ACTION:
             break;
         case META_TEXTRECT_ACTION:
@@ -396,106 +392,97 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_MOVECLIPREGION_ACTION:
             break;
-        case META_LINECOLOR_ACTION:
-            {
-                quint32  colorData;
+        case META_LINECOLOR_ACTION: {
+            quint32  colorData;
 
-                stream >> colorData;
-                stream >> mContext.lineColorSet;
+            stream >> colorData;
+            stream >> mContext.lineColorSet;
 
-                mContext.lineColor = QColor::fromRgb(colorData);
-                kDebug(31000) << "Color:"  << mContext.lineColor 
-                              << '(' << mContext.lineColorSet << ')';
-                mContext.changedItems |= GCLineColor;
-            }
-            break;
-        case META_FILLCOLOR_ACTION:
-            {
-                quint32  colorData;
+            mContext.lineColor = QColor::fromRgb(colorData);
+            kDebug(31000) << "Color:"  << mContext.lineColor
+                          << '(' << mContext.lineColorSet << ')';
+            mContext.changedItems |= GCLineColor;
+        }
+        break;
+        case META_FILLCOLOR_ACTION: {
+            quint32  colorData;
 
-                stream >> colorData;
-                stream >> mContext.fillColorSet;
-                //mContext.fillColorSet = false;
-                
-                kDebug(31000) << "Fill color :" << hex << colorData << dec
-                              << '(' << mContext.fillColorSet << ')';
+            stream >> colorData;
+            stream >> mContext.fillColorSet;
+            //mContext.fillColorSet = false;
 
-                mContext.fillColor = QColor::fromRgb(colorData);
-                mContext.changedItems |= GCFillColor;
-            }
-            break;
-        case META_TEXTCOLOR_ACTION:
-            {
-                quint32  colorData;
-                stream >> colorData;
+            kDebug(31000) << "Fill color :" << hex << colorData << dec
+                          << '(' << mContext.fillColorSet << ')';
 
-                mContext.textColor = QColor::fromRgb(colorData);
-                kDebug(31000) << "Color:"  << mContext.textColor;
-                mContext.changedItems |= GCTextColor;
-            }
-            break;
-        case META_TEXTFILLCOLOR_ACTION:
-            {
-                quint32  colorData;
+            mContext.fillColor = QColor::fromRgb(colorData);
+            mContext.changedItems |= GCFillColor;
+        }
+        break;
+        case META_TEXTCOLOR_ACTION: {
+            quint32  colorData;
+            stream >> colorData;
 
-                stream >> colorData;
-                stream >> mContext.textFillColorSet;
-                
-                kDebug(31000) << "Text fill color :" << hex << colorData << dec
-                              << '(' << mContext.textFillColorSet << ')';
+            mContext.textColor = QColor::fromRgb(colorData);
+            kDebug(31000) << "Color:"  << mContext.textColor;
+            mContext.changedItems |= GCTextColor;
+        }
+        break;
+        case META_TEXTFILLCOLOR_ACTION: {
+            quint32  colorData;
 
-                mContext.textFillColor = QColor::fromRgb(colorData);
-                kDebug(31000) << "Color:"  << mContext.textFillColor
-                              << '(' << mContext.textFillColorSet << ')';
-                mContext.changedItems |= GCTextFillColor;
-            }
-            break;
-        case META_TEXTALIGN_ACTION:
-            {
-                quint16  textAlign;
-                stream >> textAlign;
+            stream >> colorData;
+            stream >> mContext.textFillColorSet;
 
-                mContext.textAlign = (TextAlign)textAlign;
-                kDebug(31000) << "TextAlign:"  << mContext.textAlign;
-                mContext.changedItems |= GCTextAlign;
-            }
-            break;
-        case META_MAPMODE_ACTION:
-            {
-                stream >> mContext.mapMode;
-                kDebug(31000) << "mapMode:" << "Origin" << mContext.mapMode.origin
-                              << "scaleX"
-                              << mContext.mapMode.scaleX.numerator << mContext.mapMode.scaleX.denominator
-                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.denominator)
-                              << "scaleY"
-                              << mContext.mapMode.scaleY.numerator << mContext.mapMode.scaleY.denominator
-                              << (qreal(mContext.mapMode.scaleY.numerator) / mContext.mapMode.scaleY.denominator);
-                mContext.changedItems |= GCMapMode;
-            }
-            break;
-        case META_FONT_ACTION:
-            {
-                parseFont(stream, mContext.font);
-                kDebug(31000) << "Font:"  << mContext.font;
-                mContext.changedItems |= GCFont;
-            }
-            break;
-        case META_PUSH_ACTION:
-            {
-                kDebug(31000) << "Push action : " << totalSize;
-                quint16 pushValue;
-                stream >> pushValue;
-                kDebug(31000) << "Push value : " << pushValue;
-            }
-            break;
-        case META_POP_ACTION:
-            {
-                kDebug(31000) << "Pop action : " << totalSize;
-                /*quint16 pushValue;
-                stream >> pushValue;
-                kDebug(31000) << "Push value : " << pushValue;*/
-            }
-            break;
+            kDebug(31000) << "Text fill color :" << hex << colorData << dec
+                          << '(' << mContext.textFillColorSet << ')';
+
+            mContext.textFillColor = QColor::fromRgb(colorData);
+            kDebug(31000) << "Color:"  << mContext.textFillColor
+                          << '(' << mContext.textFillColorSet << ')';
+            mContext.changedItems |= GCTextFillColor;
+        }
+        break;
+        case META_TEXTALIGN_ACTION: {
+            quint16  textAlign;
+            stream >> textAlign;
+
+            mContext.textAlign = (TextAlign)textAlign;
+            kDebug(31000) << "TextAlign:"  << mContext.textAlign;
+            mContext.changedItems |= GCTextAlign;
+        }
+        break;
+        case META_MAPMODE_ACTION: {
+            stream >> mContext.mapMode;
+            kDebug(31000) << "mapMode:" << "Origin" << mContext.mapMode.origin
+                          << "scaleX"
+                          << mContext.mapMode.scaleX.numerator << mContext.mapMode.scaleX.denominator
+                          << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.denominator)
+                          << "scaleY"
+                          << mContext.mapMode.scaleY.numerator << mContext.mapMode.scaleY.denominator
+                          << (qreal(mContext.mapMode.scaleY.numerator) / mContext.mapMode.scaleY.denominator);
+            mContext.changedItems |= GCMapMode;
+        }
+        break;
+        case META_FONT_ACTION: {
+            parseFont(stream, mContext.font);
+            kDebug(31000) << "Font:"  << mContext.font;
+            mContext.changedItems |= GCFont;
+        }
+        break;
+        case META_PUSH_ACTION: {
+            kDebug(31000) << "Push action : " << totalSize;
+            quint16 pushValue;
+            stream >> pushValue;
+            kDebug(31000) << "Push value : " << pushValue;
+        }
+        break;
+        case META_POP_ACTION: {
+            kDebug(31000) << "Pop action : " << totalSize;
+            /*quint16 pushValue;
+            stream >> pushValue;
+            kDebug(31000) << "Push value : " << pushValue;*/
+        }
+        break;
         case META_RASTEROP_ACTION:
             break;
         case META_TRANSPARENT_ACTION:
@@ -512,28 +499,26 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_GRADIENTEX_ACTION:
             break;
-        case META_LAYOUTMODE_ACTION:
-            {
-                stream >> mContext.layoutMode;
-                kDebug(31000) << "New layout mode:" << hex << mContext.layoutMode << dec << "hex";
-            }
-            break;
+        case META_LAYOUTMODE_ACTION: {
+            stream >> mContext.layoutMode;
+            kDebug(31000) << "New layout mode:" << hex << mContext.layoutMode << dec << "hex";
+        }
+        break;
         case META_TEXTLANGUAGE_ACTION:
             break;
-        case META_OVERLINECOLOR_ACTION:
-            {
-                quint32  colorData;
+        case META_OVERLINECOLOR_ACTION: {
+            quint32  colorData;
 
-                stream >> colorData;
-                stream >> mContext.overlineColorSet;
-                
-                kDebug(31000) << "Overline color :" << colorData
-                              << '(' << mContext.overlineColorSet << ')';
+            stream >> colorData;
+            stream >> mContext.overlineColorSet;
 
-                mContext.overlineColor = QColor::fromRgb(colorData);
-                mContext.changedItems |= GCOverlineColor;
-            }
-            break;
+            kDebug(31000) << "Overline color :" << colorData
+                          << '(' << mContext.overlineColorSet << ')';
+
+            mContext.overlineColor = QColor::fromRgb(colorData);
+            mContext.changedItems |= GCOverlineColor;
+        }
+        break;
         case META_RENDERGRAPHIC_ACTION:
             //dumpAction(stream, version, totalSize);
             break;
@@ -548,10 +533,11 @@ bool SvmParser::parse(const QByteArray &data)
         }
 
         delete [] rawData;
-        
+
         // Security measure
-        if (mainStream.atEnd())
+        if (mainStream.atEnd()) {
             break;
+        }
     }
 
     mBackend->cleanup();
@@ -559,10 +545,8 @@ bool SvmParser::parse(const QByteArray &data)
     return true;
 }
 
-
 // ----------------------------------------------------------------
 //                         Private methods
-
 
 void SvmParser::parseRect(QDataStream &stream, QRect &rect)
 {
@@ -665,7 +649,6 @@ void SvmParser::parseFont(QDataStream &stream, QFont &font)
 
     // FIXME: Read away the rest of font here to allow for higher versions than 3.
 }
-
 
 void SvmParser::dumpAction(QDataStream &stream, quint16 version, quint32 totalSize)
 {

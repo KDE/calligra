@@ -44,7 +44,6 @@
 #include "kis_fixed_paint_device.h"
 #include "kis_paintop_utils.h"
 
-
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #include <kis_distance_information.h>
 
@@ -64,7 +63,7 @@ struct KisPaintOp::Private {
     KisPaintOp *q;
 
     KisFixedPaintDeviceSP dab;
-    KisPainter* painter;
+    KisPainter *painter;
     qreal currentScale;
     qreal currentRotation;
 
@@ -72,8 +71,7 @@ struct KisPaintOp::Private {
     qreal fanCornersStep;
 };
 
-
-KisPaintOp::KisPaintOp(KisPainter * painter) : d(new Private(this))
+KisPaintOp::KisPaintOp(KisPainter *painter) : d(new Private(this))
 {
     d->painter = painter;
 }
@@ -155,7 +153,6 @@ void KisPaintOp::paintBezierCurve(const KisPaintInformation &pi1,
     return ::paintBezierCurve(this, pi1, toKisVector2D(control1), toKisVector2D(control2), pi2, currentDistance);
 }
 
-
 void KisPaintOp::paintLine(const KisPaintInformation &pi1,
                            const KisPaintInformation &pi2,
                            KisDistanceInformation *currentDistance)
@@ -165,7 +162,7 @@ void KisPaintOp::paintLine(const KisPaintInformation &pi1,
                                d->fanCornersStep);
 }
 
-void KisPaintOp::paintAt(const KisPaintInformation& info, KisDistanceInformation *currentDistance)
+void KisPaintOp::paintAt(const KisPaintInformation &info, KisDistanceInformation *currentDistance)
 {
     Q_ASSERT(currentDistance);
 
@@ -173,7 +170,7 @@ void KisPaintOp::paintAt(const KisPaintInformation& info, KisDistanceInformation
     pi.paintAt(*this, currentDistance);
 }
 
-KisPainter* KisPaintOp::painter() const
+KisPainter *KisPaintOp::painter() const
 {
     return d->painter;
 }

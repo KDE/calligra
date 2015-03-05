@@ -44,11 +44,11 @@ enum StandardAction {
 };
 
 //! Creates an action corresponding to the KexiStandardAction::StandardAction enum.
-KEXICORE_EXPORT KAction* create(
+KEXICORE_EXPORT KAction *create(
     StandardAction id, const QObject *recvr, const char *slot, QObject *parent);
 
 //! @return the internal name of a given standard action
-KEXICORE_EXPORT const char* name(StandardAction id);
+KEXICORE_EXPORT const char *name(StandardAction id);
 
 //! Sorts data in ascending order
 KEXICORE_EXPORT KAction *sortAscending(const QObject *recvr, const char *slot, QObject *parent);

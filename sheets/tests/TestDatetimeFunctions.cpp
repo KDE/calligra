@@ -58,30 +58,35 @@ static Value RoundNumber(double f)
 #endif
 
 // round to get at most 10-digits number
-static Value RoundNumber(const Value& v)
+static Value RoundNumber(const Value &v)
 {
     if (v.isNumber()) {
         double d = numToDouble(v.asFloat());
-        if (fabs(d) < DBL_EPSILON)
+        if (fabs(d) < DBL_EPSILON) {
             d = 0.0;
+        }
         return Value(ROUND(d));
-    } else
+    } else {
         return v;
+    }
 }
 
-Value TestDatetimeFunctions::evaluate(const QString& formula, Value& ex)
+Value TestDatetimeFunctions::evaluate(const QString &formula, Value &ex)
 {
     Formula f;
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
-    if (result.isFloat() && ex.isInteger())
+    if (result.isFloat() && ex.isInteger()) {
         ex = Value(ex.asFloat());
-    if (result.isInteger() && ex.isFloat())
+    }
+    if (result.isInteger() && ex.isFloat()) {
         result = Value(result.asFloat());
+    }
 
     return RoundNumber(result);
 }

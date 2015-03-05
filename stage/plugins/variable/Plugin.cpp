@@ -26,7 +26,6 @@
 #include <KoInlineObjectRegistry.h>
 #include "PresentationVariableFactory.h"
 
-
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
 K_EXPORT_PLUGIN(PluginFactory("kprvariables"))
 

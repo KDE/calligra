@@ -53,26 +53,28 @@
 #include <QEvent>
 #include <QSizeF>
 
-class KarbonCanvas::KarbonCanvasPrivate {
+class KarbonCanvas::KarbonCanvasPrivate
+{
 public:
     KarbonCanvasPrivate()
-            : zoomHandler()
-            , part(0)
-            , showMargins(false)
-            , documentOffset(0, 0)
-            , viewMargin(100)
+        : zoomHandler()
+        , part(0)
+        , showMargins(false)
+        , documentOffset(0, 0)
+        , viewMargin(100)
     {
         pixelGrid.setGrid(1.0, 1.0);
         pixelGrid.setShowGrid(true);
     }
 
-    ~KarbonCanvasPrivate() {
+    ~KarbonCanvasPrivate()
+    {
         delete toolProxy;
         toolProxy = 0;
         delete shapeManager;
     }
 
-    KoShapeManager* shapeManager;
+    KoShapeManager *shapeManager;
     KoZoomHandler zoomHandler;
 
     KoToolProxy *toolProxy;
@@ -87,7 +89,7 @@ public:
 };
 
 KarbonCanvas::KarbonCanvas(KarbonDocument *p)
-        : QWidget() , KoCanvasBase(p), d(new KarbonCanvasPrivate())
+    : QWidget(), KoCanvasBase(p), d(new KarbonCanvasPrivate())
 {
     d->part = p;
     d->toolProxy = new KoToolProxy(this);
@@ -109,39 +111,39 @@ KarbonCanvas::~KarbonCanvas()
     delete d;
 }
 
-KoShapeManager * KarbonCanvas::shapeManager() const
+KoShapeManager *KarbonCanvas::shapeManager() const
 {
     return d->shapeManager;
 }
 
-KoViewConverter * KarbonCanvas::viewConverter() const
+KoViewConverter *KarbonCanvas::viewConverter() const
 {
     return &d->zoomHandler;
 }
 
-KoToolProxy * KarbonCanvas::toolProxy() const
+KoToolProxy *KarbonCanvas::toolProxy() const
 {
     return d->toolProxy;
 }
 
-QWidget * KarbonCanvas::canvasWidget()
+QWidget *KarbonCanvas::canvasWidget()
 {
     return this;
 }
 
-const QWidget * KarbonCanvas::canvasWidget() const
+const QWidget *KarbonCanvas::canvasWidget() const
 {
     return this;
 }
 
 bool KarbonCanvas::event(QEvent *e)
 {
-    if(toolProxy()) {
+    if (toolProxy()) {
 
         if (e->type() == QEvent::TouchBegin ||
-                 e->type() == QEvent::TouchUpdate ||
-                 e->type() == QEvent::TouchEnd) {
-            toolProxy()->touchEvent(dynamic_cast<QTouchEvent*>(e));
+                e->type() == QEvent::TouchUpdate ||
+                e->type() == QEvent::TouchEnd) {
+            toolProxy()->touchEvent(dynamic_cast<QTouchEvent *>(e));
         }
 
         toolProxy()->processEvent(e);
@@ -149,7 +151,7 @@ bool KarbonCanvas::event(QEvent *e)
     return QWidget::event(e);
 }
 
-void KarbonCanvas::paintEvent(QPaintEvent * ev)
+void KarbonCanvas::paintEvent(QPaintEvent *ev)
 {
     QPainter painter(this);
     painter.translate(-d->documentOffset);
@@ -194,8 +196,9 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
 
 void KarbonCanvas::paintMargins(QPainter &painter, const KoViewConverter &converter)
 {
-    if (! d->showMargins)
+    if (! d->showMargins) {
         return;
+    }
 
     KoPageLayout pl = d->part->pageLayout();
 
@@ -221,10 +224,10 @@ void KarbonCanvas::mousePressEvent(QMouseEvent *e)
 {
     d->toolProxy->mousePressEvent(e, d->zoomHandler.viewToDocument(widgetToView(e->pos() + d->documentOffset)));
     if (!e->isAccepted() && e->button() == Qt::RightButton) {
-        QList<QAction*> actions = d->toolProxy->popupActionList();
+        QList<QAction *> actions = d->toolProxy->popupActionList();
         if (!actions.isEmpty()) {
             QMenu menu(this);
-            foreach(QAction *action, d->toolProxy->popupActionList()) {
+            foreach (QAction *action, d->toolProxy->popupActionList()) {
                 menu.addAction(action);
             }
             menu.exec(e->globalPos());
@@ -254,10 +257,11 @@ void KarbonCanvas::keyPressEvent(QKeyEvent *e)
     d->toolProxy->keyPressEvent(e);
     if (! e->isAccepted()) {
         if (e->key() == Qt::Key_Backtab
-                || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier)))
+                || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier))) {
             focusNextPrevChild(false);
-        else if (e->key() == Qt::Key_Tab)
+        } else if (e->key() == Qt::Key_Tab) {
             focusNextPrevChild(true);
+        }
     }
 }
 
@@ -294,10 +298,12 @@ void KarbonCanvas::resizeEvent(QResizeEvent *)
 
 void KarbonCanvas::gridSize(qreal *horizontal, qreal *vertical) const
 {
-    if (horizontal)
+    if (horizontal) {
         *horizontal = d->part->gridData().gridX();
-    if (vertical)
+    }
+    if (vertical) {
         *vertical = d->part->gridData().gridY();
+    }
 }
 
 bool KarbonCanvas::snapToGrid() const
@@ -311,7 +317,7 @@ void KarbonCanvas::addCommand(KUndo2Command *command)
     updateSizeAndOffset();
 }
 
-void KarbonCanvas::updateCanvas(const QRectF& rc)
+void KarbonCanvas::updateCanvas(const QRectF &rc)
 {
     QRect clipRect(viewToWidget(d->zoomHandler.documentToView(rc).toRect()));
     clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
@@ -327,14 +333,15 @@ void KarbonCanvas::updateSizeAndOffset()
     // check if the view rect has changed and emit signal if it has
     if (oldDocumentViewRect != d->documentViewRect) {
         QRectF viewRect = d->zoomHandler.documentToView(d->documentViewRect);
-        KoCanvasController * controller = canvasController();
+        KoCanvasController *controller = canvasController();
         if (controller) {
             // tell canvas controller the new document size in pixel
             controller->updateDocumentSize(viewRect.size().toSize(), true);
             // make sure the actual selection is visible
-            KoSelection * selection = d->shapeManager->selection();
-            if (selection->count())
+            KoSelection *selection = d->shapeManager->selection();
+            if (selection->count()) {
                 controller->ensureVisible(d->zoomHandler.documentToView(selection->boundingRect()));
+            }
         }
     }
     adjustOrigin();
@@ -356,15 +363,18 @@ void KarbonCanvas::adjustOrigin()
     // if there are margins left around the zoomed document rect then
     // distribute them evenly on both sides
     int widthDiff = size().width() - documentRect.width();
-    if (widthDiff > 0)
+    if (widthDiff > 0) {
         d->origin.rx() += qRound(0.5 * widthDiff);
+    }
     int heightDiff = size().height() - documentRect.height();
-    if (heightDiff > 0)
+    if (heightDiff > 0) {
         d->origin.ry() += qRound(0.5 * heightDiff);
+    }
 
     // check if the origin has changed and emit signal if it has
-    if (d->origin != oldOrigin)
+    if (d->origin != oldOrigin) {
         emit documentOriginChanged(d->origin);
+    }
 }
 
 void KarbonCanvas::setDocumentOffset(const QPoint &offset)
@@ -384,29 +394,29 @@ KarbonDocument *KarbonCanvas::document() const
 
 void KarbonCanvas::enableOutlineMode(bool on)
 {
-    if (on)
+    if (on) {
         new KarbonOutlinePaintingStrategy(d->shapeManager);
-    else {
+    } else {
         d->shapeManager->setPaintingStrategy(new KoShapeManagerPaintingStrategy(d->shapeManager));
     }
 }
 
-QPoint KarbonCanvas::widgetToView(const QPoint& p) const
+QPoint KarbonCanvas::widgetToView(const QPoint &p) const
 {
     return p - d->origin;
 }
 
-QRect KarbonCanvas::widgetToView(const QRect& r) const
+QRect KarbonCanvas::widgetToView(const QRect &r) const
 {
     return r.translated(- d->origin);
 }
 
-QPoint KarbonCanvas::viewToWidget(const QPoint& p) const
+QPoint KarbonCanvas::viewToWidget(const QPoint &p) const
 {
     return p + d->origin;
 }
 
-QRect KarbonCanvas::viewToWidget(const QRect& r) const
+QRect KarbonCanvas::viewToWidget(const QRect &r) const
 {
     return r.translated(d->origin);
 }
@@ -448,7 +458,7 @@ void KarbonCanvas::updateInputMethodInfo()
     updateMicroFocus();
 }
 
-KoGuidesData * KarbonCanvas::guidesData()
+KoGuidesData *KarbonCanvas::guidesData()
 {
     return &d->part->guidesData();
 }

@@ -44,7 +44,7 @@ public:
 
     friend class CAuOutlinerDocker;
 
-    void setCanvas(KWCanvas* canvas);
+    void setCanvas(KWCanvas *canvas);
     void unsetCanvas();
 
 private slots:

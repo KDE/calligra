@@ -89,7 +89,6 @@ void PointStorageTest::testInsertion()
 //     qDebug() << "cols result: " << storage.m_cols;
 //     qDebug() << "cols expect: " << cols;
 
-
     // reverse filling
     storage.clear();
     storage.insert(2, 2, 4);
@@ -145,7 +144,6 @@ void PointStorageTest::testLookup()
     QCOMPARE(storage.lookup(5, 4),  0);
     QCOMPARE(storage.lookup(5, 5), 12);
 
-
     // empty row checking
     storage.clear();
     storage.insert(1, 1, 1);
@@ -186,7 +184,6 @@ void PointStorageTest::testDeletion()
     QCOMPARE(storage.m_data, data);
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
-
 
     // empty row checking
     storage.clear();
@@ -255,7 +252,6 @@ void PointStorageTest::testInsertColumns()
     QCOMPARE(storage.m_data, data);
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
-
 
     // empty row checking
     storage.clear();
@@ -349,7 +345,6 @@ void PointStorageTest::testInsertRows()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-
     old = storage.insertRows(6, 4);   // shift the last row out of range
     QVERIFY(old.count() == 2);
     QVERIFY(old.contains(qMakePair(QPoint(1, 7), 11)));
@@ -371,7 +366,6 @@ void PointStorageTest::testInsertRows()
     QCOMPARE(storage.m_data, data);
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
-
 
     // first row checking
     storage.clear();
@@ -496,7 +490,6 @@ void PointStorageTest::testShiftRight()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-
     old = storage.insertShiftRight(QRect(4, 2, 6, 1));     // shift the 6 out of range
     QVERIFY(old.count() == 1);
     QVERIFY(old.contains(qMakePair(QPoint(5, 2),  6)));
@@ -547,7 +540,6 @@ void PointStorageTest::testShiftUp()
     QCOMPARE(storage.m_data, data);
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
-
 
     // first row
     storage.clear();
@@ -605,7 +597,6 @@ void PointStorageTest::testShiftDown()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-
     old = storage.insertShiftDown(QRect(2, 4, 1, 6));     // shift the 7 out of range
     QVERIFY(old.count() == 1);
     QVERIFY(old.contains(qMakePair(QPoint(2, 5),  7)));
@@ -627,7 +618,6 @@ void PointStorageTest::testShiftDown()
     QCOMPARE(storage.m_data, data);
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
-
 
     // first row
     storage.clear();
@@ -662,7 +652,7 @@ void PointStorageTest::testShiftDownUp()
             storage.m_data << (row * col);
             storage.m_cols << col;
         }
-        storage.m_rows << (5 *(row - 1));
+        storage.m_rows << (5 * (row - 1));
     }
     // qDebug() << "Origin:" << endl << qPrintable(storage.dump());
     // ( 1, 2, 3, 4, 5)
@@ -788,7 +778,6 @@ void PointStorageTest::testFirstInRow()
     QCOMPARE(storage.firstInRow(5, &newCol), 11);
     QCOMPARE(newCol,  1);
 
-
     storage.clear();
     storage.m_data << 1;
     storage.m_rows << 0 << 0;
@@ -881,7 +870,6 @@ void PointStorageTest::testNextInColumn()
     QCOMPARE(newRow,  5);
     QCOMPARE(storage.nextInColumn(6, 3, &newRow),  0);
     QCOMPARE(newRow,  0);
-
 
     //
     storage.clear();

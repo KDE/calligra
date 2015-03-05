@@ -44,7 +44,7 @@ public:
         NextChar
     };
 
-    DeleteCommand(DeleteMode mode, QTextDocument *document, KoShapeController *shapeController, KUndo2Command* parent = 0);
+    DeleteCommand(DeleteMode mode, QTextDocument *document, KoShapeController *shapeController, KUndo2Command *parent = 0);
     virtual ~DeleteCommand();
 
     virtual void undo();

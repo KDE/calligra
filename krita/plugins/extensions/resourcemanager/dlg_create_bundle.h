@@ -45,12 +45,30 @@ public:
     QString saveLocation() const;
     QString previewImage() const;
 
-    QStringList selectedBrushes() const { return m_selectedBrushes; }
-    QStringList selectedPresets() const { return m_selectedPresets; }
-    QStringList selectedGradients() const { return m_selectedGradients; }
-    QStringList selectedPatterns() const { return m_selectedPatterns; }
-    QStringList selectedPalettes() const { return m_selectedPalettes; }
-    QStringList selectedWorkspaces() const { return m_selectedWorkspaces; }
+    QStringList selectedBrushes() const
+    {
+        return m_selectedBrushes;
+    }
+    QStringList selectedPresets() const
+    {
+        return m_selectedPresets;
+    }
+    QStringList selectedGradients() const
+    {
+        return m_selectedGradients;
+    }
+    QStringList selectedPatterns() const
+    {
+        return m_selectedPatterns;
+    }
+    QStringList selectedPalettes() const
+    {
+        return m_selectedPalettes;
+    }
+    QStringList selectedWorkspaces() const
+    {
+        return m_selectedWorkspaces;
+    }
 
 private Q_SLOTS:
 

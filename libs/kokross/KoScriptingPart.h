@@ -28,8 +28,9 @@
 #include <kxmlguiclient.h>
 
 class KoScriptingModule;
-namespace Kross {
-    class Action;
+namespace Kross
+{
+class Action;
 }
 
 #include "kokross_export.h"
@@ -50,7 +51,7 @@ public:
     * \param parent The parent QObject.
     * \param args the optional list of arguments.
     */
-    explicit KoScriptingPart(KoScriptingModule *const module, const QStringList& args = QStringList());
+    explicit KoScriptingPart(KoScriptingModule *const module, const QStringList &args = QStringList());
 
     /**
     * Destructor.
@@ -90,28 +91,28 @@ protected Q_SLOTS:
     /**
     * Called if a script got executed.
     */
-    void slotStarted(Kross::Action*);
+    void slotStarted(Kross::Action *);
 
     /**
     * Called if execution of a script finished.
     */
-    void slotFinished(Kross::Action*);
+    void slotFinished(Kross::Action *);
 
     /**
     * Called if the script finalized.
     */
-    void slotFinalized(Kross::Action*);
+    void slotFinalized(Kross::Action *);
 
 protected:
-    virtual void myStarted(Kross::Action*) {}
-    virtual void myFinished(Kross::Action*) {}
-    virtual void myFinalized(Kross::Action*) {}
+    virtual void myStarted(Kross::Action *) {}
+    virtual void myFinished(Kross::Action *) {}
+    virtual void myFinalized(Kross::Action *) {}
 
 private:
     /// \internal d-pointer class.
     class Private;
     /// \internal d-pointer instance.
-    Private* const d;
+    Private *const d;
 };
 
 #endif

@@ -31,7 +31,6 @@ class QDomDocument;
 #include "kis_serializable_configuration.h"
 #include "krita_export.h"
 
-
 /**
  * KisPropertiesConfiguration is a map-based properties class that can
  * be serialized and deserialized.
@@ -53,27 +52,26 @@ public:
     /**
      * Deep copy the properties  configFile
      */
-    KisPropertiesConfiguration(const KisPropertiesConfiguration& rhs);
+    KisPropertiesConfiguration(const KisPropertiesConfiguration &rhs);
 
 public:
-
 
     /**
      * Fill the properties  configuration object from the XML encoded representation in s.
      * This function use the "Legacy" style XML of the 1.x .kra file format.
      */
-    virtual void fromXML(const QString&);
+    virtual void fromXML(const QString &);
     /**
      * Fill the properties  configuration object from the XML encoded representation in s.
      * This function use the "Legacy" style XML  of the 1.x .kra file format.
      */
-    virtual void fromXML(const QDomElement&);
+    virtual void fromXML(const QDomElement &);
 
     /**
      * Create a serialized version of this properties  config
      * This function use the "Legacy" style XML  of the 1.x .kra file format.
      */
-    virtual void toXML(QDomDocument&, QDomElement&) const;
+    virtual void toXML(QDomDocument &, QDomElement &) const;
 
     /**
      * Create a serialized version of this properties  config
@@ -84,12 +82,12 @@ public:
     /**
      * @return true if the map contains a property with the specified name
      */
-    bool hasProperty(const QString& name) const;
+    bool hasProperty(const QString &name) const;
 
     /**
      * Set the property with name to value.
      */
-    virtual void setProperty(const QString & name, const QVariant & value);
+    virtual void setProperty(const QString &name, const QVariant &value);
 
     /**
      * Set value to the value associated with property name
@@ -98,23 +96,23 @@ public:
      *
      * @return false if the specified property did not exist.
      */
-    virtual bool getProperty(const QString & name, QVariant & value) const;
+    virtual bool getProperty(const QString &name, QVariant &value) const;
 
-    virtual QVariant getProperty(const QString & name) const;
+    virtual QVariant getProperty(const QString &name) const;
 
-    int getInt(const QString & name, int def = 0) const;
+    int getInt(const QString &name, int def = 0) const;
 
-    double getDouble(const QString & name, double def = 0.0) const;
+    double getDouble(const QString &name, double def = 0.0) const;
 
-    float getFloat(const QString& name, float def = 0.0) const;
+    float getFloat(const QString &name, float def = 0.0) const;
 
-    bool getBool(const QString & name, bool def = false) const;
+    bool getBool(const QString &name, bool def = false) const;
 
-    QString getString(const QString & name, const QString & def = QString()) const;
+    QString getString(const QString &name, const QString &def = QString()) const;
 
-    KisCubicCurve getCubicCurve(const QString & name, const KisCubicCurve & curve = KisCubicCurve()) const;
+    KisCubicCurve getCubicCurve(const QString &name, const KisCubicCurve &curve = KisCubicCurve()) const;
 
-    KoColor getColor(const QString& name, const KoColor& color = KoColor()) const;
+    KoColor getColor(const QString &name, const KoColor &color = KoColor()) const;
 
     QMap<QString, QVariant> getProperties() const;
 
@@ -122,9 +120,9 @@ public:
     void clearProperties();
 
     ///Marks a property that should not be saved by toXML
-    void setPropertyNotSaved(const QString & name);
+    void setPropertyNotSaved(const QString &name);
 
-    bool removeProperty(const QString & name);
+    bool removeProperty(const QString &name);
 
 public:
 
@@ -133,7 +131,7 @@ public:
 private:
 
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 class KRITAIMAGE_EXPORT KisPropertiesConfigurationFactory : public KisSerializableConfigurationFactory
@@ -141,11 +139,11 @@ class KRITAIMAGE_EXPORT KisPropertiesConfigurationFactory : public KisSerializab
 public:
     KisPropertiesConfigurationFactory();
     virtual ~KisPropertiesConfigurationFactory();
-    virtual KisSerializableConfiguration* createDefault();
-    virtual KisSerializableConfiguration* create(const QDomElement& e);
+    virtual KisSerializableConfiguration *createDefault();
+    virtual KisSerializableConfiguration *create(const QDomElement &e);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

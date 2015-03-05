@@ -76,7 +76,7 @@ public Q_SLOTS:
     void rename(const QString &oldName, const QString &newName);
 
 private:
-    KoBookmarkManagerPrivate * const d;
+    KoBookmarkManagerPrivate *const d;
 };
 
 #endif

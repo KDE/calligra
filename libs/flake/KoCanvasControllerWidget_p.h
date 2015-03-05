@@ -49,7 +49,6 @@
 #include <QGLWidget>
 #endif
 
-
 class KoCanvasControllerWidget::Private
 {
 public:

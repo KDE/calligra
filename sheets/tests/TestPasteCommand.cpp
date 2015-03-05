@@ -35,7 +35,7 @@ void PasteCommandTest::testKSpreadSnippet()
 {
     Doc doc(new MockPart);
     Map *map = doc.map();
-    Sheet* sheet = new Sheet(map, "Sheet1");
+    Sheet *sheet = new Sheet(map, "Sheet1");
     map->addSheet(sheet);
     CanvasItem canvas(&doc);
     Selection selection(&canvas);

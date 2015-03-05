@@ -16,9 +16,9 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #include "kis_tool_movetooloptionswidget.h"
 
-MoveToolOptionsWidget::MoveToolOptionsWidget(QWidget *parent) : QWidget(parent) {
+MoveToolOptionsWidget::MoveToolOptionsWidget(QWidget *parent) : QWidget(parent)
+{
     setupUi(this);
 }

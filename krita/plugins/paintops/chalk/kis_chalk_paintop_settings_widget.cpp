@@ -28,7 +28,7 @@
 #include <kis_paint_action_type_option.h>
 #include <kis_airbrush_option.h>
 
-KisChalkPaintOpSettingsWidget:: KisChalkPaintOpSettingsWidget(QWidget* parent)
+KisChalkPaintOpSettingsWidget:: KisChalkPaintOpSettingsWidget(QWidget *parent)
     : KisPaintOpOptionsWidget(parent)
 {
     m_chalkOption =  new KisChalkOpOption();
@@ -43,10 +43,10 @@ KisChalkPaintOpSettingsWidget::~ KisChalkPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisChalkPaintOpSettingsWidget::configuration() const
+KisPropertiesConfiguration  *KisChalkPaintOpSettingsWidget::configuration() const
 {
-    KisChalkPaintOpSettings* config = new KisChalkPaintOpSettings();
-    config->setOptionsWidget(const_cast<KisChalkPaintOpSettingsWidget*>(this));
+    KisChalkPaintOpSettings *config = new KisChalkPaintOpSettings();
+    config->setOptionsWidget(const_cast<KisChalkPaintOpSettingsWidget *>(this));
     config->setProperty("paintop", "chalkbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

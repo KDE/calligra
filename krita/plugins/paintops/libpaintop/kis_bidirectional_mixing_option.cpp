@@ -39,14 +39,15 @@ KisBidirectionalMixingOption::KisBidirectionalMixingOption()
 {
 }
 
-
 KisBidirectionalMixingOption::~KisBidirectionalMixingOption()
 {
 }
 
-void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter* painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect& dstRect)
+void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter *painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect &dstRect)
 {
-    if (!m_mixingEnabled) return;
+    if (!m_mixingEnabled) {
+        return;
+    }
 
     const KoColorSpace *cs = dab->colorSpace();
     KisPaintDeviceSP canvas = new KisPaintDevice(cs);
@@ -76,26 +77,28 @@ void KisBidirectionalMixingOption::apply(KisPaintDeviceSP dab, KisPaintDeviceSP 
             }
         }
         dit.nextPixel();
-    } while(cit.nextPixel());
+    } while (cit.nextPixel());
 }
 
-void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter* painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect& dstRect)
+void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPaintDeviceSP device, KisPainter *painter, qint32 sx, qint32 sy, qint32 sw, qint32 sh, quint8 pressure, const QRect &dstRect)
 {
     Q_UNUSED(sx);
     Q_UNUSED(sy);
 
-    if (!m_mixingEnabled) return;
+    if (!m_mixingEnabled) {
+        return;
+    }
 
     KisFixedPaintDevice canvas(device->colorSpace());
     canvas.setRect(QRect(dstRect.x(), dstRect.y(), sw, sh));
     canvas.initialize();
     device->readBytes(canvas.data(), canvas.bounds());
 
-    const KoColorSpace* cs = dab->colorSpace();
+    const KoColorSpace *cs = dab->colorSpace();
     int channelCount = cs->channelCount();
 
-    quint8* dabPointer = dab->data();
-    quint8* canvasPointer = canvas.data();
+    quint8 *dabPointer = dab->data();
+    quint8 *canvasPointer = canvas.data();
 
     QVector<float> cc(channelCount);
     QVector<float> dc(channelCount);
@@ -107,7 +110,7 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
                 cs->normalisedChannelsValue(canvasPointer, cc);
                 cs->normalisedChannelsValue(dabPointer, dc);
 
-                for (int i = 0; i < channelCount ; i++) {
+                for (int i = 0; i < channelCount; i++) {
                     dc[i] = (1.0 - 0.4 * pressure) * cc[i] + 0.4 * pressure * dc[i];
                 }
 
@@ -124,7 +127,7 @@ void KisBidirectionalMixingOption::applyFixed(KisFixedPaintDeviceSP dab, KisPain
 
 }
 
-void KisBidirectionalMixingOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBidirectionalMixingOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     m_mixingEnabled = setting->getBool(BIDIRECTIONAL_MIXING_ENABLED, false);
 }

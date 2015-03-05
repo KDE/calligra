@@ -42,7 +42,6 @@ inline double drand48()
 #include <kis_cross_device_color_picker.h>
 #include <kis_fixed_paint_device.h>
 
-
 #include <cmath>
 #include <ctime>
 
@@ -63,7 +62,6 @@ HairyBrush::~HairyBrush()
     qDeleteAll(m_bristles.begin(), m_bristles.end());
     m_bristles.clear();
 }
-
 
 void HairyBrush::initAndCache()
 {
@@ -87,12 +85,12 @@ void HairyBrush::fromDabWithDensity(KisFixedPaintDeviceSP dab, qreal density)
     int centerY = height * 0.5;
 
     // make mask
-    Bristle * bristle = 0;
+    Bristle *bristle = 0;
     qreal alpha;
 
-    quint8 * dabPointer = dab->data();
+    quint8 *dabPointer = dab->data();
     quint8 pixelSize = dab->pixelSize();
-    const KoColorSpace * cs = dab->colorSpace();
+    const KoColorSpace *cs = dab->colorSpace();
     KoColor bristleColor(cs);
 
     srand48(12345678);
@@ -113,7 +111,6 @@ void HairyBrush::fromDabWithDensity(KisFixedPaintDeviceSP dab, qreal density)
         }
     }
 }
-
 
 void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale, qreal rotation)
 {
@@ -158,8 +155,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     if (firstStroke() && m_properties->useSoakInk) {
         if (layer) {
             colorifyBristles(layer, pi1.pos());
-        }
-        else {
+        } else {
             kWarning() << "Can't soak the ink from the layer";
         }
     }
@@ -175,7 +171,9 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     qreal treshold = 1.0 - pi2.pressure();
     for (int i = 0; i < bristleCount; i++) {
 
-        if (!m_bristles.at(i)->enabled()) continue;
+        if (!m_bristles.at(i)->enabled()) {
+            continue;
+        }
         bristle = m_bristles[i];
 
         randomX = (drand48() * 2 - 1.0) * m_properties->randomFactor;
@@ -194,8 +192,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
             m_transform.map(bristle->x(), bristle->y(), &fx1, &fy1);
             // transform end dab
             m_transform.map(bristle->x(), bristle->y(), &fx2, &fy2);
-        }
-        else {
+        } else {
             // continue the path of the bristle from the previous position
             fx1 = bristle->prevX();
             fy1 = bristle->prevY();
@@ -212,13 +209,15 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         fx2 += x2;
         fy2 += y2;
 
-        if (m_properties->threshold && (bristle->length() < treshold)) continue;
+        if (m_properties->threshold && (bristle->length() < treshold)) {
+            continue;
+        }
         // paint between first and last dab
         const QVector<QPointF> bristlePath = m_trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
         bristlePathSize = m_trajectory.size();
 
-        memcpy(bristleColor.data(), bristle->color().data() , m_pixelSize);
-        for (int i = 0; i < bristlePathSize ; i++) {
+        memcpy(bristleColor.data(), bristle->color().data(), m_pixelSize);
+        for (int i = 0; i < bristlePathSize; i++) {
 
             if (m_properties->inkDepletionEnabled) {
                 inkDeplation = fetchInkDepletion(bristle, inkDepletionSize);
@@ -231,8 +230,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
                     opacityDepletion(bristle, bristleColor, pressure, inkDeplation);
                 }
 
-            }
-            else {
+            } else {
                 bristleColor.setOpacity(bristle->length());
             }
 
@@ -247,8 +245,7 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
     m_dabAccessor = 0;
 }
 
-
-inline qreal HairyBrush::fetchInkDepletion(Bristle* bristle, int inkDepletionSize)
+inline qreal HairyBrush::fetchInkDepletion(Bristle *bristle, int inkDepletionSize)
 {
     if (bristle->counter() >= inkDepletionSize - 1) {
         return m_properties->inkDepletionCurve[inkDepletionSize - 1];
@@ -257,8 +254,7 @@ inline qreal HairyBrush::fetchInkDepletion(Bristle* bristle, int inkDepletionSiz
     }
 }
 
-
-void HairyBrush::saturationDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation)
+void HairyBrush::saturationDepletion(Bristle *bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation)
 {
     qreal saturation;
     if (m_properties->useWeights) {
@@ -268,8 +264,7 @@ void HairyBrush::saturationDepletion(Bristle * bristle, KoColor &bristleColor, q
                          (bristle->length() * m_properties->bristleLengthWeight) +
                          (bristle->inkAmount() * m_properties->bristleInkAmountWeight) +
                          ((1.0 - inkDeplation) * m_properties->inkDepletionWeight)) - 1.0;
-    }
-    else {
+    } else {
         // old way of computing saturation
         saturation = (
                          pressure *
@@ -278,15 +273,15 @@ void HairyBrush::saturationDepletion(Bristle * bristle, KoColor &bristleColor, q
                          (1.0 - inkDeplation)) - 1.0;
 
     }
-	m_transfo->setParameter(m_transfo->parameterId("h"), 0.0);
-	m_transfo->setParameter(m_transfo->parameterId("v"), 0.0);
+    m_transfo->setParameter(m_transfo->parameterId("h"), 0.0);
+    m_transfo->setParameter(m_transfo->parameterId("v"), 0.0);
     m_transfo->setParameter(m_saturationId, saturation);
-	m_transfo->setParameter(3, 1);//sets the type to 
-	m_transfo->setParameter(4, false);//sets the colorize to none.
-    m_transfo->transform(bristleColor.data(), bristleColor.data() , 1);
+    m_transfo->setParameter(3, 1);//sets the type to
+    m_transfo->setParameter(4, false);//sets the colorize to none.
+    m_transfo->transform(bristleColor.data(), bristleColor.data(), 1);
 }
 
-void HairyBrush::opacityDepletion(Bristle* bristle, KoColor& bristleColor, qreal pressure, qreal inkDeplation)
+void HairyBrush::opacityDepletion(Bristle *bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation)
 {
     qreal opacity = OPACITY_OPAQUE_F;
     if (m_properties->useWeights) {
@@ -296,8 +291,7 @@ void HairyBrush::opacityDepletion(Bristle* bristle, KoColor& bristleColor, qreal
                          (bristle->inkAmount() * m_properties->bristleInkAmountWeight) +
                          ((1.0 - inkDeplation) * m_properties->inkDepletionWeight), 1.0);
 
-    }
-    else {
+    } else {
         opacity =
             bristle->length() *
             bristle->inkAmount();
@@ -331,20 +325,18 @@ inline void HairyBrush::addBristleInk(Bristle *bristle, QPointF pos, const KoCol
         } else {
             paintParticle(pos, color, 1.0);
         }
-    }
-    else {
+    } else {
         int ix = qRound(pos.x());
         int iy = qRound(pos.y());
         if (m_properties->useCompositing) {
             plotPixel(ix, iy, color);
-        }
-        else {
+        } else {
             darkenPixel(ix, iy, color);
         }
     }
 }
 
-void HairyBrush::paintParticle(QPointF pos, const KoColor& color, qreal weight)
+void HairyBrush::paintParticle(QPointF pos, const KoColor &color, qreal weight)
 {
     // opacity top left, right, bottom left, right
     quint8 opacity = color.opacityU8();
@@ -360,9 +352,9 @@ void HairyBrush::paintParticle(QPointF pos, const KoColor& color, qreal weight)
     quint8 bbl = qRound((1.0 - fx) * (fy)  * opacity);
     quint8 bbr = qRound((fx)  * (fy)  * opacity);
 
-    const KoColorSpace * cs = m_dab->colorSpace();
+    const KoColorSpace *cs = m_dab->colorSpace();
 
-    m_dabAccessor->moveTo(ipx  , ipy);
+    m_dabAccessor->moveTo(ipx, ipy);
     btl = quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8, btl + cs->opacityU8(m_dabAccessor->rawData()), OPACITY_OPAQUE_U8));
     memcpy(m_dabAccessor->rawData(), color.data(), cs->pixelSize());
     cs->setOpacity(m_dabAccessor->rawData(), btl, 1);
@@ -383,7 +375,7 @@ void HairyBrush::paintParticle(QPointF pos, const KoColor& color, qreal weight)
     cs->setOpacity(m_dabAccessor->rawData(), bbr, 1);
 }
 
-void HairyBrush::paintParticle(QPointF pos, const KoColor& color)
+void HairyBrush::paintParticle(QPointF pos, const KoColor &color)
 {
     // opacity top left, right, bottom left, right
     memcpy(m_color.data(), color.data(), m_pixelSize);
@@ -400,23 +392,22 @@ void HairyBrush::paintParticle(QPointF pos, const KoColor& color)
     quint8 bbr = qRound((fx)  * (fy)  * opacity);
 
     m_color.setOpacity(btl);
-    plotPixel(ipx  , ipy, m_color);
+    plotPixel(ipx, ipy, m_color);
 
     m_color.setOpacity(btr);
-    plotPixel(ipx + 1  , ipy, m_color);
+    plotPixel(ipx + 1, ipy, m_color);
 
     m_color.setOpacity(bbl);
-    plotPixel(ipx  , ipy + 1, m_color);
+    plotPixel(ipx, ipy + 1, m_color);
 
     m_color.setOpacity(bbr);
-    plotPixel(ipx + 1 , ipy + 1, m_color);
+    plotPixel(ipx + 1, ipy + 1, m_color);
 }
-
 
 inline void HairyBrush::plotPixel(int wx, int wy, const KoColor &color)
 {
     m_dabAccessor->moveTo(wx, wy);
-    m_compositeOp->composite(m_dabAccessor->rawData(), m_pixelSize, color.data() , m_pixelSize, 0, 0, 1, 1, OPACITY_OPAQUE_U8);
+    m_compositeOp->composite(m_dabAccessor->rawData(), m_pixelSize, color.data(), m_pixelSize, 0, 0, 1, 1, OPACITY_OPAQUE_U8);
 }
 
 inline void HairyBrush::darkenPixel(int wx, int wy, const KoColor &color)
@@ -435,14 +426,15 @@ double HairyBrush::computeMousePressure(double distance)
     double oldPressure = m_oldPressure;
 
     double factor = 1.0 - distance / scale;
-    if (factor < 0.0) factor = 0.0;
+    if (factor < 0.0) {
+        factor = 0.0;
+    }
 
     double result = ((4.0 * oldPressure) + minPressure + factor) / 5.0;
 
     m_oldPressure = result;
     return result;
 }
-
 
 void HairyBrush::colorifyBristles(KisPaintDeviceSP source, QPointF point)
 {
@@ -461,5 +453,4 @@ void HairyBrush::colorifyBristles(KisPaintDeviceSP source, QPointF point)
     }
 
 }
-
 

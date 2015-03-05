@@ -55,7 +55,7 @@ class WhirlPinchDlg : public KDialog
     Q_OBJECT
 
 public:
-    explicit WhirlPinchDlg(QWidget* parent = 0L, const char* name = 0L);
+    explicit WhirlPinchDlg(QWidget *parent = 0L, const char *name = 0L);
 
     qreal angle() const;
     qreal pinch() const;
@@ -66,9 +66,9 @@ public:
     void setUnit(const KoUnit &unit);
 
 private:
-    KDoubleNumInput* m_angle;
-    KDoubleNumInput* m_pinch;
-    KoUnitDoubleSpinBox* m_radius;
+    KDoubleNumInput *m_angle;
+    KDoubleNumInput *m_pinch;
+    KoUnitDoubleSpinBox *m_radius;
 };
 
 #endif // WHIRLPINCHPLUGIN_H

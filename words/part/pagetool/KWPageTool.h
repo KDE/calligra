@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2011 Jignesh Kakadiya <jigneshhk1992@gmail.com>
- *  
+ *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; either version 2.1 of the License, or
@@ -36,7 +36,7 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
 
 public: // Events
 

@@ -245,8 +245,8 @@ Q_SIGNALS:
     void canvasResourceChanged(int key, const QVariant &value);
 
 private:
-    KoCanvasResourceManager(const KoCanvasResourceManager&);
-    KoCanvasResourceManager& operator=(const KoCanvasResourceManager&);
+    KoCanvasResourceManager(const KoCanvasResourceManager &);
+    KoCanvasResourceManager &operator=(const KoCanvasResourceManager &);
 
     class Private;
     Private *const d;

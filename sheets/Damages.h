@@ -21,7 +21,6 @@
 #ifndef CALLIGRA_SHEETS_DAMAGES
 #define CALLIGRA_SHEETS_DAMAGES
 
-
 #include "kdebug.h"
 
 #include "calligra_sheets_export.h"
@@ -54,7 +53,8 @@ public:
         Selection
     } Type;
 
-    virtual Type type() const {
+    virtual Type type() const
+    {
         return Nothing;
     }
 };
@@ -85,17 +85,18 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    CellDamage(const Calligra::Sheets::Cell& cell, Changes changes);
-    CellDamage(Calligra::Sheets::Sheet* sheet, const Region& region, Changes changes);
+    CellDamage(const Calligra::Sheets::Cell &cell, Changes changes);
+    CellDamage(Calligra::Sheets::Sheet *sheet, const Region &region, Changes changes);
 
     virtual ~CellDamage();
 
-    virtual Type type() const {
+    virtual Type type() const
+    {
         return Damage::Cell;
     }
 
-    Calligra::Sheets::Sheet* sheet() const;
-    const Region& region() const;
+    Calligra::Sheets::Sheet *sheet() const;
+    const Region &region() const;
 
     Changes changes() const;
 
@@ -103,10 +104,9 @@ private:
     Q_DISABLE_COPY(CellDamage)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(CellDamage::Changes)
-
 
 /**
  * \ingroup Damages
@@ -128,15 +128,16 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    SheetDamage(Calligra::Sheets::Sheet* sheet, Changes changes);
+    SheetDamage(Calligra::Sheets::Sheet *sheet, Changes changes);
 
     virtual ~SheetDamage();
 
-    virtual Type type() const {
+    virtual Type type() const
+    {
         return Damage::Sheet;
     }
 
-    Calligra::Sheets::Sheet* sheet() const;
+    Calligra::Sheets::Sheet *sheet() const;
 
     Changes changes() const;
 
@@ -144,10 +145,9 @@ private:
     Q_DISABLE_COPY(SheetDamage)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(SheetDamage::Changes)
-
 
 /**
  * \ingroup Damages
@@ -163,23 +163,23 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    WorkbookDamage(Calligra::Sheets::Map* map, Changes changes);
+    WorkbookDamage(Calligra::Sheets::Map *map, Changes changes);
     virtual ~WorkbookDamage();
 
-    virtual Type type() const {
+    virtual Type type() const
+    {
         return Damage::Workbook;
     }
-    Calligra::Sheets::Map* map() const;
+    Calligra::Sheets::Map *map() const;
     Changes changes() const;
 
 private:
     Q_DISABLE_COPY(WorkbookDamage)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(WorkbookDamage::Changes)
-
 
 /**
  * \ingroup Damages
@@ -191,30 +191,30 @@ public:
     explicit SelectionDamage(const Region &region);
     virtual ~SelectionDamage();
 
-    virtual Type type() const {
+    virtual Type type() const
+    {
         return Damage::Selection;
     }
 
-    const Region& region() const;
+    const Region &region() const;
 
 private:
     Q_DISABLE_COPY(SelectionDamage)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets
 } // namespace Calligra
 
-
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Damage& d);
-CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::CellDamage& d);
-CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SheetDamage& d);
-CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SelectionDamage& d);
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Damage &d);
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::CellDamage &d);
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SheetDamage &d);
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SelectionDamage &d);
 
 #endif // CALLIGRA_SHEETS_DAMAGES

@@ -42,16 +42,16 @@ public:
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
+    virtual bool saveToDevice(QIODevice *dev) const;
 
     qint32 width() const;
     qint32 height() const;
 
     QString defaultFileExtension() const;
 
-    KoPattern& operator=(const KoPattern& pattern);
+    KoPattern &operator=(const KoPattern &pattern);
 
-    KoPattern* clone() const;
+    KoPattern *clone() const;
 
     /**
      * @brief pattern the actual pattern image
@@ -65,8 +65,8 @@ protected:
 
 private:
 
-    bool init(QByteArray& data);
-    void setPatternImage(const QImage& image);
+    bool init(QByteArray &data);
+    void setPatternImage(const QImage &image);
 
 private:
     QImage m_pattern;

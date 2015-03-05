@@ -30,14 +30,14 @@
 #include <QFlags>
 #include <QMap>
 
-namespace MSOOXML {
+namespace MSOOXML
+{
 
 /// Reading and storage
 
-struct KOMSOOXML_EXPORT TableStyleProperties
-{
+struct KOMSOOXML_EXPORT TableStyleProperties {
     TableStyleProperties()
-    :    target(Table)
+        :    target(Table)
     {}
 
     enum TargetLevel {
@@ -102,7 +102,7 @@ public:
     TableStyle();
     virtual ~TableStyle();
 
-    void setId(const QString& id);
+    void setId(const QString &id);
     QString id() const;
 
 private:
@@ -117,11 +117,11 @@ public:
     LocalTableStyles();
     ~LocalTableStyles();
 
-    TableStyleProperties* localStyle(int row, int column);
-    void setLocalStyle(MSOOXML::TableStyleProperties* properties, int row, int column);
+    TableStyleProperties *localStyle(int row, int column);
+    void setLocalStyle(MSOOXML::TableStyleProperties *properties, int row, int column);
 
 private:
-    QMap<QPair<int,int>, TableStyleProperties*> m_properties;
+    QMap<QPair<int, int>, TableStyleProperties *> m_properties;
 };
 
 class KOMSOOXML_EXPORT TableStyleConverterProperties
@@ -143,12 +143,12 @@ public:
     int columnBandSize() const;
 
     ///LocalStyles is a collection of cell<->style relationships
-    void setLocalStyles(const LocalTableStyles& localStyles);
+    void setLocalStyles(const LocalTableStyles &localStyles);
     LocalTableStyles localStyles() const;
 
     ///LocalTableStyle is a style defined to be the default style of a table. Defined locally.
-    void setLocalDefaulCelltStyle(MSOOXML::TableStyleProperties* properties);
-    TableStyleProperties* localDefaultCellStyle() const;
+    void setLocalDefaulCelltStyle(MSOOXML::TableStyleProperties *properties);
+    TableStyleProperties *localDefaultCellStyle() const;
 
 private:
     int m_rowCount;
@@ -156,7 +156,7 @@ private:
     int m_rowBandSize;
     int m_columnBandSize;
     LocalTableStyles m_localStyles;
-    MSOOXML::TableStyleProperties* m_localDefaultCellStyle;
+    MSOOXML::TableStyleProperties *m_localDefaultCellStyle;
 };
 
 class KOMSOOXML_EXPORT TableStyleConverter
@@ -168,29 +168,29 @@ public:
     virtual KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans) = 0;
 
 protected:
-    void applyStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+    void applyStyle(MSOOXML::TableStyleProperties *styleProperties, KoCellStyle::Ptr &style,
                     int row, int column, const QPair<int, int> &spans);
 
     //NOTE: TESTING
-    void reapplyTableLevelBordersStyle(MSOOXML::TableStyleProperties* properties,
-                                       MSOOXML::TableStyleProperties* localProperties,
-                                       MSOOXML::TableStyleProperties* exceptionProperties,
-                                       KoCellStyle::Ptr& style,
+    void reapplyTableLevelBordersStyle(MSOOXML::TableStyleProperties *properties,
+                                       MSOOXML::TableStyleProperties *localProperties,
+                                       MSOOXML::TableStyleProperties *exceptionProperties,
+                                       KoCellStyle::Ptr &style,
                                        int row, int column, const QPair<int, int> &spans);
 
 private:
-    void applyTableLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+    void applyTableLevelBordersStyle(MSOOXML::TableStyleProperties *properties, KoCellStyle::Ptr &style,
                                      int row, int column, const QPair<int, int> &spans);
 
-    void applyRowLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+    void applyRowLevelBordersStyle(MSOOXML::TableStyleProperties *properties, KoCellStyle::Ptr &style,
                                    int row, int column, const QPair<int, int> &spans);
 
-    void applyColumnLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+    void applyColumnLevelBordersStyle(MSOOXML::TableStyleProperties *properties, KoCellStyle::Ptr &style,
                                       int row, int column, const QPair<int, int> &spans);
 
-    void applyCellLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style);
+    void applyCellLevelBordersStyle(MSOOXML::TableStyleProperties *properties, KoCellStyle::Ptr &style);
 
-    void applyBackground(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+    void applyBackground(MSOOXML::TableStyleProperties *properties, KoCellStyle::Ptr &style,
                          int row, int column);
 
     int m_row;

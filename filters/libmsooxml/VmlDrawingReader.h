@@ -31,10 +31,10 @@ class KOMSOOXML_EXPORT VmlDrawingReaderContext : public MSOOXML::MsooXmlReaderCo
 {
 public:
     //! Creates the context object.
-    VmlDrawingReaderContext(MSOOXML::MsooXmlImport& _import,
-        const QString& _path, const QString& _file,
-        MSOOXML::MsooXmlRelationships& _relationships);
-    MSOOXML::MsooXmlImport* import;
+    VmlDrawingReaderContext(MSOOXML::MsooXmlImport &_import,
+                            const QString &_path, const QString &_file,
+                            MSOOXML::MsooXmlRelationships &_relationships);
+    MSOOXML::MsooXmlImport *import;
     const QString path;
     const QString file;
 };
@@ -45,7 +45,7 @@ class KOMSOOXML_EXPORT VmlDrawingReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit VmlDrawingReader(KoOdfWriters *writers);
     virtual ~VmlDrawingReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
     QMap<QString, QString> content();
     QMap<QString, QString> frames();
@@ -55,12 +55,12 @@ public:
 protected:
     KoFilter::ConversionStatus read_xml();
 
-    VmlDrawingReaderContext* m_context;
+    VmlDrawingReaderContext *m_context;
 
 private:
     void init();
     class Private;
-    Private* const d;
+    Private *const d;
     // List of draw:images meant to be used as object replacements
     QMap<QString, QString> m_content;
 

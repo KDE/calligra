@@ -25,7 +25,7 @@
 class MockShapeAnimation : public KPrShapeAnimation
 {
 public:
-     MockShapeAnimation(KoShape *shape, QTextBlockUserData *textBlockUserData)
+    MockShapeAnimation(KoShape *shape, QTextBlockUserData *textBlockUserData)
         : KPrShapeAnimation(shape, textBlockUserData)
         , m_beginTime(0)
         , m_duration(1)
@@ -34,25 +34,37 @@ public:
     /**
       * Return the begin and end time of the animation as a QPair
       */
-    QPair<int, int> timeRange() const {return QPair<int, int>(m_beginTime, m_beginTime + m_duration);}
+    QPair<int, int> timeRange() const
+    {
+        return QPair<int, int>(m_beginTime, m_beginTime + m_duration);
+    }
     /**
       * Return global duration of the shape animation
       */
-    int globalDuration() const {return m_duration;}
+    int globalDuration() const
+    {
+        return m_duration;
+    }
 
     /**
      * @brief Set the begin time for the animation
      *
      * @param timeMS time in miliseconds
      */
-    void setBeginTime(int timeMS) {m_beginTime = timeMS;}
+    void setBeginTime(int timeMS)
+    {
+        m_beginTime = timeMS;
+    }
 
     /**
      * @brief Set duration time for the animation
      *
      * @param timeMS time in miliseconds
      */
-    void setGlobalDuration(int timeMS) {m_duration = timeMS;}
+    void setGlobalDuration(int timeMS)
+    {
+        m_duration = timeMS;
+    }
 
 private:
     int m_beginTime;

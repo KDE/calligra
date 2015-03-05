@@ -22,11 +22,12 @@
 #include <QObject>
 #include <QVariant>
 
-class AutocorrectPlugin : public QObject {
+class AutocorrectPlugin : public QObject
+{
     Q_OBJECT
 
 public:
-    AutocorrectPlugin(QObject * parent,  const QVariantList & );
+    AutocorrectPlugin(QObject *parent,  const QVariantList &);
     ~AutocorrectPlugin() {}
 };
 

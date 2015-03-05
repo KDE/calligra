@@ -35,10 +35,11 @@ class Accounts;
 class Task;
 class MacroCommand;
 
-class TaskCostPanelImpl : public QWidget, public Ui_TaskCostPanelBase {
+class TaskCostPanelImpl : public QWidget, public Ui_TaskCostPanelBase
+{
     Q_OBJECT
 public:
-    explicit TaskCostPanelImpl(QWidget *parent=0, const char *name=0);
+    explicit TaskCostPanelImpl(QWidget *parent = 0, const char *name = 0);
 
 Q_SIGNALS:
     void changed();
@@ -47,10 +48,11 @@ public Q_SLOTS:
     void slotChanged();
 };
 
-class TaskCostPanel : public TaskCostPanelImpl {
+class TaskCostPanel : public TaskCostPanelImpl
+{
     Q_OBJECT
 public:
-    TaskCostPanel(Task &task, Accounts &accounts, QWidget *parent=0, const char *name=0);
+    TaskCostPanel(Task &task, Accounts &accounts, QWidget *parent = 0, const char *name = 0);
 
     MacroCommand *buildCommand();
 
@@ -59,8 +61,8 @@ public:
     void setStartValues(Task &task);
 
 protected:
-    void setCurrentItem(QComboBox *box, const QString& name);
-    
+    void setCurrentItem(QComboBox *box, const QString &name);
+
 private:
     Task &m_task;
     Accounts &m_accounts;

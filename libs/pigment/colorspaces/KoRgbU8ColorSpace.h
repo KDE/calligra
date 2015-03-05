@@ -44,11 +44,11 @@ public:
 
     static QString colorSpaceId();
 
-    virtual KoColorSpace* clone() const;
+    virtual KoColorSpace *clone() const;
 
-    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const;
+    virtual void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *profile = 0) const;
 
-    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
+    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile *profile = 0) const;
 
 };
 
@@ -57,15 +57,17 @@ class KoRgbU8ColorSpaceFactory : public KoSimpleColorSpaceFactory
 
 public:
     KoRgbU8ColorSpaceFactory()
-            : KoSimpleColorSpaceFactory("RGBA",
-                                        i18n("RGB (8-bit integer/channel, unmanaged)"),
-                                        true,
-                                        RGBAColorModelID,
-                                        Integer8BitsColorDepthID,
-                                        8) {
+        : KoSimpleColorSpaceFactory("RGBA",
+                                    i18n("RGB (8-bit integer/channel, unmanaged)"),
+                                    true,
+                                    RGBAColorModelID,
+                                    Integer8BitsColorDepthID,
+                                    8)
+    {
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const
+    {
         return new KoRgbU8ColorSpace();
     }
 

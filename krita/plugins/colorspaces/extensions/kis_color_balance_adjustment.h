@@ -26,11 +26,11 @@ class KisColorBalanceAdjustmentFactory : public KoColorTransformationFactory
 {
 public:
 
-   KisColorBalanceAdjustmentFactory();
+    KisColorBalanceAdjustmentFactory();
 
-   virtual QList< QPair< KoID, KoID > > supportedModels() const;
+    virtual QList< QPair< KoID, KoID > > supportedModels() const;
 
-   virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const;
+    virtual KoColorTransformation *createTransformation(const KoColorSpace *colorSpace, QHash<QString, QVariant> parameters) const;
 
 };
 

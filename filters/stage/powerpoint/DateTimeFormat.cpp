@@ -36,12 +36,11 @@
 // Calligra
 #include <KoXmlWriter.h>
 
-
 DateTimeFormat::DateTimeFormat(int dateTimeFormatId)
-        : formatId(dateTimeFormatId)
+    : formatId(dateTimeFormatId)
 {
 #ifdef LIBDATE_DEBUG
-    std::cout << "\nDateTimeConstructor formatId :" << formatId ;
+    std::cout << "\nDateTimeConstructor formatId :" << formatId;
 #endif
 }
 
@@ -49,7 +48,7 @@ DateTimeFormat::~DateTimeFormat()
 {
 }
 
-void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool longmonth, bool textualmonth, bool longyear, QString separator)
+void DateTimeFormat::addDateStyle(KoGenStyles &styles, bool dayofweek, bool longmonth, bool textualmonth, bool longyear, QString separator)
 {
     QBuffer buffer;
 
@@ -76,8 +75,9 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
     xmlWriter.startElement("number:month");
     if (longmonth == true) {
         xmlWriter.addAttribute("number:style", "long");
-        if (textualmonth == true)
+        if (textualmonth == true) {
             xmlWriter.addAttribute("number:textual", "true");
+        }
     }
     xmlWriter.endElement();  //number:month
     xmlWriter.startElement("number:text");
@@ -101,8 +101,7 @@ void DateTimeFormat::addDateStyle(KoGenStyles& styles, bool dayofweek, bool long
 
 }
 
-
-void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool second, QString separator)
+void DateTimeFormat::addTimeStyle(KoGenStyles &styles, bool hr12Format, bool second, QString separator)
 {
     QBuffer buffer;
 
@@ -143,8 +142,7 @@ void DateTimeFormat::addTimeStyle(KoGenStyles& styles, bool hr12Format, bool sec
 
 }
 
-
-void DateTimeFormat::addDateTimeAutoStyles(KoGenStyles& styles,
+void DateTimeFormat::addDateTimeAutoStyles(KoGenStyles &styles,
         bool hasTodayDate,
         bool hasUserDate)
 {
@@ -190,7 +188,7 @@ void DateTimeFormat::addDateTimeAutoStyles(KoGenStyles& styles,
     }
 }
 
-void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter, QString tStyle)
+void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter &xmlWriter, QString tStyle)
 {
     QDateTime dt = QDateTime::currentDateTime();
     QString format, result;
@@ -247,7 +245,7 @@ void DateTimeFormat::addMasterDateTimeSection(KoXmlWriter& xmlWriter, QString tS
         format = "yyyy-MM-ddTHH:mm:ss.z";
         break;
     case FixedUserDateFormat:
-        //Future - Fixed Date
+    //Future - Fixed Date
     default:
         // XML Schema time format
         format = "yyyy-MM-ddTHH:mm:ss.z";

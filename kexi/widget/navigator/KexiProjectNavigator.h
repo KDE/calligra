@@ -34,8 +34,8 @@ class KexiProjectModel;
 
 namespace KexiPart
 {
-    class Info;
-    class Item;
+class Info;
+class Item;
 }
 class KexiProject;
 
@@ -46,7 +46,7 @@ public:
     KexiMenuBase(QWidget *parent, KActionCollection *collection);
     ~KexiMenuBase();
 
-    QAction* addAction(const QString& actionName);
+    QAction *addAction(const QString &actionName);
 
 protected:
     QPointer<KActionCollection> m_actionCollection;
@@ -61,7 +61,7 @@ public:
 
     //! Rebuilds the menu entirely using information obtained from \a partInfo
     //! and \a partItem.
-    void update(KexiPart::Info* partInfo, KexiPart::Item* partItem);
+    void update(KexiPart::Info *partInfo, KexiPart::Item *partItem);
 };
 
 /*! @internal */
@@ -72,9 +72,8 @@ public:
     ~KexiGroupMenu();
 
     //! Rebuilds the menu entirely using information obtained from \a partInfo.
-    void update(KexiPart::Info* partInfo);
+    void update(KexiPart::Info *partInfo);
 };
-
 
 //! @short Project navigator widget
 //! It is also used to display list of objects for given database project in other places of Kexi.
@@ -86,7 +85,7 @@ public:
     enum Feature {
         NoFeatures   = 0,
         Writable     = 1,                          //!< Support actions that modify
-                                                   //!< the project (e.g. delete, rename).
+        //!< the project (e.g. delete, rename).
         ContextMenus = 2,                          //!< Supports context menus
         Borders      = 4,                          //!< Show borders like in a list view
         DefaultFeatures = Writable | ContextMenus  //!< The default
@@ -94,7 +93,7 @@ public:
     //! Specifies features of a navigator
     Q_DECLARE_FLAGS(Features, Feature)
 
-    explicit KexiProjectNavigator(QWidget* parent, Features features = DefaultFeatures);
+    explicit KexiProjectNavigator(QWidget *parent, Features features = DefaultFeatures);
     virtual ~KexiProjectNavigator();
 
     /*! Sets project \a prj for this browser. If \a partManagerErrorMessages is not NULL
@@ -103,24 +102,24 @@ public:
      items for only one part class are displayed. In the latter case, no group (parent)
      items are displayed.
      Previous items are removed. */
-    void setProject(KexiProject* prj, const QString& itemsPartClass = QString(),
-                    QString* partManagerErrorMessages = 0, bool addAsSearchableModel = true);
+    void setProject(KexiProject *prj, const QString &itemsPartClass = QString(),
+                    QString *partManagerErrorMessages = 0, bool addAsSearchableModel = true);
 
     /*! \return items' part class previously set by setProject. Returns empty string
      if setProject() was not executed yet or itemsPartClass argument of setProject() was
      empty (i.e. all part classes are displayed). */
     QString itemsPartClass() const;
 
-    KexiPart::Item* selectedPartItem() const;
+    KexiPart::Item *selectedPartItem() const;
 
-    bool actionEnabled(const QString& actionName) const;
+    bool actionEnabled(const QString &actionName) const;
 
-    KexiProjectModel* model() const;
+    KexiProjectModel *model() const;
 
 public Q_SLOTS:
     virtual void setFocus();
-    void updateItemName(KexiPart::Item& item, bool dirty);
-    void selectItem(KexiPart::Item& item);
+    void updateItemName(KexiPart::Item &item, bool dirty);
+    void selectItem(KexiPart::Item &item);
     void clearSelection();
     void clear();
 
@@ -131,35 +130,35 @@ public Q_SLOTS:
     bool isReadOnly() const;
 
 Q_SIGNALS:
-    void openItem(KexiPart::Item*, Kexi::ViewMode viewMode);
+    void openItem(KexiPart::Item *, Kexi::ViewMode viewMode);
 
     /*! this signal is emitted when user double clicked (or single -depending on settings)
      or pressed return ky on the part item.
      This signal differs from openItem() signal in that if the object is already opened
      in view mode other than \a viewMode, the mode is not changed. */
-    void openOrActivateItem(KexiPart::Item*, Kexi::ViewMode viewMode);
+    void openOrActivateItem(KexiPart::Item *, Kexi::ViewMode viewMode);
 
-    void newItem(KexiPart::Info*);
+    void newItem(KexiPart::Info *);
 
-    void removeItem(KexiPart::Item*);
+    void removeItem(KexiPart::Item *);
 
-    void selectionChanged(KexiPart::Item* item);
+    void selectionChanged(KexiPart::Item *item);
 
-    void executeItem(KexiPart::Item*);
+    void executeItem(KexiPart::Item *);
 
-    void exportItemToClipboardAsDataTable(KexiPart::Item*);
+    void exportItemToClipboardAsDataTable(KexiPart::Item *);
 
-    void exportItemToFileAsDataTable(KexiPart::Item*);
+    void exportItemToFileAsDataTable(KexiPart::Item *);
 
-    void printItem(KexiPart::Item*);
+    void printItem(KexiPart::Item *);
 
-    void pageSetupForItem(KexiPart::Item*);
+    void pageSetupForItem(KexiPart::Item *);
 
 protected Q_SLOTS:
     void slotExecuteItem(const QModelIndex &item);
-    void slotSelectionChanged(const QModelIndex& i);
+    void slotSelectionChanged(const QModelIndex &i);
     void slotSettingsChanged(int);
-    
+
     void slotNewObject();
     void slotOpenObject();
     void slotDesignObject();
@@ -180,15 +179,14 @@ protected Q_SLOTS:
 protected:
     void itemRenameDone();
 
-    KAction* addAction(const QString& name, const KIcon& icon, const QString& text,
-                       const QString& toolTip, const QString& whatsThis, const char* slot);
+    KAction *addAction(const QString &name, const KIcon &icon, const QString &text,
+                       const QString &toolTip, const QString &whatsThis, const char *slot);
 
-    virtual void contextMenuEvent ( QContextMenuEvent *event );
-
+    virtual void contextMenuEvent(QContextMenuEvent *event);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiProjectNavigator::Features)

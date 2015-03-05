@@ -39,9 +39,8 @@
 #include <KoCanvasController.h>
 #include <KoShapeStroke.h>
 
-
-KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
-        : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
+KisToolRectangle::KisToolRectangle(KoCanvasBase *canvas)
+    : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
     setSupportOutline(true);
     setObjectName("tool_rectangle");
@@ -51,11 +50,11 @@ KisToolRectangle::~KisToolRectangle()
 {
 }
 
-
 void KisToolRectangle::finishRect(const QRectF &rect)
 {
-    if (rect.isNull())
+    if (rect.isNull()) {
         return;
+    }
 
     if (image()) {
         KisRecordedShapePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), KisRecordedShapePaintAction::Rectangle, rect);
@@ -74,8 +73,8 @@ void KisToolRectangle::finishRect(const QRectF &rect)
         helper.paintRect(rect);
     } else {
         QRectF r = convertToPt(rect);
-        KoShape* shape = KisShapeToolHelper::createRectangleShape(r);
-        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        KoShape *shape = KisShapeToolHelper::createRectangleShape(r);
+        KoShapeStroke *border = new KoShapeStroke(1.0, currentFgColor().toQColor());
         shape->setStroke(border);
         addShape(shape);
     }

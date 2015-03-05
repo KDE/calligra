@@ -23,7 +23,8 @@
 #include <QtTest>
 #include <QObject>
 
-namespace KPlato {
+namespace KPlato
+{
 
 class Project;
 

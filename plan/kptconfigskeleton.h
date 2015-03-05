@@ -30,7 +30,7 @@
 class KPLATO_EXPORT KPlatoConfigSkeleton : public KConfigSkeleton
 {
     Q_OBJECT
-public:    
+public:
     KPlatoConfigSkeleton();
 
     ~KPlatoConfigSkeleton();

@@ -31,10 +31,10 @@ namespace KPlatoWork
 PackageSettingsDialog::PackageSettingsDialog(WorkPackage &p, QWidget *parent)
     : KDialog(parent)
 {
-    setCaption( i18n("Work Package Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setCaption(i18n("Work Package Settings"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    showButtonSeparator(true);
     //kDebug(planworkDbg())<<&p;
 
     dia = new PackageSettingsPanel(p, this);
@@ -51,32 +51,32 @@ KUndo2Command *PackageSettingsDialog::buildCommand()
     return dia->buildCommand();
 }
 
-
 PackageSettingsPanel::PackageSettingsPanel(WorkPackage &p, QWidget *parent)
     : QWidget(parent),
-      m_package( p )
+      m_package(p)
 {
     setupUi(this);
 
-    setSettings( p.settings() );
+    setSettings(p.settings());
 
-    connect( ui_usedEffort, SIGNAL(stateChanged(int)), SLOT(slotChanged()) );
-    connect( ui_progress, SIGNAL(stateChanged(int)), SLOT(slotChanged()) );
-    connect( ui_documents, SIGNAL(stateChanged(int)), SLOT(slotChanged()) );
+    connect(ui_usedEffort, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_progress, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_documents, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
 }
 
 KUndo2Command *PackageSettingsPanel::buildCommand()
 {
     //kDebug(planworkDbg());
     WorkPackageSettings s = settings();
-    if ( s == m_package.settings() ) {
+    if (s == m_package.settings()) {
         return 0;
     }
-    return new ModifyPackageSettingsCmd( &m_package, s, kundo2_i18n( "Modify package settings" ) );
+    return new ModifyPackageSettingsCmd(&m_package, s, kundo2_i18n("Modify package settings"));
 }
 
-void PackageSettingsPanel::slotChanged() {
-    emit changed( settings() != m_package.settings() );
+void PackageSettingsPanel::slotChanged()
+{
+    emit changed(settings() != m_package.settings());
 }
 
 WorkPackageSettings PackageSettingsPanel::settings() const
@@ -88,14 +88,13 @@ WorkPackageSettings PackageSettingsPanel::settings() const
     return s;
 }
 
-void PackageSettingsPanel::setSettings( const WorkPackageSettings &s )
+void PackageSettingsPanel::setSettings(const WorkPackageSettings &s)
 {
-    ui_usedEffort->setCheckState( s.usedEffort ? Qt::Checked : Qt::Unchecked );
-    ui_progress->setCheckState( s.progress ? Qt::Checked : Qt::Unchecked );
-    ui_documents->setCheckState( s.documents ? Qt::Checked : Qt::Unchecked );
+    ui_usedEffort->setCheckState(s.usedEffort ? Qt::Checked : Qt::Unchecked);
+    ui_progress->setCheckState(s.progress ? Qt::Checked : Qt::Unchecked);
+    ui_documents->setCheckState(s.documents ? Qt::Checked : Qt::Unchecked);
 }
 
 }  //KPlatoWork namespace
-
 
 #include "packagesettings.moc"

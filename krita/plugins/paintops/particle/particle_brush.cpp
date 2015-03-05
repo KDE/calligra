@@ -35,7 +35,6 @@ ParticleBrush::~ParticleBrush()
 {
 }
 
-
 void ParticleBrush::initParticles()
 {
     m_particlePos.resize(m_properties->particleCount);
@@ -52,8 +51,7 @@ void ParticleBrush::setInitialPosition(QPointF pos)
     }
 }
 
-
-void ParticleBrush::paintParticle(KisRandomAccessorSP accWrite, const KoColorSpace * cs, QPointF pos, const KoColor& color, qreal weight, bool respectOpacity)
+void ParticleBrush::paintParticle(KisRandomAccessorSP accWrite, const KoColorSpace *cs, QPointF pos, const KoColor &color, qreal weight, bool respectOpacity)
 {
     // opacity top left, right, bottom left, right
     KoColor myColor(color);
@@ -69,7 +67,7 @@ void ParticleBrush::paintParticle(KisRandomAccessorSP accWrite, const KoColorSpa
     quint8 bbl = qRound((1.0 - fx) * (fy)  * opacity * weight);
     quint8 bbr = qRound((fx)  * (fy)  * opacity * weight);
 
-    accWrite->moveTo(ipx  , ipy);
+    accWrite->moveTo(ipx, ipy);
     myColor.setOpacity(quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8, btl + cs->opacityU8(accWrite->rawData()), OPACITY_OPAQUE_U8)));
     memcpy(accWrite->rawData(), myColor.data(), cs->pixelSize());
 
@@ -86,13 +84,10 @@ void ParticleBrush::paintParticle(KisRandomAccessorSP accWrite, const KoColorSpa
     memcpy(accWrite->rawData(), myColor.data(), cs->pixelSize());
 }
 
-
-
-
-void ParticleBrush::draw(KisPaintDeviceSP dab, const KoColor& color, QPointF pos)
+void ParticleBrush::draw(KisPaintDeviceSP dab, const KoColor &color, QPointF pos)
 {
     KisRandomAccessorSP accessor = dab->createRandomAccessorNG(qRound(pos.x()), qRound(pos.y()));
-    const KoColorSpace * cs = dab->colorSpace();
+    const KoColorSpace *cs = dab->colorSpace();
 
     QRect boundingRect;
 
@@ -119,7 +114,6 @@ void ParticleBrush::draw(KisPaintDeviceSP dab, const KoColor& color, QPointF pos
                 m_position = m_position + m_oldPosition * m_time * m_time;
             */
 
-
             QPointF dist = pos - m_particlePos[j];
             dist.setX(dist.x() * m_properties->scale.x());
             dist.setY(dist.y() * m_properties->scale.y());
@@ -145,6 +139,4 @@ void ParticleBrush::draw(KisPaintDeviceSP dab, const KoColor& color, QPointF pos
         }//for j
     }//for i
 }
-
-
 

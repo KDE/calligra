@@ -33,20 +33,20 @@ class CASpreadsheetHandler : public CAAbstractDocumentHandler
     Q_OBJECT
     Q_PROPERTY(int currentSheetNumber READ currentSheetNumber NOTIFY currentSheetNumChanged)
     Q_PROPERTY(int sheetCount READ sheetCount NOTIFY sheetCountChanged)
-    Q_PROPERTY (QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
+    Q_PROPERTY(QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
 
 protected:
-    virtual KoDocument* document();
+    virtual KoDocument *document();
 
 public:
     enum SearchDirection {
-         SearchForward,
-         SearchBackwards
+        SearchForward,
+        SearchBackwards
     };
-    explicit CASpreadsheetHandler (CADocumentController* documentController);
+    explicit CASpreadsheetHandler(CADocumentController *documentController);
     virtual ~CASpreadsheetHandler();
 
-    virtual bool openDocument (const QString& uri);
+    virtual bool openDocument(const QString &uri);
     virtual QStringList supportedMimetypes();
     virtual QString documentTypeName();
     Q_INVOKABLE int sheetCount() const;
@@ -58,7 +58,7 @@ public:
 
     int currentSheetNumber() const;
     QString searchString() const;
-    void setSearchString (const QString& searchString);
+    void setSearchString(const QString &searchString);
     void gotoSheet(int sheetNumber, SearchDirection direction);
     void searchOtherSheets(SearchDirection direction);
 
@@ -73,7 +73,7 @@ public Q_SLOTS:
     void findPrevious();
 
 private Q_SLOTS:
-    void findMatchFound(const KoFindMatch& match);
+    void findMatchFound(const KoFindMatch &match);
     void findNoMatchFound();
 
 Q_SIGNALS:
@@ -83,7 +83,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     void updateDocumentSizeForActiveSheet();
 };

@@ -43,12 +43,12 @@ static QIcon themedMessageBoxIcon(QMessageBox::Icon icon)
         break;
     }
 
-   QIcon ret = KIconLoader::global()->loadIcon(QLatin1String(icon_name), KIconLoader::NoGroup, KIconLoader::SizeHuge, KIconLoader::DefaultState, QStringList(), 0, true);
+    QIcon ret = KIconLoader::global()->loadIcon(QLatin1String(icon_name), KIconLoader::NoGroup, KIconLoader::SizeHuge, KIconLoader::DefaultState, QStringList(), 0, true);
 
-   if (ret.isNull()) {
-       return QMessageBox::standardIcon(icon);
-   } else {
-       return ret;
-   }
+    if (ret.isNull()) {
+        return QMessageBox::standardIcon(icon);
+    } else {
+        return ret;
+    }
 }
 

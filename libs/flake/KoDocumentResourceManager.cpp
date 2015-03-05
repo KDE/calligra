@@ -36,8 +36,8 @@ public:
 };
 
 KoDocumentResourceManager::KoDocumentResourceManager(QObject *parent)
-        : QObject(parent),
-        d(new Private())
+    : QObject(parent),
+      d(new Private())
 {
 }
 
@@ -83,7 +83,6 @@ KoColor KoDocumentResourceManager::koColorResource(int key) const
     return d->manager.koColorResource(key);
 }
 
-
 bool KoDocumentResourceManager::boolResource(int key) const
 {
     return d->manager.boolResource(key);
@@ -118,37 +117,42 @@ void KoDocumentResourceManager::clearResource(int key)
 
 KUndo2Stack *KoDocumentResourceManager::undoStack() const
 {
-    if (!hasResource(UndoStack))
+    if (!hasResource(UndoStack)) {
         return 0;
-    return static_cast<KUndo2Stack*>(resource(UndoStack).value<void*>());
+    }
+    return static_cast<KUndo2Stack *>(resource(UndoStack).value<void *>());
 }
 
 void KoDocumentResourceManager::setHandleRadius(int handleRadius)
 {
     // do not allow arbitrary small handles
-    if (handleRadius < 3)
+    if (handleRadius < 3) {
         handleRadius = 3;
+    }
     setResource(HandleRadius, QVariant(handleRadius));
 }
 
 int KoDocumentResourceManager::handleRadius() const
 {
-    if (hasResource(HandleRadius))
+    if (hasResource(HandleRadius)) {
         return intResource(HandleRadius);
+    }
     return 3; // default value.
 }
 void KoDocumentResourceManager::setGrabSensitivity(int grabSensitivity)
 {
     // do not allow arbitrary small grab sensitivity
-    if (grabSensitivity < 3)
+    if (grabSensitivity < 3) {
         grabSensitivity = 3;
+    }
     setResource(GrabSensitivity, QVariant(grabSensitivity));
 }
 
 int KoDocumentResourceManager::grabSensitivity() const
 {
-    if (hasResource(GrabSensitivity))
+    if (hasResource(GrabSensitivity)) {
         return intResource(GrabSensitivity);
+    }
     return 3; // default value
 }
 
@@ -172,46 +176,48 @@ bool KoDocumentResourceManager::pasteAtCursor() const
     return resource(PasteAtCursor).toBool();
 }
 
-
 void KoDocumentResourceManager::setUndoStack(KUndo2Stack *undoStack)
 {
     QVariant variant;
-    variant.setValue<void*>(undoStack);
+    variant.setValue<void *>(undoStack);
     setResource(UndoStack, variant);
 }
 
 KoImageCollection *KoDocumentResourceManager::imageCollection() const
 {
-    if (!hasResource(ImageCollection))
+    if (!hasResource(ImageCollection)) {
         return 0;
-    return static_cast<KoImageCollection*>(resource(ImageCollection).value<void*>());
+    }
+    return static_cast<KoImageCollection *>(resource(ImageCollection).value<void *>());
 }
 
 void KoDocumentResourceManager::setImageCollection(KoImageCollection *ic)
 {
     QVariant variant;
-    variant.setValue<void*>(ic);
+    variant.setValue<void *>(ic);
     setResource(ImageCollection, variant);
 }
 
 KoDocumentBase *KoDocumentResourceManager::odfDocument() const
 {
-    if (!hasResource(OdfDocument))
+    if (!hasResource(OdfDocument)) {
         return 0;
-    return static_cast<KoDocumentBase*>(resource(OdfDocument).value<void*>());
+    }
+    return static_cast<KoDocumentBase *>(resource(OdfDocument).value<void *>());
 }
 
 void KoDocumentResourceManager::setOdfDocument(KoDocumentBase *currentDocument)
 {
     QVariant variant;
-    variant.setValue<void*>(currentDocument);
+    variant.setValue<void *>(currentDocument);
     setResource(OdfDocument, variant);
 }
 
 KoShapeController *KoDocumentResourceManager::shapeController() const
 {
-    if (!hasResource(ShapeController))
+    if (!hasResource(ShapeController)) {
         return 0;
+    }
     return resource(ShapeController).value<KoShapeController *>();
 }
 

@@ -26,7 +26,6 @@
 // KChart
 #include "kchart_global.h"
 
-
 class KoShape;
 
 #if 0
@@ -37,7 +36,6 @@ class AbstractDiagram;
 class Chart;
 }
 #endif
-
 
 namespace KChart
 {
@@ -52,7 +50,7 @@ public:
     /**
      * Constructor.
      */
-    ChartTextShapeCommand(KoShape* textShape, ChartShape* chart, bool isVisible);
+    ChartTextShapeCommand(KoShape *textShape, ChartShape *chart, bool isVisible);
 
     /**
      * Destructor.

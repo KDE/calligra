@@ -26,14 +26,14 @@
 
 #include "kis_bspline_p.h"
 
-namespace KisBSplines {
-
-struct KisNUBSpline2D::Private
+namespace KisBSplines
 {
+
+struct KisNUBSpline2D::Private {
     BorderCondition bcX;
     BorderCondition bcY;
 
-    NUBspline_2d_s* spline;
+    NUBspline_2d_s *spline;
 
     NUgrid *xGrid;
     NUgrid *yGrid;
@@ -50,8 +50,8 @@ KisNUBSpline2D::KisNUBSpline2D(const QVector<double> &xSamples, BorderCondition 
       m_xSamples(xSamples),
       m_ySamples(ySamples)
 {
-    m_d->xGrid = create_general_grid(const_cast<double*>(m_xSamples.constData()), m_xSamples.size());
-    m_d->yGrid = create_general_grid(const_cast<double*>(m_ySamples.constData()), m_ySamples.size());
+    m_d->xGrid = create_general_grid(const_cast<double *>(m_xSamples.constData()), m_xSamples.size());
+    m_d->yGrid = create_general_grid(const_cast<double *>(m_ySamples.constData()), m_ySamples.size());
 
     m_d->bcX = bcX;
     m_d->bcY = bcY;
@@ -86,7 +86,7 @@ void KisNUBSpline2D::initializeSplineImpl(const QVector<float> &values)
     m_d->spline =
         create_NUBspline_2d_s(m_d->xGrid, m_d->yGrid,
                               bctypeX, bctypeY,
-                              const_cast<float*>(values.constData()));
+                              const_cast<float *>(values.constData()));
 }
 
 float KisNUBSpline2D::value(float x, float y) const

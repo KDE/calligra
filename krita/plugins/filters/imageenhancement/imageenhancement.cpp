@@ -42,7 +42,7 @@ K_PLUGIN_FACTORY(KritaImageEnhancementFactory, registerPlugin<KritaImageEnhancem
 K_EXPORT_PLUGIN(KritaImageEnhancementFactory("krita"))
 
 KritaImageEnhancement::KritaImageEnhancement(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisFilterRegistry::instance()->add(new KisSimpleNoiseReducer());
     KisFilterRegistry::instance()->add(new KisWaveletNoiseReduction());

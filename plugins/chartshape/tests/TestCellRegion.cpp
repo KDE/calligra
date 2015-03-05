@@ -64,7 +64,6 @@ void TestCellRegion::testSkippedTableEntry()
     QCOMPARE(region.rects(), rects);
 }
 
-
 void TestCellRegion::testFromStringSingleTable()
 {
     QCOMPARE(m_region1, CellRegion(&m_source, "$Table1.$B$3:$K$13"));
@@ -98,8 +97,7 @@ void TestCellRegion::testListOfRegions()
     compareRects.push_back(QRect(QPoint(1, 1), QPoint(6, 13)));
     compareRects.push_back(QRect(QPoint(1, 15), QPoint(6, 26)));
     QCOMPARE(rects.count(), compareRects.count());
-    for (int i = 0; i < compareRects.count() && i < rects.count(); ++i)
-    {
+    for (int i = 0; i < compareRects.count() && i < rects.count(); ++i) {
         QCOMPARE(rects[i], compareRects[i]);
     }
 }
@@ -112,11 +110,10 @@ void TestCellRegion::testListOfRegions2()
     QVector< QRect > compareRects;
     compareRects.push_back(QRect(QPoint(1, 19), QPoint(1, 30)));
     compareRects.push_back(QRect(QPoint(5, 20), QPoint(5, 30)));
-    compareRects.push_back(QRect(QPoint(7,20), QPoint(7, 30)));
-    compareRects.push_back(QRect(QPoint(9,20), QPoint(9, 30)));
-    compareRects.push_back(QRect(QPoint(5,58), QPoint(5, 71)));
-    for (int i = 0; i < compareRects.count() && i < rects.count(); ++i)
-    {
+    compareRects.push_back(QRect(QPoint(7, 20), QPoint(7, 30)));
+    compareRects.push_back(QRect(QPoint(9, 20), QPoint(9, 30)));
+    compareRects.push_back(QRect(QPoint(5, 58), QPoint(5, 71)));
+    for (int i = 0; i < compareRects.count() && i < rects.count(); ++i) {
         QCOMPARE(rects[i], compareRects[i]);
     }
 }

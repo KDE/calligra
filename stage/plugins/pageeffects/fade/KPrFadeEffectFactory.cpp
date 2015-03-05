@@ -28,7 +28,7 @@
 #define FadeEffectId "FadeEffect"
 
 KPrFadeEffectFactory::KPrFadeEffectFactory()
-: KPrPageEffectFactory(FadeEffectId, i18n("Fade"))
+    : KPrPageEffectFactory(FadeEffectId, i18n("Fade"))
 {
     addStrategy(new KPrFadeCrossStrategy());
     addStrategy(new KPrFadeOverColorStrategy());
@@ -38,7 +38,7 @@ KPrFadeEffectFactory::~KPrFadeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
+static const char *const s_subTypes[] = {
     I18N_NOOP("Crossfade"),
     I18N_NOOP("Fade over Color")
 };
@@ -47,8 +47,7 @@ QString KPrFadeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
         return i18n(s_subTypes[subType]);
-    }
-    else {
+    } else {
         return i18n("Unknown subtype");
     }
 }

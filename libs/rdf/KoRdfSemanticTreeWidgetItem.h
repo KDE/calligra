@@ -29,7 +29,6 @@
 class KAction;
 class KoCanvasBase;
 
-
 /**
  * Code wishing to display a list of KoRdfSemanticItem objects can create TreeWidgetItems
  * using KoRdfSemanticItem::createQTreeWidgetItem().
@@ -48,7 +47,7 @@ class KORDF_EXPORT KoRdfSemanticTreeWidgetItem : public QObject, public QTreeWid
 protected:
     virtual QString uIObjectName() const = 0;
     void addApplyStylesheetActions(QWidget *parent, QList<KAction *> &actions, KoCanvasBase *host);
-    KAction* createAction(QWidget *parent, KoCanvasBase *host, const QString &text);
+    KAction *createAction(QWidget *parent, KoCanvasBase *host, const QString &text);
 
 public:
     enum {

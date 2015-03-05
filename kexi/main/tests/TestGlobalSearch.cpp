@@ -49,13 +49,15 @@ void TestGlobalSearch::initTestCase()
 class NewArgs
 {
 public:
-    NewArgs(char *argv[]) {
+    NewArgs(char *argv[])
+    {
         count = 2;
-        vals = new char*[count];
+        vals = new char *[count];
         vals[0] = qstrdup(argv[0]);
         vals[count - 1] = 0;
     }
-    ~NewArgs() {
+    ~NewArgs()
+    {
         for (int i = 0; i < count; i++) {
             delete vals[i];
         }
@@ -67,7 +69,7 @@ public:
 };
 
 TestGlobalSearch::TestGlobalSearch(int argc, char **argv, bool goToEventLoop)
- : m_argc(argc), m_argv(argv), m_goToEventLoop(goToEventLoop)
+    : m_argc(argc), m_argv(argv), m_goToEventLoop(goToEventLoop)
 {
 }
 void TestGlobalSearch::testGlobalSearch()
@@ -83,9 +85,9 @@ void TestGlobalSearch::testGlobalSearch()
     QVERIFY(kapp);
     QCOMPARE(result, 0);
 
-    KLineEdit *lineEdit = kexiTester().widget<KLineEdit*>("globalSearch.lineEdit");
+    KLineEdit *lineEdit = kexiTester().widget<KLineEdit *>("globalSearch.lineEdit");
     QVERIFY(lineEdit);
-    QTreeView *treeView = kexiTester().widget<QTreeView*>("globalSearch.treeView");
+    QTreeView *treeView = kexiTester().widget<QTreeView *>("globalSearch.treeView");
     QVERIFY(treeView);
 
     lineEdit->setFocus();
@@ -120,9 +122,9 @@ void TestGlobalSearch::testGlobalSearch()
     // check if proper entry of Project Navigator is selected
     QTest::keyPress(treeView, Qt::Key_Enter, Qt::NoModifier, GUI_DELAY);
 
-    KexiProjectNavigator *projectNavigator = kexiTester().widget<KexiProjectNavigator*>("KexiProjectNavigator");
+    KexiProjectNavigator *projectNavigator = kexiTester().widget<KexiProjectNavigator *>("KexiProjectNavigator");
     QVERIFY(projectNavigator);
-    KexiPart::Item* selectedPartItem = projectNavigator->selectedPartItem();
+    KexiPart::Item *selectedPartItem = projectNavigator->selectedPartItem();
     QVERIFY(selectedPartItem);
     QCOMPARE(selectedPartItem->name(), QLatin1String("cars"));
     QCOMPARE(selectedPartItem->partClass(), QLatin1String("org.kexi-project.form"));
@@ -142,7 +144,7 @@ int main(int argc, char *argv[])
     // Pull off custom options
     bool goToEventLoop = false;
     int realCount = 0;
-    char **realVals = new char*[argc];
+    char **realVals = new char *[argc];
     for (int i = 0; i < argc; ++i) {
         realVals[i] = 0;
     }
@@ -150,8 +152,7 @@ int main(int argc, char *argv[])
         if (0 == qstrcmp(argv[i], "-loop")) {
             goToEventLoop = true;
             continue;
-        }
-        else {
+        } else {
             if (0 == qstrcmp(argv[i], "-help") || 0 == qstrcmp(argv[i], "--help")) {
                 printf(" Options coming from the Kexi test suite:\n -loop : Go to event loop after successful test\n\n");
             }

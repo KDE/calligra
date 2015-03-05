@@ -32,7 +32,7 @@
 const char photoshopMarker[] = "Photoshop 3.0\0";
 const char photoshopBimId_[] = "8BIM";
 const uint16_t photoshopIptc = 0x0404;
-const QByteArray photoshopIptc_((char*)&photoshopIptc, 2);
+const QByteArray photoshopIptc_((char *)&photoshopIptc, 2);
 
 struct IPTCToKMD {
     QString exivTag;
@@ -97,14 +97,14 @@ void KisIptcIO::initMappingsTable() const
     }
 }
 
-bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType) const
+bool KisIptcIO::saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType) const
 {
     initMappingsTable();
     ioDevice->open(QIODevice::WriteOnly);
     Exiv2::IptcData iptcData;
     for (QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin();
             it != store->end(); ++it) {
-        const KisMetaData::Entry& entry = *it;
+        const KisMetaData::Entry &entry = *it;
         if (d->kmdToIPTC.contains(entry.qualifiedName())) {
             try {
                 QString iptcKeyStr = d->kmdToIPTC[ entry.qualifiedName()].exivTag;
@@ -114,7 +114,7 @@ bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 if (v && v->typeId() != Exiv2::invalidTypeId) {
                     iptcData.add(iptcKey, v);
                 }
-            } catch (Exiv2::AnyError& e) {
+            } catch (Exiv2::AnyError &e) {
                 dbgFile << "exiv error " << e.what();
             }
         }
@@ -142,18 +142,18 @@ bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
         ioDevice->write(header);
     }
 
-    ioDevice->write((const char*) rawData.pData_, rawData.size_);
+    ioDevice->write((const char *) rawData.pData_, rawData.size_);
     ioDevice->close();
     return true;
 }
 
-bool KisIptcIO::canSaveAllEntries(KisMetaData::Store* store) const
+bool KisIptcIO::canSaveAllEntries(KisMetaData::Store *store) const
 {
     Q_UNUSED(store);
     return false;
 }
 
-bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
+bool KisIptcIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
 {
     initMappingsTable();
     dbgFile << "Loading IPTC Tags";
@@ -161,17 +161,17 @@ bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     QByteArray arr = ioDevice->readAll();
     Exiv2::IptcData iptcData;
 #if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
-    iptcData.load((const Exiv2::byte*)arr.data(), arr.size());
+    iptcData.load((const Exiv2::byte *)arr.data(), arr.size());
 #else
-    Exiv2::IptcParser::decode(iptcData, (const Exiv2::byte*)arr.data(), arr.size());
+    Exiv2::IptcParser::decode(iptcData, (const Exiv2::byte *)arr.data(), arr.size());
 #endif
     dbgFile << "There are" << iptcData.count() << " entries in the IPTC section";
     for (Exiv2::IptcMetadata::const_iterator it = iptcData.begin();
             it != iptcData.end(); ++it) {
         dbgFile << "Reading info for key" << it->key().c_str();
         if (d->iptcToKMD.contains(it->key().c_str())) {
-            const IPTCToKMD& iptcToKMd = d->iptcToKMD[it->key().c_str()];
-            const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(iptcToKMd.namespaceUri);
+            const IPTCToKMD &iptcToKMd = d->iptcToKMD[it->key().c_str()];
+            const KisMetaData::Schema *schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(iptcToKMd.namespaceUri);
             KisMetaData::Value value;
             if (iptcToKMd.exivTag == "Iptc.Application2.Keywords") {
                 Q_ASSERT(it->getValue()->typeId() == Exiv2::string);
@@ -179,7 +179,7 @@ bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 
                 QStringList list = data.split(',');
                 QList<KisMetaData::Value> values;
-                foreach(const QString &entry, list) {
+                foreach (const QString &entry, list) {
                     values.push_back(KisMetaData::Value(entry));
                 }
                 value = KisMetaData::Value(values, KisMetaData::Value::UnorderedArray);

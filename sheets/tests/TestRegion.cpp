@@ -31,7 +31,7 @@ using namespace Calligra::Sheets;
 void TestRegion::initTestCase()
 {
     m_map = new Map(0 /* no Doc*/);
-    Sheet* sheet = m_map->addNewSheet();
+    Sheet *sheet = m_map->addNewSheet();
     sheet->setSheetName("Sheet1");
     sheet = m_map->addNewSheet();
     sheet->setSheetName("Sheet2");
@@ -91,7 +91,7 @@ void TestRegion::testSheet()
     QCOMPARE(region.firstSheet(), m_map->sheet(0));
     region = Region("A1");
     QCOMPARE(region.name(), QString("A1"));
-    QCOMPARE(region.firstSheet(), (Sheet*)0);
+    QCOMPARE(region.firstSheet(), (Sheet *)0);
     region = Region("A1", m_map, m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A1"));
     QCOMPARE(region.firstSheet(), m_map->sheet(0));
@@ -130,18 +130,18 @@ void TestRegion::testExtrem()
     Region region2 = Region("A1:A6553634523563453456356");
     QVERIFY(region2.isValid());
 
-    Region region3 = Region(QRect(1,1,KS_colMax,KS_rowMax), m_map->sheet(0));
+    Region region3 = Region(QRect(1, 1, KS_colMax, KS_rowMax), m_map->sheet(0));
     QVERIFY(region3.isValid());
 
-    Region region4 = Region(QRect(1,1,KS_colMax,KS_rowMax), m_map->sheet(0));
+    Region region4 = Region(QRect(1, 1, KS_colMax, KS_rowMax), m_map->sheet(0));
     QVERIFY(region4.isValid());
-    Region region5 = Region(QRect(1,1,KS_colMax+12345,KS_rowMax+12345), m_map->sheet(0));
+    Region region5 = Region(QRect(1, 1, KS_colMax + 12345, KS_rowMax + 12345), m_map->sheet(0));
     QVERIFY(region5.isValid());
     QCOMPARE(region4.name(), region5.name());
-    
+
     Region region6 = Region(QPoint(KS_colMax, KS_rowMax), m_map->sheet(0));
     QVERIFY(region6.isValid());
-    Region region7 = Region(QPoint(KS_colMax+22, KS_rowMax+22), m_map->sheet(0));
+    Region region7 = Region(QPoint(KS_colMax + 22, KS_rowMax + 22), m_map->sheet(0));
     QVERIFY(region7.isValid());
     QCOMPARE(region6.name(), region7.name());
 }

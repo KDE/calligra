@@ -24,7 +24,7 @@
 class KRITAIMAGE_EXPORT KisNodeMoveCommand2 : public KisMoveCommandCommon<KisNodeSP>
 {
 public:
-    KisNodeMoveCommand2(KisNodeSP object, const QPoint& oldPos, const QPoint& newPos, KUndo2Command *parent = 0);
+    KisNodeMoveCommand2(KisNodeSP object, const QPoint &oldPos, const QPoint &newPos, KUndo2Command *parent = 0);
 
     void undo();
     void redo();

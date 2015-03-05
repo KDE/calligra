@@ -44,8 +44,9 @@ static QString instancesLockFilename(const QString &appSessionId)
 {
     const QChar slash(QLatin1Char('/'));
     QString res = QDir::tempPath();
-    if (!res.endsWith(slash))
+    if (!res.endsWith(slash)) {
         res += slash;
+    }
     return res + appSessionId + QLatin1String("-instances");
 }
 
@@ -85,8 +86,9 @@ QtSingleApplication::QtSingleApplication(const QString &appId, int &/*argc*/, ch
         // Find the first instance that it still running
         // The whole list needs to be iterated in order to append to it
         for (; *pids; ++pids) {
-            if (firstPeer == -1 && isRunning(*pids))
+            if (firstPeer == -1 && isRunning(*pids)) {
                 firstPeer = *pids;
+            }
         }
     }
     // Add current pid to list and terminate it
@@ -101,8 +103,9 @@ QtSingleApplication::QtSingleApplication(const QString &appId, int &/*argc*/, ch
 
 QtSingleApplication::~QtSingleApplication()
 {
-    if (!instances)
+    if (!instances) {
         return;
+    }
     const qint64 appPid = QCoreApplication::applicationPid();
     QtLockedFile lockfile(instancesLockFilename(QtLocalPeer::appSessionId(appId)));
     lockfile.open(QtLockedFile::ReadWrite);
@@ -111,8 +114,9 @@ QtSingleApplication::~QtSingleApplication()
     qint64 *pids = static_cast<qint64 *>(instances->data());
     qint64 *newpids = pids;
     for (; *pids; ++pids) {
-        if (*pids != appPid && isRunning(*pids))
+        if (*pids != appPid && isRunning(*pids)) {
             *newpids++ = *pids;
+        }
     }
     *newpids = 0;
     lockfile.unlock();
@@ -121,7 +125,7 @@ QtSingleApplication::~QtSingleApplication()
 bool QtSingleApplication::event(QEvent *event)
 {
     if (event->type() == QEvent::FileOpen) {
-        QFileOpenEvent *foe = static_cast<QFileOpenEvent*>(event);
+        QFileOpenEvent *foe = static_cast<QFileOpenEvent *>(event);
         emit fileOpenRequest(foe->file());
         return true;
     }
@@ -146,8 +150,9 @@ bool QtSingleApplication::sendMessage(const QByteArray &message, int timeout, qi
 {
     if (pid == -1) {
         pid = firstPeer;
-        if (pid == -1)
+        if (pid == -1) {
             return false;
+        }
     }
 
     QtLocalPeer peer(this, appId + QLatin1Char('-') + QString::number(pid, 10));
@@ -167,20 +172,20 @@ void QtSingleApplication::setBlock(bool value)
 void QtSingleApplication::setActivationWindow(QWidget *aw, bool activateOnMessage)
 {
     actWin = aw;
-    if (!pidPeer)
+    if (!pidPeer) {
         return;
-    if (activateOnMessage)
+    }
+    if (activateOnMessage) {
         connect(pidPeer, SIGNAL(messageReceived(QByteArray,QObject*)), this, SLOT(activateWindow()));
-    else
+    } else {
         disconnect(pidPeer, SIGNAL(messageReceived(QByteArray,QObject*)), this, SLOT(activateWindow()));
+    }
 }
 
-
-QWidget* QtSingleApplication::activationWindow() const
+QWidget *QtSingleApplication::activationWindow() const
 {
     return actWin;
 }
-
 
 void QtSingleApplication::activateWindow()
 {

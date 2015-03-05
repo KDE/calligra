@@ -20,7 +20,6 @@
 
 #include <QTimer>
 
-
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -43,33 +42,37 @@ K_EXPORT_PLUGIN(SpecificColorSelectorPluginFactory("krita"))
 class SpecificColorSelectorDockFactory : public KoDockFactoryBase
 {
 public:
-    SpecificColorSelectorDockFactory() {
+    SpecificColorSelectorDockFactory()
+    {
     }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return QString("SpecificColorSelector");
     }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget() {
-        SpecificColorSelectorDock * dockWidget = new SpecificColorSelectorDock();
+    virtual QDockWidget *createDockWidget()
+    {
+        SpecificColorSelectorDock *dockWidget = new SpecificColorSelectorDock();
 
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    KoDockFactoryBase::DockPosition defaultDockPosition() const {
+    KoDockFactoryBase::DockPosition defaultDockPosition() const
+    {
         return DockMinimized;
     }
 };
 
-
 SpecificColorSelectorPlugin::SpecificColorSelectorPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     dbgPlugins << "SpecificColorSelectorPlugin";
 

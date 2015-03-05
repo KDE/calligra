@@ -56,4 +56,3 @@ bool PluginShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &
     return e.localName() == "plugin" && e.namespaceURI() == KoXmlNS::draw;
 }
 
-

@@ -22,7 +22,6 @@
 #include <KoToolProxy.h>
 #include <kis_tool.h>
 
-
 class KisToolProxy : public KoToolProxy
 {
 public:

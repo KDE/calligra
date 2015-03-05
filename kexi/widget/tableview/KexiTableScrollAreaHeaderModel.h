@@ -31,15 +31,15 @@ class KexiTableScrollArea;
 class KEXIDATATABLE_EXPORT KexiTableScrollAreaHeaderModel : public QAbstractTableModel
 {
 public:
-    explicit KexiTableScrollAreaHeaderModel(KexiTableScrollArea* parent = 0);
+    explicit KexiTableScrollAreaHeaderModel(KexiTableScrollArea *parent = 0);
 
     virtual ~KexiTableScrollAreaHeaderModel();
 
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
@@ -53,7 +53,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

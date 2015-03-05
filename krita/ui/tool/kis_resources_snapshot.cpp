@@ -36,7 +36,6 @@
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
 
-
 struct KisResourcesSnapshot::Private {
     Private()
         : currentPattern(0)
@@ -85,25 +84,24 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentN
 
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
-    m_d->currentPattern = static_cast<KoPattern*>(resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<void*>());
-    m_d->currentGradient = static_cast<KoAbstractGradient*>(resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<void*>());
+    m_d->currentPattern = static_cast<KoPattern *>(resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
+    m_d->currentGradient = static_cast<KoAbstractGradient *>(resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
     m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
     m_d->currentExposure = resourceManager->resource(KisCanvasResourceProvider::HdrExposure).toDouble();
-    m_d->currentGenerator = static_cast<KisFilterConfiguration*>(resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void*>());
+    m_d->currentGenerator = static_cast<KisFilterConfiguration *>(resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
 
     m_d->axesCenter = resourceManager->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
-    if (m_d->axesCenter.isNull()){
+    if (m_d->axesCenter.isNull()) {
         QRect bounds = m_d->bounds->bounds();
         m_d->axesCenter = QPointF(0.5 * bounds.width(), 0.5 * bounds.height());
     }
 
     m_d->mirrorMaskHorizontal = resourceManager->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
     m_d->mirrorMaskVertical = resourceManager->resource(KisCanvasResourceProvider::MirrorVertical).toBool();
-
 
     qreal normOpacity = resourceManager->resource(KisCanvasResourceProvider::Opacity).toDouble();
     m_d->opacity = quint8(normOpacity * OPACITY_OPAQUE_U8);
@@ -129,7 +127,7 @@ KisResourcesSnapshot::~KisResourcesSnapshot()
     delete m_d;
 }
 
-void KisResourcesSnapshot::setupPainter(KisPainter* painter)
+void KisResourcesSnapshot::setupPainter(KisPainter *painter)
 {
     painter->setPaintColor(m_d->currentFgColor);
     painter->setBackgroundColor(m_d->currentBgColor);
@@ -174,7 +172,7 @@ void KisResourcesSnapshot::setupPaintAction(KisRecordedPaintAction *action)
     action->setFillStyle(m_d->fillStyle);
 }
 
-KisPostExecutionUndoAdapter* KisResourcesSnapshot::postExecutionUndoAdapter() const
+KisPostExecutionUndoAdapter *KisResourcesSnapshot::postExecutionUndoAdapter() const
 {
     return m_d->undoAdapter;
 }
@@ -184,9 +182,9 @@ void KisResourcesSnapshot::setCurrentNode(KisNodeSP node)
     m_d->currentNode = node;
 
     KisPaintDeviceSP device;
-    if(m_d->currentNode && (device = m_d->currentNode->paintDevice())) {
+    if (m_d->currentNode && (device = m_d->currentNode->paintDevice())) {
         m_d->compositeOp = device->colorSpace()->compositeOp(m_d->compositeOpId);
-        if(!m_d->compositeOp) {
+        if (!m_d->compositeOp) {
             m_d->compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
         }
     }
@@ -230,11 +228,11 @@ KisSelectionSP KisResourcesSnapshot::activeSelection() const
      */
     KisSelectionSP selection = m_d->image ? m_d->image->globalSelection() : 0;
 
-    KisLayerSP layer = dynamic_cast<KisLayer*>(m_d->currentNode.data());
+    KisLayerSP layer = dynamic_cast<KisLayer *>(m_d->currentNode.data());
     KisSelectionMaskSP mask;
-    if((layer = dynamic_cast<KisLayer*>(m_d->currentNode.data()))) {
+    if ((layer = dynamic_cast<KisLayer *>(m_d->currentNode.data()))) {
         selection = layer->selection();
-    } else if ((mask = dynamic_cast<KisSelectionMask*>(m_d->currentNode.data())) &&
+    } else if ((mask = dynamic_cast<KisSelectionMask *>(m_d->currentNode.data())) &&
                mask->selection() == selection) {
 
         selection = 0;
@@ -263,12 +261,12 @@ quint8 KisResourcesSnapshot::opacity() const
     return m_d->opacity;
 }
 
-const KoCompositeOp* KisResourcesSnapshot::compositeOp() const
+const KoCompositeOp *KisResourcesSnapshot::compositeOp() const
 {
     return m_d->compositeOp;
 }
 
-KoPattern* KisResourcesSnapshot::currentPattern() const
+KoPattern *KisResourcesSnapshot::currentPattern() const
 {
     return m_d->currentPattern;
 }
@@ -288,12 +286,11 @@ KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
     return m_d->currentPaintOpPreset;
 }
 
-
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {
     QBitArray channelFlags;
     KisPaintLayer *paintLayer;
-    if ((paintLayer = dynamic_cast<KisPaintLayer*>(m_d->currentNode.data()))) {
+    if ((paintLayer = dynamic_cast<KisPaintLayer *>(m_d->currentNode.data()))) {
 
         channelFlags = paintLayer->channelLockFlags();
         if (m_d->globalAlphaLock) {

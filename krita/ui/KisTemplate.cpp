@@ -28,7 +28,6 @@
 #include <kconfig.h>
 #include <kdebug.h>
 
-
 #include <ksavefile.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
@@ -37,19 +36,19 @@
 #include <kconfiggroup.h>
 #include <stdlib.h>
 
-
 KisTemplate::KisTemplate(const QString &name, const QString &description, const QString &file,
-                       const QString &picture, const QString &fileName, const QString &_measureSystem,
-                       bool hidden, bool touched) :
-        m_name(name), m_descr(description), m_file(file), m_picture(picture), m_fileName(fileName),
-        m_hidden(hidden), m_touched(touched), m_cached(false), m_measureSystem(_measureSystem)
+                         const QString &picture, const QString &fileName, const QString &_measureSystem,
+                         bool hidden, bool touched) :
+    m_name(name), m_descr(description), m_file(file), m_picture(picture), m_fileName(fileName),
+    m_hidden(hidden), m_touched(touched), m_cached(false), m_measureSystem(_measureSystem)
 {
 }
 
 const QPixmap &KisTemplate::loadPicture()
 {
-    if (m_cached)
+    if (m_cached) {
         return m_pixmap;
+    }
     m_cached = true;
     if (m_picture[ 0 ] == '/') {
         QImage img(m_picture);

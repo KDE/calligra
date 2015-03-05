@@ -7,14 +7,15 @@
 #include <db/connection.h>
 #include <db/cursor.h>
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
     KComponentData componentData("newapi");
     KexiDB::DriverManager manager;
     QStringList names = manager.driverNames();
     kDebug() << "DRIVERS: ";
-    for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
+    for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd(); ++it) {
         kDebug() << *it;
+    }
     if (manager.error()) {
         kDebug() << manager.errorMsg();
         return 1;
@@ -31,10 +32,11 @@ int main(int argc, char * argv[])
     KexiDB::ConnectionData conn_data;
 
     conn_data.userName = "root";
-    if (argc > 1)
+    if (argc > 1) {
         conn_data.password = argv[1];
-    else
+    } else {
         conn_data.password = "mysql";
+    }
     conn_data.hostName = "localhost";
 
     KexiDB::Connection *conn = driver->createConnection(conn_data);
@@ -53,16 +55,23 @@ int main(int argc, char * argv[])
 
     kDebug() << "Creating first cursor";
     KexiDB::Cursor *c = conn->executeQuery("select * from Applications");
-    if (!c) kDebug() << conn->errorMsg();
+    if (!c) {
+        kDebug() << conn->errorMsg();
+    }
     kDebug() << "Creating second cursor";
     KexiDB::Cursor *c2 = conn->executeQuery("select * from Applications");
-    if (!c2) kDebug() << conn->errorMsg();
+    if (!c2) {
+        kDebug() << conn->errorMsg();
+    }
 
     QStringList l = conn->databaseNames();
-    if (l.isEmpty()) kDebug() << conn->errorMsg();
+    if (l.isEmpty()) {
+        kDebug() << conn->errorMsg();
+    }
     kDebug() << "Databases:";
-    for (QStringList::ConstIterator it = l.constBegin(); it != l.constEnd() ; ++it)
+    for (QStringList::ConstIterator it = l.constBegin(); it != l.constEnd(); ++it) {
         kDebug() << *it;
+    }
 
     if (c) {
         while (c->moveNext()) {
@@ -101,11 +110,13 @@ int main(int argc, char * argv[])
     }
 #if 0
     KexiDB::Table *t = conn->tableSchema("persons");
-    if (t)
+    if (t) {
         t->debug();
+    }
     t = conn->tableSchema("cars");
-    if (t)
+    if (t) {
         t->debug();
+    }
 
 // conn->tableNames();
 

@@ -33,7 +33,6 @@
 #include <QStringList>
 #include <kundo2command.h>
 
-
 namespace KPlato
 {
 
@@ -49,15 +48,15 @@ QWidget *ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 {
     kDebug(planDbg());
     QComboBox *editor = new KComboBox(parent);
-    editor->installEventFilter(const_cast<ComboBoxDelegate*>(this));
+    editor->installEventFilter(const_cast<ComboBoxDelegate *>(this));
     return editor;
 }
 
 void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     QString value = index.model()->data(index, Qt::DisplayRole).toString();
-    kDebug(planDbg())<<value<<":"<<m_list;
-    QComboBox *comboBox = static_cast<QComboBox*>(editor);
+    kDebug(planDbg()) << value << ":" << m_list;
+    QComboBox *comboBox = static_cast<QComboBox *>(editor);
 
     comboBox->insertItems(0, m_list);
     comboBox->setCurrentIndex(comboBox->findText(value));
@@ -65,8 +64,8 @@ void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 
 void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-    QComboBox *comboBox = static_cast<QComboBox*>(editor);
-    kDebug(planDbg())<<comboBox->currentText();
+    QComboBox *comboBox = static_cast<QComboBox *>(editor);
+    kDebug(planDbg()) << comboBox->currentText();
     model->setData(index, comboBox->currentText());
 }
 
@@ -77,19 +76,19 @@ void ComboBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionV
 
 //----------------------
 
-WBSDefinitionPanel::WBSDefinitionPanel( Project &project, WBSDefinition &def, QWidget *p, const char *n)
+WBSDefinitionPanel::WBSDefinitionPanel(Project &project, WBSDefinition &def, QWidget *p, const char *n)
     : QWidget(p),
-      m_project( project ),
+      m_project(project),
       m_def(def),
       selectedRow(-1)
 {
     setObjectName(n);
     setupUi(this);
-    
-    projectCode->setText( m_def.projectCode() );
-    projectSeparator->setText( m_def.projectSeparator() );
+
+    projectCode->setText(m_def.projectCode());
+    projectSeparator->setText(m_def.projectSeparator());
     QStringList codeList = m_def.codeList();
-    kDebug(planDbg())<<codeList;
+    kDebug(planDbg()) << codeList;
     defaultSeparator->setText(m_def.defaultSeparator());
     defaultCode->addItems(codeList);
     defaultCode->setCurrentIndex(m_def.defaultCodeIndex());
@@ -100,7 +99,7 @@ WBSDefinitionPanel::WBSDefinitionPanel( Project &project, WBSDefinition &def, QW
     const QMap<int, WBSDefinition::CodeDef> &lev = m_def.levelsDef();
     levelsTable->setRowCount(lev.count());
     QStringList sl;
-    kDebug(planDbg())<<"Map size="<<lev.count();
+    kDebug(planDbg()) << "Map size=" << lev.count();
     QMap<int, WBSDefinition::CodeDef>::const_iterator it;
     for (it = lev.begin(); it != lev.end(); ++it) {
         sl << QString("%1").arg(it.key());
@@ -115,7 +114,7 @@ WBSDefinitionPanel::WBSDefinitionPanel( Project &project, WBSDefinition &def, QW
     levelsTable->setVerticalHeaderLabels(sl);
     //levelsTable->setColumnStretchable(0, true);
     slotLevelChanged(level->value());
-    
+
     connect(projectCode, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
     connect(projectSeparator, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
     connect(defaultCode, SIGNAL(activated(int)), SLOT(slotChanged()));
@@ -130,36 +129,41 @@ WBSDefinitionPanel::WBSDefinitionPanel( Project &project, WBSDefinition &def, QW
     removeBtn->setEnabled(false);
 }
 
-void WBSDefinitionPanel::setStartValues() {
+void WBSDefinitionPanel::setStartValues()
+{
 }
 
-KUndo2Command *WBSDefinitionPanel::buildCommand() {
+KUndo2Command *WBSDefinitionPanel::buildCommand()
+{
     WBSDefinition def = m_def;
-    def.setProjectCode( projectCode->text() );
-    def.setProjectSeparator( projectSeparator->text() );
+    def.setProjectCode(projectCode->text());
+    def.setProjectSeparator(projectSeparator->text());
     def.setDefaultCode(defaultCode->currentIndex());
     def.setDefaultSeparator(defaultSeparator->text());
-    
+
     def.setLevelsDefEnabled(levelsGroup->isChecked());
 
     def.clearLevelsDef();
     for (int i = 0; i < levelsTable->rowCount(); ++i) {
         def.setLevelsDef(levelsTable->verticalHeaderItem(i)->text().toInt(), levelsTable->item(i, 0)->text(), levelsTable->item(i, 1)->text());
     }
-    WBSDefinitionModifyCmd *cmd = new WBSDefinitionModifyCmd( m_project, def, kundo2_i18n("Modify WBS Code Definition"));
+    WBSDefinitionModifyCmd *cmd = new WBSDefinitionModifyCmd(m_project, def, kundo2_i18n("Modify WBS Code Definition"));
     return cmd;
 }
 
-bool WBSDefinitionPanel::ok() {
+bool WBSDefinitionPanel::ok()
+{
     kDebug(planDbg());
     return true;
 }
 
-void WBSDefinitionPanel::slotChanged() {
+void WBSDefinitionPanel::slotChanged()
+{
     emit changed(true);
 }
 
-void WBSDefinitionPanel::slotSelectionChanged() {
+void WBSDefinitionPanel::slotSelectionChanged()
+{
     QString s;
     selectedRow = -1;
     QList<QTableWidgetItem *> items = levelsTable->selectedItems();
@@ -170,11 +174,12 @@ void WBSDefinitionPanel::slotSelectionChanged() {
         s = "None selected";
     }
     removeBtn->setEnabled(selectedRow != -1);
-    kDebug(planDbg())<<s;
+    kDebug(planDbg()) << s;
 }
 
-void WBSDefinitionPanel::slotRemoveBtnClicked() {
-    kDebug(planDbg())<<selectedRow;
+void WBSDefinitionPanel::slotRemoveBtnClicked()
+{
+    kDebug(planDbg()) << selectedRow;
     if (selectedRow == -1) {
         return;
     }
@@ -183,11 +188,12 @@ void WBSDefinitionPanel::slotRemoveBtnClicked() {
     slotLevelChanged(level->value());
 }
 
-void WBSDefinitionPanel::slotAddBtnClicked() {
+void WBSDefinitionPanel::slotAddBtnClicked()
+{
     kDebug(planDbg());
-    int i=levelsTable->rowCount()-1;
+    int i = levelsTable->rowCount() - 1;
     for (; i >= 0; --i) {
-        kDebug(planDbg())<<"Checking row["<<i<<"]="<<levelsTable->verticalHeaderItem(i)->text()<<" with"<<level->value();
+        kDebug(planDbg()) << "Checking row[" << i << "]=" << levelsTable->verticalHeaderItem(i)->text() << " with" << level->value();
         if (level->value() > levelsTable->verticalHeaderItem(i)->text().toInt()) {
             break;
         }
@@ -201,15 +207,16 @@ void WBSDefinitionPanel::slotAddBtnClicked() {
     item = new QTableWidgetItem();
     item->setText(m_def.defaultSeparator());
     levelsTable->setItem(i, 1, item);
-    
+
     addBtn->setEnabled(false);
     slotChanged();
-    
-    kDebug(planDbg())<<"Added row="<<i<<" level="<<level->value();
+
+    kDebug(planDbg()) << "Added row=" << i << " level=" << level->value();
 }
 
-void WBSDefinitionPanel::slotLevelChanged(int value) {
-    for (int i=0; i < levelsTable->rowCount(); ++i) {
+void WBSDefinitionPanel::slotLevelChanged(int value)
+{
+    for (int i = 0; i < levelsTable->rowCount(); ++i) {
         if (value == levelsTable->verticalHeaderItem(i)->text().toInt()) {
             addBtn->setEnabled(false);
             return;
@@ -218,11 +225,11 @@ void WBSDefinitionPanel::slotLevelChanged(int value) {
     addBtn->setEnabled(levelsGroup->isChecked());
     slotChanged();
 }
-void WBSDefinitionPanel::slotLevelsGroupToggled(bool /*on*/) {
+void WBSDefinitionPanel::slotLevelsGroupToggled(bool /*on*/)
+{
     kDebug(planDbg());
     slotLevelChanged(level->value());
 }
-
 
 }  //KPlato namespace
 

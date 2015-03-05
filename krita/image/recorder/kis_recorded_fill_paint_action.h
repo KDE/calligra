@@ -32,34 +32,33 @@ class KRITAIMAGE_EXPORT KisRecordedFillPaintAction : public KisRecordedPaintActi
 {
 public:
 
-    KisRecordedFillPaintAction(const KisNodeQueryPath& path, const QPoint& pt, const KisNodeQueryPath& projectionPath);
+    KisRecordedFillPaintAction(const KisNodeQueryPath &path, const QPoint &pt, const KisNodeQueryPath &projectionPath);
 
-    KisRecordedFillPaintAction(const KisRecordedFillPaintAction&);
+    KisRecordedFillPaintAction(const KisRecordedFillPaintAction &);
 
     ~KisRecordedFillPaintAction();
 
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
+    virtual void toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *) const;
 
-    virtual KisRecordedAction* clone() const;
+    virtual KisRecordedAction *clone() const;
 
 protected:
 
-    virtual KisPainter* createPainter(KisPaintDeviceSP device) const;
-    virtual void playPaint(const KisPlayInfo& info, KisPainter* painter) const;
+    virtual KisPainter *createPainter(KisPaintDeviceSP device) const;
+    virtual void playPaint(const KisPlayInfo &info, KisPainter *painter) const;
 
 private:
 
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 class KisRecordedFillPaintActionFactory : public KisRecordedPaintActionFactory
 {
 public:
     KisRecordedFillPaintActionFactory();
     virtual ~KisRecordedFillPaintActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
+    virtual KisRecordedAction *fromXML(const QDomElement &elt, const KisRecordedActionLoadContext *);
 };
 
 #endif

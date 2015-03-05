@@ -37,7 +37,7 @@ SpecificColorSelectorDock::SpecificColorSelectorDock()
     setWidget(m_colorSelector);
 }
 
-void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
+void SpecificColorSelectorDock::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
 
@@ -45,15 +45,15 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->image()->disconnect(m_colorSelector);
     }
-    
-    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas);
     m_canvas = kisCanvas;
 
     if (!kisCanvas) {
         return;
     }
 
-    connect(kisCanvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_colorSelector, SLOT(setColorSpace(const KoColorSpace*)));
+    connect(kisCanvas->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_colorSelector, SLOT(setColorSpace(const KoColorSpace *)));
     m_colorSelector->setDisplayRenderer(kisCanvas->displayColorConverter()->displayRendererInterface());
 
     if (m_view && m_view->activeNode()) {
@@ -72,28 +72,33 @@ void SpecificColorSelectorDock::unsetCanvas()
     m_colorSelector->setDisplayRenderer(0);
 }
 
-void SpecificColorSelectorDock::setMainWindow(KisViewManager* kisview)
+void SpecificColorSelectorDock::setMainWindow(KisViewManager *kisview)
 {
     m_view = kisview;
-    connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));
-    connect(m_colorSelector, SIGNAL(colorChanged(const KoColor&)), m_view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
+    connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor &)), m_colorSelector, SLOT(setColor(const KoColor &)));
+    connect(m_colorSelector, SIGNAL(colorChanged(const KoColor &)), m_view->resourceProvider(), SLOT(slotSetFGColor(const KoColor &)));
     connect(m_view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
 }
 
 void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
 {
-    if (!node) return;
-    if (!node->paintDevice()) return;
-    if (!m_colorSelector) return;
+    if (!node) {
+        return;
+    }
+    if (!node->paintDevice()) {
+        return;
+    }
+    if (!m_colorSelector) {
+        return;
+    }
     if (!m_colorSelector->customColorSpaceUsed()) {
         const KoColorSpace *cs = node->paintDevice() ?
-            node->paintDevice()->compositionSourceColorSpace() :
-            node->colorSpace();
+                                 node->paintDevice()->compositionSourceColorSpace() :
+                                 node->colorSpace();
 
         m_colorSelector->setColorSpace(cs);
     }
     m_colorSelector->setColor(m_view->resourceProvider()->fgColor());
 }
-
 
 #include "specificcolorselector_dock.moc"

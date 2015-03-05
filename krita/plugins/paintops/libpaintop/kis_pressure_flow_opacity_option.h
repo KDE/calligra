@@ -34,16 +34,16 @@ public:
     KisFlowOpacityOption(KisNodeSP currentNode);
     virtual ~KisFlowOpacityOption() { }
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting);
 
     void setFlow(qreal flow);
     void setOpacity(qreal opacity);
-    void apply(KisPainter* painter, const KisPaintInformation& info);
+    void apply(KisPainter *painter, const KisPaintInformation &info);
 
     qreal getFlow() const;
     qreal getStaticOpacity() const;
-    qreal getDynamicOpacity(const KisPaintInformation& info) const;
+    qreal getDynamicOpacity(const KisPaintInformation &info) const;
 
 protected:
     qreal m_flow;

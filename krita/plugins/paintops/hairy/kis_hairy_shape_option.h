@@ -42,10 +42,10 @@ public:
     bool isbrushDimension1D() const;
     bool useMousePressure() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* config) const;
-    void readOptionSetting(const KisPropertiesConfiguration* config);
+    void writeOptionSetting(KisPropertiesConfiguration *config) const;
+    void readOptionSetting(const KisPropertiesConfiguration *config);
 private:
-    KisShapeOptionsWidget * m_options;
+    KisShapeOptionsWidget *m_options;
 };
 
 #endif // KIS_HAIRY_SHAPE_OPTION_H

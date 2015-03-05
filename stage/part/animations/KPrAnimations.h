@@ -27,8 +27,8 @@ public:
     ~KPrAnimations();
 
     int steps();
-    KPrShapeAnimation * take( int pos );
-    int pos( KPrShapeAnimation * animation );
+    KPrShapeAnimation *take(int pos);
+    int pos(KPrShapeAnimation *animation);
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     void saveOdf(KoShapeSavingContext &context) const;
@@ -40,7 +40,7 @@ public:
      * the new animation needs to be a with previous
      * should also write out a warning
      */
-    void add( KPrAnimationBase * animation );
+    void add(KPrAnimationBase *animation);
 
     QMap<QPair<KoShape *, KoTextBlockData *>, KPrShapeAnimation *> m_current;
 #endif

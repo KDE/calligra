@@ -24,12 +24,11 @@
 // Qt
 #include <QIODevice>
 
-
-XFigStreamLineReader::XFigStreamLineReader(QIODevice* device)
-  : m_Device(device)
-  , m_TextStream(device)
-  , m_ObjectCode(-1)
-  , m_HasError((device==0)||(! device->isReadable()))
+XFigStreamLineReader::XFigStreamLineReader(QIODevice *device)
+    : m_Device(device)
+    , m_TextStream(device)
+    , m_ObjectCode(-1)
+    , m_HasError((device == 0) || (! device->isReadable()))
 {
 }
 
@@ -42,7 +41,6 @@ bool XFigStreamLineReader::atEnd() const
     return m_HasError ||
            m_TextStream.atEnd();
 }
-
 
 bool XFigStreamLineReader::readNextObjectLine()
 {
@@ -63,7 +61,6 @@ bool XFigStreamLineReader::readNextObjectLine()
 
     return m_HasError;
 }
-
 
 bool XFigStreamLineReader::readNextLine(CommentReadModus commentModus)
 {

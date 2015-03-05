@@ -26,10 +26,10 @@
 #include <QPainter>
 #include <QResizeEvent>
 
-qreal calcScale(const QSizeF& imgSize, const QSizeF viewSize, bool fitView)
+qreal calcScale(const QSizeF &imgSize, const QSizeF viewSize, bool fitView)
 {
     if (qFuzzyCompare(imgSize.width(), qreal(0)) || qFuzzyCompare(imgSize.height(), qreal(0)) ||
-        qFuzzyCompare(viewSize.width(), qreal(0)) || qFuzzyCompare(viewSize.height(), qreal(0))) {
+            qFuzzyCompare(viewSize.width(), qreal(0)) || qFuzzyCompare(viewSize.height(), qreal(0))) {
         return 1;
     }
 
@@ -39,22 +39,19 @@ qreal calcScale(const QSizeF& imgSize, const QSizeF viewSize, bool fitView)
     if (fitView) {
         if (viewAspect > imgAspect) {
             return viewSize.height() / imgSize.height();
-        }
-        else {
+        } else {
             return viewSize.width()  / imgSize.width();
         }
-    }
-    else {
+    } else {
         if (viewAspect > imgAspect) {
             return viewSize.width()  / imgSize.width();
-        }
-        else {
+        } else {
             return viewSize.height() / imgSize.height();
         }
     }
 }
 
-QRectF centerRectHorizontally(const QRectF& rect, const QSizeF viewSize)
+QRectF centerRectHorizontally(const QRectF &rect, const QSizeF viewSize)
 {
     QSizeF diff = viewSize - rect.size();
     return QRectF(diff.width() / 2.0, rect.y(), rect.width(), rect.height());
@@ -86,8 +83,9 @@ void CropWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
-    if(!m_pictureShape)
+    if (!m_pictureShape) {
         return;
+    }
 
     QPainter painter(this);
     QImage image = m_pictureShape->imageData()->image();
@@ -99,8 +97,9 @@ void CropWidget::paintEvent(QPaintEvent *event)
     painter.drawRect(m_selectionRect.getRect());
 
     painter.setBrush(QBrush(Qt::yellow));
-    for (int i=0; i<m_selectionRect.getNumHandles(); ++i)
+    for (int i = 0; i < m_selectionRect.getNumHandles(); ++i) {
         painter.drawRect(m_selectionRect.getHandleRect(m_selectionRect.getHandleFlags(i)));
+    }
 
     KoClipPath *clipPath = m_pictureShape->clipPath();
     if (clipPath) {
@@ -123,8 +122,7 @@ void CropWidget::mouseMoveEvent(QMouseEvent *event)
     QPointF pos = toUniformCoord(event->posF());
     SelectionRect::HandleFlags flags = m_selectionRect.getHandleFlags(pos);
 
-    switch (flags)
-    {
+    switch (flags) {
     case SelectionRect::TOP_HANDLE:
     case SelectionRect::BOTTOM_HANDLE:
         QWidget::setCursor(Qt::SizeVerCursor);
@@ -170,7 +168,7 @@ void CropWidget::mouseReleaseEvent(QMouseEvent *event)
     m_undoLast = false; // we are done dragging
 }
 
-void CropWidget::resizeEvent(QResizeEvent* event)
+void CropWidget::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
     calcImageRect();
@@ -208,15 +206,15 @@ void CropWidget::maximizeCroppedArea()
     emitCropRegionChanged();
 }
 
-QPointF CropWidget::toUniformCoord(const QPointF& coord) const
+QPointF CropWidget::toUniformCoord(const QPointF &coord) const
 {
     QPointF result = coord - m_imageRect.topLeft();
     return QPointF(result.x() / m_imageRect.width(), result.y() / m_imageRect.height());
 }
 
-QPointF CropWidget::fromUniformCoord(const QPointF& coord) const
+QPointF CropWidget::fromUniformCoord(const QPointF &coord) const
 {
-    return m_imageRect.topLeft() + QPointF(coord.x()*m_imageRect.width(), coord.y()*m_imageRect.height());
+    return m_imageRect.topLeft() + QPointF(coord.x() * m_imageRect.width(), coord.y() * m_imageRect.height());
 }
 
 void CropWidget::emitCropRegionChanged()
@@ -235,10 +233,9 @@ void CropWidget::calcImageRect()
     if (m_pictureShape) {
         QSizeF imageSize = m_pictureShape->imageData()->image().size();
         imageSize = imageSize * calcScale(imageSize, size(), true);
-        m_imageRect = centerRectHorizontally (QRect(0, 0, imageSize.width(), imageSize.height()), size());
+        m_imageRect = centerRectHorizontally(QRect(0, 0, imageSize.width(), imageSize.height()), size());
         m_selectionRect.setAspectRatio(m_imageRect.width() / m_imageRect.height());
-    }
-    else {
+    } else {
         m_imageRect = QRectF();
     }
 }

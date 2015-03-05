@@ -74,9 +74,9 @@ bool KisLegacyTileCompressor::readTile(QIODevice *stream, KisTiledDataManager *d
 }
 
 void KisLegacyTileCompressor::compressTileData(KisTileData *tileData,
-                                               quint8 *buffer,
-                                               qint32 bufferSize,
-                                               qint32 &bytesWritten)
+        quint8 *buffer,
+        qint32 bufferSize,
+        qint32 &bytesWritten)
 {
     bytesWritten = 0;
     const qint32 tileDataSize = TILE_DATA_SIZE(tileData->pixelSize());
@@ -90,8 +90,8 @@ void KisLegacyTileCompressor::compressTileData(KisTileData *tileData,
 }
 
 bool KisLegacyTileCompressor::decompressTileData(quint8 *buffer,
-                                                 qint32 bufferSize,
-                                                 KisTileData *tileData)
+        qint32 bufferSize,
+        KisTileData *tileData)
 {
     const qint32 tileDataSize = TILE_DATA_SIZE(tileData->pixelSize());
     if (bufferSize >= tileDataSize) {
@@ -113,7 +113,7 @@ inline qint32 KisLegacyTileCompressor::maxHeaderLength()
 }
 
 inline void KisLegacyTileCompressor::writeHeader(KisTileSP tile,
-                                                 quint8 *buffer)
+        quint8 *buffer)
 {
     qint32 x, y;
     qint32 width, height;

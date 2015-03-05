@@ -35,7 +35,6 @@ class QuerySchema;
 class Connection;
 }
 
-
 //! @short Kexi Query Designer Plugin.
 class KexiQueryPart : public KexiPart::Part
 {
@@ -49,10 +48,10 @@ public:
 
     //! @short Temporary data kept in memory while switching between Query Window's views
     class TempData : public KexiWindowData,
-                public KexiDB::Connection::TableSchemaChangeListenerInterface
+        public KexiDB::Connection::TableSchemaChangeListenerInterface
     {
     public:
-        TempData(KexiWindow* parent, KexiDB::Connection *conn);
+        TempData(KexiWindow *parent, KexiDB::Connection *conn);
         virtual ~TempData();
         virtual tristate closeListener();
         void clearQuery();
@@ -68,7 +67,8 @@ public:
         void setQuery(KexiDB::QuerySchema *query);
 
         //! \return query associated with this data
-        KexiDB::QuerySchema *query() const {
+        KexiDB::QuerySchema *query() const
+        {
             return m_query;
         }
 
@@ -94,25 +94,25 @@ public:
         bool m_queryChangedInPreviousView;
     };
 
-    virtual KLocalizedString i18nMessage(const QString& englishMessage,
-                                         KexiWindow* window) const;
+    virtual KLocalizedString i18nMessage(const QString &englishMessage,
+                                         KexiWindow *window) const;
 
     /*! Renames stored data pointed by \a item to \a newName.
      Reimplemented to mark the query obsolete by using KexiDB::Connection::setQuerySchemaObsolete(). */
-    virtual tristate rename(KexiPart::Item & item, const QString& newName);
+    virtual tristate rename(KexiPart::Item &item, const QString &newName);
 
 protected:
-    virtual KexiWindowData* createWindowData(KexiWindow* window);
+    virtual KexiWindowData *createWindowData(KexiWindow *window);
 
-    virtual KexiView* createView(QWidget *parent, KexiWindow* window,
+    virtual KexiView *createView(QWidget *parent, KexiWindow *window,
                                  KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
-                                 QMap<QString, QVariant>* staticObjectArgs = 0);
+                                 QMap<QString, QVariant> *staticObjectArgs = 0);
 
     virtual void initPartActions();
     virtual void initInstanceActions();
 
-    virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window,
-            const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);
+    virtual KexiDB::SchemaData *loadSchemaData(KexiWindow *window,
+            const KexiDB::SchemaData &sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);
 };
 
 #endif

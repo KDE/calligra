@@ -45,46 +45,47 @@
 class ColorSetDelegate : public QAbstractItemDelegate
 {
 public:
-    ColorSetDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
+    ColorSetDelegate(QObject *parent = 0) : QAbstractItemDelegate(parent) {}
     virtual ~ColorSetDelegate() {}
     /// reimplemented
     virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &) const
+    {
         return option.decorationSize;
     }
 };
 
-void ColorSetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void ColorSetDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     painter->save();
-    if (! index.isValid())
+    if (! index.isValid()) {
         return;
+    }
 
-    KoResource* resource = static_cast<KoResource*>(index.internalPointer());
-    KoColorSet* colorSet = static_cast<KoColorSet*>(resource);
+    KoResource *resource = static_cast<KoResource *>(index.internalPointer());
+    KoColorSet *colorSet = static_cast<KoColorSet *>(resource);
 
     if (option.state & QStyle::State_Selected) {
         painter->fillRect(option.rect, option.palette.highlight());
         painter->setPen(option.palette.highlightedText().color());
-    }
-    else {
+    } else {
         painter->setBrush(option.palette.text().color());
     }
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, colorSet->name());
 
     int size = 7;
-    for (int i = 0; i < colorSet->nColors() && i*size < option.rect.width(); i++) {
-        QRect rect(option.rect.x() + i*size, option.rect.y() + option.rect.height() - size, size, size);
+    for (int i = 0; i < colorSet->nColors() && i * size < option.rect.width(); i++) {
+        QRect rect(option.rect.x() + i * size, option.rect.y() + option.rect.height() - size, size, size);
         painter->fillRect(rect, colorSet->getColor(i).color.toQColor());
     }
-    
+
     painter->restore();
 }
 
-ColorSetChooser::ColorSetChooser(QWidget* parent): QWidget(parent)
+ColorSetChooser::ColorSetChooser(QWidget *parent): QWidget(parent)
 {
-    KoResourceServer<KoColorSet> * rserver = KoResourceServerProvider::instance()->paletteServer(false);
+    KoResourceServer<KoColorSet> *rserver = KoResourceServerProvider::instance()->paletteServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoColorSet>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setItemDelegate(new ColorSetDelegate(this));
@@ -93,8 +94,8 @@ ColorSetChooser::ColorSetChooser(QWidget* parent): QWidget(parent)
     m_itemChooser->setColumnCount(1);
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
-    
-    QPushButton* saveButton = new QPushButton(i18n("Save"));
+
+    QPushButton *saveButton = new QPushButton(i18n("Save"));
     connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));
 
     m_nameEdit = new KLineEdit(this);
@@ -105,7 +106,7 @@ ColorSetChooser::ColorSetChooser(QWidget* parent): QWidget(parent)
     m_columnEdit->setRange(1, 30);
     m_columnEdit->setValue(10);
 
-    QGridLayout* layout = new QGridLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(m_itemChooser, 0, 0, 1, 3);
     layout->addWidget(new QLabel(i18n("Name:"), this), 1, 0, 1, 1);
     layout->addWidget(m_nameEdit, 1, 1, 1, 2);
@@ -119,16 +120,16 @@ ColorSetChooser::~ColorSetChooser()
 {
 }
 
-void ColorSetChooser::resourceSelected(KoResource* resource)
+void ColorSetChooser::resourceSelected(KoResource *resource)
 {
-    emit paletteSelected(static_cast<KoColorSet*>(resource));
+    emit paletteSelected(static_cast<KoColorSet *>(resource));
 }
 
 void ColorSetChooser::slotSave()
 {
-    KoResourceServer<KoColorSet> * rserver = KoResourceServerProvider::instance()->paletteServer();
+    KoResourceServer<KoColorSet> *rserver = KoResourceServerProvider::instance()->paletteServer();
 
-    KoColorSet* colorset = new KoColorSet();
+    KoColorSet *colorset = new KoColorSet();
     colorset->setValid(true);
 
     QString saveLocation = rserver->saveLocation();
@@ -136,7 +137,7 @@ void ColorSetChooser::slotSave()
     int columns = m_columnEdit->value();
 
     bool newName = false;
-    if(name.isEmpty()) {
+    if (name.isEmpty()) {
         newName = true;
         name = i18n("Palette");
     }
@@ -148,7 +149,7 @@ void ColorSetChooser::slotSave()
         i++;
     }
     colorset->setFilename(fileInfo.filePath());
-    if(newName) {
+    if (newName) {
         name = i18n("Palette %1", i);
     }
     colorset->setName(name);

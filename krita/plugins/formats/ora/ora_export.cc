@@ -51,18 +51,18 @@ OraExport::~OraExport()
 {
 }
 
-
 bool hasShapeLayerChild(KisNodeSP node)
 {
-    if (!node) return false;
+    if (!node) {
+        return false;
+    }
 
-    foreach(KisNodeSP child, node->childNodes(QStringList(), KoProperties())) {
+    foreach (KisNodeSP child, node->childNodes(QStringList(), KoProperties())) {
         if (child->inherits("KisShapeLayer")
                 || child->inherits("KisGeneratorLayer")
                 || child->inherits("KisCloneLayer")) {
             return true;
-        }
-        else {
+        } else {
             if (hasShapeLayerChild(child)) {
                 return true;
             }
@@ -71,23 +71,27 @@ bool hasShapeLayerChild(KisNodeSP node)
     return false;
 }
 
-KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "ORA export! From:" << from << ", To:" << to << "";
 
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
     KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     qApp->processEvents(); // For vector layers to be updated
     input->image()->waitForDone();
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
     KUrl url;
     url.setPath(filename);
@@ -107,7 +111,6 @@ KisImportExportFilter::ConversionStatus OraExport::convert(const QByteArray& fro
         }
         return KisImportExportFilter::UsageError;
     }
-
 
     if (hasShapeLayerChild(image->root()) && !m_chain->manager()->getBatchMode()) {
         QMessageBox::information(0,

@@ -25,7 +25,8 @@ class KisHatchingPreferencesWidget: public QWidget, public Ui::WdgHatchingPrefer
 {
 public:
     KisHatchingPreferencesWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -52,7 +53,7 @@ KisHatchingPreferences::~KisHatchingPreferences()
 {
 }
 
-void KisHatchingPreferences::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisHatchingPreferences::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     /*
     setting->setProperty("Hatching/bool_trigonometryalgebra", m_options->trigonometryAlgebraRadioButton->isChecked() );
@@ -64,7 +65,7 @@ void KisHatchingPreferences::writeOptionSetting(KisPropertiesConfiguration* sett
     setting->setProperty("Hatching/bool_subpixelprecision", m_options->subpixelPrecisionCheckBox->isChecked());
 }
 
-void KisHatchingPreferences::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisHatchingPreferences::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     /*
     m_options->trigonometryAlgebraRadioButton->setChecked( setting->getBool("Hatching/bool_trigonometryalgebra") );

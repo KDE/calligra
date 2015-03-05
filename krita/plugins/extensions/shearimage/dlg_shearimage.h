@@ -29,7 +29,8 @@ class WdgShearImage : public QWidget, public Ui::WdgShearImage
     Q_OBJECT
 
 public:
-    WdgShearImage(QWidget *parent) : QWidget(parent) {
+    WdgShearImage(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -41,8 +42,8 @@ class DlgShearImage: public KDialog
 
 public:
 
-    DlgShearImage(QWidget * parent = 0,
-                  const char* name = 0);
+    DlgShearImage(QWidget *parent = 0,
+                  const char *name = 0);
     ~DlgShearImage();
 
     void setAngleX(quint32 w);
@@ -56,7 +57,7 @@ private Q_SLOTS:
 
 private:
 
-    WdgShearImage * m_page;
+    WdgShearImage *m_page;
     double m_oldAngle;
     bool m_lock;
 

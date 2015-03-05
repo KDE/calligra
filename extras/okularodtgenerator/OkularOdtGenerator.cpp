@@ -47,13 +47,13 @@
 static KAboutData createAboutData()
 {
     KAboutData aboutData(
-         "okular_odt",
-         "okularGenerator_odt",
-         ki18n( "ODT/OTT Backend" ),
-         CALLIGRA_VERSION_STRING,
-         ki18n( "ODT/OTT file renderer" ),
-         KAboutData::License_GPL,
-         ki18n( "© 2012 Sven Langkamp" )
+        "okular_odt",
+        "okularGenerator_odt",
+        ki18n("ODT/OTT Backend"),
+        CALLIGRA_VERSION_STRING,
+        ki18n("ODT/OTT file renderer"),
+        KAboutData::License_GPL,
+        ki18n("© 2012 Sven Langkamp")
     );
 
     // fill the about data
@@ -62,8 +62,8 @@ static KAboutData createAboutData()
 
 OKULAR_EXPORT_PLUGIN(OkularOdtGenerator, createAboutData())
 
-OkularOdtGenerator::OkularOdtGenerator( QObject *parent, const QVariantList &args )
-    : Okular::Generator( parent, args )
+OkularOdtGenerator::OkularOdtGenerator(QObject *parent, const QVariantList &args)
+    : Okular::Generator(parent, args)
 {
     m_doc = 0;
 }
@@ -72,19 +72,19 @@ OkularOdtGenerator::~OkularOdtGenerator()
 {
 }
 
-static Okular::DocumentViewport calculateViewport( const QTextBlock &block,
-                                                   KoTextDocumentLayout* textDocumentLayout )
+static Okular::DocumentViewport calculateViewport(const QTextBlock &block,
+        KoTextDocumentLayout *textDocumentLayout)
 {
     KoTextLayoutRootArea *a = textDocumentLayout->rootAreaForPosition(block.position());
 
-    const QRectF rect = textDocumentLayout->blockBoundingRect( block );
-    KWPage* page = static_cast<KWPage *>(a->page());
+    const QRectF rect = textDocumentLayout->blockBoundingRect(block);
+    KWPage *page = static_cast<KWPage *>(a->page());
     const qreal pageHeight = page->height();
     const qreal pageWidth = page->width();
     const int pageNumber = page->pageNumber();
-    const int yOffset = qRound( rect.y() - a->referenceRect().y() );
+    const int yOffset = qRound(rect.y() - a->referenceRect().y());
 
-    Okular::DocumentViewport viewport( pageNumber-1 );
+    Okular::DocumentViewport viewport(pageNumber - 1);
     viewport.rePos.normalizedX = (double)rect.x() / (double)pageWidth;
     viewport.rePos.normalizedY = (double)yOffset / (double)pageHeight;
     viewport.rePos.enabled = true;
@@ -93,7 +93,7 @@ static Okular::DocumentViewport calculateViewport( const QTextBlock &block,
     return viewport;
 }
 
-bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::Page*> &pages )
+bool OkularOdtGenerator::loadDocument(const QString &fileName, QVector<Okular::Page *> &pages)
 {
     KComponentData cd("OkularOdtGenerator", QByteArray(),
                       KComponentData::SkipMainComponentRegistration);
@@ -109,7 +109,7 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
         return 0;
     }
 
-    m_doc = static_cast<KWDocument*>(part->document());
+    m_doc = static_cast<KWDocument *>(part->document());
     KUrl url;
     url.setPath(fileName);
     m_doc->setCheckAutoSaveFile(false);
@@ -121,55 +121,58 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
     while (!m_doc->layoutFinishedAtleastOnce()) {
         QCoreApplication::processEvents();
 
-        if (!QCoreApplication::hasPendingEvents())
+        if (!QCoreApplication::hasPendingEvents()) {
             break;
+        }
     }
 
     KWPageManager *pageManager = m_doc->pageManager();
     int pageCount = pageManager->pages().count();
-    for(int i = 1; i <= pageCount; ++i) {
+    for (int i = 1; i <= pageCount; ++i) {
 
         KWPage kwpage = pageManager->page(i);
 
-        Okular::Page * page = new Okular::Page( i-1, kwpage.width(), kwpage.height(), Okular::Rotation0 );
+        Okular::Page *page = new Okular::Page(i - 1, kwpage.width(), kwpage.height(), Okular::Rotation0);
         pages.append(page);
     }
 
     // meta data
     const KoDocumentInfo *documentInfo = m_doc->documentInfo();
-    m_documentInfo.set( Okular::DocumentInfo::MimeType, mimetype );
-    m_documentInfo.set( Okular::DocumentInfo::Producer, documentInfo->originalGenerator() );
-    m_documentInfo.set( Okular::DocumentInfo::Title,       documentInfo->aboutInfo("title") );
-    m_documentInfo.set( Okular::DocumentInfo::Subject,     documentInfo->aboutInfo("subject") );
-    m_documentInfo.set( Okular::DocumentInfo::Keywords,     documentInfo->aboutInfo("keyword") );
-    m_documentInfo.set( Okular::DocumentInfo::Description, documentInfo->aboutInfo("description") );
-    m_documentInfo.set( "language",    KoGlobal::languageFromTag(documentInfo->aboutInfo("language")),  i18n("Language"));
+    m_documentInfo.set(Okular::DocumentInfo::MimeType, mimetype);
+    m_documentInfo.set(Okular::DocumentInfo::Producer, documentInfo->originalGenerator());
+    m_documentInfo.set(Okular::DocumentInfo::Title,       documentInfo->aboutInfo("title"));
+    m_documentInfo.set(Okular::DocumentInfo::Subject,     documentInfo->aboutInfo("subject"));
+    m_documentInfo.set(Okular::DocumentInfo::Keywords,     documentInfo->aboutInfo("keyword"));
+    m_documentInfo.set(Okular::DocumentInfo::Description, documentInfo->aboutInfo("description"));
+    m_documentInfo.set("language",    KoGlobal::languageFromTag(documentInfo->aboutInfo("language")),  i18n("Language"));
 
     const QString creationDate = documentInfo->aboutInfo("creation-date");
     if (!creationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(creationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::CreationDate, KGlobal::locale()->formatDateTime(t) );
+        m_documentInfo.set(Okular::DocumentInfo::CreationDate, KGlobal::locale()->formatDateTime(t));
     }
-    m_documentInfo.set( Okular::DocumentInfo::Creator,  documentInfo->aboutInfo("initial-creator") );
+    m_documentInfo.set(Okular::DocumentInfo::Creator,  documentInfo->aboutInfo("initial-creator"));
 
     const QString modificationDate = documentInfo->aboutInfo("date");
     if (!modificationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(modificationDate, Qt::ISODate);
-        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, KGlobal::locale()->formatDateTime(t) );
+        m_documentInfo.set(Okular::DocumentInfo::ModificationDate, KGlobal::locale()->formatDateTime(t));
     }
-    m_documentInfo.set( Okular::DocumentInfo::Author, documentInfo->aboutInfo("creator") );
+    m_documentInfo.set(Okular::DocumentInfo::Author, documentInfo->aboutInfo("creator"));
 
     // ToC
     QDomNode parentNode = m_documentSynopsis;
 
-    QStack< QPair<int,QDomNode> > parentNodeStack;
-    parentNodeStack.push( qMakePair( 0, parentNode ) );
+    QStack< QPair<int, QDomNode> > parentNodeStack;
+    parentNodeStack.push(qMakePair(0, parentNode));
 
-    KoTextDocumentLayout* textDocumentayout = static_cast<KoTextDocumentLayout *>(m_doc->mainFrameSet()->document()->documentLayout());
+    KoTextDocumentLayout *textDocumentayout = static_cast<KoTextDocumentLayout *>(m_doc->mainFrameSet()->document()->documentLayout());
 
     foreach (KWFrameSet *fs, m_doc->frameSets()) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs == 0) continue;
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet *>(fs);
+        if (tfs == 0) {
+            continue;
+        }
 
         QTextDocument *doc = tfs->document();
         QTextBlock block = doc->begin();
@@ -182,16 +185,16 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
                 continue;
             }
 
-            Okular::DocumentViewport viewport = calculateViewport( block, textDocumentayout );
+            Okular::DocumentViewport viewport = calculateViewport(block, textDocumentayout);
 
-            QDomElement item = m_documentSynopsis.createElement( block.text() );
-            item.setAttribute( "Viewport", viewport.toString() );
+            QDomElement item = m_documentSynopsis.createElement(block.text());
+            item.setAttribute("Viewport", viewport.toString());
 
             // we need a parent, which has to be at a higher heading level than this heading level
             // so we just work through the stack
-            while ( ! parentNodeStack.isEmpty() ) {
+            while (! parentNodeStack.isEmpty()) {
                 int parentLevel = parentNodeStack.top().first;
-                if ( parentLevel < blockLevel ) {
+                if (parentLevel < blockLevel) {
                     // this is OK as a parent
                     parentNode = parentNodeStack.top().second;
                     break;
@@ -200,8 +203,8 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
                     parentNodeStack.pop();
                 }
             }
-            parentNode.appendChild( item );
-            parentNodeStack.push( qMakePair( blockLevel, QDomNode(item) ) );
+            parentNode.appendChild(item);
+            parentNodeStack.push(qMakePair(blockLevel, QDomNode(item)));
 
             block = block.next();
         }
@@ -226,23 +229,23 @@ bool OkularOdtGenerator::canGeneratePixmap() const
     return true;
 }
 
-void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
+void OkularOdtGenerator::generatePixmap(Okular::PixmapRequest *request)
 {
-    QPixmap* pix;
+    QPixmap *pix;
     if (!m_doc) {
         pix = new QPixmap(request->width(), request->height());
         QPainter painter(pix);
-        painter.fillRect(0 ,0 , request->width(), request->height(), Qt::white);
+        painter.fillRect(0, 0, request->width(), request->height(), Qt::white);
     } else {
 
         // use shape manager from canvasItem even for QWidget environments
         // if using the shape manager from one of the views there is no guarantee
         // that the view, its canvas and the shapemanager is not destroyed in between
-        KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(m_doc->documentPart()->canvasItem(m_doc))->shapeManager();
+        KoShapeManager *shapeManager = static_cast<KWCanvasItem *>(m_doc->documentPart()->canvasItem(m_doc))->shapeManager();
 
         KWPageManager *pageManager = m_doc->pageManager();
 
-        KWPage page = pageManager->page(request->pageNumber()+1);
+        KWPage page = pageManager->page(request->pageNumber() + 1);
 
         pix = new QPixmap(request->width(), request->height());
         QPainter painter(pix);
@@ -255,29 +258,29 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
 
 // API change
 #if OKULAR_IS_VERSION(0, 16, 60)
-    request->page()->setPixmap( request->observer(), pix );
+    request->page()->setPixmap(request->observer(), pix);
 #else
-    request->page()->setPixmap( request->id(), pix );
+    request->page()->setPixmap(request->id(), pix);
 #endif
 
-    signalPixmapRequestDone( request );
+    signalPixmapRequestDone(request);
 }
 
 #if OKULAR_IS_VERSION(0, 20, 60)
-Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
+Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo(const QSet<Okular::DocumentInfo::Key> &keys) const
 {
     Q_UNUSED(keys);
 
     return m_documentInfo;
 }
 #else
-const Okular::DocumentInfo* OkularOdtGenerator::generateDocumentInfo()
+const Okular::DocumentInfo *OkularOdtGenerator::generateDocumentInfo()
 {
     return &m_documentInfo;
 }
 #endif
 
-const Okular::DocumentSynopsis* OkularOdtGenerator::generateDocumentSynopsis()
+const Okular::DocumentSynopsis *OkularOdtGenerator::generateDocumentSynopsis()
 {
     return m_documentSynopsis.hasChildNodes() ? &m_documentSynopsis : 0;
 }

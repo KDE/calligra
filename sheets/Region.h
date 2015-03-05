@@ -17,7 +17,6 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #ifndef CALLIGRA_SHEETS_REGION
 #define CALLIGRA_SHEETS_REGION
 
@@ -31,7 +30,7 @@
 
 #include "calligra_sheets_export.h"
 
-inline uint qHash(const QPoint& point)
+inline uint qHash(const QPoint &point)
 {
     return (static_cast<uint>(point.x()) << 16) + static_cast<uint>(point.y());
 }
@@ -69,7 +68,7 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    explicit Region(const QPoint& point, Sheet* sheet = 0);
+    explicit Region(const QPoint &point, Sheet *sheet = 0);
 
     /**
      * Constructor.
@@ -77,7 +76,7 @@ public:
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    explicit Region(const QRect& range, Sheet* sheet = 0);
+    explicit Region(const QRect &range, Sheet *sheet = 0);
 
     /**
      * Constructor.
@@ -86,14 +85,14 @@ public:
      * @param map used to determine the sheet, if it's named in the string
      * @param sheet the fallback sheet, if \p expression does not contain one
      */
-    explicit Region(const QString& expression, const Map* map = 0, Sheet* sheet = 0);
+    explicit Region(const QString &expression, const Map *map = 0, Sheet *sheet = 0);
 
     /**
      * Copy Constructor.
      * Creates a copy of the region.
      * @param region the region to copy
      */
-    Region(const Region& region);
+    Region(const Region &region);
 
     /**
      * Constructor.
@@ -102,7 +101,7 @@ public:
      * @param row the row of the point
      * @param sheet the sheet the point belongs to
      */
-    Region(int col, int row, Sheet* sheet = 0);
+    Region(int col, int row, Sheet *sheet = 0);
 
     /**
      * Constructor.
@@ -113,13 +112,12 @@ public:
      * @param height the height of the range
      * @param sheet the sheet the range belongs to
      */
-    Region(int col, int row, int width, int height, Sheet* sheet = 0);
+    Region(int col, int row, int width, int height, Sheet *sheet = 0);
 
     /**
      * Destructor.
      */
     virtual ~Region();
-
 
     /**
      *  @return a QRegion that unifies all contained ranges
@@ -130,16 +128,14 @@ public:
      * @param originSheet The name is created relative to this sheet.
      * @return the name of the region (e.g. "A1:A2")
      */
-    QString name(Sheet* originSheet = 0) const;
+    QString name(Sheet *originSheet = 0) const;
 
     /**
      * @param sRegion will be modified, if a valid sheet was found. The sheetname
      * will be removed
      * @return sheet named in the @p sRegion or null
      */
-    Sheet* filterSheetName(QString& sRegion);
-
-
+    Sheet *filterSheetName(QString &sRegion);
 
     /**
      * @return @c true, if this region contains no elements
@@ -220,9 +216,7 @@ public:
      * @param sheet the sheet the point belongs to
      * @return @c true, if the region contains the point @p point
      */
-    bool contains(const QPoint& point, Sheet* sheet = 0) const;
-
-
+    bool contains(const QPoint &point, Sheet *sheet = 0) const;
 
     /* TODO Stefan #2: Optimize! Adjacent Points/Ranges */
     /**
@@ -230,21 +224,21 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    Element* add(const QPoint& point, Sheet* sheet = 0);
+    Element *add(const QPoint &point, Sheet *sheet = 0);
 
     /**
      * Adds the range @p range to this region.
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    Element* add(const QRect& range, Sheet* sheet = 0);
+    Element *add(const QRect &range, Sheet *sheet = 0);
 
     /**
      * Adds the region @p region to this region.
      * @param region the region to be added
      * @param sheet the fallback sheet used, if an element has no sheet set
      */
-    Element* add(const Region& region, Sheet* sheet = 0);
+    Element *add(const Region &region, Sheet *sheet = 0);
 
     /* TODO Stefan #3: Improve! */
     /**
@@ -252,26 +246,26 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    void sub(const QPoint& point, Sheet* sheet);
+    void sub(const QPoint &point, Sheet *sheet);
 
     /**
      * Subtracts the range @p range from this region.
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    void sub(const QRect& range, Sheet* sheet);
+    void sub(const QRect &range, Sheet *sheet);
 
     /**
      * Subtracts the region @p region from this region.
      * @param region the region to subtract
      */
-    void sub(const Region& region);
+    void sub(const Region &region);
 
     /**
      * Intersects the region @p region and this region and
      * returns the result of the intersection as a new Region.
      */
-    Region intersected(const Region& region) const;
+    Region intersected(const Region &region) const;
 
     /**
      * Intersects this region with the row @p row and returns
@@ -283,64 +277,59 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    virtual Element* eor(const QPoint& point, Sheet* sheet = 0);
+    virtual Element *eor(const QPoint &point, Sheet *sheet = 0);
 
     /**
      * Deletes all elements of the region. The result is an empty region.
      */
     virtual void clear();
 
-
     QRect firstRange() const;
     QRect lastRange() const;
-    Sheet* firstSheet() const;
-    Sheet* lastSheet() const;
+    Sheet *firstSheet() const;
+    Sheet *lastSheet() const;
 
     QRect boundingRect() const;
 
-
-    static QRect normalized(const QRect& rect);
-
+    static QRect normalized(const QRect &rect);
 
     /**
      * @param region the region to compare
      * @return @c true, if this region equals region @p region
      */
-    bool operator==(const Region& region) const;
-    inline bool operator!=(const Region& region) const {
+    bool operator==(const Region &region) const;
+    inline bool operator!=(const Region &region) const
+    {
         return !operator==(region);
     }
 
     /**
      * @param region the region to copy
      */
-    void operator=(const Region& region);
-
-
+    void operator=(const Region &region);
 
     /**
      * @return the map to which this region belongs.
      */
-    const Map* map() const;
+    const Map *map() const;
 
     /**
      * Sets the map to which this region belongs.
      */
-    void setMap(const Map*);
+    void setMap(const Map *);
 
-
-    typedef QList<Element*>::Iterator      Iterator;
-    typedef QList<Element*>::ConstIterator ConstIterator;
+    typedef QList<Element *>::Iterator      Iterator;
+    typedef QList<Element *>::ConstIterator ConstIterator;
 
     ConstIterator constBegin() const;
     ConstIterator constEnd() const;
 
-    static bool isValid(const QPoint& point);
-    static bool isValid(const QRect& rect);
+    static bool isValid(const QPoint &point);
+    static bool isValid(const QRect &rect);
 
-    static QString loadOdf(const QString& expression);
+    static QString loadOdf(const QString &expression);
     static void loadOdf(const QChar *&data, const QChar *&end, QChar *&out);
-    static QString saveOdf(const QString& expression);
+    static QString saveOdf(const QString &expression);
 
     QString saveOdf() const;
 
@@ -348,7 +337,7 @@ protected:
     /**
      * @return the list of elements
      */
-    QList<Element*>& cells() const;
+    QList<Element *> &cells() const;
 
     /**
      * @param index the index of the element in whose front the new point
@@ -359,7 +348,7 @@ protected:
      * @return the added point, a null pointer, if @p point is not
      * valid or the element containing @p point
      */
-    Element* insert(int index, const QPoint& point, Sheet* sheet, bool multi = true);
+    Element *insert(int index, const QPoint &point, Sheet *sheet, bool multi = true);
 
     /**
      * @param index the index of the element in whose front the new range
@@ -370,48 +359,47 @@ protected:
      * @return the added range, a null pointer, if @p range is not
      * valid or the element containing @p range
      */
-    Element* insert(int index, const QRect& range, Sheet* sheet, bool multi = true);
+    Element *insert(int index, const QRect &range, Sheet *sheet, bool multi = true);
 
     /**
      * @internal used to create derived Points
      */
-    virtual Point* createPoint(const QPoint&) const;
+    virtual Point *createPoint(const QPoint &) const;
 
     /**
      * @internal used to create derived Points
      */
-    virtual Point* createPoint(const QString&) const;
+    virtual Point *createPoint(const QString &) const;
 
     /**
      * @internal used to create derived Points
      */
-    virtual Point* createPoint(const Point&) const;
+    virtual Point *createPoint(const Point &) const;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Range* createRange(const QRect&) const;
+    virtual Range *createRange(const QRect &) const;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Range* createRange(const Point&, const Point&) const;
+    virtual Range *createRange(const Point &, const Point &) const;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Range* createRange(const QString&) const;
+    virtual Range *createRange(const QString &) const;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Range* createRange(const Range&) const;
+    virtual Range *createRange(const Range &) const;
 
 private:
     class Private;
     QSharedDataPointer<Private> d;
 };
-
 
 /***************************************************************************
   class Region::Element
@@ -433,59 +421,76 @@ public:
     Element();
     virtual ~Element();
 
-    virtual Type type() const {
+    virtual Type type() const
+    {
         return Undefined;
     }
-    virtual bool isValid() const {
+    virtual bool isValid() const
+    {
         return false;
     }
-    virtual bool isColumn() const {
+    virtual bool isColumn() const
+    {
         return false;
     }
-    virtual bool isRow() const {
+    virtual bool isRow() const
+    {
         return false;
     }
-    virtual bool isAll() const {
-        return false;
-    }
-
-    virtual bool contains(const QPoint&) const {
-        return false;
-    }
-    virtual bool contains(const QRect&) const {
+    virtual bool isAll() const
+    {
         return false;
     }
 
-    virtual QString name(Sheet* = 0) const {
+    virtual bool contains(const QPoint &) const
+    {
+        return false;
+    }
+    virtual bool contains(const QRect &) const
+    {
+        return false;
+    }
+
+    virtual QString name(Sheet * = 0) const
+    {
         return QString("");
     }
-    virtual QRect rect() const {
+    virtual QRect rect() const
+    {
         return QRect();
     }
 
-    virtual bool isColumnFixed() const {
+    virtual bool isColumnFixed() const
+    {
         return false;
     }
-    virtual bool isRowFixed() const {
+    virtual bool isRowFixed() const
+    {
         return false;
     }
-    virtual bool isTopFixed() const {
+    virtual bool isTopFixed() const
+    {
         return false;
     }
-    virtual bool isLeftFixed() const {
+    virtual bool isLeftFixed() const
+    {
         return false;
     }
-    virtual bool isBottomFixed() const {
+    virtual bool isBottomFixed() const
+    {
         return false;
     }
-    virtual bool isRightFixed() const {
+    virtual bool isRightFixed() const
+    {
         return false;
     }
 
-    Sheet* sheet() const {
+    Sheet *sheet() const
+    {
         return m_sheet;
     }
-    void setSheet(Sheet* sheet) {
+    void setSheet(Sheet *sheet)
+    {
         m_sheet = sheet;
     }
 
@@ -494,9 +499,8 @@ protected:
         Elaborate, if this pointer could be avoided by QDict or whatever in
         Region.
     */
-    Sheet* m_sheet;
+    Sheet *m_sheet;
 };
-
 
 /***************************************************************************
   class Region::Point
@@ -517,60 +521,74 @@ class CALLIGRA_SHEETS_ODF_EXPORT Region::Point : public Region::Element
 public:
     Point() : Element(), m_point() {}
     Point(int col, int row) : Element(), m_point(col, row) {}
-    Point(const QPoint&);
-    Point(const QString&);
+    Point(const QPoint &);
+    Point(const QString &);
     virtual ~Point();
 
-    virtual Type type() const {
+    virtual Type type() const
+    {
         return Element::Point;
     }
-    virtual bool isValid() const {
+    virtual bool isValid() const
+    {
         return (!m_point.isNull() && Region::isValid(m_point));
     }
-    virtual bool isColumn() const {
+    virtual bool isColumn() const
+    {
         return false;
     }
-    virtual bool isRow() const {
+    virtual bool isRow() const
+    {
         return false;
     }
-    virtual bool isAll() const {
+    virtual bool isAll() const
+    {
         return false;
     }
 
-    virtual bool contains(const QPoint&) const;
-    virtual bool contains(const QRect&) const;
+    virtual bool contains(const QPoint &) const;
+    virtual bool contains(const QRect &) const;
 
-    virtual QString name(Sheet* originSheet = 0) const;
+    virtual QString name(Sheet *originSheet = 0) const;
 
-    virtual QRect rect() const {
+    virtual QRect rect() const
+    {
         return QRect(m_point, m_point);
     }
 
-    virtual bool isColumnFixed() const {
+    virtual bool isColumnFixed() const
+    {
         return m_fixedColumn;
     }
-    virtual bool isRowFixed() const {
+    virtual bool isRowFixed() const
+    {
         return m_fixedRow;
     }
-    virtual bool isTopFixed() const {
+    virtual bool isTopFixed() const
+    {
         return m_fixedRow;
     }
-    virtual bool isLeftFixed() const {
+    virtual bool isLeftFixed() const
+    {
         return m_fixedColumn;
     }
-    virtual bool isBottomFixed() const {
+    virtual bool isBottomFixed() const
+    {
         return m_fixedRow;
     }
-    virtual bool isRightFixed() const {
+    virtual bool isRightFixed() const
+    {
         return m_fixedColumn;
     }
 
-    QPoint pos() const {
+    QPoint pos() const
+    {
         return m_point;
     }
     Cell cell() const;
 
-    bool operator==(const Point& other) const {
+    bool operator==(const Point &other) const
+    {
         return ((m_point == other.m_point) && (m_sheet == other.m_sheet));
     }
 
@@ -579,7 +597,6 @@ private:
     bool m_fixedColumn;
     bool m_fixedRow;
 };
-
 
 /***************************************************************************
   class Region:.Range
@@ -598,46 +615,55 @@ private:
 class CALLIGRA_SHEETS_ODF_EXPORT Region::Range : public Region::Element
 {
 public:
-    Range(const QRect&);
-    Range(const Region::Point&, const Region::Point&);
-    Range(const QString&);
+    Range(const QRect &);
+    Range(const Region::Point &, const Region::Point &);
+    Range(const QString &);
     virtual ~Range();
 
-    virtual Type type() const {
+    virtual Type type() const
+    {
         return Element::Range;
     }
-    virtual bool isValid() const {
+    virtual bool isValid() const
+    {
         return !m_range.isNull() && Region::isValid(m_range);
     }
     virtual bool isColumn() const;
     virtual bool isRow() const;
     virtual bool isAll() const;
 
-    virtual bool contains(const QPoint&) const;
-    virtual bool contains(const QRect&) const;
+    virtual bool contains(const QPoint &) const;
+    virtual bool contains(const QRect &) const;
 
-    virtual QString name(Sheet* originSheet = 0) const;
+    virtual QString name(Sheet *originSheet = 0) const;
 
-    virtual QRect rect() const {
+    virtual QRect rect() const
+    {
         return m_range;
     }
 
-    virtual bool isColumnFixed() const {
+    virtual bool isColumnFixed() const
+    {
         return m_fixedLeft && m_fixedRight;
     }
-    virtual bool isRowFixed() const {
+    virtual bool isRowFixed() const
+    {
         return m_fixedTop && m_fixedBottom;
     }
-    virtual bool isTopFixed() const {
+    virtual bool isTopFixed() const
+    {
         return m_fixedTop;
     }
-    virtual bool isLeftFixed() const {
+    virtual bool isLeftFixed() const
+    {
         return m_fixedLeft;
     }
-    virtual bool isBottomFixed() const {
+    virtual bool isBottomFixed() const
+    {
         return m_fixedBottom;
     }
-    virtual bool isRightFixed() const {
+    virtual bool isRightFixed() const
+    {
         return m_fixedRight;
     }
 
@@ -657,12 +683,11 @@ private:
 
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Region, Q_MOVABLE_TYPE);
 
-
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-inline QDebug operator<<(QDebug str, const Calligra::Sheets::Region& r)
+inline QDebug operator<<(QDebug str, const Calligra::Sheets::Region &r)
 {
     return str << qPrintable(r.name());
 }

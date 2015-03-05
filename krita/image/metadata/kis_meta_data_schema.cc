@@ -41,7 +41,7 @@ const QString Schema::MakerNoteSchemaUri = "http://www.calligra.org/krita/xmp/Ma
 const QString Schema::IPTCSchemaUri = "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/";
 const QString Schema::PhotoshopSchemaUri = "http://ns.adobe.com/photoshop/1.0/";
 
-bool Schema::Private::load(const QString& _fileName)
+bool Schema::Private::load(const QString &_fileName)
 {
     dbgImage << "Loading from " << _fileName;
     QDomDocument document;
@@ -84,7 +84,7 @@ bool Schema::Private::load(const QString& _fileName)
     }
 }
 
-void Schema::Private::parseStructures(QDomElement& elt)
+void Schema::Private::parseStructures(QDomElement &elt)
 {
     Q_ASSERT(elt.tagName() == "structures");
     dbgImage << "Parse sturctures";
@@ -102,7 +102,7 @@ void Schema::Private::parseStructures(QDomElement& elt)
     }
 }
 
-void Schema::Private::parseStructure(QDomElement& elt)
+void Schema::Private::parseStructure(QDomElement &elt)
 {
     Q_ASSERT(elt.tagName() == "structure");
     if (!elt.hasAttribute("name")) {
@@ -126,7 +126,7 @@ void Schema::Private::parseStructure(QDomElement& elt)
     QString structurePrefix = elt.attribute("prefix");
     QString structureUri = elt.attribute("uri");
     dbgImage << ppVar(structurePrefix) << ppVar(structureUri);
-    Schema* schema = new Schema(structureUri, structurePrefix);
+    Schema *schema = new Schema(structureUri, structurePrefix);
     QDomNode n = elt.firstChild();
     while (!n.isNull()) {
         QDomElement e = n.toElement();
@@ -146,7 +146,7 @@ void Schema::Private::parseStructure(QDomElement& elt)
     structures[ structureName ] = TypeInfo::Private::createStructure(schema, structureName);
 }
 
-void Schema::Private::parseProperties(QDomElement& elt)
+void Schema::Private::parseProperties(QDomElement &elt)
 {
     Q_ASSERT(elt.tagName() == "properties");
     dbgImage << "Parse properties";
@@ -168,7 +168,7 @@ void Schema::Private::parseProperties(QDomElement& elt)
     }
 }
 
-bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QString& name, bool ignoreStructure, bool ignoreName)
+bool Schema::Private::parseEltType(QDomElement &elt, EntryInfo &entryInfo, QString &name, bool ignoreStructure, bool ignoreName)
 {
     QString tagName = elt.tagName();
     if (!ignoreName && !elt.hasAttribute("name")) {
@@ -190,7 +190,7 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
         entryInfo.propertyType = TypeInfo::Private::Text;
         return true;
     } else if (tagName == "seq") {
-        const TypeInfo* ei = parseAttType(elt, ignoreStructure);
+        const TypeInfo *ei = parseAttType(elt, ignoreStructure);
         if (!ei) {
             ei = parseEmbType(elt, ignoreStructure);
         }
@@ -201,7 +201,7 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
         entryInfo.propertyType = TypeInfo::Private::orderedArray(ei);
         return true;
     } else if (tagName == "bag") {
-        const TypeInfo* ei = parseAttType(elt, ignoreStructure);
+        const TypeInfo *ei = parseAttType(elt, ignoreStructure);
         if (!ei) {
             ei = parseEmbType(elt, ignoreStructure);
         }
@@ -212,7 +212,7 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
         entryInfo.propertyType = TypeInfo::Private::unorderedArray(ei);
         return true;
     } else if (tagName == "alt") {
-        const TypeInfo* ei = parseAttType(elt, ignoreStructure);
+        const TypeInfo *ei = parseAttType(elt, ignoreStructure);
         if (!ei) {
             ei = parseEmbType(elt, ignoreStructure);
         }
@@ -242,7 +242,7 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
     return false;
 }
 
-const TypeInfo* Schema::Private::parseAttType(QDomElement& elt, bool ignoreStructure)
+const TypeInfo *Schema::Private::parseAttType(QDomElement &elt, bool ignoreStructure)
 {
     if (!elt.hasAttribute("type")) {
         return 0;
@@ -265,7 +265,7 @@ const TypeInfo* Schema::Private::parseAttType(QDomElement& elt, bool ignoreStruc
     return 0;
 }
 
-const TypeInfo* Schema::Private::parseEmbType(QDomElement& elt, bool ignoreStructure)
+const TypeInfo *Schema::Private::parseEmbType(QDomElement &elt, bool ignoreStructure)
 {
     dbgImage << "Parse embbedded type for " << elt.tagName();
     QDomNode n = elt.firstChild();
@@ -292,9 +292,9 @@ const TypeInfo* Schema::Private::parseEmbType(QDomElement& elt, bool ignoreStruc
     return 0;
 }
 
-const TypeInfo* Schema::Private::parseChoice(QDomElement& elt)
+const TypeInfo *Schema::Private::parseChoice(QDomElement &elt)
 {
-    const TypeInfo* choiceType = parseAttType(elt, true);
+    const TypeInfo *choiceType = parseAttType(elt, true);
     TypeInfo::PropertyType propertyType;
     if (elt.tagName() == "openedchoice") {
         propertyType = TypeInfo::OpenedChoice;
@@ -310,7 +310,9 @@ const TypeInfo* Schema::Private::parseChoice(QDomElement& elt)
             EntryInfo info;
             QString name;
             if (parseEltType(e, info, name, true, true)) {
-                if (! choiceType) choiceType = info.propertyType;
+                if (! choiceType) {
+                    choiceType = info.propertyType;
+                }
                 if (choiceType == info.propertyType) {
                     QString text = e.text();
                     QVariant var = text;
@@ -331,12 +333,12 @@ const TypeInfo* Schema::Private::parseChoice(QDomElement& elt)
 }
 
 Schema::Schema()
-        : d(new Private)
+    : d(new Private)
 {
 }
 
-Schema::Schema(const QString & _uri, const QString & _ns)
-        : d(new Private)
+Schema::Schema(const QString &_uri, const QString &_ns)
+    : d(new Private)
 {
     d->uri = _uri;
     d->prefix = _ns;
@@ -349,7 +351,7 @@ Schema::~Schema()
     delete d;
 }
 
-const TypeInfo* Schema::propertyType(const QString& _propertyName) const
+const TypeInfo *Schema::propertyType(const QString &_propertyName) const
 {
     if (d->types.contains(_propertyName)) {
         return d->types.value(_propertyName).propertyType;
@@ -357,11 +359,10 @@ const TypeInfo* Schema::propertyType(const QString& _propertyName) const
     return 0;
 }
 
-const TypeInfo* Schema::structure(const QString& _structureName) const
+const TypeInfo *Schema::structure(const QString &_structureName) const
 {
     return d->structures.value(_structureName);
 }
-
 
 QString Schema::uri() const
 {
@@ -373,7 +374,7 @@ QString Schema::prefix() const
     return d->prefix;
 }
 
-QString Schema::generateQualifiedName(const QString & name) const
+QString Schema::generateQualifiedName(const QString &name) const
 {
     dbgImage << "generateQualifiedName for " << name;
     Q_ASSERT(!name.isEmpty() && !name.isNull());

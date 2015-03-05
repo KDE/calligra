@@ -34,74 +34,75 @@
  * FractionElement holds two child elements that are the numerator and the
  * denominator.
  */
-class KOFORMULA_EXPORT FractionElement : public FixedElement {
+class KOFORMULA_EXPORT FractionElement : public FixedElement
+{
 public:
     /// The standard constructor
     explicit FractionElement(BasicElement *parent = 0);
-   
-    /// The standard destructor 
+
+    /// The standard destructor
     ~FractionElement();
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint(QPainter &painter, AttributeManager *am);
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout(const AttributeManager *am);
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
+    const QList<BasicElement *> childElements() const;
 
     /// inherited from BasicElement
-    virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
+    virtual bool replaceChild(BasicElement *oldelement, BasicElement *newelement);
 
     /// inherited from BasicElement
-    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
+    virtual bool setCursorTo(FormulaCursor &cursor, QPointF point);
 
     /// inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
-    
+    virtual bool moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor);
+
     /// inherited from BasicElement
     virtual int endPosition() const;
-    
+
     /// inherited from BasicElement
-    virtual int positionOfChild(BasicElement* child) const;
-    
+    virtual int positionOfChild(BasicElement *child) const;
+
     /// inherited from BasicElement
 //     virtual QLineF cursorLine(int position) const;
-    
+
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const;
-    
+    QString attributesDefaultValue(const QString &attribute) const;
+
     /// @return The element's ElementType
     ElementType elementType() const;
 
-    virtual QList<BasicElement*> elementsBetween(int pos1, int pos2) const;
-    
+    virtual QList<BasicElement *> elementsBetween(int pos1, int pos2) const;
+
 protected:
     /// Read all content from the node - reimplemented by child elements
-    bool readMathMLContent( const KoXmlElement& parent );
+    bool readMathMLContent(const KoXmlElement &parent);
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;   
+    void writeMathMLContent(KoXmlWriter *writer, const QString &ns) const;
 
 private:
     /// Layout the fraction in a bevelled way
-    void layoutBevelledFraction( const AttributeManager* am );
+    void layoutBevelledFraction(const AttributeManager *am);
 
     /// The element representing the fraction's numerator
-    RowElement* m_numerator;
+    RowElement *m_numerator;
 
-    /// The element representing the fraction's denominator 
-    RowElement* m_denominator;
+    /// The element representing the fraction's denominator
+    RowElement *m_denominator;
 
     /// The line that separates the denominator and the numerator
     QLineF m_fractionLine;

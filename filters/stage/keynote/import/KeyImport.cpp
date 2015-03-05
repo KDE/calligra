@@ -46,26 +46,22 @@ public:
     {
         OdpGenerator collector;
         StringDocumentHandler stylesHandler, contentHandler, manifestHandler, settingsHandler;
-        if (isFlat)
+        if (isFlat) {
             collector.addDocumentHandler(&contentHandler, ODF_FLAT_XML);
-        else
-        {
+        } else {
             collector.addDocumentHandler(&contentHandler, ODF_CONTENT_XML);
             collector.addDocumentHandler(&manifestHandler, ODF_MANIFEST_XML);
             collector.addDocumentHandler(&settingsHandler, ODF_SETTINGS_XML);
             collector.addDocumentHandler(&stylesHandler, ODF_STYLES_XML);
         }
-        try
-        {
-            if (!EtonyekDocument::parse(&input, &collector))
+        try {
+            if (!EtonyekDocument::parse(&input, &collector)) {
                 return false;
-        }
-        catch (...)
-        {
+            }
+        } catch (...) {
             return false;
         }
-        if (isFlat)
-        {
+        if (isFlat) {
             printf("%s\n", contentHandler.cstr());
             return true;
         }
@@ -75,15 +71,16 @@ public:
                 !writeChildFile("META-INF/manifest.xml", manifestHandler.cstr()) ||
                 !writeChildFile("content.xml", contentHandler.cstr()) ||
                 !writeChildFile("settings.xml", settingsHandler.cstr()) ||
-                !writeChildFile("styles.xml", stylesHandler.cstr()))
+                !writeChildFile("styles.xml", stylesHandler.cstr())) {
             return false;
+        }
 
-        librevenge::RVNGStringVector objects=collector.getObjectNames();
-        for (unsigned i=0; i<objects.size(); ++i)
-        {
+        librevenge::RVNGStringVector objects = collector.getObjectNames();
+        for (unsigned i = 0; i < objects.size(); ++i) {
             StringDocumentHandler objectHandler;
-            if (collector.getObjectContent(objects[i], &objectHandler))
+            if (collector.getObjectContent(objects[i], &objectHandler)) {
                 writeChildFile(objects[i].cstr(), objectHandler.cstr());
+            }
         }
         return true;
     }
@@ -94,12 +91,11 @@ public:
     }
 };
 
-
 K_PLUGIN_FACTORY(KeyImportFactory, registerPlugin<KeyImport>();)
 K_EXPORT_PLUGIN(KeyImportFactory("calligrafilters"))
 
-KeyImport::KeyImport(QObject* parent, const QVariantList&)
-        : KoFilter(parent)
+KeyImport::KeyImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
@@ -107,10 +103,11 @@ KeyImport::~KeyImport()
 {
 }
 
-KoFilter::ConversionStatus KeyImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus KeyImport::convert(const QByteArray &from, const QByteArray &to)
 {
-    if (from != "application/x-iwork-keynote-sffkey" || to != KoOdf::mimeType(KoOdf::Presentation))
+    if (from != "application/x-iwork-keynote-sffkey" || to != KoOdf::mimeType(KoOdf::Presentation)) {
         return KoFilter::NotImplemented;
+    }
 
     QByteArray inputFile = m_chain->inputFile().toLocal8Bit();
     QByteArray outputFile = m_chain->outputFile().toLocal8Bit();
@@ -118,32 +115,29 @@ KoFilter::ConversionStatus KeyImport::convert(const QByteArray& from, const QByt
     OdpOutputFileHelper helper(outputFile.constData(), 0);
 
     shared_ptr<librevenge::RVNGInputStream> input;
-    if (librevenge::RVNGDirectoryStream::isDirectory(inputFile.constData()))
+    if (librevenge::RVNGDirectoryStream::isDirectory(inputFile.constData())) {
         input.reset(new librevenge::RVNGDirectoryStream(inputFile.constData()));
-    else
+    } else {
         input.reset(new librevenge::RVNGFileStream(inputFile.constData()));
+    }
 
     EtonyekDocument::Type type = EtonyekDocument::TYPE_UNKNOWN;
     const EtonyekDocument::Confidence confidence = helper.isSupportedFormat(*input, &type);
-    if ((EtonyekDocument::CONFIDENCE_NONE == confidence) || (EtonyekDocument::TYPE_KEYNOTE != type))
-    {
+    if ((EtonyekDocument::CONFIDENCE_NONE == confidence) || (EtonyekDocument::TYPE_KEYNOTE != type)) {
         fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Keynote Document.\n");
         return KoFilter::ParsingError;
     }
 
-    if (EtonyekDocument::CONFIDENCE_SUPPORTED_PART == confidence)
-    {
+    if (EtonyekDocument::CONFIDENCE_SUPPORTED_PART == confidence) {
         input.reset(librevenge::RVNGDirectoryStream::createForParent(inputFile.constData()));
 
-        if (EtonyekDocument::CONFIDENCE_EXCELLENT != helper.isSupportedFormat(*input))
-        {
+        if (EtonyekDocument::CONFIDENCE_EXCELLENT != helper.isSupportedFormat(*input)) {
             fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Keynote Document.\n");
             return KoFilter::ParsingError;
         }
     }
 
-    if (!helper.convertDocument(*input, outputFile.constData()))
-    {
+    if (!helper.convertDocument(*input, outputFile.constData())) {
         fprintf(stderr, "ERROR : Couldn't convert the document\n");
         return KoFilter::ParsingError;
     }

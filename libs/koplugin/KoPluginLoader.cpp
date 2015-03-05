@@ -27,7 +27,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-
 class KoPluginLoader::Private
 {
 public:
@@ -35,7 +34,7 @@ public:
 };
 
 KoPluginLoader::KoPluginLoader()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -44,19 +43,19 @@ KoPluginLoader::~KoPluginLoader()
     delete d;
 }
 
-KoPluginLoader* KoPluginLoader::instance()
+KoPluginLoader *KoPluginLoader::instance()
 {
     K_GLOBAL_STATIC(KoPluginLoader, s_instance)
     return s_instance;
 }
 
-void KoPluginLoader::load(const QString & serviceType, const QString & versionString, const PluginsConfig &config, QObject *owner)
+void KoPluginLoader::load(const QString &serviceType, const QString &versionString, const PluginsConfig &config, QObject *owner)
 {
     // Don't load the same plugins again
     if (d->loadedServiceTypes.contains(serviceType)) {
         return;
     }
-    kDebug( 30003 ) <<"KoPluginLoader::load" << serviceType;
+    kDebug(30003) << "KoPluginLoader::load" << serviceType;
     d->loadedServiceTypes << serviceType;
     QString query = QString::fromLatin1("(Type == 'Service')");
     if (!versionString.isEmpty()) {
@@ -80,7 +79,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         if (firstStart) {
             configChanged = true;
         }
-        foreach(KSharedPtr<KService> service, offers) {
+        foreach (KSharedPtr<KService> service, offers) {
             const QString pluginName = service->property(QLatin1String("X-KDE-PluginInfo-Name"), QVariant::String).toString();
             if (pluginName.isEmpty()) {
                 kWarning(30003) << "Loading plugin" << service->name() << "failed, has no X-KDE-PluginInfo-Name.";
@@ -100,7 +99,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     }
 
     QMap<QString, KSharedPtr<KService> > serviceNames;
-    foreach(KSharedPtr<KService> service, plugins) {
+    foreach (KSharedPtr<KService> service, plugins) {
         if (serviceNames.contains(service->name())) { // duplicate
             QVariant pluginVersion2 = service->property("X-Flake-PluginVersion", QVariant::Int);
             if (pluginVersion2.isNull()) { // just take the first one found...
@@ -116,9 +115,9 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     }
 
     QList<QString> whiteList;
-    foreach(KSharedPtr<KService> service, serviceNames) {
+    foreach (KSharedPtr<KService> service, serviceNames) {
         QString error;
-        QObject * plugin = service->createInstance<QObject>(owner ? owner : this, QVariantList(), &error);
+        QObject *plugin = service->createInstance<QObject>(owner ? owner : this, QVariantList(), &error);
         if (plugin) {
             whiteList << service->property(QLatin1String("X-KDE-PluginInfo-Name"), QVariant::String).toString();
             kDebug(30003) << "Loaded plugin" << service->name() << owner;

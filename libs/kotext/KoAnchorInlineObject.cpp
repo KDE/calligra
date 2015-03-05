@@ -114,8 +114,8 @@ void KoAnchorInlineObject::resize(const QTextDocument *document, QTextInlineObje
                 object.setDescent(0);
                 break;
             case KoShapeAnchor::VMiddle:
-                object.setAscent(d->parent->shape()->size().height()/2);
-                object.setDescent(d->parent->shape()->size().height()/2);
+                object.setAscent(d->parent->shape()->size().height() / 2);
+                object.setDescent(d->parent->shape()->size().height() / 2);
                 break;
             case KoShapeAnchor::VBottom:
                 object.setAscent(0);
@@ -128,16 +128,16 @@ void KoAnchorInlineObject::resize(const QTextDocument *document, QTextInlineObje
             qreal boundTop = fm.ascent();
             switch (d->parent->verticalPos()) {
             case KoShapeAnchor::VFromTop:
-                 object.setAscent(qMax((qreal) 0, -offset.y()));
-                 object.setDescent(qMax((qreal) 0, d->parent->shape()->size().height() + offset.y()));
-                 break;
+                object.setAscent(qMax((qreal) 0, -offset.y()));
+                object.setDescent(qMax((qreal) 0, d->parent->shape()->size().height() + offset.y()));
+                break;
             case KoShapeAnchor::VTop:
                 object.setAscent(boundTop);
                 object.setDescent(qMax((qreal) 0, d->parent->shape()->size().height() - boundTop));
                 break;
             case KoShapeAnchor::VMiddle:
-                object.setAscent(d->parent->shape()->size().height()/2);
-                object.setDescent(d->parent->shape()->size().height()/2);
+                object.setAscent(d->parent->shape()->size().height() / 2);
+                object.setDescent(d->parent->shape()->size().height() / 2);
                 break;
             case KoShapeAnchor::VBottom:
                 object.setAscent(0);
@@ -156,7 +156,7 @@ void KoAnchorInlineObject::resize(const QTextDocument *document, QTextInlineObje
     }
 }
 
-void KoAnchorInlineObject::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, const QTextInlineObject &, int , const QTextCharFormat &)
+void KoAnchorInlineObject::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, const QTextInlineObject &, int, const QTextCharFormat &)
 {
 }
 

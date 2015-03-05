@@ -59,7 +59,7 @@ PSDLoader::~PSDLoader()
 {
 }
 
-KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
+KisImageBuilder_Result PSDLoader::decode(const KUrl &uri)
 {
     // open the file
     QFile f(uri.toLocalFile());
@@ -105,27 +105,27 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
     // Get the right colorspace
     QPair<QString, QString> colorSpaceId = psd_colormode_to_colormodelid(header.colormode,
-                                                                         header.channelDepth);
+                                           header.channelDepth);
     if (colorSpaceId.first.isNull()) {
         dbgFile << "Unsupported colorspace" << header.colormode << header.channelDepth;
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
 
     // Get the icc profile!
-    const KoColorProfile* profile = 0;
+    const KoColorProfile *profile = 0;
     if (resourceSection.resources.contains(PSDResourceSection::ICC_PROFILE)) {
-        ICC_PROFILE_1039 *iccProfileData = dynamic_cast<ICC_PROFILE_1039*>(resourceSection.resources[PSDResourceSection::ICC_PROFILE]->resource);
-        if (iccProfileData ) {
+        ICC_PROFILE_1039 *iccProfileData = dynamic_cast<ICC_PROFILE_1039 *>(resourceSection.resources[PSDResourceSection::ICC_PROFILE]->resource);
+        if (iccProfileData) {
             profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceId.first,
-                                                                       colorSpaceId.second,
-                                                                       iccProfileData->icc);
+                      colorSpaceId.second,
+                      iccProfileData->icc);
             dbgFile  << "Loaded ICC profile" << profile->name();
             delete resourceSection.resources.take(PSDResourceSection::ICC_PROFILE);
         }
     }
 
     // Create the colorspace
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile);
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile);
     if (!cs) {
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
@@ -137,7 +137,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
     // set the correct resolution
     if (resourceSection.resources.contains(PSDResourceSection::RESN_INFO)) {
-        RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDResourceSection::RESN_INFO]->resource);
+        RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005 *>(resourceSection.resources[PSDResourceSection::RESN_INFO]->resource);
         if (resInfo) {
             m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
             // let's skip the unit for now; we can only set that on the KisDocument, and krita doesn't use it.
@@ -146,18 +146,17 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     }
 
     // Preserve all the annotations
-    foreach(PSDResourceBlock *resourceBlock, resourceSection.resources.values()) {
+    foreach (PSDResourceBlock *resourceBlock, resourceSection.resources.values()) {
         m_image->addAnnotation(resourceBlock);
     }
 
     // Preserve the duotone colormode block for saving back to psd
     if (header.colormode == DuoTone) {
         KisAnnotationSP annotation = new KisAnnotation("DuotoneColormodeBlock",
-                                                       i18n("Duotone Colormode Block"),
-                                                       colorModeBlock.data);
+                i18n("Duotone Colormode Block"),
+                colorModeBlock.data);
         m_image->addAnnotation(annotation);
     }
-
 
     // Read the projection into our single layer. Since we only read the projection when
     // we have just one layer, we don't need to later on apply the alpha channel of the
@@ -173,8 +172,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
 
         m_image->addNode(layer, m_image->rootLayer());
 
-    }
-    else {
+    } else {
 
         enum SectionType {
             OTHER = 0,
@@ -187,9 +185,9 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         groupStack.push(m_image->rootLayer());
 
         // read the channels for the various layers
-        for(int i = 0; i < layerSection.nLayers; ++i) {
+        for (int i = 0; i < layerSection.nLayers; ++i) {
 
-            PSDLayerRecord* layerRecord = layerSection.layers.at(i);
+            PSDLayerRecord *layerRecord = layerSection.layers.at(i);
             dbgFile << "Going to read channels for layer" << i << layerRecord->layerName;
             KisLayerSP newLayer;
             QStringList infoBlocks = layerRecord->infoBlocks.keys();
@@ -207,15 +205,13 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                     m_image->addNode(groupLayer, groupStack.top());
                     groupStack.push(groupLayer);
                     newLayer = groupLayer;
-                }
-                else if ((type == OPEN_FOLDER || type == CLOSED_FOLDER) && !groupStack.isEmpty()) {
+                } else if ((type == OPEN_FOLDER || type == CLOSED_FOLDER) && !groupStack.isEmpty()) {
                     KisGroupLayerSP groupLayer = groupStack.pop();
                     groupLayer->setName(layerRecord->layerName);
                     groupLayer->setVisible(layerRecord->visible);
                     newLayer = groupLayer;
                 }
-            }
-            else {
+            } else {
                 KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
                 layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
 
@@ -225,8 +221,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                 }
                 if (!groupStack.isEmpty()) {
                     m_image->addNode(layer, groupStack.top());
-                }
-                else {
+                } else {
                     m_image->addNode(layer, m_image->root());
                 }
                 layer->setVisible(layerRecord->visible);
@@ -250,11 +245,11 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     return KisImageBuilder_RESULT_OK;
 }
 
-
-KisImageBuilder_Result PSDLoader::buildImage(const KUrl& uri)
+KisImageBuilder_Result PSDLoader::buildImage(const KUrl &uri)
 {
-    if (uri.isEmpty())
+    if (uri.isEmpty()) {
         return KisImageBuilder_RESULT_NO_URI;
+    }
 
     if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, qApp->activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
@@ -266,14 +261,13 @@ KisImageBuilder_Result PSDLoader::buildImage(const KUrl& uri)
 
     if (KIO::NetAccess::download(uri, tmpFile, qApp->activeWindow())) {
         KUrl uriTF;
-        uriTF.setPath( tmpFile );
+        uriTF.setPath(tmpFile);
         result = decode(uriTF);
         KIO::NetAccess::removeTempFile(tmpFile);
     }
 
     return result;
 }
-
 
 KisImageWSP PSDLoader::image()
 {

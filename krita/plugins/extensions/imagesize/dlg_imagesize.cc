@@ -35,17 +35,17 @@ static const QString pixelsInchStr(i18n("Pixels/Inch"));
 static const QString pixelsCentimeterStr(i18n("Pixels/Centimeter"));
 
 DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolution)
-        : KDialog(parent)
-        , m_aspectRatio(((double) width) / height)
-        , m_originalWidth(width)
-        , m_originalHeight(height)
-        , m_width(width)
-        , m_height(height)
-        , m_printWidth(width / resolution)
-        , m_printHeight(height / resolution)
-        , m_originalResolution(resolution)
-        , m_resolution(resolution)
-        , m_keepAspect(true)        
+    : KDialog(parent)
+    , m_aspectRatio(((double) width) / height)
+    , m_originalWidth(width)
+    , m_originalHeight(height)
+    , m_width(width)
+    , m_height(height)
+    , m_printWidth(width / resolution)
+    , m_printHeight(height / resolution)
+    , m_originalResolution(resolution)
+    , m_resolution(resolution)
+    , m_keepAspect(true)
 {
     setCaption(i18n("Scale To New Size"));
     setButtons(Ok | Cancel);
@@ -365,10 +365,11 @@ void DlgImageSize::slotAspectChanged(bool keep)
 
 void DlgImageSize::slotPrintResolutionChanged(double r)
 {
-    if (m_page->printResolutionUnit->currentText() == pixelsInchStr)
+    if (m_page->printResolutionUnit->currentText() == pixelsInchStr) {
         m_resolution = KoUnit::convertFromUnitToUnit(r, KoUnit(KoUnit::Pixel), KoUnit(KoUnit::Inch));
-    else
+    } else {
         m_resolution = KoUnit::convertFromUnitToUnit(r, KoUnit(KoUnit::Pixel), KoUnit(KoUnit::Centimeter));
+    }
 
     if (m_page->adjustPrintSizeSeparatelyCkb->isChecked()) {
         m_printWidth = m_width / m_resolution;

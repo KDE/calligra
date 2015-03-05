@@ -81,7 +81,7 @@ void CAuOutlinerWidget::sectionClicked(QModelIndex idx)
 {
     if (idx.column() == 0) {
         int position = static_cast<KoSection *>(
-            m_sectionTree->model()->data(idx, Qt::UserRole + 1).value<void *>())->bounds().first;
+                           m_sectionTree->model()->data(idx, Qt::UserRole + 1).value<void *>())->bounds().first;
 
         KoTextDocument(m_document).textEditor()->setPosition(position); // placing cursor
         m_canvas->view()->setFocus(); // passing focus
@@ -91,7 +91,7 @@ void CAuOutlinerWidget::sectionClicked(QModelIndex idx)
     }
 }
 
-void CAuOutlinerWidget::setCanvas(KWCanvas* canvas)
+void CAuOutlinerWidget::setCanvas(KWCanvas *canvas)
 {
     m_document = canvas->document()->mainFrameSet()->document();
     if (m_layout) {
@@ -151,12 +151,12 @@ void CAuOutlinerWidget::updateSelection()
         m_editButton->setEnabled(false);
     } else {
         QModelIndexList lst = m_sectionTree->model()->match(
-            m_sectionTree->model()->index(0,0),
-            Qt::UserRole + 1,
-            qVariantFromValue(static_cast<void *>(sec)),
-            1,
-            Qt::MatchRecursive
-        );
+                                  m_sectionTree->model()->index(0, 0),
+                                  Qt::UserRole + 1,
+                                  qVariantFromValue(static_cast<void *>(sec)),
+                                  1,
+                                  Qt::MatchRecursive
+                              );
         // need next "if", because sometimes this is called before updateData()
         // is called, so new section can not be found in model
         if (lst.empty()) {
@@ -170,8 +170,8 @@ void CAuOutlinerWidget::updateSelection()
 void CAuOutlinerWidget::sectionEditClicked()
 {
     KoSection *sec = static_cast<KoSection *>(
-        m_sectionTree->model()->itemData(m_sectionTree->currentIndex())[Qt::UserRole + 1].value<void *>()
-    );
+                         m_sectionTree->model()->itemData(m_sectionTree->currentIndex())[Qt::UserRole + 1].value<void *>()
+                     );
 
     CAuDocument *caudoc = dynamic_cast<CAuDocument *>(m_canvas->shapeController()->resourceManager()->odfDocument());
     caudoc->metaManager()->callEditor(sec);

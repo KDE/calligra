@@ -38,7 +38,7 @@ class DocxXmlEndnoteReader : public DocxXmlDocumentReader
 public:
     explicit DocxXmlEndnoteReader(KoOdfWriters *writers);
     virtual ~DocxXmlEndnoteReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
 protected:
     KoFilter::ConversionStatus read_endnotes();
@@ -47,7 +47,7 @@ protected:
 private:
     void init();
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif //DOCXXMLENDNOTEREADER_H

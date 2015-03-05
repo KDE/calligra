@@ -35,27 +35,29 @@
 #include <QThread>
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-
 class KisTextBrushesPipe : public KisBrushesPipe<KisGbrBrush>
 {
 public:
-    KisTextBrushesPipe() {
+    KisTextBrushesPipe()
+    {
         m_charIndex = 0;
         m_currentBrushIndex = 0;
     }
 
     KisTextBrushesPipe(const KisTextBrushesPipe &rhs)
-        : KisBrushesPipe<KisGbrBrush>(rhs) {
+        : KisBrushesPipe<KisGbrBrush>(rhs)
+    {
         m_brushesMap.clear();
 
-        QMapIterator<QChar, KisGbrBrush*> iter(rhs.m_brushesMap);
+        QMapIterator<QChar, KisGbrBrush *> iter(rhs.m_brushesMap);
         while (iter.hasNext()) {
             iter.next();
             m_brushesMap.insert(iter.key(), iter.value());
         }
     }
 
-    void setText(const QString &text, const QFont &font) {
+    void setText(const QString &text, const QFont &font)
+    {
         m_text = text;
         m_charIndex = 0;
 
@@ -73,7 +75,8 @@ public:
         }
     }
 
-    static QImage renderChar(const QString& text, const QFont &font) {
+    static QImage renderChar(const QString &text, const QFont &font)
+    {
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
         QWidget *focusWidget = qApp->focusWidget();
         if (focusWidget) {
@@ -106,23 +109,27 @@ public:
         return renderedChar;
     }
 
-    void clear() {
+    void clear()
+    {
         m_brushesMap.clear();
         KisBrushesPipe<KisGbrBrush>::clear();
     }
 
-    KisGbrBrush* firstBrush() const {
+    KisGbrBrush *firstBrush() const
+    {
         Q_ASSERT(m_text.size() > 0);
         Q_ASSERT(m_brushesMap.size() > 0);
         return m_brushesMap.value(m_text.at(0));
     }
 
 protected:
-    int chooseNextBrush(const KisPaintInformation& info) const {
+    int chooseNextBrush(const KisPaintInformation &info) const
+    {
         Q_UNUSED(info);
         return m_currentBrushIndex;
     }
-    void updateBrushIndexes() {
+    void updateBrushIndexes()
+    {
         m_charIndex++;
         if (m_charIndex >= m_text.size()) {
             m_charIndex = 0;
@@ -135,12 +142,11 @@ protected:
     }
 
 private:
-    QMap<QChar, KisGbrBrush*> m_brushesMap;
+    QMap<QChar, KisGbrBrush *> m_brushesMap;
     QString m_text;
     int m_charIndex;
     int m_currentBrushIndex;
 };
-
 
 KisTextBrush::KisTextBrush()
     : m_brushesPipe(new KisTextBrushesPipe())
@@ -169,7 +175,7 @@ bool KisTextBrush::pipeMode() const
     return brushType() == PIPE_MASK;
 }
 
-void KisTextBrush::setText(const QString& txt)
+void KisTextBrush::setText(const QString &txt)
 {
     m_text = txt;
 }
@@ -179,7 +185,7 @@ QString KisTextBrush::text(void) const
     return m_text;
 }
 
-void KisTextBrush::setFont(const QFont& font)
+void KisTextBrush::setFont(const QFont &font)
 {
     m_font = font;
 }
@@ -194,27 +200,25 @@ void KisTextBrush::notifyCachedDabPainted()
     m_brushesPipe->notifyCachedDabPainted();
 }
 
-void KisTextBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation, double scaleX, double scaleY, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
+void KisTextBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation *coloringInformation, double scaleX, double scaleY, double angle, const KisPaintInformation &info, double subPixelX, double subPixelY, qreal softnessFactor) const
 {
     if (brushType() == MASK) {
         KisBrush::generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
-    }
-    else { /* if (brushType() == PIPE_MASK)*/
+    } else { /* if (brushType() == PIPE_MASK)*/
         m_brushesPipe->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
     }
 }
 
-KisFixedPaintDeviceSP KisTextBrush::paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const
+KisFixedPaintDeviceSP KisTextBrush::paintDevice(const KoColorSpace *colorSpace, double scale, double angle, const KisPaintInformation &info, double subPixelX, double subPixelY) const
 {
     if (brushType() == MASK) {
         return KisBrush::paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
-    }
-    else { /* if (brushType() == PIPE_MASK)*/
+    } else { /* if (brushType() == PIPE_MASK)*/
         return m_brushesPipe->paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
     }
 }
 
-void KisTextBrush::toXML(QDomDocument& doc, QDomElement& e) const
+void KisTextBrush::toXML(QDomDocument &doc, QDomElement &e) const
 {
     Q_UNUSED(doc);
 
@@ -229,12 +233,11 @@ void KisTextBrush::toXML(QDomDocument& doc, QDomElement& e) const
 void KisTextBrush::updateBrush()
 {
     Q_ASSERT((brushType() == PIPE_MASK) || (brushType() == MASK));
-    
+
     if (brushType() == PIPE_MASK) {
         m_brushesPipe->setText(m_text, m_font);
         setBrushTipImage(m_brushesPipe->firstBrush()->brushTipImage());
-    }
-    else { /* if (brushType() == MASK)*/
+    } else { /* if (brushType() == MASK)*/
         setBrushTipImage(KisTextBrushesPipe::renderChar(m_text, m_font));
     }
 
@@ -242,19 +245,19 @@ void KisTextBrush::updateBrush()
     setValid(true);
 }
 
-quint32 KisTextBrush::brushIndex(const KisPaintInformation& info) const
+quint32 KisTextBrush::brushIndex(const KisPaintInformation &info) const
 {
     return brushType() == MASK ? 0 : 1 + m_brushesPipe->brushIndex(info);
 }
 
-qint32 KisTextBrush::maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const
+qint32 KisTextBrush::maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation &info) const
 {
     return brushType() == MASK ?
            KisBrush::maskWidth(scale, angle, subPixelX, subPixelY, info) :
            m_brushesPipe->maskWidth(scale, angle, subPixelX, subPixelY, info);
 }
 
-qint32 KisTextBrush::maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const
+qint32 KisTextBrush::maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation &info) const
 {
     return brushType() == MASK ?
            KisBrush::maskHeight(scale, angle, subPixelX, subPixelY, info) :
@@ -279,7 +282,7 @@ void KisTextBrush::setSpacing(double _spacing)
     m_brushesPipe->setSpacing(_spacing);
 }
 
-KisBrush* KisTextBrush::clone() const
+KisBrush *KisTextBrush::clone() const
 {
     return new KisTextBrush(*this);
 }

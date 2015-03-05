@@ -41,7 +41,7 @@
 #include "Layout.h"
 #include "SectionContainer.h"
 
-Canvas::Canvas(View* view, RootSection* doc, Section* currentSection)
+Canvas::Canvas(View *view, RootSection *doc, Section *currentSection)
     : QWidget(view)
     , KoCanvasBase(currentSection ? currentSection->sectionContainer() : 0)
     , m_origin(0, 0)
@@ -61,13 +61,13 @@ Canvas::Canvas(View* view, RootSection* doc, Section* currentSection)
     setAutoFillBackground(true);
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
-    if(currentSection) {
+    if (currentSection) {
 
-        QList<KoShape*> shapes;
+        QList<KoShape *> shapes;
         shapes.push_back(currentSection->sectionContainer()->layer());
         shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
 
-        KoShapeLayer* layer = currentSection->sectionContainer()->layer();
+        KoShapeLayer *layer = currentSection->sectionContainer()->layer();
         shapeManager()->selection()->setActiveLayer(layer);
 
         // Make sure the canvas is enabled
@@ -97,12 +97,12 @@ void Canvas::addCommand(KUndo2Command *command)
     updateOriginAndSize();
 }
 
-KoShapeManager * Canvas::shapeManager() const
+KoShapeManager *Canvas::shapeManager() const
 {
     return m_shapeManager;
 }
 
-void Canvas::updateCanvas(const QRectF& rc)
+void Canvas::updateCanvas(const QRectF &rc)
 {
     QRect clipRect(viewToWidget(viewConverter()->documentToView(rc).toRect()));
     clipRect.adjust(-2, -2, 2, 2);   // Resize to fit anti-aliasing
@@ -112,7 +112,7 @@ void Canvas::updateCanvas(const QRectF& rc)
     emit canvasUpdated();
 }
 
-KoViewConverter * Canvas::viewConverter() const
+KoViewConverter *Canvas::viewConverter() const
 {
     return m_view->zoomHandler();
 }
@@ -122,7 +122,7 @@ KoUnit Canvas::unit() const
     return KoUnit(KoUnit::Centimeter);
 }
 
-const QPoint & Canvas::documentOffset() const
+const QPoint &Canvas::documentOffset() const
 {
     return m_documentOffset;
 }
@@ -143,7 +143,7 @@ void Canvas::paintEvent(QPaintEvent *event)
 
     painter.translate(m_origin.x(), m_origin.y());
 
-    const KoViewConverter* converter = viewConverter();
+    const KoViewConverter *converter = viewConverter();
     shapeManager()->paint(painter, *converter, false);
     painter.setRenderHint(QPainter::Antialiasing, false);
 
@@ -160,7 +160,7 @@ void Canvas::mousePressEvent(QMouseEvent *event)
 {
     m_toolProxy->mousePressEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + m_documentOffset)));
 
-    if(!event->isAccepted() && event->button() == Qt::RightButton) {
+    if (!event->isAccepted() && event->button() == Qt::RightButton) {
         showContextMenu(event->globalPos(), toolProxy()->popupActionList());
     }
 
@@ -187,9 +187,9 @@ void Canvas::keyPressEvent(QKeyEvent *event)
     m_toolProxy->keyPressEvent(event);
 #if 0
 
-    if(! event->isAccepted()) {
+    if (! event->isAccepted()) {
         event->accept();
-        switch(event->key()) {
+        switch (event->key()) {
         case Qt::Key_Home:
             m_view->navigatePage(KoPageApp::PageFirst);
             break;
@@ -207,11 +207,11 @@ void Canvas::keyPressEvent(QKeyEvent *event)
             break;
         }
     }
-    if(! event->isAccepted()) {
-        if(event->key() == Qt::Key_Backtab
-                or(event->key() == Qt::Key_Tab && (event->modifiers() & Qt::ShiftModifier))) {
+    if (! event->isAccepted()) {
+        if (event->key() == Qt::Key_Backtab
+                or (event->key() == Qt::Key_Tab && (event->modifiers() & Qt::ShiftModifier))) {
             focusNextPrevChild(false);
-        } else if(event->key() == Qt::Key_Tab) {
+        } else if (event->key() == Qt::Key_Tab) {
             focusNextPrevChild(true);
         }
     }
@@ -223,12 +223,12 @@ void Canvas::keyReleaseEvent(QKeyEvent *event)
     m_toolProxy->keyReleaseEvent(event);
 }
 
-void Canvas::wheelEvent(QWheelEvent * event)
+void Canvas::wheelEvent(QWheelEvent *event)
 {
     m_toolProxy->wheelEvent(event, viewConverter()->viewToDocument(widgetToView(event->pos() + m_documentOffset)));
 }
 
-void Canvas::closeEvent(QCloseEvent * event)
+void Canvas::closeEvent(QCloseEvent *event)
 {
     event->ignore();
 }
@@ -254,20 +254,21 @@ void Canvas::inputMethodEvent(QInputMethodEvent *event)
     m_toolProxy->inputMethodEvent(event);
 }
 
-void Canvas::resizeEvent(QResizeEvent * event)
+void Canvas::resizeEvent(QResizeEvent *event)
 {
     emit sizeChanged(event->size());
     updateOriginAndSize();
 }
 
-void Canvas::showContextMenu(const QPoint& globalPos, const QList<QAction*>& actionList)
+void Canvas::showContextMenu(const QPoint &globalPos, const QList<QAction *> &actionList)
 {
     m_view->unplugActionList("toolproxy_action_list");
     m_view->plugActionList("toolproxy_action_list", actionList);
-    QMenu *menu = dynamic_cast<QMenu*>(m_view->factory()->container("default_canvas_popup", m_view));
+    QMenu *menu = dynamic_cast<QMenu *>(m_view->factory()->container("default_canvas_popup", m_view));
 
-    if(menu)
+    if (menu) {
         menu->exec(globalPos);
+    }
 }
 
 void Canvas::setBackgroundColor(const QColor &color)
@@ -280,25 +281,26 @@ void Canvas::setBackgroundColor(const QColor &color)
 
 void Canvas::updateOriginAndSize()
 {
-    if(m_view->activeSection()) {
+    if (m_view->activeSection()) {
         QRectF rect = m_view->activeSection()->layout()->boundingBox();
-        if(rect != m_oldDocumentRect) {
+        if (rect != m_oldDocumentRect) {
             m_oldDocumentRect = rect;
             emit(documentRect(rect));
             update();
         }
         QRect viewRect = viewConverter()->documentToView(rect).toRect();
-        if(m_oldViewDocumentRect != viewRect) {
+        if (m_oldViewDocumentRect != viewRect) {
             m_oldViewDocumentRect = viewRect;
             m_origin = -viewRect.topLeft();
-            KoCanvasController* controller = canvasController();
-            if(controller) {
+            KoCanvasController *controller = canvasController();
+            if (controller) {
                 // tell canvas controller the new document size in pixel
                 controller->updateDocumentSize(viewRect.size(), true);
                 // make sure the actual selection is visible
-                KoSelection * selection = m_shapeManager->selection();
-                if(selection->count())
+                KoSelection *selection = m_shapeManager->selection();
+                if (selection->count()) {
                     controller->ensureVisible(viewConverter()->documentToView(selection->boundingRect()));
+                }
                 updateOffset();
             }
         }
@@ -328,28 +330,28 @@ void Canvas::setCursor(const QCursor &cursor)
     QWidget::setCursor(cursor);
 }
 
-void Canvas::focusInEvent(QFocusEvent * event)
+void Canvas::focusInEvent(QFocusEvent *event)
 {
     QWidget::focusInEvent(event);
     emit(canvasReceivedFocus());
 }
 
-QPoint Canvas::widgetToView(const QPoint& p) const
+QPoint Canvas::widgetToView(const QPoint &p) const
 {
     return p - m_origin;
 }
 
-QRect Canvas::widgetToView(const QRect& r) const
+QRect Canvas::widgetToView(const QRect &r) const
 {
     return r.translated(- m_origin);
 }
 
-QPoint Canvas::viewToWidget(const QPoint& p) const
+QPoint Canvas::viewToWidget(const QPoint &p) const
 {
     return p + m_origin;
 }
 
-QRect Canvas::viewToWidget(const QRect& r) const
+QRect Canvas::viewToWidget(const QRect &r) const
 {
     return r.translated(m_origin);
 }

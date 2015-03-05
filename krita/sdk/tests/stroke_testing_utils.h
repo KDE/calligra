@@ -26,82 +26,82 @@
 #include "kis_stroke_strategy.h"
 #include "kis_resources_snapshot.h"
 
-
 class KisUndoStore;
 
+namespace utils
+{
 
-namespace utils {
+KisImageSP createImage(KisUndoStore *undoStore, const QSize &imageSize);
+KoCanvasResourceManager *createResourceManager(KisImageWSP image,
+        KisNodeSP node = 0,
+        const QString &presetFileName = "autobrush_300px.kpp");
 
-    KisImageSP createImage(KisUndoStore *undoStore, const QSize &imageSize);
-    KoCanvasResourceManager* createResourceManager(KisImageWSP image,
-                                             KisNodeSP node = 0,
-                                             const QString &presetFileName = "autobrush_300px.kpp");
+class StrokeTester
+{
+public:
+    StrokeTester(const QString &name, const QSize &imageSize, const QString &presetFileName = "autobrush_300px.kpp");
+    virtual ~StrokeTester();
 
-    class StrokeTester
+    void test();
+    void benchmark();
+
+    void setNumIterations(int value);
+    void setBaseFuzziness(int value);
+
+protected:
+    KisStrokeId strokeId()
     {
-    public:
-        StrokeTester(const QString &name, const QSize &imageSize, const QString &presetFileName = "autobrush_300px.kpp");
-        virtual ~StrokeTester();
+        return m_strokeId;
+    }
 
-        void test();
-        void benchmark();
+    virtual void modifyResourceManager(KoCanvasResourceManager *manager,
+                                       KisImageWSP image, int iteration);
 
-        void setNumIterations(int value);
-        void setBaseFuzziness(int value);
+    virtual void initImage(KisImageWSP image, KisNodeSP activeNode, int iteration);
 
-    protected:
-        KisStrokeId strokeId() {
-            return m_strokeId;
-        }
+    // overload
+    virtual void modifyResourceManager(KoCanvasResourceManager *manager,
+                                       KisImageWSP image);
 
-        virtual void modifyResourceManager(KoCanvasResourceManager *manager,
-                                           KisImageWSP image, int iteration);
+    // overload
+    virtual void initImage(KisImageWSP image, KisNodeSP activeNode);
 
-        virtual void initImage(KisImageWSP image, KisNodeSP activeNode, int iteration);
+    virtual KisStrokeStrategy *createStroke(bool indirectPainting,
+                                            KisResourcesSnapshotSP resources,
+                                            KisPainter *painter,
+                                            KisImageWSP image) = 0;
 
-        // overload
-        virtual void modifyResourceManager(KoCanvasResourceManager *manager,
-                                           KisImageWSP image);
+    virtual void addPaintingJobs(KisImageWSP image,
+                                 KisResourcesSnapshotSP resources,
+                                 KisPainter *painter, int iteration);
 
-        // overload
-        virtual void initImage(KisImageWSP image, KisNodeSP activeNode);
+    // overload
+    virtual void addPaintingJobs(KisImageWSP image,
+                                 KisResourcesSnapshotSP resources,
+                                 KisPainter *painter);
 
-        virtual KisStrokeStrategy* createStroke(bool indirectPainting,
-                                                KisResourcesSnapshotSP resources,
-                                                KisPainter *painter,
-                                                KisImageWSP image) = 0;
+private:
+    void testOneStroke(bool cancelled, bool indirectPainting,
+                       bool externalLayer, bool testUpdates = false);
 
-        virtual void addPaintingJobs(KisImageWSP image,
-                                     KisResourcesSnapshotSP resources,
-                                     KisPainter *painter, int iteration);
+    QImage doStroke(bool cancelled, bool indirectPainting,
+                    bool externalLayer, bool testUpdates = false,
+                    bool needQImage = true);
 
-        // overload
-        virtual void addPaintingJobs(KisImageWSP image,
-                                     KisResourcesSnapshotSP resources,
-                                     KisPainter *painter);
+    QString formatTestName(const QString &baseName, bool cancelled,
+                           bool indirectPainting, bool externalLayer);
+    QString referenceFile(const QString &testName);
+    QString dumpReferenceFile(const QString &testName);
+    QString resultFile(const QString &testName);
 
-    private:
-        void testOneStroke(bool cancelled, bool indirectPainting,
-                           bool externalLayer, bool testUpdates = false);
-
-        QImage doStroke(bool cancelled, bool indirectPainting,
-                        bool externalLayer, bool testUpdates = false,
-                        bool needQImage = true);
-
-        QString formatTestName(const QString &baseName, bool cancelled,
-                               bool indirectPainting, bool externalLayer);
-        QString referenceFile(const QString &testName);
-        QString dumpReferenceFile(const QString &testName);
-        QString resultFile(const QString &testName);
-
-    private:
-        KisStrokeId m_strokeId;
-        QString m_name;
-        QSize m_imageSize;
-        QString m_presetFilename;
-        int m_numIterations;
-        int m_baseFuzziness;
-    };
+private:
+    KisStrokeId m_strokeId;
+    QString m_name;
+    QSize m_imageSize;
+    QString m_presetFilename;
+    int m_numIterations;
+    int m_baseFuzziness;
+};
 }
 
 #endif /* __STROKE_TESTING_UTILS_H */

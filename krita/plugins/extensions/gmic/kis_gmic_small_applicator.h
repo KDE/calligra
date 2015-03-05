@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_GMIC_SMALL_APPLICATOR_H
 #define KIS_GMIC_SMALL_APPLICATOR_H
 
@@ -35,11 +34,11 @@ public:
     KisGmicSmallApplicator(QObject *parent = 0);
     ~KisGmicSmallApplicator();
 
-    void setProperties(const QRect& canvasRect,
-                       const QSize& previewSize,
+    void setProperties(const QRect &canvasRect,
+                       const QSize &previewSize,
                        KisNodeListSP layers,
-                       KisGmicFilterSetting * settings,
-                       const QByteArray& customCommands
+                       KisGmicFilterSetting *settings,
+                       const QByteArray &customCommands
                       );
 
     float getProgress() const;
@@ -49,20 +48,19 @@ Q_SIGNALS:
     void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
     void previewReady();
 
-
 protected:
     void run();
 
 private:
-    static KisNodeListSP createPreviewThumbnails(KisNodeListSP layers,const QSize &dstSize,const QRect &srcRect);
+    static KisNodeListSP createPreviewThumbnails(KisNodeListSP layers, const QSize &dstSize, const QRect &srcRect);
 
 private:
     QRect m_canvasRect;
     QSize m_previewSize;
     KisNodeListSP m_layers;
-    KisGmicFilterSetting * m_setting;
+    KisGmicFilterSetting *m_setting;
     QByteArray m_gmicCustomCommands;
-    float * m_progress;
+    float *m_progress;
     KisPaintDeviceSP m_preview;
     bool m_gmicFinishedSuccessfully;
 };

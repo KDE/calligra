@@ -34,7 +34,7 @@ CAImageProvider::~CAImageProvider()
 
 }
 
-QImage CAImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
+QImage CAImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
     if (m_images.contains(id)) {
         QImage image = m_images.value(id);
@@ -45,12 +45,12 @@ QImage CAImageProvider::requestImage(const QString& id, QSize* size, const QSize
     return QImage();
 }
 
-void CAImageProvider::addImage(const QString& id, const QImage& image)
+void CAImageProvider::addImage(const QString &id, const QImage &image)
 {
     m_images[id] = image;
 }
 
-bool CAImageProvider::containsId(const QString& id)
+bool CAImageProvider::containsId(const QString &id)
 {
     return m_images.contains(id);
 }

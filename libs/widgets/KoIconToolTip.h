@@ -26,15 +26,15 @@
 class KoIconToolTip: public KoItemToolTip
 {
 
-    public:
-        KoIconToolTip() {}
-        virtual ~KoIconToolTip() {}
+public:
+    KoIconToolTip() {}
+    virtual ~KoIconToolTip() {}
 
-    protected:
-        virtual QTextDocument *createDocument( const QModelIndex &index );
+protected:
+    virtual QTextDocument *createDocument(const QModelIndex &index);
 
-    private:
-        typedef KoItemToolTip super;
+private:
+    typedef KoItemToolTip super;
 };
 
 #endif // KOICONTOOLTIP_H

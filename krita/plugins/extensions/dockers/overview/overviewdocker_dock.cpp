@@ -31,8 +31,7 @@
 #include "kis_paint_device.h"
 #include "kis_signal_compressor.h"
 
-
-OverviewDockerDock::OverviewDockerDock( )
+OverviewDockerDock::OverviewDockerDock()
     : QDockWidget(i18n("Overview"))
     , m_zoomSlider(0)
     , m_canvas(0)
@@ -48,10 +47,11 @@ OverviewDockerDock::OverviewDockerDock( )
     setWidget(page);
 }
 
-void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
+void OverviewDockerDock::setCanvas(KoCanvasBase *canvas)
 {
-    if(m_canvas == canvas)
+    if (m_canvas == canvas) {
         return;
+    }
 
     setEnabled(canvas != 0);
 
@@ -66,7 +66,7 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
         m_zoomSlider = 0;
     }
 
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    m_canvas = dynamic_cast<KisCanvas2 *>(canvas);
 
     m_overviewWidget->setCanvas(canvas);
     if (m_canvas) {
@@ -81,6 +81,5 @@ void OverviewDockerDock::unsetCanvas()
     m_canvas = 0;
     m_overviewWidget->unsetCanvas();
 }
-
 
 #include "overviewdocker_dock.moc"

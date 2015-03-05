@@ -20,7 +20,6 @@
 
 #include <QTransform>
 
-
 KisTransformMaskParamsInterface::~KisTransformMaskParamsInterface()
 {
 }
@@ -33,10 +32,7 @@ KisTransformMaskParamsInterface::~KisTransformMaskParamsInterface()
 #include "kis_painter.h"
 #include "KoCompositeOpRegistry.h"
 
-
-
-struct KisDumbTransformMaskParams::Private
-{
+struct KisDumbTransformMaskParams::Private {
     Private() : isHidden(false) {}
 
     QTransform transform;
@@ -130,7 +126,7 @@ KisTransformMaskParamsInterfaceSP KisDumbTransformMaskParams::fromXML(const QDom
     }
 
     return KisTransformMaskParamsInterfaceSP(
-        new KisDumbTransformMaskParams(transform));
+               new KisDumbTransformMaskParams(transform));
 }
 
 void KisDumbTransformMaskParams::translate(const QPointF &offset)
@@ -151,7 +147,8 @@ void KisDumbTransformMaskParams::testingSetTransform(const QTransform &t)
 #include "kis_transform_mask_params_factory_registry.h"
 
 struct DumbParamsRegistrar {
-    DumbParamsRegistrar() {
+    DumbParamsRegistrar()
+    {
         KisTransformMaskParamsFactory f(KisDumbTransformMaskParams::fromXML);
         KisTransformMaskParamsFactoryRegistry::instance()->addFactory("dumbparams", f);
     }

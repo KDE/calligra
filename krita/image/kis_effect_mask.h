@@ -42,7 +42,7 @@ public:
     KisEffectMask();
 
     virtual ~KisEffectMask();
-    KisEffectMask(const KisEffectMask& rhs);
+    KisEffectMask(const KisEffectMask &rhs);
 
     QIcon icon() const;
 

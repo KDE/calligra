@@ -71,12 +71,12 @@
 #include <tchar.h>
 #endif
 
-
 #include <QDesktopWidget>
 
-KoApplication* KoApplication::KoApp = 0;
+KoApplication *KoApplication::KoApp = 0;
 
-namespace {
+namespace
+{
 const QTime appStartTime(QTime::currentTime());
 }
 
@@ -99,21 +99,21 @@ public:
     {
     }
 
-    ~ResetStarting()  {
+    ~ResetStarting()
+    {
         if (m_splash) {
 
             KConfigGroup cfg(KGlobal::config(), "SplashScreen");
             bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
             if (hideSplash) {
                 m_splash->hide();
-            }
-            else {
+            } else {
                 m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
                 QRect r(QPoint(), m_splash->size());
                 m_splash->move(QApplication::desktop()->screenGeometry().center() - r.center());
                 m_splash->setWindowTitle(qAppName());
-                foreach(QObject *o, m_splash->children()) {
-                    QWidget *w = qobject_cast<QWidget*>(o);
+                foreach (QObject *o, m_splash->children()) {
+                    QWidget *w = qobject_cast<QWidget *>(o);
                     if (w && w->isHidden()) {
                         w->setVisible(true);
                     }
@@ -146,8 +146,7 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
 #endif
 
 #ifdef Q_OS_MACX
-    if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )
-    {
+    if (QSysInfo::MacintoshVersion > QSysInfo::MV_10_8) {
         // fix Mac OS X 10.9 (mavericks) font issue
         // https://bugreports.qt-project.org/browse/QTBUG-32789
         QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
@@ -181,7 +180,7 @@ bool KoApplication::initHack()
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
-typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
+typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
 
 LPFN_ISWOW64PROCESS fnIsWow64Process;
 
@@ -194,12 +193,10 @@ BOOL isWow64()
     //and GetProcAddress to get a pointer to the function if available.
 
     fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
-        GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
+                           GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
 
-    if(NULL != fnIsWow64Process)
-    {
-        if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
-        {
+    if (NULL != fnIsWow64Process) {
+        if (!fnIsWow64Process(GetCurrentProcess(), &bIsWow64)) {
             //handle error
         }
     }
@@ -209,7 +206,6 @@ BOOL isWow64()
 
 bool KoApplication::start()
 {
-
 
 #if defined(Q_OS_WIN) || defined (Q_OS_MACX)
 #ifdef ENV32BIT
@@ -263,8 +259,8 @@ bool KoApplication::start()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
     if (entry.isEmpty()) {
         QMessageBox::critical(0, i18n("%1: Critical Error", applicationName()), i18n("Essential application components could not be found.\n"
-                                                                                    "This might be an installation issue.\n"
-                                                                                    "Try restarting or reinstalling."));
+                              "This might be an installation issue.\n"
+                              "Try restarting or reinstalling."));
         return false;
     }
 
@@ -286,7 +282,9 @@ bool KoApplication::start()
         if (ok) {
             dpiX = dpiValues.toInt(&ok);
             if (ok) {
-                if (!dpiY) dpiY = dpiX;
+                if (!dpiY) {
+                    dpiY = dpiX;
+                }
                 KoDpi::setDPI(dpiX, dpiY);
             }
         }
@@ -305,8 +303,9 @@ bool KoApplication::start()
         d->partList << part;
 
         if (!part) {
-            if (!errorMsg.isEmpty())
+            if (!errorMsg.isEmpty()) {
                 KMessageBox::error(0, errorMsg);
+            }
             return false;
         }
 
@@ -332,7 +331,9 @@ bool KoApplication::start()
             qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", doc->nativeFormatMimeType().constData());
         }
         QString extension = mime->property("X-KDE-NativeExtension").toString();
-        if (extension.isEmpty()) extension = mime->mainExtension();
+        if (extension.isEmpty()) {
+            extension = mime->mainExtension();
+        }
 
         QStringList filters;
         filters << QString(".%1-%2-%3-autosave%4").arg(part->componentData().componentName()).arg("*").arg("*").arg(extension);
@@ -365,7 +366,7 @@ bool KoApplication::start()
 #endif
 
         // remove the autosave files that are saved for other, open instances of ourselves
-        foreach(const QString &autoSaveFileName, autoSaveFiles) {
+        foreach (const QString &autoSaveFileName, autoSaveFiles) {
             if (!QFile::exists(QDir::homePath() + "/" + autoSaveFileName)) {
                 autoSaveFiles.removeAll(autoSaveFileName);
                 continue;
@@ -391,8 +392,7 @@ bool KoApplication::start()
                     }
                 }
                 autoSaveFiles = filesToRecover;
-            }
-            else {
+            } else {
                 // don't recover any of the files, but don't delete them either
                 autoSaveFiles.clear();
             }
@@ -412,7 +412,7 @@ bool KoApplication::start()
 
             // And then for the other autosave files, we copy & paste the code
             // and loop through them.
-            foreach(const QString &autoSaveFile, autoSaveFiles) {
+            foreach (const QString &autoSaveFile, autoSaveFiles) {
                 // For now create an empty document
                 QString errorMsg;
                 KoPart *part = entry.createKoPart(&errorMsg);
@@ -431,28 +431,26 @@ bool KoApplication::start()
                 }
             }
             return (numberOfOpenDocuments > 0);
-        }
-        else {
+        } else {
             part->showStartUpWidget(mainWindow);
         }
 
-    }
-    else {
+    } else {
         const bool print = koargs->isSet("print");
         const bool exportAsPdf = koargs->isSet("export-pdf");
         const QString pdfFileName = koargs->getOption("export-filename");
         const QString roundtripFileName = koargs->getOption("roundtrip-filename");
         const bool doTemplate = koargs->isSet("template");
         const bool benchmarkLoading = koargs->isSet("benchmark-loading")
-                || koargs->isSet("benchmark-loading-show-window")
-                || !roundtripFileName.isEmpty();
+                                      || koargs->isSet("benchmark-loading-show-window")
+                                      || !roundtripFileName.isEmpty();
         // only show the mainWindow when no command-line mode option is passed
         const bool showmainWindow =
-                koargs->isSet("benchmark-loading-show-window") || (
-                    !koargs->isSet("export-pdf")
-                    && !koargs->isSet("benchmark-loading")
-                    && !koargs->isSet("roundtrip-filename")
-                    && roundtripFileName.isEmpty());
+            koargs->isSet("benchmark-loading-show-window") || (
+                !koargs->isSet("export-pdf")
+                && !koargs->isSet("benchmark-loading")
+                && !koargs->isSet("roundtrip-filename")
+                && roundtripFileName.isEmpty());
         const QString profileFileName = koargs->getOption("profile-filename");
         koargs->clear();
 
@@ -487,7 +485,7 @@ bool KoApplication::start()
                     doc->setProfileStream(&profileoutput);
                     profileoutput << "KoApplication::start\t"
                                   << appStartTime.msecsTo(QTime::currentTime())
-                                  <<"\t0" << endl;
+                                  << "\t0" << endl;
                     doc->setAutoErrorHandlingEnabled(false);
                 }
                 doc->setProfileReferenceTime(appStartTime);
@@ -535,30 +533,28 @@ bool KoApplication::start()
                         }
                     }
                     // now try to load
-                }
-                else if (mainWindow->openDocument(part, args->url(argNumber))) {
+                } else if (mainWindow->openDocument(part, args->url(argNumber))) {
                     if (benchmarkLoading) {
                         if (profileoutput.device()) {
                             profileoutput << "KoApplication::start\t"
                                           << appStartTime.msecsTo(QTime::currentTime())
-                                          <<"\t100" << endl;
+                                          << "\t100" << endl;
                         }
                         if (!roundtripFileName.isEmpty()) {
-                            part->document()->saveAs(KUrl("file:"+roundtripFileName));
+                            part->document()->saveAs(KUrl("file:" + roundtripFileName));
                         }
                         // close the document
                         mainWindow->slotFileQuit();
                         return true; // only load one document!
-                    }
-                    else if (print) {
+                    } else if (print) {
                         mainWindow->slotFilePrint();
                         // delete mainWindow; done by ~KoDocument
                         nPrinted++;
                     } else if (exportAsPdf) {
                         KoPrintJob *job = mainWindow->exportToPdf(pdfFileName);
                         if (job)
-                            connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
-                                     SLOT(slotFileQuit()), Qt::QueuedConnection);
+                            connect(job, SIGNAL(destroyed(QObject*)), mainWindow,
+                                    SLOT(slotFileQuit()), Qt::QueuedConnection);
                         nPrinted++;
                     } else {
                         // Normal case, success
@@ -573,7 +569,7 @@ bool KoApplication::start()
                 if (profileoutput.device()) {
                     profileoutput << "KoApplication::start\t"
                                   << appStartTime.msecsTo(QTime::currentTime())
-                                  <<"\t100" << endl;
+                                  << "\t100" << endl;
                 }
 
             }
@@ -581,10 +577,12 @@ bool KoApplication::start()
         if (benchmarkLoading) {
             return false; // no valid urls found.
         }
-        if (print || exportAsPdf)
+        if (print || exportAsPdf) {
             return nPrinted > 0;
-        if (numberOfOpenDocuments == 0) // no doc, e.g. all URLs were malformed
+        }
+        if (numberOfOpenDocuments == 0) { // no doc, e.g. all URLs were malformed
             return false;
+        }
     }
 
     args->clear();
@@ -602,7 +600,7 @@ void KoApplication::setSplashScreen(QWidget *splashScreen)
     d->splashScreen = splashScreen;
 }
 
-QList<KoPart*> KoApplication::partList() const
+QList<KoPart *> KoApplication::partList() const
 {
     return d->partList;
 }
@@ -615,7 +613,6 @@ QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) cons
                                        direction,
                                        service->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList());
 }
-
 
 bool KoApplication::notify(QObject *receiver, QEvent *event)
 {

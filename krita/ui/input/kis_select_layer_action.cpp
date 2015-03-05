@@ -33,7 +33,6 @@
 #include "kis_input_manager.h"
 #include "kis_tool_utils.h"
 
-
 class KisSelectLayerAction::Private
 {
 public:
@@ -78,16 +77,16 @@ void KisSelectLayerAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     switch (shortcut) {
-        case SelectLayerModeShortcut:
-            inputEvent(event);
-            break;
+    case SelectLayerModeShortcut:
+        inputEvent(event);
+        break;
     }
 }
 
 void KisSelectLayerAction::inputEvent(QEvent *event)
 {
     QMouseEvent *mouseEvent;
-    if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
+    if (event && (mouseEvent = dynamic_cast<QMouseEvent *>(event))) {
         QPoint pos =
             inputManager()->canvas()->
             coordinatesConverter()->widgetToImage(mouseEvent->posF()).toPoint();

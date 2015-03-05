@@ -39,15 +39,16 @@ public:
 
 KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
         const QVariantList &)
-        : KPropertiesDialogPlugin(props)
-        , d(new KoDocumentInfoPropsPagePrivate)
+    : KPropertiesDialogPlugin(props)
+    , d(new KoDocumentInfoPropsPagePrivate)
 {
     d->m_info = new KoDocumentInfo(this);
     d->m_url = props->item().url();
     d->m_dlg = 0;
 
-    if (!d->m_url.isLocalFile())
+    if (!d->m_url.isLocalFile()) {
         return;
+    }
 
     d->m_dst = 0;
 
@@ -70,16 +71,17 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
     else if (d->m_src->hasFile("documentinfo.xml")) {
         if (d->m_src->open("documentinfo.xml")) {
             KoXmlDocument doc;
-            if (doc.setContent(d->m_src->device()))
+            if (doc.setContent(d->m_src->device())) {
                 d->m_info->load(doc);
+            }
         }
     }
 
     d->m_dlg = new KoDocumentInfoDlg(props, d->m_info);
     d->m_dlg->setReadOnly(true);
     // "Steal" the pages from the document info dialog
-    Q_FOREACH(KPageWidgetItem* page, d->m_dlg->pages()) {
-        KPageWidgetItem* myPage = new KPageWidgetItem(page->widget(), page->header());
+    Q_FOREACH (KPageWidgetItem *page, d->m_dlg->pages()) {
+        KPageWidgetItem *myPage = new KPageWidgetItem(page->widget(), page->header());
         myPage->setIcon(page->icon());
         props->addPage(myPage);
     }

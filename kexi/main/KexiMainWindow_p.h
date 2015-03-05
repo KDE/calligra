@@ -67,52 +67,55 @@ public:
 
     KToolBar *createWidgetToolBar() const;
 
-    KToolBar *toolBar(const QString& name) const;
+    KToolBar *toolBar(const QString &name) const;
 
-    void appendWidgetToToolbar(const QString& name, QWidget* widget);
+    void appendWidgetToToolbar(const QString &name, QWidget *widget);
 
-    void setWidgetVisibleInToolbar(QWidget* widget, bool visible);
+    void setWidgetVisibleInToolbar(QWidget *widget, bool visible);
 
 //! @todo replace with the final Actions API
-    void addAction(const QString& toolBarName, QAction *action);
+    void addAction(const QString &toolBarName, QAction *action);
 
     bool mainMenuVisible() const;
-    
-    QRect tabRect(int index) const { return tabBar()->tabRect(index); }
+
+    QRect tabRect(int index) const
+    {
+        return tabBar()->tabRect(index);
+    }
 
     KHelpMenu *helpMenu() const;
 
     void addSearchableModel(KexiSearchableModel *model);
-    
-    KToolBar *createToolBar(const char *name, const QString& caption);
-    
-    void setCurrentTab(const QString& name);
+
+    KToolBar *createToolBar(const char *name, const QString &caption);
+
+    void setCurrentTab(const QString &name);
 
     //! Sets current tab to @a index, counting from first visible (non-Kexi) tab.
     //! In non-user mode, the first visible tab is "create" tab.
     void setCurrentTab(int index);
 
-    void hideTab(const QString& name);
-    
-    void showTab(const QString& name);
-    
-    bool isTabVisible(const QString& name) const;
+    void hideTab(const QString &name);
+
+    void showTab(const QString &name);
+
+    bool isTabVisible(const QString &name) const;
 
     bool isRolledUp();
 
 public Q_SLOTS:
     void setMainMenuContent(QWidget *w);
     void selectMainMenuItem(const char *actionName);
-    void showMainMenu(const char* actionName = 0);
+    void showMainMenu(const char *actionName = 0);
     void hideMainMenu();
     void toggleMainMenu();
     void activateSearchLineEdit();
     void toggleRollDown();
 
 protected:
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void leaveEvent(QEvent* event);
-    virtual bool eventFilter(QObject* watched, QEvent* event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void leaveEvent(QEvent *event);
+    virtual bool eventFilter(QObject *watched, QEvent *event);
 
 protected Q_SLOTS:
     void slotCurrentChanged(int index);
@@ -124,34 +127,38 @@ protected Q_SLOTS:
     void tabBarAnimationFinished();
 
 private:
-    void addAction(KToolBar *tbar, const char* actionName);
-    void addSeparatorAndAction(KToolBar *tbar, const char* actionName);
+    void addAction(KToolBar *tbar, const char *actionName);
+    void addSeparatorAndAction(KToolBar *tbar, const char *actionName);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 //! @internal window container created to speedup opening new tabs
 class KexiWindowContainer : public QWidget
 {
 public:
-    explicit KexiWindowContainer(QWidget* parent)
-            : QWidget(parent)
-            , window(0)
-            , lyr(new QVBoxLayout(this)) {
+    explicit KexiWindowContainer(QWidget *parent)
+        : QWidget(parent)
+        , window(0)
+        , lyr(new QVBoxLayout(this))
+    {
         lyr->setContentsMargins(0, 0, 0, 0);
     }
-    ~KexiWindowContainer() {
+    ~KexiWindowContainer()
+    {
         //! @todo warning if saveSettings() failed?
         if (window) {
             window->saveSettings();
-            delete (KexiWindow*)window;
+            delete(KexiWindow *)window;
         }
     }
-    void setWindow(KexiWindow* w) {
+    void setWindow(KexiWindow *w)
+    {
         window = w;
-        if (w)
+        if (w) {
             lyr->addWidget(w);
+        }
     }
     QPointer<KexiWindow> window;
 private:
@@ -168,8 +175,8 @@ private:
 class EmptyMenuContentWidget : public QWidget
 {
 public:
-    explicit EmptyMenuContentWidget(QWidget* parent = 0)
-     : QWidget(parent)
+    explicit EmptyMenuContentWidget(QWidget *parent = 0)
+        : QWidget(parent)
     {
         setAutoFillBackground(true);
         alterBackground();
@@ -182,7 +189,8 @@ public:
         pal.setColor(QPalette::Window, bg);
         setPalette(pal);
     }
-    virtual void changeEvent(QEvent *e) {
+    virtual void changeEvent(QEvent *e)
+    {
         if (e->type() == QEvent::PaletteChange) {
             alterBackground();
         }
@@ -195,12 +203,15 @@ class KexiFadeWidgetEffect : public KFadeWidgetEffect
     Q_OBJECT
 public:
     explicit KexiFadeWidgetEffect(QWidget *destWidget, int duration = 250)
-    : KFadeWidgetEffect(destWidget)
-    , m_duration(duration)
+        : KFadeWidgetEffect(destWidget)
+        , m_duration(duration)
     {
     }
 public Q_SLOTS:
-    void start() { KFadeWidgetEffect::start(m_duration); }
+    void start()
+    {
+        KFadeWidgetEffect::start(m_duration);
+    }
 private:
     int m_duration;
 };
@@ -213,15 +224,15 @@ public:
         : KexiUtils::StyleProxy(style, parent)
     {
     }
-    virtual ~KexiMenuWidgetStyle() {
+    virtual ~KexiMenuWidgetStyle()
+    {
     }
     virtual void drawControl(ControlElement element, const QStyleOption *option,
                              QPainter *painter, const QWidget *widget = 0) const
     {
         if (element == QStyle::CE_MenuItem
-            && (option->state & QStyle::State_Selected) && (option->state & QStyle::State_Enabled)
-            && parentStyle()->objectName() == QLatin1String("oxygen"))
-        {
+                && (option->state & QStyle::State_Selected) && (option->state & QStyle::State_Enabled)
+                && parentStyle()->objectName() == QLatin1String("oxygen")) {
             // Ugly fix for visual glitch of oxygen; no chance for improvement since
             // we've forked QMenu and oxygen checks for qobject_cast<QMenu*> directly.
             QColor c(option->palette.color(QPalette::Window));
@@ -230,10 +241,10 @@ public:
             // Why 0.91208791? I knew you're curious. There are some algorithms in Oxygen
             // to make color a bit lighter. They are not in the public API nor they are simple.
             // So the number was computed by me to find the proper value for the color
-            // (the accuracy is quite OK). 
-            // It's also related to the fact that Oxygen's menus have gradient background. 
+            // (the accuracy is quite OK).
+            // It's also related to the fact that Oxygen's menus have gradient background.
             // A lot of computation happens under the mask...
-            c.setHsv(h, s, v * 0.91208791, a); 
+            c.setHsv(h, s, v * 0.91208791, a);
             painter->fillRect(option->rect.x() + 6, option->rect.y() + 6,
                               option->rect.width() - 12, option->rect.height() - 12,
                               c);
@@ -247,21 +258,22 @@ class KexiMainMenu : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KexiMainMenu(KexiTabbedToolBar *toolBar, QWidget* parent = 0) : QWidget(parent),
+    explicit KexiMainMenu(KexiTabbedToolBar *toolBar, QWidget *parent = 0) : QWidget(parent),
         m_toolBar(toolBar), m_initialized(false)
     {
         m_content = 0;
         m_selectFirstItem = false;
     }
-    ~KexiMainMenu() {
-        delete (QWidget*)m_contentWidget;
+    ~KexiMainMenu()
+    {
+        delete(QWidget *)m_contentWidget;
     }
-    virtual bool eventFilter(QObject * watched, QEvent* event) {
+    virtual bool eventFilter(QObject *watched, QEvent *event)
+    {
         if (event->type() == QEvent::MouseButtonPress && watched == m_content && !m_contentWidget) {
             emit contentAreaPressed();
-        }
-        else if (event->type() == QEvent::KeyPress) {
-            QKeyEvent* ke = static_cast<QKeyEvent*>(event);
+        } else if (event->type() == QEvent::KeyPress) {
+            QKeyEvent *ke = static_cast<QKeyEvent *>(event);
             if ((ke->key() == Qt::Key_Escape) && ke->modifiers() == Qt::NoModifier) {
                 emit hideContentsRequested();
                 return true;
@@ -270,21 +282,23 @@ public:
         return QWidget::eventFilter(watched, event);
     }
 
-    void setContent(QWidget *contentWidget) {
+    void setContent(QWidget *contentWidget)
+    {
         if (m_menuWidget && m_persistentlySelectedAction) {
             m_menuWidget->setPersistentlySelectedAction(
-                m_persistentlySelectedAction, 
+                m_persistentlySelectedAction,
                 m_persistentlySelectedAction->persistentlySelected());
         }
         /*if (m_menuWidget->persistentlySelectedAction())
             kDebug() << "****" << m_menuWidget->persistentlySelectedAction()->objectName();*/
         KexiFadeWidgetEffect *fadeEffect = 0;
-        
+
         if (m_contentWidget && contentWidget) {
             fadeEffect = new KexiFadeWidgetEffect(m_content);
         }
-        if (m_contentWidget)
+        if (m_contentWidget) {
             m_contentWidget->deleteLater();
+        }
         m_contentWidget = contentWidget;
         if (m_contentWidget) {
             QPalette contentWidgetPalette(m_contentWidget->palette());
@@ -306,33 +320,36 @@ public:
             connect(m_contentWidget, SIGNAL(destroyed()), this, SLOT(contentWidgetDestroyed()));
         }
         if (fadeEffect) {
-            if (m_contentWidget)
+            if (m_contentWidget) {
                 m_contentLayout->update();
-            
+            }
+
             QTimer::singleShot(10, fadeEffect, SLOT(start()));
         }
     }
 
-    const QWidget *contentWidget() const {
+    const QWidget *contentWidget() const
+    {
         return m_contentWidget;
     }
 
-    void setPersistentlySelectedAction(KexiMenuWidgetAction* action, bool set)
+    void setPersistentlySelectedAction(KexiMenuWidgetAction *action, bool set)
     {
         m_persistentlySelectedAction = action;
         m_persistentlySelectedAction->setPersistentlySelected(set);
     }
 
-/*    void setActiveAction(QAction* action = 0) {
-        if (!action && !m_menuWidget->actions().isEmpty()) {
-            action = actions().first();
-        }
-        if (action) {
-            m_menuWidget->setActiveAction(action);
-        }
-    }*/
+    /*    void setActiveAction(QAction* action = 0) {
+            if (!action && !m_menuWidget->actions().isEmpty()) {
+                action = actions().first();
+            }
+            if (action) {
+                m_menuWidget->setActiveAction(action);
+            }
+        }*/
 
-    void selectFirstItem() {
+    void selectFirstItem()
+    {
         m_selectFirstItem = true;
     }
 
@@ -344,7 +361,8 @@ protected Q_SLOTS:
     void contentWidgetDestroyed();
 
 protected:
-    virtual void showEvent(QShowEvent * event) {
+    virtual void showEvent(QShowEvent *event)
+    {
         if (!m_initialized) {
             m_initialized = true;
             KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
@@ -354,8 +372,7 @@ protected:
             m_menuWidget = new KexiMenuWidget;
             QString styleName(m_menuWidget->style()->objectName());
             if (KDE::version() < KDE_MAKE_VERSION(4, 8, 0) // a fix is apparently needed for glitch in KDE < 4.8
-                && styleName == "oxygen")
-            {
+                    && styleName == "oxygen") {
                 KexiMenuWidgetStyle *customStyle = new KexiMenuWidgetStyle(m_menuWidget->style(), this);
                 m_menuWidget->setStyle(customStyle);
             }
@@ -394,7 +411,7 @@ protected:
         }
         QWidget::showEvent(event);
         if (m_selectFirstItem && !m_menuWidget->actions().isEmpty()) {
-            QAction* action = m_menuWidget->actions().first();
+            QAction *action = m_menuWidget->actions().first();
             m_menuWidget->setActiveAction(action);
             m_selectFirstItem = false;
         }
@@ -402,12 +419,12 @@ protected:
 
 private:
     QPointer<KexiMenuWidget> m_menuWidget;
-    KexiTabbedToolBar* m_toolBar;
+    KexiTabbedToolBar *m_toolBar;
     bool m_initialized;
     EmptyMenuContentWidget *m_content;
     QStackedLayout *m_contentLayout;
     QPointer<QWidget> m_contentWidget;
-    QVBoxLayout* m_mainContentLayout;
+    QVBoxLayout *m_mainContentLayout;
     QPointer<KexiMenuWidgetAction> m_persistentlySelectedAction;
     bool m_selectFirstItem;
 };
@@ -424,11 +441,11 @@ class KexiTabbedToolBar::Private : public QObject
     Q_OBJECT
 public:
     explicit Private(KexiTabbedToolBar *t)
-            : q(t), createWidgetToolBar(0)
+        : q(t), createWidgetToolBar(0)
 #ifdef KEXI_AUTORISE_TABBED_TOOLBAR
-            , tabToRaise(-1)
+        , tabToRaise(-1)
 #endif
-            , rolledUp(false)
+        , rolledUp(false)
     {
 #ifdef KEXI_AUTORISE_TABBED_TOOLBAR
         tabRaiseTimer.setSingleShot(true);
@@ -441,11 +458,11 @@ public:
         lowestIndex = 2;
     }
 
-    KToolBar *createToolBar(const char *name, const QString& caption);
+    KToolBar *createToolBar(const char *name, const QString &caption);
     int tabIndex;
 
 public Q_SLOTS:
-    void showMainMenu(const char* actionName = 0);
+    void showMainMenu(const char *actionName = 0);
     void hideMainMenu();
     void hideContentsOrMainMenu();
     void toggleMainMenu();
@@ -466,21 +483,21 @@ public:
     QTimer tabRaiseTimer;
 #endif
     //! Toolbars for name
-    QHash<QString, KToolBar*> toolbarsForName;
+    QHash<QString, KToolBar *> toolbarsForName;
     QHash<QString, int> toolbarsIndexForName;
     QHash<QString, QString> toolbarsCaptionForName;
     QVector<bool> toolbarsVisibleForIndex;
-    QHash<QWidget*, QAction*> extraActions;
+    QHash<QWidget *, QAction *> extraActions;
     bool rolledUp;
     QPropertyAnimation tabBarAnimation;
     QGraphicsOpacityEffect tabBarOpacityEffect;
     int rolledUpIndex;
     KHelpMenu *helpMenu;
     KexiSearchLineEdit *searchLineEdit;
-    void setCurrentTab(const QString& name);
-    void hideTab(const QString& name);
-    void showTab(const QString& name);
-    bool isTabVisible(const QString& name) const;
+    void setCurrentTab(const QString &name);
+    void hideTab(const QString &name);
+    void showTab(const QString &name);
+    bool isTabVisible(const QString &name) const;
 #ifndef NDEBUG
     void debugToolbars() const;
 #endif
@@ -493,7 +510,7 @@ public:
 class KexiTabbedToolBarStyle;
 
 //! Tab bar reimplementation for KexiTabbedToolBar.
-/*! The main its purpose is to alter the width of "Kexi" tab. 
+/*! The main its purpose is to alter the width of "Kexi" tab.
 */
 class KexiTabbedToolBarTabBar : public KTabBar
 {
@@ -503,7 +520,7 @@ public:
     virtual QSize originalTabSizeHint(int index) const;
     virtual QSize tabSizeHint(int index) const;
 
-    KexiTabbedToolBarStyle* customStyle;
+    KexiTabbedToolBarStyle *customStyle;
 };
 
 //! @return true is @a style name is specific regarding tab styling
@@ -517,10 +534,11 @@ class KexiTabbedToolBarStyle : public KexiUtils::StyleProxy
 {
 public:
     explicit KexiTabbedToolBarStyle(QStyle *style, QObject *parent = 0)
-      : KexiUtils::StyleProxy(style, parent)
+        : KexiUtils::StyleProxy(style, parent)
     {
     }
-    virtual ~KexiTabbedToolBarStyle() {
+    virtual ~KexiTabbedToolBarStyle()
+    {
     }
     virtual void drawControl(ControlElement element, const QStyleOption *option,
                              QPainter *painter, const QWidget *widget = 0) const
@@ -528,15 +546,16 @@ public:
         const QString styleName(parentStyle()->objectName());
         qreal origOpacity = -1.0;
         if (element == CE_TabBarTab) {
-            const QStyleOptionTabV2* opt
-                = qstyleoption_cast<const QStyleOptionTabV2*>(option);
-            const QTabBar* tabBar = qobject_cast<const QTabBar*>(widget);
-            KexiTabbedToolBar* tbar = tabBar
-                ? qobject_cast<KexiTabbedToolBar*>(tabBar->parentWidget()) : 0;
+            const QStyleOptionTabV2 *opt
+                = qstyleoption_cast<const QStyleOptionTabV2 *>(option);
+            const QTabBar *tabBar = qobject_cast<const QTabBar *>(widget);
+            KexiTabbedToolBar *tbar = tabBar
+                                      ? qobject_cast<KexiTabbedToolBar *>(tabBar->parentWidget()) : 0;
             if (opt && tbar) {
                 const int index = tabBar->tabAt(opt->rect.center());
-                if (index == KEXITABBEDTOOLBAR_SPACER_TAB_INDEX)
+                if (index == KEXITABBEDTOOLBAR_SPACER_TAB_INDEX) {
                     return;
+                }
                 bool mouseOver = opt->state & QStyle::State_MouseOver;
                 bool unselectedOrMenuVisible
                     = !(opt->state & State_Selected) || tbar->mainMenuVisible();
@@ -549,18 +568,17 @@ public:
                 QStyleOptionTabV2 newOpt(*opt);
                 const bool specificStyle = isSpecificTabStyle(styleName);
                 newOpt.text = (specificStyle ? " " : "")
-                        + tabBar->tabText(index)
-                        + (specificStyle ? " " : "");
+                              + tabBar->tabText(index)
+                              + (specificStyle ? " " : "");
                 if (!mouseOver
-                    && unselectedOrMenuVisible
-                    && index > 0)
-                {
-                    if (tbar->mainMenuVisible())
+                        && unselectedOrMenuVisible
+                        && index > 0) {
+                    if (tbar->mainMenuVisible()) {
                         newOpt.state &= ~QStyle::State_HasFocus;
+                    }
                     KexiUtils::StyleProxy::drawControl(CE_TabBarTabLabel, &newOpt, painter, widget);
                     return;
-                }
-                else if (index == 0) {
+                } else if (index == 0) {
                     QBrush bg;
                     newOpt.state |= State_Selected;
                     if (tbar->mainMenuVisible()) {
@@ -571,8 +589,7 @@ public:
                             newOpt.palette.setBrush(QPalette::ButtonText,
                                                     newOpt.palette.brush(QPalette::Active, QPalette::HighlightedText));
                         }
-                    }
-                    else {
+                    } else {
                         bg = Qt::transparent;
                     }
                     QFont origFont(painter->font());
@@ -589,8 +606,8 @@ public:
                     }
                 }
                 if (index > 0 || mouseOver) {
-                    const QPalette::ColorGroup hbGroup =  (styleName == "oxygen")
-                            ? QPalette::Active : QPalette::Inactive;
+                    const QPalette::ColorGroup hbGroup = (styleName == "oxygen")
+                                                         ? QPalette::Active : QPalette::Inactive;
                     const QBrush hb(newOpt.palette.brush(hbGroup, QPalette::Highlight));
                     newOpt.palette.setBrush(QPalette::Window, hb);
                     newOpt.palette.setBrush(QPalette::Button, hb); // needed e.g. for Plastique style
@@ -599,8 +616,7 @@ public:
                         origOpacity = painter->opacity();
                         painter->setOpacity(styleName == "qtcurve" ? 0.2 : 0.3);
                         newOpt.state |= State_Selected;
-                    }
-                    else {
+                    } else {
                         if (!specificStyle) {
                             newOpt.palette.setBrush(QPalette::WindowText,
                                                     newOpt.palette.brush(QPalette::Inactive, QPalette::HighlightedText));
@@ -624,24 +640,23 @@ public:
                     return;
                 }
             }
-        }
-        else if (element == CE_ToolBar) {
+        } else if (element == CE_ToolBar) {
             return;
         }
         KexiUtils::StyleProxy::drawControl(element, option, painter, widget);
     }
 
     virtual void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
-                          QPainter *painter, const QWidget *widget = 0) const
+                               QPainter *painter, const QWidget *widget = 0) const
     {
         const QString styleName(parentStyle()->objectName());
         if (element == PE_FrameTabWidget) {
             return;
         }
         if (element == PE_FrameTabBarBase) {
-            const QTabBar* tabBar = qobject_cast<const QTabBar*>(widget);
-            KexiTabbedToolBar* tbar = tabBar
-                ? qobject_cast<KexiTabbedToolBar*>(tabBar->parentWidget()) : 0;
+            const QTabBar *tabBar = qobject_cast<const QTabBar *>(widget);
+            KexiTabbedToolBar *tbar = tabBar
+                                      ? qobject_cast<KexiTabbedToolBar *>(tabBar->parentWidget()) : 0;
             if (tbar && tbar->mainMenuVisible() && styleName != "bespin") {
                 return;
             }
@@ -652,17 +667,18 @@ public:
         KexiUtils::StyleProxy::drawPrimitive(element, option, painter, widget);
     }
 
-    virtual int pixelMetric(PixelMetric metric, const QStyleOption* option = 0,
-                            const QWidget* widget = 0) const
+    virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = 0,
+                            const QWidget *widget = 0) const
     {
-        if (metric == QStyle::PM_SmallIconSize)
+        if (metric == QStyle::PM_SmallIconSize) {
             return KIconLoader::SizeMedium;
+        }
         return KexiUtils::StyleProxy::pixelMetric(metric, option, widget);
     }
 };
 
 //! Tab bar reimplementation for KexiTabbedToolBar.
-/*! The main its purpose is to alter the width of "Kexi" tab. 
+/*! The main its purpose is to alter the width of "Kexi" tab.
 */
 KexiTabbedToolBarTabBar::KexiTabbedToolBarTabBar(QWidget *parent)
     : KTabBar(parent)
@@ -697,8 +713,7 @@ QSize KexiTabbedToolBarTabBar::tabSizeHint(int index) const
     if (index == 0) {
         s.setWidth(QFontMetrics(f).width(ot.text) + w * 2);
         return s;
-    }
-    else if (index == KEXITABBEDTOOLBAR_SPACER_TAB_INDEX) {
+    } else if (index == KEXITABBEDTOOLBAR_SPACER_TAB_INDEX) {
         // fix width of the spacer tab
         s.setWidth(w);
     }
@@ -707,13 +722,14 @@ QSize KexiTabbedToolBarTabBar::tabSizeHint(int index) const
 
 void KexiTabbedToolBar::Private::toggleMainMenu()
 {
-    if (q->mainMenuVisible())
+    if (q->mainMenuVisible()) {
         hideMainMenu();
-    else
+    } else {
         showMainMenu();
+    }
 }
 
-void KexiTabbedToolBar::Private::showMainMenu(const char* actionName)
+void KexiTabbedToolBar::Private::showMainMenu(const char *actionName)
 {
     QWidget *mainWindow = KexiMainWindowIface::global()->thisWidget();
     if (!mainMenu) {
@@ -724,8 +740,7 @@ void KexiTabbedToolBar::Private::showMainMenu(const char* actionName)
     updateMainMenuGeometry();
     if (actionName) {
         q->selectMainMenuItem(actionName);
-    }
-    else {
+    } else {
         mainMenu->selectFirstItem();
     }
     mainMenu->show();
@@ -735,10 +750,11 @@ void KexiTabbedToolBar::Private::showMainMenu(const char* actionName)
 
 void KexiTabbedToolBar::Private::updateMainMenuGeometry()
 {
-    if (!mainMenu)
+    if (!mainMenu) {
         return;
+    }
     QWidget *mainWindow = KexiMainWindowIface::global()->thisWidget();
-    KexiTabbedToolBarTabBar *tabBar = static_cast<KexiTabbedToolBarTabBar*>(q->tabBar());
+    KexiTabbedToolBarTabBar *tabBar = static_cast<KexiTabbedToolBarTabBar *>(q->tabBar());
     QPoint pos = q->mapToGlobal(QPoint(0, tabBar->originalTabSizeHint(0).height() - 1));
 //     kDebug() << "1." << pos;
     pos = mainWindow->mapFromGlobal(pos);
@@ -764,8 +780,9 @@ void KexiTabbedToolBar::activateSearchLineEdit()
 
 void KexiTabbedToolBar::Private::hideMainMenu()
 {
-    if (!mainMenu || !mainMenu->isVisible())
+    if (!mainMenu || !mainMenu->isVisible()) {
         return;
+    }
     mainMenu->hide();
     mainMenu->setContent(0);
     q->update();  // tab bar could have a line that should be repainted
@@ -773,17 +790,17 @@ void KexiTabbedToolBar::Private::hideMainMenu()
 
 void KexiTabbedToolBar::Private::hideContentsOrMainMenu()
 {
-    if (!mainMenu || !mainMenu->isVisible())
+    if (!mainMenu || !mainMenu->isVisible()) {
         return;
+    }
     if (mainMenu->contentWidget()) {
         mainMenu->setContent(0);
-    }
-    else {
+    } else {
         hideMainMenu();
     }
 }
 
-KToolBar *KexiTabbedToolBar::Private::createToolBar(const char *name, const QString& caption)
+KToolBar *KexiTabbedToolBar::Private::createToolBar(const char *name, const QString &caption)
 {
     KToolBar *tbar = new KToolBar(q);
     // needed e.g. for Windows style to remove the toolbar's frame
@@ -799,8 +816,8 @@ KToolBar *KexiTabbedToolBar::Private::createToolBar(const char *name, const QStr
 }
 
 KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
-        : KTabWidget(parent)
-        , d(new Private(this))
+    : KTabWidget(parent)
+    , d(new Private(this))
 {
     d->customTabBar = new KexiTabbedToolBarTabBar(this);
     setTabBar(d->customTabBar);
@@ -808,15 +825,15 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 
     // from ktabwidget.cpp
     //! @todo KTabWidget::setTabBar() should be added with this code
-    connect(tabBar(), SIGNAL(contextMenu( int, const QPoint & )), SLOT(contextMenu( int, const QPoint & )));
-    connect(tabBar(), SIGNAL(tabDoubleClicked( int )), SLOT(mouseDoubleClick( int )));
+    connect(tabBar(), SIGNAL(contextMenu(int, const QPoint &)), SLOT(contextMenu(int, const QPoint &)));
+    connect(tabBar(), SIGNAL(tabDoubleClicked(int)), SLOT(mouseDoubleClick(int)));
     connect(tabBar(), SIGNAL(newTabRequest()), this, SIGNAL(mouseDoubleClick())); // #185487
-    connect(tabBar(), SIGNAL(mouseMiddleClick( int )), SLOT(mouseMiddleClick( int )));
-    connect(tabBar(), SIGNAL(initiateDrag( int )), SLOT(initiateDrag( int )));
-    connect(tabBar(), SIGNAL(testCanDecode(const QDragMoveEvent *, bool & )), SIGNAL(testCanDecode(const QDragMoveEvent *, bool & )));
-    connect(tabBar(), SIGNAL(receivedDropEvent( int, QDropEvent * )), SLOT(receivedDropEvent( int, QDropEvent * )));
-    connect(tabBar(), SIGNAL(moveTab( int, int )), SLOT(moveTab( int, int )));
-    connect(tabBar(), SIGNAL(tabCloseRequested( int )), SLOT(closeRequest( int )));
+    connect(tabBar(), SIGNAL(mouseMiddleClick(int)), SLOT(mouseMiddleClick(int)));
+    connect(tabBar(), SIGNAL(initiateDrag(int)), SLOT(initiateDrag(int)));
+    connect(tabBar(), SIGNAL(testCanDecode(const QDragMoveEvent *, bool &)), SIGNAL(testCanDecode(const QDragMoveEvent *, bool &)));
+    connect(tabBar(), SIGNAL(receivedDropEvent(int, QDropEvent *)), SLOT(receivedDropEvent(int, QDropEvent *)));
+    connect(tabBar(), SIGNAL(moveTab(int, int)), SLOT(moveTab(int, int)));
+    connect(tabBar(), SIGNAL(tabCloseRequested(int)), SLOT(closeRequest(int)));
 
     setMouseTracking(true); // for mouseMoveEvent()
     setWhatsThis(i18n("Task-oriented toolbar. Groups commands using tabs."));
@@ -844,20 +861,20 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     // add help menu actions... (KexiTabbedToolBar depends on them)
     d->helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(),
                                 true/*showWhatsThis*/, d->ac);
-    QAction* help_report_bug_action = d->ac->action("help_report_bug");
+    QAction *help_report_bug_action = d->ac->action("help_report_bug");
     QObject::disconnect(help_report_bug_action, 0, 0, 0);
     QObject::connect(help_report_bug_action, SIGNAL(triggered()), mainWin, SLOT(slotReportBug()));
     help_report_bug_action->setText(i18nc("Report a bug or wish for Kexi application", "Report a &Bug or Wish..."));
     help_report_bug_action->setIcon(koIcon("tools-report-bug")); // good icon for toolbar
     help_report_bug_action->setWhatsThis(i18n("Files a bug or wish for Kexi application."));
-    QAction* help_whats_this_action =  d->ac->action("help_whats_this");
+    QAction *help_whats_this_action =  d->ac->action("help_whats_this");
     help_whats_this_action->setWhatsThis(i18n("Activates a \"What's This?\" tool."));
-    QAction* help_contents_action = d->ac->action("help_contents");
+    QAction *help_contents_action = d->ac->action("help_contents");
     help_contents_action->setText(i18n("Help"));
     help_contents_action->setWhatsThis(i18n("Shows Kexi Handbook."));
-    QAction* help_about_app_action = d->ac->action("help_about_app");
+    QAction *help_about_app_action = d->ac->action("help_about_app");
     help_about_app_action->setWhatsThis(i18n("Shows information about Kexi application."));
-    QAction* help_about_kde_action = d->ac->action("help_about_kde");
+    QAction *help_about_kde_action = d->ac->action("help_about_kde");
     help_about_kde_action->setWhatsThis(i18n("Shows information about KDE."));
 
     QAction *action_show_help_menu = d->ac->action("help_show_menu");
@@ -900,8 +917,9 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     addAction(tbar, "edit_cut");
     addAction(tbar, "edit_copy");
     addAction(tbar, "edit_paste");
-    if (!userMode)
+    if (!userMode) {
         addAction(tbar, "edit_paste_special_data_table");
+    }
 //! @todo move undo/redo to quickbar:
 
     tbar = d->createToolBar("external", i18n("External Data"));
@@ -918,24 +936,24 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 
 //! @todo move to report plugin
     tbar = d->createToolBar("report", i18n("Report Design"));
-    
+
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)));
     setCurrentWidget(widget(KEXITABBEDTOOLBAR_SPACER_TAB_INDEX + 1)); // the default
     setFocusPolicy(Qt::NoFocus);
 }
 
-void KexiTabbedToolBar::Private::setCurrentTab(const QString& name)
+void KexiTabbedToolBar::Private::setCurrentTab(const QString &name)
 {
     q->setCurrentWidget(q->toolBar(name));
 }
 
-void KexiTabbedToolBar::Private::hideTab(const QString& name)
+void KexiTabbedToolBar::Private::hideTab(const QString &name)
 {
     q->removeTab(q->indexOf(toolbarsForName.value(name)));
     toolbarsVisibleForIndex[toolbarsIndexForName.value(name)] = false;
 }
 
-bool KexiTabbedToolBar::Private::isTabVisible(const QString& name) const
+bool KexiTabbedToolBar::Private::isTabVisible(const QString &name) const
 {
     return q->indexOf(toolbarsForName.value(name)) != -1
            && toolbarsVisibleForIndex[toolbarsIndexForName.value(name)];
@@ -945,21 +963,18 @@ bool KexiTabbedToolBar::Private::isTabVisible(const QString& name) const
 void KexiTabbedToolBar::Private::debugToolbars() const
 {
     kDebug() << "QHash<QString, KToolBar*> toolbarsForName:";
-    for (QHash<QString, KToolBar*>::ConstIterator it(toolbarsForName.constBegin());
-         it!=toolbarsForName.constEnd(); ++it)
-    {
+    for (QHash<QString, KToolBar *>::ConstIterator it(toolbarsForName.constBegin());
+            it != toolbarsForName.constEnd(); ++it) {
         kDebug() << it.key() << "->" << it.value();
     }
     kDebug() << "QHash<QString, int> toolbarsIndexForName:";
     for (QHash<QString, int>::ConstIterator it(toolbarsIndexForName.constBegin());
-         it!=toolbarsIndexForName.constEnd(); ++it)
-    {
+            it != toolbarsIndexForName.constEnd(); ++it) {
         kDebug() << it.key() << "->" << it.value();
     }
     kDebug() << "QHash<QString, QString> toolbarsCaptionForName:";
     for (QHash<QString, QString>::ConstIterator it(toolbarsCaptionForName.constBegin());
-         it!=toolbarsCaptionForName.constEnd(); ++it)
-    {
+            it != toolbarsCaptionForName.constEnd(); ++it) {
         kDebug() << it.key() << "->" << it.value();
     }
     kDebug() << "QVector<bool> toolbarsVisibleForIndex:";
@@ -969,7 +984,7 @@ void KexiTabbedToolBar::Private::debugToolbars() const
 }
 #endif
 
-void KexiTabbedToolBar::Private::showTab(const QString& name)
+void KexiTabbedToolBar::Private::showTab(const QString &name)
 {
 //    kDebug() << "name:" << name;
 //    kDebug() << "toolbarsForName.value(name):" << toolbarsForName.value(name);
@@ -982,8 +997,9 @@ void KexiTabbedToolBar::Private::showTab(const QString& name)
         int h = 0;
         // count h = invisible tabs before this
         for (int i = lowestIndex; i < toolbarsIndexForName.value(name); i++) {
-            if (!toolbarsVisibleForIndex.at(i))
+            if (!toolbarsVisibleForIndex.at(i)) {
                 h++;
+            }
         }
         q->insertTab(toolbarsIndexForName.value(name) - h,
                      toolbarsForName.value(name), toolbarsCaptionForName.value(name));
@@ -1001,7 +1017,7 @@ bool KexiTabbedToolBar::mainMenuVisible() const
     return d->mainMenu && d->mainMenu->isVisible();
 }
 
-KHelpMenu* KexiTabbedToolBar::helpMenu() const
+KHelpMenu *KexiTabbedToolBar::helpMenu() const
 {
     return d->helpMenu;
 }
@@ -1013,12 +1029,12 @@ void KexiTabbedToolBar::slotSettingsChanged(int category)
     }
 }
 
-KToolBar* KexiTabbedToolBar::createWidgetToolBar() const
+KToolBar *KexiTabbedToolBar::createWidgetToolBar() const
 {
     return d->createWidgetToolBar;
 }
 
-void KexiTabbedToolBar::mouseMoveEvent(QMouseEvent* event)
+void KexiTabbedToolBar::mouseMoveEvent(QMouseEvent *event)
 {
 #ifdef KEXI_AUTORISE_TABBED_TOOLBAR
     QPoint p = event->pos();
@@ -1035,7 +1051,7 @@ void KexiTabbedToolBar::mouseMoveEvent(QMouseEvent* event)
     KTabWidget::mouseMoveEvent(event);
 }
 
-void KexiTabbedToolBar::leaveEvent(QEvent* event)
+void KexiTabbedToolBar::leaveEvent(QEvent *event)
 {
 #ifdef KEXI_AUTORISE_TABBED_TOOLBAR
     d->tabRaiseTimer.stop();
@@ -1044,7 +1060,7 @@ void KexiTabbedToolBar::leaveEvent(QEvent* event)
     KTabWidget::leaveEvent(event);
 }
 
-bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
+bool KexiTabbedToolBar::eventFilter(QObject *watched, QEvent *event)
 {
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
@@ -1052,13 +1068,12 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
         // kDebug() << "MouseButtonPress: watched:" << watched << "window()->focusWidget():" << window()->focusWidget();
         if (watched == d->searchLineEdit) {
             activateSearchLineEdit(); // custom setFocus() for search box, so it's possible to focus
-                                      // back on Escape key press
+            // back on Escape key press
             return false;
-        }
-        else if (watched == tabBar()) {
-            QMouseEvent* me = static_cast<QMouseEvent*>(event);
+        } else if (watched == tabBar()) {
+            QMouseEvent *me = static_cast<QMouseEvent *>(event);
             QPoint p = me->pos();
-            KexiTabbedToolBarTabBar *tb = static_cast<KexiTabbedToolBarTabBar*>(tabBar());
+            KexiTabbedToolBarTabBar *tb = static_cast<KexiTabbedToolBarTabBar *>(tabBar());
             int index = tb->tabAt(p);
             if (index == 0) {
                 d->toggleMainMenu();
@@ -1068,20 +1083,18 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
             if (index == KEXITABBEDTOOLBAR_SPACER_TAB_INDEX) {
                 return true;
             }
-        }
-        else if (watched == mainWin && d->mainMenu) {
-            QMouseEvent* me = static_cast<QMouseEvent*>(event);
-            if (!QRect(d->mainMenu->mapToGlobal(QPoint(0,0)), d->mainMenu->size())
-                    .contains(mainWin->mapToGlobal(me->pos())))
-            {
+        } else if (watched == mainWin && d->mainMenu) {
+            QMouseEvent *me = static_cast<QMouseEvent *>(event);
+            if (!QRect(d->mainMenu->mapToGlobal(QPoint(0, 0)), d->mainMenu->size())
+                    .contains(mainWin->mapToGlobal(me->pos()))) {
                 // hide if clicked outside of the menu
                 d->hideMainMenu();
             }
         }
-        }
-        break;
+    }
+    break;
     case QEvent::KeyPress: {
-        QKeyEvent* ke = static_cast<QKeyEvent*>(event);
+        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
 //         kDebug() << "**********" << QString::number(ke->key(), 16)
 //                  << QKeySequence::mnemonic(tabText(0))[0];
         if (QKeySequence::mnemonic(tabText(0)) == QKeySequence(ke->key())) {
@@ -1107,7 +1120,7 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
         }
         break;
     case QEvent::Shortcut: {
-        QShortcutEvent *se = static_cast<QShortcutEvent*>(event);
+        QShortcutEvent *se = static_cast<QShortcutEvent *>(event);
         if (watched == tabBar() && QKeySequence::mnemonic(tabText(0)) == se->key()) {
 //             kDebug() << "eat the &File accel";
             if (!d->mainMenu || !d->mainMenu->isVisible()) {
@@ -1134,16 +1147,16 @@ void KexiTabbedToolBar::slotCurrentChanged(int index)
     }
     if (index == 0) { // main menu
         d->showMainMenu();
-    }
-    else {
+    } else {
         d->hideMainMenu();
     }
 }
 
 void KexiTabbedToolBar::slotTabDoubleClicked(int index)
 {
-    if (index == 0)
-        return; // main item does not count here
+    if (index == 0) {
+        return;    // main item does not count here
+    }
     d->rolledUp = !d->rolledUp;
     d->tabBarAnimation.stop();
     QWidget *w = widget(currentIndex());
@@ -1154,8 +1167,7 @@ void KexiTabbedToolBar::slotTabDoubleClicked(int index)
         d->tabBarAnimation.setStartValue(1.0);
         d->tabBarAnimation.setEndValue(0.0);
         d->tabBarAnimation.start();
-    }
-    else { // roll down
+    } else { // roll down
         d->tabBarOpacityEffect.setOpacity(0.0);
         setMaximumHeight(QWIDGETSIZE_MAX);
         widget(d->rolledUpIndex)->show();
@@ -1174,7 +1186,7 @@ void KexiTabbedToolBar::tabBarAnimationFinished()
     if (d->rolledUp) {
         // hide and collapse the area
         widget(currentIndex())->hide();
-        KexiTabbedToolBarTabBar *tb = static_cast<KexiTabbedToolBarTabBar*>(tabBar());
+        KexiTabbedToolBarTabBar *tb = static_cast<KexiTabbedToolBarTabBar *>(tabBar());
         setFixedHeight(tb->tabSizeHint(currentIndex()).height());
         widget(currentIndex())->setFixedHeight(0);
         d->rolledUpIndex = currentIndex();
@@ -1183,13 +1195,14 @@ void KexiTabbedToolBar::tabBarAnimationFinished()
 
 void KexiTabbedToolBar::setupCreateWidgetToolbar()
 {
-    if (!d->createWidgetToolBar->actions().isEmpty())
+    if (!d->createWidgetToolBar->actions().isEmpty()) {
         return;
+    }
 //! @todo separate core object types from custom....
     KexiPart::PartInfoList *plist = Kexi::partManager().infoList(); //this list is properly sorted
     if (plist) {
-        foreach(KexiPart::Info *info, *plist) {
-            QAction* a = info->newObjectAction();
+        foreach (KexiPart::Info *info, *plist) {
+            QAction *a = info->newObjectAction();
             if (a) {
                 d->createWidgetToolBar->addAction(a);
             } else {
@@ -1213,29 +1226,32 @@ void KexiTabbedToolBar::slotDelayedTabRaise()
 #endif
 }
 
-KToolBar *KexiTabbedToolBar::toolBar(const QString& name) const
+KToolBar *KexiTabbedToolBar::toolBar(const QString &name) const
 {
     return d->toolbarsForName[name];
 }
 
-void KexiTabbedToolBar::addAction(KToolBar *tbar, const char* actionName)
+void KexiTabbedToolBar::addAction(KToolBar *tbar, const char *actionName)
 {
     QAction *a = d->ac->action(actionName);
-    if (a)
+    if (a) {
         tbar->addAction(a);
+    }
 }
 
-void KexiTabbedToolBar::addAction(const QString& toolBarName, QAction *action)
+void KexiTabbedToolBar::addAction(const QString &toolBarName, QAction *action)
 {
-    if (!action)
+    if (!action) {
         return;
+    }
     KToolBar *tbar = d->toolbarsForName[toolBarName];
-    if (!tbar)
+    if (!tbar) {
         return;
+    }
     tbar->addAction(action);
 }
 
-void KexiTabbedToolBar::addSeparatorAndAction(KToolBar *tbar, const char* actionName)
+void KexiTabbedToolBar::addSeparatorAndAction(KToolBar *tbar, const char *actionName)
 {
     QAction *a = d->ac->action(actionName);
     if (a) {
@@ -1244,7 +1260,7 @@ void KexiTabbedToolBar::addSeparatorAndAction(KToolBar *tbar, const char* action
     }
 }
 
-void KexiTabbedToolBar::appendWidgetToToolbar(const QString& name, QWidget* widget)
+void KexiTabbedToolBar::appendWidgetToToolbar(const QString &name, QWidget *widget)
 {
     KToolBar *tbar = d->toolbarsForName[name];
     if (!tbar) {
@@ -1254,7 +1270,7 @@ void KexiTabbedToolBar::appendWidgetToToolbar(const QString& name, QWidget* widg
     d->extraActions.insert(widget, action);
 }
 
-void KexiTabbedToolBar::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
+void KexiTabbedToolBar::setWidgetVisibleInToolbar(QWidget *widget, bool visible)
 {
     QAction *action = d->extraActions[widget];
     if (!action) {
@@ -1263,7 +1279,7 @@ void KexiTabbedToolBar::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
     action->setVisible(visible);
 }
 
-void KexiTabbedToolBar::showMainMenu(const char* actionName)
+void KexiTabbedToolBar::showMainMenu(const char *actionName)
 {
     d->showMainMenu(actionName);
 }
@@ -1287,7 +1303,7 @@ void KexiTabbedToolBar::selectMainMenuItem(const char *actionName)
 {
     if (actionName) {
         KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
-        KexiMenuWidgetAction *a = qobject_cast<KexiMenuWidgetAction*>(ac->action(actionName));
+        KexiMenuWidgetAction *a = qobject_cast<KexiMenuWidgetAction *>(ac->action(actionName));
         if (a) {
             d->mainMenu->setPersistentlySelectedAction(a, true);
         }
@@ -1299,12 +1315,12 @@ void KexiTabbedToolBar::addSearchableModel(KexiSearchableModel *model)
     d->searchLineEdit->addSearchableModel(model);
 }
 
-KToolBar* KexiTabbedToolBar::createToolBar(const char* name, const QString& caption)
+KToolBar *KexiTabbedToolBar::createToolBar(const char *name, const QString &caption)
 {
     return d->createToolBar(name, caption);
 }
 
-void KexiTabbedToolBar::setCurrentTab(const QString& name)
+void KexiTabbedToolBar::setCurrentTab(const QString &name)
 {
     //kDebug() << name;
     d->setCurrentTab(name);
@@ -1315,19 +1331,19 @@ void KexiTabbedToolBar::setCurrentTab(int index)
     setCurrentIndex(d->lowestIndex + index);
 }
 
-void KexiTabbedToolBar::hideTab(const QString& name)
+void KexiTabbedToolBar::hideTab(const QString &name)
 {
     //kDebug() << name;
     d->hideTab(name);
 }
 
-void KexiTabbedToolBar::showTab(const QString& name)
+void KexiTabbedToolBar::showTab(const QString &name)
 {
     //kDebug() << name;
     d->showTab(name);
 }
 
-bool KexiTabbedToolBar::isTabVisible(const QString& name) const
+bool KexiTabbedToolBar::isTabVisible(const QString &name) const
 {
     return d->isTabVisible(name);
 }
@@ -1342,7 +1358,6 @@ void KexiTabbedToolBar::toggleRollDown()
     slotTabDoubleClicked(-1);//use -1 just to rolldown/up the tabbar
 }
 
-
 //! @short A widget being main part of KexiMainWindow
 class KexiMainWidget : public KMainWindow
 {
@@ -1351,12 +1366,14 @@ public:
     KexiMainWidget();
     virtual ~KexiMainWidget();
 
-    void setParent(KexiMainWindow* mainWindow) {
+    void setParent(KexiMainWindow *mainWindow)
+    {
         KMainWindow::setParent(mainWindow);
         m_mainWindow = mainWindow;
     }
 
-    KexiMainWindowTabWidget* tabWidget() const {
+    KexiMainWindowTabWidget *tabWidget() const
+    {
         return m_tabWidget;
     }
 protected:
@@ -1369,7 +1386,7 @@ Q_SIGNALS:
 private:
     void setupCentralWidget();
 
-    KexiMainWindowTabWidget* m_tabWidget;
+    KexiMainWindowTabWidget *m_tabWidget;
     KexiMainWindow *m_mainWindow;
     QPointer<KexiWindow> m_previouslyActiveWindow;
 
@@ -1378,8 +1395,8 @@ private:
 };
 
 KexiMainWidget::KexiMainWidget()
-        : KMainWindow(0, Qt::Widget)
-        , m_mainWindow(0)
+    : KMainWindow(0, Qt::Widget)
+    , m_mainWindow(0)
 {
     setupCentralWidget();
 }
@@ -1406,11 +1423,13 @@ bool KexiMainWidget::queryClose()
 
 void KexiMainWidget::slotCurrentTabIndexChanged(int index)
 {
-    KexiWindowContainer* cont = dynamic_cast<KexiWindowContainer*>(m_tabWidget->widget(index));
-    if (! cont || (KexiWindow*)m_previouslyActiveWindow == cont->window)
+    KexiWindowContainer *cont = dynamic_cast<KexiWindowContainer *>(m_tabWidget->widget(index));
+    if (! cont || (KexiWindow *)m_previouslyActiveWindow == cont->window) {
         return;
-    if (m_mainWindow)
-        m_mainWindow->activeWindowChanged(cont->window, (KexiWindow*)m_previouslyActiveWindow);
+    }
+    if (m_mainWindow) {
+        m_mainWindow->activeWindowChanged(cont->window, (KexiWindow *)m_previouslyActiveWindow);
+    }
     m_previouslyActiveWindow = cont->window;
     emit currentTabIndexChanged(index);
 }
@@ -1426,11 +1445,11 @@ public:
 
     virtual ~KexiDockWidget();
 
-    virtual void setSizeHint(const QSize& hint);
+    virtual void setSizeHint(const QSize &hint);
 
     virtual QSize sizeHint() const;
 
-    QToolButton* closeButton() const;
+    QToolButton *closeButton() const;
 
 protected:
     virtual void paintEvent(QPaintEvent *pe);
@@ -1440,20 +1459,21 @@ protected Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 //------------------------------------------
 
 //! @internal safer dictionary
-typedef QMap< int, KexiWindow* > KexiWindowDict;
+typedef QMap< int, KexiWindow * > KexiWindowDict;
 
 //! @internal
 class KexiMainWindow::Private
 {
 public:
-    explicit Private(KexiMainWindow* w)
-            : wnd(w) {
+    explicit Private(KexiMainWindow *w)
+        : wnd(w)
+    {
         actionCollection = new KActionCollection(w);
         propEditor = 0;
         propEditorDockWidget = 0;
@@ -1498,7 +1518,8 @@ public:
         propertyEditorCollapsed = false;
         enable_slotPropertyEditorVisibilityChanged = true;
     }
-    ~Private() {
+    ~Private()
+    {
         qDeleteAll(m_openedCustomObjectsForItem);
     }
 
@@ -1510,31 +1531,36 @@ public:
         WindowClosingJob
     };
 
-    KexiWindow *openedWindowFor(const KexiPart::Item* item, PendingJobType &pendingType) {
+    KexiWindow *openedWindowFor(const KexiPart::Item *item, PendingJobType &pendingType)
+    {
         return openedWindowFor(item->identifier(), pendingType);
     }
 
-    KexiWindow *openedWindowFor(int identifier, PendingJobType &pendingType) {
+    KexiWindow *openedWindowFor(int identifier, PendingJobType &pendingType)
+    {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         QHash<int, PendingJobType>::ConstIterator it = pendingWindows.find(identifier);
-        if (it == pendingWindows.end())
+        if (it == pendingWindows.end()) {
             pendingType = NoJob;
-        else
+        } else {
             pendingType = it.value();
+        }
 
         if (pendingType == WindowOpeningJob) {
             return 0;
         }
-        return windows.contains(identifier) ? (KexiWindow*)windows.value(identifier) : 0;
+        return windows.contains(identifier) ? (KexiWindow *)windows.value(identifier) : 0;
     }
 #else
-    KexiWindow *openedWindowFor(int identifier) {
+    KexiWindow *openedWindowFor(int identifier)
+    {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
-        return windows.contains(identifier) ? (KexiWindow*)windows.value(identifier) : 0;
+        return windows.contains(identifier) ? (KexiWindow *)windows.value(identifier) : 0;
     }
 #endif
 
-    void insertWindow(KexiWindow *window) {
+    void insertWindow(KexiWindow *window)
+    {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         windows.insert(window->id(), window);
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -1543,20 +1569,24 @@ public:
     }
 
 #ifndef KEXI_NO_PENDING_DIALOGS
-    void addItemToPendingWindows(const KexiPart::Item* item, PendingJobType jobType) {
+    void addItemToPendingWindows(const KexiPart::Item *item, PendingJobType jobType)
+    {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         pendingWindows.insert(item->identifier(), jobType);
     }
 
-    bool pendingWindowsExist() {
-        if (pendingWindows.begin() != pendingWindows.end())
+    bool pendingWindowsExist()
+    {
+        if (pendingWindows.begin() != pendingWindows.end()) {
             kDebug() <<  pendingWindows.constBegin().key() << " " << (int)pendingWindows.constBegin().value();
+        }
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         return !pendingWindows.isEmpty();
     }
 #endif
 
-    void updateWindowId(KexiWindow *window, int oldItemID) {
+    void updateWindowId(KexiWindow *window, int oldItemID)
+    {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         windows.remove(oldItemID);
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -1565,25 +1595,29 @@ public:
         windows.insert(window->id(), window);
     }
 
-    void removeWindow(int identifier) {
+    void removeWindow(int identifier)
+    {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         windows.remove(identifier);
     }
 
 #ifndef KEXI_NO_PENDING_DIALOGS
-    void removePendingWindow(int identifier) {
+    void removePendingWindow(int identifier)
+    {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         pendingWindows.remove(identifier);
     }
 #endif
 
-    uint openedWindowsCount() {
+    uint openedWindowsCount()
+    {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         return windows.count();
     }
 
     //! Used in KexiMainWindowe::closeProject()
-    void clearWindows() {
+    void clearWindows()
+    {
 //! @todo (threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         windows.clear();
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -1591,7 +1625,8 @@ public:
 #endif
     }
 
-    void showStartProcessMsg(const QStringList& args) {
+    void showStartProcessMsg(const QStringList &args)
+    {
         wnd->showErrorMessage(i18n("Could not start %1 application.", QString(KEXI_APP_NAME)),
                               i18n("Command \"%1\" failed.", args.join(" ")));
     }
@@ -1644,22 +1679,23 @@ public:
 
     //! Updates Property Editor Pane's visibility for the current window and the @a viewMode view mode.
     /*! @a info can be provided to hadle cases when current window is not yet defined (in openObject()). */
-    void updatePropEditorVisibility(Kexi::ViewMode viewMode, KexiPart::Info *info = 0) {
-        if (!propEditorDockWidget)
+    void updatePropEditorVisibility(Kexi::ViewMode viewMode, KexiPart::Info *info = 0)
+    {
+        if (!propEditorDockWidget) {
             return;
+        }
         KexiWindow *currentWindow = wnd->currentWindow();
         if (!info && currentWindow) {
             info = currentWindow->part()->info();
         }
         const bool visible = (viewMode == Kexi::DesignViewMode)
-            && ((currentWindow && currentWindow->propertySet()) || (info && info->isPropertyEditorAlwaysVisibleInDesignMode()));
+                             && ((currentWindow && currentWindow->propertySet()) || (info && info->isPropertyEditorAlwaysVisibleInDesignMode()));
         //kDebug() << "visible == " << visible;
         enable_slotPropertyEditorVisibilityChanged = false;
         if (visible && propertyEditorCollapsed) { // used when we're switching back to a window with propeditor available but collapsed
             propEditorDockWidget->setVisible(!visible);
             setPropertyEditorTabBarVisible(true);
-        }
-        else {
+        } else {
             propEditorDockWidget->setVisible(visible);
             setPropertyEditorTabBarVisible(false);
         }
@@ -1667,13 +1703,12 @@ public:
     }
 
     void setTabBarVisible(KMultiTabBar::KMultiTabBarPosition position, int id,
-                          KexiDockWidget *dockWidget, bool visible) 
+                          KexiDockWidget *dockWidget, bool visible)
     {
         KMultiTabBar *mtbar = multiTabBars.value(position);
         if (!visible) {
             mtbar->removeTab(id);
-        }
-        else if (!mtbar->tab(id)) {
+        } else if (!mtbar->tab(id)) {
             QString t(dockWidget->windowTitle());
             t.remove('&');
             mtbar->appendTab(QPixmap(), id, t);
@@ -1684,27 +1719,31 @@ public:
         }
     }
 
-    void setPropertyEditorTabBarVisible(bool visible) {
+    void setPropertyEditorTabBarVisible(bool visible)
+    {
         setTabBarVisible(KMultiTabBar::Right, PROPERTY_EDITOR_TABBAR_ID,
                          propEditorDockWidget, visible);
     }
 
     template<class type>
-    type *openedCustomObjectsForItem(KexiPart::Item* item, const char* name) {
+    type *openedCustomObjectsForItem(KexiPart::Item *item, const char *name)
+    {
         if (!item || !name) {
             kWarning() << "!item || !name";
             return 0;
         }
         QByteArray key(QByteArray::number(item->identifier()) + name);
-        return qobject_cast<type*>(m_openedCustomObjectsForItem.value(key));
+        return qobject_cast<type *>(m_openedCustomObjectsForItem.value(key));
     }
 
-    void addOpenedCustomObjectForItem(KexiPart::Item* item, QObject* object, const char* name) {
+    void addOpenedCustomObjectForItem(KexiPart::Item *item, QObject *object, const char *name)
+    {
         QByteArray key(QByteArray::number(item->identifier()) + name);
         m_openedCustomObjectsForItem.insert(key, object);
     }
 
-    KexiFindDialog *findDialog() {
+    KexiFindDialog *findDialog()
+    {
         if (!m_findDialog) {
             m_findDialog = new KexiFindDialog(wnd);
             m_findDialog->setActions(action_edit_findnext, action_edit_findprev,
@@ -1715,12 +1754,15 @@ public:
 
     /*! Updates the find/replace dialog depending on the active view.
      Nothing is performed if the dialog is not instantiated yet or is invisible. */
-    void updateFindDialogContents(bool createIfDoesNotExist = false) {
-        if (!wnd->currentWindow())
+    void updateFindDialogContents(bool createIfDoesNotExist = false)
+    {
+        if (!wnd->currentWindow()) {
             return;
-        if (!createIfDoesNotExist && (!m_findDialog || !m_findDialog->isVisible()))
+        }
+        if (!createIfDoesNotExist && (!m_findDialog || !m_findDialog->isVisible())) {
             return;
-        KexiSearchAndReplaceViewInterface* iface = currentViewSupportingSearchAndReplaceInterface();
+        }
+        KexiSearchAndReplaceViewInterface *iface = currentViewSupportingSearchAndReplaceInterface();
         if (!iface) {
             if (m_findDialog) {
                 m_findDialog->setButtonsEnabled(false);
@@ -1746,26 +1788,33 @@ public:
     }
 
     //! \return the current view if it supports \a actionName, otherwise returns 0.
-    KexiView *currentViewSupportingAction(const char* actionName) const {
-        if (!wnd->currentWindow())
+    KexiView *currentViewSupportingAction(const char *actionName) const
+    {
+        if (!wnd->currentWindow()) {
             return 0;
+        }
         KexiView *view = wnd->currentWindow()->selectedView();
-        if (!view)
+        if (!view) {
             return 0;
+        }
         QAction *action = view->sharedAction(actionName);
-        if (!action || !action->isEnabled())
+        if (!action || !action->isEnabled()) {
             return 0;
+        }
         return view;
     }
 
     //! \return the current view if it supports KexiSearchAndReplaceViewInterface.
-    KexiSearchAndReplaceViewInterface* currentViewSupportingSearchAndReplaceInterface() const {
-        if (!wnd->currentWindow())
+    KexiSearchAndReplaceViewInterface *currentViewSupportingSearchAndReplaceInterface() const
+    {
+        if (!wnd->currentWindow()) {
             return 0;
+        }
         KexiView *view = wnd->currentWindow()->selectedView();
-        if (!view)
+        if (!view) {
             return 0;
-        return dynamic_cast<KexiSearchAndReplaceViewInterface*>(view);
+        }
+        return dynamic_cast<KexiSearchAndReplaceViewInterface *>(view);
     }
 
     KexiMainWindow *wnd;
@@ -1788,7 +1837,7 @@ public:
     //! poits to kexi part which has been previously used to setup proppanel's tabs using
     //! KexiPart::setupCustomPropertyPanelTabs(), in updateCustomPropertyPanelTabs().
     QPointer<KexiPart::Part> partForPreviouslySetupPropertyPanelTabs;
-    QMap<KexiPart::Part*, int> recentlySelectedPropertyPanelPages;
+    QMap<KexiPart::Part *, int> recentlySelectedPropertyPanelPages;
     QPointer<KexiPropertyEditorView> propEditor;
     QPointer<KoProperty::Set> propertySet;
 
@@ -1801,32 +1850,32 @@ public:
 #endif
 
     //! Kexi menu
-    KAction *action_save, *action_save_as, 
-    *action_project_import_export_send, *action_close,
-    *action_project_properties,
-    *action_project_relations, *action_project_import_data_table,
-    *action_project_export_data_table;
+    KAction *action_save, *action_save_as,
+            *action_project_import_export_send, *action_close,
+            *action_project_properties,
+            *action_project_relations, *action_project_import_data_table,
+            *action_project_export_data_table;
 #ifndef KEXI_NO_QUICK_PRINTING
     KAction *action_project_print, *action_project_print_preview,
-        *action_project_print_setup;
+            *action_project_print_setup;
 #endif
     KAction *action_project_welcome;
     KAction *action_show_other;
     int action_welcome_projects_title_id,
-    action_welcome_connections_title_id;
+        action_welcome_connections_title_id;
     KAction *action_settings;
 
     //! edit menu
     KAction *action_edit_delete, *action_edit_delete_row,
-    *action_edit_cut, *action_edit_copy, *action_edit_paste,
-    *action_edit_find, *action_edit_findnext, *action_edit_findprev,
-    *action_edit_replace, *action_edit_replace_all,
-    *action_edit_select_all,
-    *action_edit_undo, *action_edit_redo,
-    *action_edit_insert_empty_row,
-    *action_edit_edititem, *action_edit_clear_table,
-    *action_edit_paste_special_data_table,
-    *action_edit_copy_special_data_table;
+            *action_edit_cut, *action_edit_copy, *action_edit_paste,
+            *action_edit_find, *action_edit_findnext, *action_edit_findprev,
+            *action_edit_replace, *action_edit_replace_all,
+            *action_edit_select_all,
+            *action_edit_undo, *action_edit_redo,
+            *action_edit_insert_empty_row,
+            *action_edit_edititem, *action_edit_clear_table,
+            *action_edit_paste_special_data_table,
+            *action_edit_copy_special_data_table;
 
     //! view menu
     KAction *action_view_nav, *action_view_propeditor, *action_view_mainarea;
@@ -1873,7 +1922,8 @@ public:
     };
     ActionToExecuteWhenPendingJobsAreFinished actionToExecuteWhenPendingJobsAreFinished;
 
-    void executeActionWhenPendingJobsAreFinished() {
+    void executeActionWhenPendingJobsAreFinished()
+    {
         ActionToExecuteWhenPendingJobsAreFinished a = actionToExecuteWhenPendingJobsAreFinished;
         actionToExecuteWhenPendingJobsAreFinished = NoAction;
         switch (a) {
@@ -1889,11 +1939,11 @@ public:
 #endif
 
     //! Used for delayed windows closing for 'close all'
-    QList<KexiWindow*> windowsToClose;
+    QList<KexiWindow *> windowsToClose;
 
 #ifndef KEXI_NO_QUICK_PRINTING
     //! Opened page setup dialogs, used by printOrPrintPreviewForItem().
-    QHash<int, KexiWindow*> pageSetupWindows;
+    QHash<int, KexiWindow *> pageSetupWindows;
 
     /*! A map from Kexi dialog to "print setup" part item's ID of the data item
      used by closeWindow() to find an ID of the data item, so the entry
@@ -1906,7 +1956,7 @@ public:
 
     //! Indicates if project navigator should be visible
     bool isProjectNavigatorVisible;
-    
+
     //! Indicates if the main menu should be visible
     bool isMainMenuVisible;
 
@@ -1922,14 +1972,14 @@ public:
 #endif
 
     //! Used by openedCustomObjectsForItem() and addOpenedCustomObjectForItem()
-    QHash<QByteArray, QObject*> m_openedCustomObjectsForItem;
+    QHash<QByteArray, QObject *> m_openedCustomObjectsForItem;
 
     int propEditorDockSeparatorPos, navDockSeparatorPos;
 
     bool wasAutoOpen;
     bool windowExistedBeforeCloseProject;
 
-    QMap<KMultiTabBar::KMultiTabBarPosition, KMultiTabBar*> multiTabBars;
+    QMap<KMultiTabBar::KMultiTabBarPosition, KMultiTabBar *> multiTabBars;
     bool propertyEditorCollapsed;
 
     bool enable_slotPropertyEditorVisibilityChanged;
@@ -1956,7 +2006,7 @@ class KexiMainMenuActionShortcut : public QShortcut
 {
     Q_OBJECT
 public:
-    KexiMainMenuActionShortcut(const QKeySequence& key, QWidget *parent, QAction *action);
+    KexiMainMenuActionShortcut(const QKeySequence &key, QWidget *parent, QAction *action);
 
 protected Q_SLOTS:
     //! Triggers associated action only when this action is enabled

@@ -38,6 +38,7 @@ public:
         DownReverse,
         Left,
         LeftReverse
-    };};
+    };
+};
 
 #endif /* KPRTRIANGLEWIPEEFFECTFACTORY_H */

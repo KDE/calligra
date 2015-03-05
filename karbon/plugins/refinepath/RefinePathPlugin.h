@@ -40,7 +40,7 @@ private Q_SLOTS:
     void slotRefinePath();
 
 private:
-    RefinePathDlg * m_RefinePathDlg;
+    RefinePathDlg *m_RefinePathDlg;
 };
 
 class KIntSpinBox;
@@ -50,13 +50,13 @@ class RefinePathDlg : public KDialog
     Q_OBJECT
 
 public:
-    explicit RefinePathDlg(QWidget* parent = 0L, const char* name = 0L);
+    explicit RefinePathDlg(QWidget *parent = 0L, const char *name = 0L);
 
     uint knots() const;
     void setKnots(uint value);
 
 private:
-    KIntSpinBox * m_knots;
+    KIntSpinBox *m_knots;
 };
 
 #endif // REFINEPATHPLUGIN_H

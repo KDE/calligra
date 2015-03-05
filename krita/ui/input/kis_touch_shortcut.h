@@ -26,20 +26,20 @@
 class QTouchEvent;
 class KisTouchShortcut : public KisAbstractShortcut
 {
-    public:
-        KisTouchShortcut( KisAbstractInputAction* action, int index );
-        ~KisTouchShortcut();
+public:
+    KisTouchShortcut(KisAbstractInputAction *action, int index);
+    ~KisTouchShortcut();
 
-        virtual int priority() const;
+    virtual int priority() const;
 
-        void setMinimumTouchPoints( int min );
-        void setMaximumTouchPoints( int max );
+    void setMinimumTouchPoints(int min);
+    void setMaximumTouchPoints(int max);
 
-        bool match( QTouchEvent* event );
+    bool match(QTouchEvent *event);
 
-    private:
-        class Private;
-        Private * const d;
+private:
+    class Private;
+    Private *const d;
 };
 
 #endif // KISTOUCHSHORTCUT_H

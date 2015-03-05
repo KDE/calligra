@@ -28,7 +28,6 @@
 
 #include <QWidget>
 
-
 namespace KPlato
 {
 
@@ -45,15 +44,15 @@ class ViewListDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ViewListDialog( View *view, ViewListWidget &viewlist, QWidget *parent=0 );
+    ViewListDialog(View *view, ViewListWidget &viewlist, QWidget *parent = 0);
 
 protected Q_SLOTS:
     void slotOk();
 
-    void slotViewListItemRemoved( ViewListItem * );
+    void slotViewListItemRemoved(ViewListItem *);
 
 Q_SIGNALS:
-    void viewCreated( ViewBase *view );
+    void viewCreated(ViewBase *view);
 
 private:
     AddViewPanel *m_panel;
@@ -63,29 +62,29 @@ class AddViewPanel : public QWidget
 {
     Q_OBJECT
 public:
-    AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent );
+    AddViewPanel(View *view, ViewListWidget &viewlist, QWidget *parent);
 
     bool ok();
 
     Ui::AddViewPanel widget;
 
 Q_SIGNALS:
-    void enableButtonOk( bool );
-    void viewCreated( ViewBase *view );
+    void enableButtonOk(bool);
+    void viewCreated(ViewBase *view);
 
 protected Q_SLOTS:
     void changed();
-    void viewtypeChanged( int idx );
+    void viewtypeChanged(int idx);
     void categoryChanged();
-    void fillAfter( ViewListItem *cat );
+    void fillAfter(ViewListItem *cat);
 
-    void viewnameChanged( const QString &text );
-    void viewtipChanged( const QString &text );
+    void viewnameChanged(const QString &text);
+    void viewtipChanged(const QString &text);
 
 private:
     View *m_view;
     ViewListWidget &m_viewlist;
-    QMap<QString, ViewListItem*> m_categories;
+    QMap<QString, ViewListItem *> m_categories;
     QStringList m_viewtypes;
     bool m_viewnameChanged;
     bool m_viewtipChanged;
@@ -95,12 +94,12 @@ class ViewListEditViewDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ViewListEditViewDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent=0 );
+    ViewListEditViewDialog(ViewListWidget &viewlist, ViewListItem *item, QWidget *parent = 0);
 
 protected Q_SLOTS:
     void slotOk();
 
-    void slotViewListItemRemoved( ViewListItem * );
+    void slotViewListItemRemoved(ViewListItem *);
 
 private:
     EditViewPanel *m_panel;
@@ -110,36 +109,36 @@ class EditViewPanel : public QWidget
 {
     Q_OBJECT
 public:
-    EditViewPanel( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent );
+    EditViewPanel(ViewListWidget &viewlist, ViewListItem *item, QWidget *parent);
 
     bool ok();
 
     Ui::EditViewPanel widget;
 
 Q_SIGNALS:
-    void enableButtonOk( bool );
+    void enableButtonOk(bool);
 
 protected Q_SLOTS:
     void changed();
     void categoryChanged();
-    void fillAfter( ViewListItem *cat );
+    void fillAfter(ViewListItem *cat);
 
 private:
     ViewListItem *m_item;
     ViewListWidget &m_viewlist;
-    QMap<QString, ViewListItem*> m_categories;
+    QMap<QString, ViewListItem *> m_categories;
 };
 
 class ViewListEditCategoryDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ViewListEditCategoryDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent=0 );
+    ViewListEditCategoryDialog(ViewListWidget &viewlist, ViewListItem *item, QWidget *parent = 0);
 
 protected Q_SLOTS:
     void slotOk();
 
-    void slotViewListItemRemoved( ViewListItem * );
+    void slotViewListItemRemoved(ViewListItem *);
 
 private:
     EditCategoryPanel *m_panel;
@@ -149,14 +148,14 @@ class EditCategoryPanel : public QWidget
 {
     Q_OBJECT
 public:
-    EditCategoryPanel( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent );
+    EditCategoryPanel(ViewListWidget &viewlist, ViewListItem *item, QWidget *parent);
 
     bool ok();
 
     Ui::EditCategoryPanel widget;
 
 Q_SIGNALS:
-    void enableButtonOk( bool );
+    void enableButtonOk(bool);
 
 protected Q_SLOTS:
     void changed();
@@ -172,15 +171,15 @@ class ViewListReportsDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ViewListReportsDialog( View *view, ViewListWidget &viewlist, QWidget *parent=0 );
+    ViewListReportsDialog(View *view, ViewListWidget &viewlist, QWidget *parent = 0);
 
 protected Q_SLOTS:
     void slotOk();
 
-    void slotViewListItemRemoved( ViewListItem * );
+    void slotViewListItemRemoved(ViewListItem *);
 
 Q_SIGNALS:
-    void viewCreated( ViewBase *view );
+    void viewCreated(ViewBase *view);
 
 private:
     AddReportsViewPanel *m_panel;
@@ -190,34 +189,33 @@ class AddReportsViewPanel : public QWidget
 {
     Q_OBJECT
 public:
-    AddReportsViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent );
+    AddReportsViewPanel(View *view, ViewListWidget &viewlist, QWidget *parent);
 
     bool ok();
 
     Ui::AddViewPanel widget;
 
 Q_SIGNALS:
-    void enableButtonOk( bool );
-    void viewCreated( ViewBase *view );
+    void enableButtonOk(bool);
+    void viewCreated(ViewBase *view);
 
 protected Q_SLOTS:
     void changed();
-    void viewtypeChanged( int idx );
+    void viewtypeChanged(int idx);
     void categoryChanged();
-    void fillAfter( ViewListItem *cat );
+    void fillAfter(ViewListItem *cat);
 
-    void viewnameChanged( const QString &text );
-    void viewtipChanged( const QString &text );
+    void viewnameChanged(const QString &text);
+    void viewtipChanged(const QString &text);
 
 private:
     View *m_view;
     ViewListWidget &m_viewlist;
-    QMap<QString, ViewListItem*> m_categories;
+    QMap<QString, ViewListItem *> m_categories;
     QStringList m_viewtypes;
     bool m_viewnameChanged;
     bool m_viewtipChanged;
 };
-
 
 } //KPlato namespace
 

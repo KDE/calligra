@@ -38,13 +38,15 @@
 #include <QComboBox>
 
 const int KWAnchoringProperties::vertRels[4][20] = {
-    { // KoShapeAnchor::AnchorAsCharacter
+    {
+        // KoShapeAnchor::AnchorAsCharacter
         KoShapeAnchor::VBaseline,
         KoShapeAnchor::VChar,
         KoShapeAnchor::VLine,
         -1
     },
-    { // KoShapeAnchor::AnchorToCharacter
+    {
+        // KoShapeAnchor::AnchorToCharacter
         KoShapeAnchor::VChar,
         KoShapeAnchor::VLine,
         KoShapeAnchor::VParagraph,
@@ -53,14 +55,16 @@ const int KWAnchoringProperties::vertRels[4][20] = {
         KoShapeAnchor::VPageContent,
         -1
     },
-    { // KoShapeAnchor::AnchorParagraph
+    {
+        // KoShapeAnchor::AnchorParagraph
         KoShapeAnchor::VParagraph,
         KoShapeAnchor::VParagraphContent,
         KoShapeAnchor::VPage,
         KoShapeAnchor::VPageContent,
         -1
     },
-    { // KoShapeAnchor::AnchorPage
+    {
+        // KoShapeAnchor::AnchorPage
         KoShapeAnchor::VPage,
         KoShapeAnchor::VPageContent,
         -1
@@ -68,10 +72,12 @@ const int KWAnchoringProperties::vertRels[4][20] = {
 };
 
 const int KWAnchoringProperties::horizRels[4][20] = {
-    { // KoShapeAnchor::AnchorAsCharacter
+    {
+        // KoShapeAnchor::AnchorAsCharacter
         -1
     },
-    { // KoShapeAnchor::AnchorToCharacter
+    {
+        // KoShapeAnchor::AnchorToCharacter
         KoShapeAnchor::HChar,
         KoShapeAnchor::HParagraph,
         KoShapeAnchor::HParagraphContent,
@@ -83,7 +89,8 @@ const int KWAnchoringProperties::horizRels[4][20] = {
         KoShapeAnchor::HPageContent,
         -1
     },
-    { // KoShapeAnchor::AnchorParagraph
+    {
+        // KoShapeAnchor::AnchorParagraph
         KoShapeAnchor::HParagraph,
         KoShapeAnchor::HParagraphContent,
         KoShapeAnchor::HParagraphStartMargin,
@@ -94,7 +101,8 @@ const int KWAnchoringProperties::horizRels[4][20] = {
         KoShapeAnchor::HPageContent,
         -1
     },
-    { // KoShapeAnchor::AnchorPage
+    {
+        // KoShapeAnchor::AnchorPage
         KoShapeAnchor::HPageStartMargin,
         KoShapeAnchor::HPageEndMargin,
         KoShapeAnchor::HPage,
@@ -192,8 +200,9 @@ bool KWAnchoringProperties::open(const QList<KoShape *> &shapes)
         if (anchorTypeHelper == GuiHelper::Unset) {
             anchorType = anchorTypeOfFrame;
             anchorTypeHelper = GuiHelper::On;
-        } else if (anchorType != anchorTypeOfFrame)
+        } else if (anchorType != anchorTypeOfFrame) {
             anchorTypeHelper = GuiHelper::TriState;
+        }
 
         if (vertHelper == GuiHelper::Unset) {
             m_vertPos = vertPosOfFrame;
@@ -201,7 +210,7 @@ bool KWAnchoringProperties::open(const QList<KoShape *> &shapes)
             offset = offsetOfFrame;
             vertHelper = GuiHelper::On;
         } else if (m_vertPos != vertPosOfFrame || m_vertRel != vertRelOfFrame ||
-            (m_vertPos == KoShapeAnchor::VFromTop && offset.y() != offsetOfFrame.y())) {
+                   (m_vertPos == KoShapeAnchor::VFromTop && offset.y() != offsetOfFrame.y())) {
             vertHelper = GuiHelper::TriState;
             m_vertPos = vertPosOfFrame;
             m_vertRel = vertRelOfFrame;
@@ -213,7 +222,7 @@ bool KWAnchoringProperties::open(const QList<KoShape *> &shapes)
             offset = offsetOfFrame;
             horizHelper = GuiHelper::On;
         } else if (m_horizPos != horizPosOfFrame || m_horizRel != horizRelOfFrame ||
-            (m_horizPos == KoShapeAnchor::HFromLeft && offset.x() != offsetOfFrame.x())) {
+                   (m_horizPos == KoShapeAnchor::HFromLeft && offset.x() != offsetOfFrame.x())) {
             horizHelper = GuiHelper::TriState;
             m_horizPos = -1;
             m_horizRel = -1;
@@ -425,7 +434,6 @@ void KWAnchoringProperties::horizRelChanged(int index)
     m_horizRel = horizRels[m_anchorType][index];
 }
 
-
 void KWAnchoringProperties::anchorTypeChanged(int type)
 {
     KoShapeAnchor::AnchorType anchorType = KoShapeAnchor::AnchorType(type);
@@ -456,7 +464,6 @@ void KWAnchoringProperties::anchorTypeChanged(int type)
     horizRelStrings[10] = i18n("Paragraph text area"); // KoShapeAnchor::HParagraphContent
     horizRelStrings[11] = i18n("Right paragraph border"); // KoShapeAnchor::HParagraphEndMargin
     horizRelStrings[12] = i18n("Left paragraph border"); // KoShapeAnchor::HParagraphStartMargin
-
 
     m_anchorType = -1;
     widget.cTopArea->clear();
@@ -500,7 +507,7 @@ void KWAnchoringProperties::open(KoShape *shape)
 
 void KWAnchoringProperties::save()
 {
-    save(0,0);
+    save(0, 0);
 }
 
 void KWAnchoringProperties::save(KUndo2Command *macro, KWCanvas *canvas)
@@ -533,13 +540,12 @@ void KWAnchoringProperties::save(KUndo2Command *macro, KWCanvas *canvas)
                 KoShape *targetShape = m_state->document()->findTargetTextShape(anchor->shape());
 
                 if (targetShape != 0) {
-                    KoTextShapeData *textData = qobject_cast<KoTextShapeData*>(targetShape->userData());
+                    KoTextShapeData *textData = qobject_cast<KoTextShapeData *>(targetShape->userData());
                     if (textData) {
-                        container = static_cast<KoShapeContainer*>(targetShape);
+                        container = static_cast<KoShapeContainer *>(targetShape);
                     }
                 }
-            }
-            else if (type != KoShapeAnchor::AnchorPage) {
+            } else if (type != KoShapeAnchor::AnchorPage) {
                 container = anchor->shape()->parent();
             }
 
@@ -567,9 +573,9 @@ void KWAnchoringProperties::save(KUndo2Command *macro, KWCanvas *canvas)
             KoTextShapeDataBase *textData = 0;
             KoShape *oldParent = anchor->shape()->parent();
             if (oldParent) {
-                textData = qobject_cast<KoTextShapeDataBase*>(oldParent->userData());
+                textData = qobject_cast<KoTextShapeDataBase *>(oldParent->userData());
             } else  if (container) {
-                textData = qobject_cast<KoTextShapeDataBase*>(container->userData());
+                textData = qobject_cast<KoTextShapeDataBase *>(container->userData());
             }
 
             ChangeAnchorPropertiesCommand *cmd = new ChangeAnchorPropertiesCommand(anchor, anchorProperties, container, macro);

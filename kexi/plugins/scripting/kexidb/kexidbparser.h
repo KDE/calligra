@@ -55,24 +55,24 @@ class KexiDBParser : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser, bool owner);
+    KexiDBParser(KexiDBConnection *connection, ::KexiDB::Parser *parser, bool owner);
     virtual ~KexiDBParser();
 
 public Q_SLOTS:
 
     /** Clears previous results and runs the parser on the SQL statement passed as an argument. */
-    bool parse(const QString& sql);
+    bool parse(const QString &sql);
     /** Clears parsing results. */
     void clear();
     /** Returns the resulting operation. */
     const QString operation();
 
     /** Returns the \a KexiDBTableSchema object on a CREATE TABLE operation. */
-    QObject* table();
+    QObject *table();
     /** Returns the \a KexiDBQuerySchema object on a SELECT operation. */
-    QObject* query();
+    QObject *query();
     /** Returns the \a KexiDBConnection object pointing to the used database connection. */
-    QObject* connection();
+    QObject *connection();
     /** Returns the SQL query statement. */
     const QString statement();
 
@@ -85,7 +85,7 @@ public Q_SLOTS:
 
 private:
     QPointer<KexiDBConnection> m_connection;
-    ::KexiDB::Parser* m_parser;
+    ::KexiDB::Parser *m_parser;
     bool m_owner;
 };
 

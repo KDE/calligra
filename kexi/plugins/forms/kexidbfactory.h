@@ -36,10 +36,10 @@ public:
                                   KFormDesigner::Container *container,
                                   CreateWidgetOptions options = DefaultOptions);
 
-    virtual void createCustomActions(KActionCollection* col);
+    virtual void createCustomActions(KActionCollection *col);
     virtual bool createMenuActions(const QByteArray &classname, QWidget *w, QMenu *menu,
                                    KFormDesigner::Container *container);
-    virtual bool startInlineEditing(InlineEditorCreationArguments& args);
+    virtual bool startInlineEditing(InlineEditorCreationArguments &args);
     virtual bool previewWidget(const QByteArray &, QWidget *, KFormDesigner::Container *);
     virtual bool clearWidgetContent(const QByteArray &classname, QWidget *w);
 
@@ -48,18 +48,18 @@ protected Q_SLOTS:
 
 protected:
     virtual bool changeInlineText(KFormDesigner::Form *form, QWidget *widget,
-        const QString &text, QString &oldText);
+                                  const QString &text, QString &oldText);
     virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
 
-    virtual bool isPropertyVisibleInternal(const QByteArray& classname, QWidget *w,
-                                           const QByteArray& property, bool isTopLevel);
+    virtual bool isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,
+                                           const QByteArray &property, bool isTopLevel);
 
     //! Sometimes property sets should be reloaded when a given property value changed.
     //! @todo this does not seem to work in Kexi 2.x
-    virtual bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& classname, QWidget *w,
-            const QByteArray& property);
+    virtual bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray &classname, QWidget *w,
+            const QByteArray &property);
 
-    KAction* m_assignAction;
+    KAction *m_assignAction;
 };
 
 #endif

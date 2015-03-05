@@ -65,8 +65,8 @@ public Q_SLOTS:
 private:
 
     explicit KisColorManager();
-    KisColorManager(const KisColorManager&);
-    KisColorManager operator=(const KisColorManager&);
+    KisColorManager(const KisColorManager &);
+    KisColorManager operator=(const KisColorManager &);
 
     class Private;
     const Private *const d;

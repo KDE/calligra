@@ -32,15 +32,15 @@ public:
     ScenarioList();
     virtual ~ScenarioList() { }
 
-    Scenario* getScenario(const QString& id) const;
+    Scenario *getScenario(const QString &id) const;
 
     static bool isSupportedSortingCriteria(int sc);
 
-    virtual int compareItemsLevel(CoreAttributes* c1, CoreAttributes* c2,
+    virtual int compareItemsLevel(CoreAttributes *c1, CoreAttributes *c2,
                                   int level);
 
-    virtual Scenario* operator[](int i);
-} ;
+    virtual Scenario *operator[](int i);
+};
 
 /**
  * @short Iterator class for ScenarioList objects.
@@ -49,14 +49,14 @@ public:
 class ScenarioListIterator : public virtual CoreAttributesListIterator
 {
 public:
-    explicit ScenarioListIterator(const CoreAttributesList& l) :
+    explicit ScenarioListIterator(const CoreAttributesList &l) :
         CoreAttributesListIterator(l)
     { }
 
     ~ScenarioListIterator() { }
 
-    Scenario* operator*();
-} ;
+    Scenario *operator*();
+};
 
 } // namespace TJ
 

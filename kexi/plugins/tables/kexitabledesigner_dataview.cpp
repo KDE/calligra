@@ -28,12 +28,12 @@
 #include <kexi_global.h>
 
 KexiTableDesigner_DataView::KexiTableDesigner_DataView(QWidget *parent)
-        : KexiDataTableView(parent, true/*db-aware*/)
+    : KexiDataTableView(parent, true/*db-aware*/)
 {
     setObjectName("KexiTableDesigner_DataView");
 
     // setup main menu actions
-    QList<QAction*> mainMenuActions;
+    QList<QAction *> mainMenuActions;
     mainMenuActions
             << sharedAction("project_export_data_table")
             << sharedAction("edit_clear_table");
@@ -77,19 +77,20 @@ tristate KexiTableDesigner_DataView::afterSwitchFrom(Kexi::ViewMode mode)
     if (tempData()->tableSchemaChangedInPreviousView) {
         KexiUtils::WaitCursor wait;
         KexiDB::Cursor *c
-        = KexiMainWindowIface::global()->project()->dbConnection()->prepareQuery(
-              *tempData()->table);
-        if (!c)
+            = KexiMainWindowIface::global()->project()->dbConnection()->prepareQuery(
+                  *tempData()->table);
+        if (!c) {
             return false;
+        }
         setData(c);
         tempData()->tableSchemaChangedInPreviousView = false;
     }
     return true;
 }
 
-KexiTablePart::TempData* KexiTableDesigner_DataView::tempData() const
+KexiTablePart::TempData *KexiTableDesigner_DataView::tempData() const
 {
-    return static_cast<KexiTablePart::TempData*>(window()->data());
+    return static_cast<KexiTablePart::TempData *>(window()->data());
 }
 
 #include "kexitabledesigner_dataview.moc"

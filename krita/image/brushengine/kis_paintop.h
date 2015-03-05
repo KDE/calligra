@@ -45,7 +45,7 @@ class KRITAIMAGE_EXPORT KisPaintOp : public KisShared
     struct Private;
 public:
 
-    KisPaintOp(KisPainter * painter);
+    KisPaintOp(KisPainter *painter);
     virtual ~KisPaintOp();
 
     /**
@@ -56,7 +56,7 @@ public:
      * specified by spacing, which is automatically saved into the
      * current distance information object
      */
-    void paintAt(const KisPaintInformation& info, KisDistanceInformation *currentDistance);
+    void paintAt(const KisPaintInformation &info, KisDistanceInformation *currentDistance);
 
     /**
      * Draw a line between pos1 and pos2 using the currently set brush and color.
@@ -84,12 +84,12 @@ public:
                                   const KisPaintInformation &pi2,
                                   KisDistanceInformation *currentDistance);
 
-
     /**
     * Whether this paintop can paint. Can be false in case that some setting isn't read correctly.
     * @return if paintop is ready for painting, default is true
     */
-    virtual bool canPaint() const {
+    virtual bool canPaint() const
+    {
         return true;
     }
 
@@ -111,7 +111,7 @@ protected:
     /**
      * The implementation of painting of a dab
      */
-    virtual KisSpacingInformation paintAt(const KisPaintInformation& info) = 0;
+    virtual KisSpacingInformation paintAt(const KisPaintInformation &info) = 0;
 
     void setCurrentScale(qreal scale);
     /**
@@ -125,7 +125,7 @@ protected:
     /**
      * Return the painter this paintop is owned by
      */
-    KisPainter* painter() const;
+    KisPainter *painter() const;
 
     /**
      * Return the paintdevice the painter this paintop is owned by
@@ -137,8 +137,7 @@ private:
     void setFanCornersInfo(bool fanCornersEnabled, qreal fanCornersStep);
 
 private:
-    Private* const d;
+    Private *const d;
 };
-
 
 #endif // KIS_PAINTOP_H_

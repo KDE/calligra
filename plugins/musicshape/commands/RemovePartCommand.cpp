@@ -25,11 +25,11 @@
 
 using namespace MusicCore;
 
-RemovePartCommand::RemovePartCommand(MusicShape* shape, Part* part)
+RemovePartCommand::RemovePartCommand(MusicShape *shape, Part *part)
     : m_sheet(part->sheet()),
-    m_part(part),
-    m_shape(shape),
-    m_partIndex(m_sheet->partIndex(part))
+      m_part(part),
+      m_shape(shape),
+      m_partIndex(m_sheet->partIndex(part))
 {
     setText(kundo2_i18n("Remove part"));
 }

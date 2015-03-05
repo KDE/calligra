@@ -44,7 +44,7 @@ public:
      saveConnectionData() is called automatically, if there's no \a filename provided
      or the filename is already used, a new unique will be generated.
      \return true on successful creating corresponding .kexic file */
-    bool addConnectionData(KexiDB::ConnectionData *data, const QString& filename = QString());
+    bool addConnectionData(KexiDB::ConnectionData *data, const QString &filename = QString());
 
     /*! Saves changes made to \a oldData to a file which name has been provided by addConnectionData().
      This function does nothing if \a oldData hasn't been added to this set.
@@ -56,14 +56,14 @@ public:
     bool removeConnectionData(KexiDB::ConnectionData *data);
 
     /*! \return the list of connection data items. */
-    const KexiDB::ConnectionData::List& list() const;
+    const KexiDB::ConnectionData::List &list() const;
 
     /*! \return a filename of a connection data file for \a data. */
     QString fileNameForConnectionData(const KexiDB::ConnectionData &data) const;
 
     /*! \return a connection data for a .kexic shortcut filename.
      0 is returned if the filename does not match. */
-    KexiDB::ConnectionData* connectionDataForFileName(const QString& fileName) const;
+    KexiDB::ConnectionData *connectionDataForFileName(const QString &fileName) const;
 
     /*! \return key for connection data @a data, basically a comma-separated string with
      all properties serialized: "driverName,userName,...". Used in internal structures. */
@@ -72,10 +72,10 @@ public:
 private:
     /*! Removes all connection data items from this set. */
     void clear();
-    void addConnectionDataInternal(KexiDB::ConnectionData *data, const QString& filename);
+    void addConnectionDataInternal(KexiDB::ConnectionData *data, const QString &filename);
     void removeConnectionDataInternal(KexiDB::ConnectionData *data);
 
-    KexiDBConnectionSetPrivate * const d;
+    KexiDBConnectionSetPrivate *const d;
 };
 
 #endif // KEXIDBCONNSET_H

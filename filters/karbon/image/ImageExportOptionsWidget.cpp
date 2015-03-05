@@ -22,8 +22,8 @@
 #include <KoUnit.h> // for POINT_TO_INCH
 #include <KoDpi.h>
 
-ImageExportOptionsWidget::ImageExportOptionsWidget(QSizeF pointSize, QWidget * parent)
-        : QWidget(parent), m_pointSize(pointSize)
+ImageExportOptionsWidget::ImageExportOptionsWidget(QSizeF pointSize, QWidget *parent)
+    : QWidget(parent), m_pointSize(pointSize)
 {
     KoUnit unit;
 
@@ -211,8 +211,9 @@ void ImageExportOptionsWidget::aspectChanged(bool keepAspect)
 
     blockChildSignals(false);
 
-    if (keepAspect)
+    if (keepAspect) {
         unitWidthChanged(widget.unitWidth->value());
+    }
 }
 
 void ImageExportOptionsWidget::enableBackgroundOpacity(bool enable)

@@ -68,19 +68,25 @@ public:
     /**
      * @return list of all documents
      */
-    static QList<DocBase*> documents();
+    static QList<DocBase *> documents();
 
     virtual void setReadWrite(bool readwrite = true);
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return SHEETS_MIME_TYPE; }
+    virtual QByteArray nativeFormatMimeType() const
+    {
+        return SHEETS_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return SHEETS_MIME_TYPE;}
+    virtual QByteArray nativeOasisMimeType() const
+    {
+        return SHEETS_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {
         return QStringList() << "application/vnd.oasis.opendocument.spreadsheet-template"
-                             << "application/x-kspread";
+               << "application/x-kspread";
     }
 
     /**
@@ -106,8 +112,6 @@ public:
 
     virtual void initConfig();
 
-
-
     /**
      * \ingroup OpenDocument
      * Main saving method.
@@ -127,24 +131,24 @@ public:
      *        It returns the plain text format of the saved data, when available.
      */
     virtual bool saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag,
-                       QString* plainText = 0);
+                               QString *plainText = 0);
 
     /**
      * \ingroup OpenDocument
      * Main loading method.
      * @see Map::loadOdf
      */
-    virtual bool loadOdf(KoOdfReadStore & odfStore);
+    virtual bool loadOdf(KoOdfReadStore &odfStore);
 
 protected:
     class Private;
-    Private * const d;
+    Private *const d;
 
-    virtual void paintContent(QPainter & painter, const QRect & rect);
-    virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
+    virtual void paintContent(QPainter &painter, const QRect &rect);
+    virtual bool loadXML(const KoXmlDocument &doc, KoStore *store);
 
-    virtual void saveOdfViewSettings(KoXmlWriter& settingsWriter);
-    virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter& settingsWriter);
+    virtual void saveOdfViewSettings(KoXmlWriter &settingsWriter);
+    virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
 private:
     Q_DISABLE_COPY(DocBase)
 
@@ -162,13 +166,13 @@ private:
      * The actual loading takes place in Map::loadOdfSettings.
      * @see Map::loadOdfSettings
      */
-    void loadOdfSettings(const KoXmlDocument&settingsDoc);
+    void loadOdfSettings(const KoXmlDocument &settingsDoc);
 
     /**
      * \ingroup OpenDocument
      * Load the spell checker ignore list.
      */
-    void loadOdfIgnoreList(const KoOasisSettings& settings);
+    void loadOdfIgnoreList(const KoOasisSettings &settings);
 };
 
 } // namespace Sheets

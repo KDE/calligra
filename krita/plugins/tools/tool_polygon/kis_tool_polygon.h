@@ -36,9 +36,8 @@ public:
     KisToolPolygon(KoCanvasBase *canvas);
     virtual ~KisToolPolygon();
 protected:
-    virtual void finishPolyline(const QVector<QPointF>& points);
+    virtual void finishPolyline(const QVector<QPointF> &points);
 };
-
 
 #include "KoToolFactoryBase.h"
 
@@ -46,8 +45,9 @@ class KisToolPolygonFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPolygonFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolPolygon") {
+    KisToolPolygonFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolPolygon")
+    {
         setToolTip(i18n("Polygon Tool. Shift-mouseclick ends the polygon."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -57,10 +57,10 @@ public:
 
     virtual ~KisToolPolygonFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolPolygon(canvas);
     }
 };
-
 
 #endif //__KIS_TOOL_POLYGON_H__

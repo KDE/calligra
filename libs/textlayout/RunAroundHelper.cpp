@@ -34,12 +34,13 @@ RunAroundHelper::RunAroundHelper()
     m_stayOnBaseline = false;
 }
 
-void RunAroundHelper::setLine(KoTextLayoutArea *area, const QTextLine &l) {
+void RunAroundHelper::setLine(KoTextLayoutArea *area, const QTextLine &l)
+{
     m_area = area;
     line = l;
 }
 
-void RunAroundHelper::setObstructions(const QList<KoTextLayoutObstruction*> &obstructions)
+void RunAroundHelper::setObstructions(const QList<KoTextLayoutObstruction *> &obstructions)
 {
     m_obstructions = obstructions;
 }
@@ -76,7 +77,7 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
         // document attached to bug 244411).
 
         //if (m_state->layout->lineCount() > 1 || m_state->layout->text().length() > 0)
-            line.setNumColumns(1);
+        line.setNumColumns(1);
 
         line.setPosition(position);
         return false;
@@ -163,8 +164,7 @@ void RunAroundHelper::createLineParts()
         }
         if (lastRightRectValid) {
             lineParts.append(rightLineRect);
-        }
-        else {
+        } else {
             lineParts.append(QRect());
         }
         Q_ASSERT(m_validObstructions.size() + 1 == lineParts.size());

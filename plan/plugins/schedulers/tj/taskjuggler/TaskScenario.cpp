@@ -18,7 +18,6 @@
 namespace TJ
 {
 
-
 TaskScenario::TaskScenario() :
     task(0),
     index(0),
@@ -55,56 +54,49 @@ TaskScenario::TaskScenario() :
     bookedResources(),
     criticalLinks()
 {
-    qDebug()<<"TaskScenario:"<<this;
+    qDebug() << "TaskScenario:" << this;
 }
 
 void
 TaskScenario::calcCompletionDegree(time_t now)
 {
-    if (now > end)
-    {
+    if (now > end) {
         completionDegree = 100.0;
         status = reportedCompletion >= 0 && reportedCompletion < 100 ?
-            Late : Finished;
-    }
-    else if (now <= start)
-    {
+                 Late : Finished;
+    } else if (now <= start) {
         completionDegree = 0.0;
         status = reportedCompletion > 0 ? InProgressEarly : NotStarted;
-    }
-    else
-    {
+    } else {
         status = OnTime;
-        if (effort > 0.0)
-        {
+        if (effort > 0.0) {
             completionDegree = (100.0 / effort) *
-                task->getLoad(index, Interval(start, now));
-        }
-        else if (length > 0.0)
-        {
+                               task->getLoad(index, Interval(start, now));
+        } else if (length > 0.0) {
             completionDegree = (100.0 /
-                task->getProject()->calcWorkingDays(Interval(start, end))) *
-                task->getProject()->calcWorkingDays(Interval(start, now));
-        }
-        else
+                                task->getProject()->calcWorkingDays(Interval(start, end))) *
+                               task->getProject()->calcWorkingDays(Interval(start, now));
+        } else {
             completionDegree = (100.0 / (end - start + 1)) * (now - start);
+        }
 
-        if (reportedCompletion >= 0.0)
-        {
-            if (reportedCompletion < completionDegree)
+        if (reportedCompletion >= 0.0) {
+            if (reportedCompletion < completionDegree) {
                 status = InProgressLate;
-            else if (reportedCompletion > completionDegree)
+            } else if (reportedCompletion > completionDegree) {
                 status = InProgressEarly;
+            }
         }
     }
 }
 
-bool TaskScenario::isDutyOf(const Resource* r) const
+bool TaskScenario::isDutyOf(const Resource *r) const
 {
     for (ConstResourceTreeIterator rti(r); *rti; ++rti)
         if (bookedResources.contains
-            (const_cast<CoreAttributes*>(static_cast<const CoreAttributes*>(*rti))))
+                (const_cast<CoreAttributes *>(static_cast<const CoreAttributes *>(*rti)))) {
             return true;
+        }
 
     return false;
 }

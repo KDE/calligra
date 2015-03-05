@@ -26,13 +26,16 @@
 class StencilBoxDockerFactory : public KoDockFactoryBase
 {
 public:
-    QString id() const {
+    QString id() const
+    {
         return QString("FlowStencilBoxDocker");
     }
-    QDockWidget* createDockWidget() {
+    QDockWidget *createDockWidget()
+    {
         return new StencilBoxDocker();
     }
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const
+    {
         return DockLeft;
     }
 };

@@ -44,13 +44,13 @@ KisPaintOpRegistry::KisPaintOpRegistry()
 
 KisPaintOpRegistry::~KisPaintOpRegistry()
 {
-    foreach(const QString & id, keys()) {
+    foreach (const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "Deleting KisPaintOpRegistry";
 }
 
-KisPaintOpRegistry* KisPaintOpRegistry::instance()
+KisPaintOpRegistry *KisPaintOpRegistry::instance()
 {
     K_GLOBAL_STATIC(KisPaintOpRegistry, s_instance);
     if (!s_instance.exists()) {
@@ -58,7 +58,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 
         QStringList toBeRemoved;
 
-        foreach(const QString & id, s_instance->keys()) {
+        foreach (const QString &id, s_instance->keys()) {
             KisPaintOpFactory *factory = s_instance->get(id);
             if (!factory->settings()) {
                 toBeRemoved << id;
@@ -66,7 +66,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
                 factory->processAfterLoading();
             }
         }
-        foreach(const QString & id, toBeRemoved) {
+        foreach (const QString &id, toBeRemoved) {
             s_instance->remove(id);
         }
     }
@@ -76,14 +76,16 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 void KisPaintOpRegistry::preinitializePaintOpIfNeeded(const KisPaintOpPresetSP preset)
 {
-    if (!preset) return;
+    if (!preset) {
+        return;
+    }
 
     KisPaintOpFactory *f = value(preset->paintOp().id());
     f->preinitializePaintOpIfNeeded(preset->settings());
 }
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image) const
+KisPaintOp *KisPaintOpRegistry::paintOp(const QString &id, const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) const
 {
     if (painter == 0) {
         warnKrita << " KisPaintOpRegistry::paintOp painter is null";
@@ -92,9 +94,9 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
 
     Q_ASSERT(settings);
 
-    KisPaintOpFactory* f = value(id);
+    KisPaintOpFactory *f = value(id);
     if (f) {
-        KisPaintOp * op = f->createOp(settings, painter, node, image);
+        KisPaintOp *op = f->createOp(settings, painter, node, image);
         if (op) {
             return op;
         }
@@ -103,17 +105,19 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
     return 0;
 }
 
-KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisNodeSP node, KisImageSP image) const
+KisPaintOp *KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPainter *painter, KisNodeSP node, KisImageSP image) const
 {
     Q_ASSERT(preset);
     Q_ASSERT(painter);
 
-    if (!preset) return 0;
+    if (!preset) {
+        return 0;
+    }
 
     return paintOp(preset->paintOp().id(), preset->settings(), painter, node, image);
 }
 
-KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id) const
+KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID &id) const
 {
     KisPaintOpFactory *f = value(id.id());
     Q_ASSERT(f);
@@ -125,7 +129,7 @@ KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id) const
     return 0;
 }
 
-KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id) const
+KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID &id) const
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset();
     preset->setName(i18n("default"));
@@ -143,9 +147,9 @@ KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id) const
     return preset;
 }
 
-QString KisPaintOpRegistry::pixmap(const KoID & id) const
+QString KisPaintOpRegistry::pixmap(const KoID &id) const
 {
-    KisPaintOpFactory* f = value(id.id());
+    KisPaintOpFactory *f = value(id.id());
 
     if (!f) {
         dbgRegistry << "No paintop" << id.id() << "";
@@ -158,7 +162,7 @@ QString KisPaintOpRegistry::pixmap(const KoID & id) const
 QList<KoID> KisPaintOpRegistry::listKeys() const
 {
     QList<KoID> answer;
-    foreach(const QString & key, keys()) {
+    foreach (const QString &key, keys()) {
         answer.append(KoID(key, get(key)->name()));
     }
 

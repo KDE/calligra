@@ -32,7 +32,8 @@ struct Rational {
     explicit Rational(qint32 n = 0, qint32 d = 1) : numerator(n), denominator(d) {}
     qint32 numerator;
     qint32 denominator;
-    bool operator==(const Rational& ur) const {
+    bool operator==(const Rational &ur) const
+    {
         return numerator == ur.numerator && denominator == ur.denominator;
     }
 };
@@ -58,20 +59,20 @@ public:
     };
 public:
     Value();
-    Value(const QVariant& value);
+    Value(const QVariant &value);
     /**
     * @param type is one of OrderedArray, UnorderedArray, AlternativeArray
     * or LangArray
     */
-    Value(const QList<Value>& array, ValueType type = OrderedArray);
-    Value(const QMap<QString, Value>& structure);
-    Value(const KisMetaData::Rational& rational);
-    Value(const Value& v);
-    Value& operator=(const Value& v);
+    Value(const QList<Value> &array, ValueType type = OrderedArray);
+    Value(const QMap<QString, Value> &structure);
+    Value(const KisMetaData::Rational &rational);
+    Value(const Value &v);
+    Value &operator=(const Value &v);
     ~Value();
 public:
-    void addPropertyQualifier(const QString& _name, const Value&);
-    const QMap<QString, Value>& propertyQualifiers() const;
+    void addPropertyQualifier(const QString &_name, const Value &);
+    const QMap<QString, Value> &propertyQualifiers() const;
 public:
     /// @return the type of this Value
     ValueType type() const;
@@ -91,9 +92,9 @@ public:
     * Set this Value to the given variant, or does nothing if this Value is not a Variant.
     * @return true if the value was changed
     */
-    bool setVariant(const QVariant& variant);
-    bool setStructureVariant(const QString& fieldNAme, const QVariant& variant);
-    bool setArrayVariant(int index, const QVariant& variant);
+    bool setVariant(const QVariant &variant);
+    bool setStructureVariant(const QString &fieldNAme, const QVariant &variant);
+    bool setArrayVariant(int index, const QVariant &variant);
     /**
     * @return the Rational hold by this Value, or a null rational if this Value is not
     * an Rational
@@ -119,13 +120,12 @@ public:
     QMap<QString, KisMetaData::Value> asLangArray() const;
     QString toString() const;
 public:
-    bool operator==(const Value&) const;
-    Value& operator+=(const Value&);
+    bool operator==(const Value &) const;
+    Value &operator+=(const Value &);
 private:
-    Private* const d;
+    Private *const d;
 };
 }
-
 
 KRITAIMAGE_EXPORT QDebug operator<<(QDebug debug, const KisMetaData::Value &v);
 

@@ -66,7 +66,7 @@ static const int g_dateSerial_19000228 = 59;
 static int g_dateOrigin = 0;
 
 // copied from gnumeric: src/formats.c:
-static char const * const cell_date_format [] = {
+static char const *const cell_date_format [] = {
     "m/d/yy",  /* 0 Cell::Format::Date5*/
     "m/d/yyyy",  /* 1 Cell::Format::Date6*/
     "d-mmm-yy",  /* 2 Cell::Format::Date1 18-Feb-99 */
@@ -103,7 +103,7 @@ static char const * const cell_date_format [] = {
 };
 
 // copied from gnumeric: src/formats.c:
-static char const * const cell_time_format [] = {
+static char const *const cell_time_format [] = {
     "h:mm AM/PM",    // Cell::Format::Time1 9 : 01 AM
     "h:mm:ss AM/PM", // Cell::Format::Time2 9:01:05 AM
     "h:mm",          // Cell::Format::Time4 9:01
@@ -138,13 +138,14 @@ uint GNUMERICFilter::GnumericDate::greg2jul(int y, int m, int d)
     return QDate::gregorianToJulian(y, m, d);
 }
 
-void GNUMERICFilter::GnumericDate::jul2greg(double num, int & y, int & m, int & d)
+void GNUMERICFilter::GnumericDate::jul2greg(double num, int &y, int &m, int &d)
 {
     int i = (int) floor(num + HALF_SEC);
-    if (i > g_dateSerial_19000228)
+    if (i > g_dateSerial_19000228) {
         --i;
-    else if (i == g_dateSerial_19000228 + 1)
+    } else if (i == g_dateSerial_19000228 + 1) {
         kWarning(30521) << "Request for date 02/29/1900.";
+    }
 
     kDebug(30521) << "***** Num:" << num << ", i:" << i;
 
@@ -174,13 +175,13 @@ QTime GNUMERICFilter::GnumericDate::getTime(double num)
 K_PLUGIN_FACTORY(GNUMERICFilterFactory, registerPlugin<GNUMERICFilter>();)
 K_EXPORT_PLUGIN(GNUMERICFilterFactory("calligrafilters"))
 
-GNUMERICFilter::GNUMERICFilter(QObject* parent, const QVariantList &)
-        : KoFilter(parent)
+GNUMERICFilter::GNUMERICFilter(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
 /* This converts GNUmeric's color string "0:0:0" to a QColor. */
-void  convert_string_to_qcolor(QString color_string, QColor * color)
+void  convert_string_to_qcolor(QString color_string, QColor *color)
 {
     int red, green, blue, first_col_pos, second_col_pos;
 
@@ -202,7 +203,7 @@ void  convert_string_to_qcolor(QString color_string, QColor * color)
     color->setRgb(red, green, blue);
 }
 
-void areaNames(Doc * ksdoc, const QString &_name, QString _zone)
+void areaNames(Doc *ksdoc, const QString &_name, QString _zone)
 {
 //Sheet2!$A$2:$D$8
     QString tableName;
@@ -238,12 +239,12 @@ void areaNames(Doc * ksdoc, const QString &_name, QString _zone)
     }
 }
 
-
-void set_document_area_names(Doc * ksdoc, QDomElement * docElem)
+void set_document_area_names(Doc *ksdoc, QDomElement *docElem)
 {
     QDomNode areaNamesElement = docElem->namedItem("Names");
-    if (areaNamesElement.isNull())
+    if (areaNamesElement.isNull()) {
         return;
+    }
     QDomNode areaNameItem = areaNamesElement.namedItem("Name");
     while (!areaNameItem.isNull()) {
         QDomNode gmr_name  = areaNameItem.namedItem("name");
@@ -254,14 +255,13 @@ void set_document_area_names(Doc * ksdoc, QDomElement * docElem)
     }
 }
 
-
-
-void set_document_attributes(Doc * ksdoc, QDomElement * docElem)
+void set_document_attributes(Doc *ksdoc, QDomElement *docElem)
 {
     ksdoc->loadConfigFromFile();
     QDomNode attributes  = docElem->namedItem("Attributes");
-    if (attributes.isNull())
+    if (attributes.isNull()) {
         return;
+    }
 
     QDomNode attributeItem = attributes.namedItem("Attribute");
     while (!attributeItem.isNull()) {
@@ -287,7 +287,7 @@ void set_document_attributes(Doc * ksdoc, QDomElement * docElem)
 /* This sets the documentation information from the information stored in
    the GNUmeric file. Particularly in the "Summary" subcategory.
 */
-void set_document_info(KoDocument * document, QDomElement * docElem)
+void set_document_info(KoDocument *document, QDomElement *docElem)
 {
     /* Summary Handling START */
     QDomNode summary  = docElem->namedItem("Summary");
@@ -297,7 +297,7 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
         QDomNode gmr_name  = gmr_item.namedItem("name");
         QDomNode gmr_value = gmr_item.namedItem("val-string");
 
-        KoDocumentInfo * DocumentInfo     = document->documentInfo();
+        KoDocumentInfo *DocumentInfo     = document->documentInfo();
 
         if (gmr_name.toElement().text() == "title") {
             DocumentInfo->setAboutInfo("title", gmr_value.toElement().text());
@@ -323,8 +323,7 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
     /* Summany Handling STOP */
 }
 
-
-void setColInfo(QDomNode * sheet, Sheet * table)
+void setColInfo(QDomNode *sheet, Sheet *table)
 {
     QDomNode columns =  sheet->namedItem("Cols");
     QDomNode columninfo = columns.namedItem("ColInfo");
@@ -354,10 +353,11 @@ void setColInfo(QDomNode * sheet, Sheet * table)
             //  xmm = (x_points) * (1 inch / 72 points) * (25.4 mm/ 1 inch)
             bool ok = false;
             double dbl = e.attribute("Unit").toDouble(&ok);
-            if (ok)
+            if (ok) {
                 cl->setWidth(dbl);
-            else if (defaultWidthOk)
+            } else if (defaultWidthOk) {
                 cl->setWidth(defaultWidth);
+            }
         }
         table->insertColumnFormat(cl);
         columninfo = columninfo.nextSibling();
@@ -393,17 +393,18 @@ void setRowInfo(QDomNode *sheet, Sheet *table)
         if (e.hasAttribute("Unit")) {
             bool ok = false;
             double dbl = e.attribute("Unit").toDouble(&ok);
-            if (ok)
+            if (ok) {
                 rl->setHeight(dbl);
-            else if (defaultHeightOk)
+            } else if (defaultHeightOk) {
                 rl->setHeight(defaultHeight);
+            }
         }
         table->insertRowFormat(rl);
         rowinfo = rowinfo.nextSibling();
     }
 }
 
-void setSelectionInfo(QDomNode * sheet, Sheet * /* table */)
+void setSelectionInfo(QDomNode *sheet, Sheet * /* table */)
 {
     QDomNode selections =  sheet->namedItem("Selections");
     QDomNode selection = selections.namedItem("Selection");
@@ -427,8 +428,7 @@ void setSelectionInfo(QDomNode * sheet, Sheet * /* table */)
     }
 }
 
-
-void setObjectInfo(QDomNode * sheet, Sheet * table)
+void setObjectInfo(QDomNode *sheet, Sheet *table)
 {
     QDomNode gmr_objects =  sheet->namedItem("Objects");
     QDomNode gmr_cellcomment = gmr_objects.namedItem("CellComment");
@@ -446,7 +446,7 @@ void setObjectInfo(QDomNode * sheet, Sheet * table)
     }
 }
 
-void convertToPen(QPen & pen, int style)
+void convertToPen(QPen &pen, int style)
 {
     switch (style) {
     case 0:
@@ -513,7 +513,7 @@ void convertToPen(QPen & pen, int style)
     }
 }
 
-void GNUMERICFilter::ParseBorder(QDomElement & gmr_styleborder, const Cell& kspread_cell)
+void GNUMERICFilter::ParseBorder(QDomElement &gmr_styleborder, const Cell &kspread_cell)
 {
     QDomNode gmr_diagonal = gmr_styleborder.namedItem("Diagonal");
     QDomNode gmr_rev_diagonal = gmr_styleborder.namedItem("Rev-Diagonal");
@@ -564,8 +564,7 @@ void GNUMERICFilter::ParseBorder(QDomElement & gmr_styleborder, const Cell& kspr
     //  QDomElement gmr_styleborder_element = gmr_styleborder.toElement();
 }
 
-
-void GNUMERICFilter::importBorder(QDomElement border, borderStyle _style, const Calligra::Sheets::Cell& cell)
+void GNUMERICFilter::importBorder(QDomElement border, borderStyle _style, const Calligra::Sheets::Cell &cell)
 {
     if (!border.isNull()) {
         QDomElement e = border.toElement(); // try to convert the node to an element.
@@ -631,23 +630,35 @@ void GNUMERICFilter::importBorder(QDomElement border, borderStyle _style, const 
                     }
                 }
             }
-            if (leftPen.style() != Qt::NoPen) style.setLeftBorderPen(leftPen);
-            if (rightPen.style() != Qt::NoPen) style.setRightBorderPen(rightPen);
-            if (topPen.style() != Qt::NoPen) style.setTopBorderPen(topPen);
-            if (bottomPen.style() != Qt::NoPen) style.setBottomBorderPen(bottomPen);
-            if (fallPen.style() != Qt::NoPen) style.setFallDiagonalPen(fallPen);
-            if (goUpPen.style() != Qt::NoPen) style.setGoUpDiagonalPen(goUpPen);
+            if (leftPen.style() != Qt::NoPen) {
+                style.setLeftBorderPen(leftPen);
+            }
+            if (rightPen.style() != Qt::NoPen) {
+                style.setRightBorderPen(rightPen);
+            }
+            if (topPen.style() != Qt::NoPen) {
+                style.setTopBorderPen(topPen);
+            }
+            if (bottomPen.style() != Qt::NoPen) {
+                style.setBottomBorderPen(bottomPen);
+            }
+            if (fallPen.style() != Qt::NoPen) {
+                style.setFallDiagonalPen(fallPen);
+            }
+            if (goUpPen.style() != Qt::NoPen) {
+                style.setGoUpDiagonalPen(goUpPen);
+            }
             Cell(cell).setStyle(style);
         }
     }
 }
 
-bool GNUMERICFilter::setType(const Cell& kspread_cell,
-                             QString const & formatString,
-                             QString & cell_content)
+bool GNUMERICFilter::setType(const Cell &kspread_cell,
+                             QString const &formatString,
+                             QString &cell_content)
 {
     int i = 0;
-    for (i = 0; cell_date_format[i] ; ++i) {
+    for (i = 0; cell_date_format[i]; ++i) {
         kDebug(30521) << "Format::Cell:" << cell_date_format[i] << ", FormatString:" << formatString;
         if ((formatString == "d/m/yy") || (formatString == cell_date_format[i])) {
             kDebug(30521) << "   FormatString: Date:" << formatString << ", CellContent:" << cell_content;
@@ -659,16 +670,18 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
                 int val  = cell_content.toInt(&ok);
 
                 kDebug(30521) << "!!!   FormatString: Date:" << formatString << ", CellContent:" << cell_content
-                << ", Double: " << val << endl;
-                if (!ok)
+                              << ", Double: " << val << endl;
+                if (!ok) {
                     return false;
+                }
 
                 GnumericDate::jul2greg(val, y, m, d);
                 kDebug(30521) << "     num:" << val << ", y:" << y << ", m:" << m << ", d:" << d;
 
                 date.setYMD(y, m, d);
-            } else
+            } else {
                 date = kspread_cell.value().asDate(kspread_cell.sheet()->map()->calculationSettings());
+            }
 
             Format::Type type;
             switch (i) {
@@ -716,7 +729,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
         }
     }
 
-    for (i = 0; cell_time_format[i] ; ++i) {
+    for (i = 0; cell_time_format[i]; ++i) {
         if (formatString == cell_time_format[i]) {
             QTime time;
 
@@ -725,14 +738,16 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
                 double content = cell_content.toDouble(&ok);
 
                 kDebug(30521) << "   FormatString: Time:" << formatString << ", CellContent:" << cell_content
-                << ", Double: " << content << endl;
+                              << ", Double: " << content << endl;
 
-                if (!ok)
+                if (!ok) {
                     return false;
+                }
 
                 time = GnumericDate::getTime(content);
-            } else
+            } else {
                 time = kspread_cell.value().asTime(kspread_cell.sheet()->map()->calculationSettings());
+            }
 
             Format::Type type;
             switch (i) {
@@ -760,15 +775,15 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
     return false; // no date or time
 }
 
-QString GNUMERICFilter::convertVars(QString const & str, Sheet * table) const
+QString GNUMERICFilter::convertVars(QString const &str, Sheet *table) const
 {
     QString result(str);
     uint count = list1.count();
     if (count == 0) {
         list1 << "&[TAB]" << "&[DATE]" << "&[PAGE]"
-        << "&[PAGES]" << "&[TIME]" << "&[FILE]";
+              << "&[PAGES]" << "&[TIME]" << "&[FILE]";
         list2 << "<sheet>" << "<date>" << "<page>"
-        << "<pages>" << "<time>" << "<file>";
+              << "<pages>" << "<time>" << "<file>";
         count = list1.count();
     }
 
@@ -777,10 +792,11 @@ QString GNUMERICFilter::convertVars(QString const & str, Sheet * table) const
 
         if (n != -1) {
             kDebug(30521) << "Found var:" << list1[i];
-            if (i == 0)
+            if (i == 0) {
                 result.replace(list1[i], table->sheetName());
-            else
+            } else {
                 result.replace(list1[i], list2[i]);
+            }
         }
     }
 
@@ -792,21 +808,23 @@ double GNUMERICFilter::parseAttribute(const QDomElement &_element)
     QString unit = _element.attribute("PrefUnit");
     bool ok;
     double value = _element.attribute("Points").toFloat(&ok);
-    if (!ok)
+    if (!ok) {
         value = 2.0;
-    if (unit == "mm")
+    }
+    if (unit == "mm") {
         return POINT_TO_MM(value);
-    else if (unit == "cm")
+    } else if (unit == "cm") {
         return (POINT_TO_MM(value) / 10.0);
-    else if (unit == "in")
+    } else if (unit == "in") {
         return POINT_TO_INCH(value);
-    else if (unit == "Pt" || unit == "Px" || unit == "points")
+    } else if (unit == "Pt" || unit == "Px" || unit == "points") {
         return value;
-    else
+    } else {
         return value;
+    }
 }
 
-void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
+void GNUMERICFilter::ParsePrintInfo(QDomNode const &printInfo, Sheet *table)
 {
     kDebug(30521) << "Parsing print info";
 
@@ -823,43 +841,53 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
     QDomNode margins(printInfo.namedItem("Margins"));
     if (!margins.isNull()) {
         QDomElement top(margins.namedItem("top").toElement());
-        if (!top.isNull())
+        if (!top.isNull()) {
             ftop = parseAttribute(top);
+        }
 
         QDomElement bottom(margins.namedItem("bottom").toElement());
-        if (!bottom.isNull())
+        if (!bottom.isNull()) {
             fbottom = parseAttribute(bottom);
+        }
 
         QDomElement left(margins.namedItem("left").toElement());
-        if (!left.isNull())
+        if (!left.isNull()) {
             fleft = parseAttribute(left);
+        }
 
         QDomElement right(margins.namedItem("right").toElement());
-        if (!right.isNull())
+        if (!right.isNull()) {
             fright = parseAttribute(right);
+        }
     }
 
     QDomElement foot(printInfo.namedItem("Footer").toElement());
     if (!foot.isNull()) {
         kDebug(30521) << "Parsing footer:" << foot.attribute("Left") << "," << foot.attribute("Middle") << ","
-        << foot.attribute("Right") << ", " << endl;
-        if (foot.hasAttribute("Left"))
+                      << foot.attribute("Right") << ", " << endl;
+        if (foot.hasAttribute("Left")) {
             footLeft = convertVars(foot.attribute("Left"), table);
-        if (foot.hasAttribute("Middle"))
+        }
+        if (foot.hasAttribute("Middle")) {
             footMiddle = convertVars(foot.attribute("Middle"), table);
-        if (foot.hasAttribute("Right"))
+        }
+        if (foot.hasAttribute("Right")) {
             footRight = convertVars(foot.attribute("Right"), table);
+        }
     }
 
     QDomElement head(printInfo.namedItem("Header").toElement());
     if (!head.isNull()) {
         kDebug(30521) << "Parsing header:" << head.attribute("Left") << "," << head.attribute("Middle") << "," << head.attribute("Right") << ",";
-        if (head.hasAttribute("Left"))
+        if (head.hasAttribute("Left")) {
             headLeft = convertVars(head.attribute("Left"), table);
-        if (head.hasAttribute("Middle"))
+        }
+        if (head.hasAttribute("Middle")) {
             headMiddle = convertVars(head.attribute("Middle"), table);
-        if (head.hasAttribute("Right"))
+        }
+        if (head.hasAttribute("Right")) {
             headRight = convertVars(head.attribute("Right"), table);
+        }
     }
 
     QDomElement repeateColumn(printInfo.namedItem("repeat_top").toElement());
@@ -885,12 +913,14 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
     }
 
     QDomElement orient(printInfo.namedItem("orientation").toElement());
-    if (!orient.isNull())
+    if (!orient.isNull()) {
         orientation = orient.text();
+    }
 
     QDomElement size(printInfo.namedItem("paper").toElement());
-    if (!size.isNull())
+    if (!size.isNull()) {
         paperSize = size.text();
+    }
 
     KoPageLayout pageLayout;
     pageLayout.format = KoPageFormat::formatFromString(paperSize);
@@ -906,12 +936,14 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
                                            footLeft, footMiddle, footRight);
 }
 
-void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspread_cell)
+void GNUMERICFilter::ParseFormat(QString const &formatString, const Cell &kspread_cell)
 {
     int l = formatString.length();
     int lastPos = 0;
 
-    if (l == 0) return;
+    if (l == 0) {
+        return;
+    }
 
     Style style;
 
@@ -954,8 +986,9 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspre
             // do pattern matching with gnumeric formats
             QString content(kspread_cell.value().asString());
 
-            if (setType(kspread_cell, formatString, content))
+            if (setType(kspread_cell, formatString, content)) {
                 return;
+            }
 
             if (formatString.indexOf("?/?") != -1) {
                 // TODO: fixme!
@@ -968,28 +1001,32 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspre
         }
     }
 
-    while (formatString[lastPos] == ' ')
+    while (formatString[lastPos] == ' ') {
         ++lastPos;
+    }
 
     // GetPrecision and decimal point, format of negative items...
 
     // thousands separator
     if (formatString[lastPos] == '#') {
-        if (formatString[lastPos + 1] == ',')
+        if (formatString[lastPos + 1] == ',') {
             lastPos += 2;
+        }
         // since KSpread 1.3
         // kspread_cell.setThousandsSeparator( sep );
     }
 
-    while (formatString[lastPos] == ' ')
+    while (formatString[lastPos] == ' ') {
         ++lastPos;
+    }
 
     int n = formatString.indexOf('.', lastPos);
     if (n != -1) {
         lastPos = n + 1;
         int precision = lastPos;
-        while (formatString[precision] == '0')
+        while (formatString[precision] == '0') {
             ++precision;
+        }
 
         int tmp = lastPos;
         lastPos = precision;
@@ -1004,36 +1041,39 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspre
         style.setFloatColor(Style::NegRed);
     }
     if (formatString.indexOf('(', lastPos) != -1) {
-        if (red)
+        if (red) {
             style.setFloatColor(Style::NegRedBrackets);
-        else
+        } else {
             style.setFloatColor(Style::NegBrackets);
+        }
     }
     Cell(kspread_cell).setStyle(style);
 }
 
-void GNUMERICFilter::convertFormula(QString & formula) const
+void GNUMERICFilter::convertFormula(QString &formula) const
 {
     int n = formula.indexOf('=', 1);
 
     // TODO: check if we do not screw something up here...
-    if (n != -1)
+    if (n != -1) {
         formula.replace(n, 1, "==");
+    }
 
     bool inQuote1 = false;
     bool inQuote2 = false;
     int l = formula.length();
     for (int i = 0; i < l; ++i) {
-        if (formula[i] == '\'')
+        if (formula[i] == '\'') {
             inQuote1 = !inQuote1;
-        else if (formula[i] == '"')
+        } else if (formula[i] == '"') {
             inQuote2 = !inQuote2;
-        else if (formula[i] == ',' && !inQuote1 && !inQuote2)
+        } else if (formula[i] == ',' && !inQuote1 && !inQuote2) {
             formula.replace(i, 1, ';');
+        }
     }
 }
 
-void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
+void GNUMERICFilter::setStyleInfo(QDomNode *sheet, Sheet *table)
 {
     kDebug(30521) << "SetStyleInfo entered";
     ValueParser *const parser = table->map()->parser();
@@ -1058,7 +1098,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
             int endRow   = e.attribute("endRow").toInt() + 1;
 
             kDebug(30521) << "------Style:" << startCol << ","
-            << startRow << " - " << endCol << ", " << endRow << endl;
+                          << startRow << " - " << endCol << ", " << endRow << endl;
 
             if (endCol - startCol > 200 || endRow - startRow > 200) {
                 style_region = style_region.nextSibling();
@@ -1190,7 +1230,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
 
                     if (style_element.hasAttribute("Rotation")) {
                         int rot = style_element.attribute("Rotation").toInt();
-                        style.setAngle(-1* rot);
+                        style.setAngle(-1 * rot);
                     }
                     if (style_element.hasAttribute("Indent")) {
                         double indent = style_element.attribute("Indent").toDouble();
@@ -1237,8 +1277,9 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                     if (style_element.hasAttribute("WrapText")) {
                         QString multiRow = style_element.attribute("WrapText");
 
-                        if (multiRow == "1")
+                        if (multiRow == "1") {
                             style.setWrapText(true);
+                        }
                     }
 
                     if (style_element.hasAttribute("Format")) {
@@ -1306,47 +1347,57 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                         switch (value) {
                                         case 0:
                                             kspread_validity.setCondition(Conditional::Between);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
-                                            if (!expression1.isNull())
+                                            }
+                                            if (!expression1.isNull()) {
                                                 kspread_validity.setMaximumValue(value2);
+                                            }
                                             break;
                                         case 1:
                                             kspread_validity.setCondition(Conditional::DifferentTo);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
-                                            if (!expression1.isNull())
+                                            }
+                                            if (!expression1.isNull()) {
                                                 kspread_validity.setMaximumValue(value2);
+                                            }
                                             break;
                                         case 2:
                                             kspread_validity.setCondition(Conditional::Equal);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 3:
                                             kspread_validity.setCondition(Conditional::Different);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 4:
                                             kspread_validity.setCondition(Conditional::Superior);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 5:
                                             kspread_validity.setCondition(Conditional::Inferior);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 6:
                                             kspread_validity.setCondition(Conditional::SuperiorEqual);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 7:
                                             kspread_validity.setCondition(Conditional::InferiorEqual);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         default:
                                             kDebug() << " Error in validation Operator :" << value;
@@ -1364,47 +1415,57 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                         switch (value) {
                                         case 0:
                                             kspread_validity.setCondition(Conditional::Between);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
-                                            if (!expression1.isNull())
+                                            }
+                                            if (!expression1.isNull()) {
                                                 kspread_validity.setMaximumValue(value2);
+                                            }
                                             break;
                                         case 1:
                                             kspread_validity.setCondition(Conditional::DifferentTo);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
-                                            if (!expression1.isNull())
+                                            }
+                                            if (!expression1.isNull()) {
                                                 kspread_validity.setMaximumValue(value2);
+                                            }
                                             break;
                                         case 2:
                                             kspread_validity.setCondition(Conditional::Equal);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 3:
                                             kspread_validity.setCondition(Conditional::Different);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 4:
                                             kspread_validity.setCondition(Conditional::Superior);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 5:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::Inferior);
                                             break;
                                         case 6:
                                             kspread_validity.setCondition(Conditional::SuperiorEqual);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 7:
                                             kspread_validity.setCondition(Conditional::InferiorEqual);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         default:
                                             kDebug() << " Error in validation Operator :" << value;
@@ -1424,47 +1485,57 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                         switch (value) {
                                         case 0:
                                             kspread_validity.setCondition(Conditional::Between);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
-                                            if (!expression1.isNull())
+                                            }
+                                            if (!expression1.isNull()) {
                                                 kspread_validity.setMaximumValue(value2);
+                                            }
 
                                             break;
                                         case 1:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
-                                            if (!expression1.isNull())
+                                            }
+                                            if (!expression1.isNull()) {
                                                 kspread_validity.setMaximumValue(value2);
+                                            }
                                             kspread_validity.setCondition(Conditional::DifferentTo);
                                             break;
                                         case 2:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::Equal);
                                             break;
                                         case 3:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::Different);
                                             break;
                                         case 4:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::Superior);
                                             break;
                                         case 5:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::Inferior);
                                             break;
                                         case 6:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::SuperiorEqual);
                                             break;
                                         case 7:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::InferiorEqual);
                                             break;
                                         default:
@@ -1482,44 +1553,53 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                         switch (value) {
                                         case 0:
                                             kspread_validity.setCondition(Conditional::Between);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
-                                            if (!expression1.isNull())
+                                            }
+                                            if (!expression1.isNull()) {
                                                 kspread_validity.setMaximumValue(value2);
+                                            }
                                             break;
                                         case 1:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
-                                            if (!expression1.isNull())
+                                            }
+                                            if (!expression1.isNull()) {
                                                 kspread_validity.setMaximumValue(value2);
+                                            }
                                             kspread_validity.setCondition(Conditional::DifferentTo);
                                             break;
                                         case 2:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::Equal);
                                             break;
                                         case 3:
                                             kspread_validity.setCondition(Conditional::Different);
                                             break;
                                         case 4:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::Superior);
                                             break;
                                         case 5:
                                             kspread_validity.setCondition(Conditional::Inferior);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 6:
                                             kspread_validity.setCondition(Conditional::SuperiorEqual);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 7:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::InferiorEqual);
                                             break;
                                         default:
@@ -1537,46 +1617,56 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                         switch (value) {
                                         case 0:
                                             kspread_validity.setCondition(Conditional::Between);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
-                                            if (!expression1.isNull())
+                                            }
+                                            if (!expression1.isNull()) {
                                                 kspread_validity.setMaximumValue(value2);
+                                            }
                                             break;
                                         case 1:
                                             kspread_validity.setCondition(Conditional::DifferentTo);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
-                                            if (!expression1.isNull())
+                                            }
+                                            if (!expression1.isNull()) {
                                                 kspread_validity.setMaximumValue(value2);
+                                            }
                                             break;
                                         case 2:
                                             kspread_validity.setCondition(Conditional::Equal);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 3:
                                             kspread_validity.setCondition(Conditional::Different);
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             break;
                                         case 4:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::Superior);
                                             break;
                                         case 5:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::Inferior);
                                             break;
                                         case 6:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::SuperiorEqual);
                                             break;
                                         case 7:
-                                            if (!expression0.isNull())
+                                            if (!expression0.isNull()) {
                                                 kspread_validity.setMinimumValue(value1);
+                                            }
                                             kspread_validity.setCondition(Conditional::InferiorEqual);
                                             break;
                                         default:
@@ -1633,22 +1723,26 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                     kspread_cell.setValue(Value(tip));
                                 }
                                 if (linkType == "GnmHLinkURL") {
-                                    if (!target.startsWith("http://"))
+                                    if (!target.startsWith("http://")) {
                                         target = "http://" + target;
+                                    }
                                     kspread_cell.setLink(target);
                                 } else if (linkType == "GnmHLinkEMail") {
-                                    if (!target.startsWith("mailto:/"))
+                                    if (!target.startsWith("mailto:/")) {
                                         target = "mailto:/" + target;
+                                    }
                                     kspread_cell.setLink(target);
                                 } else if (linkType == "GnmHLinkExternal") {
-                                    if (!target.startsWith("file://"))
+                                    if (!target.startsWith("file://")) {
                                         target = "file://" + target;
+                                    }
 
                                     kspread_cell.setLink(target);
                                 } else if (linkType == "GnmHLinkCurWB") {
                                     kspread_cell.setLink(target);
-                                } else
+                                } else {
                                     kDebug() << " linkType not defined :" << linkType;
+                                }
                             }
                         }
                     }
@@ -1668,17 +1762,17 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
          an hour or so. --PGE
   */
 
-
-KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, const QByteArray & to)
+KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray &from, const QByteArray &to)
 {
     dateInit();
     bool bSuccess = true;
 
     kDebug(30521) << "Entering GNUmeric Import filter.";
 
-    KoDocument * document = m_chain->outputDocument();
-    if (!document)
+    KoDocument *document = m_chain->outputDocument();
+    if (!document) {
         return KoFilter::StupidError;
+    }
 
     kDebug(30521) << "here we go..." << document->metaObject()->className();
 
@@ -1694,15 +1788,14 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     kDebug(30521) << "...still here...";
 
     // No need for a dynamic cast here, since we use Qt's moc magic
-    Doc * ksdoc = (Doc *) document;
+    Doc *ksdoc = (Doc *) document;
 
     if (ksdoc->mimeType() != "application/x-kspread") {
         kWarning(30521) << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 
-
-    QIODevice* in = KFilterDev::deviceForFile(m_chain->inputFile(), "application/x-gzip");
+    QIODevice *in = KFilterDev::deviceForFile(m_chain->inputFile(), "application/x-gzip");
 
     if (!in) {
         kError(30521) << "Cannot create device for uncompressing! Aborting!" << endl;
@@ -1720,8 +1813,8 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     int errorLine, errorColumn;
     if (!doc.setContent(in, true, &errorMsg, &errorLine, &errorColumn)) {
         kError(30521) << "Parsing error in " << from << "! Aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg << endl;
+                      << " In line: " << errorLine << ", column: " << errorColumn << endl
+                      << " Error message: " << errorMsg << endl;
         in->close();
         return KoFilter::ParsingError;
     }
@@ -1733,7 +1826,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     int value = 0;
     int currentTab = -1;
     int selectedTab = 0;
-    Sheet * selTable = 0;
+    Sheet *selTable = 0;
 
     QDomElement docElem = doc.documentElement();
     QDomElement uiData  = docElem.namedItem("UIData").toElement();
@@ -1763,27 +1856,29 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     /* This sets the Area Names */
     set_document_area_names(ksdoc, &docElem);
 
-    Sheet * table;
+    Sheet *table;
 
     // This is a mapping of exprID to expressions.
 
-    QMap<QString, char*> exprID_dict;
+    QMap<QString, char *> exprID_dict;
     int num = 1;
 
     while (!sheet.isNull()) {
         ++currentTab;
         table = ksdoc->map()->addNewSheet();
 
-        if (currentTab == selectedTab)
+        if (currentTab == selectedTab) {
             selTable = table;
+        }
 
         QDomElement name = sheet.namedItem("Name").toElement();
         QDomElement sheetElement = sheet.toElement();
 
-        if (!name.isNull())
+        if (!name.isNull()) {
             table->setSheetName(name.text(), true);
-        else
+        } else {
             table->setSheetName("Sheet" + QString::number(num), true);
+        }
 
         //kDebug()<<" sheetElement.hasAttribute( DisplayFormulas ) :"<<sheetElement.hasAttribute("DisplayFormulas" );
         QString tmp;
@@ -1808,7 +1903,6 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
             ksdoc->map()->settings()->setShowRowHeader((tmp == "false") || (tmp == "0"));
         }
 
-
         setObjectInfo(&sheet, table);
         setColInfo(&sheet, table);
         setRowInfo(&sheet, table);
@@ -1816,8 +1910,9 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
 
         /* handling print information */
         QDomNode printInfo = sheet.namedItem("PrintInformation");
-        if (!printInfo.isNull())
+        if (!printInfo.isNull()) {
             ParsePrintInfo(printInfo, table);
+        }
 
         kDebug(30521) << "Reading in cells";
 
@@ -1848,8 +1943,9 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
 
                         QString cell_content(content.text());
                         //kDebug()<<"cell_content :!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<cell_content;
-                        if (cell_content[0] == '=')
+                        if (cell_content[0] == '=') {
                             convertFormula(cell_content);
+                        }
 
                         Cell kspread_cell = Cell(table, column, row);
                         Style style;
@@ -1876,17 +1972,18 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
 
                         if (e.hasAttribute("ValueFormat")) {
                             QString formatString = e.attribute("ValueFormat");
-                            if (!setType(kspread_cell, formatString, cell_content))
+                            if (!setType(kspread_cell, formatString, cell_content)) {
                                 setText(table, row, column, cell_content, false);
-                        } else
+                            }
+                        } else {
                             setText(table, row, column, cell_content, false);
+                        }
 
                         if (e.hasAttribute("ExprID")) {
                             // QString encoded_string( Cell( table, column, row ).encodeFormula( row, column ).utf8());
                             QString encoded_string(Cell(table, column, row).encodeFormula().toLatin1());
 
-
-                            char * tmp_string = (char *) malloc(strlen(encoded_string.toLatin1()));
+                            char *tmp_string = (char *) malloc(strlen(encoded_string.toLatin1()));
                             strcpy(tmp_string, encoded_string.toLatin1());
 
                             kDebug(30521) << encoded_string.toLatin1();
@@ -1907,8 +2004,9 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
 
                     QString cell_content(e.text());
                     //kDebug()<<"cell_content :!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<cell_content;
-                    if (cell_content[0] == '=')
+                    if (cell_content[0] == '=') {
                         convertFormula(cell_content);
+                    }
 
                     Cell kspread_cell = Cell(table, column, row);
                     Style style;
@@ -1938,22 +2036,23 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
 
                     if (e.hasAttribute("ValueFormat")) {
                         QString formatString = e.attribute("ValueFormat");
-                        if (!setType(kspread_cell, formatString, cell_content))
+                        if (!setType(kspread_cell, formatString, cell_content)) {
                             setText(table, row, column, cell_content, false);
-                    } else
+                        }
+                    } else {
                         setText(table, row, column, cell_content, false);
-
+                    }
 
                     if (e.hasAttribute("ExprID")) {
                         column = e.attribute("Col").toInt() + 1;
                         row    = e.attribute("Row").toInt() + 1;
-                        char * expr;
+                        char *expr;
                         expr = exprID_dict[e.attribute("ExprID").toLower()];
                         // expr = exprID_dict[QString("1")];
 
                         kDebug(30521) << "FOO:" << column << row;
                         kDebug(30521) <<
-                        Cell(table, column, row).decodeFormula(expr).toLatin1() << endl;
+                                      Cell(table, column, row).decodeFormula(expr).toLatin1() << endl;
                         kDebug(30521) << expr;
 
                         setText(table, row, column, Cell(table, column, row).decodeFormula(expr), false);
@@ -2006,13 +2105,14 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     }
 
     emit sigProgress(100);
-    if (bSuccess)
+    if (bSuccess) {
         return KoFilter::OK;
-    else
+    } else {
         return KoFilter::StupidError;
+    }
 }
 
-void GNUMERICFilter::setText(Calligra::Sheets::Sheet* sheet, int _row, int _column, const QString& _text,
+void GNUMERICFilter::setText(Calligra::Sheets::Sheet *sheet, int _row, int _column, const QString &_text,
                              bool asString)
 {
     Cell cell(sheet, _column, _row);

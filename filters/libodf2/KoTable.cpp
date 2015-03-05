@@ -26,16 +26,16 @@
 #include <QDebug>
 
 KoTable::KoTable()
-: m_columns()
-, m_rows()
-, m_cells()
-, m_rowCount()
-, m_columnCount()
-, m_style(0)
-, m_printable(true)
-, m_name()
-, m_protected(false)
-, m_protectionKey()
+    : m_columns()
+    , m_rows()
+    , m_cells()
+    , m_rowCount()
+    , m_columnCount()
+    , m_style(0)
+    , m_printable(true)
+    , m_name()
+    , m_protected(false)
+    , m_protectionKey()
 {
 }
 
@@ -43,48 +43,48 @@ KoTable::~KoTable()
 {
 }
 
-KoCell* KoTable::cellAt(int row, int column)
+KoCell *KoTable::cellAt(int row, int column)
 {
-    const QPair<int,int> key(row,column);
-    KoCell* cell = m_cells.value(key);
+    const QPair<int, int> key(row, column);
+    KoCell *cell = m_cells.value(key);
 
-    if(!cell) {
+    if (!cell) {
         cell = new KoCell();
         m_cells.insert(key, cell);
-        m_columnCount = qMax(column+1, m_columnCount);
-        m_rowCount = qMax(row+1, m_rowCount);
+        m_columnCount = qMax(column + 1, m_columnCount);
+        m_rowCount = qMax(row + 1, m_rowCount);
     }
 
     return cell;
 }
 
-KoColumn* KoTable::columnAt(int column)
+KoColumn *KoTable::columnAt(int column)
 {
-    KoColumn* columnAt = m_columns.value(column);
+    KoColumn *columnAt = m_columns.value(column);
 
-    if(!columnAt) {
+    if (!columnAt) {
         columnAt = new KoColumn();
-        if(column >= m_columns.size()) {
-            m_columns.resize(column+1);
+        if (column >= m_columns.size()) {
+            m_columns.resize(column + 1);
         }
         m_columns.insert(column, columnAt);
-        m_columnCount = qMax(column+1, m_columnCount);
+        m_columnCount = qMax(column + 1, m_columnCount);
     }
 
     return columnAt;
 }
 
-KoRow* KoTable::rowAt(int row)
+KoRow *KoTable::rowAt(int row)
 {
-    KoRow* rowAt = m_rows.value(row);
+    KoRow *rowAt = m_rows.value(row);
 
-    if(!rowAt) {
+    if (!rowAt) {
         rowAt = new KoRow();
-        if(row >= m_rows.size()) {
-            m_rows.resize(row+1);
+        if (row >= m_rows.size()) {
+            m_rows.resize(row + 1);
         }
         m_rows.replace(row, rowAt);
-        m_rowCount = qMax(row+1, m_rowCount);
+        m_rowCount = qMax(row + 1, m_rowCount);
     }
 
     return rowAt;
@@ -100,32 +100,31 @@ int KoTable::rowCount() const
     return m_rowCount;
 }
 
-void KoTable::saveOdf(KoXmlWriter& writer, KoGenStyles& styles)
+void KoTable::saveOdf(KoXmlWriter &writer, KoGenStyles &styles)
 {
     writer.startElement("table:table");
 
     writer.addAttribute("table:name", m_name);
-    writer.addAttribute("table:protected", m_protected ? "true" : "false" );
-    if(!m_protectionKey.isEmpty()) {
+    writer.addAttribute("table:protected", m_protected ? "true" : "false");
+    if (!m_protectionKey.isEmpty()) {
         writer.addAttribute("table:protection-key", m_protectionKey);
     }
-    if(!m_protectionAlgorithm.isEmpty()) {
+    if (!m_protectionAlgorithm.isEmpty()) {
         writer.addAttribute("table:protection-key-digest-algorithm", m_protectionAlgorithm);
     }
 
-    if(m_style) {
+    if (m_style) {
         m_style->setName(m_style->saveOdf(styles));
         writer.addAttribute("table:style-name", m_style->name());
     }
 
     {
         KoColumn defaultColumn;
-        for(int c = 0; c < columnCount(); ++c) {
-            KoColumn* column = m_columns.value(c);
-            if(column) {
+        for (int c = 0; c < columnCount(); ++c) {
+            KoColumn *column = m_columns.value(c);
+            if (column) {
                 column->saveOdf(writer, styles);
-            }
-            else {
+            } else {
                 defaultColumn.saveOdf(writer, styles);
             }
         }
@@ -133,34 +132,31 @@ void KoTable::saveOdf(KoXmlWriter& writer, KoGenStyles& styles)
 
     {
         KoRow defaultRow;
-        for(int r = 0; r < rowCount(); ++r) {
-            KoRow* row = m_rows.value(r);
-            if(row) {
+        for (int r = 0; r < rowCount(); ++r) {
+            KoRow *row = m_rows.value(r);
+            if (row) {
                 row->saveOdf(writer, styles);
 
                 KoCell defaultCell;
-                for(int c = 0; c < columnCount(); ++c) {
-                    KoCell* cell = m_cells.value(QPair<int,int>(r,c));
-                    if(cell) {
+                for (int c = 0; c < columnCount(); ++c) {
+                    KoCell *cell = m_cells.value(QPair<int, int>(r, c));
+                    if (cell) {
                         cell->saveOdf(writer, styles);
-                    }
-                    else {
+                    } else {
                         defaultCell.saveOdf(writer, styles);
                     }
                 }
 
                 row->finishSaveOdf(writer, styles);
-            }
-            else {
+            } else {
                 defaultRow.saveOdf(writer, styles);
 
                 KoCell defaultCell;
-                for(int c = 0; c < columnCount(); ++c) {
-                    KoCell* cell = m_cells.value(QPair<int,int>(r,c));
-                    if(cell) {
+                for (int c = 0; c < columnCount(); ++c) {
+                    KoCell *cell = m_cells.value(QPair<int, int>(r, c));
+                    if (cell) {
                         cell->saveOdf(writer, styles);
-                    }
-                    else {
+                    } else {
                         defaultCell.saveOdf(writer, styles);
                     }
                 }
@@ -173,7 +169,7 @@ void KoTable::saveOdf(KoXmlWriter& writer, KoGenStyles& styles)
     writer.endElement();// table:table
 }
 
-void KoTable::setName(const QString& name)
+void KoTable::setName(const QString &name)
 {
     m_name = name;
 }

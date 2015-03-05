@@ -31,45 +31,47 @@ KisPaintOpListModel::KisPaintOpListModel(QObject *parent)
 {
 }
 
-QVariant KisPaintOpListModel::data(const QModelIndex& idx, int role) const
+QVariant KisPaintOpListModel::data(const QModelIndex &idx, int role) const
 {
-    if (!idx.isValid()) return QVariant();
+    if (!idx.isValid()) {
+        return QVariant();
+    }
 
     DataItem *item = categoriesMapper()->itemFromRow(idx.row());
     Q_ASSERT(item);
 
-    if(role == Qt::DecorationRole) {
+    if (role == Qt::DecorationRole) {
         if (!item->isCategory()) {
             return item->data()->icon;
         }
     } else if (role == SortRole) {
         return item->isCategory() ? item->name() :
-            QString("%1%2%3")
-            .arg(item->parentCategory()->name())
-            .arg(item->data()->priority, 4)
-            .arg(item->name());
+               QString("%1%2%3")
+               .arg(item->parentCategory()->name())
+               .arg(item->data()->priority, 4)
+               .arg(item->name());
     }
 
     return BasePaintOpCategorizedListModel::data(idx, role);
 }
 
-void KisPaintOpListModel::fill(const QList<KisPaintOpFactory*>& list)
+void KisPaintOpListModel::fill(const QList<KisPaintOpFactory *> &list)
 {
     foreach (KisPaintOpFactory *factory, list) {
         QString fileName = KisFactory::componentData().dirs()->findResource("kis_images", factory->pixmap());
         QPixmap pixmap(fileName);
 
-        if(pixmap.isNull()){
-            pixmap = QPixmap(22,22);
+        if (pixmap.isNull()) {
+            pixmap = QPixmap(22, 22);
             pixmap.fill();
         }
 
         categoriesMapper()->addEntry(factory->category(),
                                      KisPaintOpInfo(factory->id(),
-                                                    factory->name(),
-                                                    factory->category(),
-                                                    pixmap,
-                                                    factory->priority()));
+                                             factory->name(),
+                                             factory->category(),
+                                             pixmap,
+                                             factory->priority()));
     }
     categoriesMapper()->expandAllCategories();
 }

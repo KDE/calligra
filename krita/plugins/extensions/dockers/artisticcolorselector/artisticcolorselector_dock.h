@@ -31,33 +31,34 @@ struct ColorPreferencesPopupUI;
 class ArtisticColorSelectorDock: public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
-    
+
 public:
     ArtisticColorSelectorDock();
     ~ArtisticColorSelectorDock();
-    QString observerName() { return "ArtisticColorSelectorDock"; }
-    virtual void setMainWindow(KisViewManager* kisview);
+    QString observerName()
+    {
+        return "ArtisticColorSelectorDock";
+    }
+    virtual void setMainWindow(KisViewManager *kisview);
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
-    
 private Q_SLOTS:
-    void slotCanvasResourceChanged(int key, const QVariant& value);
-    void slotFgColorChanged(const KisColor& color);
-    void slotBgColorChanged(const KisColor& color);
+    void slotCanvasResourceChanged(int key, const QVariant &value);
+    void slotFgColorChanged(const KisColor &color);
+    void slotBgColorChanged(const KisColor &color);
     void slotColorSpaceSelected(int type);
     void slotPreferenceChanged();
-    void slotMenuActionTriggered(QAction* action);
+    void slotMenuActionTriggered(QAction *action);
     void slotResetDefaultSettings();
     void slotLightModeChanged(bool setToAbsolute);
-    
-private:
-    KisCanvasResourceProvider* m_resourceProvider;
-    QButtonGroup*            m_hsxButtons;
-    QMenu*                   m_resetMenu;
-    ArtisticColorSelectorUI* m_selectorUI;
-    ColorPreferencesPopupUI* m_preferencesUI;
-};
 
+private:
+    KisCanvasResourceProvider *m_resourceProvider;
+    QButtonGroup            *m_hsxButtons;
+    QMenu                   *m_resetMenu;
+    ArtisticColorSelectorUI *m_selectorUI;
+    ColorPreferencesPopupUI *m_preferencesUI;
+};
 
 #endif // H_ARTISTIC_COLOR_SELECTOR_DOCK_H

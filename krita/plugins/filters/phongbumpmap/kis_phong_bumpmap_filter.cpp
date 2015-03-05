@@ -33,38 +33,42 @@
 #include "kis_painter.h"
 
 KisFilterPhongBumpmap::KisFilterPhongBumpmap()
-                      : KisFilter(KoID("phongbumpmap"     , i18n("PhongBumpmap")),
-                                  KisFilter::categoryMap(), i18n("&PhongBumpmap..."))
+    : KisFilter(KoID("phongbumpmap", i18n("PhongBumpmap")),
+                KisFilter::categoryMap(), i18n("&PhongBumpmap..."))
 {
     setColorSpaceIndependence(TO_LAB16);
     setSupportsPainting(true);
 }
 
 void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
-                                        const QRect& applyRect,
+                                        const QRect &applyRect,
                                         const KisFilterConfiguration *config,
                                         KoUpdater *progressUpdater
-                                        ) const
+                                       ) const
 {
-    if (!config) return;
+    if (!config) {
+        return;
+    }
 
-    if (progressUpdater) progressUpdater->setProgress(0);
-    
+    if (progressUpdater) {
+        progressUpdater->setProgress(0);
+    }
+
     // Benchmark
     QTime timer, timerE;
-    
+
     QString userChosenHeightChannel = config->getString(PHONG_HEIGHT_CHANNEL, "FAIL");
 
     if (userChosenHeightChannel == "FAIL") {
         qDebug("FIX YOUR FILTER");
         return;
     }
-    
+
     timer.start();
 
     KoChannelInfo *m_heightChannel = 0;
 
-    foreach (KoChannelInfo* channel, device->colorSpace()->channels()) {
+    foreach (KoChannelInfo *channel, device->colorSpace()->channels()) {
         if (userChosenHeightChannel == channel->name()) {
             m_heightChannel = channel;
         }
@@ -76,7 +80,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
 
     QRect inputArea = applyRect;
     QRect outputArea = applyRect;
-    
+
     inputArea.adjust(-1, -1, 1, 1);
 
     quint32 posup;
@@ -85,7 +89,9 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     quint32 posright;
     QColor I; //Reflected light
 
-    if (progressUpdater) progressUpdater->setProgress(1);
+    if (progressUpdater) {
+        progressUpdater->setProgress(1);
+    }
 
     //======Preparation paraphlenalia=======
 
@@ -99,10 +105,12 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     QVector<quint8> bumpmap(bytesToFillBumpmapArea);
     quint8         *bumpmapDataPointer       = bumpmap.data();
     quint32         ki                       = KoChannelInfo::displayPositionToChannelIndex(m_heightChannel->displayPosition(),
-                                                                                            device->colorSpace()->channels());
+            device->colorSpace()->channels());
     PhongPixelProcessor tileRenderer(pixelsOfInputArea, config);
 
-    if (progressUpdater) progressUpdater->setProgress(2);
+    if (progressUpdater) {
+        progressUpdater->setProgress(2);
+    }
 
     //===============RENDER=================
 
@@ -115,21 +123,22 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     KisHLineConstIteratorSP iterator;
     quint32 curPixel = 0;
     iterator = device->createHLineConstIteratorNG(inputArea.x(),
-                                             inputArea.y(),
-                                             inputArea.width()
-                                             );
+               inputArea.y(),
+               inputArea.width()
+                                                 );
 
     for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow) {
         do {
             const quint8 *data = iterator->oldRawData();
             tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, device->colorSpace()->channels()[ki]->pos());
             curPixel++;
-        }
-        while (iterator->nextPixel());
+        } while (iterator->nextPixel());
         iterator->nextRow();
     }
 
-    if (progressUpdater) progressUpdater->setProgress(50);
+    if (progressUpdater) {
+        progressUpdater->setProgress(50);
+    }
 
     const int tileHeightMinus1 = inputArea.height() - 1;
     const int tileWidthMinus1 = inputArea.width() - 1;
@@ -149,7 +158,9 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
         }
     }
 
-    if (progressUpdater) progressUpdater->setProgress(90);
+    if (progressUpdater) {
+        progressUpdater->setProgress(90);
+    }
 
     KisPaintDeviceSP bumpmapPaintDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
     bumpmapPaintDevice->writeBytes(bumpmap.data(), outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
@@ -159,9 +170,11 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
                   outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
     //device->prepareClone(bumpmapPaintDevice);
     //device->makeCloneFrom(bumpmapPaintDevice, bumpmapPaintDevice->extent());  // THIS COULD BE BUG GY
-    
+
     delete leaker;
-    if (progressUpdater) progressUpdater->setProgress(100);
+    if (progressUpdater) {
+        progressUpdater->setProgress(100);
+    }
 }
 
 KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPaintDeviceSP) const
@@ -193,12 +206,12 @@ KisFilterConfiguration *KisFilterPhongBumpmap::factoryConfiguration(const KisPai
     return config;
 }
 
-QRect KisFilterPhongBumpmap::neededRect(const QRect &rect, const KisFilterConfiguration* /*config*/) const
+QRect KisFilterPhongBumpmap::neededRect(const QRect &rect, const KisFilterConfiguration * /*config*/) const
 {
     return rect.adjusted(-1, -1, 1, 1);
 }
 
-QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfiguration* /*config*/) const
+QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfiguration * /*config*/) const
 {
     return rect;
 }
@@ -208,5 +221,4 @@ KisConfigWidget *KisFilterPhongBumpmap::createConfigurationWidget(QWidget *paren
     KisPhongBumpmapConfigWidget *w = new KisPhongBumpmapConfigWidget(dev, parent);
     return w;
 }
-
 

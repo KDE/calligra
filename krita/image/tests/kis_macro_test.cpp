@@ -31,33 +31,34 @@ class TestAction : public KisRecordedAction
 {
 public:
 
-    TestAction(const QString & id, const QString & name)
-            : KisRecordedAction(id, name) {
+    TestAction(const QString &id, const QString &name)
+        : KisRecordedAction(id, name)
+    {
     }
 
-    void play(const KisPlayInfo&, KoUpdater*) const {
+    void play(const KisPlayInfo &, KoUpdater *) const
+    {
     }
 
-    KisRecordedAction* clone() const {
+    KisRecordedAction *clone() const
+    {
         return new TestAction(id(), name());
     }
 
 };
 
-
 void KisMacroTest::testCreation()
 {
-    QList<KisRecordedAction*> actions;
+    QList<KisRecordedAction *> actions;
     TestAction tc("bla", "bla");
     actions << &tc;
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, cs, "test");
 
     KisMacro a();
     KisMacro b(actions);
 }
-
 
 QTEST_KDEMAIN(KisMacroTest, GUI)
 #include "kis_macro_test.moc"

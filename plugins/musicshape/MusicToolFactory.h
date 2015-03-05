@@ -19,7 +19,6 @@
 #ifndef MUSIC_TOOL_FACTORY
 #define MUSIC_TOOL_FACTORY
 
-
 #include <KoToolFactoryBase.h>
 
 class MusicToolFactory : public KoToolFactoryBase
@@ -28,8 +27,7 @@ public:
     MusicToolFactory();
     ~MusicToolFactory();
 
-    KoToolBase* createTool( KoCanvasBase* canvas );
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
-
-#endif 
+#endif

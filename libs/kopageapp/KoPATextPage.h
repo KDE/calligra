@@ -42,7 +42,7 @@ public:
 
 private:
     int m_pageNumber;
-    KoPAPageBase * m_page;
+    KoPAPageBase *m_page;
 };
 
 #endif /* KOPATEXTPAGE_H */

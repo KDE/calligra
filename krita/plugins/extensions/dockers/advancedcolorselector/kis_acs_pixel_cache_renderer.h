@@ -24,42 +24,42 @@
 #include "kis_iterator_ng.h"
 #include "kis_display_color_converter.h"
 
+namespace Acs
+{
 
-namespace Acs {
+class PixelCacheRenderer
+{
+public:
+    /**
+     * \p Picker class must provide one method:
+     *     - KoColor Picker::colorAt(int x, int y);
+     */
+    template <class Picker>
+    static void render(Picker *picker,
+                       const KisDisplayColorConverter *converter,
+                       const QRect &pickRect,
+                       KisPaintDeviceSP &realPixelCache,
+                       QImage &pixelCache,
+                       QPoint &pixelCacheOffset)
+    {
+        const KoColorSpace *cacheColorSpace = converter->paintingColorSpace();
+        const int pixelSize = cacheColorSpace->pixelSize();
+        realPixelCache = new KisPaintDevice(cacheColorSpace);
 
-    class PixelCacheRenderer {
-    public:
-        /**
-         * \p Picker class must provide one method:
-         *     - KoColor Picker::colorAt(int x, int y);
-         */
-        template <class Picker>
-        static void render(Picker *picker,
-                           const KisDisplayColorConverter *converter,
-                           const QRect &pickRect,
-                           KisPaintDeviceSP &realPixelCache,
-                           QImage &pixelCache,
-                           QPoint &pixelCacheOffset)
-            {
-                const KoColorSpace *cacheColorSpace = converter->paintingColorSpace();
-                const int pixelSize = cacheColorSpace->pixelSize();
-                realPixelCache = new KisPaintDevice(cacheColorSpace);
+        KoColor color;
 
-                KoColor color;
+        KisSequentialIterator it(realPixelCache, pickRect);
 
-                KisSequentialIterator it(realPixelCache, pickRect);
+        do {
+            color = picker->colorAt(it.x(), it.y());
+            memcpy(it.rawData(), color.data(), pixelSize);
+        } while (it.nextPixel());
 
-                do {
-                    color = picker->colorAt(it.x(), it.y());
-                    memcpy(it.rawData(), color.data(), pixelSize);
-                } while (it.nextPixel());
-
-
-                // NOTE: toQImage() function of the converter copies exactBounds() only!
-                pixelCache = converter->toQImage(realPixelCache);
-                pixelCacheOffset = realPixelCache->exactBounds().topLeft() - pickRect.topLeft();
-            }
-    };
+        // NOTE: toQImage() function of the converter copies exactBounds() only!
+        pixelCache = converter->toQImage(realPixelCache);
+        pixelCacheOffset = realPixelCache->exactBounds().topLeft() - pickRect.topLeft();
+    }
+};
 }
 
 #endif /* __KIS_ACS_PIXEL_CACHE_RENDERER_H */

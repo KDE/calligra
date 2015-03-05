@@ -64,9 +64,12 @@ public:
 
     KisLayerBox();
     virtual ~KisLayerBox();
-    QString observerName() { return "KisLayerBox"; }
+    QString observerName()
+    {
+        return "KisLayerBox";
+    }
     /// reimplemented from KisMainwindowObserver
-    virtual void setMainWindow(KisViewManager* kisview);
+    virtual void setMainWindow(KisViewManager *kisview);
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 private Q_SLOTS:
@@ -80,12 +83,11 @@ private Q_SLOTS:
     void slotThumbnailView();
 
     // From the node manager to the layerbox
-    void slotSetCompositeOp(const KoCompositeOp* compositeOp);
+    void slotSetCompositeOp(const KoCompositeOp *compositeOp);
     void slotSetOpacity(double opacity);
-    void slotFillCompositeOps(const KoColorSpace * colorSpace);
+    void slotFillCompositeOps(const KoColorSpace *colorSpace);
     void updateUI();
     void setCurrentNode(KisNodeSP node);
-
 
     // from the layerbox to the node manager
     void slotRmClicked();
@@ -113,26 +115,26 @@ private Q_SLOTS:
     void updateThumbnail();
 
 private:
-    inline void connectActionToButton(KisViewManager* view, QAbstractButton *button, const QString &id);
+    inline void connectActionToButton(KisViewManager *view, QAbstractButton *button, const QString &id);
     inline void addActionToMenu(QMenu *menu, const QString &id);
 
     KisNodeSP findNonHidableNode(KisNodeSP startNode);
 private:
 
-    KisCanvas2* m_canvas;
+    KisCanvas2 *m_canvas;
     KMenu *m_viewModeMenu;
     KMenu *m_newLayerMenu;
     KisImageWSP m_image;
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeManager> m_nodeManager;
-    Ui_WdgLayerBox* m_wdgLayerBox;
+    Ui_WdgLayerBox *m_wdgLayerBox;
     QTimer m_opacityDelayTimer;
     int m_newOpacity;
 
-    QVector<KisAction*> m_actions;
-    KisAction* m_removeAction;
-    KisAction* m_propertiesAction;
-    KisAction* m_selectOpaque;
+    QVector<KisAction *> m_actions;
+    KisAction *m_removeAction;
+    KisAction *m_propertiesAction;
+    KisAction *m_selectOpaque;
 };
 
 class KisLayerBoxFactory : public KoDockFactoryBase
@@ -141,24 +143,25 @@ class KisLayerBoxFactory : public KoDockFactoryBase
 public:
     KisLayerBoxFactory() { }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return QString("KisLayerBox");
     }
 
-    virtual QDockWidget* createDockWidget() {
-        KisLayerBox * dockWidget = new KisLayerBox();
+    virtual QDockWidget *createDockWidget()
+    {
+        KisLayerBox *dockWidget = new KisLayerBox();
 
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const
+    {
         return DockRight;
     }
 };
-
-
 
 #endif // KIS_LAYERBOX_H
 

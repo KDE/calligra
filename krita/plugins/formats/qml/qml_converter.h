@@ -53,11 +53,11 @@ public:
     QMLConverter();
     virtual ~QMLConverter();
 public:
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP image);
+    KisImageBuilder_Result buildFile(const KUrl &uri, KisImageWSP image);
 
 private:
-    void writeString(QTextStream& out, int spacing, const QString& setting, const QString& value);
-    void writeInt(QTextStream& out, int spacing, const QString& setting, int value);
+    void writeString(QTextStream &out, int spacing, const QString &setting, const QString &value);
+    void writeInt(QTextStream &out, int spacing, const QString &setting, int value);
 };
 
 #endif

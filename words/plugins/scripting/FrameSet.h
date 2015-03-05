@@ -60,47 +60,56 @@ class FrameSet : public QObject
 {
     Q_OBJECT
 public:
-    FrameSet(Module* module, KWFrameSet* frameset)
-            : QObject(module), m_frameset(frameset) {}
+    FrameSet(Module *module, KWFrameSet *frameset)
+        : QObject(module), m_frameset(frameset) {}
     virtual ~FrameSet() {}
 
 public Q_SLOTS:
 
     /** Return this framesets name. */
-    const QString name() {
+    const QString name()
+    {
         KWFrameSet *fs = m_frameset.data();
-        if (fs)
+        if (fs) {
             return fs->name();
+        }
         return QString();
     }
     /** Set the framesets name. */
-    void setName(const QString &name) {
+    void setName(const QString &name)
+    {
         KWFrameSet *fs = m_frameset.data();
-        if (fs)
+        if (fs) {
             fs->setName(name);
+        }
     }
 
     /** Return the number of frames this frameset has. */
-    int frameCount() {
+    int frameCount()
+    {
         KWFrameSet *fs = m_frameset.data();
-        if (fs)
+        if (fs) {
             return fs->frames().count();
+        }
         return 0;
     }
     /** Return the \a Frame object with index \p frameNr or NULL if there
     exists no \a Frame with such a index. */
-    QObject* frame(int frameNr) {
+    QObject *frame(int frameNr)
+    {
         KWFrameSet *fs = m_frameset.data();
-        if (fs && frameNr >= 0 && frameNr < fs->frames().count())
+        if (fs && frameNr >= 0 && frameNr < fs->frames().count()) {
             return new Frame(this, fs->frames().at(frameNr));
+        }
         return 0;
     }
 
     /** Return the \a TextDocument object or NULL if this frameset does not
     have a \a TextDocument object. */
-    QObject* document() {
+    QObject *document()
+    {
         KWFrameSet *fs = m_frameset.data();
-        KWTextFrameSet *textframeset = dynamic_cast<KWTextFrameSet*>(fs);
+        KWTextFrameSet *textframeset = dynamic_cast<KWTextFrameSet *>(fs);
         return textframeset ? new TextDocument(this, textframeset->document()) : 0;
     }
 

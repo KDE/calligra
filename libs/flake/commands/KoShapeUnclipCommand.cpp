@@ -37,10 +37,12 @@ class KoShapeUnclipCommand::Private : public KoOdfPaste
 {
 public:
     Private(KoShapeBasedDocumentBase *c)
-            : controller(c), executed(false) {
+        : controller(c), executed(false)
+    {
     }
 
-    ~Private() {
+    ~Private()
+    {
         if (executed) {
             qDeleteAll(oldClipPaths);
         } else {
@@ -48,17 +50,20 @@ public:
         }
     }
 
-    void createClipPathShapes() {
+    void createClipPathShapes()
+    {
         // check if we have already created the clip path shapes
-        if (!clipPathShapes.isEmpty())
+        if (!clipPathShapes.isEmpty()) {
             return;
+        }
 
-        foreach(KoShape *shape, shapesToUnclip) {
+        foreach (KoShape *shape, shapesToUnclip) {
             KoClipPath *clipPath = shape->clipPath();
-            if (!clipPath)
+            if (!clipPath) {
                 continue;
-            QList<KoShape*> shapes;
-            foreach(KoShape *clipShape, clipPath->clipPathShapes()) {
+            }
+            QList<KoShape *> shapes;
+            foreach (KoShape *clipShape, clipPath->clipPathShapes()) {
                 shapes.append(clipShape);
             }
             KoShapeOdfSaveHelper saveHelper(shapes);
@@ -74,23 +79,25 @@ public:
                 KoPathShape *pathShape = clipPathShapes[i];
                 // apply transformation so that it matches the current clipped shapes clip path
                 pathShape->applyAbsoluteTransformation(clipPath->clipDataTransformation(shape));
-                pathShape->setZIndex(shape->zIndex()+1);
+                pathShape->setZIndex(shape->zIndex() + 1);
                 clipPathParents.append(shape->parent());
             }
         }
     }
 
     /// reimplemented from KoOdfPaste
-    virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore) {
+    virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore)
+    {
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
         KoShapeLoadingContext context(loadingContext, controller->resourceManager());
 
         KoXmlElement element;
-        forEachElement(element, body) {
+        forEachElement (element, body) {
             KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, context);
-            if (!shape)
+            if (!shape) {
                 continue;
-            KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+            }
+            KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
             if (!pathShape) {
                 delete shape;
                 continue;
@@ -100,20 +107,20 @@ public:
         return true;
     }
 
-    QList<KoShape*> shapesToUnclip;
-    QList<KoClipPath*> oldClipPaths;
-    QList<KoPathShape*> clipPathShapes;
-    QList<KoShapeContainer*> clipPathParents;
+    QList<KoShape *> shapesToUnclip;
+    QList<KoClipPath *> oldClipPaths;
+    QList<KoPathShape *> clipPathShapes;
+    QList<KoShapeContainer *> clipPathParents;
     KoShapeBasedDocumentBase *controller;
 
     bool executed;
 };
 
-KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent)
-        : KUndo2Command(parent), d(new Private(controller))
+KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> &shapes, KUndo2Command *parent)
+    : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToUnclip = shapes;
-    foreach(KoShape *shape, d->shapesToUnclip) {
+    foreach (KoShape *shape, d->shapesToUnclip) {
         d->oldClipPaths.append(shape->clipPath());
     }
 
@@ -121,7 +128,7 @@ KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller,
 }
 
 KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent)
-        : KUndo2Command(parent), d(new Private(controller))
+    : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToUnclip.append(shape);
     d->oldClipPaths.append(shape->clipPath());
@@ -147,8 +154,9 @@ void KoShapeUnclipCommand::redo()
     const uint clipPathCount = d->clipPathShapes.count();
     for (uint i = 0; i < clipPathCount; ++i) {
         // the parent has to be there when it is added to the KoShapeBasedDocumentBase
-        if (d->clipPathParents.at(i))
+        if (d->clipPathParents.at(i)) {
             d->clipPathParents.at(i)->addShape(d->clipPathShapes[i]);
+        }
         d->controller->addShape(d->clipPathShapes[i]);
     }
 
@@ -170,8 +178,9 @@ void KoShapeUnclipCommand::undo()
     const uint clipPathCount = d->clipPathShapes.count();
     for (uint i = 0; i < clipPathCount; ++i) {
         d->controller->removeShape(d->clipPathShapes[i]);
-        if (d->clipPathParents.at(i))
+        if (d->clipPathParents.at(i)) {
             d->clipPathParents.at(i)->removeShape(d->clipPathShapes[i]);
+        }
     }
 
     d->executed = false;

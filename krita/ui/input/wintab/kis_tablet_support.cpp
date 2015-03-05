@@ -18,7 +18,6 @@
 
 #include "kis_tablet_support.h"
 
-
 Q_GLOBAL_STATIC(QTabletDeviceDataList, tablet_devices)
 QTabletDeviceDataList *qt_tablet_devices()
 {

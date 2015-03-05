@@ -36,7 +36,7 @@
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
 
-void CalligraQtQuickComponentsPlugin::registerTypes(const char* uri)
+void CalligraQtQuickComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.calligra.CalligraComponents"));
     qmlRegisterType<CQTextDocumentCanvas> (uri, 0, 1, "TextDocumentCanvas");
@@ -47,15 +47,15 @@ void CalligraQtQuickComponentsPlugin::registerTypes(const char* uri)
 //    qmlRegisterType<CQSpreadsheetListModel> (uri, 0, 1, "SpreadsheetListModel");
     qmlRegisterType<CQPresentationModel>(uri, 0, 1, "PresentationModel");
     qmlRegisterType<CQThumbnailItem>(uri, 0, 1, "Thumbnail");
-    qmlRegisterType<CQLinkArea>( uri, 0, 1, "LinkArea" );
+    qmlRegisterType<CQLinkArea>(uri, 0, 1, "LinkArea");
 }
 
-void CalligraQtQuickComponentsPlugin::initializeEngine(QDeclarativeEngine* engine, const char* uri)
+void CalligraQtQuickComponentsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
     CQImageProvider::s_imageProvider = new CQImageProvider;
     engine->addImageProvider(CQImageProvider::identificationString, CQImageProvider::s_imageProvider);
 
-    engine->rootContext()->setContextProperty( "Calligra", new CQPluginLoaderProxy( engine ) );
+    engine->rootContext()->setContextProperty("Calligra", new CQPluginLoaderProxy(engine));
 
     QDeclarativeExtensionPlugin::initializeEngine(engine, uri);
 }

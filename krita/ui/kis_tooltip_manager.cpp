@@ -15,7 +15,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_tooltip_manager.h"
 
 #include <QFile>
@@ -30,7 +29,7 @@
 #include <KisMainWindow.h>
 #include "KisViewManager.h"
 
-KisTooltipManager::KisTooltipManager(KisViewManager* view) : QObject(view), m_view(view), m_recording(false)
+KisTooltipManager::KisTooltipManager(KisViewManager *view) : QObject(view), m_view(view), m_recording(false)
 {
     m_view->mainWindow()->menuBar()->installEventFilter(this);
 }
@@ -46,7 +45,6 @@ KisTooltipManager::~KisTooltipManager()
 
         root = doc.createElement("tooltips");
         doc.appendChild(root);
-
 
         QMapIterator<QString, QString> it(m_tooltipMap);
         while (it.hasNext()) {
@@ -66,12 +64,12 @@ KisTooltipManager::~KisTooltipManager()
 void KisTooltipManager::record()
 {
     m_recording = true;
-    QList<QAction*> actions =  m_view->actionCollection()->actions();
-    foreach(KXMLGUIClient* client, m_view->mainWindow()->childClients() ) {
+    QList<QAction *> actions =  m_view->actionCollection()->actions();
+    foreach (KXMLGUIClient *client, m_view->mainWindow()->childClients()) {
         actions.append(client->actionCollection()->actions());
     }
 
-    foreach(QAction* action, actions) {
+    foreach (QAction *action, actions) {
         action->disconnect();
         connect(action, SIGNAL(triggered()), this, SLOT(captureToolip()));
     }
@@ -91,10 +89,9 @@ void KisTooltipManager::captureToolip()
                                             "New Tooltip:", QLineEdit::Normal,
                                             oldTooltip, &ok);
     if (ok && !tooltip.isEmpty()) {
-        dynamic_cast<QAction*>(sender())->setToolTip(tooltip);
+        dynamic_cast<QAction *>(sender())->setToolTip(tooltip);
         m_tooltipMap[id] = tooltip;
     }
 }
-
 
 #include "kis_tooltip_manager.moc"

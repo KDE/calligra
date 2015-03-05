@@ -31,10 +31,10 @@
 
 #include <kis_progress_updater.h>
 
-KisProgressWidget::KisProgressWidget(QWidget* parent)
-        : QWidget(parent)
+KisProgressWidget::KisProgressWidget(QWidget *parent)
+    : QWidget(parent)
 {
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    QHBoxLayout *layout = new QHBoxLayout(this);
     m_cancelButton = new QToolButton(this);
     m_cancelButton->setIcon(koIcon("process-stop"));
 
@@ -61,14 +61,14 @@ KisProgressWidget::~KisProgressWidget()
 {
 }
 
-KoProgressProxy* KisProgressWidget::progressProxy()
+KoProgressProxy *KisProgressWidget::progressProxy()
 {
     return m_progressBar;
 }
 
 void KisProgressWidget::cancel()
 {
-    foreach(KoProgressUpdater* updater, m_activeUpdaters) {
+    foreach (KoProgressUpdater *updater, m_activeUpdaters) {
         updater->cancel();
     }
     emit sigCancellationRequested();
@@ -77,18 +77,18 @@ void KisProgressWidget::cancel()
 void KisProgressWidget::correctVisibility(int progressValue)
 {
     bool visibility = progressValue >= m_progressBar->minimum() &&
-        progressValue < m_progressBar->maximum();
+                      progressValue < m_progressBar->maximum();
 
     m_progressBar->setVisible(visibility);
     m_cancelButton->setVisible(visibility);
 }
 
-void KisProgressWidget::detachUpdater(KoProgressUpdater* updater)
+void KisProgressWidget::detachUpdater(KoProgressUpdater *updater)
 {
     m_activeUpdaters.removeOne(updater);
 }
 
-void KisProgressWidget::attachUpdater(KoProgressUpdater* updater)
+void KisProgressWidget::attachUpdater(KoProgressUpdater *updater)
 {
     m_activeUpdaters << updater;
 }

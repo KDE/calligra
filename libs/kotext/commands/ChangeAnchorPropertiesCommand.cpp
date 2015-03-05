@@ -68,9 +68,9 @@ void ChangeAnchorPropertiesCommand::redo()
 {
     KoTextShapeDataBase *textData = 0;
     if (m_oldParent) {
-        textData = qobject_cast<KoTextShapeDataBase*>(m_oldParent->userData());
+        textData = qobject_cast<KoTextShapeDataBase *>(m_oldParent->userData());
     } else  if (m_newParent) {
-        textData = qobject_cast<KoTextShapeDataBase*>(m_newParent->userData());
+        textData = qobject_cast<KoTextShapeDataBase *>(m_newParent->userData());
     }
 
     KUndo2Command::redo();
@@ -183,9 +183,9 @@ void ChangeAnchorPropertiesCommand::undo()
 {
     KoTextShapeDataBase *textData = 0;
     if (m_oldParent) {
-        textData = qobject_cast<KoTextShapeDataBase*>(m_oldParent->userData());
+        textData = qobject_cast<KoTextShapeDataBase *>(m_oldParent->userData());
     } else  if (m_newParent) {
-        textData = qobject_cast<KoTextShapeDataBase*>(m_newParent->userData());
+        textData = qobject_cast<KoTextShapeDataBase *>(m_newParent->userData());
     }
 
     copyLayoutProperties(&m_oldAnchor, m_anchor);

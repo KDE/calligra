@@ -37,10 +37,13 @@ class GoogleDocumentService : public QObject
 public:
     explicit GoogleDocumentService(OnlineDocument::DocumentType type);
     virtual ~GoogleDocumentService();
-    void clientLogin(const QString & username, const QString & password);
+    void clientLogin(const QString &username, const QString &password);
     void getDocument();
-    void downloadDocument (const QString & url, const QString & type);
-    bool alreadyAuthenticated() { return loggedin; }
+    void downloadDocument(const QString &url, const QString &type);
+    bool alreadyAuthenticated()
+    {
+        return loggedin;
+    }
     void showDocumentListWindow(bool visible);
 
 Q_SIGNALS:

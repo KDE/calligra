@@ -28,11 +28,9 @@ class KRITAIMAGE_EXPORT KisProgressInterface
 public:
 
     virtual ~KisProgressInterface() {};
-    virtual void detachUpdater(KoProgressUpdater* updater) = 0;
-    virtual void attachUpdater(KoProgressUpdater* updater) = 0;
+    virtual void detachUpdater(KoProgressUpdater *updater) = 0;
+    virtual void attachUpdater(KoProgressUpdater *updater) = 0;
 };
-
-
 
 /**
  * KisProgressUpdater is an updater that disengages itself automatically
@@ -41,13 +39,11 @@ public:
 class KRITAIMAGE_EXPORT KisProgressUpdater : public KoProgressUpdater
 {
 public:
-    KisProgressUpdater(KisProgressInterface* progressInterface, KoProgressProxy* proxy,
+    KisProgressUpdater(KisProgressInterface *progressInterface, KoProgressProxy *proxy,
                        KoProgressUpdater::Mode mode = KoProgressUpdater::Threaded);
     virtual ~KisProgressUpdater();
 private:
-    KisProgressInterface* m_interface;
+    KisProgressInterface *m_interface;
 };
-
-
 
 #endif // KIS_PROGRESS_UPDATER_H

@@ -21,11 +21,11 @@
 
 #include <KisViewManager.h>
 
-KisGmicProgressManager::KisGmicProgressManager(KisViewManager* viewManager):m_progressTimer(new QTimer()), m_progressPulseRequest(0)
+KisGmicProgressManager::KisGmicProgressManager(KisViewManager *viewManager): m_progressTimer(new QTimer()), m_progressPulseRequest(0)
 {
-        m_progressUpdater = viewManager->createProgressUpdater(KoProgressUpdater::Unthreaded);
-        m_progressTimer->setInterval(UPDATE_PROGRESS_TIMEOUT);
-        connect(m_progressTimer, SIGNAL(timeout()), this, SIGNAL(sigProgress()));
+    m_progressUpdater = viewManager->createProgressUpdater(KoProgressUpdater::Unthreaded);
+    m_progressTimer->setInterval(UPDATE_PROGRESS_TIMEOUT);
+    connect(m_progressTimer, SIGNAL(timeout()), this, SIGNAL(sigProgress()));
 }
 
 KisGmicProgressManager::~KisGmicProgressManager()
@@ -34,7 +34,6 @@ KisGmicProgressManager::~KisGmicProgressManager()
     delete m_progressTimer;
     delete m_progressUpdater;
 }
-
 
 void KisGmicProgressManager::initProgress()
 {
@@ -47,22 +46,17 @@ void KisGmicProgressManager::initProgress()
 void KisGmicProgressManager::updateProgress(float progress)
 {
     int currentProgress = 0.0;
-    if (progress >= 0.0)
-    {
-        if (m_progressPulseRequest > 0)
-        {
+    if (progress >= 0.0) {
+        if (m_progressPulseRequest > 0) {
             m_progressUpdater->start(100);
             m_updater = m_progressUpdater->startSubtask();
             m_progressPulseRequest = 0;
         }
         currentProgress = (int)progress;
-    }
-    else
-    {
+    } else {
         // pulse
         m_progressPulseRequest++;
-        if (m_updater->progress() >= 90)
-        {
+        if (m_updater->progress() >= 90) {
             m_progressUpdater->start(100);
             m_updater = m_progressUpdater->startSubtask();
         }

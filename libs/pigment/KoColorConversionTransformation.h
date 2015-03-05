@@ -87,8 +87,8 @@ public:
     static ConversionFlags AdjustmentConversionFlags;
 
 public:
-    KoColorConversionTransformation(const KoColorSpace* srcCs,
-                                    const KoColorSpace* dstCs,
+    KoColorConversionTransformation(const KoColorSpace *srcCs,
+                                    const KoColorSpace *dstCs,
                                     Intent renderingIntent,
                                     ConversionFlags conversionFlags);
     ~KoColorConversionTransformation();
@@ -97,12 +97,12 @@ public:
     /**
      * @return the source color space for this transformation.
      */
-    const KoColorSpace* srcColorSpace() const;
+    const KoColorSpace *srcColorSpace() const;
 
     /**
      * @return the destination color space for this transformation.
      */
-    const KoColorSpace* dstColorSpace() const;
+    const KoColorSpace *dstColorSpace() const;
 
     /**
      * @return the rendering intent of this transformation (this is only useful
@@ -124,14 +124,17 @@ public:
     /**
      * @return false if the  transformation is not valid
      */
-    virtual bool isValid() const { return true; }
+    virtual bool isValid() const
+    {
+        return true;
+    }
 
 private:
 
-    void setSrcColorSpace(const KoColorSpace*) const;
-    void setDstColorSpace(const KoColorSpace*) const;
+    void setSrcColorSpace(const KoColorSpace *) const;
+    void setDstColorSpace(const KoColorSpace *) const;
 
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoColorConversionTransformation::ConversionFlags)

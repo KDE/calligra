@@ -40,18 +40,18 @@ KisPaintDeviceSP initAsymTestDevice(QRect &imageRect, int &pixelSize, QByteArray
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     pixelSize = dev->pixelSize();
 
-    imageRect = QRect(0,0,5,5);
+    imageRect = QRect(0, 0, 5, 5);
     initialData.resize(25 * pixelSize);
 
-    quint8 *ptr = (quint8*) initialData.data();
-    for(int i = 0; i < 25; i++) {
-        KoColor pixel(QColor(i,i,i,255), dev->colorSpace());
+    quint8 *ptr = (quint8 *) initialData.data();
+    for (int i = 0; i < 25; i++) {
+        KoColor pixel(QColor(i, i, i, 255), dev->colorSpace());
         memcpy(ptr, pixel.data(), pixelSize);
 
         ptr += pixelSize;
     }
 
-    dev->writeBytes((const quint8*)initialData.constData(), imageRect);
+    dev->writeBytes((const quint8 *)initialData.constData(), imageRect);
 
     return dev;
 }
@@ -59,17 +59,17 @@ KisPaintDeviceSP initAsymTestDevice(QRect &imageRect, int &pixelSize, QByteArray
 Matrix<qreal, 3, 3> initSymmFilter(qreal &offset, qreal &factor)
 {
     Matrix<qreal, 3, 3> filter;
-    filter(0,0) = 1.0 / 21;
-    filter(0,1) = 3.0 / 21;
-    filter(0,2) = 1.0 / 21;
+    filter(0, 0) = 1.0 / 21;
+    filter(0, 1) = 3.0 / 21;
+    filter(0, 2) = 1.0 / 21;
 
-    filter(1,0) = 3.0 / 21;
-    filter(1,1) = 5.0 / 21;
-    filter(1,2) = 3.0 / 21;
+    filter(1, 0) = 3.0 / 21;
+    filter(1, 1) = 5.0 / 21;
+    filter(1, 2) = 3.0 / 21;
 
-    filter(2,0) = 1.0 / 21;
-    filter(2,1) = 3.0 / 21;
-    filter(2,2) = 1.0 / 21;
+    filter(2, 0) = 1.0 / 21;
+    filter(2, 1) = 3.0 / 21;
+    filter(2, 2) = 1.0 / 21;
 
     offset = 0.0;
     factor = 1.0;
@@ -80,17 +80,17 @@ Matrix<qreal, 3, 3> initSymmFilter(qreal &offset, qreal &factor)
 Matrix<qreal, 3, 3> initAsymmFilter(qreal &offset, qreal &factor)
 {
     Matrix<qreal, 3, 3> filter;
-    filter(0,0) = 1.0;
-    filter(1,0) = 2.0;
-    filter(2,0) = 1.0;
+    filter(0, 0) = 1.0;
+    filter(1, 0) = 2.0;
+    filter(2, 0) = 1.0;
 
-    filter(0,1) = 0.0;
-    filter(1,1) = 1.0;
-    filter(2,1) = 0.0;
+    filter(0, 1) = 0.0;
+    filter(1, 1) = 1.0;
+    filter(2, 1) = 0.0;
 
-    filter(0,2) =-1.0;
-    filter(1,2) =-2.0;
-    filter(2,2) =-1.0;
+    filter(0, 2) = -1.0;
+    filter(1, 2) = -2.0;
+    filter(2, 2) = -1.0;
 
     offset = 0.0;
     factor = 1.0;
@@ -98,10 +98,11 @@ Matrix<qreal, 3, 3> initAsymmFilter(qreal &offset, qreal &factor)
     return filter;
 }
 
-void printPixel(QString prefix, int pixelSize, quint8 *data) {
+void printPixel(QString prefix, int pixelSize, quint8 *data)
+{
     QString str = prefix;
 
-    for(int i = 0; i < pixelSize; i++) {
+    for (int i = 0; i < pixelSize; i++) {
         str += ' ';
         str += QString::number(data[i]);
     }
@@ -151,19 +152,18 @@ void KisConvolutionPainterTest::testSymmConvolution()
     QByteArray initialData;
     KisPaintDeviceSP dev = initAsymTestDevice(imageRect, pixelSize, initialData);
 
-
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
     gc.beginTransaction();
 
-    QRect filterRect = imageRect.adjusted(1,1,-1,-1);
+    QRect filterRect = imageRect.adjusted(1, 1, -1, -1);
     gc.applyMatrix(kernel, dev, filterRect.topLeft(), filterRect.topLeft(),
                    filterRect.size());
     gc.deleteTransaction();
 
     QByteArray resultData(initialData.size(), 0);
-    dev->readBytes((quint8*)resultData.data(), imageRect);
+    dev->readBytes((quint8 *)resultData.data(), imageRect);
 
     QCOMPARE(resultData, initialData);
 }
@@ -185,22 +185,21 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
     gc.beginTransaction();
     gc.setChannelFlags(channelFlags);
 
-    QRect filterRect = imageRect.adjusted(1,1,-1,-1);
+    QRect filterRect = imageRect.adjusted(1, 1, -1, -1);
     gc.applyMatrix(kernel, dev, filterRect.topLeft(), filterRect.topLeft(),
                    filterRect.size());
     gc.deleteTransaction();
 
-
     QByteArray resultData(initialData.size(), 0);
-    dev->readBytes((quint8*)resultData.data(), imageRect);
+    dev->readBytes((quint8 *)resultData.data(), imageRect);
 
     QRect filteredRect = imageRect.adjusted(1, 1, -1, -1);
 
-    quint8 *srcPtr = (quint8*) initialData.data();
-    quint8 *resPtr = (quint8*) resultData.data();
+    quint8 *srcPtr = (quint8 *) initialData.data();
+    quint8 *resPtr = (quint8 *) resultData.data();
 
-    for(int row = 0; row < imageRect.height(); row++) {
-        for(int col = 0; col < imageRect.width(); col++) {
+    for (int row = 0; row < imageRect.height(); row++) {
+        for (int col = 0; col < imageRect.width(); col++) {
 
             bool isFiltered = filteredRect.contains(col, row);
 
@@ -208,12 +207,12 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
             KoColor filteredPixel(QColor(pixelValue, pixelValue, pixelValue, 255), dev->colorSpace());
 
             KoColor resultPixel(dev->colorSpace());
-            for(int j = 0; j < pixelSize; j++) {
+            for (int j = 0; j < pixelSize; j++) {
                 resultPixel.data()[j] = isFiltered && channelFlags[j] ?
-                    filteredPixel.data()[j] : srcPtr[j];
+                                        filteredPixel.data()[j] : srcPtr[j];
             }
 
-            if(memcmp(resPtr, resultPixel.data(), pixelSize)) {
+            if (memcmp(resPtr, resultPixel.data(), pixelSize)) {
                 printPixel("Actual:  ", pixelSize, resPtr);
                 printPixel("Expected:", pixelSize, resultPixel.data());
                 QFAIL("Failed to filter area");
@@ -268,7 +267,6 @@ void KisConvolutionPainterTest::testAsymmSkipAlpha()
     testAsymmConvolutionImp(channelFlags);
 }
 
-
 // #include <valgrind/callgrind.h>
 void KisConvolutionPainterTest::benchmarkConvolution()
 {
@@ -282,7 +280,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
     for (int i = 0; i < 10; i++) {
 
-        KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(diameter, 1.0, 5, 5, 2, false);
+        KisCircleMaskGenerator *kas = new KisCircleMaskGenerator(diameter, 1.0, 5, 5, 2, false);
         KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
 
         KisConvolutionPainter gc(dev);
@@ -300,7 +298,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
         qDebug() << "Diameter:" << diameter << "time:" << timer.elapsed();
 
-        if(diameter < 10) {
+        if (diameter < 10) {
             diameter += 2;
         } else {
             diameter += 8;
@@ -310,65 +308,62 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
 void KisConvolutionPainterTest::testGaussianBase(KisPaintDeviceSP dev, bool useFftw, const QString &prefix)
 {
-   QBitArray channelFlags =
-       KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
+    QBitArray channelFlags =
+        KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
 
-   KisPainter gc(dev);
+    KisPainter gc(dev);
 
+    qreal horizontalRadius = 5, verticalRadius = 5;
 
-   qreal horizontalRadius = 5, verticalRadius = 5;
-   
-   for(int i = 0; i < 3 ; i++, horizontalRadius+=5, verticalRadius+=5)
-   {
-       QTime timer;
-       timer.start();
+    for (int i = 0; i < 3; i++, horizontalRadius += 5, verticalRadius += 5) {
+        QTime timer;
+        timer.start();
 
-       gc.beginTransaction();
+        gc.beginTransaction();
 
-       if (( horizontalRadius > 0 ) && ( verticalRadius > 0 )) {
-           KisPaintDeviceSP interm = new KisPaintDevice(dev->colorSpace());
+        if ((horizontalRadius > 0) && (verticalRadius > 0)) {
+            KisPaintDeviceSP interm = new KisPaintDevice(dev->colorSpace());
 
-           KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(horizontalRadius);
-           KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(verticalRadius);
+            KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(horizontalRadius);
+            KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(verticalRadius);
 
-           const QRect applyRect = dev->exactBounds();
+            const QRect applyRect = dev->exactBounds();
 
-           KisConvolutionPainter::TestingEnginePreference enginePreference =
-               useFftw ?
-               KisConvolutionPainter::FFTW :
-               KisConvolutionPainter::SPATIAL;
+            KisConvolutionPainter::TestingEnginePreference enginePreference =
+                useFftw ?
+                KisConvolutionPainter::FFTW :
+                KisConvolutionPainter::SPATIAL;
 
-           KisConvolutionPainter horizPainter(interm, enginePreference);
-           horizPainter.setChannelFlags(channelFlags);
-           horizPainter.applyMatrix(kernelHoriz, dev,
-                                    applyRect.topLeft() - QPoint(0, verticalRadius),
-                                    applyRect.topLeft() - QPoint(0, verticalRadius),
-                                    applyRect.size() + QSize(0, 2 * verticalRadius),
-                                    BORDER_REPEAT);
+            KisConvolutionPainter horizPainter(interm, enginePreference);
+            horizPainter.setChannelFlags(channelFlags);
+            horizPainter.applyMatrix(kernelHoriz, dev,
+                                     applyRect.topLeft() - QPoint(0, verticalRadius),
+                                     applyRect.topLeft() - QPoint(0, verticalRadius),
+                                     applyRect.size() + QSize(0, 2 * verticalRadius),
+                                     BORDER_REPEAT);
 
-           KisConvolutionPainter verticalPainter(dev, enginePreference);
-           verticalPainter.setChannelFlags(channelFlags);
-           verticalPainter.applyMatrix(kernelVertical, interm,
-                                       applyRect.topLeft(),
-                                       applyRect.topLeft(),
-                                       applyRect.size(), BORDER_REPEAT);
+            KisConvolutionPainter verticalPainter(dev, enginePreference);
+            verticalPainter.setChannelFlags(channelFlags);
+            verticalPainter.applyMatrix(kernelVertical, interm,
+                                        applyRect.topLeft(),
+                                        applyRect.topLeft(),
+                                        applyRect.size(), BORDER_REPEAT);
 
-           QImage result = dev->convertToQImage(0, applyRect.x(), applyRect.y(), applyRect.width(), applyRect.height());
+            QImage result = dev->convertToQImage(0, applyRect.x(), applyRect.y(), applyRect.width(), applyRect.height());
 
-           QString engine = useFftw ? "fftw" : "spatial";
-           QString testCaseName = QString("test_gaussian_%1_%2_%3.png").arg(horizontalRadius).arg(verticalRadius).arg(engine);
+            QString engine = useFftw ? "fftw" : "spatial";
+            QString testCaseName = QString("test_gaussian_%1_%2_%3.png").arg(horizontalRadius).arg(verticalRadius).arg(engine);
 
-           TestUtil::checkQImage(result,
-                                 "convolution_painter_test",
-                                 QString("gaussian_") + prefix,
-                                 testCaseName);
+            TestUtil::checkQImage(result,
+                                  "convolution_painter_test",
+                                  QString("gaussian_") + prefix,
+                                  testCaseName);
 
-           gc.revertTransaction();
-       }
-       qDebug() << "Elapsed time:" << timer.elapsed() << "ms";
+            gc.revertTransaction();
+        }
+        qDebug() << "Elapsed time:" << timer.elapsed() << "ms";
     }
 }
-
 
 void KisConvolutionPainterTest::testGaussian(bool useFftw)
 {

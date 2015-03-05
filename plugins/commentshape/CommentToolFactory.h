@@ -22,7 +22,6 @@
 
 #include <KoToolFactoryBase.h>
 
-
 class CommentToolFactory : public KoToolFactoryBase
 {
 
@@ -30,8 +29,8 @@ public:
     CommentToolFactory();
     virtual ~CommentToolFactory();
 
-    virtual KoToolBase* createTool(KoCanvasBase* canvas);
-    virtual bool canCreateTool(KoCanvasBase* canvas) const;
+    virtual KoToolBase *createTool(KoCanvasBase *canvas);
+    virtual bool canCreateTool(KoCanvasBase *canvas) const;
 };
 
 #endif // COMMENTTOOLFACTORY_H

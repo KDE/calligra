@@ -52,13 +52,13 @@ public:
     KexiTableView  *table;
     KexiDB::TableViewData  *data;
     KexiDB::TableViewData *widgetsColumnData,
-    *slotsColumnData, *signalsColumnData;
+           *slotsColumnData, *signalsColumnData;
     QLabel  *pixmapLabel, *textLabel;
     KPushButton *addButton, *removeButton;
 };
 
 ConnectionDialog::Private::Private(Form *f)
-    :form(f), buffer(0)
+    : form(f), buffer(0)
 {
 
 }
@@ -72,8 +72,8 @@ ConnectionDialog::Private::~Private()
 ///////////// The dialog to edit or add/remove connections //////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
-        : KDialog(parent)
-        , d(new Private(form))
+    : KDialog(parent)
+    , d(new Private(form))
 {
     setObjectName("connections_dialog");
     setModal(true);
@@ -189,15 +189,17 @@ void ConnectionDialog::slotCellSelected(int row, int col)
 {
     d->removeButton->setEnabled(row < d->table->rows());
     KexiDB::RecordData *record = d->table->itemAt(row);
-    if (!record)
+    if (!record) {
         return;
-    if (col == 2) // signal col
+    }
+    if (col == 2) { // signal col
         updateSignalList(record);
-    else if (col == 4) // slot col
+    } else if (col == 4) { // slot col
         updateSlotList(record);
+    }
 }
 
-void ConnectionDialog::slotRowInserted(KexiDB::RecordData* item, bool)
+void ConnectionDialog::slotRowInserted(KexiDB::RecordData *item, bool)
 {
     d->buffer->append(new Connection());
     checkConnection(item);
@@ -253,14 +255,16 @@ ConnectionDialog::setStatusOk(KexiDB::RecordData *record)
     d->pixmapLabel->setPixmap(koDesktopIcon("dialog-ok"));
     d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(i18n("The connection is OK.")));
 
-    if (!record)
+    if (!record) {
         record = d->table->selectedItem();
-    if (d->table->currentRow() >= d->table->rows())
+    }
+    if (d->table->currentRow() >= d->table->rows()) {
         record = 0;
+    }
 
-    if (record)
+    if (record) {
         (*record)[0] = "dialog-ok";
-    else {
+    } else {
         d->pixmapLabel->setPixmap(QPixmap());
         d->textLabel->setText(QString());
     }
@@ -272,27 +276,29 @@ ConnectionDialog::setStatusError(const QString &msg, KexiDB::RecordData *record)
     d->pixmapLabel->setPixmap(koDesktopIcon("dialog-cancel"));
     d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(i18n("The connection is invalid.")) + msg);
 
-    if (!record)
+    if (!record) {
         record = d->table->selectedItem();
-    if (d->table->currentRow() >= d->table->rows())
+    }
+    if (d->table->currentRow() >= d->table->rows()) {
         record = 0;
+    }
 
-    if (record)
+    if (record) {
         (*record)[0] = "dialog-cancel";
-    else {
+    } else {
         d->pixmapLabel->setPixmap(QPixmap());
         d->textLabel->setText(QString());
     }
 }
 
 void
-ConnectionDialog::slotCellChanged(KexiDB::RecordData *record, int col, QVariant&, KexiDB::ResultInfo*)
+ConnectionDialog::slotCellChanged(KexiDB::RecordData *record, int col, QVariant &, KexiDB::ResultInfo *)
 {
     switch (col) {
-        // sender changed, we clear siganl and slot
+    // sender changed, we clear siganl and slot
     case 1:
         (*record)[2] = QString("");
-        // signal or receiver changed, we clear the slot cell
+    // signal or receiver changed, we clear the slot cell
     case 2:
     case 3: {
         (*record)[4] = QString("");
@@ -310,11 +316,13 @@ ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
     QString widget = (*record)[1].toString();
     QString signal = (*record)[2].toString();
 
-    if ((widget.isEmpty()) || signal.isEmpty())
+    if ((widget.isEmpty()) || signal.isEmpty()) {
         return;
+    }
     ObjectTreeItem *tree = d->form->objectTree()->lookup(widget);
-    if (!tree || !tree->widget())
+    if (!tree || !tree->widget()) {
         return;
+    }
 
     QString signalArg(signal);
     signalArg.remove(QRegExp(".*[(]|[)]"));
@@ -322,12 +330,13 @@ ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
     const QList<QMetaMethod> list(
         KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(),
                 QMetaMethod::Slot, QMetaMethod::Public));
-    foreach(const QMetaMethod &method, list) {
+    foreach (const QMetaMethod &method, list) {
         // we add the slot only if it is compatible with the signal
         QString slotArg(method.signature());
         slotArg.remove(QRegExp(".*[(]|[)]"));
-        if (!signalArg.startsWith(slotArg, Qt::CaseSensitive) && (!signal.isEmpty())) // args not compatible
+        if (!signalArg.startsWith(slotArg, Qt::CaseSensitive) && (!signal.isEmpty())) { // args not compatible
             continue;
+        }
 
         KexiDB::RecordData *record = d->slotsColumnData->createItem();
         (*record)[0] = QString::fromLatin1(method.signature());
@@ -340,14 +349,15 @@ void
 ConnectionDialog::updateSignalList(KexiDB::RecordData *record)
 {
     ObjectTreeItem *tree = d->form->objectTree()->lookup((*record)[1].toString());
-    if (!tree || !tree->widget())
+    if (!tree || !tree->widget()) {
         return;
+    }
 
     d->signalsColumnData->deleteAllRows();
     const QList<QMetaMethod> list(
         KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(),
                 QMetaMethod::Signal, QMetaMethod::Public));
-    foreach(const QMetaMethod &method, list) {
+    foreach (const QMetaMethod &method, list) {
         KexiDB::RecordData *record = d->signalsColumnData->createItem();
         (*record)[0] = QString::fromLatin1(method.signature());
         (*record)[1] = (*record)[0];
@@ -362,7 +372,7 @@ ConnectionDialog::checkConnection(KexiDB::RecordData *record)
     for (int i = 1; i < 5; i++) {
         if (!record || (*record)[i].toString().isEmpty()) {
             setStatusError("<qt>" + i18n("You have not selected item: <b>%1</b>.",
-                                d->data->column(i)->captionAliasOrName()) + "</qt>", record);
+                                         d->data->column(i)->captionAliasOrName()) + "</qt>", record);
             return;
         }
     }
@@ -393,9 +403,9 @@ ConnectionDialog::newItemByDragnDrop()
 {
     d->form->enterConnectingState();
     connect(d->form, SIGNAL(connectionAborted(KFormDesigner::Form*)),
-        this, SLOT(slotConnectionAborted(KFormDesigner::Form*)));
+            this, SLOT(slotConnectionAborted(KFormDesigner::Form*)));
     connect(d->form, SIGNAL(connectionCreated(KFormDesigner::Form*,Connection&)),
-        this, SLOT(slotConnectionCreated(KFormDesigner::Form*,Connection&)));
+            this, SLOT(slotConnectionCreated(KFormDesigner::Form*,Connection&)));
 
     hide();
 }
@@ -404,8 +414,9 @@ void
 ConnectionDialog::slotConnectionCreated(KFormDesigner::Form *form, Connection &connection)
 {
     show();
-    if (form != d->form)
+    if (form != d->form) {
         return;
+    }
 
     Connection *c = new Connection(connection);
     KexiDB::RecordData *record = d->table->data()->createItem();
@@ -421,8 +432,9 @@ void
 ConnectionDialog::slotConnectionAborted(KFormDesigner::Form *form)
 {
     show();
-    if (form != d->form)
+    if (form != d->form) {
         return;
+    }
 
     newItem();
 }
@@ -430,18 +442,20 @@ ConnectionDialog::slotConnectionAborted(KFormDesigner::Form *form)
 void
 ConnectionDialog::removeItem()
 {
-    if (d->table->currentRow() == -1 || d->table->currentRow() >= d->table->rows())
+    if (d->table->currentRow() == -1 || d->table->currentRow() >= d->table->rows()) {
         return;
+    }
 
     const int confirm
         = KMessageBox::warningYesNo(parentWidget(),
-              i18n("Do you want to delete this connection?"),
-              QString(),
-              KGuiItem(i18n("&Delete Connection")),
-              KStandardGuiItem::no(),
-              "AskBeforeDeleteConnection"/*config entry*/);
-    if (confirm != KMessageBox::Yes)
+                                    i18n("Do you want to delete this connection?"),
+                                    QString(),
+                                    KGuiItem(i18n("&Delete Connection")),
+                                    KStandardGuiItem::no(),
+                                    "AskBeforeDeleteConnection"/*config entry*/);
+    if (confirm != KMessageBox::Yes) {
         return;
+    }
 
     d->buffer->removeAt(d->table->currentRow());
     d->table->deleteItem(d->table->selectedItem());

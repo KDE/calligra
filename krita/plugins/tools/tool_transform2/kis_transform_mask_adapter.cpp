@@ -26,12 +26,9 @@
 
 #include "kis_node.h"
 
-
-struct KisTransformMaskAdapter::Private
-{
+struct KisTransformMaskAdapter::Private {
     ToolTransformArgs args;
 };
-
 
 KisTransformMaskAdapter::KisTransformMaskAdapter(const ToolTransformArgs &args)
     : m_d(new Private)
@@ -52,7 +49,7 @@ QTransform KisTransformMaskAdapter::finalAffineTransform() const
 bool KisTransformMaskAdapter::isAffine() const
 {
     return m_d->args.mode() == ToolTransformArgs::FREE_TRANSFORM ||
-        m_d->args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT;
+           m_d->args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT;
 }
 
 bool KisTransformMaskAdapter::isHidden() const
@@ -68,7 +65,7 @@ void KisTransformMaskAdapter::transformDevice(KisNodeSP node, KisPaintDeviceSP s
     KisTransformUtils::transformDevice(m_d->args, dst, &helper);
 }
 
-const ToolTransformArgs& KisTransformMaskAdapter::savedArgs() const
+const ToolTransformArgs &KisTransformMaskAdapter::savedArgs() const
 {
     return m_d->args;
 }
@@ -86,7 +83,7 @@ void KisTransformMaskAdapter::toXML(QDomElement *e) const
 KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::fromXML(const QDomElement &e)
 {
     return KisTransformMaskParamsInterfaceSP(
-        new KisTransformMaskAdapter(ToolTransformArgs::fromXML(e)));
+               new KisTransformMaskAdapter(ToolTransformArgs::fromXML(e)));
 }
 
 void KisTransformMaskAdapter::translate(const QPointF &offset)
@@ -97,7 +94,8 @@ void KisTransformMaskAdapter::translate(const QPointF &offset)
 #include "kis_transform_mask_params_factory_registry.h"
 
 struct ToolTransformParamsRegistrar {
-    ToolTransformParamsRegistrar() {
+    ToolTransformParamsRegistrar()
+    {
         KisTransformMaskParamsFactory f(KisTransformMaskAdapter::fromXML);
         KisTransformMaskParamsFactoryRegistry::instance()->addFactory("tooltransformparams", f);
     }

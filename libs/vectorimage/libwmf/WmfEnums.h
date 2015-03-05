@@ -18,17 +18,14 @@
  * Boston, MA 02110-1301, USA
  */
 
-
 #ifndef WMFENUMS_H
 #define WMFENUMS_H
-
 
 /**
    Namespace for Windows Metafile (WMF) classes
 */
 namespace Libwmf
 {
-
 
 // ----------------------------------------------------------------
 //                             Enums
@@ -141,7 +138,6 @@ enum WmfBinaryRasterOperation {
     R2_WHITE       = 0x0010
 };
 
-
 /**
    WMF 2.1.1.3 BitCount Enumeration
 
@@ -158,7 +154,6 @@ enum WmfBitCount {
     BI_BITCOUNT_5 = 0x0018,
     BI_BITCOUNT_6 = 0x0020
 };
-
 
 /**
    MS-WMF 2.1.1.4 BrushStyle Enumeration
@@ -180,7 +175,6 @@ enum WmfBrushStyle {
     BS_DIBPATTERN8X8 = 0x0008,
     BS_MONOPATTERN   = 0x0009
 };
-
 
 /**
    MS-WMF 2.1.1.5 CharacterSet Enumeration
@@ -211,7 +205,6 @@ enum WmfCharacterSet {
     OEM_CHARSET         = 0x000000FF
 };
 
-
 /**
    MS-WMF 2.1.1.6 ColorUsage Enumeration
 
@@ -224,7 +217,6 @@ enum WmfColorUsage {
     DIB_PAL_COLORS  = 0x0001,
     DIB_PAL_INDICES = 0x0002
 };
-
 
 /**
    MS-WMF 2.1.1.7 Compression Enumeration
@@ -245,7 +237,6 @@ enum WmfCompression {
     BI_CMYKRLE4  = 0x000D
 };
 
-
 /**
    MS-WMF 2.1.1.8 FamilyFont Enumeration
 
@@ -263,7 +254,6 @@ typedef enum {
     FF_DECORATIVE = 0x05
 } WmfFamilyFont;
 
-
 /**
    MS-WMF 2.1.1.9 FloodFill Enumeration
 
@@ -275,7 +265,6 @@ enum WmfFloodFill {
     FLOODFILLBORDER  = 0x0000,
     FLOODFILLSURFACE = 0x0001
 };
-
 
 /**
    MS-WMF 2.1.1.10 FontQuality Enumeration
@@ -294,7 +283,6 @@ enum WmfFontQuality {
     CLEARTYPE_QUALITY      = 0x05
 };
 
-
 /*
   MS-WMF 2.1.1.11 GamutMappingIntent Enumeration
 
@@ -308,7 +296,6 @@ enum WmfGamutMappingIntent {
     LCS_GM_GRAPHICS         = 0x00000002,
     LCS_GM_IMAGES           = 0x00000004
 };
-
 
 /**
    MS-WMF 2.1.1.12 HatchStyle Enumeration
@@ -325,7 +312,6 @@ enum WmfHatchStyle {
     HS_DIAGCROSS  = 0x0005
 };
 
-
 /**
    MS-WMF 2.1.1.13 Layout Enumeration
 
@@ -341,7 +327,6 @@ enum WmfLayout {
     LAYOUT_BITMAPORIENTATIONPRESERVED = 0x0008
 };
 
-
 /**
    MS-WMF 2.1.1.14 LogicalColorSpace Enumeration
 
@@ -353,7 +338,6 @@ enum WmfLogicalColorSpace {
     LCS_sRGB                = 0x73524742,
     LCS_WINDOWS_COLOR_SPACE = 0x57696E20
 };
-
 
 /**
    MS-WMF 2.1.1.15 LogicalColorSpaceV5 Enumeration
@@ -368,7 +352,6 @@ enum WmfLogicalColorSpaceV5 {
     LCS_PROFILE_LINKED   = 0x4C494E4B,
     LCS_PROFILE_EMBEDDED = 0x4D424544
 };
-
 
 /**
    MS-WMF 2.1.1.16 MapMode Enumeration
@@ -391,7 +374,6 @@ enum WmfMapMode {
     MM_ANISOTROPIC = 0x0008
 };
 
-
 /**
    MS-WMF 2.1.1.18 Metafile Type Enumeration
 
@@ -403,10 +385,9 @@ enum WmfMetafileType {
     DISKMETAFILE   = 0x0002
 };
 
-
 /**
    MS-WMF 2.1.1.19 MetafileVersion Enumeration
-  
+
    The MetafileVersion Enumeration defines values that specify support
    for device-independent bitmaps (DIBs) in metafiles.
 */
@@ -416,10 +397,9 @@ enum WmfMetafileVersion {
     METAVERSION300 = 0x0300
 };
 
-
 /**
    MS-WMF 2.1.1.20 MixMode Enumeration
-  
+
    The MixMode Enumeration specifies the background mix mode for text,
    hatched brushes, and other nonsolid pen styles.
 */
@@ -429,10 +409,9 @@ enum WmfMixMode {
     OPAQUE      = 0x0002
 };
 
-
 /**
    MS-WMF 2.1.1.21 OutPrecision Enumeration
-  
+
    The OutPrecision enumeration defines values for output precision,
    which is the requirement for the font mapper to match specific font
    parameters, including height, width, character orientation,
@@ -452,10 +431,9 @@ enum WmfOutPrecision {
     OUT_PS_ONLY_PRECIS        = 0x0000000A
 };
 
-
 /**
    MS-WMF 2.1.1.22 PaletteEntryFlag Enumeration
-  
+
    The PaletteEntryFlag Enumeration specifies how the palette entry should be used.
 */
 
@@ -465,13 +443,12 @@ enum WmfPaletteEntryFlag {
     PC_NOCOLLAPSE = 0x04
 };
 
-
 /**
    MS-WMF 2.1.1.23 Pe nStyle Enumeration
-  
+
    The 16-bit PenStyle Enumeration is used to specify different types
    of pens that can be used in graphics operations.
-  
+
    Various styles can be combined by using a logical OR statement, one
    from each subsection of Style, EndCap, Join, and Type (Cosmetic).
 */
@@ -495,10 +472,9 @@ enum WmfPenStyle {
     PS_JOIN_MITER    = 0x2000
 };
 
-
 /**
    MS-WMF 2.1.1.24 PitchFont Enumeration
-  
+
    The PitchFont enumeration defines values that are used for
    specifying characteristics of a font. The values are used to
    indicate whether the characters in a font have a fixed or variable
@@ -511,10 +487,9 @@ enum WmfPitchFont {
     VARIABLE_PITCH = 2
 };
 
-
 /*
    MS-WMF 2.1.1.25 PolyFillMode Enumeration
-  
+
    The PolyFillMode Enumeration specifies the method used for filling
    a polygon.
 */
@@ -524,10 +499,9 @@ enum WmfPolyFillMode {
     WINDING   = 0x0002
 };
 
-
 /**
    MS-WMF 2.1.1.29 StretchMode Enumeration
-  
+
    The StretchMode Enumeration specifies the bitmap stretching mode,
    which defines how the system combines rows or columns of a bitmap
    with existing pixels.
@@ -540,10 +514,9 @@ enum WmfStretchMode {
     HALFTONE     = 0x0004
 };
 
-
 /**
    MS-WMF 2.1.1.30 Ternary RasterOperation Enumeration
-  
+
    The TernaryRasterOperation Enumeration specifies ternary raster
    operation codes, which define how to combine the bits in a source
    bitmap with the bits in a destination bitmap.
@@ -809,14 +782,12 @@ enum WmfTernaryRasterOperation {
     WHITENESS = 0xFF
 };
 
-
 // ----------------------------------------------------------------
 //                             Flags
 
-
 /**
    MS-WMF 2.1.2.1 ClipPrecision Flags
-  
+
    ClipPrecision Flags specify clipping precision, which defines how
    to clip characters that are partially outside a clipping
    region. These flags can be combined to specify multiple options.
@@ -830,10 +801,9 @@ enum WmfTernaryRasterOperation {
 #define CLIP_DFA_DISABLE      0x00000040
 #define CLIP_EMBEDDED         0x00000080
 
-
 /**
    MS-WMF 2.1.2.2 ExtTextOutOptions Flags
-  
+
    ExtTextOutOptions Flags specify various characteristics of the
    output of text. These flags can be combined to specify multiple options.
 */
@@ -846,16 +816,15 @@ enum WmfTernaryRasterOperation {
 #define ETO_NUMERICSLATIN 0x0800
 #define ETO_PDY           0x2000
 
-
 /**
    MS-WMF 2.1.2.3 TextAlignmentMode Flags
-  
+
    TextAlignmentMode Flags specify the relationship between a
    reference point and a bounding rectangle, for text alignment. These
    flags can be combined to specify multiple options, with the
    restriction that only one flag can be chosen that alters the
    drawing position in the playback device context.
-  
+
    Horizontal text alignment is performed when the font has a
    horizontal default baseline.
 */
@@ -874,8 +843,6 @@ enum WmfTernaryRasterOperation {
 #define TA_HORZMASK 0x0006
 #define TA_VERTMASK 0x0018
 
-
-
 // MS-WMF 2.1.2.4 VerticalTextAlignmentMode Flags
 //
 // VerticalTextAlignmentMode Flags specify the relationship between a
@@ -893,7 +860,6 @@ enum WmfTernaryRasterOperation {
 #define VTA_CENTER   0x0006
 #define VTA_LEFT     0x0008
 #define VTA_BASELINE 0x0018
-
 
 }
 

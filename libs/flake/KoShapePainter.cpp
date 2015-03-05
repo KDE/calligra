@@ -50,10 +50,12 @@ public:
 
     virtual void gridSize(qreal *horizontal, qreal *vertical) const
     {
-        if (horizontal)
+        if (horizontal) {
             *horizontal = 0;
-        if (vertical)
+        }
+        if (vertical) {
             *vertical = 0;
+        }
     };
 
     virtual bool snapToGrid() const
@@ -70,7 +72,7 @@ public:
         return m_shapeManager;
     }
 
-    virtual void updateCanvas(const QRectF&)
+    virtual void updateCanvas(const QRectF &)
     {
     }
 
@@ -115,8 +117,11 @@ public:
     {
     }
 
-    ~Private() { delete canvas; }
-    SimpleCanvas * canvas;
+    ~Private()
+    {
+        delete canvas;
+    }
+    SimpleCanvas *canvas;
 };
 
 KoShapePainter::KoShapePainter(KoShapeManagerPaintingStrategy *strategy)
@@ -133,7 +138,7 @@ KoShapePainter::~KoShapePainter()
     delete d;
 }
 
-void KoShapePainter::setShapes(const QList<KoShape*> &shapes)
+void KoShapePainter::setShapes(const QList<KoShape *> &shapes)
 {
     d->canvas->shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
 }
@@ -149,8 +154,9 @@ void KoShapePainter::paint(QPainter &painter, KoViewConverter &converter)
 
 void KoShapePainter::paint(QPainter &painter, const QRect &painterRect, const QRectF &documentRect)
 {
-    if (documentRect.width() == 0.0f || documentRect.height() == 0.0f)
+    if (documentRect.width() == 0.0f || documentRect.height() == 0.0f) {
         return;
+    }
 
     KoViewConverter converter;
     // calculate the painter destination rectangle size in document coordinates
@@ -171,7 +177,7 @@ void KoShapePainter::paint(QPainter &painter, const QRect &painterRect, const QR
     painter.setPen(QPen(Qt::NoPen));
     painter.setBrush(Qt::NoBrush);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setClipRect(painterRect.adjusted(-1,-1,1,1));
+    painter.setClipRect(painterRect.adjusted(-1, -1, 1, 1));
 
     // convert document rectangle to view coordinates
     QRectF zoomedBound = converter.documentToView(documentRect);
@@ -188,8 +194,9 @@ void KoShapePainter::paint(QPainter &painter, const QRect &painterRect, const QR
 
 void KoShapePainter::paint(QImage &image)
 {
-    if (image.isNull())
+    if (image.isNull()) {
         return;
+    }
 
     QPainter painter(&image);
 
@@ -200,17 +207,20 @@ QRectF KoShapePainter::contentRect()
 {
     QRectF bound;
     foreach (KoShape *shape, d->canvas->shapeManager()->shapes()) {
-        if (!shape->isVisible(true))
+        if (!shape->isVisible(true)) {
             continue;
-        if (dynamic_cast<KoShapeGroup*>(shape))
+        }
+        if (dynamic_cast<KoShapeGroup *>(shape)) {
             continue;
+        }
 
         QRectF shapeRect = shape->boundingRect();
 
-        if (bound.isEmpty())
+        if (bound.isEmpty()) {
             bound = shapeRect;
-        else
+        } else {
             bound = bound.united(shapeRect);
+        }
     }
     return bound;
 }

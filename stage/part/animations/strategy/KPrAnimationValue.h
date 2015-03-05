@@ -30,14 +30,14 @@ class QTextBlockUserData;
 class KPrAnimationValue
 {
 public:
-    explicit KPrAnimationValue(KPrShapeAnimation * shapeAnimation);
+    explicit KPrAnimationValue(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimationValue();
     virtual qreal value(qreal time) const = 0;
     virtual qreal startValue() const = 0;
     virtual qreal endValue() const = 0;
-    virtual void setCache(KPrAnimationCache * cache);
+    virtual void setCache(KPrAnimationCache *cache);
     virtual bool saveOdf(KoPASavingContext &paContext) const = 0;
-    enum SmilCalcMode{
+    enum SmilCalcMode {
         discrete,
         linear,
         paced,

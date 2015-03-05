@@ -32,12 +32,9 @@
 class KoPointerEvent;
 class KoCanvasBase;
 
-
-
 class KisPaintingInformationBuilder;
 class KisToolFreehandHelper;
 class KisRecordingAdapter;
-
 
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 {
@@ -47,12 +44,12 @@ class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-    KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText);
+    KisToolFreehand(KoCanvasBase *canvas, const QCursor &cursor, const KUndo2MagicString &transactionText);
     virtual ~KisToolFreehand();
     virtual int flags() const;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     void deactivate();
 
 protected:
@@ -72,7 +69,6 @@ protected:
 
     virtual bool wantsAutoScroll() const;
 
-
     virtual void initStroke(KoPointerEvent *event);
     virtual void doStroke(KoPointerEvent *event);
     virtual void endStroke();
@@ -81,9 +77,8 @@ protected:
                                         const KoPointerEvent *event,
                                         KisPaintOpSettings::OutlineMode outlineMode);
 
-
-    KisPaintingInformationBuilder* paintingInformationBuilder() const;
-    KisRecordingAdapter* recordingAdapter() const;
+    KisPaintingInformationBuilder *paintingInformationBuilder() const;
+    KisRecordingAdapter *recordingAdapter() const;
     void resetHelper(KisToolFreehandHelper *helper);
 
 protected Q_SLOTS:
@@ -99,7 +94,7 @@ private:
      * Adjusts a coordinates according to a KisPaintingAssitant,
      * if available.
      */
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    QPointF adjustPosition(const QPointF &point, const QPointF &strokeBegin);
 
     /**
      * Calculates a coefficient for KisPaintInformation
@@ -124,8 +119,6 @@ private:
     QPointF m_lastDocumentPoint;
     QPoint m_initialGestureGlobalPoint;
 };
-
-
 
 #endif // KIS_TOOL_FREEHAND_H_
 

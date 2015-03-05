@@ -26,7 +26,7 @@
 #include "sensors/kis_dynamic_sensor_fade.h"
 #include "sensors/kis_dynamic_sensor_fuzzy.h"
 
-KisDynamicSensor::KisDynamicSensor(const KoID& id)
+KisDynamicSensor::KisDynamicSensor(const KoID &id)
     : m_id(id)
     , m_customCurve(false)
     , m_active(false)
@@ -39,7 +39,7 @@ KisDynamicSensor::~KisDynamicSensor()
 {
 }
 
-QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, QWidget*)
+QWidget *KisDynamicSensor::createConfigurationWidget(QWidget *parent, QWidget *)
 {
     Q_UNUSED(parent);
     return 0;
@@ -49,56 +49,42 @@ void KisDynamicSensor::reset()
 {
 }
 
-KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID& id)
+KisDynamicSensorSP KisDynamicSensor::id2Sensor(const KoID &id)
 {
     if (id.id() == PressureId.id()) {
         return new KisDynamicSensorPressure();
-    }
-    else if (id.id() == XTiltId.id()) {
+    } else if (id.id() == XTiltId.id()) {
         return new KisDynamicSensorXTilt();
-    }
-    else if (id.id() == YTiltId.id()) {
+    } else if (id.id() == YTiltId.id()) {
         return new KisDynamicSensorYTilt();
-    }
-    else if (id.id() == TiltDirectionId.id()) {
+    } else if (id.id() == TiltDirectionId.id()) {
         return new KisDynamicSensorTiltDirection();
-    }
-    else if (id.id() == TiltElevationId.id()) {
+    } else if (id.id() == TiltElevationId.id()) {
         return new KisDynamicSensorTiltElevation();
-    }
-    else if (id.id() == SpeedId.id()) {
+    } else if (id.id() == SpeedId.id()) {
         return new KisDynamicSensorSpeed();
-    }
-    else if (id.id() == DrawingAngleId.id()) {
+    } else if (id.id() == DrawingAngleId.id()) {
         return new KisDynamicSensorDrawingAngle();
-    }
-    else if (id.id() == RotationId.id()) {
+    } else if (id.id() == RotationId.id()) {
         return new KisDynamicSensorRotation();
-    }
-    else if (id.id() == DistanceId.id()) {
+    } else if (id.id() == DistanceId.id()) {
         return new KisDynamicSensorDistance();
-    }
-    else if (id.id() == TimeId.id()) {
+    } else if (id.id() == TimeId.id()) {
         return new KisDynamicSensorTime();
-    }
-    else if (id.id() == FuzzyId.id()) {
+    } else if (id.id() == FuzzyId.id()) {
         return new KisDynamicSensorFuzzy();
-    }
-    else if (id.id() == FadeId.id()) {
+    } else if (id.id() == FadeId.id()) {
         return new KisDynamicSensorFade();
-    }
-    else if (id.id() == PerspectiveId.id()) {
+    } else if (id.id() == PerspectiveId.id()) {
         return new KisDynamicSensorPerspective();
-    }
-    else if (id.id() == TangentialPressureId.id()) {
+    } else if (id.id() == TangentialPressureId.id()) {
         return new KisDynamicSensorTangentialPressure();
     }
     dbgPlugins << "Unknown transform parameter :" << id.id();
     return 0;
 }
 
-
-KisDynamicSensorSP KisDynamicSensor::createFromXML(const QString& s)
+KisDynamicSensorSP KisDynamicSensor::createFromXML(const QString &s)
 {
     QDomDocument doc;
     doc.setContent(s);
@@ -106,7 +92,7 @@ KisDynamicSensorSP KisDynamicSensor::createFromXML(const QString& s)
     return createFromXML(e);
 }
 
-KisDynamicSensorSP KisDynamicSensor::createFromXML(const QDomElement& e)
+KisDynamicSensorSP KisDynamicSensor::createFromXML(const QDomElement &e)
 {
     QString id = e.attribute("id", "");
     KisDynamicSensorSP sensor = id2Sensor(id);
@@ -138,8 +124,7 @@ QList<KoID> KisDynamicSensor::sensorsIds()
     return ids;
 }
 
-
-void KisDynamicSensor::toXML(QDomDocument& doc, QDomElement& elt) const
+void KisDynamicSensor::toXML(QDomDocument &doc, QDomElement &elt) const
 {
     elt.setAttribute("id", id());
     if (m_customCurve) {
@@ -150,7 +135,7 @@ void KisDynamicSensor::toXML(QDomDocument& doc, QDomElement& elt) const
     }
 }
 
-void KisDynamicSensor::fromXML(const QDomElement& e)
+void KisDynamicSensor::fromXML(const QDomElement &e)
 {
     Q_UNUSED(e);
     Q_ASSERT(e.attribute("id", "") == id());
@@ -162,45 +147,44 @@ void KisDynamicSensor::fromXML(const QDomElement& e)
     }
 }
 
-const QString& KisDynamicSensor::minimumLabel() const
+const QString &KisDynamicSensor::minimumLabel() const
 {
     return m_minimumLabel;
 }
 
-const QString& KisDynamicSensor::maximumLabel() const
+const QString &KisDynamicSensor::maximumLabel() const
 {
     return m_maximumLabel;
 }
 
-void KisDynamicSensor::setMinimumLabel(const QString& _label)
+void KisDynamicSensor::setMinimumLabel(const QString &_label)
 {
     m_minimumLabel = _label;
 }
 
-void KisDynamicSensor::setMaximumLabel(const QString& _label)
+void KisDynamicSensor::setMaximumLabel(const QString &_label)
 {
     m_maximumLabel = _label;
 }
 
-qreal KisDynamicSensor::parameter(const KisPaintInformation& info)
+qreal KisDynamicSensor::parameter(const KisPaintInformation &info)
 {
     qreal val = value(info);
     if (m_customCurve) {
         int offset = qRound(256.0 * val);
         return m_curve.floatTransfer(257)[qBound(0, offset, 256)];
-    }
-    else {
+    } else {
         return val;
     }
 }
 
-void KisDynamicSensor::setCurve(const KisCubicCurve& curve)
+void KisDynamicSensor::setCurve(const KisCubicCurve &curve)
 {
     m_customCurve = true;
     m_curve = curve;
 }
 
-const KisCubicCurve& KisDynamicSensor::curve() const
+const KisCubicCurve &KisDynamicSensor::curve() const
 {
     return m_curve;
 }

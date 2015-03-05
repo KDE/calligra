@@ -23,7 +23,6 @@
 #include <QScopedPointer>
 #include <krita_export.h>
 
-
 /**
  * Templated classes cannot inherit QObject, so the signal handling is
  * moved to a separate class
@@ -39,7 +38,6 @@ Q_SIGNALS:
     void beginRemoveRow(int row);
     void endRemoveRow();
 };
-
 
 template<class TEntry, class TEntryToQStringConverter>
 class KisCategoriesMapper : public __CategoriesSignalsBase
@@ -81,82 +79,101 @@ public:
             m_name = converter(entry);
         }
 
-        TEntry* data() const {
+        TEntry *data() const
+        {
             return m_data.data();
         }
 
-        QString name() const {
+        QString name() const
+        {
             return m_name;
         }
 
-        bool isCategory() const {
+        bool isCategory() const
+        {
             Q_ASSERT(static_cast<bool>(m_category) == static_cast<bool>(m_data));
             return !m_category;
         }
 
-        DataItem* parentCategory() const {
+        DataItem *parentCategory() const
+        {
             return m_category;
         }
 
-        bool isExpanded() const {
+        bool isExpanded() const
+        {
             return m_expanded;
         }
 
-        void setExpanded(bool value) {
+        void setExpanded(bool value)
+        {
             Q_ASSERT(isCategory());
 
             m_expanded = value;
             m_parent->notifyCategoryExpanded(this);
         }
 
-        bool isEnabled() const {
+        bool isEnabled() const
+        {
             return m_enabled;
         }
 
-        void setEnabled(bool value) {
+        void setEnabled(bool value)
+        {
             m_enabled = value;
             notifyItemChanged();
         }
 
-        bool isCheckable() const {
+        bool isCheckable() const
+        {
             return m_checkable;
         }
 
-        void setCheckable(bool value) {
+        void setCheckable(bool value)
+        {
             m_checkable = value;
             notifyItemChanged();
         }
 
-        bool isChecked() const {
+        bool isChecked() const
+        {
             return m_checked;
         }
 
-        void setChecked(bool value) {  
-            setToggled(value!=m_checked);
+        void setChecked(bool value)
+        {
+            setToggled(value != m_checked);
             m_checked = value;
             notifyItemChanged();
         }
-        bool isLocked() const {
+        bool isLocked() const
+        {
             return m_locked;
         }
-        void setLocked(bool value){
+        void setLocked(bool value)
+        {
             m_locked = value;
         }
-        bool isLockable() const {
+        bool isLockable() const
+        {
             return m_lockable;
         }
-        void setLockable(bool value){
+        void setLockable(bool value)
+        {
             m_lockable = value;
         }
-        bool isToggled() const {
+        bool isToggled() const
+        {
             return m_toggled;
         }
-        void setToggled(bool value){
+        void setToggled(bool value)
+        {
             m_toggled = value;
         }
 
     private:
-        void notifyItemChanged() {
+        void notifyItemChanged()
+        {
             m_parent->notifyItemChanged(this);
         }
 
@@ -177,12 +194,16 @@ public:
 
 public:
     KisCategoriesMapper() {}
-    virtual ~KisCategoriesMapper() {
+    virtual ~KisCategoriesMapper()
+    {
         qDeleteAll(m_items);
     }
 
-    DataItem* addCategory(const QString &category) {
-        if (fetchCategory(category)) return 0;
+    DataItem *addCategory(const QString &category)
+    {
+        if (fetchCategory(category)) {
+            return 0;
+        }
         DataItem *item = new DataItem(category, this);
 
         emit beginInsertRow(m_items.size());
@@ -191,16 +212,17 @@ public:
         return item;
     }
 
-    void removeCategory(const QString &category) {
-        QMutableListIterator<DataItem*> it(m_items);
+    void removeCategory(const QString &category)
+    {
+        QMutableListIterator<DataItem *> it(m_items);
         DataItem *categoryItem = 0;
 
         int row = 0;
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             DataItem *item = it.next();
 
             if (!item->isCategory() &&
-                item->parentCategory()->name() == category) {
+                    item->parentCategory()->name() == category) {
 
                 emit beginRemoveRow(row);
                 it.remove();
@@ -223,7 +245,8 @@ public:
         }
     }
 
-    DataItem* addEntry(const QString &category, const TEntry &entry) {
+    DataItem *addEntry(const QString &category, const TEntry &entry)
+    {
         DataItem *categoryItem = fetchCategory(category);
         if (!categoryItem) {
             categoryItem = addCategory(category);
@@ -236,9 +259,12 @@ public:
         return item;
     }
 
-    void removeEntry(const QString &category, const TEntry &entry) {
+    void removeEntry(const QString &category, const TEntry &entry)
+    {
         DataItem *item = fetchEntry(category, entry);
-        if (!item) return;
+        if (!item) {
+            return;
+        }
 
         int row = m_items.indexOf(item);
         emit beginRemoveRow(row);
@@ -246,36 +272,46 @@ public:
         emit endRemoveRow();
     }
 
-    DataItem* fetchCategory(const QString &category) const {
-        foreach(DataItem *item, m_items) {
-            if (item->isCategory() && item->name() == category) return item;
+    DataItem *fetchCategory(const QString &category) const
+    {
+        foreach (DataItem *item, m_items) {
+            if (item->isCategory() && item->name() == category) {
+                return item;
+            }
         }
         return 0;
     }
 
-    DataItem* fetchEntry(const QString &category, const TEntry &entry) const {
-        foreach(DataItem *item, m_items) {
+    DataItem *fetchEntry(const QString &category, const TEntry &entry) const
+    {
+        foreach (DataItem *item, m_items) {
             if (!item->isCategory() &&
-                *item->data() == entry &&
-                item->parentCategory()->name() == category) return item;
+                    *item->data() == entry &&
+                    item->parentCategory()->name() == category) {
+                return item;
+            }
         }
         return 0;
     }
 
-    DataItem* fetchOneEntry(const TEntry &entry) const {
-        foreach(DataItem *item, m_items) {
+    DataItem *fetchOneEntry(const TEntry &entry) const
+    {
+        foreach (DataItem *item, m_items) {
             if (!item->isCategory() &&
-                *item->data() == entry) return item;
+                    *item->data() == entry) {
+                return item;
+            }
         }
         return 0;
     }
 
-    QVector<DataItem*> itemsForCategory(const QString &category) const {
-        QVector<DataItem*> filteredItems;
+    QVector<DataItem *> itemsForCategory(const QString &category) const
+    {
+        QVector<DataItem *> filteredItems;
 
-        foreach(DataItem *item, m_items) {
+        foreach (DataItem *item, m_items) {
             if (!item->isCategory() &&
-                item->parentCategory()->name() == category) {
+                    item->parentCategory()->name() == category) {
 
                 filteredItems.append(item);
             }
@@ -284,38 +320,44 @@ public:
         return filteredItems;
     }
 
-    void expandAllCategories() {
-        foreach(DataItem *item, m_items) {
+    void expandAllCategories()
+    {
+        foreach (DataItem *item, m_items) {
             if (item->isCategory()) {
                 item->setExpanded(true);
             }
         }
     }
 
-    DataItem* itemFromRow(int row) const {
+    DataItem *itemFromRow(int row) const
+    {
         return m_items[row];
     }
 
-    int rowFromItem(DataItem *item) const {
+    int rowFromItem(DataItem *item) const
+    {
         return m_items.indexOf(item);
     }
 
-    int rowCount() const {
+    int rowCount() const
+    {
         return m_items.size();
     }
 
 private:
-    void notifyItemChanged(DataItem *item) {
+    void notifyItemChanged(DataItem *item)
+    {
         emit rowChanged(m_items.indexOf(item));
     }
 
-    void notifyCategoryExpanded(DataItem *categoryItem) {
+    void notifyCategoryExpanded(DataItem *categoryItem)
+    {
         Q_ASSERT(categoryItem->isCategory());
         notifyItemChanged(categoryItem);
 
-        foreach(DataItem *item, m_items) {
+        foreach (DataItem *item, m_items) {
             if (!item->isCategory() &&
-                item->parentCategory() == categoryItem) {
+                    item->parentCategory() == categoryItem) {
 
                 notifyItemChanged(item);
             }
@@ -323,12 +365,13 @@ private:
     }
 
 protected:
-    QList<DataItem*>& testingGetItems() {
+    QList<DataItem *> &testingGetItems()
+    {
         return m_items;
     }
 
 private:
-    QList<DataItem*> m_items;
+    QList<DataItem *> m_items;
 };
 
 #endif /* __KIS_CATEGORIES_MAPPER_H */

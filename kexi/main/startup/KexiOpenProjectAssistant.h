@@ -43,18 +43,18 @@ class KexiMainOpenProjectPage : public KexiAssistantPage
 {
     Q_OBJECT
 public:
-    explicit KexiMainOpenProjectPage(QWidget* parent = 0);
+    explicit KexiMainOpenProjectPage(QWidget *parent = 0);
     ~KexiMainOpenProjectPage();
 
-    KTabWidget* tabWidget;
-    KexiConnectionSelectorWidget* fileSelector;
-    KexiConnectionSelectorWidget* connSelector;
+    KTabWidget *tabWidget;
+    KexiConnectionSelectorWidget *fileSelector;
+    KexiConnectionSelectorWidget *connSelector;
 private Q_SLOTS:
     void init();
     void tabChanged(int index);
 private:
-    QWidget* m_fileSelectorWidget;
-    QWidget* m_connSelectorWidget;
+    QWidget *m_fileSelectorWidget;
+    QWidget *m_connSelectorWidget;
     QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
 };
 
@@ -63,46 +63,46 @@ class KexiProjectDatabaseSelectionPage : public KexiAssistantPage
 {
     Q_OBJECT
 public:
-    explicit KexiProjectDatabaseSelectionPage(KexiOpenProjectAssistant* parent);
+    explicit KexiProjectDatabaseSelectionPage(KexiOpenProjectAssistant *parent);
     ~KexiProjectDatabaseSelectionPage();
-    
-    bool setConnection(KexiDB::ConnectionData* data);
 
-    KexiProjectSelectorWidget* projectSelector;
+    bool setConnection(KexiDB::ConnectionData *data);
+
+    KexiProjectSelectorWidget *projectSelector;
     QPointer<KexiDB::ConnectionData> conndataToShow;
 
 private:
     KexiProjectSet *m_projectSetToShow;
-    KexiOpenProjectAssistant* m_assistant;
+    KexiOpenProjectAssistant *m_assistant;
 };
 
 class KexiOpenProjectAssistant : public KexiAssistantWidget,
-                                 public KexiAssistantMessageHandler
+    public KexiAssistantMessageHandler
 {
     Q_OBJECT
 public:
-    explicit KexiOpenProjectAssistant(QWidget* parent = 0);
+    explicit KexiOpenProjectAssistant(QWidget *parent = 0);
     ~KexiOpenProjectAssistant();
 
 public Q_SLOTS:
-    virtual void nextPageRequested(KexiAssistantPage* page);
-    virtual void cancelRequested(KexiAssistantPage* page);
+    virtual void nextPageRequested(KexiAssistantPage *page);
+    virtual void cancelRequested(KexiAssistantPage *page);
     void tryAgainActionTriggered();
     void cancelActionTriggered();
 
 Q_SIGNALS:
-    void openProject(const KexiProjectData& data);
-    void openProject(const QString& fileName);
+    void openProject(const KexiProjectData &data);
+    void openProject(const QString &fileName);
 
 private Q_SLOTS:
-    void slotOpenProject(KexiProjectData* data);
+    void slotOpenProject(KexiProjectData *data);
 
 protected:
-    virtual QWidget* calloutWidget() const;
+    virtual QWidget *calloutWidget() const;
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

@@ -24,7 +24,7 @@
 #include "kohyphen.h"
 #include <kdebug.h>
 
-static bool check(const QString& a, const QString& b)
+static bool check(const QString &a, const QString &b)
 {
     if (a == b) {
         kDebug(32500) << "checking '" << a << "' against expected value '" << b << "'..." << "ok";
@@ -37,17 +37,17 @@ static bool check(const QString& a, const QString& b)
 
 KoHyphenator *hypher = 0;
 
-void check_hyphenation(const QStringList& tests, const QStringList& results, const char* lang)
+void check_hyphenation(const QStringList &tests, const QStringList &results, const char *lang)
 {
     QStringList::ConstIterator it, itres;
-    for (it = tests.begin(), itres = results.begin(); it != tests.end() ; ++it, ++itres) {
+    for (it = tests.begin(), itres = results.begin(); it != tests.end(); ++it, ++itres) {
         QString result = hypher->hyphenate((*it), lang);
         kDebug(32500) << (*it) << " hyphenates like this:" << result;
         check(result.replace(QChar(0xad), '-'), *itres);
     }
 }
 
-int main(int argc, char ** argv)
+int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
 
@@ -64,16 +64,17 @@ int main(int argc, char ** argv)
     QStringList cs_tests = QStringList() << "Žluťoučký" << "kůň" << "úpěl" <<
                            "ďábelské" << "ódy";
 
-    for (it = cs_tests.constBegin(); it != cs_tests.constEnd() ; ++it)
+    for (it = cs_tests.constBegin(); it != cs_tests.constEnd(); ++it) {
         kDebug(32500) << (*it) << " hyphenates like this:" << hypher->hyphenate((*it), "cs");
+    }
 
     //testing English
     QStringList en_tests = QStringList() << "Follow" << "white" << "rabbit";
     QStringList en_results = QStringList() << "Fol-low" << "white" << "rab-bit";
     check_hyphenation(en_tests, en_results, "en");
 
-    QStringList fr_tests = QStringList() << "constitution" ;
-    QStringList fr_results = QStringList() << "consti-tu-tion" ;
+    QStringList fr_tests = QStringList() << "constitution";
+    QStringList fr_results = QStringList() << "consti-tu-tion";
     check_hyphenation(fr_tests, fr_results, "fr");
 
     return 0;

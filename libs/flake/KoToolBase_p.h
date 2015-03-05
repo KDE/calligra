@@ -43,15 +43,15 @@ class KoToolBasePrivate
 public:
     KoToolBasePrivate(KoToolBase *qq, KoCanvasBase *canvas_)
         : currentCursor(Qt::ArrowCursor),
-        q(qq),
-        canvas(canvas_),
-        isInTextMode(false)
+          q(qq),
+          canvas(canvas_),
+          isInTextMode(false)
     {
     }
 
     ~KoToolBasePrivate()
     {
-        foreach(QPointer<QWidget> optionWidget, optionWidgets) {
+        foreach (QPointer<QWidget> optionWidget, optionWidgets) {
             if (optionWidget) {
                 optionWidget->setParent(0);
                 delete optionWidget;
@@ -63,27 +63,27 @@ public:
     void connectSignals()
     {
         if (canvas) { // in the case of KoToolManagers dummytool it can be zero :(
-            KoCanvasResourceManager * crp = canvas->resourceManager();
+            KoCanvasResourceManager *crp = canvas->resourceManager();
             Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
             if (crp)
                 q->connect(crp, SIGNAL(canvasResourceChanged(int, const QVariant &)),
-                        SLOT(canvasResourceChanged(int, const QVariant &)));
+                           SLOT(canvasResourceChanged(int, const QVariant &)));
 
             // can be 0 in the case of Calligra Sheets
             KoDocumentResourceManager *scrm = canvas->shapeController()->resourceManager();
             if (scrm) {
                 q->connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                        SLOT(documentResourceChanged(int, const QVariant &)));
+                           SLOT(documentResourceChanged(int, const QVariant &)));
             }
         }
     }
 
     QList<QPointer<QWidget> > optionWidgets; ///< the optionwidgets associated with this tool
     QCursor currentCursor;
-    QHash<QString, KAction*> actionCollection;
+    QHash<QString, KAction *> actionCollection;
     QString toolId;
-    QList<QAction*> popupActionList;
-    QSet<KAction*> readOnlyActions;
+    QList<QAction *> popupActionList;
+    QSet<KAction *> readOnlyActions;
     KoToolBase *q;
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.
     bool isInTextMode;

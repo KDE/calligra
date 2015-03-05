@@ -24,7 +24,6 @@
 
 #include <filter/kis_filter_registry.h>
 
-
 #include "kis_raindrops_filter.h"
 
 K_PLUGIN_FACTORY(KisRainDropsFilterPluginFactory, registerPlugin<KisRainDropsFilterPlugin>();)

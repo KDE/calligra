@@ -52,24 +52,24 @@ private:
 void TestXmlWriter::setup(const char *publicId, const char *systemId)
 {
     buffer = new QBuffer();
-    buffer->open( QIODevice::WriteOnly );
+    buffer->open(QIODevice::WriteOnly);
 
-    writer = new KoXmlWriter( buffer );
-    writer->startDocument( "dummy", publicId, systemId );
-    writer->startElement( "dummy" );
+    writer = new KoXmlWriter(buffer);
+    writer->startDocument("dummy", publicId, systemId);
+    writer->startElement("dummy");
 }
 
 QString TestXmlWriter::content()
 {
     writer->endElement();
     writer->endDocument();
-    buffer->putChar( '\0' ); /*null-terminate*/
+    buffer->putChar('\0');   /*null-terminate*/
     buffer->close();
     QString stringContent = QString::fromUtf8(buffer->data());
     int index = stringContent.indexOf("<dummy");
     Q_ASSERT(index);
     index = stringContent.indexOf('>', index);
-    stringContent = stringContent.mid(index+1, stringContent.length() - index - 11).trimmed();
+    stringContent = stringContent.mid(index + 1, stringContent.length() - index - 11).trimmed();
     return stringContent;
 }
 
@@ -79,7 +79,7 @@ void TestXmlWriter::testDocytype()
     QCOMPARE(content(), QString());
     QString stringContent = QString::fromUtf8(buffer->data());
     QCOMPARE(stringContent, QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<!DOCTYPE dummy PUBLIC \"foo\" \"bar\">\n<dummy/>\n"));
+                                    "<!DOCTYPE dummy PUBLIC \"foo\" \"bar\">\n<dummy/>\n"));
 }
 
 void TestXmlWriter::testAttributes()
@@ -150,7 +150,7 @@ void TestXmlWriter::testTextSpanWithTabCache()
     writer->addTextSpan(QString::fromUtf8("   \t\n foö  "), tabCache);
     writer->endElement();
     QCOMPARE(content(), QString::fromUtf8("<p><text:s text:c=\"3\"/><text:tab text:tab-ref=\"1\"/>"
-            "<text:line-break/> foö<text:s text:c=\"2\"/></p>"));
+                                          "<text:line-break/> foö<text:s text:c=\"2\"/></p>"));
 }
 
 void TestXmlWriter::testProcessingInstruction()
@@ -168,9 +168,8 @@ void TestXmlWriter::testAddManifestEntry()
     setup();
     writer->addManifestEntry(QString::fromLatin1("foo/bar/blah"), QString::fromLatin1("mime/type"));
     QCOMPARE(content(), QString("<manifest:file-entry manifest:media-type=\"mime/type\" "
-                "manifest:full-path=\"foo/bar/blah\"/>"));
+                                "manifest:full-path=\"foo/bar/blah\"/>"));
 }
-
 
 void TestXmlWriter::testEscapingLongString()
 {
@@ -192,8 +191,9 @@ void TestXmlWriter::testEscapingLongString()
 void TestXmlWriter::testEscalingLongString2()
 {
     QString longPath;
-    for (uint i = 0 ; i < 1000 ; ++i)
+    for (uint i = 0; i < 1000; ++i) {
         longPath += QString::fromLatin1("M10 10L20 20 ");
+    }
     setup();
     writer->startElement("test");
     writer->addAttribute("a", longPath);
@@ -214,9 +214,9 @@ void TestXmlWriter::testConfig()
     writer->addConfigItem(QString::fromLatin1("TestConfigInt"), num);
     writer->addConfigItem(QString::fromLatin1("TestConfigDouble"), numdouble);
     QCOMPARE(content(), QString("<config:config-item config:name=\"TestConfigBool\""
-            " config:type=\"boolean\">true</config:config-item>\n"
-            " <config:config-item config:name=\"TestConfigInt\" config:type=\"int\">1</config:config-item>\n"
-            " <config:config-item config:name=\"TestConfigDouble\" config:type=\"double\">5</config:config-item>"));
+                                " config:type=\"boolean\">true</config:config-item>\n"
+                                " <config:config-item config:name=\"TestConfigInt\" config:type=\"int\">1</config:config-item>\n"
+                                " <config:config-item config:name=\"TestConfigDouble\" config:type=\"double\">5</config:config-item>"));
 }
 
 static const int NumParagraphs = 30000;
@@ -233,7 +233,7 @@ void TestXmlWriter::speedTest()
         KoXmlWriter writer(&out);
         writer.startDocument("rootelem");
         writer.startElement("rootelem");
-        for (int i = 0 ; i < NumParagraphs ; ++i) {
+        for (int i = 0; i < NumParagraphs; ++i) {
             writer.startElement("paragraph");
             writer.addAttribute("text:style-name", styleName);
             writer.addTextNode(paragText);

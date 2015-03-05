@@ -21,19 +21,21 @@
 
 #include <kundo2command.h>
 
-namespace MusicCore {
-    class Chord;
+namespace MusicCore
+{
+class Chord;
 }
 class MusicShape;
 
-class AddDotCommand : public KUndo2Command {
+class AddDotCommand : public KUndo2Command
+{
 public:
-    AddDotCommand(MusicShape* shape, MusicCore::Chord* chord);
+    AddDotCommand(MusicShape *shape, MusicCore::Chord *chord);
     virtual void redo();
     virtual void undo();
 private:
-    MusicShape* m_shape;
-    MusicCore::Chord* m_chord;
+    MusicShape *m_shape;
+    MusicCore::Chord *m_chord;
 };
 
 #endif // ADDDOTCOMMAND_H

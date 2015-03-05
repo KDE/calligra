@@ -21,7 +21,6 @@
 #include <QObject>
 #include <QVariant>
 
-
 /**
  * Docker compositions of the image
  */

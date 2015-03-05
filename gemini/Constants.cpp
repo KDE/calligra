@@ -22,7 +22,7 @@
 #include <QApplication>
 #include <QWidget>
 
-Constants::Constants(QObject* parent)
+Constants::Constants(QObject *parent)
     : QObject(parent)
 {
     m_gridWidth = qApp->activeWindow()->width() / gridColumns();
@@ -41,7 +41,7 @@ qreal Constants::gridHeight() const
     return m_gridHeight;
 }
 
-void Constants::setGridHeight( qreal height )
+void Constants::setGridHeight(qreal height)
 {
     m_gridHeight = height;
     m_toolbarButtonSize = m_gridHeight;
@@ -54,7 +54,7 @@ qreal Constants::gridWidth() const
     return m_gridWidth;
 }
 
-void Constants::setGridWidth( qreal width )
+void Constants::setGridWidth(qreal width)
 {
     m_gridWidth = width;
     m_toolbarButtonSize = m_gridHeight;
@@ -74,8 +74,9 @@ qreal Constants::toolbarHeight() const
 
 int Constants::gridRows() const
 {
-    if (isLandscape())
+    if (isLandscape()) {
         return 12;
+    }
     return 18;
 }
 
@@ -111,10 +112,11 @@ qreal Constants::hugeFontSize() const
 
 bool Constants::isLandscape() const
 {
-	// If user switches certain settings in windows, activeWindow can become null.
-	if(qApp->activeWindow())
-	    return qApp->activeWindow()->height() < qApp->activeWindow()->width();
-	return true;
+    // If user switches certain settings in windows, activeWindow can become null.
+    if (qApp->activeWindow()) {
+        return qApp->activeWindow()->height() < qApp->activeWindow()->width();
+    }
+    return true;
 }
 
 #include "Constants.moc"

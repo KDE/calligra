@@ -33,7 +33,8 @@ namespace Lists
 {
 enum Capitalisation { Lowercase, Uppercase };
 struct ListStyleItem {
-    ListStyleItem(const QString &name_, KoListStyle::Style style_) {
+    ListStyleItem(const QString &name_, KoListStyle::Style style_)
+    {
         name = name_;
         style = style_;
     }

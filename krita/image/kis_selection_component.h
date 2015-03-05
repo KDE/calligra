@@ -34,15 +34,22 @@ public:
     KisSelectionComponent() {}
     virtual ~KisSelectionComponent() {}
 
-    virtual KisSelectionComponent* clone(KisSelection* selection) = 0;
+    virtual KisSelectionComponent *clone(KisSelection *selection) = 0;
 
     virtual void renderToProjection(KisPaintDeviceSP projection) = 0;
-    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r) = 0;
+    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect &r) = 0;
 
-    virtual void moveX(qint32 x) { Q_UNUSED(x); }
-    virtual void moveY(qint32 y) { Q_UNUSED(y); }
+    virtual void moveX(qint32 x)
+    {
+        Q_UNUSED(x);
+    }
+    virtual void moveY(qint32 y)
+    {
+        Q_UNUSED(y);
+    }
 
-    virtual KUndo2Command* transform(const QTransform &transform) {
+    virtual KUndo2Command *transform(const QTransform &transform)
+    {
         Q_UNUSED(transform);
         return 0;
     }
@@ -52,7 +59,10 @@ public:
     virtual bool outlineCacheValid() const = 0;
     virtual void recalculateOutlineCache() = 0;
 
-    virtual KUndo2Command* resetToEmpty() { return 0; }
+    virtual KUndo2Command *resetToEmpty()
+    {
+        return 0;
+    }
 };
 
 #endif

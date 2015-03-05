@@ -28,9 +28,8 @@ class WdgLayerSplit : public QWidget, public Ui::WdgLayerSplit
 
 public:
 
-    WdgLayerSplit(QWidget* parent);
+    WdgLayerSplit(QWidget *parent);
 
 };
-
 
 #endif // WDG_LAYERSPLIT_H

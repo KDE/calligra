@@ -38,7 +38,7 @@
 
 #include "kis_brush.h"
 
-KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image)
@@ -52,8 +52,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, K
     KisFixedPaintDeviceSP dab = cachedDab(painter->device()->compositionSourceColorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->paintDevice(source()->colorSpace(), 1.0, 0.0, KisPaintInformation());
-    }
-    else {
+    } else {
         brush->mask(dab, painter->paintColor(), 1.0, 1.0, 0.0, KisPaintInformation());
     }
 
@@ -71,7 +70,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, K
     m_sizeOption.resetAllSensors();
 }
 
-void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
+void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings *settings)
 {
     m_properties.inkAmount = settings->getInt(HAIRY_INK_AMOUNT);
     //TODO: wait for the transfer function with variable size
@@ -99,23 +98,22 @@ void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
     m_properties.connectedPath = settings->getBool(HAIRY_BRISTLE_CONNECTED);
 }
 
-
-KisSpacingInformation KisHairyPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisHairyPaintOp::paintAt(const KisPaintInformation &info)
 {
     Q_UNUSED(info);
     return 0.5;
 }
 
-
 void KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
     Q_UNUSED(currentDistance);
-    if (!painter()) return;
+    if (!painter()) {
+        return;
+    }
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
-    }
-    else {
+    } else {
         m_dab->clear();
     }
 

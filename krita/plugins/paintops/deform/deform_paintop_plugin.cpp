@@ -34,7 +34,6 @@
 K_PLUGIN_FACTORY(DeformPaintOpPluginFactory, registerPlugin<DeformPaintOpPlugin>();)
 K_EXPORT_PLUGIN(DeformPaintOpPluginFactory("krita"))
 
-
 DeformPaintOpPlugin::DeformPaintOpPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {

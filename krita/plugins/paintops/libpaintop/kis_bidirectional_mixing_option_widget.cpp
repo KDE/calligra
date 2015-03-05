@@ -22,7 +22,6 @@
 #include <QLabel>
 #include <kis_properties_configuration.h>
 
-
 KisBidirectionalMixingOptionWidget::KisBidirectionalMixingOptionWidget()
     : KisPaintOpOption(i18n("Mixing"), KisPaintOpOption::colorCategory(), false)
 {
@@ -36,12 +35,12 @@ KisBidirectionalMixingOptionWidget::~KisBidirectionalMixingOptionWidget()
 {
 }
 
-void KisBidirectionalMixingOptionWidget::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisBidirectionalMixingOptionWidget::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(BIDIRECTIONAL_MIXING_ENABLED, isChecked());
 }
 
-void KisBidirectionalMixingOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBidirectionalMixingOptionWidget::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     setChecked(setting->getBool(BIDIRECTIONAL_MIXING_ENABLED, false));
 }

@@ -33,13 +33,13 @@ typedef qint32  Fixed;                  /* Represents a fixed point implied deci
  */
 enum PSDColorMode {
     Bitmap = 0,
-    Grayscale=1,
-    Indexed=2,
-    RGB=3,
-    CMYK=4,
-    MultiChannel=7,
-    DuoTone=8,
-    Lab=9,
+    Grayscale = 1,
+    Indexed = 2,
+    RGB = 3,
+    CMYK = 4,
+    MultiChannel = 7,
+    DuoTone = 8,
+    Lab = 9,
     Gray16,
     RGB48,
     Lab48,
@@ -47,13 +47,13 @@ enum PSDColorMode {
     DeepMultichannel,
     Duotone16,
     UNKNOWN = 9000
- };
-
+};
 
 /**
  * color samplers, apparently distict from PSDColormode
  */
-namespace PSDColorSampler {
+namespace PSDColorSampler
+{
 enum PSDColorSamplers {
     RGB,
     HSB,
@@ -82,10 +82,9 @@ enum PSDColorSamplers {
  */
 QPair<QString, QString> psd_colormode_to_colormodelid(PSDColorMode colormode, quint16 channelDepth);
 
-
 /**
  * Convert the Photoshop blend mode strings to Pigment compositeop id's
  */
-QString psd_blendmode_to_composite_op(const QString& blendmode);
-QString composite_op_to_psd_blendmode(const QString& compositeOp);
+QString psd_blendmode_to_composite_op(const QString &blendmode);
+QString composite_op_to_psd_blendmode(const QString &compositeOp);
 #endif // PSD_H

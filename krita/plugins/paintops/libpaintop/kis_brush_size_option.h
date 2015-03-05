@@ -50,11 +50,11 @@ public:
 
     qreal brushAspect() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
-    KisBrushSizeOptionsWidget * m_options;
+    KisBrushSizeOptionsWidget *m_options;
 };
 
 class PAINTOP_EXPORT KisBrushSizeProperties
@@ -73,7 +73,8 @@ public:
     bool jitterEnabled;
 
 public:
-    void readOptionSetting(const KisPropertiesConfiguration * settings) {
+    void readOptionSetting(const KisPropertiesConfiguration *settings)
+    {
         //TODO: shape
         shape = 0;
         diameter = quint16(settings->getDouble(BRUSH_DIAMETER));
@@ -82,15 +83,13 @@ public:
         scale = settings->getDouble(BRUSH_SCALE);
         density = settings->getDouble(BRUSH_DENSITY) * 0.01;
         spacing = settings->getDouble(BRUSH_SPACING);
-        
+
         if ((jitterEnabled = settings->getBool(BRUSH_JITTER_MOVEMENT_ENABLED))) {
             jitterMovementAmount = settings->getDouble(BRUSH_JITTER_MOVEMENT);
-        }
-        else {
+        } else {
             jitterMovementAmount = 0.0;
         }
     }
 };
-
 
 #endif

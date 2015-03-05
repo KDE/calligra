@@ -32,7 +32,6 @@
 #include "KoMixColorsOp.h"
 #include <KoCompositeOpRegistry.h>
 
-
 #define NUM_CHANNELS 4
 
 #define RED_CHANNEL 0
@@ -52,8 +51,8 @@ void KoRgbU8ColorSpaceTester::testBasics()
 
 void KoRgbU8ColorSpaceTester::testMixColors()
 {
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoMixColorsOp * mixOp = cs->mixColorsOp();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoMixColorsOp *mixOp = cs->mixColorsOp();
 
     // Test mixColors.
     quint8 pixel1[4];
@@ -151,15 +150,17 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
     QList<KoID> depthIDs = KoColorSpaceRegistry::instance()->colorDepthList(RGBAColorModelID.id(),
                            KoColorSpaceRegistry::AllColorSpaces);
 
-    foreach(const KoID& depthId, depthIDs) {
+    foreach (const KoID &depthId, depthIDs) {
 
-        if (depthId.id().contains("Float")) continue;
+        if (depthId.id().contains("Float")) {
+            continue;
+        }
 
         kDebug() << depthId.id();
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(
                                      RGBAColorModelID.id(), depthId.id(), "");
-        
-        const KoCompositeOp* copyOp = cs->compositeOp(COMPOSITE_COPY);
+
+        const KoCompositeOp *copyOp = cs->compositeOp(COMPOSITE_COPY);
         KoColor src(cs), dst(cs);
 
         QColor red(255, 0, 0);
@@ -169,7 +170,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
         // Copying a color over another color should replace the original color
         src.fromQColor(red);
         dst.fromQColor(blue);
-        
+
         qDebug() << src.toQColor() << dst.toQColor();
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
@@ -209,20 +210,24 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 
 void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
 {
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    QList<KoCompositeOp*> ops = cs->compositeOps();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    QList<KoCompositeOp *> ops = cs->compositeOps();
 
-    foreach(const KoCompositeOp *op, ops) {
+    foreach (const KoCompositeOp *op, ops) {
         /**
          * ALPHA_DARKEN composite op doesn't take channel
          * flags into account, so just skip it
          */
-        if (op->id() == COMPOSITE_ALPHA_DARKEN) continue;
-        if (op->id() == COMPOSITE_DISSOLVE) continue;
+        if (op->id() == COMPOSITE_ALPHA_DARKEN) {
+            continue;
+        }
+        if (op->id() == COMPOSITE_DISSOLVE) {
+            continue;
+        }
 
-        quint8 src[] = {128,128,128,129};
-        quint8 goodDst[] = {10,10,10,11};
-        quint8 badDst[] = {12,12,12,0};
+        quint8 src[] = {128, 128, 128, 129};
+        quint8 goodDst[] = {10, 10, 10, 11};
+        quint8 badDst[] = {12, 12, 12, 0};
 
         KoCompositeOp::ParameterInfo params;
         params.maskRowStart  = 0;
@@ -256,7 +261,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
                      << "difficult case:" << badDst[2];
 
             qDebug() << "The composite op has failed to erase the color "
-                "channel which was hidden by zero alpha.";
+                     "channel which was hidden by zero alpha.";
             qDebug() << "Expected Blue channel:" << 0;
             qDebug() << "Actual Blue channel:  " << badDst[2];
 

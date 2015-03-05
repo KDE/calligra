@@ -25,11 +25,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-
 KoRdfLocationTreeWidgetItem::KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent,
-                                                         hKoRdfLocation semObj)
-        : KoRdfSemanticTreeWidgetItem(parent)
-        , m_semanticObject(semObj)
+        hKoRdfLocation semObj)
+    : KoRdfSemanticTreeWidgetItem(parent)
+    , m_semanticObject(semObj)
 {
     setText(ColName, m_semanticObject->name());
 }
@@ -37,13 +36,13 @@ KoRdfLocationTreeWidgetItem::KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent
 KoRdfLocationTreeWidgetItem::~KoRdfLocationTreeWidgetItem()
 {
     kDebug(30015) << "DTOR()";
-    if( m_semanticObject )
+    if (m_semanticObject) {
         kDebug(30015) << "semobj:" << m_semanticObject->name();
-    else
+    } else {
         kDebug(30015) << "NO SEMOBJ";
+    }
     kDebug(30015) << "DTOR(END)";
 }
-
 
 hKoRdfSemanticItem KoRdfLocationTreeWidgetItem::semanticItem() const
 {

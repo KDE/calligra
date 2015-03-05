@@ -18,7 +18,6 @@
 
 #include "kis_jpeg_test.h"
 
-
 #include <QTest>
 #include <QCoreApplication>
 
@@ -44,9 +43,9 @@ void KisJpegTest::testFiles()
      */
     const int fuzziness = 3;
 
-    if (JPEG_LIB_VERSION == 80){
+    if (JPEG_LIB_VERSION == 80) {
         TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), "_80", fuzziness);
-    }else {
+    } else {
         TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), fuzziness);
     }
 

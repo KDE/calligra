@@ -24,14 +24,15 @@
 #include <kis_painter.h>
 #include <KoColor.h>
 
-
 KisHatchingPressureSeparationOption::KisHatchingPressureSeparationOption()
     : KisCurveOption(i18n("Separation"), "Separation", KisPaintOpOption::generalCategory(), true)
 {
 }
 
-double KisHatchingPressureSeparationOption::apply(const KisPaintInformation & info) const
+double KisHatchingPressureSeparationOption::apply(const KisPaintInformation &info) const
 {
-    if (!isChecked()) return 0.5;
+    if (!isChecked()) {
+        return 0.5;
+    }
     return computeValue(info);
 }

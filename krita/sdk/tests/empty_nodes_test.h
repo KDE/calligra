@@ -30,14 +30,14 @@
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
 
-
 namespace TestUtil
 {
 
 class EmptyNodesTest
 {
 protected:
-    void initBase() {
+    void initBase()
+    {
         m_image = new KisImage(0, 512, 512, 0, "test");
         m_layer1 = new KisPaintLayer(m_image, "layer1", OPACITY_OPAQUE_U8);
         m_layer2 = new KisGroupLayer(m_image, "layer2", OPACITY_OPAQUE_U8);
@@ -49,7 +49,8 @@ protected:
         m_sel3 = new KisSelectionMask(m_image);
     }
 
-    void cleanupBase() {
+    void cleanupBase()
+    {
         m_layer1 = 0;
         m_layer2 = 0;
         m_layer3 = 0;
@@ -73,7 +74,8 @@ protected:
      *   layer4
      */
 
-    void constructImage() {
+    void constructImage()
+    {
         m_image->addNode(m_layer1);
         m_image->addNode(m_layer2);
         m_image->addNode(m_layer3);
@@ -81,7 +83,8 @@ protected:
         m_image->addNode(m_mask1, m_layer3);
     }
 
-    void addSelectionMasks() {
+    void addSelectionMasks()
+    {
         m_image->addNode(m_sel1, m_image->root(), (int)0);
         m_image->addNode(m_sel2, m_image->root(), (int)2);
         m_image->addNode(m_sel3, m_layer3);

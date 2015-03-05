@@ -35,9 +35,9 @@ public:
 };
 
 KexiDBCommandLinkButton::KexiDBCommandLinkButton(const QString &text,
-                                                 const QString &description, QWidget * parent)
-        : KexiCommandLinkButton(text, description, parent)
-        , d(new KexiDBCommandLinkButtonPrivate)
+        const QString &description, QWidget *parent)
+    : KexiCommandLinkButton(text, description, parent)
+    , d(new KexiDBCommandLinkButtonPrivate)
 {
     setLocalBasePath(KexiMainWindowIface::global()->project()->dbConnection()->data()->dbPath());
 }
@@ -47,7 +47,7 @@ KexiDBCommandLinkButton::~KexiDBCommandLinkButton()
     delete d;
 }
 
-void KexiDBCommandLinkButton::setValueInternal(const QVariant& add, bool removeOld)
+void KexiDBCommandLinkButton::setValueInternal(const QVariant &add, bool removeOld)
 {
     Q_UNUSED(add)
     Q_UNUSED(removeOld)
@@ -123,19 +123,19 @@ QString KexiDBCommandLinkButton::onClickAction() const
     return d->onClickActionData.string;
 }
 
-void KexiDBCommandLinkButton::setOnClickAction(const QString& actionString)
+void KexiDBCommandLinkButton::setOnClickAction(const QString &actionString)
 {
     d->onClickActionData.string = actionString;
 }
 
 QString KexiDBCommandLinkButton::onClickActionOption() const
 {
-     return d->onClickActionData.option;
+    return d->onClickActionData.option;
 }
 
-void KexiDBCommandLinkButton::setOnClickActionOption(const QString& option)
+void KexiDBCommandLinkButton::setOnClickActionOption(const QString &option)
 {
-     d->onClickActionData.option = option;
+    d->onClickActionData.option = option;
 }
 
 #include "kexidbcommandlinkbutton.moc"

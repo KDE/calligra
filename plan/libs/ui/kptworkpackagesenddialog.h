@@ -24,7 +24,6 @@
 
 #include <kdialog.h>
 
-
 namespace KPlato
 {
 
@@ -36,9 +35,12 @@ class KPLATOUI_EXPORT WorkPackageSendDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit WorkPackageSendDialog( const QList<Node*> &tasks, ScheduleManager *sm, QWidget *parent=0);
+    explicit WorkPackageSendDialog(const QList<Node *> &tasks, ScheduleManager *sm, QWidget *parent = 0);
 
-    WorkPackageSendPanel *panel() const { return m_wp; }
+    WorkPackageSendPanel *panel() const
+    {
+        return m_wp;
+    }
 
 private:
     WorkPackageSendPanel *m_wp;

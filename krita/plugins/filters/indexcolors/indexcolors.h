@@ -44,22 +44,23 @@ class KisFilterIndexColors : public KisColorTransformationFilter
 public:
     KisFilterIndexColors();
 public:
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
-    virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    static inline KoID id() {
+    virtual KoColorTransformation *createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
+    static inline KoID id()
+    {
         return KoID("indexcolors", i18n("Index Colors"));
     }
 protected:
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
 class KisIndexColorTransformation : public KoColorTransformation
 {
 public:
-    KisIndexColorTransformation(IndexColorPalette palette, const KoColorSpace* cs, int alphaSteps);
-    virtual void transform(const quint8* src, quint8* dst, qint32 nPixels) const;
+    KisIndexColorTransformation(IndexColorPalette palette, const KoColorSpace *cs, int alphaSteps);
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
 private:
-    const KoColorSpace* m_colorSpace;
+    const KoColorSpace *m_colorSpace;
     quint32 m_psize;
     IndexColorPalette m_palette;
     quint16 m_alphaStep;

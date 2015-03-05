@@ -69,8 +69,9 @@ KComponentData *instance = 0;
 
 void exitRoutine()
 {
-    if (project)
+    if (project) {
         project->closeConnection();
+    }
     delete project;
 }
 
@@ -79,7 +80,7 @@ void exitRoutine()
     kDebug()<< test_name << " TEST: " << (code==0?"PASSED":"ERROR"); \
     return code
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     int minargs = 2;
     bool gui = false;
@@ -175,8 +176,9 @@ int main(int argc, char** argv)
     KexiDB::DriverManager manager;
     QStringList names = manager.driverNames();
     kDebug() << "DRIVERS: ";
-    for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
+    for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd(); ++it) {
         kDebug() << *it;
+    }
     if (manager.error() || names.isEmpty()) {
         manager.debugError();
         RETURN(1);
@@ -192,8 +194,9 @@ int main(int argc, char** argv)
     kDebug() << "MIME type for '" << drv_info.name << "': " << drv_info.fileDBMimeType;
 
     //open connection
-    if (args->count() >= 2)
+    if (args->count() >= 2) {
         db_name = args->arg(1);
+    }
 
     if (db_name_required && db_name.isEmpty()) {
         kDebug() << prgname << ": database name?";
@@ -213,64 +216,72 @@ int main(int argc, char** argv)
         project = new KexiProject(project_data);
         bool incompatibleWithKexi = false;
         tristate res;
-        if (test_name == "dbcreation" || test_name == "tables")
+        if (test_name == "dbcreation" || test_name == "tables") {
             res = project->create(true /*force overwrite*/);
-        else
+        } else {
             res = project->open(&incompatibleWithKexi);
+        }
         if (res != true) {
-            if (incompatibleWithKexi)
+            if (incompatibleWithKexi) {
                 kDebug() << "incompatibleWithKexi";
+            }
             project->debugError();
             RETURN(1);
         }
         conn = project->dbConnection();
-/*        conn = driver->createConnection(conn_data);
-        if (!conn || driver->error()) {
-            driver->debugError();
-            RETURN(1);
-        }
-        if (!conn->connect()) {
-            conn->debugError();
-            RETURN(1);
-        }*/
+        /*        conn = driver->createConnection(conn_data);
+                if (!conn || driver->error()) {
+                    driver->debugError();
+                    RETURN(1);
+                }
+                if (!conn->connect()) {
+                    conn->debugError();
+                    RETURN(1);
+                }*/
     }
 
     //start test:
     int r = 0;
-    if (test_name == "cursors")
+    if (test_name == "cursors") {
         r = cursorsTest();
-    else if (test_name == "schema")
+    } else if (test_name == "schema") {
         r = schemaTest();
-    else if (test_name == "dbcreation")
+    } else if (test_name == "dbcreation") {
         r = dbCreationTest();
-    else if (test_name == "tables")
+    } else if (test_name == "tables") {
         r = tablesTest();
+    }
 #ifndef NO_GUI
-    else if (test_name == "tableview")
+    else if (test_name == "tableview") {
         r = tableViewTest();
+    }
 #endif
     else if (test_name == "parser") {
         QStringList params;
-        if (args->isSet("query-params"))
+        if (args->isSet("query-params")) {
             params = args->getOption("query-params").split('|');
+        }
         r = parserTest(QString(args->arg(2)), params);
-    } else if (test_name == "dr_prop")
+    } else if (test_name == "dr_prop") {
         r = drPropTest();
-    else {
+    } else {
         kWarning() << "No such test: " << test_name;
 //  usage();
         RETURN(1);
     }
 
-    if (app && r == 0)
+    if (app && r == 0) {
         app->exec();
+    }
 
-    if (r)
+    if (r) {
         kDebug() << "RECENT SQL STATEMENT: " << conn->recentSQLString();
+    }
 
     if (project) {
-        if (!project->closeConnection())
+        if (!project->closeConnection()) {
             r = 1;
+        }
         delete project;
     }
 //    if (conn && !conn->disconnect())

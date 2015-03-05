@@ -30,23 +30,26 @@ class PerspectiveAssistant : public KisAbstractPerspectiveGrid, public KisPainti
 {
     Q_OBJECT
 public:
-    PerspectiveAssistant(QObject * parent = 0);
-    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    PerspectiveAssistant(QObject *parent = 0);
+    virtual QPointF adjustPosition(const QPointF &point, const QPointF &strokeBegin);
     virtual void endStroke();
     virtual QPointF buttonPosition() const;
-    virtual int numHandles() const { return 4; }
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true);
+    virtual int numHandles() const
+    {
+        return 4;
+    }
+    virtual void drawAssistant(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, bool cached = true, KisCanvas2 *canvas = 0, bool assistantVisible = true, bool previewVisible = true);
 
-    virtual bool contains(const QPointF& point) const;
-    virtual qreal distance(const QPointF& point) const;
+    virtual bool contains(const QPointF &point) const;
+    virtual qreal distance(const QPointF &point) const;
 protected:
-    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true);
+    virtual void drawCache(QPainter &gc, const KisCoordinatesConverter *converter,  bool assistantVisible = true);
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin);
+    QPointF project(const QPointF &pt, const QPointF &strokeBegin);
     // creates the convex hull, returns false if it's not a quadrilateral
-    bool quad(QPolygonF& out) const;
+    bool quad(QPolygonF &out) const;
     // finds the transform from perspective coordinates (a unit square) to the document
-    bool getTransform(QPolygonF& polyOut, QTransform& transformOut) const;
+    bool getTransform(QPolygonF &polyOut, QTransform &transformOut) const;
 
     // which direction to snap to (in transformed coordinates)
     QLineF m_snapLine;
@@ -64,7 +67,7 @@ public:
     virtual ~PerspectiveAssistantFactory();
     virtual QString id() const;
     virtual QString name() const;
-    virtual KisPaintingAssistant* createPaintingAssistant() const;
+    virtual KisPaintingAssistant *createPaintingAssistant() const;
 };
 
 #endif

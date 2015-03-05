@@ -40,7 +40,6 @@ class CustomAttributeDefinition;
 class VacationInterval;
 class UsageLimits;
 
-
 /**
  * The Project class is the root of the data tree of the application.
  * Applications can use multiple Project objects. This is e. g. needed when
@@ -61,10 +60,10 @@ public:
     Project();
     ~Project();
 
-/*    void addSourceFile(const QString& f);
-    QStringList getSourceFiles() const;*/
+    /*    void addSourceFile(const QString& f);
+        QStringList getSourceFiles() const;*/
     // Called to emit a signal with the currently processed file.
-    void setProgressInfo(const QString& i);
+    void setProgressInfo(const QString &i);
     // Called to emit a signal with the current process of the scheduler.
     void setProgressBar(int i, int of);
     /**
@@ -76,7 +75,7 @@ public:
      * project ID. So, you have to add at least one ID before you add any
      * tasks.
      */
-    bool addId(const QString& i, bool changeCurrentId = true);
+    bool addId(const QString &i, bool changeCurrentId = true);
 
     /**
      * Returns the first (default) ID of the project.
@@ -96,11 +95,14 @@ public:
     /**
      * Returns a list of all registered project IDs.
      */
-    QStringList getProjectIdList() const { return projectIDs; }
+    QStringList getProjectIdList() const
+    {
+        return projectIDs;
+    }
     /**
      * Returns true if the passed ID is a registered project ID.
      */
-    bool isValidId(const QString& i) const
+    bool isValidId(const QString &i) const
     {
         return projectIDs.indexOf(i) != -1;
     }
@@ -109,17 +111,20 @@ public:
      * The first ID in the list is returned as "A", the second as "B". The
      * 27th is "AA" and so on.
      */
-    QString getIdIndex(const QString& i) const;
+    QString getIdIndex(const QString &i) const;
 
     /**
      * Returns the number of supported scenarios.
      */
-    int getMaxScenarios() const { return scenarioList.count(); }
+    int getMaxScenarios() const
+    {
+        return scenarioList.count();
+    }
     /**
      * Returns a pointer to the scenario.
      * @param sc Index of the scenario in the project scenario list.
      */
-    Scenario* getScenario(int sc) const;
+    Scenario *getScenario(int sc) const;
     /**
      * Returns a pointer to the scenario with index sc.
      * @param sc Index of the scenario in the project scenario list.
@@ -135,7 +140,7 @@ public:
      * list is 1, not 0! If the scenario is unknown -1 is returned.
      * @param id the ID of the scenario.
      */
-    int getScenarioIndex(const QString& id) const;
+    int getScenarioIndex(const QString &id) const;
     /**
      * Returns an interator for the list of defined scenarios.
      */
@@ -148,69 +153,111 @@ public:
      * Set the name of the project. The project name is mainly used for the
      * reports.
      */
-    void setName(const QString& n) { name = n; }
+    void setName(const QString &n)
+    {
+        name = n;
+    }
     /**
      * Returns the name of the project.
      */
-    const QString& getName() const { return name; }
+    const QString &getName() const
+    {
+        return name;
+    }
 
     /**
      * Set the version number of the project. This version is mainly used for
      * reports.
      */
-    void setVersion(const QString& v) { version = v; }
+    void setVersion(const QString &v)
+    {
+        version = v;
+    }
     /**
      * Returns the version number of the project.
      */
-    const QString& getVersion() const { return version; }
+    const QString &getVersion() const
+    {
+        return version;
+    }
 
     /**
      * Set the copyright information. This is a default text used for all
      * reports.
      */
-    void setCopyright(const QString& c) { copyright = c; }
+    void setCopyright(const QString &c)
+    {
+        copyright = c;
+    }
     /**
      * Returns the copyright information of the project.
      */
-    const QString& getCopyright() const { return copyright; }
+    const QString &getCopyright() const
+    {
+        return copyright;
+    }
 
     /**
      * Set the customer information for this project.
      */
-    void setCustomer(const QString& c) { customer = c; }
+    void setCustomer(const QString &c)
+    {
+        customer = c;
+    }
     /**
      * Returns the customer information of the project.
      */
-    const QString& getCustomer() const { return customer; }
+    const QString &getCustomer() const
+    {
+        return customer;
+    }
 
     /**
      * Set the default priority for all top-level tasks. Normally this value
      * is 500.
      */
-    void setPriority(int p) { priority = p; }
+    void setPriority(int p)
+    {
+        priority = p;
+    }
     /**
      * Returns the default priority for all top-level tasks.
      */
-    int getPriority() const { return priority; }
+    int getPriority() const
+    {
+        return priority;
+    }
 
     /**
      * Set the start time of the project.
      */
-    void setStart(time_t s) { start = s; }
+    void setStart(time_t s)
+    {
+        start = s;
+    }
     /**
      * Get the start time of the project.
      */
-    time_t getStart() const { return start; }
+    time_t getStart() const
+    {
+        return start;
+    }
 
     /**
      * Set the end time of the project. The specified second is still
      * considered as within the project time frame.
      */
-    void setEnd(time_t e) { end = e; }
+    void setEnd(time_t e)
+    {
+        end = e;
+    }
     /**
      * Get the end time of the project.
      */
-    time_t getEnd() const { return end; }
+    time_t getEnd() const
+    {
+        return end;
+    }
 
     /**
      * Set the date that TaskJuggler uses as current date for all
@@ -220,7 +267,10 @@ public:
     /**
      * Get the date that TaskJuggler uses as current date.
      */
-    time_t getNow() const { return now; }
+    time_t getNow() const
+    {
+        return now;
+    }
 
     /**
      * Specifies whether TaskJuggler uses Sunday or Monday as first day of the
@@ -229,12 +279,18 @@ public:
      * European countries use, but other Countries like the US use Sunday as
      * first day of the week.
      */
-    void setWeekStartsMonday(bool wsm) { weekStartsMonday = wsm; }
+    void setWeekStartsMonday(bool wsm)
+    {
+        weekStartsMonday = wsm;
+    }
     /**
      * Get the setting for the first day of the week.
      * @return true of weeks should start on Monday.
      */
-    bool getWeekStartsMonday() const { return weekStartsMonday; }
+    bool getWeekStartsMonday() const
+    {
+        return weekStartsMonday;
+    }
     /**
      * Decides if containers which subtasks are all hidden should be
      * drawn as normal tasks or not.
@@ -249,7 +305,7 @@ public:
      */
     bool getDrawEmptyContainersAsTasks() const
     {
-         return drawEmptyContainerAsTasks;
+        return drawEmptyContainerAsTasks;
     }
     /**
      * Set the working hours of the specified weekday.
@@ -259,23 +315,24 @@ public:
      * midnight. As with all TaskJuggler intervals, the specified end value is
      * not part of the interval. The interval ends one seconds earlier.
      */
-    void setWorkingHours(int day, const QList<Interval*>& l);
+    void setWorkingHours(int day, const QList<Interval *> &l);
     /**
      * Returns a constant list of working intervals for all week days.
      */
-    const QList<Interval*>* const * getWorkingHours() const
+    const QList<Interval *> *const *getWorkingHours() const
     {
-        return static_cast<const QList<Interval*>* const*>
-            (workingHours);
+        return static_cast<const QList<Interval *>* const *>
+               (workingHours);
     }
     /**
      * Returns the list of working intervals for the specified weekday.
      * @param day Day of the week. 0 for Sunday, 1 for Monday and so on.
      */
-    QList<Interval*>* getWorkingHours(int day) const
+    QList<Interval *> *getWorkingHours(int day) const
     {
-        if (day < 0 || day > 6)
+        if (day < 0 || day > 6) {
             qFatal("day out of range");
+        }
         return workingHours[day];
     }
     /**
@@ -283,9 +340,9 @@ public:
      * specified weekday.
      * @param day Day of the week. 0 for Sunday, 1 for Monday and so on.
      */
-    QListIterator<Interval*> getWorkingHoursIterator(int day) const
+    QListIterator<Interval *> getWorkingHoursIterator(int day) const
     {
-        return QListIterator<Interval*>(*workingHours[day]);
+        return QListIterator<Interval *>(*workingHours[day]);
     }
     /**
      * If there is a working interval defined for this weekday and the
@@ -303,13 +360,13 @@ public:
      * If the interval overlaps with a vacation day or the interval is outside
      * of the defined working hours, false is returned. Otherwise true.
      */
-    bool isWorkingTime(const Interval& iv) const;
+    bool isWorkingTime(const Interval &iv) const;
 
     /**
      * Returns the number of working days that overlap with the specified
      * interval.
      */
-    int calcWorkingDays(const Interval& iv) const;
+    int calcWorkingDays(const Interval &iv) const;
 
     /**
      * The daily working hours value is used to convert working hours into
@@ -317,11 +374,17 @@ public:
      * workingHours for each week day. With this function you can set the
      * value for the project.
      */
-    void setDailyWorkingHours(double h) { dailyWorkingHours = h; }
+    void setDailyWorkingHours(double h)
+    {
+        dailyWorkingHours = h;
+    }
     /**
      * Returns the specified daily working hours.
      */
-    double getDailyWorkingHours() const { return dailyWorkingHours; }
+    double getDailyWorkingHours() const
+    {
+        return dailyWorkingHours;
+    }
 
     /**
      * The weekly working days value is used to convert working days into
@@ -351,17 +414,35 @@ public:
      * the vacation settings. This function sets the value which also affects
      * the monthly working days and the weekly working days.
      */
-    void setYearlyWorkingDays(double wd) { yearlyWorkingDays = wd; }
+    void setYearlyWorkingDays(double wd)
+    {
+        yearlyWorkingDays = wd;
+    }
     /**
      * Returns the specified number of working days per year.
      */
-    double getYearlyWorkingDays() const { return yearlyWorkingDays; }
+    double getYearlyWorkingDays() const
+    {
+        return yearlyWorkingDays;
+    }
 
-    void setScheduleGranularity(ulong s) { scheduleGranularity = s; }
-    ulong getScheduleGranularity() const { return scheduleGranularity; }
+    void setScheduleGranularity(ulong s)
+    {
+        scheduleGranularity = s;
+    }
+    ulong getScheduleGranularity() const
+    {
+        return scheduleGranularity;
+    }
 
-    void setAllowRedefinitions(bool ar) { allowRedefinitions = ar; }
-    bool getAllowRedefinitions() const { return allowRedefinitions; }
+    void setAllowRedefinitions(bool ar)
+    {
+        allowRedefinitions = ar;
+    }
+    bool getAllowRedefinitions() const
+    {
+        return allowRedefinitions;
+    }
 
     /**
      * Add a vacation interval to the vacation list. These global vacations
@@ -371,11 +452,11 @@ public:
      * @param n Name of the vacation.
      * @param i The time interval the vacation lasts.
      */
-    void addVacation(const QString& n, const Interval& i)
+    void addVacation(const QString &n, const Interval &i)
     {
         vacationList.add(n, i);
     }
-    void addVacation(VacationInterval* vi)
+    void addVacation(VacationInterval *vi)
     {
         vacationList.add(vi);
     }
@@ -383,7 +464,10 @@ public:
      * Returns true if the passed moment falls within any of the vacation
      * intervals.
      */
-    bool isVacation(time_t vd) const { return vacationList.isVacation(vd); }
+    bool isVacation(time_t vd) const
+    {
+        return vacationList.isVacation(vd);
+    }
 
     /**
      * Returns the name of the first vacation that the given date falls into.
@@ -407,43 +491,49 @@ public:
      * object with the project as parameter will automatically add it to the
      * scenario list of the project.
      */
-    void addScenario(Scenario* r);
+    void addScenario(Scenario *r);
     /**
      * This function is for library internal use only. Deleting a Scenario
      * will automatically delete it from the respective list of the
      * project.
      */
-    void deleteScenario(Scenario* s);
+    void deleteScenario(Scenario *s);
 
     /**
      * This function is for library internal use only. Creating a Task object
      * with the project as parameter will automatically add it to the Task
      * list of the project.
      */
-    void addTask(Task* t);
+    void addTask(Task *t);
     /**
      * This function is for library internal use only. Deleting a Task
      * will automatically delete it from the respective list of the
      * project.
      */
-    void deleteTask(Task* t);
+    void deleteTask(Task *t);
     /**
      * Returns a pointer to the Task with the specified ID. The ID must be an
      * absolute ID of the form "foo.bar". If no Task with the ID exists 0 is
      * returned.
      */
-    Task* getTask(const QString& id) const
+    Task *getTask(const QString &id) const
     {
         return taskList.getTask(id);
     }
     /**
      * Returns the number of tasks of the project.
      */
-    uint taskCount() const { return taskList.count(); }
+    uint taskCount() const
+    {
+        return taskList.count();
+    }
     /**
      * Returns a copy of the Task list of the project.
      */
-    TaskList getTaskList() const { return taskList; }
+    TaskList getTaskList() const
+    {
+        return taskList;
+    }
     /**
      * Returns an iterator that can be used to traverse the Task list. The
      * Task list is a flat list of all tasks.
@@ -458,18 +548,18 @@ public:
      * namespace. @param cad is a pointer to the CustomAttributeDefinition
      * object.
      */
-    bool addTaskAttribute(const QString& id, CustomAttributeDefinition* cad);
+    bool addTaskAttribute(const QString &id, CustomAttributeDefinition *cad);
     /**
      * Returns a pointer to the custom attribute object identified by @param id.
      * If no attributes with the id exists, 0 is returned.
      */
-    const CustomAttributeDefinition* getTaskAttribute(const QString& id) const;
+    const CustomAttributeDefinition *getTaskAttribute(const QString &id) const;
     /**
      * Returns a read-only pointer to the dictionary that holds the pointers
      * to user-defined attributes of Tasks.
      */
-    const QMap<QString, CustomAttributeDefinition*>&
-        getTaskAttributeDict() const
+    const QMap<QString, CustomAttributeDefinition *> &
+    getTaskAttributeDict() const
     {
         return taskAttributes;
     }
@@ -479,30 +569,36 @@ public:
      * object with the project as parameter will automatically add it to the
      * resource list of the project.
      */
-    void addResource(Resource* r);
+    void addResource(Resource *r);
     /**
      * This function is for library internal use only. Deleting a Resource
      * will automatically delete it from the respective list of the
      * project.
      */
-    void deleteResource(Resource* r);
+    void deleteResource(Resource *r);
     /**
      * Returns a pointer to the Resource with the specified ID. The ID must
      * not be an absolute ID since the Resource list has a flat namespace. If
      * no Resource with the ID exists 0 is returned.
      */
-    Resource* getResource(const QString& id) const
+    Resource *getResource(const QString &id) const
     {
         return resourceList.getResource(id);
     }
     /**
      * Returns the number of resources in the Resource list.
      */
-    uint resourceCount() const { return resourceList.count(); }
+    uint resourceCount() const
+    {
+        return resourceList.count();
+    }
     /**
      * Returns a copy of the Resource list.
      */
-    ResourceList getResourceList() const { return resourceList; }
+    ResourceList getResourceList() const
+    {
+        return resourceList;
+    }
     /**
      * Returns an iterator that can be used to traverse the Resource list. The
      * Resource list is a flat list of all resources.
@@ -517,20 +613,20 @@ public:
      * namespace. @param cad is a pointer to the CustomAttributeDefinition
      * object.
      */
-    bool addResourceAttribute(const QString& name,
-                              CustomAttributeDefinition* cad);
+    bool addResourceAttribute(const QString &name,
+                              CustomAttributeDefinition *cad);
     /**
      * Returns a pointer to the custom attribute object identified by @param id.
      * If no attributes with the id exists, 0 is returned.
      */
-    const CustomAttributeDefinition* getResourceAttribute(const QString& id)
-        const;
+    const CustomAttributeDefinition *getResourceAttribute(const QString &id)
+    const;
     /**
      * Returns a read-only pointer to the dictionary that holds the pointers
      * to user-defined attributes of Resources.
      */
-    const QMap<QString, CustomAttributeDefinition*>&
-        getResourceAttributeDict() const
+    const QMap<QString, CustomAttributeDefinition *> &
+    getResourceAttributeDict() const
     {
         return resourceAttributes;
     }
@@ -552,10 +648,10 @@ public:
      * not be an absolute ID since the account list has a flat namespace. If
      * no Account with the ID exists 0 is returned.
      */
-/*    Account* getAccount(const QString& id) const
-    {
-        return accountList.getAccount(id);
-    }*/
+    /*    Account* getAccount(const QString& id) const
+        {
+            return accountList.getAccount(id);
+        }*/
     /**
      * Returns the number of accounts in the Account list.
      */
@@ -568,24 +664,24 @@ public:
      * Returns an iterator that can be used to traverse the Account list. The
      * Account list is a flat list of all accounts.
      */
-/*    AccountListIterator getAccountListIterator() const
-    {
-        return AccountListIterator(accountList);
-    }*/
+    /*    AccountListIterator getAccountListIterator() const
+        {
+            return AccountListIterator(accountList);
+        }*/
     /**
      * This function adds a new, user-defined attribute to the Account
      * attributes. The @param id must be unique within the Account attributes
      * namespace. @param cad is a pointer to the CustomAttributeDefinition
      * object.
      */
-/*    bool addAccountAttribute(const QString& name,
-                              CustomAttributeDefinition* cad);*/
+    /*    bool addAccountAttribute(const QString& name,
+                                  CustomAttributeDefinition* cad);*/
     /**
      * Returns a pointer to the custom attribute object identified by @param id.
      * If no attributes with the id exists, 0 is returned.
      */
-/*    const CustomAttributeDefinition* getAccountAttribute(const QString& id)
-        const;*/
+    /*    const CustomAttributeDefinition* getAccountAttribute(const QString& id)
+            const;*/
     /**
      * Returns a read-only pointer to the dictionary that holds the pointers
      * to user-defined attributes of Accounts.
@@ -601,30 +697,36 @@ public:
      * object with the project as parameter will automatically add it to the
      * Shift list of the project.
      */
-    void addShift(Shift* s);
+    void addShift(Shift *s);
     /**
      * This function is for library internal use only. Deleting a Shift
      * will automatically delete it from the respective list of the
      * project.
      */
-    void deleteShift(Shift* s);
+    void deleteShift(Shift *s);
     /**
      * Returns a pointer to the Shift with the specified ID. The ID may
      * not be an absolute ID since the Shift list has a flat namespace. If
      * no Shift with the ID exists 0 is returned.
      */
-    Shift* getShift(const QString& id) const
+    Shift *getShift(const QString &id) const
     {
         return shiftList.getShift(id);
     }
     /**
      * Returns the number of shifts in the shift list.
      */
-    uint shiftCount() const { return shiftList.count(); }
+    uint shiftCount() const
+    {
+        return shiftList.count();
+    }
     /**
      * Returns a copy of the Shift list.
      */
-    ShiftList getShiftList() const { return shiftList; }
+    ShiftList getShiftList() const
+    {
+        return shiftList;
+    }
     /**
      * Returns an iterator that can be used to traverse the Shift list. The
      * Shift list is a flat list of all accounts.
@@ -641,11 +743,17 @@ public:
      * not loaded to at least this value each day. The value is inherited by
      * all resources that are created subsequent to this function call.
      */
-    void setMinEffort(double m) { minEffort = m; }
+    void setMinEffort(double m)
+    {
+        minEffort = m;
+    }
     /**
      * Returns the default minimum effort value.
      */
-    double getMinEffort() const { return minEffort; }
+    double getMinEffort() const
+    {
+        return minEffort;
+    }
 
     /**
      * Set the maximum efforts for resources. This is the default value
@@ -653,12 +761,15 @@ public:
      * resource is never loaded more each day, week, month etc. than the
      * maximum effort value specified for the resource.
      */
-    void setResourceLimits(UsageLimits* l);
+    void setResourceLimits(UsageLimits *l);
 
     /**
      * Returns the default effort limits for resources.
      */
-    const UsageLimits* getResourceLimits() const { return resourceLimits; }
+    const UsageLimits *getResourceLimits() const
+    {
+        return resourceLimits;
+    }
 
     /**
      * Set the default daily cost rate for resources. This value is inherited
@@ -706,36 +817,51 @@ public:
     /**
      * Set the default time zone for the project.
      */
-    bool setTimeZone(const QString& tz);
+    bool setTimeZone(const QString &tz);
     /**
      * Returns the default time zone of the project;
      */
-    const QString& getTimeZone() const { return timeZone; }
+    const QString &getTimeZone() const
+    {
+        return timeZone;
+    }
 
     /**
      * Sets the format used for timestamps in reports. It will be used as
      * default for all subsequent report definitions. See the TaskJuggler
      * manual for the format details.
      */
-    void setShortTimeFormat(const QString& tf) { shortTimeFormat = tf; }
+    void setShortTimeFormat(const QString &tf)
+    {
+        shortTimeFormat = tf;
+    }
     /**
      * Returns the format for timestamps in reports.
      */
-    const QString& getShortTimeFormat() const { return shortTimeFormat; }
+    const QString &getShortTimeFormat() const
+    {
+        return shortTimeFormat;
+    }
 
     /**
      * Sets the format used for date stamps in reports. It will be used as
      * default for all subsequent report definitions. See the TaskJuggler
      * manual for the format details.
      */
-    void setTimeFormat(const QString& tf) { timeFormat = tf; }
+    void setTimeFormat(const QString &tf)
+    {
+        timeFormat = tf;
+    }
     /**
      * Returns the format for date stamps in reports.
      */
-    const QString& getTimeFormat() const { return timeFormat; }
+    const QString &getTimeFormat() const
+    {
+        return timeFormat;
+    }
 
 //     void addXMLReport(ReportXML *r ) { xmlreport = r; }
-// 
+//
 //     void addReport(Report* r)
 //     {
 //         reports.append(r);
@@ -745,10 +871,11 @@ public:
 
     void addAllowedFlag(QString flag)
     {
-        if (!isAllowedFlag(flag))
+        if (!isAllowedFlag(flag)) {
             allowedFlags.append(flag);
+        }
     }
-    bool isAllowedFlag(const QString& flag) const
+    bool isAllowedFlag(const QString &flag) const
     {
         return allowedFlags.contains(flag) > 0;
     }
@@ -763,12 +890,15 @@ public:
      */
     double convertToDailyLoad(long secs) const;
 
-    void setMaxErrors(int me) { maxErrors = me; }
+    void setMaxErrors(int me)
+    {
+        maxErrors = me;
+    }
 
 //     void addJournalEntry(JournalEntry* entry);
-// 
+//
 //     bool hasJournal() const { return !journal.isEmpty(); }
-// 
+//
 //     Journal::Iterator getJournalIterator() const;
 
     /**
@@ -779,7 +909,7 @@ public:
      */
     bool pass2(bool noDepCheck);
 
-    bool scheduleScenario(Scenario* sc);
+    bool scheduleScenario(Scenario *sc);
     void breakScheduling();
     void completeBuffersAndIndices();
     bool scheduleAllScenarios();
@@ -788,7 +918,7 @@ public:
 //     bool generateXMLReport() const;
 
 Q_SIGNALS:
-    void updateProgressInfo(const QString& i);
+    void updateProgressInfo(const QString &i);
     void updateProgressBar(int i, int of);
 
 private:
@@ -860,7 +990,7 @@ private:
     /**
      * The default resource usage limits.
      */
-    UsageLimits* resourceLimits;
+    UsageLimits *resourceLimits;
 
     /**
      * The default daily cost of a resource. The value is inherited to all
@@ -880,7 +1010,7 @@ private:
 
     /* The list of standard working or opening hours. These values will be
      * inherited by the resources as default working hours. */
-    QList<Interval*>* workingHours[7];
+    QList<Interval *> *workingHours[7];
 
     /**
      * The granularity of the scheduler in seconds. No intervals
@@ -925,21 +1055,21 @@ private:
     ResourceList originalResourceList;
 //     AccountList originalAccountList;
 
-    QMap<QString, CustomAttributeDefinition*> taskAttributes;
-    QMap<QString, CustomAttributeDefinition*> resourceAttributes;
+    QMap<QString, CustomAttributeDefinition *> taskAttributes;
+    QMap<QString, CustomAttributeDefinition *> resourceAttributes;
 //     QList<CustomAttributeDefinition*> accountAttributes;
 
     /* This is for version 1.0 XML reports and should be removed before the
      * next major release. */
-/*    ReportXML* xmlreport;
+    /*    ReportXML* xmlreport;
 
-    QPtrList<Report> reports;
-    QPtrList<QtReport> interactiveReports;*/
+        QPtrList<Report> reports;
+        QPtrList<QtReport> interactiveReports;*/
     QStringList sourceFiles;
 
     // This flag is raised to abort the scheduling.
     bool breakFlag;
-} ;
+};
 
 } // namespace TJ
 

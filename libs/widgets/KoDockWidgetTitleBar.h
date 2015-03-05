@@ -26,7 +26,7 @@
  * @short A custom title bar for dock widgets.
  *
  * Allow customization such as collapsable, or hidding text.
- * 
+ *
  * @see KoDockWidgetTitleBarButton
  */
 class KOWIDGETS_EXPORT KoDockWidgetTitleBar : public QWidget
@@ -52,8 +52,8 @@ public Q_SLOTS:
     void setCollapsable(bool collapsable);
 
 protected:
-    virtual void paintEvent(QPaintEvent* event); ///< reimplemented from QWidget
-    virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget
+    virtual void paintEvent(QPaintEvent *event); ///< reimplemented from QWidget
+    virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QWidget
 private:
     Q_PRIVATE_SLOT(d, void toggleFloating())
     Q_PRIVATE_SLOT(d, void toggleCollapsed())
@@ -61,7 +61,7 @@ private:
     Q_PRIVATE_SLOT(d, void featuresChanged(QDockWidget::DockWidgetFeatures))
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KODOCKWIDGETTITLEBAR_H_

@@ -55,7 +55,7 @@ class ConsolidateDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ConsolidateDialog(QWidget* parent, Selection* selection);
+    ConsolidateDialog(QWidget *parent, Selection *selection);
     virtual ~ConsolidateDialog();
 
 public Q_SLOTS:

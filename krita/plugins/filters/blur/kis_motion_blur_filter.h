@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of Krita
  *
  * Copyright (c) 2010 Edward Apap <schumifer@hotmail.com>
@@ -18,7 +18,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_MOTION_BLUR_FILTER_H
 #define KIS_MOTION_BLUR_FILTER_H
 
@@ -36,19 +35,20 @@ public:
 public:
 
     void processImpl(KisPaintDeviceSP src,
-                     const QRect& size,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater
-                     ) const;
-    static inline KoID id() {
+                     const QRect &size,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater
+                    ) const;
+    static inline KoID id()
+    {
         return KoID("motion blur", i18n("Motion Blur"));
     }
 
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    QRect neededRect(const QRect & rect, const KisFilterConfiguration*) const;
-    QRect changedRect(const QRect & rect, const KisFilterConfiguration*) const;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
+    QRect neededRect(const QRect &rect, const KisFilterConfiguration *) const;
+    QRect changedRect(const QRect &rect, const KisFilterConfiguration *) const;
 };
 
 #endif

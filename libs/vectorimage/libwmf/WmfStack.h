@@ -78,7 +78,6 @@ public:
     int height;                 // Can be negative. In 'font' above, we store the absolute value.
 };
 
-
 }
 
 #endif

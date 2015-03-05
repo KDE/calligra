@@ -59,18 +59,18 @@ public:
     QAction *findNext;
     QAction *findPrev;
 
-    void findDocumentSetNext(QTextDocument * document);
-    void findDocumentSetPrevious(QTextDocument * document);
+    void findDocumentSetNext(QTextDocument *document);
+    void findDocumentSetPrevious(QTextDocument *document);
 
 protected:
     void parseSettingsAndFind();
 
 private:
-    KoFind * q;
+    KoFind *q;
     KoCanvasResourceManager *provider;
     KoFindStrategy findStrategy; /// strategy used for find
     KoReplaceStrategy replaceStrategy; /// strategy used for replace
-    KoFindStrategyBase * strategy; /// the current strategy used
+    KoFindStrategyBase *strategy;  /// the current strategy used
 
     QTextDocument *document;
     QTextDocument *startDocument;
@@ -80,7 +80,7 @@ private:
     bool inFind; /// if true find/replace is running (not showing the dialog)
     QTextCursor startPosition;
     QTextCursor endPosition;
-    FindDirection * findDirection; /// the current direction used
+    FindDirection *findDirection;  /// the current direction used
     FindForward findForward;
     FindBackward findBackward;
 };

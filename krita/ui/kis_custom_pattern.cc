@@ -41,7 +41,7 @@
 #include "kis_resource_server_provider.h"
 #include "kis_paint_layer.h"
 
-KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view)
+KisCustomPattern::KisCustomPattern(QWidget *parent, const char *name, const QString &caption, KisViewManager *view)
     : KisWdgCustomPattern(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
@@ -51,7 +51,7 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 
     preview->setScaledContents(true);
 
-    KoResourceServer<KoPattern>* rServer = KoResourceServerProvider::instance()->patternServer(false);
+    KoResourceServer<KoPattern> *rServer = KoResourceServerProvider::instance()->patternServer(false);
     m_rServerAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(rServer));
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
@@ -85,8 +85,12 @@ void KisCustomPattern::slotUpdateCurrentPattern()
                     scaledHeight = maxSize;
                 }
 
-                if (scaledWidth == 0) scaledWidth++;
-                if (scaledHeight == 0) scaledHeight++;
+                if (scaledWidth == 0) {
+                    scaledWidth++;
+                }
+                if (scaledHeight == 0) {
+                    scaledHeight++;
+                }
 
                 QPixmap scaledPixmap = QPixmap::fromImage(m_pattern->pattern());
                 preview->setPixmap(scaledPixmap.scaled(scaledWidth, scaledHeight));
@@ -99,8 +103,9 @@ void KisCustomPattern::slotUpdateCurrentPattern()
 
 void KisCustomPattern::slotAddPredefined()
 {
-    if (!m_pattern)
+    if (!m_pattern) {
         return;
+    }
 
     // Save in the directory that is likely to be: ~/.kde/share/apps/krita/patterns
     // a unique file with this pattern name
@@ -127,9 +132,10 @@ void KisCustomPattern::slotAddPredefined()
 
 void KisCustomPattern::slotUsePattern()
 {
-    if (!m_pattern)
+    if (!m_pattern) {
         return;
-    KoPattern* copy = m_pattern->clone();
+    }
+    KoPattern *copy = m_pattern->clone();
 
     Q_CHECK_PTR(copy);
 
@@ -138,12 +144,16 @@ void KisCustomPattern::slotUsePattern()
 
 void KisCustomPattern::createPattern()
 {
-    if (!m_view) return;
+    if (!m_view) {
+        return;
+    }
 
     KisPaintDeviceSP dev;
     QString name;
     KisImageWSP image = m_view->image();
-    if (!image) return;
+    if (!image) {
+        return;
+    }
     QRect rc = image->bounds();
 
     if (cmbSource->currentIndex() == 0) {
@@ -151,28 +161,28 @@ void KisCustomPattern::createPattern()
         name = m_view->activeNode()->name();
         QRect rc2 = dev->exactBounds();
         rc = rc.intersected(rc2);
-    }
-    else {
+    } else {
         image->lock();
         dev = image->projection();
         image->unlock();
         name = image->objectName();
     }
-    if (!dev) return;
+    if (!dev) {
+        return;
+    }
     // warn when creating large patterns
 
     QSize size = rc.size();
     if (size.width() > 1000 || size.height() > 1000) {
         lblWarning->setText(i18n("The current image is too big to create a pattern. "
-                                "The pattern will be scaled down."));
+                                 "The pattern will be scaled down."));
         size.scale(1000, 1000, Qt::KeepAspectRatio);
     }
 
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
     m_pattern = new KoPattern(dev->createThumbnail(size.width(), size.height(), rc,
-                                                    KoColorConversionTransformation::InternalRenderingIntent,
-                                                    KoColorConversionTransformation::InternalConversionFlags), name, dir);
+                              KoColorConversionTransformation::InternalRenderingIntent,
+                              KoColorConversionTransformation::InternalConversionFlags), name, dir);
 }
-
 
 #include "kis_custom_pattern.moc"

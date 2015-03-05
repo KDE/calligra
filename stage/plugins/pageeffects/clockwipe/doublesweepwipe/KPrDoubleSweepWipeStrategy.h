@@ -26,11 +26,11 @@
 class KPrDoubleSweepWipeStrategy : public KPrSweepWipeStrategy
 {
 public:
-    KPrDoubleSweepWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrDoubleSweepWipeStrategy(int subType, const char *smilType, const char *smilSubType, bool reverse);
     virtual ~KPrDoubleSweepWipeStrategy();
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    virtual void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine);
+    virtual void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data);
 };
 
 #endif // KPRDOUBLESWEEPWIPESTRATEGY_H

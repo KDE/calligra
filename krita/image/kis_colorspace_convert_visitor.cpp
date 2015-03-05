@@ -31,10 +31,10 @@
 #include "generator/kis_generator_layer.h"
 
 KisColorSpaceConvertVisitor::KisColorSpaceConvertVisitor(KisImageWSP image,
-                                                         const KoColorSpace *srcColorSpace,
-                                                         const KoColorSpace *dstColorSpace,
-                                                         KoColorConversionTransformation::Intent renderingIntent,
-                                                         KoColorConversionTransformation::ConversionFlags conversionFlags)
+        const KoColorSpace *srcColorSpace,
+        const KoColorSpace *dstColorSpace,
+        KoColorConversionTransformation::Intent renderingIntent,
+        KoColorConversionTransformation::ConversionFlags conversionFlags)
     : KisNodeVisitor()
     , m_image(image)
     , m_srcColorSpace(srcColorSpace)
@@ -48,13 +48,13 @@ KisColorSpaceConvertVisitor::~KisColorSpaceConvertVisitor()
 {
 }
 
-bool KisColorSpaceConvertVisitor::visit(KisGroupLayer * layer)
+bool KisColorSpaceConvertVisitor::visit(KisGroupLayer *layer)
 {
     convertPaintDevice(layer);
-    KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
+    KisLayerSP child = dynamic_cast<KisLayer *>(layer->firstChild().data());
     while (child) {
         child->accept(*this);
-        child = dynamic_cast<KisLayer*>(child->nextSibling().data());
+        child = dynamic_cast<KisLayer *>(child->nextSibling().data());
     }
 
     layer->resetCache();
@@ -72,7 +72,7 @@ bool KisColorSpaceConvertVisitor::visit(KisGeneratorLayer *layer)
     return convertPaintDevice(layer);
 }
 
-bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
+bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer *layer)
 {
     // XXX: Make undoable!
     if (layer->filter()->name() == "perchannel") {
@@ -84,11 +84,11 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
         layer->setFilter(f->defaultConfiguration(0));
     }
 
-    KisLayerPropsCommand* propsCommand = new KisLayerPropsCommand(layer,
-                                                                  layer->opacity(), layer->opacity(),
-                                                                  layer->compositeOpId(), layer->compositeOpId(),
-                                                                  layer->name(), layer->name(),
-                                                                  m_emptyChannelFlags, m_emptyChannelFlags, false);
+    KisLayerPropsCommand *propsCommand = new KisLayerPropsCommand(layer,
+            layer->opacity(), layer->opacity(),
+            layer->compositeOpId(), layer->compositeOpId(),
+            layer->name(), layer->name(),
+            m_emptyChannelFlags, m_emptyChannelFlags, false);
     m_image->undoAdapter()->addCommand(propsCommand);
 
     layer->resetCache();
@@ -101,50 +101,54 @@ bool KisColorSpaceConvertVisitor::visit(KisExternalLayer *layer)
     return true;
 }
 
-bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
+bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer *layer)
 {
 
-    if (*m_dstColorSpace == *layer->colorSpace()) return true;
+    if (*m_dstColorSpace == *layer->colorSpace()) {
+        return true;
+    }
 
     if (m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
         layer->setChannelFlags(m_emptyChannelFlags);
         KisPaintLayer *paintLayer = 0;
-        if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {
+        if ((paintLayer = dynamic_cast<KisPaintLayer *>(layer))) {
             paintLayer->setChannelLockFlags(QBitArray());
         }
 
     }
 
-    KisLayerPropsCommand* propsCommand = new KisLayerPropsCommand(layer,
-                                                                  layer->opacity(), layer->opacity(),
-                                                                  layer->compositeOpId(), layer->compositeOpId(),
-                                                                  layer->name(), layer->name(),
-                                                                  m_emptyChannelFlags, m_emptyChannelFlags, false);
+    KisLayerPropsCommand *propsCommand = new KisLayerPropsCommand(layer,
+            layer->opacity(), layer->opacity(),
+            layer->compositeOpId(), layer->compositeOpId(),
+            layer->name(), layer->name(),
+            m_emptyChannelFlags, m_emptyChannelFlags, false);
 
     if (layer->original()) {
-        KUndo2Command* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
-        if (cmd)
+        KUndo2Command *cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
+        if (cmd) {
             m_image->undoAdapter()->addCommand(cmd);
-        else
+        } else {
             delete cmd;
+        }
     }
 
     if (layer->paintDevice()) {
-        KUndo2Command* cmd = layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
-        if (cmd)
+        KUndo2Command *cmd = layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
+        if (cmd) {
             m_image->undoAdapter()->addCommand(cmd);
-        else
+        } else {
             delete cmd;
+        }
     }
 
     if (layer->projection()) {
-        KUndo2Command* cmd = layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
-        if (cmd)
+        KUndo2Command *cmd = layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
+        if (cmd) {
             m_image->undoAdapter()->addCommand(cmd);
-        else
+        } else {
             delete cmd;
+        }
     }
-
 
     m_image->undoAdapter()->addCommand(propsCommand);
 

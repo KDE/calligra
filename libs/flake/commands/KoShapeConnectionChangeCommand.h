@@ -51,7 +51,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOSHAPECONNECTIONCHANGECOMMAND_H

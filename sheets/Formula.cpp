@@ -63,7 +63,6 @@
 
  */
 
-
 /*
 TODO - features:
 - handle Intersection
@@ -101,7 +100,8 @@ public:
 
 // used when evaluation formulas
 struct stackEntry {
-    void reset() {
+    void reset()
+    {
         row1 = col1 = row2 = col2 = -1;
         reg = Calligra::Sheets::Region();
         regIsNamedOrLabeled = false;
@@ -123,7 +123,7 @@ public:
     mutable QVector<Opcode> codes;
     mutable QVector<Value> constants;
 
-    Value valueOrElement(FuncExtra &fe, const stackEntry& entry) const;
+    Value valueOrElement(FuncExtra &fe, const stackEntry &entry) const;
 };
 
 class TokenStack : public QVector<Token>
@@ -131,10 +131,10 @@ class TokenStack : public QVector<Token>
 public:
     TokenStack();
     unsigned itemCount() const;
-    void push(const Token& token);
+    void push(const Token &token);
     Token pop();
-    const Token& top();
-    const Token& top(unsigned index);
+    const Token &top();
+    const Token &top(unsigned index);
 };
 
 } // namespace Sheets
@@ -147,7 +147,7 @@ const Token Token::null;
 
 // helper function: return operator of given token text
 // e.g. '*' yields Operator::Asterisk, and so on
-Token::Op Calligra::Sheets::matchOperator(const QString& text)
+Token::Op Calligra::Sheets::matchOperator(const QString &text)
 {
     Token::Op result = Token::InvalidOp;
 
@@ -186,11 +186,21 @@ Token::Op Calligra::Sheets::matchOperator(const QString& text)
     }
 
     if (text.length() == 2) {
-        if (text == "<>") result = Token::NotEqual;
-        if (text == "!=") result = Token::NotEqual;
-        if (text == "<=") result = Token::LessEqual;
-        if (text == ">=") result = Token::GreaterEqual;
-        if (text == "==") result = Token::Equal;
+        if (text == "<>") {
+            result = Token::NotEqual;
+        }
+        if (text == "!=") {
+            result = Token::NotEqual;
+        }
+        if (text == "<=") {
+            result = Token::LessEqual;
+        }
+        if (text == ">=") {
+            result = Token::GreaterEqual;
+        }
+        if (text == "==") {
+            result = Token::Equal;
+        }
     }
 
     return result;
@@ -199,7 +209,7 @@ Token::Op Calligra::Sheets::matchOperator(const QString& text)
 bool Calligra::Sheets::parseOperator(const QChar *&data, QChar *&out)
 {
     bool retval = true;
-    switch(data->unicode()) {
+    switch (data->unicode()) {
     case '+':
     case '-':
     case '*':
@@ -257,7 +267,7 @@ bool Calligra::Sheets::parseOperator(const QChar *&data, QChar *&out)
         }
         break;
     case '!': {
-        const QChar * next = data + 1;
+        const QChar *next = data + 1;
         if (!next->isNull() && *next == QChar('=', 0)) {
             *out = *data;
             ++out;
@@ -265,8 +275,7 @@ bool Calligra::Sheets::parseOperator(const QChar *&data, QChar *&out)
             *out = *data;
             ++out;
             ++data;
-        }
-        else {
+        } else {
             retval = false;
         }
     }   break;
@@ -299,7 +308,7 @@ static int opPrecedence(Token::Op op)
     case Token::LessEqual    : prec = 1; break;
     case Token::GreaterEqual : prec = 1; break;
 #ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
-        // FIXME Stefan: I don't know whether zero is right for this case. :-(
+    // FIXME Stefan: I don't know whether zero is right for this case. :-(
     case Token::CurlyBra     : prec = 0; break;
     case Token::CurlyKet     : prec = 0; break;
     case Token::Pipe         : prec = 0; break;
@@ -313,36 +322,40 @@ static int opPrecedence(Token::Op op)
 }
 
 // helper function
-static Value tokenAsValue(const Token& token)
+static Value tokenAsValue(const Token &token)
 {
     Value value;
-    if (token.isBoolean()) value = Value(token.asBoolean());
-    else if (token.isInteger()) value = Value(token.asInteger());
-    else if (token.isFloat()) value = Value(token.asFloat());
-    else if (token.isString()) value = Value(token.asString());
-    else if (token.isError()) {
+    if (token.isBoolean()) {
+        value = Value(token.asBoolean());
+    } else if (token.isInteger()) {
+        value = Value(token.asInteger());
+    } else if (token.isFloat()) {
+        value = Value(token.asFloat());
+    } else if (token.isString()) {
+        value = Value(token.asString());
+    } else if (token.isError()) {
         const QString error = token.asError();
-        if (error == Value::errorCIRCLE().errorMessage())
+        if (error == Value::errorCIRCLE().errorMessage()) {
             value = Value::errorCIRCLE();
-        else if (error == Value::errorDEPEND().errorMessage())
+        } else if (error == Value::errorDEPEND().errorMessage()) {
             value = Value::errorDEPEND();
-        else if (error == Value::errorDIV0().errorMessage())
+        } else if (error == Value::errorDIV0().errorMessage()) {
             value = Value::errorDIV0();
-        else if (error == Value::errorNA().errorMessage())
+        } else if (error == Value::errorNA().errorMessage()) {
             value = Value::errorNA();
-        else if (error == Value::errorNAME().errorMessage())
+        } else if (error == Value::errorNAME().errorMessage()) {
             value = Value::errorNAME();
-        else if (error == Value::errorNUM().errorMessage())
+        } else if (error == Value::errorNUM().errorMessage()) {
             value = Value::errorNUM();
-        else if (error == Value::errorNULL().errorMessage())
+        } else if (error == Value::errorNULL().errorMessage()) {
             value = Value::errorNULL();
-        else if (error == Value::errorPARSE().errorMessage())
+        } else if (error == Value::errorPARSE().errorMessage()) {
             value = Value::errorPARSE();
-        else if (error == Value::errorREF().errorMessage())
+        } else if (error == Value::errorREF().errorMessage()) {
             value = Value::errorREF();
-        else if (error == Value::errorVALUE().errorMessage())
+        } else if (error == Value::errorVALUE().errorMessage()) {
             value = Value::errorVALUE();
-        else {
+        } else {
             value = Value(Value::Error);
             value.setError(error);
         }
@@ -355,10 +368,10 @@ static Value tokenAsValue(const Token& token)
  **********************/
 
 // creates a token
-Token::Token(Type type, const QString& text, int pos)
-: m_type(type)
-, m_text(text)
-, m_pos(pos)
+Token::Token(Type type, const QString &text, int pos)
+    : m_type(type)
+    , m_text(text)
+    , m_pos(pos)
 {
     // the detach is needed as we manipulate the string we use as input afterwards
     // by writing to QChar * data point which does nto detach automatically.
@@ -366,15 +379,15 @@ Token::Token(Type type, const QString& text, int pos)
 }
 
 // copy constructor
-Token::Token(const Token& token)
-: m_type(token.m_type)
-, m_text(token.m_text)
-, m_pos(token.m_pos)
+Token::Token(const Token &token)
+    : m_type(token.m_type)
+    , m_text(token.m_text)
+    , m_pos(token.m_pos)
 {
 }
 
 // assignment operator
-Token& Token::operator=(const Token & token)
+Token &Token::operator=(const Token &token)
 {
     m_type = token.m_type;
     m_text = token.m_text;
@@ -384,48 +397,67 @@ Token& Token::operator=(const Token & token)
 
 bool Token::asBoolean() const
 {
-    if (!isBoolean()) return false;
+    if (!isBoolean()) {
+        return false;
+    }
     return m_text.toLower() == "true";
     // FIXME check also for i18n version
 }
 
 qint64 Token::asInteger() const
 {
-    if (isInteger()) return m_text.toLongLong();
-    else return 0;
+    if (isInteger()) {
+        return m_text.toLongLong();
+    } else {
+        return 0;
+    }
 }
 
 double Token::asFloat() const
 {
-    if (isFloat()) return m_text.toDouble();
-    else return 0.0;
+    if (isFloat()) {
+        return m_text.toDouble();
+    } else {
+        return 0.0;
+    }
 }
 
 QString Token::asString() const
 {
-    if (isString()) return m_text.mid(1, m_text.length() - 2);
-    else return QString();
+    if (isString()) {
+        return m_text.mid(1, m_text.length() - 2);
+    } else {
+        return QString();
+    }
 }
 
 QString Token::asError() const
 {
-    if (isError())
+    if (isError()) {
         return m_text;
-    else
+    } else {
         return QString();
+    }
 }
 
 Token::Op Token::asOperator() const
 {
-    if (isOperator()) return matchOperator(m_text);
-    else return InvalidOp;
+    if (isOperator()) {
+        return matchOperator(m_text);
+    } else {
+        return InvalidOp;
+    }
 }
 
 QString Token::sheetName() const
 {
-    if (!isCell() && !isRange()) return QString();
+    if (!isCell() && !isRange()) {
+        return QString();
+    }
     int i = m_text.indexOf('!');
-    if (i < 0) return QString();
+    if (i < 0) {
+        return QString();
+    }
     QString sheet = m_text.left(i);
     return sheet;
 }
@@ -447,14 +479,15 @@ QString Token::description() const
     default:          desc = "Unknown"; break;
     }
 
-    while (desc.length() < 10) desc.prepend(' ');
+    while (desc.length() < 10) {
+        desc.prepend(' ');
+    }
     desc.prepend("  ");
     desc.prepend(QString::number(m_pos));
     desc.append(" : ").append(m_text);
 
     return desc;
 }
-
 
 /**********************
     TokenStack
@@ -469,7 +502,7 @@ unsigned TokenStack::itemCount() const
     return size();
 }
 
-void TokenStack::push(const Token& token)
+void TokenStack::push(const Token &token)
 {
     append(token);
 }
@@ -484,19 +517,19 @@ Token TokenStack::pop()
     return Token();
 }
 
-const Token& TokenStack::top()
+const Token &TokenStack::top()
 {
     return top(0);
 }
 
-const Token& TokenStack::top(unsigned index)
+const Token &TokenStack::top(unsigned index)
 {
     unsigned top = size();
-    if (top > index)
+    if (top > index) {
         return at(top - index - 1);
+    }
     return Token::null;
 }
-
 
 /**********************
     FormulaPrivate
@@ -505,7 +538,7 @@ const Token& TokenStack::top(unsigned index)
 // helper function: return true for valid identifier character
 bool Calligra::Sheets::isIdentifier(QChar ch)
 {
-    switch(ch.unicode()) {
+    switch (ch.unicode()) {
     case '_':
     case '$':
     case '.':
@@ -515,17 +548,14 @@ bool Calligra::Sheets::isIdentifier(QChar ch)
     }
 }
 
-
-
-
 /**********************
     Formula
  **********************/
 
 // Constructor
 
-Formula::Formula(Sheet *sheet, const Cell& cell)
-        : d(new Private)
+Formula::Formula(Sheet *sheet, const Cell &cell)
+    : d(new Private)
 {
     d->cell = cell;
     d->sheet = sheet;
@@ -533,7 +563,7 @@ Formula::Formula(Sheet *sheet, const Cell& cell)
 }
 
 Formula::Formula(Sheet *sheet)
-        : d(new Private)
+    : d(new Private)
 {
     d->cell = Cell();
     d->sheet = sheet;
@@ -541,7 +571,7 @@ Formula::Formula(Sheet *sheet)
 }
 
 Formula::Formula()
-        : d(new Private)
+    : d(new Private)
 {
     d->cell = Cell();
     d->sheet = 0;
@@ -554,8 +584,8 @@ Formula Formula::empty()
     return f;
 }
 
-Formula::Formula(const Formula& other)
-        : d(other.d)
+Formula::Formula(const Formula &other)
+    : d(other.d)
 {
 }
 
@@ -565,12 +595,12 @@ Formula::~Formula()
 {
 }
 
-const Cell& Formula::cell() const
+const Cell &Formula::cell() const
 {
     return d->cell;
 }
 
-Sheet* Formula::sheet() const
+Sheet *Formula::sheet() const
 {
     return d->sheet;
 }
@@ -579,7 +609,7 @@ Sheet* Formula::sheet() const
 // note that both the real lex and parse processes will happen later on
 // when needed (i.e. "lazy parse"), for example during formula evaluation.
 
-void Formula::setExpression(const QString& expr)
+void Formula::setExpression(const QString &expr)
 {
     d->expression = expr;
     d->dirty = true;
@@ -599,15 +629,17 @@ QString Formula::expression() const
 bool Formula::isValid() const
 {
     if (d->dirty) {
-        KLocale* locale = !d->cell.isNull() ? d->cell.locale() : 0;
-        if ((!locale) && d->sheet)
+        KLocale *locale = !d->cell.isNull() ? d->cell.locale() : 0;
+        if ((!locale) && d->sheet) {
             locale = d->sheet->map()->calculationSettings()->locale();
+        }
         Tokens tokens = scan(d->expression, locale);
 
-        if (tokens.valid())
+        if (tokens.valid()) {
             compile(tokens);
-        else
+        } else {
             d->valid = false;
+        }
     }
     return d->valid;
 }
@@ -630,13 +662,14 @@ void Formula::clear()
 
 Tokens Formula::tokens() const
 {
-    KLocale* locale = !d->cell.isNull() ? d->cell.locale() : 0;
-    if ((!locale) && d->sheet)
+    KLocale *locale = !d->cell.isNull() ? d->cell.locale() : 0;
+    if ((!locale) && d->sheet) {
         locale = d->sheet->map()->calculationSettings()->locale();
+    }
     return scan(d->expression, locale);
 }
 
-Tokens Formula::scan(const QString &expr, const KLocale* locale) const
+Tokens Formula::scan(const QString &expr, const KLocale *locale) const
 {
     // parsing state
     enum { Start, Finish, InNumber, InDecimal, InExpIndicator, InExponent,
@@ -656,8 +689,8 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
     tokens.reserve(50);
 
     ++data;
-    const QChar * const start = data;
-    const QChar * const end = start + expr.length();
+    const QChar *const start = data;
+    const QChar *const end = start + expr.length();
     const QChar *tokenStart = data;
     const QChar *cellStart = data;
 
@@ -667,8 +700,8 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
     int length = expr.length() * 1.1; // TODO check if that is needed at all
     QString token(length, QChar());
     token.reserve(length); // needed to not realloc at the resize at the end
-    QChar * out = token.data();
-    QChar * const outStart = token.data();
+    QChar *out = token.data();
+    QChar *const outStart = token.data();
 
     while (state != Finish && data < end) {
         switch (state) {
@@ -686,8 +719,7 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             // terminator character
             else if (data->isNull()) {
                 state = Finish;
-            }
-            else {
+            } else {
                 switch (data->unicode()) {
                 case '"': // a string ?
                     *out++ = *data++;
@@ -712,16 +744,14 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                     else if (isIdentifier(*data)) {
                         *out++ = *data++;
                         state = InIdentifier;
-                    }
-                    else {
+                    } else {
                         // look for operator match
                         if (parseOperator(data, out)) {
                             token.resize(out - outStart);
                             tokens.append(Token(Token::Operator, token, tokenStart - start));
                             token.resize(length);
                             out = outStart;
-                        }
-                        else {
+                        } else {
                             // not matched an operator, add an Unknown token and remember we had a parse error
                             parseError = true;
                             *out++ = *data++;
@@ -775,13 +805,11 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                         out = outStart;
                         state = Start;
                     }
-                }
-                else {
+                } else {
                     token.resize(out - outStart);
                     if (isNamedArea(token)) {
                         tokens.append(Token(Token::Range, token, tokenStart - start));
-                    }
-                    else {
+                    } else {
                         tokens.append(Token(Token::Identifier, token, tokenStart - start));
                     }
                     token.resize(length);
@@ -794,8 +822,7 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             // consume as long as alpha, dollar sign, underscore, or digit
             if (isIdentifier(*data) || data->isDigit()) {
                 *out++ = *data++;
-            }
-            else {
+            } else {
                 *out = QChar();
                 // check if it's a cell ref like A32, not named area
                 if (!Util::isCellReference(token, cellStart - outStart)) {
@@ -807,15 +834,13 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                     token.resize(length);
                     out = outStart;
                     state = Start;
-                }
-                else {
+                } else {
                     // so up to now we've got something like A2 or Sheet2!F4
                     // check for range reference
                     if (*data == QChar(':', 0)) {
                         *out++ = *data++;
                         state = InRange;
-                    }
-                    else {
+                    } else {
                         // we're done with cell reference
                         token.resize(out - outStart);
                         tokens.append(Token(Token::Cell, token, tokenStart - start));
@@ -847,11 +872,9 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                 token.resize(out - outStart);
                 tokens.append(Token(Token::Unknown, '\'' + token + '\'', tokenStart - start));
                 state = Start;
-            }
-            else if (*data != QChar('\'', 0)) {
+            } else if (*data != QChar('\'', 0)) {
                 *out++ = *data++;
-            }
-            else {
+            } else {
                 // eat the aposthrophe itself
                 ++data;
                 // must be followed by '!' to be sheet name
@@ -859,13 +882,11 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                     *out++ = *data++;
                     cellStart = out;
                     state = InCell;
-                }
-                else {
+                } else {
                     token.resize(out - outStart);
                     if (isNamedArea(token)) {
                         tokens.append(Token(Token::Range, token, tokenStart - start));
-                    }
-                    else {
+                    } else {
                         // for compatibility with oocalc (and the openformula spec), don't parse single-quoted
                         // text as an identifier, instead add an Unknown token and remember we had an error
                         parseError = true;
@@ -978,8 +999,7 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             // consume until "
             if (*data != QChar('"', 0)) {
                 *out++ = *data++;
-            }
-            else {
+            } else {
                 *out++ = *data++;
                 // check for escaped ""
                 if (data->isNull() || *data != QChar('"', 0)) {
@@ -988,8 +1008,7 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                     token.resize(length);
                     out = outStart;
                     state = Start;
-                }
-                else {
+                } else {
                     ++data;
                 }
             }
@@ -1013,14 +1032,12 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                     bool error = false;
                     if (*data >= 'A' && *data <= 'Z') {
                         *out++ = *data++;
-                    }
-                    else if (*data >= '0' && *data <= '9'){
+                    } else if (*data >= '0' && *data <= '9') {
                         *out++ = *data++;
                         if (!data->isNull() && (*data == QChar('!', 0) || *data == QChar('?', 0))) {
                             *out++ = *data++;
                         }
-                    }
-                    else {
+                    } else {
                         error = true;
                     }
                     if (error) {
@@ -1030,8 +1047,7 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                         token.resize(length);
                         out = outStart;
                         state = Start;
-                    }
-                    else {
+                    } else {
                         token.resize(out - outStart);
                         tokens.append(Token(Token::Error, token, tokenStart - start));
                         token.resize(length);
@@ -1041,10 +1057,9 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
                 }
                 break;
             default:
-                if ((c >= 'A' && c <= 'Z') || (c >= '0' && c<= '9')) {
+                if ((c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
                     *out++ = *data++;
-                }
-                else {
+                } else {
                     parseError = true;
                     token.resize(out - outStart);
                     tokens.append(Token(Token::Unknown, token, tokenStart - start));
@@ -1061,18 +1076,19 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
     }
 
     // parse error if any text remains
-    if (data+1 < end)  {
+    if (data + 1 < end)  {
         tokens.append(Token(Token::Unknown, expr.mid(tokenStart - start), tokenStart - start));
         parseError = true;
     }
 
-    if (parseError)
+    if (parseError) {
         tokens.setValid(false);
+    }
     return tokens;
 }
 
 // will affect: dirty, valid, codes, constants
-void Formula::compile(const Tokens& tokens) const
+void Formula::compile(const Tokens &tokens) const
 {
     // initialize variables
     d->dirty = false;
@@ -1081,7 +1097,9 @@ void Formula::compile(const Tokens& tokens) const
     d->constants.clear();
 
     // sanity check
-    if (tokens.count() == 0) return;
+    if (tokens.count() == 0) {
+        return;
+    }
 
     TokenStack syntaxStack;
     QStack<int> argStack;
@@ -1093,7 +1111,9 @@ void Formula::compile(const Tokens& tokens) const
         Token::Type tokenType = token.type();
 
         // unknown token is invalid
-        if (tokenType == Token::Unknown) break;
+        if (tokenType == Token::Unknown) {
+            break;
+        }
 
         // are we entering a function ?
         // if stack already has: id (
@@ -1136,12 +1156,13 @@ void Formula::compile(const Tokens& tokens) const
                 (tokenType == Token::Identifier)) {
             syntaxStack.push(token);
             d->constants.append(Value(token.text()));
-            if (tokenType == Token::Cell)
+            if (tokenType == Token::Cell) {
                 d->codes.append(Opcode(Opcode::Cell, d->constants.count() - 1));
-            else if (tokenType == Token::Range)
+            } else if (tokenType == Token::Range) {
                 d->codes.append(Opcode(Opcode::Range, d->constants.count() - 1));
-            else
+            } else {
                 d->codes.append(Opcode(Opcode::Ref, d->constants.count() - 1));
+            }
         }
 
         // special case for percentage
@@ -1158,7 +1179,7 @@ void Formula::compile(const Tokens& tokens) const
         if (tokenType == Token::Operator)
             if (token.asOperator() != Token::Percent) {
                 // repeat until no more rule applies
-                for (; ;) {
+                for (;;) {
                     bool ruleFound = false;
 
                     // rule for function arguments, if token is ; or )
@@ -1361,7 +1382,7 @@ void Formula::compile(const Tokens& tokens) const
                                                 syntaxStack.pop();
                                                 syntaxStack.push(b);
                                                 switch (op.asOperator()) {
-                                                    // simple binary operations
+                                                // simple binary operations
                                                 case Token::Plus:         d->codes.append(Opcode::Add); break;
                                                 case Token::Minus:        d->codes.append(Opcode::Sub); break;
                                                 case Token::Asterisk:     d->codes.append(Opcode::Mul); break;
@@ -1371,24 +1392,24 @@ void Formula::compile(const Tokens& tokens) const
                                                 case Token::Intersect:    d->codes.append(Opcode::Intersect); break;
                                                 case Token::Union:        d->codes.append(Opcode::Union); break;
 
-                                                    // simple value comparisons
+                                                // simple value comparisons
                                                 case Token::Equal:        d->codes.append(Opcode::Equal); break;
                                                 case Token::Less:         d->codes.append(Opcode::Less); break;
                                                 case Token::Greater:      d->codes.append(Opcode::Greater); break;
 
-                                                    // NotEqual is Equal, followed by Not
+                                                // NotEqual is Equal, followed by Not
                                                 case Token::NotEqual:
                                                     d->codes.append(Opcode::Equal);
                                                     d->codes.append(Opcode::Not);
                                                     break;
 
-                                                    // LessOrEqual is Greater, followed by Not
+                                                // LessOrEqual is Greater, followed by Not
                                                 case Token::LessEqual:
                                                     d->codes.append(Opcode::Greater);
                                                     d->codes.append(Opcode::Not);
                                                     break;
 
-                                                    // GreaterOrEqual is Less, followed by Not
+                                                // GreaterOrEqual is Less, followed by Not
                                                 case Token::GreaterEqual:
                                                     d->codes.append(Opcode::Less);
                                                     d->codes.append(Opcode::Not);
@@ -1417,8 +1438,9 @@ void Formula::compile(const Tokens& tokens) const
                                                 syntaxStack.pop();
                                                 syntaxStack.pop();
                                                 syntaxStack.push(x);
-                                                if (op2.asOperator() == Token::Minus)
+                                                if (op2.asOperator() == Token::Minus) {
                                                     d->codes.append(Opcode(Opcode::Neg));
+                                                }
                                             }
                             }
 
@@ -1438,17 +1460,21 @@ void Formula::compile(const Tokens& tokens) const
                                             syntaxStack.pop();
                                             syntaxStack.pop();
                                             syntaxStack.push(x);
-                                            if (op.asOperator() == Token::Minus)
+                                            if (op.asOperator() == Token::Minus) {
                                                 d->codes.append(Opcode(Opcode::Neg));
+                                            }
                                         }
                             }
 
-                    if (!ruleFound) break;
+                    if (!ruleFound) {
+                        break;
+                    }
                 }
 
                 // can't apply rules anymore, push the token
-                if (token.asOperator() != Token::Percent)
+                if (token.asOperator() != Token::Percent) {
                     syntaxStack.push(token);
+                }
             }
     }
 
@@ -1457,8 +1483,9 @@ void Formula::compile(const Tokens& tokens) const
     if (syntaxStack.itemCount() == 2)
         if (syntaxStack.top().isOperator())
             if (syntaxStack.top().asOperator() == Token::InvalidOp)
-                if (!syntaxStack.top(1).isOperator())
+                if (!syntaxStack.top(1).isOperator()) {
                     d->valid = true;
+                }
 
     // bad parsing ? clean-up everything
     if (!d->valid) {
@@ -1467,11 +1494,10 @@ void Formula::compile(const Tokens& tokens) const
     }
 }
 
-bool Formula::isNamedArea(const QString& expr) const
+bool Formula::isNamedArea(const QString &expr) const
 {
     return d->sheet ? d->sheet->map()->namedAreaManager()->contains(expr) : false;
 }
-
 
 // Evaluates the formula, returns the result.
 
@@ -1483,19 +1509,21 @@ Value Formula::eval(CellIndirection cellIndirections) const
 }
 
 // We need to unroll arrays. Do use the same logic to unroll like OpenOffice.org and Excel are using.
-Value Formula::Private::valueOrElement(FuncExtra &fe, const stackEntry& entry) const
+Value Formula::Private::valueOrElement(FuncExtra &fe, const stackEntry &entry) const
 {
-    const Value& v = entry.val;
-    const Region& region = entry.reg;
-    if(v.isArray()) {
-        if(v.count() == 1) // if there is only one item, use that one
+    const Value &v = entry.val;
+    const Region &region = entry.reg;
+    if (v.isArray()) {
+        if (v.count() == 1) { // if there is only one item, use that one
             return v.element(0);
+        }
 
-        if(region.isValid() && entry.regIsNamedOrLabeled) {
+        if (region.isValid() && entry.regIsNamedOrLabeled) {
             const QPoint position = region.firstRange().topLeft();
             const int idx = fe.myrow - position.y(); // do we need to do the same for columns?
-            if(idx >= 0 && idx < int(v.count()))
-                return v.element(idx); // within the range returns the selected element
+            if (idx >= 0 && idx < int(v.count())) {
+                return v.element(idx);    // within the range returns the selected element
+            }
         }
     }
     return v;
@@ -1503,7 +1531,7 @@ Value Formula::Private::valueOrElement(FuncExtra &fe, const stackEntry& entry) c
 
 // On OO.org Calc and MS Excel operations done with +, -, * and / do fail if one of the values is
 // non-numeric. This differs from formulas like SUM which just ignores non numeric values.
-Value numericOrError(const ValueConverter* converter, const Value &v)
+Value numericOrError(const ValueConverter *converter, const Value &v)
 {
     switch (v.type()) {
     case Value::Empty:
@@ -1514,12 +1542,14 @@ Value numericOrError(const ValueConverter* converter, const Value &v)
     case Value::Error:
         return v;
     case Value::String: {
-        if (v.asString().isEmpty())
+        if (v.asString().isEmpty()) {
             return v;
+        }
         bool ok;
         converter->asNumeric(v, &ok);
-        if (ok)
+        if (ok) {
             return v;
+        }
     } break;
     case Value::Array:
     case Value::CellRange:
@@ -1528,7 +1558,7 @@ Value numericOrError(const ValueConverter* converter, const Value &v)
     return Value::errorVALUE();
 }
 
-Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value>& values) const
+Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value> &values) const
 {
     QStack<stackEntry> stack;
     stackEntry entry;
@@ -1537,9 +1567,9 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
     QString c;
     QVector<Value> args;
 
-    const Map* map = d->sheet ? d->sheet->map() : new Map(0 /*document*/);
-    const ValueConverter* converter = map->converter();
-    ValueCalc* calc = map->calc();
+    const Map *map = d->sheet ? d->sheet->map() : new Map(0 /*document*/);
+    const ValueConverter *converter = map->converter();
+    ValueCalc *calc = map->calc();
 
     QSharedPointer<Function> function;
     FuncExtra fe;
@@ -1552,40 +1582,43 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
     if (d->dirty) {
         Tokens tokens = scan(d->expression);
         d->valid = tokens.valid();
-        if (tokens.valid())
+        if (tokens.valid()) {
             compile(tokens);
+        }
     }
 
-    if (!d->valid)
+    if (!d->valid) {
         return Value::errorPARSE();
+    }
 
     for (int pc = 0; pc < d->codes.count(); pc++) {
         Value ret;   // for the function caller
-        Opcode& opcode = d->codes[pc];
+        Opcode &opcode = d->codes[pc];
         index = opcode.index;
         switch (opcode.type) {
-            // no operation
+        // no operation
         case Opcode::Nop:
             break;
 
-            // load a constant, push to stack
+        // load a constant, push to stack
         case Opcode::Load:
             entry.reset();
             entry.val = d->constants[index];
             stack.push(entry);
             break;
 
-            // unary operation
+        // unary operation
         case Opcode::Neg:
             entry.reset();
             entry.val = d->valueOrElement(fe, stack.pop());
-            if (!entry.val.isError()) // do nothing if we got an error
+            if (!entry.val.isError()) { // do nothing if we got an error
                 entry.val = calc->mul(entry.val, -1);
+            }
             stack.push(entry);
             break;
 
-            // binary operation: take two values from stack, do the operation,
-            // push the result to stack
+        // binary operation: take two values from stack, do the operation,
+        // push the result to stack
         case Opcode::Add:
             entry.reset();
             val2 = numericOrError(converter, d->valueOrElement(fe, stack.pop()));
@@ -1632,48 +1665,51 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             stack.push(entry);
             break;
 
-            // string concatenation
+        // string concatenation
         case Opcode::Concat:
             val1 = converter->asString(stack.pop().val);
             val2 = converter->asString(stack.pop().val);
-            if (val1.isError() || val2.isError())
+            if (val1.isError() || val2.isError()) {
                 val1 = Value::errorVALUE();
-            else
+            } else {
                 val1 = Value(val2.asString().append(val1.asString()));
+            }
             entry.reset();
             entry.val = val1;
             stack.push(entry);
             break;
 
-           // array intersection
+        // array intersection
         case Opcode::Intersect: {
             val1 = stack.pop().val;
             val2 = stack.pop().val;
             Region r1(d->constants[index].asString(), map, d->sheet);
-            Region r2(d->constants[index+1].asString(), map, d->sheet);
-            if(!r1.isValid() || !r2.isValid()) {
+            Region r2(d->constants[index + 1].asString(), map, d->sheet);
+            if (!r1.isValid() || !r2.isValid()) {
                 val1 = Value::errorNULL();
             } else {
                 Region r = r1.intersected(r2);
                 QRect rect = r.boundingRect();
                 Cell cell;
-                if(rect.top() == rect.bottom())
+                if (rect.top() == rect.bottom()) {
                     cell = Cell(r.firstSheet(), fe.mycol, rect.top());
-                else if(rect.left() == rect.right())
+                } else if (rect.left() == rect.right()) {
                     cell = Cell(r.firstSheet(), rect.left(), fe.mycol);
-                if(cell.isNull())
+                }
+                if (cell.isNull()) {
                     val1 = Value::errorNULL();
-                else if(cell.isEmpty())
+                } else if (cell.isEmpty()) {
                     val1 = Value::errorNULL();
-                else
+                } else {
                     val1 = cell.value();
+                }
             }
             entry.reset();
             entry.val = val1;
             stack.push(entry);
         } break;
 
-          // region union
+        // region union
         case Opcode::Union: {
             Region r = stack.pop().reg;
             Region r2 = stack.pop().reg;
@@ -1695,64 +1731,68 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             stack.push(entry);
         } break;
 
-            // logical not
+        // logical not
         case Opcode::Not:
             val1 = converter->asBoolean(d->valueOrElement(fe, stack.pop()));
-            if (val1.isError())
+            if (val1.isError()) {
                 val1 = Value::errorVALUE();
-            else
+            } else {
                 val1 = Value(!val1.asBoolean());
+            }
             entry.reset();
             entry.val = val1;
             stack.push(entry);
             break;
 
-            // comparison
+        // comparison
         case Opcode::Equal:
             val1 = d->valueOrElement(fe, stack.pop());
             val2 = d->valueOrElement(fe, stack.pop());
             if (val1.isError())
                 ;
-            else if (val2.isError())
+            else if (val2.isError()) {
                 val1 = val2;
-            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) == 0)
+            } else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) == 0) {
                 val1 = Value(true);
-            else
+            } else {
                 val1 = Value(false);
+            }
             entry.reset();
             entry.val = val1;
             stack.push(entry);
             break;
 
-            // less than
+        // less than
         case Opcode::Less:
             val1 = d->valueOrElement(fe, stack.pop());
             val2 = d->valueOrElement(fe, stack.pop());
             if (val1.isError())
                 ;
-            else if (val2.isError())
+            else if (val2.isError()) {
                 val1 = val2;
-            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) < 0)
+            } else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) < 0) {
                 val1 = Value(true);
-            else
+            } else {
                 val1 = Value(false);
+            }
             entry.reset();
             entry.val = val1;
             stack.push(entry);
             break;
 
-            // greater than
+        // greater than
         case Opcode::Greater: {
             val1 = d->valueOrElement(fe, stack.pop());
             val2 = d->valueOrElement(fe, stack.pop());
             if (val1.isError())
                 ;
-            else if (val2.isError())
+            else if (val2.isError()) {
                 val1 = val2;
-            else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) > 0)
+            } else if (val2.compare(val1, calc->settings()->caseSensitiveComparisons()) > 0) {
                 val1 = Value(true);
-            else
+            } else {
                 val1 = Value(false);
+            }
             entry.reset();
             entry.val = val1;
             stack.push(entry);
@@ -1770,19 +1810,20 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 val1 = Value::errorREF();
             } else if (region.isSingular()) {
                 const QPoint position = region.firstRange().topLeft();
-                if (cellIndirections.isEmpty())
+                if (cellIndirections.isEmpty()) {
                     val1 = Cell(region.firstSheet(), position).value();
-                else {
+                } else {
                     Cell cell(region.firstSheet(), position);
                     cell = cellIndirections.value(cell, cell);
-                    if (values.contains(cell))
+                    if (values.contains(cell)) {
                         val1 = values.value(cell);
-                    else {
+                    } else {
                         values[cell] = Value::errorCIRCLE();
-                        if (cell.isFormula())
+                        if (cell.isFormula()) {
                             val1 = cell.formula().evalRecursive(cellIndirections, values);
-                        else
+                        } else {
                             val1 = cell.value();
+                        }
                         values[cell] = val1;
                     }
                 }
@@ -1830,12 +1871,13 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             stack.push(entry);
             break;
 
-            // calling function
+        // calling function
         case Opcode::Function:
             // sanity check, this should not happen unless opcode is wrong
             // (i.e. there's a bug in the compile() function)
-            if (stack.count() < index)
-                return Value::errorVALUE(); // not enough arguments
+            if (stack.count() < index) {
+                return Value::errorVALUE();    // not enough arguments
+            }
 
             args.clear();
             fe.ranges.clear();
@@ -1856,11 +1898,13 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
 
             // function name as string value
             val1 = converter->asString(stack.pop().val);
-            if (val1.isError())
+            if (val1.isError()) {
                 return val1;
+            }
             function = FunctionRepository::self()->function(val1.asString());
-            if (!function)
-                return Value::errorNAME(); // no such function
+            if (!function) {
+                return Value::errorNAME();    // no such function
+            }
 
             ret = function->exec(args, calc, &fe);
             entry.reset();
@@ -1870,13 +1914,14 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             break;
 
 #ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
-            // creating an array
+        // creating an array
         case Opcode::Array: {
             const int cols = d->constants[index].asInteger();
-            const int rows = d->constants[index+1].asInteger();
+            const int rows = d->constants[index + 1].asInteger();
             // check if enough array elements are available
-            if (stack.count() < cols * rows)
+            if (stack.count() < cols * rows) {
                 return Value::errorVALUE();
+            }
             Value array(Value::Array);
             for (int row = rows - 1; row >= 0; --row) {
                 for (int col = cols - 1; col >= 0; --col) {
@@ -1894,23 +1939,25 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
         }
     }
 
-    if (!d->sheet)
+    if (!d->sheet) {
         delete map;
+    }
 
     // more than one value in stack ? unsuccessful execution...
-    if (stack.count() != 1)
+    if (stack.count() != 1) {
         return Value::errorVALUE();
+    }
 
     return stack.pop().val;
 }
 
-Formula& Formula::operator=(const Formula & other)
+Formula &Formula::operator=(const Formula &other)
 {
     d = other.d;
     return *this;
 }
 
-bool Formula::operator==(const Formula& other) const
+bool Formula::operator==(const Formula &other) const
 {
     return (d->expression == other.d->expression);
 }
@@ -1937,11 +1984,17 @@ QString Formula::dump() const
     for (int c = 0; c < d->constants.count(); c++) {
         QString vtext;
         Value val = d->constants[c];
-        if (val.isString()) vtext = QString("[%1]").arg(val.asString());
-        else if (val.isNumber()) vtext = QString("%1").arg((double) numToDouble(val.asFloat()));
-        else if (val.isBoolean()) vtext = QString("%1").arg(val.asBoolean() ? "True" : "False");
-        else if (val.isError()) vtext = "error";
-        else vtext = "???";
+        if (val.isString()) {
+            vtext = QString("[%1]").arg(val.asString());
+        } else if (val.isNumber()) {
+            vtext = QString("%1").arg((double) numToDouble(val.asFloat()));
+        } else if (val.isBoolean()) {
+            vtext = QString("%1").arg(val.asBoolean() ? "True" : "False");
+        } else if (val.isError()) {
+            vtext = "error";
+        } else {
+            vtext = "???";
+        }
         result += QString("    #%1 = %2\n").arg(c).arg(vtext);
     }
 
@@ -1965,7 +2018,7 @@ QString Formula::dump() const
         case Opcode::Not:       ctext = "Not"; break;
         case Opcode::Less:      ctext = "Less"; break;
         case Opcode::Greater:   ctext = "Greater"; break;
-        case Opcode::Array:     ctext = QString("Array (%1x%2)").arg(d->constants[d->codes[i].index].asInteger()).arg(d->constants[d->codes[i].index+1].asInteger()); break;
+        case Opcode::Array:     ctext = QString("Array (%1x%2)").arg(d->constants[d->codes[i].index].asInteger()).arg(d->constants[d->codes[i].index + 1].asInteger()); break;
         case Opcode::Nop:       ctext = "Nop"; break;
         case Opcode::Cell:      ctext = "Cell"; break;
         case Opcode::Range:     ctext = "Range"; break;
@@ -1977,7 +2030,7 @@ QString Formula::dump() const
     return result;
 }
 
-QTextStream& operator<<(QTextStream& ts, Formula formula)
+QTextStream &operator<<(QTextStream &ts, Formula formula)
 {
     ts << formula.dump();
     return ts;

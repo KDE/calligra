@@ -42,7 +42,6 @@
 #include "KoPathShape.h"
 #include "KoMarkerData.h"
 
-
 class KoShapeStroke::Private
 {
 public:
@@ -65,9 +64,8 @@ void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, cons
     }
 }
 
-
 KoShapeStroke::KoShapeStroke()
-        : d(new Private())
+    : d(new Private())
 {
     d->color = QColor(Qt::black);
     // we are not rendering stroke with zero width anymore
@@ -76,7 +74,7 @@ KoShapeStroke::KoShapeStroke()
 }
 
 KoShapeStroke::KoShapeStroke(const KoShapeStroke &other)
-        : KoShapeStrokeModel(), d(new Private())
+    : KoShapeStrokeModel(), d(new Private())
 {
     d->color = other.d->color;
     d->pen = other.d->pen;
@@ -84,7 +82,7 @@ KoShapeStroke::KoShapeStroke(const KoShapeStroke &other)
 }
 
 KoShapeStroke::KoShapeStroke(qreal lineWidth, const QColor &color)
-        : d(new Private())
+    : d(new Private())
 {
     d->pen.setWidthF(qMax(qreal(0.0), lineWidth));
     d->pen.setJoinStyle(Qt::MiterJoin);
@@ -98,8 +96,9 @@ KoShapeStroke::~KoShapeStroke()
 
 KoShapeStroke &KoShapeStroke::operator = (const KoShapeStroke &rhs)
 {
-    if (this == &rhs)
+    if (this == &rhs) {
         return *this;
+    }
 
     d->pen = rhs.d->pen;
     d->color = rhs.d->color;
@@ -111,10 +110,11 @@ KoShapeStroke &KoShapeStroke::operator = (const KoShapeStroke &rhs)
 void KoShapeStroke::fillStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     QPen pen = d->pen;
-    if (d->brush.gradient())
+    if (d->brush.gradient()) {
         pen.setBrush(d->brush);
-    else
+    } else {
         pen.setColor(d->color);
+    }
     KoOdfGraphicStyles::saveOdfStrokeStyle(style, context.mainStyles(), pen);
 }
 
@@ -154,10 +154,11 @@ void KoShapeStroke::paint(KoShape *shape, QPainter &painter, const KoViewConvert
 
     QPen pen = d->pen;
 
-    if (d->brush.gradient())
+    if (d->brush.gradient()) {
         pen.setBrush(d->brush);
-    else
+    } else {
         pen.setColor(d->color);
+    }
 
     d->paintBorder(shape, painter, pen);
 }
@@ -224,10 +225,11 @@ void KoShapeStroke::setColor(const QColor &color)
 
 void KoShapeStroke::setLineStyle(Qt::PenStyle style, const QVector<qreal> &dashes)
 {
-    if (style < Qt::CustomDashLine)
+    if (style < Qt::CustomDashLine) {
         d->pen.setStyle(style);
-    else
+    } else {
         d->pen.setDashPattern(dashes);
+    }
 }
 
 Qt::PenStyle KoShapeStroke::lineStyle() const

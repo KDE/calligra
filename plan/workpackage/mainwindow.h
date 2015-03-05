@@ -34,34 +34,39 @@
 #include <KoDocumentEntry.h>
 #include <kparts/mainwindow.h>
 
-namespace KParts {
+namespace KParts
+{
 }
-namespace KPlatoWork {
-    class Part;
+namespace KPlatoWork
+{
+class Part;
 }
-namespace KPlato {
-    class Document;
+namespace KPlato
+{
+class Document;
 }
 
 class KoDocumentEntry;
-
 
 /////// class KPlatoWork_MainWindow ////////
 
 class KPLATOWORK_EXPORT KPlatoWork_MainWindow : public KParts::MainWindow
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit KPlatoWork_MainWindow();
     virtual ~KPlatoWork_MainWindow();
 
-    KPlatoWork::Part *rootDocument() const { return m_part; }
-    bool openDocument(const KUrl & url);
+    KPlatoWork::Part *rootDocument() const
+    {
+        return m_part;
+    }
+    bool openDocument(const KUrl &url);
 
     virtual QString configFile() const;
 
-     void editDocument( KPlatoWork::Part *part, const KPlato::Document *doc );
+    void editDocument(KPlatoWork::Part *part, const KPlato::Document *doc);
 
 //     bool isEditing() const { return m_editing; }
 //     bool isModified() const;
@@ -72,8 +77,8 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     virtual void slotFileClose();
-    virtual void setCaption( const QString &text );
-    virtual void setCaption( const QString &text, bool modified );
+    virtual void setCaption(const QString &text);
+    virtual void setCaption(const QString &text, bool modified);
 
 protected Q_SLOTS:
     virtual bool queryClose();
@@ -85,12 +90,11 @@ protected Q_SLOTS:
     virtual void slotFileSave();
 
 protected:
-     virtual bool saveDocument( bool saveas = false, bool silent = false );
+    virtual bool saveDocument(bool saveas = false, bool silent = false);
 
 private:
     KPlatoWork::Part *m_part;
 };
-
 
 #endif // KPLATOWORK_MAINWINDOW_H
 

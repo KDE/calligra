@@ -37,16 +37,16 @@
 namespace KPlato
 {
 
-TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidget *p)
+TaskDialog::TaskDialog(Project &project, Task &task, Accounts &accounts, QWidget *p)
     : KPageDialog(p),
-    m_project( project ),
-    m_node( &task )
+      m_project(project),
+      m_node(&task)
 {
-    setCaption( i18n("Task Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    setFaceType( KPageDialog::Tabbed );
-    showButtonSeparator( true );
+    setCaption(i18n("Task Settings"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    setFaceType(KPageDialog::Tabbed);
+    showButtonSeparator(true);
     KVBox *page;
 
     // Create all the tabs.
@@ -60,7 +60,7 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
 
     page =  new KVBox();
     addPage(page, i18n("&Documents"));
-    m_documentsTab = new DocumentsPanel( task, page );
+    m_documentsTab = new DocumentsPanel(task, page);
 
     page =  new KVBox();
     addPage(page, i18n("&Cost"));
@@ -85,25 +85,26 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
     connect(&project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotTaskRemoved(Node*)));
 }
 
-void TaskDialog::slotCurrentChanged( KPageWidgetItem *current, KPageWidgetItem */*prev*/ )
+void TaskDialog::slotCurrentChanged(KPageWidgetItem *current, KPageWidgetItem */*prev*/)
 {
     //kDebug(planDbg())<<current->widget()<<m_descriptionTab->parent();
     // HACK: KPageDialog grabs focus when a tab is clicked.
     // KRichTextWidget still flashes the caret so the user thinks it has the focus.
     // For now, just give the KRichTextWidget focus.
-    if ( current->widget() == m_descriptionTab->parent() ) {
+    if (current->widget() == m_descriptionTab->parent()) {
         m_descriptionTab->descriptionfield->setFocus();
     }
 }
 
-void TaskDialog::slotTaskRemoved( Node *node )
+void TaskDialog::slotTaskRemoved(Node *node)
 {
-    if ( node == m_node ) {
+    if (node == m_node) {
         reject();
     }
 }
 
-MacroCommand *TaskDialog::buildCommand() {
+MacroCommand *TaskDialog::buildCommand()
+{
     MacroCommand *m = new MacroCommand(kundo2_i18n("Modify task"));
     bool modified = false;
     MacroCommand *cmd = m_generalTab->buildCommand();
@@ -138,14 +139,18 @@ MacroCommand *TaskDialog::buildCommand() {
     return m;
 }
 
-void TaskDialog::slotButtonClicked(int button) {
+void TaskDialog::slotButtonClicked(int button)
+{
     if (button == KDialog::Ok) {
-        if (!m_generalTab->ok())
+        if (!m_generalTab->ok()) {
             return;
-        if (!m_resourcesTab->ok())
+        }
+        if (!m_resourcesTab->ok()) {
             return;
-        if (!m_descriptionTab->ok())
+        }
+        if (!m_descriptionTab->ok()) {
             return;
+        }
         accept();
     } else {
         KDialog::slotButtonClicked(button);
@@ -159,7 +164,7 @@ TaskAddDialog::TaskAddDialog(Project &project, Task &task, Node *currentNode, Ac
     m_currentnode = currentNode;
     // do not know wbs code yet
     m_generalTab->hideWbs();
-    
+
     connect(&project, SIGNAL(nodeRemoved(Node*)), SLOT(slotNodeRemoved(Node*)));
 }
 
@@ -168,20 +173,20 @@ TaskAddDialog::~TaskAddDialog()
     delete m_node; // in case of cancel
 }
 
-void TaskAddDialog::slotNodeRemoved( Node *node )
+void TaskAddDialog::slotNodeRemoved(Node *node)
 {
-    if ( m_currentnode == node ) {
+    if (m_currentnode == node) {
         reject();
     }
 }
 
 MacroCommand *TaskAddDialog::buildCommand()
 {
-    MacroCommand *c = new MacroCommand( kundo2_i18n( "Add task" ) );
-    c->addCommand( new TaskAddCmd( &m_project, m_node, m_currentnode ) );
+    MacroCommand *c = new MacroCommand(kundo2_i18n("Add task"));
+    c->addCommand(new TaskAddCmd(&m_project, m_node, m_currentnode));
     MacroCommand *m = TaskDialog::buildCommand();
-    if ( m ) {
-        c->addCommand( m );
+    if (m) {
+        c->addCommand(m);
     }
     m_node = 0; // don't delete task
     return c;
@@ -203,24 +208,24 @@ SubTaskAddDialog::~SubTaskAddDialog()
     delete m_node; // in case of cancel
 }
 
-void SubTaskAddDialog::slotNodeRemoved( Node *node )
+void SubTaskAddDialog::slotNodeRemoved(Node *node)
 {
-    if ( m_currentnode == node ) {
+    if (m_currentnode == node) {
         reject();
     }
 }
 
 MacroCommand *SubTaskAddDialog::buildCommand()
 {
-    KUndo2MagicString s = kundo2_i18n( "Add sub-task" );
-    if ( m_currentnode == 0 ) {
-        s = kundo2_i18n( "Add task" ); // it will be added to project
+    KUndo2MagicString s = kundo2_i18n("Add sub-task");
+    if (m_currentnode == 0) {
+        s = kundo2_i18n("Add task");   // it will be added to project
     }
-    MacroCommand *c = new MacroCommand( s );
-    c->addCommand( new SubtaskAddCmd( &m_project, m_node, m_currentnode ) );
+    MacroCommand *c = new MacroCommand(s);
+    c->addCommand(new SubtaskAddCmd(&m_project, m_node, m_currentnode));
     MacroCommand *m = TaskDialog::buildCommand();
-    if ( m ) {
-        c->addCommand( m );
+    if (m) {
+        c->addCommand(m);
     }
     m_node = 0; // don't delete task
     return c;

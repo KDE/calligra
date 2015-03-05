@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -38,9 +37,10 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(PresetDockerPluginFactory, registerPlugin<PresetDockerPlugin>();)
-K_EXPORT_PLUGIN(PresetDockerPluginFactory( "krita" ) )
+K_EXPORT_PLUGIN(PresetDockerPluginFactory("krita"))
 
-class PresetDockerDockFactory : public KoDockFactoryBase {
+class PresetDockerDockFactory : public KoDockFactoryBase
+{
 public:
     PresetDockerDockFactory()
     {
@@ -48,7 +48,7 @@ public:
 
     virtual QString id() const
     {
-        return QString( "PresetDocker" );
+        return QString("PresetDocker");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
@@ -56,9 +56,9 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    virtual QDockWidget *createDockWidget()
     {
-        PresetDockerDock * dockWidget = new PresetDockerDock();
+        PresetDockerDock *dockWidget = new PresetDockerDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -70,9 +70,7 @@ public:
     }
 private:
 
-
 };
-
 
 PresetDockerPlugin::PresetDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

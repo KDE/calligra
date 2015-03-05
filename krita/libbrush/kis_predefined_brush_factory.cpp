@@ -22,7 +22,6 @@
 #include "kis_brush_server.h"
 #include "kis_gbr_brush.h"
 
-
 KisPredefinedBrushFactory::KisPredefinedBrushFactory(const QString &brushType)
     : m_id(brushType)
 {
@@ -33,7 +32,7 @@ QString KisPredefinedBrushFactory::id() const
     return m_id;
 }
 
-KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
+KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement &brushDefinition)
 {
     KisBrushResourceServer *rServer = KisBrushServer::instance()->brushServer();
     QString brushFileName = brushDefinition.attribute("filename", "");
@@ -65,7 +64,7 @@ KisBrushSP KisPredefinedBrushFactory::getOrCreateBrush(const QDomElement& brushD
     brush->setScale(scale);
 
     if (m_id == "gbr_brush") {
-        KisGbrBrush *gbrbrush = dynamic_cast<KisGbrBrush*>(brush.data());
+        KisGbrBrush *gbrbrush = dynamic_cast<KisGbrBrush *>(brush.data());
         if (gbrbrush) {
             /**
              * WARNING: see comment in KisGbrBrush::setUseColorAsMask()

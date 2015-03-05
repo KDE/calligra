@@ -32,7 +32,7 @@
 #include <Component.h>
 #include "Command.h"
 
-KisGmicBlacklister::KisGmicBlacklister(const QString& filePath):m_fileName(filePath)
+KisGmicBlacklister::KisGmicBlacklister(const QString &filePath): m_fileName(filePath)
 {
     parseBlacklist();
 }
@@ -47,36 +47,31 @@ bool KisGmicBlacklister::parseBlacklist()
 
     QDomDocument doc("mydocument");
     QFile file(m_fileName);
-    if (!file.open(QIODevice::ReadOnly))
-    {
+    if (!file.open(QIODevice::ReadOnly)) {
         return false;
     }
 
-    if (!doc.setContent(&file))
-    {
+    if (!doc.setContent(&file)) {
         file.close();
         warnPlugins << m_fileName << " has wrong format? Correct XML expected!";
         return false;
     }
 
     QDomElement docElem = doc.documentElement();
-    if (docElem.tagName() != "blacklist")
-    {
+    if (docElem.tagName() != "blacklist") {
         // weird xml
         return false;
     }
 
     // iterate categories
     QDomNodeList nodeList = docElem.elementsByTagName("category");
-    for(int i = 0;i < nodeList.count(); i++)
-    {
+    for (int i = 0; i < nodeList.count(); i++) {
         QDomElement categoryElement = nodeList.at(i).toElement();
         QString categoryName = categoryElement.attribute("name");
 
         // iterate filters
         QDomNodeList filterNodeList = categoryElement.elementsByTagName("filter");
-        for (int j = 0; j < filterNodeList.count(); j++)
-        {
+        for (int j = 0; j < filterNodeList.count(); j++) {
             QDomElement filterElement = filterNodeList.at(j).toElement();
             QString filterName = filterElement.attribute("name");
             m_categoryNameBlacklist[ categoryName ].insert(filterName);
@@ -90,25 +85,22 @@ void KisGmicBlacklister::dump()
 {
 
     QList<QString> keysList = m_categoryNameBlacklist.keys();
-    foreach (const QString& item, keysList)
-    {
+    foreach (const QString &item, keysList) {
         QSet<QString> filters = m_categoryNameBlacklist[item];
         dbgPlugins << item;
-        foreach (const QString filterItem, filters)
-        {
+        foreach (const QString filterItem, filters) {
             dbgPlugins << "\t" << filterItem;
         }
     }
 }
 
-bool KisGmicBlacklister::isBlacklisted(const QString& filterName, const QString& filterCategory)
+bool KisGmicBlacklister::isBlacklisted(const QString &filterName, const QString &filterCategory)
 {
     // transform input
     QString filterNamePlain = toPlainText(filterName);
     QString filterCategoryPlain = toPlainText(filterCategory);
 
-    if (!m_categoryNameBlacklist.contains(filterCategoryPlain))
-    {
+    if (!m_categoryNameBlacklist.contains(filterCategoryPlain)) {
         return false;
     }
 
@@ -116,42 +108,33 @@ bool KisGmicBlacklister::isBlacklisted(const QString& filterName, const QString&
     return filters.contains(filterNamePlain);
 }
 
-QString KisGmicBlacklister::toPlainText(const QString& htmlText)
+QString KisGmicBlacklister::toPlainText(const QString &htmlText)
 {
     QTextDocument doc;
     doc.setHtml(htmlText);
     return doc.toPlainText();
 }
 
-Component* KisGmicBlacklister::findFilter(const Component* rootNode, const QString& filterCategory, const QString& filterName)
+Component *KisGmicBlacklister::findFilter(const Component *rootNode, const QString &filterCategory, const QString &filterName)
 {
-    Component * result = 0;
+    Component *result = 0;
 
     QQueue<const Component *> q;
     q.enqueue(rootNode);
-    while (!q.isEmpty())
-    {
-        Component * c = const_cast<Component *>( q.dequeue() );
-        if (c->childCount() == 0)
-        {
+    while (!q.isEmpty()) {
+        Component *c = const_cast<Component *>(q.dequeue());
+        if (c->childCount() == 0) {
             // check filtername
-            if (toPlainText(c->name()) == filterName)
-            {
+            if (toPlainText(c->name()) == filterName) {
                 // check category
-                if (toPlainText(c->parent()->name()) == filterCategory)
-                {
+                if (toPlainText(c->parent()->name()) == filterCategory) {
                     result = c;
                 }
-            }
-            else
-            {
+            } else {
                 //qDebug() << c->name() << "is different from " << filterName;
             }
-        }
-        else
-        {
-            for (int i=0; i < c->childCount(); i++)
-            {
+        } else {
+            for (int i = 0; i < c->childCount(); i++) {
                 q.enqueue(c->child(i));
             }
         }
@@ -159,18 +142,15 @@ Component* KisGmicBlacklister::findFilter(const Component* rootNode, const QStri
     return result;
 }
 
-QList<Command*> KisGmicBlacklister::findFilterByParamName(const Component* rootNode, const QString& paramName, const QString& paramType)
+QList<Command *> KisGmicBlacklister::findFilterByParamName(const Component *rootNode, const QString &paramName, const QString &paramType)
 {
-    QList<Command*> commands;
+    QList<Command *> commands;
     ComponentIterator it(rootNode);
-    while (it.hasNext())
-    {
-        Component * component = const_cast<Component *>( it.next() );
-        if (component->childCount() == 0)
-        {
-            Command * cmd = static_cast<Command *>(component);
-            if (cmd->hasParameterName(paramName, paramType))
-            {
+    while (it.hasNext()) {
+        Component *component = const_cast<Component *>(it.next());
+        if (component->childCount() == 0) {
+            Command *cmd = static_cast<Command *>(component);
+            if (cmd->hasParameterName(paramName, paramType)) {
                 commands.append(cmd);
             }
         }
@@ -179,7 +159,7 @@ QList<Command*> KisGmicBlacklister::findFilterByParamName(const Component* rootN
     return commands;
 }
 
-QDomDocument KisGmicBlacklister::dumpFiltersToXML(const Component* rootNode)
+QDomDocument KisGmicBlacklister::dumpFiltersToXML(const Component *rootNode)
 {
     ComponentIterator it(rootNode);
 
@@ -188,47 +168,39 @@ QDomDocument KisGmicBlacklister::dumpFiltersToXML(const Component* rootNode)
     QDomElement root = doc.createElement("filters");
     doc.appendChild(root);
 
-    while (it.hasNext())
-    {
-        Component * component = const_cast<Component *>( it.next() );
-        if (component->childCount() == 0)
-        {
+    while (it.hasNext()) {
+        Component *component = const_cast<Component *>(it.next());
+        if (component->childCount() == 0) {
             QStack<QString> pathStack;
-            Component * parent = component->parent();
-            while (parent != 0)
-            {
-                pathStack.push( toPlainText(parent->name()) );
+            Component *parent = component->parent();
+            while (parent != 0) {
+                pathStack.push(toPlainText(parent->name()));
                 parent = parent->parent();
             }
 
             QStringList categoryPath;
-            while (!pathStack.isEmpty())
-            {
+            while (!pathStack.isEmpty()) {
                 categoryPath.push_back(pathStack.pop());
             }
 
             QDomElement parentElem = root;
-            for (int i = 0; i < categoryPath.size(); i++)
-            {
+            for (int i = 0; i < categoryPath.size(); i++) {
                 // add categories if needed
                 bool alreadyExists = false;
                 QString categoryName = toPlainText(categoryPath.at(i));
                 QDomNodeList elems = parentElem.elementsByTagName("category");
-                for (int i = 0; i < elems.size(); i++)
-                {
+                for (int i = 0; i < elems.size(); i++) {
                     QDomElement categoryElem = elems.at(i).toElement();
 
                     QDomAttr attr = categoryElem.attributeNode("name");
-                    if (attr.value() == categoryName)
-                    {
+                    if (attr.value() == categoryName) {
                         parentElem = categoryElem;
                         alreadyExists = true;
                         break;
                     }
                 }
 
-                if (!alreadyExists)
-                {
+                if (!alreadyExists) {
                     QDomElement newCategory = doc.createElement("category");
                     newCategory.setAttribute("name", categoryName);
                     parentElem.appendChild(newCategory);
@@ -237,7 +209,7 @@ QDomDocument KisGmicBlacklister::dumpFiltersToXML(const Component* rootNode)
             }
 
             KisGmicFilterSetting settings;
-            Command * cmd = static_cast<Command *>(component);
+            Command *cmd = static_cast<Command *>(component);
             cmd->writeConfiguration(&settings);
 
             QString filterCommand = settings.gmicCommand();
@@ -261,10 +233,9 @@ QDomDocument KisGmicBlacklister::dumpFiltersToXML(const Component* rootNode)
 }
 
 // *** ComponentIterator *** TODO: move to own file or to Component
-ComponentIterator::ComponentIterator(const Component* c)
+ComponentIterator::ComponentIterator(const Component *c)
 {
-    if (c)
-    {
+    if (c) {
         m_queue.enqueue(c);
     }
 }
@@ -274,13 +245,11 @@ bool ComponentIterator::hasNext() const
     return !m_queue.isEmpty();
 }
 
-const Component* ComponentIterator::next()
+const Component *ComponentIterator::next()
 {
-    if (hasNext())
-    {
-        const Component* c = m_queue.dequeue();
-        for (int i=0; i < c->childCount(); i++)
-        {
+    if (hasNext()) {
+        const Component *c = m_queue.dequeue();
+        for (int i = 0; i < c->childCount(); i++) {
             m_queue.enqueue(c->child(i));
         }
         return c;

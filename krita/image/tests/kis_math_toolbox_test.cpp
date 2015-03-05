@@ -25,14 +25,13 @@
 
 void KisMathToolboxTest::testCreation()
 {
-    KisMathToolboxRegistry * reg = KisMathToolboxRegistry::instance();
+    KisMathToolboxRegistry *reg = KisMathToolboxRegistry::instance();
     QVERIFY(reg);
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisMathToolbox * toolbox = reg->get(cs->mathToolboxId().id());
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisMathToolbox *toolbox = reg->get(cs->mathToolboxId().id());
     QVERIFY(toolbox);
 }
-
 
 QTEST_KDEMAIN(KisMathToolboxTest, GUI)
 #include "kis_math_toolbox_test.moc"

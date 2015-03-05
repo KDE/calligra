@@ -58,9 +58,8 @@
 #include <kis_config.h>
 #include "kis_resources_snapshot.h"
 
-
-KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
-        : KisToolPaint(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6))
+KisToolGradient::KisToolGradient(KoCanvasBase *canvas)
+    : KisToolPaint(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6))
 {
     setObjectName("tool_gradient");
 
@@ -77,7 +76,7 @@ KisToolGradient::~KisToolGradient()
 {
 }
 
-void KisToolGradient::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolGradient::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);
     m_configGroup = KGlobal::config()->group(toolId());
@@ -86,10 +85,10 @@ void KisToolGradient::activate(ToolActivation toolActivation, const QSet<KoShape
 void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (mode() == KisTool::PAINT_MODE && m_startPos != m_endPos) {
-            qreal sx, sy;
-            converter.zoom(&sx, &sy);
-            painter.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
-            paintLine(painter);
+        qreal sx, sy;
+        converter.zoom(&sx, &sy);
+        painter.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
+        paintLine(painter);
     }
 }
 
@@ -138,8 +137,9 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
-    if (!currentNode() || currentNode()->systemLocked())
+    if (!currentNode() || currentNode()->systemLocked()) {
         return;
+    }
 
     if (m_startPos == m_endPos) {
         return;
@@ -165,8 +165,8 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
 
         painter.beginTransaction();
 
-        KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
-        KoProgressUpdater * updater = canvas->viewManager()->createProgressUpdater(KoProgressUpdater::Unthreaded);
+        KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
+        KoProgressUpdater *updater = canvas->viewManager()->createProgressUpdater(KoProgressUpdater::Unthreaded);
 
         updater->start(100, i18nc("@info:progress", "Gradient..."));
         painter.setProgress(updater->startSubtask());
@@ -200,7 +200,7 @@ QPointF KisToolGradient::straightLine(QPointF point)
     return result;
 }
 
-void KisToolGradient::paintLine(QPainter& gc)
+void KisToolGradient::paintLine(QPainter &gc)
 {
     if (canvas()) {
         QPen old = gc.pen();
@@ -212,12 +212,11 @@ void KisToolGradient::paintLine(QPainter& gc)
     }
 }
 
-QWidget* KisToolGradient::createOptionWidget()
+QWidget *KisToolGradient::createOptionWidget()
 {
     QWidget *widget = KisToolPaint::createOptionWidget();
     Q_CHECK_PTR(widget);
     widget->setObjectName(toolId() + " option widget");
-
 
     // Make sure to create the connections last after everything is set up. The initialized values
     // won't be loaded from the configuration file if you add the widget before the connection
@@ -243,7 +242,6 @@ QWidget* KisToolGradient::createOptionWidget()
     addOptionWidgetOption(m_cmbRepeat, m_lbRepeat);
     connect(m_cmbRepeat, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetRepeat(int)));
 
-
     m_lbAntiAliasThreshold = new QLabel(i18n("Anti-alias threshold:"), widget);
     m_slAntiAliasThreshold = new KisDoubleSliderSpinBox(widget);
     m_slAntiAliasThreshold->setObjectName("threshold_slider");
@@ -256,9 +254,7 @@ QWidget* KisToolGradient::createOptionWidget()
     connect(m_ckReverse, SIGNAL(toggled(bool)), this, SLOT(slotSetReverse(bool)));
     addOptionWidgetOption(m_ckReverse);
 
-
     widget->setFixedHeight(widget->sizeHint().height());
-
 
     // load configuration settings into widget (updating UI will update internal variables from signals/slots)
     m_ckReverse->setChecked((bool)m_configGroup.readEntry("reverse", false));

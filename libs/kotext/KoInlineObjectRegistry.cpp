@@ -55,13 +55,13 @@ void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
                 factories.insert(QPair<QString, QString>(nameSpace, elementName), factory);
 
                 kDebug(32500) << "Inserting variable factory" << factory->id() << " for"
-                    << nameSpace << ":" << elementName;
+                              << nameSpace << ":" << elementName;
             }
         }
     }
 }
 
-KoInlineObjectRegistry* KoInlineObjectRegistry::instance()
+KoInlineObjectRegistry *KoInlineObjectRegistry::instance()
 {
     K_GLOBAL_STATIC(KoInlineObjectRegistry, s_instance)
     if (!s_instance.exists()) {
@@ -70,9 +70,9 @@ KoInlineObjectRegistry* KoInlineObjectRegistry::instance()
     return s_instance;
 }
 
-QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const
+QList<QAction *> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase *host) const
 {
-    QList<QAction*> answer;
+    QList<QAction *> answer;
     foreach (const QString &key, keys()) {
         KoInlineObjectFactoryBase *factory = value(key);
         if (factory->type() == KoInlineObjectFactoryBase::TextVariable) {
@@ -80,9 +80,9 @@ QList<QAction*> KoInlineObjectRegistry::createInsertVariableActions(KoCanvasBase
                 answer.append(new InsertVariableAction(host, factory, templ));
             }
 #ifndef NDEBUG
-           if (factory->templates().isEmpty()) {
+            if (factory->templates().isEmpty()) {
                 kWarning(32500) << "Variable factory" << factory->id() << "has no templates, skipping.";
-           }
+            }
 #endif
         }
     }
@@ -114,6 +114,6 @@ KoInlineObjectRegistry::~KoInlineObjectRegistry()
 }
 
 KoInlineObjectRegistry::KoInlineObjectRegistry()
-        : d(new Private())
+    : d(new Private())
 {
 }

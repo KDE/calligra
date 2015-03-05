@@ -25,7 +25,6 @@
 #include <kcomponentdata.h>
 #include <kglobalsettings.h>
 
-
 ////////////////////////////////////
 // class KisDetailsPane
 ///////////////////////////////////
@@ -34,21 +33,23 @@ class KisDetailsPanePrivate
 {
 public:
     KisDetailsPanePrivate(const KComponentData &componentData)
-            : m_componentData(componentData) {
+        : m_componentData(componentData)
+    {
         m_model = new QStandardItemModel;
     }
-    ~KisDetailsPanePrivate() {
+    ~KisDetailsPanePrivate()
+    {
         delete m_model;
     }
 
     KComponentData m_componentData;
-    QStandardItemModel* m_model;
+    QStandardItemModel *m_model;
 };
 
-KisDetailsPane::KisDetailsPane(QWidget* parent, const KComponentData &_componentData, const QString& header)
-        : QWidget(parent),
-        Ui_KisDetailsPaneBase(),
-        d(new KisDetailsPanePrivate(_componentData))
+KisDetailsPane::KisDetailsPane(QWidget *parent, const KComponentData &_componentData, const QString &header)
+    : QWidget(parent),
+      Ui_KisDetailsPaneBase(),
+      d(new KisDetailsPanePrivate(_componentData))
 {
     d->m_model->setHorizontalHeaderItem(0, new QStandardItem(header));
 
@@ -64,10 +65,10 @@ KisDetailsPane::KisDetailsPane(QWidget* parent, const KComponentData &_component
 
     connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
 
-    connect(m_documentList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(selectionChanged(const QModelIndex&)));
-    connect(m_documentList, SIGNAL(doubleClicked(const QModelIndex&)),
-            this, SLOT(openFile(const QModelIndex&)));
+    connect(m_documentList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(selectionChanged(QModelIndex)));
+    connect(m_documentList, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(openFile(QModelIndex)));
     connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 }
 
@@ -81,7 +82,7 @@ KComponentData KisDetailsPane::componentData()
     return d->m_componentData;
 }
 
-bool KisDetailsPane::eventFilter(QObject* watched, QEvent* e)
+bool KisDetailsPane::eventFilter(QObject *watched, QEvent *e)
 {
     if (watched == m_previewLabel) {
         if (e->type() == QEvent::MouseButtonDblClick) {
@@ -95,7 +96,7 @@ bool KisDetailsPane::eventFilter(QObject* watched, QEvent* e)
         }
 
         if ((e->type() == QEvent::KeyPress)) {
-            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e);
 
             if (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
                 openFile();
@@ -106,10 +107,11 @@ bool KisDetailsPane::eventFilter(QObject* watched, QEvent* e)
     return false;
 }
 
-void KisDetailsPane::resizeSplitter(KisDetailsPane* sender, const QList<int>& sizes)
+void KisDetailsPane::resizeSplitter(KisDetailsPane *sender, const QList<int> &sizes)
 {
-    if (sender == this)
+    if (sender == this) {
         return;
+    }
 
     m_splitter->setSizes(sizes);
 }
@@ -128,7 +130,7 @@ void KisDetailsPane::changePalette()
     m_detailsLabel->setPalette(p);
 }
 
-QStandardItemModel* KisDetailsPane::model() const
+QStandardItemModel *KisDetailsPane::model() const
 {
     return d->m_model;
 }

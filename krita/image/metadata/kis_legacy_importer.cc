@@ -25,7 +25,6 @@ struct ExifToKMD {
     QString name;
 };
 
-
 static const ExifToKMD mappings[] = {
     { "Exif.Image.ImageWidth", "http://ns.adobe.com/tiff/1.0/", "ImageWidth" },
     { "Exif.Image.ImageLength", "http://ns.adobe.com/tiff/1.0/", "ImageLength" },

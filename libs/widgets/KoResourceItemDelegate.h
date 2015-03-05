@@ -30,9 +30,9 @@ public:
     explicit KoResourceItemDelegate(QObject *parent = 0);
     virtual ~KoResourceItemDelegate() {}
     /// reimplemented
-    virtual void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const;
+    virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
     /// reimplemented
-    QSize sizeHint ( const QStyleOptionViewItem &, const QModelIndex & ) const;
+    QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 private:
     KoCheckerBoardPainter m_checkerPainter;
 };

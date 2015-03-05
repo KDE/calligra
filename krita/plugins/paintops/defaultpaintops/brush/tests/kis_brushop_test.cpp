@@ -32,14 +32,16 @@ class TestBrushOp : public TestUtil::QImageBasedTest
 {
 public:
     TestBrushOp(const QString &presetFileName, const QString &prefix = "simple")
-        : QImageBasedTest("brushop") {
+        : QImageBasedTest("brushop")
+    {
         m_presetFileName = presetFileName;
         m_prefix = prefix;
     }
 
     virtual ~TestBrushOp() {}
 
-    void test() {
+    void test()
+    {
         test(false, false,  0.0);
         test(false, false, 10.0);
         test(false, false, 20.0);
@@ -57,20 +59,23 @@ public:
         test(true, true, 20.0);
     }
 
-    void test(bool mirrorX, bool mirrorY, qreal rotation) {
+    void test(bool mirrorX, bool mirrorY, qreal rotation)
+    {
         test(mirrorX, mirrorY, rotation, false, false);
         test(mirrorX, mirrorY, rotation, true,  false);
         test(mirrorX, mirrorY, rotation, false, true);
         test(mirrorX, mirrorY, rotation, true,  true);
     }
 
-    void test(bool mirrorX, bool mirrorY, qreal rotation, bool mirrorDabX, bool mirrorDabY) {
+    void test(bool mirrorX, bool mirrorY, qreal rotation, bool mirrorDabX, bool mirrorDabY)
+    {
         test(mirrorX, mirrorY, rotation, mirrorDabX, mirrorDabY, 0.0);
         test(mirrorX, mirrorY, rotation, mirrorDabX, mirrorDabY, 360.0 - 10.0);
         test(mirrorX, mirrorY, rotation, mirrorDabX, mirrorDabY, 360.0 - 20.0);
     }
 
-    void test(bool mirrorX, bool mirrorY, qreal rotation, bool mirrorDabX, bool mirrorDabY, qreal dabRotation) {
+    void test(bool mirrorX, bool mirrorY, qreal rotation, bool mirrorDabX, bool mirrorDabY, qreal dabRotation)
+    {
 
         KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
         KisImageSP image = createTrivialImage(undoStore);
@@ -90,7 +95,6 @@ public:
 
         preset->settings()->setCanvasRotation(rotation);
         preset->settings()->setCanvasMirroring(mirrorY, mirrorX);
-
 
         if (mirrorDabX || mirrorDabY) {
             KisPaintOpSettingsSP settings = preset->settings()->clone();
@@ -125,7 +129,6 @@ public:
             preset->setSettings(settings);
         }
 
-
         QString testName =
             QString("%7_cmY_%1_cmX_%2_cR_%3_dmX_%4_dmY_%5_dR_%6")
             .arg(mirrorY)
@@ -149,7 +152,8 @@ public:
         checkOneLayer(image, paint1, testName);
     }
 
-    virtual void doPaint(KisPainter &gc) {
+    virtual void doPaint(KisPainter &gc)
+    {
         KisPaintInformation pi(QPointF(100, 100), 1.0);
 
         KisDistanceInformation dist;
@@ -164,10 +168,12 @@ class TestBrushOpLines : public TestBrushOp
 {
 public:
     TestBrushOpLines(const QString &presetFileName)
-        : TestBrushOp(presetFileName) {
+        : TestBrushOp(presetFileName)
+    {
     }
 
-    void doPaint(KisPainter &gc) {
+    void doPaint(KisPainter &gc)
+    {
 
         QVector<KisPaintInformation> vector;
 
@@ -187,10 +193,12 @@ class TestBrushOpPressureLines : public TestBrushOp
 {
 public:
     TestBrushOpPressureLines(const QString &presetFileName, const QString &prefix)
-        : TestBrushOp(presetFileName, prefix) {
+        : TestBrushOp(presetFileName, prefix)
+    {
     }
 
-    void doPaint(KisPainter &gc) {
+    void doPaint(KisPainter &gc)
+    {
 
         QVector<KisPaintInformation> vector;
 
@@ -207,7 +215,6 @@ public:
         }
     }
 };
-
 
 void KisBrushOpTest::testRotationMirroring()
 {

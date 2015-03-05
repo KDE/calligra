@@ -34,43 +34,47 @@ K_EXPORT_PLUGIN(ColorSelectorNgPluginFactory("krita"))
 class ColorSelectorNgDockFactory : public KoDockFactoryBase
 {
 public:
-    ColorSelectorNgDockFactory() {
+    ColorSelectorNgDockFactory()
+    {
     }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return QString("ColorSelectorNg");
     }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget() {
-        KisColorSelectorNgDock * dockWidget = new KisColorSelectorNgDock();
+    virtual QDockWidget *createDockWidget()
+    {
+        KisColorSelectorNgDock *dockWidget = new KisColorSelectorNgDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const
+    {
         return DockRight;
     }
 };
 
-
 ColorSelectorNgPlugin::ColorSelectorNgPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KoDockRegistry::instance()->add(new ColorSelectorNgDockFactory());
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
 
-    KisColorSelectorSettingsFactory* settingsFactory = new KisColorSelectorSettingsFactory();
+    KisColorSelectorSettingsFactory *settingsFactory = new KisColorSelectorSettingsFactory();
 
     //load and save preferences
     //if something in kritarc is missing, then the default from this load function will be used and saved back to kconfig.
     //this way, cfg.readEntry() in any part won't be able to set its own default
-    KisPreferenceSet* settings = settingsFactory->createPreferenceSet();
+    KisPreferenceSet *settings = settingsFactory->createPreferenceSet();
     Q_ASSERT(settings);
     settings->loadPreferences();
     settings->savePreferences();

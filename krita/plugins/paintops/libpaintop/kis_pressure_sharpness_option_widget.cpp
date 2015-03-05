@@ -34,23 +34,23 @@
 KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
     KisCurveOptionWidget(new KisPressureSharpnessOption())
 {
-    QLabel* thresholdLbl = new QLabel(i18n("Threshold:"));
+    QLabel *thresholdLbl = new QLabel(i18n("Threshold:"));
 
     m_threshold = new KisSliderSpinBox();
     m_threshold->setRange(1, 100);
     m_threshold->setValue(40);
     m_threshold->setSingleStep(1);
 
-    QHBoxLayout* hl = new QHBoxLayout;
+    QHBoxLayout *hl = new QHBoxLayout;
     hl->addWidget(thresholdLbl);
     hl->addWidget(m_threshold, 1);
 
-    QVBoxLayout* vl = new QVBoxLayout;
+    QVBoxLayout *vl = new QVBoxLayout;
     vl->setMargin(0);
     vl->addLayout(hl);
     vl->addWidget(KisCurveOptionWidget::curveWidget());
 
-    QWidget* w = new QWidget;
+    QWidget *w = new QWidget;
     w->setLayout(vl);
 
     KisCurveOptionWidget::setConfigurationPage(w);
@@ -61,6 +61,6 @@ KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
 
 void KisPressureSharpnessOptionWidget::setThreshold(int threshold)
 {
-    static_cast<KisPressureSharpnessOption*>(KisCurveOptionWidget::curveOption())->setThreshold(threshold);
+    static_cast<KisPressureSharpnessOption *>(KisCurveOptionWidget::curveOption())->setThreshold(threshold);
     emitSettingChanged();
 }

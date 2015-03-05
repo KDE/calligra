@@ -44,16 +44,16 @@ using namespace Calligra::Sheets;
 class ExternalEditor::Private
 {
 public:
-    CellToolBase* cellTool;
-    FormulaEditorHighlighter* highlighter;
+    CellToolBase *cellTool;
+    FormulaEditorHighlighter *highlighter;
     bool isArray;
-    KAction* applyAction;
-    KAction* cancelAction;
+    KAction *applyAction;
+    KAction *cancelAction;
 };
 
 ExternalEditor::ExternalEditor(QWidget *parent)
-        : KTextEdit(parent)
-        , d(new Private)
+    : KTextEdit(parent)
+    , d(new Private)
 {
     d->cellTool = 0;
     d->highlighter = 0;
@@ -92,9 +92,11 @@ QSize ExternalEditor::sizeHint() const
     //return KTextEdit::sizeHint(); // document()->size().toSize();
 }
 
-void ExternalEditor::setCellTool(CellToolBase* cellTool)
+void ExternalEditor::setCellTool(CellToolBase *cellTool)
 {
-    if (d->highlighter) delete d->highlighter;
+    if (d->highlighter) {
+        delete d->highlighter;
+    }
     d->cellTool = cellTool;
     d->highlighter = new FormulaEditorHighlighter(this, cellTool->selection());
 }
@@ -153,7 +155,7 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
     KTextEdit::keyPressEvent(event);
 }
 
-void ExternalEditor::focusInEvent(QFocusEvent* event)
+void ExternalEditor::focusInEvent(QFocusEvent *event)
 {
     Q_ASSERT(d->cellTool);
     // If the focussing is user induced.
@@ -163,12 +165,13 @@ void ExternalEditor::focusInEvent(QFocusEvent* event)
     }
     // when the external editor gets focus, create also the internal editor
     // this in turn means that ranges will be instantly highlighted right
-    if (!d->cellTool->editor())
+    if (!d->cellTool->editor()) {
         d->cellTool->createEditor(false /* keep content */, false /* no focus */);
+    }
     KTextEdit::focusInEvent(event);
 }
 
-void ExternalEditor::focusOutEvent(QFocusEvent* event)
+void ExternalEditor::focusOutEvent(QFocusEvent *event)
 {
     Q_ASSERT(d->cellTool);
     KTextEdit::focusOutEvent(event);
@@ -176,7 +179,9 @@ void ExternalEditor::focusOutEvent(QFocusEvent* event)
 
 void ExternalEditor::slotTextChanged()
 {
-    if (!hasFocus()) return;  // only report change if we have focus
+    if (!hasFocus()) {
+        return;    // only report change if we have focus
+    }
     emit textChanged(toPlainText());
     // Update the cursor position again, because this slot is invoked after
     // slotCursorPositionChanged().
@@ -197,12 +202,12 @@ void ExternalEditor::slotCursorPositionChanged()
     }
 }
 
-QAction* ExternalEditor::applyAction() const
+QAction *ExternalEditor::applyAction() const
 {
     return d->applyAction;
 }
 
-QAction* ExternalEditor::cancelAction() const
+QAction *ExternalEditor::cancelAction() const
 {
     return d->cancelAction;
 }

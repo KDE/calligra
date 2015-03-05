@@ -65,7 +65,7 @@ QString CAuActorRdf::name() const
     return i18n("Author's actor");
 }
 
-QWidget* CAuActorRdf::createEditor(QWidget *parent)
+QWidget *CAuActorRdf::createEditor(QWidget *parent)
 {
     QWidget *ret = new QWidget(parent);
     m_editWidgetUI.setupUi(ret);
@@ -125,7 +125,7 @@ void CAuActorRdf::updateFromEditorData()
 
     setIntProp("type", m_editWidgetUI.typeComboBox->currentIndex());
     setIntProp("role", m_editWidgetUI.roleComboBox->currentIndex());
-    setIntProp("age" , m_editWidgetUI.ageSpinBox->value());
+    setIntProp("age", m_editWidgetUI.ageSpinBox->value());
 
     finishUpdateFromEditorData();
 }

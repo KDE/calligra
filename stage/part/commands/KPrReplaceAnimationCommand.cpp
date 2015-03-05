@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include "KPrReplaceAnimationCommand.h"
 #include "KPrDocument.h"
 
@@ -35,8 +34,7 @@ KPrReplaceAnimationCommand::~KPrReplaceAnimationCommand()
 {
     if (m_deleteAnimation == DeleteOld) {
         delete m_oldAnimation;
-    }
-    else {
+    } else {
         delete m_newAnimation;
     }
 }

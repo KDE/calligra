@@ -48,38 +48,36 @@
 #include "kis_config_notifier.h"
 #include <QTimer>
 
-
-struct KisNodeModel::Private
-{
+struct KisNodeModel::Private {
 public:
     Private() : shapeController(0),
-                showRootLayer(false),
-                showGlobalSelection(false),
-                indexConverter(0),
-                dummiesFacade(0),
-                needFinishRemoveRows(false),
-                needFinishInsertRows(false),
-                parentOfRemovedNode(0)
+        showRootLayer(false),
+        showGlobalSelection(false),
+        indexConverter(0),
+        dummiesFacade(0),
+        needFinishRemoveRows(false),
+        needFinishInsertRows(false),
+        parentOfRemovedNode(0)
     {}
 
     KisImageWSP image;
     KisShapeController *shapeController;
     bool showRootLayer;
     bool showGlobalSelection;
-    QList<KisNodeDummy*> updateQueue;
-    QTimer* updateTimer;
+    QList<KisNodeDummy *> updateQueue;
+    QTimer *updateTimer;
 
     KisModelIndexConverterBase *indexConverter;
     KisDummiesFacadeBase *dummiesFacade;
     bool needFinishRemoveRows;
     bool needFinishInsertRows;
 
-    KisNodeDummy* parentOfRemovedNode;
+    KisNodeDummy *parentOfRemovedNode;
 };
 
-KisNodeModel::KisNodeModel(QObject * parent)
-        : KisDocumentSectionModel(parent)
-        , m_d(new Private)
+KisNodeModel::KisNodeModel(QObject *parent)
+    : KisDocumentSectionModel(parent)
+    , m_d(new Private)
 {
     updateSettings();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateSettings()));
@@ -105,15 +103,18 @@ KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index) const
 QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
 {
     KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(node);
-    if(dummy)
+    if (dummy) {
         return m_d->indexConverter->indexFromDummy(dummy);
+    }
     return QModelIndex();
 }
 
 bool KisNodeModel::belongsToIsolatedGroup(KisNodeSP node) const
 {
     KisNodeSP isolatedRoot = m_d->image->isolatedModeRoot();
-    if (!isolatedRoot) return true;
+    if (!isolatedRoot) {
+        return true;
+    }
 
     KisNodeDummy *isolatedRootDummy =
         m_d->dummiesFacade->dummyForNode(isolatedRoot);
@@ -135,12 +136,11 @@ void KisNodeModel::resetIndexConverter()
     delete m_d->indexConverter;
     m_d->indexConverter = 0;
 
-    if(m_d->dummiesFacade) {
-        if(m_d->showRootLayer) {
+    if (m_d->dummiesFacade) {
+        if (m_d->showRootLayer) {
             m_d->indexConverter =
                 new KisModelIndexConverterShowAll(m_d->dummiesFacade, this);
-        }
-        else {
+        } else {
             m_d->indexConverter =
                 new KisModelIndexConverter(m_d->dummiesFacade, this, m_d->showGlobalSelection);
         }
@@ -188,7 +188,9 @@ void KisNodeModel::updateSettings()
 
 void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
 {
-    if(!m_d->dummiesFacade) return;
+    if (!m_d->dummiesFacade) {
+        return;
+    }
 
     // Need to check here as the node might already be removed, but there might
     // still be some signals arriving from another thread
@@ -202,8 +204,8 @@ void KisNodeModel::connectDummy(KisNodeDummy *dummy, bool needConnect)
 {
     KisNodeSP node = dummy->node();
     KisNodeProgressProxy *progressProxy = node->nodeProgressProxy();
-    if(progressProxy) {
-        if(needConnect) {
+    if (progressProxy) {
+        if (needConnect) {
             connect(progressProxy, SIGNAL(percentageChanged(int,KisNodeSP)),
                     SLOT(progressPercentageChanged(int,KisNodeSP)));
         } else {
@@ -217,7 +219,7 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
     connectDummy(dummy, needConnect);
 
     dummy = dummy->firstChild();
-    while(dummy) {
+    while (dummy) {
         connectDummies(dummy, needConnect);
         dummy = dummy->nextSibling();
     }
@@ -228,7 +230,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
 
     m_d->shapeController = shapeController;
 
-    if(m_d->dummiesFacade) {
+    if (m_d->dummiesFacade) {
         m_d->image->disconnect(this);
         m_d->dummiesFacade->disconnect(this);
         connectDummies(m_d->dummiesFacade->rootDummy(), false);
@@ -238,9 +240,9 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
     m_d->dummiesFacade = dummiesFacade;
     resetIndexConverter();
 
-    if(m_d->dummiesFacade) {
+    if (m_d->dummiesFacade) {
         KisNodeDummy *rootDummy = m_d->dummiesFacade->rootDummy();
-        if(rootDummy) {
+        if (rootDummy) {
             connectDummies(rootDummy, true);
         }
 
@@ -269,10 +271,10 @@ void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const Q
 
     bool willAdd =
         m_d->indexConverter->indexFromAddedDummy(parent, index,
-                                                 metaObjectType,
-                                                 parentIndex, row);
+                metaObjectType,
+                parentIndex, row);
 
-    if(willAdd) {
+    if (willAdd) {
         beginInsertRows(parentIndex, row, row);
         m_d->needFinishInsertRows = true;
     }
@@ -280,7 +282,7 @@ void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const Q
 
 void KisNodeModel::slotEndInsertDummy(KisNodeDummy *dummy)
 {
-    if(m_d->needFinishInsertRows) {
+    if (m_d->needFinishInsertRows) {
         connectDummy(dummy, true);
         endInsertRows();
         m_d->needFinishInsertRows = false;
@@ -289,7 +291,9 @@ void KisNodeModel::slotEndInsertDummy(KisNodeDummy *dummy)
 
 void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
 {
-    if (!dummy) return;
+    if (!dummy) {
+        return;
+    }
 
     // FIXME: is it really what we want?
     m_d->updateTimer->stop();
@@ -313,7 +317,7 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
 
 void KisNodeModel::slotEndRemoveDummy()
 {
-    if(m_d->needFinishRemoveRows) {
+    if (m_d->needFinishRemoveRows) {
         endRemoveRows();
         m_d->needFinishRemoveRows = false;
     }
@@ -329,7 +333,7 @@ void KisNodeModel::slotDummyChanged(KisNodeDummy *dummy)
 
 void KisNodeModel::processUpdateQueue()
 {
-    foreach(KisNodeDummy *dummy, m_d->updateQueue) {
+    foreach (KisNodeDummy *dummy, m_d->updateQueue) {
         QModelIndex index = m_d->indexConverter->indexFromDummy(dummy);
         emit dataChanged(index, index);
     }
@@ -338,12 +342,14 @@ void KisNodeModel::processUpdateQueue()
 
 QModelIndex KisNodeModel::index(int row, int col, const QModelIndex &parent) const
 {
-    if(!m_d->dummiesFacade || !hasIndex(row, col, parent)) return QModelIndex();
+    if (!m_d->dummiesFacade || !hasIndex(row, col, parent)) {
+        return QModelIndex();
+    }
 
     QModelIndex itemIndex;
 
     KisNodeDummy *dummy = m_d->indexConverter->dummyFromRow(row, parent);
-    if(dummy) {
+    if (dummy) {
         itemIndex = m_d->indexConverter->indexFromDummy(dummy);
     }
 
@@ -352,25 +358,29 @@ QModelIndex KisNodeModel::index(int row, int col, const QModelIndex &parent) con
 
 int KisNodeModel::rowCount(const QModelIndex &parent) const
 {
-    if(!m_d->dummiesFacade) return 0;
+    if (!m_d->dummiesFacade) {
+        return 0;
+    }
     return m_d->indexConverter->rowCount(parent);
 }
 
-int KisNodeModel::columnCount(const QModelIndex&) const
+int KisNodeModel::columnCount(const QModelIndex &) const
 {
     return 1;
 }
 
 QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 {
-    if(!m_d->dummiesFacade || !index.isValid()) return QModelIndex();
+    if (!m_d->dummiesFacade || !index.isValid()) {
+        return QModelIndex();
+    }
 
     KisNodeDummy *dummy = m_d->indexConverter->dummyFromIndex(index);
     KisNodeDummy *parentDummy = dummy->parent();
 
     QModelIndex parentIndex;
 
-    if(parentDummy) {
+    if (parentDummy) {
         parentIndex = m_d->indexConverter->indexFromDummy(parentDummy);
     }
 
@@ -379,7 +389,9 @@ QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 
 QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 {
-    if (!m_d->dummiesFacade || !index.isValid() || !m_d->image.isValid()) return QVariant();
+    if (!m_d->dummiesFacade || !index.isValid() || !m_d->image.isValid()) {
+        return QVariant();
+    }
 
     KisNodeSP node = nodeFromIndex(index);
 
@@ -397,10 +409,11 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         return proxy ? proxy->percentage() : -1;
     }
     default:
-        if (role >= int(BeginThumbnailRole) && belongsToIsolatedGroup(node))
+        if (role >= int(BeginThumbnailRole) && belongsToIsolatedGroup(node)) {
             return node->createThumbnail(role - int(BeginThumbnailRole), role - int(BeginThumbnailRole));
-        else
+        } else {
             return QVariant();
+        }
     }
 
     return QVariant();
@@ -408,7 +421,9 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 {
-    if(!m_d->dummiesFacade || !index.isValid()) return Qt::ItemIsDropEnabled;
+    if (!m_d->dummiesFacade || !index.isValid()) {
+        return Qt::ItemIsDropEnabled;
+    }
 
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable | Qt::ItemIsDropEnabled;
     return flags;
@@ -429,14 +444,11 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
 
         if (index.isValid() && value.toBool()) {
             activatedNode = nodeFromIndex(index);
-        }
-        else if (parentIndex.isValid() && value.toBool()) {
+        } else if (parentIndex.isValid() && value.toBool()) {
             activatedNode = nodeFromIndex(parentIndex);
-        }
-        else {
+        } else {
             activatedNode = 0;
         }
-
 
         emit nodeActivated(activatedNode);
 
@@ -448,7 +460,9 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         return true;
     }
 
-    if(!m_d->dummiesFacade || !index.isValid()) return false;
+    if (!m_d->dummiesFacade || !index.isValid()) {
+        return false;
+    }
 
     bool result = true;
     KisNodeSP node = nodeFromIndex(index);
@@ -458,48 +472,50 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     case Qt::EditRole:
         node->setName(value.toString());
         break;
-    case PropertiesRole:
-        {
-            // don't record undo/redo for visibility, locked or alpha locked changes
-            PropertyList proplist = value.value<PropertyList>();
-            bool undo = true;
-            foreach(const KisDocumentSectionModel::Property &prop, proplist) {
-                if (prop.name == i18n("Visible") && node->visible() !=prop.state.toBool()) undo = false;
-                if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
-                if (prop.name == i18n("Active")) {
-                    if (KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data())) {
-                        if (m->active() != prop.state.toBool()) {
-                            undo = false;
-                        }
-                    }
-                }
-                if (prop.name == i18n("Alpha Locked")) {
-                    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(node.data())) {
-                        if (l->alphaLocked() != prop.state.toBool()) {
-                            undo = false;
-                        }
+    case PropertiesRole: {
+        // don't record undo/redo for visibility, locked or alpha locked changes
+        PropertyList proplist = value.value<PropertyList>();
+        bool undo = true;
+        foreach (const KisDocumentSectionModel::Property &prop, proplist) {
+            if (prop.name == i18n("Visible") && node->visible() != prop.state.toBool()) {
+                undo = false;
+            }
+            if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) {
+                undo = false;
+            }
+            if (prop.name == i18n("Active")) {
+                if (KisSelectionMask *m = dynamic_cast<KisSelectionMask *>(node.data())) {
+                    if (m->active() != prop.state.toBool()) {
+                        undo = false;
                     }
                 }
             }
-
-            KUndo2Command *cmd = new KisNodePropertyListCommand(node, proplist);
-
-            if (undo) {
-                m_d->image->undoAdapter()->addCommand(cmd);
+            if (prop.name == i18n("Alpha Locked")) {
+                if (KisPaintLayer *l = dynamic_cast<KisPaintLayer *>(node.data())) {
+                    if (l->alphaLocked() != prop.state.toBool()) {
+                        undo = false;
+                    }
+                }
             }
-            else {
-                m_d->image->setModified();
-                cmd->redo();
-                delete cmd;
-            }
-
-            break;
         }
+
+        KUndo2Command *cmd = new KisNodePropertyListCommand(node, proplist);
+
+        if (undo) {
+            m_d->image->undoAdapter()->addCommand(cmd);
+        } else {
+            m_d->image->setModified();
+            cmd->redo();
+            delete cmd;
+        }
+
+        break;
+    }
     default:
         result = false;
     }
 
-    if(result) {
+    if (result) {
         emit dataChanged(index, index);
     }
 
@@ -555,37 +571,36 @@ QList<KisNodeSP> sortNodes(KisNodeSP sourceRoot, QList<KisNodeSP> selectedNodes)
     return nodes;
 }
 
-QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
+QMimeData *KisNodeModel::mimeData(const QModelIndexList &indexes) const
 {
     QList<KisNodeSP> nodes;
-    foreach(const QModelIndex &idx, indexes) {
+    foreach (const QModelIndex &idx, indexes) {
         nodes << nodeFromIndex(idx);
     }
     nodes = sortNodes(m_d->image->rootLayer(), nodes);
-    KisMimeData* data = new KisMimeData(nodes);
+    KisMimeData *data = new KisMimeData(nodes);
     return data;
 }
 
-
 bool KisNodeModel::correctNewNodeLocation(KisNodeSP node,
-                                          KisNodeDummy* &parentDummy,
-                                          KisNodeDummy* &aboveThisDummy)
+        KisNodeDummy *&parentDummy,
+        KisNodeDummy *&aboveThisDummy)
 {
     KisNodeSP parentNode = parentDummy->node();
     bool result = true;
 
-    if(!parentDummy->node()->allowAsChild(node)) {
+    if (!parentDummy->node()->allowAsChild(node)) {
         aboveThisDummy = parentDummy;
         parentDummy = parentDummy->parent();
 
         result = (!parentDummy) ? false :
-            correctNewNodeLocation(node, parentDummy, aboveThisDummy);
+                 correctNewNodeLocation(node, parentDummy, aboveThisDummy);
     }
 
     return result;
 }
 
-bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent)
+bool KisNodeModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
     Q_UNUSED(column);
 
@@ -606,7 +621,9 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
         copyNode = true;
     }
 
-    if (nodes.isEmpty()) return false;
+    if (nodes.isEmpty()) {
+        return false;
+    }
 
     if (copyNode) {
         /**
@@ -620,19 +637,18 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
     KisNodeDummy *aboveThisDummy = 0;
 
     parentDummy = parent.isValid() ?
-        m_d->indexConverter->dummyFromIndex(parent) :
-        m_d->dummiesFacade->rootDummy();
+                  m_d->indexConverter->dummyFromIndex(parent) :
+                  m_d->dummiesFacade->rootDummy();
 
     if (row == -1) {
         aboveThisDummy = parent.isValid() ? parentDummy->lastChild() : 0;
-    }
-    else {
+    } else {
         aboveThisDummy = row < m_d->indexConverter->rowCount(parent) ? m_d->indexConverter->dummyFromRow(row, parent) : 0;
     }
 
     bool result = true;
 
-    foreach(KisNodeSP node, nodes) {
+    foreach (KisNodeSP node, nodes) {
 
         if (!correctNewNodeLocation(node, parentDummy, aboveThisDummy)) {
             return false;
@@ -643,12 +659,10 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 
         if (action == Qt::CopyAction) {
             emit requestAddNode(node, parentDummy->node(), aboveThisNode);
-        }
-        else if (action == Qt::MoveAction) {
+        } else if (action == Qt::MoveAction) {
             Q_ASSERT(node->graphListener() == m_d->image.data());
             emit requestMoveNode(node, parentDummy->node(), aboveThisNode);
-        }
-        else {
+        } else {
             result = false;
         }
     }

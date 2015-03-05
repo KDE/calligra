@@ -34,10 +34,10 @@ public:
     /// Ellipse, rectangle, line, pixel, anti-aliased pixel
     int shape() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 private:
-    KisShapeOptionsWidget * m_options;
+    KisShapeOptionsWidget *m_options;
 };
 
 #endif // KIS_GRID_SHAPE_OPTION_H

@@ -36,10 +36,10 @@ public:
 };
 
 KoCanvasResourceManager::KoCanvasResourceManager(QObject *parent)
-        : QObject(parent),
-        d(new Private())
+    : QObject(parent),
+      d(new Private())
 {
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     setForegroundColor(KoColor(Qt::black, cs));
     setBackgroundColor(KoColor(Qt::white, cs));
     setResource(ApplicationSpeciality, NoSpecial);
@@ -116,7 +116,6 @@ KoUnit KoCanvasResourceManager::unitResource(int key) const
 {
     return resource(key).value<KoUnit>();
 }
-
 
 void KoCanvasResourceManager::setActiveStroke(const KoShapeStroke &stroke)
 {

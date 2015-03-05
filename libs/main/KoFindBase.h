@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #ifndef KOFINDBASE_H
 #define KOFINDBASE_H
 
@@ -200,7 +198,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFINDBASE_H

@@ -37,7 +37,7 @@
 #include "kis_iterator_ng.h"
 #include "kis_image.h"
 
-void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness, const QRect & rc)
+void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 *c, int fuzziness, const QRect &rc)
 {
     if (rc.isEmpty()) {
         return;
@@ -50,7 +50,7 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
     w = rc.width();
     h = rc.height();
 
-    const KoColorSpace * cs = dev->colorSpace();
+    const KoColorSpace *cs = dev->colorSpace();
 
     KisHLineConstIteratorSP hiter = dev->createHLineConstIteratorNG(x, y, w);
     KisHLineIteratorSP selIter = selection->createHLineIteratorNG(x, y, w);
@@ -73,7 +73,7 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
 
 }
 
-KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
+KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase *canvas)
     : KisToolSelectBase(canvas,
                         KisCursor::load("tool_similar_selection_cursor.png", 6, 6),
                         i18n("Similar Color Selection")),
@@ -81,7 +81,7 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
 {
 }
 
-void KisToolSelectSimilar::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolSelectSimilar::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
     m_configGroup = KGlobal::config()->group(toolId());
@@ -92,9 +92,9 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     KisPaintDeviceSP dev;
 
     if (!currentNode() ||
-        !(dev = currentNode()->projection()) ||
-        !currentNode()->visible() ||
-        !selectionEditable()) {
+            !(dev = currentNode()->projection()) ||
+            !currentNode()->visible() ||
+            !selectionEditable()) {
 
         event->ignore();
         return;
@@ -102,7 +102,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 
     QPointF pos = convertToPixelCoord(event);
 
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
@@ -135,25 +135,25 @@ void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
     m_configGroup.writeEntry("fuzziness", fuzziness);
 }
 
-QWidget* KisToolSelectSimilar::createOptionWidget()
+QWidget *KisToolSelectSimilar::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
     selectionWidget->disableAntiAliasSelectionOption();
     selectionWidget->disableSelectionModeOption();
 
-    QHBoxLayout* fl = new QHBoxLayout();
-    QLabel * lbl = new QLabel(i18n("Fuzziness: "), selectionWidget);
+    QHBoxLayout *fl = new QHBoxLayout();
+    QLabel *lbl = new QLabel(i18n("Fuzziness: "), selectionWidget);
     fl->addWidget(lbl);
 
-    KisSliderSpinBox* input = new KisSliderSpinBox(selectionWidget);
+    KisSliderSpinBox *input = new KisSliderSpinBox(selectionWidget);
     input->setObjectName("fuzziness");
     input->setRange(0, 200);
     input->setSingleStep(10);
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
 
-    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
+    QVBoxLayout *l = dynamic_cast<QVBoxLayout *>(selectionWidget->layout());
     Q_ASSERT(l);
     l->insertLayout(1, fl);
 

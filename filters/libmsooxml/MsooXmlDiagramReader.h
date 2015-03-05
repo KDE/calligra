@@ -35,21 +35,21 @@ namespace MSOOXML
 
 namespace Diagram
 {
-    class Context;
-    class DataModel;
+class Context;
+class DataModel;
 }
 
 class KOMSOOXML_EXPORT MsooXmlDiagramReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    KoGenStyles* m_styles;
-    Diagram::Context* m_context;
+    KoGenStyles *m_styles;
+    Diagram::Context *m_context;
 
     int shapeListSize() const;
 
-    explicit MsooXmlDiagramReaderContext(KoGenStyles* styles);
+    explicit MsooXmlDiagramReaderContext(KoGenStyles *styles);
     virtual ~MsooXmlDiagramReaderContext();
-    void saveIndex(KoXmlWriter* xmlWriter, const QRect &rect);
+    void saveIndex(KoXmlWriter *xmlWriter, const QRect &rect);
 };
 
 class KOMSOOXML_EXPORT MsooXmlDiagramReader : public MSOOXML::MsooXmlCommonReader
@@ -57,7 +57,7 @@ class KOMSOOXML_EXPORT MsooXmlDiagramReader : public MSOOXML::MsooXmlCommonReade
 public:
     explicit MsooXmlDiagramReader(KoOdfWriters *writers);
     virtual ~MsooXmlDiagramReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
 protected:
     //KoFilter::ConversionStatus read_layoutNode();

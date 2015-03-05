@@ -72,7 +72,7 @@ public:
 };
 
 KoStyleThumbnailer::KoStyleThumbnailer()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -85,7 +85,7 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, const QSize &_size
 {
     if ((flags & UseStyleNameText)  && (!style || style->name().isNull())) {
         return QImage();
-    } else if ((! (flags & UseStyleNameText)) && d->thumbnailText.isEmpty()) {
+    } else if ((!(flags & UseStyleNameText)) && d->thumbnailText.isEmpty()) {
         return QImage();
     }
 
@@ -139,18 +139,17 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagra
 {
     if ((flags & UseStyleNameText)  && (!characterStyle || characterStyle->name().isNull())) {
         return QImage();
-    } else if ((! (flags & UseStyleNameText)) && d->thumbnailText.isEmpty()) {
+    } else if ((!(flags & UseStyleNameText)) && d->thumbnailText.isEmpty()) {
         return QImage();
-    }
-    else if (characterStyle == 0) {
+    } else if (characterStyle == 0) {
         return QImage();
     }
 
     const QSize &size = (!_size.isValid() || _size.isNull()) ? d->defaultSize : _size;
 
     QString imageKey = "c_" + QString::number(reinterpret_cast<unsigned long>(characterStyle)) + "_"
-                     + "p_" + QString::number(reinterpret_cast<unsigned long>(paragraphStyle)) + "_"
-                     + QString::number(size.width()) + "_" + QString::number(size.height());
+                       + "p_" + QString::number(reinterpret_cast<unsigned long>(paragraphStyle)) + "_"
+                       + QString::number(size.width()) + "_" + QString::number(size.height());
 
     if (!recreateThumbnail && d->thumbnailCache.object(imageKey)) {
         return QImage(*(d->thumbnailCache.object(imageKey)));
@@ -174,7 +173,7 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagra
 
     if (paragraphStyle) {
         KoParagraphStyle *paragraphStyleClone = paragraphStyle->clone();
-       // paragraphStyleClone->KoCharacterStyle::applyStyle(format);
+        // paragraphStyleClone->KoCharacterStyle::applyStyle(format);
         QTextBlock block = cursor.block();
         paragraphStyleClone->applyStyle(block, true);
         delete paragraphStyleClone;
@@ -224,12 +223,12 @@ void KoStyleThumbnailer::layoutThumbnail(const QSize &size, QImage *im, KoStyleT
         p.setFont(sizeHintFont);
         QRectF sizeHintRect(p.boundingRect(0, 0, 1, 1, Qt::AlignCenter, sizeHint));
         p.restore();
-        qreal width = qMax<qreal>(0., size.width()-sizeHintRect.width());
+        qreal width = qMax<qreal>(0., size.width() - sizeHintRect.width());
 
         QTextCharFormat fmt = cursor.charFormat();
         if (flags & ScaleThumbnailFont) {
             //calculate the font reduction factor so that the text + the sizeHint fits
-            qreal reductionFactor = qMin(width/documentSize.width(), size.height()/documentSize.height());
+            qreal reductionFactor = qMin(width / documentSize.width(), size.height() / documentSize.height());
 
             fmt.setFontPointSize((int)(fmt.fontPointSize()*reductionFactor));
         }
@@ -244,7 +243,7 @@ void KoStyleThumbnailer::layoutThumbnail(const QSize &size, QImage *im, KoStyleT
         documentSize.setWidth(documentSize.width() * qt_defaultDpiX() / 72.0);
         documentSize.setHeight(documentSize.height() * qt_defaultDpiY() / 72.0);
         //center the preview in the pixmap
-        qreal yOffset = (size.height()-documentSize.height())/2;
+        qreal yOffset = (size.height() - documentSize.height()) / 2;
         p.save();
         if ((flags & CenterAlignThumbnail) && yOffset) {
             p.translate(0, yOffset);
@@ -258,12 +257,11 @@ void KoStyleThumbnailer::layoutThumbnail(const QSize &size, QImage *im, KoStyleT
         p.restore();
 
         p.setFont(sizeHintFont);
-        p.drawText(QRectF(size.width()-sizeHintRect.width(), 0, sizeHintRect.width(),
-                          size.height() /*because we want to be vertically centered in the pixmap, like the style name*/),Qt::AlignCenter, sizeHint);
-    }
-    else {
+        p.drawText(QRectF(size.width() - sizeHintRect.width(), 0, sizeHintRect.width(),
+                          size.height() /*because we want to be vertically centered in the pixmap, like the style name*/), Qt::AlignCenter, sizeHint);
+    } else {
         //center the preview in the pixmap
-        qreal yOffset = (size.height()-documentSize.height())/2;
+        qreal yOffset = (size.height() - documentSize.height()) / 2;
         if ((flags & CenterAlignThumbnail) && yOffset) {
             p.translate(0, yOffset);
         }

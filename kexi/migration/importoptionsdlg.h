@@ -35,11 +35,11 @@ class OptionsDialog : public KDialog
 {
     Q_OBJECT
 public:
-    OptionsDialog(const QString& databaseFile, const QString& selectedEncoding,
-                  QWidget* parent = 0);
+    OptionsDialog(const QString &databaseFile, const QString &selectedEncoding,
+                  QWidget *parent = 0);
     virtual ~OptionsDialog();
 
-    KexiCharacterEncodingComboBox* encodingComboBox() const;
+    KexiCharacterEncodingComboBox *encodingComboBox() const;
 
 protected Q_SLOTS:
     virtual void accept();

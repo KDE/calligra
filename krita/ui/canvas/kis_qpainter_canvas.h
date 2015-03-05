@@ -45,7 +45,7 @@ class KisQPainterCanvas : public QWidget, public KisCanvasWidgetBase
 
 public:
 
-    KisQPainterCanvas(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent);
+    KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent);
 
     virtual ~KisQPainterCanvas();
 
@@ -54,7 +54,7 @@ public:
 public: // QWidget
 
     /// reimplemented method from superclass
-    void paintEvent(QPaintEvent * ev);
+    void paintEvent(QPaintEvent *ev);
 
     /// reimplemented method from superclass
     void resizeEvent(QResizeEvent *e);
@@ -67,11 +67,13 @@ public: // QWidget
 
 public: // KisAbstractCanvasWidget
 
-    QWidget * widget() {
+    QWidget *widget()
+    {
         return this;
     }
 
-    bool isBusy() const {
+    bool isBusy() const
+    {
         return false;
     }
 
@@ -86,7 +88,7 @@ private:
     QImage m_buffer;
 
     class Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif

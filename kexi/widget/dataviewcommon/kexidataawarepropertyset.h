@@ -31,7 +31,8 @@
 
 class KexiView;
 class KexiDataAwareObjectInterface;
-namespace KexiDB {
+namespace KexiDB
+{
 class TableViewData;
 }
 
@@ -64,26 +65,26 @@ public:
      (KexiDataAwareObjectInterface::setData()) now but it can be done later as well
      (but assigning data is needed for proper functionality).
      Any changed reassignments of table view's data will be handled automatically. */
-    KexiDataAwarePropertySet(KexiView *view, KexiDataAwareObjectInterface* dataObject);
+    KexiDataAwarePropertySet(KexiView *view, KexiDataAwareObjectInterface *dataObject);
 
     virtual ~KexiDataAwarePropertySet();
 
     uint size() const;
 
-    KoProperty::Set* currentPropertySet() const;
+    KoProperty::Set *currentPropertySet() const;
 
     uint currentRow() const;
-    KoProperty::Set* at(uint row) const;
+    KoProperty::Set *at(uint row) const;
 
     /*! \return a pointer to property set assigned for \a record or null if \a item has no
      property set assigned or it's not owned by assigned table view or
      if assigned table view has no data set. */
-    KoProperty::Set* findPropertySetForItem(const KexiDB::RecordData& record);
+    KoProperty::Set *findPropertySetForItem(const KexiDB::RecordData &record);
 
     /*! \return number of the first row containing \a propertyName property equal to \a value.
      This is used e.g. in the Table Designer to find a row by field name.
      If no such row has been found, -1 is returned. */
-    int findRowForPropertyValue(const QByteArray& propertyName, const QVariant& value);
+    int findRowForPropertyValue(const QByteArray &propertyName, const QVariant &value);
 
 Q_SIGNALS:
     /*! Emitted when row is deleted.
@@ -97,7 +98,7 @@ Q_SIGNALS:
     void rowInserted();
 
     /*! Emitted when the value of @a property is changed in @a set.*/
-    void propertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    void propertyChanged(KoProperty::Set &set, KoProperty::Property &property);
 
 public Q_SLOTS:
     void eraseCurrentPropertySet();
@@ -116,7 +117,7 @@ public Q_SLOTS:
      or equal to this KexiDataAwarePropertySet object, otherwise this method
      will fail with a warning.
     */
-    void set(uint row, KoProperty::Set* set, bool newOne = false);
+    void set(uint row, KoProperty::Set *set, bool newOne = false);
 
     /*! Deletes a property set at \a row position without removing the row. */
     void eraseAt(uint row);
@@ -132,7 +133,7 @@ protected Q_SLOTS:
     void slotRowsDeleted(const QList<int> &rows);
 
     //! Called on \a row insertion in a tableview.
-    void slotRowInserted(KexiDB::RecordData* record, uint pos, bool repaint);
+    void slotRowInserted(KexiDB::RecordData *record, uint pos, bool repaint);
 
     //! Called on selecting another cell in a tableview.
     void slotCellSelected(int row, int col);
@@ -145,7 +146,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

@@ -38,10 +38,12 @@ public:
                    bool readTree = false);
     ~KoTemplateTree();
 
-    QByteArray templateType() const {
+    QByteArray templateType() const
+    {
         return m_templateType;
     }
-    KComponentData componentData() const {
+    KComponentData componentData() const
+    {
         return m_componentData;
     }
     void readTemplateTree();
@@ -50,14 +52,19 @@ public:
     void add(KoTemplateGroup *g);
     KoTemplateGroup *find(const QString &name) const;
 
-    KoTemplateGroup *defaultGroup() const {
+    KoTemplateGroup *defaultGroup() const
+    {
         return m_defaultGroup;
     }
-    KoTemplate *defaultTemplate() const {
+    KoTemplate *defaultTemplate() const
+    {
         return m_defaultTemplate;
     }
 
-    QList<KoTemplateGroup*> groups () const { return m_groups; }
+    QList<KoTemplateGroup *> groups() const
+    {
+        return m_groups;
+    }
 
 private:
     void readGroups();
@@ -67,7 +74,7 @@ private:
 
     QByteArray m_templateType;
     KComponentData m_componentData;
-    QList<KoTemplateGroup*> m_groups;
+    QList<KoTemplateGroup *> m_groups;
     KoTemplateGroup *m_defaultGroup;
     KoTemplate *m_defaultTemplate;
 };

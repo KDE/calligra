@@ -22,7 +22,6 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
-
 class KisHatchingOptionsWidget;
 
 class KisHatchingOptions : public KisPaintOpOption
@@ -32,11 +31,11 @@ public:
     KisHatchingOptions();
     ~KisHatchingOptions();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
-    KisHatchingOptionsWidget * m_options;
+    KisHatchingOptionsWidget *m_options;
 
 };
 

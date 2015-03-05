@@ -32,12 +32,9 @@
 #include "koodfreader_export.h"
 #include "OdfReaderInternals.h"
 
-
-
 class OdfReader;
 class OdfReaderContext;
 class OdfTextReaderBackend;
-
 
 /** @brief Read the XML tree of the content of an ODT file.
  *
@@ -51,7 +48,7 @@ class OdfTextReaderBackend;
  */
 class KOODFREADER_EXPORT OdfTextReader
 {
- public:
+public:
     OdfTextReader();
     ~OdfTextReader();
 
@@ -114,8 +111,7 @@ class KOODFREADER_EXPORT OdfTextReader
 
     void readUnknownElement(KoXmlStreamReader &reader);
 
-
- private:
+private:
     OdfReader             *m_parent;  // The OdfReader controlling this one.
 
     OdfTextReaderBackend  *m_backend;

@@ -23,19 +23,18 @@
 
 #include "kis_update_job_item.h"
 
-
 KisUpdaterContext::KisUpdaterContext(qint32 threadCount)
 {
-    if(threadCount <= 0) {
+    if (threadCount <= 0) {
         threadCount = QThread::idealThreadCount();
         threadCount = threadCount > 0 ? threadCount : 1;
     }
 
     m_jobs.resize(threadCount);
-    for(qint32 i = 0; i < m_jobs.size(); i++) {
+    for (qint32 i = 0; i < m_jobs.size(); i++) {
         m_jobs[i] = new KisUpdateJobItem(&m_exclusiveJobLock);
-        connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
-                SIGNAL(sigContinueUpdate(const QRect&)),
+        connect(m_jobs[i], SIGNAL(sigContinueUpdate(QRect)),
+                SIGNAL(sigContinueUpdate(QRect)),
                 Qt::DirectConnection);
 
         connect(m_jobs[i], SIGNAL(sigDoSomeUsefulWork()),
@@ -49,8 +48,9 @@ KisUpdaterContext::KisUpdaterContext(qint32 threadCount)
 KisUpdaterContext::~KisUpdaterContext()
 {
     m_threadPool.waitForDone();
-    for(qint32 i = 0; i < m_jobs.size(); i++)
+    for (qint32 i = 0; i < m_jobs.size(); i++) {
         delete m_jobs[i];
+    }
 }
 
 void KisUpdaterContext::getJobsSnapshot(qint32 &numMergeJobs,
@@ -59,12 +59,11 @@ void KisUpdaterContext::getJobsSnapshot(qint32 &numMergeJobs,
     numMergeJobs = 0;
     numStrokeJobs = 0;
 
-    foreach(const KisUpdateJobItem *item, m_jobs) {
-        if(item->type() == KisUpdateJobItem::MERGE ||
-           item->type() == KisUpdateJobItem::SPONTANEOUS) {
+    foreach (const KisUpdateJobItem *item, m_jobs) {
+        if (item->type() == KisUpdateJobItem::MERGE ||
+                item->type() == KisUpdateJobItem::SPONTANEOUS) {
             numMergeJobs++;
-        }
-        else if(item->type() == KisUpdateJobItem::STROKE) {
+        } else if (item->type() == KisUpdateJobItem::STROKE) {
             numStrokeJobs++;
         }
     }
@@ -74,8 +73,8 @@ bool KisUpdaterContext::hasSpareThread()
 {
     bool found = false;
 
-    foreach(const KisUpdateJobItem *item, m_jobs) {
-        if(!item->isRunning()) {
+    foreach (const KisUpdateJobItem *item, m_jobs) {
+        if (!item->isRunning()) {
             found = true;
             break;
         }
@@ -87,8 +86,8 @@ bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
 {
     bool intersects = false;
 
-    foreach(const KisUpdateJobItem *item, m_jobs) {
-        if(item->isRunning() && walkerIntersectsJob(walker, item)) {
+    foreach (const KisUpdateJobItem *item, m_jobs) {
+        if (item->isRunning() && walkerIntersectsJob(walker, item)) {
             intersects = true;
             break;
         }
@@ -174,17 +173,18 @@ void KisUpdaterContext::waitForDone()
 }
 
 bool KisUpdaterContext::walkerIntersectsJob(KisBaseRectsWalkerSP walker,
-                                            const KisUpdateJobItem* job)
+        const KisUpdateJobItem *job)
 {
     return (walker->accessRect().intersects(job->changeRect())) ||
-        (job->accessRect().intersects(walker->changeRect()));
+           (job->accessRect().intersects(walker->changeRect()));
 }
 
 qint32 KisUpdaterContext::findSpareThread()
 {
-    for(qint32 i=0; i < m_jobs.size(); i++)
-        if(!m_jobs[i]->isRunning())
+    for (qint32 i = 0; i < m_jobs.size(); i++)
+        if (!m_jobs[i]->isRunning()) {
             return i;
+        }
 
     return -1;
 }
@@ -210,18 +210,19 @@ KisTestableUpdaterContext::KisTestableUpdaterContext(qint32 threadCount)
 {
 }
 
-KisTestableUpdaterContext::~KisTestableUpdaterContext() {
+KisTestableUpdaterContext::~KisTestableUpdaterContext()
+{
     clear();
 }
 
-const QVector<KisUpdateJobItem*> KisTestableUpdaterContext::getJobs()
+const QVector<KisUpdateJobItem *> KisTestableUpdaterContext::getJobs()
 {
     return m_jobs;
 }
 
 void KisTestableUpdaterContext::clear()
 {
-    foreach(KisUpdateJobItem *item, m_jobs) {
+    foreach (KisUpdateJobItem *item, m_jobs) {
         item->testingSetDone();
     }
 }

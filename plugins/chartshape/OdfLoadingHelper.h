@@ -36,7 +36,8 @@
 class KoStyleStack;
 class KoodfStylesReader;
 
-namespace KChart {
+namespace KChart
+{
 
 class OdfLoadingHelper : public KoSharedLoadingData
 {

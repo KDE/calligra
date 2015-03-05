@@ -34,7 +34,7 @@ class KisShapeSelectionModel: public QObject, public KoShapeContainerModel
 {
     Q_OBJECT
 public:
-    KisShapeSelectionModel(KisImageWSP image, KisSelectionWSP selection, KisShapeSelection* shapeSelection);
+    KisShapeSelectionModel(KisImageWSP image, KisSelectionWSP selection, KisShapeSelection *shapeSelection);
     ~KisShapeSelectionModel();
 
     void add(KoShape *child);
@@ -49,22 +49,22 @@ public:
     virtual bool inheritsTransform(const KoShape *shape) const;
 
     int count() const;
-    QList<KoShape*> shapes() const;
+    QList<KoShape *> shapes() const;
 
     void containerChanged(KoShapeContainer *, KoShape::ChangeType);
-    void childChanged(KoShape * child, KoShape::ChangeType type);
+    void childChanged(KoShape *child, KoShape::ChangeType type);
     bool isChildLocked(const KoShape *child) const;
-    void setShapeSelection(KisShapeSelection* selection);
+    void setShapeSelection(KisShapeSelection *selection);
 
 private Q_SLOTS:
     void requestUpdate(const QRect &updateRect);
     void startUpdateJob();
 
 private:
-    QMap<KoShape*, QRectF> m_shapeMap;
+    QMap<KoShape *, QRectF> m_shapeMap;
     KisImageWSP m_image;
     KisSelectionWSP m_parentSelection;
-    KisShapeSelection* m_shapeSelection;
+    KisShapeSelection *m_shapeSelection;
 
     KisSignalCompressor *m_updateSignalCompressor;
     QRect m_updateRect;

@@ -25,20 +25,21 @@
 #include "FlowAboutData.h"
 #include "FlowDocument.h"
 
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
+extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-  std::auto_ptr<KAboutData> about( newFlowAboutData() );
-  KCmdLineArgs::init( argc, argv, about.get() );
+    std::auto_ptr<KAboutData> about(newFlowAboutData());
+    KCmdLineArgs::init(argc, argv, about.get());
 
-  KCmdLineOptions options;
-  options.add("+[file]", ki18n("File to open"));
-  KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineOptions options;
+    options.add("+[file]", ki18n("File to open"));
+    KCmdLineArgs::addCmdLineOptions(options);
 
-  KoApplication app(FLOW_MIME_TYPE);
+    KoApplication app(FLOW_MIME_TYPE);
 
-  if (!app.start())
-      return 1;
-  app.exec();
+    if (!app.start()) {
+        return 1;
+    }
+    app.exec();
 
-  return 0;
+    return 0;
 }

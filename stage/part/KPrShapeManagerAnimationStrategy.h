@@ -28,19 +28,19 @@ class KPrPageSelectStrategyBase;
 class KPrShapeManagerAnimationStrategy : public KoShapeManagerPaintingStrategy
 {
 public:
-    KPrShapeManagerAnimationStrategy( KoShapeManager * shapeManager, KPrAnimationCache * animationCache,
-                                      KPrPageSelectStrategyBase * strategy );
+    KPrShapeManagerAnimationStrategy(KoShapeManager *shapeManager, KPrAnimationCache *animationCache,
+                                     KPrPageSelectStrategyBase *strategy);
     virtual ~KPrShapeManagerAnimationStrategy();
 
     /// reimplemented
-    virtual void paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 
     /// reimplemented
-    virtual void adapt( KoShape * shape, QRectF & rect );
+    virtual void adapt(KoShape *shape, QRectF &rect);
 
 private:
-    KPrAnimationCache * m_animationCache;
-    KPrPageSelectStrategyBase * m_strategy;
+    KPrAnimationCache *m_animationCache;
+    KPrPageSelectStrategyBase *m_strategy;
 };
 
 #endif /* KPRSHAPEMANAGERANIMATIONSTRATEGY_H */

@@ -28,9 +28,10 @@ KisPressureMixOption::KisPressureMixOption()
     setMaximumLabel(i18n("Background"));
 }
 
-
-double KisPressureMixOption::apply(const KisPaintInformation & info) const
+double KisPressureMixOption::apply(const KisPaintInformation &info) const
 {
-    if (!isChecked()) return 1.0;
+    if (!isChecked()) {
+        return 1.0;
+    }
     return computeValue(info);
 }

@@ -29,18 +29,17 @@
 
 #include <klocale.h>
 
-
 namespace KPlato
 {
 
 class WeekdayListItem : public QTreeWidgetItem
 {
 public:
-    WeekdayListItem(Calendar *cal, int wd, QTreeWidget *parent, const QString& name, QTreeWidgetItem *after)
-    : QTreeWidgetItem(parent, after),
-      original(cal->weekday(wd)),
-      calendar(cal),
-      weekday(wd)
+    WeekdayListItem(Calendar *cal, int wd, QTreeWidget *parent, const QString &name, QTreeWidgetItem *after)
+        : QTreeWidgetItem(parent, after),
+          original(cal->weekday(wd)),
+          calendar(cal),
+          weekday(wd)
     {
         setText(0, name);
         day = new CalendarDay(original);
@@ -50,26 +49,31 @@ public:
             setText(1, KGlobal::locale()->formatNumber(day->duration().toDouble(Duration::Unit_h)));
         }
     }
-    ~WeekdayListItem() {
+    ~WeekdayListItem()
+    {
         delete day;
     }
-    void setHours() {
+    void setHours()
+    {
         setText(1, "-");
         day->clearIntervals();
     }
-    void setIntervals(QList<TimeInterval*> intervals) {
+    void setIntervals(QList<TimeInterval *> intervals)
+    {
         day->setIntervals(intervals);
         setText(1, KGlobal::locale()->formatNumber(day->duration().toDouble(Duration::Unit_h)));
     }
-    void setState(int st) {
-        day->setState(st+1);
+    void setState(int st)
+    {
+        day->setState(st + 1);
     }
-    
-    MacroCommand *save() {
-        MacroCommand *cmd=0;
+
+    MacroCommand *save()
+    {
+        MacroCommand *cmd = 0;
         if (*original != *day) {
             cmd = new MacroCommand();
-            cmd->addCommand( new CalendarModifyWeekdayCmd(calendar, weekday, day) );
+            cmd->addCommand(new CalendarModifyWeekdayCmd(calendar, weekday, day));
             day = 0;
         }
         return cmd;
@@ -84,10 +88,10 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
     : KDialog(parent),
       project(p)
 {
-    setCaption( i18n("Estimate Conversions") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setCaption(i18n("Estimate Conversions"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    showButtonSeparator(true);
     //kDebug(planDbg())<<&p;
     m_original = p.standardWorktime();
     dia = new StandardWorktimeDialogImpl(m_original, this);
@@ -97,42 +101,52 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
 
     connect(dia, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
     connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)));
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
 }
 
-MacroCommand *StandardWorktimeDialog::buildCommand() {
+MacroCommand *StandardWorktimeDialog::buildCommand()
+{
     //kDebug(planDbg());
     KUndo2MagicString n = kundo2_i18n("Modify Estimate Conversions");
     MacroCommand *cmd = 0;
     if (m_original->year() != dia->inYear()) {
-        if (cmd == 0) cmd = new MacroCommand(n);
+        if (cmd == 0) {
+            cmd = new MacroCommand(n);
+        }
         cmd->addCommand(new ModifyStandardWorktimeYearCmd(m_original, m_original->year(), dia->inYear()));
     }
     if (m_original->month() != dia->inMonth()) {
-        if (cmd == 0) cmd = new MacroCommand(n);
+        if (cmd == 0) {
+            cmd = new MacroCommand(n);
+        }
         cmd->addCommand(new ModifyStandardWorktimeMonthCmd(m_original, m_original->month(), dia->inMonth()));
     }
     if (m_original->week() != dia->inWeek()) {
-        if (cmd == 0) cmd = new MacroCommand(n);
+        if (cmd == 0) {
+            cmd = new MacroCommand(n);
+        }
         cmd->addCommand(new ModifyStandardWorktimeWeekCmd(m_original, m_original->week(), dia->inWeek()));
     }
     if (m_original->day() != dia->inDay()) {
-        if (cmd == 0) cmd = new MacroCommand(n);
+        if (cmd == 0) {
+            cmd = new MacroCommand(n);
+        }
         cmd->addCommand(new ModifyStandardWorktimeDayCmd(m_original, m_original->day(), dia->inDay()));
     }
     return cmd;
 
 }
 
-void StandardWorktimeDialog::slotOk() {
+void StandardWorktimeDialog::slotOk()
+{
     accept();
 }
 
-
 StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QWidget *parent)
     : QWidget(parent),
-      m_std(std) {
-    
+      m_std(std)
+{
+
     setupUi(this);
     if (!std) {
         m_std = new StandardWorktime();
@@ -142,12 +156,12 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     m_week = m_std->week();
     m_day = m_std->day();
 
-    kDebug(planDbg())<<"y="<<m_year<<" m="<<m_month<<" w="<<m_week<<" d="<<m_day;
+    kDebug(planDbg()) << "y=" << m_year << " m=" << m_month << " w=" << m_week << " d=" << m_day;
     year->setValue(m_year);
     month->setValue(m_month);
     week->setValue(m_week);
     day->setValue(m_day);
-    
+
     connect(year, SIGNAL(valueChanged(double)), SLOT(slotYearChanged(double)));
     connect(month, SIGNAL(valueChanged(double)), SLOT(slotMonthChanged(double)));
     connect(week, SIGNAL(valueChanged(double)), SLOT(slotWeekChanged(double)));
@@ -155,50 +169,59 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
 
 }
 
-
-void StandardWorktimeDialogImpl::slotEnableButtonOk(bool on) {
+void StandardWorktimeDialogImpl::slotEnableButtonOk(bool on)
+{
     emit enableButtonOk(on);
 }
 
-void StandardWorktimeDialogImpl::slotCheckAllFieldsFilled() {
+void StandardWorktimeDialogImpl::slotCheckAllFieldsFilled()
+{
     emit obligatedFieldsFilled(true);
 }
 
-void StandardWorktimeDialogImpl::slotYearChanged(double value) {
+void StandardWorktimeDialogImpl::slotYearChanged(double value)
+{
     //kDebug(planDbg())<<value;
     m_year = value;
-    if (month->value() > value)
+    if (month->value() > value) {
         month->setValue(value);
+    }
     slotEnableButtonOk(true);
 }
 
-void StandardWorktimeDialogImpl::slotMonthChanged(double value) {
+void StandardWorktimeDialogImpl::slotMonthChanged(double value)
+{
     m_month = value;
-    if (year->value() < value)
+    if (year->value() < value) {
         year->setValue(value);
-    if (week->value() > value)
+    }
+    if (week->value() > value) {
         week->setValue(value);
+    }
     slotEnableButtonOk(true);
 }
 
-void StandardWorktimeDialogImpl::slotWeekChanged(double value) {
+void StandardWorktimeDialogImpl::slotWeekChanged(double value)
+{
     m_week = value;
-    if (month->value() < value)
+    if (month->value() < value) {
         month->setValue(value);
-    if (day->value() > value)
+    }
+    if (day->value() > value) {
         day->setValue(value);
+    }
     slotEnableButtonOk(true);
 }
 
-void StandardWorktimeDialogImpl::slotDayChanged(double value) {
+void StandardWorktimeDialogImpl::slotDayChanged(double value)
+{
     m_day = value;
-    if (week->value() < value)
+    if (week->value() < value) {
         week->setValue(value);
+    }
     slotEnableButtonOk(true);
 }
-
 
 }  //KPlato namespace
-
 
 #include "kptstandardworktimedialog.moc"

@@ -34,14 +34,16 @@ class MockShape : public KoShape
 {
 public:
     MockShape() : paintedCount(0) {}
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+    {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
         //qDebug() << "Shape" << kBacktrace( 10 );
         paintedCount++;
     }
     virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
+    {
         return true;
     }
     int paintedCount;
@@ -51,7 +53,8 @@ class MockContainer : public KoShapeContainer
 {
 public:
     MockContainer(KoShapeContainerModel *model = 0) : KoShapeContainer(model), paintedCount(0) {}
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+    {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
         //qDebug() << "Container:" << kBacktrace( 10 );
@@ -59,7 +62,8 @@ public:
     }
 
     virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
+    {
         return true;
     }
     int paintedCount;
@@ -67,7 +71,8 @@ public:
 
 class MockGroup : public KoShapeGroup
 {
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
+    {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }
@@ -78,67 +83,82 @@ class KoToolProxy;
 class MockCanvas : public KoCanvasBase
 {
 public:
-    MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase =0)//made for TestSnapStrategy.cpp
-            : KoCanvasBase(aKoShapeBasedDocumentBase), m_shapeManager(new KoShapeManager(this)), m_guideData(0) {}
+    MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase = 0) //made for TestSnapStrategy.cpp
+        : KoCanvasBase(aKoShapeBasedDocumentBase), m_shapeManager(new KoShapeManager(this)), m_guideData(0) {}
     ~MockCanvas() {}
-    void setHorz(qreal pHorz){
+    void setHorz(qreal pHorz)
+    {
         m_horz = pHorz;
     }
-    void setVert(qreal pVert){
+    void setVert(qreal pVert)
+    {
         m_vert = pVert;
     }
-    void setGuidesData(KoGuidesData* pGuideData){
+    void setGuidesData(KoGuidesData *pGuideData)
+    {
         m_guideData = pGuideData;
     }
-    void gridSize(qreal *horizontal, qreal *vertical) const {
+    void gridSize(qreal *horizontal, qreal *vertical) const
+    {
         *horizontal = m_horz;
         *vertical = m_vert;
     }
-    bool snapToGrid() const  {
+    bool snapToGrid() const
+    {
         return true;
     }
-    void addCommand(KUndo2Command*) { }
-    KoShapeManager *shapeManager() const  {
+    void addCommand(KUndo2Command *) { }
+    KoShapeManager *shapeManager() const
+    {
         return m_shapeManager;
     }
-    void updateCanvas(const QRectF&)  {}
-    KoToolProxy * toolProxy() const {
+    void updateCanvas(const QRectF &)  {}
+    KoToolProxy *toolProxy() const
+    {
         return 0;
     }
-    KoViewConverter *viewConverter() const {
+    KoViewConverter *viewConverter() const
+    {
         return 0;
     }
-    QWidget* canvasWidget() {
+    QWidget *canvasWidget()
+    {
         return 0;
     }
-    const QWidget* canvasWidget() const {
+    const QWidget *canvasWidget() const
+    {
         return 0;
     }
-    KoUnit unit() const {
+    KoUnit unit() const
+    {
         return KoUnit(KoUnit::Millimeter);
     }
-    KoGuidesData *guidesData(){
+    KoGuidesData *guidesData()
+    {
         return m_guideData;
     }
     void updateInputMethodInfo() {}
     void setCursor(const QCursor &) {}
-    private:
-        KoShapeManager *m_shapeManager;
-        qreal m_horz;
-        qreal m_vert;
-        KoGuidesData *m_guideData;
+private:
+    KoShapeManager *m_shapeManager;
+    qreal m_horz;
+    qreal m_vert;
+    KoGuidesData *m_guideData;
 };
 
 class MockShapeController : public KoShapeBasedDocumentBase
 {
 public:
-    void addShape(KoShape* shape) {
+    void addShape(KoShape *shape)
+    {
         m_shapes.insert(shape);
     }
-    void removeShape(KoShape* shape) {
+    void removeShape(KoShape *shape)
+    {
         m_shapes.remove(shape);
     }
-    bool contains(KoShape* shape) {
+    bool contains(KoShape *shape)
+    {
         return m_shapes.contains(shape);
     }
 private:
@@ -148,73 +168,89 @@ private:
 class MockContainerModel : public KoShapeContainerModel
 {
 public:
-    MockContainerModel() {
+    MockContainerModel()
+    {
         resetCounts();
     }
 
     /// reimplemented
-    void add(KoShape *child) {
+    void add(KoShape *child)
+    {
         m_children.append(child); // note that we explicitly do not check for duplicates here!
     }
     /// reimplemented
-    void remove(KoShape *child) {
+    void remove(KoShape *child)
+    {
         m_children.removeAll(child);
     }
 
     /// reimplemented
     void setClipped(const KoShape *, bool) { }  // ignored
     /// reimplemented
-    bool isClipped(const KoShape *) const {
+    bool isClipped(const KoShape *) const
+    {
         return false;
     }// ignored
     /// reimplemented
-    bool isChildLocked(const KoShape *child) const {
+    bool isChildLocked(const KoShape *child) const
+    {
         return child->isGeometryProtected();
     }
     /// reimplemented
-    int count() const {
+    int count() const
+    {
         return m_children.count();
     }
     /// reimplemented
-    QList<KoShape*> shapes() const {
+    QList<KoShape *> shapes() const
+    {
         return m_children;
     }
     /// reimplemented
-    void containerChanged(KoShapeContainer *, KoShape::ChangeType) {
+    void containerChanged(KoShapeContainer *, KoShape::ChangeType)
+    {
         m_containerChangedCalled++;
     }
     /// reimplemented
-    void proposeMove(KoShape *, QPointF &) {
+    void proposeMove(KoShape *, QPointF &)
+    {
         m_proposeMoveCalled++;
     }
     /// reimplemented
-    void childChanged(KoShape *, KoShape::ChangeType) {
+    void childChanged(KoShape *, KoShape::ChangeType)
+    {
         m_childChangedCalled++;
     }
-    void setInheritsTransform(const KoShape *, bool) {
+    void setInheritsTransform(const KoShape *, bool)
+    {
     }
-    bool inheritsTransform(const KoShape *) const {
+    bool inheritsTransform(const KoShape *) const
+    {
         return false;
     }
 
-    int containerChangedCalled() const {
+    int containerChangedCalled() const
+    {
         return m_containerChangedCalled;
     }
-    int childChangedCalled() const {
+    int childChangedCalled() const
+    {
         return m_childChangedCalled;
     }
-    int proposeMoveCalled() const {
+    int proposeMoveCalled() const
+    {
         return m_proposeMoveCalled;
     }
 
-    void resetCounts() {
+    void resetCounts()
+    {
         m_containerChangedCalled = 0;
         m_childChangedCalled = 0;
         m_proposeMoveCalled = 0;
     }
 
 private:
-    QList<KoShape*> m_children;
+    QList<KoShape *> m_children;
     int m_containerChangedCalled, m_childChangedCalled, m_proposeMoveCalled;
 };
 

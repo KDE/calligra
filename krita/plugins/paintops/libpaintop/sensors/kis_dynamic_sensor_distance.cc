@@ -30,7 +30,7 @@ KisDynamicSensorDistance::KisDynamicSensorDistance() : KisDynamicSensor(Distance
     setMaximumLabel(i18n("30 px"));
 }
 
-qreal KisDynamicSensorDistance::value(const KisPaintInformation&  pi)
+qreal KisDynamicSensorDistance::value(const KisPaintInformation  &pi)
 {
     m_measuredDistance += pi.drawingDistance();
 
@@ -57,9 +57,9 @@ void KisDynamicSensorDistance::setLength(int length)
     setMaximumLabel(i18n("%1 px", length));
 }
 
-QWidget* KisDynamicSensorDistance::createConfigurationWidget(QWidget* parent, QWidget* ss)
+QWidget *KisDynamicSensorDistance::createConfigurationWidget(QWidget *parent, QWidget *ss)
 {
-    QWidget* wdg = new QWidget(parent);
+    QWidget *wdg = new QWidget(parent);
     Ui_SensorDistanceConfiguration stc;
     stc.setupUi(wdg);
     stc.checkBoxRepeat->setChecked(m_periodic);
@@ -71,14 +71,14 @@ QWidget* KisDynamicSensorDistance::createConfigurationWidget(QWidget* parent, QW
     return wdg;
 }
 
-void KisDynamicSensorDistance::toXML(QDomDocument& doc, QDomElement& e) const
+void KisDynamicSensorDistance::toXML(QDomDocument &doc, QDomElement &e) const
 {
     KisDynamicSensor::toXML(doc, e);
     e.setAttribute("periodic", m_periodic);
     e.setAttribute("length", m_length);
 }
 
-void KisDynamicSensorDistance::fromXML(const QDomElement& e)
+void KisDynamicSensorDistance::fromXML(const QDomElement &e)
 {
     KisDynamicSensor::fromXML(e);
     m_periodic = e.attribute("periodic", "0").toInt();

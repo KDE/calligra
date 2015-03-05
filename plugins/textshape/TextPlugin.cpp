@@ -36,16 +36,16 @@
 K_PLUGIN_FACTORY(TextPluginFactory,
                  registerPlugin<TextPlugin>();
                  registerPlugin<TextDocumentInspectionPlugin>(QLatin1String("TextDocumentInspection"));
-)
+                )
 #else
 K_PLUGIN_FACTORY(TextPluginFactory,
                  registerPlugin<TextPlugin>();
-)
+                )
 #endif
 K_EXPORT_PLUGIN(TextPluginFactory("calligra_shape_text"))
 
-TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
-        : QObject(parent)
+TextPlugin::TextPlugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
     KoToolRegistry::instance()->add(new TextToolFactory());
     KoToolRegistry::instance()->add(new ReviewToolFactory());

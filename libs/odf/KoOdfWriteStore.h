@@ -114,7 +114,7 @@ public:
 
 private:
     struct Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOODFWRITESTORE_H */

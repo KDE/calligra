@@ -24,9 +24,10 @@
 
 #include "kotext_export.h"
 
-class KOTEXT_EXPORT KoUndoableTool {
+class KOTEXT_EXPORT KoUndoableTool
+{
 public:
-    virtual ~KoUndoableTool(){}
+    virtual ~KoUndoableTool() {}
     virtual void setAddUndoCommandAllowed(bool allowed) = 0;
 };
 
@@ -76,10 +77,10 @@ protected:
     class KOTEXT_EXPORT UndoRedoFinalizer
     {
     public:
-        explicit UndoRedoFinalizer(KoTextCommandBase* parent) : m_parent(parent) {}
+        explicit UndoRedoFinalizer(KoTextCommandBase *parent) : m_parent(parent) {}
         ~UndoRedoFinalizer();
     private:
-        KoTextCommandBase* m_parent;
+        KoTextCommandBase *m_parent;
     };
 
     KoUndoableTool *m_tool;

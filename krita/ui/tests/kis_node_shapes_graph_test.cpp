@@ -23,7 +23,6 @@
 #include "kis_node_shapes_graph.h"
 #include "node_shapes_utils.h"
 
-
 /**
  * node0
  * +--node1
@@ -46,23 +45,22 @@ void KisNodeShapesGraphTest::init()
     m_shapesGraph->addNode(rootNode, 0, 0);
     m_rootDummy = m_shapesGraph->nodeToDummy(rootNode);
 
-
     KisNodeSP parent;
 
     parent = rootNode;
-    for(int i = 6; i >= 1; i--) {
+    for (int i = 6; i >= 1; i--) {
         m_shapesGraph->addNode(nodeFromId(i), parent, 0);
     }
 
     parent = findNodeById(m_rootDummy, 1);
     Q_ASSERT(parent);
-    for(int i = 8; i >= 7; i--) {
+    for (int i = 8; i >= 7; i--) {
         m_shapesGraph->addNode(nodeFromId(i), parent, 0);
     }
 
     parent = findNodeById(m_rootDummy, 4);
     Q_ASSERT(parent);
-    for(int i = 11; i >= 9; i--) {
+    for (int i = 11; i >= 9; i--) {
         m_shapesGraph->addNode(nodeFromId(i), parent, 0);
     }
 
@@ -86,16 +84,16 @@ void KisNodeShapesGraphTest::cleanup()
 void KisNodeShapesGraphTest::testShapeChildren()
 {
     KisNodeShape *parent = m_shapesGraph->nodeToShape(findNodeById(m_rootDummy, 4));
-    QList<KisNodeShape*> expectedChildren;
+    QList<KisNodeShape *> expectedChildren;
 
-    for(int i = 9; i <= 11; i++) {
+    for (int i = 9; i <= 11; i++) {
         expectedChildren.append(m_shapesGraph->nodeToShape(findNodeById(m_rootDummy, i)));
     }
 
-    QList<KoShape*> realChildren = parent->shapes();
+    QList<KoShape *> realChildren = parent->shapes();
 
-    foreach(KoShape *shape, realChildren) {
-        KisNodeShape *nodeShape = dynamic_cast<KisNodeShape*>(shape);
+    foreach (KoShape *shape, realChildren) {
+        KisNodeShape *nodeShape = dynamic_cast<KisNodeShape *>(shape);
 
         QVERIFY(expectedChildren.contains(nodeShape));
         expectedChildren.removeOne(nodeShape);
@@ -120,7 +118,7 @@ void KisNodeShapesGraphTest::testInsert()
     KisNodeShape *nodeShape = m_shapesGraph->nodeToShape(node);
     KisNodeShape *parentShape = m_shapesGraph->nodeToShape(parent);
     QCOMPARE(addedShape, nodeShape);
-    QCOMPARE(((KoShape*)nodeShape)->parent(), parentShape);
+    QCOMPARE(((KoShape *)nodeShape)->parent(), parentShape);
 }
 
 void KisNodeShapesGraphTest::testRemove()

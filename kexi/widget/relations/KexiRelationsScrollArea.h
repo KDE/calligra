@@ -34,18 +34,17 @@
 #include "KexiRelationsConnection.h"
 #include "KexiRelationsTableContainer.h"
 
-
 namespace KexiDB
 {
 class Connection;
 }
 
-typedef QHash<QString, KexiRelationsTableContainer*> TablesHash;
-typedef QMutableHashIterator<QString, KexiRelationsTableContainer*> TablesHashMutableIterator;
-typedef QHash<QString, KexiRelationsTableContainer*>::ConstIterator TablesHashConstIterator;
-typedef QSet<KexiRelationsConnection*> ConnectionSet;
-typedef QMutableSetIterator<KexiRelationsConnection*> ConnectionSetMutableIterator;
-typedef QSet<KexiRelationsConnection*>::ConstIterator ConnectionSetIterator;
+typedef QHash<QString, KexiRelationsTableContainer *> TablesHash;
+typedef QMutableHashIterator<QString, KexiRelationsTableContainer *> TablesHashMutableIterator;
+typedef QHash<QString, KexiRelationsTableContainer *>::ConstIterator TablesHashConstIterator;
+typedef QSet<KexiRelationsConnection *> ConnectionSet;
+typedef QMutableSetIterator<KexiRelationsConnection *> ConnectionSetMutableIterator;
+typedef QSet<KexiRelationsConnection *>::ConstIterator ConnectionSetIterator;
 
 //! A data structure describing connection
 struct SourceConnection {
@@ -73,30 +72,30 @@ public:
     virtual ~KexiRelationsScrollArea();
 
     //! \return a hash of added tables
-    TablesHash* tables() const;
+    TablesHash *tables() const;
 
     /*! Adds a table \a t to the area. This changes only visual representation.
      If \a rect is valid, table widget geometry will be initialized.
      \return added table container or 0 on failure.
      */
-    KexiRelationsTableContainer* addTableContainer(KexiDB::TableSchema *t,
+    KexiRelationsTableContainer *addTableContainer(KexiDB::TableSchema *t,
             const QRect &rect = QRect());
 
     /*! \return table container for table \a t. */
-    KexiRelationsTableContainer * tableContainer(KexiDB::TableSchema *t) const;
+    KexiRelationsTableContainer *tableContainer(KexiDB::TableSchema *t) const;
 
     //! Adds a connection \a _conn to the area. This changes only visual representation.
-    void addConnection(const SourceConnection& _conn);
+    void addConnection(const SourceConnection &_conn);
 
     void setReadOnly(bool);
 
-    KexiRelationsConnection* selectedConnection() const;
+    KexiRelationsConnection *selectedConnection() const;
 
-    KexiRelationsTableContainer* focusedTableContainer() const;
+    KexiRelationsTableContainer *focusedTableContainer() const;
 
     virtual QSize sizeHint() const;
 
-    const ConnectionSet* connections() const;
+    const ConnectionSet *connections() const;
 
     //! @internal Handles mouse press event for area widget
     void handleMousePressEvent(QMouseEvent *ev);
@@ -105,15 +104,15 @@ public:
     void handlePaintEvent(QPaintEvent *event);
 
 Q_SIGNALS:
-    void tableContextMenuRequest(const QPoint& pos);
-    void connectionContextMenuRequest(const QPoint& pos);
-    void emptyAreaContextMenuRequest(const QPoint& pos);
+    void tableContextMenuRequest(const QPoint &pos);
+    void connectionContextMenuRequest(const QPoint &pos);
+    void emptyAreaContextMenuRequest(const QPoint &pos);
     void tableViewGotFocus();
     void connectionViewGotFocus();
     void emptyAreaGotFocus();
-    void tableHidden(KexiDB::TableSchema& t);
-    void tablePositionChanged(KexiRelationsTableContainer*);
-    void aboutConnectionRemove(KexiRelationsConnection*);
+    void tableHidden(KexiDB::TableSchema &t);
+    void tablePositionChanged(KexiRelationsTableContainer *);
+    void aboutConnectionRemove(KexiRelationsConnection *);
 
 public Q_SLOTS:
     //! Clears current selection - table/query or connection
@@ -127,7 +126,7 @@ public Q_SLOTS:
     void removeAllConnections();
 
     /*! Hides all tables except \a tables. */
-    void hideAllTablesExcept(KexiDB::TableSchema::List* tables);
+    void hideAllTablesExcept(KexiDB::TableSchema::List *tables);
 
     //! removes selected table or connection
     void removeSelectedObject();
@@ -142,20 +141,20 @@ protected Q_SLOTS:
 protected:
     void contentsMousePressEvent(QMouseEvent *ev);
     virtual void keyPressEvent(QKeyEvent *ev);
-    virtual void contextMenuEvent(QContextMenuEvent* event);
+    virtual void contextMenuEvent(QContextMenuEvent *event);
 
-    void hideTable(KexiRelationsTableContainer* tableView);
+    void hideTable(KexiRelationsTableContainer *tableView);
     void removeConnection(KexiRelationsConnection *conn);
 
     //! Removes current value of iterator \a it, also deleted the container object.
-    void hideTableInternal(TablesHashMutableIterator& it);
+    void hideTableInternal(TablesHashMutableIterator &it);
 
     //! Removes current value of iterator \a it, also deleted the connection object.
-    void removeConnectionInternal(ConnectionSetMutableIterator& it);
+    void removeConnectionInternal(ConnectionSetMutableIterator &it);
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

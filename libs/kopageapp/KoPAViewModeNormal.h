@@ -31,19 +31,19 @@ class KoViewConverter;
 class KOPAGEAPP_EXPORT KoPAViewModeNormal : public KoPAViewMode
 {
 public:
-    KoPAViewModeNormal( KoPAViewBase * view, KoPACanvasBase * m_canvas );
+    KoPAViewModeNormal(KoPAViewBase *view, KoPACanvasBase *m_canvas);
     ~KoPAViewModeNormal();
 
-    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect);
+    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect);
     //void paintEvent( KoPACanvas * canvas, QPaintEvent* event );
-    void tabletEvent( QTabletEvent *event, const QPointF &point );
-    void mousePressEvent( QMouseEvent *event, const QPointF &point );
-    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point );
-    void mouseMoveEvent( QMouseEvent *event, const QPointF &point );
-    void mouseReleaseEvent( QMouseEvent *event, const QPointF &point );
-    void keyPressEvent( QKeyEvent *event );
-    void keyReleaseEvent( QKeyEvent *event );
-    void wheelEvent( QWheelEvent * event, const QPointF &point );
+    void tabletEvent(QTabletEvent *event, const QPointF &point);
+    void mousePressEvent(QMouseEvent *event, const QPointF &point);
+    void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
+    void mouseMoveEvent(QMouseEvent *event, const QPointF &point);
+    void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+    void wheelEvent(QWheelEvent *event, const QPointF &point);
 
     /**
      * @brief Switch the active view mode to work on master/normal pages
@@ -54,23 +54,23 @@ public:
      *
      * @param master if true work on master pages, if false work on normal pages
      */
-    virtual void setMasterMode( bool master );
+    virtual void setMasterMode(bool master);
 
     virtual bool masterMode();
 
-    void addShape( KoShape *shape );
+    void addShape(KoShape *shape);
 
-    void removeShape( KoShape *shape );
+    void removeShape(KoShape *shape);
 
-    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0 );
+    virtual void changePageLayout(const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0);
 
 private:
-    void paintMargins( QPainter &painter, const KoViewConverter &converter );
+    void paintMargins(QPainter &painter, const KoViewConverter &converter);
 
     /// if true it works on master pages, if false on normal pages
     bool m_masterMode;
     /// the page which was active before entering the master mode
-    KoPAPage * m_savedPage;
+    KoPAPage *m_savedPage;
 };
 
 #endif /* KOPAVIEWMODENORMAL_H */

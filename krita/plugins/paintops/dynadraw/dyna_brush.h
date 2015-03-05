@@ -58,19 +58,21 @@ public:
     void drawSegment(KisPainter &painter);
     int applyFilter(qreal mx, qreal my);
 
-    void updateCursorPosition(const QPointF &point) {
+    void updateCursorPosition(const QPointF &point)
+    {
         m_cursorPos.setX(point.x() / m_canvasWidth);
         m_cursorPos.setY(point.y() / m_canvasHeight);
     }
 
-    void setProperties(KisDynaProperties * properties) {
+    void setProperties(KisDynaProperties *properties)
+    {
         m_properties = properties;
     }
-    void setCanvasSize(int width, int height) {
+    void setCanvasSize(int width, int height)
+    {
         m_canvasWidth = width;
         m_canvasHeight = height;
     }
-
 
 private:
     void drawCircle(KisPainter &painter, qreal x, qreal y, int radius, int steps);
@@ -104,7 +106,7 @@ private:
     DynaFilter m_cursorFilter;
 
     bool m_initialized;
-    const KisDynaProperties * m_properties;
+    const KisDynaProperties *m_properties;
 
 };
 

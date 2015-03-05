@@ -112,8 +112,9 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
     }
     m_owner = owner;
     m_data = data;
-    if (m_data)
+    if (m_data) {
         m_itemIterator = m_data->constBegin();
+    }
 
     //kDebug() << "using shared data";
     //add columns
@@ -123,13 +124,13 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
     if (horizontalHeader()) {
         int i = 0;
         horizontalHeader()->setResizeMode(QHeaderView::Interactive); // set before using resizeSection()
-        foreach(KexiDB::TableViewColumn *col, *m_data->columns()) {
+        foreach (KexiDB::TableViewColumn *col, *m_data->columns()) {
             if (col->isVisible()) {
                 int w = col->width();
                 if (w == 0) {
                     w = KEXI_DEFAULT_DATA_COLUMN_WIDTH; //default col width in pixels
                 }
-    //! @todo add col width configuration and storage
+                //! @todo add col width configuration and storage
                 horizontalHeader()->resizeSection(i, w);
                 i++;
             }
@@ -143,14 +144,15 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
         verticalHeader()->headerDataChanged(Qt::Vertical, 0, data->count() - 1);
     }
 //!Change the following:
-    if (m_data && m_data->count() == 0 && m_navPanel)
+    if (m_data && m_data->count() == 0 && m_navPanel) {
         m_navPanel->setCurrentRecordNumber(0 + 1);
+    }
 
     if (m_data && !theSameData) {
 //! @todo: store sorting settings?
         setSorting(-1);
         connectToReloadDataSlot(m_data, SIGNAL(reloadRequested()));
-        QObject* thisObject = dynamic_cast<QObject*>(this);
+        QObject *thisObject = dynamic_cast<QObject *>(this);
         if (thisObject) {
             QObject::connect(m_data, SIGNAL(destroying()), thisObject, SLOT(slotDataDestroying()));
             QObject::connect(m_data, SIGNAL(rowsDeleted(QList<int>)),
@@ -190,14 +192,17 @@ void KexiDataAwareObjectInterface::setData(KexiDB::TableViewData *data, bool own
     updateIndicesForVisibleValues();
 
     if (m_data)
-        /*emit*/ dataSet(m_data);
+        /*emit*/ {
+        dataSet(m_data);
+    }
 }
 
 void KexiDataAwareObjectInterface::initDataContents()
 {
     m_editor = 0;
-    if (m_navPanel)
+    if (m_navPanel) {
         m_navPanel->setRecordCount(rowCount());
+    }
 
     if (m_data && !m_cursorPositionSetExplicityBeforeShow) {
         //set current row:
@@ -231,24 +236,27 @@ void KexiDataAwareObjectInterface::initDataContents()
 
 void KexiDataAwareObjectInterface::setSortingEnabled(bool set)
 {
-    if (m_isSortingEnabled && !set)
+    if (m_isSortingEnabled && !set) {
         setSorting(-1);
+    }
     m_isSortingEnabled = set;
     /*emit*/ reloadActions();
 }
 
 void KexiDataAwareObjectInterface::setSorting(int column, Qt::SortOrder order)
 {
-    if (!m_data || !m_isSortingEnabled)
+    if (!m_data || !m_isSortingEnabled) {
         return;
+    }
     setLocalSortOrder(column, order);
     m_data->setSorting(column, order);
 }
 
 int KexiDataAwareObjectInterface::dataSortColumn() const
 {
-    if (m_data && m_isSortingEnabled)
+    if (m_data && m_isSortingEnabled) {
         return m_data->sortColumn();
+    }
     return -1;
 }
 
@@ -259,54 +267,63 @@ Qt::SortOrder KexiDataAwareObjectInterface::dataSortOrder() const
 
 bool KexiDataAwareObjectInterface::sort()
 {
-    if (!m_data || !m_isSortingEnabled)
+    if (!m_data || !m_isSortingEnabled) {
         return false;
+    }
 
-    if (rowCount() < 2)
+    if (rowCount() < 2) {
         return true;
+    }
 
-    if (!acceptRowEdit())
+    if (!acceptRowEdit()) {
         return false;
+    }
 
     const int oldRow = m_curRow;
-    if (m_data->sortColumn() != -1)
+    if (m_data->sortColumn() != -1) {
         m_data->sort();
+    }
 
     //locate current record
     if (!m_currentItem) {
         m_itemIterator = m_data->constBegin();
         m_currentItem = *m_itemIterator;
         m_curRow = 0;
-        if (!m_currentItem)
+        if (!m_currentItem) {
             return true;
+        }
     }
     if (m_currentItem != m_insertItem) {
         m_curRow = m_data->indexOf(m_currentItem);
         int jump = m_curRow - oldRow;
-        if (jump < 0)
+        if (jump < 0) {
             m_itemIterator -= -jump;
-        else
+        } else {
             m_itemIterator += jump;
+        }
     }
 
     updateGUIAfterSorting(oldRow);
     editorShowFocus(m_curRow, m_curCol);
-    if (m_navPanel)
+    if (m_navPanel) {
         m_navPanel->setCurrentRecordNumber(m_curRow + 1);
+    }
     return true;
 }
 
 void KexiDataAwareObjectInterface::sortAscending()
 {
-    if (currentColumn() < 0)
+    if (currentColumn() < 0) {
         return;
+    }
     sortColumnInternal(currentColumn(), 1);
 }
 
 void KexiDataAwareObjectInterface::sortDescending()
 {
-    if (currentColumn() < 0)
+    if (currentColumn() < 0) {
         return;
+    }
     sortColumnInternal(currentColumn(), -1);
 }
 
@@ -315,12 +332,12 @@ void KexiDataAwareObjectInterface::sortColumnInternal(int col, int order)
     //-select sorting
     bool asc;
     if (order == 0) {// invert
-        if (col == dataSortColumn() && dataSortOrder() == Qt::AscendingOrder)
-            asc = false; // invert
-        else
+        if (col == dataSortColumn() && dataSortOrder() == Qt::AscendingOrder) {
+            asc = false;    // invert
+        } else {
             asc = true;
-    }
-    else {
+        }
+    } else {
         asc = (order == 1);
     }
 
@@ -338,12 +355,15 @@ void KexiDataAwareObjectInterface::sortColumnInternal(int col, int order)
 
 bool KexiDataAwareObjectInterface::isInsertingEnabled() const
 {
-    if (isReadOnly())
+    if (isReadOnly()) {
         return false;
-    if (m_insertingEnabled == 1 || m_insertingEnabled == 0)
+    }
+    if (m_insertingEnabled == 1 || m_insertingEnabled == 0) {
         return (bool)m_insertingEnabled;
-    if (!hasData())
+    }
+    if (!hasData()) {
         return true;
+    }
     return m_data->isInsertingEnabled();
 }
 
@@ -364,37 +384,44 @@ void KexiDataAwareObjectInterface::setDeletionPolicy(DeletionPolicy policy)
 
 void KexiDataAwareObjectInterface::setReadOnly(bool set)
 {
-    if (isReadOnly() == set || (m_data && m_data->isReadOnly() && !set))
-        return; //not allowed!
+    if (isReadOnly() == set || (m_data && m_data->isReadOnly() && !set)) {
+        return;    //not allowed!
+    }
     m_readOnly = (set ? 1 : 0);
-    if (set)
+    if (set) {
         setInsertingEnabled(false);
+    }
     updateWidgetContents();
     /*emit*/ reloadActions();
 }
 
 bool KexiDataAwareObjectInterface::isReadOnly() const
 {
-    if (!hasData())
+    if (!hasData()) {
         return true;
-    if (m_readOnly == 1 || m_readOnly == 0)
+    }
+    if (m_readOnly == 1 || m_readOnly == 0) {
         return (bool)m_readOnly;
-    if (!hasData())
+    }
+    if (!hasData()) {
         return true;
+    }
     return m_data->isReadOnly();
 }
 
 void KexiDataAwareObjectInterface::setInsertingEnabled(bool set)
 {
-    if (isInsertingEnabled() == set || (m_data && !m_data->isInsertingEnabled() && set))
-        return; //not allowed!
+    if (isInsertingEnabled() == set || (m_data && !m_data->isInsertingEnabled() && set)) {
+        return;    //not allowed!
+    }
     m_insertingEnabled = (set ? 1 : 0);
     if (m_navPanel) {
         m_navPanel->setInsertingEnabled(set);
         m_navPanel->setInsertingButtonVisible(set);
     }
-    if (set)
+    if (set) {
         setReadOnly(false);
+    }
     updateWidgetContents();
     /*emit*/ reloadActions();
 }
@@ -461,14 +488,15 @@ void KexiDataAwareObjectInterface::clearSelection()
     m_curCol = -1;
     m_currentItem = 0;
     updateRow(oldRow);
-    if (m_navPanel)
+    if (m_navPanel) {
         m_navPanel->setCurrentRecordNumber(0);
+    }
 }
 
 // #define setCursorPosition_DEBUG
 
 void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
-                                                     CursorPositionFlags flags)
+        CursorPositionFlags flags)
 {
     int newrow = row;
     int newcol = col;
@@ -477,10 +505,11 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
         if (isInsertingEnabled()) {
             m_currentItem = m_insertItem;
             newrow = 0;
-            if (col >= 0)
+            if (col >= 0) {
                 newcol = col;
-            else
+            } else {
                 newcol = 0;
+            }
         } else {
             m_currentItem = 0;
             m_curRow = -1;
@@ -504,7 +533,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
     if (forceSet || m_curRow != newrow || m_curCol != newcol) {
 #ifdef setCursorPosition_DEBUG
         kDebug() << QString("old:%1,%2 new:%3,%4").arg(m_curCol)
-            .arg(m_curRow).arg(newcol).arg(newrow);
+                 .arg(m_curRow).arg(newcol).arg(newrow);
 #endif
 
         // cursor moved: get rid of editor
@@ -530,16 +559,16 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
         if (m_rowEditing && m_curRow != newrow) {
             newRowInserted = m_newRowEditing;
             if (m_acceptRowEdit_in_setCursorPosition_enabled
-                && !acceptRowEdit())
-            {
+                    && !acceptRowEdit()) {
                 //accepting failed: cancel setting the cursor
                 return;
             }
             //update row number, because number of rows changed
             newrow = qMin(rowCount() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
 
-            if (m_navPanel)
-                m_navPanel->setCurrentRecordNumber(newrow + 1); //refresh
+            if (m_navPanel) {
+                m_navPanel->setCurrentRecordNumber(newrow + 1);    //refresh
+            }
         }
 
         //change position
@@ -564,19 +593,22 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
         //show editor-dependent focus, if needed
         editorShowFocus(m_curRow, m_curCol);
 
-        if (m_updateEntireRowWhenMovingToOtherRow)
+        if (m_updateEntireRowWhenMovingToOtherRow) {
             updateRow(oldRow);
-        else
+        } else {
             updateCell(oldRow, oldCol);
+        }
 
-        if (m_updateEntireRowWhenMovingToOtherRow)
+        if (m_updateEntireRowWhenMovingToOtherRow) {
             updateRow(m_curRow);
-        else
+        } else {
             updateCell(m_curRow, m_curCol);
+        }
 
         if (m_curCol != oldCol || m_curRow != oldRow || forceSet) {//ensure this is also refreshed
-            if (!m_updateEntireRowWhenMovingToOtherRow) //only if entire row has not been updated
+            if (!m_updateEntireRowWhenMovingToOtherRow) { //only if entire row has not been updated
                 updateCell(oldRow, m_curCol);
+            }
         }
         //update row
         if (forceSet || m_curRow != oldRow) {
@@ -589,12 +621,11 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
             } else {
 #ifdef setCursorPosition_DEBUG
                 kDebug() << QString("NOW item at %1 (%2) is current")
-                    .arg(m_curRow).arg((ulong)itemAt(m_curRow));
+                         .arg(m_curRow).arg((ulong)itemAt(m_curRow));
                 int _i = 0;
                 kDebug() << "m_curRow:" << m_curRow;
                 for (KexiDB::TableViewData::Iterator ii = m_data->constBegin();
-                     ii != m_data->constEnd(); ++ii)
-                {
+                        ii != m_data->constEnd(); ++ii) {
                     kDebug() << _i << (ulong)(*ii)
                              << (ii == m_itemIterator ? "CURRENT" : "")
                              << (*ii)->debugString();
@@ -603,27 +634,20 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
                 kDebug() << "~" << m_curRow << (ulong)(*m_itemIterator)
                          << (*m_itemIterator)->debugString();
 #endif
-                if (   !newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem
-                    && m_curRow == (rowCount() - 1))
-                {
+                if (!newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem
+                        && m_curRow == (rowCount() - 1)) {
                     //moving from the 'insert item' to the last item
                     m_itemIterator = m_data->constBegin();
                     m_itemIterator += (m_data->count() - 1);
-                }
-                else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && 0 == m_curRow) {
+                } else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && 0 == m_curRow) {
                     m_itemIterator = m_data->constBegin();
-                }
-                else if (   !newRowInserted && !forceSet && m_currentItem != m_insertItem
-                         && oldRow >= 0 && (oldRow + 1) == m_curRow)
-                {
+                } else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem
+                           && oldRow >= 0 && (oldRow + 1) == m_curRow) {
                     ++m_itemIterator; // just move next
-                }
-                else if (   !newRowInserted && !forceSet && m_currentItem != m_insertItem
-                         && oldRow >= 0 && (oldRow - 1) == m_curRow)
-                {
+                } else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem
+                           && oldRow >= 0 && (oldRow - 1) == m_curRow) {
                     --m_itemIterator; // just move back
-                }
-                else { //move at:
+                } else { //move at:
                     m_itemIterator = m_data->constBegin();
                     m_itemIterator += m_curRow;
                 }
@@ -647,8 +671,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/,
         selectCellInternal(oldRow, oldCol);
     } else {
         if (!(flags & DontEnsureCursorVisibleIfPositionUnchanged)
-            && m_curRow >= 0 && m_curRow < rowCount() && m_curCol >= 0 && m_curCol < columnCount())
-        {
+                && m_curRow >= 0 && m_curRow < rowCount() && m_curCol >= 0 && m_curCol < columnCount()) {
             // the same cell but may need a bit of scrolling to make it visible
             ensureCellVisible(m_curRow, m_curCol);
         }
@@ -668,8 +691,9 @@ void KexiDataAwareObjectInterface::selectCellInternal(int previousRow, int previ
 
 bool KexiDataAwareObjectInterface::acceptRowEdit()
 {
-    if (!m_rowEditing || /*sanity*/!m_data->rowEditBuffer() || m_inside_acceptRowEdit)
+    if (!m_rowEditing || /*sanity*/!m_data->rowEditBuffer() || m_inside_acceptRowEdit) {
         return true;
+    }
     if (m_inside_acceptEditor) {
         m_internal_acceptsRowEditAfterCellAccepting = true;
         return true;
@@ -695,8 +719,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
             kDebug() << "-- INSERTING: ";
             m_data->rowEditBuffer()->debug();
             success = m_data->saveNewRow(*m_currentItem);
-        }
-        else {
+        } else {
             if (success) {
                 //accept changes for this row:
                 kDebug() << "-- UPDATING: ";
@@ -723,16 +746,18 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 
         if (inserting) {
             //update navigator's data
-            if (m_navPanel)
+            if (m_navPanel) {
                 m_navPanel->setRecordCount(rowCount());
+            }
         }
         /*emit*/ rowEditTerminated(m_curRow);
     } else {
         int faultyColumn = -1;
-        if (m_data->result().column >= 0 && m_data->result().column < columnCount())
+        if (m_data->result().column >= 0 && m_data->result().column < columnCount()) {
             faultyColumn = m_data->result().column;
-        else if (columnEditedBeforeAccepting >= 0)
+        } else if (columnEditedBeforeAccepting >= 0) {
             faultyColumn = columnEditedBeforeAccepting;
+        }
         if (faultyColumn >= 0) {
             setCursorPosition(m_curRow, faultyColumn);
         }
@@ -758,10 +783,12 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 
 bool KexiDataAwareObjectInterface::cancelRowEdit()
 {
-    if (!hasData())
+    if (!hasData()) {
         return true;
-    if (!m_rowEditing)
+    }
+    if (!m_rowEditing) {
         return true;
+    }
     cancelEditor();
     m_rowEditing = false;
 
@@ -800,8 +827,9 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
 void KexiDataAwareObjectInterface::updateAfterCancelRowEdit()
 {
     updateRow(m_curRow);
-    if (m_alsoUpdateNextRow)
+    if (m_alsoUpdateNextRow) {
         updateRow(m_curRow + 1);
+    }
     m_alsoUpdateNextRow = false;
 }
 
@@ -812,8 +840,9 @@ void KexiDataAwareObjectInterface::updateAfterAcceptRowEdit()
 
 void KexiDataAwareObjectInterface::removeEditor()
 {
-    if (!m_editor)
+    if (!m_editor) {
         return;
+    }
     m_editor->hideWidget();
     m_editor = 0;
 }
@@ -823,18 +852,21 @@ bool KexiDataAwareObjectInterface::cancelEditor()
     if (m_errorMessagePopup) {
         m_errorMessagePopup->animatedHide();
     }
-    if (!m_editor)
+    if (!m_editor) {
         return true;
+    }
     removeEditor();
     return true;
 }
 
 bool KexiDataAwareObjectInterface::acceptEditor()
 {
-    if (!hasData())
+    if (!hasData()) {
         return true;
-    if (!m_editor || m_inside_acceptEditor)
+    }
+    if (!m_editor || m_inside_acceptEditor) {
         return true;
+    }
 
     m_inside_acceptEditor = true; // avoid recursion
     KexiUtils::Setter<bool> acceptRowEditSetter(&m_inside_acceptEditor, false);
@@ -854,12 +886,11 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             res = KexiDB::Validator::Error;
             //! @todo allow displaying user-defined warning
             showEditorContextMessage(
-                        m_editor,
-                        i18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()),
-                        KMessageWidget::Error,
-                        KMessageWidget::Up);
-        }
-        else if (m_editor->valueIsNull()) {//null value entered
+                m_editor,
+                i18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()),
+                KMessageWidget::Error,
+                KMessageWidget::Up);
+        } else if (m_editor->valueIsNull()) { //null value entered
             if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
                 kDebug() << "NULL NOT ALLOWED!";
                 res = KexiDB::Validator::Error;
@@ -895,8 +926,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     setNull = true;
                 }
             }
-        }
-        else {
+        } else {
             // try to fixup the value before accepting, e.g. trim the text
             if (!m_editor->fixup()) {
                 res = KexiDB::Validator::Error;
@@ -921,13 +951,13 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
     //try to get the value entered:
     if (res == KexiDB::Validator::Ok) {
-        if (   (!setNull && !valueChanged)
-            || (m_editor->field()->type() != KexiDB::Field::Boolean && setNull && m_currentItem->at(realFieldNumber).isNull()))
-        {
+        if ((!setNull && !valueChanged)
+                || (m_editor->field()->type() != KexiDB::Field::Boolean && setNull && m_currentItem->at(realFieldNumber).isNull())) {
             kDebug() << "VALUE NOT CHANGED.";
             removeEditor();
-            if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting)
+            if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting) {
                 acceptRowEdit();
+            }
             return true;
         }
         if (!setNull) {//get the new value
@@ -947,30 +977,29 @@ bool KexiDataAwareObjectInterface::acceptEditor()
     //show the validation result if not OK:
     if (res == KexiDB::Validator::Error) {
         if (!msg.isEmpty()) {
-            if (desc.isEmpty())
-                KMessageBox::sorry(dynamic_cast<QWidget*>(this), msg);
-            else
-                KMessageBox::detailedSorry(dynamic_cast<QWidget*>(this), msg, desc);
+            if (desc.isEmpty()) {
+                KMessageBox::sorry(dynamic_cast<QWidget *>(this), msg);
+            } else {
+                KMessageBox::detailedSorry(dynamic_cast<QWidget *>(this), msg, desc);
+            }
         }
     } else if (res == KexiDB::Validator::Warning) {
         //! @todo: message
-        KMessageBox::messageBox(dynamic_cast<QWidget*>(this), KMessageBox::Sorry, msg + "\n" + desc);
+        KMessageBox::messageBox(dynamic_cast<QWidget *>(this), KMessageBox::Sorry, msg + "\n" + desc);
     }
 
     if (res == KexiDB::Validator::Ok) {
         //2. check using signal
         //send changes to the backend
         QVariant visibleValue;
-        if (   !newval.isNull()/* visible value should be null if value is null */
-            && currentTVColumn->visibleLookupColumnInfo())
-        {
+        if (!newval.isNull()   /* visible value should be null if value is null */
+                && currentTVColumn->visibleLookupColumnInfo()) {
             visibleValue = m_editor->visibleValue(); //visible value for lookup field
         }
         //should be also added to the buffer
         if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, currentTVColumn,
                                            newval, /*allowSignals*/true,
-                                           currentTVColumn->visibleLookupColumnInfo() ? &visibleValue : 0))
-        {
+                                           currentTVColumn->visibleLookupColumnInfo() ? &visibleValue : 0)) {
             kDebug() << "------ EDIT BUFFER CHANGED TO:";
             m_data->rowEditBuffer()->debug();
         } else {
@@ -989,8 +1018,9 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                 if (KMessageBox::No == button) {
                     //discard changes
                     cancelEditor();
-                    if (m_acceptsRowEditAfterCellAccepting)
+                    if (m_acceptsRowEditAfterCellAccepting) {
                         cancelRowEdit();
+                    }
                     return false;
                 }
             }
@@ -1023,18 +1053,18 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 }
 
 void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText,
-                                                        CreateEditorFlags flags)
+        CreateEditorFlags flags)
 {
     //kDebug() << "setText:" << setText;
-    if (isReadOnly() || !columnEditable(m_curCol))
+    if (isReadOnly() || !columnEditable(m_curCol)) {
         return;
+    }
     if (m_editor) {
         if (m_editor->hasFocusableWidget()) {
             m_editor->showWidget();
             m_editor->setFocus();
         }
-    }
-    else {
+    } else {
         if (!setText.isEmpty()) {
             flags |= ReplaceOldValue;
         }
@@ -1044,8 +1074,9 @@ void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText,
 
 void KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell()
 {
-    if (isReadOnly() || !columnEditable(m_curCol))
+    if (isReadOnly() || !columnEditable(m_curCol)) {
         return;
+    }
     if (m_editor) {//if we've editor - just clear it
         m_editor->clear();
         return;
@@ -1054,13 +1085,16 @@ void KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell()
         ensureCellVisible(m_curRow + 1, m_curCol);
     }
     createEditor(m_curRow, m_curCol);
-    if (!m_editor)
+    if (!m_editor) {
         return;
+    }
     m_editor->clear();
-    if (m_editor->acceptEditorAfterDeleteContents())
+    if (m_editor->acceptEditorAfterDeleteContents()) {
         acceptEditor();
-    if (!m_editor || !m_editor->hasFocusableWidget())
+    }
+    if (!m_editor || !m_editor->hasFocusableWidget()) {
         updateCell(m_curRow, m_curCol);
+    }
 }
 
 void KexiDataAwareObjectInterface::deleteCurrentRow()
@@ -1073,8 +1107,9 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
         return;
     }
     ensureCellVisible(m_curRow, m_curCol);
-    if (!acceptRowEdit())
+    if (!acceptRowEdit()) {
         return;
+    }
 
     switch (m_deletionPolicy) {
     case NoDelete:
@@ -1083,12 +1118,11 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
         break;
     case AskDelete:
         if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(
-                    dynamic_cast<QWidget*>(this),
+                    dynamic_cast<QWidget *>(this),
                     i18n("Do you want to delete selected record?"), QString(),
                     KGuiItem(i18n("&Delete Record"), koIconName("edit-delete")), KStandardGuiItem::cancel(),
                     "AskBeforeDeleteRow"/*config entry*/,
-                    KMessageBox::Notify | KMessageBox::Dangerous))
-        {
+                    KMessageBox::Notify | KMessageBox::Dangerous)) {
             return;
         }
         break;
@@ -1104,11 +1138,12 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
     }
 }
 
-KexiDB::RecordData* KexiDataAwareObjectInterface::insertEmptyRow(int pos)
+KexiDB::RecordData *KexiDataAwareObjectInterface::insertEmptyRow(int pos)
 {
     if (!acceptRowEdit() || !isEmptyRowInsertingEnabled()
-            || (pos != -1 && pos >= (rowCount() + (isInsertingEnabled() ? 1 : 0))))
+            || (pos != -1 && pos >= (rowCount() + (isInsertingEnabled() ? 1 : 0)))) {
         return 0;
+    }
 
     KexiDB::RecordData *newRecord = m_data->createItem();
     insertItem(newRecord, pos);
@@ -1148,7 +1183,7 @@ void KexiDataAwareObjectInterface::insertItem(KexiDB::RecordData *newRecord, int
     endInsertItem(newRecord, pos);
 }
 
-void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData* record, bool repaint)
+void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData *record, bool repaint)
 {
     slotRowInserted(record, m_data->indexOf(record), repaint);
 }
@@ -1160,8 +1195,9 @@ void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData * /*record
         updateAllVisibleRowsBelow(pos);
 
         //update navigator's data
-        if (m_navPanel)
+        if (m_navPanel) {
             m_navPanel->setRecordCount(rowCount());
+        }
 
         if (m_curRow >= (int)pos) {
             //update
@@ -1172,10 +1208,12 @@ void KexiDataAwareObjectInterface::slotRowInserted(KexiDB::RecordData * /*record
 
 tristate KexiDataAwareObjectInterface::deleteAllRows(bool ask, bool repaint)
 {
-    if (!hasData())
+    if (!hasData()) {
         return true;
-    if (m_data->count() < 1)
+    }
+    if (m_data->count() < 1) {
         return true;
+    }
 
     if (ask) {
         QString tableName = m_data->dbTableName();
@@ -1183,10 +1221,9 @@ tristate KexiDataAwareObjectInterface::deleteAllRows(bool ask, bool repaint)
             tableName.prepend(" \"");
             tableName.append("\"");
         }
-        if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(dynamic_cast<QWidget*>(this),
+        if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(dynamic_cast<QWidget *>(this),
                 i18n("Do you want to clear the contents of table %1?", tableName),
-                0, KGuiItem(i18n("&Clear Contents"))))
-        {
+                0, KGuiItem(i18n("&Clear Contents")))) {
             return cancelled;
         }
     }
@@ -1204,8 +1241,9 @@ tristate KexiDataAwareObjectInterface::deleteAllRows(bool ask, bool repaint)
             }
         }
     }
-    if (repaintLater)
+    if (repaintLater) {
         m_data->reload();
+    }
 
     return res;
 }
@@ -1218,8 +1256,9 @@ void KexiDataAwareObjectInterface::clearColumns(bool repaint)
     clearColumnsInternal(repaint);
     updateIndicesForVisibleValues();
 
-    if (repaint)
+    if (repaint) {
         updateWidgetContents();
+    }
 }
 
 void KexiDataAwareObjectInterface::reloadData()
@@ -1234,25 +1273,26 @@ void KexiDataAwareObjectInterface::reloadData()
     }
     clearVariables();
 
-    if (dynamic_cast<QWidget*>(this) && dynamic_cast<QWidget*>(this)->isVisible())
+    if (dynamic_cast<QWidget *>(this) && dynamic_cast<QWidget *>(this)->isVisible()) {
         initDataContents();
-    else
+    } else {
         m_initDataContentsOnShow = true;
+    }
 }
 
 int KexiDataAwareObjectInterface::columnType(int col)
 {
-    KexiDB::TableViewColumn* c = m_data ? column(col) : 0;
+    KexiDB::TableViewColumn *c = m_data ? column(col) : 0;
     return c ? c->field()->type() : KexiDB::Field::InvalidType;
 }
 
 bool KexiDataAwareObjectInterface::columnEditable(int col)
 {
-    KexiDB::TableViewColumn* c = m_data ? column(col) : 0;
+    KexiDB::TableViewColumn *c = m_data ? column(col) : 0;
     return c ? (! c->isReadOnly()) : false;
 }
 
-QHeaderView* KexiDataAwareObjectInterface::horizontalHeader() const
+QHeaderView *KexiDataAwareObjectInterface::horizontalHeader() const
 {
     return 0;
 }
@@ -1262,15 +1302,16 @@ int KexiDataAwareObjectInterface::horizontalHeaderHeight() const
     return 0;
 }
 
-QHeaderView* KexiDataAwareObjectInterface::verticalHeader() const
+QHeaderView *KexiDataAwareObjectInterface::verticalHeader() const
 {
     return 0;
 }
 
 int KexiDataAwareObjectInterface::rowCount() const
 {
-    if (!hasData())
+    if (!hasData()) {
         return 0;
+    }
     return m_data->count();
 }
 
@@ -1281,8 +1322,9 @@ int KexiDataAwareObjectInterface::columnCount() const
 
 int KexiDataAwareObjectInterface::dataColumns() const
 {
-    if (!hasData())
+    if (!hasData()) {
         return 0;
+    }
     return m_data->columnCount();
 }
 
@@ -1299,8 +1341,9 @@ void KexiDataAwareObjectInterface::setAcceptsRowEditAfterCellAccepting(bool set)
 
 void KexiDataAwareObjectInterface::setDropsAtRowEnabled(bool set)
 {
-    if (!set)
+    if (!set) {
         m_dragIndicatorLine = -1;
+    }
     if (m_dropsAtRowEnabled && !set) {
         m_dropsAtRowEnabled = false;
         updateWidgetContents();
@@ -1315,8 +1358,8 @@ void KexiDataAwareObjectInterface::setEmptyRowInsertingEnabled(bool set)
     /*emit*/ reloadActions();
 }
 
-void KexiDataAwareObjectInterface::slotAboutToDeleteRow(KexiDB::RecordData& record,
-        KexiDB::ResultInfo* /*result*/, bool repaint)
+void KexiDataAwareObjectInterface::slotAboutToDeleteRow(KexiDB::RecordData &record,
+        KexiDB::ResultInfo * /*result*/, bool repaint)
 {
     if (repaint) {
         m_rowWillBeDeleted = m_data->indexOf(&record);
@@ -1326,23 +1369,26 @@ void KexiDataAwareObjectInterface::slotAboutToDeleteRow(KexiDB::RecordData& reco
 void KexiDataAwareObjectInterface::slotRowDeleted()
 {
     if (m_rowWillBeDeleted >= 0) {
-        if (m_rowWillBeDeleted > 0 && m_rowWillBeDeleted >= (rowCount() - 1) && !m_spreadSheetMode)
-            m_rowWillBeDeleted = rowCount() - 1; //move up if it's the last row
+        if (m_rowWillBeDeleted > 0 && m_rowWillBeDeleted >= (rowCount() - 1) && !m_spreadSheetMode) {
+            m_rowWillBeDeleted = rowCount() - 1;    //move up if it's the last row
+        }
         updateWidgetContentsSize();
 
-        if (!(m_spreadSheetMode && m_rowWillBeDeleted >= (rowCount() - 1)))
+        if (!(m_spreadSheetMode && m_rowWillBeDeleted >= (rowCount() - 1))) {
             setCursorPosition(m_rowWillBeDeleted, m_curCol, ForceSetCursorPosition);
+        }
         updateAllVisibleRowsBelow(m_curRow); //needed for KexiTableView
 
         //update navigator's data
-        if (m_navPanel)
+        if (m_navPanel) {
             m_navPanel->setRecordCount(rowCount());
+        }
 
         m_rowWillBeDeleted = -1;
     }
 }
 
-bool KexiDataAwareObjectInterface::beforeDeleteItem(KexiDB::RecordData*)
+bool KexiDataAwareObjectInterface::beforeDeleteItem(KexiDB::RecordData *)
 {
     //always return
     return true;
@@ -1359,10 +1405,11 @@ void KexiDataAwareObjectInterface::endRemoveItem(int pos)
     Q_UNUSED(pos);
 }
 
-bool KexiDataAwareObjectInterface::deleteItem(KexiDB::RecordData* record)
+bool KexiDataAwareObjectInterface::deleteItem(KexiDB::RecordData *record)
 {
-    if (!record || !beforeDeleteItem(record))
+    if (!record || !beforeDeleteItem(record)) {
         return false;
+    }
 
     const int pos = m_data->indexOf(record);
     beginRemoveItem(record, pos);
@@ -1381,12 +1428,12 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiDB::RecordData* record)
     return true;
 }
 
-KexiDB::TableViewColumn* KexiDataAwareObjectInterface::column(int column)
+KexiDB::TableViewColumn *KexiDataAwareObjectInterface::column(int column)
 {
     return m_data->column(column);
 }
 
-bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KexiDB::TableViewColumn& tvcol)
+bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KexiDB::TableViewColumn &tvcol)
 {
     if (m_rowEditing && m_data->rowEditBuffer() && m_data->rowEditBuffer()->isDBAware()) {
         return m_data->rowEditBuffer()->hasDefaultValueAt(*tvcol.columnInfo());
@@ -1394,10 +1441,10 @@ bool KexiDataAwareObjectInterface::hasDefaultValueAt(const KexiDB::TableViewColu
     return false;
 }
 
-const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col, bool useDefaultValueIfPossible)
+const QVariant *KexiDataAwareObjectInterface::bufferedValueAt(int col, bool useDefaultValueIfPossible)
 {
     if (m_rowEditing && m_data->rowEditBuffer()) {
-        KexiDB::TableViewColumn* tvcol = column(col);
+        KexiDB::TableViewColumn *tvcol = column(col);
         if (tvcol->isDBAware()) {
             //get the stored value
             const int realFieldNumber = fieldNumberForColumn(col);
@@ -1410,14 +1457,16 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col, bool useD
             //db-aware data: now, try to find a buffered value (or default one)
             const QVariant *cv = m_data->rowEditBuffer()->at(*tvcol->columnInfo(),
                                  storedValue->isNull() && useDefaultValueIfPossible);
-            if (cv)
+            if (cv) {
                 return cv;
+            }
             return storedValue;
         }
         //not db-aware data:
         const QVariant *cv = m_data->rowEditBuffer()->at(tvcol->field()->name());
-        if (cv)
+        if (cv) {
             return cv;
+        }
     }
     //not db-aware data:
     const int realFieldNumber = fieldNumberForColumn(col);
@@ -1458,18 +1507,21 @@ void KexiDataAwareObjectInterface::slotDataDestroying()
 
 void KexiDataAwareObjectInterface::addNewRecordRequested()
 {
-    if (!isInsertingEnabled())
+    if (!isInsertingEnabled()) {
         return;
-    if (m_rowEditing) {
-        if (!acceptRowEdit())
-            return;
     }
-    if (!hasData())
+    if (m_rowEditing) {
+        if (!acceptRowEdit()) {
+            return;
+        }
+    }
+    if (!hasData()) {
         return;
+    }
     // find first column that is not autoincrement
     int columnToSelect = 0;
     int i = 0;
-    foreach(KexiDB::TableViewColumn *col, *data()->columns()) {
+    foreach (KexiDB::TableViewColumn *col, *data()->columns()) {
         if (!col->field()->isAutoIncrement()) {
             columnToSelect = i;
             break;
@@ -1479,8 +1531,9 @@ void KexiDataAwareObjectInterface::addNewRecordRequested()
     CreateEditorFlags flags = DefaultCreateEditorFlags;
     flags ^= EnsureCellVisible;
     createEditor(rowCount(), columnToSelect, QString(), flags);
-    if (m_editor)
+    if (m_editor) {
         m_editor->setFocus();
+    }
     const bool orig_acceptRowEdit_in_setCursorPosition_enabled = m_acceptRowEdit_in_setCursorPosition_enabled;
     m_acceptRowEdit_in_setCursorPosition_enabled = false;
     setCursorPosition(rowCount(), columnToSelect);
@@ -1490,23 +1543,22 @@ void KexiDataAwareObjectInterface::addNewRecordRequested()
 bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int &curCol,
         bool fullRecordSelection, bool *moveToFirstField, bool *moveToLastField)
 {
-    if (moveToFirstField)
+    if (moveToFirstField) {
         *moveToFirstField = false;
-    if (moveToLastField)
+    }
+    if (moveToLastField) {
         *moveToLastField = false;
+    }
 
     const bool nobtn = e->modifiers() == Qt::NoModifier;
     const int k = e->key();
 
-    if (   (k == Qt::Key_Up)
-        || (k == Qt::Key_PageUp && e->modifiers() == Qt::ControlModifier))
-    {
+    if ((k == Qt::Key_Up)
+            || (k == Qt::Key_PageUp && e->modifiers() == Qt::ControlModifier)) {
         selectPrevRow();
         e->accept();
-    }
-    else if (   (k == Qt::Key_Down)
-               || (k == Qt::Key_PageDown && e->modifiers() == Qt::ControlModifier))
-    {
+    } else if ((k == Qt::Key_Down)
+               || (k == Qt::Key_PageDown && e->modifiers() == Qt::ControlModifier)) {
         selectNextRow();
         e->accept();
     } else if (k == Qt::Key_PageUp && nobtn) {
@@ -1525,11 +1577,13 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
             } else if (e->modifiers() == Qt::ControlModifier) {
                 curRow = 0;//to 1st row and col
                 curCol = 0;
-            } else
+            } else {
                 return false;
+            }
         }
-        if (moveToFirstField)
+        if (moveToFirstField) {
             *moveToFirstField = true;
+        }
         //do not accept yet
         e->ignore();
     } else if (k == Qt::Key_End) {
@@ -1542,24 +1596,25 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
             } else if (e->modifiers() == Qt::ControlModifier) {
                 curRow = m_data->count() - 1 /*+(isInsertingEnabled()?1:0)*/; //to last row and col
                 curCol = columnCount() - 1;//to last col
-            } else
+            } else {
                 return false;
+            }
         }
-        if (moveToLastField)
+        if (moveToLastField) {
             *moveToLastField = true;
+        }
         //do not accept yet
         e->ignore();
-    }
-    else if (isInsertingEnabled()
-               && (   (e->modifiers() == Qt::ControlModifier && k == Qt::Key_Equal)
+    } else if (isInsertingEnabled()
+               && ((e->modifiers() == Qt::ControlModifier && k == Qt::Key_Equal)
                    || (e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && k == Qt::Key_Equal)
                   )
-            )
-    {
+              ) {
         curRow = m_data->count(); //to the new row
         curCol = 0;//to first col
-        if (moveToFirstField)
+        if (moveToFirstField) {
             *moveToFirstField = true;
+        }
         //do not accept yet
         e->ignore();
     } else {
@@ -1572,19 +1627,20 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
 void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
 {
     Q_UNUSED(v);
-    if (!m_vScrollBarValueChanged_enabled)
+    if (!m_vScrollBarValueChanged_enabled) {
         return;
+    }
 
     if (m_scrollbarToolTipsEnabled && verticalScrollBar()->isSliderDown()) {
-        QWidget* thisWidget = dynamic_cast<QWidget*>(this);
+        QWidget *thisWidget = dynamic_cast<QWidget *>(this);
         const int row = lastVisibleRow() + 1;
         if (row > 0) {
-            const QString toolTipText( i18n("Record: %1", row) );
+            const QString toolTipText(i18n("Record: %1", row));
             QToolTip::showText(
                 QPoint(
                     verticalScrollBar()->mapToGlobal(QPoint(0, 0)).x()
                     //thisWidget->mapToGlobal(verticalScrollBar()->pos()).x()
-                        - thisWidget->fontMetrics().width(toolTipText+"      "),
+                    - thisWidget->fontMetrics().width(toolTipText + "      "),
                     QCursor::pos().y() - thisWidget->fontMetrics().height() / 2
                     - thisWidget->fontMetrics().height() // because: "shown with a platform specific offset from the point of interest"
                 ),
@@ -1613,29 +1669,30 @@ void KexiDataAwareObjectInterface::setScrollbarToolTipsEnabled(bool set)
     m_scrollbarToolTipsEnabled = set;
 }
 
-void KexiDataAwareObjectInterface::focusOutEvent(QFocusEvent* e)
+void KexiDataAwareObjectInterface::focusOutEvent(QFocusEvent *e)
 {
     Q_UNUSED(e);
     updateCell(m_curRow, m_curCol);
 }
 
-int KexiDataAwareObjectInterface::showErrorMessageForResult(const KexiDB::ResultInfo& resultInfo)
+int KexiDataAwareObjectInterface::showErrorMessageForResult(const KexiDB::ResultInfo &resultInfo)
 {
-    QWidget *thisWidget = dynamic_cast<QWidget*>(this);
+    QWidget *thisWidget = dynamic_cast<QWidget *>(this);
     if (resultInfo.allowToDiscardChanges) {
         return KMessageBox::questionYesNo(thisWidget, resultInfo.msg
                                           + (resultInfo.desc.isEmpty() ? QString() : ("\n" + resultInfo.desc)),
                                           QString(),
                                           KGuiItem(i18nc("Correct Changes", "Correct"),
-                                                   QString(),
-                                                   i18n("Correct changes")),
+                                                  QString(),
+                                                  i18n("Correct changes")),
                                           KGuiItem(i18n("Discard Changes")));
     }
 
-    if (resultInfo.desc.isEmpty())
+    if (resultInfo.desc.isEmpty()) {
         KMessageBox::sorry(thisWidget, resultInfo.msg);
-    else
+    } else {
         KMessageBox::detailedSorry(thisWidget, resultInfo.msg, resultInfo.desc);
+    }
 
     return KMessageBox::Ok;
 }
@@ -1643,15 +1700,18 @@ int KexiDataAwareObjectInterface::showErrorMessageForResult(const KexiDB::Result
 void KexiDataAwareObjectInterface::updateIndicesForVisibleValues()
 {
     m_indicesForVisibleValues.resize(m_data ? m_data->columnCount() : 0);
-    if (!m_data)
+    if (!m_data) {
         return;
+    }
     for (uint i = 0; i < m_data->columnCount(); i++) {
-        KexiDB::TableViewColumn* tvCol = m_data->column(i);
+        KexiDB::TableViewColumn *tvCol = m_data->column(i);
         if (tvCol->columnInfo() && tvCol->columnInfo()->indexForVisibleLookupValue() != -1)
             // retrieve visible value from lookup field
+        {
             m_indicesForVisibleValues[ i ] = tvCol->columnInfo()->indexForVisibleLookupValue();
-        else
+        } else {
             m_indicesForVisibleValues[ i ] = i;
+        }
     }
 }
 
@@ -1666,9 +1726,9 @@ void KexiDataAwareObjectInterface::updateIndicesForVisibleValues()
  means then the last character. \a firstCharacter == INT_MAX means "before first" place, so searching fails
  immediately.
  On success, true is returned and \a firstCharacter is set to position of the matched string. */
-static inline bool findInString(const QString& stringValue, int stringLength,
-                                const QString& where,
-                                int& firstCharacter, bool matchAnyPartOfField, bool matchWholeField,
+static inline bool findInString(const QString &stringValue, int stringLength,
+                                const QString &where,
+                                int &firstCharacter, bool matchAnyPartOfField, bool matchWholeField,
                                 Qt::CaseSensitivity caseSensitivity, bool wholeWordsOnly, bool forward)
 {
     if (where.isEmpty()) {
@@ -1683,14 +1743,15 @@ static inline bool findInString(const QString& stringValue, int stringLength,
                 const int whereLength = where.length();
                 while (true) {
                     pos = where.indexOf(stringValue, pos, caseSensitivity);
-                    if (pos == -1)
+                    if (pos == -1) {
                         break;
-                    if (   (pos > 0 && where.at(pos - 1).isLetterOrNumber())
-                        || ((pos + stringLength - 1) < (whereLength - 1) && where.at(pos + stringLength - 1 + 1).isLetterOrNumber()))
-                    {
+                    }
+                    if ((pos > 0 && where.at(pos - 1).isLetterOrNumber())
+                            || ((pos + stringLength - 1) < (whereLength - 1) && where.at(pos + stringLength - 1 + 1).isLetterOrNumber())) {
                         pos++; // invalid match because before or after the string there is non-white space
-                    } else
+                    } else {
                         break;
+                    }
                 }//while
                 firstCharacter = pos;
             } else {// !wholeWordsOnly
@@ -1707,17 +1768,19 @@ static inline bool findInString(const QString& stringValue, int stringLength,
                 const int whereLength = where.length();
                 while (true) {
                     pos = where.lastIndexOf(stringValue, pos, caseSensitivity);
-                    if (pos == -1)
+                    if (pos == -1) {
                         break;
-                    if (   (pos > 0 && where.at(pos - 1).isLetterOrNumber())
-                        || ((pos + stringLength - 1) < (whereLength - 1) && where.at(pos + stringLength - 1 + 1).isLetterOrNumber()))
-                    {
+                    }
+                    if ((pos > 0 && where.at(pos - 1).isLetterOrNumber())
+                            || ((pos + stringLength - 1) < (whereLength - 1) && where.at(pos + stringLength - 1 + 1).isLetterOrNumber())) {
                         // invalid match because before or after the string there is non-white space
                         pos--;
-                        if (pos < 0) // it can make pos < 0
+                        if (pos < 0) { // it can make pos < 0
                             break;
-                    } else
+                        }
+                    } else {
                         break;
+                    }
                 }//while
                 firstCharacter = pos;
             } else {// !wholeWordsOnly
@@ -1747,24 +1810,25 @@ static inline bool findInString(const QString& stringValue, int stringLength,
     return false;
 }
 
-tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
-        const KexiSearchAndReplaceViewInterface::Options& options, bool next)
+tristate KexiDataAwareObjectInterface::find(const QVariant &valueToFind,
+        const KexiSearchAndReplaceViewInterface::Options &options, bool next)
 {
-    if (!hasData())
+    if (!hasData()) {
         return cancelled;
+    }
     const QVariant prevSearchedValue(m_recentlySearchedValue);
     m_recentlySearchedValue = valueToFind;
     const KexiSearchAndReplaceViewInterface::Options::SearchDirection prevSearchDirection = m_recentSearchDirection;
     m_recentSearchDirection = options.searchDirection;
-    if (valueToFind.isNull() || valueToFind.toString().isEmpty())
+    if (valueToFind.isNull() || valueToFind.toString().isEmpty()) {
         return cancelled;
+    }
 
     const bool forward = (options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchUp)
                          ? !next : next; //direction can be reversed
 
     if ((!prevSearchedValue.isNull() && prevSearchedValue != valueToFind)
-            || (prevSearchDirection != options.searchDirection && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows))
-    {
+            || (prevSearchDirection != options.searchDirection && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows)) {
         // restart searching when value has been changed or new direction is SearchAllRows
         m_positionOfRecentlyFoundValue.exists = false;
     }
@@ -1772,8 +1836,8 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
     const bool startFrom1stRowAndCol = !m_positionOfRecentlyFoundValue.exists && next
                                        && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows;
     const bool startFromLastRowAndCol =
-           (   !m_positionOfRecentlyFoundValue.exists && !next
-            && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows)
+        (!m_positionOfRecentlyFoundValue.exists && !next
+         && options.searchDirection == KexiSearchAndReplaceViewInterface::Options::SearchAllRows)
         || (m_curRow >= rowCount() && !forward); //we're at "insert" record, and searching backwards: move to the last cell
 
     if (!startFrom1stRowAndCol && !startFromLastRowAndCol && m_curRow >= rowCount()) {
@@ -1781,14 +1845,15 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
         return false;
     }
     KexiDB::TableViewData::Iterator it((startFrom1stRowAndCol || startFromLastRowAndCol)
-                                   ? m_data->constBegin() : m_itemIterator /*start from the current cell*/);
-    if (startFromLastRowAndCol)
+                                       ? m_data->constBegin() : m_itemIterator /*start from the current cell*/);
+    if (startFromLastRowAndCol) {
         it += (m_data->columnCount() - 1);
+    }
     int firstCharacter;
     if (m_positionOfRecentlyFoundValue.exists) {// start after the next/prev char position
-        if (forward)
+        if (forward) {
             firstCharacter = m_positionOfRecentlyFoundValue.lastCharacter + 1;
-        else {
+        } else {
             firstCharacter = (m_positionOfRecentlyFoundValue.firstCharacter > 0) ?
                              (m_positionOfRecentlyFoundValue.firstCharacter - 1) : INT_MAX /* this means 'before first'*/;
         }
@@ -1819,8 +1884,9 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
     const bool wholeWordsOnly = options.wholeWordsOnly;
     int columnNumber = (options.columnNumber == KexiSearchAndReplaceViewInterface::Options::CurrentColumn)
                        ? m_curCol : options.columnNumber;
-    if (columnNumber >= 0)
+    if (columnNumber >= 0) {
         col = columnNumber;
+    }
     const bool lookInAllColumns = columnNumber == KexiSearchAndReplaceViewInterface::Options::AllColumns;
     int firstColumn; // real number of the first column, can be smaller than lastColumn if forward==true
     int lastColumn; // real number of the last column
@@ -1845,11 +1911,11 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
             const QVariant cell(record->at(m_indicesForVisibleValues[ col ]));
             if (findInString(stringValue, stringLength, cell.toString(), firstCharacter,
                              matchAnyPartOfField, matchWholeField, caseSensitivity,
-                             wholeWordsOnly, forward))
-            {
+                             wholeWordsOnly, forward)) {
                 setCursorPosition(row, col, ForceSetCursorPosition);
-                if (prevRow != m_curRow)
+                if (prevRow != m_curRow) {
                     updateRow(prevRow);
+                }
                 // remember the exact position for the found value
                 m_positionOfRecentlyFoundValue.exists = true;
                 m_positionOfRecentlyFoundValue.firstCharacter = firstCharacter;
@@ -1875,45 +1941,49 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
 }
 
 tristate KexiDataAwareObjectInterface::findNextAndReplace(
-    const QVariant& valueToFind, const QVariant& replacement,
-    const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll)
+    const QVariant &valueToFind, const QVariant &replacement,
+    const KexiSearchAndReplaceViewInterface::Options &options, bool replaceAll)
 {
     Q_UNUSED(replacement);
     Q_UNUSED(options);
     Q_UNUSED(replaceAll);
 
-    if (isReadOnly())
+    if (isReadOnly()) {
         return cancelled;
-    if (valueToFind.isNull() || valueToFind.toString().isEmpty())
+    }
+    if (valueToFind.isNull() || valueToFind.toString().isEmpty()) {
         return cancelled;
+    }
     //! @todo implement KexiDataAwareObjectInterface::findAndReplace()
     return false;
 }
 
 void KexiDataAwareObjectInterface::setRowEditing(bool set)
 {
-    if (set == m_rowEditing)
+    if (set == m_rowEditing) {
         return;
+    }
     m_rowEditing = set;
-    if (m_rowEditing)
+    if (m_rowEditing) {
         emit rowEditStarted(m_curRow);
-    else
+    } else {
         emit rowEditTerminated(m_curRow);
+    }
 }
 
 void KexiDataAwareObjectInterface::showEditorContextMessage(
-        KexiDataItemInterface *item,
-        const QString &message,
-        KMessageWidget::MessageType type,
-        KMessageWidget::CalloutPointerDirection direction)
+    KexiDataItemInterface *item,
+    const QString &message,
+    KMessageWidget::MessageType type,
+    KMessageWidget::CalloutPointerDirection direction)
 {
-    QWidget *par = dynamic_cast<QScrollArea*>(this)
-                   ? dynamic_cast<QScrollArea*>(this)->widget() : dynamic_cast<QWidget*>(this);
-    QWidget *edit = dynamic_cast<QWidget*>(item);
+    QWidget *par = dynamic_cast<QScrollArea *>(this)
+                   ? dynamic_cast<QScrollArea *>(this)->widget() : dynamic_cast<QWidget *>(this);
+    QWidget *edit = dynamic_cast<QWidget *>(item);
     if (par && edit) {
         delete m_errorMessagePopup;
         KexiContextMessage msg(message);
-        m_errorMessagePopup = new KexiContextMessageWidget(dynamic_cast<QWidget*>(this), 0, 0, msg);
+        m_errorMessagePopup = new KexiContextMessageWidget(dynamic_cast<QWidget *>(this), 0, 0, msg);
         QPoint arrowPos = par->mapToGlobal(edit->pos()) + QPoint(12, edit->height() + 6);
         if (verticalHeader()) {
             arrowPos += QPoint(verticalHeader()->width(), horizontalHeaderHeight());
@@ -1935,13 +2005,13 @@ void KexiDataAwareObjectInterface::showEditorContextMessage(
 static QString lengthExceededMessage(KexiDataItemInterface *item)
 {
     return i18np(
-        "Limit of %2 characters for <resource>%3</resource> field has been exceeded by %1 character.\n"
-        "Fix the text or it will be truncated upon saving changes.",
-        "Limit of %2 characters for <resource>%3</resource> field has been exceeded by %1 characters.\n"
-        "Fix the text or it will be truncated upon saving changes.",
-        item->value().toString().length() - item->columnInfo()->field->maxLength(),
-        item->columnInfo()->field->maxLength(),
-        item->columnInfo()->captionOrAliasOrName());
+               "Limit of %2 characters for <resource>%3</resource> field has been exceeded by %1 character.\n"
+               "Fix the text or it will be truncated upon saving changes.",
+               "Limit of %2 characters for <resource>%3</resource> field has been exceeded by %1 characters.\n"
+               "Fix the text or it will be truncated upon saving changes.",
+               item->value().toString().length() - item->columnInfo()->field->maxLength(),
+               item->columnInfo()->field->maxLength(),
+               item->columnInfo()->captionOrAliasOrName());
 }
 
 void KexiDataAwareObjectInterface::showLengthExceededMessage(KexiDataItemInterface *item, bool exceeded)
@@ -1955,12 +2025,11 @@ void KexiDataAwareObjectInterface::showLengthExceededMessage(KexiDataItemInterfa
                 KMessageWidget::Up);
             m_lengthExceededMessageVisible = true;
         }
-    }
-    else {
-         if (m_errorMessagePopup) {
-             m_errorMessagePopup->animatedHide();
-             m_lengthExceededMessageVisible = false;
-         }
+    } else {
+        if (m_errorMessagePopup) {
+            m_errorMessagePopup->animatedHide();
+            m_lengthExceededMessageVisible = false;
+        }
     }
 }
 

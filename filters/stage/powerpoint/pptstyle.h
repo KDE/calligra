@@ -37,14 +37,15 @@ enum TextTypeEnum {
     Tx_TYPE_QUARTERBODY
 };
 
-class PptTextPFRun {
+class PptTextPFRun
+{
 public:
 
     /**
      * Only the default TextPFException is required.
      * @param d DocumentContainer address
      */
-    explicit PptTextPFRun(const MSO::DocumentContainer* d);
+    explicit PptTextPFRun(const MSO::DocumentContainer *d);
 
     /**
      * Special purpose constructor for default list styles of masters.
@@ -54,9 +55,9 @@ public:
      * @param textType specifies the type of the text body
      * @param indentLevel specifies the indentation level of the paragraph
      */
-    PptTextPFRun(const MSO::DocumentContainer* d,
-                 const MSO::TextMasterStyleLevel* level,
-                 const MSO::TextMasterStyle9Level* level9,
+    PptTextPFRun(const MSO::DocumentContainer *d,
+                 const MSO::TextMasterStyleLevel *level,
+                 const MSO::TextMasterStyle9Level *level9,
                  const quint32 textType,
                  const quint16 indentLevel);
 
@@ -70,15 +71,18 @@ public:
      * @param tr specifies tabbing, margins, and indentation for text
      * @param start specifies beginning of the paragraph in the slide text
      */
-    PptTextPFRun(const MSO::DocumentContainer* d,
-                 const MSO::MasterOrSlideContainer* m,
-                 const MSO::SlideListWithTextSubContainerOrAtom* texts = 0,
-                 const MSO::PptOfficeArtClientData* pcd = 0,
-                 const MSO::TextContainer* tc = 0,
-                 const MSO::TextRuler* tr = 0,
+    PptTextPFRun(const MSO::DocumentContainer *d,
+                 const MSO::MasterOrSlideContainer *m,
+                 const MSO::SlideListWithTextSubContainerOrAtom *texts = 0,
+                 const MSO::PptOfficeArtClientData *pcd = 0,
+                 const MSO::TextContainer *tc = 0,
+                 const MSO::TextRuler *tr = 0,
                  quint32 start = 0);
 
-    quint16 level() const { return m_level; }
+    quint16 level() const
+    {
+        return m_level;
+    }
     bool isList() const;
 
     // TextPFException
@@ -130,7 +134,7 @@ private:
      *
      * @param d DocumentContainer address
      */
-    void processPFDefaults(const MSO::DocumentContainer* d);
+    void processPFDefaults(const MSO::DocumentContainer *d);
 
     //The indentation level of the paragraph.  MUST be <= 0x0005, [MS-PPT]
     quint16 m_level;
@@ -146,18 +150,19 @@ private:
     QList<qint16> m_leftMargin;
 
     //Hierarchies of exceptions.
-    QList<const MSO::TextPFException*> pfs;
-    QList<const MSO::TextPFException9*> pf9s;
+    QList<const MSO::TextPFException *> pfs;
+    QList<const MSO::TextPFException9 *> pf9s;
 };
 
-class PptTextCFRun {
+class PptTextCFRun
+{
 public:
 
     /**
      * Only the default TextCFException is required.
      * @param d DocumentContainer address
      */
-    explicit PptTextCFRun(const MSO::DocumentContainer* d);
+    explicit PptTextCFRun(const MSO::DocumentContainer *d);
 
     /**
      * Special purpose constructor for default list styles of masters.
@@ -166,9 +171,9 @@ public:
      * @param level9 additional character-level and paragraph-level formatting
      * @param indentLevel specifies the indentation level of the paragraph
      */
-    PptTextCFRun(const MSO::DocumentContainer* d,
-                 const MSO::TextMasterStyleLevel* level,
-                 const MSO::TextMasterStyle9Level* level9,
+    PptTextCFRun(const MSO::DocumentContainer *d,
+                 const MSO::TextMasterStyleLevel *level,
+                 const MSO::TextMasterStyle9Level *level9,
                  const quint16 indentLevel);
 
     /**
@@ -178,9 +183,9 @@ public:
      * @param tc TextContainer
      * @param indentLevel specifies the indentation level of the paragraph
      */
-    PptTextCFRun(const MSO::DocumentContainer* d,
-                 const MSO::MasterOrSlideContainer* m,
-                 const MSO::TextContainer* tc,
+    PptTextCFRun(const MSO::DocumentContainer *d,
+                 const MSO::MasterOrSlideContainer *m,
+                 const MSO::TextContainer *tc,
                  quint16 indentLevel);
 
     /**
@@ -195,7 +200,7 @@ public:
      * @return the number of characters of the corresponding text to which this
      * character formatting applies
      */
-    int addCurrentCFRun(const MSO::TextContainer* tc, quint32 start, quint32& num);
+    int addCurrentCFRun(const MSO::TextContainer *tc, quint32 start, quint32 &num);
 
     void removeCurrentCFRun();
 
@@ -221,7 +226,7 @@ private:
      * and TextMasterStyleAtom.
      * @param d DocumentContainer address
      */
-    void processCFDefaults(const MSO::DocumentContainer* d);
+    void processCFDefaults(const MSO::DocumentContainer *d);
 
     //The indentation level of the paragraph.  MUST be <= 0x0005, [MS-PPT]
     quint16 m_level;
@@ -230,7 +235,7 @@ private:
     //TextCFRun which is added/replaced on top of the cfs list.
     bool m_cfrun_rm;
 
-    QList<const MSO::TextCFException*> cfs;
+    QList<const MSO::TextCFException *> cfs;
 };
 
 /**
@@ -241,27 +246,30 @@ private:
  * @param textType specifies the type of the text body
  * @return TextMasterStyleAtom address
  */
-const MSO::TextMasterStyleAtom*
-getTextMasterStyleAtom(const MSO::MasterOrSlideContainer* m, quint16 textType);
-
+const MSO::TextMasterStyleAtom *
+getTextMasterStyleAtom(const MSO::MasterOrSlideContainer *m, quint16 textType);
 
 template<class T>
-const T*
-getPP(const MSO::DocumentContainer* dc)
+const T *
+getPP(const MSO::DocumentContainer *dc)
 {
-    if (dc == 0 || dc->docInfoList == 0) return 0;
-    foreach (const MSO::DocInfoListSubContainerOrAtom& a,
-                 dc->docInfoList->rgChildRec) {
-        const MSO::DocProgTagsContainer* d
-                = a.anon.get<MSO::DocProgTagsContainer>();
+    if (dc == 0 || dc->docInfoList == 0) {
+        return 0;
+    }
+    foreach (const MSO::DocInfoListSubContainerOrAtom &a,
+             dc->docInfoList->rgChildRec) {
+        const MSO::DocProgTagsContainer *d
+            = a.anon.get<MSO::DocProgTagsContainer>();
         if (d) {
-            foreach (const MSO::DocProgTagsSubContainerOrAtom& da,
+            foreach (const MSO::DocProgTagsSubContainerOrAtom &da,
                      d->rgChildRec) {
-                const MSO::DocProgBinaryTagContainer* c
-                        = da.anon.get<MSO::DocProgBinaryTagContainer>();
+                const MSO::DocProgBinaryTagContainer *c
+                    = da.anon.get<MSO::DocProgBinaryTagContainer>();
                 if (c) {
-                    const T* t = c->rec.anon.get<T>();
-                    if (t) return t;
+                    const T *t = c->rec.anon.get<T>();
+                    if (t) {
+                        return t;
+                    }
                 }
             }
         }
@@ -270,20 +278,20 @@ getPP(const MSO::DocumentContainer* dc)
 }
 
 template<class T>
-const T*
-getPP(const MSO::PptOfficeArtClientData& o)
+const T *
+getPP(const MSO::PptOfficeArtClientData &o)
 {
-    foreach (const MSO::ShapeClientRoundtripDataSubcontainerOrAtom& s,
+    foreach (const MSO::ShapeClientRoundtripDataSubcontainerOrAtom &s,
              o.rgShapeClientRoundtripData) {
-        const MSO::ShapeProgsTagContainer* p
-                = s.anon.get<MSO::ShapeProgsTagContainer>();
+        const MSO::ShapeProgsTagContainer *p
+            = s.anon.get<MSO::ShapeProgsTagContainer>();
         if (p) {
-            foreach (const MSO::ShapeProgTagsSubContainerOrAtom& s,
+            foreach (const MSO::ShapeProgTagsSubContainerOrAtom &s,
                      p->rgChildRec) {
-                const MSO::ShapeProgBinaryTagContainer* a
-                        = s.anon.get<MSO::ShapeProgBinaryTagContainer>();
+                const MSO::ShapeProgBinaryTagContainer *a
+                    = s.anon.get<MSO::ShapeProgBinaryTagContainer>();
                 if (a) {
-                    const T* pp = a->rec.anon.get<T>();
+                    const T *pp = a->rec.anon.get<T>();
                     if (pp) {
                         return pp;
                     }
@@ -291,17 +299,17 @@ getPP(const MSO::PptOfficeArtClientData& o)
             }
         }
     }
-    foreach (const MSO::ShapeClientRoundtripDataSubcontainerOrAtom& s,
+    foreach (const MSO::ShapeClientRoundtripDataSubcontainerOrAtom &s,
              o.rgShapeClientRoundtripData0) {
-        const MSO::ShapeProgsTagContainer* p
-                = s.anon.get<MSO::ShapeProgsTagContainer>();
+        const MSO::ShapeProgsTagContainer *p
+            = s.anon.get<MSO::ShapeProgsTagContainer>();
         if (p) {
-            foreach (const MSO::ShapeProgTagsSubContainerOrAtom& s,
+            foreach (const MSO::ShapeProgTagsSubContainerOrAtom &s,
                      p->rgChildRec) {
-                const MSO::ShapeProgBinaryTagContainer* a
-                        = s.anon.get<MSO::ShapeProgBinaryTagContainer>();
+                const MSO::ShapeProgBinaryTagContainer *a
+                    = s.anon.get<MSO::ShapeProgBinaryTagContainer>();
                 if (a) {
-                    const T* pp = a->rec.anon.get<T>();
+                    const T *pp = a->rec.anon.get<T>();
                     if (pp) {
                         return pp;
                     }
@@ -313,28 +321,39 @@ getPP(const MSO::PptOfficeArtClientData& o)
 }
 
 template<class T, class C>
-const T*
-getPP(const C* c)
+const T *
+getPP(const C *c)
 {
-    if (!c) return 0;
-    const MSO::SlideProgTagsContainer* sc = c->slideProgTagsContainer.data();
-    if (!sc) return 0;
-    foreach (const MSO::SlideProgTagsSubContainerOrAtom& a , sc->rgTypeRec) {
-        const MSO::SlideProgBinaryTagContainer* bt
-                = a.anon.get<MSO::SlideProgBinaryTagContainer>();
+    if (!c) {
+        return 0;
+    }
+    const MSO::SlideProgTagsContainer *sc = c->slideProgTagsContainer.data();
+    if (!sc) {
+        return 0;
+    }
+    foreach (const MSO::SlideProgTagsSubContainerOrAtom &a, sc->rgTypeRec) {
+        const MSO::SlideProgBinaryTagContainer *bt
+            = a.anon.get<MSO::SlideProgBinaryTagContainer>();
         if (bt) {
-            const T* t = bt->rec.anon.get<T>();
-            if (t) return t;
+            const T *t = bt->rec.anon.get<T>();
+            if (t) {
+                return t;
+            }
         }
     }
     return 0;
 }
 template<class T>
-const T*
-getPP(const MSO::MasterOrSlideContainer* m) {
-    if (!m) return 0;
-    const MSO::MainMasterContainer* mm = m->anon.get<MSO::MainMasterContainer>();
-    if (mm) return getPP<T>(mm);
+const T *
+getPP(const MSO::MasterOrSlideContainer *m)
+{
+    if (!m) {
+        return 0;
+    }
+    const MSO::MainMasterContainer *mm = m->anon.get<MSO::MainMasterContainer>();
+    if (mm) {
+        return getPP<T>(mm);
+    }
     return getPP<T>(m->anon.get<MSO::SlideContainer>());
 }
 

@@ -38,26 +38,25 @@
 #include <KoFilterManager.h>
 #include <KoDocument.h>
 
-
 using namespace KPlato;
 
 K_PLUGIN_FACTORY(KPlatoImportFactory, registerPlugin<KPlatoImport>();)
 K_EXPORT_PLUGIN(KPlatoImportFactory("calligrafilters"))
 
-KPlatoImport::KPlatoImport(QObject* parent, const QVariantList &)
+KPlatoImport::KPlatoImport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus KPlatoImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus KPlatoImport::convert(const QByteArray &from, const QByteArray &to)
 {
     kDebug(planDbg()) << from << to;
-    if ( ( from != "application/x-vnd.kde.kplato" ) || ( to != "application/x-vnd.kde.plan" ) ) {
+    if ((from != "application/x-vnd.kde.kplato") || (to != "application/x-vnd.kde.plan")) {
         return KoFilter::NotImplemented;
     }
     KoDocument *part = 0;
     bool batch = false;
-    if ( m_chain->manager() ) {
+    if (m_chain->manager()) {
         batch = m_chain->manager()->getBatchMode();
     }
     if (batch) {
@@ -71,12 +70,11 @@ KoFilter::ConversionStatus KPlatoImport::convert(const QByteArray& from, const Q
         kError() << "Cannot open document";
         return KoFilter::InternalError;
     }
-    if ( ! part->loadNativeFormat( m_chain->inputFile() ) ) {
+    if (! part->loadNativeFormat(m_chain->inputFile())) {
         return KoFilter::ParsingError;
     }
 
     return KoFilter::OK;
 }
-
 
 #include "kplatoimport.moc"

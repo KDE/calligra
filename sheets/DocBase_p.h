@@ -37,8 +37,10 @@ static const int CURRENT_SYNTAX_VERSION = 1;
 
 typedef QMap<QString, QDomDocument> SavedDocParts;
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 class Map;
 class SheetAccessModel;
 
@@ -46,7 +48,7 @@ class DocBase::Private
 {
 public:
     Map *map;
-    static QList<DocBase*> s_docs;
+    static QList<DocBase *> s_docs;
     static int s_docId;
 
     // document properties

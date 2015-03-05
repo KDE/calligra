@@ -41,7 +41,6 @@ enum CursorDirection {
     NoDirection
 };
 
-
 /**
  * @short The cursor being moved through a formula
  *
@@ -51,18 +50,19 @@ enum CursorDirection {
  *
  */
 
-class KOFORMULA_EXPORT FormulaCursor {
+class KOFORMULA_EXPORT FormulaCursor
+{
 public:
-    FormulaCursor(BasicElement* element, bool selecting, int position, int mark);
-    FormulaCursor(BasicElement* element, int position);
+    FormulaCursor(BasicElement *element, bool selecting, int position, int mark);
+    FormulaCursor(BasicElement *element, int position);
     FormulaCursor();
-    FormulaCursor(const FormulaCursor& other);
+    FormulaCursor(const FormulaCursor &other);
 
     /**
      * Draw the cursor to the given QPainter
      * @param painter The QPainter the cursor draws itsself to
      */
-    void paint( QPainter &painter ) const;
+    void paint(QPainter &painter) const;
 
     /// @return whether the cursor is at the first position
     bool isHome() const;
@@ -71,7 +71,7 @@ public:
     bool isEnd() const;
 
     /// @return The element the FormulaCursor is currently inside
-    BasicElement* currentElement() const;
+    BasicElement *currentElement() const;
 
     /// @return The current position in m_currentElement
     int position() const;
@@ -80,7 +80,7 @@ public:
     void setPosition(int position);
 
     /// set the element, in which the cursor is
-    void setCurrentElement(BasicElement* element);
+    void setCurrentElement(BasicElement *element);
 
     /// @return The current direction the cursor is moving in
     CursorDirection direction() const;
@@ -89,7 +89,7 @@ public:
      * Make the cursor selecting
      * @param selecting When true the cursor is selecting
      */
-    void setSelecting( bool selecting );
+    void setSelecting(bool selecting);
 
     /// @return @c true when the cursor is selecting
     bool isSelecting() const;
@@ -104,25 +104,25 @@ public:
     int mark() const;
 
     /// select the element completely
-    void selectElement(BasicElement* element);
+    void selectElement(BasicElement *element);
 
     /// return the end and beginning of the current selection where the first element is the smaller one
-    QPair<int,int> selection() const;
+    QPair<int, int> selection() const;
 
     /// @return checks if the cursor is valid were it is
     bool isAccepted() const;
 
     /// Move the cursor in the specified @p direction
-    void move( CursorDirection direction );
+    void move(CursorDirection direction);
 
-    void moveTo( const FormulaCursor& pos);
+    void moveTo(const FormulaCursor &pos);
 
-    void moveTo(BasicElement* element, int position);
+    void moveTo(BasicElement *element, int position);
 
-    void moveTo(BasicElement* element);
-    
+    void moveTo(BasicElement *element);
+
     /// Put the cursor in @p element, as close as possible to the point where @p cursor is
-    bool moveCloseTo( BasicElement* element, FormulaCursor& cursor);
+    bool moveCloseTo(BasicElement *element, FormulaCursor &cursor);
 
     /// Move the cursor to the first position in the current element
     void moveHome();
@@ -132,9 +132,9 @@ public:
 
     /// @return the midpoint of the current cursorLine in global coordinates
     QPointF getCursorPosition();
-    
+
     /// Set the cursor to the element at @p point
-    void setCursorTo( const QPointF& point );
+    void setCursorTo(const QPointF &point);
 
     /// @return true if the cursor is inside a token element
     bool insideToken() const;
@@ -145,15 +145,15 @@ public:
     /// @return true if the cursor is inside a element with fixed number of children
     bool insideFixedElement() const;
 
-    bool performMovement( FormulaCursor& oldcursor );
+    bool performMovement(FormulaCursor &oldcursor);
 
-    FormulaCursor& operator+=(int step);
+    FormulaCursor &operator+=(int step);
 
     int offset();
 
 private:
     /// The element that is currently left to the cursor
-    BasicElement* m_currentElement;
+    BasicElement *m_currentElement;
 
     /// The position of the cursor in the current element
     int m_position;

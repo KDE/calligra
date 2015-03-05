@@ -40,14 +40,14 @@ KisGeneratorRegistry::KisGeneratorRegistry(QObject *parent)
 
 KisGeneratorRegistry::~KisGeneratorRegistry()
 {
-    foreach(KisGeneratorSP generator, values()) {
+    foreach (KisGeneratorSP generator, values()) {
         remove(generator->id());
         generator.clear();
     }
     dbgRegistry << "deleting KisGeneratorRegistry";
 }
 
-KisGeneratorRegistry* KisGeneratorRegistry::instance()
+KisGeneratorRegistry *KisGeneratorRegistry::instance()
 {
     KisGeneratorRegistry *reg = qApp->findChild<KisGeneratorRegistry *>("");
     if (!reg) {
@@ -70,10 +70,10 @@ void KisGeneratorRegistry::add(const QString &id, KisGeneratorSP item)
     emit(generatorAdded(id));
 }
 
-KisFilterConfiguration* KisGeneratorRegistry::cloneConfiguration(KisFilterConfiguration* kfc)
+KisFilterConfiguration *KisGeneratorRegistry::cloneConfiguration(KisFilterConfiguration *kfc)
 {
     KisGeneratorSP filter = value(kfc->name());
-    KisFilterConfiguration* newkfc = filter->defaultConfiguration(0);
+    KisFilterConfiguration *newkfc = filter->defaultConfiguration(0);
     newkfc->fromXML(kfc->toXML());
     return newkfc;
 }

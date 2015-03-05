@@ -52,7 +52,7 @@ public:
     double doubleRandomAt(qint64 x, qint64 y);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

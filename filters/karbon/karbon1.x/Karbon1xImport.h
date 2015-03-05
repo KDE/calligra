@@ -33,23 +33,23 @@ class KarbonImport : public KoFilter
     Q_OBJECT
 
 public:
-    KarbonImport(QObject* parent, const QVariantList&);
+    KarbonImport(QObject *parent, const QVariantList &);
     virtual ~KarbonImport();
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 protected:
-    bool parseRoot(QIODevice* io);
+    bool parseRoot(QIODevice *io);
 
     bool convert(const KoXmlDocument &);
-    bool loadXML(const KoXmlElement& doc);
+    bool loadXML(const KoXmlElement &doc);
 
     QString loadStyle(const KoXmlElement &element);
     void loadCommon(const KoXmlElement &element, bool ignoreTransform = false);
     QString loadStroke(const KoXmlElement &element);
     QString loadFill(const KoXmlElement &element);
     QColor loadColor(const KoXmlElement &element);
-    QVector<qreal> loadDashes(const KoXmlElement& element);
+    QVector<qreal> loadDashes(const KoXmlElement &element);
     QString loadGradient(const KoXmlElement &element);
     void loadColorStops(const KoXmlElement &element);
     QString loadPattern(const KoXmlElement &element);

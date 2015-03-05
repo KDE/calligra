@@ -29,11 +29,10 @@
 
 #include "KoFormulaShape.h"
 
-
 KoFormulaShapeFactory::KoFormulaShapeFactory()
-    : KoShapeFactoryBase(KoFormulaShapeId, i18n( "Formula" ) )
+    : KoShapeFactoryBase(KoFormulaShapeId, i18n("Formula"))
 {
-    setToolTip(i18n( "A formula"));
+    setToolTip(i18n("A formula"));
     setIconName(koIconNameCStr("x-shape-formula"));
 
     // The following lines let the formula shape load both embedded and
@@ -49,15 +48,15 @@ KoFormulaShapeFactory::KoFormulaShapeFactory()
     elementNamesList.append(qMakePair(QString(KoXmlNS::math), QStringList("math")));
     setXmlElements(elementNamesList);
 
-    setLoadingPriority( 1 );
-/*    KoShapeTemplate t;
-    t.id = KoFormulaShapeId;
-    t.name = i18n("Formula");
-    t.toolTip = i18n("A formula");
-    t.icon = ""; //TODO add it
-    props = new KoProperties();
-    t.properties = props;
-    addTemplate( t );*/
+    setLoadingPriority(1);
+    /*    KoShapeTemplate t;
+        t.id = KoFormulaShapeId;
+        t.name = i18n("Formula");
+        t.toolTip = i18n("A formula");
+        t.icon = ""; //TODO add it
+        props = new KoProperties();
+        t.properties = props;
+        addTemplate( t );*/
 }
 
 KoFormulaShapeFactory::~KoFormulaShapeFactory()
@@ -65,12 +64,12 @@ KoFormulaShapeFactory::~KoFormulaShapeFactory()
 
 KoShape *KoFormulaShapeFactory::createDefaultShape(KoDocumentResourceManager *resourceManager) const
 {
-    KoFormulaShape* formula = new KoFormulaShape(resourceManager);
-    formula->setShapeId( KoFormulaShapeId );
+    KoFormulaShape *formula = new KoFormulaShape(resourceManager);
+    formula->setShapeId(KoFormulaShapeId);
     return formula;
 }
 
-bool KoFormulaShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContext &context) const
+bool KoFormulaShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     if ((e.localName() == "math" && e.namespaceURI() == KoXmlNS::math)) {

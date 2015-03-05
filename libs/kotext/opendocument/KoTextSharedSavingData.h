@@ -38,7 +38,6 @@ class Model;
 
 class QString;
 
-
 class KOTEXT_EXPORT KoTextSharedSavingData : public KoSharedSavingData
 {
 public:
@@ -47,7 +46,7 @@ public:
 
     void setGenChanges(KoGenChanges &changes);
 
-    KoGenChanges& genChanges() const;
+    KoGenChanges &genChanges() const;
 
     void addRdfIdMapping(const QString &oldid, const QString &newid);
     QMap<QString, QString> getRdfIdMapping() const;

@@ -30,14 +30,14 @@ class TouchDeclarativeView : public QDeclarativeView
     Q_OBJECT
 
     Q_PROPERTY(bool drawCanvas READ drawCanvas WRITE setDrawCanvas NOTIFY drawCanvasChanged);
-    Q_PROPERTY(QWidget* canvasWidget READ canvasWidget WRITE setCanvasWidget NOTIFY canvasWidgetChanged);
+    Q_PROPERTY(QWidget *canvasWidget READ canvasWidget WRITE setCanvasWidget NOTIFY canvasWidgetChanged);
 
 public:
     explicit TouchDeclarativeView(QWidget *parent = 0);
     TouchDeclarativeView(const QUrl &url, QWidget *parent = 0);
     virtual ~TouchDeclarativeView();
 
-    QWidget* canvasWidget() const;
+    QWidget *canvasWidget() const;
     void setCanvasWidget(QWidget *canvasWidget);
 
     bool drawCanvas() const;
@@ -49,8 +49,8 @@ Q_SIGNALS:
 
 protected:
     void resizeEvent(QResizeEvent *event);
-    virtual bool event(QEvent* event);
-    virtual bool eventFilter(QObject* watched, QEvent* e);
+    virtual bool event(QEvent *event);
+    virtual bool eventFilter(QObject *watched, QEvent *e);
 
     void drawBackground(QPainter *painter, const QRectF &rect);
 private:
@@ -58,7 +58,7 @@ private:
     bool m_drawCanvas;
     QPointer<QWidget> m_canvasWidget;
     bool m_GLInitialized;
-    QGraphicsItem* m_sketchView;
+    QGraphicsItem *m_sketchView;
     Q_SLOT void resetInitialized();
 };
 

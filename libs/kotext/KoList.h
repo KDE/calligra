@@ -88,12 +88,12 @@ public:
     void setListContinuedFrom(KoList *list);
 
 private:
-    KoListPrivate * const d;
+    KoListPrivate *const d;
 
     Q_PRIVATE_SLOT(d, void styleChanged(int))
 };
 
-Q_DECLARE_METATYPE(KoList*)
-Q_DECLARE_METATYPE(QList<KoList*>)
+Q_DECLARE_METATYPE(KoList *)
+Q_DECLARE_METATYPE(QList<KoList *>)
 
 #endif // KOLIST_H

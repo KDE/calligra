@@ -29,20 +29,18 @@ class Component;
 // introduce "rolespace", let's not collide with some other Qt::UserRole + 1 roles e.g. in ui/kis_categorized_list_model.h
 static const int GmicRolespace = 100;
 
-enum
-{
+enum {
     CommandRole = Qt::UserRole + GmicRolespace + 1,
     FilterSettingsRole = Qt::UserRole + GmicRolespace + 2
 };
 
-
 class KisGmicFilterModel : public QAbstractItemModel
 {
-     Q_OBJECT
+    Q_OBJECT
 
 public:
     // takes ownershop of component
-    KisGmicFilterModel(Component * rootComponent, QObject *parent = 0);
+    KisGmicFilterModel(Component *rootComponent, QObject *parent = 0);
     ~KisGmicFilterModel();
 
     QVariant data(const QModelIndex &index, int role) const;
@@ -59,11 +57,11 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
     // takes ownership
-    void setBlacklister(KisGmicBlacklister * blacklister);
+    void setBlacklister(KisGmicBlacklister *blacklister);
 
 private:
-    Component * m_rootComponent;
-    KisGmicBlacklister * m_blacklister;
+    Component *m_rootComponent;
+    KisGmicBlacklister *m_blacklister;
 
 };
 

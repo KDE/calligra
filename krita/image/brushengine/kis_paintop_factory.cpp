@@ -20,7 +20,7 @@
 #include <klocale.h>
 #include <KoColorSpace.h>
 
-KisPaintOpFactory::KisPaintOpFactory(const QStringList & whiteListedCompositeOps)
+KisPaintOpFactory::KisPaintOpFactory(const QStringList &whiteListedCompositeOps)
     : m_whiteListedCompositeOps(whiteListedCompositeOps), m_priority(100)
     , m_visibility(AUTO)
 {
@@ -53,12 +53,10 @@ void KisPaintOpFactory::setPriority(int newPriority)
     m_priority = newPriority;
 }
 
-
 int KisPaintOpFactory::priority() const
 {
     return m_priority;
 }
-
 
 #include "kis_paintop_factory.moc"
 

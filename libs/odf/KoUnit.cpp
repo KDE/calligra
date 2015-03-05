@@ -30,8 +30,7 @@
 #include <kdebug.h>
 
 // ensure the same order as in KoUnit::Unit
-static const char* const unitNameList[KoUnit::TypeCount] =
-{
+static const char *const unitNameList[KoUnit::TypeCount] = {
     "mm",
     "pt",
     "in",
@@ -67,8 +66,7 @@ QString KoUnit::unitDescription(KoUnit::Type type)
 }
 
 // grouped by units which are similar
-static const KoUnit::Type typesInUi[KoUnit::TypeCount] =
-{
+static const KoUnit::Type typesInUi[KoUnit::TypeCount] = {
     KoUnit::Millimeter,
     KoUnit::Centimeter,
     KoUnit::Decimeter,
@@ -84,8 +82,9 @@ QStringList KoUnit::listOfUnitNameForUi(ListOptions listOptions)
     QStringList lst;
     for (int i = 0; i < KoUnit::TypeCount; ++i) {
         const Type type = typesInUi[i];
-        if ((type != Pixel) || ((listOptions & HideMask) == ListAll))
+        if ((type != Pixel) || ((listOptions & HideMask) == ListAll)) {
             lst.append(unitDescription(type));
+        }
     }
     return lst;
 }
@@ -97,7 +96,7 @@ KoUnit KoUnit::fromListForUi(int index, ListOptions listOptions, qreal factor)
     if ((0 <= index) && (index < KoUnit::TypeCount)) {
         // iterate through all enums and skip the Pixel enum if needed
         for (int i = 0; i < KoUnit::TypeCount; ++i) {
-            if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
+            if ((listOptions & HidePixel) && (typesInUi[i] == Pixel)) {
                 ++index;
                 continue;
             }
@@ -113,7 +112,7 @@ KoUnit KoUnit::fromListForUi(int index, ListOptions listOptions, qreal factor)
 
 int KoUnit::indexInListForUi(ListOptions listOptions) const
 {
-    if ((listOptions&HidePixel) && (m_type == Pixel)) {
+    if ((listOptions & HidePixel) && (m_type == Pixel)) {
         return -1;
     }
 
@@ -121,7 +120,7 @@ int KoUnit::indexInListForUi(ListOptions listOptions) const
 
     int skipped = 0;
     for (int i = 0; i < KoUnit::TypeCount; ++i) {
-        if ((listOptions&HidePixel) && (typesInUi[i] == Pixel)) {
+        if ((listOptions & HidePixel) && (typesInUi[i] == Pixel)) {
             ++skipped;
             continue;
         }
@@ -213,10 +212,11 @@ qreal KoUnit::fromUserValue(const QString &value, bool *ok) const
     return fromUserValue(KGlobal::locale()->readNumber(value, ok));
 }
 
-qreal KoUnit::parseValue(const QString& _value, qreal defaultVal)
+qreal KoUnit::parseValue(const QString &_value, qreal defaultVal)
 {
-    if (_value.isEmpty())
+    if (_value.isEmpty()) {
         return defaultVal;
+    }
 
     QString value(_value.simplified());
     value.remove(QLatin1Char(' '));
@@ -224,32 +224,37 @@ qreal KoUnit::parseValue(const QString& _value, qreal defaultVal)
     int firstLetter = -1;
     for (int i = 0; i < value.length(); ++i) {
         if (value.at(i).isLetter()) {
-            if (value.at(i) == QLatin1Char('e'))
+            if (value.at(i) == QLatin1Char('e')) {
                 continue;
+            }
             firstLetter = i;
             break;
         }
     }
 
-    if (firstLetter == -1)
+    if (firstLetter == -1) {
         return value.toDouble();
+    }
 
     const QString symbol = value.mid(firstLetter);
     value.truncate(firstLetter);
     const qreal val = value.toDouble();
 
-    if (symbol == QLatin1String("pt"))
+    if (symbol == QLatin1String("pt")) {
         return val;
+    }
 
     bool ok;
     KoUnit u = KoUnit::fromSymbol(symbol, &ok);
-    if (ok)
+    if (ok) {
         return u.fromUserValue(val);
+    }
 
-    if (symbol == QLatin1String("m"))
+    if (symbol == QLatin1String("m")) {
         return DM_TO_POINT(val * 10.0);
-    else if (symbol == QLatin1String("km"))
+    } else if (symbol == QLatin1String("km")) {
         return DM_TO_POINT(val * 10000.0);
+    }
     kWarning() << "KoUnit::parseValue: Unit " << symbol << " is not supported, please report.";
 
     // TODO : add support for mi/ft ?
@@ -262,17 +267,20 @@ KoUnit KoUnit::fromSymbol(const QString &symbol, bool *ok)
 
     if (symbol == QLatin1String("inch") /*compat*/) {
         result = Inch;
-        if (ok)
+        if (ok) {
             *ok = true;
+        }
     } else {
-        if (ok)
+        if (ok) {
             *ok = false;
+        }
 
         for (int i = 0; i < TypeCount; ++i) {
             if (symbol == QLatin1String(unitNameList[i])) {
                 result = static_cast<Type>(i);
-                if (ok)
+                if (ok) {
                     *ok = true;
+                }
             }
         }
     }
@@ -337,10 +345,11 @@ QString KoUnit::symbol() const
     return QLatin1String(unitNameList[m_type]);
 }
 
-qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
+qreal KoUnit::parseAngle(const QString &_value, qreal defaultVal)
 {
-    if (_value.isEmpty())
+    if (_value.isEmpty()) {
         return defaultVal;
+    }
 
     QString value(_value.simplified());
     value.remove(QLatin1Char(' '));
@@ -348,26 +357,29 @@ qreal KoUnit::parseAngle(const QString& _value, qreal defaultVal)
     int firstLetter = -1;
     for (int i = 0; i < value.length(); ++i) {
         if (value.at(i).isLetter()) {
-            if (value.at(i) == QLatin1Char('e'))
+            if (value.at(i) == QLatin1Char('e')) {
                 continue;
+            }
             firstLetter = i;
             break;
         }
     }
 
-    if (firstLetter == -1)
+    if (firstLetter == -1) {
         return value.toDouble();
+    }
 
     const QString type = value.mid(firstLetter);
     value.truncate(firstLetter);
     const qreal val = value.toDouble();
 
-    if (type == QLatin1String("deg"))
+    if (type == QLatin1String("deg")) {
         return val;
-    else if (type == QLatin1String("rad"))
+    } else if (type == QLatin1String("rad")) {
         return val * 180 / M_PI;
-    else if (type == QLatin1String("grad"))
+    } else if (type == QLatin1String("grad")) {
         return val * 0.9;
+    }
 
     return defaultVal;
 }

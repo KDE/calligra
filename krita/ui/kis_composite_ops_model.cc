@@ -26,12 +26,13 @@
 #include "kis_debug.h"
 #include "kis_config.h"
 
-KoID KisCompositeOpListModel::favoriteCategory() {
+KoID KisCompositeOpListModel::favoriteCategory()
+{
     static KoID category("favorites", i18n("Favorites"));
     return category;
 }
 
-KisCompositeOpListModel* KisCompositeOpListModel::sharedInstance()
+KisCompositeOpListModel *KisCompositeOpListModel::sharedInstance()
 {
     static KisCompositeOpListModel *model = 0;
 
@@ -73,17 +74,18 @@ void KisCompositeOpListModel::validate(const KoColorSpace *cs)
     }
 }
 
-bool KisCompositeOpListModel::setData(const QModelIndex& idx, const QVariant& value, int role)
+bool KisCompositeOpListModel::setData(const QModelIndex &idx, const QVariant &value, int role)
 {
-    if (!idx.isValid()) return false;
+    if (!idx.isValid()) {
+        return false;
+    }
 
     bool result = BaseKoIDCategorizedListModel::setData(idx, value, role);
 
     DataItem *item = categoriesMapper()->itemFromRow(idx.row());
     Q_ASSERT(item);
 
-
-    if(role == Qt::CheckStateRole) {
+    if (role == Qt::CheckStateRole) {
         if (item->isChecked()) {
             addFavoriteEntry(*item->data());
         } else {
@@ -96,11 +98,13 @@ bool KisCompositeOpListModel::setData(const QModelIndex& idx, const QVariant& va
     return result;
 }
 
-QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
+QVariant KisCompositeOpListModel::data(const QModelIndex &idx, int role) const
 {
-    if (!idx.isValid()) return QVariant();
+    if (!idx.isValid()) {
+        return QVariant();
+    }
 
-    if(role == Qt::DecorationRole) {
+    if (role == Qt::DecorationRole) {
         DataItem *item = categoriesMapper()->itemFromRow(idx.row());
         Q_ASSERT(item);
 
@@ -141,7 +145,7 @@ void KisCompositeOpListModel::readFavoriteCompositeOpsFromConfig()
 void KisCompositeOpListModel::writeFavoriteCompositeOpsToConfig() const
 {
     QStringList list;
-    QVector<DataItem*> filteredItems =
+    QVector<DataItem *> filteredItems =
         categoriesMapper()->itemsForCategory(favoriteCategory().name());
 
     foreach (DataItem *item, filteredItems) {

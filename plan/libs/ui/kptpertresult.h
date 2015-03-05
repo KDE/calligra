@@ -34,7 +34,6 @@
 
 #include <kdebug.h>
 
-
 class KoDocument;
 
 /// The main namespace
@@ -53,43 +52,49 @@ class KPLATOUI_EXPORT PertResult : public ViewBase
     Q_OBJECT
 public:
     explicit PertResult(KoPart *part, KoDocument *doc, QWidget *parent = 0);
-    
+
     void setupGui();
-    void setProject( Project *project );
-    Project *project() const { return m_project; }
-    void draw( Project &project );
+    void setProject(Project *project);
+    Project *project() const
+    {
+        return m_project;
+    }
+    void draw(Project &project);
     void draw();
 
-    PertResultItemModel *model() const { return static_cast<PertResultItemModel*>( widget.treeWidgetTaskResult->model() ); }
+    PertResultItemModel *model() const
+    {
+        return static_cast<PertResultItemModel *>(widget.treeWidgetTaskResult->model());
+    }
 
     /// Loads context info into this view.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext(QDomElement &/*context*/) const;
 
     KoPrintJob *createPrintJob();
-    
+
     Node *currentNode() const;
-            
+
 public Q_SLOTS:
-    void slotScheduleSelectionChanged( ScheduleManager *sm );
-    
+    void slotScheduleSelectionChanged(ScheduleManager *sm);
+
 protected Q_SLOTS:
-    void slotProjectCalculated( ScheduleManager *sm );
-    void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
-    void slotScheduleManagerChanged( ScheduleManager *sm );
-    void slotHeaderContextMenuRequested( const QPoint &pos );
-    void slotContextMenuRequested( const QModelIndex& index, const QPoint& pos );
-    
+    void slotProjectCalculated(ScheduleManager *sm);
+    void slotScheduleManagerToBeRemoved(const ScheduleManager *sm);
+    void slotScheduleManagerChanged(ScheduleManager *sm);
+    void slotHeaderContextMenuRequested(const QPoint &pos);
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
+
     void slotSplitView();
     virtual void slotOptions();
-    
+
 private:
-    Node * m_node;
-    Project * m_project;
+    Node *m_node;
+    Project *m_project;
     ScheduleManager *current_schedule;
     Ui::PertResult widget;
-    
+
 private Q_SLOTS:
     void slotUpdate();
 
@@ -101,52 +106,58 @@ class KPLATOUI_EXPORT PertCpmView : public ViewBase
     Q_OBJECT
 public:
     explicit PertCpmView(KoPart *part, KoDocument *doc, QWidget *parent = 0);
-    
-    void setupGui();
-    void setProject( Project *project );
-    Project *project() const { return m_project; }
-    void draw( Project &project );
-    void draw();
-    
-    CriticalPathItemModel *model() const { return static_cast<CriticalPathItemModel*>( widget.cpmTable->model() ); }
 
-    double probability( double z ) const;
-    double valueZ( double p ) const;
-    
+    void setupGui();
+    void setProject(Project *project);
+    Project *project() const
+    {
+        return m_project;
+    }
+    void draw(Project &project);
+    void draw();
+
+    CriticalPathItemModel *model() const
+    {
+        return static_cast<CriticalPathItemModel *>(widget.cpmTable->model());
+    }
+
+    double probability(double z) const;
+    double valueZ(double p) const;
+
     /// Loads context info into this view.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext(QDomElement &/*context*/) const;
 
     KoPrintJob *createPrintJob();
-    
+
     Node *currentNode() const;
-    
+
 public Q_SLOTS:
-    void slotScheduleSelectionChanged( ScheduleManager *sm );
-    
+    void slotScheduleSelectionChanged(ScheduleManager *sm);
+
 protected Q_SLOTS:
-    void slotProjectCalculated( ScheduleManager *sm );
-    void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
-    void slotScheduleManagerChanged( ScheduleManager *sm );
-    void slotHeaderContextMenuRequested( const QPoint &pos );
-    void slotContextMenuRequested( const QModelIndex& index, const QPoint& pos );
-    
+    void slotProjectCalculated(ScheduleManager *sm);
+    void slotScheduleManagerToBeRemoved(const ScheduleManager *sm);
+    void slotScheduleManagerChanged(ScheduleManager *sm);
+    void slotHeaderContextMenuRequested(const QPoint &pos);
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
+
     void slotSplitView();
     virtual void slotOptions();
-    
-    void slotFinishTimeChanged( const QDateTime &dt );
-    void slotProbabilityChanged( int value );
+
+    void slotFinishTimeChanged(const QDateTime &dt);
+    void slotProbabilityChanged(int value);
 
 private Q_SLOTS:
     void slotUpdate();
 
 private:
-    Project * m_project;
+    Project *m_project;
     QList<Node *> m_criticalPath;
     ScheduleManager *current_schedule;
     Ui::CpmWidget widget;
-    
+
     bool block;
 };
 

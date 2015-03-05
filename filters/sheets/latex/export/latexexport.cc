@@ -30,20 +30,20 @@
 K_PLUGIN_FACTORY(LATEXExportFactory, registerPlugin<LATEXExport>();)
 K_EXPORT_PLUGIN(LATEXExportFactory("calligrafilters"))
 
-
-LATEXExport::LATEXExport(QObject* parent, const QVariantList&) :
-        KoFilter(parent)
+LATEXExport::LATEXExport(QObject *parent, const QVariantList &) :
+    KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus LATEXExport::convert(const QByteArray &from, const QByteArray &to)
 {
     QString config;
 
-    if (to != "text/x-tex" || from != "application/x-kspread")
+    if (to != "text/x-tex" || from != "application/x-kspread") {
         return KoFilter::NotImplemented;
+    }
 
-    KoStore* in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
+    KoStore *in = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
     if (!in || !in->open("root")) {
         kError(30503) << "Unable to open input file!" << endl;
         delete in;
@@ -53,7 +53,7 @@ KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QB
     /* input file Reading */
     in->close();
 
-    LatexExportDialog* dialog = new LatexExportDialog(in);
+    LatexExportDialog *dialog = new LatexExportDialog(in);
     dialog->setOutputFile(m_chain->outputFile());
 
     dialog->exec();

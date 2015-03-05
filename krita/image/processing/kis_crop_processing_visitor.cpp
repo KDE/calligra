@@ -29,7 +29,6 @@
 #include "kis_undo_adapter.h"
 #include "kis_transform_mask.h"
 
-
 KisCropProcessingVisitor::KisCropProcessingVisitor(const QRect &rect, bool cropLayers, bool moveLayers)
     : m_rect(rect),
       m_cropLayers(cropLayers),
@@ -40,7 +39,7 @@ KisCropProcessingVisitor::KisCropProcessingVisitor(const QRect &rect, bool cropL
 
 void KisCropProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    KUndo2Command* command = layer->crop(m_rect);
+    KUndo2Command *command = layer->crop(m_rect);
     undoAdapter->addCommand(command);
 }
 

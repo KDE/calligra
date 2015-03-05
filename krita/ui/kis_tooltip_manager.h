@@ -27,7 +27,7 @@ class KisTooltipManager : public QObject
     Q_OBJECT
 
 public:
-    KisTooltipManager(KisViewManager* view);
+    KisTooltipManager(KisViewManager *view);
     ~KisTooltipManager();
 
     void record();
@@ -36,7 +36,7 @@ private Q_SLOTS:
     void captureToolip();
 
 private:
-    KisViewManager* m_view;
+    KisViewManager *m_view;
     bool m_recording;
     QMap<QString, QString> m_tooltipMap;
 };

@@ -27,7 +27,7 @@ class KoResourceItemView;
 /**
 *
 * KisPresetSelectorStrip is a composite widget around KisPresetChooser. It provides
-* a strip of icons with two scroll buttons at the sides and a small delete button 
+* a strip of icons with two scroll buttons at the sides and a small delete button
 * that appears when a user selects a preset icon.
 *
 * KisPresetSelectorStrip makes it possible to quickly select and modify presets.
@@ -40,17 +40,17 @@ class KoResourceItemView;
 class KisPresetSelectorStrip : public QWidget, public Ui::WdgPresetSelectorStrip
 {
     Q_OBJECT
-    
+
 public:
     KisPresetSelectorStrip(QWidget *parent);
     virtual ~KisPresetSelectorStrip();
 
-    void setPresetFilter(const QString& paintOpId);
+    void setPresetFilter(const QString &paintOpId);
 
 private Q_SLOTS:
     /// Scrolls the strip's item view to the left
     void on_leftScrollBtn_pressed();
-    
+
     /// Scrolls the strip's item view to the right
     void on_rightScrollBtn_pressed();
 
@@ -59,9 +59,8 @@ private:
     * This is a workaround to access members of KisPresetChooser using the QObject tree
     * instead of class methods
     */
-    KoResourceItemView* m_resourceItemView;
+    KoResourceItemView *m_resourceItemView;
     QString m_currentPaintopID;
 };
-
 
 #endif // KIS_PRESET_SELECTOR_STRIP_H

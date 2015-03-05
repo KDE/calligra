@@ -34,7 +34,7 @@ class KRITAUI_EXPORT KisCanvasControlsManager: public QObject
     Q_OBJECT
 
 public:
-    KisCanvasControlsManager(KisViewManager * view);
+    KisCanvasControlsManager(KisViewManager *view);
     virtual ~KisCanvasControlsManager();
 
     void setup(KisActionManager *actionManager);
@@ -51,7 +51,7 @@ private:
     void stepAlpha(float step);
 
 private:
-    KisViewManager * m_view;
+    KisViewManager *m_view;
 };
 
 #endif // KIS_CANVAS_CONTROLS_MANAGER_H

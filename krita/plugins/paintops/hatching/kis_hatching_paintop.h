@@ -35,7 +35,6 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 
-
 class KisPainter;
 
 class KisHatchingPaintOp : public KisBrushBasedPaintOp
@@ -43,14 +42,14 @@ class KisHatchingPaintOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     virtual ~KisHatchingPaintOp();
 
     /**
      *  Paint a hatched dab around the mouse cursor according to
      *  sensor settings and user preferences.
      */
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
 
     /**
      *  Returns a number between -90 and 90, and corresponds to the
@@ -60,9 +59,9 @@ public:
     double spinAngle(double spin);
 
 private:
-    KisHatchingPaintOpSettings* m_settings;
+    KisHatchingPaintOpSettings *m_settings;
     KisImageWSP m_image;
-    HatchingBrush * m_hatchingBrush;
+    HatchingBrush *m_hatchingBrush;
 
     /**
      *  PaintDevice that will be filled with a single pass of

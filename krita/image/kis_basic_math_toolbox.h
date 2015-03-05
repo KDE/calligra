@@ -33,11 +33,11 @@ public:
     KisBasicMathToolbox();
     ~KisBasicMathToolbox();
 public:
-    virtual KisWavelet* fastWaveletTransformation(KisPaintDeviceSP src, const QRect&,  KisWavelet* buff = 0);
-    virtual void fastWaveletUntransformation(KisPaintDeviceSP dst, const QRect&, KisWavelet* wav, KisWavelet* buff = 0);
+    virtual KisWavelet *fastWaveletTransformation(KisPaintDeviceSP src, const QRect &,  KisWavelet *buff = 0);
+    virtual void fastWaveletUntransformation(KisPaintDeviceSP dst, const QRect &, KisWavelet *wav, KisWavelet *buff = 0);
 private:
-    void wavetrans(KisWavelet* wav, KisWavelet* buff, uint halfsize);
-    void waveuntrans(KisWavelet* wav, KisWavelet* buff, uint halfsize);
+    void wavetrans(KisWavelet *wav, KisWavelet *buff, uint halfsize);
+    void waveuntrans(KisWavelet *wav, KisWavelet *buff, uint halfsize);
 
 };
 

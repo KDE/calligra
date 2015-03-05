@@ -30,7 +30,7 @@
  * These will get routed the active tools which can then do whatever
  * they like with it.
  */
-class FLAKE_EXPORT KoInputDeviceHandlerRegistry : public KoGenericRegistry<KoInputDeviceHandler*>
+class FLAKE_EXPORT KoInputDeviceHandlerRegistry : public KoGenericRegistry<KoInputDeviceHandler *>
 {
 public:
     ~KoInputDeviceHandlerRegistry();
@@ -43,8 +43,8 @@ public:
 
 private:
     KoInputDeviceHandlerRegistry();
-    KoInputDeviceHandlerRegistry(const KoInputDeviceHandlerRegistry&);
-    KoInputDeviceHandlerRegistry operator=(const KoInputDeviceHandlerRegistry&);
+    KoInputDeviceHandlerRegistry(const KoInputDeviceHandlerRegistry &);
+    KoInputDeviceHandlerRegistry operator=(const KoInputDeviceHandlerRegistry &);
     void init();
 
     class Private;

@@ -38,7 +38,7 @@ class KEXIDATATABLE_EXPORT KexiTableScrollAreaHeader : public QHeaderView
     Q_OBJECT
 
 public:
-    explicit KexiTableScrollAreaHeader(Qt::Orientation orientation, KexiTableScrollArea* parent = 0);
+    explicit KexiTableScrollAreaHeader(Qt::Orientation orientation, KexiTableScrollArea *parent = 0);
 
     virtual ~KexiTableScrollAreaHeader();
 
@@ -60,7 +60,7 @@ public:
     int preferredSectionSize(int logicalIndex) const;
 
     //! @return scroll area (parent) of this header.
-    KexiTableScrollArea* scrollArea() const;
+    KexiTableScrollArea *scrollArea() const;
 
 public Q_SLOTS:
     //! Updates the section specified by the given \a logicalIndex.
@@ -89,7 +89,7 @@ private:
     void styleChanged();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

@@ -29,21 +29,20 @@ class KoColorSlider;
 class QLineEdit;
 #include "KoColorDisplayRendererInterface.h"
 
-
 class KisColorInput : public QWidget
 {
     Q_OBJECT
 public:
-    KisColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisColorInput(QWidget *parent, const KoChannelInfo *, KoColor *color, KoColorDisplayRendererInterface *displayRenderer);
 protected:
     void init();
-    virtual QWidget* createInput() = 0;
+    virtual QWidget *createInput() = 0;
 Q_SIGNALS:
     void updated();
 protected:
-    const KoChannelInfo* m_channelInfo;
-    KoColor* m_color;
-    KoColorSlider* m_colorSlider;
+    const KoChannelInfo *m_channelInfo;
+    KoColor *m_color;
+    KoColorSlider *m_colorSlider;
     KoColorDisplayRendererInterface *m_displayRenderer;
 };
 
@@ -51,30 +50,29 @@ class KisIntegerColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisIntegerColorInput(QWidget *parent, const KoChannelInfo *, KoColor *color, KoColorDisplayRendererInterface *displayRenderer);
 protected:
-    virtual QWidget* createInput();
+    virtual QWidget *createInput();
 public Q_SLOTS:
     void setValue(int);
     void update();
 private:
-    QSpinBox* m_intNumInput;
+    QSpinBox *m_intNumInput;
 };
-
 
 class KisFloatColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisFloatColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisFloatColorInput(QWidget *parent, const KoChannelInfo *, KoColor *color, KoColorDisplayRendererInterface *displayRenderer);
 protected:
-    virtual QWidget* createInput();
+    virtual QWidget *createInput();
 public Q_SLOTS:
     void setValue(double);
     void sliderChanged(int);
     void update();
 private:
-    KDoubleNumInput* m_dblNumInput;
+    KDoubleNumInput *m_dblNumInput;
     qreal m_minValue;
     qreal m_maxValue;
 };
@@ -83,14 +81,14 @@ class KisHexColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
-    KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer);
+    KisHexColorInput(QWidget *parent, KoColor *color, KoColorDisplayRendererInterface *displayRenderer);
 protected:
-    virtual QWidget* createInput();
+    virtual QWidget *createInput();
 public Q_SLOTS:
     void setValue();
     void update();
 private:
-    QLineEdit* m_hexInput;
+    QLineEdit *m_hexInput;
 };
 
 #endif

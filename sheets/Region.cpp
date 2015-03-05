@@ -41,14 +41,14 @@ class Region::Private : public QSharedData
 {
 public:
     Private()
-            : map(0),
-            cells(QList<Element*>()) {
+        : map(0),
+          cells(QList<Element * >())
+    {
     }
 
-    const Map* map;
-    mutable QList<Element*> cells;
+    const Map *map;
+    mutable QList<Element *> cells;
 };
-
 
 /***************************************************************************
   class Region
@@ -59,7 +59,7 @@ Region::Region()
     d = new Private();
 }
 
-Region::Region(const QString& string, const Map* map, Sheet* fallbackSheet)
+Region::Region(const QString &string, const Map *map, Sheet *fallbackSheet)
 {
     d = new Private();
     d->map = map;
@@ -80,10 +80,10 @@ Region::Region(const QString& string, const Map* map, Sheet* fallbackSheet)
             for (ConstIterator it = namedAreaRegion.d->cells.constBegin(); it != end; ++it) {
                 Element *element = *it;
                 if (element->type() == Element::Point) {
-                    Point* point = static_cast<Point*>(element);
+                    Point *point = static_cast<Point *>(element);
                     d->cells.append(createPoint(*point));
                 } else {
-                    Range* range = static_cast<Range*>(element);
+                    Range *range = static_cast<Range *>(element);
                     d->cells.append(createRange(*range));
                 }
             }
@@ -97,51 +97,64 @@ Region::Region(const QString& string, const Map* map, Sheet* fallbackSheet)
             QString sUL = sRegion.left(delimiterPos);
             QString sLR = sRegion.mid(delimiterPos + 1);
 
-            Sheet* firstSheet = map ? filterSheetName(sUL) : 0;
-            Sheet* lastSheet = map ? filterSheetName(sLR) : 0;
+            Sheet *firstSheet = map ? filterSheetName(sUL) : 0;
+            Sheet *lastSheet = map ? filterSheetName(sLR) : 0;
             // TODO: lastSheet is silently ignored if it is different from firstSheet
 
             // Still has the sheet name separator?
-            if (sUL.contains('!') || sLR.contains('!'))
+            if (sUL.contains('!') || sLR.contains('!')) {
                 return;
+            }
 
-            if (!firstSheet)
+            if (!firstSheet) {
                 firstSheet = fallbackSheet;
-            if (!lastSheet)
+            }
+            if (!lastSheet) {
                 lastSheet = fallbackSheet;
+            }
 
             Point ul(sUL);
             Point lr(sLR);
 
             if (ul.isValid() && lr.isValid()) {
-                Range* range = createRange(ul, lr);
-                if (firstSheet) range->setSheet(firstSheet);
+                Range *range = createRange(ul, lr);
+                if (firstSheet) {
+                    range->setSheet(firstSheet);
+                }
                 d->cells.append(range);
             } else if (ul.isValid()) {
-                Point* point = createPoint(ul);
-                if (firstSheet) point->setSheet(firstSheet);
+                Point *point = createPoint(ul);
+                if (firstSheet) {
+                    point->setSheet(firstSheet);
+                }
                 d->cells.append(point);
             } else { // lr.isValid()
-                Point* point = createPoint(lr);
-                if (firstSheet) point->setSheet(firstSheet);
+                Point *point = createPoint(lr);
+                if (firstSheet) {
+                    point->setSheet(firstSheet);
+                }
                 d->cells.append(point);
             }
         } else {
             // single cell
-            Sheet* sheet = map ? filterSheetName(sRegion) : 0;
+            Sheet *sheet = map ? filterSheetName(sRegion) : 0;
             // Still has the sheet name separator?
-            if (sRegion.contains('!'))
+            if (sRegion.contains('!')) {
                 return;
-            if (!sheet)
+            }
+            if (!sheet) {
                 sheet = fallbackSheet;
-            Point* point = createPoint(sRegion);
-            if(sheet) point->setSheet(sheet);
+            }
+            Point *point = createPoint(sRegion);
+            if (sheet) {
+                point->setSheet(sheet);
+            }
             d->cells.append(point);
         }
     }
 }
 
-Region::Region(const QRect& rect, Sheet* sheet)
+Region::Region(const QRect &rect, Sheet *sheet)
 {
     d = new Private();
 
@@ -153,7 +166,7 @@ Region::Region(const QRect& rect, Sheet* sheet)
     add(rect, sheet);
 }
 
-Region::Region(const QPoint& point, Sheet* sheet)
+Region::Region(const QPoint &point, Sheet *sheet)
 {
     d = new Private();
 
@@ -165,7 +178,7 @@ Region::Region(const QPoint& point, Sheet* sheet)
     add(point, sheet);
 }
 
-Region::Region(const Region& list)
+Region::Region(const Region &list)
 {
     d = new Private();
     d->map = list.d->map;
@@ -176,16 +189,16 @@ Region::Region(const Region& list)
     for (ConstIterator it = list.d->cells.constBegin(); it != end; ++it) {
         Element *element = *it;
         if (element->type() == Element::Point) {
-            Point* point = static_cast<Point*>(element);
+            Point *point = static_cast<Point *>(element);
             d->cells.append(createPoint(*point));
         } else {
-            Range* range = static_cast<Range*>(element);
+            Range *range = static_cast<Range *>(element);
             d->cells.append(createRange(*range));
         }
     }
 }
 
-Region::Region(int x, int y, Sheet* sheet)
+Region::Region(int x, int y, Sheet *sheet)
 {
     d = new Private();
 
@@ -197,7 +210,7 @@ Region::Region(int x, int y, Sheet* sheet)
     add(QPoint(x, y), sheet);
 }
 
-Region::Region(int x, int y, int width, int height, Sheet* sheet)
+Region::Region(int x, int y, int width, int height, Sheet *sheet)
 {
     d = new Private();
 
@@ -209,7 +222,6 @@ Region::Region(int x, int y, int width, int height, Sheet* sheet)
     add(QRect(x, y, width, height), sheet);
 }
 
-
 Region::~Region()
 {
     qDeleteAll(d->cells);
@@ -218,31 +230,33 @@ Region::~Region()
 QVector<QRect> Region::rects() const
 {
     QVector<QRect> cellRects;
-    foreach(Element *element, d->cells) {
+    foreach (Element *element, d->cells) {
         cellRects.append(element->rect());
     }
     return cellRects;
 }
 
-const Map* Region::map() const
+const Map *Region::map() const
 {
     Q_ASSERT(d->map);
     return d->map;
 }
 
-void Region::setMap(const Map* map)
+void Region::setMap(const Map *map)
 {
     d->map = map;
 }
 
 bool Region::isValid() const
 {
-    if (d->cells.isEmpty())
+    if (d->cells.isEmpty()) {
         return false;
+    }
     ConstIterator end = d->cells.constEnd();
     for (ConstIterator it = d->cells.constBegin(); it != end; ++it) {
-        if (!(*it)->isValid())
+        if (!(*it)->isValid()) {
             return false;
+        }
     }
     return true;
 }
@@ -263,7 +277,7 @@ bool Region::isContiguous() const
     return true;
 }
 
-QString Region::name(Sheet* originSheet) const
+QString Region::name(Sheet *originSheet) const
 {
     QStringList names;
     ConstIterator endOfList(d->cells.constEnd());
@@ -274,12 +288,12 @@ QString Region::name(Sheet* originSheet) const
     return names.isEmpty() ? "" : names.join(";");
 }
 
-Region::Element* Region::add(const QPoint& point, Sheet* sheet)
+Region::Element *Region::add(const QPoint &point, Sheet *sheet)
 {
     return insert(d->cells.count(), point, sheet, false);
 }
 
-Region::Element* Region::add(const QRect& range, Sheet* sheet)
+Region::Element *Region::add(const QRect &range, Sheet *sheet)
 {
     const QRect normalizedRange = normalized(range);
     if (normalizedRange.width() == 0 || normalizedRange.height() == 0) {
@@ -291,7 +305,7 @@ Region::Element* Region::add(const QRect& range, Sheet* sheet)
     return insert(d->cells.count(), normalizedRange, sheet, false);
 }
 
-Region::Element* Region::add(const Region& region, Sheet* sheet)
+Region::Element *Region::add(const Region &region, Sheet *sheet)
 {
     ConstIterator endOfList(region.d->cells.constEnd());
     for (ConstIterator it = region.d->cells.constBegin(); it != endOfList; ++it) {
@@ -300,7 +314,7 @@ Region::Element* Region::add(const Region& region, Sheet* sheet)
     return d->cells.isEmpty() ? 0 : d->cells.last();
 }
 
-void Region::sub(const QPoint& point, Sheet* sheet)
+void Region::sub(const QPoint &point, Sheet *sheet)
 {
     // TODO Stefan: Improve!
     Iterator endOfList(d->cells.end());
@@ -317,7 +331,7 @@ void Region::sub(const QPoint& point, Sheet* sheet)
     }
 }
 
-void Region::sub(const QRect& range, Sheet* sheet)
+void Region::sub(const QRect &range, Sheet *sheet)
 {
     const QRect normalizedRange = normalized(range);
     // TODO Stefan: Improve!
@@ -335,13 +349,13 @@ void Region::sub(const QRect& range, Sheet* sheet)
     }
 }
 
-void Region::sub(const Region& region)
+void Region::sub(const Region &region)
 {
     ConstIterator endOfList(region.constEnd());
     for (ConstIterator it = region.constBegin(); it != endOfList; ++it) {
         Element *element = *it;
         if (element->type() == Element::Point) {
-            Point* point = static_cast<Point*>(element);
+            Point *point = static_cast<Point *>(element);
             sub(Region(point->pos()));
         } else {
             sub(Region(element->rect()));
@@ -349,53 +363,64 @@ void Region::sub(const Region& region)
     }
 }
 
-Region Region::intersected(const Region& region) const
+Region Region::intersected(const Region &region) const
 {
-  // Special case 1: one of the regions is empty
-  if (region.isEmpty()) return region;
-  if (isEmpty()) return Region();
-
-  // Special case 2: If the region contains more elements than this one, do this operation in reverse (optimization)
-  if (region.cells().size() > cells().size())
-    return region.intersected (*this);
-
-  // Most common case: the region contains only one rectangle
-  Region result;
-  QVector<QRect> rects = region.rects();
-  if (rects.size() == 1) {
-    QRect rect = rects[0];
-    Sheet *s = region.cells()[0]->sheet();
-    // intersect each element with the rectangle
-    foreach(Element *element, d->cells) {
-      if (element->sheet() != s) continue;
-      if (element->type() == Element::Point) {
-        Point* point = static_cast<Point*>(element);
-        if (rect.contains (point->pos()))
-          result.add (point->pos(), s);
-      } else {
-        QRect rect2 = element->rect();
-        if (rect2.intersects (rect))
-          result.add (rect2.intersected (rect), s);
-      }
+    // Special case 1: one of the regions is empty
+    if (region.isEmpty()) {
+        return region;
     }
-    return result;
-  }
+    if (isEmpty()) {
+        return Region();
+    }
+
+    // Special case 2: If the region contains more elements than this one, do this operation in reverse (optimization)
+    if (region.cells().size() > cells().size()) {
+        return region.intersected(*this);
+    }
+
+    // Most common case: the region contains only one rectangle
+    Region result;
+    QVector<QRect> rects = region.rects();
+    if (rects.size() == 1) {
+        QRect rect = rects[0];
+        Sheet *s = region.cells()[0]->sheet();
+        // intersect each element with the rectangle
+        foreach (Element *element, d->cells) {
+            if (element->sheet() != s) {
+                continue;
+            }
+            if (element->type() == Element::Point) {
+                Point *point = static_cast<Point *>(element);
+                if (rect.contains(point->pos())) {
+                    result.add(point->pos(), s);
+                }
+            } else {
+                QRect rect2 = element->rect();
+                if (rect2.intersects(rect)) {
+                    result.add(rect2.intersected(rect), s);
+                }
+            }
+        }
+        return result;
+    }
 
     // Generic case. TODO: optimize this better - generating a ton of single-cell regions is slow
     ConstIterator end(region.constEnd());
     for (ConstIterator it = region.constBegin(); it != end; ++it) {
         Element *element = *it;
         if (element->type() == Element::Point) {
-            Point* point = static_cast<Point*>(element);
-            if(contains(point->pos(), element->sheet()))
+            Point *point = static_cast<Point *>(element);
+            if (contains(point->pos(), element->sheet())) {
                 result.add(point->pos(), element->sheet());
+            }
         } else {
             QRect rect = element->rect();
-            for(int c = rect.top(); c <= rect.bottom(); ++c) {
-                for(int r = rect.left(); r <= rect.right(); ++r) {
-                    QPoint p(r,c);
-                    if(contains(p, element->sheet()))
+            for (int c = rect.top(); c <= rect.bottom(); ++c) {
+                for (int r = rect.left(); r <= rect.right(); ++r) {
+                    QPoint p(r, c);
+                    if (contains(p, element->sheet())) {
                         result.add(p, element->sheet());
+                    }
                 }
             }
         }
@@ -410,9 +435,10 @@ Region Region::intersectedWithRow(int row) const
     for (ConstIterator it = constBegin(); it != end; ++it) {
         Element *element = *it;
         if (element->type() == Element::Point) {
-            Point* point = static_cast<Point*>(element);
-            if (point->pos().y() == row)
+            Point *point = static_cast<Point *>(element);
+            if (point->pos().y() == row) {
                 result.add(point->pos(), point->sheet());
+            }
         } else {
             QRect rect = element->rect();
             if (rect.top() <= row && rect.bottom() >= row) {
@@ -423,7 +449,7 @@ Region Region::intersectedWithRow(int row) const
     return result;
 }
 
-Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
+Region::Element *Region::eor(const QPoint &point, Sheet *sheet)
 {
     bool containsPoint = false;
 
@@ -480,7 +506,7 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
     return 0;
 }
 
-Region::Element* Region::insert(int pos, const QPoint& point, Sheet* sheet, bool multi)
+Region::Element *Region::insert(int pos, const QPoint &point, Sheet *sheet, bool multi)
 {
     if (point.x() < 1 || point.y() < 1) {
         return 0;
@@ -494,7 +520,7 @@ Region::Element* Region::insert(int pos, const QPoint& point, Sheet* sheet, bool
 
     // we don't have to check for occurrences?
     if (multi) {
-        Point* rpoint = createPoint(point);
+        Point *rpoint = createPoint(point);
         rpoint->setSheet(sheet);
         d->cells.insert(pos, rpoint);
         return d->cells[pos];
@@ -523,7 +549,7 @@ Region::Element* Region::insert(int pos, const QPoint& point, Sheet* sheet, bool
             }*/
     }
     if (!containsPoint) {
-        Point* rpoint = createPoint(point);
+        Point *rpoint = createPoint(point);
         rpoint->setSheet(sheet);
         d->cells.insert(pos, rpoint);
         return d->cells[pos];
@@ -531,7 +557,7 @@ Region::Element* Region::insert(int pos, const QPoint& point, Sheet* sheet, bool
     return 0;
 }
 
-Region::Element* Region::insert(int pos, const QRect& range, Sheet* sheet, bool multi)
+Region::Element *Region::insert(int pos, const QRect &range, Sheet *sheet, bool multi)
 {
     // Keep boundaries.
     pos = qBound(0, pos, cells().count());
@@ -542,7 +568,7 @@ Region::Element* Region::insert(int pos, const QRect& range, Sheet* sheet, bool 
     }
 
     if (multi) {
-        Range* rrange = createRange(normalizedRange);
+        Range *rrange = createRange(normalizedRange);
         rrange->setSheet(sheet);
         d->cells.insert(pos, rrange);
         return d->cells[pos];
@@ -565,7 +591,7 @@ Region::Element* Region::insert(int pos, const QRect& range, Sheet* sheet, bool 
         // Keep boundaries.
         pos = qBound(0, pos, cells().count());
 
-        Range* rrange = createRange(normalizedRange);
+        Range *rrange = createRange(normalizedRange);
         rrange->setSheet(sheet);
         d->cells.insert(pos, rrange);
         return d->cells[pos];
@@ -677,13 +703,14 @@ bool Region::isColumnOrRowSelected() const
 
 bool Region::isAllSelected() const
 {
-    if (d->cells.count() != 1)
+    if (d->cells.count() != 1) {
         return false;
+    }
     Q_ASSERT(d->cells.first());
     return d->cells.first()->isAll();
 }
 
-bool Region::contains(const QPoint& point, Sheet* sheet) const
+bool Region::contains(const QPoint &point, Sheet *sheet) const
 {
     if (d->cells.isEmpty()) {
         return false;
@@ -714,29 +741,33 @@ void Region::clear()
 
 QRect Region::firstRange() const
 {
-    if (!isValid())
+    if (!isValid()) {
         return QRect();
+    }
     return d->cells.value(0)->rect();
 }
 
 QRect Region::lastRange() const
 {
-    if (!isValid())
+    if (!isValid()) {
         return QRect();
+    }
     return d->cells.value(d->cells.count() - 1)->rect();
 }
 
-Sheet* Region::firstSheet() const
+Sheet *Region::firstSheet() const
 {
-    if (!isValid())
+    if (!isValid()) {
         return 0;
+    }
     return d->cells.value(0)->sheet();
 }
 
-Sheet* Region::lastSheet() const
+Sheet *Region::lastSheet() const
 {
-    if (!isValid())
+    if (!isValid()) {
         return 0;
+    }
     return d->cells.value(d->cells.count() - 1)->sheet();
 }
 
@@ -765,7 +796,7 @@ QRect Region::boundingRect() const
     return QRect(left, top, right - left + 1, bottom - top + 1);
 }
 
-QRect Region::normalized(const QRect& rect)
+QRect Region::normalized(const QRect &rect)
 {
     QRect normalizedRect(rect);
     if (rect.left() > rect.right()) {
@@ -795,22 +826,24 @@ Region::ConstIterator Region::constEnd() const
     return d->cells.constEnd();
 }
 
-bool Region::isValid(const QPoint& point)
+bool Region::isValid(const QPoint &point)
 {
     if (point.x() < 1 || point.y() < 1 ||
-            point.x() > KS_colMax ||  point.y() > KS_rowMax)
+            point.x() > KS_colMax ||  point.y() > KS_rowMax) {
         return false;
-    else
+    } else {
         return true;
+    }
 }
 
-bool Region::isValid(const QRect& rect)
+bool Region::isValid(const QRect &rect)
 {
     if (!isValid(rect.topLeft()) || !isValid(rect.bottomRight()) ||
-            rect.width() == 0 || rect.height() == 0)
+            rect.width() == 0 || rect.height() == 0) {
         return false;
-    else
+    } else {
         return true;
+    }
 }
 
 static void append(const QChar *from, const QChar *to, QChar **dest)
@@ -855,9 +888,9 @@ void Region::loadOdf(const QChar *&data, const QChar *&end, QChar *&out)
                 append(pos, data, &out);
                 *out = *data; // append :
                 ++out;
-                const QChar * next = data + 1;
+                const QChar *next = data + 1;
                 if (!next->isNull()) {
-                    const QChar * nextnext = next + 1;
+                    const QChar *nextnext = next + 1;
                     if (!nextnext->isNull() && *next == QChar('$', 0) && *nextnext != QChar('.', 0)) {
                         ++data;
                     }
@@ -878,11 +911,10 @@ void Region::loadOdf(const QChar *&data, const QChar *&end, QChar *&out)
             if (data->unicode() == '\'') {
                 // an escaped apostrophe?
                 // As long as Calligra Sheets does not support fixed sheets eat the dollar sign.
-                const QChar * next = data + 1;
+                const QChar *next = data + 1;
                 if (!next->isNull() && *next == QChar('\'', 0)) {
                     ++data;
-                }
-                else { // the end
+                } else { // the end
                     state = Start;
                 }
             }
@@ -894,7 +926,7 @@ void Region::loadOdf(const QChar *&data, const QChar *&end, QChar *&out)
 }
 
 // static
-QString Region::loadOdf(const QString& expression)
+QString Region::loadOdf(const QString &expression)
 {
     QString result;
     QString temp;
@@ -902,8 +934,9 @@ QString Region::loadOdf(const QString& expression)
     enum { Start, InQuotes } state = Start;
     int i = 0;
     // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
-    if (expression[i] == '$')
+    if (expression[i] == '$') {
         ++i;
+    }
     while (i < expression.count()) {
         switch (state) {
         case Start: {
@@ -923,14 +956,16 @@ QString Region::loadOdf(const QString& expression)
                 result.append(':');
                 temp.clear();
                 // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
-                if (i + 2 < expression.count() && expression[i+1] == '$' && expression[i+2] != '.')
+                if (i + 2 < expression.count() && expression[i + 1] == '$' && expression[i + 2] != '.') {
                     ++i;
+                }
             } else if (expression[i] == ' ') { // range separator
                 result.append(temp);
                 result.append(';');
                 temp.clear();
-            } else
+            } else {
                 temp.append(expression[i]);
+            }
             ++i;
             break;
         }
@@ -938,10 +973,11 @@ QString Region::loadOdf(const QString& expression)
             temp.append(expression[i]);
             if (expression[i] == '\'') {
                 // an escaped apostrophe?
-                if (i + 1 < expression.count() && expression[i+1] == '\'')
-                    ++i; // eat it
-                else // the end
+                if (i + 1 < expression.count() && expression[i + 1] == '\'') {
+                    ++i;    // eat it
+                } else { // the end
                     state = Start;
+                }
             }
             ++i;
             break;
@@ -952,7 +988,7 @@ QString Region::loadOdf(const QString& expression)
 }
 
 // static
-QString Region::saveOdf(const QString& expression)
+QString Region::saveOdf(const QString &expression)
 {
     QString result;
     QString sheetName;
@@ -967,22 +1003,25 @@ QString Region::saveOdf(const QString& expression)
                 state = InQuotes;
             } else if (expression[i] == '!') { // sheet name separator
                 // There has to be a sheet name.
-                if (temp.isEmpty())
-                    return expression; // error
-                if (temp.count() > 2 && (temp[0] != '\'' && temp[temp.count()-1] != '\'')) {
+                if (temp.isEmpty()) {
+                    return expression;    // error
+                }
+                if (temp.count() > 2 && (temp[0] != '\'' && temp[temp.count() - 1] != '\'')) {
                     temp.replace('\'', "''");
                     if (temp.contains(' ') || temp.contains('.') ||
                             temp.contains(';') || temp.contains('!') ||
-                            temp.contains('$') || temp.contains(']'))
+                            temp.contains('$') || temp.contains(']')) {
                         temp = '\'' + temp + '\'';
+                    }
                 }
                 sheetName = temp;
                 result.append(temp);
                 result.append('.');
                 temp.clear();
             } else if (expression[i] == ':') { // cell separator
-                if (result.isEmpty())
+                if (result.isEmpty()) {
                     result = '.';
+                }
                 result.append(temp);
                 result.append(':');
                 result.append(sheetName);
@@ -992,8 +1031,9 @@ QString Region::saveOdf(const QString& expression)
                 result.append(temp);
                 result.append(' ');
                 temp.clear();
-            } else
+            } else {
                 temp.append(expression[i]);
+            }
             ++i;
             break;
         }
@@ -1001,18 +1041,20 @@ QString Region::saveOdf(const QString& expression)
             temp.append(expression[i]);
             if (expression[i] == '\'') {
                 // an escaped apostrophe?
-                if (i + 1 < expression.count() && expression[i+1] == '\'')
-                    ++i; // eat it
-                else // the end
+                if (i + 1 < expression.count() && expression[i + 1] == '\'') {
+                    ++i;    // eat it
+                } else { // the end
                     state = Start;
+                }
             }
             ++i;
             break;
         }
         }
     }
-    if (result.isEmpty())
+    if (result.isEmpty()) {
         result = '.';
+    }
     return result + temp;
 }
 
@@ -1021,29 +1063,32 @@ QString Region::saveOdf() const
     return saveOdf(Region::name());
 }
 
-QList<Region::Element*>& Region::cells() const
+QList<Region::Element *> &Region::cells() const
 {
     return d->cells;
 }
 
-bool Region::operator==(const Region& other) const
+bool Region::operator==(const Region &other) const
 {
-    if (d->cells.count() != other.d->cells.count())
+    if (d->cells.count() != other.d->cells.count()) {
         return false;
+    }
     ConstIterator endOfList(d->cells.constEnd());
     ConstIterator endOfOtherList(other.d->cells.constEnd());
     ConstIterator it = d->cells.constBegin();
     ConstIterator it2 = other.d->cells.constBegin();
     while (it != endOfList && it2 != endOfOtherList) {
-        if ((*it)->sheet() != (*it2)->sheet())
+        if ((*it)->sheet() != (*it2)->sheet()) {
             return false;
-        if ((*it++)->rect() != (*it2++)->rect())
+        }
+        if ((*it++)->rect() != (*it2++)->rect()) {
             return false;
+        }
     }
     return true;
 }
 
-void Region::operator=(const Region& other)
+void Region::operator=(const Region &other)
 {
     d->map = other.d->map;
     clear();
@@ -1051,67 +1096,69 @@ void Region::operator=(const Region& other)
     for (ConstIterator it = other.d->cells.constBegin(); it != end; ++it) {
         Element *element = *it;
         if (element->type() == Element::Point) {
-            Point* point = static_cast<Point*>(element);
+            Point *point = static_cast<Point *>(element);
             d->cells.append(createPoint(*point));
         } else {
-            Range* range = static_cast<Range*>(element);
+            Range *range = static_cast<Range *>(element);
             d->cells.append(createRange(*range));
         }
     }
 }
 
-Sheet* Region::filterSheetName(QString& sRegion)
+Sheet *Region::filterSheetName(QString &sRegion)
 {
-    Sheet* sheet = 0;
+    Sheet *sheet = 0;
     int delimiterPos = sRegion.lastIndexOf('!');
-    if (delimiterPos < 0)
+    if (delimiterPos < 0) {
         delimiterPos = sRegion.lastIndexOf('.');
+    }
     if (delimiterPos > -1) {
         QString sheetName = sRegion.left(delimiterPos);
         sheet = d->map->findSheet(sheetName);
         // try again without apostrophes
-        while(!sheet && sheetName.count() > 2 && sheetName[0] == '\'' && sheetName[sheetName.count()-1] == '\'') {
+        while (!sheet && sheetName.count() > 2 && sheetName[0] == '\'' && sheetName[sheetName.count() - 1] == '\'') {
             sheetName = sheetName.mid(1, sheetName.count() - 2);
             sheet = d->map->findSheet(sheetName);
         }
         // remove the sheet name, incl. '!', from the string
-        if (sheet)
+        if (sheet) {
             sRegion = sRegion.right(sRegion.length() - delimiterPos - 1);
+        }
     }
     return sheet;
 }
 
-Region::Point* Region::createPoint(const QPoint& point) const
+Region::Point *Region::createPoint(const QPoint &point) const
 {
     return new Point(point);
 }
 
-Region::Point* Region::createPoint(const QString& string) const
+Region::Point *Region::createPoint(const QString &string) const
 {
     return new Point(string);
 }
 
-Region::Point* Region::createPoint(const Point& point) const
+Region::Point *Region::createPoint(const Point &point) const
 {
     return new Point(point);
 }
 
-Region::Range* Region::createRange(const QRect& rect) const
+Region::Range *Region::createRange(const QRect &rect) const
 {
     return new Range(rect);
 }
 
-Region::Range* Region::createRange(const Point& tl, const Point& br) const
+Region::Range *Region::createRange(const Point &tl, const Point &br) const
 {
     return new Range(tl, br);
 }
 
-Region::Range* Region::createRange(const QString& string) const
+Region::Range *Region::createRange(const QString &string) const
 {
     return new Range(string);
 }
 
-Region::Range* Region::createRange(const Range& range) const
+Region::Range *Region::createRange(const Range &range) const
 {
     return new Range(range);
 }
@@ -1121,7 +1168,7 @@ Region::Range* Region::createRange(const Range& range) const
 ****************************************************************************/
 
 Region::Element::Element()
-        : m_sheet(0)
+    : m_sheet(0)
 {
 }
 
@@ -1129,11 +1176,10 @@ Region::Element::~Element()
 {
 }
 
-
 /***************************************************************************
   class Point
 ****************************************************************************/
-static int firstNonCharPos(const QString& s, int pos = 0)
+static int firstNonCharPos(const QString &s, int pos = 0)
 {
     int result = -1;
     const QChar *data = s.constData();
@@ -1152,26 +1198,29 @@ static int firstNonCharPos(const QString& s, int pos = 0)
     return result;
 }
 
-Region::Point::Point(const QPoint& point)
-        : Region::Element()
-        , m_point(point)
-        , m_fixedColumn(false)
-        , m_fixedRow(false)
+Region::Point::Point(const QPoint &point)
+    : Region::Element()
+    , m_point(point)
+    , m_fixedColumn(false)
+    , m_fixedRow(false)
 {
-    if (m_point.x() > KS_colMax)
+    if (m_point.x() > KS_colMax) {
         m_point.setX(KS_colMax);
-    if (m_point.y() > KS_rowMax)
+    }
+    if (m_point.y() > KS_rowMax) {
         m_point.setY(KS_rowMax);
+    }
 }
 
-Region::Point::Point(const QString& string)
-        : Region::Element()
-        , m_fixedColumn(false)
-        , m_fixedRow(false)
+Region::Point::Point(const QString &string)
+    : Region::Element()
+    , m_fixedColumn(false)
+    , m_fixedRow(false)
 {
     const uint length = string.length();
-    if (length == 0)
+    if (length == 0) {
         return;
+    }
 
     uint p = 0;
 
@@ -1182,11 +1231,13 @@ Region::Point::Point(const QString& string)
     }
 
     // Malformed ?
-    if (p == length)
+    if (p == length) {
         return;
+    }
 
-    if ((string[p] < QChar('A',0) || string[p] > QChar('Z',0)) && (string[p] < QChar('a', 0) || string[p] > QChar('z', 0)))
+    if ((string[p] < QChar('A', 0) || string[p] > QChar('Z', 0)) && (string[p] < QChar('a', 0) || string[p] > QChar('z', 0))) {
         return;
+    }
 
     //default is error
     int x = -1;
@@ -1194,22 +1245,26 @@ Region::Point::Point(const QString& string)
     int result = firstNonCharPos(string, p);
 
     //get the column number for the character between actual position and the first non text character
-    if (result != -1)
-        x = Util::decodeColumnLabelText(string.mid(p, result - p));     // x is defined now
-    else  // If there isn't any, then this is not a point -> return
+    if (result != -1) {
+        x = Util::decodeColumnLabelText(string.mid(p, result - p));    // x is defined now
+    } else { // If there isn't any, then this is not a point -> return
         return;
+    }
     p = result;
 
     //limit the x-value
     //Q_ASSERT(x >= 1 && x <= KS_colMax);
-    if (x < 1)
+    if (x < 1) {
         return;
-    if (x > KS_colMax)
+    }
+    if (x > KS_colMax) {
         x = KS_colMax;
+    }
 
     // Malformed ?
-    if (p == length)
+    if (p == length) {
         return;
+    }
 
     if (string[p] == QChar('$', 0)) {
         m_fixedRow = true;
@@ -1217,13 +1272,15 @@ Region::Point::Point(const QString& string)
     }
 
     // Malformed ?
-    if (p == length)
+    if (p == length) {
         return;
+    }
 
     uint p2 = p;
     while (p < length) {
-        if (!string[p++].isDigit())
+        if (!string[p++].isDigit()) {
             return;
+        }
     }
 
     bool ok;
@@ -1231,10 +1288,12 @@ Region::Point::Point(const QString& string)
 
     //limit the y-value
     //Q_ASSERT(y >= 1 && y <= KS_rowMax);
-    if (!ok || y < 1)
+    if (!ok || y < 1) {
         return;
-    if (y > KS_rowMax)
+    }
+    if (y > KS_rowMax) {
         y = KS_rowMax;
+    }
 
     m_point = QPoint(x, y);
 }
@@ -1243,31 +1302,34 @@ Region::Point::~Point()
 {
 }
 
-QString Region::Point::name(Sheet* originSheet) const
+QString Region::Point::name(Sheet *originSheet) const
 {
     QString name;
     if (m_sheet && m_sheet != originSheet) {
         name.append(m_sheet->sheetName());
         name.replace('\'', "''");
-        if (name.contains('!') || name.contains(' ') || name.contains(';') || name.contains('$'))
+        if (name.contains('!') || name.contains(' ') || name.contains(';') || name.contains('$')) {
             name = '\'' + name + '\'';
+        }
         name.append('!');
     }
-    if (m_fixedColumn)
+    if (m_fixedColumn) {
         name.append('$');
+    }
     name.append(Cell::columnName(m_point.x()));
-    if (m_fixedRow)
+    if (m_fixedRow) {
         name.append('$');
+    }
     name.append(QString::number(m_point.y()));
     return name;
 }
 
-bool Region::Point::contains(const QPoint& point) const
+bool Region::Point::contains(const QPoint &point) const
 {
     return (m_point == point);
 }
 
-bool Region::Point::contains(const QRect& range) const
+bool Region::Point::contains(const QRect &range) const
 {
     return (range.width() == 1) && (range.height() == 1) && (range.topLeft() == m_point);
 }
@@ -1281,29 +1343,32 @@ Cell Region::Point::cell() const
   class Range
 ****************************************************************************/
 
-Region::Range::Range(const QRect& rect)
-        : Region::Element()
-        , m_range(rect)
-        , m_fixedTop(false)
-        , m_fixedLeft(false)
-        , m_fixedBottom(false)
-        , m_fixedRight(false)
+Region::Range::Range(const QRect &rect)
+    : Region::Element()
+    , m_range(rect)
+    , m_fixedTop(false)
+    , m_fixedLeft(false)
+    , m_fixedBottom(false)
+    , m_fixedRight(false)
 {
-    if (m_range.right() > KS_colMax)
+    if (m_range.right() > KS_colMax) {
         m_range.setRight(KS_colMax);
-    if (m_range.bottom() > KS_rowMax)
+    }
+    if (m_range.bottom() > KS_rowMax) {
         m_range.setBottom(KS_rowMax);
+    }
 }
 
-Region::Range::Range(const Calligra::Sheets::Region::Point& ul, const Calligra::Sheets::Region::Point& lr)
-        : Region::Element()
-        , m_fixedTop(false)
-        , m_fixedLeft(false)
-        , m_fixedBottom(false)
-        , m_fixedRight(false)
+Region::Range::Range(const Calligra::Sheets::Region::Point &ul, const Calligra::Sheets::Region::Point &lr)
+    : Region::Element()
+    , m_fixedTop(false)
+    , m_fixedLeft(false)
+    , m_fixedBottom(false)
+    , m_fixedRight(false)
 {
-    if (!ul.isValid() || !lr.isValid())
+    if (!ul.isValid() || !lr.isValid()) {
         return;
+    }
     m_range = QRect(ul.pos(), lr.pos());
     m_fixedTop    = ul.isRowFixed();
     m_fixedLeft   = ul.isColumnFixed();
@@ -1311,22 +1376,24 @@ Region::Range::Range(const Calligra::Sheets::Region::Point& ul, const Calligra::
     m_fixedRight  = lr.isColumnFixed();
 }
 
-Region::Range::Range(const QString& sRange)
-        : Region::Element()
-        , m_fixedTop(false)
-        , m_fixedLeft(false)
-        , m_fixedBottom(false)
-        , m_fixedRight(false)
+Region::Range::Range(const QString &sRange)
+    : Region::Element()
+    , m_fixedTop(false)
+    , m_fixedLeft(false)
+    , m_fixedBottom(false)
+    , m_fixedRight(false)
 {
     int delimiterPos = sRange.indexOf(':');
-    if (delimiterPos == -1)
+    if (delimiterPos == -1) {
         return;
+    }
 
     Region::Point ul(sRange.left(delimiterPos));
     Region::Point lr(sRange.mid(delimiterPos + 1));
 
-    if (!ul.isValid() || !lr.isValid())
+    if (!ul.isValid() || !lr.isValid()) {
         return;
+    }
     m_range = QRect(ul.pos(), lr.pos());
     m_fixedTop    = ul.isRowFixed();
     m_fixedLeft   = ul.isColumnFixed();
@@ -1353,38 +1420,43 @@ bool Region::Range::isAll() const
     return (m_range == QRect(1, 1, KS_colMax, KS_rowMax));
 }
 
-bool Region::Range::contains(const QPoint& point) const
+bool Region::Range::contains(const QPoint &point) const
 {
     return m_range.contains(point);
 }
 
-bool Region::Range::contains(const QRect& range) const
+bool Region::Range::contains(const QRect &range) const
 {
     return m_range.contains(normalized(range));
 }
 
-QString Region::Range::name(Sheet* originSheet) const
+QString Region::Range::name(Sheet *originSheet) const
 {
     QString name;
     if (m_sheet && m_sheet != originSheet) {
         name.append(m_sheet->sheetName());
         name.replace('\'', "''");
-        if (name.contains('!') || name.contains(' ') || name.contains(';') || name.contains('$'))
+        if (name.contains('!') || name.contains(' ') || name.contains(';') || name.contains('$')) {
             name = '\'' + name + '\'';
+        }
         name.append('!');
     }
-    if (m_fixedLeft)
+    if (m_fixedLeft) {
         name.append('$');
+    }
     name.append(Cell::columnName(m_range.left()));
-    if (m_fixedTop)
+    if (m_fixedTop) {
         name.append('$');
+    }
     name.append(QString::number(m_range.top()));
     name.append(':');
-    if (m_fixedRight)
+    if (m_fixedRight) {
         name.append('$');
+    }
     name.append(Cell::columnName(m_range.right()));
-    if (m_fixedBottom)
+    if (m_fixedBottom) {
         name.append('$');
+    }
     name.append(QString::number(m_range.bottom()));
     return name;
 }

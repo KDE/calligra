@@ -55,7 +55,7 @@ public:
     /**
      * Return the currently selected filter configuration
      */
-    KisFilterConfiguration* filterConfig() const;
+    KisFilterConfiguration *filterConfig() const;
 
     bool smudgeMode() const;
 
@@ -69,22 +69,22 @@ public:
      */
     void setImage(KisImageWSP image);
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private Q_SLOTS:
 
-    void setCurrentFilter(const KoID&);
+    void setCurrentFilter(const KoID &);
 
     void updateFilterConfigWidget();
 
 private:
 
-    QGridLayout* m_layout;
-    KisFilterOptionWidget* m_options;
+    QGridLayout *m_layout;
+    KisFilterOptionWidget *m_options;
     const KisFilterSP m_currentFilter;
-    KisConfigWidget* m_currentFilterConfigWidget;
+    KisConfigWidget *m_currentFilterConfigWidget;
     KisPaintDeviceSP m_paintDevice;
     KisImageSP m_image;
 };

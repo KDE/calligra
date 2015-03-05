@@ -5,12 +5,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
@@ -41,15 +41,16 @@ enum Form {
  * It also implements a lookup method for entities as MathML allows a number of them.
  * The method mapEntity maps a given "&...;" representation to the corresponding QChar.
  */
-class Dictionary {
+class Dictionary
+{
 public:
     /// Standard constructor sets default values to operator attributes
     Dictionary();
 
     /// @return The mapped entity represented as a QChar
-    QChar mapEntity( const QString& entity );
+    QChar mapEntity(const QString &entity);
 
-    bool queryOperator( const QString& queriedOperator, Form form );
+    bool queryOperator(const QString &queriedOperator, Form form);
 
     /// @return The form value of the currently queried operator
     Form form() const;

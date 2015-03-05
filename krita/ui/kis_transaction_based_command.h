@@ -33,7 +33,7 @@ public:
     void undo();
 
 protected:
-    virtual KUndo2Command* paint() = 0;
+    virtual KUndo2Command *paint() = 0;
 private:
     KUndo2Command *m_transactionData;
 };

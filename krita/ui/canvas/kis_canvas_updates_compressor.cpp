@@ -21,7 +21,9 @@
 bool KisCanvasUpdatesCompressor::putUpdateInfo(KisUpdateInfoSP info)
 {
     const QRect newUpdateRect = info->dirtyImageRect();
-    if (newUpdateRect.isEmpty()) return false;
+    if (newUpdateRect.isEmpty()) {
+        return false;
+    }
 
     QMutexLocker l(&m_mutex);
     bool updateOverridden = false;

@@ -62,7 +62,7 @@ public:
      */
     qreal width(qreal penWidth) const;
 
-    /** 
+    /**
      * Set the width of the marker
      *
      * This calculates a base width for the marker so the width of the marker changes
@@ -110,7 +110,7 @@ public:
 
     /**
      * Load the marker data
-     * 
+     *
      * @param penWidth the used pen width of the line
      * @param context The shape loading context
      */
@@ -130,7 +130,7 @@ private:
     KoMarkerData();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOMARKERDATA_H */

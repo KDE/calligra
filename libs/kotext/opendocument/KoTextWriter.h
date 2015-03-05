@@ -31,7 +31,6 @@ class QTextCharFormat;
 
 class KoDocumentRdfBase;
 
-
 /**
  * KoTextWriter saves the text ODF of a shape
  */
@@ -79,7 +78,7 @@ public:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

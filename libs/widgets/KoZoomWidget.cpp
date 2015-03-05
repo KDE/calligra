@@ -1,4 +1,4 @@
-/*  
+/*
     Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
     Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
     Copyright (C) 2006-2007 C. Boemann <cbo@boemann.dk>
@@ -40,14 +40,14 @@ public:
         , aspectButton(0)
     {}
 
-    QSlider* slider;
-    KoZoomInput* input;
-    QToolButton* aspectButton;
+    QSlider *slider;
+    KoZoomInput *input;
+    QToolButton *aspectButton;
 
     qreal effectiveZoom;
 };
 
-KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons specialButtons, int maxZoom )
+KoZoomWidget::KoZoomWidget(QWidget *parent, KoZoomAction::SpecialButtons specialButtons, int maxZoom)
     : QWidget(parent)
     , d(new Private)
 {
@@ -57,7 +57,7 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons special
     layout->setSpacing(0);
 
     d->input = new KoZoomInput(this);
-    connect(d->input, SIGNAL(zoomLevelChanged(const QString&)), this, SIGNAL(zoomLevelChanged(const QString&)));
+    connect(d->input, SIGNAL(zoomLevelChanged(QString)), this, SIGNAL(zoomLevelChanged(QString)));
     layout->addWidget(d->input);
 
     d->slider = new QSlider(Qt::Horizontal);
@@ -74,7 +74,7 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons special
     if (specialButtons & KoZoomAction::AspectMode) {
         d->aspectButton = new QToolButton(this);
         d->aspectButton->setIcon(koIcon("zoom-pixels"));
-        d->aspectButton->setIconSize(QSize(16,16));
+        d->aspectButton->setIconSize(QSize(16, 16));
         d->aspectButton->setCheckable(true);
         d->aspectButton->setChecked(true);
         d->aspectButton->setAutoRaise(true);
@@ -83,18 +83,18 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons special
         layout->addWidget(d->aspectButton);
     }
     if (specialButtons & KoZoomAction::ZoomToSelection) {
-        QToolButton * zoomToSelectionButton = new QToolButton(this);
+        QToolButton *zoomToSelectionButton = new QToolButton(this);
         zoomToSelectionButton->setIcon(koIcon("zoom-select"));
-        zoomToSelectionButton->setIconSize(QSize(16,16));
+        zoomToSelectionButton->setIconSize(QSize(16, 16));
         zoomToSelectionButton->setAutoRaise(true);
         zoomToSelectionButton->setToolTip(i18n("Zoom to Selection"));
         connect(zoomToSelectionButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToSelection()));
         layout->addWidget(zoomToSelectionButton);
     }
     if (specialButtons & KoZoomAction::ZoomToAll) {
-        QToolButton * zoomToAllButton = new QToolButton(this);
+        QToolButton *zoomToAllButton = new QToolButton(this);
         zoomToAllButton->setIcon(koIcon("zoom-draw"));
-        zoomToAllButton->setIconSize(QSize(16,16));
+        zoomToAllButton->setIconSize(QSize(16, 16));
         zoomToAllButton->setAutoRaise(true);
         zoomToAllButton->setToolTip(i18n("Zoom to All"));
         connect(zoomToAllButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToAll()));
@@ -126,7 +126,7 @@ void KoZoomWidget::setSliderValue(int value)
 
 void KoZoomWidget::setAspectMode(bool status)
 {
-    if(d->aspectButton && d->aspectButton->isChecked() != status) {
+    if (d->aspectButton && d->aspectButton->isChecked() != status) {
         d->aspectButton->blockSignals(true);
         d->aspectButton->setChecked(status);
         d->aspectButton->blockSignals(false);

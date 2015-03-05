@@ -38,8 +38,10 @@ public:
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
-    virtual QString observerName() { return "KoToolBoxDocker"; }
-
+    virtual QString observerName()
+    {
+        return "KoToolBoxDocker";
+    }
 
 protected Q_SLOTS:
     void updateToolBoxOrientation(Qt::DockWidgetArea area);

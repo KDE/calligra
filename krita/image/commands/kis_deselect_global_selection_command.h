@@ -22,7 +22,6 @@
 #include <kundo2command.h>
 #include "kis_types.h"
 
-
 /// The command for deselection the global selection of KisImage
 class KRITAIMAGE_EXPORT KisDeselectGlobalSelectionCommand : public KUndo2Command
 {
@@ -33,7 +32,7 @@ public:
      * @param image the image
      * @param parent the parent command
      */
-    KisDeselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent = 0);
+    KisDeselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command *parent = 0);
     virtual ~KisDeselectGlobalSelectionCommand();
 
     virtual void redo();

@@ -42,9 +42,9 @@
 
 #include "../../sdk/tests/testutil.h"
 
-bool KisPrescaledProjectionTest::testProjectionScenario(KisPrescaledProjection & projection,
-        KoZoomHandler * viewConverter,
-        const QString & name)
+bool KisPrescaledProjectionTest::testProjectionScenario(KisPrescaledProjection &projection,
+        KoZoomHandler *viewConverter,
+        const QString &name)
 {
 
     projection.notifyCanvasSizeChanged(QSize(1000, 1000));
@@ -148,7 +148,7 @@ bool KisPrescaledProjectionTest::testProjectionScenario(KisPrescaledProjection &
 
 void KisPrescaledProjectionTest::testCreation()
 {
-    KisPrescaledProjection * prescaledProjection = 0;
+    KisPrescaledProjection *prescaledProjection = 0;
     prescaledProjection = new KisPrescaledProjection();
     QVERIFY(prescaledProjection != 0);
     QVERIFY(prescaledProjection->prescaledQImage().isNull());
@@ -161,12 +161,12 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
 
     // Undo adapter not necessary
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, qimage.width(), qimage.height(), cs, "projection test");
 
     // 300 dpi recalculated to pixels per point (of which there are 72
     // to the inch)
-    image->setResolution(100 / 72 , 100 / 72);
+    image->setResolution(100 / 72, 100 / 72);
 
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8, cs);
     image->addNode(layer.data(), image->rootLayer(), 0);
@@ -174,7 +174,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
 
     KisPrescaledProjection projection;
     KisCoordinatesConverter converter;
-    
+
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
     projection.setMonitorProfile(0,
@@ -189,14 +189,13 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
 
 }
 
-
 void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
 {
     // Set up a nice image
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
 
     // Undo adapter not necessary
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, qimage.width(), qimage.height(), cs, "projection test");
 
     // 300 dpi recalculated to pixels per point (of which there are 72
@@ -209,7 +208,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
 
     KisPrescaledProjection projection;
     KisCoordinatesConverter converter;
-    
+
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
     projection.setMonitorProfile(0,
@@ -226,13 +225,13 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
 void KisPrescaledProjectionTest::benchmarkUpdate()
 {
     QImage referenceImage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
-    QRect imageRect = QRect(QPoint(0,0), referenceImage.size());
+    QRect imageRect = QRect(QPoint(0, 0), referenceImage.size());
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), cs, "projection test");
 
     // set up 300dpi
-    image->setResolution(300 / 72 , 300 / 72);
+    image->setResolution(300 / 72, 300 / 72);
 
     KisPaintLayerSP layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, cs);
     layer->paintDevice()->convertFromQImage(referenceImage, 0);
@@ -257,16 +256,17 @@ void KisPrescaledProjectionTest::benchmarkUpdate()
     KisUpdateInfoSP info = projection.updateCache(image->bounds());
     projection.recalculateCache(info);
 
-    QCOMPARE(imageRect, QRect(0,0,512,512));
+    QCOMPARE(imageRect, QRect(0, 0, 512, 512));
 
-    QRect dirtyRect(0,0,20,20);
+    QRect dirtyRect(0, 0, 20, 20);
     const qint32 numShifts = 25;
-    const QPoint offset(dirtyRect.width(),dirtyRect.height());
+    const QPoint offset(dirtyRect.width(), dirtyRect.height());
 
     //CALLGRIND_START_INSTRUMENTATION;
 
     QBENCHMARK {
-        for(qint32 i = 0; i < numShifts; i++) {
+        for (qint32 i = 0; i < numShifts; i++)
+        {
             KisUpdateInfoSP tempInfo = projection.updateCache(dirtyRect);
             projection.recalculateCache(tempInfo);
 
@@ -278,14 +278,14 @@ void KisPrescaledProjectionTest::benchmarkUpdate()
 
 }
 
-
 class PrescaledProjectionTester
 {
 public:
-    PrescaledProjectionTester() {
+    PrescaledProjectionTester()
+    {
         sourceImage = QImage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
 
-        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
         image = new KisImage(0, sourceImage.width(), sourceImage.height(), cs, "projection test");
         image->setResolution(100, 100);
 
@@ -297,15 +297,15 @@ public:
         converter.setResolution(100, 100);
         converter.setZoom(1.);
         converter.setImage(image);
-        converter.setCanvasWidgetSize(QSize(100,100));
-        converter.setDocumentOffset(QPoint(100,100));
+        converter.setCanvasWidgetSize(QSize(100, 100));
+        converter.setDocumentOffset(QPoint(100, 100));
 
         projection.setCoordinatesConverter(&converter);
         projection.setMonitorProfile(0,
                                      KoColorConversionTransformation::InternalRenderingIntent,
                                      KoColorConversionTransformation::InternalConversionFlags);
         projection.setImage(image);
-        projection.notifyCanvasSizeChanged(QSize(100,100));
+        projection.notifyCanvasSizeChanged(QSize(100, 100));
         projection.notifyZoomChanged();
     }
 
@@ -321,17 +321,17 @@ void KisPrescaledProjectionTest::testScrollingZoom100()
     PrescaledProjectionTester t;
 
     QImage result = t.projection.prescaledQImage();
-    QImage reference = t.sourceImage.copy(QRect(100,100,100,100));
+    QImage reference = t.sourceImage.copy(QRect(100, 100, 100, 100));
 
     QPoint pt;
     QVERIFY(TestUtil::compareQImages(pt, result, reference));
 
     // Test actual scrolling
-    t.converter.setDocumentOffset(QPoint(150,150));
-    t.projection.viewportMoved(QPoint(-50,-50));
+    t.converter.setDocumentOffset(QPoint(150, 150));
+    t.projection.viewportMoved(QPoint(-50, -50));
 
     result = t.projection.prescaledQImage();
-    reference = t.sourceImage.copy(QRect(150,150,100,100));
+    reference = t.sourceImage.copy(QRect(150, 150, 100, 100));
 
     QVERIFY(TestUtil::compareQImages(pt, result, reference));
 }
@@ -340,11 +340,10 @@ void KisPrescaledProjectionTest::testScrollingZoom50()
 {
     PrescaledProjectionTester t;
 
-    t.converter.setDocumentOffset(QPoint(0,0));
+    t.converter.setDocumentOffset(QPoint(0, 0));
 
-    t.converter.setCanvasWidgetSize(QSize(300,300));
-    t.projection.notifyCanvasSizeChanged(QSize(300,300));
-
+    t.converter.setCanvasWidgetSize(QSize(300, 300));
+    t.projection.notifyCanvasSizeChanged(QSize(300, 300));
 
     QVERIFY(TestUtil::checkQImage(t.projection.prescaledQImage(),
                                   "prescaled_projection_test",
@@ -359,8 +358,8 @@ void KisPrescaledProjectionTest::testScrollingZoom50()
                                   "testScrollingZoom50",
                                   "zoom50"));
 
-    t.converter.setDocumentOffset(QPoint(50,50));
-    t.projection.viewportMoved(QPoint(-50,-50));
+    t.converter.setDocumentOffset(QPoint(50, 50));
+    t.projection.viewportMoved(QPoint(-50, -50));
 
     QVERIFY(TestUtil::checkQImage(t.projection.prescaledQImage(),
                                   "prescaled_projection_test",
@@ -372,11 +371,10 @@ void KisPrescaledProjectionTest::testUpdates()
 {
     PrescaledProjectionTester t;
 
-    t.converter.setDocumentOffset(QPoint(10,10));
+    t.converter.setDocumentOffset(QPoint(10, 10));
 
-    t.converter.setCanvasWidgetSize(2*QSize(300,300));
-    t.projection.notifyCanvasSizeChanged(2*QSize(300,300));
-
+    t.converter.setCanvasWidgetSize(2 * QSize(300, 300));
+    t.projection.notifyCanvasSizeChanged(2 * QSize(300, 300));
 
     t.converter.setZoom(0.50);
     t.projection.notifyZoomChanged();
@@ -406,8 +404,8 @@ void KisPrescaledProjectionTest::testUpdates()
 
     QList<KisUpdateInfoSP> infos;
 
-    for(int y = 0; y < t.image->height(); y+=step) {
-        for(int x = 0; x < t.image->width(); x+=step) {
+    for (int y = 0; y < t.image->height(); y += step) {
+        for (int x = 0; x < t.image->width(); x += step) {
             QRect patchRect(x - patchOffset, y - patchOffset,
                             patchSize, patchSize);
 
@@ -415,7 +413,7 @@ void KisPrescaledProjectionTest::testUpdates()
         }
     }
 
-    foreach(KisUpdateInfoSP info, infos) {
+    foreach (KisUpdateInfoSP info, infos) {
         t.projection.recalculateCache(info);
     }
 
@@ -441,21 +439,20 @@ void KisPrescaledProjectionTest::testQtScaling()
     // Image we are going to scale down
     QImage image(7, 7, QImage::Format_ARGB32);
     QPainter imagePainter(&image);
-    imagePainter.fillRect(QRect(0,0,7,7),Qt::green);
+    imagePainter.fillRect(QRect(0, 0, 7, 7), Qt::green);
     imagePainter.end();
-
 
     QPainter gc(&canvas);
 
     // Scale down transformation
-    qreal scale = 3.49/7.0;
-    gc.setTransform(QTransform::fromScale(scale,scale));
+    qreal scale = 3.49 / 7.0;
+    gc.setTransform(QTransform::fromScale(scale, scale));
 
     // Draw a rect scale*(7x7)
-    gc.fillRect(QRectF(0,0,7,7), Qt::red);
+    gc.fillRect(QRectF(0, 0, 7, 7), Qt::red);
 
     // Draw an image scale*(7x7)
-    gc.drawImage(QPointF(), image, QRectF(0,0,7,7));
+    gc.drawImage(QPointF(), image, QRectF(0, 0, 7, 7));
 
     gc.end();
 
@@ -463,8 +460,8 @@ void KisPrescaledProjectionTest::testQtScaling()
     QImage expectedResult(6, 6, QImage::Format_ARGB32);
     expectedResult.fill(0);
     QPainter expectedPainter(&expectedResult);
-    expectedPainter.fillRect(QRect(0,0,4,4), Qt::red);
-    expectedPainter.fillRect(QRect(0,0,3,3), Qt::green);
+    expectedPainter.fillRect(QRect(0, 0, 4, 4), Qt::red);
+    expectedPainter.fillRect(QRect(0, 0, 3, 3), Qt::green);
     expectedPainter.end();
 
     QCOMPARE(canvas, expectedResult);

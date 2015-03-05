@@ -25,7 +25,6 @@
 #include "kis_types.h"
 #include "kis_undo_store.h"
 
-
 class KRITAIMAGE_EXPORT KisUndoAdapter : public QObject
 {
     Q_OBJECT
@@ -37,13 +36,14 @@ public:
 public:
     void emitSelectionChanged();
 
-    virtual const KUndo2Command* presentCommand() = 0;
+    virtual const KUndo2Command *presentCommand() = 0;
     virtual void undoLastCommand() = 0;
     virtual void addCommand(KUndo2Command *cmd) = 0;
-    virtual void beginMacro(const KUndo2MagicString& macroName) = 0;
+    virtual void beginMacro(const KUndo2MagicString &macroName) = 0;
     virtual void endMacro() = 0;
 
-    inline void setUndoStore(KisUndoStore *undoStore) {
+    inline void setUndoStore(KisUndoStore *undoStore)
+    {
         m_undoStore = undoStore;
     }
 
@@ -51,7 +51,8 @@ Q_SIGNALS:
     void selectionChanged();
 
 protected:
-    inline KisUndoStore* undoStore() {
+    inline KisUndoStore *undoStore()
+    {
         return m_undoStore;
     }
 
@@ -59,7 +60,6 @@ private:
     Q_DISABLE_COPY(KisUndoAdapter)
     KisUndoStore *m_undoStore;
 };
-
 
 #endif // KIS_UNDO_ADAPTER_H_
 

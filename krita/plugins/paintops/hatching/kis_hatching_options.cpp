@@ -25,7 +25,8 @@ class KisHatchingOptionsWidget: public QWidget, public Ui::WdgHatchingOptions
 {
 public:
     KisHatchingOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
 
         QString degree = QChar(Qt::Key_degree);
@@ -80,7 +81,7 @@ KisHatchingOptions::~KisHatchingOptions()
 {
 }
 
-void KisHatchingOptions::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisHatchingOptions::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty("Hatching/angle", m_options->angleKisDoubleSliderSpinBox->value());
     setting->setProperty("Hatching/separation", m_options->separationKisDoubleSliderSpinBox->value());
@@ -97,7 +98,7 @@ void KisHatchingOptions::writeOptionSetting(KisPropertiesConfiguration* setting)
     setting->setProperty("Hatching/separationintervals", m_options->separationIntervalSpinBox->value());
 }
 
-void KisHatchingOptions::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisHatchingOptions::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     m_options->angleKisDoubleSliderSpinBox->setValue(setting->getDouble("Hatching/angle"));
     m_options->separationKisDoubleSliderSpinBox->setValue(setting->getDouble("Hatching/separation"));

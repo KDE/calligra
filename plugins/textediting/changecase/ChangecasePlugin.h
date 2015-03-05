@@ -23,11 +23,12 @@
 #include <QObject>
 #include <QVariant>
 
-class ChangecasePlugin : public QObject {
+class ChangecasePlugin : public QObject
+{
     Q_OBJECT
 
 public:
-    ChangecasePlugin(QObject * parent,  const QVariantList & );
+    ChangecasePlugin(QObject *parent,  const QVariantList &);
     ~ChangecasePlugin() {}
 };
 

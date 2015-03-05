@@ -21,7 +21,7 @@
 #include <Section.h>
 #include <DocumentModel.h>
 
-RenameSectionCommand::RenameSectionCommand(DocumentModel* _model, Section* _section, const QString& _newName) : m_model(_model), m_section(_section), m_newName(_newName), m_oldName(m_section->name())
+RenameSectionCommand::RenameSectionCommand(DocumentModel *_model, Section *_section, const QString &_newName) : m_model(_model), m_section(_section), m_newName(_newName), m_oldName(m_section->name())
 {
 }
 

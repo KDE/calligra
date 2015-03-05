@@ -31,14 +31,13 @@ QDebug KoInlineObjectPrivate::printDebug(QDebug dbg) const
     return dbg.space();
 }
 
-
 KoInlineObjectPrivate::~KoInlineObjectPrivate()
 {
     delete rdf;
 }
 
 KoInlineObject::KoInlineObject(bool propertyChangeListener)
-        : d_ptr(new KoInlineObjectPrivate)
+    : d_ptr(new KoInlineObjectPrivate)
 {
     Q_D(KoInlineObject);
     d->propertyChangeListener = propertyChangeListener;
@@ -99,16 +98,16 @@ bool KoInlineObject::propertyChangeListener() const
 QDebug operator<<(QDebug dbg, const KoInlineObject *o)
 {
     return o ? o->d_func()->printDebug(dbg) : dbg << "KoInlineObject 0";
-;
+    ;
 }
 
-void KoInlineObject::setInlineRdf(KoTextInlineRdf* rdf)
+void KoInlineObject::setInlineRdf(KoTextInlineRdf *rdf)
 {
     Q_D(KoInlineObject);
     d->rdf = rdf;
 }
 
-KoTextInlineRdf* KoInlineObject::inlineRdf() const
+KoTextInlineRdf *KoInlineObject::inlineRdf() const
 {
     Q_D(const KoInlineObject);
     return d->rdf;

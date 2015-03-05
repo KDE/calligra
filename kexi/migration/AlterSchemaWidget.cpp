@@ -49,7 +49,7 @@ AlterSchemaWidget::AlterSchemaWidget(QWidget *parent) : QWidget(parent)
     m_table = new QTableView(this);
     m_columnType = new QComboBox(this);
     m_columnPKey = new QCheckBox(this);
-    m_tableNameWidget = new KexiNameWidget("",this);
+    m_tableNameWidget = new KexiNameWidget("", this);
 
     m_columnNumLabel = new QLabel(i18n("Column %1", 1), this);
     m_columnTypeLabel = new QLabel(i18n("Type"), this);
@@ -86,7 +86,7 @@ AlterSchemaWidget::~AlterSchemaWidget()
     delete m_model;
 }
 
-void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts, const QString& suggestedCaption)
+void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema *ts, const QString &suggestedCaption)
 {
     m_originalSchema = ts;
     m_newSchema = new KexiDB::TableSchema(*ts, false);
@@ -99,15 +99,15 @@ void AlterSchemaWidget::setTableSchema(KexiDB::TableSchema* ts, const QString& s
     m_model->setRowCount(3); // default
 
     m_model->setSchema(m_newSchema);
-    tableClicked(m_model->index(0,0));
+    tableClicked(m_model->index(0, 0));
 }
 
-void AlterSchemaWidget::setData(const QList<KexiDB::RecordData>& data)
+void AlterSchemaWidget::setData(const QList<KexiDB::RecordData> &data)
 {
     m_model->setData(data);
 }
 
-void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
+void AlterSchemaWidget::tableClicked(const QModelIndex &idx)
 {
     m_selectedColumn = idx.column();
     m_columnNumLabel->setText(i18n("Column %1", m_selectedColumn + 1));
@@ -141,23 +141,23 @@ void AlterSchemaWidget::pkeyClicked(bool pkey)
     m_newSchema->field(m_selectedColumn)->setAutoIncrement(pkey);
 }
 
-KexiDB::TableSchema* AlterSchemaWidget::newSchema()
+KexiDB::TableSchema *AlterSchemaWidget::newSchema()
 {
     m_newSchema->setName(m_tableNameWidget->nameText());
     return m_newSchema;
 }
 
-KexiNameWidget* AlterSchemaWidget::nameWidget()
+KexiNameWidget *AlterSchemaWidget::nameWidget()
 {
     return m_tableNameWidget;
 }
 
-AlterSchemaTableModel* AlterSchemaWidget::model()
+AlterSchemaTableModel *AlterSchemaWidget::model()
 {
     return m_model;
 }
 
-QString AlterSchemaWidget::suggestedItemCaption(const QString& baseCaption)
+QString AlterSchemaWidget::suggestedItemCaption(const QString &baseCaption)
 {
     unsigned int n = 0;
     QString newCaption;
@@ -182,14 +182,14 @@ QString AlterSchemaWidget::suggestedItemCaption(const QString& baseCaption)
     return newCaption;
 }
 
-bool AlterSchemaWidget::nameExists(const QString & name) const
+bool AlterSchemaWidget::nameExists(const QString &name) const
 {
-    KexiPart::ItemDict* list = KexiMainWindowIface::global()->project()->itemsForClass("org.kexi-project.table");
+    KexiPart::ItemDict *list = KexiMainWindowIface::global()->project()->itemsForClass("org.kexi-project.table");
     if (!list) {
         return false;
     }
 
-    QHash<int, KexiPart::Item*>::const_iterator it = list->constBegin();
+    QHash<int, KexiPart::Item *>::const_iterator it = list->constBegin();
     while (it != list->constEnd()) {
         if (QString::compare(name, it.value()->name(), Qt::CaseInsensitive) == 0) {
             return true;

@@ -21,15 +21,14 @@
 #include <klocale.h>
 #include <kis_debug.h>
 
-DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize imageSize)
-        :   KDialog(parent),
-            m_offsetSize(imageSize)
+DlgOffsetImage::DlgOffsetImage(QWidget   *parent, const char *name, QSize imageSize)
+    :   KDialog(parent),
+        m_offsetSize(imageSize)
 {
     setCaption("BUG: No sane caption is set");
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setObjectName(name);
-
 
     m_lock = false;
 
@@ -40,7 +39,7 @@ DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize image
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    connect(this, SIGNAL(okClicked()),this, SLOT(okClicked()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
     connect(m_page->middleOffsetBtn, SIGNAL(clicked()), this, SLOT(slotMiddleOffset()));
     connect(m_page->offsetXspinBox, SIGNAL(valueChanged(int)), this, SLOT(slotOffsetXChanged(int)));
     connect(m_page->offsetYspinBox, SIGNAL(valueChanged(int)), this, SLOT(slotOffsetYChanged(int)));
@@ -75,6 +74,5 @@ void DlgOffsetImage::okClicked()
 {
     accept();
 }
-
 
 #include "dlg_offsetimage.moc"

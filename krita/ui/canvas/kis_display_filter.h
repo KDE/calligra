@@ -26,7 +26,6 @@
 #include <krita_export.h>
 #include "kis_exposure_gamma_correction_interface.h"
 
-
 /**
  * @brief The KisDisplayFilter class is the base class for filters that
  * are applied by the canvas to the projection before displaying.
@@ -48,6 +47,5 @@ public:
     virtual KisExposureGammaCorrectionInterface *correctionInterface() const = 0;
     virtual bool lockCurrentColorVisualRepresentation() const = 0;
 };
-
 
 #endif

@@ -44,25 +44,25 @@ protected:
 public:
 
     /// Construct brush to load filename later as brush
-    KisGbrBrush(const QString& filename);
+    KisGbrBrush(const QString &filename);
 
     /// Load brush from the specified data, at position dataPos, and set the filename
-    KisGbrBrush(const QString& filename,
-                const QByteArray & data,
-                qint32 & dataPos);
+    KisGbrBrush(const QString &filename,
+                const QByteArray &data,
+                qint32 &dataPos);
 
     /// Load brush from the specified paint device, in the specified region
     KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h);
 
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
-    KisGbrBrush(const QImage& image, const QString& name = QString(""));
+    KisGbrBrush(const QImage &image, const QString &name = QString(""));
 
     virtual ~KisGbrBrush();
 
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
+    virtual bool saveToDevice(QIODevice *dev) const;
 
     /**
      * @return a preview of the brush
@@ -88,7 +88,7 @@ public:
     /**
      * Makes a copy of this brush.
      */
-    virtual KisGbrBrush* clone() const;
+    virtual KisGbrBrush *clone() const;
 
     /**
      * @return default file extension for saving the brush
@@ -101,13 +101,12 @@ protected:
      */
     friend class KisImageBrushesPipe;
 
-
-    KisGbrBrush(const KisGbrBrush& rhs);
+    KisGbrBrush(const KisGbrBrush &rhs);
 
     void setBrushType(enumBrushType type);
-    virtual void setBrushTipImage(const QImage& image);
+    virtual void setBrushTipImage(const QImage &image);
 
-    void toXML(QDomDocument& d, QDomElement& e) const;
+    void toXML(QDomDocument &d, QDomElement &e) const;
 
 private:
 
@@ -115,7 +114,7 @@ private:
     bool initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, int h);
 
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KIS_GBR_BRUSH_

@@ -37,15 +37,14 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 
-
-KoGlobal* KoGlobal::self()
+KoGlobal *KoGlobal::self()
 {
     K_GLOBAL_STATIC(KoGlobal, s_instance)
     return s_instance;
 }
 
 KoGlobal::KoGlobal()
-        : m_pointSize(-1), m_calligraConfig(0)
+    : m_pointSize(-1), m_calligraConfig(0)
 {
     if (KGlobal::locale()) {
         // Install the libcalligra* translations
@@ -73,8 +72,9 @@ QFont KoGlobal::_defaultFont()
     // we have to use QFontInfo, in case the font was specified with a pixel size
     if (font.pointSize() == -1) {
         // cache size into m_pointSize, since QFontInfo loads the font -> slow
-        if (m_pointSize == -1)
+        if (m_pointSize == -1) {
             m_pointSize = QFontInfo(font).pointSize();
+        }
         Q_ASSERT(m_pointSize != -1);
         font.setPointSize(m_pointSize);
     }
@@ -85,15 +85,17 @@ QFont KoGlobal::_defaultFont()
 
 QStringList KoGlobal::_listOfLanguageTags()
 {
-    if (m_langMap.isEmpty())
+    if (m_langMap.isEmpty()) {
         createListOfLanguages();
+    }
     return m_langMap.values();
 }
 
 QStringList KoGlobal::_listOfLanguages()
 {
-    if (m_langMap.empty())
+    if (m_langMap.empty()) {
         createListOfLanguages();
+    }
     return m_langMap.keys();
 }
 
@@ -150,29 +152,31 @@ void KoGlobal::createListOfLanguages()
     // How to add them?
 }
 
-QString KoGlobal::tagOfLanguage(const QString & _lang)
+QString KoGlobal::tagOfLanguage(const QString &_lang)
 {
-    const LanguageMap& map = self()->m_langMap;
+    const LanguageMap &map = self()->m_langMap;
     QMap<QString, QString>::ConstIterator it = map.find(_lang);
-    if (it != map.end())
+    if (it != map.end()) {
         return *it;
+    }
     return QString();
 }
 
 QString KoGlobal::languageFromTag(const QString &langTag)
 {
-    const LanguageMap& map = self()->m_langMap;
+    const LanguageMap &map = self()->m_langMap;
     QMap<QString, QString>::ConstIterator it = map.begin();
     const QMap<QString, QString>::ConstIterator end = map.end();
     for (; it != end; ++it)
-        if (it.value() == langTag)
+        if (it.value() == langTag) {
             return it.key();
+        }
 
     // Language code not found. Better return the code (tag) than nothing.
     return langTag;
 }
 
-KConfig* KoGlobal::_calligraConfig()
+KConfig *KoGlobal::_calligraConfig()
 {
     if (!m_calligraConfig) {
         m_calligraConfig = new KConfig("calligrarc");

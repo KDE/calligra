@@ -67,12 +67,12 @@ public:
         qDeleteAll(channelInfoRecords);
     }
 
-    bool read(QIODevice* io);
-    bool readPixelData(QIODevice* io, KisPaintDeviceSP device);
-    bool readMask(QIODevice* io, KisPaintDeviceSP dev, ChannelInfo *channel);
+    bool read(QIODevice *io);
+    bool readPixelData(QIODevice *io, KisPaintDeviceSP device);
+    bool readMask(QIODevice *io, KisPaintDeviceSP dev, ChannelInfo *channel);
 
-    bool write(QIODevice* io, KisNodeSP node);
-    bool writePixelData(QIODevice* io);
+    bool write(QIODevice *io, KisNodeSP node);
+    bool writePixelData(QIODevice *io);
 
     bool valid();
 
@@ -85,7 +85,7 @@ public:
 
     quint16 nChannels;
 
-    QVector<ChannelInfo*> channelInfoRecords;
+    QVector<ChannelInfo *> channelInfoRecords;
 
     QString blendModeKey;
 
@@ -130,20 +130,20 @@ public:
         QByteArray data;
     };
 
-    QMap<QString, LayerInfoBlock*> infoBlocks;
+    QMap<QString, LayerInfoBlock *> infoBlocks;
 
 private:
 
-    bool doRGB(KisPaintDeviceSP dev ,QIODevice *io);
-    bool doCMYK(KisPaintDeviceSP dev ,QIODevice *io);
-    bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
-    bool doGrayscale(KisPaintDeviceSP dev ,QIODevice *io);
+    bool doRGB(KisPaintDeviceSP dev, QIODevice *io);
+    bool doCMYK(KisPaintDeviceSP dev, QIODevice *io);
+    bool doLAB(KisPaintDeviceSP dev, QIODevice *io);
+    bool doGrayscale(KisPaintDeviceSP dev, QIODevice *io);
 
     KisNodeSP m_node;
     const PSDHeader m_header;
 };
 
-QDebug operator<<(QDebug dbg, const PSDLayerRecord& layer);
-QDebug operator<<(QDebug dbg, const ChannelInfo& layer);
+QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer);
+QDebug operator<<(QDebug dbg, const ChannelInfo &layer);
 
 #endif // PSD_LAYER_RECORD_H

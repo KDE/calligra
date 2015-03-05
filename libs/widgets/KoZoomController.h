@@ -33,7 +33,6 @@ class KoZoomHandler;
 class KActionCollection;
 class QSize;
 
-
 /**
  * This controller class handles zoom levels for any canvas.
  *
@@ -57,8 +56,9 @@ class QSize;
  * except emit the aspectModeChanged signal.
  *
  */
-class KOWIDGETS_EXPORT KoZoomController : public QObject {
-Q_OBJECT
+class KOWIDGETS_EXPORT KoZoomController : public QObject
+{
+    Q_OBJECT
 public:
     /**
     * Constructor. Create one per canvasController.  The zoomAction is created in the constructor and will
@@ -99,7 +99,6 @@ public:
      */
     void setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint);
 
-
     /**
      * Convenience function that changes resolution with
      * keeping the centering unchanged
@@ -118,10 +117,9 @@ public:
      */
     void setZoom(KoZoomMode::Mode mode, qreal zoom);
 
-
-  /**
-   * Set Aspect Mode button status and begin a chain of signals
-   */
+    /**
+     * Set Aspect Mode button status and begin a chain of signals
+     */
     void setAspectMode(bool status);
 
 public Q_SLOTS:
@@ -167,13 +165,13 @@ Q_SIGNALS:
      * This signal is emitted whenever either the zoommode or the zoom level is changed by the user.
      * the application can use the emitted data for persistency purposes.
      */
-    void zoomChanged (KoZoomMode::Mode mode, qreal zoom);
+    void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
 
     /**
      * emitted when the special aspect mode toggle changes.
      * @see KoZoomAction::aspectModeChanged()
      */
-    void aspectModeChanged (bool aspectModeActivated);
+    void aspectModeChanged(bool aspectModeActivated);
 
     /**
      * Signal is triggered when the user clicks the zoom to selection button.
@@ -192,12 +190,12 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())
-    Q_PRIVATE_SLOT(d, void requestZoomRelative(const qreal, const QPointF&))
+    Q_PRIVATE_SLOT(d, void requestZoomRelative(const qreal, const QPointF &))
     Q_PRIVATE_SLOT(d, void setZoom(KoZoomMode::Mode, qreal))
-    Q_DISABLE_COPY( KoZoomController )
+    Q_DISABLE_COPY(KoZoomController)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

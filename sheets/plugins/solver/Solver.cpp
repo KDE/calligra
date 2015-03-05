@@ -42,19 +42,18 @@ using namespace Calligra::Sheets::Plugins;
 K_PLUGIN_FACTORY(SolverFactory, registerPlugin<Calligra::Sheets::Plugins::Solver>();)
 K_EXPORT_PLUGIN(SolverFactory("sheetssolver"))
 
-Calligra::Sheets::View* s_view = 0;
-Calligra::Sheets::Formula* s_formula = 0;
-double _function(const gsl_vector* vector, void *params);
-
+Calligra::Sheets::View *s_view = 0;
+Calligra::Sheets::Formula *s_formula = 0;
+double _function(const gsl_vector *vector, void *params);
 
 class Solver::Private
 {
 public:
-    SolverDialog* dialog;
-    View* view;
+    SolverDialog *dialog;
+    View *view;
 };
 
-Solver::Solver(QObject* parent, const QVariantList& args)
+Solver::Solver(QObject *parent, const QVariantList &args)
     : d(new Private)
 {
     Q_UNUSED(args)
@@ -62,13 +61,13 @@ Solver::Solver(QObject* parent, const QVariantList& args)
     setXMLFile(KStandardDirs::locate("data", "sheets/viewplugins/solver.rc"), true);
 
     d->dialog = 0;
-    d->view = qobject_cast<View*>(parent);
+    d->view = qobject_cast<View *>(parent);
     if (!d->view) {
         kError() << "Solver: Parent object is not a Calligra::Sheets::View! Quitting." << endl;
         return;
     }
 
-    QAction* solver = actionCollection()->addAction("sheetssolver");
+    QAction *solver = actionCollection()->addAction("sheetssolver");
     solver->setText(i18n("Function Optimizer..."));
     connect(solver, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
 }
@@ -87,24 +86,29 @@ void Solver::showDialog()
 
 void Solver::optimize()
 {
-    register Sheet * const sheet = d->view->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = d->view->activeSheet();
+    if (!sheet) {
         return;
+    }
 
-    if (d->dialog->function->textEdit()->toPlainText().isEmpty())
+    if (d->dialog->function->textEdit()->toPlainText().isEmpty()) {
         return;
+    }
 
-    if (d->dialog->parameters->textEdit()->toPlainText().isEmpty())
+    if (d->dialog->parameters->textEdit()->toPlainText().isEmpty()) {
         return;
+    }
 
     Region region(d->dialog->function->textEdit()->toPlainText(), d->view->doc()->map(), d->view->activeSheet());
-    if (!region.isValid())
+    if (!region.isValid()) {
         return;
+    }
 
     const QPoint point = (*region.constBegin())->rect().topLeft();
     const Cell formulaCell = Cell(sheet, point.x(), point.y());
-    if (!formulaCell.isFormula())
+    if (!formulaCell.isFormula()) {
         return;
+    }
 
     kDebug() << formulaCell.userInput();
     s_formula = new Formula(sheet);
@@ -121,7 +125,7 @@ void Solver::optimize()
 
     // Determine the parameters
     int dimension = 0;
-    Parameters* parameters = new Parameters;
+    Parameters *parameters = new Parameters;
     region = Region(d->dialog->parameters->textEdit()->toPlainText(), d->view->doc()->map(), d->view->activeSheet());
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
@@ -135,13 +139,13 @@ void Solver::optimize()
     }
 
     /* Initial vertex size vector with a step size of 1 */
-    gsl_vector* stepSizes = gsl_vector_alloc(dimension);
+    gsl_vector *stepSizes = gsl_vector_alloc(dimension);
     gsl_vector_set_all(stepSizes, 1.0);
 
     /* Initialize starting point */
     int index = 0;
-    gsl_vector* x = gsl_vector_alloc(dimension);
-    foreach(const Cell &cell, parameters->cells) {
+    gsl_vector *x = gsl_vector_alloc(dimension);
+    foreach (const Cell &cell, parameters->cells) {
         gsl_vector_set(x, index++, numToDouble(cell.value().asFloat()));
     }
 
@@ -149,11 +153,11 @@ void Solver::optimize()
     gsl_multimin_function functionInfo;
     functionInfo.f = &_function;
     functionInfo.n = dimension;
-    functionInfo.params = static_cast<void*>(parameters);
+    functionInfo.params = static_cast<void *>(parameters);
 
     // Use the simplex minimizer. The others depend on the first derivative.
     const gsl_multimin_fminimizer_type *T = gsl_multimin_fminimizer_nmsimplex;
-    gsl_multimin_fminimizer* minimizer = gsl_multimin_fminimizer_alloc(T, dimension);
+    gsl_multimin_fminimizer *minimizer = gsl_multimin_fminimizer_alloc(T, dimension);
     gsl_multimin_fminimizer_set(minimizer, &functionInfo, x, stepSizes);
 
     int status = 0;
@@ -165,8 +169,9 @@ void Solver::optimize()
         iteration++;
         status = gsl_multimin_fminimizer_iterate(minimizer);
 
-        if (status)
+        if (status) {
             break;
+        }
 
         size = gsl_multimin_fminimizer_size(minimizer);
         status = gsl_multimin_test_size(size, epsilon);
@@ -181,7 +186,6 @@ void Solver::optimize()
         printf("f() = %7.3f size = %.3f\n", minimizer->fval, size);
     } while (status == GSL_CONTINUE && iteration < maxIterations);
 
-
     // free allocated memory
     gsl_vector_free(x);
     gsl_vector_free(stepSizes);
@@ -190,16 +194,16 @@ void Solver::optimize()
     delete s_formula;
 }
 
-double Solver::evaluate(const gsl_vector* vector, void *parameters)
+double Solver::evaluate(const gsl_vector *vector, void *parameters)
 {
     Q_UNUSED(vector)
     Q_UNUSED(parameters)
     return 0.0;
 }
 
-double _function(const gsl_vector* vector, void *params)
+double _function(const gsl_vector *vector, void *params)
 {
-    Solver::Parameters* parameters = static_cast<Solver::Parameters*>(params);
+    Solver::Parameters *parameters = static_cast<Solver::Parameters *>(params);
 
     for (int i = 0; i < parameters->cells.count(); ++i) {
         parameters->cells[i].setValue(Calligra::Sheets::Value(gsl_vector_get(vector, i)));

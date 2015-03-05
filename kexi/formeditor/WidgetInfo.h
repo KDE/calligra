@@ -51,11 +51,11 @@ public:
     //! @return the class name of a widget e.g. "LineEdit"
     QByteArray className() const;
 
-    void setClassName(const QByteArray& className);
+    void setClassName(const QByteArray &className);
 
     QByteArray inheritedClassName() const;
 
-    void setInheritedClassName(const QByteArray& inheritedClassName);
+    void setInheritedClassName(const QByteArray &inheritedClassName);
 
     /*! \return the name used to name widget, that will appear eg in scripts (must not contain spaces
       nor non-latin1 characters) */
@@ -100,13 +100,13 @@ public:
      For example, in Kexi application, KLineEdit class contains additional
      "datasource" property for binding to database sources.
     */
-    void addAlternateClassName(const QByteArray& alternateName, bool override = false);
+    void addAlternateClassName(const QByteArray &alternateName, bool override = false);
 
     /*! \return true is a class \a alternateName is defined as alternate name with
      'override' flag set to true, using addAlternateClassName().
      If this flag is set to false (the default) or there's no such alternate class
      name defined. */
-    bool isOverriddenClassName(const QByteArray& alternateName) const;
+    bool isOverriddenClassName(const QByteArray &alternateName) const;
 
     /*! Sets the name that will be written in the .ui file when saving.
      This name must be one of alternate names (or loading will be impossible).
@@ -121,60 +121,60 @@ public:
      e.g. KoProperty::EditorView can have autoSync flag set to false or true, but
      not all properties have to comply with that.
      \a flag equal to cancelled value means there is no overriding (the default). */
-    void setAutoSyncForProperty(const QByteArray& propertyName, tristate flag);
+    void setAutoSyncForProperty(const QByteArray &propertyName, tristate flag);
 
     /*! \return autoSync override value (true or false) for \a propertyName.
      If cancelled value is returned, there is no overriding (the default). */
-    tristate autoSyncForProperty(const QByteArray& propertyName) const;
+    tristate autoSyncForProperty(const QByteArray &propertyName) const;
 
     QByteArray parentFactoryName() const;
 
-    void setParentFactoryName(const QByteArray& factoryName);
+    void setParentFactoryName(const QByteArray &factoryName);
 
-    WidgetInfo* inheritedClass() const;
+    WidgetInfo *inheritedClass() const;
 
     /*! Sets custom type \a type for property \a propertyName.
      This allows to override default type, especially when custom property
      and custom property editor item has to be used. */
-    void setCustomTypeForProperty(const QByteArray& propertyName, int type);
+    void setCustomTypeForProperty(const QByteArray &propertyName, int type);
 
     /*! \return custom type for property \a propertyName. If no specific custom type has been assigned,
      KoProperty::Auto is returned.
      @see setCustomTypeForProperty() */
-    int customTypeForProperty(const QByteArray& propertyName) const;
+    int customTypeForProperty(const QByteArray &propertyName) const;
 
     /*! @return list of the properties that should automatically be saved
     for a widget of @a classname class.
-    Examples are: custom properties "text" for label or button, "contents" for combobox... 
-    If there is inherited class (see @ref inheritedClass()), autosave properties 
+    Examples are: custom properties "text" for label or button, "contents" for combobox...
+    If there is inherited class (see @ref inheritedClass()), autosave properties
     from that class are prepended to the list. */
     QList<QByteArray> autoSaveProperties() const;
 
     /*! Sets list of the properties that should automatically be saved for a widget of @a classname class. */
-    void setAutoSaveProperties(const QList<QByteArray>& properties);
+    void setAutoSaveProperties(const QList<QByteArray> &properties);
 
     /*! @return internal property @a property.
      Internal properties are not stored within objects, but can be just provided
      to describe class' details. */
-    QVariant internalProperty(const QByteArray& property) const;
+    QVariant internalProperty(const QByteArray &property) const;
 
     /*! Assigns @a value for internal property @a property.
      Internal properties are not stored within objects, but can be provided
      to describe class' details. */
-    void setInternalProperty(const QByteArray& property, const QVariant& value);
+    void setInternalProperty(const QByteArray &property, const QVariant &value);
 
 protected:
     void setInheritedClass(WidgetInfo *inheritedClass);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     friend class WidgetLibrary;
 };
 
-typedef QList<WidgetInfo*> WidgetInfoList;
-typedef QHash<QByteArray, WidgetInfo*> WidgetInfoHash;
+typedef QList<WidgetInfo *> WidgetInfoList;
+typedef QHash<QByteArray, WidgetInfo *> WidgetInfoHash;
 
 } // namespace KFormDesigner
 

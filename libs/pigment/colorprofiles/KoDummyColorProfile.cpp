@@ -28,7 +28,7 @@ KoDummyColorProfile::~KoDummyColorProfile()
 {
 }
 
-KoColorProfile* KoDummyColorProfile::clone() const
+KoColorProfile *KoDummyColorProfile::clone() const
 {
     return new KoDummyColorProfile();
 }
@@ -53,8 +53,8 @@ bool KoDummyColorProfile::isSuitableForDisplay() const
     return true;
 }
 
-bool KoDummyColorProfile::operator==(const KoColorProfile& rhs) const
+bool KoDummyColorProfile::operator==(const KoColorProfile &rhs) const
 {
-    return dynamic_cast<const KoDummyColorProfile*>(&rhs);
+    return dynamic_cast<const KoDummyColorProfile *>(&rhs);
 }
 

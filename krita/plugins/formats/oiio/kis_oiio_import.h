@@ -31,7 +31,7 @@ public:
     KisOiioImport(QObject *parent, const QVariantList &);
     virtual ~KisOiioImport();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif

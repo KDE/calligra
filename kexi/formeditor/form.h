@@ -33,7 +33,8 @@ class KActionCollection;
 
 class PixmapCollection;
 
-namespace KoProperty {
+namespace KoProperty
+{
 class Property;
 class Set;
 }
@@ -49,7 +50,7 @@ class ConnectionBuffer;
 class Container;
 class ObjectTree;
 class ObjectTreeItem;
-typedef QList<ObjectTreeItem*> ObjectTreeList;
+typedef QList<ObjectTreeItem *> ObjectTreeList;
 class FormPrivate;
 class FormWidget;
 class ResizeHandleSet;
@@ -112,7 +113,7 @@ public:
     };
 
     /*! Creates Form object. */
-    Form(WidgetLibrary* library, Mode mode, KActionCollection &col, ActionGroup& group);
+    Form(WidgetLibrary *library, Mode mode, KActionCollection &col, ActionGroup &group);
 
     /*! Creates Form object as a child of other form. */
     explicit Form(Form *parent);
@@ -120,9 +121,9 @@ public:
     ~Form();
 
     //! \return A pointer to the WidgetLibrary supporting this form.
-    WidgetLibrary* library() const;
+    WidgetLibrary *library() const;
 
-    KoProperty::Set& propertySet();
+    KoProperty::Set &propertySet();
 
     void setFeatures(Features features);
 
@@ -140,40 +141,40 @@ public:
 
     /*! \return the toplevel Container or 0 if the form is in data mode or createToplevel()
        has not been called yet. */
-    Container* toplevelContainer() const;
+    Container *toplevelContainer() const;
 
     //! \return the FormWidget that holds this Form
-    FormWidget* formWidget() const;
+    FormWidget *formWidget() const;
 
     //! \return a pointer to this form's ObjectTree.
-    ObjectTree* objectTree() const;
+    ObjectTree *objectTree() const;
 
     //! \return the form's toplevel widget, or 0 if not in design mode.
-    QWidget* widget() const;
+    QWidget *widget() const;
 
     /*! \return A pointer to the currently active Container, ie the parent Container for a simple widget,
         and the widget's Container if it is itself a container.
      */
-    Container* activeContainer();
+    Container *activeContainer();
 
     /*! \return A pointer to the parent Container of the currently selected widget.
      It is the same as activeContainer() for a simple widget, but unlike this function
       it will also return the parent Container if the widget itself is a Container.
      */
-    Container* parentContainer(QWidget *w = 0) const;
+    Container *parentContainer(QWidget *w = 0) const;
 
     /*! \return The \ref Container which is a parent of all widgets in \a wlist.
      Used by \ref activeContainer(), and to find where
      to paste widgets when multiple widgets are selected. */
-    ObjectTreeItem* commonParentContainer(const QWidgetList &wlist);
+    ObjectTreeItem *commonParentContainer(const QWidgetList &wlist);
 
     //! \return the list of currently selected widgets in this form
-    QWidgetList* selectedWidgets() const;
+    QWidgetList *selectedWidgets() const;
 
     /*! \return currently selected widget in this form,
      or 0 if there is no widget selected or more than one widget selected.
      \see selectedWidgets() */
-    QWidget* selectedWidget() const;
+    QWidget *selectedWidget() const;
 
     //! \return true if form widget itself is selected.
     /*! Used to check whether it is possible to execute copy/cut/delete actions. */
@@ -243,10 +244,10 @@ public:
     void setUndoStackClean();
 
 #ifdef KFD_SIGSLOTS
-    ConnectionBuffer* connectionBuffer() const;
+    ConnectionBuffer *connectionBuffer() const;
 #endif
 
-    PixmapCollection* pixmapCollection() const;
+    PixmapCollection *pixmapCollection() const;
 
     void setPixmapsStoredInline(bool set);
 
@@ -258,7 +259,7 @@ public:
         ExecuteCommand = 1      //!< command is executed in addCommand()
     };
 
-    /*! Adds a command @a command in the form's undo/redo stack and returns true. 
+    /*! Adds a command @a command in the form's undo/redo stack and returns true.
      If @a command is merged with the existing command and deleted, false is returned. */
     bool addCommand(Command *command, AddCommandOption option = ExecuteCommand);
 
@@ -266,7 +267,7 @@ public:
     /*! Takes care about the case when the same property of the same object is changed
      one-after-one. In this case only value of the present command on stack is changed.  */
     void addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
-                            const QVariant &value, const QByteArray &propertyName, 
+                            const QVariant &value, const QByteArray &propertyName,
                             AddCommandOption addOption, uint idOfPropertyCommand = 0);
 
     void addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
@@ -276,7 +277,7 @@ public:
     //! Adds @a commandGroup to the undo/redo stack.
     /*! Assuming the @a commandGroup contains PropertyCommand objects, the method takes care
      about the case when the same properties of the same list of objects is changed
-     one-after-one. In this case only values of the command in the present command group 
+     one-after-one. In this case only values of the command in the present command group
      on the stack are changed and @a commandGroup is deleted.*/
     void addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
                                  AddCommandOption addOption, uint idOfPropertyCommand = 0);
@@ -285,11 +286,11 @@ public:
      is not currently being executed.
      Currently used by WidgetTreeWidget to check if tab page adding was
      the original reason for adding widget. */
-    const Command* executingCommand() const;
+    const Command *executingCommand() const;
 
-    /*! \return tabstops list. It contains all the widgets that can have focus 
+    /*! \return tabstops list. It contains all the widgets that can have focus
      (i.e. no labels, etc.) in the order of the tabs.*/
-    ObjectTreeList* tabStops();
+    ObjectTreeList *tabStops();
 
     /*! Called (e.g. by KexiDBForm) when certain widgets can have updated focusPolicy properties
      these having no TabFocus flags set are removed from tabStops() list. */
@@ -315,18 +316,17 @@ public:
     void autoAssignTabStops();
 
     //! Specifies target of context menu. Used in createContextMenu().
-    enum ContextMenuTarget
-    {
+    enum ContextMenuTarget {
         FormContextMenuTarget, //!< Context menu should be displayed on the form
-                               //!< with offset specified by menuPos argument.
+        //!< with offset specified by menuPos argument.
         WidgetTreeContextMenuTarget //!< Context menu should be displayed on the widget tree
-                                    //!< area with offset specified by menuPos argument.
+        //!< area with offset specified by menuPos argument.
     };
 
     /*! This function creates and displays the context menu corresponding to the widget \a w.
         The menu item are disabled if necessary, and
         the widget specific part is added (menu from the factory and buddy selection). */
-    void createContextMenu(QWidget *w, Container *container, const QPoint& menuPos, ContextMenuTarget target);
+    void createContextMenu(QWidget *w, Container *container, const QPoint &menuPos, ContextMenuTarget target);
 
     //! @return true if snapping to grid is enabled. The defalt value is false.
     bool isSnapToGridEnabled() const;
@@ -346,11 +346,11 @@ public:
     QString m_recentlyLoadedUICode;
 #endif
 
-    ResizeHandleSet* resizeHandlesForWidget(QWidget* w);
+    ResizeHandleSet *resizeHandlesForWidget(QWidget *w);
 
     /*! A set of value/key pairs provided to be stored as attributes in
      <kfd:customHeader/> XML element (saved as a first child of \<UI> element). */
-    QHash<QByteArray, QString>* headerProperties();
+    QHash<QByteArray, QString> *headerProperties();
 
     //! \return format version number for this form.
     //! For new forms it is equal to KFormDesigner::version().
@@ -375,16 +375,16 @@ public:
 
     //! selection flags used in methods like selectWidget()
     enum WidgetSelectionFlag {
-        AddToPreviousSelection = 0,   //!< add to the previous selection, for clarity, 
-                                      //!< do not use with ReplacePreviousSelection
+        AddToPreviousSelection = 0,   //!< add to the previous selection, for clarity,
+        //!< do not use with ReplacePreviousSelection
         ReplacePreviousSelection = 1, //!< replace the actually selected widget(s)
         MoreWillBeSelected = 0,       //!< indicates that more selections will be added
-                                      //!< do not use with LastSelection
-                                      //!< so the property editor can be updated (used without ReplacePreviousSelection)
+        //!< do not use with LastSelection
+        //!< so the property editor can be updated (used without ReplacePreviousSelection)
         LastSelection = 2,            //!< indicates that this selection is the last one
-                                      //!< so the property editor can be updated (used without ReplacePreviousSelection)
+        //!< so the property editor can be updated (used without ReplacePreviousSelection)
         Raise = 0,                    //!< raise the widget(s) on selection
-                                      //!< do not use with DontRaise
+        //!< do not use with DontRaise
         DontRaise = 4,                //!< do not raise the widget(s) on selection
         DefaultWidgetSelectionFlags = ReplacePreviousSelection | LastSelection | Raise
     };
@@ -395,12 +395,12 @@ public:
     QByteArray selectedClass() const;
 
     /*! @return widgets list for names @a names. Form widget, if present is omitted. */
-    QList<QWidget*> widgetsForNames(const QList<QByteArray>& names) const;
+    QList<QWidget *> widgetsForNames(const QList<QByteArray> &names) const;
 
     //! @return action from related action collection
-    QAction* action(const QString& name);
+    QAction *action(const QString &name);
 
-    void createPropertyCommandsInDesignMode(QWidget* widget, 
+    void createPropertyCommandsInDesignMode(QWidget *widget,
                                             const QHash<QByteArray, QVariant> &propValues,
                                             Command *parentCommand, bool addToActiveForm = true);
 
@@ -412,9 +412,9 @@ public:
     bool isRedoing() const;
 
 public Q_SLOTS:
-    /*! Called when the user presses a widget item of the toolbox. 
+    /*! Called when the user presses a widget item of the toolbox.
       The form enters into "widget inserting" state.
-      Prepares all form's widgets for creation of a new widget 
+      Prepares all form's widgets for creation of a new widget
       (i.e. temporarily changes their cursor). */
     void enterWidgetInsertingState(const QByteArray &classname);
 
@@ -425,8 +425,8 @@ public Q_SLOTS:
     void abortWidgetInserting();
 
 #ifdef KFD_SIGSLOTS
-     //! Enters the Connection creation state.
-     void enterConnectingState();
+    //! Enters the Connection creation state.
+    void enterConnectingState();
 
     //! Leave the Connection creation mode.
     void abortCreatingConnection();
@@ -441,15 +441,15 @@ public Q_SLOTS:
      The form widget is always selected alone. */
     void selectWidget(QWidget *selected, WidgetSelectionFlags flags = DefaultWidgetSelectionFlags);
 
-    /*! Sets all widgets @a widgets to be the selected for this Form. 
+    /*! Sets all widgets @a widgets to be the selected for this Form.
      Form widget, if present is omitted. */
-    void selectWidgets(const QList<QWidget*>& widgets, WidgetSelectionFlags flags);
+    void selectWidgets(const QList<QWidget *> &widgets, WidgetSelectionFlags flags);
 
-    /*! Sets all widgets with @a names to be the selected for this Form. 
+    /*! Sets all widgets with @a names to be the selected for this Form.
      Form widget, if present is omitted. */
-    void selectWidgets(const QList<QByteArray>& names, WidgetSelectionFlags flags);
+    void selectWidgets(const QList<QByteArray> &names, WidgetSelectionFlags flags);
 
-    /*! Removes selection for widget \a w. 
+    /*! Removes selection for widget \a w.
      The widget is removed from the Container's list
      and its resize handle is removed as well. */
     void deselectWidget(QWidget *w);
@@ -509,13 +509,13 @@ public Q_SLOTS:
     void editConnections();
 
     void alignWidgetsToLeft();
-    
+
     void alignWidgetsToRight();
-    
+
     void alignWidgetsToTop();
-    
+
     void alignWidgetsToBottom();
-    
+
     void alignWidgetsToGrid();
 
     void adjustSizeToGrid();
@@ -568,10 +568,10 @@ protected Q_SLOTS:
 
     /*!  This function is called every time a property is modifed.  It also takes
      care of saving set and enum properties. */
-    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyChanged(KoProperty::Set &set, KoProperty::Property &property);
 
     /*! This slot is called when a property is reset using the "reload" button in PropertyEditor. */
-    void slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyReset(KoProperty::Set &set, KoProperty::Property &property);
 
     /*! Default implementation changes "text" property.
     You have to reimplement this function for editing inside the Form to work if your widget's
@@ -579,7 +579,7 @@ protected Q_SLOTS:
     This slot is called when the line edit text changes, and you have to make
     it really change the good property of the widget using changeProperty() (text, or title, etc.).
     */
-    void changeInlineTextInternal(const QString& text);
+    void changeInlineTextInternal(const QString &text);
 
     void slotInlineTextChanged();
 
@@ -648,12 +648,12 @@ protected:
     void updatePropertiesForSelection(QWidget *w, WidgetSelectionFlags flags);
 
 #ifdef KFD_SIGSLOTS
-    //! Sets connection buffer to @a b, which will be owned by the form. 
+    //! Sets connection buffer to @a b, which will be owned by the form.
     //! The previous buffer will be deleted, if there is any.
     void setConnectionBuffer(ConnectionBuffer *b);
 #endif
 
-    void setFormWidget(FormWidget* w);
+    void setFormWidget(FormWidget *w);
 
     void emitFormWidgetSelected();
 
@@ -707,7 +707,7 @@ protected:
     KActionCollection  *actionCollection() const;
 
     //! @todo rm when the 2 libs are merged
-    KFormDesigner::ActionGroup* widgetActionGroup() const;
+    KFormDesigner::ActionGroup *widgetActionGroup() const;
 
     /*! Called when a property has been changed.
       @a w is the widget concerned, @a property
@@ -715,11 +715,11 @@ protected:
     void handleWidgetPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value);
 
     /*! This function creates a KLineEdit to input some text and edit a widget's contents. */
-    void createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments& args);
+    void createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments &args);
 
     QString inlineEditorText() const;
 
-    void setInlineEditorText(const QString& text);
+    void setInlineEditorText(const QString &text);
 
     /*! This function destroys the editor when it loses focus or Enter is pressed. */
     virtual bool eventFilter(QObject *obj, QEvent *ev);
@@ -729,7 +729,7 @@ private:
 
     void selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags);
 
-    FormPrivate * const d;
+    FormPrivate *const d;
 
     friend class FormWidget;
     friend class WidgetLibrary;

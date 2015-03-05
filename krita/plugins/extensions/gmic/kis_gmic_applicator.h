@@ -45,7 +45,7 @@ Q_SIGNALS:
     void gmicFinished(bool successfully, int miliseconds = -1, const QString &msg = QString());
 
 private:
-    KisProcessingApplicator * m_applicator;
+    KisProcessingApplicator *m_applicator;
     KisImageWSP m_image;
     KisNodeSP m_node;
     KUndo2MagicString m_actionName;
@@ -53,10 +53,9 @@ private:
     QString m_gmicCommand;
     QByteArray m_customCommands;
     bool m_applicatorStrokeEnded;
-    float * m_progress;
-    bool * m_cancel;
+    float *m_progress;
+    bool *m_cancel;
 };
 
 #endif
-
 

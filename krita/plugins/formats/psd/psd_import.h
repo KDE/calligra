@@ -22,13 +22,14 @@
 
 #include <KisImportExportFilter.h>
 
-class psdImport : public KisImportExportFilter {
+class psdImport : public KisImportExportFilter
+{
     Q_OBJECT
-    public:
-        psdImport(QObject *parent, const QVariantList &);
-        virtual ~psdImport();
-    public:
-        virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+public:
+    psdImport(QObject *parent, const QVariantList &);
+    virtual ~psdImport();
+public:
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif

@@ -41,16 +41,18 @@ public:
 
     Conditional();
     ~Conditional();
-    Conditional(const Conditional& c);
-    Conditional& operator=(const Conditional& c);
-    Conditional& assign(const Conditional& c);
+    Conditional(const Conditional &c);
+    Conditional &operator=(const Conditional &c);
+    Conditional &assign(const Conditional &c);
 
     bool hasValueFormat() const;
     using Format::valueFormat;
-    void setValueFormat(const QString& valueFormat);
+    void setValueFormat(const QString &valueFormat);
 
-    const FormatFont& font() const
-    { return Format::font(); }
+    const FormatFont &font() const
+    {
+        return Format::font();
+    }
 
     bool hasFontItalic() const;
     void setFontItalic(bool italic);
@@ -69,10 +71,10 @@ public:
     void setFontUnderline(bool u);
 
     bool hasFontColor() const;
-    void setFontColor(const QColor& color);
+    void setFontColor(const QColor &color);
 private:
     class Private;
-    Private* d; // can't never be 0
+    Private *d; // can't never be 0
 };
 
 class ConditionalFormat
@@ -81,14 +83,14 @@ public:
     ConditionalFormat();
     ~ConditionalFormat();
 
-    void setRegion(const QRegion& region);
+    void setRegion(const QRegion &region);
     QRegion region() const;
 
     QList<Conditional> conditionals() const;
-    void addConditional(const Conditional& c);
+    void addConditional(const Conditional &c);
 private:
     class Private;
-    Private* d; // can't never be 0
+    Private *d; // can't never be 0
 };
 
 } // namespace Swinder

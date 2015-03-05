@@ -27,23 +27,22 @@
 
 #include <kdebug.h>
 
-
-
 AnchorStrategy::AnchorStrategy(KoShapeAnchor *anchor, KoTextLayoutRootArea *rootArea)
-        : m_anchor(anchor)
-        , m_rootArea(rootArea)
-        , m_model(0)
-        , m_pageRect(0,0,10,10)
-        , m_pageContentRect(0,0,10,10)
-        , m_paragraphRect(0,0,0,0)
-        , m_pageNumber(0)
+    : m_anchor(anchor)
+    , m_rootArea(rootArea)
+    , m_model(0)
+    , m_pageRect(0, 0, 10, 10)
+    , m_pageContentRect(0, 0, 10, 10)
+    , m_paragraphRect(0, 0, 0, 0)
+    , m_pageNumber(0)
 {
 }
 
 AnchorStrategy::~AnchorStrategy()
 {
-    if (m_model)
+    if (m_model) {
         m_model->removeAnchor(m_anchor);
+    }
 }
 
 void AnchorStrategy::detachFromModel()
@@ -115,19 +114,21 @@ void AnchorStrategy::updateContainerModel()
 {
     KoShape *shape = m_anchor->shape();
 
-    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(m_rootArea->associatedShape());
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(m_rootArea->associatedShape());
     if (container == 0) {
-        if (m_model)
+        if (m_model) {
             m_model->removeAnchor(m_anchor);
+        }
         m_model = 0;
         shape->setParent(0);
         return;
     }
 
-    KoTextShapeContainerModel *theModel = dynamic_cast<KoTextShapeContainerModel*>(container->model());
+    KoTextShapeContainerModel *theModel = dynamic_cast<KoTextShapeContainerModel *>(container->model());
     if (theModel != m_model) {
-        if (m_model)
+        if (m_model) {
             m_model->removeAnchor(m_anchor);
+        }
         if (shape->parent() != container) {
             if (shape->parent()) {
                 shape->parent()->removeShape(shape);

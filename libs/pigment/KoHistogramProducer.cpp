@@ -37,18 +37,18 @@ KoHistogramProducerFactoryRegistry::~KoHistogramProducerFactoryRegistry()
     qDeleteAll(values());
 }
 
-KoHistogramProducerFactoryRegistry* KoHistogramProducerFactoryRegistry::instance()
+KoHistogramProducerFactoryRegistry *KoHistogramProducerFactoryRegistry::instance()
 {
     K_GLOBAL_STATIC(KoHistogramProducerFactoryRegistry, s_instance);
     return s_instance;
 
 }
 
-QList<QString> KoHistogramProducerFactoryRegistry::keysCompatibleWith(const KoColorSpace* colorSpace) const
+QList<QString> KoHistogramProducerFactoryRegistry::keysCompatibleWith(const KoColorSpace *colorSpace) const
 {
     QList<QString> list;
     QList<float> preferredList;
-    foreach(const QString &id, keys()) {
+    foreach (const QString &id, keys()) {
         KoHistogramProducerFactory *f = value(id);
         if (f->isCompatibleWith(colorSpace)) {
             float preferred = f->preferrednessLevelWith(colorSpace);

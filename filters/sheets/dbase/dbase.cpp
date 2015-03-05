@@ -32,7 +32,9 @@ DBase::DBase(): m_recordCount(0)
 
 DBase::~DBase()
 {
-    while (!fields.isEmpty()) delete fields.takeFirst();
+    while (!fields.isEmpty()) {
+        delete fields.takeFirst();
+    }
     close();
 }
 
@@ -48,12 +50,13 @@ DBase::~DBase()
 //  unsigned char reserved[20]      12-31  reserverd info from dBase
 //
 
-bool DBase::load(const QString& filename)
+bool DBase::load(const QString &filename)
 {
 
     m_file.setFileName(filename);
-    if (!m_file.open(QIODevice::ReadOnly))
+    if (!m_file.open(QIODevice::ReadOnly)) {
         return false;
+    }
 
     m_stream.setDevice(&m_file);
     m_stream.setByteOrder(QDataStream::LittleEndian);
@@ -66,8 +69,9 @@ bool DBase::load(const QString& filename)
     m_version = ver & 0x7f; // bit 7: has memo ?
 
     // only dBASE V.3 is supported
-    if (m_version != 3)
+    if (m_version != 3) {
         return false;
+    }
 
     // date of last update
     quint8 y, m, d;
@@ -76,7 +80,9 @@ bool DBase::load(const QString& filename)
     m_lastUpdate.setYMD(y + 1900, m, d);
 
     // check for valid date
-    if (!m_lastUpdate.isValid()) return false;
+    if (!m_lastUpdate.isValid()) {
+        return false;
+    }
 
     // number of records
     quint32 norec;
@@ -95,12 +101,14 @@ bool DBase::load(const QString& filename)
 
     // read the remaining chars
     quint8 dummy;
-    for (int foo = 0; foo < 20; ++foo)
+    for (int foo = 0; foo < 20; ++foo) {
         m_stream >> dummy;
+    }
 
     // size of file must match
-    if (filesize < m_headerLength + m_recordLength * m_recordCount)
+    if (filesize < m_headerLength + m_recordLength * m_recordCount) {
         return false;
+    }
 
     // Now read the headers of the columns and their type
 
@@ -113,16 +121,19 @@ bool DBase::load(const QString& filename)
     // unsigned char field_decimals      17       decimals
     // unsigned char reserved[14]        18-31    reserved for internal dBASE-stuff
 
-    while (!fields.isEmpty()) delete fields.takeFirst();
+    while (!fields.isEmpty()) {
+        delete fields.takeFirst();
+    }
     for (unsigned i = 1; i < m_headerLength / 32; ++i) {
-        DBaseField* field = new DBaseField;
+        DBaseField *field = new DBaseField;
 
         // columnn-name
         quint8 colname[12];
-        for (int j = 0; j < 11; ++j)
+        for (int j = 0; j < 11; ++j) {
             m_stream >> colname[j];
+        }
         colname[11] = '\0';
-        field->name = QString((const char*) & colname[0]);
+        field->name = QString((const char *) & colname[0]);
 
         // type of column
         quint8 coltype;
@@ -152,8 +163,9 @@ bool DBase::load(const QString& filename)
 
         // read remaining chars
         quint8 dummy;
-        for (int foo = 0; foo < 14; ++foo)
+        for (int foo = 0; foo < 14; ++foo) {
             m_stream >> dummy;
+        }
 
         // now append
         fields.append(field);
@@ -171,8 +183,9 @@ QStringList DBase::readRecord(unsigned recno)
 
     // out of range ? return empty strings
     if (recno >= m_recordCount) {
-        for (int i = 0; i < fields.count(); i++)
+        for (int i = 0; i < fields.count(); i++) {
             result.append("");
+        }
         return result;
     }
 
@@ -184,13 +197,14 @@ QStringList DBase::readRecord(unsigned recno)
     // so we just skip it
     quint8 delmarker;
     m_stream >> delmarker;
-    if (delmarker == 0x2a)
+    if (delmarker == 0x2a) {
         return result;
+    }
 
     // load it
     for (int i = 0; i < fields.count(); ++i)
         switch (fields.at(i)->type) {
-            // Numeric or Character
+        // Numeric or Character
         case DBaseField::Numeric:
         case DBaseField::Character: {
             QString str;
@@ -241,5 +255,7 @@ QStringList DBase::readRecord(unsigned recno)
 
 void DBase::close()
 {
-    if (m_file.isOpen()) m_file.close();
+    if (m_file.isOpen()) {
+        m_file.close();
+    }
 }

@@ -41,5 +41,4 @@ private:
     QPointF pt0, pt1, pt2, pt3, pt4, pt5;
 };
 
-
 #endif

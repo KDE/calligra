@@ -28,30 +28,25 @@ Leader::Leader(KoFilterChain *filterChain)
     m_filterChain = filterChain;
 }
 
-
 Leader::Leader(KoFilterChain *filterChain, KSpreadBaseWorker *newWorker)
 {
     m_worker = newWorker;
     m_filterChain = filterChain;
 }
 
-
 Leader::~Leader()
 {
 }
-
 
 KSpreadBaseWorker *Leader::getWorker() const
 {
     return m_worker;
 }
 
-
 void Leader::setWorker(KSpreadBaseWorker *newWorker)
 {
     m_worker = newWorker;
 }
-
 
 KoFilter::ConversionStatus Leader::convert()
 {
@@ -71,8 +66,9 @@ KoFilter::ConversionStatus Leader::convert()
     KSpreadFilterProperty docProperty;
     docProperty["outputfile"] = m_filterChain->outputFile();
     status = m_worker->startDocument(docProperty);
-    if (status != KoFilter::OK)
+    if (status != KoFilter::OK) {
         return status;
+    }
 
     // Get the document in memory
     KSpreadDoc *document = (KSpreadDoc *) m_filterChain->inputDocument();
@@ -96,28 +92,32 @@ KoFilter::ConversionStatus Leader::convert()
 
     // Gather data about the document info
     status = doInfo(info);
-    if (status != KoFilter::OK)
+    if (status != KoFilter::OK) {
         return status;
+    }
 
     // Gather data about the spread book
     status = doSpreadBook(document);
-    if (status != KoFilter::OK)
+    if (status != KoFilter::OK) {
         return status;
+    }
 
     // Gather data about the spread sheet
     KSpreadSheet *spreadSheet = document->map()->firstTable();
     while (spreadSheet != 0) {
         status = doSpreadSheet(spreadSheet);
-        if (status != KoFilter::OK)
+        if (status != KoFilter::OK) {
             return status;
+        }
 
         // Gather data about the cell
         for (int row = 1; row <= m_maxCellRow; ++row) {
             for (int column = 1; column <= m_maxCellColumn; ++column) {
                 Cell spreadCell(spreadSheet, column, row);
                 status = doSpreadCell(spreadCell, column, row);
-                if (status != KoFilter::OK)
+                if (status != KoFilter::OK) {
                     return status;
+                }
             }
         }
 
@@ -126,7 +126,6 @@ KoFilter::ConversionStatus Leader::convert()
 
     return status;
 }
-
 
 KoFilter::ConversionStatus Leader::doInfo(KoDocumentInfo *info)
 {
@@ -139,8 +138,9 @@ KoFilter::ConversionStatus Leader::doInfo(KoDocumentInfo *info)
     docInfoLogProperty["oldlog"] = infoLog->oldLog();
     docInfoLogProperty["newlog"] = infoLog->newLog();
     status = m_worker->startInfoLog(docInfoLogProperty);
-    if (status != KoFilter::OK)
+    if (status != KoFilter::OK) {
         return status;
+    }
 #endif
 
     // Gather data about the document author
@@ -158,8 +158,9 @@ KoFilter::ConversionStatus Leader::doInfo(KoDocumentInfo *info)
     docInfoAuthorProperty["city"] = infoAuthor->city();
     docInfoAuthorProperty["street"] = infoAuthor->street();
     status = m_worker->startInfoAuthor(docInfoAuthorProperty);
-    if (status != KoFilter::OK)
+    if (status != KoFilter::OK) {
         return status;
+    }
 
     // Gather data about the document about
     KSpreadFilterProperty docInfoAboutProperty;
@@ -169,7 +170,6 @@ KoFilter::ConversionStatus Leader::doInfo(KoDocumentInfo *info)
     status = m_worker->startInfoAbout(docInfoAboutProperty);
     return status;
 }
-
 
 KoFilter::ConversionStatus Leader::doSpreadBook(KSpreadDoc *document)
 {
@@ -223,7 +223,6 @@ KoFilter::ConversionStatus Leader::doSpreadBook(KSpreadDoc *document)
     return m_worker->startSpreadBook(docSpreadBookProperty);
 }
 
-
 KoFilter::ConversionStatus Leader::doSpreadSheet(KSpreadSheet *spreadSheet)
 {
     KSpreadFilterProperty docSpreadSheetProperty;
@@ -265,8 +264,7 @@ KoFilter::ConversionStatus Leader::doSpreadSheet(KSpreadSheet *spreadSheet)
     return m_worker->startSpreadSheet(docSpreadSheetProperty);
 }
 
-
-KoFilter::ConversionStatus Leader::doSpreadCell(const Cell& spreadCell, int column, int row)
+KoFilter::ConversionStatus Leader::doSpreadCell(const Cell &spreadCell, int column, int row)
 {
     KSpreadFilterProperty docSpreadCellProperty;
     docSpreadCellProperty["column"] = QString::number(column);
@@ -339,7 +337,6 @@ KoFilter::ConversionStatus Leader::doSpreadCell(const Cell& spreadCell, int colu
     }
     return m_worker->startSpreadCell(docSpreadCellProperty);
 }
-
 
 void Leader::updateMaxCells(KSpreadSheet *spreadSheet)
 {

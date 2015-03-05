@@ -43,9 +43,9 @@
 #include <QIODevice>
 
 StencilShapeFactory::
-StencilShapeFactory(const QString& id,
-                    const QString& name,
-                    KoProperties* props)
+StencilShapeFactory(const QString &id,
+                    const QString &name,
+                    KoProperties *props)
     : KoShapeFactoryBase(id, name)
     , m_properties(props)
 {
@@ -57,8 +57,8 @@ StencilShapeFactory::
     delete m_properties;
 }
 
-KoShape* StencilShapeFactory::
-createFromOdf(KoStore* store, KoDocumentResourceManager* documentRes) const
+KoShape *StencilShapeFactory::
+createFromOdf(KoStore *store, KoDocumentResourceManager *documentRes) const
 {
     KoOdfReadStore odfStore(store);
     QString errorMessage;
@@ -98,17 +98,17 @@ createFromOdf(KoStore* store, KoDocumentResourceManager* documentRes) const
     KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
     KoShapeLoadingContext context(loadingContext, documentRes);
 
-    KoShapeRegistry* registry = KoShapeRegistry::instance();
-    foreach (const QString & id, registry->keys()) {
-        KoShapeFactoryBase* shapeFactory = registry->value(id);
+    KoShapeRegistry *registry = KoShapeRegistry::instance();
+    foreach (const QString &id, registry->keys()) {
+        KoShapeFactoryBase *shapeFactory = registry->value(id);
         shapeFactory->newDocumentResourceManager(documentRes);
     }
 
     return KoShapeRegistry::instance()->createShapeFromOdf(shapeElement, context);
 }
 
-KoShape* StencilShapeFactory::
-createFromSvg(QIODevice* in, KoDocumentResourceManager* documentRes) const
+KoShape *StencilShapeFactory::
+createFromSvg(QIODevice *in, KoDocumentResourceManager *documentRes) const
 {
     if (!in->open(QIODevice::ReadOnly)) {
         qDebug() << "svg file open error";
@@ -123,18 +123,20 @@ createFromSvg(QIODevice* in, KoDocumentResourceManager* documentRes) const
 
     if (!parsed) {
         qDebug() << "Error while parsing file: "
-        << "at line " << line << " column: " << col
-        << " message: " << errormessage << endl;
+                 << "at line " << line << " column: " << col
+                 << " message: " << errormessage << endl;
         return 0;
     }
 
     SvgParser parser(documentRes);
     parser.setXmlBaseDir(id());
-    QList<KoShape*> shapes = parser.parseSvg(inputDoc.documentElement());
-    if (shapes.isEmpty())
+    QList<KoShape *> shapes = parser.parseSvg(inputDoc.documentElement());
+    if (shapes.isEmpty()) {
         return 0;
-    if (shapes.count() == 1)
+    }
+    if (shapes.count() == 1) {
         return shapes.first();
+    }
 
     KoShapeGroup *svgGroup = new KoShapeGroup;
     KoShapeGroupCommand cmd(svgGroup, shapes);
@@ -143,12 +145,12 @@ createFromSvg(QIODevice* in, KoDocumentResourceManager* documentRes) const
     return svgGroup;
 }
 
-KoShape* StencilShapeFactory::
-createDefaultShape(KoDocumentResourceManager* documentResources) const
+KoShape *StencilShapeFactory::
+createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    KoShape* shape = 0;
-    KoStore* store = 0;
-    QIODevice* in = 0;
+    KoShape *shape = 0;
+    KoStore *store = 0;
+    QIODevice *in = 0;
     QString ext = id().mid(id().lastIndexOf('.')).toLower();
     if (ext == ".odg") {
         store = KoStore::createStore(id(), KoStore::Read);
@@ -169,8 +171,9 @@ createDefaultShape(KoDocumentResourceManager* documentResources) const
     }
 
     if (shape) {
-        if (m_properties->intProperty("keepAspectRatio") == 1)
+        if (m_properties->intProperty("keepAspectRatio") == 1) {
             shape->setKeepAspectRatio(true);
+        }
     }
 
     return shape;
@@ -178,7 +181,7 @@ createDefaultShape(KoDocumentResourceManager* documentResources) const
 
 // StencilShapeFactory shouldn't participate element support detection
 bool StencilShapeFactory::
-supports(const KoXmlElement& e, KoShapeLoadingContext& context) const
+supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(e);
     Q_UNUSED(context);

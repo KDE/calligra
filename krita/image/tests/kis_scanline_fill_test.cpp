@@ -31,13 +31,12 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 
-
 void KisScanlineFillTest::testFillGeneral(const QVector<KisFillInterval> &initialBackwardIntervals,
-                                          const QVector<QColor> &expectedResult,
-                                          const QVector<KisFillInterval> &expectedForwardIntervals,
-                                          const QVector<KisFillInterval> &expectedBackwardIntervals)
+        const QVector<QColor> &expectedResult,
+        const QVector<KisFillInterval> &expectedForwardIntervals,
+        const QVector<KisFillInterval> &expectedBackwardIntervals)
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     dev->setPixel(1, 0, Qt::white);
@@ -51,11 +50,11 @@ void KisScanlineFillTest::testFillGeneral(const QVector<KisFillInterval> &initia
     KisScanlineFill gc(dev, QPoint(), boundingRect);
 
     KisFillIntervalMap *backwardMap = gc.testingGetBackwardIntervals();
-    foreach(const KisFillInterval &i, initialBackwardIntervals) {
+    foreach (const KisFillInterval &i, initialBackwardIntervals) {
         backwardMap->insertInterval(i);
     }
 
-    KisFillInterval processInterval(0,10,0);
+    KisFillInterval processInterval(0, 10, 0);
     gc.testingProcessLine(processInterval);
 
     Q_ASSERT(expectedResult.size() == processInterval.width());
@@ -77,7 +76,6 @@ void KisScanlineFillTest::testFillGeneral(const QVector<KisFillInterval> &initia
     }
     QCOMPARE(forwardIntervals.size(), expectedForwardIntervals.size());
 
-
     QStack<KisFillInterval> backwardIntervals =
         gc.testingGetBackwardIntervals()->fetchAllIntervals();
 
@@ -88,7 +86,8 @@ void KisScanlineFillTest::testFillGeneral(const QVector<KisFillInterval> &initia
     QCOMPARE(backwardIntervals.size(), expectedBackwardIntervals.size());
 }
 
-inline QColor testingColor(quint8 c) {
+inline QColor testingColor(quint8 c)
+{
     return QColor(c, c, c, c);
 }
 
@@ -130,7 +129,7 @@ void KisScanlineFillTest::testFillBackwardCollisionOnTheLeft()
     initialBackwardIntervals << KisFillInterval(-10,  0, 0);
 
     QVector<QColor> expectedResult;
-    expectedResult << testingColor(  0); //  0
+    expectedResult << testingColor(0);   //  0
     expectedResult << testingColor(255); //  1
     expectedResult << testingColor(255); //  2
     expectedResult << testingColor(200); //  3
@@ -150,7 +149,6 @@ void KisScanlineFillTest::testFillBackwardCollisionOnTheLeft()
     QVector<KisFillInterval> expectedBackwardIntervals;
     expectedBackwardIntervals << KisFillInterval(-10,  -1, 0);
     expectedBackwardIntervals << KisFillInterval(11, 16, 0);
-
 
     testFillGeneral(initialBackwardIntervals,
                     expectedResult,
@@ -173,8 +171,8 @@ void KisScanlineFillTest::testFillBackwardCollisionOnTheRight()
     expectedResult << testingColor(200); //  6
     expectedResult << testingColor(200); //  7
     expectedResult << testingColor(255); //  8
-    expectedResult << testingColor(  0); //  9
-    expectedResult << testingColor(  0); // 10
+    expectedResult << testingColor(0);   //  9
+    expectedResult << testingColor(0);   // 10
 
     QVector<KisFillInterval> expectedForwardIntervals;
     expectedForwardIntervals << KisFillInterval(-10,  0, 1);
@@ -197,17 +195,17 @@ void KisScanlineFillTest::testFillBackwardCollisionFull()
     initialBackwardIntervals << KisFillInterval(-10, 20, 0);
 
     QVector<QColor> expectedResult;
-    expectedResult << testingColor(  0); //  0
+    expectedResult << testingColor(0);   //  0
     expectedResult << testingColor(255); //  1
     expectedResult << testingColor(255); //  2
-    expectedResult << testingColor(  0); //  3
-    expectedResult << testingColor(  0); //  4
+    expectedResult << testingColor(0);   //  3
+    expectedResult << testingColor(0);   //  4
     expectedResult << testingColor(255); //  5
-    expectedResult << testingColor(  0); //  6
-    expectedResult << testingColor(  0); //  7
+    expectedResult << testingColor(0);   //  6
+    expectedResult << testingColor(0);   //  7
     expectedResult << testingColor(255); //  8
-    expectedResult << testingColor(  0); //  9
-    expectedResult << testingColor(  0); // 10
+    expectedResult << testingColor(0);   //  9
+    expectedResult << testingColor(0);   // 10
 
     QVector<KisFillInterval> expectedForwardIntervals;
 

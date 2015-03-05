@@ -27,7 +27,6 @@
 #include "kis_selection.h"
 #include <krita_export.h>
 
-
 /**
  * KisPixelSelection contains a byte-map representation of a layer, where
  * the value of a byte signifies whether a corresponding pixel is selected, or not.
@@ -46,20 +45,20 @@ public:
     /**
      * Copy the selection
      */
-    KisPixelSelection(const KisPixelSelection& rhs);
+    KisPixelSelection(const KisPixelSelection &rhs);
 
     virtual ~KisPixelSelection();
 
-    KisSelectionComponent* clone(KisSelection*);
+    KisSelectionComponent *clone(KisSelection *);
 
-    const KoColorSpace* compositionSourceColorSpace() const;
+    const KoColorSpace *compositionSourceColorSpace() const;
 
     bool read(QIODevice *stream);
 
     /**
      * Fill the specified rect with the specified selectedness.
      */
-    void select(const QRect & r, quint8 selectedness = MAX_SELECTED);
+    void select(const QRect &r, quint8 selectedness = MAX_SELECTED);
 
     /**
      * Invert the total selection. This will also invert the default value
@@ -71,7 +70,7 @@ public:
     /**
      * Set the specified rect to MIN_SELECTED.
      */
-    void clear(const QRect & r);
+    void clear(const QRect &r);
 
     /**
      * Reset the entire selection. The selectedRect and selectedExactRect
@@ -85,7 +84,7 @@ public:
     void applySelection(KisPixelSelectionSP selection, SelectionAction action);
 
     /// Tests if the rect is totally outside the selection
-    bool isTotallyUnselected(const QRect & r) const;
+    bool isTotallyUnselected(const QRect &r) const;
 
     /**
      * Rough, but fastish way of determining the area
@@ -108,7 +107,7 @@ public:
     /**
      * Overridden from KisPaintDevice to handle outline cache moves
      */
-    void move(const QPoint& pt);
+    void move(const QPoint &pt);
     using KisPaintDevice::move;
 
     bool isEmpty() const;
@@ -124,12 +123,11 @@ public:
     QTransform thumbnailImageTransform() const;
     void recalculateThumbnailImage(const QColor &maskColor);
 
-
     void setParentSelection(KisSelectionWSP selection);
     KisSelectionWSP parentSelection() const;
 
     virtual void renderToProjection(KisPaintDeviceSP projection);
-    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
+    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect &r);
 
 private:
     /**
@@ -155,7 +153,7 @@ private:
 private:
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif // KIS_PIXEL_SELECTION_H_

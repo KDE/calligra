@@ -31,12 +31,30 @@ public:
     TaskScenario();
     ~TaskScenario() { }
 
-    void setStart(time_t s) { start = s; }
-    void setEnd(time_t e) { end = e; }
-    void setMaxEnd(time_t e) { maxEnd = e; }
-    void setMinEnd(time_t e) { minEnd = e; }
-    void setMaxStart(time_t s) { maxStart = s; }
-    void setMinStart(time_t s) { minStart = s; }
+    void setStart(time_t s)
+    {
+        start = s;
+    }
+    void setEnd(time_t e)
+    {
+        end = e;
+    }
+    void setMaxEnd(time_t e)
+    {
+        maxEnd = e;
+    }
+    void setMinEnd(time_t e)
+    {
+        minEnd = e;
+    }
+    void setMaxStart(time_t s)
+    {
+        maxStart = s;
+    }
+    void setMinStart(time_t s)
+    {
+        minStart = s;
+    }
 
     bool isStartOk() const
     {
@@ -51,16 +69,16 @@ public:
 
     void calcCompletionDegree(time_t now);
 
-    bool isDutyOf(const Resource* r) const;
+    bool isDutyOf(const Resource *r) const;
 
     ResourceListIterator getBookedResourcesIterator() const
     {
-	return ResourceListIterator(bookedResources);
+        return ResourceListIterator(bookedResources);
     }
 
 private:
     /// Pointer to the corresponding task.
-    Task* task;
+    Task *task;
 
     /// Index of the scenario
     int index;
@@ -179,8 +197,8 @@ private:
      * This list stores pointers to the task that have been found to be
      * critical followers.
      */
-    QList<Task*> criticalLinks;
-} ;
+    QList<Task *> criticalLinks;
+};
 
 } // namespace TJ
 

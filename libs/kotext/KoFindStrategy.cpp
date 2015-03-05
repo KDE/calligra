@@ -30,22 +30,23 @@ class NonClosingFindDialog : public KFindDialog
 {
 public:
     NonClosingFindDialog(QWidget *parent)
-            : KFindDialog(parent) {}
+        : KFindDialog(parent) {}
 
     virtual void accept() {}
 };
 
 KoFindStrategy::KoFindStrategy(QWidget *parent)
-        : m_dialog(new NonClosingFindDialog(parent))
-        , m_matches(0)
+    : m_dialog(new NonClosingFindDialog(parent))
+    , m_matches(0)
 {
     m_dialog->setOptions(KFind::FromCursor);
 }
 
 KoFindStrategy::~KoFindStrategy()
 {
-    if (m_dialog->parent() == 0)
+    if (m_dialog->parent() == 0) {
         delete m_dialog;
+    }
 }
 
 KFindDialog *KoFindStrategy::dialog() const

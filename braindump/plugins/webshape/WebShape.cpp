@@ -57,7 +57,7 @@ void WebShape::paint(QPainter &painter,
     m_webPage->mainFrame()->render(&painter);
 }
 
-void WebShape::saveOdf(KoShapeSavingContext & context) const
+void WebShape::saveOdf(KoShapeSavingContext &context) const
 {
     KoXmlWriter &writer = context.xmlWriter();
 
@@ -69,7 +69,7 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
     writer.addAttribute("zoom", m_zoom);
     saveOdfAttributes(context, OdfAllAttributes);
     saveOdfCommonChildElements(context);
-    if(m_cached) {
+    if (m_cached) {
         writer.addAttribute("cached", "true");
     }
     writer.startElement("cache");
@@ -78,14 +78,14 @@ void WebShape::saveOdf(KoShapeSavingContext & context) const
     writer.endElement(); // braindump:web
 }
 
-bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool WebShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     loadOdfAttributes(element, context, OdfAllAttributes);
     m_url = element.attribute("url");
     m_scrollPosition.setX(element.attribute("scroll_x", "0").toDouble());
     m_scrollPosition.setY(element.attribute("scroll_y", "0").toDouble());
     m_zoom = element.attribute("zoom", "1.0").toDouble();
-    if(element.attribute("cached") == "true") {
+    if (element.attribute("cached") == "true") {
         m_cached = true;
         m_cacheLocked = true;
     } else {
@@ -93,25 +93,25 @@ bool WebShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &cont
         m_cacheLocked = false;
     }
     KoXmlElement childElement;
-    forEachElement(childElement, element) {
-        if(childElement.tagName() == "cache") {
+    forEachElement (childElement, element) {
+        if (childElement.tagName() == "cache") {
             m_cache = childElement.text();
             m_firstLoad = true;
             m_webPage->mainFrame()->setContent(m_cache.toUtf8());
         }
     }
-    if(!m_cached) {
+    if (!m_cached) {
         setUrl(m_url);
     }
     return true;
 }
 
-const KUrl& WebShape::url()
+const KUrl &WebShape::url()
 {
     return m_url;
 }
 
-void WebShape::setUrl(const KUrl& _url)
+void WebShape::setUrl(const KUrl &_url)
 {
     m_url = _url;
     m_webPage->mainFrame()->load(_url);
@@ -126,7 +126,7 @@ void WebShape::loadFinished(bool)
 {
     update();
     m_loaded = true;
-    if(!m_cacheLocked) {
+    if (!m_cacheLocked) {
         updateCache();
     }
     m_firstLoad = false;
@@ -146,9 +146,9 @@ bool WebShape::isCached() const
 void WebShape::setCached(bool _cache)
 {
     m_cached = _cache;
-    if(m_cached) {
+    if (m_cached) {
         m_cacheLocked = false;
-        if(m_loaded) {
+        if (m_loaded) {
             updateCache();
         }
     } else {
@@ -157,7 +157,7 @@ void WebShape::setCached(bool _cache)
     update();
 }
 
-void WebShape::setCache(const QString& _cache)
+void WebShape::setCache(const QString &_cache)
 {
     m_cache = _cache;
     m_cacheLocked = true;
@@ -165,12 +165,12 @@ void WebShape::setCache(const QString& _cache)
     update();
 }
 
-const QString& WebShape::cache() const
+const QString &WebShape::cache() const
 {
     return m_cache;
 }
 
-void WebShape::scrollOf(const QPointF& _scroll)
+void WebShape::scrollOf(const QPointF &_scroll)
 {
     m_scrollPosition += _scroll / m_zoom;
 }
@@ -178,7 +178,9 @@ void WebShape::scrollOf(const QPointF& _scroll)
 void WebShape::zoomOf(qreal z)
 {
     m_zoom *= z;
-    if(m_zoom <= 0.01) m_zoom = 0.01;
+    if (m_zoom <= 0.01) {
+        m_zoom = 0.01;
+    }
 }
 
 QPointF WebShape::scroll() const
@@ -186,7 +188,7 @@ QPointF WebShape::scroll() const
     return m_scrollPosition;
 }
 
-void WebShape::setScroll(const QPointF& point)
+void WebShape::setScroll(const QPointF &point)
 {
     m_scrollPosition = point;
 }

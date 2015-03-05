@@ -29,12 +29,10 @@
 // Qt
 #include <QMimeData>
 
-
 KoContactSemanticItemFactory::KoContactSemanticItemFactory()
     : KoRdfSemanticItemFactoryBase("Contact")
 {
 }
-
 
 QString KoContactSemanticItemFactory::className() const
 {
@@ -49,19 +47,19 @@ QString KoContactSemanticItemFactory::classDisplayName() const
 void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
     const QString sparqlQuery = QLatin1String(
-        "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        "prefix foaf: <http://xmlns.com/foaf/0.1/> \n"
-        "select distinct ?graph ?person ?name ?nick ?homepage ?img ?phone \n"
-        "where { \n"
-        "  GRAPH ?graph { \n"
-        "    ?person rdf:type foaf:Person . \n"
-        "    ?person foaf:name ?name \n"
-        "    OPTIONAL { ?person foaf:phone ?phone } \n"
-        "    OPTIONAL { ?person foaf:nick ?nick } \n"
-        "    OPTIONAL { ?person foaf:homepage ?homepage } \n"
-        "    OPTIONAL { ?person foaf:img ?img } \n"
-        "    }\n"
-        "}\n");
+                                    "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+                                    "prefix foaf: <http://xmlns.com/foaf/0.1/> \n"
+                                    "select distinct ?graph ?person ?name ?nick ?homepage ?img ?phone \n"
+                                    "where { \n"
+                                    "  GRAPH ?graph { \n"
+                                    "    ?person rdf:type foaf:Person . \n"
+                                    "    ?person foaf:name ?name \n"
+                                    "    OPTIONAL { ?person foaf:phone ?phone } \n"
+                                    "    OPTIONAL { ?person foaf:nick ?nick } \n"
+                                    "    OPTIONAL { ?person foaf:homepage ?homepage } \n"
+                                    "    OPTIONAL { ?person foaf:img ?img } \n"
+                                    "    }\n"
+                                    "}\n");
 
     Soprano::QueryResultIterator it =
         m->executeQuery(sparqlQuery,
@@ -104,19 +102,17 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemantic
     }
 
 #ifndef NDEBUG
-    if (semanticItems.empty() && m->statementCount())
-    {
+    if (semanticItems.empty() && m->statementCount()) {
         kDebug(30015) << "foaf() have data, but no foafs!" << endl;
         QList<Soprano::Statement> allStatements = m->listStatements().allElements();
-        foreach (Soprano::Statement s, allStatements)
-        {
+        foreach (Soprano::Statement s, allStatements) {
             kDebug(30015) << s;
         }
     }
 #endif
 }
 
-hKoRdfBasicSemanticItem KoContactSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfBasicSemanticItem KoContactSemanticItemFactory::createSemanticItem(const KoDocumentRdf *rdf, QObject *parent)
 {
     return hKoRdfBasicSemanticItem(new KoRdfFoaF(parent, rdf));
 
@@ -128,9 +124,9 @@ bool KoContactSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMime
 }
 
 hKoRdfBasicSemanticItem KoContactSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData,
-                                                                   KoCanvasBase *host,
-                                                                   const KoDocumentRdf *rdf,
-                                                                   QObject *parent) const
+        KoCanvasBase *host,
+        const KoDocumentRdf *rdf,
+        QObject *parent) const
 {
     const QByteArray ba = mimeData->data(QLatin1String("text/x-vcard"));
     hKoRdfSemanticItem semanticItem = hKoRdfSemanticItem(new KoRdfFoaF(parent, rdf));

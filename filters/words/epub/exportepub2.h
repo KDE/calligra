@@ -32,7 +32,6 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-
 class EpubFile;
 
 class ExportEpub2 : public KoFilter
@@ -49,7 +48,7 @@ public:
 
     ExportEpub2(QObject *parent, const QVariantList &);
     virtual ~ExportEpub2();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 private:
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, EpubFile *epubFile);
@@ -68,7 +67,6 @@ private:
     void writeCoverImage(EpubFile *epubFile, const QString coverPath);
 
 public Q_SLOTS:
-
 
 private:
     QHash<QString, QString> m_metadata;

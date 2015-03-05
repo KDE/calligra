@@ -26,7 +26,7 @@
 #include <kis_airbrush_option.h>
 #include <kis_compositeop_option.h>
 
-KisParticlePaintOpSettingsWidget:: KisParticlePaintOpSettingsWidget(QWidget* parent)
+KisParticlePaintOpSettingsWidget:: KisParticlePaintOpSettingsWidget(QWidget *parent)
     : KisPaintOpOptionsWidget(parent)
 {
     m_paintActionTypeOption = new KisPaintActionTypeOption();
@@ -42,10 +42,10 @@ KisParticlePaintOpSettingsWidget::~ KisParticlePaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisParticlePaintOpSettingsWidget::configuration() const
+KisPropertiesConfiguration  *KisParticlePaintOpSettingsWidget::configuration() const
 {
-    KisParticlePaintOpSettings* config = new KisParticlePaintOpSettings();
-    config->setOptionsWidget(const_cast<KisParticlePaintOpSettingsWidget*>(this));
+    KisParticlePaintOpSettings *config = new KisParticlePaintOpSettings();
+    config->setOptionsWidget(const_cast<KisParticlePaintOpSettingsWidget *>(this));
     config->setProperty("paintop", "particlebrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

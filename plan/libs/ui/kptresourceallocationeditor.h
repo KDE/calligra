@@ -30,7 +30,6 @@ class KoDocument;
 
 class QPoint;
 
-
 namespace KPlato
 {
 
@@ -38,25 +37,45 @@ class Project;
 class Resource;
 class ResourceGroup;
 
-
 class KPLATOUI_EXPORT ResourceAllocationTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    explicit ResourceAllocationTreeView( QWidget *parent );
+    explicit ResourceAllocationTreeView(QWidget *parent);
 
-    ResourceAllocationItemModel *model() const { return static_cast<ResourceAllocationItemModel*>( DoubleTreeViewBase::model() ); }
+    ResourceAllocationItemModel *model() const
+    {
+        return static_cast<ResourceAllocationItemModel *>(DoubleTreeViewBase::model());
+    }
 
-    Project *project() const { return model()->project(); }
-    void setProject( Project *project ) { model()->setProject( project ); }
+    Project *project() const
+    {
+        return model()->project();
+    }
+    void setProject(Project *project)
+    {
+        model()->setProject(project);
+    }
 
-    Task *task() const { return model()->task(); }
-    void setTask( Task *task ) { model()->setTask( task ); }
+    Task *task() const
+    {
+        return model()->task();
+    }
+    void setTask(Task *task)
+    {
+        model()->setTask(task);
+    }
 
     QObject *currentObject() const;
 
-    const QMap<const Resource*, ResourceRequest*> &resourceCache() const { return model()->resourceCache(); }
-    const QMap<const ResourceGroup*, ResourceGroupRequest*> &groupCache() const { return model()->groupCache(); }
+    const QMap<const Resource *, ResourceRequest *> &resourceCache() const
+    {
+        return model()->resourceCache();
+    }
+    const QMap<const ResourceGroup *, ResourceGroupRequest *> &groupCache() const
+    {
+        return model()->groupCache();
+    }
 
 Q_SIGNALS:
     void dataChanged();
@@ -68,42 +87,51 @@ class KPLATOUI_EXPORT ResourceAllocationEditor : public ViewBase
     Q_OBJECT
 public:
     ResourceAllocationEditor(KoPart *part, KoDocument *doc, QWidget *parent);
-    
-    void setupGui();
-    Project *project() const { return m_view->project(); }
-    virtual void setProject( Project *project ) { m_view->setProject( project ); }
 
-    ResourceAllocationItemModel *model() const { return m_view->model(); }
-    
-    virtual void updateReadWrite( bool readwrite );
+    void setupGui();
+    Project *project() const
+    {
+        return m_view->project();
+    }
+    virtual void setProject(Project *project)
+    {
+        m_view->setProject(project);
+    }
+
+    ResourceAllocationItemModel *model() const
+    {
+        return m_view->model();
+    }
+
+    virtual void updateReadWrite(bool readwrite);
 
     virtual Resource *currentResource() const;
     virtual ResourceGroup *currentResourceGroup() const;
-    
+
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
-    
+    virtual void saveContext(QDomElement &/*context*/) const;
+
     KoPrintJob *createPrintJob();
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
 protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
-    void updateActionsEnabled(  bool on = true );
+    void updateActionsEnabled(bool on = true);
 
 private Q_SLOTS:
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
     void slotSplitView();
 
-    void slotSelectionChanged( const QModelIndexList& );
-    void slotCurrentChanged( const QModelIndex& );
-    void slotEnableActions( bool on );
+    void slotSelectionChanged(const QModelIndexList &);
+    void slotCurrentChanged(const QModelIndex &);
+    void slotEnableActions(bool on);
 
 private:
     ResourceAllocationTreeView *m_view;

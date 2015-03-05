@@ -46,27 +46,27 @@ class KRITAUI_EXPORT KisNodeManager : public QObject
 
 public:
 
-    KisNodeManager(KisViewManager * view);
+    KisNodeManager(KisViewManager *view);
     ~KisNodeManager();
-    
+
     void setView(QPointer<KisView>imageView);
 
 Q_SIGNALS:
 
     /// emitted whenever a node is selected.
     void sigNodeActivated(KisNodeSP node);
-    
+
     /// emitted whenever a different layer is selected.
     void sigLayerActivated(KisLayerSP layer);
-    
+
     /// for the layer box: this sets the current node in the layerbox
     /// without telling the node manager that the node is activated,
     /// preventing loops (I think...)
     void sigUiNeedChangeActiveNode(KisNodeSP node);
-    
+
 public:
-    
-    void setup(KActionCollection * collection, KisActionManager* actionManager);
+
+    void setup(KActionCollection *collection, KisActionManager *actionManager);
     void updateGUI();
 
     /// Convenience function to get the active layer or mask
@@ -75,7 +75,7 @@ public:
     /// convenience function to get the active layer. If a mask is
     /// active, it's parent layer is the active layer.
     KisLayerSP activeLayer();
-    
+
     /// Get the paint device the user wants to paint on now
     KisPaintDeviceSP activePaintDevice();
 
@@ -83,7 +83,7 @@ public:
      * @return the active color space used for composition, meaning the color space
      * of the active mask, or the color space of the parent of the active layer
      */
-    const KoColorSpace* activeColorSpace();
+    const KoColorSpace *activeColorSpace();
 
     /**
      * Sets opacity for the node in a universal way (masks/layers)
@@ -93,7 +93,7 @@ public:
     /**
      * Sets compositeOp for the node in a universal way (masks/layers)
      */
-    void setNodeCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
+    void setNodeCompositeOp(KisNodeSP node, const KoCompositeOp *compositeOp);
 
     /**
      * @brief setSelectedNodes set the list of nodes selected in the layerbox. Selected nodes are not necessarily active nodes.
@@ -142,24 +142,23 @@ public Q_SLOTS:
      */
     void moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
-
     void toggleIsolateActiveNode();
     void toggleIsolateMode(bool checked);
     void slotUpdateIsolateModeAction();
     void slotTryFinishIsolatedMode();
 
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
-    void createNode(const QString& nodeType, bool quiet = false, KisPaintDeviceSP copyFrom = 0);
+    void createNode(const QString &nodeType, bool quiet = false, KisPaintDeviceSP copyFrom = 0);
     void convertNode(const QString &nodeType);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
     void nodeOpacityChanged(qreal opacity, bool finalChange);
-    void nodeCompositeOpChanged(const KoCompositeOp* op);
+    void nodeCompositeOpChanged(const KoCompositeOp *op);
     void duplicateActiveNode();
     void removeNode();
     void mirrorNodeX();
     void mirrorNodeY();
-    void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation);
+    void mirrorNode(KisNodeSP node, const KUndo2MagicString &commandName, Qt::Orientation orientation);
     void activateNextNode();
     void activatePreviousNode();
 
@@ -186,7 +185,7 @@ public Q_SLOTS:
      * belonging to the current layer.
      */
     void nodeToBottom();
-    
+
     void rotate(double radians);
     void rotate180();
     void rotateLeft90();
@@ -203,11 +202,10 @@ public Q_SLOTS:
 
 public:
 
-    
     void shear(double angleX, double angleY);
 
     void scale(double sx, double sy, KisFilterStrategy *filterStrategy);
-    
+
 private:
     /**
      * Scales opacity from the range 0...1
@@ -218,7 +216,7 @@ private:
     void removeSingleNode(KisNodeSP node);
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif

@@ -55,10 +55,10 @@ enum OfficeArtBlipType {
  * @return The name under which the image is saved or an empty string when an
  *         error occurred.
  **/
-PictureReference savePicture(POLE::Stream& stream, KoStore* store);
+PictureReference savePicture(POLE::Stream &stream, KoStore *store);
 
-PictureReference savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a,
-                             KoStore* store);
+PictureReference savePicture(const MSO::OfficeArtBStoreContainerFileBlock &a,
+                             KoStore *store);
 
 /**
  * Look in blipStore for the id mapping to this object.
@@ -68,7 +68,7 @@ PictureReference savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a,
  * @param offset into the associated OfficeArtBStoreDelay record
  * @return unique identifier of the pixel data in the BLIP
  **/
-QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32& offset);
+QByteArray getRgbUid(const MSO::OfficeArtDggContainer &dgg, quint32 pib, quint32 &offset);
 
 /**
  * Save pictures into the ODF store and write the appropriate manifest entry.
@@ -79,7 +79,7 @@ QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32
  * either part of the OfficeArtBStoreContainer or OfficeArtBStoreDelay.
  * @return map of picture names vs. MD4 digests of the picture data.
  **/
-QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, const QList<MSO::OfficeArtBStoreContainerFileBlock>* rgfb);
+QMap<QByteArray, QString> createPictures(KoStore *store, KoXmlWriter *manifest, const QList<MSO::OfficeArtBStoreContainerFileBlock> *rgfb);
 
 /**
  * Note: Copied from filters/libkowmf/qwmf.cc, the name is confusing as
@@ -91,6 +91,6 @@ QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, 
  * @param size size of the dib in bytes
  * @return if the conversion was successful
  **/
-bool dibToBmp(QImage& bmp, const char* dib, long size);
+bool dibToBmp(QImage &bmp, const char *dib, long size);
 
 #endif

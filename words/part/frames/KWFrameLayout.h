@@ -61,7 +61,7 @@ public:
      * @param pageManager the manager of pages
      * @param frameSets all the framesets registered in the document.
      */
-    KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet*> &frameSets);
+    KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet *> &frameSets);
     ~KWFrameLayout() {}
     /**
      * As soon as a new page is created you should call this method to auto-create all frames
@@ -82,7 +82,8 @@ public:
     static void proposeShapeMove(const KoShape *shape, QPointF &delta, const KWPage &page);
 
     /// Set the document to be passed to new instances of the KWTextFrameSet
-    void setDocument(KWDocument *document) {
+    void setDocument(KWDocument *document)
+    {
         m_document = document;
     }
 
@@ -96,7 +97,7 @@ public:
     QList<KoShape *> sequencedShapesOn(KWFrameSet *fs, int pageNumber) const;
 
     QList<KWTextFrameSet *> getFrameSets(const KWPageStyle &pageStyle) const;
-    KWTextFrameSet* getFrameSet(Words::TextFrameSetType type, const KWPageStyle &pageStyle) const;
+    KWTextFrameSet *getFrameSet(Words::TextFrameSetType type, const KWPageStyle &pageStyle) const;
 
     KWFrame *createCopyFrame(KWFrameSet *fs, const KWPage &page);
 

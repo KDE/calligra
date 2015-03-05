@@ -65,12 +65,14 @@ StylesModel::~StylesModel()
 
 QModelIndex StylesModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (row < 0 || column != 0)
+    if (row < 0 || column != 0) {
         return QModelIndex();
+    }
 
     if (! parent.isValid()) {
-        if (row >= m_styleList.count())
+        if (row >= m_styleList.count()) {
             return QModelIndex();
+        }
         return createIndex(row, column, m_styleList[row]);
     }
     return QModelIndex();
@@ -84,8 +86,9 @@ QModelIndex StylesModel::parent(const QModelIndex &child) const
 
 int StylesModel::rowCount(const QModelIndex &parent) const
 {
-    if (!parent.isValid())
+    if (!parent.isValid()) {
         return m_styleList.count();
+    }
     return 0;
 }
 
@@ -97,11 +100,12 @@ int StylesModel::columnCount(const QModelIndex &parent) const
 
 QVariant StylesModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QVariant();
+    }
 
     int id = (int)index.internalId();
-    switch (role){
+    switch (role) {
     case Qt::DisplayRole: {
         return QVariant();
     }
@@ -117,11 +121,10 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
             if (!paragStyle && m_draftParStyleList.contains(id)) {
                 return m_styleThumbnailer->thumbnail(m_draftParStyleList[id]);
             }
-        }
-        else {
+        } else {
             KoCharacterStyle *usedStyle = 0;
             if (id == -1) {
-                usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
+                usedStyle = static_cast<KoCharacterStyle *>(m_currentParagraphStyle);
                 if (!usedStyle) {
                     usedStyle = m_defaultCharacterStyle;
                 }
@@ -130,8 +133,7 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
                     usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
                 }
                 return m_styleThumbnailer->thumbnail(usedStyle);
-            }
-            else {
+            } else {
                 usedStyle = m_styleManager->characterStyle(id);
                 if (usedStyle) {
                     return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle);
@@ -153,8 +155,9 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags StylesModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return 0;
+    }
     return (Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
@@ -181,8 +184,7 @@ QModelIndex StylesModel::indexOf(const KoCharacterStyle &style) const
 {
     if (&style) {
         return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());
-    }
-    else {
+    } else {
         return QModelIndex();
     }
 }
@@ -201,11 +203,10 @@ QImage StylesModel::stylePreview(int row, QSize size)
         if (!usedStyle && m_draftParStyleList.contains(index(row).internalId())) {
             return m_styleThumbnailer->thumbnail(m_draftParStyleList[index(row).internalId()], size);
         }
-    }
-    else {
+    } else {
         KoCharacterStyle *usedStyle = 0;
         if (index(row).internalId() == -1) {
-            usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
+            usedStyle = static_cast<KoCharacterStyle *>(m_currentParagraphStyle);
             if (!usedStyle) {
                 usedStyle = m_defaultCharacterStyle;
             }
@@ -214,14 +215,13 @@ QImage StylesModel::stylePreview(int row, QSize size)
                 usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
             }
             return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
-        }
-        else {
+        } else {
             usedStyle = m_styleManager->characterStyle(index(row).internalId());
             if (usedStyle) {
                 return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
             }
             if (!usedStyle && m_draftCharStyleList.contains(index(row).internalId())) {
-                return m_styleThumbnailer->thumbnail(m_draftCharStyleList[index(row).internalId()],m_currentParagraphStyle, size);
+                return m_styleThumbnailer->thumbnail(m_draftCharStyleList[index(row).internalId()], m_currentParagraphStyle, size);
             }
         }
     }
@@ -271,8 +271,9 @@ QImage StylesModel::stylePreview(QModelIndex &index, QSize size)
 */
 void StylesModel::setStyleManager(KoStyleManager *sm)
 {
-    if (sm == m_styleManager)
+    if (sm == m_styleManager) {
         return;
+    }
     if (m_styleManager) {
         disconnect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
         disconnect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
@@ -306,13 +307,14 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
     Q_ASSERT(style);
     QList<int>::iterator begin = m_styleList.begin();
     int index = 0;
-    for ( ; begin != m_styleList.end(); ++begin) {
+    for (; begin != m_styleList.end(); ++begin) {
         KoParagraphStyle *s = m_styleManager->paragraphStyle(*begin);;
-        if (!s && m_draftParStyleList.contains(*begin))
+        if (!s && m_draftParStyleList.contains(*begin)) {
             s = m_draftParStyleList[*begin];
+        }
         // s should be found as the manager and the m_styleList should be in sync
         Q_ASSERT(s);
-        if (KStringHandler::naturalCompare(style->name(),s->name()) < 0) {
+        if (KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
             break;
         }
         ++index;
@@ -320,7 +322,7 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
     beginInsertRows(QModelIndex(), index, index);
     m_styleList.insert(begin, style->styleId());
     m_styleMapper->setMapping(style, style->styleId());
-    connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
     endInsertRows();
 }
 
@@ -341,11 +343,11 @@ void StylesModel::updateParagraphStyles()
     QList<KoParagraphStyle *> styles = m_styleManager->paragraphStyles();
     qSort(styles.begin(), styles.end(), sortParagraphStyleByName);
 
-    foreach(KoParagraphStyle *style, styles) {
+    foreach (KoParagraphStyle *style, styles) {
         if (style != m_styleManager->defaultParagraphStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
             m_styleList.append(style->styleId());
             m_styleMapper->setMapping(style, style->styleId());
-            connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+            connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
         }
     }
 
@@ -364,13 +366,14 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
         ++begin;
         ++index;
     }
-    for ( ; begin != m_styleList.end(); ++begin) {
+    for (; begin != m_styleList.end(); ++begin) {
         KoCharacterStyle *s = m_styleManager->characterStyle(*begin);;
-        if (!s && m_draftCharStyleList.contains(*begin))
+        if (!s && m_draftCharStyleList.contains(*begin)) {
             s = m_draftCharStyleList[*begin];
+        }
         // s should be found as the manager and the m_styleList should be in sync
         Q_ASSERT(s);
-        if (KStringHandler::naturalCompare(style->name(),s->name()) < 0) {
+        if (KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
             break;
         }
         ++index;
@@ -379,7 +382,7 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
     m_styleList.insert(index, style->styleId());
     endInsertRows();
     m_styleMapper->setMapping(style, style->styleId());
-    connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
 }
 
 bool sortCharacterStyleByName(KoCharacterStyle *style1, KoCharacterStyle *style2)
@@ -403,11 +406,11 @@ void StylesModel::updateCharacterStyles()
     QList<KoCharacterStyle *> styles = m_styleManager->characterStyles();
     qSort(styles.begin(), styles.end(), sortCharacterStyleByName);
 
-    foreach(KoCharacterStyle *style, styles) {
+    foreach (KoCharacterStyle *style, styles) {
         if (style != m_styleManager->defaultCharacterStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
             m_styleList.append(style->styleId());
             m_styleMapper->setMapping(style, style->styleId());
-            connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+            connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
         }
     }
 
@@ -420,7 +423,7 @@ void StylesModel::removeParagraphStyle(KoParagraphStyle *style)
     int row = m_styleList.indexOf(style->styleId());
     beginRemoveRows(QModelIndex(), row, row);
     m_styleMapper->removeMappings(style);
-    disconnect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    disconnect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
     m_styleList.removeAt(row);
     endRemoveRows();
 }
@@ -431,7 +434,7 @@ void StylesModel::removeCharacterStyle(KoCharacterStyle *style)
     int row = m_styleList.indexOf(style->styleId());
     beginRemoveRows(QModelIndex(), row, row);
     m_styleMapper->removeMappings(style);
-    disconnect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
+    disconnect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
     m_styleList.removeAt(row);
     endRemoveRows();
 }
@@ -444,20 +447,22 @@ void StylesModel::updateName(int styleId)
         int newIndex = 0;
         if (m_modelType == StylesModel::ParagraphStyle) {
             KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(styleId);
-            if (!paragStyle && m_draftParStyleList.contains(styleId))
+            if (!paragStyle && m_draftParStyleList.contains(styleId)) {
                 paragStyle = m_draftParStyleList.value(styleId);
+            }
             if (paragStyle) {
                 m_styleThumbnailer->removeFromCache(paragStyle);
 
                 QList<int>::iterator begin = m_styleList.begin();
-                for ( ; begin != m_styleList.end(); ++begin) {
+                for (; begin != m_styleList.end(); ++begin) {
                     // don't test again the same style
                     if (*begin == styleId) {
                         continue;
                     }
                     KoParagraphStyle *s = m_styleManager->paragraphStyle(*begin);
-                    if (!s && m_draftParStyleList.contains(*begin))
+                    if (!s && m_draftParStyleList.contains(*begin)) {
                         s = m_draftParStyleList[*begin];
+                    }
                     // s should be found as the manager and the m_styleList should be in sync
                     Q_ASSERT(s);
                     if (KStringHandler::naturalCompare(paragStyle->name(), s->name()) < 0) {
@@ -474,11 +479,11 @@ void StylesModel::updateName(int styleId)
                     endMoveRows();
                 }
             }
-        }
-        else {
+        } else {
             KoCharacterStyle *characterStyle = m_styleManager->characterStyle(styleId);
-            if (!characterStyle && m_draftCharStyleList.contains(styleId))
+            if (!characterStyle && m_draftCharStyleList.contains(styleId)) {
                 characterStyle = m_draftCharStyleList[styleId];
+            }
             if (characterStyle) {
                 m_styleThumbnailer->removeFromCache(characterStyle);
 
@@ -487,14 +492,15 @@ void StylesModel::updateName(int styleId)
                     ++begin;
                     ++newIndex;
                 }
-                for ( ; begin != m_styleList.end(); ++begin) {
+                for (; begin != m_styleList.end(); ++begin) {
                     // don't test again the same style
                     if (*begin == styleId) {
                         continue;
                     }
                     KoCharacterStyle *s = m_styleManager->characterStyle(*begin);
-                    if (!s && m_draftCharStyleList.contains(*begin))
+                    if (!s && m_draftCharStyleList.contains(*begin)) {
                         s = m_draftCharStyleList[*begin];
+                    }
                     // s should be found as the manager and the m_styleList should be in sync
                     Q_ASSERT(s);
                     if (KStringHandler::naturalCompare(characterStyle->name(), s->name()) < 0) {
@@ -540,28 +546,29 @@ QHash<int, KoCharacterStyle *> StylesModel::draftCharStyleList()
 
 void StylesModel::addDraftParagraphStyle(KoParagraphStyle *style)
 {
-    style->setStyleId(-(m_draftParStyleList.count()+1));
+    style->setStyleId(-(m_draftParStyleList.count() + 1));
     m_draftParStyleList.insert(style->styleId(), style);
     addParagraphStyle(style);
 }
 
 void StylesModel::addDraftCharacterStyle(KoCharacterStyle *style)
 {
-    if (m_draftCharStyleList.count() == 0) // we have a character style "m_defaultCharacterStyle" with style id -1 in style model.
-        style->setStyleId(-(m_draftCharStyleList.count()+2));
-    else
-        style->setStyleId(-(m_draftCharStyleList.count()+1));
+    if (m_draftCharStyleList.count() == 0) { // we have a character style "m_defaultCharacterStyle" with style id -1 in style model.
+        style->setStyleId(-(m_draftCharStyleList.count() + 2));
+    } else {
+        style->setStyleId(-(m_draftCharStyleList.count() + 1));
+    }
     m_draftCharStyleList.insert(style->styleId(), style);
     addCharacterStyle(style);
 }
 
 void StylesModel::clearDraftStyles()
 {
-    foreach(KoParagraphStyle *style, m_draftParStyleList.values()) {
+    foreach (KoParagraphStyle *style, m_draftParStyleList.values()) {
         removeParagraphStyle(style);
     }
     m_draftParStyleList.clear();
-    foreach(KoCharacterStyle *style, m_draftCharStyleList.values()) {
+    foreach (KoCharacterStyle *style, m_draftCharStyleList.values()) {
         removeCharacterStyle(style);
     }
     m_draftCharStyleList.clear();

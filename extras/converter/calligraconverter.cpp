@@ -70,7 +70,7 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
     // We should now have a print job - but check to make sure
     if (!printJob) {
         qDebug() << "The document" << uIn.path() << "of format" << inputFormat
-                    << "was unable to provide a print job for PDF export";
+                 << "was unable to provide a print job for PDF export";
         doc->deleteLater();
         return false;
     }
@@ -79,44 +79,79 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
     printJob->printer().setOutputFormat(QPrinter::PdfFormat);
     printJob->printer().setColorMode(QPrinter::Color);
 
-    if (orientation == "Portrait") printJob->printer().setOrientation(QPrinter::Portrait);
-    else if (orientation == "Landscape") printJob->printer().setOrientation(QPrinter::Landscape);
+    if (orientation == "Portrait") {
+        printJob->printer().setOrientation(QPrinter::Portrait);
+    } else if (orientation == "Landscape") {
+        printJob->printer().setOrientation(QPrinter::Landscape);
+    }
 
-    if (papersize == "A0") printJob->printer().setPaperSize(QPrinter::A0);
-    else if (papersize == "A1") printJob->printer().setPaperSize(QPrinter::A1);
-    else if (papersize == "A2") printJob->printer().setPaperSize(QPrinter::A2);
-    else if (papersize == "A3") printJob->printer().setPaperSize(QPrinter::A3);
-    else if (papersize == "A4") printJob->printer().setPaperSize(QPrinter::A4);
-    else if (papersize == "A5") printJob->printer().setPaperSize(QPrinter::A5);
-    else if (papersize == "A6") printJob->printer().setPaperSize(QPrinter::A6);
-    else if (papersize == "A7") printJob->printer().setPaperSize(QPrinter::A7);
-    else if (papersize == "A8") printJob->printer().setPaperSize(QPrinter::A8);
-    else if (papersize == "A9") printJob->printer().setPaperSize(QPrinter::A9);
-    else if (papersize == "B0") printJob->printer().setPaperSize(QPrinter::B0);
-    else if (papersize == "B1") printJob->printer().setPaperSize(QPrinter::B1);
-    else if (papersize == "B2") printJob->printer().setPaperSize(QPrinter::B2);
-    else if (papersize == "B3") printJob->printer().setPaperSize(QPrinter::B3);
-    else if (papersize == "B4") printJob->printer().setPaperSize(QPrinter::B4);
-    else if (papersize == "B5") printJob->printer().setPaperSize(QPrinter::B5);
-    else if (papersize == "B6") printJob->printer().setPaperSize(QPrinter::B6);
-    else if (papersize == "B7") printJob->printer().setPaperSize(QPrinter::B7);
-    else if (papersize == "B8") printJob->printer().setPaperSize(QPrinter::B8);
-    else if (papersize == "B9") printJob->printer().setPaperSize(QPrinter::B9);
-    else if (papersize == "B10") printJob->printer().setPaperSize(QPrinter::B10);
-    else if (papersize == "C5E") printJob->printer().setPaperSize(QPrinter::C5E);
-    else if (papersize == "Comm10E") printJob->printer().setPaperSize(QPrinter::Comm10E);
-    else if (papersize == "DLE") printJob->printer().setPaperSize(QPrinter::DLE);
-    else if (papersize == "Executive") printJob->printer().setPaperSize(QPrinter::Executive);
-    else if (papersize == "Folio") printJob->printer().setPaperSize(QPrinter::Folio);
-    else if (papersize == "Ledger") printJob->printer().setPaperSize(QPrinter::Ledger);
-    else if (papersize == "Legal") printJob->printer().setPaperSize(QPrinter::Legal);
-    else if (papersize == "Letter") printJob->printer().setPaperSize(QPrinter::Letter);
-    else if (papersize == "Tabloid") printJob->printer().setPaperSize(QPrinter::Tabloid);
+    if (papersize == "A0") {
+        printJob->printer().setPaperSize(QPrinter::A0);
+    } else if (papersize == "A1") {
+        printJob->printer().setPaperSize(QPrinter::A1);
+    } else if (papersize == "A2") {
+        printJob->printer().setPaperSize(QPrinter::A2);
+    } else if (papersize == "A3") {
+        printJob->printer().setPaperSize(QPrinter::A3);
+    } else if (papersize == "A4") {
+        printJob->printer().setPaperSize(QPrinter::A4);
+    } else if (papersize == "A5") {
+        printJob->printer().setPaperSize(QPrinter::A5);
+    } else if (papersize == "A6") {
+        printJob->printer().setPaperSize(QPrinter::A6);
+    } else if (papersize == "A7") {
+        printJob->printer().setPaperSize(QPrinter::A7);
+    } else if (papersize == "A8") {
+        printJob->printer().setPaperSize(QPrinter::A8);
+    } else if (papersize == "A9") {
+        printJob->printer().setPaperSize(QPrinter::A9);
+    } else if (papersize == "B0") {
+        printJob->printer().setPaperSize(QPrinter::B0);
+    } else if (papersize == "B1") {
+        printJob->printer().setPaperSize(QPrinter::B1);
+    } else if (papersize == "B2") {
+        printJob->printer().setPaperSize(QPrinter::B2);
+    } else if (papersize == "B3") {
+        printJob->printer().setPaperSize(QPrinter::B3);
+    } else if (papersize == "B4") {
+        printJob->printer().setPaperSize(QPrinter::B4);
+    } else if (papersize == "B5") {
+        printJob->printer().setPaperSize(QPrinter::B5);
+    } else if (papersize == "B6") {
+        printJob->printer().setPaperSize(QPrinter::B6);
+    } else if (papersize == "B7") {
+        printJob->printer().setPaperSize(QPrinter::B7);
+    } else if (papersize == "B8") {
+        printJob->printer().setPaperSize(QPrinter::B8);
+    } else if (papersize == "B9") {
+        printJob->printer().setPaperSize(QPrinter::B9);
+    } else if (papersize == "B10") {
+        printJob->printer().setPaperSize(QPrinter::B10);
+    } else if (papersize == "C5E") {
+        printJob->printer().setPaperSize(QPrinter::C5E);
+    } else if (papersize == "Comm10E") {
+        printJob->printer().setPaperSize(QPrinter::Comm10E);
+    } else if (papersize == "DLE") {
+        printJob->printer().setPaperSize(QPrinter::DLE);
+    } else if (papersize == "Executive") {
+        printJob->printer().setPaperSize(QPrinter::Executive);
+    } else if (papersize == "Folio") {
+        printJob->printer().setPaperSize(QPrinter::Folio);
+    } else if (papersize == "Ledger") {
+        printJob->printer().setPaperSize(QPrinter::Ledger);
+    } else if (papersize == "Legal") {
+        printJob->printer().setPaperSize(QPrinter::Legal);
+    } else if (papersize == "Letter") {
+        printJob->printer().setPaperSize(QPrinter::Letter);
+    } else if (papersize == "Tabloid") {
+        printJob->printer().setPaperSize(QPrinter::Tabloid);
+    }
 
     bool _marginOk;
     qreal _margin = margin.toDouble(&_marginOk);
-    if (!_marginOk)
+    if (!_marginOk) {
         _margin = 0.2;
+    }
     printJob->printer().setPageMargins(_margin, _margin, _margin, _margin, QPrinter::Point);
 
     printJob->startPrinting();
@@ -198,7 +233,6 @@ int main(int argc, char **argv)
             job->exec();
         }
     }
-
 
     KMimeType::Ptr inputMimetype = KMimeType::findByUrl(urlIn);
     if (inputMimetype->name() == KMimeType::defaultMimeType()) {

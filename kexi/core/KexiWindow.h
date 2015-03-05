@@ -48,9 +48,9 @@ class Set;
 /*! This class can contain a number of configurable views, switchable using toggle action.
  It also automatically works as a proxy for shared (application-wide) actions. */
 class KEXICORE_EXPORT KexiWindow
-            : public QWidget
-            , public KexiActionProxy
-            , public Kexi::ObjectStatus
+    : public QWidget
+    , public KexiActionProxy
+    , public Kexi::ObjectStatus
 {
     Q_OBJECT
 
@@ -94,18 +94,18 @@ public:
     int id() const;
 
     //! \return Kexi part used to create this window
-    KexiPart::Part* part() const;
+    KexiPart::Part *part() const;
 
     //! \return Kexi part item used to create this window
-    KexiPart::Item* partItem() const;
+    KexiPart::Item *partItem() const;
 
     //! Kexi dialog's gui COMMON client.
     //! It's obtained by querying part object for this dialog.
-    KexiPart::GUIClient* commonGUIClient() const;
+    KexiPart::GUIClient *commonGUIClient() const;
 
     //! Kexi dialog's gui client for currently selected view.
     //! It's obtained by querying part object for this dialog.
-    KexiPart::GUIClient* guiClient() const;
+    KexiPart::GUIClient *guiClient() const;
 
     /*! \return name of icon provided by part that created this dialog.
      The name is used by KexiMainWindow to set/reset icon for this dialog. */
@@ -124,10 +124,11 @@ public:
     /*! \return current view mode for this dialog. */
     Kexi::ViewMode currentViewMode() const;
 
-    void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
+    void setContextHelp(const QString &caption, const QString &text, const QString &iconName);
 
     //! \return true if the window is attached within the main window
-    bool isAttached() const {
+    bool isAttached() const
+    {
         return true;
     }
 
@@ -140,7 +141,7 @@ public:
 
     /*! \return a pointer to view that has recently set dirty flag.
      This value is cleared when dirty flag is set to false (i.e. upon saving changes). */
-    KexiView* viewThatRecentlySetDirtyFlag() const;
+    KexiView *viewThatRecentlySetDirtyFlag() const;
 
     /*! \return true, if this dialog's data were never saved.
      If it's true we're usually try to ask a user if the dialog's
@@ -154,9 +155,9 @@ public:
      or NULL if there is no view set (or the view has no set assigned). */
     KoProperty::Set *propertySet();
 
-    KexiDB::SchemaData* schemaData() const;
+    KexiDB::SchemaData *schemaData() const;
 
-    void setSchemaData(KexiDB::SchemaData* schemaData);
+    void setSchemaData(KexiDB::SchemaData *schemaData);
 
     //! Sets 'owned' property for schema data.
     //! If true, the window will delete the schema data before destruction.
@@ -238,7 +239,7 @@ Q_SIGNALS:
 
     /*! Emitted to inform the world that 'dirty' flag changes.
      Activated by KexiView::setDirty(). */
-    void dirtyChanged(KexiWindow*);
+    void dirtyChanged(KexiWindow *);
 
 protected Q_SLOTS:
     /*!  Sets 'dirty' flag on every dialog's view. */
@@ -253,8 +254,8 @@ protected Q_SLOTS:
 
 protected:
     //! Used by KexiPart::Part
-    KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes, KexiPart::Part& part,
-               KexiPart::Item& item);
+    KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes, KexiPart::Part &part,
+               KexiPart::Item &item);
 
     //! Used by KexiInternalPart
     KexiWindow();
@@ -263,12 +264,12 @@ protected:
      like switchToViewMode( int newViewMode ), but passed \a staticObjectArgs.
      Only used for parts of class KexiPart::StaticPart. */
     tristate switchToViewMode(Kexi::ViewMode newViewMode,
-                              QMap<QString, QVariant>* staticObjectArgs,
-                              bool& proposeOpeningInTextViewModeBecauseOfProblems);
+                              QMap<QString, QVariant> *staticObjectArgs,
+                              bool &proposeOpeningInTextViewModeBecauseOfProblems);
 
     void registerWindow();
 
-    virtual void closeEvent(QCloseEvent * e);
+    virtual void closeEvent(QCloseEvent *e);
 
     //! \internal
     void addView(KexiView *view, Kexi::ViewMode mode);
@@ -280,7 +281,7 @@ protected:
     virtual bool eventFilter(QObject *obj, QEvent *e);
 
     //! Used by \a view to inform the dialog about changing state of the "dirty" flag.
-    void dirtyChanged(KexiView* view);
+    void dirtyChanged(KexiView *view);
 
     bool isDesignModePreloadedForTextModeHackUsed(Kexi::ViewMode newViewMode) const;
 
@@ -289,11 +290,11 @@ protected:
     Kexi::ViewMode creatingViewsMode() const;
 
     /*! Sets temporary data shared between views. */
-    void setData(KexiWindowData* data);
+    void setData(KexiWindowData *data);
 
     //! Used by KexiView
-    QVariant internalPropertyValue(const QByteArray& name,
-                                   const QVariant& defaultValue = QVariant()) const;
+    QVariant internalPropertyValue(const QByteArray &name,
+                                   const QVariant &defaultValue = QVariant()) const;
 
 private Q_SLOTS:
     /*! Helper, calls KexiMainWindowIface::switchToViewMode() which in turn calls KexiWindow::switchToViewMode()

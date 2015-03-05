@@ -19,9 +19,8 @@
 #ifndef __KIS_WRAPPED_LINE_ITERATOR_BASE_H
 #define __KIS_WRAPPED_LINE_ITERATOR_BASE_H
 
-
 template <class IteratorStrategy, class BaseClass>
-    class KisWrappedLineIteratorBase : public BaseClass
+class KisWrappedLineIteratorBase : public BaseClass
 {
 public:
     KisWrappedLineIteratorBase(KisDataManager *dataManager,
@@ -35,12 +34,14 @@ public:
         m_iterators.resize(4);
         for (int i = 0; i < 4; i++) {
             QRect rc = m_splitRect[i];
-            if (rc.isEmpty()) continue;
+            if (rc.isEmpty()) {
+                continue;
+            }
 
             m_iterators[i] = m_strategy.createIterator(dataManager,
-                                                       rc,
-                                                       offsetX, offsetY,
-                                                       writable);
+                             rc,
+                             offsetX, offsetY,
+                             writable);
         }
         m_strategy.completeInitialization(&m_iterators, &m_splitRect);
         m_iterationAreaSize =
@@ -49,7 +50,8 @@ public:
         m_currentIterator = m_strategy.leftColumnIterator();
     }
 
-    bool nextPixel() {
+    bool nextPixel()
+    {
         int result = m_currentIterator->nextPixel();
         if (!result) {
             result = trySwitchColumn();
@@ -59,7 +61,8 @@ public:
         return m_currentPos.rx() < m_iterationAreaSize.width();
     }
 
-    bool nextPixels(qint32 n) {
+    bool nextPixels(qint32 n)
+    {
         int result = m_currentIterator->nextPixels(n);
         if (!result) {
             result = trySwitchColumn();
@@ -69,7 +72,8 @@ public:
         return m_currentPos.rx() < m_iterationAreaSize.width();
     }
 
-    void nextRow() {
+    void nextRow()
+    {
         if (!m_strategy.trySwitchIteratorStripe()) {
             m_strategy.iteratorsToNextRow();
         }
@@ -79,57 +83,68 @@ public:
         m_currentPos.ry()++;
     }
 
-    void nextColumn() {
+    void nextColumn()
+    {
         nextRow();
     }
 
-    const quint8* oldRawData() const {
+    const quint8 *oldRawData() const
+    {
         return m_currentIterator->oldRawData();
     }
 
-    const quint8* rawDataConst() const {
+    const quint8 *rawDataConst() const
+    {
         return m_currentIterator->rawDataConst();
     }
 
-    quint8* rawData() {
+    quint8 *rawData()
+    {
         return m_currentIterator->rawData();
     }
 
-    qint32 nConseqPixels() const {
+    qint32 nConseqPixels() const
+    {
         qint32 iteratorChunk =
             m_currentIterator->nConseqPixels();
         return qMin(iteratorChunk,
                     m_iterationAreaSize.width() - m_currentPos.x());
     }
 
-    qint32 x() const {
+    qint32 x() const
+    {
         return (m_splitRect.originalRect().topLeft() +
                 m_strategy.columnRowToXY(m_currentPos)).x();
     }
 
-    qint32 y() const {
+    qint32 y() const
+    {
         return (m_splitRect.originalRect().topLeft() +
                 m_strategy.columnRowToXY(m_currentPos)).y();
     }
 
-    void resetPixelPos() {
+    void resetPixelPos()
+    {
         qCritical() << "CRITICAL: resetPixelPos() is not implemented";
     }
 
-    void resetRowPos() {
+    void resetRowPos()
+    {
         qCritical() << "CRITICAL: resetRowPos() is not implemented";
     }
 
-    void resetColumnPos() {
+    void resetColumnPos()
+    {
         resetRowPos();
     }
 
 private:
-    bool trySwitchColumn() {
+    bool trySwitchColumn()
+    {
         int result = true;
 
         if (m_currentIterator == m_strategy.leftColumnIterator() &&
-            m_strategy.rightColumnIterator()) {
+                m_strategy.rightColumnIterator()) {
 
             m_currentIterator = m_strategy.rightColumnIterator();
 

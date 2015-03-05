@@ -21,7 +21,8 @@
 
 #include <QObject>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Staff;
 class Chord;
@@ -41,7 +42,7 @@ public:
      * @param pitch the pitch of the new note
      * @param accidentals the accidentals of the new note
      */
-    Note(Chord* chord, Staff* staff, int pitch, int accidentals = 0);
+    Note(Chord *chord, Staff *staff, int pitch, int accidentals = 0);
 
     /**
      * Destructor.
@@ -51,12 +52,12 @@ public:
     /**
      * Returns the staff for this note.
      */
-    Staff* staff();
+    Staff *staff();
 
-    void setStaff(Staff* staff);
+    void setStaff(Staff *staff);
 
-    Chord* chord();
-    
+    Chord *chord();
+
     /**
      * Returns the pitch for this note.
      */
@@ -76,7 +77,7 @@ public:
     void setStartTie(bool startTie);
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

@@ -28,12 +28,11 @@
 
 // ------------------------------------------------------------------
 
-
 QpFormulaStack::QpFormulaStack()
-        : cIdx(-1)
-        , cMax(3)
+    : cIdx(-1)
+    , cMax(3)
 {
-    cStack = new char*[cMax];
+    cStack = new char *[cMax];
 }
 
 QpFormulaStack::~QpFormulaStack()
@@ -45,24 +44,32 @@ QpFormulaStack::~QpFormulaStack()
 }
 
 void
-QpFormulaStack::bracket(const char* pBefore, const char* pAfter)
+QpFormulaStack::bracket(const char *pBefore, const char *pAfter)
 {
     if (cIdx >= 0) {
         int lLen = strlen(cStack[cIdx]) + 1;
 
-        if (pBefore) lLen += strlen(pBefore);
+        if (pBefore) {
+            lLen += strlen(pBefore);
+        }
 
-        if (pAfter) lLen += strlen(pAfter);
+        if (pAfter) {
+            lLen += strlen(pAfter);
+        }
 
-        char* lNew = new char[ lLen ];
+        char *lNew = new char[ lLen ];
 
         lNew[0] = '\0';
 
-        if (pBefore) strcpy(lNew, pBefore);
+        if (pBefore) {
+            strcpy(lNew, pBefore);
+        }
 
         strcat(lNew, cStack[cIdx]);
 
-        if (pAfter) strcat(lNew, pAfter);
+        if (pAfter) {
+            strcat(lNew, pAfter);
+        }
 
         delete [] cStack[cIdx];
         cStack[cIdx] = lNew;
@@ -70,7 +77,7 @@ QpFormulaStack::bracket(const char* pBefore, const char* pAfter)
 }
 
 void
-QpFormulaStack::join(int pCnt, const char* pSeparator)
+QpFormulaStack::join(int pCnt, const char *pSeparator)
 {
     int lFirstIdx = 1 - pCnt;  // really 0 - pCnt +1
 
@@ -81,7 +88,7 @@ QpFormulaStack::join(int pCnt, const char* pSeparator)
             lLen += strlen(cStack[cIdx + lIdx]);
         }
 
-        char* lNew = new char[lLen];
+        char *lNew = new char[lLen];
 
         lNew[0] = '\0';
 
@@ -109,14 +116,14 @@ QpFormulaStack::pop(int pCnt)
 }
 
 void
-QpFormulaStack::push(const char* pString)
+QpFormulaStack::push(const char *pString)
 {
     ++cIdx;
 
     if (cIdx == cMax) {
         cMax += 10;
 
-        char** cTemp = new char*[cMax];
+        char **cTemp = new char *[cMax];
 
         for (int lIdx = 0; lIdx < cIdx; ++lIdx) {
             cTemp[lIdx] = cStack[lIdx];
@@ -126,19 +133,19 @@ QpFormulaStack::push(const char* pString)
         cStack = cTemp;
     }
 
-    cStack[cIdx] = strcpy(new char[strlen(pString)+1], pString);
+    cStack[cIdx] = strcpy(new char[strlen(pString) + 1], pString);
 }
 
-const char*
+const char *
 QpFormulaStack::top()
 {
     return (cIdx >= 0 ? cStack[cIdx] : 0);
 }
 
-const char*
+const char *
 QpFormulaStack::operator [](int pIdx)
 {
-    char* lResult = 0;
+    char *lResult = 0;
 
     if (pIdx <= 0 && (cIdx + pIdx) >= 0) {
         lResult = cStack[cIdx + pIdx];
@@ -304,18 +311,18 @@ static const QpFormulaConv gConv[] = {
     {0,   0,                             0}
 };
 
-QpFormula::QpFormula(QpRecFormulaCell& pCell, QpTableNames& pTable)
-        : cArgSeparator(strcpy(new char[2], ","))
-        , cCell(pCell)
-        , cFormula((unsigned char*)pCell.formula(), (unsigned int)pCell.formulaLen())
-        , cFormulaRefs((unsigned char*)&pCell.formula()[pCell.formulaReferences()]
-                       , (unsigned)(pCell.formulaLen() - pCell.formulaReferences())
-                      )
-        , cReplaceFunc(0)
-        , cFormulaStart(strcpy(new char[2], "+"))
-        , cIdx(0)
-        , cDropLeadingAt(0)
-        , cTable(pTable)
+QpFormula::QpFormula(QpRecFormulaCell &pCell, QpTableNames &pTable)
+    : cArgSeparator(strcpy(new char[2], ","))
+    , cCell(pCell)
+    , cFormula((unsigned char *)pCell.formula(), (unsigned int)pCell.formulaLen())
+    , cFormulaRefs((unsigned char *) & pCell.formula()[pCell.formulaReferences()]
+                   , (unsigned)(pCell.formulaLen() - pCell.formulaReferences())
+                  )
+    , cReplaceFunc(0)
+    , cFormulaStart(strcpy(new char[2], "+"))
+    , cIdx(0)
+    , cDropLeadingAt(0)
+    , cTable(pTable)
 {
 }
 
@@ -331,13 +338,13 @@ QpFormula::~QpFormula()
 }
 
 void
-QpFormula::argSeparator(const char* pArg)
+QpFormula::argSeparator(const char *pArg)
 {
     delete [] cArgSeparator;
-    cArgSeparator = strcpy(new char[strlen(pArg)+1], pArg);
+    cArgSeparator = strcpy(new char[strlen(pArg) + 1], pArg);
 }
 
-char*
+char *
 QpFormula::formula()
 {
     QP_UINT8 lOperand;
@@ -380,31 +387,31 @@ QpFormula::formula()
     cStack.join(2, "");
 
     QP_DEBUG("Formula = " << cStack.top() << endl);
-    return strcpy(new char[strlen(cStack.top())+1], cStack.top());
+    return strcpy(new char[strlen(cStack.top()) + 1], cStack.top());
 }
 
 void
-QpFormula::formulaStart(const char* pFirstChar)
+QpFormula::formulaStart(const char *pFirstChar)
 {
     delete [] cFormulaStart;
-    cFormulaStart = strcpy(new char[strlen(pFirstChar)+1], pFirstChar);
+    cFormulaStart = strcpy(new char[strlen(pFirstChar) + 1], pFirstChar);
 }
 
 void
-QpFormula::binaryOperandReal(const char* pOper)
+QpFormula::binaryOperandReal(const char *pOper)
 {
     cStack.join(2, pOper);
 }
 
 void
-QpFormula::absKludgeReal(const char*/*pOper*/)
+QpFormula::absKludgeReal(const char */*pOper*/)
 {
     // kspread doesn't (yet) have the abs function so do it ourselves
     // using 'if( (arg) < 0, -(arg), arg )'
 
     cStack.bracket();
 
-    char* lArg = strcpy(new char[strlen(cStack.top())+1], cStack.top());
+    char *lArg = strcpy(new char[strlen(cStack.top()) + 1], cStack.top());
 
     cStack.bracket("", "<0");
 
@@ -421,53 +428,53 @@ QpFormula::absKludgeReal(const char*/*pOper*/)
 }
 
 void
-QpFormula::func0Real(const char* pFunc)
+QpFormula::func0Real(const char *pFunc)
 {
-    const char* lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
+    const char *lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
 
     cStack.push(lFunc);
 }
 
 void
-QpFormula::func1Real(const char* pFunc)
+QpFormula::func1Real(const char *pFunc)
 {
-    const char* lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
+    const char *lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
 
     cStack.bracket(lFunc);
 }
 
 void
-QpFormula::func2Real(const char* pFunc)
+QpFormula::func2Real(const char *pFunc)
 {
-    const char* lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
+    const char *lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
 
     cStack.join(2, cArgSeparator);
     cStack.bracket(lFunc);
 }
 
 void
-QpFormula::func3Real(const char* pFunc)
+QpFormula::func3Real(const char *pFunc)
 {
-    const char* lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
+    const char *lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
 
     cStack.join(3, cArgSeparator);
     cStack.bracket(lFunc);
 }
 
 void
-QpFormula::func4Real(const char* pFunc)
+QpFormula::func4Real(const char *pFunc)
 {
-    const char* lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
+    const char *lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
 
     cStack.join(4, cArgSeparator);
     cStack.bracket(lFunc);
 }
 
 void
-QpFormula::funcVReal(const char* pFunc)
+QpFormula::funcVReal(const char *pFunc)
 {
     QP_INT8     lCnt;
-    const char* lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
+    const char *lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
 
     cFormula >> lCnt;
 
@@ -476,7 +483,7 @@ QpFormula::funcVReal(const char* pFunc)
 }
 
 void
-QpFormula::floatFuncReal(const char*)
+QpFormula::floatFuncReal(const char *)
 {
     QP_INT64   lFloat;
     std::ostrstream lNum;
@@ -491,7 +498,7 @@ QpFormula::floatFuncReal(const char*)
 }
 
 void
-QpFormula::intFuncReal(const char*)
+QpFormula::intFuncReal(const char *)
 {
     QP_INT16 lInt;
     std::ostrstream lNum;
@@ -512,7 +519,7 @@ QpFormula::dropLeadingAt(int pBool)
 }
 
 void
-QpFormula::refReal(const char*)
+QpFormula::refReal(const char *)
 {
     char lRef[100];  // ??? hard coded length
 
@@ -522,19 +529,19 @@ QpFormula::refReal(const char*)
 }
 
 void
-QpFormula::replaceFunc(QpFormulaConv* pFuncEntry)
+QpFormula::replaceFunc(QpFormulaConv *pFuncEntry)
 {
     cReplaceFunc = pFuncEntry;
 }
 
 void
-QpFormula::stringFuncReal(const char*)
+QpFormula::stringFuncReal(const char *)
 {
-    char* lString = 0;
+    char *lString = 0;
 
     cFormula >> lString;
 
-    char* lQuoteString = new char[strlen(lString)+3];
+    char *lQuoteString = new char[strlen(lString) + 3];
 
     lQuoteString[0] = '"';
     strcpy(&lQuoteString[1], lString);
@@ -547,9 +554,8 @@ QpFormula::stringFuncReal(const char*)
 }
 
 void
-QpFormula::unaryOperandReal(const char* pOper)
+QpFormula::unaryOperandReal(const char *pOper)
 {
     cStack.bracket(pOper, "");
 }
-
 

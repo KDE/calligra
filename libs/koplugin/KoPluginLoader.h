@@ -80,11 +80,11 @@ public:
          * /endcode
          * For most cases you can pass the string "calligra" into this variable.
          */
-        const char * group;
+        const char *group;
         /// This contains the variable name for the list of plugins (by library name) the user wants to load
-        const char * whiteList;
+        const char *whiteList;
         /// This contains the variable name for the list of plugins (by library name) that will not be loaded
-        const char * blacklist;
+        const char *blacklist;
         /// A registry can state it wants to load a default set of plugins instead of all plugins
         /// when the application starts the first time.  Append all such plugin (library) names to this list.
         QStringList defaults;
@@ -96,7 +96,7 @@ public:
      * Return an instance of the KoPluginLoader
      * Creates an instance if that has never happened before and returns the singleton instance.
      */
-    static KoPluginLoader * instance();
+    static KoPluginLoader *instance();
 
     /**
      * Load all plugins that conform to the versiontype and versionstring,
@@ -112,16 +112,16 @@ public:
      * @param owner an optional parent object for the plugins
      * @return a list of services (by library name) that were not know in the config
      */
-    void load(const QString & serviceType, const QString & versionString = QString(), const PluginsConfig &config = PluginsConfig(), QObject *owner = 0);
+    void load(const QString &serviceType, const QString &versionString = QString(), const PluginsConfig &config = PluginsConfig(), QObject *owner = 0);
 
 private:
     KoPluginLoader();
-    KoPluginLoader(const KoPluginLoader&);
-    KoPluginLoader operator=(const KoPluginLoader&);
+    KoPluginLoader(const KoPluginLoader &);
+    KoPluginLoader operator=(const KoPluginLoader &);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KO_PLUGIN_LOADER_H

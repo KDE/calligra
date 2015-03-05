@@ -48,7 +48,7 @@ private:
     Q_DISABLE_COPY(KisDefaultBounds)
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 class KRITAIMAGE_EXPORT KisSelectionDefaultBounds : public KisDefaultBounds
@@ -63,7 +63,7 @@ private:
     Q_DISABLE_COPY(KisSelectionDefaultBounds)
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 class KRITAIMAGE_EXPORT KisSelectionEmptyBounds : public KisDefaultBounds

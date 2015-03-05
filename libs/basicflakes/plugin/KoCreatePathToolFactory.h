@@ -32,6 +32,6 @@ public:
     /// Destructor
     ~KoCreatePathToolFactory();
 
-    KoToolBase* createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 #endif

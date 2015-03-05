@@ -73,12 +73,12 @@ class Module : public KoScriptingModule
 {
     Q_OBJECT
 public:
-    explicit Module(QObject* parent = 0);
+    explicit Module(QObject *parent = 0);
     virtual ~Module();
 
-    KWDocument* kwDoc();
-    virtual KoDocument* doc();
-    QObject* findFrameSet(Words::TextFrameSetType type);
+    KWDocument *kwDoc();
+    virtual KoDocument *doc();
+    QObject *findFrameSet(Words::TextFrameSetType type);
 
 public Q_SLOTS:
 
@@ -97,7 +97,7 @@ public Q_SLOTS:
     *     print "width=%s height=%s" % (page.width(),page.height())
     * \endcode
     */
-    QObject* page(int pageNumber);
+    QObject *page(int pageNumber);
 
     /** Insert a new page and returns the new \a Page object.
     *
@@ -107,7 +107,7 @@ public Q_SLOTS:
     * the number afterPageNum+1. To append a new page use
     * insertPage( pageCount() ).
     */
-    QObject* insertPage(int afterPageNum);
+    QObject *insertPage(int afterPageNum);
     /** Remove the page with the pagenumber \p pageNumber . */
     void removePage(int pageNumber);
 
@@ -116,41 +116,47 @@ public Q_SLOTS:
     /** Return the amount of framesets this document holds. */
     int frameSetCount();
     /** Return the \a FrameSet object identified by the index frameSetNr. */
-    QObject* frameSet(int frameSetNr);
+    QObject *frameSet(int frameSetNr);
     /** Return the \a FrameSet object which has the name \p name . */
-    QObject* frameSetByName(const QString& name);
+    QObject *frameSetByName(const QString &name);
 
     /** Return the \a FrameSet that holds the headers for the odd pages */
-    QObject* oddPagesHeaderFrameSet() {
+    QObject *oddPagesHeaderFrameSet()
+    {
         return findFrameSet(Words::OddPagesHeaderTextFrameSet);
     }
     /** Return the \a FrameSet that holds the headers for the even pages */
-    QObject* evenPagesHeaderFrameSet() {
+    QObject *evenPagesHeaderFrameSet()
+    {
         return findFrameSet(Words::EvenPagesHeaderTextFrameSet);
     }
     /** Return the \a FrameSet that holds the footers for the odd pages */
-    QObject* oddPagesFooterFrameSet() {
+    QObject *oddPagesFooterFrameSet()
+    {
         return findFrameSet(Words::OddPagesFooterTextFrameSet);
     }
     /** Return the \a FrameSet that holds the footers for the even pages */
-    QObject* evenPagesFooterFrameSet() {
+    QObject *evenPagesFooterFrameSet()
+    {
         return findFrameSet(Words::EvenPagesFooterTextFrameSet);
     }
 
     /** Return the \a FrameSet that holds all the frames for the main text area */
-    QObject* mainFrameSet() {
+    QObject *mainFrameSet()
+    {
         return findFrameSet(Words::MainTextFrameSet);
     }
 
     /** Return any other \a FrameSet not managed by the auto-frame layout */
-    QObject* otherFrameSet() {
+    QObject *otherFrameSet()
+    {
         return findFrameSet(Words::OtherTextFrameSet);
     }
 
     /** Add and return a new \a FrameSet object for text handled with \a TextDocument . */
-    QObject* addTextFrameSet(const QString& framesetname);
+    QObject *addTextFrameSet(const QString &framesetname);
     /** Add and return a new \a FrameSet object. */
-    QObject* addFrameSet(const QString& framesetname);
+    QObject *addFrameSet(const QString &framesetname);
 
     /***** Frame *****/
 
@@ -161,32 +167,32 @@ public Q_SLOTS:
     /** Return the amount of frames this document holds. */
     int frameCount();
     /** Return a the \a Frame object identified by the index frameNr. */
-    QObject* frame(int frameNr);
+    QObject *frame(int frameNr);
 
     /***** Page Layout *****/
 
     /** Return the standard page layout. */
-    QObject* standardPageLayout();
+    QObject *standardPageLayout();
 
     /***** Style *****/
 
     /** Return the default paragraph \a ParagraphStyle that will always be present in each document. */
-    QObject* defaultParagraphStyle();
+    QObject *defaultParagraphStyle();
     /** Return the \a ParagraphStyle with the defined user-visible-name \p name . */
-    QObject* paragraphStyle(const QString& name);
+    QObject *paragraphStyle(const QString &name);
     /** Add and return a new \a ParagraphStyle object. */
-    QObject* addParagraphStyle(const QString& name);
+    QObject *addParagraphStyle(const QString &name);
 
     /** Return the \a CharacterStyle with the defined user-visible-name \p name . */
-    QObject* characterStyle(const QString& name);
+    QObject *characterStyle(const QString &name);
     /** Add and return a new \a CharacterStyle object. */
-    QObject* addCharacterStyle(const QString& name);
+    QObject *addCharacterStyle(const QString &name);
 
     /***** Active selection *****/
 
     /** Return a \a Tool object that provides access to functionality
     like handling for example current/active selections. */
-    QObject* tool();
+    QObject *tool();
 
 private:
     QWeakPointer<KWDocument> m_doc;

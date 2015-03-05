@@ -53,10 +53,10 @@ class KexiStartupDialog::Private
 {
 public:
     Private()
-            : pageTemplates(0), pageOpenExisting(0)
-            , templPageWidgetItem_BlankDatabase(0)
-            , templPageWidgetItem_ImportExisting(0)
-            , templPageWidgetItem_CreateFromTemplate(0)
+        : pageTemplates(0), pageOpenExisting(0)
+        , templPageWidgetItem_BlankDatabase(0)
+        , templPageWidgetItem_ImportExisting(0)
+        , templPageWidgetItem_CreateFromTemplate(0)
     {
         result = -1;
         kexi_sqlite_icon = Kexi::defaultFileBasedDriverIcon();
@@ -65,7 +65,8 @@ public:
         templatesWidget = 0;
         templatesWidget_IconListView = 0;
     }
-    ~Private() {
+    ~Private()
+    {
     }
 
     int dialogType, dialogOptions;
@@ -74,11 +75,11 @@ public:
 
     // subpages within "templates" page
     KPageWidgetItem *templPageWidgetItem_BlankDatabase,
-    *templPageWidgetItem_ImportExisting, *templPageWidgetItem_CreateFromTemplate;
+                    *templPageWidgetItem_ImportExisting, *templPageWidgetItem_CreateFromTemplate;
     QCheckBox *chkDoNotShow;
 
     //widgets for template tab:
-    KPageWidget* templatesWidget;
+    KPageWidget *templatesWidget;
     QListView *templatesWidget_IconListView;//helper
 
     int result;
@@ -89,7 +90,7 @@ public:
     KexiDBConnectionSet *connSet;
     KexiFileWidget *openExistingFileWidget; //! embedded file widget
     KexiConnectionSelectorWidget *openExistingConnWidget;
-    KexiDB::ConnectionData* selectedExistingConnection; //! helper for returning selected connection
+    KexiDB::ConnectionData *selectedExistingConnection; //! helper for returning selected connection
 
     //! true if the dialog contain single page, not tabs
     bool singlePage;
@@ -97,10 +98,11 @@ public:
 
 static QString captionForDialogType(int type)
 {
-    if (type == KexiStartupDialog::Templates)
+    if (type == KexiStartupDialog::Templates) {
         return i18n("Create Project");
-    else if (type == KexiStartupDialog::OpenExisting)
+    } else if (type == KexiStartupDialog::OpenExisting) {
         return i18n("Open Existing Project");
+    }
 
     return i18n("Choose Project");
 }
@@ -109,10 +111,10 @@ static QString captionForDialogType(int type)
 
 KexiStartupDialog::KexiStartupDialog(
     int dialogType, int dialogOptions,
-    KexiDBConnectionSet& connSet,
+    KexiDBConnectionSet &connSet,
     QWidget *parent)
-        : KPageDialog(parent)
-        , d(new Private())
+    : KPageDialog(parent)
+    , d(new Private())
 {
     d->singlePage = dialogType == KexiStartupDialog::Templates
                     || dialogType == KexiStartupDialog::OpenExisting;
@@ -135,15 +137,18 @@ KexiStartupDialog::KexiStartupDialog(
         setupPageTemplates();
         //d->pageTemplatesID = id++;
         d->templatesWidget->setFocus();
-        if (!firstPage)
+        if (!firstPage) {
             firstPage = d->pageTemplates;
+        }
     }
     if (d->dialogType & OpenExisting) {
         setupPageOpenExisting();
-        if (d->singlePage)
+        if (d->singlePage) {
             d->openExistingConnWidget->setFocus();
-        if (!firstPage)
+        }
+        if (!firstPage) {
             firstPage = d->pageOpenExisting;
+        }
     }
 
     if (!d->singlePage) {
@@ -178,8 +183,9 @@ int KexiStartupDialog::result() const
 
 void KexiStartupDialog::done(int r)
 {
-    if (d->result != -1) //already done!
+    if (d->result != -1) { //already done!
         return;
+    }
 
 // kDebug() << r;
 // updateSelectedTemplateKeyInfo();
@@ -191,29 +197,34 @@ void KexiStartupDialog::done(int r)
 
         if (currentPageWidgetItem == d->pageTemplates) {
             KPageWidgetItem *currenTemplatesPageWidgetItem = d->templatesWidget->currentPage();
-            if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase)
+            if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase) {
                 d->result = CreateBlankResult;
+            }
 #ifdef KEXI_PROJECT_TEMPLATES
-            else if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_CreateFromTemplate)
+            else if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_CreateFromTemplate) {
                 d->result = CreateFromTemplateResult;
+            }
 #endif
-            else if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting)
+            else if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting) {
                 d->result = ImportResult;
+            }
         } else if (currentPageWidgetItem == d->pageOpenExisting) {
             // return file or connection:
             if (d->openExistingConnWidget->selectedConnectionType()
                     == KexiConnectionSelectorWidget::FileBased) {
-                if (!d->openExistingFileWidget->checkSelectedFile())
+                if (!d->openExistingFileWidget->checkSelectedFile()) {
                     return;
+                }
                 d->openExistingFileWidget->accept();
                 d->selectedExistingConnection = 0;
             } else {
                 d->selectedExistingConnection
-                = d->openExistingConnWidget->selectedConnectionData();
+                    = d->openExistingConnWidget->selectedConnectionData();
             }
             d->result = OpenExistingResult;
-        } else
+        } else {
             return;
+        }
     }
 
     //save settings
@@ -222,8 +233,9 @@ void KexiStartupDialog::done(int r)
         group.writeEntry("OpenExistingType",
                          (d->openExistingConnWidget->selectedConnectionType() == KexiConnectionSelectorWidget::FileBased)
                          ? "File" : "Server");
-    if (d->chkDoNotShow)
+    if (d->chkDoNotShow) {
         group.writeEntry("ShowStartupDialog", !d->chkDoNotShow->isChecked());
+    }
 
     group.sync();
 
@@ -247,9 +259,10 @@ void KexiStartupDialog::setupPageTemplates()
     d->templatesWidget->setObjectName("templatesWidget");
     d->templatesWidget->setFaceType(KPageWidget::List);
     {
-        d->templatesWidget_IconListView = KexiUtils::findFirstChild<QListView*>(d->templatesWidget, "QListView");
-        if (d->templatesWidget_IconListView)
+        d->templatesWidget_IconListView = KexiUtils::findFirstChild<QListView *>(d->templatesWidget, "QListView");
+        if (d->templatesWidget_IconListView) {
             d->templatesWidget_IconListView->installEventFilter(this);
+        }
     }
     lyr->addWidget(d->templatesWidget);
     connect(d->templatesWidget, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
@@ -301,15 +314,15 @@ void KexiStartupDialog::setupPageTemplates()
     tmplyr->addStretch(1);
 }
 
-void KexiStartupDialog::slotCurrentPageChanged(KPageWidgetItem* current,
-        KPageWidgetItem* before)
+void KexiStartupDialog::slotCurrentPageChanged(KPageWidgetItem *current,
+        KPageWidgetItem *before)
 {
     Q_UNUSED(before);
     updateDialogOKButton(current);
 }
 
-void KexiStartupDialog::slotCurrentTemplatesubpageChanged(KPageWidgetItem* current,
-        KPageWidgetItem* before)
+void KexiStartupDialog::slotCurrentTemplatesubpageChanged(KPageWidgetItem *current,
+        KPageWidgetItem *before)
 {
     Q_UNUSED(before);
     if (current == d->templPageWidgetItem_BlankDatabase) {//blank
@@ -327,8 +340,9 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
 {
     if (!pageWidgetItem) {
         pageWidgetItem = currentPage();
-        if (!pageWidgetItem)
+        if (!pageWidgetItem) {
             return;
+        }
     }
     bool enable = true;
     if (pageWidgetItem == d->pageTemplates) {
@@ -371,9 +385,9 @@ void KexiStartupDialog::setupPageOpenExisting()
     d->openExistingConnWidget->hideConnectonIcon();
     lyr->addWidget(d->openExistingConnWidget);
     KConfigGroup group = KGlobal::config()->group("Startup");
-    if (group.readEntry("OpenExistingType", "File") == "File")
+    if (group.readEntry("OpenExistingType", "File") == "File") {
         d->openExistingConnWidget->showSimpleConn();
-    else {
+    } else {
         d->openExistingConnWidget->showSimpleConn();
         d->openExistingConnWidget->showAdvancedConn();
     }
@@ -389,8 +403,9 @@ void KexiStartupDialog::setupPageOpenExisting()
 
 void KexiStartupDialog::connectionItemForOpenExistingExecuted(ConnectionDataLVItem *item)
 {
-    if (!item)
+    if (!item) {
         return;
+    }
     accept();
 }
 
@@ -418,18 +433,20 @@ void KexiStartupDialog::showAdvancedConnForOpenExisting()
 
 QString KexiStartupDialog::selectedFileName() const
 {
-    if (d->result == OpenExistingResult)
+    if (d->result == OpenExistingResult) {
         return d->openExistingFileWidget->highlightedFile();
+    }
 #ifdef KEXI_PROJECT_TEMPLATES
     /*! @todo
     else if (d->result == CreateFromTemplateResult && d->viewTemplates)
         return d->viewTemplates->selectedFileName();*/
 #endif
-    else
+    else {
         return QString();
+    }
 }
 
-KexiDB::ConnectionData* KexiStartupDialog::selectedExistingConnection() const
+KexiDB::ConnectionData *KexiStartupDialog::selectedExistingConnection() const
 {
     return d->selectedExistingConnection;
 }
@@ -440,7 +457,7 @@ void KexiStartupDialog::existingFileHighlighted()
     updateDialogOKButton(0);
 }
 
-KexiProjectData* KexiStartupDialog::selectedProjectData() const
+KexiProjectData *KexiStartupDialog::selectedProjectData() const
 {
     return 0;
 }
@@ -450,22 +467,19 @@ bool KexiStartupDialog::eventFilter(QObject *o, QEvent *e)
 {
     if (o == d->templatesWidget_IconListView && d->templatesWidget_IconListView) {
         bool tryAcept = false;
-        if (   e->type() == QEvent::KeyPress
-            && (   static_cast<QKeyEvent*>(e)->key() == Qt::Key_Enter
-                || static_cast<QKeyEvent*>(e)->key() == Qt::Key_Return)
-           )
-        {
+        if (e->type() == QEvent::KeyPress
+                && (static_cast<QKeyEvent *>(e)->key() == Qt::Key_Enter
+                    || static_cast<QKeyEvent *>(e)->key() == Qt::Key_Return)
+           ) {
             tryAcept = true;
-        }
-        else if (e->type() == QEvent::MouseButtonDblClick) {
+        } else if (e->type() == QEvent::MouseButtonDblClick) {
             tryAcept = true;
         }
 
         if (tryAcept) {
             KPageWidgetItem *currentTemplatesPageWidgetItem = d->templatesWidget->currentPage();
-            if (   currentTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
-                || currentTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting)
-            {
+            if (currentTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
+                    || currentTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting) {
                 accept();
             }
         }
@@ -473,10 +487,11 @@ bool KexiStartupDialog::eventFilter(QObject *o, QEvent *e)
     return KPageDialog::eventFilter(o, e);
 }
 
-void KexiStartupDialog::templateSelected(const QString& fileName)
+void KexiStartupDialog::templateSelected(const QString &fileName)
 {
-    if (!fileName.isEmpty())
+    if (!fileName.isEmpty()) {
         accept();
+    }
 }
 
 #ifdef KEXI_PROJECT_TEMPLATES

@@ -38,7 +38,8 @@ class BorderColorCommand : public AbstractRegionCommand
 {
 public:
     BorderColorCommand();
-    void setColor(const QColor& color) {
+    void setColor(const QColor &color)
+    {
         m_color = color;
     }
 

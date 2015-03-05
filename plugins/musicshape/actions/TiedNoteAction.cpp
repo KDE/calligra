@@ -42,18 +42,22 @@
 
 using namespace MusicCore;
 
-TiedNoteAction::TiedNoteAction(SimpleEntryTool* tool)
+TiedNoteAction::TiedNoteAction(SimpleEntryTool *tool)
     : AbstractNoteMusicAction(koIcon("music-tiednote"), i18n("Tied notes"), tool)
 {
 }
 
-void TiedNoteAction::mousePress(Chord* chord, Note* note, qreal distance, const QPointF& pos)
+void TiedNoteAction::mousePress(Chord *chord, Note *note, qreal distance, const QPointF &pos)
 {
-    Q_UNUSED( chord );
-    Q_UNUSED( pos );
-    
-    if (!note) return;
-    if (distance > 15) return; // bah, magic numbers are ugly....
-    
+    Q_UNUSED(chord);
+    Q_UNUSED(pos);
+
+    if (!note) {
+        return;
+    }
+    if (distance > 15) {
+        return;    // bah, magic numbers are ugly....
+    }
+
     m_tool->addCommand(new ToggleTiedNoteCommand(m_tool->shape(), note));
 }

@@ -37,7 +37,7 @@ public:
      * @param shadow the new shadow, the same for all given shapes
      * @param parent the parent command used for macro commands
      */
-    KoShapeShadowCommand(const QList<KoShape*> & shapes, KoShapeShadow *shadow, KUndo2Command *parent = 0);
+    KoShapeShadowCommand(const QList<KoShape *> &shapes, KoShapeShadow *shadow, KUndo2Command *parent = 0);
 
     /**
      * Command to set new shape shadows.
@@ -45,7 +45,7 @@ public:
      * @param shadows the new shadows, one for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeShadowCommand(const QList<KoShape*> &shapes, const QList<KoShapeShadow*> &shadows, KUndo2Command *parent = 0);
+    KoShapeShadowCommand(const QList<KoShape *> &shapes, const QList<KoShapeShadow *> &shadows, KUndo2Command *parent = 0);
 
     /**
      * Command to set a new shape shadow.
@@ -62,7 +62,7 @@ public:
     void undo();
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOSHAPESHADOWCOMMAND_H

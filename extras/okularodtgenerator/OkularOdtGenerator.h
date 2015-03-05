@@ -29,26 +29,26 @@ class KWDocument;
 class OkularOdtGenerator : public Okular::Generator
 {
 public:
-    OkularOdtGenerator( QObject *parent, const QVariantList &args );
+    OkularOdtGenerator(QObject *parent, const QVariantList &args);
     ~OkularOdtGenerator();
 
-    bool loadDocument( const QString &fileName, QVector<Okular::Page*> &pages );
+    bool loadDocument(const QString &fileName, QVector<Okular::Page *> &pages);
 
     bool canGeneratePixmap() const;
-    void generatePixmap( Okular::PixmapRequest *request );
+    void generatePixmap(Okular::PixmapRequest *request);
 
 #if OKULAR_IS_VERSION(0, 20, 60)
-    Okular::DocumentInfo generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const;
+    Okular::DocumentInfo generateDocumentInfo(const QSet<Okular::DocumentInfo::Key> &keys) const;
 #else
-    const Okular::DocumentInfo* generateDocumentInfo();
+    const Okular::DocumentInfo *generateDocumentInfo();
 #endif
-    const Okular::DocumentSynopsis* generateDocumentSynopsis();
+    const Okular::DocumentSynopsis *generateDocumentSynopsis();
 
 protected:
     bool doCloseDocument();
 
 private:
-    KWDocument* m_doc;
+    KWDocument *m_doc;
 
     Okular::DocumentInfo m_documentInfo;
     Okular::DocumentSynopsis m_documentSynopsis;

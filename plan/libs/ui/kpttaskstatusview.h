@@ -35,7 +35,6 @@
 
 #include "KDChartBarDiagram"
 
-
 class QItemSelection;
 
 class KoDocument;
@@ -44,9 +43,9 @@ class PrintingHeaderFooter;
 
 namespace KDChart
 {
-    class CartesianCoordinatePlane;
-    class CartesianAxis;
-    class Legend;
+class CartesianCoordinatePlane;
+class CartesianAxis;
+class Legend;
 };
 
 namespace KPlato
@@ -59,7 +58,7 @@ class TaskStatusItemModel;
 class NodeItemModel;
 class PerformanceStatusBase;
 
-typedef QList<Node*> NodeList;
+typedef QList<Node *> NodeList;
 
 class KPLATOUI_EXPORT TaskStatusTreeView : public DoubleTreeViewBase
 {
@@ -72,57 +71,68 @@ public:
     TaskStatusItemModel *model() const;
 
     Project *project() const;
-    void setProject( Project *project );
+    void setProject(Project *project);
 
-    int defaultWeekday() const { return Qt::Friday; }
+    int defaultWeekday() const
+    {
+        return Qt::Friday;
+    }
     int weekday() const;
-    void setWeekday( int day );
+    void setWeekday(int day);
 
-    int defaultPeriod() const { return 7; }
+    int defaultPeriod() const
+    {
+        return 7;
+    }
     int period() const;
-    void setPeriod( int days );
+    void setPeriod(int days);
 
     int defaultPeriodType() const;
     int periodType() const;
-    void setPeriodType( int type );
+    void setPeriodType(int type);
 
 protected:
     void dragMoveEvent(QDragMoveEvent *event);
 };
-
 
 class KPLATOUI_EXPORT TaskStatusView : public ViewBase
 {
     Q_OBJECT
 public:
     TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent);
-    
-    void setupGui();
-    virtual void setProject( Project *project );
-    Project *project() const { return m_view->project(); }
-    using ViewBase::draw;
-    virtual void draw( Project &project );
 
-    TaskStatusItemModel *model() const { return m_view->model(); }
-    
-    virtual void updateReadWrite( bool readwrite );
+    void setupGui();
+    virtual void setProject(Project *project);
+    Project *project() const
+    {
+        return m_view->project();
+    }
+    using ViewBase::draw;
+    virtual void draw(Project &project);
+
+    TaskStatusItemModel *model() const
+    {
+        return m_view->model();
+    }
+
+    virtual void updateReadWrite(bool readwrite);
     virtual Node *currentNode() const;
-    
+
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext(QDomElement &/*context*/) const;
 
     KoPrintJob *createPrintJob();
-    
+
 Q_SIGNALS:
     void openNode();
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
-    void setScheduleManager( ScheduleManager *sm );
+    void setScheduleManager(ScheduleManager *sm);
 
     virtual void slotRefreshView();
 
@@ -130,13 +140,13 @@ protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
-    void updateActionsEnabled( bool on );
+    void updateActionsEnabled(bool on);
 
 private Q_SLOTS:
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
-    void slotContextMenuRequested( Node *node, const QPoint& pos );
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
+    void slotContextMenuRequested(Node *node, const QPoint &pos);
     void slotSplitView();
-    
+
 private:
     Project *m_project;
     int m_id;
@@ -149,7 +159,7 @@ class TaskStatusViewSettingsPanel : public QWidget, public Ui::TaskStatusViewSet
 {
     Q_OBJECT
 public:
-    explicit TaskStatusViewSettingsPanel( TaskStatusTreeView *view, QWidget *parent = 0 );
+    explicit TaskStatusViewSettingsPanel(TaskStatusTreeView *view, QWidget *parent = 0);
 
 public Q_SLOTS:
     void slotOk();
@@ -166,12 +176,11 @@ class TaskStatusViewSettingsDialog : public SplitItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    explicit TaskStatusViewSettingsDialog( ViewBase *view, TaskStatusTreeView *treeview, QWidget *parent = 0 );
+    explicit TaskStatusViewSettingsDialog(ViewBase *view, TaskStatusTreeView *treeview, QWidget *parent = 0);
 
 };
 
-struct PerformanceChartInfo
-{
+struct PerformanceChartInfo {
     bool showBarChart;
     bool showLineChart;
     bool showTableView;
@@ -194,47 +203,84 @@ struct PerformanceChartInfo
     bool showSpiEffort;
     bool showCpiEffort;
 
-    bool effortShown() const {
-        return ( showBaseValues && showEffort ) || ( showIndices && ( showSpiEffort || showCpiEffort ) );
+    bool effortShown() const
+    {
+        return (showBaseValues && showEffort) || (showIndices && (showSpiEffort || showCpiEffort));
     }
-    bool costShown() const {
-        return ( showBaseValues && showCost ) || ( showIndices && ( showSpiCost || showCpiCost ) );
+    bool costShown() const
+    {
+        return (showBaseValues && showCost) || (showIndices && (showSpiCost || showCpiCost));
     }
-    bool bcwsCost() const { return showBaseValues && showCost && showBCWSCost; }
-    bool bcwpCost() const { return showBaseValues && showCost && showBCWPCost; }
-    bool acwpCost() const { return showBaseValues && showCost && showACWPCost; }
-    bool bcwsEffort() const { return showBaseValues && showEffort && showBCWSEffort; }
-    bool bcwpEffort() const { return showBaseValues && showEffort && showBCWPEffort; }
-    bool acwpEffort() const { return showBaseValues && showEffort && showACWPEffort; }
+    bool bcwsCost() const
+    {
+        return showBaseValues && showCost && showBCWSCost;
+    }
+    bool bcwpCost() const
+    {
+        return showBaseValues && showCost && showBCWPCost;
+    }
+    bool acwpCost() const
+    {
+        return showBaseValues && showCost && showACWPCost;
+    }
+    bool bcwsEffort() const
+    {
+        return showBaseValues && showEffort && showBCWSEffort;
+    }
+    bool bcwpEffort() const
+    {
+        return showBaseValues && showEffort && showBCWPEffort;
+    }
+    bool acwpEffort() const
+    {
+        return showBaseValues && showEffort && showACWPEffort;
+    }
 
-    bool spiCost() const { return showIndices && showSpiCost; }
-    bool cpiCost() const { return showIndices && showCpiCost; }
-    bool spiEffort() const { return showIndices && showSpiEffort; }
-    bool cpiEffort() const { return showIndices && showCpiEffort; }
+    bool spiCost() const
+    {
+        return showIndices && showSpiCost;
+    }
+    bool cpiCost() const
+    {
+        return showIndices && showCpiCost;
+    }
+    bool spiEffort() const
+    {
+        return showIndices && showSpiEffort;
+    }
+    bool cpiEffort() const
+    {
+        return showIndices && showCpiEffort;
+    }
 
-    PerformanceChartInfo() {
+    PerformanceChartInfo()
+    {
         showBarChart = false; showLineChart = true; showTableView = false;
         showBaseValues = true; showIndices = false;
         showCost = showBCWSCost = showBCWPCost = showACWPCost = true;
         showEffort = showBCWSEffort = showBCWPEffort = showACWPEffort = true;
         showSpiCost = showCost = showSpiEffort = showCpiEffort = true;
     }
-    bool operator!=( const PerformanceChartInfo &o ) const { return ! operator==( o ); }
-    bool operator==( const PerformanceChartInfo &o ) const {
+    bool operator!=(const PerformanceChartInfo &o) const
+    {
+        return ! operator==(o);
+    }
+    bool operator==(const PerformanceChartInfo &o) const
+    {
         return showBarChart == o.showBarChart && showLineChart == o.showLineChart &&
-                showBaseValues == o.showBaseValues && showIndices == o.showIndices &&
-                showCost == o.showCost && 
-                showBCWSCost == o.showBCWSCost &&
-                showBCWPCost == o.showBCWPCost &&
-                showACWPCost == o.showACWPCost &&
-                showEffort == o.showEffort &&
-                showBCWSEffort == o.showBCWSEffort &&
-                showBCWPEffort == o.showBCWPEffort &&
-                showACWPEffort == o.showACWPEffort &&
-                showSpiCost == o.showSpiCost &&
-                showCpiCost == o.showCpiCost &&
-                showSpiEffort == o.showSpiEffort &&
-                showCpiEffort == o.showCpiEffort;
+               showBaseValues == o.showBaseValues && showIndices == o.showIndices &&
+               showCost == o.showCost &&
+               showBCWSCost == o.showBCWSCost &&
+               showBCWPCost == o.showBCWPCost &&
+               showACWPCost == o.showACWPCost &&
+               showEffort == o.showEffort &&
+               showBCWSEffort == o.showBCWSEffort &&
+               showBCWPEffort == o.showBCWPEffort &&
+               showACWPEffort == o.showACWPEffort &&
+               showSpiCost == o.showSpiCost &&
+               showCpiCost == o.showCpiCost &&
+               showSpiEffort == o.showSpiEffort &&
+               showCpiEffort == o.showCpiEffort;
     }
 };
 
@@ -243,14 +289,14 @@ class KPLATOUI_EXPORT PerformanceStatusPrintingDialog : public PrintingDialog
 {
     Q_OBJECT
 public:
-    PerformanceStatusPrintingDialog( ViewBase *view, PerformanceStatusBase *chart, Project *project = 0 );
+    PerformanceStatusPrintingDialog(ViewBase *view, PerformanceStatusBase *chart, Project *project = 0);
     ~PerformanceStatusPrintingDialog() {}
 
     virtual int documentLastPage() const;
-    virtual QList<QWidget*> createOptionWidgets() const;
+    virtual QList<QWidget *> createOptionWidgets() const;
 
 protected:
-    virtual void printPage( int pageNumber, QPainter &painter );
+    virtual void printPage(int pageNumber, QPainter &painter);
 
 private:
     PerformanceStatusBase *m_chart;
@@ -261,37 +307,43 @@ class PerformanceStatusBase : public QWidget, public Ui::PerformanceStatus
 {
     Q_OBJECT
 public:
-    explicit PerformanceStatusBase( QWidget *parent );
-    
-    void setProject( Project *project );
-    void setScheduleManager( ScheduleManager *sm );
+    explicit PerformanceStatusBase(QWidget *parent);
 
-    ChartItemModel *model() const { return const_cast<ChartItemModel*>( &m_chartmodel ); }
-    
+    void setProject(Project *project);
+    void setScheduleManager(ScheduleManager *sm);
+
+    ChartItemModel *model() const
+    {
+        return const_cast<ChartItemModel *>(&m_chartmodel);
+    }
+
     void setupChart();
-    void setChartInfo( const PerformanceChartInfo &info );
-    PerformanceChartInfo chartInfo() const { return m_chartinfo; }
-    
+    void setChartInfo(const PerformanceChartInfo &info);
+    PerformanceChartInfo chartInfo() const
+    {
+        return m_chartinfo;
+    }
+
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &context );
+    virtual bool loadContext(const KoXmlElement &context);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &context ) const;
+    virtual void saveContext(QDomElement &context) const;
 
     /// Create a print job dialog
-    KoPrintJob *createPrintJob( ViewBase *parent );
+    KoPrintJob *createPrintJob(ViewBase *parent);
 
-    void setNodes( const QList<Node*> &nodes );
+    void setNodes(const QList<Node *> &nodes);
 
 public Q_SLOTS:
     void refreshChart();
 
 protected:
-    void contextMenuEvent( QContextMenuEvent *event );
-    
+    void contextMenuEvent(QContextMenuEvent *event);
+
     void createBarChart();
     void createLineChart();
-    void setEffortValuesVisible( bool visible );
-    void setCostValuesVisible( bool visible );
+    void setEffortValuesVisible(bool visible);
+    void setCostValuesVisible(bool visible);
 
 protected Q_SLOTS:
     void slotUpdate();
@@ -299,7 +351,8 @@ protected Q_SLOTS:
 
 private:
     struct ChartContents {
-        ~ChartContents() {
+        ~ChartContents()
+        {
             delete effortplane;
             delete costplane;
             delete effortdiagram;
@@ -310,7 +363,7 @@ private:
         }
         ChartProxyModel costproxy;
         ChartProxyModel effortproxy;
-    
+
         KDChart::CartesianCoordinatePlane *effortplane;
         KDChart::CartesianCoordinatePlane *costplane;
         KDChart::AbstractDiagram *effortdiagram;
@@ -324,7 +377,7 @@ private:
         KDChart::AbstractDiagram *pidiagram;
         KDChart::CartesianAxis *piaxis;
     };
-    void setupChart( ChartContents &cc );
+    void setupChart(ChartContents &cc);
 
 private:
     Project *m_project;
@@ -343,27 +396,30 @@ class KPLATOUI_EXPORT ProjectStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *parent );
+    ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setupGui();
-    Project *project() const { return m_project; }
-    virtual void setProject( Project *project );
+    Project *project() const
+    {
+        return m_project;
+    }
+    virtual void setProject(Project *project);
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext(QDomElement &/*context*/) const;
 
     KoPrintJob *createPrintJob();
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
-    void setScheduleManager( ScheduleManager *sm );
+    void setScheduleManager(ScheduleManager *sm);
 
 protected:
-    void updateActionsEnabled( bool on );
+    void updateActionsEnabled(bool on);
 
 protected Q_SLOTS:
     virtual void slotOptions();
@@ -378,25 +434,31 @@ class PerformanceStatusTreeView : public QSplitter
 {
     Q_OBJECT
 public:
-    explicit PerformanceStatusTreeView( QWidget *parent );
+    explicit PerformanceStatusTreeView(QWidget *parent);
 
     NodeItemModel *nodeModel() const;
     Project *project() const;
-    void setProject( Project *project );
-    void setScheduleManager( ScheduleManager *sm );
+    void setProject(Project *project);
+    void setScheduleManager(ScheduleManager *sm);
 
     /// Loads context info into this view.
-    virtual bool loadContext( const KoXmlElement &context );
+    virtual bool loadContext(const KoXmlElement &context);
     /// Save context info from this view.
-    virtual void saveContext( QDomElement &context ) const;
+    virtual void saveContext(QDomElement &context) const;
 
-    TreeViewBase *treeView() const { return m_tree; }
-    PerformanceStatusBase *chartView() const { return m_chart; }
-    
-    KoPrintJob *createPrintJob( ViewBase *view );
+    TreeViewBase *treeView() const
+    {
+        return m_tree;
+    }
+    PerformanceStatusBase *chartView() const
+    {
+        return m_chart;
+    }
+
+    KoPrintJob *createPrintJob(ViewBase *view);
 
 protected Q_SLOTS:
-    void slotSelectionChanged( const QItemSelection & selected, const QItemSelection & deselected );
+    void slotSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     void resizeSplitters();
 
 private:
@@ -404,22 +466,24 @@ private:
     PerformanceStatusBase *m_chart;
 };
 
-
 //----------------------------------
 class KPLATOUI_EXPORT PerformanceStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    PerformanceStatusView(KoPart *part, KoDocument *doc, QWidget *parent );
+    PerformanceStatusView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setupGui();
-    Project *project() const { return m_view->project(); }
-    virtual void setProject( Project *project );
+    Project *project() const
+    {
+        return m_view->project();
+    }
+    virtual void setProject(Project *project);
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &context );
+    virtual bool loadContext(const KoXmlElement &context);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &context ) const;
+    virtual void saveContext(QDomElement &context) const;
 
     Node *currentNode() const;
 
@@ -427,19 +491,19 @@ public:
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
-    void setScheduleManager( ScheduleManager *sm );
+    void setScheduleManager(ScheduleManager *sm);
 
 protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
-    void updateActionsEnabled( bool on );
+    void updateActionsEnabled(bool on);
 
 private Q_SLOTS:
-    void slotContextMenuRequested( Node *node, const QPoint& pos );
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+    void slotContextMenuRequested(Node *node, const QPoint &pos);
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
 
 private:
     PerformanceStatusTreeView *m_view;
@@ -451,7 +515,7 @@ class PerformanceStatusViewSettingsPanel : public QWidget, public Ui::Performanc
 {
     Q_OBJECT
 public:
-    explicit PerformanceStatusViewSettingsPanel( PerformanceStatusBase *view, QWidget *parent = 0 );
+    explicit PerformanceStatusViewSettingsPanel(PerformanceStatusBase *view, QWidget *parent = 0);
 
 public Q_SLOTS:
     void slotOk();
@@ -471,7 +535,7 @@ class PerformanceStatusViewSettingsDialog : public ItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    explicit PerformanceStatusViewSettingsDialog( PerformanceStatusView *view, PerformanceStatusTreeView *treeview, QWidget *parent = 0 );
+    explicit PerformanceStatusViewSettingsDialog(PerformanceStatusView *view, PerformanceStatusTreeView *treeview, QWidget *parent = 0);
 
 };
 
@@ -479,7 +543,7 @@ class ProjectStatusViewSettingsDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit ProjectStatusViewSettingsDialog( ViewBase *base, PerformanceStatusBase *view, QWidget *parent = 0 );
+    explicit ProjectStatusViewSettingsDialog(ViewBase *base, PerformanceStatusBase *view, QWidget *parent = 0);
 
 protected Q_SLOTS:
     void slotOk();
@@ -490,9 +554,6 @@ private:
     PrintingHeaderFooter *m_headerfooter;
 };
 
-
-
 } //namespace KPlato
-
 
 #endif

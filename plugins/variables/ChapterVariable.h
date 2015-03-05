@@ -37,10 +37,10 @@ public:
     ChapterVariable();
 
     // reimplmented
-    QWidget* createOptionsWidget();
+    QWidget *createOptionsWidget();
     void readProperties(const KoProperties *props);
-    void saveOdf(KoShapeSavingContext & context);
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
+    void saveOdf(KoShapeSavingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private Q_SLOTS:
     void formatChanged(int format);

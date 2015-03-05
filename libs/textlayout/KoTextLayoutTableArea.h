@@ -63,7 +63,7 @@ private:
     void paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, const QTextTableCell &tableCell, bool topRow, int maxRow, QVector<QLineF> *accuBlankBorders);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

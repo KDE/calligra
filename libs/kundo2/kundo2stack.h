@@ -67,7 +67,6 @@
 #include <QTime>
 #include <QVector>
 
-
 #include "kundo2_export.h"
 
 class QAction;
@@ -111,24 +110,21 @@ public:
     virtual void setEndTime();
     virtual QTime endTime();
 
-    virtual QVector<KUndo2Command*> mergeCommandsVector();
+    virtual QVector<KUndo2Command *> mergeCommandsVector();
     virtual bool isMerged();
     virtual void undoMergedCommands();
     virtual void redoMergedCommands();
 
-
-
 private:
     Q_DISABLE_COPY(KUndo2Command)
     friend class KUndo2QStack;
-
 
     bool m_hasParent;
     int m_timedID;
 
     QTime m_timeOfCreation;
     QTime m_endOfCommand;
-    QVector<KUndo2Command*> m_mergeCommandsVector;
+    QVector<KUndo2Command *> m_mergeCommandsVector;
 };
 
 #endif // QT_NO_UNDOCOMMAND
@@ -185,7 +181,6 @@ public:
     int strokesN();
     void setStrokesN(int value);
 
-
 public Q_SLOTS:
     void setClean();
     virtual void setIndex(int idx);
@@ -203,8 +198,8 @@ Q_SIGNALS:
 
 private:
     // from QUndoStackPrivate
-    QList<KUndo2Command*> m_command_list;
-    QList<KUndo2Command*> m_macro_stack;
+    QList<KUndo2Command *> m_command_list;
+    QList<KUndo2Command *> m_macro_stack;
     int m_index;
     int m_clean_index;
     KUndo2Group *m_group;
@@ -230,8 +225,8 @@ public:
     explicit KUndo2Stack(QObject *parent = 0);
 
     // functions from KUndoStack
-    QAction* createRedoAction(KActionCollection* actionCollection, const QString& actionName = QString());
-    QAction* createUndoAction(KActionCollection* actionCollection, const QString& actionName = QString());
+    QAction *createRedoAction(KActionCollection *actionCollection, const QString &actionName = QString());
+    QAction *createUndoAction(KActionCollection *actionCollection, const QString &actionName = QString());
 };
 
 #endif // QT_NO_UNDOSTACK

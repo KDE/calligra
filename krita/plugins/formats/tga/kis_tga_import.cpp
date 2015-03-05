@@ -53,7 +53,7 @@ KisTGAImport::~KisTGAImport()
 {
 }
 
-static QDataStream & operator>> (QDataStream & s, TgaHeader & head)
+static QDataStream &operator>> (QDataStream &s, TgaHeader &head)
 {
     s >> head.id_length;
     s >> head.colormap_type;
@@ -75,8 +75,7 @@ static QDataStream & operator>> (QDataStream & s, TgaHeader & head)
     return s;
 }
 
-
-static bool isSupported(const TgaHeader & head)
+static bool isSupported(const TgaHeader &head)
 {
     if (head.image_type != TGA_TYPE_INDEXED &&
             head.image_type != TGA_TYPE_RGB &&
@@ -115,7 +114,7 @@ static bool isSupported(const TgaHeader & head)
     return true;
 }
 
-static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
+static bool loadTGA(QDataStream &s, const TgaHeader &tga, QImage &img)
 {
     // Create image.
     img = QImage(tga.width, tga.height, QImage::Format_RGB32);
@@ -145,11 +144,11 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
     }
 
     // Allocate image.
-    uchar * const image = new uchar[size];
+    uchar *const image = new uchar[size];
 
     if (info.rle) {
         // Decode image.
-        char * dst = (char *)image;
+        char *dst = (char *)image;
         int num = size;
 
         while (num > 0) {
@@ -193,10 +192,10 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
         y_end = -1;
     }
 
-    uchar* src = image;
+    uchar *src = image;
 
     for (int y = y_start; y != y_end; y += y_step) {
-        QRgb * scanline = (QRgb *) img.scanLine(y);
+        QRgb *scanline = (QRgb *) img.scanLine(y);
 
         if (info.pal) {
             // Paletted.
@@ -240,19 +239,19 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
     return true;
 }
 
-
-
-KisImportExportFilter::ConversionStatus KisTGAImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisTGAImport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "TGA import! From:" << from << ", To:" << to << 0;
 
-    if (to != "application/x-krita")
+    if (to != "application/x-krita") {
         return KisImportExportFilter::BadMimeType;
+    }
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
 
-    if (!doc)
+    if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     QString filename = m_chain->inputFile();
 
@@ -261,13 +260,13 @@ KisImportExportFilter::ConversionStatus KisTGAImport::convert(const QByteArray& 
     if (!filename.isEmpty()) {
         KUrl url(filename);
 
-        if (url.isEmpty())
+        if (url.isEmpty()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
         if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
             return KisImportExportFilter::FileNotFound;
         }
-
 
         QString localFile = url.toLocalFile();
 
@@ -279,7 +278,6 @@ KisImportExportFilter::ConversionStatus KisTGAImport::convert(const QByteArray& 
         TgaHeader tga;
         s >> tga;
         s.device()->seek(TgaHeader::SIZE + tga.id_length);
-
 
         // Check image file format.
         if (s.atEnd()) {

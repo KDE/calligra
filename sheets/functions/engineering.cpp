@@ -94,12 +94,10 @@ Value func_oct2dec(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2bin(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2hex(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("engineering", EngineeringModule)
 
-
-EngineeringModule::EngineeringModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+EngineeringModule::EngineeringModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -279,7 +277,6 @@ QString EngineeringModule::descriptionFileName() const
     return QString("engineering.xml");
 }
 
-
 //
 // Function: BASE
 //
@@ -287,18 +284,22 @@ Value func_base(valVector args, ValueCalc *calc, FuncExtra *)
 {
     int base = 10;
     int minLength = 0;
-    if (args.count() > 1)
+    if (args.count() > 1) {
         base = calc->conv()->asInteger(args[1]).asInteger();
-    if (args.count() == 3)
+    }
+    if (args.count() == 3) {
         minLength = calc->conv()->asInteger(args[2]).asInteger();
+    }
 
-    if ((base < 2) || (base > 36))
+    if ((base < 2) || (base > 36)) {
         return Value::errorVALUE();
-    if (minLength < 0) minLength = 2;
+    }
+    if (minLength < 0) {
+        minLength = 2;
+    }
 
     return calc->base(args[0], base, 0, minLength);
 }
-
 
 //
 // Function: BESSELI
@@ -310,7 +311,6 @@ Value func_besseli(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->besseli(y, x);
 }
 
-
 //
 // Function: BESSELJ
 //
@@ -320,7 +320,6 @@ Value func_besselj(valVector args, ValueCalc *calc, FuncExtra *)
     Value y = args[1];
     return calc->besselj(y, x);
 }
-
 
 //
 // Function: BESSELK
@@ -332,7 +331,6 @@ Value func_besselk(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->besselk(y, x);
 }
 
-
 //
 // Function: BESSELY
 //
@@ -343,7 +341,6 @@ Value func_bessely(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->besseln(y, x);
 }
 
-
 //
 // Function: DEC2HEX
 //
@@ -353,7 +350,9 @@ Value func_dec2hex(valVector args, ValueCalc *calc, FuncExtra *)
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
+    {
         minLength = calc->conv()->asInteger(args[1]).asInteger();
+    }
 
     if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
         // this only contains decimal digits.
@@ -362,7 +361,6 @@ Value func_dec2hex(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
     }
 }
-
 
 //
 // Function: DEC2OCT
@@ -373,7 +371,9 @@ Value func_dec2oct(valVector args, ValueCalc *calc, FuncExtra *)
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
+    {
         minLength = calc->conv()->asInteger(args[1]).asInteger();
+    }
 
     if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
         // this only contains decimal digits.
@@ -382,7 +382,6 @@ Value func_dec2oct(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
     }
 }
-
 
 //
 // Function: DEC2BIN
@@ -393,7 +392,9 @@ Value func_dec2bin(valVector args, ValueCalc *calc, FuncExtra *)
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
+    {
         minLength = calc->conv()->asInteger(args[1]).asInteger();
+    }
 
     if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
         // this only contains decimal digits.
@@ -403,7 +404,6 @@ Value func_dec2bin(valVector args, ValueCalc *calc, FuncExtra *)
     }
 }
 
-
 //
 // Function: BIN2DEC
 //
@@ -411,7 +411,6 @@ Value func_bin2dec(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return calc->fromBase(args[0], 2);
 }
-
 
 //
 // Function: BIN2OCT
@@ -422,7 +421,9 @@ Value func_bin2oct(valVector args, ValueCalc *calc, FuncExtra *)
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
+    {
         minLength = calc->conv()->asInteger(args[1]).asInteger();
+    }
 
     if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
         // this only contains 0s and 1s.
@@ -431,7 +432,6 @@ Value func_bin2oct(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
     }
 }
-
 
 //
 // Function: BIN2HEX
@@ -442,7 +442,9 @@ Value func_bin2hex(valVector args, ValueCalc *calc, FuncExtra *)
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
+    {
         minLength = calc->conv()->asInteger(args[1]).asInteger();
+    }
 
     if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
         // this only contains 0s and 1s.
@@ -453,7 +455,6 @@ Value func_bin2hex(valVector args, ValueCalc *calc, FuncExtra *)
 
 }
 
-
 //
 // Function: OCT2DEC
 //
@@ -461,7 +462,6 @@ Value func_oct2dec(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return calc->fromBase(args[0], 8);
 }
-
 
 //
 // Function: OCT2BIN
@@ -472,7 +472,9 @@ Value func_oct2bin(valVector args, ValueCalc *calc, FuncExtra *)
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
+    {
         minLength = calc->conv()->asInteger(args[1]).asInteger();
+    }
 
     if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
         // this only contains decimal digits.
@@ -481,7 +483,6 @@ Value func_oct2bin(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
     }
 }
-
 
 //
 // Function: OCT2HEX
@@ -492,7 +493,9 @@ Value func_oct2hex(valVector args, ValueCalc *calc, FuncExtra *)
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
+    {
         minLength = calc->conv()->asInteger(args[1]).asInteger();
+    }
 
     if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
         // this only contains decimal digits.
@@ -502,7 +505,6 @@ Value func_oct2hex(valVector args, ValueCalc *calc, FuncExtra *)
     }
 }
 
-
 //
 // Function: HEX2DEC
 //
@@ -510,7 +512,6 @@ Value func_hex2dec(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return calc->fromBase(args[0], 16);
 }
-
 
 //
 // Function: HEX2BIN
@@ -521,7 +522,9 @@ Value func_hex2bin(valVector args, ValueCalc *calc, FuncExtra *)
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
+    {
         minLength = calc->conv()->asInteger(args[1]).asInteger();
+    }
 
     if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
         // this only contains decimal digits.
@@ -530,7 +533,6 @@ Value func_hex2bin(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
     }
 }
-
 
 //
 // Function: HEX2OCT
@@ -541,7 +543,9 @@ Value func_hex2oct(valVector args, ValueCalc *calc, FuncExtra *)
     int minLength = 0;
     if (args.count() > 1)
         // we have the optional "minimum length" argument
+    {
         minLength = calc->conv()->asInteger(args[1]).asInteger();
+    }
 
     if (rx.exactMatch(calc->conv()->asString(args[0]).asString())) {
         // this only contains decimal digits.
@@ -550,7 +554,6 @@ Value func_hex2oct(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
     }
 }
-
 
 //
 // Function: DECIMAL
@@ -586,10 +589,11 @@ Value func_decimal(valVector args, ValueCalc *calc, FuncExtra *)
 // return prefix factor found in unit, or 1.0 for no prefix
 // also modify the unit, i.e stripping the prefix from it
 // example: "kPa" will return 1e3 and change unit into "Pa"
-static double kspread_convert_prefix(QMap<QString, double> map, QString& unit)
+static double kspread_convert_prefix(QMap<QString, double> map, QString &unit)
 {
-    if (map.contains(unit))
+    if (map.contains(unit)) {
         return 1.0;
+    }
 
     // initialize prefix mapping if necessary
     static QMap<QString, double> prefixMap;
@@ -617,14 +621,14 @@ static double kspread_convert_prefix(QMap<QString, double> map, QString& unit)
         prefixMap[ "y" ]  = 1e-24;  // yocto
 
         // binary prefixes
-        prefixMap[ "ki" ]  = 1024.0                      ;  // kibi
-        prefixMap[ "Mi" ]  = 1048576.0                   ;  // mebi
-        prefixMap[ "Gi" ]  = 1073741824.0                ;  // gibi
-        prefixMap[ "Ti" ]  = 1099511627776.0             ;  // tebi
-        prefixMap[ "Pi" ]  = 1125899906842624.0          ;  // pebi
-        prefixMap[ "Ei" ]  = 1152921504606846976.0       ;  // exbi
-        prefixMap[ "Zi" ]  = 1180591620717411303424.0    ;  // zebi
-        prefixMap[ "Yi" ]  = 1208925819614629174706176.0 ;  // yobi
+        prefixMap[ "ki" ]  = 1024.0;  // kibi
+        prefixMap[ "Mi" ]  = 1048576.0;  // mebi
+        prefixMap[ "Gi" ]  = 1073741824.0;  // gibi
+        prefixMap[ "Ti" ]  = 1099511627776.0;  // tebi
+        prefixMap[ "Pi" ]  = 1125899906842624.0;  // pebi
+        prefixMap[ "Ei" ]  = 1152921504606846976.0;  // exbi
+        prefixMap[ "Zi" ]  = 1180591620717411303424.0;  // zebi
+        prefixMap[ "Yi" ]  = 1208925819614629174706176.0;  // yobi
     }
 
     // check for possible prefix
@@ -641,12 +645,11 @@ static double kspread_convert_prefix(QMap<QString, double> map, QString& unit)
     return 0.0;
 }
 
-
 //
 // convert masses
 //
-static bool kspread_convert_mass(const QString& fromUnit,
-                                 const QString& toUnit, double value, double& result)
+static bool kspread_convert_mass(const QString &fromUnit,
+                                 const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> massMap;
 
@@ -671,22 +674,29 @@ static bool kspread_convert_mass(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(massMap, fromU);
     double toPrefix = kspread_convert_prefix(massMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!massMap.contains(fromU)) return false;
-    if (!massMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!massMap.contains(fromU)) {
+        return false;
+    }
+    if (!massMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * massMap[toU] / (massMap[fromU] * toPrefix);
 
     return true;
 }
 
-
 //
 // convert distances
 //
-static bool kspread_convert_distance(const QString& fromUnit,
-                                     const QString& toUnit, double value, double& result)
+static bool kspread_convert_distance(const QString &fromUnit,
+                                     const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> distanceMap;
 
@@ -713,22 +723,29 @@ static bool kspread_convert_distance(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(distanceMap, fromU);
     double toPrefix = kspread_convert_prefix(distanceMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!distanceMap.contains(fromU)) return false;
-    if (!distanceMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!distanceMap.contains(fromU)) {
+        return false;
+    }
+    if (!distanceMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * distanceMap[toU] / (distanceMap[fromU] * toPrefix);
 
     return true;
 }
 
-
 //
 // convert pressures
 //
-static bool kspread_convert_pressure(const QString& fromUnit,
-                                     const QString& toUnit, double value, double& result)
+static bool kspread_convert_pressure(const QString &fromUnit,
+                                     const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> pressureMap;
 
@@ -747,22 +764,29 @@ static bool kspread_convert_pressure(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(pressureMap, fromU);
     double toPrefix = kspread_convert_prefix(pressureMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!pressureMap.contains(fromU)) return false;
-    if (!pressureMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!pressureMap.contains(fromU)) {
+        return false;
+    }
+    if (!pressureMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * pressureMap[toU] / (pressureMap[fromU] * toPrefix);
 
     return true;
 }
 
-
 //
 // convert forces
 //
-static bool kspread_convert_force(const QString& fromUnit,
-                                  const QString& toUnit, double value, double& result)
+static bool kspread_convert_force(const QString &fromUnit,
+                                  const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> forceMap;
 
@@ -780,22 +804,29 @@ static bool kspread_convert_force(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(forceMap, fromU);
     double toPrefix = kspread_convert_prefix(forceMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!forceMap.contains(fromU)) return false;
-    if (!forceMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!forceMap.contains(fromU)) {
+        return false;
+    }
+    if (!forceMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * forceMap[toU] / (forceMap[fromU] * toPrefix);
 
     return true;
 }
 
-
 //
 // convert energies
 //
-static bool kspread_convert_energy(const QString& fromUnit,
-                                   const QString& toUnit, double value, double& result)
+static bool kspread_convert_energy(const QString &fromUnit,
+                                   const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> energyMap;
 
@@ -817,22 +848,29 @@ static bool kspread_convert_energy(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(energyMap, fromU);
     double toPrefix = kspread_convert_prefix(energyMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!energyMap.contains(fromU)) return false;
-    if (!energyMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!energyMap.contains(fromU)) {
+        return false;
+    }
+    if (!energyMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * energyMap[toU] / (energyMap[fromU] * toPrefix);
 
     return true;
 }
 
-
 //
 // convert powers
 //
-static bool kspread_convert_power(const QString& fromUnit,
-                                  const QString& toUnit, double value, double& result)
+static bool kspread_convert_power(const QString &fromUnit,
+                                  const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> powerMap;
 
@@ -849,22 +887,29 @@ static bool kspread_convert_power(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(powerMap, fromU);
     double toPrefix = kspread_convert_prefix(powerMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!powerMap.contains(fromU)) return false;
-    if (!powerMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!powerMap.contains(fromU)) {
+        return false;
+    }
+    if (!powerMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * powerMap[toU] / (powerMap[fromU] * toPrefix);
 
     return true;
 }
 
-
 //
 // convert magnetism
 //
-static bool kspread_convert_magnetism(const QString& fromUnit,
-                                      const QString& toUnit, double value, double& result)
+static bool kspread_convert_magnetism(const QString &fromUnit,
+                                      const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> magnetismMap;
 
@@ -879,22 +924,29 @@ static bool kspread_convert_magnetism(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(magnetismMap, fromU);
     double toPrefix = kspread_convert_prefix(magnetismMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!magnetismMap.contains(fromU)) return false;
-    if (!magnetismMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!magnetismMap.contains(fromU)) {
+        return false;
+    }
+    if (!magnetismMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * magnetismMap[toU] / (magnetismMap[fromU] * toPrefix);
 
     return true;
 }
 
-
 //
 // convert temperatures
 //
-static bool kspread_convert_temperature(const QString& fromUnit,
-                                        const QString& toUnit, double value, double& result)
+static bool kspread_convert_temperature(const QString &fromUnit,
+                                        const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> tempFactorMap;
     static QMap<QString, double> tempOffsetMap;
@@ -906,10 +958,18 @@ static bool kspread_convert_temperature(const QString& fromUnit,
         tempFactorMap[ "K" ] = 1.0; tempOffsetMap[ "K" ] = -273.15;
     }
 
-    if (!tempFactorMap.contains(fromUnit)) return false;
-    if (!tempOffsetMap.contains(fromUnit)) return false;
-    if (!tempFactorMap.contains(toUnit)) return false;
-    if (!tempOffsetMap.contains(toUnit)) return false;
+    if (!tempFactorMap.contains(fromUnit)) {
+        return false;
+    }
+    if (!tempOffsetMap.contains(fromUnit)) {
+        return false;
+    }
+    if (!tempFactorMap.contains(toUnit)) {
+        return false;
+    }
+    if (!tempOffsetMap.contains(toUnit)) {
+        return false;
+    }
 
     result = (value + tempOffsetMap[ fromUnit ]) * tempFactorMap[ fromUnit ];
     result = (result / tempFactorMap[ toUnit ]) - tempOffsetMap[ toUnit ];
@@ -917,12 +977,11 @@ static bool kspread_convert_temperature(const QString& fromUnit,
     return true;
 }
 
-
 //
 // convert volumes
 //
-static bool kspread_convert_volume(const QString& fromUnit,
-                                   const QString& toUnit, double value, double& result)
+static bool kspread_convert_volume(const QString &fromUnit,
+                                   const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> volumeMap;
 
@@ -959,22 +1018,29 @@ static bool kspread_convert_volume(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(volumeMap, fromU);
     double toPrefix = kspread_convert_prefix(volumeMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!volumeMap.contains(fromU)) return false;
-    if (!volumeMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!volumeMap.contains(fromU)) {
+        return false;
+    }
+    if (!volumeMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * volumeMap[toU] / (volumeMap[fromU] * toPrefix);
 
     return true;
 }
 
-
 //
 // convert areas
 //
-static bool kspread_convert_area(const QString& fromUnit,
-                                 const QString& toUnit, double value, double& result)
+static bool kspread_convert_area(const QString &fromUnit,
+                                 const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> areaMap;
 
@@ -1002,22 +1068,29 @@ static bool kspread_convert_area(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(areaMap, fromU);
     double toPrefix = kspread_convert_prefix(areaMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!areaMap.contains(fromU)) return false;
-    if (!areaMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!areaMap.contains(fromU)) {
+        return false;
+    }
+    if (!areaMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * areaMap[toU] / (areaMap[fromU] * toPrefix);
 
     return true;
 }
 
-
 //
 // convert speeds
 //
-static bool kspread_convert_speed(const QString& fromUnit,
-                                  const QString& toUnit, double value, double& result)
+static bool kspread_convert_speed(const QString &fromUnit,
+                                  const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> speedMap;
 
@@ -1034,22 +1107,29 @@ static bool kspread_convert_speed(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(speedMap, fromU);
     double toPrefix = kspread_convert_prefix(speedMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!speedMap.contains(fromU)) return false;
-    if (!speedMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!speedMap.contains(fromU)) {
+        return false;
+    }
+    if (!speedMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * speedMap[toU] / (speedMap[fromU] * toPrefix);
 
     return true;
 }
 
-
 //
 // convert times
 //
-static bool kspread_convert_time(const QString& fromUnit,
-                                 const QString& toUnit, double value, double& result)
+static bool kspread_convert_time(const QString &fromUnit,
+                                 const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> timeMap;
 
@@ -1070,22 +1150,29 @@ static bool kspread_convert_time(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(timeMap, fromU);
     double toPrefix = kspread_convert_prefix(timeMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!timeMap.contains(fromU)) return false;
-    if (!timeMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!timeMap.contains(fromU)) {
+        return false;
+    }
+    if (!timeMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * timeMap[toU] / (timeMap[fromU] * toPrefix);
 
     return true;
 }
 
-
 //
 // convert IT
 //
-static bool kspread_convert_info(const QString& fromUnit,
-                                 const QString& toUnit, double value, double& result)
+static bool kspread_convert_info(const QString &fromUnit,
+                                 const QString &toUnit, double value, double &result)
 {
     static QMap<QString, double> infoMap;
 
@@ -1099,10 +1186,18 @@ static bool kspread_convert_info(const QString& fromUnit,
     QString toU = toUnit;
     double fromPrefix = kspread_convert_prefix(infoMap, fromU);
     double toPrefix = kspread_convert_prefix(infoMap, toU);
-    if (fromPrefix == 0.0) return false;
-    if (toPrefix == 0.0) return false;
-    if (!infoMap.contains(fromU)) return false;
-    if (!infoMap.contains(toU)) return false;
+    if (fromPrefix == 0.0) {
+        return false;
+    }
+    if (toPrefix == 0.0) {
+        return false;
+    }
+    if (!infoMap.contains(fromU)) {
+        return false;
+    }
+    if (!infoMap.contains(toU)) {
+        return false;
+    }
 
     result = value * fromPrefix * infoMap[toU] / (infoMap[fromU] * toPrefix);
 
@@ -1134,17 +1229,16 @@ Value func_convert(valVector args, ValueCalc *calc, FuncExtra *)
                                         if (!kspread_convert_area(fromUnit, toUnit, value, result))
                                             if (!kspread_convert_speed(fromUnit, toUnit, value, result))
                                                 if (!kspread_convert_time(fromUnit, toUnit, value, result))
-                                                    if (!kspread_convert_info(fromUnit, toUnit, value, result))
+                                                    if (!kspread_convert_info(fromUnit, toUnit, value, result)) {
                                                         return Value::errorNA();
+                                                    }
 
     return Value(result);
 }
 
-
 // functions operating over complex numbers ...
 // these may eventually end up being merged into ValueCalc and friends
 // then complex numbers will be handled transparently in most functions
-
 
 //
 // Function: COMPLEX
@@ -1156,7 +1250,6 @@ Value func_complex(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(complex<Number>(real, imag));
 }
 
-
 //
 // Function: IMAGINARY
 //
@@ -1165,7 +1258,6 @@ Value func_complex_imag(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(calc->conv()->toComplex(args[0]).imag());
 }
 
-
 //
 // Function: IMREAL
 //
@@ -1173,7 +1265,6 @@ Value func_complex_real(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value(calc->conv()->toComplex(args[0]).real());
 }
-
 
 //
 //
@@ -1185,7 +1276,6 @@ void awImSum(ValueCalc *c, Value &res, Value val, Value)
     res = Value(c1 + c2);
 }
 
-
 //
 //
 //
@@ -1196,7 +1286,6 @@ void awImSub(ValueCalc *c, Value &res, Value val, Value)
     res = Value(c1 - c2);
 }
 
-
 //
 //
 //
@@ -1206,7 +1295,6 @@ void awImMul(ValueCalc *c, Value &res, Value val, Value)
     const complex<Number> c2 = c->conv()->toComplex(val);
     res = Value(c1 * c2);
 }
-
 
 //
 //
@@ -1228,23 +1316,21 @@ Value func_imsum(valVector args, ValueCalc *calc, FuncExtra *)
     return result;
 }
 
-
 //
 // Function: IMSUB
 //
 Value func_imsub(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value result;
-    if (args.count() == 1)
+    if (args.count() == 1) {
         awImSub(calc, result, args[0], Value(0));
-    else {
+    } else {
         result = args[0];
         valVector vector = args.mid(1);
         calc->arrayWalk(vector, result, awImSub, Value(0));
     }
     return result;
 }
-
 
 //
 // Function: IMPRODUCT
@@ -1263,7 +1349,6 @@ Value func_improduct(valVector args, ValueCalc *calc, FuncExtra *)
     return result;
 }
 
-
 //
 // Function: IMDIV
 //
@@ -1281,7 +1366,6 @@ Value func_imdiv(valVector args, ValueCalc *calc, FuncExtra *)
     return result;
 }
 
-
 //
 // Function: IMCONJUGATE
 //
@@ -1289,7 +1373,6 @@ Value func_imconjugate(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value(std::conj(calc->conv()->asComplex(args[0]).asComplex()));
 }
-
 
 //
 // Function: IMARGUMENT
@@ -1299,7 +1382,6 @@ Value func_imargument(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(std::arg(calc->conv()->asComplex(args[0]).asComplex()));
 }
 
-
 //
 // Function: IMABS
 //
@@ -1307,7 +1389,6 @@ Value func_imabs(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value(std::abs(calc->conv()->asComplex(args[0]).asComplex()));
 }
-
 
 //
 // Function: IMCOS
@@ -1317,34 +1398,30 @@ Value func_imcos(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(std::cos(calc->conv()->asComplex(args[0]).asComplex()));
 }
 
-
 //
 // Function: IMCOT
 //
-Value func_imcot(valVector args, ValueCalc *calc, FuncExtra*)
+Value func_imcot(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value(std::cos(calc->conv()->asComplex(args[0]).asComplex())
-                 /std::sin(calc->conv()->asComplex(args[0]).asComplex()));
+                 / std::sin(calc->conv()->asComplex(args[0]).asComplex()));
 }
-
 
 //
 // Function: IMCSC
 //
 Value func_imcsc(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value(complex<Number>(1)/std::sin(calc->conv()->asComplex(args[0]).asComplex()));
+    return Value(complex<Number>(1) / std::sin(calc->conv()->asComplex(args[0]).asComplex()));
 }
-
 
 //
 // Function: IMSEC
 //
 Value func_imsec(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value(complex<Number>(1)/std::cos(calc->conv()->asComplex(args[0]).asComplex()));
+    return Value(complex<Number>(1) / std::cos(calc->conv()->asComplex(args[0]).asComplex()));
 }
-
 
 //
 // Function: IMSIN
@@ -1354,60 +1431,53 @@ Value func_imsin(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(std::sin(calc->conv()->asComplex(args[0]).asComplex()));
 }
 
-
 //
 // Function: IMTAN
 //
-Value func_imtan(valVector args, ValueCalc *calc, FuncExtra*)
+Value func_imtan(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value(std::tan(calc->conv()->asComplex(args[0]).asComplex()));
 }
 
-
 //
 // Function: IMCOSH
 //
-Value func_imcosh(valVector args, ValueCalc *calc, FuncExtra*)
+Value func_imcosh(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value(std::cosh(calc->conv()->asComplex(args[0]).asComplex()));
 }
 
-
 //
 // Function: IMCSCH
 //
-Value func_imcsch(valVector args, ValueCalc *calc, FuncExtra*)
+Value func_imcsch(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value(complex<Number>(1)/std::sinh(calc->conv()->asComplex(args[0]).asComplex()));
+    return Value(complex<Number>(1) / std::sinh(calc->conv()->asComplex(args[0]).asComplex()));
 }
-
 
 //
 // Function: IMSECH
 //
 Value func_imsech(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value(complex<Number>(1)/std::cosh(calc->conv()->asComplex(args[0]).asComplex()));
+    return Value(complex<Number>(1) / std::cosh(calc->conv()->asComplex(args[0]).asComplex()));
 }
-
 
 //
 // Function: IMSINH
 //
-Value func_imsinh(valVector args, ValueCalc *calc, FuncExtra*)
+Value func_imsinh(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value(std::sinh(calc->conv()->asComplex(args[0]).asComplex()));
 }
 
-
 //
 // Function: IMTANH
 //
-Value func_imtanh(valVector args, ValueCalc *calc, FuncExtra*)
+Value func_imtanh(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value(std::tanh(calc->conv()->asComplex(args[0]).asComplex()));
 }
-
 
 //
 // Function: IMLN
@@ -1417,7 +1487,6 @@ Value func_imln(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(std::log(calc->conv()->asComplex(args[0]).asComplex()));
 }
 
-
 //
 // Function: IMLOG2
 //
@@ -1425,7 +1494,6 @@ Value func_imlog2(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value(std::log(calc->conv()->toComplex(args[0])) / static_cast<Number>(double(M_LN2l)));
 }
-
 
 //
 // Function: IMLOG10
@@ -1435,7 +1503,6 @@ Value func_imlog10(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(std::log10(calc->conv()->toComplex(args[0])));
 }
 
-
 //
 // Function: IMEXP
 //
@@ -1444,7 +1511,6 @@ Value func_imexp(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(std::exp(calc->conv()->toComplex(args[0])));
 }
 
-
 //
 // Function: IMSQRT
 //
@@ -1452,7 +1518,6 @@ Value func_imsqrt(valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value(std::sqrt(calc->conv()->toComplex(args[0])));
 }
-
 
 //
 // Function: IMPOWER
@@ -1463,7 +1528,6 @@ Value func_impower(valVector args, ValueCalc *calc, FuncExtra *)
                           calc->conv()->toComplex(args[1])));
 }
 
-
 //
 // Function: DELTA
 //
@@ -1471,34 +1535,34 @@ Value func_delta(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value val1 = args[0];
     Value val2 = Value(0.0);
-    if (args.count() == 2)
+    if (args.count() == 2) {
         val2 = args[1];
+    }
 
     return Value(calc->approxEqual(val1, val2) ? 1 : 0);
 }
-
 
 //
 // Function: ERF
 //
 Value func_erf(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args.count() == 2)
+    if (args.count() == 2) {
         return calc->sub(calc->erf(args[1]), calc->erf(args[0]));
+    }
     return calc->erf(args[0]);
 }
-
 
 //
 // Function: ERFC
 //
 Value func_erfc(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args.count() == 2)
+    if (args.count() == 2) {
         return calc->sub(calc->erfc(args[1]), calc->erfc(args[0]));
+    }
     return calc->erfc(args[0]);
 }
-
 
 //
 // Function: GESTEP
@@ -1507,15 +1571,18 @@ Value func_gestep(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value x = args[0];
     Value y = Value(0.0);
-    if (args.count() == 2)
+    if (args.count() == 2) {
         y = args[1];
+    }
 
-    if (x.isString() || y.isString())
+    if (x.isString() || y.isString()) {
         return Value::errorNUM();
+    }
 
     int result = 0;
-    if (calc->greater(x, y) || calc->approxEqual(x, y))
+    if (calc->greater(x, y) || calc->approxEqual(x, y)) {
         result = 1;
+    }
 
     return Value(result);
 }

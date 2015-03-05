@@ -54,31 +54,35 @@ jp2Export::~jp2Export()
 {
 }
 
-KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "JP2 export! From:" << from << ", To:" << to << "";
 
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
     KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
-    KDialog* kdb = new KDialog(0);
+    KDialog *kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("JPEG 2000 Export Options"));
     kdb->setButtons(KDialog::Ok | KDialog::Cancel);
 
     Ui::WdgOptionsJP2 optionsJP2;
 
-    QWidget* wdg = new QWidget(kdb);
+    QWidget *wdg = new QWidget(kdb);
     optionsJP2.setupUi(wdg);
 
     QString filterConfig = KisConfig().exportConfiguration("JP2");
@@ -86,7 +90,7 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
     cfg.fromXML(filterConfig);
     optionsJP2.numberResolutions->setValue(cfg.getInt("number_resolutions", 6));
     optionsJP2.qualityLevel->setValue(cfg.getInt("quality", 100));
-    
+
     kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
 
@@ -94,12 +98,11 @@ KisImportExportFilter::ConversionStatus jp2Export::convert(const QByteArray& fro
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
         }
-    }
-    else {
+    } else {
         qApp->processEvents(); // For vector layers to be updated
     }
     image->waitForDone();
-    
+
     JP2ConvertOptions options;
     options.numberresolution = optionsJP2.numberResolutions->value();
     cfg.setProperty("number_resolutions", options.numberresolution);

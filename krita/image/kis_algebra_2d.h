@@ -29,27 +29,24 @@
 
 class QPainterPath;
 
-namespace KisAlgebra2D {
+namespace KisAlgebra2D
+{
 
 template <class T>
-struct PointTypeTraits
-{
+struct PointTypeTraits {
 };
 
 template <>
-struct PointTypeTraits<QPoint>
-{
+struct PointTypeTraits<QPoint> {
     typedef int value_type;
     typedef qreal calculation_type;
 };
 
 template <>
-struct PointTypeTraits<QPointF>
-{
+struct PointTypeTraits<QPointF> {
     typedef qreal value_type;
     typedef qreal calculation_type;
 };
-
 
 template <class T>
 typename PointTypeTraits<T>::value_type dotProduct(const T &a, const T &b)
@@ -80,7 +77,8 @@ Point normalize(const Point &a)
  * Usual sign() function with positive zero
  */
 template <typename T>
-T signPZ(T x) {
+T signPZ(T x)
+{
     return x >= T(0) ? T(1) : T(-1);
 }
 
@@ -88,7 +86,8 @@ T signPZ(T x) {
  * Usual sign() function with zero returning zero
  */
 template <typename T>
-T signZZ(T x) {
+T signZZ(T x)
+{
     return x == T(0) ? T(0) : x > T(0) ? T(1) : T(-1);
 }
 
@@ -96,7 +95,8 @@ T signZZ(T x) {
  * Copies the sign of \p y into \p x and returns the result
  */
 template <typename T>
-    inline T copysign(T x, T y) {
+inline T copysign(T x, T y)
+{
     T strippedX = qAbs(x);
     return y >= T(0) ? strippedX : -strippedX;
 }
@@ -131,7 +131,8 @@ T inwardUnitNormal(const T &a, int polygonDirection)
  *       is reversed
  */
 template <class T>
-int polygonDirection(const QVector<T> &polygon) {
+int polygonDirection(const QVector<T> &polygon)
+{
 
     typename PointTypeTraits<T>::value_type doubleSum = 0;
 
@@ -149,7 +150,8 @@ int polygonDirection(const QVector<T> &polygon) {
 }
 
 template <typename T>
-bool isInRange(T x, T a, T b) {
+bool isInRange(T x, T a, T b)
+{
     T length = qAbs(a - b);
     return qAbs(x - a) <= length && qAbs(x - b) <= length;
 }
@@ -166,15 +168,18 @@ QPointF KRITAIMAGE_EXPORT transformAsBase(const QPointF &pt, const QPointF &base
 
 qreal KRITAIMAGE_EXPORT angleBetweenVectors(const QPointF &v1, const QPointF &v2);
 
-namespace Private {
-    inline void resetEmptyRectangle(const QPoint &pt, QRect *rc) {
-        *rc = QRect(pt, QSize(1, 1));
-    }
+namespace Private
+{
+inline void resetEmptyRectangle(const QPoint &pt, QRect *rc)
+{
+    *rc = QRect(pt, QSize(1, 1));
+}
 
-    inline void resetEmptyRectangle(const QPointF &pt, QRectF *rc) {
-        static const qreal eps = 1e-10;
-        *rc = QRectF(pt, QSizeF(eps, eps));
-    }
+inline void resetEmptyRectangle(const QPointF &pt, QRectF *rc)
+{
+    static const qreal eps = 1e-10;
+    *rc = QRectF(pt, QSizeF(eps, eps));
+}
 }
 
 template <class Point, class Rect>
@@ -234,8 +239,6 @@ QRect KRITAIMAGE_EXPORT blowRect(const QRect &rect, qreal coeff);
 QPoint ensureInRect(QPoint pt, const QRect &bounds);
 QPointF ensureInRect(QPointF pt, const QRectF &bounds);
 
-
-
 /**
  * Attempt to intersect a line to the area of the a rectangle.
  *
@@ -248,13 +251,12 @@ QPointF ensureInRect(QPointF pt, const QRectF &bounds);
  */
 bool KRITAIMAGE_EXPORT intersectLineRect(QLineF &line, const QRect rect);
 
-
 template <class Point>
-inline Point abs(const Point &pt) {
+inline Point abs(const Point &pt)
+{
     return Point(qAbs(pt.x()), qAbs(pt.y()));
 }
 
 }
-
 
 #endif /* __KIS_ALGEBRA_2D_H */

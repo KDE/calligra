@@ -31,11 +31,11 @@ class CalendarTool : public CellTool
 {
     Q_OBJECT
 public:
-    explicit CalendarTool(KoCanvasBase* canvas);
+    explicit CalendarTool(KoCanvasBase *canvas);
     ~CalendarTool();
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     virtual void deactivate();
 
     /**
@@ -46,14 +46,14 @@ public Q_SLOTS:
     void insertCalendar(const QDate &start, const QDate &end);
 
 private:
-    virtual QWidget* createOptionWidget();
-    void setText(Sheet* sheet, int row, int column, const QString& text, bool asString = false);
+    virtual QWidget *createOptionWidget();
+    void setText(Sheet *sheet, int row, int column, const QString &text, bool asString = false);
 
 private:
     Q_DISABLE_COPY(CalendarTool)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

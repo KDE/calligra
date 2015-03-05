@@ -35,7 +35,6 @@
 // Qt
 #include <QTemporaryFile>
 
-
 using namespace Soprano;
 
 KoRdfLocation::KoRdfLocation(QObject *parent, const KoDocumentRdf *rdf)
@@ -68,8 +67,8 @@ void KoRdfLocation::showInViewer()
 #ifdef CAN_USE_MARBLE
     kDebug(30015) << "RDFLocation::showInViewer() opening a marble widget...";
 
-    QWidget* parent = 0;
-    QWidget* ret = new QWidget(parent);
+    QWidget *parent = 0;
+    QWidget *ret = new QWidget(parent);
     viewWidget.setupUi(ret);
     viewWidget.name->setText(m_name);
     viewWidget.map->setMapThemeId("earth/srtm/srtm.dgml");
@@ -100,16 +99,16 @@ void KoRdfLocation::exportToFile(const QString &fileNameConst) const
     QString xmlstring;
     QTextStream xmlss(&xmlstring);
     xmlss << "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n"
-        << "<kml xmlns=\"http://www.opengis.net/kml/2.2\" > \n"
-        << " \n"
-        << "<Placemark> \n"
-        << "  <name>" << name() << "</name> \n"
-        << "  <LookAt> \n"
-        << "    <longitude>" << dlong() << "</longitude> \n"
-        << "    <latitude>" << dlat() << "</latitude> \n"
-        << "  </LookAt> \n"
-        << "</Placemark> \n"
-        << "</kml>\n";
+          << "<kml xmlns=\"http://www.opengis.net/kml/2.2\" > \n"
+          << " \n"
+          << "<Placemark> \n"
+          << "  <name>" << name() << "</name> \n"
+          << "  <LookAt> \n"
+          << "    <longitude>" << dlong() << "</longitude> \n"
+          << "    <latitude>" << dlat() << "</latitude> \n"
+          << "  </LookAt> \n"
+          << "</Placemark> \n"
+          << "</kml>\n";
     xmlss.flush();
     QFile file(fileName);
     file.open(QIODevice::WriteOnly);
@@ -122,7 +121,7 @@ QWidget *KoRdfLocation::createEditor(QWidget *parent)
     kDebug(30015) << "KoRdfLocation::createEditor()";
 #ifndef CAN_USE_MARBLE
     {
-        KoRdfLocationEditWidget* ret = new KoRdfLocationEditWidget(parent, &editWidget);
+        KoRdfLocationEditWidget *ret = new KoRdfLocationEditWidget(parent, &editWidget);
 
         editWidget.setupUi(ret);
         editWidget.name->setText(m_name);
@@ -130,7 +129,7 @@ QWidget *KoRdfLocation::createEditor(QWidget *parent)
         return ret;
     }
 #else
-    KoRdfLocationEditWidget* ret = new KoRdfLocationEditWidget(parent, &editWidget);
+    KoRdfLocationEditWidget *ret = new KoRdfLocationEditWidget(parent, &editWidget);
 
     editWidget.setupUi(ret);
     editWidget.name->setText(m_name);
@@ -212,7 +211,7 @@ void KoRdfLocation::updateFromEditorData()
 #endif
 
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
+        const_cast<KoDocumentRdf *>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 }
 
@@ -271,13 +270,13 @@ QString KoRdfLocation::className() const
     return "Location";
 }
 
-void KoRdfLocation::importFromData(const QByteArray& ba, const KoDocumentRdf* m_rdf, KoCanvasBase* host)
+void KoRdfLocation::importFromData(const QByteArray &ba, const KoDocumentRdf *m_rdf, KoCanvasBase *host)
 {
     Q_UNUSED(ba);
     Q_UNUSED(m_rdf);
     Q_UNUSED(host);
 #ifdef __GNUC__
-    #warning FIXME: implement importFromData
+#warning FIXME: implement importFromData
 #endif
 
 }
@@ -332,7 +331,7 @@ void KoRdfLocation::setName(const QString &name)
         updateTriple(m_name, name, dcBase + "title");
     }
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
+        const_cast<KoDocumentRdf *>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 
 }
@@ -372,7 +371,7 @@ void KoRdfLocation::setDlat(double dlat)
     }
 
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
+        const_cast<KoDocumentRdf *>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 
 }
@@ -411,7 +410,7 @@ void KoRdfLocation::setDlong(double dlong)
     }
 
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
+        const_cast<KoDocumentRdf *>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 
 }

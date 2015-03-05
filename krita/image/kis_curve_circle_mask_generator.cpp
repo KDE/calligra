@@ -31,10 +31,7 @@
 #include "kis_cubic_curve.h"
 #include "kis_antialiasing_fade_maker.h"
 
-
-
-struct KisCurveCircleMaskGenerator::Private
-{
+struct KisCurveCircleMaskGenerator::Private {
     Private(bool enableAntialiasing)
         : fadeMaker(*this, enableAntialiasing)
     {
@@ -94,8 +91,8 @@ inline quint8 KisCurveCircleMaskGenerator::Private::value(qreal dist) const
     qreal alphaValueF = distance - alphaValue;
 
     qreal alpha = (
-        (1.0 - alphaValueF) * curveData.at(alphaValue) +
-        alphaValueF * curveData.at(alphaValue+1));
+                      (1.0 - alphaValueF) * curveData.at(alphaValue) +
+                      alphaValueF * curveData.at(alphaValue + 1));
     return (1.0 - alpha) * 255;
 }
 
@@ -106,7 +103,7 @@ quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
     if (KisMaskGenerator::d->spikes > 2) {
         double angle = (KisFastMath::atan2(yr, xr));
 
-        while (angle > KisMaskGenerator::d->cachedSpikesAngle ){
+        while (angle > KisMaskGenerator::d->cachedSpikesAngle) {
             double sx = xr, sy = yr;
 
             xr = KisMaskGenerator::d->cs * sx - KisMaskGenerator::d->ss * sy;
@@ -126,7 +123,7 @@ quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
     return d->value(dist);
 }
 
-void KisCurveCircleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
+void KisCurveCircleMaskGenerator::toXML(QDomDocument &doc, QDomElement &e) const
 {
     KisMaskGenerator::toXML(doc, e);
     e.setAttribute("softness_curve", curveString());
@@ -135,34 +132,36 @@ void KisCurveCircleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 void KisCurveCircleMaskGenerator::setSoftness(qreal softness)
 {
     // performance
-    if (!d->dirty && softness == 1.0) return;
+    if (!d->dirty && softness == 1.0) {
+        return;
+    }
 
     d->dirty = true;
     KisMaskGenerator::setSoftness(softness);
-    KisCurveCircleMaskGenerator::transformCurveForSoftness(softness,d->curvePoints, d->curveResolution+2, d->curveData);
+    KisCurveCircleMaskGenerator::transformCurveForSoftness(softness, d->curvePoints, d->curveResolution + 2, d->curveData);
     d->dirty = false;
 }
 
-void KisCurveCircleMaskGenerator::transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector< qreal >& result)
+void KisCurveCircleMaskGenerator::transformCurveForSoftness(qreal softness, const QList<QPointF> &points, int curveResolution, QVector< qreal > &result)
 {
     QList<QPointF> newList = points;
     newList.detach();
 
     int size = newList.size();
-    if (size == 2){
+    if (size == 2) {
         // make place for new point in the centre
         newList.append(newList.at(1));
         newList[1] = (newList.at(0) + newList.at(2)) * 0.5;
         // transoform it
-        newList[1].setY(qBound<qreal>(0.0,newList.at(1).y() * softness,1.0));
-    }else{
+        newList[1].setY(qBound<qreal>(0.0, newList.at(1).y() * softness, 1.0));
+    } else {
         // transform all points except first and last
-        for (int i = 1; i < size-1; i++){
-            newList[i].setY(qBound<qreal>(0.0,newList.at(i).y() * softness,1.0));
+        for (int i = 1; i < size - 1; i++) {
+            newList[i].setY(qBound<qreal>(0.0, newList.at(i).y() * softness, 1.0));
         }
     }
 
     // compute the data
     KisCubicCurve curve(newList);
-    result = curve.floatTransfer( curveResolution );
+    result = curve.floatTransfer(curveResolution);
 }

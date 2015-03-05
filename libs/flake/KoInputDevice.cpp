@@ -23,10 +23,11 @@ class KoInputDevice::Private
 {
 public:
     Private(QTabletEvent::TabletDevice d, QTabletEvent::PointerType p, qint64 id, bool m)
-            : device(d),
-            pointer(p),
-            uniqueTabletId(id),
-            mouse(m) {
+        : device(d),
+          pointer(p),
+          uniqueTabletId(id),
+          mouse(m)
+    {
     }
     QTabletEvent::TabletDevice device;
     QTabletEvent::PointerType pointer;
@@ -35,20 +36,19 @@ public:
 };
 
 KoInputDevice::KoInputDevice(QTabletEvent::TabletDevice device, QTabletEvent::PointerType pointer, qint64 uniqueTabletId)
-        : d(new Private(device, pointer, uniqueTabletId, false))
+    : d(new Private(device, pointer, uniqueTabletId, false))
 {
 }
 
 KoInputDevice::KoInputDevice()
-        : d(new Private(QTabletEvent::NoDevice, QTabletEvent::UnknownPointer, -1, true))
+    : d(new Private(QTabletEvent::NoDevice, QTabletEvent::UnknownPointer, -1, true))
 {
 }
 
 KoInputDevice::KoInputDevice(const KoInputDevice &other)
-        : d(new Private(other.d->device, other.d->pointer, other.d->uniqueTabletId, other.d->mouse))
+    : d(new Private(other.d->device, other.d->pointer, other.d->uniqueTabletId, other.d->mouse))
 {
 }
-
 
 KoInputDevice::~KoInputDevice()
 {
@@ -78,7 +78,6 @@ bool KoInputDevice::isMouse() const
     return d->mouse || d->device == QTabletEvent::NoDevice || d->pointer == QTabletEvent::UnknownPointer;
 }
 
-
 bool KoInputDevice::operator==(const KoInputDevice &other) const
 {
     return d->device == other.d->device && d->pointer == other.d->pointer &&
@@ -90,7 +89,7 @@ bool KoInputDevice::operator!=(const KoInputDevice &other) const
     return !(operator==(other));
 }
 
-KoInputDevice & KoInputDevice::operator=(const KoInputDevice & other)
+KoInputDevice &KoInputDevice::operator=(const KoInputDevice &other)
 {
     d->device = other.d->device;
     d->pointer = other.d->pointer;
@@ -123,9 +122,9 @@ KoInputDevice KoInputDevice::eraser()
 QDebug operator<<(QDebug dbg, const KoInputDevice &device)
 {
 #ifndef NDEBUG
-    if (device.isMouse())
+    if (device.isMouse()) {
         dbg.nospace() << "mouse";
-    else {
+    } else {
         switch (device.pointer()) {
         case QTabletEvent::UnknownPointer:
             dbg.nospace() << "unknown pointer";
@@ -140,7 +139,7 @@ QDebug operator<<(QDebug dbg, const KoInputDevice &device)
             dbg.nospace() << "eraser";
             break;
         }
-        switch(device.device()) {
+        switch (device.device()) {
         case QTabletEvent::NoDevice:
             dbg.space() << "no device";
             break;

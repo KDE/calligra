@@ -28,28 +28,30 @@
 #include "kis_paint_device.h"
 
 KisRandomSubAccessor::KisRandomSubAccessor(KisPaintDeviceSP device)
-        : m_device(device)
-        , m_currentPoint(0, 0)
-        , m_randomAccessor(device->createRandomConstAccessorNG(0, 0))
+    : m_device(device)
+    , m_currentPoint(0, 0)
+    , m_randomAccessor(device->createRandomConstAccessorNG(0, 0))
 {
 }
-
 
 KisRandomSubAccessor::~KisRandomSubAccessor()
 {
 }
 
-
-void KisRandomSubAccessor::sampledOldRawData(quint8* dst)
+void KisRandomSubAccessor::sampledOldRawData(quint8 *dst)
 {
-    const quint8* pixels[4];
+    const quint8 *pixels[4];
     qint16 weights[4];
     int x = (int)floor(m_currentPoint.x());
     int y = (int)floor(m_currentPoint.y());
     double hsub = m_currentPoint.x() - x;
-    if (hsub < 0.0) hsub = 1.0 + hsub;
+    if (hsub < 0.0) {
+        hsub = 1.0 + hsub;
+    }
     double vsub = m_currentPoint.y() - y;
-    if (vsub < 0.0) vsub = 1.0 + vsub;
+    if (vsub < 0.0) {
+        vsub = 1.0 + vsub;
+    }
     weights[0] = qRound((1.0 - hsub) * (1.0 - vsub) * 255);
     m_randomAccessor->moveTo(x, y);
     pixels[0] = m_randomAccessor->oldRawData();
@@ -65,17 +67,20 @@ void KisRandomSubAccessor::sampledOldRawData(quint8* dst)
     m_device->colorSpace()->mixColorsOp()->mixColors(pixels, weights, 4, dst);
 }
 
-
-void KisRandomSubAccessor::sampledRawData(quint8* dst)
+void KisRandomSubAccessor::sampledRawData(quint8 *dst)
 {
-    const quint8* pixels[4];
+    const quint8 *pixels[4];
     qint16 weights[4];
     int x = (int)floor(m_currentPoint.x());
     int y = (int)floor(m_currentPoint.y());
     double hsub = m_currentPoint.x() - x;
-    if (hsub < 0.0) hsub = 1.0 + hsub;
+    if (hsub < 0.0) {
+        hsub = 1.0 + hsub;
+    }
     double vsub = m_currentPoint.y() - y;
-    if (vsub < 0.0) vsub = 1.0 + vsub;
+    if (vsub < 0.0) {
+        vsub = 1.0 + vsub;
+    }
     weights[0] = qRound((1.0 - hsub) * (1.0 - vsub) * 255);
     m_randomAccessor->moveTo(x, y);
     pixels[0] = m_randomAccessor->rawDataConst();

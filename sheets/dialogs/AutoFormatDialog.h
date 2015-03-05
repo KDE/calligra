@@ -43,7 +43,7 @@ class AutoFormatDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit AutoFormatDialog(QWidget* parent, Selection* selection);
+    explicit AutoFormatDialog(QWidget *parent, Selection *selection);
     ~AutoFormatDialog();
 
 private Q_SLOTS:
@@ -52,7 +52,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

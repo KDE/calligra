@@ -73,7 +73,6 @@ public:
         static const char diagram[];
     };
 
-
     //! A.6 Shared MLs
     class KOMSOOXML_EXPORT officeDocument
     {

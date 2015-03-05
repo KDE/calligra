@@ -53,12 +53,12 @@ public:
     virtual void endPage();
 
     // path painting
-    virtual void stroke(GfxState * state);
-    virtual void fill(GfxState * state);
+    virtual void stroke(GfxState *state);
+    virtual void fill(GfxState *state);
     virtual void eoFill(GfxState *state);
 
     // text
-    virtual void drawString(GfxState * state, GooString * s);
+    virtual void drawString(GfxState *state, GooString *s);
 
     // images
     virtual void drawImage(GfxState *state, Object *ref, Stream *str,
@@ -84,12 +84,12 @@ public:
 private:
     QString convertPath(GfxPath *path);
     QString convertMatrix(const QMatrix &matrix);
-    QString convertMatrix(double * matrix);
+    QString convertMatrix(double *matrix);
     QString printFill();
     QString printStroke();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // SVGOUTPUTDEV_H

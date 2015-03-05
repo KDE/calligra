@@ -25,7 +25,6 @@
 
 #include <kis_brush_based_paintop_options_widget.h>
 
-
 class KisBrushOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {
 
@@ -33,13 +32,11 @@ class KisBrushOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 
 public:
 
-    KisBrushOpSettingsWidget(QWidget* parent = 0);
+    KisBrushOpSettingsWidget(QWidget *parent = 0);
 
     virtual ~KisBrushOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 };
-
-
 
 #endif // KIS_BRUSHOP_SETTINGS_WIDGET_H_

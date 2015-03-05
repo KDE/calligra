@@ -33,28 +33,29 @@ class KoM2MMLFormulaTool : public KoToolBase
     Q_OBJECT
 public:
     explicit KoM2MMLFormulaTool(KoCanvasBase *canvas);
-    
-    virtual void activate(ToolActivation toolActivation, const QSet< KoShape* >& shapes);
-    
-    virtual void mouseReleaseEvent(KoPointerEvent* event);
-    virtual void mousePressEvent(KoPointerEvent* event);
-    virtual void mouseMoveEvent(KoPointerEvent* event);
-    virtual void paint(QPainter& painter, const KoViewConverter& converter);
-    virtual QWidget* createOptionWidget();
+
+    virtual void activate(ToolActivation toolActivation, const QSet< KoShape * > &shapes);
+
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual QWidget *createOptionWidget();
 public Q_SLOTS:
     void textEdited();
 private:
-    void setMathML(const QString& mathml, const QString& mode);
+    void setMathML(const QString &mathml, const QString &mode);
 private:
-    QLineEdit* m_lineEdit;
-    QLabel* m_errorLabel;
-    KoFormulaShape* m_formulaShape;
+    QLineEdit *m_lineEdit;
+    QLabel *m_errorLabel;
+    KoFormulaShape *m_formulaShape;
     QString m_text;
-    QComboBox* m_comboBox;
+    QComboBox *m_comboBox;
     QString m_mode;
 };
 
-class KoM2MMLFormulaToolFactory : public KoToolFactoryBase {
+class KoM2MMLFormulaToolFactory : public KoToolFactoryBase
+{
 public:
     /// The constructor - reimplemented from KoToolFactoryBase
     explicit KoM2MMLFormulaToolFactory();
@@ -63,7 +64,7 @@ public:
     ~KoM2MMLFormulaToolFactory();
 
     /// @return an instance of KoFormulaTool
-    KoToolBase* createTool( KoCanvasBase* canvas );
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 #endif

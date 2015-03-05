@@ -41,9 +41,9 @@
 K_PLUGIN_FACTORY(XAMLImportFactory, registerPlugin<XAMLImport>();)
 K_EXPORT_PLUGIN(XAMLImportFactory("calligrafilters"))
 
-XAMLImport::XAMLImport(KoFilter *, const char *, const QVariantList&) :
-        KoFilter(parent),
-        outdoc("DOC")
+XAMLImport::XAMLImport(KoFilter *, const char *, const QVariantList &) :
+    KoFilter(parent),
+    outdoc("DOC")
 {
     m_gc.setAutoDelete(true);
 }
@@ -52,11 +52,12 @@ XAMLImport::~XAMLImport()
 {
 }
 
-KoFilter::ConversionStatus XAMLImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus XAMLImport::convert(const QByteArray &from, const QByteArray &to)
 {
     // check for proper conversion
-    if (to != "application/x-karbon" || from != "image/wvg+xml")
+    if (to != "application/x-karbon" || from != "image/wvg+xml") {
         return KoFilter::NotImplemented;
+    }
 
     //Find the last extension
     QString strExt;
@@ -68,16 +69,17 @@ KoFilter::ConversionStatus XAMLImport::convert(const QByteArray& from, const QBy
 
     QString strMime; // Mime type of the compressor
     if ((strExt == ".gz")    //in case of .svg.gz (logical extension)
-            || (strExt == ".wvgz")) //in case of .svgz (extension used prioritary)
-        strMime = "application/x-gzip"; // Compressed with gzip
-    else if (strExt == ".bz2") //in case of .svg.bz2 (logical extension)
-        strMime = "application/x-bzip2"; // Compressed with bzip2
-    else
+            || (strExt == ".wvgz")) { //in case of .svgz (extension used prioritary)
+        strMime = "application/x-gzip";    // Compressed with gzip
+    } else if (strExt == ".bz2") { //in case of .svg.bz2 (logical extension)
+        strMime = "application/x-bzip2";    // Compressed with bzip2
+    } else {
         strMime = "text/plain";
+    }
 
     kDebug(30514) << "File extension: -" << strExt << "- Compression:" << strMime;
 
-    QIODevice* in = KFilterDev::deviceForFile(fileIn, strMime);
+    QIODevice *in = KFilterDev::deviceForFile(fileIn, strMime);
 
     if (!in->open(QIODevice::ReadOnly)) {
         kError(30514) << "Cannot open file! Aborting!" << endl;
@@ -92,8 +94,8 @@ KoFilter::ConversionStatus XAMLImport::convert(const QByteArray& from, const QBy
     delete in;
     if (! parsed) {
         kError(30514) << "Error while parsing file: "
-        << "at line " << line << " column: " << col
-        << " message: " << errormessage << endl;
+                      << "at line " << line << " column: " << col
+                      << " message: " << errormessage << endl;
         // ### TODO: feedback to the user
         return KoFilter::ParsingError;
     }
@@ -101,7 +103,7 @@ KoFilter::ConversionStatus XAMLImport::convert(const QByteArray& from, const QBy
     // Do the conversion!
     convert();
 
-    KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
+    KoStoreDevice *out = m_chain->storageFile("root", KoStore::Write);
     if (!out) {
         kError(30514) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
@@ -130,7 +132,7 @@ XAMLImport::convert()
         QString viewbox(docElem.attribute("viewBox"));
         QStringList points = QStringList::split(' ', viewbox.replace(',', ' ').simplified());
 
-        gc->matrix.scale(width / points[2].toFloat() , height / points[3].toFloat());
+        gc->matrix.scale(width / points[2].toFloat(), height / points[3].toFloat());
         m_outerRect.setWidth(m_outerRect.width() * (points[2].toFloat() / width));
         m_outerRect.setHeight(m_outerRect.height() * (points[3].toFloat() / height));
     }
@@ -185,29 +187,31 @@ getNumber(const char *ptr, double &number)
     expsign = 1;
 
     // read the sign
-    if (*ptr == '+')
+    if (*ptr == '+') {
         ptr++;
-    else if (*ptr == '-') {
+    } else if (*ptr == '-') {
         ptr++;
         sign = -1;
     }
 
     // read the integer part
-    while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+    while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9') {
         integer = (integer * 10) + *(ptr++) - '0';
+    }
     if (*ptr == '.') { // read the decimals
         ptr++;
-        while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+        while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9') {
             decimal += (*(ptr++) - '0') * (frac *= 0.1);
+        }
     }
 
     if (*ptr == 'e' || *ptr == 'E') { // read the exponent part
         ptr++;
 
         // read the sign of the exponent
-        if (*ptr == '+')
+        if (*ptr == '+') {
             ptr++;
-        else if (*ptr == '-') {
+        } else if (*ptr == '-') {
             ptr++;
             expsign = -1;
         }
@@ -225,7 +229,6 @@ getNumber(const char *ptr, double &number)
     return ptr;
 }
 
-
 double
 XAMLImport::parseUnit(const QString &unit, bool horiz, bool vert, KoRect bbox)
 {
@@ -238,27 +241,28 @@ XAMLImport::parseUnit(const QString &unit, bool horiz, bool vert, KoRect bbox)
     const char *end = getNumber(start, value);
 
     if (uint(end - start) < unit.length()) {
-        if (unit.right(2) == "pt")
+        if (unit.right(2) == "pt") {
             value = (value / 72.0) * DPI;
-        else if (unit.right(2) == "cm")
+        } else if (unit.right(2) == "cm") {
             value = (value / 2.54) * DPI;
-        else if (unit.right(2) == "pc")
+        } else if (unit.right(2) == "pc") {
             value = (value / 6.0) * DPI;
-        else if (unit.right(2) == "mm")
+        } else if (unit.right(2) == "mm") {
             value = (value / 25.4) * DPI;
-        else if (unit.right(2) == "in")
+        } else if (unit.right(2) == "in") {
             value = value * DPI;
-        else if (unit.right(2) == "pt")
+        } else if (unit.right(2) == "pt") {
             value = (value / 72.0) * DPI;
-        else if (unit.right(2) == "em")
+        } else if (unit.right(2) == "em") {
             value = value * m_gc.current()->font.pointSize() / (sqrt(pow(m_gc.current()->matrix.m11(), 2) + pow(m_gc.current()->matrix.m22(), 2)) / sqrt(2.0));
-        else if (unit.right(1) == "%") {
-            if (horiz && vert)
+        } else if (unit.right(1) == "%") {
+            if (horiz && vert) {
                 value = (value / 100.0) * (sqrt(pow(bbox.width(), 2) + pow(bbox.height(), 2)) / sqrt(2.0));
-            else if (horiz)
+            } else if (horiz) {
                 value = (value / 100.0) * bbox.width();
-            else if (vert)
+            } else if (vert) {
                 value = (value / 100.0) * bbox.height();
+            }
         }
     }
     /*else
@@ -314,10 +318,11 @@ XAMLImport::parseColor(VColor &color, const QString &s)
     } else {
         QString rgbColor = s.trimmed();
         QColor c;
-        if (rgbColor.startsWith('#'))
+        if (rgbColor.startsWith('#')) {
             c.setNamedColor(rgbColor);
-        else
+        } else {
             c = parseColor(rgbColor);
+        }
         color.set(c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0);
     }
 }
@@ -334,12 +339,13 @@ XAMLImport::parseColorStops(VGradient *gradient, const QDomElement &e)
             if (temp.contains('%')) {
                 temp = temp.left(temp.length() - 1);
                 offset = temp.toFloat() / 100.0;
-            } else
+            } else {
                 offset = temp.toFloat();
+            }
 
-            if (!stop.attribute("stop-color").isEmpty())
+            if (!stop.attribute("stop-color").isEmpty()) {
                 parseColor(c, stop.attribute("stop-color"));
-            else {
+            } else {
                 // try style attr
                 QString style = stop.attribute("style").simplified();
                 QStringList substyles = QStringList::split(';', style);
@@ -347,15 +353,18 @@ XAMLImport::parseColorStops(VGradient *gradient, const QDomElement &e)
                     QStringList substyle = QStringList::split(':', (*it));
                     QString command = substyle[0].trimmed();
                     QString params = substyle[1].trimmed();
-                    if (command == "stop-color")
+                    if (command == "stop-color") {
                         parseColor(c, params);
-                    if (command == "stop-opacity")
+                    }
+                    if (command == "stop-opacity") {
                         c.setOpacity(params.toDouble());
+                    }
                 }
 
             }
-            if (!stop.attribute("stop-opacity").isEmpty())
+            if (!stop.attribute("stop-opacity").isEmpty()) {
                 c.setOpacity(stop.attribute("stop-opacity").toDouble());
+            }
             gradient->addStop(c, offset, 0.5);
         }
     }
@@ -400,10 +409,11 @@ XAMLImport::parseGradient(const QDomElement &e)
     // handle spread method
     QString spreadMethod = e.attribute("spreadMethod");
     if (!spreadMethod.isEmpty()) {
-        if (spreadMethod == "reflect")
+        if (spreadMethod == "reflect") {
             gradhelper.gradient.setRepeatMethod(VGradient::reflect);
-        else if (spreadMethod == "repeat")
+        } else if (spreadMethod == "repeat") {
             gradhelper.gradient.setRepeatMethod(VGradient::repeat);
+        }
     }
     parseColorStops(&gradhelper.gradient, e);
     //gradient.setGradientTransform( parseTransform( e.attribute( "gradientTransform" ) ) );
@@ -418,9 +428,9 @@ XAMLImport::parsePA(VObject *obj, XAMLGraphicsContext *gc, const QString &comman
     VColor strokecolor = gc->stroke.color();
 
     if (command == "fill") {
-        if (params == "none")
+        if (params == "none") {
             gc->fill.setType(VFill::none);
-        else if (params.startsWith("url(")) {
+        } else if (params.startsWith("url(")) {
             unsigned int start = params.find("#") + 1;
             unsigned int end = params.findRev(")");
             QString key = params.mid(start, end - start);
@@ -448,22 +458,24 @@ XAMLImport::parsePA(VObject *obj, XAMLGraphicsContext *gc, const QString &comman
                 //kDebug() << gc->fill.gradient().vector().y();
             }
             gc->fill.gradient().transform(m_gradients[ key ].gradientTransform);
-            if (!m_gradients[ key ].bbox)
+            if (!m_gradients[ key ].bbox) {
                 gc->fill.gradient().transform(gc->matrix);
+            }
             gc->fill.setType(VFill::grad);
         } else {
             parseColor(fillcolor,  params);
             gc->fill.setType(VFill::solid);
         }
     } else if (command == "fill-rule") {
-        if (params == "nonzero")
+        if (params == "nonzero") {
             gc->fillRule = winding;
-        else if (params == "evenodd")
+        } else if (params == "evenodd") {
             gc->fillRule = evenOdd;
+        }
     } else if (command == "stroke") {
-        if (params == "none")
+        if (params == "none") {
             gc->stroke.setType(VStroke::none);
-        else if (params.startsWith("url(")) {
+        } else if (params.startsWith("url(")) {
             unsigned int start = params.find("#") + 1;
             unsigned int end = params.findRev(")");
             QString key = params.mid(start, end - start);
@@ -475,58 +487,64 @@ XAMLImport::parsePA(VObject *obj, XAMLGraphicsContext *gc, const QString &comman
             parseColor(strokecolor, params);
             gc->stroke.setType(VStroke::solid);
         }
-    } else if (command == "stroke-width")
+    } else if (command == "stroke-width") {
         gc->stroke.setLineWidth(parseUnit(params, true, true, m_outerRect));
-    else if (command == "stroke-linejoin") {
-        if (params == "miter")
+    } else if (command == "stroke-linejoin") {
+        if (params == "miter") {
             gc->stroke.setLineJoin(VStroke::joinMiter);
-        else if (params == "round")
+        } else if (params == "round") {
             gc->stroke.setLineJoin(VStroke::joinRound);
-        else if (params == "bevel")
+        } else if (params == "bevel") {
             gc->stroke.setLineJoin(VStroke::joinBevel);
+        }
     } else if (command == "stroke-linecap") {
-        if (params == "butt")
+        if (params == "butt") {
             gc->stroke.setLineCap(VStroke::capButt);
-        else if (params == "round")
+        } else if (params == "round") {
             gc->stroke.setLineCap(VStroke::capRound);
-        else if (params == "square")
+        } else if (params == "square") {
             gc->stroke.setLineCap(VStroke::capSquare);
-    } else if (command == "stroke-miterlimit")
+        }
+    } else if (command == "stroke-miterlimit") {
         gc->stroke.setMiterLimit(params.toFloat());
-    else if (command == "stroke-dasharray") {
+    } else if (command == "stroke-dasharray") {
         QList<float> array;
         if (params != "none") {
             QStringList dashes = QStringList::split(' ', params);
-            for (QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it)
+            for (QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it) {
                 array.append((*it).toFloat());
+            }
         }
         gc->stroke.dashPattern().setArray(array);
-    } else if (command == "stroke-dashoffset")
+    } else if (command == "stroke-dashoffset") {
         gc->stroke.dashPattern().setOffset(params.toFloat());
+    }
     // handle opacity
-    else if (command == "stroke-opacity")
+    else if (command == "stroke-opacity") {
         strokecolor.setOpacity(fromPercentage(params));
-    else if (command == "fill-opacity")
+    } else if (command == "fill-opacity") {
         fillcolor.setOpacity(fromPercentage(params));
-    else if (command == "opacity") {
+    } else if (command == "opacity") {
         fillcolor.setOpacity(fromPercentage(params));
         strokecolor.setOpacity(fromPercentage(params));
     } else if (command == "font-family") {
         QString family = params;
-        family.replace('\'' , ' ');
+        family.replace('\'', ' ');
         gc->font.setFamily(family);
     } else if (command == "font-size") {
         float pointSize = parseUnit(params);
         pointSize *= gc->matrix.m22() > 0 ? gc->matrix.m22() : -1.0 * gc->matrix.m22();
         gc->font.setPointSizeFloat(pointSize);
     } else if (command == "text-decoration") {
-        if (params == "line-through")
+        if (params == "line-through") {
             gc->font.setStrikeOut(true);
-        else if (params == "underline")
+        } else if (params == "underline") {
             gc->font.setUnderline(true);
+        }
     }
-    if (gc->fill.type() != VFill::none)
+    if (gc->fill.type() != VFill::none) {
         gc->fill.setColor(fillcolor, false);
+    }
     //if( gc->stroke.type() == VStroke::solid )
     gc->stroke.setColor(strokecolor);
 }
@@ -536,8 +554,9 @@ XAMLImport::addGraphicContext()
 {
     XAMLGraphicsContext *gc = new XAMLGraphicsContext;
     // set as default
-    if (m_gc.current())
+    if (m_gc.current()) {
         *gc = *(m_gc.current());
+    }
     m_gc.push(gc);
 }
 
@@ -554,33 +573,47 @@ void
 XAMLImport::parseStyle(VObject *obj, const QDomElement &e)
 {
     XAMLGraphicsContext *gc = m_gc.current();
-    if (!gc) return;
+    if (!gc) {
+        return;
+    }
 
     // try normal PA
-    if (!e.attribute("fill").isEmpty())
+    if (!e.attribute("fill").isEmpty()) {
         parsePA(obj, gc, "fill", e.attribute("fill"));
-    if (!e.attribute("fill-rule").isEmpty())
+    }
+    if (!e.attribute("fill-rule").isEmpty()) {
         parsePA(obj, gc, "fill-rule", e.attribute("fill-rule"));
-    if (!e.attribute("stroke").isEmpty())
+    }
+    if (!e.attribute("stroke").isEmpty()) {
         parsePA(obj, gc, "stroke", e.attribute("stroke"));
-    if (!e.attribute("stroke-width").isEmpty())
+    }
+    if (!e.attribute("stroke-width").isEmpty()) {
         parsePA(obj, gc, "stroke-width", e.attribute("stroke-width"));
-    if (!e.attribute("stroke-linejoin").isEmpty())
+    }
+    if (!e.attribute("stroke-linejoin").isEmpty()) {
         parsePA(obj, gc, "stroke-linejoin", e.attribute("stroke-linejoin"));
-    if (!e.attribute("stroke-linecap").isEmpty())
+    }
+    if (!e.attribute("stroke-linecap").isEmpty()) {
         parsePA(obj, gc, "stroke-linecap", e.attribute("stroke-linecap"));
-    if (!e.attribute("stroke-dasharray").isEmpty())
+    }
+    if (!e.attribute("stroke-dasharray").isEmpty()) {
         parsePA(obj, gc, "stroke-dasharray", e.attribute("stroke-dasharray"));
-    if (!e.attribute("stroke-dashoffset").isEmpty())
+    }
+    if (!e.attribute("stroke-dashoffset").isEmpty()) {
         parsePA(obj, gc, "stroke-dashoffset", e.attribute("stroke-dashoffset"));
-    if (!e.attribute("stroke-opacity").isEmpty())
+    }
+    if (!e.attribute("stroke-opacity").isEmpty()) {
         parsePA(obj, gc, "stroke-opacity", e.attribute("stroke-opacity"));
-    if (!e.attribute("stroke-miterlimit").isEmpty())
+    }
+    if (!e.attribute("stroke-miterlimit").isEmpty()) {
         parsePA(obj, gc, "stroke-miterlimit", e.attribute("stroke-miterlimit"));
-    if (!e.attribute("fill-opacity").isEmpty())
+    }
+    if (!e.attribute("fill-opacity").isEmpty()) {
         parsePA(obj, gc, "fill-opacity", e.attribute("fill-opacity"));
-    if (!e.attribute("opacity").isEmpty())
+    }
+    if (!e.attribute("opacity").isEmpty()) {
         parsePA(obj, gc, "opacity", e.attribute("opacity"));
+    }
 
     // try style attr
     QString style = e.attribute("style").simplified();
@@ -593,8 +626,9 @@ XAMLImport::parseStyle(VObject *obj, const QDomElement &e)
     }
 
     obj->setFill(gc->fill);
-    if (dynamic_cast<VPath *>(obj))
+    if (dynamic_cast<VPath *>(obj)) {
         dynamic_cast<VPath *>(obj)->setFillRule(gc->fillRule);
+    }
     // stroke scaling
     double lineWidth = gc->stroke.lineWidth();
     gc->stroke.setLineWidth(lineWidth * sqrt(pow(m_gc.current()->matrix.m11(), 2) + pow(m_gc.current()->matrix.m22(), 2)) / sqrt(2.0));
@@ -606,33 +640,42 @@ void
 XAMLImport::parseFont(const QDomElement &e)
 {
     XAMLGraphicsContext *gc = m_gc.current();
-    if (!gc) return;
+    if (!gc) {
+        return;
+    }
 
-    if (! e.attribute("font-family").isEmpty())
+    if (! e.attribute("font-family").isEmpty()) {
         parsePA(0L, m_gc.current(), "font-family", e.attribute("font-family"));
-    if (! e.attribute("font-size").isEmpty())
+    }
+    if (! e.attribute("font-size").isEmpty()) {
         parsePA(0L, m_gc.current(), "font-size", e.attribute("font-size"));
-    if (! e.attribute("text-decoration").isEmpty())
+    }
+    if (! e.attribute("text-decoration").isEmpty()) {
         parsePA(0L, m_gc.current(), "text-decoration", e.attribute("text-decoration"));
+    }
 }
 
 void
 XAMLImport::parseGroup(VGroup *grp, const QDomElement &e)
 {
     bool isDef = false;
-    if (e.tagName() == "defs")
+    if (e.tagName() == "defs") {
         isDef = true;
+    }
 
     for (QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
         QDomElement b = n.toElement();
-        if (b.isNull()) continue;
+        if (b.isNull()) {
+            continue;
+        }
         VObject *obj = 0L;
         if (b.tagName() == "g") {
             VGroup *group;
-            if (grp)
+            if (grp) {
                 group = new VGroup(grp);
-            else
+            } else {
                 group = new VGroup(&m_document);
+            }
 
             addGraphicContext();
             setupTransform(b);
@@ -641,12 +684,14 @@ XAMLImport::parseGroup(VGroup *grp, const QDomElement &e)
             parseGroup(group, b);
 
             // handle id
-            if (!b.attribute("id").isEmpty())
+            if (!b.attribute("id").isEmpty()) {
                 group->setName(b.attribute("id"));
-            if (grp)
+            }
+            if (grp) {
                 grp->append(group);
-            else
+            } else {
                 m_document.append(group);
+            }
             delete(m_gc.pop());
             continue;
         }
@@ -664,15 +709,17 @@ XAMLImport::parseGroup(VGroup *grp, const QDomElement &e)
                    b.tagName() == "polygon" ||
                    b.tagName() == "path" ||
                    b.tagName() == "image") {
-            if (!isDef)
+            if (!isDef) {
                 obj = createObject(b);
-            else
+            } else {
                 m_paths.insert(b.attribute("id"), b);
+            }
         } else if (b.tagName() == "text") {
-            if (isDef)
+            if (isDef) {
                 m_paths.insert(b.attribute("id"), b);
-            else
+            } else {
                 createText(grp, b);
+            }
         } else if (b.tagName() == "use") {
             double tx = b.attribute("x").toDouble();
             double ty = b.attribute("y").toDouble();
@@ -690,52 +737,60 @@ XAMLImport::parseGroup(VGroup *grp, const QDomElement &e)
                 }
             }
         }
-        if (!obj) continue;
+        if (!obj) {
+            continue;
+        }
         VTransformCmd trafo(0L, m_gc.current()->matrix);
         trafo.visit(*obj);
         parseStyle(obj, b);
         // handle id
-        if (!b.attribute("id").isEmpty())
+        if (!b.attribute("id").isEmpty()) {
             obj->setName(b.attribute("id"));
-        if (grp)
+        }
+        if (grp) {
             grp->append(obj);
-        else
+        } else {
             m_document.append(obj);
+        }
         delete(m_gc.pop());
     }
 }
 
-VObject* XAMLImport::findObject(const QString &name, VGroup* group)
+VObject *XAMLImport::findObject(const QString &name, VGroup *group)
 {
-    if (! group)
+    if (! group) {
         return 0L;
+    }
 
     VObjectListIterator itr = group->objects();
 
     for (uint objcount = 1; itr.current(); ++itr, objcount++)
         if (itr.current()->state() != VObject::deleted) {
-            if (itr.current()->name() == name)
+            if (itr.current()->name() == name) {
                 return itr.current();
+            }
 
             if (dynamic_cast<VGroup *>(itr.current())) {
                 VObject *obj = findObject(name, dynamic_cast<VGroup *>(itr.current()));
-                if (obj)
+                if (obj) {
                     return obj;
+                }
             }
         }
 
     return 0L;
 }
 
-VObject* XAMLImport::findObject(const QString &name)
+VObject *XAMLImport::findObject(const QString &name)
 {
-    QVector<VLayer*> vector;
+    QVector<VLayer *> vector;
     m_document.layers().toVector(&vector);
     for (int i = vector.count() - 1; i >= 0; i--) {
         if (vector[i]->state() != VObject::deleted) {
-            VObject* obj = findObject(name, dynamic_cast<VGroup *>(vector[i]));
-            if (obj)
+            VObject *obj = findObject(name, dynamic_cast<VGroup *>(vector[i]));
+            if (obj) {
                 return obj;
+            }
         }
     }
 
@@ -768,25 +823,29 @@ void XAMLImport::createText(VGroup *grp, const QDomElement &b)
             if (e.isNull()) {
                 content += n.toCharacterData().data();
             } else if (e.tagName() == "textPath") {
-                if (e.attribute("xlink:href").isEmpty())
+                if (e.attribute("xlink:href").isEmpty()) {
                     continue;
+                }
 
                 QString uri = e.attribute("xlink:href");
                 unsigned int start = uri.find("#") + 1;
                 unsigned int end = uri.findRev(")");
                 QString key = uri.mid(start, end - start);
                 if (! m_paths.contains(key)) {
-                    VObject* obj = findObject(key);
-                    if (obj)
-                        path = dynamic_cast<VPath*>(obj);
+                    VObject *obj = findObject(key);
+                    if (obj) {
+                        path = dynamic_cast<VPath *>(obj);
+                    }
                 } else {
                     QDomElement p = m_paths[key];
-                    path = dynamic_cast<VPath*>(createObject(p));
-                    if (path)
+                    path = dynamic_cast<VPath *>(createObject(p));
+                    if (path) {
                         path->setState(VObject::deleted);
+                    }
                 }
-                if (! path)
+                if (! path) {
                     continue;
+                }
                 base = *path->paths().getFirst();
                 content += e.text();
             } else if (e.tagName() == "tspan") {
@@ -804,8 +863,9 @@ void XAMLImport::createText(VGroup *grp, const QDomElement &b)
                     }
                 }
             } else if (e.tagName() == "tref") {
-                if (e.attribute("xlink:href").isEmpty())
+                if (e.attribute("xlink:href").isEmpty()) {
                     continue;
+                }
 
                 QString uri = e.attribute("xlink:href");
                 unsigned int start = uri.find("#") + 1;
@@ -813,15 +873,17 @@ void XAMLImport::createText(VGroup *grp, const QDomElement &b)
                 QString key = uri.mid(start, end - start);
 
                 if (! m_paths.contains(key)) {
-                    VObject* obj = findObject(key);
-                    if (obj)
-                        content += dynamic_cast<VText*>(obj)->text();
+                    VObject *obj = findObject(key);
+                    if (obj) {
+                        content += dynamic_cast<VText *>(obj)->text();
+                    }
                 } else {
                     QDomElement p = m_paths[key];
                     content += p.text();
                 }
-            } else
+            } else {
                 continue;
+            }
         }
         text = new VText(m_gc.current()->font, base, VText::Above, VText::Left, content.simplified());
     } else {
@@ -839,18 +901,20 @@ void XAMLImport::createText(VGroup *grp, const QDomElement &b)
         parseStyle(text, b);
         trafo.visit(*text);
 
-        if (!b.attribute("id").isEmpty())
+        if (!b.attribute("id").isEmpty()) {
             text->setName(b.attribute("id"));
+        }
 
-        if (grp)
+        if (grp) {
             grp->append(text);
-        else
+        } else {
             m_document.append(text);
+        }
     }
     delete(m_gc.pop());
 }
 
-VObject* XAMLImport::createObject(const QDomElement &b)
+VObject *XAMLImport::createObject(const QDomElement &b)
 {
     if (b.tagName() == "rect") {
         addGraphicContext();
@@ -859,7 +923,7 @@ VObject* XAMLImport::createObject(const QDomElement &b)
         double width = parseUnit(b.attribute("width"), true, false, m_outerRect);
         double height = parseUnit(b.attribute("height"), false, true, m_outerRect);
         setupTransform(b);
-        return new VRectangle(0L, KoPoint(x, height + y) , width, height);
+        return new VRectangle(0L, KoPoint(x, height + y), width, height);
     } else if (b.tagName() == "ellipse") {
         addGraphicContext();
         setupTransform(b);
@@ -904,10 +968,13 @@ VObject* XAMLImport::createObject(const QDomElement &b)
             if (bFirst) {
                 path->moveTo(point);
                 bFirst = false;
-            } else
+            } else {
                 path->lineTo(point);
+            }
         }
-        if (b.tagName() == "polygon") path->close();
+        if (b.tagName() == "polygon") {
+            path->close();
+        }
         return path;
     } else if (b.tagName() == "path") {
         addGraphicContext();

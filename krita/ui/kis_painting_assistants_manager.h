@@ -29,16 +29,15 @@
 class KisViewManager;
 class KisPaintingAssistantsDecoration;
 
-
 class KisPaintingAssistantsManager : public QObject
 {
     Q_OBJECT
 
 public:
-    KisPaintingAssistantsManager(KisViewManager* view);
+    KisPaintingAssistantsManager(KisViewManager *view);
     virtual ~KisPaintingAssistantsManager();
 
-    void setup(KisActionManager* actionManager);
+    void setup(KisActionManager *actionManager);
 
     void setView(QPointer<KisView> imageView);
 
@@ -46,11 +45,11 @@ private Q_SLOTS:
     void updateAction();
 
 private:
-    KisPaintingAssistantsDecoration* decoration();
-    
+    KisPaintingAssistantsDecoration *decoration();
+
     QPointer<KisView> m_imageView;
-    KisAction* m_toggleAssistant;
-    KisAction* m_togglePreview;
+    KisAction *m_toggleAssistant;
+    KisAction *m_togglePreview;
 };
 
 #endif // KIS_PAINTING_ASSISTANTS_MANAGER_H

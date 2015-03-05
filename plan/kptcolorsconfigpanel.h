@@ -22,7 +22,6 @@
 
 #include "ui_kptcolorsconfigpanel.h"
 
-
 namespace KPlato
 {
 

@@ -19,7 +19,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "ChartTableModel.h"
 
@@ -46,8 +45,8 @@
 #include "CellRegion.h"
 #include "OdfLoadingHelper.h"
 
-
-namespace KChart {
+namespace KChart
+{
 
 ChartTableModel::ChartTableModel(QObject *parent /* = 0 */)
     : QStandardItemModel(parent)
@@ -58,14 +57,13 @@ ChartTableModel::~ChartTableModel()
 {
 }
 
-
 QHash<QString, QVector<QRect> > ChartTableModel::cellRegion() const
 {
     // FIXME: Unimplemented?
     return QHash<QString, QVector<QRect> >();
 }
 
-bool ChartTableModel::setCellRegion(const QString& /*regionName*/)
+bool ChartTableModel::setCellRegion(const QString & /*regionName*/)
 {
 #if 0 // FIXME: What does this code do?
     int result = 0;
@@ -81,7 +79,7 @@ bool ChartTableModel::setCellRegion(const QString& /*regionName*/)
     return true;
 }
 
-bool ChartTableModel::isCellRegionValid(const QString& regionName) const
+bool ChartTableModel::isCellRegionValid(const QString &regionName) const
 {
     Q_UNUSED(regionName);
 
@@ -104,21 +102,23 @@ bool ChartTableModel::loadOdf(const KoXmlElement &tableElement,
     int row = 0;
     KoXmlElement  n;
     forEachElement (n, tableElement) {
-        if (n.namespaceURI() != KoXmlNS::table)
+        if (n.namespaceURI() != KoXmlNS::table) {
             continue;
+        }
 
         if (n.localName() == "table-columns" || n.localName() == "table-header-columns") {
             int column = 0;
             KoXmlElement  _n;
             forEachElement (_n, n) {
-                if (_n.namespaceURI() != KoXmlNS::table || _n.localName() != "table-column")
+                if (_n.namespaceURI() != KoXmlNS::table || _n.localName() != "table-column") {
                     continue;
+                }
                 column += qMax(1, _n.attributeNS(KoXmlNS::table, "number-columns-repeated").toInt());
-                if (column > columnCount())
+                if (column > columnCount()) {
                     setColumnCount(column);
+                }
             }
-        }
-        else if (n.localName() == "table-rows" || n.localName() == "table-header-rows") {
+        } else if (n.localName() == "table-rows" || n.localName() == "table-header-rows") {
             if (n.localName() == "table-header-rows") {
                 if (row >= 1) {
                     // There can only be one header-row and only at the very beginning.
@@ -130,8 +130,9 @@ bool ChartTableModel::loadOdf(const KoXmlElement &tableElement,
 
             KoXmlElement  _n;
             forEachElement (_n, n) {
-                if (_n.namespaceURI() != KoXmlNS::table || _n.localName() != "table-row")
+                if (_n.namespaceURI() != KoXmlNS::table || _n.localName() != "table-row") {
                     continue;
+                }
 
                 // Add a row to the internal representation.
                 setRowCount(row + 1);
@@ -140,8 +141,9 @@ bool ChartTableModel::loadOdf(const KoXmlElement &tableElement,
                 int  column = 0;
                 KoXmlElement  __n;
                 forEachElement (__n, _n) {
-                    if (__n.namespaceURI() != KoXmlNS::table || __n.localName() != "table-cell")
+                    if (__n.namespaceURI() != KoXmlNS::table || __n.localName() != "table-cell") {
                         continue;
+                    }
 
                     // We have a cell so be sure our column-counter is increased right now so
                     // any 'continue' coming now will leave with the correct value for the next
@@ -149,25 +151,29 @@ bool ChartTableModel::loadOdf(const KoXmlElement &tableElement,
                     ++column;
 
                     // If this row is wider than any previous one, then add another column.
-                    if (column > columnCount())
+                    if (column > columnCount()) {
                         setColumnCount(column);
+                    }
 
                     const QString valueType = __n.attributeNS(KoXmlNS::office, "value-type");
                     QString valueString = __n.attributeNS(KoXmlNS::office, "value");
                     const KoXmlElement valueElement = __n.namedItemNS(KoXmlNS::text, "p").toElement();
-                    if ((valueElement.isNull() || !valueElement.isElement()) && valueString.isEmpty())
+                    if ((valueElement.isNull() || !valueElement.isElement()) && valueString.isEmpty()) {
                         continue;
+                    }
 
                     // Read the actual value in the cell.
                     QVariant value;
-                    if (valueString.isEmpty())
+                    if (valueString.isEmpty()) {
                         valueString = valueElement.text().trimmed();
-                    if (valueType == "float")
+                    }
+                    if (valueType == "float") {
                         value = valueString.toDouble();
-                    else if (valueType == "boolean")
+                    } else if (valueType == "boolean") {
                         value = (bool)valueString.toInt();
-                    else // if (valueType == "string")
+                    } else { // if (valueType == "string")
                         value = valueString;
+                    }
 
                     setData(index(row, column - 1), value);
                 } // foreach table:table-cell
@@ -180,7 +186,7 @@ bool ChartTableModel::loadOdf(const KoXmlElement &tableElement,
     return true;
 }
 
-bool ChartTableModel::saveOdf(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
+bool ChartTableModel::saveOdf(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles) const
 {
     Q_UNUSED(bodyWriter);
     Q_UNUSED(mainStyles);

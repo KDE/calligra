@@ -32,26 +32,26 @@ public:
         TextRole = Qt::UserRole + 1,
     };
 
-    explicit ColorDepthModel(QObject* parent = 0);
+    explicit ColorDepthModel(QObject *parent = 0);
     virtual ~ColorDepthModel();
 
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual int rowCount(const QModelIndex &parent) const;
 
     QString colorModelId() const;
 
     Q_INVOKABLE QString id(int index);
-    Q_INVOKABLE int indexOf(const QString& id);
+    Q_INVOKABLE int indexOf(const QString &id);
 
 public Q_SLOTS:
-    void setColorModelId(const QString& id);
+    void setColorModelId(const QString &id);
 
 Q_SIGNALS:
     void colorModelIdChanged();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // COLORDEPTHMODEL_H

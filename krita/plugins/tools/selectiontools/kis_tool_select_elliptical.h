@@ -35,7 +35,7 @@ class KisToolSelectElliptical : public KisToolEllipseBase
 
 public:
     KisToolSelectElliptical(KoCanvasBase *canvas);
-    QWidget* createOptionWidget();
+    QWidget *createOptionWidget();
 
 private:
     void keyPressEvent(QKeyEvent *event);
@@ -49,8 +49,9 @@ class KisToolSelectEllipticalFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectEllipticalFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolSelectElliptical") {
+    KisToolSelectEllipticalFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolSelectElliptical")
+    {
         setToolTip(i18n("Elliptical Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -61,15 +62,12 @@ public:
 
     virtual ~KisToolSelectEllipticalFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return  new KisToolSelectElliptical(canvas);
     }
 
 };
-
-
-
-
 
 #endif //__KIS_TOOL_SELECT_ELLIPTICAL_H__
 

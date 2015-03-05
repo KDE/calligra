@@ -36,8 +36,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDBPasswordDialog : public KPasswordDialog
 {
     Q_OBJECT
 public:
-    enum Flag
-    {
+    enum Flag {
         NoFlags = 0x00,
         ShowDetailsButton = 0x01, //!< If set, the details button will be displayed
         ServerReadOnly = 0x02     //!< If set, the server line edit will be read-only
@@ -47,7 +46,7 @@ public:
     //! Constructs a new password dialog.
     //! cdata.password is modified only when user provided the password.
     //! If @a showDetailsButton is true, the dialog displays connection details.
-    KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, Flags flags = NoFlags);
+    KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData &cdata, Flags flags = NoFlags);
     virtual ~KexiDBPasswordDialog();
 
     bool showConnectionDetailsRequested() const;
@@ -64,7 +63,7 @@ protected Q_SLOTS:
 
 protected:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDBPasswordDialog::Flags)

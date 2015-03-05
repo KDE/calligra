@@ -61,7 +61,6 @@ class KoShapeAnchor;
 class KoBorder;
 struct KoInsets;
 
-
 /**
  *
  * Base class for all flake shapes. Shapes extend this class
@@ -187,7 +186,7 @@ public:
 
     /**
      * @brief Paint the shape's border
-     * This is a helper function that could be called from the paint() method of all shapes. 
+     * This is a helper function that could be called from the paint() method of all shapes.
      * @param painter used for painting the shape
      * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
@@ -495,7 +494,6 @@ public:
      */
     qreal minimumHeight() const;
 
-
     /**
      * Set the background of the shape.
      * A shape background can be a plain color, a gradient, a pattern, be fully transparent
@@ -533,7 +531,7 @@ public:
      * Returns the shape level transparency.
      * @param recursive when true takes the parents transparency into account
      */
-    qreal transparency(bool recursive=false) const;
+    qreal transparency(bool recursive = false) const;
 
     /**
      * Retrieve the z-coordinate of this shape.
@@ -696,16 +694,16 @@ public:
         ChildZPassThrough ///< children are considered equal to this shape
     };
 
-   /**
-    * Returns if during compareShapeZIndex() how this shape portrays the values
-    * of its children. The default behaviour is to let this shape's z values take
-    * the place of its childrens values, so you get a parent/child relationship.
-    * The children are naturally still ordered relatively to their z values
-    *
-    * But for special cases (like Calligra's TextShape) it can be overloaded to return
-    * ChildZPassThrough which means the children keep their own z values
-    * @returns the z order policy of this shape
-    */
+    /**
+     * Returns if during compareShapeZIndex() how this shape portrays the values
+     * of its children. The default behaviour is to let this shape's z values take
+     * the place of its childrens values, so you get a parent/child relationship.
+     * The children are naturally still ordered relatively to their z values
+     *
+     * But for special cases (like Calligra's TextShape) it can be overloaded to return
+     * ChildZPassThrough which means the children keep their own z values
+     * @returns the z order policy of this shape
+     */
     virtual ChildZOrderPolicy childZOrderPolicy();
 
     /**
@@ -739,7 +737,7 @@ public:
      * Normally this would be the same as outline() if there is a fill (background) set on the
      * shape and empty if not.  However, a shape could reimplement this to return an outline
      * even if no fill is defined. A typical example of this would be the picture shape
-     * which has a picture but almost never a background. 
+     * which has a picture but almost never a background.
      *
      * @returns the outline of the shape in the form of a path.
      */
@@ -779,7 +777,7 @@ public:
     void setClipPath(KoClipPath *clipPath);
 
     /// Returns the currently set clip path or 0 if there is no clip path set
-    KoClipPath * clipPath() const;
+    KoClipPath *clipPath() const;
 
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
@@ -1004,7 +1002,7 @@ public:
     bool hasDependee(KoShape *shape) const;
 
     /// Returns list of shapes depending on this shape
-    QList<KoShape*> dependees() const;
+    QList<KoShape *> dependees() const;
 
     /// Returns additional snap data the shape wants to have snapping to
     virtual KoSnapData snapData() const;
@@ -1082,19 +1080,19 @@ public:
      * Notice that if the set is non-empty 'this' shape is no longer looked at. You can choose
      * to add itself to the set too.
      */
-    QSet<KoShape*> toolDelegates() const;
+    QSet<KoShape *> toolDelegates() const;
 
     /**
      * Set the tool delegates.
      * @param delegates the new delegates.
      * @see toolDelegates()
      */
-    void setToolDelegates(const QSet<KoShape*> &delegates);
+    void setToolDelegates(const QSet<KoShape *> &delegates);
 
     /**
      * Return the hyperlink for this shape.
      */
-    QString hyperLink () const;
+    QString hyperLink() const;
 
     /**
      * Set hyperlink for this shape.
@@ -1202,6 +1200,6 @@ private:
     Q_DECLARE_PRIVATE(KoShape)
 };
 
-Q_DECLARE_METATYPE(KoShape*)
+Q_DECLARE_METATYPE(KoShape *)
 
 #endif

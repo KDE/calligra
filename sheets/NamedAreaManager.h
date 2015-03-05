@@ -59,11 +59,11 @@ public:
      */
     virtual ~NamedAreaManager();
 
-    void remove(Sheet* sheet);
+    void remove(Sheet *sheet);
 
-    Region namedArea(const QString& name) const;
-    Sheet* sheet(const QString& name) const;
-    bool contains(const QString& name) const;
+    Region namedArea(const QString &name) const;
+    Sheet *sheet(const QString &name) const;
+    bool contains(const QString &name) const;
 
     /**
      * Returns the list of all registered named areas.
@@ -71,18 +71,18 @@ public:
      */
     QList<QString> areaNames() const;
 
-    void regionChanged(const Region& region);
+    void regionChanged(const Region &region);
     void updateAllNamedAreas();
 
     /// \ingroup OpenDocument
-    void loadOdf(const KoXmlElement& body);
+    void loadOdf(const KoXmlElement &body);
     /// \ingroup OpenDocument
-    void saveOdf(KoXmlWriter& xmlWriter) const;
+    void saveOdf(KoXmlWriter &xmlWriter) const;
 
     /// \ingroup NativeFormat
-    void loadXML(const KoXmlElement& element);
+    void loadXML(const KoXmlElement &element);
     /// \ingroup NativeFormat
-    QDomElement saveXML(QDomDocument& doc) const;
+    QDomElement saveXML(QDomDocument &doc) const;
 
 public Q_SLOTS:
     /**
@@ -91,18 +91,18 @@ public Q_SLOTS:
      * \param region the cell range to be named
      * \param name the name of the new area
      */
-    void insert(const Region& region, const QString& name);
+    void insert(const Region &region, const QString &name);
 
-    void remove(const QString& name);
+    void remove(const QString &name);
 
 Q_SIGNALS:
-    void namedAreaAdded(const QString&);
-    void namedAreaRemoved(const QString&);
-    void namedAreaModified(const QString&);
+    void namedAreaAdded(const QString &);
+    void namedAreaRemoved(const QString &);
+    void namedAreaModified(const QString &);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

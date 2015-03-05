@@ -59,10 +59,10 @@ KisHeightMapImport::~KisHeightMapImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteArray &from, const QByteArray &to)
 {
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
 
     if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
@@ -71,11 +71,9 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
     KoID depthId;
     if (from == "image/x-r8") {
         depthId = Integer8BitsColorDepthID;
-    }
-    else if (from == "image/x-r16") {
+    } else if (from == "image/x-r16") {
         depthId = Integer16BitsColorDepthID;
-    }
-    else {
+    } else {
         doc->setErrorMessage(i18n("The file is not 8 or 16 bits raw"));
         return KisImportExportFilter::WrongFormat;
     }
@@ -93,10 +91,10 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
 
     KUrl url(filename);
 
-
     dbgFile << "Import: " << url;
-    if (url.isEmpty())
+    if (url.isEmpty()) {
         return KisImportExportFilter::FileNotFound;
+    }
 
     if (!url.isLocalFile()) {
         return KisImportExportFilter::FileNotFound;
@@ -104,13 +102,13 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
 
     QApplication::restoreOverrideCursor();
 
-    KDialog* kdb = new KDialog(0);
+    KDialog *kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("R16 HeightMap Import Options"));
     kdb->setButtons(KDialog::Ok | KDialog::Cancel);
 
     Ui::WdgOptionsHeightMap optionsHeightMap;
 
-    QWidget* wdg = new QWidget(kdb);
+    QWidget *wdg = new QWidget(kdb);
     optionsHeightMap.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
@@ -137,8 +135,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
     int endianness = cfg.getInt("endianness", 0);
     if (endianness == 0) {
         optionsHeightMap.radioMac->setChecked(true);
-    }
-    else {
+    } else {
         optionsHeightMap.radioPC->setChecked(true);
     }
 
@@ -154,7 +151,6 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
         doc->setErrorMessage(i18n("Source file is not the right size for the specified width and height."));
         return KisImportExportFilter::WrongFormat;
     }
-
 
     QDataStream::ByteOrder bo = QDataStream::LittleEndian;
     cfg.setProperty("endianness", 1);
@@ -184,8 +180,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(const QByteA
                 s >> pixel;
                 KoGrayU16Traits::setGray(it->rawData(), pixel);
                 KoGrayU16Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_F, 1);
-            }
-            else {
+            } else {
                 quint8 pixel;
                 s >> pixel;
                 KoGrayU8Traits::setGray(it->rawData(), pixel);

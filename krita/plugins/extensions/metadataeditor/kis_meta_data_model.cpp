@@ -24,7 +24,7 @@
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_value.h>
 
-KisMetaDataModel::KisMetaDataModel(KisMetaData::Store* store) : m_store(store)
+KisMetaDataModel::KisMetaDataModel(KisMetaData::Store *store) : m_store(store)
 {
 
 }

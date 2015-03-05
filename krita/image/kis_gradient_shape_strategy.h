@@ -21,12 +21,11 @@
 
 #include <QPointF>
 
-
 class KisGradientShapeStrategy
 {
 public:
     KisGradientShapeStrategy();
-    KisGradientShapeStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
+    KisGradientShapeStrategy(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd);
     virtual ~KisGradientShapeStrategy();
 
     virtual double valueAt(double x, double y) const = 0;

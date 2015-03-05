@@ -230,17 +230,20 @@ public:
 
 public Q_SLOTS:
     /** Returns the number of file-entries the manifest has. */
-    int count() const {
+    int count() const
+    {
         return m_entries.count();
     }
     /** Returns the type of the file-entry. This could be for example
     something like "text/xml" or "application/vnd.oasis.opendocument.text" */
-    QString type(int index) {
+    QString type(int index)
+    {
         return m_entries.value(index).first;
     }
     /** Return the path of the file-entry. This could be for example
     something like "/", "content.xml" or "styles.xml". */
-    QString path(int index) {
+    QString path(int index)
+    {
         return m_entries.value(index).second;
     }
     /**
@@ -258,7 +261,7 @@ public Q_SLOTS:
     */
     QStringList paths(const QString &type = QString());
 private:
-    QList<QPair<QString,QString> > m_entries;
+    QList<QPair<QString, QString> > m_entries;
 };
 
 /**
@@ -386,7 +389,7 @@ public Q_SLOTS:
     *     raise "Failed to read mainfest"
     * \endcode
     */
-    QObject* open(const QString &fileName);
+    QObject *open(const QString &fileName);
 
     /**
     * Closes the store if it's opened. If the store was not opened
@@ -444,7 +447,5 @@ private:
     KoScriptingOdfReader *m_reader;
     QByteArray m_byteArray;
 };
-
-
 
 #endif

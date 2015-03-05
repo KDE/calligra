@@ -1,4 +1,3 @@
-// -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -30,18 +29,18 @@ class STAGE_EXPORT KPrFactory : public KPluginFactory
 {
     Q_OBJECT
 public:
-    explicit KPrFactory( QObject* parent = 0, const char* name = 0 );
+    explicit KPrFactory(QObject *parent = 0, const char *name = 0);
     ~KPrFactory();
 
-    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
+    virtual QObject *create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword);
     static const KComponentData &componentData();
 
     // _Creates_ a KAboutData but doesn't keep ownership
-    static KAboutData* aboutData();
+    static KAboutData *aboutData();
 
 private:
-    static KComponentData* s_instance;
-    static KAboutData* s_aboutData;
+    static KComponentData *s_instance;
+    static KAboutData *s_aboutData;
 };
 
 #endif

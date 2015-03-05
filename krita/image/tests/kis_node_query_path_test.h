@@ -60,5 +60,4 @@ private:
     KisNodeSP brother1, brother2;
 };
 
-
 #endif

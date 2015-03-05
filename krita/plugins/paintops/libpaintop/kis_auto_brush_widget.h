@@ -30,7 +30,8 @@ class PAINTOP_EXPORT KisWdgAutobrush : public QWidget, public Ui::KisWdgAutobrus
     Q_OBJECT
 
 public:
-    KisWdgAutobrush(QWidget *parent, const char *name) : QWidget(parent) {
+    KisWdgAutobrush(QWidget *parent, const char *name) : QWidget(parent)
+    {
         setObjectName(name); setupUi(this);
     }
 
@@ -42,7 +43,7 @@ class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutobrush
 
 public:
 
-    KisAutoBrushWidget(QWidget *parent, const char* name);
+    KisAutoBrushWidget(QWidget *parent, const char *name);
 
     void activate();
 
@@ -80,6 +81,5 @@ private:
     KisBrushSP m_autoBrush;
     bool m_linkFade;
 };
-
 
 #endif

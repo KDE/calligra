@@ -29,7 +29,6 @@
 // Qt
 #include <QCoreApplication>
 
-
 class KoSemanticStylesheetPrivate
 {
 public:
@@ -47,16 +46,15 @@ public:
         m_templateString(templateString),
         m_type(type),
         m_isMutable(isMutable)
-        {}
+    {}
 };
 
-
 KoSemanticStylesheet::KoSemanticStylesheet(const QString &uuid,
-                                       const QString &name,
-                                       const QString &templateString,
-                                       const QString &type, bool isMutable)
+        const QString &name,
+        const QString &templateString,
+        const QString &type, bool isMutable)
     : QObject(QCoreApplication::instance())
-    , d (new KoSemanticStylesheetPrivate (uuid,name,templateString,type,isMutable))
+    , d(new KoSemanticStylesheetPrivate(uuid, name, templateString, type, isMutable))
 {
 }
 
@@ -85,7 +83,6 @@ QString KoSemanticStylesheet::type() const
     return d->m_type;
 }
 
-
 bool KoSemanticStylesheet::isMutable() const
 {
     return d->m_isMutable;
@@ -105,7 +102,6 @@ void KoSemanticStylesheet::templateString(const QString &v)
         d->m_templateString = v;
     }
 }
-
 
 void KoSemanticStylesheet::format(hKoRdfSemanticItem obj, KoTextEditor *editor, const QString &xmlid)
 {

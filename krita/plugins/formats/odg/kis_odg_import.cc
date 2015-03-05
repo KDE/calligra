@@ -37,7 +37,6 @@
 #include <KoXmlNS.h>
 #include <KoShapeRegistry.h>
 
-
 #include <KoShapeBasedDocumentBase.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -52,26 +51,27 @@ KisODGImport::~KisODGImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "Import odg";
 
-    if (to != "application/x-krita")
+    if (to != "application/x-krita") {
         return KisImportExportFilter::BadMimeType;
+    }
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
 
-    if (!doc)
+    if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     QString filename = m_chain->inputFile();
 
-    KoStore* store = KoStore::createStore(filename, KoStore::Read, from, KoStore::Zip);
+    KoStore *store = KoStore::createStore(filename, KoStore::Read, from, KoStore::Zip);
     if (!store || store->bad()) {
         delete store;
         return KisImportExportFilter::BadConversionGraph;
     }
-    
 
     doc -> prepareForImport();
 
@@ -106,13 +106,14 @@ KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& 
         return KisImportExportFilter::CreationError;
     }
 
-    KoXmlElement * master = 0;
-    if (odfStore.styles().masterPages().contains("Standard"))
+    KoXmlElement *master = 0;
+    if (odfStore.styles().masterPages().contains("Standard")) {
         master = odfStore.styles().masterPages().value("Standard");
-    else if (odfStore.styles().masterPages().contains("Default"))
+    } else if (odfStore.styles().masterPages().contains("Default")) {
         master = odfStore.styles().masterPages().value("Default");
-    else if (! odfStore.styles().masterPages().empty())
+    } else if (! odfStore.styles().masterPages().empty()) {
         master = odfStore.styles().masterPages().begin().value();
+    }
 
     qint32 width = 1000;
     qint32 height = 1000;
@@ -130,17 +131,17 @@ KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& 
     context.setManifestFile(QString("tar:/") + odfStore.store()->currentPath() + "META-INF/manifest.xml");
     KoShapeLoadingContext shapeContext(context, doc->shapeController()->resourceManager());
 
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
     doc->setCurrentImage(image);
 
     KoXmlElement layerElement;
-    forEachElement(layerElement, KoXml::namedItemNS(page, KoXmlNS::draw, "layer-set")) {
+    forEachElement (layerElement, KoXml::namedItemNS(page, KoXmlNS::draw, "layer-set")) {
 
-    KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), image,
-                                        i18n("Vector Layer"),
-                                        OPACITY_OPAQUE_U8);
-    if (!shapeLayer->loadOdf(layerElement, shapeContext)) {
+        KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), image,
+                i18n("Vector Layer"),
+                OPACITY_OPAQUE_U8);
+        if (!shapeLayer->loadOdf(layerElement, shapeContext)) {
             kWarning() << "Could not load vector layer!";
             return KisImportExportFilter::CreationError;
         }
@@ -148,11 +149,10 @@ KisImportExportFilter::ConversionStatus KisODGImport::convert(const QByteArray& 
     }
 
     KoXmlElement child;
-    forEachElement(child, page) {
+    forEachElement (child, page) {
         /*KoShape * shape = */KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
     }
 
     return KisImportExportFilter::OK;
 }
-
 

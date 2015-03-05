@@ -26,8 +26,8 @@
 
 using namespace Scripting;
 
-TextCursor::TextCursor(QObject* parent, const QTextCursor& cursor)
-        : QObject(parent), m_cursor(cursor) {}
+TextCursor::TextCursor(QObject *parent, const QTextCursor &cursor)
+    : QObject(parent), m_cursor(cursor) {}
 
 TextCursor::~TextCursor() {}
 
@@ -92,30 +92,30 @@ QString TextCursor::selectedHtml() const
     return m_cursor.selection().toHtml();
 }
 
-QObject* TextCursor::currentFrame()
+QObject *TextCursor::currentFrame()
 {
-    QTextFrame* frame = m_cursor.currentFrame();
+    QTextFrame *frame = m_cursor.currentFrame();
     return frame ? new TextFrame(this, frame) : 0;
 }
 
-QObject* TextCursor::currentList()
+QObject *TextCursor::currentList()
 {
-    QTextList* list = m_cursor.currentList();
+    QTextList *list = m_cursor.currentList();
     return list ? new TextList(this, list) : 0;
 }
 
-QObject* TextCursor::currentTable()
+QObject *TextCursor::currentTable()
 {
-    QTextTable* table = m_cursor.currentTable();
+    QTextTable *table = m_cursor.currentTable();
     return table ? new TextTable(this, table) : 0;
 }
 
-void TextCursor::insertText(const QString& text)
+void TextCursor::insertText(const QString &text)
 {
     m_cursor.insertText(text);
 }
 
-void TextCursor::insertHtml(const QString& html)
+void TextCursor::insertHtml(const QString &html)
 {
     m_cursor.insertHtml(html);
 }
@@ -132,14 +132,14 @@ void TextCursor::insertDefaultBlock()
     m_cursor.insertBlock(bf, cf);
 }
 
-QObject* TextCursor::insertFrame()
+QObject *TextCursor::insertFrame()
 {
     QTextFrameFormat f;
-    QTextFrame* frame = m_cursor.insertFrame(f);
+    QTextFrame *frame = m_cursor.insertFrame(f);
     return frame ? new TextFrame(this, frame) : 0;
 }
 
-QObject* TextCursor::insertList()
+QObject *TextCursor::insertList()
 {
     QTextListFormat f;
 
@@ -147,11 +147,11 @@ QObject* TextCursor::insertList()
     //f.setStyle(QTextListFormat::ListDisc);
     //f.setIndent(f.indent()+1);
 
-    QTextList* l = m_cursor.insertList(f);
+    QTextList *l = m_cursor.insertList(f);
     return l ? new TextList(this, l) : 0;
 }
 
-QObject* TextCursor::insertTable(int rows, int columns)
+QObject *TextCursor::insertTable(int rows, int columns)
 {
     QTextTableFormat format;
     //format.setColumns(columns);
@@ -166,7 +166,7 @@ QObject* TextCursor::insertTable(int rows, int columns)
     constraints << QTextLength(QTextLength::PercentageLength, 28);
     format.setColumnWidthConstraints(constraints);
 
-    QTextTable* table = m_cursor.insertTable(rows, columns, format);
+    QTextTable *table = m_cursor.insertTable(rows, columns, format);
     //QTextTable* t = m_cursor.insertTable(rows, columns);
 
     QTextTableCell cell = table->cellAt(0, 0);

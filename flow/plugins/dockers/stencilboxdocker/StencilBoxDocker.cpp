@@ -64,11 +64,11 @@
 
 #define StencilShapeId "StencilShape"
 
-StencilBoxDocker::StencilBoxDocker(QWidget* parent)
+StencilBoxDocker::StencilBoxDocker(QWidget *parent)
     : QDockWidget(parent)
 {
     setWindowTitle(i18n("Stencil Box"));
-    QWidget* mainWidget = new QWidget(this);
+    QWidget *mainWidget = new QWidget(this);
     mainWidget->setAcceptDrops(true);
     setWidget(mainWidget);
 
@@ -115,8 +115,8 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_layout = new QVBoxLayout(mainWidget);
     m_layout->addLayout(m_panelLayout);
     m_layout->addWidget(m_treeWidget);
-    
-    if(! KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections").empty()) {
+
+    if (! KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections").empty()) {
         loadShapeCollections();
     }
 
@@ -132,10 +132,9 @@ void StencilBoxDocker::getHotNewStuff()
 {
     KNS3::DownloadDialog dialog("flow_stencils.knsrc", this);
     dialog.exec();
-    if(!dialog.installedEntries().isEmpty()) {
+    if (!dialog.installedEntries().isEmpty()) {
         KMessageBox::information(0, i18n("Stencils successfully installed."));
-    }
-    else if(!dialog.changedEntries().isEmpty()) {
+    } else if (!dialog.changedEntries().isEmpty()) {
         KMessageBox::information(0, i18n("Stencils successfully uninstalled."));
     }
 }
@@ -186,15 +185,15 @@ but it won't look good under small pixels when the stencil stroke is complicated
 
 void StencilBoxDocker::locationChanged(Qt::DockWidgetArea area)
 {
-    switch(area) {
-        case Qt::TopDockWidgetArea:
-        case Qt::BottomDockWidgetArea:
-            break;
-        case Qt::LeftDockWidgetArea:
-        case Qt::RightDockWidgetArea:
-            break;
-        default:
-            break;
+    switch (area) {
+    case Qt::TopDockWidgetArea:
+    case Qt::BottomDockWidgetArea:
+        break;
+    case Qt::LeftDockWidgetArea:
+    case Qt::RightDockWidgetArea:
+        break;
+    default:
+        break;
     }
     m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     m_layout->invalidate();
@@ -210,66 +209,67 @@ void StencilBoxDocker::reapplyFilter()
 void StencilBoxDocker::loadShapeCollections()
 {
     QStringList dirs = KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections");
-    foreach(const QString& path, dirs)
-    {
+    foreach (const QString &path, dirs) {
         qDebug() << path;
         QDir dir(path);
         QStringList collectionDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        foreach(const QString & collectionDirName, collectionDirs) {
+        foreach (const QString &collectionDirName, collectionDirs) {
             addCollection(path + collectionDirName);
             qDebug() << path + collectionDirName;
         }
     }
 }
 
-bool StencilBoxDocker::addCollection(const QString& path)
+bool StencilBoxDocker::addCollection(const QString &path)
 {
     QDir dir(path);
 
-    if(!dir.exists("collection.desktop"))
+    if (!dir.exists("collection.desktop")) {
         return false;
+    }
 
     KDesktopFile collection(dir.absoluteFilePath("collection.desktop"));
     KConfigGroup dg = collection.desktopGroup();
     QString family = dg.readEntry("Name");
 
-    if(!m_modelMap.contains(family)) {
-        CollectionItemModel* model = new CollectionItemModel(this);
+    if (!m_modelMap.contains(family)) {
+        CollectionItemModel *model = new CollectionItemModel(this);
         m_modelMap.insert(family, model);
     }
 
-    CollectionItemModel* model = m_modelMap[family];
+    CollectionItemModel *model = m_modelMap[family];
     QList<KoCollectionItem> templateList = model->shapeTemplateList();
     QStringList stencils = dir.entryList(QStringList("*.desktop"));
 
-    foreach(const QString & stencil, stencils) {
-        if(stencil == "collection.desktop")
+    foreach (const QString &stencil, stencils) {
+        if (stencil == "collection.desktop") {
             continue;
+        }
 
         KDesktopFile entry(dir.absoluteFilePath(stencil));
         KConfigGroup content = entry.desktopGroup();
         QString name = content.readEntry("Name");
         bool keepAspectRatio = content.readEntry("CS-KeepAspectRatio", false);
-        KoProperties* props = new KoProperties();
+        KoProperties *props = new KoProperties();
         props->setProperty("keepAspectRatio", keepAspectRatio);
 
         // find data file path
         QString filename = dir.absoluteFilePath(stencil);
         filename.chop(7); // remove 'desktop'
         QString source = filename;
-        if (QFile(filename+"odg").exists())
+        if (QFile(filename + "odg").exists()) {
             source += "odg";
-        else if (QFile(filename+"svgz").exists())
+        } else if (QFile(filename + "svgz").exists()) {
             source += "svgz";
-        else if (QFile(filename+"svg").exists())
+        } else if (QFile(filename + "svg").exists()) {
             source += "svg";
-        else {
+        } else {
             qDebug() << filename << "not found";
             continue;
         }
 
         // register shape factory
-        StencilShapeFactory* factory = new StencilShapeFactory(source, name, props);
+        StencilShapeFactory *factory = new StencilShapeFactory(source, name, props);
         KoShapeRegistry::instance()->add(source, factory);
 
         KoCollectionItem temp;
@@ -277,14 +277,14 @@ bool StencilBoxDocker::addCollection(const QString& path)
         temp.name = name;
         temp.toolTip = name;
 
-        if (QFile(filename+"png").exists()) {
-            temp.icon = QIcon(filename+"png");
+        if (QFile(filename + "png").exists()) {
+            temp.icon = QIcon(filename + "png");
         } else {
             // generate icon using factory
             QPixmap pix(32, 32);
             pix.fill(Qt::white);
             if (!QPixmapCache::find(source, &pix)) {
-                KoShape* shape = factory->createDefaultShape();
+                KoShape *shape = factory->createDefaultShape();
                 if (shape) {
                     KoZoomHandler converter;
                     qreal diffx = 30 / converter.documentToViewX(shape->size().width());
@@ -309,15 +309,13 @@ bool StencilBoxDocker::addCollection(const QString& path)
     return true;
 }
 
-void StencilBoxDocker::removeCollection(const QString& family)
+void StencilBoxDocker::removeCollection(const QString &family)
 {
-    if(m_modelMap.contains(family))
-    {
-        CollectionItemModel* model = m_modelMap[family];
+    if (m_modelMap.contains(family)) {
+        CollectionItemModel *model = m_modelMap[family];
         QList<KoCollectionItem> list = model->shapeTemplateList();
-        foreach(const KoCollectionItem & temp, list)
-        {
-            KoShapeFactoryBase* factory = KoShapeRegistry::instance()->get(temp.id);
+        foreach (const KoCollectionItem &temp, list) {
+            KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(temp.id);
             KoShapeRegistry::instance()->remove(temp.id);
             delete factory;
         }

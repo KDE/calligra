@@ -28,30 +28,30 @@
 #include <QAction>
 #include <QRunnable>
 
-Q_DECLARE_METATYPE(QAbstractListModel*);
+Q_DECLARE_METATYPE(QAbstractListModel *);
 
 class GitController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString cloneDir READ cloneDir WRITE setCloneDir NOTIFY cloneDirChanged)
     Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged)
-    Q_PROPERTY(QAbstractListModel* documents READ documents NOTIFY documentsChanged)
+    Q_PROPERTY(QAbstractListModel *documents READ documents NOTIFY documentsChanged)
 
     Q_PROPERTY(QString privateKeyFile READ privateKeyFile WRITE setPrivateKeyFile NOTIFY privateKeyFileChanged)
     Q_PROPERTY(bool needsPrivateKeyPassphrase READ needsPrivateKeyPassphrase WRITE setNeedsPrivateKeyPassphrase NOTIFY needsPrivateKeyPassphraseChanged)
     Q_PROPERTY(QString publicKeyFile READ publicKeyFile WRITE setPublicKeyFile NOTIFY publicKeyFileChanged)
     Q_PROPERTY(QString userForRemote READ userForRemote WRITE setUserForRemote NOTIFY userForRemoteChanged)
 public:
-    explicit GitController(QObject* parent = 0);
+    explicit GitController(QObject *parent = 0);
     virtual ~GitController();
 
     QString cloneDir() const;
-    void setCloneDir(const QString& newDir);
+    void setCloneDir(const QString &newDir);
 
     QString currentFile() const;
-    void setCurrentFile(QString& newFile);
+    void setCurrentFile(QString &newFile);
 
-    QAbstractListModel* documents() const;
+    QAbstractListModel *documents() const;
 
     QString privateKeyFile() const;
     void setPrivateKeyFile(QString newFile);
@@ -69,7 +69,7 @@ public:
     Q_INVOKABLE void pull();
 
 public Q_SLOTS:
-    QAction* commitAndPushCurrentFileAction();
+    QAction *commitAndPushCurrentFileAction();
     void commitAndPushCurrentFile();
 
     void clearOpThread();
@@ -102,7 +102,7 @@ public:
         PullOperation,
         PushOperation
     };
-    GitOpsThread(QString privateKey, QString publicKey, QString userForRemote, bool needsPrivateKeyPassphrase, git_signature* signature, QString gitDir, GitOperation operation, QString currentFile, QString message, QObject *parent = 0);
+    GitOpsThread(QString privateKey, QString publicKey, QString userForRemote, bool needsPrivateKeyPassphrase, git_signature *signature, QString gitDir, GitOperation operation, QString currentFile, QString message, QObject *parent = 0);
     ~GitOpsThread();
 
     void run();
@@ -118,7 +118,7 @@ private:
     void performPull();
     void performPush();
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // GITCONTROLLER_H

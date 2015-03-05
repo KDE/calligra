@@ -56,20 +56,20 @@ class PasswordRecord;
 class GlobalsSubStreamHandler : public SubStreamHandler, public FormulaDecoder
 {
 public:
-    GlobalsSubStreamHandler(Workbook* workbook, unsigned version);
+    GlobalsSubStreamHandler(Workbook *workbook, unsigned version);
     virtual ~GlobalsSubStreamHandler();
 
-    virtual void handleRecord(Record* record);
+    virtual void handleRecord(Record *record);
 
-    Workbook* workbook() const;
+    Workbook *workbook() const;
 
     bool passwordProtected() const;
     bool encryptionTypeSupported() const;
     void decryptionSkipBytes(int count);
-    void decryptRecord(unsigned type, unsigned size, unsigned char* buffer);
+    void decryptRecord(unsigned type, unsigned size, unsigned char *buffer);
 
     unsigned version() const;
-    Sheet* sheetFromPosition(unsigned position) const;
+    Sheet *sheetFromPosition(unsigned position) const;
     QString stringFromSST(unsigned index) const;
     std::map<unsigned, FormatFont> formatRunsFromSST(unsigned index) const;
 
@@ -79,40 +79,40 @@ public:
     unsigned xformatCount() const;//
     XFRecord xformat(unsigned index) const;  //
 
-    const Format* convertedFormat(unsigned index) const;
+    const Format *convertedFormat(unsigned index) const;
 
     QString valueFormat(unsigned index) const;  //
 
-    virtual const std::vector<QString>& externSheets() const;
+    virtual const std::vector<QString> &externSheets() const;
 
     virtual QString nameFromIndex(unsigned index) const;
     virtual QString externNameFromIndex(unsigned index) const;
 
-    QList< Sheet* >& chartSheets();
+    QList< Sheet * > &chartSheets();
 
-    KoStore* store() const;
+    KoStore *store() const;
 
 private:
-    void handleBOF(BOFRecord* record);
-    void handleBoundSheet(BoundSheetRecord* record);
-    void handleDateMode(DateModeRecord* record);
-    void handleExternBook(ExternBookRecord* record);
-    void handleExternName(ExternNameRecord* record);
-    void handleExternSheet(ExternSheetRecord* record);
-    void handleFilepass(FilepassRecord* record);
-    void handleFont(FontRecord* record);
-    void handleFormat(FormatRecord* record);
-    void handleName(NameRecord* record);
-    void handlePalette(PaletteRecord* record);
-    void handleSST(SSTRecord* record);
-    void handleXF(XFRecord* record);
-    void handleProtect(ProtectRecord* record);
-    void handleMsoDrawingGroup(MsoDrawingGroupRecord* record);
-    void handleWindow1(Window1Record* record);
-    void handlePassword(PasswordRecord* record);
+    void handleBOF(BOFRecord *record);
+    void handleBoundSheet(BoundSheetRecord *record);
+    void handleDateMode(DateModeRecord *record);
+    void handleExternBook(ExternBookRecord *record);
+    void handleExternName(ExternNameRecord *record);
+    void handleExternSheet(ExternSheetRecord *record);
+    void handleFilepass(FilepassRecord *record);
+    void handleFont(FontRecord *record);
+    void handleFormat(FormatRecord *record);
+    void handleName(NameRecord *record);
+    void handlePalette(PaletteRecord *record);
+    void handleSST(SSTRecord *record);
+    void handleXF(XFRecord *record);
+    void handleProtect(ProtectRecord *record);
+    void handleMsoDrawingGroup(MsoDrawingGroupRecord *record);
+    void handleWindow1(Window1Record *record);
+    void handlePassword(PasswordRecord *record);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Swinder

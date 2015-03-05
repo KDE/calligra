@@ -32,7 +32,8 @@
 // This class is meant to be used as a helper class to understand
 // drawingML elements avLst, gdLst and pathLst and to help
 // create a custom-shape from them
-class KOMSOOXML_EXPORT ComplexShapeHandler {
+class KOMSOOXML_EXPORT ComplexShapeHandler
+{
 
 public:
 
@@ -44,41 +45,41 @@ public:
     QString pathEquationsCreated();
 
     // Handles avLst items and creates equations out of them
-    QString handle_avLst(QXmlStreamReader* reader);
+    QString handle_avLst(QXmlStreamReader *reader);
 
     // Handles gdLst items and creates equations out of them
-    QString handle_gdLst(QXmlStreamReader* reader);
+    QString handle_gdLst(QXmlStreamReader *reader);
 
     // Handles rect item and creates cooridantes for text-areas out of them
-    QString handle_rect(QXmlStreamReader* reader);
+    QString handle_rect(QXmlStreamReader *reader);
 
     // Handles pathLst and creates a value which should be used for enhanced-path attribute
     // Note: remember to check pathEquationsCreated() after using this one
-    QString handle_pathLst(QXmlStreamReader* reader);
+    QString handle_pathLst(QXmlStreamReader *reader);
 
 private:
 
-    QString getArgument(QString& function, bool equation = false);
+    QString getArgument(QString &function, bool equation = false);
 
-    QString createEquation(QString& function);
+    QString createEquation(QString &function);
 
-    QString handle_gd(QXmlStreamReader* reader);
+    QString handle_gd(QXmlStreamReader *reader);
 
-    QString handle_lnTo(QXmlStreamReader* reader);
+    QString handle_lnTo(QXmlStreamReader *reader);
 
-    QString handle_close(QXmlStreamReader* reader);
+    QString handle_close(QXmlStreamReader *reader);
 
-    QString handle_arcTo(QXmlStreamReader* reader);
+    QString handle_arcTo(QXmlStreamReader *reader);
 
-    QString handle_quadBezTo(QXmlStreamReader* reader);
+    QString handle_quadBezTo(QXmlStreamReader *reader);
 
-    QString handle_cubicBezTo(QXmlStreamReader* reader);
+    QString handle_cubicBezTo(QXmlStreamReader *reader);
 
-    QString handle_pt(QXmlStreamReader* reader);
+    QString handle_pt(QXmlStreamReader *reader);
 
-    QString handle_path(QXmlStreamReader* reader);
+    QString handle_path(QXmlStreamReader *reader);
 
-    QString handle_moveTo(QXmlStreamReader* reader);
+    QString handle_moveTo(QXmlStreamReader *reader);
 
     // Storing the latest position where we are, this is needed in order to implment arcTo
     QString oldX, oldY;

@@ -25,7 +25,6 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
-
 const QString SCATTER_X = "Scattering/AxisX";
 const QString SCATTER_Y = "Scattering/AxisY";
 const QString SCATTER_AMOUNT = "Scattering/Amount";
@@ -38,10 +37,10 @@ class PAINTOP_EXPORT KisPressureScatterOption : public KisCurveOption
 public:
     KisPressureScatterOption();
 
-    QPointF apply(const KisPaintInformation& info, qreal width, qreal height) const;
+    QPointF apply(const KisPaintInformation &info, qreal width, qreal height) const;
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting);
 
     void enableAxisY(bool enable);
     void enableAxisX(bool enable);

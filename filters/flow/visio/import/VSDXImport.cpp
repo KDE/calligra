@@ -44,26 +44,22 @@ public:
     {
         OdgGenerator collector;
         StringDocumentHandler stylesHandler, contentHandler, manifestHandler, settingsHandler;
-        if (isFlat)
+        if (isFlat) {
             collector.addDocumentHandler(&contentHandler, ODF_FLAT_XML);
-        else
-        {
+        } else {
             collector.addDocumentHandler(&contentHandler, ODF_CONTENT_XML);
             collector.addDocumentHandler(&manifestHandler, ODF_MANIFEST_XML);
             collector.addDocumentHandler(&settingsHandler, ODF_SETTINGS_XML);
             collector.addDocumentHandler(&stylesHandler, ODF_STYLES_XML);
         }
-        try
-        {
-            if (!libvisio::VisioDocument::parse(&input, &collector))
+        try {
+            if (!libvisio::VisioDocument::parse(&input, &collector)) {
                 return false;
-        }
-        catch (...)
-        {
+            }
+        } catch (...) {
             return false;
         }
-        if (isFlat)
-        {
+        if (isFlat) {
             printf("%s\n", contentHandler.cstr());
             return true;
         }
@@ -73,26 +69,24 @@ public:
                 !writeChildFile("META-INF/manifest.xml", manifestHandler.cstr()) ||
                 !writeChildFile("content.xml", contentHandler.cstr()) ||
                 !writeChildFile("settings.xml", settingsHandler.cstr()) ||
-                !writeChildFile("styles.xml", stylesHandler.cstr()))
+                !writeChildFile("styles.xml", stylesHandler.cstr())) {
             return false;
+        }
 
-        librevenge::RVNGStringVector objects=collector.getObjectNames();
-        for (unsigned i=0; i<objects.size(); ++i)
-        {
+        librevenge::RVNGStringVector objects = collector.getObjectNames();
+        for (unsigned i = 0; i < objects.size(); ++i) {
             StringDocumentHandler objectHandler;
-            if (collector.getObjectContent(objects[i], &objectHandler))
+            if (collector.getObjectContent(objects[i], &objectHandler)) {
                 writeChildFile(objects[i].cstr(), objectHandler.cstr());
+            }
         }
         return true;
     }
     bool isSupportedFormat(librevenge::RVNGInputStream &input)
     {
-        try
-        {
+        try {
             return libvisio::VisioDocument::isSupported(&input);
-        }
-        catch (...)
-        {
+        } catch (...) {
             return false;
         }
     }
@@ -102,8 +96,8 @@ private:
 K_PLUGIN_FACTORY(VSDXImportFactory, registerPlugin<VSDXImport>();)
 K_EXPORT_PLUGIN(VSDXImportFactory("calligrafilters"))
 
-VSDXImport::VSDXImport(QObject* parent, const QVariantList&)
-        : KoFilter(parent)
+VSDXImport::VSDXImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
@@ -111,24 +105,23 @@ VSDXImport::~VSDXImport()
 {
 }
 
-KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus VSDXImport::convert(const QByteArray &from, const QByteArray &to)
 {
-    if (from != "application/vnd.visio" || to != KoOdf::mimeType(KoOdf::Graphics))
+    if (from != "application/vnd.visio" || to != KoOdf::mimeType(KoOdf::Graphics)) {
         return KoFilter::NotImplemented;
+    }
 
     QByteArray inputFile = m_chain->inputFile().toLocal8Bit();
     QByteArray outputFile = m_chain->outputFile().toLocal8Bit();
 
     OdgOutputFileHelper helper(outputFile.constData(), 0);
     librevenge::RVNGFileStream input(inputFile.constData());
-    if (!helper.isSupportedFormat(input))
-    {
+    if (!helper.isSupportedFormat(input)) {
         fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Visio Document.\n");
         return KoFilter::ParsingError;
     }
 
-    if (!helper.convertDocument(input, outputFile.constData()))
-    {
+    if (!helper.convertDocument(input, outputFile.constData())) {
         fprintf(stderr, "ERROR : Couldn't write convert the document\n");
         return KoFilter::ParsingError;
     }

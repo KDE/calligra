@@ -23,8 +23,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-
-KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelector* parent) :
+KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelector *parent) :
     QObject(parent),
     m_hue(0),
     m_hsvSaturation(1),
@@ -50,37 +49,37 @@ KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelector* parent) :
 
 void KisColorSelectorComponent::setGeometry(int x, int y, int width, int height)
 {
-    m_x=x;
-    m_y=y;
-    m_width=width;
-    m_height=height;
-    m_dirty=true;
+    m_x = x;
+    m_y = y;
+    m_width = width;
+    m_height = height;
+    m_dirty = true;
 }
 
-void KisColorSelectorComponent::paintEvent(QPainter* painter)
+void KisColorSelectorComponent::paintEvent(QPainter *painter)
 {
     painter->save();
     painter->translate(m_x, m_y);
     paint(painter);
     painter->restore();
 
-    m_dirty=false;
-    m_lastColorSpace=colorSpace();
+    m_dirty = false;
+    m_lastColorSpace = colorSpace();
 }
 
 void KisColorSelectorComponent::mouseEvent(int x, int y)
 {
-    int newX=qBound(0, (x-m_x), width());
-    int newY=qBound(0, (y-m_y), height());
+    int newX = qBound(0, (x - m_x), width());
+    int newY = qBound(0, (y - m_y), height());
 
     selectColor(newX, newY);
-    m_lastX=newX;
-    m_lastY=newY;
+    m_lastX = newX;
+    m_lastY = newY;
 }
 
-const KoColorSpace* KisColorSelectorComponent::colorSpace() const
+const KoColorSpace *KisColorSelectorComponent::colorSpace() const
 {
-    const KoColorSpace* cs = m_parent->colorSpace();
+    const KoColorSpace *cs = m_parent->colorSpace();
     Q_ASSERT(cs);
     return cs;
 }
@@ -92,15 +91,16 @@ void KisColorSelectorComponent::setDirty()
 
 bool KisColorSelectorComponent::isDirty() const
 {
-    return m_dirty || m_lastColorSpace!=colorSpace();
+    return m_dirty || m_lastColorSpace != colorSpace();
 }
 
 bool KisColorSelectorComponent::containsPointInComponentCoords(int x, int y) const
 {
-    if(x>=0 && y>=0 && x<=width() && y<=height())
+    if (x >= 0 && y >= 0 && x <= width() && y <= height()) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
 KoColor KisColorSelectorComponent::currentColor()
@@ -110,77 +110,78 @@ KoColor KisColorSelectorComponent::currentColor()
 
 void KisColorSelectorComponent::setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness, qreal hsiSaturation, qreal intensity, qreal hsySaturation, qreal luma)
 {
-    if(qFuzzyCompare(m_hue, hue) &&
-       qFuzzyCompare(m_hsvSaturation, hsvSaturation) &&
-       qFuzzyCompare(m_value, value) &&
-       qFuzzyCompare(m_hslSaturation, hslSaturation) &&
-       qFuzzyCompare(m_lightness, lightness) &&
-       qFuzzyCompare(m_hsiSaturation, hsiSaturation) &&
-       qFuzzyCompare(m_intensity, intensity) &&
-       qFuzzyCompare(m_hsySaturation, hsySaturation) &&
-       qFuzzyCompare(m_luma, luma))
+    if (qFuzzyCompare(m_hue, hue) &&
+            qFuzzyCompare(m_hsvSaturation, hsvSaturation) &&
+            qFuzzyCompare(m_value, value) &&
+            qFuzzyCompare(m_hslSaturation, hslSaturation) &&
+            qFuzzyCompare(m_lightness, lightness) &&
+            qFuzzyCompare(m_hsiSaturation, hsiSaturation) &&
+            qFuzzyCompare(m_intensity, intensity) &&
+            qFuzzyCompare(m_hsySaturation, hsySaturation) &&
+            qFuzzyCompare(m_luma, luma)) {
         return;
-
-    if(hue>=0. && hue<=1.)
-        m_hue=hue;
-
-    if(hsvSaturation>=0. && hsvSaturation<=1.) {
-        m_hsvSaturation=hsvSaturation;
-        m_hslSaturation=-1;
-	m_hsiSaturation=-1;
-	m_hsySaturation=-1;
     }
 
-    if(value>=0. && value<=1.) {
-        m_value=value;
-        m_intensity=-1;
-	m_luma=-1;
-	m_lightness=-1;
+    if (hue >= 0. && hue <= 1.) {
+        m_hue = hue;
     }
 
-    if(hslSaturation>=0. && hslSaturation<=1.) {
-        m_hslSaturation=hslSaturation;
-        m_hsvSaturation=-1;
-	m_hsiSaturation=-1;
-	m_hsySaturation=-1;
+    if (hsvSaturation >= 0. && hsvSaturation <= 1.) {
+        m_hsvSaturation = hsvSaturation;
+        m_hslSaturation = -1;
+        m_hsiSaturation = -1;
+        m_hsySaturation = -1;
     }
 
-    if(lightness>=0. && lightness<=1.) {
-        m_lightness=lightness;
-        m_value=-1;
-	m_luma=-1;
-	m_intensity=-1;
-    }
-    if(hsiSaturation>=0. && hsiSaturation<=1.) {
-        m_hsiSaturation=hsiSaturation;
-        m_hsvSaturation=-1;
-	m_hslSaturation=-1;
-	m_hsySaturation=-1;
+    if (value >= 0. && value <= 1.) {
+        m_value = value;
+        m_intensity = -1;
+        m_luma = -1;
+        m_lightness = -1;
     }
 
-    if(intensity>=0. && intensity<=1.) {
-        m_intensity=intensity;
-        m_value=-1;
-	m_luma=-1;
-	m_lightness=-1;
+    if (hslSaturation >= 0. && hslSaturation <= 1.) {
+        m_hslSaturation = hslSaturation;
+        m_hsvSaturation = -1;
+        m_hsiSaturation = -1;
+        m_hsySaturation = -1;
     }
 
-    if(hsySaturation>=0. && hsySaturation<=1.) {
-        m_hsySaturation=hsySaturation;
-        m_hsvSaturation=-1;
-	m_hsiSaturation=-1;
-	m_hslSaturation=-1;
+    if (lightness >= 0. && lightness <= 1.) {
+        m_lightness = lightness;
+        m_value = -1;
+        m_luma = -1;
+        m_intensity = -1;
+    }
+    if (hsiSaturation >= 0. && hsiSaturation <= 1.) {
+        m_hsiSaturation = hsiSaturation;
+        m_hsvSaturation = -1;
+        m_hslSaturation = -1;
+        m_hsySaturation = -1;
     }
 
-    if(luma>=0. && luma<=1.) {
-        m_intensity=-1;
-        m_value=-1;
-	m_luma=luma;
-	m_lightness=-1;
+    if (intensity >= 0. && intensity <= 1.) {
+        m_intensity = intensity;
+        m_value = -1;
+        m_luma = -1;
+        m_lightness = -1;
     }
 
+    if (hsySaturation >= 0. && hsySaturation <= 1.) {
+        m_hsySaturation = hsySaturation;
+        m_hsvSaturation = -1;
+        m_hsiSaturation = -1;
+        m_hslSaturation = -1;
+    }
 
-    m_dirty=true;
+    if (luma >= 0. && luma <= 1.) {
+        m_intensity = -1;
+        m_value = -1;
+        m_luma = luma;
+        m_lightness = -1;
+    }
+
+    m_dirty = true;
     emit update();
 }
 

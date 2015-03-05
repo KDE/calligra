@@ -29,13 +29,13 @@ namespace KPlato
 
 class KPLATOMODELS_EXPORT TaskCompleteDelegate : public ProgressBarDelegate
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
     explicit TaskCompleteDelegate(QObject *parent = 0);
 
     ~TaskCompleteDelegate();
 
-    void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 };
 

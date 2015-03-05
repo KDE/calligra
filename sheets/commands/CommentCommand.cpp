@@ -20,7 +20,6 @@
 // Local
 #include "CommentCommand.h"
 
-
 #include <klocale.h>
 
 #include "CellStorage.h"
@@ -29,17 +28,18 @@
 
 using namespace Calligra::Sheets;
 
-CommentCommand::CommentCommand(KUndo2Command* parent)
-        : AbstractRegionCommand(parent)
+CommentCommand::CommentCommand(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
 {
 }
 
-bool CommentCommand::process(Element* element)
+bool CommentCommand::process(Element *element)
 {
     if (!m_reverse) {
         // create undo
-        if (m_firstrun)
+        if (m_firstrun) {
             m_undoData += m_sheet->commentStorage()->undoData(Region(element->rect()));
+        }
         m_sheet->cellStorage()->setComment(Region(element->rect()), m_comment);
     }
     return true;
@@ -49,17 +49,19 @@ bool CommentCommand::mainProcessing()
 {
     if (m_reverse) {
         m_sheet->cellStorage()->setComment(*this, QString());
-        for (int i = 0; i < m_undoData.count(); ++i)
+        for (int i = 0; i < m_undoData.count(); ++i) {
             m_sheet->cellStorage()->setComment(Region(m_undoData[i].first.toRect()), m_undoData[i].second);
+        }
     }
     return AbstractRegionCommand::mainProcessing();
 }
 
-void CommentCommand::setComment(const QString& comment)
+void CommentCommand::setComment(const QString &comment)
 {
     m_comment = comment;
-    if (m_comment.isEmpty())
+    if (m_comment.isEmpty()) {
         setText(kundo2_i18n("Remove Comment"));
-    else
+    } else {
         setText(kundo2_i18n("Add Comment"));
+    }
 }

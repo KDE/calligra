@@ -43,20 +43,20 @@ public:
      * @param _componentData the instance object for the app
      * @param header string used as header text in the listview
      */
-    KisRecentDocumentsPane(QWidget* parent, const KComponentData &_componentData, const QString& header);
+    KisRecentDocumentsPane(QWidget *parent, const KComponentData &_componentData, const QString &header);
     ~KisRecentDocumentsPane();
 
 protected Q_SLOTS:
-    void selectionChanged(const QModelIndex& index);
+    void selectionChanged(const QModelIndex &index);
     void openFile();
-    void openFile(const QModelIndex& index);
+    void openFile(const QModelIndex &index);
 
-    void previewResult(KJob* job);
-    void updatePreview(const KFileItem& fileItem, const QPixmap& preview);
-    void updateIcon(const KFileItem& fileItem, const QPixmap& pixmap);
+    void previewResult(KJob *job);
+    void updatePreview(const KFileItem &fileItem, const QPixmap &preview);
+    void updateIcon(const KFileItem &fileItem, const QPixmap &pixmap);
 
 private:
-    KisRecentDocumentsPanePrivate * const d;
+    KisRecentDocumentsPanePrivate *const d;
 };
 
 #endif

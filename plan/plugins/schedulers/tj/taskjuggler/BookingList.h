@@ -23,13 +23,13 @@ namespace TJ
  * @short A list of bookings.
  * @author Chris Schlaeger <cs@kde.org>
  */
-class BookingList : public QList<Booking*>
+class BookingList : public QList<Booking *>
 {
 public:
     BookingList() { }
     virtual ~BookingList() { }
 
-    typedef QListIterator<Booking*> Iterator;
+    typedef QListIterator<Booking *> Iterator;
 
 protected:
 //     virtual int compareItems(QCollection::Item i1, QCollection::Item i2);

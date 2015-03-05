@@ -38,7 +38,7 @@ CAuOutlinerDocker::~CAuOutlinerDocker()
 
 void CAuOutlinerDocker::setCanvas(KoCanvasBase *_canvas)
 {
-    KWCanvas *canvas = dynamic_cast<KWCanvas*>(_canvas);
+    KWCanvas *canvas = dynamic_cast<KWCanvas *>(_canvas);
     m_outlinerWidget->setCanvas(canvas);
 }
 

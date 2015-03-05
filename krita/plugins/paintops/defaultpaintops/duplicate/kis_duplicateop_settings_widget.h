@@ -35,21 +35,20 @@ class KisDuplicateOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 
 public:
 
-    KisDuplicateOpSettingsWidget(QWidget* parent = 0);
+    KisDuplicateOpSettingsWidget(QWidget *parent = 0);
 
     ~KisDuplicateOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 
-    virtual bool supportScratchBox() {
+    virtual bool supportScratchBox()
+    {
         return false;
     }
 
 public:
-    KisDuplicateOpOption* m_duplicateOption;
+    KisDuplicateOpOption *m_duplicateOption;
 
 };
-
-
 
 #endif // KIS_DUPLICATEOP_SETTINGS_WIDGET_H_

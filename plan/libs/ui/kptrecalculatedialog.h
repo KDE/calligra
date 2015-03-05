@@ -31,7 +31,7 @@ class RecalculateDialogImpl : public QWidget, public Ui_RecalculateDialog
 {
     Q_OBJECT
 public:
-    explicit RecalculateDialogImpl (QWidget *parent);
+    explicit RecalculateDialogImpl(QWidget *parent);
 
 };
 

@@ -38,7 +38,6 @@
 
 class KoCanvasBase;
 
-
 class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
@@ -56,7 +55,6 @@ private:
     // The statistics widget
     KWStatisticsWidget *m_statisticsWidget;
 
-    
 public Q_SLOTS:
     void ondockLocationChanged(Qt::DockWidgetArea newArea);
 };
@@ -66,8 +64,9 @@ class KWStatisticsDockerFactory : public KoDockFactoryBase
 public:
     KWStatisticsDockerFactory();
     virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-    DockPosition defaultDockPosition() const {
+    virtual QDockWidget *createDockWidget();
+    DockPosition defaultDockPosition() const
+    {
         return DockMinimized;
     }
 };

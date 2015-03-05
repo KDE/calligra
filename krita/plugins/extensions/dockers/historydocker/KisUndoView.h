@@ -99,11 +99,11 @@ public:
 
     void setCleanIcon(const QIcon &icon);
     QIcon cleanIcon() const;
-    
+
     void mousePressEvent(QMouseEvent *event);
 
     //my new imba function
-    void setCanvas(KisCanvas2* canvas);
+    void setCanvas(KisCanvas2 *canvas);
 
 public Q_SLOTS:
     void setStack(KUndo2QStack *stack);
@@ -116,7 +116,7 @@ public Q_SLOTS:
 #endif
 
 private:
-    KisUndoViewPrivate* const d;
+    KisUndoViewPrivate *const d;
     Q_DISABLE_COPY(KisUndoView)
 };
 

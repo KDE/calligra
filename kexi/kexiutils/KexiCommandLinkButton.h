@@ -36,9 +36,9 @@ class KEXIUTILS_EXPORT KexiCommandLinkButton : public KexiPushButton
     Q_PROPERTY(bool arrowVisible READ isArrowVisible WRITE setArrowVisible)
 
 public:
-    explicit KexiCommandLinkButton(QWidget *parent=0);
-    explicit KexiCommandLinkButton(const QString &text, QWidget *parent=0);
-    KexiCommandLinkButton(const QString &text, const QString &description, QWidget *parent=0);
+    explicit KexiCommandLinkButton(QWidget *parent = 0);
+    explicit KexiCommandLinkButton(const QString &text, QWidget *parent = 0);
+    KexiCommandLinkButton(const QString &text, const QString &description, QWidget *parent = 0);
     virtual ~KexiCommandLinkButton();
 
     QString description() const;
@@ -56,7 +56,7 @@ protected:
 private:
     Q_DISABLE_COPY(KexiCommandLinkButton)
     friend class KexiCommandLinkButtonPrivate;
-    KexiCommandLinkButtonPrivate * const d;
+    KexiCommandLinkButtonPrivate *const d;
 };
 
 #endif // KEXICOMMANDLINKBUTTON

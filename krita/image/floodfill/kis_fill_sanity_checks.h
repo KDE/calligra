@@ -37,5 +37,4 @@
 
 #endif /* ENABLE_FILL_SANITY_CHECKS */
 
-
 #endif /* __KIS_FILL_SANITY_CHECKS_H */

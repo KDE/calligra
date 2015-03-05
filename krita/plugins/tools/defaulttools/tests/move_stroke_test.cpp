@@ -26,7 +26,6 @@
 #include "kis_paint_device.h"
 #include "strokes/move_stroke_strategy.h"
 
-
 class MoveStrokeTester : public utils::StrokeTester
 {
 public:
@@ -36,17 +35,19 @@ public:
     }
 
 protected:
-    void initImage(KisImageWSP image, KisNodeSP activeNode) {
+    void initImage(KisImageWSP image, KisNodeSP activeNode)
+    {
         Q_UNUSED(image);
 
         QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
         activeNode->original()->convertFromQImage(src, 0);
     }
 
-    KisStrokeStrategy* createStroke(bool indirectPainting,
+    KisStrokeStrategy *createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
                                     KisPainter *painter,
-                                    KisImageWSP image) {
+                                    KisImageWSP image)
+    {
 
         Q_UNUSED(indirectPainting);
         Q_UNUSED(painter);
@@ -57,35 +58,32 @@ protected:
 
     void addPaintingJobs(KisImageWSP image,
                          KisResourcesSnapshotSP resources,
-                         KisPainter *painter) {
+                         KisPainter *painter)
+    {
 
         Q_UNUSED(resources);
         Q_UNUSED(painter);
 
         image->
-            addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(100,100)));
+        addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(100, 100)));
 
         image->
-            addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(-50, -50)));
+        addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(-50, -50)));
 
         for (int i = 0; i < 25; i++) {
             image->
-                addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(1,0)));
+            addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(1, 0)));
             QTest::qSleep(1);
             image->
-                addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(0,1)));
+            addJob(strokeId(), new MoveStrokeStrategy::Data(QPoint(0, 1)));
             QTest::qSleep(1);
         }
-
-
-
 
     }
 
 private:
 
 };
-
 
 void MoveStrokeTest::testMoveStroke()
 {

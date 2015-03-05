@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef COLORSET_CHOOSER_H
 #define COLORSET_CHOOSER_H
 
@@ -33,20 +32,20 @@ class ColorSetChooser : public QWidget
 {
     Q_OBJECT
 public:
-    ColorSetChooser(QWidget* parent = 0);
+    ColorSetChooser(QWidget *parent = 0);
     virtual ~ColorSetChooser();
 
 Q_SIGNALS:
-    void paletteSelected(KoColorSet* colorSet);
+    void paletteSelected(KoColorSet *colorSet);
 
 private Q_SLOTS:
-    void resourceSelected(KoResource* resource);
+    void resourceSelected(KoResource *resource);
     void slotSave();
 
 private:
-    KoResourceItemChooser * m_itemChooser;
-    KLineEdit* m_nameEdit;
-    QSpinBox* m_columnEdit;
+    KoResourceItemChooser *m_itemChooser;
+    KLineEdit *m_nameEdit;
+    QSpinBox *m_columnEdit;
 };
 
 #endif // COLORSET_CHOOSER_H

@@ -43,13 +43,11 @@
 #include "OdtReaderAsciiBackend.h"
 #include "OdfReaderAsciiContext.h"
 
-
 K_PLUGIN_FACTORY(AsciiExportFactory, registerPlugin<AsciiExport>();)
 K_EXPORT_PLUGIN(AsciiExportFactory("wordsasciiexportng", "calligrafilters"))
 
-
 AsciiExport::AsciiExport(QObject *parent, const QVariantList &)
-: KoFilter(parent)
+    : KoFilter(parent)
 {
 }
 
@@ -57,7 +55,7 @@ AsciiExport::~AsciiExport()
 {
 }
 
-KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus AsciiExport::convert(const QByteArray &from, const QByteArray &to)
 {
     // Check for types
     if (from != "application/vnd.oasis.opendocument.text" || to != "text/plain") {
@@ -66,7 +64,7 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
 
     // Open the infile and return an error if it fails.
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
-                                             "", KoStore::Auto);
+                        "", KoStore::Auto);
 
     if (!odfStore->open("mimetype")) {
         kError(30503) << "Unable to open input file!" << endl;
@@ -77,7 +75,7 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
 
     // Create output file.
     QFile outfile(m_chain->outputFile());
-    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text )) {
+    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)) {
         kError(30501) << "Unable to open output file!" << endl;
         outfile.close();
         return KoFilter::FileNotFound;

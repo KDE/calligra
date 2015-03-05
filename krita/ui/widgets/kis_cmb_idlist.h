@@ -36,14 +36,13 @@ class KRITAUI_EXPORT KisCmbIDList: public QComboBox
     Q_OBJECT
 
 public:
-    KisCmbIDList(QWidget * parent = 0, const char * name = 0);
+    KisCmbIDList(QWidget *parent = 0, const char *name = 0);
     virtual ~KisCmbIDList();
 
-
 public:
-    void setIDList(const QList<KoID> & list);
+    void setIDList(const QList<KoID> &list);
     void setCurrent(const KoID id);
-    void setCurrent(const QString & s);
+    void setCurrent(const QString &s);
 
     KoID currentItem() const;
 

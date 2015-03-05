@@ -21,44 +21,44 @@ Boston, MA 02110-1301, USA.
 
 #include <QList>
 
-namespace CalligraFilter {
+namespace CalligraFilter
+{
 
-    class ChainLink;
+class ChainLink;
 
+class ChainLinkList
+{
+public:
+    ChainLinkList();
+    ~ChainLinkList();
 
-    class ChainLinkList
-    {
-    public:
-        ChainLinkList();
-        ~ChainLinkList();
+    void deleteAll();
+    int count() const;
 
-        void deleteAll();
-        int count() const;
+    /**
+     * Return a pointer to the current position in the chain.
+     * @return pointer to the current ChainLink or 0 if the ChainLinkList is empty.
+     **/
+    ChainLink *current() const;
 
-        /**
-         * Return a pointer to the current position in the chain.
-         * @return pointer to the current ChainLink or 0 if the ChainLinkList is empty.
-         **/
-        ChainLink* current() const;
+    /**
+     * Move the position to the first position in the chain.
+     * @return pointer to the first ChainLink or 0 if the ChainLinkList is empty.
+     **/
+    ChainLink *first();
 
-        /**
-         * Move the position to the first position in the chain.
-         * @return pointer to the first ChainLink or 0 if the ChainLinkList is empty.
-         **/
-        ChainLink* first();
+    ChainLink *next();
 
-        ChainLink* next();
+    void prepend(ChainLink *link);
 
-        void prepend(ChainLink* link);
+    void append(ChainLink *link);
 
-        void append(ChainLink* link);
+private:
 
-    private:
+    QList<ChainLink *> m_chainLinks;
+    int m_current;
 
-        QList<ChainLink*> m_chainLinks;
-        int m_current;
-
-    };
+};
 
 }
 

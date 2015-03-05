@@ -49,14 +49,14 @@ public:
      * @param selectedCharts all charts that this dialog will show for user modification
      * @param parent a parent widget for the purpose of centering the dialog
      */
-    explicit ChartDialog(const QList<KChart::ChartShape*> &selectedCharts, QWidget *parent = 0);
+    explicit ChartDialog(const QList<KChart::ChartShape *> &selectedCharts, QWidget *parent = 0);
     ~ChartDialog();
 
     /**
      * Create a list of factories that will be able to create widgets to configure shapes.
      * @param map the parent document these panels will work for.
      */
-    static QList<KoShapeConfigFactoryBase*> panels(Map *map);
+    static QList<KoShapeConfigFactoryBase *> panels(Map *map);
 
 private Q_SLOTS:
     void okClicked();
@@ -80,11 +80,13 @@ public:
     /// constructor
     GuiHelper() : m_state(Unset) { }
     /// Add a new state
-    void addState(State state) {
-        if (m_state == Unset)
+    void addState(State state)
+    {
+        if (m_state == Unset) {
             m_state = state;
-        else if (m_state != state)
+        } else if (m_state != state) {
             m_state = TriState;
+        }
     }
 
     /**
@@ -92,10 +94,12 @@ public:
      * @param checkbox the checkbox to set.
      * @param hide if true the checkbox will be hidden when there was no 'addState' called
      */
-    void updateCheckBox(QCheckBox *checkbox, bool hide) {
+    void updateCheckBox(QCheckBox *checkbox, bool hide)
+    {
         if (m_state == Unset) {
-            if (hide)
+            if (hide) {
                 checkbox->setVisible(false);
+            }
             checkbox->setEnabled(false);
             checkbox->setTristate(true);
             checkbox->setCheckState(Qt::PartiallyChecked);

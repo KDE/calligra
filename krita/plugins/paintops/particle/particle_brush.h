@@ -16,14 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef _PARTICLE_BRUSH_H_
 #define _PARTICLE_BRUSH_H_
 
 #include "kis_paint_device.h"
 #include "kis_debug.h"
 #include <QPointF>
-
 
 class KisParticleBrushProperties
 {
@@ -47,23 +45,24 @@ public:
     ParticleBrush();
     ~ParticleBrush();
     void initParticles();
-    void draw(KisPaintDeviceSP dab, const KoColor& color, QPointF pos);
+    void draw(KisPaintDeviceSP dab, const KoColor &color, QPointF pos);
 
     void setInitialPosition(QPointF pos);
-    void setProperties(KisParticleBrushProperties * properties) {
+    void setProperties(KisParticleBrushProperties *properties)
+    {
         m_properties = properties;
     }
 
 private:
     /// paints wu particle, similar to spray version but you can turn on respecting opacity of the tool and add weight to opacity
     /// also the particle respects opacity in the destination pixel buffer
-    void paintParticle(KisRandomAccessorSP writeAccessor, const KoColorSpace *cs, QPointF pos, const KoColor& color, qreal weight, bool respectOpacity);
+    void paintParticle(KisRandomAccessorSP writeAccessor, const KoColorSpace *cs, QPointF pos, const KoColor &color, qreal weight, bool respectOpacity);
 
     QVector<QPointF> m_particlePos;
     QVector<QPointF> m_particleNextPos;
     QVector<qreal> m_accelaration;
 
-    KisParticleBrushProperties * m_properties;
+    KisParticleBrushProperties *m_properties;
 };
 
 #endif

@@ -71,20 +71,19 @@ public:
         EffectiveZoom ///<-Used only by painting tools for non-displaying purposes
     };
 
-
-    KisCanvasResourceProvider(KisViewManager * view);
+    KisCanvasResourceProvider(KisViewManager *view);
     ~KisCanvasResourceProvider();
 
     void setResourceManager(KoCanvasResourceManager *resourceManager);
-    KoCanvasResourceManager* resourceManager();
+    KoCanvasResourceManager *resourceManager();
 
-    KoCanvasBase * canvas() const;
+    KoCanvasBase *canvas() const;
 
     KoColor bgColor() const;
-    void setBGColor(const KoColor& c);
+    void setBGColor(const KoColor &c);
 
     KoColor fgColor() const;
-    void setFGColor(const KoColor& c);
+    void setFGColor(const KoColor &c);
 
     float HDRExposure() const;
     void setHDRExposure(float exposure);
@@ -97,7 +96,7 @@ public:
     KoAbstractGradient *currentGradient() const;
 
     void resetDisplayProfile(int screen = -1);
-    const KoColorProfile * currentDisplayProfile() const;
+    const KoColorProfile *currentDisplayProfile() const;
 
     KisImageWSP currentImage() const;
 
@@ -109,14 +108,14 @@ public:
     KisPaintOpPresetSP previousPreset() const;
     void setPreviousPaintOpPreset(const KisPaintOpPresetSP preset);
 
-    KisFilterConfiguration* currentGeneratorConfiguration() const;
+    KisFilterConfiguration *currentGeneratorConfiguration() const;
 
-    void setCurrentCompositeOp(const QString& compositeOp);
+    void setCurrentCompositeOp(const QString &compositeOp);
     QString currentCompositeOp() const;
 
     QList<QPointer<KisAbstractPerspectiveGrid> > perspectiveGrids() const;
-    void addPerspectiveGrid(KisAbstractPerspectiveGrid*);
-    void removePerspectiveGrid(KisAbstractPerspectiveGrid*);
+    void addPerspectiveGrid(KisAbstractPerspectiveGrid *);
+    void removePerspectiveGrid(KisAbstractPerspectiveGrid *);
     void clearPerspectiveGrids();
 
     void setMirrorHorizontal(bool mirrorHorizontal);
@@ -131,21 +130,20 @@ public:
     void setGlobalAlphaLock(bool lock);
     bool globalAlphaLock() const;
 
-
     ///Notify that the workspace is saved and settings should be saved to it
-    void notifySavingWorkspace(KisWorkspaceResource* workspace);
+    void notifySavingWorkspace(KisWorkspaceResource *workspace);
 
     ///Notify that the workspace is loaded and settings can be read
-    void notifyLoadingWorkspace(KisWorkspaceResource* workspace);
+    void notifyLoadingWorkspace(KisWorkspaceResource *workspace);
 
 public Q_SLOTS:
 
-    void slotSetFGColor(const KoColor& c);
-    void slotSetBGColor(const KoColor& c);
+    void slotSetFGColor(const KoColor &c);
+    void slotSetBGColor(const KoColor &c);
     void slotPatternActivated(KoResource *pattern);
     void slotGradientActivated(KoResource *gradient);
     void slotNodeActivated(const KisNodeSP node);
-    void slotGeneratorConfigurationActivated(KisFilterConfiguration * generatorConfiguration);
+    void slotGeneratorConfigurationActivated(KisFilterConfiguration *generatorConfiguration);
     void slotPainting();
 
     /**
@@ -154,7 +152,7 @@ public Q_SLOTS:
      */
     // FIXME: this slot doesn't catch the case when image resolution is changed
     void slotImageSizeChanged();
-    void slotSetDisplayProfile(const KoColorProfile * profile);
+    void slotSetDisplayProfile(const KoColorProfile *profile);
 
     void slotOnScreenResolutionChanged();
 
@@ -167,7 +165,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotCanvasResourceChanged(int key, const QVariant & res);
+    void slotCanvasResourceChanged(int key, const QVariant &res);
 
 Q_SIGNALS:
 
@@ -177,17 +175,17 @@ Q_SIGNALS:
     void sigPatternChanged(KoPattern *);
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
-    void sigFGColorUsed(const KoColor&);
+    void sigFGColorUsed(const KoColor &);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
     void sigOpacityChanged(qreal);
-    void sigSavingWorkspace(KisWorkspaceResource* workspace);
-    void sigLoadingWorkspace(KisWorkspaceResource* workspace);
+    void sigSavingWorkspace(KisWorkspaceResource *workspace);
+    void sigLoadingWorkspace(KisWorkspaceResource *workspace);
 
     void mirrorModeChanged();
 
 private:
 
-    KisViewManager * m_view;
+    KisViewManager *m_view;
     KoCanvasResourceManager *m_resourceManager;
     const KoColorProfile *m_displayProfile;
     bool m_fGChanged;

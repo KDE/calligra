@@ -26,15 +26,15 @@
 #include <QHBoxLayout>
 #include <QDoubleSpinBox>
 
-KisDoubleWidget::KisDoubleWidget(QWidget* parent, const char* name)
-        : QWidget(parent)
+KisDoubleWidget::KisDoubleWidget(QWidget *parent, const char *name)
+    : QWidget(parent)
 {
     setObjectName(name);
     init(0, 1);
 }
 
-KisDoubleWidget::KisDoubleWidget(double min, double max, QWidget* parent, const char* name)
-        : QWidget(parent)
+KisDoubleWidget::KisDoubleWidget(double min, double max, QWidget *parent, const char *name)
+    : QWidget(parent)
 {
     setObjectName(name);
     init(min, max);

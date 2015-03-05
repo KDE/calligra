@@ -56,16 +56,15 @@ static const int LINE_WIDTH = 1;
 
 void KisPainterBenchmark::initTestCase()
 {
-    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();    
-    
+    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+
     m_color = KoColor(m_colorSpace);
     m_color.fromQColor(Qt::red);
-    
-    
+
     srand48(0);
-    for (int i = 0; i < LINE_COUNT ;i++){
-        m_points.append( QPointF(drand48() * TEST_IMAGE_WIDTH, drand48() * TEST_IMAGE_HEIGHT) );
-        m_points.append( QPointF(drand48() * TEST_IMAGE_WIDTH, drand48() * TEST_IMAGE_HEIGHT) );
+    for (int i = 0; i < LINE_COUNT; i++) {
+        m_points.append(QPointF(drand48() * TEST_IMAGE_WIDTH, drand48() * TEST_IMAGE_HEIGHT));
+        m_points.append(QPointF(drand48() * TEST_IMAGE_WIDTH, drand48() * TEST_IMAGE_HEIGHT));
     }
 }
 
@@ -77,17 +76,18 @@ void KisPainterBenchmark::benchmarkBitBlt()
 {
     KisPaintDeviceSP src = new KisPaintDevice(m_colorSpace);
     KisPaintDeviceSP dst = new KisPaintDevice(m_colorSpace);
-    src->fill(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
-    dst->fill(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
-    
+    src->fill(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
+    dst->fill(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
+
     KisPainter gc(dst);
-    
-    QPoint pos(0,0);
-    QRect rc(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
-    
+
+    QPoint pos(0, 0);
+    QRect rc(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+
     QBENCHMARK{
-        for (int i = 0; i < CYCLES ; i++){
-            gc.bitBlt(pos,src,rc);
+        for (int i = 0; i < CYCLES; i++)
+        {
+            gc.bitBlt(pos, src, rc);
         }
     }
 
@@ -97,18 +97,19 @@ void KisPainterBenchmark::benchmarkFastBitBlt()
 {
     KisPaintDeviceSP src = new KisPaintDevice(m_colorSpace);
     KisPaintDeviceSP dst = new KisPaintDevice(m_colorSpace);
-    src->fill(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
-    dst->fill(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
+    src->fill(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
+    dst->fill(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
 
     KisPainter gc(dst);
     gc.setCompositeOp(m_colorSpace->compositeOp(COMPOSITE_COPY));
 
-    QPoint pos(0,0);
-    QRect rc(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+    QPoint pos(0, 0);
+    QRect rc(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
 
     QBENCHMARK{
-        for (int i = 0; i < CYCLES ; i++){
-            gc.bitBlt(pos,src,rc);
+        for (int i = 0; i < CYCLES; i++)
+        {
+            gc.bitBlt(pos, src, rc);
         }
     }
 
@@ -118,33 +119,31 @@ void KisPainterBenchmark::benchmarkBitBltSelection()
 {
     KisPaintDeviceSP src = new KisPaintDevice(m_colorSpace);
     KisPaintDeviceSP dst = new KisPaintDevice(m_colorSpace);
-    src->fill(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
-    dst->fill(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
+    src->fill(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
+    dst->fill(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
 
     KisSelectionSP selection = new KisSelection();
     selection->pixelSelection()->select(QRect(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT));
     selection->updateProjection();
 
-    
     KisPainter gc(dst);
     gc.setSelection(selection);
-    
-    QPoint pos(0,0);
-    QRect rc(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
-    
+
+    QPoint pos(0, 0);
+    QRect rc(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
+
     QBENCHMARK{
-        for (int i = 0; i < CYCLES ; i++){
-            gc.bitBlt(pos,src,rc);
+        for (int i = 0; i < CYCLES; i++)
+        {
+            gc.bitBlt(pos, src, rc);
         }
     }
 
-    
 }
-
 
 void KisPainterBenchmark::benchmarkFixedBitBlt()
 {
-    QImage img(TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT,QImage::Format_ARGB32);
+    QImage img(TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, QImage::Format_ARGB32);
     img.fill(255);
 
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(m_colorSpace);
@@ -156,16 +155,16 @@ void KisPainterBenchmark::benchmarkFixedBitBlt()
     QRect rc = img.rect();
 
     QBENCHMARK{
-        for (int i = 0; i < CYCLES ; i++){
-            gc.bltFixed(pos,fdev,rc);
+        for (int i = 0; i < CYCLES; i++)
+        {
+            gc.bltFixed(pos, fdev, rc);
         }
     }
 }
 
-
 void KisPainterBenchmark::benchmarkFixedBitBltSelection()
 {
-    QImage img(TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT,QImage::Format_ARGB32);
+    QImage img(TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, QImage::Format_ARGB32);
     img.fill(128);
 
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(m_colorSpace);
@@ -174,7 +173,7 @@ void KisPainterBenchmark::benchmarkFixedBitBltSelection()
     KisPaintDeviceSP dst = new KisPaintDevice(m_colorSpace);
 
     KisSelectionSP selection = new KisSelection();
-    selection->pixelSelection()->select(QRect(0, 0, TEST_IMAGE_WIDTH , TEST_IMAGE_HEIGHT));
+    selection->pixelSelection()->select(QRect(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT));
     selection->updateProjection();
 
     KisPainter gc(dst);
@@ -184,8 +183,9 @@ void KisPainterBenchmark::benchmarkFixedBitBltSelection()
     QRect rc = img.rect();
 
     QBENCHMARK{
-        for (int i = 0; i < CYCLES ; i++){
-            gc.bltFixed(pos,fdev,rc);
+        for (int i = 0; i < CYCLES; i++)
+        {
+            gc.bltFixed(pos, fdev, rc);
         }
     }
 
@@ -196,56 +196,57 @@ void KisPainterBenchmark::benchmarkDrawThickLine()
     KisPaintDeviceSP dev = new KisPaintDevice(m_colorSpace);
     KoColor color(m_colorSpace);
     color.fromQColor(Qt::white);
-    
+
     dev->clear();
-    dev->fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT,color.data());
-    
+    dev->fill(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, color.data());
+
     color.fromQColor(Qt::black);
-    
+
     KisPainter painter(dev);
     painter.setPaintColor(color);
-    
+
     QBENCHMARK{
-        for (int i = 0; i < LINE_COUNT; i++){
-            painter.drawThickLine(m_points[i*2],m_points[i*2+1],LINE_WIDTH,LINE_WIDTH);
+        for (int i = 0; i < LINE_COUNT; i++)
+        {
+            painter.drawThickLine(m_points[i * 2], m_points[i * 2 + 1], LINE_WIDTH, LINE_WIDTH);
         }
     }
-#ifdef SAVE_OUTPUT    
+#ifdef SAVE_OUTPUT
     dev->convertToQImage(m_colorSpace->profile()).save("drawThickLine.png");
 #endif
 }
-
 
 void KisPainterBenchmark::benchmarkDrawQtLine()
 {
     KisPaintDeviceSP dev = new KisPaintDevice(m_colorSpace);
     KoColor color(m_colorSpace);
     color.fromQColor(Qt::white);
-    
+
     dev->clear();
-    dev->fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT,color.data());
-    
+    dev->fill(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, color.data());
+
     color.fromQColor(Qt::black);
-    
+
     KisPainter painter(dev);
     painter.setPaintColor(color);
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-    
+
     QPen pen;
     pen.setWidth(LINE_WIDTH);
     pen.setColor(Qt::white);
     pen.setCapStyle(Qt::RoundCap);
-    
+
     QBENCHMARK{
-        for (int i = 0; i < LINE_COUNT; i++){
+        for (int i = 0; i < LINE_COUNT; i++)
+        {
             QPainterPath path;
-            path.moveTo(m_points[i*2]);
-            path.lineTo(m_points[i*2 + 1]);
+            path.moveTo(m_points[i * 2]);
+            path.lineTo(m_points[i * 2 + 1]);
             painter.drawPainterPath(path, pen);
         }
     }
-#ifdef SAVE_OUTPUT        
-    dev->convertToQImage(m_colorSpace->profile(),0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT).save("drawQtLine.png");
+#ifdef SAVE_OUTPUT
+    dev->convertToQImage(m_colorSpace->profile(), 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT).save("drawQtLine.png");
 #endif
 }
 
@@ -254,24 +255,24 @@ void KisPainterBenchmark::benchmarkDrawScanLine()
     KisPaintDeviceSP dev = new KisPaintDevice(m_colorSpace);
     KoColor color(m_colorSpace);
     color.fromQColor(Qt::white);
-    
+
     dev->clear();
-    dev->fill(0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT,color.data());
-    
+    dev->fill(0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, color.data());
+
     color.fromQColor(Qt::black);
-    
+
     KisPainter painter(dev);
     painter.setPaintColor(color);
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-    
-    
+
     QBENCHMARK{
-        for (int i = 0; i < LINE_COUNT; i++){
-            painter.drawLine(m_points[i*2],m_points[i*2+1],LINE_WIDTH,true);
+        for (int i = 0; i < LINE_COUNT; i++)
+        {
+            painter.drawLine(m_points[i * 2], m_points[i * 2 + 1], LINE_WIDTH, true);
         }
     }
-#ifdef SAVE_OUTPUT    
-    dev->convertToQImage(m_colorSpace->profile(),0,0,TEST_IMAGE_WIDTH,TEST_IMAGE_HEIGHT).save("drawScanLine.png");
+#ifdef SAVE_OUTPUT
+    dev->convertToQImage(m_colorSpace->profile(), 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT).save("drawScanLine.png");
 #endif
 }
 

@@ -24,7 +24,6 @@
 
 #include <kundo2command.h>
 
-
 class KRITAIMAGE_EXPORT KisImageSetResolutionCommand : public KUndo2Command
 {
 public:

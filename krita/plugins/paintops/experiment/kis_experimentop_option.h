@@ -30,8 +30,6 @@ const QString EXPERIMENT_SPEED_VALUE = "Experiment/speed";
 const QString EXPERIMENT_WINDING_FILL = "Experiment/windingFill";
 const QString EXPERIMENT_HARD_EDGE = "Experiment/hardEdge";
 
-
-
 class KisExperimentOpOptionsWidget;
 
 class KisExperimentOpOption : public KisPaintOpOption
@@ -41,8 +39,8 @@ public:
     KisExperimentOpOption();
     ~KisExperimentOpOption();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private Q_SLOTS:
     void enableSpeed(qreal value);
@@ -50,7 +48,7 @@ private Q_SLOTS:
     void enableDisplacement(qreal value);
 
 private:
-    KisExperimentOpOptionsWidget * m_options;
+    KisExperimentOpOptionsWidget *m_options;
 
 };
 
@@ -67,7 +65,8 @@ public:
     bool windingFill;
     bool hardEdge;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting) {
+    void readOptionSetting(const KisPropertiesConfiguration *setting)
+    {
         isDisplacementEnabled = setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED);
         displacement = setting->getDouble(EXPERIMENT_DISPLACEMENT_VALUE, 50.0);
         isSpeedEnabled = setting->getBool(EXPERIMENT_SPEED_ENABLED);

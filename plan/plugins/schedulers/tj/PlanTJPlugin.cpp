@@ -34,12 +34,12 @@ KPLATO_SCHEDULERPLUGIN_EXPORT(PlanTJPlugin)
 
 using namespace KPlato;
 
-PlanTJPlugin::PlanTJPlugin( QObject * parent, const QVariantList & )
+PlanTJPlugin::PlanTJPlugin(QObject *parent, const QVariantList &)
     : KPlato::SchedulerPlugin(parent)
 {
     KLocale *locale = KGlobal::locale();
-    if ( locale ) {
-        locale->insertCatalog( "plantjplugin" );
+    if (locale) {
+        locale->insertCatalog("plantjplugin");
     }
     m_granularities << (long unsigned int) 5 * 60 * 1000
                     << (long unsigned int) 15 * 60 * 1000
@@ -53,11 +53,11 @@ PlanTJPlugin::~PlanTJPlugin()
 
 QString PlanTJPlugin::description() const
 {
-    return i18nc( "@info:whatsthis", "<title>TaskJuggler Scheduler</title>"
-                    "<para>This is a slightly modified version of the scheduler used in TaskJuggler."
-                    " It has been enhanced to handle resource units.</para>"
-                    "<para>Scheduling backwards is simulated by scheduling all tasks as late as possible.</para>"
-                    "<para><note>Plan does not utilize all of its functionality.</note></para>"
+    return i18nc("@info:whatsthis", "<title>TaskJuggler Scheduler</title>"
+                 "<para>This is a slightly modified version of the scheduler used in TaskJuggler."
+                 " It has been enhanced to handle resource units.</para>"
+                 "<para>Scheduling backwards is simulated by scheduling all tasks as late as possible.</para>"
+                 "<para><note>Plan does not utilize all of its functionality.</note></para>"
                 );
 }
 
@@ -68,24 +68,24 @@ int PlanTJPlugin::capabilities() const
 
 ulong PlanTJPlugin::currentGranularity() const
 {
-    ulong v = m_granularities.value( m_granularity );
-    return qMax( v, (ulong)300000 ); // minimum 5 min
+    ulong v = m_granularities.value(m_granularity);
+    return qMax(v, (ulong)300000);   // minimum 5 min
 }
 
-void PlanTJPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread )
+void PlanTJPlugin::calculate(KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread)
 {
-    foreach ( SchedulerThread *j, m_jobs ) {
-        if ( j->manager() == sm ) {
+    foreach (SchedulerThread *j, m_jobs) {
+        if (j->manager() == sm) {
             return;
         }
     }
-    sm->setScheduling( true );
+    sm->setScheduling(true);
 
-    PlanTJScheduler *job = new PlanTJScheduler( &project, sm, currentGranularity() );
+    PlanTJScheduler *job = new PlanTJScheduler(&project, sm, currentGranularity());
     m_jobs << job;
     connect(job, SIGNAL(jobFinished(SchedulerThread*)), SLOT(slotFinished(SchedulerThread*)));
 
-    project.changed( sm );
+    project.changed(sm);
 
 //     connect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), &project, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
 //     connect(this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), &project, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)));
@@ -93,7 +93,7 @@ void PlanTJPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager 
     connect(job, SIGNAL(maxProgressChanged(int)), sm, SLOT(setMaxProgress(int)));
     connect(job, SIGNAL(progressChanged(int)), sm, SLOT(setProgress(int)));
 
-    if ( nothread ) {
+    if (nothread) {
         job->doRun();
     } else {
         job->start();
@@ -102,65 +102,64 @@ void PlanTJPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager 
 
 void PlanTJPlugin::stopAllCalculations()
 {
-    foreach ( SchedulerThread *s, m_jobs ) {
-        stopCalculation( s );
+    foreach (SchedulerThread *s, m_jobs) {
+        stopCalculation(s);
     }
 }
 
-void PlanTJPlugin::stopCalculation( SchedulerThread *sch )
+void PlanTJPlugin::stopCalculation(SchedulerThread *sch)
 {
-    if ( sch ) {
-         //FIXME: this should just call stopScheduling() and let the job finish "normally"
-        disconnect( sch, SIGNAL(jobFinished(PlanTJScheduler*)), this, SLOT(slotFinished(PlanTJScheduler*)) );
+    if (sch) {
+        //FIXME: this should just call stopScheduling() and let the job finish "normally"
+        disconnect(sch, SIGNAL(jobFinished(PlanTJScheduler*)), this, SLOT(slotFinished(PlanTJScheduler*)));
         sch->stopScheduling();
         // wait max 20 seconds.
-        sch->mainManager()->setCalculationResult( ScheduleManager::CalculationStopped );
-        if ( ! sch->wait( 20000 ) ) {
+        sch->mainManager()->setCalculationResult(ScheduleManager::CalculationStopped);
+        if (! sch->wait(20000)) {
             sch->deleteLater();
-            m_jobs.removeAt( m_jobs.indexOf( sch ) );
+            m_jobs.removeAt(m_jobs.indexOf(sch));
         } else {
-            slotFinished( sch );
+            slotFinished(sch);
         }
     }
 }
 
-void PlanTJPlugin::slotStarted( SchedulerThread */*job*/ )
+void PlanTJPlugin::slotStarted(SchedulerThread */*job*/)
 {
 //    kDebug(planDbg())<<"PlanTJPlugin::slotStarted:";
 }
 
-void PlanTJPlugin::slotFinished( SchedulerThread *j )
+void PlanTJPlugin::slotFinished(SchedulerThread *j)
 {
-    PlanTJScheduler *job = static_cast<PlanTJScheduler*>( j );
+    PlanTJScheduler *job = static_cast<PlanTJScheduler *>(j);
     Project *mp = job->mainProject();
     ScheduleManager *sm = job->mainManager();
     //kDebug(planDbg())<<"PlanTJPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
-    if ( job->isStopped() ) {
-        sm->setCalculationResult( ScheduleManager::CalculationCanceled );
+    if (job->isStopped()) {
+        sm->setCalculationResult(ScheduleManager::CalculationCanceled);
     } else {
-        updateLog( job );
-        if ( job->result > 0 ) {
-            sm->setCalculationResult( ScheduleManager::CalculationError );
+        updateLog(job);
+        if (job->result > 0) {
+            sm->setCalculationResult(ScheduleManager::CalculationError);
         } else {
             Project *tp = job->project();
             ScheduleManager *tm = job->manager();
-            updateProject( tp, tm, mp, sm );
-            sm->setCalculationResult( ScheduleManager::CalculationDone );
+            updateProject(tp, tm, mp, sm);
+            sm->setCalculationResult(ScheduleManager::CalculationDone);
         }
     }
-    sm->setScheduling( false );
+    sm->setScheduling(false);
 
-    m_jobs.removeAt( m_jobs.indexOf( job ) );
-    if ( m_jobs.isEmpty() ) {
+    m_jobs.removeAt(m_jobs.indexOf(job));
+    if (m_jobs.isEmpty()) {
         m_synctimer.stop();
     }
-    emit sigCalculationFinished( mp, sm );
+    emit sigCalculationFinished(mp, sm);
 
     disconnect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), mp, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
     disconnect(this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), mp, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)));
 
     job->deleteLater();
 }
-
 
 #include "PlanTJPlugin.moc"

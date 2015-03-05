@@ -35,19 +35,19 @@ class KRITAIMAGE_EXPORT KisRecordedPaintAction : public KisRecordedNodeAction
 {
 public:
 
-    KisRecordedPaintAction(const QString & id,
-                           const QString & name,
-                           const KisNodeQueryPath& path,
+    KisRecordedPaintAction(const QString &id,
+                           const QString &name,
+                           const KisNodeQueryPath &path,
                            KisPaintOpPresetSP paintOpPreset);
 
-    KisRecordedPaintAction(const KisRecordedPaintAction&);
+    KisRecordedPaintAction(const KisRecordedPaintAction &);
 
     ~KisRecordedPaintAction();
 
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
+    virtual void toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *) const;
 
     using KisRecordedNodeAction::play;
-    virtual void play(KisNodeSP node, const KisPlayInfo& info, KoUpdater* _updater = 0) const;
+    virtual void play(KisNodeSP node, const KisPlayInfo &info, KoUpdater *_updater = 0) const;
 
 protected:
     /**
@@ -55,11 +55,11 @@ protected:
      * implementation creates a KisPainter, subclass can reimplement it if
      * they want to use one of the subclass of KisPainter.
      */
-    virtual KisPainter* createPainter(KisPaintDeviceSP device) const;
+    virtual KisPainter *createPainter(KisPaintDeviceSP device) const;
     /**
      * Reimplement this function in a subclass to play the painting.
      */
-    virtual void playPaint(const KisPlayInfo&, KisPainter* painter) const = 0;
+    virtual void playPaint(const KisPlayInfo &, KisPainter *painter) const = 0;
 
 public:
     KisPaintOpPresetSP paintOpPreset() const;
@@ -68,43 +68,42 @@ public:
      * @return the opacity in the range 0.0->1.0
      */
     qreal opacity() const;
-    void setOpacity(qreal );
+    void setOpacity(qreal);
     KoColor paintColor() const;
-    void setPaintColor(const KoColor& color);
+    void setPaintColor(const KoColor &color);
     KoColor backgroundColor() const;
-    void setBackgroundColor(const KoColor& color);
+    void setBackgroundColor(const KoColor &color);
     QString compositeOp();
-    void setCompositeOp(const QString& );
-    void setPaintIncremental(bool );
-    void setStrokeStyle(KisPainter::StrokeStyle );
-    void setFillStyle(KisPainter::FillStyle );
+    void setCompositeOp(const QString &);
+    void setPaintIncremental(bool);
+    void setStrokeStyle(KisPainter::StrokeStyle);
+    void setFillStyle(KisPainter::FillStyle);
     KisPainter::FillStyle fillStyle() const;
-    void setPattern(const KoPattern* );
-    void setGradient(const KoAbstractGradient* gradient);
-    void setGenerator(const KisFilterConfiguration * generator);
+    void setPattern(const KoPattern *);
+    void setGradient(const KoAbstractGradient *gradient);
+    void setGenerator(const KisFilterConfiguration *generator);
 private:
 
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 class KisRecordedPaintActionFactory : public KisRecordedActionFactory
 {
 public:
-    KisRecordedPaintActionFactory(const QString & id) : KisRecordedActionFactory(id) {}
+    KisRecordedPaintActionFactory(const QString &id) : KisRecordedActionFactory(id) {}
     virtual ~KisRecordedPaintActionFactory() {}
 protected:
 
-    void setupPaintAction(KisRecordedPaintAction* action, const QDomElement& elt, const KisRecordedActionLoadContext*);
-    KisPaintOpPresetSP paintOpPresetFromXML(const QDomElement& elt);
-    KoColor paintColorFromXML(const QDomElement& elt);
-    KoColor backgroundColorFromXML(const QDomElement& elt);
-    KoColor colorFromXML(const QDomElement& elt, const QString& elementName);
-    qreal opacityFromXML(const QDomElement& elt);
-    bool paintIncrementalFromXML(const QDomElement& elt);
-    QString compositeOpFromXML(const QDomElement& elt);
-    KisNodeQueryPath nodeQueryPathFromXML(const QDomElement& elt);
+    void setupPaintAction(KisRecordedPaintAction *action, const QDomElement &elt, const KisRecordedActionLoadContext *);
+    KisPaintOpPresetSP paintOpPresetFromXML(const QDomElement &elt);
+    KoColor paintColorFromXML(const QDomElement &elt);
+    KoColor backgroundColorFromXML(const QDomElement &elt);
+    KoColor colorFromXML(const QDomElement &elt, const QString &elementName);
+    qreal opacityFromXML(const QDomElement &elt);
+    bool paintIncrementalFromXML(const QDomElement &elt);
+    QString compositeOpFromXML(const QDomElement &elt);
+    KisNodeQueryPath nodeQueryPathFromXML(const QDomElement &elt);
 };
-
 
 #endif

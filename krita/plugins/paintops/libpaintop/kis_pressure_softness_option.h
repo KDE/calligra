@@ -32,8 +32,7 @@ class PAINTOP_EXPORT KisPressureSoftnessOption : public KisCurveOption
 {
 public:
     KisPressureSoftnessOption();
-    double apply(const KisPaintInformation & info) const;
-
+    double apply(const KisPaintInformation &info) const;
 
 };
 

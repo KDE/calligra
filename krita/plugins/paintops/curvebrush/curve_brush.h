@@ -31,14 +31,16 @@ class KoColorSpace;
 class Pen
 {
 public:
-    Pen(): pos(QPointF(0, 0)), rotation(0), scale(0) {
+    Pen(): pos(QPointF(0, 0)), rotation(0), scale(0)
+    {
 
     }
 
     Pen(QPointF ipos, qreal irotation, qreal iscale)
         : pos(ipos),
           rotation(irotation),
-          scale(iscale) {
+          scale(iscale)
+    {
 
     }
 
@@ -63,10 +65,10 @@ private:
     void putPixel(QPointF pos, KoColor &color);
 
     KisRandomAccessorSP m_writeAccessor;
-    KoColorSpace * cs;
+    KoColorSpace *cs;
     quint32 m_pixelSize;
 
-    KisPainter * m_painter;
+    KisPainter *m_painter;
 
     QList<Pen> m_pens;
     int m_branch;

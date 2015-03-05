@@ -20,7 +20,6 @@
 
 #include <QDomElement>
 
-
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kconfig.h>

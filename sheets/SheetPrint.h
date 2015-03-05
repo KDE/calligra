@@ -26,7 +26,6 @@
 
 #include "calligra_sheets_export.h"
 
-
 namespace Calligra
 {
 namespace Sheets
@@ -45,7 +44,7 @@ class Sheet;
 class CALLIGRA_SHEETS_ODF_EXPORT SheetPrint
 {
 public:
-    explicit SheetPrint(Sheet * sheet = 0);
+    explicit SheetPrint(Sheet *sheet = 0);
     SheetPrint(const SheetPrint &other);
     ~SheetPrint();
 
@@ -148,7 +147,6 @@ public:
      * Assignment operator.
      */
     void operator=(const SheetPrint &);
-
 
 private:
     class Private;

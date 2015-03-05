@@ -42,13 +42,15 @@ QRectF ODrawToOdf::getRect(const OfficeArtFSPGR &r)
     return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
 }
 
-void ODrawToOdf::processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out)
+void ODrawToOdf::processGroupShape(const MSO::OfficeArtSpgrContainer &o, Writer &out)
 {
-    if (o.rgfb.size() < 2) return;
+    if (o.rgfb.size() < 2) {
+        return;
+    }
 
     //The first container MUST be an OfficeArtSpContainer record, which
     //MUST contain shape information for the group.  MS-ODRAW, 2.2.16
-    const OfficeArtSpContainer* sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+    const OfficeArtSpContainer *sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
 
     //An OfficeArtFSPGR record specifies the coordinate system of the group
     //shape.  The anchors of the child shape are expressed in this coordinate
@@ -85,8 +87,8 @@ void ODrawToOdf::processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer&
     }
 }
 
-void ODrawToOdf::processDrawing(const OfficeArtSpgrContainerFileBlock& of,
-                                Writer& out)
+void ODrawToOdf::processDrawing(const OfficeArtSpgrContainerFileBlock &of,
+                                Writer &out)
 {
     if (of.anon.is<OfficeArtSpgrContainer>()) {
         processGroupShape(*of.anon.get<OfficeArtSpgrContainer>(), out);
@@ -94,12 +96,12 @@ void ODrawToOdf::processDrawing(const OfficeArtSpgrContainerFileBlock& of,
         processDrawingObject(*of.anon.get<OfficeArtSpContainer>(), out);
     }
 }
-void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
-        const OfficeArtSpContainer& o)
+void ODrawToOdf::addGraphicStyleToDrawElement(Writer &out,
+        const OfficeArtSpContainer &o)
 {
     KoGenStyle style;
-    const OfficeArtDggContainer* drawingGroup = 0;
-    const OfficeArtSpContainer* master = 0;
+    const OfficeArtDggContainer *drawingGroup = 0;
+    const OfficeArtSpContainer *master = 0;
 
     if (client) {
         drawingGroup = client->getOfficeArtDggContainer();
@@ -126,27 +128,27 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
 
 namespace
 {
-    QString format(double v)
-    {
-        static const QString f("%1");
-        static const QString e("");
-        static const QRegExp r("\\.?0+$");
-        return f.arg(v, 0, 'f').replace(r, e);
-    }
+QString format(double v)
+{
+    static const QString f("%1");
+    static const QString e("");
+    static const QRegExp r("\\.?0+$");
+    return f.arg(v, 0, 'f').replace(r, e);
+}
 
-    QString pt(double v)
-    {
-        static const QString pt("pt");
-        return format(v) + pt;
-    }
+QString pt(double v)
+{
+    static const QString pt("pt");
+    return format(v) + pt;
+}
 
-    QString percent(double v)
-    {
-        return format(v) + '%';
-    }
+QString percent(double v)
+{
+    return format(v) + '%';
+}
 } //namespace
 
-void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles)
+void ODrawToOdf::defineGraphicProperties(KoGenStyle &style, const DrawStyle &ds, KoGenStyles &styles)
 {
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     // dr3d:ambient-color
@@ -176,7 +178,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:auto-grow-height
     style.addProperty("draw:auto-grow-height", ds.fFitShapeToText(), gt);
     // draw:auto-grow-width
-    style.addProperty("draw:auto-grow-width", ds.fFitShapeToText() && ds.wrapText()==msowrapNone, gt);
+    style.addProperty("draw:auto-grow-width", ds.fFitShapeToText() && ds.wrapText() == msowrapNone, gt);
     // draw:blue
     // draw:caption-angle
     // draw:caption-angle-type
@@ -209,9 +211,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         // only set the color if the fill type is 'solid' because OOo ignores
         // fill='none' if the color is set
         switch (fillType) {
-        case msofillSolid:
-        {
-            if (!client) break;
+        case msofillSolid: {
+            if (!client) {
+                break;
+            }
             QColor color = processOfficeArtCOLORREF(ds.fillColor(), ds);
             style.addProperty("draw:fill-color", color.name(), gt);
             break;
@@ -221,9 +224,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         case msofillShadeCenter:
         case msofillShadeShape:
         case msofillShadeScale:
-        case msofillShadeTitle:
-        {
-            if (!client) break;
+        case msofillShadeTitle: {
+            if (!client) {
+                break;
+            }
             KoGenStyle gs(KoGenStyle::LinearGradientStyle);
             defineGradientStyle(gs, ds);
             QString gname = styles.insert(gs);
@@ -236,9 +240,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         // draw:fill-image-name
         case msofillPattern:
         case msofillTexture:
-        case msofillPicture:
-        {
-            if (!client) break;
+        case msofillPicture: {
+            if (!client) {
+                break;
+            }
             quint32 fillBlip = ds.fillBlip();
             QString fillImagePath;
             fillImagePath = client->getPicturePath(fillBlip);
@@ -284,7 +289,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     qreal lineWidthPt = EMU_TO_POINT(ds.lineWidth());
     // markers are shape specific and thus do NOT belong into the
     // default graphic style
-    if (ds.fLine() && ( ds.shapeType() != msosptNil )) {
+    if (ds.fLine() && (ds.shapeType() != msosptNil)) {
         quint32 lineEndArrowhead = ds.lineEndArrowhead();
         if (lineEndArrowhead > 0 && lineEndArrowhead < 6) {
             // draw:marker-end
@@ -333,7 +338,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         }
         // draw:shadow-opacity
         float shadowOpacity = toQReal(ds.shadowOpacity());
-        style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
+        style.addProperty("draw:shadow-opacity", percent(100 * shadowOpacity), gt);
     } else {
         style.addProperty("draw:shadow", "hidden", gt);
     }
@@ -473,7 +478,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // svg:fill-rule
     QString fillRule(getFillRule(ds.shapeType()));
     if (!fillRule.isEmpty()) {
-        style.addProperty("svg:fill-rule" ,fillRule, gt);
+        style.addProperty("svg:fill-rule", fillRule, gt);
     }
     // svg:height
     // svg:width
@@ -492,15 +497,15 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
 
 namespace
 {
-    const char* const markerStyles[6] = {
-        "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
-        "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
-    };
+const char *const markerStyles[6] = {
+    "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
+    "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
+};
 }
 
-QString ODrawToOdf::defineMarkerStyle(KoGenStyles& styles, const quint32 arrowType)
+QString ODrawToOdf::defineMarkerStyle(KoGenStyles &styles, const quint32 arrowType)
 {
-    if ( !(arrowType > msolineNoEnd && arrowType < msolineArrowChevronEnd) ) {
+    if (!(arrowType > msolineNoEnd && arrowType < msolineArrowChevronEnd)) {
         return QString();
     }
 
@@ -540,7 +545,7 @@ QString ODrawToOdf::defineMarkerStyle(KoGenStyles& styles, const quint32 arrowTy
     return styles.insert(marker, name, KoGenStyles::DontAddNumberToName);
 }
 
-void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
+void ODrawToOdf::defineGradientStyle(KoGenStyle &style, const DrawStyle &ds)
 {
     // TODO: another fill types
 
@@ -548,7 +553,7 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     // the line with rectangle to use it in svg
     // size of rectangle is 100*100 with the middle in 0,0
     // line coordinates are x1,y1; 0,0; x2,y2
-    int dx=0,dy=0;
+    int dx = 0, dy = 0;
     int angle = (int)toQReal(ds.fillAngle());
 
     // from observations of the documents it seems
@@ -566,16 +571,16 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 
     if ((angle >= 0 && angle < 45) || (angle >= 315 && angle <= 360)) {
         dx = 50;
-        dy = sinA/cosA * 50;
+        dy = sinA / cosA * 50;
     } else if (angle >= 45 && angle < 135) {
         dy = 50;
-        dx = cosA/sinA * 50;
-    } else if  (angle >= 135 && angle < 225) {
+        dx = cosA / sinA * 50;
+    } else if (angle >= 135 && angle < 225) {
         dx = -50;
-        dy = sinA/cosA*(-50);
+        dy = sinA / cosA * (-50);
     } else {
         dy = -50;
-        dx = cosA/sinA * (-50);
+        dx = cosA / sinA * (-50);
     }
 
     style.addAttribute("svg:spreadMethod", "reflect");
@@ -586,8 +591,8 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     int y2 = 50 - dy;
 
     if (ds.fillFocus() == 100) {
-        qSwap(x1,x2);
-        qSwap(y1,y2);
+        qSwap(x1, x2);
+        qSwap(y1, y2);
     } else if (ds.fillFocus() == 50) {
         int sx = (x2 - x1) * 0.5;
         int sy = (y2 - y1) * 0.5;
@@ -596,8 +601,8 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 
         // in one case don't swap the gradient vector
         if (angle != 90) {
-            qSwap(x1,x2);
-            qSwap(y1,y2);
+            qSwap(x1, x2);
+            qSwap(y1, y2);
         }
     } else if (ds.fillFocus() == -50) {
         int sx = (x2 - x1) * 0.5;
@@ -607,8 +612,8 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
         // in this case we have to swap the gradient vector
         // check some gradient file from MS Office 2003
         if (angle == 90) {
-            qSwap(x1,x2);
-            qSwap(y1,y2);
+            qSwap(x1, x2);
+            qSwap(y1, y2);
         }
     }
 
@@ -637,8 +642,8 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
         FixedPoint fixedPoint;
         for (int i = 0; i < a.nElems; i++) {
             try {
-                parseOfficeArtCOLORREF(in,color);
-            } catch (const IOException& e) {
+                parseOfficeArtCOLORREF(in, color);
+            } catch (const IOException &e) {
                 qDebug() << e.msg;
                 break;
             } catch (...) {
@@ -646,8 +651,8 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
                 break;
             }
             try {
-                parseFixedPoint(in,fixedPoint);
-            } catch (const IOException& e) {
+                parseFixedPoint(in, fixedPoint);
+            } catch (const IOException &e) {
                 qDebug() << e.msg;
                 break;
             } catch (...) {
@@ -670,10 +675,10 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
         QColor fillColor = processOfficeArtCOLORREF(ds.fillColor(), ds);
         QColor backColor = processOfficeArtCOLORREF(ds.fillBackColor(), ds);
 
-        if (ds.fillFocus() == 50){
-            if (toQReal( ds.fillAngle() ) > 0){
-                qSwap(x1,x2);
-                qSwap(y1,y2);
+        if (ds.fillFocus() == 50) {
+            if (toQReal(ds.fillAngle()) > 0) {
+                qSwap(x1, x2);
+                qSwap(y1, y2);
             }
         }
 
@@ -703,7 +708,7 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     style.addChildElement("svg:stop", elementContents);
 }
 
-QString ODrawToOdf::defineDashStyle(KoGenStyles& styles, const quint32 lineDashing)
+QString ODrawToOdf::defineDashStyle(KoGenStyles &styles, const quint32 lineDashing)
 {
     if (lineDashing <= 0 || lineDashing > 10) {
         return QString();
@@ -775,7 +780,7 @@ QString ODrawToOdf::defineDashStyle(KoGenStyles& styles, const quint32 lineDashi
                          KoGenStyles::DontAddNumberToName);
 }
 
-QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds)
+QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF &c, const DrawStyle &ds)
 {
     static const QRgb systemColors[25] = {
         0xc0c0c0, 0x008080, 0x000080, 0x808080, 0xc0c0c0, 0xffffff, 0x000000,
@@ -800,8 +805,7 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
                 break;
             // If the shape contains a line, use the line color of the
             // shape. Otherwise, use the fill color.
-            case 0xF1:
-            {
+            case 0xF1: {
                 if (ds.fLine()) {
                     tmp = ds.lineColor();
                 } else {
@@ -831,8 +835,7 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
                 break;
             // If the shape contains a fill, use the fill color of the
             // shape. Otherwise, use the line color.
-            case 0xF7:
-            {
+            case 0xF7: {
                 if (ds.fFilled()) {
                     tmp = ds.fillColor();
                 } else {
@@ -848,7 +851,7 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
             tmp = c;
             // system colors
             if (c.red < 25) {
-                const QRgb& col = systemColors[c.red];
+                const QRgb &col = systemColors[c.red];
                 tmp.red = qRed(col);
                 tmp.green = qGreen(col);
                 tmp.blue = qBlue(col);
@@ -866,8 +869,7 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
         // A blue value of 0xFF specifies that the color is to be left
         // unchanged, whereas a blue value of 0x00 specifies that the color is
         // to be completely darkened.
-        case 0x01:
-        {
+        case 0x01: {
             if (c.blue == 0x00) {
                 ret = ret.darker(800);
             } else if (c.blue != 0xFF) {
@@ -881,8 +883,7 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
         // A blue value of 0xFF specifies that the color is to be left
         // unchanged, whereas a blue value of 0x00 specifies that the color is
         // to be completely lightened.
-        case 0x02:
-        {
+        case 0x02: {
             if (c.blue == 0x00) {
                 ret = ret.lighter(150);
             } else if (c.blue != 0xFF) {
@@ -891,7 +892,7 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
                 ret.setBlue(ret.blue() + ceil(p * ret.blue()));
             }
             break;
-	}
+        }
         //TODO:
         case 0x03:
         case 0x04:
@@ -917,7 +918,7 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
     return ret;
 }
 
-const char* getFillRule(quint16 shapeType)
+const char *getFillRule(quint16 shapeType)
 {
     switch (shapeType) {
     case msosptDonut:
@@ -940,12 +941,12 @@ const char* getFillRule(quint16 shapeType)
     }
 }
 
-const char* getFillType(quint32 fillType)
+const char *getFillType(quint32 fillType)
 {
     switch (fillType) {
     case msofillPattern:
-        // NOTE: there's usually a DIB file used for the pattern, check also
-        // draw:fill="hatch" and <draw:hatch> in ODF specification
+    // NOTE: there's usually a DIB file used for the pattern, check also
+    // draw:fill="hatch" and <draw:hatch> in ODF specification
     case msofillTexture:
     case msofillPicture:
         return "bitmap";
@@ -963,7 +964,7 @@ const char* getFillType(quint32 fillType)
     }
 }
 
-const char* getRepeatStyle(quint32 fillType)
+const char *getRepeatStyle(quint32 fillType)
 {
     switch (fillType) {
     case msofillPicture:
@@ -983,7 +984,7 @@ const char* getRepeatStyle(quint32 fillType)
     }
 }
 
-const char* getGradientRendering(quint32 fillType)
+const char *getGradientRendering(quint32 fillType)
 {
     //TODO: Add the logic!!!
     switch (fillType) {
@@ -1002,7 +1003,7 @@ const char* getGradientRendering(quint32 fillType)
     }
 }
 
-const char* getHorizontalPos(quint32 posH)
+const char *getHorizontalPos(quint32 posH)
 {
     switch (posH) {
     case 0: // msophAbs
@@ -1022,7 +1023,7 @@ const char* getHorizontalPos(quint32 posH)
     }
 }
 
-const char* getHorizontalRel(quint32 posRelH)
+const char *getHorizontalRel(quint32 posRelH)
 {
     switch (posRelH) {
     case 0: //msoprhMargin
@@ -1038,7 +1039,7 @@ const char* getHorizontalRel(quint32 posRelH)
     }
 }
 
-const char* getVerticalPos(quint32 posV)
+const char *getVerticalPos(quint32 posV)
 {
     switch (posV) {
     case 0: // msophAbs
@@ -1058,7 +1059,7 @@ const char* getVerticalPos(quint32 posV)
     }
 }
 
-const char* getVerticalRel(quint32 posRelV)
+const char *getVerticalRel(quint32 posRelV)
 {
     switch (posRelV) {
     case 0: //msoprvMargin
@@ -1074,7 +1075,7 @@ const char* getVerticalRel(quint32 posRelV)
     }
 }
 
-const char* getHorizontalAlign(quint32 anchorText)
+const char *getHorizontalAlign(quint32 anchorText)
 {
     switch (anchorText) {
     case msoanchorTop:
@@ -1094,7 +1095,7 @@ const char* getHorizontalAlign(quint32 anchorText)
     }
 }
 
-const char* getVerticalAlign(quint32 anchorText)
+const char *getVerticalAlign(quint32 anchorText)
 {
     switch (anchorText) {
     case msoanchorTop:
@@ -1115,7 +1116,7 @@ const char* getVerticalAlign(quint32 anchorText)
     }
 }
 
-const char* getStrokeLineCap(quint32 capStyle)
+const char *getStrokeLineCap(quint32 capStyle)
 {
     switch (capStyle) {
     case msolineEndCapRound:
@@ -1128,7 +1129,7 @@ const char* getStrokeLineCap(quint32 capStyle)
     }
 }
 
-const char* getStrokeLineJoin(quint32 joinStyle)
+const char *getStrokeLineJoin(quint32 joinStyle)
 {
     switch (joinStyle) {
     case msolineJoinBevel:

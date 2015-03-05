@@ -28,8 +28,7 @@
 #include <Command.h>
 #include <Category.h>
 
-
-KisGmicParser::KisGmicParser(const QStringList& filePaths):m_filePaths(filePaths)
+KisGmicParser::KisGmicParser(const QStringList &filePaths): m_filePaths(filePaths)
 {
 
 }
@@ -39,50 +38,45 @@ KisGmicParser::~KisGmicParser()
 
 }
 
-bool KisGmicParser::matchesRegExp(const QRegExp& regExp,const QString& line)
+bool KisGmicParser::matchesRegExp(const QRegExp &regExp, const QString &line)
 {
     int indexOfMatch = regExp.indexIn(line);
     int matchedLength = regExp.matchedLength();
     return (indexOfMatch == 0) && (matchedLength > 0);
 }
 
-bool KisGmicParser::isCommand(const QString& line)
+bool KisGmicParser::isCommand(const QString &line)
 {
     return matchesRegExp(COMMAND_NAME_RX, line);
 }
 
-bool KisGmicParser::isParameter(const QString& line)
+bool KisGmicParser::isParameter(const QString &line)
 {
-    return matchesRegExp(PARAMETER_RX,line);
+    return matchesRegExp(PARAMETER_RX, line);
 }
 
-bool KisGmicParser::isCategory(const QString& line)
+bool KisGmicParser::isCategory(const QString &line)
 {
-    return matchesRegExp(CATEGORY_NAME_RX,line);
+    return matchesRegExp(CATEGORY_NAME_RX, line);
 }
 
-QString KisGmicParser::parseCategoryName(const QString& line)
+QString KisGmicParser::parseCategoryName(const QString &line)
 {
     QString result = line;
     return result.remove(0, GIMP_COMMENT.size()).trimmed();
 }
 
-Component* KisGmicParser::createFilterTree()
+Component *KisGmicParser::createFilterTree()
 {
-    Category * rootCategory = 0;
-    foreach (const QString &fileName, m_filePaths)
-    {
+    Category *rootCategory = 0;
+    foreach (const QString &fileName, m_filePaths) {
         QFile file(fileName);
 
-        if (!file.open(QIODevice::ReadOnly))
-        {
+        if (!file.open(QIODevice::ReadOnly)) {
             dbgPlugins << "Can't open file " << fileName << file.errorString();
             continue;
-        }
-        else
-        {
-            if (!rootCategory)
-            {
+        } else {
+            if (!rootCategory) {
                 rootCategory = new Category();
                 rootCategory->setName("Filters");
             }
@@ -90,129 +84,94 @@ Component* KisGmicParser::createFilterTree()
 
         QTextStream in(&file);
 
-        Command * command = 0;
-        Category * category = rootCategory;
+        Command *command = 0;
+        Category *category = rootCategory;
         int lineNum = 0;
-        while(!in.atEnd()) {
+        while (!in.atEnd()) {
             QString line = fetchLine(in, lineNum);
 
-            if (line.startsWith(GIMP_COMMENT))
-            {
-                if (isCategory(line))
-                {
+            if (line.startsWith(GIMP_COMMENT)) {
+                if (isCategory(line)) {
                     //dbgPlugins << "category:" << line;
                     command = 0;
                     QString categoryName = parseCategoryName(line);
 
                     int toParentSteps = 0;
                     // count the prefix occurences of "_"
-                    while ( (toParentSteps < categoryName.size()) && (categoryName.at(toParentSteps) == '_') )
-                    {
+                    while ((toParentSteps < categoryName.size()) && (categoryName.at(toParentSteps) == '_')) {
                         toParentSteps++;
                     }
 
-                    if (toParentSteps > 0)
-                    {
+                    if (toParentSteps > 0) {
                         // move to correct category
-                        for (int i = 0; i < toParentSteps; i++)
-                        {
-                            Category * parent = dynamic_cast<Category *>(category->parent());
-                            if (parent)
-                            {
+                        for (int i = 0; i < toParentSteps; i++) {
+                            Category *parent = dynamic_cast<Category *>(category->parent());
+                            if (parent) {
                                 category = parent;
-                            }
-                            else
-                            {
+                            } else {
                                 // already in root category
                                 break;
                             }
                         }
 
-
-
-                        categoryName = categoryName.remove(0,toParentSteps);
+                        categoryName = categoryName.remove(0, toParentSteps);
                     }
 
-                    if (!categoryName.isEmpty())
-                    {
+                    if (!categoryName.isEmpty()) {
                         // create new category in current category and set it as current
                         int categoryChildIndex = category->indexOf<Category>(categoryName);
-                        if (categoryChildIndex != -1)
-                        {
+                        if (categoryChildIndex != -1) {
                             category = static_cast<Category *>(category->child(categoryChildIndex));
-                        }
-                        else
-                        {
-                            Category * newCategory = new Category(category);
+                        } else {
+                            Category *newCategory = new Category(category);
                             newCategory->setName(categoryName);
                             category->add(newCategory);
                             category = newCategory; // set current category
                         }
                     }
-                }
-                else if (isCommand(line))
-                {
+                } else if (isCommand(line)) {
                     //dbgPlugins << "command: " << line;
                     command = new Command();
                     command->processCommandName(line);
 
                     int commandChildIndex = category->indexOf<Command>(command->name());
-                    if (commandChildIndex == -1)
-                    {
+                    if (commandChildIndex == -1) {
                         category->add(command);
-                    }
-                    else
-                    {
+                    } else {
                         category->replace(commandChildIndex, command);
                     }
                     command->setParent(category);
 
-                }
-                else if (isParameter(line))
-                {
-                    if (command)
-                    {
+                } else if (isParameter(line)) {
+                    if (command) {
                         QStringList block;
                         block.append(line);
                         bool parameterIsComplete = false;
                         int lines = 1;
-                        while (!parameterIsComplete)
-                        {
+                        while (!parameterIsComplete) {
                             //dbgPlugins << "Line number" << lineNum;
                             parameterIsComplete = command->processParameter(block);
-                            if (!parameterIsComplete)
-                            {
+                            if (!parameterIsComplete) {
 
                                 QString anotherLine = fetchLine(in, lineNum);
-                                if (!anotherLine.isNull())
-                                {
+                                if (!anotherLine.isNull()) {
                                     block.append(anotherLine);
                                     lines++;
-                                }
-                                else
-                                {
+                                } else {
                                     warnPlugins << "We are and the end of the file unexpectedly"; // we are at the end of the file
                                     break;
                                 }
-                            }
-                            else if (lines > 1)
-                            {
+                            } else if (lines > 1) {
                                 // dbgPlugins << "At " << lineNum << " lines: " << lines << " multiline: " << block;
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         dbgPlugins << "No command for given parameter, invalid gmic definition line: " << line;
 
                     }
-                }
-                else if (line.startsWith(GIMP_COMMENT+"_"))
-                {
+                } else if (line.startsWith(GIMP_COMMENT + "_")) {
                     // TODO: do something with those translations
-                }
-                else
-                {
+                } else {
                     dbgPlugins << "Ignoring line :" << line;
                 }
             }
@@ -226,11 +185,9 @@ Component* KisGmicParser::createFilterTree()
     return rootCategory;
 }
 
-
-QString KisGmicParser::fetchLine(QTextStream& input, int& lineCounter)
+QString KisGmicParser::fetchLine(QTextStream &input, int &lineCounter)
 {
-    if (!input.atEnd())
-    {
+    if (!input.atEnd()) {
         QString line = input.readLine();
         lineCounter++;
         return line;
@@ -238,23 +195,20 @@ QString KisGmicParser::fetchLine(QTextStream& input, int& lineCounter)
     return QString();
 }
 
-QByteArray KisGmicParser::extractGmicCommandsOnly(const QString& filePath)
+QByteArray KisGmicParser::extractGmicCommandsOnly(const QString &filePath)
 {
     QFile file(filePath);
 
-    if (!file.open(QIODevice::ReadOnly))
-    {
+    if (!file.open(QIODevice::ReadOnly)) {
         //dbgPlugins() << "Can't open file: " << filePath << file.errorString();
         return QByteArray();
     }
 
     QTextStream in(&file);
     QByteArray result;
-    while(!in.atEnd())
-    {
+    while (!in.atEnd()) {
         QString line = in.readLine();
-        if (!line.startsWith("#"))
-        {
+        if (!line.startsWith("#")) {
             line.append("\n");
             result.append(line.toUtf8());
         }

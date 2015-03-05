@@ -70,7 +70,6 @@ public:
     QString suffix() const;
     void setSuffix(const QString &suffix);
 
-
     /**
      * The style:num-format attribute specifies the format of the number in the same way as the
      * [XSLT] format attribute. The number styles supported are as follows:
@@ -127,8 +126,7 @@ public:
 private:
 
     class Private;
-    Private * const d;
-
+    Private *const d;
 
 };
 

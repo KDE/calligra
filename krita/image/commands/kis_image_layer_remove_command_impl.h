@@ -27,7 +27,6 @@
 #include "kis_types.h"
 #include "kis_image_command.h"
 
-
 /// The command for removing a single node. It should be used inside
 /// KisImageLayerRemoveCommand only
 class KRITAIMAGE_EXPORT KisImageLayerRemoveCommandImpl : public KisImageCommand
@@ -46,6 +45,6 @@ public:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 #endif

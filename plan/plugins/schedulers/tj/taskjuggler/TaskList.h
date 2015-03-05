@@ -40,25 +40,28 @@ public:
         sorting[2] = CoreAttributesList::EndUp;
     }
 
-    TaskList(const TaskList& tl) :
+    TaskList(const TaskList &tl) :
         CoreAttributesList(tl),
         sortScenario(tl.sortScenario)
     { }
 
     virtual ~TaskList() { }
 
-    Task* getTask(const QString& id) const;
+    Task *getTask(const QString &id) const;
 
     static bool isSupportedSortingCriteria(int sc);
 
-    virtual int compareItemsLevel(CoreAttributes* c1, CoreAttributes* c2,
+    virtual int compareItemsLevel(CoreAttributes *c1, CoreAttributes *c2,
                                   int level);
 
-    void setSortScenario(int sc) { sortScenario = sc; }
+    void setSortScenario(int sc)
+    {
+        sortScenario = sc;
+    }
 
 protected:
     int sortScenario;
-} ;
+};
 
 /**
  * @short Iterator class for TaskList objects.
@@ -68,11 +71,11 @@ protected:
 class KPLATOTJ_EXPORT TaskListIterator : public virtual CoreAttributesListIterator
 {
 public:
-    explicit TaskListIterator(const CoreAttributesList& l) :
+    explicit TaskListIterator(const CoreAttributesList &l) :
         CoreAttributesListIterator(l) { }
     virtual ~TaskListIterator() { }
-    Task* operator*();
-} ;
+    Task *operator*();
+};
 
 } // namespace TJ
 

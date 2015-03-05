@@ -71,7 +71,7 @@ void PrintSettings::Private::calculatePageDimensions()
 }
 
 PrintSettings::PrintSettings()
-        : d(new Private)
+    : d(new Private)
 {
     d->printGrid = false;
     d->printCharts = true;
@@ -88,8 +88,8 @@ PrintSettings::PrintSettings()
     d->zoom = 1.0;
 }
 
-PrintSettings::PrintSettings(const PrintSettings& other)
-        : d(new Private)
+PrintSettings::PrintSettings(const PrintSettings &other)
+    : d(new Private)
 {
     d->pageLayout = other.d->pageLayout;
     d->printGrid = other.d->printGrid;
@@ -115,12 +115,12 @@ PrintSettings::~PrintSettings()
     delete d;
 }
 
-const KoPageLayout& PrintSettings::pageLayout() const
+const KoPageLayout &PrintSettings::pageLayout() const
 {
     return d->pageLayout;
 }
 
-void PrintSettings::setPageLayout(const KoPageLayout& pageLayout)
+void PrintSettings::setPageLayout(const KoPageLayout &pageLayout)
 {
     d->pageLayout = pageLayout;
 }
@@ -278,22 +278,22 @@ void PrintSettings::setCenterVertically(bool center)
     d->centerVertically = center;
 }
 
-const Calligra::Sheets::Region& PrintSettings::printRegion() const
+const Calligra::Sheets::Region &PrintSettings::printRegion() const
 {
     return d->printRegion;
 }
 
-void PrintSettings::setPrintRegion(const Region& region)
+void PrintSettings::setPrintRegion(const Region &region)
 {
     d->printRegion = region;
 }
 
-void PrintSettings::addPrintRange(const QRect& range)
+void PrintSettings::addPrintRange(const QRect &range)
 {
     d->printRegion.add(range);
 }
 
-void PrintSettings::removePrintRange(const QRect& range)
+void PrintSettings::removePrintRange(const QRect &range)
 {
     d->printRegion.sub(range, 0);
 }
@@ -308,33 +308,33 @@ void PrintSettings::setZoom(double zoom)
     d->zoom = zoom;
 }
 
-const QSize& PrintSettings::pageLimits() const
+const QSize &PrintSettings::pageLimits() const
 {
     return d->pageLimits;
 }
 
-void PrintSettings::setPageLimits(const QSize& pageLimits)
+void PrintSettings::setPageLimits(const QSize &pageLimits)
 {
     d->pageLimits = pageLimits;
 }
 
-const QPair<int, int>& PrintSettings::repeatedColumns() const
+const QPair<int, int> &PrintSettings::repeatedColumns() const
 {
     return d->repeatedColumns;
 }
 
-void PrintSettings::setRepeatedColumns(const QPair<int, int>& repeatedColumns)
+void PrintSettings::setRepeatedColumns(const QPair<int, int> &repeatedColumns)
 {
     d->repeatedColumns = repeatedColumns;
     kDebug() << repeatedColumns;
 }
 
-const QPair<int, int>& PrintSettings::repeatedRows() const
+const QPair<int, int> &PrintSettings::repeatedRows() const
 {
     return d->repeatedRows;
 }
 
-void PrintSettings::setRepeatedRows(const QPair<int, int>& repeatedRows)
+void PrintSettings::setRepeatedRows(const QPair<int, int> &repeatedRows)
 {
     d->repeatedRows = repeatedRows;
 }
@@ -410,7 +410,7 @@ QString PrintSettings::saveOdfPageLayout(KoGenStyles &mainStyles,
     return mainStyles.insert(pageLayout, "pm");
 }
 
-void PrintSettings::operator=(const PrintSettings & other)
+void PrintSettings::operator=(const PrintSettings &other)
 {
     d->pageLayout = other.d->pageLayout;
     d->printGrid = other.d->printGrid;
@@ -431,41 +431,58 @@ void PrintSettings::operator=(const PrintSettings & other)
     d->repeatedRows = other.d->repeatedRows;
 }
 
-bool PrintSettings::operator==(const PrintSettings& other) const
+bool PrintSettings::operator==(const PrintSettings &other) const
 {
-    if (d->pageLayout != other.d->pageLayout)
+    if (d->pageLayout != other.d->pageLayout) {
         return false;
-    if (d->printGrid != other.d->printGrid)
+    }
+    if (d->printGrid != other.d->printGrid) {
         return false;
-    if (d->printCharts != other.d->printCharts)
+    }
+    if (d->printCharts != other.d->printCharts) {
         return false;
-    if (d->printObjects != other.d->printObjects)
+    }
+    if (d->printObjects != other.d->printObjects) {
         return false;
-    if (d->printGraphics != other.d->printGraphics)
+    }
+    if (d->printGraphics != other.d->printGraphics) {
         return false;
-    if (d->printCommentIndicator != other.d->printCommentIndicator)
+    }
+    if (d->printCommentIndicator != other.d->printCommentIndicator) {
         return false;
-    if (d->printFormulaIndicator != other.d->printFormulaIndicator)
+    }
+    if (d->printFormulaIndicator != other.d->printFormulaIndicator) {
         return false;
-    if (d->printHeaders != other.d->printHeaders)
+    }
+    if (d->printHeaders != other.d->printHeaders) {
         return false;
-    if (d->printZeroValues != other.d->printZeroValues)
+    }
+    if (d->printZeroValues != other.d->printZeroValues) {
         return false;
-    if (d->centerHorizontally != other.d->centerHorizontally)
+    }
+    if (d->centerHorizontally != other.d->centerHorizontally) {
         return false;
-    if (d->centerVertically != other.d->centerVertically)
+    }
+    if (d->centerVertically != other.d->centerVertically) {
         return false;
-    if (d->pageOrder != other.d->pageOrder)
+    }
+    if (d->pageOrder != other.d->pageOrder) {
         return false;
-    if (d->printRegion != other.d->printRegion)
+    }
+    if (d->printRegion != other.d->printRegion) {
         return false;
-    if (d->zoom != other.d->zoom)
+    }
+    if (d->zoom != other.d->zoom) {
         return false;
-    if (d->pageLimits != other.d->pageLimits)
+    }
+    if (d->pageLimits != other.d->pageLimits) {
         return false;
-    if (d->repeatedColumns != other.d->repeatedColumns)
+    }
+    if (d->repeatedColumns != other.d->repeatedColumns) {
         return false;
-    if (d->repeatedRows != other.d->repeatedRows)
+    }
+    if (d->repeatedRows != other.d->repeatedRows) {
         return false;
+    }
     return true;
 }

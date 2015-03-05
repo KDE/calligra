@@ -31,7 +31,7 @@
 
 #include <kglobal.h>
 
-KoDpi* KoDpi::self()
+KoDpi *KoDpi::self()
 {
     K_GLOBAL_STATIC(KoDpi, s_instance)
     return s_instance;
@@ -64,7 +64,7 @@ KoDpi::~KoDpi()
 void KoDpi::setDPI(int x, int y)
 {
     //kDebug(30006) << x <<"," << y;
-    KoDpi* s = self();
+    KoDpi *s = self();
     s->m_dpiX = x;
     s->m_dpiY = y;
 }

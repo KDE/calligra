@@ -21,10 +21,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KCHART_DATASET_H
 #define KCHART_DATASET_H
-
 
 // Qt
 #include <QPen>
@@ -33,24 +31,26 @@
 #include "ChartShape.h"
 #include "CellRegion.h"
 
-namespace KDChart {
-    class DataValueAttributes;
-    class PieAttributes;
-    class MarkerAttributes;
+namespace KDChart
+{
+class DataValueAttributes;
+class PieAttributes;
+class MarkerAttributes;
 }
 
 class KoShapeLoadingContext;
 
-namespace KChart {
+namespace KChart
+{
 
 class KDChartModel;
 
 /**
  * @brief The DataSet class stores properties of a single data series.
- * 
+ *
  * A global chart type can be overridden by setting a specific type
  * on a data series.
- * 
+ *
  * To change properties of a single data point inside a data series,
  * use section's like for example \a brush(int section) where the
  * section refers to the data-point number.
@@ -71,7 +71,8 @@ public:
     /**
      * Describes ODF attribute chart:data-label-number from §15.32.3
      */
-    class ValueLabelType {
+    class ValueLabelType
+    {
     public:
         /// Show value as number.
         bool number;
@@ -84,7 +85,10 @@ public:
         /// Constructor.
         explicit ValueLabelType(bool number = false, bool percentage = false, bool category = false, bool symbol = false) : number(number), percentage(percentage), category(category), symbol(symbol) {}
         /// Returns true if no label will be displayed.
-        bool noLabel() const { return !number && !percentage && !category && !symbol; }
+        bool noLabel() const
+        {
+            return !number && !percentage && !category && !symbol;
+        }
     };
 
     /**
@@ -103,15 +107,15 @@ public:
      * the series-wide value
      */
     ValueLabelType valueLabelType(int section = -1) const;
-    
+
     /**
      * Sets the marker attributes of the series
      *
      * \param section The data point to set this type for. -1 will set
      * a series-wide value
      */
-    void setMarkerAttributes(const KDChart::MarkerAttributes& attribs, int section = -1);
-    
+    void setMarkerAttributes(const KDChart::MarkerAttributes &attribs, int section = -1);
+
     /**
      * \return the MarkerAttributes.
      * \see ValueLabelType

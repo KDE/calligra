@@ -52,7 +52,7 @@ public:
     // reimplemented from KoShapeBackground
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
     // reimplemented from KoShapeBackground
-    virtual bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize);
+    virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize);
 protected:
     KoColorBackground(KoShapeBackgroundPrivate &dd);
 private:

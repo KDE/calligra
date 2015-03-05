@@ -34,8 +34,9 @@
 
 #else /* HAVE_VC */
 
-namespace Vc {
-    typedef enum {ScalarImpl} Implementation;
+namespace Vc
+{
+typedef enum {ScalarImpl} Implementation;
 }
 
 #define VC_IMPL ::Vc::ScalarImpl
@@ -48,7 +49,6 @@ namespace Vc {
 #endif
 
 #endif /* HAVE_VC */
-
 
 #ifdef DO_PACKAGERS_BUILD
 
@@ -67,17 +67,17 @@ createOptimizedClass(typename FactoryType::ParamType param)
         return FactoryType::template create<Vc::AVX2Impl>(param);
     } else
 #endif
-    if (Vc::isImplementationSupported(Vc::AVXImpl)) {
-        return FactoryType::template create<Vc::AVXImpl>(param);
-    } else if (Vc::isImplementationSupported(Vc::SSE41Impl)) {
-        return FactoryType::template create<Vc::SSE41Impl>(param);
-    } else if (Vc::isImplementationSupported(Vc::SSSE3Impl)) {
-        return FactoryType::template create<Vc::SSSE3Impl>(param);
-    } else if (Vc::isImplementationSupported(Vc::SSE2Impl)) {
-        return FactoryType::template create<Vc::SSE2Impl>(param);
-    } else {
-        return FactoryType::template create<Vc::ScalarImpl>(param);
-    }
+        if (Vc::isImplementationSupported(Vc::AVXImpl)) {
+            return FactoryType::template create<Vc::AVXImpl>(param);
+        } else if (Vc::isImplementationSupported(Vc::SSE41Impl)) {
+            return FactoryType::template create<Vc::SSE41Impl>(param);
+        } else if (Vc::isImplementationSupported(Vc::SSSE3Impl)) {
+            return FactoryType::template create<Vc::SSSE3Impl>(param);
+        } else if (Vc::isImplementationSupported(Vc::SSE2Impl)) {
+            return FactoryType::template create<Vc::SSE2Impl>(param);
+        } else {
+            return FactoryType::template create<Vc::ScalarImpl>(param);
+        }
 }
 
 #else /* DO_PACKAGERS_BUILD */

@@ -50,7 +50,7 @@ public Q_SLOTS:
     virtual void accept();
 
 private:
-    Selection* m_selection;
+    Selection *m_selection;
     QListWidget *m_listWidget;
 };
 

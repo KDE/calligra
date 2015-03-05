@@ -23,8 +23,9 @@
 #include <QtTest>
 
 struct ModelDepthProfile {
-    ModelDepthProfile(const QString& _model, const QString& _depth, const QString& _profile)
-            : model(_model), depth(_depth), profile(_profile) {
+    ModelDepthProfile(const QString &_model, const QString &_depth, const QString &_profile)
+        : model(_model), depth(_depth), profile(_profile)
+    {
     }
     QString model;
     QString depth;

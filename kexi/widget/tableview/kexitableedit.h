@@ -43,7 +43,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
     Q_OBJECT
 
 public:
-    explicit KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent = 0);
+    explicit KexiTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiTableEdit();
 
@@ -74,7 +74,7 @@ public:
     virtual void resize(int w, int h);
 
     /*! \return the view widget of this editor, e.g. line edit widget. */
-    virtual QWidget* widget();
+    virtual QWidget *widget();
 
     /*! Hides item's widget, if available. */
     virtual void hideWidget();
@@ -103,7 +103,7 @@ public:
      \a p painter's pen is set to foreground color (usually black) that should be used to paint
      foreground information, if needed. For example boolean editor widget paints
      a rectangle using this color. */
-    virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
+    virtual void setupContents(QPainter *p, bool focused, const QVariant &val,
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
 
     /*! \return true if "selected text" color should be used to paint contents of the editor.
@@ -117,9 +117,9 @@ public:
     /*! For reimplementation.
      Paints selection's background using \a p. Most parameters are similar to these from
      setupContents(). */
-    virtual void paintSelectionBackground(QPainter *p, bool focused, const QString& txt,
+    virtual void paintSelectionBackground(QPainter *p, bool focused, const QString &txt,
                                           int align, int x, int y_offset, int w, int h,
-                                          const QColor& fillColor, const QFontMetrics &fm,
+                                          const QColor &fillColor, const QFontMetrics &fm,
                                           bool readOnly, bool fullRecordSelection);
 
     /*! Sometimes, editor can contain non-standard margin, for example combobox editor contains
@@ -136,7 +136,7 @@ public:
      For implementation: true should be returned if \a ke should be accepted.
      If \a editorActive is true, this editor is currently active, i.e. the table view is in edit mode.
      By default false is returned. */
-    virtual bool handleKeyPress(QKeyEvent* ke, bool editorActive);
+    virtual bool handleKeyPress(QKeyEvent *ke, bool editorActive);
 
     /*! Handles double click request coming from the table view.
      \return true if it has been consumed.
@@ -148,7 +148,7 @@ public:
      For a special case (combo box), \a visibleValue can be provided,
      so it can be copied to the clipboard instead of unreadable \a value.
      For reimplementation. */
-    virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue) = 0;
+    virtual void handleCopyAction(const QVariant &value, const QVariant &visibleValue) = 0;
 
     /*! \return width of \a value. For the default implementation \a val is converted to a string
      and width of this string is returned. */
@@ -165,13 +165,13 @@ public:
      no tooltip should be displayed or a custom tooltip was displayed internally (not yet supported).
      Default implementation does nothing and returns false.
      If the cell is currentl focused (selected), \a focused is true. */
-    virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,
+    virtual bool showToolTipIfNeeded(const QVariant &value, const QRect &rect, const QFontMetrics &fm,
                                      bool focused);
 
     /*! Created internal editor for this editor is needed. This method is only implemented
      in KexiComboBoxTableEdit since it's visible value differs from internal value,
      so a different KexiTableEdit object is used to displaying the data. */
-    virtual void createInternalEditor(KexiDB::QuerySchema& schema);
+    virtual void createInternalEditor(KexiDB::QuerySchema &schema);
 
 Q_SIGNALS:
     void editRequested();
@@ -185,7 +185,7 @@ protected:
 
     /*! Moves child widget within the viewport if the parent is scrollview (otherwise does nothing).
      Use this for child widgets that are outside of this editor widget, instead of calling QWidget::move(). */
-    void moveChild(QWidget * child, int x, int y);
+    void moveChild(QWidget *child, int x, int y);
 
     /*! Allows to force redrawing the related cell by the editor itself. Usable when the editor is not
      displayed by a QWidget but rather by table view cell itself, for example KexiBlobTableEdit. */
@@ -198,7 +198,7 @@ protected:
 
 private:
     //! @see widget()
-    QWidget* m_view;
+    QWidget *m_view;
 };
 
 //! Declaration of cell editor factory
@@ -216,7 +216,7 @@ private:
 //! Implementation of cell editor factory
 #define KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(factoryclassname, itemclassname) \
     factoryclassname::factoryclassname() \
-            : KexiCellEditorFactoryItem() \
+        : KexiCellEditorFactoryItem() \
     { \
         m_className = "" #itemclassname ""; \
     } \

@@ -23,7 +23,7 @@
 #include <QLineEdit>
 
 KexiDBDoubleSpinBox::KexiDBDoubleSpinBox(QWidget *parent)
-        : KDoubleSpinBox(parent) , KexiFormDataItemInterface()
+    : KDoubleSpinBox(parent), KexiFormDataItemInterface()
 {
     connect(this, SIGNAL(valueChanged(double)), this, SLOT(slotValueChanged()));
 }
@@ -32,14 +32,15 @@ KexiDBDoubleSpinBox::~KexiDBDoubleSpinBox()
 {
 }
 
-void KexiDBDoubleSpinBox::setInvalidState(const QString& displayText)
+void KexiDBDoubleSpinBox::setInvalidState(const QString &displayText)
 {
     m_invalidState = true;
     setEnabled(false);
     setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-    if (focusPolicy() & Qt::TabFocus)
+    if (focusPolicy() & Qt::TabFocus) {
         setFocusPolicy(Qt::ClickFocus);
+    }
     setSpecialValueText(displayText);
     KDoubleSpinBox::setValue(minimum());
 }
@@ -48,12 +49,13 @@ void
 KexiDBDoubleSpinBox::setEnabled(bool enabled)
 {
     // prevent the user from reenabling the widget when it is in invalid state
-    if (enabled && m_invalidState)
+    if (enabled && m_invalidState) {
         return;
+    }
     KDoubleSpinBox::setEnabled(enabled);
 }
 
-void KexiDBDoubleSpinBox::setValueInternal(const QVariant&, bool)
+void KexiDBDoubleSpinBox::setValueInternal(const QVariant &, bool)
 {
     KDoubleSpinBox::setValue(m_origValue.toDouble());
 }
@@ -89,7 +91,7 @@ void KexiDBDoubleSpinBox::setReadOnly(bool set)
     editor()->setReadOnly(set);
 }
 
-QWidget*
+QWidget *
 KexiDBDoubleSpinBox::widget()
 {
     return this;

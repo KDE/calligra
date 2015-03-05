@@ -25,16 +25,15 @@
 #include <kis_outline_generation_policy.h>
 #include "kis_spray_paintop_settings_widget.h"
 
-
 class KisSprayPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:
     KisSprayPaintOpSettings();
 
-
     QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
-    QString modelName() const {
+    QString modelName() const
+    {
         return "airbrush";
     }
 

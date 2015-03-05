@@ -29,7 +29,8 @@ struct PathElement {
         Parent,
         Index
     };
-    PathElement(Type _type) : type(_type) {
+    PathElement(Type _type) : type(_type)
+    {
         Q_ASSERT(type == Wildcard || type == Parent);
     }
     PathElement(int _i) : type(Index), index(_i) {}
@@ -41,9 +42,12 @@ struct KisNodeQueryPath::Private {
     QList<PathElement> elements;
     bool relative;
     /// This function will remove uneeded call to parent, for instance, "1/../3/../5" => "5"
-    void simplifyPath() {
+    void simplifyPath()
+    {
         // No elements then return
-        if (elements.isEmpty()) return;
+        if (elements.isEmpty()) {
+            return;
+        }
         QList<PathElement> newelements;
         int i = 0;
         for (; i < elements.count() && elements[i].type == PathElement::Parent; ++i) {
@@ -66,7 +70,8 @@ struct KisNodeQueryPath::Private {
         // Set the new list
         elements = newelements;
     }
-    void queryLevel(int _level, KisNodeSP _node, QList<KisNodeSP>& _result) {
+    void queryLevel(int _level, KisNodeSP _node, QList<KisNodeSP> &_result)
+    {
         if (_level >= elements.size()) {
             _result.push_back(_node);
         } else {
@@ -110,11 +115,11 @@ KisNodeQueryPath::~KisNodeQueryPath()
     delete d;
 }
 
-KisNodeQueryPath::KisNodeQueryPath(const KisNodeQueryPath& nqp) : d(new Private(*nqp.d))
+KisNodeQueryPath::KisNodeQueryPath(const KisNodeQueryPath &nqp) : d(new Private(*nqp.d))
 {
 }
 
-KisNodeQueryPath& KisNodeQueryPath::operator=(const KisNodeQueryPath & nqp)
+KisNodeQueryPath &KisNodeQueryPath::operator=(const KisNodeQueryPath &nqp)
 {
     *d = *nqp.d;
     return *this;
@@ -124,7 +129,6 @@ bool KisNodeQueryPath::isRelative() const
 {
     return d->relative;
 }
-
 
 QList<KisNodeSP> KisNodeQueryPath::queryNodes(KisImageWSP image, KisNodeSP currentNode) const
 {
@@ -170,7 +174,7 @@ QString KisNodeQueryPath::toString() const
     return str;
 }
 
-KisNodeQueryPath KisNodeQueryPath::fromString(const QString& _path)
+KisNodeQueryPath KisNodeQueryPath::fromString(const QString &_path)
 {
     KisNodeQueryPath path;
     if (_path.size() == 0 || _path == ".") {
@@ -186,7 +190,7 @@ KisNodeQueryPath KisNodeQueryPath::fromString(const QString& _path)
     if (!path.d->relative) {
         indexes.pop_front(); // In case of an absolute path "/1/2", the list is "", "1", "2" which is not good
     }
-    foreach(const QString& index, indexes) {
+    foreach (const QString &index, indexes) {
         if (index == "*") {
             path.d->elements.push_back(PathElement::Wildcard);
         } else if (index == "..") {
@@ -213,5 +217,4 @@ KisNodeQueryPath KisNodeQueryPath::absolutePath(KisNodeSP node)
     }
     return path;
 }
-
 

@@ -35,9 +35,10 @@ class TextCursor : public QObject
     Q_OBJECT
     Q_ENUMS(MoveOperation)
 public:
-    TextCursor(QObject* parent, const QTextCursor& cursor);
+    TextCursor(QObject *parent, const QTextCursor &cursor);
     virtual ~TextCursor();
-    QTextCursor& cursor() {
+    QTextCursor &cursor()
+    {
         return m_cursor;
     }
 
@@ -134,26 +135,26 @@ public Q_SLOTS:
     QString selectedHtml() const;
 
     /** Return the current \a TextFrame object if valid. */
-    QObject* currentFrame();
+    QObject *currentFrame();
     /** Return the current \a TextList object if valid. */
-    QObject* currentList();
+    QObject *currentList();
     /** Return the current \a TextTable object if valid. */
-    QObject* currentTable();
+    QObject *currentTable();
 
     /** Insert the \p text plain-text at the current cursor position. */
-    void insertText(const QString& text);
+    void insertText(const QString &text);
     /** Insert the \p html html-text at the current cursor position. */
-    void insertHtml(const QString& html);
+    void insertHtml(const QString &html);
     /** Insert a block element at the current cursor position. */
     void insertBlock();
     /** Insert a default block element at the current cursor position. */
     void insertDefaultBlock();
     /** Insert and return a new \a TextFrame object at the current cursor position. */
-    QObject* insertFrame();
+    QObject *insertFrame();
     /** Insert and return a new \a TextList object at the current cursor position. */
-    QObject* insertList();
+    QObject *insertList();
     /** Insert and return a new \a TextTable object at the current cursor position. */
-    QObject* insertTable(int rows, int columns);
+    QObject *insertTable(int rows, int columns);
 
     //void insertFragment ( const QTextDocumentFragment & fragment )
     //void insertImage ( const QTextImageFormat & format, QTextFrameFormat::Position alignment )

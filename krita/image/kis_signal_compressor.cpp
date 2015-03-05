@@ -20,7 +20,6 @@
 
 #include <QTimer>
 
-
 KisSignalCompressor::KisSignalCompressor(int delay, Mode mode, QObject *parent)
     : QObject(parent),
       m_timer(new QTimer(this)),

@@ -28,16 +28,16 @@ class KisDeformPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
     Q_OBJECT
 public:
-    KisDeformPaintOpSettingsWidget(QWidget* parent = 0);
+    KisDeformPaintOpSettingsWidget(QWidget *parent = 0);
     virtual ~KisDeformPaintOpSettingsWidget();
 
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual KisPropertiesConfiguration *configuration() const;
     virtual void changePaintOpSize(qreal x, qreal y);
     virtual QSizeF paintOpSize() const;
 
 private:
-    KisDeformOption * m_deformOption;
-    KisBrushSizeOption * m_brushSizeOption;
+    KisDeformOption *m_deformOption;
+    KisBrushSizeOption *m_brushSizeOption;
 };
 
 #endif

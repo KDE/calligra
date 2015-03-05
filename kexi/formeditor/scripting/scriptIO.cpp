@@ -41,8 +41,9 @@ ScriptIO::saveFormEvents(QDomNode &parentNode, FormScript *formScript)
     }
 
     // Save all form events
-    if (!formScript->eventList()->isEmpty())
+    if (!formScript->eventList()->isEmpty()) {
         saveEventList(formScript->eventList(), parentNode);
+    }
     return true;
 }
 
@@ -61,8 +62,9 @@ ScriptIO::loadFormEvents(QDomNode &parentNode, Form *form, ScriptManager *manage
 
     // Load all events in the EventList
     if (!events.isNull()) {
-        for (QDomNode n = events.firstChild(); !n.isNull(); n = n.nextSibling())
+        for (QDomNode n = events.firstChild(); !n.isNull(); n = n.nextSibling()) {
             loadEvent(n, formScript->eventList(), form);
+        }
     }
     return true;
 }
@@ -78,8 +80,9 @@ ScriptIO::saveAllEventsForWidget(QObject *widget, FormScript *formScript, QDomNo
 void
 ScriptIO::saveEvent(Event *event, QDomNode &parentNode)
 {
-    if (!event)
+    if (!event) {
         return;
+    }
 
     QDomDocument domDoc = parentNode.ownerDocument();
     QDomElement eventNode = domDoc.createElement("event");
@@ -140,14 +143,15 @@ ScriptIO::saveEvent(Event *event, QDomNode &parentNode)
 void
 ScriptIO::saveEventList(EventList *list, QDomNode &parentNode)
 {
-    if (!list || list->isEmpty())
+    if (!list || list->isEmpty()) {
         return;
+    }
 
     QDomDocument domDoc = parentNode.ownerDocument();
     QDomElement events = domDoc.createElement("events");
     parentNode.appendChild(events);
 
-    foreach (Event* e, *list) {
+    foreach (Event *e, *list) {
         saveEvent(e, events);
     }
 }

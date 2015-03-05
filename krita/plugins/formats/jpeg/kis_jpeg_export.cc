@@ -49,7 +49,6 @@
 #include <generator/kis_generator_layer.h>
 #include "kis_jpeg_converter.h"
 
-
 #include "ui_kis_wdg_options_jpeg.h"
 
 class KisExternalLayer;
@@ -65,26 +64,28 @@ KisJPEGExport::~KisJPEGExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "JPEG export! From:" << from << ", To:" << to << "";
 
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
     KisDocument *input = m_chain->inputDocument();
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
-    KDialog* kdb = new KDialog(0);
+    KDialog *kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("JPEG Export Options"));
     kdb->setButtons(KDialog::Ok | KDialog::Cancel);
 
     Ui::WdgOptionsJPEG wdgUi;
-    QWidget* wdg = new QWidget(kdb);
+    QWidget *wdg = new QWidget(kdb);
     wdgUi.setupUi(wdg);
     KisMetaData::FilterRegistryModel frm;
     wdgUi.metaDataFilters->setModel(&frm);
@@ -105,14 +106,13 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     wdgUi.smoothLevel->setRange(0, 100, 0);
     wdgUi.smoothLevel->setSuffix("%");
 
-
     wdgUi.baseLineJPEG->setChecked(cfg.getBool("baseline", true));
     wdgUi.subsampling->setCurrentIndex(cfg.getInt("subsampling", 0));
     wdgUi.exif->setChecked(cfg.getBool("exif", true));
     wdgUi.iptc->setChecked(cfg.getBool("iptc", true));
     wdgUi.xmp->setChecked(cfg.getBool("xmp", true));
 
-    const KoColorSpace* cs = image->projection()->colorSpace();
+    const KoColorSpace *cs = image->projection()->colorSpace();
     bool sRGB = cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
     wdgUi.chkForceSRGB->setVisible(!sRGB);
     wdgUi.chkForceSRGB->setChecked(cfg.getBool("forceSRGB", false));
@@ -130,8 +130,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
         }
-    }
-    else {
+    } else {
         qApp->processEvents(); // For vector layers to be updated
     }
     image->waitForDone();
@@ -174,7 +173,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
 
     options.filters = frm.enabledFilters();
     QString enabledFilters;
-    foreach(const KisMetaData::Filter* filter, options.filters) {
+    foreach (const KisMetaData::Filter *filter, options.filters) {
         enabledFilters = enabledFilters + filter->id() + ',';
     }
 
@@ -187,7 +186,9 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
 
     QString filename = m_chain->outputFile();
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
     KUrl url;
     url.setPath(filename);
@@ -208,11 +209,12 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(const QByteArray&
     KisExifInfoVisitor eIV;
     eIV.visit(image->rootLayer().data());
 
-    KisMetaData::Store* eI = 0;
-    if (eIV.countPaintLayer() == 1)
+    KisMetaData::Store *eI = 0;
+    if (eIV.countPaintLayer() == 1) {
         eI = eIV.exifInfo();
+    }
     if (eI) {
-        KisMetaData::Store* copy = new KisMetaData::Store(*eI);
+        KisMetaData::Store *copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
     if ((res = kpc.buildFile(url, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {

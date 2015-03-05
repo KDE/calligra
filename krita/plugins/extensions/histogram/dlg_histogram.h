@@ -38,8 +38,8 @@ class DlgHistogram: public KDialog
 
 public:
 
-    DlgHistogram(QWidget * parent = 0,
-                 const char* name = 0);
+    DlgHistogram(QWidget *parent = 0,
+                 const char *name = 0);
     ~DlgHistogram();
 
     void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds);
@@ -49,7 +49,7 @@ private Q_SLOTS:
 
 private:
 
-    KisHistogramWidget * m_page;
+    KisHistogramWidget *m_page;
 };
 
 #endif // DLG_HISTOGRAM

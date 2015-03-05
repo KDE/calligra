@@ -32,7 +32,8 @@ class KoGenStyles;
 class KoGenStyle;
 
 /// Gradients from odf that are not native to Qt
-class KoOdfGradientBackground : public KoShapeBackground {
+class KoOdfGradientBackground : public KoShapeBackground
+{
 public:
     // constructor
     KoOdfGradientBackground();
@@ -40,15 +41,15 @@ public:
     virtual ~KoOdfGradientBackground();
 
     /// reimplemented from KoShapeBackground
-    virtual void fillStyle(KoGenStyle& style, KoShapeSavingContext& context);
+    virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
     /// reimplemented from KoShapeBackground
-    virtual bool loadStyle(KoOdfLoadingContext& context, const QSizeF& shapeSize);
+    virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize);
     /// reimplemented from KoShapeBackground
-    virtual void paint(QPainter& painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath& fillPath) const;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const;
 
 private:
     bool loadOdf(const KoXmlElement &element);
-    void saveOdf(KoGenStyle& styleFill, KoGenStyles& mainStyles) const;
+    void saveOdf(KoGenStyle &styleFill, KoGenStyles &mainStyles) const;
 
     void renderSquareGradient(QImage &buffer) const;
     void renderRectangleGradient(QImage &buffer) const;

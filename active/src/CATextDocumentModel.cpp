@@ -28,30 +28,30 @@
 #include <KWDocument.h>
 #include <kdebug.h>
 
-CATextDocumentModel::CATextDocumentModel(QObject* /*parent*/, KWDocument* document, KoShapeManager *shapemanager)
+CATextDocumentModel::CATextDocumentModel(QObject * /*parent*/, KWDocument *document, KoShapeManager *shapemanager)
     : kw_document(document), kw_shapemanager(shapemanager)
 {
 }
 
-int CATextDocumentModel::rowCount(const QModelIndex& parent) const
+int CATextDocumentModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return kw_document->pageManager()->pageCount();
 }
 
-QVariant CATextDocumentModel::data(const QModelIndex& index, int role) const
+QVariant CATextDocumentModel::data(const QModelIndex &index, int role) const
 {
 
     if (!kw_document || !index.isValid()) {
-       return QVariant();
+        return QVariant();
     }
 
     if (CAImageProvider::s_imageProvider) {
         if (role == Qt::DecorationRole) {
             const QString id = kw_document->caption() + "textData" + QString::number(index.row());
             if (!CAImageProvider::s_imageProvider->containsId(id)) {
-                KWPage pagePreview = kw_document->pageManager()->page(index.row()+1);
-                QSize size = QSize(512,512);
+                KWPage pagePreview = kw_document->pageManager()->page(index.row() + 1);
+                QSize size = QSize(512, 512);
                 QImage image = pagePreview.thumbnail(size, kw_shapemanager);
                 if (image.isNull() == true) {
                     return QVariant();

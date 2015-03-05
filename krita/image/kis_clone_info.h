@@ -29,27 +29,27 @@ class KRITAIMAGE_EXPORT KisCloneInfo
 
 public:
     KisCloneInfo();
-    KisCloneInfo(const QUuid& uuid);
-    KisCloneInfo(const QString& name);
+    KisCloneInfo(const QUuid &uuid);
+    KisCloneInfo(const QString &name);
     KisCloneInfo(KisNodeSP node);
-    
+
 public:
     QUuid uuid()
     {
         return m_uuid;
     }
-    
+
     QString name()
     {
         return m_name;
     }
-    
+
 public:
     KisNodeSP findNode(KisNodeSP rootNode);
-    
+
 private:
     bool check(KisNodeSP node);
-    
+
 private:
     QUuid m_uuid;
     QString m_name;

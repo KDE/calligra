@@ -44,11 +44,11 @@ class KexiProjectDataPrivate;
 class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaData
 {
 public:
-    typedef QList<KexiProjectData*> List;
+    typedef QList<KexiProjectData *> List;
     typedef QHash<QByteArray, QString> ObjectInfo;
 
     //! A list of autoopen objects allowing deep copies
-    class KEXICORE_EXPORT AutoOpenObjects : public QList<ObjectInfo*>
+    class KEXICORE_EXPORT AutoOpenObjects : public QList<ObjectInfo *>
     {
     public:
         AutoOpenObjects();
@@ -56,10 +56,10 @@ public:
         ~AutoOpenObjects();
 
         //! Construct autoopen objects list as a deep copy of \a other
-        AutoOpenObjects(const AutoOpenObjects& other);
+        AutoOpenObjects(const AutoOpenObjects &other);
 
         //! Assigns a deep copy of \a other
-        AutoOpenObjects& operator=(const AutoOpenObjects& other);
+        AutoOpenObjects &operator=(const AutoOpenObjects &other);
     };
 
     KexiProjectData();
@@ -70,10 +70,10 @@ public:
       (cdata.dbFileName()).
       @a caption is for setting project's caption. */
     explicit KexiProjectData(const KexiDB::ConnectionData &cdata,
-                             const QString& dbname = QString(), const QString& caption = QString());
+                             const QString &dbname = QString(), const QString &caption = QString());
 
     /*! Constructs a copy of \a pdata */
-    KexiProjectData(const KexiProjectData& pdata);
+    KexiProjectData(const KexiProjectData &pdata);
 
     ~KexiProjectData();
 
@@ -82,7 +82,7 @@ public:
      @a groupKey, if provided will be set to a group key,
      so you can later use it in saveConnectionData().
      @return true on success. */
-    bool load(const QString& fileName, QString* _groupKey = 0);
+    bool load(const QString &fileName, QString *_groupKey = 0);
 
     /*! Saves project data (with connection data) to a shortcut file @a fileName.
      If @a storePassword is true, password will be saved in the file,
@@ -92,10 +92,10 @@ public:
      instead of creating of a new unique group. This mode is usable for updating .kexic files
      containing single connection data, what's used for storing connections repository.
      @return true on success. */
-    bool save(const QString& fileName, bool savePassword,
-              QString* groupKey = 0, bool overwriteFirstGroup = true);
+    bool save(const QString &fileName, bool savePassword,
+              QString *groupKey = 0, bool overwriteFirstGroup = true);
 
-    KexiProjectData& operator=(const KexiProjectData& pdata);
+    KexiProjectData &operator=(const KexiProjectData &pdata);
 
     QString name() const;
 
@@ -103,15 +103,15 @@ public:
      project settings. */
     bool userMode() const;
 
-    KexiDB::ConnectionData* connectionData();
+    KexiDB::ConnectionData *connectionData();
 
-    const KexiDB::ConnectionData* constConnectionData() const;
+    const KexiDB::ConnectionData *constConnectionData() const;
 
     /*! \return database name.
      In fact, this is the same as KexiDB::SchemaData::name() */
     QString databaseName() const;
-   
-    void setDatabaseName(const QString& dbName);
+
+    void setDatabaseName(const QString &dbName);
 
     /*! \return user-visible string better describing the project than just databaseName().
      For server-based projects returns i18n'd string:
@@ -123,11 +123,11 @@ public:
 
     QDateTime lastOpened() const;
 
-    void setLastOpened(const QDateTime& lastOpened);
+    void setLastOpened(const QDateTime &lastOpened);
 
     QString description() const;
 
-    void setDescription(const QString& desc);
+    void setDescription(const QString &desc);
 
     /*! If \a set is true, sets readonly flag for this data, so any connection opened for the project will
      be readonly. Change this flag before using this data in KexiProject instance,
@@ -150,9 +150,9 @@ public:
     uint formatVersion;
 
 private:
-    KexiProjectDataPrivate * const d;
+    KexiProjectDataPrivate *const d;
 };
 
-KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& d);
+KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData &d);
 
 #endif

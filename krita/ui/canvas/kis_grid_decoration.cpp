@@ -28,7 +28,7 @@
 #include "kis_grid_painter_configuration.h"
 #include "kis_config.h"
 
-KisGridDecoration::KisGridDecoration(KisView* parent) : KisCanvasDecoration("grid", parent)
+KisGridDecoration::KisGridDecoration(KisView *parent) : KisCanvasDecoration("grid", parent)
 {
 
 }
@@ -38,7 +38,7 @@ KisGridDecoration::~KisGridDecoration()
 
 }
 
-void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas)
+void KisGridDecoration::drawDecoration(QPainter &gc, const QRectF &updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
     Q_UNUSED(canvas);
 
@@ -78,7 +78,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         if (x >= x1) {
             // Always draw the full line otherwise the line stippling varies
             // with the location of area and we get glitchy patterns.
-            gc.drawLine(QPointF(x, y1),QPointF(x, y2));
+            gc.drawLine(QPointF(x, y1), QPointF(x, y2));
         }
         x += hspacing;
     }

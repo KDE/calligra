@@ -35,7 +35,6 @@ class KActionCollection;
 class QRect;
 class QRectF;
 
-
 class KoShape;
 class KoCanvasBase;
 class KoCanvasControllerProxyObject;
@@ -84,7 +83,7 @@ public:
      * Constructor.
      * @param actionCollection the action collection for this canvas
      */
-    explicit KoCanvasController(KActionCollection* actionCollection);
+    explicit KoCanvasController(KActionCollection *actionCollection);
     virtual ~KoCanvasController();
 
 public:
@@ -291,11 +290,11 @@ public:
      */
     virtual void setVastScrolling(qreal factor) = 0;
 
-   /**
-     * Returns the action collection for the canvas
-     * @returns action collection for this canvas, can be 0
-     */
-    virtual KActionCollection* actionCollection() const;
+    /**
+      * Returns the action collection for the canvas
+      * @returns action collection for this canvas, can be 0
+      */
+    virtual KActionCollection *actionCollection() const;
 
     QPoint documentOffset() const;
 
@@ -309,14 +308,12 @@ protected:
     void setPreferredCenterFractionY(qreal);
     qreal preferredCenterFractionY() const;
 
-    void setDocumentOffset( QPoint &offset);
-
+    void setDocumentOffset(QPoint &offset);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 /**
  * Workaround class for the problem that Qt does not allow two QObject base classes.
@@ -335,18 +332,48 @@ public:
 
     // Convenience methods to invoke the signals from subclasses
 
-    void emitCanvasRemoved(KoCanvasController *canvasController) { emit canvasRemoved(canvasController); }
-    void emitCanvasSet(KoCanvasController *canvasController) { emit canvasSet(canvasController); }
-    void emitCanvasOffsetXChanged(int offset) { emit canvasOffsetXChanged(offset); }
-    void emitCanvasOffsetYChanged(int offset) { emit canvasOffsetYChanged(offset); }
-    void emitCanvasMousePositionChanged(const QPoint &position) { emit canvasMousePositionChanged(position); }
-    void emitDocumentMousePositionChanged(const QPointF &position) { emit documentMousePositionChanged(position); }
-    void emitSizeChanged(const QSize &size) { emit sizeChanged(size); }
-    void emitMoveDocumentOffset(const QPoint &point) { emit moveDocumentOffset(point); }
-    void emitZoomRelative(const qreal factor, const QPointF &stillPoint) { emit zoomRelative(factor, stillPoint); }
+    void emitCanvasRemoved(KoCanvasController *canvasController)
+    {
+        emit canvasRemoved(canvasController);
+    }
+    void emitCanvasSet(KoCanvasController *canvasController)
+    {
+        emit canvasSet(canvasController);
+    }
+    void emitCanvasOffsetXChanged(int offset)
+    {
+        emit canvasOffsetXChanged(offset);
+    }
+    void emitCanvasOffsetYChanged(int offset)
+    {
+        emit canvasOffsetYChanged(offset);
+    }
+    void emitCanvasMousePositionChanged(const QPoint &position)
+    {
+        emit canvasMousePositionChanged(position);
+    }
+    void emitDocumentMousePositionChanged(const QPointF &position)
+    {
+        emit documentMousePositionChanged(position);
+    }
+    void emitSizeChanged(const QSize &size)
+    {
+        emit sizeChanged(size);
+    }
+    void emitMoveDocumentOffset(const QPoint &point)
+    {
+        emit moveDocumentOffset(point);
+    }
+    void emitZoomRelative(const qreal factor, const QPointF &stillPoint)
+    {
+        emit zoomRelative(factor, stillPoint);
+    }
 
     // Convenience method to retrieve the canvas controller for who needs to use QPointer
-    KoCanvasController *canvasController() const { return m_canvasController; }
+    KoCanvasController *canvasController() const
+    {
+        return m_canvasController;
+    }
 
 Q_SIGNALS:
     /**
@@ -429,27 +456,45 @@ private:
     KoCanvasController *m_canvasController;
 };
 
-class FLAKE_EXPORT  KoDummyCanvasController : public KoCanvasController {
+class FLAKE_EXPORT  KoDummyCanvasController : public KoCanvasController
+{
 
 public:
 
-    explicit KoDummyCanvasController(KActionCollection* actionCollection)
+    explicit KoDummyCanvasController(KActionCollection *actionCollection)
         : KoCanvasController(actionCollection)
     {}
 
     virtual ~KoDummyCanvasController()
     {}
 
-
     virtual void scrollContentsBy(int /*dx*/, int /*dy*/) {}
-    virtual QSize viewportSize() const { return QSize(); }
+    virtual QSize viewportSize() const
+    {
+        return QSize();
+    }
     virtual void setDrawShadow(bool /*drawShadow*/) {}
     virtual void setCanvas(KoCanvasBase */*canvas*/) {}
-    virtual KoCanvasBase *canvas() const {return 0;}
-    virtual int visibleHeight() const {return 0;}
-    virtual int visibleWidth() const {return 0;}
-    virtual int canvasOffsetX() const {return 0;}
-    virtual int canvasOffsetY() const {return 0;}
+    virtual KoCanvasBase *canvas() const
+    {
+        return 0;
+    }
+    virtual int visibleHeight() const
+    {
+        return 0;
+    }
+    virtual int visibleWidth() const
+    {
+        return 0;
+    }
+    virtual int canvasOffsetX() const
+    {
+        return 0;
+    }
+    virtual int canvasOffsetY() const
+    {
+        return 0;
+    }
     virtual void ensureVisible(const QRectF &/*rect*/, bool /*smooth */ = false) {}
     virtual void ensureVisible(KoShape */*shape*/) {}
     virtual void zoomIn(const QPoint &/*center*/) {}
@@ -458,9 +503,15 @@ public:
     virtual void zoomTo(const QRect &/*rect*/) {}
     virtual void recenterPreferred() {}
     virtual void setPreferredCenter(const QPointF &/*viewPoint*/) {}
-    virtual QPointF preferredCenter() const {return QPointF();}
+    virtual QPointF preferredCenter() const
+    {
+        return QPointF();
+    }
     virtual void pan(const QPoint &/*distance*/) {}
-    virtual QPoint scrollBarValue() const {return QPoint();}
+    virtual QPoint scrollBarValue() const
+    {
+        return QPoint();
+    }
     virtual void setScrollBarValue(const QPoint &/*value*/) {}
     virtual void updateDocumentSize(const QSize &/*sz*/, bool /*recalculateCenter*/) {}
     virtual void setZoomWithWheel(bool /*zoom*/) {}

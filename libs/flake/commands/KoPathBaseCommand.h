@@ -47,7 +47,7 @@ protected:
      */
     void repaint(bool normalizeShapes);
 
-    QSet<KoPathShape*> m_shapes; ///< the shapes the command operates on
+    QSet<KoPathShape *> m_shapes; ///< the shapes the command operates on
 };
 
 #endif // KOPATHBASECOMMAND_H

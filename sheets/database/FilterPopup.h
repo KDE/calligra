@@ -39,26 +39,26 @@ public:
     /**
      * Constructor.
      */
-    FilterPopup(QWidget* parent, const Cell& cell, Database* database);
+    FilterPopup(QWidget *parent, const Cell &cell, Database *database);
 
-    static void showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect, Database* database);
+    static void showPopup(QWidget *parent, const Cell &cell, const QRect &cellRect, Database *database);
 
     /**
      * Destructor.
      */
     virtual ~FilterPopup();
 
-    void updateFilter(Filter* filter) const;
+    void updateFilter(Filter *filter) const;
 
 protected:
-    void closeEvent(QCloseEvent*);
+    void closeEvent(QCloseEvent *);
 
 private Q_SLOTS:
-    void buttonClicked(QAbstractButton* button);
+    void buttonClicked(QAbstractButton *button);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

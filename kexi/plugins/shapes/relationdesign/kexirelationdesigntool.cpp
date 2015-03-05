@@ -66,10 +66,11 @@ void KexiRelationDesignTool::paint(QPainter &painter, const KoViewConverter &con
 void KexiRelationDesignTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
-    foreach(KoShape * shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         m_relationDesign = dynamic_cast<KexiRelationDesignShape *>(shape);
-        if (m_relationDesign)
+        if (m_relationDesign) {
             break;
+        }
     }
     if (!m_relationDesign) {
         emit done();
@@ -110,8 +111,9 @@ QWidget *KexiRelationDesignTool::createOptionWidget()
 
 void KexiRelationDesignTool::changeUrlPressed()
 {
-    if (m_relationDesign == 0)
+    if (m_relationDesign == 0) {
         return;
+    }
 
     KexiDBConnectionSet kcs;
 
@@ -158,16 +160,18 @@ QStringList KexiRelationDesignTool::queryList()
         qs << "";
         for (int i = 0; i < tids.size(); ++i) {
             KexiDB::TableSchema *tsc = conn->tableSchema(tids[i]);
-            if (tsc)
+            if (tsc) {
                 qs << tsc->name();
+            }
         }
 
         QList<int> qids = conn->queryIds();
         qs << "";
         for (int i = 0; i < qids.size(); ++i) {
             KexiDB::QuerySchema *qsc = conn->querySchema(qids[i]);
-            if (qsc)
+            if (qsc) {
                 qs << qsc->name();
+            }
         }
     }
 
@@ -176,8 +180,9 @@ QStringList KexiRelationDesignTool::queryList()
 
 void KexiRelationDesignTool::relationSelected(const QString &rel)
 {
-    if (m_relationDesign == 0)
+    if (m_relationDesign == 0) {
         return;
+    }
 
     m_relationDesign->setRelation(rel);
 }

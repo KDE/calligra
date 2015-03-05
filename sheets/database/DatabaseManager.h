@@ -58,17 +58,17 @@ public:
      * Loads databases.
      * \ingroup OpenDocument
      */
-    bool loadOdf(const KoXmlElement& element);
+    bool loadOdf(const KoXmlElement &element);
 
     /**
      * Saves databases.
      * \ingroup OpenDocument
      */
-    void saveOdf(KoXmlWriter& xmlWriter) const;
+    void saveOdf(KoXmlWriter &xmlWriter) const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

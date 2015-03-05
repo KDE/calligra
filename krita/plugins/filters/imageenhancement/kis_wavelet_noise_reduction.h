@@ -39,18 +39,19 @@ public:
 public:
 
     void processImpl(KisPaintDeviceSP device,
-                     const QRect& applyRect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater
-                     ) const;
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+                     const QRect &applyRect,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater
+                    ) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 
-    static inline KoID id() {
+    static inline KoID id()
+    {
         return KoID("waveletnoisereducer", i18n("Wavelet Noise Reducer"));
     }
 
 private:
-    virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 
 };
 

@@ -26,7 +26,6 @@
 class QRect;
 class KisCropProcessingVisitor;
 
-
 class KisCropSelectionsProcessingVisitor : public KisDoNothingProcessingVisitor
 {
 public:

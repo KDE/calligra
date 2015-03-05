@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_dynamic_sensor_fuzzy.h"
 
 #include <QDomElement>
@@ -25,13 +24,12 @@
 #include <QCheckBox>
 #include <QHBoxLayout>
 
-
 KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
 {
     setMinimumLabel(QString());
     setMaximumLabel(QString());
 }
-QWidget* KisDynamicSensorFuzzy::createConfigurationWidget(QWidget* parent, QWidget *ss)
+QWidget *KisDynamicSensorFuzzy::createConfigurationWidget(QWidget *parent, QWidget *ss)
 {
     QWidget *w = new QWidget(parent);
 
@@ -42,7 +40,7 @@ QWidget* KisDynamicSensorFuzzy::createConfigurationWidget(QWidget* parent, QWidg
 
     rotationModeEnabled->setChecked(m_rotationModeEnabled);
 
-    QVBoxLayout* l = new QVBoxLayout(w);
+    QVBoxLayout *l = new QVBoxLayout(w);
     l->addWidget(rotationModeEnabled);
 
     w->setLayout(l);
@@ -74,5 +72,4 @@ bool KisDynamicSensorFuzzy::dependsOnCanvasRotation() const
 {
     return false;
 }
-
 

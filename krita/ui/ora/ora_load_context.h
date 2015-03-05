@@ -26,15 +26,14 @@ class KoStore;
 class KRITAUI_EXPORT OraLoadContext : public KisOpenRasterLoadContext
 {
 public:
-    OraLoadContext(KoStore* _store);
+    OraLoadContext(KoStore *_store);
     virtual ~OraLoadContext();
-    virtual KisImageWSP loadDeviceData(const QString & fileName);
+    virtual KisImageWSP loadDeviceData(const QString &fileName);
     virtual QDomDocument loadStack();
-
 
 private:
 
-    KoStore* m_store;
+    KoStore *m_store;
 };
 
 #endif

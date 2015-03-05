@@ -19,7 +19,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_PERSPECTIVE_GRID_DECORATION_H
 #define KIS_PERSPECTIVE_GRID_DECORATION_H
 
@@ -37,18 +36,18 @@ public:
     virtual ~KisPerspectiveGridDecoration();
 
 protected:
-    virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas);
+    virtual void drawDecoration(QPainter &gc, const QRectF &updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
 
 private:
     class LineWrapper;
     struct SubdivisionLinesInfo;
 
-    void drawSubdivisions(QPainter& gc, const SubdivisionLinesInfo &info);
-    
+    void drawSubdivisions(QPainter &gc, const SubdivisionLinesInfo &info);
+
     SubdivisionLinesInfo getSubdivisionsInfo(const LineWrapper &l0,
-                                             const LineWrapper &l1,
-                                             const QPointF &focusPoint,
-                                             int numSubdivisions);
+            const LineWrapper &l1,
+            const QPointF &focusPoint,
+            int numSubdivisions);
 };
 
 #endif // KIS_PERSPECTIVE_GRID_DECORATION_H

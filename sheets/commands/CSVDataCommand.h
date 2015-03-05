@@ -46,14 +46,14 @@ public:
      */
     virtual ~CSVDataCommand();
 
-    void setValue(const Value& value);
-    void setColumnDataTypes(const QList<KoCsvImportDialog::DataType>& dataTypes);
-    void setDecimalSymbol(const QString& symbol);
-    void setThousandsSeparator(const QString& separator);
+    void setValue(const Value &value);
+    void setColumnDataTypes(const QList<KoCsvImportDialog::DataType> &dataTypes);
+    void setDecimalSymbol(const QString &symbol);
+    void setThousandsSeparator(const QString &separator);
 
 protected:
-    virtual Value newValue(Element* element, int col, int row, bool* parse, Format::Type* fmtType);
-    virtual bool wantChange(Element* element, int col, int row);
+    virtual Value newValue(Element *element, int col, int row, bool *parse, Format::Type *fmtType);
+    virtual bool wantChange(Element *element, int col, int row);
     virtual bool preProcessing();
     virtual bool postProcessing();
 

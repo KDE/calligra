@@ -35,23 +35,22 @@
 #include "kis_paintop_preset.h"
 #include "kis_workspace_resource.h"
 
-QString resourceTypeToManifestType(const QString &type) {
+QString resourceTypeToManifestType(const QString &type)
+{
     if (type.startsWith("ko_")) {
         return type.mid(3);
-    }
-    else if (type.startsWith("kis_")) {
+    } else if (type.startsWith("kis_")) {
         return type.mid(4);
-    }
-    else {
+    } else {
         return type;
     }
 }
 
-QString manifestTypeToResourceType(const QString &type) {
+QString manifestTypeToResourceType(const QString &type)
+{
     if (type == "patterns" || type == "gradients" || type == "palettes") {
         return "ko_" + type;
-    }
-    else {
+    } else {
         return "kis_" + type;
     }
 }
@@ -107,12 +106,14 @@ bool ResourceBundleManifest::load(QIODevice *device)
     const KoXmlElement  manifestElement = n.toElement();
     for (n = manifestElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
 
-        if (!n.isElement())
+        if (!n.isElement()) {
             continue;
+        }
 
         KoXmlElement el = n.toElement();
-        if (!(el.localName() == "file-entry" && el.namespaceURI() == KoXmlNS::manifest))
+        if (!(el.localName() == "file-entry" && el.namespaceURI() == KoXmlNS::manifest)) {
             continue;
+        }
 
         QString fullPath  = el.attributeNS(KoXmlNS::manifest, "full-path", QString());
         QString mediaType = el.attributeNS(KoXmlNS::manifest, "media-type", QString(""));
@@ -140,41 +141,41 @@ bool ResourceBundleManifest::load(QIODevice *device)
 
 bool ResourceBundleManifest::save(QIODevice *device)
 {
-       if (!device->isOpen()) {
-           if (!device->open(QIODevice::WriteOnly)) {
-               return false;
-           }
-       }
-       KoXmlWriter manifestWriter(device);
-       manifestWriter.startDocument("manifest:manifest");
-       manifestWriter.startElement("manifest:manifest");
-       manifestWriter.addAttribute("xmlns:manifest", KoXmlNS::manifest);
-       manifestWriter.addAttribute("manifest:version", "1.2");
-       manifestWriter.addManifestEntry("/", "application/x-krita-resourcebundle");
+    if (!device->isOpen()) {
+        if (!device->open(QIODevice::WriteOnly)) {
+            return false;
+        }
+    }
+    KoXmlWriter manifestWriter(device);
+    manifestWriter.startDocument("manifest:manifest");
+    manifestWriter.startElement("manifest:manifest");
+    manifestWriter.addAttribute("xmlns:manifest", KoXmlNS::manifest);
+    manifestWriter.addAttribute("manifest:version", "1.2");
+    manifestWriter.addManifestEntry("/", "application/x-krita-resourcebundle");
 
-       foreach(QString resourceType, m_resources.uniqueKeys()) {
-           foreach(const ResourceReference &resource, m_resources[resourceType].values()) {
-               manifestWriter.startElement("manifest:file-entry");
-               manifestWriter.addAttribute("manifest:media-type", resourceTypeToManifestType(resourceType));
-               manifestWriter.addAttribute("manifest:full-path", resourceTypeToManifestType(resourceType) + "/" + QFileInfo(resource.resourcePath).fileName());
-               manifestWriter.addAttribute("manifest:md5sum", QString(resource.md5sum.toHex()));
-               if (!resource.tagList.isEmpty()) {
-                   manifestWriter.startElement("manifest:tags");
-                   foreach(const QString tag, resource.tagList) {
-                       manifestWriter.startElement("manifest:tag");
-                       manifestWriter.addTextNode(tag);
-                       manifestWriter.endElement();
-                   }
-                   manifestWriter.endElement();
-               }
-               manifestWriter.endElement();
-           }
-       }
+    foreach (QString resourceType, m_resources.uniqueKeys()) {
+        foreach (const ResourceReference &resource, m_resources[resourceType].values()) {
+            manifestWriter.startElement("manifest:file-entry");
+            manifestWriter.addAttribute("manifest:media-type", resourceTypeToManifestType(resourceType));
+            manifestWriter.addAttribute("manifest:full-path", resourceTypeToManifestType(resourceType) + "/" + QFileInfo(resource.resourcePath).fileName());
+            manifestWriter.addAttribute("manifest:md5sum", QString(resource.md5sum.toHex()));
+            if (!resource.tagList.isEmpty()) {
+                manifestWriter.startElement("manifest:tags");
+                foreach (const QString tag, resource.tagList) {
+                    manifestWriter.startElement("manifest:tag");
+                    manifestWriter.addTextNode(tag);
+                    manifestWriter.endElement();
+                }
+                manifestWriter.endElement();
+            }
+            manifestWriter.endElement();
+        }
+    }
 
-       manifestWriter.endElement();
-       manifestWriter.endDocument();
+    manifestWriter.endElement();
+    manifestWriter.endDocument();
 
-       return true;
+    return true;
 }
 
 void ResourceBundleManifest::addResource(const QString &fileTypeName, const QString &fileName, const QStringList &fileTagList, const QByteArray &md5)
@@ -194,8 +195,8 @@ QStringList ResourceBundleManifest::types() const
 QStringList ResourceBundleManifest::tags() const
 {
     QSet<QString> tags;
-    foreach(const QString &type, m_resources.keys()) {
-        foreach(const ResourceReference &ref, m_resources[type].values()) {
+    foreach (const QString &type, m_resources.keys()) {
+        foreach (const ResourceReference &ref, m_resources[type].values()) {
             tags += ref.tagList.toSet();
         }
     }
@@ -213,7 +214,7 @@ QList<ResourceBundleManifest::ResourceReference> ResourceBundleManifest::files(c
 void ResourceBundleManifest::removeFile(QString fileName)
 {
     QList<QString> tags;
-    foreach(const QString &type, m_resources.keys()) {
+    foreach (const QString &type, m_resources.keys()) {
         if (m_resources[type].contains(fileName)) {
             m_resources[type].remove(fileName);
         }

@@ -32,7 +32,8 @@ class WdgImageProperties : public QWidget, public Ui::WdgImageProperties
     Q_OBJECT
 
 public:
-    WdgImageProperties(QWidget *parent) : QWidget(parent) {
+    WdgImageProperties(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -48,20 +49,18 @@ public:
                           const char *name = 0);
     virtual ~KisDlgImageProperties();
 
-    const KoColorSpace * colorSpace();
+    const KoColorSpace *colorSpace();
 
 private Q_SLOTS:
 
-    void setAnnotation(const QString& type);
+    void setAnnotation(const QString &type);
     void setCurrentColor();
 private:
 
-    WdgImageProperties * m_page;
+    WdgImageProperties *m_page;
     KisImageWSP m_image;
     KoColorPopupAction *m_defaultColorAction;
 };
-
-
 
 #endif // KIS_DLG_IMAGE_PROPERTIES_H_
 

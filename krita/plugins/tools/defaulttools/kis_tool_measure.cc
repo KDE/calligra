@@ -37,14 +37,14 @@
 
 #define INNER_RADIUS 50
 
-KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double resolution)
-        : QWidget(parent),
-        m_resolution(resolution),
-        m_unit(KoUnit::Pixel)
+KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget *parent, double resolution)
+    : QWidget(parent),
+      m_resolution(resolution),
+      m_unit(KoUnit::Pixel)
 {
     m_distance = 0.0;
 
-    QGridLayout* optionLayout = new QGridLayout(this);
+    QGridLayout *optionLayout = new QGridLayout(this);
     Q_CHECK_PTR(optionLayout);
     optionLayout->setMargin(0);
 
@@ -59,7 +59,7 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double
     m_angleLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     optionLayout->addWidget(m_angleLabel, 1, 1);
 
-    KComboBox* unitBox = new KComboBox(this);
+    KComboBox *unitBox = new KComboBox(this);
     unitBox->addItems(KoUnit::listOfUnitNameForUi(KoUnit::ListAll));
     connect(unitBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUnitChanged(int)));
     unitBox->setCurrentIndex(m_unit.indexInListForUi(KoUnit::ListAll));
@@ -91,8 +91,7 @@ void KisToolMeasureOptionsWidget::updateDistance()
     m_distanceLabel->setText(QString("%1").arg(m_unit.toUserValue(m_distance), 5, 'f', 1));
 }
 
-
-KisToolMeasure::KisToolMeasure(KoCanvasBase * canvas)
+KisToolMeasure::KisToolMeasure(KoCanvasBase *canvas)
     : KisTool(canvas, KisCursor::crossCursor())
 {
     m_startPos = QPointF(0, 0);
@@ -103,7 +102,7 @@ KisToolMeasure::~KisToolMeasure()
 {
 }
 
-void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
+void KisToolMeasure::paint(QPainter &gc, const KoViewConverter &converter)
 {
     qreal sx, sy;
     converter.zoom(&sx, &sy);
@@ -116,20 +115,22 @@ void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 
     gc.drawLine(m_startPos, m_endPos);
 
-    if (deltaX() >= 0)
+    if (deltaX() >= 0) {
         gc.drawLine(QPointF(m_startPos.x(), m_startPos.y()), QPointF(m_startPos.x() + INNER_RADIUS, m_startPos.y()));
-    else
+    } else {
         gc.drawLine(QPointF(m_startPos.x(), m_startPos.y()), QPointF(m_startPos.x() - INNER_RADIUS, m_startPos.y()));
+    }
 
     if (distance() >= INNER_RADIUS) {
-        QRectF rectangle(m_startPos.x() - INNER_RADIUS, m_startPos.y() - INNER_RADIUS, 2*INNER_RADIUS, 2*INNER_RADIUS);
+        QRectF rectangle(m_startPos.x() - INNER_RADIUS, m_startPos.y() - INNER_RADIUS, 2 * INNER_RADIUS, 2 * INNER_RADIUS);
         int startAngle = (deltaX() >= 0) ? 0 : 180 * 16;
 
         int spanAngle;
-        if ((deltaY() >= 0 && deltaX() >= 0) || (deltaY() < 0 && deltaX() < 0))
+        if ((deltaY() >= 0 && deltaX() >= 0) || (deltaY() < 0 && deltaX() < 0)) {
             spanAngle = static_cast<int>(angle() * 16);
-        else
+        } else {
             spanAngle = static_cast<int>(-angle() * 16);
+        }
         gc.drawArc(rectangle, startAngle, spanAngle);
     }
 
@@ -180,10 +181,11 @@ void KisToolMeasure::endPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::HOVER_MODE);
 }
 
-QWidget* KisToolMeasure::createOptionWidget()
+QWidget *KisToolMeasure::createOptionWidget()
 {
-    if (!currentImage())
+    if (!currentImage()) {
         return 0;
+    }
     m_optionsWidget = new KisToolMeasureOptionsWidget(0, currentImage()->xRes());
 
     // See https://bugs.kde.org/show_bug.cgi?id=316896
@@ -201,12 +203,12 @@ QWidget* KisToolMeasure::createOptionWidget()
 
 double KisToolMeasure::angle()
 {
-    return atan(qAbs(deltaY()) / qAbs(deltaX())) / (2*M_PI)*360;
+    return atan(qAbs(deltaY()) / qAbs(deltaX())) / (2 * M_PI) * 360;
 }
 
 double KisToolMeasure::distance()
 {
-    return sqrt(deltaX()*deltaX() + deltaY()*deltaY());
+    return sqrt(deltaX() * deltaX() + deltaY() * deltaY());
 }
 
 QRectF KisToolMeasure::boundingRect()

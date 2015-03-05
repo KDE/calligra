@@ -33,8 +33,8 @@ class KMenu;
 #ifdef KexiStatusBar_KTEXTEDITOR_USED
 namespace KTextEditor
 {
-    class ViewStatusMsgInterface;
-    class ViewCursorInterface;
+class ViewStatusMsgInterface;
+class ViewCursorInterface;
 }
 #endif
 
@@ -65,8 +65,8 @@ protected:
     int m_msgID, m_readOnlyID;
 
 #ifdef KexiStatusBar_KTEXTEDITOR_USED
-    KTextEditor::ViewCursorInterface * m_cursorIface;
-    KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
+    KTextEditor::ViewCursorInterface *m_cursorIface;
+    KTextEditor::ViewStatusMsgInterface *m_viewmsgIface;
 #endif
     KMenu *m_viewMenu;
 };

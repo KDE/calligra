@@ -30,7 +30,7 @@
 #include <QMimeData>
 
 KoEventSemanticItemFactory::KoEventSemanticItemFactory()
-  : KoRdfSemanticItemFactoryBase("Event")
+    : KoRdfSemanticItemFactoryBase("Event")
 {
 }
 
@@ -47,25 +47,25 @@ QString KoEventSemanticItemFactory::classDisplayName() const
 void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
     const QString sparqlQuery = QLatin1String(
-        " prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        " prefix cal:  <http://www.w3.org/2002/12/cal/icaltzd#>  \n"
-        " select distinct ?graph ?ev ?uid ?dtstart ?dtend ?summary ?location ?geo ?long ?lat \n"
-        " where {  \n"
-        "  GRAPH ?graph { \n"
-        "    ?ev rdf:type cal:Vevent . \n"
-        "    ?ev cal:uid      ?uid . \n"
-        "    ?ev cal:dtstart  ?dtstart . \n"
-        "    ?ev cal:dtend    ?dtend \n"
-        "    OPTIONAL { ?ev cal:summary  ?summary  } \n"
-        "    OPTIONAL { ?ev cal:location ?location } \n"
-        "    OPTIONAL {  \n"
-        "               ?ev cal:geo ?geo . \n"
-        "               ?geo rdf:first ?lat . \n"
-       "               ?geo rdf:rest ?joiner . \n"
-       "               ?joiner rdf:first ?long \n"
-       "              } \n"
-       "    } \n"
-       "  } \n");
+                                    " prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+                                    " prefix cal:  <http://www.w3.org/2002/12/cal/icaltzd#>  \n"
+                                    " select distinct ?graph ?ev ?uid ?dtstart ?dtend ?summary ?location ?geo ?long ?lat \n"
+                                    " where {  \n"
+                                    "  GRAPH ?graph { \n"
+                                    "    ?ev rdf:type cal:Vevent . \n"
+                                    "    ?ev cal:uid      ?uid . \n"
+                                    "    ?ev cal:dtstart  ?dtstart . \n"
+                                    "    ?ev cal:dtend    ?dtend \n"
+                                    "    OPTIONAL { ?ev cal:summary  ?summary  } \n"
+                                    "    OPTIONAL { ?ev cal:location ?location } \n"
+                                    "    OPTIONAL {  \n"
+                                    "               ?ev cal:geo ?geo . \n"
+                                    "               ?geo rdf:first ?lat . \n"
+                                    "               ?geo rdf:rest ?joiner . \n"
+                                    "               ?joiner rdf:first ?long \n"
+                                    "              } \n"
+                                    "    } \n"
+                                    "  } \n");
 
     Soprano::QueryResultIterator it =
         m->executeQuery(sparqlQuery,
@@ -103,7 +103,7 @@ void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticIt
     }
 }
 
-hKoRdfBasicSemanticItem KoEventSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfBasicSemanticItem KoEventSemanticItemFactory::createSemanticItem(const KoDocumentRdf *rdf, QObject *parent)
 {
     return hKoRdfBasicSemanticItem(new KoRdfCalendarEvent(parent, rdf));
 }
@@ -114,9 +114,9 @@ bool KoEventSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMimeDa
 }
 
 hKoRdfBasicSemanticItem KoEventSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData,
-                                                                            KoCanvasBase *host,
-                                                                            const KoDocumentRdf *rdf,
-                                                                            QObject *parent) const
+        KoCanvasBase *host,
+        const KoDocumentRdf *rdf,
+        QObject *parent) const
 {
     const QByteArray ba = mimeData->data(QLatin1String("text/calendar"));
     hKoRdfSemanticItem semanticItem = hKoRdfSemanticItem(new KoRdfCalendarEvent(parent, rdf));

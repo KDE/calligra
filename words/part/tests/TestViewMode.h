@@ -31,9 +31,18 @@ class MyViewModeNormal : public KWViewModeNormal
 public:
     MyViewModeNormal() { }
 
-    const QList<qreal>& pageTops() { return m_pageTops; }
-    bool pageSpreadMode() const { return m_pageSpreadMode; }
-    const QSizeF& contents() const { return  m_contents; }
+    const QList<qreal> &pageTops()
+    {
+        return m_pageTops;
+    }
+    bool pageSpreadMode() const
+    {
+        return m_pageSpreadMode;
+    }
+    const QSizeF &contents() const
+    {
+        return  m_contents;
+    }
 };
 
 class TestViewMode : public QObject

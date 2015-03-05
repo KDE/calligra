@@ -34,13 +34,13 @@ public:
     KexiPasswordWidget *widget;
 };
 
-KexiPasswordPage::KexiPasswordPage(const QString &title, QWidget* parent)
+KexiPasswordPage::KexiPasswordPage(const QString &title, QWidget *parent)
     : KexiAssistantPage(title, QString(), parent), d(new Private)
 {
     init();
 }
 
-KexiPasswordPage::KexiPasswordPage(QWidget* parent)
+KexiPasswordPage::KexiPasswordPage(QWidget *parent)
     : KexiAssistantPage(i18nc("@title:window", "Database Password"), QString(), parent), d(new Private)
 {
     init();
@@ -52,11 +52,11 @@ void KexiPasswordPage::init()
     setNextButtonVisible(true);
     QVBoxLayout *lyr = new QVBoxLayout;
     d->widget = new KexiPasswordWidget(0,
-        KexiPasswordWidget::ShowUsernameLine | KexiPasswordWidget::ShowDomainLine
-        | KexiPasswordWidget::UsernameReadOnly | KexiPasswordWidget::DomainReadOnly);
-    KLineEdit *passEdit = d->widget->findChild<KLineEdit*>("passEdit");
+                                       KexiPasswordWidget::ShowUsernameLine | KexiPasswordWidget::ShowDomainLine
+                                       | KexiPasswordWidget::UsernameReadOnly | KexiPasswordWidget::DomainReadOnly);
+    KLineEdit *passEdit = d->widget->findChild<KLineEdit *>("passEdit");
     Q_ASSERT(passEdit);
-    passEdit->setMaximumWidth(passEdit->fontMetrics().width("W")*24);
+    passEdit->setMaximumWidth(passEdit->fontMetrics().width("W") * 24);
     lyr->addWidget(d->widget);
     lyr->addStretch();
     setFocusWidget(passEdit);
@@ -72,7 +72,7 @@ KexiPasswordPage::~KexiPasswordPage()
     delete d;
 }
 
-void KexiPasswordPage::setPassword(const QString& password)
+void KexiPasswordPage::setPassword(const QString &password)
 {
     d->widget->setPassword(password);
 }
@@ -82,7 +82,7 @@ QString KexiPasswordPage::password() const
     return d->widget->password();
 }
 
-void KexiPasswordPage::setUserName(const QString& username)
+void KexiPasswordPage::setUserName(const QString &username)
 {
     d->widget->setUsername(username);
 }
@@ -92,7 +92,7 @@ QString KexiPasswordPage::userName() const
     return d->widget->username();
 }
 
-void KexiPasswordPage::setServer(const QString& server)
+void KexiPasswordPage::setServer(const QString &server)
 {
     d->widget->setDomain(server);
 }
@@ -112,7 +112,7 @@ void KexiPasswordPage::setDatabaseNameReadOnly(bool readOnly)
     d->widget->setDatabaseNameReadOnly(readOnly);
 }
 
-void KexiPasswordPage::setDatabaseName(const QString& databaseName)
+void KexiPasswordPage::setDatabaseName(const QString &databaseName)
 {
     d->widget->setDatabaseName(databaseName);
 }

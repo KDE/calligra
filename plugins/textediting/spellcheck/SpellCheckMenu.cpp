@@ -30,14 +30,14 @@
 
 SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spellCheck)
     : QObject(spellCheck),
-    m_spellCheck(spellCheck),
-    m_speller(speller),
-    m_suggestionsMenuAction(0),
-    m_ignoreWordAction(0),
-    m_addToDictionaryAction(0),
-    m_suggestionsMenu(0),
-    m_suggestionsSignalMapper(new QSignalMapper(this)),
-    m_currentMisspelledPosition(-1)
+      m_spellCheck(spellCheck),
+      m_speller(speller),
+      m_suggestionsMenuAction(0),
+      m_ignoreWordAction(0),
+      m_addToDictionaryAction(0),
+      m_suggestionsMenu(0),
+      m_suggestionsSignalMapper(new QSignalMapper(this)),
+      m_currentMisspelledPosition(-1)
 {
     m_suggestionsMenuAction = new KActionMenu(i18n("Spelling"), this);
     m_suggestionsMenu = m_suggestionsMenuAction->menu();
@@ -54,8 +54,8 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
     // m_ignoreWordAction = new KAction(i18n("Ignore Word"), this);
     // connect(m_ignoreWordAction, SIGNAL(triggered()), this, SLOT(ignoreWord()));
 
-    connect(m_suggestionsSignalMapper, SIGNAL(mapped(const QString&)), 
-            this, SLOT(replaceWord(const QString&)));
+    connect(m_suggestionsSignalMapper, SIGNAL(mapped(QString)),
+            this, SLOT(replaceWord(QString)));
 
     setEnabled(false);
     setVisible(false);
@@ -66,9 +66,9 @@ SpellCheckMenu::~SpellCheckMenu()
 
 }
 
-QPair<QString, KAction*> SpellCheckMenu::menuAction()
+QPair<QString, KAction *> SpellCheckMenu::menuAction()
 {
-    return QPair<QString, KAction*>("spelling_suggestions", m_suggestionsMenuAction);
+    return QPair<QString, KAction *>("spelling_suggestions", m_suggestionsMenuAction);
 }
 
 void SpellCheckMenu::createSuggestionsMenu()
@@ -93,8 +93,9 @@ void SpellCheckMenu::createSuggestionsMenu()
 
 void SpellCheckMenu::ignoreWord()
 {
-    if (m_currentMisspelled.isEmpty() || m_currentMisspelledPosition < 0)
+    if (m_currentMisspelled.isEmpty() || m_currentMisspelledPosition < 0) {
         return;
+    }
 
     // see comment in ctor why this will never work
     m_speller.addToSession(m_currentMisspelled);
@@ -107,8 +108,9 @@ void SpellCheckMenu::ignoreWord()
 
 void SpellCheckMenu::addWordToDictionary()
 {
-    if (m_currentMisspelled.isEmpty() || m_currentMisspelledPosition < 0)
+    if (m_currentMisspelled.isEmpty() || m_currentMisspelledPosition < 0) {
         return;
+    }
 
     m_spellCheck->addWordToPersonal(m_currentMisspelled, m_currentMisspelledPosition);
 
@@ -116,43 +118,50 @@ void SpellCheckMenu::addWordToDictionary()
     m_currentMisspelledPosition = -1;
 }
 
-void SpellCheckMenu::setMisspelled(const QString word, int position,int length)
+void SpellCheckMenu::setMisspelled(const QString word, int position, int length)
 {
     m_currentMisspelled = word;
-    m_lengthMisspelled=length;
+    m_lengthMisspelled = length;
     m_currentMisspelledPosition = position;
 }
 
 void SpellCheckMenu::setEnabled(bool b)
 {
-    if (m_suggestionsMenuAction)
+    if (m_suggestionsMenuAction) {
         m_suggestionsMenuAction->setEnabled(b);
+    }
 
-    if (m_addToDictionaryAction)
+    if (m_addToDictionaryAction) {
         m_addToDictionaryAction->setEnabled(b);
+    }
 
-    if (m_ignoreWordAction)
+    if (m_ignoreWordAction) {
         m_ignoreWordAction->setEnabled(b);
+    }
 }
 
 void SpellCheckMenu::setVisible(bool b)
 {
-    if (m_suggestionsMenuAction)
+    if (m_suggestionsMenuAction) {
         m_suggestionsMenuAction->setVisible(b);
+    }
 
-    if (m_addToDictionaryAction)
+    if (m_addToDictionaryAction) {
         m_addToDictionaryAction->setVisible(b);
+    }
 
-    if (m_ignoreWordAction)
+    if (m_ignoreWordAction) {
         m_ignoreWordAction->setVisible(b);
+    }
 }
 
 void SpellCheckMenu::replaceWord(const QString &suggestion)
 {
-    if (suggestion.isEmpty() || m_currentMisspelledPosition < 0)
+    if (suggestion.isEmpty() || m_currentMisspelledPosition < 0) {
         return;
+    }
 
-    m_spellCheck->replaceWordBySuggestion(suggestion, m_currentMisspelledPosition,m_lengthMisspelled);
+    m_spellCheck->replaceWordBySuggestion(suggestion, m_currentMisspelledPosition, m_lengthMisspelled);
 
     m_currentMisspelled.clear();
     m_currentMisspelledPosition = -1;

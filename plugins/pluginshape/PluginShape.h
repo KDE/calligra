@@ -30,7 +30,6 @@
 
 #define PLUGINSHAPEID "PluginShape"
 
-
 class PluginShape : public KoShape, public KoFrameShape
 {
 public:
@@ -49,7 +48,7 @@ protected:
 
 private:
     //Note:- We assume that all the name of draw:param are unique.
-    QMap<QString,QString> m_drawParams;
+    QMap<QString, QString> m_drawParams;
     QString m_mimetype;
     QString m_xlinkactuate;
     QString m_xlinkhref;

@@ -28,11 +28,12 @@
 
 /**
  * @short Implementation of the MathML mtd element
- * 
+ *
  * The lines behaviour is (a little) different from that
  * of ordinary sequences. Its MathML tag is \<mtd\>.
  */
-class KOFORMULA_EXPORT TableDataElement : public RowElement {
+class KOFORMULA_EXPORT TableDataElement : public RowElement
+{
 public:
     /// The standard constructor
     explicit TableDataElement(BasicElement *parent = 0);
@@ -42,14 +43,14 @@ public:
 //     * @param am The AttributeManager providing information about attributes values
 //     */
 //    void layout( const AttributeManager* am );
-    
+
     /// @return The element's ElementType
     ElementType elementType() const;
-    
-    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
-    
+
+    virtual bool moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor);
+
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const; 
+    QString attributesDefaultValue(const QString &attribute) const;
 };
 
 #endif // TABLEDATAELEMENT_H

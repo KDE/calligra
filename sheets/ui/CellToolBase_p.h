@@ -46,7 +46,6 @@ class KUndo2Command;
 class KFind;
 class KReplace;
 
-
 namespace Calligra
 {
 namespace Sheets
@@ -58,21 +57,21 @@ class Sheet;
 class CellToolBase::Private
 {
 public:
-    Private(CellToolBase* parent) : q(parent) {}
+    Private(CellToolBase *parent) : q(parent) {}
 
     // Inline editor
-    CellEditor* cellEditor;
+    CellEditor *cellEditor;
     // External editor
-    Calligra::Sheets::ExternalEditor* externalEditor;
+    Calligra::Sheets::ExternalEditor *externalEditor;
     // Insert special character dialog
-    CharacterSelectDialog* specialCharDialog;
+    CharacterSelectDialog *specialCharDialog;
     QPointer<FormulaDialog> formulaDialog;
     // Actions with extended names for the popup menu
-    QHash<QString, QAction*> popupMenuActions;
+    QHash<QString, QAction *> popupMenuActions;
     // Initialization flag.
     bool initialized;
     // For "Selection List..." action
-    QMenu* popupListChoose;
+    QMenu *popupListChoose;
     Editor lastEditorWithFocus;
 
     // Find and Replace context. We remember the options and
@@ -83,9 +82,9 @@ public:
     FindOption::searchTypeValue typeValue;
     FindOption::searchDirectionValue directionValue;
     // Current "find" operation
-    KFind* find;
-    KReplace* replace;
-    KUndo2Command* replaceCommand;
+    KFind *find;
+    KReplace *replace;
+    KUndo2Command *replaceCommand;
     int findLeftColumn;
     int findRightColumn;
     int findTopRow;
@@ -96,13 +95,13 @@ public:
     QHash<int, QString> wordCollection;
 
     struct {
-        Sheet * currentSheet;
-        Sheet * firstSheet;
+        Sheet *currentSheet;
+        Sheet *firstSheet;
     } searchInSheets;
 
 public:
-    void updateEditor(const Cell& cell);
-    void updateActions(const Cell& cell);
+    void updateEditor(const Cell &cell);
+    void updateActions(const Cell &cell);
     void setProtectedActionsEnabled(bool enable);
 
     void processEnterKey(QKeyEvent *event);
@@ -148,9 +147,8 @@ public:
     void retrieveMarkerInfo(const QRect &marker, const QRectF &viewRect,
                             double positions[], bool paintSides[]);
 
-    QList<QAction*> popupActionList() const;
+    QList<QAction *> popupActionList() const;
     void createPopupMenuActions();
-
 
     /**
      * \ingroup UI
@@ -163,7 +161,7 @@ public:
     bool testListChoose(Selection *selection) const;
 
 private:
-    CellToolBase* q;
+    CellToolBase *q;
 };
 
 } // namespace Sheets

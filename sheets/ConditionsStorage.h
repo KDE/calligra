@@ -37,14 +37,16 @@ class ConditionsStorage : public QObject, public RectStorage<Conditions>
 {
     Q_OBJECT
 public:
-    explicit ConditionsStorage(Map* map) : QObject(map), RectStorage<Conditions>(map) {}
-    ConditionsStorage(const ConditionsStorage& other) : QObject(other.parent()), RectStorage<Conditions>(other) {}
+    explicit ConditionsStorage(Map *map) : QObject(map), RectStorage<Conditions>(map) {}
+    ConditionsStorage(const ConditionsStorage &other) : QObject(other.parent()), RectStorage<Conditions>(other) {}
 
 protected Q_SLOTS:
-    virtual void triggerGarbageCollection() {
+    virtual void triggerGarbageCollection()
+    {
         QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
     }
-    virtual void garbageCollection() {
+    virtual void garbageCollection()
+    {
         RectStorage<Conditions>::garbageCollection();
     }
 };

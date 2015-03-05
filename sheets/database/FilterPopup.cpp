@@ -43,26 +43,26 @@ using namespace Calligra::Sheets;
 class FilterPopup::Private
 {
 public:
-    QAbstractButton* allCheckbox;
-    QAbstractButton* emptyCheckbox;
-    QAbstractButton* notEmptyCheckbox;
-    QList<QCheckBox*> checkboxes;
+    QAbstractButton *allCheckbox;
+    QAbstractButton *emptyCheckbox;
+    QAbstractButton *notEmptyCheckbox;
+    QList<QCheckBox *> checkboxes;
     int fieldNumber;
     Database database;
     bool dirty;
 
 public:
-    void initGUI(FilterPopup* parent, const Cell& cell, const Database* database);
+    void initGUI(FilterPopup *parent, const Cell &cell, const Database *database);
 };
 
-void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const Database* database)
+void FilterPopup::Private::initGUI(FilterPopup *parent, const Cell &cell, const Database *database)
 {
-    QButtonGroup* buttonGroup = new QButtonGroup(parent);
+    QButtonGroup *buttonGroup = new QButtonGroup(parent);
     buttonGroup->setExclusive(false);
     connect(buttonGroup, SIGNAL(buttonClicked(QAbstractButton*)),
             parent, SLOT(buttonClicked(QAbstractButton*)));
 
-    QVBoxLayout* layout = new QVBoxLayout(parent);
+    QVBoxLayout *layout = new QVBoxLayout(parent);
     layout->setMargin(3);
     layout->setSpacing(0);
 
@@ -79,7 +79,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     layout->addWidget(notEmptyCheckbox);
     layout->addSpacing(3);
 
-    const Sheet* sheet = cell.sheet();
+    const Sheet *sheet = cell.sheet();
     const QRect range = database->range().lastRange();
     const bool isRowFilter = database->orientation() == Qt::Vertical;
     const int start = isRowFilter ? range.top() : range.left();
@@ -90,12 +90,13 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
         const Value value = isRowFilter ? sheet->cellStorage()->value(j, i)
                             : sheet->cellStorage()->value(i, j);
         const QString string = sheet->map()->converter()->asString(value).asString();
-        if (!string.isEmpty())
+        if (!string.isEmpty()) {
             items.insert(string);
+        }
     }
 
-    QWidget* scrollWidget = new QWidget(parent);
-    QVBoxLayout* scrollLayout = new QVBoxLayout(scrollWidget);
+    QWidget *scrollWidget = new QWidget(parent);
+    QVBoxLayout *scrollLayout = new QVBoxLayout(scrollWidget);
     scrollLayout->setMargin(0);
     scrollLayout->setSpacing(0);
 
@@ -107,7 +108,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     QList<QString> sortedItems = items.toList();
     qSort(sortedItems);
     bool isAll = true;
-    QCheckBox* item;
+    QCheckBox *item;
     for (int i = 0; i < sortedItems.count(); ++i) {
         const QString value = sortedItems[i];
         item = new QCheckBox(value, scrollWidget);
@@ -121,15 +122,14 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     allCheckbox->setChecked(isAll && emptyCheckbox->isChecked());
     notEmptyCheckbox->setChecked(isAll);
 
-    QScrollArea* scrollArea = new QScrollArea(parent);
+    QScrollArea *scrollArea = new QScrollArea(parent);
     layout->addWidget(scrollArea);
     scrollArea->setWidget(scrollWidget);
 }
 
-
-FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, Database* database)
-        : QFrame(parent, Qt::Popup)
-        , d(new Private)
+FilterPopup::FilterPopup(QWidget *parent, const Cell &cell, Database *database)
+    : QFrame(parent, Qt::Popup)
+    , d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setBackgroundRole(QPalette::Base);
@@ -140,10 +140,11 @@ FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, Database* database)
 
     d->initGUI(this, cell, database);
 
-    if (database->orientation() == Qt::Vertical)
+    if (database->orientation() == Qt::Vertical) {
         d->fieldNumber = cell.column() - database->range().lastRange().left();
-    else // Qt::Horizontal
+    } else { // Qt::Horizontal
         d->fieldNumber = cell.row() - database->range().lastRange().top();
+    }
     kDebug() << "FilterPopup for fieldNumber" << d->fieldNumber;
 }
 
@@ -152,11 +153,11 @@ FilterPopup::~FilterPopup()
     delete d;
 }
 
-void FilterPopup::updateFilter(Filter* filter) const
+void FilterPopup::updateFilter(Filter *filter) const
 {
-    if (d->allCheckbox->isChecked())
-        filter->removeConditions(d->fieldNumber); // remove all conditions for this field
-    else if (d->notEmptyCheckbox->isChecked()) {
+    if (d->allCheckbox->isChecked()) {
+        filter->removeConditions(d->fieldNumber);    // remove all conditions for this field
+    } else if (d->notEmptyCheckbox->isChecked()) {
         // emptyCheckbox is not checked, because allCheckbox is not.
         filter->removeConditions(d->fieldNumber);
         filter->addCondition(Filter::AndComposition, d->fieldNumber, Filter::NotMatch, "");
@@ -164,15 +165,17 @@ void FilterPopup::updateFilter(Filter* filter) const
         filter->removeConditions(d->fieldNumber);
         QList<QString> matchList;
         QList<QString> notMatchList;
-        if (d->emptyCheckbox->isChecked())
+        if (d->emptyCheckbox->isChecked()) {
             matchList.append("");
-        else
+        } else {
             notMatchList.append("");
-        foreach(QCheckBox* checkbox, d->checkboxes) {
-            if (checkbox->isChecked())
+        }
+        foreach (QCheckBox *checkbox, d->checkboxes) {
+            if (checkbox->isChecked()) {
                 matchList.append(checkbox->text());
-            else
+            } else {
                 notMatchList.append(checkbox->text());
+            }
         }
         // be lazy; choose the comparison causing least effort
         const Filter::Comparison comparison = (matchList.count() < notMatchList.count())
@@ -182,20 +185,21 @@ void FilterPopup::updateFilter(Filter* filter) const
         const QList<QString> values = (comparison == Filter::Match) ? matchList : notMatchList;
         kDebug() << "adding conditions for fieldNumber" << d->fieldNumber;
         Filter subFilter;
-        for (int i = 0; i < values.count(); ++i)
+        for (int i = 0; i < values.count(); ++i) {
             subFilter.addCondition(composition, d->fieldNumber, comparison, values[i]);
+        }
         filter->addSubFilter(Filter::AndComposition, subFilter);
     }
 }
 
-void FilterPopup::closeEvent(QCloseEvent* event)
+void FilterPopup::closeEvent(QCloseEvent *event)
 {
     if (d->dirty) {
         Filter filter = d->database.filter();
         updateFilter(&filter);
         // any real change?
         if (d->database.filter() != filter) {
-            ApplyFilterCommand* command = new ApplyFilterCommand();
+            ApplyFilterCommand *command = new ApplyFilterCommand();
             command->setSheet(d->database.range().lastSheet());
             command->add(d->database.range());
             command->setOldFilter(d->database.filter());
@@ -208,18 +212,19 @@ void FilterPopup::closeEvent(QCloseEvent* event)
     QFrame::closeEvent(event);
 }
 
-void FilterPopup::buttonClicked(QAbstractButton* button)
+void FilterPopup::buttonClicked(QAbstractButton *button)
 {
     d->dirty = true;
     if (button == d->allCheckbox) {
-        foreach(QCheckBox* checkbox, d->checkboxes)
-        checkbox->setChecked(button->isChecked());
+        foreach (QCheckBox *checkbox, d->checkboxes) {
+            checkbox->setChecked(button->isChecked());
+        }
         d->emptyCheckbox->setChecked(button->isChecked());
         d->notEmptyCheckbox->setChecked(button->isChecked());
     } else if (button == d->emptyCheckbox) {
         bool isAll = button->isChecked();
         if (isAll) {
-            foreach(QCheckBox* checkbox, d->checkboxes) {
+            foreach (QCheckBox *checkbox, d->checkboxes) {
                 if (!checkbox->isChecked()) {
                     isAll = false;
                     break;
@@ -228,13 +233,14 @@ void FilterPopup::buttonClicked(QAbstractButton* button)
         }
         d->allCheckbox->setChecked(isAll);
     } else if (button == d->notEmptyCheckbox) {
-        foreach(QCheckBox* checkbox, d->checkboxes)
-        checkbox->setChecked(button->isChecked());
+        foreach (QCheckBox *checkbox, d->checkboxes) {
+            checkbox->setChecked(button->isChecked());
+        }
         d->allCheckbox->setChecked(button->isChecked() && d->emptyCheckbox->isChecked());
     } else {
         bool isAll = d->emptyCheckbox->isChecked();
         if (isAll) {
-            foreach(QCheckBox* checkbox, d->checkboxes) {
+            foreach (QCheckBox *checkbox, d->checkboxes) {
                 if (!checkbox->isChecked()) {
                     isAll = false;
                     break;
@@ -248,7 +254,7 @@ void FilterPopup::buttonClicked(QAbstractButton* button)
 
 void FilterPopup::showPopup(QWidget *parent, const Cell &cell, const QRect &cellRect, Database *database)
 {
-    FilterPopup* popup = new FilterPopup(parent, cell, database);
+    FilterPopup *popup = new FilterPopup(parent, cell, database);
     const QPoint position(database->orientation() == Qt::Vertical ? cellRect.bottomLeft() : cellRect.topRight());
     popup->move(parent->mapToGlobal(position));
     popup->show();

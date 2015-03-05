@@ -29,7 +29,7 @@ public:
 
     virtual QList< QPair< KoID, KoID > > supportedModels() const;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const;
+    virtual KoColorTransformation *createTransformation(const KoColorSpace *colorSpace, QHash<QString, QVariant> parameters) const;
 
 };
 #endif // KIS_DESATURATE_ADJUSTMENT_H

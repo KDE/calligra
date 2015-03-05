@@ -27,19 +27,19 @@ struct KisConstProcessingInformation::Private {
     QPoint topLeft;
 };
 
-KisConstProcessingInformation::KisConstProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : d(new Private)
+KisConstProcessingInformation::KisConstProcessingInformation(const KisPaintDeviceSP device, const QPoint &topLeft, const KisSelectionSP selection) : d(new Private)
 {
     d->device = device;
     d->selection = selection;
     d->topLeft = topLeft;
 }
 
-KisConstProcessingInformation::KisConstProcessingInformation(const KisConstProcessingInformation& _rhs) : d(new Private)
+KisConstProcessingInformation::KisConstProcessingInformation(const KisConstProcessingInformation &_rhs) : d(new Private)
 {
     *d = *_rhs.d;
 }
 
-KisConstProcessingInformation& KisConstProcessingInformation::operator=(const KisConstProcessingInformation & _rhs)
+KisConstProcessingInformation &KisConstProcessingInformation::operator=(const KisConstProcessingInformation &_rhs)
 {
     *d = *_rhs.d;
     return *this;
@@ -60,7 +60,7 @@ const KisSelectionSP KisConstProcessingInformation::selection() const
     return d->selection;
 }
 
-const QPoint& KisConstProcessingInformation::topLeft() const
+const QPoint &KisConstProcessingInformation::topLeft() const
 {
     return d->topLeft;
 }
@@ -69,16 +69,16 @@ struct KisProcessingInformation::Private {
     KisPaintDeviceSP device;
 };
 
-KisProcessingInformation::KisProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection) : KisConstProcessingInformation(device, topLeft, selection), d(new Private)
+KisProcessingInformation::KisProcessingInformation(KisPaintDeviceSP device, const QPoint &topLeft, const KisSelectionSP selection) : KisConstProcessingInformation(device, topLeft, selection), d(new Private)
 {
     d->device = device;
 }
 
-KisProcessingInformation::KisProcessingInformation(const KisProcessingInformation& _rhs) : KisConstProcessingInformation(_rhs), d(new Private(*_rhs.d))
+KisProcessingInformation::KisProcessingInformation(const KisProcessingInformation &_rhs) : KisConstProcessingInformation(_rhs), d(new Private(*_rhs.d))
 {
 }
 
-KisProcessingInformation& KisProcessingInformation::operator=(const KisProcessingInformation & _rhs)
+KisProcessingInformation &KisProcessingInformation::operator=(const KisProcessingInformation &_rhs)
 {
     *d = *_rhs.d;
     KisConstProcessingInformation::operator=(_rhs);

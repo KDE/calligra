@@ -47,8 +47,9 @@ bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QMimeData *data)
 
 bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QByteArray &bytes)
 {
-    if (bytes.isEmpty())
+    if (bytes.isEmpty()) {
         return false;
+    }
 
     QBuffer buffer;
     buffer.setData(bytes);

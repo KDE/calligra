@@ -30,7 +30,6 @@
 
 class KoBorder;
 
-
 class KoShapePrivate
 {
 public:
@@ -78,10 +77,10 @@ public:
     KoShapeApplicationData *appData;
     KoShapeStrokeModel *stroke; ///< points to a stroke, or 0 if there is no stroke
     QSharedPointer<KoShapeBackground> fill; ///< Stands for the background color / fill etc.
-    QList<KoShape*> dependees; ///< list of shape dependent on this shape
-    KoShapeShadow * shadow; ///< the current shape shadow
+    QList<KoShape *> dependees; ///< list of shape dependent on this shape
+    KoShapeShadow *shadow;  ///< the current shape shadow
     KoBorder *border; ///< the current shape border
-    KoClipPath * clipPath; ///< the current clip path
+    KoClipPath *clipPath;  ///< the current clip path
     QMap<QString, QString> additionalAttributes;
     QMap<QByteArray, QString> additionalStyleAttributes;
     QSet<KoEventAction *> eventActions; ///< list of event actions the shape has

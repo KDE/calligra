@@ -30,8 +30,9 @@ int main(int argc, char **argv)
     KexiDB::DriverManager manager;
     QStringList names = manager.driverNames();
     kDebug() << "DRIVERS: ";
-    for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
+    for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd(); ++it) {
         kDebug() << *it;
+    }
     if (manager.error()) {
         kDebug() << manager.errorMsg();
         return 1;
@@ -89,7 +90,6 @@ int main(int argc, char **argv)
         }
         default:
             kDebug() << "main(): not implemented in main.cpp";
-
 
         }
         parser->clear();

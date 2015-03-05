@@ -94,7 +94,7 @@ public:
     /**
      * Retrieves the entire collection of actions for the plugin
      */
-    QHash<QString, KAction*> actions() const;
+    QHash<QString, KAction *> actions() const;
 
 Q_SIGNALS:
     /// emitted when a series of commands is started that together need to become 1 undo action.
@@ -138,7 +138,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

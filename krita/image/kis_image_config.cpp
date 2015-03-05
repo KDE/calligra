@@ -165,7 +165,6 @@ QString KisImageConfig::swapDir()
     return m_config.readEntry("swaplocation", QString());
 }
 
-
 #if defined Q_OS_LINUX
 #include <sys/sysinfo.h>
 #elif defined Q_OS_FREEBSD
@@ -189,7 +188,7 @@ int KisImageConfig::totalRAM()
     struct sysinfo info;
 
     error = sysinfo(&info);
-    if(!error) {
+    if (!error) {
         totalMemory = info.totalram * info.mem_unit / (1UL << 20);
     }
 #elif defined Q_OS_FREEBSD
@@ -198,7 +197,7 @@ int KisImageConfig::totalRAM()
     size_t len = sizeof(physmem);
 
     error = sysctl(mib, 2, &physmem, &len, NULL, 0);
-    if(!error) {
+    if (!error) {
         totalMemory = physmem >> 20;
     }
 #elif defined Q_OS_WIN
@@ -226,7 +225,7 @@ int KisImageConfig::totalRAM()
     }
 #endif
 
-    if(error) {
+    if (error) {
         kWarning() << "Cannot get the size of your RAM."
                    << "Using default value of 1GiB.";
     }

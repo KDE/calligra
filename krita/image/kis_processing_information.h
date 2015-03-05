@@ -23,7 +23,6 @@
 
 #include "krita_export.h"
 
-
 /**
  * This class is used in KisFilter to contain information needed to apply a filter
  * on a paint device.
@@ -32,9 +31,9 @@
 class KRITAIMAGE_EXPORT KisConstProcessingInformation
 {
 public:
-    KisConstProcessingInformation(const KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
-    KisConstProcessingInformation(const KisConstProcessingInformation& _rhs);
-    KisConstProcessingInformation& operator=(const KisConstProcessingInformation& _rhs);
+    KisConstProcessingInformation(const KisPaintDeviceSP device, const QPoint &topLeft, const KisSelectionSP selection = 0);
+    KisConstProcessingInformation(const KisConstProcessingInformation &_rhs);
+    KisConstProcessingInformation &operator=(const KisConstProcessingInformation &_rhs);
     ~KisConstProcessingInformation();
     /**
      * @return the paint device
@@ -48,10 +47,10 @@ public:
     /**
      * @return the top left pixel that need to process
      */
-    const QPoint& topLeft() const;
+    const QPoint &topLeft() const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 /**
@@ -62,9 +61,9 @@ private:
 class KRITAIMAGE_EXPORT KisProcessingInformation : public KisConstProcessingInformation
 {
 public:
-    KisProcessingInformation(KisPaintDeviceSP device, const QPoint& topLeft, const KisSelectionSP selection = 0);
-    KisProcessingInformation(const KisProcessingInformation& _rhs);
-    KisProcessingInformation& operator=(const KisProcessingInformation& _rhs);
+    KisProcessingInformation(KisPaintDeviceSP device, const QPoint &topLeft, const KisSelectionSP selection = 0);
+    KisProcessingInformation(const KisProcessingInformation &_rhs);
+    KisProcessingInformation &operator=(const KisProcessingInformation &_rhs);
     ~KisProcessingInformation();
     /**
      * @return the paint device
@@ -72,7 +71,7 @@ public:
     KisPaintDeviceSP paintDevice();
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

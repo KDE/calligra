@@ -43,7 +43,6 @@ public:
     void testTabs_data();
     void testTabs();
 
-
 private Q_SLOTS:
     void initTestCase();
 

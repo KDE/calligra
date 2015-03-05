@@ -178,7 +178,7 @@ public:
 private:
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // _KO_PROPERTIES_H

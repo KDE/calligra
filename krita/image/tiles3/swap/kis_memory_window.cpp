@@ -30,8 +30,7 @@ KisMemoryWindow::KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize
     if (!swapDir.isEmpty() && QDir::isAbsolutePath(swapDir)) {
         QString swapFileTemplate = swapDir + QDir::separator() + SWP_PREFIX;
         m_file.setFileTemplate(swapFileTemplate);
-    }
-    else {
+    } else {
         m_file.setPrefix(SWP_PREFIX);
     }
 
@@ -43,14 +42,14 @@ KisMemoryWindow::~KisMemoryWindow()
 {
 }
 
-quint8* KisMemoryWindow::getReadChunkPtr(const KisChunkData &readChunk)
+quint8 *KisMemoryWindow::getReadChunkPtr(const KisChunkData &readChunk)
 {
     adjustWindow(readChunk, &m_readWindowEx, &m_writeWindowEx);
 
     return m_readWindowEx.calculatePointer(readChunk);
 }
 
-quint8* KisMemoryWindow::getWriteChunkPtr(const KisChunkData &writeChunk)
+quint8 *KisMemoryWindow::getWriteChunkPtr(const KisChunkData &writeChunk)
 {
     adjustWindow(writeChunk, &m_writeWindowEx, &m_readWindowEx);
 
@@ -61,25 +60,24 @@ void KisMemoryWindow::adjustWindow(const KisChunkData &requestedChunk,
                                    MappingWindow *adjustingWindow,
                                    MappingWindow *otherWindow)
 {
-    if(!(adjustingWindow->window) ||
-       !(requestedChunk.m_begin >= adjustingWindow->chunk.m_begin &&
-         requestedChunk.m_end <= adjustingWindow->chunk.m_end))
-    {
+    if (!(adjustingWindow->window) ||
+            !(requestedChunk.m_begin >= adjustingWindow->chunk.m_begin &&
+              requestedChunk.m_end <= adjustingWindow->chunk.m_end)) {
         m_file.unmap(adjustingWindow->window);
 
         quint64 windowSize = adjustingWindow->defaultSize;
-        if(requestedChunk.size() > windowSize) {
+        if (requestedChunk.size() > windowSize) {
             qWarning() <<
-                "KisMemoryWindow: the requested chunk is too "
-                "big to fit into the mapping! "
-                "Adjusting mapping to avoid SIGSEGV...";
+                       "KisMemoryWindow: the requested chunk is too "
+                       "big to fit into the mapping! "
+                       "Adjusting mapping to avoid SIGSEGV...";
 
             windowSize = requestedChunk.size();
         }
 
         adjustingWindow->chunk.setChunk(requestedChunk.m_begin, windowSize);
 
-        if(adjustingWindow->chunk.m_end >= (quint64)m_file.size()) {
+        if (adjustingWindow->chunk.m_end >= (quint64)m_file.size()) {
             // Align by 32 bytes
             quint64 newSize = (adjustingWindow->chunk.m_end + 1 + 32) & (~31ULL);
 

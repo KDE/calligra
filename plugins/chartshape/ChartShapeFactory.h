@@ -20,7 +20,6 @@
 #ifndef KCHART_CHART_SHAPE_FACTORY
 #define KCHART_CHART_SHAPE_FACTORY
 
-
 // Own
 #include "ChartShape.h"
 
@@ -31,20 +30,17 @@
 #include <KoShapeFactoryBase.h>
 #include <QVariantList>
 
-
 class KoShape;
 class KoShapeConfigWidgetBase;
-
 
 class ChartShapePlugin : public QObject
 {
     Q_OBJECT
 public:
 
-    ChartShapePlugin(QObject *parent, const QVariantList&);
+    ChartShapePlugin(QObject *parent, const QVariantList &);
     ~ChartShapePlugin() {}
 };
-
 
 class ChartShapeFactory : public KoShapeFactoryBase
 {
@@ -59,8 +55,7 @@ public:
     virtual KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
 
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
 };
-
 
 #endif // KCHART_CHART_SHAPE_FACTORY

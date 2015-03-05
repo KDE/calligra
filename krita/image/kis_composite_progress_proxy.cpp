@@ -28,31 +28,32 @@ void KisCompositeProgressProxy::removeProxy(KoProgressProxy *proxy)
     m_proxies.removeAll(proxy);
 }
 
-
 int KisCompositeProgressProxy::maximum() const
 {
-    if(m_proxies.isEmpty()) return 0;
+    if (m_proxies.isEmpty()) {
+        return 0;
+    }
 
     return m_proxies.first()->maximum();
 }
 
 void KisCompositeProgressProxy::setValue(int value)
 {
-    foreach(KoProgressProxy *proxy, m_proxies) {
+    foreach (KoProgressProxy *proxy, m_proxies) {
         proxy->setValue(value);
     }
 }
 
 void KisCompositeProgressProxy::setRange(int minimum, int maximum)
 {
-    foreach(KoProgressProxy *proxy, m_proxies) {
+    foreach (KoProgressProxy *proxy, m_proxies) {
         proxy->setRange(minimum, maximum);
     }
 }
 
 void KisCompositeProgressProxy::setFormat(const QString &format)
 {
-    foreach(KoProgressProxy *proxy, m_proxies) {
+    foreach (KoProgressProxy *proxy, m_proxies) {
         proxy->setFormat(format);
     }
 }

@@ -34,8 +34,8 @@ using namespace Calligra::Sheets;
 class PublicValueFormatter : public ValueFormatter
 {
 public:
-    explicit PublicValueFormatter(const ValueConverter* converter)
-            : ValueFormatter(converter) {}
+    explicit PublicValueFormatter(const ValueConverter *converter)
+        : ValueFormatter(converter) {}
 
     using ValueFormatter::fractionFormat;
     using ValueFormatter::createNumberFormat;
@@ -232,7 +232,6 @@ void TestValueFormatter::testCreateNumberFormat()
     PublicValueFormatter fmt(m_converter);
     QCOMPARE(fmt.createNumberFormat(num, precision, formatType, floatFormat, currencySymbol, formatString, thousandsSep), result);
 }
-
 
 QTEST_KDEMAIN(TestValueFormatter, GUI)
 

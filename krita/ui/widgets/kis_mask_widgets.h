@@ -36,7 +36,8 @@ class WdgMaskSource : public QWidget, public Ui::WdgMaskSource
 public:
 
     WdgMaskSource(QWidget *parent)
-            : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -48,7 +49,8 @@ class WdgMaskFromSelection : public QWidget, public Ui::WdgMaskFromSelection
 public:
 
     WdgMaskFromSelection(QWidget *parent)
-            : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };

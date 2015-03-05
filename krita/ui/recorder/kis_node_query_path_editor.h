@@ -29,9 +29,9 @@ class KisNodeQueryPathEditor : public QWidget
 {
     Q_OBJECT
 public:
-    KisNodeQueryPathEditor(QWidget* parent);
+    KisNodeQueryPathEditor(QWidget *parent);
     ~KisNodeQueryPathEditor();
-    void setNodeQueryPath(const KisNodeQueryPath& path);
+    void setNodeQueryPath(const KisNodeQueryPath &path);
     /**
      * Generate a node query path based on the state of the widgets
      */
@@ -44,7 +44,7 @@ private Q_SLOTS:
     void slotPopupQuickHelp();
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

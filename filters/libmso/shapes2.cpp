@@ -25,13 +25,13 @@ using namespace writeodf;
 
 namespace
 {
-void equation(Writer& out, const char* name, const char* formula)
+void equation(Writer &out, const char *name, const char *formula)
 {
     draw_equation eq(&out.xml);
     eq.set_draw_name(name);
     eq.set_draw_formula(formula);
 }
-void equation(draw_enhanced_geometry& eg, const char* name, const char* formula)
+void equation(draw_enhanced_geometry &eg, const char *name, const char *formula)
 {
     draw_equation eq(eg.add_draw_equation());
     eq.set_draw_name(name);
@@ -39,7 +39,6 @@ void equation(draw_enhanced_geometry& eg, const char* name, const char* formula)
 }
 
 }
-
 
 /*void ODrawToOdf::processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.startElement("draw:custom-shape");
@@ -54,8 +53,8 @@ void equation(draw_enhanced_geometry& eg, const char* name, const char* formula)
     out.xml.endElement(); // custom shape
 }*/
 
-
-void ODrawToOdf::processParallelogram(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processParallelogram(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     draw_custom_shape shape(&out.xml);
     processStyleAndText(o, out);
 
@@ -67,27 +66,27 @@ void ODrawToOdf::processParallelogram(const MSO::OfficeArtSpContainer& o, Writer
     eg.set_draw_type("parallelogram");
     eg.set_draw_text_areas("?f3 ?f3 ?f4 ?f4");
     setShapeMirroring(o, out);
-    equation(eg,"f0","$0 ");
-    equation(eg,"f1","21600-$0 ");
-    equation(eg,"f2","$0 *10/24");
-    equation(eg,"f3","?f2 +1750");
-    equation(eg,"f4","21600-?f3 ");
-    equation(eg,"f5","?f0 /2");
-    equation(eg,"f6","10800+?f5 ");
-    equation(eg,"f7","?f0 -10800");
-    equation(eg,"f8","if(?f7 ,?f13 ,0)");
-    equation(eg,"f9","10800-?f5 ");
-    equation(eg,"f10","if(?f7 ,?f12 ,21600)");
-    equation(eg,"f11","21600-?f5 ");
-    equation(eg,"f12","21600*10800/?f0 ");
-    equation(eg,"f13","21600-?f12 ");
+    equation(eg, "f0", "$0 ");
+    equation(eg, "f1", "21600-$0 ");
+    equation(eg, "f2", "$0 *10/24");
+    equation(eg, "f3", "?f2 +1750");
+    equation(eg, "f4", "21600-?f3 ");
+    equation(eg, "f5", "?f0 /2");
+    equation(eg, "f6", "10800+?f5 ");
+    equation(eg, "f7", "?f0 -10800");
+    equation(eg, "f8", "if(?f7 ,?f13 ,0)");
+    equation(eg, "f9", "10800-?f5 ");
+    equation(eg, "f10", "if(?f7 ,?f12 ,21600)");
+    equation(eg, "f11", "21600-?f5 ");
+    equation(eg, "f12", "21600*10800/?f0 ");
+    equation(eg, "f13", "21600-?f12 ");
     draw_handle handle(eg.add_draw_handle("$0 top"));
     handle.set_draw_handle_radius_range_maximum("21000");
     handle.set_draw_handle_radius_range_minimum("0");
 }
 
-
-void ODrawToOdf::processTrapezoid(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processTrapezoid(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     draw_custom_shape shape(&out.xml);
     processStyleAndText(o, out);
 
@@ -99,20 +98,20 @@ void ODrawToOdf::processTrapezoid(const MSO::OfficeArtSpContainer& o, Writer& ou
     eg.set_draw_type("trapezoid");
     eg.set_draw_text_areas("?f3 ?f3 ?f4 ?f4");
     setShapeMirroring(o, out);
-    equation(eg,"f0","21600-$0 ");
-    equation(eg,"f1","$0 ");
-    equation(eg,"f2","$0 *10/18");
-    equation(eg,"f3","?f2 +1750");
-    equation(eg,"f4","21600-?f3 ");
-    equation(eg,"f5","$0 /2");
-    equation(eg,"f6","21600-?f5 ");
+    equation(eg, "f0", "21600-$0 ");
+    equation(eg, "f1", "$0 ");
+    equation(eg, "f2", "$0 *10/18");
+    equation(eg, "f3", "?f2 +1750");
+    equation(eg, "f4", "21600-?f3 ");
+    equation(eg, "f5", "$0 /2");
+    equation(eg, "f6", "21600-?f5 ");
     draw_handle handle(eg.add_draw_handle("$0 bottom"));
     handle.set_draw_handle_radius_range_maximum("10000");
     handle.set_draw_handle_radius_range_minimum("0");
 }
 
-
-void ODrawToOdf::processDiamond(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processDiamond(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -127,8 +126,8 @@ void ODrawToOdf::processDiamond(const MSO::OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processRoundRectangle(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -141,17 +140,17 @@ void ODrawToOdf::processRoundRectangle(const MSO::OfficeArtSpContainer& o, Write
     out.xml.addAttribute("draw:type", "round-rectangle");
     out.xml.addAttribute("draw:text-areas", "?f3 ?f4 ?f5 ?f6");
     setShapeMirroring(o, out);
-    equation(out,"f0","45");
-    equation(out,"f1","$0 *sin(?f0 *(pi/180))");
-    equation(out,"f2","?f1 *3163/7636");
-    equation(out,"f3","left+?f2 ");
-    equation(out,"f4","top+?f2 ");
-    equation(out,"f5","right-?f2 ");
-    equation(out,"f6","bottom-?f2 ");
-    equation(out,"f7","left+$0 ");
-    equation(out,"f8","top+$0 ");
-    equation(out,"f9","bottom-$0 ");
-    equation(out,"f10","right-$0 ");
+    equation(out, "f0", "45");
+    equation(out, "f1", "$0 *sin(?f0 *(pi/180))");
+    equation(out, "f2", "?f1 *3163/7636");
+    equation(out, "f3", "left+?f2 ");
+    equation(out, "f4", "top+?f2 ");
+    equation(out, "f5", "right-?f2 ");
+    equation(out, "f6", "bottom-?f2 ");
+    equation(out, "f7", "left+$0 ");
+    equation(out, "f8", "top+$0 ");
+    equation(out, "f9", "bottom-$0 ");
+    equation(out, "f10", "right-$0 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -162,8 +161,8 @@ void ODrawToOdf::processRoundRectangle(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processOctagon(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processOctagon(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -177,15 +176,15 @@ void ODrawToOdf::processOctagon(const MSO::OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:type", "octagon");
     out.xml.addAttribute("draw:text-areas", "?f5 ?f6 ?f7 ?f8");
     setShapeMirroring(o, out);
-    equation(out,"f0","left+$0 ");
-    equation(out,"f1","top+$0 ");
-    equation(out,"f2","right-$0 ");
-    equation(out,"f3","bottom-$0 ");
-    equation(out,"f4","$0 /2");
-    equation(out,"f5","left+?f4 ");
-    equation(out,"f6","top+?f4 ");
-    equation(out,"f7","right-?f4 ");
-    equation(out,"f8","bottom-?f4 ");
+    equation(out, "f0", "left+$0 ");
+    equation(out, "f1", "top+$0 ");
+    equation(out, "f2", "right-$0 ");
+    equation(out, "f3", "bottom-$0 ");
+    equation(out, "f4", "$0 /2");
+    equation(out, "f5", "left+?f4 ");
+    equation(out, "f6", "top+?f4 ");
+    equation(out, "f7", "right-?f4 ");
+    equation(out, "f8", "bottom-?f4 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -195,8 +194,8 @@ void ODrawToOdf::processOctagon(const MSO::OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processIsocelesTriangle(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processIsocelesTriangle(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -208,14 +207,14 @@ void ODrawToOdf::processIsocelesTriangle(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.addAttribute("draw:type", "isosceles-triangle");
     out.xml.addAttribute("draw:text-areas", "?f1 10800 ?f2 18000 ?f3 7200 ?f4 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$0 /2");
-    equation(out,"f2","?f1 +10800");
-    equation(out,"f3","$0 *2/3");
-    equation(out,"f4","?f3 +7200");
-    equation(out,"f5","21600-?f0 ");
-    equation(out,"f6","?f5 /2");
-    equation(out,"f7","21600-?f6 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$0 /2");
+    equation(out, "f2", "?f1 +10800");
+    equation(out, "f3", "$0 *2/3");
+    equation(out, "f4", "?f3 +7200");
+    equation(out, "f5", "21600-?f0 ");
+    equation(out, "f6", "?f5 /2");
+    equation(out, "f7", "21600-?f6 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -225,8 +224,8 @@ void ODrawToOdf::processIsocelesTriangle(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processRightTriangle(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processRightTriangle(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -241,8 +240,7 @@ void ODrawToOdf::processRightTriangle(const MSO::OfficeArtSpContainer& o, Writer
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processEllipse(const MSO::OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processEllipse(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
     out.xml.startElement("draw:ellipse");
     processStyleAndText(o, out);
@@ -266,7 +264,8 @@ void ODrawToOdf::processEllipse(const MSO::OfficeArtSpContainer& o, Writer& out)
 }
 */
 
-void ODrawToOdf::processHexagon(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processHexagon(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -278,11 +277,11 @@ void ODrawToOdf::processHexagon(const MSO::OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:type", "hexagon");
     out.xml.addAttribute("draw:text-areas", "?f3 ?f3 ?f4 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","21600-$0 ");
-    equation(out,"f2","$0 *100/234");
-    equation(out,"f3","?f2 +1700");
-    equation(out,"f4","21600-?f3 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "21600-$0 ");
+    equation(out, "f2", "$0 *100/234");
+    equation(out, "f3", "?f2 +1700");
+    equation(out, "f4", "21600-?f3 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -292,8 +291,8 @@ void ODrawToOdf::processHexagon(const MSO::OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processPlus(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processPlus(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -307,10 +306,10 @@ void ODrawToOdf::processPlus(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.addAttribute("draw:type", "cross");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f1 ?f2 ?f3");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 *10799/10800");
-    equation(out,"f1","?f0 ");
-    equation(out,"f2","right-?f0 ");
-    equation(out,"f3","bottom-?f0 ");
+    equation(out, "f0", "$0 *10799/10800");
+    equation(out, "f1", "?f0 ");
+    equation(out, "f2", "right-?f0 ");
+    equation(out, "f3", "bottom-?f0 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -321,8 +320,8 @@ void ODrawToOdf::processPlus(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processPentagon(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processPentagon(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -337,8 +336,8 @@ void ODrawToOdf::processPentagon(const MSO::OfficeArtSpContainer& o, Writer& out
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCan(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCan(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -350,14 +349,14 @@ void ODrawToOdf::processCan(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.addAttribute("draw:type", "can");
     out.xml.addAttribute("draw:text-areas", "0 ?f6 88 ?f3");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 *2/4");
-    equation(out,"f1","?f0 *6/11");
-    equation(out,"f2","?f0 -?f1 ");
-    equation(out,"f3","21600-?f0 ");
-    equation(out,"f4","?f3 +?f1 ");
-    equation(out,"f5","?f0 +?f1 ");
-    equation(out,"f6","$0 *2/2");
-    equation(out,"f7","44");
+    equation(out, "f0", "$0 *2/4");
+    equation(out, "f1", "?f0 *6/11");
+    equation(out, "f2", "?f0 -?f1 ");
+    equation(out, "f3", "21600-?f0 ");
+    equation(out, "f4", "?f3 +?f1 ");
+    equation(out, "f5", "?f0 +?f1 ");
+    equation(out, "f6", "$0 *2/2");
+    equation(out, "f7", "44");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "?f7 $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "0");
@@ -367,8 +366,8 @@ void ODrawToOdf::processCan(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCube(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCube(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -382,19 +381,19 @@ void ODrawToOdf::processCube(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.addAttribute("draw:type", "cube");
     out.xml.addAttribute("draw:text-areas", "0 ?f1 ?f4 ?f12");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","top+?f0 ");
-    equation(out,"f2","left+?f0 ");
-    equation(out,"f3","bottom-?f0 ");
-    equation(out,"f4","right-?f0 ");
-    equation(out,"f5","right-?f2 ");
-    equation(out,"f6","?f5 /2");
-    equation(out,"f7","?f2 +?f6 ");
-    equation(out,"f8","bottom-?f1 ");
-    equation(out,"f9","?f8 /2");
-    equation(out,"f10","?f1 +?f9 ");
-    equation(out,"f11","right");
-    equation(out,"f12","bottom");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "top+?f0 ");
+    equation(out, "f2", "left+?f0 ");
+    equation(out, "f3", "bottom-?f0 ");
+    equation(out, "f4", "right-?f0 ");
+    equation(out, "f5", "right-?f2 ");
+    equation(out, "f6", "?f5 /2");
+    equation(out, "f7", "?f2 +?f6 ");
+    equation(out, "f8", "bottom-?f1 ");
+    equation(out, "f9", "?f8 /2");
+    equation(out, "f10", "?f1 +?f9 ");
+    equation(out, "f11", "right");
+    equation(out, "f12", "bottom");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "left $0");
     out.xml.addAttribute("draw:handle-switched", "true");
@@ -405,8 +404,8 @@ void ODrawToOdf::processCube(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processBevel(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processBevel(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -419,9 +418,9 @@ void ODrawToOdf::processBevel(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.addAttribute("draw:type", "quad-bevel");
     out.xml.addAttribute("draw:text-areas", "?f0 ?f0 ?f1 ?f2");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 *21599/21600");
-    equation(out,"f1","right-?f0 ");
-    equation(out,"f2","bottom-?f0 ");
+    equation(out, "f0", "$0 *21599/21600");
+    equation(out, "f1", "right-?f0 ");
+    equation(out, "f2", "bottom-?f0 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -432,8 +431,8 @@ void ODrawToOdf::processBevel(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFoldedCorner(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFoldedCorner(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -445,18 +444,18 @@ void ODrawToOdf::processFoldedCorner(const MSO::OfficeArtSpContainer& o, Writer&
     out.xml.addAttribute("draw:type", "paper");
     out.xml.addAttribute("draw:text-areas", "0 0 21600 ?f11");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","21600-?f0 ");
-    equation(out,"f2","?f1 *8000/10800");
-    equation(out,"f3","21600-?f2 ");
-    equation(out,"f4","?f1 /2");
-    equation(out,"f5","?f1 /4");
-    equation(out,"f6","?f1 /7");
-    equation(out,"f7","?f1 /16");
-    equation(out,"f8","?f3 +?f5 ");
-    equation(out,"f9","?f0 +?f6 ");
-    equation(out,"f10","21600-?f4 ");
-    equation(out,"f11","?f0 +?f7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "21600-?f0 ");
+    equation(out, "f2", "?f1 *8000/10800");
+    equation(out, "f3", "21600-?f2 ");
+    equation(out, "f4", "?f1 /2");
+    equation(out, "f5", "?f1 /4");
+    equation(out, "f6", "?f1 /7");
+    equation(out, "f7", "?f1 /16");
+    equation(out, "f8", "?f3 +?f5 ");
+    equation(out, "f9", "?f0 +?f6 ");
+    equation(out, "f10", "21600-?f4 ");
+    equation(out, "f11", "?f0 +?f7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 bottom");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -466,8 +465,8 @@ void ODrawToOdf::processFoldedCorner(const MSO::OfficeArtSpContainer& o, Writer&
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processSmileyFace(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processSmileyFace(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -479,9 +478,9 @@ void ODrawToOdf::processSmileyFace(const MSO::OfficeArtSpContainer& o, Writer& o
     out.xml.addAttribute("draw:type", "smiley");
     out.xml.addAttribute("draw:text-areas", "3163 3163 18437 18437");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 -15510");
-    equation(out,"f1","17520-?f0 ");
-    equation(out,"f2","15510+?f0 ");
+    equation(out, "f0", "$0 -15510");
+    equation(out, "f1", "17520-?f0 ");
+    equation(out, "f2", "15510+?f0 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "10800 $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "15510");
@@ -491,8 +490,8 @@ void ODrawToOdf::processSmileyFace(const MSO::OfficeArtSpContainer& o, Writer& o
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processDonut(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processDonut(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -504,8 +503,8 @@ void ODrawToOdf::processDonut(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.addAttribute("draw:type", "ring");
     out.xml.addAttribute("draw:text-areas", "3163 3163 18437 18437");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","10800-$0 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "10800-$0 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 10800");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -515,8 +514,8 @@ void ODrawToOdf::processDonut(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processNoSmoking(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processNoSmoking(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -528,23 +527,23 @@ void ODrawToOdf::processNoSmoking(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.addAttribute("draw:type", "forbidden");
     out.xml.addAttribute("draw:text-areas", "3163 3163 18437 18437");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","21600-$0 ");
-    equation(out,"f2","10800-$0 ");
-    equation(out,"f3","$0 /2");
-    equation(out,"f4","sqrt(?f2 *?f2 -?f3 *?f3 )");
-    equation(out,"f5","10800-?f3 ");
-    equation(out,"f6","10800+?f3 ");
-    equation(out,"f7","10800-?f4 ");
-    equation(out,"f8","10800+?f4 ");
-    equation(out,"f9","(cos(45*(pi/180))*(?f5 -10800)+sin(45*(pi/180))*(?f7 -10800))+10800");
-    equation(out,"f10","-(sin(45*(pi/180))*(?f5 -10800)-cos(45*(pi/180))*(?f7 -10800))+10800");
-    equation(out,"f11","(cos(45*(pi/180))*(?f5 -10800)+sin(45*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f12","-(sin(45*(pi/180))*(?f5 -10800)-cos(45*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f13","(cos(45*(pi/180))*(?f6 -10800)+sin(45*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f14","-(sin(45*(pi/180))*(?f6 -10800)-cos(45*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f15","(cos(45*(pi/180))*(?f6 -10800)+sin(45*(pi/180))*(?f7 -10800))+10800");
-    equation(out,"f16","-(sin(45*(pi/180))*(?f6 -10800)-cos(45*(pi/180))*(?f7 -10800))+10800");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "21600-$0 ");
+    equation(out, "f2", "10800-$0 ");
+    equation(out, "f3", "$0 /2");
+    equation(out, "f4", "sqrt(?f2 *?f2 -?f3 *?f3 )");
+    equation(out, "f5", "10800-?f3 ");
+    equation(out, "f6", "10800+?f3 ");
+    equation(out, "f7", "10800-?f4 ");
+    equation(out, "f8", "10800+?f4 ");
+    equation(out, "f9", "(cos(45*(pi/180))*(?f5 -10800)+sin(45*(pi/180))*(?f7 -10800))+10800");
+    equation(out, "f10", "-(sin(45*(pi/180))*(?f5 -10800)-cos(45*(pi/180))*(?f7 -10800))+10800");
+    equation(out, "f11", "(cos(45*(pi/180))*(?f5 -10800)+sin(45*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f12", "-(sin(45*(pi/180))*(?f5 -10800)-cos(45*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f13", "(cos(45*(pi/180))*(?f6 -10800)+sin(45*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f14", "-(sin(45*(pi/180))*(?f6 -10800)-cos(45*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f15", "(cos(45*(pi/180))*(?f6 -10800)+sin(45*(pi/180))*(?f7 -10800))+10800");
+    equation(out, "f16", "-(sin(45*(pi/180))*(?f6 -10800)-cos(45*(pi/180))*(?f7 -10800))+10800");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 10800");
     out.xml.addAttribute("draw:handle-range-x-maximum", "7200");
@@ -554,26 +553,26 @@ void ODrawToOdf::processNoSmoking(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processBlockArc(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processBlockArc(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 180<< 5400);
+    processModifiers(o, out, QList<int>() << 180 << 5400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "B 0 0 21600 21600 ?f4 ?f3 ?f2 ?f3 W ?f5 ?f5 ?f6 ?f6 ?f2 ?f3 ?f4 ?f3 Z N");
     out.xml.addAttribute("draw:type", "block-arc");
     setShapeMirroring(o, out);
-    equation(out,"f0","10800*cos($0 *(pi/180))");
-    equation(out,"f1","10800*sin($0 *(pi/180))");
-    equation(out,"f2","?f0 +10800");
-    equation(out,"f3","?f1 +10800");
-    equation(out,"f4","21600-?f2 ");
-    equation(out,"f5","10800-$1 ");
-    equation(out,"f6","10800+$1 ");
-    equation(out,"f7","?f5 *cos($0 *(pi/180))");
-    equation(out,"f8","?f5 *sin($0 *(pi/180))");
+    equation(out, "f0", "10800*cos($0 *(pi/180))");
+    equation(out, "f1", "10800*sin($0 *(pi/180))");
+    equation(out, "f2", "?f0 +10800");
+    equation(out, "f3", "?f1 +10800");
+    equation(out, "f4", "21600-?f2 ");
+    equation(out, "f5", "10800-$1 ");
+    equation(out, "f6", "10800+$1 ");
+    equation(out, "f7", "?f5 *cos($0 *(pi/180))");
+    equation(out, "f8", "?f5 *sin($0 *(pi/180))");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$1 $0");
     out.xml.addAttribute("draw:handle-radius-range-minimum", "0");
@@ -584,8 +583,8 @@ void ODrawToOdf::processBlockArc(const MSO::OfficeArtSpContainer& o, Writer& out
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processHeart(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processHeart(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -600,8 +599,8 @@ void ODrawToOdf::processHeart(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processLightningBolt(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processLightningBolt(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -616,8 +615,8 @@ void ODrawToOdf::processLightningBolt(const MSO::OfficeArtSpContainer& o, Writer
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processSun(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processSun(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -629,61 +628,61 @@ void ODrawToOdf::processSun(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.addAttribute("draw:type", "sun");
     out.xml.addAttribute("draw:text-areas", "?f52 ?f52 ?f53 ?f53");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","21600-$0 ");
-    equation(out,"f2","$0 -2700");
-    equation(out,"f3","?f2 *5080/7425");
-    equation(out,"f4","?f3 +2540");
-    equation(out,"f5","10125-$0 ");
-    equation(out,"f6","?f5 *2120/7425");
-    equation(out,"f7","?f6 +210");
-    equation(out,"f8","10800+?f7 ");
-    equation(out,"f9","10800-?f7 ");
-    equation(out,"f10","(cos(45*(pi/180))*(0-10800)+sin(45*(pi/180))*(10800-10800))+10800");
-    equation(out,"f11","-(sin(45*(pi/180))*(0-10800)-cos(45*(pi/180))*(10800-10800))+10800");
-    equation(out,"f12","(cos(45*(pi/180))*(?f4 -10800)+sin(45*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f13","-(sin(45*(pi/180))*(?f4 -10800)-cos(45*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f14","(cos(45*(pi/180))*(?f4 -10800)+sin(45*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f15","-(sin(45*(pi/180))*(?f4 -10800)-cos(45*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f16","(cos(90*(pi/180))*(0-10800)+sin(90*(pi/180))*(10800-10800))+10800");
-    equation(out,"f17","-(sin(90*(pi/180))*(0-10800)-cos(90*(pi/180))*(10800-10800))+10800");
-    equation(out,"f18","(cos(90*(pi/180))*(?f4 -10800)+sin(90*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f19","-(sin(90*(pi/180))*(?f4 -10800)-cos(90*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f20","(cos(90*(pi/180))*(?f4 -10800)+sin(90*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f21","-(sin(90*(pi/180))*(?f4 -10800)-cos(90*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f22","(cos(135*(pi/180))*(0-10800)+sin(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f23","-(sin(135*(pi/180))*(0-10800)-cos(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f24","(cos(135*(pi/180))*(?f4 -10800)+sin(135*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f25","-(sin(135*(pi/180))*(?f4 -10800)-cos(135*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f26","(cos(135*(pi/180))*(?f4 -10800)+sin(135*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f27","-(sin(135*(pi/180))*(?f4 -10800)-cos(135*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f28","(cos(180*(pi/180))*(0-10800)+sin(180*(pi/180))*(10800-10800))+10800");
-    equation(out,"f29","-(sin(180*(pi/180))*(0-10800)-cos(180*(pi/180))*(10800-10800))+10800");
-    equation(out,"f30","(cos(180*(pi/180))*(?f4 -10800)+sin(180*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f31","-(sin(180*(pi/180))*(?f4 -10800)-cos(180*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f32","(cos(180*(pi/180))*(?f4 -10800)+sin(180*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f33","-(sin(180*(pi/180))*(?f4 -10800)-cos(180*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f34","(cos(225*(pi/180))*(0-10800)+sin(225*(pi/180))*(10800-10800))+10800");
-    equation(out,"f35","-(sin(225*(pi/180))*(0-10800)-cos(225*(pi/180))*(10800-10800))+10800");
-    equation(out,"f36","(cos(225*(pi/180))*(?f4 -10800)+sin(225*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f37","-(sin(225*(pi/180))*(?f4 -10800)-cos(225*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f38","(cos(225*(pi/180))*(?f4 -10800)+sin(225*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f39","-(sin(225*(pi/180))*(?f4 -10800)-cos(225*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f40","(cos(270*(pi/180))*(0-10800)+sin(270*(pi/180))*(10800-10800))+10800");
-    equation(out,"f41","-(sin(270*(pi/180))*(0-10800)-cos(270*(pi/180))*(10800-10800))+10800");
-    equation(out,"f42","(cos(270*(pi/180))*(?f4 -10800)+sin(270*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f43","-(sin(270*(pi/180))*(?f4 -10800)-cos(270*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f44","(cos(270*(pi/180))*(?f4 -10800)+sin(270*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f45","-(sin(270*(pi/180))*(?f4 -10800)-cos(270*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f46","(cos(315*(pi/180))*(0-10800)+sin(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f47","-(sin(315*(pi/180))*(0-10800)-cos(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f48","(cos(315*(pi/180))*(?f4 -10800)+sin(315*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f49","-(sin(315*(pi/180))*(?f4 -10800)-cos(315*(pi/180))*(?f8 -10800))+10800");
-    equation(out,"f50","(cos(315*(pi/180))*(?f4 -10800)+sin(315*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f51","-(sin(315*(pi/180))*(?f4 -10800)-cos(315*(pi/180))*(?f9 -10800))+10800");
-    equation(out,"f52","(cos(45*(pi/180))*($0 -10800)+sin(45*(pi/180))*(10800-10800))+10800");
-    equation(out,"f53","(cos(225*(pi/180))*($0 -10800)+sin(225*(pi/180))*(10800-10800))+10800");
-    equation(out,"f54","10800-$0 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "21600-$0 ");
+    equation(out, "f2", "$0 -2700");
+    equation(out, "f3", "?f2 *5080/7425");
+    equation(out, "f4", "?f3 +2540");
+    equation(out, "f5", "10125-$0 ");
+    equation(out, "f6", "?f5 *2120/7425");
+    equation(out, "f7", "?f6 +210");
+    equation(out, "f8", "10800+?f7 ");
+    equation(out, "f9", "10800-?f7 ");
+    equation(out, "f10", "(cos(45*(pi/180))*(0-10800)+sin(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f11", "-(sin(45*(pi/180))*(0-10800)-cos(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f12", "(cos(45*(pi/180))*(?f4 -10800)+sin(45*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f13", "-(sin(45*(pi/180))*(?f4 -10800)-cos(45*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f14", "(cos(45*(pi/180))*(?f4 -10800)+sin(45*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f15", "-(sin(45*(pi/180))*(?f4 -10800)-cos(45*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f16", "(cos(90*(pi/180))*(0-10800)+sin(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f17", "-(sin(90*(pi/180))*(0-10800)-cos(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f18", "(cos(90*(pi/180))*(?f4 -10800)+sin(90*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f19", "-(sin(90*(pi/180))*(?f4 -10800)-cos(90*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f20", "(cos(90*(pi/180))*(?f4 -10800)+sin(90*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f21", "-(sin(90*(pi/180))*(?f4 -10800)-cos(90*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f22", "(cos(135*(pi/180))*(0-10800)+sin(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f23", "-(sin(135*(pi/180))*(0-10800)-cos(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f24", "(cos(135*(pi/180))*(?f4 -10800)+sin(135*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f25", "-(sin(135*(pi/180))*(?f4 -10800)-cos(135*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f26", "(cos(135*(pi/180))*(?f4 -10800)+sin(135*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f27", "-(sin(135*(pi/180))*(?f4 -10800)-cos(135*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f28", "(cos(180*(pi/180))*(0-10800)+sin(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f29", "-(sin(180*(pi/180))*(0-10800)-cos(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f30", "(cos(180*(pi/180))*(?f4 -10800)+sin(180*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f31", "-(sin(180*(pi/180))*(?f4 -10800)-cos(180*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f32", "(cos(180*(pi/180))*(?f4 -10800)+sin(180*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f33", "-(sin(180*(pi/180))*(?f4 -10800)-cos(180*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f34", "(cos(225*(pi/180))*(0-10800)+sin(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f35", "-(sin(225*(pi/180))*(0-10800)-cos(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f36", "(cos(225*(pi/180))*(?f4 -10800)+sin(225*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f37", "-(sin(225*(pi/180))*(?f4 -10800)-cos(225*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f38", "(cos(225*(pi/180))*(?f4 -10800)+sin(225*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f39", "-(sin(225*(pi/180))*(?f4 -10800)-cos(225*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f40", "(cos(270*(pi/180))*(0-10800)+sin(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f41", "-(sin(270*(pi/180))*(0-10800)-cos(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f42", "(cos(270*(pi/180))*(?f4 -10800)+sin(270*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f43", "-(sin(270*(pi/180))*(?f4 -10800)-cos(270*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f44", "(cos(270*(pi/180))*(?f4 -10800)+sin(270*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f45", "-(sin(270*(pi/180))*(?f4 -10800)-cos(270*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f46", "(cos(315*(pi/180))*(0-10800)+sin(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f47", "-(sin(315*(pi/180))*(0-10800)-cos(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f48", "(cos(315*(pi/180))*(?f4 -10800)+sin(315*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f49", "-(sin(315*(pi/180))*(?f4 -10800)-cos(315*(pi/180))*(?f8 -10800))+10800");
+    equation(out, "f50", "(cos(315*(pi/180))*(?f4 -10800)+sin(315*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f51", "-(sin(315*(pi/180))*(?f4 -10800)-cos(315*(pi/180))*(?f9 -10800))+10800");
+    equation(out, "f52", "(cos(45*(pi/180))*($0 -10800)+sin(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f53", "(cos(225*(pi/180))*($0 -10800)+sin(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f54", "10800-$0 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 10800");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10125");
@@ -693,8 +692,8 @@ void ODrawToOdf::processSun(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processMoon(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processMoon(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -706,17 +705,17 @@ void ODrawToOdf::processMoon(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.addAttribute("draw:type", "moon");
     out.xml.addAttribute("draw:text-areas", "?f9 ?f8 ?f0 ?f10");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","21600-$0 ");
-    equation(out,"f2","?f1 /2");
-    equation(out,"f3","?f2 +$0 ");
-    equation(out,"f4","$0 *1794/10000");
-    equation(out,"f5","21600-?f4 ");
-    equation(out,"f6","$0 *400/18900");
-    equation(out,"f7","(cos(?f6 *(pi/180))*(0-10800)+sin(?f6 *(pi/180))*(10800-10800))+10800");
-    equation(out,"f8","-(sin(?f6 *(pi/180))*(0-10800)-cos(?f6 *(pi/180))*(10800-10800))+10800");
-    equation(out,"f9","?f7 +?f7 ");
-    equation(out,"f10","21600-?f8 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "21600-$0 ");
+    equation(out, "f2", "?f1 /2");
+    equation(out, "f3", "?f2 +$0 ");
+    equation(out, "f4", "$0 *1794/10000");
+    equation(out, "f5", "21600-?f4 ");
+    equation(out, "f6", "$0 *400/18900");
+    equation(out, "f7", "(cos(?f6 *(pi/180))*(0-10800)+sin(?f6 *(pi/180))*(10800-10800))+10800");
+    equation(out, "f8", "-(sin(?f6 *(pi/180))*(0-10800)-cos(?f6 *(pi/180))*(10800-10800))+10800");
+    equation(out, "f9", "?f7 +?f7 ");
+    equation(out, "f10", "21600-?f8 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 10800");
     out.xml.addAttribute("draw:handle-range-x-maximum", "18900");
@@ -726,7 +725,8 @@ void ODrawToOdf::processMoon(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-void ODrawToOdf::processNotchedCircularArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processNotchedCircularArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -734,8 +734,8 @@ void ODrawToOdf::processNotchedCircularArrow(const MSO::OfficeArtSpContainer& o,
 
     // custom way for processing modifieres as this shape
     // return the AdjustValue, AdjustValue2 16-bit shifted
-    const AdjustValue* val1 = get<AdjustValue>(o);
-    const Adjust2Value* val2 = get<Adjust2Value>(o);
+    const AdjustValue *val1 = get<AdjustValue>(o);
+    const Adjust2Value *val2 = get<Adjust2Value>(o);
     QString modifiers = QString::number(val1 ? val1->adjustvalue >> 16 : 270);
     modifiers += QString(" %1").arg(val2 ? val2->adjust2value >> 16 : 0);
     out.xml.addAttribute("draw:modifiers", modifiers);
@@ -745,14 +745,14 @@ void ODrawToOdf::processNotchedCircularArrow(const MSO::OfficeArtSpContainer& o,
     out.xml.addAttribute("draw:type", "mso-spt100");
     out.xml.addAttribute("draw:text-areas", "10799 0 21599 10799");
     setShapeMirroring(o, out);
-    equation(out,"f0","10800*sin($0 *(pi/180))");
-    equation(out,"f1","?f0 +10800");
-    equation(out,"f2","10800*cos($0 *(pi/180))");
-    equation(out,"f3","?f2 +10800");
-    equation(out,"f4","10800*sin($1 *(pi/180))");
-    equation(out,"f5","?f4 +10800");
-    equation(out,"f6","10800*cos($1 *(pi/180))");
-    equation(out,"f7","?f6 +10800");
+    equation(out, "f0", "10800*sin($0 *(pi/180))");
+    equation(out, "f1", "?f0 +10800");
+    equation(out, "f2", "10800*cos($0 *(pi/180))");
+    equation(out, "f3", "?f2 +10800");
+    equation(out, "f4", "10800*sin($1 *(pi/180))");
+    equation(out, "f5", "?f4 +10800");
+    equation(out, "f6", "10800*cos($1 *(pi/180))");
+    equation(out, "f7", "?f6 +10800");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "10800 $0");
     out.xml.addAttribute("draw:handle-radius-range-minimum", "10800");
@@ -769,7 +769,8 @@ void ODrawToOdf::processNotchedCircularArrow(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); // custom shape
 }
 
-void ODrawToOdf::processBracketPair(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processBracketPair(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -782,22 +783,22 @@ void ODrawToOdf::processBracketPair(const MSO::OfficeArtSpContainer& o, Writer& 
     out.xml.addAttribute("draw:type", "bracket-pair");
     out.xml.addAttribute("draw:text-areas", "?f8 ?f9 ?f10 ?f11");
     setShapeMirroring(o, out);
-    equation(out,"f0","left+$0 ");
-    equation(out,"f1","top+$0 ");
-    equation(out,"f2","bottom-$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","-(sin(45*(pi/180))*($0 -10800)-cos(45*(pi/180))*(0-10800))+10800");
-    equation(out,"f5","?f4 -10800");
-    equation(out,"f6","-$0 ");
-    equation(out,"f7","?f6 -?f5 ");
-    equation(out,"f8","left-?f7 ");
-    equation(out,"f9","top-?f7 ");
-    equation(out,"f10","right+?f7 ");
-    equation(out,"f11","bottom+?f7 ");
-    equation(out,"f12","left-?f5 ");
-    equation(out,"f13","top-?f5 ");
-    equation(out,"f14","right+?f5 ");
-    equation(out,"f15","bottom+?f5 ");
+    equation(out, "f0", "left+$0 ");
+    equation(out, "f1", "top+$0 ");
+    equation(out, "f2", "bottom-$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "-(sin(45*(pi/180))*($0 -10800)-cos(45*(pi/180))*(0-10800))+10800");
+    equation(out, "f5", "?f4 -10800");
+    equation(out, "f6", "-$0 ");
+    equation(out, "f7", "?f6 -?f5 ");
+    equation(out, "f8", "left-?f7 ");
+    equation(out, "f9", "top-?f7 ");
+    equation(out, "f10", "right+?f7 ");
+    equation(out, "f11", "bottom+?f7 ");
+    equation(out, "f12", "left-?f5 ");
+    equation(out, "f13", "top-?f5 ");
+    equation(out, "f14", "right+?f5 ");
+    equation(out, "f15", "bottom+?f5 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -808,8 +809,8 @@ void ODrawToOdf::processBracketPair(const MSO::OfficeArtSpContainer& o, Writer& 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processBracePair(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processBracePair(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -822,21 +823,21 @@ void ODrawToOdf::processBracePair(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.addAttribute("draw:type", "brace-pair");
     out.xml.addAttribute("draw:text-areas", "?f11 ?f12 ?f13 ?f14");
     setShapeMirroring(o, out);
-    equation(out,"f0","left+$0 ");
-    equation(out,"f1","top+$0 ");
-    equation(out,"f2","bottom-$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","?f0 *2");
-    equation(out,"f5","$0 *2");
-    equation(out,"f6","10800-$0 ");
-    equation(out,"f7","21600-?f6 ");
-    equation(out,"f8","right-?f5 ");
-    equation(out,"f9","$0 /3");
-    equation(out,"f10","?f9 +$0 ");
-    equation(out,"f11","left+?f10 ");
-    equation(out,"f12","top+?f9 ");
-    equation(out,"f13","right-?f10 ");
-    equation(out,"f14","bottom-?f9 ");
+    equation(out, "f0", "left+$0 ");
+    equation(out, "f1", "top+$0 ");
+    equation(out, "f2", "bottom-$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "?f0 *2");
+    equation(out, "f5", "$0 *2");
+    equation(out, "f6", "10800-$0 ");
+    equation(out, "f7", "21600-?f6 ");
+    equation(out, "f8", "right-?f5 ");
+    equation(out, "f9", "$0 /3");
+    equation(out, "f10", "?f9 +$0 ");
+    equation(out, "f11", "left+?f10 ");
+    equation(out, "f12", "top+?f9 ");
+    equation(out, "f13", "right-?f10 ");
+    equation(out, "f14", "bottom-?f9 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "left $0");
     out.xml.addAttribute("draw:handle-switched", "true");
@@ -847,8 +848,8 @@ void ODrawToOdf::processBracePair(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processPlaque(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processPlaque(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -862,22 +863,22 @@ void ODrawToOdf::processPlaque(const MSO::OfficeArtSpContainer& o, Writer& out) 
     out.xml.addAttribute("draw:type", "mso-spt21");
     out.xml.addAttribute("draw:text-areas", "?f12 ?f13 ?f14 ?f15");
     setShapeMirroring(o, out);
-    equation(out,"f0","left+$0 ");
-    equation(out,"f1","top+$0 ");
-    equation(out,"f2","bottom-$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","-(sin(45*(pi/180))*($0 -10800)-cos(45*(pi/180))*(0-10800))+10800");
-    equation(out,"f5","?f4 -10800");
-    equation(out,"f6","-$0 ");
-    equation(out,"f7","?f6 -?f5 ");
-    equation(out,"f8","left-?f7 ");
-    equation(out,"f9","top-?f7 ");
-    equation(out,"f10","right+?f7 ");
-    equation(out,"f11","bottom+?f7 ");
-    equation(out,"f12","left-?f5 ");
-    equation(out,"f13","top-?f5 ");
-    equation(out,"f14","right+?f5 ");
-    equation(out,"f15","bottom+?f5 ");
+    equation(out, "f0", "left+$0 ");
+    equation(out, "f1", "top+$0 ");
+    equation(out, "f2", "bottom-$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "-(sin(45*(pi/180))*($0 -10800)-cos(45*(pi/180))*(0-10800))+10800");
+    equation(out, "f5", "?f4 -10800");
+    equation(out, "f6", "-$0 ");
+    equation(out, "f7", "?f6 -?f5 ");
+    equation(out, "f8", "left-?f7 ");
+    equation(out, "f9", "top-?f7 ");
+    equation(out, "f10", "right+?f7 ");
+    equation(out, "f11", "bottom+?f7 ");
+    equation(out, "f12", "left-?f5 ");
+    equation(out, "f13", "top-?f5 ");
+    equation(out, "f14", "right+?f5 ");
+    equation(out, "f15", "bottom+?f5 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -888,8 +889,8 @@ void ODrawToOdf::processPlaque(const MSO::OfficeArtSpContainer& o, Writer& out) 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processLeftBracket(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processLeftBracket(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -901,11 +902,11 @@ void ODrawToOdf::processLeftBracket(const MSO::OfficeArtSpContainer& o, Writer& 
     out.xml.addAttribute("draw:type", "left-bracket");
     out.xml.addAttribute("draw:text-areas", "6350 ?f3 21600 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 /2");
-    equation(out,"f1","top+$0 ");
-    equation(out,"f2","bottom-$0 ");
-    equation(out,"f3","top+?f0 ");
-    equation(out,"f4","bottom-?f0 ");
+    equation(out, "f0", "$0 /2");
+    equation(out, "f1", "top+$0 ");
+    equation(out, "f2", "bottom-$0 ");
+    equation(out, "f3", "top+?f0 ");
+    equation(out, "f4", "bottom-?f0 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "left $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "0");
@@ -915,8 +916,8 @@ void ODrawToOdf::processLeftBracket(const MSO::OfficeArtSpContainer& o, Writer& 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processRightBracket(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processRightBracket(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -928,11 +929,11 @@ void ODrawToOdf::processRightBracket(const MSO::OfficeArtSpContainer& o, Writer&
     out.xml.addAttribute("draw:type", "right-bracket");
     out.xml.addAttribute("draw:text-areas", "0 ?f3 15150 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 /2");
-    equation(out,"f1","top+$0 ");
-    equation(out,"f2","bottom-$0 ");
-    equation(out,"f3","top+?f0 ");
-    equation(out,"f4","bottom-?f0 ");
+    equation(out, "f0", "$0 /2");
+    equation(out, "f1", "top+$0 ");
+    equation(out, "f2", "bottom-$0 ");
+    equation(out, "f3", "top+?f0 ");
+    equation(out, "f4", "bottom-?f0 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "right $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "0");
@@ -942,30 +943,30 @@ void ODrawToOdf::processRightBracket(const MSO::OfficeArtSpContainer& o, Writer&
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processLeftBrace(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processLeftBrace(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "21600 0 0 10800 21600 21600");
-    processModifiers(o, out, QList<int>() << 1800<< 10800);
+    processModifiers(o, out, QList<int>() << 1800 << 10800);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 21600 0 C 16200 0 10800 ?f0 10800 ?f1 L 10800 ?f2 C 10800 ?f3 5400 ?f4 0 ?f4 5400 ?f4 10800 ?f5 10800 ?f6 L 10800 ?f7 C 10800 ?f8 16200 21600 21600 21600 N");
     out.xml.addAttribute("draw:type", "left-brace");
     out.xml.addAttribute("draw:text-areas", "13800 ?f9 21600 ?f10");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 /2");
-    equation(out,"f1","$0 ");
-    equation(out,"f2","?f4 -$0 ");
-    equation(out,"f3","?f4 -?f0 ");
-    equation(out,"f4","$1 ");
-    equation(out,"f5","?f4 +?f0 ");
-    equation(out,"f6","?f4 +$0 ");
-    equation(out,"f7","21600-$0 ");
-    equation(out,"f8","21600-?f0 ");
-    equation(out,"f9","$0 *10000/31953");
-    equation(out,"f10","21600-?f9 ");
+    equation(out, "f0", "$0 /2");
+    equation(out, "f1", "$0 ");
+    equation(out, "f2", "?f4 -$0 ");
+    equation(out, "f3", "?f4 -?f0 ");
+    equation(out, "f4", "$1 ");
+    equation(out, "f5", "?f4 +?f0 ");
+    equation(out, "f6", "?f4 +$0 ");
+    equation(out, "f7", "21600-$0 ");
+    equation(out, "f8", "21600-?f0 ");
+    equation(out, "f9", "$0 *10000/31953");
+    equation(out, "f10", "21600-?f9 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "10800 $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "0");
@@ -980,30 +981,30 @@ void ODrawToOdf::processLeftBrace(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processRightBrace(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processRightBrace(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "0 0 0 21600 21600 10800");
-    processModifiers(o, out, QList<int>() << 1800<< 10800);
+    processModifiers(o, out, QList<int>() << 1800 << 10800);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 C 5400 0 10800 ?f0 10800 ?f1 L 10800 ?f2 C 10800 ?f3 16200 ?f4 21600 ?f4 16200 ?f4 10800 ?f5 10800 ?f6 L 10800 ?f7 C 10800 ?f8 5400 21600 0 21600 N");
     out.xml.addAttribute("draw:type", "right-brace");
     out.xml.addAttribute("draw:text-areas", "0 ?f9 7800 ?f10");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 /2");
-    equation(out,"f1","$0 ");
-    equation(out,"f2","?f4 -$0 ");
-    equation(out,"f3","?f4 -?f0 ");
-    equation(out,"f4","$1 ");
-    equation(out,"f5","?f4 +?f0 ");
-    equation(out,"f6","?f4 +$0 ");
-    equation(out,"f7","21600-$0 ");
-    equation(out,"f8","21600-?f0 ");
-    equation(out,"f9","$0 *10000/31953");
-    equation(out,"f10","21600-?f9 ");
+    equation(out, "f0", "$0 /2");
+    equation(out, "f1", "$0 ");
+    equation(out, "f2", "?f4 -$0 ");
+    equation(out, "f3", "?f4 -?f0 ");
+    equation(out, "f4", "$1 ");
+    equation(out, "f5", "?f4 +?f0 ");
+    equation(out, "f6", "?f4 +$0 ");
+    equation(out, "f7", "21600-$0 ");
+    equation(out, "f8", "21600-?f0 ");
+    equation(out, "f9", "$0 *10000/31953");
+    equation(out, "f10", "21600-?f9 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "10800 $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "0");
@@ -1018,26 +1019,26 @@ void ODrawToOdf::processRightBrace(const MSO::OfficeArtSpContainer& o, Writer& o
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 16200<< 5400);
+    processModifiers(o, out, QList<int>() << 16200 << 5400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 ?f0 L ?f1 ?f0 ?f1 0 21600 10800 ?f1 21600 ?f1 ?f2 0 ?f2 Z N");
     out.xml.addAttribute("draw:type", "right-arrow");
     out.xml.addAttribute("draw:text-areas", "0 ?f0 ?f5 ?f2");
     setShapeMirroring(o, out);
-    equation(out,"f0","$1 ");
-    equation(out,"f1","$0 ");
-    equation(out,"f2","21600-$1 ");
-    equation(out,"f3","21600-?f1 ");
-    equation(out,"f4","?f3 *?f0 /10800");
-    equation(out,"f5","?f1 +?f4 ");
-    equation(out,"f6","?f1 *?f0 /10800");
-    equation(out,"f7","?f1 -?f6 ");
+    equation(out, "f0", "$1 ");
+    equation(out, "f1", "$0 ");
+    equation(out, "f2", "21600-$1 ");
+    equation(out, "f3", "21600-?f1 ");
+    equation(out, "f4", "?f3 *?f0 /10800");
+    equation(out, "f5", "?f1 +?f4 ");
+    equation(out, "f6", "?f1 *?f0 /10800");
+    equation(out, "f7", "?f1 -?f6 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -1049,26 +1050,26 @@ void ODrawToOdf::processArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processLeftArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processLeftArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 5400<< 5400);
+    processModifiers(o, out, QList<int>() << 5400 << 5400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 21600 ?f0 L ?f1 ?f0 ?f1 0 0 10800 ?f1 21600 ?f1 ?f2 21600 ?f2 Z N");
     out.xml.addAttribute("draw:type", "left-arrow");
     out.xml.addAttribute("draw:text-areas", "?f7 ?f0 21600 ?f2");
     setShapeMirroring(o, out);
-    equation(out,"f0","$1 ");
-    equation(out,"f1","$0 ");
-    equation(out,"f2","21600-$1 ");
-    equation(out,"f3","21600-?f1 ");
-    equation(out,"f4","?f3 *?f0 /10800");
-    equation(out,"f5","?f1 +?f4 ");
-    equation(out,"f6","?f1 *?f0 /10800");
-    equation(out,"f7","?f1 -?f6 ");
+    equation(out, "f0", "$1 ");
+    equation(out, "f1", "$0 ");
+    equation(out, "f2", "21600-$1 ");
+    equation(out, "f3", "21600-?f1 ");
+    equation(out, "f4", "?f3 *?f0 /10800");
+    equation(out, "f5", "?f1 +?f4 ");
+    equation(out, "f6", "?f1 *?f0 /10800");
+    equation(out, "f7", "?f1 -?f6 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -1080,26 +1081,26 @@ void ODrawToOdf::processLeftArrow(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processUpArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processUpArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 5400<< 5400);
+    processModifiers(o, out, QList<int>() << 5400 << 5400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M ?f0 21600 L ?f0 ?f1 0 ?f1 10800 0 21600 ?f1 ?f2 ?f1 ?f2 21600 Z N");
     out.xml.addAttribute("draw:type", "up-arrow");
     out.xml.addAttribute("draw:text-areas", "?f0 ?f7 ?f2 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$1 ");
-    equation(out,"f1","$0 ");
-    equation(out,"f2","21600-$1 ");
-    equation(out,"f3","21600-?f1 ");
-    equation(out,"f4","?f3 *?f0 /10800");
-    equation(out,"f5","?f1 +?f4 ");
-    equation(out,"f6","?f1 *?f0 /10800");
-    equation(out,"f7","?f1 -?f6 ");
+    equation(out, "f0", "$1 ");
+    equation(out, "f1", "$0 ");
+    equation(out, "f2", "21600-$1 ");
+    equation(out, "f3", "21600-?f1 ");
+    equation(out, "f4", "?f3 *?f0 /10800");
+    equation(out, "f5", "?f1 +?f4 ");
+    equation(out, "f6", "?f1 *?f0 /10800");
+    equation(out, "f7", "?f1 -?f6 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$1 $0");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -1111,26 +1112,26 @@ void ODrawToOdf::processUpArrow(const MSO::OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processDownArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processDownArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 16200<< 5400);
+    processModifiers(o, out, QList<int>() << 16200 << 5400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M ?f0 0 L ?f0 ?f1 0 ?f1 10800 21600 21600 ?f1 ?f2 ?f1 ?f2 0 Z N");
     out.xml.addAttribute("draw:type", "down-arrow");
     out.xml.addAttribute("draw:text-areas", "?f0 0 ?f2 ?f5");
     setShapeMirroring(o, out);
-    equation(out,"f0","$1 ");
-    equation(out,"f1","$0 ");
-    equation(out,"f2","21600-$1 ");
-    equation(out,"f3","21600-?f1 ");
-    equation(out,"f4","?f3 *?f0 /10800");
-    equation(out,"f5","?f1 +?f4 ");
-    equation(out,"f6","?f1 *?f0 /10800");
-    equation(out,"f7","?f1 -?f6 ");
+    equation(out, "f0", "$1 ");
+    equation(out, "f1", "$0 ");
+    equation(out, "f2", "21600-$1 ");
+    equation(out, "f3", "21600-?f1 ");
+    equation(out, "f4", "?f3 *?f0 /10800");
+    equation(out, "f5", "?f1 +?f4 ");
+    equation(out, "f6", "?f1 *?f0 /10800");
+    equation(out, "f7", "?f1 -?f6 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$1 $0");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -1142,28 +1143,28 @@ void ODrawToOdf::processDownArrow(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processLeftRightArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processLeftRightArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 4300<< 5400);
+    processModifiers(o, out, QList<int>() << 4300 << 5400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 10800 L ?f0 0 ?f0 ?f1 ?f2 ?f1 ?f2 0 21600 10800 ?f2 21600 ?f2 ?f3 ?f0 ?f3 ?f0 21600 Z N");
     out.xml.addAttribute("draw:type", "left-right-arrow");
     out.xml.addAttribute("draw:text-areas", "?f5 ?f1 ?f6 ?f3");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","21600-$0 ");
-    equation(out,"f3","21600-$1 ");
-    equation(out,"f4","10800-$1 ");
-    equation(out,"f5","$0 *?f4 /10800");
-    equation(out,"f6","21600-?f5 ");
-    equation(out,"f7","10800-$0 ");
-    equation(out,"f8","$1 *?f7 /10800");
-    equation(out,"f9","21600-?f8 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "21600-$0 ");
+    equation(out, "f3", "21600-$1 ");
+    equation(out, "f4", "10800-$1 ");
+    equation(out, "f5", "$0 *?f4 /10800");
+    equation(out, "f6", "21600-?f5 ");
+    equation(out, "f7", "10800-$0 ");
+    equation(out, "f8", "$1 *?f7 /10800");
+    equation(out, "f9", "21600-?f8 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -1175,28 +1176,28 @@ void ODrawToOdf::processLeftRightArrow(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processUpDownArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processUpDownArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 5400<< 4300);
+    processModifiers(o, out, QList<int>() << 5400 << 4300);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 ?f1 L 10800 0 21600 ?f1 ?f2 ?f1 ?f2 ?f3 21600 ?f3 10800 21600 0 ?f3 ?f0 ?f3 ?f0 ?f1 Z N");
     out.xml.addAttribute("draw:type", "up-down-arrow");
     out.xml.addAttribute("draw:text-areas", "?f0 ?f8 ?f2 ?f9");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","21600-$0 ");
-    equation(out,"f3","21600-$1 ");
-    equation(out,"f4","10800-$1 ");
-    equation(out,"f5","$0 *?f4 /10800");
-    equation(out,"f6","21600-?f5 ");
-    equation(out,"f7","10800-$0 ");
-    equation(out,"f8","$1 *?f7 /10800");
-    equation(out,"f9","21600-?f8 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "21600-$0 ");
+    equation(out, "f3", "21600-$1 ");
+    equation(out, "f4", "10800-$1 ");
+    equation(out, "f5", "$0 *?f4 /10800");
+    equation(out, "f6", "21600-?f5 ");
+    equation(out, "f7", "10800-$0 ");
+    equation(out, "f8", "$1 *?f7 /10800");
+    equation(out, "f9", "21600-?f8 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -1208,24 +1209,24 @@ void ODrawToOdf::processUpDownArrow(const MSO::OfficeArtSpContainer& o, Writer& 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processQuadArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processQuadArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 6500<< 8600<< 4300);
+    processModifiers(o, out, QList<int>() << 6500 << 8600 << 4300);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 10800 L ?f0 ?f1 ?f0 ?f2 ?f2 ?f2 ?f2 ?f0 ?f1 ?f0 10800 0 ?f3 ?f0 ?f4 ?f0 ?f4 ?f2 ?f5 ?f2 ?f5 ?f1 21600 10800 ?f5 ?f3 ?f5 ?f4 ?f4 ?f4 ?f4 ?f5 ?f3 ?f5 10800 21600 ?f1 ?f5 ?f2 ?f5 ?f2 ?f4 ?f0 ?f4 ?f0 ?f3 Z N");
     out.xml.addAttribute("draw:type", "quad-arrow");
     out.xml.addAttribute("draw:text-areas", "0 0 21600 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$2 ");
-    equation(out,"f1","$0 ");
-    equation(out,"f2","$1 ");
-    equation(out,"f3","21600-$0 ");
-    equation(out,"f4","21600-$1 ");
-    equation(out,"f5","21600-$2 ");
+    equation(out, "f0", "$2 ");
+    equation(out, "f1", "$0 ");
+    equation(out, "f2", "$1 ");
+    equation(out, "f3", "21600-$0 ");
+    equation(out, "f4", "21600-$1 ");
+    equation(out, "f5", "21600-$2 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$1 $2");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -1242,24 +1243,24 @@ void ODrawToOdf::processQuadArrow(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processLeftRightUpArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processLeftRightUpArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 6500<< 8600<< 6200);
+    processModifiers(o, out, QList<int>() << 6500 << 8600 << 6200);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 10800 0 L ?f3 ?f2 ?f4 ?f2 ?f4 ?f1 ?f5 ?f1 ?f5 ?f0 21600 10800 ?f5 ?f3 ?f5 ?f4 ?f2 ?f4 ?f2 ?f3 0 10800 ?f2 ?f0 ?f2 ?f1 ?f1 ?f1 ?f1 ?f2 ?f0 ?f2 Z N");
     out.xml.addAttribute("draw:type", "mso-spt182");
     out.xml.addAttribute("draw:text-areas", "0 0 21600 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","?f3 *$2 /21600");
-    equation(out,"f3","21600-$0 ");
-    equation(out,"f4","21600-$1 ");
-    equation(out,"f5","21600-?f2 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "?f3 *$2 /21600");
+    equation(out, "f3", "21600-$0 ");
+    equation(out, "f4", "21600-$1 ");
+    equation(out, "f5", "21600-?f2 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$1 $2");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -1276,23 +1277,23 @@ void ODrawToOdf::processLeftRightUpArrow(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processBentArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processBentArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 15100<< 2900);
+    processModifiers(o, out, QList<int>() << 15100 << 2900);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 21600 L 0 12160 Y 12427 ?f1 L ?f0 ?f1 ?f0 0 21600 6079 ?f0 12158 ?f0 ?f2 12427 ?f2 X ?f4 12160 L ?f4 21600 Z N");
     out.xml.addAttribute("draw:type", "mso-spt91");
     out.xml.addAttribute("draw:text-areas", "0 0 21600 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","12158-$1 ");
-    equation(out,"f3","6079-$1 ");
-    equation(out,"f4","?f3 *2");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "12158-$1 ");
+    equation(out, "f3", "6079-$1 ");
+    equation(out, "f4", "?f3 *2");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -1304,8 +1305,8 @@ void ODrawToOdf::processBentArrow(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processUturnArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -1319,28 +1320,28 @@ void ODrawToOdf::processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& o
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processLeftUpArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processLeftUpArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 9340<< 18500<< 6200);
+    processModifiers(o, out, QList<int>() << 9340 << 18500 << 6200);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 ?f5 L ?f2 ?f0 ?f2 ?f7 ?f7 ?f7 ?f7 ?f2 ?f0 ?f2 ?f5 0 21600 ?f2 ?f1 ?f2 ?f1 ?f1 ?f2 ?f1 ?f2 21600 Z N");
     out.xml.addAttribute("draw:type", "mso-spt89");
     out.xml.addAttribute("draw:text-areas", "?f2 ?f7 ?f1 ?f1 ?f7 ?f2 ?f1 ?f1");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","21600-$0 ");
-    equation(out,"f4","?f3 /2");
-    equation(out,"f5","$0 +?f4 ");
-    equation(out,"f6","21600-$1 ");
-    equation(out,"f7","$0 +?f6 ");
-    equation(out,"f8","21600-?f6 ");
-    equation(out,"f9","?f8 -?f6 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "21600-$0 ");
+    equation(out, "f4", "?f3 /2");
+    equation(out, "f5", "$0 +?f4 ");
+    equation(out, "f6", "21600-$1 ");
+    equation(out, "f7", "$0 +?f6 ");
+    equation(out, "f8", "21600-?f6 ");
+    equation(out, "f9", "?f8 -?f6 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$1 $2");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -1357,29 +1358,29 @@ void ODrawToOdf::processLeftUpArrow(const MSO::OfficeArtSpContainer& o, Writer& 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processBentUpArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processBentUpArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 9340<< 18500<< 7200);
+    processModifiers(o, out, QList<int>() << 9340 << 18500 << 7200);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 ?f8 L ?f7 ?f8 ?f7 ?f2 ?f0 ?f2 ?f5 0 21600 ?f2 ?f1 ?f2 ?f1 21600 0 21600 Z N");
     out.xml.addAttribute("draw:type", "mso-spt90");
     out.xml.addAttribute("draw:text-areas", "?f2 ?f7 ?f1 ?f1 ?f7 ?f2 ?f1 ?f1");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","21600-$0 ");
-    equation(out,"f4","?f3 /2");
-    equation(out,"f5","$0 +?f4 ");
-    equation(out,"f6","21600-$1 ");
-    equation(out,"f7","$0 +?f6 ");
-    equation(out,"f8","?f7 +?f6 ");
-    equation(out,"f9","21600-?f6 ");
-    equation(out,"f10","?f9 -?f6 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "21600-$0 ");
+    equation(out, "f4", "?f3 /2");
+    equation(out, "f5", "$0 +?f4 ");
+    equation(out, "f6", "21600-$1 ");
+    equation(out, "f7", "$0 +?f6 ");
+    equation(out, "f8", "?f7 +?f6 ");
+    equation(out, "f9", "21600-?f6 ");
+    equation(out, "f10", "?f9 -?f6 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$1 $2");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -1396,68 +1397,68 @@ void ODrawToOdf::processBentUpArrow(const MSO::OfficeArtSpContainer& o, Writer& 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCurvedRightArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCurvedRightArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "0 ?f17 ?f2 ?f14 ?f22 ?f8 ?f2 ?f12 ?f22 ?f16");
-    processModifiers(o, out, QList<int>() << 12960<< 19440<< 14400);
+    processModifiers(o, out, QList<int>() << 12960 << 19440 << 14400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "B 0 0 ?f23 ?f3 ?f22 0 0 ?f4 A 0 ?f15 ?f23 ?f1 0 ?f7 ?f2 ?f13 L ?f2 ?f14 ?f22 ?f8 ?f2 ?f12 W 0 0 ?f23 ?f3 ?f2 ?f11 ?f26 ?f17 0 ?f15 ?f23 ?f1 ?f26 ?f17 ?f22 ?f15 Z N B 0 0 ?f23 ?f3 0 ?f4 ?f26 ?f17 F N");
     out.xml.addAttribute("draw:type", "mso-spt102");
     out.xml.addAttribute("draw:text-areas", "?f47 ?f45 ?f48 ?f46");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$0 +21600-$1 ");
-    equation(out,"f4","?f3 /2");
-    equation(out,"f5","$1 +$1 -21600");
-    equation(out,"f6","?f5 +$1 -$0 ");
-    equation(out,"f7","?f6 /2");
-    equation(out,"f8","(21600+$0 )/2");
-    equation(out,"f9","21600-$2 ");
-    equation(out,"f10","?f4 *sqrt(1-(?f9 /21600)*(?f9 /21600))");
-    equation(out,"f11","?f4 +?f10 ");
-    equation(out,"f12","?f11 +$1 -21600");
-    equation(out,"f13","?f7 +?f10 ");
-    equation(out,"f14","?f12 +21600-$0 ");
-    equation(out,"f15","?f5 -$0 ");
-    equation(out,"f16","?f15 /2");
-    equation(out,"f17","(?f4 +?f7 )/2");
-    equation(out,"f18","$0 +$1 -21600");
-    equation(out,"f19","?f18 /2");
-    equation(out,"f20","?f17 -?f19 ");
-    equation(out,"f21","21600");
-    equation(out,"f22","21600");
-    equation(out,"f23","21600*2");
-    equation(out,"f24","?f17 -?f4 ");
-    equation(out,"f25","21600*sqrt(1-(?f24 /?f4 )*(?f24 /?f4 ))");
-    equation(out,"f26","21600-?f25 ");
-    equation(out,"f27","?f8 +128");
-    equation(out,"f28","?f5 /2");
-    equation(out,"f29","?f5 -128");
-    equation(out,"f30","$0 +?f17 -?f12 ");
-    equation(out,"f31","21600*sqrt(1-(?f20 /?f4 )*(?f20 /?f4 ))");
-    equation(out,"f32","21600-$0 ");
-    equation(out,"f33","?f32 /2");
-    equation(out,"f34","21600*21600");
-    equation(out,"f35","?f9 *?f9 ");
-    equation(out,"f36","?f34 -?f35 ");
-    equation(out,"f37","sqrt(?f36 )");
-    equation(out,"f38","?f37 +21600");
-    equation(out,"f39","21600*21600/?f38 ");
-    equation(out,"f40","?f39 +64");
-    equation(out,"f41","$0 /2");
-    equation(out,"f42","21600*sqrt(1-(?f33 /?f41 )*(?f33 /?f41 ))");
-    equation(out,"f43","21600-?f42 ");
-    equation(out,"f44","?f43 +64");
-    equation(out,"f45","?f4 /2");
-    equation(out,"f46","$1 -?f45 ");
-    equation(out,"f47","21600*2195/16384");
-    equation(out,"f48","21600*14189/16384");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$0 +21600-$1 ");
+    equation(out, "f4", "?f3 /2");
+    equation(out, "f5", "$1 +$1 -21600");
+    equation(out, "f6", "?f5 +$1 -$0 ");
+    equation(out, "f7", "?f6 /2");
+    equation(out, "f8", "(21600+$0 )/2");
+    equation(out, "f9", "21600-$2 ");
+    equation(out, "f10", "?f4 *sqrt(1-(?f9 /21600)*(?f9 /21600))");
+    equation(out, "f11", "?f4 +?f10 ");
+    equation(out, "f12", "?f11 +$1 -21600");
+    equation(out, "f13", "?f7 +?f10 ");
+    equation(out, "f14", "?f12 +21600-$0 ");
+    equation(out, "f15", "?f5 -$0 ");
+    equation(out, "f16", "?f15 /2");
+    equation(out, "f17", "(?f4 +?f7 )/2");
+    equation(out, "f18", "$0 +$1 -21600");
+    equation(out, "f19", "?f18 /2");
+    equation(out, "f20", "?f17 -?f19 ");
+    equation(out, "f21", "21600");
+    equation(out, "f22", "21600");
+    equation(out, "f23", "21600*2");
+    equation(out, "f24", "?f17 -?f4 ");
+    equation(out, "f25", "21600*sqrt(1-(?f24 /?f4 )*(?f24 /?f4 ))");
+    equation(out, "f26", "21600-?f25 ");
+    equation(out, "f27", "?f8 +128");
+    equation(out, "f28", "?f5 /2");
+    equation(out, "f29", "?f5 -128");
+    equation(out, "f30", "$0 +?f17 -?f12 ");
+    equation(out, "f31", "21600*sqrt(1-(?f20 /?f4 )*(?f20 /?f4 ))");
+    equation(out, "f32", "21600-$0 ");
+    equation(out, "f33", "?f32 /2");
+    equation(out, "f34", "21600*21600");
+    equation(out, "f35", "?f9 *?f9 ");
+    equation(out, "f36", "?f34 -?f35 ");
+    equation(out, "f37", "sqrt(?f36 )");
+    equation(out, "f38", "?f37 +21600");
+    equation(out, "f39", "21600*21600/?f38 ");
+    equation(out, "f40", "?f39 +64");
+    equation(out, "f41", "$0 /2");
+    equation(out, "f42", "21600*sqrt(1-(?f33 /?f41 )*(?f33 /?f41 ))");
+    equation(out, "f43", "21600-?f42 ");
+    equation(out, "f44", "?f43 +64");
+    equation(out, "f45", "?f4 /2");
+    equation(out, "f46", "$1 -?f45 ");
+    equation(out, "f47", "21600*2195/16384");
+    equation(out, "f48", "21600*14189/16384");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "21600 $0");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -1483,64 +1484,64 @@ void ODrawToOdf::processCurvedRightArrow(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCurvedLeftArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCurvedLeftArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "0 ?f15 ?f2 ?f11 0 ?f8 ?f2 ?f13 ?f21 ?f16");
-    processModifiers(o, out, QList<int>() << 12960<< 19440<< 7200);
+    processModifiers(o, out, QList<int>() << 12960 << 19440 << 7200);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "V ?f22 0 ?f21 ?f3 0 0 ?f21 ?f4 W ?f22 ?f14 ?f21 ?f1 ?f21 ?f7 ?f2 ?f12 L ?f2 ?f13 0 ?f8 ?f2 ?f11 A ?f22 0 ?f21 ?f3 ?f2 ?f10 ?f24 ?f16 ?f22 ?f14 ?f21 ?f1 ?f24 ?f16 0 ?f14 Z N B ?f22 ?f14 ?f21 ?f1 ?f21 ?f7 ?f24 ?f16 F N");
     out.xml.addAttribute("draw:type", "mso-spt103");
     out.xml.addAttribute("draw:text-areas", "?f43 ?f41 ?f44 ?f42");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$0 +21600-$1 ");
-    equation(out,"f4","?f3 /2");
-    equation(out,"f5","$1 +$1 -21600");
-    equation(out,"f6","?f5 +$1 -$0 ");
-    equation(out,"f7","?f6 /2");
-    equation(out,"f8","(21600+$0 )/2");
-    equation(out,"f9","?f4 *sqrt(1-($2 /21600)*($2 /21600))");
-    equation(out,"f10","?f4 +?f9 ");
-    equation(out,"f11","?f10 +$1 -21600");
-    equation(out,"f12","?f7 +?f9 ");
-    equation(out,"f13","?f11 +21600-$0 ");
-    equation(out,"f14","?f5 -$0 ");
-    equation(out,"f15","?f14 /2");
-    equation(out,"f16","(?f4 +?f7 )/2");
-    equation(out,"f17","$0 +$1 -21600");
-    equation(out,"f18","?f17 /2");
-    equation(out,"f19","?f16 -?f18 ");
-    equation(out,"f20","21600");
-    equation(out,"f21","21600");
-    equation(out,"f22","-21600");
-    equation(out,"f23","?f16 -?f4 ");
-    equation(out,"f24","21600*sqrt(1-(?f23 /?f4 )*(?f23 /?f4 ))");
-    equation(out,"f25","?f8 +128");
-    equation(out,"f26","?f5 /2");
-    equation(out,"f27","?f5 -128");
-    equation(out,"f28","$0 +?f16 -?f11 ");
-    equation(out,"f29","21600-$0 ");
-    equation(out,"f30","?f29 /2");
-    equation(out,"f31","21600*21600");
-    equation(out,"f32","$2 *$2 ");
-    equation(out,"f33","?f31 -?f32 ");
-    equation(out,"f34","sqrt(?f33 )");
-    equation(out,"f35","?f34 +21600");
-    equation(out,"f36","21600*21600/?f35 ");
-    equation(out,"f37","?f36 +64");
-    equation(out,"f38","$0 /2");
-    equation(out,"f39","21600*sqrt(1-(?f30 /?f38 )*(?f30 /?f38 ))");
-    equation(out,"f40","?f39 -64");
-    equation(out,"f41","?f4 /2");
-    equation(out,"f42","$1 -?f41 ");
-    equation(out,"f43","21600*2195/16384");
-    equation(out,"f44","21600*14189/16384");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$0 +21600-$1 ");
+    equation(out, "f4", "?f3 /2");
+    equation(out, "f5", "$1 +$1 -21600");
+    equation(out, "f6", "?f5 +$1 -$0 ");
+    equation(out, "f7", "?f6 /2");
+    equation(out, "f8", "(21600+$0 )/2");
+    equation(out, "f9", "?f4 *sqrt(1-($2 /21600)*($2 /21600))");
+    equation(out, "f10", "?f4 +?f9 ");
+    equation(out, "f11", "?f10 +$1 -21600");
+    equation(out, "f12", "?f7 +?f9 ");
+    equation(out, "f13", "?f11 +21600-$0 ");
+    equation(out, "f14", "?f5 -$0 ");
+    equation(out, "f15", "?f14 /2");
+    equation(out, "f16", "(?f4 +?f7 )/2");
+    equation(out, "f17", "$0 +$1 -21600");
+    equation(out, "f18", "?f17 /2");
+    equation(out, "f19", "?f16 -?f18 ");
+    equation(out, "f20", "21600");
+    equation(out, "f21", "21600");
+    equation(out, "f22", "-21600");
+    equation(out, "f23", "?f16 -?f4 ");
+    equation(out, "f24", "21600*sqrt(1-(?f23 /?f4 )*(?f23 /?f4 ))");
+    equation(out, "f25", "?f8 +128");
+    equation(out, "f26", "?f5 /2");
+    equation(out, "f27", "?f5 -128");
+    equation(out, "f28", "$0 +?f16 -?f11 ");
+    equation(out, "f29", "21600-$0 ");
+    equation(out, "f30", "?f29 /2");
+    equation(out, "f31", "21600*21600");
+    equation(out, "f32", "$2 *$2 ");
+    equation(out, "f33", "?f31 -?f32 ");
+    equation(out, "f34", "sqrt(?f33 )");
+    equation(out, "f35", "?f34 +21600");
+    equation(out, "f36", "21600*21600/?f35 ");
+    equation(out, "f37", "?f36 +64");
+    equation(out, "f38", "$0 /2");
+    equation(out, "f39", "21600*sqrt(1-(?f30 /?f38 )*(?f30 /?f38 ))");
+    equation(out, "f40", "?f39 -64");
+    equation(out, "f41", "?f4 /2");
+    equation(out, "f42", "$1 -?f41 ");
+    equation(out, "f43", "21600*2195/16384");
+    equation(out, "f44", "21600*14189/16384");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "left $0");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -1566,64 +1567,64 @@ void ODrawToOdf::processCurvedLeftArrow(const MSO::OfficeArtSpContainer& o, Writ
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCurvedUpArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCurvedUpArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "?f8 0 ?f11 ?f2 ?f15 0 ?f16 ?f21 ?f13 ?f2");
-    processModifiers(o, out, QList<int>() << 12960<< 19440<< 7200);
+    processModifiers(o, out, QList<int>() << 12960 << 19440 << 7200);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "B 0 ?f22 ?f3 ?f21 0 0 ?f4 ?f21 A ?f14 ?f22 ?f1 ?f21 ?f7 ?f21 ?f12 ?f2 L ?f13 ?f2 ?f8 0 ?f11 ?f2 W 0 ?f22 ?f3 ?f21 ?f10 ?f2 ?f16 ?f24 ?f14 ?f22 ?f1 ?f21 ?f16 ?f24 ?f14 0 Z N V ?f14 ?f22 ?f1 ?f21 ?f7 ?f21 ?f16 ?f24 F N");
     out.xml.addAttribute("draw:type", "mso-spt104");
     out.xml.addAttribute("draw:text-areas", "?f41 ?f43 ?f42 ?f44");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$0 +21600-$1 ");
-    equation(out,"f4","?f3 /2");
-    equation(out,"f5","$1 +$1 -21600");
-    equation(out,"f6","?f5 +$1 -$0 ");
-    equation(out,"f7","?f6 /2");
-    equation(out,"f8","(21600+$0 )/2");
-    equation(out,"f9","?f4 *sqrt(1-($2 /21600)*($2 /21600))");
-    equation(out,"f10","?f4 +?f9 ");
-    equation(out,"f11","?f10 +$1 -21600");
-    equation(out,"f12","?f7 +?f9 ");
-    equation(out,"f13","?f11 +21600-$0 ");
-    equation(out,"f14","?f5 -$0 ");
-    equation(out,"f15","?f14 /2");
-    equation(out,"f16","(?f4 +?f7 )/2");
-    equation(out,"f17","$0 +$1 -21600");
-    equation(out,"f18","?f17 /2");
-    equation(out,"f19","?f16 -?f18 ");
-    equation(out,"f20","21600");
-    equation(out,"f21","21600");
-    equation(out,"f22","-21600");
-    equation(out,"f23","?f16 -?f4 ");
-    equation(out,"f24","21600*sqrt(1-(?f23 /?f4 )*(?f23 /?f4 ))");
-    equation(out,"f25","?f8 +128");
-    equation(out,"f26","?f5 /2");
-    equation(out,"f27","?f5 -128");
-    equation(out,"f28","$0 +?f16 -?f11 ");
-    equation(out,"f29","21600-$0 ");
-    equation(out,"f30","?f29 /2");
-    equation(out,"f31","21600*21600");
-    equation(out,"f32","$2 *$2 ");
-    equation(out,"f33","?f31 -?f32 ");
-    equation(out,"f34","sqrt(?f33 )");
-    equation(out,"f35","?f34 +21600");
-    equation(out,"f36","21600*21600/?f35 ");
-    equation(out,"f37","?f36 +64");
-    equation(out,"f38","$0 /2");
-    equation(out,"f39","21600*sqrt(1-(?f30 /?f38 )*(?f30 /?f38 ))");
-    equation(out,"f40","?f39 -64");
-    equation(out,"f41","?f4 /2");
-    equation(out,"f42","$1 -?f41 ");
-    equation(out,"f43","21600*2195/16384");
-    equation(out,"f44","21600*14189/16384");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$0 +21600-$1 ");
+    equation(out, "f4", "?f3 /2");
+    equation(out, "f5", "$1 +$1 -21600");
+    equation(out, "f6", "?f5 +$1 -$0 ");
+    equation(out, "f7", "?f6 /2");
+    equation(out, "f8", "(21600+$0 )/2");
+    equation(out, "f9", "?f4 *sqrt(1-($2 /21600)*($2 /21600))");
+    equation(out, "f10", "?f4 +?f9 ");
+    equation(out, "f11", "?f10 +$1 -21600");
+    equation(out, "f12", "?f7 +?f9 ");
+    equation(out, "f13", "?f11 +21600-$0 ");
+    equation(out, "f14", "?f5 -$0 ");
+    equation(out, "f15", "?f14 /2");
+    equation(out, "f16", "(?f4 +?f7 )/2");
+    equation(out, "f17", "$0 +$1 -21600");
+    equation(out, "f18", "?f17 /2");
+    equation(out, "f19", "?f16 -?f18 ");
+    equation(out, "f20", "21600");
+    equation(out, "f21", "21600");
+    equation(out, "f22", "-21600");
+    equation(out, "f23", "?f16 -?f4 ");
+    equation(out, "f24", "21600*sqrt(1-(?f23 /?f4 )*(?f23 /?f4 ))");
+    equation(out, "f25", "?f8 +128");
+    equation(out, "f26", "?f5 /2");
+    equation(out, "f27", "?f5 -128");
+    equation(out, "f28", "$0 +?f16 -?f11 ");
+    equation(out, "f29", "21600-$0 ");
+    equation(out, "f30", "?f29 /2");
+    equation(out, "f31", "21600*21600");
+    equation(out, "f32", "$2 *$2 ");
+    equation(out, "f33", "?f31 -?f32 ");
+    equation(out, "f34", "sqrt(?f33 )");
+    equation(out, "f35", "?f34 +21600");
+    equation(out, "f36", "21600*21600/?f35 ");
+    equation(out, "f37", "?f36 +64");
+    equation(out, "f38", "$0 /2");
+    equation(out, "f39", "21600*sqrt(1-(?f30 /?f38 )*(?f30 /?f38 ))");
+    equation(out, "f40", "?f39 -64");
+    equation(out, "f41", "?f4 /2");
+    equation(out, "f42", "$1 -?f41 ");
+    equation(out, "f43", "21600*2195/16384");
+    equation(out, "f44", "21600*14189/16384");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "?f27");
@@ -1649,66 +1650,66 @@ void ODrawToOdf::processCurvedUpArrow(const MSO::OfficeArtSpContainer& o, Writer
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCurvedDownArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCurvedDownArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "?f17 0 ?f16 21600 ?f12 ?f2 ?f8 21600 ?f14 ?f2");
-    processModifiers(o, out, QList<int>() << 12960<< 19440<< 14400);
+    processModifiers(o, out, QList<int>() << 12960 << 19440 << 14400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "W 0 0 ?f3 ?f21 0 21600 ?f4 0 0 0 ?f3 ?f21 ?f4 0 ?f17 ?f24 A ?f15 0 ?f1 ?f21 ?f17 ?f24 ?f15 21600 Z N V ?f15 0 ?f1 ?f21 ?f7 0 ?f13 ?f2 L ?f14 ?f2 ?f8 21600 ?f12 ?f2 A 0 0 ?f3 ?f21 ?f11 ?f2 ?f17 ?f24 0 0 ?f3 ?f21 ?f17 ?f24 ?f4 0 Z N");
     out.xml.addAttribute("draw:type", "mso-spt105");
     out.xml.addAttribute("draw:text-areas", "?f43 ?f45 ?f44 ?f46");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$0 +21600-$1 ");
-    equation(out,"f4","?f3 /2");
-    equation(out,"f5","$1 +$1 -21600");
-    equation(out,"f6","?f5 +$1 -$0 ");
-    equation(out,"f7","?f6 /2");
-    equation(out,"f8","(21600+$0 )/2");
-    equation(out,"f9","21600-$2 ");
-    equation(out,"f10","?f4 *sqrt(1-(?f9 /21600)*(?f9 /21600))");
-    equation(out,"f11","?f4 +?f10 ");
-    equation(out,"f12","?f11 +$1 -21600");
-    equation(out,"f13","?f7 +?f10 ");
-    equation(out,"f14","?f12 +21600-$0 ");
-    equation(out,"f15","?f5 -$0 ");
-    equation(out,"f16","?f15 /2");
-    equation(out,"f17","(?f4 +?f7 )/2");
-    equation(out,"f18","$0 +$1 -21600");
-    equation(out,"f19","?f18 /2");
-    equation(out,"f20","?f17 -?f19 ");
-    equation(out,"f21","21600*2");
-    equation(out,"f22","?f17 -?f4 ");
-    equation(out,"f23","21600*sqrt(1-(?f22 /?f4 )*(?f22 /?f4 ))");
-    equation(out,"f24","21600-?f23 ");
-    equation(out,"f25","?f8 +128");
-    equation(out,"f26","?f5 /2");
-    equation(out,"f27","?f5 -128");
-    equation(out,"f28","$0 +?f17 -?f12 ");
-    equation(out,"f29","21600*sqrt(1-(?f20 /?f4 )*(?f20 /?f4 ))");
-    equation(out,"f30","21600-$0 ");
-    equation(out,"f31","?f30 /2");
-    equation(out,"f32","21600*21600");
-    equation(out,"f33","?f9 *?f9 ");
-    equation(out,"f34","?f32 -?f33 ");
-    equation(out,"f35","sqrt(?f34 )");
-    equation(out,"f36","?f35 +21600");
-    equation(out,"f37","21600*21600/?f36 ");
-    equation(out,"f38","?f37 +64");
-    equation(out,"f39","$0 /2");
-    equation(out,"f40","21600*sqrt(1-(?f31 /?f39 )*(?f31 /?f39 ))");
-    equation(out,"f41","21600-?f40 ");
-    equation(out,"f42","?f41 +64");
-    equation(out,"f43","?f4 /2");
-    equation(out,"f44","$1 -?f43 ");
-    equation(out,"f45","21600*2195/16384");
-    equation(out,"f46","21600*14189/16384");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$0 +21600-$1 ");
+    equation(out, "f4", "?f3 /2");
+    equation(out, "f5", "$1 +$1 -21600");
+    equation(out, "f6", "?f5 +$1 -$0 ");
+    equation(out, "f7", "?f6 /2");
+    equation(out, "f8", "(21600+$0 )/2");
+    equation(out, "f9", "21600-$2 ");
+    equation(out, "f10", "?f4 *sqrt(1-(?f9 /21600)*(?f9 /21600))");
+    equation(out, "f11", "?f4 +?f10 ");
+    equation(out, "f12", "?f11 +$1 -21600");
+    equation(out, "f13", "?f7 +?f10 ");
+    equation(out, "f14", "?f12 +21600-$0 ");
+    equation(out, "f15", "?f5 -$0 ");
+    equation(out, "f16", "?f15 /2");
+    equation(out, "f17", "(?f4 +?f7 )/2");
+    equation(out, "f18", "$0 +$1 -21600");
+    equation(out, "f19", "?f18 /2");
+    equation(out, "f20", "?f17 -?f19 ");
+    equation(out, "f21", "21600*2");
+    equation(out, "f22", "?f17 -?f4 ");
+    equation(out, "f23", "21600*sqrt(1-(?f22 /?f4 )*(?f22 /?f4 ))");
+    equation(out, "f24", "21600-?f23 ");
+    equation(out, "f25", "?f8 +128");
+    equation(out, "f26", "?f5 /2");
+    equation(out, "f27", "?f5 -128");
+    equation(out, "f28", "$0 +?f17 -?f12 ");
+    equation(out, "f29", "21600*sqrt(1-(?f20 /?f4 )*(?f20 /?f4 ))");
+    equation(out, "f30", "21600-$0 ");
+    equation(out, "f31", "?f30 /2");
+    equation(out, "f32", "21600*21600");
+    equation(out, "f33", "?f9 *?f9 ");
+    equation(out, "f34", "?f32 -?f33 ");
+    equation(out, "f35", "sqrt(?f34 )");
+    equation(out, "f36", "?f35 +21600");
+    equation(out, "f37", "21600*21600/?f36 ");
+    equation(out, "f38", "?f37 +64");
+    equation(out, "f39", "$0 /2");
+    equation(out, "f40", "21600*sqrt(1-(?f31 /?f39 )*(?f31 /?f39 ))");
+    equation(out, "f41", "21600-?f40 ");
+    equation(out, "f42", "?f41 +64");
+    equation(out, "f43", "?f4 /2");
+    equation(out, "f44", "$1 -?f43 ");
+    equation(out, "f45", "21600*2195/16384");
+    equation(out, "f46", "21600*14189/16384");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 21600");
     out.xml.addAttribute("draw:handle-range-x-maximum", "?f27");
@@ -1734,24 +1735,24 @@ void ODrawToOdf::processCurvedDownArrow(const MSO::OfficeArtSpContainer& o, Writ
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processStripedRightArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processStripedRightArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 16200<< 5400);
+    processModifiers(o, out, QList<int>() << 16200 << 5400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 3375 ?f0 L ?f1 ?f0 ?f1 0 21600 10800 ?f1 21600 ?f1 ?f2 3375 ?f2 Z N M 0 ?f0 L 675 ?f0 675 ?f2 0 ?f2 Z N M 1350 ?f0 L 2700 ?f0 2700 ?f2 1350 ?f2 Z N");
     out.xml.addAttribute("draw:type", "striped-right-arrow");
     out.xml.addAttribute("draw:text-areas", "3375 ?f0 ?f5 ?f2");
     setShapeMirroring(o, out);
-    equation(out,"f0","$1 ");
-    equation(out,"f1","$0 ");
-    equation(out,"f2","21600-$1 ");
-    equation(out,"f3","21600-?f1 ");
-    equation(out,"f4","?f3 *?f0 /10800");
-    equation(out,"f5","?f1 +?f4 ");
+    equation(out, "f0", "$1 ");
+    equation(out, "f1", "$0 ");
+    equation(out, "f2", "21600-$1 ");
+    equation(out, "f3", "21600-?f1 ");
+    equation(out, "f4", "?f3 *?f0 /10800");
+    equation(out, "f5", "?f1 +?f4 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -1763,24 +1764,24 @@ void ODrawToOdf::processStripedRightArrow(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processNotchedRightArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processNotchedRightArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 16200<< 5400);
+    processModifiers(o, out, QList<int>() << 16200 << 5400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 ?f1 L ?f0 ?f1 ?f0 0 21600 10800 ?f0 21600 ?f0 ?f2 0 ?f2 ?f5 10800 0 ?f1 Z N");
     out.xml.addAttribute("draw:type", "notched-right-arrow");
     out.xml.addAttribute("draw:text-areas", "0 0 21600 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","21600-$1 ");
-    equation(out,"f3","21600-$0 ");
-    equation(out,"f4","10800-$1 ");
-    equation(out,"f5","?f3 *?f4 /10800");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "21600-$1 ");
+    equation(out, "f3", "21600-$0 ");
+    equation(out, "f4", "10800-$1 ");
+    equation(out, "f5", "?f3 *?f4 /10800");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -1792,8 +1793,8 @@ void ODrawToOdf::processNotchedRightArrow(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processHomePlate(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processHomePlate(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -1804,7 +1805,7 @@ void ODrawToOdf::processHomePlate(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.addAttribute("draw:type", "pentagon-right");
     out.xml.addAttribute("draw:text-areas", "0 0 21600 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
+    equation(out, "f0", "$0 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -1814,8 +1815,8 @@ void ODrawToOdf::processHomePlate(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processChevron(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processChevron(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -1826,8 +1827,8 @@ void ODrawToOdf::processChevron(const MSO::OfficeArtSpContainer& o, Writer& out)
     out.xml.addAttribute("draw:type", "chevron");
     out.xml.addAttribute("draw:text-areas", "0 0 21600 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","21600-?f0 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "21600-?f0 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -1837,24 +1838,24 @@ void ODrawToOdf::processChevron(const MSO::OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processRightArrowCallout(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processRightArrowCallout(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 14400<< 5400<< 18000<< 8100);
+    processModifiers(o, out, QList<int>() << 14400 << 5400 << 18000 << 8100);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L ?f0 0 ?f0 ?f3 ?f2 ?f3 ?f2 ?f1 21600 10800 ?f2 ?f4 ?f2 ?f5 ?f0 ?f5 ?f0 21600 0 21600 Z N");
     out.xml.addAttribute("draw:type", "right-arrow-callout");
     out.xml.addAttribute("draw:text-areas", "0 0 ?f0 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","21600-?f1 ");
-    equation(out,"f5","21600-?f3 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "21600-?f1 ");
+    equation(out, "f5", "21600-?f3 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "$2");
@@ -1876,24 +1877,24 @@ void ODrawToOdf::processRightArrowCallout(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processLeftArrowCallout(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processLeftArrowCallout(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 7200<< 5400<< 3600<< 8100);
+    processModifiers(o, out, QList<int>() << 7200 << 5400 << 3600 << 8100);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M ?f0 0 L 21600 0 21600 21600 ?f0 21600 ?f0 ?f5 ?f2 ?f5 ?f2 ?f4 0 10800 ?f2 ?f1 ?f2 ?f3 ?f0 ?f3 Z N");
     out.xml.addAttribute("draw:type", "left-arrow-callout");
     out.xml.addAttribute("draw:text-areas", "?f0 0 21600 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","21600-?f1 ");
-    equation(out,"f5","21600-?f3 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "21600-?f1 ");
+    equation(out, "f5", "21600-?f3 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "21600");
@@ -1915,24 +1916,24 @@ void ODrawToOdf::processLeftArrowCallout(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processUpArrowCallout(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processUpArrowCallout(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 7200<< 5400<< 3600<< 8100);
+    processModifiers(o, out, QList<int>() << 7200 << 5400 << 3600 << 8100);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 21600 ?f0 L 21600 21600 0 21600 0 ?f0 ?f3 ?f0 ?f3 ?f2 ?f1 ?f2 10800 0 ?f4 ?f2 ?f5 ?f2 ?f5 ?f0 Z N");
     out.xml.addAttribute("draw:type", "up-arrow-callout");
     out.xml.addAttribute("draw:text-areas", "0 ?f0 21600 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","21600-?f1 ");
-    equation(out,"f5","21600-?f3 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "21600-?f1 ");
+    equation(out, "f5", "21600-?f3 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "left $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "$2");
@@ -1954,24 +1955,24 @@ void ODrawToOdf::processUpArrowCallout(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processDownArrowCallout(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processDownArrowCallout(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 14400<< 5400<< 18000<< 8100);
+    processModifiers(o, out, QList<int>() << 14400 << 5400 << 18000 << 8100);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 ?f0 L 0 0 21600 0 21600 ?f0 ?f5 ?f0 ?f5 ?f2 ?f4 ?f2 10800 21600 ?f1 ?f2 ?f3 ?f2 ?f3 ?f0 Z N");
     out.xml.addAttribute("draw:type", "down-arrow-callout");
     out.xml.addAttribute("draw:text-areas", "0 0 21600 ?f0");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","21600-?f1 ");
-    equation(out,"f5","21600-?f3 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "21600-?f1 ");
+    equation(out, "f5", "21600-?f3 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "left $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "0");
@@ -1993,26 +1994,26 @@ void ODrawToOdf::processDownArrowCallout(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processLeftRightArrowCallout(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processLeftRightArrowCallout(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 5400<< 5500<< 2700<< 8100);
+    processModifiers(o, out, QList<int>() << 5400 << 5500 << 2700 << 8100);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M ?f0 0 L ?f4 0 ?f4 ?f3 ?f6 ?f3 ?f6 ?f1 21600 10800 ?f6 ?f5 ?f6 ?f7 ?f4 ?f7 ?f4 21600 ?f0 21600 ?f0 ?f7 ?f2 ?f7 ?f2 ?f5 0 10800 ?f2 ?f1 ?f2 ?f3 ?f0 ?f3 Z N");
     out.xml.addAttribute("draw:type", "left-right-arrow-callout");
     out.xml.addAttribute("draw:text-areas", "?f0 0 ?f4 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","21600-?f0 ");
-    equation(out,"f5","21600-?f1 ");
-    equation(out,"f6","21600-?f2 ");
-    equation(out,"f7","21600-?f3 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "21600-?f0 ");
+    equation(out, "f5", "21600-?f1 ");
+    equation(out, "f6", "21600-?f2 ");
+    equation(out, "f7", "21600-?f3 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -2034,26 +2035,26 @@ void ODrawToOdf::processLeftRightArrowCallout(const MSO::OfficeArtSpContainer& o
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processUpDownArrowCallout(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processUpDownArrowCallout(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 5400<< 5500<< 2700<< 8100);
+    processModifiers(o, out, QList<int>() << 5400 << 5500 << 2700 << 8100);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 ?f0 L 0 ?f4 ?f3 ?f4 ?f3 ?f6 ?f1 ?f6 10800 21600 ?f5 ?f6 ?f7 ?f6 ?f7 ?f4 21600 ?f4 21600 ?f0 ?f7 ?f0 ?f7 ?f2 ?f5 ?f2 10800 0 ?f1 ?f2 ?f3 ?f2 ?f3 ?f0 Z N");
     out.xml.addAttribute("draw:type", "up-down-arrow-callout");
     out.xml.addAttribute("draw:text-areas", "0 ?f0 21600 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","21600-?f0 ");
-    equation(out,"f5","21600-?f1 ");
-    equation(out,"f6","21600-?f2 ");
-    equation(out,"f7","21600-?f3 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "21600-?f0 ");
+    equation(out, "f5", "21600-?f1 ");
+    equation(out, "f6", "21600-?f2 ");
+    equation(out, "f7", "21600-?f3 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "left $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "$2");
@@ -2075,26 +2076,26 @@ void ODrawToOdf::processUpDownArrowCallout(const MSO::OfficeArtSpContainer& o, W
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processQuadArrowCallout(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processQuadArrowCallout(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 5400<< 8100<< 2700<< 9400);
+    processModifiers(o, out, QList<int>() << 5400 << 8100 << 2700 << 9400);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M ?f0 ?f0 L ?f3 ?f0 ?f3 ?f2 ?f1 ?f2 10800 0 ?f5 ?f2 ?f7 ?f2 ?f7 ?f0 ?f4 ?f0 ?f4 ?f3 ?f6 ?f3 ?f6 ?f1 21600 10800 ?f6 ?f5 ?f6 ?f7 ?f4 ?f7 ?f4 ?f4 ?f7 ?f4 ?f7 ?f6 ?f5 ?f6 10800 21600 ?f1 ?f6 ?f3 ?f6 ?f3 ?f4 ?f0 ?f4 ?f0 ?f7 ?f2 ?f7 ?f2 ?f5 0 10800 ?f2 ?f1 ?f2 ?f3 ?f0 ?f3 Z N");
     out.xml.addAttribute("draw:type", "quad-arrow-callout");
     out.xml.addAttribute("draw:text-areas", "?f0 ?f0 ?f4 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","21600-?f0 ");
-    equation(out,"f5","21600-?f1 ");
-    equation(out,"f6","21600-?f2 ");
-    equation(out,"f7","21600-?f3 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "21600-?f0 ");
+    equation(out, "f5", "21600-?f1 ");
+    equation(out, "f6", "21600-?f2 ");
+    equation(out, "f7", "21600-?f3 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "left $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "$2");
@@ -2116,8 +2117,8 @@ void ODrawToOdf::processQuadArrowCallout(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCircularArrow(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCircularArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2125,12 +2126,12 @@ void ODrawToOdf::processCircularArrow(const MSO::OfficeArtSpContainer& o, Writer
     // custom way for processing modifieres as this shape
     // return the AdjustValue, AdjustValue2 16-bit shifted
     // see bug 274684, file mp03_cycle_default.ppt
-    const AdjustValue* val1 = get<AdjustValue>(o);
-    const Adjust2Value* val2 = get<Adjust2Value>(o);
-    const Adjust3Value* val3 = get<Adjust3Value>(o);
+    const AdjustValue *val1 = get<AdjustValue>(o);
+    const Adjust2Value *val2 = get<Adjust2Value>(o);
+    const Adjust3Value *val3 = get<Adjust3Value>(o);
     QString modifiers = QString::number(val1 ? val1->adjustvalue >> 16 : 180) +
-            QString(" %1").arg(val2 ? val2->adjust2value >> 16 : 0) +
-            QString(" %1").arg(val3 ? val3->adjust3value : 5500);
+                        QString(" %1").arg(val2 ? val2->adjust2value >> 16 : 0) +
+                        QString(" %1").arg(val3 ? val3->adjust3value : 5500);
     out.xml.addAttribute("draw:modifiers", modifiers);
 
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
@@ -2138,54 +2139,54 @@ void ODrawToOdf::processCircularArrow(const MSO::OfficeArtSpContainer& o, Writer
     out.xml.addAttribute("draw:type", "circular-arrow");
     out.xml.addAttribute("draw:text-areas", "0 0 21600 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","10800+$2 ");
-    equation(out,"f4","10800*sin($0 *(pi/180))");
-    equation(out,"f5","10800*cos($0 *(pi/180))");
-    equation(out,"f6","10800*sin($1 *(pi/180))");
-    equation(out,"f7","10800*cos($1 *(pi/180))");
-    equation(out,"f8","?f4 +10800");
-    equation(out,"f9","?f5 +10800");
-    equation(out,"f10","?f6 +10800");
-    equation(out,"f11","?f7 +10800");
-    equation(out,"f12","?f3 *sin($0 *(pi/180))");
-    equation(out,"f13","?f3 *cos($0 *(pi/180))");
-    equation(out,"f14","?f3 *sin($1 *(pi/180))");
-    equation(out,"f15","?f3 *cos($1 *(pi/180))");
-    equation(out,"f16","?f12 +10800");
-    equation(out,"f17","?f13 +10800");
-    equation(out,"f18","?f14 +10800");
-    equation(out,"f19","?f15 +10800");
-    equation(out,"f20","21600-?f3 ");
-    equation(out,"f21","13500*sin($1 *(pi/180))");
-    equation(out,"f22","13500*cos($1 *(pi/180))");
-    equation(out,"f23","?f21 +10800");
-    equation(out,"f24","?f22 +10800");
-    equation(out,"f25","$2 -2700");
-    equation(out,"f26","?f25 *sin($1 *(pi/180))");
-    equation(out,"f27","?f25 *cos($1 *(pi/180))");
-    equation(out,"f28","?f26 +10800");
-    equation(out,"f29","?f27 +10800");
-    equation(out,"f30","?f29 -?f24 ");
-    equation(out,"f31","?f29 -?f24 ");
-    equation(out,"f32","?f30 *?f31 ");
-    equation(out,"f33","?f28 -?f23 ");
-    equation(out,"f34","?f28 -?f23 ");
-    equation(out,"f35","?f33 *?f34 ");
-    equation(out,"f36","?f32 +?f35 ");
-    equation(out,"f37","sqrt(?f36 )");
-    equation(out,"f38","$1 +45");
-    equation(out,"f39","?f37 *sin(?f38 *(pi/180))");
-    equation(out,"f40","$1 +45");
-    equation(out,"f41","?f37 *cos(?f40 *(pi/180))");
-    equation(out,"f42","45");
-    equation(out,"f43","?f39 *sin(?f42 *(pi/180))");
-    equation(out,"f44","45");
-    equation(out,"f45","?f41 *sin(?f44 *(pi/180))");
-    equation(out,"f46","?f28 +?f43 ");
-    equation(out,"f47","?f29 +?f45 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "10800+$2 ");
+    equation(out, "f4", "10800*sin($0 *(pi/180))");
+    equation(out, "f5", "10800*cos($0 *(pi/180))");
+    equation(out, "f6", "10800*sin($1 *(pi/180))");
+    equation(out, "f7", "10800*cos($1 *(pi/180))");
+    equation(out, "f8", "?f4 +10800");
+    equation(out, "f9", "?f5 +10800");
+    equation(out, "f10", "?f6 +10800");
+    equation(out, "f11", "?f7 +10800");
+    equation(out, "f12", "?f3 *sin($0 *(pi/180))");
+    equation(out, "f13", "?f3 *cos($0 *(pi/180))");
+    equation(out, "f14", "?f3 *sin($1 *(pi/180))");
+    equation(out, "f15", "?f3 *cos($1 *(pi/180))");
+    equation(out, "f16", "?f12 +10800");
+    equation(out, "f17", "?f13 +10800");
+    equation(out, "f18", "?f14 +10800");
+    equation(out, "f19", "?f15 +10800");
+    equation(out, "f20", "21600-?f3 ");
+    equation(out, "f21", "13500*sin($1 *(pi/180))");
+    equation(out, "f22", "13500*cos($1 *(pi/180))");
+    equation(out, "f23", "?f21 +10800");
+    equation(out, "f24", "?f22 +10800");
+    equation(out, "f25", "$2 -2700");
+    equation(out, "f26", "?f25 *sin($1 *(pi/180))");
+    equation(out, "f27", "?f25 *cos($1 *(pi/180))");
+    equation(out, "f28", "?f26 +10800");
+    equation(out, "f29", "?f27 +10800");
+    equation(out, "f30", "?f29 -?f24 ");
+    equation(out, "f31", "?f29 -?f24 ");
+    equation(out, "f32", "?f30 *?f31 ");
+    equation(out, "f33", "?f28 -?f23 ");
+    equation(out, "f34", "?f28 -?f23 ");
+    equation(out, "f35", "?f33 *?f34 ");
+    equation(out, "f36", "?f32 +?f35 ");
+    equation(out, "f37", "sqrt(?f36 )");
+    equation(out, "f38", "$1 +45");
+    equation(out, "f39", "?f37 *sin(?f38 *(pi/180))");
+    equation(out, "f40", "$1 +45");
+    equation(out, "f41", "?f37 *cos(?f40 *(pi/180))");
+    equation(out, "f42", "45");
+    equation(out, "f43", "?f39 *sin(?f42 *(pi/180))");
+    equation(out, "f44", "45");
+    equation(out, "f45", "?f41 *sin(?f44 *(pi/180))");
+    equation(out, "f46", "?f28 +?f43 ");
+    equation(out, "f47", "?f29 +?f45 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "10800 $0");
     out.xml.addAttribute("draw:handle-radius-range-minimum", "10800");
@@ -2202,8 +2203,8 @@ void ODrawToOdf::processCircularArrow(const MSO::OfficeArtSpContainer& o, Writer
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartProcess(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartProcess(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2217,8 +2218,8 @@ void ODrawToOdf::processFlowChartProcess(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartAlternateProcess(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartAlternateProcess(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2229,20 +2230,20 @@ void ODrawToOdf::processFlowChartAlternateProcess(const MSO::OfficeArtSpContaine
     out.xml.addAttribute("draw:type", "flowchart-alternate-process");
     out.xml.addAttribute("draw:text-areas", "?f4 ?f6 ?f5 ?f7");
     setShapeMirroring(o, out);
-    equation(out,"f0","left+2540");
-    equation(out,"f1","right-2540");
-    equation(out,"f2","top+2540");
-    equation(out,"f3","bottom-2540");
-    equation(out,"f4","left+800");
-    equation(out,"f5","right-800");
-    equation(out,"f6","top+800");
-    equation(out,"f7","bottom-800");
+    equation(out, "f0", "left+2540");
+    equation(out, "f1", "right-2540");
+    equation(out, "f2", "top+2540");
+    equation(out, "f3", "bottom-2540");
+    equation(out, "f4", "left+800");
+    equation(out, "f5", "right-800");
+    equation(out, "f6", "top+800");
+    equation(out, "f7", "bottom-800");
     out.xml.endElement(); // enhanced geometry
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartDecision(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartDecision(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2257,8 +2258,8 @@ void ODrawToOdf::processFlowChartDecision(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartInputOutput(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartInputOutput(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2273,8 +2274,8 @@ void ODrawToOdf::processFlowChartInputOutput(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartPredefinedProcess(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartPredefinedProcess(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2288,8 +2289,8 @@ void ODrawToOdf::processFlowChartPredefinedProcess(const MSO::OfficeArtSpContain
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartInternalStorage(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartInternalStorage(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2303,8 +2304,8 @@ void ODrawToOdf::processFlowChartInternalStorage(const MSO::OfficeArtSpContainer
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartDocument(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartDocument(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2319,8 +2320,8 @@ void ODrawToOdf::processFlowChartDocument(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartMultidocument(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartMultidocument(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2335,8 +2336,8 @@ void ODrawToOdf::processFlowChartMultidocument(const MSO::OfficeArtSpContainer& 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartTerminator(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartTerminator(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2351,8 +2352,8 @@ void ODrawToOdf::processFlowChartTerminator(const MSO::OfficeArtSpContainer& o, 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartPreparation(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartPreparation(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2367,8 +2368,8 @@ void ODrawToOdf::processFlowChartPreparation(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartManualInput(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartManualInput(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2383,8 +2384,8 @@ void ODrawToOdf::processFlowChartManualInput(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartManualOperation(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartManualOperation(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2399,8 +2400,8 @@ void ODrawToOdf::processFlowChartManualOperation(const MSO::OfficeArtSpContainer
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartConnector(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartConnector(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2415,8 +2416,8 @@ void ODrawToOdf::processFlowChartConnector(const MSO::OfficeArtSpContainer& o, W
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartOffpageConnector(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartOffpageConnector(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2431,8 +2432,8 @@ void ODrawToOdf::processFlowChartOffpageConnector(const MSO::OfficeArtSpContaine
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartPunchedCard(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartPunchedCard(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2447,8 +2448,8 @@ void ODrawToOdf::processFlowChartPunchedCard(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartPunchedTape(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartPunchedTape(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2463,8 +2464,8 @@ void ODrawToOdf::processFlowChartPunchedTape(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartSummingJunction(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartSummingJunction(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2479,8 +2480,8 @@ void ODrawToOdf::processFlowChartSummingJunction(const MSO::OfficeArtSpContainer
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartOr(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartOr(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2495,8 +2496,8 @@ void ODrawToOdf::processFlowChartOr(const MSO::OfficeArtSpContainer& o, Writer& 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartCollate(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartCollate(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2511,8 +2512,8 @@ void ODrawToOdf::processFlowChartCollate(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartSort(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartSort(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2526,8 +2527,8 @@ void ODrawToOdf::processFlowChartSort(const MSO::OfficeArtSpContainer& o, Writer
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartExtract(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartExtract(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2542,8 +2543,8 @@ void ODrawToOdf::processFlowChartExtract(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartMerge(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartMerge(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2558,8 +2559,8 @@ void ODrawToOdf::processFlowChartMerge(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartOnlineStorage(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartOnlineStorage(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2574,8 +2575,8 @@ void ODrawToOdf::processFlowChartOnlineStorage(const MSO::OfficeArtSpContainer& 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartDelay(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2590,8 +2591,8 @@ void ODrawToOdf::processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartMagneticTape(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartMagneticTape(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2606,8 +2607,8 @@ void ODrawToOdf::processFlowChartMagneticTape(const MSO::OfficeArtSpContainer& o
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartMagneticDisk(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartMagneticDisk(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2622,8 +2623,8 @@ void ODrawToOdf::processFlowChartMagneticDisk(const MSO::OfficeArtSpContainer& o
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartMagneticDrum(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartMagneticDrum(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2638,8 +2639,8 @@ void ODrawToOdf::processFlowChartMagneticDrum(const MSO::OfficeArtSpContainer& o
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processFlowChartDisplay(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processFlowChartDisplay(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2654,8 +2655,8 @@ void ODrawToOdf::processFlowChartDisplay(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processIrregularSeal1(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processIrregularSeal1(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2670,8 +2671,8 @@ void ODrawToOdf::processIrregularSeal1(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processIrregularSeal2(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processIrregularSeal2(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2686,8 +2687,8 @@ void ODrawToOdf::processIrregularSeal2(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processSeal4(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processSeal4(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2698,11 +2699,11 @@ void ODrawToOdf::processSeal4(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.addAttribute("draw:type", "star4");
     out.xml.addAttribute("draw:text-areas", "?f4 ?f4 ?f3 ?f3");
     setShapeMirroring(o, out);
-    equation(out,"f0","7600");
-    equation(out,"f1","?f0 *$0 /10800");
-    equation(out,"f2","?f0 -?f1 ");
-    equation(out,"f3","10800+?f2 ");
-    equation(out,"f4","10800-?f2 ");
+    equation(out, "f0", "7600");
+    equation(out, "f1", "?f0 *$0 /10800");
+    equation(out, "f2", "?f0 -?f1 ");
+    equation(out, "f3", "10800+?f2 ");
+    equation(out, "f4", "10800-?f2 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 10800");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -2712,8 +2713,8 @@ void ODrawToOdf::processSeal4(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processStar(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processStar(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2727,8 +2728,8 @@ void ODrawToOdf::processStar(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processSeal8(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processSeal8(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2739,107 +2740,107 @@ void ODrawToOdf::processSeal8(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.addAttribute("draw:type", "star8");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","(cos(315*(pi/180))*(?f0 -10800)+sin(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f2","-(sin(315*(pi/180))*(?f0 -10800)-cos(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f3","(cos(135*(pi/180))*(?f0 -10800)+sin(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f4","-(sin(135*(pi/180))*(?f0 -10800)-cos(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f5","(cos(0*(pi/180))*(0-10800)+sin(0*(pi/180))*(10800-10800))+10800");
-    equation(out,"f6","-(sin(0*(pi/180))*(0-10800)-cos(0*(pi/180))*(10800-10800))+10800");
-    equation(out,"f7","(cos(7*(pi/180))*(?f0 -10800)+sin(7*(pi/180))*(10800-10800))+10800");
-    equation(out,"f8","-(sin(7*(pi/180))*(?f0 -10800)-cos(7*(pi/180))*(10800-10800))+10800");
-    equation(out,"f9","(cos(15*(pi/180))*(0-10800)+sin(15*(pi/180))*(10800-10800))+10800");
-    equation(out,"f10","-(sin(15*(pi/180))*(0-10800)-cos(15*(pi/180))*(10800-10800))+10800");
-    equation(out,"f11","(cos(22*(pi/180))*(?f0 -10800)+sin(22*(pi/180))*(10800-10800))+10800");
-    equation(out,"f12","-(sin(22*(pi/180))*(?f0 -10800)-cos(22*(pi/180))*(10800-10800))+10800");
-    equation(out,"f13","(cos(30*(pi/180))*(0-10800)+sin(30*(pi/180))*(10800-10800))+10800");
-    equation(out,"f14","-(sin(30*(pi/180))*(0-10800)-cos(30*(pi/180))*(10800-10800))+10800");
-    equation(out,"f15","(cos(37*(pi/180))*(?f0 -10800)+sin(37*(pi/180))*(10800-10800))+10800");
-    equation(out,"f16","-(sin(37*(pi/180))*(?f0 -10800)-cos(37*(pi/180))*(10800-10800))+10800");
-    equation(out,"f17","(cos(45*(pi/180))*(0-10800)+sin(45*(pi/180))*(10800-10800))+10800");
-    equation(out,"f18","-(sin(45*(pi/180))*(0-10800)-cos(45*(pi/180))*(10800-10800))+10800");
-    equation(out,"f19","(cos(52*(pi/180))*(?f0 -10800)+sin(52*(pi/180))*(10800-10800))+10800");
-    equation(out,"f20","-(sin(52*(pi/180))*(?f0 -10800)-cos(52*(pi/180))*(10800-10800))+10800");
-    equation(out,"f21","(cos(60*(pi/180))*(0-10800)+sin(60*(pi/180))*(10800-10800))+10800");
-    equation(out,"f22","-(sin(60*(pi/180))*(0-10800)-cos(60*(pi/180))*(10800-10800))+10800");
-    equation(out,"f23","(cos(67*(pi/180))*(?f0 -10800)+sin(67*(pi/180))*(10800-10800))+10800");
-    equation(out,"f24","-(sin(67*(pi/180))*(?f0 -10800)-cos(67*(pi/180))*(10800-10800))+10800");
-    equation(out,"f25","(cos(75*(pi/180))*(0-10800)+sin(75*(pi/180))*(10800-10800))+10800");
-    equation(out,"f26","-(sin(75*(pi/180))*(0-10800)-cos(75*(pi/180))*(10800-10800))+10800");
-    equation(out,"f27","(cos(82*(pi/180))*(?f0 -10800)+sin(82*(pi/180))*(10800-10800))+10800");
-    equation(out,"f28","-(sin(82*(pi/180))*(?f0 -10800)-cos(82*(pi/180))*(10800-10800))+10800");
-    equation(out,"f29","(cos(90*(pi/180))*(0-10800)+sin(90*(pi/180))*(10800-10800))+10800");
-    equation(out,"f30","-(sin(90*(pi/180))*(0-10800)-cos(90*(pi/180))*(10800-10800))+10800");
-    equation(out,"f31","(cos(97*(pi/180))*(?f0 -10800)+sin(97*(pi/180))*(10800-10800))+10800");
-    equation(out,"f32","-(sin(97*(pi/180))*(?f0 -10800)-cos(97*(pi/180))*(10800-10800))+10800");
-    equation(out,"f33","(cos(105*(pi/180))*(0-10800)+sin(105*(pi/180))*(10800-10800))+10800");
-    equation(out,"f34","-(sin(105*(pi/180))*(0-10800)-cos(105*(pi/180))*(10800-10800))+10800");
-    equation(out,"f35","(cos(112*(pi/180))*(?f0 -10800)+sin(112*(pi/180))*(10800-10800))+10800");
-    equation(out,"f36","-(sin(112*(pi/180))*(?f0 -10800)-cos(112*(pi/180))*(10800-10800))+10800");
-    equation(out,"f37","(cos(120*(pi/180))*(0-10800)+sin(120*(pi/180))*(10800-10800))+10800");
-    equation(out,"f38","-(sin(120*(pi/180))*(0-10800)-cos(120*(pi/180))*(10800-10800))+10800");
-    equation(out,"f39","(cos(127*(pi/180))*(?f0 -10800)+sin(127*(pi/180))*(10800-10800))+10800");
-    equation(out,"f40","-(sin(127*(pi/180))*(?f0 -10800)-cos(127*(pi/180))*(10800-10800))+10800");
-    equation(out,"f41","(cos(135*(pi/180))*(0-10800)+sin(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f42","-(sin(135*(pi/180))*(0-10800)-cos(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f43","(cos(142*(pi/180))*(?f0 -10800)+sin(142*(pi/180))*(10800-10800))+10800");
-    equation(out,"f44","-(sin(142*(pi/180))*(?f0 -10800)-cos(142*(pi/180))*(10800-10800))+10800");
-    equation(out,"f45","(cos(150*(pi/180))*(0-10800)+sin(150*(pi/180))*(10800-10800))+10800");
-    equation(out,"f46","-(sin(150*(pi/180))*(0-10800)-cos(150*(pi/180))*(10800-10800))+10800");
-    equation(out,"f47","(cos(157*(pi/180))*(?f0 -10800)+sin(157*(pi/180))*(10800-10800))+10800");
-    equation(out,"f48","-(sin(157*(pi/180))*(?f0 -10800)-cos(157*(pi/180))*(10800-10800))+10800");
-    equation(out,"f49","(cos(165*(pi/180))*(0-10800)+sin(165*(pi/180))*(10800-10800))+10800");
-    equation(out,"f50","-(sin(165*(pi/180))*(0-10800)-cos(165*(pi/180))*(10800-10800))+10800");
-    equation(out,"f51","(cos(172*(pi/180))*(?f0 -10800)+sin(172*(pi/180))*(10800-10800))+10800");
-    equation(out,"f52","-(sin(172*(pi/180))*(?f0 -10800)-cos(172*(pi/180))*(10800-10800))+10800");
-    equation(out,"f53","(cos(180*(pi/180))*(0-10800)+sin(180*(pi/180))*(10800-10800))+10800");
-    equation(out,"f54","-(sin(180*(pi/180))*(0-10800)-cos(180*(pi/180))*(10800-10800))+10800");
-    equation(out,"f55","(cos(187*(pi/180))*(?f0 -10800)+sin(187*(pi/180))*(10800-10800))+10800");
-    equation(out,"f56","-(sin(187*(pi/180))*(?f0 -10800)-cos(187*(pi/180))*(10800-10800))+10800");
-    equation(out,"f57","(cos(195*(pi/180))*(0-10800)+sin(195*(pi/180))*(10800-10800))+10800");
-    equation(out,"f58","-(sin(195*(pi/180))*(0-10800)-cos(195*(pi/180))*(10800-10800))+10800");
-    equation(out,"f59","(cos(202*(pi/180))*(?f0 -10800)+sin(202*(pi/180))*(10800-10800))+10800");
-    equation(out,"f60","-(sin(202*(pi/180))*(?f0 -10800)-cos(202*(pi/180))*(10800-10800))+10800");
-    equation(out,"f61","(cos(210*(pi/180))*(0-10800)+sin(210*(pi/180))*(10800-10800))+10800");
-    equation(out,"f62","-(sin(210*(pi/180))*(0-10800)-cos(210*(pi/180))*(10800-10800))+10800");
-    equation(out,"f63","(cos(217*(pi/180))*(?f0 -10800)+sin(217*(pi/180))*(10800-10800))+10800");
-    equation(out,"f64","-(sin(217*(pi/180))*(?f0 -10800)-cos(217*(pi/180))*(10800-10800))+10800");
-    equation(out,"f65","(cos(225*(pi/180))*(0-10800)+sin(225*(pi/180))*(10800-10800))+10800");
-    equation(out,"f66","-(sin(225*(pi/180))*(0-10800)-cos(225*(pi/180))*(10800-10800))+10800");
-    equation(out,"f67","(cos(232*(pi/180))*(?f0 -10800)+sin(232*(pi/180))*(10800-10800))+10800");
-    equation(out,"f68","-(sin(232*(pi/180))*(?f0 -10800)-cos(232*(pi/180))*(10800-10800))+10800");
-    equation(out,"f69","(cos(240*(pi/180))*(0-10800)+sin(240*(pi/180))*(10800-10800))+10800");
-    equation(out,"f70","-(sin(240*(pi/180))*(0-10800)-cos(240*(pi/180))*(10800-10800))+10800");
-    equation(out,"f71","(cos(247*(pi/180))*(?f0 -10800)+sin(247*(pi/180))*(10800-10800))+10800");
-    equation(out,"f72","-(sin(247*(pi/180))*(?f0 -10800)-cos(247*(pi/180))*(10800-10800))+10800");
-    equation(out,"f73","(cos(255*(pi/180))*(0-10800)+sin(255*(pi/180))*(10800-10800))+10800");
-    equation(out,"f74","-(sin(255*(pi/180))*(0-10800)-cos(255*(pi/180))*(10800-10800))+10800");
-    equation(out,"f75","(cos(262*(pi/180))*(?f0 -10800)+sin(262*(pi/180))*(10800-10800))+10800");
-    equation(out,"f76","-(sin(262*(pi/180))*(?f0 -10800)-cos(262*(pi/180))*(10800-10800))+10800");
-    equation(out,"f77","(cos(270*(pi/180))*(0-10800)+sin(270*(pi/180))*(10800-10800))+10800");
-    equation(out,"f78","-(sin(270*(pi/180))*(0-10800)-cos(270*(pi/180))*(10800-10800))+10800");
-    equation(out,"f79","(cos(277*(pi/180))*(?f0 -10800)+sin(277*(pi/180))*(10800-10800))+10800");
-    equation(out,"f80","-(sin(277*(pi/180))*(?f0 -10800)-cos(277*(pi/180))*(10800-10800))+10800");
-    equation(out,"f81","(cos(285*(pi/180))*(0-10800)+sin(285*(pi/180))*(10800-10800))+10800");
-    equation(out,"f82","-(sin(285*(pi/180))*(0-10800)-cos(285*(pi/180))*(10800-10800))+10800");
-    equation(out,"f83","(cos(292*(pi/180))*(?f0 -10800)+sin(292*(pi/180))*(10800-10800))+10800");
-    equation(out,"f84","-(sin(292*(pi/180))*(?f0 -10800)-cos(292*(pi/180))*(10800-10800))+10800");
-    equation(out,"f85","(cos(300*(pi/180))*(0-10800)+sin(300*(pi/180))*(10800-10800))+10800");
-    equation(out,"f86","-(sin(300*(pi/180))*(0-10800)-cos(300*(pi/180))*(10800-10800))+10800");
-    equation(out,"f87","(cos(307*(pi/180))*(?f0 -10800)+sin(307*(pi/180))*(10800-10800))+10800");
-    equation(out,"f88","-(sin(307*(pi/180))*(?f0 -10800)-cos(307*(pi/180))*(10800-10800))+10800");
-    equation(out,"f89","(cos(315*(pi/180))*(0-10800)+sin(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f90","-(sin(315*(pi/180))*(0-10800)-cos(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f91","(cos(322*(pi/180))*(?f0 -10800)+sin(322*(pi/180))*(10800-10800))+10800");
-    equation(out,"f92","-(sin(322*(pi/180))*(?f0 -10800)-cos(322*(pi/180))*(10800-10800))+10800");
-    equation(out,"f93","(cos(330*(pi/180))*(0-10800)+sin(330*(pi/180))*(10800-10800))+10800");
-    equation(out,"f94","-(sin(330*(pi/180))*(0-10800)-cos(330*(pi/180))*(10800-10800))+10800");
-    equation(out,"f95","(cos(337*(pi/180))*(?f0 -10800)+sin(337*(pi/180))*(10800-10800))+10800");
-    equation(out,"f96","-(sin(337*(pi/180))*(?f0 -10800)-cos(337*(pi/180))*(10800-10800))+10800");
-    equation(out,"f97","(cos(345*(pi/180))*(0-10800)+sin(345*(pi/180))*(10800-10800))+10800");
-    equation(out,"f98","-(sin(345*(pi/180))*(0-10800)-cos(345*(pi/180))*(10800-10800))+10800");
-    equation(out,"f99","(cos(352*(pi/180))*(?f0 -10800)+sin(352*(pi/180))*(10800-10800))+10800");
-    equation(out,"f100","-(sin(352*(pi/180))*(?f0 -10800)-cos(352*(pi/180))*(10800-10800))+10800");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "(cos(315*(pi/180))*(?f0 -10800)+sin(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f2", "-(sin(315*(pi/180))*(?f0 -10800)-cos(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f3", "(cos(135*(pi/180))*(?f0 -10800)+sin(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f4", "-(sin(135*(pi/180))*(?f0 -10800)-cos(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f5", "(cos(0*(pi/180))*(0-10800)+sin(0*(pi/180))*(10800-10800))+10800");
+    equation(out, "f6", "-(sin(0*(pi/180))*(0-10800)-cos(0*(pi/180))*(10800-10800))+10800");
+    equation(out, "f7", "(cos(7*(pi/180))*(?f0 -10800)+sin(7*(pi/180))*(10800-10800))+10800");
+    equation(out, "f8", "-(sin(7*(pi/180))*(?f0 -10800)-cos(7*(pi/180))*(10800-10800))+10800");
+    equation(out, "f9", "(cos(15*(pi/180))*(0-10800)+sin(15*(pi/180))*(10800-10800))+10800");
+    equation(out, "f10", "-(sin(15*(pi/180))*(0-10800)-cos(15*(pi/180))*(10800-10800))+10800");
+    equation(out, "f11", "(cos(22*(pi/180))*(?f0 -10800)+sin(22*(pi/180))*(10800-10800))+10800");
+    equation(out, "f12", "-(sin(22*(pi/180))*(?f0 -10800)-cos(22*(pi/180))*(10800-10800))+10800");
+    equation(out, "f13", "(cos(30*(pi/180))*(0-10800)+sin(30*(pi/180))*(10800-10800))+10800");
+    equation(out, "f14", "-(sin(30*(pi/180))*(0-10800)-cos(30*(pi/180))*(10800-10800))+10800");
+    equation(out, "f15", "(cos(37*(pi/180))*(?f0 -10800)+sin(37*(pi/180))*(10800-10800))+10800");
+    equation(out, "f16", "-(sin(37*(pi/180))*(?f0 -10800)-cos(37*(pi/180))*(10800-10800))+10800");
+    equation(out, "f17", "(cos(45*(pi/180))*(0-10800)+sin(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f18", "-(sin(45*(pi/180))*(0-10800)-cos(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f19", "(cos(52*(pi/180))*(?f0 -10800)+sin(52*(pi/180))*(10800-10800))+10800");
+    equation(out, "f20", "-(sin(52*(pi/180))*(?f0 -10800)-cos(52*(pi/180))*(10800-10800))+10800");
+    equation(out, "f21", "(cos(60*(pi/180))*(0-10800)+sin(60*(pi/180))*(10800-10800))+10800");
+    equation(out, "f22", "-(sin(60*(pi/180))*(0-10800)-cos(60*(pi/180))*(10800-10800))+10800");
+    equation(out, "f23", "(cos(67*(pi/180))*(?f0 -10800)+sin(67*(pi/180))*(10800-10800))+10800");
+    equation(out, "f24", "-(sin(67*(pi/180))*(?f0 -10800)-cos(67*(pi/180))*(10800-10800))+10800");
+    equation(out, "f25", "(cos(75*(pi/180))*(0-10800)+sin(75*(pi/180))*(10800-10800))+10800");
+    equation(out, "f26", "-(sin(75*(pi/180))*(0-10800)-cos(75*(pi/180))*(10800-10800))+10800");
+    equation(out, "f27", "(cos(82*(pi/180))*(?f0 -10800)+sin(82*(pi/180))*(10800-10800))+10800");
+    equation(out, "f28", "-(sin(82*(pi/180))*(?f0 -10800)-cos(82*(pi/180))*(10800-10800))+10800");
+    equation(out, "f29", "(cos(90*(pi/180))*(0-10800)+sin(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f30", "-(sin(90*(pi/180))*(0-10800)-cos(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f31", "(cos(97*(pi/180))*(?f0 -10800)+sin(97*(pi/180))*(10800-10800))+10800");
+    equation(out, "f32", "-(sin(97*(pi/180))*(?f0 -10800)-cos(97*(pi/180))*(10800-10800))+10800");
+    equation(out, "f33", "(cos(105*(pi/180))*(0-10800)+sin(105*(pi/180))*(10800-10800))+10800");
+    equation(out, "f34", "-(sin(105*(pi/180))*(0-10800)-cos(105*(pi/180))*(10800-10800))+10800");
+    equation(out, "f35", "(cos(112*(pi/180))*(?f0 -10800)+sin(112*(pi/180))*(10800-10800))+10800");
+    equation(out, "f36", "-(sin(112*(pi/180))*(?f0 -10800)-cos(112*(pi/180))*(10800-10800))+10800");
+    equation(out, "f37", "(cos(120*(pi/180))*(0-10800)+sin(120*(pi/180))*(10800-10800))+10800");
+    equation(out, "f38", "-(sin(120*(pi/180))*(0-10800)-cos(120*(pi/180))*(10800-10800))+10800");
+    equation(out, "f39", "(cos(127*(pi/180))*(?f0 -10800)+sin(127*(pi/180))*(10800-10800))+10800");
+    equation(out, "f40", "-(sin(127*(pi/180))*(?f0 -10800)-cos(127*(pi/180))*(10800-10800))+10800");
+    equation(out, "f41", "(cos(135*(pi/180))*(0-10800)+sin(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f42", "-(sin(135*(pi/180))*(0-10800)-cos(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f43", "(cos(142*(pi/180))*(?f0 -10800)+sin(142*(pi/180))*(10800-10800))+10800");
+    equation(out, "f44", "-(sin(142*(pi/180))*(?f0 -10800)-cos(142*(pi/180))*(10800-10800))+10800");
+    equation(out, "f45", "(cos(150*(pi/180))*(0-10800)+sin(150*(pi/180))*(10800-10800))+10800");
+    equation(out, "f46", "-(sin(150*(pi/180))*(0-10800)-cos(150*(pi/180))*(10800-10800))+10800");
+    equation(out, "f47", "(cos(157*(pi/180))*(?f0 -10800)+sin(157*(pi/180))*(10800-10800))+10800");
+    equation(out, "f48", "-(sin(157*(pi/180))*(?f0 -10800)-cos(157*(pi/180))*(10800-10800))+10800");
+    equation(out, "f49", "(cos(165*(pi/180))*(0-10800)+sin(165*(pi/180))*(10800-10800))+10800");
+    equation(out, "f50", "-(sin(165*(pi/180))*(0-10800)-cos(165*(pi/180))*(10800-10800))+10800");
+    equation(out, "f51", "(cos(172*(pi/180))*(?f0 -10800)+sin(172*(pi/180))*(10800-10800))+10800");
+    equation(out, "f52", "-(sin(172*(pi/180))*(?f0 -10800)-cos(172*(pi/180))*(10800-10800))+10800");
+    equation(out, "f53", "(cos(180*(pi/180))*(0-10800)+sin(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f54", "-(sin(180*(pi/180))*(0-10800)-cos(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f55", "(cos(187*(pi/180))*(?f0 -10800)+sin(187*(pi/180))*(10800-10800))+10800");
+    equation(out, "f56", "-(sin(187*(pi/180))*(?f0 -10800)-cos(187*(pi/180))*(10800-10800))+10800");
+    equation(out, "f57", "(cos(195*(pi/180))*(0-10800)+sin(195*(pi/180))*(10800-10800))+10800");
+    equation(out, "f58", "-(sin(195*(pi/180))*(0-10800)-cos(195*(pi/180))*(10800-10800))+10800");
+    equation(out, "f59", "(cos(202*(pi/180))*(?f0 -10800)+sin(202*(pi/180))*(10800-10800))+10800");
+    equation(out, "f60", "-(sin(202*(pi/180))*(?f0 -10800)-cos(202*(pi/180))*(10800-10800))+10800");
+    equation(out, "f61", "(cos(210*(pi/180))*(0-10800)+sin(210*(pi/180))*(10800-10800))+10800");
+    equation(out, "f62", "-(sin(210*(pi/180))*(0-10800)-cos(210*(pi/180))*(10800-10800))+10800");
+    equation(out, "f63", "(cos(217*(pi/180))*(?f0 -10800)+sin(217*(pi/180))*(10800-10800))+10800");
+    equation(out, "f64", "-(sin(217*(pi/180))*(?f0 -10800)-cos(217*(pi/180))*(10800-10800))+10800");
+    equation(out, "f65", "(cos(225*(pi/180))*(0-10800)+sin(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f66", "-(sin(225*(pi/180))*(0-10800)-cos(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f67", "(cos(232*(pi/180))*(?f0 -10800)+sin(232*(pi/180))*(10800-10800))+10800");
+    equation(out, "f68", "-(sin(232*(pi/180))*(?f0 -10800)-cos(232*(pi/180))*(10800-10800))+10800");
+    equation(out, "f69", "(cos(240*(pi/180))*(0-10800)+sin(240*(pi/180))*(10800-10800))+10800");
+    equation(out, "f70", "-(sin(240*(pi/180))*(0-10800)-cos(240*(pi/180))*(10800-10800))+10800");
+    equation(out, "f71", "(cos(247*(pi/180))*(?f0 -10800)+sin(247*(pi/180))*(10800-10800))+10800");
+    equation(out, "f72", "-(sin(247*(pi/180))*(?f0 -10800)-cos(247*(pi/180))*(10800-10800))+10800");
+    equation(out, "f73", "(cos(255*(pi/180))*(0-10800)+sin(255*(pi/180))*(10800-10800))+10800");
+    equation(out, "f74", "-(sin(255*(pi/180))*(0-10800)-cos(255*(pi/180))*(10800-10800))+10800");
+    equation(out, "f75", "(cos(262*(pi/180))*(?f0 -10800)+sin(262*(pi/180))*(10800-10800))+10800");
+    equation(out, "f76", "-(sin(262*(pi/180))*(?f0 -10800)-cos(262*(pi/180))*(10800-10800))+10800");
+    equation(out, "f77", "(cos(270*(pi/180))*(0-10800)+sin(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f78", "-(sin(270*(pi/180))*(0-10800)-cos(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f79", "(cos(277*(pi/180))*(?f0 -10800)+sin(277*(pi/180))*(10800-10800))+10800");
+    equation(out, "f80", "-(sin(277*(pi/180))*(?f0 -10800)-cos(277*(pi/180))*(10800-10800))+10800");
+    equation(out, "f81", "(cos(285*(pi/180))*(0-10800)+sin(285*(pi/180))*(10800-10800))+10800");
+    equation(out, "f82", "-(sin(285*(pi/180))*(0-10800)-cos(285*(pi/180))*(10800-10800))+10800");
+    equation(out, "f83", "(cos(292*(pi/180))*(?f0 -10800)+sin(292*(pi/180))*(10800-10800))+10800");
+    equation(out, "f84", "-(sin(292*(pi/180))*(?f0 -10800)-cos(292*(pi/180))*(10800-10800))+10800");
+    equation(out, "f85", "(cos(300*(pi/180))*(0-10800)+sin(300*(pi/180))*(10800-10800))+10800");
+    equation(out, "f86", "-(sin(300*(pi/180))*(0-10800)-cos(300*(pi/180))*(10800-10800))+10800");
+    equation(out, "f87", "(cos(307*(pi/180))*(?f0 -10800)+sin(307*(pi/180))*(10800-10800))+10800");
+    equation(out, "f88", "-(sin(307*(pi/180))*(?f0 -10800)-cos(307*(pi/180))*(10800-10800))+10800");
+    equation(out, "f89", "(cos(315*(pi/180))*(0-10800)+sin(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f90", "-(sin(315*(pi/180))*(0-10800)-cos(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f91", "(cos(322*(pi/180))*(?f0 -10800)+sin(322*(pi/180))*(10800-10800))+10800");
+    equation(out, "f92", "-(sin(322*(pi/180))*(?f0 -10800)-cos(322*(pi/180))*(10800-10800))+10800");
+    equation(out, "f93", "(cos(330*(pi/180))*(0-10800)+sin(330*(pi/180))*(10800-10800))+10800");
+    equation(out, "f94", "-(sin(330*(pi/180))*(0-10800)-cos(330*(pi/180))*(10800-10800))+10800");
+    equation(out, "f95", "(cos(337*(pi/180))*(?f0 -10800)+sin(337*(pi/180))*(10800-10800))+10800");
+    equation(out, "f96", "-(sin(337*(pi/180))*(?f0 -10800)-cos(337*(pi/180))*(10800-10800))+10800");
+    equation(out, "f97", "(cos(345*(pi/180))*(0-10800)+sin(345*(pi/180))*(10800-10800))+10800");
+    equation(out, "f98", "-(sin(345*(pi/180))*(0-10800)-cos(345*(pi/180))*(10800-10800))+10800");
+    equation(out, "f99", "(cos(352*(pi/180))*(?f0 -10800)+sin(352*(pi/180))*(10800-10800))+10800");
+    equation(out, "f100", "-(sin(352*(pi/180))*(?f0 -10800)-cos(352*(pi/180))*(10800-10800))+10800");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 10800");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -2849,8 +2850,8 @@ void ODrawToOdf::processSeal8(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processSeal16(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processSeal16(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2861,75 +2862,75 @@ void ODrawToOdf::processSeal16(const MSO::OfficeArtSpContainer& o, Writer& out) 
     out.xml.addAttribute("draw:type", "mso-spt59");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","(cos(315*(pi/180))*(?f0 -10800)+sin(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f2","-(sin(315*(pi/180))*(?f0 -10800)-cos(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f3","(cos(135*(pi/180))*(?f0 -10800)+sin(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f4","-(sin(135*(pi/180))*(?f0 -10800)-cos(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f5","(cos(0*(pi/180))*(0-10800)+sin(0*(pi/180))*(10800-10800))+10800");
-    equation(out,"f6","-(sin(0*(pi/180))*(0-10800)-cos(0*(pi/180))*(10800-10800))+10800");
-    equation(out,"f7","(cos(11*(pi/180))*(?f0 -10800)+sin(11*(pi/180))*(10800-10800))+10800");
-    equation(out,"f8","-(sin(11*(pi/180))*(?f0 -10800)-cos(11*(pi/180))*(10800-10800))+10800");
-    equation(out,"f9","(cos(22*(pi/180))*(0-10800)+sin(22*(pi/180))*(10800-10800))+10800");
-    equation(out,"f10","-(sin(22*(pi/180))*(0-10800)-cos(22*(pi/180))*(10800-10800))+10800");
-    equation(out,"f11","(cos(33*(pi/180))*(?f0 -10800)+sin(33*(pi/180))*(10800-10800))+10800");
-    equation(out,"f12","-(sin(33*(pi/180))*(?f0 -10800)-cos(33*(pi/180))*(10800-10800))+10800");
-    equation(out,"f13","(cos(45*(pi/180))*(0-10800)+sin(45*(pi/180))*(10800-10800))+10800");
-    equation(out,"f14","-(sin(45*(pi/180))*(0-10800)-cos(45*(pi/180))*(10800-10800))+10800");
-    equation(out,"f15","(cos(56*(pi/180))*(?f0 -10800)+sin(56*(pi/180))*(10800-10800))+10800");
-    equation(out,"f16","-(sin(56*(pi/180))*(?f0 -10800)-cos(56*(pi/180))*(10800-10800))+10800");
-    equation(out,"f17","(cos(67*(pi/180))*(0-10800)+sin(67*(pi/180))*(10800-10800))+10800");
-    equation(out,"f18","-(sin(67*(pi/180))*(0-10800)-cos(67*(pi/180))*(10800-10800))+10800");
-    equation(out,"f19","(cos(78*(pi/180))*(?f0 -10800)+sin(78*(pi/180))*(10800-10800))+10800");
-    equation(out,"f20","-(sin(78*(pi/180))*(?f0 -10800)-cos(78*(pi/180))*(10800-10800))+10800");
-    equation(out,"f21","(cos(90*(pi/180))*(0-10800)+sin(90*(pi/180))*(10800-10800))+10800");
-    equation(out,"f22","-(sin(90*(pi/180))*(0-10800)-cos(90*(pi/180))*(10800-10800))+10800");
-    equation(out,"f23","(cos(101*(pi/180))*(?f0 -10800)+sin(101*(pi/180))*(10800-10800))+10800");
-    equation(out,"f24","-(sin(101*(pi/180))*(?f0 -10800)-cos(101*(pi/180))*(10800-10800))+10800");
-    equation(out,"f25","(cos(112*(pi/180))*(0-10800)+sin(112*(pi/180))*(10800-10800))+10800");
-    equation(out,"f26","-(sin(112*(pi/180))*(0-10800)-cos(112*(pi/180))*(10800-10800))+10800");
-    equation(out,"f27","(cos(123*(pi/180))*(?f0 -10800)+sin(123*(pi/180))*(10800-10800))+10800");
-    equation(out,"f28","-(sin(123*(pi/180))*(?f0 -10800)-cos(123*(pi/180))*(10800-10800))+10800");
-    equation(out,"f29","(cos(135*(pi/180))*(0-10800)+sin(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f30","-(sin(135*(pi/180))*(0-10800)-cos(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f31","(cos(146*(pi/180))*(?f0 -10800)+sin(146*(pi/180))*(10800-10800))+10800");
-    equation(out,"f32","-(sin(146*(pi/180))*(?f0 -10800)-cos(146*(pi/180))*(10800-10800))+10800");
-    equation(out,"f33","(cos(157*(pi/180))*(0-10800)+sin(157*(pi/180))*(10800-10800))+10800");
-    equation(out,"f34","-(sin(157*(pi/180))*(0-10800)-cos(157*(pi/180))*(10800-10800))+10800");
-    equation(out,"f35","(cos(168*(pi/180))*(?f0 -10800)+sin(168*(pi/180))*(10800-10800))+10800");
-    equation(out,"f36","-(sin(168*(pi/180))*(?f0 -10800)-cos(168*(pi/180))*(10800-10800))+10800");
-    equation(out,"f37","(cos(180*(pi/180))*(0-10800)+sin(180*(pi/180))*(10800-10800))+10800");
-    equation(out,"f38","-(sin(180*(pi/180))*(0-10800)-cos(180*(pi/180))*(10800-10800))+10800");
-    equation(out,"f39","(cos(191*(pi/180))*(?f0 -10800)+sin(191*(pi/180))*(10800-10800))+10800");
-    equation(out,"f40","-(sin(191*(pi/180))*(?f0 -10800)-cos(191*(pi/180))*(10800-10800))+10800");
-    equation(out,"f41","(cos(202*(pi/180))*(0-10800)+sin(202*(pi/180))*(10800-10800))+10800");
-    equation(out,"f42","-(sin(202*(pi/180))*(0-10800)-cos(202*(pi/180))*(10800-10800))+10800");
-    equation(out,"f43","(cos(213*(pi/180))*(?f0 -10800)+sin(213*(pi/180))*(10800-10800))+10800");
-    equation(out,"f44","-(sin(213*(pi/180))*(?f0 -10800)-cos(213*(pi/180))*(10800-10800))+10800");
-    equation(out,"f45","(cos(225*(pi/180))*(0-10800)+sin(225*(pi/180))*(10800-10800))+10800");
-    equation(out,"f46","-(sin(225*(pi/180))*(0-10800)-cos(225*(pi/180))*(10800-10800))+10800");
-    equation(out,"f47","(cos(236*(pi/180))*(?f0 -10800)+sin(236*(pi/180))*(10800-10800))+10800");
-    equation(out,"f48","-(sin(236*(pi/180))*(?f0 -10800)-cos(236*(pi/180))*(10800-10800))+10800");
-    equation(out,"f49","(cos(247*(pi/180))*(0-10800)+sin(247*(pi/180))*(10800-10800))+10800");
-    equation(out,"f50","-(sin(247*(pi/180))*(0-10800)-cos(247*(pi/180))*(10800-10800))+10800");
-    equation(out,"f51","(cos(258*(pi/180))*(?f0 -10800)+sin(258*(pi/180))*(10800-10800))+10800");
-    equation(out,"f52","-(sin(258*(pi/180))*(?f0 -10800)-cos(258*(pi/180))*(10800-10800))+10800");
-    equation(out,"f53","(cos(270*(pi/180))*(0-10800)+sin(270*(pi/180))*(10800-10800))+10800");
-    equation(out,"f54","-(sin(270*(pi/180))*(0-10800)-cos(270*(pi/180))*(10800-10800))+10800");
-    equation(out,"f55","(cos(281*(pi/180))*(?f0 -10800)+sin(281*(pi/180))*(10800-10800))+10800");
-    equation(out,"f56","-(sin(281*(pi/180))*(?f0 -10800)-cos(281*(pi/180))*(10800-10800))+10800");
-    equation(out,"f57","(cos(292*(pi/180))*(0-10800)+sin(292*(pi/180))*(10800-10800))+10800");
-    equation(out,"f58","-(sin(292*(pi/180))*(0-10800)-cos(292*(pi/180))*(10800-10800))+10800");
-    equation(out,"f59","(cos(303*(pi/180))*(?f0 -10800)+sin(303*(pi/180))*(10800-10800))+10800");
-    equation(out,"f60","-(sin(303*(pi/180))*(?f0 -10800)-cos(303*(pi/180))*(10800-10800))+10800");
-    equation(out,"f61","(cos(315*(pi/180))*(0-10800)+sin(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f62","-(sin(315*(pi/180))*(0-10800)-cos(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f63","(cos(326*(pi/180))*(?f0 -10800)+sin(326*(pi/180))*(10800-10800))+10800");
-    equation(out,"f64","-(sin(326*(pi/180))*(?f0 -10800)-cos(326*(pi/180))*(10800-10800))+10800");
-    equation(out,"f65","(cos(337*(pi/180))*(0-10800)+sin(337*(pi/180))*(10800-10800))+10800");
-    equation(out,"f66","-(sin(337*(pi/180))*(0-10800)-cos(337*(pi/180))*(10800-10800))+10800");
-    equation(out,"f67","(cos(348*(pi/180))*(?f0 -10800)+sin(348*(pi/180))*(10800-10800))+10800");
-    equation(out,"f68","-(sin(348*(pi/180))*(?f0 -10800)-cos(348*(pi/180))*(10800-10800))+10800");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "(cos(315*(pi/180))*(?f0 -10800)+sin(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f2", "-(sin(315*(pi/180))*(?f0 -10800)-cos(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f3", "(cos(135*(pi/180))*(?f0 -10800)+sin(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f4", "-(sin(135*(pi/180))*(?f0 -10800)-cos(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f5", "(cos(0*(pi/180))*(0-10800)+sin(0*(pi/180))*(10800-10800))+10800");
+    equation(out, "f6", "-(sin(0*(pi/180))*(0-10800)-cos(0*(pi/180))*(10800-10800))+10800");
+    equation(out, "f7", "(cos(11*(pi/180))*(?f0 -10800)+sin(11*(pi/180))*(10800-10800))+10800");
+    equation(out, "f8", "-(sin(11*(pi/180))*(?f0 -10800)-cos(11*(pi/180))*(10800-10800))+10800");
+    equation(out, "f9", "(cos(22*(pi/180))*(0-10800)+sin(22*(pi/180))*(10800-10800))+10800");
+    equation(out, "f10", "-(sin(22*(pi/180))*(0-10800)-cos(22*(pi/180))*(10800-10800))+10800");
+    equation(out, "f11", "(cos(33*(pi/180))*(?f0 -10800)+sin(33*(pi/180))*(10800-10800))+10800");
+    equation(out, "f12", "-(sin(33*(pi/180))*(?f0 -10800)-cos(33*(pi/180))*(10800-10800))+10800");
+    equation(out, "f13", "(cos(45*(pi/180))*(0-10800)+sin(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f14", "-(sin(45*(pi/180))*(0-10800)-cos(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f15", "(cos(56*(pi/180))*(?f0 -10800)+sin(56*(pi/180))*(10800-10800))+10800");
+    equation(out, "f16", "-(sin(56*(pi/180))*(?f0 -10800)-cos(56*(pi/180))*(10800-10800))+10800");
+    equation(out, "f17", "(cos(67*(pi/180))*(0-10800)+sin(67*(pi/180))*(10800-10800))+10800");
+    equation(out, "f18", "-(sin(67*(pi/180))*(0-10800)-cos(67*(pi/180))*(10800-10800))+10800");
+    equation(out, "f19", "(cos(78*(pi/180))*(?f0 -10800)+sin(78*(pi/180))*(10800-10800))+10800");
+    equation(out, "f20", "-(sin(78*(pi/180))*(?f0 -10800)-cos(78*(pi/180))*(10800-10800))+10800");
+    equation(out, "f21", "(cos(90*(pi/180))*(0-10800)+sin(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f22", "-(sin(90*(pi/180))*(0-10800)-cos(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f23", "(cos(101*(pi/180))*(?f0 -10800)+sin(101*(pi/180))*(10800-10800))+10800");
+    equation(out, "f24", "-(sin(101*(pi/180))*(?f0 -10800)-cos(101*(pi/180))*(10800-10800))+10800");
+    equation(out, "f25", "(cos(112*(pi/180))*(0-10800)+sin(112*(pi/180))*(10800-10800))+10800");
+    equation(out, "f26", "-(sin(112*(pi/180))*(0-10800)-cos(112*(pi/180))*(10800-10800))+10800");
+    equation(out, "f27", "(cos(123*(pi/180))*(?f0 -10800)+sin(123*(pi/180))*(10800-10800))+10800");
+    equation(out, "f28", "-(sin(123*(pi/180))*(?f0 -10800)-cos(123*(pi/180))*(10800-10800))+10800");
+    equation(out, "f29", "(cos(135*(pi/180))*(0-10800)+sin(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f30", "-(sin(135*(pi/180))*(0-10800)-cos(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f31", "(cos(146*(pi/180))*(?f0 -10800)+sin(146*(pi/180))*(10800-10800))+10800");
+    equation(out, "f32", "-(sin(146*(pi/180))*(?f0 -10800)-cos(146*(pi/180))*(10800-10800))+10800");
+    equation(out, "f33", "(cos(157*(pi/180))*(0-10800)+sin(157*(pi/180))*(10800-10800))+10800");
+    equation(out, "f34", "-(sin(157*(pi/180))*(0-10800)-cos(157*(pi/180))*(10800-10800))+10800");
+    equation(out, "f35", "(cos(168*(pi/180))*(?f0 -10800)+sin(168*(pi/180))*(10800-10800))+10800");
+    equation(out, "f36", "-(sin(168*(pi/180))*(?f0 -10800)-cos(168*(pi/180))*(10800-10800))+10800");
+    equation(out, "f37", "(cos(180*(pi/180))*(0-10800)+sin(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f38", "-(sin(180*(pi/180))*(0-10800)-cos(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f39", "(cos(191*(pi/180))*(?f0 -10800)+sin(191*(pi/180))*(10800-10800))+10800");
+    equation(out, "f40", "-(sin(191*(pi/180))*(?f0 -10800)-cos(191*(pi/180))*(10800-10800))+10800");
+    equation(out, "f41", "(cos(202*(pi/180))*(0-10800)+sin(202*(pi/180))*(10800-10800))+10800");
+    equation(out, "f42", "-(sin(202*(pi/180))*(0-10800)-cos(202*(pi/180))*(10800-10800))+10800");
+    equation(out, "f43", "(cos(213*(pi/180))*(?f0 -10800)+sin(213*(pi/180))*(10800-10800))+10800");
+    equation(out, "f44", "-(sin(213*(pi/180))*(?f0 -10800)-cos(213*(pi/180))*(10800-10800))+10800");
+    equation(out, "f45", "(cos(225*(pi/180))*(0-10800)+sin(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f46", "-(sin(225*(pi/180))*(0-10800)-cos(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f47", "(cos(236*(pi/180))*(?f0 -10800)+sin(236*(pi/180))*(10800-10800))+10800");
+    equation(out, "f48", "-(sin(236*(pi/180))*(?f0 -10800)-cos(236*(pi/180))*(10800-10800))+10800");
+    equation(out, "f49", "(cos(247*(pi/180))*(0-10800)+sin(247*(pi/180))*(10800-10800))+10800");
+    equation(out, "f50", "-(sin(247*(pi/180))*(0-10800)-cos(247*(pi/180))*(10800-10800))+10800");
+    equation(out, "f51", "(cos(258*(pi/180))*(?f0 -10800)+sin(258*(pi/180))*(10800-10800))+10800");
+    equation(out, "f52", "-(sin(258*(pi/180))*(?f0 -10800)-cos(258*(pi/180))*(10800-10800))+10800");
+    equation(out, "f53", "(cos(270*(pi/180))*(0-10800)+sin(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f54", "-(sin(270*(pi/180))*(0-10800)-cos(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f55", "(cos(281*(pi/180))*(?f0 -10800)+sin(281*(pi/180))*(10800-10800))+10800");
+    equation(out, "f56", "-(sin(281*(pi/180))*(?f0 -10800)-cos(281*(pi/180))*(10800-10800))+10800");
+    equation(out, "f57", "(cos(292*(pi/180))*(0-10800)+sin(292*(pi/180))*(10800-10800))+10800");
+    equation(out, "f58", "-(sin(292*(pi/180))*(0-10800)-cos(292*(pi/180))*(10800-10800))+10800");
+    equation(out, "f59", "(cos(303*(pi/180))*(?f0 -10800)+sin(303*(pi/180))*(10800-10800))+10800");
+    equation(out, "f60", "-(sin(303*(pi/180))*(?f0 -10800)-cos(303*(pi/180))*(10800-10800))+10800");
+    equation(out, "f61", "(cos(315*(pi/180))*(0-10800)+sin(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f62", "-(sin(315*(pi/180))*(0-10800)-cos(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f63", "(cos(326*(pi/180))*(?f0 -10800)+sin(326*(pi/180))*(10800-10800))+10800");
+    equation(out, "f64", "-(sin(326*(pi/180))*(?f0 -10800)-cos(326*(pi/180))*(10800-10800))+10800");
+    equation(out, "f65", "(cos(337*(pi/180))*(0-10800)+sin(337*(pi/180))*(10800-10800))+10800");
+    equation(out, "f66", "-(sin(337*(pi/180))*(0-10800)-cos(337*(pi/180))*(10800-10800))+10800");
+    equation(out, "f67", "(cos(348*(pi/180))*(?f0 -10800)+sin(348*(pi/180))*(10800-10800))+10800");
+    equation(out, "f68", "-(sin(348*(pi/180))*(?f0 -10800)-cos(348*(pi/180))*(10800-10800))+10800");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 10800");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -2939,8 +2940,8 @@ void ODrawToOdf::processSeal16(const MSO::OfficeArtSpContainer& o, Writer& out) 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processSeal24(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processSeal24(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -2951,107 +2952,107 @@ void ODrawToOdf::processSeal24(const MSO::OfficeArtSpContainer& o, Writer& out) 
     out.xml.addAttribute("draw:type", "star24");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","(cos(315*(pi/180))*(?f0 -10800)+sin(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f2","-(sin(315*(pi/180))*(?f0 -10800)-cos(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f3","(cos(135*(pi/180))*(?f0 -10800)+sin(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f4","-(sin(135*(pi/180))*(?f0 -10800)-cos(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f5","(cos(0*(pi/180))*(0-10800)+sin(0*(pi/180))*(10800-10800))+10800");
-    equation(out,"f6","-(sin(0*(pi/180))*(0-10800)-cos(0*(pi/180))*(10800-10800))+10800");
-    equation(out,"f7","(cos(7*(pi/180))*(?f0 -10800)+sin(7*(pi/180))*(10800-10800))+10800");
-    equation(out,"f8","-(sin(7*(pi/180))*(?f0 -10800)-cos(7*(pi/180))*(10800-10800))+10800");
-    equation(out,"f9","(cos(15*(pi/180))*(0-10800)+sin(15*(pi/180))*(10800-10800))+10800");
-    equation(out,"f10","-(sin(15*(pi/180))*(0-10800)-cos(15*(pi/180))*(10800-10800))+10800");
-    equation(out,"f11","(cos(22*(pi/180))*(?f0 -10800)+sin(22*(pi/180))*(10800-10800))+10800");
-    equation(out,"f12","-(sin(22*(pi/180))*(?f0 -10800)-cos(22*(pi/180))*(10800-10800))+10800");
-    equation(out,"f13","(cos(30*(pi/180))*(0-10800)+sin(30*(pi/180))*(10800-10800))+10800");
-    equation(out,"f14","-(sin(30*(pi/180))*(0-10800)-cos(30*(pi/180))*(10800-10800))+10800");
-    equation(out,"f15","(cos(37*(pi/180))*(?f0 -10800)+sin(37*(pi/180))*(10800-10800))+10800");
-    equation(out,"f16","-(sin(37*(pi/180))*(?f0 -10800)-cos(37*(pi/180))*(10800-10800))+10800");
-    equation(out,"f17","(cos(45*(pi/180))*(0-10800)+sin(45*(pi/180))*(10800-10800))+10800");
-    equation(out,"f18","-(sin(45*(pi/180))*(0-10800)-cos(45*(pi/180))*(10800-10800))+10800");
-    equation(out,"f19","(cos(52*(pi/180))*(?f0 -10800)+sin(52*(pi/180))*(10800-10800))+10800");
-    equation(out,"f20","-(sin(52*(pi/180))*(?f0 -10800)-cos(52*(pi/180))*(10800-10800))+10800");
-    equation(out,"f21","(cos(60*(pi/180))*(0-10800)+sin(60*(pi/180))*(10800-10800))+10800");
-    equation(out,"f22","-(sin(60*(pi/180))*(0-10800)-cos(60*(pi/180))*(10800-10800))+10800");
-    equation(out,"f23","(cos(67*(pi/180))*(?f0 -10800)+sin(67*(pi/180))*(10800-10800))+10800");
-    equation(out,"f24","-(sin(67*(pi/180))*(?f0 -10800)-cos(67*(pi/180))*(10800-10800))+10800");
-    equation(out,"f25","(cos(75*(pi/180))*(0-10800)+sin(75*(pi/180))*(10800-10800))+10800");
-    equation(out,"f26","-(sin(75*(pi/180))*(0-10800)-cos(75*(pi/180))*(10800-10800))+10800");
-    equation(out,"f27","(cos(82*(pi/180))*(?f0 -10800)+sin(82*(pi/180))*(10800-10800))+10800");
-    equation(out,"f28","-(sin(82*(pi/180))*(?f0 -10800)-cos(82*(pi/180))*(10800-10800))+10800");
-    equation(out,"f29","(cos(90*(pi/180))*(0-10800)+sin(90*(pi/180))*(10800-10800))+10800");
-    equation(out,"f30","-(sin(90*(pi/180))*(0-10800)-cos(90*(pi/180))*(10800-10800))+10800");
-    equation(out,"f31","(cos(97*(pi/180))*(?f0 -10800)+sin(97*(pi/180))*(10800-10800))+10800");
-    equation(out,"f32","-(sin(97*(pi/180))*(?f0 -10800)-cos(97*(pi/180))*(10800-10800))+10800");
-    equation(out,"f33","(cos(105*(pi/180))*(0-10800)+sin(105*(pi/180))*(10800-10800))+10800");
-    equation(out,"f34","-(sin(105*(pi/180))*(0-10800)-cos(105*(pi/180))*(10800-10800))+10800");
-    equation(out,"f35","(cos(112*(pi/180))*(?f0 -10800)+sin(112*(pi/180))*(10800-10800))+10800");
-    equation(out,"f36","-(sin(112*(pi/180))*(?f0 -10800)-cos(112*(pi/180))*(10800-10800))+10800");
-    equation(out,"f37","(cos(120*(pi/180))*(0-10800)+sin(120*(pi/180))*(10800-10800))+10800");
-    equation(out,"f38","-(sin(120*(pi/180))*(0-10800)-cos(120*(pi/180))*(10800-10800))+10800");
-    equation(out,"f39","(cos(127*(pi/180))*(?f0 -10800)+sin(127*(pi/180))*(10800-10800))+10800");
-    equation(out,"f40","-(sin(127*(pi/180))*(?f0 -10800)-cos(127*(pi/180))*(10800-10800))+10800");
-    equation(out,"f41","(cos(135*(pi/180))*(0-10800)+sin(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f42","-(sin(135*(pi/180))*(0-10800)-cos(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f43","(cos(142*(pi/180))*(?f0 -10800)+sin(142*(pi/180))*(10800-10800))+10800");
-    equation(out,"f44","-(sin(142*(pi/180))*(?f0 -10800)-cos(142*(pi/180))*(10800-10800))+10800");
-    equation(out,"f45","(cos(150*(pi/180))*(0-10800)+sin(150*(pi/180))*(10800-10800))+10800");
-    equation(out,"f46","-(sin(150*(pi/180))*(0-10800)-cos(150*(pi/180))*(10800-10800))+10800");
-    equation(out,"f47","(cos(157*(pi/180))*(?f0 -10800)+sin(157*(pi/180))*(10800-10800))+10800");
-    equation(out,"f48","-(sin(157*(pi/180))*(?f0 -10800)-cos(157*(pi/180))*(10800-10800))+10800");
-    equation(out,"f49","(cos(165*(pi/180))*(0-10800)+sin(165*(pi/180))*(10800-10800))+10800");
-    equation(out,"f50","-(sin(165*(pi/180))*(0-10800)-cos(165*(pi/180))*(10800-10800))+10800");
-    equation(out,"f51","(cos(172*(pi/180))*(?f0 -10800)+sin(172*(pi/180))*(10800-10800))+10800");
-    equation(out,"f52","-(sin(172*(pi/180))*(?f0 -10800)-cos(172*(pi/180))*(10800-10800))+10800");
-    equation(out,"f53","(cos(180*(pi/180))*(0-10800)+sin(180*(pi/180))*(10800-10800))+10800");
-    equation(out,"f54","-(sin(180*(pi/180))*(0-10800)-cos(180*(pi/180))*(10800-10800))+10800");
-    equation(out,"f55","(cos(187*(pi/180))*(?f0 -10800)+sin(187*(pi/180))*(10800-10800))+10800");
-    equation(out,"f56","-(sin(187*(pi/180))*(?f0 -10800)-cos(187*(pi/180))*(10800-10800))+10800");
-    equation(out,"f57","(cos(195*(pi/180))*(0-10800)+sin(195*(pi/180))*(10800-10800))+10800");
-    equation(out,"f58","-(sin(195*(pi/180))*(0-10800)-cos(195*(pi/180))*(10800-10800))+10800");
-    equation(out,"f59","(cos(202*(pi/180))*(?f0 -10800)+sin(202*(pi/180))*(10800-10800))+10800");
-    equation(out,"f60","-(sin(202*(pi/180))*(?f0 -10800)-cos(202*(pi/180))*(10800-10800))+10800");
-    equation(out,"f61","(cos(210*(pi/180))*(0-10800)+sin(210*(pi/180))*(10800-10800))+10800");
-    equation(out,"f62","-(sin(210*(pi/180))*(0-10800)-cos(210*(pi/180))*(10800-10800))+10800");
-    equation(out,"f63","(cos(217*(pi/180))*(?f0 -10800)+sin(217*(pi/180))*(10800-10800))+10800");
-    equation(out,"f64","-(sin(217*(pi/180))*(?f0 -10800)-cos(217*(pi/180))*(10800-10800))+10800");
-    equation(out,"f65","(cos(225*(pi/180))*(0-10800)+sin(225*(pi/180))*(10800-10800))+10800");
-    equation(out,"f66","-(sin(225*(pi/180))*(0-10800)-cos(225*(pi/180))*(10800-10800))+10800");
-    equation(out,"f67","(cos(232*(pi/180))*(?f0 -10800)+sin(232*(pi/180))*(10800-10800))+10800");
-    equation(out,"f68","-(sin(232*(pi/180))*(?f0 -10800)-cos(232*(pi/180))*(10800-10800))+10800");
-    equation(out,"f69","(cos(240*(pi/180))*(0-10800)+sin(240*(pi/180))*(10800-10800))+10800");
-    equation(out,"f70","-(sin(240*(pi/180))*(0-10800)-cos(240*(pi/180))*(10800-10800))+10800");
-    equation(out,"f71","(cos(247*(pi/180))*(?f0 -10800)+sin(247*(pi/180))*(10800-10800))+10800");
-    equation(out,"f72","-(sin(247*(pi/180))*(?f0 -10800)-cos(247*(pi/180))*(10800-10800))+10800");
-    equation(out,"f73","(cos(255*(pi/180))*(0-10800)+sin(255*(pi/180))*(10800-10800))+10800");
-    equation(out,"f74","-(sin(255*(pi/180))*(0-10800)-cos(255*(pi/180))*(10800-10800))+10800");
-    equation(out,"f75","(cos(262*(pi/180))*(?f0 -10800)+sin(262*(pi/180))*(10800-10800))+10800");
-    equation(out,"f76","-(sin(262*(pi/180))*(?f0 -10800)-cos(262*(pi/180))*(10800-10800))+10800");
-    equation(out,"f77","(cos(270*(pi/180))*(0-10800)+sin(270*(pi/180))*(10800-10800))+10800");
-    equation(out,"f78","-(sin(270*(pi/180))*(0-10800)-cos(270*(pi/180))*(10800-10800))+10800");
-    equation(out,"f79","(cos(277*(pi/180))*(?f0 -10800)+sin(277*(pi/180))*(10800-10800))+10800");
-    equation(out,"f80","-(sin(277*(pi/180))*(?f0 -10800)-cos(277*(pi/180))*(10800-10800))+10800");
-    equation(out,"f81","(cos(285*(pi/180))*(0-10800)+sin(285*(pi/180))*(10800-10800))+10800");
-    equation(out,"f82","-(sin(285*(pi/180))*(0-10800)-cos(285*(pi/180))*(10800-10800))+10800");
-    equation(out,"f83","(cos(292*(pi/180))*(?f0 -10800)+sin(292*(pi/180))*(10800-10800))+10800");
-    equation(out,"f84","-(sin(292*(pi/180))*(?f0 -10800)-cos(292*(pi/180))*(10800-10800))+10800");
-    equation(out,"f85","(cos(300*(pi/180))*(0-10800)+sin(300*(pi/180))*(10800-10800))+10800");
-    equation(out,"f86","-(sin(300*(pi/180))*(0-10800)-cos(300*(pi/180))*(10800-10800))+10800");
-    equation(out,"f87","(cos(307*(pi/180))*(?f0 -10800)+sin(307*(pi/180))*(10800-10800))+10800");
-    equation(out,"f88","-(sin(307*(pi/180))*(?f0 -10800)-cos(307*(pi/180))*(10800-10800))+10800");
-    equation(out,"f89","(cos(315*(pi/180))*(0-10800)+sin(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f90","-(sin(315*(pi/180))*(0-10800)-cos(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f91","(cos(322*(pi/180))*(?f0 -10800)+sin(322*(pi/180))*(10800-10800))+10800");
-    equation(out,"f92","-(sin(322*(pi/180))*(?f0 -10800)-cos(322*(pi/180))*(10800-10800))+10800");
-    equation(out,"f93","(cos(330*(pi/180))*(0-10800)+sin(330*(pi/180))*(10800-10800))+10800");
-    equation(out,"f94","-(sin(330*(pi/180))*(0-10800)-cos(330*(pi/180))*(10800-10800))+10800");
-    equation(out,"f95","(cos(337*(pi/180))*(?f0 -10800)+sin(337*(pi/180))*(10800-10800))+10800");
-    equation(out,"f96","-(sin(337*(pi/180))*(?f0 -10800)-cos(337*(pi/180))*(10800-10800))+10800");
-    equation(out,"f97","(cos(345*(pi/180))*(0-10800)+sin(345*(pi/180))*(10800-10800))+10800");
-    equation(out,"f98","-(sin(345*(pi/180))*(0-10800)-cos(345*(pi/180))*(10800-10800))+10800");
-    equation(out,"f99","(cos(352*(pi/180))*(?f0 -10800)+sin(352*(pi/180))*(10800-10800))+10800");
-    equation(out,"f100","-(sin(352*(pi/180))*(?f0 -10800)-cos(352*(pi/180))*(10800-10800))+10800");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "(cos(315*(pi/180))*(?f0 -10800)+sin(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f2", "-(sin(315*(pi/180))*(?f0 -10800)-cos(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f3", "(cos(135*(pi/180))*(?f0 -10800)+sin(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f4", "-(sin(135*(pi/180))*(?f0 -10800)-cos(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f5", "(cos(0*(pi/180))*(0-10800)+sin(0*(pi/180))*(10800-10800))+10800");
+    equation(out, "f6", "-(sin(0*(pi/180))*(0-10800)-cos(0*(pi/180))*(10800-10800))+10800");
+    equation(out, "f7", "(cos(7*(pi/180))*(?f0 -10800)+sin(7*(pi/180))*(10800-10800))+10800");
+    equation(out, "f8", "-(sin(7*(pi/180))*(?f0 -10800)-cos(7*(pi/180))*(10800-10800))+10800");
+    equation(out, "f9", "(cos(15*(pi/180))*(0-10800)+sin(15*(pi/180))*(10800-10800))+10800");
+    equation(out, "f10", "-(sin(15*(pi/180))*(0-10800)-cos(15*(pi/180))*(10800-10800))+10800");
+    equation(out, "f11", "(cos(22*(pi/180))*(?f0 -10800)+sin(22*(pi/180))*(10800-10800))+10800");
+    equation(out, "f12", "-(sin(22*(pi/180))*(?f0 -10800)-cos(22*(pi/180))*(10800-10800))+10800");
+    equation(out, "f13", "(cos(30*(pi/180))*(0-10800)+sin(30*(pi/180))*(10800-10800))+10800");
+    equation(out, "f14", "-(sin(30*(pi/180))*(0-10800)-cos(30*(pi/180))*(10800-10800))+10800");
+    equation(out, "f15", "(cos(37*(pi/180))*(?f0 -10800)+sin(37*(pi/180))*(10800-10800))+10800");
+    equation(out, "f16", "-(sin(37*(pi/180))*(?f0 -10800)-cos(37*(pi/180))*(10800-10800))+10800");
+    equation(out, "f17", "(cos(45*(pi/180))*(0-10800)+sin(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f18", "-(sin(45*(pi/180))*(0-10800)-cos(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f19", "(cos(52*(pi/180))*(?f0 -10800)+sin(52*(pi/180))*(10800-10800))+10800");
+    equation(out, "f20", "-(sin(52*(pi/180))*(?f0 -10800)-cos(52*(pi/180))*(10800-10800))+10800");
+    equation(out, "f21", "(cos(60*(pi/180))*(0-10800)+sin(60*(pi/180))*(10800-10800))+10800");
+    equation(out, "f22", "-(sin(60*(pi/180))*(0-10800)-cos(60*(pi/180))*(10800-10800))+10800");
+    equation(out, "f23", "(cos(67*(pi/180))*(?f0 -10800)+sin(67*(pi/180))*(10800-10800))+10800");
+    equation(out, "f24", "-(sin(67*(pi/180))*(?f0 -10800)-cos(67*(pi/180))*(10800-10800))+10800");
+    equation(out, "f25", "(cos(75*(pi/180))*(0-10800)+sin(75*(pi/180))*(10800-10800))+10800");
+    equation(out, "f26", "-(sin(75*(pi/180))*(0-10800)-cos(75*(pi/180))*(10800-10800))+10800");
+    equation(out, "f27", "(cos(82*(pi/180))*(?f0 -10800)+sin(82*(pi/180))*(10800-10800))+10800");
+    equation(out, "f28", "-(sin(82*(pi/180))*(?f0 -10800)-cos(82*(pi/180))*(10800-10800))+10800");
+    equation(out, "f29", "(cos(90*(pi/180))*(0-10800)+sin(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f30", "-(sin(90*(pi/180))*(0-10800)-cos(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f31", "(cos(97*(pi/180))*(?f0 -10800)+sin(97*(pi/180))*(10800-10800))+10800");
+    equation(out, "f32", "-(sin(97*(pi/180))*(?f0 -10800)-cos(97*(pi/180))*(10800-10800))+10800");
+    equation(out, "f33", "(cos(105*(pi/180))*(0-10800)+sin(105*(pi/180))*(10800-10800))+10800");
+    equation(out, "f34", "-(sin(105*(pi/180))*(0-10800)-cos(105*(pi/180))*(10800-10800))+10800");
+    equation(out, "f35", "(cos(112*(pi/180))*(?f0 -10800)+sin(112*(pi/180))*(10800-10800))+10800");
+    equation(out, "f36", "-(sin(112*(pi/180))*(?f0 -10800)-cos(112*(pi/180))*(10800-10800))+10800");
+    equation(out, "f37", "(cos(120*(pi/180))*(0-10800)+sin(120*(pi/180))*(10800-10800))+10800");
+    equation(out, "f38", "-(sin(120*(pi/180))*(0-10800)-cos(120*(pi/180))*(10800-10800))+10800");
+    equation(out, "f39", "(cos(127*(pi/180))*(?f0 -10800)+sin(127*(pi/180))*(10800-10800))+10800");
+    equation(out, "f40", "-(sin(127*(pi/180))*(?f0 -10800)-cos(127*(pi/180))*(10800-10800))+10800");
+    equation(out, "f41", "(cos(135*(pi/180))*(0-10800)+sin(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f42", "-(sin(135*(pi/180))*(0-10800)-cos(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f43", "(cos(142*(pi/180))*(?f0 -10800)+sin(142*(pi/180))*(10800-10800))+10800");
+    equation(out, "f44", "-(sin(142*(pi/180))*(?f0 -10800)-cos(142*(pi/180))*(10800-10800))+10800");
+    equation(out, "f45", "(cos(150*(pi/180))*(0-10800)+sin(150*(pi/180))*(10800-10800))+10800");
+    equation(out, "f46", "-(sin(150*(pi/180))*(0-10800)-cos(150*(pi/180))*(10800-10800))+10800");
+    equation(out, "f47", "(cos(157*(pi/180))*(?f0 -10800)+sin(157*(pi/180))*(10800-10800))+10800");
+    equation(out, "f48", "-(sin(157*(pi/180))*(?f0 -10800)-cos(157*(pi/180))*(10800-10800))+10800");
+    equation(out, "f49", "(cos(165*(pi/180))*(0-10800)+sin(165*(pi/180))*(10800-10800))+10800");
+    equation(out, "f50", "-(sin(165*(pi/180))*(0-10800)-cos(165*(pi/180))*(10800-10800))+10800");
+    equation(out, "f51", "(cos(172*(pi/180))*(?f0 -10800)+sin(172*(pi/180))*(10800-10800))+10800");
+    equation(out, "f52", "-(sin(172*(pi/180))*(?f0 -10800)-cos(172*(pi/180))*(10800-10800))+10800");
+    equation(out, "f53", "(cos(180*(pi/180))*(0-10800)+sin(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f54", "-(sin(180*(pi/180))*(0-10800)-cos(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f55", "(cos(187*(pi/180))*(?f0 -10800)+sin(187*(pi/180))*(10800-10800))+10800");
+    equation(out, "f56", "-(sin(187*(pi/180))*(?f0 -10800)-cos(187*(pi/180))*(10800-10800))+10800");
+    equation(out, "f57", "(cos(195*(pi/180))*(0-10800)+sin(195*(pi/180))*(10800-10800))+10800");
+    equation(out, "f58", "-(sin(195*(pi/180))*(0-10800)-cos(195*(pi/180))*(10800-10800))+10800");
+    equation(out, "f59", "(cos(202*(pi/180))*(?f0 -10800)+sin(202*(pi/180))*(10800-10800))+10800");
+    equation(out, "f60", "-(sin(202*(pi/180))*(?f0 -10800)-cos(202*(pi/180))*(10800-10800))+10800");
+    equation(out, "f61", "(cos(210*(pi/180))*(0-10800)+sin(210*(pi/180))*(10800-10800))+10800");
+    equation(out, "f62", "-(sin(210*(pi/180))*(0-10800)-cos(210*(pi/180))*(10800-10800))+10800");
+    equation(out, "f63", "(cos(217*(pi/180))*(?f0 -10800)+sin(217*(pi/180))*(10800-10800))+10800");
+    equation(out, "f64", "-(sin(217*(pi/180))*(?f0 -10800)-cos(217*(pi/180))*(10800-10800))+10800");
+    equation(out, "f65", "(cos(225*(pi/180))*(0-10800)+sin(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f66", "-(sin(225*(pi/180))*(0-10800)-cos(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f67", "(cos(232*(pi/180))*(?f0 -10800)+sin(232*(pi/180))*(10800-10800))+10800");
+    equation(out, "f68", "-(sin(232*(pi/180))*(?f0 -10800)-cos(232*(pi/180))*(10800-10800))+10800");
+    equation(out, "f69", "(cos(240*(pi/180))*(0-10800)+sin(240*(pi/180))*(10800-10800))+10800");
+    equation(out, "f70", "-(sin(240*(pi/180))*(0-10800)-cos(240*(pi/180))*(10800-10800))+10800");
+    equation(out, "f71", "(cos(247*(pi/180))*(?f0 -10800)+sin(247*(pi/180))*(10800-10800))+10800");
+    equation(out, "f72", "-(sin(247*(pi/180))*(?f0 -10800)-cos(247*(pi/180))*(10800-10800))+10800");
+    equation(out, "f73", "(cos(255*(pi/180))*(0-10800)+sin(255*(pi/180))*(10800-10800))+10800");
+    equation(out, "f74", "-(sin(255*(pi/180))*(0-10800)-cos(255*(pi/180))*(10800-10800))+10800");
+    equation(out, "f75", "(cos(262*(pi/180))*(?f0 -10800)+sin(262*(pi/180))*(10800-10800))+10800");
+    equation(out, "f76", "-(sin(262*(pi/180))*(?f0 -10800)-cos(262*(pi/180))*(10800-10800))+10800");
+    equation(out, "f77", "(cos(270*(pi/180))*(0-10800)+sin(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f78", "-(sin(270*(pi/180))*(0-10800)-cos(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f79", "(cos(277*(pi/180))*(?f0 -10800)+sin(277*(pi/180))*(10800-10800))+10800");
+    equation(out, "f80", "-(sin(277*(pi/180))*(?f0 -10800)-cos(277*(pi/180))*(10800-10800))+10800");
+    equation(out, "f81", "(cos(285*(pi/180))*(0-10800)+sin(285*(pi/180))*(10800-10800))+10800");
+    equation(out, "f82", "-(sin(285*(pi/180))*(0-10800)-cos(285*(pi/180))*(10800-10800))+10800");
+    equation(out, "f83", "(cos(292*(pi/180))*(?f0 -10800)+sin(292*(pi/180))*(10800-10800))+10800");
+    equation(out, "f84", "-(sin(292*(pi/180))*(?f0 -10800)-cos(292*(pi/180))*(10800-10800))+10800");
+    equation(out, "f85", "(cos(300*(pi/180))*(0-10800)+sin(300*(pi/180))*(10800-10800))+10800");
+    equation(out, "f86", "-(sin(300*(pi/180))*(0-10800)-cos(300*(pi/180))*(10800-10800))+10800");
+    equation(out, "f87", "(cos(307*(pi/180))*(?f0 -10800)+sin(307*(pi/180))*(10800-10800))+10800");
+    equation(out, "f88", "-(sin(307*(pi/180))*(?f0 -10800)-cos(307*(pi/180))*(10800-10800))+10800");
+    equation(out, "f89", "(cos(315*(pi/180))*(0-10800)+sin(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f90", "-(sin(315*(pi/180))*(0-10800)-cos(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f91", "(cos(322*(pi/180))*(?f0 -10800)+sin(322*(pi/180))*(10800-10800))+10800");
+    equation(out, "f92", "-(sin(322*(pi/180))*(?f0 -10800)-cos(322*(pi/180))*(10800-10800))+10800");
+    equation(out, "f93", "(cos(330*(pi/180))*(0-10800)+sin(330*(pi/180))*(10800-10800))+10800");
+    equation(out, "f94", "-(sin(330*(pi/180))*(0-10800)-cos(330*(pi/180))*(10800-10800))+10800");
+    equation(out, "f95", "(cos(337*(pi/180))*(?f0 -10800)+sin(337*(pi/180))*(10800-10800))+10800");
+    equation(out, "f96", "-(sin(337*(pi/180))*(?f0 -10800)-cos(337*(pi/180))*(10800-10800))+10800");
+    equation(out, "f97", "(cos(345*(pi/180))*(0-10800)+sin(345*(pi/180))*(10800-10800))+10800");
+    equation(out, "f98", "-(sin(345*(pi/180))*(0-10800)-cos(345*(pi/180))*(10800-10800))+10800");
+    equation(out, "f99", "(cos(352*(pi/180))*(?f0 -10800)+sin(352*(pi/180))*(10800-10800))+10800");
+    equation(out, "f100", "-(sin(352*(pi/180))*(?f0 -10800)-cos(352*(pi/180))*(10800-10800))+10800");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 10800");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -3061,8 +3062,8 @@ void ODrawToOdf::processSeal24(const MSO::OfficeArtSpContainer& o, Writer& out) 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processSeal32(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processSeal32(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -3073,139 +3074,139 @@ void ODrawToOdf::processSeal32(const MSO::OfficeArtSpContainer& o, Writer& out) 
     out.xml.addAttribute("draw:type", "mso-spt60");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","(cos(315*(pi/180))*(?f0 -10800)+sin(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f2","-(sin(315*(pi/180))*(?f0 -10800)-cos(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f3","(cos(135*(pi/180))*(?f0 -10800)+sin(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f4","-(sin(135*(pi/180))*(?f0 -10800)-cos(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f5","(cos(0*(pi/180))*(0-10800)+sin(0*(pi/180))*(10800-10800))+10800");
-    equation(out,"f6","-(sin(0*(pi/180))*(0-10800)-cos(0*(pi/180))*(10800-10800))+10800");
-    equation(out,"f7","(cos(5*(pi/180))*(?f0 -10800)+sin(5*(pi/180))*(10800-10800))+10800");
-    equation(out,"f8","-(sin(5*(pi/180))*(?f0 -10800)-cos(5*(pi/180))*(10800-10800))+10800");
-    equation(out,"f9","(cos(11*(pi/180))*(0-10800)+sin(11*(pi/180))*(10800-10800))+10800");
-    equation(out,"f10","-(sin(11*(pi/180))*(0-10800)-cos(11*(pi/180))*(10800-10800))+10800");
-    equation(out,"f11","(cos(16*(pi/180))*(?f0 -10800)+sin(16*(pi/180))*(10800-10800))+10800");
-    equation(out,"f12","-(sin(16*(pi/180))*(?f0 -10800)-cos(16*(pi/180))*(10800-10800))+10800");
-    equation(out,"f13","(cos(22*(pi/180))*(0-10800)+sin(22*(pi/180))*(10800-10800))+10800");
-    equation(out,"f14","-(sin(22*(pi/180))*(0-10800)-cos(22*(pi/180))*(10800-10800))+10800");
-    equation(out,"f15","(cos(28*(pi/180))*(?f0 -10800)+sin(28*(pi/180))*(10800-10800))+10800");
-    equation(out,"f16","-(sin(28*(pi/180))*(?f0 -10800)-cos(28*(pi/180))*(10800-10800))+10800");
-    equation(out,"f17","(cos(33*(pi/180))*(0-10800)+sin(33*(pi/180))*(10800-10800))+10800");
-    equation(out,"f18","-(sin(33*(pi/180))*(0-10800)-cos(33*(pi/180))*(10800-10800))+10800");
-    equation(out,"f19","(cos(39*(pi/180))*(?f0 -10800)+sin(39*(pi/180))*(10800-10800))+10800");
-    equation(out,"f20","-(sin(39*(pi/180))*(?f0 -10800)-cos(39*(pi/180))*(10800-10800))+10800");
-    equation(out,"f21","(cos(45*(pi/180))*(0-10800)+sin(45*(pi/180))*(10800-10800))+10800");
-    equation(out,"f22","-(sin(45*(pi/180))*(0-10800)-cos(45*(pi/180))*(10800-10800))+10800");
-    equation(out,"f23","(cos(50*(pi/180))*(?f0 -10800)+sin(50*(pi/180))*(10800-10800))+10800");
-    equation(out,"f24","-(sin(50*(pi/180))*(?f0 -10800)-cos(50*(pi/180))*(10800-10800))+10800");
-    equation(out,"f25","(cos(56*(pi/180))*(0-10800)+sin(56*(pi/180))*(10800-10800))+10800");
-    equation(out,"f26","-(sin(56*(pi/180))*(0-10800)-cos(56*(pi/180))*(10800-10800))+10800");
-    equation(out,"f27","(cos(61*(pi/180))*(?f0 -10800)+sin(61*(pi/180))*(10800-10800))+10800");
-    equation(out,"f28","-(sin(61*(pi/180))*(?f0 -10800)-cos(61*(pi/180))*(10800-10800))+10800");
-    equation(out,"f29","(cos(67*(pi/180))*(0-10800)+sin(67*(pi/180))*(10800-10800))+10800");
-    equation(out,"f30","-(sin(67*(pi/180))*(0-10800)-cos(67*(pi/180))*(10800-10800))+10800");
-    equation(out,"f31","(cos(73*(pi/180))*(?f0 -10800)+sin(73*(pi/180))*(10800-10800))+10800");
-    equation(out,"f32","-(sin(73*(pi/180))*(?f0 -10800)-cos(73*(pi/180))*(10800-10800))+10800");
-    equation(out,"f33","(cos(78*(pi/180))*(0-10800)+sin(78*(pi/180))*(10800-10800))+10800");
-    equation(out,"f34","-(sin(78*(pi/180))*(0-10800)-cos(78*(pi/180))*(10800-10800))+10800");
-    equation(out,"f35","(cos(84*(pi/180))*(?f0 -10800)+sin(84*(pi/180))*(10800-10800))+10800");
-    equation(out,"f36","-(sin(84*(pi/180))*(?f0 -10800)-cos(84*(pi/180))*(10800-10800))+10800");
-    equation(out,"f37","(cos(90*(pi/180))*(0-10800)+sin(90*(pi/180))*(10800-10800))+10800");
-    equation(out,"f38","-(sin(90*(pi/180))*(0-10800)-cos(90*(pi/180))*(10800-10800))+10800");
-    equation(out,"f39","(cos(95*(pi/180))*(?f0 -10800)+sin(95*(pi/180))*(10800-10800))+10800");
-    equation(out,"f40","-(sin(95*(pi/180))*(?f0 -10800)-cos(95*(pi/180))*(10800-10800))+10800");
-    equation(out,"f41","(cos(101*(pi/180))*(0-10800)+sin(101*(pi/180))*(10800-10800))+10800");
-    equation(out,"f42","-(sin(101*(pi/180))*(0-10800)-cos(101*(pi/180))*(10800-10800))+10800");
-    equation(out,"f43","(cos(106*(pi/180))*(?f0 -10800)+sin(106*(pi/180))*(10800-10800))+10800");
-    equation(out,"f44","-(sin(106*(pi/180))*(?f0 -10800)-cos(106*(pi/180))*(10800-10800))+10800");
-    equation(out,"f45","(cos(112*(pi/180))*(0-10800)+sin(112*(pi/180))*(10800-10800))+10800");
-    equation(out,"f46","-(sin(112*(pi/180))*(0-10800)-cos(112*(pi/180))*(10800-10800))+10800");
-    equation(out,"f47","(cos(118*(pi/180))*(?f0 -10800)+sin(118*(pi/180))*(10800-10800))+10800");
-    equation(out,"f48","-(sin(118*(pi/180))*(?f0 -10800)-cos(118*(pi/180))*(10800-10800))+10800");
-    equation(out,"f49","(cos(123*(pi/180))*(0-10800)+sin(123*(pi/180))*(10800-10800))+10800");
-    equation(out,"f50","-(sin(123*(pi/180))*(0-10800)-cos(123*(pi/180))*(10800-10800))+10800");
-    equation(out,"f51","(cos(129*(pi/180))*(?f0 -10800)+sin(129*(pi/180))*(10800-10800))+10800");
-    equation(out,"f52","-(sin(129*(pi/180))*(?f0 -10800)-cos(129*(pi/180))*(10800-10800))+10800");
-    equation(out,"f53","(cos(135*(pi/180))*(0-10800)+sin(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f54","-(sin(135*(pi/180))*(0-10800)-cos(135*(pi/180))*(10800-10800))+10800");
-    equation(out,"f55","(cos(140*(pi/180))*(?f0 -10800)+sin(140*(pi/180))*(10800-10800))+10800");
-    equation(out,"f56","-(sin(140*(pi/180))*(?f0 -10800)-cos(140*(pi/180))*(10800-10800))+10800");
-    equation(out,"f57","(cos(146*(pi/180))*(0-10800)+sin(146*(pi/180))*(10800-10800))+10800");
-    equation(out,"f58","-(sin(146*(pi/180))*(0-10800)-cos(146*(pi/180))*(10800-10800))+10800");
-    equation(out,"f59","(cos(151*(pi/180))*(?f0 -10800)+sin(151*(pi/180))*(10800-10800))+10800");
-    equation(out,"f60","-(sin(151*(pi/180))*(?f0 -10800)-cos(151*(pi/180))*(10800-10800))+10800");
-    equation(out,"f61","(cos(157*(pi/180))*(0-10800)+sin(157*(pi/180))*(10800-10800))+10800");
-    equation(out,"f62","-(sin(157*(pi/180))*(0-10800)-cos(157*(pi/180))*(10800-10800))+10800");
-    equation(out,"f63","(cos(163*(pi/180))*(?f0 -10800)+sin(163*(pi/180))*(10800-10800))+10800");
-    equation(out,"f64","-(sin(163*(pi/180))*(?f0 -10800)-cos(163*(pi/180))*(10800-10800))+10800");
-    equation(out,"f65","(cos(168*(pi/180))*(0-10800)+sin(168*(pi/180))*(10800-10800))+10800");
-    equation(out,"f66","-(sin(168*(pi/180))*(0-10800)-cos(168*(pi/180))*(10800-10800))+10800");
-    equation(out,"f67","(cos(174*(pi/180))*(?f0 -10800)+sin(174*(pi/180))*(10800-10800))+10800");
-    equation(out,"f68","-(sin(174*(pi/180))*(?f0 -10800)-cos(174*(pi/180))*(10800-10800))+10800");
-    equation(out,"f69","(cos(180*(pi/180))*(0-10800)+sin(180*(pi/180))*(10800-10800))+10800");
-    equation(out,"f70","-(sin(180*(pi/180))*(0-10800)-cos(180*(pi/180))*(10800-10800))+10800");
-    equation(out,"f71","(cos(185*(pi/180))*(?f0 -10800)+sin(185*(pi/180))*(10800-10800))+10800");
-    equation(out,"f72","-(sin(185*(pi/180))*(?f0 -10800)-cos(185*(pi/180))*(10800-10800))+10800");
-    equation(out,"f73","(cos(191*(pi/180))*(0-10800)+sin(191*(pi/180))*(10800-10800))+10800");
-    equation(out,"f74","-(sin(191*(pi/180))*(0-10800)-cos(191*(pi/180))*(10800-10800))+10800");
-    equation(out,"f75","(cos(196*(pi/180))*(?f0 -10800)+sin(196*(pi/180))*(10800-10800))+10800");
-    equation(out,"f76","-(sin(196*(pi/180))*(?f0 -10800)-cos(196*(pi/180))*(10800-10800))+10800");
-    equation(out,"f77","(cos(202*(pi/180))*(0-10800)+sin(202*(pi/180))*(10800-10800))+10800");
-    equation(out,"f78","-(sin(202*(pi/180))*(0-10800)-cos(202*(pi/180))*(10800-10800))+10800");
-    equation(out,"f79","(cos(208*(pi/180))*(?f0 -10800)+sin(208*(pi/180))*(10800-10800))+10800");
-    equation(out,"f80","-(sin(208*(pi/180))*(?f0 -10800)-cos(208*(pi/180))*(10800-10800))+10800");
-    equation(out,"f81","(cos(213*(pi/180))*(0-10800)+sin(213*(pi/180))*(10800-10800))+10800");
-    equation(out,"f82","-(sin(213*(pi/180))*(0-10800)-cos(213*(pi/180))*(10800-10800))+10800");
-    equation(out,"f83","(cos(219*(pi/180))*(?f0 -10800)+sin(219*(pi/180))*(10800-10800))+10800");
-    equation(out,"f84","-(sin(219*(pi/180))*(?f0 -10800)-cos(219*(pi/180))*(10800-10800))+10800");
-    equation(out,"f85","(cos(225*(pi/180))*(0-10800)+sin(225*(pi/180))*(10800-10800))+10800");
-    equation(out,"f86","-(sin(225*(pi/180))*(0-10800)-cos(225*(pi/180))*(10800-10800))+10800");
-    equation(out,"f87","(cos(230*(pi/180))*(?f0 -10800)+sin(230*(pi/180))*(10800-10800))+10800");
-    equation(out,"f88","-(sin(230*(pi/180))*(?f0 -10800)-cos(230*(pi/180))*(10800-10800))+10800");
-    equation(out,"f89","(cos(236*(pi/180))*(0-10800)+sin(236*(pi/180))*(10800-10800))+10800");
-    equation(out,"f90","-(sin(236*(pi/180))*(0-10800)-cos(236*(pi/180))*(10800-10800))+10800");
-    equation(out,"f91","(cos(241*(pi/180))*(?f0 -10800)+sin(241*(pi/180))*(10800-10800))+10800");
-    equation(out,"f92","-(sin(241*(pi/180))*(?f0 -10800)-cos(241*(pi/180))*(10800-10800))+10800");
-    equation(out,"f93","(cos(247*(pi/180))*(0-10800)+sin(247*(pi/180))*(10800-10800))+10800");
-    equation(out,"f94","-(sin(247*(pi/180))*(0-10800)-cos(247*(pi/180))*(10800-10800))+10800");
-    equation(out,"f95","(cos(253*(pi/180))*(?f0 -10800)+sin(253*(pi/180))*(10800-10800))+10800");
-    equation(out,"f96","-(sin(253*(pi/180))*(?f0 -10800)-cos(253*(pi/180))*(10800-10800))+10800");
-    equation(out,"f97","(cos(258*(pi/180))*(0-10800)+sin(258*(pi/180))*(10800-10800))+10800");
-    equation(out,"f98","-(sin(258*(pi/180))*(0-10800)-cos(258*(pi/180))*(10800-10800))+10800");
-    equation(out,"f99","(cos(264*(pi/180))*(?f0 -10800)+sin(264*(pi/180))*(10800-10800))+10800");
-    equation(out,"f100","-(sin(264*(pi/180))*(?f0 -10800)-cos(264*(pi/180))*(10800-10800))+10800");
-    equation(out,"f101","(cos(270*(pi/180))*(0-10800)+sin(270*(pi/180))*(10800-10800))+10800");
-    equation(out,"f102","-(sin(270*(pi/180))*(0-10800)-cos(270*(pi/180))*(10800-10800))+10800");
-    equation(out,"f103","(cos(275*(pi/180))*(?f0 -10800)+sin(275*(pi/180))*(10800-10800))+10800");
-    equation(out,"f104","-(sin(275*(pi/180))*(?f0 -10800)-cos(275*(pi/180))*(10800-10800))+10800");
-    equation(out,"f105","(cos(281*(pi/180))*(0-10800)+sin(281*(pi/180))*(10800-10800))+10800");
-    equation(out,"f106","-(sin(281*(pi/180))*(0-10800)-cos(281*(pi/180))*(10800-10800))+10800");
-    equation(out,"f107","(cos(286*(pi/180))*(?f0 -10800)+sin(286*(pi/180))*(10800-10800))+10800");
-    equation(out,"f108","-(sin(286*(pi/180))*(?f0 -10800)-cos(286*(pi/180))*(10800-10800))+10800");
-    equation(out,"f109","(cos(292*(pi/180))*(0-10800)+sin(292*(pi/180))*(10800-10800))+10800");
-    equation(out,"f110","-(sin(292*(pi/180))*(0-10800)-cos(292*(pi/180))*(10800-10800))+10800");
-    equation(out,"f111","(cos(298*(pi/180))*(?f0 -10800)+sin(298*(pi/180))*(10800-10800))+10800");
-    equation(out,"f112","-(sin(298*(pi/180))*(?f0 -10800)-cos(298*(pi/180))*(10800-10800))+10800");
-    equation(out,"f113","(cos(303*(pi/180))*(0-10800)+sin(303*(pi/180))*(10800-10800))+10800");
-    equation(out,"f114","-(sin(303*(pi/180))*(0-10800)-cos(303*(pi/180))*(10800-10800))+10800");
-    equation(out,"f115","(cos(309*(pi/180))*(?f0 -10800)+sin(309*(pi/180))*(10800-10800))+10800");
-    equation(out,"f116","-(sin(309*(pi/180))*(?f0 -10800)-cos(309*(pi/180))*(10800-10800))+10800");
-    equation(out,"f117","(cos(315*(pi/180))*(0-10800)+sin(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f118","-(sin(315*(pi/180))*(0-10800)-cos(315*(pi/180))*(10800-10800))+10800");
-    equation(out,"f119","(cos(320*(pi/180))*(?f0 -10800)+sin(320*(pi/180))*(10800-10800))+10800");
-    equation(out,"f120","-(sin(320*(pi/180))*(?f0 -10800)-cos(320*(pi/180))*(10800-10800))+10800");
-    equation(out,"f121","(cos(326*(pi/180))*(0-10800)+sin(326*(pi/180))*(10800-10800))+10800");
-    equation(out,"f122","-(sin(326*(pi/180))*(0-10800)-cos(326*(pi/180))*(10800-10800))+10800");
-    equation(out,"f123","(cos(331*(pi/180))*(?f0 -10800)+sin(331*(pi/180))*(10800-10800))+10800");
-    equation(out,"f124","-(sin(331*(pi/180))*(?f0 -10800)-cos(331*(pi/180))*(10800-10800))+10800");
-    equation(out,"f125","(cos(337*(pi/180))*(0-10800)+sin(337*(pi/180))*(10800-10800))+10800");
-    equation(out,"f126","-(sin(337*(pi/180))*(0-10800)-cos(337*(pi/180))*(10800-10800))+10800");
-    equation(out,"f127","(cos(343*(pi/180))*(?f0 -10800)+sin(343*(pi/180))*(10800-10800))+10800");
-    equation(out,"f128","-(sin(343*(pi/180))*(?f0 -10800)-cos(343*(pi/180))*(10800-10800))+10800");
-    equation(out,"f129","(cos(348*(pi/180))*(0-10800)+sin(348*(pi/180))*(10800-10800))+10800");
-    equation(out,"f130","-(sin(348*(pi/180))*(0-10800)-cos(348*(pi/180))*(10800-10800))+10800");
-    equation(out,"f131","(cos(354*(pi/180))*(?f0 -10800)+sin(354*(pi/180))*(10800-10800))+10800");
-    equation(out,"f132","-(sin(354*(pi/180))*(?f0 -10800)-cos(354*(pi/180))*(10800-10800))+10800");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "(cos(315*(pi/180))*(?f0 -10800)+sin(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f2", "-(sin(315*(pi/180))*(?f0 -10800)-cos(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f3", "(cos(135*(pi/180))*(?f0 -10800)+sin(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f4", "-(sin(135*(pi/180))*(?f0 -10800)-cos(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f5", "(cos(0*(pi/180))*(0-10800)+sin(0*(pi/180))*(10800-10800))+10800");
+    equation(out, "f6", "-(sin(0*(pi/180))*(0-10800)-cos(0*(pi/180))*(10800-10800))+10800");
+    equation(out, "f7", "(cos(5*(pi/180))*(?f0 -10800)+sin(5*(pi/180))*(10800-10800))+10800");
+    equation(out, "f8", "-(sin(5*(pi/180))*(?f0 -10800)-cos(5*(pi/180))*(10800-10800))+10800");
+    equation(out, "f9", "(cos(11*(pi/180))*(0-10800)+sin(11*(pi/180))*(10800-10800))+10800");
+    equation(out, "f10", "-(sin(11*(pi/180))*(0-10800)-cos(11*(pi/180))*(10800-10800))+10800");
+    equation(out, "f11", "(cos(16*(pi/180))*(?f0 -10800)+sin(16*(pi/180))*(10800-10800))+10800");
+    equation(out, "f12", "-(sin(16*(pi/180))*(?f0 -10800)-cos(16*(pi/180))*(10800-10800))+10800");
+    equation(out, "f13", "(cos(22*(pi/180))*(0-10800)+sin(22*(pi/180))*(10800-10800))+10800");
+    equation(out, "f14", "-(sin(22*(pi/180))*(0-10800)-cos(22*(pi/180))*(10800-10800))+10800");
+    equation(out, "f15", "(cos(28*(pi/180))*(?f0 -10800)+sin(28*(pi/180))*(10800-10800))+10800");
+    equation(out, "f16", "-(sin(28*(pi/180))*(?f0 -10800)-cos(28*(pi/180))*(10800-10800))+10800");
+    equation(out, "f17", "(cos(33*(pi/180))*(0-10800)+sin(33*(pi/180))*(10800-10800))+10800");
+    equation(out, "f18", "-(sin(33*(pi/180))*(0-10800)-cos(33*(pi/180))*(10800-10800))+10800");
+    equation(out, "f19", "(cos(39*(pi/180))*(?f0 -10800)+sin(39*(pi/180))*(10800-10800))+10800");
+    equation(out, "f20", "-(sin(39*(pi/180))*(?f0 -10800)-cos(39*(pi/180))*(10800-10800))+10800");
+    equation(out, "f21", "(cos(45*(pi/180))*(0-10800)+sin(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f22", "-(sin(45*(pi/180))*(0-10800)-cos(45*(pi/180))*(10800-10800))+10800");
+    equation(out, "f23", "(cos(50*(pi/180))*(?f0 -10800)+sin(50*(pi/180))*(10800-10800))+10800");
+    equation(out, "f24", "-(sin(50*(pi/180))*(?f0 -10800)-cos(50*(pi/180))*(10800-10800))+10800");
+    equation(out, "f25", "(cos(56*(pi/180))*(0-10800)+sin(56*(pi/180))*(10800-10800))+10800");
+    equation(out, "f26", "-(sin(56*(pi/180))*(0-10800)-cos(56*(pi/180))*(10800-10800))+10800");
+    equation(out, "f27", "(cos(61*(pi/180))*(?f0 -10800)+sin(61*(pi/180))*(10800-10800))+10800");
+    equation(out, "f28", "-(sin(61*(pi/180))*(?f0 -10800)-cos(61*(pi/180))*(10800-10800))+10800");
+    equation(out, "f29", "(cos(67*(pi/180))*(0-10800)+sin(67*(pi/180))*(10800-10800))+10800");
+    equation(out, "f30", "-(sin(67*(pi/180))*(0-10800)-cos(67*(pi/180))*(10800-10800))+10800");
+    equation(out, "f31", "(cos(73*(pi/180))*(?f0 -10800)+sin(73*(pi/180))*(10800-10800))+10800");
+    equation(out, "f32", "-(sin(73*(pi/180))*(?f0 -10800)-cos(73*(pi/180))*(10800-10800))+10800");
+    equation(out, "f33", "(cos(78*(pi/180))*(0-10800)+sin(78*(pi/180))*(10800-10800))+10800");
+    equation(out, "f34", "-(sin(78*(pi/180))*(0-10800)-cos(78*(pi/180))*(10800-10800))+10800");
+    equation(out, "f35", "(cos(84*(pi/180))*(?f0 -10800)+sin(84*(pi/180))*(10800-10800))+10800");
+    equation(out, "f36", "-(sin(84*(pi/180))*(?f0 -10800)-cos(84*(pi/180))*(10800-10800))+10800");
+    equation(out, "f37", "(cos(90*(pi/180))*(0-10800)+sin(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f38", "-(sin(90*(pi/180))*(0-10800)-cos(90*(pi/180))*(10800-10800))+10800");
+    equation(out, "f39", "(cos(95*(pi/180))*(?f0 -10800)+sin(95*(pi/180))*(10800-10800))+10800");
+    equation(out, "f40", "-(sin(95*(pi/180))*(?f0 -10800)-cos(95*(pi/180))*(10800-10800))+10800");
+    equation(out, "f41", "(cos(101*(pi/180))*(0-10800)+sin(101*(pi/180))*(10800-10800))+10800");
+    equation(out, "f42", "-(sin(101*(pi/180))*(0-10800)-cos(101*(pi/180))*(10800-10800))+10800");
+    equation(out, "f43", "(cos(106*(pi/180))*(?f0 -10800)+sin(106*(pi/180))*(10800-10800))+10800");
+    equation(out, "f44", "-(sin(106*(pi/180))*(?f0 -10800)-cos(106*(pi/180))*(10800-10800))+10800");
+    equation(out, "f45", "(cos(112*(pi/180))*(0-10800)+sin(112*(pi/180))*(10800-10800))+10800");
+    equation(out, "f46", "-(sin(112*(pi/180))*(0-10800)-cos(112*(pi/180))*(10800-10800))+10800");
+    equation(out, "f47", "(cos(118*(pi/180))*(?f0 -10800)+sin(118*(pi/180))*(10800-10800))+10800");
+    equation(out, "f48", "-(sin(118*(pi/180))*(?f0 -10800)-cos(118*(pi/180))*(10800-10800))+10800");
+    equation(out, "f49", "(cos(123*(pi/180))*(0-10800)+sin(123*(pi/180))*(10800-10800))+10800");
+    equation(out, "f50", "-(sin(123*(pi/180))*(0-10800)-cos(123*(pi/180))*(10800-10800))+10800");
+    equation(out, "f51", "(cos(129*(pi/180))*(?f0 -10800)+sin(129*(pi/180))*(10800-10800))+10800");
+    equation(out, "f52", "-(sin(129*(pi/180))*(?f0 -10800)-cos(129*(pi/180))*(10800-10800))+10800");
+    equation(out, "f53", "(cos(135*(pi/180))*(0-10800)+sin(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f54", "-(sin(135*(pi/180))*(0-10800)-cos(135*(pi/180))*(10800-10800))+10800");
+    equation(out, "f55", "(cos(140*(pi/180))*(?f0 -10800)+sin(140*(pi/180))*(10800-10800))+10800");
+    equation(out, "f56", "-(sin(140*(pi/180))*(?f0 -10800)-cos(140*(pi/180))*(10800-10800))+10800");
+    equation(out, "f57", "(cos(146*(pi/180))*(0-10800)+sin(146*(pi/180))*(10800-10800))+10800");
+    equation(out, "f58", "-(sin(146*(pi/180))*(0-10800)-cos(146*(pi/180))*(10800-10800))+10800");
+    equation(out, "f59", "(cos(151*(pi/180))*(?f0 -10800)+sin(151*(pi/180))*(10800-10800))+10800");
+    equation(out, "f60", "-(sin(151*(pi/180))*(?f0 -10800)-cos(151*(pi/180))*(10800-10800))+10800");
+    equation(out, "f61", "(cos(157*(pi/180))*(0-10800)+sin(157*(pi/180))*(10800-10800))+10800");
+    equation(out, "f62", "-(sin(157*(pi/180))*(0-10800)-cos(157*(pi/180))*(10800-10800))+10800");
+    equation(out, "f63", "(cos(163*(pi/180))*(?f0 -10800)+sin(163*(pi/180))*(10800-10800))+10800");
+    equation(out, "f64", "-(sin(163*(pi/180))*(?f0 -10800)-cos(163*(pi/180))*(10800-10800))+10800");
+    equation(out, "f65", "(cos(168*(pi/180))*(0-10800)+sin(168*(pi/180))*(10800-10800))+10800");
+    equation(out, "f66", "-(sin(168*(pi/180))*(0-10800)-cos(168*(pi/180))*(10800-10800))+10800");
+    equation(out, "f67", "(cos(174*(pi/180))*(?f0 -10800)+sin(174*(pi/180))*(10800-10800))+10800");
+    equation(out, "f68", "-(sin(174*(pi/180))*(?f0 -10800)-cos(174*(pi/180))*(10800-10800))+10800");
+    equation(out, "f69", "(cos(180*(pi/180))*(0-10800)+sin(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f70", "-(sin(180*(pi/180))*(0-10800)-cos(180*(pi/180))*(10800-10800))+10800");
+    equation(out, "f71", "(cos(185*(pi/180))*(?f0 -10800)+sin(185*(pi/180))*(10800-10800))+10800");
+    equation(out, "f72", "-(sin(185*(pi/180))*(?f0 -10800)-cos(185*(pi/180))*(10800-10800))+10800");
+    equation(out, "f73", "(cos(191*(pi/180))*(0-10800)+sin(191*(pi/180))*(10800-10800))+10800");
+    equation(out, "f74", "-(sin(191*(pi/180))*(0-10800)-cos(191*(pi/180))*(10800-10800))+10800");
+    equation(out, "f75", "(cos(196*(pi/180))*(?f0 -10800)+sin(196*(pi/180))*(10800-10800))+10800");
+    equation(out, "f76", "-(sin(196*(pi/180))*(?f0 -10800)-cos(196*(pi/180))*(10800-10800))+10800");
+    equation(out, "f77", "(cos(202*(pi/180))*(0-10800)+sin(202*(pi/180))*(10800-10800))+10800");
+    equation(out, "f78", "-(sin(202*(pi/180))*(0-10800)-cos(202*(pi/180))*(10800-10800))+10800");
+    equation(out, "f79", "(cos(208*(pi/180))*(?f0 -10800)+sin(208*(pi/180))*(10800-10800))+10800");
+    equation(out, "f80", "-(sin(208*(pi/180))*(?f0 -10800)-cos(208*(pi/180))*(10800-10800))+10800");
+    equation(out, "f81", "(cos(213*(pi/180))*(0-10800)+sin(213*(pi/180))*(10800-10800))+10800");
+    equation(out, "f82", "-(sin(213*(pi/180))*(0-10800)-cos(213*(pi/180))*(10800-10800))+10800");
+    equation(out, "f83", "(cos(219*(pi/180))*(?f0 -10800)+sin(219*(pi/180))*(10800-10800))+10800");
+    equation(out, "f84", "-(sin(219*(pi/180))*(?f0 -10800)-cos(219*(pi/180))*(10800-10800))+10800");
+    equation(out, "f85", "(cos(225*(pi/180))*(0-10800)+sin(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f86", "-(sin(225*(pi/180))*(0-10800)-cos(225*(pi/180))*(10800-10800))+10800");
+    equation(out, "f87", "(cos(230*(pi/180))*(?f0 -10800)+sin(230*(pi/180))*(10800-10800))+10800");
+    equation(out, "f88", "-(sin(230*(pi/180))*(?f0 -10800)-cos(230*(pi/180))*(10800-10800))+10800");
+    equation(out, "f89", "(cos(236*(pi/180))*(0-10800)+sin(236*(pi/180))*(10800-10800))+10800");
+    equation(out, "f90", "-(sin(236*(pi/180))*(0-10800)-cos(236*(pi/180))*(10800-10800))+10800");
+    equation(out, "f91", "(cos(241*(pi/180))*(?f0 -10800)+sin(241*(pi/180))*(10800-10800))+10800");
+    equation(out, "f92", "-(sin(241*(pi/180))*(?f0 -10800)-cos(241*(pi/180))*(10800-10800))+10800");
+    equation(out, "f93", "(cos(247*(pi/180))*(0-10800)+sin(247*(pi/180))*(10800-10800))+10800");
+    equation(out, "f94", "-(sin(247*(pi/180))*(0-10800)-cos(247*(pi/180))*(10800-10800))+10800");
+    equation(out, "f95", "(cos(253*(pi/180))*(?f0 -10800)+sin(253*(pi/180))*(10800-10800))+10800");
+    equation(out, "f96", "-(sin(253*(pi/180))*(?f0 -10800)-cos(253*(pi/180))*(10800-10800))+10800");
+    equation(out, "f97", "(cos(258*(pi/180))*(0-10800)+sin(258*(pi/180))*(10800-10800))+10800");
+    equation(out, "f98", "-(sin(258*(pi/180))*(0-10800)-cos(258*(pi/180))*(10800-10800))+10800");
+    equation(out, "f99", "(cos(264*(pi/180))*(?f0 -10800)+sin(264*(pi/180))*(10800-10800))+10800");
+    equation(out, "f100", "-(sin(264*(pi/180))*(?f0 -10800)-cos(264*(pi/180))*(10800-10800))+10800");
+    equation(out, "f101", "(cos(270*(pi/180))*(0-10800)+sin(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f102", "-(sin(270*(pi/180))*(0-10800)-cos(270*(pi/180))*(10800-10800))+10800");
+    equation(out, "f103", "(cos(275*(pi/180))*(?f0 -10800)+sin(275*(pi/180))*(10800-10800))+10800");
+    equation(out, "f104", "-(sin(275*(pi/180))*(?f0 -10800)-cos(275*(pi/180))*(10800-10800))+10800");
+    equation(out, "f105", "(cos(281*(pi/180))*(0-10800)+sin(281*(pi/180))*(10800-10800))+10800");
+    equation(out, "f106", "-(sin(281*(pi/180))*(0-10800)-cos(281*(pi/180))*(10800-10800))+10800");
+    equation(out, "f107", "(cos(286*(pi/180))*(?f0 -10800)+sin(286*(pi/180))*(10800-10800))+10800");
+    equation(out, "f108", "-(sin(286*(pi/180))*(?f0 -10800)-cos(286*(pi/180))*(10800-10800))+10800");
+    equation(out, "f109", "(cos(292*(pi/180))*(0-10800)+sin(292*(pi/180))*(10800-10800))+10800");
+    equation(out, "f110", "-(sin(292*(pi/180))*(0-10800)-cos(292*(pi/180))*(10800-10800))+10800");
+    equation(out, "f111", "(cos(298*(pi/180))*(?f0 -10800)+sin(298*(pi/180))*(10800-10800))+10800");
+    equation(out, "f112", "-(sin(298*(pi/180))*(?f0 -10800)-cos(298*(pi/180))*(10800-10800))+10800");
+    equation(out, "f113", "(cos(303*(pi/180))*(0-10800)+sin(303*(pi/180))*(10800-10800))+10800");
+    equation(out, "f114", "-(sin(303*(pi/180))*(0-10800)-cos(303*(pi/180))*(10800-10800))+10800");
+    equation(out, "f115", "(cos(309*(pi/180))*(?f0 -10800)+sin(309*(pi/180))*(10800-10800))+10800");
+    equation(out, "f116", "-(sin(309*(pi/180))*(?f0 -10800)-cos(309*(pi/180))*(10800-10800))+10800");
+    equation(out, "f117", "(cos(315*(pi/180))*(0-10800)+sin(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f118", "-(sin(315*(pi/180))*(0-10800)-cos(315*(pi/180))*(10800-10800))+10800");
+    equation(out, "f119", "(cos(320*(pi/180))*(?f0 -10800)+sin(320*(pi/180))*(10800-10800))+10800");
+    equation(out, "f120", "-(sin(320*(pi/180))*(?f0 -10800)-cos(320*(pi/180))*(10800-10800))+10800");
+    equation(out, "f121", "(cos(326*(pi/180))*(0-10800)+sin(326*(pi/180))*(10800-10800))+10800");
+    equation(out, "f122", "-(sin(326*(pi/180))*(0-10800)-cos(326*(pi/180))*(10800-10800))+10800");
+    equation(out, "f123", "(cos(331*(pi/180))*(?f0 -10800)+sin(331*(pi/180))*(10800-10800))+10800");
+    equation(out, "f124", "-(sin(331*(pi/180))*(?f0 -10800)-cos(331*(pi/180))*(10800-10800))+10800");
+    equation(out, "f125", "(cos(337*(pi/180))*(0-10800)+sin(337*(pi/180))*(10800-10800))+10800");
+    equation(out, "f126", "-(sin(337*(pi/180))*(0-10800)-cos(337*(pi/180))*(10800-10800))+10800");
+    equation(out, "f127", "(cos(343*(pi/180))*(?f0 -10800)+sin(343*(pi/180))*(10800-10800))+10800");
+    equation(out, "f128", "-(sin(343*(pi/180))*(?f0 -10800)-cos(343*(pi/180))*(10800-10800))+10800");
+    equation(out, "f129", "(cos(348*(pi/180))*(0-10800)+sin(348*(pi/180))*(10800-10800))+10800");
+    equation(out, "f130", "-(sin(348*(pi/180))*(0-10800)-cos(348*(pi/180))*(10800-10800))+10800");
+    equation(out, "f131", "(cos(354*(pi/180))*(?f0 -10800)+sin(354*(pi/180))*(10800-10800))+10800");
+    equation(out, "f132", "-(sin(354*(pi/180))*(?f0 -10800)-cos(354*(pi/180))*(10800-10800))+10800");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 10800");
     out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
@@ -3215,46 +3216,46 @@ void ODrawToOdf::processSeal32(const MSO::OfficeArtSpContainer& o, Writer& out) 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processRibbon2(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processRibbon2(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 5400<< 18900);
+    processModifiers(o, out, QList<int>() << 5400 << 18900);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M ?f12 ?f1 L ?f12 ?f13 C ?f12 ?f14 ?f15 21600 ?f16 21600 L 0 21600 2750 ?f7 0 ?f2 ?f0 ?f2 ?f0 ?f4 C ?f0 ?f5 ?f10 0 ?f11 0 L ?f17 0 C ?f18 0 ?f19 ?f5 ?f19 ?f4 L ?f19 ?f2 21600 ?f2 18850 ?f7 21600 21600 ?f20 21600 C ?f21 21600 ?f22 ?f14 ?f22 ?f13 L ?f22 ?f1 Z N M ?f12 ?f1 L ?f12 ?f13 C ?f12 ?f23 ?f15 ?f24 ?f16 ?f24 L ?f11 ?f24 C ?f10 ?f24 ?f0 ?f26 ?f0 ?f25 ?f0 ?f27 ?f10 ?f1 ?f11 ?f1 Z N M ?f22 ?f1 L ?f22 ?f13 C ?f22 ?f23 ?f21 ?f24 ?f20 ?f24 L ?f17 ?f24 C ?f18 ?f24 ?f19 ?f26 ?f19 ?f25 ?f19 ?f27 ?f18 ?f1 ?f17 ?f1 Z N M ?f0 ?f25 L ?f0 ?f2 N M ?f19 ?f25 L ?f19 ?f2 N");
     out.xml.addAttribute("draw:type", "mso-spt54");
     out.xml.addAttribute("draw:text-areas", "?f0 0 ?f19 ?f1");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","21600-?f1 ");
-    equation(out,"f3","?f2 /2");
-    equation(out,"f4","?f3 /2");
-    equation(out,"f5","?f4 /2");
-    equation(out,"f6","?f1 /2");
-    equation(out,"f7","21600-?f6 ");
-    equation(out,"f8","420");
-    equation(out,"f9","?f8 *2");
-    equation(out,"f10","?f0 +?f8 ");
-    equation(out,"f11","?f0 +?f9 ");
-    equation(out,"f12","?f0 +2700");
-    equation(out,"f13","21600-?f4 ");
-    equation(out,"f14","21600-?f5 ");
-    equation(out,"f15","?f12 -?f8 ");
-    equation(out,"f16","?f12 -?f9 ");
-    equation(out,"f17","21600-?f11 ");
-    equation(out,"f18","21600-?f10 ");
-    equation(out,"f19","21600-?f0 ");
-    equation(out,"f20","21600-?f16 ");
-    equation(out,"f21","21600-?f15 ");
-    equation(out,"f22","21600-?f12 ");
-    equation(out,"f23","?f13 -?f5 ");
-    equation(out,"f24","?f1 +?f3 ");
-    equation(out,"f25","?f1 +?f4 ");
-    equation(out,"f26","?f25 +?f5 ");
-    equation(out,"f27","?f25 -?f5 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "21600-?f1 ");
+    equation(out, "f3", "?f2 /2");
+    equation(out, "f4", "?f3 /2");
+    equation(out, "f5", "?f4 /2");
+    equation(out, "f6", "?f1 /2");
+    equation(out, "f7", "21600-?f6 ");
+    equation(out, "f8", "420");
+    equation(out, "f9", "?f8 *2");
+    equation(out, "f10", "?f0 +?f8 ");
+    equation(out, "f11", "?f0 +?f9 ");
+    equation(out, "f12", "?f0 +2700");
+    equation(out, "f13", "21600-?f4 ");
+    equation(out, "f14", "21600-?f5 ");
+    equation(out, "f15", "?f12 -?f8 ");
+    equation(out, "f16", "?f12 -?f9 ");
+    equation(out, "f17", "21600-?f11 ");
+    equation(out, "f18", "21600-?f10 ");
+    equation(out, "f19", "21600-?f0 ");
+    equation(out, "f20", "21600-?f16 ");
+    equation(out, "f21", "21600-?f15 ");
+    equation(out, "f22", "21600-?f12 ");
+    equation(out, "f23", "?f13 -?f5 ");
+    equation(out, "f24", "?f1 +?f3 ");
+    equation(out, "f25", "?f1 +?f4 ");
+    equation(out, "f26", "?f25 +?f5 ");
+    equation(out, "f27", "?f25 -?f5 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "8100");
@@ -3269,39 +3270,39 @@ void ODrawToOdf::processRibbon2(const MSO::OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processRibbon(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processRibbon(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "?f17 ?f10 2700 ?f14 ?f17 21600 ?f18 ?f14");
-    processModifiers(o, out, QList<int>() << 5400<< 2700);
+    processModifiers(o, out, QList<int>() << 5400 << 2700);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L ?f3 0 X ?f4 ?f11 L ?f4 ?f10 ?f5 ?f10 ?f5 ?f11 Y ?f6 0 L 21600 0 ?f18 ?f14 21600 ?f15 ?f9 ?f15 ?f9 ?f16 Y ?f8 21600 L ?f1 21600 X ?f0 ?f16 L ?f0 ?f15 0 ?f15 2700 ?f14 Z N M ?f4 ?f11 F Y ?f3 ?f12 L ?f1 ?f12 X ?f0 ?f13 ?f1 ?f10 L ?f4 ?f10 N M ?f5 ?f11 F Y ?f6 ?f12 L ?f8 ?f12 X ?f9 ?f13 ?f8 ?f10 L ?f5 ?f10 N M ?f0 ?f13 F L ?f0 ?f15 N M ?f9 ?f13 F L ?f9 ?f15 N");
     out.xml.addAttribute("draw:type", "mso-spt53");
     out.xml.addAttribute("draw:text-areas", "?f0 ?f10 ?f9 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","?f0 +675");
-    equation(out,"f2","?f1 +675");
-    equation(out,"f3","?f2 +675");
-    equation(out,"f4","?f3 +675");
-    equation(out,"f5","21600-?f4 ");
-    equation(out,"f6","21600-?f3 ");
-    equation(out,"f7","21600-?f2 ");
-    equation(out,"f8","21600-?f1 ");
-    equation(out,"f9","21600-?f0 ");
-    equation(out,"f10","$1 ");
-    equation(out,"f11","?f10 /4");
-    equation(out,"f12","?f11 *2");
-    equation(out,"f13","?f11 *3");
-    equation(out,"f14","10800-?f12 ");
-    equation(out,"f15","21600-?f10 ");
-    equation(out,"f16","21600-?f11 ");
-    equation(out,"f17","21600/2");
-    equation(out,"f18","21600-2700");
-    equation(out,"f19","?f17 -2700");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "?f0 +675");
+    equation(out, "f2", "?f1 +675");
+    equation(out, "f3", "?f2 +675");
+    equation(out, "f4", "?f3 +675");
+    equation(out, "f5", "21600-?f4 ");
+    equation(out, "f6", "21600-?f3 ");
+    equation(out, "f7", "21600-?f2 ");
+    equation(out, "f8", "21600-?f1 ");
+    equation(out, "f9", "21600-?f0 ");
+    equation(out, "f10", "$1 ");
+    equation(out, "f11", "?f10 /4");
+    equation(out, "f12", "?f11 *2");
+    equation(out, "f13", "?f11 *3");
+    equation(out, "f14", "10800-?f12 ");
+    equation(out, "f15", "21600-?f10 ");
+    equation(out, "f16", "21600-?f11 ");
+    equation(out, "f17", "21600/2");
+    equation(out, "f18", "21600-2700");
+    equation(out, "f19", "?f17 -2700");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "8100");
@@ -3316,46 +3317,46 @@ void ODrawToOdf::processRibbon(const MSO::OfficeArtSpContainer& o, Writer& out) 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processEllipseRibbon2(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processEllipseRibbon2(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 5400<< 18900);
+    processModifiers(o, out, QList<int>() << 5400 << 18900);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M ?f12 ?f1 L ?f12 ?f13 C ?f12 ?f14 ?f15 21600 ?f16 21600 L 0 21600 2750 ?f7 0 ?f2 ?f0 ?f2 ?f0 ?f4 C ?f0 ?f5 ?f10 0 ?f11 0 L ?f17 0 C ?f18 0 ?f19 ?f5 ?f19 ?f4 L ?f19 ?f2 21600 ?f2 18850 ?f7 21600 21600 ?f20 21600 C ?f21 21600 ?f22 ?f14 ?f22 ?f13 L ?f22 ?f1 Z N M ?f12 ?f1 L ?f12 ?f13 C ?f12 ?f23 ?f15 ?f24 ?f16 ?f24 L ?f11 ?f24 C ?f10 ?f24 ?f0 ?f26 ?f0 ?f25 ?f0 ?f27 ?f10 ?f1 ?f11 ?f1 Z N M ?f22 ?f1 L ?f22 ?f13 C ?f22 ?f23 ?f21 ?f24 ?f20 ?f24 L ?f17 ?f24 C ?f18 ?f24 ?f19 ?f26 ?f19 ?f25 ?f19 ?f27 ?f18 ?f1 ?f17 ?f1 Z N M ?f0 ?f25 L ?f0 ?f2 N M ?f19 ?f25 L ?f19 ?f2 N");
     out.xml.addAttribute("draw:type", "mso-spt108");
     out.xml.addAttribute("draw:text-areas", "?f0 0 ?f19 ?f1");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","21600-?f1 ");
-    equation(out,"f3","?f2 /2");
-    equation(out,"f4","?f3 /2");
-    equation(out,"f5","?f4 /2");
-    equation(out,"f6","?f1 /2");
-    equation(out,"f7","21600-?f6 ");
-    equation(out,"f8","420");
-    equation(out,"f9","?f8 *2");
-    equation(out,"f10","?f0 +?f8 ");
-    equation(out,"f11","?f0 +?f9 ");
-    equation(out,"f12","?f0 +2700");
-    equation(out,"f13","21600-?f4 ");
-    equation(out,"f14","21600-?f5 ");
-    equation(out,"f15","?f12 -?f8 ");
-    equation(out,"f16","?f12 -?f9 ");
-    equation(out,"f17","21600-?f11 ");
-    equation(out,"f18","21600-?f10 ");
-    equation(out,"f19","21600-?f0 ");
-    equation(out,"f20","21600-?f16 ");
-    equation(out,"f21","21600-?f15 ");
-    equation(out,"f22","21600-?f12 ");
-    equation(out,"f23","?f13 -?f5 ");
-    equation(out,"f24","?f1 +?f3 ");
-    equation(out,"f25","?f1 +?f4 ");
-    equation(out,"f26","?f25 +?f5 ");
-    equation(out,"f27","?f25 -?f5 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "21600-?f1 ");
+    equation(out, "f3", "?f2 /2");
+    equation(out, "f4", "?f3 /2");
+    equation(out, "f5", "?f4 /2");
+    equation(out, "f6", "?f1 /2");
+    equation(out, "f7", "21600-?f6 ");
+    equation(out, "f8", "420");
+    equation(out, "f9", "?f8 *2");
+    equation(out, "f10", "?f0 +?f8 ");
+    equation(out, "f11", "?f0 +?f9 ");
+    equation(out, "f12", "?f0 +2700");
+    equation(out, "f13", "21600-?f4 ");
+    equation(out, "f14", "21600-?f5 ");
+    equation(out, "f15", "?f12 -?f8 ");
+    equation(out, "f16", "?f12 -?f9 ");
+    equation(out, "f17", "21600-?f11 ");
+    equation(out, "f18", "21600-?f10 ");
+    equation(out, "f19", "21600-?f0 ");
+    equation(out, "f20", "21600-?f16 ");
+    equation(out, "f21", "21600-?f15 ");
+    equation(out, "f22", "21600-?f12 ");
+    equation(out, "f23", "?f13 -?f5 ");
+    equation(out, "f24", "?f1 +?f3 ");
+    equation(out, "f25", "?f1 +?f4 ");
+    equation(out, "f26", "?f25 +?f5 ");
+    equation(out, "f27", "?f25 -?f5 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "8100");
@@ -3370,39 +3371,39 @@ void ODrawToOdf::processEllipseRibbon2(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processEllipseRibbon(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processEllipseRibbon(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "?f17 ?f10 2700 ?f14 ?f17 21600 ?f18 ?f14");
-    processModifiers(o, out, QList<int>() << 5400<< 2700);
+    processModifiers(o, out, QList<int>() << 5400 << 2700);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L ?f3 0 X ?f4 ?f11 L ?f4 ?f10 ?f5 ?f10 ?f5 ?f11 Y ?f6 0 L 21600 0 ?f18 ?f14 21600 ?f15 ?f9 ?f15 ?f9 ?f16 Y ?f8 21600 L ?f1 21600 X ?f0 ?f16 L ?f0 ?f15 0 ?f15 2700 ?f14 Z N M ?f4 ?f11 F Y ?f3 ?f12 L ?f1 ?f12 X ?f0 ?f13 ?f1 ?f10 L ?f4 ?f10 N M ?f5 ?f11 F Y ?f6 ?f12 L ?f8 ?f12 X ?f9 ?f13 ?f8 ?f10 L ?f5 ?f10 N M ?f0 ?f13 F L ?f0 ?f15 N M ?f9 ?f13 F L ?f9 ?f15 N");
     out.xml.addAttribute("draw:type", "mso-spt107");
     out.xml.addAttribute("draw:text-areas", "?f0 ?f10 ?f9 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","?f0 +675");
-    equation(out,"f2","?f1 +675");
-    equation(out,"f3","?f2 +675");
-    equation(out,"f4","?f3 +675");
-    equation(out,"f5","21600-?f4 ");
-    equation(out,"f6","21600-?f3 ");
-    equation(out,"f7","21600-?f2 ");
-    equation(out,"f8","21600-?f1 ");
-    equation(out,"f9","21600-?f0 ");
-    equation(out,"f10","$1 ");
-    equation(out,"f11","?f10 /4");
-    equation(out,"f12","?f11 *2");
-    equation(out,"f13","?f11 *3");
-    equation(out,"f14","10800-?f12 ");
-    equation(out,"f15","21600-?f10 ");
-    equation(out,"f16","21600-?f11 ");
-    equation(out,"f17","21600/2");
-    equation(out,"f18","21600-2700");
-    equation(out,"f19","?f17 -2700");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "?f0 +675");
+    equation(out, "f2", "?f1 +675");
+    equation(out, "f3", "?f2 +675");
+    equation(out, "f4", "?f3 +675");
+    equation(out, "f5", "21600-?f4 ");
+    equation(out, "f6", "21600-?f3 ");
+    equation(out, "f7", "21600-?f2 ");
+    equation(out, "f8", "21600-?f1 ");
+    equation(out, "f9", "21600-?f0 ");
+    equation(out, "f10", "$1 ");
+    equation(out, "f11", "?f10 /4");
+    equation(out, "f12", "?f11 *2");
+    equation(out, "f13", "?f11 *3");
+    equation(out, "f14", "10800-?f12 ");
+    equation(out, "f15", "21600-?f10 ");
+    equation(out, "f16", "21600-?f11 ");
+    equation(out, "f17", "21600/2");
+    equation(out, "f18", "21600-2700");
+    equation(out, "f19", "?f17 -2700");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "8100");
@@ -3417,8 +3418,8 @@ void ODrawToOdf::processEllipseRibbon(const MSO::OfficeArtSpContainer& o, Writer
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processVerticalScroll(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processVerticalScroll(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -3431,20 +3432,20 @@ void ODrawToOdf::processVerticalScroll(const MSO::OfficeArtSpContainer& o, Write
     out.xml.addAttribute("draw:type", "vertical-scroll");
     out.xml.addAttribute("draw:text-areas", "?f0 ?f0 ?f3 ?f12");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","?f0 /2");
-    equation(out,"f2","right-?f1 ");
-    equation(out,"f3","right-?f0 ");
-    equation(out,"f4","?f0 +?f1 ");
-    equation(out,"f5","right-?f4 ");
-    equation(out,"f6","?f0 *2");
-    equation(out,"f7","?f1 /2");
-    equation(out,"f8","?f0 +?f7 ");
-    equation(out,"f9","?f1 +?f7 ");
-    equation(out,"f10","bottom-?f9 ");
-    equation(out,"f11","bottom-?f1 ");
-    equation(out,"f12","bottom-?f0 ");
-    equation(out,"f13","bottom-?f4 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "?f0 /2");
+    equation(out, "f2", "right-?f1 ");
+    equation(out, "f3", "right-?f0 ");
+    equation(out, "f4", "?f0 +?f1 ");
+    equation(out, "f5", "right-?f4 ");
+    equation(out, "f6", "?f0 *2");
+    equation(out, "f7", "?f1 /2");
+    equation(out, "f8", "?f0 +?f7 ");
+    equation(out, "f9", "?f1 +?f7 ");
+    equation(out, "f10", "bottom-?f9 ");
+    equation(out, "f11", "bottom-?f1 ");
+    equation(out, "f12", "bottom-?f0 ");
+    equation(out, "f13", "bottom-?f4 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "left $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "0");
@@ -3454,8 +3455,8 @@ void ODrawToOdf::processVerticalScroll(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processHorizontalScroll(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processHorizontalScroll(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -3468,20 +3469,20 @@ void ODrawToOdf::processHorizontalScroll(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.addAttribute("draw:type", "horizontal-scroll");
     out.xml.addAttribute("draw:text-areas", "?f0 ?f0 ?f3 ?f12");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","?f0 /2");
-    equation(out,"f2","right-?f1 ");
-    equation(out,"f3","right-?f0 ");
-    equation(out,"f4","?f0 +?f1 ");
-    equation(out,"f5","right-?f4 ");
-    equation(out,"f6","?f0 *2");
-    equation(out,"f7","?f1 /2");
-    equation(out,"f8","?f0 +?f7 ");
-    equation(out,"f9","?f1 +?f7 ");
-    equation(out,"f10","bottom-?f9 ");
-    equation(out,"f11","bottom-?f1 ");
-    equation(out,"f12","bottom-?f0 ");
-    equation(out,"f13","bottom-?f4 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "?f0 /2");
+    equation(out, "f2", "right-?f1 ");
+    equation(out, "f3", "right-?f0 ");
+    equation(out, "f4", "?f0 +?f1 ");
+    equation(out, "f5", "right-?f4 ");
+    equation(out, "f6", "?f0 *2");
+    equation(out, "f7", "?f1 /2");
+    equation(out, "f8", "?f0 +?f7 ");
+    equation(out, "f9", "?f1 +?f7 ");
+    equation(out, "f10", "bottom-?f9 ");
+    equation(out, "f11", "bottom-?f1 ");
+    equation(out, "f12", "bottom-?f0 ");
+    equation(out, "f13", "bottom-?f4 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -3491,49 +3492,49 @@ void ODrawToOdf::processHorizontalScroll(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processWave(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processWave(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "?f18 ?f0 ?f20 10800 ?f19 ?f1 ?f21 10800");
-    processModifiers(o, out, QList<int>() << 1400<< 10800);
+    processModifiers(o, out, QList<int>() << 1400 << 10800);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M ?f7 ?f0 C ?f15 ?f9 ?f16 ?f10 ?f12 ?f0 L ?f24 ?f1 C ?f25 ?f26 ?f27 ?f28 ?f29 ?f1 Z N");
     out.xml.addAttribute("draw:type", "mso-spt64");
     out.xml.addAttribute("draw:text-areas", "?f5 ?f22 ?f11 ?f23");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","21600-?f0 ");
-    equation(out,"f2","$1 ");
-    equation(out,"f3","?f2 -10800");
-    equation(out,"f4","?f3 *2");
-    equation(out,"f5","abs(?f4 )");
-    equation(out,"f6","4320-?f5 ");
-    equation(out,"f7","if(?f3 ,0,?f5 )");
-    equation(out,"f8","15800*?f0 /4460");
-    equation(out,"f9","?f0 -?f8 ");
-    equation(out,"f10","?f0 +?f8 ");
-    equation(out,"f11","21600-?f4 ");
-    equation(out,"f12","if(?f3 ,?f11 ,21600)");
-    equation(out,"f13","?f12 -?f7 ");
-    equation(out,"f14","?f5 /2");
-    equation(out,"f15","?f7 +7200-?f14 ");
-    equation(out,"f16","?f12 +?f14 -7200");
-    equation(out,"f17","?f13 /2");
-    equation(out,"f18","?f7 +?f17 ");
-    equation(out,"f19","21600-?f18 ");
-    equation(out,"f20","?f5 /2");
-    equation(out,"f21","21600-?f20 ");
-    equation(out,"f22","?f0 *2");
-    equation(out,"f23","21600-?f22 ");
-    equation(out,"f24","21600-?f7 ");
-    equation(out,"f25","21600-?f15 ");
-    equation(out,"f26","?f1 +?f8 ");
-    equation(out,"f27","21600-?f16 ");
-    equation(out,"f28","?f1 -?f8 ");
-    equation(out,"f29","21600-?f12 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "21600-?f0 ");
+    equation(out, "f2", "$1 ");
+    equation(out, "f3", "?f2 -10800");
+    equation(out, "f4", "?f3 *2");
+    equation(out, "f5", "abs(?f4 )");
+    equation(out, "f6", "4320-?f5 ");
+    equation(out, "f7", "if(?f3 ,0,?f5 )");
+    equation(out, "f8", "15800*?f0 /4460");
+    equation(out, "f9", "?f0 -?f8 ");
+    equation(out, "f10", "?f0 +?f8 ");
+    equation(out, "f11", "21600-?f4 ");
+    equation(out, "f12", "if(?f3 ,?f11 ,21600)");
+    equation(out, "f13", "?f12 -?f7 ");
+    equation(out, "f14", "?f5 /2");
+    equation(out, "f15", "?f7 +7200-?f14 ");
+    equation(out, "f16", "?f12 +?f14 -7200");
+    equation(out, "f17", "?f13 /2");
+    equation(out, "f18", "?f7 +?f17 ");
+    equation(out, "f19", "21600-?f18 ");
+    equation(out, "f20", "?f5 /2");
+    equation(out, "f21", "21600-?f20 ");
+    equation(out, "f22", "?f0 *2");
+    equation(out, "f23", "21600-?f22 ");
+    equation(out, "f24", "21600-?f7 ");
+    equation(out, "f25", "21600-?f15 ");
+    equation(out, "f26", "?f1 +?f8 ");
+    equation(out, "f27", "21600-?f16 ");
+    equation(out, "f28", "?f1 -?f8 ");
+    equation(out, "f29", "21600-?f12 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "left $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "0");
@@ -3548,53 +3549,53 @@ void ODrawToOdf::processWave(const MSO::OfficeArtSpContainer& o, Writer& out) {
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processDoubleWave(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processDoubleWave(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "?f18 ?f0 ?f20 10800 ?f19 ?f1 ?f21 10800");
-    processModifiers(o, out, QList<int>() << 1400<< 10800);
+    processModifiers(o, out, QList<int>() << 1400 << 10800);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M ?f7 ?f0 C ?f15 ?f9 ?f30 ?f10 ?f18 ?f0 ?f31 ?f9 ?f16 ?f10 ?f12 ?f0 L ?f24 ?f1 C ?f25 ?f26 ?f33 ?f28 ?f19 ?f1 ?f32 ?f26 ?f27 ?f28 ?f29 ?f1 Z N");
     out.xml.addAttribute("draw:type", "mso-spt188");
     out.xml.addAttribute("draw:text-areas", "?f5 ?f22 ?f11 ?f23");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","21600-?f0 ");
-    equation(out,"f2","$1 ");
-    equation(out,"f3","?f2 -10800");
-    equation(out,"f4","?f3 *2");
-    equation(out,"f5","abs(?f4 )");
-    equation(out,"f6","4320-?f5 ");
-    equation(out,"f7","if(?f3 ,0,?f5 )");
-    equation(out,"f8","7900*?f0 /2230");
-    equation(out,"f9","?f0 -?f8 ");
-    equation(out,"f10","?f0 +?f8 ");
-    equation(out,"f11","21600-?f4 ");
-    equation(out,"f12","if(?f3 ,?f11 ,21600)");
-    equation(out,"f13","?f12 -?f7 ");
-    equation(out,"f14","?f5 /2");
-    equation(out,"f15","?f7 +3600-?f14 ");
-    equation(out,"f16","?f12 +?f14 -3600");
-    equation(out,"f17","?f13 /2");
-    equation(out,"f18","?f7 +?f17 ");
-    equation(out,"f19","21600-?f18 ");
-    equation(out,"f20","?f5 /2");
-    equation(out,"f21","21600-?f20 ");
-    equation(out,"f22","?f0 *2");
-    equation(out,"f23","21600-?f22 ");
-    equation(out,"f24","21600-?f7 ");
-    equation(out,"f25","21600-?f15 ");
-    equation(out,"f26","?f1 +?f8 ");
-    equation(out,"f27","21600-?f16 ");
-    equation(out,"f28","?f1 -?f8 ");
-    equation(out,"f29","21600-?f12 ");
-    equation(out,"f30","?f18 -?f14 ");
-    equation(out,"f31","?f18 +?f14 ");
-    equation(out,"f32","?f19 -?f14 ");
-    equation(out,"f33","?f19 +?f14 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "21600-?f0 ");
+    equation(out, "f2", "$1 ");
+    equation(out, "f3", "?f2 -10800");
+    equation(out, "f4", "?f3 *2");
+    equation(out, "f5", "abs(?f4 )");
+    equation(out, "f6", "4320-?f5 ");
+    equation(out, "f7", "if(?f3 ,0,?f5 )");
+    equation(out, "f8", "7900*?f0 /2230");
+    equation(out, "f9", "?f0 -?f8 ");
+    equation(out, "f10", "?f0 +?f8 ");
+    equation(out, "f11", "21600-?f4 ");
+    equation(out, "f12", "if(?f3 ,?f11 ,21600)");
+    equation(out, "f13", "?f12 -?f7 ");
+    equation(out, "f14", "?f5 /2");
+    equation(out, "f15", "?f7 +3600-?f14 ");
+    equation(out, "f16", "?f12 +?f14 -3600");
+    equation(out, "f17", "?f13 /2");
+    equation(out, "f18", "?f7 +?f17 ");
+    equation(out, "f19", "21600-?f18 ");
+    equation(out, "f20", "?f5 /2");
+    equation(out, "f21", "21600-?f20 ");
+    equation(out, "f22", "?f0 *2");
+    equation(out, "f23", "21600-?f22 ");
+    equation(out, "f24", "21600-?f7 ");
+    equation(out, "f25", "21600-?f15 ");
+    equation(out, "f26", "?f1 +?f8 ");
+    equation(out, "f27", "21600-?f16 ");
+    equation(out, "f28", "?f1 -?f8 ");
+    equation(out, "f29", "21600-?f12 ");
+    equation(out, "f30", "?f18 -?f14 ");
+    equation(out, "f31", "?f18 +?f14 ");
+    equation(out, "f32", "?f19 -?f14 ");
+    equation(out, "f33", "?f19 +?f14 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "left $0");
     out.xml.addAttribute("draw:handle-range-y-minimum", "0");
@@ -3609,61 +3610,61 @@ void ODrawToOdf::processDoubleWave(const MSO::OfficeArtSpContainer& o, Writer& o
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processWedgeRectCallout(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processWedgeRectCallout(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "10800 0 0 10800 10800 21600 21600 10800 ?f40 ?f41");
-    processModifiers(o, out, QList<int>() << 1400<< 25920);
+    processModifiers(o, out, QList<int>() << 1400 << 25920);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 0 3590 ?f2 ?f3 0 8970 0 12630 ?f4 ?f5 0 18010 0 21600 3590 21600 ?f6 ?f7 8970 21600 12630 21600 ?f8 ?f9 18010 21600 21600 21600 21600 18010 ?f10 ?f11 21600 12630 21600 8970 ?f12 ?f13 21600 3590 21600 0 18010 0 ?f14 ?f15 12630 0 8970 0 ?f16 ?f17 3590 0 0 0 Z N");
     out.xml.addAttribute("draw:type", "rectangular-callout");
     out.xml.addAttribute("draw:text-areas", "0 0 21600 21600");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 -10800");
-    equation(out,"f1","$1 -10800");
-    equation(out,"f2","if(?f18 ,$0 ,0)");
-    equation(out,"f3","if(?f18 ,$1 ,6280)");
-    equation(out,"f4","if(?f23 ,$0 ,0)");
-    equation(out,"f5","if(?f23 ,$1 ,15320)");
-    equation(out,"f6","if(?f26 ,$0 ,6280)");
-    equation(out,"f7","if(?f26 ,$1 ,21600)");
-    equation(out,"f8","if(?f29 ,$0 ,15320)");
-    equation(out,"f9","if(?f29 ,$1 ,21600)");
-    equation(out,"f10","if(?f32 ,$0 ,21600)");
-    equation(out,"f11","if(?f32 ,$1 ,15320)");
-    equation(out,"f12","if(?f34 ,$0 ,21600)");
-    equation(out,"f13","if(?f34 ,$1 ,6280)");
-    equation(out,"f14","if(?f36 ,$0 ,15320)");
-    equation(out,"f15","if(?f36 ,$1 ,0)");
-    equation(out,"f16","if(?f38 ,$0 ,6280)");
-    equation(out,"f17","if(?f38 ,$1 ,0)");
-    equation(out,"f18","if($0 ,-1,?f19 )");
-    equation(out,"f19","if(?f1 ,-1,?f22 )");
-    equation(out,"f20","abs(?f0 )");
-    equation(out,"f21","abs(?f1 )");
-    equation(out,"f22","?f20 -?f21 ");
-    equation(out,"f23","if($0 ,-1,?f24 )");
-    equation(out,"f24","if(?f1 ,?f22 ,-1)");
-    equation(out,"f25","$1 -21600");
-    equation(out,"f26","if(?f25 ,?f27 ,-1)");
-    equation(out,"f27","if(?f0 ,-1,?f28 )");
-    equation(out,"f28","?f21 -?f20 ");
-    equation(out,"f29","if(?f25 ,?f30 ,-1)");
-    equation(out,"f30","if(?f0 ,?f28 ,-1)");
-    equation(out,"f31","$0 -21600");
-    equation(out,"f32","if(?f31 ,?f33 ,-1)");
-    equation(out,"f33","if(?f1 ,?f22 ,-1)");
-    equation(out,"f34","if(?f31 ,?f35 ,-1)");
-    equation(out,"f35","if(?f1 ,-1,?f22 )");
-    equation(out,"f36","if($1 ,-1,?f37 )");
-    equation(out,"f37","if(?f0 ,?f28 ,-1)");
-    equation(out,"f38","if($1 ,-1,?f39 )");
-    equation(out,"f39","if(?f0 ,-1,?f28 )");
-    equation(out,"f40","$0 ");
-    equation(out,"f41","$1 ");
+    equation(out, "f0", "$0 -10800");
+    equation(out, "f1", "$1 -10800");
+    equation(out, "f2", "if(?f18 ,$0 ,0)");
+    equation(out, "f3", "if(?f18 ,$1 ,6280)");
+    equation(out, "f4", "if(?f23 ,$0 ,0)");
+    equation(out, "f5", "if(?f23 ,$1 ,15320)");
+    equation(out, "f6", "if(?f26 ,$0 ,6280)");
+    equation(out, "f7", "if(?f26 ,$1 ,21600)");
+    equation(out, "f8", "if(?f29 ,$0 ,15320)");
+    equation(out, "f9", "if(?f29 ,$1 ,21600)");
+    equation(out, "f10", "if(?f32 ,$0 ,21600)");
+    equation(out, "f11", "if(?f32 ,$1 ,15320)");
+    equation(out, "f12", "if(?f34 ,$0 ,21600)");
+    equation(out, "f13", "if(?f34 ,$1 ,6280)");
+    equation(out, "f14", "if(?f36 ,$0 ,15320)");
+    equation(out, "f15", "if(?f36 ,$1 ,0)");
+    equation(out, "f16", "if(?f38 ,$0 ,6280)");
+    equation(out, "f17", "if(?f38 ,$1 ,0)");
+    equation(out, "f18", "if($0 ,-1,?f19 )");
+    equation(out, "f19", "if(?f1 ,-1,?f22 )");
+    equation(out, "f20", "abs(?f0 )");
+    equation(out, "f21", "abs(?f1 )");
+    equation(out, "f22", "?f20 -?f21 ");
+    equation(out, "f23", "if($0 ,-1,?f24 )");
+    equation(out, "f24", "if(?f1 ,?f22 ,-1)");
+    equation(out, "f25", "$1 -21600");
+    equation(out, "f26", "if(?f25 ,?f27 ,-1)");
+    equation(out, "f27", "if(?f0 ,-1,?f28 )");
+    equation(out, "f28", "?f21 -?f20 ");
+    equation(out, "f29", "if(?f25 ,?f30 ,-1)");
+    equation(out, "f30", "if(?f0 ,?f28 ,-1)");
+    equation(out, "f31", "$0 -21600");
+    equation(out, "f32", "if(?f31 ,?f33 ,-1)");
+    equation(out, "f33", "if(?f1 ,?f22 ,-1)");
+    equation(out, "f34", "if(?f31 ,?f35 ,-1)");
+    equation(out, "f35", "if(?f1 ,-1,?f22 )");
+    equation(out, "f36", "if($1 ,-1,?f37 )");
+    equation(out, "f37", "if(?f0 ,?f28 ,-1)");
+    equation(out, "f38", "if($1 ,-1,?f39 )");
+    equation(out, "f39", "if(?f0 ,-1,?f28 )");
+    equation(out, "f40", "$0 ");
+    equation(out, "f41", "$1 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -3671,60 +3672,60 @@ void ODrawToOdf::processWedgeRectCallout(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processWedgeRRectCallout(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processWedgeRRectCallout(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 1400<< 25920);
+    processModifiers(o, out, QList<int>() << 1400 << 25920);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 3590 0 X 0 3590 L ?f2 ?f3 0 8970 0 12630 ?f4 ?f5 0 18010 Y 3590 21600 L ?f6 ?f7 8970 21600 12630 21600 ?f8 ?f9 18010 21600 X 21600 18010 L ?f10 ?f11 21600 12630 21600 8970 ?f12 ?f13 21600 3590 Y 18010 0 L ?f14 ?f15 12630 0 8970 0 ?f16 ?f17 Z N");
     out.xml.addAttribute("draw:type", "round-rectangular-callout");
     out.xml.addAttribute("draw:text-areas", "800 800 20800 20800");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 -10800");
-    equation(out,"f1","$1 -10800");
-    equation(out,"f2","if(?f18 ,$0 ,0)");
-    equation(out,"f3","if(?f18 ,$1 ,6280)");
-    equation(out,"f4","if(?f23 ,$0 ,0)");
-    equation(out,"f5","if(?f23 ,$1 ,15320)");
-    equation(out,"f6","if(?f26 ,$0 ,6280)");
-    equation(out,"f7","if(?f26 ,$1 ,21600)");
-    equation(out,"f8","if(?f29 ,$0 ,15320)");
-    equation(out,"f9","if(?f29 ,$1 ,21600)");
-    equation(out,"f10","if(?f32 ,$0 ,21600)");
-    equation(out,"f11","if(?f32 ,$1 ,15320)");
-    equation(out,"f12","if(?f34 ,$0 ,21600)");
-    equation(out,"f13","if(?f34 ,$1 ,6280)");
-    equation(out,"f14","if(?f36 ,$0 ,15320)");
-    equation(out,"f15","if(?f36 ,$1 ,0)");
-    equation(out,"f16","if(?f38 ,$0 ,6280)");
-    equation(out,"f17","if(?f38 ,$1 ,0)");
-    equation(out,"f18","if($0 ,-1,?f19 )");
-    equation(out,"f19","if(?f1 ,-1,?f22 )");
-    equation(out,"f20","abs(?f0 )");
-    equation(out,"f21","abs(?f1 )");
-    equation(out,"f22","?f20 -?f21 ");
-    equation(out,"f23","if($0 ,-1,?f24 )");
-    equation(out,"f24","if(?f1 ,?f22 ,-1)");
-    equation(out,"f25","$1 -21600");
-    equation(out,"f26","if(?f25 ,?f27 ,-1)");
-    equation(out,"f27","if(?f0 ,-1,?f28 )");
-    equation(out,"f28","?f21 -?f20 ");
-    equation(out,"f29","if(?f25 ,?f30 ,-1)");
-    equation(out,"f30","if(?f0 ,?f28 ,-1)");
-    equation(out,"f31","$0 -21600");
-    equation(out,"f32","if(?f31 ,?f33 ,-1)");
-    equation(out,"f33","if(?f1 ,?f22 ,-1)");
-    equation(out,"f34","if(?f31 ,?f35 ,-1)");
-    equation(out,"f35","if(?f1 ,-1,?f22 )");
-    equation(out,"f36","if($1 ,-1,?f37 )");
-    equation(out,"f37","if(?f0 ,?f28 ,-1)");
-    equation(out,"f38","if($1 ,-1,?f39 )");
-    equation(out,"f39","if(?f0 ,-1,?f28 )");
-    equation(out,"f40","$0 ");
-    equation(out,"f41","$1 ");
+    equation(out, "f0", "$0 -10800");
+    equation(out, "f1", "$1 -10800");
+    equation(out, "f2", "if(?f18 ,$0 ,0)");
+    equation(out, "f3", "if(?f18 ,$1 ,6280)");
+    equation(out, "f4", "if(?f23 ,$0 ,0)");
+    equation(out, "f5", "if(?f23 ,$1 ,15320)");
+    equation(out, "f6", "if(?f26 ,$0 ,6280)");
+    equation(out, "f7", "if(?f26 ,$1 ,21600)");
+    equation(out, "f8", "if(?f29 ,$0 ,15320)");
+    equation(out, "f9", "if(?f29 ,$1 ,21600)");
+    equation(out, "f10", "if(?f32 ,$0 ,21600)");
+    equation(out, "f11", "if(?f32 ,$1 ,15320)");
+    equation(out, "f12", "if(?f34 ,$0 ,21600)");
+    equation(out, "f13", "if(?f34 ,$1 ,6280)");
+    equation(out, "f14", "if(?f36 ,$0 ,15320)");
+    equation(out, "f15", "if(?f36 ,$1 ,0)");
+    equation(out, "f16", "if(?f38 ,$0 ,6280)");
+    equation(out, "f17", "if(?f38 ,$1 ,0)");
+    equation(out, "f18", "if($0 ,-1,?f19 )");
+    equation(out, "f19", "if(?f1 ,-1,?f22 )");
+    equation(out, "f20", "abs(?f0 )");
+    equation(out, "f21", "abs(?f1 )");
+    equation(out, "f22", "?f20 -?f21 ");
+    equation(out, "f23", "if($0 ,-1,?f24 )");
+    equation(out, "f24", "if(?f1 ,?f22 ,-1)");
+    equation(out, "f25", "$1 -21600");
+    equation(out, "f26", "if(?f25 ,?f27 ,-1)");
+    equation(out, "f27", "if(?f0 ,-1,?f28 )");
+    equation(out, "f28", "?f21 -?f20 ");
+    equation(out, "f29", "if(?f25 ,?f30 ,-1)");
+    equation(out, "f30", "if(?f0 ,?f28 ,-1)");
+    equation(out, "f31", "$0 -21600");
+    equation(out, "f32", "if(?f31 ,?f33 ,-1)");
+    equation(out, "f33", "if(?f1 ,?f22 ,-1)");
+    equation(out, "f34", "if(?f31 ,?f35 ,-1)");
+    equation(out, "f35", "if(?f1 ,-1,?f22 )");
+    equation(out, "f36", "if($1 ,-1,?f37 )");
+    equation(out, "f37", "if(?f0 ,?f28 ,-1)");
+    equation(out, "f38", "if($1 ,-1,?f39 )");
+    equation(out, "f39", "if(?f0 ,-1,?f28 )");
+    equation(out, "f40", "$0 ");
+    equation(out, "f41", "$1 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -3732,43 +3733,43 @@ void ODrawToOdf::processWedgeRRectCallout(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processWedgeEllipseCallout(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processWedgeEllipseCallout(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:glue-points", "10800 0 3160 3160 0 10800 3160 18440 10800 21600 18440 18440 21600 10800 18440 3160 ?f14 ?f15");
-    processModifiers(o, out, QList<int>() << 1350<< 25920);
+    processModifiers(o, out, QList<int>() << 1350 << 25920);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "V 0 0 21600 21600 ?f22 ?f23 ?f18 ?f19 L ?f14 ?f15 Z N");
     out.xml.addAttribute("draw:type", "round-callout");
     out.xml.addAttribute("draw:text-areas", "3200 3200 18400 18400");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 -10800");
-    equation(out,"f1","$1 -10800");
-    equation(out,"f2","?f0 *?f0 ");
-    equation(out,"f3","?f1 *?f1 ");
-    equation(out,"f4","?f2 +?f3 ");
-    equation(out,"f5","sqrt(?f4 )");
-    equation(out,"f6","?f5 -10800");
-    equation(out,"f7","atan2(?f1 ,?f0 )/(pi/180)");
-    equation(out,"f8","?f7 -10");
-    equation(out,"f9","?f7 +10");
-    equation(out,"f10","10800*cos(?f7 *(pi/180))");
-    equation(out,"f11","10800*sin(?f7 *(pi/180))");
-    equation(out,"f12","?f10 +10800");
-    equation(out,"f13","?f11 +10800");
-    equation(out,"f14","if(?f6 ,$0 ,?f12 )");
-    equation(out,"f15","if(?f6 ,$1 ,?f13 )");
-    equation(out,"f16","10800*cos(?f8 *(pi/180))");
-    equation(out,"f17","10800*sin(?f8 *(pi/180))");
-    equation(out,"f18","?f16 +10800");
-    equation(out,"f19","?f17 +10800");
-    equation(out,"f20","10800*cos(?f9 *(pi/180))");
-    equation(out,"f21","10800*sin(?f9 *(pi/180))");
-    equation(out,"f22","?f20 +10800");
-    equation(out,"f23","?f21 +10800");
+    equation(out, "f0", "$0 -10800");
+    equation(out, "f1", "$1 -10800");
+    equation(out, "f2", "?f0 *?f0 ");
+    equation(out, "f3", "?f1 *?f1 ");
+    equation(out, "f4", "?f2 +?f3 ");
+    equation(out, "f5", "sqrt(?f4 )");
+    equation(out, "f6", "?f5 -10800");
+    equation(out, "f7", "atan2(?f1 ,?f0 )/(pi/180)");
+    equation(out, "f8", "?f7 -10");
+    equation(out, "f9", "?f7 +10");
+    equation(out, "f10", "10800*cos(?f7 *(pi/180))");
+    equation(out, "f11", "10800*sin(?f7 *(pi/180))");
+    equation(out, "f12", "?f10 +10800");
+    equation(out, "f13", "?f11 +10800");
+    equation(out, "f14", "if(?f6 ,$0 ,?f12 )");
+    equation(out, "f15", "if(?f6 ,$1 ,?f13 )");
+    equation(out, "f16", "10800*cos(?f8 *(pi/180))");
+    equation(out, "f17", "10800*sin(?f8 *(pi/180))");
+    equation(out, "f18", "?f16 +10800");
+    equation(out, "f19", "?f17 +10800");
+    equation(out, "f20", "10800*cos(?f9 *(pi/180))");
+    equation(out, "f21", "10800*sin(?f9 *(pi/180))");
+    equation(out, "f22", "?f20 +10800");
+    equation(out, "f23", "?f21 +10800");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -3776,39 +3777,39 @@ void ODrawToOdf::processWedgeEllipseCallout(const MSO::OfficeArtSpContainer& o, 
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCloudCallout(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCloudCallout(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 1350<< 25920);
+    processModifiers(o, out, QList<int>() << 1350 << 25920);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 1930 7160 C 1530 4490 3400 1970 5270 1970 5860 1950 6470 2210 6970 2600 7450 1390 8340 650 9340 650 10004 690 10710 1050 11210 1700 11570 630 12330 0 13150 0 13840 0 14470 460 14870 1160 15330 440 16020 0 16740 0 17910 0 18900 1130 19110 2710 20240 3150 21060 4580 21060 6220 21060 6720 21000 7200 20830 7660 21310 8460 21600 9450 21600 10460 21600 12750 20310 14680 18650 15010 18650 17200 17370 18920 15770 18920 15220 18920 14700 18710 14240 18310 13820 20240 12490 21600 11000 21600 9890 21600 8840 20790 8210 19510 7620 20000 7930 20290 6240 20290 4850 20290 3570 19280 2900 17640 1300 17600 480 16300 480 14660 480 13900 690 13210 1070 12640 380 12160 0 11210 0 10120 0 8590 840 7330 1930 7160 Z N M 1930 7160 C 1950 7410 2040 7690 2090 7920 F N M 6970 2600 C 7200 2790 7480 3050 7670 3310 F N M 11210 1700 C 11130 1910 11080 2160 11030 2400 F N M 14870 1160 C 14720 1400 14640 1720 14540 2010 F N M 19110 2710 C 19130 2890 19230 3290 19190 3380 F N M 20830 7660 C 20660 8170 20430 8620 20110 8990 F N M 18660 15010 C 18740 14200 18280 12200 17000 11450 F N M 14240 18310 C 14320 17980 14350 17680 14370 17360 F N M 8220 19510 C 8060 19250 7960 18950 7860 18640 F N M 2900 17640 C 3090 17600 3280 17540 3460 17450 F N M 1070 12640 C 1400 12900 1780 13130 2330 13040 F N U ?f17 ?f18 1800 1800 0 360 Z N U ?f19 ?f20 1200 1200 0 360 Z N U ?f13 ?f14 700 700 0 360 Z N");
     out.xml.addAttribute("draw:type", "cloud-callout");
     out.xml.addAttribute("draw:text-areas", "3000 3320 17110 17330");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 -10800");
-    equation(out,"f1","$1 -10800");
-    equation(out,"f2","atan2(?f1 ,?f0 )/(pi/180)");
-    equation(out,"f3","10800*cos(?f2 *(pi/180))");
-    equation(out,"f4","10800*sin(?f2 *(pi/180))");
-    equation(out,"f5","?f3 +10800");
-    equation(out,"f6","?f4 +10800");
-    equation(out,"f7","$0 -?f5 ");
-    equation(out,"f8","$1 -?f6 ");
-    equation(out,"f9","?f7 /3");
-    equation(out,"f10","?f8 /3");
-    equation(out,"f11","?f7 *2/3");
-    equation(out,"f12","?f8 *2/3");
-    equation(out,"f13","$0 ");
-    equation(out,"f14","$1 ");
-    equation(out,"f15","?f3 /12");
-    equation(out,"f16","?f4 /12");
-    equation(out,"f17","?f9 +?f5 -?f15 ");
-    equation(out,"f18","?f10 +?f6 -?f16 ");
-    equation(out,"f19","?f11 +?f5 ");
-    equation(out,"f20","?f12 +?f6 ");
+    equation(out, "f0", "$0 -10800");
+    equation(out, "f1", "$1 -10800");
+    equation(out, "f2", "atan2(?f1 ,?f0 )/(pi/180)");
+    equation(out, "f3", "10800*cos(?f2 *(pi/180))");
+    equation(out, "f4", "10800*sin(?f2 *(pi/180))");
+    equation(out, "f5", "?f3 +10800");
+    equation(out, "f6", "?f4 +10800");
+    equation(out, "f7", "$0 -?f5 ");
+    equation(out, "f8", "$1 -?f6 ");
+    equation(out, "f9", "?f7 /3");
+    equation(out, "f10", "?f8 /3");
+    equation(out, "f11", "?f7 *2/3");
+    equation(out, "f12", "?f8 *2/3");
+    equation(out, "f13", "$0 ");
+    equation(out, "f14", "$1 ");
+    equation(out, "f15", "?f3 /12");
+    equation(out, "f16", "?f4 /12");
+    equation(out, "f17", "?f9 +?f5 -?f15 ");
+    equation(out, "f18", "?f10 +?f6 -?f16 ");
+    equation(out, "f19", "?f11 +?f5 ");
+    equation(out, "f20", "?f12 +?f6 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -3816,25 +3817,25 @@ void ODrawToOdf::processCloudCallout(const MSO::OfficeArtSpContainer& o, Writer&
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processBorderCallout90(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processBorderCallout90(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -1800<< 22950<< -1800<< 2700);
+    processModifiers(o, out, QList<int>() << -1800 << 22950 << -1800 << 2700);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N");
     out.xml.addAttribute("draw:type", "mso-spt180");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -3845,25 +3846,25 @@ void ODrawToOdf::processBorderCallout90(const MSO::OfficeArtSpContainer& o, Writ
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processBorderCallout1(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processBorderCallout1(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -8288<< 24500<< -1800<< 4000);
+    processModifiers(o, out, QList<int>() << -8288 << 24500 << -1800 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N");
     out.xml.addAttribute("draw:type", "line-callout-1");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -3874,25 +3875,25 @@ void ODrawToOdf::processBorderCallout1(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processBorderCallout2(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processBorderCallout2(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -10088<< 24500<< -3600<< 4000<< -1800<< 4000);
+    processModifiers(o, out, QList<int>() << -10088 << 24500 << -3600 << 4000 << -1800 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N M ?f2 ?f3 L ?f4 ?f5 N M");
     out.xml.addAttribute("draw:type", "line-callout-2");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -3906,25 +3907,25 @@ void ODrawToOdf::processBorderCallout2(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processBorderCallout3(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processBorderCallout3(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 23400<< 24413<< 25200<< 21600<< 25200<< 4000<< 23400<< 4000);
+    processModifiers(o, out, QList<int>() << 23400 << 24413 << 25200 << 21600 << 25200 << 4000 << 23400 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 Z N M ?f6 ?f7 F L ?f4 ?f5 ?f2 ?f3 ?f0 ?f1 N");
     out.xml.addAttribute("draw:type", "mso-spt49");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -3941,25 +3942,25 @@ void ODrawToOdf::processBorderCallout3(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processAccentCallout90(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processAccentCallout90(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -1800<< 22950<< -1800<< 2700);
+    processModifiers(o, out, QList<int>() << -1800 << 22950 << -1800 << 2700);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 S L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N");
     out.xml.addAttribute("draw:type", "mso-spt179");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -3970,25 +3971,25 @@ void ODrawToOdf::processAccentCallout90(const MSO::OfficeArtSpContainer& o, Writ
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processAccentCallout1(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processAccentCallout1(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -8288<< 24500<< -1800<< 4000);
+    processModifiers(o, out, QList<int>() << -8288 << 24500 << -1800 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 S L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N M ?f2 0 L ?f2 21600 N");
     out.xml.addAttribute("draw:type", "mso-spt44");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -3999,25 +4000,25 @@ void ODrawToOdf::processAccentCallout1(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processAccentCallout2(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processAccentCallout2(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -10088<< 24500<< -3600<< 4000<< -1800<< 4000);
+    processModifiers(o, out, QList<int>() << -10088 << 24500 << -3600 << 4000 << -1800 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 S L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N M ?f2 ?f3 L ?f4 ?f5 N M ?f4 0 L ?f4 21600 N M");
     out.xml.addAttribute("draw:type", "mso-spt45");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -4031,25 +4032,25 @@ void ODrawToOdf::processAccentCallout2(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processAccentCallout3(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processAccentCallout3(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 23400<< 24413<< 25200<< 21600<< 25200<< 4000<< 23400<< 4000);
+    processModifiers(o, out, QList<int>() << 23400 << 24413 << 25200 << 21600 << 25200 << 4000 << 23400 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 S L 21600 0 21600 21600 0 21600 Z N M ?f6 ?f7 F L ?f4 ?f5 ?f2 ?f3 ?f0 ?f1 N M ?f6 0 L ?f6 21600 N");
     out.xml.addAttribute("draw:type", "mso-spt46");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -4066,25 +4067,25 @@ void ODrawToOdf::processAccentCallout3(const MSO::OfficeArtSpContainer& o, Write
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCallout90(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCallout90(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -1800<< 22950<< -1800<< 2700);
+    processModifiers(o, out, QList<int>() << -1800 << 22950 << -1800 << 2700);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 S L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N");
     out.xml.addAttribute("draw:type", "mso-spt178");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -4095,25 +4096,25 @@ void ODrawToOdf::processCallout90(const MSO::OfficeArtSpContainer& o, Writer& ou
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCallout1(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCallout1(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -8288<< 24500<< -1800<< 4000);
+    processModifiers(o, out, QList<int>() << -8288 << 24500 << -1800 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 S L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N");
     out.xml.addAttribute("draw:type", "mso-spt41");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -4124,25 +4125,25 @@ void ODrawToOdf::processCallout1(const MSO::OfficeArtSpContainer& o, Writer& out
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCallout2(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -10088<< 24500<< -3600<< 4000<< -1800<< 4000);
+    processModifiers(o, out, QList<int>() << -10088 << 24500 << -3600 << 4000 << -1800 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 S L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N M ?f2 ?f3 L ?f4 ?f5 N M");
     out.xml.addAttribute("draw:type", "mso-spt42");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -4156,25 +4157,25 @@ void ODrawToOdf::processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processCallout3(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processCallout3(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 23400<< 24413<< 25200<< 21600<< 25200<< 4000<< 23400<< 4000);
+    processModifiers(o, out, QList<int>() << 23400 << 24413 << 25200 << 21600 << 25200 << 4000 << 23400 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 S L 21600 0 21600 21600 0 21600 Z N M ?f6 ?f7 F L ?f4 ?f5 ?f2 ?f3 ?f0 ?f1 N");
     out.xml.addAttribute("draw:type", "mso-spt43");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -4191,25 +4192,25 @@ void ODrawToOdf::processCallout3(const MSO::OfficeArtSpContainer& o, Writer& out
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processAccentBorderCallout90(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processAccentBorderCallout90(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -1800<< 22950<< -1800<< 2700);
+    processModifiers(o, out, QList<int>() << -1800 << 22950 << -1800 << 2700);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N");
     out.xml.addAttribute("draw:type", "line-callout-3");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -4220,25 +4221,25 @@ void ODrawToOdf::processAccentBorderCallout90(const MSO::OfficeArtSpContainer& o
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processAccentBorderCallout1(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processAccentBorderCallout1(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -8288<< 24500<< -1800<< 4000);
+    processModifiers(o, out, QList<int>() << -8288 << 24500 << -1800 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N M ?f2 0 L ?f2 21600 N");
     out.xml.addAttribute("draw:type", "mso-spt50");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -4249,25 +4250,25 @@ void ODrawToOdf::processAccentBorderCallout1(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processAccentBorderCallout2(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processAccentBorderCallout2(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << -10088<< 24500<< -3600<< 4000<< -1800<< 4000);
+    processModifiers(o, out, QList<int>() << -10088 << 24500 << -3600 << 4000 << -1800 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N M ?f2 ?f3 L ?f4 ?f5 N M ?f4 0 L ?f4 21600 N M");
     out.xml.addAttribute("draw:type", "mso-spt51");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -4281,25 +4282,25 @@ void ODrawToOdf::processAccentBorderCallout2(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processAccentBorderCallout3(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processAccentBorderCallout3(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
     out.xml.startElement("draw:enhanced-geometry");
-    processModifiers(o, out, QList<int>() << 23400<< 24413<< 25200<< 21600<< 25200<< 4000<< 23400<< 4000);
+    processModifiers(o, out, QList<int>() << 23400 << 24413 << 25200 << 21600 << 25200 << 4000 << 23400 << 4000);
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:enhanced-path", "M 0 0 L 21600 0 21600 21600 0 21600 Z N M ?f6 ?f7 F L ?f4 ?f5 ?f2 ?f3 ?f0 ?f1 N M ?f6 0 L ?f6 21600 N");
     out.xml.addAttribute("draw:type", "mso-spt52");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","$1 ");
-    equation(out,"f2","$2 ");
-    equation(out,"f3","$3 ");
-    equation(out,"f4","$4 ");
-    equation(out,"f5","$5 ");
-    equation(out,"f6","$6 ");
-    equation(out,"f7","$7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 $1");
     out.xml.endElement(); // draw:handle
@@ -4316,8 +4317,8 @@ void ODrawToOdf::processAccentBorderCallout3(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonBlank(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonBlank(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4330,9 +4331,9 @@ void ODrawToOdf::processActionButtonBlank(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.addAttribute("draw:type", "mso-spt189");
     out.xml.addAttribute("draw:text-areas", "?f0 ?f0 ?f1 ?f2");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 *21599/21600");
-    equation(out,"f1","right-?f0 ");
-    equation(out,"f2","bottom-?f0 ");
+    equation(out, "f0", "$0 *21599/21600");
+    equation(out, "f1", "right-?f0 ");
+    equation(out, "f2", "bottom-?f0 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4343,8 +4344,8 @@ void ODrawToOdf::processActionButtonBlank(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonHome(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonHome(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4357,43 +4358,43 @@ void ODrawToOdf::processActionButtonHome(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.addAttribute("draw:type", "mso-spt190");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","left+$0 ");
-    equation(out,"f2","top+$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","bottom-$0 ");
-    equation(out,"f5","10800-$0 ");
-    equation(out,"f6","?f5 /10800");
-    equation(out,"f7","right/2");
-    equation(out,"f8","bottom/2");
-    equation(out,"f9","-8000*?f6 ");
-    equation(out,"f10","?f9 +?f8 ");
-    equation(out,"f11","2960*?f6 ");
-    equation(out,"f12","?f11 +?f7 ");
-    equation(out,"f13","-5000*?f6 ");
-    equation(out,"f14","?f13 +?f8 ");
-    equation(out,"f15","-7000*?f6 ");
-    equation(out,"f16","?f15 +?f8 ");
-    equation(out,"f17","5000*?f6 ");
-    equation(out,"f18","?f17 +?f7 ");
-    equation(out,"f19","-2960*?f6 ");
-    equation(out,"f20","?f19 +?f8 ");
-    equation(out,"f21","8000*?f6 ");
-    equation(out,"f22","?f21 +?f7 ");
-    equation(out,"f23","6100*?f6 ");
-    equation(out,"f24","?f23 +?f7 ");
-    equation(out,"f25","8260*?f6 ");
-    equation(out,"f26","?f25 +?f8 ");
-    equation(out,"f27","-6100*?f6 ");
-    equation(out,"f28","?f27 +?f7 ");
-    equation(out,"f29","-8000*?f6 ");
-    equation(out,"f30","?f29 +?f7 ");
-    equation(out,"f31","-1060*?f6 ");
-    equation(out,"f32","?f31 +?f7 ");
-    equation(out,"f33","1060*?f6 ");
-    equation(out,"f34","?f33 +?f7 ");
-    equation(out,"f35","4020*?f6 ");
-    equation(out,"f36","?f35 +?f8 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "left+$0 ");
+    equation(out, "f2", "top+$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "bottom-$0 ");
+    equation(out, "f5", "10800-$0 ");
+    equation(out, "f6", "?f5 /10800");
+    equation(out, "f7", "right/2");
+    equation(out, "f8", "bottom/2");
+    equation(out, "f9", "-8000*?f6 ");
+    equation(out, "f10", "?f9 +?f8 ");
+    equation(out, "f11", "2960*?f6 ");
+    equation(out, "f12", "?f11 +?f7 ");
+    equation(out, "f13", "-5000*?f6 ");
+    equation(out, "f14", "?f13 +?f8 ");
+    equation(out, "f15", "-7000*?f6 ");
+    equation(out, "f16", "?f15 +?f8 ");
+    equation(out, "f17", "5000*?f6 ");
+    equation(out, "f18", "?f17 +?f7 ");
+    equation(out, "f19", "-2960*?f6 ");
+    equation(out, "f20", "?f19 +?f8 ");
+    equation(out, "f21", "8000*?f6 ");
+    equation(out, "f22", "?f21 +?f7 ");
+    equation(out, "f23", "6100*?f6 ");
+    equation(out, "f24", "?f23 +?f7 ");
+    equation(out, "f25", "8260*?f6 ");
+    equation(out, "f26", "?f25 +?f8 ");
+    equation(out, "f27", "-6100*?f6 ");
+    equation(out, "f28", "?f27 +?f7 ");
+    equation(out, "f29", "-8000*?f6 ");
+    equation(out, "f30", "?f29 +?f7 ");
+    equation(out, "f31", "-1060*?f6 ");
+    equation(out, "f32", "?f31 +?f7 ");
+    equation(out, "f33", "1060*?f6 ");
+    equation(out, "f34", "?f33 +?f7 ");
+    equation(out, "f35", "4020*?f6 ");
+    equation(out, "f36", "?f35 +?f8 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4404,8 +4405,8 @@ void ODrawToOdf::processActionButtonHome(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonHelp(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonHelp(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4418,69 +4419,69 @@ void ODrawToOdf::processActionButtonHelp(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.addAttribute("draw:type", "mso-spt191");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","left+$0 ");
-    equation(out,"f2","top+$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","bottom-$0 ");
-    equation(out,"f5","10800-$0 ");
-    equation(out,"f6","?f5 /10800");
-    equation(out,"f7","right/2");
-    equation(out,"f8","bottom/2");
-    equation(out,"f9","-1690*?f6 ");
-    equation(out,"f10","?f9 +?f7 ");
-    equation(out,"f11","4600*?f6 ");
-    equation(out,"f12","?f11 +?f8 ");
-    equation(out,"f13","1690*?f6 ");
-    equation(out,"f14","?f13 +?f7 ");
-    equation(out,"f15","7980*?f6 ");
-    equation(out,"f16","?f15 +?f8 ");
-    equation(out,"f17","1270*?f6 ");
-    equation(out,"f18","?f17 +?f7 ");
-    equation(out,"f19","4000*?f6 ");
-    equation(out,"f20","?f19 +?f8 ");
-    equation(out,"f21","1750*?f6 ");
-    equation(out,"f22","?f21 +?f8 ");
-    equation(out,"f23","800*?f6 ");
-    equation(out,"f24","?f23 +?f8 ");
-    equation(out,"f25","1650*?f6 ");
-    equation(out,"f26","?f25 +?f7 ");
-    equation(out,"f27","2340*?f6 ");
-    equation(out,"f28","?f27 +?f7 ");
-    equation(out,"f29","3640*?f6 ");
-    equation(out,"f30","?f29 +?f7 ");
-    equation(out,"f31","4670*?f6 ");
-    equation(out,"f32","?f31 +?f7 ");
-    equation(out,"f33","-1570*?f6 ");
-    equation(out,"f34","?f33 +?f8 ");
-    equation(out,"f35","-3390*?f6 ");
-    equation(out,"f36","?f35 +?f8 ");
-    equation(out,"f37","-6050*?f6 ");
-    equation(out,"f38","?f37 +?f8 ");
-    equation(out,"f39","2540*?f6 ");
-    equation(out,"f40","?f39 +?f7 ");
-    equation(out,"f41","-8050*?f6 ");
-    equation(out,"f42","?f41 +?f8 ");
-    equation(out,"f43","-2540*?f6 ");
-    equation(out,"f44","?f43 +?f7 ");
-    equation(out,"f45","-4460*?f6 ");
-    equation(out,"f46","?f45 +?f7 ");
-    equation(out,"f47","-2330*?f6 ");
-    equation(out,"f48","?f47 +?f7 ");
-    equation(out,"f49","-4700*?f6 ");
-    equation(out,"f50","?f49 +?f8 ");
-    equation(out,"f51","-1270*?f6 ");
-    equation(out,"f52","?f51 +?f7 ");
-    equation(out,"f53","-5720*?f6 ");
-    equation(out,"f54","?f53 +?f8 ");
-    equation(out,"f55","-2540*?f6 ");
-    equation(out,"f56","?f55 +?f8 ");
-    equation(out,"f57","1800*?f6 ");
-    equation(out,"f58","?f57 +?f7 ");
-    equation(out,"f59","-1700*?f6 ");
-    equation(out,"f60","?f59 +?f8 ");
-    equation(out,"f61","6290*?f6 ");
-    equation(out,"f62","?f61 +?f8 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "left+$0 ");
+    equation(out, "f2", "top+$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "bottom-$0 ");
+    equation(out, "f5", "10800-$0 ");
+    equation(out, "f6", "?f5 /10800");
+    equation(out, "f7", "right/2");
+    equation(out, "f8", "bottom/2");
+    equation(out, "f9", "-1690*?f6 ");
+    equation(out, "f10", "?f9 +?f7 ");
+    equation(out, "f11", "4600*?f6 ");
+    equation(out, "f12", "?f11 +?f8 ");
+    equation(out, "f13", "1690*?f6 ");
+    equation(out, "f14", "?f13 +?f7 ");
+    equation(out, "f15", "7980*?f6 ");
+    equation(out, "f16", "?f15 +?f8 ");
+    equation(out, "f17", "1270*?f6 ");
+    equation(out, "f18", "?f17 +?f7 ");
+    equation(out, "f19", "4000*?f6 ");
+    equation(out, "f20", "?f19 +?f8 ");
+    equation(out, "f21", "1750*?f6 ");
+    equation(out, "f22", "?f21 +?f8 ");
+    equation(out, "f23", "800*?f6 ");
+    equation(out, "f24", "?f23 +?f8 ");
+    equation(out, "f25", "1650*?f6 ");
+    equation(out, "f26", "?f25 +?f7 ");
+    equation(out, "f27", "2340*?f6 ");
+    equation(out, "f28", "?f27 +?f7 ");
+    equation(out, "f29", "3640*?f6 ");
+    equation(out, "f30", "?f29 +?f7 ");
+    equation(out, "f31", "4670*?f6 ");
+    equation(out, "f32", "?f31 +?f7 ");
+    equation(out, "f33", "-1570*?f6 ");
+    equation(out, "f34", "?f33 +?f8 ");
+    equation(out, "f35", "-3390*?f6 ");
+    equation(out, "f36", "?f35 +?f8 ");
+    equation(out, "f37", "-6050*?f6 ");
+    equation(out, "f38", "?f37 +?f8 ");
+    equation(out, "f39", "2540*?f6 ");
+    equation(out, "f40", "?f39 +?f7 ");
+    equation(out, "f41", "-8050*?f6 ");
+    equation(out, "f42", "?f41 +?f8 ");
+    equation(out, "f43", "-2540*?f6 ");
+    equation(out, "f44", "?f43 +?f7 ");
+    equation(out, "f45", "-4460*?f6 ");
+    equation(out, "f46", "?f45 +?f7 ");
+    equation(out, "f47", "-2330*?f6 ");
+    equation(out, "f48", "?f47 +?f7 ");
+    equation(out, "f49", "-4700*?f6 ");
+    equation(out, "f50", "?f49 +?f8 ");
+    equation(out, "f51", "-1270*?f6 ");
+    equation(out, "f52", "?f51 +?f7 ");
+    equation(out, "f53", "-5720*?f6 ");
+    equation(out, "f54", "?f53 +?f8 ");
+    equation(out, "f55", "-2540*?f6 ");
+    equation(out, "f56", "?f55 +?f8 ");
+    equation(out, "f57", "1800*?f6 ");
+    equation(out, "f58", "?f57 +?f7 ");
+    equation(out, "f59", "-1700*?f6 ");
+    equation(out, "f60", "?f59 +?f8 ");
+    equation(out, "f61", "6290*?f6 ");
+    equation(out, "f62", "?f61 +?f8 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4491,8 +4492,8 @@ void ODrawToOdf::processActionButtonHelp(const MSO::OfficeArtSpContainer& o, Wri
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonInformation(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonInformation(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4505,49 +4506,49 @@ void ODrawToOdf::processActionButtonInformation(const MSO::OfficeArtSpContainer&
     out.xml.addAttribute("draw:type", "mso-spt192");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","left+$0 ");
-    equation(out,"f2","top+$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","bottom-$0 ");
-    equation(out,"f5","10800-$0 ");
-    equation(out,"f6","?f5 /10800");
-    equation(out,"f7","right/2");
-    equation(out,"f8","bottom/2");
-    equation(out,"f9","-8050*?f6 ");
-    equation(out,"f10","?f9 +?f7 ");
-    equation(out,"f11","-8050*?f6 ");
-    equation(out,"f12","?f11 +?f8 ");
-    equation(out,"f13","8050*?f6 ");
-    equation(out,"f14","?f13 +?f7 ");
-    equation(out,"f15","8050*?f6 ");
-    equation(out,"f16","?f15 +?f8 ");
-    equation(out,"f17","-2060*?f6 ");
-    equation(out,"f18","?f17 +?f7 ");
-    equation(out,"f19","-7620*?f6 ");
-    equation(out,"f20","?f19 +?f8 ");
-    equation(out,"f21","2060*?f6 ");
-    equation(out,"f22","?f21 +?f7 ");
-    equation(out,"f23","-3500*?f6 ");
-    equation(out,"f24","?f23 +?f8 ");
-    equation(out,"f25","-2960*?f6 ");
-    equation(out,"f26","?f25 +?f7 ");
-    equation(out,"f27","-2960*?f6 ");
-    equation(out,"f28","?f27 +?f8 ");
-    equation(out,"f29","1480*?f6 ");
-    equation(out,"f30","?f29 +?f7 ");
-    equation(out,"f31","5080*?f6 ");
-    equation(out,"f32","?f31 +?f8 ");
-    equation(out,"f33","2960*?f6 ");
-    equation(out,"f34","?f33 +?f7 ");
-    equation(out,"f35","6140*?f6 ");
-    equation(out,"f36","?f35 +?f8 ");
-    equation(out,"f37","-1480*?f6 ");
-    equation(out,"f38","?f37 +?f7 ");
-    equation(out,"f39","-1920*?f6 ");
-    equation(out,"f40","?f39 +?f8 ");
-    equation(out,"f41","-5560*?f6 ");
-    equation(out,"f42","?f41 +?f8 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "left+$0 ");
+    equation(out, "f2", "top+$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "bottom-$0 ");
+    equation(out, "f5", "10800-$0 ");
+    equation(out, "f6", "?f5 /10800");
+    equation(out, "f7", "right/2");
+    equation(out, "f8", "bottom/2");
+    equation(out, "f9", "-8050*?f6 ");
+    equation(out, "f10", "?f9 +?f7 ");
+    equation(out, "f11", "-8050*?f6 ");
+    equation(out, "f12", "?f11 +?f8 ");
+    equation(out, "f13", "8050*?f6 ");
+    equation(out, "f14", "?f13 +?f7 ");
+    equation(out, "f15", "8050*?f6 ");
+    equation(out, "f16", "?f15 +?f8 ");
+    equation(out, "f17", "-2060*?f6 ");
+    equation(out, "f18", "?f17 +?f7 ");
+    equation(out, "f19", "-7620*?f6 ");
+    equation(out, "f20", "?f19 +?f8 ");
+    equation(out, "f21", "2060*?f6 ");
+    equation(out, "f22", "?f21 +?f7 ");
+    equation(out, "f23", "-3500*?f6 ");
+    equation(out, "f24", "?f23 +?f8 ");
+    equation(out, "f25", "-2960*?f6 ");
+    equation(out, "f26", "?f25 +?f7 ");
+    equation(out, "f27", "-2960*?f6 ");
+    equation(out, "f28", "?f27 +?f8 ");
+    equation(out, "f29", "1480*?f6 ");
+    equation(out, "f30", "?f29 +?f7 ");
+    equation(out, "f31", "5080*?f6 ");
+    equation(out, "f32", "?f31 +?f8 ");
+    equation(out, "f33", "2960*?f6 ");
+    equation(out, "f34", "?f33 +?f7 ");
+    equation(out, "f35", "6140*?f6 ");
+    equation(out, "f36", "?f35 +?f8 ");
+    equation(out, "f37", "-1480*?f6 ");
+    equation(out, "f38", "?f37 +?f7 ");
+    equation(out, "f39", "-1920*?f6 ");
+    equation(out, "f40", "?f39 +?f8 ");
+    equation(out, "f41", "-5560*?f6 ");
+    equation(out, "f42", "?f41 +?f8 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4558,8 +4559,8 @@ void ODrawToOdf::processActionButtonInformation(const MSO::OfficeArtSpContainer&
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonBackPrevious(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonBackPrevious(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4572,23 +4573,23 @@ void ODrawToOdf::processActionButtonBackPrevious(const MSO::OfficeArtSpContainer
     out.xml.addAttribute("draw:type", "mso-spt194");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","left+$0 ");
-    equation(out,"f2","top+$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","bottom-$0 ");
-    equation(out,"f5","10800-$0 ");
-    equation(out,"f6","?f5 /10800");
-    equation(out,"f7","right/2");
-    equation(out,"f8","bottom/2");
-    equation(out,"f9","-8050*?f6 ");
-    equation(out,"f10","?f9 +?f7 ");
-    equation(out,"f11","-8050*?f6 ");
-    equation(out,"f12","?f11 +?f8 ");
-    equation(out,"f13","8050*?f6 ");
-    equation(out,"f14","?f13 +?f7 ");
-    equation(out,"f15","8050*?f6 ");
-    equation(out,"f16","?f15 +?f8 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "left+$0 ");
+    equation(out, "f2", "top+$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "bottom-$0 ");
+    equation(out, "f5", "10800-$0 ");
+    equation(out, "f6", "?f5 /10800");
+    equation(out, "f7", "right/2");
+    equation(out, "f8", "bottom/2");
+    equation(out, "f9", "-8050*?f6 ");
+    equation(out, "f10", "?f9 +?f7 ");
+    equation(out, "f11", "-8050*?f6 ");
+    equation(out, "f12", "?f11 +?f8 ");
+    equation(out, "f13", "8050*?f6 ");
+    equation(out, "f14", "?f13 +?f7 ");
+    equation(out, "f15", "8050*?f6 ");
+    equation(out, "f16", "?f15 +?f8 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4599,8 +4600,8 @@ void ODrawToOdf::processActionButtonBackPrevious(const MSO::OfficeArtSpContainer
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonForwardNext(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonForwardNext(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4613,23 +4614,23 @@ void ODrawToOdf::processActionButtonForwardNext(const MSO::OfficeArtSpContainer&
     out.xml.addAttribute("draw:type", "mso-spt193");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","left+$0 ");
-    equation(out,"f2","top+$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","bottom-$0 ");
-    equation(out,"f5","10800-$0 ");
-    equation(out,"f6","?f5 /10800");
-    equation(out,"f7","right/2");
-    equation(out,"f8","bottom/2");
-    equation(out,"f9","-8050*?f6 ");
-    equation(out,"f10","?f9 +?f7 ");
-    equation(out,"f11","-8050*?f6 ");
-    equation(out,"f12","?f11 +?f8 ");
-    equation(out,"f13","8050*?f6 ");
-    equation(out,"f14","?f13 +?f7 ");
-    equation(out,"f15","8050*?f6 ");
-    equation(out,"f16","?f15 +?f8 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "left+$0 ");
+    equation(out, "f2", "top+$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "bottom-$0 ");
+    equation(out, "f5", "10800-$0 ");
+    equation(out, "f6", "?f5 /10800");
+    equation(out, "f7", "right/2");
+    equation(out, "f8", "bottom/2");
+    equation(out, "f9", "-8050*?f6 ");
+    equation(out, "f10", "?f9 +?f7 ");
+    equation(out, "f11", "-8050*?f6 ");
+    equation(out, "f12", "?f11 +?f8 ");
+    equation(out, "f13", "8050*?f6 ");
+    equation(out, "f14", "?f13 +?f7 ");
+    equation(out, "f15", "8050*?f6 ");
+    equation(out, "f16", "?f15 +?f8 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4640,8 +4641,8 @@ void ODrawToOdf::processActionButtonForwardNext(const MSO::OfficeArtSpContainer&
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonBeginning(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonBeginning(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4654,31 +4655,31 @@ void ODrawToOdf::processActionButtonBeginning(const MSO::OfficeArtSpContainer& o
     out.xml.addAttribute("draw:type", "mso-spt196");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","left+$0 ");
-    equation(out,"f2","top+$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","bottom-$0 ");
-    equation(out,"f5","10800-$0 ");
-    equation(out,"f6","?f5 /10800");
-    equation(out,"f7","right/2");
-    equation(out,"f8","bottom/2");
-    equation(out,"f9","-4020*?f6 ");
-    equation(out,"f10","?f9 +?f7 ");
-    equation(out,"f11","-8050*?f6 ");
-    equation(out,"f12","?f11 +?f8 ");
-    equation(out,"f13","8050*?f6 ");
-    equation(out,"f14","?f13 +?f7 ");
-    equation(out,"f15","8050*?f6 ");
-    equation(out,"f16","?f15 +?f8 ");
-    equation(out,"f17","-8050*?f6 ");
-    equation(out,"f18","?f17 +?f7 ");
-    equation(out,"f19","-6140*?f6 ");
-    equation(out,"f20","?f19 +?f7 ");
-    equation(out,"f21","4020*?f6 ");
-    equation(out,"f22","?f21 +?f7 ");
-    equation(out,"f23","6140*?f6 ");
-    equation(out,"f24","?f23 +?f7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "left+$0 ");
+    equation(out, "f2", "top+$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "bottom-$0 ");
+    equation(out, "f5", "10800-$0 ");
+    equation(out, "f6", "?f5 /10800");
+    equation(out, "f7", "right/2");
+    equation(out, "f8", "bottom/2");
+    equation(out, "f9", "-4020*?f6 ");
+    equation(out, "f10", "?f9 +?f7 ");
+    equation(out, "f11", "-8050*?f6 ");
+    equation(out, "f12", "?f11 +?f8 ");
+    equation(out, "f13", "8050*?f6 ");
+    equation(out, "f14", "?f13 +?f7 ");
+    equation(out, "f15", "8050*?f6 ");
+    equation(out, "f16", "?f15 +?f8 ");
+    equation(out, "f17", "-8050*?f6 ");
+    equation(out, "f18", "?f17 +?f7 ");
+    equation(out, "f19", "-6140*?f6 ");
+    equation(out, "f20", "?f19 +?f7 ");
+    equation(out, "f21", "4020*?f6 ");
+    equation(out, "f22", "?f21 +?f7 ");
+    equation(out, "f23", "6140*?f6 ");
+    equation(out, "f24", "?f23 +?f7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4689,8 +4690,8 @@ void ODrawToOdf::processActionButtonBeginning(const MSO::OfficeArtSpContainer& o
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonEnd(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonEnd(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4703,31 +4704,31 @@ void ODrawToOdf::processActionButtonEnd(const MSO::OfficeArtSpContainer& o, Writ
     out.xml.addAttribute("draw:type", "mso-spt195");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","left+$0 ");
-    equation(out,"f2","top+$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","bottom-$0 ");
-    equation(out,"f5","10800-$0 ");
-    equation(out,"f6","?f5 /10800");
-    equation(out,"f7","right/2");
-    equation(out,"f8","bottom/2");
-    equation(out,"f9","-4020*?f6 ");
-    equation(out,"f10","?f9 +?f7 ");
-    equation(out,"f11","-8050*?f6 ");
-    equation(out,"f12","?f11 +?f8 ");
-    equation(out,"f13","8050*?f6 ");
-    equation(out,"f14","?f13 +?f7 ");
-    equation(out,"f15","8050*?f6 ");
-    equation(out,"f16","?f15 +?f8 ");
-    equation(out,"f17","-8050*?f6 ");
-    equation(out,"f18","?f17 +?f7 ");
-    equation(out,"f19","-6140*?f6 ");
-    equation(out,"f20","?f19 +?f7 ");
-    equation(out,"f21","4020*?f6 ");
-    equation(out,"f22","?f21 +?f7 ");
-    equation(out,"f23","6140*?f6 ");
-    equation(out,"f24","?f23 +?f7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "left+$0 ");
+    equation(out, "f2", "top+$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "bottom-$0 ");
+    equation(out, "f5", "10800-$0 ");
+    equation(out, "f6", "?f5 /10800");
+    equation(out, "f7", "right/2");
+    equation(out, "f8", "bottom/2");
+    equation(out, "f9", "-4020*?f6 ");
+    equation(out, "f10", "?f9 +?f7 ");
+    equation(out, "f11", "-8050*?f6 ");
+    equation(out, "f12", "?f11 +?f8 ");
+    equation(out, "f13", "8050*?f6 ");
+    equation(out, "f14", "?f13 +?f7 ");
+    equation(out, "f15", "8050*?f6 ");
+    equation(out, "f16", "?f15 +?f8 ");
+    equation(out, "f17", "-8050*?f6 ");
+    equation(out, "f18", "?f17 +?f7 ");
+    equation(out, "f19", "-6140*?f6 ");
+    equation(out, "f20", "?f19 +?f7 ");
+    equation(out, "f21", "4020*?f6 ");
+    equation(out, "f22", "?f21 +?f7 ");
+    equation(out, "f23", "6140*?f6 ");
+    equation(out, "f24", "?f23 +?f7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4738,8 +4739,8 @@ void ODrawToOdf::processActionButtonEnd(const MSO::OfficeArtSpContainer& o, Writ
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonReturn(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonReturn(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4752,51 +4753,51 @@ void ODrawToOdf::processActionButtonReturn(const MSO::OfficeArtSpContainer& o, W
     out.xml.addAttribute("draw:type", "mso-spt197");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","left+$0 ");
-    equation(out,"f2","top+$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","bottom-$0 ");
-    equation(out,"f5","10800-$0 ");
-    equation(out,"f6","?f5 /10800");
-    equation(out,"f7","right/2");
-    equation(out,"f8","bottom/2");
-    equation(out,"f9","-8050*?f6 ");
-    equation(out,"f10","?f9 +?f7 ");
-    equation(out,"f11","-3800*?f6 ");
-    equation(out,"f12","?f11 +?f8 ");
-    equation(out,"f13","-4020*?f6 ");
-    equation(out,"f14","?f13 +?f7 ");
-    equation(out,"f15","2330*?f6 ");
-    equation(out,"f16","?f15 +?f8 ");
-    equation(out,"f17","3390*?f6 ");
-    equation(out,"f18","?f17 +?f8 ");
-    equation(out,"f19","-3100*?f6 ");
-    equation(out,"f20","?f19 +?f7 ");
-    equation(out,"f21","4230*?f6 ");
-    equation(out,"f22","?f21 +?f8 ");
-    equation(out,"f23","-1910*?f6 ");
-    equation(out,"f24","?f23 +?f7 ");
-    equation(out,"f25","1190*?f6 ");
-    equation(out,"f26","?f25 +?f7 ");
-    equation(out,"f27","2110*?f6 ");
-    equation(out,"f28","?f27 +?f7 ");
-    equation(out,"f29","4030*?f6 ");
-    equation(out,"f30","?f29 +?f7 ");
-    equation(out,"f31","-7830*?f6 ");
-    equation(out,"f32","?f31 +?f8 ");
-    equation(out,"f33","8250*?f6 ");
-    equation(out,"f34","?f33 +?f7 ");
-    equation(out,"f35","6140*?f6 ");
-    equation(out,"f36","?f35 +?f7 ");
-    equation(out,"f37","5510*?f6 ");
-    equation(out,"f38","?f37 +?f8 ");
-    equation(out,"f39","3180*?f6 ");
-    equation(out,"f40","?f39 +?f7 ");
-    equation(out,"f41","8450*?f6 ");
-    equation(out,"f42","?f41 +?f8 ");
-    equation(out,"f43","-5090*?f6 ");
-    equation(out,"f44","?f43 +?f7 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "left+$0 ");
+    equation(out, "f2", "top+$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "bottom-$0 ");
+    equation(out, "f5", "10800-$0 ");
+    equation(out, "f6", "?f5 /10800");
+    equation(out, "f7", "right/2");
+    equation(out, "f8", "bottom/2");
+    equation(out, "f9", "-8050*?f6 ");
+    equation(out, "f10", "?f9 +?f7 ");
+    equation(out, "f11", "-3800*?f6 ");
+    equation(out, "f12", "?f11 +?f8 ");
+    equation(out, "f13", "-4020*?f6 ");
+    equation(out, "f14", "?f13 +?f7 ");
+    equation(out, "f15", "2330*?f6 ");
+    equation(out, "f16", "?f15 +?f8 ");
+    equation(out, "f17", "3390*?f6 ");
+    equation(out, "f18", "?f17 +?f8 ");
+    equation(out, "f19", "-3100*?f6 ");
+    equation(out, "f20", "?f19 +?f7 ");
+    equation(out, "f21", "4230*?f6 ");
+    equation(out, "f22", "?f21 +?f8 ");
+    equation(out, "f23", "-1910*?f6 ");
+    equation(out, "f24", "?f23 +?f7 ");
+    equation(out, "f25", "1190*?f6 ");
+    equation(out, "f26", "?f25 +?f7 ");
+    equation(out, "f27", "2110*?f6 ");
+    equation(out, "f28", "?f27 +?f7 ");
+    equation(out, "f29", "4030*?f6 ");
+    equation(out, "f30", "?f29 +?f7 ");
+    equation(out, "f31", "-7830*?f6 ");
+    equation(out, "f32", "?f31 +?f8 ");
+    equation(out, "f33", "8250*?f6 ");
+    equation(out, "f34", "?f33 +?f7 ");
+    equation(out, "f35", "6140*?f6 ");
+    equation(out, "f36", "?f35 +?f7 ");
+    equation(out, "f37", "5510*?f6 ");
+    equation(out, "f38", "?f37 +?f8 ");
+    equation(out, "f39", "3180*?f6 ");
+    equation(out, "f40", "?f39 +?f7 ");
+    equation(out, "f41", "8450*?f6 ");
+    equation(out, "f42", "?f41 +?f8 ");
+    equation(out, "f43", "-5090*?f6 ");
+    equation(out, "f44", "?f43 +?f7 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4807,8 +4808,8 @@ void ODrawToOdf::processActionButtonReturn(const MSO::OfficeArtSpContainer& o, W
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonDocument(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonDocument(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4821,27 +4822,27 @@ void ODrawToOdf::processActionButtonDocument(const MSO::OfficeArtSpContainer& o,
     out.xml.addAttribute("draw:type", "mso-spt198");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","left+$0 ");
-    equation(out,"f2","top+$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","bottom-$0 ");
-    equation(out,"f5","10800-$0 ");
-    equation(out,"f6","?f5 /10800");
-    equation(out,"f7","right/2");
-    equation(out,"f8","bottom/2");
-    equation(out,"f9","-6350*?f6 ");
-    equation(out,"f10","?f9 +?f7 ");
-    equation(out,"f11","-7830*?f6 ");
-    equation(out,"f12","?f11 +?f8 ");
-    equation(out,"f13","1690*?f6 ");
-    equation(out,"f14","?f13 +?f7 ");
-    equation(out,"f15","6350*?f6 ");
-    equation(out,"f16","?f15 +?f7 ");
-    equation(out,"f17","-3810*?f6 ");
-    equation(out,"f18","?f17 +?f8 ");
-    equation(out,"f19","7830*?f6 ");
-    equation(out,"f20","?f19 +?f8 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "left+$0 ");
+    equation(out, "f2", "top+$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "bottom-$0 ");
+    equation(out, "f5", "10800-$0 ");
+    equation(out, "f6", "?f5 /10800");
+    equation(out, "f7", "right/2");
+    equation(out, "f8", "bottom/2");
+    equation(out, "f9", "-6350*?f6 ");
+    equation(out, "f10", "?f9 +?f7 ");
+    equation(out, "f11", "-7830*?f6 ");
+    equation(out, "f12", "?f11 +?f8 ");
+    equation(out, "f13", "1690*?f6 ");
+    equation(out, "f14", "?f13 +?f7 ");
+    equation(out, "f15", "6350*?f6 ");
+    equation(out, "f16", "?f15 +?f7 ");
+    equation(out, "f17", "-3810*?f6 ");
+    equation(out, "f18", "?f17 +?f8 ");
+    equation(out, "f19", "7830*?f6 ");
+    equation(out, "f20", "?f19 +?f8 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4852,8 +4853,8 @@ void ODrawToOdf::processActionButtonDocument(const MSO::OfficeArtSpContainer& o,
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonSound(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonSound(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4866,37 +4867,37 @@ void ODrawToOdf::processActionButtonSound(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.addAttribute("draw:type", "mso-spt199");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","left+$0 ");
-    equation(out,"f2","top+$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","bottom-$0 ");
-    equation(out,"f5","10800-$0 ");
-    equation(out,"f6","?f5 /10800");
-    equation(out,"f7","right/2");
-    equation(out,"f8","bottom/2");
-    equation(out,"f9","-8050*?f6 ");
-    equation(out,"f10","?f9 +?f7 ");
-    equation(out,"f11","-2750*?f6 ");
-    equation(out,"f12","?f11 +?f8 ");
-    equation(out,"f13","-2960*?f6 ");
-    equation(out,"f14","?f13 +?f7 ");
-    equation(out,"f15","2120*?f6 ");
-    equation(out,"f16","?f15 +?f7 ");
-    equation(out,"f17","-8050*?f6 ");
-    equation(out,"f18","?f17 +?f8 ");
-    equation(out,"f19","8050*?f6 ");
-    equation(out,"f20","?f19 +?f8 ");
-    equation(out,"f21","2750*?f6 ");
-    equation(out,"f22","?f21 +?f8 ");
-    equation(out,"f23","4020*?f6 ");
-    equation(out,"f24","?f23 +?f7 ");
-    equation(out,"f25","8050*?f6 ");
-    equation(out,"f26","?f25 +?f7 ");
-    equation(out,"f27","-5930*?f6 ");
-    equation(out,"f28","?f27 +?f8 ");
-    equation(out,"f29","5930*?f6 ");
-    equation(out,"f30","?f29 +?f8 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "left+$0 ");
+    equation(out, "f2", "top+$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "bottom-$0 ");
+    equation(out, "f5", "10800-$0 ");
+    equation(out, "f6", "?f5 /10800");
+    equation(out, "f7", "right/2");
+    equation(out, "f8", "bottom/2");
+    equation(out, "f9", "-8050*?f6 ");
+    equation(out, "f10", "?f9 +?f7 ");
+    equation(out, "f11", "-2750*?f6 ");
+    equation(out, "f12", "?f11 +?f8 ");
+    equation(out, "f13", "-2960*?f6 ");
+    equation(out, "f14", "?f13 +?f7 ");
+    equation(out, "f15", "2120*?f6 ");
+    equation(out, "f16", "?f15 +?f7 ");
+    equation(out, "f17", "-8050*?f6 ");
+    equation(out, "f18", "?f17 +?f8 ");
+    equation(out, "f19", "8050*?f6 ");
+    equation(out, "f20", "?f19 +?f8 ");
+    equation(out, "f21", "2750*?f6 ");
+    equation(out, "f22", "?f21 +?f8 ");
+    equation(out, "f23", "4020*?f6 ");
+    equation(out, "f24", "?f23 +?f7 ");
+    equation(out, "f25", "8050*?f6 ");
+    equation(out, "f26", "?f25 +?f7 ");
+    equation(out, "f27", "-5930*?f6 ");
+    equation(out, "f28", "?f27 +?f8 ");
+    equation(out, "f29", "5930*?f6 ");
+    equation(out, "f30", "?f29 +?f8 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4907,8 +4908,8 @@ void ODrawToOdf::processActionButtonSound(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.endElement(); // custom shape
 }
 
-
-void ODrawToOdf::processActionButtonMovie(const MSO::OfficeArtSpContainer& o, Writer& out) {
+void ODrawToOdf::processActionButtonMovie(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
@@ -4921,51 +4922,51 @@ void ODrawToOdf::processActionButtonMovie(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.addAttribute("draw:type", "mso-spt200");
     out.xml.addAttribute("draw:text-areas", "?f1 ?f2 ?f3 ?f4");
     setShapeMirroring(o, out);
-    equation(out,"f0","$0 ");
-    equation(out,"f1","left+$0 ");
-    equation(out,"f2","top+$0 ");
-    equation(out,"f3","right-$0 ");
-    equation(out,"f4","bottom-$0 ");
-    equation(out,"f5","10800-$0 ");
-    equation(out,"f6","?f5 /10800");
-    equation(out,"f7","right/2");
-    equation(out,"f8","bottom/2");
-    equation(out,"f9","-8050*?f6 ");
-    equation(out,"f10","?f9 +?f7 ");
-    equation(out,"f11","-4020*?f6 ");
-    equation(out,"f12","?f11 +?f8 ");
-    equation(out,"f13","-7000*?f6 ");
-    equation(out,"f14","?f13 +?f7 ");
-    equation(out,"f15","-6560*?f6 ");
-    equation(out,"f16","?f15 +?f7 ");
-    equation(out,"f17","-3600*?f6 ");
-    equation(out,"f18","?f17 +?f8 ");
-    equation(out,"f19","4020*?f6 ");
-    equation(out,"f20","?f19 +?f7 ");
-    equation(out,"f21","4660*?f6 ");
-    equation(out,"f22","?f21 +?f7 ");
-    equation(out,"f23","-2960*?f6 ");
-    equation(out,"f24","?f23 +?f8 ");
-    equation(out,"f25","-2330*?f6 ");
-    equation(out,"f26","?f25 +?f8 ");
-    equation(out,"f27","6780*?f6 ");
-    equation(out,"f28","?f27 +?f7 ");
-    equation(out,"f29","7200*?f6 ");
-    equation(out,"f30","?f29 +?f7 ");
-    equation(out,"f31","8050*?f6 ");
-    equation(out,"f32","?f31 +?f7 ");
-    equation(out,"f33","2960*?f6 ");
-    equation(out,"f34","?f33 +?f8 ");
-    equation(out,"f35","2330*?f6 ");
-    equation(out,"f36","?f35 +?f8 ");
-    equation(out,"f37","3800*?f6 ");
-    equation(out,"f38","?f37 +?f8 ");
-    equation(out,"f39","-1060*?f6 ");
-    equation(out,"f40","?f39 +?f8 ");
-    equation(out,"f41","-6350*?f6 ");
-    equation(out,"f42","?f41 +?f7 ");
-    equation(out,"f43","-640*?f6 ");
-    equation(out,"f44","?f43 +?f8 ");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "left+$0 ");
+    equation(out, "f2", "top+$0 ");
+    equation(out, "f3", "right-$0 ");
+    equation(out, "f4", "bottom-$0 ");
+    equation(out, "f5", "10800-$0 ");
+    equation(out, "f6", "?f5 /10800");
+    equation(out, "f7", "right/2");
+    equation(out, "f8", "bottom/2");
+    equation(out, "f9", "-8050*?f6 ");
+    equation(out, "f10", "?f9 +?f7 ");
+    equation(out, "f11", "-4020*?f6 ");
+    equation(out, "f12", "?f11 +?f8 ");
+    equation(out, "f13", "-7000*?f6 ");
+    equation(out, "f14", "?f13 +?f7 ");
+    equation(out, "f15", "-6560*?f6 ");
+    equation(out, "f16", "?f15 +?f7 ");
+    equation(out, "f17", "-3600*?f6 ");
+    equation(out, "f18", "?f17 +?f8 ");
+    equation(out, "f19", "4020*?f6 ");
+    equation(out, "f20", "?f19 +?f7 ");
+    equation(out, "f21", "4660*?f6 ");
+    equation(out, "f22", "?f21 +?f7 ");
+    equation(out, "f23", "-2960*?f6 ");
+    equation(out, "f24", "?f23 +?f8 ");
+    equation(out, "f25", "-2330*?f6 ");
+    equation(out, "f26", "?f25 +?f8 ");
+    equation(out, "f27", "6780*?f6 ");
+    equation(out, "f28", "?f27 +?f7 ");
+    equation(out, "f29", "7200*?f6 ");
+    equation(out, "f30", "?f29 +?f7 ");
+    equation(out, "f31", "8050*?f6 ");
+    equation(out, "f32", "?f31 +?f7 ");
+    equation(out, "f33", "2960*?f6 ");
+    equation(out, "f34", "?f33 +?f8 ");
+    equation(out, "f35", "2330*?f6 ");
+    equation(out, "f36", "?f35 +?f8 ");
+    equation(out, "f37", "3800*?f6 ");
+    equation(out, "f38", "?f37 +?f8 ");
+    equation(out, "f39", "-1060*?f6 ");
+    equation(out, "f40", "?f39 +?f8 ");
+    equation(out, "f41", "-6350*?f6 ");
+    equation(out, "f42", "?f41 +?f7 ");
+    equation(out, "f43", "-640*?f6 ");
+    equation(out, "f44", "?f43 +?f8 ");
     out.xml.startElement("draw:handle");
     out.xml.addAttribute("draw:handle-position", "$0 top");
     out.xml.addAttribute("draw:handle-range-x-maximum", "5400");
@@ -4975,5 +4976,4 @@ void ODrawToOdf::processActionButtonMovie(const MSO::OfficeArtSpContainer& o, Wr
     out.xml.endElement(); // enhanced geometry
     out.xml.endElement(); // custom shape
 }
-
 

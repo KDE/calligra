@@ -3,7 +3,7 @@
 *
 * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 *
-* Contact: Amit Aggarwal <amitcs06@gmail.com> 
+* Contact: Amit Aggarwal <amitcs06@gmail.com>
 *            <amit.5.aggarwal@nokia.com>
 *
 * This library is free software; you can redistribute it and/or
@@ -30,11 +30,11 @@
 
 #include <QVariantList>
 
-class Plugin : public QObject 
+class Plugin : public QObject
 {
     Q_OBJECT
 public:
-    Plugin(QObject * parent,  const QVariantList &);
+    Plugin(QObject *parent,  const QVariantList &);
 };
 
 #endif

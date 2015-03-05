@@ -36,7 +36,7 @@ KisUrlRequester::KisUrlRequester(QWidget *parent)
     m_ui->btnSelectFile->setIcon(koIcon("folder"));
 
     connect(m_ui->btnSelectFile, SIGNAL(clicked()), SLOT(slotSelectFile()));
-    connect(m_ui->txtFileName, SIGNAL(textChanged(const QString&)), SIGNAL(textChanged(const QString&)));
+    connect(m_ui->txtFileName, SIGNAL(textChanged(QString)), SIGNAL(textChanged(QString)));
 }
 
 KisUrlRequester::~KisUrlRequester()
@@ -71,8 +71,7 @@ void KisUrlRequester::setUrl(const KUrl &urlObj)
 
     if (m_basePath.isEmpty()) {
         setFileName(url);
-    }
-    else {
+    } else {
         QDir d(m_basePath);
         setFileName(d.relativeFilePath(url));
     }
@@ -89,7 +88,7 @@ KoFileDialog::DialogType KisUrlRequester::mode() const
 }
 
 void KisUrlRequester::setMimeTypeFilters(const QStringList &filterList,
-                            QString defaultFilter)
+        QString defaultFilter)
 {
     m_mime_filter_list = filterList;
     m_mime_default_filter = defaultFilter;
@@ -100,25 +99,23 @@ void KisUrlRequester::slotSelectFile()
     KoFileDialog dialog(this, m_mode, "OpenDocument");
     if (m_mode == KoFileDialog::OpenFile) {
         dialog.setCaption(i18n("Select a file to load..."));
-    }
-    else if (m_mode == KoFileDialog::OpenDirectory)  {
+    } else if (m_mode == KoFileDialog::OpenDirectory)  {
         dialog.setCaption(i18n("Select a directory to load..."));
     }
 
     dialog.setDefaultDir(m_basePath.isEmpty() ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) : m_basePath);
-    if (m_mime_filter_list.isEmpty())
+    if (m_mime_filter_list.isEmpty()) {
         dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
-    else
+    } else {
         dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);
+    }
     QString url = dialog.url();
 
     if (m_basePath.isEmpty()) {
         setFileName(url);
-    } else
-    {
+    } else {
         QDir d(m_basePath);
         setFileName(d.relativeFilePath(url));
     }
-
 
 }

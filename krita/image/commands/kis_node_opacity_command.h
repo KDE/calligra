@@ -21,7 +21,6 @@
 
 #include "kis_node_command.h"
 
-
 /// The command for setting the node opacity
 class KRITAIMAGE_EXPORT KisNodeOpacityCommand : public KisNodeCommand
 {

@@ -44,7 +44,7 @@ public:
     void setVisible(bool v);
 
 protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
+    void drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
 
 private Q_SLOTS:
     void slotStartUpdateSelection();
@@ -60,7 +60,7 @@ private:
     QPainterPath m_outlinePath;
     QImage m_thumbnailImage;
     QTransform m_thumbnailImageTransform;
-    QTimer* m_antsTimer;
+    QTimer *m_antsTimer;
     int m_offset;
 
     QPen m_antsPen;

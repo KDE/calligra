@@ -33,7 +33,7 @@ class FinancialModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    explicit FinancialModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit FinancialModule(QObject *parent, const QVariantList &args = QVariantList());
 
     QString descriptionFileName() const;
 };

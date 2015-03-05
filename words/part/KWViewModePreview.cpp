@@ -31,9 +31,8 @@
 // #include "KWGUI.h"
 // // #include <kdebug.h>
 
-
 KWViewModePreview::KWViewModePreview()
-        : m_pagesPerRow(3)
+    : m_pagesPerRow(3)
 {
 }
 
@@ -42,14 +41,14 @@ QSizeF KWViewModePreview::contentsSize() const
     return QSizeF();
 }
 
-QPointF KWViewModePreview::documentToView(const QPointF & point, KoViewConverter *viewConverter) const
+QPointF KWViewModePreview::documentToView(const QPointF &point, KoViewConverter *viewConverter) const
 {
     Q_UNUSED(point);
     Q_UNUSED(viewConverter);
     return QPointF();
 }
 
-QPointF KWViewModePreview::viewToDocument(const QPointF & point, KoViewConverter *viewConverter) const
+QPointF KWViewModePreview::viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const
 {
     Q_UNUSED(point);
     Q_UNUSED(viewConverter);

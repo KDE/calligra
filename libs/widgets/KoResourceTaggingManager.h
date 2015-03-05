@@ -39,39 +39,38 @@ class KOWIDGETS_EXPORT KoResourceTaggingManager : public QObject
     Q_OBJECT
 
 public:
-    explicit KoResourceTaggingManager(KoResourceModelBase*, QWidget* parent);
+    explicit KoResourceTaggingManager(KoResourceModelBase *, QWidget *parent);
     ~KoResourceTaggingManager();
     void showTaggingBar(bool showSearchBar, bool showOpBar);
     QStringList availableTags() const;
     QString currentTag();
-    void contextMenuRequested(KoResource* currentResource, QPoint pos);
-    KoTagFilterWidget* tagFilterWidget();
-    KoTagChooserWidget* tagChooserWidget();
+    void contextMenuRequested(KoResource *currentResource, QPoint pos);
+    KoTagFilterWidget *tagFilterWidget();
+    KoTagChooserWidget *tagChooserWidget();
 private Q_SLOTS:
-    void undeleteTag(const QString& tagToUndelete);
+    void undeleteTag(const QString &tagToUndelete);
     void purgeTagUndeleteList();
-    void contextCreateNewTag(KoResource* resource, const QString& tag);
-    void contextCreateNewTag(const QString& tag);
-    void syncTagBoxEntryRemoval(const QString& tag);
-    void syncTagBoxEntryAddition(const QString& tag);
+    void contextCreateNewTag(KoResource *resource, const QString &tag);
+    void contextCreateNewTag(const QString &tag);
+    void syncTagBoxEntryRemoval(const QString &tag);
+    void syncTagBoxEntryAddition(const QString &tag);
     void syncTagBoxEntries();
     void tagSaveButtonPressed();
-    void contextRemoveTagFromResource(KoResource* resource, const QString& tag);
-    void contextAddTagToResource(KoResource* resource, const QString& tag);
+    void contextRemoveTagFromResource(KoResource *resource, const QString &tag);
+    void contextAddTagToResource(KoResource *resource, const QString &tag);
     void renameTag(const QString &oldName, const QString &newName);
-    void tagChooserIndexChanged(const QString& lineEditText);
-    void tagSearchLineEditTextChanged(const QString& lineEditText);
-    void removeTagFromComboBox(const QString& tag);
+    void tagChooserIndexChanged(const QString &lineEditText);
+    void tagSearchLineEditTextChanged(const QString &lineEditText);
+    void removeTagFromComboBox(const QString &tag);
 
 private:
-    void contextMenuRequested(KoResource* resource, const QStringList& resourceTags, const QPoint& pos);
+    void contextMenuRequested(KoResource *resource, const QStringList &resourceTags, const QPoint &pos);
     void enableContextMenu(bool enable);
-    void removeResourceTag(KoResource* resource, const QString& tagName);
-    void addResourceTag(KoResource* resource, const QString& tagName);
+    void removeResourceTag(KoResource *resource, const QString &tagName);
+    void addResourceTag(KoResource *resource, const QString &tagName);
     void updateTaggedResourceView();
     class Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 #endif // KORESOURCETAGGINGINTERFACE_H

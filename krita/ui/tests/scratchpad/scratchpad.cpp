@@ -33,7 +33,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_scratch_pad.h>
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     KAboutData aboutData("scratchpad",
                          0,
@@ -56,7 +56,7 @@ int main(int argc, char** argv)
     KisScratchPad *scratchpad = new KisScratchPad();
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->count() > 0 ) {
+    if (args->count() > 0) {
         QString fileName = args->arg(0);
         if (QFile::exists(fileName)) {
             KisPaintOpPresetSP preset = new KisPaintOpPreset(fileName);

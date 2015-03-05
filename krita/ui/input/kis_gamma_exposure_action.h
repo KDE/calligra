@@ -21,7 +21,6 @@
 
 #include "kis_abstract_input_action.h"
 
-
 class KisGammaExposureAction : public KisAbstractInputAction
 {
 public:
@@ -56,7 +55,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* __KIS_GAMMA_EXPOSURE_ACTION_H */

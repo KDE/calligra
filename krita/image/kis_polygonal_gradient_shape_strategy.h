@@ -26,7 +26,6 @@
 
 #include "krita_export.h"
 
-
 class KRITAIMAGE_EXPORT KisPolygonalGradientShapeStrategy : public KisGradientShapeStrategy
 {
 public:

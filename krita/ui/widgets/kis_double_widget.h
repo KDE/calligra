@@ -34,8 +34,8 @@ class KRITAUI_EXPORT KisDoubleWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisDoubleWidget(QWidget* parent = 0, const char* name = 0);
-    KisDoubleWidget(double min, double max, QWidget* parent = 0, const char* name = 0);
+    KisDoubleWidget(QWidget *parent = 0, const char *name = 0);
+    KisDoubleWidget(double min, double max, QWidget *parent = 0, const char *name = 0);
     ~KisDoubleWidget();
 
     double value() const;
@@ -68,8 +68,8 @@ private:
     void init(double min, double max);
 
 protected:
-    QHBoxLayout* m_layout;
-    QSlider* m_slider;
+    QHBoxLayout *m_layout;
+    QSlider *m_slider;
     QDoubleSpinBox *m_spinBox;
 };
 

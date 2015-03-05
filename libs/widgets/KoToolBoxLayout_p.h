@@ -27,7 +27,6 @@
 #include <QRect>
 #include <QAbstractButton>
 
-
 class SectionLayout : public QLayout
 {
 public:
@@ -38,7 +37,7 @@ public:
 
     ~SectionLayout()
     {
-        qDeleteAll( m_items );
+        qDeleteAll(m_items);
         m_items.clear();
     }
 
@@ -47,12 +46,13 @@ public:
         addChildWidget(button);
         m_priorities.insert(button, priority);
         int index = 1;
-        foreach(QWidgetItem *item, m_items) {
-            if (m_priorities.value(static_cast<QAbstractButton*>(item->widget())) > priority)
+        foreach (QWidgetItem *item, m_items) {
+            if (m_priorities.value(static_cast<QAbstractButton *>(item->widget())) > priority) {
                 break;
+            }
             index++;
         }
-        m_items.insert(index-1, new QWidgetItem(button));
+        m_items.insert(index - 1, new QWidgetItem(button));
     }
 
     QSize sizeHint() const
@@ -61,26 +61,37 @@ public:
         return QSize();
     }
 
-    void addItem(QLayoutItem*) { Q_ASSERT(0); }
-    QLayoutItem* itemAt(int i) const
+    void addItem(QLayoutItem *)
     {
-        if (m_items.count() <= i)
+        Q_ASSERT(0);
+    }
+    QLayoutItem *itemAt(int i) const
+    {
+        if (m_items.count() <= i) {
             return 0;
+        }
         return m_items.at(i);
     }
 
-    QLayoutItem* takeAt(int i) { return m_items.takeAt(i); }
-    int count() const { return m_items.count(); }
+    QLayoutItem *takeAt(int i)
+    {
+        return m_items.takeAt(i);
+    }
+    int count() const
+    {
+        return m_items.count();
+    }
 
-    void setGeometry (const QRect &rect)
+    void setGeometry(const QRect &rect)
     {
         int x = 0;
         int y = 0;
         const QSize &size = buttonSize();
         if (m_orientation == Qt::Vertical) {
-            foreach (QWidgetItem* w, m_items) {
-                if (w->isEmpty())
+            foreach (QWidgetItem *w, m_items) {
+                if (w->isEmpty()) {
                     continue;
+                }
                 w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
                 x += size.width();
                 if (x + size.width() > rect.width()) {
@@ -89,9 +100,10 @@ public:
                 }
             }
         } else {
-            foreach (QWidgetItem* w, m_items) {
-                if (w->isEmpty())
+            foreach (QWidgetItem *w, m_items) {
+                if (w->isEmpty()) {
                     continue;
+                }
                 w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
                 y += size.height();
                 if (y + size.height() > rect.height()) {
@@ -104,20 +116,21 @@ public:
 
     const QSize &buttonSize() const
     {
-        if (!m_items.isEmpty() && ! m_buttonSize.isValid())
-            const_cast<SectionLayout*> (this)->m_buttonSize = m_items[0]->widget()->sizeHint();
+        if (!m_items.isEmpty() && ! m_buttonSize.isValid()) {
+            const_cast<SectionLayout *>(this)->m_buttonSize = m_items[0]->widget()->sizeHint();
+        }
         return m_buttonSize;
     }
 
-    void setOrientation (Qt::Orientation orientation)
+    void setOrientation(Qt::Orientation orientation)
     {
         m_orientation = orientation;
     }
 
 private:
     QSize m_buttonSize;
-    QMap<QAbstractButton*, int> m_priorities;
-    QList<QWidgetItem*> m_items;
+    QMap<QAbstractButton *, int> m_priorities;
+    QList<QWidgetItem *> m_items;
     Qt::Orientation m_orientation;
 };
 
@@ -130,7 +143,7 @@ public:
     Q_DECLARE_FLAGS(Separators, SeparatorFlag)
     explicit Section(QWidget *parent = 0)
         : QWidget(parent),
-        m_layout(new SectionLayout(this))
+          m_layout(new SectionLayout(this))
     {
         setLayout(m_layout);
     }
@@ -158,9 +171,10 @@ public:
     int visibleButtonCount() const
     {
         int count = 0;
-        for(int i = m_layout->count()-1; i >= 0; --i) {
-            if (! static_cast<QWidgetItem*> (m_layout->itemAt(i))->isEmpty())
+        for (int i = m_layout->count() - 1; i >= 0; --i) {
+            if (! static_cast<QWidgetItem *>(m_layout->itemAt(i))->isEmpty()) {
                 ++count;
+            }
         }
         return count;
     }
@@ -175,7 +189,7 @@ public:
         return m_separators;
     }
 
-    void setOrientation (Qt::Orientation orientation)
+    void setOrientation(Qt::Orientation orientation)
     {
         m_layout->setOrientation(orientation);
     }
@@ -199,15 +213,16 @@ public:
 
     ~KoToolBoxLayout()
     {
-        qDeleteAll( m_sections );
+        qDeleteAll(m_sections);
         m_sections.clear();
     }
 
     QSize sizeHint() const
     {
-        if (m_sections.isEmpty())
+        if (m_sections.isEmpty()) {
             return QSize();
-        QSize oneIcon = static_cast<Section*> (m_sections[0]->widget())->iconSize();
+        }
+        QSize oneIcon = static_cast<Section *>(m_sections[0]->widget())->iconSize();
         return oneIcon;
     }
     QSize minimumSize() const
@@ -225,35 +240,42 @@ public:
     {
         addChildWidget(section);
 
-        QList<QWidgetItem*>::iterator iterator = m_sections.begin();
+        QList<QWidgetItem *>::iterator iterator = m_sections.begin();
         int defaults = 2; // skip the first two as they are the 'main' and 'dynamic' sections.
         while (iterator != m_sections.end()) {
-            if (--defaults < 0 && static_cast<Section*> ((*iterator)->widget())->name() > section->name())
+            if (--defaults < 0 && static_cast<Section *>((*iterator)->widget())->name() > section->name()) {
                 break;
+            }
             ++iterator;
         }
         m_sections.insert(iterator, new QWidgetItem(section));
     }
 
-    void addItem(QLayoutItem*)
+    void addItem(QLayoutItem *)
     {
         Q_ASSERT(0); // don't let anything else be added. (code depends on this!)
     }
 
-    QLayoutItem* itemAt(int i) const
+    QLayoutItem *itemAt(int i) const
     {
-        if (m_sections.count() >= i)
+        if (m_sections.count() >= i) {
             return 0;
+        }
         return m_sections.at(i);
     }
-    QLayoutItem* takeAt(int i) { return m_sections.takeAt(i); }
-    int count() const { return m_sections.count(); }
+    QLayoutItem *takeAt(int i)
+    {
+        return m_sections.takeAt(i);
+    }
+    int count() const
+    {
+        return m_sections.count();
+    }
 
-    void setGeometry (const QRect &rect)
+    void setGeometry(const QRect &rect)
     {
         // nothing to do?
-        if (m_sections.isEmpty())
-        {
+        if (m_sections.isEmpty()) {
             m_currentHeight = 0;
             return;
         }
@@ -261,7 +283,7 @@ public:
         // the names of the variables assume a vertical orientation,
         // but all calculations are done based on the real orientation
 
-        const QSize iconSize = static_cast<Section*> (m_sections.first()->widget())->iconSize();
+        const QSize iconSize = static_cast<Section *>(m_sections.first()->widget())->iconSize();
 
         const int maxWidth = (m_orientation == Qt::Vertical) ? rect.width() : rect.height();
         // using min 1 as width to e.g. protect against div by 0 below
@@ -274,7 +296,7 @@ public:
         int y = 0;
         bool firstSection = true;
         foreach (QWidgetItem *wi, m_sections) {
-            Section *section = static_cast<Section*> (wi->widget());
+            Section *section = static_cast<Section *>(wi->widget());
             const int buttonCount = section->visibleButtonCount();
             if (buttonCount == 0) {
                 // move out of view, not perfect TODO: better solution
@@ -283,7 +305,7 @@ public:
             }
 
             // rows needed for the buttons (calculation gets the ceiling value of the plain div)
-            const int neededRowCount = ((buttonCount-1) / maxColumns) + 1;
+            const int neededRowCount = ((buttonCount - 1) / maxColumns) + 1;
             const int availableButtonCount = (maxWidth - x + 1) / iconWidth;
 
             if (firstSection) {
@@ -294,15 +316,15 @@ public:
                 y += iconHeight + spacing();
                 const Section::Separators separator =
                     (m_orientation == Qt::Vertical) ? Section::SeparatorTop : Section::SeparatorLeft;
-                section->setSeparator( separator );
+                section->setSeparator(separator);
             } else {
                 // append to last row, set separators (on first row only to the left side)
                 const bool isFirstRow = (y == 0);
                 const Section::Separators separators =
                     isFirstRow ?
-                        ((m_orientation == Qt::Vertical) ? Section::SeparatorLeft : Section::SeparatorTop) :
-                        (Section::SeparatorTop | Section::SeparatorLeft);
-                section->setSeparator( separators );
+                    ((m_orientation == Qt::Vertical) ? Section::SeparatorLeft : Section::SeparatorTop) :
+                    (Section::SeparatorTop | Section::SeparatorLeft);
+                section->setSeparator(separators);
             }
 
             const int usedColumns = qMin(buttonCount, maxColumns);
@@ -315,7 +337,7 @@ public:
             }
 
             // advance by the icons in the last row
-            const int lastRowColumnCount = buttonCount - ((neededRowCount-1) * maxColumns);
+            const int lastRowColumnCount = buttonCount - ((neededRowCount - 1) * maxColumns);
             x += (lastRowColumnCount * iconWidth) + spacing();
             // advance by all but the last used row
             y += (neededRowCount - 1) * iconHeight;
@@ -325,14 +347,14 @@ public:
         m_currentHeight = y + iconHeight;
     }
 
-    void setOrientation (Qt::Orientation orientation)
+    void setOrientation(Qt::Orientation orientation)
     {
         m_orientation = orientation;
         invalidate();
     }
 
 private:
-    QList <QWidgetItem*> m_sections;
+    QList <QWidgetItem *> m_sections;
     Qt::Orientation m_orientation;
     mutable int m_currentHeight;
 };

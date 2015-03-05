@@ -42,7 +42,7 @@ public:
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    virtual void paint(QPainter &gc, const KoViewConverter &converter);
 
 public Q_SLOTS:
     virtual void deactivate();
@@ -51,18 +51,18 @@ private:
     void updateFeedback();
     void updateCanvas();
 
-    QPainterPath * m_paintPath;
+    QPainterPath *m_paintPath;
     vQPointF m_points;
 
 };
-
 
 class KisToolSelectOutlineFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectOutlineFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolSelectOutline") {
+    KisToolSelectOutlineFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolSelectOutline")
+    {
         setToolTip(i18n("Outline Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setIconName(koIconNameCStr("tool_outline_selection"));
@@ -72,11 +72,11 @@ public:
 
     virtual ~KisToolSelectOutlineFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolSelectOutline(canvas);
     }
 };
-
 
 #endif //__selecttoolfreehand_h__
 

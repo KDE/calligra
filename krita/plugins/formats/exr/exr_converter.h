@@ -54,15 +54,15 @@ public:
     exrConverter(KisDocument *doc, bool showNotifications);
     virtual ~exrConverter();
 public:
-    KisImageBuilder_Result buildImage(const KUrl& uri);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisGroupLayerSP layer);
+    KisImageBuilder_Result buildImage(const KUrl &uri);
+    KisImageBuilder_Result buildFile(const KUrl &uri, KisPaintLayerSP layer);
+    KisImageBuilder_Result buildFile(const KUrl &uri, KisGroupLayerSP layer);
     /**
      * Retrieve the constructed image
      */
     KisImageWSP image();
 private:
-    KisImageBuilder_Result decode(const KUrl& uri);
+    KisImageBuilder_Result decode(const KUrl &uri);
 public Q_SLOTS:
     virtual void cancel();
 private:

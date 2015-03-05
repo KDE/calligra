@@ -25,7 +25,6 @@
 // Local
 #include "MapAdaptor.h"
 
-
 #include <kdebug.h>
 
 #include "Map.h"
@@ -33,25 +32,26 @@
 
 using namespace Calligra::Sheets;
 
-MapAdaptor::MapAdaptor(Map* map)
-        : QDBusAbstractAdaptor(map)
+MapAdaptor::MapAdaptor(Map *map)
+    : QDBusAbstractAdaptor(map)
 {
     setAutoRelaySignals(true);
     m_map = map;
 }
 
-QString MapAdaptor::sheet(const QString& name)
+QString MapAdaptor::sheet(const QString &name)
 {
-    Sheet* t = m_map->findSheet(name);
-    if (!t)
+    Sheet *t = m_map->findSheet(name);
+    if (!t) {
         return QString();
+    }
 
     return t->objectName();
 }
 
 QString MapAdaptor::sheetByIndex(int index)
 {
-    Sheet* t = m_map->sheetList().at(index);
+    Sheet *t = m_map->sheetList().at(index);
     if (!t) {
         kDebug(36001) << "+++++ No table found at index" << index;
         return QString();
@@ -70,7 +70,7 @@ int MapAdaptor::sheetCount() const
 QStringList MapAdaptor::sheetNames() const
 {
     QStringList names;
-    foreach(Sheet* sheet, m_map->sheetList()) {
+    foreach (Sheet *sheet, m_map->sheetList()) {
         names.append(sheet->objectName());
     }
     return names;
@@ -79,18 +79,19 @@ QStringList MapAdaptor::sheetNames() const
 QStringList MapAdaptor::sheets()
 {
     QStringList t;
-    foreach(Sheet* sheet, m_map->sheetList()) {
+    foreach (Sheet *sheet, m_map->sheetList()) {
         t.append(sheet->objectName());
     }
     return t;
 }
 
-QString MapAdaptor::insertSheet(const QString& name)
+QString MapAdaptor::insertSheet(const QString &name)
 {
-    if (m_map->findSheet(name))
+    if (m_map->findSheet(name)) {
         return sheet(name);
+    }
 
-    Sheet* t = m_map->addNewSheet();
+    Sheet *t = m_map->addNewSheet();
     t->setSheetName(name);
 
     return sheet(name);

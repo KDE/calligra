@@ -38,23 +38,26 @@ class KisCacheStateValue
 public:
     typedef int SeqValue;
 public:
-    inline void invalidate() {
+    inline void invalidate()
+    {
         int oldValue;
         int newValue = -1;
         do {
             oldValue = m_value;
             newValue = incrementSeqNo(oldValue) & ~IsValidMask;
-        } while(!m_value.testAndSetOrdered(oldValue, newValue));
+        } while (!m_value.testAndSetOrdered(oldValue, newValue));
     }
 
-    inline bool startRead(int *seq) const {
+    inline bool startRead(int *seq) const
+    {
         *seq = m_value;
 
         return (*seq & IsValidMask) &&
-            !(*seq & WritersCountMask);
+               !(*seq & WritersCountMask);
     }
 
-    inline bool endRead(int seq) const {
+    inline bool endRead(int seq) const
+    {
         bool result =
             seq == m_value &&
             (seq & IsValidMask) &&
@@ -63,25 +66,26 @@ public:
         return result;
     }
 
-
-    inline bool startWrite(int *seq) {
+    inline bool startWrite(int *seq)
+    {
         int oldValue;
         int newValue;
         do {
             oldValue = m_value;
             if ((oldValue & IsValidMask) ||
-                (oldValue & WritersCountMask)) {
+                    (oldValue & WritersCountMask)) {
 
                 return false;
             }
             newValue = incrementSeqNo(oldValue) + WritersCountIncrement;
-        } while(!m_value.testAndSetOrdered(oldValue, newValue));
+        } while (!m_value.testAndSetOrdered(oldValue, newValue));
 
         *seq = newValue;
         return true;
     }
 
-    inline void endWrite(int seq) {
+    inline void endWrite(int seq)
+    {
         int oldValue;
         int newValue;
         do {
@@ -92,11 +96,12 @@ public:
             } else {
                 newValue = (incrementSeqNo(oldValue) - WritersCountIncrement) & ~IsValidMask;
             }
-        } while(!m_value.testAndSetOrdered(oldValue, newValue));
+        } while (!m_value.testAndSetOrdered(oldValue, newValue));
     }
 
 private:
-    int incrementSeqNo(int value) {
+    int incrementSeqNo(int value)
+    {
         // handle overflow properly
         if ((value & SeqNoMask) == SeqNoMask) {
             value = value & ~SeqNoMask;
@@ -119,14 +124,16 @@ public:
     /**
      * Notify the chache that the value has changed
      */
-    void invalidate() {
+    void invalidate()
+    {
         m_state.invalidate();
     }
 
     /**
      * Calculate the value or fetch it from the cache
      */
-    T getValue() const {
+    T getValue() const
+    {
         KisCacheStateValue::SeqValue seqValue;
         bool isValid = false;
         T newValue;
@@ -159,7 +166,5 @@ private:
     mutable KisCacheStateValue m_state;
     mutable T m_value;
 };
-
-
 
 #endif /* __KIS_CACHE_STATE_VALUE_H */

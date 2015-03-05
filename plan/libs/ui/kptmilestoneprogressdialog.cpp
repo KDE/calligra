@@ -34,12 +34,12 @@ class MacroCommand;
 
 MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
     : KDialog(p),
-    m_node( &task )
+      m_node(&task)
 {
-    setCaption( i18n("Milestone Progress") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setCaption(i18n("Milestone Progress"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    showButtonSeparator(true);
     m_panel = new MilestoneProgressPanel(task, this);
 
     setMainWidget(m_panel);
@@ -47,27 +47,28 @@ MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
     enableButtonOk(false);
 
     connect(m_panel, SIGNAL(changed()), SLOT(slotChanged()));
-    Project *proj = static_cast<Project*>( task.projectNode() );
-    if ( proj ) {
+    Project *proj = static_cast<Project *>(task.projectNode());
+    if (proj) {
         connect(proj, SIGNAL(nodeRemoved(Node*)), SLOT(slotNodeRemoved(Node*)));
     }
 }
 
-void MilestoneProgressDialog::slotNodeRemoved( Node *node )
+void MilestoneProgressDialog::slotNodeRemoved(Node *node)
 {
-    if ( m_node == node ) {
+    if (m_node == node) {
         reject();
     }
 }
 
-void MilestoneProgressDialog::slotChanged() {
+void MilestoneProgressDialog::slotChanged()
+{
     enableButtonOk(true);
 }
 
-MacroCommand *MilestoneProgressDialog::buildCommand() {
+MacroCommand *MilestoneProgressDialog::buildCommand()
+{
     return m_panel->buildCommand();
 }
-
 
 }  //KPlato namespace
 

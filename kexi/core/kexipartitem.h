@@ -43,38 +43,48 @@ public:
     Item();
     ~Item();
 
-    int identifier() const {
+    int identifier() const
+    {
         return m_id;
     }
-    void setIdentifier(int id) {
+    void setIdentifier(int id)
+    {
         m_id = id;
     }
 
-    QString partClass() const {
+    QString partClass() const
+    {
         return m_class;
     }
-    void setPartClass(const QString &_class) {
+    void setPartClass(const QString &_class)
+    {
         m_class = _class;
     }
 
-    QString name() const {
+    QString name() const
+    {
         return m_name;
     }
-    void setName(const QString &name) {
+    void setName(const QString &name)
+    {
         m_name = name;
     }
 
-    QString caption() const {
+    QString caption() const
+    {
         return m_caption;
     }
-    void setCaption(const QString &c) {
+    void setCaption(const QString &c)
+    {
         m_caption = c;
     }
 
-    QString description() const {
+    QString description() const
+    {
         return m_desc;
     }
-    void setDescription(const QString &d) {
+    void setDescription(const QString &d)
+    {
         m_desc = d;
     }
 
@@ -83,22 +93,26 @@ public:
      so we need to indicate for KexiProject about that state.
      By default this flag is false.
      Used by KexiMainWindow::newObject(). */
-    bool neverSaved() const {
+    bool neverSaved() const
+    {
         return m_neverSaved;
     }
 
     /*! \sa neverSaved().
      Used by KexiMainWindow::newObject(). */
-    void setNeverSaved(bool set) {
+    void setNeverSaved(bool set)
+    {
         m_neverSaved = set;
     }
 
-    bool isNull() const {
+    bool isNull() const
+    {
         return m_id == 0;
     }
 
     //! \return caption if not empty, else returns name.
-    inline QString captionOrName() const {
+    inline QString captionOrName() const
+    {
         return m_caption.isEmpty() ? m_name : m_caption;
     }
 
@@ -111,18 +125,18 @@ private:
     bool m_neverSaved;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 //! Item dict which destroys KexiPart::Item items on destruction.
-class KEXICORE_EXPORT ItemDict : public QHash<int, KexiPart::Item*>
+class KEXICORE_EXPORT ItemDict : public QHash<int, KexiPart::Item *>
 {
 public:
     ItemDict();
     ~ItemDict();
 };
 
-typedef QList<KexiPart::Item*>::iterator ItemListIterator;
+typedef QList<KexiPart::Item *>::iterator ItemListIterator;
 
 /*!
  @short Part item list with special sorting method (by item name).
@@ -130,7 +144,7 @@ typedef QList<KexiPart::Item*>::iterator ItemListIterator;
  Such a list is returend by KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
  so you can call sort() on the list to sort it by item name.
 */
-class KEXICORE_EXPORT ItemList : public QList<KexiPart::Item*>
+class KEXICORE_EXPORT ItemList : public QList<KexiPart::Item *>
 {
 public:
     ItemList();

@@ -22,8 +22,6 @@
 #include <kis_types.h>
 #include "kis_gmic_filter_settings.h"
 
-
-
 class KisInputOutputMapper
 {
 public:

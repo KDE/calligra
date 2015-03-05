@@ -34,12 +34,12 @@
 #include <kactioncollection.h>
 
 CAuView::CAuView(KoPart *part, KWDocument *document, QWidget *parent)
-    :KWView(part, document, parent)
+    : KWView(part, document, parent)
 {
-        setComponentData(CAuFactory::componentData());
-        setXMLFile("author.rc");
+    setComponentData(CAuFactory::componentData());
+    setXMLFile("author.rc");
 
-        setupActions();
+    setupActions();
 }
 
 void CAuView::setupActions()
@@ -55,7 +55,7 @@ void CAuView::setupActions()
 void CAuView::selectCoverImage()
 {
     //first "this" for CAuView context and second one for window parent
-    CoverSelectionDialog* coverDialog = new CoverSelectionDialog(this,this);
+    CoverSelectionDialog *coverDialog = new CoverSelectionDialog(this, this);
     coverDialog->show();
 }
 

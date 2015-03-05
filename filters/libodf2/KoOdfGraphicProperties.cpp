@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "KoOdfGraphicProperties.h"
 
@@ -32,10 +31,8 @@
 #include <KoXmlStreamReader.h>
 #include <KoXmlWriter.h>
 
-
 // ----------------------------------------------------------------
 //                         private class
-
 
 class KoOdfGraphicProperties::Private
 {
@@ -48,9 +45,7 @@ public:
     // NYI: List Style
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfGraphicProperties::KoOdfGraphicProperties()
     : KoOdfStyleProperties()
@@ -63,12 +58,10 @@ KoOdfGraphicProperties::~KoOdfGraphicProperties()
     delete d;
 }
 
-
 void KoOdfGraphicProperties::clear()
 {
     KoOdfStyleProperties::clear();
 }
-
 
 bool KoOdfGraphicProperties::readOdf(KoXmlStreamReader &reader)
 {
@@ -86,11 +79,9 @@ bool KoOdfGraphicProperties::readOdf(KoXmlStreamReader &reader)
 
         if (child == "style:background-image") {
             // FIXME: NYI
-        }
-        else if (child == "style:columns") {
+        } else if (child == "style:columns") {
             // FIXME: NYI
-        }
-        else if (child == "text:list-style") {
+        } else if (child == "text:list-style") {
             // FIXME: NYI
         }
 

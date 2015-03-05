@@ -38,11 +38,11 @@ class Map;
 class ExportDialogUI : public QWidget, public Ui::ExportDialogUI
 {
 public:
-    explicit ExportDialogUI(QWidget *parent) : QWidget(parent) {
+    explicit ExportDialogUI(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
-
 
 class CSVExportDialog : public KDialog
 {
@@ -53,21 +53,21 @@ public:
 
     QChar   getDelimiter() const;
     QChar   getTextQuote() const;
-    bool    exportSheet(QString const & sheetName) const;
+    bool    exportSheet(QString const &sheetName) const;
     bool    printAlwaysSheetDelimiter() const;
     QString getSheetDelimiter() const;
     bool    exportSelectionOnly() const;
 
-    void  fillSheet(Calligra::Sheets::Map * map);
+    void  fillSheet(Calligra::Sheets::Map *map);
     QString getEndOfLine(void) const;
-    QTextCodec* getCodec(void) const;
+    QTextCodec *getCodec(void) const;
 
 private:
     void loadSettings();
     void saveSettings();
-    ExportDialogUI * m_dialog;
+    ExportDialogUI *m_dialog;
 
-    QValidator* m_delimiterValidator;
+    QValidator *m_delimiterValidator;
     QString m_delimiter;
     QChar   m_textquote;
 
@@ -78,7 +78,7 @@ private Q_SLOTS:
     void returnPressed();
     void delimiterClicked(int id);
     void textChanged(const QString &);
-    void textquoteSelected(const QString & mark);
+    void textquoteSelected(const QString &mark);
     void selectionOnlyChanged(bool);
 };
 

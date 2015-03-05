@@ -30,9 +30,9 @@
 
 StatesModel::StatesModel()
 {
-    foreach(const QString & catId, StatesRegistry::instance()->categorieIds()) {
-        foreach(const QString & stateId, StatesRegistry::instance()->stateIds(catId)) {
-            const State* state = StatesRegistry::instance()->state(catId, stateId);
+    foreach (const QString &catId, StatesRegistry::instance()->categorieIds()) {
+        foreach (const QString &stateId, StatesRegistry::instance()->stateIds(catId)) {
+            const State *state = StatesRegistry::instance()->state(catId, stateId);
             Q_ASSERT(state);
             m_states.push_back(state);
             QImage image(32, 32, QImage::Format_ARGB32);
@@ -44,16 +44,16 @@ StatesModel::StatesModel()
     Q_ASSERT(m_states.size() == m_icons.size());
 }
 
-int StatesModel::rowCount(const QModelIndex & parent) const
+int StatesModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_states.size();
 }
 
-QVariant StatesModel::data(const QModelIndex & index, int role) const
+QVariant StatesModel::data(const QModelIndex &index, int role) const
 {
-    if(index.isValid()) {
-        switch(role) {
+    if (index.isValid()) {
+        switch (role) {
         case Qt::DisplayRole:
             return m_states[index.row()]->name();
         case Qt::DecorationRole:
@@ -69,17 +69,17 @@ QVariant StatesModel::data(const QModelIndex & index, int role) const
     return QVariant();
 }
 
-const State* StatesModel::stateAt(int index) const
+const State *StatesModel::stateAt(int index) const
 {
     Q_ASSERT(index >= 0 && index < m_states.count());
     return m_states[index];
 }
 
-QModelIndex StatesModel::indexFor(const QString& catId, const QString& stateId) const
+QModelIndex StatesModel::indexFor(const QString &catId, const QString &stateId) const
 {
-    for(int i = 0; i < m_states.count(); ++i) {
-        const State* state = m_states[i];
-        if(state->category()->id() == catId && state->id() == stateId) {
+    for (int i = 0; i < m_states.count(); ++i) {
+        const State *state = m_states[i];
+        if (state->category()->id() == catId && state->id() == stateId) {
             return index(i, 0, QModelIndex());
         }
     }

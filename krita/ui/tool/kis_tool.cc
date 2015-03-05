@@ -72,7 +72,6 @@
 #include "kis_resources_snapshot.h"
 #include <KisView.h>
 
-
 struct KisTool::Private {
     Private()
         : currentPattern(0),
@@ -91,13 +90,13 @@ struct KisTool::Private {
     QCursor cursor; // the cursor that should be shown on tool activation.
 
     // From the canvas resources
-    KoPattern* currentPattern;
-    KoAbstractGradient* currentGradient;
+    KoPattern *currentPattern;
+    KoAbstractGradient *currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
     float currentExposure;
-    KisFilterConfiguration* currentGenerator;
-    QWidget* optionWidget;
+    KisFilterConfiguration *currentGenerator;
+    QWidget *optionWidget;
 
 #ifdef HAVE_OPENGL
     QGLShaderProgram *cursorShader; // Make static instead of creating for all tools?
@@ -107,7 +106,7 @@ struct KisTool::Private {
     bool useGLToolOutlineWorkaround;
 };
 
-KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
+KisTool::KisTool(KoCanvasBase *canvas, const QCursor &cursor)
     : KoToolBase(canvas)
     , d(new Private)
 {
@@ -130,19 +129,18 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
         collection->addAction("reset_fg_bg", resetFgBg);
     }
 
-    addAction("toggle_fg_bg", dynamic_cast<KAction*>(collection->action("toggle_fg_bg")));
-    addAction("reset_fg_bg", dynamic_cast<KAction*>(collection->action("reset_fg_bg")));
+    addAction("toggle_fg_bg", dynamic_cast<KAction *>(collection->action("toggle_fg_bg")));
+    addAction("reset_fg_bg", dynamic_cast<KAction *>(collection->action("reset_fg_bg")));
 
     setMode(HOVER_MODE);
 
     QStringList qtVersion = QString(qVersion()).split('.');
-    int versionNumber = qtVersion.at(0).toInt()*10000
-            + qtVersion.at(1).toInt()*100
-            + qtVersion.at(2).toInt();
-    if (versionNumber>=40603) {
+    int versionNumber = qtVersion.at(0).toInt() * 10000
+                        + qtVersion.at(1).toInt() * 100
+                        + qtVersion.at(2).toInt();
+    if (versionNumber >= 40603) {
         d->useGLToolOutlineWorkaround = false;
-    }
-    else {
+    } else {
         d->useGLToolOutlineWorkaround = true;
     }
 }
@@ -155,23 +153,26 @@ KisTool::~KisTool()
     delete d;
 }
 
-void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
     Q_UNUSED(shapes);
 
     resetCursorStyle();
 
-    if (!canvas()) return;
-    if (!canvas()->resourceManager()) return;
-
+    if (!canvas()) {
+        return;
+    }
+    if (!canvas()->resourceManager()) {
+        return;
+    }
 
     d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     d->currentPattern = static_cast<KoPattern *>(canvas()->resourceManager()->
-                                                  resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
+                        resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
     d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
-                                                           resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
+                         resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
 
     KisPaintOpPresetSP preset = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     if (preset && preset->settings()) {
@@ -180,8 +181,8 @@ void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shap
 
     d->currentExposure = static_cast<float>(canvas()->resourceManager()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
-    d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
-                                                               resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
+    d->currentGenerator = static_cast<KisFilterConfiguration *>(canvas()->resourceManager()->
+                          resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
 
     connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
@@ -222,28 +223,28 @@ void KisTool::requestStrokeEnd()
 {
 }
 
-void KisTool::canvasResourceChanged(int key, const QVariant & v)
+void KisTool::canvasResourceChanged(int key, const QVariant &v)
 {
     switch (key) {
-    case(KoCanvasResourceManager::ForegroundColor):
+    case (KoCanvasResourceManager::ForegroundColor):
         d->currentFgColor = v.value<KoColor>();
         break;
-    case(KoCanvasResourceManager::BackgroundColor):
+    case (KoCanvasResourceManager::BackgroundColor):
         d->currentBgColor = v.value<KoColor>();
         break;
-    case(KisCanvasResourceProvider::CurrentPattern):
+    case (KisCanvasResourceProvider::CurrentPattern):
         d->currentPattern = static_cast<KoPattern *>(v.value<void *>());
         break;
-    case(KisCanvasResourceProvider::CurrentGradient):
+    case (KisCanvasResourceProvider::CurrentGradient):
         d->currentGradient = static_cast<KoAbstractGradient *>(v.value<void *>());
         break;
-    case(KisCanvasResourceProvider::HdrExposure):
+    case (KisCanvasResourceProvider::HdrExposure):
         d->currentExposure = static_cast<float>(v.toDouble());
         break;
-    case(KisCanvasResourceProvider::CurrentGeneratorConfiguration):
-        d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>());
+    case (KisCanvasResourceProvider::CurrentGeneratorConfiguration):
+        d->currentGenerator = static_cast<KisFilterConfiguration *>(v.value<void *>());
         break;
-    case(KisCanvasResourceProvider::CurrentPaintOpPreset):
+    case (KisCanvasResourceProvider::CurrentPaintOpPreset):
         emit statusTextChanged(v.value<KisPaintOpPresetSP>()->name());
     default:
         ;
@@ -257,16 +258,16 @@ void KisTool::updateSettingsViews()
 
 QPointF KisTool::widgetCenterInWidgetPixels()
 {
-    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     Q_ASSERT(kritaCanvas);
 
     const KisCoordinatesConverter *converter = kritaCanvas->coordinatesConverter();
     return converter->flakeToWidget(converter->flakeCenterPoint());
 }
 
-QPointF KisTool::convertDocumentToWidget(const QPointF& pt)
+QPointF KisTool::convertDocumentToWidget(const QPointF &pt)
 {
-    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     Q_ASSERT(kritaCanvas);
 
     return kritaCanvas->coordinatesConverter()->documentToWidget(pt);
@@ -274,40 +275,45 @@ QPointF KisTool::convertDocumentToWidget(const QPointF& pt)
 
 QPointF KisTool::convertToPixelCoord(KoPointerEvent *e)
 {
-    if (!image())
+    if (!image()) {
         return e->point;
+    }
 
     return image()->documentToPixel(e->point);
 }
 
-QPointF KisTool::convertToPixelCoord(const QPointF& pt)
+QPointF KisTool::convertToPixelCoord(const QPointF &pt)
 {
-    if (!image())
+    if (!image()) {
         return pt;
+    }
 
     return image()->documentToPixel(pt);
 }
 
 QPoint KisTool::convertToIntPixelCoord(KoPointerEvent *e)
 {
-    if (!image())
+    if (!image()) {
         return e->point.toPoint();
+    }
 
     return image()->documentToIntPixel(e->point);
 }
 
 QPointF KisTool::viewToPixel(const QPointF &viewCoord) const
 {
-    if (!image())
+    if (!image()) {
         return viewCoord;
+    }
 
     return image()->documentToPixel(canvas()->viewConverter()->viewToDocument(viewCoord));
 }
 
 QRectF KisTool::convertToPt(const QRectF &rect)
 {
-    if (!image())
+    if (!image()) {
         return rect;
+    }
     QRectF r;
     //We add 1 in the following to the extreme coords because a pixel always has size
     r.setCoords(int(rect.left()) / image()->xRes(), int(rect.top()) / image()->yRes(),
@@ -317,24 +323,27 @@ QRectF KisTool::convertToPt(const QRectF &rect)
 
 QPointF KisTool::pixelToView(const QPoint &pixelCoord) const
 {
-    if (!image())
+    if (!image()) {
         return pixelCoord;
+    }
     QPointF documentCoord = image()->pixelToDocument(pixelCoord);
     return canvas()->viewConverter()->documentToView(documentCoord);
 }
 
 QPointF KisTool::pixelToView(const QPointF &pixelCoord) const
 {
-    if (!image())
+    if (!image()) {
         return pixelCoord;
+    }
     QPointF documentCoord = image()->pixelToDocument(pixelCoord);
     return canvas()->viewConverter()->documentToView(documentCoord);
 }
 
 QRectF KisTool::pixelToView(const QRectF &pixelRect) const
 {
-    if (!image())
+    if (!image()) {
         return pixelRect;
+    }
     QPointF topLeft = pixelToView(pixelRect.topLeft());
     QPointF bottomRight = pixelToView(pixelRect.bottomRight());
     return QRectF(topLeft, bottomRight);
@@ -345,7 +354,7 @@ QPainterPath KisTool::pixelToView(const QPainterPath &pixelPolygon) const
     QTransform matrix;
     qreal zoomX, zoomY;
     canvas()->viewConverter()->zoom(&zoomX, &zoomY);
-    matrix.scale(zoomX/image()->xRes(), zoomY/ image()->yRes());
+    matrix.scale(zoomX / image()->xRes(), zoomY / image()->yRes());
     return matrix.map(pixelPolygon);
 }
 
@@ -354,7 +363,7 @@ QPolygonF KisTool::pixelToView(const QPolygonF &pixelPath) const
     QTransform matrix;
     qreal zoomX, zoomY;
     canvas()->viewConverter()->zoom(&zoomX, &zoomY);
-    matrix.scale(zoomX/image()->xRes(), zoomY/ image()->yRes());
+    matrix.scale(zoomX / image()->xRes(), zoomY / image()->yRes());
     return matrix.map(pixelPath);
 }
 
@@ -371,7 +380,7 @@ void KisTool::updateCanvasViewRect(const QRectF &viewRect)
 KisImageWSP KisTool::image() const
 {
     // For now, krita tools only work in krita, not for a krita shape. Krita shapes are for 2.1
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     if (kisCanvas) {
         return kisCanvas->currentImage();
     }
@@ -392,12 +401,12 @@ void KisTool::notifyModified() const
     }
 }
 
-KoPattern * KisTool::currentPattern()
+KoPattern *KisTool::currentPattern()
 {
     return d->currentPattern;
 }
 
-KoAbstractGradient * KisTool::currentGradient()
+KoAbstractGradient *KisTool::currentGradient()
 {
     return d->currentGradient;
 }
@@ -428,20 +437,23 @@ KisImageWSP KisTool::currentImage()
     return image();
 }
 
-KisFilterConfiguration * KisTool::currentGenerator()
+KisFilterConfiguration *KisTool::currentGenerator()
 {
     return d->currentGenerator;
 }
 
-void KisTool::setMode(ToolMode mode) {
+void KisTool::setMode(ToolMode mode)
+{
     m_mode = mode;
 }
 
-KisTool::ToolMode KisTool::mode() const {
+KisTool::ToolMode KisTool::mode() const
+{
     return m_mode;
 }
 
-KisTool::AlternateAction KisTool::actionToAlternateAction(ToolAction action) {
+KisTool::AlternateAction KisTool::actionToAlternateAction(ToolAction action)
+{
     KIS_ASSERT_RECOVER_RETURN_VALUE(action != Primary, Secondary);
     return (AlternateAction)action;
 }
@@ -545,7 +557,7 @@ void KisTool::deleteSelection()
     KisSelectionSP selection = resources->activeSelection();
     KisNodeSP node = resources->currentNode();
 
-    if(node && node->hasEditablePaintDevice()) {
+    if (node && node->hasEditablePaintDevice()) {
         KisPaintDeviceSP device = node->paintDevice();
 
         image()->barrierLock();
@@ -555,8 +567,7 @@ void KisTool::deleteSelection()
         if (selection) {
             dirtyRect = selection->selectedRect();
             device->clearSelection(selection);
-        }
-        else {
+        } else {
             dirtyRect = device->extent();
             device->clear();
         }
@@ -564,19 +575,18 @@ void KisTool::deleteSelection()
         transaction.commit(image()->undoAdapter());
         device->setDirty(dirtyRect);
         image()->unlock();
-    }
-    else {
+    } else {
         KoToolBase::deleteSelection();
     }
 }
 
-void KisTool::setupPaintAction(KisRecordedPaintAction* action)
+void KisTool::setupPaintAction(KisRecordedPaintAction *action)
 {
     action->setPaintColor(currentFgColor());
     action->setBackgroundColor(currentBgColor());
 }
 
-QWidget* KisTool::createOptionWidget()
+QWidget *KisTool::createOptionWidget()
 {
     d->optionWidget = new QLabel(i18n("No options"));
     d->optionWidget->setObjectName("SpecialSpacer");
@@ -587,7 +597,7 @@ QWidget* KisTool::createOptionWidget()
 #define FAR_VAL 1000.0
 #define PROGRAM_VERTEX_ATTRIBUTE 0
 
-void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
+void KisTool::paintToolOutline(QPainter *painter, const QPainterPath &path)
 {
 #ifdef HAVE_OPENGL
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
@@ -611,7 +621,7 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         d->cursorShader->bind();
 
         // setup the mvp transformation
-        KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2 *>(canvas());
         Q_ASSERT(kritaCanvas);
         const KisCoordinatesConverter *converter = kritaCanvas->coordinatesConverter();
 
@@ -633,9 +643,9 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         // setup the array of vertices
         QVector<QVector3D> vertices;
         QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
-        for (int i=0; i<subPathPolygons.size(); i++) {
-            const QPolygonF& polygon = subPathPolygons.at(i);
-            for (int j=0; j < polygon.count(); j++) {
+        for (int i = 0; i < subPathPolygons.size(); i++) {
+            const QPolygonF &polygon = subPathPolygons.at(i);
+            for (int j = 0; j < polygon.count(); j++) {
                 QPointF p = polygon.at(j);
                 vertices << QVector3D(p.x(), p.y(), 0.f);
             }
@@ -652,28 +662,24 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         d->cursorShader->release();
 
         painter->endNativePainting();
-    }
-    else
+    } else
 #endif // HAVE_OPENGL
         if (m_outlinePaintMode == XOR_MODE) {
-        painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-        painter->setPen(QColor(128, 255, 128));
-        painter->drawPath(path);
-    }
-    else /* if (m_outlinePaintMode==BW_MODE)*/
-    {
-        QPen pen = painter->pen();
-        pen.setWidth(3);
-        pen.setColor(QColor(0, 0, 0, 100));
-        painter->setPen(pen);
-        painter->drawPath(path);
-        pen.setWidth(1);
-        pen.setColor(Qt::white);
-        painter->setPen(pen);
-        painter->drawPath(path);
+            painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
+            painter->setPen(QColor(128, 255, 128));
+            painter->drawPath(path);
+        } else { /* if (m_outlinePaintMode==BW_MODE)*/
+            QPen pen = painter->pen();
+            pen.setWidth(3);
+            pen.setColor(QColor(0, 0, 0, 100));
+            painter->setPen(pen);
+            painter->drawPath(path);
+            pen.setWidth(1);
+            pen.setColor(Qt::white);
+            painter->setPen(pen);
+            painter->drawPath(path);
 
-
-    }
+        }
 }
 
 void KisTool::resetCursorStyle()
@@ -682,10 +688,9 @@ void KisTool::resetCursorStyle()
     useCursor(d->cursor);
 }
 
-
 void KisTool::slotToggleFgBg()
 {
-    KoCanvasResourceManager* resourceManager = canvas()->resourceManager();
+    KoCanvasResourceManager *resourceManager = canvas()->resourceManager();
     KoColor newFg = resourceManager->backgroundColor();
     KoColor newBg = resourceManager->foregroundColor();
 
@@ -701,13 +706,12 @@ void KisTool::slotToggleFgBg()
 
 void KisTool::slotResetFgBg()
 {
-    KoCanvasResourceManager* resourceManager = canvas()->resourceManager();
+    KoCanvasResourceManager *resourceManager = canvas()->resourceManager();
 
     // see a comment in slotToggleFgBg()
     resourceManager->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
     resourceManager->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
 }
-
 
 void KisTool::setCurrentNodeLocked(bool locked)
 {
@@ -723,13 +727,13 @@ bool KisTool::nodeEditable()
         return false;
     }
     if (!node->isEditable()) {
-        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        KisCanvas2 *kiscanvas = static_cast<KisCanvas2 *>(canvas());
         QString message;
         if (!node->visible() && node->userLocked()) {
             message = i18n("Layer is locked and invisible.");
         } else if (node->userLocked()) {
             message = i18n("Layer is locked.");
-        } else if(!node->visible()) {
+        } else if (!node->visible()) {
             message = i18n("Layer is invisible.");
         } else {
             message = i18n("Group not editable.");
@@ -741,17 +745,16 @@ bool KisTool::nodeEditable()
 
 bool KisTool::selectionEditable()
 {
-    KisCanvas2 * kisCanvas = static_cast<KisCanvas2*>(canvas());
-    KisViewManager * view = kisCanvas->viewManager();
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
+    KisViewManager *view = kisCanvas->viewManager();
 
     bool editable = view->selectionEditable();
     if (!editable) {
-        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        KisCanvas2 *kiscanvas = static_cast<KisCanvas2 *>(canvas());
         kiscanvas->viewManager()->showFloatingMessage(i18n("Local selection is locked."), koIcon("object-locked"));
     }
     return editable;
 }
-
 
 #include "kis_tool.moc"
 

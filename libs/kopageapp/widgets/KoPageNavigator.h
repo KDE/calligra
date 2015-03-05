@@ -26,7 +26,6 @@
 
 class KoPAView;
 
-
 class KoPageNavigator : public QStackedWidget
 {
     Q_OBJECT

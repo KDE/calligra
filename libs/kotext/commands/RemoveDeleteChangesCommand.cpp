@@ -27,7 +27,7 @@
 #include <KoTextDocument.h>
 
 RemoveDeleteChangesCommand::RemoveDeleteChangesCommand(QTextDocument *document,
-                                                       KUndo2Command *parent)
+        KUndo2Command *parent)
     : KUndo2Command("Insert Delete Changes", parent)
     , m_document(document)
 {

@@ -41,9 +41,9 @@ QString ProgressProxy::taskName() const
     return d->taskName;
 }
 
-void ProgressProxy::setFormat(const QString& format)
+void ProgressProxy::setFormat(const QString &format)
 {
-    if ( format != d->taskName ) {
+    if (format != d->taskName) {
         d->taskName = format;
         emit taskNameChanged();
     }

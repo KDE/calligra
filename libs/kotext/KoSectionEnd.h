@@ -34,9 +34,10 @@ class KoSectionEndPrivate;
 /**
  * Marks the end of the section
  */
-class KOTEXT_EXPORT KoSectionEnd {
+class KOTEXT_EXPORT KoSectionEnd
+{
 public:
-    explicit KoSectionEnd(KoSection* section);
+    explicit KoSectionEnd(KoSection *section);
     ~KoSectionEnd(); // this is needed to QScopedPointer to work
 
     void saveOdf(KoShapeSavingContext &context) const;

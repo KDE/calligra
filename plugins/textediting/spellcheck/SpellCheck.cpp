@@ -66,11 +66,11 @@ SpellCheck::SpellCheck()
     m_bgSpellCheck = new BgSpellCheck(m_speller, this);
 
     m_spellCheckMenu = new SpellCheckMenu(m_speller, this);
-    QPair<QString, KAction*> pair = m_spellCheckMenu->menuAction();
+    QPair<QString, KAction *> pair = m_spellCheckMenu->menuAction();
     addAction(pair.first, pair.second);
 
-    connect(m_bgSpellCheck, SIGNAL(misspelledWord(const QString &,int,bool)),
-            this, SLOT(highlightMisspelled(const QString &,int,bool)));
+    connect(m_bgSpellCheck, SIGNAL(misspelledWord(QString,int,bool)),
+            this, SLOT(highlightMisspelled(QString,int,bool)));
     connect(m_bgSpellCheck, SIGNAL(done()), this, SLOT(finishedRun()));
     connect(spellCheck, SIGNAL(toggled(bool)), this, SLOT(setBackgroundSpellChecking(bool)));
 }
@@ -78,12 +78,14 @@ SpellCheck::SpellCheck()
 void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
 {
     setDocument(document);
-    if (!m_enableSpellCheck)
+    if (!m_enableSpellCheck) {
         return;
+    }
 
     QTextBlock block = document->findBlock(cursorPosition);
-    if (!block.isValid())
+    if (!block.isValid()) {
         return;
+    }
     KoTextBlockData blockData(block);
     blockData.setMarkupsLayoutValidity(KoTextBlockData::Misspell, false);
     checkSection(document, block.position(), block.position() + block.length() - 1);
@@ -127,13 +129,15 @@ void SpellCheck::checkSection(QTextDocument *document, int startPosition, int en
 
 void SpellCheck::setDocument(QTextDocument *document)
 {
-    if (m_document == document)
+    if (m_document == document) {
         return;
-    if (m_document)
-        disconnect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
+    }
+    if (m_document) {
+        disconnect(document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
+    }
 
     m_document = document;
-    connect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
+    connect(document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
 }
 
 QStringList SpellCheck::availableBackends() const
@@ -157,8 +161,9 @@ void SpellCheck::setDefaultLanguage(const QString &language)
 
 void SpellCheck::setBackgroundSpellChecking(bool on)
 {
-    if (m_enableSpellCheck == on)
+    if (m_enableSpellCheck == on) {
         return;
+    }
     KConfigGroup spellConfig = KGlobal::config()->group("Spelling");
     m_enableSpellCheck = on;
     spellConfig.writeEntry("autoSpellCheck", m_enableSpellCheck);
@@ -178,7 +183,6 @@ void SpellCheck::setBackgroundSpellChecking(bool on)
     }
 }
 
-
 void SpellCheck::setSkipAllUppercaseWords(bool on)
 {
     m_speller.setAttribute(Speller::CheckUppercase, !on);
@@ -192,8 +196,9 @@ void SpellCheck::setSkipRunTogetherWords(bool on)
 bool SpellCheck::addWordToPersonal(const QString &word, int startPosition)
 {
     QTextBlock block = m_document->findBlock(startPosition);
-    if (!block.isValid())
+    if (!block.isValid()) {
         return false;
+    }
 
     KoTextBlockData blockData(block);
     blockData.setMarkupsLayoutValidity(KoTextBlockData::Misspell, false);
@@ -201,7 +206,6 @@ bool SpellCheck::addWordToPersonal(const QString &word, int startPosition)
     // TODO we should probably recheck the entire document so other occurrences are also removed, but then again we should recheck every document (footer,header etc) not sure how to do this
     return m_bgSpellCheck->addWordToPersonal(word);
 }
-
 
 QString SpellCheck::defaultLanguage() const
 {
@@ -225,13 +229,20 @@ bool SpellCheck::skipRunTogetherWords()
 
 void SpellCheck::highlightMisspelled(const QString &word, int startPosition, bool misspelled)
 {
-    if (!misspelled)
+    if (!misspelled) {
         return;
+    }
 
 #if 0
     // DEBUG
-class MyThread : public QThread { public: static void mySleep(unsigned long msecs) { msleep(msecs); }};
-static_cast<MyThread*>(QThread::currentThread())->mySleep(400);
+    class MyThread : public QThread
+    {
+    public: static void mySleep(unsigned long msecs)
+        {
+            msleep(msecs);
+        }
+    };
+    static_cast<MyThread *>(QThread::currentThread())->mySleep(400);
 #endif
 
     QTextBlock block = m_activeSection.document->findBlock(startPosition);
@@ -241,13 +252,15 @@ static_cast<MyThread*>(QThread::currentThread())->mySleep(400);
 
 void SpellCheck::documentChanged(int from, int min, int plus)
 {
-    QTextDocument *document = qobject_cast<QTextDocument*>(sender());
-    if (document == 0)
+    QTextDocument *document = qobject_cast<QTextDocument *>(sender());
+    if (document == 0) {
         return;
+    }
 
     QTextBlock block = document->findBlock(from);
-    if (!block.isValid())
+    if (!block.isValid()) {
         return;
+    }
 
     do {
         KoTextBlockData blockData(block);
@@ -263,7 +276,7 @@ void SpellCheck::documentChanged(int from, int min, int plus)
             blockData.clearMarkups(KoTextBlockData::Misspell);
         }
         block = block.next();
-    } while(block.isValid() && block.position() <= from + plus);
+    } while (block.isValid() && block.position() <= from + plus);
 
     m_simpleEdit = false;
 }
@@ -271,21 +284,24 @@ void SpellCheck::documentChanged(int from, int min, int plus)
 void SpellCheck::runQueue()
 {
     Q_ASSERT(QThread::currentThread() == QApplication::instance()->thread());
-    if (m_isChecking)
+    if (m_isChecking) {
         return;
+    }
     while (!m_documentsQueue.isEmpty()) {
         m_activeSection = m_documentsQueue.dequeue();
-        if (m_activeSection.document.isNull())
+        if (m_activeSection.document.isNull()) {
             continue;
+        }
         QTextBlock block = m_activeSection.document->findBlock(m_activeSection.from);
-        if (!block.isValid())
+        if (!block.isValid()) {
             continue;
+        }
         m_isChecking = true;
         do {
             KoTextBlockData blockData(block);
             blockData.clearMarkups(KoTextBlockData::Misspell);
             block = block.next();
-        } while(block.isValid() && block.position() < m_activeSection.to);
+        } while (block.isValid() && block.position() < m_activeSection.to);
 
         m_bgSpellCheck->startRun(m_activeSection.document, m_activeSection.from, m_activeSection.to);
         break;
@@ -295,7 +311,7 @@ void SpellCheck::runQueue()
 void SpellCheck::configureSpellCheck()
 {
     Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(KGlobal::config().data(), 0);
-    connect (dialog, SIGNAL(languageChanged(const QString&)), this, SLOT(setDefaultLanguage(const QString&)));
+    connect(dialog, SIGNAL(languageChanged(QString)), this, SLOT(setDefaultLanguage(QString)));
     dialog->exec();
     delete dialog;
 }
@@ -305,7 +321,7 @@ void SpellCheck::finishedRun()
     Q_ASSERT(QThread::currentThread() == QApplication::instance()->thread());
     m_isChecking = false;
 
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_activeSection.document->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(m_activeSection.document->documentLayout());
     lay->provider()->updateAll();
 
     QTimer::singleShot(0, this, SLOT(runQueue()));
@@ -342,16 +358,18 @@ void SpellCheck::setCurrentCursorPosition(QTextDocument *document, int cursorPos
 
 void SpellCheck::replaceWordBySuggestion(const QString &word, int startPosition, int lengthOfWord)
 {
-    if (!m_document)
+    if (!m_document) {
         return;
+    }
 
     QTextBlock block = m_document->findBlock(startPosition);
-    if (!block.isValid())
+    if (!block.isValid()) {
         return;
+    }
 
     QTextCursor cursor(m_document);
     cursor.setPosition(startPosition);
-    cursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor, lengthOfWord);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, lengthOfWord);
     cursor.removeSelectedText();
     cursor.insertText(word);
 }

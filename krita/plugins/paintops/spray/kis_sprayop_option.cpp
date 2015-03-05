@@ -24,7 +24,8 @@ class KisSprayOpOptionsWidget: public QWidget, public Ui::WdgSprayOptions
 {
 public:
     KisSprayOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -57,14 +58,12 @@ KisSprayOpOption::KisSprayOpOption()
     m_options->coverageSpin->setValue(0.1);
     m_options->coverageSpin->setSuffix("%");
 
-
     m_options->particlesSpinBox->setRange(1.0, 1000.0, 0);
     m_options->particlesSpinBox->setValue(12);
     m_options->particlesSpinBox->setExponentRatio(3.0);
 
-    m_options->jitterMovementSpin->setRange(0.0,5.0, 1);
+    m_options->jitterMovementSpin->setRange(0.0, 5.0, 1);
     m_options->jitterMovementSpin->setValue(1.0);
-
 
     connect(m_options->diameterSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->coverageSpin, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
@@ -91,7 +90,7 @@ KisSprayOpOption::~KisSprayOpOption()
     delete m_options;
 }
 
-void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(SPRAY_DIAMETER, m_options->diameterSpinBox->value());
     setting->setProperty(SPRAY_ASPECT, m_options->aspectSPBox->value());
@@ -106,7 +105,7 @@ void KisSprayOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) c
     setting->setProperty(SPRAY_USE_DENSITY, m_options->densityRadioButton->isChecked());
 }
 
-void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     m_options->diameterSpinBox->setValue(setting->getInt(SPRAY_DIAMETER));
     m_options->aspectSPBox->setValue(setting->getDouble(SPRAY_ASPECT));
@@ -123,7 +122,6 @@ void KisSprayOpOption::readOptionSetting(const KisPropertiesConfiguration* setti
     m_options->densityRadioButton->setChecked(useDensity);
     m_options->countRadioButton->setChecked(!useDensity);
 }
-
 
 void KisSprayOpOption::setDiameter(int diameter) const
 {

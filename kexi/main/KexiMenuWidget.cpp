@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
    Copyright (C) 2011-2014 Jarosław Staniek <staniek@kde.org>
-   
+
    Based on qmenu.cpp from Qt 4.7
 
    Based on oxygenhelper.cpp
@@ -69,13 +69,13 @@ const char calligraUrl[] = "http://www.calligra.org";
 
 // from oxygenhelper.cpp:
 OxygenHelper::OxygenHelper()
- : _componentData("oxygen", 0, KComponentData::SkipMainComponentRegistration)
+    : _componentData("oxygen", 0, KComponentData::SkipMainComponentRegistration)
 {
     _config = _componentData.config();
     _contrast = KGlobalSettings::contrastF(_config);
     // background contrast is calculated so that it is 0.9
     // when KGlobalSettings contrast value of 0.7
-    _bgcontrast = qMin(1.0, 0.9*_contrast/0.7);
+    _bgcontrast = qMin(1.0, 0.9 * _contrast / 0.7);
 }
 
 OxygenHelper::~OxygenHelper()
@@ -84,14 +84,15 @@ OxygenHelper::~OxygenHelper()
 
 bool OxygenHelper::lowThreshold(const QColor &color)
 {
-    const quint32 key( color.rgba() );
-    ColorMap::iterator iter( m_lowThreshold.find( key ) );
-    if( iter != m_lowThreshold.end() ) return iter.value();
-    else {
+    const quint32 key(color.rgba());
+    ColorMap::iterator iter(m_lowThreshold.find(key));
+    if (iter != m_lowThreshold.end()) {
+        return iter.value();
+    } else {
 
-        const QColor darker( KColorScheme::shade(color, KColorScheme::MidShade, 0.5 ) );
-        const bool result( KColorUtils::luma(darker) > KColorUtils::luma(color) );
-        m_lowThreshold.insert( key, result );
+        const QColor darker(KColorScheme::shade(color, KColorScheme::MidShade, 0.5));
+        const bool result(KColorUtils::luma(darker) > KColorUtils::luma(color));
+        m_lowThreshold.insert(key, result);
         return result;
 
     }
@@ -99,72 +100,76 @@ bool OxygenHelper::lowThreshold(const QColor &color)
 
 bool OxygenHelper::highThreshold(const QColor &color)
 {
-    const quint32 key( color.rgba() );
-    ColorMap::iterator iter( m_highThreshold.find( key ) );
-    if( iter != m_highThreshold.end() ) return iter.value();
-    else {
+    const quint32 key(color.rgba());
+    ColorMap::iterator iter(m_highThreshold.find(key));
+    if (iter != m_highThreshold.end()) {
+        return iter.value();
+    } else {
 
-        const QColor lighter( KColorScheme::shade(color, KColorScheme::LightShade, 0.5 ) );
-        const bool result( KColorUtils::luma(lighter) < KColorUtils::luma(color) );
-        m_highThreshold.insert( key, result );
+        const QColor lighter(KColorScheme::shade(color, KColorScheme::LightShade, 0.5));
+        const bool result(KColorUtils::luma(lighter) < KColorUtils::luma(color));
+        m_highThreshold.insert(key, result);
         return result;
 
     }
 }
 
-const QColor& OxygenHelper::backgroundTopColor(const QColor &color)
+const QColor &OxygenHelper::backgroundTopColor(const QColor &color)
 {
-    const quint64 key( color.rgba() );
-    QColor* out( m_backgroundTopColorCache.object( key ) );
-    if( !out )
-    {
-        if( lowThreshold(color) ) out = new QColor( KColorScheme::shade(color, KColorScheme::MidlightShade, 0.0) );
-        else {
-            const qreal my( KColorUtils::luma( KColorScheme::shade(color, KColorScheme::LightShade, 0.0) ) );
-            const qreal by( KColorUtils::luma(color) );
-            out = new QColor( KColorUtils::shade(color, (my - by) * _bgcontrast) );
+    const quint64 key(color.rgba());
+    QColor *out(m_backgroundTopColorCache.object(key));
+    if (!out) {
+        if (lowThreshold(color)) {
+            out = new QColor(KColorScheme::shade(color, KColorScheme::MidlightShade, 0.0));
+        } else {
+            const qreal my(KColorUtils::luma(KColorScheme::shade(color, KColorScheme::LightShade, 0.0)));
+            const qreal by(KColorUtils::luma(color));
+            out = new QColor(KColorUtils::shade(color, (my - by) * _bgcontrast));
         }
 
-        m_backgroundTopColorCache.insert( key, out );
+        m_backgroundTopColorCache.insert(key, out);
     }
 
     return *out;
 
 }
 
-const QColor& OxygenHelper::backgroundBottomColor(const QColor &color)
+const QColor &OxygenHelper::backgroundBottomColor(const QColor &color)
 {
-    const quint64 key( color.rgba() );
-    QColor* out( m_backgroundBottomColorCache.object( key ) );
-    if( !out )
-    {
-        const QColor midColor( KColorScheme::shade(color, KColorScheme::MidShade, 0.0) );
-        if( lowThreshold(color) ) out = new QColor( midColor );
-        else {
+    const quint64 key(color.rgba());
+    QColor *out(m_backgroundBottomColorCache.object(key));
+    if (!out) {
+        const QColor midColor(KColorScheme::shade(color, KColorScheme::MidShade, 0.0));
+        if (lowThreshold(color)) {
+            out = new QColor(midColor);
+        } else {
 
-            const qreal by( KColorUtils::luma(color) );
-            const qreal my( KColorUtils::luma(midColor) );
-            out = new QColor( KColorUtils::shade(color, (my - by) * _bgcontrast) );
+            const qreal by(KColorUtils::luma(color));
+            const qreal my(KColorUtils::luma(midColor));
+            out = new QColor(KColorUtils::shade(color, (my - by) * _bgcontrast));
 
         }
 
-        m_backgroundBottomColorCache.insert( key, out );
+        m_backgroundBottomColorCache.insert(key, out);
     }
 
     return *out;
 
 }
 
-const QColor& OxygenHelper::backgroundRadialColor(const QColor &color)
+const QColor &OxygenHelper::backgroundRadialColor(const QColor &color)
 {
-    const quint64 key( color.rgba() );
-    QColor* out( m_backgroundRadialColorCache.object( key ) );
-    if( !out )
-    {
-        if( lowThreshold(color) ) out = new QColor( KColorScheme::shade(color, KColorScheme::LightShade, 0.0) );
-        else if( highThreshold( color ) ) out = new QColor( color );
-        else out = new QColor( KColorScheme::shade(color, KColorScheme::LightShade, _bgcontrast) );
-        m_backgroundRadialColorCache.insert( key, out );
+    const quint64 key(color.rgba());
+    QColor *out(m_backgroundRadialColorCache.object(key));
+    if (!out) {
+        if (lowThreshold(color)) {
+            out = new QColor(KColorScheme::shade(color, KColorScheme::LightShade, 0.0));
+        } else if (highThreshold(color)) {
+            out = new QColor(color);
+        } else {
+            out = new QColor(KColorScheme::shade(color, KColorScheme::LightShade, _bgcontrast));
+        }
+        m_backgroundRadialColorCache.insert(key, out);
     }
 
     return *out;
@@ -172,15 +177,14 @@ const QColor& OxygenHelper::backgroundRadialColor(const QColor &color)
 
 QPixmap OxygenHelper::verticalGradient(const QColor &color, int height, int offset)
 {
-    const quint64 key( (quint64(color.rgba()) << 32) | height | 0x8000 );
-    QPixmap *pixmap( m_backgroundCache.object( key ) );
+    const quint64 key((quint64(color.rgba()) << 32) | height | 0x8000);
+    QPixmap *pixmap(m_backgroundCache.object(key));
 
-    if (!pixmap)
-    {
+    if (!pixmap) {
         pixmap = new QPixmap(1, height);
-        pixmap->fill( Qt::transparent );
+        pixmap->fill(Qt::transparent);
 
-        QLinearGradient gradient(0, offset, 0, height+offset);
+        QLinearGradient gradient(0, offset, 0, height + offset);
         gradient.setColorAt(0.0, backgroundTopColor(color));
         gradient.setColorAt(0.5, color);
         gradient.setColorAt(1.0, backgroundBottomColor(color));
@@ -199,17 +203,16 @@ QPixmap OxygenHelper::verticalGradient(const QColor &color, int height, int offs
 
 QPixmap OxygenHelper::radialGradient(const QColor &color, int width, int height)
 {
-    const quint64 key( ( quint64(color.rgba()) << 32) | width | 0xb000 );
-    QPixmap *pixmap( m_backgroundCache.object( key ) );
+    const quint64 key((quint64(color.rgba()) << 32) | width | 0xb000);
+    QPixmap *pixmap(m_backgroundCache.object(key));
 
-    if (!pixmap)
-    {
+    if (!pixmap) {
         pixmap = new QPixmap(width, height);
         pixmap->fill(Qt::transparent);
 
         QColor radialColor = backgroundRadialColor(color);
         radialColor.setAlpha(255);
-        QRadialGradient gradient(64, height-64, 64);
+        QRadialGradient gradient(64, height - 64, 64);
         gradient.setColorAt(0, radialColor);
         radialColor.setAlpha(101);
         gradient.setColorAt(0.5, radialColor);
@@ -219,8 +222,8 @@ QPixmap OxygenHelper::radialGradient(const QColor &color, int width, int height)
         gradient.setColorAt(1, radialColor);
 
         QPainter p(pixmap);
-        p.scale(width/128.0,1);
-        p.fillRect(QRect(0,0,128,height), gradient);
+        p.scale(width / 128.0, 1);
+        p.fillRect(QRect(0, 0, 128, height), gradient);
 
         p.end();
 
@@ -231,64 +234,61 @@ QPixmap OxygenHelper::radialGradient(const QColor &color, int width, int height)
 }
 
 void OxygenHelper::renderOxygenWindowBackground(QPainter *p, const QRect &clipRect,
-                                         const QWidget *widget, const QWidget* window,
-                                         const QColor& color, int y_shift,
-                                         int gradientHeight)
+        const QWidget *widget, const QWidget *window,
+        const QColor &color, int y_shift,
+        int gradientHeight)
 {
     // get coordinates relative to the client area
     // this is stupid. One could use mapTo if this was taking const QWidget* and not
     // QWidget* as argument.
-    const QWidget* w( widget );
+    const QWidget *w(widget);
     int x(0);
     int y(-y_shift);
 
-    while ( w != window && !w->isWindow() && w != w->parentWidget() )
-    {
+    while (w != window && !w->isWindow() && w != w->parentWidget()) {
         x += w->geometry().x();
         y += w->geometry().y();
         w = w->parentWidget();
     }
 
-    if (clipRect.isValid())
-    {
+    if (clipRect.isValid()) {
         p->save();
-        p->setClipRegion(clipRect,Qt::IntersectClip);
+        p->setClipRegion(clipRect, Qt::IntersectClip);
     }
 
     // calculate upper part height
     // special tricks are needed
     // to handle both window contents and window decoration
     const QRect r = window->rect();
-    int height( window->frameGeometry().height() );
-    int width( window->frameGeometry().width() );
-    if( y_shift > 0 )
-    {
-        height -= 2*y_shift;
-        width -= 2*y_shift;
+    int height(window->frameGeometry().height());
+    int width(window->frameGeometry().width());
+    if (y_shift > 0) {
+        height -= 2 * y_shift;
+        width -= 2 * y_shift;
     }
 
-    const int splitY( qMin(300, (3*height)/4) );
+    const int splitY(qMin(300, (3 * height) / 4));
 
     // draw upper linear gradient
     const QRect upperRect(-x, -y, r.width(), splitY);
-    QPixmap tile( verticalGradient(color, splitY, gradientHeight-64) );
+    QPixmap tile(verticalGradient(color, splitY, gradientHeight - 64));
     p->drawTiledPixmap(upperRect, tile);
 
     // draw lower flat part
-    const QRect lowerRect(-x, splitY-y, r.width(), r.height() - splitY-y_shift);
+    const QRect lowerRect(-x, splitY - y, r.width(), r.height() - splitY - y_shift);
     p->fillRect(lowerRect, backgroundBottomColor(color));
 
     // draw upper radial gradient
-    const int radialW( qMin(600, width) );
-    const QRect radialRect( (r.width() - radialW) / 2-x, -y, radialW, gradientHeight);
-    if (clipRect.intersects(radialRect))
-    {
+    const int radialW(qMin(600, width));
+    const QRect radialRect((r.width() - radialW) / 2 - x, -y, radialW, gradientHeight);
+    if (clipRect.intersects(radialRect)) {
         tile = radialGradient(color, radialW, gradientHeight);
         p->drawPixmap(radialRect, tile);
     }
 
-    if (clipRect.isValid())
-    { p->restore(); }
+    if (clipRect.isValid()) {
+        p->restore();
+    }
 }
 
 //!@name window background gradients
@@ -299,34 +299,33 @@ void OxygenHelper::renderOxygenWindowBackground(QPainter *p, const QRect &clipRe
 for different heights, the gradient is translated so that it is always at the same position from the bottom
 */
 void OxygenHelper::renderWindowBackground(QPainter *p, const QRect &clipRect,
-                                   const QWidget *widget, const QPalette & pal,
-                                   int y_shift, int gradientHeight)
+        const QWidget *widget, const QPalette &pal,
+        int y_shift, int gradientHeight)
 {
     renderOxygenWindowBackground(
-                           p, clipRect, widget, widget->window(),
-                           pal.color( widget->window()->backgroundRole() ),
-                           y_shift, gradientHeight );
+        p, clipRect, widget, widget->window(),
+        pal.color(widget->window()->backgroundRole()),
+        y_shift, gradientHeight);
 }
 
-void OxygenHelper::renderMenuBackground( QPainter* p, const QRect& clipRect,
-                                         const QWidget* widget, const QPalette& pal)
+void OxygenHelper::renderMenuBackground(QPainter *p, const QRect &clipRect,
+                                        const QWidget *widget, const QPalette &pal)
 {
-    renderMenuBackground( p, clipRect, widget, pal.color( widget->window()->backgroundRole() ) );
+    renderMenuBackground(p, clipRect, widget, pal.color(widget->window()->backgroundRole()));
 }
 
-void OxygenHelper::renderMenuBackground( QPainter* p, const QRect& clipRect,
-                                         const QWidget* widget, const QColor& color )
+void OxygenHelper::renderMenuBackground(QPainter *p, const QRect &clipRect,
+                                        const QWidget *widget, const QColor &color)
 {
 
     // get coordinates relative to the client area
     // this is stupid. One could use mapTo if this was taking const QWidget* and not
     // QWidget* as argument.
-    const QWidget* w( widget );
+    const QWidget *w(widget);
     int x(0);
     int y(0);
 
-    while( !w->isWindow() && w != w->parentWidget() )
-    {
+    while (!w->isWindow() && w != w->parentWidget()) {
         x += w->geometry().x();
         y += w->geometry().y();
         w = w->parentWidget();
@@ -334,25 +333,26 @@ void OxygenHelper::renderMenuBackground( QPainter* p, const QRect& clipRect,
 
     if (clipRect.isValid()) {
         p->save();
-        p->setClipRegion(clipRect,Qt::IntersectClip);
+        p->setClipRegion(clipRect, Qt::IntersectClip);
     }
 
     // calculate upper part height
     // special tricks are needed
     // to handle both window contents and window decoration
     QRect r = w->rect();
-    const int height( w->frameGeometry().height() );
-    const int splitY( qMin(200, (3*height)/4) );
+    const int height(w->frameGeometry().height());
+    const int splitY(qMin(200, (3 * height) / 4));
 
-    const QRect upperRect( QRect(0, 0, r.width(), splitY) );
-    const QPixmap tile( verticalGradient(color, splitY) );
+    const QRect upperRect(QRect(0, 0, r.width(), splitY));
+    const QPixmap tile(verticalGradient(color, splitY));
     p->drawTiledPixmap(upperRect, tile);
 
-    const QRect lowerRect( 0,splitY, r.width(), r.height() - splitY );
+    const QRect lowerRect(0, splitY, r.width(), r.height() - splitY);
     p->fillRect(lowerRect, backgroundBottomColor(color));
 
-    if (clipRect.isValid())
-    { p->restore(); }
+    if (clipRect.isValid()) {
+        p->restore();
+    }
 
 }
 
@@ -362,34 +362,34 @@ class KexiMenuWidgetActionPrivate
 {
 public:
     KexiMenuWidgetActionPrivate()
-     : persistentlySelected(false)
+        : persistentlySelected(false)
     {
     }
     bool persistentlySelected;
 };
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(QObject *parent)
- : KAction(parent)
- , d(new KexiMenuWidgetActionPrivate)
+    : KAction(parent)
+    , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(const QString &text, QObject *parent)
- : KAction(text, parent)
- , d(new KexiMenuWidgetActionPrivate)
+    : KAction(text, parent)
+    , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(const KIcon &icon, const QString &text,
-                                           QObject *parent)
- : KAction(icon, text, parent)
- , d(new KexiMenuWidgetActionPrivate)
+        QObject *parent)
+    : KAction(icon, text, parent)
+    , d(new KexiMenuWidgetActionPrivate)
 {
 }
 
 KexiMenuWidgetAction::KexiMenuWidgetAction(KStandardAction::StandardAction id, QObject *parent)
- : KAction(parent)
- , d(new KexiMenuWidgetActionPrivate)
+    : KAction(parent)
+    , d(new KexiMenuWidgetActionPrivate)
 {
     QScopedPointer<KAction> tmp(KStandardAction::create(id, 0, 0, 0));
     setIcon(tmp->icon());
@@ -398,11 +398,11 @@ KexiMenuWidgetAction::KexiMenuWidgetAction(KStandardAction::StandardAction id, Q
     setShortcut(tmp->shortcut(ActiveShortcut), ActiveShortcut);
 }
 
-
 void KexiMenuWidgetAction::setPersistentlySelected(bool set)
 {
-    if (set == d->persistentlySelected)
+    if (set == d->persistentlySelected) {
         return;
+    }
     //kDebug() << "^^^^" << objectName() << set;
     d->persistentlySelected = set;
 }
@@ -416,8 +416,14 @@ bool KexiMenuWidgetAction::persistentlySelected() const
 class QBoolBlocker
 {
 public:
-    inline QBoolBlocker(bool &b, bool value=true):block(b), reset(b){block = value;}
-    inline ~QBoolBlocker(){block = reset; }
+    inline QBoolBlocker(bool &b, bool value = true): block(b), reset(b)
+    {
+        block = value;
+    }
+    inline ~QBoolBlocker()
+    {
+        block = reset;
+    }
 private:
     bool &block;
     bool reset;
@@ -475,36 +481,39 @@ QRect KexiMenuWidgetPrivate::popupGeometry(int screen) const
 QList<QPointer<QWidget> > KexiMenuWidgetPrivate::calcCausedStack() const
 {
     QList<QPointer<QWidget> > ret;
-    for(QWidget *widget = causedPopup.widget; widget; ) {
+    for (QWidget *widget = causedPopup.widget; widget;) {
         ret.append(widget);
-        if (KexiMenuWidget *qmenu = qobject_cast<KexiMenuWidget*>(widget))
+        if (KexiMenuWidget *qmenu = qobject_cast<KexiMenuWidget *>(widget)) {
             widget = qmenu->causedPopup().widget;
-        else
+        } else {
             break;
+        }
     }
     return ret;
 }
 
 void KexiMenuWidgetPrivate::updateActionRects() const
 {
-    if (!itemsDirty)
+    if (!itemsDirty) {
         return;
+    }
 
     q->ensurePolished();
 
     //let's reinitialize the buffer
-    QList<QAction*> actionsList = q->actions();
+    QList<QAction *> actionsList = q->actions();
     actionRects.resize(actionsList.count());
     actionRects.fill(QRect());
 
     //let's try to get the last visible action
     int lastVisibleAction = actionsList.count() - 1;
-    for(;lastVisibleAction >= 0; --lastVisibleAction) {
+    for (; lastVisibleAction >= 0; --lastVisibleAction) {
         const QAction *action = actionsList.at(lastVisibleAction);
         if (action->isVisible()) {
             //removing trailing separators
-            if (action->isSeparator() && collapsibleSeparators)
+            if (action->isSeparator() && collapsibleSeparators) {
                 continue;
+            }
             break;
         }
     }
@@ -523,7 +532,7 @@ void KexiMenuWidgetPrivate::updateActionRects() const
 #else
 #pragma WARNING( todo adjust this size for smaller displays )
 #endif
-              //style->pixelMetric(QStyle::PM_SmallIconSize, &opt, q);
+    //style->pixelMetric(QStyle::PM_SmallIconSize, &opt, q);
     const int fw = style->pixelMetric(QStyle::PM_MenuPanelWidth, &opt, q);
     const int deskFw = frameWidth(&opt);
     //const int tearoffHeight = tearoff ? style->pixelMetric(QStyle::PM_MenuTearoffHeight, &opt, q) : 0;
@@ -537,8 +546,9 @@ void KexiMenuWidgetPrivate::updateActionRects() const
 
     for (int i = 0; i < actionsList.count(); ++i) {
         QAction *action = actionsList.at(i);
-        if (action->isSeparator() || !action->isVisible() || widgetItems.contains(action))
+        if (action->isSeparator() || !action->isVisible() || widgetItems.contains(action)) {
             continue;
+        }
         //..and some members
         hasCheckableItems |= action->isCheckable();
         QIcon is = action->icon();
@@ -550,12 +560,13 @@ void KexiMenuWidgetPrivate::updateActionRects() const
     //calculate size
     QFontMetrics qfm = q->fontMetrics();
     bool previousWasSeparator = true; // this is true to allow removing the leading separators
-    for(int i = 0; i <= lastVisibleAction; i++) {
+    for (int i = 0; i <= lastVisibleAction; i++) {
         QAction *action = actionsList.at(i);
 
         if (!action->isVisible() ||
-            (collapsibleSeparators && previousWasSeparator && action->isSeparator()))
-            continue; // we continue, this action will get an empty QRect
+                (collapsibleSeparators && previousWasSeparator && action->isSeparator())) {
+            continue;    // we continue, this action will get an empty QRect
+        }
 
         previousWasSeparator = action->isSeparator();
 
@@ -566,7 +577,7 @@ void KexiMenuWidgetPrivate::updateActionRects() const
 
         QSize sz;
         if (QWidget *w = widgetItems.value(action)) {
-          sz = w->sizeHint().expandedTo(w->minimumSize()).expandedTo(w->minimumSizeHint()).boundedTo(w->maximumSize());
+            sz = w->sizeHint().expandedTo(w->minimumSize()).expandedTo(w->minimumSizeHint()).boundedTo(w->maximumSize());
         } else {
             //calc what I think the size is..
             if (action->isSeparator()) {
@@ -575,34 +586,35 @@ void KexiMenuWidgetPrivate::updateActionRects() const
                 QString s = action->text();
                 int t = s.indexOf(QLatin1Char('\t'));
                 if (t != -1) {
-                    tabWidth = qMax(int(tabWidth), qfm.width(s.mid(t+1)));
+                    tabWidth = qMax(int(tabWidth), qfm.width(s.mid(t + 1)));
                     s = s.left(t);
-    #ifndef QT_NO_SHORTCUT
+#ifndef QT_NO_SHORTCUT
                 } else {
                     QKeySequence seq = action->shortcut();
-                    if (!seq.isEmpty())
+                    if (!seq.isEmpty()) {
                         tabWidth = qMax(int(tabWidth), qfm.width(seq));
-    #endif
+                    }
+#endif
                 }
                 sz.setWidth(fm.boundingRect(QRect(), Qt::TextSingleLine | Qt::TextShowMnemonic, s).width());
                 sz.setHeight(qMax(fm.height(), qfm.height()));
 
                 QIcon is = action->icon();
                 //(not need because iconless items have to be of the same size as icon ones): if (!is.isNull()) {
-                    QSize is_sz = QSize(icone, icone);
-                    if (is_sz.height() > sz.height())
-                        sz.setHeight(is_sz.height());
+                QSize is_sz = QSize(icone, icone);
+                if (is_sz.height() > sz.height()) {
+                    sz.setHeight(is_sz.height());
+                }
                 //}
             }
             sz = style->sizeFromContents(QStyle::CT_MenuItem, &opt, sz, q);
         }
 
-
         if (!sz.isEmpty()) {
             max_column_width = qMax(max_column_width, sz.width());
             //wrapping
             if (!scroll &&
-               y+sz.height()+vmargin > dh - (deskFw * 2)) {
+                    y + sz.height() + vmargin > dh - (deskFw * 2)) {
                 ncols++;
                 y = vmargin;
             }
@@ -619,20 +631,20 @@ void KexiMenuWidgetPrivate::updateActionRects() const
     const int min_column_width = q->minimumWidth() - (sfcMargin + leftmargin + rightmargin + 2 * (fw + hmargin));
     max_column_width = qMax(min_column_width, max_column_width);
 
-
     //calculate position
     const int base_y = vmargin + fw + topmargin +
-        (scroll ? scroll->scrollOffset : 0)
-        /*+ tearoffHeight*/;
+                       (scroll ? scroll->scrollOffset : 0)
+                       /*+ tearoffHeight*/;
     int x = hmargin + fw + leftmargin;
     y = base_y;
 
-    for(int i = 0; i < actionsList.count(); i++) {
+    for (int i = 0; i < actionsList.count(); i++) {
         QRect &rect = actionRects[i];
-        if (rect.isNull())
+        if (rect.isNull()) {
             continue;
+        }
         if (!scroll &&
-           y+rect.height() > dh - deskFw * 2) {
+                y + rect.height() > dh - deskFw * 2) {
             x += max_column_width + hmargin;
             y = base_y;
         }
@@ -652,10 +664,11 @@ void KexiMenuWidgetPrivate::updateActionRects() const
 
 QRect KexiMenuWidgetPrivate::actionRect(QAction *act) const
 {
-    QList<QAction*> actionsList = q->actions();
+    QList<QAction *> actionsList = q->actions();
     int index = actionsList.indexOf(act);
-    if (index == -1)
+    if (index == -1) {
         return QRect();
+    }
 
     updateActionRects();
 
@@ -668,12 +681,13 @@ void KexiMenuWidgetPrivate::hideUpToMenuBar()
     bool fadeMenus = q->style()->styleHint(QStyle::SH_Menu_FadeOutOnHide);
     QWidget *caused = causedPopup.widget;
     hideMenu(q); //hide after getting causedPopup
-    while(caused) {
-        if (KexiMenuWidget *m = qobject_cast<KexiMenuWidget*>(caused)) {
+    while (caused) {
+        if (KexiMenuWidget *m = qobject_cast<KexiMenuWidget *>(caused)) {
             caused = m->causedPopup().widget;
             hideMenu(m, fadeMenus);
-            if (!fadeMenus) // Mac doesn't clear the action until after hidden.
+            if (!fadeMenus) { // Mac doesn't clear the action until after hidden.
                 m->setCurrentAction(0);
+            }
         } else {
             caused = 0;
         }
@@ -692,12 +706,13 @@ void KexiMenuWidgetPrivate::popupAction(QAction *action, int delay, bool activat
 {
     Q_UNUSED(activateFirst);
     if (action && action->isEnabled()) {
-        if (!delay)
+        if (!delay) {
             q->internalDelayedPopup();
-        else if (!menuDelayTimer.isActive() && (!action->menu() || !action->menu()->isVisible()))
+        } else if (!menuDelayTimer.isActive() && (!action->menu() || !action->menu()->isVisible())) {
             menuDelayTimer.start(delay, q);
-/*        if (activateFirst && action->menu())
-            action->menu()->d_func()->setFirstActionActive();*/
+        }
+        /*        if (activateFirst && action->menu())
+                    action->menu()->d_func()->setFirstActionActive();*/
     } else if (KexiMenuWidget *menu = activeMenu) {  //hide the current item
         activeMenu = 0;
         hideMenu(menu);
@@ -708,37 +723,40 @@ void KexiMenuWidgetPrivate::popupAction(QAction *action, int delay, bool activat
 void KexiMenuWidgetPrivate::setSyncAction()
 {
     QAction *current = currentAction;
-    if(current && (!current->isEnabled() || current->menu() || current->isSeparator()))
+    if (current && (!current->isEnabled() || current->menu() || current->isSeparator())) {
         current = 0;
-    for(QWidget *caused = q; caused;) {
-        if (KexiMenuWidget *m = qobject_cast<KexiMenuWidget*>(caused)) {
+    }
+    for (QWidget *caused = q; caused;) {
+        if (KexiMenuWidget *m = qobject_cast<KexiMenuWidget *>(caused)) {
             caused = m->causedPopup().widget;
-            if (m->eventLoop())
-                m->setSyncAction(current); // synchronous operation
+            if (m->eventLoop()) {
+                m->setSyncAction(current);    // synchronous operation
+            }
         } else {
             break;
         }
     }
 }
 
-
 void KexiMenuWidgetPrivate::setFirstActionActive()
 {
     updateActionRects();
-    QList<QAction*> actionsList = q->actions();
-    for(int i = 0, saccum = 0; i < actionsList.count(); i++) {
+    QList<QAction *> actionsList = q->actions();
+    for (int i = 0, saccum = 0; i < actionsList.count(); i++) {
         const QRect &rect = actionRects.at(i);
-        if (rect.isNull())
+        if (rect.isNull()) {
             continue;
+        }
         if (scroll && scroll->scrollFlags & QMenuScroller::ScrollUp) {
             saccum -= rect.height();
-            if (saccum > scroll->scrollOffset - scrollerHeight())
+            if (saccum > scroll->scrollOffset - scrollerHeight()) {
                 continue;
+            }
         }
         QAction *act = actionsList.at(i);
         if (!act->isSeparator() &&
-           (q->style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, q)
-            || act->isEnabled())) {
+                (q->style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, q)
+                 || act->isEnabled())) {
             setCurrentAction(act);
             break;
         }
@@ -750,12 +768,14 @@ void KexiMenuWidgetPrivate::setCurrentAction(QAction *action, int popup, KexiMen
 {
     Q_UNUSED(activateFirst);
     //tearoffHighlighted = 0;
-    if (currentAction)
+    if (currentAction) {
         q->update(actionRect(currentAction));
+    }
 
     sloppyAction = 0;
-    if (!sloppyRegion.isEmpty())
+    if (!sloppyRegion.isEmpty()) {
         sloppyRegion = QRegion();
+    }
     KexiMenuWidget *hideActiveMenu = activeMenu;
 #ifndef QT_NO_STATUSTIP
     QAction *previousAction = currentAction;
@@ -778,8 +798,9 @@ void KexiMenuWidgetPrivate::setCurrentAction(QAction *action, int popup, KexiMen
             if (reason == KexiMenuWidget::SelectedFromKeyboard) {
                 QWidget *widget = widgetItems.value(action);
                 if (widget) {
-                    if (widget->focusPolicy() != Qt::NoFocus)
+                    if (widget->focusPolicy() != Qt::NoFocus) {
                         widget->setFocus(Qt::TabFocusReason);
+                    }
                 } else {
                     //when the action has no QWidget, the KexiMenuWidget itself should
                     // get the focus
@@ -790,8 +811,9 @@ void KexiMenuWidgetPrivate::setCurrentAction(QAction *action, int popup, KexiMen
                 }
             }
         } else { //action is a separator
-            if (popup != -1)
-                hideActiveMenu = 0; //will be done "later"
+            if (popup != -1) {
+                hideActiveMenu = 0;    //will be done "later"
+            }
         }
 #ifndef QT_NO_STATUSTIP
     }  else if (previousAction) {
@@ -807,21 +829,24 @@ void KexiMenuWidgetPrivate::setCurrentAction(QAction *action, int popup, KexiMen
 //return the top causedPopup.widget that is not a KexiMenuWidget
 QWidget *KexiMenuWidgetPrivate::topCausedWidget() const
 {
-    QWidget* top = causedPopup.widget;
-    while (KexiMenuWidget* m = qobject_cast<KexiMenuWidget *>(top))
+    QWidget *top = causedPopup.widget;
+    while (KexiMenuWidget *m = qobject_cast<KexiMenuWidget *>(top)) {
         top = m->causedPopup().widget;
+    }
     return top;
 }
 
 QAction *KexiMenuWidgetPrivate::actionAt(QPoint p) const
 {
-    if (!q->rect().contains(p))     //sanity check
-       return 0;
+    if (!q->rect().contains(p)) {   //sanity check
+        return 0;
+    }
 
-    QList<QAction*> actionsList = q->actions();
-    for(int i = 0; i < actionRects.count(); i++) {
-        if (actionRects.at(i).contains(p))
+    QList<QAction *> actionsList = q->actions();
+    for (int i = 0; i < actionRects.count(); i++) {
+        if (actionRects.at(i).contains(p)) {
             return actionsList.at(i);
+        }
     }
     return 0;
 }
@@ -842,45 +867,47 @@ void KexiMenuWidget::overrideMenuActionDestroyed()
     d->menuAction = d->defaultMenuAction;
 }
 
-
 void KexiMenuWidgetPrivate::updateLayoutDirection()
 {
     //we need to mimic the cause of the popup's layout direction
     //to allow setting it on a mainwindow for example
     //we call setLayoutDirection_helper to not overwrite a user-defined value
     if (!q->testAttribute(Qt::WA_SetLayoutDirection)) {
-        if (QWidget *w = causedPopup.widget)
+        if (QWidget *w = causedPopup.widget) {
             setLayoutDirection_helper(w, w->layoutDirection());
-        else if (QWidget *w = q->parentWidget())
+        } else if (QWidget *w = q->parentWidget()) {
             setLayoutDirection_helper(w, w->layoutDirection());
-        else
+        } else {
             setLayoutDirection_helper(w, QApplication::layoutDirection());
+        }
     }
 }
 
-bool KexiMenuWidgetPrivate::actionPersistentlySelected(const QAction* action) const
+bool KexiMenuWidgetPrivate::actionPersistentlySelected(const QAction *action) const
 {
-    const KexiMenuWidgetAction* kaction = qobject_cast<const KexiMenuWidgetAction*>(action);
+    const KexiMenuWidgetAction *kaction = qobject_cast<const KexiMenuWidgetAction *>(action);
     return kaction ? kaction->persistentlySelected() : false;
 }
 
-void KexiMenuWidgetPrivate::setActionPersistentlySelected(QAction* action, bool set)
+void KexiMenuWidgetPrivate::setActionPersistentlySelected(QAction *action, bool set)
 {
-    KexiMenuWidgetAction* kaction = qobject_cast<KexiMenuWidgetAction*>(action);
+    KexiMenuWidgetAction *kaction = qobject_cast<KexiMenuWidgetAction *>(action);
     if (previousPersistentlySelectedAction) {
         previousPersistentlySelectedAction->setPersistentlySelected(false);
         q->update(actionRect(previousPersistentlySelectedAction));
     }
-    if (kaction)
+    if (kaction) {
         kaction->setPersistentlySelected(set);
+    }
     previousPersistentlySelectedAction = kaction;
 }
 
-void KexiMenuWidgetPrivate::toggleActionPersistentlySelected(QAction* action)
+void KexiMenuWidgetPrivate::toggleActionPersistentlySelected(QAction *action)
 {
-    KexiMenuWidgetAction* kaction = qobject_cast<KexiMenuWidgetAction*>(action);
-    if (!kaction)
+    KexiMenuWidgetAction *kaction = qobject_cast<KexiMenuWidgetAction *>(action);
+    if (!kaction) {
         return;
+    }
     setActionPersistentlySelected(kaction, !kaction->persistentlySelected());
 }
 
@@ -929,13 +956,13 @@ void KexiMenuWidget::setIcon(const QIcon &icon)
     d->menuAction->setIcon(icon);
 }
 
-
 //actually performs the scrolling
 void KexiMenuWidgetPrivate::scrollMenu(QAction *action, QMenuScroller::ScrollLocation location, bool active)
 {
     return;
-    if (!scroll || !scroll->scrollFlags)
+    if (!scroll || !scroll->scrollFlags) {
         return;
+    }
     updateActionRects();
     int newOffset = 0;
     const int topScroll = (scroll->scrollFlags & QMenuScroller::ScrollUp)   ? scrollerHeight() : 0;
@@ -943,9 +970,9 @@ void KexiMenuWidgetPrivate::scrollMenu(QAction *action, QMenuScroller::ScrollLoc
     const int vmargin = q->style()->pixelMetric(QStyle::PM_MenuVMargin, 0, q);
     const int fw = q->style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, q);
 
-    QList<QAction*> actionsList = q->actions();
+    QList<QAction *> actionsList = q->actions();
     if (location == QMenuScroller::ScrollTop) {
-        for(int i = 0, saccum = 0; i < actionsList.count(); i++) {
+        for (int i = 0, saccum = 0; i < actionsList.count(); i++) {
             if (actionsList.at(i) == action) {
                 newOffset = topScroll - saccum;
                 break;
@@ -953,26 +980,29 @@ void KexiMenuWidgetPrivate::scrollMenu(QAction *action, QMenuScroller::ScrollLoc
             saccum += actionRects.at(i).height();
         }
     } else {
-        for(int i = 0, saccum = 0; i < actionsList.count(); i++) {
+        for (int i = 0, saccum = 0; i < actionsList.count(); i++) {
             saccum += actionRects.at(i).height();
             if (actionsList.at(i) == action) {
-                if (location == QMenuScroller::ScrollCenter)
+                if (location == QMenuScroller::ScrollCenter) {
                     newOffset = ((q->height() / 2) - botScroll) - (saccum - topScroll);
-                else
+                } else {
                     newOffset = (q->height() - botScroll) - saccum;
+                }
                 break;
             }
         }
-        if(newOffset)
+        if (newOffset) {
             newOffset -= fw * 2;
+        }
     }
 
     //figure out which scroll flags
     uint newScrollFlags = QMenuScroller::ScrollNone;
-    if (newOffset < 0) //easy and cheap one
+    if (newOffset < 0) { //easy and cheap one
         newScrollFlags |= QMenuScroller::ScrollUp;
+    }
     int saccum = newOffset;
-    for(int i = 0; i < actionRects.count(); i++) {
+    for (int i = 0; i < actionRects.count(); i++) {
         saccum += actionRects.at(i).height();
         if (saccum > q->height()) {
             newScrollFlags |= QMenuScroller::ScrollDown;
@@ -981,43 +1011,49 @@ void KexiMenuWidgetPrivate::scrollMenu(QAction *action, QMenuScroller::ScrollLoc
     }
 
     if (!(newScrollFlags & QMenuScroller::ScrollDown) && (scroll->scrollFlags & QMenuScroller::ScrollDown)) {
-        newOffset = q->height() - (saccum - newOffset) - fw*2 - vmargin;    //last item at bottom
+        newOffset = q->height() - (saccum - newOffset) - fw * 2 - vmargin;  //last item at bottom
     }
 
     if (!(newScrollFlags & QMenuScroller::ScrollUp) && (scroll->scrollFlags & QMenuScroller::ScrollUp)) {
         newOffset = 0;  //first item at top
     }
 
-    if (newScrollFlags & QMenuScroller::ScrollUp)
+    if (newScrollFlags & QMenuScroller::ScrollUp) {
         newOffset -= vmargin;
+    }
 
     QRect screen = popupGeometry(q);
     const int desktopFrame = frameWidth();
-    if (q->height() < screen.height()-(desktopFrame*2)-1) {
+    if (q->height() < screen.height() - (desktopFrame * 2) - 1) {
         QRect geom = q->geometry();
         if (newOffset > scroll->scrollOffset && (scroll->scrollFlags & newScrollFlags & QMenuScroller::ScrollUp)) { //scroll up
-            const int newHeight = geom.height()-(newOffset-scroll->scrollOffset);
-            if(newHeight > geom.height())
+            const int newHeight = geom.height() - (newOffset - scroll->scrollOffset);
+            if (newHeight > geom.height()) {
                 geom.setHeight(newHeight);
-        } else if(scroll->scrollFlags & newScrollFlags & QMenuScroller::ScrollDown) {
-            int newTop = geom.top() + (newOffset-scroll->scrollOffset);
-            if (newTop < desktopFrame+screen.top())
-                newTop = desktopFrame+screen.top();
+            }
+        } else if (scroll->scrollFlags & newScrollFlags & QMenuScroller::ScrollDown) {
+            int newTop = geom.top() + (newOffset - scroll->scrollOffset);
+            if (newTop < desktopFrame + screen.top()) {
+                newTop = desktopFrame + screen.top();
+            }
             if (newTop < geom.top()) {
                 geom.setTop(newTop);
                 newOffset = 0;
                 newScrollFlags &= ~QMenuScroller::ScrollUp;
             }
         }
-        if (geom.bottom() > screen.bottom() - desktopFrame)
+        if (geom.bottom() > screen.bottom() - desktopFrame) {
             geom.setBottom(screen.bottom() - desktopFrame);
-        if (geom.top() < desktopFrame+screen.top())
-            geom.setTop(desktopFrame+screen.top());
+        }
+        if (geom.top() < desktopFrame + screen.top()) {
+            geom.setTop(desktopFrame + screen.top());
+        }
         if (geom != q->geometry()) {
 #if 0
             if (newScrollFlags & QMenuScroller::ScrollDown &&
-               q->geometry().top() - geom.top() >= -newOffset)
+                    q->geometry().top() - geom.top() >= -newOffset) {
                 newScrollFlags &= ~QMenuScroller::ScrollDown;
+            }
 #endif
             q->setGeometry(geom);
         }
@@ -1032,14 +1068,16 @@ void KexiMenuWidgetPrivate::scrollMenu(QAction *action, QMenuScroller::ScrollLoc
             current.moveTop(current.top() + delta);
 
             //we need to update the widgets geometry
-            if (QWidget *w = widgetItems.value(actionsList.at(i)))
+            if (QWidget *w = widgetItems.value(actionsList.at(i))) {
                 w->setGeometry(current);
+            }
         }
     }
     scroll->scrollOffset += delta;
     scroll->scrollFlags = newScrollFlags;
-    if (active)
+    if (active) {
         setCurrentAction(action);
+    }
 
     q->update();     //issue an update so we see all the new state..
 }
@@ -1048,34 +1086,38 @@ void KexiMenuWidgetPrivate::scrollMenu(QMenuScroller::ScrollLocation location, b
 {
     return;
     updateActionRects();
-    QList<QAction*> actionsList = q->actions();
-    if(location == QMenuScroller::ScrollBottom) {
-        for(int i = actionsList.size()-1; i >= 0; --i) {
+    QList<QAction *> actionsList = q->actions();
+    if (location == QMenuScroller::ScrollBottom) {
+        for (int i = actionsList.size() - 1; i >= 0; --i) {
             QAction *act = actionsList.at(i);
-            if (actionRects.at(i).isNull())
+            if (actionRects.at(i).isNull()) {
                 continue;
+            }
             if (!act->isSeparator() &&
-                (q->style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, q)
-                 || act->isEnabled())) {
-                if(scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollDown)
+                    (q->style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, q)
+                     || act->isEnabled())) {
+                if (scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollDown) {
                     scrollMenu(act, KexiMenuWidgetPrivate::QMenuScroller::ScrollBottom, active);
-                else if(active)
-                    setCurrentAction(act, /*popup*/-1, KexiMenuWidget::SelectedFromKeyboard);
+                } else if (active) {
+                    setCurrentAction(act, /*popup*/ -1, KexiMenuWidget::SelectedFromKeyboard);
+                }
                 break;
             }
         }
-    } else if(location == QMenuScroller::ScrollTop) {
-        for(int i = 0; i < actionsList.size(); ++i) {
+    } else if (location == QMenuScroller::ScrollTop) {
+        for (int i = 0; i < actionsList.size(); ++i) {
             QAction *act = actionsList.at(i);
-            if (actionRects.at(i).isNull())
+            if (actionRects.at(i).isNull()) {
                 continue;
+            }
             if (!act->isSeparator() &&
-                (q->style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, q)
-                 || act->isEnabled())) {
-                if(scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollUp)
+                    (q->style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, q)
+                     || act->isEnabled())) {
+                if (scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollUp) {
                     scrollMenu(act, KexiMenuWidgetPrivate::QMenuScroller::ScrollTop, active);
-                else if(active)
-                    setCurrentAction(act, /*popup*/-1, KexiMenuWidget::SelectedFromKeyboard);
+                } else if (active) {
+                    setCurrentAction(act, /*popup*/ -1, KexiMenuWidget::SelectedFromKeyboard);
+                }
                 break;
             }
         }
@@ -1086,32 +1128,33 @@ void KexiMenuWidgetPrivate::scrollMenu(QMenuScroller::ScrollLocation location, b
 void KexiMenuWidgetPrivate::scrollMenu(QMenuScroller::ScrollDirection direction, bool page, bool active)
 {
     return;
-    if (!scroll || !(scroll->scrollFlags & direction)) //not really possible...
+    if (!scroll || !(scroll->scrollFlags & direction)) { //not really possible...
         return;
+    }
     updateActionRects();
     const int topScroll = (scroll->scrollFlags & QMenuScroller::ScrollUp)   ? scrollerHeight() : 0;
     const int botScroll = (scroll->scrollFlags & QMenuScroller::ScrollDown) ? scrollerHeight() : 0;
     const int vmargin = q->style()->pixelMetric(QStyle::PM_MenuVMargin, 0, q);
     const int fw = q->style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, q);
-    const int offset = topScroll ? topScroll-vmargin : 0;
-    QList<QAction*> actionsList = q->actions();
+    const int offset = topScroll ? topScroll - vmargin : 0;
+    QList<QAction *> actionsList = q->actions();
     if (direction == QMenuScroller::ScrollUp) {
-        for(int i = 0, saccum = 0; i < actionsList.count(); i++) {
+        for (int i = 0, saccum = 0; i < actionsList.count(); i++) {
             saccum -= actionRects.at(i).height();
-            if (saccum <= scroll->scrollOffset-offset) {
+            if (saccum <= scroll->scrollOffset - offset) {
                 scrollMenu(actionsList.at(i), page ? QMenuScroller::ScrollBottom : QMenuScroller::ScrollTop, active);
                 break;
             }
         }
     } else if (direction == QMenuScroller::ScrollDown) {
         bool scrolled = false;
-        for(int i = 0, saccum = 0; i < actionsList.count(); i++) {
+        for (int i = 0, saccum = 0; i < actionsList.count(); i++) {
             const int iHeight = actionRects.at(i).height();
             saccum -= iHeight;
-            if (saccum <= scroll->scrollOffset-offset) {
-                const int scrollerArea = q->height() - botScroll - fw*2;
-                int visible = (scroll->scrollOffset-offset) - saccum;
-                for(i++ ; i < actionsList.count(); i++) {
+            if (saccum <= scroll->scrollOffset - offset) {
+                const int scrollerArea = q->height() - botScroll - fw * 2;
+                int visible = (scroll->scrollOffset - offset) - saccum;
+                for (i++; i < actionsList.count(); i++) {
                     visible += actionRects.at(i).height();
                     if (visible > scrollerArea - topScroll) {
                         scrolled = true;
@@ -1122,7 +1165,7 @@ void KexiMenuWidgetPrivate::scrollMenu(QMenuScroller::ScrollDirection direction,
                 break;
             }
         }
-        if(!scrolled) {
+        if (!scrolled) {
             scroll->scrollFlags &= ~QMenuScroller::ScrollDown;
             q->update();
         }
@@ -1137,12 +1180,13 @@ bool KexiMenuWidgetPrivate::mouseEventTaken(QMouseEvent *e)
     if (scroll && !activeMenu) { //let the scroller "steal" the event
         bool isScroll = false;
         if (pos.x() >= 0 && pos.x() < q->width()) {
-            for(int dir = QMenuScroller::ScrollUp; dir <= QMenuScroller::ScrollDown; dir = dir << 1) {
+            for (int dir = QMenuScroller::ScrollUp; dir <= QMenuScroller::ScrollDown; dir = dir << 1) {
                 if (scroll->scrollFlags & dir) {
-                    if (dir == QMenuScroller::ScrollUp)
+                    if (dir == QMenuScroller::ScrollUp) {
                         isScroll = (pos.y() <= scrollerHeight());
-                    else if (dir == QMenuScroller::ScrollDown)
+                    } else if (dir == QMenuScroller::ScrollDown) {
                         isScroll = (pos.y() >= q->height() - scrollerHeight());
+                    }
                     if (isScroll) {
                         scroll->scrollDirection = dir;
                         break;
@@ -1174,26 +1218,28 @@ bool KexiMenuWidgetPrivate::mouseEventTaken(QMouseEvent *e)
 //         tearoffHighlighted = 0;
 //     }
 
-    if (q->frameGeometry().contains(e->globalPos())) //otherwise if the event is in our rect we want it..
+    if (q->frameGeometry().contains(e->globalPos())) { //otherwise if the event is in our rect we want it..
         return false;
+    }
 
-    for(QWidget *caused = causedPopup.widget; caused;) {
+    for (QWidget *caused = causedPopup.widget; caused;) {
         bool passOnEvent = false;
         QWidget *next_widget = 0;
         QPoint cpos = caused->mapFromGlobal(e->globalPos());
-        if (KexiMenuWidget *m = qobject_cast<KexiMenuWidget*>(caused)) {
+        if (KexiMenuWidget *m = qobject_cast<KexiMenuWidget *>(caused)) {
             passOnEvent = m->rect().contains(cpos);
             next_widget = m->causedPopup().widget;
         }
         if (passOnEvent) {
-            if(e->type() != QEvent::MouseButtonRelease || mouseDown == caused) {
-            QMouseEvent new_e(e->type(), cpos, e->button(), e->buttons(), e->modifiers());
-            QApplication::sendEvent(caused, &new_e);
-            return true;
+            if (e->type() != QEvent::MouseButtonRelease || mouseDown == caused) {
+                QMouseEvent new_e(e->type(), cpos, e->button(), e->buttons(), e->modifiers());
+                QApplication::sendEvent(caused, &new_e);
+                return true;
+            }
         }
-        }
-        if (!next_widget)
+        if (!next_widget) {
             break;
+        }
         caused = next_widget;
     }
     return false;
@@ -1202,19 +1248,21 @@ bool KexiMenuWidgetPrivate::mouseEventTaken(QMouseEvent *e)
 void KexiMenuWidgetPrivate::activateCausedStack(const QList<QPointer<QWidget> > &causedStack, QAction *action, QAction::ActionEvent action_e, bool self)
 {
     QBoolBlocker guard(activationRecursionGuard);
-    if(self)
+    if (self) {
         action->activate(action_e);
+    }
 
-    for(int i = 0; i < causedStack.size(); ++i) {
+    for (int i = 0; i < causedStack.size(); ++i) {
         QPointer<QWidget> widget = causedStack.at(i);
-        if (!widget)
+        if (!widget) {
             continue;
+        }
         //fire
-        if (KexiMenuWidget *qmenu = qobject_cast<KexiMenuWidget*>(widget)) {
+        if (KexiMenuWidget *qmenu = qobject_cast<KexiMenuWidget *>(widget)) {
             widget = qmenu->causedPopup().widget;
             if (action_e == QAction::Trigger) {
                 emit qmenu->triggered(action);
-           } else if (action_e == QAction::Hover) {
+            } else if (action_e == QAction::Hover) {
                 emit qmenu->hovered(action);
             }
         }
@@ -1227,12 +1275,13 @@ void KexiMenuWidgetPrivate::activateAction(QAction *action, QAction::ActionEvent
     bool inWhatsThisMode = QWhatsThis::inWhatsThisMode();
 #endif
     if (!action || !q->isEnabled()
-        || (action_e == QAction::Trigger
+            || (action_e == QAction::Trigger
 #ifndef QT_NO_WHATSTHIS
-            && !inWhatsThisMode
+                && !inWhatsThisMode
 #endif
-            && (action->isSeparator() ||!action->isEnabled())))
+                && (action->isSeparator() || !action->isEnabled()))) {
         return;
+    }
 
     /* I have to save the caused stack here because it will be undone after popup execution (ie in the hide).
        Then I iterate over the list to actually send the events. --Sam
@@ -1240,17 +1289,19 @@ void KexiMenuWidgetPrivate::activateAction(QAction *action, QAction::ActionEvent
     const QList<QPointer<QWidget> > causedStack = calcCausedStack();
     if (action_e == QAction::Trigger) {
 #ifndef QT_NO_WHATSTHIS
-        if (!inWhatsThisMode)
+        if (!inWhatsThisMode) {
             actionAboutToTrigger = action;
+        }
 #endif
 
         if (q->testAttribute(Qt::WA_DontShowOnScreen)) {
             hideUpToMenuBar();
         } else {
-            for(QWidget *widget = QApplication::activePopupWidget(); widget; ) {
-                if (KexiMenuWidget *qmenu = qobject_cast<KexiMenuWidget*>(widget)) {
-                    if(qmenu == q)
+            for (QWidget *widget = QApplication::activePopupWidget(); widget;) {
+                if (KexiMenuWidget *qmenu = qobject_cast<KexiMenuWidget *>(widget)) {
+                    if (qmenu == q) {
                         hideUpToMenuBar();
+                    }
                     widget = qmenu->causedPopup().widget;
                 } else {
                     break;
@@ -1261,17 +1312,16 @@ void KexiMenuWidgetPrivate::activateAction(QAction *action, QAction::ActionEvent
 #ifndef QT_NO_WHATSTHIS
         if (inWhatsThisMode) {
             QString s = action->whatsThis();
-            if (s.isEmpty())
+            if (s.isEmpty()) {
                 s = q->whatsThis();
+            }
             QWhatsThis::showText(q->mapToGlobal(actionRect(action).center()), s, q);
             return;
         }
 #endif
     }
 
-
     activateCausedStack(causedStack, action, action_e, self);
-
 
     if (action_e == QAction::Hover) {
 #ifndef QT_NO_ACCESSIBILITY
@@ -1297,9 +1347,8 @@ void KexiMenuWidget::actionTriggered()
             //in case the action has not been activated by the mouse
             //we check the parent hierarchy
             QList< QPointer<QWidget> > list;
-            for(QWidget *widget = parentWidget(); widget; ) {
-                if (qobject_cast<KexiMenuWidget*>(widget))
-                {
+            for (QWidget *widget = parentWidget(); widget;) {
+                if (qobject_cast<KexiMenuWidget *>(widget)) {
                     list.append(widget);
                     widget = widget->parentWidget();
                 } else {
@@ -1313,7 +1362,7 @@ void KexiMenuWidget::actionTriggered()
 
 void KexiMenuWidget::actionHovered()
 {
-    if (QAction * action = qobject_cast<QAction *>(sender())) {
+    if (QAction *action = qobject_cast<QAction *>(sender())) {
         emit hovered(action);
     }
 }
@@ -1324,28 +1373,31 @@ bool KexiMenuWidgetPrivate::hasMouseMoved(const QPoint &globalPos)
     //changed by more than QApplication::startDragDistance()
     //or if there were at least 6 mouse motions)
     return motions > 6 ||
-        QApplication::startDragDistance() < (mousePopupPos - globalPos).manhattanLength();
+           QApplication::startDragDistance() < (mousePopupPos - globalPos).manhattanLength();
 }
 
 // from QWidgetPrivate
-void KexiMenuWidgetPrivate::setLayoutDirection_helper(QWidget* w, Qt::LayoutDirection direction)
+void KexiMenuWidgetPrivate::setLayoutDirection_helper(QWidget *w, Qt::LayoutDirection direction)
 {
-    if (!w || (direction == Qt::RightToLeft) == w->testAttribute(Qt::WA_RightToLeft))
+    if (!w || (direction == Qt::RightToLeft) == w->testAttribute(Qt::WA_RightToLeft)) {
         return;
+    }
     w->setAttribute(Qt::WA_RightToLeft, (direction == Qt::RightToLeft));
     foreach (QObject *obj, w->children()) {
-        QWidget *widget = qobject_cast<QWidget*>(obj);
-        if (widget && !widget->isWindow() && !widget->testAttribute(Qt::WA_SetLayoutDirection))
+        QWidget *widget = qobject_cast<QWidget *>(obj);
+        if (widget && !widget->isWindow() && !widget->testAttribute(Qt::WA_SetLayoutDirection)) {
             setLayoutDirection_helper(widget, direction);
+        }
     }
     QEvent e(QEvent::LayoutDirectionChange);
     QApplication::sendEvent(w, &e);
 }
 
-int KexiMenuWidgetPrivate::frameWidth(const QStyleOption* opt) const
+int KexiMenuWidgetPrivate::frameWidth(const QStyleOption *opt) const
 {
-    if (!hasFrame)
+    if (!hasFrame) {
         return 0;
+    }
     return q->style()->pixelMetric(QStyle::PM_MenuPanelWidth, opt, q);
 }
 
@@ -1375,27 +1427,30 @@ void KexiMenuWidget::setFrame(bool set)
 */
 void KexiMenuWidget::initStyleOption(QStyleOptionMenuItem *option, const QAction *action) const
 {
-    if (!option || !action)
+    if (!option || !action) {
         return;
+    }
 
     option->initFrom(this);
     option->palette = palette();
     option->state = QStyle::State_None;
 
-    if (window()->isActiveWindow())
+    if (window()->isActiveWindow()) {
         option->state |= QStyle::State_Active;
+    }
     if (isEnabled() && action->isEnabled()
-            && (!action->menu() || action->menu()->isEnabled()))
+            && (!action->menu() || action->menu()->isEnabled())) {
         option->state |= QStyle::State_Enabled;
-    else
+    } else {
         option->palette.setCurrentColorGroup(QPalette::Disabled);
+    }
 
     option->font = action->font().resolve(font());
     option->fontMetrics = QFontMetrics(option->font);
 
     if (d->currentAction && d->currentAction == action && !d->currentAction->isSeparator()) {
         option->state |= QStyle::State_Selected
-                     | (d->mouseDown ? QStyle::State_Sunken : QStyle::State_None);
+                         | (d->mouseDown ? QStyle::State_Sunken : QStyle::State_None);
     }
 
     option->menuHasCheckableItems = d->hasCheckableItems;
@@ -1406,22 +1461,25 @@ void KexiMenuWidget::initStyleOption(QStyleOptionMenuItem *option, const QAction
                             ? QStyleOptionMenuItem::Exclusive : QStyleOptionMenuItem::NonExclusive;
         option->checked = action->isChecked();
     }
-    if (action->menu())
+    if (action->menu()) {
         option->menuItemType = QStyleOptionMenuItem::SubMenu;
-    else if (action->isSeparator())
+    } else if (action->isSeparator()) {
         option->menuItemType = QStyleOptionMenuItem::Separator;
-    else if (d->defaultAction == action)
+    } else if (d->defaultAction == action) {
         option->menuItemType = QStyleOptionMenuItem::DefaultItem;
-    else
+    } else {
         option->menuItemType = QStyleOptionMenuItem::Normal;
-    if (action->isIconVisibleInMenu())
+    }
+    if (action->isIconVisibleInMenu()) {
         option->icon = action->icon();
+    }
     QString textAndAccel = action->text();
 #ifndef QT_NO_SHORTCUT
     if (textAndAccel.indexOf(QLatin1Char('\t')) == -1) {
         QKeySequence seq = action->shortcut();
-        if (!seq.isEmpty())
+        if (!seq.isEmpty()) {
             textAndAccel += QLatin1Char('\t') + QString(seq);
+        }
     }
 #endif
     option->text = textAndAccel;
@@ -1483,28 +1541,28 @@ KexiMenuWidget::~KexiMenuWidget()
         }
     }
 
-    if (d->eventLoop)
+    if (d->eventLoop) {
         d->eventLoop->exit();
+    }
     //hideTearOffMenu();
     delete d;
 }
 
-KexiMenuWidgetAction* KexiMenuWidget::persistentlySelectedAction() const
+KexiMenuWidgetAction *KexiMenuWidget::persistentlySelectedAction() const
 {
     if (d->previousPersistentlySelectedAction
-        && d->previousPersistentlySelectedAction->persistentlySelected())
-    {
+            && d->previousPersistentlySelectedAction->persistentlySelected()) {
         return d->previousPersistentlySelectedAction;
     }
     return 0;
 }
 
-void KexiMenuWidget::setPersistentlySelectedAction(KexiMenuWidgetAction* action, bool set)
+void KexiMenuWidget::setPersistentlySelectedAction(KexiMenuWidgetAction *action, bool set)
 {
     d->setActionPersistentlySelected(action, set);
 }
 
-const KexiMenuWidgetCaused& KexiMenuWidget::causedPopup() const
+const KexiMenuWidgetCaused &KexiMenuWidget::causedPopup() const
 {
     return d->causedPopup;
 }
@@ -1567,7 +1625,7 @@ QAction *KexiMenuWidget::addAction(const QIcon &icon, const QString &text)
 
     \sa QWidget::addAction()
 */
-QAction *KexiMenuWidget::addAction(const QString &text, const QObject *receiver, const char* member, const QKeySequence &shortcut)
+QAction *KexiMenuWidget::addAction(const QString &text, const QObject *receiver, const char *member, const QKeySequence &shortcut)
 {
     QAction *action = new QAction(text, this);
 #ifdef QT_NO_SHORTCUT
@@ -1592,7 +1650,7 @@ QAction *KexiMenuWidget::addAction(const QString &text, const QObject *receiver,
     \sa QWidget::addAction()
 */
 QAction *KexiMenuWidget::addAction(const QIcon &icon, const QString &text, const QObject *receiver,
-                          const char* member, const QKeySequence &shortcut)
+                                   const char *member, const QKeySequence &shortcut)
 {
     QAction *action = new QAction(icon, text, this);
 #ifdef QT_NO_SHORTCUT
@@ -1665,10 +1723,10 @@ QAction *KexiMenuWidget::defaultAction() const
 void KexiMenuWidget::setActiveAction(QAction *act)
 {
     d->setCurrentAction(act, 0);
-    if (d->scroll)
+    if (d->scroll) {
         d->scrollMenu(act, KexiMenuWidgetPrivate::QMenuScroller::ScrollCenter);
+    }
 }
-
 
 /*!
     Returns the currently highlighted action, or 0 if no
@@ -1691,8 +1749,8 @@ QAction *KexiMenuWidget::activeAction() const
 bool KexiMenuWidget::isEmpty() const
 {
     bool ret = true;
-    QList<QAction*> actionsList = this->actions();
-    for(int i = 0; ret && i < actionsList.count(); ++i) {
+    QList<QAction *> actionsList = this->actions();
+    for (int i = 0; ret && i < actionsList.count(); ++i) {
         const QAction *action = actionsList.at(i);
         if (!action->isSeparator() && action->isVisible()) {
             ret = false;
@@ -1709,17 +1767,19 @@ bool KexiMenuWidget::isEmpty() const
 */
 void KexiMenuWidget::clear()
 {
-    QList<QAction*> acts = actions();
+    QList<QAction *> acts = actions();
 
-    for(int i = 0; i < acts.size(); i++) {
+    for (int i = 0; i < acts.size(); i++) {
 #ifdef QT_SOFTKEYS_ENABLED
         // Lets not touch to our internal softkey actions
-        if(acts[i] == d->selectAction || acts[i] == d->cancelAction)
+        if (acts[i] == d->selectAction || acts[i] == d->cancelAction) {
             continue;
+        }
 #endif
         removeAction(acts[i]);
-        if (acts[i]->parent() == this && acts[i]->associatedWidgets().isEmpty())
+        if (acts[i]->parent() == this && acts[i]->associatedWidgets().isEmpty()) {
             delete acts[i];
+        }
     }
 }
 
@@ -1740,8 +1800,9 @@ int KexiMenuWidget::columnCount() const
 */
 QAction *KexiMenuWidget::actionAt(const QPoint &pt) const
 {
-    if (QAction *ret = d->actionAt(pt))
+    if (QAction *ret = d->actionAt(pt)) {
         return ret;
+    }
     return 0;
 }
 
@@ -1763,12 +1824,15 @@ QSize KexiMenuWidget::sizeHint() const
     QSize s;
     for (int i = 0; i < d->actionRects.count(); ++i) {
         const QRect &rect = d->actionRects.at(i);
-        if (rect.isNull())
+        if (rect.isNull()) {
             continue;
-        if (rect.bottom() >= s.height())
+        }
+        if (rect.bottom() >= s.height()) {
             s.setHeight(rect.y() + rect.height());
-        if (rect.right() >= s.width())
+        }
+        if (rect.right() >= s.width()) {
             s.setWidth(rect.x() + rect.width());
+        }
     }
     // Note that the action rects calculated above already include
     // the top and left margins, so we only need to add margins for
@@ -1779,11 +1843,11 @@ QSize KexiMenuWidget::sizeHint() const
     int leftmargin, topmargin, rightmargin, bottommargin;
     getContentsMargins(&leftmargin, &topmargin, &rightmargin, &bottommargin);
     s.rwidth() += style()->pixelMetric(QStyle::PM_MenuHMargin, &opt, this)
-        + fw + rightmargin + 2 /*frame*/;
+                  + fw + rightmargin + 2 /*frame*/;
     s.rheight() += style()->pixelMetric(QStyle::PM_MenuVMargin, &opt, this) + fw + bottommargin;
 
     return style()->sizeFromContents(QStyle::CT_Menu, &opt,
-                                    s.expandedTo(QApplication::globalStrut()), this);
+                                     s.expandedTo(QApplication::globalStrut()), this);
 }
 
 /*!
@@ -1822,7 +1886,7 @@ void KexiMenuWidget::popup(const QPoint &p, QAction *atAction)
     if (actionListChanged && causedButton)
         pos = QPushButtonPrivate::get(causedButton)->adjustedMenuPosition();
     else*/
-        pos = p;
+    pos = p;
 
     QSize size = sizeHint();
     QRect screen;
@@ -1836,7 +1900,7 @@ void KexiMenuWidget::popup(const QPoint &p, QAction *atAction)
 
     const int desktopFrame = d->frameWidth();
     bool adjustToDesktop = !window()->testAttribute(Qt::WA_DontShowOnScreen);
-    QList<QAction*> actionsList = this->actions();
+    QList<QAction *> actionsList = this->actions();
 #ifdef QT_KEYPAD_NAVIGATION
     if (!atAction && QApplication::keypadNavigationEnabled()) {
         // Try to have one item activated
@@ -1869,10 +1933,11 @@ void KexiMenuWidget::popup(const QPoint &p, QAction *atAction)
                 pos.setY(newY);
 
                 if (d->scroll && d->scroll->scrollFlags != KexiMenuWidgetPrivate::QMenuScroller::ScrollNone
-                    && !style()->styleHint(QStyle::SH_Menu_FillScreenWithScroll, 0, this)) {
+                        && !style()->styleHint(QStyle::SH_Menu_FillScreenWithScroll, 0, this)) {
                     int below_height = above_height + d->scroll->scrollOffset;
-                    for (int i2 = i; i2 < d->actionRects.count(); i2++)
+                    for (int i2 = i; i2 < d->actionRects.count(); i2++) {
                         below_height += d->actionRects.at(i2).height();
+                    }
                     size.setHeight(below_height);
                 }
                 break;
@@ -1889,34 +1954,41 @@ void KexiMenuWidget::popup(const QPoint &p, QAction *atAction)
     if (adjustToDesktop) {
         // handle popup falling "off screen"
         if (isRightToLeft()) {
-            if (snapToMouse) // position flowing left from the mouse
+            if (snapToMouse) { // position flowing left from the mouse
                 pos.setX(mouse.x() - size.width());
+            }
 
-            if (pos.x() < screen.left() + desktopFrame)
+            if (pos.x() < screen.left() + desktopFrame) {
                 pos.setX(qMax(p.x(), screen.left() + desktopFrame));
-            if (pos.x() + size.width() - 1 > screen.right() - desktopFrame)
+            }
+            if (pos.x() + size.width() - 1 > screen.right() - desktopFrame) {
                 pos.setX(qMax(p.x() - size.width(), screen.right() - desktopFrame - size.width() + 1));
+            }
         } else {
-            if (pos.x() + size.width() - 1 > screen.right() - desktopFrame)
+            if (pos.x() + size.width() - 1 > screen.right() - desktopFrame) {
                 pos.setX(screen.right() - desktopFrame - size.width() + 1);
-            if (pos.x() < screen.left() + desktopFrame)
+            }
+            if (pos.x() < screen.left() + desktopFrame) {
                 pos.setX(screen.left() + desktopFrame);
+            }
         }
         if (pos.y() + size.height() - 1 > screen.bottom() - desktopFrame) {
-            if(snapToMouse)
-                pos.setY(qMin(mouse.y() - (size.height() + desktopFrame), screen.bottom()-desktopFrame-size.height()+1));
-            else
-                pos.setY(qMax(p.y() - (size.height() + desktopFrame), screen.bottom()-desktopFrame-size.height()+1));
+            if (snapToMouse) {
+                pos.setY(qMin(mouse.y() - (size.height() + desktopFrame), screen.bottom() - desktopFrame - size.height() + 1));
+            } else {
+                pos.setY(qMax(p.y() - (size.height() + desktopFrame), screen.bottom() - desktopFrame - size.height() + 1));
+            }
         } else if (pos.y() < screen.top() + desktopFrame) {
             pos.setY(screen.top() + desktopFrame);
         }
 
-        if (pos.y() < screen.top() + desktopFrame)
+        if (pos.y() < screen.top() + desktopFrame) {
             pos.setY(screen.top() + desktopFrame);
+        }
         if (pos.y() + size.height() - 1 > screen.bottom() - desktopFrame) {
             if (d->scroll) {
                 d->scroll->scrollFlags |= uint(KexiMenuWidgetPrivate::QMenuScroller::ScrollDown);
-                int y = qMax(screen.y(),pos.y());
+                int y = qMax(screen.y(), pos.y());
                 size.setHeight(screen.bottom() - (desktopFrame * 2) - y);
             } else {
                 // Too big for screen, bias to see bottom of menu (for some reason)
@@ -1955,7 +2027,6 @@ QAction *KexiMenuWidget::exec()
 {
     return exec(pos());
 }
-
 
 /*!
     \overload
@@ -2001,8 +2072,9 @@ QAction *KexiMenuWidget::exec(const QPoint &p, QAction *action)
 
     QPointer<QObject> guard = this;
     (void) eventLoop.exec();
-    if (guard.isNull())
+    if (guard.isNull()) {
         return 0;
+    }
 
     action = d->syncAction;
     d->syncAction = 0;
@@ -2032,7 +2104,7 @@ QAction *KexiMenuWidget::exec(const QPoint &p, QAction *action)
 
     \sa popup(), QWidget::mapToGlobal()
 */
-QAction *KexiMenuWidget::exec(QList<QAction*> actions, const QPoint &pos, QAction *at, QWidget *parent)
+QAction *KexiMenuWidget::exec(QList<QAction *> actions, const QPoint &pos, QAction *at, QWidget *parent)
 {
     KexiMenuWidget menu(parent);
     menu.addActions(actions);
@@ -2058,7 +2130,7 @@ QAction *KexiMenuWidget::exec(QList<QAction*> actions, const QPoint &pos, QActio
 
     \sa popup(), QWidget::mapToGlobal()
 */
-QAction *KexiMenuWidget::exec(QList<QAction*> actions, const QPoint &pos, QAction *at)
+QAction *KexiMenuWidget::exec(QList<QAction *> actions, const QPoint &pos, QAction *at)
 {
     // ### Qt 5: merge
     return exec(actions, pos, at, 0);
@@ -2066,7 +2138,7 @@ QAction *KexiMenuWidget::exec(QList<QAction*> actions, const QPoint &pos, QActio
 #endif
 
 ClickableLogoArea::ClickableLogoArea(QWidget *parent)
- : QAbstractButton(parent)
+    : QAbstractButton(parent)
 {
     connect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
 }
@@ -2076,7 +2148,7 @@ void ClickableLogoArea::slotClicked()
     QDesktopServices::openUrl(QUrl(calligraUrl));
 }
 
-void ClickableLogoArea::paintEvent(QPaintEvent*)
+void ClickableLogoArea::paintEvent(QPaintEvent *)
 {
 }
 
@@ -2085,14 +2157,13 @@ void KexiMenuWidgetPrivate::updateLogoPixmap()
     bool isLight;
     if (bespin) {
         isLight = q->palette().color(QPalette::Shadow).lightness() >= 128;
-    }
-    else {
+    } else {
         isLight = KexiUtils::isLightColorScheme();
     }
     const QString calligraLogo = KStandardDirs::locate("data",
-        isLight
-         ? "kexi/pics/calligra-logo-white-glow.png"
-         : "kexi/pics/calligra-logo-black-glow.png");
+                                 isLight
+                                 ? "kexi/pics/calligra-logo-white-glow.png"
+                                 : "kexi/pics/calligra-logo-black-glow.png");
     calligraLogoPixmap = QPixmap(calligraLogo);
 }
 
@@ -2121,25 +2192,24 @@ const int spacingAfterLastItem = 10;
 //! @return distance between bottom border of the logo and bottom border of the entire menu widget
 int KexiMenuWidgetPrivate::logoBottomMargin() const
 {
-/*
-    +----------------+
-    | Menu item 1    |                             |
-    | ...            |                             |
-    | Last menu item |                             | q->height()
-    +----------------+ <--- bottomOfLastItem()     |
-    |                | |--- spacingAfterLastItem   |
-    +----------------+
-    |      glow      |
-    |     +----+     |
-    |     |logo|     |
-    |     +----+     | +
-    |      glow      | |--- bottomMargin
-    +----------------+ +
-*/
+    /*
+        +----------------+
+        | Menu item 1    |                             |
+        | ...            |                             |
+        | Last menu item |                             | q->height()
+        +----------------+ <--- bottomOfLastItem()     |
+        |                | |--- spacingAfterLastItem   |
+        +----------------+
+        |      glow      |
+        |     +----+     |
+        |     |logo|     |
+        |     +----+     | +
+        |      glow      | |--- bottomMargin
+        +----------------+ +
+    */
     int bottomMargin = glowHeight - cutOffGlow;
     if ((q->height() - bottomMargin - calligraLogoPixmapInternalHeight - cutOffGlow)
-            <= (bottomOfLastItem() + spacingAfterLastItem))
-    {
+            <= (bottomOfLastItem() + spacingAfterLastItem)) {
         /* Special case when the last menu item would cover the logo: keep the logo below
             +----------------+
             |     +----+     |
@@ -2171,7 +2241,7 @@ void KexiMenuWidgetPrivate::updateLogo()
 /*!
   \reimp
 */
-void KexiMenuWidget::showEvent(QShowEvent* event)
+void KexiMenuWidget::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
     d->updateLogo();
@@ -2184,8 +2254,9 @@ void KexiMenuWidget::showEvent(QShowEvent* event)
 void KexiMenuWidget::hideEvent(QHideEvent *)
 {
     emit aboutToHide();
-    if (d->eventLoop)
+    if (d->eventLoop) {
         d->eventLoop->exit();
+    }
     d->setCurrentAction(0);
 #ifndef QT_NO_ACCESSIBILITY
     QAccessible::updateAccessibility(this, 0, QAccessible::PopupMenuEnd);
@@ -2194,8 +2265,9 @@ void KexiMenuWidget::hideEvent(QHideEvent *)
     d->hasHadMouse = false;
     d->causedPopup.widget = 0;
     d->causedPopup.action = 0;
-    if (d->scroll)
-        d->scroll->scrollTimer.stop(); //make sure the timer stops
+    if (d->scroll) {
+        d->scroll->scrollTimer.stop();    //make sure the timer stops
+    }
     // this unmarks the previous persistent action
     d->setActionPersistentlySelected(0, false);
 }
@@ -2223,8 +2295,7 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
     menuOpt.tabWidth = 0;
     if (d->bespin) {
         p.fillRect(rect(), palette().shadow());
-    }
-    else {
+    } else {
         style()->drawPrimitive(QStyle::PE_PanelMenu, &menuOpt, &p, this);
     }
 
@@ -2241,7 +2312,7 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         opt.rect.setX(opt.rect.width() - opt.lineWidth);
         opt.rect.setWidth(opt.lineWidth);
         style()->drawControl(QStyle::CE_ShapedFrame, &opt, &p);
-        
+
         /*
         QStyleOption opt;
         opt.initFrom(this);
@@ -2252,13 +2323,14 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
     }
 
     //draw the items that need updating..
-    QList<QAction*> actionsList = this->actions();
+    QList<QAction *> actionsList = this->actions();
     for (int i = 0; i < actionsList.count(); ++i) {
         QAction *action = actionsList.at(i);
         QRect adjustedActionRect = d->actionRects.at(i);
         if (!e->rect().intersects(adjustedActionRect)
-            || d->widgetItems.value(action))
-           continue;
+                || d->widgetItems.value(action)) {
+            continue;
+        }
         //set the clip region to be extra safe (and adjust for the scrollers)
         QRegion adjustedActionReg(adjustedActionRect);
         emptyArea -= adjustedActionReg;
@@ -2273,15 +2345,14 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
                 opt.palette.setBrush(QPalette::Window, opt.palette.brush(QPalette::Highlight));
                 opt.palette.setBrush(QPalette::WindowText, opt.palette.brush(QPalette::HighlightedText));
             }
-        }
-        else if (!action->isSeparator()) {
+        } else if (!action->isSeparator()) {
             if (!d->bespin && opt.state & QStyle::State_Selected) {
                 // lighten the highlight to make it different from
                 // the persistently selected item
                 opt.palette.setColor(QPalette::Highlight,
                                      KColorUtils::mix(
-                                        opt.palette.color(QPalette::Highlight),
-                                        opt.palette.color(QPalette::Window)));
+                                         opt.palette.color(QPalette::Highlight),
+                                         opt.palette.color(QPalette::Window)));
                 opt.palette.setColor(QPalette::HighlightedText, opt.palette.color(QPalette::Text));
             }
         }
@@ -2315,7 +2386,7 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         }
         if (d->scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollDown) {
             menuOpt.rect.setRect(fw, height() - d->scrollerHeight() - fw, width() - (fw * 2),
-                                     d->scrollerHeight());
+                                 d->scrollerHeight());
             emptyArea -= QRegion(menuOpt.rect);
             menuOpt.state |= QStyle::State_DownArrow;
             p.setClipRect(menuOpt.rect);
@@ -2323,26 +2394,26 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         }
     }
     //paint the tear off..
-/*    if (d->tearoff) {
-        menuOpt.menuItemType = QStyleOptionMenuItem::TearOff;
-        menuOpt.rect.setRect(fw, fw, width() - (fw * 2),
-                             style()->pixelMetric(QStyle::PM_MenuTearoffHeight, 0, this));
-        if (d->scroll && d->scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollUp)
-            menuOpt.rect.translate(0, d->scrollerHeight());
-        emptyArea -= QRegion(menuOpt.rect);
-        p.setClipRect(menuOpt.rect);
-        menuOpt.state = QStyle::State_None;
-        if (d->tearoffHighlighted)
-            menuOpt.state |= QStyle::State_Selected;
-        style()->drawControl(QStyle::CE_MenuTearoff, &menuOpt, &p, this);
-    }*/
+    /*    if (d->tearoff) {
+            menuOpt.menuItemType = QStyleOptionMenuItem::TearOff;
+            menuOpt.rect.setRect(fw, fw, width() - (fw * 2),
+                                 style()->pixelMetric(QStyle::PM_MenuTearoffHeight, 0, this));
+            if (d->scroll && d->scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollUp)
+                menuOpt.rect.translate(0, d->scrollerHeight());
+            emptyArea -= QRegion(menuOpt.rect);
+            p.setClipRect(menuOpt.rect);
+            menuOpt.state = QStyle::State_None;
+            if (d->tearoffHighlighted)
+                menuOpt.state |= QStyle::State_Selected;
+            style()->drawControl(QStyle::CE_MenuTearoff, &menuOpt, &p, this);
+        }*/
     //draw border
     if (fw > 0) {
         QRegion borderReg;
         borderReg += QRect(0, 0, fw, height()); //left
-        borderReg += QRect(width()-fw, 0, fw, height()); //right
+        borderReg += QRect(width() - fw, 0, fw, height()); //right
         borderReg += QRect(0, 0, width(), fw); //top
-        borderReg += QRect(0, height()-fw, width(), fw); //bottom
+        borderReg += QRect(0, height() - fw, width(), fw); //bottom
         p.setClipRegion(borderReg);
         emptyArea -= borderReg;
         QStyleOptionFrame frame;
@@ -2383,9 +2454,9 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
 
     // logo
     p.drawPixmap((width() - d->calligraLogoPixmap.width()) / 2,
-                    height() - logoBottomMargin - d->calligraLogoPixmap.height()
-                    + calligraLogoPixmapInternalHeight - 20,
-                    d->calligraLogoPixmap);
+                 height() - logoBottomMargin - d->calligraLogoPixmap.height()
+                 + calligraLogoPixmapInternalHeight - 20,
+                 d->calligraLogoPixmap);
 }
 
 #ifndef QT_NO_WHEELEVENT
@@ -2405,14 +2476,17 @@ void KexiMenuWidget::wheelEvent(QWheelEvent *e)
 */
 void KexiMenuWidget::mousePressEvent(QMouseEvent *e)
 {
-    if (d->aboutToHide || d->mouseEventTaken(e))
+    if (d->aboutToHide || d->mouseEventTaken(e)) {
         return;
+    }
     if (!rect().contains(e->pos())) {
-         if (d->noReplayFor
-             && QRect(d->noReplayFor->mapToGlobal(QPoint()), d->noReplayFor->size()).contains(e->globalPos()))
-             setAttribute(Qt::WA_NoMouseReplay);
-         if (d->eventLoop) // synchronous operation
-             d->syncAction = 0;
+        if (d->noReplayFor
+                && QRect(d->noReplayFor->mapToGlobal(QPoint()), d->noReplayFor->size()).contains(e->globalPos())) {
+            setAttribute(Qt::WA_NoMouseReplay);
+        }
+        if (d->eventLoop) { // synchronous operation
+            d->syncAction = 0;
+        }
         d->hideUpToMenuBar();
         return;
     }
@@ -2428,9 +2502,10 @@ void KexiMenuWidget::mousePressEvent(QMouseEvent *e)
 */
 void KexiMenuWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (d->aboutToHide || d->mouseEventTaken(e))
+    if (d->aboutToHide || d->mouseEventTaken(e)) {
         return;
-    if(d->mouseDown != this) {
+    }
+    if (d->mouseDown != this) {
         d->mouseDown = 0;
         return;
     }
@@ -2440,7 +2515,7 @@ void KexiMenuWidget::mouseReleaseEvent(QMouseEvent *e)
     QAction *action = d->actionAt(e->pos());
     //kDebug() << "action:" << action << "d->currentAction:" << d->currentAction;
     if (action && action == d->currentAction) {
-        if (!action->menu()){
+        if (!action->menu()) {
 #if defined(Q_WS_WIN)
             //On Windows only context menus can be activated with the right button
             if (e->button() == Qt::LeftButton || d->topCausedWidget() == 0)
@@ -2464,11 +2539,12 @@ void KexiMenuWidget::mouseReleaseEvent(QMouseEvent *e)
 void KexiMenuWidget::changeEvent(QEvent *e)
 {
     if (e->type() == QEvent::StyleChange || e->type() == QEvent::FontChange ||
-        e->type() == QEvent::LayoutDirectionChange) {
+            e->type() == QEvent::LayoutDirectionChange) {
         d->itemsDirty = 1;
         setMouseTracking(style()->styleHint(QStyle::SH_Menu_MouseTracking, 0, this));
-        if (isVisible())
+        if (isVisible()) {
             resize(sizeHint());
+        }
         if (!style()->styleHint(QStyle::SH_Menu_Scrollable, 0, this)) {
             delete d->scroll;
             d->scroll = 0;
@@ -2478,14 +2554,12 @@ void KexiMenuWidget::changeEvent(QEvent *e)
         }
     } else if (e->type() == QEvent::EnabledChange) {
         d->menuAction->setEnabled(isEnabled());
-    }
-    else if (e->type() == QEvent::PaletteChange) {
+    } else if (e->type() == QEvent::PaletteChange) {
         d->updateLogoPixmap();
         d->updateLogo();
     }
     QWidget::changeEvent(e);
 }
-
 
 /*!
   \reimp
@@ -2498,18 +2572,18 @@ KexiMenuWidget::event(QEvent *e)
         d->updateLayoutDirection();
         break;
     case QEvent::ShortcutOverride: {
-            QKeyEvent *kev = static_cast<QKeyEvent*>(e);
-            if (kev->key() == Qt::Key_Up || kev->key() == Qt::Key_Down
+        QKeyEvent *kev = static_cast<QKeyEvent *>(e);
+        if (kev->key() == Qt::Key_Up || kev->key() == Qt::Key_Down
                 || kev->key() == Qt::Key_Left || kev->key() == Qt::Key_Right
                 || kev->key() == Qt::Key_Enter || kev->key() == Qt::Key_Return
                 || kev->key() == Qt::Key_Escape) {
-                e->accept();
-                return true;
-            }
+            e->accept();
+            return true;
         }
-        break;
+    }
+    break;
     case QEvent::KeyPress: {
-        QKeyEvent *ke = (QKeyEvent*)e;
+        QKeyEvent *ke = (QKeyEvent *)e;
         if (ke->key() == Qt::Key_Tab || ke->key() == Qt::Key_Backtab) {
             keyPressEvent(ke);
             return true;
@@ -2543,9 +2617,10 @@ KexiMenuWidget::event(QEvent *e)
 #ifndef QT_NO_WHATSTHIS
     case QEvent::QueryWhatsThis:
         e->setAccepted(whatsThis().size());
-        if (QAction *action = d->actionAt(static_cast<QHelpEvent*>(e)->pos())) {
-            if (action->whatsThis().size() || action->menu())
+        if (QAction *action = d->actionAt(static_cast<QHelpEvent *>(e)->pos())) {
+            if (action->whatsThis().size() || action->menu()) {
                 e->accept();
+            }
         }
         return true;
 #endif
@@ -2553,8 +2628,8 @@ KexiMenuWidget::event(QEvent *e)
     case QEvent::LanguageChange: {
         d->selectAction->setText(QSoftKeyManager::standardSoftKeyText(QSoftKeyManager::SelectSoftKey));
         d->cancelAction->setText(QSoftKeyManager::standardSoftKeyText(QSoftKeyManager::CancelSoftKey));
-        }
-        break;
+    }
+    break;
 #endif
     default:
         break;
@@ -2581,47 +2656,54 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
     d->updateActionRects();
     int key = e->key();
     if (isRightToLeft()) {  // in reverse mode open/close key for submenues are reversed
-        if (key == Qt::Key_Left)
+        if (key == Qt::Key_Left) {
             key = Qt::Key_Right;
-        else if (key == Qt::Key_Right)
+        } else if (key == Qt::Key_Right) {
             key = Qt::Key_Left;
+        }
     }
 #ifndef Q_WS_MAC
-    if (key == Qt::Key_Tab) //means down
+    if (key == Qt::Key_Tab) { //means down
         key = Qt::Key_Down;
-    if (key == Qt::Key_Backtab) //means up
+    }
+    if (key == Qt::Key_Backtab) { //means up
         key = Qt::Key_Up;
+    }
 #endif
 
     bool key_consumed = false;
-    QList<QAction*> actionsList = this->actions();
-    switch(key) {
+    QList<QAction *> actionsList = this->actions();
+    switch (key) {
     case Qt::Key_Home:
         key_consumed = true;
-        if (d->scroll)
+        if (d->scroll) {
             d->scrollMenu(KexiMenuWidgetPrivate::QMenuScroller::ScrollTop, true);
+        }
         break;
     case Qt::Key_End:
         key_consumed = true;
-        if (d->scroll)
+        if (d->scroll) {
             d->scrollMenu(KexiMenuWidgetPrivate::QMenuScroller::ScrollBottom, true);
+        }
         break;
     case Qt::Key_PageUp:
         key_consumed = true;
         if (d->currentAction && d->scroll) {
-            if(d->scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollUp)
+            if (d->scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollUp) {
                 d->scrollMenu(KexiMenuWidgetPrivate::QMenuScroller::ScrollUp, true, true);
-            else
+            } else {
                 d->scrollMenu(KexiMenuWidgetPrivate::QMenuScroller::ScrollTop, true);
+            }
         }
         break;
     case Qt::Key_PageDown:
         key_consumed = true;
         if (d->currentAction && d->scroll) {
-            if(d->scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollDown)
+            if (d->scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollDown) {
                 d->scrollMenu(KexiMenuWidgetPrivate::QMenuScroller::ScrollDown, true, true);
-            else
+            } else {
                 d->scrollMenu(KexiMenuWidgetPrivate::QMenuScroller::ScrollBottom, true);
+            }
         }
         break;
     case Qt::Key_Up:
@@ -2630,93 +2712,108 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
         QAction *nextAction = 0;
         KexiMenuWidgetPrivate::QMenuScroller::ScrollLocation scroll_loc = KexiMenuWidgetPrivate::QMenuScroller::ScrollStay;
         if (!d->currentAction) {
-            if(key == Qt::Key_Down) {
-                for(int i = 0; i < actionsList.count(); ++i) {
+            if (key == Qt::Key_Down) {
+                for (int i = 0; i < actionsList.count(); ++i) {
                     QAction *act = actionsList.at(i);
-                    if (d->actionRects.at(i).isNull())
+                    if (d->actionRects.at(i).isNull()) {
                         continue;
+                    }
                     if (!act->isSeparator() &&
-                        (style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, this)
-                         || act->isEnabled())) {
+                            (style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, this)
+                             || act->isEnabled())) {
                         nextAction = act;
                         break;
                     }
                 }
             } else {
-                for(int i = actionsList.count()-1; i >= 0; --i) {
+                for (int i = actionsList.count() - 1; i >= 0; --i) {
                     QAction *act = actionsList.at(i);
-                    if (d->actionRects.at(i).isNull())
+                    if (d->actionRects.at(i).isNull()) {
                         continue;
+                    }
                     if (!act->isSeparator() &&
-                        (style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, this)
-                         || act->isEnabled())) {
+                            (style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, this)
+                             || act->isEnabled())) {
                         nextAction = act;
                         break;
                     }
                 }
             }
         } else {
-            for(int i = 0, y = 0; !nextAction && i < actionsList.count(); i++) {
+            for (int i = 0, y = 0; !nextAction && i < actionsList.count(); i++) {
                 QAction *act = actionsList.at(i);
                 if (act == d->currentAction) {
                     if (key == Qt::Key_Up) {
-                        for(int next_i = i-1; true; next_i--) {
+                        for (int next_i = i - 1; true; next_i--) {
                             if (next_i == -1) {
-                                if(!style()->styleHint(QStyle::SH_Menu_SelectionWrap, 0, this))
+                                if (!style()->styleHint(QStyle::SH_Menu_SelectionWrap, 0, this)) {
                                     break;
-                                if (d->scroll)
+                                }
+                                if (d->scroll) {
                                     scroll_loc = KexiMenuWidgetPrivate::QMenuScroller::ScrollBottom;
-                                next_i = d->actionRects.count()-1;
+                                }
+                                next_i = d->actionRects.count() - 1;
                             }
                             QAction *next = actionsList.at(next_i);
-                            if (next == d->currentAction)
+                            if (next == d->currentAction) {
                                 break;
-                            if (d->actionRects.at(next_i).isNull())
+                            }
+                            if (d->actionRects.at(next_i).isNull()) {
                                 continue;
+                            }
                             if (next->isSeparator() ||
-                               (!next->isEnabled() &&
-                                !style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, this)))
+                                    (!next->isEnabled() &&
+                                     !style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, this))) {
                                 continue;
+                            }
                             nextAction = next;
                             if (d->scroll && (d->scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollUp)) {
                                 int topVisible = d->scrollerHeight();
-/*                                if (d->tearoff)
-                                    topVisible += style()->pixelMetric(QStyle::PM_MenuTearoffHeight, 0, this);*/
-                                if (((y + d->scroll->scrollOffset) - topVisible) <= d->actionRects.at(next_i).height())
+                                /*                                if (d->tearoff)
+                                                                    topVisible += style()->pixelMetric(QStyle::PM_MenuTearoffHeight, 0, this);*/
+                                if (((y + d->scroll->scrollOffset) - topVisible) <= d->actionRects.at(next_i).height()) {
                                     scroll_loc = KexiMenuWidgetPrivate::QMenuScroller::ScrollTop;
+                                }
                             }
                             break;
                         }
-/*                        if (!nextAction && d->tearoff)
-                            d->tearoffHighlighted = 1;*/
+                        /*                        if (!nextAction && d->tearoff)
+                                                    d->tearoffHighlighted = 1;*/
                     } else {
                         y += d->actionRects.at(i).height();
-                        for(int next_i = i+1; true; next_i++) {
+                        for (int next_i = i + 1; true; next_i++) {
                             if (next_i == d->actionRects.count()) {
-                                if(!style()->styleHint(QStyle::SH_Menu_SelectionWrap, 0, this))
+                                if (!style()->styleHint(QStyle::SH_Menu_SelectionWrap, 0, this)) {
                                     break;
-                                if (d->scroll)
+                                }
+                                if (d->scroll) {
                                     scroll_loc = KexiMenuWidgetPrivate::QMenuScroller::ScrollTop;
+                                }
                                 next_i = 0;
                             }
                             QAction *next = actionsList.at(next_i);
-                            if (next == d->currentAction)
+                            if (next == d->currentAction) {
                                 break;
-                            if (d->actionRects.at(next_i).isNull())
+                            }
+                            if (d->actionRects.at(next_i).isNull()) {
                                 continue;
+                            }
                             if (next->isSeparator() ||
-                               (!next->isEnabled() &&
-                                !style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, this)))
+                                    (!next->isEnabled() &&
+                                     !style()->styleHint(QStyle::SH_Menu_AllowActiveAndDisabled, 0, this))) {
                                 continue;
+                            }
                             nextAction = next;
                             if (d->scroll && (d->scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollDown)) {
                                 int bottomVisible = height() - d->scrollerHeight();
-                                if (d->scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollUp)
+                                if (d->scroll->scrollFlags & KexiMenuWidgetPrivate::QMenuScroller::ScrollUp) {
                                     bottomVisible -= d->scrollerHeight();
-/*                                if (d->tearoff)
-                                    bottomVisible -= style()->pixelMetric(QStyle::PM_MenuTearoffHeight, 0, this);*/
-                                if ((y + d->scroll->scrollOffset + d->actionRects.at(next_i).height()) > bottomVisible)
+                                }
+                                /*                                if (d->tearoff)
+                                                                    bottomVisible -= style()->pixelMetric(QStyle::PM_MenuTearoffHeight, 0, this);*/
+                                if ((y + d->scroll->scrollOffset + d->actionRects.at(next_i).height()) > bottomVisible) {
                                     scroll_loc = KexiMenuWidgetPrivate::QMenuScroller::ScrollBottom;
+                                }
                             }
                             break;
                         }
@@ -2731,9 +2828,10 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
                 d->scroll->scrollTimer.stop();
                 d->scrollMenu(nextAction, scroll_loc);
             }
-            d->setCurrentAction(nextAction, /*popup*/-1, KexiMenuWidget::SelectedFromKeyboard);
+            d->setCurrentAction(nextAction, /*popup*/ -1, KexiMenuWidget::SelectedFromKeyboard);
         }
-        break; }
+        break;
+    }
 
     /*case Qt::Key_Right:
         if (d->currentAction && d->currentAction->isEnabled() && d->currentAction->menu()) {
@@ -2747,32 +2845,35 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
             QAction *nextAction = 0;
             if (key == Qt::Key_Left) {
                 QRect actionR = d->actionRect(d->currentAction);
-                for(int x = actionR.left()-1; !nextAction && x >= 0; x--)
+                for (int x = actionR.left() - 1; !nextAction && x >= 0; x--) {
                     nextAction = d->actionAt(QPoint(x, actionR.center().y()));
+                }
             } else {
                 QRect actionR = d->actionRect(d->currentAction);
-                for(int x = actionR.right()+1; !nextAction && x < width(); x++)
+                for (int x = actionR.right() + 1; !nextAction && x < width(); x++) {
                     nextAction = d->actionAt(QPoint(x, actionR.center().y()));
+                }
             }
             if (nextAction) {
-                d->setCurrentAction(nextAction, /*popup*/-1, KexiMenuWidget::SelectedFromKeyboard);
+                d->setCurrentAction(nextAction, /*popup*/ -1, KexiMenuWidget::SelectedFromKeyboard);
                 key_consumed = true;
             }
         }
-        if (!key_consumed && key == Qt::Key_Left && qobject_cast<KexiMenuWidget*>(d->causedPopup.widget)) {
+        if (!key_consumed && key == Qt::Key_Left && qobject_cast<KexiMenuWidget *>(d->causedPopup.widget)) {
             QPointer<QWidget> caused = d->causedPopup.widget;
             d->hideMenu(this);
-            if (caused)
+            if (caused) {
                 caused->setFocus();
+            }
             key_consumed = true;
         }
-        break; }
+        break;
+    }
 
     case Qt::Key_Alt:
 
         key_consumed = true;
-        if (style()->styleHint(QStyle::SH_MenuBar_AltKeyNavigation, 0, this))
-        {
+        if (style()->styleHint(QStyle::SH_MenuBar_AltKeyNavigation, 0, this)) {
             d->hideMenu(this);
         }
         break;
@@ -2789,8 +2890,9 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
         break;
 
     case Qt::Key_Space:
-        if (!style()->styleHint(QStyle::SH_Menu_SpaceActivatesItem, 0, this))
+        if (!style()->styleHint(QStyle::SH_Menu_SpaceActivatesItem, 0, this)) {
             break;
+        }
         // for motif, fall through
 #ifdef QT_KEYPAD_NAVIGATION
     case Qt::Key_Select:
@@ -2807,15 +2909,18 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
 
         if (d->currentAction->menu())
             ; /*d->popupAction(d->currentAction, 0, true);*/
-        else
+        else {
             d->activateAction(d->currentAction, QAction::Trigger);
+        }
         key_consumed = true;
-        break; }
+        break;
+    }
 
 #ifndef QT_NO_WHATSTHIS
     case Qt::Key_F1:
-        if (!d->currentAction || d->currentAction->whatsThis().isNull())
+        if (!d->currentAction || d->currentAction->whatsThis().isNull()) {
             break;
+        }
         QWhatsThis::enterWhatsThisMode();
         d->activateAction(d->currentAction, QAction::Trigger);
         return;
@@ -2826,24 +2931,26 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
 
     if (!key_consumed) {                                // send to menu bar
         if ((!e->modifiers() || e->modifiers() == Qt::AltModifier || e->modifiers() == Qt::ShiftModifier) &&
-           e->text().length()==1) {
+                e->text().length() == 1) {
             bool activateAction = false;
             QAction *nextAction = 0;
             if (style()->styleHint(QStyle::SH_Menu_KeyboardSearch, 0, this) && !e->modifiers()) {
                 int best_match_count = 0;
                 d->searchBufferTimer.start(2000, this);
                 d->searchBuffer += e->text();
-                for(int i = 0; i < actionsList.size(); ++i) {
+                for (int i = 0; i < actionsList.size(); ++i) {
                     int match_count = 0;
-                    if (d->actionRects.at(i).isNull())
+                    if (d->actionRects.at(i).isNull()) {
                         continue;
+                    }
                     QAction *act = actionsList.at(i);
                     const QString act_text = act->text();
-                    for(int c = 0; c < d->searchBuffer.size(); ++c) {
-                        if(act_text.indexOf(d->searchBuffer.at(c), 0, Qt::CaseInsensitive) != -1)
+                    for (int c = 0; c < d->searchBuffer.size(); ++c) {
+                        if (act_text.indexOf(d->searchBuffer.at(c), 0, Qt::CaseInsensitive) != -1) {
                             ++match_count;
+                        }
                     }
-                    if(match_count > best_match_count) {
+                    if (match_count > best_match_count) {
                         best_match_count = match_count;
                         nextAction = act;
                     }
@@ -2854,36 +2961,42 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
                 int clashCount = 0;
                 QAction *first = 0, *currentSelected = 0, *firstAfterCurrent = 0;
                 QChar c = e->text().at(0).toUpper();
-                for(int i = 0; i < actionsList.size(); ++i) {
-                    if (d->actionRects.at(i).isNull())
+                for (int i = 0; i < actionsList.size(); ++i) {
+                    if (d->actionRects.at(i).isNull()) {
                         continue;
+                    }
                     QAction *act = actionsList.at(i);
                     QKeySequence sequence = QKeySequence::mnemonic(act->text());
                     int key = sequence[0] & 0xffff;
                     if (key == c.unicode()) {
                         clashCount++;
-                        if (!first)
+                        if (!first) {
                             first = act;
-                        if (act == d->currentAction)
+                        }
+                        if (act == d->currentAction) {
                             currentSelected = act;
-                        else if (!firstAfterCurrent && currentSelected)
+                        } else if (!firstAfterCurrent && currentSelected) {
                             firstAfterCurrent = act;
+                        }
                     }
                 }
-                if (clashCount == 1)
+                if (clashCount == 1) {
                     activateAction = true;
+                }
                 if (clashCount >= 1) {
-                    if (clashCount == 1 || !currentSelected || !firstAfterCurrent)
+                    if (clashCount == 1 || !currentSelected || !firstAfterCurrent) {
                         nextAction = first;
-                    else
+                    } else {
                         nextAction = firstAfterCurrent;
+                    }
                 }
             }
 #endif
             if (nextAction) {
                 key_consumed = true;
-                if(d->scroll)
+                if (d->scroll) {
                     d->scrollMenu(nextAction, KexiMenuWidgetPrivate::QMenuScroller::ScrollCenter, false);
+                }
                 d->setCurrentAction(nextAction, 20, KexiMenuWidget::SelectedFromElsewhere, true);
                 if (!nextAction->menu() && activateAction) {
                     d->setSyncAction();
@@ -2895,14 +3008,16 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
         }
 
 #ifdef Q_OS_WIN32
-        if (key_consumed && (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift || e->key() == Qt::Key_Meta))
+        if (key_consumed && (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift || e->key() == Qt::Key_Meta)) {
             QApplication::beep();
+        }
 #endif // Q_OS_WIN32
     }
-    if (key_consumed)
+    if (key_consumed) {
         e->accept();
-    else
+    } else {
         e->ignore();
+    }
 }
 
 /*!
@@ -2910,26 +3025,29 @@ void KexiMenuWidget::keyPressEvent(QKeyEvent *e)
 */
 void KexiMenuWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    if (!isVisible() || d->aboutToHide || d->mouseEventTaken(e))
+    if (!isVisible() || d->aboutToHide || d->mouseEventTaken(e)) {
         return;
+    }
     d->motions++;
-    if (d->motions == 0) // ignore first mouse move event (see enterEvent())
+    if (d->motions == 0) { // ignore first mouse move event (see enterEvent())
         return;
+    }
     d->hasHadMouse = d->hasHadMouse || rect().contains(e->pos());
 
     QAction *action = d->actionAt(e->pos());
     if (!action) {
         if (d->hasHadMouse
-            && (!d->currentAction
-                || !(d->currentAction->menu() && d->currentAction->menu()->isVisible())))
+                && (!d->currentAction
+                    || !(d->currentAction->menu() && d->currentAction->menu()->isVisible()))) {
             d->setCurrentAction(0);
+        }
         return;
-    } else if(e->buttons()) {
+    } else if (e->buttons()) {
         d->mouseDown = this;
     }
     if (d->sloppyRegion.contains(e->pos())) {
         d->sloppyAction = action;
-        KexiMenuWidgetPrivate::sloppyDelayTimer = startTimer(style()->styleHint(QStyle::SH_Menu_SubMenuPopupDelay, 0, this)*6);
+        KexiMenuWidgetPrivate::sloppyDelayTimer = startTimer(style()->styleHint(QStyle::SH_Menu_SubMenuPopupDelay, 0, this) * 6);
     } else {
         d->setCurrentAction(action, style()->styleHint(QStyle::SH_Menu_SubMenuPopupDelay, 0, this));
     }
@@ -2949,10 +3067,12 @@ void KexiMenuWidget::enterEvent(QEvent *)
 void KexiMenuWidget::leaveEvent(QEvent *)
 {
     d->sloppyAction = 0;
-    if (!d->sloppyRegion.isEmpty())
+    if (!d->sloppyRegion.isEmpty()) {
         d->sloppyRegion = QRegion();
-    if (!d->activeMenu && d->currentAction)
+    }
+    if (!d->activeMenu && d->currentAction) {
         setActiveAction(0);
+    }
 }
 
 /*!
@@ -2963,16 +3083,17 @@ KexiMenuWidget::timerEvent(QTimerEvent *e)
 {
     if (d->scroll && d->scroll->scrollTimer.timerId() == e->timerId()) {
         d->scrollMenu((KexiMenuWidgetPrivate::QMenuScroller::ScrollDirection)d->scroll->scrollDirection);
-        if (d->scroll->scrollFlags == KexiMenuWidgetPrivate::QMenuScroller::ScrollNone)
+        if (d->scroll->scrollFlags == KexiMenuWidgetPrivate::QMenuScroller::ScrollNone) {
             d->scroll->scrollTimer.stop();
+        }
     }/* else if(d->menuDelayTimer.timerId() == e->timerId()) {
         d->menuDelayTimer.stop();
         internalDelayedPopup();
-    }*/ else if(KexiMenuWidgetPrivate::sloppyDelayTimer == e->timerId()) {
+    }*/ else if (KexiMenuWidgetPrivate::sloppyDelayTimer == e->timerId()) {
         killTimer(KexiMenuWidgetPrivate::sloppyDelayTimer);
         KexiMenuWidgetPrivate::sloppyDelayTimer = 0;
         internalSetSloppyAction();
-    } else if(d->searchBufferTimer.timerId() == e->timerId()) {
+    } else if (d->searchBufferTimer.timerId() == e->timerId()) {
         d->searchBuffer.clear();
     }
 }
@@ -2989,16 +3110,19 @@ void KexiMenuWidget::actionEvent(QActionEvent *e)
         connect(e->action(), SIGNAL(hovered()), this, SLOT(actionHovered()));
         if (QWidgetAction *wa = qobject_cast<QWidgetAction *>(e->action())) {
             QWidget *widget = wa->requestWidget(this);
-            if (widget)
+            if (widget) {
                 d->widgetItems.insert(wa, widget);
+            }
         }
     } else if (e->type() == QEvent::ActionRemoved) {
         e->action()->disconnect(this);
-        if (e->action() == d->currentAction)
+        if (e->action() == d->currentAction) {
             d->currentAction = 0;
+        }
         if (QWidgetAction *wa = qobject_cast<QWidgetAction *>(e->action())) {
-            if (QWidget *widget = d->widgetItems.value(wa))
+            if (QWidget *widget = d->widgetItems.value(wa)) {
                 wa->releaseWidget(widget);
+            }
         }
         d->widgetItems.remove(e->action());
     }
@@ -3015,8 +3139,9 @@ void KexiMenuWidget::actionEvent(QActionEvent *e)
 */
 void KexiMenuWidget::internalSetSloppyAction()
 {
-    if (d->sloppyAction)
+    if (d->sloppyAction) {
         d->setCurrentAction(d->sloppyAction, 0);
+    }
 }
 
 #if 0
@@ -3032,8 +3157,9 @@ void KexiMenuWidget::internalDelayedPopup()
     }
 
     if (!d->currentAction || !d->currentAction->isEnabled() || !d->currentAction->menu() ||
-        !d->currentAction->menu()->isEnabled() || d->currentAction->menu()->isVisible())
+            !d->currentAction->menu()->isEnabled() || d->currentAction->menu()->isVisible()) {
         return;
+    }
 
     //setup
     d->activeMenu = d->currentAction->menu();
@@ -3047,23 +3173,25 @@ void KexiMenuWidget::internalDelayedPopup()
     const QPoint leftPos(mapToGlobal(QPoint(actionRect.left() - subMenuOffset - menuSize.width(), actionRect.top())));
 
     QPoint pos(rightPos);
-    KexiMenuWidget *caused = qobject_cast<KexiMenuWidget*>(d->activeMenu->causedPopup().widget);
+    KexiMenuWidget *caused = qobject_cast<KexiMenuWidget *>(d->activeMenu->causedPopup().widget);
 
     const QRect availGeometry(d->popupGeometry(caused));
     if (isRightToLeft()) {
         pos = leftPos;
         if ((caused && caused->x() < x()) || pos.x() < availGeometry.left()) {
-            if(rightPos.x() + menuSize.width() < availGeometry.right())
+            if (rightPos.x() + menuSize.width() < availGeometry.right()) {
                 pos = rightPos;
-            else
+            } else {
                 pos.rx() = availGeometry.left();
+            }
         }
     } else {
         if ((caused && caused->x() > x()) || pos.x() + menuSize.width() > availGeometry.right()) {
-            if(leftPos.x() < availGeometry.left())
+            if (leftPos.x() < availGeometry.left()) {
                 pos.rx() = availGeometry.right() - menuSize.width();
-            else
+            } else {
                 pos = leftPos;
+            }
         }
     }
 
@@ -3082,8 +3210,9 @@ void KexiMenuWidget::internalDelayedPopup()
                 pts[2] = QPoint(pos.x() + menuSize.width(), pos.y() + menuSize.height());
             }
             QPolygon points(4);
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++) {
                 points.setPoint(i, mapFromGlobal(pts[i]));
+            }
             d->sloppyRegion = QRegion(points);
         }
     }
@@ -3123,8 +3252,9 @@ bool KexiMenuWidget::separatorsCollapsible() const
 
 void KexiMenuWidget::setSeparatorsCollapsible(bool collapse)
 {
-    if (d->collapsibleSeparators == collapse)
+    if (d->collapsibleSeparators == collapse) {
         return;
+    }
 
     d->collapsibleSeparators = collapse;
     d->itemsDirty = 1;

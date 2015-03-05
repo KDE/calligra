@@ -22,7 +22,6 @@
 
 #include <klocale.h>
 
-
 KisImageLockCommand::KisImageLockCommand(KisImageWSP image, bool lockImage)
     : KisImageCommand(kundo2_noi18n("lock image"), image)
 {

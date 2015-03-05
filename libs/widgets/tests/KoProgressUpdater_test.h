@@ -29,8 +29,8 @@ class KoProgressUpdaterTest : public QObject
 
 public Q_SLOTS:
 
-    void jobDone(ThreadWeaver::Job* );
-    
+    void jobDone(ThreadWeaver::Job *);
+
 private Q_SLOTS:
 
     void testCreation();

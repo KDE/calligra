@@ -26,7 +26,7 @@
 
 //! @short Frame widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame,
-                                       public KFormDesigner::FormWidgetInterface
+    public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
 //! @todo Q_ENUMS( Shape Shadow )
@@ -35,7 +35,7 @@ class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame,
 //! @todo Q_PROPERTY( Shadow frameShadow READ frameShadow WRITE setFrameShadow )
 
 public:
-    explicit KexiFrame(QWidget * parent, Qt::WindowFlags f = 0);
+    explicit KexiFrame(QWidget *parent, Qt::WindowFlags f = 0);
     virtual ~KexiFrame();
 
     virtual QColor frameColor() const;
@@ -68,7 +68,7 @@ public:
 
 public Q_SLOTS:
     virtual void setPalette(const QPalette &pal);
-    virtual void setFrameColor(const QColor& color);
+    virtual void setFrameColor(const QColor &color);
 
 Q_SIGNALS:
     //! Needed to control dragging over the container's surface
@@ -84,7 +84,7 @@ protected:
     void paintEvent(QPaintEvent *pe);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

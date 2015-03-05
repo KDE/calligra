@@ -25,7 +25,6 @@
 
 class QWidget;
 
-
 class KisScratchPadEventFilter : public QObject
 {
     Q_OBJECT
@@ -43,9 +42,9 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
 private:
-    inline QWidget* parentWidget();
-    inline KoPointerEvent* createMouseEvent(QEvent *event);
-    inline KoPointerEvent* createTabletEvent(QEvent *event);
+    inline QWidget *parentWidget();
+    inline KoPointerEvent *createMouseEvent(QEvent *event);
+    inline KoPointerEvent *createTabletEvent(QEvent *event);
 
 private:
     QTransform m_widgetToDocument;

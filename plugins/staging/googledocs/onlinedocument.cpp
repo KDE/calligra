@@ -44,7 +44,7 @@ OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
     setComponentData(OnlineDocumentFactory::componentData());
 
     KAction *action  = new KAction(i18n("&Google Online Document..."), this);
-    actionCollection()->addAction("google_docs", action );
+    actionCollection()->addAction("google_docs", action);
     connect(action, SIGNAL(triggered(bool)), SLOT(slotOnlineDocument()));
 
     const KAboutData *about = KCmdLineArgs::aboutData();
@@ -73,7 +73,7 @@ void OnlineDocument::slotOnlineDocument()
         m_login = new LoginWindow(m_type);
         if (QDialog::Accepted == m_login->exec()) {
             connect(m_login->googleService(), SIGNAL(receivedDocument(QString)), this,
-                    SLOT(receivedOnlineDocument(QString )));
+                    SLOT(receivedOnlineDocument(QString)));
         } else {
             delete m_login;
             m_login = 0;

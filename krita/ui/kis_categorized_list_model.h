@@ -43,24 +43,29 @@ public:
 
 private Q_SLOTS:
 
-    void slotRowChanged(int row) {
+    void slotRowChanged(int row)
+    {
         QModelIndex changedIndex(index(row));
         emit dataChanged(changedIndex, changedIndex);
     }
 
-    void slotBeginInsertRow(int row) {
+    void slotBeginInsertRow(int row)
+    {
         beginInsertRows(QModelIndex(), row, row);
     }
 
-    void slotEndInsertRow() {
+    void slotEndInsertRow()
+    {
         endInsertRows();
     }
 
-    void slotBeginRemoveRow(int row) {
+    void slotBeginRemoveRow(int row)
+    {
         beginRemoveRows(QModelIndex(), row, row);
     }
 
-    void slotEndRemoveRow() {
+    void slotEndRemoveRow()
+    {
         endRemoveRows();
     }
 };
@@ -84,13 +89,17 @@ public:
         connect(&m_mapper, SIGNAL(endRemoveRow()), SLOT(slotEndRemoveRow()));
     }
 
-    int rowCount(const QModelIndex& parent) const {
+    int rowCount(const QModelIndex &parent) const
+    {
         Q_UNUSED(parent);
         return m_mapper.rowCount();
     }
 
-    QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const {
-        if (!idx.isValid()) return QVariant();
+    QVariant data(const QModelIndex &idx, int role = Qt::DisplayRole) const
+    {
+        if (!idx.isValid()) {
+            return QVariant();
+        }
 
         typename SpecificCategoriesMapper::DataItem *item =
             m_mapper.itemFromRow(idx.row());
@@ -120,8 +129,11 @@ public:
         return QVariant();
     }
 
-    bool setData(const QModelIndex& idx, const QVariant& value, int role = Qt::EditRole) {
-        if (!idx.isValid()) return false;
+    bool setData(const QModelIndex &idx, const QVariant &value, int role = Qt::EditRole)
+    {
+        if (!idx.isValid()) {
+            return false;
+        }
 
         typename SpecificCategoriesMapper::DataItem *item =
             m_mapper.itemFromRow(idx.row());
@@ -141,8 +153,11 @@ public:
         return true;
     }
 
-    Qt::ItemFlags flags(const QModelIndex& idx) const {
-        if (!idx.isValid()) return Qt::NoItemFlags;
+    Qt::ItemFlags flags(const QModelIndex &idx) const
+    {
+        if (!idx.isValid()) {
+            return Qt::NoItemFlags;
+        }
 
         typename SpecificCategoriesMapper::DataItem *item =
             m_mapper.itemFromRow(idx.row());
@@ -165,16 +180,20 @@ public:
         return flags;
     }
 
-    QModelIndex indexOf(const TEntry& entry) const {
+    QModelIndex indexOf(const TEntry &entry) const
+    {
         typename SpecificCategoriesMapper::DataItem *item =
             m_mapper.fetchOneEntry(entry);
 
         return index(m_mapper.rowFromItem(item));
     }
 
-    bool entryAt(TEntry& entry, QModelIndex index) const {
+    bool entryAt(TEntry &entry, QModelIndex index) const
+    {
         int row = index.row();
-        if (row < 0 || row >= m_mapper.rowCount()) return false;
+        if (row < 0 || row >= m_mapper.rowCount()) {
+            return false;
+        }
 
         typename SpecificCategoriesMapper::DataItem *item =
             m_mapper.itemFromRow(row);
@@ -187,11 +206,13 @@ public:
         return false;
     }
 
-    SpecificCategoriesMapper* categoriesMapper() {
+    SpecificCategoriesMapper *categoriesMapper()
+    {
         return &m_mapper;
     }
 
-    const SpecificCategoriesMapper* categoriesMapper() const {
+    const SpecificCategoriesMapper *categoriesMapper() const
+    {
         return &m_mapper;
     }
 
@@ -211,18 +232,21 @@ public:
     {
     }
 
-    QModelIndex indexOf(const Entry_Type& entry) const {
+    QModelIndex indexOf(const Entry_Type &entry) const
+    {
         QModelIndex srcIndex = m_model->indexOf(entry);
         return mapFromSource(srcIndex);
     }
 
-    bool entryAt(Entry_Type &entry, QModelIndex index) const {
+    bool entryAt(Entry_Type &entry, QModelIndex index) const
+    {
         QModelIndex srcIndex = mapToSource(index);
         return m_model->entryAt(entry, srcIndex);
     }
 
 protected:
-    void initializeModel(TModel *model) {
+    void initializeModel(TModel *model)
+    {
         m_model = model;
         setSourceModel(model);
         setSortRole(TModel::SortRole);
@@ -230,7 +254,8 @@ protected:
 
     bool lessThanPriority(const QModelIndex &left,
                           const QModelIndex &right,
-                          const QString &priorityCategory) const {
+                          const QString &priorityCategory) const
+    {
 
         QString leftKey = sourceModel()->data(left, sortRole()).toString();
         QString rightKey = sourceModel()->data(right, sortRole()).toString();
@@ -239,7 +264,7 @@ protected:
         bool rightIsSpecial = rightKey.startsWith(priorityCategory);
 
         return leftIsSpecial != rightIsSpecial ?
-            leftIsSpecial : leftKey < rightKey;
+               leftIsSpecial : leftKey < rightKey;
     }
 
 private:

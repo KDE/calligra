@@ -45,24 +45,26 @@ const char ooNS::dc[] = "http://purl.org/dc/elements/1.1/";
 const char ooNS::meta[] = "http://openoffice.org/2000/meta";
 const char ooNS::config[] = "http://openoffice.org/2001/config";
 
-QString OoUtils::expandWhitespace(const KoXmlElement& tag)
+QString OoUtils::expandWhitespace(const KoXmlElement &tag)
 {
     //tags like <text:s text:c="4">
 
     int howmany = 1;
-    if (tag.hasAttributeNS(ooNS::text, "c"))
+    if (tag.hasAttributeNS(ooNS::text, "c")) {
         howmany = tag.attributeNS(ooNS::text, "c", QString()).toInt();
+    }
 
     QString result;
     return result.fill(32, howmany);
 }
 
-bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QColor * color)
+bool OoUtils::parseBorder(const QString &tag, double *width, int *style, QColor *color)
 {
     //string like "0.088cm solid #800000"
 
-    if (tag.isEmpty() || tag == "none" || tag == "hidden") // in fact no border
+    if (tag.isEmpty() || tag == "none" || tag == "hidden") { // in fact no border
         return false;
+    }
 
     QString _width = tag.section(' ', 0, 0);
     QString _style = tag.section(' ', 1, 1);
@@ -70,28 +72,30 @@ bool OoUtils::parseBorder(const QString & tag, double * width, int * style, QCol
 
     *width = KoUnit::parseValue(_width, 1.0);
 
-    if (_style == "dashed")
+    if (_style == "dashed") {
         *style = 1;
-    else if (_style == "dotted")
+    } else if (_style == "dotted") {
         *style = 2;
-    else if (_style == "dot-dash")   // not in xsl/fo, but in OASIS (in other places)
+    } else if (_style == "dot-dash") { // not in xsl/fo, but in OASIS (in other places)
         *style = 3;
-    else if (_style == "dot-dot-dash")   // not in xsl/fo, but in OASIS (in other places)
+    } else if (_style == "dot-dot-dash") { // not in xsl/fo, but in OASIS (in other places)
         *style = 4;
-    else if (_style == "double")
+    } else if (_style == "double") {
         *style = 5;
-    else
+    } else {
         *style = 0;
+    }
 
-    if (_color.isEmpty())
+    if (_color.isEmpty()) {
         *color = QColor();
-    else
+    } else {
         color->setNamedColor(_color);
+    }
 
     return true;
 }
 
-void OoUtils::importIndents(QDomElement& parentElement, const KoStyleStack& styleStack)
+void OoUtils::importIndents(QDomElement &parentElement, const KoStyleStack &styleStack)
 {
     if (styleStack.hasProperty(ooNS::fo, "margin-left") ||    // 3.11.19
             styleStack.hasProperty(ooNS::fo, "margin-right"))
@@ -104,37 +108,42 @@ void OoUtils::importIndents(QDomElement& parentElement, const KoStyleStack& styl
             // ### "indented by a value that is based on the current font size"
             // ### and "requires margin-left and margin-right
             // ### but how much is the indent?
+        {
             first = 10;
-        else if (styleStack.hasProperty(ooNS::fo, "text-indent"))
+        } else if (styleStack.hasProperty(ooNS::fo, "text-indent")) {
             first = KoUnit::parseValue(styleStack.property(ooNS::fo, "text-indent"));
+        }
 
         if (marginLeft != 0 || marginRight != 0 || first != 0) {
             QDomElement indent = parentElement.ownerDocument().createElement("INDENTS");
-            if (marginLeft != 0)
+            if (marginLeft != 0) {
                 indent.setAttribute("left", marginLeft);
-            if (marginRight != 0)
+            }
+            if (marginRight != 0) {
                 indent.setAttribute("right", marginRight);
-            if (first != 0)
+            }
+            if (first != 0) {
                 indent.setAttribute("first", first);
+            }
             parentElement.appendChild(indent);
         }
     }
 }
 
-void OoUtils::importLineSpacing(QDomElement& parentElement, const KoStyleStack& styleStack)
+void OoUtils::importLineSpacing(QDomElement &parentElement, const KoStyleStack &styleStack)
 {
     if (styleStack.hasProperty(ooNS::fo, "line-height")) {
         // Fixed line height
         QString value = styleStack.property(ooNS::fo, "line-height");   // 3.11.1
         if (value != "normal") {
             QDomElement lineSpacing = parentElement.ownerDocument().createElement("LINESPACING");
-            if (value == "100%")
+            if (value == "100%") {
                 lineSpacing.setAttribute("type", "single");
-            else if (value == "150%")
+            } else if (value == "150%") {
                 lineSpacing.setAttribute("type", "oneandhalf");
-            else if (value == "200%")
+            } else if (value == "200%") {
                 lineSpacing.setAttribute("type", "double");
-            else if (value.contains('%')) {
+            } else if (value.contains('%')) {
                 double percent = value.toDouble();
                 lineSpacing.setAttribute("type", "multiple");
                 lineSpacing.setAttribute("spacingvalue", percent / 100);
@@ -170,7 +179,7 @@ void OoUtils::importLineSpacing(QDomElement& parentElement, const KoStyleStack& 
 
 }
 
-void OoUtils::importTopBottomMargin(QDomElement& parentElement, const KoStyleStack& styleStack)
+void OoUtils::importTopBottomMargin(QDomElement &parentElement, const KoStyleStack &styleStack)
 {
     if (styleStack.hasProperty(ooNS::fo, "margin-top") ||  // 3.11.22
             styleStack.hasProperty(ooNS::fo, "margin-bottom")) {
@@ -178,19 +187,22 @@ void OoUtils::importTopBottomMargin(QDomElement& parentElement, const KoStyleSta
         double mbottom = KoUnit::parseValue(styleStack.property(ooNS::fo, "margin-bottom"));
         if (mtop != 0 || mbottom != 0) {
             QDomElement offset = parentElement.ownerDocument().createElement("OFFSETS");
-            if (mtop != 0)
+            if (mtop != 0) {
                 offset.setAttribute("before", mtop);
-            if (mbottom != 0)
+            }
+            if (mbottom != 0) {
                 offset.setAttribute("after", mbottom);
+            }
             parentElement.appendChild(offset);
         }
     }
 }
 
-void OoUtils::importTabulators(QDomElement& parentElement, const KoStyleStack& styleStack)
+void OoUtils::importTabulators(QDomElement &parentElement, const KoStyleStack &styleStack)
 {
-    if (!styleStack.hasChildNode(ooNS::style, "tab-stops"))     // 3.11.10
+    if (!styleStack.hasChildNode(ooNS::style, "tab-stops")) {   // 3.11.10
         return;
+    }
     KoXmlElement tabStops = styleStack.childNode(ooNS::style, "tab-stops");
     //kDebug(30519) << tabStops.childNodes().count() <<" tab stops in layout.";
     for (KoXmlNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling()) {
@@ -201,13 +213,13 @@ void OoUtils::importTabulators(QDomElement& parentElement, const KoStyleStack& s
 
         QDomElement elem = parentElement.ownerDocument().createElement("TABULATOR");
         int calligraType = 0;
-        if (type == "left")
+        if (type == "left") {
             calligraType = 0;
-        else if (type == "center")
+        } else if (type == "center") {
             calligraType = 1;
-        else if (type == "right")
+        } else if (type == "right") {
             calligraType = 2;
-        else if (type == "char") {
+        } else if (type == "char") {
             QString delimiterChar = tabStop.attributeNS(ooNS::style, "char", QString());   // single character
             elem.setAttribute("alignchar", delimiterChar);
             calligraType = 3; // "alignment on decimal point"
@@ -242,7 +254,7 @@ void OoUtils::importTabulators(QDomElement& parentElement, const KoStyleStack& s
 
 }
 
-void OoUtils::importBorders(QDomElement& parentElement, const KoStyleStack& styleStack)
+void OoUtils::importBorders(QDomElement &parentElement, const KoStyleStack &styleStack)
 {
     if (styleStack.hasProperty(ooNS::fo, "border", "left")) {
         double width;
@@ -313,45 +325,46 @@ void OoUtils::importBorders(QDomElement& parentElement, const KoStyleStack& styl
     }
 }
 
-void OoUtils::importUnderline(const QString& in, QString& underline, QString& styleline)
+void OoUtils::importUnderline(const QString &in, QString &underline, QString &styleline)
 {
     underline = "single";
-    if (in == "none")
+    if (in == "none") {
         underline = "0";
-    else if (in == "single")
+    } else if (in == "single") {
         styleline = "solid";
-    else if (in == "double") {
+    } else if (in == "double") {
         underline = in;
         styleline = "solid";
-    } else if (in == "dotted" || in == "bold-dotted")  // bold-dotted not in libkotext
+    } else if (in == "dotted" || in == "bold-dotted") { // bold-dotted not in libkotext
         styleline = "dot";
-    else if (in == "dash"
-             // those are not in libkotext:
-             || in == "long-dash"
-             || in == "bold-dash"
-             || in == "bold-long-dash"
-            )
+    } else if (in == "dash"
+               // those are not in libkotext:
+               || in == "long-dash"
+               || in == "bold-dash"
+               || in == "bold-long-dash"
+              ) {
         styleline = "dash";
-    else if (in == "dot-dash"
-             || in == "bold-dot-dash") // not in libkotext
-        styleline = "dashdot"; // tricky ;)
-    else if (in == "dot-dot-dash"
-             || in == "bold-dot-dot-dash") // not in libkotext
-        styleline = "dashdotdot"; // this is getting fun...
-    else if (in == "wave"
-             || in == "bold-wave" // not in libkotext
-             || in == "double-wave" // not in libkotext
-             || in == "small-wave") { // not in libkotext
+    } else if (in == "dot-dash"
+               || in == "bold-dot-dash") { // not in libkotext
+        styleline = "dashdot";    // tricky ;)
+    } else if (in == "dot-dot-dash"
+               || in == "bold-dot-dot-dash") { // not in libkotext
+        styleline = "dashdotdot";    // this is getting fun...
+    } else if (in == "wave"
+               || in == "bold-wave" // not in libkotext
+               || in == "double-wave" // not in libkotext
+               || in == "small-wave") { // not in libkotext
         underline = in;
         styleline = "solid";
     } else if (in == "bold") {
         underline = "single-bold";
         styleline = "solid";
-    } else
+    } else {
         kWarning(30519) << " unsupported text-underline value: " << in;
+    }
 }
 
-void OoUtils::importTextPosition(const QString& text_position, QString& value, QString& relativetextsize)
+void OoUtils::importTextPosition(const QString &text_position, QString &value, QString &relativetextsize)
 {
     //OO: <vertical position (% or sub or super)> [<size as %>]
     //Examples: "super" or "super 58%" or "82% 58%" (where 82% is the vertical position)
@@ -361,10 +374,12 @@ void OoUtils::importTextPosition(const QString& text_position, QString& value, Q
         QString textPos = lst.front().trimmed();
         QString textSize;
         lst.pop_front();
-        if (!lst.isEmpty())
+        if (!lst.isEmpty()) {
             textSize = lst.front().trimmed();
-        if (!lst.isEmpty())
+        }
+        if (!lst.isEmpty()) {
             kWarning(30519) << "Strange text position: " << text_position;
+        }
         bool super = textPos == "super";
         bool sub = textPos == "sub";
         if (textPos.endsWith(QLatin1Char('%'))) {
@@ -372,33 +387,37 @@ void OoUtils::importTextPosition(const QString& text_position, QString& value, Q
             // This is where we interpret the text position into kotext's simpler
             // "super" or "sub".
             double val = textPos.toDouble();
-            if (val > 0)
+            if (val > 0) {
                 super = true;
-            else if (val < 0)
+            } else if (val < 0) {
                 sub = true;
+            }
         }
-        if (super)
+        if (super) {
             value = "2";
-        else if (sub)
+        } else if (sub) {
             value = "1";
-        else
+        } else {
             value = "0";
+        }
         if (!textSize.isEmpty() && textSize.endsWith(QLatin1Char('%'))) {
             textSize.chop(1);
             double textSizeValue = textSize.toDouble() / 100; // e.g. 0.58
             relativetextsize = QString::number(textSizeValue);
         }
-    } else
+    } else {
         value = "0";
+    }
 }
 
-void OoUtils::createDocumentInfo(KoXmlDocument &_meta, QDomDocument & docinfo)
+void OoUtils::createDocumentInfo(KoXmlDocument &_meta, QDomDocument &docinfo)
 {
     KoXmlNode meta   = KoXml::namedItemNS(_meta, ooNS::office, "document-meta");
     KoXmlNode office = KoXml::namedItemNS(meta, ooNS::office, "meta");
 
-    if (office.isNull())
+    if (office.isNull()) {
         return;
+    }
     QDomElement elementDocInfo  = docinfo.documentElement();
 
     KoXmlElement e = KoXml::namedItemNS(office, ooNS::dc, "creator");
@@ -457,7 +476,7 @@ void OoUtils::createDocumentInfo(KoXmlDocument &_meta, QDomDocument & docinfo)
     }
 }
 
-KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& fileName, KoXmlDocument& doc, KoStore* store)
+KoFilter::ConversionStatus OoUtils::loadAndParse(const QString &fileName, KoXmlDocument &doc, KoStore *store)
 {
     kDebug(30518) << "loadAndParse: Trying to open" << fileName;
 
@@ -471,15 +490,15 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& fileName, KoXmlD
 
 }
 
-KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, KoXmlDocument& doc, const QString & fileName)
+KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice *io, KoXmlDocument &doc, const QString &fileName)
 {
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
     if (!doc.setContent(io, &errorMsg, &errorLine, &errorColumn)) {
         kError(30519) << "Parsing error in " << fileName << "! Aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg << endl;
+                      << " In line: " << errorLine << ", column: " << errorColumn << endl
+                      << " Error message: " << errorMsg << endl;
         return KoFilter::ParsingError;
     }
 
@@ -488,7 +507,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, KoXmlDocument& d
     return KoFilter::OK;
 }
 
-KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlDocument& doc, KZip* zip)
+KoFilter::ConversionStatus OoUtils::loadAndParse(const QString &filename, KoXmlDocument &doc, KZip *zip)
 {
     kDebug(30519) << "Trying to open" << filename;
 
@@ -497,7 +516,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlD
         return KoFilter::CreationError; // Should not happen
     }
 
-    const KArchiveEntry* entry = zip->directory()->entry(filename);
+    const KArchiveEntry *entry = zip->directory()->entry(filename);
     if (!entry) {
         kWarning(30519) << "Entry " << filename << " not found!";
         return KoFilter::FileNotFound;
@@ -506,15 +525,15 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlD
         kWarning(30519) << "Entry " << filename << " is a directory!";
         return KoFilter::WrongFormat;
     }
-    const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
+    const KZipFileEntry *f = static_cast<const KZipFileEntry *>(entry);
     kDebug(30519) << "Entry" << filename << " has size" << f->size();
-    QIODevice* io = f->createDevice();
+    QIODevice *io = f->createDevice();
     KoFilter::ConversionStatus convertStatus = loadAndParse(io, doc, filename);
     delete io;
     return convertStatus;
 }
 
-KoFilter::ConversionStatus OoUtils::loadThumbnail(QImage& thumbnail, KZip* zip)
+KoFilter::ConversionStatus OoUtils::loadThumbnail(QImage &thumbnail, KZip *zip)
 {
     const QString filename("Thumbnails/thumbnail.png");
     kDebug(30519) << "Trying to open thumbnail" << filename;
@@ -524,7 +543,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail(QImage& thumbnail, KZip* zip)
         return KoFilter::CreationError; // Should not happen
     }
 
-    const KArchiveEntry* entry = zip->directory()->entry(filename);
+    const KArchiveEntry *entry = zip->directory()->entry(filename);
     if (!entry) {
         kWarning(30519) << "Entry " << filename << " not found!";
         return KoFilter::FileNotFound;
@@ -533,8 +552,8 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail(QImage& thumbnail, KZip* zip)
         kWarning(30519) << "Entry " << filename << " is a directory!";
         return KoFilter::WrongFormat;
     }
-    const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
-    QIODevice* io = f->createDevice();
+    const KZipFileEntry *f = static_cast<const KZipFileEntry *>(entry);
+    QIODevice *io = f->createDevice();
     kDebug(30519) << "Entry" << filename << " has size" << f->size();
 
     if (! io->open(QIODevice::ReadOnly)) {

@@ -29,7 +29,8 @@
  * The mpadded element adjusts the space around a sequence of elements.
  * Therefore it just implements the layout() method.
  */
-class KOFORMULA_EXPORT PaddedElement : public RowElement {
+class KOFORMULA_EXPORT PaddedElement : public RowElement
+{
 public:
     /// The standart constructor
     explicit PaddedElement(BasicElement *parent = 0);
@@ -38,10 +39,10 @@ public:
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout(const AttributeManager *am);
 
     /// @return The element's ElementType
-    ElementType elementType() const;   
+    ElementType elementType() const;
 };
 
 #endif // PADDEDELEMENT_H

@@ -53,7 +53,7 @@ public:
      * Creates a new gradient tab widget with the given parent.
      * @param parent the widgets parent
      */
-    explicit KarbonGradientEditWidget(QWidget* parent = 0L);
+    explicit KarbonGradientEditWidget(QWidget *parent = 0L);
 
     /// Destroys the widget
     virtual ~KarbonGradientEditWidget();
@@ -62,7 +62,7 @@ public:
      * Sets a new gradient to edit.
      * @param gradient the gradient to edit
      */
-    void setGradient(const QGradient & gradient);
+    void setGradient(const QGradient &gradient);
 
     /// Returns the gradient target (fill/stroke)
     GradientTarget target();

@@ -24,16 +24,15 @@
 #include <KoResource.h>
 #include <KoResourceServerAdapter.h>
 
-
 KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
-        : KisPopupButton(parent)
+    : KisPopupButton(parent)
 {
     setObjectName(name);
     m_resource = 0;
     setFixedSize(QSize(26, 26));
 }
 
-void KisIconWidget::slotSetItem(KoResource * resource)
+void KisIconWidget::slotSetItem(KoResource *resource)
 {
     m_resource = resource;
     update();
@@ -59,10 +58,10 @@ void KisIconWidget::setResourceAdapter(QSharedPointer<KoAbstractResourceServerAd
 {
     Q_ASSERT(adapter);
     adapter->connectToResourceServer();
-    connect(adapter.data(), SIGNAL(resourceChanged(KoResource*)), this, SLOT(slotAdapterResourceChanged(KoResource*)));
+    connect(adapter.data(), SIGNAL(resourceChanged(KoResource *)), this, SLOT(slotAdapterResourceChanged(KoResource *)));
 }
 
-void KisIconWidget::slotAdapterResourceChanged(KoResource* resource)
+void KisIconWidget::slotAdapterResourceChanged(KoResource *resource)
 {
     if (m_resource == resource) {
         update();

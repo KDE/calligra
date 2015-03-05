@@ -32,13 +32,12 @@
 #include "kis_input_manager.h"
 #include "kis_config.h"
 
-
 class KisZoomAction::Private
 {
 public:
     Private(KisZoomAction *qq) : q(qq), distance(0), lastDistance(0.f) {}
 
-    QPointF centerPoint(QTouchEvent* event);
+    QPointF centerPoint(QTouchEvent *event);
 
     KisZoomAction *q;
     int distance;
@@ -50,7 +49,7 @@ public:
     void zoomTo(bool zoomIn, QEvent *event);
 };
 
-QPointF KisZoomAction::Private::centerPoint(QTouchEvent* event)
+QPointF KisZoomAction::Private::centerPoint(QTouchEvent *event)
 {
     QPointF result;
     int count = 0;
@@ -75,11 +74,11 @@ void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
 
     if (event) {
         QPoint pos;
-        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
         if (mouseEvent) {
             pos = mouseEvent->pos();
         } else {
-            QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event);
+            QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent *>(event);
             if (wheelEvent) {
                 pos = wheelEvent->pos();
             } else {
@@ -89,10 +88,10 @@ void KisZoomAction::Private::zoomTo(bool zoomIn, QEvent *event)
 
         float oldZoom = zoomAction->effectiveZoom();
         float newZoom = zoomIn ?
-            zoomAction->nextZoomLevel() : zoomAction->prevZoomLevel();
+                        zoomAction->nextZoomLevel() : zoomAction->prevZoomLevel();
 
         KoCanvasControllerWidget *controller =
-            dynamic_cast<KoCanvasControllerWidget*>(
+            dynamic_cast<KoCanvasControllerWidget *>(
                 q->inputManager()->canvas()->canvasController());
 
         controller->zoomRelativeToPoint(pos, newZoom / oldZoom);
@@ -137,7 +136,7 @@ void KisZoomAction::activate(int shortcut)
 {
     if (shortcut == DiscreteZoomModeShortcut) {
         QApplication::setOverrideCursor(KisCursor::zoomDiscreteCursor());
-    } else /* if (shortcut == SmoothZoomModeShortcut) */ {
+    } else { /* if (shortcut == SmoothZoomModeShortcut) */
         QApplication::setOverrideCursor(KisCursor::zoomSmoothCursor());
     }
 }
@@ -154,69 +153,70 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
 
     d->lastDistance = 0.f;
 
-    switch(shortcut) {
-        case ZoomModeShortcut: {
-            d->mode = (Shortcuts)shortcut;
-            QTouchEvent *tevent = dynamic_cast<QTouchEvent*>(event);
-            if(tevent)
-                d->lastPosition = d->centerPoint(tevent);
-            break;
+    switch (shortcut) {
+    case ZoomModeShortcut: {
+        d->mode = (Shortcuts)shortcut;
+        QTouchEvent *tevent = dynamic_cast<QTouchEvent *>(event);
+        if (tevent) {
+            d->lastPosition = d->centerPoint(tevent);
         }
-        case DiscreteZoomModeShortcut:
-            d->mode = (Shortcuts)shortcut;
-            d->distance = 0;
-            break;
-        case ZoomInShortcut:
-            d->zoomTo(true, event);
-            break;
-        case ZoomOutShortcut:
-            d->zoomTo(false, event);
-            break;
-        case ZoomResetShortcut:
-            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
-            break;
-        case ZoomToPageShortcut:
-            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
-            break;
-        case ZoomToWidthShortcut:
-            inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
-            break;
+        break;
+    }
+    case DiscreteZoomModeShortcut:
+        d->mode = (Shortcuts)shortcut;
+        d->distance = 0;
+        break;
+    case ZoomInShortcut:
+        d->zoomTo(true, event);
+        break;
+    case ZoomOutShortcut:
+        d->zoomTo(false, event);
+        break;
+    case ZoomResetShortcut:
+        inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
+        break;
+    case ZoomToPageShortcut:
+        inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+        break;
+    case ZoomToWidthShortcut:
+        inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
+        break;
     }
 }
 
-void KisZoomAction::inputEvent( QEvent* event )
+void KisZoomAction::inputEvent(QEvent *event)
 {
     switch (event->type()) {
-        case QEvent::TouchUpdate: {
-            QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
-            QPointF center = d->centerPoint(tevent);
+    case QEvent::TouchUpdate: {
+        QTouchEvent *tevent = static_cast<QTouchEvent *>(event);
+        QPointF center = d->centerPoint(tevent);
 
-            int count = 0;
-            float dist = 0.0f;
-            foreach(const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
-                if (point.state() != Qt::TouchPointReleased) {
-                    count++;
+        int count = 0;
+        float dist = 0.0f;
+        foreach (const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
+            if (point.state() != Qt::TouchPointReleased) {
+                count++;
 
-                    dist += (point.screenPos() - center).manhattanLength();
-                }
-            }
-
-            dist /= count;
-            float delta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
-            
-            if(qAbs(delta) > 0.1f) {
-                qreal zoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
-                Q_UNUSED(zoom);
-                static_cast<KisCanvasController*>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), delta);
-                d->lastDistance = dist;
-                // Also do panning here, as doing it later requires a further check for validity
-                QPointF moveDelta = center - d->lastPosition;
-                inputManager()->canvas()->canvasController()->pan(-moveDelta.toPoint());
-                d->lastPosition = center;
+                dist += (point.screenPos() - center).manhattanLength();
             }
         }
-        default:
-            break;
+
+        dist /= count;
+        float delta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
+
+        if (qAbs(delta) > 0.1f) {
+            qreal zoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
+            Q_UNUSED(zoom);
+            static_cast<KisCanvasController *>(inputManager()->canvas()->canvasController())->zoomRelativeToPoint(center.toPoint(), delta);
+            d->lastDistance = dist;
+            // Also do panning here, as doing it later requires a further check for validity
+            QPointF moveDelta = center - d->lastPosition;
+            inputManager()->canvas()->canvasController()->pan(-moveDelta.toPoint());
+            d->lastPosition = center;
+        }
+    }
+    default:
+        break;
     }
 
     KisAbstractInputAction::inputEvent(event);
@@ -234,8 +234,7 @@ void KisZoomAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
         float coeff;
         if (cfg.readEntry<bool>("InvertMiddleClickZoom", false)) {
             coeff = 1.0 - qreal(diff.y()) / stepCont;
-        }
-        else {
+        } else {
             coeff = 1.0 + qreal(diff.y()) / stepCont;
         }
         float zoom = coeff * inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();

@@ -30,30 +30,30 @@
 #define BarWipeEffectId "BarWipeEffect"
 
 KPrBarWipeEffectFactory::KPrBarWipeEffectFactory()
-: KPrPageEffectFactory( BarWipeEffectId, i18n( "Bar" ) )
+    : KPrPageEffectFactory(BarWipeEffectId, i18n("Bar"))
 {
-    addStrategy( new KPrBarWipeFromTopStrategy() );
-    addStrategy( new KPrBarWipeFromBottomStrategy() );
-    addStrategy( new KPrBarWipeFromLeftStrategy() );
-    addStrategy( new KPrBarWipeFromRightStrategy() );
+    addStrategy(new KPrBarWipeFromTopStrategy());
+    addStrategy(new KPrBarWipeFromBottomStrategy());
+    addStrategy(new KPrBarWipeFromLeftStrategy());
+    addStrategy(new KPrBarWipeFromRightStrategy());
 }
 
 KPrBarWipeEffectFactory::~KPrBarWipeEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
-    I18N_NOOP( "From Left" ),
-    I18N_NOOP( "From Top" ),
-    I18N_NOOP( "From Right" ),
-    I18N_NOOP( "From Bottom" )
+static const char *const s_subTypes[] = {
+    I18N_NOOP("From Left"),
+    I18N_NOOP("From Top"),
+    I18N_NOOP("From Right"),
+    I18N_NOOP("From Bottom")
 };
 
 QString KPrBarWipeEffectFactory::subTypeName(int subType) const
 {
     if (subType >= 0 && (uint)subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
-        return i18n( s_subTypes[subType] );
+        return i18n(s_subTypes[subType]);
     } else {
-        return i18n( "Unknown subtype" );
+        return i18n("Unknown subtype");
     }
 }

@@ -44,7 +44,6 @@ bool KisStrokeJobData::isExclusive() const
     return m_exclusivity == EXCLUSIVE;
 }
 
-
 KisStrokeJobStrategy::KisStrokeJobStrategy()
 {
 }
@@ -52,5 +51,4 @@ KisStrokeJobStrategy::KisStrokeJobStrategy()
 KisStrokeJobStrategy::~KisStrokeJobStrategy()
 {
 }
-
 

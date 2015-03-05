@@ -33,45 +33,45 @@ class KEXIEXTWIDGETS_EXPORT KexiProjectModel : public QAbstractItemModel, public
 {
     Q_OBJECT
 public:
-    explicit KexiProjectModel(QObject* parent = 0);
+    explicit KexiProjectModel(QObject *parent = 0);
     virtual ~KexiProjectModel();
-    
+
     enum ExtraRoles {
         SearchHighlight = Qt::UserRole + 0 //!< item is highlighted when corresponding global search
-                                           //!< completion is highlighted
+                          //!< completion is highlighted
     };
-    
-    KexiProject* project() const;
-    void setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages);
+
+    KexiProject *project() const;
+    void setProject(KexiProject *prj, const QString &itemsPartClass, QString *partManagerErrorMessages);
     QString itemsPartClass() const;
     //! @return number of objects
     int objectsCount() const;
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex& child) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex &child) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    virtual bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    void updateItemName(KexiPart::Item& item, bool dirty);
+    void updateItemName(KexiPart::Item &item, bool dirty);
     QModelIndex indexFromItem(KexiProjectModelItem *item) const;
     KexiProjectModelItem *modelItemFromItem(const KexiPart::Item &item) const;
     KexiProjectModelItem *modelItemFromName(const QString &name) const;
-    
+
     void clear();
 
     //! @return index of first part item (looking from the top) or invalid item
     //! if there are no part items
     QModelIndex firstPartItem() const;
-    
+
     //! Implemented for KexiSearchableModel
     virtual int searchableObjectCount() const;
 
     //! Implemented for KexiSearchableModel
     virtual QModelIndex sourceIndexForSearchableObject(int objectIndex) const;
-    
+
     //! Implemented for KexiSearchableModel
     virtual QVariant searchableData(const QModelIndex &sourceIndex, int role) const;
 
@@ -86,29 +86,29 @@ public:
 
     QPersistentModelIndex itemWithSearchHighlight() const;
 
-    bool renameItem(KexiPart::Item *item, const QString& newName);
-    bool setItemCaption(KexiPart::Item *item, const QString& newCaption);
+    bool renameItem(KexiPart::Item *item, const QString &newName);
+    bool setItemCaption(KexiPart::Item *item, const QString &newCaption);
 
 public Q_SLOTS:
-    void slotAddItem(KexiPart::Item& item);
+    void slotAddItem(KexiPart::Item &item);
     void slotRemoveItem(const KexiPart::Item &item);
 
 Q_SIGNALS:
-    void renameItem(KexiPart::Item *item, const QString& newName, bool &succes);
-    void changeItemCaption(KexiPart::Item *item, const QString& newCaption, bool &succes);
+    void renameItem(KexiPart::Item *item, const QString &newName, bool &succes);
+    void changeItemCaption(KexiPart::Item *item, const QString &newCaption, bool &succes);
     void highlightSearchedItem(const QModelIndex &index);
     void activateSearchedItem(const QModelIndex &index);
 
 private:
-    KexiProjectModelItem* addGroup(KexiPart::Info *info, KexiProjectModelItem *parent) const;
-    KexiProjectModelItem* addItem(KexiPart::Info *info, KexiPart::Item *item,
+    KexiProjectModelItem *addGroup(KexiPart::Info *info, KexiProjectModelItem *parent) const;
+    KexiProjectModelItem *addItem(KexiPart::Info *info, KexiPart::Item *item,
                                   KexiProjectModelItem *parent) const;
 
     //! @return index of first part item within children of parentIndex (recursively)
     QModelIndex firstChildPartItem(const QModelIndex &parentIndex) const;
 
-    class Private;  
-    Private * const d;
+    class Private;
+    Private *const d;
 };
 
 #endif // KEXIPROJECTMODEL_H

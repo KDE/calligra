@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #ifndef KOFINDTEXT_H
 #define KOFINDTEXT_H
 
@@ -82,7 +80,7 @@ public:
     /**
      * Retrieve the list of documents currently in use.
      */
-    QList<QTextDocument*> documents() const;
+    QList<QTextDocument *> documents() const;
 
     /**
      * Set the current cursor.
@@ -109,7 +107,7 @@ public:
      * \param shapes The shapes to search for text.
      * \param append A list to append the found QTextDocument objects to.
      */
-    static void findTextInShapes(const QList<KoShape*> &shapes, QList<QTextDocument*> &append);
+    static void findTextInShapes(const QList<KoShape *> &shapes, QList<QTextDocument *> &append);
 
 public Q_SLOTS:
     /**
@@ -121,7 +119,7 @@ public Q_SLOTS:
      *
      * \param documents The list of documents to search through.
      */
-    void setDocuments(const QList<QTextDocument*> &documents);
+    void setDocuments(const QList<QTextDocument *> &documents);
 
 protected:
     /**
@@ -139,9 +137,9 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
-    Q_PRIVATE_SLOT(d, void documentDestroyed(QObject* object))
+    Q_PRIVATE_SLOT(d, void documentDestroyed(QObject *object))
 };
 
 Q_DECLARE_METATYPE(QTextDocument *)

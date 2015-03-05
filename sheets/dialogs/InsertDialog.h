@@ -47,13 +47,13 @@ class InsertDialog : public KDialog
 public:
     enum Mode { Insert, Remove };
 
-    InsertDialog(QWidget* parent, Selection* selection, Mode _mode);
+    InsertDialog(QWidget *parent, Selection *selection, Mode _mode);
 
 public Q_SLOTS:
     void slotOk();
 
 private:
-    Selection* m_selection;
+    Selection *m_selection;
 
     QRadioButton *rb1;
     QRadioButton *rb2;

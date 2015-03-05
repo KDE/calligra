@@ -38,7 +38,7 @@ WebToolFactory::~WebToolFactory()
 {
 }
 
-KoToolBase* WebToolFactory::createTool(KoCanvasBase * canvas)
+KoToolBase *WebToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new WebTool(canvas);
 }

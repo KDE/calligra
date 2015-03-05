@@ -28,8 +28,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-
-
 class QWidget;
 class QCheckBox;
 class KisSliderSpinBox;
@@ -42,16 +40,16 @@ class KisToolFill : public KisToolPaint
 
 public:
 
-    KisToolFill(KoCanvasBase * canvas);
+    KisToolFill(KoCanvasBase *canvas);
     virtual ~KisToolFill();
 
     void beginPrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
 
-    virtual QWidget * createOptionWidget();
+    virtual QWidget *createOptionWidget();
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     void slotSetUseFastMode(bool);
     void slotSetThreshold(int);
     void slotSetUsePattern(bool);
@@ -59,8 +57,6 @@ public Q_SLOTS:
     void slotSetFillSelection(bool);
     void slotSetSizemod(int);
     void slotSetFeather(int);
-
-
 
 private:
     void updateGUI();
@@ -85,15 +81,15 @@ private:
     KConfigGroup m_configGroup;
 };
 
-
 #include "KoToolFactoryBase.h"
 
 class KisToolFillFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolFillFactory(const QStringList&)
-            : KoToolFactoryBase("KritaFill/KisToolFill") {
+    KisToolFillFactory(const QStringList &)
+        : KoToolFactoryBase("KritaFill/KisToolFill")
+    {
         setToolTip(i18n("Fill a contiguous area of color with a color, or fill a selection."));
         setToolType(TOOL_TYPE_FILL);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -104,7 +100,8 @@ public:
 
     virtual ~KisToolFillFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolFill(canvas);
     }
 

@@ -57,10 +57,10 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotParagraphStyleSelected(QModelIndex index);
     void slotCharacterStyleSelected(QModelIndex index);
-    void addParagraphStyle(KoParagraphStyle*);
-    void addCharacterStyle(KoCharacterStyle*);
-    void removeParagraphStyle(KoParagraphStyle*);
-    void removeCharacterStyle(KoCharacterStyle*);
+    void addParagraphStyle(KoParagraphStyle *);
+    void addCharacterStyle(KoCharacterStyle *);
+    void removeParagraphStyle(KoParagraphStyle *);
+    void removeCharacterStyle(KoCharacterStyle *);
     void currentParagraphStyleChanged();
     void currentParagraphNameChanged(const QString &name);
     void currentCharacterStyleChanged();

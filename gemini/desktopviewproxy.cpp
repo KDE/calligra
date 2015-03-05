@@ -49,48 +49,48 @@
 class DesktopViewProxy::Private
 {
 public:
-    Private(MainWindow* mainWindow, KoMainWindow* desktopView)
+    Private(MainWindow *mainWindow, KoMainWindow *desktopView)
         : mainWindow(mainWindow)
         , desktopView(desktopView)
         , isImporting(false)
     {}
-    MainWindow* mainWindow;
-    KoMainWindow* desktopView;
+    MainWindow *mainWindow;
+    KoMainWindow *desktopView;
     bool isImporting;
 };
 
-DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
+DesktopViewProxy::DesktopViewProxy(MainWindow *mainWindow, KoMainWindow *parent)
     : QObject(parent)
     , d(new Private(mainWindow, parent))
 {
     Q_ASSERT(parent); // "There MUST be a KoMainWindow assigned, otherwise everything will blow up");
 
     // Hide this one... as it doesn't work at all well and release happens :P
-    QAction* closeAction = d->desktopView->actionCollection()->action("file_close");
+    QAction *closeAction = d->desktopView->actionCollection()->action("file_close");
     closeAction->setVisible(false);
 
     // Concept is simple - simply steal all the actions we require to work differently, and reconnect them to local functions
-    QAction* newAction = d->desktopView->actionCollection()->action("file_new");
+    QAction *newAction = d->desktopView->actionCollection()->action("file_new");
     newAction->disconnect(d->desktopView);
     connect(newAction, SIGNAL(triggered(bool)), this, SLOT(fileNew()));
-    QAction* openAction = d->desktopView->actionCollection()->action("file_open");
+    QAction *openAction = d->desktopView->actionCollection()->action("file_open");
     openAction->disconnect(d->desktopView);
     connect(openAction, SIGNAL(triggered(bool)), this, SLOT(fileOpen()));
-    QAction* saveAction = d->desktopView->actionCollection()->action("file_save");
+    QAction *saveAction = d->desktopView->actionCollection()->action("file_save");
     saveAction->disconnect(d->desktopView);
     connect(saveAction, SIGNAL(triggered(bool)), this, SLOT(fileSave()));
-    QAction* saveasAction = d->desktopView->actionCollection()->action("file_save_as");
+    QAction *saveasAction = d->desktopView->actionCollection()->action("file_save_as");
     saveasAction->disconnect(d->desktopView);
     connect(saveasAction, SIGNAL(triggered(bool)), this, SLOT(fileSaveAs()));
-    QAction* reloadAction = d->desktopView->actionCollection()->action("file_reload_file");
+    QAction *reloadAction = d->desktopView->actionCollection()->action("file_reload_file");
     reloadAction->disconnect(d->desktopView);
     connect(reloadAction, SIGNAL(triggered(bool)), this, SLOT(reload()));
-    QAction* loadExistingAsNewAction = d->desktopView->actionCollection()->action("file_import_file");
+    QAction *loadExistingAsNewAction = d->desktopView->actionCollection()->action("file_import_file");
     loadExistingAsNewAction->disconnect(d->desktopView);
     connect(loadExistingAsNewAction, SIGNAL(triggered(bool)), this, SLOT(loadExistingAsNew()));
 
     // Recent files need a touch more work, as they aren't simply an action.
-    KRecentFilesAction* recent = qobject_cast<KRecentFilesAction*>(d->desktopView->actionCollection()->action("file_open_recent"));
+    KRecentFilesAction *recent = qobject_cast<KRecentFilesAction *>(d->desktopView->actionCollection()->action("file_open_recent"));
     recent->disconnect(d->desktopView);
     connect(recent, SIGNAL(urlSelected(KUrl)), this, SLOT(slotFileOpenRecent(KUrl)));
     recent->clear();
@@ -114,16 +114,17 @@ void DesktopViewProxy::fileOpen()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(DocumentManager::instance()->settingsManager()->currentFileClass().toLatin1());
     KService::Ptr service = entry.service();
     const QStringList mimeFilter = KoFilterManager::mimeFilter(DocumentManager::instance()->settingsManager()->currentFileClass().toLatin1(),
-                                                               KoFilterManager::Import,
-                                                               service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
-
+                                   KoFilterManager::Import,
+                                   service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
 
     KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Document"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
     dialog.setMimeTypeFilters(mimeFilter);
     QString filename = dialog.url();
-    if (filename.isEmpty()) return;
+    if (filename.isEmpty()) {
+        return;
+    }
 
     DocumentManager::instance()->recentFileManager()->addRecent(filename);
 
@@ -132,8 +133,8 @@ void DesktopViewProxy::fileOpen()
 
 void DesktopViewProxy::fileSave()
 {
-    if(DocumentManager::instance()->isTemporaryFile()) {
-        if(d->desktopView->saveDocument(true)) {
+    if (DocumentManager::instance()->isTemporaryFile()) {
+        if (d->desktopView->saveDocument(true)) {
             DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
             DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
             DocumentManager::instance()->setTemporaryFile(false);
@@ -147,7 +148,7 @@ void DesktopViewProxy::fileSave()
 
 bool DesktopViewProxy::fileSaveAs()
 {
-    if(d->desktopView->saveDocument(true)) {
+    if (d->desktopView->saveDocument(true)) {
         DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
         DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
         DocumentManager::instance()->setTemporaryFile(false);
@@ -171,7 +172,7 @@ void DesktopViewProxy::loadExistingAsNew()
     d->isImporting = false;
 }
 
-void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
+void DesktopViewProxy::slotFileOpenRecent(const KUrl &url)
 {
     QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile(), QDir::currentPath());
 }

@@ -21,7 +21,6 @@
 #include <klocale.h>
 #include <kis_image.h>
 
-
 KisImageSetResolutionCommand::KisImageSetResolutionCommand(KisImageWSP image, qreal newXRes, qreal newYRes, KUndo2Command *parent)
     : KUndo2Command(kundo2_i18n("Set Image Resolution"), parent)
     , m_image(image)
@@ -42,8 +41,6 @@ void KisImageSetResolutionCommand::redo()
     m_image->setResolution(m_newXRes, m_newYRes);
 }
 
-
-
 #include "kis_processing_visitor.h"
 
 #include "kis_adjustment_layer.h"
@@ -59,20 +56,40 @@ void KisImageSetResolutionCommand::redo()
 class ResetShapesProcessingVisitor : public KisProcessingVisitor
 {
 public:
-    void visit(KisNode*, KisUndoAdapter*) {}
-    void visit(KisPaintLayer*, KisUndoAdapter*) {}
-    void visit(KisGroupLayer*, KisUndoAdapter*) {}
-    void visit(KisCloneLayer*, KisUndoAdapter*) {}
+    void visit(KisNode *, KisUndoAdapter *) {}
+    void visit(KisPaintLayer *, KisUndoAdapter *) {}
+    void visit(KisGroupLayer *, KisUndoAdapter *) {}
+    void visit(KisCloneLayer *, KisUndoAdapter *) {}
 
-    void visit(KisAdjustmentLayer *layer, KisUndoAdapter*) { layer->internalSelection()->updateProjection(); }
-    void visit(KisGeneratorLayer *layer, KisUndoAdapter*) { layer->internalSelection()->updateProjection(); }
-    void visit(KisExternalLayer *layer, KisUndoAdapter*) { layer->resetCache(); }
-    void visit(KisFilterMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
-    void visit(KisTransformMask *mask, KisUndoAdapter*) { KIS_ASSERT_RECOVER_NOOP(!mask->selection()); }
-    void visit(KisTransparencyMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
-    void visit(KisSelectionMask *mask, KisUndoAdapter*) { mask->selection()->updateProjection(); }
+    void visit(KisAdjustmentLayer *layer, KisUndoAdapter *)
+    {
+        layer->internalSelection()->updateProjection();
+    }
+    void visit(KisGeneratorLayer *layer, KisUndoAdapter *)
+    {
+        layer->internalSelection()->updateProjection();
+    }
+    void visit(KisExternalLayer *layer, KisUndoAdapter *)
+    {
+        layer->resetCache();
+    }
+    void visit(KisFilterMask *mask, KisUndoAdapter *)
+    {
+        mask->selection()->updateProjection();
+    }
+    void visit(KisTransformMask *mask, KisUndoAdapter *)
+    {
+        KIS_ASSERT_RECOVER_NOOP(!mask->selection());
+    }
+    void visit(KisTransparencyMask *mask, KisUndoAdapter *)
+    {
+        mask->selection()->updateProjection();
+    }
+    void visit(KisSelectionMask *mask, KisUndoAdapter *)
+    {
+        mask->selection()->updateProjection();
+    }
 };
-
 
 KisResetShapesCommand::KisResetShapesCommand(KisNodeSP rootNode)
     : KUndo2Command(kundo2_noi18n("RESET_SHAPES_COMMAND")),
@@ -98,7 +115,7 @@ void KisResetShapesCommand::resetNode(KisNodeSP node)
     node->accept(visitor, 0);
 
     node = node->firstChild();
-    while(node) {
+    while (node) {
         resetNode(node);
         node = node->nextSibling();
     }

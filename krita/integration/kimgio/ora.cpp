@@ -43,12 +43,16 @@ bool OraHandler::canRead() const
 bool OraHandler::read(QImage *image)
 {
     KZip zip(device());
-    if (!zip.open(QIODevice::ReadOnly)) return false;
+    if (!zip.open(QIODevice::ReadOnly)) {
+        return false;
+    }
 
     const KArchiveEntry *entry = zip.directory()->entry("mergedimage.png");
-    if (!entry || !entry->isFile()) return false;
+    if (!entry || !entry->isFile()) {
+        return false;
+    }
 
-    const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(entry);
+    const KZipFileEntry *fileZipEntry = static_cast<const KZipFileEntry *>(entry);
 
     image->loadFromData(fileZipEntry->data(), "PNG");
 
@@ -74,16 +78,19 @@ bool OraHandler::canRead(QIODevice *device)
     }
 
     KZip zip(device);
-    if (!zip.open(QIODevice::ReadOnly)) return false;
+    if (!zip.open(QIODevice::ReadOnly)) {
+        return false;
+    }
 
     const KArchiveEntry *entry = zip.directory()->entry("mimetype");
-    if (!entry || !entry->isFile()) return false;
+    if (!entry || !entry->isFile()) {
+        return false;
+    }
 
-    const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(entry);
+    const KZipFileEntry *fileZipEntry = static_cast<const KZipFileEntry *>(entry);
 
     return (qstrcmp(fileZipEntry->data().constData(), "image/openraster") == 0);
 }
-
 
 class OraPlugin : public QImageIOPlugin
 {
@@ -101,10 +108,11 @@ QStringList OraPlugin::keys() const
 QImageIOPlugin::Capabilities OraPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
     Q_UNUSED(device);
-    if (format == "ora" || format == "ORA")
+    if (format == "ora" || format == "ORA") {
         return Capabilities(CanRead);
-    else
+    } else {
         return 0;
+    }
 
 }
 

@@ -32,21 +32,21 @@
 
 using namespace KexiDB;
 
-MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement, uint cursor_options)
-        : Cursor(conn, statement, cursor_options)
-        , d(new MySqlCursorData(conn))
+MySqlCursor::MySqlCursor(KexiDB::Connection *conn, const QString &statement, uint cursor_options)
+    : Cursor(conn, statement, cursor_options)
+    , d(new MySqlCursorData(conn))
 {
     m_options |= Buffered;
-    d->mysql = static_cast<MySqlConnection*>(conn)->d->mysql;
+    d->mysql = static_cast<MySqlConnection *>(conn)->d->mysql;
 // KexiDBDrvDbg << "Constructor for query statement";
 }
 
-MySqlCursor::MySqlCursor(Connection* conn, QuerySchema& query, uint options)
-        : Cursor(conn, query, options)
-        , d(new MySqlCursorData(conn))
+MySqlCursor::MySqlCursor(Connection *conn, QuerySchema &query, uint options)
+    : Cursor(conn, query, options)
+    , d(new MySqlCursorData(conn))
 {
     m_options |= Buffered;
-    d->mysql = static_cast<MySqlConnection*>(conn)->d->mysql;
+    d->mysql = static_cast<MySqlConnection *>(conn)->d->mysql;
 // KexiDBDrvDbg << "Constructor for query statement";
 }
 
@@ -109,8 +109,9 @@ void MySqlCursor::drv_getNextRecord()
 // This isn't going to work right now as it uses d->mysqlrow
 QVariant MySqlCursor::value(uint pos)
 {
-    if (!d->mysqlrow || pos >= m_fieldCount || d->mysqlrow[pos] == 0)
+    if (!d->mysqlrow || pos >= m_fieldCount || d->mysqlrow[pos] == 0) {
         return QVariant();
+    }
 
     KexiDB::Field *f = (m_fieldsExpanded && pos < (uint)m_fieldsExpanded->count())
                        ? m_fieldsExpanded->at(pos)->field : 0;
@@ -120,15 +121,15 @@ QVariant MySqlCursor::value(uint pos)
     return KexiDB::cstringToVariant(d->mysqlrow[pos], f, d->lengths[pos]);
 }
 
-
 /* As with sqlite, the DB library returns all values (including numbers) as
    strings. So just put that string in a QVariant and let KexiDB deal with it.
  */
-bool MySqlCursor::drv_storeCurrentRow(RecordData& data) const
+bool MySqlCursor::drv_storeCurrentRow(RecordData &data) const
 {
     // KexiDBDrvDbg << "Position is" << (long)m_at;
-    if (d->numRows == 0)
+    if (d->numRows == 0) {
         return false;
+    }
 
 //! @todo js: use MYSQL_FIELD::type here!
 //!           see SQLiteCursor::storeCurrentRow()
@@ -137,8 +138,9 @@ bool MySqlCursor::drv_storeCurrentRow(RecordData& data) const
     const uint realCount = qMin(fieldsExpandedCount, m_fieldsToStoreInRow);
     for (uint i = 0; i < realCount; i++) {
         Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
-        if (m_fieldsExpanded && !f)
+        if (m_fieldsExpanded && !f) {
             continue;
+        }
         data[i] = KexiDB::cstringToVariant(d->mysqlrow[i], f, d->lengths[i]);
     }
     return true;
@@ -147,7 +149,6 @@ bool MySqlCursor::drv_storeCurrentRow(RecordData& data) const
 void MySqlCursor::drv_appendCurrentRecordToBuffer()
 {
 }
-
 
 void MySqlCursor::drv_bufferMovePointerNext()
 {
@@ -162,7 +163,6 @@ void MySqlCursor::drv_bufferMovePointerPrev()
     d->lengths = mysql_fetch_lengths(d->mysqlres);
 }
 
-
 void MySqlCursor::drv_bufferMovePointerTo(qint64 to)
 {
     mysql_data_seek(d->mysqlres, to);
@@ -170,7 +170,7 @@ void MySqlCursor::drv_bufferMovePointerTo(qint64 to)
     d->lengths = mysql_fetch_lengths(d->mysqlres);
 }
 
-const char** MySqlCursor::rowData() const
+const char **MySqlCursor::rowData() const
 {
     //! @todo
     return 0;
@@ -188,8 +188,9 @@ QString MySqlCursor::serverResultName()
 
 void MySqlCursor::drv_clearServerResult()
 {
-    if (!d)
+    if (!d) {
         return;
+    }
     d->res = 0;
 }
 

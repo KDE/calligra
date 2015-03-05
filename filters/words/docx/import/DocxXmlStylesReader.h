@@ -43,7 +43,7 @@ public:
     virtual ~DocxXmlStylesReader();
 
     //! Reads/parses the file. The output goes mainly to KoGenStyles* KoOdfWriters::mainStyles
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
 protected:
     KoFilter::ConversionStatus read_docDefaults();
@@ -53,12 +53,12 @@ protected:
     KoFilter::ConversionStatus read_name();
     KoFilter::ConversionStatus read_tblStylePr();
 
-    QMap<QByteArray, KoGenStyle*> m_defaultStyles;
-    void createDefaultStyle(KoGenStyle::Type type, const char* family);
+    QMap<QByteArray, KoGenStyle *> m_defaultStyles;
+    void createDefaultStyle(KoGenStyle::Type type, const char *family);
 
     QString m_name; //!< set by read_name()
 
-    MSOOXML::DrawingTableStyle* m_currentStyle;
+    MSOOXML::DrawingTableStyle *m_currentStyle;
 
 private:
     void init();

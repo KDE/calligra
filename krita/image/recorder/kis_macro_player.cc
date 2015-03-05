@@ -32,17 +32,15 @@
 #include "kis_undo_adapter.h"
 #include "kundo2magicstring.h"
 
-
-struct KisMacroPlayer::Private
-{
-    Private(const KisPlayInfo& _info) : info(_info), updater(0) {}
+struct KisMacroPlayer::Private {
+    Private(const KisPlayInfo &_info) : info(_info), updater(0) {}
     bool paused;
-    KisMacro* macro;
+    KisMacro *macro;
     KisPlayInfo info;
-    KoUpdater* updater;
+    KoUpdater *updater;
 };
 
-KisMacroPlayer::KisMacroPlayer(KisMacro* _macro, const KisPlayInfo& info, KoUpdater * updater, QObject* _parent ) : QThread(_parent), d(new Private(info))
+KisMacroPlayer::KisMacroPlayer(KisMacro *_macro, const KisPlayInfo &info, KoUpdater *updater, QObject *_parent) : QThread(_parent), d(new Private(info))
 {
     d->macro = _macro;
     d->updater = updater;
@@ -66,7 +64,7 @@ void KisMacroPlayer::resume()
 void KisMacroPlayer::run()
 {
     d->paused = false;
-    QList<KisRecordedAction*> actions = d->macro->actions();
+    QList<KisRecordedAction *> actions = d->macro->actions();
 
     if (actions.size() < 1) {
         return;
@@ -77,29 +75,29 @@ void KisMacroPlayer::run()
         d->info.undoAdapter()->beginMacro(kundo2_i18n("Play macro"));
     }
 
-    KoProgressUpdater* progressUpdater = 0;
-    if(d->updater) {
+    KoProgressUpdater *progressUpdater = 0;
+    if (d->updater) {
         progressUpdater = new KoProgressUpdater(d->updater);
         progressUpdater->start(actions.size(), i18n("Playing back macro"));
     }
 
-    for (QList<KisRecordedAction*>::iterator it = actions.begin(); it != actions.end(); ++it) {
+    for (QList<KisRecordedAction *>::iterator it = actions.begin(); it != actions.end(); ++it) {
         if (*it) {
             dbgImage << "Play action : " << (*it)->name();
-            KoUpdater* updater = 0;
-            if(progressUpdater) {
+            KoUpdater *updater = 0;
+            if (progressUpdater) {
                 updater = progressUpdater->startSubtask();
             }
             (*it)->play(d->info, updater);
         }
-        if(progressUpdater && progressUpdater->interrupted()) {
+        if (progressUpdater && progressUpdater->interrupted()) {
             break;
         }
     }
 
     if (d->info.undoAdapter()) {
         d->info.undoAdapter()->endMacro();
-        if(progressUpdater && progressUpdater->interrupted()) {
+        if (progressUpdater && progressUpdater->interrupted()) {
             d->info.undoAdapter()->undoLastCommand();
         }
     }

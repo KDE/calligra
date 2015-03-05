@@ -26,7 +26,6 @@
 #include "KoResource.h"
 #include <pigment_export.h>
 
-
 typedef QPair<qreal, KoColor> KoGradientStop;
 
 /**
@@ -42,17 +41,17 @@ public:
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
+    virtual bool saveToDevice(QIODevice *dev) const;
 
     /// reimplemented
-    virtual QGradient* toQGradient() const;
+    virtual QGradient *toQGradient() const;
 
     /// reimplemented
-    void colorAt(KoColor&, qreal t) const;
+    void colorAt(KoColor &, qreal t) const;
 
     /// Creates KoStopGradient from a QGradient
-    static KoStopGradient * fromQGradient(QGradient * gradient);
-    
+    static KoStopGradient *fromQGradient(QGradient *gradient);
+
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);
 
@@ -75,10 +74,10 @@ private:
 private:
 
     void loadKarbonGradient(QIODevice *file);
-    void parseKarbonGradient(const QDomElement& element);
+    void parseKarbonGradient(const QDomElement &element);
 
     void loadSvgGradient(QIODevice *file);
-    void parseSvgGradient(const QDomElement& element);
+    void parseSvgGradient(const QDomElement &element);
     void parseSvgColor(QColor &color, const QString &s);
 };
 

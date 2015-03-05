@@ -38,7 +38,7 @@ QPainterPath KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &in
 {
     QPainterPath path;
     if (mode == CursorIsOutline) {
-        KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
+        KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget *>(optionsWidget());
 
         if (!widget) {
             return KisPaintOpSettings::brushOutline(info, mode);
@@ -53,7 +53,7 @@ QPainterPath KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &in
     return path;
 }
 
-void KisHairyPaintOpSettings::fromXML(const QDomElement& elt)
+void KisHairyPaintOpSettings::fromXML(const QDomElement &elt)
 {
     setProperty(HAIRY_VERSION, "1"); // This make sure that fromXML will override HAIRY_VERSION with 2, or will default to 1
     KisBrushBasedPaintOpSettings::fromXML(elt);

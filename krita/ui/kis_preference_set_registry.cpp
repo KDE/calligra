@@ -19,16 +19,16 @@
 
 #include <kglobal.h>
 
-KisPreferenceSetRegistry ::KisPreferenceSetRegistry ()
+KisPreferenceSetRegistry ::KisPreferenceSetRegistry()
 {
 }
 
-KisPreferenceSetRegistry ::~KisPreferenceSetRegistry ()
+KisPreferenceSetRegistry ::~KisPreferenceSetRegistry()
 {
     qDeleteAll(values());
 }
 
-KisPreferenceSetRegistry * KisPreferenceSetRegistry ::instance()
+KisPreferenceSetRegistry *KisPreferenceSetRegistry ::instance()
 {
     K_GLOBAL_STATIC(KisPreferenceSetRegistry, s_instance);
     return s_instance;

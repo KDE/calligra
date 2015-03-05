@@ -28,24 +28,24 @@
 void TestConvolutionOpImpl::testConvolutionOpImpl()
 {
     KoConvolutionOpImpl<KoBgrU16Traits> op;
-    quint8** colors = new quint8*[3];
+    quint8 **colors = new quint8*[3];
     colors[0] = new quint8[KoBgrU16Traits::pixelSize];
-    ((quint16*)colors[0])[0] = 100;
-    ((quint16*)colors[0])[1] = 200;
-    ((quint16*)colors[0])[2] = 300;
-    ((quint16*)colors[0])[3] = 0xFFFF;
+    ((quint16 *)colors[0])[0] = 100;
+    ((quint16 *)colors[0])[1] = 200;
+    ((quint16 *)colors[0])[2] = 300;
+    ((quint16 *)colors[0])[3] = 0xFFFF;
     colors[1] = new quint8[KoBgrU16Traits::pixelSize];
-    ((quint16*)colors[1])[0] = 50;
-    ((quint16*)colors[1])[1] = 150;
-    ((quint16*)colors[1])[2] = 0;
-    ((quint16*)colors[1])[3] = 0xFFFF;
+    ((quint16 *)colors[1])[0] = 50;
+    ((quint16 *)colors[1])[1] = 150;
+    ((quint16 *)colors[1])[2] = 0;
+    ((quint16 *)colors[1])[3] = 0xFFFF;
     colors[2] = new quint8[KoBgrU16Traits::pixelSize];
-    ((quint16*)colors[2])[0] = 100;
-    ((quint16*)colors[2])[1] = 300;
-    ((quint16*)colors[2])[2] = 50;
-    ((quint16*)colors[2])[3] = 0xFFFF;
-    quint8* dst = new quint8[KoBgrU16Traits::pixelSize];
-    quint16* dst16 = (quint16*)dst;
+    ((quint16 *)colors[2])[0] = 100;
+    ((quint16 *)colors[2])[1] = 300;
+    ((quint16 *)colors[2])[2] = 50;
+    ((quint16 *)colors[2])[3] = 0xFFFF;
+    quint8 *dst = new quint8[KoBgrU16Traits::pixelSize];
+    quint16 *dst16 = (quint16 *)dst;
     {
         memcpy(dst16, colors[0], KoBgrU16Traits::pixelSize);
         QVERIFY2(dst16[0] == 100, QString("%1 100").arg(dst16[0]).toLatin1());
@@ -124,26 +124,26 @@ void TestConvolutionOpImpl::testConvolutionOpImpl()
 void TestConvolutionOpImpl::testOneSemiTransparent()
 {
     KoConvolutionOpImpl<KoBgrU16Traits> op;
-    quint8** colors = new quint8*[3];
+    quint8 **colors = new quint8*[3];
     colors[0] = new quint8[KoBgrU16Traits::pixelSize];
-    ((quint16*)colors[0])[0] = 100;
-    ((quint16*)colors[0])[1] = 200;
-    ((quint16*)colors[0])[2] = 300;
+    ((quint16 *)colors[0])[0] = 100;
+    ((quint16 *)colors[0])[1] = 200;
+    ((quint16 *)colors[0])[2] = 300;
 
-    ((quint16*)colors[0])[3] = 0x00FF;
+    ((quint16 *)colors[0])[3] = 0x00FF;
 
     colors[1] = new quint8[KoBgrU16Traits::pixelSize];
-    ((quint16*)colors[1])[0] = 50;
-    ((quint16*)colors[1])[1] = 150;
-    ((quint16*)colors[1])[2] = 0;
-    ((quint16*)colors[1])[3] = 0xFFFF;
+    ((quint16 *)colors[1])[0] = 50;
+    ((quint16 *)colors[1])[1] = 150;
+    ((quint16 *)colors[1])[2] = 0;
+    ((quint16 *)colors[1])[3] = 0xFFFF;
     colors[2] = new quint8[KoBgrU16Traits::pixelSize];
-    ((quint16*)colors[2])[0] = 100;
-    ((quint16*)colors[2])[1] = 300;
-    ((quint16*)colors[2])[2] = 50;
-    ((quint16*)colors[2])[3] = 0xFFFF;
-    quint8* dst = new quint8[KoBgrU16Traits::pixelSize];
-    quint16* dst16 = (quint16*)dst;
+    ((quint16 *)colors[2])[0] = 100;
+    ((quint16 *)colors[2])[1] = 300;
+    ((quint16 *)colors[2])[2] = 50;
+    ((quint16 *)colors[2])[3] = 0xFFFF;
+    quint8 *dst = new quint8[KoBgrU16Traits::pixelSize];
+    quint16 *dst16 = (quint16 *)dst;
     memset(dst16, 0, KoBgrU16Traits::pixelSize);
 
     {
@@ -169,26 +169,26 @@ void TestConvolutionOpImpl::testOneSemiTransparent()
 void TestConvolutionOpImpl::testOneFullyTransparent()
 {
     KoConvolutionOpImpl<KoBgrU16Traits> op;
-    quint8** colors = new quint8*[3];
+    quint8 **colors = new quint8*[3];
     colors[0] = new quint8[KoBgrU16Traits::pixelSize];
-    ((quint16*)colors[0])[0] = 100;
-    ((quint16*)colors[0])[1] = 200;
-    ((quint16*)colors[0])[2] = 300;
+    ((quint16 *)colors[0])[0] = 100;
+    ((quint16 *)colors[0])[1] = 200;
+    ((quint16 *)colors[0])[2] = 300;
 
-    ((quint16*)colors[0])[3] = 0x0000;
+    ((quint16 *)colors[0])[3] = 0x0000;
 
     colors[1] = new quint8[KoBgrU16Traits::pixelSize];
-    ((quint16*)colors[1])[0] = 50;
-    ((quint16*)colors[1])[1] = 150;
-    ((quint16*)colors[1])[2] = 0;
-    ((quint16*)colors[1])[3] = 0xFFFF;
+    ((quint16 *)colors[1])[0] = 50;
+    ((quint16 *)colors[1])[1] = 150;
+    ((quint16 *)colors[1])[2] = 0;
+    ((quint16 *)colors[1])[3] = 0xFFFF;
     colors[2] = new quint8[KoBgrU16Traits::pixelSize];
-    ((quint16*)colors[2])[0] = 100;
-    ((quint16*)colors[2])[1] = 300;
-    ((quint16*)colors[2])[2] = 50;
-    ((quint16*)colors[2])[3] = 0xFFFF;
-    quint8* dst = new quint8[KoBgrU16Traits::pixelSize];
-    quint16* dst16 = (quint16*)dst;
+    ((quint16 *)colors[2])[0] = 100;
+    ((quint16 *)colors[2])[1] = 300;
+    ((quint16 *)colors[2])[2] = 50;
+    ((quint16 *)colors[2])[3] = 0xFFFF;
+    quint8 *dst = new quint8[KoBgrU16Traits::pixelSize];
+    quint16 *dst16 = (quint16 *)dst;
     memset(dst16, 0, KoBgrU16Traits::pixelSize);
 
     {
@@ -216,7 +216,6 @@ void TestConvolutionOpImpl::testOneFullyTransparent()
         QVERIFY2(dst16[3] == 0x2222, QString("%1 0x2222").arg(dst16[3]).toLatin1());
     }
 }
-
 
 QTEST_KDEMAIN(TestConvolutionOpImpl, NoGUI)
 #include <TestConvolutionOpImpl.moc>

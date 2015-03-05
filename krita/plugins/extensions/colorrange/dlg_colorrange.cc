@@ -98,7 +98,7 @@ bool isShadow(int v)
 
 }
 
-quint32 matchColors(const QColor & c, enumAction action)
+quint32 matchColors(const QColor &c, enumAction action)
 {
     int r = c.red();
     int g = c.green();
@@ -111,58 +111,67 @@ quint32 matchColors(const QColor & c, enumAction action)
     switch (action) {
 
     case REDS:
-        if (isReddish(h))
+        if (isReddish(h)) {
             return MAX_SELECTED;
-        else
+        } else {
             return MIN_SELECTED;
+        }
     case YELLOWS:
         if (isYellowish(h)) {
             return MAX_SELECTED;
-        } else
+        } else {
             return MIN_SELECTED;
+        }
     case GREENS:
-        if (isGreenish(h))
+        if (isGreenish(h)) {
             return MAX_SELECTED;
-        else
+        } else {
             return MIN_SELECTED;
+        }
     case CYANS:
-        if (isCyanish(h))
+        if (isCyanish(h)) {
             return MAX_SELECTED;
-        else
+        } else {
             return MIN_SELECTED;
+        }
     case BLUES:
-        if (isBlueish(h))
+        if (isBlueish(h)) {
             return MAX_SELECTED;
-        else
+        } else {
             return MIN_SELECTED;
+        }
     case MAGENTAS:
-        if (isMagentaish(h))
+        if (isMagentaish(h)) {
             return MAX_SELECTED;
-        else
+        } else {
             return MIN_SELECTED;
+        }
     case HIGHLIGHTS:
-        if (isHighlight(v))
+        if (isHighlight(v)) {
             return MAX_SELECTED;
-        else
+        } else {
             return MIN_SELECTED;
+        }
     case MIDTONES:
-        if (isMidTone(v))
+        if (isMidTone(v)) {
             return MAX_SELECTED;
-        else
+        } else {
             return MIN_SELECTED;
+        }
     case SHADOWS:
-        if (isShadow(v))
+        if (isShadow(v)) {
             return MAX_SELECTED;
-        else
+        } else {
             return MIN_SELECTED;
+        }
     };
 
     return MIN_SELECTED;
 }
 
 DlgColorRange::DlgColorRange(KisViewManager *view, QWidget *parent)
-        : KDialog(parent)
-        , m_selectionCommandsAdded(0)
+    : KDialog(parent)
+    , m_selectionCommandsAdded(0)
 {
     setCaption(i18n("Color Range"));
     setButtons(Ok | Cancel);
@@ -222,8 +231,12 @@ void DlgColorRange::okClicked()
 
 void DlgColorRange::cancelClicked()
 {
-    if (!m_view) return;
-    if (!m_view->image()) return;
+    if (!m_view) {
+        return;
+    }
+    if (!m_view->image()) {
+        return;
+    }
 
     for (int i = 0; i < m_selectionCommandsAdded; i++) {
         m_view->undoAdapter()->undoLastCommand();
@@ -244,14 +257,16 @@ void DlgColorRange::slotSelectionTypeChanged(int index)
 
 void DlgColorRange::slotSubtract(bool on)
 {
-    if (on)
+    if (on) {
         m_mode = SELECTION_SUBTRACT;
+    }
 }
 
 void DlgColorRange::slotAdd(bool on)
 {
-    if (on)
+    if (on) {
         m_mode = SELECTION_ADD;
+    }
 }
 
 void DlgColorRange::slotSelectClicked()
@@ -260,7 +275,9 @@ void DlgColorRange::slotSelectClicked()
     KIS_ASSERT_RECOVER_RETURN(device);
 
     QRect rc = device->exactBounds();
-    if (rc.isEmpty()) return;
+    if (rc.isEmpty()) {
+        return;
+    }
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
@@ -323,8 +340,9 @@ void DlgColorRange::slotSelectClicked()
 
 void DlgColorRange::slotDeselectClicked()
 {
-    if (!m_view) return;
-
+    if (!m_view) {
+        return;
+    }
 
     m_view->undoAdapter()->undoLastCommand();
     m_selectionCommandsAdded--;
@@ -332,6 +350,5 @@ void DlgColorRange::slotDeselectClicked()
         m_page->bnDeselect->setEnabled(false);
     }
 }
-
 
 #include "dlg_colorrange.moc"

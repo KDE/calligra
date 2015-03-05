@@ -30,56 +30,58 @@ class QCheckBox;
 class QLabel;
 class KexiNameWidget;
 
-namespace KexiDB {
+namespace KexiDB
+{
 class TableSchema;
 }
 
-namespace KexiMigration {
+namespace KexiMigration
+{
 
 class AlterSchemaWidget : public QWidget
 {
     Q_OBJECT
-    public:
-        explicit AlterSchemaWidget(QWidget* parent = 0);
-        ~AlterSchemaWidget();
+public:
+    explicit AlterSchemaWidget(QWidget *parent = 0);
+    ~AlterSchemaWidget();
 
-        void setTableSchema(KexiDB::TableSchema *schema, const QString &suggestedCaption = QString());
-        void setData(const QList<KexiDB::RecordData>& data);
+    void setTableSchema(KexiDB::TableSchema *schema, const QString &suggestedCaption = QString());
+    void setData(const QList<KexiDB::RecordData> &data);
 
-        KexiDB::TableSchema* newSchema();
+    KexiDB::TableSchema *newSchema();
 
-        KexiNameWidget* nameWidget();
-        bool nameExists(const QString &name) const;
+    KexiNameWidget *nameWidget();
+    bool nameExists(const QString &name) const;
 
-        AlterSchemaTableModel* model();
-    private:
+    AlterSchemaTableModel *model();
+private:
 
-        QGridLayout *m_layout;
-        QTableView *m_table;
-        QComboBox *m_columnType;
-        QCheckBox *m_columnPKey;
-        KexiNameWidget *m_tableNameWidget;
+    QGridLayout *m_layout;
+    QTableView *m_table;
+    QComboBox *m_columnType;
+    QCheckBox *m_columnPKey;
+    KexiNameWidget *m_tableNameWidget;
 
-        QStringList m_types;
+    QStringList m_types;
 
-        AlterSchemaTableModel *m_model;
+    AlterSchemaTableModel *m_model;
 
-        QLabel *m_columnNumLabel;
-        QLabel *m_columnTypeLabel;
-        QLabel *m_columnPKeyLabel;
+    QLabel *m_columnNumLabel;
+    QLabel *m_columnTypeLabel;
+    QLabel *m_columnPKeyLabel;
 
-        KexiDB::TableSchema *m_originalSchema;
-        KexiDB::TableSchema *m_newSchema;
+    KexiDB::TableSchema *m_originalSchema;
+    KexiDB::TableSchema *m_newSchema;
 
-        int m_selectedColumn;
+    int m_selectedColumn;
 
-        //! @todo Something like this could go in kexi utils/project?
-        QString suggestedItemCaption(const QString& baseCaption);
+    //! @todo Something like this could go in kexi utils/project?
+    QString suggestedItemCaption(const QString &baseCaption);
 
-    private Q_SLOTS:
-        void tableClicked(const QModelIndex& idx);
-        void typeActivated(int typ);
-        void pkeyClicked(bool pkey);
+private Q_SLOTS:
+    void tableClicked(const QModelIndex &idx);
+    void typeActivated(int typ);
+    void pkeyClicked(bool pkey);
 };
 }
 #endif // ALTERSCHEMAWIDGET_H

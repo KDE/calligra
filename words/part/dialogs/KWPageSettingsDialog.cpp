@@ -33,10 +33,10 @@
 #include <kdebug.h>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, const KWPage &page)
-        : KoPageLayoutDialog(parent, page.pageStyle().pageLayout()),
-        m_document(document),
-        m_page(page),
-        m_pageStyle(page.pageStyle())
+    : KoPageLayoutDialog(parent, page.pageStyle().pageLayout()),
+      m_document(document),
+      m_page(page),
+      m_pageStyle(page.pageStyle())
 {
     Q_ASSERT(document);
     setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel);
@@ -63,8 +63,9 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     connect(m_deletePageStyleButton, SIGNAL(clicked()), this, SLOT(pageStyleDeleteClicked()));
     pageStyleLayout2->addWidget(m_deletePageStyleButton);
     pageStyleLayout2->addStretch();
-    foreach(KPageWidgetItem *item, QList<KPageWidgetItem*>() << columnsPage << stylePage)
+    foreach (KPageWidgetItem *item, QList<KPageWidgetItem *>() << columnsPage << stylePage) {
         m_pages[item->name()] = item;
+    }
 
     reloadPageStyles();
 
@@ -74,7 +75,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
 
 #if 0
     bool simpleSetup = m_document->pageCount() == 1
-            || (m_document->pageCount() == 2 && page.pageSide() == KWPage::PageSpread);
+                       || (m_document->pageCount() == 2 && page.pageSide() == KWPage::PageSpread);
     if (!simpleSetup) { // if there is one style, its still a simple doc
         bool onlyOneStyle = true;
         foreach (const KWPage &p, m_document->pageManager()->pages()) {
@@ -83,8 +84,9 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
                 break;
             }
         }
-        if (onlyOneStyle)
+        if (onlyOneStyle) {
             simpleSetup = true;
+        }
     }
 
     if (simpleSetup) {
@@ -99,8 +101,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
         KWPageStyle pageStyle = m_page.pageStyle();
         setPageSpread(pageStyle.isPageSpread());
         setTextDirection(pageStyle.direction());
-    }
-    else {
+    } else {
         /*
           The document is already not simple anymore; there is more than one page style
           in use. We should show that fact and the user is allowed to use the power of
@@ -127,7 +128,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     connect(this, SIGNAL(unitChanged(KoUnit)), SLOT(setDocumentUnit(KoUnit)));
 }
 
-KPageWidgetItem* KWPageSettingsDialog::pageItem(const QString &name) const
+KPageWidgetItem *KWPageSettingsDialog::pageItem(const QString &name) const
 {
     return m_pages.value(name);
 }
@@ -201,10 +202,12 @@ void KWPageSettingsDialog::pageStyleCloneClicked()
     Q_ASSERT(item);
     KWPageStyle pagestyle = m_document->pageManager()->pageStyle(item->text());
     Q_ASSERT(pagestyle.isValid());
-    class Validator : public QValidator {
+    class Validator : public QValidator
+    {
     public:
         Validator(KWDocument *document) : QValidator(), m_document(document) {}
-        virtual State validate(QString &input, int&) const {
+        virtual State validate(QString &input, int &) const
+        {
             return input.trimmed().isEmpty() || m_document->pageManager()->pageStyle(input).isValid() ? Intermediate : Acceptable;
         }
     private:
@@ -212,8 +215,9 @@ void KWPageSettingsDialog::pageStyleCloneClicked()
     };
     Validator validator(m_document);
     QString name = KInputDialog::getText(i18n("Clone Page Style"), i18n("Add a new page style with the name:"), pagestyle.name(), 0, this, &validator);
-    if (name.isEmpty())
+    if (name.isEmpty()) {
         return;
+    }
     pagestyle.detach(name);
     m_document->pageManager()->addPageStyle(pagestyle);
     reloadPageStyles();
@@ -238,8 +242,9 @@ void KWPageSettingsDialog::pageStyleCurrentRowChanged(int row)
 {
     QListWidgetItem *item = m_pageStylesView->item(row);
     KWPageStyle pagestyle = item ? m_document->pageManager()->pageStyle(item->text()) : KWPageStyle();
-    if (pagestyle.isValid())
+    if (pagestyle.isValid()) {
         m_pageStyle = pagestyle;
+    }
     setPageLayout(m_pageStyle.pageLayout());
     setPageSpread(m_pageStyle.isPageSpread());
     setTextDirection(m_pageStyle.direction());

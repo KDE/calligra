@@ -38,19 +38,19 @@
 
 #include "../../sdk/tests/testutil.h"
 
-    /*
-      +-----------+
-      |root       |
-      | group     |
-      |  blur 1   |
-      |  paint 2  |
-      | paint 1   |
-      +-----------+
-     */
+/*
+  +-----------+
+  |root       |
+  | group     |
+  |  blur 1   |
+  |  paint 2  |
+  | paint 1   |
+  +-----------+
+ */
 
 void KisAsyncMergerTest::testMerger()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
 
     QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
@@ -78,10 +78,10 @@ void KisAsyncMergerTest::testMerger()
     image->addNode(paintLayer2, groupLayer);
     image->addNode(blur1, groupLayer);
 
-    QRect testRect1(0,0,100,441);
-    QRect testRect2(100,0,400,441);
-    QRect testRect3(500,0,140,441);
-    QRect testRect4(580,381,40,40);
+    QRect testRect1(0, 0, 100, 441);
+    QRect testRect2(100, 0, 400, 441);
+    QRect testRect3(500, 0, 140, 441);
+    QRect testRect4(580, 381, 40, 40);
 
     QRect cropRect(image->bounds());
 
@@ -102,15 +102,15 @@ void KisAsyncMergerTest::testMerger()
 
     // Old style merging: has artefacts at x=100 and x=500
     // And should be turned on inside KisLayer
-/*    paintLayer2->setDirty(testRect1);
-    QTest::qSleep(3000);
-    paintLayer2->setDirty(testRect2);
-    QTest::qSleep(3000);
-    paintLayer2->setDirty(testRect3);
-    QTest::qSleep(3000);
-    paintLayer2->setDirty(testRect4);
-    QTest::qSleep(3000);
-*/
+    /*    paintLayer2->setDirty(testRect1);
+        QTest::qSleep(3000);
+        paintLayer2->setDirty(testRect2);
+        QTest::qSleep(3000);
+        paintLayer2->setDirty(testRect3);
+        QTest::qSleep(3000);
+        paintLayer2->setDirty(testRect4);
+        QTest::qSleep(3000);
+    */
 
     KisLayerSP rootLayer = image->rootLayer();
     QVERIFY(rootLayer->exactBounds() == image->bounds());
@@ -121,7 +121,6 @@ void KisAsyncMergerTest::testMerger()
     QVERIFY(TestUtil::compareQImages(pt, resultProjection, referenceProjection, 5, 0, 0));
 }
 
-
 /**
  * This in not fully automated test for child obliging in KisAsyncMerger.
  * It just checks whether devices are shared. To check if the merger
@@ -129,17 +128,17 @@ void KisAsyncMergerTest::testMerger()
  * and take a look.
  */
 
-    /*
-      +-----------+
-      |root       |
-      | group     |
-      |  paint 1  |
-      +-----------+
-     */
+/*
+  +-----------+
+  |root       |
+  | group     |
+  |  paint 1  |
+  +-----------+
+ */
 
 void KisAsyncMergerTest::debugObligeChild()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 640, 441, colorSpace, "merger test");
 
     QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
@@ -152,7 +151,7 @@ void KisAsyncMergerTest::debugObligeChild()
     image->addNode(groupLayer, image->rootLayer());
     image->addNode(paintLayer1, groupLayer);
 
-    QRect testRect1(0,0,640,441);
+    QRect testRect1(0, 0, 640, 441);
     QRect cropRect(image->bounds());
 
     KisMergeWalker walker(cropRect);
@@ -166,14 +165,14 @@ void KisAsyncMergerTest::debugObligeChild()
     QVERIFY(groupLayer->original() == paintLayer1->projection());
 }
 
-    /*
-      +--------------+
-      |root          |
-      | paint 1      |
-      |  invert_mask |
-      | clone_of_1   |
-      +--------------+
-     */
+/*
+  +--------------+
+  |root          |
+  | paint 1      |
+  |  invert_mask |
+  | clone_of_1   |
+  +--------------+
+ */
 
 void KisAsyncMergerTest::testFullRefreshWithClones()
 {
@@ -181,7 +180,7 @@ void KisAsyncMergerTest::testFullRefreshWithClones()
     KisImageSP image = new KisImage(0, 128, 128, colorSpace, "clones test");
 
     KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
-    device1->fill(image->bounds(), KoColor( Qt::white, colorSpace));
+    device1->fill(image->bounds(), KoColor(Qt::white, colorSpace));
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(filter);
@@ -224,13 +223,13 @@ void KisAsyncMergerTest::testFullRefreshWithClones()
     const int numPixels = filledRect.width() * filledRect.height();
 
     QByteArray bytes(numPixels * pixelSize, 13);
-    cloneLayer1->projection()->readBytes((quint8*)bytes.data(), filledRect);
+    cloneLayer1->projection()->readBytes((quint8 *)bytes.data(), filledRect);
 
     KoColor desiredPixel(Qt::black, colorSpace);
-    quint8 *srcPtr = (quint8*)bytes.data();
+    quint8 *srcPtr = (quint8 *)bytes.data();
     quint8 *dstPtr = desiredPixel.data();
-    for(int i = 0; i < numPixels; i++) {
-        if(memcmp(srcPtr, dstPtr, pixelSize)) {
+    for (int i = 0; i < numPixels; i++) {
+        if (memcmp(srcPtr, dstPtr, pixelSize)) {
             qDebug() << "expected:" << dstPtr[0] << dstPtr[1] << dstPtr[2] << dstPtr[3];
             qDebug() << "result:  " << srcPtr[0] << srcPtr[1] << srcPtr[2] << srcPtr[3];
             QFAIL("Failed to compare pixels");
@@ -239,13 +238,13 @@ void KisAsyncMergerTest::testFullRefreshWithClones()
     }
 }
 
-    /*
-      +--------------+
-      |root          |
-      | paint 2      |
-      | paint 1      |
-      +--------------+
-     */
+/*
+  +--------------+
+  |root          |
+  | paint 2      |
+  | paint 1      |
+  +--------------+
+ */
 
 void KisAsyncMergerTest::testSubgraphingWithoutUpdatingParent()
 {

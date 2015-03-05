@@ -38,24 +38,48 @@ class CustomAttributeDefinition;
 class KPLATOTJ_EXPORT CoreAttributes
 {
 public:
-    CoreAttributes(Project* p, const QString& i, const QString& n,
-                   CoreAttributes* parent_, const QString& df = QString(),
+    CoreAttributes(Project *p, const QString &i, const QString &n,
+                   CoreAttributes *parent_, const QString &df = QString(),
                    uint dl = 0);
     virtual ~CoreAttributes();
 
-    virtual CAType getType() const { return CA_Undefined; }
+    virtual CAType getType() const
+    {
+        return CA_Undefined;
+    }
 
-    const QString& getId() const { return id; }
+    const QString &getId() const
+    {
+        return id;
+    }
     QString getFullId() const;
 
-    const QString& getDefinitionFile() const { return definitionFile; }
-    uint getDefinitionLine() const { return definitionLine; }
+    const QString &getDefinitionFile() const
+    {
+        return definitionFile;
+    }
+    uint getDefinitionLine() const
+    {
+        return definitionLine;
+    }
 
-    void setIndex(int idx) { index = idx; }
-    int getIndex() const { return index; }
+    void setIndex(int idx)
+    {
+        index = idx;
+    }
+    int getIndex() const
+    {
+        return index;
+    }
 
-    void setSequenceNo(uint no) { sequenceNo = no; }
-    uint getSequenceNo() const { return sequenceNo; }
+    void setSequenceNo(uint no)
+    {
+        sequenceNo = no;
+    }
+    uint getSequenceNo() const
+    {
+        return sequenceNo;
+    }
 
     void setHierarchNo(uint no);
     QString getHierarchNo() const;
@@ -64,13 +88,25 @@ public:
     QString getHierarchIndex() const;
     QString getHierarchLevel() const;
 
-    Project* getProject() const { return project; }
+    Project *getProject() const
+    {
+        return project;
+    }
 
-    void setName(const QString& n) { name = n; }
-    const QString& getName() const { return name; }
-    void getFullName(QString& fullName) const;
+    void setName(const QString &n)
+    {
+        name = n;
+    }
+    const QString &getName() const
+    {
+        return name;
+    }
+    void getFullName(QString &fullName) const;
 
-    CoreAttributes* getParent() const { return parent; }
+    CoreAttributes *getParent() const
+    {
+        return parent;
+    }
 
     uint treeLevel() const;
 
@@ -78,31 +114,49 @@ public:
     CoreAttributesListIterator getSubListIterator() const;
 
     bool hasSubs() const;
-    void addFlag(QString flag) { flags.addFlag(flag); }
-    void purgeFlags() { flags.clear(); }
-    void clearFlag(const QString& flag) { flags.clearFlag(flag); }
-    bool hasFlag(const QString& flag) { return flags.hasFlag(flag); }
-    FlagList getFlagList() const { return flags; }
+    void addFlag(QString flag)
+    {
+        flags.addFlag(flag);
+    }
+    void purgeFlags()
+    {
+        flags.clear();
+    }
+    void clearFlag(const QString &flag)
+    {
+        flags.clearFlag(flag);
+    }
+    bool hasFlag(const QString &flag)
+    {
+        return flags.hasFlag(flag);
+    }
+    FlagList getFlagList() const
+    {
+        return flags;
+    }
 
-    bool hasSameAncestor(const CoreAttributes* c) const;
-    bool isDescendantOf(const CoreAttributes* c) const;
-    bool isParentOf(const CoreAttributes* c) const;
+    bool hasSameAncestor(const CoreAttributes *c) const;
+    bool isDescendantOf(const CoreAttributes *c) const;
+    bool isParentOf(const CoreAttributes *c) const;
 
-    bool isRoot() const { return parent == 0; }
+    bool isRoot() const
+    {
+        return parent == 0;
+    }
     bool isLeaf() const;
 
-    void addCustomAttribute(const QString& id, CustomAttribute* ca);
-    const CustomAttribute* getCustomAttribute(const QString& id) const;
-    const QMap<QString, CustomAttribute*>& getCustomAttributeDict() const
+    void addCustomAttribute(const QString &id, CustomAttribute *ca);
+    const CustomAttribute *getCustomAttribute(const QString &id) const;
+    const QMap<QString, CustomAttribute *> &getCustomAttributeDict() const
     {
         return customAttributes;
     }
     void inheritCustomAttributes
-        (const QMap<QString, CustomAttributeDefinition*>& dict);
+    (const QMap<QString, CustomAttributeDefinition *> &dict);
 
 protected:
     /// A pointer to access information that are global to the project.
-    Project* project;
+    Project *project;
 
     /// An ID that must be unique within the attribute class.
     QString id;
@@ -111,7 +165,7 @@ protected:
     QString name;
 
     /// Pointer to parent. If there is no parent the pointer is 0.
-    CoreAttributes* parent;
+    CoreAttributes *parent;
 
     /* Name of the tjp file that caused the creation of this CoreAttribute. It
      * may be empty if it was not created from a .tjp file. */
@@ -146,18 +200,18 @@ protected:
     uint hierarchIndex;
 
     /// List of child attributes.
-    CoreAttributesList* sub;
+    CoreAttributesList *sub;
 
     /// List of flags set for this attribute.
     FlagList flags;
 
     /// User defined, optional attributes.
-    QMap<QString, CustomAttribute*> customAttributes;
-} ;
+    QMap<QString, CustomAttribute *> customAttributes;
+};
 
 } // namespace TJ
 
-KPLATOTJ_EXPORT QDebug operator<<( QDebug dbg, const TJ::CoreAttributes* t );
-KPLATOTJ_EXPORT QDebug operator<<( QDebug dbg, const TJ::CoreAttributes& t );
+KPLATOTJ_EXPORT QDebug operator<<(QDebug dbg, const TJ::CoreAttributes *t);
+KPLATOTJ_EXPORT QDebug operator<<(QDebug dbg, const TJ::CoreAttributes &t);
 
 #endif

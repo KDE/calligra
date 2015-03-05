@@ -18,14 +18,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include "GreyscaleFilterEffect.h"
 #include <KoFilterEffectRenderContext.h>
 
 #include <QImage>
 
 GreyscaleFilterEffect::GreyscaleFilterEffect()
-: KoFilterEffect(GreyscaleFilterEffectId, "Grayscale effect")
+    : KoFilterEffect(GreyscaleFilterEffectId, "Grayscale effect")
 {
 }
 
@@ -33,16 +32,16 @@ GreyscaleFilterEffect::~GreyscaleFilterEffect()
 {
 }
 
-void GreyscaleFilterEffect::save(KoXmlWriter& /*writer*/)
+void GreyscaleFilterEffect::save(KoXmlWriter & /*writer*/)
 {
 }
 
-bool GreyscaleFilterEffect::load(const KoXmlElement& /*element*/, const KoFilterEffectLoadingContext& /*context*/)
+bool GreyscaleFilterEffect::load(const KoXmlElement & /*element*/, const KoFilterEffectLoadingContext & /*context*/)
 {
     return true;
 }
 
-QImage GreyscaleFilterEffect::processImage(const QImage& image, const KoFilterEffectRenderContext& context) const
+QImage GreyscaleFilterEffect::processImage(const QImage &image, const KoFilterEffectRenderContext &context) const
 {
     QImage result = image.convertToFormat(QImage::Format_ARGB32);
 
@@ -51,11 +50,11 @@ QImage GreyscaleFilterEffect::processImage(const QImage& image, const KoFilterEf
     const int right = context.filterRegion().right();
     const int width = result.width();
 #if QT_VERSION >= 0x040700
-    const QRgb *src = (const QRgb*)image.constBits();
+    const QRgb *src = (const QRgb *)image.constBits();
 #else
-    const QRgb *src = (const QRgb*)image.bits();
+    const QRgb *src = (const QRgb *)image.bits();
 #endif
-    QRgb *dst = (QRgb*)result.bits();
+    QRgb *dst = (QRgb *)result.bits();
 
     for (int row = context.filterRegion().top(); row < bottom; ++row) {
         for (int col = left; col < right; ++col) {

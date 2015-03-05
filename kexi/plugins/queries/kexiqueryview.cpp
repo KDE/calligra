@@ -38,8 +38,8 @@ class KexiQueryView::Private
 {
 public:
     Private()
-            : cursor(0),
-              currentParams()
+        : cursor(0),
+          currentParams()
     {}
     ~Private() {}
     KexiDB::Cursor *cursor;
@@ -52,11 +52,11 @@ public:
 //---------------------------------------------------------------------------------
 
 KexiQueryView::KexiQueryView(QWidget *parent)
-        : KexiDataTableView(parent)
-        , d(new Private())
+    : KexiDataTableView(parent)
+    , d(new Private())
 {
     // setup main menu actions
-    QList<QAction*> mainMenuActions;
+    QList<QAction *> mainMenuActions;
     mainMenuActions
             << sharedAction("project_export_data_table");
     setMainMenuActions(mainMenuActions);
@@ -66,24 +66,26 @@ KexiQueryView::KexiQueryView(QWidget *parent)
 
 KexiQueryView::~KexiQueryView()
 {
-    if (d->cursor)
+    if (d->cursor) {
         d->cursor->connection()->deleteCursor(d->cursor);
+    }
     delete d;
 }
 
 tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 {
-    if (!query)
+    if (!query) {
         return false;
+    }
     KexiUtils::WaitCursor wait;
     KexiDB::Cursor *oldCursor = d->cursor;
     KexiDB::debug(query->parameters());
     bool ok;
-    KexiDB::Connection * conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     {
         KexiUtils::WaitCursorRemover remover;
         d->currentParams = KexiQueryParameters::getParameters(this,
-                 *conn->driver(), *query, ok);
+                           *conn->driver(), *query, ok);
     }
     if (!ok) {//input cancelled
         return cancelled;
@@ -101,8 +103,9 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 //! @todo remove close() when dynamic cursors arrive
     d->cursor->close();
 
-    if (oldCursor)
+    if (oldCursor) {
         oldCursor->connection()->deleteCursor(oldCursor);
+    }
 
 //! @todo maybe allow writing and inserting for single-table relations?
     tableView()->setReadOnly(true);
@@ -118,36 +121,42 @@ tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
     if (mode == Kexi::NoViewMode) {
         KexiDB::QuerySchema *querySchema = static_cast<KexiDB::QuerySchema *>(window()->schemaData());
         const tristate result = executeQuery(querySchema);
-        if (true != result)
+        if (true != result) {
             return result;
+        }
     } else if (mode == Kexi::DesignViewMode || Kexi::TextViewMode) {
-        KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window()->data());
+        KexiQueryPart::TempData *temp = static_cast<KexiQueryPart::TempData *>(window()->data());
         const tristate result = executeQuery(temp->query());
-        if (true != result)
+        if (true != result) {
             return result;
+        }
     }
     return true;
 }
 
-KexiDB::SchemaData* KexiQueryView::storeNewData(const KexiDB::SchemaData& sdata,
-                                                KexiView::StoreNewDataOptions options,
-                                                bool &cancel)
+KexiDB::SchemaData *KexiQueryView::storeNewData(const KexiDB::SchemaData &sdata,
+        KexiView::StoreNewDataOptions options,
+        bool &cancel)
 {
-    KexiView * view = window()->viewThatRecentlySetDirtyFlag();
-    if (dynamic_cast<KexiQueryDesignerGuiEditor*>(view))
-        return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeNewData(sdata, options, cancel);
-    if (dynamic_cast<KexiQueryDesignerSQLView*>(view))
-        return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeNewData(sdata, options, cancel);
+    KexiView *view = window()->viewThatRecentlySetDirtyFlag();
+    if (dynamic_cast<KexiQueryDesignerGuiEditor *>(view)) {
+        return dynamic_cast<KexiQueryDesignerGuiEditor *>(view)->storeNewData(sdata, options, cancel);
+    }
+    if (dynamic_cast<KexiQueryDesignerSQLView *>(view)) {
+        return dynamic_cast<KexiQueryDesignerSQLView *>(view)->storeNewData(sdata, options, cancel);
+    }
     return 0;
 }
 
 tristate KexiQueryView::storeData(bool dontAsk)
 {
-    KexiView * view = window()->viewThatRecentlySetDirtyFlag();
-    if (dynamic_cast<KexiQueryDesignerGuiEditor*>(view))
-        return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeData(dontAsk);
-    if (dynamic_cast<KexiQueryDesignerSQLView*>(view))
-        return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeData(dontAsk);
+    KexiView *view = window()->viewThatRecentlySetDirtyFlag();
+    if (dynamic_cast<KexiQueryDesignerGuiEditor *>(view)) {
+        return dynamic_cast<KexiQueryDesignerGuiEditor *>(view)->storeData(dontAsk);
+    }
+    if (dynamic_cast<KexiQueryDesignerSQLView *>(view)) {
+        return dynamic_cast<KexiQueryDesignerSQLView *>(view)->storeData(dontAsk);
+    }
     return false;
 }
 

@@ -32,8 +32,8 @@
 
 #include "dialogs/PartsWidget.h"
 
-MusicTool::MusicTool( KoCanvasBase* canvas )
-    : KoToolBase( canvas ),
+MusicTool::MusicTool(KoCanvasBase *canvas)
+    : KoToolBase(canvas),
       m_musicshape(0)
 {
 }
@@ -42,18 +42,18 @@ MusicTool::~MusicTool()
 {
 }
 
-void MusicTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void MusicTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
     //kDebug() ;
 
     foreach (KoShape *shape, shapes) {
-        m_musicshape = dynamic_cast<MusicShape*>( shape );
-        if ( m_musicshape )
+        m_musicshape = dynamic_cast<MusicShape *>(shape);
+        if (m_musicshape) {
             break;
+        }
     }
-    if ( !m_musicshape )
-    {
+    if (!m_musicshape) {
         emit done();
         return;
     }
@@ -63,35 +63,34 @@ void MusicTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sh
 
 void MusicTool::deactivate()
 {
-  //kDebug()<<"MusicTool::deactivate";
-  m_musicshape = 0;
+    //kDebug()<<"MusicTool::deactivate";
+    m_musicshape = 0;
 }
 
-void MusicTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
+void MusicTool::paint(QPainter &painter, const KoViewConverter &viewConverter)
 {
-    Q_UNUSED( painter );
-    Q_UNUSED( viewConverter );
+    Q_UNUSED(painter);
+    Q_UNUSED(viewConverter);
 }
 
-void MusicTool::mousePressEvent( KoPointerEvent* )
-{
-}
-
-void MusicTool::mouseMoveEvent( KoPointerEvent* )
+void MusicTool::mousePressEvent(KoPointerEvent *)
 {
 }
 
-void MusicTool::mouseReleaseEvent( KoPointerEvent* )
+void MusicTool::mouseMoveEvent(KoPointerEvent *)
 {
 }
 
-void MusicTool::addCommand(KUndo2Command* command)
+void MusicTool::mouseReleaseEvent(KoPointerEvent *)
+{
+}
+
+void MusicTool::addCommand(KUndo2Command *command)
 {
     canvas()->addCommand(command);
 }
 
-
-QWidget * MusicTool::createOptionWidget()
+QWidget *MusicTool::createOptionWidget()
 {
     KTabWidget *widget = new KTabWidget();
 
@@ -100,14 +99,16 @@ QWidget * MusicTool::createOptionWidget()
 
     connect(this, SIGNAL(shapeChanged(MusicShape*)), pw, SLOT(setShape(MusicShape*)));
 
-    if (m_musicshape) pw->setShape(m_musicshape);
+    if (m_musicshape) {
+        pw->setShape(m_musicshape);
+    }
 
     return widget;
 
 }
 
-MusicShape* MusicTool::shape()
+MusicShape *MusicTool::shape()
 {
     return m_musicshape;
 }
-    
+

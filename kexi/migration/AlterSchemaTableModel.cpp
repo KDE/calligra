@@ -23,7 +23,7 @@
 
 #define ROWS_FOR_PREVIEW 3
 
-AlterSchemaTableModel::AlterSchemaTableModel ( QObject* parent ) : QAbstractTableModel ( parent )
+AlterSchemaTableModel::AlterSchemaTableModel(QObject *parent) : QAbstractTableModel(parent)
 {
     kDebug();
     m_schema = 0;
@@ -35,46 +35,50 @@ AlterSchemaTableModel::~AlterSchemaTableModel()
     kDebug();
 }
 
-QVariant AlterSchemaTableModel::data ( const QModelIndex& index, int role ) const
+QVariant AlterSchemaTableModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QVariant();
-    
-    if (index.column() >= (int)m_schema->fieldCount())
+    }
+
+    if (index.column() >= (int)m_schema->fieldCount()) {
         return QVariant();
-    
+    }
+
     if (role == Qt::DisplayRole) {
         if (m_data.length() > index.row()) {
-            const KexiDB::RecordData r( m_data[index.row()] );
-            if (r.size() <= index.column())
+            const KexiDB::RecordData r(m_data[index.row()]);
+            if (r.size() <= index.column()) {
                 return QVariant();
+            }
             return r[index.column()];
-        }
-        else {
+        } else {
             return QVariant();
         }
-    }
-    else
+    } else {
         return QVariant();
+    }
 }
 
 QVariant AlterSchemaTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role != Qt::DisplayRole)
+    if (role != Qt::DisplayRole) {
         return QVariant();
+    }
 
     if (orientation == Qt::Horizontal) {
         if (m_schema) {
             KexiDB::Field *fld = m_schema->field(section);
-            if (fld)
+            if (fld) {
                 return m_schema->field(section)->captionOrName();
+            }
         }
         return QString("Column %1").arg(section);
     }
     return QString("Record %1").arg(section + 1);
 }
 
-int AlterSchemaTableModel::columnCount ( const QModelIndex& parent ) const
+int AlterSchemaTableModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     if (m_schema) {
@@ -83,7 +87,7 @@ int AlterSchemaTableModel::columnCount ( const QModelIndex& parent ) const
     return 0;
 }
 
-int AlterSchemaTableModel::rowCount ( const QModelIndex& parent ) const
+int AlterSchemaTableModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_rowCount;
@@ -100,7 +104,7 @@ void AlterSchemaTableModel::setSchema(KexiDB::TableSchema *ts)
     emit layoutChanged();
 }
 
-void AlterSchemaTableModel::setData(const QList<KexiDB::RecordData>& data)
+void AlterSchemaTableModel::setData(const QList<KexiDB::RecordData> &data)
 {
     m_data = data;
 }

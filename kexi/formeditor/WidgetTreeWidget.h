@@ -45,39 +45,41 @@ public:
 
     //! Creates tree item. If @a forcedTabPageIndex >= 0, it is used as index for tab page.
     WidgetTreeWidgetItem(WidgetTreeWidgetItem *parent, ObjectTreeItem *data,
-        LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
-        const QString& forcedTabPageName = QString());
+                         LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
+                         const QString &forcedTabPageName = QString());
 
     //! For TabStopDialog
     explicit WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data = 0,
-        LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
-        const QString& forcedTabPageName = QString());
+                                  LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
+                                  const QString &forcedTabPageName = QString());
     virtual ~WidgetTreeWidgetItem();
 
     //! \return the item name, ie the ObjectTreeItem name
     QString name() const;
 
     //! \return the ObjectTreeItem information associated to this item.
-    ObjectTreeItem* data() const;
+    ObjectTreeItem *data() const;
 
     //! Added to unhide.
-    virtual QVariant data(int column, int role) const { return QTreeWidgetItem::data(column, role); }
+    virtual QVariant data(int column, int role) const
+    {
+        return QTreeWidgetItem::data(column, role);
+    }
 
     //! Reimplemented to alter sorting for certain widget types, e.g. tab pages.
-    virtual bool operator<( const QTreeWidgetItem & other ) const;
+    virtual bool operator<(const QTreeWidgetItem &other) const;
 
     //! Used to alter sorting for certain widget types, e.g. tab pages.
     QString customSortingKey() const;
 
 protected:
     //! Initializes text, icon, selectable flag, custom serting key
-    void init(int forcedTabPageIndex, const QString& forcedTabPageName);
-    void initTextAndIcon(int forcedTabPageIndex, const QString& forcedTabPageName);
-
+    void init(int forcedTabPageIndex, const QString &forcedTabPageName);
+    void initTextAndIcon(int forcedTabPageIndex, const QString &forcedTabPageName);
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 /*! @short A graphical view of Form's ObjectTree.
@@ -103,13 +105,13 @@ public:
     virtual ~WidgetTreeWidget();
 
     //! @return selected tree item or 0 if there is no selection or more than one item is selected.
-    WidgetTreeWidgetItem* selectedItem() const;
+    WidgetTreeWidgetItem *selectedItem() const;
 
     //! \return the pixmap name for a given class, to be shown next to the widget name.
     QString iconNameForClass(const QByteArray &classname) const;
 
     //! @see ObjectTreeItem* WidgetLibrary::selectableItem(ObjectTreeItem*)
-    ObjectTreeItem* selectableItem(ObjectTreeItem* item);
+    ObjectTreeItem *selectableItem(ObjectTreeItem *item);
 
 public Q_SLOTS:
     /*! Sets \a form as the current Form in the list. The list will automatically
@@ -142,31 +144,31 @@ protected Q_SLOTS:
 protected:
     //! Internal function to fill the list.
     void loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *parent,
-        WidgetTreeWidgetItem::LoadTreeFlags flags = WidgetTreeWidgetItem::NoLoadTreeFlags);
+                  WidgetTreeWidgetItem::LoadTreeFlags flags = WidgetTreeWidgetItem::NoLoadTreeFlags);
 
     //! @return the item whose name is @a name.
-    WidgetTreeWidgetItem* findItem(const QString &name);
+    WidgetTreeWidgetItem *findItem(const QString &name);
 
     //! @return the item whose text in column 0 is @a text.
-    WidgetTreeWidgetItem* findItemByFirstColumn(const QString& text);
+    WidgetTreeWidgetItem *findItemByFirstColumn(const QString &text);
 
-    virtual void contextMenuEvent(QContextMenuEvent* e);
+    virtual void contextMenuEvent(QContextMenuEvent *e);
 
-    void handleContextMenuEvent(QContextMenuEvent* e);
+    void handleContextMenuEvent(QContextMenuEvent *e);
 
     void selectWidgetForItem(QTreeWidgetItem *item);
 
     //! Try to alter selection of the item is nonselectable item clicked and parent item is available.
-    QTreeWidgetItem* tryToAlterSelection(QTreeWidgetItem* current);
+    QTreeWidgetItem *tryToAlterSelection(QTreeWidgetItem *current);
 
     //! If @a item is (grand)child of tab widget, activate proper tab page.
     //! Do it recursively because there may be nested tab widgets.
-    void activateTabPageIfNeeded(QTreeWidgetItem* item);
+    void activateTabPageIfNeeded(QTreeWidgetItem *item);
 
 private:
 
     class Private;
-    Private* const d;
+    Private *const d;
 
     friend class TabStopDialog;
 };

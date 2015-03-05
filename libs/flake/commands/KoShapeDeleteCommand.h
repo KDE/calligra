@@ -45,7 +45,7 @@ public:
      * @param shapes a set of all the shapes that should be deleted.
      * @param parent the parent command used for macro commands
      */
-    KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent = 0);
+    KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
     virtual ~KoShapeDeleteCommand();
     /// redo the command
     void redo();
@@ -53,7 +53,7 @@ public:
     void undo();
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

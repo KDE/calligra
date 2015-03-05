@@ -29,13 +29,14 @@ class KisWdgGaussianBlur : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgGaussianBlur(QWidget * parent);
+    KisWdgGaussianBlur(QWidget *parent);
     virtual ~KisWdgGaussianBlur();
-    inline const Ui_WdgGaussianBlur* widget() const {
+    inline const Ui_WdgGaussianBlur *widget() const
+    {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration *);
+    virtual KisPropertiesConfiguration *configuration() const;
 
 private Q_SLOTS:
     void horizontalRadiusChanged(qreal);
@@ -43,7 +44,7 @@ private Q_SLOTS:
     void aspectLockChanged(bool);
 
 private:
-    Ui_WdgGaussianBlur* m_widget;
+    Ui_WdgGaussianBlur *m_widget;
 };
 
 #endif

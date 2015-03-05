@@ -33,14 +33,14 @@
 K_PLUGIN_FACTORY(KarbonToolsPluginFactory, registerPlugin<KarbonToolsPlugin>();)
 K_EXPORT_PLUGIN(KarbonToolsPluginFactory("KarbonTools"))
 
-KarbonToolsPlugin::KarbonToolsPlugin(QObject *parent, const QVariantList&)
-        : QObject(parent)
+KarbonToolsPlugin::KarbonToolsPlugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
     KoToolRegistry::instance()->add(new KarbonCalligraphyToolFactory());
     KoToolRegistry::instance()->add(new KarbonGradientToolFactory());
     KoToolRegistry::instance()->add(new KarbonPatternToolFactory());
     KoToolRegistry::instance()->add(new KarbonFilterEffectsToolFactory());
-    
+
     KoShapeRegistry::instance()->add(new KarbonCalligraphicShapeFactory());
 }
 

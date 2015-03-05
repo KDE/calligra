@@ -25,49 +25,49 @@
 
 #include <QMimeData>
 
-CollectionItemModel::CollectionItemModel(QObject* parent)
+CollectionItemModel::CollectionItemModel(QObject *parent)
     : QAbstractListModel(parent),
       m_viewMode(QListView::IconMode)
 {
     setSupportedDragActions(Qt::CopyAction);
 }
 
-QVariant CollectionItemModel::data(const QModelIndex& index, int role) const
+QVariant CollectionItemModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || index.row() > m_shapeTemplateList.count ())
+    if (!index.isValid() || index.row() > m_shapeTemplateList.count()) {
         return QVariant();
+    }
 
-    switch(role)
-    {
-        case Qt::ToolTipRole:
-            return m_shapeTemplateList[index.row()].toolTip;
+    switch (role) {
+    case Qt::ToolTipRole:
+        return m_shapeTemplateList[index.row()].toolTip;
 
-        case Qt::DecorationRole:
-            return m_shapeTemplateList[index.row()].icon;
+    case Qt::DecorationRole:
+        return m_shapeTemplateList[index.row()].icon;
 
-        case Qt::UserRole:
-            return m_shapeTemplateList[index.row()].id;
+    case Qt::UserRole:
+        return m_shapeTemplateList[index.row()].id;
 
-        case Qt::DisplayRole:
-            return m_viewMode == QListView::ListMode ? m_shapeTemplateList[index.row()].name : QString();
+    case Qt::DisplayRole:
+        return m_viewMode == QListView::ListMode ? m_shapeTemplateList[index.row()].name : QString();
 
-        case Qt::UserRole+1:
-            return m_shapeTemplateList[index.row()].name;
+    case Qt::UserRole+1:
+        return m_shapeTemplateList[index.row()].name;
 
-        default:
-            return QVariant();
+    default:
+        return QVariant();
     }
 
     return QVariant();
 }
 
-int CollectionItemModel::rowCount(const QModelIndex& parent) const
+int CollectionItemModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_shapeTemplateList.count();
 }
 
-void CollectionItemModel::setShapeTemplateList(const QList<KoCollectionItem>& newlist)
+void CollectionItemModel::setShapeTemplateList(const QList<KoCollectionItem> &newlist)
 {
     m_shapeTemplateList = newlist;
     reset();
@@ -80,35 +80,40 @@ QListView::ViewMode CollectionItemModel::viewMode() const
 
 void CollectionItemModel::setViewMode(QListView::ViewMode vm)
 {
-    if(m_viewMode == vm)
+    if (m_viewMode == vm) {
         return;
+    }
     m_viewMode = vm;
 }
 
-QMimeData* CollectionItemModel::mimeData(const QModelIndexList& indexes) const
+QMimeData *CollectionItemModel::mimeData(const QModelIndexList &indexes) const
 {
-    if(indexes.isEmpty())
+    if (indexes.isEmpty()) {
         return 0;
+    }
 
     QModelIndex index = indexes.first();
 
-    if(!index.isValid())
+    if (!index.isValid()) {
         return 0;
+    }
 
-    if(m_shapeTemplateList.isEmpty())
+    if (m_shapeTemplateList.isEmpty()) {
         return 0;
+    }
 
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
     dataStream << m_shapeTemplateList[index.row()].id;
     KoProperties *props = m_shapeTemplateList[index.row()].properties;
 
-    if(props)
+    if (props) {
         dataStream << props->store("shapes");
-    else
+    } else {
         dataStream << QString();
+    }
 
-    QMimeData* mimeData = new QMimeData;
+    QMimeData *mimeData = new QMimeData;
     mimeData->setData(SHAPETEMPLATE_MIMETYPE, itemData);
 
     return mimeData;
@@ -122,18 +127,20 @@ QStringList CollectionItemModel::mimeTypes() const
     return mimetypes;
 }
 
-Qt::ItemFlags CollectionItemModel::flags(const QModelIndex& index) const
+Qt::ItemFlags CollectionItemModel::flags(const QModelIndex &index) const
 {
-    if(index.isValid())
+    if (index.isValid()) {
         return QAbstractListModel::flags(index) | Qt::ItemIsDragEnabled;
+    }
 
     return QAbstractListModel::flags(index);
 }
 
-KoProperties* CollectionItemModel::properties(const QModelIndex& index) const
+KoProperties *CollectionItemModel::properties(const QModelIndex &index) const
 {
-    if (!index.isValid() || index.row() > m_shapeTemplateList.count())
+    if (!index.isValid() || index.row() > m_shapeTemplateList.count()) {
         return 0;
+    }
 
     return m_shapeTemplateList[index.row()].properties;
 }

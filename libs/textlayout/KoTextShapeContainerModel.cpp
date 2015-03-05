@@ -31,30 +31,29 @@
 
 #include <kdebug.h>
 
-struct Relation
-{
+struct Relation {
     Relation(KoShape *shape = 0)
         : child(shape),
-        anchor(0),
-        nested(false),
-        inheritsTransform(false)
+          anchor(0),
+          nested(false),
+          inheritsTransform(false)
     {
     }
     KoShape *child;
     KoShapeAnchor *anchor;
     uint nested : 1;
-    uint inheritsTransform :1;
+    uint inheritsTransform : 1;
 };
 
 class KoTextShapeContainerModel::Private
 {
 public:
-    QHash<const KoShape*, Relation> children;
+    QHash<const KoShape *, Relation> children;
     QList<KoShapeAnchor *> shapeRemovedAnchors;
 };
 
 KoTextShapeContainerModel::KoTextShapeContainerModel()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -65,8 +64,9 @@ KoTextShapeContainerModel::~KoTextShapeContainerModel()
 
 void KoTextShapeContainerModel::add(KoShape *child)
 {
-    if (d->children.contains(child))
+    if (d->children.contains(child)) {
         return;
+    }
     Relation relation(child);
     d->children.insert(child, relation);
 
@@ -118,15 +118,14 @@ bool KoTextShapeContainerModel::inheritsTransform(const KoShape *shape) const
     return d->children[shape].inheritsTransform;
 }
 
-
 int KoTextShapeContainerModel::count() const
 {
     return d->children.count();
 }
 
-QList<KoShape*> KoTextShapeContainerModel::shapes() const
+QList<KoShape *> KoTextShapeContainerModel::shapes() const
 {
-    QList<KoShape*> answer;
+    QList<KoShape *> answer;
 #if QT_VERSION >= 0x040700
     answer.reserve(d->children.count());
 #endif
@@ -145,16 +144,16 @@ void KoTextShapeContainerModel::containerChanged(KoShapeContainer *container, Ko
 void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType type)
 {
     if (((type == KoShape::RotationChanged ||
-          type == KoShape::ScaleChanged ||
-          type == KoShape::ShearChanged ||
-          type == KoShape::ClipPathChanged ||
-          type == KoShape::PositionChanged ||
-          type == KoShape::SizeChanged) && child->textRunAroundSide() != KoShape::RunThrough) ||
-          type == KoShape::TextRunAroundChanged) {
+            type == KoShape::ScaleChanged ||
+            type == KoShape::ShearChanged ||
+            type == KoShape::ClipPathChanged ||
+            type == KoShape::PositionChanged ||
+            type == KoShape::SizeChanged) && child->textRunAroundSide() != KoShape::RunThrough) ||
+            type == KoShape::TextRunAroundChanged) {
 
         relayoutInlineObject(child);
     }
-    KoShapeContainerModel::childChanged( child, type );
+    KoShapeContainerModel::childChanged(child, type);
 }
 
 void KoTextShapeContainerModel::addAnchor(KoShapeAnchor *anchor)
@@ -175,11 +174,13 @@ void KoTextShapeContainerModel::removeAnchor(KoShapeAnchor *anchor)
 
 void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
 {
-    if (!d->children.contains(child))
+    if (!d->children.contains(child)) {
         return;
+    }
     Relation relation = d->children.value(child);
-    if (relation.anchor == 0)
+    if (relation.anchor == 0) {
         return;
+    }
 
     QPointF newPosition = child->position() + move/* + relation.anchor->offset()*/;
     const QRectF parentShapeRect(QPointF(0, 0), child->parent()->size());
@@ -198,7 +199,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
             QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
             Q_ASSERT(tl.isValid());
             relation.anchor->setOffset(QPointF(newPosition.x() - tl.cursorToX(anchorPosInParag)
-                + tl.x(), 0));
+                                               + tl.x(), 0));
             relayoutInlineObject(child);
         }
 
@@ -210,7 +211,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
             anchorPosInParag = posInDocument - block.position();
         }
         if (layout->lineCount() > 0) {
-            KoTextShapeData *data = qobject_cast<KoTextShapeData*>(child->parent()->userData());
+            KoTextShapeData *data = qobject_cast<KoTextShapeData *>(child->parent()->userData());
             Q_ASSERT(data);
             QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
             Q_ASSERT(tl.isValid());
@@ -239,7 +240,7 @@ void KoTextShapeContainerModel::relayoutInlineObject(KoShape *child)
     if (child == 0) {
         return;
     }
-    KoTextShapeData *data  = qobject_cast<KoTextShapeData*>(child->parent()->userData());
+    KoTextShapeData *data  = qobject_cast<KoTextShapeData *>(child->parent()->userData());
     Q_ASSERT(data);
     data->setDirty();
 }

@@ -56,10 +56,12 @@ public:
     static void  loadEvent(QDomNode &node, EventList *list, Form *form);
 
 protected:
-    ScriptIO() {
+    ScriptIO()
+    {
         ;
     }
-    ~ScriptIO() {
+    ~ScriptIO()
+    {
         ;
     }
 };

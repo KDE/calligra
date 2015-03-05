@@ -32,14 +32,14 @@ class KisParticlePaintOpSettingsWidget : public KisPaintOpOptionsWidget
     Q_OBJECT
 
 public:
-    KisParticlePaintOpSettingsWidget(QWidget* parent = 0);
+    KisParticlePaintOpSettingsWidget(QWidget *parent = 0);
     virtual ~KisParticlePaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 
 public:
-    KisPaintActionTypeOption* m_paintActionTypeOption;
-    KisParticleOpOption* m_particleOption;
+    KisPaintActionTypeOption *m_paintActionTypeOption;
+    KisParticleOpOption *m_particleOption;
 
 };
 

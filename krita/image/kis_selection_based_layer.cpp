@@ -35,43 +35,40 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter.h"
 
-
-struct KisSelectionBasedLayer::Private
-{
+struct KisSelectionBasedLayer::Private {
 public:
     KisSelectionSP selection;
     KisPaintDeviceSP paintDevice;
 };
-
 
 KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
         const QString &name,
         KisSelectionSP selection,
         KisFilterConfiguration *filterConfig,
         bool useGeneratorRegistry)
-        : KisLayer(image.data(), name, OPACITY_OPAQUE_U8),
-          KisNodeFilterInterface(filterConfig, useGeneratorRegistry),
-          m_d(new Private())
+    : KisLayer(image.data(), name, OPACITY_OPAQUE_U8),
+      KisNodeFilterInterface(filterConfig, useGeneratorRegistry),
+      m_d(new Private())
 {
-    if (!selection)
+    if (!selection) {
         initSelection();
-    else
+    } else {
         setInternalSelection(selection);
+    }
 
     m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
 }
 
-KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs)
-        : KisLayer(rhs)
-        , KisIndirectPaintingSupport()
-        , KisNodeFilterInterface(rhs)
-        , m_d(new Private())
+KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer &rhs)
+    : KisLayer(rhs)
+    , KisIndirectPaintingSupport()
+    , KisNodeFilterInterface(rhs)
+    , m_d(new Private())
 {
     setInternalSelection(rhs.m_d->selection);
 
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
 }
-
 
 KisSelectionBasedLayer::~KisSelectionBasedLayer()
 {
@@ -97,7 +94,6 @@ bool KisSelectionBasedLayer::allowAsChild(KisNodeSP node) const
     return node->inherits("KisMask");
 }
 
-
 KisPaintDeviceSP KisSelectionBasedLayer::original() const
 {
     return m_d->paintDevice;
@@ -107,7 +103,6 @@ KisPaintDeviceSP KisSelectionBasedLayer::paintDevice() const
     return m_d->selection->pixelSelection();
 }
 
-
 bool KisSelectionBasedLayer::needProjection() const
 {
     return m_d->selection;
@@ -115,7 +110,7 @@ bool KisSelectionBasedLayer::needProjection() const
 
 void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         KisPaintDeviceSP projection,
-        const QRect& rect) const
+        const QRect &rect) const
 {
     lockTemporaryTarget();
 
@@ -140,9 +135,9 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
         projection->clear(rect);
         gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_OVER));
         gc.setSelection(tempSelection);
-    } else
+    } else {
         gc.setCompositeOp(colorSpace()->compositeOp(COMPOSITE_COPY));
-
+    }
 
     gc.bitBlt(rect.topLeft(), original, rect);
 
@@ -152,8 +147,8 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
 QRect KisSelectionBasedLayer::cropChangeRectBySelection(const QRect &rect) const
 {
     return m_d->selection ?
-        rect & m_d->selection->selectedRect() :
-        rect;
+           rect & m_d->selection->selectedRect() :
+           rect;
 }
 
 QRect KisSelectionBasedLayer::needRect(const QRect &rect, PositionToFilthy pos) const
@@ -164,8 +159,9 @@ QRect KisSelectionBasedLayer::needRect(const QRect &rect, PositionToFilthy pos) 
 
 void KisSelectionBasedLayer::resetCache(const KoColorSpace *colorSpace)
 {
-    if (!colorSpace)
+    if (!colorSpace) {
         colorSpace = image()->colorSpace();
+    }
 
     if (!m_d->paintDevice ||
             !(*m_d->paintDevice->colorSpace() == *colorSpace)) {
@@ -187,8 +183,9 @@ void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
         m_d->selection = new KisSelection(*selection.data());
         m_d->selection->setParentNode(this);
         m_d->selection->updateProjection();
-    } else
+    } else {
         m_d->selection = 0;
+    }
 }
 
 qint32 KisSelectionBasedLayer::x() const
@@ -215,7 +212,7 @@ void KisSelectionBasedLayer::setY(qint32 y)
     }
 }
 
-void KisSelectionBasedLayer::setDirty(const QRect & rect)
+void KisSelectionBasedLayer::setDirty(const QRect &rect)
 {
     KisLayer::setDirty(rect);
 }

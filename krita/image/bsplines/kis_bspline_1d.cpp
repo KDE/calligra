@@ -26,19 +26,19 @@
 
 #include "kis_bspline_p.h"
 
-namespace KisBSplines {
-
-struct KisBSpline1D::Private
+namespace KisBSplines
 {
+
+struct KisBSpline1D::Private {
     BorderCondition bc;
-    UBspline_1d_s* spline;
+    UBspline_1d_s *spline;
 };
 
 KisBSpline1D::KisBSpline1D(float gridStart,
                            float gridEnd,
                            int numSamples,
                            BorderCondition bc)
-  : m_d(new Private)
+    : m_d(new Private)
 {
     m_gridStart = gridStart;
     m_gridEnd = gridEnd/* + step*/;
@@ -68,7 +68,7 @@ void KisBSpline1D::initializeSplineImpl(const QVector<float> &values)
     m_d->spline =
         create_UBspline_1d_s(grid,
                              bctype,
-                             const_cast<float*>(values.constData()));
+                             const_cast<float *>(values.constData()));
 }
 
 float KisBSpline1D::value(float x) const
@@ -85,7 +85,7 @@ float KisBSpline1D::value(float x) const
     KIS_ASSERT_RECOVER_NOOP(x >= m_gridStart && x < m_gridEnd);
 
     float value;
-    eval_UBspline_1d_s (m_d->spline, x, &value);
+    eval_UBspline_1d_s(m_d->spline, x, &value);
 
     return value;
 }

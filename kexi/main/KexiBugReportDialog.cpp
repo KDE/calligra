@@ -34,18 +34,18 @@
 #include "KexiUserFeedbackAgent.h"
 
 KexiBugReportDialog::KexiBugReportDialog(QWidget *parent)
- : KBugReport(parent, true /*modal*/, copyAboutData())
+    : KBugReport(parent, true /*modal*/, copyAboutData())
 {
     collectData();
     setWindowTitle(i18nc("@title:window", "Report a Bug or Wish"));
-    QWidget *title = KexiUtils::findFirstChild<QWidget*>(this, "KTitleWidget");
+    QWidget *title = KexiUtils::findFirstChild<QWidget *>(this, "KTitleWidget");
     if (title) {
         title->hide();
     }
-    QVBoxLayout* lay = qobject_cast<QVBoxLayout*>(mainWidget()->layout());
+    QVBoxLayout *lay = qobject_cast<QVBoxLayout *>(mainWidget()->layout());
     lay->insertSpacing(0, 6);
     lay->addStretch(1);
-    QGridLayout *glay = KexiUtils::findFirstChild<QGridLayout*>(this, "QGridLayout");
+    QGridLayout *glay = KexiUtils::findFirstChild<QGridLayout *>(this, "QGridLayout");
     if (glay) {
         if (glay->itemAtPosition(0, 0) && glay->itemAtPosition(0, 0)->widget()) {
             glay->itemAtPosition(0, 0)->widget()->hide(); // app name label
@@ -54,14 +54,14 @@ KexiBugReportDialog::KexiBugReportDialog(QWidget *parent)
             glay->itemAtPosition(0, 1)->widget()->hide(); // app name
         }
         QLabel *lbl;
-        if (glay->itemAtPosition(1, 0) && ((lbl = qobject_cast<QLabel*>(glay->itemAtPosition(1, 0)->widget())))) {
+        if (glay->itemAtPosition(1, 0) && ((lbl = qobject_cast<QLabel *>(glay->itemAtPosition(1, 0)->widget())))) {
             lbl->setAlignment(Qt::AlignRight);
         }
-        if (glay->itemAtPosition(2, 0) && ((lbl = qobject_cast<QLabel*>(glay->itemAtPosition(2, 0)->widget())))) {
+        if (glay->itemAtPosition(2, 0) && ((lbl = qobject_cast<QLabel *>(glay->itemAtPosition(2, 0)->widget())))) {
             lbl->setText(i18n("Operating system & platform:"));
             lbl->setAlignment(Qt::AlignRight);
         }
-        if (glay->itemAtPosition(2, 1) && ((lbl = qobject_cast<QLabel*>(glay->itemAtPosition(2, 1)->widget())))) {
+        if (glay->itemAtPosition(2, 1) && ((lbl = qobject_cast<QLabel *>(glay->itemAtPosition(2, 1)->widget())))) {
             QString op_sys = m_op_sys;
             QString rep_platform = m_rep_platform;
             if (op_sys == "other") {
@@ -84,7 +84,7 @@ KexiBugReportDialog::KexiBugReportDialog(QWidget *parent)
     adjustSize();
 }
 
-KAboutData* KexiBugReportDialog::copyAboutData()
+KAboutData *KexiBugReportDialog::copyAboutData()
 {
     // Make a deep copy so we can modify the version.
     m_aboutData = new KAboutData(*KGlobal::mainComponent().aboutData());
@@ -126,63 +126,45 @@ void KexiBugReportDialog::collectData()
     const QString linux_desc = KexiMainWindowIface::global()->userFeedbackAgent()->value("linux_desc").toString().toLower();
     if (linux_id.contains("arch")) {
         m_rep_platform = "Archlinux Packages";
-    }
-    else if (linux_id.contains("balsam")) {
+    } else if (linux_id.contains("balsam")) {
         m_rep_platform = "Balsam Professional";
-    }
-    else if (linux_id.contains("chakra")) {
+    } else if (linux_id.contains("chakra")) {
         m_rep_platform = "Chakra";
-    }
-    else if (linux_id.contains("debian")) {
+    } else if (linux_id.contains("debian")) {
         if (linux_id.contains("unstable")) {
             m_rep_platform = "Debian unstable";
-        }
-        else if (linux_id.contains("testing")) {
+        } else if (linux_id.contains("testing")) {
             m_rep_platform = "Debian testing";
-        }
-        else {
+        } else {
             m_rep_platform = "Debian stable";
         }
-    }
-    else if (linux_id.contains("exherbo")) {
+    } else if (linux_id.contains("exherbo")) {
         m_rep_platform = "Exherbo Packages";
-    }
-    else if (linux_id.contains("fedora")) {
+    } else if (linux_id.contains("fedora")) {
         m_rep_platform = "Fedora RPMs";
-    }
-    else if (linux_id.contains("gentoo")) {
+    } else if (linux_id.contains("gentoo")) {
         m_rep_platform = "Gentoo Packages";
-    }
-    else if (linux_id.contains("ubuntu")) {
+    } else if (linux_id.contains("ubuntu")) {
         m_rep_platform = "Ubuntu Packages";
-    }
-    else if (linux_id.contains("kubuntu")) {
+    } else if (linux_id.contains("kubuntu")) {
         m_rep_platform = "Kubuntu Packages";
-    }
-    else if (linux_id.contains("mageia")) {
+    } else if (linux_id.contains("mageia")) {
         m_rep_platform = "Mageia RPMs";
-    }
-    else if (linux_id.contains("mint")) {
+    } else if (linux_id.contains("mint")) {
         if (linux_desc.contains("debian")) {
             m_rep_platform = "Mint (Debian based)";
-        }
-        else {
+        } else {
             m_rep_platform = "Mint (Ubuntu based)";
         }
-    }
-    else if (linux_id.contains("opensuse")) {
+    } else if (linux_id.contains("opensuse")) {
         m_rep_platform = "openSUSE RPMs";
-    }
-    else if (linux_id.contains("pclinuxos")) {
+    } else if (linux_id.contains("pclinuxos")) {
         m_rep_platform = "PCLinuxOS";
-    }
-    else if (linux_id.contains("redhat")) {
+    } else if (linux_id.contains("redhat")) {
         m_rep_platform = "RedHat RPMs";
-    }
-    else if (linux_id.contains("slackware")) {
+    } else if (linux_id.contains("slackware")) {
         m_rep_platform = "Slackware Packages";
-    }
-    else {
+    } else {
         m_rep_platform = "Other";
     }
 #elif defined(Q_OS_FREEBSD)

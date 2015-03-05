@@ -38,11 +38,13 @@ using namespace boost::accumulators;
 using namespace KisBSplines;
 
 struct FunctionOp {
-    float operator() (qreal x) {
+    float operator()(qreal x)
+    {
         return std::sqrt(x);
     }
 
-    float operator() (qreal x, qreal y) const {
+    float operator()(qreal x, qreal y) const
+    {
         return std::sqrt(x) + y - pow2(x + y);
     }
 };
@@ -163,7 +165,7 @@ void KisBSplinesTest::testNU2D()
     samples << end;
 
     KisNUBSpline2D spline(samples, Natural,
-                         samples, Natural);
+                          samples, Natural);
     FunctionOp op;
     spline.initializeSpline(op);
 

@@ -33,11 +33,11 @@ bool sortAnchor(KoAnchorInlineObject *a1, KoAnchorInlineObject *a2)
     return a1->position() > a2->position();
 }
 
-DeleteAnchorsCommand::DeleteAnchorsCommand(const QList<KoShapeAnchor*> &anchorObjects, QTextDocument *document, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_document(document)
-, m_first(true)
-, m_deleteAnchors(false)
+DeleteAnchorsCommand::DeleteAnchorsCommand(const QList<KoShapeAnchor *> &anchorObjects, QTextDocument *document, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_document(document)
+    , m_first(true)
+    , m_deleteAnchors(false)
 {
     foreach (KoShapeAnchor *anchor, anchorObjects) {
         KoAnchorInlineObject *anchorObject = dynamic_cast<KoAnchorInlineObject *>(anchor->textLocation());

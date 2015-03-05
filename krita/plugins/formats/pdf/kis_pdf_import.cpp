@@ -66,14 +66,14 @@ KisPDFImport::~KisPDFImport()
 {
 }
 
-KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray&)
+KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray &, const QByteArray &)
 {
     QString filename = m_chain->inputFile();
     dbgFile << "Importing using PDFImport!" << filename;
 
-    if (filename.isEmpty())
+    if (filename.isEmpty()) {
         return KisImportExportFilter::FileNotFound;
-
+    }
 
     KUrl url(filename);
 
@@ -87,7 +87,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         url.setPath(tmpFile);
     }
 
-    Poppler::Document* pdoc = Poppler::Document::load(url.toLocalFile());
+    Poppler::Document *pdoc = Poppler::Document::load(url.toLocalFile());
 
     if (!pdoc) {
         return KisPDFImport::InvalidFormat;
@@ -101,7 +101,6 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         return KisImportExportFilter::StorageCreationError;
     }
 
-
     while (pdoc->isLocked()) {
         KPasswordDialog dlg(0);
         dlg.setPrompt(i18n("A password is required to read that pdf"));
@@ -109,15 +108,16 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         if (dlg.exec() != QDialog::Accepted) {
             dbgFile << "Password canceled";
             return KisImportExportFilter::StorageCreationError;
-        } else
+        } else {
             pdoc->unlock(dlg.password().toLocal8Bit(), dlg.password().toLocal8Bit());
+        }
     }
 
-    KDialog* kdb = new KDialog(0);
+    KDialog *kdb = new KDialog(0);
     kdb->setCaption(i18n("PDF Import Options"));
     kdb->setModal(false);
 
-    KisPDFImportWidget* wdg = new KisPDFImportWidget(pdoc, kdb);
+    KisPDFImportWidget *wdg = new KisPDFImportWidget(pdoc, kdb);
     kdb->setMainWidget(wdg);
     QApplication::restoreOverrideCursor();
     if (kdb->exec() == QDialog::Rejected) {
@@ -127,7 +127,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     }
 
     // Init kis's doc
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
     if (!doc) {
         delete pdoc;
         delete kdb;
@@ -136,7 +136,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     doc -> prepareForImport();
     // Create the krita image
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     int width = wdg->intWidth->value();
     int height = wdg->intHeight->value();
     KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
@@ -145,12 +145,11 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     QPointer<KoUpdater> loadUpdater =  m_chain->outputDocument()->progressUpdater()->startSubtask(1, "load");
     loadUpdater->setRange(0, pages.count());
     for (QList<int>::const_iterator it = pages.constBegin(); it != pages.constEnd(); ++it) {
-        KisPaintLayer* layer = new KisPaintLayer(image.data(),
+        KisPaintLayer *layer = new KisPaintLayer(image.data(),
                 i18n("Page %1", *it + 1),
                 quint8_MAX);
 
-
-        Poppler::Page* page = pdoc->page(*it);
+        Poppler::Page *page = pdoc->page(*it);
 
         QImage img = page->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value(), 0, 0, width, height);
         layer->paintDevice()->convertFromQImage(img, 0, 0, 0);

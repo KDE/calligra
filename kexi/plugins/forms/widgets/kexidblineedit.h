@@ -41,30 +41,32 @@ class KexiDBLineEditStyle;
  and/or input masks.
 */
 class KEXIFORMUTILS_EXPORT KexiDBLineEdit : public KLineEdit,
-                                            protected KexiDBTextWidgetInterface,
-                                            public KexiFormDataItemInterface,
-                                            public KexiSubwidgetInterface,
-                                            public KFormDesigner::FormWidgetInterface
+    protected KexiDBTextWidgetInterface,
+    public KexiFormDataItemInterface,
+    public KexiSubwidgetInterface,
+    public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
     Q_PROPERTY(QString clickMessage READ clickMessage WRITE setClickMessage) // internal, only for compatibility with Kexi 2
-                                                                             // (equivalent of placeholderText)
+    // (equivalent of placeholderText)
 
 public:
     explicit KexiDBLineEdit(QWidget *parent);
     virtual ~KexiDBLineEdit();
 
-    inline QString dataSource() const {
+    inline QString dataSource() const
+    {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePartClass() const
+    {
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
     virtual QVariant value();
-    virtual void setInvalidState(const QString& displayText);
+    virtual void setInvalidState(const QString &displayText);
 
     //! \return true if editor's value is null (not empty)
     //! Used for checking if a given constraint within table of form is met.
@@ -86,27 +88,30 @@ public:
      is displayed in a special way. Used by KexiFormDataProvider::fillDataItems().
      \a widget is equal to 'this'.
      Reimplemented after KexiFormDataItemInterface. */
-    virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+    virtual void setDisplayDefaultValue(QWidget *widget, bool displayDefaultValue);
 
     /*! \return the view widget of this item, e.g. line edit widget. */
-    virtual QWidget* widget();
+    virtual QWidget *widget();
 
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
     virtual void clear();
 
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KexiDB::QueryColumnInfo *cinfo);
 
     /*! Handles action having standard name \a actionName.
      Action could be: "edit_copy", "edit_paste", etc.
      Reimplemented after KexiDataItemInterface. */
-    virtual void handleAction(const QString& actionName);
+    virtual void handleAction(const QString &actionName);
 
     /*! Called by top-level form on key press event to consume widget-specific shortcuts. */
     virtual bool keyPressed(QKeyEvent *ke);
 
     //! Used when read only flag is true
-    QString originalText() const { return m_originalText; }
+    QString originalText() const
+    {
+        return m_originalText;
+    }
 
     //! Used when read only flag is true
     int originalCursorPosition() const;
@@ -141,24 +146,24 @@ public Q_SLOTS:
     void setClickMessage(const QString &msg);
 
 protected Q_SLOTS:
-    void slotTextChanged(const QString&);
+    void slotTextChanged(const QString &);
 
-    void slotTextEdited(const QString& text);
+    void slotTextEdited(const QString &text);
 
     void slotCursorPositionChanged(int oldPos, int newPos);
 
     //! Used to protect m_readWriteValidator against after validator is destroyed
-    void slotReadWriteValidatorDestroyed(QObject*);
+    void slotReadWriteValidatorDestroyed(QObject *);
 
 protected:
     virtual void paintEvent(QPaintEvent *);
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
     virtual bool event(QEvent *);
     virtual void contextMenuEvent(QContextMenuEvent *e);
     virtual void changeEvent(QEvent *e);
 
     //! Implemented for KexiSubwidgetInterface
-    virtual bool appendStretchRequired(KexiDBAutoField* autoField) const;
+    virtual bool appendStretchRequired(KexiDBAutoField *autoField) const;
 
     void updateTextForDataSource();
 
@@ -172,7 +177,7 @@ protected:
 
     //! Used to remember the previous validator used for r/w mode, after setting
     //! the read only flag
-    const QValidator* m_readWriteValidator;
+    const QValidator *m_readWriteValidator;
 
     //! Used for extending context menu
     KexiDBWidgetContextMenuExtender m_menuExtender;

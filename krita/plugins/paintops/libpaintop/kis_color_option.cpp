@@ -25,7 +25,8 @@ class KisColorOptionsWidget: public QWidget, public Ui::WdgColorOptions
 {
 public:
     KisColorOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
 
         hueSlider->setRange(-180, 180);
@@ -67,7 +68,7 @@ KisColorOption::~KisColorOption()
     // delete m_options;
 }
 
-void KisColorOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisColorOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(COLOROP_HUE, hue());
     setting->setProperty(COLOROP_SATURATION, saturation());
@@ -82,7 +83,7 @@ void KisColorOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     setting->setProperty(COLOROP_MIX_BG_COLOR, mixBgColor());
 }
 
-void KisColorOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisColorOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     m_options->hueSlider->setValue(setting->getInt(COLOROP_HUE));
     m_options->saturationSlider->setValue(setting->getInt(COLOROP_SATURATION));
@@ -94,7 +95,6 @@ void KisColorOption::readOptionSetting(const KisPropertiesConfiguration* setting
     m_options->colorPerParticleCHBox->setChecked(setting->getBool(COLOROP_COLOR_PER_PARTICLE));
     m_options->mixBgColorCHBox->setChecked(setting->getBool(COLOROP_MIX_BG_COLOR));
 }
-
 
 bool KisColorOption::useRandomOpacity() const
 {
@@ -111,44 +111,37 @@ int KisColorOption::hue() const
     return m_options->hueSlider->value();
 }
 
-
 int KisColorOption::saturation() const
 {
     return m_options->saturationSlider->value();
 }
-
 
 int KisColorOption::value() const
 {
     return m_options->valueSlider->value();
 }
 
-
 bool KisColorOption::sampleInputColor() const
 {
     return m_options->sampleInputCHBox->isChecked();
 }
-
-
 
 bool KisColorOption::colorPerParticle() const
 {
     return m_options->colorPerParticleCHBox->isChecked();
 }
 
-
 bool KisColorOption::fillBackground() const
 {
     return m_options->fillBackgroundCHBox->isChecked();
 }
-
 
 bool KisColorOption::mixBgColor() const
 {
     return m_options->mixBgColorCHBox->isChecked();
 }
 
-void KisColorProperties::fillProperties(const KisPropertiesConfiguration* setting)
+void KisColorProperties::fillProperties(const KisPropertiesConfiguration *setting)
 {
     hue = setting->getInt(COLOROP_HUE);
     saturation = setting->getInt(COLOROP_SATURATION);

@@ -19,18 +19,17 @@
 
 #include "kis_node_visitor.h"
 
-bool KisNodeVisitor::visitAll(KisNode * node, bool breakOnFail)
+bool KisNodeVisitor::visitAll(KisNode *node, bool breakOnFail)
 {
     for (uint i = 0; i < node->childCount(); ++i) {
         if (!node->at(i)->accept(*this)) {
-            if (breakOnFail)
+            if (breakOnFail) {
                 return false;
+            }
         }
     }
     return true;
 }
-
-
 
 /**
  * Visit all child nodes of the given node starting with the last one until one node returns
@@ -41,13 +40,14 @@ bool KisNodeVisitor::visitAll(KisNode * node, bool breakOnFail)
  * @return true if none of the childnodes returns false on
  * accepting the visitor.
  */
-bool KisNodeVisitor::visitAllInverse(KisNode * node, bool breakOnFail)
+bool KisNodeVisitor::visitAllInverse(KisNode *node, bool breakOnFail)
 {
     KisNodeSP child = node->lastChild();
     while (child) {
         if (!child->accept(*this)) {
-            if (breakOnFail)
+            if (breakOnFail) {
                 return false;
+            }
         }
         child = child->prevSibling();
     }

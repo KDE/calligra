@@ -37,7 +37,6 @@
 //Qt Headers
 #include <QPainter>
 
-
 KPrViewModePreviewShapeAnimations::KPrViewModePreviewShapeAnimations(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
     , m_savedViewMode(0)
@@ -59,7 +58,6 @@ void KPrViewModePreviewShapeAnimations::paint(KoPACanvasBase *canvas, QPainter &
 #else
     Q_ASSERT(m_canvas == canvas);
 #endif
-
 
     painter.translate(-m_canvas->documentOffset());
     painter.setRenderHint(QPainter::Antialiasing);
@@ -123,8 +121,8 @@ void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
     m_savedViewMode = previousViewMode;               // store the previous view mode
     m_animationCache = new KPrAnimationCache();
     m_canvas->shapeManager()->setPaintingStrategy(new KPrShapeManagerAnimationStrategy(m_canvas->shapeManager(),
-                                                                                       m_animationCache,
-                                                       new KPrPageSelectStrategyActive(m_canvas)));
+            m_animationCache,
+            new KPrPageSelectStrategyActive(m_canvas)));
 
     // the update of the canvas is needed so that the old page gets drawn fully before the effect starts
 
@@ -137,8 +135,8 @@ void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
 
     // create a rect out of it with origin in tp left of page
     QRectF documentRect(QPointF((documentMinSize.width() - layout.width) * -0.5,
-                               (documentMinSize.height() - layout.height) * -0.5),
-                       documentMinSize);
+                                (documentMinSize.height() - layout.height) * -0.5),
+                        documentMinSize);
 
     QPointF offset = -documentRect.topLeft();
     m_canvas->setDocumentOrigin(offset);
@@ -146,7 +144,6 @@ void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
 
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::PageSize, pageSize);
     m_canvas->repaint();
-
 
     m_timeLine.setDuration(m_shapeAnimation->duration());
     m_timeLine.setCurrentTime(0);
@@ -163,13 +160,13 @@ void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModePreviewShapeAnimations::deactivate()
 {
-    if ( m_timeLine.state() == QTimeLine::Running ) { // there are still shape animations running
-            m_timeLine.stop();
+    if (m_timeLine.state() == QTimeLine::Running) {   // there are still shape animations running
+        m_timeLine.stop();
     }
     m_savedViewMode = 0;
     m_shapeAnimation->deactivate();
     m_canvas->shapeManager()->setPaintingStrategy(new KoShapeManagerPaintingStrategy(m_canvas->shapeManager()));
-    delete (m_animationCache);
+    delete(m_animationCache);
     m_animationCache = 0;
     disconnect(&m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()));
 }

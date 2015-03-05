@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdtReaderDocxBackend.h"
 
@@ -34,20 +33,17 @@
 // This filter
 #include "OdfReaderDocxContext.h"
 
-
 #if 0
 #define DEBUG_BACKEND() \
     kDebug(30503) << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
-    << reader.qualifiedName().toString()
+                  << reader.qualifiedName().toString()
 #else
 #define DEBUG_BACKEND() \
     //NOTHING
 #endif
 
-
 // ================================================================
 //                 class OdtReaderDocxBackend
-
 
 OdtReaderDocxBackend::OdtReaderDocxBackend()
     : OdtReaderBackend()
@@ -58,15 +54,13 @@ OdtReaderDocxBackend::~OdtReaderDocxBackend()
 {
 }
 
-
 // ----------------------------------------------------------------
 // ODT document level functions
-
 
 void OdtReaderDocxBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext*>(context);
+    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext *>(context);
     if (!docxContext) {
         return;
     }
@@ -81,8 +75,7 @@ void OdtReaderDocxBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReade
         writer->addAttribute("xmlns:w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
 
         writer->startElement("w:body");
-    }
-    else {
+    } else {
         // FIXME: Do we have to add w:sectPr here always or only sometimes?
 
         writer->endElement(); // w:body

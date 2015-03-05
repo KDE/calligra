@@ -28,9 +28,11 @@
 class KexiFrame::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
     QColor frameColor;
 //! @todo
@@ -42,9 +44,9 @@ public:
 
 //=========================================================
 
-KexiFrame::KexiFrame(QWidget * parent, Qt::WindowFlags f)
-        : QFrame(parent, f)
-        , d(new Private())
+KexiFrame::KexiFrame(QWidget *parent, Qt::WindowFlags f)
+    : QFrame(parent, f)
+    , d(new Private())
 {
     //defaults
     d->frameColor = palette().color(QPalette::Foreground);

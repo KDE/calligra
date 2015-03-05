@@ -31,18 +31,18 @@ using namespace KexiDB;
 
 unsigned int pqxxSqlCursor_trans_num = 0; //!< debug helper
 
-static QByteArray pgsqlByteaToByteArray(const pqxx::result::field& r)
+static QByteArray pgsqlByteaToByteArray(const pqxx::result::field &r)
 {
     return KexiDB::pgsqlByteaToByteArray(r.c_str(), r.size());
 }
 
 //==================================================================================
 //Constructor based on query statement
-pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection* conn, const QString& statement, uint options):
-        Cursor(conn, statement, options)
+pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection *conn, const QString &statement, uint options):
+    Cursor(conn, statement, options)
 {
 // KexiDBDrvDbg << "Constructor for query statement";
-    my_conn = static_cast<pqxxSqlConnection*>(conn)->d->pqxxsql;
+    my_conn = static_cast<pqxxSqlConnection *>(conn)->d->pqxxsql;
     m_options = Buffered;
     m_res = 0;
     m_implicityStarted = false;
@@ -50,11 +50,11 @@ pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection* conn, const QString& statement,
 
 //==================================================================================
 //Constructor base on query object
-pqxxSqlCursor::pqxxSqlCursor(Connection* conn, QuerySchema& query, uint options)
-        : Cursor(conn, query, options)
+pqxxSqlCursor::pqxxSqlCursor(Connection *conn, QuerySchema &query, uint options)
+    : Cursor(conn, query, options)
 {
 // KexiDBDrvDbg << "Constructor for query schema";
-    my_conn = static_cast<pqxxSqlConnection*>(conn)->d->pqxxsql;
+    my_conn = static_cast<pqxxSqlConnection *>(conn)->d->pqxxsql;
     m_options = Buffered;
     m_res = 0;
     m_implicityStarted = false;
@@ -81,13 +81,13 @@ bool pqxxSqlCursor::drv_open()
 
     //Set up a transaction
     try {
-        if (!((pqxxSqlConnection*)connection())->m_trans) {
-            (void)new pqxxTransactionData((pqxxSqlConnection*)connection(), true);
+        if (!((pqxxSqlConnection *)connection())->m_trans) {
+            (void)new pqxxTransactionData((pqxxSqlConnection *)connection(), true);
             m_implicityStarted = true;
         }
 
-        m_res = new pqxx::result(((pqxxSqlConnection*)connection())->m_trans->data->exec(std::string(m_sql.toUtf8())));
-        ((pqxxSqlConnection*)connection())->drv_commitTransaction(((pqxxSqlConnection*)connection())->m_trans);
+        m_res = new pqxx::result(((pqxxSqlConnection *)connection())->m_trans->data->exec(std::string(m_sql.toUtf8())));
+        ((pqxxSqlConnection *)connection())->drv_commitTransaction(((pqxxSqlConnection *)connection())->m_trans);
 //  KexiDBDrvDbg << "trans. committed: " << cur_name;
 
         //We should now be placed before the first row, if any
@@ -104,7 +104,7 @@ bool pqxxSqlCursor::drv_open()
         setError();
     }
     if (m_implicityStarted) {
-        delete((pqxxSqlConnection*)connection())->m_trans;
+        delete((pqxxSqlConnection *)connection())->m_trans;
         m_implicityStarted = false;
     }
 // KexiDBDrvDbg << "trans. rolled back! - " << cur_name;
@@ -154,10 +154,11 @@ void pqxxSqlCursor::drv_getPrevRecord()
 //Return the value for a given column for the current record
 QVariant pqxxSqlCursor::value(uint pos)
 {
-    if (pos < m_fieldCount)
+    if (pos < m_fieldCount) {
         return pValue(pos);
-    else
+    } else {
         return QVariant();
+    }
 }
 
 //==================================================================================
@@ -205,15 +206,15 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
 //==================================================================================
 //Return the current record as a char**
 //who'd have thought we'd be using char** in this day and age :o)
-const char** pqxxSqlCursor::rowData() const
+const char **pqxxSqlCursor::rowData() const
 {
 // KexiDBDrvDbg;
-    const char** row = (const char**)malloc(m_res->columns() + 1);
+    const char **row = (const char **)malloc(m_res->columns() + 1);
     row[m_res->columns()] = NULL;
     if (at() >= 0 && at() < qint64(m_res->size())) {
         for (int i = 0; i < (int)m_res->columns(); i++) {
-            row[i] = (char*)malloc(strlen((*m_res)[at()][i].c_str()) + 1);
-            strcpy((char*)(*m_res)[at()][i].c_str(), row[i]);
+            row[i] = (char *)malloc(strlen((*m_res)[at()][i].c_str()) + 1);
+            strcpy((char *)(*m_res)[at()][i].c_str(), row[i]);
 //   KexiDBDrvDbg << row[i];
         }
     } else {
@@ -227,11 +228,13 @@ const char** pqxxSqlCursor::rowData() const
 bool pqxxSqlCursor::drv_storeCurrentRow(RecordData &data) const
 {
 // KexiDBDrvDbg << "POSITION IS" << (long)m_at;
-    if (m_res->size() <= 0)
+    if (m_res->size() <= 0) {
         return false;
+    }
 
-    for (uint i = 0; i < m_fieldsToStoreInRow; i++)
+    for (uint i = 0; i < m_fieldsToStoreInRow; i++) {
         data[i] = pValue(i);
+    }
     return true;
 }
 

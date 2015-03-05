@@ -29,15 +29,15 @@ class KisIteratorTest : public QObject
     Q_OBJECT
 
 private:
-    void allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs));
+    void allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace *cs));
 
-    void justCreation(const KoColorSpace * cs);
-    void vLineIter(const KoColorSpace * cs);
-    void writeBytes(const KoColorSpace * cs);
-    void fill(const KoColorSpace * cs);
-    void sequentialIter(const KoColorSpace * colorSpace);
-    void hLineIter(const KoColorSpace * cs);
-    void randomAccessor(const KoColorSpace * cs);
+    void justCreation(const KoColorSpace *cs);
+    void vLineIter(const KoColorSpace *cs);
+    void writeBytes(const KoColorSpace *cs);
+    void fill(const KoColorSpace *cs);
+    void sequentialIter(const KoColorSpace *colorSpace);
+    void hLineIter(const KoColorSpace *cs);
+    void randomAccessor(const KoColorSpace *cs);
 
 private Q_SLOTS:
     void justCreation();

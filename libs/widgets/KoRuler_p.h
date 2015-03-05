@@ -25,15 +25,24 @@ public:
     RulerTabChooser(QWidget *parent) : QWidget(parent), m_type(QTextOption::LeftTab), m_showTabs(false) {}
     virtual ~RulerTabChooser() {}
 
-    inline QTextOption::TabType type() {return m_type;}
-    void setShowTabs(bool showTabs) { if (m_showTabs == showTabs) return; m_showTabs = showTabs; update(); }
+    inline QTextOption::TabType type()
+    {
+        return m_type;
+    }
+    void setShowTabs(bool showTabs)
+    {
+        if (m_showTabs == showTabs) {
+            return;
+        } m_showTabs = showTabs;
+        update();
+    }
     void mousePressEvent(QMouseEvent *);
 
     void paintEvent(QPaintEvent *);
 
 private:
     QTextOption::TabType m_type;
-    bool m_showTabs :1;
+    bool m_showTabs : 1;
 };
 
 class PaintingStrategy
@@ -130,7 +139,7 @@ public:
 
     KoUnit unit;
     const Qt::Orientation orientation;
-    const KoViewConverter * const viewConverter;
+    const KoViewConverter *const viewConverter;
 
     int offset;
     qreal rulerLength;
@@ -178,24 +187,24 @@ public:
     Selection selected;
     int selectOffset;
 
-    QList<QAction*> popupActions;
+    QList<QAction *> popupActions;
 
     RulerTabChooser *tabChooser;
 
     // Cached painting strategies
-    PaintingStrategy * normalPaintingStrategy;
-    PaintingStrategy * distancesPaintingStrategy;
+    PaintingStrategy *normalPaintingStrategy;
+    PaintingStrategy *distancesPaintingStrategy;
 
     // Current painting strategy
-    PaintingStrategy * paintingStrategy;
+    PaintingStrategy *paintingStrategy;
 
     KoRuler *ruler;
 
     qreal numberStepForUnit() const;
     /// @return The rounding of value to the nearest multiple of stepValue
     qreal doSnapping(const qreal value) const;
-    Selection selectionAtPosition(const QPoint & pos, int *selectOffset = 0);
-    int hotSpotIndex(const QPoint & pos);
+    Selection selectionAtPosition(const QPoint &pos, int *selectOffset = 0);
+    int hotSpotIndex(const QPoint &pos);
     qreal effectiveActiveRangeStart() const;
     qreal effectiveActiveRangeEnd() const;
 

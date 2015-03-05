@@ -28,7 +28,7 @@ class KoSelectionPrivate : public KoShapePrivate
 public:
     explicit KoSelectionPrivate(KoSelection *parent)
         : KoShapePrivate(parent), eventTriggered(false), activeLayer(0), q(parent) {}
-    QList<KoShape*> selectedShapes;
+    QList<KoShape *> selectedShapes;
     bool eventTriggered;
 
     KoShapeLayer *activeLayer;

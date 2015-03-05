@@ -34,7 +34,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <klocale.h>
 
-KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
+KarbonConfigureDialog::KarbonConfigureDialog(KarbonView *parent)
     : KPageDialog(parent)
 {
     setFaceType(List);
@@ -43,7 +43,7 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     setDefaultButton(KDialog::Ok);
 
     m_interfacePage = new KarbonConfigInterfacePage(parent);
-    KPageWidgetItem* item = addPage(m_interfacePage, i18n("Interface"));
+    KPageWidgetItem *item = addPage(m_interfacePage, i18n("Interface"));
     item->setHeader(i18n("Interface"));
     item->setIcon(koIcon("preferences-desktop-theme"));
 
@@ -65,10 +65,9 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     item->setIcon(koIcon("document-properties"));
 
     m_authorPage = new KoConfigAuthorPage();
-    item = addPage(m_authorPage, i18nc("@title:tab Author page", "Author" ));
+    item = addPage(m_authorPage, i18nc("@title:tab Author page", "Author"));
     item->setHeader(i18n("Author"));
     item->setIcon(koIcon("user-identity"));
-
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
@@ -86,16 +85,17 @@ void KarbonConfigureDialog::slotApply()
 
 void KarbonConfigureDialog::slotDefault()
 {
-    QWidget* curr = currentPage()->widget();
+    QWidget *curr = currentPage()->widget();
 
-    if (curr == m_interfacePage)
+    if (curr == m_interfacePage) {
         m_interfacePage->slotDefault();
-    else if (curr == m_miscPage)
+    } else if (curr == m_miscPage) {
         m_miscPage->slotDefault();
-    else if (curr == m_gridPage)
+    } else if (curr == m_gridPage) {
         m_gridPage->slotDefault();
-    else if (curr == m_defaultDocPage)
+    } else if (curr == m_defaultDocPage) {
         m_defaultDocPage->slotDefault();
+    }
 }
 
 #include "KarbonConfigureDialog.moc"

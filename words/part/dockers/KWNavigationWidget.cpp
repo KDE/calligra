@@ -79,7 +79,7 @@ void KWNavigationWidget::navigationClicked(QModelIndex idx)
 {
     if (idx.column() == 0) {
         QTextDocument *doc = static_cast<QTextDocument *>(
-            m_model->itemFromIndex(idx)->data(Qt::UserRole + 2).value<void *>());
+                                 m_model->itemFromIndex(idx)->data(Qt::UserRole + 2).value<void *>());
 
         int position = m_model->itemFromIndex(idx)->data(Qt::UserRole + 1).toInt();
 
@@ -117,8 +117,10 @@ void KWNavigationWidget::updateData()
     curChain.push(QPair<QStandardItem *, int>(m_model->invisibleRootItem(), 0));
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs == 0) continue;
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet *>(fs);
+        if (tfs == 0) {
+            continue;
+        }
 
         tfs->wordsDocument();
         QTextDocument *doc = tfs->document();
@@ -157,17 +159,18 @@ void KWNavigationWidget::updateData()
     m_updateTimer->start(300);
 }
 
-void KWNavigationWidget::setCanvas(KWCanvas* canvas)
+void KWNavigationWidget::setCanvas(KWCanvas *canvas)
 {
-    if (!canvas)
+    if (!canvas) {
         return;
+    }
     m_document = canvas->document();
     if (m_layout) {
         disconnect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
     }
     if (m_document->mainFrameSet()) {
         m_layout = qobject_cast<KoTextDocumentLayout *>(
-            m_document->mainFrameSet()->document()->documentLayout());
+                       m_document->mainFrameSet()->document()->documentLayout());
         connect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
     } else {
         m_layout = 0;

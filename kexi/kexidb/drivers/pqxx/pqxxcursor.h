@@ -45,7 +45,7 @@ public:
     virtual ~pqxxSqlCursor();
 
     virtual QVariant value(uint i);
-    virtual const char** rowData() const;
+    virtual const char **rowData() const;
     virtual bool drv_storeCurrentRow(RecordData &data) const;
 
 //! @todo virtual const char *** bufferData()
@@ -54,9 +54,9 @@ public:
 //! @todo virtual QString serverErrorMsg() const;
 
 protected:
-    pqxxSqlCursor(Connection* conn, const QString& statement = QString(),
+    pqxxSqlCursor(Connection *conn, const QString &statement = QString(),
                   uint options = NoOptions);
-    pqxxSqlCursor(Connection* conn, QuerySchema& query, uint options = NoOptions);
+    pqxxSqlCursor(Connection *conn, QuerySchema &query, uint options = NoOptions);
     virtual void drv_clearServerResult();
     virtual void drv_appendCurrentRecordToBuffer();
     virtual void drv_bufferMovePointerNext();
@@ -68,14 +68,14 @@ protected:
     virtual void drv_getPrevRecord();
 
 private:
-    pqxx::result* m_res;
-    pqxx::connection* my_conn;
+    pqxx::result *m_res;
+    pqxx::connection *my_conn;
     QVariant pValue(uint pos)const;
     bool m_implicityStarted;
     friend class pqxxSqlConnection;
 };
 
-inline QVariant pgsqlCStrToVariant(const pqxx::result::field& r)
+inline QVariant pgsqlCStrToVariant(const pqxx::result::field &r)
 {
     switch (r.type()) {
     case BOOLOID:

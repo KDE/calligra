@@ -59,7 +59,7 @@ class calcSettings :  public QObject
 {
     Q_OBJECT
 public:
-    calcSettings(Selection* selection, KVBox *box);
+    calcSettings(Selection *selection, KVBox *box);
     void apply();
 protected:
     CalculationSettings *m_cs;
@@ -76,7 +76,7 @@ class parameterLocale :  public QObject
 {
     Q_OBJECT
 public:
-    parameterLocale(Selection* selection, KVBox *box);
+    parameterLocale(Selection *selection, KVBox *box);
     void apply();
 public Q_SLOTS:
     void updateDefaultSystemConfig();
@@ -84,14 +84,13 @@ protected:
     /**
      * Updates the GUI widgets to match the specified locale.
      */
-    void updateToMatchLocale(KLocale* locale);
+    void updateToMatchLocale(KLocale *locale);
 
     QLabel *m_shortDate, *m_time, *m_money, *m_date, *m_language, *m_number;
     QPushButton *m_updateButton;
-    Selection* m_selection;
+    Selection *m_selection;
     bool m_bUpdateLocale;
 };
-
 
 /**
  * \ingroup UI
@@ -101,7 +100,7 @@ class DocumentSettingsDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit DocumentSettingsDialog(Selection* selection, QWidget* parent);
+    explicit DocumentSettingsDialog(Selection *selection, QWidget *parent);
     ~DocumentSettingsDialog();
 
 public Q_SLOTS:
@@ -111,7 +110,7 @@ public Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

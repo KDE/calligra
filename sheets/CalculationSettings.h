@@ -65,7 +65,7 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    void loadOdf(const KoXmlElement& body);
+    void loadOdf(const KoXmlElement &body);
 
     /**
      * \ingroup OpenDocument
@@ -101,7 +101,7 @@ public:
      *
      * \param date the new reference date
      */
-    void setReferenceDate(const QDate& date);
+    void setReferenceDate(const QDate &date);
 
     /**
      * Returns the reference date all date are stored relative to.
@@ -133,12 +133,12 @@ public:
     /**
      * Sets the file name used in the FILENAME function.
      */
-    void setFileName(const QString& fileName);
+    void setFileName(const QString &fileName);
 
     /**
      * \return The file name used in the FILENAME function.
      */
-    const QString& fileName() const;
+    const QString &fileName() const;
 
     /**
      * Sets the activation state of the active sheet's automatic recalculation
@@ -198,7 +198,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

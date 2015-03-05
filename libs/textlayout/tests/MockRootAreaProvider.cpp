@@ -23,14 +23,14 @@
 
 MockRootAreaProvider::MockRootAreaProvider()
     : m_area(0),
-      m_suggestedRect(QRectF(100, 100, 200,1000)),
-    m_askedForMoreThenOneArea(false)
+      m_suggestedRect(QRectF(100, 100, 200, 1000)),
+      m_askedForMoreThenOneArea(false)
 {
 }
 
 KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &, int, bool *isNewRootArea)
 {
-    if(m_area == 0) {
+    if (m_area == 0) {
         m_area = new KoTextLayoutRootArea(documentLayout);
         *isNewRootArea = true;
         return m_area;
@@ -69,6 +69,6 @@ void MockRootAreaProvider::setSuggestedRect(QRectF rect)
 QList<KoTextLayoutObstruction *> MockRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)
 {
     Q_UNUSED(rootArea);
-    QList<KoTextLayoutObstruction*> obstructions;
+    QList<KoTextLayoutObstruction *> obstructions;
     return obstructions;
 }

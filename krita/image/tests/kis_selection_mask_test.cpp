@@ -27,10 +27,9 @@
 #include "kis_selection_mask.h"
 #include "kis_group_layer.h"
 
-
 void KisSelectionMaskTest::testActivation()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 100, 100, cs, "bla");
     KisSelectionMaskSP mask1 = new KisSelectionMask(image);
     KisSelectionMaskSP mask2 = new KisSelectionMask(image);
@@ -74,7 +73,6 @@ void KisSelectionMaskTest::testActivation()
     QCOMPARE(image->rootLayer()->selectionMask(), KisSelectionMaskSP(0));
 
 }
-
 
 QTEST_KDEMAIN(KisSelectionMaskTest, GUI)
 #include "kis_selection_mask_test.moc"

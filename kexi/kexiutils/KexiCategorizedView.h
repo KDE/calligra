@@ -40,21 +40,21 @@ public:
 class KEXIUTILS_EXPORT KexiCategorySingleSelectionModel : public QItemSelectionModel
 {
 public:
-    explicit KexiCategorySingleSelectionModel(QAbstractItemModel* model);
-    
+    explicit KexiCategorySingleSelectionModel(QAbstractItemModel *model);
+
     using QItemSelectionModel::select;
-    
+
     //! Reimplemented to disable full category selections.
     //! Shouldn't be needed in KDElibs >= 4.5,
     //! where KexiTemplatesCategoryDrawer::mouseButtonPressed() works.
-    void select(const QItemSelection& selection,
+    void select(const QItemSelection &selection,
                 QItemSelectionModel::SelectionFlags command);
 };
 
 //! Single selection categorized view.
 class KEXIUTILS_EXPORT KexiCategorizedView : public KCategorizedView
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit KexiCategorizedView(QWidget *parent = 0);
 

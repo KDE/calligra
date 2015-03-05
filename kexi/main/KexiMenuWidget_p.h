@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
    Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
-   
+
    Based on qmenu_p.h from Qt 4.7
 
    based on oxygenhelper.h
@@ -54,7 +54,7 @@ public:
 protected Q_SLOTS:
     void slotClicked();
 protected:
-    virtual void paintEvent(QPaintEvent*);
+    virtual void paintEvent(QPaintEvent *);
 };
 
 //used to walk up the popup list
@@ -70,15 +70,15 @@ public:
     virtual ~OxygenHelper();
     bool lowThreshold(const QColor &color);
     bool highThreshold(const QColor &color);
-    virtual const QColor& backgroundTopColor(const QColor &color);
-    virtual const QColor& backgroundBottomColor(const QColor &color);
-    virtual const QColor& backgroundRadialColor(const QColor &color);
+    virtual const QColor &backgroundTopColor(const QColor &color);
+    virtual const QColor &backgroundBottomColor(const QColor &color);
+    virtual const QColor &backgroundRadialColor(const QColor &color);
     virtual QPixmap verticalGradient(const QColor &color, int height, int offset = 0);
     virtual QPixmap radialGradient(const QColor &color, int width, int height = 64);
     void renderOxygenWindowBackground(QPainter *p, const QRect &clipRect,
-                                         const QWidget *widget, const QWidget* window,
-                                         const QColor& color, int y_shift=-23,
-                                         int gradientHeight = 64);
+                                      const QWidget *widget, const QWidget *window,
+                                      const QColor &color, int y_shift = -23,
+                                      int gradientHeight = 64);
 
     //!@name window background gradients
     //@{
@@ -88,12 +88,12 @@ public:
     for different heights, the gradient is translated so that it is always at the same position from the bottom
     */
     void renderWindowBackground(QPainter *p, const QRect &clipRect,
-                                const QWidget *widget, const QPalette & pal,
-                                int y_shift=-23, int gradientHeight = 64);
+                                const QWidget *widget, const QPalette &pal,
+                                int y_shift = -23, int gradientHeight = 64);
 
-    void renderMenuBackground(QPainter* p, const QRect& clipRect, const QWidget* widget,
-                              const QPalette& pal);
-    void renderMenuBackground(QPainter*, const QRect&, const QWidget*, const QColor&);
+    void renderMenuBackground(QPainter *p, const QRect &clipRect, const QWidget *widget,
+                              const QPalette &pal);
+    void renderMenuBackground(QPainter *, const QRect &, const QWidget *, const QColor &);
 
     //! draw frame that mimics some sort of shadows around a panel
     /*! it is used for menus, detached dock panels and toolbar,
@@ -115,7 +115,7 @@ public:
     ColorCache m_backgroundRadialColorCache;
     ColorMap m_lowThreshold;
     ColorMap m_highThreshold;
-                                
+
     KComponentData _componentData;
     KSharedConfigPtr _config;
     qreal _contrast;
@@ -126,11 +126,11 @@ class KexiMenuWidgetPrivate // : public QWidgetPrivate
 {
 public:
     explicit KexiMenuWidgetPrivate(KexiMenuWidget *menu) : q(menu), itemsDirty(0), maxIconWidth(0), tabWidth(0), ncols(0),
-                      collapsibleSeparators(true), activationRecursionGuard(false), hasHadMouse(0), aboutToHide(0), motions(0),
-                      currentAction(0),
-                      scroll(0), eventLoop(0), /*tearoff(0),*/ /*tornoff(0),*/ /*tearoffHighlighted(0),*/
-                      hasCheckableItems(0), sloppyAction(0), /* doChildEffects(false)*/
-                      hasFrame(true), clickableLogoArea(0)
+        collapsibleSeparators(true), activationRecursionGuard(false), hasHadMouse(0), aboutToHide(0), motions(0),
+        currentAction(0),
+        scroll(0), eventLoop(0), /*tearoff(0),*/ /*tornoff(0),*/ /*tearoffHighlighted(0),*/
+        hasCheckableItems(0), sloppyAction(0), /* doChildEffects(false)*/
+        hasFrame(true), clickableLogoArea(0)
     {
     }
     virtual ~KexiMenuWidgetPrivate()
@@ -178,7 +178,7 @@ public:
     //scrolling support
     struct QMenuScroller {
         enum ScrollLocation { ScrollStay, ScrollBottom, ScrollTop, ScrollCenter };
-        enum ScrollDirection { ScrollNone=0, ScrollUp=0x01, ScrollDown=0x02 };
+        enum ScrollDirection { ScrollNone = 0, ScrollUp = 0x01, ScrollDown = 0x02 };
         uint scrollFlags : 2, scrollDirection : 2;
         int scrollOffset;
         QBasicTimer scrollTimer;
@@ -186,9 +186,9 @@ public:
         QMenuScroller() : scrollFlags(ScrollNone), scrollDirection(ScrollNone), scrollOffset(0) { }
         ~QMenuScroller() { }
     } *scroll;
-    void scrollMenu(QMenuScroller::ScrollLocation location, bool active=false);
-    void scrollMenu(QMenuScroller::ScrollDirection direction, bool page=false, bool active=false);
-    void scrollMenu(QAction *action, QMenuScroller::ScrollLocation location, bool active=false);
+    void scrollMenu(QMenuScroller::ScrollLocation location, bool active = false);
+    void scrollMenu(QMenuScroller::ScrollDirection direction, bool page = false, bool active = false);
+    void scrollMenu(QAction *action, QMenuScroller::ScrollLocation location, bool active = false);
 
     //synchronous operation (ie exec())
     QEventLoop *eventLoop;
@@ -208,8 +208,14 @@ public:
     void hideMenu(KexiMenuWidget *menu, bool justRegister = false);
 
     //index mappings
-    inline QAction *actionAt(int i) const { return q->actions().at(i); }
-    inline int indexOf(QAction *act) const { return q->actions().indexOf(act); }
+    inline QAction *actionAt(int i) const
+    {
+        return q->actions().at(i);
+    }
+    inline int indexOf(QAction *act) const
+    {
+        return q->actions().indexOf(act);
+    }
 
     //tear off support
 //     uint tearoff : 1, tornoff : 1, tearoffHighlighted : 1;
@@ -232,7 +238,7 @@ public:
     void overrideMenuActionDestroyed();
 
     //firing of events
-    void activateAction(QAction *, QAction::ActionEvent, bool self=true);
+    void activateAction(QAction *, QAction::ActionEvent, bool self = true);
     void activateCausedStack(const QList<QPointer<QWidget> > &, QAction *, QAction::ActionEvent, bool);
 
     void actionTriggered();
@@ -244,15 +250,15 @@ public:
 
     void updateLayoutDirection();
 
-    void setLayoutDirection_helper(QWidget* w, Qt::LayoutDirection direction);
+    void setLayoutDirection_helper(QWidget *w, Qt::LayoutDirection direction);
 
-    int frameWidth(const QStyleOption* opt = 0) const;
+    int frameWidth(const QStyleOption *opt = 0) const;
 
-    bool actionPersistentlySelected(const QAction* action) const;
+    bool actionPersistentlySelected(const QAction *action) const;
 
-    void setActionPersistentlySelected(QAction* action, bool set);
+    void setActionPersistentlySelected(QAction *action, bool set);
 
-    void toggleActionPersistentlySelected(QAction* action);
+    void toggleActionPersistentlySelected(QAction *action);
 
     //menu fading/scrolling effects
     //bool doChildEffects;
@@ -263,7 +269,7 @@ public:
     bool hasFrame;
 
     QPointer<KexiMenuWidgetAction> previousPersistentlySelectedAction;
-    
+
     //! True if persistent selections are enabled. False by default.
     //bool persistentSelectionsEnabled;
 

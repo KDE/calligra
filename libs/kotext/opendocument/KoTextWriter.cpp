@@ -76,12 +76,13 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlock &block, KoStyleManager
     return saveParagraphStyle(blockFormat, charFormat, styleManager, context);
 }
 
-QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, KoStyleManager * styleManager, KoShapeSavingContext &context)
+QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, KoStyleManager *styleManager, KoShapeSavingContext &context)
 {
     KoParagraphStyle *defaultParagraphStyle = styleManager->defaultParagraphStyle();
     KoParagraphStyle *originalParagraphStyle = styleManager->paragraphStyle(blockFormat.intProperty(KoParagraphStyle::StyleId));
-    if (!originalParagraphStyle)
+    if (!originalParagraphStyle) {
         originalParagraphStyle = defaultParagraphStyle;
+    }
 
     QString generatedName;
     QString displayName = originalParagraphStyle->name();
@@ -99,8 +100,9 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
         }
     } else { // There are manual changes... We'll have to store them then
         KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph", internalName);
-        if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+        if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml)) {
             style.setAutoStyleInStylesDotXml(true);
+        }
         if (originalParagraphStyle) {
             paragStyle.removeDuplicates(*originalParagraphStyle);
             paragStyle.setParentStyle(originalParagraphStyle);
@@ -113,7 +115,7 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
 
 void KoTextWriter::write(const QTextDocument *document, int from, int to)
 {
-    d->document = const_cast<QTextDocument*>(document);
+    d->document = const_cast<QTextDocument *>(document);
     d->styleManager = KoTextDocument(document).styleManager();
 
     QTextBlock fromblock = document->findBlock(from);
@@ -150,10 +152,10 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
                 QTextTableCell fromcell = currentTable->cellAt(from);
                 QTextTableCell tocell = currentTable->cellAt(to);
                 if ((fromcursor.isNull() || fromcursor.currentTable() != currentTable) &&
-                    (tocursor.isNull() || tocursor.currentTable() != currentTable) &&
-                    fromcell.column() == 0 && fromcell.row() == 0 &&
-                    tocell.column() == currentTable->columns()-1 && tocell.row() == currentTable->rows()-1
-                ) {
+                        (tocursor.isNull() || tocursor.currentTable() != currentTable) &&
+                        fromcell.column() == 0 && fromcell.row() == 0 &&
+                        tocell.column() == currentTable->columns() - 1 && tocell.row() == currentTable->rows() - 1
+                   ) {
                     currentTable = 0;
                 }
             }
@@ -163,9 +165,9 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
                 int fromindex = currentList->itemNumber(fromblock);
                 int toindex = currentList->itemNumber(toblock);
                 if ((fromcursor.isNull() || fromcursor.currentList() != currentList) &&
-                    (tocursor.isNull() || tocursor.currentList() != currentList) &&
-                    fromindex <= 0 && (toindex < 0 || toindex == currentList->count()-1)
-                ) {
+                        (tocursor.isNull() || tocursor.currentList() != currentList) &&
+                        fromindex <= 0 && (toindex < 0 || toindex == currentList->count() - 1)
+                   ) {
                     currentList = 0;
                 }
             }

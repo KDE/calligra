@@ -52,7 +52,7 @@ protected Q_SLOTS:
 
     void filterSelectionChanged();
 
-    virtual void resizeEvent(QResizeEvent* );
+    virtual void resizeEvent(QResizeEvent *);
 
 private:
     void startApplyingFilter(KisSafeFilterConfigurationSP config);
@@ -61,7 +61,7 @@ private:
 
 private:
     struct Private;
-    KisDlgFilter::Private* const d;
+    KisDlgFilter::Private *const d;
 };
 
 #endif

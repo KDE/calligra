@@ -38,13 +38,13 @@
 
 //#define DEBUG_REPAINT
 
-KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter)
-        : QObject(parent)
-        , KoCanvasBase(0)
-        , m_viewConverter(viewConverter)
-        , m_shapeManager(new KoShapeManager(this))
-        , m_projection(0)
-        , m_parentLayer(parent)
+KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter *viewConverter)
+    : QObject(parent)
+    , KoCanvasBase(0)
+    , m_viewConverter(viewConverter)
+    , m_shapeManager(new KoShapeManager(this))
+    , m_projection(0)
+    , m_parentLayer(parent)
 {
     m_shapeManager->selection()->setActiveLayer(parent);
     connect(this, SIGNAL(forwardRepaint()), SLOT(repaint()), Qt::QueuedConnection);
@@ -82,7 +82,7 @@ KoShapeManager *KisShapeLayerCanvas::shapeManager() const
 # include <stdlib.h>
 #endif
 
-void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
+void KisShapeLayerCanvas::updateCanvas(const QRectF &rc)
 {
     dbgUI << "KisShapeLayerCanvas::updateCanvas()" << rc;
     //image is 0, if parentLayer is being deleted so don't update
@@ -113,7 +113,9 @@ void KisShapeLayerCanvas::repaint()
         m_dirtyRegion = QRegion();
     }
 
-    if (r.isEmpty()) return;
+    if (r.isEmpty()) {
+        return;
+    }
 
     r = r.intersected(m_parentLayer->image()->bounds());
     QImage image(r.width(), r.height(), QImage::Format_ARGB32);
@@ -141,7 +143,7 @@ void KisShapeLayerCanvas::repaint()
     m_parentLayer->setDirty(r);
 }
 
-KoToolProxy * KisShapeLayerCanvas::toolProxy() const
+KoToolProxy *KisShapeLayerCanvas::toolProxy() const
 {
 //     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     return 0;
@@ -152,12 +154,12 @@ KoViewConverter *KisShapeLayerCanvas::viewConverter() const
     return m_viewConverter;
 }
 
-QWidget* KisShapeLayerCanvas::canvasWidget()
+QWidget *KisShapeLayerCanvas::canvasWidget()
 {
     return 0;
 }
 
-const QWidget* KisShapeLayerCanvas::canvasWidget() const
+const QWidget *KisShapeLayerCanvas::canvasWidget() const
 {
     return 0;
 }

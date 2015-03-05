@@ -24,22 +24,21 @@
 
 #include "SimpleEntryToolFactory.h"
 
-
 SimpleEntryToolFactory::SimpleEntryToolFactory()
     : KoToolFactoryBase("SimpleEntryToolFactoryId")
 {
-    setToolTip( i18n( "Music editing" ) );
+    setToolTip(i18n("Music editing"));
     setIconName(koIconNameCStr("music-note-16th"));
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( MusicShapeId );
+    setToolType(dynamicToolType());
+    setPriority(1);
+    setActivationShapeId(MusicShapeId);
 }
 
 SimpleEntryToolFactory::~SimpleEntryToolFactory()
 {
 }
 
-KoToolBase* SimpleEntryToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase *SimpleEntryToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new SimpleEntryTool( canvas );
+    return new SimpleEntryTool(canvas);
 }

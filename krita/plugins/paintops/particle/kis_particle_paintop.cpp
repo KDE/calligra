@@ -39,7 +39,7 @@
 
 #include "particle_brush.h"
 
-KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisParticlePaintOp::KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
@@ -61,7 +61,7 @@ KisParticlePaintOp::~KisParticlePaintOp()
 {
 }
 
-KisSpacingInformation KisParticlePaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisParticlePaintOp::paintAt(const KisPaintInformation &info)
 {
     KisDistanceInformation di;
     paintLine(info, info, &di);
@@ -71,15 +71,15 @@ KisSpacingInformation KisParticlePaintOp::paintAt(const KisPaintInformation& inf
 void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
     Q_UNUSED(currentDistance);
-    if (!painter()) return;
+    if (!painter()) {
+        return;
+    }
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
-    }
-    else {
+    } else {
         m_dab->clear();
     }
-
 
     if (m_first) {
         m_particleBrush.setInitialPosition(pi1.pos());

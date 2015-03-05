@@ -27,13 +27,13 @@ KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
     const QPointF &offset,
     KoPathPoint::PointType pointType,
     KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , m_pointData(pointData)
-        , m_pointType(pointType)
+    : KUndo2Command(parent)
+    , m_pointData(pointData)
+    , m_pointType(pointType)
 {
     Q_ASSERT(offset.x() < 1e14 && offset.y() < 1e14);
-    KoPathShape * pathShape = m_pointData.pathShape;
-    KoPathPoint * point = pathShape->pointByIndex(m_pointData.pointIndex);
+    KoPathShape *pathShape = m_pointData.pathShape;
+    KoPathPoint *point = pathShape->pointByIndex(m_pointData.pointIndex);
     if (point) {
         m_offset = point->parent()->documentToShape(offset) - point->parent()->documentToShape(QPointF(0, 0));
     }
@@ -44,8 +44,8 @@ KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
 void KoPathControlPointMoveCommand::redo()
 {
     KUndo2Command::redo();
-    KoPathShape * pathShape = m_pointData.pathShape;
-    KoPathPoint * point = pathShape->pointByIndex(m_pointData.pointIndex);
+    KoPathShape *pathShape = m_pointData.pathShape;
+    KoPathPoint *point = pathShape->pointByIndex(m_pointData.pointIndex);
     if (point) {
         pathShape->update();
 

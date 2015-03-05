@@ -45,11 +45,11 @@ ChangeVideoCommand::~ChangeVideoCommand()
 void ChangeVideoCommand::redo()
 {
     // we need new here as setUserData deletes the old data
-    m_shape->setUserData(m_newVideoData ? new VideoData(*m_newVideoData): 0);
+    m_shape->setUserData(m_newVideoData ? new VideoData(*m_newVideoData) : 0);
 }
 
 void ChangeVideoCommand::undo()
 {
     // we need new here as setUserData deletes the old data
-    m_shape->setUserData(m_oldVideoData ? new VideoData(*m_oldVideoData): 0);
+    m_shape->setUserData(m_oldVideoData ? new VideoData(*m_oldVideoData) : 0);
 }

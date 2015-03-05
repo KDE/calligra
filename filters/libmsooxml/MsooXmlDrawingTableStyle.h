@@ -81,14 +81,14 @@ public:
     virtual ~DrawingTableStyle();
 
     //the style takes ownership of the properties
-    void addProperties(Type type, TableStyleProperties* properties);
-    TableStyleProperties* properties(Type type) const;
+    void addProperties(Type type, TableStyleProperties *properties);
+    TableStyleProperties *properties(Type type) const;
 
     //Style of the whole table, not cell styles
     KoTblStyle::Ptr mainStyle;
 
 private:
-    QMap<Type, TableStyleProperties*> m_properties;
+    QMap<Type, TableStyleProperties *> m_properties;
     //TODO: handle the table background stored in the element TblBg
 };
 
@@ -123,16 +123,16 @@ private:
 class KOMSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
 {
 public:
-    explicit DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);
+    explicit DrawingTableStyleConverter(DrawingTableStyleConverterProperties const &properties, DrawingTableStyle *style = 0);
     virtual ~DrawingTableStyleConverter();
 
     KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans);
 
 private:
-    void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column, const QPair<int, int> &spans);
+    void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr &style, int row, int column, const QPair<int, int> &spans);
 
-    DrawingTableStyle * const m_style;
-    DrawingTableStyleConverterProperties const& m_properties;
+    DrawingTableStyle *const m_style;
+    DrawingTableStyleConverterProperties const &m_properties;
 };
 
 }

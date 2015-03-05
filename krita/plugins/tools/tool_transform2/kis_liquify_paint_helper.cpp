@@ -29,9 +29,7 @@
 
 #include "kis_paintop_utils.h"
 
-
-struct KisLiquifyPaintHelper::Private
-{
+struct KisLiquifyPaintHelper::Private {
     Private(const KisCoordinatesConverter *_converter)
         : converter(_converter),
           infoBuilder(new KisConverterPaintingInformationBuilder(converter)),
@@ -54,7 +52,6 @@ struct KisLiquifyPaintHelper::Private
     KisPaintOpUtils::PositionHistory lastOutlinePos;
     void updatePreviousPaintInfo(const KisPaintInformation &info);
 };
-
 
 KisLiquifyPaintHelper::KisLiquifyPaintHelper(const KisCoordinatesConverter *converter)
     : m_d(new Private(converter))
@@ -83,7 +80,7 @@ QPainterPath KisLiquifyPaintHelper::brushOutline(const KisLiquifyProperties &pro
 }
 
 void KisLiquifyPaintHelper::configurePaintOp(const KisLiquifyProperties &props,
-                                             KisLiquifyTransformWorker *worker)
+        KisLiquifyTransformWorker *worker)
 {
     m_d->paintOp.reset(new KisLiquifyPaintop(props, worker));
 }
@@ -119,7 +116,9 @@ void KisLiquifyPaintHelper::continuePaint(KoPointerEvent *event)
 
 bool KisLiquifyPaintHelper::endPaint(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER(m_d->paintOp) { return false; }
+    KIS_ASSERT_RECOVER(m_d->paintOp) {
+        return false;
+    }
 
     if (!m_d->hasPaintedAtLeastOnce) {
         KisPaintInformation pi =

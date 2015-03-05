@@ -27,7 +27,8 @@
 /**
  * @short Implementation of the mmultiscript element
  */
-class KOFORMULA_EXPORT MultiscriptElement : public FixedElement {
+class KOFORMULA_EXPORT MultiscriptElement : public FixedElement
+{
 public:
     /// The standard constructor
     explicit MultiscriptElement(BasicElement *parent = 0);
@@ -39,45 +40,45 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
-    
-    virtual bool setCursorTo ( FormulaCursor& cursor, QPointF point );
+    const QList<BasicElement *> childElements() const;
 
-    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
-    
+    virtual bool setCursorTo(FormulaCursor &cursor, QPointF point);
+
+    virtual bool moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor);
+
 //     virtual int length() const;
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint(QPainter &painter, AttributeManager *am);
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout(const AttributeManager *am);
 
     /**
      * Implement the cursor behaviour for the element
      * @param cursor The FormulaCursor that is moved around
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    virtual bool acceptCursor ( const FormulaCursor& cursor );
+    virtual bool acceptCursor(const FormulaCursor &cursor);
 
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const; 
+    QString attributesDefaultValue(const QString &attribute) const;
 
     /// @return The element's ElementType
     ElementType elementType() const;
 
 protected:
     /// Read all content from the node
-    bool readMathMLContent( const KoXmlElement& element );
+    bool readMathMLContent(const KoXmlElement &element);
 
     /// Write all content to the KoXmlWriter
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    void writeMathMLContent(KoXmlWriter *writer, const QString &ns) const;
 
     /// Make sure that there are an even number of elements, as the spec says
     /// there must be.
@@ -85,22 +86,21 @@ protected:
 
 private:
     /// The BasicElement representing the base element of the multiscript
-    BasicElement* m_baseElement;
+    BasicElement *m_baseElement;
 
     /// A list of BasicElements representing the sub- and super-scripts left to the base
     /// element.  The first item in the list is subscript, second is superscript, third
     /// subscript and so on.
     /// The first 2 items are drawn closest to the item, then moving increasingly
     /// further away
-    QList<BasicElement*> m_preScripts;
+    QList<BasicElement *> m_preScripts;
 
     /// A list of BasicElements representing the sub- and super-scripts right to the base
     /// element.  The first item in the list is subscript, second is superscript, third
     /// subscript and so on.
     /// The first 2 items are drawn closest to the item, then moving increasingly
     /// further away
-    QList<BasicElement*> m_postScripts;
+    QList<BasicElement *> m_postScripts;
 };
-
 
 #endif // MULTISCRIPTELEMENT_H

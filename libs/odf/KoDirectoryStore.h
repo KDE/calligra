@@ -27,20 +27,24 @@ class QFile;
 class KoDirectoryStore : public KoStore
 {
 public:
-    KoDirectoryStore(const QString& path, Mode _mode, bool writeMimetype);
+    KoDirectoryStore(const QString &path, Mode _mode, bool writeMimetype);
     ~KoDirectoryStore();
 protected:
     void init();
-    virtual bool openWrite(const QString &name) {
+    virtual bool openWrite(const QString &name)
+    {
         return openReadOrWrite(name, QIODevice::WriteOnly);
     }
-    virtual bool openRead(const QString &name) {
+    virtual bool openRead(const QString &name)
+    {
         return openReadOrWrite(name, QIODevice::ReadOnly);
     }
-    virtual bool closeRead() {
+    virtual bool closeRead()
+    {
         return true;
     }
-    virtual bool closeWrite() {
+    virtual bool closeWrite()
+    {
         return true;
     }
     virtual bool enterRelativeDirectory(const QString &dirName);
@@ -56,7 +60,7 @@ private:
     QString m_currentPath;
 
     // Current File
-    QFile* m_file;
+    QFile *m_file;
     Q_DECLARE_PRIVATE(KoStore)
 };
 

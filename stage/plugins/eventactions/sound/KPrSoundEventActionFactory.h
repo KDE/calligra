@@ -28,7 +28,7 @@ public:
     KPrSoundEventActionFactory();
     virtual ~KPrSoundEventActionFactory();
 
-    virtual KoEventAction * createEventAction();
+    virtual KoEventAction *createEventAction();
     virtual QWidget *createOptionWidget();
 };
 

@@ -71,13 +71,12 @@ typedef KisSharedPtr<KisBrush> KisBrushSP;
 class BRUSH_EXPORT KisBrush : public KoResource, public KisShared
 {
 
-
 public:
     class ColoringInformation
     {
     public:
         virtual ~ColoringInformation();
-        virtual const quint8* color() const = 0;
+        virtual const quint8 *color() const = 0;
         virtual void nextColumn() = 0;
         virtual void nextRow() = 0;
     };
@@ -87,13 +86,13 @@ protected:
     class PlainColoringInformation : public ColoringInformation
     {
     public:
-        PlainColoringInformation(const quint8* color);
+        PlainColoringInformation(const quint8 *color);
         virtual ~PlainColoringInformation();
-        virtual const quint8* color() const ;
+        virtual const quint8 *color() const;
         virtual void nextColumn();
         virtual void nextRow();
     private:
-        const quint8* m_color;
+        const quint8 *m_color;
     };
 
     class PaintDeviceColoringInformation : public ColoringInformation
@@ -103,7 +102,7 @@ protected:
 
         PaintDeviceColoringInformation(const KisPaintDeviceSP source, int width);
         virtual ~PaintDeviceColoringInformation();
-        virtual const quint8* color() const ;
+        virtual const quint8 *color() const;
         virtual void nextColumn();
         virtual void nextRow();
 
@@ -116,24 +115,27 @@ protected:
 public:
 
     KisBrush();
-    KisBrush(const QString& filename);
+    KisBrush(const QString &filename);
 
     virtual ~KisBrush();
 
-    virtual bool load() {
+    virtual bool load()
+    {
         return false;
     }
 
-    virtual bool loadFromDevice(QIODevice *) {
+    virtual bool loadFromDevice(QIODevice *)
+    {
         return false;
     }
 
-
-    virtual bool save() {
+    virtual bool save()
+    {
         return false;
     }
 
-    virtual bool saveToDevice(QIODevice* ) const {
+    virtual bool saveToDevice(QIODevice *) const
+    {
         return false;
     }
 
@@ -161,7 +163,6 @@ public:
     bool autoSpacingActive() const;
     qreal autoSpacingCoeff() const;
 
-
     /**
      * @return the width (for scale == 1.0)
      */
@@ -175,12 +176,12 @@ public:
     /**
      * @return the width of the mask for the given scale and angle
      */
-    virtual qint32 maskWidth(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
+    virtual qint32 maskWidth(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation &info) const;
 
     /**
      * @return the height of the mask for the given scale and angle
      */
-    virtual qint32 maskHeight(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation& info) const;
+    virtual qint32 maskHeight(double scale, double angle, qreal subPixelX, qreal subPixelY, const KisPaintInformation &info) const;
 
     /**
      * @return the logical size of the brush, that is the size measured
@@ -191,7 +192,7 @@ public:
      *         of this metric is calculation of brush-size derivatives like
      *         hotspots and spacing.
      */
-     QSizeF characteristicSize(double scaleX, double scaleY, double rotation) const;
+    QSizeF characteristicSize(double scaleX, double scaleY, double rotation) const;
 
     /**
      * @return the angle of the mask adding the given angle
@@ -202,20 +203,20 @@ public:
      * @return the index of the brush
      *         if the brush consists of multiple images
      */
-    virtual quint32 brushIndex(const KisPaintInformation& info) const;
+    virtual quint32 brushIndex(const KisPaintInformation &info) const;
 
     /**
      * The brush type defines how the brush is used.
      */
     virtual enumBrushType brushType() const;
 
-    virtual QPointF hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation& info) const;
+    virtual QPointF hotSpot(double scaleX, double scaleY, double rotation, const KisPaintInformation &info) const;
 
     /**
      * Returns true if this brush can return something useful for the info. This is used
      * by Pipe Brushes that can't paint sometimes
      **/
-    virtual bool canPaintFor(const KisPaintInformation& /*info*/);
+    virtual bool canPaintFor(const KisPaintInformation & /*info*/);
 
     /**
      * Is called by the cache, when cache hit has happened.
@@ -230,9 +231,9 @@ public:
     /**
      * Return a fixed paint device that contains a correctly scaled image dab.
      */
-    virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
+    virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace *colorSpace,
             double scale, double angle,
-            const KisPaintInformation& info,
+            const KisPaintInformation &info,
             double subPixelX = 0, double subPixelY = 0) const;
 
     /**
@@ -240,16 +241,16 @@ public:
      */
     void mask(KisFixedPaintDeviceSP dst,
               double scaleX, double scaleY, double angle,
-              const KisPaintInformation& info,
+              const KisPaintInformation &info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
     /**
      * clear dst fill it with a mask colored with KoColor
      */
     void mask(KisFixedPaintDeviceSP dst,
-              const KoColor& color,
+              const KoColor &color,
               double scaleX, double scaleY, double angle,
-              const KisPaintInformation& info,
+              const KisPaintInformation &info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
     /**
@@ -258,9 +259,8 @@ public:
     void mask(KisFixedPaintDeviceSP dst,
               const KisPaintDeviceSP src,
               double scaleX, double scaleY, double angle,
-              const KisPaintInformation& info,
+              const KisPaintInformation &info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
-
 
     virtual bool hasColor() const;
 
@@ -285,20 +285,19 @@ public:
      * pixels in the brush.
      */
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-            ColoringInformation* coloringInfo,
+            ColoringInformation *coloringInfo,
             double scaleX, double scaleY, double angle,
-            const KisPaintInformation& info,
+            const KisPaintInformation &info,
             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
-
 
     /**
      * Serialize this brush to XML.
      */
-    virtual void toXML(QDomDocument& , QDomElement&) const;
+    virtual void toXML(QDomDocument &, QDomElement &) const;
 
-    static KisBrushSP fromXML(const QDomElement& element);
+    static KisBrushSP fromXML(const QDomElement &element);
 
-    virtual const KisBoundary* boundary() const;
+    virtual const KisBoundary *boundary() const;
     virtual QPainterPath outline() const;
 
     virtual void setScale(qreal _scale);
@@ -311,7 +310,7 @@ public:
 
 //protected:
 
-    KisBrush(const KisBrush& rhs);
+    KisBrush(const KisBrush &rhs);
 
     void setWidth(qint32 width);
 
@@ -323,7 +322,7 @@ public:
      * The image is used to represent the brush in the gui, and may also, depending on the brush type
      * be used to define the actual brush instance.
      */
-    virtual void setBrushTipImage(const QImage& image);
+    virtual void setBrushTipImage(const QImage &image);
 
     /**
      * XXX
@@ -334,13 +333,12 @@ public:
 
     virtual void setHasColor(bool hasColor);
 
-
 protected:
     virtual QByteArray generateMD5() const;
 
     void resetBoundary();
 
-    void predefinedBrushToXML(const QString &type, QDomElement& e) const;
+    void predefinedBrushToXML(const QString &type, QDomElement &e) const;
 
 private:
     friend class KisImagePipeBrushTest;
@@ -349,10 +347,9 @@ private:
     void generateBoundary() const;
 
     struct Private;
-    Private* const d;
+    Private *const d;
 
 };
-
 
 #endif // KIS_BRUSH_
 

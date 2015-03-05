@@ -33,22 +33,22 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoChannelInfo.h"
 
-
 class KoColor::Private
 {
 public:
     Private() : data(0), colorSpace(0) {}
 
-    ~Private() {
+    ~Private()
+    {
         delete [] data;
     }
 
-    quint8 * data;
-    const KoColorSpace * colorSpace;
+    quint8 *data;
+    const KoColorSpace *colorSpace;
 };
 
 KoColor::KoColor()
-        : d(new Private())
+    : d(new Private())
 {
     d->colorSpace = KoColorSpaceRegistry::instance()->lab16(0);
     d->data = new quint8[d->colorSpace->pixelSize()];
@@ -56,8 +56,8 @@ KoColor::KoColor()
     d->colorSpace->setOpacity(d->data, OPACITY_OPAQUE_U8, 1);
 }
 
-KoColor::KoColor(const KoColorSpace * colorSpace)
-        : d(new Private())
+KoColor::KoColor(const KoColorSpace *colorSpace)
+    : d(new Private())
 {
     Q_ASSERT(colorSpace);
     d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
@@ -65,14 +65,13 @@ KoColor::KoColor(const KoColorSpace * colorSpace)
     memset(d->data, 0, d->colorSpace->pixelSize());
 }
 
-
 KoColor::~KoColor()
 {
     delete d;
 }
 
-KoColor::KoColor(const QColor & color, const KoColorSpace * colorSpace)
-        : d(new Private())
+KoColor::KoColor(const QColor &color, const KoColorSpace *colorSpace)
+    : d(new Private())
 {
     Q_ASSERT(color.isValid());
     Q_ASSERT(colorSpace);
@@ -84,8 +83,8 @@ KoColor::KoColor(const QColor & color, const KoColorSpace * colorSpace)
     d->colorSpace->fromQColor(color, d->data);
 }
 
-KoColor::KoColor(const quint8 * data, const KoColorSpace * colorSpace)
-        : d(new Private())
+KoColor::KoColor(const quint8 *data, const KoColorSpace *colorSpace)
+    : d(new Private())
 {
     Q_ASSERT(colorSpace);
     Q_ASSERT(data);
@@ -95,9 +94,8 @@ KoColor::KoColor(const quint8 * data, const KoColorSpace * colorSpace)
     memmove(d->data, data, colorSpace->pixelSize());
 }
 
-
-KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
-        : d(new Private())
+KoColor::KoColor(const KoColor &src, const KoColorSpace *colorSpace)
+    : d(new Private())
 {
     Q_ASSERT(colorSpace);
     d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
@@ -107,8 +105,8 @@ KoColor::KoColor(const KoColor &src, const KoColorSpace * colorSpace)
     src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace, 1, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
 }
 
-KoColor::KoColor(const KoColor & rhs)
-        : d(new Private())
+KoColor::KoColor(const KoColor &rhs)
+    : d(new Private())
 {
     d->colorSpace = rhs.colorSpace();
     Q_ASSERT(*d->colorSpace == *KoColorSpaceRegistry::instance()->permanentColorspace(d->colorSpace));
@@ -118,9 +116,11 @@ KoColor::KoColor(const KoColor & rhs)
     }
 }
 
-KoColor & KoColor::operator=(const KoColor & rhs)
+KoColor &KoColor::operator=(const KoColor &rhs)
 {
-    if (this == &rhs) return *this;
+    if (this == &rhs) {
+        return *this;
+    }
 
     delete [] d->data;
     d->data = 0;
@@ -136,20 +136,22 @@ KoColor & KoColor::operator=(const KoColor & rhs)
 
 bool KoColor::operator==(const KoColor &other) const
 {
-    if (!(*colorSpace() == *other.colorSpace()))
+    if (!(*colorSpace() == *other.colorSpace())) {
         return false;
+    }
     return memcmp(d->data, other.d->data, d->colorSpace->pixelSize()) == 0;
 }
 
-void KoColor::convertTo(const KoColorSpace * cs, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+void KoColor::convertTo(const KoColorSpace *cs, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     //dbgPigment <<"Our colormodel:" << d->colorSpace->id().name()
     //      << ", new colormodel: " << cs->id().name() << "\n";
 
-    if (*d->colorSpace == *cs)
+    if (*d->colorSpace == *cs) {
         return;
+    }
 
-    quint8 * data = new quint8[cs->pixelSize()];
+    quint8 *data = new quint8[cs->pixelSize()];
     memset(data, 0, cs->pixelSize());
 
     d->colorSpace->convertPixelsTo(d->data, data, cs, 1, renderingIntent, conversionFlags);
@@ -159,19 +161,18 @@ void KoColor::convertTo(const KoColorSpace * cs, KoColorConversionTransformation
     d->colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(cs);
 }
 
-void KoColor::convertTo(const KoColorSpace * cs)
+void KoColor::convertTo(const KoColorSpace *cs)
 {
     convertTo(cs,
               KoColorConversionTransformation::InternalRenderingIntent,
               KoColorConversionTransformation::InternalConversionFlags);
 }
 
-void KoColor::setColor(const quint8 * data, const KoColorSpace * colorSpace)
+void KoColor::setColor(const quint8 *data, const KoColorSpace *colorSpace)
 {
     Q_ASSERT(data);
     Q_ASSERT(colorSpace);
-    if(d->colorSpace->pixelSize() != colorSpace->pixelSize())
-    {
+    if (d->colorSpace->pixelSize() != colorSpace->pixelSize()) {
         delete [] d->data;
         d->data = new quint8[colorSpace->pixelSize()];
     }
@@ -195,7 +196,7 @@ QColor KoColor::toQColor() const
     return c;
 }
 
-void KoColor::fromQColor(const QColor& c) const
+void KoColor::fromQColor(const QColor &c) const
 {
     if (d->colorSpace && d->data) {
         d->colorSpace->fromQColor(c, d->data);
@@ -212,7 +213,7 @@ void KoColor::dump() const
     QList<KoChannelInfo *>::const_iterator end = channels.constEnd();
 
     for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it) {
-        KoChannelInfo * ch = (*it);
+        KoChannelInfo *ch = (*it);
         // XXX: setNum always takes a byte.
         if (ch->size() == sizeof(quint8)) {
             // Byte
@@ -228,32 +229,32 @@ void KoColor::dump() const
 }
 #endif
 
-void KoColor::fromKoColor(const KoColor& src)
+void KoColor::fromKoColor(const KoColor &src)
 {
     src.colorSpace()->convertPixelsTo(src.d->data, d->data, colorSpace(), 1, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
 }
 
-const KoColorProfile *  KoColor::profile() const
+const KoColorProfile   *KoColor::profile() const
 {
     return d->colorSpace->profile();
 }
 
-quint8 * KoColor::data()
+quint8 *KoColor::data()
 {
     return d->data;
 }
 
-const quint8 * KoColor::data() const
+const quint8 *KoColor::data() const
 {
     return d->data;
 }
 
-const KoColorSpace * KoColor::colorSpace() const
+const KoColorSpace *KoColor::colorSpace() const
 {
     return d->colorSpace;
 }
 
-void KoColor::toXML(QDomDocument& doc, QDomElement& colorElt) const
+void KoColor::toXML(QDomDocument &doc, QDomElement &colorElt) const
 {
     d->colorSpace->colorToXML(d->data, doc, colorElt);
 }
@@ -275,7 +276,7 @@ qreal KoColor::opacityF() const
     return d->colorSpace->opacityF(d->data);
 }
 
-KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, const QHash<QString, QString> & aliases)
+KoColor KoColor::fromXML(const QDomElement &elt, const QString &bitDepthId, const QHash<QString, QString> &aliases)
 {
     QString modelId;
     if (elt.tagName() == "CMYK") {
@@ -303,7 +304,7 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, con
             profileName.clear();
         }
     }
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, bitDepthId, profileName);
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, bitDepthId, profileName);
     if (cs == 0) {
         QList<KoID> list =  KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces);
         if (!list.empty()) {
@@ -322,7 +323,7 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString & bitDepthId, con
 QString KoColor::toQString(const KoColor &color)
 {
     QStringList ls;
-    foreach(KoChannelInfo *channel, KoChannelInfo::displayOrderSorted(color.colorSpace()->channels())) {
+    foreach (KoChannelInfo *channel, KoChannelInfo::displayOrderSorted(color.colorSpace()->channels())) {
         int realIndex = KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), color.colorSpace()->channels());
         ls << channel->name();
         ls << color.colorSpace()->channelValueText(color.data(), realIndex);

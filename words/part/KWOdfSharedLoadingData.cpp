@@ -36,8 +36,8 @@
 #include <kdebug.h>
 
 KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader *loader)
-        : KoTextSharedLoadingData()
-        , m_loader(loader)
+    : KoTextSharedLoadingData()
+    , m_loader(loader)
 {
     KoShapeLoadingContext::addAdditionalAttributeData(
         KoShapeLoadingContext::AdditionalAttributeData(
@@ -57,7 +57,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
                     context.odfLoadingContext().useStylesAutoStyles());
     }
 
-    KoTextShapeData *text = qobject_cast<KoTextShapeData*>(shape->userData());
+    KoTextShapeData *text = qobject_cast<KoTextShapeData *>(shape->userData());
     if (text) {
         KoXmlElement textBox(KoXml::namedItemNS(element, KoXmlNS::draw, "text-box"));
         if (!textBox.isNull()) {
@@ -76,15 +76,17 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
             KWTextFrameSet *fs = new KWTextFrameSet(m_loader->document());
             fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
             KWFrame *frame = new KWFrame(shape, fs);
-            if (style)
+            if (style) {
                 fillFrameProperties(frame, *style);
+            }
         }
     } else {
         KWFrameSet *fs = new KWFrameSet();
         fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
         KWFrame *frame = new KWFrame(shape, fs);
-        if (style)
+        if (style) {
             fillFrameProperties(frame, *style);
+        }
         m_loader->document()->addFrameSet(fs);
     }
 }
@@ -92,8 +94,9 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
 bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElement &style)
 {
     KoXmlElement properties(KoXml::namedItemNS(style, KoXmlNS::style, "graphic-properties"));
-    if (properties.isNull())
+    if (properties.isNull()) {
         return frame;
+    }
 
     return true;
 }

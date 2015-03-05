@@ -38,8 +38,8 @@ public:
     //! stores last result's message
     virtual void storeResult();
 
-    pqxx::connection* pqxxsql;
-    pqxx::result* res;
+    pqxx::connection *pqxxsql;
+    pqxx::result *res;
 
     KexiDB::ServerVersionInfo *version; //!< this is set in drv_connect(), so we can use it in drv_useDatabase()
     //!< because pgsql really connects after "USE".

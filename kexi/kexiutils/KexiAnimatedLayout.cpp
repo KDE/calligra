@@ -19,14 +19,14 @@
 
 #include "KexiAnimatedLayout.h"
 #include "KexiAnimatedLayout_p.h"
- 
+
 #include <kglobalsettings.h>
 
 #include <QPainter>
 #include <QPaintEvent>
 
-KexiAnimatedLayout::Private::Private(KexiAnimatedLayout * qq)
- : QWidget(), q(qq), animation(this, "pos")
+KexiAnimatedLayout::Private::Private(KexiAnimatedLayout *qq)
+    : QWidget(), q(qq), animation(this, "pos")
 {
     hide();
     setAttribute(Qt::WA_OpaquePaintEvent, true);
@@ -35,16 +35,16 @@ KexiAnimatedLayout::Private::Private(KexiAnimatedLayout * qq)
     connect(&animation, SIGNAL(finished()), this, SLOT(animationFinished()));
 }
 
-void KexiAnimatedLayout::Private::animateTo(QWidget* destination)
+void KexiAnimatedLayout::Private::animateTo(QWidget *destination)
 {
     QWidget *from = q->currentWidget();
     Q_ASSERT(destination && from);
     destinationWidget = destination;
-    if (from == destinationWidget)
+    if (from == destinationWidget) {
         return;
+    }
     if (!(KGlobalSettings::self()->graphicEffectsLevel()
-          & KGlobalSettings::SimpleAnimationEffects))
-    {
+            & KGlobalSettings::SimpleAnimationEffects)) {
         // animations not allowed: switch to destination widget immediately
         animationFinished();
         return;
@@ -62,7 +62,7 @@ void KexiAnimatedLayout::Private::animateTo(QWidget* destination)
     from->render(&buffer, startPos);
     //kDebug() << s << from->geometry() << destinationWidget->geometry();
     destinationWidget->resize(from->size()); // needed because destination could
-                                               // have been never displayed
+    // have been never displayed
     destinationWidget->render(&buffer, endPos);
     resize(buffer.size());
     move(animation.startValue().toPoint().x(), animation.startValue().toPoint().y());
@@ -70,10 +70,11 @@ void KexiAnimatedLayout::Private::animateTo(QWidget* destination)
     animation.start();
 }
 
-void KexiAnimatedLayout::Private::paintEvent(QPaintEvent* event)
+void KexiAnimatedLayout::Private::paintEvent(QPaintEvent *event)
 {
-    if (buffer.isNull())
+    if (buffer.isNull()) {
         return;
+    }
     QPainter p(this);
     p.drawPixmap(event->rect(), buffer, event->rect());
 }
@@ -81,7 +82,7 @@ void KexiAnimatedLayout::Private::paintEvent(QPaintEvent* event)
 void KexiAnimatedLayout::Private::animationFinished()
 {
     if (destinationWidget) {
-        static_cast<QStackedLayout*>(q)->setCurrentWidget(destinationWidget);
+        static_cast<QStackedLayout *>(q)->setCurrentWidget(destinationWidget);
     }
     hide();
     destinationWidget = 0;
@@ -90,9 +91,9 @@ void KexiAnimatedLayout::Private::animationFinished()
 
 // ----
 
-KexiAnimatedLayout::KexiAnimatedLayout(QWidget* parent)
- : QStackedLayout(parent)
- , d(new Private(this))
+KexiAnimatedLayout::KexiAnimatedLayout(QWidget *parent)
+    : QStackedLayout(parent)
+    , d(new Private(this))
 {
 }
 
@@ -101,7 +102,7 @@ KexiAnimatedLayout::~KexiAnimatedLayout()
     delete d;
 }
 
-void KexiAnimatedLayout::setCurrentWidget(QWidget* widget)
+void KexiAnimatedLayout::setCurrentWidget(QWidget *widget)
 {
     if (indexOf(widget) < 0) {
         return;
@@ -116,9 +117,10 @@ void KexiAnimatedLayout::setCurrentWidget(QWidget* widget)
 void KexiAnimatedLayout::setCurrentIndex(int index)
 {
     QWidget *w = widget(index);
-    if (!w)
+    if (!w) {
         return;
-    
+    }
+
     setCurrentWidget(w);
 }
 

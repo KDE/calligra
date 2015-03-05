@@ -46,9 +46,9 @@ public:
 
 HyperlinkStrategy::HyperlinkStrategy(CellToolBase *cellTool,
                                      const QPointF documentPos, Qt::KeyboardModifiers modifiers,
-                                     const QString& url, const QRectF& textRect)
-        : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
-        , d(new Private)
+                                     const QString &url, const QRectF &textRect)
+    : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
+    , d(new Private)
 {
     d->lastPoint = documentPos;
     d->textRect = textRect;
@@ -61,12 +61,13 @@ HyperlinkStrategy::~HyperlinkStrategy()
     delete d;
 }
 
-void HyperlinkStrategy::handleMouseMove(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
+void HyperlinkStrategy::handleMouseMove(const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
 {
     const QPointF position = documentPos - cellTool()->offset();
     d->lastPoint = position;
-    if (d->textRect.contains(position))
+    if (d->textRect.contains(position)) {
         return;
+    }
     AbstractSelectionStrategy::handleMouseMove(documentPos, modifiers);
 }
 

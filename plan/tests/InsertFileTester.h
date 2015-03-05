@@ -25,7 +25,6 @@
 namespace KPlato
 {
 
-
 class InsertFileTester : public QObject
 {
     Q_OBJECT

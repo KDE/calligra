@@ -45,7 +45,7 @@ KWStatisticsDocker::~KWStatisticsDocker()
 
 void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
 {
-    KWCanvas *canvas = dynamic_cast<KWCanvas*>(_canvas);
+    KWCanvas *canvas = dynamic_cast<KWCanvas *>(_canvas);
     m_statisticsWidget->setCanvas(canvas);
 }
 
@@ -63,7 +63,6 @@ void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
     }
 }
 
-
 KWStatisticsDockerFactory::KWStatisticsDockerFactory()
 {
 }
@@ -79,5 +78,4 @@ QDockWidget *KWStatisticsDockerFactory::createDockWidget()
     widget->setObjectName(id());
     return widget;
 }
-
 

@@ -48,12 +48,12 @@ K_EXPORT_PLUGIN(FlowImageExportFactory("FlowImageExport"))
 namespace Flow
 {
 
-ImageExport::ImageExport(KoFilter *, const char *, const QStringList&)
-        : KoFilter(parent)
+ImageExport::ImageExport(KoFilter *, const char *, const QStringList &)
+    : KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus ImageExport::convert(const QByteArray &from, const QByteArray &to)
 {
     if (from != "application/x-flow") {
         return KoFilter::BadMimeType;
@@ -85,7 +85,7 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
         return KoFilter::BadMimeType;
     }
 
-    KoStoreDevice* storeIn = m_chain->storageFile("root", KoStore::Read);
+    KoStoreDevice *storeIn = m_chain->storageFile("root", KoStore::Read);
 
     if (!storeIn) {
         KMessageBox::error(0, i18n("Failed to read data."), i18n("Export Error"));
@@ -106,16 +106,16 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
     ImageExportDialog dlg;
 
     QStringList pageNames;
-    QList<FlowPage*> pageList = doc.map()->pageList();
+    QList<FlowPage *> pageList = doc.map()->pageList();
 
-    foreach(FlowPage* page, pageList) {
+    foreach (FlowPage *page, pageList) {
         pageNames.append(page->pageName());
     }
 
     KoZoomHandler zoom;
 
     dlg.setPageList(pageNames);
-    FlowPage* page = doc.map()->firstPage();
+    FlowPage *page = doc.map()->firstPage();
     QSize size = QSize(zoom.zoomItX(page->paperLayout().ptWidth), zoom.zoomItY(page->paperLayout().ptHeight));
     dlg.setInitialCustomSize(size);
 
@@ -142,8 +142,8 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
         float zh = (float)customSize.height() / (float)size.height();
         float z = qMin(zw, zh);
 
-	converter.setZoom( z );
-	converter.setDpi( KoGlobal::dpiX(), KoGlobal::dpiY() );
+        converter.setZoom(z);
+        converter.setDpi(KoGlobal::dpiX(), KoGlobal::dpiY());
 
         size = customSize;
     }

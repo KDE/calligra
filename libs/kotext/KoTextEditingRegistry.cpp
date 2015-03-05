@@ -33,7 +33,7 @@ void KoTextEditingRegistry::init()
                                      QString::fromLatin1("[X-KoText-PluginVersion] == 28"), config);
 }
 
-KoTextEditingRegistry* KoTextEditingRegistry::instance()
+KoTextEditingRegistry *KoTextEditingRegistry::instance()
 {
     K_GLOBAL_STATIC(KoTextEditingRegistry, s_instance)
     if (!s_instance.exists()) {

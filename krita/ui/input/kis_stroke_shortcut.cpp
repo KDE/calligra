@@ -27,7 +27,6 @@ public:
     QList<Qt::MouseButton> buttons;
 };
 
-
 KisStrokeShortcut::KisStrokeShortcut(KisAbstractInputAction *action, int index)
     : KisAbstractShortcut(action, index),
       m_d(new Private)
@@ -52,7 +51,9 @@ int KisStrokeShortcut::priority() const
 void KisStrokeShortcut::setButtons(const QList<Qt::Key> &modifiers,
                                    const QList<Qt::MouseButton> &buttons)
 {
-    if (buttons.size() == 0) return;
+    if (buttons.size() == 0) {
+        return;
+    }
 
     m_d->modifiers = modifiers;
     m_d->buttons = buttons;
@@ -70,8 +71,10 @@ bool KisStrokeShortcut::matchReady(const QList<Qt::Key> &modifiers,
         return false;
     }
 
-    foreach(Qt::MouseButton button, buttons) {
-        if (!m_d->buttons.contains(button)) return false;
+    foreach (Qt::MouseButton button, buttons) {
+        if (!m_d->buttons.contains(button)) {
+            return false;
+        }
     }
     return true;
 }

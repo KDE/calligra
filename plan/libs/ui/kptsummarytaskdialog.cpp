@@ -34,33 +34,33 @@ namespace KPlato
 
 SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
     : KDialog(p),
-    m_node( &task )
+      m_node(&task)
 {
-    setCaption( i18n("Summary Task Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setCaption(i18n("Summary Task Settings"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    showButtonSeparator(true);
     m_generalTab = new SummaryTaskGeneralPanel(task, this);
     setMainWidget(m_generalTab);
     enableButtonOk(false);
 
     connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
 
-    Project *proj = static_cast<Project*>( task.projectNode() );
-    if ( proj ) {
+    Project *proj = static_cast<Project *>(task.projectNode());
+    if (proj) {
         connect(proj, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotTaskRemoved(Node*)));
     }
 }
 
-void SummaryTaskDialog::slotTaskRemoved( Node *node )
+void SummaryTaskDialog::slotTaskRemoved(Node *node)
 {
-    if ( node == m_node ) {
+    if (node == m_node) {
         reject();
     }
 }
 
-
-MacroCommand *SummaryTaskDialog::buildCommand() {
+MacroCommand *SummaryTaskDialog::buildCommand()
+{
     MacroCommand *m = new MacroCommand(kundo2_i18n("Modify Summary Task"));
     bool modified = false;
     MacroCommand *cmd = m_generalTab->buildCommand();
@@ -75,16 +75,17 @@ MacroCommand *SummaryTaskDialog::buildCommand() {
     return m;
 }
 
-void SummaryTaskDialog::slotButtonClicked(int button) {
+void SummaryTaskDialog::slotButtonClicked(int button)
+{
     if (button == KDialog::Ok) {
-        if (!m_generalTab->ok())
+        if (!m_generalTab->ok()) {
             return;
+        }
         accept();
     } else {
         KDialog::slotButtonClicked(button);
     }
 }
-
 
 }  //KPlato namespace
 

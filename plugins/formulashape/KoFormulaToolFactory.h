@@ -31,7 +31,8 @@
  * This class is part of the FormulaShape plugin and follows the factory design
  * pattern.
  */
-class KoFormulaToolFactory : public KoToolFactoryBase {
+class KoFormulaToolFactory : public KoToolFactoryBase
+{
 public:
     /// The constructor - reimplemented from KoToolFactoryBase
     explicit KoFormulaToolFactory();
@@ -40,7 +41,7 @@ public:
     ~KoFormulaToolFactory();
 
     /// @return an instance of KoFormulaTool
-    KoToolBase* createTool( KoCanvasBase* canvas );
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 #endif

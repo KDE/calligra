@@ -35,13 +35,13 @@
 
 using namespace Calligra::Sheets;
 
-StyleCommand::StyleCommand(KUndo2Command* parent)
-        : AbstractRegionCommand(parent)
-        , m_horizontalPen(QPen(QColor(), 0, Qt::NoPen))
-        , m_verticalPen(QPen(QColor(), 0, Qt::NoPen))
-        , m_horizontalPenChanged(false)
-        , m_verticalPenChanged(false)
-        , m_style(new Style())
+StyleCommand::StyleCommand(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
+    , m_horizontalPen(QPen(QColor(), 0, Qt::NoPen))
+    , m_verticalPen(QPen(QColor(), 0, Qt::NoPen))
+    , m_horizontalPenChanged(false)
+    , m_verticalPenChanged(false)
+    , m_style(new Style())
 {
 }
 
@@ -50,7 +50,7 @@ StyleCommand::~StyleCommand()
     delete m_style;
 }
 
-bool StyleCommand::process(Element* element)
+bool StyleCommand::process(Element *element)
 {
     const QRect range = element->rect();
     if (!m_reverse) { // (re)do
@@ -60,7 +60,7 @@ bool StyleCommand::process(Element* element)
                                               m_style->hasAttribute(Style::RightPen) ? 1 : 0,
                                               m_style->hasAttribute(Style::BottomPen) ? 1 : 0);
             const QList< QPair<QRectF, SharedSubStyle> > rawUndoData
-            = m_sheet->styleStorage()->undoData(Region(rect));
+                = m_sheet->styleStorage()->undoData(Region(rect));
             for (int i = 0; i < rawUndoData.count(); ++i) {
 //                 if ( m_style->hasAttribute( rawUndoData[i].second->type() ) ||
 //                      rawUndoData[i].second->type() == Style::DefaultStyleKey ||
@@ -181,17 +181,19 @@ bool StyleCommand::process(Element* element)
 bool StyleCommand::preProcessing()
 {
     if (m_firstrun) {
-        if (m_style->isDefault())
+        if (m_style->isDefault()) {
             setText(kundo2_i18n("Reset Style"));
-        else
+        } else {
             setText(kundo2_i18n("Change Style"));
+        }
 
         // special handling for precision
         if (m_style->hasAttribute(Style::Precision)) {
-            if (m_style->precision() == -1)   // Style default
-                m_style->setPrecision(0);   // storage default
-            else if (m_style->precision() == 0)
-                m_style->setPrecision(-1);   // anything resulting in zero, but not storage default
+            if (m_style->precision() == -1) { // Style default
+                m_style->setPrecision(0);    // storage default
+            } else if (m_style->precision() == 0) {
+                m_style->setPrecision(-1);    // anything resulting in zero, but not storage default
+            }
         }
     }
     return AbstractRegionCommand::preProcessing();

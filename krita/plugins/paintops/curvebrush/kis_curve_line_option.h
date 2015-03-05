@@ -36,11 +36,11 @@ public:
     KisCurveOpOption();
     ~KisCurveOpOption();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
-    KisCurveOpOptionsWidget * m_options;
+    KisCurveOpOptionsWidget *m_options;
 
 };
 
@@ -53,7 +53,8 @@ public:
     bool paintConnectionLine;
     bool smoothing;
 
-    void readOptionSetting(const KisPropertiesConfiguration* settings) {
+    void readOptionSetting(const KisPropertiesConfiguration *settings)
+    {
         lineWidth = settings->getInt(CURVE_LINE_WIDTH);
         historySize = settings->getInt(CURVE_STROKE_HISTORY_SIZE);
         paintConnectionLine = settings->getBool(CURVE_PAINT_CONNECTION_LINE);

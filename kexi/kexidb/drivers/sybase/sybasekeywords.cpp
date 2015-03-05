@@ -31,7 +31,7 @@
 
 namespace KexiDB
 {
-const char* const SybaseDriver::keywords[] = {
+const char *const SybaseDriver::keywords[] = {
     "ACTION",
     "ADD",
     "AGAINST",

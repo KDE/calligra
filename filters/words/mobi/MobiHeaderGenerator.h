@@ -45,7 +45,7 @@ struct palmDBHeader {
     qint16 version; /// file version
     qint32 creationDate; /// No. of seconds since start of January 1, 1904.
     qint32 modificationDate; /// No. of seconds since start of January 1, 1904.
-    qint32 lastBackupDate; /// 	No. of seconds since start of January 1, 1904.
+    qint32 lastBackupDate; ///  No. of seconds since start of January 1, 1904.
     qint32 modificationNumber;
     qint32 appInfoId; /// offset to start of Application Info (if present) or null
     qint32 sortInfoId; /// offset to start of Sort Info (if present) or null
@@ -69,8 +69,7 @@ struct palmDBHeader {
 };
 
 /// PalmDocHeadr length = 16
-struct palmDocHeader
-{
+struct palmDocHeader {
     palmDocHeader();
 
     qint16 compression;  /// 1 == no compression, 2 = PalmDOC compression, 17480 = HUFF/CDIC compression
@@ -88,11 +87,10 @@ struct palmDocHeader
 };
 
 /// mobi header length 232
-struct mobiHeader
-{
+struct mobiHeader {
     mobiHeader();
 
-    QByteArray identifier; /// 	the characters M O B I
+    QByteArray identifier; ///  the characters M O B I
     int mobiHeaderLength;// = 232;
     qint32 mobiType;// = 2;
     /**  The kind of Mobipocket file this is
@@ -202,7 +200,7 @@ struct exthHeader {
     qint32 exthRecordCount;
 
     // EXTH record start
-    qint32 recordType; /// 	Exth Record type. Just a number identifying what's stored in the record
+    qint32 recordType; ///  Exth Record type. Just a number identifying what's stored in the record
 
     /// length of EXTH record = L , including the 8 bytes in
     /// the type and length fields
@@ -218,7 +216,7 @@ public:
     ~MobiHeaderGenerator();
 
     void generateMobiHeaders(QHash<QString, QString> metaData
-                             ,int compressedTextSize, int uncompressedTextSize,
+                             , int compressedTextSize, int uncompressedTextSize,
                              QList<int> imagesSize, QList<qint32> textRecordsOffset);
 
 public:

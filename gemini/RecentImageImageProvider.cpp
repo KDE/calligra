@@ -38,9 +38,9 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
 {
     int width = 512;
     int height = 512;
-    if(id.endsWith(QLatin1String("odt"), Qt::CaseInsensitive) ||
-       id.endsWith(QLatin1String("doc"), Qt::CaseInsensitive) ||
-       id.endsWith(QLatin1String("docx"), Qt::CaseInsensitive)) {
+    if (id.endsWith(QLatin1String("odt"), Qt::CaseInsensitive) ||
+            id.endsWith(QLatin1String("doc"), Qt::CaseInsensitive) ||
+            id.endsWith(QLatin1String("docx"), Qt::CaseInsensitive)) {
         width *= 0.72413793;
     } else {
         height *= 0.72413793;
@@ -63,17 +63,17 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
 
         bool thumbnailFound = false;
         if (store &&
-            // ODF thumbnail?
-            (store->open(QLatin1String("Thumbnails/thumbnail.png")) ||
-            // old KOffice/Calligra thumbnail?
-            store->open(QLatin1String("preview.png")) ||
-            // OOXML?
-            store->open(QLatin1String("docProps/thumbnail.jpeg")))) {
+                // ODF thumbnail?
+                (store->open(QLatin1String("Thumbnails/thumbnail.png")) ||
+                 // old KOffice/Calligra thumbnail?
+                 store->open(QLatin1String("preview.png")) ||
+                 // OOXML?
+                 store->open(QLatin1String("docProps/thumbnail.jpeg")))) {
             // Hooray! No long delay for the user...
             const QByteArray thumbnailData = store->read(store->size());
 
             QImage thumbnailImage;
-            if (thumbnailImage.loadFromData(thumbnailData) ){//&&
+            if (thumbnailImage.loadFromData(thumbnailData)) {//&&
                 //thumbnailImage.width() >= width && thumbnailImage.height() >= height) {
                 // put a white background behind the thumbnail
                 // as lots of old(?) OOo files have thumbnails with transparent background
@@ -88,7 +88,7 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
             }
         }
 
-         if(!thumbnailFound) {
+        if (!thumbnailFound) {
             // load document and render the thumbnail ourselves
             QProcess thumbnailer;
             QString thumbnailerProgram = QString("%1%2calligrageminithumbnailhelper").arg(qApp->applicationDirPath()).arg(QDir::separator());
@@ -103,13 +103,13 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
             arguments << "-height" << QString::number(sz.height());
             arguments << "--nocrashhandler";
             bool fileExists = QFile::exists(thumbFile);
-            if(!fileExists)
+            if (!fileExists) {
                 thumbnailer.start(thumbnailerProgram, arguments);
-            if(fileExists || thumbnailer.waitForFinished(3000)) {
+            }
+            if (fileExists || thumbnailer.waitForFinished(3000)) {
                 thumbnail.load(thumbFile);
                 thumbnail = thumbnail.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            }
-            else {
+            } else {
                 // some error, final failure...
                 qDebug() << "Failed completely to find a preview for" << id;
             }

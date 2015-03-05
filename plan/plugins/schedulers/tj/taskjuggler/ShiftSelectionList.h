@@ -23,17 +23,17 @@ class Interval;
  * @short Holds a list of shift selections.
  * @author Chris Schlaeger <cs@kde.org>
  */
-class ShiftSelectionList : public QList<ShiftSelection*>
+class ShiftSelectionList : public QList<ShiftSelection *>
 {
 public:
     ShiftSelectionList() { }
     virtual ~ShiftSelectionList() { }
 
-    typedef QListIterator<ShiftSelection*> Iterator;
+    typedef QListIterator<ShiftSelection *> Iterator;
 
-    bool insert(ShiftSelection* s);
+    bool insert(ShiftSelection *s);
 
-    bool isOnShift(const Interval& iv) const;
+    bool isOnShift(const Interval &iv) const;
 
     bool isVacationDay(time_t day) const;
 

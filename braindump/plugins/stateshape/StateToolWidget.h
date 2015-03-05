@@ -34,7 +34,7 @@ class StateToolWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit StateToolWidget(StateTool*);
+    explicit StateToolWidget(StateTool *);
 public Q_SLOTS:
     /// reimplemented
     virtual void open(StateShape *shape);
@@ -42,14 +42,14 @@ public Q_SLOTS:
     virtual void save();
 private:
     /// reimplemented
-    virtual KUndo2Command * createCommand();
+    virtual KUndo2Command *createCommand();
 private:
     void blockChildSignals(bool block);
 private:
-    StateTool* m_tool;
+    StateTool *m_tool;
     StateShape *m_shape;
-    StatesModel* m_model;
-    KCategorizedSortFilterProxyModel* m_proxyModel;
+    StatesModel *m_model;
+    KCategorizedSortFilterProxyModel *m_proxyModel;
     Ui::StateShapeConfigWidget m_widget;
 };
 

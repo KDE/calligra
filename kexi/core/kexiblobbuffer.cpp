@@ -42,42 +42,45 @@ class KexiBLOBBuffer::Private
 {
 public:
     Private()
-            : maxId(0) {
+        : maxId(0)
+    {
     }
-    ~Private() {
-        foreach(Item* item, inMemoryItems) {
+    ~Private()
+    {
+        foreach (Item *item, inMemoryItems) {
             delete item;
         }
         inMemoryItems.clear();
-        foreach(Item* item, storedItems) {
+        foreach (Item *item, storedItems) {
             delete item;
         }
         storedItems.clear();
     }
     Id_t maxId; //!< Used to compute maximal recently used identifier for unstored BLOB
 //! @todo will be changed to QHash<quint64, Item>
-    QHash<Id_t, Item*> inMemoryItems; //!< for unstored BLOBs
-    QHash<Id_t, Item*> storedItems; //!< for stored items
-    QHash<QString, Item*> itemsByURL;
+    QHash<Id_t, Item *> inMemoryItems; //!< for unstored BLOBs
+    QHash<Id_t, Item *> storedItems; //!< for stored items
+    QHash<QString, Item *> itemsByURL;
     QPointer<KexiDB::Connection> conn;
 };
 
 //-----------------
 
-KexiBLOBBuffer::Handle::Handle(Item* item)
-        : m_item(item)
+KexiBLOBBuffer::Handle::Handle(Item *item)
+    : m_item(item)
 {
-    if (m_item)
+    if (m_item) {
         m_item->refs++;
+    }
 }
 
-KexiBLOBBuffer::Handle::Handle(const Handle& handle)
+KexiBLOBBuffer::Handle::Handle(const Handle &handle)
 {
     *this = handle;
 }
 
 KexiBLOBBuffer::Handle::Handle()
-        : m_item(0)
+    : m_item(0)
 {
 }
 
@@ -85,23 +88,26 @@ KexiBLOBBuffer::Handle::~Handle()
 {
     if (m_item) {
         m_item->refs--;
-        if (m_item->refs <= 0)
+        if (m_item->refs <= 0) {
             KexiBLOBBuffer::self()->removeItem(m_item->id, m_item->stored);
+        }
     }
 }
 
-KexiBLOBBuffer::Handle& KexiBLOBBuffer::Handle::operator=(const Handle & handle)
+KexiBLOBBuffer::Handle &KexiBLOBBuffer::Handle::operator=(const Handle &handle)
 {
     m_item = handle.m_item;
-    if (m_item)
+    if (m_item) {
         m_item->refs++;
+    }
     return *this;
 }
 
 void KexiBLOBBuffer::Handle::setStoredWidthID(KexiBLOBBuffer::Id_t id)
 {
-    if (!m_item)
+    if (!m_item) {
         return;
+    }
     if (m_item->stored) {
         kWarning() << "object for id=" << id << " is aleady stored";
         return;
@@ -117,22 +123,24 @@ void KexiBLOBBuffer::Handle::setStoredWidthID(KexiBLOBBuffer::Id_t id)
 
 //-----------------
 
-KexiBLOBBuffer::Item::Item(const QByteArray& data, KexiBLOBBuffer::Id_t ident, bool _stored,
-                           const QString& _name, const QString& _caption, const QString& _mimeType,
-                           Id_t _folderId, const QPixmap& pixmap)
-        : name(_name), caption(_caption), mimeType(_mimeType), refs(0),
-        id(ident), folderId(_folderId), stored(_stored),
-        m_pixmapLoaded(new bool(false)/*workaround for pixmap() const*/)
+KexiBLOBBuffer::Item::Item(const QByteArray &data, KexiBLOBBuffer::Id_t ident, bool _stored,
+                           const QString &_name, const QString &_caption, const QString &_mimeType,
+                           Id_t _folderId, const QPixmap &pixmap)
+    : name(_name), caption(_caption), mimeType(_mimeType), refs(0),
+      id(ident), folderId(_folderId), stored(_stored),
+      m_pixmapLoaded(new bool(false)/*workaround for pixmap() const*/)
 {
-    if (pixmap.isNull())
+    if (pixmap.isNull()) {
         m_pixmap = new QPixmap();
-    else
+    } else {
         m_pixmap = new QPixmap(pixmap);
+    }
 
-    if (data.isEmpty())
+    if (data.isEmpty()) {
         m_data = new QByteArray();
-    else
+    } else {
         m_data = new QByteArray(data);
+    }
 }
 
 KexiBLOBBuffer::Item::~Item()
@@ -150,11 +158,10 @@ QPixmap KexiBLOBBuffer::Item::pixmap() const
 //! @todo ...
     if (!*m_pixmapLoaded && m_pixmap->isNull() && !m_data->isEmpty()) {
         const QStringList types(KImageIO::typeForMime(mimeType));
-        if (   types.isEmpty()
-            || !KImageIO::isSupported(mimeType, KImageIO::Reading)
-            || !m_pixmap->loadFromData(*m_data, types.first().toLatin1())
-           )
-        {
+        if (types.isEmpty()
+                || !KImageIO::isSupported(mimeType, KImageIO::Reading)
+                || !m_pixmap->loadFromData(*m_data, types.first().toLatin1())
+           ) {
             //! @todo inform about error?
         }
         *m_pixmapLoaded = true;
@@ -164,7 +171,7 @@ QPixmap KexiBLOBBuffer::Item::pixmap() const
 
 /*! @return Extension for QPixmap::save() from @a mimeType.
     @todo default PNG ok? */
-static QString formatFromMimeType(const QString& mimeType, const QString& defaultType = "PNG")
+static QString formatFromMimeType(const QString &mimeType, const QString &defaultType = "PNG")
 {
     const KMimeType::Ptr mime = KMimeType::mimeType(mimeType);
     if (mime.isNull()) {
@@ -175,11 +182,13 @@ static QString formatFromMimeType(const QString& mimeType, const QString& defaul
 
 QByteArray KexiBLOBBuffer::Item::data() const
 {
-    if (!m_data->isEmpty())
+    if (!m_data->isEmpty()) {
         return *m_data;
+    }
 
-    if (m_data->isEmpty() && m_pixmap->isNull())
+    if (m_data->isEmpty() && m_pixmap->isNull()) {
         return QByteArray();
+    }
 
     if (m_data->isEmpty() && !m_pixmap->isNull()) {
         //convert pixmap to byte array
@@ -189,8 +198,7 @@ QByteArray KexiBLOBBuffer::Item::data() const
             //! @todo err msg
             kWarning() << "!QBuffer::open()";
         }
-        if (!m_pixmap->save(&buffer, formatFromMimeType(mimeType).toLatin1()))
-        {
+        if (!m_pixmap->save(&buffer, formatFromMimeType(mimeType).toLatin1())) {
             //! @todo err msg
             kWarning() << "!QPixmap::save()";
         }
@@ -201,8 +209,8 @@ QByteArray KexiBLOBBuffer::Item::data() const
 //-----------------
 
 KexiBLOBBuffer::KexiBLOBBuffer()
-        : QObject()
-        , d(new Private())
+    : QObject()
+    , d(new Private())
 {
 }
 
@@ -211,18 +219,20 @@ KexiBLOBBuffer::~KexiBLOBBuffer()
     delete d;
 }
 
-KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
+KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl &url)
 {
-    if (url.isEmpty())
+    if (url.isEmpty()) {
         return KexiBLOBBuffer::Handle();
+    }
     if (!url.isValid()) {
         kWarning() << "INVALID URL" << url;
         return KexiBLOBBuffer::Handle();
     }
 //! @todo what about searching by filename only and then compare data?
-    Item * item = d->itemsByURL.value(url.prettyUrl());
-    if (item)
+    Item *item = d->itemsByURL.value(url.prettyUrl());
+    if (item) {
         return KexiBLOBBuffer::Handle(item);
+    }
 
     QString fileName = url.isLocalFile() ? url.toLocalFile() : url.prettyUrl();
 //! @todo download the file if remote, then set fileName properly
@@ -249,26 +259,28 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
     return KexiBLOBBuffer::Handle(item);
 }
 
-KexiBLOBBuffer::Handle KexiBLOBBuffer::insertObject(const QByteArray& data,
-        const QString& name, const QString& caption, const QString& mimeType, KexiBLOBBuffer::Id_t identifier)
+KexiBLOBBuffer::Handle KexiBLOBBuffer::insertObject(const QByteArray &data,
+        const QString &name, const QString &caption, const QString &mimeType, KexiBLOBBuffer::Id_t identifier)
 {
     KexiBLOBBuffer::Id_t newIdentifier;
-    if (identifier > 0)
+    if (identifier > 0) {
         newIdentifier = identifier;
-    else
+    } else {
         newIdentifier = ++d->maxId;
+    }
 
     Item *item = new Item(data, newIdentifier, identifier > 0, name, caption, mimeType);
     insertItem(item);
     return KexiBLOBBuffer::Handle(item);
 }
 
-KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const QPixmap& pixmap)
+KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const QPixmap &pixmap)
 {
-    if (pixmap.isNull())
+    if (pixmap.isNull()) {
         return KexiBLOBBuffer::Handle();
+    }
 
-    Item * item = new Item(
+    Item *item = new Item(
         QByteArray(), //(pixmap will be converted to byte array on demand)
         ++d->maxId,
         false, //not stored
@@ -284,12 +296,14 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const QPixmap& pixmap)
 
 KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 {
-    if (id <= 0)
+    if (id <= 0) {
         return KexiBLOBBuffer::Handle();
+    }
     if (stored) {
         Item *item = d->storedItems.value(id);
-        if (item || !d->conn)
+        if (item || !d->conn) {
             return KexiBLOBBuffer::Handle(item);
+        }
         //retrieve stored BLOB:
         assert(d->conn);
         KexiDB::TableSchema *blobsTable = d->conn->tableSchema("kexi__blobs");
@@ -317,8 +331,8 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
         if (res != true || recordData.size() < 4) {
             //! @todo err msg
             kWarning() << "id=" << id << "stored=" << stored
-                << ": res!=true || recordData.size()<4; res==" << res.toString() 
-                << "recordData.size()==" << recordData.size();
+                       << ": res!=true || recordData.size()<4; res==" << res.toString()
+                       << "recordData.size()==" << recordData.size();
             return KexiBLOBBuffer::Handle();
         }
 
@@ -341,18 +355,20 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id)
 {
     KexiBLOBBuffer::Handle h(objectForId(id, false/* !stored */));
-    if (h)
+    if (h) {
         return h;
+    }
     return objectForId(id, true/*stored*/);
 }
 
 void KexiBLOBBuffer::removeItem(Id_t id, bool stored)
 {
     Item *item;
-    if (stored)
+    if (stored) {
         item = d->storedItems.take(id);
-    else
+    } else {
         item = d->inMemoryItems.take(id);
+    }
 
     if (item && !item->prettyURL.isEmpty()) {
         d->itemsByURL.remove(item->prettyURL);
@@ -363,19 +379,21 @@ void KexiBLOBBuffer::removeItem(Id_t id, bool stored)
 void KexiBLOBBuffer::takeItem(Item *item)
 {
     assert(item);
-    if (item->stored)
+    if (item->stored) {
         d->storedItems.take(item->id);
-    else
+    } else {
         d->inMemoryItems.take(item->id);
+    }
 }
 
 void KexiBLOBBuffer::insertItem(Item *item)
 {
     assert(item);
-    if (item->stored)
+    if (item->stored) {
         d->storedItems.insert(item->id, item);
-    else
+    } else {
         d->inMemoryItems.insert(item->id, item);
+    }
 }
 
 void KexiBLOBBuffer::setConnection(KexiDB::Connection *conn)
@@ -383,7 +401,7 @@ void KexiBLOBBuffer::setConnection(KexiDB::Connection *conn)
     KexiBLOBBuffer::self()->d->conn = conn;
 }
 
-KexiBLOBBuffer* KexiBLOBBuffer::self()
+KexiBLOBBuffer *KexiBLOBBuffer::self()
 {
     return _buffer;
 }

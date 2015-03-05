@@ -20,15 +20,14 @@
 
 #include "kis_wdg_noise.h"
 
-
 #include <QLayout>
 
 #include <filter/kis_filter_configuration.h>
 
 #include "ui_wdgnoiseoptions.h"
 
-KisWdgNoise::KisWdgNoise(KisFilter* /*nfilter*/, QWidget* parent)
-        : KisConfigWidget(parent)
+KisWdgNoise::KisWdgNoise(KisFilter * /*nfilter*/, QWidget *parent)
+    : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgNoiseOptions();
     m_widget->setupUi(this);
@@ -46,7 +45,7 @@ KisWdgNoise::~KisWdgNoise()
     delete m_widget;
 }
 
-void KisWdgNoise::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgNoise::setConfiguration(const KisPropertiesConfiguration *config)
 {
     QVariant value;
     if (config->getProperty("level", value)) {
@@ -57,9 +56,9 @@ void KisWdgNoise::setConfiguration(const KisPropertiesConfiguration* config)
     }
 }
 
-KisPropertiesConfiguration* KisWdgNoise::configuration() const
+KisPropertiesConfiguration *KisWdgNoise::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("noise", 1);
     config->setProperty("level", this->widget()->intLevel->value());
     config->setProperty("opacity", this->widget()->intOpacity->value());
     config->setProperty("seedThreshold", m_seedThreshold);

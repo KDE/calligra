@@ -74,7 +74,6 @@
   customCommandCount: counter used to keep track of nested KUndo2Commands that are pushed on the KoTextEditor.
   */
 
-
 // This slot is called when the KoTextEditor receives the signal undoCommandAdded() from QTextDocument. A generic UndoTextCommand is used to match the QTextDocument's internal undo command. This command calls QTextDocument::undo() or QTextDocument::redo() respectively, which triggers the undo redo actions on the document.
 //In order to allow nesting commands, we maintain a stack of commands. The top command will be the parent of our auto generated UndoTextCommands.
 //Depending on the case, we might create a command which will serve as head command. This is pushed to our commandStack and eventually to the application's stack.
@@ -89,18 +88,22 @@ void KoTextEditor::Private::documentCommandAdded()
             , m_p(p)
         {}
 
-        void undo() {
+        void undo()
+        {
             QTextDocument *doc = m_document.data();
-            if (doc == 0)
+            if (doc == 0) {
                 return;
+            }
             doc->undo(KoTextDocument(doc).textEditor()->cursor());
             m_p->emitTextFormatChanged();
         }
 
-        void redo() {
+        void redo()
+        {
             QTextDocument *doc = m_document.data();
-            if (doc == 0)
+            if (doc == 0) {
                 return;
+            }
             doc->redo(KoTextDocument(doc).textEditor()->cursor());
             m_p->emitTextFormatChanged();
         }
@@ -123,21 +126,19 @@ void KoTextEditor::Private::documentCommandAdded()
         }
         addNewCommand = false;
         kDebug(32500) << "commandStack is now: " << commandStack.count();
-    }
-    else if (addNewCommand) {
+    } else if (addNewCommand) {
         //We have already a headCommand on the commandStack. However we want a new child headCommand (nested commands) on the commandStack for parenting further UndoTextCommands. This shouldn't be pushed on the application's stack because it is a child of the current commandStack's top.
         kDebug(32500) << "we have a headCommand on the commandStack but need a new child command. we will push it only on the commandStack: " << commandTitle;
         commandStack.push(new KUndo2Command(commandTitle, commandStack.top()));
         addNewCommand = false;
         kDebug(32500) << "commandStack count is now: " << commandStack.count();
-    }
-    else if ((editorState == KeyPress || editorState == Delete) && !commandStack.isEmpty() && commandStack.top()->childCount()) {
+    } else if ((editorState == KeyPress || editorState == Delete) && !commandStack.isEmpty() && commandStack.top()->childCount()) {
         //QTextDocument emits a signal on the first key press (or delte) and "merges" the subsequent ones, until an incompatible one is done. In which case it re-emit a signal.
         //Here we are in KeyPress (or Delete) state. The fact that the commandStack isn't empty and its top command has children means that we just received such a signal. We therefore need to pop the previous headCommand (which were either key press or delete) and create a new one to parent the UndoTextCommands. This command also need to be pushed on the application's stack.
         kDebug(32500) << "we are in subsequent keyPress/delete state and still received a signal. we need to create a new headCommand: " << commandTitle;
         kDebug(32500) << "so we pop the current one and push the new one on both the commandStack and the application's stack";
         commandStack.pop();
-        commandStack.push(new KUndo2Command(commandTitle, !commandStack.isEmpty()?commandStack.top():0));
+        commandStack.push(new KUndo2Command(commandTitle, !commandStack.isEmpty() ? commandStack.top() : 0));
         if (KoTextDocument(document).undoStack()) {
             KoTextDocument(document).undoStack()->push(commandStack.top());
         }
@@ -160,10 +161,11 @@ void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, c
         //from QTextDocument. This is to ensure that undo/redo actions are done in the proper order. Setting addNewCommand will ensure that we create such a child headCommand on the commandStack. This command will not be pushed on the application's stack.
         kDebug(32500) << "we are already in a custom state. a new state, which is not NoOp is part of the macro we are doing. we need however to create a new command on the commandStack to parent a signal induced UndoTextCommand";
         addNewCommand = true;
-        if (!title.isEmpty())
+        if (!title.isEmpty()) {
             commandTitle = title;
-        else
+        } else {
             commandTitle = kundo2_i18n("Text");
+        }
         kDebug(32500) << "returning now. commandStack is not modified at this stage";
         return;
     }
@@ -195,10 +197,11 @@ void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, c
         }
     }
     editorState = newState;
-    if (!title.isEmpty())
+    if (!title.isEmpty()) {
         commandTitle = title;
-    else
+    } else {
         commandTitle = kundo2_i18n("Text");
+    }
     kDebug(32500) << "returning now. commandStack count: " << commandStack.count();
 }
 
@@ -215,7 +218,7 @@ void KoTextEditor::addCommand(KUndo2Command *command)
     //On the contrary, if the commandStack is not empty, or the pushed command has a parent, it means that we are adding a nested KUndo2Command. In which case we just want to put it on the commandStack to parent UndoTextCommands. We need to call the redo method manually though.
     ++d->customCommandCount;
     kDebug(32500) << "we will now go to custom state";
-    d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():kundo2_i18n("Text"));
+    d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty()) ? command->text() : kundo2_i18n("Text"));
     kDebug(32500) << "but will set the addCommand to false. we don't want a new headCommand";
     d->addNewCommand = false;
     kDebug(32500) << "commandStack count is: " << d->commandStack.count();
@@ -233,8 +236,7 @@ void KoTextEditor::addCommand(KUndo2Command *command)
             command->redo();
             kDebug(32500) << "still called redo on it";
         }
-    }
-    else {
+    } else {
         kDebug(32500) << "the commandStack is not empty, our command is actually nested in another kotext command. we don't push on the application stack but only on the commandStack";
         d->commandStack.push(command);
         kDebug(32500) << "commandStack count after push: " << d->commandStack.count();
@@ -257,7 +259,7 @@ void KoTextEditor::addCommand(KUndo2Command *command)
 /// DO NOT USE THIS. It stays here for compiling reasons. But it will severely break everything. Again: DO NOT USE THIS.
 void KoTextEditor::instantlyExecuteCommand(KUndo2Command *command)
 {
-    d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():kundo2_i18n("Text"));
+    d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty()) ? command->text() : kundo2_i18n("Text"));
     command->redo();
     // instant replay done let's not keep it dangling
     if (!command->hasParent()) {
@@ -303,7 +305,7 @@ KUndo2Command *KoTextEditor::beginEditBlock(const KUndo2MagicString &title)
         d->caret.beginEditBlock();
     }
     kDebug(32500) << "will return top od commandStack";
-    return (d->commandStack.isEmpty())?0:d->commandStack.top();
+    return (d->commandStack.isEmpty()) ? 0 : d->commandStack.top();
 }
 
 void KoTextEditor::endEditBlock()

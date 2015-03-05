@@ -30,9 +30,9 @@ class WdgShrinkSelection : public KisOperationUIWidget, public Ui::WdgShrinkSele
     Q_OBJECT
 
 public:
-    WdgShrinkSelection(QWidget *parent, KisViewManager* view);
+    WdgShrinkSelection(QWidget *parent, KisViewManager *view);
 
-    virtual void getConfiguration(KisOperationConfiguration* config);
+    virtual void getConfiguration(KisOperationConfiguration *config);
 
 private Q_SLOTS:
     void slotShrinkValueChanged(int value);

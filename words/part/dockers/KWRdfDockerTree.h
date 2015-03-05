@@ -52,7 +52,10 @@ public:
     void setDocumentRdf(KoDocumentRdf *rdf);
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }
+    virtual void unsetCanvas()
+    {
+        m_canvas = 0;
+    }
 
     // for dropping
     bool dropMimeData(QTreeWidgetItem *parent, int index, const

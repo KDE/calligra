@@ -36,16 +36,23 @@ class Sheet;
 class ChartObject;
 class OfficeArtObject;
 
-struct Hyperlink
-{
+struct Hyperlink {
     Hyperlink() : isValid(false) {}
-    Hyperlink(const QString& displayName, const QString& location, const QString& targetFrameName) : isValid(true), displayName(displayName), location(location), targetFrameName(targetFrameName) {}
-    bool operator==(const Hyperlink& b) {
-        if (!isValid && !b.isValid) return true;
-        if (!isValid || !b.isValid) return false;
+    Hyperlink(const QString &displayName, const QString &location, const QString &targetFrameName) : isValid(true), displayName(displayName), location(location), targetFrameName(targetFrameName) {}
+    bool operator==(const Hyperlink &b)
+    {
+        if (!isValid && !b.isValid) {
+            return true;
+        }
+        if (!isValid || !b.isValid) {
+            return false;
+        }
         return displayName == b.displayName && location == b.location && targetFrameName == b.targetFrameName;
     }
-    bool operator!=(const Hyperlink& b) { return !operator==(b); }
+    bool operator!=(const Hyperlink &b)
+    {
+        return !operator==(b);
+    }
 
     bool isValid;
     QString displayName;
@@ -60,11 +67,11 @@ class Cell
 {
 public:
 
-    Cell(Sheet* sheet, unsigned column, unsigned row);
+    Cell(Sheet *sheet, unsigned column, unsigned row);
     virtual ~Cell();
 
     // Returns the sheet this cell is located in.
-    Sheet* sheet();
+    Sheet *sheet();
 
     // Returns the column this cell is in.
     unsigned column() const;
@@ -83,15 +90,15 @@ public:
 
     // Retuns the value this cell has.
     Value value() const;
-    void setValue(const Value& value);
+    void setValue(const Value &value);
 
     // Returns the formula of this cell. May an empty string if this cell has no formula.
     QString formula() const;
-    void setFormula(const QString& formula);
+    void setFormula(const QString &formula);
 
     // Returns the format of this cell.
-    const Format& format() const;
-    void setFormat(const Format* format);
+    const Format &format() const;
+    void setFormat(const Format *format);
 
     // Returns the optional column span.
     unsigned columnSpan() const;
@@ -114,33 +121,33 @@ public:
     // Defines if this cell has a hyperlink.
     bool hasHyperlink() const;
     Hyperlink hyperlink() const;
-    void setHyperlink(const Hyperlink& link);
+    void setHyperlink(const Hyperlink &link);
 
     // Returns the optional note/comment/annotation of this cell.
     QString note() const;
     void setNote(const QString &n);
 
     // Defines a list of charts anchored to this cell.
-    QList<ChartObject*> charts() const;
-    void addChart(ChartObject* chart);
+    QList<ChartObject *> charts() const;
+    void addChart(ChartObject *chart);
 
     // Defines a list of ODraw objects anchored to this cell.
-    QList<OfficeArtObject*> drawObjects() const;
-    void addDrawObject(OfficeArtObject* of);
+    QList<OfficeArtObject *> drawObjects() const;
+    void addDrawObject(OfficeArtObject *of);
 
     bool operator==(const Cell &other) const;
     bool operator!=(const Cell &other) const;
 
 private:
     // no copy or assign
-    Cell(const Cell&);
-    Cell& operator=(const Cell&);
+    Cell(const Cell &);
+    Cell &operator=(const Cell &);
 
-    Sheet* m_sheet;
-    Value* m_value;
-    QString* m_formula;
-    QString* m_note;
-    const Format* m_format;
+    Sheet *m_sheet;
+    Value *m_value;
+    QString *m_formula;
+    QString *m_note;
+    const Format *m_format;
 
     unsigned m_row : 21; // KS_rowMax
     unsigned m_column : 17; // KS_colMax
@@ -151,7 +158,6 @@ private:
 };
 
 } // namespace Swinder
-
 
 #endif // SWINDER_CELL_H
 

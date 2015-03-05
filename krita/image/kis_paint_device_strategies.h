@@ -24,7 +24,6 @@
 #include "kis_wrapped_vline_iterator.h"
 #include "kis_wrapped_random_accessor.h"
 
-
 class KisPaintDevice::Private::KisPaintDeviceStrategy
 {
 public:
@@ -34,16 +33,19 @@ public:
     {
     }
 
-    virtual ~KisPaintDeviceStrategy() {
+    virtual ~KisPaintDeviceStrategy()
+    {
     }
 
-    virtual void move(const QPoint& pt) {
+    virtual void move(const QPoint &pt)
+    {
         m_d->x = pt.x();
         m_d->y = pt.y();
         m_d->cache.invalidate();
     }
 
-    virtual QRect extent() const {
+    virtual QRect extent() const
+    {
         QRect extent;
 
         qint32 x, y, w, h;
@@ -55,29 +57,34 @@ public:
         quint8 defaultOpacity =
             m_device->colorSpace()->opacityU8(m_device->defaultPixel());
 
-        if (defaultOpacity != OPACITY_TRANSPARENT_U8)
+        if (defaultOpacity != OPACITY_TRANSPARENT_U8) {
             extent |= m_d->defaultBounds->bounds();
+        }
 
         return extent;
     }
 
-    virtual QRegion region() const {
+    virtual QRegion region() const
+    {
         return m_d->cache.region().translated(m_d->x, m_d->y);
     }
 
-    virtual void crop(const QRect &rect) {
+    virtual void crop(const QRect &rect)
+    {
         m_d->dataManager->setExtent(rect.translated(-m_d->x, -m_d->y));
         m_d->cache.invalidate();
     }
 
-    virtual void clear(const QRect & rc) {
+    virtual void clear(const QRect &rc)
+    {
         m_d->dataManager->clear(rc.x() - m_d->x, rc.y() - m_d->y,
                                 rc.width(), rc.height(),
                                 m_d->dataManager->defaultPixel());
         m_d->cache.invalidate();
     }
 
-    virtual void fill(const QRect &rc, const quint8 *fillPixel) {
+    virtual void fill(const QRect &rc, const quint8 *fillPixel)
+    {
         m_d->dataManager->clear(rc.x() - m_d->x,
                                 rc.y() - m_d->y,
                                 rc.width(),
@@ -86,81 +93,94 @@ public:
         m_d->cache.invalidate();
     }
 
-
-    virtual KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w) {
+    virtual KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w)
+    {
         m_d->cache.invalidate();
         return new KisHLineIterator2(m_d->dataManager.data(), x, y, w, m_d->x, m_d->y, true);
     }
 
-    virtual KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const {
+    virtual KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const
+    {
         return new KisHLineIterator2(m_d->dataManager.data(), x, y, w, m_d->x, m_d->y, false);
     }
 
-
-    virtual KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 w) {
+    virtual KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 w)
+    {
         m_d->cache.invalidate();
         return new KisVLineIterator2(m_d->dataManager.data(), x, y, w, m_d->x, m_d->y, true);
     }
 
-    virtual KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const {
+    virtual KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const
+    {
         return new KisVLineIterator2(m_d->dataManager.data(), x, y, w, m_d->x, m_d->y, false);
     }
 
-    virtual KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y) {
+    virtual KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y)
+    {
         m_d->cache.invalidate();
         return new KisRandomAccessor2(m_d->dataManager.data(), x, y, m_d->x, m_d->y, true);
     }
 
-    virtual KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const {
+    virtual KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const
+    {
         return new KisRandomAccessor2(m_d->dataManager.data(), x, y, m_d->x, m_d->y, false);
     }
 
-    virtual void fastBitBlt(KisPaintDeviceSP src, const QRect &rect) {
+    virtual void fastBitBlt(KisPaintDeviceSP src, const QRect &rect)
+    {
         Q_ASSERT(m_device->fastBitBltPossible(src));
 
         m_d->dataManager->bitBlt(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
         m_d->cache.invalidate();
     }
 
-    virtual void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect) {
+    virtual void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect)
+    {
         Q_ASSERT(m_device->fastBitBltPossible(src));
 
         m_d->dataManager->bitBltOldData(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
         m_d->cache.invalidate();
     }
 
-    virtual void fastBitBltRough(KisPaintDeviceSP src, const QRect &rect) {
+    virtual void fastBitBltRough(KisPaintDeviceSP src, const QRect &rect)
+    {
         Q_ASSERT(m_device->fastBitBltPossible(src));
 
         m_d->dataManager->bitBltRough(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
         m_d->cache.invalidate();
     }
 
-    virtual void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect) {
+    virtual void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect)
+    {
         Q_ASSERT(m_device->fastBitBltPossible(src));
 
         m_d->dataManager->bitBltRoughOldData(src->dataManager(), rect.translated(-m_d->x, -m_d->y));
         m_d->cache.invalidate();
     }
 
-    virtual void readBytes(quint8 *data, const QRect &rect) const {
+    virtual void readBytes(quint8 *data, const QRect &rect) const
+    {
         readBytesImpl(data, rect, -1);
     }
 
-    virtual void writeBytes(const quint8 * data, const QRect &rect) {
+    virtual void writeBytes(const quint8 *data, const QRect &rect)
+    {
         writeBytesImpl(data, rect, -1);
     }
 
-    virtual QVector<quint8*> readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h) const {
+    virtual QVector<quint8 *> readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h) const
+    {
         return m_d->dataManager->readPlanarBytes(m_device->channelSizes(), x, y, w, h);
     }
 
-    virtual void writePlanarBytes(QVector<quint8*> planes, qint32 x, qint32 y, qint32 w, qint32 h) {
+    virtual void writePlanarBytes(QVector<quint8 *> planes, qint32 x, qint32 y, qint32 w, qint32 h)
+    {
         m_d->dataManager->writePlanarBytes(planes, m_device->channelSizes(), x, y, w, h);
         m_d->cache.invalidate();
     }
 protected:
-    virtual void readBytesImpl(quint8 *data, const QRect &rect, int dataRowStride) const {
+    virtual void readBytesImpl(quint8 *data, const QRect &rect, int dataRowStride) const
+    {
         m_d->dataManager->readBytes(data,
                                     rect.x() - m_d->x,
                                     rect.y() - m_d->y,
@@ -169,7 +189,8 @@ protected:
                                     dataRowStride);
     }
 
-    virtual void writeBytesImpl(const quint8 * data, const QRect &rect, int dataRowStride) {
+    virtual void writeBytesImpl(const quint8 *data, const QRect &rect, int dataRowStride)
+    {
         m_d->dataManager->writeBytes(data,
                                      rect.x() - m_d->x,
                                      rect.y() - m_d->y,
@@ -181,9 +202,8 @@ protected:
 
 protected:
     KisPaintDevice *m_device;
-    KisPaintDevice::Private * const m_d;
+    KisPaintDevice::Private *const m_d;
 };
-
 
 class KisPaintDevice::Private::KisPaintDeviceWrappedStrategy : public KisPaintDeviceStrategy
 {
@@ -196,12 +216,14 @@ public:
     {
     }
 
-    const QRect wrapRect() const {
+    const QRect wrapRect() const
+    {
         return m_wrapRect;
     }
 
-    void move(const QPoint& pt) {
-        QPoint offset (pt.x() - m_device->x(), pt.y() - m_device->y());
+    void move(const QPoint &pt)
+    {
+        QPoint offset(pt.x() - m_device->x(), pt.y() - m_device->y());
 
         QRect exactBoundsBeforeMove = m_device->exactBounds();
         KisPaintDeviceStrategy::move(pt);
@@ -244,33 +266,39 @@ public:
         }
     }
 
-    QRect extent() const {
+    QRect extent() const
+    {
         return KisPaintDeviceStrategy::extent() & m_wrapRect;
     }
 
-    QRegion region() const {
+    QRegion region() const
+    {
         return KisPaintDeviceStrategy::region() & m_wrapRect;
     }
 
-    void crop(const QRect &rect) {
+    void crop(const QRect &rect)
+    {
         KisPaintDeviceStrategy::crop(rect & m_wrapRect);
     }
 
-    void clear(const QRect &rect) {
+    void clear(const QRect &rect)
+    {
         KisWrappedRect splitRect(rect, m_wrapRect);
         foreach (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::clear(rc);
         }
     }
 
-    void fill(const QRect &rect, const quint8 *fillPixel) {
+    void fill(const QRect &rect, const quint8 *fillPixel)
+    {
         KisWrappedRect splitRect(rect, m_wrapRect);
         foreach (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fill(rc, fillPixel);
         }
     }
 
-    virtual KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w) {
+    virtual KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w)
+    {
         m_d->cache.invalidate();
 
         KisWrappedRect splitRect(QRect(x, y, w, m_wrapRect.height()), m_wrapRect);
@@ -280,7 +308,8 @@ public:
         return new KisWrappedHLineIterator(m_d->dataManager.data(), splitRect, m_d->x, m_d->y, true);
     }
 
-    virtual KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const {
+    virtual KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const
+    {
         KisWrappedRect splitRect(QRect(x, y, w, m_wrapRect.height()), m_wrapRect);
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createHLineConstIteratorNG(x, y, w);
@@ -288,7 +317,8 @@ public:
         return new KisWrappedHLineIterator(m_d->dataManager.data(), splitRect, m_d->x, m_d->y, false);
     }
 
-    virtual KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h) {
+    virtual KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h)
+    {
         m_d->cache.invalidate();
 
         KisWrappedRect splitRect(QRect(x, y, m_wrapRect.width(), h), m_wrapRect);
@@ -298,7 +328,8 @@ public:
         return new KisWrappedVLineIterator(m_d->dataManager.data(), splitRect, m_d->x, m_d->y, true);
     }
 
-    virtual KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const {
+    virtual KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const
+    {
         KisWrappedRect splitRect(QRect(x, y, m_wrapRect.width(), h), m_wrapRect);
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createVLineConstIteratorNG(x, y, h);
@@ -306,40 +337,47 @@ public:
         return new KisWrappedVLineIterator(m_d->dataManager.data(), splitRect, m_d->x, m_d->y, false);
     }
 
-    virtual KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y) {
+    virtual KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y)
+    {
         m_d->cache.invalidate();
         return new KisWrappedRandomAccessor(m_d->dataManager.data(), x, y, m_d->x, m_d->y, true, m_wrapRect);
     }
 
-    virtual KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const {
+    virtual KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const
+    {
         return new KisWrappedRandomAccessor(m_d->dataManager.data(), x, y, m_d->x, m_d->y, false, m_wrapRect);
     }
 
-    void fastBitBlt(KisPaintDeviceSP src, const QRect &rect) {
+    void fastBitBlt(KisPaintDeviceSP src, const QRect &rect)
+    {
         KisWrappedRect splitRect(rect, m_wrapRect);
         foreach (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fastBitBlt(src, rc);
         }
     }
 
-    void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect) {
+    void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect)
+    {
         KisWrappedRect splitRect(rect, m_wrapRect);
         foreach (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fastBitBltOldData(src, rc);
         }
     }
 
-    void fastBitBltRough(KisPaintDeviceSP src, const QRect &rect) {
+    void fastBitBltRough(KisPaintDeviceSP src, const QRect &rect)
+    {
         // no rough version in wrapped mode
         fastBitBlt(src, rect);
     }
 
-    void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect) {
+    void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect)
+    {
         // no rough version in wrapped mode
         fastBitBltOldData(src, rect);
     }
 
-    void readBytes(quint8 *data, const QRect &rect) const {
+    void readBytes(quint8 *data, const QRect &rect) const
+    {
         KisWrappedRect splitRect(rect, m_wrapRect);
 
         if (!splitRect.isSplit()) {
@@ -375,7 +413,9 @@ public:
                     readBytesImpl(dataPtr, QRect(leftRectOrigin, QSize(width, height)), dataRowStride);
                     col += width;
 
-                    if (col >= totalWidth) break;
+                    if (col >= totalWidth) {
+                        break;
+                    }
 
                     width = qMin(rightWidth, totalWidth - col);
                     dataPtr = data + pixelSize * (col + row * totalWidth);
@@ -389,7 +429,8 @@ public:
         }
     }
 
-    void writeBytes(const quint8 *data, const QRect &rect) {
+    void writeBytes(const quint8 *data, const QRect &rect)
+    {
         KisWrappedRect splitRect(rect, m_wrapRect);
 
         if (!splitRect.isSplit()) {
@@ -433,7 +474,5 @@ public:
 private:
     QRect m_wrapRect;
 };
-
-
 
 #endif /* __KIS_PAINT_DEVICE_STRATEGIES_H */

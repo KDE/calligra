@@ -57,7 +57,7 @@ private:
     void setupStylesheetsItems(const QString &semanticClass,
                                hKoRdfSemanticItem si,
                                const QList<hKoSemanticStylesheet> &ssl,
-                               const QMap<QString, QTreeWidgetItem*> &m,
+                               const QMap<QString, QTreeWidgetItem *> &m,
                                bool editable = false);
     void maskButtonsDependingOnCurrentItem(QTreeWidgetItem *current);
 

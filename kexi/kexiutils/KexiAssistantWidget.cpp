@@ -35,12 +35,13 @@ public:
         : q(qq)
     {
     }
-    
+
     ~Private()
     {
     }
-    
-    void addPage(KexiAssistantPage* page) {
+
+    void addPage(KexiAssistantPage *page)
+    {
         lyr->addWidget(page);
         connect(page, SIGNAL(back(KexiAssistantPage*)), q, SLOT(previousPageRequested(KexiAssistantPage*)));
         connect(page, SIGNAL(next(KexiAssistantPage*)), q, SLOT(nextPageRequested(KexiAssistantPage*)));
@@ -51,20 +52,20 @@ public:
     QStack< QPointer<KexiAssistantPage> > stack;
 
 private:
-    KexiAssistantWidget* q;
+    KexiAssistantWidget *q;
 };
 
 // ----
 
-KexiAssistantWidget::KexiAssistantWidget(QWidget* parent)
- : QWidget(parent)
- , d(new Private(this))
+KexiAssistantWidget::KexiAssistantWidget(QWidget *parent)
+    : QWidget(parent)
+    , d(new Private(this))
 {
     QVBoxLayout *mainLyr = new QVBoxLayout(this);
     d->lyr = new KexiAnimatedLayout;
     mainLyr->addLayout(d->lyr);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
-        + KDialog::marginHint();
+                 + KDialog::marginHint();
     mainLyr->setContentsMargins(margin, margin, margin, margin);
 }
 
@@ -73,12 +74,12 @@ KexiAssistantWidget::~KexiAssistantWidget()
     delete d;
 }
 
-void KexiAssistantWidget::addPage(KexiAssistantPage* page)
+void KexiAssistantWidget::addPage(KexiAssistantPage *page)
 {
     d->addPage(page);
 }
 
-void KexiAssistantWidget::previousPageRequested(KexiAssistantPage* page)
+void KexiAssistantWidget::previousPageRequested(KexiAssistantPage *page)
 {
     Q_UNUSED(page);
     if (d->stack.count() < 2) {
@@ -89,22 +90,22 @@ void KexiAssistantWidget::previousPageRequested(KexiAssistantPage* page)
     setCurrentPage(d->stack.top());
 }
 
-void KexiAssistantWidget::nextPageRequested(KexiAssistantPage* page)
+void KexiAssistantWidget::nextPageRequested(KexiAssistantPage *page)
 {
     Q_UNUSED(page);
-}
-    
-void KexiAssistantWidget::cancelRequested(KexiAssistantPage* page)
-{
-    Q_UNUSED(page);
-}
-    
-KexiAssistantPage* KexiAssistantWidget::currentPage() const
-{
-    return dynamic_cast<KexiAssistantPage*>(d->lyr->currentWidget());
 }
 
-void KexiAssistantWidget::setCurrentPage(KexiAssistantPage* page)
+void KexiAssistantWidget::cancelRequested(KexiAssistantPage *page)
+{
+    Q_UNUSED(page);
+}
+
+KexiAssistantPage *KexiAssistantWidget::currentPage() const
+{
+    return dynamic_cast<KexiAssistantPage *>(d->lyr->currentWidget());
+}
+
+void KexiAssistantWidget::setCurrentPage(KexiAssistantPage *page)
 {
     if (!page) {
         kWarning() << "!page";

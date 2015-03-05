@@ -55,7 +55,7 @@ public:
 
 public Q_SLOTS:
     /// register the position of an annotation shape.
-    void registerAnnotationRefPosition(KoShape *annotationShape, const QPointF& refPosition);
+    void registerAnnotationRefPosition(KoShape *annotationShape, const QPointF &refPosition);
 
     /// Remove annotation shape.
     void removeAnnotationShape(KoShape *annotationShape);
@@ -70,10 +70,9 @@ private:
     /// layout annotation shapes
     void layoutAnnotationShapes();
 
-
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOANNOTATIONLAYOUTMANAGER_H

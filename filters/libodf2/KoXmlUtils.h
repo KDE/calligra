@@ -21,13 +21,10 @@
 #ifndef KOXMLUTILS_H
 #define KOXMLUTILS_H
 
-
 #include "koodf2_export.h"
-
 
 class QString;
 class KoXmlStreamReader;
-
 
 /**
  * @brief Read and collect the text (character data) from an element.
@@ -41,6 +38,5 @@ class KoXmlStreamReader;
  */
 
 void KOODF2_EXPORT readCharacterData(KoXmlStreamReader &reader, QString &result);
-
 
 #endif /* KOXMLUTILS_H */

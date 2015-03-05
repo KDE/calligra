@@ -40,7 +40,7 @@ private Q_SLOTS:
 
     void startupDefault();
     void startupAccount();
-    
+
     void shutdownAccount();
 
     void subaccounts();
@@ -51,7 +51,7 @@ private:
     Resource *r;
     ScheduleManager *sm;
     Account *topaccount;
-    
+
     QDate today;
     QDate tomorrow;
     QDate yesterday;

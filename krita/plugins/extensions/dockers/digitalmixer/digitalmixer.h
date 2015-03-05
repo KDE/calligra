@@ -29,11 +29,11 @@ class KisViewManager;
 class DigitalMixerPlugin : public QObject
 {
     Q_OBJECT
-    public:
-        DigitalMixerPlugin(QObject *parent, const QVariantList &);
-        virtual ~DigitalMixerPlugin();
-    private:
-        KisViewManager* m_view;
+public:
+    DigitalMixerPlugin(QObject *parent, const QVariantList &);
+    virtual ~DigitalMixerPlugin();
+private:
+    KisViewManager *m_view;
 };
 
 #endif

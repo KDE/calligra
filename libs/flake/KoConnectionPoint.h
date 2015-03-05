@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -26,8 +26,7 @@
 #include <QMap>
 
 /// Data of a single connection point
-struct FLAKE_EXPORT KoConnectionPoint
-{
+struct FLAKE_EXPORT KoConnectionPoint {
     /// Default connection point ids
     enum PointId {
         TopConnectionPoint = 0,         ///< default connection point on the middle of the top edge

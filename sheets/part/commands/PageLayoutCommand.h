@@ -38,13 +38,13 @@ class Sheet;
 class PageLayoutCommand : public KUndo2Command
 {
 public:
-    explicit PageLayoutCommand(Sheet* sheet, const PrintSettings& settings, KUndo2Command* parent = 0);
+    explicit PageLayoutCommand(Sheet *sheet, const PrintSettings &settings, KUndo2Command *parent = 0);
 
     virtual void redo();
     virtual void undo();
 
 private:
-    Sheet* m_sheet;
+    Sheet *m_sheet;
     PrintSettings m_settings;
 };
 

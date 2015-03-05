@@ -2,11 +2,11 @@
 #include "enums.h"
 #define N_
 #include <stdio.h>
-const char*
+const char *
 showGimpLayerModeEffects(GimpLayerModeEffects x)
 {
-  static char buf[35];
-  switch(x) {
+    static char buf[35];
+    switch (x) {
     case GIMP_NORMAL_MODE: return N_("Normal");
     case GIMP_DISSOLVE_MODE: return N_("Dissolve");
     case GIMP_BEHIND_MODE: return N_("Behind");
@@ -34,42 +34,42 @@ showGimpLayerModeEffects(GimpLayerModeEffects x)
     case GIMP_REPLACE_MODE: return N_("Replace");
     case GIMP_ANTI_ERASE_MODE: return N_("AntiErase");
     case GIMP_NORMAL_NOPARTIAL_MODE: return N_("NormalNopartial");
-    default: sprintf(buf,"(GimpLayerModeEffects:%d)",(int)x);
-             return buf;
-  }
+    default: sprintf(buf, "(GimpLayerModeEffects:%d)", (int)x);
+        return buf;
+    }
 }
-const char*
+const char *
 showGimpImageBaseType(GimpImageBaseType x)
 {
-  static char buf[32];
-  switch(x) {
+    static char buf[32];
+    switch (x) {
     case GIMP_RGB: return N_("RGB color");
     case GIMP_GRAY: return N_("Grayscale");
     case GIMP_INDEXED: return N_("Indexed color");
-    default: sprintf(buf,"(GimpImageBaseType:%d)",(int)x);
-             return buf;
-  }
+    default: sprintf(buf, "(GimpImageBaseType:%d)", (int)x);
+        return buf;
+    }
 }
-const char*
+const char *
 showGimpImageType(GimpImageType x)
 {
-  static char buf[28];
-  switch(x) {
+    static char buf[28];
+    switch (x) {
     case GIMP_RGB_IMAGE: return N_("RGB");
     case GIMP_RGBA_IMAGE: return N_("RGB-alpha");
     case GIMP_GRAY_IMAGE: return N_("Grayscale");
     case GIMP_GRAYA_IMAGE: return N_("Grayscale-alpha");
     case GIMP_INDEXED_IMAGE: return N_("Indexed");
     case GIMP_INDEXEDA_IMAGE: return N_("Indexed-alpha");
-    default: sprintf(buf,"(GimpImageType:%d)",(int)x);
-             return buf;
-  }
+    default: sprintf(buf, "(GimpImageType:%d)", (int)x);
+        return buf;
+    }
 }
-const char*
+const char *
 showPropType(PropType x)
 {
-  static char buf[23];
-  switch(x) {
+    static char buf[23];
+    switch (x) {
     case PROP_END: return ("End");
     case PROP_COLORMAP: return ("Colormap");
     case PROP_ACTIVE_LAYER: return ("ActiveLayer");
@@ -97,20 +97,20 @@ showPropType(PropType x)
     case PROP_USER_UNIT: return ("UserUnit");
     case PROP_VECTORS: return ("Vectors");
     case PROP_TEXT_LAYER_FLAGS: return ("TextLayerFlags");
-    default: sprintf(buf,"(PropType:%d)",(int)x);
-             return buf;
-  }
+    default: sprintf(buf, "(PropType:%d)", (int)x);
+        return buf;
+    }
 }
-const char*
+const char *
 showXcfCompressionType(XcfCompressionType x)
 {
-  static char buf[33];
-  switch(x) {
+    static char buf[33];
+    switch (x) {
     case COMPRESS_NONE: return N_("None");
     case COMPRESS_RLE: return N_("RLE");
     case COMPRESS_ZLIB: return N_("Zlib");
     case COMPRESS_FRACTAL: return N_("Fractal");
-    default: sprintf(buf,"(XcfCompressionType:%d)",(int)x);
-             return buf;
-  }
+    default: sprintf(buf, "(XcfCompressionType:%d)", (int)x);
+        return buf;
+    }
 }

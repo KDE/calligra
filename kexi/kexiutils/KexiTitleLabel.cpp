@@ -25,7 +25,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
-class KexiTitleLabel::Private {
+class KexiTitleLabel::Private
+{
 public:
     Private() : updateFontEnabled(true) {}
     bool updateFontEnabled;
@@ -33,16 +34,16 @@ public:
 
 // ----
 
-KexiTitleLabel::KexiTitleLabel(QWidget * parent, Qt::WindowFlags f)
- : QLabel(parent, f)
- , d(new Private)
+KexiTitleLabel::KexiTitleLabel(QWidget *parent, Qt::WindowFlags f)
+    : QLabel(parent, f)
+    , d(new Private)
 {
     init();
 }
 
-KexiTitleLabel::KexiTitleLabel(const QString & text, QWidget * parent, Qt::WindowFlags f)
- : QLabel(text, parent, f)
- , d(new Private)
+KexiTitleLabel::KexiTitleLabel(const QString &text, QWidget *parent, Qt::WindowFlags f)
+    : QLabel(text, parent, f)
+    , d(new Private)
 {
     init();
 }
@@ -60,31 +61,30 @@ KexiTitleLabel::~KexiTitleLabel()
 
 void KexiTitleLabel::updateFont()
 {
-    if (!d->updateFontEnabled)
+    if (!d->updateFontEnabled) {
         return;
+    }
     KexiUtils::BoolBlocker guard(d->updateFontEnabled, false);
-    
+
     qreal factor;
     QRect geo = QApplication::desktop()->availableGeometry(this);
     QFont f = font();
     if (geo.width() > 600 && geo.height() > 600) {
         factor = 2.0;
-    }
-    else {
+    } else {
         factor = 1.2;
         f.setBold(true);
     }
     //kDebug() << f.pointSize() << f.pixelSize();
     if (f.pointSize() == -1) {
         f.setPixelSize(qreal(f.pixelSize()) * factor);
-    }
-    else {
+    } else {
         f.setPointSize(f.pointSizeF() * factor);
     }
     setFont(f);
 }
 
-void KexiTitleLabel::changeEvent(QEvent* event)
+void KexiTitleLabel::changeEvent(QEvent *event)
 {
     QLabel::changeEvent(event);
     if (event->type() == QEvent::FontChange) {

@@ -41,12 +41,13 @@ QMLExport::~QMLExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus QMLExport::convert(const QByteArray &from, const QByteArray &to)
 {
     Q_UNUSED(to);
 
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
     KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();

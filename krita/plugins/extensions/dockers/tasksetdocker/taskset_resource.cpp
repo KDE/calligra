@@ -28,7 +28,7 @@
 
 #define TASKSET_VERSION 1
 
-TasksetResource::TasksetResource(const QString& f)
+TasksetResource::TasksetResource(const QString &f)
     : KoResource(f)
 {
 }
@@ -39,8 +39,9 @@ TasksetResource::~TasksetResource()
 
 bool TasksetResource::save()
 {
-    if (filename().isEmpty())
-         return false;
+    if (filename().isEmpty()) {
+        return false;
+    }
 
     QFile file(filename());
     file.open(QIODevice::WriteOnly);
@@ -52,10 +53,14 @@ bool TasksetResource::save()
 bool TasksetResource::load()
 {
     QString fn = filename();
-    if (fn.isEmpty()) return false;
- 
+    if (fn.isEmpty()) {
+        return false;
+    }
+
     QFile file(fn);
-    if (file.size() == 0) return false;
+    if (file.size() == 0) {
+        return false;
+    }
     if (!file.open(QIODevice::ReadOnly)) {
         warnKrita << "Can't open file " << filename();
         return false;
@@ -80,7 +85,7 @@ bool TasksetResource::loadFromDevice(QIODevice *dev)
     while (!node.isNull()) {
         QDomElement child = node.toElement();
         if (!child.isNull() && child.tagName() == "action") {
-                m_actions.append(child.text());
+            m_actions.append(child.text());
         }
         node = node.nextSibling();
     }
@@ -126,9 +131,9 @@ bool TasksetResource::saveToDevice(QIODevice *io) const
 
     QDomDocument doc;
     QDomElement root = doc.createElement("Taskset");
-    root.setAttribute("name", name() );
+    root.setAttribute("name", name());
     root.setAttribute("version", TASKSET_VERSION);
-    foreach(const QString& action, m_actions) {
+    foreach (const QString &action, m_actions) {
         QDomElement element = doc.createElement("action");
         element.appendChild(doc.createTextNode(action));
         root.appendChild(element);
@@ -139,5 +144,4 @@ bool TasksetResource::saveToDevice(QIODevice *io) const
     doc.save(textStream, 4);
     return true;
 }
-
 

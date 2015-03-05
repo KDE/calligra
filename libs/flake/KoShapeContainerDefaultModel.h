@@ -50,7 +50,7 @@ public:
 
     virtual int count() const;
 
-    virtual QList<KoShape*> shapes() const;
+    virtual QList<KoShape *> shapes() const;
 
     virtual bool isChildLocked(const KoShape *child) const;
 
@@ -59,7 +59,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

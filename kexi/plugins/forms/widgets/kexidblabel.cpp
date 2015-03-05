@@ -40,7 +40,8 @@ class KexiDBLabel::Private
 {
 public:
     Private()
-            : resizeEvent(false) {
+        : resizeEvent(false)
+    {
     }
     ~Private() {}
     QColor frameColor;
@@ -50,19 +51,19 @@ public:
 //=========================================================
 
 KexiDBLabel::KexiDBLabel(QWidget *parent, Qt::WFlags f)
-        : QLabel(parent, f)
-        , KexiDBTextWidgetInterface()
-        , KexiFormDataItemInterface()
-        , d(new Private())
+    : QLabel(parent, f)
+    , KexiDBTextWidgetInterface()
+    , KexiFormDataItemInterface()
+    , d(new Private())
 {
     init();
 }
 
-KexiDBLabel::KexiDBLabel(const QString& text, QWidget *parent, Qt::WFlags f)
-        : QLabel(parent, f)
-        , KexiDBTextWidgetInterface()
-        , KexiFormDataItemInterface()
-        , d(new Private())
+KexiDBLabel::KexiDBLabel(const QString &text, QWidget *parent, Qt::WFlags f)
+    : QLabel(parent, f)
+    , KexiDBTextWidgetInterface()
+    , KexiFormDataItemInterface()
+    , d(new Private())
 {
     init();
     setText(text);
@@ -81,8 +82,7 @@ void KexiDBLabel::init()
     setAutoFillBackground(true);
 }
 
-
-void KexiDBLabel::paintEvent(QPaintEvent* e)
+void KexiDBLabel::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
     KexiDBTextWidgetInterface::paint(this, &p, text().isEmpty(), alignment(), false);
@@ -108,12 +108,13 @@ void KexiDBLabel::paintEvent(QPaintEvent* e)
     }
 }
 
-void KexiDBLabel::setValueInternal(const QVariant& add, bool removeOld)
+void KexiDBLabel::setValueInternal(const QVariant &add, bool removeOld)
 {
-    if (removeOld)
+    if (removeOld) {
         setText(add.toString());
-    else
+    } else {
         setText(KexiDataItemInterface::originalValue().toString() + add.toString());
+    }
 }
 
 QVariant KexiDBLabel::value()
@@ -121,7 +122,7 @@ QVariant KexiDBLabel::value()
     return text();
 }
 
-void KexiDBLabel::setInvalidState(const QString& displayText)
+void KexiDBLabel::setInvalidState(const QString &displayText)
 {
     setText(displayText);
 }
@@ -146,7 +147,7 @@ void KexiDBLabel::setReadOnly(bool readOnly)
     Q_UNUSED(readOnly);
 }
 
-QWidget* KexiDBLabel::widget()
+QWidget *KexiDBLabel::widget()
 {
     return this;
 }
@@ -166,36 +167,37 @@ void KexiDBLabel::clear()
     setText(QString());
 }
 
-bool KexiDBLabel::setProperty(const char * name, const QVariant & value)
+bool KexiDBLabel::setProperty(const char *name, const QVariant &value)
 {
     const bool ret = QLabel::setProperty(name, value);
     return ret;
 }
 
-const QPixmap* KexiDBLabel::pixmap() const
+const QPixmap *KexiDBLabel::pixmap() const
 {
     return QLabel::pixmap();
 }
 
-void KexiDBLabel::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+void KexiDBLabel::setColumnInfo(KexiDB::QueryColumnInfo *cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
 }
 
-void KexiDBLabel::resizeEvent(QResizeEvent* e)
+void KexiDBLabel::resizeEvent(QResizeEvent *e)
 {
-    if (isVisible())
+    if (isVisible()) {
         d->resizeEvent = true;
+    }
     QLabel::resizeEvent(e);
 }
 
-void KexiDBLabel::fontChange(const QFont& font)
+void KexiDBLabel::fontChange(const QFont &font)
 {
     QLabel::fontChange(font);
 }
 
-void KexiDBLabel::styleChange(QStyle& style)
+void KexiDBLabel::styleChange(QStyle &style)
 {
     QLabel::styleChange(style);
 }
@@ -205,17 +207,17 @@ void KexiDBLabel::enabledChange(bool enabled)
     QLabel::enabledChange(enabled);
 }
 
-void KexiDBLabel::paletteChange(const QPalette& oldPal)
+void KexiDBLabel::paletteChange(const QPalette &oldPal)
 {
     Q_UNUSED(oldPal);
 }
 
-void KexiDBLabel::showEvent(QShowEvent* e)
+void KexiDBLabel::showEvent(QShowEvent *e)
 {
     QLabel::showEvent(e);
 }
 
-void KexiDBLabel::setText(const QString& text)
+void KexiDBLabel::setText(const QString &text)
 {
     QLabel::setText(text);
     //This is necessary for KexiFormDataItemInterface

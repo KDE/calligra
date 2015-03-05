@@ -5,6 +5,4 @@
 #include "kis_paintop_settings.h"
 #include "kis_properties_configuration.h"
 
-
-
 #endif // KIS_LOCKED_SETTINGS_H

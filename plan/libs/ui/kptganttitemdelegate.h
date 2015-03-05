@@ -30,13 +30,12 @@
 
 namespace KDGantt
 {
-    class StyleOptionGanttItem;
-    class Constraint;
+class StyleOptionGanttItem;
+class Constraint;
 }
 
 class QPainter;
 class QModelIndex;
-
 
 namespace KPlato
 {
@@ -47,21 +46,21 @@ class KPLATOUI_EXPORT GanttItemDelegate : public KDGantt::ItemDelegate
 public:
     explicit GanttItemDelegate(QObject *parent = 0);
 
-    virtual QString toolTip( const QModelIndex& idx ) const;
-    virtual KDGantt::Span itemBoundingSpan( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
-    virtual void paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
-    
-    virtual void paintConstraintItem( QPainter* p, const QStyleOptionGraphicsItem& opt, const QPointF& start, const QPointF& end, const KDGantt::Constraint &constraint );
+    virtual QString toolTip(const QModelIndex &idx) const;
+    virtual KDGantt::Span itemBoundingSpan(const KDGantt::StyleOptionGanttItem &opt, const QModelIndex &idx) const;
+    virtual void paintGanttItem(QPainter *painter, const KDGantt::StyleOptionGanttItem &opt, const QModelIndex &idx);
 
-    QVariant data( const QModelIndex& idx, int column, int role = Qt::DisplayRole ) const;
-    QString itemText( const QModelIndex& idx, int type ) const;
-    QRectF itemPositiveFloatRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
-    QRectF itemNegativeFloatRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
+    virtual void paintConstraintItem(QPainter *p, const QStyleOptionGraphicsItem &opt, const QPointF &start, const QPointF &end, const KDGantt::Constraint &constraint);
 
-    bool hasStartConstraint( const QModelIndex& idx ) const;
-    bool hasEndConstraint( const QModelIndex& idx ) const;
-    QRectF itemStartConstraintRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
-    QRectF itemEndConstraintRect( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
+    QVariant data(const QModelIndex &idx, int column, int role = Qt::DisplayRole) const;
+    QString itemText(const QModelIndex &idx, int type) const;
+    QRectF itemPositiveFloatRect(const KDGantt::StyleOptionGanttItem &opt, const QModelIndex &idx) const;
+    QRectF itemNegativeFloatRect(const KDGantt::StyleOptionGanttItem &opt, const QModelIndex &idx) const;
+
+    bool hasStartConstraint(const QModelIndex &idx) const;
+    bool hasEndConstraint(const QModelIndex &idx) const;
+    QRectF itemStartConstraintRect(const KDGantt::StyleOptionGanttItem &opt, const QModelIndex &idx) const;
+    QRectF itemEndConstraintRect(const KDGantt::StyleOptionGanttItem &opt, const QModelIndex &idx) const;
 
     bool showResources;
     bool showTaskName;
@@ -77,7 +76,7 @@ public:
     bool showSchedulingError;
 
 protected:
-    void paintSpecialItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx, int typ );
+    void paintSpecialItem(QPainter *painter, const KDGantt::StyleOptionGanttItem &opt, const QModelIndex &idx, int typ);
 
 protected:
     QBrush m_criticalBrush;
@@ -94,12 +93,12 @@ class KPLATOUI_EXPORT ResourceGanttItemDelegate : public KDGantt::ItemDelegate
 public:
     explicit ResourceGanttItemDelegate(QObject *parent = 0);
 
-    QVariant data( const QModelIndex& idx, int column, int role = Qt::DisplayRole ) const;
+    QVariant data(const QModelIndex &idx, int column, int role = Qt::DisplayRole) const;
 
-    virtual void paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
+    virtual void paintGanttItem(QPainter *painter, const KDGantt::StyleOptionGanttItem &opt, const QModelIndex &idx);
 
 protected:
-    void paintResourceItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
+    void paintResourceItem(QPainter *painter, const KDGantt::StyleOptionGanttItem &opt, const QModelIndex &idx);
 
 private:
     Q_DISABLE_COPY(ResourceGanttItemDelegate)

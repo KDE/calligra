@@ -37,16 +37,16 @@ public:
 public:
 
     void processImpl(KisPaintDeviceSP device,
-                     const QRect& applyRect,
+                     const QRect &applyRect,
                      const KisFilterConfiguration *config,
                      KoUpdater *progressUpdater
-                     ) const;
+                    ) const;
 
     QRect neededRect(const QRect &rect, const KisFilterConfiguration *config) const;
     QRect changedRect(const QRect &rect, const KisFilterConfiguration *config) const;
 
     virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
 #endif  //KIS_PHONG_BUMPMAP_FILTER_H

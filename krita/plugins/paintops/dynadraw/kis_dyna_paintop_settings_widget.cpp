@@ -25,7 +25,7 @@
 #include <kis_airbrush_option.h>
 #include <kis_compositeop_option.h>
 
-KisDynaPaintOpSettingsWidget:: KisDynaPaintOpSettingsWidget(QWidget* parent)
+KisDynaPaintOpSettingsWidget:: KisDynaPaintOpSettingsWidget(QWidget *parent)
     : KisPaintOpOptionsWidget(parent)
 {
     addPaintOpOption(new KisDynaOpOption());
@@ -38,10 +38,10 @@ KisDynaPaintOpSettingsWidget::~ KisDynaPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisDynaPaintOpSettingsWidget::configuration() const
+KisPropertiesConfiguration  *KisDynaPaintOpSettingsWidget::configuration() const
 {
-    KisDynaPaintOpSettings* config = new KisDynaPaintOpSettings();
-    config->setOptionsWidget(const_cast<KisDynaPaintOpSettingsWidget*>(this));
+    KisDynaPaintOpSettings *config = new KisDynaPaintOpSettings();
+    config->setOptionsWidget(const_cast<KisDynaPaintOpSettingsWidget *>(this));
     config->setProperty("paintop", "dynabrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

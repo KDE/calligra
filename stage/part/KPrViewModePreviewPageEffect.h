@@ -37,25 +37,24 @@ class STAGE_EXPORT KPrViewModePreviewPageEffect : public KoPAViewMode
 
     Q_OBJECT
 public:
-    KPrViewModePreviewPageEffect( KoPAViewBase * view, KoPACanvasBase * m_canvas );
+    KPrViewModePreviewPageEffect(KoPAViewBase *view, KoPACanvasBase *m_canvas);
     ~KPrViewModePreviewPageEffect();
 
-    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect);
-    void tabletEvent( QTabletEvent *event, const QPointF &point );
-    void mousePressEvent( QMouseEvent *event, const QPointF &point );
-    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point );
-    void mouseMoveEvent( QMouseEvent *event, const QPointF &point );
-    void mouseReleaseEvent( QMouseEvent *event, const QPointF &point );
-    void keyPressEvent( QKeyEvent *event );
-    void keyReleaseEvent( QKeyEvent *event );
-    void wheelEvent( QWheelEvent * event, const QPointF &point );
+    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect);
+    void tabletEvent(QTabletEvent *event, const QPointF &point);
+    void mousePressEvent(QMouseEvent *event, const QPointF &point);
+    void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
+    void mouseMoveEvent(QMouseEvent *event, const QPointF &point);
+    void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+    void wheelEvent(QWheelEvent *event, const QPointF &point);
 
-    void activate( KoPAViewMode * previousViewMode );
+    void activate(KoPAViewMode *previousViewMode);
     void deactivate();
 
     /// reimplemented
-    virtual void updateActivePage( KoPAPageBase *page );
-
+    virtual void updateActivePage(KoPAPageBase *page);
 
     /**
      * Set a page effect
@@ -64,7 +63,7 @@ public:
      * @param page The current page used in the preview. If 0 the preview will be x
      * @param prevpage The page coming before @p page
      */
-    void setPageEffect( KPrPageEffect* pageEffect, KPrPage* page, KPrPage* prevpage );
+    void setPageEffect(KPrPageEffect *pageEffect, KPrPage *page, KPrPage *prevpage);
 
 public Q_SLOTS:
     /**
@@ -81,13 +80,13 @@ protected Q_SLOTS:
 private:
     void updatePixmaps();
 
-    KoPAViewMode * m_savedViewMode;
+    KoPAViewMode *m_savedViewMode;
     QTimeLine m_timeLine;
 
-    KPrPageEffect* m_pageEffect;
-    KPrPageEffectRunner* m_pageEffectRunner;
-    KPrPage* m_page;
-    KPrPage* m_prevpage;
+    KPrPageEffect *m_pageEffect;
+    KPrPageEffectRunner *m_pageEffectRunner;
+    KPrPage *m_page;
+    KPrPage *m_prevpage;
 
     QPixmap m_oldPage;
     QPixmap m_newPage;

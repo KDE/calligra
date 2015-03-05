@@ -25,31 +25,30 @@
 
 #include <kis_types.h>
 
-
 class KoColorSpace;
 
 class KisPainterBenchmark : public QObject
 {
     Q_OBJECT
 private:
-    const KoColorSpace * m_colorSpace;
+    const KoColorSpace *m_colorSpace;
     KoColor m_color;
     QVector<QPointF> m_points;
-    
+
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    
+
     void benchmarkBitBlt();
     void benchmarkFastBitBlt();
     void benchmarkBitBltSelection();
     void benchmarkFixedBitBlt();
     void benchmarkFixedBitBltSelection();
-    
+
     void benchmarkDrawThickLine();
     void benchmarkDrawQtLine();
     void benchmarkDrawScanLine();
-    
+
 };
 
 #endif

@@ -46,12 +46,13 @@ public:
 
 public:
 
-    KisPaintOpOption(const QString & label, const QString& category, bool checked );
+    KisPaintOpOption(const QString &label, const QString &category, bool checked);
     virtual ~KisPaintOpOption();
 
     QString label() const;
     QString category() const;
-    virtual bool isCheckable() {
+    virtual bool isCheckable()
+    {
         return m_checkable;
     }
 
@@ -59,7 +60,7 @@ public:
     virtual void setChecked(bool checked);
 
     void setLocked(bool value);
-    bool isLocked () const;
+    bool isLocked() const;
 
     /**
      * Reimplement this to use the image in the option widget
@@ -68,27 +69,28 @@ public:
 
     virtual void setNode(KisNodeWSP node);
 
-    void startReadOptionSetting(const KisPropertiesConfiguration* setting);
-    void startWriteOptionSetting(KisPropertiesConfiguration* setting) const;
+    void startReadOptionSetting(const KisPropertiesConfiguration *setting);
+    void startWriteOptionSetting(KisPropertiesConfiguration *setting) const;
 
-    QWidget* configurationPage() const;
-
+    QWidget *configurationPage() const;
 
 protected:
-    void setConfigurationPage(QWidget * page);
+    void setConfigurationPage(QWidget *page);
 
 protected:
     /**
      * Re-implement this to save the configuration to the paint configuration.
      */
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const {
+    virtual void writeOptionSetting(KisPropertiesConfiguration *setting) const
+    {
         Q_UNUSED(setting);
     }
 
     /**
      * Re-implement this to set te widgets with the values in @param setting.
      */
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting) {
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting)
+    {
         Q_UNUSED(setting);
     }
 
@@ -107,11 +109,10 @@ protected:
     bool m_checkable;
     bool m_locked;
 
-
 private:
 
     struct Private;
-    Private* const m_d;
+    Private *const m_d;
 };
 
 #endif

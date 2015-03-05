@@ -71,7 +71,7 @@ protected:
      * @return true if none of the childnodes returns false on
      * accepting the visitor.
      */
-    bool visitAll(KisNode * node, bool breakOnFail = false);
+    bool visitAll(KisNode *node, bool breakOnFail = false);
 
     /**
      * Visit all child nodes of the given node starting with the last one until one node returns
@@ -82,9 +82,8 @@ protected:
      * @return true if none of the childnodes returns false on
      * accepting the visitor.
      */
-    bool visitAllInverse(KisNode * node, bool breakOnFail = false);
+    bool visitAllInverse(KisNode *node, bool breakOnFail = false);
 };
-
 
 #endif // KIS_ NODE_VISITOR_H_
 

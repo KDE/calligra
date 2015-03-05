@@ -25,9 +25,8 @@
 #include "kis_memento_manager.h"
 #include "kis_debug.h"
 
-
 void KisTile::init(qint32 col, qint32 row,
-                   KisTileData *defaultTileData, KisMementoManager* mm)
+                   KisTileData *defaultTileData, KisMementoManager *mm)
 {
     m_col = col;
     m_row = row;
@@ -41,30 +40,31 @@ void KisTile::init(qint32 col, qint32 row,
 
     m_mementoManager = mm;
 
-    if (m_mementoManager)
+    if (m_mementoManager) {
         m_mementoManager->registerTileChange(this);
+    }
 }
 
 KisTile::KisTile(qint32 col, qint32 row,
-                 KisTileData *defaultTileData, KisMementoManager* mm)
+                 KisTileData *defaultTileData, KisMementoManager *mm)
 {
     init(col, row, defaultTileData, mm);
 }
 
-KisTile::KisTile(const KisTile& rhs, qint32 col, qint32 row, KisMementoManager* mm)
-        : KisShared()
+KisTile::KisTile(const KisTile &rhs, qint32 col, qint32 row, KisMementoManager *mm)
+    : KisShared()
 {
     init(col, row, rhs.tileData(), mm);
 }
 
-KisTile::KisTile(const KisTile& rhs, KisMementoManager* mm)
-        : KisShared()
+KisTile::KisTile(const KisTile &rhs, KisMementoManager *mm)
+    : KisShared()
 {
     init(rhs.col(), rhs.row(), rhs.tileData(), mm);
 }
 
-KisTile::KisTile(const KisTile& rhs)
-        : KisShared()
+KisTile::KisTile(const KisTile &rhs)
+    : KisShared()
 {
     init(rhs.col(), rhs.row(), rhs.tileData(), rhs.m_mementoManager);
 }
@@ -122,8 +122,9 @@ inline void KisTile::blockSwapping() const
     QMutexLocker locker(&m_swapBarrierLock);
     Q_ASSERT(m_lockCounter >= 0);
 
-    if(!m_lockCounter++)
+    if (!m_lockCounter++) {
         m_tileData->blockSwapping();
+    }
 
     Q_ASSERT(data());
 }
@@ -133,11 +134,11 @@ inline void KisTile::unblockSwapping() const
     QMutexLocker locker(&m_swapBarrierLock);
     Q_ASSERT(m_lockCounter > 0);
 
-    if(--m_lockCounter == 0) {
+    if (--m_lockCounter == 0) {
         m_tileData->unblockSwapping();
 
-        if(!m_oldTileData.isEmpty()) {
-            foreach(KisTileData *td, m_oldTileData) {
+        if (!m_oldTileData.isEmpty()) {
+            foreach (KisTileData *td, m_oldTileData) {
                 td->unblockSwapping();
                 td->release();
             }
@@ -151,10 +152,9 @@ inline void KisTile::safeReleaseOldTileData(KisTileData *td)
     QMutexLocker locker(&m_swapBarrierLock);
     Q_ASSERT(m_lockCounter >= 0);
 
-    if(m_lockCounter > 0) {
+    if (m_lockCounter > 0) {
         m_oldTileData.push(td);
-    }
-    else {
+    } else {
         td->unblockSwapping();
         td->release();
     }
@@ -165,7 +165,6 @@ void KisTile::lockForRead() const
     DEBUG_LOG_ACTION("lock [R]");
     blockSwapping();
 }
-
 
 #define lazyCopying() (m_tileData->m_usersCount>1)
 
@@ -193,8 +192,9 @@ void KisTile::lockForWrite()
 
             DEBUG_COWING(tileData);
 
-            if (m_mementoManager)
+            if (m_mementoManager) {
                 m_mementoManager->registerTileChange(this);
+            }
         }
         m_COWMutex.unlock();
     }
@@ -208,14 +208,13 @@ void KisTile::unlock() const
     DEBUG_LOG_ACTION("unlock");
 }
 
-
 #include <stdio.h>
 void KisTile::debugPrintInfo()
 {
     dbgTiles << "------\n"
-                "Tile:\t\t\t" << this
-                << "\n   data:\t" << m_tileData
-                << "\n   next:\t" <<  m_nextTile.data();
+             "Tile:\t\t\t" << this
+             << "\n   data:\t" << m_tileData
+             << "\n   next:\t" <<  m_nextTile.data();
 
 }
 
@@ -226,7 +225,7 @@ void KisTile::debugDumpTile()
 
     for (int i = 0; i < KisTileData::HEIGHT; i++) {
         for (int j = 0; j < KisTileData::WIDTH; j++) {
-            dbgTiles << data[(i*KisTileData::WIDTH+j)*pixelSize()];
+            dbgTiles << data[(i * KisTileData::WIDTH + j)*pixelSize()];
         }
     }
     unlock();

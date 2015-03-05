@@ -27,7 +27,6 @@
 #include "tiles3/kis_tiled_data_manager.h"
 #include "tiles3/kis_tile_data_store.h"
 
-
 void KisLowMemoryTests::initTestCase()
 {
     // hard limit of 1MiB, no undo in memory, no clones
@@ -36,7 +35,6 @@ void KisLowMemoryTests::initTestCase()
     config.setMemorySoftLimitPercent(0);
     config.setMemoryPoolLimitPercent(0);
 }
-
 
 class DeadlockyThread : public QRunnable
 {
@@ -60,8 +58,9 @@ public:
     {
     }
 
-    void run() {
-        switch(m_type) {
+    void run()
+    {
+        switch (m_type) {
         case PRODUCER:
             for (int j = 0; j < m_numCycles; j++) {
                 for (int i = 0; i < m_numTiles; i++) {
@@ -74,7 +73,9 @@ public:
                 QRect cloneRect(0, 0, m_numTiles * 64, 64);
                 m_dstDM.bitBltRough(&m_srcDM, cloneRect);
 
-                if(j % 50 == 0) qDebug() << "Producer:" << j << "of" << m_numCycles;
+                if (j % 50 == 0) {
+                    qDebug() << "Producer:" << j << "of" << m_numCycles;
+                }
 
                 KisTileDataStore::instance()->debugSwapAll();
             }
@@ -90,7 +91,9 @@ public:
                     voidTile->unlock();
                 }
 
-                if(j % 50 == 0) qDebug() << "Consumer_src:" << j << "of" << m_numCycles;
+                if (j % 50 == 0) {
+                    qDebug() << "Consumer_src:" << j << "of" << m_numCycles;
+                }
 
                 KisTileDataStore::instance()->debugSwapAll();
             }
@@ -106,7 +109,9 @@ public:
                     voidTile->unlock();
                 }
 
-                if(j % 50 == 0) qDebug() << "Consumer_dst:" << j << "of" << m_numCycles;
+                if (j % 50 == 0) {
+                    qDebug() << "Consumer_dst:" << j << "of" << m_numCycles;
+                }
 
                 KisTileDataStore::instance()->debugSwapAll();
             }
@@ -157,9 +162,8 @@ void KisLowMemoryTests::hangingTilesTest()
     srcTile->lockForWrite();
     srcTile->lockForRead();
 
-
     KisTiledDataManager dstDM(1, &defaultPixel);
-    dstDM.bitBlt(&srcDM, QRect(0,0,64,64));
+    dstDM.bitBlt(&srcDM, QRect(0, 0, 64, 64));
 
     KisTileSP dstTile = dstDM.getTile(0, 0, true);
 

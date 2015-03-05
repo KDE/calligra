@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KPRREORDERANIMATIONCOMMAND_H
 #define KPRREORDERANIMATIONCOMMAND_H
 
@@ -36,9 +35,9 @@ public:
     virtual ~KPrReorderAnimationCommand();
 
     /// redo the command
-    void redo ();
+    void redo();
     /// revert the actions done in redo
-    void undo ();
+    void undo();
 
 private:
     KPrShapeAnimations *m_shapeAnimationsModel;

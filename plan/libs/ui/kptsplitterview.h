@@ -26,7 +26,6 @@
 
 #include <KoXmlReaderForward.h>
 
-
 class KoDocument;
 
 class QSplitter;
@@ -65,67 +64,69 @@ public:
     virtual ~SplitterView() {}
 
     /// Set the project this view shall handle.
-    virtual void setProject( Project *project );
+    virtual void setProject(Project *project);
     /// Draw data from current part / project
     virtual void draw();
     /// Draw data from project.
-    virtual void draw( Project &project );
+    virtual void draw(Project &project);
     /// Set readWrite mode
-    virtual void updateReadWrite( bool );
+    virtual void updateReadWrite(bool);
 
     /// Return the view that has focus
     ViewBase *focusView() const;
     /// Returns the list of action lists that shall be plugged/unplugged
     virtual QStringList actionListNames() const;
     /// Returns the list of actions associated with the action list name
-    virtual QList<QAction*> actionList( const QString &name ) const;
+    virtual QList<QAction *> actionList(const QString &name) const;
     /// Returns the list of context menu actions for the active view
-    virtual QList<QAction*> contextActionList() const;
+    virtual QList<QAction *> contextActionList() const;
 
     /// Sets context info to this view. Reimplement.
-    virtual bool setContext( const Context &/*context*/ ) { return false; }
+    virtual bool setContext(const Context &/*context*/)
+    {
+        return false;
+    }
     /// Gets context info from this view. Reimplement.
-    virtual void getContext( Context &/*context*/ ) const {}
-    
+    virtual void getContext(Context &/*context*/) const {}
+
     /// Add a KTabWidget to the splitter
     KTabWidget *addTabWidget();
     /// Add the @p view to the splitter
-    void addView( ViewBase *view );
+    void addView(ViewBase *view);
     /// Add the @p view to the @p tab. Set the tabs label to @p label
-    void addView( ViewBase *view, QTabWidget *tab, const QString &label );
+    void addView(ViewBase *view, QTabWidget *tab, const QString &label);
     /// Return the active view at @p pos
-    ViewBase *findView( const QPoint &pos ) const;
+    ViewBase *findView(const QPoint &pos) const;
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
-    
-    virtual Node* currentNode() const;
-    
-    virtual Resource* currentResource() const;
-    
-    virtual ResourceGroup* currentResourceGroup() const;
+    virtual void saveContext(QDomElement &/*context*/) const;
 
-    virtual Calendar* currentCalendar() const;
+    virtual Node *currentNode() const;
+
+    virtual Resource *currentResource() const;
+
+    virtual ResourceGroup *currentResourceGroup() const;
+
+    virtual Calendar *currentCalendar() const;
 
     virtual Relation *currentRelation() const;
 
 public Q_SLOTS:
     /// Activate/deactivate the gui (also of subviews)
-    virtual void setGuiActive( bool activate );
-    virtual void setScheduleManager( ScheduleManager *sm );
+    virtual void setGuiActive(bool activate);
+    virtual void setScheduleManager(ScheduleManager *sm);
     virtual void slotEditCopy();
 
 protected Q_SLOTS:
-    virtual void slotGuiActivated( ViewBase *v, bool active );
-    virtual void currentTabChanged( int i );
-    
+    virtual void slotGuiActivated(ViewBase *v, bool active);
+    virtual void currentTabChanged(int i);
+
 protected:
     QSplitter *m_splitter;
     ViewBase *m_activeview;
 };
-
 
 } // namespace KPlato
 

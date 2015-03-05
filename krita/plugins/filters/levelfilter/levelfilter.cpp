@@ -29,7 +29,7 @@ K_PLUGIN_FACTORY(LevelFilterFactory, registerPlugin<LevelFilter>();)
 K_EXPORT_PLUGIN(LevelFilterFactory("krita"))
 
 LevelFilter::LevelFilter(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisFilterRegistry::instance()->add(new KisLevelFilter());
 

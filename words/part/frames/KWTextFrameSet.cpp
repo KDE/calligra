@@ -53,7 +53,7 @@ KWTextFrameSet::KWTextFrameSet(KWDocument *wordsDocument, Words::TextFrameSetTyp
     , m_pageManager(wordsDocument->pageManager())
     , m_wordsDocument(wordsDocument)
 {
-    if(type == Words::OtherTextFrameSet) {
+    if (type == Words::OtherTextFrameSet) {
         m_rootAreaProvider = new KWRootAreaProviderTextBox(this);
     } else {
         m_rootAreaProvider = new KWRootAreaProvider(this);
@@ -87,11 +87,11 @@ void KWTextFrameSet::setupShape(KoShape *shape)
         m_rootAreaProvider->clearPages(page.pageNumber());
     }
 
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+    KoTextShapeData *data = qobject_cast<KoTextShapeData *>(shape->userData());
     if (!data) {
         // copy-frames don't need to be setup cause they only point to the referenced KWFrame which
         // contains everything needed and which was or will be proper setup.
-        Q_ASSERT(dynamic_cast<KWCopyShape*>(shape));
+        Q_ASSERT(dynamic_cast<KWCopyShape *>(shape));
         return;
     }
 
@@ -131,22 +131,23 @@ void KWTextFrameSet::setupShape(KoShape *shape)
 
 #ifndef QT_NO_DEBUG // these checks are just sanity checks in development mode
     KoTextDocument doc(m_document);
-    KoStyleManager *styleManager = m_wordsDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+    KoStyleManager *styleManager = m_wordsDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager *>();
     Q_ASSERT(doc.styleManager() == styleManager);
-    KoChangeTracker *changeTracker = m_wordsDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+    KoChangeTracker *changeTracker = m_wordsDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker *>();
     Q_ASSERT(doc.changeTracker() == changeTracker);
     Q_ASSERT(doc.inlineTextObjectManager() == m_wordsDocument->inlineTextObjectManager());
     Q_ASSERT(doc.undoStack() == m_wordsDocument->resourceManager()->undoStack());
 #endif
 }
 
-void KWTextFrameSet::cleanupShape(KoShape *shape) {
+void KWTextFrameSet::cleanupShape(KoShape *shape)
+{
     // it is no longer set when document is destroyed
     if (rootAreaProvider()) {
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(document()->documentLayout());
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(document()->documentLayout());
         Q_ASSERT(lay);
         QList<KoTextLayoutRootArea *> layoutRootAreas = lay->rootAreas();
-        for(int i = 0; i < layoutRootAreas.count(); ++i) {
+        for (int i = 0; i < layoutRootAreas.count(); ++i) {
             KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
             if (rootArea->associatedShape() == shape) {
                 KoTextLayoutRootArea *prevRootArea = i >= 1 ? layoutRootAreas[i - 1] : 0;
@@ -166,9 +167,9 @@ void KWTextFrameSet::setupDocument()
     KoTextDocument doc(m_document);
     doc.setInlineTextObjectManager(m_wordsDocument->inlineTextObjectManager());
     doc.setTextRangeManager(m_wordsDocument->textRangeManager());
-    KoStyleManager *styleManager = m_wordsDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+    KoStyleManager *styleManager = m_wordsDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager *>();
     doc.setStyleManager(styleManager);
-    KoChangeTracker *changeTracker = m_wordsDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+    KoChangeTracker *changeTracker = m_wordsDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker *>();
     doc.setChangeTracker(changeTracker);
     doc.setUndoStack(m_wordsDocument->resourceManager()->undoStack());
     doc.setShapeController(m_wordsDocument->shapeController());
@@ -180,8 +181,8 @@ void KWTextFrameSet::setupDocument()
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
     lay->setWordprocessingMode();
 
-    QObject::connect(lay, SIGNAL(foundAnnotation(KoShape *, QPointF)),
-                     m_wordsDocument->annotationLayoutManager(), SLOT(registerAnnotationRefPosition(KoShape *, QPointF)));
+    QObject::connect(lay, SIGNAL(foundAnnotation(KoShape*,QPointF)),
+                     m_wordsDocument->annotationLayoutManager(), SLOT(registerAnnotationRefPosition(KoShape*,QPointF)));
 
     m_document->setDocumentLayout(lay);
     QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
@@ -194,13 +195,13 @@ void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
     // TODO: check if this is really needed here, when KWFrameLayout::layoutFramesOnPage() also
     // ensures the background is set. Especially as the separator data is only set there to the text background shape
     if (style.isValid()) {
-        foreach(KoShape *shape, shapes()) {
+        foreach (KoShape *shape, shapes()) {
             shape->setBackground(style.background());
         }
     }
 }
 
-const KWPageStyle& KWTextFrameSet::pageStyle() const
+const KWPageStyle &KWTextFrameSet::pageStyle() const
 {
     return m_pageStyle;
 }

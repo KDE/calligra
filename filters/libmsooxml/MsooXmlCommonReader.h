@@ -40,7 +40,7 @@ class KOMSOOXML_EXPORT MsooXmlCommonReader : public MsooXmlReader
 protected:
     explicit MsooXmlCommonReader(KoOdfWriters *writers);
 
-    MsooXmlCommonReader(QIODevice* io, KoOdfWriters *writers);
+    MsooXmlCommonReader(QIODevice *io, KoOdfWriters *writers);
 
     virtual ~MsooXmlCommonReader();
 
@@ -51,8 +51,8 @@ protected:
     Q_DECLARE_FLAGS(read_p_args, read_p_arg)
     read_p_args m_read_p_args;
 
-    KoGenStyle* m_currentDrawStyle; //! used by all classes that need a graphics style.
-    QList<KoGenStyle*>  m_drawStyleStack;
+    KoGenStyle *m_currentDrawStyle; //! used by all classes that need a graphics style.
+    QList<KoGenStyle *>  m_drawStyleStack;
     KoGenStyle m_currentGradientStyle;
     void pushCurrentDrawStyle(KoGenStyle *newStyle);
     void popCurrentDrawStyle();
@@ -63,7 +63,7 @@ protected:
     void setupParagraphStyle();
 
     KoGenStyle m_currentTextStyle;
-    KoCharacterStyle* m_currentTextStyleProperties;
+    KoCharacterStyle *m_currentTextStyleProperties;
 
     KoGenStyle m_currentListStyle;
     MSOOXML::Utils::ParagraphBulletProperties m_currentBulletProperties;
@@ -75,11 +75,11 @@ protected:
     //! Style (from styles.xml) to apply to the current paragraph or similar element, set by read_pStyle()
     QString m_currentStyleName;
 
-    bool isDefaultTocStyle(const QString& name) const;
+    bool isDefaultTocStyle(const QString &name) const;
 
     //! Adds reference to a file in the ODF document to manifest.xml
     //! The media-type attribute is based on the extension of @a path.
-    void addManifestEntryForFile(const QString& path);
+    void addManifestEntryForFile(const QString &path);
 
     //! Adds manifest entry for "Pictures/"
     void addManifestEntryForPicturesDir();

@@ -45,18 +45,22 @@
 
 using namespace MusicCore;
 
-EraserAction::EraserAction(SimpleEntryTool* tool)
+EraserAction::EraserAction(SimpleEntryTool *tool)
     : AbstractNoteMusicAction(koIcon("draw-eraser"), i18n("Eraser"), tool)
 {
 }
 
-void EraserAction::mousePress(Chord* chord, Note* note, qreal distance, const QPointF& pos)
+void EraserAction::mousePress(Chord *chord, Note *note, qreal distance, const QPointF &pos)
 {
-    Q_UNUSED( pos );
-    
-    if (!chord) return;
-    if (distance > 10) return;
-    
+    Q_UNUSED(pos);
+
+    if (!chord) {
+        return;
+    }
+    if (distance > 10) {
+        return;
+    }
+
     if (note && chord->noteCount() > 1) {
         m_tool->addCommand(new RemoveNoteCommand(m_tool->shape(), chord, note));
     } else {
@@ -64,15 +68,19 @@ void EraserAction::mousePress(Chord* chord, Note* note, qreal distance, const QP
     }
 }
 
-void EraserAction::mousePress(StaffElement* se, qreal distance, const QPointF& pos)
+void EraserAction::mousePress(StaffElement *se, qreal distance, const QPointF &pos)
 {
-    Q_UNUSED( pos );
-    
-    if (!se) return;
-    if (distance > 10) return;
-    
-    Bar* bar = se->bar();
-    Sheet* sheet = bar->sheet();
+    Q_UNUSED(pos);
+
+    if (!se) {
+        return;
+    }
+    if (distance > 10) {
+        return;
+    }
+
+    Bar *bar = se->bar();
+    Sheet *sheet = bar->sheet();
     // remove staff element
     if (bar != sheet->bar(0) || se->startTime() > 0) {
         // don't allow removal of staff elements at the start of the first bar

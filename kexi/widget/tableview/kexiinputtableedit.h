@@ -63,12 +63,12 @@ public:
 
     /*! Handles action having standard name \a actionName.
      Action could be: "edit_cut", "edit_paste", etc. */
-    virtual void handleAction(const QString& actionName);
+    virtual void handleAction(const QString &actionName);
 
     /*! Handles copy action for value. The \a value is copied to clipboard in format appropriate
      for the editor's impementation, e.g. for image cell it can be a pixmap.
      \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
-    virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
+    virtual void handleCopyAction(const QVariant &value, const QVariant &visibleValue);
 
     /*! Shows a special tooltip for \a value if needed, i.e. if the value could not fit
      inside \a rect for a given font metrics \a fm.
@@ -77,7 +77,7 @@ public:
      This implementation converts the value to text using KexiTextFormatter::toString()
      if \a value is not string to see whether it can fit inside the cell's \a rect.
      If the cell is currentl focused (selected), \a focused is true. */
-    virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,
+    virtual bool showToolTipIfNeeded(const QVariant &value, const QRect &rect, const QFontMetrics &fm,
                                      bool focused);
 
 public Q_SLOTS:
@@ -96,11 +96,11 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void setRestrictedCompletion();
     void completed(const QString &);
-    void slotTextEdited(const QString&);
+    void slotTextEdited(const QString &);
 
 protected:
     //! initializes this editor with \a add value
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
 
     void showHintButton();
     void init();

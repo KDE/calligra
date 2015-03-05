@@ -27,7 +27,7 @@ class KCanvasPreview : public QWidget
     Q_OBJECT
 
 public:
-    KCanvasPreview(QWidget * parent = 0);
+    KCanvasPreview(QWidget *parent = 0);
 
     virtual ~KCanvasPreview();
 
@@ -58,6 +58,5 @@ protected:
     QImage m_image;
     QPoint m_prevDragPoint;
 };
-
 
 #endif /* KCANVASPREVIEW_H */

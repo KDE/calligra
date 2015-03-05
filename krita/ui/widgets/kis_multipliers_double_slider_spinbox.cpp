@@ -35,7 +35,7 @@ void KisMultipliersDoubleSliderSpinBox::Private::updateRange()
     form.sliderSpinBox->setRange(m * min, m * max, decimals);
 }
 
-KisMultipliersDoubleSliderSpinBox::KisMultipliersDoubleSliderSpinBox(QWidget* _parent)
+KisMultipliersDoubleSliderSpinBox::KisMultipliersDoubleSliderSpinBox(QWidget *_parent)
     : QWidget(_parent)
     , d(new Private)
 {
@@ -52,7 +52,7 @@ KisMultipliersDoubleSliderSpinBox::~KisMultipliersDoubleSliderSpinBox()
 
 void KisMultipliersDoubleSliderSpinBox::addMultiplier(double v)
 {
-  d->form.comboBox->addItem(i18n("x%1", v), v);
+    d->form.comboBox->addItem(i18n("x%1", v), v);
 }
 
 void KisMultipliersDoubleSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals)
@@ -73,7 +73,7 @@ void KisMultipliersDoubleSliderSpinBox::setValue(qreal value)
     qreal m = d->currentMultiplier();
 
     if (value < m * d->min || value > m * d->max) {
-        for(int i = 0; i < d->form.comboBox->count(); ++i) {
+        for (int i = 0; i < d->form.comboBox->count(); ++i) {
             qreal m = d->form.comboBox->itemData(i).toDouble();
             if (value >= m * d->min && value <= m * d->max) {
                 d->form.comboBox->setCurrentIndex(i);

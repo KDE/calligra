@@ -32,7 +32,7 @@
 using namespace KFormDesigner;
 
 FormScript::FormScript(Form *form, ScriptManager *manager, const char *name)
-        : QObject(manager, name), m_manager(manager), m_form(form)
+    : QObject(manager, name), m_manager(manager), m_form(form)
 {
     m_script = manager->krossManager()->getScriptContainer(form->widget()->name());
 }
@@ -69,7 +69,7 @@ FormScript::execute(const QString &functionName)
     /// \todo  support return value and arguments
     try {
         m_script->callFunction(functionName);
-    } catch (Kross::Api::Exception& e) {
+    } catch (Kross::Api::Exception &e) {
         kDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description());
         return false;
     }
@@ -79,8 +79,9 @@ FormScript::execute(const QString &functionName)
 void
 FormScript::connectEvents()
 {
-    if (!m_form || !m_form->objectTree())
+    if (!m_form || !m_form->objectTree()) {
         return;
+    }
     // first call addQObject for each widget in the Form
     ObjectTreeHash *hash = m_form->objectTree()->hash();
     foreach (ObjectTreeItem *item, *hash) {
@@ -89,7 +90,7 @@ FormScript::connectEvents()
     m_script->addQObject(m_form->widget());
 
     // Then we connect all signals
-    foreach (Event* e, m_list) {
+    foreach (Event *e, m_list) {
         if (e->type() == Event::Slot) {
             connect(e->sender(), e->signal(), e->receiver(), e->slot());
         } else if (e->type() == Event::UserFunction) {
@@ -99,7 +100,6 @@ FormScript::connectEvents()
         }
     }
 }
-
 
 #include "formscript.moc"
 

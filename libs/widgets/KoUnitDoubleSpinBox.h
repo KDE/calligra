@@ -50,7 +50,7 @@ public:
      * the default unit of points.
      * @param parent the parent widget
      */
-    explicit KoUnitDoubleSpinBox( QWidget *parent = 0);
+    explicit KoUnitDoubleSpinBox(QWidget *parent = 0);
     ~KoUnitDoubleSpinBox();
 
     /**
@@ -58,14 +58,14 @@ public:
      * @param newValue the new value
      * @see value()
      */
-    virtual void changeValue( double newValue );
+    virtual void changeValue(double newValue);
     /**
      * This spinbox shows the internal value after a conversion to the unit set here.
      */
-    virtual void setUnit( KoUnit );
+    virtual void setUnit(KoUnit);
 
     /// @return the current value, converted in points
-    double value( ) const;
+    double value() const;
 
     /// Set minimum value in points.
     void setMinimum(double min);
@@ -80,7 +80,7 @@ public:
     void setLineStepPt(double step);
 
     /// Set minimum, maximum value and the step size (all in points)
-    void setMinMaxStep( double min, double max, double step );
+    void setMinMaxStep(double min, double max, double step);
 
     /// reimplemented from superclass, will forward to KoUnitDoubleValidator
     virtual QValidator::State validate(QString &input, int &pos) const;
@@ -90,22 +90,21 @@ public:
      * @param value the number as double
      * @return the resulting string
      */
-    virtual QString textFromValue( double value ) const;
+    virtual QString textFromValue(double value) const;
     /**
      * Transfrom a string into a double, while taking care of locale specific symbols.
      * @param str the string to transform into a number
      * @return the value as double
      */
-    virtual double valueFromText( const QString& str ) const;
-
+    virtual double valueFromText(const QString &str) const;
 
 Q_SIGNALS:
     /// emitted like valueChanged in the parent, but this one emits the point value
-    void valueChangedPt( qreal );
+    void valueChangedPt(qreal);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
 private Q_SLOTS:
     // exists to do emits for valueChangedPt

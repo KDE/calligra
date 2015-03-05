@@ -32,79 +32,99 @@ class Project;
 class Node;
 class Task;
 
-typedef QMap<QString, Node*> NodeMap;
+typedef QMap<QString, Node *> NodeMap;
 
 class KPLATOMODELS_EXPORT TaskStatusItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit TaskStatusItemModel( QObject *parent = 0 );
+    explicit TaskStatusItemModel(QObject *parent = 0);
     ~TaskStatusItemModel();
-    
+
     enum PeriodType { UseCurrentDate, UseWeekday };
-    int periodType() const { return m_periodType; }
-    void setPeriodType( int type ) { m_periodType = type; }
-    
+    int periodType() const
+    {
+        return m_periodType;
+    }
+    void setPeriodType(int type)
+    {
+        m_periodType = type;
+    }
+
     /// Returns a column number/- name map for this model
-    virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
+    virtual const QMetaEnum columnMap() const
+    {
+        return m_nodemodel.columnMap();
+    }
 
-    virtual void setProject( Project *project );
-    
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
-    
-    virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex index( const Node *node ) const;
-    virtual QModelIndex index( const NodeMap *lst ) const;
-    
-    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
-    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
-    
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
+    virtual void setProject(Project *project);
 
-    
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-    
-    virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
-    virtual QStringList mimeTypes () const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    virtual QModelIndex parent(const QModelIndex &index) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex index(const Node *node) const;
+    virtual QModelIndex index(const NodeMap *lst) const;
+
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
+    virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
+    virtual QStringList mimeTypes() const;
     virtual Qt::DropActions supportedDropActions() const;
-    virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
 
-    NodeMap *list( const QModelIndex &index ) const;
-    Node *node( const QModelIndex &index ) const;
-    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
-    
-    NodeMap nodeList( QDataStream &stream );
+    NodeMap *list(const QModelIndex &index) const;
+    Node *node(const QModelIndex &index) const;
+    QAbstractItemDelegate *createDelegate(int column, QWidget *parent) const;
+
+    NodeMap nodeList(QDataStream &stream);
     using ItemModelBase::dropAllowed;
-    bool dropAllowed( Node *on, const QMimeData *data );
-    
+    bool dropAllowed(Node *on, const QMimeData *data);
+
     void clear();
-    
+
     void setNow();
-    void setPeriod( int days ) { m_period = days; }
-    int period() const { return m_period; }
-    void setWeekday( int day ) { m_weekday = day; }
-    int weekday() const { return m_weekday; }
-    
+    void setPeriod(int days)
+    {
+        m_period = days;
+    }
+    int period() const
+    {
+        return m_period;
+    }
+    void setWeekday(int day)
+    {
+        m_weekday = day;
+    }
+    int weekday() const
+    {
+        return m_weekday;
+    }
+
     /// Return the sortorder to be used for @p column
-    virtual int sortRole( int column ) const;
+    virtual int sortRole(int column) const;
 
 public Q_SLOTS:
-    virtual void setScheduleManager( ScheduleManager *sm );
+    virtual void setScheduleManager(ScheduleManager *sm);
     virtual void refresh();
 
 protected Q_SLOTS:
     void slotAboutToBeReset();
     void slotReset();
 
-    void slotNodeChanged( Node* );
-    void slotNodeToBeInserted( Node *node, int row );
-    void slotNodeInserted( Node *node );
-    void slotNodeToBeRemoved( Node *node );
-    void slotNodeRemoved( Node *node );
-    void slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos );
-    void slotNodeMoved( Node *node );
+    void slotNodeChanged(Node *);
+    void slotNodeToBeInserted(Node *node, int row);
+    void slotNodeInserted(Node *node);
+    void slotNodeToBeRemoved(Node *node);
+    void slotNodeRemoved(Node *node);
+    void slotNodeToBeMoved(Node *node, int pos, Node *newParent, int newPos);
+    void slotNodeMoved(Node *node);
 
     void slotWbsDefinitionChanged();
     void slotLayoutChanged();
@@ -120,27 +140,27 @@ protected:
         TaskUpcoming = 3
     };
 
-    QVariant alignment( int column ) const;
+    QVariant alignment(int column) const;
 
-    QVariant name( int row, int role ) const;
+    QVariant name(int row, int role) const;
     TaskStatusItemModel::TaskStatus taskStatus(const Task *task, const QDate &begin, const QDate &end);
 
-    bool setCompletion( Node *node, const QVariant &value, int role );
-    bool setRemainingEffort( Node *node, const QVariant &value, int role );
-    bool setActualEffort( Node *node, const QVariant &value, int role );
-    bool setStartedTime( Node *node, const QVariant &value, int role );
-    bool setFinishedTime( Node *node, const QVariant &value, int role );
+    bool setCompletion(Node *node, const QVariant &value, int role);
+    bool setRemainingEffort(Node *node, const QVariant &value, int role);
+    bool setActualEffort(Node *node, const QVariant &value, int role);
+    bool setStartedTime(Node *node, const QVariant &value, int role);
+    bool setFinishedTime(Node *node, const QVariant &value, int role);
 
 private:
     NodeModel m_nodemodel;
     QStringList m_topNames;
     QStringList m_topTips;
-    QList<NodeMap*> m_top;
+    QList<NodeMap *> m_top;
     NodeMap m_notstarted;
     NodeMap m_running;
     NodeMap m_finished;
     NodeMap m_upcoming;
-    
+
     long m_id; // schedule id
     int m_period; // days
     int m_periodType;
@@ -149,6 +169,5 @@ private:
 };
 
 } //namespace KPlato
-
 
 #endif

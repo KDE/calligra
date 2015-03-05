@@ -39,7 +39,6 @@
 // This shape
 //#include "Foo.h"
 
-
 TemplateShape::TemplateShape()
     : QObject()
     , KoShape()
@@ -60,7 +59,6 @@ void TemplateShape::paint(QPainter &painter, const KoViewConverter &converter,
     painter.drawRect(converter.documentToView(QRectF(QPoint(0, 0), size())));
 }
 
-
 void TemplateShape::saveOdf(KoShapeSavingContext &context) const
 {
     KoXmlWriter &writer = context.xmlWriter();
@@ -77,7 +75,7 @@ void TemplateShape::saveOdf(KoShapeSavingContext &context) const
 bool TemplateShape::loadOdf(const KoXmlElement &templateElement, KoShapeLoadingContext &context)
 {
     kDebug(31000) << "========================== Starting Template shape";
-    kDebug(31000) <<"Loading ODF element: " << templateElement.tagName();
+    kDebug(31000) << "Loading ODF element: " << templateElement.tagName();
 
     // Load all standard odf attributes and store into the KoShape
     loadOdfAttributes(templateElement, context, OdfAllAttributes);
@@ -87,10 +85,8 @@ bool TemplateShape::loadOdf(const KoXmlElement &templateElement, KoShapeLoadingC
     return true;
 }
 
-
 void TemplateShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous) const
 {
 }
-
 
 #include <TemplateShape.moc>

@@ -146,7 +146,6 @@ public:
      */
     ShapeSavingOptions options() const;
 
-
     /**
      * @brief xmlid returns an element reference that can be related to the given referent. If there is a
      *   prefix given, this prefix will be used in addition to either the counter or the uuid.
@@ -155,7 +154,7 @@ public:
      * @param counter if counter is true, shapesavingcontext will use a counter to create the xml:id
      * @return a KoElementReference; if insert is false and referent doesn't exist yet in the list, the elementreference will be invalid.
      */
-    KoElementReference xmlid(const void *referent, const QString& prefix = QString(), KoElementReference::GenerationOption counter = KoElementReference::UUID);
+    KoElementReference xmlid(const void *referent, const QString &prefix = QString(), KoElementReference::GenerationOption counter = KoElementReference::UUID);
 
     /**
      * @brief existingXmlid retrieve an existing xml id or invalid xml id if the referent object doesn't exist
@@ -283,7 +282,7 @@ public:
     QTransform shapeOffset(const KoShape *shape) const;
 
 private:
-    KoShapeSavingContextPrivate * const d;
+    KoShapeSavingContextPrivate *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoShapeSavingContext::ShapeSavingOptions)

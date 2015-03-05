@@ -28,13 +28,13 @@
 #include <KoXmlNS.h>
 
 KoShapeLayer::KoShapeLayer()
-        : KoShapeContainer(new SimpleShapeContainerModel())
+    : KoShapeContainer(new SimpleShapeContainerModel())
 {
     setSelectable(false);
 }
 
 KoShapeLayer::KoShapeLayer(KoShapeContainerModel *model)
-        : KoShapeContainer(model)
+    : KoShapeContainer(model)
 {
     setSelectable(false);
 }
@@ -49,27 +49,28 @@ QRectF KoShapeLayer::boundingRect() const
 {
     QRectF bb;
 
-    foreach(KoShape* shape, shapes()) {
-        if (bb.isEmpty())
+    foreach (KoShape *shape, shapes()) {
+        if (bb.isEmpty()) {
             bb = shape->boundingRect();
-        else
+        } else {
             bb = bb.united(shape->boundingRect());
+        }
     }
 
     return bb;
 }
 
-void KoShapeLayer::saveOdf(KoShapeSavingContext & context) const
+void KoShapeLayer::saveOdf(KoShapeSavingContext &context) const
 {
-    QList<KoShape*> shapes = this->shapes();
+    QList<KoShape *> shapes = this->shapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-    foreach(KoShape* shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         shape->saveOdf(context);
     }
 }
 
-bool KoShapeLayer::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool KoShapeLayer::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     // set layer name
     setName(element.attributeNS(KoXmlNS::draw, "name"));

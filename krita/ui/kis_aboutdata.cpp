@@ -29,7 +29,6 @@ KAboutData *newKritaAboutData()
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;
 
-
 #ifdef CALLIGRA_GIT_SHA1_STRING
     QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
     version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
@@ -37,15 +36,15 @@ KAboutData *newKritaAboutData()
     version = calligraVersion;
 #endif
 
-    KAboutData * aboutData = new KAboutData("krita", 0,
-                                            ki18n("Krita"),
-                                            version.toLatin1(),
-                                            ki18n("Digital Painting for Artists"),
-                                            KAboutData::License_GPL,
-                                            ki18n("© 1999-%1, The Krita Team").subs(CALLIGRA_YEAR),
-                                            KLocalizedString(),
-                                            "http://www.krita.org",
-                                            "submit@bugs.kde.org");
+    KAboutData *aboutData = new KAboutData("krita", 0,
+                                           ki18n("Krita"),
+                                           version.toLatin1(),
+                                           ki18n("Digital Painting for Artists"),
+                                           KAboutData::License_GPL,
+                                           ki18n("© 1999-%1, The Krita Team").subs(CALLIGRA_YEAR),
+                                           KLocalizedString(),
+                                           "http://www.krita.org",
+                                           "submit@bugs.kde.org");
 
     aboutData->setProgramIconName(koIconName("calligrakrita"));
 
@@ -644,7 +643,6 @@ KAboutData *newKritaAboutData()
     aboutData->addCredit(ki18n("Zett-0"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Zorael"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("And 47 anonymous backers"), ki18n("Krita 2.9 Kickstarter Backer"));
-
 
     return aboutData;
 }

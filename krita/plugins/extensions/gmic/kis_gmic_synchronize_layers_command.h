@@ -19,7 +19,6 @@
 #ifndef _KIS_GMIC_SYNCHRONIZE_LAYERS_COMMAND
 #define _KIS_GMIC_SYNCHRONIZE_LAYERS_COMMAND
 
-
 #include <kundo2command.h>
 
 #include <QSharedPointer>
@@ -42,7 +41,7 @@ public:
                                     KisImageWSP image,
                                     const QRect &dstRect = QRect(),
                                     const KisSelectionSP selection = 0
-    );
+                                   );
 
     virtual ~KisGmicSynchronizeLayersCommand();
 

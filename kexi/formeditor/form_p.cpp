@@ -28,7 +28,7 @@
 
 using namespace KFormDesigner;
 
-DesignModeStyle::DesignModeStyle(QStyle* parentStyle, QObject *parent)
+DesignModeStyle::DesignModeStyle(QStyle *parentStyle, QObject *parent)
     : KexiUtils::StyleProxy(parentStyle, parent)
 {
 }
@@ -45,15 +45,16 @@ void DesignModeStyle::drawControl(ControlElement element, const QStyleOption *op
 template <class StyleOptionClass>
 static StyleOptionClass *cloneStyleOption(const QStyleOption *option)
 {
-    return new StyleOptionClass( *qstyleoption_cast<const StyleOptionClass*>(option) );
+    return new StyleOptionClass(*qstyleoption_cast<const StyleOptionClass *>(option));
 }
 
-QStyleOption* DesignModeStyle::alterOption(ControlElement element, const QStyleOption *option) const
+QStyleOption *DesignModeStyle::alterOption(ControlElement element, const QStyleOption *option) const
 {
     Q_UNUSED(element)
-    if (!option)
+    if (!option) {
         return 0;
-    QStyleOption* res = 0;
+    }
+    QStyleOption *res = 0;
     switch (option->type) {
     case QStyleOption::SO_Button:
         res = cloneStyleOption<QStyleOptionButton>(option);
@@ -128,7 +129,7 @@ QStyleOption* DesignModeStyle::alterOption(ControlElement element, const QStyleO
         return 0;
     }
 
-    const QStyle::State statesToRemove( QStyle::State_MouseOver | State_HasFocus );
+    const QStyle::State statesToRemove(QStyle::State_MouseOver | State_HasFocus);
     res->state |= statesToRemove;
     res->state ^= statesToRemove;
     return res;
@@ -136,11 +137,11 @@ QStyleOption* DesignModeStyle::alterOption(ControlElement element, const QStyleO
 
 //--------------
 
-FormPrivate::FormPrivate(Form *form, WidgetLibrary* _library)
- : state(Form::WidgetSelecting)
- , internalCollection(static_cast<QObject*>(0))
- , library(_library)
- , q(form)
+FormPrivate::FormPrivate(Form *form, WidgetLibrary *_library)
+    : state(Form::WidgetSelecting)
+    , internalCollection(static_cast<QObject *>(0))
+    , library(_library)
+    , q(form)
 {
     toplevel = 0;
     topTree = 0;
@@ -192,39 +193,41 @@ QString FormPrivate::valueCaption(const QByteArray &name)
 
 void FormPrivate::addPropertyCaption(const QByteArray &property, const QString &caption)
 {
-    if (!propCaption.contains(property))
+    if (!propCaption.contains(property)) {
         propCaption.insert(property, caption);
+    }
 }
 
 void FormPrivate::addValueCaption(const QByteArray &value, const QString &caption)
 {
-    if (!propValCaption.contains(value))
+    if (!propValCaption.contains(value)) {
         propValCaption.insert(value, caption);
+    }
 }
 
-void FormPrivate::setColorProperty(KoProperty::Property& p,
-                                   QPalette::ColorRole (QWidget::*roleMethod)() const,
-                                   const QVariant& value)
+void FormPrivate::setColorProperty(KoProperty::Property &p,
+                                   QPalette::ColorRole(QWidget::*roleMethod)() const,
+                                   const QVariant &value)
 {
     bool nullColor = value.isNull() || !value.value<QColor>().isValid();
-    foreach(QWidget* widget, selected) {
+    foreach (QWidget *widget, selected) {
         ObjectTreeItem *titem = q->objectTree()->lookup(widget->objectName());
         QColor color;
         if (nullColor && roleMethod == &QWidget::backgroundRole) {
             color = widget->parentWidget()->palette().color((widget->*roleMethod)());
-        }
-        else {
+        } else {
             color = value.value<QColor>();
         }
-        if (titem && p.isModified())
+        if (titem && p.isModified()) {
             titem->addModifiedProperty(p.name(), color);
+        }
         QPalette widgetPalette(widget->palette());
         QColor oldColor(widgetPalette.color((widget->*roleMethod)()));
         widgetPalette.setColor((widget->*roleMethod)(), color);
         widget->setPalette(widgetPalette);
         if (!isRedoing && !isUndoing) {
             q->addPropertyCommand(widget->objectName().toLatin1(),
-                oldColor, color, p.name(), Form::DontExecuteCommand);
+                                  oldColor, color, p.name(), Form::DontExecuteCommand);
         }
         if (roleMethod == &QWidget::backgroundRole) {
             widget->setAutoFillBackground(!nullColor);
@@ -334,10 +337,10 @@ void FormPrivate::initPropertiesDescription()
     propValCaption["RightToLeft"] = i18n("Right to Left");
 }
 
-KoProperty::Property::ListData* FormPrivate::createValueList(WidgetInfo *winfo, const QStringList &list)
+KoProperty::Property::ListData *FormPrivate::createValueList(WidgetInfo *winfo, const QStringList &list)
 {
     QStringList names;
-    foreach (const QString& name, list) {
+    foreach (const QString &name, list) {
         QString n(propValCaption.value(name.toLatin1()));
         if (n.isEmpty()) { //try within factory and (maybe) parent factory
             if (winfo) {
@@ -345,8 +348,7 @@ KoProperty::Property::ListData* FormPrivate::createValueList(WidgetInfo *winfo, 
             }
             if (n.isEmpty()) {
                 names.append(name);   //untranslated
-            }
-            else {
+            } else {
                 names.append(n);
             }
         } else {

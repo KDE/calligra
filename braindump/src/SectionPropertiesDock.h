@@ -34,15 +34,15 @@ class SectionPropertiesDock : public QDockWidget
 public:
     SectionPropertiesDock();
     virtual ~SectionPropertiesDock();
-    void setRootSection(RootSection* _rootSection);
-    void setSection(Section* _section);
+    void setRootSection(RootSection *_rootSection);
+    void setSection(Section *_section);
 private Q_SLOTS:
     void reload();
     void layoutChanged(int index);
 private:
     Ui::WdgSectionProperties m_wdgSectionProperties;
-    Section* m_currentSection;
-    RootSection* m_rootSection;
+    Section *m_currentSection;
+    RootSection *m_rootSection;
 };
 
 class SectionPropertiesDockFactory : public KoDockFactoryBase
@@ -51,19 +51,22 @@ class SectionPropertiesDockFactory : public KoDockFactoryBase
 public:
     SectionPropertiesDockFactory() { }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return QString("SectionProperties");
     }
 
-    virtual QDockWidget* createDockWidget() {
-        SectionPropertiesDock * dockWidget = new SectionPropertiesDock();
+    virtual QDockWidget *createDockWidget()
+    {
+        SectionPropertiesDock *dockWidget = new SectionPropertiesDock();
 
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const
+    {
         return DockRight;
     }
 };

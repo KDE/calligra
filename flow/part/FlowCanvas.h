@@ -32,13 +32,11 @@ class FlowView;
 class FlowCanvas : public QWidget, public KoPACanvas
 {
     Q_OBJECT
-    
+
 public:
     FlowCanvas();
     virtual ~FlowCanvas();
-    
+
 }
-
-
 
 #endif

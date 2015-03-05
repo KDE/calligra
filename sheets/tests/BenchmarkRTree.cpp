@@ -60,7 +60,8 @@ void RTreeBenchmark::testInsertionPerformance()
     const int step_y = 1;
 
     QBENCHMARK {
-        for (int y = 1; y <= max_y; y += step_y) { // equals row insertion into table
+        for (int y = 1; y <= max_y; y += step_y)   // equals row insertion into table
+        {
             for (int x = 1; x <= max_x; x += step_x) { // equals cell insertion into row
                 m_tree.insert(QRect(x, y, step_x, step_y), 42);
             }
@@ -104,9 +105,12 @@ void RTreeBenchmark::testLookupPerformance()
     const int max_y = 1000;
     const int step_y = 1;
     QBENCHMARK {
-        for (int y = 1; y <= max_y; y += step_y) {
+        for (int y = 1; y <= max_y; y += step_y)
+        {
             for (int x = 1; x <= max_x; x += step_x) {
-                if (!m_tree.contains(QPoint(x, y)).isEmpty()) counter++;
+                if (!m_tree.contains(QPoint(x, y)).isEmpty()) {
+                    counter++;
+                }
             }
         }
     }

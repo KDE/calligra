@@ -68,50 +68,50 @@ public:
     /**
      * Overloaded version of the above function.
      */
-    void eraseRect(const QRect& rc);
+    void eraseRect(const QRect &rc);
 
     /**
      * Fill a rectangle with a certain color.
      */
-    void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c);
+    void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor &c);
 
     /**
      * Overloaded version of the above function.
      */
-    void fillRect(const QRect& rc, const KoColor& c);
+    void fillRect(const QRect &rc, const KoColor &c);
 
     /**
      * Fill a rectangle with a certain color and opacity.
      */
-    void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c, quint8 opacity);
+    void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor &c, quint8 opacity);
 
     /**
      * Overloaded version of the above function.
      */
-    void fillRect(const QRect& rc, const KoColor& c, quint8 opacity);
+    void fillRect(const QRect &rc, const KoColor &c, quint8 opacity);
 
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
      * entire rectangle.
      */
-    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern * pattern);
+    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern *pattern);
 
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
      * entire rectangle.
      */
-    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect);
+    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect &deviceRect);
 
     /**
      * Overloaded version of the above function.
      */
-    void fillRect(const QRect& rc, const KoPattern * pattern);
+    void fillRect(const QRect &rc, const KoPattern *pattern);
 
     /**
      * Fill the specified area with the output of the generator plugin that is configured
      * in the generator parameter
      */
-    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisFilterConfiguration * generator);
+    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisFilterConfiguration *generator);
 
     /**
      * Fills the enclosed area around the point with the set color. If
@@ -156,57 +156,68 @@ public:
     void setFillThreshold(int threshold);
 
     /** Returns the fill threshold, see setFillThreshold for details */
-    int fillThreshold() const {
+    int fillThreshold() const
+    {
         return m_threshold;
     }
 
-    bool useCompositioning() const {
+    bool useCompositioning() const
+    {
         return m_useCompositioning;
     }
 
-    void setUseCompositioning(bool useCompositioning) {
+    void setUseCompositioning(bool useCompositioning)
+    {
         m_useCompositioning = useCompositioning;
     }
 
     /** Sets the width of the paint device */
-    void setWidth(int w) {
+    void setWidth(int w)
+    {
         m_width = w;
     }
 
     /** Sets the height of the paint device */
-    void setHeight(int h) {
+    void setHeight(int h)
+    {
         m_height = h;
     }
 
     /** If true, floodfill doesn't fill outside the selected area of a layer */
-    bool careForSelection() const {
+    bool careForSelection() const
+    {
         return m_careForSelection;
     }
 
     /** Set caring for selection. See careForSelection for details */
-    void setCareForSelection(bool set) {
+    void setCareForSelection(bool set)
+    {
         m_careForSelection = set;
     }
 
     /** Sets the auto growth/shrinking radius */
-    void setSizemod(int sizemod) {
+    void setSizemod(int sizemod)
+    {
         m_sizemod = sizemod;
     }
-    
+
     /** Sets how much to auto-grow or shrink (if @param sizemod is negative) the selection
     flood before painting, this affects every fill operation except fillRect */
-    int sizemod() {
+    int sizemod()
+    {
         return m_sizemod;
     }
-    
+
     /** Sets feathering radius */
-    void setFeather(int feather) {
+    void setFeather(int feather)
+    {
         m_feather = feather;
     }
-    
+
     /** defines the feathering radius for selection flood operations, this affects every
     fill operation except fillRect */
-    uint feather() {
+    uint feather()
+    {
         return m_feather;
     }
 
@@ -226,15 +237,14 @@ private:
     bool m_useCompositioning;
 };
 
-
 inline
-void KisFillPainter::fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c)
+void KisFillPainter::fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor &c)
 {
     fillRect(x, y, w, h, c, OPACITY_OPAQUE_U8);
 }
 
 inline
-void KisFillPainter::fillRect(const QRect& rc, const KoColor& c)
+void KisFillPainter::fillRect(const QRect &rc, const KoColor &c)
 {
     fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE_U8);
 }
@@ -242,27 +252,27 @@ void KisFillPainter::fillRect(const QRect& rc, const KoColor& c)
 inline
 void KisFillPainter::eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h)
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoColor c(Qt::black, cs);
     fillRect(x1, y1, w, h, c, OPACITY_TRANSPARENT_U8);
 }
 
 inline
-void KisFillPainter::eraseRect(const QRect& rc)
+void KisFillPainter::eraseRect(const QRect &rc)
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoColor c(Qt::black, cs);
     fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_TRANSPARENT_U8);
 }
 
 inline
-void KisFillPainter::fillRect(const QRect& rc, const KoColor& c, quint8 opacity)
+void KisFillPainter::fillRect(const QRect &rc, const KoColor &c, quint8 opacity)
 {
     fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }
 
 inline
-void KisFillPainter::fillRect(const QRect& rc, const KoPattern* pattern)
+void KisFillPainter::fillRect(const QRect &rc, const KoPattern *pattern)
 {
     fillRect(rc.x(), rc.y(), rc.width(), rc.height(), pattern);
 }
@@ -272,6 +282,5 @@ void KisFillPainter::setFillThreshold(int threshold)
 {
     m_threshold = threshold;
 }
-
 
 #endif //KIS_FILL_PAINTER_H_

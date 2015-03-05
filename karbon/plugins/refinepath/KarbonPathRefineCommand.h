@@ -38,7 +38,7 @@ public:
      * @param insertPointsCount number of point to insert into each segment
      * @param parent the parent command used for macro commands
      */
-    KarbonPathRefineCommand(KoPathShape * path, uint insertPointsCount, KUndo2Command *parent = 0);
+    KarbonPathRefineCommand(KoPathShape *path, uint insertPointsCount, KUndo2Command *parent = 0);
     virtual ~KarbonPathRefineCommand();
 
     /// redo the command
@@ -48,7 +48,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // _KARBONPATHREFINECOMMAND_H_

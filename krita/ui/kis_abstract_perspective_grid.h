@@ -31,17 +31,17 @@ class KRITAUI_EXPORT KisAbstractPerspectiveGrid : public QObject
     Q_OBJECT
 public:
 
-    KisAbstractPerspectiveGrid(QObject * parent = 0);
+    KisAbstractPerspectiveGrid(QObject *parent = 0);
 
     virtual ~KisAbstractPerspectiveGrid() {}
 
-    virtual bool contains(const QPointF& pt) const = 0;
+    virtual bool contains(const QPointF &pt) const = 0;
     /**
      * Returns the reciprocal of the distance from the given point
      * to the 'observer', in the range [0, 1] where 0 = inifinite
      * distance and 1 = closest.
      */
-    virtual qreal distance(const QPointF& pt) const = 0;
+    virtual qreal distance(const QPointF &pt) const = 0;
 };
 
 #endif

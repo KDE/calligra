@@ -37,8 +37,8 @@
 
 #include <MsooXmlReader_p.h>
 
-VmlDrawingReaderContext::VmlDrawingReaderContext(MSOOXML::MsooXmlImport& _import, const QString& _path,
-    const QString& _file, MSOOXML::MsooXmlRelationships& _relationships) :
+VmlDrawingReaderContext::VmlDrawingReaderContext(MSOOXML::MsooXmlImport &_import, const QString &_path,
+        const QString &_file, MSOOXML::MsooXmlRelationships &_relationships) :
     MSOOXML::MsooXmlReaderContext(&_relationships), import(&_import), path(_path), file(_file)
 {
 }
@@ -46,9 +46,11 @@ VmlDrawingReaderContext::VmlDrawingReaderContext(MSOOXML::MsooXmlImport& _import
 class VmlDrawingReader::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
 };
 
@@ -80,9 +82,9 @@ QMap<QString, QString> VmlDrawingReader::frames()
     return m_frames;
 }
 
-KoFilter::ConversionStatus VmlDrawingReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus VmlDrawingReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = static_cast<VmlDrawingReaderContext*>(context);
+    m_context = static_cast<VmlDrawingReaderContext *>(context);
 
     readNext();
     if (!isStartDocument()) {
@@ -120,8 +122,7 @@ KoFilter::ConversionStatus VmlDrawingReader::read_xml()
         if (isStartElement()) {
             if (name() == "shapetype") {
                 TRY_READ(shapetype)
-            }
-            else if (name() == "shape") {
+            } else if (name() == "shape") {
                 oldBody = body; // Body protetion starts
                 QBuffer frameBuf;
                 KoXmlWriter frameWriter(&frameBuf);

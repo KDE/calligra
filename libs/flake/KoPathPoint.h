@@ -82,7 +82,7 @@ public:
     /**
      * @brief Assignment operator.
      */
-    KoPathPoint& operator=(const KoPathPoint &other);
+    KoPathPoint &operator=(const KoPathPoint &other);
 
     /// Compare operator
     bool operator == (const KoPathPoint &other) const;
@@ -216,7 +216,7 @@ public:
      * @brief Sets the parent path shape.
      * @param parent the new parent path shape
      */
-    void setParent(KoPathShape* parent);
+    void setParent(KoPathShape *parent);
 
     /**
      * @brief Get the path shape the point belongs to
@@ -263,7 +263,7 @@ protected:
     friend class KoPathShapePrivate;
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 //   /// a KoSubpath contains a path from a moveTo until a close or a new moveTo

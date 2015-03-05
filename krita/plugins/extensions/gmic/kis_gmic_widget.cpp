@@ -40,13 +40,12 @@
 #include <kis_gmic_filter_proxy_model.h>
 #include "kis_gmic_updater.h"
 
-
 static const QString maximizeStr = i18n("Maximize");
 static const QString selectFilterStr = i18n("Select a filter...");
 
-KisGmicWidget::KisGmicWidget(KisGmicFilterModel * filters, const QString &updateUrl)
+KisGmicWidget::KisGmicWidget(KisGmicFilterModel *filters, const QString &updateUrl)
     : m_filterModel(filters)
-    ,m_updateUrl(updateUrl)
+    , m_updateUrl(updateUrl)
 {
     dbgPlugins << "Constructor:" << this;
 
@@ -73,7 +72,6 @@ KisGmicWidget::~KisGmicWidget()
 void KisGmicWidget::createMainLayout()
 {
 
-
     connect(m_inputOutputOptions->previewCheckBox, SIGNAL(toggled(bool)), this, SLOT(slotPreviewChanged(bool)));
     connect(m_inputOutputOptions->previewSizeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(slotPreviewSizeChanged()));
     connect(m_inputOutputOptions->previewSizeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(slotConfigurationChanged()));
@@ -87,15 +85,12 @@ void KisGmicWidget::createMainLayout()
     m_filterTree->setModel(proxyModel);
     m_filterTree->setItemDelegate(new HtmlDelegate());
 
-    connect(m_filterTree->selectionModel(), SIGNAL(selectionChanged (const QItemSelection &, const QItemSelection &)),
-            this, SLOT(slotSelectedFilterChanged(const QItemSelection &, const QItemSelection &)));
+    connect(m_filterTree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(slotSelectedFilterChanged(QItemSelection,QItemSelection)));
 
-    if (!m_updateUrl.isEmpty())
-    {
+    if (!m_updateUrl.isEmpty()) {
         updateBtn->setToolTip("Fetching definitions from : " + m_updateUrl);
-    }
-    else
-    {
+    } else {
         updateBtn->setEnabled(false);
     }
 
@@ -105,7 +100,7 @@ void KisGmicWidget::createMainLayout()
     connect(updateBtn, SIGNAL(clicked(bool)), this, SLOT(startUpdate()));
     connect(searchBox, SIGNAL(textChanged(QString)), proxyModel, SLOT(setFilterFixedString(QString)));
 
-    QPushButton * maximize = new QPushButton(maximizeStr);
+    QPushButton *maximize = new QPushButton(maximizeStr);
     controlButtonBox->addButton(maximize, QDialogButtonBox::ActionRole);
     connect(maximize, SIGNAL(clicked(bool)), this, SLOT(slotMaximizeClicked()));
     connect(controlButtonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked(bool)), this, SLOT(slotOkClicked()));
@@ -116,119 +111,94 @@ void KisGmicWidget::createMainLayout()
     switchOptionsWidgetFor(new QLabel(selectFilterStr));
 }
 
-
 void KisGmicWidget::slotSelectedFilterChanged(const QItemSelection & /*newSelection*/, const QItemSelection & /*oldSelection*/)
- {
-     //get the text of the selected item
+{
+    //get the text of the selected item
     const QModelIndex index = m_filterTree->selectionModel()->currentIndex();
     QString selectedText = index.data(Qt::DisplayRole).toString();
 
-
     QVariant var = index.data(CommandRole);
 
-    Command * gmicCommand(0);
-    if (!var.isValid())
-    {
+    Command *gmicCommand(0);
+    if (!var.isValid()) {
         gmicCommand = 0;
         dbgPlugins << "Invalid QVariant, invalid command? : ';' ";
-    }
-    else
-    {
+    } else {
         gmicCommand = var.value<Command *>();
     }
 
-
-    if (gmicCommand)
-    {
-        KisGmicSettingsWidget * filterOptions = new KisGmicSettingsWidget(gmicCommand);
+    if (gmicCommand) {
+        KisGmicSettingsWidget *filterOptions = new KisGmicSettingsWidget(gmicCommand);
         QObject::connect(filterOptions, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotConfigurationChanged()));
         switchOptionsWidgetFor(filterOptions);
-    }
-    else
-    {
+    } else {
         switchOptionsWidgetFor(new QLabel(selectFilterStr));
         emit sigPreviewActiveLayer();
     }
 
-
-
 #ifdef DEBUG_MODEL
-     //find out the hierarchy level of the selected item
-     int hierarchyLevel = 1;
-     QModelIndex seekRoot = index;
-     while(seekRoot.parent() != QModelIndex())
-     {
-         seekRoot = seekRoot.parent();
-         hierarchyLevel++;
-     }
+    //find out the hierarchy level of the selected item
+    int hierarchyLevel = 1;
+    QModelIndex seekRoot = index;
+    while (seekRoot.parent() != QModelIndex()) {
+        seekRoot = seekRoot.parent();
+        hierarchyLevel++;
+    }
 
-     QString showString = QString("%1, Level %2").arg(selectedText)
-                          .arg(hierarchyLevel);
-     setWindowTitle(showString);
+    QString showString = QString("%1, Level %2").arg(selectedText)
+                         .arg(hierarchyLevel);
+    setWindowTitle(showString);
 #endif
- }
-
+}
 
 void KisGmicWidget::slotCancelClicked()
 {
-    if (m_onCanvasPreviewRequested)
-    {
+    if (m_onCanvasPreviewRequested) {
         emit sigCancelOnCanvasPreview();
     }
     close();
 }
 
-
 void KisGmicWidget::slotOkClicked()
 {
-    if (m_inputOutputOptions->previewSize() == ON_CANVAS)
-    {
+    if (m_inputOutputOptions->previewSize() == ON_CANVAS) {
         emit sigAcceptOnCanvasPreview();
-    }
-    else
-    {
-        if (!m_filterApplied)
-        {
-            KisGmicFilterSetting * filterSettings = currentFilterSettings();
-            if (filterSettings)
-            {
+    } else {
+        if (!m_filterApplied) {
+            KisGmicFilterSetting *filterSettings = currentFilterSettings();
+            if (filterSettings) {
                 emit sigFilterCurrentImage(filterSettings);
             }
             m_filterApplied = true;
         }
     }
 
-
     emit sigRequestFinishAndClose();
     hide();
 }
 
- void KisGmicWidget::closeEvent(QCloseEvent *event)
- {
-     event->accept();
-     emit sigClose();
- }
+void KisGmicWidget::closeEvent(QCloseEvent *event)
+{
+    event->accept();
+    emit sigClose();
+}
 
 void KisGmicWidget::slotResetClicked()
 {
     const QModelIndex index = m_filterTree->selectionModel()->currentIndex();
     QVariant var = index.data(CommandRole);
-    Command * gmicCommand(0);
-    if (!var.isValid())
-    {
+    Command *gmicCommand(0);
+    if (!var.isValid()) {
         gmicCommand = 0;
         dbgPlugins << "Filter not selected!";
         return;
-    }
-    else
-    {
+    } else {
         gmicCommand = var.value<Command *>();
     }
 
     gmicCommand->reset();
-    KisGmicSettingsWidget * currentSettingsWidget = qobject_cast<KisGmicSettingsWidget *>(m_filterOptions);
-    if (currentSettingsWidget)
-    {
+    KisGmicSettingsWidget *currentSettingsWidget = qobject_cast<KisGmicSettingsWidget *>(m_filterOptions);
+    if (currentSettingsWidget) {
         currentSettingsWidget->reload();
     }
 
@@ -236,19 +206,15 @@ void KisGmicWidget::slotResetClicked()
 
 void KisGmicWidget::slotMaximizeClicked()
 {
-    QPushButton * maximizeButton = qobject_cast<QPushButton *>(sender());
-    if (!maximizeButton)
-    {
+    QPushButton *maximizeButton = qobject_cast<QPushButton *>(sender());
+    if (!maximizeButton) {
         return;
     }
-    if (isMaximized())
-    {
+    if (isMaximized()) {
         // restore clicked
         showNormal();
         maximizeButton->setText(maximizeStr);
-    }
-    else
-    {
+    } else {
         showMaximized();
         maximizeButton->setText(i18n("Restore"));
     }
@@ -274,19 +240,13 @@ void KisGmicWidget::finishUpdate()
 
 void KisGmicWidget::slotPreviewChanged(bool enabling)
 {
-    if (enabling)
-    {
+    if (enabling) {
         requestComputePreview();
-    }
-    else
-    {
-        if (m_inputOutputOptions->previewSize() == ON_CANVAS)
-        {
+    } else {
+        if (m_inputOutputOptions->previewSize() == ON_CANVAS) {
             emit sigCancelOnCanvasPreview();
             m_onCanvasPreviewRequested = false; // cancelled
-        }
-        else
-        {
+        } else {
             emit sigPreviewActiveLayer();
         }
     }
@@ -295,14 +255,10 @@ void KisGmicWidget::slotPreviewChanged(bool enabling)
 
 void KisGmicWidget::slotPreviewSizeChanged()
 {
-    if (m_inputOutputOptions->previewSize() == ON_CANVAS)
-    {
+    if (m_inputOutputOptions->previewSize() == ON_CANVAS) {
         m_onCanvasPreviewActivated = true;
-    }
-    else
-    {
-        if (m_onCanvasPreviewActivated)
-        {
+    } else {
+        if (m_onCanvasPreviewActivated) {
             emit sigCancelOnCanvasPreview();
             m_onCanvasPreviewActivated = false;
             m_onCanvasPreviewRequested = false;
@@ -310,15 +266,11 @@ void KisGmicWidget::slotPreviewSizeChanged()
     }
 }
 
-
 void KisGmicWidget::slotConfigurationChanged()
 {
-    if (m_inputOutputOptions->previewCheckBox->isChecked())
-    {
+    if (m_inputOutputOptions->previewCheckBox->isChecked()) {
         requestComputePreview();
-    }
-    else
-    {
+    } else {
         emit sigPreviewActiveLayer();
     }
 
@@ -326,46 +278,36 @@ void KisGmicWidget::slotConfigurationChanged()
 
 void KisGmicWidget::slotApplyClicked()
 {
-    if (m_inputOutputOptions->previewSize() == ON_CANVAS)
-    {
-        KisGmicFilterSetting * filterSettings = currentFilterSettings();
-        if (!filterSettings)
-        {
+    if (m_inputOutputOptions->previewSize() == ON_CANVAS) {
+        KisGmicFilterSetting *filterSettings = currentFilterSettings();
+        if (!filterSettings) {
             return;
         }
 
-        if (m_inputOutputOptions->previewCheckBox->isChecked())
-        {
+        if (m_inputOutputOptions->previewCheckBox->isChecked()) {
             emit sigAcceptOnCanvasPreview();
             emit sigPreviewFilterCommand(filterSettings);
-        }
-        else
-        {
+        } else {
             emit sigFilterCurrentImage(filterSettings);
             m_filterApplied = true;
         }
 
+    } else { // Tiny, Small, Medium, Large preview
 
-    }
-    else // Tiny, Small, Medium, Large preview
-    {
-
-            KisGmicFilterSetting * filterSettings = currentFilterSettings();
-            if (filterSettings)
-            {
-                emit sigFilterCurrentImage(filterSettings);
-                m_filterApplied = true;
-                requestComputePreview();
-            }
+        KisGmicFilterSetting *filterSettings = currentFilterSettings();
+        if (filterSettings) {
+            emit sigFilterCurrentImage(filterSettings);
+            m_filterApplied = true;
+            requestComputePreview();
+        }
     }
 }
 
-KisGmicFilterSetting* KisGmicWidget::currentFilterSettings()
+KisGmicFilterSetting *KisGmicWidget::currentFilterSettings()
 {
-    KisGmicFilterSetting * filterSettings = 0;
+    KisGmicFilterSetting *filterSettings = 0;
     QVariant settings = m_filterTree->selectionModel()->currentIndex().data(FilterSettingsRole);
-    if (settings.isValid())
-    {
+    if (settings.isValid()) {
         dbgPlugins << "Valid settings!";
         filterSettings = settings.value<KisGmicFilterSetting * >();
         filterSettings->setInputLayerMode(m_inputOutputOptions->inputMode());
@@ -374,9 +316,7 @@ KisGmicFilterSetting* KisGmicWidget::currentFilterSettings()
         filterSettings->setPreviewSize(m_inputOutputOptions->previewSize());
         dbgPlugins << "GMIC command : " << filterSettings->gmicCommand();
         dbgPlugins << "GMIC preview command : " << filterSettings->previewGmicCommand();
-    }
-    else
-    {
+    } else {
         dbgPlugins << "Filter is not selected!";
     }
 
@@ -385,22 +325,18 @@ KisGmicFilterSetting* KisGmicWidget::currentFilterSettings()
 
 void KisGmicWidget::requestComputePreview()
 {
-    KisGmicFilterSetting * filterSettings = currentFilterSettings();
-    if (filterSettings)
-    {
+    KisGmicFilterSetting *filterSettings = currentFilterSettings();
+    if (filterSettings) {
         emit sigPreviewFilterCommand(filterSettings);
-        if (m_onCanvasPreviewActivated)
-        {
+        if (m_onCanvasPreviewActivated) {
             m_onCanvasPreviewRequested = true;
         }
-    }
-    else
-    {
+    } else {
         emit sigPreviewActiveLayer();
     }
 }
 
-void KisGmicWidget::switchOptionsWidgetFor(QWidget* widget)
+void KisGmicWidget::switchOptionsWidgetFor(QWidget *widget)
 {
     m_filterOptions = m_filterScrollArea->takeWidget();
     delete m_filterOptions;
@@ -411,7 +347,7 @@ void KisGmicWidget::switchOptionsWidgetFor(QWidget* widget)
     m_filterOptions->show();
 }
 
-KisFilterPreviewWidget * KisGmicWidget::previewWidget()
+KisFilterPreviewWidget *KisGmicWidget::previewWidget()
 {
     return m_inputOutputOptions->previewWidget();
 }
@@ -424,14 +360,11 @@ void KisGmicWidget::slotNotImplemented()
 void KisGmicWidget::slotExpandCollapse()
 {
     const QString &iconName = expandCollapseBtn->icon().name();
-    if (iconName == "zoom-in")
-    {
+    if (iconName == "zoom-in") {
         m_filterTree->expandAll();
         expandCollapseBtn->setIcon(koIcon("zoom-out"));
 
-    }
-    else if (iconName == "zoom-out")
-    {
+    } else if (iconName == "zoom-out") {
         m_filterTree->collapseAll();
         expandCollapseBtn->setIcon(koIcon("zoom-in"));
     }

@@ -32,35 +32,41 @@ class ShiftListIterator;
 class Shift : public CoreAttributes
 {
 public:
-    Shift(Project* prj, const QString& i, const QString& n, Shift* p,
-          const QString& df = QString(), uint dl = 0);
+    Shift(Project *prj, const QString &i, const QString &n, Shift *p,
+          const QString &df = QString(), uint dl = 0);
     virtual ~Shift();
 
-    virtual CAType getType() const { return CA_Shift; }
+    virtual CAType getType() const
+    {
+        return CA_Shift;
+    }
 
-    Shift* getParent() const { return static_cast<Shift*>(parent); }
+    Shift *getParent() const
+    {
+        return static_cast<Shift *>(parent);
+    }
 
     ShiftListIterator getSubListIterator() const;
 
     void inheritValues();
 
-    void setWorkingHours(int day, const QList<Interval*>& l);
+    void setWorkingHours(int day, const QList<Interval *> &l);
 
-    QList<Interval*>* getWorkingHours(int day) const
+    QList<Interval *> *getWorkingHours(int day) const
     {
         return workingHours[day];
     }
-    const QList<Interval*>* const * getWorkingHours() const
+    const QList<Interval *> *const *getWorkingHours() const
     {
-        return static_cast<const QList<Interval*>* const*>(workingHours);
+        return static_cast<const QList<Interval *>* const *>(workingHours);
     }
 
-    bool isOnShift(const Interval& iv) const;
+    bool isOnShift(const Interval &iv) const;
 
     bool isVacationDay(time_t day) const;
 
 private:
-    QList<Interval*>* workingHours[7];
+    QList<Interval *> *workingHours[7];
 };
 
 } // namespace TJ

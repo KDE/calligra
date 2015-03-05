@@ -38,18 +38,18 @@ public:
         GroupName,
         GroupFolded
     };
-    explicit TemplatesModel(QObject* parent = 0);
+    explicit TemplatesModel(QObject *parent = 0);
     virtual ~TemplatesModel();
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual int rowCount(const QModelIndex &parent) const;
     Q_INVOKABLE QString groupNameOf(int index) const;
-    Q_INVOKABLE void toggleGroup(const QString& name);
+    Q_INVOKABLE void toggleGroup(const QString &name);
     Q_SLOT void populate();
 
 private:
     struct ItemData;
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // TEMPLATESMODEL_H

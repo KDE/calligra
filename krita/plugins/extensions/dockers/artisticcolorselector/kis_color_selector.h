@@ -33,22 +33,31 @@ class QPainter;
 class KisColorSelector: public QWidget
 {
     Q_OBJECT
-    
+
     typedef KisRadian<float> Radian;
-    
-    struct ColorRing
-    {
+
+    struct ColorRing {
         ColorRing(): angle(0) { }
-        
-        Radian getPieceAngle() const { return RAD_360 / float(pieced.size()); }
-        Radian getShift     () const { return angle % getPieceAngle();        }
-        Radian getMovedAngel() const { return angle - tmpAngle;               }
-        
-        void setTemporaries(const KisColor& color) {
+
+        Radian getPieceAngle() const
+        {
+            return RAD_360 / float(pieced.size());
+        }
+        Radian getShift() const
+        {
+            return angle % getPieceAngle();
+        }
+        Radian getMovedAngel() const
+        {
+            return angle - tmpAngle;
+        }
+
+        void setTemporaries(const KisColor &color)
+        {
             tmpAngle = angle;
             tmpColor = color;
         }
-        
+
         KisColor              tmpColor;
         Radian                tmpAngle;
         Radian                angle;
@@ -57,10 +66,10 @@ class KisColorSelector: public QWidget
         float                 innerRadius;
         QVector<QPainterPath> pieced;
     };
-    
+
 public:
-    KisColorSelector(QWidget* parent, KisColor::Type type=KisColor::HSL);
-    
+    KisColorSelector(QWidget *parent, KisColor::Type type = KisColor::HSL);
+
     void setColorSpace(KisColor::Type type);
     void setNumPieces(int num);
     void setNumLightPieces(int num);
@@ -68,55 +77,76 @@ public:
     void resetRings();
     void resetSelectedRing();
     void resetLight();
-    void setLight(float light=0.0f, bool relative=true);
+    void setLight(float light = 0.0f, bool relative = true);
     void setInverseSaturation(bool inverse);
-    void selectColor(const KisColor& color);
-    void setFgColor(const KisColor& fgColor);
-    void setBgColor(const KisColor& bgColor);
-    
+    void selectColor(const KisColor &color);
+    void setFgColor(const KisColor &fgColor);
+    void setBgColor(const KisColor &bgColor);
+
     void saveSettings();
     void loadSettings();
-    
-    KisColor::Type getColorSpace       () const { return m_colorSpace;        }
-    qint32         getNumRings         () const { return m_colorRings.size(); }
-    qint32         getNumPieces        () const { return m_numPieces;         }
-    qint32         getNumLightPieces   () const { return m_numLightPieces;    }
-    qreal          getLight            () const { return m_light;             }
-    bool           isSaturationInverted() const { return m_inverseSaturation; }
-    bool           islightRelative     () const { return m_relativeLight;     }
-    
+
+    KisColor::Type getColorSpace() const
+    {
+        return m_colorSpace;
+    }
+    qint32         getNumRings() const
+    {
+        return m_colorRings.size();
+    }
+    qint32         getNumPieces() const
+    {
+        return m_numPieces;
+    }
+    qint32         getNumLightPieces() const
+    {
+        return m_numLightPieces;
+    }
+    qreal          getLight() const
+    {
+        return m_light;
+    }
+    bool           isSaturationInverted() const
+    {
+        return m_inverseSaturation;
+    }
+    bool           islightRelative() const
+    {
+        return m_relativeLight;
+    }
+
 Q_SIGNALS:
-    void sigFgColorChanged(const KisColor& color);
-    void sigBgColorChanged(const KisColor& color);
-    
+    void sigFgColorChanged(const KisColor &color);
+    void sigBgColorChanged(const KisColor &color);
+
 private:
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void resizeEvent(QResizeEvent* event);
-    virtual void paintEvent(QPaintEvent* event);
-    
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void resizeEvent(QResizeEvent *event);
+    virtual void paintEvent(QPaintEvent *event);
+
     void recalculateAreas(quint8 numLightPieces);
     void recalculateRings(quint8 numRings, quint8 numPieces);
-    void createRing(ColorRing& wheel, quint8 numPieces, qreal innerRadius, qreal outerRadius);
-    
-    void drawRing(QPainter& painter, ColorRing& wheel, const QRect& rect);
-    void drawOutline(QPainter& painter, const QRect& rect);
-    void drawLightStrip(QPainter& painter, const QRect& rect);
-    void setSelectedColor(const KisColor& color, bool selectAsFgColor, bool emitSignal=true);
-    
-    qint8 getHueIndex(Radian hue, Radian shift=0.0f) const;
-    qreal getHue(int hueIdx, Radian shift=0.0f) const;
-    qint8 getLightIndex(const QPointF& pt) const;
+    void createRing(ColorRing &wheel, quint8 numPieces, qreal innerRadius, qreal outerRadius);
+
+    void drawRing(QPainter &painter, ColorRing &wheel, const QRect &rect);
+    void drawOutline(QPainter &painter, const QRect &rect);
+    void drawLightStrip(QPainter &painter, const QRect &rect);
+    void setSelectedColor(const KisColor &color, bool selectAsFgColor, bool emitSignal = true);
+
+    qint8 getHueIndex(Radian hue, Radian shift = 0.0f) const;
+    qreal getHue(int hueIdx, Radian shift = 0.0f) const;
+    qint8 getLightIndex(const QPointF &pt) const;
     qint8 getLightIndex(qreal light) const;
     qreal getLight(qreal light, qreal hue, bool relative) const;
-    qreal getLight(const QPointF& pt) const;
-    qint8 getSaturationIndex(const QPointF& pt) const;
+    qreal getLight(const QPointF &pt) const;
+    qint8 getSaturationIndex(const QPointF &pt) const;
     qint8 getSaturationIndex(qreal saturation) const;
     qreal getSaturation(int saturationIdx) const;
-    
-    QPointF mapCoord(const QPointF& pt, const QRectF& rect) const;
-    
+
+    QPointF mapCoord(const QPointF &pt, const QRectF &rect) const;
+
 private:
     KisColor::Type     m_colorSpace;
     quint8             m_numPieces;

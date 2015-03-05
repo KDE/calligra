@@ -29,10 +29,11 @@
  * @short Implementation of the MathML mover, munder and moverunder elements
  *
  */
-class KOFORMULA_EXPORT UnderOverElement : public FixedElement {
+class KOFORMULA_EXPORT UnderOverElement : public FixedElement
+{
 public:
     /// The standard constructor
-    explicit UnderOverElement( BasicElement* parent = 0, ElementType elementType = UnderOver );
+    explicit UnderOverElement(BasicElement *parent = 0, ElementType elementType = UnderOver);
 
     /// The standard destructor
     ~UnderOverElement();
@@ -41,48 +42,48 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
+    const QList<BasicElement *> childElements() const;
 
-    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
+    virtual bool moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor);
 
-    virtual int endPosition() const; 
+    virtual int endPosition() const;
 
-    virtual bool setCursorTo ( FormulaCursor& cursor, QPointF point );
+    virtual bool setCursorTo(FormulaCursor &cursor, QPointF point);
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint(QPainter &painter, AttributeManager *am);
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout(const AttributeManager *am);
 
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const; 
+    QString attributesDefaultValue(const QString &attribute) const;
 
     /// @return The element's ElementType
     ElementType elementType() const;
 
 protected:
     /// Read all content from the node - reimplemented by child elements
-    bool readMathMLContent( const KoXmlElement& element );
+    bool readMathMLContent(const KoXmlElement &element);
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;   
- 
+    void writeMathMLContent(KoXmlWriter *writer, const QString &ns) const;
+
 private:
     /// The element used as basis for the under and the over element
-    RowElement* m_baseElement;
+    RowElement *m_baseElement;
 
     /// The element that is layouted under the base element
-    RowElement* m_underElement;
+    RowElement *m_underElement;
 
     /// The element that is layouted over the base element
-    RowElement* m_overElement;
+    RowElement *m_overElement;
 
     /// The type - one of Under, Over, UnderOver
     ElementType m_elementType;

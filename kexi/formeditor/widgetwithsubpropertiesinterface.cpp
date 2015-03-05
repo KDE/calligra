@@ -61,22 +61,21 @@ void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
                 metaObject = metaObject->superClass()) {
             QList<QMetaProperty> properties(
                 KexiUtils::propertiesForMetaObjectWithInherited(metaObject));
-            foreach(const QMetaProperty &property, properties) {
-                if (dynamic_cast<QObject*>(this)
-                    && -1 != dynamic_cast<QObject*>(this)->metaObject()->indexOfProperty(property.name())
-                    && !addedSubproperties.contains(property.name()))
-                {
+            foreach (const QMetaProperty &property, properties) {
+                if (dynamic_cast<QObject *>(this)
+                        && -1 != dynamic_cast<QObject *>(this)->metaObject()->indexOfProperty(property.name())
+                        && !addedSubproperties.contains(property.name())) {
                     d->subproperties.insert(property.name());
                     addedSubproperties.insert(property.name());
                     kDebug() << "added subwidget's property that is not present in the parent: "
-                        << property.name();
+                             << property.name();
                 }
             }
         }
     }
 }
 
-QWidget* WidgetWithSubpropertiesInterface::subwidget() const
+QWidget *WidgetWithSubpropertiesInterface::subwidget() const
 {
     return d->subwidget;
 }
@@ -86,14 +85,15 @@ QSet<QByteArray> WidgetWithSubpropertiesInterface::subproperties() const
     return d->subproperties;
 }
 
-QMetaProperty WidgetWithSubpropertiesInterface::findMetaSubproperty(const char * name) const
+QMetaProperty WidgetWithSubpropertiesInterface::findMetaSubproperty(const char *name) const
 {
-    if (!d->subwidget || d->subproperties.contains(name))
+    if (!d->subwidget || d->subproperties.contains(name)) {
         return QMetaProperty();
+    }
     return KexiUtils::findPropertyWithSuperclasses(d->subwidget, name);
 }
 
-QVariant WidgetWithSubpropertiesInterface::subproperty(const char * name, bool &ok) const
+QVariant WidgetWithSubpropertiesInterface::subproperty(const char *name, bool &ok) const
 {
     if (!d->subwidget || d->subproperties.contains(name)) {
         ok = false;
@@ -103,9 +103,10 @@ QVariant WidgetWithSubpropertiesInterface::subproperty(const char * name, bool &
     return d->subwidget->property(name);
 }
 
-bool WidgetWithSubpropertiesInterface::setSubproperty(const char * name, const QVariant & value)
+bool WidgetWithSubpropertiesInterface::setSubproperty(const char *name, const QVariant &value)
 {
-    if (!d->subwidget || d->subproperties.contains(name))
+    if (!d->subwidget || d->subproperties.contains(name)) {
         return false;
+    }
     return d->subwidget->setProperty(name, value);
 }

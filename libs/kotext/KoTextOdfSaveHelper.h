@@ -54,7 +54,7 @@ public:
     KoStyleManager *styleManager() const;
 private:
     struct Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOTEXTODFSAVEHELPER_H */

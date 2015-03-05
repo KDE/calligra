@@ -17,7 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef CALLIGRA_SHEETS_DATA_MANIPULATORS
 #define CALLIGRA_SHEETS_DATA_MANIPULATORS
 
@@ -27,7 +26,6 @@
 #include "Value.h"
 
 #include "calligra_sheets_export.h"
-
 
 namespace Calligra
 {
@@ -44,7 +42,7 @@ public:
     explicit AbstractDataManipulator(KUndo2Command *parent = 0);
     virtual ~AbstractDataManipulator();
 
-    virtual bool process(Element* element);
+    virtual bool process(Element *element);
 
 protected:
     /** Return new value. row/col are relative to sheet, not element.
@@ -54,7 +52,8 @@ protected:
                            bool *parse, Format::Type *fmtType) = 0;
 
     /** do we want to change this cell ? */
-    virtual bool wantChange(Element *element, int col, int row) {
+    virtual bool wantChange(Element *element, int col, int row)
+    {
         Q_UNUSED(element)
         Q_UNUSED(col)
         Q_UNUSED(row)
@@ -86,14 +85,16 @@ class AbstractDFManipulator : public AbstractDataManipulator
 public:
     explicit AbstractDFManipulator(KUndo2Command *parent = 0);
     virtual ~AbstractDFManipulator();
-    virtual bool process(Element* element);
+    virtual bool process(Element *element);
 
     /** returns whether this manipulator changes formats */
-    bool changeFormat() {
+    bool changeFormat()
+    {
         return m_changeformat;
     }
     /** set whether this manipulator changes formats */
-    void setChangeFormat(bool chf) {
+    void setChangeFormat(bool chf)
+    {
         m_changeformat = chf;
     }
 protected:
@@ -102,7 +103,6 @@ protected:
 
     bool m_changeformat : 1;
 };
-
 
 /**
  * \ingroup Commands
@@ -113,25 +113,29 @@ class DataManipulator : public AbstractDataManipulator
 public:
     explicit DataManipulator(KUndo2Command *parent = 0);
     virtual ~DataManipulator();
-    void setParsing(bool val) {
+    void setParsing(bool val)
+    {
         m_parsing = val;
     }
-    void setExpandMatrix(bool expand) {
+    void setExpandMatrix(bool expand)
+    {
         m_expandMatrix = expand;
     }
     /** set the values for the range. Can be either a single value, or
     a value array */
-    void setValue(Value val) {
+    void setValue(Value val)
+    {
         m_data = val;
     }
     /** If set, all cells shall be switched to this format. If parsing is
     true, the resulting value may end up being different. */
-    void setFormat(Format::Type fmtType) {
+    void setFormat(Format::Type fmtType)
+    {
         m_format = fmtType;
     }
 protected:
     virtual bool preProcessing();
-    virtual bool process(Element* element);
+    virtual bool process(Element *element);
     virtual Value newValue(Element *element, int col, int row, bool *, Format::Type *);
     virtual bool wantChange(Element *element, int col, int row);
 
@@ -140,7 +144,6 @@ protected:
     bool m_parsing : 1;
     bool m_expandMatrix : 1;
 };
-
 
 /**
  * \ingroup Commands
@@ -167,7 +170,6 @@ protected:
     int m_last;
 };
 
-
 /**
  * \ingroup Commands
  * \brief Fills values into a cell range.
@@ -180,7 +182,8 @@ public:
 
     enum Direction { Up = 0, Down, Left, Right };
 
-    void setDirection(Direction d) {
+    void setDirection(Direction d)
+    {
         m_dir = d;
     }
 protected:
@@ -189,7 +192,6 @@ protected:
     virtual Style newFormat(Element *element, int col, int row);
     Direction m_dir;
 };
-
 
 /**
  * \ingroup Commands
@@ -206,7 +208,8 @@ public:
         Lower,
         FirstUpper
     };
-    void changeMode(CaseMode mode) {
+    void changeMode(CaseMode mode)
+    {
         m_mode = mode;
     }
     void changeLowerCase();
@@ -221,7 +224,6 @@ protected:
     CaseMode m_mode;
 };
 
-
 /**
  * \ingroup Commands
  * \brief Inserts/Removes cells by shifting other cells.
@@ -232,13 +234,14 @@ public:
     enum Direction { ShiftRight, ShiftBottom };
     explicit ShiftManipulator(KUndo2Command *parent = 0);
     virtual ~ShiftManipulator();
-    void setDirection(Direction direction) {
+    void setDirection(Direction direction)
+    {
         m_direction = direction;
     }
     virtual void setReverse(bool reverse);
 
 protected:
-    bool process(Element*);
+    bool process(Element *);
     virtual bool preProcessing();
     virtual bool mainProcessing();
     virtual bool postProcessing();

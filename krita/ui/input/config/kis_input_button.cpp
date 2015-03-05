@@ -134,8 +134,7 @@ void KisInputButton::mouseReleaseEvent(QMouseEvent *)
 {
     if (isChecked()) {
         reset();
-    }
-    else {
+    } else {
         setChecked(true);
         setText(i18nc("Waiting for user input", "Input..."));
         d->resetTimer->start();
@@ -150,8 +149,7 @@ void KisInputButton::wheelEvent(QWheelEvent *event)
         case Qt::Horizontal:
             if (event->delta() < 0) {
                 d->wheel = KisShortcutConfiguration::WheelRight;
-            }
-            else {
+            } else {
                 d->wheel = KisShortcutConfiguration::WheelLeft;
             }
 
@@ -160,8 +158,7 @@ void KisInputButton::wheelEvent(QWheelEvent *event)
         case Qt::Vertical:
             if (event->delta() > 0) {
                 d->wheel = KisShortcutConfiguration::WheelUp;
-            }
-            else {
+            } else {
                 d->wheel = KisShortcutConfiguration::WheelDown;
             }
 
@@ -196,8 +193,7 @@ void KisInputButton::keyReleaseEvent(QKeyEvent *event)
 {
     if (isChecked()) {
         reset();
-    }
-    else if (event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+    } else if (event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
         setChecked(true);
         setText(i18nc("Waiting for user input", "Input..."));
         d->resetTimer->start();

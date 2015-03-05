@@ -34,13 +34,16 @@
 class ChangeScroll : public KUndo2Command
 {
 public:
-    ChangeScroll(WebShape* shape, const QPointF& oldScroll) : m_shape(shape), m_newScroll(shape->scroll()), m_oldScroll(oldScroll) {
+    ChangeScroll(WebShape *shape, const QPointF &oldScroll) : m_shape(shape), m_newScroll(shape->scroll()), m_oldScroll(oldScroll)
+    {
     }
-    virtual void undo() {
+    virtual void undo()
+    {
         m_shape->setScroll(m_oldScroll);
         m_shape->update();
     }
-    virtual void redo() {
+    virtual void redo()
+    {
         m_shape->setScroll(m_newScroll);
         m_shape->update();
     }
@@ -53,13 +56,16 @@ private:
 class ChangeZoom : public KUndo2Command
 {
 public:
-    ChangeZoom(WebShape* shape, qreal oldZoom) : m_shape(shape), m_newZoom(shape->zoom()), m_oldZoom(oldZoom) {
+    ChangeZoom(WebShape *shape, qreal oldZoom) : m_shape(shape), m_newZoom(shape->zoom()), m_oldZoom(oldZoom)
+    {
     }
-    virtual void undo() {
+    virtual void undo()
+    {
         m_shape->setZoom(m_oldZoom);
         m_shape->update();
     }
-    virtual void redo() {
+    virtual void redo()
+    {
         m_shape->setZoom(m_newZoom);
         m_shape->update();
     }
@@ -77,17 +83,18 @@ WebTool::~WebTool()
 {
 }
 
-void WebTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape*> &/*shapes*/)
+void WebTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape *> &/*shapes*/)
 {
     Q_ASSERT(m_dragMode == NO_DRAG);
     KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach(KoShape * shape, selection->selectedShapes()) {
-        m_currentShape = dynamic_cast<WebShape*>(shape);
-        if(m_currentShape)
+    foreach (KoShape *shape, selection->selectedShapes()) {
+        m_currentShape = dynamic_cast<WebShape *>(shape);
+        if (m_currentShape) {
             break;
+        }
     }
     emit(shapeChanged(m_currentShape));
-    if(m_currentShape == 0) {
+    if (m_currentShape == 0) {
         // none found
         emit done();
         return;
@@ -104,15 +111,15 @@ void WebTool::mousePressEvent(KoPointerEvent *event)
 {
     WebShape *hit = 0;
     QRectF roi(event->point, QSizeF(1, 1));
-    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(roi);
+    QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(roi);
     KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach(KoShape * shape, shapes) {
-        hit = dynamic_cast<WebShape*>(shape);
-        if(hit) {
-            if(hit == m_currentShape) {
+    foreach (KoShape *shape, shapes) {
+        hit = dynamic_cast<WebShape *>(shape);
+        if (hit) {
+            if (hit == m_currentShape) {
                 m_scrollPoint = event->point;
                 Q_ASSERT(m_dragMode == NO_DRAG);
-                if(event->modifiers() & Qt::ShiftModifier) {
+                if (event->modifiers() & Qt::ShiftModifier) {
                     m_oldZoom = m_currentShape->zoom();
                     m_dragMode = ZOOM_DRAG;
                 } else {
@@ -131,7 +138,7 @@ void WebTool::mousePressEvent(KoPointerEvent *event)
 
 void WebTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    switch(m_dragMode) {
+    switch (m_dragMode) {
     case NO_DRAG:
         break;
     case SCROLL_DRAG: {
@@ -151,7 +158,7 @@ void WebTool::mouseMoveEvent(KoPointerEvent *event)
 void WebTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);
-    switch(m_dragMode) {
+    switch (m_dragMode) {
     case NO_DRAG:
         break;
     case SCROLL_DRAG:
@@ -167,7 +174,7 @@ void WebTool::mouseReleaseEvent(KoPointerEvent *event)
 QList<QPointer<QWidget> > WebTool::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets;
-    WebToolWidget* widget = new WebToolWidget(this);
+    WebToolWidget *widget = new WebToolWidget(this);
     widget->open(m_currentShape);
     widgets.append(widget);
     return widgets;

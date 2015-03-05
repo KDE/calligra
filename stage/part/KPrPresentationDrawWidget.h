@@ -30,8 +30,7 @@
 
 class QAction;
 
-struct Path
-{
+struct Path {
     QVector<QPointF> points;
     QColor color;
     int size;
@@ -46,27 +45,27 @@ public :
     ~KPrPresentationDrawWidget();
 
     /** Draw on the Presentation */
-    void paintEvent( QPaintEvent * event );
+    void paintEvent(QPaintEvent *event);
 
     /** Get all the mouse event needed to paint */
-    void mouseMoveEvent( QMouseEvent * e );
-    void mousePressEvent( QMouseEvent * e );
-    void mouseReleaseEvent( QMouseEvent * e );
+    void mouseMoveEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
     /** Popup menu for colors and sizes */
-    void contextMenuEvent( QContextMenuEvent * event );
+    void contextMenuEvent(QContextMenuEvent *event);
 
 public Q_SLOTS:
-    void updateColor( QAction * );
-    void updateColor( const QString &color );
-    void updateSize( QAction * );
-    void updateSize( int size );
+    void updateColor(QAction *);
+    void updateColor(const QString &color);
+    void updateSize(QAction *);
+    void updateSize(int size);
 
 private :
-    QIcon buildIconColor( QColor );
-    QIcon buildIconSize( int );
-    QAction* buildActionColor( QColor, QString );
-    QAction* buildActionSize( int );
+    QIcon buildIconColor(QColor);
+    QIcon buildIconSize(int);
+    QAction *buildActionColor(QColor, QString);
+    QAction *buildActionSize(int);
 
     bool m_draw;
     int m_penSize;

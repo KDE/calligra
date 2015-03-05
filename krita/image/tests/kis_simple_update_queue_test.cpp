@@ -34,14 +34,13 @@
 #include "kis_simple_update_queue.h"
 #include "scheduler_utils.h"
 
-
 void KisSimpleUpdateQueueTest::testJobProcessing()
 {
     KisTestableUpdaterContext context(2);
 
-    QRect imageRect(0,0,200,200);
+    QRect imageRect(0, 0, 200, 200);
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), cs, "merge test");
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
@@ -50,12 +49,12 @@ void KisSimpleUpdateQueueTest::testJobProcessing()
     image->addNode(paintLayer);
     image->unlock();
 
-    QRect dirtyRect1(0,0,50,100);
-    QRect dirtyRect2(0,0,100,100);
-    QRect dirtyRect3(50,0,50,100);
-    QRect dirtyRect4(150,150,50,50);
+    QRect dirtyRect1(0, 0, 50, 100);
+    QRect dirtyRect2(0, 0, 100, 100);
+    QRect dirtyRect3(50, 0, 50, 100);
+    QRect dirtyRect4(150, 150, 50, 50);
 
-    QVector<KisUpdateJobItem*> jobs;
+    QVector<KisUpdateJobItem *> jobs;
     KisWalkersList walkersList;
 
     /**
@@ -95,9 +94,9 @@ void KisSimpleUpdateQueueTest::testSplitFullRefresh()
 
 void KisSimpleUpdateQueueTest::testSplit(bool useFullRefresh)
 {
-    QRect imageRect(0,0,1024,1024);
+    QRect imageRect(0, 0, 1024, 1024);
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), cs, "merge test");
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
@@ -106,42 +105,41 @@ void KisSimpleUpdateQueueTest::testSplit(bool useFullRefresh)
     image->addNode(paintLayer);
     image->unlock();
 
-    QRect dirtyRect1(0,0,1000,1000);
+    QRect dirtyRect1(0, 0, 1000, 1000);
 
     KisTestableSimpleUpdateQueue queue;
-    KisWalkersList& walkersList = queue.getWalkersList();
+    KisWalkersList &walkersList = queue.getWalkersList();
 
-    if(!useFullRefresh) {
+    if (!useFullRefresh) {
         queue.addUpdateJob(paintLayer, dirtyRect1, imageRect);
-    }
-    else {
+    } else {
         queue.addFullRefreshJob(paintLayer, dirtyRect1, imageRect);
     }
 
     QCOMPARE(walkersList.size(), 4);
 
-    QVERIFY(checkWalker(walkersList[0], QRect(0,0,512,512)));
-    QVERIFY(checkWalker(walkersList[1], QRect(512,0,488,512)));
-    QVERIFY(checkWalker(walkersList[2], QRect(0,512,512,488)));
-    QVERIFY(checkWalker(walkersList[3], QRect(512,512,488,488)));
+    QVERIFY(checkWalker(walkersList[0], QRect(0, 0, 512, 512)));
+    QVERIFY(checkWalker(walkersList[1], QRect(512, 0, 488, 512)));
+    QVERIFY(checkWalker(walkersList[2], QRect(0, 512, 512, 488)));
+    QVERIFY(checkWalker(walkersList[3], QRect(512, 512, 488, 488)));
 
     queue.optimize();
 
     //must change nothing
 
     QCOMPARE(walkersList.size(), 4);
-    QVERIFY(checkWalker(walkersList[0], QRect(0,0,512,512)));
-    QVERIFY(checkWalker(walkersList[1], QRect(512,0,488,512)));
-    QVERIFY(checkWalker(walkersList[2], QRect(0,512,512,488)));
-    QVERIFY(checkWalker(walkersList[3], QRect(512,512,488,488)));
+    QVERIFY(checkWalker(walkersList[0], QRect(0, 0, 512, 512)));
+    QVERIFY(checkWalker(walkersList[1], QRect(512, 0, 488, 512)));
+    QVERIFY(checkWalker(walkersList[2], QRect(0, 512, 512, 488)));
+    QVERIFY(checkWalker(walkersList[3], QRect(512, 512, 488, 488)));
 }
 
 void KisSimpleUpdateQueueTest::testChecksum()
 {
-    QRect imageRect(0,0,512,512);
-    QRect dirtyRect(100,100,100,100);
+    QRect imageRect(0, 0, 512, 512);
+    QRect dirtyRect(100, 100, 100, 100);
 
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), colorSpace, "test");
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
@@ -156,9 +154,8 @@ void KisSimpleUpdateQueueTest::testChecksum()
     Q_ASSERT(filter);
     KisFilterConfiguration *configuration = filter->defaultConfiguration(0);
 
-
     KisTestableSimpleUpdateQueue queue;
-    KisWalkersList& walkersList = queue.getWalkersList();
+    KisWalkersList &walkersList = queue.getWalkersList();
 
     queue.addUpdateJob(adjustmentLayer, dirtyRect, imageRect);
     QCOMPARE(walkersList[0]->checksumValid(), true);
@@ -166,7 +163,7 @@ void KisSimpleUpdateQueueTest::testChecksum()
     adjustmentLayer->setFilter(configuration);
     QCOMPARE(walkersList[0]->checksumValid(), false);
 
-    QVector<KisUpdateJobItem*> jobs;
+    QVector<KisUpdateJobItem *> jobs;
     KisTestableUpdaterContext context(2);
 
     queue.processQueue(context);
@@ -178,9 +175,9 @@ void KisSimpleUpdateQueueTest::testChecksum()
 
 void KisSimpleUpdateQueueTest::testMixingTypes()
 {
-    QRect imageRect(0,0,1024,1024);
+    QRect imageRect(0, 0, 1024, 1024);
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), cs, "merge test");
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
@@ -189,12 +186,12 @@ void KisSimpleUpdateQueueTest::testMixingTypes()
     image->addNode(paintLayer);
     image->unlock();
 
-    QRect dirtyRect1(0,0,200,200);
-    QRect dirtyRect2(0,0,200,200);
-    QRect dirtyRect3(20,20,200,200);
+    QRect dirtyRect1(0, 0, 200, 200);
+    QRect dirtyRect2(0, 0, 200, 200);
+    QRect dirtyRect3(20, 20, 200, 200);
 
     KisTestableSimpleUpdateQueue queue;
-    KisWalkersList& walkersList = queue.getWalkersList();
+    KisWalkersList &walkersList = queue.getWalkersList();
 
     queue.addUpdateJob(paintLayer, dirtyRect1, imageRect);
     queue.addFullRefreshJob(paintLayer, dirtyRect2, imageRect);
@@ -203,9 +200,9 @@ void KisSimpleUpdateQueueTest::testMixingTypes()
 
     QCOMPARE(walkersList.size(), 3);
 
-    QVERIFY(checkWalker(walkersList[0], QRect(0,0,200,200)));
-    QVERIFY(checkWalker(walkersList[1], QRect(0,0,220,220)));
-    QVERIFY(checkWalker(walkersList[2], QRect(0,0,200,200)));
+    QVERIFY(checkWalker(walkersList[0], QRect(0, 0, 200, 200)));
+    QVERIFY(checkWalker(walkersList[1], QRect(0, 0, 220, 220)));
+    QVERIFY(checkWalker(walkersList[2], QRect(0, 0, 200, 200)));
 
     QCOMPARE(walkersList[0]->type(), KisBaseRectsWalker::UPDATE);
     QCOMPARE(walkersList[1]->type(), KisBaseRectsWalker::FULL_REFRESH);
@@ -220,7 +217,6 @@ void KisSimpleUpdateQueueTest::testSpontaneousJobsCompression()
     QVERIFY(queue.isEmpty());
     QCOMPARE(queue.sizeMetric(), 0);
     QVERIFY(jobsList.isEmpty());
-
 
     KisSpontaneousJob *job1 = new KisNoopSpontaneousJob(false);
     KisSpontaneousJob *job2 = new KisNoopSpontaneousJob(false);

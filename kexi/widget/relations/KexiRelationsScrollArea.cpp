@@ -50,9 +50,10 @@ class KexiRelationsScrollArea::Private
 {
 public:
     Private()
-            : readOnly(false)
-            , selectedConnection(0)
-            , focusedTableContainer(0) {
+        : readOnly(false)
+        , selectedConnection(0)
+        , focusedTableContainer(0)
+    {
         autoScrollTimer.setSingleShot(true);
     }
 
@@ -60,7 +61,7 @@ public:
     TablesHash tables;
     bool readOnly;
     ConnectionSet connectionViews;
-    KexiRelationsConnection* selectedConnection;
+    KexiRelationsConnection *selectedConnection;
     QPointer<KexiRelationsTableContainer> focusedTableContainer;
     QPointer<KexiRelationsTableContainer> movedTableContainer;
     QTimer autoScrollTimer;
@@ -72,7 +73,7 @@ public:
 class KexiRelationsScrollAreaWidget : public QWidget
 {
 public:
-    explicit KexiRelationsScrollAreaWidget(KexiRelationsScrollArea* parent);
+    explicit KexiRelationsScrollAreaWidget(KexiRelationsScrollArea *parent);
     ~KexiRelationsScrollAreaWidget();
 
 protected:
@@ -80,14 +81,15 @@ protected:
     virtual void mousePressEvent(QMouseEvent *ev);
 
 private:
-    KexiRelationsScrollArea *scrollArea() {
-        return static_cast<KexiRelationsScrollArea*>(parentWidget()->parentWidget());
+    KexiRelationsScrollArea *scrollArea()
+    {
+        return static_cast<KexiRelationsScrollArea *>(parentWidget()->parentWidget());
     }
 };
 
 KexiRelationsScrollAreaWidget::KexiRelationsScrollAreaWidget(
-    KexiRelationsScrollArea* parent)
-        : QWidget(parent)
+    KexiRelationsScrollArea *parent)
+    : QWidget(parent)
 {
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Mid);
@@ -112,8 +114,8 @@ void KexiRelationsScrollAreaWidget::mousePressEvent(QMouseEvent *ev)
 //-------------
 
 KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
-        : QScrollArea(parent)
-        , d(new Private)
+    : QScrollArea(parent)
+    , d(new Private)
 {
     d->areaWidget = new KexiRelationsScrollAreaWidget(this);
     setWidget(d->areaWidget);
@@ -156,15 +158,16 @@ KexiRelationsScrollArea::tableContainer(KexiDB::TableSchema *t) const
     return t ? d->tables.value(t->name()) : 0;
 }
 
-KexiRelationsTableContainer*
+KexiRelationsTableContainer *
 KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &rect)
 {
-    if (!t)
+    if (!t) {
         return 0;
+    }
 
     kDebug() << t->name();
 
-    KexiRelationsTableContainer* c = tableContainer(t);
+    KexiRelationsTableContainer *c = tableContainer(t);
     if (c) {
         kWarning() << "table already added";
         return c;
@@ -187,8 +190,7 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
         //we're doing this instead of setGeometry(rect)
         //because the geomenty might be saved on other system with bigger fonts :)
         c->resize(c->sizeHint());
-    }
-    else {
+    } else {
         c->move(100, 100);
     }
     updateGeometry();
@@ -200,10 +202,11 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
 
     if (d->tables.count() > 0) {
         int place = -10;
-        foreach(KexiRelationsTableContainer* container, d->tables) {
+        foreach (KexiRelationsTableContainer *container, d->tables) {
             int right = container->x() + container->width();
-            if (right > place)
+            if (right > place) {
                 place = right;
+            }
         }
 
         x = place + 30;
@@ -222,35 +225,39 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
             SLOT(containerMoved(KexiRelationsTableContainer*)));
 
     c->show();
-    if (hasFocus()) //ok?
+    if (hasFocus()) { //ok?
         c->setFocus();
+    }
 
     return c;
 }
 
 void
-KexiRelationsScrollArea::addConnection(const SourceConnection& _conn)
+KexiRelationsScrollArea::addConnection(const SourceConnection &_conn)
 {
     SourceConnection conn = _conn;
     kDebug();
 
     KexiRelationsTableContainer *master = d->tables[conn.masterTable];
     KexiRelationsTableContainer *details = d->tables[conn.detailsTable];
-    if (!master || !details)
+    if (!master || !details) {
         return;
+    }
 
     /*! @todo what about query? */
     KexiDB::TableSchema *masterTable = master->schema()->table();
     /*! @todo what about query? */
     KexiDB::TableSchema *detailsTable = details->schema()->table();
-    if (!masterTable || !detailsTable)
+    if (!masterTable || !detailsTable) {
         return;
+    }
 
     // ok, but we need to know where is the 'master' and where is the 'details' side:
     KexiDB::Field *masterFld = masterTable->field(conn.masterField);
     KexiDB::Field *detailsFld = detailsTable->field(conn.detailsField);
-    if (!masterFld || !detailsFld)
+    if (!masterFld || !detailsFld) {
         return;
+    }
 
     if (!masterFld->isUniqueKey()) {
         if (detailsFld->isUniqueKey()) {
@@ -303,7 +310,7 @@ KexiRelationsScrollArea::containerMoved(KexiRelationsTableContainer *c)
 {
     d->movedTableContainer = c;
     QRect r;
-    foreach(KexiRelationsConnection* cview, d->connectionViews) {
+    foreach (KexiRelationsConnection *cview, d->connectionViews) {
 //! @todo optimize
         if (cview->masterTable() == c || cview->detailsTable() == c
                 || cview->connectionRect().intersects(r)) {
@@ -329,8 +336,9 @@ KexiRelationsScrollArea::containerMoved(KexiRelationsTableContainer *c)
                 d->autoScrollTimer.stop();
             }
         }
-    } else
+    } else {
         d->autoScrollTimer.stop();
+    }
 
     d->areaWidget->update();
     emit tablePositionChanged(c);
@@ -346,8 +354,9 @@ KexiRelationsScrollArea::slotAutoScrollTimeout()
                     100 - (d->movedTableContainer->geometry().left()
                            - (horizontalScrollBar()->value() + width() - verticalScrollBar()->width()))
                 );
-        if (delay < 0)
+        if (delay < 0) {
             delay = 0;
+        }
         delay = delay * delay / 100;
         kDebug() << delay;
         int add = 16;
@@ -392,9 +401,10 @@ KexiRelationsScrollArea::slotListUpdate(QObject *)
 void
 KexiRelationsScrollArea::handleMousePressEvent(QMouseEvent *ev)
 {
-    foreach(KexiRelationsConnection* cview, d->connectionViews) {
-        if (!cview->matchesPoint(ev->pos(), 3))
+    foreach (KexiRelationsConnection *cview, d->connectionViews) {
+        if (!cview->matchesPoint(ev->pos(), 3)) {
             continue;
+        }
         clearSelection();
         setFocus();
         cview->setSelected(true);
@@ -430,7 +440,7 @@ void KexiRelationsScrollArea::handlePaintEvent(QPaintEvent *event)
         horizontalScrollBar() ? horizontalScrollBar()->value() : 0,
         verticalScrollBar() ? verticalScrollBar()->value() : 0,
         width(), height());
-    foreach(KexiRelationsConnection *cview, d->connectionViews) {
+    foreach (KexiRelationsConnection *cview, d->connectionViews) {
         cview->drawConnection(&p);
     }
 }
@@ -449,7 +459,7 @@ void KexiRelationsScrollArea::clearSelection()
 }
 
 void
-KexiRelationsScrollArea::contextMenuEvent(QContextMenuEvent* event)
+KexiRelationsScrollArea::contextMenuEvent(QContextMenuEvent *event)
 {
     Q_UNUSED(event);
     if (d->selectedConnection) {
@@ -478,7 +488,7 @@ void
 KexiRelationsScrollArea::removeSelectedObject()
 {
     if (d->selectedConnection) {
-        KexiRelationsConnection* tmp = d->selectedConnection;
+        KexiRelationsConnection *tmp = d->selectedConnection;
         d->selectedConnection = 0;
         removeConnection(tmp);
 
@@ -498,8 +508,7 @@ KexiRelationsScrollArea::removeSelectedObject()
 
         d->relation->updateRelationList(this, nl);
 #endif
-    }
-    else if (d->focusedTableContainer) {
+    } else if (d->focusedTableContainer) {
         KexiRelationsTableContainer *tmp = d->focusedTableContainer;
         d->focusedTableContainer = 0;
         hideTable(tmp);
@@ -507,23 +516,24 @@ KexiRelationsScrollArea::removeSelectedObject()
 }
 
 void
-KexiRelationsScrollArea::hideTable(KexiRelationsTableContainer* container)
+KexiRelationsScrollArea::hideTable(KexiRelationsTableContainer *container)
 {
     /*! @todo what about query? */
     TablesHashMutableIterator it(d->tables);
-    if (!it.findNext(container))
+    if (!it.findNext(container)) {
         return;
+    }
     hideTableInternal(it);
 }
 
 void
-KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator& it)
+KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator &it)
 {
-    KexiRelationsTableContainer* container = it.value();
+    KexiRelationsTableContainer *container = it.value();
     KexiDB::TableSchema *ts = container->schema()->table();
     //for all connections: find and remove all connected with this table
-    for (ConnectionSetMutableIterator itConn(d->connectionViews);itConn.hasNext();) {
-        KexiRelationsConnection* conn = itConn.next();
+    for (ConnectionSetMutableIterator itConn(d->connectionViews); itConn.hasNext();) {
+        KexiRelationsConnection *conn = itConn.next();
         if (conn->masterTable() == container
                 || conn->detailsTable() == container) {
             //remove this
@@ -536,14 +546,15 @@ KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator& it)
 }
 
 void
-KexiRelationsScrollArea::hideAllTablesExcept(KexiDB::TableSchema::List* tables)
+KexiRelationsScrollArea::hideAllTablesExcept(KexiDB::TableSchema::List *tables)
 {
 //! @todo what about queries?
     for (TablesHashMutableIterator it(d->tables); it.hasNext();) {
         it.next();
         KexiDB::TableSchema *table = it.value()->schema()->table();
-        if (!table || tables->contains(table))
+        if (!table || tables->contains(table)) {
             continue;
+        }
         hideTableInternal(it);
     }
 }
@@ -552,13 +563,14 @@ void
 KexiRelationsScrollArea::removeConnection(KexiRelationsConnection *conn)
 {
     ConnectionSetMutableIterator it(d->connectionViews);
-    if (!it.findNext(conn))
+    if (!it.findNext(conn)) {
         return;
+    }
     removeConnectionInternal(it);
 }
 
 void
-KexiRelationsScrollArea::removeConnectionInternal(ConnectionSetMutableIterator& it)
+KexiRelationsScrollArea::removeConnectionInternal(ConnectionSetMutableIterator &it)
 {
     KexiRelationsConnection *conn = it.value();
     emit aboutConnectionRemove(conn);
@@ -570,11 +582,12 @@ KexiRelationsScrollArea::removeConnectionInternal(ConnectionSetMutableIterator& 
 
 void KexiRelationsScrollArea::slotTableViewGotFocus()
 {
-    if (d->focusedTableContainer == sender())
+    if (d->focusedTableContainer == sender()) {
         return;
+    }
     //kDebug() << "GOT FOCUS!";
     clearSelection();
-    d->focusedTableContainer = (KexiRelationsTableContainer*)sender();
+    d->focusedTableContainer = (KexiRelationsTableContainer *)sender();
     emit tableViewGotFocus();
 }
 
@@ -599,22 +612,22 @@ void KexiRelationsScrollArea::removeAllConnections()
     d->areaWidget->update();
 }
 
-TablesHash* KexiRelationsScrollArea::tables() const
+TablesHash *KexiRelationsScrollArea::tables() const
 {
     return &d->tables;
 }
 
-KexiRelationsConnection* KexiRelationsScrollArea::selectedConnection() const
+KexiRelationsConnection *KexiRelationsScrollArea::selectedConnection() const
 {
     return d->selectedConnection;
 }
 
-KexiRelationsTableContainer* KexiRelationsScrollArea::focusedTableContainer() const
+KexiRelationsTableContainer *KexiRelationsScrollArea::focusedTableContainer() const
 {
     return d->focusedTableContainer;
 }
 
-const ConnectionSet* KexiRelationsScrollArea::connections() const
+const ConnectionSet *KexiRelationsScrollArea::connections() const
 {
     return &d->connectionViews;
 }

@@ -20,7 +20,6 @@
 #include "kis_lzf_compression.h"
 #include "kis_debug.h"
 
-
 #define HASH_LOG  12
 #define HASH_SIZE (1<< HASH_LOG)
 #define HASH_MASK  (HASH_SIZE-1)
@@ -32,28 +31,28 @@
 #define MAX_LEN       264  /* 256 + 8 */
 #define MAX_DISTANCE 8192
 
-
 // Lossless compression using LZF algorithm, this is faster on modern CPU than
 // the original implementation in http://liblzf.plan9.de/
-int lzff_compress(const void* input, int length, void* output, int /*maxout*/)
+int lzff_compress(const void *input, int length, void *output, int /*maxout*/)
 {
-    const quint8* ip = (const quint8*) input;
-    const quint8* ip_limit = ip + length - MAX_COPY - 4;
-    quint8* op = (quint8*) output;
+    const quint8 *ip = (const quint8 *) input;
+    const quint8 *ip_limit = ip + length - MAX_COPY - 4;
+    quint8 *op = (quint8 *) output;
 
-    const quint8* htab[HASH_SIZE];
-    const quint8** hslot;
+    const quint8 *htab[HASH_SIZE];
+    const quint8 **hslot;
     quint32 hval;
 
-    quint8* ref;
+    quint8 *ref;
     qint32 copy;
     qint32 len;
     qint32 distance;
-    quint8* anchor;
+    quint8 *anchor;
 
     /* initializes hash table */
-    for (hslot = htab; hslot < htab + HASH_SIZE; hslot++)
+    for (hslot = htab; hslot < htab + HASH_SIZE; hslot++) {
         *hslot = ip;
+    }
 
     /* we start with literal copy */
     copy = 0;
@@ -64,32 +63,36 @@ int lzff_compress(const void* input, int length, void* output, int /*maxout*/)
         /* find potential match */
         UPDATE_HASH(hval, ip);
         hslot = htab + (hval & HASH_MASK);
-        ref = (quint8*) * hslot;
+        ref = (quint8 *) * hslot;
 
         /* update hash table */
         *hslot = ip;
 
         /* find itself? then it's no match */
-        if (ip == ref)
+        if (ip == ref) {
             goto literal;
+        }
 
         /* is this a match? check the first 2 bytes */
-        if (*((quint16*)ref) != *((quint16*)ip))
+        if (*((quint16 *)ref) != *((quint16 *)ip)) {
             goto literal;
+        }
 
         /* now check the 3rd byte */
-        if (ref[2] != ip[2])
+        if (ref[2] != ip[2]) {
             goto literal;
+        }
 
         /* calculate distance to the match */
         distance = ip - ref;
 
         /* skip if too far away */
-        if (distance >= MAX_DISTANCE)
+        if (distance >= MAX_DISTANCE) {
             goto literal;
+        }
 
         /* here we have 3-byte matches */
-        anchor = (quint8*)ip;
+        anchor = (quint8 *)ip;
         len = 3;
         ref += 3;
         ip += 3;
@@ -98,14 +101,30 @@ int lzff_compress(const void* input, int length, void* output, int /*maxout*/)
         if (ip < ip_limit - MAX_LEN) {
             while (len < MAX_LEN - 8) {
                 /* unroll 8 times */
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
-                if (*ref++ != *ip++) break;
+                if (*ref++ != *ip++) {
+                    break;
+                }
+                if (*ref++ != *ip++) {
+                    break;
+                }
+                if (*ref++ != *ip++) {
+                    break;
+                }
+                if (*ref++ != *ip++) {
+                    break;
+                }
+                if (*ref++ != *ip++) {
+                    break;
+                }
+                if (*ref++ != *ip++) {
+                    break;
+                }
+                if (*ref++ != *ip++) {
+                    break;
+                }
+                if (*ref++ != *ip++) {
+                    break;
+                }
                 len += 8;
             }
             ip--;
@@ -123,7 +142,9 @@ int lzff_compress(const void* input, int length, void* output, int /*maxout*/)
             copy = 0;
         } else
             /* back, to overwrite the copy count */
+        {
             op--;
+        }
 
         /* length is biased, '1' means a match of 3 bytes */
         len -= 2;
@@ -132,9 +153,9 @@ int lzff_compress(const void* input, int length, void* output, int /*maxout*/)
         distance--;
 
         /* encode the match */
-        if (len < 7)
+        if (len < 7) {
             *op++ = (len << 5) + (distance >> 8);
-        else {
+        } else {
             *op++ = (7 << 5) + (distance >> 8);
             *op++ = len - 7;
         }
@@ -161,7 +182,7 @@ int lzff_compress(const void* input, int length, void* output, int /*maxout*/)
     }
 
     /* left-over as literal copy */
-    ip_limit = (const quint8*)input + length;
+    ip_limit = (const quint8 *)input + length;
     while (ip < ip_limit) {
         *op++ = *ip++;
         copy++;
@@ -172,21 +193,22 @@ int lzff_compress(const void* input, int length, void* output, int /*maxout*/)
     }
 
     /* if we have copied something, adjust the copy length */
-    if (copy)
+    if (copy) {
         *(op - copy - 1) = copy - 1;
-    else
+    } else {
         op--;
+    }
 
-    return op - (quint8*)output;
+    return op - (quint8 *)output;
 }
 
-int lzff_decompress(const void* input, int length, void* output, int maxout)
+int lzff_decompress(const void *input, int length, void *output, int maxout)
 {
-    const quint8* ip = (const quint8*) input;
-    const quint8* ip_limit  = ip + length - 1;
-    quint8* op = (quint8*) output;
-    quint8* op_limit = op + maxout;
-    quint8* ref;
+    const quint8 *ip = (const quint8 *) input;
+    const quint8 *ip_limit  = ip + length - 1;
+    quint8 *op = (quint8 *) output;
+    quint8 *op_limit = op + maxout;
+    quint8 *ref;
 
     while (ip < ip_limit) {
         quint32 ctrl = (*ip) + 1;
@@ -195,8 +217,9 @@ int lzff_decompress(const void* input, int length, void* output, int maxout)
 
         if (ctrl < 33) {
             /* literal copy */
-            if (op + ctrl > op_limit)
+            if (op + ctrl > op_limit) {
                 return 0;
+            }
 
             /* crazy unrolling */
             if (ctrl) {
@@ -211,8 +234,9 @@ int lzff_decompress(const void* input, int length, void* output, int maxout)
                         *op++ = *ip++;
                         ctrl--;
 
-                        for (; ctrl; ctrl--)
+                        for (; ctrl; ctrl--) {
                             *op++ = *ip++;
+                        }
                     }
                 }
             }
@@ -222,30 +246,32 @@ int lzff_decompress(const void* input, int length, void* output, int maxout)
             ref = op - ofs;
             ref--;
 
-            if (len == 7 - 1)
+            if (len == 7 - 1) {
                 len += *ip++;
+            }
 
             ref -= *ip++;
 
-            if (op + len + 3 > op_limit)
+            if (op + len + 3 > op_limit) {
                 return 0;
+            }
 
-            if (ref < (quint8 *)output)
+            if (ref < (quint8 *)output) {
                 return 0;
+            }
 
             *op++ = *ref++;
             *op++ = *ref++;
             *op++ = *ref++;
             if (len)
-                for (; len; --len)
+                for (; len; --len) {
                     *op++ = *ref++;
+                }
         }
     }
 
-    return op - (quint8*)output;
+    return op - (quint8 *)output;
 }
-
-
 
 KisLzfCompression::KisLzfCompression()
 {
@@ -260,12 +286,12 @@ KisLzfCompression::~KisLzfCompression()
 {
 }
 
-qint32 KisLzfCompression::compress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength)
+qint32 KisLzfCompression::compress(const quint8 *input, qint32 inputLength, quint8 *output, qint32 outputLength)
 {
     return lzff_compress(input, inputLength, output, outputLength);
 }
 
-qint32 KisLzfCompression::decompress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength)
+qint32 KisLzfCompression::decompress(const quint8 *input, qint32 inputLength, quint8 *output, qint32 outputLength)
 {
     return lzff_decompress(input, inputLength, output, outputLength);
 }

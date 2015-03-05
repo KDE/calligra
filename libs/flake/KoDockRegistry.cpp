@@ -24,7 +24,7 @@
 #include <kglobal.h>
 
 KoDockRegistry::KoDockRegistry()
-  : d(0)
+    : d(0)
 {
 }
 
@@ -45,7 +45,7 @@ KoDockRegistry::~KoDockRegistry()
     qDeleteAll(values());
 }
 
-KoDockRegistry* KoDockRegistry::instance()
+KoDockRegistry *KoDockRegistry::instance()
 {
     K_GLOBAL_STATIC(KoDockRegistry, s_instance)
     if (!s_instance.exists()) {

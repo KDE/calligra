@@ -24,7 +24,7 @@
 
 using namespace KexiUtils;
 
-StyleProxy::StyleProxy(QStyle* parentStyle, QObject *parent)
+StyleProxy::StyleProxy(QStyle *parentStyle, QObject *parent)
     : QStyle(), m_method(new int(0))
 {
     setParent(parent);
@@ -37,25 +37,28 @@ StyleProxy::~StyleProxy()
     delete m_style;
 }
 
-void StyleProxy::setParentStyle(QStyle* style)
+void StyleProxy::setParentStyle(QStyle *style)
 {
     m_style = QStyleFactory::create(style->objectName());
-    if (!m_style)
+    if (!m_style) {
         m_style = style;
+    }
     setObjectName(m_style->objectName()); // useful for testing style name
 }
 
-QStyle* StyleProxy::parentStyle() const
+QStyle *StyleProxy::parentStyle() const
 {
-    if (m_style)
+    if (m_style) {
         return m_style;
+    }
     return QApplication::style();
 }
 
-QStyle* StyleProxy::parentStyle(int methodIndex) const
+QStyle *StyleProxy::parentStyle(int methodIndex) const
 {
-    if (!m_style || *m_method == methodIndex /* avoid infinite recursion */)
+    if (!m_style || *m_method == methodIndex /* avoid infinite recursion */) {
         return QApplication::style();
+    }
     *m_method = methodIndex;
     return m_style;
 }

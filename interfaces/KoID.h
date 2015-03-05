@@ -41,14 +41,14 @@ public:
      * Construct a KoID with the given id, and name, id is the untranslated
      * official name of the id, name should be translatable as it will be used
      * in the UI.
-     * 
+     *
      * @code
      * KoID("id", i18n("name"))
      * @endcode
      */
-    explicit KoID(const QString & id, const QString & name = QString())
-            : m_id(id),
-            m_name(name) {}
+    explicit KoID(const QString &id, const QString &name = QString())
+        : m_id(id),
+          m_name(name) {}
 
     /**
      * Use this constructore for static KoID. as KoID("id", ki18n("name"));
@@ -56,10 +56,9 @@ public:
      * important because static objects are constructed before translations
      * are initialized.
      */
-    explicit KoID(const QString & id, const KLocalizedString& name )
-            : m_id(id),
-            m_localizedString(name) {}
-
+    explicit KoID(const QString &id, const KLocalizedString &name)
+        : m_id(id),
+          m_localizedString(name) {}
 
     KoID(const KoID &rhs)
     {
@@ -67,12 +66,16 @@ public:
         m_name = rhs.name();
     }
 
-    QString id() const {
+    QString id() const
+    {
         return m_id;
     }
 
-    QString name() const {
-        if(m_name.isEmpty()) m_name = m_localizedString.toString();
+    QString name() const
+    {
+        if (m_name.isEmpty()) {
+            m_name = m_localizedString.toString();
+        }
         return m_name;
     }
 
@@ -101,12 +104,10 @@ inline bool operator!=(const KoID &v1, const KoID &v2)
     return v1.m_id != v2.m_id;
 }
 
-
 inline bool operator<(const KoID &v1, const KoID &v2)
 {
     return v1.m_id < v2.m_id;
 }
-
 
 inline bool operator>(const KoID &v1, const KoID &v2)
 {
@@ -119,6 +120,5 @@ inline QDebug operator<<(QDebug dbg, const KoID &id)
 
     return dbg.space();
 }
-
 
 #endif

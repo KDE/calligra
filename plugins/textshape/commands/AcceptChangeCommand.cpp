@@ -36,7 +36,7 @@
 #include <QTextDocument>
 #include <QTextFragment>
 
-AcceptChangeCommand::AcceptChangeCommand (int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command* parent) : KoTextCommandBase(parent),
+AcceptChangeCommand::AcceptChangeCommand(int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command *parent) : KoTextCommandBase(parent),
     m_first(true),
     m_changeId(changeId),
     m_changeRanges(changeRanges),
@@ -66,8 +66,7 @@ void AcceptChangeCommand::redo()
                 if (changeId == m_changeId) {
                     if (int parentChangeId = m_changeTracker->parent(m_changeId)) {
                         format.setProperty(KoCharacterStyle::ChangeTrackerId, parentChangeId);
-                    }
-                    else {
+                    } else {
                         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
                     }
                     cursor.setCharFormat(format);
@@ -87,8 +86,7 @@ void AcceptChangeCommand::redo()
             }
         }
         m_changeTracker->acceptRejectChange(m_changeId, true);
-    }
-    else {
+    } else {
         m_changeTracker->acceptRejectChange(m_changeId, true);
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);

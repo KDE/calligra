@@ -216,9 +216,9 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(QTextBlockUserData*)
+Q_DECLARE_METATYPE(QTextBlockUserData *)
 
 #endif

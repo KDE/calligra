@@ -40,8 +40,7 @@
 #include <kis_pressure_flow_opacity_option_widget.h>
 #include <kis_pressure_spacing_option_widget.h>
 
-
-KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
+KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget *parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
@@ -77,10 +76,10 @@ KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration* KisBrushOpSettingsWidget::configuration() const
+KisPropertiesConfiguration *KisBrushOpSettingsWidget::configuration() const
 {
     KisBrushBasedPaintOpSettings *config = new KisBrushBasedPaintOpSettings();
-    config->setOptionsWidget(const_cast<KisBrushOpSettingsWidget*>(this));
+    config->setOptionsWidget(const_cast<KisBrushOpSettingsWidget *>(this));
     config->setProperty("paintop", "paintbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

@@ -23,10 +23,9 @@
 
 #include "CalculationSettings.h"
 
-
 void TestValue::testEmpty()
 {
-    Value* v1;
+    Value *v1;
 
     // empty value
     v1 = new Value();
@@ -36,7 +35,7 @@ void TestValue::testEmpty()
 
 void TestValue::testBoolean()
 {
-    Value* v1;
+    Value *v1;
 
     // boolean value (true)
     v1 = new Value(true);
@@ -61,7 +60,7 @@ void TestValue::testBoolean()
 
 void TestValue::testInteger()
 {
-    Value* v1;
+    Value *v1;
 
     // integer value
     v1 = new Value(1977);
@@ -80,7 +79,7 @@ void TestValue::testInteger()
 
 void TestValue::testFloat()
 {
-    Value* v1;
+    Value *v1;
 
     // floating-point value
     v1 = new Value(M_PI);
@@ -99,8 +98,8 @@ void TestValue::testFloat()
 
 void TestValue::testString()
 {
-    Value* v1;
-    Value* v2;
+    Value *v1;
+    Value *v2;
 
     // string value
     v1 = new Value(QString("Ailinon"));
@@ -129,7 +128,7 @@ void TestValue::testString()
 
 void TestValue::testDate()
 {
-    Value* v1;
+    Value *v1;
 
     // check all (valid) dates from 1900 to 2050
     // note: bail on first error immediately
@@ -141,7 +140,9 @@ void TestValue::testDate()
         for (unsigned m = 1; !date_error && m <= 12; ++m)
             for (unsigned d = 1; !date_error && d <= 31; ++d) {
                 QDate dv1 = QDate(y, m, d);
-                if (!dv1.isValid()) continue;
+                if (!dv1.isValid()) {
+                    continue;
+                }
                 long double serialNo = -dv1.daysTo(refDate) + 1.0;
                 *v1 = Value(Value(dv1, &calculationSettings));
                 QCOMPARE(numToDouble(v1->asFloat()), serialNo);
@@ -153,7 +154,7 @@ void TestValue::testDate()
 void TestValue::testTime()
 {
     CalculationSettings calculationSettings;
-    Value* v1;
+    Value *v1;
 
     // time value
     v1 = new Value();
@@ -190,8 +191,8 @@ void TestValue::testTime()
 
 void TestValue::testError()
 {
-    Value* v1;
-    Value* v2;
+    Value *v1;
+    Value *v2;
 
     // TODO error values
 
@@ -212,8 +213,8 @@ void TestValue::testError()
 
 void TestValue::testArray()
 {
-    Value* v1;
-    Value* v2;
+    Value *v1;
+    Value *v2;
 
     // array
     v1 = new Value(Value::Array);
@@ -254,8 +255,12 @@ void TestValue::testArray()
         for (unsigned r = 0; !array_error && r < 1000; ++r) {
             int index = 1000 * r + c;
             v2 = new Value(v1->element(c, r));
-            if (v2->type() != Value::Integer) ++array_error;
-            if (v2->asInteger() != index) ++array_error;
+            if (v2->type() != Value::Integer) {
+                ++array_error;
+            }
+            if (v2->asInteger() != index) {
+                ++array_error;
+            }
             delete v2;
         }
     QCOMPARE(array_error, (int)0);
@@ -291,8 +296,8 @@ void TestValue::testArray()
 
 void TestValue::testCopy()
 {
-    Value* v1;
-    Value* v2;
+    Value *v1;
+    Value *v2;
 
     // copy value
     v1 = new Value();
@@ -308,8 +313,8 @@ void TestValue::testCopy()
 
 void TestValue::testAssignment()
 {
-    Value* v1;
-    Value* v2;
+    Value *v1;
+    Value *v2;
 
     // value assignment
     v1 = new Value(14.3l);

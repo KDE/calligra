@@ -77,10 +77,10 @@ static KDateTime VEventDateTimeToKDateTime(const QString &s, KDateTime::Spec &tz
     ret = ret.toLocalZone();
     tz = KSystemTimeZones::local();
     kDebug(30015) << "date string:" << s << "\n"
-        << " is valid:" << ret.isValid() << "\n"
-        << " parsed:" << ret << "\n"
-        << " time.tz.offset:" << ret.timeZone().currentOffset()
-        << " tz.offset:" << tz.timeZone().currentOffset();
+                  << " is valid:" << ret.isValid() << "\n"
+                  << " parsed:" << ret << "\n"
+                  << " time.tz.offset:" << ret.timeZone().currentOffset()
+                  << " tz.offset:" << tz.timeZone().currentOffset();
     return ret;
 }
 
@@ -97,13 +97,13 @@ static KTimeZone toKTimeZone(Soprano::Node n)
     }
     KTimeZone kt = KSystemTimeZones::zone(dt);
     kDebug(30015) << "input:" << n.dataType().toString()
-        << " output tz.valid:" << kt.isValid()
-        << " timezone:" << dt;
+                  << " output tz.valid:" << kt.isValid()
+                  << " timezone:" << dt;
     if (!kt.isValid()) {
         // UTC "Zulu" Time
         if (dt == "2001/XMLSchema#dateTime" && n.toString().endsWith('Z')) {
             kDebug(30015) << "input:" << n.dataType().toString()
-            << " is UTC...";
+                          << " is UTC...";
             kt = KSystemTimeZones::zone("UTC");
         }
     }
@@ -128,13 +128,13 @@ KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *rdf
     m_startTimespec = toKTimeZone(it.binding("dtstart"));
     m_endTimespec = toKTimeZone(it.binding("dtend"));
     m_dtstart = VEventDateTimeToKDateTime(it.binding("dtstart").toString(),
-                   m_startTimespec);
+                                          m_startTimespec);
     m_dtend = VEventDateTimeToKDateTime(it.binding("dtend").toString(),
-                                           m_endTimespec);
+                                        m_endTimespec);
     kDebug(30015) << "KoRdfCalendarEvent() start:" << m_dtstart
-        << " end:" << m_dtend;
+                  << " end:" << m_dtend;
     kDebug(30015) << "KoRdfCalendarEvent() long:" << KoTextRdfCore::optionalBindingAsString(it, "long")
-        << " lat:" << KoTextRdfCore::optionalBindingAsString(it, "lat");
+                  << " lat:" << KoTextRdfCore::optionalBindingAsString(it, "lat");
     kDebug(30015) << "KoRdfCalendarEvent() context-direct:" << it.binding("graph").toString();
     kDebug(30015) << "KoRdfCalendarEvent() context():" << context().toString();
     kDebug(30015) << "m_startTimespec.offset:" << m_startTimespec.timeZone().currentOffset();
@@ -148,7 +148,7 @@ KoRdfCalendarEvent::~KoRdfCalendarEvent()
 {
 }
 
-QWidget* KoRdfCalendarEvent::createEditor(QWidget *parent)
+QWidget *KoRdfCalendarEvent::createEditor(QWidget *parent)
 {
     QWidget *ret = new QWidget(parent);
 
@@ -225,11 +225,11 @@ void KoRdfCalendarEvent::updateFromEditorData()
     updateTriple(m_dtstart,   dtstart,  predBase + "dtstart");
     updateTriple(m_dtend,     dtend,    predBase + "dtend");
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
+        const_cast<KoDocumentRdf *>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 }
 
-KoRdfSemanticTreeWidgetItem *KoRdfCalendarEvent::createQTreeWidgetItem(QTreeWidgetItem* parent)
+KoRdfSemanticTreeWidgetItem *KoRdfCalendarEvent::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
     KoRdfCalendarEventTreeWidgetItem *item  =
         new KoRdfCalendarEventTreeWidgetItem(parent, hKoRdfSemanticItem(this));
@@ -282,8 +282,9 @@ void KoRdfCalendarEvent::exportToMime(QMimeData *md) const
     QString data;
     QTextStream oss(&data);
     oss << name() << ", ";
-    if (location().size())
+    if (location().size()) {
         oss << location() << ", ";
+    }
     oss << start().toString() << flush;
     md->setText(data);
 }
@@ -402,12 +403,12 @@ void KoRdfCalendarEvent::saveToKCal()
     item.setMimeType(event->mimeType());
 
     Akonadi::ItemCreateJob *itemCreateJob = new Akonadi::ItemCreateJob(item, collection);
-    connect(itemCreateJob, SIGNAL(result(KJob*) ), SLOT(onCreateJobFinished(KJob*)));
+    connect(itemCreateJob, SIGNAL(result(KJob*)), SLOT(onCreateJobFinished(KJob*)));
 #endif
 }
 
 #ifdef KDEPIMLIBS_FOUND
-void KoRdfCalendarEvent::onCreateJobFinished( KJob *job )
+void KoRdfCalendarEvent::onCreateJobFinished(KJob *job)
 {
     if (job->error()) {
         KMessageBox::error(0, i18n("Could not add entry\n%1", name()));

@@ -34,7 +34,6 @@
 #include "krita_utils.h"
 #include "testutil.h"
 
-
 void KisGradientPainterTest::testSimplifyPath()
 {
     QPolygonF selectionPolygon;
@@ -52,10 +51,10 @@ void KisGradientPainterTest::testSimplifyPath()
     simplifiedPath = KritaUtils::trySimplifyPath(path, 10.0);
 
     QPainterPath ref;
-    ref.moveTo(100,100);
-    ref.lineTo(200,100);
-    ref.lineTo(200,200);
-    ref.lineTo(100,200);
+    ref.moveTo(100, 100);
+    ref.lineTo(200, 100);
+    ref.lineTo(200, 200);
+    ref.lineTo(100, 200);
 
     QCOMPARE(simplifiedPath, ref);
 }
@@ -64,10 +63,10 @@ void testShapedGradientPainterImpl(const QPolygonF &selectionPolygon,
                                    const QString &testName,
                                    const QPolygonF &selectionErasePolygon = QPolygonF())
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    QRect imageRect(0,0,300,300);
+    QRect imageRect(0, 0, 300, 300);
 
     KisSelectionSP selection = new KisSelection();
     KisPixelSelectionSP pixelSelection = selection->pixelSelection();
@@ -261,7 +260,6 @@ void KisGradientPainterTest::testSplitDisjointPaths()
             index = (index + 1) % brushes.size();
         }
 
-
         TestUtil::checkQImageExternal(dstImage,
                                       "shaped_gradient",
                                       "test",
@@ -302,15 +300,18 @@ void KisGradientPainterTest::testCachedStrategy()
     accumulator_set<qreal, stats<tag::variance, tag::max, tag::min> > accum;
     const qreal maxRelError = 5.0 / 256;
 
-
     for (int y = rc.y(); y <= rc.bottom(); y++) {
         for (int x = rc.x(); x <= rc.right(); x++) {
-            if (!selectionPolygon.containsPoint(QPointF(x, y), Qt::OddEvenFill)) continue;
+            if (!selectionPolygon.containsPoint(QPointF(x, y), Qt::OddEvenFill)) {
+                continue;
+            }
 
             qreal ref = strategy->valueAt(x, y);
             qreal value = cached.valueAt(x, y);
 
-            if (ref == 0.0) continue;
+            if (ref == 0.0) {
+                continue;
+            }
 
             qreal relError = (ref - value)/* / ref*/;
             accum(relError);

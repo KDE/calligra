@@ -21,12 +21,12 @@
 #ifndef KCHART_FONT_EDITOR_DIALOG_H
 #define KCHART_FONT_EDITOR_DIALOG_H
 
-
 #include <kdialog.h>
 
 class KFontChooser;
 
-namespace KChart {
+namespace KChart
+{
 
 class FontEditorDialog : public KDialog
 {
@@ -37,6 +37,5 @@ public:
 };
 
 } // Namespace KChart
-
 
 #endif // KCHART_FONT_EDITOR_DIALOG_H

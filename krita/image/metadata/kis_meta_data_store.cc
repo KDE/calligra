@@ -30,7 +30,7 @@
 
 using namespace KisMetaData;
 
-uint qHash(const Entry& e)
+uint qHash(const Entry &e)
 {
     return qHash(e.qualifiedName());
 }
@@ -44,7 +44,7 @@ Store::Store() : d(new Private)
 
 }
 
-Store::Store(const Store& s) : d(new Private(*s.d))
+Store::Store(const Store &s) : d(new Private(*s.d))
 {
     // TODO: reaffect all schemas
 }
@@ -54,11 +54,11 @@ Store::~Store()
     delete d;
 }
 
-void Store::copyFrom(const Store* store)
+void Store::copyFrom(const Store *store)
 {
     for (QHash<QString, Entry>::const_iterator entryIt = store->begin();
             entryIt != store->end(); ++entryIt) {
-        const Entry& entry = entryIt.value();
+        const Entry &entry = entryIt.value();
         if (entry.value().type() != KisMetaData::Value::Invalid) {
             if (containsEntry(entry.qualifiedName())) {
                 getEntry(entry.qualifiedName()).value() = entry.value();
@@ -69,7 +69,7 @@ void Store::copyFrom(const Store* store)
     }
 }
 
-bool Store::addEntry(const Entry& entry)
+bool Store::addEntry(const Entry &entry)
 {
     Q_ASSERT(!entry.name().isEmpty());
     if (d->entries.contains(entry.qualifiedName()) && d->entries[entry.qualifiedName()].isValid()) {
@@ -90,23 +90,23 @@ bool Store::isEmpty() const
     return d->entries.isEmpty();
 }
 
-bool Store::containsEntry(const QString & entryKey) const
+bool Store::containsEntry(const QString &entryKey) const
 {
     return d->entries.keys().contains(entryKey);
 }
 
-bool Store::containsEntry(const QString & uri, const QString & entryName) const
+bool Store::containsEntry(const QString &uri, const QString &entryName) const
 {
-    const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
+    const Schema *schema = SchemaRegistry::instance()->schemaFromUri(uri);
     return containsEntry(schema->generateQualifiedName(entryName));
 }
 
-bool Store::containsEntry(const KisMetaData::Schema* schema, const QString & entryName) const
+bool Store::containsEntry(const KisMetaData::Schema *schema, const QString &entryName) const
 {
     return containsEntry(schema->generateQualifiedName(entryName));
 }
 
-Entry& Store::getEntry(const QString & entryKey)
+Entry &Store::getEntry(const QString &entryKey)
 {
     if (!d->entries.contains(entryKey)) {
         QStringList splitKey = entryKey.split(':');
@@ -119,54 +119,53 @@ Entry& Store::getEntry(const QString & entryKey)
     return d->entries [entryKey];
 }
 
-Entry& Store::getEntry(const QString & uri, const QString & entryName)
+Entry &Store::getEntry(const QString &uri, const QString &entryName)
 {
-    const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
+    const Schema *schema = SchemaRegistry::instance()->schemaFromUri(uri);
     Q_ASSERT(schema);
     return getEntry(schema, entryName);
 }
 
-Entry& Store::getEntry(const KisMetaData::Schema* schema, const QString & entryName)
+Entry &Store::getEntry(const KisMetaData::Schema *schema, const QString &entryName)
 {
     return getEntry(schema->generateQualifiedName(entryName));
 }
 
-
-const Entry& Store::getEntry(const QString & entryKey) const
+const Entry &Store::getEntry(const QString &entryKey) const
 {
     return d->entries[entryKey];
 }
 
-const Entry& Store::getEntry(const QString & uri, const QString & entryName) const
+const Entry &Store::getEntry(const QString &uri, const QString &entryName) const
 {
-    const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
+    const Schema *schema = SchemaRegistry::instance()->schemaFromUri(uri);
     Q_ASSERT(schema);
     return getEntry(schema, entryName);
 }
 
-const Entry& Store::getEntry(const KisMetaData::Schema* schema, const QString & entryName) const
+const Entry &Store::getEntry(const KisMetaData::Schema *schema, const QString &entryName) const
 {
     return getEntry(schema->generateQualifiedName(entryName));
 }
 
-void Store::removeEntry(const QString & entryKey)
+void Store::removeEntry(const QString &entryKey)
 {
     d->entries.remove(entryKey);
 }
 
-void Store::removeEntry(const QString & uri, const QString & entryName)
+void Store::removeEntry(const QString &uri, const QString &entryName)
 {
-    const Schema* schema = SchemaRegistry::instance()->schemaFromUri(uri);
+    const Schema *schema = SchemaRegistry::instance()->schemaFromUri(uri);
     Q_ASSERT(schema);
     removeEntry(schema, entryName);
 }
 
-void Store::removeEntry(const KisMetaData::Schema* schema, const QString & entryName)
+void Store::removeEntry(const KisMetaData::Schema *schema, const QString &entryName)
 {
     removeEntry(schema->generateQualifiedName(entryName));
 }
 
-const Value& Store::getValue(const QString & uri, const QString & entryName) const
+const Value &Store::getValue(const QString &uri, const QString &entryName) const
 {
     return getEntry(uri, entryName).value();
 }
@@ -185,7 +184,7 @@ void Store::debugDump() const
 {
     dbgImage << "=== Dumping MetaData Store ===";
     dbgImage << " - Metadata (there are" << d->entries.size() << " entries)";
-    foreach(const Entry& e, d->entries) {
+    foreach (const Entry &e, d->entries) {
         if (e.isValid()) {
             dbgImage << e;
         } else {
@@ -194,10 +193,10 @@ void Store::debugDump() const
     }
 }
 
-void Store::applyFilters(const QList<const Filter*> & filters)
+void Store::applyFilters(const QList<const Filter *> &filters)
 {
     dbgImage << "Apply " << filters.size() << " filters";
-    foreach(const Filter* filter, filters) {
+    foreach (const Filter *filter, filters) {
         filter->filter(this);
     }
 }

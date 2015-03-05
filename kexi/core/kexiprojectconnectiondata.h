@@ -38,8 +38,8 @@ public:
 
     KexiProjectConnectionData();
 
-    KexiProjectConnectionData(const QString& driverName, const QString& databaseName, const QString &hostName, unsigned short int port,
-                              const QString& userName, const QString &password, const QString& fileName);
+    KexiProjectConnectionData(const QString &driverName, const QString &databaseName, const QString &hostName, unsigned short int port,
+                              const QString &userName, const QString &password, const QString &fileName);
 
     /**
      * connect to a embedded database
@@ -50,7 +50,7 @@ public:
 
     static const QString &generateTmpName();
 
-    static KexiProjectConnectionData* loadInfo(QDomElement &e);
+    static KexiProjectConnectionData *loadInfo(QDomElement &e);
     void writeInfo(QDomDocument &doc);
 
     void    setDriverName(const QString &driverName);
@@ -61,7 +61,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

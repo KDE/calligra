@@ -21,7 +21,6 @@
 #include "KPtViewAdaptor.h"
 #include "kptview.h"
 
-
 namespace KPlato
 {
 
@@ -31,8 +30,8 @@ namespace KPlato
  *
  ************************************************/
 
-ViewAdaptor::ViewAdaptor( View* t )
-    : KoViewAdaptor( t )
+ViewAdaptor::ViewAdaptor(View *t)
+    : KoViewAdaptor(t)
 {
 //     setAutoRelaySignals(true);
     m_view = t;
@@ -46,42 +45,42 @@ ViewAdaptor::~ViewAdaptor()
 // {
 //   m_view->slotEditResource();
 // }
-// 
+//
 // void ViewAdaptor::slotEditCut()
 // {
 //   m_view->slotEditCut();
 // }
-// 
+//
 // void ViewAdaptor::slotEditCopy()
 // {
 //   m_view->slotEditCopy();
 // }
-// 
+//
 // void ViewAdaptor::slotEditPaste()
 // {
 //   m_view->slotEditPaste();
 // }
-// 
+//
 // void ViewAdaptor::slotAddTask()
 // {
 //   m_view->slotAddTask();
 // }
-// 
+//
 // void ViewAdaptor::slotAddSubTask()
 // {
 //   m_view->slotAddSubTask();
 // }
-// 
+//
 // void ViewAdaptor::slotAddMilestone()
 // {
 //   m_view->slotAddMilestone();
 // }
-// 
+//
 // void ViewAdaptor::slotProjectEdit()
 // {
 //   m_view->slotProjectEdit();
 // }
-// 
+//
 // void ViewAdaptor::slotConfigure()
 // {
 //   m_view->slotConfigure();

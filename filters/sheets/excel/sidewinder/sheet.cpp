@@ -49,19 +49,19 @@ public:
         , autoFilters(0)
     {}
 
-    Workbook* workbook;
+    Workbook *workbook;
     QString name;
 
     // hash to store cell, FIXME replace with quad-tree
-    QHash<unsigned, Cell*> cells;
+    QHash<unsigned, Cell *> cells;
     unsigned maxRow;
     unsigned maxColumn;
     QHash<unsigned, unsigned> maxCellsInRow;
-    QHash<unsigned, Column*> columns;
-    QHash<unsigned, Row*> rows;
+    QHash<unsigned, Column *> columns;
+    QHash<unsigned, Row *> rows;
     Calligra::Sheets::PointStorage<Hyperlink> hyperlinks;
-    Calligra::Sheets::PointStorage<QList<ChartObject*> > charts;
-    Calligra::Sheets::PointStorage<QList<OfficeArtObject*> > drawObjects;
+    Calligra::Sheets::PointStorage<QList<ChartObject *> > charts;
+    Calligra::Sheets::PointStorage<QList<OfficeArtObject *> > drawObjects;
 
     bool visible;
     bool protect;
@@ -96,18 +96,18 @@ public:
     QList<HorizontalPageBreak> horizontalPageBreaks;
 
     QList<MSO::OfficeArtSpgrContainer> sheetDrawObjectsGroups;
-    QMultiHash<int, OfficeArtObject*> sheetDrawObjects;
+    QMultiHash<int, OfficeArtObject *> sheetDrawObjects;
 
-    QList<ConditionalFormat*> conditionalFormats;
+    QList<ConditionalFormat *> conditionalFormats;
 
-    Calligra::Sheets::Filter* autoFilters;
+    Calligra::Sheets::Filter *autoFilters;
 };
 
 }
 
 using namespace Swinder;
 
-Sheet::Sheet(Workbook* wb)
+Sheet::Sheet(Workbook *wb)
 {
     d = new Sheet::Private();
     d->workbook = wb;
@@ -120,7 +120,7 @@ Sheet::~Sheet()
     delete d;
 }
 
-Workbook* Sheet::workbook()
+Workbook *Sheet::workbook()
 {
     return d->workbook;
 }
@@ -174,7 +174,7 @@ void Sheet::clear()
     d->zoomLevel = 1.0; // 100%
     d->showGrid = true;
     d->showZeroValues = true;
-    d->firstVisibleCell = QPoint(0,0); // A1
+    d->firstVisibleCell = QPoint(0, 0); // A1
     d->isPageBreakViewEnabled = false;
     d->passwd = 0; // password protection disabled
     delete d->autoFilters;
@@ -186,15 +186,15 @@ QString Sheet::name() const
     return d->name;
 }
 
-void Sheet::setName(const QString& name)
+void Sheet::setName(const QString &name)
 {
     d->name = name;
 }
 
-Cell* Sheet::cell(unsigned columnIndex, unsigned rowIndex, bool autoCreate)
+Cell *Sheet::cell(unsigned columnIndex, unsigned rowIndex, bool autoCreate)
 {
     const unsigned hashed = (rowIndex + 1) * maximalColumnCount + columnIndex + 1;
-    Cell* c = d->cells[ hashed ];
+    Cell *c = d->cells[ hashed ];
 
     // create cell if necessary
     if (!c && autoCreate) {
@@ -205,39 +205,48 @@ Cell* Sheet::cell(unsigned columnIndex, unsigned rowIndex, bool autoCreate)
         this->column(columnIndex, true);
         this->row(rowIndex, true);
 
-        if (rowIndex > d->maxRow) d->maxRow = rowIndex;
-        if (columnIndex > d->maxColumn) d->maxColumn = columnIndex;
+        if (rowIndex > d->maxRow) {
+            d->maxRow = rowIndex;
+        }
+        if (columnIndex > d->maxColumn) {
+            d->maxColumn = columnIndex;
+        }
 
-        if(!d->maxCellsInRow.contains(rowIndex) || columnIndex > d->maxCellsInRow[rowIndex])
+        if (!d->maxCellsInRow.contains(rowIndex) || columnIndex > d->maxCellsInRow[rowIndex]) {
             d->maxCellsInRow[rowIndex] = columnIndex;
+        }
     }
 
     return c;
 }
 
-Column* Sheet::column(unsigned index, bool autoCreate)
+Column *Sheet::column(unsigned index, bool autoCreate)
 {
-    Column* c = d->columns[ index ];
+    Column *c = d->columns[ index ];
 
     // create column if necessary
     if (!c && autoCreate) {
         c = new Column(this, index);
         d->columns[ index ] = c;
-        if (index > d->maxColumn) d->maxColumn = index;
+        if (index > d->maxColumn) {
+            d->maxColumn = index;
+        }
     }
 
     return c;
 }
 
-Row* Sheet::row(unsigned index, bool autoCreate)
+Row *Sheet::row(unsigned index, bool autoCreate)
 {
-    Row* r = d->rows[ index ];
+    Row *r = d->rows[ index ];
 
     // create row if necessary
     if (!r && autoCreate) {
         r = new Row(this, index);
         d->rows[ index ] = r;
-        if (index > d->maxRow) d->maxRow = index;
+        if (index > d->maxRow) {
+            d->maxRow = index;
+        }
     }
 
     return r;
@@ -255,20 +264,23 @@ unsigned Sheet::maxColumn() const
 
 void Sheet::setMaxRow(unsigned row)
 {
-    if (row > d->maxRow)
+    if (row > d->maxRow) {
         d->maxRow = row;
+    }
 }
 
 void Sheet::setMaxColumn(unsigned column)
 {
-    if (column > d->maxColumn)
+    if (column > d->maxColumn) {
         d->maxColumn = column;
+    }
 }
 
 unsigned Sheet::maxCellsInRow(int rowIndex) const
 {
-    if(d->maxCellsInRow.contains(rowIndex))
+    if (d->maxCellsInRow.contains(rowIndex)) {
         return d->maxCellsInRow[rowIndex];
+    }
     return 0;
 }
 
@@ -297,7 +309,7 @@ QString Sheet::leftHeader() const
     return d->leftHeader;
 }
 
-void Sheet::setLeftHeader(const QString& h)
+void Sheet::setLeftHeader(const QString &h)
 {
     d->leftHeader = h;
 }
@@ -307,7 +319,7 @@ QString Sheet::centerHeader() const
     return d->centerHeader;
 }
 
-void Sheet::setCenterHeader(const QString& h)
+void Sheet::setCenterHeader(const QString &h)
 {
     d->centerHeader = h;
 }
@@ -317,7 +329,7 @@ QString Sheet::rightHeader() const
     return d->rightHeader;
 }
 
-void Sheet::setRightHeader(const QString& h)
+void Sheet::setRightHeader(const QString &h)
 {
     d->rightHeader = h;
 }
@@ -327,7 +339,7 @@ QString Sheet::leftFooter() const
     return d->leftFooter;
 }
 
-void Sheet::setLeftFooter(const QString& h)
+void Sheet::setLeftFooter(const QString &h)
 {
     d->leftFooter = h;
 }
@@ -337,7 +349,7 @@ QString Sheet::centerFooter() const
     return d->centerFooter;
 }
 
-void Sheet::setCenterFooter(const QString& h)
+void Sheet::setCenterFooter(const QString &h)
 {
     d->centerFooter = h;
 }
@@ -347,7 +359,7 @@ QString Sheet::rightFooter() const
     return d->rightFooter;
 }
 
-void Sheet::setRightFooter(const QString& h)
+void Sheet::setRightFooter(const QString &h)
 {
     d->rightFooter = h;
 }
@@ -472,7 +484,7 @@ void Sheet::setPassword(unsigned long hash)
     d->passwd = hash;
 }
 
-void Sheet::setBackgroundImage( const QString& imagePath )
+void Sheet::setBackgroundImage(const QString &imagePath)
 {
     d->backgroundImagePath = imagePath;
 }
@@ -482,7 +494,7 @@ QString Sheet::backgroundImage()
     return d->backgroundImagePath;
 }
 
-void Sheet::addVerticalPageBreak(const Swinder::VerticalPageBreak& pageBreak)
+void Sheet::addVerticalPageBreak(const Swinder::VerticalPageBreak &pageBreak)
 {
     d->verticalPageBreaks.append(pageBreak);
 }
@@ -492,7 +504,7 @@ QList<VerticalPageBreak> Sheet::verticalPageBreaks()
     return d->verticalPageBreaks;
 }
 
-void Sheet::addHorizontalPageBreak(const Swinder::HorizontalPageBreak& pageBreak)
+void Sheet::addHorizontalPageBreak(const Swinder::HorizontalPageBreak &pageBreak)
 {
     d->horizontalPageBreaks.append(pageBreak);
 }
@@ -504,53 +516,56 @@ QList<HorizontalPageBreak> Sheet::horizontalPageBreaks()
 
 Hyperlink Sheet::hyperlink(unsigned column, unsigned row) const
 {
-    return d->hyperlinks.lookup(column+1, row+1);
+    return d->hyperlinks.lookup(column + 1, row + 1);
 }
 
-void Sheet::setHyperlink(unsigned column, unsigned row, const Hyperlink& link)
+void Sheet::setHyperlink(unsigned column, unsigned row, const Hyperlink &link)
 {
-    if (link.isValid)
-        d->hyperlinks.insert(column+1, row+1, link);
-    else
-        d->hyperlinks.take(column+1, row+1);
+    if (link.isValid) {
+        d->hyperlinks.insert(column + 1, row + 1, link);
+    } else {
+        d->hyperlinks.take(column + 1, row + 1);
+    }
 }
 
-QList<ChartObject*> Sheet::charts(unsigned column, unsigned row) const
+QList<ChartObject *> Sheet::charts(unsigned column, unsigned row) const
 {
-    return d->charts.lookup(column+1, row+1);
+    return d->charts.lookup(column + 1, row + 1);
 }
 
-void Sheet::setCharts(unsigned column, unsigned row, const QList<ChartObject*>& charts)
+void Sheet::setCharts(unsigned column, unsigned row, const QList<ChartObject *> &charts)
 {
-    if (charts.isEmpty())
-        d->charts.take(column+1, row+1);
-    else
-        d->charts.insert(column+1, row+1, charts);
+    if (charts.isEmpty()) {
+        d->charts.take(column + 1, row + 1);
+    } else {
+        d->charts.insert(column + 1, row + 1, charts);
+    }
 }
 
-void Sheet::addChart(unsigned column, unsigned row, ChartObject* chart)
+void Sheet::addChart(unsigned column, unsigned row, ChartObject *chart)
 {
-    QList<ChartObject*> chrts = charts(column, row);
+    QList<ChartObject *> chrts = charts(column, row);
     chrts.append(chart);
     setCharts(column, row, chrts);
 }
 
-QList<OfficeArtObject*> Sheet::drawObjects(unsigned column, unsigned row) const
+QList<OfficeArtObject *> Sheet::drawObjects(unsigned column, unsigned row) const
 {
-    return d->drawObjects.lookup(column+1, row+1);
+    return d->drawObjects.lookup(column + 1, row + 1);
 }
 
-void Sheet::setDrawObjects(unsigned column, unsigned row, const QList<OfficeArtObject*>& drawObjects)
+void Sheet::setDrawObjects(unsigned column, unsigned row, const QList<OfficeArtObject *> &drawObjects)
 {
-    if (drawObjects.isEmpty())
-        d->drawObjects.take(column+1, row+1);
-    else
-        d->drawObjects.insert(column+1, row+1, drawObjects);
+    if (drawObjects.isEmpty()) {
+        d->drawObjects.take(column + 1, row + 1);
+    } else {
+        d->drawObjects.insert(column + 1, row + 1, drawObjects);
+    }
 }
 
-void Sheet::addDrawObject(unsigned column, unsigned row, OfficeArtObject* drawObject)
+void Sheet::addDrawObject(unsigned column, unsigned row, OfficeArtObject *drawObject)
 {
-    QList<OfficeArtObject*> objects = drawObjects(column, row);
+    QList<OfficeArtObject *> objects = drawObjects(column, row);
     objects.append(drawObject);
     setDrawObjects(column, row, objects);
 }
@@ -566,7 +581,7 @@ MSO::OfficeArtSpgrContainer Sheet::drawObjectsGroup(int groupId) const
     return d->sheetDrawObjectsGroups[groupId];
 }
 
-QList<OfficeArtObject*> Sheet::drawObjects(int groupId) const
+QList<OfficeArtObject *> Sheet::drawObjects(int groupId) const
 {
     Q_ASSERT(groupId < drawObjectsGroupCount());
     if (groupId < 0) {
@@ -576,12 +591,12 @@ QList<OfficeArtObject*> Sheet::drawObjects(int groupId) const
     }
 }
 
-static int shapeGroupId(const MSO::OfficeArtSpgrContainer& group)
+static int shapeGroupId(const MSO::OfficeArtSpgrContainer &group)
 {
     return group.rgfb.first().anon.get<MSO::OfficeArtSpContainer>()->shapeProp.spid;
 }
 
-void Sheet::addDrawObject(OfficeArtObject* drawObject, const MSO::OfficeArtSpgrContainer* group )
+void Sheet::addDrawObject(OfficeArtObject *drawObject, const MSO::OfficeArtSpgrContainer *group)
 {
     int groupId = -1;
     if (group) {
@@ -603,12 +618,12 @@ void Sheet::addConditionalFormat(ConditionalFormat *format)
     d->conditionalFormats.append(format);
 }
 
-QList<ConditionalFormat*> Sheet::conditionalFormats() const
+QList<ConditionalFormat *> Sheet::conditionalFormats() const
 {
     return d->conditionalFormats;
 }
 
-void Sheet::setAutoFilters(const Calligra::Sheets::Filter& filter)
+void Sheet::setAutoFilters(const Calligra::Sheets::Filter &filter)
 {
     d->autoFilters = new Calligra::Sheets::Filter(filter);
 }
@@ -636,17 +651,37 @@ bool Sheet::isRightToLeft() const
 void Sheet::dumpStats()
 {
     int ndValue = 0, ndFormula = 0, ndFormat = 0, ndColumnSpan = 0, ndRowSpan = 0, ndCovered = 0, ndColumnRepeat = 0, ndHyperlink = 0, ndNote = 0, ndPictures = 0, ndCharts = 0;
-    foreach (Cell* c, d->cells) {
-        if (c->value() != Value()) ndValue++;
-        if (!c->formula().isEmpty()) ndFormula++;
-        if (c->format() != Format()) ndFormat++;
-        if (c->columnSpan() != 1) ndColumnSpan++;
-        if (c->rowSpan() != 1) ndRowSpan++;
-        if (c->isCovered()) ndCovered++;
-        if (c->columnRepeat() != 1) ndColumnRepeat++;
-        if (c->hasHyperlink()) ndHyperlink++;
-        if (!c->note().isEmpty()) ndNote++;
-        if (c->charts().size()) ndCharts++;
+    foreach (Cell *c, d->cells) {
+        if (c->value() != Value()) {
+            ndValue++;
+        }
+        if (!c->formula().isEmpty()) {
+            ndFormula++;
+        }
+        if (c->format() != Format()) {
+            ndFormat++;
+        }
+        if (c->columnSpan() != 1) {
+            ndColumnSpan++;
+        }
+        if (c->rowSpan() != 1) {
+            ndRowSpan++;
+        }
+        if (c->isCovered()) {
+            ndCovered++;
+        }
+        if (c->columnRepeat() != 1) {
+            ndColumnRepeat++;
+        }
+        if (c->hasHyperlink()) {
+            ndHyperlink++;
+        }
+        if (!c->note().isEmpty()) {
+            ndNote++;
+        }
+        if (c->charts().size()) {
+            ndCharts++;
+        }
     }
     printf("    rows: %d\n  cols: %d\n  cells: %d\n", d->rows.size(), d->columns.size(), d->cells.size());
     printf("       values: %d\n       formulas: %d\n       formats: %d\n       colspans: %d\n       rowspans: %d\n       covered: %d\n       colrepeat: %d\n       hyperlink: %d\n       note: %d\n       pics: %d\n       charts: %d\n", ndValue, ndFormula, ndFormat, ndColumnSpan, ndRowSpan, ndCovered, ndColumnRepeat, ndHyperlink, ndNote, ndPictures, ndCharts);
@@ -656,16 +691,16 @@ void Sheet::dumpStats()
 class Column::Private
 {
 public:
-    Sheet* sheet;
+    Sheet *sheet;
     unsigned index;
     double width;
-    const Format* format;
+    const Format *format;
     bool visible;
     unsigned outlineLevel;
     bool collapsed;
 };
 
-Column::Column(Sheet* sheet, unsigned index)
+Column::Column(Sheet *sheet, unsigned index)
 {
     d = new Column::Private;
     d->sheet   = sheet;
@@ -682,7 +717,7 @@ Column::~Column()
     delete d;
 }
 
-Sheet* Column::sheet() const
+Sheet *Column::sheet() const
 {
     return d->sheet;
 }
@@ -694,8 +729,9 @@ unsigned Column::index() const
 
 double Column::width() const
 {
-    if( d->width == 0.0)
+    if (d->width == 0.0) {
         return d->sheet->defaultColWidth();
+    }
 
     return d->width;
 }
@@ -705,14 +741,16 @@ void Column::setWidth(double w)
     d->width = w;
 }
 
-const Format& Column::format() const
+const Format &Column::format() const
 {
     static const Format null;
-    if (!d->format) return null;
+    if (!d->format) {
+        return null;
+    }
     return *(d->format);
 }
 
-void Column::setFormat(const Format* f)
+void Column::setFormat(const Format *f)
 {
     d->format = f;
 }
@@ -757,18 +795,18 @@ bool Column::operator==(const Column &other) const
 
 bool Column::operator!=(const Column &other) const
 {
-    return ! (*this == other);
+    return !(*this == other);
 }
 
 double Column::columnUnitsToPts(const double columnUnits)
 {
     QFont font("Arial", 10);
     QFontMetricsF fontMetrics(font);
-    double characterWidth = qMax(fontMetrics.width("0"),qMax(fontMetrics.width("1"),
-    qMax(fontMetrics.width("2"),qMax(fontMetrics.width("3"),
-    qMax(fontMetrics.width("4"),qMax(fontMetrics.width("5"),
-    qMax(fontMetrics.width("6"),qMax(fontMetrics.width("7"),
-    qMax(fontMetrics.width("8"),fontMetrics.width("9"))))))))));
+    double characterWidth = qMax(fontMetrics.width("0"), qMax(fontMetrics.width("1"),
+                                 qMax(fontMetrics.width("2"), qMax(fontMetrics.width("3"),
+                                         qMax(fontMetrics.width("4"), qMax(fontMetrics.width("5"),
+                                                 qMax(fontMetrics.width("6"), qMax(fontMetrics.width("7"),
+                                                         qMax(fontMetrics.width("8"), fontMetrics.width("9"))))))))));
 
     double width = characterWidth * columnUnits / 256.0; //px
     width = qRound(width / 8.0 + 0.5) * 8.0;
@@ -782,16 +820,16 @@ double Column::columnUnitsToPts(const double columnUnits)
 class Row::Private
 {
 public:
-    Sheet* sheet;
+    Sheet *sheet;
     unsigned index;
     double height;
-    const Format* format;
+    const Format *format;
     bool visible;
     unsigned outlineLevel;
     bool collapsed;
 };
 
-Row::Row(Sheet* sheet, unsigned index)
+Row::Row(Sheet *sheet, unsigned index)
 {
     d = new Row::Private;
     d->sheet   = sheet;
@@ -808,7 +846,7 @@ Row::~Row()
     delete d;
 }
 
-Sheet* Row::sheet() const
+Sheet *Row::sheet() const
 {
     return d->sheet;
 }
@@ -828,14 +866,16 @@ void Row::setHeight(double w)
     d->height = w;
 }
 
-const Format& Row::format() const
+const Format &Row::format() const
 {
     static const Format null;
-    if (!d->format) return null;
+    if (!d->format) {
+        return null;
+    }
     return *(d->format);
 }
 
-void Row::setFormat(const Format* f)
+void Row::setFormat(const Format *f)
 {
     d->format = f;
 }
@@ -880,5 +920,5 @@ bool Row::operator==(const Row &other) const
 
 bool Row::operator!=(const Row &other) const
 {
-    return ! (*this == other);
+    return !(*this == other);
 }

@@ -27,10 +27,10 @@
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
 K_EXPORT_PLUGIN(PluginFactory("kopageapplication-backgroundtool"))
 
-Plugin::Plugin( QObject* parent, const QVariantList& )
-    : QObject( parent )
+Plugin::Plugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
-    KoToolRegistry::instance()->add( new KoPABackgroundToolFactory() );
+    KoToolRegistry::instance()->add(new KoPABackgroundToolFactory());
 }
 
 #include <Plugin.moc>

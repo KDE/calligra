@@ -27,23 +27,23 @@ class KoShapeRunAroundCommand::Private
 {
 public:
     Private(KoShape *s, KoShape::TextRunAroundSide side, int runThrough, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal threshold, KoShape::TextRunAroundContour contour)
-    : shape(s)
-    , newSide(side)
-    , newRunThrough(runThrough)
-    , newDistanceLeft(distanceLeft)
-    , newDistanceTop(distanceTop)
-    , newDistanceRight(distanceRight)
-    , newDistanceBottom(distanceBottom)
-    , newThreshold(threshold)
-    , newContour(contour)
-    , oldSide(shape->textRunAroundSide())
-    , oldRunThrough(shape->runThrough())
-    , oldDistanceLeft(shape->textRunAroundDistanceLeft())
-    , oldDistanceTop(shape->textRunAroundDistanceTop())
-    , oldDistanceRight(shape->textRunAroundDistanceRight())
-    , oldDistanceBottom(shape->textRunAroundDistanceBottom())
-    , oldThreshold(shape->textRunAroundThreshold())
-    , oldContour(shape->textRunAroundContour())
+        : shape(s)
+        , newSide(side)
+        , newRunThrough(runThrough)
+        , newDistanceLeft(distanceLeft)
+        , newDistanceTop(distanceTop)
+        , newDistanceRight(distanceRight)
+        , newDistanceBottom(distanceBottom)
+        , newThreshold(threshold)
+        , newContour(contour)
+        , oldSide(shape->textRunAroundSide())
+        , oldRunThrough(shape->runThrough())
+        , oldDistanceLeft(shape->textRunAroundDistanceLeft())
+        , oldDistanceTop(shape->textRunAroundDistanceTop())
+        , oldDistanceRight(shape->textRunAroundDistanceRight())
+        , oldDistanceBottom(shape->textRunAroundDistanceBottom())
+        , oldThreshold(shape->textRunAroundThreshold())
+        , oldContour(shape->textRunAroundContour())
     {}
 
     KoShape *shape;
@@ -66,15 +66,15 @@ public:
 };
 
 KoShapeRunAroundCommand::KoShapeRunAroundCommand(KoShape *shape, KoShape::TextRunAroundSide side, int runThrough, qreal distanceLeft, qreal distanceTop, qreal distanceRight, qreal distanceBottom, qreal threshold, KoShape::TextRunAroundContour contour, KUndo2Command *parent)
-: KUndo2Command(parent)
-, d(new Private(shape, side, runThrough, distanceLeft, distanceTop, distanceRight, distanceBottom, threshold, contour))
+    : KUndo2Command(parent)
+    , d(new Private(shape, side, runThrough, distanceLeft, distanceTop, distanceRight, distanceBottom, threshold, contour))
 {
     setText(kundo2_i18n("Change Shape RunAround"));
 }
 
 KoShapeRunAroundCommand::~KoShapeRunAroundCommand()
 {
-   delete d;
+    delete d;
 }
 
 void KoShapeRunAroundCommand::redo()

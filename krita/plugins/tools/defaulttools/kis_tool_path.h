@@ -30,13 +30,13 @@
 class KoCanvasBase;
 class KisToolPath;
 
-
-class __KisToolPathLocalTool : public KoCreatePathTool {
+class __KisToolPathLocalTool : public KoCreatePathTool
+{
 public:
-    __KisToolPathLocalTool(KoCanvasBase * canvas, KisToolPath* parentTool);
+    __KisToolPathLocalTool(KoCanvasBase *canvas, KisToolPath *parentTool);
 
     virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
-    virtual void addPathShape(KoPathShape* pathShape);
+    virtual void addPathShape(KoPathShape *pathShape);
 
     using KoCreatePathTool::createOptionWidgets;
     using KoCreatePathTool::endPathWithoutLastPoint;
@@ -44,19 +44,19 @@ public:
     using KoCreatePathTool::cancelPath;
 
 private:
-    KisToolPath* const m_parentTool;
+    KisToolPath *const m_parentTool;
 };
 
 typedef KisDelegatedTool<KisToolShape,
-                         __KisToolPathLocalTool,
-                         DeselectShapesActivationPolicy> DelegatedPathTool;
+        __KisToolPathLocalTool,
+        DeselectShapesActivationPolicy> DelegatedPathTool;
 
 class KisToolPath : public DelegatedPathTool
 {
     Q_OBJECT
 
 public:
-    KisToolPath(KoCanvasBase * canvas);
+    KisToolPath(KoCanvasBase *canvas);
     void mousePressEvent(KoPointerEvent *event);
 
     virtual QList< QPointer<QWidget> > createOptionWidgets();
@@ -73,8 +73,9 @@ class KisToolPathFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPathFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolPath") {
+    KisToolPathFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolPath")
+    {
         setToolTip(i18n("Bezier Curve Tool. Shift-mouseclick ends the curve."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -84,12 +85,11 @@ public:
 
     virtual ~KisToolPathFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolPath(canvas);
     }
 };
-
-
 
 #endif // KIS_TOOL_PATH_H_
 

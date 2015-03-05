@@ -17,24 +17,23 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include "MapBrowserWidget.h"
 #include <QPointF>
 #include <kdebug.h>
 
 MapBrowserWidget::MapBrowserWidget(QWidget *parent)
-  : Marble::MarbleWidget(parent),
-    KFormDesigner::FormWidgetInterface(),
-    KexiFormDataItemInterface(),
-    m_slotMapChanged_enabled(true),
-    m_internalReadOnly(false)
+    : Marble::MarbleWidget(parent),
+      KFormDesigner::FormWidgetInterface(),
+      KexiFormDataItemInterface(),
+      m_slotMapChanged_enabled(true),
+      m_internalReadOnly(false)
 {
 #ifndef Q_CC_MSVC
 #warning this id could be invalid; try to use Marble::MapThemeManager::mapThemes() and get proper Marble::GeoSceneDocument::head()->mapThemeId()
 #endif
-  //Marble::GeoSceneDocument::head()->mapThemeId()
-  setMapThemeId("earth/srtm/srtm.dgml");
-  connect( this, SIGNAL(visibleLatLonAltBoxChanged(GeoDataLatLonAltBox)), this , SLOT(slotMapChanged()));
+    //Marble::GeoSceneDocument::head()->mapThemeId()
+    setMapThemeId("earth/srtm/srtm.dgml");
+    connect(this, SIGNAL(visibleLatLonAltBoxChanged(GeoDataLatLonAltBox)), this, SLOT(slotMapChanged()));
 }
 
 MapBrowserWidget::~MapBrowserWidget()
@@ -44,13 +43,13 @@ MapBrowserWidget::~MapBrowserWidget()
 
 QVariant MapBrowserWidget::value()
 {
-    if (dataSource().isEmpty()){
+    if (dataSource().isEmpty()) {
         return serializeData(0.0, 0.0, 1100);
     }
     return serializeData(centerLatitude(), centerLongitude(), zoom());
 }
 
-void MapBrowserWidget::setValueInternal(const QVariant& add, bool removeOld)
+void MapBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
 {
     Q_UNUSED(add);
     Q_UNUSED(removeOld);
@@ -89,7 +88,7 @@ void MapBrowserWidget::clear()
 
 bool MapBrowserWidget::cursorAtEnd()
 {
-   return true;
+    return true;
 }
 
 bool MapBrowserWidget::cursorAtStart()
@@ -97,7 +96,7 @@ bool MapBrowserWidget::cursorAtStart()
     return true;
 }
 
-void MapBrowserWidget::setInvalidState(const QString& )
+void MapBrowserWidget::setInvalidState(const QString &)
 {
     setEnabled(false);
     setReadOnly(true);
@@ -108,14 +107,14 @@ QVariant MapBrowserWidget::serializeData(qreal lat, qreal lon, int zoomLevel)
     return QString("%1;%2;%3").arg(lat).arg(lon).arg(zoomLevel);
 }
 
-void MapBrowserWidget::deserializeData(const QVariant& serialized)
+void MapBrowserWidget::deserializeData(const QVariant &serialized)
 {
     //kDebug() << "seting new data";
     QString serializedData = serialized.toString();
     //kDebug() << "serializedData:" << serializedData << ";" << serialized;
     QStringList dataList = serializedData.split(';');
     //kDebug() << "splited:" << dataList;
-    if (dataList.length()>=3) {
+    if (dataList.length() >= 3) {
         setCenterLatitude(dataList[0].toDouble());
         setCenterLongitude(dataList[1].toDouble());
         zoomView(dataList[2].toInt());
@@ -124,8 +123,9 @@ void MapBrowserWidget::deserializeData(const QVariant& serialized)
 
 void MapBrowserWidget::slotMapChanged()
 {
-    if(!m_slotMapChanged_enabled)
+    if (!m_slotMapChanged_enabled) {
         return;
+    }
     signalValueChanged();
 }
 

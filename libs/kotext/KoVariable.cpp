@@ -32,9 +32,9 @@ class KoVariablePrivate : public KoInlineObjectPrivate
 {
 public:
     KoVariablePrivate()
-            : modified(true),
-            document(0),
-            lastPositionInDocument(-1)
+        : modified(true),
+          document(0),
+          lastPositionInDocument(-1)
     {
     }
 
@@ -51,7 +51,7 @@ public:
 };
 
 KoVariable::KoVariable(bool propertyChangeListener)
-        : KoInlineObject(*(new KoVariablePrivate()), propertyChangeListener)
+    : KoInlineObject(*(new KoVariablePrivate()), propertyChangeListener)
 {
 }
 
@@ -62,8 +62,9 @@ KoVariable::~KoVariable()
 void KoVariable::setValue(const QString &value)
 {
     Q_D(KoVariable);
-    if (d->value == value)
+    if (d->value == value) {
         return;
+    }
     d->value = value;
     d->modified = true;
     if (d->document) {
@@ -71,7 +72,7 @@ void KoVariable::setValue(const QString &value)
     }
 }
 
-void KoVariable::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat & format)
+void KoVariable::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
     Q_D(KoVariable);
     if (d->document) {
@@ -90,10 +91,12 @@ void KoVariable::resize(const QTextDocument *document, QTextInlineObject &object
     Q_D(KoVariable);
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
-    if (d->modified == false)
+    if (d->modified == false) {
         return;
-    if (object.isValid() == false)
+    }
+    if (object.isValid() == false) {
         return;
+    }
     d->modified = true;
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);

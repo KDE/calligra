@@ -52,9 +52,9 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    Value evaluate(const QString&, Value& ex);
+    Value evaluate(const QString &, Value &ex);
 
-    Map* m_map;
+    Map *m_map;
 };
 
 } // namespace Sheets

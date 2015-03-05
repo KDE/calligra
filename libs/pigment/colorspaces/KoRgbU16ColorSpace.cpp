@@ -31,12 +31,11 @@
 #include "KoID.h"
 #include "KoIntegerMaths.h"
 
-
 KoRgbU16ColorSpace::KoRgbU16ColorSpace() :
-        KoSimpleColorSpace<KoBgrU16Traits>(colorSpaceId(),
-                                           i18n("RGB (16-bit integer/channel, unmanaged)"),
-                                           RGBAColorModelID,
-                                           Integer16BitsColorDepthID)
+    KoSimpleColorSpace<KoBgrU16Traits>(colorSpaceId(),
+                                       i18n("RGB (16-bit integer/channel, unmanaged)"),
+                                       RGBAColorModelID,
+                                       Integer16BitsColorDepthID)
 {
 }
 
@@ -44,25 +43,24 @@ KoRgbU16ColorSpace::~KoRgbU16ColorSpace()
 {
 }
 
-
 QString KoRgbU16ColorSpace::colorSpaceId()
 {
     return QString("RGBA16");
 }
 
-KoColorSpace* KoRgbU16ColorSpace::clone() const
+KoColorSpace *KoRgbU16ColorSpace::clone() const
 {
     return new KoRgbU16ColorSpace();
 }
 
-void KoRgbU16ColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
+void KoRgbU16ColorSpace::fromQColor(const QColor &c, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
     QVector<float> channelValues;
     channelValues << c.blueF() << c.greenF() << c.redF() << c.alphaF();
     fromNormalisedChannelsValue(dst, channelValues);
 }
 
-void KoRgbU16ColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
+void KoRgbU16ColorSpace::toQColor(const quint8 *src, QColor *c, const KoColorProfile * /*profile*/) const
 {
     QVector<float> channelValues(4);
     normalisedChannelsValue(src, channelValues);

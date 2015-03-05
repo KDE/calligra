@@ -23,33 +23,35 @@
 #include <QList>
 #include <db/RecordData.h>
 
-namespace KexiDB {
+namespace KexiDB
+{
 class TableSchema;
 }
 
 class AlterSchemaTableModel : public QAbstractTableModel
 {
-    public:
-        explicit AlterSchemaTableModel( QObject* parent = 0 );
-        ~AlterSchemaTableModel();
+public:
+    explicit AlterSchemaTableModel(QObject *parent = 0);
+    ~AlterSchemaTableModel();
 
-        virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-        virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-        virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-        void setSchema(KexiDB::TableSchema*);
-        void setData(const QList<KexiDB::RecordData>& data);
-        void setRowCount(const int i);
-    private:
-        //! Reimplemented just to avoid 'hidden' warnings
-        virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) {
-            return QAbstractTableModel::setData(index, value, role);
-        }
+    void setSchema(KexiDB::TableSchema *);
+    void setData(const QList<KexiDB::RecordData> &data);
+    void setRowCount(const int i);
+private:
+    //! Reimplemented just to avoid 'hidden' warnings
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole)
+    {
+        return QAbstractTableModel::setData(index, value, role);
+    }
 
-        KexiDB::TableSchema *m_schema;
-        QList<KexiDB::RecordData> m_data; //Small amount of data to display to user
-        int m_rowCount;
+    KexiDB::TableSchema *m_schema;
+    QList<KexiDB::RecordData> m_data; //Small amount of data to display to user
+    int m_rowCount;
 };
 
 #endif // ALTERSCHEMATABLEMODEL_H

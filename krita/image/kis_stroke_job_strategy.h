@@ -21,7 +21,6 @@
 
 #include "krita_export.h"
 
-
 class KRITAIMAGE_EXPORT KisStrokeJobData
 {
 public:
@@ -45,14 +44,19 @@ public:
     bool isSequential() const;
     bool isExclusive() const;
 
-    Sequentiality sequentiality() { return m_sequentiality; };
-    Exclusivity exclusivity() { return m_exclusivity; };
+    Sequentiality sequentiality()
+    {
+        return m_sequentiality;
+    };
+    Exclusivity exclusivity()
+    {
+        return m_exclusivity;
+    };
 
 private:
     Sequentiality m_sequentiality;
     Exclusivity m_exclusivity;
 };
-
 
 class KRITAIMAGE_EXPORT KisStrokeJobStrategy
 {
@@ -61,7 +65,6 @@ public:
     virtual ~KisStrokeJobStrategy();
 
     virtual void run(KisStrokeJobData *data) = 0;
-
 
 private:
 };

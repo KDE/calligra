@@ -57,17 +57,23 @@ class Interval;
  */
 class KPLATOTJ_EXPORT Task : public CoreAttributes
 {
-    friend int TaskList::compareItemsLevel(CoreAttributes*, CoreAttributes*,
+    friend int TaskList::compareItemsLevel(CoreAttributes *, CoreAttributes *,
                                            int);
 
 public:
-    Task(Project* prj, const QString& id_, const QString& n, Task* p,
-         const QString& f, int l);
+    Task(Project *prj, const QString &id_, const QString &n, Task *p,
+         const QString &f, int l);
     virtual ~Task();
 
-    virtual CAType getType() const { return CA_Task; }
+    virtual CAType getType() const
+    {
+        return CA_Task;
+    }
 
-    Task* getParent() const { return static_cast<Task*>(parent); }
+    Task *getParent() const
+    {
+        return static_cast<Task *>(parent);
+    }
 
     TaskListIterator getSubListIterator() const
     {
@@ -78,11 +84,23 @@ public:
 
     void inheritValues();
 
-    void setProjectId(const QString& i) { projectId = i; }
-    const QString& getProjectId() const { return projectId; }
+    void setProjectId(const QString &i)
+    {
+        projectId = i;
+    }
+    const QString &getProjectId() const
+    {
+        return projectId;
+    }
 
-    void setNote(const QString& d) { note = d; }
-    const QString& getNote() const { return note; }
+    void setNote(const QString &d)
+    {
+        note = d;
+    }
+    const QString &getNote() const
+    {
+        return note;
+    }
 
 //     void addJournalEntry(JournalEntry* entry);
 
@@ -90,93 +108,153 @@ public:
 
 //     Journal::Iterator getJournalIterator() const;
 
-    void setReference(const QString& r, const QString& l)
+    void setReference(const QString &r, const QString &l)
     {
         ref = r;
         refLabel = l;
     }
-    const QString& getReference() const { return ref; }
-    const QString& getReferenceLabel() const { return refLabel; }
+    const QString &getReference() const
+    {
+        return ref;
+    }
+    const QString &getReferenceLabel() const
+    {
+        return refLabel;
+    }
 
-    void setScheduling(SchedulingInfo si) { scheduling = si; }
-    SchedulingInfo getScheduling() const { return scheduling; }
+    void setScheduling(SchedulingInfo si)
+    {
+        scheduling = si;
+    }
+    SchedulingInfo getScheduling() const
+    {
+        return scheduling;
+    }
 
-    void setPriority(int p) { priority = p; }
-    int getPriority() const { return priority; }
+    void setPriority(int p)
+    {
+        priority = p;
+    }
+    int getPriority() const
+    {
+        return priority;
+    }
 
-    void setResponsible(Resource* r) { responsible = r; }
-    Resource* getResponsible() const { return responsible; }
+    void setResponsible(Resource *r)
+    {
+        responsible = r;
+    }
+    Resource *getResponsible() const
+    {
+        return responsible;
+    }
 
-    void setMilestone(bool ms = true) { milestone = ms; }
-    bool isMilestone() const { return milestone; }
+    void setMilestone(bool ms = true)
+    {
+        milestone = ms;
+    }
+    bool isMilestone() const
+    {
+        return milestone;
+    }
 
 // // //     void setAccount(Account* a) { account = a; }
 // // //     Account* getAccount() const { return account; }
 
-    TaskDependency* addDepends(const QString& id);
-    QList<TaskDependency*> getDepends() const
+    TaskDependency *addDepends(const QString &id);
+    QList<TaskDependency *> getDepends() const
     {
         return depends;
     }
-    QListIterator<TaskDependency*> getDependsIterator() const
+    QListIterator<TaskDependency *> getDependsIterator() const
     {
-        return QListIterator<TaskDependency*>(depends);
+        return QListIterator<TaskDependency *>(depends);
     }
-    TaskDependency* addPrecedes(const QString& id);
-    QList<TaskDependency*> getPrecedes() const
+    TaskDependency *addPrecedes(const QString &id);
+    QList<TaskDependency *> getPrecedes() const
     {
         return precedes;
     }
-    QListIterator<TaskDependency*> getPrecedesIterator() const
+    QListIterator<TaskDependency *> getPrecedesIterator() const
     {
-        return QListIterator<TaskDependency*>(precedes);
+        return QListIterator<TaskDependency *>(precedes);
     }
 
     /// Add working time defined in @p shift for interval @p i
-    bool addShift(const Interval& i, Shift* s);
+    bool addShift(const Interval &i, Shift *s);
     /// Return true if @p slot is defined as working time
     /// Falls back to project definitions if no shifts has been defined for this task
     bool isWorkingTime(const Interval &slot) const;
 
-    void addAllocation(Allocation* a) { allocations.append(a); }
-    void purgeAllocations() { allocations.clear(); }
-    QListIterator<Allocation*> getAllocationIterator() const
+    void addAllocation(Allocation *a)
     {
-        return QListIterator<Allocation*>(allocations);
+        allocations.append(a);
+    }
+    void purgeAllocations()
+    {
+        allocations.clear();
+    }
+    QListIterator<Allocation *> getAllocationIterator() const
+    {
+        return QListIterator<Allocation *>(allocations);
     }
 
     TaskListIterator getPreviousIterator() const
     {
         return TaskListIterator(previous);
     }
-    bool hasPrevious() const { return !previous.isEmpty(); }
+    bool hasPrevious() const
+    {
+        return !previous.isEmpty();
+    }
 
     TaskListIterator getFollowersIterator() const
     {
         return TaskListIterator(followers);
     }
-    bool hasFollowers() const { return !followers.isEmpty(); }
+    bool hasFollowers() const
+    {
+        return !followers.isEmpty();
+    }
 
-    bool hasPrevious(const Task* t) { return previous.indexOf(const_cast<Task*>(t)) != -1; }
-    bool hasFollower(const Task* t) { return followers.indexOf(const_cast<Task*>(t)) != -1; }
+    bool hasPrevious(const Task *t)
+    {
+        return previous.indexOf(const_cast<Task *>(t)) != -1;
+    }
+    bool hasFollower(const Task *t)
+    {
+        return followers.indexOf(const_cast<Task *>(t)) != -1;
+    }
 
     // The following group of functions operates only on scenario variables.
     void setSpecifiedStart(int sc, time_t s)
     {
         scenarios[sc].specifiedStart = s;
-        qDebug()<<"Task::setSpecifiedStart:"<<id<<":"<<sc<<s<<scenarios[sc].specifiedStart;
+        qDebug() << "Task::setSpecifiedStart:" << id << ":" << sc << s << scenarios[sc].specifiedStart;
     }
-    void setStart(int sc, time_t s) { scenarios[sc].start = s; }
-    time_t getStart(int sc) const { return scenarios[sc].start; }
+    void setStart(int sc, time_t s)
+    {
+        scenarios[sc].start = s;
+    }
+    time_t getStart(int sc) const
+    {
+        return scenarios[sc].start;
+    }
 
     void setSpecifiedEnd(int sc, time_t s)
     {
         scenarios[sc].specifiedEnd = s;
     }
-    void setEnd(int sc, time_t s) { scenarios[sc].end = s; }
-    time_t getEnd(int sc) const { return scenarios[sc].end; }
+    void setEnd(int sc, time_t s)
+    {
+        scenarios[sc].end = s;
+    }
+    time_t getEnd(int sc) const
+    {
+        return scenarios[sc].end;
+    }
 
-    void setSpecifiedPeriod(int sc, const Interval& iv)
+    void setSpecifiedPeriod(int sc, const Interval &iv)
     {
         scenarios[sc].specifiedStart = iv.getStart();
         scenarios[sc].specifiedEnd = iv.getEnd();
@@ -191,26 +269,68 @@ public:
         return scenarios[sc].endBufferStart;
     }
 
-    void setMinStart(int sc, time_t s) { scenarios[sc].minStart = s; }
-    time_t getMinStart(int sc) const { return scenarios[sc].minStart; }
+    void setMinStart(int sc, time_t s)
+    {
+        scenarios[sc].minStart = s;
+    }
+    time_t getMinStart(int sc) const
+    {
+        return scenarios[sc].minStart;
+    }
 
-    void setMaxStart(int sc, time_t s) { scenarios[sc].maxStart = s; }
-    time_t getMaxStart(int sc) const { return scenarios[sc].maxStart; }
+    void setMaxStart(int sc, time_t s)
+    {
+        scenarios[sc].maxStart = s;
+    }
+    time_t getMaxStart(int sc) const
+    {
+        return scenarios[sc].maxStart;
+    }
 
-    void setMinEnd(int sc, time_t e) { scenarios[sc].minEnd = e; }
-    time_t getMinEnd(int sc) const { return scenarios[sc].minEnd; }
+    void setMinEnd(int sc, time_t e)
+    {
+        scenarios[sc].minEnd = e;
+    }
+    time_t getMinEnd(int sc) const
+    {
+        return scenarios[sc].minEnd;
+    }
 
-    void setMaxEnd(int sc, time_t e) { scenarios[sc].maxEnd = e; }
-    time_t getMaxEnd(int sc) const { return scenarios[sc].maxEnd; }
+    void setMaxEnd(int sc, time_t e)
+    {
+        scenarios[sc].maxEnd = e;
+    }
+    time_t getMaxEnd(int sc) const
+    {
+        return scenarios[sc].maxEnd;
+    }
 
-    void setLength(int sc, double days) { scenarios[sc].length = days; }
-    double getLength(int sc) const { return scenarios[sc].length; }
+    void setLength(int sc, double days)
+    {
+        scenarios[sc].length = days;
+    }
+    double getLength(int sc) const
+    {
+        return scenarios[sc].length;
+    }
 
-    void setEffort(int sc, double e) { scenarios[sc].effort = e; }
-    double getEffort(int sc) const { return scenarios[sc].effort; }
+    void setEffort(int sc, double e)
+    {
+        scenarios[sc].effort = e;
+    }
+    double getEffort(int sc) const
+    {
+        return scenarios[sc].effort;
+    }
 
-    void setDuration(int sc, double d) { scenarios[sc].duration = d; }
-    double getDuration(int sc) const { return scenarios[sc].duration; }
+    void setDuration(int sc, double d)
+    {
+        scenarios[sc].duration = d;
+    }
+    double getDuration(int sc) const
+    {
+        return scenarios[sc].duration;
+    }
 
     bool isStartOk(int sc) const
     {
@@ -221,34 +341,61 @@ public:
         return scenarios[sc].isEndOk();
     }
 
-    bool isBuffer(int sc, const Interval& iv) const;
+    bool isBuffer(int sc, const Interval &iv) const;
 
-    void setComplete(int sc, double c) { scenarios[sc].reportedCompletion = c; }
+    void setComplete(int sc, double c)
+    {
+        scenarios[sc].reportedCompletion = c;
+    }
     double getComplete(int sc) const
     {
         return scenarios[sc].reportedCompletion;
     }
 
-    void setStatusNote(int sc, const QString& d)
+    void setStatusNote(int sc, const QString &d)
     {
         scenarios[sc].statusNote = d;
     }
-    const QString& getStatusNote(int sc) const
+    const QString &getStatusNote(int sc) const
     {
         return scenarios[sc].statusNote;
     }
 
-    void setStartBuffer(int sc, double p) { scenarios[sc].startBuffer = p; }
-    double getStartBuffer(int sc) const { return scenarios[sc].startBuffer; }
+    void setStartBuffer(int sc, double p)
+    {
+        scenarios[sc].startBuffer = p;
+    }
+    double getStartBuffer(int sc) const
+    {
+        return scenarios[sc].startBuffer;
+    }
 
-    void setEndBuffer(int sc, double p) { scenarios[sc]. endBuffer = p; }
-    double getEndBuffer(int sc) const { return scenarios[sc].endBuffer; }
+    void setEndBuffer(int sc, double p)
+    {
+        scenarios[sc]. endBuffer = p;
+    }
+    double getEndBuffer(int sc) const
+    {
+        return scenarios[sc].endBuffer;
+    }
 
-    void setStartCredit(int sc, double c) { scenarios[sc].startCredit = c; }
-    double getStartCredit(int sc) const { return scenarios[sc].startCredit; }
+    void setStartCredit(int sc, double c)
+    {
+        scenarios[sc].startCredit = c;
+    }
+    double getStartCredit(int sc) const
+    {
+        return scenarios[sc].startCredit;
+    }
 
-    void setEndCredit(int sc, double c) { scenarios[sc].endCredit = c; }
-    double getEndCredit(int sc) const { return scenarios[sc].endCredit; }
+    void setEndCredit(int sc, double c)
+    {
+        scenarios[sc].endCredit = c;
+    }
+    double getEndCredit(int sc) const
+    {
+        return scenarios[sc].endCredit;
+    }
 
     double getCalcEffort(int sc) const;
     double getCalcDuration(int sc) const;
@@ -257,8 +404,11 @@ public:
 //                       const Resource* resource = 0, bool recursive = true)
 //         const;
 
-    bool isActive(int sc, const Interval& period) const;
-    TaskStatus getStatus(int sc) const { return scenarios[sc].status; }
+    bool isActive(int sc, const Interval &period) const;
+    TaskStatus getStatus(int sc) const
+    {
+        return scenarios[sc].status;
+    }
     QString getStatusText(int sc) const;
 
     QString getSchedulingText() const;
@@ -275,21 +425,22 @@ public:
     double getCompletedLoad(int sc) const;
     double getRemainingLoad(int sc) const;
 
-    double getLoad(int sc, const Interval& period, const Resource* resource = 0)
-        const;
-    long getAllocatedTime(int sc, const Interval& period,
-                          const Resource* resource = 0) const;
-    double getAllocatedTimeLoad(int sc, const Interval& period,
-                                const Resource* resource = 0) const;
+    double getLoad(int sc, const Interval &period, const Resource *resource = 0)
+    const;
+    long getAllocatedTime(int sc, const Interval &period,
+                          const Resource *resource = 0) const;
+    double getAllocatedTimeLoad(int sc, const Interval &period,
+                                const Resource *resource = 0) const;
 
-    void addBookedResource(int sc, Resource* r)
+    void addBookedResource(int sc, Resource *r)
     {
-        if (scenarios[sc].bookedResources.indexOf((CoreAttributes*) r) == -1)
-            scenarios[sc].bookedResources.inSort((CoreAttributes*) r);
+        if (scenarios[sc].bookedResources.indexOf((CoreAttributes *) r) == -1) {
+            scenarios[sc].bookedResources.inSort((CoreAttributes *) r);
+        }
     }
-    bool isBookedResource(int sc, const Resource* r) const
+    bool isBookedResource(int sc, const Resource *r) const
     {
-        return scenarios[sc].bookedResources.indexOf((CoreAttributes*) r) != -1;
+        return scenarios[sc].bookedResources.indexOf((CoreAttributes *) r) != -1;
     }
     ResourceListIterator getBookedResourcesIterator(int sc) const
     {
@@ -303,10 +454,16 @@ public:
     {
         scenarios[sc].specifiedScheduled = ps;
     }
-    void setScheduled(int sc, bool ps) { scenarios[sc].scheduled = ps; }
-    bool getScheduled(int sc) const { return scenarios[sc].scheduled; }
+    void setScheduled(int sc, bool ps)
+    {
+        scenarios[sc].scheduled = ps;
+    }
+    bool getScheduled(int sc) const
+    {
+        return scenarios[sc].scheduled;
+    }
 
-    bool isDutyOf(int sc, const Resource* r) const
+    bool isDutyOf(int sc, const Resource *r) const
     {
         return scenarios[sc].isDutyOf(r);
     }
@@ -315,7 +472,10 @@ public:
     void prepareScenario(int sc);
     void finishScenario(int sc);
     void computeCriticalness(int sc);
-    double getCriticalness(int sc) const { return scenarios[sc].criticalness; }
+    double getCriticalness(int sc) const
+    {
+        return scenarios[sc].criticalness;
+    }
     void checkAndMarkCriticalPath(int sc, double minSlack, time_t maxEnd);
 
     double computePathCriticalness(int sc);
@@ -326,15 +486,16 @@ public:
 
     bool isOnCriticalPath(int sc, bool leavesOnly = true) const
     {
-        if (!isLeaf() && leavesOnly)
+        if (!isLeaf() && leavesOnly) {
             return false;
+        }
 
         return scenarios[sc].isOnCriticalPath;
     }
 
-    bool hasCriticalLinkTo(int sc, const Task* t) const
+    bool hasCriticalLinkTo(int sc, const Task *t) const
     {
-        return scenarios[sc].criticalLinks.contains(const_cast<Task*>(t));
+        return scenarios[sc].criticalLinks.contains(const_cast<Task *>(t));
     }
 
     /**
@@ -343,9 +504,12 @@ public:
      */
     bool isOrHasDescendantOnCriticalPath(int sc) const;
 
-    bool isContainer() const { return !sub->isEmpty(); }
+    bool isContainer() const
+    {
+        return !sub->isEmpty();
+    }
 
-    bool xRef(QMap<QString, Task*>& hash);
+    bool xRef(QMap<QString, Task *> &hash);
     void implicitXRef();
     void sortAllocations();
     void saveSpecifiedBookedResources();
@@ -361,27 +525,36 @@ public:
      * @retval true if a loop was detected.
      * @retval false otherwise.
      */
-    bool loopDetector(LDIList& chkedTaskList) const;
+    bool loopDetector(LDIList &chkedTaskList) const;
     bool checkDetermination(int sc) const;
     void computeBuffers();
     time_t nextSlot(time_t slotDuration) const;
     bool isReadyForScheduling() const;
-    bool schedule(int sc, time_t& reqStart, time_t duration);
+    bool schedule(int sc, time_t &reqStart, time_t duration);
     void propagateInitialValues(int sc);
     void setRunaway();
     bool isRunaway() const;
 
-    bool isSubTask(const Task* t) const;
+    bool isSubTask(const Task *t) const;
 
-    bool isSchedulingDone() const { return schedulingDone; }
+    bool isSchedulingDone() const
+    {
+        return schedulingDone;
+    }
 
-    void errorMessage(const QString& msg) const;
-    void warningMessage(const QString& msg) const;
+    void errorMessage(const QString &msg) const;
+    void warningMessage(const QString &msg) const;
 
-    QDomElement xmlElement( QDomDocument& doc, bool absId = true );
+    QDomElement xmlElement(QDomDocument &doc, bool absId = true);
 
-    TaskList getSuccessors() const { return successors; }
-    TaskList getPredecessors() const { return predecessors; }
+    TaskList getSuccessors() const
+    {
+        return successors;
+    }
+    TaskList getPredecessors() const
+    {
+        return predecessors;
+    }
 
     bool hasAlapPredecessor() const;
 
@@ -397,29 +570,36 @@ private:
      * @retval true if a loop was detected.
      * @retval false otherwise.
      */
-    bool loopDetection(LDIList& list, LDIList& chkedTaskList, bool atEnd,
+    bool loopDetection(LDIList &list, LDIList &chkedTaskList, bool atEnd,
                        bool fromOutside) const;
-    bool checkPathForLoops(LDIList& list, bool atEnd) const;
+    bool checkPathForLoops(LDIList &list, bool atEnd) const;
     bool scheduleContainer(int sc);
-    Task* subFirst() { return 0/*(Task*) sub->first()*/; }
-    Task* subNext() { return 0/*(Task*) sub->next()*/; }
+    Task *subFirst()
+    {
+        return 0/*(Task*) sub->first()*/;
+    }
+    Task *subNext()
+    {
+        return 0/*(Task*) sub->next()*/;
+    }
     /// Returns the availability of @p resource and its required resources (if any)
     int isAvailable(Allocation *allocation, Resource *resource, time_t slot) const;
     /// Book resource @p r if it (and its required resources) is available
-    bool bookResource(Allocation *allocation, Resource* r, time_t day, time_t duration,
-                      int& slotsToLimit, int& availability);
+    bool bookResource(Allocation *allocation, Resource *r, time_t day, time_t duration,
+                      int &slotsToLimit, int &availability);
     void bookResources(int sc, time_t day, time_t duration);
-    void addBookedResource(Resource* r)
+    void addBookedResource(Resource *r)
     {
-        if (bookedResources.indexOf((CoreAttributes*) r) == -1)
-            bookedResources.inSort((CoreAttributes*) r);
+        if (bookedResources.indexOf((CoreAttributes *) r) == -1) {
+            bookedResources.inSort((CoreAttributes *) r);
+        }
     }
-    QList<Resource*> createCandidateList(int sc, time_t date, Allocation* a);
+    QList<Resource *> createCandidateList(int sc, time_t date, Allocation *a);
     time_t earliestStart(int sc) const;
     time_t latestEnd(int sc) const;
 
-    bool startCanBeDetermined(LDIList& list, int sc) const;
-    bool endCanBeDetermined(LDIList& list, int sc) const;
+    bool startCanBeDetermined(LDIList &list, int sc) const;
+    bool endCanBeDetermined(LDIList &list, int sc) const;
 
     bool hasStartDependency(int sc) const;
     bool hasEndDependency(int sc) const;
@@ -428,15 +608,15 @@ private:
     bool hasEndDependency() const;
 
     bool analyzePath(int sc, double minSlack, time_t pathStart, long busyTime,
-                     long worstMinSlackTime, long& checked, long& found);
-    void collectTransientFollowers(TaskList& list);
+                     long worstMinSlackTime, long &checked, long &found);
+    void collectTransientFollowers(TaskList &list);
 
-    bool countMilestones(int sc, time_t now, int& totalMilestones,
-                         int& completedMilestones,
-                         int& reportedCompletedMilestones);
-    bool sumUpEffort(int sc, time_t now, double& totalEffort,
-                     double& completedEffort,
-                     double& reportedCompletedEffort);
+    bool countMilestones(int sc, time_t now, int &totalMilestones,
+                         int &completedMilestones,
+                         int &reportedCompletedMilestones);
+    bool sumUpEffort(int sc, time_t now, double &totalEffort,
+                     double &completedEffort,
+                     double &reportedCompletedEffort);
 
     /// A longer description of the task.
     QString note;
@@ -456,10 +636,10 @@ private:
      * also store the backward dependency together with the specified
      * dependencies in predecessors and successors.
      */
-    QList<TaskDependency*> depends;
+    QList<TaskDependency *> depends;
 
     /// @see depends
-    QList<TaskDependency*> precedes;
+    QList<TaskDependency *> precedes;
 
     /**
      * A list of tasks that must precede this task.
@@ -503,19 +683,19 @@ private:
     SchedulingInfo scheduling;
 
     /// ID of responsible resource.
-    Resource* responsible;
+    Resource *responsible;
 
     /// Tasks may only be worked on during the specified shifts.
     /// Also defines the working time of length tasks
     ShiftSelectionList shifts;
 
     /// List of resource allocations requested by the task
-    QList<Allocation*> allocations;
+    QList<Allocation *> allocations;
 
     /// Account where the credits of the task are credited to.
 //     Account* account;
 
-    TaskScenario* scenarios;
+    TaskScenario *scenarios;
 
     /* The following group of variables store values generated during a
      * scheduler run. They might be initialized by other values and/or
@@ -584,12 +764,12 @@ private:
 
     /// A list of all the resources booked for this task.
     ResourceList bookedResources;
-} ;
+};
 
 } // namespace TJ
 
-KPLATOTJ_EXPORT QDebug operator<<( QDebug dbg, const TJ::Task* t );
-KPLATOTJ_EXPORT QDebug operator<<( QDebug dbg, const TJ::Task& t );
+KPLATOTJ_EXPORT QDebug operator<<(QDebug dbg, const TJ::Task *t);
+KPLATOTJ_EXPORT QDebug operator<<(QDebug dbg, const TJ::Task &t);
 
 #endif
 

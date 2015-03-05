@@ -63,7 +63,8 @@ public:
      * attributes from the ODF file (if applicable), so it would be useful to synchronize
      * the property names based on that.
      */
-    virtual void setProperties(const KoProperties *props) {
+    virtual void setProperties(const KoProperties *props)
+    {
         Q_UNUSED(props);
     }
 
@@ -72,7 +73,8 @@ public:
      * of manipulating these options so the text-tool can use it to show that to the user.
      * Note that all manipulations should have a direct effect on the variable itself.
      */
-    virtual QWidget *createOptionsWidget() {
+    virtual QWidget *createOptionsWidget()
+    {
         return 0;
     }
 

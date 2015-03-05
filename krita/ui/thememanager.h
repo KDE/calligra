@@ -52,11 +52,11 @@ public:
     ~ThemeManager();
 
     QString currentThemeName() const;
-    void    setCurrentTheme(const QString& name);
+    void    setCurrentTheme(const QString &name);
 
     QString defaultThemeName() const;
 
-    void    setThemeMenuAction(KActionMenu* const action);
+    void    setThemeMenuAction(KActionMenu *const action);
     void    registerThemeActions(KActionCollection *actionCollection);
 
 Q_SIGNALS:
@@ -71,16 +71,15 @@ private Q_SLOTS:
 
 private:
 
-
     void    populateThemeMenu();
-    QPixmap createSchemePreviewIcon(const KSharedConfigPtr& config);
+    QPixmap createSchemePreviewIcon(const KSharedConfigPtr &config);
     QString currentKDEdefaultTheme() const;
     void    updateCurrentKDEdefaultThemePreview();
 
 private:
 
     class ThemeManagerPriv;
-    ThemeManagerPriv* const d;
+    ThemeManagerPriv *const d;
 };
 
 }  // namespace Digikam

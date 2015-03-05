@@ -42,7 +42,7 @@ private Q_SLOTS:
     void testBITLSHIFT();
     void testBITRSHIFT();
 private:
-    Value evaluate(const QString&, Value& ex);
+    Value evaluate(const QString &, Value &ex);
 };
 
 } // namespace Sheets

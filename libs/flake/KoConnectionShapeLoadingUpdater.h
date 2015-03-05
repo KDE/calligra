@@ -28,8 +28,7 @@ class KoShape;
 class KoConnectionShapeLoadingUpdater : public KoLoadingShapeUpdater
 {
 public:
-    enum ConnectionPosition
-    {
+    enum ConnectionPosition {
         First,
         Second
     };

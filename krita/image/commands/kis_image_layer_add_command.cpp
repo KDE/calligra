@@ -22,17 +22,16 @@
 
 #include <klocale.h>
 
-
 KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,
-                                                 KisNodeSP layer,
-                                                 KisNodeSP parent,
-                                                 KisNodeSP aboveThis,
-                                                 bool doRedoUpdates,
-                                                 bool doUndoUpdates)
-        : KisImageCommand(kundo2_i18n("Add Layer"), image),
-          m_index(-1),
-          m_doRedoUpdates(doRedoUpdates),
-          m_doUndoUpdates(doUndoUpdates)
+        KisNodeSP layer,
+        KisNodeSP parent,
+        KisNodeSP aboveThis,
+        bool doRedoUpdates,
+        bool doUndoUpdates)
+    : KisImageCommand(kundo2_i18n("Add Layer"), image),
+      m_index(-1),
+      m_doRedoUpdates(doRedoUpdates),
+      m_doUndoUpdates(doUndoUpdates)
 {
     m_layer = layer;
     m_parent = parent;
@@ -40,15 +39,15 @@ KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,
 }
 
 KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,
-                                                 KisNodeSP layer,
-                                                 KisNodeSP parent,
-                                                 quint32 index,
-                                                 bool doRedoUpdates,
-                                                 bool doUndoUpdates)
-        : KisImageCommand(kundo2_i18n("Add Layer"), image),
-          m_index(index),
-          m_doRedoUpdates(doRedoUpdates),
-          m_doUndoUpdates(doUndoUpdates)
+        KisNodeSP layer,
+        KisNodeSP parent,
+        quint32 index,
+        bool doRedoUpdates,
+        bool doUndoUpdates)
+    : KisImageCommand(kundo2_i18n("Add Layer"), image),
+      m_index(index),
+      m_doRedoUpdates(doRedoUpdates),
+      m_doUndoUpdates(doUndoUpdates)
 {
     m_layer = layer;
     m_parent = parent;

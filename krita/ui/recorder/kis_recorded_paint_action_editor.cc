@@ -36,10 +36,10 @@
 #include "kis_node_query_path_editor.h"
 #include <recorder/kis_node_query_path.h>
 
-KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisRecordedAction* action) : QWidget(parent),
-        m_action(dynamic_cast<KisRecordedPaintAction*>(action)),
-        m_actionEditor(new Ui_WdgPaintActionEditor),
-        m_configWidget(0)
+KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget *parent, KisRecordedAction *action) : QWidget(parent),
+    m_action(dynamic_cast<KisRecordedPaintAction *>(action)),
+    m_actionEditor(new Ui_WdgPaintActionEditor),
+    m_configWidget(0)
 {
     Q_ASSERT(m_action);
     m_actionEditor->setupUi(this);
@@ -65,7 +65,7 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
     // Setup paint ops
 
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
-    foreach(const KoID& paintopId, keys) {
+    foreach (const KoID &paintopId, keys) {
         QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintopId);
 
         QPixmap pm;
@@ -73,7 +73,6 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
             QString fname = KisFactory::componentData().dirs()->findResource("kis_images", pixmapName);
             pm = QPixmap(fname);
         }
-
 
         if (pm.isNull()) {
             pm = QPixmap(16, 16);
@@ -90,12 +89,12 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
     setPaintOpPreset();
     m_actionEditor->paintOps->setCurrentIndex(m_paintops.indexOf(m_action->paintOpPreset()->paintOp().id()));
     m_paintOpsToPreset[m_action->paintOpPreset()->paintOp().id()] = m_action->paintOpPreset();
-    connect(m_actionEditor->wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
+    connect(m_actionEditor->wdgPresetChooser, SIGNAL(resourceSelected(KoResource *)), SLOT(resourceSelected(KoResource *)));
 
     // Setup the query path editor
     m_actionEditor->nodeQueryPathEditor->setNodeQueryPath(m_action->nodeQueryPath());
     connect(m_actionEditor->nodeQueryPathEditor, SIGNAL(nodeQueryPathChanged()), SLOT(nodeQueryPathChanged()));
-    
+
 }
 
 KisRecordedPaintActionEditor::~KisRecordedPaintActionEditor()
@@ -105,7 +104,7 @@ KisRecordedPaintActionEditor::~KisRecordedPaintActionEditor()
 
 void KisRecordedPaintActionEditor::configurationUpdated()
 {
-    m_configWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_action->paintOpPreset()->settings().data()));
+    m_configWidget->writeConfiguration(const_cast<KisPaintOpSettings *>(m_action->paintOpPreset()->settings().data()));
 
     m_action->setPaintColor(m_paintColorPopup->currentKoColor());
     m_action->setBackgroundColor(m_backgroundColorPopup->currentKoColor());
@@ -126,9 +125,9 @@ void KisRecordedPaintActionEditor::paintOpChanged(int index)
     setPaintOpPreset();
 }
 
-void KisRecordedPaintActionEditor::resourceSelected(KoResource* resource)
+void KisRecordedPaintActionEditor::resourceSelected(KoResource *resource)
 {
-    KisPaintOpPresetSP preset = static_cast<KisPaintOpPreset*>(resource);
+    KisPaintOpPresetSP preset = static_cast<KisPaintOpPreset *>(resource);
 
     m_paintOpsToPreset[preset->paintOp().id()] = preset;
     m_action->setPaintOpPreset(preset);
@@ -140,7 +139,6 @@ void KisRecordedPaintActionEditor::nodeQueryPathChanged()
     m_action->setNodeQueryPath(m_actionEditor->nodeQueryPathEditor->nodeQueryPath());
     emit(actionEdited());
 }
-
 
 void KisRecordedPaintActionEditor::setPaintOpPreset()
 {
@@ -164,14 +162,14 @@ KisRecordedPaintActionEditorFactory::~KisRecordedPaintActionEditorFactory()
 {
 }
 
-QWidget* KisRecordedPaintActionEditorFactory::createEditor(QWidget* parent, KisRecordedAction* action) const
+QWidget *KisRecordedPaintActionEditorFactory::createEditor(QWidget *parent, KisRecordedAction *action) const
 {
     return new KisRecordedPaintActionEditor(parent, action);
 }
 
-bool KisRecordedPaintActionEditorFactory::canEdit(const KisRecordedAction* action) const
+bool KisRecordedPaintActionEditorFactory::canEdit(const KisRecordedAction *action) const
 {
-    return dynamic_cast<const KisRecordedPaintAction*>(action);
+    return dynamic_cast<const KisRecordedPaintAction *>(action);
 }
 
 #include "kis_recorded_paint_action_editor.moc"

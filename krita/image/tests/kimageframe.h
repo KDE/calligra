@@ -24,14 +24,14 @@ class KImageFrame : public QFrame
 {
     Q_OBJECT
 public:
-    KImageFrame(QWidget* parent = 0);
+    KImageFrame(QWidget *parent = 0);
     virtual ~KImageFrame() {}
 
 public Q_SLOTS:
-    void setImage(const QImage&);
+    void setImage(const QImage &);
 
 protected Q_SLOTS:
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent *);
 
 protected:
     QImage _image;
@@ -39,4 +39,3 @@ protected:
 };
 
 #endif
-// kate: hl C++; indent-width 4; replace-tabs on;

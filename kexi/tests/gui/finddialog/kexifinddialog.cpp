@@ -26,9 +26,9 @@
 #include <QCheckBox>
 #include <QLabel>
 
-KexiFindDialog::KexiFindDialog(bool replaceMode, QWidget* parent, const char* name, bool modal)
-        : KexiFindDialogBase(parent, name, modal)
-        , m_replaceMode(true)
+KexiFindDialog::KexiFindDialog(bool replaceMode, QWidget *parent, const char *name, bool modal)
+    : KexiFindDialogBase(parent, name, modal)
+    , m_replaceMode(true)
 {
     m_btnFind->setIconSet(KStandardGuiItem::find().iconSet());
     m_btnClose->setIconSet(KStandardGuiItem::close().iconSet());
@@ -38,8 +38,9 @@ KexiFindDialog::KexiFindDialog(bool replaceMode, QWidget* parent, const char* na
 
 void KexiFindDialog::setReplaceMode(bool set)
 {
-    if (m_replaceMode == set)
+    if (m_replaceMode == set) {
         return;
+    }
     m_replaceMode = set;
     if (m_replaceMode) {
         m_promptOnReplace->show();

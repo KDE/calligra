@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 
@@ -34,7 +33,6 @@ typedef boost::singleton_pool<KisTileData, TILE_SIZE_8BPP, boost::default_user_a
 const qint32 KisTileData::WIDTH = __TILE_DATA_WIDTH;
 const qint32 KisTileData::HEIGHT = __TILE_DATA_HEIGHT;
 
-
 KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
     : m_state(NORMAL),
       m_mementoFlag(0),
@@ -50,7 +48,6 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
     fillWithPixel(defPixel);
 }
 
-
 /**
  * Duplicating tiledata
  * + new object loaded in memory
@@ -62,7 +59,7 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
  * to disable the memory check with checkFreeMemory, otherwise, there
  * is a deadlock.
  */
-KisTileData::KisTileData(const KisTileData& rhs, bool checkFreeMemory)
+KisTileData::KisTileData(const KisTileData &rhs, bool checkFreeMemory)
     : m_state(NORMAL),
       m_mementoFlag(0),
       m_age(0),
@@ -71,14 +68,13 @@ KisTileData::KisTileData(const KisTileData& rhs, bool checkFreeMemory)
       m_pixelSize(rhs.m_pixelSize),
       m_store(rhs.m_store)
 {
-    if(checkFreeMemory) {
+    if (checkFreeMemory) {
         m_store->checkFreeMemory();
     }
     m_data = allocateData(m_pixelSize);
 
     memcpy(m_data, rhs.data(), m_pixelSize * WIDTH * HEIGHT);
 }
-
 
 KisTileData::~KisTileData()
 {
@@ -89,7 +85,7 @@ void KisTileData::fillWithPixel(const quint8 *defPixel)
 {
     quint8 *it = m_data;
 
-    for (int i = 0; i < WIDTH*HEIGHT; i++, it += m_pixelSize) {
+    for (int i = 0; i < WIDTH * HEIGHT; i++, it += m_pixelSize) {
         memcpy(it, defPixel, m_pixelSize);
     }
 }
@@ -102,7 +98,7 @@ void KisTileData::releaseMemory()
     }
 
     KisTileData *clone = 0;
-    while(m_clonesStack.pop(clone)) {
+    while (m_clonesStack.pop(clone)) {
         delete clone;
     }
 
@@ -115,27 +111,27 @@ void KisTileData::allocateMemory()
     m_data = allocateData(m_pixelSize);
 }
 
-quint8* KisTileData::allocateData(const qint32 pixelSize)
+quint8 *KisTileData::allocateData(const qint32 pixelSize)
 {
     quint8 *ptr = 0;
 
-    switch(pixelSize) {
+    switch (pixelSize) {
     case 4:
-        ptr = (quint8*)BoostPool4BPP::malloc();
+        ptr = (quint8 *)BoostPool4BPP::malloc();
         break;
     case 8:
-        ptr = (quint8*)BoostPool8BPP::malloc();
+        ptr = (quint8 *)BoostPool8BPP::malloc();
         break;
     default:
-        ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
+        ptr = (quint8 *) malloc(pixelSize * WIDTH * HEIGHT);
     }
 
     return ptr;
 }
 
-void KisTileData::freeData(quint8* ptr, const qint32 pixelSize)
+void KisTileData::freeData(quint8 *ptr, const qint32 pixelSize)
 {
-    switch(pixelSize) {
+    switch (pixelSize) {
     case 4:
         BoostPool4BPP::free(ptr);
         break;
@@ -156,7 +152,7 @@ void KisTileData::freeData(quint8* ptr, const qint32 pixelSize)
 void KisTileData::releaseInternalPools()
 {
     if (!KisTileDataStore::instance()->numTiles() &&
-        !KisTileDataStore::instance()->numTilesInMemory()) {
+            !KisTileDataStore::instance()->numTilesInMemory()) {
 
         BoostPool4BPP::purge_memory();
         BoostPool8BPP::purge_memory();

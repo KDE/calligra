@@ -32,8 +32,7 @@
 #include "kis_canvas_resource_provider.h"
 #include <kis_paintop_preset.h>
 
-
-PresetDockerDock::PresetDockerDock( )
+PresetDockerDock::PresetDockerDock()
     : QDockWidget(i18n("Brush Presets"))
     , m_canvas(0)
 {
@@ -43,7 +42,7 @@ PresetDockerDock::PresetDockerDock( )
     setWidget(m_presetChooser);
 }
 
-void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
+void PresetDockerDock::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
 
@@ -52,9 +51,11 @@ void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
         m_presetChooser->disconnect(m_canvas->viewManager()->paintOpBox());
     }
 
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    m_canvas = dynamic_cast<KisCanvas2 *>(canvas);
 
-    if (!m_canvas || !m_canvas->viewManager() || !m_canvas->resourceManager()) return;
+    if (!m_canvas || !m_canvas->viewManager() || !m_canvas->resourceManager()) {
+        return;
+    }
 
     connect(m_presetChooser, SIGNAL(resourceSelected(KoResource*)),
             m_canvas->viewManager()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
@@ -62,13 +63,14 @@ void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
             this, SLOT(canvasResourceChanged(int,QVariant)));
 }
 
-void PresetDockerDock::canvasResourceChanged(int /*key*/, const QVariant& /*v*/)
+void PresetDockerDock::canvasResourceChanged(int /*key*/, const QVariant & /*v*/)
 {
     if (m_canvas) {
         sender()->blockSignals(true);
         KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-        if(preset)
-            m_presetChooser->canvasResourceChanged(preset.data(),preset);
+        if (preset) {
+            m_presetChooser->canvasResourceChanged(preset.data(), preset);
+        }
         sender()->blockSignals(false);
         m_presetChooser->updateViewSettings();
     }

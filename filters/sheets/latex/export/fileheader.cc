@@ -28,7 +28,7 @@
 #include "config.h"
 #include <QTextStream>
 
-FileHeader* FileHeader::_instance = 0;
+FileHeader *FileHeader::_instance = 0;
 
 /*******************************************/
 /* Constructor                             */
@@ -107,14 +107,16 @@ void FileHeader::analyzeAttributes(const QDomNode node)
 void FileHeader::generate(QTextStream &out)
 {
     kDebug(30522) << "GENERATION OF THE FILE HEADER";
-    if (Config::instance()->mustUseLatin1())
+    if (Config::instance()->mustUseLatin1()) {
         generateLatinPreamble(out);
-    else if (Config::instance()->mustUseUnicode())
+    } else if (Config::instance()->mustUseUnicode()) {
         generateUnicodePreamble(out);
+    }
 
     generatePackage(out);
-    if (getFormat() == TF_CUSTOM)
+    if (getFormat() == TF_CUSTOM) {
         generatePaper(out);
+    }
     out << "%%%%%%%%%%%%%%%%%% END OF PREAMBLE %%%%%%%%%%%%%%%%%%" << endl << endl;
 }
 
@@ -179,8 +181,9 @@ void FileHeader::generateLatinPreamble(QTextStream &out)
         out << "executivepaper, ";
         break;
     }
-    if (getOrientation() == TO_LANDSCAPE)
+    if (getOrientation() == TO_LANDSCAPE) {
         out << "landscape, ";
+    }
     /* To change : will use a special latexcommand to able to
      * obtain more than one column :))
      */
@@ -199,8 +202,9 @@ void FileHeader::generateLatinPreamble(QTextStream &out)
     }
 
     out << Config::instance()->getDefaultFontSize() << "pt";
-    if (Config::instance()->getQuality() == "draft")
+    if (Config::instance()->getQuality() == "draft") {
         out << ", draft";
+    }
     out << "]{";
     out << Config::instance()->getClass() << "}" << endl;
     out << "\\usepackage[" << Config::instance()->getEncoding() << "]{inputenc}" << endl << endl;
@@ -249,8 +253,9 @@ void FileHeader::generateUnicodePreamble(QTextStream &out)
         out << "executivepaper, ";
         break;
     }
-    if (getOrientation() == TO_LANDSCAPE)
+    if (getOrientation() == TO_LANDSCAPE) {
         out << "landscape, ";
+    }
     /* To change : will use a special latexcommand to able to
      * obtain more than one column :))
      */
@@ -269,12 +274,12 @@ void FileHeader::generateUnicodePreamble(QTextStream &out)
     }
 
     out << Config::instance()->getDefaultFontSize() << "pt";
-    if (Config::instance()->getQuality() == "draft")
+    if (Config::instance()->getQuality() == "draft") {
         out << ", draft";
+    }
     out << "]{";
     out << Config::instance()->getClass() << "}" << endl;
 }
-
 
 /*******************************************/
 /* GeneratePackage                         */
@@ -282,20 +287,27 @@ void FileHeader::generateUnicodePreamble(QTextStream &out)
 void FileHeader::generatePackage(QTextStream &out)
 {
     out << "% Package(s) to include" << endl;
-    if (Config::instance()->mustUseUnicode())
+    if (Config::instance()->mustUseUnicode()) {
         out << "\\usepackage{omega}" << endl;
-    if (getFormat() == TF_A4)
+    }
+    if (getFormat() == TF_A4) {
         out << "\\usepackage[a4paper]{geometry}" << endl;
-    if (hasFooter() || hasHeader())
+    }
+    if (hasFooter() || hasHeader()) {
         out << "\\usepackage{fancyhdr}" << endl;
-    if (hasColor())
+    }
+    if (hasColor()) {
         out << "\\usepackage{colortbl}" << endl;
-    if (hasUnderline())
+    }
+    if (hasUnderline()) {
         out << "\\usepackage{ulem}" << endl;
-    if (hasEnumerate())
+    }
+    if (hasEnumerate()) {
         out << "\\usepackage{enumerate}" << endl;
-    if (hasGraphics())
+    }
+    if (hasGraphics()) {
         out << "\\usepackage{graphics}" << endl;
+    }
     out << "\\usepackage{array}" << endl;
     out << "\\usepackage{multirow}" << endl;
     out << "\\usepackage{textcomp}" << endl;
@@ -310,13 +322,14 @@ void FileHeader::generatePackage(QTextStream &out)
 
     if (langs.count() > 1)
         out << "\\selectlanguage{" << Config::instance()->getDefaultLanguage()
-        << "}" << endl << endl;
+            << "}" << endl << endl;
 }
 
-FileHeader* FileHeader::instance()
+FileHeader *FileHeader::instance()
 {
-    if (_instance == 0)
+    if (_instance == 0) {
         _instance = new FileHeader();
+    }
     return _instance;
 }
 

@@ -27,12 +27,11 @@
 #include <kis_bookmarked_configuration_manager.h>
 
 struct KisBookmarkedConfigurationsModel::Private {
-    KisBookmarkedConfigurationManager* bookmarkManager;
+    KisBookmarkedConfigurationManager *bookmarkManager;
     QList<QString> configsKey;
 };
 
-
-KisBookmarkedConfigurationsModel::KisBookmarkedConfigurationsModel(KisBookmarkedConfigurationManager* bm) : d(new Private)
+KisBookmarkedConfigurationsModel::KisBookmarkedConfigurationsModel(KisBookmarkedConfigurationManager *bm) : d(new Private)
 {
     d->bookmarkManager = bm;
     d->configsKey = d->bookmarkManager->configurations();
@@ -44,7 +43,7 @@ KisBookmarkedConfigurationsModel::~KisBookmarkedConfigurationsModel()
     delete d;
 }
 
-KisBookmarkedConfigurationManager* KisBookmarkedConfigurationsModel::bookmarkedConfigurationManager()
+KisBookmarkedConfigurationManager *KisBookmarkedConfigurationsModel::bookmarkedConfigurationManager()
 {
     return d->bookmarkManager;
 }
@@ -73,12 +72,12 @@ QVariant KisBookmarkedConfigurationsModel::data(const QModelIndex &index, int ro
     return QVariant();
 }
 
-bool KisBookmarkedConfigurationsModel::setData(const QModelIndex & index, const QVariant & value, int role)
+bool KisBookmarkedConfigurationsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (role == Qt::EditRole && index.row() >= 2) {
         QString name = value.toString();
         int idx = index.row() - 2;
-        KisSerializableConfiguration* config = d->bookmarkManager->load(d->configsKey[idx]);
+        KisSerializableConfiguration *config = d->bookmarkManager->load(d->configsKey[idx]);
         d->bookmarkManager->remove(d->configsKey[idx]);
         d->bookmarkManager->save(name, config);
         d->configsKey[idx] = name;
@@ -89,9 +88,11 @@ bool KisBookmarkedConfigurationsModel::setData(const QModelIndex & index, const 
     return false;
 }
 
-KisSerializableConfiguration* KisBookmarkedConfigurationsModel::configuration(const QModelIndex &index) const
+KisSerializableConfiguration *KisBookmarkedConfigurationsModel::configuration(const QModelIndex &index) const
 {
-    if (!index.isValid()) return 0;
+    if (!index.isValid()) {
+        return 0;
+    }
     switch (index.row()) {
     case 0:
         dbgKrita << "loading default" << endl;
@@ -105,25 +106,29 @@ KisSerializableConfiguration* KisBookmarkedConfigurationsModel::configuration(co
     }
 }
 
-QModelIndex KisBookmarkedConfigurationsModel::indexFor(const QString& name) const
+QModelIndex KisBookmarkedConfigurationsModel::indexFor(const QString &name) const
 {
     int idx = d->configsKey.indexOf(name);
-    if (idx == -1) return QModelIndex();
+    if (idx == -1) {
+        return QModelIndex();
+    }
     return createIndex(idx + 2, 0, 0);
 }
 
 bool KisBookmarkedConfigurationsModel::isIndexDeletable(const QModelIndex &index) const
 {
-    if (!index.isValid() || index.row() < 2) return false;
+    if (!index.isValid() || index.row() < 2) {
+        return false;
+    }
     return true;
 }
 
-void KisBookmarkedConfigurationsModel::newConfiguration(KLocalizedString baseName, const KisSerializableConfiguration* config)
+void KisBookmarkedConfigurationsModel::newConfiguration(KLocalizedString baseName, const KisSerializableConfiguration *config)
 {
     saveConfiguration(d->bookmarkManager->uniqueName(baseName), config);
 }
 
-void KisBookmarkedConfigurationsModel::saveConfiguration(const QString & name, const KisSerializableConfiguration* config)
+void KisBookmarkedConfigurationsModel::saveConfiguration(const QString &name, const KisSerializableConfiguration *config)
 {
     d->bookmarkManager->save(name, config);
     if (!d->configsKey.contains(name)) {
@@ -135,7 +140,9 @@ void KisBookmarkedConfigurationsModel::saveConfiguration(const QString & name, c
 
 void KisBookmarkedConfigurationsModel::deleteIndex(const QModelIndex &index)
 {
-    if (!index.isValid() || index.row() < 2) return ;
+    if (!index.isValid() || index.row() < 2) {
+        return;
+    }
     int idx = index.row() - 2;
     d->bookmarkManager->remove(d->configsKey[idx]);
     beginRemoveRows(QModelIndex(), idx + 2, idx + 2);
@@ -143,9 +150,11 @@ void KisBookmarkedConfigurationsModel::deleteIndex(const QModelIndex &index)
     endRemoveRows();
 }
 
-Qt::ItemFlags KisBookmarkedConfigurationsModel::flags(const QModelIndex & index) const
+Qt::ItemFlags KisBookmarkedConfigurationsModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid()) return 0;
+    if (!index.isValid()) {
+        return 0;
+    }
     switch (index.row()) {
     case 0:
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled;

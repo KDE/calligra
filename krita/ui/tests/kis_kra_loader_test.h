@@ -25,7 +25,7 @@ class KisKraLoaderTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-     void initTestCase();
+    void initTestCase();
 
     void testLoading();
     void testObligeSingleChild();

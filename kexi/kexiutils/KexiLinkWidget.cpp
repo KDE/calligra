@@ -27,42 +27,45 @@
 class KexiLinkWidget::Private
 {
 public:
-    explicit Private(KexiLinkWidget* qq) : q(qq) {
+    explicit Private(KexiLinkWidget *qq) : q(qq)
+    {
         q->setFocusPolicy(Qt::StrongFocus);
         q->setTextFormat(Qt::RichText);
         updateColors();
     }
 
-    void updateColors() {
+    void updateColors()
+    {
         KColorScheme scheme(q->palette().currentColorGroup());
         linkColor = scheme.foreground(KColorScheme::LinkText).color();
     }
 
-    void updateText() {
+    void updateText()
+    {
         QString text;
         text = QString("<a href=\"%1\" style=\"color:%2;\">%3</a>")
-            .arg(link).arg(linkColor.name()).arg(linkText);
+               .arg(link).arg(linkColor.name()).arg(linkText);
         if (!format.isEmpty()) {
             text = QString(format).replace("%L", text);
         }
         q->setText(text);
     }
 
-    KexiLinkWidget * const q;
+    KexiLinkWidget *const q;
     QString link;
     QString linkText;
     QString format;
     QColor linkColor;
 };
 
-KexiLinkWidget::KexiLinkWidget(QWidget* parent)
- : QLabel(parent), d(new Private(this))
+KexiLinkWidget::KexiLinkWidget(QWidget *parent)
+    : QLabel(parent), d(new Private(this))
 {
 }
 
 KexiLinkWidget::KexiLinkWidget(
-    const QString& link, const QString& linkText, QWidget* parent)
- : QLabel(parent), d(new Private(this))
+    const QString &link, const QString &linkText, QWidget *parent)
+    : QLabel(parent), d(new Private(this))
 {
     d->link = link;
     d->linkText = linkText;
@@ -79,7 +82,7 @@ QString KexiLinkWidget::link() const
     return d->link;
 }
 
-void KexiLinkWidget::setLink(const QString& link)
+void KexiLinkWidget::setLink(const QString &link)
 {
     d->link = link;
     d->updateText();
@@ -90,7 +93,7 @@ QString KexiLinkWidget::linkText() const
     return d->linkText;
 }
 
-void KexiLinkWidget::setLinkText(const QString& linkText)
+void KexiLinkWidget::setLinkText(const QString &linkText)
 {
     d->linkText = linkText;
     d->updateText();
@@ -101,13 +104,13 @@ QString KexiLinkWidget::format() const
     return d->format;
 }
 
-void KexiLinkWidget::setFormat(const QString& format)
+void KexiLinkWidget::setFormat(const QString &format)
 {
     d->format = format;
     d->updateText();
 }
 
-void KexiLinkWidget::changeEvent(QEvent* event)
+void KexiLinkWidget::changeEvent(QEvent *event)
 {
     switch (event->type()) {
     case QEvent::EnabledChange:

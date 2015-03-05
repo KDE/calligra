@@ -26,13 +26,13 @@
 
 #include <kis_properties_configuration.h>
 
-
 struct KisEmbeddedPatternManager::Private {
-    static KoPattern* tryFetchPatternByMd5(const QByteArray &md5) {
+    static KoPattern *tryFetchPatternByMd5(const QByteArray &md5)
+    {
         KoPattern *pattern = 0;
 
         if (!md5.isEmpty()) {
-            foreach(KoResource * res, KoResourceServerProvider::instance()->patternServer()->resources()) {
+            foreach (KoResource *res, KoResourceServerProvider::instance()->patternServer()->resources()) {
                 KoPattern *pat = dynamic_cast<KoPattern *>(res);
                 if (pat && pat->valid() && pat->md5() == md5) {
                     pattern = pat;
@@ -44,7 +44,8 @@ struct KisEmbeddedPatternManager::Private {
         return pattern;
     }
 
-    static KoPattern* tryLoadEmbeddedPattern(const KisPropertiesConfiguration* setting) {
+    static KoPattern *tryLoadEmbeddedPattern(const KisPropertiesConfiguration *setting)
+    {
         KoPattern *pattern = 0;
 
         QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
@@ -67,7 +68,7 @@ struct KisEmbeddedPatternManager::Private {
     }
 };
 
-void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern)
+void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfiguration *setting, const KoPattern *pattern)
 {
     QByteArray patternMD5 = pattern->md5();
 
@@ -97,7 +98,7 @@ void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfiguration* 
     setting->setProperty("Texture/Pattern/Name", pattern->name());
 }
 
-KoPattern* KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesConfiguration* setting)
+KoPattern *KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesConfiguration *setting)
 {
     KoPattern *pattern = 0;
 
@@ -111,8 +112,7 @@ KoPattern* KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesCon
             if (existingPattern) {
                 delete pattern;
                 pattern = existingPattern;
-            }
-            else {
+            } else {
                 KoResourceServerProvider::instance()->patternServer()->addResource(pattern, true);
             }
         }

@@ -31,11 +31,10 @@ class KoID;
 class KoColorSpace;
 class KisSortedCompositeOpListModel;
 
-
 class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCategorizedListView
 {
 public:
-     KisCompositeOpListWidget(QWidget* parent=0);
+    KisCompositeOpListWidget(QWidget *parent = 0);
     ~KisCompositeOpListWidget();
 
     KoID selectedCompositeOp() const;
@@ -44,12 +43,11 @@ private:
     KisSortedCompositeOpListModel *m_model;
 };
 
-
 class KRITAUI_EXPORT KisCompositeOpComboBox: public QComboBox
 {
     Q_OBJECT
 public:
-     KisCompositeOpComboBox(QWidget* parent=0);
+    KisCompositeOpComboBox(QWidget *parent = 0);
     ~KisCompositeOpComboBox();
 
     virtual void hidePopup();
@@ -58,11 +56,11 @@ public:
     void selectCompositeOp(const KoID &op);
     KoID selectedCompositeOp() const;
 
-    QList<KAction*> blendmodeActions();
+    QList<KAction *> blendmodeActions();
 
 private Q_SLOTS:
-    void slotCategoryToggled(const QModelIndex& index, bool toggled);
-    void slotEntryChecked(const QModelIndex& index);
+    void slotCategoryToggled(const QModelIndex &index, bool toggled);
+    void slotEntryChecked(const QModelIndex &index);
 
     void slotNextBlendingMode();
     void slotPreviousBlendingMode();
@@ -92,13 +90,11 @@ private Q_SLOTS:
     void slotColor();
     void slotLuminosity();
 
-
-
 private:
     KisSortedCompositeOpListModel *m_model;
     KisCategorizedListView *m_view;
     bool m_allowToHidePopup;
-    QList<KAction*> m_actions;
+    QList<KAction *> m_actions;
 };
 
 #endif // KIS_COMPOSITEOP_WIDGETS_H_

@@ -27,7 +27,7 @@
 #include <kis_image.h>
 #include <operations/kis_operation_configuration.h>
 
-WdgGrowSelection::WdgGrowSelection(QWidget* parent, KisViewManager* view)
+WdgGrowSelection::WdgGrowSelection(QWidget *parent, KisViewManager *view)
     : KisOperationUIWidget(i18n("Grow Selection"), parent)
     , m_growValue(1)
 {
@@ -97,7 +97,7 @@ void WdgGrowSelection::updateGrowUIValue(double value)
     }
 }
 
-void WdgGrowSelection::getConfiguration(KisOperationConfiguration* config)
+void WdgGrowSelection::getConfiguration(KisOperationConfiguration *config)
 {
     config->setProperty("x-radius", m_growValue);
     config->setProperty("y-radius", m_growValue);

@@ -45,8 +45,8 @@ public:
     void setImage(KisImageWSP image);
 
     virtual bool hasDummyForNode(KisNodeSP node) const = 0;
-    virtual KisNodeDummy* dummyForNode(KisNodeSP node) const = 0;
-    virtual KisNodeDummy* rootDummy() const = 0;
+    virtual KisNodeDummy *dummyForNode(KisNodeSP node) const = 0;
+    virtual KisNodeDummy *rootDummy() const = 0;
     virtual int dummiesCount() const = 0;
 
 protected:
@@ -97,7 +97,7 @@ private:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* __KIS_DUMMIES_FACADE_BASE_H */

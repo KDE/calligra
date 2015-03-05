@@ -37,20 +37,19 @@ class KisTreeViewPopup : public KisPopupButton
 {
     Q_OBJECT
 public:
-    KisTreeViewPopup(QWidget* parent);
+    KisTreeViewPopup(QWidget *parent);
     ~KisTreeViewPopup();
-    void setModel(QAbstractItemModel* model);
-    void setCurrentFilterId(const QString& id);
+    void setModel(QAbstractItemModel *model);
+    void setCurrentFilterId(const QString &id);
 Q_SIGNALS:
     void currentItemChanged(const QModelIndex &);
 public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &);
 protected:
-    virtual void resizeEvent(QResizeEvent * event);
+    virtual void resizeEvent(QResizeEvent *event);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 #endif

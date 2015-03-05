@@ -44,8 +44,6 @@
 #include <kross/core/interpreter.h>
 #include <kross/core/actioncollection.h>
 
-
-
 /// \internal d-pointer class.
 class KoScriptingPart::Private
 {
@@ -68,10 +66,10 @@ public:
     * each part has exactly one \a KoView instance. That way we are able to bind
     * a script explicit to a specific view.
     */
-    QList<Kross::Action*> actions;
+    QList<Kross::Action *> actions;
 };
 
-KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringList&)
+KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringList &)
     : d(new Private())
 {
     d->module = module;
@@ -98,11 +96,12 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringL
         Kross::Manager::self().setProperty("configfile", file);
         Kross::Manager::self().setProperty("configfiles", files);
 
-        if (QFileInfo(file).exists())
+        if (QFileInfo(file).exists()) {
             Kross::Manager::self().actionCollection()->readXmlFile(file);
-        else
-            foreach(const QString &f, files)
+        } else
+            foreach (const QString &f, files) {
                 Kross::Manager::self().actionCollection()->readXmlFile(f);
+            }
     }
 
     KoView *view = d->module->view();
@@ -115,11 +114,14 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringL
     if (view) {
         if (Kross::ActionCollection *c = Kross::Manager::self().actionCollection()->collection("docker")) {
             foreach (Kross::Action *a, c->actions()) {
-                if (! a->isEnabled())
+                if (! a->isEnabled()) {
                     continue;
+                }
                 a->addObject(d->module);
                 KoScriptingDockerFactory f(view, d->module, a);
-                if (mainwindow) mainwindow->createDockWidget(&f);
+                if (mainwindow) {
+                    mainwindow->createDockWidget(&f);
+                }
                 kDebug(41011) << "Adding scripting docker with id=" << f.id();
             }
         }
@@ -128,9 +130,10 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringL
 
 KoScriptingPart::~KoScriptingPart()
 {
-    foreach(Kross::Action *action, d->actions) {
-        if (action)
+    foreach (Kross::Action *action, d->actions) {
+        if (action) {
             action->finalize();
+        }
     }
     delete d;
 }
@@ -173,14 +176,15 @@ bool KoScriptingPart::showExecuteScriptFile()
 void addMenu(QMenu *menu, Kross::ActionCollection *collection)
 {
     foreach (Kross::Action *a, collection->actions()) {
-            if(a->isEnabled()) {
-                menu->addAction(a);
-            }
+        if (a->isEnabled()) {
+            menu->addAction(a);
         }
+    }
     foreach (const QString &collectionname, collection->collections()) {
         Kross::ActionCollection *c = collection->collection(collectionname);
-        if (c->isEnabled())
+        if (c->isEnabled()) {
             addMenu(menu->addMenu(c->text()), c);
+        }
     }
 }
 
@@ -205,7 +209,7 @@ void KoScriptingPart::slotShowScriptManager()
 void KoScriptingPart::slotStarted(Kross::Action *action)
 {
     kDebug(32010) << "action=" << action->objectName();
-    KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(qApp->activeWindow());
+    KoMainWindow *mainwin = dynamic_cast<KoMainWindow *>(qApp->activeWindow());
     KoView *view = d->module ? d->module->view() : 0;
     if (view && mainwin && view->mainWindow() == mainwin && view == mainwin->rootView()) {
         action->addObject(d->module);
@@ -218,7 +222,7 @@ void KoScriptingPart::slotStarted(Kross::Action *action)
 
 void KoScriptingPart::slotFinished(Kross::Action *action)
 {
-    kDebug(32010) <<"KoScriptingPart::slotFinished action=" << action->objectName();
+    kDebug(32010) << "KoScriptingPart::slotFinished action=" << action->objectName();
     disconnect(action, SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
     if (d->module && d->module == action->object(d->module->objectName())) {
         //d->view->document()->setModified(true);
@@ -226,10 +230,11 @@ void KoScriptingPart::slotFinished(Kross::Action *action)
         KoView *view = d->module ? d->module->view() : 0;
         if (view && view->mainWindow() /* && view == view->mainWindow()->rootView() */) {
             if (action->hadError()) {
-                if (action->errorTrace().isNull())
+                if (action->errorTrace().isNull()) {
                     KMessageBox::error(view, action->errorMessage());
-                else
+                } else {
                     KMessageBox::detailedError(view, action->errorMessage(), action->errorTrace());
+                }
             }
         }
         myFinished(action);

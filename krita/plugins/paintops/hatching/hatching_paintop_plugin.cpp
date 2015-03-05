@@ -17,14 +17,12 @@
  */
 #include "hatching_paintop_plugin.h"
 
-
 #include <klocale.h>
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
-
 
 #include "kis_hatching_paintop.h"
 #include "kis_simple_paintop_factory.h"
@@ -34,13 +32,12 @@
 K_PLUGIN_FACTORY(HatchingPaintOpPluginFactory, registerPlugin<HatchingPaintOpPlugin>();)
 K_EXPORT_PLUGIN(HatchingPaintOpPluginFactory("krita"))
 
-
 HatchingPaintOpPlugin::HatchingPaintOpPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisSimplePaintOpFactory<KisHatchingPaintOp, KisHatchingPaintOpSettings, KisHatchingPaintOpSettingsWidget>("hatchingbrush", i18n("Hatching"),
-                                                                                                                         KisPaintOpFactory::categoryStable() , "krita-hatching.png", QString(), QStringList(), 7));
+            KisPaintOpFactory::categoryStable(), "krita-hatching.png", QString(), QStringList(), 7));
 
 }
 

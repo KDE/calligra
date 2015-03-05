@@ -72,7 +72,6 @@ public:
      */
     static void makeContextCurrent(QGLWidget *widget);
 
-
     /**
      * Print any error messages waiting to be read from glGetError(). Use
      * the helper macro KIS_OPENGL_PRINT_ERROR() to generate the source

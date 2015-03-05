@@ -57,11 +57,11 @@ public:
     /**
      * Xml writer that writes into content.xml.
      */
-    KoXmlWriter& xml;
+    KoXmlWriter &xml;
     /**
      * Styles for the document that is being created.
      **/
-    KoGenStyles& styles;
+    KoGenStyles &styles;
     /**
      * Tells if the current output is for styles.xml or content.xml
      **/
@@ -72,7 +72,7 @@ public:
      *
      * @param xmlWriter The xml writer that writes content.xml
      */
-    Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
+    Writer(KoXmlWriter &xmlWriter, KoGenStyles &kostyles,
            bool stylexml = false);
     /**
      * Create a new writer with a new coordinate system.
@@ -81,7 +81,7 @@ public:
      * systems are used.  These are defined by specifying a rectangle in the
      * old coordinate system and the equivalent in the new coordinate system.
      */
-    Writer transform(const QRectF& oldCoords, const QRectF &newCoords) const;
+    Writer transform(const QRectF &oldCoords, const QRectF &newCoords) const;
     /**
      * Convert local length to global length.
      *

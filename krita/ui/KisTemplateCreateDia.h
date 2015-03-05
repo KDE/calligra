@@ -42,8 +42,8 @@ class KRITAUI_EXPORT KisTemplateCreateDia : public KDialog
     Q_OBJECT
 
 private:
-    KisTemplateCreateDia( const char *templateType, const KComponentData &instance,
-                         const QString &filePath, const QPixmap &thumbnail, QWidget *parent=0 );
+    KisTemplateCreateDia(const char *templateType, const KComponentData &instance,
+                         const QString &filePath, const QPixmap &thumbnail, QWidget *parent = 0);
     ~KisTemplateCreateDia();
 
 public:
@@ -67,7 +67,7 @@ private:
     void fillGroupTree();
 
 private:
-    KisTemplateCreateDiaPrivate * const d;
+    KisTemplateCreateDiaPrivate *const d;
 };
 
 #endif

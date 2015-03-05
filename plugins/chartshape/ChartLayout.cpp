@@ -30,11 +30,10 @@
 
 using namespace KChart;
 
-
 // Static helper methods (defined at end of file)
 static QPointF itemPosition(KoShape *shape);
 static QSizeF  itemSize(KoShape *shape);
-static void    setItemPosition(KoShape *shape, const QPointF& pos);
+static void    setItemPosition(KoShape *shape, const QPointF &pos);
 
 class ChartLayout::LayoutData
 {
@@ -62,8 +61,9 @@ ChartLayout::ChartLayout()
 
 ChartLayout::~ChartLayout()
 {
-    foreach(LayoutData *data, m_layoutItems.values())
+    foreach (LayoutData *data, m_layoutItems.values()) {
         delete data;
+    }
 }
 
 void ChartLayout::add(KoShape *shape)
@@ -92,24 +92,24 @@ void ChartLayout::remove(KoShape *shape)
 
 void ChartLayout::setClipped(const KoShape *shape, bool clipping)
 {
-    Q_ASSERT(m_layoutItems.contains(const_cast<KoShape*>(shape)));
-    m_layoutItems.value(const_cast<KoShape*>(shape))->clipped = clipping;
+    Q_ASSERT(m_layoutItems.contains(const_cast<KoShape *>(shape)));
+    m_layoutItems.value(const_cast<KoShape *>(shape))->clipped = clipping;
 }
 
 bool ChartLayout::isClipped(const KoShape *shape) const
 {
-    Q_ASSERT(m_layoutItems.contains(const_cast<KoShape*>(shape)));
-    return m_layoutItems.value(const_cast<KoShape*>(shape))->clipped;
+    Q_ASSERT(m_layoutItems.contains(const_cast<KoShape *>(shape)));
+    return m_layoutItems.value(const_cast<KoShape *>(shape))->clipped;
 }
 
 void ChartLayout::setInheritsTransform(const KoShape *shape, bool inherit)
 {
-    m_layoutItems.value(const_cast<KoShape*>(shape))->inheritsTransform = inherit;
+    m_layoutItems.value(const_cast<KoShape *>(shape))->inheritsTransform = inherit;
 }
 
 bool ChartLayout::inheritsTransform(const KoShape *shape) const
 {
-    return m_layoutItems.value(const_cast<KoShape*>(shape))->inheritsTransform;
+    return m_layoutItems.value(const_cast<KoShape *>(shape))->inheritsTransform;
 }
 
 int ChartLayout::count() const
@@ -117,14 +117,14 @@ int ChartLayout::count() const
     return m_layoutItems.size();
 }
 
-QList<KoShape*> ChartLayout::shapes() const
+QList<KoShape *> ChartLayout::shapes() const
 {
     return m_layoutItems.keys();
 }
 
 void ChartLayout::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
-    switch(type) {
+    switch (type) {
     case KoShape::SizeChanged:
         m_containerSize = container->size();
         scheduleRelayout();
@@ -141,8 +141,8 @@ bool ChartLayout::isChildLocked(const KoShape *shape) const
 
 void ChartLayout::setPosition(const KoShape *shape, Position pos, int weight)
 {
-    Q_ASSERT(m_layoutItems.contains(const_cast<KoShape*>(shape)));
-    LayoutData *data = m_layoutItems.value(const_cast<KoShape*>(shape));
+    Q_ASSERT(m_layoutItems.contains(const_cast<KoShape *>(shape)));
+    LayoutData *data = m_layoutItems.value(const_cast<KoShape *>(shape));
     data->pos = pos;
     data->weight = weight;
     scheduleRelayout();
@@ -154,8 +154,9 @@ void ChartLayout::childChanged(KoShape *shape, KoShape::ChangeType type)
 
     // Do not relayout again if we're currently in the process of a relayout.
     // Repositioning a layout item or resizing it will result in a cull of this method.
-    if (m_doingLayout)
+    if (m_doingLayout) {
         return;
+    }
 
     // This can be fine-tuned, but right now, simply everything will be re-layouted.
     switch (type) {
@@ -178,24 +179,26 @@ void ChartLayout::layout()
 {
     Q_ASSERT(!m_doingLayout);
 
-    if (!m_relayoutScheduled)
+    if (!m_relayoutScheduled) {
         return;
+    }
 
     m_doingLayout = true;
 
-    QMap<int, KoShape*> top, bottom, start, end;
+    QMap<int, KoShape *> top, bottom, start, end;
     KoShape *topStart    = 0;
     KoShape *bottomStart = 0;
     KoShape *topEnd      = 0;
     KoShape *bottomEnd   = 0;
     KoShape *p           = 0;
 
-    QMapIterator<KoShape*, LayoutData*> it(m_layoutItems);
+    QMapIterator<KoShape *, LayoutData *> it(m_layoutItems);
     while (it.hasNext()) {
         it.next();
         KoShape *shape = it.key();
-        if (!shape->isVisible())
+        if (!shape->isVisible()) {
             continue;
+        }
         LayoutData *data = it.value();
         switch (data->pos) {
         case TopPosition:
@@ -249,17 +252,13 @@ void ChartLayout::layout()
     m_relayoutScheduled = false;
 }
 
-
-
 /// Private Methods
 
-
-
-qreal ChartLayout::layoutTop(const QMap<int, KoShape*>& shapes)
+qreal ChartLayout::layoutTop(const QMap<int, KoShape *> &shapes)
 {
     qreal top = m_vMargin;
     qreal pX = m_containerSize.width() / 2.0;
-    foreach(KoShape *shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         QSizeF size = itemSize(shape);
         setItemPosition(shape, QPointF(pX - size.width() / 2.0, top));
         top += size.height() + m_vMargin;
@@ -267,11 +266,11 @@ qreal ChartLayout::layoutTop(const QMap<int, KoShape*>& shapes)
     return top + m_vMargin;
 }
 
-qreal ChartLayout::layoutBottom(const QMap<int, KoShape*>& shapes)
+qreal ChartLayout::layoutBottom(const QMap<int, KoShape *> &shapes)
 {
     qreal bottom = m_containerSize.height();
     qreal pX = m_containerSize.width() / 2.0;
-    foreach(KoShape *shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         QSizeF size = itemSize(shape);
         bottom -= size.height() + m_vMargin;
         setItemPosition(shape, QPointF(pX - size.width() / 2.0, bottom));
@@ -279,11 +278,11 @@ qreal ChartLayout::layoutBottom(const QMap<int, KoShape*>& shapes)
     return bottom - m_vMargin;
 }
 
-qreal ChartLayout::layoutStart(const QMap<int, KoShape*>& shapes)
+qreal ChartLayout::layoutStart(const QMap<int, KoShape *> &shapes)
 {
     qreal start = m_hMargin;
     qreal pY = m_containerSize.height() / 2.0;
-    foreach(KoShape *shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         QSizeF size = itemSize(shape);
         setItemPosition(shape, QPointF(start, pY - size.height() / 2.0));
         start += size.width() + m_hMargin;
@@ -291,11 +290,11 @@ qreal ChartLayout::layoutStart(const QMap<int, KoShape*>& shapes)
     return start + m_hMargin;
 }
 
-qreal ChartLayout::layoutEnd(const QMap<int, KoShape*>& shapes)
+qreal ChartLayout::layoutEnd(const QMap<int, KoShape *> &shapes)
 {
     qreal end = m_containerSize.width();
     qreal pY = m_containerSize.height() / 2.0;
-    foreach(KoShape *shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         QSizeF size = itemSize(shape);
         end -= size.width() + m_hMargin;
         setItemPosition(shape, QPointF(end, pY - size.height() / 2.0));
@@ -305,32 +304,36 @@ qreal ChartLayout::layoutEnd(const QMap<int, KoShape*>& shapes)
 
 void ChartLayout::layoutTopStart(KoShape *shape)
 {
-    if (!shape)
+    if (!shape) {
         return;
+    }
     setItemPosition(shape, QPointF(0, 0));
 }
 
 void ChartLayout::layoutBottomStart(KoShape *shape)
 {
-    if (!shape)
+    if (!shape) {
         return;
+    }
     setItemPosition(shape, QPointF(0, m_containerSize.height() - itemSize(shape).height()));
 }
 
 void ChartLayout::layoutTopEnd(KoShape *shape)
 {
-    if (!shape)
+    if (!shape) {
         return;
+    }
     setItemPosition(shape, QPointF(m_containerSize.width() - itemSize(shape).width(), 0));
 }
 
 void ChartLayout::layoutBottomEnd(KoShape *shape)
 {
-    if (!shape)
+    if (!shape) {
         return;
+    }
     const QSizeF size = itemSize(shape);
     setItemPosition(shape, QPointF(m_containerSize.width()  - size.width(),
-                                     m_containerSize.height() - size.height()));
+                                   m_containerSize.height() - size.height()));
 }
 
 void ChartLayout::setMargins(qreal hMargin, qreal vMargin)
@@ -354,7 +357,7 @@ static QSizeF itemSize(KoShape *shape)
     return shape->transformation().mapRect(boundingRect).size();
 }
 
-static void setItemPosition(KoShape *shape, const QPointF& pos)
+static void setItemPosition(KoShape *shape, const QPointF &pos)
 {
     const QPointF offset =  shape->position() - itemPosition(shape);
     shape->setPosition(pos + offset);

@@ -45,10 +45,10 @@ public:
     ~Private();
 
     QAction *fontComboAction, *colorComboAction, *boldTextAction,
-    *italicTextAction, *underlineTextAction,
-    *subscriptTextAction, *superscriptTextAction,
-    *alignLeftAction, *alignRightAction, *alignCenterAction, *alignJustifyAction;
-    QActionGroup* alignActionGroup;
+            *italicTextAction, *underlineTextAction,
+            *subscriptTextAction, *superscriptTextAction,
+            *alignLeftAction, *alignRightAction, *alignCenterAction, *alignJustifyAction;
+    QActionGroup *alignActionGroup;
     KToolBar  *toolbar;
     KTextEdit  *edit;
     KFontRequester  *fontCombo;
@@ -127,7 +127,6 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
     lyr->addWidget(d->edit);
     d->edit->setAcceptRichText(true);
 
-
     connect(d->edit, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
             this, SLOT(slotCurrentCharFormatChanged(QTextCharFormat)));
 
@@ -160,17 +159,17 @@ RichTextDialog::changeColor(const QColor &color)
 }
 
 void
-RichTextDialog::slotActionTriggered(QAction* action)
+RichTextDialog::slotActionTriggered(QAction *action)
 {
     const bool isChecked = action->isChecked();
 
-    if (action == d->boldTextAction)
+    if (action == d->boldTextAction) {
         d->edit->setFontWeight(isChecked ? QFont::Bold : QFont::Normal);
-    else if (action == d->italicTextAction)
+    } else if (action == d->italicTextAction) {
         d->edit->setFontItalic(isChecked);
-    else if (action == d->underlineTextAction)
+    } else if (action == d->underlineTextAction) {
         d->edit->setFontUnderline(isChecked);
-    else if (action == d->superscriptTextAction) {
+    } else if (action == d->superscriptTextAction) {
         if (isChecked && d->subscriptTextAction->isChecked()) {
             d->subscriptTextAction->setChecked(false);
             QTextCharFormat currentCharFormat = d->edit->currentCharFormat();
@@ -187,22 +186,26 @@ RichTextDialog::slotActionTriggered(QAction* action)
             d->edit->setCurrentCharFormat(currentCharFormat);
         }
     } else if (action == d->alignLeftAction) {
-        if (isChecked)
+        if (isChecked) {
             d->edit->setAlignment(Qt::AlignLeft);
+        }
     } else if (action == d->alignCenterAction) {
-        if (isChecked)
+        if (isChecked) {
             d->edit->setAlignment(Qt::AlignCenter);
+        }
     } else if (action == d->alignRightAction) {
-        if (isChecked)
+        if (isChecked) {
             d->edit->setAlignment(Qt::AlignRight);
+        }
     } else if (action == d->alignJustifyAction) {
-        if (isChecked)
+        if (isChecked) {
             d->edit->setAlignment(Qt::AlignJustify);
+        }
     }
 }
 
 void
-RichTextDialog::slotCurrentCharFormatChanged(const QTextCharFormat& f)
+RichTextDialog::slotCurrentCharFormatChanged(const QTextCharFormat &f)
 {
     d->superscriptTextAction->setChecked(f.verticalAlignment() == QTextCharFormat::AlignSuperScript);
     d->subscriptTextAction->setChecked(f.verticalAlignment() == QTextCharFormat::AlignSubScript);

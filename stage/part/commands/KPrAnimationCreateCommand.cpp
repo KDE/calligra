@@ -24,28 +24,28 @@
 #include "KPrDocument.h"
 #include "animations/KPrShapeAnimation.h"
 
-KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimation * animation )
-: m_doc( doc )
-, m_animation( animation )
-, m_deleteAnimation( true )
+KPrAnimationCreateCommand::KPrAnimationCreateCommand(KPrDocument *doc, KPrShapeAnimation *animation)
+    : m_doc(doc)
+    , m_animation(animation)
+    , m_deleteAnimation(true)
 {
-    setText( kundo2_i18n( "Create shape animation" ) );
+    setText(kundo2_i18n("Create shape animation"));
 }
 
 KPrAnimationCreateCommand::~KPrAnimationCreateCommand()
 {
-    if ( m_deleteAnimation ) {
+    if (m_deleteAnimation) {
         delete m_animation;
     }
 }
 
-void KPrAnimationCreateCommand::redo ()
+void KPrAnimationCreateCommand::redo()
 {
-    m_doc->addAnimation( m_animation );
+    m_doc->addAnimation(m_animation);
     m_deleteAnimation = false;
 }
 
-void KPrAnimationCreateCommand::undo ()
+void KPrAnimationCreateCommand::undo()
 {
     m_doc->removeAnimation(m_animation);
     m_deleteAnimation = true;

@@ -27,8 +27,8 @@
 #include <filter/kis_filter_configuration.h>
 #include <klocale.h>
 
-KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget * parent, const QString & name)
-        : KDoubleNumInput(parent)
+KisDelayedActionDoubleInput::KisDelayedActionDoubleInput(QWidget *parent, const QString &name)
+    : KDoubleNumInput(parent)
 {
     setObjectName(name);
     m_timer = new QTimer(this);
@@ -53,18 +53,18 @@ void KisDelayedActionDoubleInput::cancelDelayedSignal()
     m_timer->stop();
 }
 
-KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, const QString & nlabel, const QString & nname) :
-        min(nmin),
-        max(nmax),
-        initvalue(ninitvalue),
-        label(nlabel),
-        name(nname)
+KisDoubleWidgetParam::KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, const QString &nlabel, const QString &nname) :
+    min(nmin),
+    max(nmax),
+    initvalue(ninitvalue),
+    label(nlabel),
+    name(nname)
 {
 
 }
 
-KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisDoubleWidgetParam dwparam)
-        : KisConfigWidget(parent), m_filterid(filterid)
+KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString &filterid, QWidget *parent, const QString &caption, vKisDoubleWidgetParam dwparam)
+    : KisConfigWidget(parent), m_filterid(filterid)
 {
     m_nbdoubleWidgets = dwparam.size();
 
@@ -72,7 +72,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid,
 
     QGridLayout *widgetLayout = new QGridLayout(this);
     widgetLayout->setColumnStretch(1, 1);
-    widgetLayout->setContentsMargins(0,0,0,0);
+    widgetLayout->setContentsMargins(0, 0, 0, 0);
     widgetLayout->setHorizontalSpacing(0);
 
     m_doubleWidgets = new KisDelayedActionDoubleInput*[ m_nbdoubleWidgets ];
@@ -85,24 +85,26 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid,
 
         connect(m_doubleWidgets[i], SIGNAL(valueChangedDelayed(double)), SIGNAL(sigConfigurationItemChanged()));
 
-        QLabel* lbl = new QLabel(dwparam[i].label + ':', this);
-        widgetLayout->addWidget(lbl, i , 0);
+        QLabel *lbl = new QLabel(dwparam[i].label + ':', this);
+        widgetLayout->addWidget(lbl, i, 0);
 
-        widgetLayout->addWidget(m_doubleWidgets[i], i , 1);
+        widgetLayout->addWidget(m_doubleWidgets[i], i, 1);
     }
-    widgetLayout->setRowStretch(m_nbdoubleWidgets,1);
+    widgetLayout->setRowStretch(m_nbdoubleWidgets, 1);
 
-    QSpacerItem * sp = new QSpacerItem(1, 1);
+    QSpacerItem *sp = new QSpacerItem(1, 1);
     widgetLayout->addItem(sp, m_nbdoubleWidgets, 0);
 
 }
 
-void KisMultiDoubleFilterWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisMultiDoubleFilterWidget::setConfiguration(const KisPropertiesConfiguration *config)
 {
-    if (!config) return;
+    if (!config) {
+        return;
+    }
 
-    for (int i = 0; i < m_nbdoubleWidgets ; ++i) {
-        KisDelayedActionDoubleInput *  w = m_doubleWidgets[i];
+    for (int i = 0; i < m_nbdoubleWidgets; ++i) {
+        KisDelayedActionDoubleInput   *w = m_doubleWidgets[i];
         if (w) {
             double val = config->getDouble(m_doubleWidgets[i]->objectName());
             m_doubleWidgets[i]->setValue(val);
@@ -111,9 +113,9 @@ void KisMultiDoubleFilterWidget::setConfiguration(const KisPropertiesConfigurati
     }
 }
 
-KisPropertiesConfiguration* KisMultiDoubleFilterWidget::configuration() const
+KisPropertiesConfiguration *KisMultiDoubleFilterWidget::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(m_filterid, 0);
+    KisFilterConfiguration *config = new KisFilterConfiguration(m_filterid, 0);
     for (int i = 0; i < nbValues(); ++i) {
         config->setProperty(m_doubleWidgets[i]->objectName(), m_doubleWidgets[i]->value());
     }

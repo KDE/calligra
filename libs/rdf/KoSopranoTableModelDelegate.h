@@ -20,7 +20,6 @@
 #ifndef __rdf_KoSopranoTableModelDelegate_h__
 #define __rdf_KoSopranoTableModelDelegate_h__
 
-
 #include <QItemDelegate>
 #include <QStyledItemDelegate>
 #include <QWidget>

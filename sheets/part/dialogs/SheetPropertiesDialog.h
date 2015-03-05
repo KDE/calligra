@@ -34,7 +34,8 @@ namespace Sheets
 class SheetPropertiesWidget : public QWidget, public ::Ui::SheetPropertiesWidget
 {
 public:
-    explicit SheetPropertiesWidget(QWidget* parent) : QWidget(parent) {
+    explicit SheetPropertiesWidget(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -52,7 +53,6 @@ public:
     explicit SheetPropertiesDialog(QWidget *parent = 0);
 
     ~SheetPropertiesDialog();
-
 
     Qt::LayoutDirection layoutDirection() const;
 
@@ -100,7 +100,7 @@ public:
 public Q_SLOTS:
     virtual void slotDefault();
 private:
-    SheetPropertiesWidget* m_widget;
+    SheetPropertiesWidget *m_widget;
 };
 
 } // namespace Sheets

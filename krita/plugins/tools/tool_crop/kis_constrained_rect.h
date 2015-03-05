@@ -22,8 +22,6 @@
 #include <QObject>
 #include <QRect>
 
-
-
 class KisConstrainedRect : public QObject
 {
     Q_OBJECT

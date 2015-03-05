@@ -37,17 +37,17 @@ public:
     /**
      * Fill the object from the XML encoded representation in s.
      */
-    virtual void fromXML(const QString&);
+    virtual void fromXML(const QString &);
 
     /**
      * Fill the object from the XML encoded representation in s.
      */
-    virtual void fromXML(const QDomElement&) = 0;
+    virtual void fromXML(const QDomElement &) = 0;
 
     /**
      * Create a serialized version of this object
      */
-    virtual void toXML(QDomDocument&, QDomElement&) const = 0;
+    virtual void toXML(QDomDocument &, QDomElement &) const = 0;
 
     /**
      * Create a serialized version of this object
@@ -65,12 +65,11 @@ public:
     /**
      * @return an empty object with a sane default configuration
      */
-    virtual KisSerializableConfiguration* createDefault() = 0;
+    virtual KisSerializableConfiguration *createDefault() = 0;
     /**
      * @return an unserialied version of the configuration
      */
-    virtual KisSerializableConfiguration* create(const QDomElement&) = 0;
+    virtual KisSerializableConfiguration *create(const QDomElement &) = 0;
 };
-
 
 #endif

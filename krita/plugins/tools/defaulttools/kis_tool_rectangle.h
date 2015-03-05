@@ -31,7 +31,6 @@
 #include <kis_tool_rectangle_base.h>
 #include <KoIcon.h>
 
-
 class QRect;
 
 class KoCanvasBase;
@@ -41,19 +40,20 @@ class KisToolRectangle : public KisToolRectangleBase
     Q_OBJECT
 
 public:
-    KisToolRectangle(KoCanvasBase * canvas);
+    KisToolRectangle(KoCanvasBase *canvas);
     virtual ~KisToolRectangle();
 
 protected:
-    virtual void finishRect(const QRectF& rect);
+    virtual void finishRect(const QRectF &rect);
 };
 
 class KisToolRectangleFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolRectangleFactory(const QStringList&)
-            : KoToolFactoryBase("KritaShape/KisToolRectangle") {
+    KisToolRectangleFactory(const QStringList &)
+        : KoToolFactoryBase("KritaShape/KisToolRectangle")
+    {
         setToolTip(i18n("Rectangle Tool"));
 
         setToolType(TOOL_TYPE_SHAPE);
@@ -65,12 +65,12 @@ public:
 
     virtual ~KisToolRectangleFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return  new KisToolRectangle(canvas);
     }
 
 };
-
 
 #endif // __KIS_TOOL_RECTANGLE_H__
 

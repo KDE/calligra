@@ -30,7 +30,6 @@
 // This filter
 #include "FileCollector.h"
 
-
 class QString;
 class QByteArray;
 
@@ -38,7 +37,6 @@ class KoStore;
 
 class OdtTraverserDocxContext;
 class OdfReaderDocxContext;
-
 
 class DocxFile : public FileCollector
 {

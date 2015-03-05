@@ -24,38 +24,36 @@
 namespace KPlato
 {
 
-RecalculateDialogImpl::RecalculateDialogImpl (QWidget *parent)
+RecalculateDialogImpl::RecalculateDialogImpl(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
 
     QDateTime ct = QDateTime::currentDateTime();
-    ct.setTime( QTime( ct.time().hour(), ct.time().minute() ) ); // clear secs/msecs
-    dateTimeEdit->setDateTime( ct );
-    btnCurrent->setChecked( true );
-    dateTimeEdit->setEnabled( false );
-    connect( btnFrom, SIGNAL(toggled(bool)), dateTimeEdit, SLOT(setEnabled(bool)) );
+    ct.setTime(QTime(ct.time().hour(), ct.time().minute()));     // clear secs/msecs
+    dateTimeEdit->setDateTime(ct);
+    btnCurrent->setChecked(true);
+    dateTimeEdit->setEnabled(false);
+    connect(btnFrom, SIGNAL(toggled(bool)), dateTimeEdit, SLOT(setEnabled(bool)));
 }
-
-
 
 //////////////////  ResourceDialog  ////////////////////////
 
-RecalculateDialog::RecalculateDialog( QWidget *parent )
+RecalculateDialog::RecalculateDialog(QWidget *parent)
     : KDialog(parent)
 {
-    setCaption( i18n("Re-calculate Schedule") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setCaption(i18n("Re-calculate Schedule"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    showButtonSeparator(true);
     dia = new RecalculateDialogImpl(this);
     setMainWidget(dia);
 }
 
-QDateTime RecalculateDialog::dateTime() const {
+QDateTime RecalculateDialog::dateTime() const
+{
     return dia->btnFrom->isChecked() ? dia->dateTimeEdit->dateTime() : QDateTime::currentDateTime();
 }
-
 
 }  //KPlato namespace
 

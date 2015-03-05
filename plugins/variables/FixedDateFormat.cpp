@@ -34,8 +34,8 @@ static void createTimeAction(QMenu *parent, const QString &title, const QString 
 }
 
 FixedDateFormat::FixedDateFormat(DateVariable *variable)
-        : m_variable(variable),
-        m_popup(0)
+    : m_variable(variable),
+      m_popup(0)
 {
     widget.setupUi(this);
 
@@ -81,15 +81,16 @@ FixedDateFormat::FixedDateFormat(DateVariable *variable)
     connect(widget.formatList, SIGNAL(itemPressed(QListWidgetItem*)), this, SLOT(listClicked(QListWidgetItem*)));
     connect(widget.correction, SIGNAL(valueChanged(int)), this, SLOT(offsetChanged(int)));
     connect(widget.formatButton, SIGNAL(clicked()), this, SLOT(insertCustomButtonPressed()));
-    connect(widget.customString, SIGNAL(textChanged(const QString&)), this, SLOT(customTextChanged(const QString&)));
+    connect(widget.customString, SIGNAL(textChanged(QString)), this, SLOT(customTextChanged(QString)));
 }
 
 void FixedDateFormat::customClicked(int state)
 {
-    if (state == Qt::Unchecked)
+    if (state == Qt::Unchecked) {
         widget.widgetStack->setCurrentWidget(widget.normalPage);
-    else
+    } else {
         widget.widgetStack->setCurrentWidget(widget.customPage);
+    }
 }
 
 void FixedDateFormat::listClicked(QListWidgetItem *item)
@@ -157,20 +158,22 @@ void FixedDateFormat::insertCustomButtonPressed()
     }
     QPoint position = widget.formatButton->mapToGlobal(QPoint(0, widget.formatButton->height()));
     QAction *action = m_popup->exec(position);
-    if (action)
+    if (action) {
         widget.customString->insert(qvariant_cast<QString>(action->data()));
+    }
 }
 
-void FixedDateFormat::customTextChanged(const QString& text)
+void FixedDateFormat::customTextChanged(const QString &text)
 {
     m_variable->setDefinition(text);
 
     if (widget.custom->isChecked()) {
         // altering the custom text will deselect the list item so the user can easilly switch
         // back by selecting one.
-        QListWidgetItem * item = widget.formatList->currentItem();
-        if (item) // deselect it.
+        QListWidgetItem *item = widget.formatList->currentItem();
+        if (item) { // deselect it.
             widget.formatList->setItemSelected(item, false);
+        }
     }
 }
 

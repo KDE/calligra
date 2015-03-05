@@ -20,7 +20,6 @@
 
 #include <QtTest>
 
-
 class KisMemoryWindowTest : public QObject
 {
     Q_OBJECT

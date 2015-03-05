@@ -11,7 +11,6 @@
 
 #include <QtXml>
 
-
 class TestXmlReader : public QObject
 {
     Q_OBJECT
@@ -37,7 +36,7 @@ private slots:
     void testSimpleOpenDocumentPresentation();
     void testSimpleOpenDocumentFormula();
     void testLargeOpenDocumentSpreadsheet();
-    void testExternalOpenDocumentSpreadsheet(const QString& filename);
+    void testExternalOpenDocumentSpreadsheet(const QString &filename);
 };
 
 void TestXmlReader::testNode()
@@ -417,7 +416,7 @@ void TestXmlReader::testAttributes()
     QVERIFY(list.contains("width"));
     QVERIFY(list.contains("height"));
     QVERIFY(! list.contains("border"));
-    foreach(QString a, list) {
+    foreach (QString a, list) {
         QCOMPARE(imgElement.hasAttribute(a), true);
         QCOMPARE(imgElement.attribute(a).isEmpty(), false);
     }
@@ -835,9 +834,9 @@ void TestXmlReader::testNamespace()
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
-    const char* defaultNS = "http://trolltech.com/fnord/";
-    const char* bookNS = "http://trolltech.com/fnord/book/";
-    const char* fnordNS = "http://trolltech.com/fnord/";
+    const char *defaultNS = "http://trolltech.com/fnord/";
+    const char *bookNS = "http://trolltech.com/fnord/book/";
+    const char *fnordNS = "http://trolltech.com/fnord/";
 
     // <document>
     rootElement = doc.documentElement();
@@ -966,9 +965,9 @@ void TestXmlReader::testParseQString()
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
-    const char* defaultNS = "http://trolltech.com/fnord/";
-    const char* bookNS = "http://trolltech.com/fnord/book/";
-    const char* fnordNS = "http://trolltech.com/fnord/";
+    const char *defaultNS = "http://trolltech.com/fnord/";
+    const char *bookNS = "http://trolltech.com/fnord/book/";
+    const char *fnordNS = "http://trolltech.com/fnord/";
 
     // <document>
     rootElement = doc.documentElement();
@@ -1467,8 +1466,8 @@ void TestXmlReader::testSimpleOpenDocumentText()
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
-    const char* officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
-    const char* textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+    const char *officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
+    const char *textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
 
     // <office:document-content>
     KoXmlElement contentElement;
@@ -1929,11 +1928,11 @@ void TestXmlReader::testSimpleOpenDocumentPresentation()
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
-    const char* officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
-    const char* drawNS = "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0";
-    const char* textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
-    const char* presentationNS = "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0";
-    const char* svgNS = "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0";
+    const char *officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
+    const char *drawNS = "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0";
+    const char *textNS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+    const char *presentationNS = "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0";
+    const char *svgNS = "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0";
 
     // <office:document-content>
     KoXmlElement contentElement;
@@ -2086,7 +2085,7 @@ void TestXmlReader::testSimpleOpenDocumentPresentation()
     QCOMPARE(titlePageElement.attributeNS(drawNS, "style-name", ""), QString("dp1"));
     QCOMPARE(titlePageElement.attributeNS(drawNS, "master-page-name", ""), QString("lyt-cool"));
     QCOMPARE(titlePageElement.attributeNS(presentationNS,
-                                       "presentation-page-layout-name", ""), QString("AL1T0"));
+                                          "presentation-page-layout-name", ""), QString("AL1T0"));
 
     // <draw:frame> for the title frame
     KoXmlElement titleFrameElement;
@@ -2252,7 +2251,7 @@ void TestXmlReader::testSimpleOpenDocumentFormula()
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
-    const char* mathNS = "http://www.w3.org/1998/Math/MathML";
+    const char *mathNS = "http://www.w3.org/1998/Math/MathML";
 
     // <math:math>
     KoXmlElement mathElement;
@@ -2469,7 +2468,6 @@ void TestXmlReader::testLargeOpenDocumentSpreadsheet()
 
     printf("Raw XML size: %lld KB\n", xmldevice.size() / 1024);
 
-
     QTime timer;
 
 #if 0
@@ -2586,7 +2584,7 @@ void TestXmlReader::testLargeOpenDocumentSpreadsheet()
     printf("Large spreadsheet: iterating time is %d ms\n", timer.elapsed());
 }
 
-void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
+void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString &filename)
 {
     QProcess unzip;
     QStringList arguments;
@@ -2646,10 +2644,11 @@ void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
     long totalCellCount = 0;
 
     KoXmlElement bodyElement;
-    forEachElement(bodyElement, contentElement) {
+    forEachElement (bodyElement, contentElement) {
         // <office:body>
-        if (bodyElement.localName() != QString("body"))
+        if (bodyElement.localName() != QString("body")) {
             continue;
+        }
 
         // now we iterate inside the body
         timer.start();
@@ -2666,8 +2665,9 @@ void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
         KoXmlElement tableElement;
         tableElement = spreadsheetElement.firstChild().toElement();
         for (;;) {
-            if (tableElement.isNull())
+            if (tableElement.isNull()) {
                 break;
+            }
 
             if (tableElement.localName() != QString("table")) {
                 tableElement = tableElement.nextSibling().toElement();
@@ -2688,8 +2688,9 @@ void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
             KoXmlElement rowElement;
             rowElement = tableElement.firstChild().toElement();
             for (;;) {
-                if (rowElement.isNull())
+                if (rowElement.isNull()) {
                     break;
+                }
 
                 if (rowElement.localName() != QString("table-row")) {
                     rowElement = rowElement.nextSibling().toElement();
@@ -2706,9 +2707,10 @@ void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
 
                 KoXmlElement cellElement;
                 cellElement = rowElement.firstChild().toElement();
-                for (; ;) {
-                    if (cellElement.isNull())
+                for (;;) {
+                    if (cellElement.isNull()) {
                         break;
+                    }
 
                     if (cellElement.localName() != QString("table-cell")) {
                         cellElement = cellElement.nextSibling().toElement();
@@ -2736,7 +2738,6 @@ void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
                     cellElement = cellElement.nextSibling().toElement();
                 }
 
-
                 // better not to unload, freeing memory takes time
                 KoXml::unload(rowElement);
 
@@ -2760,8 +2761,9 @@ void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
 
     int elapsed = timer.elapsed();
     printf("External spreadsheet: iterating time is %d ms\n", elapsed);
-    if (elapsed > 0)
-        printf("  approx. %ld cells/second\n", totalCellCount*1000 / elapsed);
+    if (elapsed > 0) {
+        printf("  approx. %ld cells/second\n", totalCellCount * 1000 / elapsed);
+    }
 
     // uncomment to check the XML
     xmlfile.remove();

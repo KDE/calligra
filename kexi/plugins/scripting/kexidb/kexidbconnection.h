@@ -64,7 +64,7 @@ class KexiDBConnection : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver = 0, KexiDBConnectionData* connectiondata = 0);
+    KexiDBConnection(::KexiDB::Connection *connection, KexiDBDriver *driver = 0, KexiDBConnectionData *connectiondata = 0);
     virtual ~KexiDBConnection();
 
 public Q_SLOTS:
@@ -75,9 +75,9 @@ public Q_SLOTS:
     const QString lastError() const;
 
     /** Return the \a KexiDBConnectionData object used to create this connection. */
-    QObject* data();
+    QObject *data();
     /** Return the \a KexiDBDriver object this connection belongs too. */
-    QObject* driver();
+    QObject *driver();
 
     /** Try to connect and return true if we are successfully connected now. */
     bool connect();
@@ -90,7 +90,7 @@ public Q_SLOTS:
     bool isReadOnly() const;
 
     /** Return true if the as argument passed databasename exists. */
-    bool databaseExists(const QString& dbname);
+    bool databaseExists(const QString &dbname);
     /** Return the name of currently used database for this connection or empty
     string if there is no used database. */
     const QString currentDatabase() const;
@@ -100,7 +100,7 @@ public Q_SLOTS:
     bool isDatabaseUsed() const;
     /** Opens an existing database specified by the as argument passed databasename
     and returns true if the database is used now. */
-    bool useDatabase(const QString& dbname);
+    bool useDatabase(const QString &dbname);
     /** Closes currently used database for this connection. */
     bool closeDatabase();
 
@@ -114,38 +114,38 @@ public Q_SLOTS:
 
     /** Executes query described by the as argument passed sqlstatement-string. Returns the
     opened cursor \a KexiDBCursor instance created for results of this query or NULL on error. */
-    QObject* executeQueryString(const QString& sqlquery);
+    QObject *executeQueryString(const QString &sqlquery);
     /** Executes query described by the as argument passed KexiDBQuerySchema object. Returns the
     opened cursor \a KexiDBCursor instance created for results of this query or NULL on error. */
-    QObject* executeQuerySchema(KexiDBQuerySchema* queryschema);
+    QObject *executeQuerySchema(KexiDBQuerySchema *queryschema);
 
     /** Inserts a new record with the as argument passed \p values values. The
     \p obj could be a \a KexiDBFieldList or a \a KexiDBTableSchema object. */
-    bool insertRecord(QObject* obj, const QVariantList& values);
+    bool insertRecord(QObject *obj, const QVariantList &values);
 
     /** Creates new database with the as argument passed databasename. */
-    bool createDatabase(const QString& dbname);
+    bool createDatabase(const QString &dbname);
     /** Drops the as argument passed databasename. */
-    bool dropDatabase(const QString& dbname);
+    bool dropDatabase(const QString &dbname);
 
     /** Creates table defined by the as argument passed KexiTableSchema object. */
-    bool createTable(KexiDBTableSchema* tableschema);
+    bool createTable(KexiDBTableSchema *tableschema);
     /** Drops table defined by the as argument passed KexiDBTableSchema object. */
-    bool dropTable(const QString& tablename);
+    bool dropTable(const QString &tablename);
     /** Alters the as first argument passed KexiDBTableSchema object using the as
     second argument passed KexiDBTableSchema. */
-    bool alterTable(KexiDBTableSchema* fromschema, KexiDBTableSchema* toschema);
+    bool alterTable(KexiDBTableSchema *fromschema, KexiDBTableSchema *toschema);
     /** Alters the tablename of the as first argument passed KexiDBTableSchema into
     the as second argument passed new tablename. */
-    bool alterTableName(KexiDBTableSchema* tableschema, const QString& newtablename);
+    bool alterTableName(KexiDBTableSchema *tableschema, const QString &newtablename);
 
     /** Returns the \a KexiDBTableSchema object of the table matching to the as argument
     passed tablename. */
-    QObject* tableSchema(const QString& tablename);
+    QObject *tableSchema(const QString &tablename);
     /** Returns true if there is at least one valid record in the as argument passed tablename. */
-    bool isEmptyTable(KexiDBTableSchema* tableschema) const;
+    bool isEmptyTable(KexiDBTableSchema *tableschema) const;
     /** Returns the \a KexiDBQuerySchema object of the query matching to the as argument passed queryname. */
-    QObject* querySchema(const QString& queryname);
+    QObject *querySchema(const QString &queryname);
 
     /** Return true if the \"auto commit\" option is on. */
     bool autoCommit() const;
@@ -154,10 +154,10 @@ public Q_SLOTS:
     bool setAutoCommit(bool enabled);
 
     /** Return a \a KexiDBParser object. */
-    QObject* parser();
+    QObject *parser();
 
 private:
-    ::KexiDB::Connection* m_connection;
+    ::KexiDB::Connection *m_connection;
     QPointer<KexiDBConnectionData> m_connectiondata;
     QPointer<KexiDBDriver> m_driver;
 };

@@ -25,7 +25,6 @@
 #include "kis_image_signal_router.h"
 #include "empty_nodes_test.h"
 
-
 class KisImageSignalRouterTest : public QObject, public TestUtil::EmptyNodesTest
 {
     Q_OBJECT

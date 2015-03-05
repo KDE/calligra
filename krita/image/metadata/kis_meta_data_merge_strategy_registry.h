@@ -27,15 +27,15 @@
 namespace KisMetaData
 {
 
-class KRITAIMAGE_EXPORT MergeStrategyRegistry : public KoGenericRegistry<const KisMetaData::MergeStrategy*>
+class KRITAIMAGE_EXPORT MergeStrategyRegistry : public KoGenericRegistry<const KisMetaData::MergeStrategy *>
 {
 public:
     virtual ~MergeStrategyRegistry();
-    static MergeStrategyRegistry* instance();
+    static MergeStrategyRegistry *instance();
 private:
     MergeStrategyRegistry();
-    MergeStrategyRegistry(const MergeStrategyRegistry&);
-    MergeStrategyRegistry& operator=(const MergeStrategyRegistry&);
+    MergeStrategyRegistry(const MergeStrategyRegistry &);
+    MergeStrategyRegistry &operator=(const MergeStrategyRegistry &);
 };
 
 }

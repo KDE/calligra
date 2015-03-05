@@ -1,6 +1,5 @@
 #include "SimpleAnnotationWidget.h"
 
-
 #include "../ReviewTool.h"
 #include <kaction.h>
 #include <kdebug.h>

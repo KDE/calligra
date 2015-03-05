@@ -62,7 +62,6 @@ class RowHeader;
 class Selection;
 class View;
 
-
 /**
  * The scrollable area showing the cells.
  */
@@ -76,118 +75,160 @@ class CALLIGRA_SHEETS_COMMON_EXPORT CanvasItem : public QGraphicsWidget, public 
     Q_OBJECT
 
 public:
-    explicit CanvasItem(Doc* doc, QGraphicsItem *parent = 0);
+    explicit CanvasItem(Doc *doc, QGraphicsItem *parent = 0);
     ~CanvasItem();
 
-    virtual QWidget* canvasWidget() {
+    virtual QWidget *canvasWidget()
+    {
         return 0;
     }
-    virtual const QWidget* canvasWidget() const {
+    virtual const QWidget *canvasWidget() const
+    {
         return 0;
     }
 
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual QGraphicsObject *canvasItem() { return this; }
+    virtual QGraphicsObject *canvasItem()
+    {
+        return this;
+    }
 
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual const QGraphicsObject *canvasItem() const{ return this; }
-
+    virtual const QGraphicsObject *canvasItem() const
+    {
+        return this;
+    }
 
 public Q_SLOTS:
-    void setDocumentOffset(const QPoint& offset) {
+    void setDocumentOffset(const QPoint &offset)
+    {
         CanvasBase::setDocumentOffset(offset);
     }
-    void setDocumentSize(const QSizeF& size) {
+    void setDocumentSize(const QSizeF &size)
+    {
         CanvasBase::setDocumentSize(size);
     }
 
     void refreshSheetViews();
-    void setActiveSheet(Sheet* sheet);
+    void setActiveSheet(Sheet *sheet);
 
-    void setObscuredRange(const QSize& size);
+    void setObscuredRange(const QSize &size);
 
     /**
      * \ingroup Damages
      * Handles damages that need visual updates.
      */
-    void handleDamages(const QList<Damage*>& damages);
+    void handleDamages(const QList<Damage *> &damages);
 
-    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
+    void updateAccessedCellRange(Sheet *sheet, const QPoint &location);
 
 Q_SIGNALS:
-    /* virtual */ void documentSizeChanged(const QSize&);
-    void obscuredRangeChanged(const Calligra::Sheets::Sheet* sheet, const QSize&);
+    /* virtual */ void documentSizeChanged(const QSize &);
+    void obscuredRangeChanged(const Calligra::Sheets::Sheet *sheet, const QSize &);
 
 public:
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *_ev);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *_ev);
 protected:
-    virtual void keyPressEvent(QKeyEvent* _ev) {
+    virtual void keyPressEvent(QKeyEvent *_ev)
+    {
         CanvasBase::keyPressed(_ev);
     }
-    virtual void paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*);
-    virtual void focusInEvent(QFocusEvent* _ev) {
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *_ev);
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *);
+    virtual void focusInEvent(QFocusEvent *_ev)
+    {
         CanvasBase::focusIn(_ev);
         QGraphicsWidget::focusInEvent(_ev);
     }
-    virtual void dragEnterEvent(QGraphicsSceneDragDropEvent*);
-    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent*);
-    virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent*);
-    virtual void dropEvent(QGraphicsSceneDragDropEvent*);
+    virtual void dragEnterEvent(QGraphicsSceneDragDropEvent *);
+    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent *);
+    virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent *);
+    virtual void dropEvent(QGraphicsSceneDragDropEvent *);
     /// reimplemented method from superclass
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const {
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const
+    {
         return CanvasBase::inputMethodQuery(query);
     }
     /// reimplemented method from superclass
-    virtual void inputMethodEvent(QInputMethodEvent *event) {
+    virtual void inputMethodEvent(QInputMethodEvent *event)
+    {
         CanvasBase::inputMethodEvent(event);
     }
     /// reimplemented method from superclass
-    virtual void tabletEvent(QTabletEvent *e) {
+    virtual void tabletEvent(QTabletEvent *e)
+    {
         CanvasBase::tabletEvent(e);
     }
 
 private:
-    virtual bool eventFilter(QObject *o, QEvent *e) {
+    virtual bool eventFilter(QObject *o, QEvent *e)
+    {
         return CanvasBase::eventFilter(o, e);
     }
 
 public:
-    virtual Selection* selection() const;
-    virtual Sheet* activeSheet() const;
-    virtual KoZoomHandler* zoomHandler() const;
-    virtual SheetView* sheetView(const Sheet* sheet) const;
+    virtual Selection *selection() const;
+    virtual Sheet *activeSheet() const;
+    virtual KoZoomHandler *zoomHandler() const;
+    virtual SheetView *sheetView(const Sheet *sheet) const;
 
-    virtual bool isViewLoading() const { return false; }
+    virtual bool isViewLoading() const
+    {
+        return false;
+    }
     virtual void enableAutoScroll() {}
     virtual void disableAutoScroll() {}
     virtual void setVertScrollBarPos(qreal) {}
     virtual void setHorizScrollBarPos(qreal) {}
 
-    virtual void update() { QGraphicsWidget::update(); }
-    virtual void update(const QRectF& rect) { QGraphicsWidget::update(rect); }
-    virtual Qt::LayoutDirection layoutDirection() const { return QGraphicsWidget::layoutDirection(); }
-    virtual QRectF rect() const { return QGraphicsWidget::rect(); }
-    virtual QSizeF size() const { return QGraphicsWidget::size(); }
-    virtual QPoint mapToGlobal(const QPointF& point) const { return QGraphicsWidget::mapToScene(point).toPoint(); /* TODO */ }
-    virtual void updateMicroFocus() { /*QGraphicsWidget::updateMicroFocus();*/ }
+    virtual void update()
+    {
+        QGraphicsWidget::update();
+    }
+    virtual void update(const QRectF &rect)
+    {
+        QGraphicsWidget::update(rect);
+    }
+    virtual Qt::LayoutDirection layoutDirection() const
+    {
+        return QGraphicsWidget::layoutDirection();
+    }
+    virtual QRectF rect() const
+    {
+        return QGraphicsWidget::rect();
+    }
+    virtual QSizeF size() const
+    {
+        return QGraphicsWidget::size();
+    }
+    virtual QPoint mapToGlobal(const QPointF &point) const
+    {
+        return QGraphicsWidget::mapToScene(point).toPoint(); /* TODO */
+    }
+    virtual void updateMicroFocus()
+    {
+        /*QGraphicsWidget::updateMicroFocus();*/
+    }
 
-    virtual ColumnHeader* columnHeader() const;
-    virtual RowHeader* rowHeader() const;
+    virtual ColumnHeader *columnHeader() const;
+    virtual RowHeader *rowHeader() const;
     virtual void setCursor(const QCursor &cursor);
 
-    virtual void showContextMenu(const QPoint& globalPos) { Q_UNUSED(globalPos); }
+    virtual void showContextMenu(const QPoint &globalPos)
+    {
+        Q_UNUSED(globalPos);
+    }
 private:
     Q_DISABLE_COPY(CanvasItem)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

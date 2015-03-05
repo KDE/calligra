@@ -23,7 +23,7 @@
 #include <KoPageLayout.h>
 
 KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
 
@@ -39,7 +39,7 @@ KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
 
     connect(widget.columns, SIGNAL(valueChanged(int)), this, SLOT(optionsChanged()));
     connect(widget.spacing, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
-    connect(this, SIGNAL(columnsChanged(const KoColumns&)), m_preview, SLOT(setColumns(const KoColumns&)));
+    connect(this, SIGNAL(columnsChanged(KoColumns)), m_preview, SLOT(setColumns(KoColumns)));
 }
 
 void KWDocumentColumns::setColumns(const KoColumns &columns)
@@ -53,9 +53,9 @@ void KWDocumentColumns::setTextAreaAvailable(bool available)
 {
     widget.columns->setEnabled(available);
     widget.spacing->setEnabled(available);
-    if (available)
+    if (available) {
         optionsChanged();
-    else {
+    } else {
         m_columns.count = 1;
         emit columnsChanged(m_columns);
     }

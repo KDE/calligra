@@ -32,7 +32,7 @@
  A drop-down button is added to mimic native combo box widget's functionality.
 */
 class KEXIFORMUTILS_EXPORT KexiDBComboBox : public KexiDBAutoField,
-                                            public KexiComboBoxBase
+    public KexiComboBoxBase
 {
     Q_OBJECT
     Q_PROPERTY(bool editable READ isEditable WRITE setEditable)
@@ -67,20 +67,20 @@ public:
 
     //! Reimplemented after KexiDBAutoField: jsut sets \a cinfo without initializing a subwidget.
     //! Initialization is performed by \ref setVisibleColumnInfo().
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KexiDB::QueryColumnInfo *cinfo);
 
     /*! Used internally to set visible database column information.
      Reimplemented: performs initialization of the subwidget. */
-    virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo *cinfo);
 
     /*! \return visible database column information for this item.
      Reimplemented. */
-    virtual KexiDB::QueryColumnInfo* visibleColumnInfo() const;
+    virtual KexiDB::QueryColumnInfo *visibleColumnInfo() const;
 
     virtual QColor paletteBackgroundColor() const;
 
     //! Reimplemented to also set 'this' widget's background color, not only subwidget's.
-    virtual void setPaletteBackgroundColor(const QColor & color);
+    virtual void setPaletteBackgroundColor(const QColor &color);
 
     /*! Undoes changes made to this item - just resets the widget to original value.
      Reimplemented after KexiFormDataItemInterface to also revert the visible value
@@ -92,7 +92,7 @@ public Q_SLOTS:
     virtual void slotItemSelected(KexiDB::RecordData *record);
 
 protected Q_SLOTS:
-    virtual void slotInternalEditorValueChanged(const QVariant& v);
+    virtual void slotInternalEditorValueChanged(const QVariant &v);
     void slotPopupHidden();
 
 protected:
@@ -114,12 +114,12 @@ protected:
     virtual void createEditor();
 
     /*! Reimplemented */
-    virtual void styleChange(QStyle& oldStyle);
+    virtual void styleChange(QStyle &oldStyle);
 
     /*! Reimplemented */
-    virtual void fontChange(const QFont & oldFont);
+    virtual void fontChange(const QFont &oldFont);
 
-    virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const;
+    virtual bool subwidgetStretchRequired(KexiDBAutoField *autoField) const;
 
     //! Implemented for KexiComboBoxBase
     virtual QWidget *internalEditor() const;
@@ -131,7 +131,7 @@ protected:
     virtual void selectAllInInternalEditor();
 
     //! Implemented for KexiComboBoxBase
-    virtual void setValueInInternalEditor(const QVariant& value);
+    virtual void setValueInInternalEditor(const QVariant &value);
 
     //! Implemented for KexiComboBoxBase
     virtual QVariant valueFromInternalEditor();
@@ -144,15 +144,15 @@ protected:
 
     //! Implement this to return a position \a pos mapped from parent (e.g. viewport)
     //! to global coordinates. QPoint(-1, -1) should be returned if this cannot be computed.
-    virtual QPoint mapFromParentToGlobal(const QPoint& pos) const;
+    virtual QPoint mapFromParentToGlobal(const QPoint &pos) const;
 
     //! Implement this to return a hint for popup width.
     virtual int popupWidthHint() const;
 
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
 
     //! Implemented to handle visible value instead of index
-    virtual void setVisibleValueInternal(const QVariant& value);
+    virtual void setVisibleValueInternal(const QVariant &value);
 
     bool handleMousePressEvent(QMouseEvent *e);
 
@@ -171,7 +171,7 @@ protected:
     virtual bool keyPressed(QKeyEvent *ke);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

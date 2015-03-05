@@ -38,9 +38,9 @@ class KRITAUI_EXPORT KisPerspectiveGridManager : public QObject
 public:
     /** Create a perspective manager for this view
      */
-    KisPerspectiveGridManager(KisViewManager * parent);
+    KisPerspectiveGridManager(KisViewManager *parent);
     ~KisPerspectiveGridManager();
-    void setup(KActionCollection * collection);
+    void setup(KActionCollection *collection);
     /**
      * Call this function to start editing the grid, to disable display
      */
@@ -60,12 +60,11 @@ public Q_SLOTS:
     void clearPerspectiveGrid();
 
 private:
-    KisPerspectiveGridDecoration* decoration();
+    KisPerspectiveGridDecoration *decoration();
 
-    
     QPointer<KisView> m_imageView;
-    KToggleAction* m_toggleGrid;
-    KAction* m_gridClear;
+    KToggleAction *m_toggleGrid;
+    KAction *m_gridClear;
 };
 
 #endif

@@ -26,9 +26,9 @@
 #include <kis_debug.h>
 #include <KoIcon.h>
 
-DlgRotateImage::DlgRotateImage(QWidget *  parent,
-                               const char * name)
-        : KDialog(parent)
+DlgRotateImage::DlgRotateImage(QWidget   *parent,
+                               const char *name)
+    : KDialog(parent)
 {
     setCaption(i18n("Rotate Image"));
     setButtons(Ok | Cancel);
@@ -79,8 +79,9 @@ void DlgRotateImage::setAngle(quint32 angle)
         m_page->doubleCustom->setValue(angle);
     }
 
-    if (m_oldAngle != angle)
+    if (m_oldAngle != angle) {
         resetPreview();
+    }
 
     m_oldAngle = angle;
 

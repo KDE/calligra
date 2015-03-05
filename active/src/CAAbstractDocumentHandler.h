@@ -33,7 +33,7 @@ class CADocumentController;
 class CAAbstractDocumentHandler : public QObject
 {
     Q_OBJECT
-    Q_ENUMS (FlickModes)
+    Q_ENUMS(FlickModes)
     Q_PROPERTY(QString topToolbarSource READ topToolbarSource CONSTANT)
     Q_PROPERTY(QString rightToolbarSource READ rightToolbarSource CONSTANT)
     Q_PROPERTY(QString bottomToolbarSource READ bottomToolbarSource CONSTANT)
@@ -50,17 +50,17 @@ public:
         FlickVertically,
         FlickBoth
     };
-    explicit CAAbstractDocumentHandler (CADocumentController* documentController);
+    explicit CAAbstractDocumentHandler(CADocumentController *documentController);
     virtual ~CAAbstractDocumentHandler();
 
     virtual QStringList supportedMimetypes() = 0;
-    virtual bool openDocument (const QString& uri) = 0;
+    virtual bool openDocument(const QString &uri) = 0;
     virtual QString documentTypeName() = 0;
     virtual KoZoomMode::Mode preferredZoomMode() const = 0;
-    virtual KoDocument* document() = 0;
+    virtual KoDocument *document() = 0;
 
-    bool canOpenDocument (const QString& uri);
-    KoCanvasBase* canvas() const;
+    bool canOpenDocument(const QString &uri);
+    KoCanvasBase *canvas() const;
 
     virtual QString topToolbarSource() const;
     virtual QString rightToolbarSource() const;
@@ -81,10 +81,10 @@ Q_SIGNALS:
 
 protected:
     class Private;
-    Private* const d;
+    Private *const d;
 
-    void setCanvas (KoCanvasBase* canvas);
-    CADocumentController* documentController() const;
+    void setCanvas(KoCanvasBase *canvas);
+    CADocumentController *documentController() const;
 };
 
 #endif // CAABSTRACTDOCUMENTHANDLER_H

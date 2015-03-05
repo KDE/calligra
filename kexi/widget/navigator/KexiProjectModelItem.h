@@ -39,7 +39,7 @@ class KEXIEXTWIDGETS_EXPORT KexiProjectModelItem
 public:
 
     //! Create a generic group item
-    explicit KexiProjectModelItem(const QString& n, KexiProjectModelItem *parent = 0);
+    explicit KexiProjectModelItem(const QString &n, KexiProjectModelItem *parent = 0);
 
     //! Creates group item for part \a i
     explicit KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *parent = 0);
@@ -55,10 +55,10 @@ public:
     KexiPart::Info *partInfo() const;
 
     //! \return part item. Can be null if the browser item is a "folder/group", i.e. a parent node.
-    KexiPart::Item* partItem() const;
+    KexiPart::Item *partItem() const;
 
     KexiProjectModelItem *child(int row);
-    void appendChild(KexiProjectModelItem*);
+    void appendChild(KexiProjectModelItem *);
     int childCount() const;
     int columnCount() const;
     QVariant data(int column) const;
@@ -73,15 +73,15 @@ public:
 
     void debugPrint() const;
 
-    KexiProjectModelItem* modelItemFromItem(const KexiPart::Item &item) const;
-    KexiProjectModelItem* modelItemFromName(const QString& name) const;
+    KexiProjectModelItem *modelItemFromItem(const KexiPart::Item &item) const;
+    KexiProjectModelItem *modelItemFromName(const QString &name) const;
 
     void sortChildren();
     void setDirty(bool set);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 bool itemLessThan(const KexiProjectModelItem *a, const KexiProjectModelItem *b);

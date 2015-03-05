@@ -53,17 +53,16 @@
  * for that.
  */
 void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
-                                              const QRectF &rect, qreal vstep,
-                                              int numCycles,
-                                              bool createTransaction,
-                                              int hardLimitMiB,
-                                              int softLimitMiB,
-                                              int poolLimitMiB,
-                                              int index)
+        const QRectF &rect, qreal vstep,
+        int numCycles,
+        bool createTransaction,
+        int hardLimitMiB,
+        int softLimitMiB,
+        int poolLimitMiB,
+        int index)
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset(QString(FILES_DATA_DIR) + QDir::separator() + presetFileName);
     LOAD_PRESET_OR_RETURN(preset, presetFileName);
-
 
     /**
      * Initialize image and painter
@@ -106,11 +105,11 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
      */
     QString fileName;
     fileName = QString("log_%1_%2_%3_%4_%5.txt")
-        .arg(createTransaction)
-        .arg(hardLimitMiB)
-        .arg(softLimitMiB)
-        .arg(poolLimitMiB)
-        .arg(index);
+               .arg(createTransaction)
+               .arg(hardLimitMiB)
+               .arg(softLimitMiB)
+               .arg(poolLimitMiB)
+               .arg(index);
 
     QFile logFile(fileName);
     logFile.open(QFile::WriteOnly | QFile::Truncate);
@@ -139,7 +138,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
 
         KisDistanceInformation currentDistance;
 
-        while(line.y1() < rectBottom) {
+        while (line.y1() < rectBottom) {
             lineTime.restart();
 
             KisPaintInformation pi1(line.p1(), 0.0);
@@ -184,7 +183,7 @@ void KisLowMemoryBenchmark::unlimitedMemoryNoHistoryNoPool()
 {
     QString presetFileName = "autobrush_300px.kpp";
     // one cycle takes about 48 MiB of memory (total 960 MiB)
-    QRectF rect(150,150,4000,4000);
+    QRectF rect(150, 150, 4000, 4000);
     qreal step = 250;
     int numCycles = 20;
 
@@ -196,7 +195,7 @@ void KisLowMemoryBenchmark::unlimitedMemoryHistoryNoPool()
 {
     QString presetFileName = "autobrush_300px.kpp";
     // one cycle takes about 48 MiB of memory (total 960 MiB)
-    QRectF rect(150,150,4000,4000);
+    QRectF rect(150, 150, 4000, 4000);
     qreal step = 250;
     int numCycles = 20;
 
@@ -208,7 +207,7 @@ void KisLowMemoryBenchmark::unlimitedMemoryHistoryPool50()
 {
     QString presetFileName = "autobrush_300px.kpp";
     // one cycle takes about 48 MiB of memory (total 960 MiB)
-    QRectF rect(150,150,4000,4000);
+    QRectF rect(150, 150, 4000, 4000);
     qreal step = 250;
     int numCycles = 20;
 
@@ -220,7 +219,7 @@ void KisLowMemoryBenchmark::memory2000History100Pool500HugeBrush()
 {
     QString presetFileName = "BIG_TESTING.kpp";
     // one cycle takes about 316 MiB of memory (total 3+ GiB)
-    QRectF rect(150,150,7850,7850);
+    QRectF rect(150, 150, 7850, 7850);
     qreal step = 250;
     int numCycles = 10;
 

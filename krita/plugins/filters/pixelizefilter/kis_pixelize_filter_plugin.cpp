@@ -20,7 +20,6 @@
 
 #include "kis_pixelize_filter_plugin.h"
 
-
 #include <kpluginfactory.h>
 
 #include <kis_paint_device.h>
@@ -33,7 +32,7 @@ K_PLUGIN_FACTORY(KisPixelizeFilterPluginFactory, registerPlugin<KisPixelizeFilte
 K_EXPORT_PLUGIN(KisPixelizeFilterPluginFactory("krita"))
 
 KisPixelizeFilterPlugin::KisPixelizeFilterPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisFilterRegistry::instance()->add(new KisPixelizeFilter());
 }

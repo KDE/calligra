@@ -30,7 +30,6 @@ class WdgLevel;
 class QWidget;
 class KisHistogram;
 
-
 /**
  * This class affect Intensity Y of the image
  */
@@ -45,26 +44,26 @@ public:
 public:
 
 //     virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation *createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const;
 
-    static inline KoID id() {
+    static inline KoID id()
+    {
         return KoID("levels", i18n("Levels"));
     }
 
 };
 
-
 class KisLevelConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev);
+    KisLevelConfigWidget(QWidget *parent, KisPaintDeviceSP dev);
     virtual ~KisLevelConfigWidget();
 
-    virtual KisPropertiesConfiguration* configuration() const;
-    void setConfiguration(const KisPropertiesConfiguration* config);
+    virtual KisPropertiesConfiguration *configuration() const;
+    void setConfiguration(const KisPropertiesConfiguration *config);
     Ui::WdgLevel m_page;
 
 protected Q_SLOTS:

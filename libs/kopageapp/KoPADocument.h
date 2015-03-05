@@ -43,18 +43,18 @@ public:
     explicit KoPADocument(KoPart *part);
     virtual ~KoPADocument();
 
-    QPixmap generatePreview(const QSize& size);
-    void paintContent( QPainter &painter, const QRect &rect);
+    QPixmap generatePreview(const QSize &size);
+    void paintContent(QPainter &painter, const QRect &rect);
 
-    bool loadXML( const KoXmlDocument & doc, KoStore *store );
-    bool loadOdf( KoOdfReadStore & odfStore );
+    bool loadXML(const KoXmlDocument &doc, KoStore *store);
+    bool loadOdf(KoOdfReadStore &odfStore);
 
-    bool saveOdf( SavingContext & documentContext );
+    bool saveOdf(SavingContext &documentContext);
 
     /**
      * The tag the body is saved in
      */
-    virtual const char *odfTagName( bool withNamespace ) = 0;
+    virtual const char *odfTagName(bool withNamespace) = 0;
 
     /**
      * Load master pages
@@ -62,7 +62,7 @@ public:
      * @param masterStyles
      * @param context
      */
-    QList<KoPAPageBase *> loadOdfMasterPages( const QHash<QString, KoXmlElement*> masterStyles, KoPALoadingContext & context );
+    QList<KoPAPageBase *> loadOdfMasterPages(const QHash<QString, KoXmlElement *> masterStyles, KoPALoadingContext &context);
 
     /**
      * Save pages
@@ -71,17 +71,17 @@ public:
      *
      * For all pages that are specified also the master slide has to be specified.
      */
-    bool saveOdfPages( KoPASavingContext & paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages );
+    bool saveOdfPages(KoPASavingContext &paContext, QList<KoPAPageBase *> &pages, QList<KoPAPageBase *> &masterPages);
 
     /**
      * Save document styles
      */
-    virtual void saveOdfDocumentStyles( KoPASavingContext & context );
+    virtual void saveOdfDocumentStyles(KoPASavingContext &context);
 
     /**
      * Load document styles
      */
-    virtual bool loadOdfDocumentStyles( KoPALoadingContext & context );
+    virtual bool loadOdfDocumentStyles(KoPALoadingContext &context);
 
     /**
      * Get page by index.
@@ -89,7 +89,7 @@ public:
      * @param index of the page
      * @param masterPage if true return a masterPage, if false a normal page
      */
-    KoPAPageBase* pageByIndex( int index, bool masterPage ) const;
+    KoPAPageBase *pageByIndex(int index, bool masterPage) const;
 
     /// reimplemnted
     virtual int pageCount() const;
@@ -101,7 +101,7 @@ public:
      *
      * @return The index of the page or -1 if the page is not found
      */
-    int pageIndex( KoPAPageBase * page ) const;
+    int pageIndex(KoPAPageBase *page) const;
 
     /**
      * Get page by navigation
@@ -111,7 +111,7 @@ public:
      *
      * @return the page which is reached by pageNavigation
      */
-    KoPAPageBase* pageByNavigation( KoPAPageBase * currentPage, KoPageApp::PageNavigation pageNavigation ) const;
+    KoPAPageBase *pageByNavigation(KoPAPageBase *currentPage, KoPageApp::PageNavigation pageNavigation) const;
 
     /**
      * Insert page to the document at index
@@ -122,7 +122,7 @@ public:
      * @param page to insert to document
      * @param index where the page will be inserted.
      */
-    void insertPage( KoPAPageBase* page, int index );
+    void insertPage(KoPAPageBase *page, int index);
 
     /**
      * Insert @p page to the document after page @p before
@@ -133,7 +133,7 @@ public:
      * @param page to insert to document
      * @param after the page which the inserted page should come after. Set after to 0 to add at the beginning
      */
-    void insertPage( KoPAPageBase* page, KoPAPageBase* after );
+    void insertPage(KoPAPageBase *page, KoPAPageBase *after);
 
     /**
      * Take @page from the page
@@ -141,7 +141,7 @@ public:
      * @param page taken from the document
      * @return the position of the page was taken from the document, or -1 if the page was not found
      */
-    int takePage( KoPAPageBase *page );
+    int takePage(KoPAPageBase *page);
 
     /**
      * Remove the page from the document
@@ -150,7 +150,7 @@ public:
      *
      * @param page The page that gets removed
      */
-    virtual void removePage( KoPAPageBase * page );
+    virtual void removePage(KoPAPageBase *page);
 
     /**
      * Remove the given pages from the document
@@ -159,12 +159,12 @@ public:
      *
      * @param pages The list of pages that gets removed
      */
-    virtual void removePages(QList<KoPAPageBase*> &pages);
+    virtual void removePages(QList<KoPAPageBase *> &pages);
 
-    void addShape( KoShape *shape );
-    void removeShape( KoShape* shape );
+    void addShape(KoShape *shape);
+    void removeShape(KoShape *shape);
 
-    QList<KoPAPageBase*> pages( bool masterPages = false ) const;
+    QList<KoPAPageBase *> pages(bool masterPages = false) const;
 
     /**
      * Get a new page for inserting into the document
@@ -182,13 +182,12 @@ public:
      *
      * Reimplement when you need a derivered class in your kopageapplication
      */
-    virtual KoPAMasterPage * newMasterPage();
+    virtual KoPAMasterPage *newMasterPage();
 
     /**
      * Get the type of the document
      */
     virtual KoOdf::DocumentType documentType() const = 0;
-
 
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
@@ -202,7 +201,7 @@ public:
      * @param shape The shape for which the page should be found
      * @return The page on which the shape is located
      */
-    KoPAPageBase * pageByShape( KoShape * shape ) const;
+    KoPAPageBase *pageByShape(KoShape *shape) const;
 
     /**
      * Get the page type used in the document
@@ -216,23 +215,26 @@ public:
      *
      * Use this method instead the one in the pages directly
      */
-    QPixmap pageThumbnail(KoPAPageBase* page, const QSize& size);
+    QPixmap pageThumbnail(KoPAPageBase *page, const QSize &size);
 
-    QImage pageThumbImage(KoPAPageBase* page, const QSize& size);
+    QImage pageThumbImage(KoPAPageBase *page, const QSize &size);
 
-    void emitUpdate(KoPAPageBase *page) {emit update(page);}
+    void emitUpdate(KoPAPageBase *page)
+    {
+        emit update(page);
+    }
 
 public Q_SLOTS:
     /// reimplemented
     virtual void initEmpty();
 
 Q_SIGNALS:
-    void shapeAdded(KoShape* shape);
-    void shapeRemoved(KoShape* shape);
-    void pageAdded(KoPAPageBase* page);
+    void shapeAdded(KoShape *shape);
+    void shapeRemoved(KoShape *shape);
+    void pageAdded(KoPAPageBase *page);
 
     /// This is a general signal to tell you a page was removed
-    void pageRemoved(KoPAPageBase* page);
+    void pageRemoved(KoPAPageBase *page);
 
     /// when page is removed this signal indicates you should replace it if it was active
     void replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage);
@@ -260,39 +262,38 @@ protected:
      *
      * The default implementation is empty
      */
-    virtual bool loadOdfProlog( const KoXmlElement & body, KoPALoadingContext & context );
-
+    virtual bool loadOdfProlog(const KoXmlElement &body, KoPALoadingContext &context);
 
     /**
      * Load the epilouge
      *
      * The default implementation is empty
      */
-    virtual bool loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext & context );
+    virtual bool loadOdfEpilogue(const KoXmlElement &body, KoPALoadingContext &context);
 
     /**
      * Save the prolog
      *
      * The default implementation is empty
      */
-    virtual bool saveOdfProlog( KoPASavingContext & paContext );
+    virtual bool saveOdfProlog(KoPASavingContext &paContext);
 
     /**
      * Save the epilouge
      *
      * The default implementation is empty
      */
-    virtual bool saveOdfEpilogue( KoPASavingContext & paContext );
+    virtual bool saveOdfEpilogue(KoPASavingContext &paContext);
 
     /**
      * Save settings
      */
-    bool saveOdfSettings( KoStore * store );
+    bool saveOdfSettings(KoStore *store);
 
     /**
      * Load settings
      */
-    void loadOdfSettings( const KoXmlDocument & settingsDoc );
+    void loadOdfSettings(const KoXmlDocument &settingsDoc);
 
     /**
      * This function is called by at the end of addShape. This is used
@@ -300,7 +301,7 @@ protected:
      *
      * The default impementation does nothing
      */
-    virtual void postAddShape( KoPAPageBase * page, KoShape * shape );
+    virtual void postAddShape(KoPAPageBase *page, KoShape *shape);
 
     /**
      * This function is called by at the end of removeShape. This is used
@@ -308,7 +309,7 @@ protected:
      *
      * The default impementation does nothing
      */
-    virtual void postRemoveShape( KoPAPageBase * page, KoShape * shape );
+    virtual void postRemoveShape(KoPAPageBase *page, KoShape *shape);
 
     /**
      * This function is called with the command that will remove the page
@@ -318,7 +319,7 @@ protected:
      * @param page The page that will be removed
      * @param parent The command that will be used to delete the page
      */
-    virtual void pageRemoved( KoPAPageBase * page, KUndo2Command * parent );
+    virtual void pageRemoved(KoPAPageBase *page, KUndo2Command *parent);
 
     /// Load the configuration
     void loadConfig();
@@ -342,12 +343,11 @@ private:
      * @param body
      * @param context
      */
-    QList<KoPAPageBase *> loadOdfPages( const KoXmlElement & body, KoPALoadingContext & context );
-
+    QList<KoPAPageBase *> loadOdfPages(const KoXmlElement &body, KoPALoadingContext &context);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOPADOCUMENT_H */

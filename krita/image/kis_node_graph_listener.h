@@ -68,15 +68,15 @@ public:
      * Inform the model we're about to start moving a node (which
      * includes removing and adding the same node)
      */
-    virtual void aboutToMoveNode(KisNode * node, int oldIndex, int newIndex);
+    virtual void aboutToMoveNode(KisNode *node, int oldIndex, int newIndex);
 
     /**
      * Inform the model we're done moving the node: it has been
      * removed and added successfully
      */
-    virtual void nodeHasBeenMoved(KisNode * node, int oldIndex, int newIndex);
+    virtual void nodeHasBeenMoved(KisNode *node, int oldIndex, int newIndex);
 
-    virtual void nodeChanged(KisNode * node);
+    virtual void nodeChanged(KisNode *node);
 
     /**
      * Inform the model that one of the selections in the graph is
@@ -89,7 +89,7 @@ public:
     /**
      * Inform the model that a node has been changed (setDirty)
      */
-    virtual void requestProjectionUpdate(KisNode * node, const QRect& rect);
+    virtual void requestProjectionUpdate(KisNode *node, const QRect &rect);
 
     /**
      * Returns the sequence of the graph.
@@ -103,11 +103,11 @@ public:
      * It is used in the scheduler for checking whether queued walkers
      * should be regenerated.
      */
-     int graphSequenceNumber() const;
+    int graphSequenceNumber() const;
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif

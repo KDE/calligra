@@ -76,8 +76,7 @@ bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt
         m_position = info.pos();
         m_isOffsetNotUptodate = true;
         ignoreEvent = false;
-    }
-    else {
+    } else {
         if (m_isOffsetNotUptodate) {
             m_offset = info.pos() - m_position;
             m_isOffsetNotUptodate = false;
@@ -88,12 +87,11 @@ bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt
     return ignoreEvent;
 }
 
-
 void KisDuplicateOpSettings::activate()
 {
 }
 
-void KisDuplicateOpSettings::fromXML(const QDomElement& elt)
+void KisDuplicateOpSettings::fromXML(const QDomElement &elt)
 {
     // First, call the parent class fromXML to make sure all the
     // properties are saved to the map
@@ -104,7 +102,7 @@ void KisDuplicateOpSettings::fromXML(const QDomElement& elt)
     m_isOffsetNotUptodate = false;
 }
 
-void KisDuplicateOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) const
+void KisDuplicateOpSettings::toXML(QDomDocument &doc, QDomElement &rootElt) const
 {
     // Then call the parent class fromXML
     KisPropertiesConfiguration::toXML(doc, rootElt);
@@ -113,11 +111,10 @@ void KisDuplicateOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) cons
     rootElt.setAttribute("OffsetY", QString::number(m_offset.y()));
 }
 
-
 KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
 {
     KisPaintOpSettingsSP setting = KisPaintOpSettings::clone();
-    KisDuplicateOpSettings* s = dynamic_cast<KisDuplicateOpSettings*>(setting.data());
+    KisDuplicateOpSettings *s = dynamic_cast<KisDuplicateOpSettings *>(setting.data());
     s->m_offset = m_offset;
     s->m_isOffsetNotUptodate = m_isOffsetNotUptodate;
     s->m_position = m_position;
@@ -134,8 +131,7 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
     QRectF rect2 = copy.boundingRect();
     if (m_isOffsetNotUptodate || !getBool(DUPLICATE_MOVE_SOURCE_POINT)) {
         copy.translate(m_position - info.pos());
-    }
-    else {
+    } else {
         copy.translate(-m_offset);
     }
 

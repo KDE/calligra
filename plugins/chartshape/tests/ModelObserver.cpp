@@ -32,7 +32,7 @@ ModelObserver::ModelObserver(QAbstractItemModel *source)
     m_lastHeaderDataChange.valid = false;
 
     connect(source, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            this  , SLOT(slotRowsInserted(QModelIndex,int,int)));
+            this, SLOT(slotRowsInserted(QModelIndex,int,int)));
     connect(source, SIGNAL(columnsInserted(QModelIndex,int,int)),
             this,   SLOT(slotColumnsInserted(QModelIndex,int,int)));
     connect(source, SIGNAL(rowsRemoved(QModelIndex,int,int)),
@@ -100,7 +100,7 @@ void ModelObserver::slotHeaderDataChanged(Qt::Orientation orientation, int first
     m_lastHeaderDataChange.valid = true;
 }
 
-void ModelObserver::slotDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight)
+void ModelObserver::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
     m_lastDataChange.topLeft = topLeft;
     m_lastDataChange.bottomRight = bottomRight;

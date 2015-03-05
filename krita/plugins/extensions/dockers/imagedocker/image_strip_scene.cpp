@@ -41,8 +41,8 @@ ImageLoader::ImageLoader(float size)
 
 void ImageLoader::run()
 {
-    typedef QHash<ImageItem*,Data>::iterator Iterator;
-    
+    typedef QHash<ImageItem *, Data>::iterator Iterator;
+
     for (Iterator data = m_data.begin(); data != m_data.end() && m_run; ++data) {
         QImage img = QImage(data->path);
         if (!img.isNull()) {
@@ -58,36 +58,33 @@ void ImageLoader::stopExecution()
     m_run = false;
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////
 // ------------- ImageItem ------------------------------------------------------------ //
 
-void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void ImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    
+
     if (m_loader->isImageLoaded(this)) {
         QImage  image = m_loader->getImage(this);
-        
+
         if (!image.isNull()) {
-            QPointF offset((m_size-image.width()) / 2.0, (m_size-image.height()) / 2.0);
+            QPointF offset((m_size - image.width()) / 2.0, (m_size - image.height()) / 2.0);
             painter->drawImage(offset, image);
-        }
-        else {
+        } else {
             QIcon   icon = koIcon("image-missing");
             QRect   rect = boundingRect().toRect();
             QPixmap img  = icon.pixmap(rect.size());
             painter->drawPixmap(rect, img, img.rect());
         }
-    }
-    else {
+    } else {
         QIcon   icon = koIcon("image-loading");
         QRect   rect = boundingRect().toRect();
         QPixmap img  = icon.pixmap(rect.size());
         painter->drawPixmap(rect, img, img.rect());
     }
-    
+
     if (isSelected()) {
         painter->setCompositionMode(QPainter::CompositionMode_HardLight);
         painter->setOpacity(0.50);
@@ -96,22 +93,21 @@ void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
         QPen pen(palette().color(QPalette::Active, QPalette::Highlight), 3);
         painter->setPen(pen);
     }
-    
+
     painter->drawRect(boundingRect());
 }
 
-QSizeF ImageItem::sizeHint(Qt::SizeHint /*which*/, const QSizeF& /*constraint*/) const
+QSizeF ImageItem::sizeHint(Qt::SizeHint /*which*/, const QSizeF & /*constraint*/) const
 {
     return QSizeF(m_size, m_size);
 }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // ------------- ImageStripScene ------------------------------------------------------ //
 
 ImageStripScene::ImageStripScene():
     m_imgSize(80)
-  , m_loader(0)
+    , m_loader(0)
 {
 }
 
@@ -120,35 +116,35 @@ ImageStripScene::~ImageStripScene()
     delete m_loader;
 }
 
-bool ImageStripScene::setCurrentDirectory(const QString& path)
+bool ImageStripScene::setCurrentDirectory(const QString &path)
 {
     QMutexLocker locker(&m_mutex);
     QDir         directory(path);
     QImageReader reader;
-    
+
     if (directory.exists()) {
         clear();
-        
+
         if (m_loader) {
             m_loader->disconnect(this);
             m_loader->stopExecution();
-            
+
             if (!m_loader->wait(500)) {
                 m_loader->terminate();
                 m_loader->wait();
             }
         }
-        
+
         delete m_loader;
-        
+
         m_numItems = 0;
         m_loader   = new ImageLoader(m_imgSize);
         connect(m_loader, SIGNAL(sigItemContentChanged(ImageItem*)), SLOT(slotItemContentChanged(ImageItem*)));
-        
+
         QStringList            files  = directory.entryList(QDir::Files);
-        QGraphicsLinearLayout* layout = new QGraphicsLinearLayout();
-        
-        for (QStringList::iterator name=files.begin(); name!=files.end(); ++name) {
+        QGraphicsLinearLayout *layout = new QGraphicsLinearLayout();
+
+        for (QStringList::iterator name = files.begin(); name != files.end(); ++name) {
             QString path = directory.absoluteFilePath(*name);
             QString fileExtension = QFileInfo(path).suffix();
 
@@ -159,39 +155,40 @@ bool ImageStripScene::setCurrentDirectory(const QString& path)
 
             reader.setFileName(path);
 
-            if(reader.canRead()) {
-                ImageItem* item = new ImageItem(m_imgSize, path, m_loader);
+            if (reader.canRead()) {
+                ImageItem *item = new ImageItem(m_imgSize, path, m_loader);
                 m_loader->addPath(item, path);
                 layout->addItem(item);
                 ++m_numItems;
             }
         }
-        
-        QGraphicsWidget* widget = new QGraphicsWidget();
+
+        QGraphicsWidget *widget = new QGraphicsWidget();
         widget->setLayout(layout);
         widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        
+
         addItem(widget);
         setSceneRect(widget->boundingRect());
-        
+
         m_loader->start(QThread::LowPriority);
         return true;
     }
-    
+
     return false;
 }
 
-void ImageStripScene::slotItemContentChanged(ImageItem* item)
+void ImageStripScene::slotItemContentChanged(ImageItem *item)
 {
     QMutexLocker locker(&m_mutex);
     item->update();
 }
 
-void ImageStripScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+void ImageStripScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    ImageItem* item = static_cast<ImageItem*>(itemAt(event->scenePos()));
-    
-    if (item)
+    ImageItem *item = static_cast<ImageItem *>(itemAt(event->scenePos()));
+
+    if (item) {
         emit sigImageActivated(item->path());
+    }
 }
 

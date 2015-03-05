@@ -29,47 +29,58 @@ public:
 
     ~TestNodeVisitor() {}
 
-    bool visit(KisNode */*node*/) {
+    bool visit(KisNode */*node*/)
+    {
         return true;
     }
 
-    bool visit(KisPaintLayer */*layer*/) {
+    bool visit(KisPaintLayer */*layer*/)
+    {
         return true;
     }
 
-    bool visit(KisGroupLayer */*layer*/) {
+    bool visit(KisGroupLayer */*layer*/)
+    {
         return true;
     }
 
-    bool visit(KisAdjustmentLayer */*layer*/) {
+    bool visit(KisAdjustmentLayer */*layer*/)
+    {
         return true;
     }
 
-    bool visit(KisExternalLayer */*layer*/) {
+    bool visit(KisExternalLayer */*layer*/)
+    {
         return true;
     }
 
-    bool visit(KisGeneratorLayer */*layer*/) {
+    bool visit(KisGeneratorLayer */*layer*/)
+    {
         return true;
     }
 
-    bool visit(KisCloneLayer */*layer*/) {
+    bool visit(KisCloneLayer */*layer*/)
+    {
         return true;
     }
 
-    bool visit(KisFilterMask */*mask*/) {
+    bool visit(KisFilterMask */*mask*/)
+    {
         return true;
     }
 
-    bool visit(KisTransformMask */*mask*/) {
+    bool visit(KisTransformMask */*mask*/)
+    {
         return true;
     }
 
-    bool visit(KisTransparencyMask */*mask*/) {
+    bool visit(KisTransparencyMask */*mask*/)
+    {
         return true;
     }
 
-    bool visit(KisSelectionMask */*mask*/) {
+    bool visit(KisSelectionMask */*mask*/)
+    {
         return true;
     }
 
@@ -83,7 +94,6 @@ void KisNodeVisitorTest::testCreation()
 void KisNodeVisitorTest::testFullImage()
 {
 }
-
 
 QTEST_KDEMAIN(KisNodeVisitorTest, GUI)
 #include "kis_node_visitor_test.moc"

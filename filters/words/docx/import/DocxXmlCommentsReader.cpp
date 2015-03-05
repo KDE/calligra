@@ -36,9 +36,11 @@
 class DocxXmlCommentReader::Private
 {
 public:
-    Private() : counter(0) {
+    Private() : counter(0)
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
     QString pathAndFile;
     int counter;
@@ -62,9 +64,9 @@ void DocxXmlCommentReader::init()
     d->counter = 0;
 }
 
-KoFilter::ConversionStatus DocxXmlCommentReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus DocxXmlCommentReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = static_cast<DocxXmlDocumentReaderContext*>(context);
+    m_context = static_cast<DocxXmlDocumentReaderContext *>(context);
 
     kDebug() << "=============================";
     readNext();

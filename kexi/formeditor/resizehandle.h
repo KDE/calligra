@@ -42,7 +42,7 @@ class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
     Q_OBJECT
 
 public:
-    typedef QHash<QString, ResizeHandleSet*> Hash;
+    typedef QHash<QString, ResizeHandleSet *> Hash;
 
     ResizeHandleSet(QWidget *modify, Form *form);
 
@@ -51,11 +51,11 @@ public:
     QWidget *widget() const;
 
     void setWidget(QWidget *modify);
-    
+
     void raise();
-    
+
     void setEditingMode(bool editing);
-    
+
     Form *form() const;
 
 Q_SIGNALS:
@@ -68,7 +68,7 @@ protected:
 private:
     class Private;
 
-    Private* const d;
+    Private *const d;
     friend class ResizeHandle;
 };
 

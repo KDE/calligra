@@ -35,18 +35,18 @@ class TaskDescriptionPanel;
 class Task;
 class Node;
 class MacroCommand;
-        
+
 class TaskDescriptionPanelImpl : public QWidget, public Ui_TaskDescriptionPanelBase
 {
     Q_OBJECT
 public:
-    TaskDescriptionPanelImpl( Node &node, QWidget *parent );
-        
+    TaskDescriptionPanelImpl(Node &node, QWidget *parent);
+
 public Q_SLOTS:
     virtual void slotChanged();
 
 Q_SIGNALS:
-    void textChanged( bool );
+    void textChanged(bool);
 
 protected:
     Node &m_node;
@@ -56,16 +56,16 @@ class TaskDescriptionPanel : public TaskDescriptionPanelImpl
 {
     Q_OBJECT
 public:
-    explicit TaskDescriptionPanel( Node &node, QWidget *parent = 0, bool readOnly = false );
+    explicit TaskDescriptionPanel(Node &node, QWidget *parent = 0, bool readOnly = false);
 
     MacroCommand *buildCommand();
 
     bool ok();
 
-    void setStartValues( Node &node );
+    void setStartValues(Node &node);
 
 protected:
-    void initDescription( bool readOnly );
+    void initDescription(bool readOnly);
 };
 
 class KPLATOUI_EXPORT TaskDescriptionDialog : public KDialog
@@ -77,12 +77,12 @@ public:
      * @param node the node to show
      * @param parent parent widget
      */
-    explicit TaskDescriptionDialog( Task &task, QWidget *parent = 0, bool readOnly = false  );
+    explicit TaskDescriptionDialog(Task &task, QWidget *parent = 0, bool readOnly = false);
 
     MacroCommand *buildCommand();
 
 protected Q_SLOTS:
-    void slotButtonClicked( int button );
+    void slotButtonClicked(int button);
 
 protected:
     TaskDescriptionPanel *m_descriptionTab;

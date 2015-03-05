@@ -23,7 +23,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef CALLIGRA_SHEETS_AUTOFILL_COMMAND
 #define CALLIGRA_SHEETS_AUTOFILL_COMMAND
 
@@ -58,8 +57,8 @@ public:
      */
     virtual ~AutoFillCommand();
 
-    void setSourceRange(const QRect& range);
-    void setTargetRange(const QRect& range);
+    void setSourceRange(const QRect &range);
+    void setTargetRange(const QRect &range);
 
     /**
      * Executes the actual operation.
@@ -74,12 +73,13 @@ public:
     static QStringList *shortDay;
 
 private:
-    void fillSequence(const QList<Cell>& _srcList,
-                      const QList<Cell>& _destList,
-                      const AutoFillSequence& _seqList,
+    void fillSequence(const QList<Cell> &_srcList,
+                      const QList<Cell> &_destList,
+                      const AutoFillSequence &_seqList,
                       bool down = true);
     // dummy
-    virtual Value newValue(Element*, int, int, bool*, Format::Type*) {
+    virtual Value newValue(Element *, int, int, bool *, Format::Type *)
+    {
         return Value();
     }
 

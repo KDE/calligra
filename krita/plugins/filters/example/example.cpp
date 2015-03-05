@@ -40,7 +40,7 @@ K_PLUGIN_FACTORY(KritaExampleFactory, registerPlugin<KritaExample>();)
 K_EXPORT_PLUGIN(KritaExampleFactory("krita"))
 
 KritaExample::KritaExample(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisFilterRegistry::instance()->add(KisFilterSP(new KisFilterInvert()));
 }
@@ -57,7 +57,7 @@ KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), category
     setShowConfigurationWidget(false);
 }
 
-KoColorTransformation* KisFilterInvert::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation *KisFilterInvert::createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const
 {
     Q_UNUSED(config);
     return cs->createInvertTransformation();

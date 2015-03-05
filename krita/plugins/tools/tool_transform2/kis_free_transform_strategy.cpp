@@ -32,7 +32,6 @@
 #include "kis_transform_utils.h"
 #include "kis_free_transform_strategy_gsl_helpers.h"
 
-
 enum StrokeFunction {
     ROTATE = 0,
     MOVE,
@@ -52,8 +51,7 @@ enum StrokeFunction {
     PERSPECTIVE
 };
 
-struct KisFreeTransformStrategy::Private
-{
+struct KisFreeTransformStrategy::Private {
     Private(KisFreeTransformStrategy *_q,
             const KisCoordinatesConverter *_converter,
             ToolTransformArgs &_currentArgs,
@@ -87,7 +85,6 @@ struct KisFreeTransformStrategy::Private
     ToolTransformArgs &currentArgs;
     //////
     TransformTransactionProperties &transaction;
-
 
     QTransform thumbToImageTransform;
     QImage originalImage;
@@ -133,8 +130,8 @@ struct KisFreeTransformStrategy::Private
 };
 
 KisFreeTransformStrategy::KisFreeTransformStrategy(const KisCoordinatesConverter *converter,
-                                                   ToolTransformArgs &currentArgs,
-                                                   TransformTransactionProperties &transaction)
+        ToolTransformArgs &currentArgs,
+        TransformTransactionProperties &transaction)
     : KisSimplifiedActionPolicyStrategy(converter),
       m_d(new Private(this, converter, currentArgs, transaction))
 {
@@ -170,11 +167,10 @@ void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     qreal handleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
     qreal rotationHandleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
 
-
     StrokeFunction defaultFunction =
         transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : ROTATE;
     KisTransformUtils::HandleChooser<StrokeFunction>
-        handleChooser(mousePos, defaultFunction);
+    handleChooser(mousePos, defaultFunction);
 
     handleChooser.addFunction(m_d->transformedHandles.topMiddle,
                               handleRadius, TOPSCALE);
@@ -203,16 +199,20 @@ void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
         QPointF t = m_d->transform.inverted().map(mousePos);
 
         if (t.x() >= originalRect.left() && t.x() <= originalRect.right()) {
-            if (fabs(t.y() - originalRect.top()) <= handleRadius)
+            if (fabs(t.y() - originalRect.top()) <= handleRadius) {
                 m_d->function = TOPSHEAR;
-            if (fabs(t.y() - originalRect.bottom()) <= handleRadius)
+            }
+            if (fabs(t.y() - originalRect.bottom()) <= handleRadius) {
                 m_d->function = BOTTOMSHEAR;
+            }
         }
         if (t.y() >= originalRect.top() && t.y() <= originalRect.bottom()) {
-            if (fabs(t.x() - originalRect.left()) <= handleRadius)
+            if (fabs(t.x() - originalRect.left()) <= handleRadius) {
                 m_d->function = LEFTSHEAR;
-            if (fabs(t.x() - originalRect.right()) <= handleRadius)
+            }
+            if (fabs(t.x() - originalRect.right()) <= handleRadius) {
                 m_d->function = RIGHTSHEAR;
+            }
         }
     }
 }
@@ -408,8 +408,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
 
         break;
     }
-    case ROTATE:
-    {
+    case ROTATE: {
         KisTransformUtils::MatricesPack clickM(m_d->clickArgs);
         QTransform clickT = clickM.finalTransform();
 
@@ -432,8 +431,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
         m_d->currentArgs.setTransformedCenter(m_d->currentArgs.transformedCenter() + oldRotationCenter - newRotationCenter);
     }
     break;
-    case PERSPECTIVE:
-    {
+    case PERSPECTIVE: {
         QPointF diff = mousePos - m_d->clickPos;
         double thetaX = - diff.y() * M_PI / m_d->transaction.originalHalfHeight() / 2 / fabs(m_d->currentArgs.scaleY());
         m_d->currentArgs.setAX(normalizeAngle(m_d->clickArgs.aX() + thetaX));
@@ -602,7 +600,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bo
         m_d->currentArgs.setRotationCenterOffset(newRotationCenterOffset);
         emit requestResetRotationCenterButtons();
     }
-        break;
+    break;
     case TOPSHEAR:
     case BOTTOMSHEAR: {
         KisTransformUtils::MatricesPack m(m_d->clickArgs);

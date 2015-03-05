@@ -41,7 +41,7 @@ public:
     /**
      * Constructor.
      */
-    SpellCheckCommand(const Region &region, KoCanvasBase* canvasBase);
+    SpellCheckCommand(const Region &region, KoCanvasBase *canvasBase);
 
     /**
      * Destructor.
@@ -57,7 +57,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

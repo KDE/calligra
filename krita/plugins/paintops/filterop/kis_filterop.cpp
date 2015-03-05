@@ -72,7 +72,7 @@ KisFilterOp::~KisFilterOp()
 {
 }
 
-KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation &info)
 {
     if (!painter()) {
         return 1.0;
@@ -87,13 +87,18 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     }
 
     KisBrushSP brush = m_brush;;
-    if (!brush) return 1.0;
-
-    if (! brush->canPaintFor(info))
+    if (!brush) {
         return 1.0;
+    }
+
+    if (! brush->canPaintFor(info)) {
+        return 1.0;
+    }
 
     qreal scale = m_sizeOption.apply(info);
-    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
+    if (checkSizeTooSmall(scale)) {
+        return KisSpacingInformation();
+    }
 
     setCurrentScale(scale);
 
@@ -109,13 +114,14 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
                              info, 1.0,
                              &dstRect);
 
-    if (dstRect.isEmpty()) return 1.0;
+    if (dstRect.isEmpty()) {
+        return 1.0;
+    }
 
     QRect dabRect = dab->bounds();
 
     // sanity check
     Q_ASSERT(dstRect.size() == dabRect.size());
-
 
     // Filter the paint device
     QRect neededRect = m_filter->neededRect(dstRect, m_filterConfiguration);
@@ -129,7 +135,6 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     KisTransaction transaction(m_tmpDevice);
     m_filter->process(m_tmpDevice, dabRect, m_filterConfiguration, 0);
     transaction.end();
-
 
     painter()->
     bitBltWithFixedSelection(dstRect.x(), dstRect.y(),

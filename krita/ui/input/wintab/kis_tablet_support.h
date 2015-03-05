@@ -36,9 +36,7 @@
 #include "kis_incremental_average.h"
 #endif
 
-
-struct QTabletDeviceData
-{
+struct QTabletDeviceData {
 #ifndef Q_WS_MAC
     int minPressure;
     int maxPressure;
@@ -100,7 +98,8 @@ struct QTabletDeviceData
      * they report only recently changed axes.  SavedAxesData was
      * created to handle all these complexities.
      */
-    class SavedAxesData {
+    class SavedAxesData
+    {
     public:
         enum AxesIndexes {
             XCoord = 0,
@@ -133,45 +132,52 @@ struct QTabletDeviceData
 
         void tryFetchAxesMapping(XDevice *dev);
 
-        void setAxesMap(const QVector<AxesIndexes> &axesMap) {
+        void setAxesMap(const QVector<AxesIndexes> &axesMap)
+        {
             // the size of \p axesMap can be smaller/equal/bigger
             // than m_axes_data. Everything depends on the driver
 
             m_x11_to_local_axis_mapping = axesMap;
         }
 
-        inline QPointF position(const QTabletDeviceData *tablet, const QRect &screenArea) const {
+        inline QPointF position(const QTabletDeviceData *tablet, const QRect &screenArea) const
+        {
             return tablet->scaleCoord(m_axis_data[XCoord], m_axis_data[YCoord],
-                              screenArea.x(), screenArea.width(),
-                              screenArea.y(), screenArea.height());
+                                      screenArea.x(), screenArea.width(),
+                                      screenArea.y(), screenArea.height());
         }
 
-        inline int pressure() const {
+        inline int pressure() const
+        {
             return m_axis_data[Pressure];
         }
 
-        inline int xTilt() const {
+        inline int xTilt() const
+        {
             return m_axis_data[XTilt];
         }
 
-        inline int yTilt() const {
+        inline int yTilt() const
+        {
             return m_axis_data[YTilt];
         }
 
-        inline int rotation() const {
+        inline int rotation() const
+        {
             return m_axis_data[Rotation];
         }
 
-        bool updateAxesData(int firstAxis, int axesCount, const int *axes) {
+        bool updateAxesData(int firstAxis, int axesCount, const int *axes)
+        {
             for (int srcIt = 0, dstIt = firstAxis;
-                 srcIt < axesCount;
-                 srcIt++, dstIt++) {
+                    srcIt < axesCount;
+                    srcIt++, dstIt++) {
 
                 int index = m_x11_to_local_axis_mapping[dstIt];
                 int newValue = axes[srcIt];
 
                 if (m_workaroundX11SmoothPressureSteps > 0 &&
-                    index == Pressure) {
+                        index == Pressure) {
                     newValue = m_pressureAverage.pushThrough(newValue);
                 }
 
@@ -198,20 +204,20 @@ static inline int sign(int x)
 
 #ifndef Q_WS_MAC
 inline QPointF QTabletDeviceData::scaleCoord(int coordX, int coordY,
-                                            int outOriginX, int outExtentX,
-                                            int outOriginY, int outExtentY) const
+        int outOriginX, int outExtentX,
+        int outOriginY, int outExtentY) const
 {
     QPointF ret;
 
-    if (sign(outExtentX) == sign(maxX))
+    if (sign(outExtentX) == sign(maxX)) {
         ret.setX(((coordX - minX) * qAbs(outExtentX) / qAbs(qreal(maxX - minX))) + outOriginX);
-    else
+    } else
         ret.setX(((qAbs(maxX) - (coordX - minX)) * qAbs(outExtentX) / qAbs(qreal(maxX - minX)))
                  + outOriginX);
 
-    if (sign(outExtentY) == sign(maxY))
+    if (sign(outExtentY) == sign(maxY)) {
         ret.setY(((coordY - minY) * qAbs(outExtentY) / qAbs(qreal(maxY - minY))) + outOriginY);
-    else
+    } else
         ret.setY(((qAbs(maxY) - (coordY - minY)) * qAbs(outExtentY) / qAbs(qreal(maxY - minY)))
                  + outOriginY);
 
@@ -221,6 +227,5 @@ inline QPointF QTabletDeviceData::scaleCoord(int coordX, int coordY,
 
 typedef QList<QTabletDeviceData> QTabletDeviceDataList;
 QTabletDeviceDataList *qt_tablet_devices();
-
 
 #endif /* __KIS_TABLET_SUPPORT_H */

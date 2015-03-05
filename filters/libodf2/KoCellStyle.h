@@ -24,7 +24,6 @@
 #include "koodf2_export.h"
 #include "KoStyle.h"
 
-
 /**
  * A \class KoCellStyle represents a style of a cell to be applied to one or more cells.
  *
@@ -39,9 +38,9 @@ public:
 
     virtual ~KoCellStyle();
 
-    KoBorder* borders();
+    KoBorder *borders();
 
-    void setBackgroundColor(const QColor& color);
+    void setBackgroundColor(const QColor &color);
     QColor backgroundColor() const;
 
     void setBackgroundOpacity(qreal opacity);
@@ -60,24 +59,24 @@ public:
     void setBottomPadding(qreal padding);
 
     QString verticalAlign() const;
-    void setVerticalAlign(const QString& align);
+    void setVerticalAlign(const QString &align);
 
     bool glyphOrientation() const;
     void setGlyphOrientation(bool orientation);
 
-    void setTextStyle(const KoGenStyle& style);
-    void setParagraphStyle(const KoGenStyle& style);
+    void setTextStyle(const KoGenStyle &style);
+    void setParagraphStyle(const KoGenStyle &style);
     KoGenStyle styleProperties() const;
 
 protected:
-    virtual void prepareStyle( KoGenStyle& style ) const;
+    virtual void prepareStyle(KoGenStyle &style) const;
     virtual QString defaultPrefix() const;
     virtual KoGenStyle::Type styleType() const;
     virtual KoGenStyle::Type automaticstyleType() const;
-    virtual const char* styleFamilyName() const;
+    virtual const char *styleFamilyName() const;
 
 private:
-    KoBorder* m_borders;
+    KoBorder *m_borders;
     QColor m_backgroundColor;
     qreal m_backgroundOpacity;
 

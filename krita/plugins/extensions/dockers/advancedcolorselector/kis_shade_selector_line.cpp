@@ -33,9 +33,8 @@
 #include "kis_display_color_converter.h"
 #include "kis_paint_device.h"
 
-
 KisShadeSelectorLine::KisShadeSelectorLine(KisColorSelectorBaseProxy *parentProxy,
-                                           QWidget *parent)
+        QWidget *parent)
     : KisShadeSelectorLineBase(parent),
       m_displayHelpText(false),
       m_parentProxy(parentProxy)
@@ -46,7 +45,7 @@ KisShadeSelectorLine::KisShadeSelectorLine(KisColorSelectorBaseProxy *parentProx
 }
 
 KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta,
-                                           KisColorSelectorBaseProxy *parentProxy, QWidget *parent, qreal hueShift, qreal satShift, qreal valShift) :
+        KisColorSelectorBaseProxy *parentProxy, QWidget *parent, qreal hueShift, qreal satShift, qreal valShift) :
     KisShadeSelectorLineBase(parent),
     m_displayHelpText(false),
     m_parentProxy(parentProxy)
@@ -95,14 +94,16 @@ QString KisShadeSelectorLine::toString() const
     return QString("%1|%2|%3|%4|%5|%6|%7").arg(m_lineNumber).arg(m_hueDelta).arg(m_saturationDelta).arg(m_valueDelta).arg(m_hueShift).arg(m_saturationShift).arg(m_valueShift);
 }
 
-void KisShadeSelectorLine::fromString(const QString& string)
+void KisShadeSelectorLine::fromString(const QString &string)
 {
     QStringList strili = string.split('|');
     m_lineNumber = strili.at(0).toInt();
     m_hueDelta = strili.at(1).toDouble();
     m_saturationDelta = strili.at(2).toDouble();
     m_valueDelta = strili.at(3).toDouble();
-    if(strili.size()==4) return;            // don't crash, if reading old config files.
+    if (strili.size() == 4) {
+        return;    // don't crash, if reading old config files.
+    }
     m_hueShift = strili.at(4).toDouble();
     m_saturationShift = strili.at(5).toDouble();
     m_valueShift = strili.at(6).toDouble();
@@ -115,33 +116,38 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
     int patchCount;
     int patchSpacing;
 
-    if(m_gradient) {
+    if (m_gradient) {
         patchCount = width();
         patchSpacing = 0;
-    }
-    else {
+    } else {
         patchCount = m_patchCount;
         patchSpacing = 3;
     }
-    qreal patchWidth = (width()-patchSpacing*patchCount)/qreal(patchCount);
+    qreal patchWidth = (width() - patchSpacing * patchCount) / qreal(patchCount);
 
-    qreal hueStep=m_hueDelta/qreal(patchCount);
-    qreal saturationStep=m_saturationDelta/qreal(patchCount);
-    qreal valueStep=m_valueDelta/qreal(patchCount);
+    qreal hueStep = m_hueDelta / qreal(patchCount);
+    qreal saturationStep = m_saturationDelta / qreal(patchCount);
+    qreal valueStep = m_valueDelta / qreal(patchCount);
 
     qreal baseHue;
     qreal baseSaturation;
     qreal baseValue;
     m_parentProxy->converter()->
-        getHsvF(m_realColor, &baseHue, &baseSaturation, &baseValue);
+    getHsvF(m_realColor, &baseHue, &baseSaturation, &baseValue);
 
-    int z=0;
-    for(int i=-patchCount/2; i<=patchCount/2; i++) {
-        if(i==0 && patchCount%2==0) continue;
+    int z = 0;
+    for (int i = -patchCount / 2; i <= patchCount / 2; i++) {
+        if (i == 0 && patchCount % 2 == 0) {
+            continue;
+        }
 
         qreal hue = baseHue + (i * hueStep) + m_hueShift;
-        while (hue < 0.0) hue += 1.0;
-        while (hue > 1.0) hue -= 1.0;
+        while (hue < 0.0) {
+            hue += 1.0;
+        }
+        while (hue > 1.0) {
+            hue -= 1.0;
+        }
 
         qreal saturation = qBound<qreal>(0., baseSaturation + (i * saturationStep) + m_saturationShift, 1.);
         qreal value = qBound<qreal>(0., baseValue + (i * valueStep) + m_valueShift, 1.);
@@ -159,22 +165,22 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
     QImage renderedImage = m_parentProxy->converter()->toQImage(m_realPixelCache);
     wpainter.drawImage(0, 0, renderedImage);
 
-    if(m_displayHelpText) {
+    if (m_displayHelpText) {
         QString helpText(i18n("delta h=%1 s=%2 v=%3 shift h=%4 s=%5 v=%6",
-                         m_hueDelta,
-                         m_saturationDelta,
-                         m_valueDelta,
-                         m_hueShift,
-                         m_saturationShift,
-                         m_valueShift));
-        wpainter.setPen(QColor(255,255,255));
+                              m_hueDelta,
+                              m_saturationDelta,
+                              m_valueDelta,
+                              m_hueShift,
+                              m_saturationShift,
+                              m_valueShift));
+        wpainter.setPen(QColor(255, 255, 255));
         wpainter.drawText(rect(), helpText);
     }
 }
 
-void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
+void KisShadeSelectorLine::mousePressEvent(QMouseEvent *e)
 {
-    if(e->button()!=Qt::LeftButton && e->button()!=Qt::RightButton) {
+    if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton) {
         e->setAccepted(false);
         return;
     }
@@ -189,7 +195,7 @@ void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
     m_parentProxy->updateColorPreview(color);
 }
 
-void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent * e)
+void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton && e->button() != Qt::RightButton) {
         e->ignore();

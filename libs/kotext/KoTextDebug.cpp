@@ -58,7 +58,7 @@ static QString fontProperties(const QTextCharFormat &textFormat)
     QMap<int, QVariant> properties = textFormat.properties();
     QStringList fontProps;
     // add only font properties here
-    foreach(int id, properties.keys()) {
+    foreach (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextFormat::FontFamily:
@@ -157,32 +157,35 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
         int id = textFormat.intProperty(KoCharacterStyle::StyleId);
         KoCharacterStyle *characterStyle = styleManager->characterStyle(id);
         attrs.append(" characterStyle=\"id:").append(QString::number(id));
-        if (characterStyle)
+        if (characterStyle) {
             attrs.append(" name:").append(characterStyle->name());
+        }
         attrs.append("\"");
     }
 
     QMap<int, QVariant> properties = textFormat.properties();
     attrs.append(" type=\"char\"");
     QString fontProps = fontProperties(textFormat);
-    if (!fontProps.isEmpty())
+    if (!fontProps.isEmpty()) {
         attrs.append(QString(" font=\"%1\"").arg(fontProps));
+    }
 
     if (textFormat.isAnchor()) {
         attrs.append(QString(" achorHref=\"%1\"").arg(textFormat.anchorHref()));
         attrs.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
     }
 
-    foreach(int id, properties.keys()) {
+    foreach (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextFormat::TextOutline: {
             key = "outline";
             QPen pen = qvariant_cast<QPen>(properties[id]);
-            if (pen.style() == Qt::NoPen)
+            if (pen.style() == Qt::NoPen) {
                 value = "false";
-            else
+            } else {
                 value = pen.color().name();
+            }
             break;
         }
         case KoCharacterStyle::UnderlineStyle:
@@ -290,12 +293,13 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             value = QString::number(properties[id].toInt());
             break;
         default:
-            key = "unknown"+QString::number(id);
+            key = "unknown" + QString::number(id);
             value = QString::number(properties[id].toInt());
             break;
         }
-        if (!key.isEmpty())
+        if (!key.isEmpty()) {
             attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+        }
     }
     return attrs;
 }
@@ -315,13 +319,14 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
         int id = blockFormat.intProperty(KoParagraphStyle::StyleId);
         KoParagraphStyle *paragraphStyle = styleManager->paragraphStyle(id);
         attrs.append(" paragraphStyle=\"id:").append(QString::number(id));
-        if (paragraphStyle)
+        if (paragraphStyle) {
             attrs.append(" name:").append(paragraphStyle->name());
+        }
         attrs.append("\"");
     }
 
     QMap<int, QVariant> properties = blockFormat.properties();
-    foreach(int id, properties.keys()) {
+    foreach (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         // the following are 'todo'
@@ -368,36 +373,36 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
             break;
         case KoParagraphStyle::AutoTextIndent:
             key = "autotextindent";
-            value = properties[id].toBool() ? "true" : "false" ;
+            value = properties[id].toBool() ? "true" : "false";
             break;
 #ifdef PARAGRAPH_BORDER_DEBUG // because it tends to get annoyingly long :)
         case KoParagraphStyle::LeftBorderWidth:
             key = "border-width-left";
-            value = QString::number(properties[id].toDouble()) ;
+            value = QString::number(properties[id].toDouble());
             break;
         case KoParagraphStyle::TopBorderWidth:
             key = "border-width-top";
-            value = QString::number(properties[id].toDouble()) ;
+            value = QString::number(properties[id].toDouble());
             break;
         case KoParagraphStyle::RightBorderWidth:
             key = "border-width-right";
-            value = QString::number(properties[id].toDouble()) ;
+            value = QString::number(properties[id].toDouble());
             break;
         case KoParagraphStyle::BottomBorderWidth:
             key = "border-width-bottom";
-            value = QString::number(properties[id].toDouble()) ;
+            value = QString::number(properties[id].toDouble());
             break;
         case KoParagraphStyle::LeftBorderStyle:
             key = "border-style-left";
-            value = QString::number(properties[id].toDouble()) ;
+            value = QString::number(properties[id].toDouble());
             break;
         case KoParagraphStyle::LeftBorderSpacing:
             key = "inner-border-spacing-left";
-            value = QString::number(properties[id].toDouble()) ;
+            value = QString::number(properties[id].toDouble());
             break;
         case KoParagraphStyle::LeftInnerBorderWidth:
             key = "inner-border-width-left";
-            value = QString::number(properties[id].toDouble()) ;
+            value = QString::number(properties[id].toDouble());
             break;
 #endif
         case KoParagraphStyle::TabStopDistance:
@@ -407,20 +412,22 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
         case KoParagraphStyle::TabPositions:
             key = "tab-stops";
             value.clear();
-            foreach(const QVariant & qvtab, qvariant_cast<QList<QVariant> >(properties[id])) {
+            foreach (const QVariant &qvtab, qvariant_cast<QList<QVariant> >(properties[id])) {
                 KoText::Tab tab = qvtab.value<KoText::Tab>();
                 value.append("{");
                 value.append(" pos:").append(QString::number(tab.position));
                 value.append(" type:").append(QString::number(tab.type));
-                if (! tab.delimiter.isNull())
+                if (! tab.delimiter.isNull()) {
                     value.append(" delim:").append(QString(tab.delimiter));
+                }
                 value.append(" leadertype:").append(QString::number(tab.leaderType));
                 value.append(" leaderstyle:").append(QString::number(tab.leaderStyle));
                 value.append(" leaderweight:").append(QString::number(tab.leaderWeight));
                 value.append(" leaderwidth:").append(QString().setNum(tab.leaderWidth));
                 value.append(" leadercolor:").append(tab.leaderColor.name());
-                if (! tab.leaderText.isEmpty())
+                if (! tab.leaderText.isEmpty()) {
                     value.append(" leadertext:").append(QString(tab.leaderText));
+                }
                 value.append("}, ");
             }
             break;
@@ -442,23 +449,27 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
             break;
         case QTextFormat::BlockBottomMargin:
             value = QString::number(properties[id].toDouble());
-            if (value != "0")
+            if (value != "0") {
                 key = "block-bottom-margin";
+            }
             break;
         case QTextFormat::BlockTopMargin:
             value = QString::number(properties[id].toDouble());
-            if (value != "0")
+            if (value != "0") {
                 key = "block-top-margin";
+            }
             break;
         case QTextFormat::BlockLeftMargin:
             value = QString::number(properties[id].toDouble());
-            if (value != "0")
+            if (value != "0") {
                 key = "block-left-margin";
+            }
             break;
         case QTextFormat::BlockRightMargin:
             value = QString::number(properties[id].toDouble());
-            if (value != "0")
+            if (value != "0") {
                 key = "block-right-margin";
+            }
             break;
         case KoParagraphStyle::UnnumberedListItem:
             key = "unnumbered-list-item";
@@ -475,8 +486,9 @@ QString KoTextDebug::paraAttributes(const QTextBlockFormat &blockFormat)
         default:
             break;
         }
-        if (!key.isEmpty())
+        if (!key.isEmpty()) {
             attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+        }
     }
     return attrs;
 }
@@ -489,13 +501,14 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
         int id = listFormat.intProperty(KoListStyle::StyleId);
         KoListStyle *listStyle = styleManager->listStyle(id);
         attrs.append(" listStyle=\"id:").append(QString::number(id));
-        if (listStyle)
+        if (listStyle) {
             attrs.append(" name:").append(listStyle->name());
+        }
         attrs.append("\"");
     }
 
     QMap<int, QVariant> properties = listFormat.properties();
-    foreach(int id, properties.keys()) {
+    foreach (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextListFormat::ListStyle:
@@ -576,33 +589,34 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             break;
         case KoListStyle::BulletImage:
             key = "bullet-image";
-            value = QString::number((quintptr)(properties[id].value<KoImageData*>()));
+            value = QString::number((quintptr)(properties[id].value<KoImageData *>()));
             break;
         case KoListStyle::Margin:
-            key="margin-left";
-            value =QString::number(properties[id].toInt());
+            key = "margin-left";
+            value = QString::number(properties[id].toInt());
             break;
         case KoListStyle::TextIndent:
-            key="text-indent";
-            value =QString::number(properties[id].toInt());
+            key = "text-indent";
+            value = QString::number(properties[id].toInt());
             break;
         case KoListStyle::AlignmentMode:
-            key="label-alignment";
-            value=QString(properties[id].toBool()? "true":"false");
+            key = "label-alignment";
+            value = QString(properties[id].toBool() ? "true" : "false");
             break;
         case KoListStyle::LabelFollowedBy:
-            key="label-followed-by";
-            value =QString::number(properties[id].toInt());
+            key = "label-followed-by";
+            value = QString::number(properties[id].toInt());
             break;
         case KoListStyle::TabStopPosition:
-            key="tab-stop-position";
-            value =QString::number(properties[id].toInt());
+            key = "tab-stop-position";
+            value = QString::number(properties[id].toInt());
             break;
         default:
             break;
         }
-        if (!key.isEmpty())
+        if (!key.isEmpty()) {
             attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+        }
     }
     return attrs;
 }
@@ -622,13 +636,14 @@ QString KoTextDebug::tableAttributes(const QTextTableFormat &tableFormat)
         int id = tableFormat.intProperty(KoTableStyle::StyleId);
         KoTableStyle *tableStyle = styleManager->tableStyle(id);
         attrs.append(" tableStyle=\"id:").append(QString::number(id));
-        if (tableStyle)
+        if (tableStyle) {
             attrs.append(" name:").append(tableStyle->name());
+        }
         attrs.append("\"");
     }
 
     QMap<int, QVariant> properties = tableFormat.properties();
-    foreach(int id, properties.keys()) {
+    foreach (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextTableFormat::TableColumnWidthConstraints:
@@ -639,21 +654,21 @@ QString KoTextDebug::tableAttributes(const QTextTableFormat &tableFormat)
         case QTextFormat::BlockAlignment:
             key = "alignment";
             switch (properties[id].toInt()) {
-                case Qt::AlignLeft:
-                    value = "left";
-                    break;
-                case Qt::AlignRight:
-                    value = "right";
-                    break;
-                case Qt::AlignHCenter:
-                    value = "center";
-                    break;
-                case Qt::AlignJustify:
-                    value = "justify";
-                    break;
-                default:
-                    value.clear();
-                    break;
+            case Qt::AlignLeft:
+                value = "left";
+                break;
+            case Qt::AlignRight:
+                value = "right";
+                break;
+            case Qt::AlignHCenter:
+                value = "center";
+                break;
+            case Qt::AlignJustify:
+                value = "justify";
+                break;
+            default:
+                value.clear();
+                break;
             }
             break;
         case KoTableStyle::KeepWithNext:
@@ -691,8 +706,9 @@ QString KoTextDebug::tableAttributes(const QTextTableFormat &tableFormat)
         default:
             break;
         }
-        if (!key.isEmpty())
+        if (!key.isEmpty()) {
             attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+        }
     }
     return attrs;
 }
@@ -702,7 +718,7 @@ QString KoTextDebug::frameAttributes(const QTextFrameFormat &frameFormat)
     QString attrs;
 
     QMap<int, QVariant> properties = frameFormat.properties();
-    foreach(int id, properties.keys()) {
+    foreach (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextFrameFormat::FrameBorderBrush:
@@ -788,8 +804,9 @@ QString KoTextDebug::frameAttributes(const QTextFrameFormat &frameFormat)
         default:
             break;
         }
-        if (!key.isEmpty())
+        if (!key.isEmpty()) {
             attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+        }
     }
     return attrs;
 }
@@ -809,13 +826,14 @@ QString KoTextDebug::tableCellAttributes(const QTextTableCellFormat &tableCellFo
         int id = tableCellFormat.intProperty(KoTableCellStyle::StyleId);
         KoTableCellStyle *tableCellStyle = styleManager->tableCellStyle(id);
         attrs.append(" tableCellStyle=\"id:").append(QString::number(id));
-        if (tableCellStyle)
+        if (tableCellStyle) {
             attrs.append(" name:").append(tableCellStyle->name());
+        }
         attrs.append("\"");
     }
 
     QMap<int, QVariant> properties = tableCellFormat.properties();
-    foreach(int id, properties.keys()) {
+    foreach (int id, properties.keys()) {
         QString key, value;
         switch (id) {
         case QTextTableCellFormat::TableCellRowSpan:
@@ -849,8 +867,9 @@ QString KoTextDebug::tableCellAttributes(const QTextTableCellFormat &tableCellFo
         default:
             break;
         }
-        if (!key.isEmpty())
+        if (!key.isEmpty()) {
             attrs.append(" ").append(key).append("=\"").append(value).append("\"");
+        }
     }
     return attrs;
 }
@@ -915,8 +934,9 @@ void KoTextDebug::dumpBlock(const QTextBlock &block, QTextStream &out)
     dumpIndent(depth);
     out << "</block>" << endl;
     depth -= INDENT;
-    if (block.next().isValid())
+    if (block.next().isValid()) {
         out << ' ';
+    }
 }
 
 void KoTextDebug::dumpTable(const QTextTable *table, QTextStream &out)

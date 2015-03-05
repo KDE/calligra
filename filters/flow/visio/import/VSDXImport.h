@@ -30,10 +30,10 @@ class VSDXImport : public KoFilter
 
 public:
 
-    VSDXImport(QObject *parent, const QVariantList&);
+    VSDXImport(QObject *parent, const QVariantList &);
     virtual ~VSDXImport();
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif // VSDXIMPORT_H

@@ -41,7 +41,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QGroupBox>
 #include <QFormLayout>
 
-KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* name)
+KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView *view, char *name)
 {
     setObjectName(name);
 
@@ -53,7 +53,7 @@ KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* nam
     m_oldCanvasColor = QColor(Qt::white);
     bool oldShowStatusBar = true;
 
-    QGroupBox* tmpQGroupBox = new QGroupBox(i18n("Interface"), this);
+    QGroupBox *tmpQGroupBox = new QGroupBox(i18n("Interface"), this);
 
     KConfigGroup emptyGroup = m_config->group("GUI");
     m_oldDockerFontSize = emptyGroup.readEntry("palettefontsize", m_oldDockerFontSize);
@@ -90,7 +90,7 @@ void KarbonConfigInterfacePage::apply()
 {
     bool showStatusBar = m_showStatusBar->isChecked();
 
-    KarbonDocument* part = m_view->part();
+    KarbonDocument *part = m_view->part();
 
     KConfigGroup interfaceGroup = m_config->group("Interface");
 
@@ -124,8 +124,9 @@ void KarbonConfigInterfacePage::apply()
         refreshGUI = true;
     }
 
-    if (refreshGUI)
+    if (refreshGUI) {
         part->reorganizeGUI();
+    }
 }
 
 void KarbonConfigInterfacePage::slotDefault()

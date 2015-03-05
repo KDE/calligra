@@ -23,9 +23,7 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 
-
-
-KisImageCommand::KisImageCommand(const KUndo2MagicString& name, KisImageWSP image, KUndo2Command *parent)
+KisImageCommand::KisImageCommand(const KUndo2MagicString &name, KisImageWSP image, KUndo2Command *parent)
     : KUndo2Command(name, parent)
     , m_image(image)
 {
@@ -35,13 +33,14 @@ KisImageCommand::~KisImageCommand()
 {
 }
 
-static inline bool isLayer(KisNodeSP node) {
-    return qobject_cast<KisLayer*>(node.data());
+static inline bool isLayer(KisNodeSP node)
+{
+    return qobject_cast<KisLayer *>(node.data());
 }
 
 KisImageCommand::UpdateTarget::UpdateTarget(KisImageWSP image,
-                                            KisNodeSP removedNode,
-                                            const QRect &updateRect)
+        KisNodeSP removedNode,
+        const QRect &updateRect)
     : m_image(image), m_updateRect(updateRect)
 {
     /**
@@ -53,8 +52,11 @@ KisImageCommand::UpdateTarget::UpdateTarget(KisImageWSP image,
     m_removedNodeIndex = m_removedNodeParent ? m_removedNodeParent->index(removedNode) : -1;
 }
 
-void KisImageCommand::UpdateTarget::update() {
-    if (!m_removedNodeParent) return;
+void KisImageCommand::UpdateTarget::update()
+{
+    if (!m_removedNodeParent) {
+        return;
+    }
     KIS_ASSERT_RECOVER_RETURN(m_removedNodeIndex >= 0);
 
     KisNodeSP node;

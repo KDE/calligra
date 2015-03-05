@@ -27,17 +27,18 @@
 
 #include "FindDirection_p.h"
 
-KoReplaceStrategy::KoReplaceStrategy(QWidget * parent)
-        : m_dialog(new KReplaceDialog(parent))
-        , m_replaced(0)
+KoReplaceStrategy::KoReplaceStrategy(QWidget *parent)
+    : m_dialog(new KReplaceDialog(parent))
+    , m_replaced(0)
 {
     m_dialog->setOptions(KFind::FromCursor);
 }
 
 KoReplaceStrategy::~KoReplaceStrategy()
 {
-    if (m_dialog->parent()==0)
+    if (m_dialog->parent() == 0) {
         delete m_dialog;
+    }
 }
 
 KFindDialog *KoReplaceStrategy::dialog() const

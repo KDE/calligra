@@ -31,19 +31,20 @@ public:
     KisFilterColorToAlpha();
 
     void processImpl(KisPaintDeviceSP device,
-                     const QRect& rect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater
-                     ) const;
+                     const QRect &rect,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater
+                    ) const;
 
-    static inline KoID id() {
+    static inline KoID id()
+    {
         return KoID("colortoalpha", i18n("Color to Alpha"));
     }
 
 public:
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP dev) const;
 };
 
 #endif

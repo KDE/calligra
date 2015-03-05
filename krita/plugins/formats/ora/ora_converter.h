@@ -54,8 +54,8 @@ public:
     OraConverter(KisDocument *doc);
     virtual ~OraConverter();
 public:
-    KisImageBuilder_Result buildImage(const KUrl& uri);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP image, vKisNodeSP activeNodes);
+    KisImageBuilder_Result buildImage(const KUrl &uri);
+    KisImageBuilder_Result buildFile(const KUrl &uri, KisImageWSP image, vKisNodeSP activeNodes);
     /**
      * Retrieve the constructed image
      */

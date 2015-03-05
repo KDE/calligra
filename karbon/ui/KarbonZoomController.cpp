@@ -38,8 +38,8 @@ class KarbonZoomController::Private
 {
 public:
     Private()
-            : canvasController(0), canvas(0), zoomHandler(0), action(0)
-            , fitMargin(25)
+        : canvasController(0), canvas(0), zoomHandler(0), action(0)
+        , fitMargin(25)
     {
     }
 
@@ -48,16 +48,16 @@ public:
         delete action;
     }
 
-    KoCanvasController * canvasController;
-    KarbonCanvas * canvas;
-    KoZoomHandler * zoomHandler;
-    KoZoomAction * action;
+    KoCanvasController *canvasController;
+    KarbonCanvas *canvas;
+    KoZoomHandler *zoomHandler;
+    KoZoomAction *action;
     QSizeF pageSize;
     int fitMargin;
 };
 
 KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActionCollection *actionCollection, QObject *parent)
-        : QObject(parent), d(new Private())
+    : QObject(parent), d(new Private())
 {
     d->canvasController = controller;
 
@@ -74,8 +74,8 @@ KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActi
     actionCollection->addAction(KStandardAction::ZoomIn, "zoom_in", this, SLOT(zoomInRelative()));
     actionCollection->addAction(KStandardAction::ZoomOut, "zoom_out", this, SLOT(zoomOutRelative()));
 
-    d->canvas = dynamic_cast<KarbonCanvas*>(d->canvasController->canvas());
-    d->zoomHandler = dynamic_cast<KoZoomHandler*>(const_cast<KoViewConverter*>(d->canvas->viewConverter()));
+    d->canvas = dynamic_cast<KarbonCanvas *>(d->canvasController->canvas());
+    d->zoomHandler = dynamic_cast<KoZoomHandler *>(const_cast<KoViewConverter *>(d->canvas->viewConverter()));
 
     connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(setAvailableSize()));
     connect(d->canvasController->proxyObject, SIGNAL(zoomRelative(qreal,QPointF)), this, SLOT(requestZoomRelative(qreal,QPointF)));
@@ -91,7 +91,7 @@ KarbonZoomController::~KarbonZoomController()
     delete d;
 }
 
-KoZoomAction * KarbonZoomController::zoomAction() const
+KoZoomAction *KarbonZoomController::zoomAction() const
 {
     return d->action;
 }
@@ -108,15 +108,18 @@ void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
 
 void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, const QPointF &stillPoint)
 {
-    if (d->zoomHandler->zoomMode() == mode && d->zoomHandler->zoom() == zoom)
-        return; // no change
+    if (d->zoomHandler->zoomMode() == mode && d->zoomHandler->zoom() == zoom) {
+        return;    // no change
+    }
 
     qreal oldEffectiveZoom = d->action->effectiveZoom();
 
     d->zoomHandler->setZoomMode(mode);
 
     if (mode == KoZoomMode::ZOOM_CONSTANT) {
-        if (zoom == 0.0) return;
+        if (zoom == 0.0) {
+            return;
+        }
         d->action->setZoom(zoom);
     } else if (mode == KoZoomMode::ZOOM_WIDTH) {
         zoom = (d->canvasController->viewportSize().width() - 2 * d->fitMargin)
@@ -147,7 +150,7 @@ void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, const QPoi
     // Finally ask the canvasController to recenter
     QPointF documentCenter;
     if (mode == KoZoomMode::ZOOM_CONSTANT) {
-        KoSelection * selection = d->canvas->shapeManager()->selection();
+        KoSelection *selection = d->canvas->shapeManager()->selection();
         if (selection->count()) {
             QPointF docCenter = selection->boundingRect().center();
             documentCenter = d->canvas->documentOrigin() + d->zoomHandler->documentToView(docCenter);
@@ -167,34 +170,39 @@ void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, const QPoi
 
 void KarbonZoomController::setAvailableSize()
 {
-    if (d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
+    if (d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH) {
         setZoom(KoZoomMode::ZOOM_WIDTH, -1);
-    if (d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
+    }
+    if (d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE) {
         setZoom(KoZoomMode::ZOOM_PAGE, -1);
+    }
 }
 
 void KarbonZoomController::requestZoomRelative(const qreal factor, const QPointF &stillPoint)
 {
     qreal zoom = d->zoomHandler->zoom();
-    setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom, stillPoint);
+    setZoom(KoZoomMode::ZOOM_CONSTANT, factor * zoom, stillPoint);
 }
 
 void KarbonZoomController::requestZoomBy(const qreal factor)
 {
     qreal zoom = d->zoomHandler->zoom();
-    setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom);
+    setZoom(KoZoomMode::ZOOM_CONSTANT, factor * zoom);
 }
 
 void KarbonZoomController::setPageSize(const QSizeF &pageSize)
 {
-    if (d->pageSize == pageSize)
+    if (d->pageSize == pageSize) {
         return;
+    }
     d->pageSize = pageSize;
 
-    if (d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
+    if (d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH) {
         setZoom(KoZoomMode::ZOOM_WIDTH, -1);
-    if (d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
+    }
+    if (d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE) {
         setZoom(KoZoomMode::ZOOM_PAGE, -1);
+    }
 }
 
 void KarbonZoomController::canvasResourceChanged(int key, const QVariant &value)

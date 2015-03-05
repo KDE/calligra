@@ -29,19 +29,19 @@
 class KPrTranslateAnimation : public KPrShapeAnimationOld
 {
 public:
-    KPrTranslateAnimation( KoShape * shape, int step, Type type );
+    KPrTranslateAnimation(KoShape *shape, int step, Type type);
     virtual ~KPrTranslateAnimation();
 
     /// reimplemented
-    virtual KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect ) = 0;
+    virtual KPrAnimationData *animationData(KoCanvasBase *canvas, KoShapeManager *shapeManager, const QRectF &pageRect) = 0;
     /// reimplemented
-    virtual bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData );
+    virtual bool animate(QPainter &painter, const KoViewConverter &converter, KPrAnimationData *animationData);
     /// reimplemented
-    virtual void animateRect( QRectF & rect, KPrAnimationData * animationData );
+    virtual void animateRect(QRectF &rect, KPrAnimationData *animationData);
     /// reimplemented
-    virtual void next( int currentTime, KPrAnimationData * animationData );
+    virtual void next(int currentTime, KPrAnimationData *animationData);
     /// reimplemented
-    virtual void finish( KPrAnimationData * animationData );
+    virtual void finish(KPrAnimationData *animationData);
 };
 
 #endif /* KPRTRANSLATEANIMATION_H */

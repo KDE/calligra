@@ -162,8 +162,8 @@ using namespace MSOOXML;
 
 //-----------------------------------------
 
-KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc,
-        QString& errorMessage, const QString & fileName)
+KoFilter::ConversionStatus Utils::loadAndParse(QIODevice *io, KoXmlDocument &doc,
+        QString &errorMessage, const QString &fileName)
 {
     errorMessage.clear();
 
@@ -172,40 +172,42 @@ KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc
     bool ok = doc.setContent(io, true, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
         kError() << "Parsing error in " << fileName << ", aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg;
+                 << " In line: " << errorLine << ", column: " << errorColumn << endl
+                 << " Error message: " << errorMsg;
         errorMessage = i18n("Parsing error in the main document at line %1, column %2.\n"
-                            "Error message: %3", errorLine , errorColumn , i18n("QXml", errorMsg));
+                            "Error message: %3", errorLine, errorColumn, i18n("QXml", errorMsg));
         return KoFilter::ParsingError;
     }
     kDebug() << "File" << fileName << "loaded and parsed.";
     return KoFilter::OK;
 }
 
-KoFilter::ConversionStatus Utils::loadAndParse(KoXmlDocument& doc, const KZip* zip,
-        QString& errorMessage, const QString& fileName)
+KoFilter::ConversionStatus Utils::loadAndParse(KoXmlDocument &doc, const KZip *zip,
+        QString &errorMessage, const QString &fileName)
 {
     errorMessage.clear();
     KoFilter::ConversionStatus status;
     std::auto_ptr<QIODevice> device(openDeviceForFile(zip, errorMessage, fileName, status));
-    if (!device.get())
+    if (!device.get()) {
         return status;
+    }
     return loadAndParse(device.get(), doc, errorMessage, fileName);
 }
 
-KoFilter::ConversionStatus Utils::loadAndParseDocument(MsooXmlReader* reader,
-        const KZip* zip,
+KoFilter::ConversionStatus Utils::loadAndParseDocument(MsooXmlReader *reader,
+        const KZip *zip,
         KoOdfWriters *writers,
-        QString& errorMessage,
-        const QString& fileName,
-        MsooXmlReaderContext* context)
+        QString &errorMessage,
+        const QString &fileName,
+        MsooXmlReaderContext *context)
 {
     Q_UNUSED(writers)
     errorMessage.clear();
     KoFilter::ConversionStatus status;
     std::auto_ptr<QIODevice> device(openDeviceForFile(zip, errorMessage, fileName, status));
-    if (!device.get())
+    if (!device.get()) {
         return status;
+    }
     reader->setDevice(device.get());
     reader->setFileName(fileName); // for error reporting
     status = reader->read(context);
@@ -217,12 +219,12 @@ KoFilter::ConversionStatus Utils::loadAndParseDocument(MsooXmlReader* reader,
     return KoFilter::OK;
 }
 
-QIODevice* Utils::openDeviceForFile(const KZip* zip, QString& errorMessage, const QString& fileName,
-                                    KoFilter::ConversionStatus& status)
+QIODevice *Utils::openDeviceForFile(const KZip *zip, QString &errorMessage, const QString &fileName,
+                                    KoFilter::ConversionStatus &status)
 {
     kDebug() << "Trying to open" << fileName;
     errorMessage.clear();
-    const KArchiveEntry* entry = zip->directory()->entry(fileName);
+    const KArchiveEntry *entry = zip->directory()->entry(fileName);
     if (!entry) {
         errorMessage = i18n("Entry '%1' not found.", fileName);
         kDebug() << errorMessage;
@@ -235,7 +237,7 @@ QIODevice* Utils::openDeviceForFile(const KZip* zip, QString& errorMessage, cons
         status = KoFilter::WrongFormat;
         return 0;
     }
-    const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
+    const KZipFileEntry *f = static_cast<const KZipFileEntry *>(entry);
     kDebug() << "Entry" << fileName << "has size" << f->size();
     status = KoFilter::OK;
     // There seem to be some problems with kde/zlib when trying to read
@@ -249,13 +251,13 @@ QIODevice* Utils::openDeviceForFile(const KZip* zip, QString& errorMessage, cons
 }
 
 #define BLOCK_SIZE 4096
-static KoFilter::ConversionStatus copyOle(QString& errorMessage,
-                                    const QString sourceName, KoStore *outputStore,
-                                    const QString& destinationName, const KZip* zip)
+static KoFilter::ConversionStatus copyOle(QString &errorMessage,
+        const QString sourceName, KoStore *outputStore,
+        const QString &destinationName, const KZip *zip)
 {
     KoFilter::ConversionStatus status = KoFilter::OK;
 
-    QIODevice* inputDevice = Utils::openDeviceForFile(zip, errorMessage, sourceName, status);
+    QIODevice *inputDevice = Utils::openDeviceForFile(zip, errorMessage, sourceName, status);
     if (!inputDevice) {
         // Source did not exist
         return KoFilter::CreationError;
@@ -275,8 +277,7 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
         //qDebug() << "ENTRY " << (*it).c_str();
         if (QString((*it).c_str()).contains("Ole10Native")) {
             oleType = "Ole10Native";
-        }
-        else if (QString((*it).c_str()).contains("CONTENTS")) {
+        } else if (QString((*it).c_str()).contains("CONTENTS")) {
             oleType = "CONTENTS";
         }
     }
@@ -285,14 +286,14 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
     QByteArray array;
     array.resize(stream.size());
 
-    unsigned long r = stream.read((unsigned char*)array.data(), stream.size());
+    unsigned long r = stream.read((unsigned char *)array.data(), stream.size());
     if (r != stream.size()) {
         kError(30513) << "Error while reading from stream";
         return KoFilter::WrongFormat;
     }
 
     if (oleType == "Contents" || oleType == "Ole10Native") {
-     // Removing first 4 bytes which are the size
+        // Removing first 4 bytes which are the size
         array = array.right(array.length() - 4);
     }
 
@@ -335,9 +336,9 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
 #undef BLOCK_SIZE
 
 #define BLOCK_SIZE 4096
-KoFilter::ConversionStatus Utils::createImage(QString& errorMessage,
-                                       const QImage& source, KoStore *outputStore,
-                                       const QString& destinationName)
+KoFilter::ConversionStatus Utils::createImage(QString &errorMessage,
+        const QImage &source, KoStore *outputStore,
+        const QString &destinationName)
 {
     if (outputStore->hasFile(destinationName)) {
         return KoFilter::OK;
@@ -373,9 +374,9 @@ KoFilter::ConversionStatus Utils::createImage(QString& errorMessage,
 #undef BLOCK_SIZE
 
 #define BLOCK_SIZE 4096
-KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessage,
-                                           const QString& sourceName, KoStore *outputStore,
-                                           const QString& destinationName, bool oleType)
+KoFilter::ConversionStatus Utils::copyFile(const KZip *zip, QString &errorMessage,
+        const QString &sourceName, KoStore *outputStore,
+        const QString &destinationName, bool oleType)
 {
     if (outputStore->hasFile(destinationName)) {
         return KoFilter::OK;
@@ -403,8 +404,9 @@ KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessag
     while (true) {
         const qint64 in = inputDevice->read(block, BLOCK_SIZE);
 //        kDebug() << "in:" << in;
-        if (in <= 0)
+        if (in <= 0) {
             break;
+        }
         if (in != outputStore->write(block, in)) {
             errorMessage = i18n("Could not write block");
             status = KoFilter::CreationError;
@@ -416,8 +418,8 @@ KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessag
 }
 #undef BLOCK_SIZE
 
-KoFilter::ConversionStatus Utils::imageSize(const KZip* zip, QString& errorMessage, const QString& sourceName,
-                                            QSize* size)
+KoFilter::ConversionStatus Utils::imageSize(const KZip *zip, QString &errorMessage, const QString &sourceName,
+        QSize *size)
 {
     Q_ASSERT(size);
     KoFilter::ConversionStatus status;
@@ -426,14 +428,15 @@ KoFilter::ConversionStatus Utils::imageSize(const KZip* zip, QString& errorMessa
         return status;
     }
     QImageReader r(inputDevice.get(), QFileInfo(sourceName).suffix().toLatin1());
-    if (!r.canRead())
+    if (!r.canRead()) {
         return KoFilter::WrongFormat;
+    }
     *size = r.size();
     kDebug() << *size;
     return KoFilter::OK;
 }
 
-KoFilter::ConversionStatus Utils::loadThumbnail(QImage& thumbnail, KZip* zip)
+KoFilter::ConversionStatus Utils::loadThumbnail(QImage &thumbnail, KZip *zip)
 {
 //! @todo
     Q_UNUSED(thumbnail)
@@ -443,19 +446,19 @@ KoFilter::ConversionStatus Utils::loadThumbnail(QImage& thumbnail, KZip* zip)
 
 //! @return true if @a el has tag name is equal to @a expectedTag or false otherwise;
 //!         on failure optional @a warningPrefix message is prepended to the warning
-static bool checkTag(const KoXmlElement& el, const char* expectedTag, const char* warningPrefix = 0)
+static bool checkTag(const KoXmlElement &el, const char *expectedTag, const char *warningPrefix = 0)
 {
     if (el.tagName() != expectedTag) {
         kWarning()
-        << (warningPrefix ? QString::fromLatin1(warningPrefix) + ":" : QString())
-        << "tag name=" << el.tagName() << " expected:" << expectedTag;
+                << (warningPrefix ? QString::fromLatin1(warningPrefix) + ":" : QString())
+                << "tag name=" << el.tagName() << " expected:" << expectedTag;
         return false;
     }
     return true;
 }
 
 //! @return true if @a el has namespace URI is equal to @a expectedNSURI or false otherwise
-static bool checkNsUri(const KoXmlElement& el, const char* expectedNsUri)
+static bool checkNsUri(const KoXmlElement &el, const char *expectedNsUri)
 {
     if (el.namespaceURI() != expectedNsUri) {
         kWarning() << "Invalid namespace URI" << el.namespaceURI() << " expected:" << expectedNsUri;
@@ -464,7 +467,7 @@ static bool checkNsUri(const KoXmlElement& el, const char* expectedNsUri)
     return true;
 }
 
-bool Utils::convertBooleanAttr(const QString& value, bool defaultValue)
+bool Utils::convertBooleanAttr(const QString &value, bool defaultValue)
 {
     const QByteArray val(value.toLatin1());
     if (val.isEmpty()) {
@@ -476,7 +479,7 @@ bool Utils::convertBooleanAttr(const QString& value, bool defaultValue)
 }
 
 KoFilter::ConversionStatus Utils::loadContentTypes(
-    const KoXmlDocument& contentTypesXML, QMultiHash<QByteArray, QByteArray>& contentTypes)
+    const KoXmlDocument &contentTypesXML, QMultiHash<QByteArray, QByteArray> &contentTypes)
 {
     KoXmlElement typesEl(contentTypesXML.documentElement());
     if (!checkTag(typesEl, "Types", "documentElement")) {
@@ -486,7 +489,7 @@ KoFilter::ConversionStatus Utils::loadContentTypes(
         return KoFilter::WrongFormat;
     }
     KoXmlElement e;
-    forEachElement(e, typesEl) {
+    forEachElement (e, typesEl) {
         const QString tagName(e.tagName());
         if (!checkNsUri(e, Schemas::contentTypes)) {
             return KoFilter::WrongFormat;
@@ -498,7 +501,7 @@ KoFilter::ConversionStatus Utils::loadContentTypes(
             const QByteArray atrContentType(e.attribute("ContentType").toLatin1());
             if (atrPartName.isEmpty() || atrContentType.isEmpty()) {
                 kWarning() << "Invalid data for" << tagName
-                << "element: PartName=" << atrPartName << "ContentType=" << atrContentType;
+                           << "element: PartName=" << atrPartName << "ContentType=" << atrContentType;
                 return KoFilter::WrongFormat;
             }
 //kDebug() << atrContentType << "->" << atrPartName;
@@ -511,32 +514,35 @@ KoFilter::ConversionStatus Utils::loadContentTypes(
     return KoFilter::OK;
 }
 
-KoFilter::ConversionStatus Utils::loadDocumentProperties(const KoXmlDocument& appXML, QMap<QString, QVariant>& properties)
+KoFilter::ConversionStatus Utils::loadDocumentProperties(const KoXmlDocument &appXML, QMap<QString, QVariant> &properties)
 {
     KoXmlElement typesEl(appXML.documentElement());
     KoXmlElement e, elem, element;
-    forEachElement(element, typesEl) {
+    forEachElement (element, typesEl) {
         QVariant v;
-        forEachElement(elem, element) {
-            if(elem.tagName() == "vector") {
+        forEachElement (elem, element) {
+            if (elem.tagName() == "vector") {
                 QVariantList list;
-                forEachElement(e, elem)
+                forEachElement (e, elem) {
                     list.append(e.text());
+                }
                 v = list;
             }
         }
-        if(!v.isValid())
+        if (!v.isValid()) {
             v = element.text();
+        }
         properties[element.tagName()] = v;
     }
     return KoFilter::OK;
 }
 
-bool Utils::ST_Lang_to_languageAndCountry(const QString& value, QString& language, QString& country)
+bool Utils::ST_Lang_to_languageAndCountry(const QString &value, QString &language, QString &country)
 {
     int indexForCountry =  value.indexOf('-');
-    if (indexForCountry <= 0)
+    if (indexForCountry <= 0) {
         return false;
+    }
     indexForCountry++;
     language = value.left(indexForCountry - 1);
     country = value.mid(indexForCountry);
@@ -546,7 +552,8 @@ bool Utils::ST_Lang_to_languageAndCountry(const QString& value, QString& languag
 class ST_HighlightColorMapping : public QHash<QString, QColor>
 {
 public:
-    ST_HighlightColorMapping() {
+    ST_HighlightColorMapping()
+    {
 #define INSERT_HC(c, hex) insert(QLatin1String(c), QColor( QRgb( 0xff000000 | hex ) ) )
         INSERT_HC("black", 0x000000);
         INSERT_HC("blue", 0x0000ff);
@@ -568,16 +575,17 @@ public:
     }
 };
 
-QBrush Utils::ST_HighlightColor_to_QColor(const QString& colorName)
+QBrush Utils::ST_HighlightColor_to_QColor(const QString &colorName)
 {
     K_GLOBAL_STATIC(ST_HighlightColorMapping, s_ST_HighlightColor_to_QColor)
     const QColor c(s_ST_HighlightColor_to_QColor->value(colorName));
-    if (c.isValid())
+    if (c.isValid()) {
         return QBrush(c);
+    }
     return QBrush(); // for "none" or anything unsupported
 }
 
-qreal Utils::ST_Percentage_to_double(const QString& val, bool& ok)
+qreal Utils::ST_Percentage_to_double(const QString &val, bool &ok)
 {
     if (!val.endsWith('%')) {
         ok = false;
@@ -588,19 +596,21 @@ qreal Utils::ST_Percentage_to_double(const QString& val, bool& ok)
     return result.toDouble(&ok);
 }
 
-qreal Utils::ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok)
+qreal Utils::ST_Percentage_withMsooxmlFix_to_double(const QString &val, bool &ok)
 {
     const qreal result = ST_Percentage_to_double(val, ok);
-    if (ok)
+    if (ok) {
         return result;
+    }
     // MSOOXML fix: the format is int({ST_Percentage}*1000)
     const int resultInt = val.toInt(&ok);
-    if (!ok)
+    if (!ok) {
         return 0.0;
+    }
     return qreal(resultInt) / 1000.0;
 }
 
-QColor Utils::colorForLuminance(const QColor& color, const DoubleModifier& modulation, const DoubleModifier& offset)
+QColor Utils::colorForLuminance(const QColor &color, const DoubleModifier &modulation, const DoubleModifier &offset)
 {
     if (modulation.valid) {
         int r, g, b;
@@ -622,7 +632,7 @@ QColor Utils::colorForLuminance(const QColor& color, const DoubleModifier& modul
     return color;
 }
 
-KOMSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod)
+KOMSOOXML_EXPORT void Utils::modifyColor(QColor &color, qreal tint, qreal shade, qreal satMod)
 {
     int red = color.red();
     int green = color.green();
@@ -645,7 +655,6 @@ KOMSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade,
     // SatMod can be for example 3.5 so converting RGB -> HSL is not an option
     // ADD INFO: MS document does not say that when calculating TINT and SHADE
     // That whether one should use normal RGB or linear RGB, check it!
-
 
     // This method is used temporarily, it seems to produce visually better results than the lower one.
     if (satMod > 0) {
@@ -680,7 +689,8 @@ KOMSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade,
 class ST_PlaceholderType_to_ODFMapping : public QHash<QByteArray, QByteArray>
 {
 public:
-    ST_PlaceholderType_to_ODFMapping() {
+    ST_PlaceholderType_to_ODFMapping()
+    {
         insert("body", "outline");
         insert("chart", "chart");
         insert("clipArt", "graphic");
@@ -703,12 +713,13 @@ public:
     }
 };
 
-QString Utils::ST_PlaceholderType_to_ODF(const QString& ecmaType)
+QString Utils::ST_PlaceholderType_to_ODF(const QString &ecmaType)
 {
     K_GLOBAL_STATIC(ST_PlaceholderType_to_ODFMapping, s_ST_PlaceholderType_to_ODF)
     QHash<QByteArray, QByteArray>::ConstIterator it(s_ST_PlaceholderType_to_ODF->constFind(ecmaType.toLatin1()));
-    if (it == s_ST_PlaceholderType_to_ODF->constEnd())
+    if (it == s_ST_PlaceholderType_to_ODF->constEnd()) {
         return QLatin1String("text");
+    }
     return QString(it.value());
 }
 
@@ -719,7 +730,8 @@ struct UnderlineStyle {
         KoCharacterStyle::LineType type_,
         KoCharacterStyle::LineWeight weight_,
         KoCharacterStyle::LineMode mode_ = KoCharacterStyle::ContinuousLineMode)
-            : style(style_), type(type_), weight(weight_), mode(mode_) {
+        : style(style_), type(type_), weight(weight_), mode(mode_)
+    {
     }
 
     KoCharacterStyle::LineStyle style;
@@ -728,12 +740,13 @@ struct UnderlineStyle {
     KoCharacterStyle::LineMode mode;
 };
 
-typedef QHash<QByteArray, UnderlineStyle*> UnderlineStylesHashBase;
+typedef QHash<QByteArray, UnderlineStyle *> UnderlineStylesHashBase;
 
 class UnderlineStylesHash : public UnderlineStylesHashBase
 {
 public:
-    UnderlineStylesHash() {
+    UnderlineStylesHash()
+    {
         // default:
         insert("-",
                new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
@@ -810,15 +823,18 @@ public:
 //! @todo more styles
     }
 
-    ~UnderlineStylesHash() {
+    ~UnderlineStylesHash()
+    {
         qDeleteAll(*this);
     }
 
-    void setup(const QString& msooxmlName,
-               KoCharacterStyle* textStyleProperties) {
-        UnderlineStyle* style = value(msooxmlName.toLatin1());
-        if (!style)
+    void setup(const QString &msooxmlName,
+               KoCharacterStyle *textStyleProperties)
+    {
+        UnderlineStyle *style = value(msooxmlName.toLatin1());
+        if (!style) {
             style = value("-");
+        }
         textStyleProperties->setUnderlineStyle(style->style);
         // add style:text-underline-type if it is not "single"
         if (KoCharacterStyle::SingleLine != style->type) {
@@ -832,17 +848,17 @@ public:
     }
 };
 
-void Utils::rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff)
+void Utils::rotateString(const qreal rotation, const qreal width, const qreal height, qreal &angle, qreal &xDiff, qreal &yDiff)
 {
-    angle = -(qreal)rotation * ((qreal)(M_PI) / (qreal)180.0)/ (qreal)60000.0;
+    angle = -(qreal)rotation * ((qreal)(M_PI) / (qreal)180.0) / (qreal)60000.0;
     //position change is calculated based on the fact that center point stays in the same location
     // Width/2 = Xnew + cos(angle)*Width/2 - sin(angle)*Height/2
     // Height/2 = Ynew + sin(angle)*Width/2 + cos(angle)*Height/2
-    xDiff = width/2 - cos(-angle)*width/2 + sin(-angle)*height/2;
-    yDiff = height/2 - sin(-angle)*width/2 - cos(-angle)*height/2;
+    xDiff = width / 2 - cos(-angle) * width / 2 + sin(-angle) * height / 2;
+    yDiff = height / 2 - sin(-angle) * width / 2 - cos(-angle) * height / 2;
 }
 
-void Utils::setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* textStyleProperties)
+void Utils::setupUnderLineStyle(const QString &msooxmlName, KoCharacterStyle *textStyleProperties)
 {
     K_GLOBAL_STATIC(UnderlineStylesHash, s_underLineStyles)
     s_underLineStyles->setup(msooxmlName, textStyleProperties);
@@ -854,23 +870,23 @@ void Utils::setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* te
 
 namespace
 {
-    static const char* const markerStyles[6] = {
-        "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
-        "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
-    };
+static const char *const markerStyles[6] = {
+    "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
+    "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
+};
 
-    // trying to maintain compatibility with libmso
-    enum MSOLINEEND_CUSTOM {
-        msolineNoEnd,
-        msolineArrowEnd,
-        msolineArrowStealthEnd,
-        msolineArrowDiamondEnd,
-        msolineArrowOvalEnd,
-        msolineArrowOpenEnd
-    };
+// trying to maintain compatibility with libmso
+enum MSOLINEEND_CUSTOM {
+    msolineNoEnd,
+    msolineArrowEnd,
+    msolineArrowStealthEnd,
+    msolineArrowDiamondEnd,
+    msolineArrowOvalEnd,
+    msolineArrowOpenEnd
+};
 }
 
-QString Utils::defineMarkerStyle(KoGenStyles& mainStyles, const QString& type)
+QString Utils::defineMarkerStyle(KoGenStyles &mainStyles, const QString &type)
 {
     uint id;
 
@@ -935,7 +951,7 @@ qreal Utils::defineMarkerWidth(const QString &markerWidth, const qreal lineWidth
     } else if (markerWidth == "sm") {
         c = 1;
     }
-    return ( lineWidth * c );
+    return (lineWidth * c);
 }
 
 //-----------------------------------------
@@ -943,7 +959,7 @@ qreal Utils::defineMarkerWidth(const QString &markerWidth, const qreal lineWidth
 //-----------------------------------------
 
 Utils::XmlWriteBuffer::XmlWriteBuffer()
-        : m_origWriter(0), m_newWriter(0)
+    : m_origWriter(0), m_newWriter(0)
 {
 }
 
@@ -952,7 +968,7 @@ Utils::XmlWriteBuffer::~XmlWriteBuffer()
     releaseWriterInternal();
 }
 
-KoXmlWriter* Utils::XmlWriteBuffer::setWriter(KoXmlWriter* writer)
+KoXmlWriter *Utils::XmlWriteBuffer::setWriter(KoXmlWriter *writer)
 {
     Q_ASSERT(!m_origWriter && !m_newWriter);
     if (m_origWriter || m_newWriter) {
@@ -963,7 +979,7 @@ KoXmlWriter* Utils::XmlWriteBuffer::setWriter(KoXmlWriter* writer)
     return m_newWriter;
 }
 
-KoXmlWriter* Utils::XmlWriteBuffer::releaseWriter()
+KoXmlWriter *Utils::XmlWriteBuffer::releaseWriter()
 {
     Q_ASSERT(m_newWriter && m_origWriter);
     if (!m_newWriter || !m_origWriter) {
@@ -973,7 +989,7 @@ KoXmlWriter* Utils::XmlWriteBuffer::releaseWriter()
     return releaseWriterInternal();
 }
 
-KoXmlWriter* Utils::XmlWriteBuffer::releaseWriter(QString& bkpXmlSnippet)
+KoXmlWriter *Utils::XmlWriteBuffer::releaseWriter(QString &bkpXmlSnippet)
 {
     Q_ASSERT(m_newWriter && m_origWriter);
     if (!m_newWriter || !m_origWriter) {
@@ -983,14 +999,14 @@ KoXmlWriter* Utils::XmlWriteBuffer::releaseWriter(QString& bkpXmlSnippet)
     return releaseWriterInternal();
 }
 
-KoXmlWriter* Utils::XmlWriteBuffer::releaseWriterInternal()
+KoXmlWriter *Utils::XmlWriteBuffer::releaseWriterInternal()
 {
     if (!m_newWriter || !m_origWriter) {
         return 0;
     }
     delete m_newWriter;
     m_newWriter = 0;
-    KoXmlWriter* tmp = m_origWriter;
+    KoXmlWriter *tmp = m_origWriter;
     m_origWriter = 0;
     return tmp;
 }
@@ -1007,17 +1023,19 @@ QString Utils::columnName(uint column)
     uint digits = 1;
     uint offset = 0;
 
-    for (uint limit = 26; column >= limit + offset; limit *= 26, digits++)
+    for (uint limit = 26; column >= limit + offset; limit *= 26, digits++) {
         offset += limit;
+    }
 
     QString str;
-    for (uint col = column - offset; digits > 0; --digits, col /= 26)
+    for (uint col = column - offset; digits > 0; --digits, col /= 26) {
         str.prepend(QChar('A' + (col % 26)));
+    }
 
     return str;
 }
 
-void Utils::splitPathAndFile(const QString& pathAndFile, QString* path, QString* file)
+void Utils::splitPathAndFile(const QString &pathAndFile, QString *path, QString *file)
 {
     Q_ASSERT(path);
     Q_ASSERT(file);
@@ -1027,61 +1045,71 @@ void Utils::splitPathAndFile(const QString& pathAndFile, QString* path, QString*
 
 // <units> -------------------
 
-QString Utils::EMU_to_ODF(const QString& twipValue)
+QString Utils::EMU_to_ODF(const QString &twipValue)
 {
-    if (twipValue.isEmpty())
+    if (twipValue.isEmpty()) {
         return QLatin1String("0cm");
+    }
     bool ok;
     const int emu = twipValue.toInt(&ok);
-    if (!ok)
+    if (!ok) {
         return QString();
-    if (emu == 0)
+    }
+    if (emu == 0) {
         return QLatin1String("0cm");
+    }
     return EMU_TO_CM_STRING(emu);
 }
 
-QString Utils::TWIP_to_ODF(const QString& twipValue)
+QString Utils::TWIP_to_ODF(const QString &twipValue)
 {
-    if (twipValue.isEmpty())
+    if (twipValue.isEmpty()) {
         return QLatin1String("0cm");
+    }
     bool ok;
     const int twip = twipValue.toInt(&ok);
-    if (!ok)
+    if (!ok) {
         return QString();
-    if (twip == 0)
+    }
+    if (twip == 0) {
         return QLatin1String("0cm");
+    }
     return cmString(TWIP_TO_CM(qreal(twip)));
 }
 
-QString Utils::ST_EighthPointMeasure_to_ODF(const QString& value)
+QString Utils::ST_EighthPointMeasure_to_ODF(const QString &value)
 {
-    if (value.isEmpty())
+    if (value.isEmpty()) {
         return QString();
+    }
     bool ok;
     const qreal point = qreal(value.toFloat(&ok)) / 8.0;
-    if (!ok)
+    if (!ok) {
         return QString();
+    }
     return QString::number(point, 'g', 2) + QLatin1String("pt");
 }
 
 //! @return true if @a string is non-negative integer number
-static bool isPositiveIntegerNumber(const QString& string)
+static bool isPositiveIntegerNumber(const QString &string)
 {
     for (const QChar *c = string.constData(); !c->isNull(); c++) {
-        if (!c->isNumber())
+        if (!c->isNumber()) {
             return false;
+        }
     }
     return !string.isEmpty();
 }
 
 //! Splits number and unit
-static bool splitNumberAndUnit(const QString& _string, qreal *number, QString* unit)
+static bool splitNumberAndUnit(const QString &_string, qreal *number, QString *unit)
 {
     int unitIndex = 0;
     QString string(_string);
     for (const QChar *c = string.constData(); !c->isNull(); c++, unitIndex++) {
-        if (!c->isNumber() && *c != '.')
+        if (!c->isNumber() && *c != '.') {
             break;
+        }
     }
     *unit = string.mid(unitIndex);
     string.truncate(unitIndex);
@@ -1091,16 +1119,18 @@ static bool splitNumberAndUnit(const QString& _string, qreal *number, QString* u
     }
     bool ok;
     *number = string.toFloat(&ok);
-    if (!ok)
+    if (!ok) {
         kWarning() << "Invalid number in" << _string;
+    }
     return ok;
 }
 
 //! @return true is @a unit is one of these mentioned in 22.9.2.15 ST_UniversalMeasure (Universal Measurement)
-static bool isUnitAcceptable(const QString& unit)
+static bool isUnitAcceptable(const QString &unit)
 {
-    if (unit.length() != 2)
+    if (unit.length() != 2) {
         return false;
+    }
     return unit == QString::fromLatin1("cm")
            || unit == QString::fromLatin1("mm")
            || unit == QString::fromLatin1("in")
@@ -1109,17 +1139,19 @@ static bool isUnitAcceptable(const QString& unit)
            || unit == QString::fromLatin1("pi");
 }
 
-static QString ST_TwipsMeasure_to_ODF_with_unit(const QString& value,
-                                                qreal (*convertFromTwips)(qreal), const char* unit)
+static QString ST_TwipsMeasure_to_ODF_with_unit(const QString &value,
+        qreal(*convertFromTwips)(qreal), const char *unit)
 {
-    if (value.isEmpty())
+    if (value.isEmpty()) {
         return QString();
+    }
     if (isPositiveIntegerNumber(value)) {
         // a positive number in twips (twentieths of a point, equivalent to 1/1440th of an inch)
         bool ok;
-        const qreal point = convertFromTwips( qreal(value.toFloat(&ok)) );
-        if (!ok)
+        const qreal point = convertFromTwips(qreal(value.toFloat(&ok)));
+        if (!ok) {
             return QString();
+        }
         return QString::number(point, 'g', 2) + QLatin1String(unit);
     }
     return Utils::ST_PositiveUniversalMeasure_to_ODF(value);
@@ -1130,7 +1162,7 @@ qreal twipToPt(qreal v)
     return TWIP_TO_POINT(v);
 }
 
-KOMSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_pt(const QString& value)
+KOMSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_pt(const QString &value)
 {
     return ST_TwipsMeasure_to_ODF_with_unit(value, twipToPt, "pt");
 }
@@ -1140,18 +1172,19 @@ qreal twipToCm(qreal v)
     return TWIP_TO_CM(v);
 }
 
-KOMSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_cm(const QString& value)
+KOMSOOXML_EXPORT QString Utils::ST_TwipsMeasure_to_cm(const QString &value)
 {
     return ST_TwipsMeasure_to_ODF_with_unit(value, twipToCm, "cm");
 }
 
-KOMSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& value)
+KOMSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString &value)
 {
     // a positive decimal number immediately following by a unit identifier.
     qreal number(0.0);
     QString unit;
-    if (!splitNumberAndUnit(value, &number, &unit))
+    if (!splitNumberAndUnit(value, &number, &unit)) {
         return QString();
+    }
     // special case: pc is another name for pica
     if (unit == QString::fromLatin1("pc")) {
         return QString::number(number) + QLatin1String("pi");
@@ -1163,11 +1196,12 @@ KOMSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString
     return value; // the original is OK
 }
 
-KOMSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& value)
+KOMSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString &value)
 {
     QString v(ST_PositiveUniversalMeasure_to_ODF(value));
-    if (v.isEmpty())
+    if (v.isEmpty()) {
         return QString();
+    }
     return cmString(POINT_TO_CM(KoUnit::parseValue(v)));
 }
 
@@ -1207,18 +1241,18 @@ bool Utils::ParagraphBulletProperties::isEmpty() const
     return false;
 }
 
-void Utils::ParagraphBulletProperties::setAlign(const QString& align)
+void Utils::ParagraphBulletProperties::setAlign(const QString &align)
 {
     m_align = align;
 }
 
-void Utils::ParagraphBulletProperties::setBulletChar(const QString& bulletChar)
+void Utils::ParagraphBulletProperties::setBulletChar(const QString &bulletChar)
 {
     m_bulletChar = bulletChar;
     m_type = ParagraphBulletProperties::BulletType;
 }
 
-void Utils::ParagraphBulletProperties::setStartValue(const QString& value)
+void Utils::ParagraphBulletProperties::setStartValue(const QString &value)
 {
     m_startValue = value;
 }
@@ -1233,23 +1267,23 @@ void Utils::ParagraphBulletProperties::setIndent(const qreal indent)
     m_indent = QString("%1").arg(indent);
 }
 
-void Utils::ParagraphBulletProperties::setPrefix(const QString& prefixChar)
+void Utils::ParagraphBulletProperties::setPrefix(const QString &prefixChar)
 {
     m_prefix = prefixChar;
 }
 
-void Utils::ParagraphBulletProperties::setSuffix(const QString& suffixChar)
+void Utils::ParagraphBulletProperties::setSuffix(const QString &suffixChar)
 {
     m_suffix = suffixChar;
 }
 
-void Utils::ParagraphBulletProperties::setNumFormat(const QString& numFormat)
+void Utils::ParagraphBulletProperties::setNumFormat(const QString &numFormat)
 {
     m_numFormat = numFormat;
     m_type = ParagraphBulletProperties::NumberType;
 }
 
-void Utils::ParagraphBulletProperties::setPicturePath(const QString& picturePath)
+void Utils::ParagraphBulletProperties::setPicturePath(const QString &picturePath)
 {
     m_picturePath = picturePath;
     m_type = ParagraphBulletProperties::PictureType;
@@ -1265,22 +1299,22 @@ void Utils::ParagraphBulletProperties::setBulletSizePt(const qreal size)
     m_bulletSize = QString("%1").arg(size);
 }
 
-void Utils::ParagraphBulletProperties::setBulletFont(const QString& font)
+void Utils::ParagraphBulletProperties::setBulletFont(const QString &font)
 {
     m_bulletFont = font;
 }
 
-void Utils::ParagraphBulletProperties::setBulletColor(const QString& bulletColor)
+void Utils::ParagraphBulletProperties::setBulletColor(const QString &bulletColor)
 {
     m_bulletColor = bulletColor;
 }
 
-void Utils::ParagraphBulletProperties::setFollowingChar(const QString& followingChar)
+void Utils::ParagraphBulletProperties::setFollowingChar(const QString &followingChar)
 {
     m_followingChar = followingChar;
 }
 
-void Utils::ParagraphBulletProperties::setTextStyle(const KoGenStyle& textStyle)
+void Utils::ParagraphBulletProperties::setTextStyle(const KoGenStyle &textStyle)
 {
     m_textStyle = textStyle;
 
@@ -1371,7 +1405,7 @@ bool Utils::ParagraphBulletProperties::startOverride() const
     return m_startOverride;
 }
 
-void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties& properties)
+void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties &properties)
 {
     // This function is intented for helping to inherit some values from other properties
     if (m_level == -1) {
@@ -1427,7 +1461,7 @@ void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletP
     }
 }
 
-QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& mainStyles, Utils::MSOOXMLFilter currentFilter)
+QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles &mainStyles, Utils::MSOOXMLFilter currentFilter)
 {
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
@@ -1448,15 +1482,13 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
             out.addAttribute("style:num-suffix", m_suffix);
         }
         out.addAttribute("text:start-value", m_startValue);
-    }
-    else if (m_type == ParagraphBulletProperties::PictureType) {
+    } else if (m_type == ParagraphBulletProperties::PictureType) {
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href", m_picturePath);
         out.addAttribute("xlink:type", "simple");
         out.addAttribute("xlink:show", "embed");
         out.addAttribute("xlink:actuate", "onLoad");
-    }
-    else {
+    } else {
         out.startElement("text:list-level-style-bullet");
         if (m_bulletChar.length() != 1) {
             // TODO: if there is no bullet char this should not be
@@ -1550,8 +1582,7 @@ QString Utils::ParagraphBulletProperties::convertToListProperties(KoGenStyles& m
         out.addAttributePt("fo:margin-left", margin);
 
         if (((m_type == ParagraphBulletProperties::BulletType) && m_bulletChar.isEmpty()) ||
-            (m_type == ParagraphBulletProperties::DefaultType))
-        {
+                (m_type == ParagraphBulletProperties::DefaultType)) {
             //hanging:
             if (indent < 0) {
                 if (qAbs(indent) > margin) {

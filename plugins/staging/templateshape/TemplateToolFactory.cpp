@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "TemplateToolFactory.h"
 
@@ -32,11 +31,10 @@
 #include "TemplateShape.h"
 #include "TemplateTool.h"
 
-
 TemplateToolFactory::TemplateToolFactory()
     : KoToolFactoryBase("TemplateToolFactoryId")
 {
-    setToolTip( i18n( "Template shape editing" ) );
+    setToolTip(i18n("Template shape editing"));
     setIconName(koIconNameCStr("x-template"));
     setToolType(dynamicToolType());
     setPriority(1);
@@ -47,8 +45,8 @@ TemplateToolFactory::~TemplateToolFactory()
 {
 }
 
-KoToolBase* TemplateToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase *TemplateToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new TemplateTool( canvas );
+    return new TemplateTool(canvas);
 }
 

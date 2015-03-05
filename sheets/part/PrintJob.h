@@ -47,12 +47,12 @@ public Q_SLOTS:
 protected:
     virtual QRectF preparePage(int pageNumber);
     virtual void printPage(int pageNumber, QPainter &painter);
-    virtual QList<KoShape*> shapesOnPage(int pageNumber);
-    virtual QList<QWidget*> createOptionWidgets() const;
+    virtual QList<KoShape *> shapesOnPage(int pageNumber);
+    virtual QList<QWidget *> createOptionWidgets() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

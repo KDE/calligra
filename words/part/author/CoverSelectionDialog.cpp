@@ -54,7 +54,7 @@ CoverSelectionDialog::~CoverSelectionDialog()
 void CoverSelectionDialog::createActions()
 {
     //need to add that 'open..' button manualy, behaviour is not standard
-    QPushButton *b = ui->coverSelectionButtonBox->addButton(i18n("Open..."),QDialogButtonBox::ActionRole);
+    QPushButton *b = ui->coverSelectionButtonBox->addButton(i18n("Open..."), QDialogButtonBox::ActionRole);
     b->setIcon(QIcon::fromTheme("document-open"));
     connect(b, SIGNAL(clicked()), this, SLOT(open()));
 
@@ -88,14 +88,16 @@ void CoverSelectionDialog::open()
     }
 }
 
-void CoverSelectionDialog::resizeEvent(QResizeEvent*) {
+void CoverSelectionDialog::resizeEvent(QResizeEvent *)
+{
     refresh();
 }
 
-void CoverSelectionDialog::refresh(){
-    if(!img.second.isNull()) {
+void CoverSelectionDialog::refresh()
+{
+    if (!img.second.isNull()) {
         QPixmap p = QPixmap::fromImage(QImage::fromData(img.second));
-        ui->coverSelectLabel->setPixmap(p.scaled(ui->coverSelectLabel->size(),Qt::KeepAspectRatio));
+        ui->coverSelectLabel->setPixmap(p.scaled(ui->coverSelectLabel->size(), Qt::KeepAspectRatio));
     }
     /*
     else {

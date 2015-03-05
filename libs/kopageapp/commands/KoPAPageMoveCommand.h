@@ -34,9 +34,9 @@ class KoPAPageBase;
 class KOPAGEAPP_TEST_EXPORT KoPAPageMoveCommand : public KUndo2Command
 {
 public:
-    KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent = 0 );
-    KoPAPageMoveCommand( KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, KUndo2Command *parent = 0 );
-    void init( const QList<KoPAPageBase *> &pages );
+    KoPAPageMoveCommand(KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent = 0);
+    KoPAPageMoveCommand(KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, KUndo2Command *parent = 0);
+    void init(const QList<KoPAPageBase *> &pages);
     virtual ~KoPAPageMoveCommand();
 
     /// redo the command
@@ -45,7 +45,7 @@ public:
     void undo();
 
 private:
-    KoPADocument * m_document;
+    KoPADocument *m_document;
     QMap<int, KoPAPageBase *> m_pageIndices;
     KoPAPageBase *m_after;
 };

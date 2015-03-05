@@ -19,4 +19,4 @@
 
 #include "kexiformpart.h"
 
-K_EXPORT_KEXIPART_PLUGIN( KexiFormPart, form )
+K_EXPORT_KEXIPART_PLUGIN(KexiFormPart, form)

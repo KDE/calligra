@@ -23,15 +23,15 @@
 
 #include "tiles_test_utils.h"
 
-bool KisTiledDataManagerTest::checkHole(quint8* buffer,
+bool KisTiledDataManagerTest::checkHole(quint8 *buffer,
                                         quint8 holeColor, QRect holeRect,
                                         quint8 backgroundColor, QRect backgroundRect)
 {
-    for(qint32 y = backgroundRect.y(); y <= backgroundRect.bottom(); y++) {
-        for(qint32 x = backgroundRect.x(); x <= backgroundRect.right(); x++) {
-            quint8 expectedColor = holeRect.contains(x,y) ? holeColor : backgroundColor;
+    for (qint32 y = backgroundRect.y(); y <= backgroundRect.bottom(); y++) {
+        for (qint32 x = backgroundRect.x(); x <= backgroundRect.right(); x++) {
+            quint8 expectedColor = holeRect.contains(x, y) ? holeColor : backgroundColor;
 
-            if(*buffer != expectedColor) {
+            if (*buffer != expectedColor) {
                 qDebug() << "Expected" << expectedColor << "but found" << *buffer;
                 return false;
             }
@@ -43,19 +43,19 @@ bool KisTiledDataManagerTest::checkHole(quint8* buffer,
 }
 
 bool KisTiledDataManagerTest::checkTilesShared(KisTiledDataManager *srcDM,
-                                               KisTiledDataManager *dstDM,
-                                               bool takeOldSrc,
-                                               bool takeOldDst,
-                                               QRect tilesRect)
+        KisTiledDataManager *dstDM,
+        bool takeOldSrc,
+        bool takeOldDst,
+        QRect tilesRect)
 {
-    for(qint32 row = tilesRect.y(); row <= tilesRect.bottom(); row++) {
-        for(qint32 col = tilesRect.x(); col <= tilesRect.right(); col++) {
+    for (qint32 row = tilesRect.y(); row <= tilesRect.bottom(); row++) {
+        for (qint32 col = tilesRect.x(); col <= tilesRect.right(); col++) {
             KisTileSP srcTile = takeOldSrc ? srcDM->getOldTile(col, row)
-                : srcDM->getTile(col, row, false);
+                                : srcDM->getTile(col, row, false);
             KisTileSP dstTile = takeOldDst ? dstDM->getOldTile(col, row)
-                : dstDM->getTile(col, row, false);
+                                : dstDM->getTile(col, row, false);
 
-            if(srcTile->tileData() != dstTile->tileData()) {
+            if (srcTile->tileData() != dstTile->tileData()) {
                 qDebug() << "Expected tile data (" << col << row << ")"
                          << srcTile->extent()
                          << srcTile->tileData()
@@ -69,20 +69,20 @@ bool KisTiledDataManagerTest::checkTilesShared(KisTiledDataManager *srcDM,
 }
 
 bool KisTiledDataManagerTest::checkTilesNotShared(KisTiledDataManager *srcDM,
-                                                  KisTiledDataManager *dstDM,
-                                                  bool takeOldSrc,
-                                                  bool takeOldDst,
-                                                  QRect tilesRect)
+        KisTiledDataManager *dstDM,
+        bool takeOldSrc,
+        bool takeOldDst,
+        QRect tilesRect)
 {
-    for(qint32 row = tilesRect.y(); row <= tilesRect.bottom(); row++) {
-        for(qint32 col = tilesRect.x(); col <= tilesRect.right(); col++) {
+    for (qint32 row = tilesRect.y(); row <= tilesRect.bottom(); row++) {
+        for (qint32 col = tilesRect.x(); col <= tilesRect.right(); col++) {
             KisTileSP srcTile = takeOldSrc ? srcDM->getOldTile(col, row)
-                : srcDM->getTile(col, row, false);
+                                : srcDM->getTile(col, row, false);
             KisTileSP dstTile = takeOldDst ? dstDM->getOldTile(col, row)
-                : dstDM->getTile(col, row, false);
+                                : dstDM->getTile(col, row, false);
 
-            if(srcTile->tileData() == dstTile->tileData()) {
-                qDebug() << "Expected tiles not be shared:"<< srcTile->extent();
+            if (srcTile->tileData() == dstTile->tileData()) {
+                qDebug() << "Expected tiles not be shared:" << srcTile->extent();
                 return false;
             }
         }
@@ -94,7 +94,7 @@ void KisTiledDataManagerTest::testUndoingNewTiles()
 {
     // "growing extent bug"
 
-    const QRect nullRect(qint32_MAX,qint32_MAX,0,0);
+    const QRect nullRect(qint32_MAX, qint32_MAX, 0, 0);
 
     quint8 defaultPixel = 0;
     KisTiledDataManager srcDM(1, &defaultPixel);
@@ -107,7 +107,7 @@ void KisTiledDataManagerTest::testUndoingNewTiles()
     KisTileSP createdTile = srcDM.getTile(0, 0, true);
     srcDM.commit();
 
-    QCOMPARE(srcDM.extent(), QRect(0,0,64,64));
+    QCOMPARE(srcDM.extent(), QRect(0, 0, 64, 64));
 
     srcDM.rollback(memento0);
     QCOMPARE(srcDM.extent(), nullRect);
@@ -120,9 +120,9 @@ void KisTiledDataManagerTest::testPurgedAndEmptyTransactions()
 
     quint8 oddPixel1 = 128;
 
-    QRect rect(0,0,512,512);
-    QRect clearRect1(50,50,100,100);
-    QRect clearRect2(150,50,100,100);
+    QRect rect(0, 0, 512, 512);
+    QRect clearRect1(50, 50, 100, 100);
+    QRect clearRect2(150, 50, 100, 100);
 
     quint8 *buffer = new quint8[rect.width()*rect.height()];
 
@@ -163,7 +163,6 @@ void KisTiledDataManagerTest::testPurgedAndEmptyTransactions()
     QVERIFY(checkHole(buffer, oddPixel1, clearRect1 | clearRect2,
                       defaultPixel, rect));
 
-
     // now check that everything works still
 
     KisMementoSP memento3 = srcDM.getMemento();
@@ -180,7 +179,6 @@ void KisTiledDataManagerTest::testPurgedAndEmptyTransactions()
     QVERIFY(checkHole(buffer, oddPixel1, clearRect1 | clearRect2,
                       defaultPixel, rect));
 
-
 }
 void KisTiledDataManagerTest::testUnversionedBitBlt()
 {
@@ -191,9 +189,9 @@ void KisTiledDataManagerTest::testUnversionedBitBlt()
     quint8 oddPixel1 = 128;
     quint8 oddPixel2 = 129;
 
-    QRect rect(0,0,512,512);
-    QRect cloneRect(81,80,250,250);
-    QRect tilesRect(2,2,3,3);
+    QRect rect(0, 0, 512, 512);
+    QRect cloneRect(81, 80, 250, 250);
+    QRect tilesRect(2, 2, 3, 3);
 
     srcDM.clear(rect, &oddPixel1);
     dstDM.clear(rect, &oddPixel2);
@@ -226,10 +224,9 @@ void KisTiledDataManagerTest::testVersionedBitBlt()
 
     quint8 oddPixel4 = 131;
 
-    QRect rect(0,0,512,512);
-    QRect cloneRect(81,80,250,250);
-    QRect tilesRect(2,2,3,3);
-
+    QRect rect(0, 0, 512, 512);
+    QRect cloneRect(81, 80, 250, 250);
+    QRect tilesRect(2, 2, 3, 3);
 
     KisMementoSP memento1 = srcDM1.getMemento();
     srcDM1.clear(rect, &oddPixel1);
@@ -280,9 +277,9 @@ void KisTiledDataManagerTest::testBitBltOldData()
     quint8 oddPixel1 = 128;
     quint8 oddPixel2 = 129;
 
-    QRect rect(0,0,512,512);
-    QRect cloneRect(81,80,250,250);
-    QRect tilesRect(2,2,3,3);
+    QRect rect(0, 0, 512, 512);
+    QRect cloneRect(81, 80, 250, 250);
+    QRect tilesRect(2, 2, 3, 3);
 
     quint8 *buffer = new quint8[rect.width()*rect.height()];
 
@@ -317,10 +314,10 @@ void KisTiledDataManagerTest::testBitBltRough()
     quint8 oddPixel2 = 129;
     quint8 oddPixel3 = 130;
 
-    QRect rect(0,0,512,512);
-    QRect cloneRect(81,80,250,250);
-    QRect actualCloneRect(64,64,320,320);
-    QRect tilesRect(1,1,4,4);
+    QRect rect(0, 0, 512, 512);
+    QRect cloneRect(81, 80, 250, 250);
+    QRect actualCloneRect(64, 64, 320, 320);
+    QRect tilesRect(1, 1, 4, 4);
 
     srcDM.clear(rect, &oddPixel1);
     dstDM.clear(rect, &oddPixel2);
@@ -482,7 +479,7 @@ void KisTiledDataManagerTest::testUndoSetDefaultPixel()
     quint8 oddPixel1 = 128;
     quint8 oddPixel2 = 129;
 
-    QRect fillRect(0,0,64,64);
+    QRect fillRect(0, 0, 64, 64);
 
     KisTileSP tile00;
     KisTileSP tile10;
@@ -551,7 +548,8 @@ void KisTiledDataManagerTest::benchmarkReadOnlyTileLazy()
     //CALLGRIND_START_INSTRUMENTATION;
 
     QBENCHMARK_ONCE {
-        for(qint32 i = 0; i < numTilesToTest; i++) {
+        for (qint32 i = 0; i < numTilesToTest; i++)
+        {
             KisTileSP tile = dm.getTile(i, i, false);
         }
     }
@@ -572,7 +570,8 @@ void KisTiledDataManagerTest::benchmarkSharedPointers()
     //CALLGRIND_START_INSTRUMENTATION;
 
     QBENCHMARK_ONCE {
-        for(qint32 i = 0; i < numIterations; i++) {
+        for (qint32 i = 0; i < numIterations; i++)
+        {
             KisSimpleClassSP pointer = new KisSimpleClass;
             pointer = 0;
         }
@@ -588,7 +587,6 @@ void KisTiledDataManagerTest::benchmarkCOWImpl()
     memset(defaultPixel, 1, pixelSize);
 
     KisTiledDataManager dm(pixelSize, defaultPixel);
-
 
     KisMementoSP memento1 = dm.getMemento();
 
@@ -612,7 +610,8 @@ void KisTiledDataManagerTest::benchmarkCOWImpl()
     QTest::qSleep(500);
     QBENCHMARK {
 
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < 32; i++)
+        {
             for (int j = 0; j < 64; j++) {
                 KisTileSP tile = dm.getTile(j, i, true);
                 tile->lockForWrite();
@@ -648,7 +647,6 @@ void KisTiledDataManagerTest::benchmarkCOWWithPooler()
 
 #define TILE_DIMENSION 64
 
-
 /**
  * The data manager has partial guarantees of reentrancy. That is
  * you can call any arbitrary number of methods concurrently as long
@@ -665,7 +663,6 @@ void KisTiledDataManagerTest::benchmarkCOWWithPooler()
 //#define run_exclusive(lock, _i) while(0)
 //#define run_concurrent(lock, _i) while(0)
 
-
 class KisStressJob : public QRunnable
 {
 public:
@@ -674,16 +671,17 @@ public:
     {
     }
 
-    void run() {
+    void run()
+    {
         qsrand(QTime::currentTime().msec());
-        for(qint32 i = 0; i < NUM_CYCLES; i++) {
+        for (qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = qrand() % NUM_TYPES;
 
             qint32 t;
 
-            switch(type) {
+            switch (type) {
             case 0:
-                run_concurrent(lock,t) {
+                run_concurrent(lock, t) {
                     quint8 *buf;
                     buf = new quint8[dm.pixelSize()];
                     memcpy(buf, dm.defaultPixel(), dm.pixelSize());
@@ -693,7 +691,7 @@ public:
                 break;
             case 1:
             case 2:
-                run_concurrent(lock,t) {
+                run_concurrent(lock, t) {
                     KisTileSP tile;
 
                     tile = dm.getTile(m_accessRect.x() / TILE_DIMENSION,
@@ -712,19 +710,19 @@ public:
                 }
                 break;
             case 3:
-                run_concurrent(lock,t) {
+                run_concurrent(lock, t) {
                     QRect newRect = dm.extent();
-		    Q_UNUSED(newRect);
+                    Q_UNUSED(newRect);
                 }
                 break;
             case 4:
-                run_concurrent(lock,t) {
+                run_concurrent(lock, t) {
                     dm.clear(m_accessRect.x(), m_accessRect.y(),
                              m_accessRect.width(), m_accessRect.height(), 4);
                 }
                 break;
             case 5:
-                run_concurrent(lock,t) {
+                run_concurrent(lock, t) {
                     quint8 *buf;
 
                     buf = new quint8[m_accessRect.width() * m_accessRect.height() *
@@ -734,10 +732,10 @@ public:
                     dm.writeBytes(buf, m_accessRect.x(), m_accessRect.y(),
                                   m_accessRect.width(), m_accessRect.height());
                     delete[] buf;
-                    }
+                }
                 break;
             case 6:
-                run_concurrent(lock,t) {
+                run_concurrent(lock, t) {
                     quint8 oddPixel = 13;
                     KisTiledDataManager srcDM(1, &oddPixel);
                     dm.bitBlt(&srcDM, m_accessRect);
@@ -745,7 +743,7 @@ public:
                 break;
             case 7:
             case 8:
-                run_exclusive(lock,t) {
+                run_exclusive(lock, t) {
                     m_memento = dm.getMemento();
                     dm.clear(m_accessRect.x(), m_accessRect.y(),
                              m_accessRect.width(), m_accessRect.height(), 2);
@@ -759,18 +757,18 @@ public:
                 }
                 break;
             case 9:
-                run_exclusive(lock,t) {
+                run_exclusive(lock, t) {
                     bool b = dm.hasCurrentMemento();
                     Q_UNUSED(b);
                 }
                 break;
             case 10:
-                run_exclusive(lock,t) {
+                run_exclusive(lock, t) {
                     dm.clear();
                 }
                 break;
             case 11:
-                run_exclusive(lock,t) {
+                run_exclusive(lock, t) {
                     dm.setExtent(m_accessRect);
                 }
                 break;
@@ -794,8 +792,8 @@ void KisTiledDataManagerTest::stressTest()
     QThreadPool pool;
     pool.setMaxThreadCount(NUM_TYPES);
 
-    QRect accessRect(0,0,100,100);
-    for(qint32 i = 0; i < NUM_TYPES; i++) {
+    QRect accessRect(0, 0, 100, 100);
+    for (qint32 i = 0; i < NUM_TYPES; i++) {
         KisStressJob *job = new KisStressJob(dm, accessRect, lock);
         pool.start(job);
         accessRect.translate(100, 0);

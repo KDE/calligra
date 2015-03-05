@@ -29,12 +29,14 @@ class RandomGauss
 {
 
 public:
-    RandomGauss() {
+    RandomGauss()
+    {
         srand48(0);
         m_next = false;
     }
 
-    RandomGauss(int seed) {
+    RandomGauss(int seed)
+    {
         srand48(seed);
         m_next = false;
     }

@@ -49,7 +49,7 @@ public:
     /**
      * Create action events for the elements given
      */
-    QSet<KoEventAction*> createEventActionsFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    QSet<KoEventAction *> createEventActionsFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     /**
      * Add presentation event action.

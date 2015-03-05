@@ -19,7 +19,7 @@ private Q_SLOTS:
     void testFrameRemoval();
 
 private:
-    KWTextFrame* createFrame(const QPointF &position, KWTextFrameSet &fs);
+    KWTextFrame *createFrame(const QPointF &position, KWTextFrameSet &fs);
 };
 
 #endif

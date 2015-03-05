@@ -54,10 +54,10 @@ KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::cate
 }
 
 void KisRoundCornersFilter::processImpl(KisPaintDeviceSP device,
-                                        const QRect& applyRect,
-                                        const KisFilterConfiguration* config,
-                                        KoUpdater* progressUpdater
-                                        ) const
+                                        const QRect &applyRect,
+                                        const KisFilterConfiguration *config,
+                                        KoUpdater *progressUpdater
+                                       ) const
 {
     Q_UNUSED(config);
     Q_ASSERT(!device.isNull());
@@ -69,7 +69,7 @@ void KisRoundCornersFilter::processImpl(KisPaintDeviceSP device,
     }
 
     //read the filter configuration values from the KisFilterConfiguration object
-    qint32 radius = qMax(1, config->getInt("radius" , 30));
+    qint32 radius = qMax(1, config->getInt("radius", 30));
 
     if (progressUpdater) {
         progressUpdater->setRange(0, applyRect.height());
@@ -79,7 +79,7 @@ void KisRoundCornersFilter::processImpl(KisPaintDeviceSP device,
 
     KisHLineIteratorSP dstIt = device->createHLineIteratorNG(applyRect.x(), applyRect.y(), width);
 
-    const KoColorSpace* cs = device->colorSpace();
+    const KoColorSpace *cs = device->colorSpace();
 
     QRect bounds = device->defaultBounds()->bounds();
     for (qint32 y = applyRect.y(); y < applyRect.y() + applyRect.height(); y++) {
@@ -89,40 +89,42 @@ void KisRoundCornersFilter::processImpl(KisPaintDeviceSP device,
                 double dx = radius - x;
                 double dy = radius - y;
                 double dradius = static_cast<double>(radius);
-                if (dx >= sqrt(dradius*dradius - dy*dy)) {
+                if (dx >= sqrt(dradius * dradius - dy * dy)) {
                     cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
                 }
             } else if (x >= bounds.width() - radius && y <= radius) {
                 double dx = x + radius - bounds.width();
                 double dy = radius - y;
                 double dradius = static_cast<double>(radius);
-                if (dx >= sqrt(dradius*dradius - dy*dy)) {
+                if (dx >= sqrt(dradius * dradius - dy * dy)) {
                     cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
                 }
             } else if (x <= radius && y >= bounds.height() - radius) {
                 double dx = radius - x;
                 double dy = y + radius - bounds.height();
                 double dradius = static_cast<double>(radius);
-                if (dx >= sqrt(dradius*dradius - dy*dy)) {
+                if (dx >= sqrt(dradius * dradius - dy * dy)) {
                     cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
                 }
             } else if (x >= bounds.width()  - radius && y >= bounds.height() - radius) {
 
-                double dx = x + radius - bounds.width() ;
+                double dx = x + radius - bounds.width();
                 double dy = y + radius - bounds.height();
                 double dradius = static_cast<double>(radius);
-                if (dx >= sqrt(dradius*dradius - dy*dy)) {
+                if (dx >= sqrt(dradius * dradius - dy * dy)) {
                     cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
                 }
             }
             ++x;
-        } while(dstIt->nextPixel());
+        } while (dstIt->nextPixel());
         dstIt->nextRow();
-        if (progressUpdater) progressUpdater->setValue(y);
+        if (progressUpdater) {
+            progressUpdater->setValue(y);
+        }
     }
 }
 
-KisConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget *KisRoundCornersFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(2, 100, 30, i18n("Radius"), "radius"));
@@ -130,9 +132,9 @@ KisConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* pare
 
 }
 
-KisFilterConfiguration* KisRoundCornersFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisRoundCornersFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("roundcorners", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("roundcorners", 1);
     config->setProperty("radius", 30);
     return config;
 }

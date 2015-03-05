@@ -42,7 +42,7 @@ class KRITAIMAGE_EXPORT KisConfigWidget : public QWidget
 
 protected:
 
-    KisConfigWidget(QWidget * parent = 0, Qt::WFlags f = 0, int delay = 500);
+    KisConfigWidget(QWidget *parent = 0, Qt::WFlags f = 0, int delay = 500);
 
 public:
     virtual ~KisConfigWidget();
@@ -50,12 +50,12 @@ public:
     /**
      * @param config the configuration for this configuration widget.
      */
-    virtual void setConfiguration(const KisPropertiesConfiguration * config) = 0;
+    virtual void setConfiguration(const KisPropertiesConfiguration *config) = 0;
 
     /**
      * @return the configuration
      */
-    virtual KisPropertiesConfiguration* configuration() const = 0;
+    virtual KisPropertiesConfiguration *configuration() const = 0;
 
     /**
      * Sets the view object that can be used by the configuration
@@ -77,8 +77,8 @@ Q_SIGNALS:
      * widget.
      */
     void sigConfigurationItemChanged();
-    void sigSaveLockedConfig(KisPropertiesConfiguration* p);
-    void sigDropLockedConfig(KisPropertiesConfiguration* p);
+    void sigSaveLockedConfig(KisPropertiesConfiguration *p);
+    void sigDropLockedConfig(KisPropertiesConfiguration *p);
 
 private Q_SLOTS:
 
@@ -89,6 +89,5 @@ private:
     QTimer m_timer;
     int m_delay;
 };
-
 
 #endif

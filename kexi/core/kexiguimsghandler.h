@@ -31,7 +31,7 @@ public:
 
     using KexiDB::MessageHandler::showErrorMessage;
 
-    void showErrorMessage(const QString&, const QString&, KexiDB::Object *obj);
+    void showErrorMessage(const QString &, const QString &, KexiDB::Object *obj);
     void showErrorMessage(Kexi::ObjectStatus *status);
     void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
 
@@ -41,23 +41,23 @@ public:
     /*! Displays a message of a type \a type, with \a title text and optional \a details.
      \a dontShowAgainName can be specified to add "Do not show again" option if \a type is Warning. */
     virtual void showMessage(MessageType type, const QString &title, const QString &details,
-                             const QString& dontShowAgainName = QString());
+                             const QString &dontShowAgainName = QString());
 
     /*! Displays a Warning message with \a title text and optional \a details
      with "Continue" button instead "OK".
      \a dontShowAgainName can be specified to add "Do not show again" option. */
     virtual void showWarningContinueMessage(const QString &title, const QString &details = QString(),
-                                            const QString& dontShowAgainName = QString());
+                                            const QString &dontShowAgainName = QString());
 
 protected:
     using KexiDB::MessageHandler::showErrorMessageInternal;
 
     virtual void showErrorMessageInternal(const QString &title, const QString &details = QString());
-    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString());
+    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString &msg = QString());
 
     /*! Interactively asks a question using KMessageBox.
      See KexiDB::MessageHandler::askQuestionInternal() for details. */
-    virtual int askQuestionInternal(const QString& message,
+    virtual int askQuestionInternal(const QString &message,
                                     KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
                                     const KGuiItem &buttonYes = KStandardGuiItem::yes(),
                                     const KGuiItem &buttonNo = KStandardGuiItem::no(),

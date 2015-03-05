@@ -31,13 +31,11 @@
 #include "OdfReaderBackend.h"
 #include "OdfReaderInternals.h"
 
-
 class QByteArray;
 class QSizeF;
 class QStringList;
 class KoStore;
 class OdfReaderContext;
-
 
 /** @brief A default backend for the OdsReader class.
  *
@@ -71,7 +69,7 @@ class OdfReaderContext;
  */
 class KOODFREADER_EXPORT OdsReaderBackend : public OdfReaderBackend
 {
- public:
+public:
     explicit OdsReaderBackend();
     virtual ~OdsReaderBackend();
 
@@ -80,10 +78,9 @@ class KOODFREADER_EXPORT OdsReaderBackend : public OdfReaderBackend
 
     DECLARE_BACKEND_FUNCTION(OfficeSpreadsheet);
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif // ODSREADERBACKEND_H

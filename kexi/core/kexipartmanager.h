@@ -34,11 +34,11 @@ namespace KexiPart
 class Info;
 class Part;
 
-typedef QHash<QString, Info*> PartInfoDict;
-typedef QHash<QString, Info*>::iterator PartInfoDictIterator;
-typedef QList<Info*> PartInfoList;
-typedef QList<Info*>::iterator PartInfoListIterator;
-typedef QHash<QString, Part*> PartDict;
+typedef QHash<QString, Info *> PartInfoDict;
+typedef QHash<QString, Info *>::iterator PartInfoDictIterator;
+typedef QList<Info *> PartInfoList;
+typedef QList<Info *>::iterator PartInfoListIterator;
+typedef QHash<QString, Part *> PartDict;
 
 /**
  * @short KexiPart's manager: looks up and instantiates them
@@ -62,7 +62,7 @@ public:
      *       will be prepended to the class name.
      * Dlopens a part using KexiPart::Info if needed. Return 0 if loading failed.
      */
-    Part *partForClass(const QString& className);
+    Part *partForClass(const QString &className);
 
     /**
      * \return a part object for specified info. Dlopens a part using KexiPart::Info
@@ -75,24 +75,24 @@ public:
      * @note For compatibility, if a string without any dot is provided, "org.kexi-project."
      *       will be prepended to the class name.
      */
-    Info *infoForClass(const QString& className);
+    Info *infoForClass(const QString &className);
 
     /**
      * @return a list of the available KexiParts in well-defined order
      * Can return 0 if plugins were not found (what means the installation is broken).
      */
-    PartInfoList* infoList();
+    PartInfoList *infoList();
 
 Q_SIGNALS:
-    void partLoaded(KexiPart::Part*);
+    void partLoaded(KexiPart::Part *);
     void newObjectRequested(KexiPart::Info *info);
 
 protected:
     //! Used by StaticPart
-    void insertStaticPart(KexiPart::StaticPart* part);
+    void insertStaticPart(KexiPart::StaticPart *part);
 
     //! Used by KexiInternalPart
-    KexiInternalPart* internalPartForClass(const QString& className);
+    KexiInternalPart *internalPartForClass(const QString &className);
 
 private:
     /**
@@ -105,10 +105,10 @@ private:
 
     class Private;
 
-    Private* const d;
+    Private *const d;
 
-    friend KexiPart::StaticPart::StaticPart(const QString&, const QString&, const QString&);
-    friend KexiInternalPart* KexiInternalPart::part(KexiDB::MessageHandler*, const QString&);
+    friend KexiPart::StaticPart::StaticPart(const QString &, const QString &, const QString &);
+    friend KexiInternalPart *KexiInternalPart::part(KexiDB::MessageHandler *, const QString &);
 };
 
 }

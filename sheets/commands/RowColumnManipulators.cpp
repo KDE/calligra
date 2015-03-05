@@ -42,8 +42,8 @@ using namespace Calligra::Sheets;
   class ResizeColumnManipulator
 ****************************************************************************/
 
-ResizeColumnManipulator::ResizeColumnManipulator(KUndo2Command* parent)
-        : AbstractRegionCommand(parent)
+ResizeColumnManipulator::ResizeColumnManipulator(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
 {
     setText(kundo2_i18n("Resize Column"));
 }
@@ -52,17 +52,18 @@ ResizeColumnManipulator::~ResizeColumnManipulator()
 {
 }
 
-bool ResizeColumnManipulator::process(Element* element)
+bool ResizeColumnManipulator::process(Element *element)
 {
     QRect range = element->rect();
     for (int col = range.right(); col >= range.left(); --col) {
         ColumnFormat *format = m_sheet->nonDefaultColumnFormat(col);
-        if (m_firstrun)
+        if (m_firstrun) {
             m_oldSizes[col] = format->width();
+        }
         qreal delta = format->width();
         format->setWidth(m_reverse ? m_oldSizes[col] : qMax(2.0, m_newSize));
         delta = format->width() - delta;
-        m_sheet->adjustCellAnchoredShapesX(delta, col+1);
+        m_sheet->adjustCellAnchoredShapesX(delta, col + 1);
     }
     // Just repaint everything visible; no need to invalidate the visual cache.
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
@@ -71,14 +72,12 @@ bool ResizeColumnManipulator::process(Element* element)
     return true;
 }
 
-
-
 /***************************************************************************
   class ResizeRowManipulator
 ****************************************************************************/
 
-ResizeRowManipulator::ResizeRowManipulator(KUndo2Command* parent)
-        : AbstractRegionCommand(parent)
+ResizeRowManipulator::ResizeRowManipulator(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
 {
     setText(kundo2_i18n("Resize Row"));
 }
@@ -87,7 +86,7 @@ ResizeRowManipulator::~ResizeRowManipulator()
 {
 }
 
-bool ResizeRowManipulator::process(Element* element)
+bool ResizeRowManipulator::process(Element *element)
 {
     QRect range = element->rect();
     // TODO: more efficiently store old sizes
@@ -106,8 +105,10 @@ bool ResizeRowManipulator::process(Element* element)
     // TODO: more efficiently update positions of cell-anchored shapes
     for (int row = range.top(); row <= range.bottom(); ++row) {
         qreal delta = m_newSize - m_oldSizes[row];
-        if (m_reverse) delta = -delta;
-        m_sheet->adjustCellAnchoredShapesY(delta, row+1);
+        if (m_reverse) {
+            delta = -delta;
+        }
+        m_sheet->adjustCellAnchoredShapesY(delta, row + 1);
     }
     // Just repaint everything visible; no need to invalidate the visual cache.
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
@@ -116,15 +117,14 @@ bool ResizeRowManipulator::process(Element* element)
     return true;
 }
 
-
 /***************************************************************************
   class HideShowManipulator
 ****************************************************************************/
 
-HideShowManipulator::HideShowManipulator(KUndo2Command* parent)
-        : AbstractRegionCommand(parent),
-        m_manipulateColumns(false),
-        m_manipulateRows(false)
+HideShowManipulator::HideShowManipulator(KUndo2Command *parent)
+    : AbstractRegionCommand(parent),
+      m_manipulateColumns(false),
+      m_manipulateRows(false)
 {
 }
 
@@ -132,12 +132,12 @@ HideShowManipulator::~HideShowManipulator()
 {
 }
 
-bool HideShowManipulator::process(Element* element)
+bool HideShowManipulator::process(Element *element)
 {
     QRect range = element->rect();
     if (m_manipulateColumns) {
         for (int col = range.left(); col <= range.right(); ++col) {
-            ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
+            ColumnFormat *format = m_sheet->nonDefaultColumnFormat(col);
             format->setHidden(!m_reverse);
             m_sheet->adjustCellAnchoredShapesX(m_reverse ? format->width() : -format->width(), col);
         }
@@ -145,7 +145,9 @@ bool HideShowManipulator::process(Element* element)
     if (m_manipulateRows) {
         m_sheet->rowFormats()->setHidden(range.top(), range.bottom(), !m_reverse);
         qreal delta = m_sheet->rowFormats()->totalRowHeight(range.top(), range.bottom());
-        if (!m_reverse) delta = -delta;
+        if (!m_reverse) {
+            delta = -delta;
+        }
         m_sheet->adjustCellAnchoredShapesY(delta, range.top());
     }
     return true;
@@ -153,8 +155,9 @@ bool HideShowManipulator::process(Element* element)
 
 bool HideShowManipulator::preProcessing()
 {
-    if (m_firstrun)
+    if (m_firstrun) {
         setText(name());
+    }
     Region region;
     ConstIterator endOfList = cells().constEnd();
     for (ConstIterator it = cells().constBegin(); it != endOfList; ++it) {
@@ -164,8 +167,9 @@ bool HideShowManipulator::preProcessing()
                 if (range.left() > 1) {
                     int col;
                     for (col = 1; col < range.left(); ++col) {
-                        if (!m_sheet->columnFormat(col)->isHidden())
+                        if (!m_sheet->columnFormat(col)->isHidden()) {
                             break;
+                        }
                     }
                     if (col == range.left()) {
                         region.add(QRect(1, 1, range.left() - 1, KS_rowMax));
@@ -242,10 +246,10 @@ KUndo2MagicString HideShowManipulator::name() const
   class AdjustColumnRowManipulator
 ****************************************************************************/
 
-AdjustColumnRowManipulator::AdjustColumnRowManipulator(KUndo2Command* parent)
-        : AbstractRegionCommand(parent),
-        m_adjustColumn(false),
-        m_adjustRow(false)
+AdjustColumnRowManipulator::AdjustColumnRowManipulator(KUndo2Command *parent)
+    : AbstractRegionCommand(parent),
+      m_adjustColumn(false),
+      m_adjustRow(false)
 {
 }
 
@@ -253,9 +257,9 @@ AdjustColumnRowManipulator::~AdjustColumnRowManipulator()
 {
 }
 
-bool AdjustColumnRowManipulator::process(Element* element)
+bool AdjustColumnRowManipulator::process(Element *element)
 {
-    Sheet* sheet = m_sheet; // TODO Stefan: element->sheet();
+    Sheet *sheet = m_sheet; // TODO Stefan: element->sheet();
     if (m_sheet && sheet != m_sheet) {
         return true;
     }
@@ -279,7 +283,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
                     int col = cell.column();
                     if (!cell.isEmpty() && !cell.isPartOfMerged()) {
                         if (widths.contains(col) && widths[col] != -1.0) {
-                            ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
+                            ColumnFormat *format = sheet->nonDefaultColumnFormat(col);
                             if (qAbs(format->width() - widths[col]) > DBL_EPSILON) {
                                 format->setWidth(qMax(2.0, widths[col]));
                             }
@@ -291,7 +295,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
         } else {
             for (int col = range.left(); col <= range.right(); ++col) {
                 if (widths.contains(col) && widths[col] != -1.0) {
-                    ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
+                    ColumnFormat *format = sheet->nonDefaultColumnFormat(col);
                     if (qAbs(format->width() - widths[col]) > DBL_EPSILON) {
                         format->setWidth(qMax(2.0, widths[col]));
                     }
@@ -332,8 +336,9 @@ bool AdjustColumnRowManipulator::process(Element* element)
 
 bool AdjustColumnRowManipulator::preProcessing()
 {
-    if (m_firstrun)
+    if (m_firstrun) {
         setText(name());
+    }
     if (m_reverse) {
     } else {
         if (!m_newHeights.isEmpty() || !m_newWidths.isEmpty()) {
@@ -343,7 +348,7 @@ bool AdjustColumnRowManipulator::preProcessing()
 
         ConstIterator endOfList(cells().constEnd());
         for (ConstIterator it = cells().constBegin(); it != endOfList; ++it) {
-            Element* element = *it;
+            Element *element = *it;
             QRect range = element->rect();
             if (element->isColumn()) {
                 for (int col = range.left(); col <= range.right(); ++col) {
@@ -453,7 +458,8 @@ bool AdjustColumnRowManipulator::postProcessing()
 
 class DummyWidget : public QWidget
 {
-    int metric(PaintDeviceMetric metric) const {
+    int metric(PaintDeviceMetric metric) const
+    {
         switch (metric) {
         case QPaintDevice::PdmDpiX:
         case QPaintDevice::PdmDpiY:
@@ -467,7 +473,7 @@ class DummyWidget : public QWidget
     }
 };
 
-QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& style) const
+QSizeF AdjustColumnRowManipulator::textSize(const QString &text, const Style &style) const
 {
     QSizeF size;
     DummyWidget dummyWiget;
@@ -480,11 +486,12 @@ QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& st
 
         size = fontMetrics.size(0, text);
         double offsetFont = 0.0;
-        if ((style.valign() == Style::Bottom) && style.underline())
+        if ((style.valign() == Style::Bottom) && style.underline()) {
             offsetFont = fontMetrics.underlinePos() + 1;
+        }
 
         size.setHeight((fontMetrics.ascent() + fontMetrics.descent() + offsetFont)
-                       *(text.count('\n') + 1));
+                       * (text.count('\n') + 1));
     } else if (style.angle() != 0) {
         // Rotated text.
 
@@ -498,8 +505,9 @@ QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& st
         // Vertical text.
 
         qreal width = 0.0;
-        for (int i = 0; i < text.length(); i++)
+        for (int i = 0; i < text.length(); i++) {
             width = qMax(width, fontMetrics.width(text.at(i)));
+        }
 
         size.setWidth(width);
         size.setHeight((fontMetrics.ascent() + fontMetrics.descent())
@@ -508,7 +516,7 @@ QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& st
     return size;
 }
 
-double AdjustColumnRowManipulator::adjustColumnHelper(const Cell& cell)
+double AdjustColumnRowManipulator::adjustColumnHelper(const Cell &cell)
 {
     double long_max = 0.0;
     const Style style = cell.effectiveStyle();
@@ -517,13 +525,15 @@ double AdjustColumnRowManipulator::adjustColumnHelper(const Cell& cell)
         double indent = 0.0;
         Style::HAlign alignment = style.halign();
         if (alignment == Style::HAlignUndefined) {
-            if (cell.value().isNumber() || cell.isDate() || cell.isTime())
+            if (cell.value().isNumber() || cell.isDate() || cell.isTime()) {
                 alignment = Style::Right;
-            else
+            } else {
                 alignment = Style::Left;
+            }
         }
-        if (alignment == Style::Left)
+        if (alignment == Style::Left) {
             indent = cell.style().indentation();
+        }
         long_max = indent + size.width()
                    + style.leftBorderPen().width() + style.rightBorderPen().width();
         // if this cell has others merged into it, we'll subtract the width of those columns
@@ -538,25 +548,28 @@ double AdjustColumnRowManipulator::adjustColumnHelper(const Cell& cell)
     }
     // add 4 because long_max is the length of the text
     // but column has borders
-    if (long_max == 0.0)
+    if (long_max == 0.0) {
         return -1.0;
-    else
+    } else {
         return long_max + 4.0;
+    }
 }
 
-double AdjustColumnRowManipulator::adjustRowHelper(const Cell& cell)
+double AdjustColumnRowManipulator::adjustRowHelper(const Cell &cell)
 {
     double long_max = 0.0;
     const Style style = cell.effectiveStyle();
     const QSizeF size = textSize(cell.displayText(), style);
-    if (size.height() > long_max)
+    if (size.height() > long_max) {
         long_max = size.height() + style.topBorderPen().width() + style.bottomBorderPen().width();
+    }
     //  add 1 because long_max is the height of the text
     //  but row has borders
-    if (long_max == 0.0)
+    if (long_max == 0.0) {
         return -1.0;
-    else
+    } else {
         return long_max + 1.0;
+    }
 }
 
 KUndo2MagicString AdjustColumnRowManipulator::name() const
@@ -575,9 +588,9 @@ KUndo2MagicString AdjustColumnRowManipulator::name() const
 ****************************************************************************/
 
 InsertDeleteColumnManipulator::InsertDeleteColumnManipulator(KUndo2Command *parent)
-        : AbstractRegionCommand(parent)
-        , m_mode(Insert)
-        , m_template(0)
+    : AbstractRegionCommand(parent)
+    , m_mode(Insert)
+    , m_template(0)
 {
     setText(kundo2_i18n("Insert Columns"));
 }
@@ -597,13 +610,14 @@ void InsertDeleteColumnManipulator::setReverse(bool reverse)
 {
     m_reverse = reverse;
     m_mode = reverse ? Delete : Insert;
-    if (!m_reverse)
+    if (!m_reverse) {
         setText(kundo2_i18n("Insert Columns"));
-    else
+    } else {
         setText(kundo2_i18n("Remove Columns"));
+    }
 }
 
-bool InsertDeleteColumnManipulator::process(Element* element)
+bool InsertDeleteColumnManipulator::process(Element *element)
 {
     const QRect range = element->rect();
     const int pos = range.left();
@@ -698,9 +712,9 @@ bool InsertDeleteColumnManipulator::postProcessing()
 ****************************************************************************/
 
 InsertDeleteRowManipulator::InsertDeleteRowManipulator(KUndo2Command *parent)
-        : AbstractRegionCommand(parent)
-        , m_mode(Insert)
-        , m_template(0)
+    : AbstractRegionCommand(parent)
+    , m_mode(Insert)
+    , m_template(0)
 {
     setText(kundo2_i18n("Insert Rows"));
 }
@@ -720,13 +734,14 @@ void InsertDeleteRowManipulator::setReverse(bool reverse)
 {
     m_reverse = reverse;
     m_mode = reverse ? Delete : Insert;
-    if (!m_reverse)
+    if (!m_reverse) {
         setText(kundo2_i18n("Insert Rows"));
-    else
+    } else {
         setText(kundo2_i18n("Remove Rows"));
+    }
 }
 
-bool InsertDeleteRowManipulator::process(Element* element)
+bool InsertDeleteRowManipulator::process(Element *element)
 {
     const QRect range = element->rect();
     const int pos = range.top();

@@ -66,7 +66,7 @@ public:
      *
      * \see tileDataBufferSize()
      */
-    virtual void compressTileData(KisTileData *tileData,quint8 *buffer,
+    virtual void compressTileData(KisTileData *tileData, quint8 *buffer,
                                   qint32 bufferSize, qint32 &bytesWritten) = 0;
 
     /**
@@ -86,15 +86,18 @@ public:
     virtual qint32 tileDataBufferSize(KisTileData *tileData) = 0;
 
 protected:
-    inline qint32 xToCol(KisTiledDataManager *dm, qint32 x) {
+    inline qint32 xToCol(KisTiledDataManager *dm, qint32 x)
+    {
         return dm->xToCol(x);
     }
 
-    inline qint32 yToRow(KisTiledDataManager *dm, qint32 y) {
+    inline qint32 yToRow(KisTiledDataManager *dm, qint32 y)
+    {
         return dm->yToRow(y);
     }
 
-    inline qint32 pixelSize(KisTiledDataManager *dm) {
+    inline qint32 pixelSize(KisTiledDataManager *dm)
+    {
         return dm->pixelSize();
     }
 };

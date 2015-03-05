@@ -29,7 +29,6 @@
 #include <QBuffer>
 #include <QRegExp>
 
-
 #define TEST_BEGIN(publicId,systemId) \
     { \
         QByteArray cstr; \
@@ -41,20 +40,19 @@
             writer.startElement( "r" )
 
 #define TEST_END_QTTEST(expected) \
-            writer.endElement(); \
-            writer.endDocument(); \
-        } \
-        buffer.putChar( '\0' ); /*null-terminate*/ \
-        QString expectedFull = QString::fromLatin1( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" ); \
-        expectedFull += expected; \
-        QString s1 = QString::fromLatin1( cstr ); \
-        QCOMPARE( expectedFull, s1 ); \
+    writer.endElement(); \
+    writer.endDocument(); \
+    } \
+    buffer.putChar( '\0' ); /*null-terminate*/ \
+    QString expectedFull = QString::fromLatin1( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" ); \
+    expectedFull += expected; \
+    QString s1 = QString::fromLatin1( cstr ); \
+    QCOMPARE( expectedFull, s1 ); \
     }
-
 
 void TestKoGenStyles::testLookup()
 {
-    kDebug() ;
+    kDebug();
     KoGenStyles coll;
 
     QMap<QString, QString> map1;
@@ -108,7 +106,7 @@ void TestKoGenStyles::testLookup()
     QCOMPARE(firstName, secondName);   // check that sharing works
     QCOMPARE(first, second);   // check that operator== works :)
 
-    const KoGenStyle* s = coll.style(firstName, "paragraph");   // check insert of existing style
+    const KoGenStyle *s = coll.style(firstName, "paragraph");   // check insert of existing style
     QVERIFY(s != 0);
     QCOMPARE(*s, first);
     s = coll.style("foobarblah", "paragraph");   // check insert of non-existing style
@@ -165,21 +163,20 @@ void TestKoGenStyles::testLookup()
     TEST_BEGIN(0, 0);
     first.writeStyle(&writer, coll, "style:style", firstName, "style:paragraph-properties");
 
-
     TEST_END_QTTEST("<r>\n <style:style style:name=\"" + firstName + "\" style:family=\"paragraph\" "
-        "style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\">\n"
-        "   <child test:foo=\"bar\"/>\n  </style:paragraph-properties>\n  <style:text-properties style:foobar=\"2\">\n"
-        "   <child2 test:foo=\"bar\"/>\n  </style:text-properties>\n"
-        "  <style:map map1key=\"map1value\"/>\n  <style:map map2key1=\"map2value1\" map2key2=\"map2value2\"/>\n"
-        " </style:style>\n</r>\n");
+                    "style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\">\n"
+                    "   <child test:foo=\"bar\"/>\n  </style:paragraph-properties>\n  <style:text-properties style:foobar=\"2\">\n"
+                    "   <child2 test:foo=\"bar\"/>\n  </style:text-properties>\n"
+                    "  <style:map map1key=\"map1value\"/>\n  <style:map map2key1=\"map2value1\" map2key2=\"map2value2\"/>\n"
+                    " </style:style>\n</r>\n");
 
     // XML for third style
     TEST_BEGIN(0, 0);
     third.writeStyle(&writer, coll, "style:style", thirdName, "style:paragraph-properties");
     TEST_END_QTTEST("<r>\n <style:style style:name=\"" + thirdName + "\""
-        " style:parent-style-name=\"" + firstName + "\" style:family=\"paragraph\">\n"
-        "  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n"
-        "  <style:text-properties style:foobar=\"3\"/>\n </style:style>\n</r>\n");
+                    " style:parent-style-name=\"" + firstName + "\" style:family=\"paragraph\">\n"
+                    "  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n"
+                    "  <style:text-properties style:foobar=\"3\"/>\n </style:style>\n</r>\n");
 }
 
 void TestKoGenStyles::testLookupFlags()
@@ -256,7 +253,7 @@ void TestKoGenStyles::testWriteStyle()
 
 void TestKoGenStyles::testDefaultStyle()
 {
-    kDebug() ;
+    kDebug();
     /* Create a default style,
      * and then an auto style with exactly the same attributes
      * -> the insert gives the default style.
@@ -299,7 +296,7 @@ void TestKoGenStyles::testDefaultStyle()
 
 void TestKoGenStyles:: testUserStyles()
 {
-    kDebug() ;
+    kDebug();
     /* Two user styles with exactly the same attributes+properties will not get merged, since
      * they don't have exactly the same attributes after all: the display-name obviously differs :)
      */
@@ -354,7 +351,7 @@ void TestKoGenStyles:: testUserStyles()
 
 void TestKoGenStyles::testStylesDotXml()
 {
-    kDebug() ;
+    kDebug();
     KoGenStyles coll;
 
     // Check that an autostyle-in-style.xml and an autostyle-in-content.xml

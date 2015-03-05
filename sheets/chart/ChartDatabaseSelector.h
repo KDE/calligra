@@ -48,16 +48,17 @@ public:
     KAction *createAction();
 
     /// reimplemented
-    virtual bool showOnShapeCreate() {
+    virtual bool showOnShapeCreate()
+    {
         return true;
     }
 
 protected:
-    virtual void showEvent(QShowEvent* event);
+    virtual void showEvent(QShowEvent *event);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

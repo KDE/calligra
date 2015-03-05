@@ -55,7 +55,7 @@ FormWidget::~FormWidget()
     delete d;
 }
 
-Form* FormWidget::form() const
+Form *FormWidget::form() const
 {
     return d->form;
 }

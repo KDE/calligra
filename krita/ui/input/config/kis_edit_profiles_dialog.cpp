@@ -92,11 +92,11 @@ void KisEditProfilesDialog::renameButtonClicked()
 
 void KisEditProfilesDialog::resetButtonClicked()
 {
-    if(QMessageBox::question(this,
-                             i18nc("@title:window", "Reset All Profiles"),
-                             i18n("You will lose all changes to any input profiles. Do you wish to continue?"),
-                             QMessageBox::Yes | QMessageBox::No,
-                             QMessageBox::Yes) == QMessageBox::Yes) {
+    if (QMessageBox::question(this,
+                              i18nc("@title:window", "Reset All Profiles"),
+                              i18n("You will lose all changes to any input profiles. Do you wish to continue?"),
+                              QMessageBox::Yes | QMessageBox::No,
+                              QMessageBox::Yes) == QMessageBox::Yes) {
         KisInputProfileManager::instance()->resetAll();
     }
 }

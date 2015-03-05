@@ -84,12 +84,12 @@ public:
 };
 
 Conditions::Conditions()
-        : d(new Private)
+    : d(new Private)
 {
 }
 
-Conditions::Conditions(const Conditions& other)
-        : d(other.d)
+Conditions::Conditions(const Conditions &other)
+    : d(other.d)
 {
 }
 
@@ -102,19 +102,20 @@ bool Conditions::isEmpty() const
     return d->conditionList.isEmpty();
 }
 
-Style Conditions::testConditions( const Cell& cell ) const
+Style Conditions::testConditions(const Cell &cell) const
 {
     Conditional condition;
     if (currentCondition(cell, condition)) {
         StyleManager *const styleManager = cell.sheet()->map()->styleManager();
         Style *const style = styleManager->style(condition.styleName);
-        if (style)
+        if (style) {
             return *style;
+        }
     }
     return d->defaultStyle;
 }
 
-bool Conditions::currentCondition(const Cell& cell, Conditional & condition) const
+bool Conditions::currentCondition(const Cell &cell, Conditional &condition) const
 {
     /* for now, the first condition that is true is the one that will be used */
 
@@ -198,13 +199,13 @@ bool Conditions::currentCondition(const Cell& cell, Conditional & condition) con
 
 bool Conditions::isTrueFormula(const Cell &cell, const QString &formula, const QString &baseCellAddress) const
 {
-    Map* const map = cell.sheet()->map();
+    Map *const map = cell.sheet()->map();
     ValueCalc *const calc = map->calc();
     Formula f(cell.sheet(), cell);
     f.setExpression('=' + formula);
     Region r(baseCellAddress, map, cell.sheet());
     if (r.isValid() && r.isSingular()) {
-        QPoint basePoint = static_cast<Region::Point*>(*r.constBegin())->pos();
+        QPoint basePoint = static_cast<Region::Point *>(*r.constBegin())->pos();
         QString newFormula('=');
         const Tokens tokens = f.tokens();
         for (int t = 0; t < tokens.count(); ++t) {
@@ -223,9 +224,9 @@ bool Conditions::isTrueFormula(const Cell &cell, const QString &formula, const Q
                     newFormula.append(token.text());
                     continue;
                 }
-                Region::Element* element = *region.constBegin();
+                Region::Element *element = *region.constBegin();
                 if (element->type() == Region::Element::Point) {
-                    Region::Point* point = static_cast<Region::Point*>(element);
+                    Region::Point *point = static_cast<Region::Point *>(element);
                     QPoint pos = point->pos();
                     if (!point->isRowFixed()) {
                         int delta = pos.y() - basePoint.y();
@@ -237,7 +238,7 @@ bool Conditions::isTrueFormula(const Cell &cell, const QString &formula, const Q
                     }
                     newFormula.append(Region(pos, cell.sheet()).name());
                 } else {
-                    Region::Range* range = static_cast<Region::Range*>(element);
+                    Region::Range *range = static_cast<Region::Range *>(element);
                     QRect r = range->rect();
                     if (!range->isTopFixed()) {
                         int delta = r.top() - basePoint.y();
@@ -272,7 +273,7 @@ QLinkedList<Conditional> Conditions::conditionList() const
     return d->conditionList;
 }
 
-void Conditions::setConditionList(const QLinkedList<Conditional> & list)
+void Conditions::setConditionList(const QLinkedList<Conditional> &list)
 {
     d->conditionList = list;
 }
@@ -290,8 +291,9 @@ void Conditions::setDefaultStyle(const Style &style)
 void Conditions::saveOdfConditions(KoGenStyle &currentCellStyle, ValueConverter *converter) const
 {
     //todo fix me with kspread old format!!!
-    if (d->conditionList.isEmpty())
+    if (d->conditionList.isEmpty()) {
         return;
+    }
     QLinkedList<Conditional>::const_iterator it;
     int i = 0;
     for (it = d->conditionList.begin(); it != d->conditionList.end(); ++it, ++i) {
@@ -300,13 +302,14 @@ void Conditions::saveOdfConditions(KoGenStyle &currentCellStyle, ValueConverter 
         QMap<QString, QString> map;
         map.insert("style:condition", saveOdfConditionValue(condition, converter));
         map.insert("style:apply-style-name", condition.styleName);
-        if (!condition.baseCellAddress.isEmpty())
+        if (!condition.baseCellAddress.isEmpty()) {
             map.insert("style:base-cell-address", condition.baseCellAddress);
+        }
         currentCellStyle.addStyleMap(map);
     }
 }
 
-QString Conditions::saveOdfConditionValue(const Conditional &condition, ValueConverter* converter) const
+QString Conditions::saveOdfConditionValue(const Conditional &condition, ValueConverter *converter) const
 {
     //we can also compare text value.
     //todo adapt it.
@@ -353,7 +356,6 @@ QString Conditions::saveOdfConditionValue(const Conditional &condition, ValueCon
     }
     return value;
 }
-
 
 QDomElement Conditions::saveConditions(QDomDocument &doc, ValueConverter *converter) const
 {
@@ -404,7 +406,7 @@ QDomElement Conditions::saveConditions(QDomDocument &doc, ValueConverter *conver
 }
 
 Conditional Conditions::loadOdfCondition(const QString &conditionValue, const QString &applyStyleName,
-                                         const QString& baseCellAddress, const ValueParser *parser)
+        const QString &baseCellAddress, const ValueParser *parser)
 {
     //kDebug(36003) << "\tcondition:" << conditionValue;
     Conditional newCondition;
@@ -428,11 +430,14 @@ void Conditions::loadOdfConditions(const KoXmlElement &element, const ValueParse
         if (elementItem.tagName() == "map" && elementItem.namespaceURI() == KoXmlNS::style) {
             QString conditionValue = elementItem.attributeNS(KoXmlNS::style, "condition", QString());
             QString applyStyleName;
-            if (elementItem.hasAttributeNS(KoXmlNS::style, "apply-style-name"))
+            if (elementItem.hasAttributeNS(KoXmlNS::style, "apply-style-name")) {
                 applyStyleName = elementItem.attributeNS(KoXmlNS::style, "apply-style-name", QString());
+            }
             if (!applyStyleName.isEmpty() && styleManager) {
                 QString odfStyle = styleManager->openDocumentName(applyStyleName);
-                if (!odfStyle.isEmpty()) applyStyleName = odfStyle;
+                if (!odfStyle.isEmpty()) {
+                    applyStyleName = odfStyle;
+                }
             }
             QString baseCellAddress = elementItem.attributeNS(KoXmlNS::style, "base-cell-address");
             loadOdfCondition(conditionValue, applyStyleName, baseCellAddress, parser);
@@ -468,7 +473,9 @@ void Conditions::loadOdfConditionValue(const QString &styleCondition, Conditiona
         newCondition.cond = Conditional::Different;
     } else if (val.startsWith(QLatin1String("is-true-formula("))) {
         val.remove(0, 16);
-        if (val.endsWith(QLatin1Char(')'))) val.chop(1);
+        if (val.endsWith(QLatin1Char(')'))) {
+            val.chop(1);
+        }
         newCondition.cond = Conditional::IsTrueFormula;
         newCondition.value1 = Value(Odf::decodeFormula(val));
     }
@@ -501,8 +508,8 @@ void Conditions::loadOdfCondition(QString &valExpression, Conditional &newCondit
     }
     //kDebug(36003) << "\tvalue:" << value;
 
-    if (value.length() > 1 && value[0] == '"' && value[value.length()-1] == '"') {
-        newCondition.value1 = Value(value.mid(1, value.length()-2));
+    if (value.length() > 1 && value[0] == '"' && value[value.length() - 1] == '"') {
+        newCondition.value1 = Value(value.mid(1, value.length() - 2));
     } else {
         newCondition.value1 = parser->parse(value);
     }
@@ -520,27 +527,31 @@ void Conditions::loadConditions(const KoXmlElement &element, const ValueParser *
     Conditional newCondition;
 
     KoXmlElement conditionElement;
-    forEachElement(conditionElement, element) {
-        if (!conditionElement.hasAttribute("cond"))
+    forEachElement (conditionElement, element) {
+        if (!conditionElement.hasAttribute("cond")) {
             continue;
+        }
 
         bool ok = true;
         newCondition.cond = (Conditional::Type) conditionElement.attribute("cond").toInt(&ok);
-        if(!ok)
+        if (!ok) {
             continue;
+        }
 
         if (conditionElement.hasAttribute("val1")) {
             newCondition.value1 = parser->parse(conditionElement.attribute("val1"));
 
-            if (conditionElement.hasAttribute("val2"))
+            if (conditionElement.hasAttribute("val2")) {
                 newCondition.value2 = parser->parse(conditionElement.attribute("val2"));
+            }
         }
 
         if (conditionElement.hasAttribute("strval1")) {
             newCondition.value1 = Value(conditionElement.attribute("strval1"));
 
-            if (conditionElement.hasAttribute("strval2"))
+            if (conditionElement.hasAttribute("strval2")) {
                 newCondition.value2 = Value(conditionElement.attribute("strval2"));
+            }
         }
 
         if (conditionElement.hasAttribute("style")) {
@@ -551,25 +562,28 @@ void Conditions::loadConditions(const KoXmlElement &element, const ValueParser *
     }
 }
 
-void Conditions::operator=(const Conditions & other)
+void Conditions::operator=(const Conditions &other)
 {
     d = other.d;
 }
 
-bool Conditions::operator==(const Conditions& other) const
+bool Conditions::operator==(const Conditions &other) const
 {
-    if (d->conditionList.count() != other.d->conditionList.count())
+    if (d->conditionList.count() != other.d->conditionList.count()) {
         return false;
+    }
     QLinkedList<Conditional>::ConstIterator end(d->conditionList.end());
     for (QLinkedList<Conditional>::ConstIterator it(d->conditionList.begin()); it != end; ++it) {
         bool found = false;
         QLinkedList<Conditional>::ConstIterator otherEnd(other.d->conditionList.end());
         for (QLinkedList<Conditional>::ConstIterator otherIt(other.d->conditionList.begin()); otherIt != otherEnd; ++otherIt) {
-            if ((*it) == (*otherIt))
+            if ((*it) == (*otherIt)) {
                 found = true;
+            }
         }
-        if (!found)
+        if (!found) {
             return false;
+        }
     }
     return true;
 }
@@ -577,13 +591,13 @@ bool Conditions::operator==(const Conditions& other) const
 uint Calligra::Sheets::qHash(const Conditions &c)
 {
     uint res = 0;
-    foreach (const Conditional& co, c.conditionList()) {
+    foreach (const Conditional &co, c.conditionList()) {
         res ^= qHash(co);
     }
     return res;
 }
 
-uint Calligra::Sheets::qHash(const Conditional& c)
+uint Calligra::Sheets::qHash(const Conditional &c)
 {
     return qHash(c.value1);
 }

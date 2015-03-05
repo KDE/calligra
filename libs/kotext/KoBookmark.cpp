@@ -84,17 +84,15 @@ bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
 
             // Add inline Rdf to the bookmark.
             if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || element.hasAttribute("id")) {
-                KoTextInlineRdf* inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument*>(d->document), this);
+                KoTextInlineRdf *inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument *>(d->document), this);
                 if (inlineRdf->loadOdf(element)) {
                     setInlineRdf(inlineRdf);
-                }
-                else {
+                } else {
                     delete inlineRdf;
                     inlineRdf = 0;
                 }
             }
-        }
-        else {
+        } else {
             // NOTE: "bookmark-end" is handled in KoTextLoader
             // if we ever come here then something pretty weird is going on...
             return false;
@@ -132,7 +130,7 @@ void KoBookmark::saveOdf(KoShapeSavingContext &context, int position, TagType ta
     // else nothing
 }
 
-QString KoBookmark::createUniqueBookmarkName(const KoBookmarkManager* bmm, QString bookmarkName, bool isEndMarker)
+QString KoBookmark::createUniqueBookmarkName(const KoBookmarkManager *bmm, QString bookmarkName, bool isEndMarker)
 {
     QString ret = bookmarkName;
     int uniqID = 0;
@@ -143,10 +141,11 @@ QString KoBookmark::createUniqueBookmarkName(const KoBookmarkManager* bmm, QStri
         } else {
             if (isEndMarker) {
                 --uniqID;
-                if (!uniqID)
+                if (!uniqID) {
                     ret = bookmarkName;
-                else
+                } else {
                     ret = QString("%1_%2").arg(bookmarkName).arg(uniqID);
+                }
             }
             break;
         }

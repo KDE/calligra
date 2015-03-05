@@ -73,7 +73,7 @@ KarbonPaletteBarWidget::KarbonPaletteBarWidget(Qt::Orientation orientation, QWid
 
     m_documentColors.setName(DocumentColorsName);
 
-    QList<KoResource*> resources = m_palettes.resources();
+    QList<KoResource *> resources = m_palettes.resources();
     if (resources.count()) {
         KConfigGroup paletteGroup = KGlobal::mainComponent().config()->group("PaletteBar");
         QString lastPalette = paletteGroup.readEntry("LastPalette", "SVG Colors");
@@ -81,14 +81,14 @@ KarbonPaletteBarWidget::KarbonPaletteBarWidget(Qt::Orientation orientation, QWid
         if (lastPalette == DocumentColorsName) {
             r = &m_documentColors;
         } else {
-            foreach(KoResource *res, resources) {
+            foreach (KoResource *res, resources) {
                 if (res->name() == lastPalette) {
                     r = res;
                     break;
                 }
             }
         }
-        m_colorBar->setPalette(dynamic_cast<KoColorSet*>(r));
+        m_colorBar->setPalette(dynamic_cast<KoColorSet *>(r));
         updateDocumentColors();
     }
 }
@@ -99,8 +99,9 @@ KarbonPaletteBarWidget::~KarbonPaletteBarWidget()
 
 void KarbonPaletteBarWidget::setOrientation(Qt::Orientation orientation)
 {
-    if (m_colorBar->orientation() == orientation)
+    if (m_colorBar->orientation() == orientation) {
         return;
+    }
 
     m_colorBar->setOrientation(orientation);
     createLayout();
@@ -143,9 +144,10 @@ void KarbonPaletteBarWidget::updateButtons()
 
 void KarbonPaletteBarWidget::selectPalette()
 {
-    QList<KoResource*> resources = m_palettes.resources();
-    if (!resources.count())
+    QList<KoResource *> resources = m_palettes.resources();
+    if (!resources.count()) {
         return;
+    }
 
     int index = 0;
 
@@ -157,7 +159,7 @@ void KarbonPaletteBarWidget::selectPalette()
         action->setChecked(true);
     }
 
-    foreach(KoResource* r, resources) {
+    foreach (KoResource *r, resources) {
         QAction *a = palletteMenu.addAction(r->name());
         if (r == m_colorBar->palette()) {
             a->setCheckable(true);
@@ -166,12 +168,12 @@ void KarbonPaletteBarWidget::selectPalette()
         a->setData(QVariant(index++));
     }
 
-    QAction *selectedAction = palletteMenu.exec(m_choosePalette->mapToGlobal(QPoint(0,0)));
+    QAction *selectedAction = palletteMenu.exec(m_choosePalette->mapToGlobal(QPoint(0, 0)));
     if (selectedAction) {
         int selectedIndex = selectedAction->data().toInt();
         KoColorSet *selectedColorSet = 0;
         if (selectedIndex) {
-            selectedColorSet = dynamic_cast<KoColorSet*>(resources.at(selectedIndex-1));
+            selectedColorSet = dynamic_cast<KoColorSet *>(resources.at(selectedIndex - 1));
         } else {
             selectedColorSet = &m_documentColors;
         }
@@ -192,16 +194,18 @@ uint qHash(const QColor &key)
 
 void KarbonPaletteBarWidget::updateDocumentColors()
 {
-    KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
-    if (!canvas)
+    KoCanvasBase *canvas = KoToolManager::instance()->activeCanvasController()->canvas();
+    if (!canvas) {
         return;
+    }
 
-    if (m_colorBar->palette() != &m_documentColors)
+    if (m_colorBar->palette() != &m_documentColors) {
         return;
+    }
 
     QMap<uint, QColor> colors;
 
-    foreach(KoShape *shape, canvas->shapeManager()->shapes()) {
+    foreach (KoShape *shape, canvas->shapeManager()->shapes()) {
         QSharedPointer<KoShapeBackground> fill = shape->background();
         if (fill) {
             QSharedPointer<KoColorBackground> cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
@@ -211,20 +215,20 @@ void KarbonPaletteBarWidget::updateDocumentColors()
             }
             QSharedPointer<KoGradientBackground> gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
             if (gbg) {
-                foreach(const QGradientStop &stop, gbg->gradient()->stops()) {
-                     colors.insert(qHash(stop.second), stop.second);
+                foreach (const QGradientStop &stop, gbg->gradient()->stops()) {
+                    colors.insert(qHash(stop.second), stop.second);
                 }
             }
         }
         KoShapeStrokeModel *stroke = shape->stroke();
         if (stroke) {
-            KoShapeStroke *lb = dynamic_cast<KoShapeStroke*>(shape->stroke());
+            KoShapeStroke *lb = dynamic_cast<KoShapeStroke *>(shape->stroke());
             if (lb) {
                 if (lb->lineStyle() == Qt::SolidLine) {
                     colors.insert(qHash(lb->color()), lb->color());
                 } else if (lb->lineBrush().gradient()) {
-                    foreach(const QGradientStop &stop, lb->lineBrush().gradient()->stops()) {
-                         colors.insert(qHash(stop.second), stop.second);
+                    foreach (const QGradientStop &stop, lb->lineBrush().gradient()->stops()) {
+                        colors.insert(qHash(stop.second), stop.second);
                     }
                 }
             }
@@ -235,7 +239,7 @@ void KarbonPaletteBarWidget::updateDocumentColors()
     for (int i = 0; i < colorCount; ++i) {
         m_documentColors.remove(m_documentColors.getColor(0));
     }
-    foreach(const QColor &c, colors) {
+    foreach (const QColor &c, colors) {
         KoColorSetEntry e;
         e.color.fromQColor(c);
         m_documentColors.add(e);

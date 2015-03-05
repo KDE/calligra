@@ -26,7 +26,6 @@
 #include <QList>
 #include <QPointer>
 
-
 #include <kurl.h>
 #include <kxmlguiclient.h>
 
@@ -34,7 +33,8 @@
 
 #include <KisMainWindow.h>
 
-namespace KIO {
+namespace KIO
+{
 }
 
 class KisDocument;
@@ -123,7 +123,7 @@ public:
     /**
      * @return the list of main windows.
      */
-    const QList<QPointer<KisMainWindow> >& mainWindows() const;
+    const QList<QPointer<KisMainWindow> > &mainWindows() const;
 
     /**
      * @return the number of shells for the main window
@@ -140,7 +140,7 @@ public Q_SLOTS:
      * This slot loads an existing file and deletes the start up widget.
      * @param url the file to load
      */
-    void openExistingFile(const KUrl& url);
+    void openExistingFile(const KUrl &url);
 
     /**
      * @brief configureShortcuts opens the shortcut configuration dialog.
@@ -157,7 +157,7 @@ protected Q_SLOTS:
      * This slot loads a template and deletes the start up widget.
      * @param url the template to load
      */
-    void openTemplate(const KUrl& url);
+    void openTemplate(const KUrl &url);
 
 private Q_SLOTS:
 
@@ -230,7 +230,6 @@ public:
      */
     QString templateType() const;
 
-
     /**
      * Creates and shows the start up widget.
      * @param parent the KisMainWindow used as parent for the widget.
@@ -244,7 +243,7 @@ protected:
      * Set the template type used. This is used by the start up widget to show
      * the correct templates.
      */
-    void setTemplateType(const QString& _templateType);
+    void setTemplateType(const QString &_templateType);
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()
@@ -277,14 +276,12 @@ protected:
      */
     QGraphicsItem *createCanvasItem(KisDocument *document);
 
-
 private:
 
     Q_DISABLE_COPY(KisPart)
 
     class Private;
     Private *const d;
-
 
 };
 

@@ -45,7 +45,7 @@ using namespace Calligra::Sheets;
 #define CHECK_ARRAY_NOSIZE(x,y) QCOMPARE(TestArray(x,y,10,false),true)
 #define ROUND(x) (roundf(1e15 * x) / 1e15)
 
-bool TestStatisticalFunctions::TestArray(const QString& formula, const QString& _Array, int accuracy, bool checkSize = true)
+bool TestStatisticalFunctions::TestArray(const QString &formula, const QString &_Array, int accuracy, bool checkSize = true)
 {
     // define epsilon
     double epsilon = DBL_EPSILON * pow(10.0, (double)(accuracy));
@@ -75,47 +75,53 @@ bool TestStatisticalFunctions::TestArray(const QString& formula, const QString& 
     return true;
 }
 
-Value TestStatisticalFunctions::TestDouble(const QString& formula, const Value& v2, int accuracy)
+Value TestStatisticalFunctions::TestDouble(const QString &formula, const Value &v2, int accuracy)
 {
     double epsilon = DBL_EPSILON * pow(10.0, (double)(accuracy));
 
     Formula f(m_map->sheet(0)); // bind to test case data set
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
     bool res = fabs(v2.asFloat() - result.asFloat()) < epsilon;
 
-    if (!res)
+    if (!res) {
         kDebug(36002) << "check failed -->" << "Epsilon =" << epsilon << "" << (double)v2.asFloat() << " to" << (double)result.asFloat() << "  diff =" << (double)(v2.asFloat() - result.asFloat());
+    }
 //   else
 //     kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
-    if (res)
+    if (res) {
         return v2;
-    else
+    } else {
         return result;
+    }
 }
 
 // round to get at most 15-digits number
-static Value RoundNumber(const Value& v)
+static Value RoundNumber(const Value &v)
 {
     if (v.isNumber()) {
         double d = numToDouble(v.asFloat());
-        if (fabs(d) < DBL_EPSILON)
+        if (fabs(d) < DBL_EPSILON) {
             d = 0.0;
+        }
         return Value(ROUND(d));
-    } else
+    } else {
         return v;
+    }
 }
 
-Value TestStatisticalFunctions::evaluate(const QString& formula)
+Value TestStatisticalFunctions::evaluate(const QString &formula)
 {
     Formula f(m_map->sheet(0));
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
@@ -132,13 +138,12 @@ void TestStatisticalFunctions::initTestCase()
     FunctionModuleRegistry::instance()->loadFunctionModules();
     m_map = new Map(0 /*no Doc*/);
     m_map->addNewSheet();
-    Sheet* sheet = m_map->sheet(0);
-    CellStorage* storage = sheet->cellStorage();
+    Sheet *sheet = m_map->sheet(0);
+    CellStorage *storage = sheet->cellStorage();
 
     //
     // Test case data set
     //
-
 
     // A19:A29
     storage->setValue(1, 19, Value(1));
@@ -154,7 +159,6 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(1, 29, Value(1024));
     storage->setValue(1, 30, Value(2048));
     storage->setValue(1, 31, Value(4096));
-
 
     // B3:B17
     storage->setValue(2, 3, Value("7"));
@@ -209,7 +213,6 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(3, 56, Value(17));
     storage->setValue(3, 57, Value(19));
 
-
     // D51:D57
     storage->setValue(4, 51, Value(100));
     storage->setValue(4, 52, Value(105));
@@ -239,7 +242,6 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(6, 58, Value(6));
     storage->setValue(6, 59, Value(4));
     storage->setValue(6, 60, Value(7));
-
 
     // G51:G60
     storage->setValue(7, 51, Value(23));
@@ -761,7 +763,6 @@ void TestStatisticalFunctions::testMAX()
     //   B7  |  "Hello"
     //   B8  |
     //   B9  | DIV/0
-
 
     // ODF-tests
     CHECK_EVAL("MAX(2;4;1;-8)", Value(4));             // Negative numbers are smaller than positive numbers.

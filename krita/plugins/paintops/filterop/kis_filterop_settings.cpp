@@ -49,12 +49,12 @@ bool KisFilterOpSettings::paintIncremental()
     return true; // We always paint on the existing data
 }
 
-KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
+KisFilterConfiguration *KisFilterOpSettings::filterConfig() const
 {
     if (hasProperty(FILTER_ID)) {
         KisFilterSP filter = KisFilterRegistry::instance()->get(getString(FILTER_ID));
         if (filter) {
-            KisFilterConfiguration* configuration = filter->factoryConfiguration(0);
+            KisFilterConfiguration *configuration = filter->factoryConfiguration(0);
             configuration->fromXML(getString(FILTER_CONFIGURATION));
             return configuration;
         }
@@ -62,10 +62,10 @@ KisFilterConfiguration* KisFilterOpSettings::filterConfig() const
     return 0;
 }
 
-void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& root) const
+void KisFilterOpSettings::toXML(QDomDocument &doc, QDomElement &root) const
 {
     KisPaintOpSettings::toXML(doc, root);
-    KisFilterConfiguration* configuration = filterConfig();
+    KisFilterConfiguration *configuration = filterConfig();
     if (configuration) {
         QDomElement e = doc.createElement("filterconfig");
         configuration->toXML(doc, e);
@@ -74,14 +74,14 @@ void KisFilterOpSettings::toXML(QDomDocument& doc, QDomElement& root) const
     delete configuration;
 }
 
-void KisFilterOpSettings::fromXML(const QDomElement& e)
+void KisFilterOpSettings::fromXML(const QDomElement &e)
 {
     KisPaintOpSettings::fromXML(e);
     QDomElement element = e.firstChildElement("filterconfig");
     if (hasProperty(FILTER_ID)) {
         KisFilterSP filter = KisFilterRegistry::instance()->get(getString(FILTER_ID));
         if (filter) {
-            KisFilterConfiguration* configuration = filter->factoryConfiguration(0);
+            KisFilterConfiguration *configuration = filter->factoryConfiguration(0);
             configuration->fromXML(element);
             setProperty(FILTER_CONFIGURATION, configuration->toXML());
             delete configuration;

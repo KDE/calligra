@@ -39,9 +39,7 @@
 #define erf(x) boost::math::erf(x)
 #endif
 
-
-struct KisGaussCircleMaskGenerator::Private
-{
+struct KisGaussCircleMaskGenerator::Private {
     Private(bool enableAntialiasing)
         : fadeMaker(*this, enableAntialiasing)
     {
@@ -60,9 +58,12 @@ KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal r
 {
     d->ycoef = 1.0 / KisMaskGenerator::d->ratio;
     d->fade = 1.0 - (fh + fv) / 2.0;
-    if (d->fade == 0.0) d->fade = 1e-6;
-    else if (d->fade == 1.0) d->fade = 1.0 - 1e-6; // would become undefined for fade == 0 or 1
-    d->center = (2.5 * (6761.0*d->fade-10000.0))/(M_SQRT_2*6761.0*d->fade);
+    if (d->fade == 0.0) {
+        d->fade = 1e-6;
+    } else if (d->fade == 1.0) {
+        d->fade = 1.0 - 1e-6;    // would become undefined for fade == 0 or 1
+    }
+    d->center = (2.5 * (6761.0 * d->fade - 10000.0)) / (M_SQRT_2 * 6761.0 * d->fade);
     d->alphafactor = 255.0 / (2.0 * erf(d->center));
 }
 

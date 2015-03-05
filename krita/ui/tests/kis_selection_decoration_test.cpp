@@ -24,7 +24,6 @@
 #include "commands/kis_selection_commands.h"
 #include "kis_selection.h"
 
-
 void KisSelectionDecorationTest::testConcurrentSelectionFetches()
 {
     KisImageSP image = utils::createImage(0, QSize(3000, 3000));
@@ -35,7 +34,6 @@ void KisSelectionDecorationTest::testConcurrentSelectionFetches()
                                            KisProcessingApplicator::SUPPORTS_WRAPAROUND_MODE,
                                            KisImageSignalVector() << ModifiedSignal,
                                            kundo2_noi18n("test stroke"));
-
 
         applicator.applyCommand(new KisSetEmptyGlobalSelectionCommand(image));
         applicator.applyCommand(new KisDeselectGlobalSelectionCommand(image));

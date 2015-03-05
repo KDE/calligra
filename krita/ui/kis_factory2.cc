@@ -38,9 +38,8 @@
 
 #include "KisPart.h"
 
-
-KAboutData* KisFactory::s_aboutData = 0;
-KComponentData* KisFactory::s_componentData = 0;
+KAboutData *KisFactory::s_aboutData = 0;
+KComponentData *KisFactory::s_componentData = 0;
 
 KisFactory::KisFactory()
 {
@@ -55,8 +54,7 @@ KisFactory::~KisFactory()
     s_componentData = 0;
 }
 
-
-KAboutData* KisFactory::aboutData()
+KAboutData *KisFactory::aboutData()
 {
     if (!s_aboutData) {
         s_aboutData = newKritaAboutData();

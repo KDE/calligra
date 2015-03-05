@@ -30,20 +30,22 @@
 #include "frames/KWFrameSet.h"
 
 KWFrameDialog::KWFrameDialog(const QList<KoShape *> &shapes, KWDocument *document, KWCanvas *canvas)
-        : KPageDialog(canvas)
-        , m_frameConnectSelector(0)
-        , m_canvas(canvas)
+    : KPageDialog(canvas)
+    , m_frameConnectSelector(0)
+    , m_canvas(canvas)
 {
     m_state = new FrameConfigSharedState(document);
     setFaceType(Tabbed);
 
     m_anchoringProperties = new KWAnchoringProperties(m_state);
-    if (m_anchoringProperties->open(shapes))
+    if (m_anchoringProperties->open(shapes)) {
         addPage(m_anchoringProperties, i18n("Smart Positioning"));
+    }
 
     m_runAroundProperties = new KWRunAroundProperties(m_state);
-    if (m_runAroundProperties->open(shapes))
+    if (m_runAroundProperties->open(shapes)) {
         addPage(m_runAroundProperties, i18n("Text Run Around"));
+    }
 
     if (shapes.count() == 1) {
         m_frameConnectSelector = new KWFrameConnectSelector(m_state);
@@ -68,8 +70,9 @@ KWFrameDialog::~KWFrameDialog()
 
 void KWFrameDialog::okClicked()
 {
-    if (m_frameConnectSelector)
+    if (m_frameConnectSelector) {
         m_frameConnectSelector->save();
+    }
 
     // create the master command
     class MasterCommand : public KUndo2Command
@@ -82,7 +85,8 @@ void KWFrameDialog::okClicked()
             , m_canvas(canvas)
         {}
 
-        void redo() {
+        void redo()
+        {
             if (m_first) {
                 m_first = false;
                 KUndo2Command::redo();

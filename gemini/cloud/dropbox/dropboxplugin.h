@@ -11,8 +11,8 @@ class DropboxPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
 public:
-    virtual void registerTypes(const char* uri);
-    virtual void initializeEngine(QDeclarativeEngine* engine, const char* uri);
+    virtual void registerTypes(const char *uri);
+    virtual void initializeEngine(QDeclarativeEngine *engine, const char *uri);
 };
 
 Q_EXPORT_PLUGIN2(calligrageminidropboxplugin, DropboxPlugin)

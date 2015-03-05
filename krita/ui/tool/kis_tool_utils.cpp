@@ -21,59 +21,61 @@
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 
-namespace KisToolUtils {
+namespace KisToolUtils
+{
 
-    bool pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color)
-    {
-        KIS_ASSERT(dev);
-        KoColor pickedColor;
-        dev->pixel(pos.x(), pos.y(), &pickedColor);
-        pickedColor.convertTo(dev->compositionSourceColorSpace());
+bool pick(KisPaintDeviceSP dev, const QPoint &pos, KoColor *color)
+{
+    KIS_ASSERT(dev);
+    KoColor pickedColor;
+    dev->pixel(pos.x(), pos.y(), &pickedColor);
+    pickedColor.convertTo(dev->compositionSourceColorSpace());
 
-        bool validColorPicked =
-            pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8;
+    bool validColorPicked =
+        pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8;
 
-        if (validColorPicked) {
-            pickedColor.setOpacity(OPACITY_OPAQUE_U8);
-            *color = pickedColor;
-        }
-
-        return validColorPicked;
+    if (validColorPicked) {
+        pickedColor.setOpacity(OPACITY_OPAQUE_U8);
+        *color = pickedColor;
     }
 
-    KisNodeSP findNode(KisNodeSP node, const QPoint &point, bool wholeGroup, bool editableOnly)
-    {
-        KisNodeSP foundNode = 0;
-        while (node) {
-            KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+    return validColorPicked;
+}
 
-            if (!layer || !layer->isEditable()) {
-                node = node->prevSibling();
-                continue;
-            }
+KisNodeSP findNode(KisNodeSP node, const QPoint &point, bool wholeGroup, bool editableOnly)
+{
+    KisNodeSP foundNode = 0;
+    while (node) {
+        KisLayerSP layer = dynamic_cast<KisLayer *>(node.data());
 
-            KoColor color(layer->projection()->colorSpace());
-            layer->projection()->pixel(point.x(), point.y(), &color);
-
-            if(color.opacityU8() != OPACITY_TRANSPARENT_U8) {
-                if (layer->inherits("KisGroupLayer") && (!editableOnly || layer->isEditable())) {
-                    // if this is a group and the pixel is transparent,
-                    // don't even enter it
-
-                    foundNode = findNode(node->lastChild(), point, wholeGroup, editableOnly);
-                }
-                else {
-                    foundNode = !wholeGroup ? node : node->parent();
-                }
-
-            }
-
-            if (foundNode) break;
-
+        if (!layer || !layer->isEditable()) {
             node = node->prevSibling();
+            continue;
         }
 
-        return foundNode;
+        KoColor color(layer->projection()->colorSpace());
+        layer->projection()->pixel(point.x(), point.y(), &color);
+
+        if (color.opacityU8() != OPACITY_TRANSPARENT_U8) {
+            if (layer->inherits("KisGroupLayer") && (!editableOnly || layer->isEditable())) {
+                // if this is a group and the pixel is transparent,
+                // don't even enter it
+
+                foundNode = findNode(node->lastChild(), point, wholeGroup, editableOnly);
+            } else {
+                foundNode = !wholeGroup ? node : node->parent();
+            }
+
+        }
+
+        if (foundNode) {
+            break;
+        }
+
+        node = node->prevSibling();
     }
+
+    return foundNode;
+}
 
 }

@@ -33,9 +33,9 @@ class ReadWriteTableModel::Private
 public:
 };
 
-ReadWriteTableModel::ReadWriteTableModel(Sheet* sheet, int columns, int rows)
-        : ReadOnlyTableModel(sheet, columns, rows)
-        , d(new Private)
+ReadWriteTableModel::ReadWriteTableModel(Sheet *sheet, int columns, int rows)
+    : ReadOnlyTableModel(sheet, columns, rows)
+    , d(new Private)
 {
 }
 
@@ -44,7 +44,7 @@ ReadWriteTableModel::~ReadWriteTableModel()
     delete d;
 }
 
-Qt::ItemFlags ReadWriteTableModel::flags(const QModelIndex& index) const
+Qt::ItemFlags ReadWriteTableModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid() || !hasIndex(index.row(), index.column(), index.parent())) {
         return 0;
@@ -52,7 +52,7 @@ Qt::ItemFlags ReadWriteTableModel::flags(const QModelIndex& index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
 }
 
-bool ReadWriteTableModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool ReadWriteTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
     Cell cell = Cell(sheet(), index.column() + 1, index.row() + 1).masterCell();

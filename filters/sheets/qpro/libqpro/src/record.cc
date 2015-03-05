@@ -31,26 +31,26 @@
 #include <strstream>
 
 void
-Charout(ostream& pOut, unsigned char pChar)
+Charout(ostream &pOut, unsigned char pChar)
 {
     pOut << ((pChar < 32) || (pChar > 126) ? '.' : (char)pChar);
 }
 
 void
-Hexout(ostream& pOut, unsigned char pChar)
+Hexout(ostream &pOut, unsigned char pChar)
 {
     pOut << setiosflags(ios::uppercase)
-    << setfill('0')
-    << setw(2)
-    << hex
-    << (int)pChar
-    << dec;
+         << setfill('0')
+         << setw(2)
+         << hex
+         << (int)pChar
+         << dec;
 }
 
 int
-Hexout(char* pChar, int pLen)
+Hexout(char *pChar, int pLen)
 {
-    std::ostrstream*   lOStr = new std::ostrstream;
+    std::ostrstream   *lOStr = new std::ostrstream;
 
     while (pLen) {
         int lIdx = 0;
@@ -82,7 +82,7 @@ Hexout(char* pChar, int pLen)
 // -----------------------------------------------------------------------
 
 QpRec::QpRec(QpRecType pType)
-        : cType(pType)
+    : cType(pType)
 {
 }
 
@@ -128,12 +128,12 @@ QpRec::type()
 // -----------------------------------------------------------------------
 
 QpRecCell::QpRecCell(QpRecType pType)
-        : QpRec(pType)
-        , cAttributes(0)
-        , cColumn(0)
-        , cPage(0)
-        , cRow(0)
-        , cCellRef(0)
+    : QpRec(pType)
+    , cAttributes(0)
+    , cColumn(0)
+    , cPage(0)
+    , cRow(0)
+    , cCellRef(0)
 {
 }
 
@@ -142,7 +142,6 @@ QpRecCell::~QpRecCell()
     delete [] cCellRef;
     cCellRef = 0;
 }
-
 
 void
 QpRecCell::attributes(QP_INT16 pAttributes)
@@ -181,7 +180,7 @@ QpRecCell::row()
 }
 
 int
-QpRecCell::loadCellInfo(QpIStream& pIn)
+QpRecCell::loadCellInfo(QpIStream &pIn)
 {
     pIn >> cColumn >> cPage >> cRow >> cAttributes;
 
@@ -209,7 +208,7 @@ QpRecCell::loadCellInfo(QpIStream& pIn)
 //
 
 void
-QpRecCell::cellRef(char* pText, QpTableNames& pTable, QP_INT16 /*pNoteBook*/, QP_UINT8 pPage, QP_UINT8 pColumn, QP_INT16 pRow)
+QpRecCell::cellRef(char *pText, QpTableNames &pTable, QP_INT16 /*pNoteBook*/, QP_UINT8 pPage, QP_UINT8 pColumn, QP_INT16 pRow)
 {
 //??? cope with relative/absolute references
 
@@ -221,8 +220,8 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QP_INT16 /*pNoteBook*/, QP
 
     // Sign bit for row is in bit 0x1000, so either set all top bits or lose all top bits
     QP_INT16  lRow = (lRowRelative ? cRow + (pRow & 0x1000 ? pRow | 0xE000 : pRow & 0x1FFF)
-                              : pRow & 0x1FFF
-                             );
+                      : pRow & 0x1FFF
+                     );
 
     // Are we referencing a different page ?
 
@@ -245,7 +244,7 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QP_INT16 /*pNoteBook*/, QP
         lOut << (char)('A' + lCol);
     } else {
         lOut << (char)('A' - 1 + lCol / 26)
-        << (char)('A' + lCol % 26);
+             << (char)('A' + lCol % 26);
     }
 
     if (!lRowRelative) {
@@ -256,7 +255,7 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QP_INT16 /*pNoteBook*/, QP
 }
 
 void
-QpRecCell::cellRef(char* pText, QpTableNames& pTable, QpIStream& pFormulaRef)
+QpRecCell::cellRef(char *pText, QpTableNames &pTable, QpIStream &pFormulaRef)
 {
     QP_INT16 lNoteBook;
     pFormulaRef >> lNoteBook;
@@ -272,11 +271,11 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QpIStream& pFormulaRef)
         QP_INT16 lLastRow;
 
         pFormulaRef >> lFirstColumn
-        >> lFirstPage
-        >> lFirstRow
-        >> lLastColumn
-        >> lLastPage
-        >> lLastRow;
+                    >> lFirstPage
+                    >> lFirstRow
+                    >> lLastColumn
+                    >> lLastPage
+                    >> lLastRow;
 
         QP_DEBUG("BlockRef: NoteBook " << lNoteBook
                  << ", 1st col " << lFirstColumn
@@ -311,8 +310,8 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QpIStream& pFormulaRef)
 
 // -----------------------------------------------------------------------
 
-QpRecBof::QpRecBof(QP_INT16, QpIStream& pIn)
-        : QpRec(QpBof)
+QpRecBof::QpRecBof(QP_INT16, QpIStream &pIn)
+    : QpRec(QpBof)
 {
     pIn >> cFileFormat;
 
@@ -325,8 +324,8 @@ QpRecBof::~QpRecBof()
 
 // -----------------------------------------------------------------------
 
-QpRecEof::QpRecEof(QP_INT16, QpIStream&)
-        : QpRec(QpEof)
+QpRecEof::QpRecEof(QP_INT16, QpIStream &)
+    : QpRec(QpEof)
 {
     QP_DEBUG("EOF" << endl);
 }
@@ -335,11 +334,10 @@ QpRecEof::~QpRecEof()
 {
 }
 
-
 // -----------------------------------------------------------------------
 
-QpRecRecalcMode::QpRecRecalcMode(QP_INT16, QpIStream& pIn)
-        : QpRec(QpRecalcMode)
+QpRecRecalcMode::QpRecRecalcMode(QP_INT16, QpIStream &pIn)
+    : QpRec(QpRecalcMode)
 {
     QP_INT8 lMode;
 
@@ -361,7 +359,6 @@ QpRecRecalcMode::~QpRecRecalcMode()
 {
 }
 
-
 void
 QpRecRecalcMode::mode(MODE pMode)
 {
@@ -374,11 +371,10 @@ QpRecRecalcMode::mode()
     return cMode;
 }
 
-
 // -----------------------------------------------------------------------
 
-QpRecRecalcOrder::QpRecRecalcOrder(QP_INT16, QpIStream& pIn)
-        : QpRec(QpRecalcOrder)
+QpRecRecalcOrder::QpRecRecalcOrder(QP_INT16, QpIStream &pIn)
+    : QpRec(QpRecalcOrder)
 {
     QP_INT8 lOrder;
 
@@ -400,7 +396,6 @@ QpRecRecalcOrder::~QpRecRecalcOrder()
 {
 }
 
-
 void
 QpRecRecalcOrder::order(ORDER pOrder)
 {
@@ -413,11 +408,10 @@ QpRecRecalcOrder::order()
     return cOrder;
 }
 
-
 // -----------------------------------------------------------------------
 
-QpRecEmptyCell::QpRecEmptyCell(QP_INT16, QpIStream& pIn)
-        : QpRecCell(QpEmptyCell)
+QpRecEmptyCell::QpRecEmptyCell(QP_INT16, QpIStream &pIn)
+    : QpRecCell(QpEmptyCell)
 {
     QP_DEBUG("Empty Cell - ");
 
@@ -430,11 +424,10 @@ QpRecEmptyCell::~QpRecEmptyCell()
 {
 }
 
-
 // -----------------------------------------------------------------------
 
-QpRecIntegerCell::QpRecIntegerCell(QP_INT16, QpIStream& pIn)
-        : QpRecCell(QpIntegerCell)
+QpRecIntegerCell::QpRecIntegerCell(QP_INT16, QpIStream &pIn)
+    : QpRecCell(QpIntegerCell)
 {
     QP_DEBUG("Integer Cell - ");
 
@@ -457,8 +450,8 @@ QpRecIntegerCell::integer()
 
 // -----------------------------------------------------------------------
 
-QpRecFloatingPointCell::QpRecFloatingPointCell(QP_INT16, QpIStream& pIn)
-        : QpRecCell(QpFloatingPointCell)
+QpRecFloatingPointCell::QpRecFloatingPointCell(QP_INT16, QpIStream &pIn)
+    : QpRecCell(QpFloatingPointCell)
 {
     QP_DEBUG("Float Cell - ");
 
@@ -481,8 +474,8 @@ QpRecFloatingPointCell::value()
 
 // -----------------------------------------------------------------------
 
-QpRecLabelCell::QpRecLabelCell(QP_INT16 pLen, QpIStream& pIn)
-        : QpRecCell(QpLabelCell)
+QpRecLabelCell::QpRecLabelCell(QP_INT16 pLen, QpIStream &pIn)
+    : QpRecCell(QpLabelCell)
 {
     QP_DEBUG("Label Cell - ");
     int lLabelLen = pLen - loadCellInfo(pIn) - 1;
@@ -508,7 +501,7 @@ QpRecLabelCell::labelPrefix()
     return cLabelPrefix;
 }
 
-const char*
+const char *
 QpRecLabelCell::label()
 {
     return cLabel;
@@ -516,9 +509,9 @@ QpRecLabelCell::label()
 
 // -----------------------------------------------------------------------
 
-QpRecFormulaCell::QpRecFormulaCell(QP_INT16 pLen, QpIStream& pIn)
-        : QpRecCell(QpFormulaCell)
-        , cFormula(0)
+QpRecFormulaCell::QpRecFormulaCell(QP_INT16 pLen, QpIStream &pIn)
+    : QpRecCell(QpFormulaCell)
+    , cFormula(0)
 {
     QP_DEBUG("Formula Cell - ");
 
@@ -554,7 +547,7 @@ QpRecFormulaCell::~QpRecFormulaCell()
     cFormula = 0;
 }
 
-const char*
+const char *
 QpRecFormulaCell::formula()
 {
     return cFormula;
@@ -574,13 +567,13 @@ QpRecFormulaCell::formulaReferences()
 
 // -----------------------------------------------------------------------
 
-QpRecUnknown::QpRecUnknown(QP_INT16 /*pType*/, QP_INT16 pLen, QpIStream& pIn)
-        : QpRec(QpUnknown)
+QpRecUnknown::QpRecUnknown(QP_INT16 /*pType*/, QP_INT16 pLen, QpIStream &pIn)
+    : QpRec(QpUnknown)
 {
     QP_DEBUG("Unknown Type " << pType << ", len " << pLen << endl);
 
     if (pLen > 0) {
-        char* lBuf = new char[pLen];
+        char *lBuf = new char[pLen];
 
         pIn.read(lBuf, pLen);
 
@@ -595,8 +588,8 @@ QpRecUnknown::~QpRecUnknown()
 
 // -----------------------------------------------------------------------
 
-QpRecBop::QpRecBop(QP_INT16, QpIStream& pIn)
-        : QpRec(QpBop)
+QpRecBop::QpRecBop(QP_INT16, QpIStream &pIn)
+    : QpRec(QpBop)
 {
     pIn >> cPageIndex;
     QP_DEBUG("BOP: " << (unsigned)cPageIndex << endl);
@@ -606,18 +599,16 @@ QpRecBop::~QpRecBop()
 {
 }
 
-
 QP_UINT8
 QpRecBop::pageIndex()
 {
     return cPageIndex;
 }
 
-
 // -----------------------------------------------------------------------
 
-QpRecPageName::QpRecPageName(QP_INT16, QpIStream& pIn)
-        : QpRec(QpPageName)
+QpRecPageName::QpRecPageName(QP_INT16, QpIStream &pIn)
+    : QpRec(QpPageName)
 {
     pIn >> cPageName;
 
@@ -629,25 +620,25 @@ QpRecPageName::~QpRecPageName()
     delete [] cPageName;
 }
 
-const char*
+const char *
 QpRecPageName::pageName()
 {
     return cPageName;
 }
 // -----------------------------------------------------------------------
 
-QpRecPassword::QpRecPassword(QP_INT16 pLen, QpIStream& pIn)
-        : QpRec(QpPassword)
+QpRecPassword::QpRecPassword(QP_INT16 pLen, QpIStream &pIn)
+    : QpRec(QpPassword)
 {
     QP_DEBUG("Password len = " << pLen << endl);
 
     cPassword = new QP_UINT8[pLen];
 
-    pIn.read((char*)cPassword, pLen);
+    pIn.read((char *)cPassword, pLen);
 
     QP_DEBUG("Password(Hex) = ");
 #ifdef QP_TRACE
-    Hexout((char*)cPassword, pLen);
+    Hexout((char *)cPassword, pLen);
 #endif
     QP_DEBUG(endl);
 }
@@ -658,7 +649,7 @@ QpRecPassword::~QpRecPassword()
     cPassword = 0;
 }
 
-const QP_UINT8*
+const QP_UINT8 *
 QpRecPassword::password()
 {
     return cPassword;

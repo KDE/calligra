@@ -24,17 +24,16 @@
 class KisSurrogateUndoStore;
 class KUndo2MagicString;
 
-
 class KRITAIMAGE_EXPORT KisSurrogateUndoAdapter : public KisUndoAdapter
 {
 public:
     KisSurrogateUndoAdapter();
     ~KisSurrogateUndoAdapter();
 
-    const KUndo2Command* presentCommand();
+    const KUndo2Command *presentCommand();
     void undoLastCommand();
     void addCommand(KUndo2Command *command);
-    void beginMacro(const KUndo2MagicString& macroName);
+    void beginMacro(const KUndo2MagicString &macroName);
     void endMacro();
 
     void undo();

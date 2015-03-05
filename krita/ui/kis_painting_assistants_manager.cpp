@@ -28,8 +28,7 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 
-
-KisPaintingAssistantsManager::KisPaintingAssistantsManager(KisViewManager* view) : QObject(view)
+KisPaintingAssistantsManager::KisPaintingAssistantsManager(KisViewManager *view) : QObject(view)
     , m_imageView(0)
 {
 
@@ -40,7 +39,7 @@ KisPaintingAssistantsManager::~KisPaintingAssistantsManager()
 
 }
 
-void KisPaintingAssistantsManager::setup(KisActionManager * actionManager)
+void KisPaintingAssistantsManager::setup(KisActionManager *actionManager)
 {
     m_toggleAssistant = new KisAction(i18n("Show Painting Assistants"), this);
     m_toggleAssistant->setCheckable(true);
@@ -65,7 +64,7 @@ void KisPaintingAssistantsManager::setView(QPointer<KisView> imageView)
     }
     m_imageView = imageView;
     if (m_imageView && !decoration()) {
-        KisPaintingAssistantsDecoration* deco = new KisPaintingAssistantsDecoration(m_imageView);
+        KisPaintingAssistantsDecoration *deco = new KisPaintingAssistantsDecoration(m_imageView);
         m_imageView->canvasBase()->addDecoration(deco);
     }
     if (m_imageView && decoration()) {
@@ -89,7 +88,7 @@ void KisPaintingAssistantsManager::updateAction()
     }
 }
 
-KisPaintingAssistantsDecoration* KisPaintingAssistantsManager::decoration()
+KisPaintingAssistantsDecoration *KisPaintingAssistantsManager::decoration()
 {
     if (m_imageView) {
         return m_imageView->canvasBase()->paintingAssistantsDecoration();

@@ -29,21 +29,21 @@
 #include <QDeclarativeContext>
 #include <QApplication>
 
-void GitPlugin::registerTypes(const char* uri)
+void GitPlugin::registerTypes(const char *uri)
 {
     Q_UNUSED(uri)
-    Q_ASSERT( uri == QLatin1String( "Calligra.Gemini.Git" ) );
+    Q_ASSERT(uri == QLatin1String("Calligra.Gemini.Git"));
     qmlRegisterType<GitController>("Calligra.Gemini.Git", 1, 0, "GitController");
     qmlRegisterType<GitLogModel>("Calligra.Gemini.Git", 1, 0, "GitLogModel");
     qmlRegisterType<QAbstractListModel>();
 }
 
-void GitPlugin::initializeEngine(QDeclarativeEngine* engine, const char* uri)
+void GitPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
     Q_UNUSED(uri)
-    Q_ASSERT( uri == QLatin1String( "Calligra.Gemini.Git" ) );
+    Q_ASSERT(uri == QLatin1String("Calligra.Gemini.Git"));
 
-    CheckoutCreator* ac = new CheckoutCreator(qApp);
+    CheckoutCreator *ac = new CheckoutCreator(qApp);
 
     QDeclarativeContext *context = engine->rootContext();
     context->setContextProperty("GitCheckoutCreator", ac);

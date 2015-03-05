@@ -20,7 +20,6 @@
 #include <QDomElement>
 #include <QString>
 
-
 #include "kis_image.h"
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
@@ -42,10 +41,11 @@ struct KisRecordedFilterAction::Private {
 
     }
 
-    const KisFilter* filter;
+    const KisFilter *filter;
     QRect rect;
 
-    KisFilterConfiguration* configuration() {
+    KisFilterConfiguration *configuration()
+    {
         if (!kconfig) {
             kconfig = filter->defaultConfiguration(0);
             if (kconfig) {
@@ -55,28 +55,31 @@ struct KisRecordedFilterAction::Private {
         return kconfig;
     }
 
-    void setConfiguration(KisFilterConfiguration* conf) {
+    void setConfiguration(KisFilterConfiguration *conf)
+    {
         delete kconfig;
         kconfig = conf;
         configstr = conf->toXML();
     }
 
-    void setConfig(const QString& cfg) {
+    void setConfig(const QString &cfg)
+    {
         delete kconfig;
         kconfig = 0;
         configstr = cfg;
     }
 
-    const QString& config() {
+    const QString &config()
+    {
         return configstr;
     }
 
 private:
     QString configstr;
-    KisFilterConfiguration* kconfig;
+    KisFilterConfiguration *kconfig;
 };
 
-KisRecordedFilterAction::KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfiguration* fc) : KisRecordedNodeAction("FilterAction", name, path), d(new Private)
+KisRecordedFilterAction::KisRecordedFilterAction(QString name, const KisNodeQueryPath &path, const KisFilter *filter, const KisFilterConfiguration *fc) : KisRecordedNodeAction("FilterAction", name, path), d(new Private)
 {
     Q_ASSERT(filter);
     d->filter = filter;
@@ -85,7 +88,7 @@ KisRecordedFilterAction::KisRecordedFilterAction(QString name, const KisNodeQuer
     }
 }
 
-KisRecordedFilterAction::KisRecordedFilterAction(const KisRecordedFilterAction& rhs) : KisRecordedNodeAction(rhs), d(new Private(*rhs.d))
+KisRecordedFilterAction::KisRecordedFilterAction(const KisRecordedFilterAction &rhs) : KisRecordedNodeAction(rhs), d(new Private(*rhs.d))
 {
 }
 
@@ -94,11 +97,11 @@ KisRecordedFilterAction::~KisRecordedFilterAction()
     delete d;
 }
 
-void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoUpdater* _updater) const
+void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo &_info, KoUpdater *_updater) const
 {
-    KisFilterConfiguration * kfc = d->configuration();
+    KisFilterConfiguration *kfc = d->configuration();
     KisPaintDeviceSP dev = node->paintDevice();
-    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+    KisLayerSP layer = dynamic_cast<KisLayer *>(node.data());
     QRect r1 = dev->extent();
     KisTransaction transaction(kundo2_i18n("Filter: \"%1\"", d->filter->name()), dev);
 
@@ -114,12 +117,12 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoU
     transaction.commit(_info.undoAdapter());
 }
 
-void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const
+void KisRecordedFilterAction::toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *context) const
 {
     KisRecordedAction::toXML(doc, elt, context);
     elt.setAttribute("filter", d->filter->id());
     // Save configuration
-    KisFilterConfiguration * kfc = d->configuration();
+    KisFilterConfiguration *kfc = d->configuration();
     if (kfc) {
         QDomElement filterConfigElt = doc.createElement("Params");
         kfc->toXML(doc, filterConfigElt);
@@ -127,29 +130,28 @@ void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt, KisReco
     }
 }
 
-KisRecordedAction* KisRecordedFilterAction::clone() const
+KisRecordedAction *KisRecordedFilterAction::clone() const
 {
     return new KisRecordedFilterAction(*this);
 }
 
-const KisFilter* KisRecordedFilterAction::filter() const
+const KisFilter *KisRecordedFilterAction::filter() const
 {
     return d->filter;
 }
 
-const KisFilterConfiguration* KisRecordedFilterAction::filterConfiguration() const
+const KisFilterConfiguration *KisRecordedFilterAction::filterConfiguration() const
 {
     return d->configuration();
 }
 
-void KisRecordedFilterAction::setFilterConfiguration(KisFilterConfiguration* config)
+void KisRecordedFilterAction::setFilterConfiguration(KisFilterConfiguration *config)
 {
     d->setConfiguration(config);
 }
 
-
 KisRecordedFilterActionFactory::KisRecordedFilterActionFactory() :
-        KisRecordedActionFactory("FilterAction")
+    KisRecordedActionFactory("FilterAction")
 {
 }
 
@@ -158,18 +160,18 @@ KisRecordedFilterActionFactory::~KisRecordedFilterActionFactory()
 
 }
 
-KisRecordedAction* KisRecordedFilterActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*)
+KisRecordedAction *KisRecordedFilterActionFactory::fromXML(const QDomElement &elt, const KisRecordedActionLoadContext *)
 {
     QString name = elt.attribute("name");
     KisNodeQueryPath pathnode = KisNodeQueryPath::fromString(elt.attribute("path"));
     const KisFilterSP filter = KisFilterRegistry::instance()->get(elt.attribute("filter"));
     if (filter) {
-        KisFilterConfiguration* config = filter->defaultConfiguration(0);
+        KisFilterConfiguration *config = filter->defaultConfiguration(0);
         QDomElement paramsElt = elt.firstChildElement("Params");
         if (config && !paramsElt.isNull()) {
             config->fromXML(paramsElt);
         }
-        KisRecordedFilterAction* rfa = new KisRecordedFilterAction(name, pathnode, filter, config);
+        KisRecordedFilterAction *rfa = new KisRecordedFilterAction(name, pathnode, filter, config);
         delete config;
         return rfa;
     } else {

@@ -19,13 +19,13 @@
 
 #include "StringElement.h"
 
-StringElement::StringElement( BasicElement* parent ) : TokenElement( parent )
+StringElement::StringElement(BasicElement *parent) : TokenElement(parent)
 {}
 
-QRectF StringElement::renderToPath( const QString& raw, QPainterPath& path ) const
+QRectF StringElement::renderToPath(const QString &raw, QPainterPath &path) const
 {
-    Q_UNUSED( raw )
-    Q_UNUSED( path )
+    Q_UNUSED(raw)
+    Q_UNUSED(path)
     return QRectF();
 }
 

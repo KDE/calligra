@@ -30,9 +30,9 @@ class KoCanvasBase;
 class CACanvasItem : public QDeclarativeItem
 {
     Q_OBJECT
-    Q_PROPERTY (bool editable READ editable WRITE setEditable NOTIFY editableChanged)
+    Q_PROPERTY(bool editable READ editable WRITE setEditable NOTIFY editableChanged)
 public:
-    explicit CACanvasItem(QDeclarativeItem* parent = 0);
+    explicit CACanvasItem(QDeclarativeItem *parent = 0);
     virtual ~CACanvasItem();
 
     KoCanvasBase *koCanvas();
@@ -46,7 +46,7 @@ Q_SIGNALS:
     void editableChanged();
 
 protected:
-    virtual bool eventFilter(QObject* o, QEvent* e);
+    virtual bool eventFilter(QObject *o, QEvent *e);
 
 private Q_SLOTS:
     void resetShouldIgnoreGeometryChange();

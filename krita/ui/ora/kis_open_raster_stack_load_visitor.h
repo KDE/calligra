@@ -25,7 +25,6 @@
 
 class QDomElement;
 
-
 class KisAdjustmentLayer;
 class KisUndoStore;
 class KisGroupLayer;
@@ -35,22 +34,21 @@ class KisPaintLayer;
 class KRITAUI_EXPORT KisOpenRasterStackLoadVisitor
 {
 public:
-    KisOpenRasterStackLoadVisitor(KisUndoStore *undoStore, KisOpenRasterLoadContext* orlc);
+    KisOpenRasterStackLoadVisitor(KisUndoStore *undoStore, KisOpenRasterLoadContext *orlc);
     virtual ~KisOpenRasterStackLoadVisitor();
 
 public:
     void loadImage();
-    void loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL);
-    void loadAdjustmentLayer(const QDomElement& elem, KisAdjustmentLayerSP pL);
-    void loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL);
+    void loadPaintLayer(const QDomElement &elem, KisPaintLayerSP pL);
+    void loadAdjustmentLayer(const QDomElement &elem, KisAdjustmentLayerSP pL);
+    void loadGroupLayer(const QDomElement &elem, KisGroupLayerSP gL);
     KisImageWSP image();
     vKisNodeSP activeNodes();
 private:
-    void loadLayerInfo(const QDomElement& elem, KisLayerSP layer);
+    void loadLayerInfo(const QDomElement &elem, KisLayerSP layer);
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 #endif // KIS_LAYER_VISITOR_H_
 

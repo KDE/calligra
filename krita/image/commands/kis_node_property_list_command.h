@@ -22,7 +22,6 @@
 #include "kis_node_command.h"
 #include "KisDocumentSectionModel.h"
 
-
 /// The command for changing the property list of a layer
 class KRITAIMAGE_EXPORT KisNodePropertyListCommand : public KisNodeCommand
 {

@@ -37,8 +37,8 @@ class KoTextMeta::Private
 {
 public:
     Private(const QTextDocument *doc)
-            : document(doc),
-            posInDocument(0) { }
+        : document(doc),
+          posInDocument(0) { }
     const QTextDocument *document;
     int posInDocument;
     QWeakPointer<KoTextMeta> endBookmark;
@@ -46,8 +46,8 @@ public:
 };
 
 KoTextMeta::KoTextMeta(const QTextDocument *document)
-        : KoInlineObject(false),
-        d(new Private(document))
+    : KoInlineObject(false),
+      d(new Private(document))
 {
     d->endBookmark.clear();
 }
@@ -61,7 +61,7 @@ void KoTextMeta::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter &writer = context.xmlWriter();
 
-    kDebug(30015) << "kom.save() this:" << (void*)this << " d->type:" << d->type;
+    kDebug(30015) << "kom.save() this:" << (void *)this << " d->type:" << d->type;
     if (inlineRdf()) {
         kDebug(30015) << "kom.save() have inline Rdf";
     }
@@ -77,7 +77,7 @@ void KoTextMeta::saveOdf(KoShapeSavingContext &context)
         kDebug(30015) << "adding endelement.";
         writer.endElement();
     }
-    kDebug(30015) << "kom.save() done this:" << (void*)this << " d->type:" << d->type;
+    kDebug(30015) << "kom.save() done this:" << (void *)this << " d->type:" << d->type;
 }
 
 bool KoTextMeta::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -106,7 +106,7 @@ void KoTextMeta::resize(const QTextDocument *document, QTextInlineObject &object
     object.setDescent(0);
 }
 
-void KoTextMeta::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, const QTextInlineObject &, int , const QTextCharFormat &)
+void KoTextMeta::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &, const QTextInlineObject &, int, const QTextCharFormat &)
 {
     // nothing to paint.
 }

@@ -43,13 +43,12 @@ public:
      */
     void hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, double givenangle, const KoColor &color);
 
-
 private:
     void init();
     KoColor m_inkColor;
     int m_counter;
     int m_radius;
-    const KisHatchingPaintOpSettings * m_settings;
+    const KisHatchingPaintOpSettings *m_settings;
     KisPainter m_painter;
 
     /** Thickness in pixels of each hatch line */

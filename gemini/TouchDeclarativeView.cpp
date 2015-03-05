@@ -73,7 +73,7 @@ TouchDeclarativeView::~TouchDeclarativeView()
     m_canvasWidget = 0;
 }
 
-QWidget* TouchDeclarativeView::canvasWidget() const
+QWidget *TouchDeclarativeView::canvasWidget() const
 {
     return m_canvasWidget.data();
 }
@@ -121,13 +121,11 @@ void TouchDeclarativeView::drawBackground(QPainter *painter, const QRectF &rect)
         }
         //m_canvasWidget->renderCanvasGL();
         //m_canvasWidget->renderDecorations(painter);
-    }
-    else {
+    } else {
         QDeclarativeView::drawBackground(painter, rect);
     }
 
 }
-
 
 void TouchDeclarativeView::resizeEvent(QResizeEvent *event)
 {
@@ -138,42 +136,42 @@ void TouchDeclarativeView::resizeEvent(QResizeEvent *event)
     QDeclarativeView::resizeEvent(event);
 }
 
-bool TouchDeclarativeView::event( QEvent* event )
+bool TouchDeclarativeView::event(QEvent *event)
 {
-    switch(static_cast<int>(event->type())) {
-        case QEvent::TabletPress:
-        case QEvent::TabletMove:
-        case QEvent::TabletRelease:
-            break;
-        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent:
-        case ViewModeSwitchEvent::SwitchedToTouchModeEvent: {
-            // If we don't have a canvas widget yet, we don't really have anywhere to send those events
-            // so... let's just not
-            //if (m_canvasWidget.data())
-            {
-                //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
-                //functionality.
-                QList<QGraphicsItem*> items = scene()->items();
-                Q_FOREACH(QGraphicsItem* item, items) {
+    switch (static_cast<int>(event->type())) {
+    case QEvent::TabletPress:
+    case QEvent::TabletMove:
+    case QEvent::TabletRelease:
+        break;
+    case ViewModeSwitchEvent::AboutToSwitchViewModeEvent:
+    case ViewModeSwitchEvent::SwitchedToTouchModeEvent: {
+        // If we don't have a canvas widget yet, we don't really have anywhere to send those events
+        // so... let's just not
+        //if (m_canvasWidget.data())
+        {
+            //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
+            //functionality.
+            QList<QGraphicsItem *> items = scene()->items();
+            Q_FOREACH (QGraphicsItem *item, items) {
 //                    if (item == m_sketchView || qobject_cast<TouchView*>((item))) {
 //                        if (item != m_sketchView)
 //                            m_sketchView = item;
-                        scene()->sendEvent(item, event);
+                scene()->sendEvent(item, event);
 //                        break;
 //                    }
-                }
             }
-            break;
         }
-        default:
-            break;
+        break;
     }
-    return QGraphicsView::event( event );
+    default:
+        break;
+    }
+    return QGraphicsView::event(event);
 }
 
-bool TouchDeclarativeView::eventFilter(QObject* watched, QEvent* e)
+bool TouchDeclarativeView::eventFilter(QObject *watched, QEvent *e)
 {
-    switch(static_cast<int>(e->type())) {
+    switch (static_cast<int>(e->type())) {
 //         case KisTabletEvent::TabletMoveEx:
 //         case KisTabletEvent::TabletPressEx:
 //         case KisTabletEvent::TabletReleaseEx: {
@@ -191,10 +189,9 @@ bool TouchDeclarativeView::eventFilter(QObject* watched, QEvent* e)
 //             }
 //             break;
 //         }
-        default:
-            break;
+    default:
+        break;
     }
-
 
     return QDeclarativeView::eventFilter(watched, e);
 }

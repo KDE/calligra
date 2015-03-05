@@ -36,7 +36,6 @@ StatisticsPreferencesPopup::StatisticsPreferencesPopup(QWidget *parent)
     connect(w->check_flesch, SIGNAL(stateChanged(int)), this, SIGNAL(fleschDisplayChange(int)));
 }
 
-
 QSize StatisticsPreferencesPopup::sizeHint() const
 {
     return layout()->sizeHint();

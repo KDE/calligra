@@ -35,7 +35,8 @@ void PointStorageBenchmark::testInsertionPerformance_loadingLike()
     int cols = 100;
     int rows = 10000;
     QBENCHMARK {
-        for (int r = row; r <= rows; ++r) {
+        for (int r = row; r <= rows; ++r)
+        {
             for (int c = col; c <= cols; c += 1) {
                 storage.insert(c, r, c);
             }
@@ -51,7 +52,8 @@ void PointStorageBenchmark::testInsertionPerformance_singular()
         int row = 1 + rand() % 1000;
         int cols = col + 1;
         int rows = row + 1;
-        for (int r = row; r <= rows; ++r) {
+        for (int r = row; r <= rows; ++r)
+        {
             for (int c = col; c <= cols; c += 1) {
                 storage.insert(c, r, c);
             }
@@ -87,7 +89,7 @@ void PointStorageBenchmark::testLookupPerformance()
             storage.m_data << c;
             storage.m_cols << (c + 1);
         }
-        storage.m_rows << r*maxcol;
+        storage.m_rows << r *maxcol;
     }
 
     //     qDebug() << endl << qPrintable( storage.dump() );
@@ -102,7 +104,8 @@ void PointStorageBenchmark::testLookupPerformance()
         row = 1 + rand() % maxrow;
         cols = col + 1 * (rand() % 10);
         rows = row + rand() % 10;
-        for (int r = row; r <= rows; ++r) {
+        for (int r = row; r <= rows; ++r)
+        {
             for (int c = col; c <= cols; c += 1) {
                 v = storage.lookup(c, r);
             }
@@ -248,7 +251,7 @@ void PointStorageBenchmark::testIterationPerformance()
             storage.m_data << c;
             storage.m_cols << (c + 1);
         }
-        storage.m_rows << r*maxcol;
+        storage.m_rows << r *maxcol;
     }
 
     //     qDebug() << endl << qPrintable( storage.dump() );
@@ -256,7 +259,8 @@ void PointStorageBenchmark::testIterationPerformance()
 
     int v;
     QBENCHMARK {
-        for (int i = 0; i < storage.count(); ++i) {
+        for (int i = 0; i < storage.count(); ++i)
+        {
             v = storage.data(i);
         }
     }

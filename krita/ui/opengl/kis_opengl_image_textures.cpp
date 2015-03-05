@@ -42,7 +42,6 @@
 #define GL_BGRA 0x80E1
 #endif
 
-
 KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMap;
 
 KisOpenGLImageTextures::KisOpenGLImageTextures()
@@ -58,16 +57,20 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
 
     m_conversionFlags = KoColorConversionTransformation::HighQuality;
-    if (cfg.useBlackPointCompensation()) m_conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
-    if (!cfg.allowLCMSOptimization()) m_conversionFlags |= KoColorConversionTransformation::NoOptimization;
+    if (cfg.useBlackPointCompensation()) {
+        m_conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+    }
+    if (!cfg.allowLCMSOptimization()) {
+        m_conversionFlags |= KoColorConversionTransformation::NoOptimization;
+    }
 
     m_useOcio = cfg.useOcio();
 }
 
 KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
-                                               const KoColorProfile *monitorProfile,
-                                               KoColorConversionTransformation::Intent renderingIntent,
-                                               KoColorConversionTransformation::ConversionFlags conversionFlags)
+        const KoColorProfile *monitorProfile,
+        KoColorConversionTransformation::Intent renderingIntent,
+        KoColorConversionTransformation::ConversionFlags conversionFlags)
     : m_image(image)
     , m_monitorProfile(monitorProfile)
     , m_renderingIntent(renderingIntent)
@@ -113,9 +116,9 @@ bool KisOpenGLImageTextures::imageCanShareTextures()
 }
 
 KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP image,
-                                                                  const KoColorProfile *monitorProfile,
-                                                                  KoColorConversionTransformation::Intent renderingIntent,
-                                                                  KoColorConversionTransformation::ConversionFlags conversionFlags)
+        const KoColorProfile *monitorProfile,
+        KoColorConversionTransformation::Intent renderingIntent,
+        KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     KisOpenGL::makeSharedContextCurrent();
 
@@ -142,10 +145,10 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
 QRect KisOpenGLImageTextures::calculateTileRect(int col, int row) const
 {
     return m_image->bounds() &
-            QRect(col * m_texturesInfo.effectiveWidth,
-                  row * m_texturesInfo.effectiveHeight,
-                  m_texturesInfo.effectiveWidth,
-                  m_texturesInfo.effectiveHeight);
+           QRect(col * m_texturesInfo.effectiveWidth,
+                 row * m_texturesInfo.effectiveHeight,
+                 m_texturesInfo.effectiveWidth,
+                 m_texturesInfo.effectiveHeight);
 }
 
 void KisOpenGLImageTextures::createImageTextureTiles()
@@ -175,11 +178,11 @@ void KisOpenGLImageTextures::createImageTextureTiles()
             QRect tileRect = calculateTileRect(col, row);
 
             KisTextureTile *tile = new KisTextureTile(tileRect,
-                                                      &m_texturesInfo,
-                                                      emptyTileData,
-                                                      mode,
-                                                      cfg.useOpenGLTextureBuffer(),
-                                                      cfg.numMipmapLevels());
+                    &m_texturesInfo,
+                    emptyTileData,
+                    mode,
+                    cfg.useOpenGLTextureBuffer(),
+                    cfg.numMipmapLevels());
             m_textureTiles.append(tile);
         }
     }
@@ -187,23 +190,27 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
 void KisOpenGLImageTextures::destroyImageTextureTiles()
 {
-    if(m_textureTiles.isEmpty()) return;
+    if (m_textureTiles.isEmpty()) {
+        return;
+    }
 
     KisOpenGL::makeSharedContextCurrent();
 
-    foreach(KisTextureTile *tile, m_textureTiles) {
+    foreach (KisTextureTile *tile, m_textureTiles) {
         delete tile;
     }
     m_textureTiles.clear();
     m_storedImageBounds = QRect();
 }
 
-KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
+KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect &rect)
 {
     KisOpenGLUpdateInfoSP info = new KisOpenGLUpdateInfo();
 
     QRect updateRect = rect & m_image->bounds();
-    if (updateRect.isEmpty()) return info;
+    if (updateRect.isEmpty()) {
+        return info;
+    }
 
     /**
      * Why the rect is artificial? That's easy!
@@ -255,8 +262,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
                 tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
 
                 info->tileList.append(tileInfo);
-            }
-            else {
+            } else {
                 kWarning() << "Trying to create an empty tileinfo record" << col << row << tileTextureRect << updateRect << m_image->bounds();
             }
         }
@@ -268,15 +274,17 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
 
 void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 {
-    KisOpenGLUpdateInfoSP glInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
-    if(!glInfo) return;
+    KisOpenGLUpdateInfoSP glInfo = dynamic_cast<KisOpenGLUpdateInfo *>(info.data());
+    if (!glInfo) {
+        return;
+    }
 
     KisOpenGL::makeSharedContextCurrent();
 
     KIS_OPENGL_CLEAR_ERROR();
 
     KisTextureTileUpdateInfoSP tileInfo;
-    foreach(tileInfo, glInfo->tileList) {
+    foreach (tileInfo, glInfo->tileList) {
         KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
         KIS_ASSERT_RECOVER_RETURN(tile);
 
@@ -319,7 +327,7 @@ GLuint KisOpenGLImageTextures::checkerTexture() const
 
 void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
 {
-    foreach(KisTextureTile *tile, m_textureTiles) {
+    foreach (KisTextureTile *tile, m_textureTiles) {
         tile->setUseBuffer(useBuffer);
         tile->setNumMipmapLevels(NumMipmapLevels);
     }
@@ -345,7 +353,7 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
     m_channelFlags = channelFlags;
     int selectedChannels = 0;
     const KoColorSpace *projectionCs = m_image->projection()->colorSpace();
-    QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+    QList<KoChannelInfo *> channelInfo = projectionCs->channels();
 
     if (m_channelFlags.size() != channelInfo.size()) {
         m_channelFlags = QBitArray();
@@ -388,7 +396,6 @@ bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
 {
     bool needsFinalRegeneration = m_internalColorManagementActive != value;
 
-
     if (needsFinalRegeneration) {
         m_internalColorManagementActive = value;
         createImageTextureTiles();
@@ -402,7 +409,9 @@ bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
 
 void KisOpenGLImageTextures::updateTextureFormat()
 {
-    if (!m_image) return;
+    if (!m_image) {
+        return;
+    }
 
     m_texturesInfo.internalFormat = GL_RGBA8;
     m_texturesInfo.type = GL_UNSIGNED_BYTE;
@@ -423,8 +432,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
             if (GLEW_ARB_texture_float) {
                 m_texturesInfo.internalFormat = GL_RGBA16F_ARB;
                 dbgUI << "Using ARB half";
-            }
-            else if (GLEW_ATI_texture_float){
+            } else if (GLEW_ATI_texture_float) {
                 m_texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
                 dbgUI << "Using ATI half";
             }
@@ -444,8 +452,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 dbgUI << "Pixel type float";
             }
             m_texturesInfo.format = GL_RGBA;
-        }
-        else if (colorDepthId == Float32BitsColorDepthID) {
+        } else if (colorDepthId == Float32BitsColorDepthID) {
             if (GLEW_ARB_texture_float) {
                 m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
@@ -457,16 +464,14 @@ void KisOpenGLImageTextures::updateTextureFormat()
             m_texturesInfo.type = GL_FLOAT;
             m_texturesInfo.format = GL_RGBA;
             destinationColorDepthId = Float32BitsColorDepthID;
-        }
-        else if (colorDepthId == Integer16BitsColorDepthID) {
+        } else if (colorDepthId == Integer16BitsColorDepthID) {
             m_texturesInfo.internalFormat = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
             m_texturesInfo.format = GL_BGRA;
             destinationColorDepthId = Integer16BitsColorDepthID;
             dbgUI << "Using 16 bits rgba";
         }
-    }
-    else {
+    } else {
         // We will convert the colorspace to 16 bits rgba, instead of 8 bits
         if (colorDepthId == Integer16BitsColorDepthID) {
             m_texturesInfo.internalFormat = GL_RGBA16;
@@ -479,19 +484,19 @@ void KisOpenGLImageTextures::updateTextureFormat()
 #endif
 
     if (!m_internalColorManagementActive &&
-        colorModelId != destinationColorModelId) {
+            colorModelId != destinationColorModelId) {
 
         QMessageBox::critical(0,
                               i18nc("@title:window", "Internal color management was activated"),
                               i18n("It was requested to disable final color "
                                    "conversion for a image that has non-RGB "
                                    "color space. This is a bug in Krita. "
-                                      "Please report us how you managed to get "
-                                      "this message.\n\n"
-                                      "Right now the internal color conversion "
-                                      "into the monitor profile will be activated. "
-                                      "Please take it into account if you use OCIO "
-                                      "or activated it for some other reason."));
+                                   "Please report us how you managed to get "
+                                   "this message.\n\n"
+                                   "Right now the internal color conversion "
+                                   "into the monitor profile will be activated. "
+                                   "Please take it into account if you use OCIO "
+                                   "or activated it for some other reason."));
 
         qWarning() << "WARNING: Internal color management was forcely enabled";
         qWarning() << ppVar(m_image->colorSpace());
@@ -513,8 +518,8 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
     m_tilesDestinationColorSpace =
         KoColorSpaceRegistry::instance()->colorSpace(destinationColorModelId.id(),
-                                                     destinationColorDepthId.id(),
-                                                     profile);
+                destinationColorDepthId.id(),
+                profile);
 }
 
 #include "kis_opengl_image_textures.moc"

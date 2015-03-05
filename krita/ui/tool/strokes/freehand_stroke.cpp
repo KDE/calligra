@@ -23,26 +23,24 @@
 #include "kis_paintop_settings.h"
 #include "kis_painter.h"
 
-
-
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
-                                               const QString &indirectPaintingCompositeOp,
-                                               KisResourcesSnapshotSP resources,
-                                               PainterInfo *painterInfo,
-                                               const KUndo2MagicString &name)
+        const QString &indirectPaintingCompositeOp,
+        KisResourcesSnapshotSP resources,
+        PainterInfo *painterInfo,
+        const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
-                                    resources, painterInfo,true)
+                                    resources, painterInfo, true)
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
-                                               const QString &indirectPaintingCompositeOp,
-                                               KisResourcesSnapshotSP resources,
-                                               QVector<PainterInfo*> painterInfos,
-                                               const KUndo2MagicString &name)
+        const QString &indirectPaintingCompositeOp,
+        KisResourcesSnapshotSP resources,
+        QVector<PainterInfo *> painterInfos,
+        const KUndo2MagicString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
-                                    resources, painterInfos,true)
+                                    resources, painterInfos, true)
 {
     init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
@@ -58,10 +56,10 @@ void FreehandStrokeStrategy::init(bool needsIndirectPainting,
 
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    Data *d = dynamic_cast<Data*>(data);
+    Data *d = dynamic_cast<Data *>(data);
     PainterInfo *info = d->painterInfo;
 
-    switch(d->type) {
+    switch (d->type) {
     case Data::POINT:
         info->painter->paintAt(d->pi1, info->dragDistance);
         break;

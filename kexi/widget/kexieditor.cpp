@@ -46,8 +46,9 @@ copy and paste to the editor. */
 class KexiEditorSharedActionConnector : public KexiSharedActionConnector
 {
 public:
-    KexiEditorSharedActionConnector(KexiActionProxy* proxy, QObject* obj)
-            : KexiSharedActionConnector(proxy, obj) {
+    KexiEditorSharedActionConnector(KexiActionProxy *proxy, QObject *obj)
+        : KexiSharedActionConnector(proxy, obj)
+    {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
         plugSharedAction("edit_cut", SLOT(cut()));
         plugSharedAction("edit_copy", SLOT(copy()));
@@ -59,7 +60,7 @@ public:
 #else
         QList<QByteArray> actions;
         actions << "edit_cut" << "edit_copy" << "edit_paste" << "edit_clear"
-            << "edit_undo" << "edit_redo" << "edit_select_all";
+                << "edit_undo" << "edit_redo" << "edit_select_all";
 #ifdef __GNUC__
 #warning TODO plugSharedActionsToExternalGUI(actions, dynamic_cast<KXMLGUIClient*>(obj));
 #else
@@ -83,8 +84,8 @@ public:
 };
 
 KexiEditor::KexiEditor(QWidget *parent)
-        : KexiView(parent)
-        , d(new Private())
+    : KexiView(parent)
+    , d(new Private())
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
     d->view = new KTextEdit("", QString(), this);
@@ -101,20 +102,22 @@ KexiEditor::KexiEditor(QWidget *parent)
     layout->setContentsMargins(2, 2, 2, 2);
 
     KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
-    if (!editor)
+    if (!editor) {
         return;
+    }
 //! @todo error handling!
 
     d->doc = editor->createDocument(fr);
-    if (!d->doc)
+    if (!d->doc) {
         return;
+    }
     d->view = d->doc->createView(fr);
     // suppresing default saving mechanism of KTextEditor
     d->view->action("file_save")->setEnabled(false);
     // set word wrap by default
     KTextEditor::ConfigInterface *configIface
         =
-qobject_cast<KTextEditor::ConfigInterface*>( d->view );
+            qobject_cast<KTextEditor::ConfigInterface *>(d->view);
     configIface->setConfigValue("dynamic-word-wrap", true);
 
 #ifdef __GNUC__
@@ -164,8 +167,9 @@ QString KexiEditor::text()
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
     return d->view->text();
 #else
-    if (!d->doc)
+    if (!d->doc) {
         return QString();
+    }
     return d->doc->text();
 #endif
 }
@@ -177,30 +181,34 @@ void KexiEditor::setText(const QString &text)
     d->view->setText(text);
     setDirty(was_dirty);
 #else
-    if (!d->doc)
+    if (!d->doc) {
         return;
+    }
     const bool was_dirty = isDirty();
     d->doc->setText(text);
     setDirty(was_dirty);
 #endif
 }
 
-void KexiEditor::setHighlightMode(const QString& highlightmodename)
+void KexiEditor::setHighlightMode(const QString &highlightmodename)
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
     QString n = highlightmodename;
-    if (n == "javascript" || n == "qtscript")
+    if (n == "javascript" || n == "qtscript") {
         n = "JavaScript";
-    else if (n.size() > 0)
+    } else if (n.size() > 0) {
         n = n[0].toLower() + n.mid(1);
-    if (!d->doc->setMode(n))
-        d->doc->setMode(QString()); // don't highlight
-    if (!d->doc->setHighlightingMode(n))
-        d->doc->setHighlightingMode(QString()); //hl->setHlMode(0); // 0=None, don't highlight anything.
+    }
+    if (!d->doc->setMode(n)) {
+        d->doc->setMode(QString());    // don't highlight
+    }
+    if (!d->doc->setHighlightingMode(n)) {
+        d->doc->setHighlightingMode(QString());    //hl->setHlMode(0); // 0=None, don't highlight anything.
+    }
 
-    QMetaObject::invokeMethod(d->view, "modeChanged", Q_ARG(KTextEditor::Document*, d->doc));
-    QMetaObject::invokeMethod(d->view, "highlightingModeChanged", Q_ARG(KTextEditor::Document*, d->doc));
+    QMetaObject::invokeMethod(d->view, "modeChanged", Q_ARG(KTextEditor::Document *, d->doc));
+    QMetaObject::invokeMethod(d->view, "highlightingModeChanged", Q_ARG(KTextEditor::Document *, d->doc));
 
 #endif
 }
@@ -210,8 +218,9 @@ void KexiEditor::slotConfigureEditor()
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 //! @todo show configuration...
 #else
-    if (!d->doc)
+    if (!d->doc) {
         return;
+    }
     d->doc->editor()->configDialog(this);
 //! @todo use d->doc->editor()->writeConfig() or KTextEditor::ConfigInterface to save changes
 #endif
@@ -232,8 +241,9 @@ void KexiEditor::jump(int character)
     }
     d->view->setCursorPosition(row, col);
 #else
-    if (!d->doc)
+    if (!d->doc) {
         return;
+    }
     const int numRows = d->doc->lines();
     int row = 0, col = 0;
     for (int ch = 0; row < numRows; row++) {
@@ -275,12 +285,12 @@ void KexiEditor::slotTextChanged(KTextEditor::Document *)
     emit textChanged();
 }
 
-QMenu* KexiEditor::defaultContextMenu()
+QMenu *KexiEditor::defaultContextMenu()
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
     return d->view->createStandardContextMenu();
 #else
-    QMenu* menu = d->view->defaultContextMenu();
+    QMenu *menu = d->view->defaultContextMenu();
     menu->addSeparator();
     menu->addAction(d->view->action("edit_find"));
     menu->addAction(d->view->action("edit_find_next"));

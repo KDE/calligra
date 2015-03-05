@@ -43,16 +43,15 @@ class GotoDialog : public KDialog
 {
     Q_OBJECT
 public:
-    GotoDialog(QWidget* parent, Selection* selection);
+    GotoDialog(QWidget *parent, Selection *selection);
 
 public Q_SLOTS:
     void slotOk();
     void textChanged(const QString &_text);
 
-
 protected:
-    Selection* m_selection;
-    KComboBox* m_nameCell;
+    Selection *m_selection;
+    KComboBox *m_nameCell;
 };
 
 } // namespace Sheets

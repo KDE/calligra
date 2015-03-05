@@ -60,7 +60,7 @@ public:
      * @param description a localized string describing the annotation
      * @param data a binary blob containing the annotation data
      */
-    KisAnnotation(const QString & type, const QString & description, const QByteArray & data)
+    KisAnnotation(const QString &type, const QString &description, const QByteArray &data)
         : m_type(type),
           m_description(description),
           m_annotation(data) {}
@@ -73,7 +73,8 @@ public:
      * @return a non-localized string identifiying the type of the
      * annotation
      */
-    const QString & type() const {
+    const QString &type() const
+    {
         return m_type;
     }
 
@@ -83,7 +84,8 @@ public:
      * @return a localized string describing the type of the
      * annotations for user interface purposes.
      */
-    const QString & description() const {
+    const QString &description() const
+    {
         return m_description;
     }
 
@@ -91,14 +93,16 @@ public:
      * gets a binary blob representation of this annotation
      * @return a binary blob representation of this annotation
      */
-    const QByteArray & annotation() const {
+    const QByteArray &annotation() const
+    {
         return m_annotation;
     }
 
     /**
      * @brief displayText: override this to return an interpreted version of the annotation
      */
-    virtual QString displayText() const {
+    virtual QString displayText() const
+    {
         return QString::fromUtf8(m_annotation);
     }
 

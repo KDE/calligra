@@ -49,13 +49,13 @@ class FlattenDlg : public KDialog
     Q_OBJECT
 
 public:
-    explicit FlattenDlg(QWidget* parent = 0L, const char* name = 0L);
+    explicit FlattenDlg(QWidget *parent = 0L, const char *name = 0L);
 
     qreal flatness() const;
     void setFlatness(qreal value);
 
 private:
-    KDoubleNumInput* m_flatness;
+    KDoubleNumInput *m_flatness;
 };
 
 #endif

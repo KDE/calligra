@@ -51,9 +51,8 @@ public:
      * where to apply the filter/generator.
      */
     KisSelectionBasedLayer(KisImageWSP image, const QString &name, KisSelectionSP selection, KisFilterConfiguration *filterConfig, bool useGeneratorRegistry = false);
-    KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs);
+    KisSelectionBasedLayer(const KisSelectionBasedLayer &rhs);
     virtual ~KisSelectionBasedLayer();
-
 
     /**
      * tells whether the @node can be a child of this layer
@@ -70,7 +69,7 @@ public:
     bool needProjection() const;
     void copyOriginalToProjection(const KisPaintDeviceSP original,
                                   KisPaintDeviceSP projection,
-                                  const QRect& rect) const;
+                                  const QRect &rect) const;
 
     // From KisNode
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
@@ -91,7 +90,7 @@ public:
      * as our extent() function doesn't fit for this
      */
     void setDirty();
-    void setDirty(const QRect & rect);
+    void setDirty(const QRect &rect);
 
 public:
 
@@ -171,13 +170,14 @@ public Q_SLOTS:
      * KisIndirectPaintingSupport
      * @return this AdjustmentLayer
      */
-    KisLayer* layer() {
+    KisLayer *layer()
+    {
         return this;
     }
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* KIS_SELECTION_BASED_LAYER_H_ */

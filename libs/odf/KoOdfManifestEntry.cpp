@@ -17,7 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "KoOdfManifestEntry.h"
 
@@ -33,9 +32,7 @@ public:
     QString  version;           // manifest:version  (isNull==true if not present)
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfManifestEntry::KoOdfManifestEntry(const QString &fullPath, const QString &mediaType,
                                        const QString &version)
@@ -67,7 +64,6 @@ KoOdfManifestEntry &KoOdfManifestEntry::operator=(const KoOdfManifestEntry &othe
 
     return *this;
 }
-
 
 QString KoOdfManifestEntry::fullPath() const
 {

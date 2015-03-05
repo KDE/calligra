@@ -49,7 +49,6 @@
 #include "strokes/kis_filter_stroke_strategy.h"
 #include "krita_utils.h"
 
-
 struct KisFilterManager::Private {
     Private()
         : reapplyAction(0)
@@ -58,9 +57,9 @@ struct KisFilterManager::Private {
         , view(0)
     {
     }
-    KisAction* reapplyAction;
-    QHash<QString, KActionMenu*> filterActionMenus;
-    QHash<KisFilter*, KAction*> filters2Action;
+    KisAction *reapplyAction;
+    QHash<QString, KActionMenu *> filterActionMenus;
+    QHash<KisFilter *, KAction *> filters2Action;
     KActionCollection *actionCollection;
     KisActionManager *actionManager;
     KisViewManager *view;
@@ -74,7 +73,7 @@ struct KisFilterManager::Private {
     QPointer<KisDlgFilter> filterDialog;
 };
 
-KisFilterManager::KisFilterManager(KisViewManager * view)
+KisFilterManager::KisFilterManager(KisViewManager *view)
     : d(new Private)
 {
     d->view = view;
@@ -90,8 +89,7 @@ void KisFilterManager::setView(QPointer<KisView>imageView)
     Q_UNUSED(imageView);
 }
 
-
-void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionManager)
+void KisFilterManager::setup(KActionCollection *ac, KisActionManager *actionManager)
 {
     d->actionCollection = ac;
     d->actionManager = actionManager;
@@ -103,7 +101,7 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
     d->reapplyAction->setEnabled(false);
     connect(d->reapplyAction, SIGNAL(triggered()), SLOT(reapplyLastFilter()));
 
-    connect(&d->actionsMapper, SIGNAL(mapped(const QString&)), SLOT(showFilterDialog(const QString&)));
+    connect(&d->actionsMapper, SIGNAL(mapped(const QString &)), SLOT(showFilterDialog(const QString &)));
 
     // Setup list of filters
     foreach (const QString &filterName, KisFilterRegistry::instance()->keys()) {
@@ -113,7 +111,7 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
     connect(KisFilterRegistry::instance(), SIGNAL(filterAdded(QString)), SLOT(insertFilter(const QString &)));
 }
 
-void KisFilterManager::insertFilter(const QString & filterName)
+void KisFilterManager::insertFilter(const QString &filterName)
 {
     Q_ASSERT(d->actionCollection);
 
@@ -126,7 +124,7 @@ void KisFilterManager::insertFilter(const QString & filterName)
     }
 
     KoID category = filter->menuCategory();
-    KActionMenu* actionMenu = d->filterActionMenus[ category.id()];
+    KActionMenu *actionMenu = d->filterActionMenus[ category.id()];
     if (!actionMenu) {
         actionMenu = new KActionMenu(category.name(), this);
         d->actionCollection->addAction(category.id(), actionMenu);
@@ -148,7 +146,9 @@ void KisFilterManager::insertFilter(const QString & filterName)
 
 void KisFilterManager::updateGUI()
 {
-    if (!d->view) return;
+    if (!d->view) {
+        return;
+    }
 
     bool enable = false;
 
@@ -157,7 +157,7 @@ void KisFilterManager::updateGUI()
 
     d->reapplyAction->setEnabled(enable);
 
-    for (QHash<KisFilter*, KAction*>::iterator it = d->filters2Action.begin();
+    for (QHash<KisFilter *, KAction *>::iterator it = d->filters2Action.begin();
             it != d->filters2Action.end(); ++it) {
 
         bool localEnable = enable;
@@ -168,7 +168,9 @@ void KisFilterManager::updateGUI()
 
 void KisFilterManager::reapplyLastFilter()
 {
-    if (!d->lastConfiguration) return;
+    if (!d->lastConfiguration) {
+        return;
+    }
 
     apply(d->lastConfiguration);
     finish();
@@ -219,21 +221,25 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
                                           filter->name(),
                                           dev->colorSpace()->name()),
                                      QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok)
-                    != QMessageBox::Ok) return;
+                    != QMessageBox::Ok) {
+                return;
+            }
 
         } else if (filter->colorSpaceIndependence() == TO_RGBA16) {
             if (QMessageBox::warning(d->view->mainWindow(),
                                      i18nc("@title:window", "Krita"),
                                      i18n("The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. ",
-                                          filter->name() , dev->colorSpace()->name()),
+                                          filter->name(), dev->colorSpace()->name()),
                                      QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok)
-                    != QMessageBox::Ok) return;
+                    != QMessageBox::Ok) {
+                return;
+            }
         }
     }
 
     if (filter->showConfigurationWidget()) {
         if (!d->filterDialog) {
-            d->filterDialog = new KisDlgFilter(d->view , d->view->activeNode(), this, d->view->mainWindow());
+            d->filterDialog = new KisDlgFilter(d->view, d->view->activeNode(), this, d->view->mainWindow());
             d->filterDialog->setAttribute(Qt::WA_DeleteOnClose);
         }
         d->filterDialog->setFilter(filter);
@@ -268,14 +274,14 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
 
     d->currentStrokeId =
         image->startStroke(new KisFilterStrokeStrategy(filter,
-                                                       KisSafeFilterConfigurationSP(filterConfig),
-                                                       resources));
+                           KisSafeFilterConfigurationSP(filterConfig),
+                           resources));
 
     if (filter->supportsThreading()) {
         QSize size = KritaUtils::optimalPatchSize();
         QVector<QRect> rects = KritaUtils::splitRectIntoPatches(image->bounds(), size);
 
-        foreach(const QRect &rc, rects) {
+        foreach (const QRect &rc, rects) {
             image->addJob(d->currentStrokeId,
                           new KisFilterStrokeStrategy::Data(rc, true));
         }
@@ -296,7 +302,7 @@ void KisFilterManager::finish()
     KisFilterSP filter = KisFilterRegistry::instance()->value(d->currentlyAppliedConfiguration->name());
     if (filter->bookmarkManager()) {
         filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed,
-                                       d->currentlyAppliedConfiguration.data());
+                                        d->currentlyAppliedConfiguration.data());
     }
 
     d->lastConfiguration = d->currentlyAppliedConfiguration;

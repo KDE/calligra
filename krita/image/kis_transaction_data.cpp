@@ -27,11 +27,10 @@
 //#define DEBUG_TRANSACTIONS
 
 #ifdef DEBUG_TRANSACTIONS
-    #define DEBUG_ACTION(action) qDebug() << action << "for" << m_d->device->dataManager()
+#define DEBUG_ACTION(action) qDebug() << action << "for" << m_d->device->dataManager()
 #else
-    #define DEBUG_ACTION(action)
+#define DEBUG_ACTION(action)
 #endif
-
 
 class KisTransactionData::Private
 {
@@ -49,8 +48,7 @@ public:
     bool resetSelectionOutlineCache;
 };
 
-
-KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent)
+KisTransactionData::KisTransactionData(const KUndo2MagicString &name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command *parent)
     : KUndo2Command(name, parent)
 
     , m_d(new Private())
@@ -82,7 +80,7 @@ KisTransactionData::~KisTransactionData()
 
 void KisTransactionData::endTransaction()
 {
-    if(!m_d->transactionFinished) {
+    if (!m_d->transactionFinished) {
         DEBUG_ACTION("Transaction ended");
         m_d->transactionFinished = true;
         m_d->device->dataManager()->commit();
@@ -102,7 +100,7 @@ void KisTransactionData::startUpdates()
             m_d->device->dataManager()->extent() | mementoExtent;
 
         rc = totalExtent.translated(m_d->oldOffset) |
-            totalExtent.translated(m_d->newOffset);
+             totalExtent.translated(m_d->newOffset);
     }
 
     m_d->device->setDirty(rc);
@@ -111,7 +109,7 @@ void KisTransactionData::startUpdates()
 void KisTransactionData::possiblyNotifySelectionChanged()
 {
     KisPixelSelectionSP pixelSelection =
-        dynamic_cast<KisPixelSelection*>(m_d->device.data());
+        dynamic_cast<KisPixelSelection *>(m_d->device.data());
 
     KisSelectionSP selection;
     if (pixelSelection && (selection = pixelSelection->parentSelection())) {
@@ -124,8 +122,8 @@ void KisTransactionData::possiblyResetOutlineCache()
     KisPixelSelectionSP pixelSelection;
 
     if (m_d->resetSelectionOutlineCache &&
-        (pixelSelection =
-         dynamic_cast<KisPixelSelection*>(m_d->device.data()))) {
+            (pixelSelection =
+                 dynamic_cast<KisPixelSelection *>(m_d->device.data()))) {
 
         pixelSelection->invalidateOutlineCache();
     }
@@ -137,12 +135,10 @@ void KisTransactionData::redo()
     if (m_d->firstRedo) {
         m_d->firstRedo = false;
 
-
         possiblyResetOutlineCache();
         possiblyNotifySelectionChanged();
         return;
     }
-
 
     restoreSelectionOutlineCache(false);
 
@@ -180,7 +176,7 @@ void KisTransactionData::saveSelectionOutlineCache()
     m_d->savedOutlineCacheValid = false;
 
     KisPixelSelectionSP pixelSelection =
-        dynamic_cast<KisPixelSelection*>(m_d->device.data());
+        dynamic_cast<KisPixelSelection *>(m_d->device.data());
 
     if (pixelSelection) {
         m_d->savedOutlineCacheValid = pixelSelection->outlineCacheValid();
@@ -203,7 +199,7 @@ void KisTransactionData::saveSelectionOutlineCache()
 void KisTransactionData::restoreSelectionOutlineCache(bool undo)
 {
     KisPixelSelectionSP pixelSelection =
-        dynamic_cast<KisPixelSelection*>(m_d->device.data());
+        dynamic_cast<KisPixelSelection *>(m_d->device.data());
 
     if (pixelSelection) {
         bool savedOutlineCacheValid;

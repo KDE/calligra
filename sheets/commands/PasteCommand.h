@@ -56,7 +56,7 @@ public:
         ShiftCellsDown   ///< Shift cells to the bottom.
     };
 
-    const QMimeData* mimeData() const;
+    const QMimeData *mimeData() const;
     bool setMimeData(const QMimeData *mimeData);
     void setInsertionMode(InsertionMode mode);
     void setMode(Paste::Mode mode);
@@ -98,8 +98,8 @@ protected:
     bool processTextPlain(Element *element);
 
 private:
-    const QMimeData *   m_mimeData;
-    KoXmlDocument *     m_xmlDocument;
+    const QMimeData    *m_mimeData;
+    KoXmlDocument      *m_xmlDocument;
     InsertionMode       m_insertMode;
     Paste::Mode         m_pasteMode;
     Paste::Operation    m_operation;

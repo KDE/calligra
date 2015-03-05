@@ -34,7 +34,7 @@
 
 using namespace MSOOXML;
 
-MsooXmlDocPropertiesReader::MsooXmlDocPropertiesReader(KoOdfWriters* writers) : MsooXmlReader(writers)
+MsooXmlDocPropertiesReader::MsooXmlDocPropertiesReader(KoOdfWriters *writers) : MsooXmlReader(writers)
 {
     elemMap.insert(QLatin1String("dc:creator"), QLatin1String("meta:initial-creator"));
     elemMap.insert(QLatin1String("cp:lastModifiedBy"), QLatin1String("dc:creator"));
@@ -47,8 +47,7 @@ MsooXmlDocPropertiesReader::MsooXmlDocPropertiesReader(KoOdfWriters* writers) : 
     elemMap.insert(QLatin1String("cp:revision"), QLatin1String("meta:editing-cycles"));
 }
 
-
-KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read(MsooXmlReaderContext*)
+KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read(MsooXmlReaderContext *)
 {
     kDebug() << "=============================";
 
@@ -59,11 +58,13 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read(MsooXmlReaderContext
 
     readNext();
 
-    if (!expectEl("cp:coreProperties"))
+    if (!expectEl("cp:coreProperties")) {
         return KoFilter::WrongFormat;
+    }
 
-    if (!expectNS(MSOOXML::Schemas::core_properties))
+    if (!expectNS(MSOOXML::Schemas::core_properties)) {
         return KoFilter::WrongFormat;
+    }
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
     for (int i = 0; i < namespaces.count(); i++) {
@@ -95,14 +96,16 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read_coreProperties()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             const QString qn = qualifiedName().toString();
-            while (!isEndElement() && !isCharacters())
+            while (!isEndElement() && !isCharacters()) {
                 readNext();
+            }
 
-            const QMap<QString,QString>::ConstIterator it = elemMap.constFind(qn);
+            const QMap<QString, QString>::ConstIterator it = elemMap.constFind(qn);
             if (it == elemMap.constEnd()) {
                 kDebug() << "Unknown metadata ignored:" << qn;
-                while (!isEndElement())
+                while (!isEndElement()) {
                     readNext();
+                }
                 continue;
             }
             kDebug() << "Found:" << it.key() << "Mapped to:" << it.value();
@@ -114,8 +117,9 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read_coreProperties()
             meta->startElement(elementArray.constData());
             meta->addTextNode(t.toUtf8());
             meta->endElement();
-            while (!isEndElement())
+            while (!isEndElement()) {
                 readNext();
+            }
         }
     }
 

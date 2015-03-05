@@ -21,13 +21,13 @@
 #include "kis_types.h"
 #include "ui_wdghistogram.h"
 
-
 class WdgHistogram : public QWidget, public Ui::WdgHistogram
 {
     Q_OBJECT
 
 public:
-    WdgHistogram(QWidget *parent) : QWidget(parent) {
+    WdgHistogram(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -59,6 +59,5 @@ private:
     void updateEnabled();
     double m_from, m_width;
 };
-
 
 #endif // KIS_HISTOGRAM_WIDGET_

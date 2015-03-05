@@ -44,15 +44,15 @@ struct ViewModeSynchronisationObject {
     float exposure;
     float gamma;
     QString compositeOp;
-    KoPattern* pattern;
-    KoAbstractGradient* gradient;
+    KoPattern *pattern;
+    KoAbstractGradient *gradient;
     KisNodeSP node;
     KisPaintOpPresetSP paintOp;
     float opacity;
     bool globalAlphaLock;
     QString activeToolId;
 
-    KoGridData* gridData;
+    KoGridData *gridData;
 
     // Mirror-axes
     QPointF mirrorAxesCenter;
@@ -71,29 +71,33 @@ public:
         SwitchedToSketchModeEvent,
     };
 
-    inline ViewModeSwitchEvent(ViewModeEventType type, QObject* fromView, QObject* toView, ViewModeSynchronisationObject* syncObject)
-            : QEvent(static_cast<QEvent::Type>(type))
-            , m_fromView(fromView)
-            , m_toView(toView)
-            , m_syncObject(syncObject) {
+    inline ViewModeSwitchEvent(ViewModeEventType type, QObject *fromView, QObject *toView, ViewModeSynchronisationObject *syncObject)
+        : QEvent(static_cast<QEvent::Type>(type))
+        , m_fromView(fromView)
+        , m_toView(toView)
+        , m_syncObject(syncObject)
+    {
 
     }
 
-    inline QObject* fromView() const {
+    inline QObject *fromView() const
+    {
         return m_fromView;
     }
-    inline QObject* toView() const {
+    inline QObject *toView() const
+    {
         return m_toView;
     }
 
-    inline ViewModeSynchronisationObject* synchronisationObject() const {
+    inline ViewModeSynchronisationObject *synchronisationObject() const
+    {
         return m_syncObject;
     }
 
 private:
-    QObject* m_fromView;
-    QObject* m_toView;
-    ViewModeSynchronisationObject* m_syncObject;
+    QObject *m_fromView;
+    QObject *m_toView;
+    ViewModeSynchronisationObject *m_syncObject;
 };
 
 #endif // VIEWMODESWITCHEVENT_H

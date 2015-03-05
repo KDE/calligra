@@ -47,19 +47,22 @@ void TestLogicFunctions::initTestCase()
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z = (y); QCOMPARE(evaluate(x,z),(z)); }
 
-Value TestLogicFunctions::evaluate(const QString& formula, Value& ex)
+Value TestLogicFunctions::evaluate(const QString &formula, Value &ex)
 {
     Formula f(m_sheet);
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
-    if (result.isFloat() && ex.isInteger())
+    if (result.isFloat() && ex.isInteger()) {
         ex = Value(ex.asFloat());
-    if (result.isInteger() && ex.isFloat())
+    }
+    if (result.isInteger() && ex.isFloat()) {
         result = Value(result.asFloat());
+    }
 
     return result;
 }

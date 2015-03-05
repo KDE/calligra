@@ -29,9 +29,10 @@ class QRadioButton;
 class KPageWidgetItem;
 class KFileWidget;
 
-namespace Kross {
-    class ActionCollection;
-    class ActionCollectionEditor;
+namespace Kross
+{
+class ActionCollection;
+class ActionCollectionEditor;
 }
 
 /**
@@ -115,7 +116,7 @@ public Q_SLOTS:
     bool accept();
 
 private:
-    virtual void showEvent(QShowEvent* event);
+    virtual void showEvent(QShowEvent *event);
 
 private:
     KoScriptManagerAddWizard *const m_wizard;
@@ -154,7 +155,7 @@ class KoScriptManagerAddWizard : public KAssistantDialog
 {
     Q_OBJECT
 public:
-    explicit KoScriptManagerAddWizard(QWidget* parent, Kross::ActionCollection* collection = 0);
+    explicit KoScriptManagerAddWizard(QWidget *parent, Kross::ActionCollection *collection = 0);
     virtual ~KoScriptManagerAddWizard();
 
 public Q_SLOTS:
@@ -168,7 +169,7 @@ public Q_SLOTS:
     virtual void accept();
 
 private:
-    bool invokeWidgetMethod(const char* member);
+    bool invokeWidgetMethod(const char *member);
 
 private:
     friend class KoScriptManagerAddTypeWidget;

@@ -47,7 +47,6 @@ enum enumFuncNames  {
     P_ENUM
 };
 
-
 static QHash<QString, enumFuncNames> types;
 
 static QString p_patt(QDataStream &buf)
@@ -79,7 +78,7 @@ static QString p_text(QDataStream &buf)
     quint32 size;
     buf >> size;
 
-    ushort * text = new ushort[size];
+    ushort *text = new ushort[size];
     for (int i = 0; i < size; i++) {
         buf >> text[i];
     }
@@ -91,7 +90,7 @@ static QString p_objc(QDataStream &buf)
     quint32 objvallen;
     buf >> objvallen;
 
-    char * objval = new char[objvallen * 2 + 1];
+    char *objval = new char[objvallen * 2 + 1];
     buf.readRawData(objval, objvallen * 2);
     objval[ objvallen * 2 ] = '\0';
 
@@ -101,7 +100,7 @@ static QString p_objc(QDataStream &buf)
         size = 4;
     }
 
-    char * name = new char[size + 1];
+    char *name = new char[size + 1];
 
     buf.readRawData(name, size);
     name[size] = '\0';
@@ -113,7 +112,7 @@ static QString p_objc(QDataStream &buf)
 
 static QString p_untf(QDataStream &buf)
 {
-    char * type = new char[5];
+    char *type = new char[5];
     buf.readRawData(type, 4);
     type[4] = '\0';
     double value;
@@ -126,8 +125,11 @@ static QString p_bool(QDataStream &buf)
     //# ord converts 1 byte number
     char byte;
     buf.device()->getChar(&byte);
-    if (byte) return QString("1");
-    else return QString("0");
+    if (byte) {
+        return QString("1");
+    } else {
+        return QString("0");
+    }
 }
 
 static QString p_doub(QDataStream &buf)
@@ -146,16 +148,16 @@ static QString p_enum(QDataStream &buf)
     if (size1 == 0) {
         size1 = 4;
     }
-    char * name1 = new char[size1 + 1];
+    char *name1 = new char[size1 + 1];
     buf.readRawData(name1, size1);
     name1[size1] = '\0';
 
-    buf >> size2 ;
+    buf >> size2;
     if (size2 == 0) {
         size2 = 4;
     }
 
-    char * name2 = new char[size2 + 1];
+    char *name2 = new char[size2 + 1];
     buf.readRawData(name2, size2);
     name2[size2] = '\0';
 
@@ -176,17 +178,16 @@ static quint32 parseEntry(QDataStream &buf)
     if (nlen == 1331849827) { // "Objc"
         value = p_objc(buf); // TODO: port
         qDebug() << "Objc " << value;
-    }
-    else {
+    } else {
         // read char with nlen bytes and convert to String
-        char * name = new char[ nlen + 1 ];
+        char *name = new char[ nlen + 1 ];
         int status = buf.readRawData(name, nlen);
         if (status == -1) {
             qDebug() << "Error, name can't be readed";
         }
         name[nlen] = '\0';
 
-        char * type = new char[5];
+        char *type = new char[5];
         status = buf.readRawData(type, 4);
         type[4] = '\0';
         QString key = QString::fromLatin1(type);
@@ -209,8 +210,7 @@ static quint32 parseEntry(QDataStream &buf)
             }
             qDebug() << name << type << value;
 
-        }
-        else {
+        } else {
             qDebug() << "Unknown key:\t" << name << type;
             //qDebug() << p_unkn(buf);
             return -1;
@@ -220,7 +220,6 @@ static quint32 parseEntry(QDataStream &buf)
     return 0;
 }
 
-
 static void parse(QString fileName)
 {
     QFile file(fileName);
@@ -229,7 +228,6 @@ static void parse(QString fileName)
         return;
     }
     QDataStream buf(&file);
-
 
     // offset in bytes
     short int vermaj, vermin;
@@ -250,16 +248,14 @@ static void parse(QString fileName)
     }
 }
 
-int main(int argc, const char * argv[])
+int main(int argc, const char *argv[])
 {
     QString fileName;
     if (argc != 2) {
         fileName = "test.abr";
-    }
-    else {
+    } else {
         fileName = QString::fromLatin1(argv[1]);
     }
-
 
     types.insert(PATT, P_PATT);
     types.insert(DESC, P_DESC);

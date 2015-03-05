@@ -28,8 +28,8 @@ public:
     explicit KPrAnimateColor(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimateColor();
 
-    virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
-    virtual bool saveOdf(KoPASavingContext & paContext) const;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual bool saveOdf(KoPASavingContext &paContext) const;
     virtual void init(KPrAnimationCache *animationCache, int step);
 
 protected:

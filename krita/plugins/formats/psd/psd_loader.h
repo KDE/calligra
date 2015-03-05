@@ -45,9 +45,10 @@ enum KisImageBuilder_Result {
     KisImageBuilder_RESULT_INTR = 400,
     KisImageBuilder_RESULT_PATH = 500,
     KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE = 600
-                                                };
+};
 
-class PSDLoader : public QObject {
+class PSDLoader : public QObject
+{
 
     Q_OBJECT
 
@@ -56,7 +57,7 @@ public:
     PSDLoader(KisDocument *doc);
     virtual ~PSDLoader();
 
-    KisImageBuilder_Result buildImage(const KUrl& uri);
+    KisImageBuilder_Result buildImage(const KUrl &uri);
 
     KisImageWSP image();
 
@@ -66,7 +67,7 @@ public Q_SLOTS:
 
 private:
 
-    KisImageBuilder_Result decode(const KUrl& uri);
+    KisImageBuilder_Result decode(const KUrl &uri);
 
 private:
 

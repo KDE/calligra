@@ -38,7 +38,7 @@ KPrAddCustomSlideShowCommand::~KPrAddCustomSlideShowCommand()
 
 void KPrAddCustomSlideShowCommand::redo()
 {
-    m_doc->customSlideShows()->insert(m_name, QList<KoPAPageBase*>());
+    m_doc->customSlideShows()->insert(m_name, QList<KoPAPageBase *>());
     m_model->updateCustomSlideShowsList(m_name);
 }
 

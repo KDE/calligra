@@ -35,7 +35,7 @@ public:
 
     void setView(KoPAViewBase *view);
 
-    QList<KoShape*> currentShapes();
+    QList<KoShape *> currentShapes();
 
     KoShape *currentShape();
 };

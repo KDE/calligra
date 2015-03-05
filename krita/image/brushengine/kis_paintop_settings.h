@@ -29,7 +29,6 @@
 #include "kis_properties_configuration.h"
 #include "kis_paint_information.h"
 
-
 class KisPaintOpSettingsWidget;
 
 /**
@@ -57,7 +56,7 @@ public:
     /**
      *
      */
-    virtual void setOptionsWidget(KisPaintOpSettingsWidget* widget);
+    virtual void setOptionsWidget(KisPaintOpSettingsWidget *widget);
 
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
@@ -97,7 +96,8 @@ public:
      * @return true if we paint incrementally, false if we paint like Photoshop. By default, paintops
      *      do not support non-incremental.
      */
-    virtual bool paintIncremental() {
+    virtual bool paintIncremental()
+    {
         return true;
     }
 
@@ -112,14 +112,16 @@ public:
      * Whether this paintop wants to deposit paint even when not moving, i.e. the
      * tool needs to activate its timer.
      */
-    virtual bool isAirbrushing() const {
+    virtual bool isAirbrushing() const
+    {
         return false;
     }
 
     /**
     * If this paintop deposit the paint even when not moving, the tool needs to know the rate of it in miliseconds
     */
-    virtual int rate() const {
+    virtual int rate() const
+    {
         return 100;
     }
 
@@ -194,7 +196,6 @@ public:
 
     KisPaintOpPresetWSP preset() const;
 
-
     /**
      * @return filename of the 3D brush model, empty if no brush is set
      */
@@ -203,7 +204,7 @@ public:
     /**
     * Set filename of 3D brush model. By default no brush is set
     */
-    void setModelName(const QString & modelName);
+    void setModelName(const QString &modelName);
 
     /// Check if the settings are valid, setting might be invalid through missing brushes etc
     /// Overwrite if the settings of a paintop can be invalid
@@ -228,20 +229,18 @@ public:
      * Overrides the method in KisPropertiesCofiguration to allow
      * onPropertyChanged() callback
      */
-    void setProperty(const QString & name, const QVariant & value);
-
+    void setProperty(const QString &name, const QVariant &value);
 
 protected:
     /**
     * @return the option widget of the paintop (can be 0 is no option widgets is set)
     */
-    KisPaintOpSettingsWidget* optionsWidget() const;
+    KisPaintOpSettingsWidget *optionsWidget() const;
 
     /**
      * The callback is called every time when a property changes
      */
     virtual void onPropertyChanged();
-
 
 private:
     struct Private;

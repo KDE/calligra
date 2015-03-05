@@ -32,11 +32,11 @@
 
 KoImageDataPrivate::KoImageDataPrivate(KoImageData *q)
     : collection(0),
-    errorCode(KoImageData::Success),
-    key(0),
-    refCount(0),
-    dataStoreState(StateEmpty),
-    temporaryFile(0)
+      errorCode(KoImageData::Success),
+      key(0),
+      refCount(0),
+      dataStoreState(StateEmpty),
+      temporaryFile(0)
 {
     cleanCacheTimer.setSingleShot(true);
     cleanCacheTimer.setInterval(1000);
@@ -45,8 +45,9 @@ KoImageDataPrivate::KoImageDataPrivate(KoImageData *q)
 
 KoImageDataPrivate::~KoImageDataPrivate()
 {
-    if (collection)
+    if (collection) {
         collection->removeOnKey(key);
+    }
     delete temporaryFile;
 }
 
@@ -65,8 +66,9 @@ bool KoImageDataPrivate::saveData(QIODevice &device)
         while (true) {
             temporaryFile->waitForReadyRead(-1);
             qint64 bytes = temporaryFile->read(buf, sizeof(buf));
-            if (bytes <= 0)
-                break; // done!
+            if (bytes <= 0) {
+                break;    // done!
+            }
             do {
                 qint64 nWritten = device.write(buf, bytes);
                 if (nWritten == -1) {
@@ -95,7 +97,7 @@ bool KoImageDataPrivate::saveData(QIODevice &device)
         bool result = writer.write(image);
         device.write(buffer.data(), buffer.size());
         return result;
-      }
+    }
     }
     return false;
 }
@@ -123,8 +125,9 @@ void KoImageDataPrivate::copyToTemporary(QIODevice &device)
     while (true) {
         device.waitForReadyRead(-1);
         qint64 bytes = device.read(buf, sizeof(buf));
-        if (bytes <= 0)
-            break; // done!
+        if (bytes <= 0) {
+            break;    // done!
+        }
         md5.addData(buf, bytes);
         do {
             bytes -= temporaryFile->write(buf, bytes);
@@ -161,7 +164,8 @@ qint64 KoImageDataPrivate::generateKey(const QByteArray &bytes)
 {
     qint64 answer = 1;
     const int max = qMin(8, bytes.count());
-    for (int x = 0; x < max; ++x)
+    for (int x = 0; x < max; ++x) {
         answer += bytes[x] << (8 * x);
+    }
     return answer;
 }

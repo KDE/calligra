@@ -39,18 +39,18 @@ class KRITAIMAGE_EXPORT KisFixedPaintDevice : public KisShared
 
 public:
 
-    KisFixedPaintDevice(const KoColorSpace* colorSpace);
+    KisFixedPaintDevice(const KoColorSpace *colorSpace);
     virtual ~KisFixedPaintDevice();
 
     /**
      * Deep copy the fixed paint device, including the data.
      */
-    KisFixedPaintDevice(const KisFixedPaintDevice& rhs);
+    KisFixedPaintDevice(const KisFixedPaintDevice &rhs);
 
     /**
      * Deep copy the fixed paint device, including the data.
      */
-    KisFixedPaintDevice& operator=(const KisFixedPaintDevice& rhs);
+    KisFixedPaintDevice &operator=(const KisFixedPaintDevice &rhs);
 
     /**
      * setRect sets the rect of the fixed paint device to rect.
@@ -59,7 +59,7 @@ public:
      * @rect the bounds in pixels. The x,y of the rect represent the origin
      * of the fixed paint device.
      */
-    void setRect(const QRect& rc);
+    void setRect(const QRect &rc);
 
     /**
      * @return the rect that the data represents
@@ -72,13 +72,13 @@ public:
      */
     int allocatedPixels() const;
 
-
     /**
      * @return the pixelSize associated with this fixed paint device.
      */
     quint32 pixelSize() const;
 
-    const KoColorSpace* colorSpace() const {
+    const KoColorSpace *colorSpace() const
+    {
         return m_colorSpace;
     }
 
@@ -93,9 +93,9 @@ public:
     /**
      * @return a pointer to the beginning of the data associated with this fixed paint device.
      */
-    quint8* data();
+    quint8 *data();
 
-    quint8* data() const;
+    quint8 *data() const;
 
     /**
      * Read the bytes representing the rectangle described by x, y, w, h into
@@ -107,12 +107,12 @@ public:
      * The reading is done only if the rectangular area x,y,w,h is inside the bounds of the device
      * and the device is not empty
      */
-    void readBytes(quint8 * dstData, qint32 x, qint32 y, qint32 w, qint32 h) const;
+    void readBytes(quint8 *dstData, qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      *   Converts the paint device to a different colorspace
      */
-    void convertTo(const KoColorSpace * dstColorSpace = 0,
+    void convertTo(const KoColorSpace *dstColorSpace = 0,
                    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
                    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags);
     /**
@@ -120,7 +120,7 @@ public:
      *
      * @param srcProfileName name of the RGB profile to interpret the image as. 0 is interpreted as sRGB
      */
-    virtual void convertFromQImage(const QImage& image, const QString &srcProfileName);
+    virtual void convertFromQImage(const QImage &image, const QString &srcProfileName);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.
@@ -155,7 +155,7 @@ public:
      * XXX: this will not (yet) expand the paint device to contain the specified rect
      * but if the paintdevice has not been initialized, it will be.
      */
-    void clear(const QRect & rc);
+    void clear(const QRect &rc);
 
     /**
      * Fill the given rectangle with the given pixel. This does not take the
@@ -166,7 +166,6 @@ public:
      */
     void fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *fillPixel);
 
-
     /**
      * Mirrors the device.
      */
@@ -174,7 +173,7 @@ public:
 
 private:
 
-    const KoColorSpace* m_colorSpace;
+    const KoColorSpace *m_colorSpace;
     QRect m_bounds;
     QVector<quint8> m_data;
 

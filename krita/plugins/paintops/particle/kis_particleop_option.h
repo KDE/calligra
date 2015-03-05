@@ -42,12 +42,11 @@ public:
     int iterations() const;
     QPointF scale() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
-
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
-    KisParticleOpOptionsWidget * m_options;
+    KisParticleOpOptionsWidget *m_options;
 };
 
 #endif

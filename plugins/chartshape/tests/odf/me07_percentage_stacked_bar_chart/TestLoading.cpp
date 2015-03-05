@@ -69,12 +69,12 @@ void TestLoading::testDataSets()
 {
     TableSource *source = tableSource();
     QVERIFY(source);
-                              // y data
+    // y data
     testDataSetCellRegions(0, CellRegion(source, "Sheet1.E5:G5"),
-                              // series label
-                              CellRegion(source, "Sheet1.D5"),
-                              // categories (specified in x-axis)
-                              CellRegion(source, "Sheet1.E4:G4"));
+                           // series label
+                           CellRegion(source, "Sheet1.D5"),
+                           // categories (specified in x-axis)
+                           CellRegion(source, "Sheet1.E4:G4"));
 }
 
 void TestLoading::testLegend()
@@ -83,5 +83,5 @@ void TestLoading::testLegend()
     testLegendElements(QStringList() << "Week");
 }
 
-QTEST_KDEMAIN(TestLoading, GUI )
+QTEST_KDEMAIN(TestLoading, GUI)
 

@@ -51,49 +51,58 @@ KexiCellEditorFactoryItem::~KexiCellEditorFactoryItem()
 class KexiCellEditorFactoryPrivate
 {
 public:
-    KexiCellEditorFactoryPrivate() {
+    KexiCellEditorFactoryPrivate()
+    {
         // Initialize standard editor cell editor factories
         registerItem(*new KexiBlobEditorFactoryItem(), KexiDB::Field::BLOB);
-        registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date);
-        registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time);
-        registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime);
+        registerItem(*new KexiDateEditorFactoryItem(), KexiDB::Field::Date);
+        registerItem(*new KexiTimeEditorFactoryItem(), KexiDB::Field::Time);
+        registerItem(*new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime);
         registerItem(*new KexiComboBoxEditorFactoryItem(), KexiDB::Field::Enum);
         registerItem(*new KexiBoolEditorFactoryItem(), KexiDB::Field::Boolean);
         registerItem(*new KexiKIconTableEditorFactoryItem(), KexiDB::Field::Text, "KIcon");
         //default type
         registerItem(*new KexiInputEditorFactoryItem(), KexiDB::Field::InvalidType);
     }
-    ~KexiCellEditorFactoryPrivate() {
+    ~KexiCellEditorFactoryPrivate()
+    {
         qDeleteAll(items);
     }
 
-    QString key(uint type, const QString& subType) const {
+    QString key(uint type, const QString &subType) const
+    {
         QString key = QString::number(type);
-        if (!subType.isEmpty())
+        if (!subType.isEmpty()) {
             key += (QString(" ") + subType);
+        }
         return key;
     }
 
-    void registerItem(KexiCellEditorFactoryItem& item, uint type, const QString& subType = QString()) {
-        if (!items.contains(&item))
+    void registerItem(KexiCellEditorFactoryItem &item, uint type, const QString &subType = QString())
+    {
+        if (!items.contains(&item)) {
             items.insert(&item);
+        }
 
         items_by_type.insert(key(type, subType), &item);
     }
 
-    KexiCellEditorFactoryItem *findItem(uint type, const QString& subType) {
+    KexiCellEditorFactoryItem *findItem(uint type, const QString &subType)
+    {
         KexiCellEditorFactoryItem *item = items_by_type.value(key(type, subType));
-        if (item)
+        if (item) {
             return item;
+        }
         item = items_by_type.value(key(type, QString()));
-        if (item)
+        if (item) {
             return item;
+        }
         return items_by_type.value(key(KexiDB::Field::InvalidType, QString()));
     }
 
-    QSet<KexiCellEditorFactoryItem*> items; //!< list of editor factory items (for later destroy)
+    QSet<KexiCellEditorFactoryItem *> items; //!< list of editor factory items (for later destroy)
 
-    QHash<QString, KexiCellEditorFactoryItem*> items_by_type; //!< editor factory items accessed by a key
+    QHash<QString, KexiCellEditorFactoryItem *> items_by_type; //!< editor factory items accessed by a key
 };
 
 K_GLOBAL_STATIC(KexiCellEditorFactoryPrivate, KexiCellEditorFactory_static)
@@ -108,7 +117,7 @@ KexiCellEditorFactory::~KexiCellEditorFactory()
 {
 }
 
-void KexiCellEditorFactory::registerItem(KexiCellEditorFactoryItem& item, uint type, const QString& subType)
+void KexiCellEditorFactory::registerItem(KexiCellEditorFactoryItem &item, uint type, const QString &subType)
 {
     KexiCellEditorFactory_static->registerItem(item, type, subType);
 }
@@ -116,20 +125,24 @@ void KexiCellEditorFactory::registerItem(KexiCellEditorFactoryItem& item, uint t
 static bool hasEnumType(const KexiDB::TableViewColumn &column)
 {
     /*not db-aware case*/
-    if (column.relatedData())
+    if (column.relatedData()) {
         return true;
+    }
     /*db-aware case*/
-    if (!column.field() || !column.field()->table())
+    if (!column.field() || !column.field()->table()) {
         return false;
+    }
     KexiDB::LookupFieldSchema *lookupFieldSchema = column.field()->table()->lookupFieldSchema(*column.field());
-    if (!lookupFieldSchema)
+    if (!lookupFieldSchema) {
         return false;
-    if (lookupFieldSchema->rowSource().name().isEmpty())
+    }
+    if (lookupFieldSchema->rowSource().name().isEmpty()) {
         return false;
+    }
     return true;
 }
 
-KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::TableViewColumn &column, QWidget* parent)
+KexiTableEdit *KexiCellEditorFactory::createEditor(KexiDB::TableViewColumn &column, QWidget *parent)
 {
     KexiDB::Field *realField;
     if (column.visibleLookupColumnInfo()) {
@@ -155,7 +168,7 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::TableViewColumn &colu
     if (table) {
         //find index that contain this field
         KexiDB::IndexSchema::ListIterator it = table->indicesIterator();
-        for (;it.current();++it) {
+        for (; it.current(); ++it) {
             KexiDB::IndexSchema *idx = it.current();
             if (idx->fields()->contains(&f)) {
                 //find details-side rel. for this index
@@ -170,7 +183,7 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::TableViewColumn &colu
     return item->createEditor(column, parent);
 }
 
-KexiCellEditorFactoryItem* KexiCellEditorFactory::item(uint type, const QString& subType)
+KexiCellEditorFactoryItem *KexiCellEditorFactory::item(uint type, const QString &subType)
 {
     return KexiCellEditorFactory_static->findItem(type, subType);
 }

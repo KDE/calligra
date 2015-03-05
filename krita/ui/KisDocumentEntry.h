@@ -44,7 +44,7 @@ public:
     /**
      * Represents a valid entry
      */
-    explicit KisDocumentEntry(const KService::Ptr& service);
+    explicit KisDocumentEntry(const KService::Ptr &service);
     ~KisDocumentEntry();
 
     static QString nativeMimeType();
@@ -71,17 +71,17 @@ public:
     /**
      *  @return TRUE if the document can handle the requested mimetype.
      */
-    bool supportsMimeType(const QString & _mimetype) const;
+    bool supportsMimeType(const QString &_mimetype) const;
 
-        /**
-     *  This function will query ksycoca to find all available components.
-     *  The result will only contain parts, which are embeddable into a document
-     *
-     *  @param _constr is a constraint expression as used by KTrader.
-     *                 You can use it to set additional restrictions on the available
-     *                 components.
-     */
-    static QList<KisDocumentEntry> query(const QString &  mimetype = QString());
+    /**
+    *  This function will query ksycoca to find all available components.
+    *  The result will only contain parts, which are embeddable into a document
+    *
+    *  @param _constr is a constraint expression as used by KTrader.
+    *                 You can use it to set additional restrictions on the available
+    *                 components.
+    */
+    static QList<KisDocumentEntry> query(const QString   &mimetype = QString());
 
     /**
      *  This is a convenience function.
@@ -89,7 +89,7 @@ public:
      *  @return a document entry for the Calligra component that supports
      *          the requested mimetype and fits the user best.
      */
-    static KisDocumentEntry queryByMimeType(const QString & mimetype);
+    static KisDocumentEntry queryByMimeType(const QString &mimetype);
 
 private:
     KService::Ptr m_service;

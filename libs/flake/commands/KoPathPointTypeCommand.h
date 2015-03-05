@@ -59,7 +59,7 @@ private:
     // used for storing the data for undo
     struct PointData {
         PointData(const KoPathPointData pointData)
-                : m_pointData(pointData) {}
+            : m_pointData(pointData) {}
         KoPathPointData m_pointData;
         // old control points in document coordinates
         QPointF m_oldControlPoint1;

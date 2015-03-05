@@ -99,7 +99,7 @@ protected:
     void savePasswordInKWallet();
 
 private:
-    QCA::SecureArray decryptFile(QCA::SecureArray & encryptedFile, KoEncryptedStore_EncryptionData & encData, QCA::SecureArray & password);
+    QCA::SecureArray decryptFile(QCA::SecureArray &encryptedFile, KoEncryptedStore_EncryptionData &encData, QCA::SecureArray &password);
 
     /** returns true if the file should be encrypted, false otherwise **/
     bool isToBeEncrypted(const QString &fullpath);

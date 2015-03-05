@@ -28,7 +28,6 @@
 #include <kis_liquify_transform_worker.h>
 #include <kis_algebra_2d.h>
 
-
 void KisLiquifyTransformWorkerTest::testPoints()
 {
     TestUtil::TestProgressBar bar;
@@ -47,31 +46,30 @@ void KisLiquifyTransformWorkerTest::testPoints()
                                      updater,
                                      pixelPrecision);
 
-
     QBENCHMARK_ONCE {
-        worker.translatePoints(QPointF(100,100),
-                               QPointF(50, 0),
-                               50, false, 0.2);
+        worker.translatePoints(QPointF(100, 100),
+        QPointF(50, 0),
+        50, false, 0.2);
 
-        worker.scalePoints(QPointF(400,100),
-                           0.9,
-                           50, false, 0.2);
+        worker.scalePoints(QPointF(400, 100),
+        0.9,
+        50, false, 0.2);
 
-        worker.undoPoints(QPointF(400,100),
-                           1.0,
-                           50);
+        worker.undoPoints(QPointF(400, 100),
+        1.0,
+        50);
 
-        worker.scalePoints(QPointF(400,300),
-                           0.5,
-                           50, false, 0.2);
+        worker.scalePoints(QPointF(400, 300),
+        0.5,
+        50, false, 0.2);
 
-        worker.scalePoints(QPointF(100,300),
-                           -0.5,
-                           30, false, 0.2);
+        worker.scalePoints(QPointF(100, 300),
+        -0.5,
+        30, false, 0.2);
 
-        worker.rotatePoints(QPointF(100,500),
-                            M_PI / 4,
-                            50, false, 0.2);
+        worker.rotatePoints(QPointF(100, 500),
+        M_PI / 4,
+        50, false, 0.2);
     }
 
     worker.run(dev);
@@ -98,8 +96,7 @@ void KisLiquifyTransformWorkerTest::testPointsQImage()
                                      updater,
                                      pixelPrecision);
 
-
-    worker.translatePoints(QPointF(100,100),
+    worker.translatePoints(QPointF(100, 100),
                            QPointF(50, 0),
                            50, false, 0.2);
 
@@ -125,7 +122,6 @@ void KisLiquifyTransformWorkerTest::testPointsQImage()
     QImage result = worker.runOnQImage(image, QPointF(10, 10), imageToThumbTransform, &newOffset);
     qDebug() << ppVar(newOffset);
 
-
     TestUtil::checkQImage(result, "liquify_transform_test", "liquify_qimage", "resultImage");
 }
 
@@ -137,7 +133,7 @@ void KisLiquifyTransformWorkerTest::testIdentityTransform()
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    QRect rc(0,0,13,23);
+    QRect rc(0, 0, 13, 23);
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(rc, KoColor(Qt::blue, cs));

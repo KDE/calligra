@@ -35,14 +35,14 @@ class KRITAUI_EXPORT KisPopupButton : public QPushButton
 
 public:
 
-    KisPopupButton(QWidget* parent);
+    KisPopupButton(QWidget *parent);
     ~KisPopupButton();
 
     /**
      * Set the popup widget, the KisPopupButton becomes
      * the owner and parent of the widget.
      */
-    void setPopupWidget(QWidget* widget);
+    void setPopupWidget(QWidget *widget);
 
     /**
      * This function allow to force the popup to be visible.
@@ -65,12 +65,12 @@ public Q_SLOTS:
 
     void adjustPosition();
 protected:
-    void paintEvent(QPaintEvent* event);
-    
+    void paintEvent(QPaintEvent *event);
+
     void paintPopupArrow();
 private:
     struct Private;
-    Private* const m_d;
+    Private *const m_d;
 };
 
 #endif

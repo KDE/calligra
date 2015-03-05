@@ -24,12 +24,13 @@
 #include <KoToolFactoryBase.h>
 
 /// Factory for the KWPageTool
-class KWPageToolFactory : public KoToolFactoryBase {
+class KWPageToolFactory : public KoToolFactoryBase
+{
 public:
     /// constructor
     KWPageToolFactory();
     ~KWPageToolFactory();
 
-    KoToolBase* createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 #endif

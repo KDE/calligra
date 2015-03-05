@@ -27,21 +27,21 @@ class QVBoxLayout;
 
 namespace KoProperty
 {
-    class EditorView;
-    class Set;
+class EditorView;
+class Set;
 }
 
 class KexiObjectInfoLabel;
 
 //! @short A base class for propety pane's tabs.
-/*! Defines vertical layout and offers info label on the top. 
+/*! Defines vertical layout and offers info label on the top.
  Use mainLayout() to access the QVBoxLayout object.
 */
 class KEXIEXTWIDGETS_EXPORT KexiPropertyPaneViewBase : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KexiPropertyPaneViewBase(QWidget* parent = 0);
+    explicit KexiPropertyPaneViewBase(QWidget *parent = 0);
     virtual ~KexiPropertyPaneViewBase();
 
     KexiObjectInfoLabel *infoLabel() const;
@@ -54,10 +54,10 @@ public:
      If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes
      hidden. */
     void updateInfoLabelForPropertySet(
-        KoProperty::Set* set, const QString& textToDisplayForNullSet = QString());
+        KoProperty::Set *set, const QString &textToDisplayForNullSet = QString());
 protected:
     //! @return main vertical layout of the pane
-    QVBoxLayout* mainLayout() const;
+    QVBoxLayout *mainLayout() const;
 
     //! @return default spacing for the pane, 2/3 of the font height
     int spacing() const;
@@ -66,10 +66,10 @@ protected:
     void addSpacing();
 
     //! Adds widget-based spacing to the main layout. The size of spacing is taken from spacing().
-    QWidget* addWidgetSpacer();
+    QWidget *addWidgetSpacer();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

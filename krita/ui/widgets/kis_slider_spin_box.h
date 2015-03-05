@@ -38,26 +38,26 @@ class KRITAUI_EXPORT KisAbstractSliderSpinBox : public QWidget
     Q_DISABLE_COPY(KisAbstractSliderSpinBox)
     Q_DECLARE_PRIVATE(KisAbstractSliderSpinBox)
 protected:
-    explicit KisAbstractSliderSpinBox(QWidget* parent, KisAbstractSliderSpinBoxPrivate*);
+    explicit KisAbstractSliderSpinBox(QWidget *parent, KisAbstractSliderSpinBoxPrivate *);
 public:
     virtual ~KisAbstractSliderSpinBox();
 
     void showEdit();
     void hideEdit();
 
-    void setSuffix(const QString& suffix);
+    void setSuffix(const QString &suffix);
 
     void setExponentRatio(qreal dbl);
 
 protected:
-    virtual void paintEvent(QPaintEvent* e);
-    virtual void mousePressEvent(QMouseEvent* e);
-    virtual void mouseReleaseEvent(QMouseEvent* e);
-    virtual void mouseMoveEvent(QMouseEvent* e);
-    virtual void keyPressEvent(QKeyEvent* e);
+    virtual void paintEvent(QPaintEvent *e);
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
+    virtual void mouseMoveEvent(QMouseEvent *e);
+    virtual void keyPressEvent(QKeyEvent *e);
     virtual void wheelEvent(QWheelEvent *);
 
-    virtual bool eventFilter(QObject* recv, QEvent* e);
+    virtual bool eventFilter(QObject *recv, QEvent *e);
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
@@ -65,9 +65,9 @@ protected:
     QStyleOptionSpinBox spinBoxOptions() const;
     QStyleOptionProgressBar progressBarOptions() const;
 
-    QRect progressRect(const QStyleOptionSpinBox& spinBoxOptions) const;
-    QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
-    QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
+    QRect progressRect(const QStyleOptionSpinBox &spinBoxOptions) const;
+    QRect upButtonRect(const QStyleOptionSpinBox &spinBoxOptions) const;
+    QRect downButtonRect(const QStyleOptionSpinBox &spinBoxOptions) const;
 
     int valueForX(int x, Qt::KeyboardModifiers modifiers = Qt::NoModifier) const;
 
@@ -75,20 +75,20 @@ protected:
     virtual void setInternalValue(int value) = 0;
 
 protected Q_SLOTS:
-    void contextMenuEvent(QContextMenuEvent * event);
+    void contextMenuEvent(QContextMenuEvent *event);
     void editLostFocus();
 protected:
-    KisAbstractSliderSpinBoxPrivate* const d_ptr;
+    KisAbstractSliderSpinBoxPrivate *const d_ptr;
 };
 
 class KRITAUI_EXPORT KisSliderSpinBox : public KisAbstractSliderSpinBox
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(KisSliderSpinBox)
-    Q_PROPERTY( int minimum READ minimum WRITE setMinimum )
-    Q_PROPERTY( int maximum READ maximum WRITE setMaximum )
+    Q_PROPERTY(int minimum READ minimum WRITE setMinimum)
+    Q_PROPERTY(int maximum READ maximum WRITE setMaximum)
 public:
-    KisSliderSpinBox(QWidget* parent = 0);
+    KisSliderSpinBox(QWidget *parent = 0);
     ~KisSliderSpinBox();
 
     void setRange(int minimum, int maximum);
@@ -121,7 +121,7 @@ class KRITAUI_EXPORT KisDoubleSliderSpinBox : public KisAbstractSliderSpinBox
     Q_OBJECT
     Q_DECLARE_PRIVATE(KisDoubleSliderSpinBox)
 public:
-    KisDoubleSliderSpinBox(QWidget* parent = 0);
+    KisDoubleSliderSpinBox(QWidget *parent = 0);
     ~KisDoubleSliderSpinBox();
 
     void setRange(qreal minimum, qreal maximum, int decimals = 0);

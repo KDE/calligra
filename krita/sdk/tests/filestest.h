@@ -41,14 +41,14 @@
 namespace TestUtil
 {
 
-void testFiles(const QString& _dirname, const QStringList& exclusions, const QString &resultSuffix = QString(), int fuzzy = 0)
+void testFiles(const QString &_dirname, const QStringList &exclusions, const QString &resultSuffix = QString(), int fuzzy = 0)
 {
     QDir dirSources(_dirname);
     QStringList failuresFileInfo;
     QStringList failuresDocImage;
     QStringList failuresCompare;
 
-    foreach(QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
+    foreach (QFileInfo sourceFileInfo, dirSources.entryInfoList()) {
         if (exclusions.indexOf(sourceFileInfo.fileName()) > -1) {
             continue;
         }
@@ -60,7 +60,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                 continue;
             }
 
-            KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
+            KisDocument *doc = qobject_cast<KisDocument *>(KisPart::instance()->createDocument());
 
             KisImportExportManager manager(doc);
             manager.setBatchMode(true);
@@ -79,8 +79,8 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             if (id != "GRAYA" && id != "GRAYAU16" && id != "RGBA" && id != "RGBA16") {
                 dbgKrita << "Images need conversion";
                 doc->image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8(),
-                                                    KoColorConversionTransformation::IntentAbsoluteColorimetric,
-                                                    KoColorConversionTransformation::NoOptimization);
+                                                     KoColorConversionTransformation::IntentAbsoluteColorimetric,
+                                                     KoColorConversionTransformation::NoOptimization);
             }
 
             KTemporaryFile tmpFile;

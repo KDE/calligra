@@ -31,15 +31,15 @@ namespace TJ
 {
 
 inline void
-tjWarning(const QString& msg)
+tjWarning(const QString &msg)
 {
-    qWarning()<<msg;
+    qWarning() << msg;
 }
 
 inline void
-tjDebug(const QString& msg)
+tjDebug(const QString &msg)
 {
-    qDebug()<<msg;
+    qDebug() << msg;
 }
 
 } // namespace TJ

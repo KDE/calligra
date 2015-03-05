@@ -26,7 +26,6 @@
 #include "kis_perspectivetransform_worker.h"
 #include "kis_transaction.h"
 
-
 class PerspectiveWorkerTester : public TestUtil::QImageBasedTest
 {
 public:
@@ -40,19 +39,19 @@ public:
         QVERIFY(checkLayersInitial(image));
     }
 
-    KisPaintDeviceSP paintDevice() {
+    KisPaintDeviceSP paintDevice()
+    {
         return findNode(image->root(), "paint1")->paintDevice();
     }
 
-    void checkLayer(const QString &testName) {
+    void checkLayer(const QString &testName)
+    {
         KisNodeSP node = findNode(image->root(), "paint1");
         QVERIFY(checkOneLayer(image, node, testName, 0));
     }
 
-
     KisImageSP image;
 };
-
 
 void KisPerspectiveTransformWorkerTest::testSimpleTransform()
 {

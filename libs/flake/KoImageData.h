@@ -111,7 +111,10 @@ public:
 
     KoImageData &operator=(const KoImageData &other);
 
-    inline bool operator!=(const KoImageData &other) const { return !operator==(other); }
+    inline bool operator!=(const KoImageData &other) const
+    {
+        return !operator==(other);
+    }
     bool operator==(const KoImageData &other) const;
 
     /**
@@ -127,7 +130,10 @@ public:
     bool isValid() const;
 
     /// \internal
-    KoImageDataPrivate *priv() { return d; }
+    KoImageDataPrivate *priv()
+    {
+        return d;
+    }
 
 protected:
     friend class KoImageCollection;
@@ -140,6 +146,6 @@ private:
     Q_PRIVATE_SLOT(d, void cleanupImageCache())
 };
 
-Q_DECLARE_METATYPE(KoImageData*)
+Q_DECLARE_METATYPE(KoImageData *)
 
 #endif

@@ -73,21 +73,22 @@ public:
      * Creates a null pointer.
      */
     inline KisSharedPtr()
-            : d(0) { }
+        : d(0) { }
 
     /**
      * Creates a new pointer.
      * @param p the pointer
      */
-    inline KisSharedPtr(T* p)
-            : d(p) {
+    inline KisSharedPtr(T *p)
+        : d(p)
+    {
         ref();
     }
 
-    inline KisSharedPtr(const KisWeakSharedPtr<T>& o);
+    inline KisSharedPtr(const KisWeakSharedPtr<T> &o);
 
     // Free the pointer and set it to new value
-    void attach(T* p) const;
+    void attach(T *p) const;
 
     // Free the pointer
     void clear();
@@ -96,8 +97,9 @@ public:
      * Copies a pointer.
      * @param o the pointer to copy
      */
-    inline KisSharedPtr<T>(const KisSharedPtr<T>& o)
-            : d(o.d) {
+    inline KisSharedPtr<T>(const KisSharedPtr<T> &o)
+        : d(o.d)
+    {
         ref();
     }
 
@@ -105,41 +107,51 @@ public:
      * Dereferences the object that this pointer points to. If it was
      * the last reference, the object will be deleted.
      */
-    inline ~KisSharedPtr() {
+    inline ~KisSharedPtr()
+    {
         deref();
     }
 
-    inline KisSharedPtr<T>& operator= (const KisSharedPtr& o) {
+    inline KisSharedPtr<T> &operator= (const KisSharedPtr &o)
+    {
         attach(o.d);
         return *this;
     }
-    inline const KisSharedPtr<T>& operator= (const KisSharedPtr& o) const {
+    inline const KisSharedPtr<T> &operator= (const KisSharedPtr &o) const
+    {
         attach(o.d);
         return *this;
     }
-    inline bool operator== (const T* p) const {
+    inline bool operator== (const T *p) const
+    {
         return (d == p);
     }
-    inline bool operator!= (const T* p) const {
+    inline bool operator!= (const T *p) const
+    {
         return (d != p);
     }
-    inline bool operator== (const KisSharedPtr& o) const {
+    inline bool operator== (const KisSharedPtr &o) const
+    {
         return (d == o.d);
     }
-    inline bool operator!= (const KisSharedPtr& o) const {
+    inline bool operator!= (const KisSharedPtr &o) const
+    {
         return (d != o.d);
     }
 
-    inline KisSharedPtr<T>& operator= (T* p) {
+    inline KisSharedPtr<T> &operator= (T *p)
+    {
         attach(p);
         return *this;
     }
 
-    inline operator const T*() const {
+    inline operator const T *() const
+    {
         return d;
     }
 
-    template< class T2> inline operator KisSharedPtr<T2>() const {
+    template< class T2> inline operator KisSharedPtr<T2>() const
+    {
         return KisSharedPtr<T2>(d);
     }
 
@@ -149,38 +161,45 @@ public:
     * perfectly save to put the contained pointer in another
     * KisSharedPtr, though.
     */
-    inline T* data() {
+    inline T *data()
+    {
         return d;
     }
 
     /**
     * @return the pointer
     */
-    inline const T* data() const {
+    inline const T *data() const
+    {
         return d;
     }
 
     /**
     * @return a const pointer to the shared object.
     */
-    inline const T* constData() const {
+    inline const T *constData() const
+    {
         return d;
     }
 
-    inline const T& operator*() const {
+    inline const T &operator*() const
+    {
         Q_ASSERT(d);
         return *d;
     }
-    inline T& operator*() {
+    inline T &operator*()
+    {
         Q_ASSERT(d);
         return *d;
     }
 
-    inline const T* operator->() const {
+    inline const T *operator->() const
+    {
         Q_ASSERT(d);
         return d;
     }
-    inline T* operator->() {
+    inline T *operator->()
+    {
         Q_ASSERT(d);
         return d;
     }
@@ -188,11 +207,12 @@ public:
     /**
     * @return true if the pointer is null
     */
-    inline bool isNull() const {
+    inline bool isNull() const
+    {
         return (d == 0);
     }
 private:
-    inline static void ref(const KisSharedPtr<T>* sp, T* t)
+    inline static void ref(const KisSharedPtr<T> *sp, T *t)
     {
 #ifndef HAVE_MEMORY_LEAK_TRACKER
         Q_UNUSED(sp);
@@ -207,7 +227,7 @@ private:
     {
         ref(this, d);
     }
-    inline static bool deref(const KisSharedPtr<T>* sp, T* t)
+    inline static bool deref(const KisSharedPtr<T> *sp, T *t)
     {
 #ifndef HAVE_MEMORY_LEAK_TRACKER
         Q_UNUSED(sp);
@@ -228,11 +248,11 @@ private:
             d = 0;
         }
 #else
-    Q_UNUSED(v);
+        Q_UNUSED(v);
 #endif
     }
 private:
-    mutable T* d;
+    mutable T *d;
 };
 
 /**
@@ -256,11 +276,13 @@ public:
      * Creates a new pointer.
      * @param p the pointer
      */
-    inline KisWeakSharedPtr(T* p) {
+    inline KisWeakSharedPtr(T *p)
+    {
         load(p);
     }
 
-    inline KisWeakSharedPtr<T>(const KisSharedPtr<T>& o) {
+    inline KisWeakSharedPtr<T>(const KisSharedPtr<T> &o)
+    {
         load(o.d);
     }
 
@@ -268,43 +290,51 @@ public:
      * Copies a pointer.
      * @param o the pointer to copy
      */
-    inline KisWeakSharedPtr<T>(const KisWeakSharedPtr<T>& o) {
+    inline KisWeakSharedPtr<T>(const KisWeakSharedPtr<T> &o)
+    {
         if (o.isConsistent()) {
             load(o.d);
-        }
-        else {
+        } else {
             d = 0;
             weakReference = 0;
         }
     }
 
-    inline KisWeakSharedPtr<T>& operator= (const KisWeakSharedPtr& o) {
+    inline KisWeakSharedPtr<T> &operator= (const KisWeakSharedPtr &o)
+    {
         attach(o);
         return *this;
     }
-    inline const KisWeakSharedPtr<T>& operator= (const KisWeakSharedPtr& o) const {
+    inline const KisWeakSharedPtr<T> &operator= (const KisWeakSharedPtr &o) const
+    {
         attach(o);
         return *this;
     }
-    inline bool operator== (const T* p) const {
+    inline bool operator== (const T *p) const
+    {
         return (d == p);
     }
-    inline bool operator!= (const T* p) const {
+    inline bool operator!= (const T *p) const
+    {
         return (d != p);
     }
-    inline bool operator== (const KisWeakSharedPtr& o) const {
+    inline bool operator== (const KisWeakSharedPtr &o) const
+    {
         return (d == o.d);
     }
-    inline bool operator!= (const KisWeakSharedPtr& o) const {
+    inline bool operator!= (const KisWeakSharedPtr &o) const
+    {
         return (d != o.d);
     }
 
-    inline KisWeakSharedPtr<T>& operator= (T* p) {
+    inline KisWeakSharedPtr<T> &operator= (T *p)
+    {
         attach(p);
         return *this;
     }
 
-    template< class T2> inline operator KisWeakSharedPtr<T2>() const {
+    template< class T2> inline operator KisWeakSharedPtr<T2>() const
+    {
         return KisWeakSharedPtr<T2>(d);
     }
 
@@ -314,7 +344,8 @@ public:
      * a segmentation fault. Use with care.
      * @return a const pointer to the shared object.
      */
-    inline T* data() {
+    inline T *data()
+    {
         if (!isConsistent()) {
             warnKrita << kBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
@@ -326,7 +357,8 @@ public:
     /**
      * @see data()
      */
-    inline const T* data() const {
+    inline const T *data() const
+    {
         if (!isConsistent()) {
             warnKrita << kBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
@@ -338,7 +370,8 @@ public:
     /**
      * @see data()
      */
-    inline const T* constData() const {
+    inline const T *constData() const
+    {
         if (!isConsistent()) {
             warnKrita << kBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
@@ -350,7 +383,8 @@ public:
     /**
      * @see data()
      */
-    inline operator const T*() const {
+    inline operator const T *() const
+    {
         /**
          * This operator is used in boolean expressions where we check
          * for pointer consistency, so return 0 instead of asserting.
@@ -359,7 +393,8 @@ public:
         return isConsistent() ? d : 0;
     }
 
-    inline const T& operator*() const {
+    inline const T &operator*() const
+    {
         if (!isValid()) {
             warnKrita << kBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
@@ -368,7 +403,8 @@ public:
         return *d;
     }
 
-    inline T& operator*() {
+    inline T &operator*()
+    {
         if (!isValid()) {
             warnKrita << kBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
@@ -377,7 +413,8 @@ public:
         return *d;
     }
 
-    inline const T* operator->() const {
+    inline const T *operator->() const
+    {
         if (!isValid()) {
             warnKrita << kBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
@@ -386,7 +423,8 @@ public:
         return d;
     }
 
-    inline T* operator->() {
+    inline T *operator->()
+    {
         if (!isValid()) {
             warnKrita << kBacktrace();
             Q_ASSERT_X(0, "KisWeakSharedPtr", "Weak pointer is not valid!");
@@ -398,7 +436,8 @@ public:
     /**
     * @return true if the pointer is null
     */
-    inline bool isNull() const {
+    inline bool isNull() const
+    {
         return (d == 0);
     }
 
@@ -406,58 +445,63 @@ public:
      * @return true if the weak pointer points to a valid pointer
      *         and false if the data has been deleted or is null
      */
-    inline bool isValid() const {
+    inline bool isValid() const
+    {
         Q_ASSERT(!d || weakReference);
 
-        return d && weakReference && isOdd((int)*weakReference);
+        return d && weakReference && isOdd((int) * weakReference);
     }
 private:
     static const qint32 WEAK_REF = 2;
-    static inline bool isOdd(const qint32 &x) {
+    static inline bool isOdd(const qint32 &x)
+    {
         return x & 0x01;
     }
 
-    inline bool isConsistent() const {
+    inline bool isConsistent() const
+    {
         Q_ASSERT(!d || weakReference);
 
-        return !d || (weakReference && isOdd((int)*weakReference));
+        return !d || (weakReference && isOdd((int) * weakReference));
     }
 
-    void load(T* newValue) {
+    void load(T *newValue)
+    {
         d = newValue;
 
         if (d) {
             weakReference = d->sharedWeakReference();
             weakReference->fetchAndAddOrdered(WEAK_REF);
-        }
-        else {
+        } else {
             weakReference = 0;
         }
     }
 
     // see note in kis_shared.cc
-    inline void attach(T* newValue) {
+    inline void attach(T *newValue)
+    {
         detach();
         load(newValue);
     }
 
-    inline void attach(const KisWeakSharedPtr& o) {
+    inline void attach(const KisWeakSharedPtr &o)
+    {
         detach();
         if (o.isConsistent()) {
             load(o.d);
-        }
-        else {
+        } else {
             d = 0;
             weakReference = 0;
         }
     }
 
     // see note in kis_shared.cc
-    void detach() {
+    void detach()
+    {
         d = 0;
 
         if (weakReference &&
-            weakReference->fetchAndAddOrdered(-WEAK_REF) <= WEAK_REF) {
+                weakReference->fetchAndAddOrdered(-WEAK_REF) <= WEAK_REF) {
 
             // sanity check:
             Q_ASSERT((int)*weakReference == 0);
@@ -467,14 +511,13 @@ private:
         }
     }
 
-    mutable T* d;
+    mutable T *d;
     QAtomicInt *weakReference;
 };
 
-
 template <class T>
-Q_INLINE_TEMPLATE  KisSharedPtr<T>::KisSharedPtr(const KisWeakSharedPtr<T>& o)
-        : d(o.d)
+Q_INLINE_TEMPLATE  KisSharedPtr<T>::KisSharedPtr(const KisWeakSharedPtr<T> &o)
+    : d(o.d)
 {
     if (o.isValid()) {
         ref();
@@ -484,19 +527,17 @@ Q_INLINE_TEMPLATE  KisSharedPtr<T>::KisSharedPtr(const KisWeakSharedPtr<T>& o)
          * Is the object we have just referenced still valid?
          */
         Q_ASSERT(o.isConsistent());
-    }
-    else {
+    } else {
         d = 0;
     }
 }
 
-
 template <class T>
-Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T* p) const
+Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T *p) const
 {
     if (d != p) {
         ref(this, p);
-        T* old = d;
+        T *old = d;
         d = p;
         deref(this, old);
     }
@@ -505,7 +546,7 @@ Q_INLINE_TEMPLATE void KisSharedPtr<T>::attach(T* p) const
 template <class T>
 Q_INLINE_TEMPLATE void KisSharedPtr<T>::clear()
 {
-    attach((T*)0);
+    attach((T *)0);
 }
 
 #endif

@@ -31,58 +31,60 @@ class QButtonGroup;
 class KRITAUI_EXPORT KisWidgetChooser: public QFrame
 {
     Q_OBJECT
-    
-    struct Data
-    {
-        Data(const QString& ID):
+
+    struct Data {
+        Data(const QString &ID):
             id(ID), widget(0), label(0), choosen(false) { }
-        Data(const Data& d):
+        Data(const Data &d):
             id(d.id), widget(d.widget), label(d.label), choosen(d.choosen) { }
-        Data(const QString& ID, QWidget* w, QLabel* l):
+        Data(const QString &ID, QWidget *w, QLabel *l):
             id(ID), widget(w), label(l), choosen(false) { }
-            
-        friend bool operator == (const Data& a, const Data& b) {
+
+        friend bool operator == (const Data &a, const Data &b)
+        {
             return a.id == b.id;
         }
-        
+
         QString  id;
-        QWidget* widget;
-        QLabel*  label;
+        QWidget *widget;
+        QLabel  *label;
         bool     choosen;
     };
-    
+
     typedef QList<Data>::iterator       Iterator;
     typedef QList<Data>::const_iterator ConstIterator;
-    
+
 public:
-     KisWidgetChooser(int id, QWidget* parent=0);
+    KisWidgetChooser(int id, QWidget *parent = 0);
     ~KisWidgetChooser();
-    
-    QWidget* chooseWidget(const QString& id);
-    void     addWidget(const QString& id, const QString& label, QWidget* widget);
-    QWidget* getWidget(const QString& id) const;
-    
+
+    QWidget *chooseWidget(const QString &id);
+    void     addWidget(const QString &id, const QString &label, QWidget *widget);
+    QWidget *getWidget(const QString &id) const;
+
     template<class TWidget>
-    TWidget* addWidget(const QString& id, const QString& label) {
-        TWidget* widget = new TWidget();
+    TWidget *addWidget(const QString &id, const QString &label)
+    {
+        TWidget *widget = new TWidget();
         addWidget(id, label, widget);
         return widget;
     }
-    
+
     template<class TWidget>
-    TWidget* getWidget(const QString& id) const {
-        return dynamic_cast<TWidget*>(getWidget(id));
+    TWidget *getWidget(const QString &id) const
+    {
+        return dynamic_cast<TWidget *>(getWidget(id));
     }
 public Q_SLOTS:
 
     void showPopupWidget();
-    
+
 private:
-    void     removeWidget(const QString& id);
-    QLayout* createPopupLayout();
-    QLayout* createLayout();
+    void     removeWidget(const QString &id);
+    QLayout *createPopupLayout();
+    QLayout *createLayout();
     QIcon    arrowIcon();
-    
+
 protected Q_SLOTS:
     void slotButtonPressed();
     void slotWidgetChoosen(int index);
@@ -90,9 +92,9 @@ protected Q_SLOTS:
 private:
     int           m_chooserid;
     QIcon         m_acceptIcon;
-    QToolButton*  m_arrowButton;
-    QButtonGroup* m_buttons;
-    QFrame*       m_popup;
+    QToolButton  *m_arrowButton;
+    QButtonGroup *m_buttons;
+    QFrame       *m_popup;
     QString       m_choosenID;
     QList<Data>   m_widgets;
 };

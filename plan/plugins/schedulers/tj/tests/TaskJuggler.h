@@ -23,8 +23,9 @@
 #include <QtTest>
 #include <ktempdir.h>
 
-namespace TJ {
-    class Project;
+namespace TJ
+{
+class Project;
 }
 
 namespace KPlato

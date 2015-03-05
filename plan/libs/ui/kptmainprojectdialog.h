@@ -24,7 +24,6 @@
 
 #include <kdialog.h>
 
-
 namespace KPlato
 {
 
@@ -32,14 +31,14 @@ class Project;
 class MainProjectPanel;
 class MacroCommand;
 
-
-class KPLATOUI_EXPORT MainProjectDialog : public KDialog {
+class KPLATOUI_EXPORT MainProjectDialog : public KDialog
+{
     Q_OBJECT
 public:
-    explicit MainProjectDialog(Project &project, QWidget *parent=0, const char *name=0);
+    explicit MainProjectDialog(Project &project, QWidget *parent = 0, const char *name = 0);
 
     MacroCommand *buildCommand();
-    
+
 protected Q_SLOTS:
     void slotOk();
 

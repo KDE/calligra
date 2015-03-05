@@ -55,14 +55,14 @@ bool KisPressureMirrorOption::isVerticalMirrorEnabled()
     return m_enableVerticalMirror;
 }
 
-void KisPressureMirrorOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPressureMirrorOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(MIRROR_HORIZONTAL_ENABLED, m_enableHorizontalMirror);
     setting->setProperty(MIRROR_VERTICAL_ENABLED, m_enableVerticalMirror);
 }
 
-void KisPressureMirrorOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureMirrorOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOption::readOptionSetting(setting);
     m_enableHorizontalMirror = setting->getBool(MIRROR_HORIZONTAL_ENABLED, false);
@@ -72,7 +72,7 @@ void KisPressureMirrorOption::readOptionSetting(const KisPropertiesConfiguration
     m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredY", false);
 }
 
-MirrorProperties KisPressureMirrorOption::apply(const KisPaintInformation& info) const
+MirrorProperties KisPressureMirrorOption::apply(const KisPaintInformation &info) const
 {
     int mirrorXIncrement = m_canvasAxisXMirrored;
     int mirrorYIncrement = m_canvasAxisYMirrored;
@@ -96,6 +96,4 @@ MirrorProperties KisPressureMirrorOption::apply(const KisPaintInformation& info)
 
     return mirrors;
 }
-
-
 

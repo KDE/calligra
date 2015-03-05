@@ -32,7 +32,7 @@ class KoFilter::Private
 public:
     QPointer<KoUpdater> updater;
 
-    Private() :updater(0) {}
+    Private() : updater(0) {}
 };
 
 KoFilter::KoFilter(QObject *parent)
@@ -42,11 +42,13 @@ KoFilter::KoFilter(QObject *parent)
 
 KoFilter::~KoFilter()
 {
-    if (d->updater) d->updater->setProgress(100);
+    if (d->updater) {
+        d->updater->setProgress(100);
+    }
     delete d;
 }
 
-void KoFilter::setUpdater(const QPointer<KoUpdater>& updater)
+void KoFilter::setUpdater(const QPointer<KoUpdater> &updater)
 {
     if (d->updater && !updater) {
         disconnect(this, SLOT(slotProgress(int)));

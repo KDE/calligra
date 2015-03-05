@@ -43,12 +43,12 @@ public:
     virtual ~FormWidget();
 
     Form *form() const;
-    void setForm(Form* f);
+    void setForm(Form *f);
 
 protected:
     class Private;
 
-    Private* const d;
+    Private *const d;
     friend class Form;
 };
 

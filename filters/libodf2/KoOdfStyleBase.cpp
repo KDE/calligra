@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "KoOdfStyleBase.h"
 
@@ -35,10 +34,8 @@
 //#include "KoOdfParagraphProperties.h"
 //#include "KoOdfGraphicProperties.h"
 
-
 // ================================================================
 //                         class KoOdfStyleBase
-
 
 class KoOdfStyleBase::Private
 {
@@ -68,9 +65,7 @@ KoOdfStyleBase::Private::~Private()
 {
 }
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfStyleBase::KoOdfStyleBase(KoOdfStyleBase::StyleType type)
     : d(new KoOdfStyleBase::Private(type))
@@ -82,12 +77,10 @@ KoOdfStyleBase::~KoOdfStyleBase()
     delete d;
 }
 
-
 KoOdfStyleBase::StyleType KoOdfStyleBase::type() const
 {
     return d->type;
 }
-
 
 QString KoOdfStyleBase::name() const
 {
@@ -109,7 +102,6 @@ void KoOdfStyleBase::setDisplayName(const QString &name)
     d->displayName = name;
 }
 
-
 bool KoOdfStyleBase::isDefaultStyle() const
 {
     return d->isDefaultStyle;
@@ -119,8 +111,6 @@ void KoOdfStyleBase::setIsDefaultStyle(bool isDefaultStyle)
 {
     d->isDefaultStyle = isDefaultStyle;
 }
-
-
 
 bool KoOdfStyleBase::inUse() const
 {

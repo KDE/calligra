@@ -20,7 +20,6 @@
 
 #include "kundo2magicstring.h"
 
-
 KUndo2MagicString::KUndo2MagicString()
 {
 }

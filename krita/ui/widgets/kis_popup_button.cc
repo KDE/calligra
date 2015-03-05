@@ -31,7 +31,6 @@
 #include <kis_debug.h>
 #include <kis_paintop_presets_popup.h>
 
-
 struct KisPopupButton::Private {
     Private()
         : frameLayout(0)
@@ -41,9 +40,9 @@ struct KisPopupButton::Private {
     QPointer<QHBoxLayout> frameLayout;
 };
 
-KisPopupButton::KisPopupButton(QWidget* parent)
-        : QPushButton(parent)
-        , m_d(new Private)
+KisPopupButton::KisPopupButton(QWidget *parent)
+    : QPushButton(parent)
+    , m_d(new Private)
 {
     setObjectName("KisPopupButton");
     connect(this, SIGNAL(released()), SLOT(showPopupWidget()));
@@ -64,7 +63,7 @@ void KisPopupButton::setAlwaysVisible(bool v)
     }
 }
 
-void KisPopupButton::setPopupWidget(QWidget* widget)
+void KisPopupButton::setPopupWidget(QWidget *widget)
 {
     if (widget) {
         /**
@@ -87,7 +86,7 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
 
         // Workaround for bug 279740, preset popup widget resizes after it's shown for the first time
         // so we catch that and correct the position
-        KisPaintOpPresetsPopup* presetPopup = dynamic_cast<KisPaintOpPresetsPopup*>(widget);
+        KisPaintOpPresetsPopup *presetPopup = dynamic_cast<KisPaintOpPresetsPopup *>(widget);
         if (presetPopup) {
             connect(presetPopup, SIGNAL(sizeChanged()), this, SLOT(adjustPosition()));
         }
@@ -105,8 +104,7 @@ void KisPopupButton::showPopupWidget()
         m_d->frame->raise();
         m_d->frame->show();
         adjustPosition();
-    }
-    else {
+    } else {
         hidePopupWidget();
     }
 }
@@ -118,7 +116,7 @@ void KisPopupButton::hidePopupWidget()
     }
 }
 
-void KisPopupButton::paintEvent ( QPaintEvent * event  )
+void KisPopupButton::paintEvent(QPaintEvent *event)
 {
     QPushButton::paintEvent(event);
     paintPopupArrow();
@@ -139,7 +137,7 @@ void KisPopupButton::paintPopupArrow()
 
 void KisPopupButton::adjustPosition()
 {
-    KisPaintOpPresetsPopup* presetPopup = dynamic_cast<KisPaintOpPresetsPopup*>(m_d->popupWidget.data());
+    KisPaintOpPresetsPopup *presetPopup = dynamic_cast<KisPaintOpPresetsPopup *>(m_d->popupWidget.data());
     if (presetPopup && presetPopup->detached()) {
         return;
     }
@@ -148,18 +146,22 @@ void KisPopupButton::adjustPosition()
     QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);
 
     // Get the available geometry of the screen which contains this KisPopupButton
-    QDesktopWidget* desktopWidget = QApplication::desktop();
+    QDesktopWidget *desktopWidget = QApplication::desktop();
     QRect screenRect = desktopWidget->availableGeometry(this);
 
     // Make sure the popup is not drawn outside the screen area
-    if (popupRect.right() > screenRect.right())
+    if (popupRect.right() > screenRect.right()) {
         popupRect.translate(screenRect.right() - popupRect.right(), 0);
-    if (popupRect.left() < screenRect.left())
+    }
+    if (popupRect.left() < screenRect.left()) {
         popupRect.translate(screenRect.left() - popupRect.left(), 0);
-    if (popupRect.bottom() > screenRect.bottom())
+    }
+    if (popupRect.bottom() > screenRect.bottom()) {
         popupRect.translate(0, -m_d->frame->height());
-    if (popupRect.top() < screenRect.top())
-        popupRect.moveTo(0,0);
+    }
+    if (popupRect.top() < screenRect.top()) {
+        popupRect.moveTo(0, 0);
+    }
 
     m_d->frame->setGeometry(popupRect);
 }

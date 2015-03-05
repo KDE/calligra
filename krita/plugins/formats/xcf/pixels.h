@@ -2,7 +2,7 @@
  *
  * This file was written by Henning Makholm <henning@makholm.net>
  * It is hereby in the public domain.
- * 
+ *
  * In jurisdictions that do not recognise grants of copyright to the
  * public domain: I, the author and (presumably, in those jurisdictions)
  * copyright holder, hereby permit anyone to distribute and use this code,
@@ -41,7 +41,7 @@
  * significant byte on all archs - it is tested and used more
  * often than the visible channels.
  */
-typedef uint32_t rgba ;
+typedef uint32_t rgba;
 
 #define ALPHA_SHIFT 0
 #define RED_SHIFT 8
@@ -54,19 +54,19 @@ typedef uint32_t rgba ;
 #define NEWALPHA(rgb,a) (((rgba)(rgb) & 0xFFFFFF00) + (a))
 
 #ifdef PRECOMPUTED_SCALETABLE
-extern const uint8_t scaletable[256][256] ;
+extern const uint8_t scaletable[256][256];
 #define INIT_SCALETABLE_IF(foo) ((void)0)
 #else
-extern uint8_t scaletable[256][256] ;
-extern int ok_scaletable ;
+extern uint8_t scaletable[256][256];
+extern int ok_scaletable;
 void mk_scaletable(void);
 #define INIT_SCALETABLE_IF(foo) \
-             (ok_scaletable || !(foo) || (mk_scaletable(),0) )
+    (ok_scaletable || !(foo) || (mk_scaletable(),0) )
 #endif
 
-extern const rgba graytable[256] ;
-extern rgba colormap[256] ;
-extern unsigned colormapLength ;
+extern const rgba graytable[256];
+extern rgba colormap[256];
+extern unsigned colormapLength;
 void initLayer(struct xcfLayer *);
 void initColormap();
 
@@ -83,11 +83,11 @@ int degrayPixel(rgba); /* returns -1 for non-gray pixels */
 /* This is probably the only common architecture where small constants
  * are more efficient for byte operations.
  */
-typedef int8_t summary_t ;
-typedef short int refcount_t ;
+typedef int8_t summary_t;
+typedef short int refcount_t;
 #else
-typedef int summary_t ;
-typedef int refcount_t ;
+typedef int summary_t;
+typedef int refcount_t;
 #endif
 
 #define TILESUMMARY_UPTODATE 8
@@ -95,10 +95,10 @@ typedef int refcount_t ;
 #define TILESUMMARY_ALLFULL 2
 #define TILESUMMARY_CRISP   1 /* everyting either null or full */
 struct Tile {
-  refcount_t refcount ;
-  summary_t summary ; /* a combination of TIMESUMMARY_FOO constatns */
-  unsigned count ;
-  rgba pixels[TILE_WIDTH * TILE_HEIGHT];
+    refcount_t refcount;
+    summary_t summary; /* a combination of TIMESUMMARY_FOO constatns */
+    unsigned count;
+    rgba pixels[TILE_WIDTH * TILE_HEIGHT];
 };
 /* Actually, the Tile structures that get allocated many not have
  * room for that many pixels. We subtract the space for those we don't
@@ -106,23 +106,22 @@ struct Tile {
  *  OTOH, one can also use a static struct Tile for temporary storage.
  */
 
-
 #define assertTileCompatibility(t1,t2) assert((t1)->count==(t2)->count)
 
 struct Tile *newTile(struct rect);
-struct Tile *forkTile(struct Tile*);
-void freeTile(struct Tile*);
+struct Tile *forkTile(struct Tile *);
+void freeTile(struct Tile *);
 #define invalidateSummary(tile,mask) \
-  do{ assert((tile)->refcount==1); (tile)->summary &= mask; } while(0)
+    do{ assert((tile)->refcount==1); (tile)->summary &= mask; } while(0)
 summary_t __ATTRIBUTE__((pure)) tileSummary(struct Tile *);
 
-void fillTile(struct Tile*,rgba);
+void fillTile(struct Tile *, rgba);
 
 /* applyMask() destructively changes tile,
  * applyMask() gets ownership of mask
  */
 void applyMask(struct Tile *tile, struct Tile *mask);
 
-struct Tile *getLayerTile(struct xcfLayer *,const struct rect *);
+struct Tile *getLayerTile(struct xcfLayer *, const struct rect *);
 
 #endif /* FLATTEN_H */

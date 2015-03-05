@@ -29,9 +29,8 @@ class KRITAIMAGE_EXPORT KisProgressInterface
 public:
 
     virtual ~KoProgressInterface();
-    virtual void detachUpdater(KoProgressUpdater* updater) = 0;
-    virtual void attachUpdater(KoProgressUpdater* updater) = 0;
+    virtual void detachUpdater(KoProgressUpdater *updater) = 0;
+    virtual void attachUpdater(KoProgressUpdater *updater) = 0;
 };
-
 
 #endif // KIS_PROGRESS_INTERFACE_H

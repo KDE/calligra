@@ -26,7 +26,7 @@
 #include <QWidget>
 
 KexiTestObject::KexiTestObject(QObject *object, const QString &name)
- : m_object(object), m_name(name)
+    : m_object(object), m_name(name)
 {
 }
 
@@ -34,7 +34,7 @@ class KexiTester::Private
 {
 public:
     Private() {}
-    QMap<QString, QObject*> objects;
+    QMap<QString, QObject *> objects;
 };
 
 KexiTester::KexiTester()
@@ -48,7 +48,7 @@ KexiTester::~KexiTester()
 }
 
 //static
-KexiTester* KexiTester::self()
+KexiTester *KexiTester::self()
 {
     K_GLOBAL_STATIC(KexiTester, g_kexiTester)
     return g_kexiTester;
@@ -62,10 +62,10 @@ QObject *KexiTester::object(const QString &name) const
 QWidget *KexiTester::widget(const QString &name) const
 {
     QObject *o = object(name);
-    return qobject_cast<QWidget*>(o);
+    return qobject_cast<QWidget *>(o);
 }
 
-KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject &object)
+KEXIUTILS_EXPORT KexiTester &operator<<(KexiTester &tester, const KexiTestObject &object)
 {
     if (!object.m_object) {
         kWarning() << "No object provided";

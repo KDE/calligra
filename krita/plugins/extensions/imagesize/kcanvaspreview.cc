@@ -23,7 +23,7 @@
 #include <QPainter>
 #include <QCursor>
 
-KCanvasPreview::KCanvasPreview(QWidget * parent) : QWidget(parent), m_dragging(false)
+KCanvasPreview::KCanvasPreview(QWidget *parent) : QWidget(parent), m_dragging(false)
 {
     setMouseTracking(true);
 }

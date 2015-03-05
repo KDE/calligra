@@ -26,9 +26,9 @@
 #include "kis_selection_mask.h"
 #include "kis_pixel_selection.h"
 
-KisReselectGlobalSelectionCommand::KisReselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent) :
-        KUndo2Command(kundo2_i18n("Reselect"), parent)
-        , m_image(image)
+KisReselectGlobalSelectionCommand::KisReselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command *parent) :
+    KUndo2Command(kundo2_i18n("Reselect"), parent)
+    , m_image(image)
 {
 }
 

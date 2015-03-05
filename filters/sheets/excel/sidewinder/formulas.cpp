@@ -59,25 +59,27 @@ FormulaToken::FormulaToken(unsigned t)
     d->id = t;
 }
 
-FormulaToken::FormulaToken(const FormulaToken& token)
+FormulaToken::FormulaToken(const FormulaToken &token)
 {
     d = new Private;
     d->ver = token.d->ver;
     d->id = token.id();
 
     d->data.resize(token.d->data.size());
-    for (unsigned i = 0; i < d->data.size(); ++i)
+    for (unsigned i = 0; i < d->data.size(); ++i) {
         d->data[i] = token.d->data[i];
+    }
 }
 
-FormulaToken& FormulaToken::operator=(const FormulaToken& token)
+FormulaToken &FormulaToken::operator=(const FormulaToken &token)
 {
     d->ver = token.d->ver;
     d->id = token.id();
 
     d->data.resize(token.d->data.size());
-    for (unsigned i = 0; i < d->data.size(); ++i)
+    for (unsigned i = 0; i < d->data.size(); ++i) {
         d->data[i] = token.d->data[i];
+    }
     return *this;
 }
 
@@ -89,7 +91,7 @@ FormulaToken::~FormulaToken()
 FormulaToken FormulaToken::createBool(bool value)
 {
     FormulaToken t(Bool);
-    unsigned char data = value ? 1: 0;
+    unsigned char data = value ? 1 : 0;
     t.setData(1, &data);
     return t;
 }
@@ -104,7 +106,7 @@ FormulaToken FormulaToken::createNum(double value)
     ds.setFloatingPointPrecision(QDataStream::DoublePrecision);
     ds << value;
     Q_ASSERT(b.data().size() == 8);
-    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char *>(b.data().data()));
     return t;
 }
 
@@ -120,11 +122,11 @@ FormulaToken FormulaToken::createStr(const QString &value)
     for (int i = 0; i < value.length(); i++) {
         ds << quint16(value[i].unicode());
     }
-    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char *>(b.data().data()));
     return t;
 }
 
-FormulaToken FormulaToken::createRef(const QPoint& pos, bool rowFixed, bool colFixed)
+FormulaToken FormulaToken::createRef(const QPoint &pos, bool rowFixed, bool colFixed)
 {
     FormulaToken t(Ref);
     QBuffer b;
@@ -136,11 +138,15 @@ FormulaToken FormulaToken::createRef(const QPoint& pos, bool rowFixed, bool colF
     bool rowRel = !rowFixed;
     bool colRel = !colFixed;
 
-    if (rowRel) col |= 0x4000;
-    if (colRel) col |= 0x8000;
+    if (rowRel) {
+        col |= 0x4000;
+    }
+    if (colRel) {
+        col |= 0x8000;
+    }
     ds << quint16(row);
     ds << quint16(col);
-    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char *>(b.data().data()));
     return t;
 }
 
@@ -148,11 +154,11 @@ FormulaToken FormulaToken::createRefErr()
 {
     FormulaToken t(RefErr);
     quint32 zero = 0;
-    t.setData(4, reinterpret_cast<unsigned char*>(&zero));
+    t.setData(4, reinterpret_cast<unsigned char *>(&zero));
     return t;
 }
 
-FormulaToken FormulaToken::createArea(const QRect& area, bool topFixed, bool bottomFixed, bool leftFixed, bool rightFixed)
+FormulaToken FormulaToken::createArea(const QRect &area, bool topFixed, bool bottomFixed, bool leftFixed, bool rightFixed)
 {
     FormulaToken t(Area);
     QBuffer b;
@@ -168,15 +174,23 @@ FormulaToken FormulaToken::createArea(const QRect& area, bool topFixed, bool bot
     bool rowRel2 = !bottomFixed;
     bool colRel2 = !rightFixed;
 
-    if (rowRel1) col1 |= 0x4000;
-    if (colRel1) col1 |= 0x8000;
-    if (rowRel2) col2 |= 0x4000;
-    if (colRel2) col2 |= 0x8000;
+    if (rowRel1) {
+        col1 |= 0x4000;
+    }
+    if (colRel1) {
+        col1 |= 0x8000;
+    }
+    if (rowRel2) {
+        col2 |= 0x4000;
+    }
+    if (colRel2) {
+        col2 |= 0x8000;
+    }
     ds << quint16(row1);
     ds << quint16(row2);
     ds << quint16(col1);
     ds << quint16(col2);
-    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char *>(b.data().data()));
     return t;
 }
 
@@ -184,7 +198,7 @@ FormulaToken FormulaToken::createAreaErr()
 {
     FormulaToken t(AreaErr);
     quint64 zero = 0;
-    t.setData(8, reinterpret_cast<unsigned char*>(&zero));
+    t.setData(8, reinterpret_cast<unsigned char *>(&zero));
     return t;
 }
 
@@ -202,7 +216,7 @@ FormulaToken FormulaToken::createFunc(const QString &func, unsigned argCount)
         ds << quint8(argCount);
     }
     ds << quint16(functionIndex(func));
-    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char *>(b.data().data()));
     return t;
 }
 
@@ -221,9 +235,9 @@ unsigned FormulaToken::id() const
     return d->id;
 }
 
-const char* FormulaToken::idAsString() const
+const char *FormulaToken::idAsString() const
 {
-    const char* s = 0;
+    const char *s = 0;
 
     switch (d->id) {
     case Matrix:       s = "Matrix"; break;
@@ -280,7 +294,7 @@ const char* FormulaToken::idAsString() const
     case Attr: switch (attr()) {
         case AttrChoose:    s = "AttrChoose"; break;
         default:            s = "Attr"; break;
-    } break;
+        } break;
     case 0:            s = ""; break; // NOPE...
     default:
         s = "Unknown";
@@ -290,7 +304,6 @@ const char* FormulaToken::idAsString() const
 
     return s;
 }
-
 
 unsigned FormulaToken::size() const
 {
@@ -321,8 +334,8 @@ unsigned FormulaToken::size() const
 
     case Attr:
         switch (attr()) {
-            case AttrChoose:    s = 3 + 2 * (1+readU16(&(d->data[1]))); break;
-            default:            s = 3; break;
+        case AttrChoose:    s = 3 + 2 * (1 + readU16(&(d->data[1]))); break;
+        default:            s = 3; break;
         } break;
 
     case ErrorCode:
@@ -392,21 +405,24 @@ unsigned FormulaToken::size() const
     case MemNoMemN:
     default:
         if (d->data.empty())
-        // WARNING this is unhandled case
+            // WARNING this is unhandled case
+        {
             printf("Unhandled formula token with id %i\n", d->id);
-        else
+        } else {
             s = d->data.size();
+        }
         break;
     }
 
     return s;
 }
 
-void FormulaToken::setData(unsigned size, const unsigned char* data)
+void FormulaToken::setData(unsigned size, const unsigned char *data)
 {
     d->data.resize(size);
-    for (unsigned i = 0; i < size; ++i)
+    for (unsigned i = 0; i < size; ++i) {
         d->data[i] = data[i];
+    }
 }
 
 std::vector<unsigned char> FormulaToken::data() const
@@ -418,10 +434,11 @@ Value FormulaToken::value() const
 {
     Value result;
 
-    unsigned char* buf;
+    unsigned char *buf;
     buf = new unsigned char[d->data.size()];
-    for (unsigned k = 0; k < d->data.size(); ++k)
+    for (unsigned k = 0; k < d->data.size(); ++k) {
         buf[k] = d->data[k];
+    }
 
     // FIXME sanity check: verify size of data
     switch (d->id) {
@@ -869,9 +886,9 @@ static const FunctionEntry FunctionEntries[] = {
     { "ISHYPERLINK",     1, false }     // 380
 };
 
-static const FunctionEntry* functionEntry(const QString& functionName)
+static const FunctionEntry *functionEntry(const QString &functionName)
 {
-    static QHash<QString, const FunctionEntry*> entries;
+    static QHash<QString, const FunctionEntry *> entries;
     if (entries.isEmpty()) {
         for (int i = 0; i <= 380; i++) {
             entries[QString::fromLatin1(FunctionEntries[i].name)] = &FunctionEntries[i];
@@ -880,9 +897,11 @@ static const FunctionEntry* functionEntry(const QString& functionName)
     return entries.value(functionName);
 }
 
-const char* FormulaToken::functionName() const
+const char *FormulaToken::functionName() const
 {
-    if (functionIndex() > 367) return 0;
+    if (functionIndex() > 367) {
+        return 0;
+    }
     return FunctionEntries[ functionIndex()].name;
 }
 
@@ -891,7 +910,9 @@ unsigned FormulaToken::functionParams() const
     unsigned params = 0;
 
     if (d->id == Function) {
-        if (functionIndex() > 367) return 0;
+        if (functionIndex() > 367) {
+            return 0;
+        }
         params = FunctionEntries[ functionIndex()].params;
     }
 
@@ -905,22 +926,28 @@ unsigned FormulaToken::functionParams() const
 
 unsigned FormulaToken::functionIndex(const QString &functionName)
 {
-    const FunctionEntry* e = functionEntry(functionName);
-    if (e) return e - FunctionEntries;
+    const FunctionEntry *e = functionEntry(functionName);
+    if (e) {
+        return e - FunctionEntries;
+    }
     return -1;
 }
 
 unsigned FormulaToken::functionParams(const QString &functionName)
 {
-    const FunctionEntry* e = functionEntry(functionName);
-    if (e) return e->params;
+    const FunctionEntry *e = functionEntry(functionName);
+    if (e) {
+        return e->params;
+    }
     return 0;
 }
 
 bool FormulaToken::fixedFunctionParams(const QString &functionName)
 {
-    const FunctionEntry* e = functionEntry(functionName);
-    if (e) return !e->varParams;
+    const FunctionEntry *e = functionEntry(functionName);
+    if (e) {
+        return !e->varParams;
+    }
     return false;
 }
 
@@ -945,8 +972,7 @@ unsigned long FormulaToken::nameIndex() const
             buf[2] = d->data[2];
             buf[3] = d->data[3];
             ni = readU32(buf);
-        }
-        else if (d->ver == Excel95) {
+        } else if (d->ver == Excel95) {
             buf[0] = d->data[8];
             buf[1] = d->data[9];
             ni = readU16(buf);
@@ -967,8 +993,7 @@ unsigned long FormulaToken::nameXIndex() const
             buf[2] = d->data[4];
             buf[3] = d->data[5];
             ni = readU32(buf);
-        }
-        else if (d->ver == Excel95) {
+        } else if (d->ver == Excel95) {
             buf[0] = d->data[10];
             buf[1] = d->data[11];
             ni = readU16(buf);
@@ -977,7 +1002,7 @@ unsigned long FormulaToken::nameXIndex() const
     return ni;
 }
 
-static QString escapeSheetName(const QString& sheetName)
+static QString escapeSheetName(const QString &sheetName)
 {
     bool hasSpecial = false;
     for (int i = 0; i < sheetName.length(); i++) {
@@ -987,10 +1012,12 @@ static QString escapeSheetName(const QString& sheetName)
         }
     }
 
-    if (!hasSpecial) return sheetName;
+    if (!hasSpecial) {
+        return sheetName;
+    }
 
     QString res = sheetName;
-    while(res.startsWith(QLatin1Char('\'')) && res.endsWith(QLatin1Char('\''))) {
+    while (res.startsWith(QLatin1Char('\'')) && res.endsWith(QLatin1Char('\''))) {
         res.remove(0, 1).chop(1);
     }
     return "$'" + res.replace('\'', QLatin1String("\'\'")) + "'";
@@ -1030,10 +1057,18 @@ QString FormulaToken::area(unsigned row, unsigned col, bool relative) const
         col2Ref &= 0x3fff;
 
         if (relative) {
-            if (row1Ref & 0x8000) row1Ref -= 0x10000;
-            if (row2Ref & 0x8000) row2Ref -= 0x10000;
-            if (col1Ref & 0x80) col1Ref -= 0x100;
-            if (col2Ref & 0x80) col2Ref -= 0x100;
+            if (row1Ref & 0x8000) {
+                row1Ref -= 0x10000;
+            }
+            if (row2Ref & 0x8000) {
+                row2Ref -= 0x10000;
+            }
+            if (col1Ref & 0x80) {
+                col1Ref -= 0x100;
+            }
+            if (col2Ref & 0x80) {
+                col2Ref -= 0x100;
+            }
         }
     } else {
         buf[0] = d->data[0];
@@ -1061,10 +1096,18 @@ QString FormulaToken::area(unsigned row, unsigned col, bool relative) const
         row2Ref &= 0x3fff;
 
         if (relative) {
-            if (row1Ref & 0x2000) row1Ref -= 0x4000;
-            if (row2Ref & 0x2000) row2Ref -= 0x4000;
-            if (col1Ref & 0x80) col1Ref -= 0x100;
-            if (col2Ref & 0x80) col2Ref -= 0x100;
+            if (row1Ref & 0x2000) {
+                row1Ref -= 0x4000;
+            }
+            if (row2Ref & 0x2000) {
+                row2Ref -= 0x4000;
+            }
+            if (col1Ref & 0x80) {
+                col1Ref -= 0x100;
+            }
+            if (col2Ref & 0x80) {
+                col2Ref -= 0x100;
+            }
         }
     }
 
@@ -1078,18 +1121,22 @@ QString FormulaToken::area(unsigned row, unsigned col, bool relative) const
     QString result;
     result.append(QString("["));    // OpenDocument format
 
-    if (!col1Relative)
+    if (!col1Relative) {
         result.append(QString("$"));
+    }
     result.append(Cell::columnLabel(col1Ref));
-    if (!row1Relative)
+    if (!row1Relative) {
         result.append(QString("$"));
+    }
     result.append(QString::number(row1Ref + 1));
     result.append(QString(":"));
-    if (!col2Relative)
+    if (!col2Relative) {
         result.append(QString("$"));
+    }
     result.append(Cell::columnLabel(col2Ref));
-    if (!row2Relative)
+    if (!row2Relative) {
         result.append(QString("$"));
+    }
     result.append(QString::number(row2Ref + 1));
 
     result.append(QString("]"));  // OpenDocument format
@@ -1097,7 +1144,7 @@ QString FormulaToken::area(unsigned row, unsigned col, bool relative) const
     return result;
 }
 
-QString FormulaToken::area3d(const std::vector<QString>& externSheets, unsigned /*row*/, unsigned /*col*/) const
+QString FormulaToken::area3d(const std::vector<QString> &externSheets, unsigned /*row*/, unsigned /*col*/) const
 {
     if (version() != Excel97) {
         return QString("Unknown");
@@ -1138,24 +1185,29 @@ QString FormulaToken::area3d(const std::vector<QString>& externSheets, unsigned 
     QString result;
     result.append(QString("["));    // OpenDocument format
 
-    if (sheetRef >= externSheets.size())
+    if (sheetRef >= externSheets.size()) {
         result.append(QString("Error"));
-    else
+    } else {
         result.append(escapeSheetName(externSheets[sheetRef]));
+    }
     result.append(QString("."));
 
-    if (!col1Relative)
+    if (!col1Relative) {
         result.append(QString("$"));
+    }
     result.append(Cell::columnLabel(col1Ref));
-    if (!row1Relative)
+    if (!row1Relative) {
         result.append(QString("$"));
+    }
     result.append(QString::number(row1Ref + 1));
     result.append(QString(":"));
-    if (!col2Relative)
+    if (!col2Relative) {
         result.append(QString("$"));
+    }
     result.append(Cell::columnLabel(col2Ref));
-    if (!row2Relative)
+    if (!row2Relative) {
         result.append(QString("$"));
+    }
     result.append(QString::number(row2Ref + 1));
 
     result.append(QString("]"));  // OpenDocument format
@@ -1273,11 +1325,13 @@ QString FormulaToken::ref(unsigned /*row*/, unsigned /*col*/) const
 
     result.append(QString("["));    // OpenDocument format
 
-    if (!colRelative)
+    if (!colRelative) {
         result.append(QString("$"));
+    }
     result.append(Cell::columnLabel(colRef));
-    if (!rowRelative)
+    if (!rowRelative) {
         result.append(QString("$"));
+    }
     result.append(QString::number(rowRef + 1));
 
     result.append(QString("]"));  // OpenDocument format
@@ -1324,17 +1378,23 @@ QString FormulaToken::refn(unsigned row, unsigned col) const
         }
     }
 
-    if (colRelative) colRef += col;
-    if (rowRelative) rowRef += row;
+    if (colRelative) {
+        colRef += col;
+    }
+    if (rowRelative) {
+        rowRef += row;
+    }
     QString result;
 
     result.append(QString("["));    // OpenDocument format
 
-    if (!colRelative)
+    if (!colRelative) {
         result.append(QString("$"));
+    }
     result.append(Cell::columnLabel(qMax(0, colRef)));
-    if (!rowRelative)
+    if (!rowRelative) {
         result.append(QString("$"));
+    }
     result.append(QString::number(rowRef + 1));
 
     result.append(QString("]"));  // OpenDocument format
@@ -1342,7 +1402,7 @@ QString FormulaToken::refn(unsigned row, unsigned col) const
     return result;
 }
 
-QString FormulaToken::ref3d(const std::vector<QString>& externSheets, unsigned /*row*/, unsigned /*col*/) const
+QString FormulaToken::ref3d(const std::vector<QString> &externSheets, unsigned /*row*/, unsigned /*col*/) const
 {
     if (version() != Excel97) {
         return QString("Unknown");
@@ -1372,21 +1432,23 @@ QString FormulaToken::ref3d(const std::vector<QString>& externSheets, unsigned /
 
     result.append(QString("["));    // OpenDocument format
 
-    if (sheetRef >= externSheets.size())
+    if (sheetRef >= externSheets.size()) {
         result.append(QString("Error"));
-    else
+    } else {
         result.append(escapeSheetName(externSheets[sheetRef]));
+    }
     result.append(QString("."));
 
-    if (!colRelative)
+    if (!colRelative) {
         result.append(QString("$"));
+    }
     result.append(Cell::columnLabel(colRef));
-    if (!rowRelative)
+    if (!rowRelative) {
         result.append(QString("$"));
+    }
     result.append(QString::number(rowRef + 1));
 
     result.append(QString("]"));  // OpenDocument format
-
 
     return result;
 }
@@ -1396,9 +1458,9 @@ QString FormulaToken::array(unsigned row, unsigned col) const
     Q_UNUSED(row);
     Q_UNUSED(col);
 
-    #ifdef __GNUC__
-        #warning TODO Implement FormulaToken::array()
-    #endif
+#ifdef __GNUC__
+#warning TODO Implement FormulaToken::array()
+#endif
 
     printf("Unhandled formula array-token with row=%i and column=%i\n", row, col);
 
@@ -1444,7 +1506,7 @@ std::pair<unsigned, unsigned> FormulaToken::baseFormulaRecord() const
     }
 }
 
-std::ostream& operator<<(std::ostream& s,  Swinder::FormulaToken token)
+std::ostream &operator<<(std::ostream &s,  Swinder::FormulaToken token)
 {
     s << std::setw(2) << std::hex << token.id() << std::dec;
     // s  << "  Size: " << std::dec << token.size();
@@ -1473,7 +1535,7 @@ std::ostream& operator<<(std::ostream& s,  Swinder::FormulaToken token)
     return s;
 }
 
-FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const unsigned char* data, unsigned version)
+FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const unsigned char *data, unsigned version)
 {
     FormulaTokens tokens;
     const unsigned formula_len = readU16(data + pos);
@@ -1508,17 +1570,21 @@ FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const u
 
 typedef std::vector<QString> UStringStack;
 
-static void mergeTokens(UStringStack* stack, unsigned count, QString mergeString)
+static void mergeTokens(UStringStack *stack, unsigned count, QString mergeString)
 {
-    if (!stack) return;
-    if (stack->size() < count) return;
+    if (!stack) {
+        return;
+    }
+    if (stack->size() < count) {
+        return;
+    }
 
     QString s1, s2;
 
     while (count) {
         count--;
 
-        QString last = (*stack)[stack->size()-1];
+        QString last = (*stack)[stack->size() - 1];
         QString tmp = last;
         tmp.append(s1);
         s1 = tmp;
@@ -1539,17 +1605,19 @@ static void mergeTokens(UStringStack* stack, unsigned count, QString mergeString
 static void dumpStack(std::vector<QString> stack)
 {
     std::cout << std::endl;
-    std::cout << "Stack now is: " ;
-    if (stack.empty())
-        std::cout << "(empty)" ;
+    std::cout << "Stack now is: ";
+    if (stack.empty()) {
+        std::cout << "(empty)";
+    }
 
-    for (unsigned i = 0; i < stack.size(); ++i)
+    for (unsigned i = 0; i < stack.size(); ++i) {
         std::cout << "  " << i << ": " << stack[i] << std::endl;
+    }
     std::cout << std::endl;
 }
 #endif
 
-QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens)
+QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens &tokens)
 {
     UStringStack stack;
 
@@ -1625,27 +1693,27 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
 
         case FormulaToken::UPlus: {
             QString str("+");
-            str.append(stack[stack.size()-1]);
-            stack[stack.size()-1] = str;
+            str.append(stack[stack.size() - 1]);
+            stack[stack.size() - 1] = str;
             break;
         }
 
         case FormulaToken::UMinus: {
             QString str("-");
-            str.append(stack[ stack.size()-1 ]);
-            stack[stack.size()-1] = str;
+            str.append(stack[ stack.size() - 1 ]);
+            stack[stack.size() - 1] = str;
             break;
         }
 
         case FormulaToken::Percent:
-            stack[stack.size()-1].append(QString("%"));
+            stack[stack.size() - 1].append(QString("%"));
             break;
 
         case FormulaToken::Paren: {
             QString str("(");
-            str.append(stack[ stack.size()-1 ]);
+            str.append(stack[ stack.size() - 1 ]);
             str.append(QString(")"));
-            stack[stack.size()-1] = str;
+            stack[stack.size() - 1] = str;
             break;
         }
 
@@ -1663,10 +1731,11 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
         }
 
         case FormulaToken::Bool:
-            if (token.value().asBoolean())
+            if (token.value().asBoolean()) {
                 stack.push_back(QString("TRUE"));
-            else
+            } else {
                 stack.push_back(QString("FALSE"));
+            }
             break;
 
         case FormulaToken::Integer:
@@ -1710,9 +1779,9 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             if (!stack.empty()) {
                 QString str(token.functionName() ? token.functionName() : "??");
                 str.append(QString("("));
-                str.append(stack[stack.size()-1]);
+                str.append(stack[stack.size() - 1]);
                 str.append(QString(")"));
-                stack[stack.size()-1] = str;
+                stack[stack.size() - 1] = str;
             }
             break;
         }
@@ -1722,12 +1791,13 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
                 mergeTokens(&stack, token.functionParams(), QString(";"));
                 if (!stack.empty()) {
                     QString str;
-                    if (token.functionIndex() != 255)
+                    if (token.functionIndex() != 255) {
                         str = token.functionName() ? token.functionName() : "??";
+                    }
                     str.append(QString("("));
-                    str.append(stack[stack.size()-1]);
+                    str.append(stack[stack.size() - 1]);
                     str.append(QString(")"));
-                    stack[stack.size()-1] = str;
+                    stack[stack.size() - 1] = str;
                 }
             } else {
                 unsigned count = token.functionParams() - 1;
@@ -1735,9 +1805,9 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
                 if (!stack.empty()) {
                     QString str;
                     str.append(QString("("));
-                    str.append(stack[ stack.size()-1 ]);
+                    str.append(stack[ stack.size() - 1 ]);
                     str.append(QString(")"));
-                    stack[stack.size()-1] = str;
+                    stack[stack.size() - 1] = str;
                 }
             }
             break;
@@ -1748,43 +1818,45 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
                 if (!stack.empty()) {
                     QString str("SUM");
                     str.append(QString("("));
-                    str.append(stack[ stack.size()-1 ]);
+                    str.append(stack[ stack.size() - 1 ]);
                     str.append(QString(")"));
-                    stack[stack.size()-1] = str;
+                    stack[stack.size() - 1] = str;
                 }
             }
             break;
 
         case FormulaToken::Name:
-            stack.push_back(nameFromIndex(token.nameIndex()-1));
+            stack.push_back(nameFromIndex(token.nameIndex() - 1));
             break;
 
         case FormulaToken::NameX:
-            stack.push_back(externNameFromIndex(token.nameXIndex()-1));
+            stack.push_back(externNameFromIndex(token.nameXIndex() - 1));
             break;
 
         case FormulaToken::Matrix: {
             std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
-            if( isShared ) {
-              FormulaTokens ft = sharedFormulas(formulaCellPos);
-              if (!ft.empty())
-                  stack.push_back(decodeFormula(row, col, isShared, ft));
+            if (isShared) {
+                FormulaTokens ft = sharedFormulas(formulaCellPos);
+                if (!ft.empty()) {
+                    stack.push_back(decodeFormula(row, col, isShared, ft));
+                }
             } else {
-              // "2.5.198.58 PtgExp" says that if its not a sharedFormula then it's an indication that the
-              // result is an reference to cells. So, we can savly ignore that case...
-              std::cout << "MATRIX first=%i second=" << formulaCellPos.first << " " << formulaCellPos.second << std::endl;
+                // "2.5.198.58 PtgExp" says that if its not a sharedFormula then it's an indication that the
+                // result is an reference to cells. So, we can savly ignore that case...
+                std::cout << "MATRIX first=%i second=" << formulaCellPos.first << " " << formulaCellPos.second << std::endl;
             }
             break;
         }
 
         case FormulaToken::Table: {
             std::pair<unsigned, unsigned> formulaCellPos = token.baseFormulaRecord();
-            if( isShared ) {
-              DataTableRecord* dt = tableRecord(formulaCellPos);
-              if(dt)
-                  stack.push_back(dataTableFormula(row, col, dt));
+            if (isShared) {
+                DataTableRecord *dt = tableRecord(formulaCellPos);
+                if (dt) {
+                    stack.push_back(dataTableFormula(row, col, dt));
+                }
             } else {
-              std::cout << "TABLE first=%i second=" << formulaCellPos.first << " " << formulaCellPos.second << std::endl;
+                std::cout << "TABLE first=%i second=" << formulaCellPos.first << " " << formulaCellPos.second << std::endl;
             }
             break;
         }
@@ -1832,8 +1904,9 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
     }
 
     QString result;
-    for (unsigned i = 0; i < stack.size(); ++i)
+    for (unsigned i = 0; i < stack.size(); ++i) {
         result.append(stack[i]);
+    }
 
 #ifdef SWINDER_XLS2RAW
     std::cout << "FORMULA Result: " << result << std::endl;
@@ -1841,7 +1914,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
     return result;
 }
 
-QString FormulaDecoder::dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record)
+QString FormulaDecoder::dataTableFormula(unsigned row, unsigned col, const DataTableRecord *record)
 {
     QString result("MULTIPLE.OPERATIONS(");
 

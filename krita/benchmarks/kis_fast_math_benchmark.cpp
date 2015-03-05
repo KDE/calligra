@@ -27,9 +27,10 @@ const int COUNT = 1000;
 void KisFastMathBenchmark::benchmarkFastAtan2()
 {
     QBENCHMARK{
-        for (int i = 0 ; i < COUNT; ++i) {
+        for (int i = 0; i < COUNT; ++i)
+        {
             double x = i;
-            for (int j = 0 ; j < COUNT; ++j) {
+            for (int j = 0; j < COUNT; ++j) {
 
                 double y = j;
 
@@ -42,9 +43,10 @@ void KisFastMathBenchmark::benchmarkFastAtan2()
 void KisFastMathBenchmark::benchmarkLibCAtan2()
 {
     QBENCHMARK{
-        for (int i = 0 ; i < COUNT; ++i) {
+        for (int i = 0; i < COUNT; ++i)
+        {
             double x = i;
-            for (int j = 0 ; j < COUNT; ++j) {
+            for (int j = 0; j < COUNT; ++j) {
 
                 double y = j;
 

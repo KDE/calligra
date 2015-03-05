@@ -54,18 +54,18 @@ KisFilterIndexColors::KisFilterIndexColors() : KisColorTransformationFilter(id()
     setShowConfigurationWidget(true);
 }
 
-KoColorTransformation* KisFilterIndexColors::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation *KisFilterIndexColors::createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const
 {
     IndexColorPalette pal;
 
     PaletteGeneratorConfig palCfg;
     palCfg.fromByteArray(config->getProperty("paletteGen").toByteArray());
     pal = palCfg.generate();
-    if(config->getBool("reduceColorsEnabled"))
-    {
+    if (config->getBool("reduceColorsEnabled")) {
         int maxClrs = config->getInt("colorLimit");
-        while(pal.numColors() > maxClrs)
+        while (pal.numColors() > maxClrs) {
             pal.mergeMostReduantColors();
+        }
     }
 
     pal.similarityFactors.L = config->getFloat("LFactor");
@@ -74,10 +74,10 @@ KoColorTransformation* KisFilterIndexColors::createTransformation(const KoColorS
     return new KisIndexColorTransformation(pal, cs, config->getInt("alphaSteps"));
 }
 
-KisConfigWidget* KisFilterIndexColors::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisFilterIndexColors::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    KisWdgIndexColors* w = new KisWdgIndexColors(parent);
+    KisWdgIndexColors *w = new KisWdgIndexColors(parent);
     w->setup(
         QStringList() << i18nc("Color palette shade", "Bright") << i18nc("Color palette shade", "Light") << i18nc("Color palette shade", "Base") << i18nc("Color palette shade", "Shadow")
         , 4
@@ -85,9 +85,9 @@ KisConfigWidget* KisFilterIndexColors::createConfigurationWidget(QWidget* parent
     return w;
 }
 
-KisFilterConfiguration* KisFilterIndexColors::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisFilterIndexColors::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 0);
 
     PaletteGeneratorConfig palCfg; // Default constructor is factory config
     config->setProperty("paletteGen",     palCfg.toByteArray());
@@ -101,38 +101,32 @@ KisFilterConfiguration* KisFilterIndexColors::factoryConfiguration(const KisPain
     return config;
 }
 
-KisIndexColorTransformation::KisIndexColorTransformation(IndexColorPalette palette, const KoColorSpace* cs, int alphaSteps)
+KisIndexColorTransformation::KisIndexColorTransformation(IndexColorPalette palette, const KoColorSpace *cs, int alphaSteps)
     : m_colorSpace(cs),
       m_psize(cs->pixelSize())
 {
     m_palette = palette;
 
     static const qreal max = KoColorSpaceMathsTraits<quint16>::max;
-    if(alphaSteps > 0)
-    {
+    if (alphaSteps > 0) {
         m_alphaStep = max / alphaSteps;
         m_alphaHalfStep = m_alphaStep / 2;
-    }
-    else
-    {
+    } else {
         m_alphaStep = 0;
         m_alphaHalfStep = 0;
     }
 }
 
-void KisIndexColorTransformation::transform(const quint8* src, quint8* dst, qint32 nPixels) const
+void KisIndexColorTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
 {
-    union
-    {
+    union {
         quint16 laba[4];
         LabColor lab;
     } clr;
-    while (nPixels--)
-    {
+    while (nPixels--) {
         m_colorSpace->toLabA16(src, reinterpret_cast<quint8 *>(clr.laba), 1);
         clr.lab = m_palette.getNearestIndex(clr.lab);
-        if(m_alphaStep)
-        {
+        if (m_alphaStep) {
             quint16 amod = clr.laba[3] % m_alphaStep;
             clr.laba[3] = clr.laba[3] + (amod > m_alphaHalfStep ? m_alphaStep - amod : -amod);
         }

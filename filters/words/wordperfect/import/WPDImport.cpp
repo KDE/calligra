@@ -40,7 +40,7 @@ using namespace libwpd;
 class OdtOutputFileHelper : public OutputFileHelper
 {
 public:
-    OdtOutputFileHelper(const char *outFileName,const char *password) :
+    OdtOutputFileHelper(const char *outFileName, const char *password) :
         OutputFileHelper(outFileName, password) {};
     ~OdtOutputFileHelper() {};
 
@@ -50,26 +50,22 @@ public:
         collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
         collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
         StringDocumentHandler stylesHandler, contentHandler, manifestHandler, metaHandler;
-        if (isFlat)
+        if (isFlat) {
             collector.addDocumentHandler(&contentHandler, ODF_FLAT_XML);
-        else
-        {
+        } else {
             collector.addDocumentHandler(&contentHandler, ODF_CONTENT_XML);
             collector.addDocumentHandler(&manifestHandler, ODF_MANIFEST_XML);
             collector.addDocumentHandler(&metaHandler, ODF_META_XML);
             collector.addDocumentHandler(&stylesHandler, ODF_STYLES_XML);
         }
-        try
-        {
-            if (WPD_OK != WPDocument::parse(&input, &collector, password))
+        try {
+            if (WPD_OK != WPDocument::parse(&input, &collector, password)) {
                 return false;
-        }
-        catch (...)
-        {
+            }
+        } catch (...) {
             return false;
         }
-        if (isFlat)
-        {
+        if (isFlat) {
             printf("%s\n", contentHandler.cstr());
             return true;
         }
@@ -79,45 +75,39 @@ public:
                 !writeChildFile("META-INF/manifest.xml", manifestHandler.cstr()) ||
                 !writeChildFile("content.xml", contentHandler.cstr()) ||
                 !writeChildFile("meta.xml", metaHandler.cstr()) ||
-                !writeChildFile("styles.xml", stylesHandler.cstr()))
+                !writeChildFile("styles.xml", stylesHandler.cstr())) {
             return false;
+        }
 
-        librevenge::RVNGStringVector objects=collector.getObjectNames();
-        for (unsigned i=0; i<objects.size(); ++i)
-        {
+        librevenge::RVNGStringVector objects = collector.getObjectNames();
+        for (unsigned i = 0; i < objects.size(); ++i) {
             StringDocumentHandler objectHandler;
-            if (collector.getObjectContent(objects[i], &objectHandler))
+            if (collector.getObjectContent(objects[i], &objectHandler)) {
                 writeChildFile(objects[i].cstr(), objectHandler.cstr());
+            }
         }
         return true;
     }
 
-
     bool isSupportedFormat(librevenge::RVNGInputStream &input, const char *password)
     {
-        try
-        {
+        try {
             WPDConfidence confidence = WPDocument::isFileFormatSupported(&input);
-            if (WPD_CONFIDENCE_EXCELLENT != confidence && WPD_CONFIDENCE_SUPPORTED_ENCRYPTION != confidence)
-            {
+            if (WPD_CONFIDENCE_EXCELLENT != confidence && WPD_CONFIDENCE_SUPPORTED_ENCRYPTION != confidence) {
                 fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid WordPerfect document.\n");
                 return false;
             }
-            if (WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence && !password)
-            {
+            if (WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence && !password) {
                 fprintf(stderr, "ERROR: The WordPerfect document is encrypted and you did not give us a password.\n");
                 return false;
             }
             if (confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION && password &&
-                    (WPD_PASSWORD_MATCH_OK != WPDocument::verifyPassword(&input, password)))
-            {
+                    (WPD_PASSWORD_MATCH_OK != WPDocument::verifyPassword(&input, password))) {
                 fprintf(stderr, "ERROR: The WordPerfect document is encrypted and we either\n");
                 fprintf(stderr, "ERROR: don't know how to decrypt it or the given password is wrong.\n");
                 return false;
             }
-        }
-        catch (...)
-        {
+        } catch (...) {
             fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid WordPerfect document.\n");
             return false;
         }
@@ -134,8 +124,9 @@ private:
 
         libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
 
-        if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(data.getDataStream())))
+        if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(data.getDataStream()))) {
             fileFormat = libwpg::WPG_WPG1;
+        }
 
         return libwpg::WPGraphics::parse(const_cast<librevenge::RVNGInputStream *>(data.getDataStream()), &exporter, fileFormat);
     }
@@ -144,14 +135,16 @@ private:
     {
         libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
 
-        if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(input.getDataStream())))
+        if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(input.getDataStream()))) {
             fileFormat = libwpg::WPG_WPG1;
+        }
 
         librevenge::RVNGStringVector svgOutput;
         librevenge::RVNGSVGDrawingGenerator generator(svgOutput, "");
         bool result = libwpg::WPGraphics::parse(const_cast<librevenge::RVNGInputStream *>(input.getDataStream()), &generator, fileFormat);
-        if (!result || svgOutput.empty() || svgOutput[0].empty())
+        if (!result || svgOutput.empty() || svgOutput[0].empty()) {
             return false;
+        }
 
         output.clear();
         const char *svgHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
@@ -167,7 +160,7 @@ private:
 K_PLUGIN_FACTORY(WPDImportFactory, registerPlugin<WPDImport>();)
 K_EXPORT_PLUGIN(WPDImportFactory("calligrafilters"))
 
-WPDImport::WPDImport(QObject* parent, const QVariantList&)
+WPDImport::WPDImport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
@@ -176,22 +169,23 @@ WPDImport::~WPDImport()
 {
 }
 
-KoFilter::ConversionStatus WPDImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus WPDImport::convert(const QByteArray &from, const QByteArray &to)
 {
-    if (from != "application/vnd.wordperfect" || to != KoOdf::mimeType(KoOdf::Text))
+    if (from != "application/vnd.wordperfect" || to != KoOdf::mimeType(KoOdf::Text)) {
         return KoFilter::NotImplemented;
+    }
 
     QByteArray inputFile = m_chain->inputFile().toLocal8Bit();
     QByteArray outputFile = m_chain->outputFile().toLocal8Bit();
-    const char* password = 0;
+    const char *password = 0;
 
     OdtOutputFileHelper helper(outputFile.constData(), 0);
     librevenge::RVNGFileStream input(inputFile.constData());
-    if (!helper.isSupportedFormat(input, password))
+    if (!helper.isSupportedFormat(input, password)) {
         return KoFilter::ParsingError;
+    }
 
-    if (!helper.convertDocument(input, password, false))
-    {
+    if (!helper.convertDocument(input, password, false)) {
         fprintf(stderr, "ERROR : Couldn't convert the document\n");
         return KoFilter::ParsingError;
     }

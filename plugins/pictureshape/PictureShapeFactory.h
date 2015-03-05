@@ -35,7 +35,7 @@ public:
     /// reimplemented
     virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
     /// reimplemented
-    virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    virtual QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
 };
 
 #endif

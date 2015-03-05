@@ -30,7 +30,6 @@ enum enumSepAlphaOptions {
     CREATE_ALPHA_SEPARATION = 2
 };
 
-
 enum enumSepSource {
     CURRENT_LAYER = 0,
     ALL_LAYERS = 1,
@@ -47,14 +46,14 @@ class KisChannelSeparator
 
 public:
 
-    KisChannelSeparator(KisViewManager * view);
+    KisChannelSeparator(KisViewManager *view);
     virtual ~KisChannelSeparator() {}
 
-    void separate(KoUpdater * progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor);
+    void separate(KoUpdater *progress, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor);
 
 private:
 
-    KisViewManager * m_view;
+    KisViewManager *m_view;
 
 };
 

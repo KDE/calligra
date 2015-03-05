@@ -33,16 +33,22 @@ class Task;
 class SbBooking
 {
 public:
-    explicit SbBooking(Task* t)
+    explicit SbBooking(Task *t)
         : task(t) { }
-    explicit SbBooking(const SbBooking* b) { task = b->task; }
+    explicit SbBooking(const SbBooking *b)
+    {
+        task = b->task;
+    }
     virtual ~SbBooking() { }
 
-    Task* getTask() const { return task; }
+    Task *getTask() const
+    {
+        return task;
+    }
 
 private:
     /// A pointer to the task that caused the booking
-    Task* task;
+    Task *task;
 
     /// For future use.
     // double amount;

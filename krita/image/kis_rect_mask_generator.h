@@ -21,7 +21,6 @@
 
 #include "krita_export.h"
 
-
 #include "kis_mask_generator.h"
 
 /**
@@ -42,7 +41,7 @@ public:
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

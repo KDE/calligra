@@ -23,7 +23,6 @@
 #include <KoProgressProxy.h>
 #include "krita_export.h"
 
-
 class KRITAIMAGE_EXPORT KisCompositeProgressProxy : public KoProgressProxy
 {
 public:
@@ -36,7 +35,7 @@ public:
     void setFormat(const QString &format);
 
 private:
-    QList<KoProgressProxy*> m_proxies;
+    QList<KoProgressProxy *> m_proxies;
 };
 
 #endif /* __KIS_COMPOSITE_PROGRESS_PROXY_H */

@@ -96,21 +96,21 @@ public:
 
     FormulaToken();
     FormulaToken(unsigned id);
-    FormulaToken(const FormulaToken&);
+    FormulaToken(const FormulaToken &);
     ~FormulaToken();
 
     static FormulaToken createBool(bool value);
     static FormulaToken createNum(double value);
-    static FormulaToken createStr(const QString& value);
-    static FormulaToken createRef(const QPoint& pos, bool rowFixed, bool colFixed);
+    static FormulaToken createStr(const QString &value);
+    static FormulaToken createRef(const QPoint &pos, bool rowFixed, bool colFixed);
     static FormulaToken createRefErr();
-    static FormulaToken createArea(const QRect& area, bool topFixed, bool bottomFixed, bool leftFixed, bool rightFixed);
+    static FormulaToken createArea(const QRect &area, bool topFixed, bool bottomFixed, bool leftFixed, bool rightFixed);
     static FormulaToken createAreaErr();
-    static FormulaToken createFunc(const QString& func, unsigned argCount);
+    static FormulaToken createFunc(const QString &func, unsigned argCount);
 
     // token id, excluding token class
     unsigned id() const;
-    const char* idAsString() const;
+    const char *idAsString() const;
 
     // Excel version
     unsigned version() const;
@@ -118,7 +118,7 @@ public:
 
     // size of data, EXCLUDING the byte for token id
     unsigned size() const;
-    void setData(unsigned size, const unsigned char* data);
+    void setData(unsigned size, const unsigned char *data);
     std::vector<unsigned char> data() const;
 
     // only when id returns ErrorCode, Bool, Integer, Float, or String
@@ -126,19 +126,19 @@ public:
 
     // only when id is Function or FunctionVar
     unsigned functionIndex() const;
-    const char* functionName() const;  // for non external function
+    const char *functionName() const;  // for non external function
     unsigned functionParams() const;
 
-    static unsigned functionIndex(const QString& functionName);
-    static unsigned functionParams(const QString& functionName);
-    static bool fixedFunctionParams(const QString& functionName);
+    static unsigned functionIndex(const QString &functionName);
+    static unsigned functionParams(const QString &functionName);
+    static bool fixedFunctionParams(const QString &functionName);
 
     // only when id is Ref
     QString ref(unsigned row, unsigned col) const;
     // only when id is RefN
     QString refn(unsigned row, unsigned col) const;
     // only when id is Ref3d
-    QString ref3d(const std::vector<QString>& externSheets, unsigned row, unsigned col) const;
+    QString ref3d(const std::vector<QString> &externSheets, unsigned row, unsigned col) const;
 
     // only when id is Array
     QString array(unsigned row, unsigned col) const;
@@ -146,7 +146,7 @@ public:
     // only when id is Area or AreaN
     QString area(unsigned row, unsigned col, bool relative = false) const;
     // only when id is Area3d
-    QString area3d(const std::vector<QString>& externSheets, unsigned row, unsigned col) const;
+    QString area3d(const std::vector<QString> &externSheets, unsigned row, unsigned col) const;
     // only when id is Area3d, assumes all references to be absolute
     std::pair<unsigned, QRect> filterArea3d() const;
     // only when id is MemArea
@@ -163,7 +163,7 @@ public:
     // only when id is Matrix (tExp)
     std::pair<unsigned, unsigned> baseFormulaRecord() const;
 
-    FormulaToken& operator=(const FormulaToken& token);
+    FormulaToken &operator=(const FormulaToken &token);
 
 private:
     class Private;
@@ -172,7 +172,7 @@ private:
 
 typedef std::vector<FormulaToken> FormulaTokens;
 
-std::ostream& operator<<(std::ostream& s, FormulaToken token);
+std::ostream &operator<<(std::ostream &s, FormulaToken token);
 
 class DataTableRecord;
 class FormulaToken;
@@ -184,16 +184,31 @@ public:
     FormulaDecoder() {}
     virtual ~FormulaDecoder() {}
 
-    FormulaTokens decodeFormula(unsigned size, unsigned pos, const unsigned char* data, unsigned version);
+    FormulaTokens decodeFormula(unsigned size, unsigned pos, const unsigned char *data, unsigned version);
 
-    QString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens);
-    QString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);
+    QString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens &tokens);
+    QString dataTableFormula(unsigned row, unsigned col, const DataTableRecord *record);
 
-    virtual const std::vector<QString>& externSheets() const { return m_externSheets; }
-    virtual QString nameFromIndex(unsigned /*index*/) const { return QString(); }
-    virtual QString externNameFromIndex(unsigned /*index*/) const { return QString(); }
-    virtual FormulaTokens sharedFormulas(const std::pair<unsigned, unsigned>& /*formulaCellPos*/) const { return FormulaTokens(); }
-    virtual DataTableRecord* tableRecord(const std::pair<unsigned, unsigned>& /*formulaCellPos*/) const { return 0; }
+    virtual const std::vector<QString> &externSheets() const
+    {
+        return m_externSheets;
+    }
+    virtual QString nameFromIndex(unsigned /*index*/) const
+    {
+        return QString();
+    }
+    virtual QString externNameFromIndex(unsigned /*index*/) const
+    {
+        return QString();
+    }
+    virtual FormulaTokens sharedFormulas(const std::pair<unsigned, unsigned> & /*formulaCellPos*/) const
+    {
+        return FormulaTokens();
+    }
+    virtual DataTableRecord *tableRecord(const std::pair<unsigned, unsigned> & /*formulaCellPos*/) const
+    {
+        return 0;
+    }
 protected:
     std::vector<QString> m_externSheets;
 };

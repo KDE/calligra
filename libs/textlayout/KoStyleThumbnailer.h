@@ -44,10 +44,10 @@ public:
     enum KoStyleThumbnailerFlag {
         NoFlags = 0,
         CenterAlignThumbnail = 1, ///< Vertically Center Align the layout of the thumbnail
-                                  ///     i.e the layout is done at the center of the area
+        ///     i.e the layout is done at the center of the area
         UseStyleNameText = 2, ///< Use the style name as the text that is layouted inside the thumbnail
         ScaleThumbnailFont = 4 ///< If set, then when the layout size is more than the size available
-                               ///  the font size is scaled down to fit the space availiable
+                             ///  the font size is scaled down to fit the space availiable
     };
     Q_DECLARE_FLAGS(KoStyleThumbnailerFlags, KoStyleThumbnailerFlag)
 
@@ -72,7 +72,7 @@ public:
     QImage thumbnail(KoParagraphStyle *style,
                      const QSize &size = QSize(), bool recreateThumbnail = false,
                      KoStyleThumbnailerFlags flags =
-                          KoStyleThumbnailerFlags(CenterAlignThumbnail | UseStyleNameText | ScaleThumbnailFont));
+                         KoStyleThumbnailerFlags(CenterAlignThumbnail | UseStyleNameText | ScaleThumbnailFont));
 
     /**
      * @returns a thumbnail representing the @param characterStyle applied on the given @param paragraphStyle, constrained into the @param size.
@@ -85,7 +85,7 @@ public:
     QImage thumbnail(KoCharacterStyle *characterStyle, KoParagraphStyle *paragraphStyle = 0,
                      const QSize &size = QSize(), bool recreateThumbnail = false,
                      KoStyleThumbnailerFlags flags =
-                          KoStyleThumbnailerFlags(CenterAlignThumbnail | UseStyleNameText | ScaleThumbnailFont));
+                         KoStyleThumbnailerFlags(CenterAlignThumbnail | UseStyleNameText | ScaleThumbnailFont));
 
     /**
      * Sets the size of the thumbnails returned by the @fn thumbnail with no size arguments.
@@ -114,7 +114,7 @@ private:
     void removeFromCache(const QString &expr);
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

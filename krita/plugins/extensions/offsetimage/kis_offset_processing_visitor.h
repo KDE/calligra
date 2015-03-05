@@ -22,7 +22,6 @@
 #include "processing/kis_simple_processing_visitor.h"
 #include <QRect>
 
-
 class KisOffsetProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:

@@ -40,15 +40,15 @@ QRectF FreeLayout::boundingBox() const
     return b.adjusted(-margin, -margin, margin, margin);
 }
 
-void FreeLayout::shapeAdded(KoShape*)
+void FreeLayout::shapeAdded(KoShape *)
 {
 }
 
-void FreeLayout::shapeRemoved(KoShape*)
+void FreeLayout::shapeRemoved(KoShape *)
 {
 }
 
-void FreeLayout::shapeGeometryChanged(KoShape*)
+void FreeLayout::shapeGeometryChanged(KoShape *)
 {
 }
 
@@ -65,7 +65,7 @@ FreeLayoutFactory::~FreeLayoutFactory()
 {
 }
 
-Layout* FreeLayoutFactory::createLayout() const
+Layout *FreeLayoutFactory::createLayout() const
 {
     return new FreeLayout;
 }

@@ -33,33 +33,33 @@ class CAPAView : public QObject, public KoPAViewBase
 {
     Q_OBJECT
 public:
-    CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument);
+    CAPAView(KoCanvasController *canvasController, KoPACanvasBase *canvas, KPrDocument *prDocument);
     virtual ~CAPAView();
-    virtual void setShowRulers (bool show);
+    virtual void setShowRulers(bool show);
     virtual void editPaste();
     virtual void pagePaste();
     virtual void insertPage();
     virtual void updatePageNavigationActions();
-    virtual void setActionEnabled (int actions, bool enable);
-    virtual void navigatePage (KoPageApp::PageNavigation pageNavigation);
-    virtual KoPAPageBase* activePage() const;
-    virtual void setActivePage (KoPAPageBase* page);
-    virtual void doUpdateActivePage (KoPAPageBase* page);
-    virtual KoZoomController* zoomController() const;
-    virtual KoPADocument* kopaDocument() const;
-    virtual KoPACanvasBase* kopaCanvas() const;
+    virtual void setActionEnabled(int actions, bool enable);
+    virtual void navigatePage(KoPageApp::PageNavigation pageNavigation);
+    virtual KoPAPageBase *activePage() const;
+    virtual void setActivePage(KoPAPageBase *page);
+    virtual void doUpdateActivePage(KoPAPageBase *page);
+    virtual KoZoomController *zoomController() const;
+    virtual KoPADocument *kopaDocument() const;
+    virtual KoPACanvasBase *kopaCanvas() const;
 
 public Q_SLOTS:
     void connectToZoomController();
 
 private:
-    KoCanvasController* m_canvasController;
-    KoPACanvasBase* m_paCanvas;
-    KPrDocument* m_prDocument;
-    KoPAPageBase* m_page;
+    KoCanvasController *m_canvasController;
+    KoPACanvasBase *m_paCanvas;
+    KPrDocument *m_prDocument;
+    KoPAPageBase *m_page;
 
 private Q_SLOTS:
-    void slotZoomChanged (KoZoomMode::Mode mode, qreal zoom);
+    void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
 };
 
 #endif // CAPAVIEW_H

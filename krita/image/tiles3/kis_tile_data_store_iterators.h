@@ -31,7 +31,6 @@
  * because it can invalidate the iterator. This is a general rule.
  */
 
-
 class KisTileDataStoreIterator
 {
 public:
@@ -43,21 +42,26 @@ public:
         m_end = m_list.end();
     }
 
-    inline KisTileData* peekNext() {
+    inline KisTileData *peekNext()
+    {
         return *m_iterator;
     }
 
-    inline KisTileData* next() {
+    inline KisTileData *next()
+    {
         return *(m_iterator++);
     }
 
-    inline bool hasNext() const {
+    inline bool hasNext() const
+    {
         return m_iterator != m_end;
     }
 
-    inline bool trySwapOut(KisTileData *td) {
-        if(td->m_listIterator == m_iterator)
+    inline bool trySwapOut(KisTileData *td)
+    {
+        if (td->m_listIterator == m_iterator) {
             m_iterator++;
+        }
 
         return m_store->trySwapTileData(td);
     }
@@ -80,21 +84,26 @@ public:
         m_begin = m_list.begin();
     }
 
-    inline KisTileData* peekNext() {
-        return *(m_iterator-1);
+    inline KisTileData *peekNext()
+    {
+        return *(m_iterator - 1);
     }
 
-    inline KisTileData* next() {
+    inline KisTileData *next()
+    {
         return *(--m_iterator);
     }
 
-    inline bool hasNext() const {
+    inline bool hasNext() const
+    {
         return m_iterator != m_begin;
     }
 
-    inline bool trySwapOut(KisTileData *td) {
-        if(td->m_listIterator == m_iterator)
+    inline bool trySwapOut(KisTileData *td)
+    {
+        if (td->m_listIterator == m_iterator) {
             m_iterator++;
+        }
 
         return m_store->trySwapTileData(td);
     }
@@ -115,21 +124,21 @@ public:
     {
         m_end = m_list.end();
 
-        if(startItem == m_list.begin() ||
-           startItem == m_end) {
+        if (startItem == m_list.begin() ||
+                startItem == m_end) {
             m_iterator = m_list.begin();
             m_startItem = m_end;
             m_endReached = true;
-        }
-        else  {
+        } else  {
             m_startItem = startItem;
             m_iterator = startItem;
             m_endReached = false;
         }
     }
 
-    inline KisTileData* peekNext() {
-        if(m_iterator == m_end) {
+    inline KisTileData *peekNext()
+    {
+        if (m_iterator == m_end) {
             m_iterator = m_list.begin();
             m_endReached = true;
         }
@@ -137,8 +146,9 @@ public:
         return *m_iterator;
     }
 
-    inline KisTileData* next() {
-        if(m_iterator == m_end) {
+    inline KisTileData *next()
+    {
+        if (m_iterator == m_end) {
             m_iterator = m_list.begin();
             m_endReached = true;
         }
@@ -146,20 +156,24 @@ public:
         return *(m_iterator++);
     }
 
-    inline bool hasNext() const {
+    inline bool hasNext() const
+    {
         return !(m_endReached && m_iterator == m_startItem);
     }
 
-    inline bool trySwapOut(KisTileData *td) {
-        if(td->m_listIterator == m_iterator)
+    inline bool trySwapOut(KisTileData *td)
+    {
+        if (td->m_listIterator == m_iterator) {
             m_iterator++;
+        }
 
         return m_store->trySwapTileData(td);
     }
 
 private:
     friend class KisTileDataStore;
-    inline KisTileDataListIterator getFinalPosition() {
+    inline KisTileDataListIterator getFinalPosition()
+    {
         return m_iterator;
     }
 

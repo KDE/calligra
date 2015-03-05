@@ -39,11 +39,10 @@ public:
     virtual ~KoPathConnectionPointStrategy();
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
-    virtual KUndo2Command* createCommand();
+    virtual KUndo2Command *createCommand();
 
 private:
     Q_DECLARE_PRIVATE(KoPathConnectionPointStrategy)
 };
-
 
 #endif

@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef CALLIGRA_SHEETS_FORMULA_EDITOR_HIGHLIGHTER
 #define CALLIGRA_SHEETS_FORMULA_EDITOR_HIGHLIGHTER
 
@@ -46,18 +45,17 @@ public:
      * @param textEdit The QTextEdit widget which the highlighter should operate on
      * @param selection The Selection object
      */
-    FormulaEditorHighlighter(QTextEdit* textEdit, Selection* selection);
+    FormulaEditorHighlighter(QTextEdit *textEdit, Selection *selection);
     virtual ~FormulaEditorHighlighter();
-
 
     /**
      * Called automatically by KTextEditor to highlight text when modified.
      */
-    virtual void highlightBlock(const QString& text);
+    virtual void highlightBlock(const QString &text);
     /**
      *
      */
-    const Tokens& formulaTokens() const;
+    const Tokens &formulaTokens() const;
     /**
      *
      */
@@ -72,8 +70,6 @@ public:
      * Sets the highlighter's range changed flag to false.
      */
     void resetRangeChanged();
-
-
 
 protected:
     /**
@@ -90,7 +86,7 @@ private:
     Q_DISABLE_COPY(FormulaEditorHighlighter)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

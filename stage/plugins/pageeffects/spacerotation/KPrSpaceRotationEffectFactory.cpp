@@ -29,7 +29,7 @@
 #define SpaceRotationEffectId "SpaceRotationEffect"
 
 KPrSpaceRotationEffectFactory::KPrSpaceRotationEffectFactory()
-: KPrPageEffectFactory(SpaceRotationEffectId, i18n("Space Rotation"))
+    : KPrPageEffectFactory(SpaceRotationEffectId, i18n("Space Rotation"))
 {
     addStrategy(new KPrSpaceRotationFromBottomStrategy());
     addStrategy(new KPrSpaceRotationFromTopStrategy());
@@ -41,7 +41,7 @@ KPrSpaceRotationEffectFactory::~KPrSpaceRotationEffectFactory()
 {
 }
 
-static const char* const s_subTypes[] = {
+static const char *const s_subTypes[] = {
     I18N_NOOP("From Bottom"),
     I18N_NOOP("From Top"),
     I18N_NOOP("From Left"),

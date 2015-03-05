@@ -35,25 +35,24 @@
 #include <QCompleter>
 #include "kis_paintop_settings.h"
 
-struct KisPaintOpPresetsChooserPopup::Private
-{
+struct KisPaintOpPresetsChooserPopup::Private {
 public:
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
     bool firstShown;
 };
 
-KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
+KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget *parent)
     : QWidget(parent)
     , m_d(new Private())
 {
     m_d->uiWdgPaintOpPresets.setupUi(this);
-    KMenu* menu = new KMenu(this);
+    KMenu *menu = new KMenu(this);
 
     QActionGroup *actionGroup = new QActionGroup(this);
 
     KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig().presetChooserViewMode();
 
-    QAction* action = menu->addAction(koIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
+    QAction *action = menu->addAction(koIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
     action->setCheckable(true);
     action->setChecked(mode == KisPresetChooser::THUMBNAIL);
     action->setActionGroup(actionGroup);
@@ -72,7 +71,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
 
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
-    
+
     m_d->firstShown = true;
 
 }
@@ -94,11 +93,11 @@ void KisPaintOpPresetsChooserPopup::slotDetailMode()
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::DETAIL);
 }
 
-void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent* event)
+void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
     //Workaround to get the column and row size right
-    if(m_d->firstShown) {
+    if (m_d->firstShown) {
         m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
         m_d->firstShown = false;
     }
@@ -109,13 +108,13 @@ void KisPaintOpPresetsChooserPopup::showButtons(bool show)
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->showButtons(show);
 }
 
-void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource , KisPaintOpPresetSP  preset2  )
+void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource *resource, KisPaintOpPresetSP  preset2)
 {
     Q_UNUSED(preset2);
 
     if (resource) {
         blockSignals(true);
-        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
         KisPaintOpPresetSP preset = rserver->resourceByName(resource->name());
 
         m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(preset.data());
@@ -126,5 +125,5 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource ,
 
 void KisPaintOpPresetsChooserPopup::updateViewSettings()
 {
-   m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
 }

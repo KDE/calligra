@@ -27,7 +27,7 @@
 #include <klocale.h>
 
 DateVariableFactory::DateVariableFactory()
-        : KoInlineObjectFactoryBase("date", TextVariable)
+    : KoInlineObjectFactoryBase("date", TextVariable)
 {
     KoInlineObjectTemplate var;
     var.id = "fixed";
@@ -47,11 +47,13 @@ DateVariableFactory::DateVariableFactory()
 KoInlineObject *DateVariableFactory::createInlineObject(const KoProperties *properties) const
 {
     DateVariable::DateType dt = DateVariable::Fixed;
-    if (properties)
+    if (properties) {
         dt = static_cast<DateVariable::DateType>(properties->intProperty("id", dt));
+    }
 
     DateVariable *var = new DateVariable(dt);
-    if (properties)
+    if (properties) {
         var->readProperties(properties);
+    }
     return var;
 }

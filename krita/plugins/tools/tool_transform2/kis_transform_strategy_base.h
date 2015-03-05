@@ -24,14 +24,12 @@
 
 #include "kis_tool.h"
 
-
 class QImage;
 class QTransform;
 class QPainter;
 class QCursor;
 class KoPointerEvent;
 class QPainterPath;
-
 
 class KisTransformStrategyBase : public QObject
 {

@@ -21,14 +21,16 @@
 
 #include "StaffElement.h"
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Staff;
 
 /**
  * This class represents a key signature.
  */
-class KeySignature : public StaffElement {
+class KeySignature : public StaffElement
+{
     Q_OBJECT
 public:
     /**
@@ -37,7 +39,7 @@ public:
      * @param accidentals the number of accidentals in this key signature, positive values for sharps, negative values
      * for flats.
      */
-    KeySignature(Staff* staff, int startTime, int accidentals, int cancel = 0);
+    KeySignature(Staff *staff, int startTime, int accidentals, int cancel = 0);
 
     /**
      * Destructor.
@@ -56,12 +58,12 @@ public:
      * @param pitch the pitch of the note for which to return the accidentals
      */
     int accidentals(int pitch) const;
-    
+
     /**
      * Returns the priority of this staff element with regard to order in which it should be sorted.
-     */    
+     */
     virtual int priority() const;
-    
+
     int cancel() const;
     int cancel(int pitch) const;
 public Q_SLOTS:
@@ -72,7 +74,7 @@ public Q_SLOTS:
      * @param accidentals the new accidentals for this key signature
      */
     void setAccidentals(int accidentals);
-    
+
     void setCancel(int cancel);
 Q_SIGNALS:
     /**
@@ -81,7 +83,7 @@ Q_SIGNALS:
     void accidentalsChanged(int accidentals);
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

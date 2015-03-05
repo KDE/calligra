@@ -38,24 +38,24 @@ class KisActionsEditor : public QWidget
 {
     Q_OBJECT
 public:
-    KisActionsEditor(QWidget* parent);
+    KisActionsEditor(QWidget *parent);
     ~KisActionsEditor();
-    void setMacro(KisMacro*);
+    void setMacro(KisMacro *);
 private Q_SLOTS:
-    void slotCreateAction(const QString& _id);
-    void slotActionActivated(const QModelIndex&);
+    void slotCreateAction(const QString &_id);
+    void slotActionActivated(const QModelIndex &);
     void slotBtnDelete();
     void slotBtnDuplicate();
     void slotBtnRaise();
     void slotBtnLower();
 private:
-    void setCurrentAction(KisRecordedAction* _action);
+    void setCurrentAction(KisRecordedAction *_action);
 private:
-    QWidget* m_currentEditor;
-    Ui::ActionsEditor* m_form;
-    KisMacro* m_macro;
-    KisMacroModel* m_model;
-    QGridLayout* m_widgetLayout;
+    QWidget *m_currentEditor;
+    Ui::ActionsEditor *m_form;
+    KisMacro *m_macro;
+    KisMacroModel *m_model;
+    QGridLayout *m_widgetLayout;
 };
 
 #endif

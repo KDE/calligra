@@ -49,7 +49,7 @@
 #define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
 #endif
 
-KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
@@ -81,13 +81,10 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
 
     if ((m_sizeProperties.diameter * 0.5) > 1) {
         m_ySpacing = m_xSpacing = m_sizeProperties.diameter * 0.5 * m_sizeProperties.spacing;
-    }
-    else {
+    } else {
         m_ySpacing = m_xSpacing = 1.0;
     }
     m_spacing = m_xSpacing;
-
-
 
 }
 
@@ -95,10 +92,14 @@ KisDeformPaintOp::~KisDeformPaintOp()
 {
 }
 
-KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation &info)
 {
-    if (!painter()) return m_spacing;
-    if (!m_dev) return m_spacing;
+    if (!painter()) {
+        return m_spacing;
+    }
+    if (!m_dev) {
+        return m_spacing;
+    }
 
     KisFixedPaintDeviceSP dab = cachedDab(source()->compositionSourceColorSpace());
 
@@ -143,18 +144,15 @@ KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
     }
 
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    painter()->bltFixedWithFixedSelection(x, y, dab, mask, mask->bounds().width() , mask->bounds().height());
-    painter()->renderMirrorMask(QRect(QPoint(x, y), QSize(mask->bounds().width() , mask->bounds().height())), dab, mask);
+    painter()->bltFixedWithFixedSelection(x, y, dab, mask, mask->bounds().width(), mask->bounds().height());
+    painter()->renderMirrorMask(QRect(QPoint(x, y), QSize(mask->bounds().width(), mask->bounds().height())), dab, mask);
     painter()->setOpacity(origOpacity);
 
     return m_spacing;
 }
 
-
 qreal KisDeformPaintOp::spacing(qreal /*pressure*/) const
 {
     return m_spacing;
 }
-
-
 

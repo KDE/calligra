@@ -31,16 +31,17 @@ public:
     KisRoundCornersFilter();
 public:
     void processImpl(KisPaintDeviceSP device,
-                     const QRect& applyRect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater
-                     ) const;
-    static inline KoID id() {
+                     const QRect &applyRect,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater
+                    ) const;
+    static inline KoID id()
+    {
         return KoID("roundcorners", i18n("Round Corners"));
     }
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 private:
 };
 

@@ -31,7 +31,6 @@
 #include "kis_transform_worker.h"
 #include "processing/kis_transform_processing_visitor.h"
 
-
 class BaseProcessingTest : public TestUtil::QImageBasedTest
 {
 public:
@@ -40,7 +39,8 @@ public:
     {
     }
 
-    void test(const QString &testname, KisProcessingVisitorSP visitor) {
+    void test(const QString &testname, KisProcessingVisitorSP visitor)
+    {
         KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
         KisImageSP image = createImage(undoStore);
         image->initialRefreshGraph();
@@ -77,7 +77,7 @@ public:
 void KisProcessingsTest::testCropVisitor()
 {
     KisProcessingVisitorSP visitor =
-        new KisCropProcessingVisitor(QRect(45,45,410,410), true, true);
+        new KisCropProcessingVisitor(QRect(45, 45, 410, 410), true, true);
 
     BaseProcessingTest tester;
     tester.test("crop", visitor);
@@ -87,13 +87,13 @@ void KisProcessingsTest::testTransformVisitorScale()
 {
     BaseProcessingTest tester;
 
-    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+    KisFilterStrategy *filter = new KisBoxFilterStrategy();
 
     KisProcessingVisitorSP visitor =
         new KisTransformProcessingVisitor(0.5, 0.5,
-                                          0,0,QPointF(),
+                                          0, 0, QPointF(),
                                           0,
-                                          0,0,
+                                          0, 0,
                                           filter);
 
     tester.test("transform_scale", visitor);
@@ -103,13 +103,13 @@ void KisProcessingsTest::testTransformVisitorScaleRotate()
 {
     BaseProcessingTest tester;
 
-    KisFilterStrategy * filter = new KisBoxFilterStrategy();
+    KisFilterStrategy *filter = new KisBoxFilterStrategy();
 
     KisProcessingVisitorSP visitor =
         new KisTransformProcessingVisitor(0.5, 0.5,
-                                          0,0,QPointF(),
+                                          0, 0, QPointF(),
                                           M_PI,
-                                          320,221,
+                                          320, 221,
                                           filter);
 
     tester.test("transform_scale_rotate", visitor);

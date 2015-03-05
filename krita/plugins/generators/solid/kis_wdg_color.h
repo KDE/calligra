@@ -29,16 +29,17 @@ class KisWdgColor : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgColor(QWidget* parent = 0);
+    KisWdgColor(QWidget *parent = 0);
     ~KisWdgColor();
 public:
-    inline const Ui_WdgColorOptions* widget() const {
+    inline const Ui_WdgColorOptions *widget() const
+    {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration *);
+    virtual KisPropertiesConfiguration *configuration() const;
 private:
-    Ui_WdgColorOptions* m_widget;
+    Ui_WdgColorOptions *m_widget;
 };
 
 #endif

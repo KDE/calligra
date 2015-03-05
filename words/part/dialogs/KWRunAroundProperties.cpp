@@ -28,7 +28,7 @@
 #include <kundo2command.h>
 
 KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
-        : m_state(state)
+    : m_state(state)
 {
     widget.setupUi(this);
 
@@ -96,49 +96,57 @@ bool KWRunAroundProperties::open(const QList<KoShape *> &shapes)
         if (runaround == GuiHelper::Unset) {
             side = shape->textRunAroundSide();
             runaround = GuiHelper::On;
-        } else if (side != shape->textRunAroundSide())
+        } else if (side != shape->textRunAroundSide()) {
             runaround = GuiHelper::TriState;
+        }
 
         if (raThreshold == GuiHelper::Unset) {
             threshold = shape->textRunAroundThreshold();
             raThreshold = GuiHelper::On;
-        } else if (threshold != shape->textRunAroundThreshold())
+        } else if (threshold != shape->textRunAroundThreshold()) {
             raThreshold = GuiHelper::TriState;
+        }
 
         if (raContour == GuiHelper::Unset) {
             contour = shape->textRunAroundContour();
             raContour = GuiHelper::On;
-        } else if (contour != shape->textRunAroundContour())
+        } else if (contour != shape->textRunAroundContour()) {
             raContour = GuiHelper::TriState;
+        }
 
         if (raDistanceLeft == GuiHelper::Unset) {
             distanceLeft = shape->textRunAroundDistanceLeft();
             raDistanceLeft = GuiHelper::On;
-        } else if (distanceLeft != shape->textRunAroundDistanceLeft())
+        } else if (distanceLeft != shape->textRunAroundDistanceLeft()) {
             raDistanceLeft = GuiHelper::TriState;
+        }
         if (raDistanceTop == GuiHelper::Unset) {
             distanceTop = shape->textRunAroundDistanceTop();
             raDistanceTop = GuiHelper::On;
-        } else if (distanceTop != shape->textRunAroundDistanceTop())
+        } else if (distanceTop != shape->textRunAroundDistanceTop()) {
             raDistanceTop = GuiHelper::TriState;
+        }
         if (raDistanceRight == GuiHelper::Unset) {
             distanceRight = shape->textRunAroundDistanceRight();
             raDistanceRight = GuiHelper::On;
-        } else if (distanceRight != shape->textRunAroundDistanceRight())
+        } else if (distanceRight != shape->textRunAroundDistanceRight()) {
             raDistanceRight = GuiHelper::TriState;
+        }
         if (raDistanceBottom == GuiHelper::Unset) {
             distanceBottom = shape->textRunAroundDistanceBottom();
             raDistanceBottom = GuiHelper::On;
-        } else if (distanceBottom != shape->textRunAroundDistanceBottom())
+        } else if (distanceBottom != shape->textRunAroundDistanceBottom()) {
             raDistanceBottom = GuiHelper::TriState;
+        }
     }
 
     if (!atLeastOne) {
         return false;
     }
 
-    if (runaround != GuiHelper::TriState)
+    if (runaround != GuiHelper::TriState) {
         m_runAroundSide->button(side)->setChecked(true);
+    }
 
     widget.threshold->changeValue(threshold);
 
@@ -233,6 +241,7 @@ void KWRunAroundProperties::save(KUndo2Command *macro)
     m_state->removeUser();
 }
 
-void KWRunAroundProperties::enoughRunAroundToggled(bool checked) {
+void KWRunAroundProperties::enoughRunAroundToggled(bool checked)
+{
     widget.threshold->setEnabled(checked);
 }

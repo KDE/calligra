@@ -31,9 +31,7 @@
 #include <QMutex>
 #include <QTimer>
 
-
 class KLocale;
-
 
 namespace KPlato
 {
@@ -51,26 +49,25 @@ public:
 
     virtual QString description() const;
     /// Calculate the project
-    virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false );
+    virtual void calculate(Project &project, ScheduleManager *sm, bool nothread = false);
 
 Q_SIGNALS:
-    void sigCalculationStarted( Project*, ScheduleManager* );
-    void sigCalculationFinished( Project*, ScheduleManager* );
-    void maxProgress( int, ScheduleManager* );
-    void sigProgress( int, ScheduleManager* );
+    void sigCalculationStarted(Project *, ScheduleManager *);
+    void sigCalculationFinished(Project *, ScheduleManager *);
+    void maxProgress(int, ScheduleManager *);
+    void sigProgress(int, ScheduleManager *);
 
 protected Q_SLOTS:
-    void slotStarted( SchedulerThread *job );
-    void slotFinished( SchedulerThread *job );
+    void slotStarted(SchedulerThread *job);
+    void slotFinished(SchedulerThread *job);
 };
-
 
 class KPlatoScheduler : public SchedulerThread
 {
     Q_OBJECT
 
 public:
-    KPlatoScheduler( Project *project, ScheduleManager *sm, QObject *parent = 0 );
+    KPlatoScheduler(Project *project, ScheduleManager *sm, QObject *parent = 0);
     ~KPlatoScheduler();
 
     KLocale *locale() const;
@@ -79,7 +76,11 @@ public Q_SLOTS:
     /// Stop scheduling.
     virtual void stopScheduling();
     /// Halt scheduling
-    virtual void haltScheduling() { m_haltScheduling = true; stopScheduling(); }
+    virtual void haltScheduling()
+    {
+        m_haltScheduling = true;
+        stopScheduling();
+    }
 
 protected:
     void run();

@@ -42,25 +42,29 @@
 #include <QNetworkReply>
 #include <NetworkAccessManager.h>
 
-namespace Welcome {
+namespace Welcome
+{
 
-namespace Internal {
+namespace Internal
+{
 
 QString shortenHtml(QString html)
 {
     html.replace(QLatin1String("<a"), QLatin1String("<i"));
     html.replace(QLatin1String("</a"), QLatin1String("</i"));
     uint firstParaEndXhtml = (uint) html.indexOf(QLatin1String("</p>"));
-    uint firstParaEndHtml = (uint) html.indexOf(QLatin1String("<p>"), html.indexOf(QLatin1String("<p>"))+1);
+    uint firstParaEndHtml = (uint) html.indexOf(QLatin1String("<p>"), html.indexOf(QLatin1String("<p>")) + 1);
     uint firstParaEndBr = (uint) html.indexOf(QLatin1String("<br"));
     uint firstParaEnd = qMin(firstParaEndXhtml, firstParaEndHtml);
     firstParaEnd = qMin(firstParaEnd, firstParaEndBr);
     return html.left(firstParaEnd);
 }
 
-class RssReader {
+class RssReader
+{
 public:
-    Internal::RssItem parseItem() {
+    Internal::RssItem parseItem()
+    {
         RssItem item;
         item.source = requestUrl;
         item.blogIcon = blogIcon;
@@ -68,22 +72,23 @@ public:
         while (!streamReader.atEnd()) {
             switch (streamReader.readNext()) {
             case QXmlStreamReader::StartElement:
-                if (streamReader.name() == QLatin1String("title"))
+                if (streamReader.name() == QLatin1String("title")) {
                     item.title = streamReader.readElementText();
-                else if (streamReader.name() == QLatin1String("link"))
+                } else if (streamReader.name() == QLatin1String("link")) {
                     item.link = streamReader.readElementText();
-                else if (streamReader.name() == QLatin1String("pubDate")) {
+                } else if (streamReader.name() == QLatin1String("pubDate")) {
                     QString dateStr = streamReader.readElementText();
                     // fixme: honor time zone!
-                    dateStr = dateStr.left(dateStr.indexOf('+')-1);
+                    dateStr = dateStr.left(dateStr.indexOf('+') - 1);
                     item.pubDate = QLocale(QLocale::English).toDateTime(dateStr, "ddd, dd MMM yyyy HH:mm:ss");
+                } else if (streamReader.name() == QLatin1String("description")) {
+                    item.description = streamReader.readElementText();    //shortenHtml(streamReader.readElementText());
                 }
-                else if (streamReader.name() == QLatin1String("description"))
-                    item.description = streamReader.readElementText(); //shortenHtml(streamReader.readElementText());
                 break;
             case QXmlStreamReader::EndElement:
-                if (streamReader.name() == QLatin1String("item"))
+                if (streamReader.name() == QLatin1String("item")) {
                     return item;
+                }
                 break;
             default:
                 break;
@@ -93,7 +98,8 @@ public:
         return RssItem();
     }
 
-    Internal::RssItemList parse(QNetworkReply *reply) {
+    Internal::RssItemList parse(QNetworkReply *reply)
+    {
         QUrl source = reply->request().url();
         requestUrl = source.toString();
         streamReader.setDevice(reply);
@@ -101,13 +107,14 @@ public:
         while (!streamReader.atEnd()) {
             switch (streamReader.readNext()) {
             case QXmlStreamReader::StartElement:
-                if (streamReader.name() == QLatin1String("item"))
+                if (streamReader.name() == QLatin1String("item")) {
                     list.append(parseItem());
-                else if (streamReader.name() == QLatin1String("title"))
+                } else if (streamReader.name() == QLatin1String("title")) {
                     blogName = streamReader.readElementText();
-                else if (streamReader.name() == QLatin1String("link")) {
-                    if (!streamReader.namespaceUri().isEmpty())
+                } else if (streamReader.name() == QLatin1String("link")) {
+                    if (!streamReader.namespaceUri().isEmpty()) {
                         break;
+                    }
                     QString favIconString(streamReader.readElementText());
                     QUrl favIconUrl(favIconString);
                     favIconUrl.setPath(QLatin1String("favicon.ico"));
@@ -153,13 +160,13 @@ MultiFeedRssModel::~MultiFeedRssModel()
 {
 }
 
-void MultiFeedRssModel::addFeed(const QString& feed)
+void MultiFeedRssModel::addFeed(const QString &feed)
 {
     QMetaObject::invokeMethod(m_networkAccessManager, "getUrl",
                               Qt::QueuedConnection, Q_ARG(QUrl, feed));
 }
 
-bool sortForPubDate(const Internal::RssItem& item1, const Internal::RssItem& item2)
+bool sortForPubDate(const Internal::RssItem &item1, const Internal::RssItem &item2)
 {
     return item1.pubDate > item2.pubDate;
 }
@@ -178,8 +185,9 @@ void MultiFeedRssModel::removeFeed(const QString &feed)
     QMutableListIterator<Internal::RssItem> it(m_aggregatedFeed);
     while (it.hasNext()) {
         Internal::RssItem item = it.next();
-        if (item.source == feed)
+        if (item.source == feed) {
             it.remove();
+        }
     }
     setArticleCount(m_aggregatedFeed.size());
 }

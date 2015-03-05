@@ -58,11 +58,11 @@ namespace NAMESPACE
 class MySqlConnectionInternal : public KexiDB::ConnectionInternal
 {
 public:
-    explicit MySqlConnectionInternal(KexiDB::Connection* connection);
+    explicit MySqlConnectionInternal(KexiDB::Connection *connection);
     virtual ~MySqlConnectionInternal();
 
     //! Connects to a MySQL database
-    bool db_connect(const KexiDB::ConnectionData& data);
+    bool db_connect(const KexiDB::ConnectionData &data);
 
     //! Disconnects from the database
     bool db_disconnect();
@@ -71,13 +71,13 @@ public:
     bool useDatabase(const QString &dbName = QString());
 
     //! Execute SQL statement on the database
-    bool executeSQL(const QString& statement);
+    bool executeSQL(const QString &statement);
 
     //! Stores last operation's result
     virtual void storeResult();
 
     //! Escapes a table, database or column name
-    QString escapeIdentifier(const QString& str) const;
+    QString escapeIdentifier(const QString &str) const;
 
     MYSQL *mysql;
     bool mysql_owned; //!< true if mysql pointer should be freed on destruction
@@ -87,13 +87,12 @@ public:
     bool lowerCaseTableNames;
 };
 
-
 //! Internal MySQL cursor data.
 /*! Provides a low-level abstraction for iterating over MySql result sets. */
 class MySqlCursorData : public MySqlConnectionInternal
 {
 public:
-    explicit MySqlCursorData(KexiDB::Connection* connection);
+    explicit MySqlCursorData(KexiDB::Connection *connection);
     virtual ~MySqlCursorData();
 
     MYSQL_RES *mysqlres;

@@ -35,49 +35,57 @@ public:
 
     using KisNodeVisitor::visit;
 
-    KisTIFFWriterVisitor(TIFF*image, KisTIFFOptions* options);
+    KisTIFFWriterVisitor(TIFF *image, KisTIFFOptions *options);
     ~KisTIFFWriterVisitor();
 
 public:
 
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
-    bool visit(KisGeneratorLayer*);
+    bool visit(KisGeneratorLayer *);
 
-    bool visit(KisNode*) {
+    bool visit(KisNode *)
+    {
         return true;
     }
-    bool visit(KisCloneLayer*) {
+    bool visit(KisCloneLayer *)
+    {
         return true;
     }
-    bool visit(KisFilterMask*) {
+    bool visit(KisFilterMask *)
+    {
         return true;
     }
-    bool visit(KisTransformMask*) {
+    bool visit(KisTransformMask *)
+    {
         return true;
     }
-    bool visit(KisTransparencyMask*) {
+    bool visit(KisTransparencyMask *)
+    {
         return true;
     }
-    bool visit(KisSelectionMask*) {
+    bool visit(KisSelectionMask *)
+    {
         return true;
     }
-    bool visit(KisExternalLayer*);
+    bool visit(KisExternalLayer *);
 
-    bool visit(KisAdjustmentLayer*) {
+    bool visit(KisAdjustmentLayer *)
+    {
         return true;
     }
 
 private:
-    inline TIFF* image() {
+    inline TIFF *image()
+    {
         return m_image;
     }
     inline bool saveAlpha();
-    bool copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8 depth, uint16 sample_format, uint8 nbcolorssamples, quint8* poses);
+    bool copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8 depth, uint16 sample_format, uint8 nbcolorssamples, quint8 *poses);
     bool saveLayerProjection(KisLayer *);
 private:
-    TIFF* m_image;
-    KisTIFFOptions* m_options;
+    TIFF *m_image;
+    KisTIFFOptions *m_options;
 };
 
 #endif

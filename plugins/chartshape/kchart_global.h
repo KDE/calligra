@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef KCHART_GLOBAL_H
 #define KCHART_GLOBAL_H
 
@@ -30,10 +29,10 @@ enum ChartType {
     BarChartType,
     LineChartType,
     AreaChartType,
-    CircleChartType,		// Pie in KDChart
+    CircleChartType,        // Pie in KDChart
     RingChartType,
     ScatterChartType,
-    RadarChartType,		    // Polar in KDChart
+    RadarChartType,         // Polar in KDChart
     FilledRadarChartType,   // Polar in KDChart
     StockChartType,
     BubbleChartType,
@@ -46,7 +45,6 @@ const int NUM_CHARTTYPES = int (LastChartType);
 bool isPolar(ChartType type);
 bool isCartesian(ChartType type);
 int numDimensions(ChartType type);
-
 
 // Chart subtypes, applicable to Bar, Line, Area, and Radar
 enum ChartSubtype {
@@ -65,8 +63,7 @@ enum AxisDimension {
     ZAxisDimension
 };
 
-struct ChartTypeOptions
-{
+struct ChartTypeOptions {
     ChartSubtype subtype;
 };
 
@@ -85,9 +82,9 @@ enum Position {
 };
 
 enum LegendExpansion {
-	WideLegendExpansion,
-	HighLegendExpansion,
-	BalancedLegendExpansion
+    WideLegendExpansion,
+    HighLegendExpansion,
+    BalancedLegendExpansion
 };
 
 enum ErrorCategory {
@@ -125,7 +122,8 @@ enum OdfMarkerStyle { MarkerSquare         = 0,
                       MarkerFastCross      = 16,
                       Marker1Pixel         = 17,
                       Marker4Pixels        = 18,
-                      NoMarker             = 19 };
+                      NoMarker             = 19
+                    };
 
 } // Namespace KChart
 

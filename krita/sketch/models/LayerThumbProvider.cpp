@@ -16,19 +16,19 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #include "LayerThumbProvider.h"
 #include "LayerModel.h"
 #include <KisViewManager.h>
 #include <kis_image.h>
 
-class LayerThumbProvider::Private {
+class LayerThumbProvider::Private
+{
 public:
     Private()
         : layerModel(0)
         , id(0)
     {};
-    LayerModel* layerModel;
+    LayerModel *layerModel;
     int id;
 };
 
@@ -43,19 +43,19 @@ LayerThumbProvider::~LayerThumbProvider()
     delete d;
 }
 
-QImage LayerThumbProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
+QImage LayerThumbProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
     Q_UNUSED(size);
     Q_UNUSED(requestedSize);
     if (id.split("/").first() == QLatin1String("fullimage")) {
-        KisViewManager* view = qobject_cast<KisViewManager*>(d->layerModel->view());
+        KisViewManager *view = qobject_cast<KisViewManager *>(d->layerModel->view());
         int width = 300 * ((float)view->image()->bounds().width() / (float)view->image()->bounds().height());
         return view->image()->convertToQImage(QRect(0, 0, width, 300), QSize(width, 300), view->image()->profile());
     }
     return d->layerModel->layerThumbnail(id);
 }
 
-void LayerThumbProvider::setLayerModel(LayerModel* model)
+void LayerThumbProvider::setLayerModel(LayerModel *model)
 {
     d->layerModel = model;
 }

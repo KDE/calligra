@@ -53,12 +53,13 @@ public:
     /// reimplemented from superclass
     virtual void paint(QPainter &, const KoViewConverter &) {}
     /// reimplemented from superclass
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     /// reimplemented method
     virtual void customMoveEvent(KoPointerEvent *event);
 
     /// set the canvasController this tool works on.
-    void setCanvasController(KoCanvasController *controller) {
+    void setCanvasController(KoCanvasController *controller)
+    {
         m_controller = controller;
     }
 

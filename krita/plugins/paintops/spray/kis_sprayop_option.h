@@ -46,11 +46,11 @@ public:
 
     qreal brushAspect() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
-    KisSprayOpOptionsWidget * m_options;
+    KisSprayOpOptionsWidget *m_options;
 
 };
 
@@ -71,7 +71,8 @@ public:
     bool gaussian;
 
 public:
-    void loadSettings(const KisPropertiesConfiguration* settings) {
+    void loadSettings(const KisPropertiesConfiguration *settings)
+    {
         diameter = settings->getInt(SPRAY_DIAMETER);
         radius =  qRound(0.5 * diameter);
         aspect = settings->getDouble(SPRAY_ASPECT);

@@ -21,9 +21,7 @@
 #include "KoPointerEvent.h"
 #include "kis_coordinates_converter.h"
 
-
-struct KisSimplifiedActionPolicyStrategy::Private
-{
+struct KisSimplifiedActionPolicyStrategy::Private {
     Private(const KisCoordinatesConverter *_converter)
         : converter(_converter),
           changeSizeModifierActive(false),
@@ -34,7 +32,6 @@ struct KisSimplifiedActionPolicyStrategy::Private
     bool changeSizeModifierActive;
     bool anyPickerModifierActive;
 };
-
 
 KisSimplifiedActionPolicyStrategy::KisSimplifiedActionPolicyStrategy(const KisCoordinatesConverter *_converter)
     : m_d(new Private(_converter))
@@ -106,7 +103,9 @@ bool KisSimplifiedActionPolicyStrategy::beginAlternateAction(KoPointerEvent *eve
 {
     Q_UNUSED(action);
 
-    if (!m_d->changeSizeModifierActive && !m_d->anyPickerModifierActive) return false;
+    if (!m_d->changeSizeModifierActive && !m_d->anyPickerModifierActive) {
+        return false;
+    }
 
     return beginPrimaryAction(m_d->converter->documentToImage(event->point));
 }
@@ -115,7 +114,9 @@ void KisSimplifiedActionPolicyStrategy::continueAlternateAction(KoPointerEvent *
 {
     Q_UNUSED(action);
 
-    if (!m_d->changeSizeModifierActive && !m_d->anyPickerModifierActive) return;
+    if (!m_d->changeSizeModifierActive && !m_d->anyPickerModifierActive) {
+        return;
+    }
 
     continuePrimaryAction(m_d->converter->documentToImage(event->point), m_d->changeSizeModifierActive);
 }
@@ -125,7 +126,9 @@ bool KisSimplifiedActionPolicyStrategy::endAlternateAction(KoPointerEvent *event
     Q_UNUSED(event);
     Q_UNUSED(action);
 
-    if (!m_d->changeSizeModifierActive && !m_d->anyPickerModifierActive) return false;
+    if (!m_d->changeSizeModifierActive && !m_d->anyPickerModifierActive) {
+        return false;
+    }
 
     return endPrimaryAction();
 }

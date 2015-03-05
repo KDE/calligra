@@ -32,7 +32,6 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-
 class HtmlFile;
 
 class ExportHtml : public KoFilter
@@ -49,7 +48,7 @@ public:
 
     ExportHtml(QObject *parent, const QVariantList &);
     virtual ~ExportHtml();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 private:
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, HtmlFile *epubFile);
@@ -65,7 +64,6 @@ private:
     bool isWmf(QByteArray &content);
 #endif
 public Q_SLOTS:
-
 
 private:
     QHash<QString, QString> m_metadata;

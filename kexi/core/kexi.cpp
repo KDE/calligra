@@ -52,14 +52,16 @@ public:
     static KexiInternal *_int;
 
     KexiInternal()
-            : connset(0)
+        : connset(0)
     {
     }
-    ~KexiInternal() {
+    ~KexiInternal()
+    {
         delete connset;
     }
 
-    static KexiInternal* self() {
+    static KexiInternal *self()
+    {
         static bool created = false;
         if (!created) {
             _int = new KexiInternal;
@@ -68,12 +70,13 @@ public:
         return _int;
     }
 
-    static void destroy() {
+    static void destroy()
+    {
         delete _int;
         _int = 0;
     }
 
-    KexiDBConnectionSet* connset;
+    KexiDBConnectionSet *connset;
     KexiRecentProjects recentProjects;
     KexiDBConnectionSet recentConnections;
     KexiDB::DriverManager driverManager;
@@ -82,7 +85,7 @@ public:
 
 KexiInternal *KexiInternal::_int = 0;
 
-KexiDBConnectionSet& Kexi::connset()
+KexiDBConnectionSet &Kexi::connset()
 {
     //delayed
     if (!KexiInternal::self()->connset) {
@@ -93,17 +96,17 @@ KexiDBConnectionSet& Kexi::connset()
     return *KexiInternal::self()->connset;
 }
 
-KexiRecentProjects* Kexi::recentProjects()
+KexiRecentProjects *Kexi::recentProjects()
 {
     return &KexiInternal::self()->recentProjects;
 }
 
-KexiDB::DriverManager& Kexi::driverManager()
+KexiDB::DriverManager &Kexi::driverManager()
 {
     return KexiInternal::self()->driverManager;
 }
 
-KexiPart::Manager& Kexi::partManager()
+KexiPart::Manager &Kexi::partManager()
 {
     return KexiInternal::self()->partManager;
 }
@@ -116,7 +119,7 @@ void Kexi::deleteGlobalObjects()
 //temp
 
 bool _tempShowMacros = true;
-bool& Kexi::tempShowMacros()
+bool &Kexi::tempShowMacros()
 {
 #ifndef KEXI_MACROS_SUPPORT
     _tempShowMacros = false;
@@ -125,7 +128,7 @@ bool& Kexi::tempShowMacros()
 }
 
 bool _tempShowScripts = true;
-bool& Kexi::tempShowScripts()
+bool &Kexi::tempShowScripts()
 {
 #ifndef KEXI_SCRIPTS_SUPPORT
     _tempShowScripts = false;
@@ -136,17 +139,19 @@ bool& Kexi::tempShowScripts()
 //--------------------------------------------------------------------------------
 QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
 {
-    if (!withAmpersand)
+    if (!withAmpersand) {
         return Kexi::nameForViewMode(mode, true).remove('&');
+    }
 
-    if (mode == NoViewMode)
+    if (mode == NoViewMode) {
         return i18n("&No View");
-    else if (mode == DataViewMode)
+    } else if (mode == DataViewMode) {
         return i18n("&Data View");
-    else if (mode == DesignViewMode)
+    } else if (mode == DesignViewMode) {
         return i18n("D&esign View");
-    else if (mode == TextViewMode)
+    } else if (mode == TextViewMode) {
         return i18n("&Text View");
+    }
 
     return i18n("&Unknown");
 }
@@ -157,7 +162,7 @@ QString Kexi::iconNameForViewMode(ViewMode mode)
     const char *const id =
         (mode == DataViewMode) ? koIconNameCStr("state_data") :
         (mode == DesignViewMode) ? koIconNameCStr("state_edit") :
-        (mode == TextViewMode) ? koIconNameCStr("state_sql"): 
+        (mode == TextViewMode) ? koIconNameCStr("state_sql") :
         0;
 
     return QLatin1String(id);
@@ -166,18 +171,18 @@ QString Kexi::iconNameForViewMode(ViewMode mode)
 //--------------------------------------------------------------------------------
 
 ObjectStatus::ObjectStatus()
-        : msgHandler(0)
+    : msgHandler(0)
 {
 }
 
-ObjectStatus::ObjectStatus(const QString& message, const QString& description)
-        : msgHandler(0)
+ObjectStatus::ObjectStatus(const QString &message, const QString &description)
+    : msgHandler(0)
 {
     setStatus(message, description);
 }
 
-ObjectStatus::ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
-        : msgHandler(0)
+ObjectStatus::ObjectStatus(KexiDB::Object *dbObject, const QString &message, const QString &description)
+    : msgHandler(0)
 {
     setStatus(dbObject, message, description);
 }
@@ -187,7 +192,7 @@ ObjectStatus::~ObjectStatus()
     delete msgHandler;
 }
 
-const ObjectStatus& ObjectStatus::status() const
+const ObjectStatus &ObjectStatus::status() const
 {
     return *this;
 }
@@ -195,49 +200,52 @@ const ObjectStatus& ObjectStatus::status() const
 bool ObjectStatus::error() const
 {
     return !message.isEmpty()
-           || (dynamic_cast<KexiDB::Object*>((QObject*)dbObj) && dynamic_cast<KexiDB::Object*>((QObject*)dbObj)->error());
+           || (dynamic_cast<KexiDB::Object *>((QObject *)dbObj) && dynamic_cast<KexiDB::Object *>((QObject *)dbObj)->error());
 }
 
-void ObjectStatus::setStatus(const QString& message, const QString& description)
+void ObjectStatus::setStatus(const QString &message, const QString &description)
 {
     this->dbObj = 0;
     this->message = message;
     this->description = description;
 }
 
-void ObjectStatus::setStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
+void ObjectStatus::setStatus(KexiDB::Object *dbObject, const QString &message, const QString &description)
 {
-    if (dynamic_cast<QObject*>(dbObject)) {
-        dbObj = dynamic_cast<QObject*>(dbObject);
+    if (dynamic_cast<QObject *>(dbObject)) {
+        dbObj = dynamic_cast<QObject *>(dbObject);
     }
     this->message = message;
     this->description = description;
 }
 
-void ObjectStatus::setStatus(KexiDB::ResultInfo* result, const QString& message, const QString& description)
+void ObjectStatus::setStatus(KexiDB::ResultInfo *result, const QString &message, const QString &description)
 {
     if (result) {
-        if (message.isEmpty())
+        if (message.isEmpty()) {
             this->message = result->msg;
-        else
+        } else {
             this->message = message + " " + result->msg;
+        }
 
-        if (description.isEmpty())
+        if (description.isEmpty()) {
             this->description = result->desc;
-        else
+        } else {
             this->description = description + " " + result->desc;
-    } else
+        }
+    } else {
         clearStatus();
+    }
 }
 
-void ObjectStatus::setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result,
-                             const QString& message, const QString& description)
+void ObjectStatus::setStatus(KexiDB::Object *dbObject, KexiDB::ResultInfo *result,
+                             const QString &message, const QString &description)
 {
-    if (!dbObject)
+    if (!dbObject) {
         setStatus(result, message, description);
-    else if (!result)
+    } else if (!result) {
         setStatus(dbObject, message, description);
-    else {
+    } else {
         setStatus(dbObject, message, description);
         setStatus(result, this->message, this->description);
     }
@@ -251,12 +259,13 @@ void ObjectStatus::clearStatus()
 
 QString ObjectStatus::singleStatusString() const
 {
-    if (message.isEmpty() || description.isEmpty())
+    if (message.isEmpty() || description.isEmpty()) {
         return message;
+    }
     return message + " " + description;
 }
 
-void ObjectStatus::append(const ObjectStatus& otherStatus)
+void ObjectStatus::append(const ObjectStatus &otherStatus)
 {
     if (message.isEmpty()) {
         message = otherStatus.message;
@@ -264,8 +273,9 @@ void ObjectStatus::append(const ObjectStatus& otherStatus)
         return;
     }
     const QString s(otherStatus.singleStatusString());
-    if (s.isEmpty())
+    if (s.isEmpty()) {
         return;
+    }
     if (description.isEmpty()) {
         description = s;
         return;
@@ -278,10 +288,12 @@ class ObjectStatusMessageHandler : public KexiDB::MessageHandler
 {
 public:
     explicit ObjectStatusMessageHandler(ObjectStatus *status)
-            : KexiDB::MessageHandler()
-            , m_status(status) {
+        : KexiDB::MessageHandler()
+        , m_status(status)
+    {
     }
-    virtual ~ObjectStatusMessageHandler() {
+    virtual ~ObjectStatusMessageHandler()
+    {
     }
 
     virtual void showErrorMessageInternal(const QString &title,
@@ -290,7 +302,7 @@ public:
         m_status->setStatus(title, details);
     }
 
-    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString())
+    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString &msg = QString())
     {
         m_status->setStatus(obj, msg);
     }
@@ -298,50 +310,52 @@ public:
     ObjectStatus *m_status;
 };
 
-ObjectStatus::operator KexiDB::MessageHandler*()
+ObjectStatus::operator KexiDB::MessageHandler *()
 {
-    if (!msgHandler)
+    if (!msgHandler) {
         msgHandler = new ObjectStatusMessageHandler(this);
+    }
     return msgHandler;
 }
 
-void Kexi::initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData)
+void Kexi::initCmdLineArgs(int argc, char *argv[], const KAboutData &aboutData)
 {
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineArgs::addCmdLineOptions(kexi_options());
 }
 
-void KEXI_UNFINISHED_INTERNAL(const QString& feature_name, const QString& extra_text,
-                              QString* line1, QString* line2)
+void KEXI_UNFINISHED_INTERNAL(const QString &feature_name, const QString &extra_text,
+                              QString *line1, QString *line2)
 {
     if (feature_name.isEmpty())
         *line1 = i18n("This function is not available for version %1 of %2 application.",
-                   QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
+                      QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     else {
         QString feature_name_(feature_name);
         *line1 = i18n(
-                  "\"%1\" function is not available for version %2 of %3 application.",
-                  feature_name_.remove('&'), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
+                     "\"%1\" function is not available for version %2 of %3 application.",
+                     feature_name_.remove('&'), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     }
 
     *line2 = extra_text;
 }
 
-void KEXI_UNFINISHED(const QString& feature_name, const QString& extra_text)
+void KEXI_UNFINISHED(const QString &feature_name, const QString &extra_text)
 {
     QString line1, line2;
     KEXI_UNFINISHED_INTERNAL(feature_name, extra_text, &line1, &line2);
-    if (!line2.isEmpty())
+    if (!line2.isEmpty()) {
         line2.prepend("\n");
+    }
     KMessageBox::sorry(0, line1 + line2);
 }
 
-QLabel *KEXI_UNFINISHED_LABEL(const QString& feature_name, const QString& extra_text)
+QLabel *KEXI_UNFINISHED_LABEL(const QString &feature_name, const QString &extra_text)
 {
     QString line1, line2;
     KEXI_UNFINISHED_INTERNAL(feature_name, extra_text, &line1, &line2);
     QLabel *label = new QLabel(QLatin1String("<b>") + line1 + QLatin1String("</b><br>")
-        + line2);
+                               + line2);
     label->setAlignment(Qt::AlignCenter);
     label->setWordWrap(true);
     label->setAutoFillBackground(true);

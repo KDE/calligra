@@ -42,7 +42,7 @@ KisGmicSmallApplicator::~KisGmicSmallApplicator()
     dbgPlugins << "Destroying KisGmicSmallApplicator: " << this;
 }
 
-void KisGmicSmallApplicator::setProperties(const QRect& canvasRect, const QSize& previewSize, KisNodeListSP layers, KisGmicFilterSetting* settings, const QByteArray& customCommands)
+void KisGmicSmallApplicator::setProperties(const QRect &canvasRect, const QSize &previewSize, KisNodeListSP layers, KisGmicFilterSetting *settings, const QByteArray &customCommands)
 {
     m_canvasRect = canvasRect;
     m_previewSize = previewSize;
@@ -51,14 +51,13 @@ void KisGmicSmallApplicator::setProperties(const QRect& canvasRect, const QSize&
     m_gmicCustomCommands = customCommands;
 }
 
-
 void KisGmicSmallApplicator::run()
 {
     qreal aspectRatio = (qreal)m_canvasRect.width() / m_canvasRect.height();
 
     int previewWidth = m_previewSize.width();
     int previewHeight = qRound(previewWidth / aspectRatio);
-    QRect previewRect = QRect(QPoint(0,0), QSize(previewWidth, previewHeight));
+    QRect previewRect = QRect(QPoint(0, 0), QSize(previewWidth, previewHeight));
 
     KisNodeListSP previewKritaNodes = createPreviewThumbnails(m_layers, previewRect.size(), m_canvasRect);
 
@@ -66,24 +65,21 @@ void KisGmicSmallApplicator::run()
     gmicLayers->assign(previewKritaNodes->size());
 
     KisExportGmicProcessingVisitor exportVisitor(previewKritaNodes, gmicLayers, previewRect);
-    for (int i = 0; i < previewKritaNodes->size(); i++)
-    {
-        exportVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0);
+    for (int i = 0; i < previewKritaNodes->size(); i++) {
+        exportVisitor.visit((KisPaintLayer *)(*previewKritaNodes)[i].data(), 0);
     }
 
     QString gmicCommand = m_setting->previewGmicCommand();
-    if (gmicCommand.isEmpty())
-    {
+    if (gmicCommand.isEmpty()) {
         gmicCommand = m_setting->gmicCommand();
     }
 
     KisGmicCommand gmicCmd(gmicCommand, gmicLayers, m_gmicCustomCommands);
-    connect(&gmicCmd, SIGNAL(gmicFinished(bool, int, QString)), this, SIGNAL(gmicFinished(bool, int, QString)));
+    connect(&gmicCmd, SIGNAL(gmicFinished(bool,int,QString)), this, SIGNAL(gmicFinished(bool,int,QString)));
     m_progress = gmicCmd.progressPtr();
 
     gmicCmd.redo();
-    if (!gmicCmd.isSuccessfullyDone())
-    {
+    if (!gmicCmd.isSuccessfullyDone()) {
         dbgPlugins << "G'MIC command for small preview failed!";
         return;
     }
@@ -92,27 +88,22 @@ void KisGmicSmallApplicator::run()
     syncCmd.redo();
 
     KisImportGmicProcessingVisitor importVisitor(previewKritaNodes, gmicLayers, previewRect, 0);
-    for (int i = 0; i < previewKritaNodes->size(); i++)
-    {
-        importVisitor.visit( (KisPaintLayer *)(*previewKritaNodes)[i].data(), 0 );
+    for (int i = 0; i < previewKritaNodes->size(); i++) {
+        importVisitor.visit((KisPaintLayer *)(*previewKritaNodes)[i].data(), 0);
     }
 
-    if (previewKritaNodes->size() > 0)
-    {
+    if (previewKritaNodes->size() > 0) {
         m_preview = previewKritaNodes->at(0)->paintDevice();
         emit previewReady();
-    }
-    else
-    {
+    } else {
         // TODO: show error preview
     }
 }
 
-KisNodeListSP KisGmicSmallApplicator::createPreviewThumbnails(KisNodeListSP layers,const QSize &dstSize,const QRect &srcRect)
+KisNodeListSP KisGmicSmallApplicator::createPreviewThumbnails(KisNodeListSP layers, const QSize &dstSize, const QRect &srcRect)
 {
     KisNodeListSP previewKritaNodes(new QList< KisNodeSP >());
-    for (int i = 0; i < layers->size(); i++)
-    {
+    for (int i = 0; i < layers->size(); i++) {
         KisPaintDeviceSP thumbnail = layers->at(i)->paintDevice()->createThumbnailDevice(dstSize.width(), dstSize.height(), srcRect);
         KisNodeSP node(new KisPaintLayer(0, "", OPACITY_OPAQUE_U8, thumbnail));
         previewKritaNodes->append(node);

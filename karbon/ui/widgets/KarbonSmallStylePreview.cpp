@@ -51,23 +51,28 @@
 #define FRAMEWIDTH 75
 #define FRAMEHEIGHT 15
 
-class KarbonFillStyleWidget : public QPushButton {
+class KarbonFillStyleWidget : public QPushButton
+{
 public:
-    KarbonFillStyleWidget(QWidget * parent)
-            : QPushButton(parent), m_fill(0), m_checkerPainter(5) {
+    KarbonFillStyleWidget(QWidget *parent)
+        : QPushButton(parent), m_fill(0), m_checkerPainter(5)
+    {
         setCursor(Qt::PointingHandCursor);
         setToolTip(i18n("Press to apply fill to selection"));
     }
 
-    virtual ~KarbonFillStyleWidget() {
+    virtual ~KarbonFillStyleWidget()
+    {
     }
 
-    void setFill(QSharedPointer<KoShapeBackground>  fill) {
+    void setFill(QSharedPointer<KoShapeBackground>  fill)
+    {
         m_fill = fill;
         update();
     }
 protected:
-    virtual void paintEvent(QPaintEvent* event) {
+    virtual void paintEvent(QPaintEvent *event)
+    {
         QPainter painter(this);
         painter.setClipRect(event->rect());
 
@@ -76,8 +81,8 @@ protected:
 
             QSharedPointer<KoGradientBackground>  gradientFill = qSharedPointerDynamicCast<KoGradientBackground>(m_fill);
             if (gradientFill) {
-                const QGradient * gradient = gradientFill->gradient();
-                QGradient * defGradient = KarbonGradientHelper::defaultGradient(gradient->type(), gradient->spread(), gradient->stops());
+                const QGradient *gradient = gradientFill->gradient();
+                QGradient *defGradient = KarbonGradientHelper::defaultGradient(gradient->type(), gradient->spread(), gradient->stops());
                 QBrush brush(*defGradient);
                 delete defGradient;
                 painter.setBrush(brush);
@@ -109,42 +114,50 @@ private:
     KoCheckerBoardPainter m_checkerPainter;
 };
 
-class KarbonStrokeStyleWidget : public QPushButton {
+class KarbonStrokeStyleWidget : public QPushButton
+{
 public:
-    KarbonStrokeStyleWidget(QWidget * parent)
-            : QPushButton(parent), m_stroke(0), m_checkerPainter(5) {
+    KarbonStrokeStyleWidget(QWidget *parent)
+        : QPushButton(parent), m_stroke(0), m_checkerPainter(5)
+    {
         setCursor(Qt::PointingHandCursor);
         setToolTip(i18n("Press to apply stroke to selection"));
     }
 
-    virtual ~KarbonStrokeStyleWidget() {
-        if (m_stroke && !m_stroke->deref())
+    virtual ~KarbonStrokeStyleWidget()
+    {
+        if (m_stroke && !m_stroke->deref()) {
             delete m_stroke;
+        }
     }
 
-    void setStroke(KoShapeStrokeModel * stroke) {
+    void setStroke(KoShapeStrokeModel *stroke)
+    {
         if (stroke != m_stroke) {
-            if (m_stroke && !m_stroke->deref())
+            if (m_stroke && !m_stroke->deref()) {
                 delete m_stroke;
+            }
             m_stroke = stroke;
-            if (m_stroke)
+            if (m_stroke) {
                 m_stroke->ref();
+            }
         }
         update();
     }
 protected:
-    virtual void paintEvent(QPaintEvent* event) {
+    virtual void paintEvent(QPaintEvent *event)
+    {
         QPainter painter(this);
         painter.setClipRect(event->rect());
 
         if (m_stroke) {
             m_checkerPainter.paint(painter, rect());
-            const KoShapeStroke * line = dynamic_cast<const KoShapeStroke*>(m_stroke);
+            const KoShapeStroke *line = dynamic_cast<const KoShapeStroke *>(m_stroke);
             if (line) {
                 painter.setPen(Qt::NoPen);
                 QBrush brush = line->lineBrush();
                 if (brush.gradient()) {
-                    QGradient * defGradient = KarbonGradientHelper::defaultGradient(brush.gradient()->type(), brush.gradient()->spread(), brush.gradient()->stops());
+                    QGradient *defGradient = KarbonGradientHelper::defaultGradient(brush.gradient()->type(), brush.gradient()->spread(), brush.gradient()->stops());
                     QBrush brush(*defGradient);
                     delete defGradient;
                     painter.setBrush(brush);
@@ -174,23 +187,23 @@ protected:
     }
 
 private:
-    KoShapeStrokeModel * m_stroke; ///< the stroke to preview
+    KoShapeStrokeModel *m_stroke;  ///< the stroke to preview
     KoCheckerBoardPainter m_checkerPainter;
 };
 
-KarbonSmallStylePreview::KarbonSmallStylePreview(QWidget* parent)
-        : QWidget(parent)
+KarbonSmallStylePreview::KarbonSmallStylePreview(QWidget *parent)
+    : QWidget(parent)
 {
     setFont(KGlobalSettings::smallestReadableFont());
 
     /* Create widget layout */
     QHBoxLayout *layout = new QHBoxLayout(this);
-    QLabel * strokeLabel = new QLabel(i18n("Stroke:"), this);
+    QLabel *strokeLabel = new QLabel(i18n("Stroke:"), this);
     strokeLabel->setMinimumHeight(FRAMEHEIGHT);
     m_strokeFrame = new KarbonStrokeStyleWidget(this);
     m_strokeFrame->setMinimumSize(QSize(FRAMEWIDTH, FRAMEHEIGHT));
 
-    QLabel * fillLabel = new QLabel(i18n("Fill:"), this);
+    QLabel *fillLabel = new QLabel(i18n("Fill:"), this);
     fillLabel->setMinimumHeight(FRAMEHEIGHT);
     m_fillFrame = new KarbonFillStyleWidget(this);
     m_fillFrame->setMinimumSize(QSize(FRAMEWIDTH, FRAMEHEIGHT));
@@ -203,8 +216,8 @@ KarbonSmallStylePreview::KarbonSmallStylePreview(QWidget* parent)
 
     setLayout(layout);
 
-    connect(KoToolManager::instance(), SIGNAL(changedCanvas(const KoCanvasBase *)),
-            this, SLOT(canvasChanged(const KoCanvasBase *)));
+    connect(KoToolManager::instance(), SIGNAL(changedCanvas(const KoCanvasBase*)),
+            this, SLOT(canvasChanged(const KoCanvasBase*)));
     connect(m_strokeFrame, SIGNAL(clicked()), this, SIGNAL(strokeApplied()));
     connect(m_fillFrame, SIGNAL(clicked()), this, SIGNAL(fillApplied()));
 }
@@ -226,7 +239,7 @@ void KarbonSmallStylePreview::canvasChanged(const KoCanvasBase *canvas)
 
 void KarbonSmallStylePreview::selectionChanged()
 {
-    KoCanvasController * controller = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *controller = KoToolManager::instance()->activeCanvasController();
     if (! controller || ! controller->canvas()) {
         m_fillFrame->setFill(QSharedPointer<KoShapeBackground>(0));
         m_strokeFrame->setStroke(0);
@@ -234,7 +247,7 @@ void KarbonSmallStylePreview::selectionChanged()
         return;
     }
 
-    KoShape * shape = controller->canvas()->shapeManager()->selection()->firstSelectedShape();
+    KoShape *shape = controller->canvas()->shapeManager()->selection()->firstSelectedShape();
     if (shape) {
         m_fillFrame->setFill(shape->background());
         m_strokeFrame->setStroke(shape->stroke());

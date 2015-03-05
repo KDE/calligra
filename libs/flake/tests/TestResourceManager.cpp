@@ -26,18 +26,18 @@
 
 void TestResourceManager::koShapeResource()
 {
-    KoPathShape * shape = new KoPathShape();
+    KoPathShape *shape = new KoPathShape();
     int key = 9001;
 
-    KoCanvasResourceManager rp( 0 );
-    rp.setResource( key, shape );
-    QVERIFY( shape == rp.koShapeResource( key ) );
+    KoCanvasResourceManager rp(0);
+    rp.setResource(key, shape);
+    QVERIFY(shape == rp.koShapeResource(key));
 }
 
 void TestResourceManager::testUnitChanged()
 {
     KoCanvasResourceManager rm(0);
-    QSignalSpy spy(&rm, SIGNAL(canvasResourceChanged(int, const QVariant &)));
+    QSignalSpy spy(&rm, SIGNAL(canvasResourceChanged(int,QVariant)));
 
     KoUnit a;
     rm.setResource(KoCanvasResourceManager::Unit, a);

@@ -52,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    KexiScriptDesignView(QWidget *parent, Kross::Action* scriptaction);
+    KexiScriptDesignView(QWidget *parent, Kross::Action *scriptaction);
 
     /**
      * Destructor.
@@ -63,12 +63,12 @@ public:
      * \return the \a Kross::Action this \a KexiScriptDesignView
      * is responsible for.
      */
-    Kross::Action* scriptAction() const;
+    Kross::Action *scriptAction() const;
 
     /**
      * \return a property set for this view.
      */
-    virtual KoProperty::Set* propertySet();
+    virtual KoProperty::Set *propertySet();
 
     /**
      * Try to call \a storeData with new data we like to store. On
@@ -80,9 +80,9 @@ public:
      * \return The matching \a KexiDB::SchemaData instance or NULL
      *        if storing failed.
      */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
-                                             KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+    virtual KexiDB::SchemaData *storeNewData(const KexiDB::SchemaData &sdata,
+            KexiView::StoreNewDataOptions options,
+            bool &cancel);
 
     /**
      * Try to store the modified data in the already opened and
@@ -103,7 +103,7 @@ private Q_SLOTS:
     /**
      * Handle changes in the property editor.
      */
-    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyChanged(KoProperty::Set &set, KoProperty::Property &property);
 
     /**
      * Update the \a KoProperty::Property::Dict propertymap of the
@@ -117,7 +117,7 @@ private Q_SLOTS:
     void execute();
 
 private:
-    KexiScriptDesignViewPrivate* d;
+    KexiScriptDesignViewPrivate *d;
 
     /**
      * Load the data from XML source and fill the internally

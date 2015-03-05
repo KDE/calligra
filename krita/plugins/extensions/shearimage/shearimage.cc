@@ -35,7 +35,7 @@ K_PLUGIN_FACTORY(ShearImageFactory, registerPlugin<ShearImage>();)
 K_EXPORT_PLUGIN(ShearImageFactory("krita"))
 
 ShearImage::ShearImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+    : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("&Shear Image..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
@@ -57,9 +57,11 @@ void ShearImage::slotShearImage()
 {
     KisImageWSP image = m_view->image();
 
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
-    DlgShearImage * dlgShearImage = new DlgShearImage(m_view->mainWindow(), "ShearImage");
+    DlgShearImage *dlgShearImage = new DlgShearImage(m_view->mainWindow(), "ShearImage");
     Q_CHECK_PTR(dlgShearImage);
 
     dlgShearImage->setCaption(i18n("Shear Image"));
@@ -76,9 +78,11 @@ void ShearImage::slotShearLayer()
 {
     KisImageWSP image = m_view->image();
 
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
-    DlgShearImage * dlgShearImage = new DlgShearImage(m_view->mainWindow(), "ShearLayer");
+    DlgShearImage *dlgShearImage = new DlgShearImage(m_view->mainWindow(), "ShearLayer");
     Q_CHECK_PTR(dlgShearImage);
 
     dlgShearImage->setCaption(i18n("Shear Layer"));

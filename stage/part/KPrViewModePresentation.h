@@ -36,27 +36,27 @@ class STAGE_EXPORT KPrViewModePresentation : public KoPAViewMode
     Q_OBJECT
 
 public:
-    KPrViewModePresentation( KoPAViewBase * view, KoPACanvasBase * m_canvas );
+    KPrViewModePresentation(KoPAViewBase *view, KoPACanvasBase *m_canvas);
     ~KPrViewModePresentation();
 
-    KoViewConverter * viewConverter( KoPACanvasBase * canvas );
+    KoViewConverter *viewConverter(KoPACanvasBase *canvas);
 
-    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect);
-    void tabletEvent( QTabletEvent *event, const QPointF &point );
-    void mousePressEvent( QMouseEvent *event, const QPointF &point );
-    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point );
-    void mouseMoveEvent( QMouseEvent *event, const QPointF &point );
-    void mouseReleaseEvent( QMouseEvent *event, const QPointF &point );
-    void keyPressEvent( QKeyEvent *event );
-    void keyReleaseEvent( QKeyEvent *event );
-    void wheelEvent( QWheelEvent * event, const QPointF &point );
-    void closeEvent( QCloseEvent * event );
+    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect);
+    void tabletEvent(QTabletEvent *event, const QPointF &point);
+    void mousePressEvent(QMouseEvent *event, const QPointF &point);
+    void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
+    void mouseMoveEvent(QMouseEvent *event, const QPointF &point);
+    void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+    void wheelEvent(QWheelEvent *event, const QPointF &point);
+    void closeEvent(QCloseEvent *event);
 
-    void activate( KoPAViewMode * previousViewMode );
+    void activate(KoPAViewMode *previousViewMode);
     void deactivate();
 
     /// reimplemented
-    virtual void updateActivePage( KoPAPageBase *page );
+    virtual void updateActivePage(KoPAPageBase *page);
 
     /**
      * @brief Activate the saved view mode
@@ -73,7 +73,7 @@ public:
      *
      * @return animationDirector
      */
-    KPrAnimationDirector * animationDirector();
+    KPrAnimationDirector *animationDirector();
 
     /**
      * Get the number of pages.
@@ -108,14 +108,14 @@ public:
      *
      * This assumes that the presentation is active.
      */
-    KPrPresentationTool * presentationTool() const;
+    KPrPresentationTool *presentationTool() const;
 
     /**
      * Navigate in the presentation.
      */
-    void navigate( KPrAnimationDirector::Navigation navigation );
+    void navigate(KPrAnimationDirector::Navigation navigation);
 
-    Q_INVOKABLE void navigateToPage( int index );
+    Q_INVOKABLE void navigateToPage(int index);
     void blackPresentation();
 
     /**
@@ -141,25 +141,25 @@ Q_SIGNALS:
      * @param page new page index within the current slideshow
      * @param stepsInPage the number of steps in the new page
      */
-    void pageChanged( int page, int stepsInPage );
+    void pageChanged(int page, int stepsInPage);
 
     /**
      * Emitted when the step changes.
      *
      * @param step new step index within the page
      */
-    void stepChanged( int step );
+    void stepChanged(int step);
 
 protected:
-    KoPAViewMode * m_savedViewMode;
-    QWidget * m_savedParent;
-    KPrPresentationTool * m_tool;
-    KPrAnimationDirector * m_animationDirector;
-    KPrAnimationDirector * m_pvAnimationDirector;
-    KoPACanvas * m_presenterViewCanvas;
-    KoPACanvas * m_baseCanvas;
-    KPrPresenterViewWidget * m_presenterViewWidget;
-    KPrEndOfSlideShowPage * m_endOfSlideShowPage;
+    KoPAViewMode *m_savedViewMode;
+    QWidget *m_savedParent;
+    KPrPresentationTool *m_tool;
+    KPrAnimationDirector *m_animationDirector;
+    KPrAnimationDirector *m_pvAnimationDirector;
+    KoPACanvas *m_presenterViewCanvas;
+    KoPACanvas *m_baseCanvas;
+    KPrPresenterViewWidget *m_presenterViewWidget;
+    KPrEndOfSlideShowPage *m_endOfSlideShowPage;
     KPrView *m_view;
 };
 

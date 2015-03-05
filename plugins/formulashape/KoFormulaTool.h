@@ -1,12 +1,12 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net> 
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
                  2009 Jeremias Epperlein <jeeree@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-  
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -32,70 +32,70 @@ class QSignalMapper;
  * @short The flake tool for a formula
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */
-class KoFormulaTool : public KoToolBase {
+class KoFormulaTool : public KoToolBase
+{
     Q_OBJECT
 public:
     /// The standard constructor
-    explicit KoFormulaTool( KoCanvasBase *canvas );
+    explicit KoFormulaTool(KoCanvasBase *canvas);
 
     /// The standard destructor
     ~KoFormulaTool();
 
     /// reimplemented
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// reimplemented
-    void mousePressEvent( KoPointerEvent *event ) ;
+    void mousePressEvent(KoPointerEvent *event);
 
     /// reimplemented
-    void mouseDoubleClickEvent( KoPointerEvent *event );
+    void mouseDoubleClickEvent(KoPointerEvent *event);
 
     /// reimplemented
-    void mouseMoveEvent( KoPointerEvent *event );
+    void mouseMoveEvent(KoPointerEvent *event);
 
     /// reimplemented
-    void mouseReleaseEvent( KoPointerEvent *event );
+    void mouseReleaseEvent(KoPointerEvent *event);
 
-    void keyPressEvent( QKeyEvent *event );
+    void keyPressEvent(QKeyEvent *event);
 
-    void keyReleaseEvent( QKeyEvent *event );
+    void keyReleaseEvent(QKeyEvent *event);
 
-    void remove( bool backSpace );
+    void remove(bool backSpace);
 
     /// @return The currently manipulated KoFormulaShape
-    KoFormulaShape* shape();
+    KoFormulaShape *shape();
 
     /// @return The currently active cursor
-    FormulaEditor* formulaEditor();
+    FormulaEditor *formulaEditor();
 
     /// Reset the cursor
     void resetFormulaEditor();
 
 public Q_SLOTS:
     /// Called when this tool instance is activated and fills m_formulaShape
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
 
     /// Called when this tool instance is deactivated
     void deactivate();
 
     /// Insert the element tied to the given @p action
-    void insert( const QString& action );
+    void insert(const QString &action);
 
-    void changeTable( QAction* action);
-    
-    void insertSymbol( const QString& symbol);
+    void changeTable(QAction *action);
+
+    void insertSymbol(const QString &symbol);
 
     /// Reposition the cursor according to the data change
-    void updateCursor(FormulaCommand* command, bool undo);
+    void updateCursor(FormulaCommand *command, bool undo);
 
     void saveFormula();
 
     void loadFormula();
 
-    
 protected:
     /// Create default option widget
-    QWidget* createOptionWidget();
+    QWidget *createOptionWidget();
 
     virtual void copy() const;
 
@@ -104,7 +104,7 @@ protected:
     virtual bool paste();
 
     virtual QStringList supportedPasteMimeTypes() const;
-    
+
 private:
     /// Repaint the cursor and selection
     void repaintCursor();
@@ -115,14 +115,14 @@ private:
     void addTemplateAction(const QString &caption, const QString &name, const QString &data, const char *iconName);
 
     /// The FormulaShape the tool is manipulating
-    KoFormulaShape* m_formulaShape;
+    KoFormulaShape *m_formulaShape;
 
     /// The FormulaEditor the tool uses to move around in the formula
-    FormulaEditor* m_formulaEditor;
+    FormulaEditor *m_formulaEditor;
 
-    QList<FormulaEditor*> m_cursorList;
+    QList<FormulaEditor *> m_cursorList;
 
-    QSignalMapper* m_signalMapper;
+    QSignalMapper *m_signalMapper;
 };
 
 #endif

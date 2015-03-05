@@ -21,7 +21,6 @@
 
 #include <QtTest>
 
-
 class KisSimpleUpdateQueueTest : public QObject
 {
     Q_OBJECT

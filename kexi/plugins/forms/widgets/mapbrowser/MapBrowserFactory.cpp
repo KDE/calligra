@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include "MapBrowserWidget.h"
 #include "MapBrowserFactory.h"
 
@@ -33,8 +32,8 @@
 #include <QVariant>
 #include <QVariantList>
 
-MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
-  : KexiDBFactoryBase(parent, "mapbrowser")
+MapBrowserFactory::MapBrowserFactory(QObject *parent, const QVariantList &args)
+    : KexiDBFactoryBase(parent, "mapbrowser")
 {
     Q_UNUSED(args);
     KFormDesigner::WidgetInfo *mapBrowser = new KFormDesigner::WidgetInfo(this);
@@ -43,13 +42,13 @@ MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
     mapBrowser->setName(i18n("Map Browser"));
     mapBrowser->setNamePrefix(
         i18nc("A prefix for identifiers of map browser widgets. Based on that, identifiers such as "
-            "mapBrowser1, mapBrowser2 are generated. "
-            "This string can be used to refer the widget object as variables in programming "
-            "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-            "should start with lower case letter and if there are subsequent words, these should "
-            "start with upper case letter. Example: smallCamelCase. "
-            "Moreover, try to make this prefix as short as possible.",
-            "mapBrowser"));
+              "mapBrowser1, mapBrowser2 are generated. "
+              "This string can be used to refer the widget object as variables in programming "
+              "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+              "should start with lower case letter and if there are subsequent words, these should "
+              "start with upper case letter. Example: smallCamelCase. "
+              "Moreover, try to make this prefix as short as possible.",
+              "mapBrowser"));
     mapBrowser->setDescription(i18n("Displays an interactive map."));
     addClass(mapBrowser);
 }
@@ -58,20 +57,21 @@ MapBrowserFactory::~MapBrowserFactory()
 {
 }
 
-QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
-                            QWidget* parent,
-                            const char* name,
-                            KFormDesigner::Container* container,
-                            KFormDesigner::WidgetFactory::CreateWidgetOptions options)
+QWidget *MapBrowserFactory::createWidget(const QByteArray &classname,
+        QWidget *parent,
+        const char *name,
+        KFormDesigner::Container *container,
+        KFormDesigner::WidgetFactory::CreateWidgetOptions options)
 {
     Q_UNUSED(options);
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(name, classname));
 
-    if (classname == "MapBrowserWidget")
+    if (classname == "MapBrowserWidget") {
         w = new MapBrowserWidget(parent);
+    }
 
-    if (w){
+    if (w) {
         w->setObjectName(name);
         kDebug() << w << w->objectName() << "created";
         return w;
@@ -81,7 +81,7 @@ QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
 }
 
 bool MapBrowserFactory::createMenuActions(const QByteArray &classname, QWidget *w,
-                                    QMenu *menu, KFormDesigner::Container *container)
+        QMenu *menu, KFormDesigner::Container *container)
 {
     Q_UNUSED(classname);
     Q_UNUSED(w);
@@ -90,20 +90,20 @@ bool MapBrowserFactory::createMenuActions(const QByteArray &classname, QWidget *
     return false;
 }
 
-bool MapBrowserFactory::startInlineEditing(InlineEditorCreationArguments& args)
+bool MapBrowserFactory::startInlineEditing(InlineEditorCreationArguments &args)
 {
     Q_UNUSED(args);
     return false;
 }
 
 bool MapBrowserFactory::previewWidget(const QByteArray &classname,
-                                QWidget *widget, KFormDesigner::Container *)
+                                      QWidget *widget, KFormDesigner::Container *)
 {
     Q_UNUSED(classname);
     Q_UNUSED(widget);
     return true;
 }
-     
+
 K_EXPORT_KEXIFORMWIDGETS_PLUGIN(MapBrowserFactory, mapbrowser)
 
 #include "MapBrowserFactory.moc"

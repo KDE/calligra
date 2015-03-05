@@ -29,7 +29,6 @@
 #include "kis_types.h"
 #include "kis_paint_device.h"
 
-
 /// the base command for commands altering a KisImage
 class KRITAIMAGE_EXPORT KisImageCommand : public KUndo2Command
 {
@@ -40,7 +39,7 @@ public:
      * @param name The name that will be shown in the ui
      * @param image The image the command will be working on.
      */
-    KisImageCommand(const KUndo2MagicString& name, KisImageWSP image, KUndo2Command *parent = 0);
+    KisImageCommand(const KUndo2MagicString &name, KisImageWSP image, KUndo2Command *parent = 0);
     virtual ~KisImageCommand();
 
 protected:

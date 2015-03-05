@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #include "testfindmatch.h"
 
 #include <QTextDocument>
@@ -28,7 +26,7 @@
 
 #include "KoFindMatch.h"
 
-Q_DECLARE_METATYPE(QTextDocument*)
+Q_DECLARE_METATYPE(QTextDocument *)
 Q_DECLARE_METATYPE(QTextCursor)
 
 void TestFindMatch::testBasic()
@@ -38,15 +36,15 @@ void TestFindMatch::testBasic()
     QTextDocument *doc = new QTextDocument("Test Document", this);
     QVariant docVariant = QVariant::fromValue(doc);
     QVERIFY(docVariant.isValid());
-    
+
     match.setContainer(docVariant);
     QCOMPARE(match.container(), docVariant);
-    QCOMPARE(match.container().value<QTextDocument*>(), doc);
+    QCOMPARE(match.container().value<QTextDocument *>(), doc);
 
     QTextCursor cursor = doc->find("Document");
     QVariant curVariant = QVariant::fromValue(cursor);
     QVERIFY(curVariant.isValid());
-    
+
     match.setLocation(curVariant);
     QCOMPARE(match.location(), curVariant);
     QCOMPARE(match.location().value<QTextCursor>(), cursor);
@@ -70,7 +68,7 @@ void TestFindMatch::testCopyAssign()
 
     QVERIFY(docVariant.isValid());
     QVERIFY(curVariant.isValid());
-    
+
     match.setContainer(docVariant);
     match.setLocation(curVariant);
 

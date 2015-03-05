@@ -37,7 +37,6 @@ class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
 
-
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
 {
     Q_OBJECT
@@ -69,7 +68,7 @@ public:
     void paint(KoPointerEvent *event);
     void endPaint();
 
-    const KisPaintOp* currentPaintOp() const;
+    const KisPaintOp *currentPaintOp() const;
     QPainterPath paintOpOutline(const QPointF &savedCursorPos,
                                 const KoPointerEvent *event,
                                 const KisPaintOpSettings *globalSettings,
@@ -99,21 +98,21 @@ protected:
 
 protected:
 
-    virtual void createPainters(QVector<PainterInfo*> &painterInfos,
+    virtual void createPainters(QVector<PainterInfo *> &painterInfos,
                                 const QPointF &lastPosition,
                                 int lastTime);
 
     // to be overridden in derived classes to add painting with
     // multiple painters
 
-    virtual void paintAt(const QVector<PainterInfo*> &painterInfos,
+    virtual void paintAt(const QVector<PainterInfo *> &painterInfos,
                          const KisPaintInformation &pi);
 
-    virtual void paintLine(const QVector<PainterInfo*> &painterInfos,
+    virtual void paintLine(const QVector<PainterInfo *> &painterInfos,
                            const KisPaintInformation &pi1,
                            const KisPaintInformation &pi2);
 
-    virtual void paintBezierCurve(const QVector<PainterInfo*> &painterInfos,
+    virtual void paintBezierCurve(const QVector<PainterInfo *> &painterInfos,
                                   const KisPaintInformation &pi1,
                                   const QPointF &control1,
                                   const QPointF &control2,
@@ -147,7 +146,7 @@ protected:
 
 private:
     void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
-                                                   QPointF tangent1, QPointF tangent2);
+                            QPointF tangent1, QPointF tangent2);
 
     void stabilizerStart(KisPaintInformation firstPaintInfo);
     void stabilizerEnd();
@@ -160,7 +159,7 @@ private Q_SLOTS:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* __KIS_TOOL_FREEHAND_HELPER_H */

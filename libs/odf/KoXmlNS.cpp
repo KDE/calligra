@@ -55,60 +55,61 @@ const QString KoXmlNS::delta("http://www.deltaxml.com/ns/track-changes/delta-nam
 const QString KoXmlNS::split("http://www.deltaxml.com/ns/track-changes/split-namespace");
 const QString KoXmlNS::ac("http://www.deltaxml.com/ns/track-changes/attribute-change-namespace");
 
-const char* KoXmlNS::nsURI2NS(const QString &nsURI)
+const char *KoXmlNS::nsURI2NS(const QString &nsURI)
 {
-    if (nsURI == KoXmlNS::office)
+    if (nsURI == KoXmlNS::office) {
         return "office";
-    else if (nsURI == KoXmlNS::meta)
+    } else if (nsURI == KoXmlNS::meta) {
         return "meta";
-    else if (nsURI == KoXmlNS::config)
+    } else if (nsURI == KoXmlNS::config) {
         return "config";
-    else if (nsURI == KoXmlNS::text)
+    } else if (nsURI == KoXmlNS::text) {
         return "text";
-    else if (nsURI == KoXmlNS::table)
+    } else if (nsURI == KoXmlNS::table) {
         return "table";
-    else if (nsURI == KoXmlNS::draw)
+    } else if (nsURI == KoXmlNS::draw) {
         return "draw";
-    else if (nsURI == KoXmlNS::presentation)
+    } else if (nsURI == KoXmlNS::presentation) {
         return "presentation";
-    else if (nsURI == KoXmlNS::dr3d)
+    } else if (nsURI == KoXmlNS::dr3d) {
         return "dr3d";
-    else if (nsURI == KoXmlNS::chart)
+    } else if (nsURI == KoXmlNS::chart) {
         return "chart";
-    else if (nsURI == KoXmlNS::form)
+    } else if (nsURI == KoXmlNS::form) {
         return "form";
-    else if (nsURI == KoXmlNS::script)
+    } else if (nsURI == KoXmlNS::script) {
         return "script";
-    else if (nsURI == KoXmlNS::style)
+    } else if (nsURI == KoXmlNS::style) {
         return "style";
-    else if (nsURI == KoXmlNS::number)
+    } else if (nsURI == KoXmlNS::number) {
         return "number";
-    else if (nsURI == KoXmlNS::manifest)
+    } else if (nsURI == KoXmlNS::manifest) {
         return "manifest";
-    else if (nsURI == KoXmlNS::anim)
+    } else if (nsURI == KoXmlNS::anim) {
         return "anim";
-    else if (nsURI == KoXmlNS::math)
+    } else if (nsURI == KoXmlNS::math) {
         return "math";
-    else if (nsURI == KoXmlNS::svg)
+    } else if (nsURI == KoXmlNS::svg) {
         return "svg";
-    else if (nsURI == KoXmlNS::fo)
+    } else if (nsURI == KoXmlNS::fo) {
         return "fo";
-    else if (nsURI == KoXmlNS::dc)
+    } else if (nsURI == KoXmlNS::dc) {
         return "dc";
-    else if (nsURI == KoXmlNS::xlink)
+    } else if (nsURI == KoXmlNS::xlink) {
         return "xlink";
-    else if (nsURI == KoXmlNS::VL)
+    } else if (nsURI == KoXmlNS::VL) {
         return "VL";
-    else if (nsURI == KoXmlNS::smil)
+    } else if (nsURI == KoXmlNS::smil) {
         return "smil";
-    else if (nsURI == KoXmlNS::xhtml)
+    } else if (nsURI == KoXmlNS::xhtml) {
         return "xhtml";
-    else if (nsURI == KoXmlNS::calligra)
+    } else if (nsURI == KoXmlNS::calligra) {
         return "calligra";
-    else if (nsURI == KoXmlNS::officeooo)
+    } else if (nsURI == KoXmlNS::officeooo) {
         return "officeooo";
-    else if (nsURI == KoXmlNS::xml)
+    } else if (nsURI == KoXmlNS::xml) {
         return "xml";
+    }
 
     // Shouldn't happen.
     return "";

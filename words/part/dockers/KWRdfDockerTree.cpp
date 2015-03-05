@@ -39,9 +39,9 @@
 #include <KoToolProxy.h>
 
 KWRdfDockerTree::KWRdfDockerTree(QWidget *parent)
-        : QTreeWidget(parent),
-        m_rdf(0),
-        m_canvas(0)
+    : QTreeWidget(parent),
+      m_rdf(0),
+      m_canvas(0)
 {
     //kDebug(30015) << "KWRdfDockerTree()";
     setAcceptDrops(true);
@@ -66,7 +66,7 @@ void KWRdfDockerTree::dragEnterEvent(QDragEnterEvent *event)
 {
     //kDebug(30015) << "dragEnterEvent() mime format:" << event->mimeData()->formats();
     if (KoRdfSemanticItemRegistry::instance()->canCreateSemanticItemFromMimeData(event->mimeData()) ||
-        event->mimeData()->hasFormat("text/uri-list")) {
+            event->mimeData()->hasFormat("text/uri-list")) {
         event->accept();
     }
 }
@@ -78,7 +78,7 @@ void KWRdfDockerTree::dragMoveEvent(QDragMoveEvent *e)
 }
 
 bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
-        const QMimeData *data, Qt::DropAction action)
+                                   const QMimeData *data, Qt::DropAction action)
 {
     Q_UNUSED(parent);
     Q_UNUSED(index);
@@ -116,12 +116,14 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
 
 void KWRdfDockerTree::mouseMoveEvent(QMouseEvent *event)
 {
-    if (!(event->buttons() & Qt::LeftButton))
+    if (!(event->buttons() & Qt::LeftButton)) {
         return;
-    if (!currentItem())
+    }
+    if (!currentItem()) {
         return;
+    }
     QTreeWidgetItem *baseitem = currentItem();
-    if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {
+    if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem *>(baseitem)) {
         QMimeData *mimeData = new QMimeData;
         item->semanticItem()->exportToMime(mimeData);
         QDrag *drag = new QDrag(this);

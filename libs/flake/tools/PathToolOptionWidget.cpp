@@ -49,10 +49,11 @@ PathToolOptionWidget::~PathToolOptionWidget()
 void PathToolOptionWidget::setSelectionType(int type)
 {
     const bool plain = type & PlainPath;
-    if (plain)
+    if (plain) {
         widget.stackedWidget->setCurrentIndex(0);
-    else
+    } else {
         widget.stackedWidget->setCurrentIndex(1);
+    }
 }
 
 #include <PathToolOptionWidget.moc>

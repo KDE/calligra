@@ -38,27 +38,26 @@ class KisDuplicateOpSettings;
 class QPointF;
 class KisPainter;
 
-
 class KisDuplicateOp : public KisBrushBasedPaintOp
 {
 
 public:
 
-    KisDuplicateOp(const KisDuplicateOpSettings *m_settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisDuplicateOp(const KisDuplicateOpSettings *m_settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisDuplicateOp();
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
 
 private:
 
-    qreal minimizeEnergy(const qreal* m, qreal* sol, int w, int h);
+    qreal minimizeEnergy(const qreal *m, qreal *sol, int w, int h);
 
 private:
 
     KisImageSP m_image;
     KisNodeSP m_node;
 
-    const KisDuplicateOpSettings * m_settings;
+    const KisDuplicateOpSettings *m_settings;
     KisPaintDeviceSP m_srcdev;
     KisPaintDeviceSP m_target;
     QPointF m_duplicateStart;

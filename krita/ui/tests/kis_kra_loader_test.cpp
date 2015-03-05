@@ -33,7 +33,6 @@
 #include <filter/kis_filter_registry.h>
 #include <generator/kis_generator_registry.h>
 
-
 void KisKraLoaderTest::initTestCase()
 {
     KisFilterRegistry::instance();
@@ -70,8 +69,8 @@ void testObligeSingleChildImpl(bool transpDefaultPixel)
 {
 
     QString id = !transpDefaultPixel ?
-        "single_layer_no_channel_flags_nontransp_def_pixel.kra" :
-        "single_layer_no_channel_flags_transp_def_pixel.kra";
+                 "single_layer_no_channel_flags_nontransp_def_pixel.kra" :
+                 "single_layer_no_channel_flags_transp_def_pixel.kra";
 
     QString fileName = TestUtil::fetchDataFileLazy(id);
 
@@ -107,7 +106,6 @@ void KisKraLoaderTest::testObligeSingleChildNonTranspPixel()
 {
     testObligeSingleChildImpl(false);
 }
-
 
 QTEST_KDEMAIN(KisKraLoaderTest, GUI)
 #include "kis_kra_loader_test.moc"

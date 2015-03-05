@@ -28,7 +28,6 @@
 #include "kis_painter.h"
 #include "kis_paint_information.h"
 
-
 class FreehandStrokeTester : public utils::StrokeTester
 {
 public:
@@ -38,12 +37,14 @@ public:
     {
     }
 
-    void setFlipLineDirection(bool value) {
+    void setFlipLineDirection(bool value)
+    {
         m_flipLineDirection = value;
         setNumIterations(2);
     }
 
-    void setPaintColor(const QColor &color) {
+    void setPaintColor(const QColor &color)
+    {
         m_paintColor.reset(new QColor(color));
     }
 
@@ -55,10 +56,10 @@ protected:
         modifyResourceManager(manager, image, 0);
     }
 
-
     void modifyResourceManager(KoCanvasResourceManager *manager,
                                KisImageWSP image,
-                               int iteration) {
+                               int iteration)
+    {
 
         if (m_paintColor && iteration > 0) {
             QVariant i;
@@ -67,15 +68,16 @@ protected:
         }
     }
 
-    KisStrokeStrategy* createStroke(bool indirectPainting,
+    KisStrokeStrategy *createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
                                     KisPainter *painter,
-                                    KisImageWSP image) {
+                                    KisImageWSP image)
+    {
         Q_UNUSED(image);
 
         m_painterInfo =
             new FreehandStrokeStrategy::PainterInfo(painter,
-                                                    new KisDistanceInformation());
+                    new KisDistanceInformation());
 
         return new FreehandStrokeStrategy(indirectPainting, COMPOSITE_ALPHA_DARKEN, resources, m_painterInfo, kundo2_noi18n("Freehand Stroke"));
     }
@@ -87,7 +89,8 @@ protected:
         addPaintingJobs(image, resources, painter, 0);
     }
 
-    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter, int iteration) {
+    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter, int iteration)
+    {
 
         Q_ASSERT(painter == m_painterInfo->painter);
         Q_UNUSED(painter);
@@ -104,8 +107,8 @@ protected:
         }
 
         image->addJob(strokeId(),
-            new FreehandStrokeStrategy::Data(resources->currentNode(),
-                                             m_painterInfo, pi1, pi2));
+                      new FreehandStrokeStrategy::Data(resources->currentNode(),
+                              m_painterInfo, pi1, pi2));
 
     }
 

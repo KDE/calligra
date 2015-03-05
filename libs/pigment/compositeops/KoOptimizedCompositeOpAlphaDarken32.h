@@ -29,7 +29,7 @@
 template<typename channels_type, typename pixel_type>
 struct AlphaDarkenCompositor32 {
     struct OptionalParams {
-        OptionalParams(const KoCompositeOp::ParameterInfo& params)
+        OptionalParams(const KoCompositeOp::ParameterInfo &params)
             : flow(params.flow),
               averageOpacity(*params.lastOpacity * params.flow),
               premultipliedOpacity(params.opacity * params.flow)
@@ -63,12 +63,10 @@ struct AlphaDarkenCompositor32 {
         Vc::float_v average_opacity_vec(255.0 * oparams.averageOpacity);
         Vc::float_v flow_norm_vec(oparams.flow);
 
-
         Vc::float_v uint8MaxRec2((float)1.0 / (255.0 * 255.0));
         Vc::float_v uint8MaxRec1((float)1.0 / 255.0);
         Vc::float_v uint8Max((float)255.0);
         Vc::float_v zeroValue(Vc::Zero);
-
 
         Vc::float_v msk_norm_alpha;
         src_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<src_aligned>(src);
@@ -96,7 +94,9 @@ struct AlphaDarkenCompositor32 {
         KoStreamedMath<_impl>::template fetch_colors_32<src_aligned>(src, src_c1, src_c2, src_c3);
 
         bool srcAlphaIsZero = (src_alpha == zeroValue).isFull();
-        if (srcAlphaIsZero) return;
+        if (srcAlphaIsZero) {
+            return;
+        }
 
         bool dstAlphaIsZero = empty_dst_pixels_mask.isFull();
 
@@ -165,7 +165,7 @@ struct AlphaDarkenCompositor32 {
             dst_alpha = fullFlowAlpha;
         } else {
             Vc::float_v zeroFlowAlpha = src_alpha + dst_alpha -
-                dst_blend * dst_alpha;
+                                        dst_blend * dst_alpha;
             dst_alpha = (fullFlowAlpha - zeroFlowAlpha) * flow_norm_vec + zeroFlowAlpha;
         }
 
@@ -205,11 +205,10 @@ struct AlphaDarkenCompositor32 {
             dst[1] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[1], src[1], srcAlphaNorm);
             dst[2] = KoStreamedMath<_impl>::lerp_mixed_u8_float(dst[2], src[2], srcAlphaNorm);
         } else {
-            const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
-            pixel_type *d = reinterpret_cast<pixel_type*>(dst);
+            const pixel_type *s = reinterpret_cast<const pixel_type *>(src);
+            pixel_type *d = reinterpret_cast<pixel_type *>(dst);
             *d = *s;
         }
-
 
         float flow = oparams.flow;
         float averageOpacity = oparams.averageOpacity;
@@ -244,14 +243,14 @@ template<Vc::Implementation _impl>
 class KoOptimizedCompositeOpAlphaDarken32 : public KoCompositeOp
 {
 public:
-    KoOptimizedCompositeOpAlphaDarken32(const KoColorSpace* cs)
+    KoOptimizedCompositeOpAlphaDarken32(const KoColorSpace *cs)
         : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix()) {}
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    virtual void composite(const KoCompositeOp::ParameterInfo &params) const
     {
-        if(params.maskRowStart) {
+        if (params.maskRowStart) {
             KoStreamedMath<_impl>::template genericComposite32<true, true, AlphaDarkenCompositor32<quint8, quint32> >(params);
         } else {
             KoStreamedMath<_impl>::template genericComposite32<false, true, AlphaDarkenCompositor32<quint8, quint32> >(params);

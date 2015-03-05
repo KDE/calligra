@@ -94,13 +94,13 @@ public:
      * Copy constructor.
      * \note Take care: does not perform a deep copy!
      */
-    CellStorage(const CellStorage& other);
+    CellStorage(const CellStorage &other);
 
     /**
      * Copy constructor.
      * Creates a CellStorage for \p sheet and copies the data from \p other.
      */
-    CellStorage(const CellStorage& other, Sheet* sheet);
+    CellStorage(const CellStorage &other, Sheet *sheet);
 
     /**
      * Destructor.
@@ -110,7 +110,7 @@ public:
     /**
      * \return the sheet this CellStorage is for.
      */
-    Sheet* sheet() const;
+    Sheet *sheet() const;
 
     /**
      * Removes all data at \p col , \p row .
@@ -121,48 +121,48 @@ public:
      * \return the binding associated with the Cell at \p column , \p row .
      */
     Binding binding(int column, int row) const;
-    void setBinding(const Region& region, const Binding& binding);
-    void removeBinding(const Region& region, const Binding& binding);
+    void setBinding(const Region &region, const Binding &binding);
+    void removeBinding(const Region &region, const Binding &binding);
 
     /**
      * \return the comment associated with the Cell at \p column , \p row .
      */
     QString comment(int column, int row) const;
-    void setComment(const Region& region, const QString& comment);
+    void setComment(const Region &region, const QString &comment);
 
     /**
      * \return the conditional formattings associated with the Cell at \p column , \p row .
      */
     Conditions conditions(int column, int row) const;
-    void setConditions(const Region& region, Conditions conditions);
+    void setConditions(const Region &region, Conditions conditions);
 
     /**
      * \return the database associated with the Cell at \p column , \p row .
      */
     Database database(int column, int row) const;
-    QList< QPair<QRectF, Database> > databases(const Region& region) const;
-    void setDatabase(const Region& region, const Database& database);
+    QList< QPair<QRectF, Database> > databases(const Region &region) const;
+    void setDatabase(const Region &region, const Database &database);
 
     /**
      * \return the formula associated with the Cell at \p column , \p row .
      */
     Formula formula(int column, int row) const;
-    void setFormula(int column, int row, const Formula& formula);
+    void setFormula(int column, int row, const Formula &formula);
 
     /**
      * \return the hyperlink associated with the Cell at \p column , \p row .
      */
     QString link(int column, int row) const;
-    void setLink(int column, int row, const QString& link);
+    void setLink(int column, int row, const QString &link);
 
     /**
      * \return the named area's name associated with the Cell at \p column , \p row .
      */
     QString namedArea(int column, int row) const;
-    QList< QPair<QRectF, QString> > namedAreas(const Region& region) const;
-    void setNamedArea(const Region& region, const QString& namedArea);
+    QList< QPair<QRectF, QString> > namedAreas(const Region &region) const;
+    void setNamedArea(const Region &region, const QString &namedArea);
     void emitInsertNamedArea(const Region &region, const QString &namedArea);
-    void removeNamedArea(const Region& region, const QString& namedArea);
+    void removeNamedArea(const Region &region, const QString &namedArea);
 
     /**
      * \return the Style associated with the Cell at \p column , \p row .
@@ -172,21 +172,21 @@ public:
     /**
      * \return the Style associated with \p rect.
      */
-    Style style(const QRect& rect) const;
-    void setStyle(const Region& region, const Style& style);
-    void insertSubStyle(const QRect& rect, const SharedSubStyle& subStyle);
+    Style style(const QRect &rect) const;
+    void setStyle(const Region &region, const Style &style);
+    void insertSubStyle(const QRect &rect, const SharedSubStyle &subStyle);
 
     /**
      * \return the user input associated with the Cell at \p column , \p row .
      */
     QString userInput(int column, int row) const;
-    void setUserInput(int column, int row, const QString& input);
+    void setUserInput(int column, int row, const QString &input);
 
     /**
      * \return the validity checks associated with the Cell at \p column , \p row .
      */
     Validity validity(int column, int row) const;
-    void setValidity(const Region& region, Validity validity);
+    void setValidity(const Region &region, Validity validity);
 
     /**
      * \return the value associated with the Cell at \p column , \p row .
@@ -196,8 +196,8 @@ public:
     /**
      * Creates a value array containing the values in \p region.
      */
-    Value valueRegion(const Region& region) const;
-    void setValue(int column, int row, const Value& value);
+    Value valueRegion(const Region &region) const;
+    void setValue(int column, int row, const Value &value);
 
     QSharedPointer<QTextDocument> richText(int column, int row) const;
     void setRichText(int column, int row, QSharedPointer<QTextDocument> text);
@@ -223,15 +223,15 @@ public:
     Cell masterCell(int column, int row) const;
     int mergedXCells(int column, int row) const;
     int mergedYCells(int column, int row) const;
-    QList<Cell> masterCells(const Region& region) const;
+    QList<Cell> masterCells(const Region &region) const;
 
     /**
      * \return \c true, if the cell's value is a matrix and obscures other cells
      */
     bool locksCells(int column, int row) const;
     bool isLocked(int column, int row) const;
-    bool hasLockedCells(const Region& region) const;
-    void lockCells(const QRect& rect);
+    bool hasLockedCells(const Region &region) const;
+    void lockCells(const QRect &rect);
     void unlockCells(int column, int row);
     QRect lockedCells(int column, int row) const;
 
@@ -263,23 +263,23 @@ public:
      * Shifts the data right of \p rect to the left by the width of \p rect .
      * The data formerly contained in \p rect becomes overridden.
      */
-    void removeShiftLeft(const QRect& rect);
+    void removeShiftLeft(const QRect &rect);
 
     /**
      * Shifts the data in and right of \p rect to the right by the width of \p rect .
      */
-    void insertShiftRight(const QRect& rect);
+    void insertShiftRight(const QRect &rect);
 
     /**
      * Shifts the data below \p rect to the top by the height of \p rect .
      * The data formerly contained in \p rect becomes overridden.
      */
-    void removeShiftUp(const QRect& rect);
+    void removeShiftUp(const QRect &rect);
 
     /**
      * Shifts the data in and below \p rect to the bottom by the height of \p rect .
      */
-    void insertShiftDown(const QRect& rect);
+    void insertShiftDown(const QRect &rect);
 
     /**
      * Retrieve the first used data in \p col .
@@ -371,21 +371,21 @@ public:
      * Creates a substorage consisting of the values in \p region.
      * \return a subset of the storage stripped down to the values in \p region
      */
-    CellStorage subStorage(const Region& region) const;
+    CellStorage subStorage(const Region &region) const;
 
-    const BindingStorage* bindingStorage() const;
-    const CommentStorage* commentStorage() const;
-    const ConditionsStorage* conditionsStorage() const;
-    const FormulaStorage* formulaStorage() const;
-    const FusionStorage* fusionStorage() const;
-    const LinkStorage* linkStorage() const;
-    const StyleStorage* styleStorage() const;
-    const UserInputStorage* userInputStorage() const;
-    const ValidityStorage* validityStorage() const;
-    const ValueStorage* valueStorage() const;
+    const BindingStorage *bindingStorage() const;
+    const CommentStorage *commentStorage() const;
+    const ConditionsStorage *conditionsStorage() const;
+    const FormulaStorage *formulaStorage() const;
+    const FusionStorage *fusionStorage() const;
+    const LinkStorage *linkStorage() const;
+    const StyleStorage *styleStorage() const;
+    const UserInputStorage *userInputStorage() const;
+    const ValidityStorage *validityStorage() const;
+    const ValueStorage *valueStorage() const;
 
-    void loadConditions(const QList<QPair<QRegion, Conditions> >& conditions);
-    void loadStyles(const QList<QPair<QRegion, Style> >& styles);
+    void loadConditions(const QList<QPair<QRegion, Conditions> > &conditions);
+    void loadStyles(const QList<QPair<QRegion, Style> > &styles);
 
     void invalidateStyleCache();
 
@@ -406,21 +406,22 @@ public:
     void stopUndoRecording(KUndo2Command *parent);
 
 Q_SIGNALS:
-    void insertNamedArea(const Region&, const QString&);
-    void namedAreaRemoved(const QString&);
+    void insertNamedArea(const Region &, const QString &);
+    void namedAreaRemoved(const QString &);
 
 private:
     // do not allow assignment
-    CellStorage& operator=(const CellStorage&);
+    CellStorage &operator=(const CellStorage &);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 class UserInputStorage : public PointStorage<QString>
 {
 public:
-    UserInputStorage& operator=(const PointStorage<QString>& o) {
+    UserInputStorage &operator=(const PointStorage<QString> &o)
+    {
         PointStorage<QString>::operator=(o);
         return *this;
     }
@@ -429,7 +430,8 @@ public:
 class LinkStorage : public PointStorage<QString>
 {
 public:
-    LinkStorage& operator=(const PointStorage<QString>& o) {
+    LinkStorage &operator=(const PointStorage<QString> &o)
+    {
         PointStorage<QString>::operator=(o);
         return *this;
     }
@@ -438,7 +440,8 @@ public:
 class RichTextStorage : public PointStorage<QSharedPointer<QTextDocument> >
 {
 public:
-    RichTextStorage& operator=(const PointStorage<QSharedPointer<QTextDocument> >& o) {
+    RichTextStorage &operator=(const PointStorage<QSharedPointer<QTextDocument> > &o)
+    {
         PointStorage<QSharedPointer<QTextDocument> >::operator=(o);
         return *this;
     }

@@ -51,7 +51,6 @@
 #define DRAG_WHILE_DRAG_WORKAROUND_STOP()
 #endif
 
-
 class KoDocumentSectionView::Private
 {
 public:
@@ -120,8 +119,8 @@ void KoDocumentSectionView::addPropertyActions(QMenu *menu, const QModelIndex &i
     for (int i = 0, n = list.count(); i < n; ++i) {
         if (list.at(i).isMutable) {
             PropertyAction *a = new PropertyAction(i, list.at(i), index, menu);
-            connect(a, SIGNAL(toggled(bool, const QPersistentModelIndex&, int)),
-                    this, SLOT(slotActionToggled(bool, const QPersistentModelIndex&, int)));
+            connect(a, SIGNAL(toggled(bool,QPersistentModelIndex,int)),
+                    this, SLOT(slotActionToggled(bool,QPersistentModelIndex,int)));
             menu->addAction(a);
         }
     }
@@ -130,11 +129,11 @@ void KoDocumentSectionView::addPropertyActions(QMenu *menu, const QModelIndex &i
 bool KoDocumentSectionView::viewportEvent(QEvent *e)
 {
     if (model()) {
-        switch(e->type()) {
+        switch (e->type()) {
         case QEvent::MouseButtonPress: {
             DRAG_WHILE_DRAG_WORKAROUND_STOP();
 
-            const QPoint pos = static_cast<QMouseEvent*>(e)->pos();
+            const QPoint pos = static_cast<QMouseEvent *>(e)->pos();
             d->lastPos = pos;
             if (!indexAt(pos).isValid()) {
                 return QTreeView::viewportEvent(e);
@@ -156,7 +155,7 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
             }
 #endif
 
-            const QPoint pos = static_cast<QMouseEvent*>(e)->pos();
+            const QPoint pos = static_cast<QMouseEvent *>(e)->pos();
             QModelIndex hovered = indexAt(pos);
             if (hovered != d->hovered) {
                 if (d->hovered.isValid()) {
@@ -171,7 +170,7 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
             }
             /* This is a workaround for a bug in QTreeView that immediately begins a dragging action
             when the mouse lands on the decoration/icon of a different index and moves 1 pixel or more */
-            Qt::MouseButtons buttons = static_cast<QMouseEvent*>(e)->buttons();
+            Qt::MouseButtons buttons = static_cast<QMouseEvent *>(e)->buttons();
             if ((Qt::LeftButton | Qt::MidButton) & buttons) {
                 if ((pos - d->lastPos).manhattanLength() > qApp->startDragDistance()) {
                     return QTreeView::viewportEvent(e);
@@ -180,7 +179,7 @@ bool KoDocumentSectionView::viewportEvent(QEvent *e)
             }
         } break;
         case QEvent::ToolTip: {
-            const QPoint pos = static_cast<QHelpEvent*>(e)->pos();
+            const QPoint pos = static_cast<QHelpEvent *>(e)->pos();
             if (!indexAt(pos).isValid()) {
                 return QTreeView::viewportEvent(e);
             }
@@ -201,8 +200,9 @@ void KoDocumentSectionView::contextMenuEvent(QContextMenuEvent *e)
 {
     QTreeView::contextMenuEvent(e);
     QModelIndex i = indexAt(e->pos());
-    if (model())
+    if (model()) {
         i = model()->buddy(i);
+    }
     showContextMenu(e->globalPos(), i);
 }
 
@@ -244,15 +244,16 @@ void KoDocumentSectionView::slotActionToggled(bool on, const QPersistentModelInd
 {
     Model::PropertyList list = index.data(Model::PropertiesRole).value<Model::PropertyList>();
     list[num].state = on;
-    const_cast<QAbstractItemModel*>(index.model())->setData(index, QVariant::fromValue(list), Model::PropertiesRole);
+    const_cast<QAbstractItemModel *>(index.model())->setData(index, QVariant::fromValue(list), Model::PropertiesRole);
 }
 
 QStyleOptionViewItem KoDocumentSectionView::optionForIndex(const QModelIndex &index) const
 {
     QStyleOptionViewItem option = viewOptions();
     option.rect = visualRect(index);
-    if (index == currentIndex())
+    if (index == currentIndex()) {
         option.state |= QStyle::State_HasFocus;
+    }
     return option;
 }
 
@@ -273,8 +274,7 @@ void KoDocumentSectionView::startDrag(Qt::DropActions supportedActions)
             //m_dragSource = this;
             drag->exec(supportedActions);
         }
-    }
-    else {
+    } else {
         QTreeView::startDrag(supportedActions);
     }
 }
@@ -293,12 +293,10 @@ QPixmap KoDocumentSectionView::createDragPixmap() const
     if (itemCount > 9) {
         xCount = 4;
         size = KIconLoader::SizeLarge;
-    }
-    else if (itemCount > 4) {
+    } else if (itemCount > 4) {
         xCount = 3;
         size = KIconLoader::SizeHuge;
-    }
-    else if (itemCount < xCount) {
+    } else if (itemCount < xCount) {
         xCount = itemCount;
     }
 
@@ -390,7 +388,7 @@ int KoDocumentSectionView::cursorPageIndex() const
 
     //If cursor is at the half button of the page then the move action is performed after the slide, otherwise it is
     //performed before the page
-    if (abs((cursorPosition.y() + scrollBarValue) - size.height()*numberRow) > (size.height()/2)) {
+    if (abs((cursorPosition.y() + scrollBarValue) - size.height()*numberRow) > (size.height() / 2)) {
         numberRow++;
     }
 

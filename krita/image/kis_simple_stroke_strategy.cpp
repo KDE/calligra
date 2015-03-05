@@ -18,7 +18,6 @@
 
 #include "kis_simple_stroke_strategy.h"
 
-
 /***************************************************************/
 /*         private class: SimpleStrokeJobStrategy              */
 /***************************************************************/
@@ -33,8 +32,9 @@ public:
     {
     }
 
-    void run(KisStrokeJobData *data) {
-        switch(m_type) {
+    void run(KisStrokeJobData *data)
+    {
+        switch (m_type) {
         case KisSimpleStrokeStrategy::JOB_INIT:
             Q_UNUSED(data);
             m_parentStroke->initStrokeCallback();
@@ -58,7 +58,6 @@ private:
     KisSimpleStrokeStrategy *m_parentStroke;
 };
 
-
 /***************************************************************/
 /*                 KisSimpleStrokeStrategy                     */
 /***************************************************************/
@@ -80,39 +79,39 @@ void KisSimpleStrokeStrategy::enableJob(JobType type, bool enable,
     m_jobExclusivity[(int)type] = exclusivity;
 }
 
-KisStrokeJobStrategy*
+KisStrokeJobStrategy *
 KisSimpleStrokeStrategy::createStrategy(JobType type)
 {
     KisStrokeJobStrategy *strategy = 0;
 
-    if(m_jobEnabled[(int)type]) {
+    if (m_jobEnabled[(int)type]) {
         strategy = new SimpleStrokeJobStrategy(type, this);
     }
 
     return strategy;
 }
 
-KisStrokeJobStrategy* KisSimpleStrokeStrategy::createInitStrategy()
+KisStrokeJobStrategy *KisSimpleStrokeStrategy::createInitStrategy()
 {
     return createStrategy(JOB_INIT);
 }
 
-KisStrokeJobStrategy* KisSimpleStrokeStrategy::createFinishStrategy()
+KisStrokeJobStrategy *KisSimpleStrokeStrategy::createFinishStrategy()
 {
     return createStrategy(JOB_FINISH);
 }
 
-KisStrokeJobStrategy* KisSimpleStrokeStrategy::createCancelStrategy()
+KisStrokeJobStrategy *KisSimpleStrokeStrategy::createCancelStrategy()
 {
     return createStrategy(JOB_CANCEL);
 }
 
-KisStrokeJobStrategy* KisSimpleStrokeStrategy::createDabStrategy()
+KisStrokeJobStrategy *KisSimpleStrokeStrategy::createDabStrategy()
 {
     return createStrategy(JOB_DOSTROKE);
 }
 
-KisStrokeJobData* KisSimpleStrokeStrategy::createData(JobType type)
+KisStrokeJobData *KisSimpleStrokeStrategy::createData(JobType type)
 {
     KisStrokeJobData::Sequentiality sequentiality = m_jobSequentiality[(int)type];
     KisStrokeJobData::Exclusivity exclusivity = m_jobExclusivity[(int)type];
@@ -120,17 +119,17 @@ KisStrokeJobData* KisSimpleStrokeStrategy::createData(JobType type)
     return new KisStrokeJobData(sequentiality, exclusivity);
 }
 
-KisStrokeJobData* KisSimpleStrokeStrategy::createInitData()
+KisStrokeJobData *KisSimpleStrokeStrategy::createInitData()
 {
     return createData(JOB_INIT);
 }
 
-KisStrokeJobData* KisSimpleStrokeStrategy::createFinishData()
+KisStrokeJobData *KisSimpleStrokeStrategy::createFinishData()
 {
     return createData(JOB_FINISH);
 }
 
-KisStrokeJobData* KisSimpleStrokeStrategy::createCancelData()
+KisStrokeJobData *KisSimpleStrokeStrategy::createCancelData()
 {
     return createData(JOB_CANCEL);
 }

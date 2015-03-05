@@ -37,8 +37,8 @@ Q_DECLARE_METATYPE(QTextCursor)
 class KoFindStyle::Private
 {
 public:
-    QList<QTextDocument*> documents;
-    QHash<QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> > selections;
+    QList<QTextDocument *> documents;
+    QHash<QTextDocument *, QVector<QAbstractTextDocumentLayout::Selection> > selections;
 
     static QTextCharFormat highlightFormat;
     void updateSelections();
@@ -46,7 +46,7 @@ public:
 
 QTextCharFormat KoFindStyle::Private::highlightFormat;
 
-KoFindStyle::KoFindStyle(QObject* parent)
+KoFindStyle::KoFindStyle(QObject *parent)
     : KoFindBase(parent), d(new Private)
 {
     KoFindOptionSet *options = new KoFindOptionSet();
@@ -62,12 +62,12 @@ KoFindStyle::~KoFindStyle()
     delete d;
 }
 
-QList< QTextDocument* > KoFindStyle::documents()
+QList< QTextDocument * > KoFindStyle::documents()
 {
     return d->documents;
 }
 
-void KoFindStyle::setDocuments(const QList< QTextDocument* >& list)
+void KoFindStyle::setDocuments(const QList< QTextDocument * > &list)
 {
     clearMatches();
     d->documents = list;
@@ -76,29 +76,29 @@ void KoFindStyle::setDocuments(const QList< QTextDocument* >& list)
 void KoFindStyle::clearMatches()
 {
     d->selections.clear();
-    foreach(QTextDocument* doc, d->documents) {
+    foreach (QTextDocument *doc, d->documents) {
         d->selections.insert(doc, QVector<QAbstractTextDocumentLayout::Selection>());
     }
     d->updateSelections();
 }
 
-void KoFindStyle::replaceImplementation(const KoFindMatch& /*match*/, const QVariant& /*value*/)
+void KoFindStyle::replaceImplementation(const KoFindMatch & /*match*/, const QVariant & /*value*/)
 {
 
 }
 
-void KoFindStyle::findImplementation(const QString& /*pattern*/, KoFindBase::KoFindMatchList& matchList)
+void KoFindStyle::findImplementation(const QString & /*pattern*/, KoFindBase::KoFindMatchList &matchList)
 {
     int charStyle = options()->option("characterStyle")->value().toInt();
     int parStyle = options()->option("paragraphStyle")->value().toInt();
 
-    foreach(QTextDocument *document, d->documents) {
+    foreach (QTextDocument *document, d->documents) {
         QTextBlock block = document->firstBlock();
         QVector<QAbstractTextDocumentLayout::Selection> selections;
-        while(block.isValid()) {
-            if(block.blockFormat().intProperty(KoParagraphStyle::StyleId) == parStyle) {
-                for(QTextBlock::iterator itr = block.begin(); itr != block.end(); ++itr) {
-                    if(itr.fragment().charFormat().intProperty(KoCharacterStyle::StyleId) == charStyle) {
+        while (block.isValid()) {
+            if (block.blockFormat().intProperty(KoParagraphStyle::StyleId) == parStyle) {
+                for (QTextBlock::iterator itr = block.begin(); itr != block.end(); ++itr) {
+                    if (itr.fragment().charFormat().intProperty(KoCharacterStyle::StyleId) == charStyle) {
                         QTextCursor cursor(document);
                         cursor.setPosition(itr.fragment().position());
                         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, itr.fragment().length());
@@ -121,8 +121,8 @@ void KoFindStyle::findImplementation(const QString& /*pattern*/, KoFindBase::KoF
 
 void KoFindStyle::Private::updateSelections()
 {
-    QHash< QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> >::iterator itr;
-    for(itr = selections.begin(); itr != selections.end(); ++itr) {
+    QHash< QTextDocument *, QVector<QAbstractTextDocumentLayout::Selection> >::iterator itr;
+    for (itr = selections.begin(); itr != selections.end(); ++itr) {
         KoTextDocument doc(itr.key());
         doc.setSelections(itr.value());
     }

@@ -28,16 +28,17 @@
 #include <KoXmlReader.h>
 
 KoTextReference::KoTextReference(int indexId)
-        : KoVariable(),
-        m_indexId(indexId)
+    : KoVariable(),
+      m_indexId(indexId)
 {
 }
 
 KoTextReference::~KoTextReference()
 {
     KoTextLocator *loc = locator();
-    if (loc)
+    if (loc) {
         loc->removeListener(this);
+    }
 }
 
 void KoTextReference::variableMoved(const QTextDocument *document, int posInDocument)
@@ -46,10 +47,11 @@ void KoTextReference::variableMoved(const QTextDocument *document, int posInDocu
     Q_UNUSED(posInDocument);
     Q_ASSERT(manager());
     KoTextLocator *loc = locator();
-    if (loc)
+    if (loc) {
         setValue(QString::number(loc->pageNumber()));
-    else
-        setValue("NOREF"); // anything smarter to point to a broken reference?
+    } else {
+        setValue("NOREF");    // anything smarter to point to a broken reference?
+    }
 }
 
 void KoTextReference::setup()
@@ -58,9 +60,9 @@ void KoTextReference::setup()
     variableMoved(0, 0);
 }
 
-KoTextLocator* KoTextReference::locator()
+KoTextLocator *KoTextReference::locator()
 {
-    return dynamic_cast<KoTextLocator*>(manager()->inlineTextObject(m_indexId));
+    return dynamic_cast<KoTextLocator *>(manager()->inlineTextObject(m_indexId));
 }
 
 bool KoTextReference::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

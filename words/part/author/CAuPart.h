@@ -37,7 +37,7 @@ public:
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
 
 private Q_SLOTS:
-     void showErrorAndDie();
+    void showErrorAndDie();
 
 protected:
 

@@ -23,11 +23,11 @@
 #include "kis_node_dummies_graph.h"
 #include "node_shapes_utils.h"
 
-inline KisNodeDummy* nodeDummyFromId(int id) {
+inline KisNodeDummy *nodeDummyFromId(int id)
+{
     KisNodeShape *nodeShape = nodeShapeFromId(id);
     return new KisNodeDummy(nodeShape, nodeShape->node());
 }
-
 
 /**
  * node0
@@ -53,21 +53,21 @@ void KisNodeDummiesGraphTest::init()
     KisNodeDummy *parent;
 
     parent = m_rootDummy;
-    for(int i = 6; i >= 1; i--) {
+    for (int i = 6; i >= 1; i--) {
         KisNodeDummy *dummy = nodeDummyFromId(i);
         m_dummiesGraph->addNode(dummy, parent, 0);
     }
 
     parent = findDummyById(m_rootDummy, 1);
     Q_ASSERT(parent);
-    for(int i = 8; i >= 7; i--) {
+    for (int i = 8; i >= 7; i--) {
         KisNodeDummy *dummy = nodeDummyFromId(i);
         m_dummiesGraph->addNode(dummy, parent, 0);
     }
 
     parent = findDummyById(m_rootDummy, 4);
     Q_ASSERT(parent);
-    for(int i = 11; i >= 9; i--) {
+    for (int i = 11; i >= 9; i--) {
         KisNodeDummy *dummy = nodeDummyFromId(i);
         m_dummiesGraph->addNode(dummy, parent, 0);
     }

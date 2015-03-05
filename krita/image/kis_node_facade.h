@@ -135,6 +135,6 @@ public:
 private:
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 #endif

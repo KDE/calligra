@@ -91,16 +91,17 @@ void Changecase::process()
 {
     emit startMacro(i18n("Change case"));
 
-    if (m_sentenceCaseRadio->isChecked())
+    if (m_sentenceCaseRadio->isChecked()) {
         sentenceCase();
-    else if (m_lowerCaseRadio->isChecked())
+    } else if (m_lowerCaseRadio->isChecked()) {
         lowerCase();
-    else if (m_upperCaseRadio->isChecked())
+    } else if (m_upperCaseRadio->isChecked()) {
         upperCase();
-    else if (m_initialCapsRadio->isChecked())
+    } else if (m_initialCapsRadio->isChecked()) {
         initialCaps();
-    else if (m_toggleCaseRadio->isChecked())
+    } else if (m_toggleCaseRadio->isChecked()) {
         toggleCase();
+    }
 
     emit stopMacro();
 }
@@ -122,8 +123,9 @@ void Changecase::sentenceCase()
         QString::Iterator iter = text.end();
 
         if (text.isEmpty()) { // empty block, go to next block
-            if (!(block.isValid() && block.position() + block.length() < m_endPosition))
+            if (!(block.isValid() && block.position() + block.length() < m_endPosition)) {
                 break;
+            }
             block = block.next();
             continue;
         }
@@ -151,9 +153,9 @@ void Changecase::sentenceCase()
                     m_cursor.insertText(currentWord.toUpper());
                     iter--;
                     pos--;
-                }
-                else if (prevLetterIndex < m_startPosition)
+                } else if (prevLetterIndex < m_startPosition) {
                     break;
+                }
             }
         }
 
@@ -162,16 +164,16 @@ void Changecase::sentenceCase()
                 m_cursor.setPosition(pos);
                 m_cursor.deleteChar();
                 m_cursor.insertText((*iter).toUpper());
-            }
-            else if (!(*iter).isLetter() && currentWord.isLower()) {
+            } else if (!(*iter).isLetter() && currentWord.isLower()) {
                 m_cursor.setPosition(prevLetterIndex);
                 m_cursor.deleteChar();
                 m_cursor.insertText(currentWord.toUpper());
             }
         }
 
-        if (!(block.isValid() && block.position() + block.length() < m_endPosition))
+        if (!(block.isValid() && block.position() + block.length() < m_endPosition)) {
             break;
+        }
         block = block.next();
     }
 }
@@ -190,8 +192,9 @@ void Changecase::lowerCase()
         QString::ConstIterator constIter = text.constBegin();
         while (pos < m_endPosition && constIter != text.constEnd()) {
             if (pos >= m_startPosition) {
-                if (!foundToBeChanged && constIter->isUpper())
+                if (!foundToBeChanged && constIter->isUpper()) {
                     foundToBeChanged = true;
+                }
                 result.append(constIter->toLower());
             }
 
@@ -199,8 +202,9 @@ void Changecase::lowerCase()
             constIter++;
         }
 
-        if (!(block.isValid() && block.position() + block.length() < m_endPosition))
+        if (!(block.isValid() && block.position() + block.length() < m_endPosition)) {
             finished = true;
+        }
 
         if (foundToBeChanged) {
             m_cursor.setPosition(qMax(m_startPosition, block.position()));
@@ -208,8 +212,9 @@ void Changecase::lowerCase()
             m_cursor.insertText(result);
         }
 
-        if (finished)
+        if (finished) {
             break;
+        }
 
         block = block.next();
         pos = block.position();
@@ -230,8 +235,9 @@ void Changecase::upperCase()
         QString::ConstIterator constIter = text.constBegin();
         while (pos < m_endPosition && constIter != text.constEnd()) {
             if (pos >= m_startPosition) {
-                if (!foundToBeChanged && constIter->isLower())
+                if (!foundToBeChanged && constIter->isLower()) {
                     foundToBeChanged = true;
+                }
                 result.append(constIter->toUpper());
             }
 
@@ -239,8 +245,9 @@ void Changecase::upperCase()
             constIter++;
         }
 
-        if (!(block.isValid() && block.position() + block.length() < m_endPosition))
+        if (!(block.isValid() && block.position() + block.length() < m_endPosition)) {
             finished = true;
+        }
 
         if (foundToBeChanged) {
             m_cursor.setPosition(qMax(m_startPosition, block.position()));
@@ -248,8 +255,9 @@ void Changecase::upperCase()
             m_cursor.insertText(result);
         }
 
-        if (finished)
+        if (finished) {
             break;
+        }
 
         block = block.next();
         pos = block.position();
@@ -271,15 +279,16 @@ void Changecase::initialCaps()
         QString::ConstIterator constIter = text.constBegin();
         while (pos < m_endPosition && constIter != text.constEnd()) {
             bool isSpace = constIter->isSpace();
-            
+
             if (pos >= m_startPosition) {
                 if (space && !isSpace) {
-                    if (!foundToBeChanged && constIter->isLower())
+                    if (!foundToBeChanged && constIter->isLower()) {
                         foundToBeChanged = true;
+                    }
                     result.append(constIter->toTitleCase());
-                }
-                else
+                } else {
                     result.append(*constIter);
+                }
             }
 
             space = isSpace;
@@ -287,8 +296,9 @@ void Changecase::initialCaps()
             constIter++;
         }
 
-        if (!(block.isValid() && block.position() + block.length() < m_endPosition))
+        if (!(block.isValid() && block.position() + block.length() < m_endPosition)) {
             finished = true;
+        }
 
         if (foundToBeChanged) {
             m_cursor.setPosition(qMax(m_startPosition, block.position()));
@@ -296,8 +306,9 @@ void Changecase::initialCaps()
             m_cursor.insertText(result);
         }
 
-        if (finished)
+        if (finished) {
             break;
+        }
 
         block = block.next();
         pos = block.position();
@@ -317,20 +328,22 @@ void Changecase::toggleCase()
         QString::ConstIterator constIter = text.constBegin();
         while (pos < m_endPosition && constIter != text.constEnd()) {
             if (pos >= m_startPosition) {
-                if (constIter->isLower())
+                if (constIter->isLower()) {
                     result.append(constIter->toUpper());
-                else if (constIter->isUpper())
+                } else if (constIter->isUpper()) {
                     result.append(constIter->toLower());
-                else
+                } else {
                     result.append(*constIter);
+                }
             }
 
             pos++;
             constIter++;
         }
 
-        if (!(block.isValid() && block.position() + block.length() < m_endPosition))
+        if (!(block.isValid() && block.position() + block.length() < m_endPosition)) {
             finished = true;
+        }
 
         if (result != text) {
             m_cursor.setPosition(qMax(m_startPosition, block.position()));
@@ -338,8 +351,9 @@ void Changecase::toggleCase()
             m_cursor.insertText(result);
         }
 
-        if (finished)
+        if (finished) {
             break;
+        }
 
         block = block.next();
         pos = block.position();

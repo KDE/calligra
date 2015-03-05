@@ -49,7 +49,7 @@ void KPrPicturesImport::import(KPrView *view)
         // TODO there should be a progress bar
         // instead of the progress bar opening for each loaded picture
         m_currentPage = view->activePage();
-        KoPAPage *activePage = dynamic_cast<KoPAPage*>(m_currentPage);
+        KoPAPage *activePage = dynamic_cast<KoPAPage *>(m_currentPage);
         if (activePage) {
             m_masterPage = activePage->masterPage();
 
@@ -57,8 +57,7 @@ void KPrPicturesImport::import(KPrView *view)
             m_cmd = new KUndo2Command(kundo2_i18n("Insert Pictures"));
             import();
         }
-    }
-    else {
+    } else {
         kWarning(33001) << "picture shape factory not found";
     }
 }
@@ -69,8 +68,7 @@ void KPrPicturesImport::import()
         //  TODO check that a picture was added.
         m_doc->addCommand(m_cmd);
         // TODO activate first added page doUpdateActivePage(page);
-    }
-    else {
+    } else {
         KUrl url(m_urls.takeAt(0));
         // todo calculate the correct size so that the image is centered to
         KIO::StoredTransferJob *job(KIO::storedGet(url, KIO::NoReload, 0));
@@ -83,7 +81,7 @@ void KPrPicturesImport::pictureImported(KJob *job)
 {
     KoShape *shape = m_factory->createDefaultShape();
     if (shape) {
-        KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+        KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);
         Q_ASSERT(transferJob);
         KoImageData *imageData = m_doc->resourceManager()->imageCollection()->createImageData(transferJob->data());
         if (imageData->isValid()) {
@@ -101,7 +99,7 @@ void KPrPicturesImport::pictureImported(KJob *job)
             shape->setSize(imageSize);
 
             // center the picture on the page
-            QPointF pos( pageSize.width() / 2- imageSize.width() / 2, pageSize.height() / 2 - imageSize.height() / 2 );
+            QPointF pos(pageSize.width() / 2 - imageSize.width() / 2, pageSize.height() / 2 - imageSize.height() / 2);
             shape->setPosition(pos);
 
             KoPAPageBase *page = m_doc->newPage(m_masterPage);
@@ -110,18 +108,15 @@ void KPrPicturesImport::pictureImported(KJob *job)
                 layer->addShape(shape);
                 new KoPAPageInsertCommand(m_doc, page, m_currentPage, m_cmd);
                 m_currentPage = page;
-            }
-            else {
+            } else {
                 delete page;
                 delete shape;
             }
-        }
-        else {
+        } else {
             kWarning(33001) << "imageData not valid";
             delete shape;
         }
-    }
-    else {
+    } else {
         kWarning(33001) << "shape not created";
     }
     import();

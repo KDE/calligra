@@ -28,7 +28,7 @@ PSDColorModeBlock::PSDColorModeBlock(PSDColorMode colormode)
 {
 }
 
-bool PSDColorModeBlock::read(QIODevice* io)
+bool PSDColorModeBlock::read(QIODevice *io)
 {
     // get length
     psdread(io, &blocksize);
@@ -37,8 +37,7 @@ bool PSDColorModeBlock::read(QIODevice* io)
         if (colormode == Indexed || colormode == DuoTone) {
             error = "Blocksize of 0 and Indexed or DuoTone colormode";
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -48,24 +47,23 @@ bool PSDColorModeBlock::read(QIODevice* io)
     }
 
     data = io->read(blocksize);
-    if ((quint32)data.size() != blocksize) return false;
+    if ((quint32)data.size() != blocksize) {
+        return false;
+    }
 
     if (colormode == Indexed) {
         int i = 0;
         while (i <= 767) {
-            colormap.append(qRgb(data[i],data[i + 1],data[i + 2]));
+            colormap.append(qRgb(data[i], data[i + 1], data[i + 2]));
             i += 2;
         }
-    }
-    else {
+    } else {
         duotoneSpecification = data;
     }
     return valid();
 }
 
-
-
-bool PSDColorModeBlock::write(QIODevice* io)
+bool PSDColorModeBlock::write(QIODevice *io)
 {
     if (!valid()) {
         error = "Cannot write an invalid Color Mode Block";
@@ -74,16 +72,14 @@ bool PSDColorModeBlock::write(QIODevice* io)
     if (colormap.size() > 0 && colormode == Indexed) {
         error = "Cannot write indexed color data";
         return false;
-    }
-    else if (duotoneSpecification.size() > 0 && colormode == DuoTone) {
+    } else if (duotoneSpecification.size() > 0 && colormode == DuoTone) {
         quint32 blocksize = duotoneSpecification.size();
         psdwrite(io, blocksize);
         if (io->write(duotoneSpecification.constData(), blocksize) != blocksize) {
             error = "Failed to write duotone specification";
             return false;
         }
-    }
-    else {
+    } else {
         quint32 i = 0;
         psdwrite(io, i);
     }

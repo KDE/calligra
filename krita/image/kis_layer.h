@@ -68,29 +68,29 @@ public:
      * @param opacity is a value between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
     **/
     KisLayer(KisImageWSP image, const QString &name, quint8 opacity);
-    KisLayer(const KisLayer& rhs);
+    KisLayer(const KisLayer &rhs);
     virtual ~KisLayer();
 
     /// returns the image's colorSpace or null, if there is no image
-    virtual const KoColorSpace * colorSpace() const;
+    virtual const KoColorSpace *colorSpace() const;
 
     /// returns the layer's composite op for the colorspace of the layer's parent.
-    const KoCompositeOp * compositeOp() const;
+    const KoCompositeOp *compositeOp() const;
 
     /**
      * Ask the layer to assemble its data & apply all the effect masks
      * to it.
      */
-    QRect updateProjection(const QRect& rect, KisNodeSP filthyNode);
+    QRect updateProjection(const QRect &rect, KisNodeSP filthyNode);
 
-    QRect partialChangeRect(KisNodeSP lastNode, const QRect& rect);
-    void buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect);
+    QRect partialChangeRect(KisNodeSP lastNode, const QRect &rect);
+    void buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect &rect);
 
     virtual bool needProjection() const;
 
     virtual void copyOriginalToProjection(const KisPaintDeviceSP original,
                                           KisPaintDeviceSP projection,
-                                          const QRect& rect) const;
+                                          const QRect &rect) const;
 
     /**
      * Return the fully rendered representation of this layer: its
@@ -137,14 +137,14 @@ public:
      * the colorspace this layer is in, or be empty, in which case all
      * channels are active.
      */
-    virtual void setChannelFlags(const QBitArray & channelFlags);
+    virtual void setChannelFlags(const QBitArray &channelFlags);
 
     /**
      * Return a bit array where each bit indicates whether a
      * particular channel is active or not. If the channelflags bit
      * array is empty, all channels are active.
      */
-    QBitArray & channelFlags() const;
+    QBitArray &channelFlags() const;
 
     /**
      * Returns true if this layer is temporary: i.e., it should not
@@ -199,7 +199,6 @@ public:
      * with the list, because it is not thread safe.
      */
     const QList<KisCloneLayerWSP> registeredClones() const;
-
 
     /**
      * Returns whether we have a clone.
@@ -256,7 +255,7 @@ public:
     /**
      * @return the metadata object associated with this object.
      */
-    KisMetaData::Store* metaData();
+    KisMetaData::Store *metaData();
 
 protected:
 
@@ -342,7 +341,7 @@ protected:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 Q_DECLARE_METATYPE(KisLayerSP)

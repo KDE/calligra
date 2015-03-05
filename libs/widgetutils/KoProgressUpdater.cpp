@@ -28,7 +28,6 @@
 #include "KoUpdater.h"
 #include "KoProgressProxy.h"
 
-
 // 4 updates per second should be enough
 #define PROGRESSUPDATER_GUITIMERINTERVAL 250
 
@@ -62,8 +61,8 @@ public:
     QList<QPointer<KoUpdater> > subTaskWrappers; // We delete these
     QTime referenceTime;
 
-    static void logEvents(QTextStream& out, KoProgressUpdater::Private *updater,
-                          const QTime& startTime, const QString& prefix);
+    static void logEvents(QTextStream &out, KoProgressUpdater::Private *updater,
+                          const QTime &startTime, const QString &prefix);
     bool canceled;
 };
 
@@ -73,7 +72,7 @@ public:
 // of progress reporting in multi-threaded environments.
 KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar,
                                      Mode mode, QTextStream *output)
-    : d (new Private(this, progressBar, mode, output))
+    : d(new Private(this, progressBar, mode, output))
 {
     Q_ASSERT(d->progressBar);
     connect(&d->updateGuiTimer, SIGNAL(timeout()), SLOT(updateUi()));
@@ -119,10 +118,10 @@ void KoProgressUpdater::start(int range, const QString &text)
     qDeleteAll(d->subTaskWrappers);
     d->subTaskWrappers.clear();
 
-    d->progressBar->setRange(0, range-1);
+    d->progressBar->setRange(0, range - 1);
     d->progressBar->setValue(0);
 
-    if(!text.isEmpty()) {
+    if (!text.isEmpty()) {
         d->progressBar->setFormat(text);
     }
     d->totalWeight = 0;
@@ -130,7 +129,7 @@ void KoProgressUpdater::start(int range, const QString &text)
 }
 
 QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
-                                                    const QString &name)
+        const QString &name)
 {
     KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight, name);
     d->totalWeight += weight;
@@ -151,7 +150,7 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
 
 void KoProgressUpdater::cancel()
 {
-    foreach(KoUpdaterPrivate *updater, d->subtasks) {
+    foreach (KoUpdaterPrivate *updater, d->subtasks) {
         updater->setProgress(100);
         updater->interrupt();
     }
@@ -178,7 +177,7 @@ void KoProgressUpdater::updateUi()
 
     if (d->updated) {
         int totalProgress = 0;
-        foreach(QPointer<KoUpdaterPrivate> updater, d->subtasks) {
+        foreach (QPointer<KoUpdaterPrivate> updater, d->subtasks) {
             if (updater->interrupted()) {
                 d->currentProgress = -1;
                 return;
@@ -189,7 +188,7 @@ void KoProgressUpdater::updateUi()
                 progress = updater->progress();
             }
 
-            totalProgress += progress *updater->weight();
+            totalProgress += progress * updater->weight();
         }
 
         d->currentProgress = totalProgress / d->totalWeight;
@@ -197,7 +196,7 @@ void KoProgressUpdater::updateUi()
     }
 
     if (d->currentProgress == -1) {
-        d->progressBar->setValue( d->progressBar->maximum() );
+        d->progressBar->setValue(d->progressBar->maximum());
         // should we hide the progressbar after a little while?
         return;
     }
@@ -219,16 +218,19 @@ bool KoProgressUpdater::hasOutput() const
     return d->output != 0;
 }
 
-void KoProgressUpdater::Private::logEvents(QTextStream& out,
-                                           KoProgressUpdater::Private *updater,
-                                           const QTime& startTime,
-                                           const QString& prefix) {
+void KoProgressUpdater::Private::logEvents(QTextStream &out,
+        KoProgressUpdater::Private *updater,
+        const QTime &startTime,
+        const QString &prefix)
+{
     // initial implementation: write out the names of all events
     foreach (QPointer<KoUpdaterPrivate> p, updater->subtasks) {
-        if (!p) continue;
+        if (!p) {
+            continue;
+        }
         foreach (const KoUpdaterPrivate::TimePoint &tp, p->getPoints()) {
-            out << prefix+p->objectName() << '\t'
-                    << startTime.msecsTo(tp.time) << '\t' << tp.value << endl;
+            out << prefix + p->objectName() << '\t'
+                << startTime.msecsTo(tp.time) << '\t' << tp.value << endl;
         }
     }
 }

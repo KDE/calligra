@@ -47,8 +47,8 @@ private Q_SLOTS:
     void testCompareRows();
 
 private:
-    Sheet* m_sheet;
-    Doc* m_doc;
+    Sheet *m_sheet;
+    Doc *m_doc;
 };
 
 } // namespace Sheets

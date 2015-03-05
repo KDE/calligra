@@ -22,7 +22,6 @@
 #include "kis_merge_walker.h"
 #include "kis_refresh_subtree_walker.h"
 
-
 class KisFullRefreshWalker : public KisRefreshSubtreeWalker, public KisMergeWalker
 {
 public:
@@ -32,12 +31,14 @@ public:
         setCropRect(cropRect);
     }
 
-    UpdateType type() const {
+    UpdateType type() const
+    {
         return FULL_REFRESH;
     }
 
-    void startTrip(KisNodeSP startWith) {
-        if(m_firstRun) {
+    void startTrip(KisNodeSP startWith)
+    {
+        if (m_firstRun) {
             m_firstRun = false;
 
             m_currentUpdateType = UPDATE;
@@ -47,22 +48,20 @@ public:
             KisRefreshSubtreeWalker::startTrip(startWith);
 
             m_firstRun = true;
-        }
-        else {
-            if(m_currentUpdateType == FULL_REFRESH) {
+        } else {
+            if (m_currentUpdateType == FULL_REFRESH) {
                 KisRefreshSubtreeWalker::startTrip(startWith);
-            }
-            else {
+            } else {
                 KisMergeWalker::startTrip(startWith);
             }
         }
     }
 
-    void registerChangeRect(KisNodeSP node, NodePosition position) {
-        if(m_currentUpdateType == FULL_REFRESH) {
+    void registerChangeRect(KisNodeSP node, NodePosition position)
+    {
+        if (m_currentUpdateType == FULL_REFRESH) {
             KisRefreshSubtreeWalker::registerChangeRect(node, position);
-        }
-        else {
+        } else {
             /**
              * Merge walker thinks that we changed the original of the
              * dirty node (dirtyNode == startNode()), but that is not
@@ -75,27 +74,26 @@ public:
              * children here.
              */
 
-            if(node == startNode()) {
+            if (node == startNode()) {
                 KisRefreshSubtreeWalker::calculateChangeRect(node, changeRect());
-            }
-            else {
+            } else {
                 KisMergeWalker::registerChangeRect(node, position);
             }
         }
     }
-    void registerNeedRect(KisNodeSP node, NodePosition position) {
-        if(m_currentUpdateType == FULL_REFRESH) {
+    void registerNeedRect(KisNodeSP node, NodePosition position)
+    {
+        if (m_currentUpdateType == FULL_REFRESH) {
             KisRefreshSubtreeWalker::registerNeedRect(node, position);
-        }
-        else {
+        } else {
             KisMergeWalker::registerNeedRect(node, position);
         }
     }
-    void adjustMasksChangeRect(KisNodeSP firstMask) {
-        if(m_currentUpdateType == FULL_REFRESH) {
+    void adjustMasksChangeRect(KisNodeSP firstMask)
+    {
+        if (m_currentUpdateType == FULL_REFRESH) {
             KisRefreshSubtreeWalker::adjustMasksChangeRect(firstMask);
-        }
-        else {
+        } else {
             KisMergeWalker::adjustMasksChangeRect(firstMask);
         }
     }

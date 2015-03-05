@@ -61,20 +61,19 @@ struct KisRecordedPaintAction::Private {
     QString compositeOp;
     KisPainter::StrokeStyle strokeStyle;
     KisPainter::FillStyle fillStyle;
-    const KoPattern* pattern;
-    const KoAbstractGradient* gradient;
-    const KisFilterConfiguration* generator;
+    const KoPattern *pattern;
+    const KoAbstractGradient *gradient;
+    const KisFilterConfiguration *generator;
 };
 
-KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
-        const QString & name,
-        const KisNodeQueryPath& path,
+KisRecordedPaintAction::KisRecordedPaintAction(const QString &id,
+        const QString &name,
+        const KisNodeQueryPath &path,
         const KisPaintOpPresetSP paintOpPreset)
-        : KisRecordedNodeAction(id, name, path)
-        , d(new Private)
+    : KisRecordedNodeAction(id, name, path)
+    , d(new Private)
 {
-    if (paintOpPreset)
-    {
+    if (paintOpPreset) {
         d->paintOpPreset = paintOpPreset;
     }
     d->opacity = 1.0;
@@ -87,7 +86,7 @@ KisRecordedPaintAction::KisRecordedPaintAction(const QString & id,
     d->generator = 0;
 }
 
-KisRecordedPaintAction::KisRecordedPaintAction(const KisRecordedPaintAction& rhs) : KisRecordedNodeAction(rhs), d(new Private(*rhs.d))
+KisRecordedPaintAction::KisRecordedPaintAction(const KisRecordedPaintAction &rhs) : KisRecordedNodeAction(rhs), d(new Private(*rhs.d))
 {
 
 }
@@ -97,13 +96,12 @@ KisRecordedPaintAction::~KisRecordedPaintAction()
     delete d;
 }
 
-void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const
+void KisRecordedPaintAction::toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *context) const
 {
     KisRecordedAction::toXML(doc, elt, context);
 
     // Paint op presset
-    if (d->paintOpPreset)
-    {
+    if (d->paintOpPreset) {
         QDomElement paintopPressetElt = doc.createElement("PaintopPreset");
         d->paintOpPreset->toXML(doc, paintopPressetElt);
         elt.appendChild(paintopPressetElt);
@@ -129,50 +127,47 @@ void KisRecordedPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecor
     elt.setAttribute("compositeOp", d->compositeOp);
 
     // Save stroke style
-    switch(d->strokeStyle)
-    {
-        case KisPainter::StrokeStyleNone:
-            elt.setAttribute("strokeStyle", "None");
-            break;
-        case KisPainter::StrokeStyleBrush:
-            elt.setAttribute("strokeStyle", "Brush");
-            break;
+    switch (d->strokeStyle) {
+    case KisPainter::StrokeStyleNone:
+        elt.setAttribute("strokeStyle", "None");
+        break;
+    case KisPainter::StrokeStyleBrush:
+        elt.setAttribute("strokeStyle", "Brush");
+        break;
     }
     // Save fill style
-    switch(d->fillStyle)
-    {
-        case KisPainter::FillStyleNone:
-            elt.setAttribute("fillStyle", "None");
-            break;
-        case KisPainter::FillStyleForegroundColor:
-            elt.setAttribute("fillStyle", "PaintColor");
-            break;
-        case KisPainter::FillStyleBackgroundColor:
-            elt.setAttribute("fillStyle", "AlternativeColor");
-            break;
-        case KisPainter::FillStylePattern:
-            elt.setAttribute("fillStyle", "Pattern");
-            context->savePattern(d->pattern);
-            elt.setAttribute("pattern", d->pattern->name());
-            break;
-        case KisPainter::FillStyleGradient:
-            elt.setAttribute("fillStyle", "Gradient");
-            context->saveGradient(d->gradient);
-            elt.setAttribute("gradient", d->gradient->name());
-            break;
-        case KisPainter::FillStyleStrokes:
-            elt.setAttribute("fillStyle", "Strokes");
-            break;
-        case KisPainter::FillStyleGenerator:
-            elt.setAttribute("fillStyle", "Generator");
-            if (d->generator)
-            {
-                elt.setAttribute("generator", d->generator->name());
-                QDomElement filterConfigElt = doc.createElement("Generator");
-                d->generator->toXML(doc, filterConfigElt);
-                elt.appendChild(filterConfigElt);
-            }
-            break;
+    switch (d->fillStyle) {
+    case KisPainter::FillStyleNone:
+        elt.setAttribute("fillStyle", "None");
+        break;
+    case KisPainter::FillStyleForegroundColor:
+        elt.setAttribute("fillStyle", "PaintColor");
+        break;
+    case KisPainter::FillStyleBackgroundColor:
+        elt.setAttribute("fillStyle", "AlternativeColor");
+        break;
+    case KisPainter::FillStylePattern:
+        elt.setAttribute("fillStyle", "Pattern");
+        context->savePattern(d->pattern);
+        elt.setAttribute("pattern", d->pattern->name());
+        break;
+    case KisPainter::FillStyleGradient:
+        elt.setAttribute("fillStyle", "Gradient");
+        context->saveGradient(d->gradient);
+        elt.setAttribute("gradient", d->gradient->name());
+        break;
+    case KisPainter::FillStyleStrokes:
+        elt.setAttribute("fillStyle", "Strokes");
+        break;
+    case KisPainter::FillStyleGenerator:
+        elt.setAttribute("fillStyle", "Generator");
+        if (d->generator) {
+            elt.setAttribute("generator", d->generator->name());
+            QDomElement filterConfigElt = doc.createElement("Generator");
+            d->generator->toXML(doc, filterConfigElt);
+            elt.appendChild(filterConfigElt);
+        }
+        break;
     }
 }
 
@@ -201,7 +196,7 @@ KoColor KisRecordedPaintAction::paintColor() const
     return d->foregroundColor;
 }
 
-void KisRecordedPaintAction::setPaintColor(const KoColor& color)
+void KisRecordedPaintAction::setPaintColor(const KoColor &color)
 {
     d->foregroundColor = color;
 }
@@ -211,7 +206,7 @@ KoColor KisRecordedPaintAction::backgroundColor() const
     return d->backgroundColor;
 }
 
-void KisRecordedPaintAction::setBackgroundColor(const KoColor& color)
+void KisRecordedPaintAction::setBackgroundColor(const KoColor &color)
 {
     d->backgroundColor = color;
 }
@@ -221,7 +216,7 @@ QString KisRecordedPaintAction::compositeOp()
     return d->compositeOp;
 }
 
-void KisRecordedPaintAction::setCompositeOp(const QString& id)
+void KisRecordedPaintAction::setCompositeOp(const QString &id)
 {
     d->compositeOp = id;
 }
@@ -233,12 +228,12 @@ void KisRecordedPaintAction::setPaintIncremental(bool v)
 
 void KisRecordedPaintAction::setStrokeStyle(KisPainter::StrokeStyle strokeStyle)
 {
-  d->strokeStyle = strokeStyle;
+    d->strokeStyle = strokeStyle;
 }
 
 void KisRecordedPaintAction::setFillStyle(KisPainter::FillStyle fillStyle)
 {
-  d->fillStyle = fillStyle;
+    d->fillStyle = fillStyle;
 }
 
 KisPainter::FillStyle KisRecordedPaintAction::fillStyle() const
@@ -246,24 +241,24 @@ KisPainter::FillStyle KisRecordedPaintAction::fillStyle() const
     return d->fillStyle;
 }
 
-void KisRecordedPaintAction::setPattern(const KoPattern* pattern)
+void KisRecordedPaintAction::setPattern(const KoPattern *pattern)
 {
-  d->pattern = pattern;
+    d->pattern = pattern;
 }
 
-void KisRecordedPaintAction::setGradient(const KoAbstractGradient* gradient)
+void KisRecordedPaintAction::setGradient(const KoAbstractGradient *gradient)
 {
-  d->gradient = gradient;
+    d->gradient = gradient;
 }
 
-void KisRecordedPaintAction::setGenerator(const KisFilterConfiguration * generator)
+void KisRecordedPaintAction::setGenerator(const KisFilterConfiguration *generator)
 {
-  d->generator = generator;
+    d->generator = generator;
 }
 
-void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpdater* _updater) const
+void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo &info, KoUpdater *_updater) const
 {
-    dbgUI << "Play recorded paint action on node : " << node->name() ;
+    dbgUI << "Play recorded paint action on node : " << node->name();
     KisTransaction transaction(node->paintDevice());
 
     KisPaintDeviceSP target = 0;
@@ -273,7 +268,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpd
         target = node->paintDevice()->createCompositionSourceDevice();
     }
 
-    KisPainter* painter = createPainter(target);
+    KisPainter *painter = createPainter(target);
     painter->setProgress(_updater);
 
     if (d->paintIncremental) {
@@ -322,12 +317,12 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpd
     transaction.commit(info.undoAdapter());
 }
 
-KisPainter* KisRecordedPaintAction::createPainter(KisPaintDeviceSP device) const
+KisPainter *KisRecordedPaintAction::createPainter(KisPaintDeviceSP device) const
 {
     return new KisPainter(device);
 }
 
-void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction* action, const QDomElement& elt, const KisRecordedActionLoadContext* context)
+void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction *action, const QDomElement &elt, const KisRecordedActionLoadContext *context)
 {
     QString name = elt.attribute("name");
 
@@ -348,60 +343,48 @@ void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction* act
     action->setPaintIncremental(paintIncremental);
     action->setCompositeOp(compositeOp);
 
-
     // Load stroke style
     QString strokeAttr = elt.attribute("strokeStyle", "None");
-    if (strokeAttr == "Brush" )
-    {
+    if (strokeAttr == "Brush") {
         action->setStrokeStyle(KisPainter::StrokeStyleBrush);
     } else { // "None"
         action->setStrokeStyle(KisPainter::StrokeStyleNone);
     }
     // Save fill style
     QString fillAttr = elt.attribute("fillStyle", "None");
-    if (fillAttr == "PaintColor")
-    {
+    if (fillAttr == "PaintColor") {
         action->setFillStyle(KisPainter::FillStyleForegroundColor);
-    } else if(fillAttr == "AlternativeColor")
-    {
+    } else if (fillAttr == "AlternativeColor") {
         action->setFillStyle(KisPainter::FillStyleBackgroundColor);
-    } else if(fillAttr == "Pattern")
-    {
-        const KoPattern* pattern = context->pattern(elt.attribute("pattern"));
-        if (pattern)
-        {
+    } else if (fillAttr == "Pattern") {
+        const KoPattern *pattern = context->pattern(elt.attribute("pattern"));
+        if (pattern) {
             action->setFillStyle(KisPainter::FillStylePattern);
             action->setPattern(pattern);
         } else {
             action->setFillStyle(KisPainter::FillStyleNone);
         }
-    } else if(fillAttr == "Gradient")
-    {
-        const KoAbstractGradient* gradient = context->gradient(elt.attribute("gradient"));
-        if (gradient)
-        {
+    } else if (fillAttr == "Gradient") {
+        const KoAbstractGradient *gradient = context->gradient(elt.attribute("gradient"));
+        if (gradient) {
             action->setFillStyle(KisPainter::FillStyleGradient);
             action->setGradient(gradient);
         } else {
             action->setFillStyle(KisPainter::FillStyleNone);
         }
-    } else if(fillAttr == "Strokes")
-    {
+    } else if (fillAttr == "Strokes") {
         action->setFillStyle(KisPainter::FillStyleStrokes);
-    } else if(fillAttr == "Generator")
-    {
+    } else if (fillAttr == "Generator") {
         KisGeneratorSP g = KisGeneratorRegistry::instance()->value(elt.attribute("generator"));
-        KisFilterConfiguration* config = 0;
-        if (g)
-        {
+        KisFilterConfiguration *config = 0;
+        if (g) {
             config = g->defaultConfiguration(0);
             QDomElement paramsElt = elt.firstChildElement("Generator");
             if (config && !paramsElt.isNull()) {
                 config->fromXML(paramsElt);
             }
         }
-        if(config)
-        {
+        if (config) {
             action->setFillStyle(KisPainter::FillStyleGenerator);
             action->setGenerator(config);
         } else {
@@ -410,7 +393,7 @@ void KisRecordedPaintActionFactory::setupPaintAction(KisRecordedPaintAction* act
     }
 }
 
-KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QDomElement& elt)
+KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QDomElement &elt)
 {
 
     QDomElement settingsElt = elt.firstChildElement("PaintopPreset");
@@ -424,17 +407,17 @@ KisPaintOpPresetSP KisRecordedPaintActionFactory::paintOpPresetFromXML(const QDo
     }
 }
 
-KoColor KisRecordedPaintActionFactory::paintColorFromXML(const QDomElement& elt)
+KoColor KisRecordedPaintActionFactory::paintColorFromXML(const QDomElement &elt)
 {
     return colorFromXML(elt, "ForegroundColor");
 }
 
-KoColor KisRecordedPaintActionFactory::backgroundColorFromXML(const QDomElement& elt)
+KoColor KisRecordedPaintActionFactory::backgroundColorFromXML(const QDomElement &elt)
 {
     return colorFromXML(elt, "BackgroundColor");
 }
 
-KoColor KisRecordedPaintActionFactory::colorFromXML(const QDomElement& elt, const QString& elementName)
+KoColor KisRecordedPaintActionFactory::colorFromXML(const QDomElement &elt, const QString &elementName)
 {
     QDomElement colorElt = elt.firstChildElement(elementName);
     KoColor bC;
@@ -449,22 +432,22 @@ KoColor KisRecordedPaintActionFactory::colorFromXML(const QDomElement& elt, cons
     return bC;
 }
 
-qreal KisRecordedPaintActionFactory::opacityFromXML(const QDomElement& elt)
+qreal KisRecordedPaintActionFactory::opacityFromXML(const QDomElement &elt)
 {
     return elt.attribute("opacity", "1.0").toDouble();
 }
 
-bool KisRecordedPaintActionFactory::paintIncrementalFromXML(const QDomElement& elt)
+bool KisRecordedPaintActionFactory::paintIncrementalFromXML(const QDomElement &elt)
 {
     return elt.attribute("paintIncremental", "1").toInt();
 }
 
-QString KisRecordedPaintActionFactory::compositeOpFromXML(const QDomElement& elt)
+QString KisRecordedPaintActionFactory::compositeOpFromXML(const QDomElement &elt)
 {
     return elt.attribute("compositeOp", COMPOSITE_OVER);
 }
 
-KisNodeQueryPath KisRecordedPaintActionFactory::nodeQueryPathFromXML(const QDomElement& elt)
+KisNodeQueryPath KisRecordedPaintActionFactory::nodeQueryPathFromXML(const QDomElement &elt)
 {
     return KisNodeQueryPath::fromString(elt.attribute("path"));
 }

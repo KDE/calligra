@@ -48,8 +48,8 @@ class CQSpreadsheetCanvas::Private
 public:
     Private() : canvas(0), document(0), currentSheet(0) { }
 
-    Calligra::Sheets::CanvasItem* canvas;
-    Calligra::Sheets::Doc * document;
+    Calligra::Sheets::CanvasItem *canvas;
+    Calligra::Sheets::Doc *document;
 
     int currentSheet;
     QObjectList linkTargets;
@@ -62,18 +62,18 @@ public:
         if (!canvas) {
             return;
         }
-        foreach(const KoShape* shape, canvas->activeSheet()->shapes()) {
+        foreach (const KoShape *shape, canvas->activeSheet()->shapes()) {
             if (!shape->hyperLink().isEmpty()) {
-                QObject * obj = new QObject(canvas);
+                QObject *obj = new QObject(canvas);
                 obj->setProperty("linkRect", shape->boundingRect());
                 obj->setProperty("linkTarget", QUrl(shape->hyperLink()));
                 linkTargets.append(obj);
             }
         }
 
-        QList<QTextDocument*> texts;
+        QList<QTextDocument *> texts;
         KoFindText::findTextInShapes(canvas->activeSheet()->shapes(), texts);
-        foreach(QTextDocument* text, texts) {
+        foreach (QTextDocument *text, texts) {
             QTextBlock block = text->rootFrame()->firstCursorPosition().block();
             for (; block.isValid(); block = block.next()) {
                 block.begin();
@@ -84,7 +84,7 @@ public:
                         QTextCharFormat format = fragment.charFormat();
                         if (format.isAnchor()) {
                             // This is an anchor, store target and position...
-                            QObject * obj = new QObject(canvas);
+                            QObject *obj = new QObject(canvas);
                             QRectF rect = getFragmentPosition(block, fragment);
                             obj->setProperty("linkRect", canvas->viewConverter()->documentToView(rect));
                             obj->setProperty("linkTarget", QUrl(format.anchorHref()));
@@ -96,12 +96,12 @@ public:
         }
     }
 
-    QRectF getFragmentPosition(const QTextBlock& block, const QTextFragment& fragment)
+    QRectF getFragmentPosition(const QTextBlock &block, const QTextFragment &fragment)
     {
         // TODO this only produces a position for the first part, if the link spans more than one line...
         // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
         // For now leave it like this, more important things are needed.
-        QTextLayout* layout = block.layout();
+        QTextLayout *layout = block.layout();
         QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
         if (!line.isValid()) {
             // fragment has no valid position and consequently no line...
@@ -116,7 +116,7 @@ public:
     }
 };
 
-CQSpreadsheetCanvas::CQSpreadsheetCanvas(QDeclarativeItem* parent)
+CQSpreadsheetCanvas::CQSpreadsheetCanvas(QDeclarativeItem *parent)
     : CQCanvasBase(parent), d(new Private)
 {
 
@@ -132,7 +132,7 @@ int CQSpreadsheetCanvas::currentSheet() const
     return d->currentSheet;
 }
 
-Calligra::Sheets::Map* CQSpreadsheetCanvas::documentMap() const
+Calligra::Sheets::Map *CQSpreadsheetCanvas::documentMap() const
 {
     return d->document->map();
 }
@@ -154,7 +154,7 @@ void CQSpreadsheetCanvas::setCurrentSheet(int sheet)
     }
 }
 
-void CQSpreadsheetCanvas::render(QPainter* painter, const QRectF& target)
+void CQSpreadsheetCanvas::render(QPainter *painter, const QRectF &target)
 {
     QStyleOptionGraphicsItem option;
     option.exposedRect = target;
@@ -162,7 +162,7 @@ void CQSpreadsheetCanvas::render(QPainter* painter, const QRectF& target)
     d->canvas->canvasItem()->paint(painter, &option);
 }
 
-void CQSpreadsheetCanvas::openFile(const QString& uri)
+void CQSpreadsheetCanvas::openFile(const QString &uri)
 {
     KService::Ptr service = KService::serviceByDesktopName("sheetspart");
     if (service.isNull()) {
@@ -170,13 +170,13 @@ void CQSpreadsheetCanvas::openFile(const QString& uri)
         return;
     }
 
-    KoPart* part = service->createInstance<KoPart>();
-    d->document = static_cast<Calligra::Sheets::Doc*> (part->document());
+    KoPart *part = service->createInstance<KoPart>();
+    d->document = static_cast<Calligra::Sheets::Doc *>(part->document());
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);
-    d->document->openUrl (KUrl (uri));
+    d->document->openUrl(KUrl(uri));
 
-    d->canvas = dynamic_cast<Calligra::Sheets::CanvasItem*> (part->canvasItem(part->document()));
+    d->canvas = dynamic_cast<Calligra::Sheets::CanvasItem *>(part->canvasItem(part->document()));
     createAndSetCanvasControllerOn(d->canvas);
     createAndSetZoomController(d->canvas);
 
@@ -194,31 +194,31 @@ void CQSpreadsheetCanvas::openFile(const QString& uri)
     }
 }
 
-void CQSpreadsheetCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
+void CQSpreadsheetCanvas::createAndSetCanvasControllerOn(KoCanvasBase *canvas)
 {
     //TODO: pass a proper action collection
     CQCanvasController *controller = new CQCanvasController(new KActionCollection(this));
     setCanvasController(controller);
     controller->setCanvas(canvas);
-    KoToolManager::instance()->addController (controller);
+    KoToolManager::instance()->addController(controller);
 }
 
-void CQSpreadsheetCanvas::createAndSetZoomController(KoCanvasBase* canvas)
+void CQSpreadsheetCanvas::createAndSetZoomController(KoCanvasBase *canvas)
 {
-    KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (canvas->viewConverter());
+    KoZoomHandler *zoomHandler = static_cast<KoZoomHandler *>(canvas->viewConverter());
     setZoomController(new KoZoomController(canvasController(),
                                            zoomHandler,
                                            new KActionCollection(this)));
 
-    Calligra::Sheets::CanvasItem *canvasItem = dynamic_cast<Calligra::Sheets::CanvasItem*> (canvas);
+    Calligra::Sheets::CanvasItem *canvasItem = dynamic_cast<Calligra::Sheets::CanvasItem *>(canvas);
     // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-    connect (canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), canvasItem, SLOT(setDocumentOffset(QPoint)));
+    connect(canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), canvasItem, SLOT(setDocumentOffset(QPoint)));
     // whenever the size of the document viewed in the canvas changes, inform the zoom controller
     connect(canvasItem, SIGNAL(documentSizeChanged(QSize)), SLOT(updateDocumentSize(QSize)));
     canvasItem->update();
 }
 
-void CQSpreadsheetCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+void CQSpreadsheetCanvas::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     if (d->canvas) {
         d->canvas->setGeometry(newGeometry);
@@ -226,7 +226,7 @@ void CQSpreadsheetCanvas::geometryChanged(const QRectF& newGeometry, const QRect
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
-void CQSpreadsheetCanvas::updateDocumentSize(const QSize& size)
+void CQSpreadsheetCanvas::updateDocumentSize(const QSize &size)
 {
     zoomController()->setDocumentSize(size, false);
 }

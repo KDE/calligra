@@ -26,7 +26,7 @@
 class KisRateOptionWidget: public KisCurveOptionWidget
 {
 public:
-    KisRateOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked);
+    KisRateOptionWidget(const QString &label, const QString &sliderLabel, const QString &name, bool checked);
 };
 
 #endif // KIS_RATE_OPTION_WIDGET_H

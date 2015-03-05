@@ -31,14 +31,14 @@
 #include <QPainter>
 
 struct KisPaintingAssistantsDecoration::Private {
-    QList<KisPaintingAssistant*> assistants;
+    QList<KisPaintingAssistant *> assistants;
     bool assistantVisible;
     bool outlineVisible;
 };
 
 KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisView> parent) :
-        KisCanvasDecoration("paintingAssistantsDecoration", parent),
-        d(new Private)
+    KisCanvasDecoration("paintingAssistantsDecoration", parent),
+    d(new Private)
 {
     setAssistantVisible(true);
     setOutlineVisible(true);
@@ -50,14 +50,16 @@ KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
     delete d;
 }
 
-void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistant* assistant)
+void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistant *assistant)
 {
-    if (d->assistants.contains(assistant)) return;
+    if (d->assistants.contains(assistant)) {
+        return;
+    }
     d->assistants.push_back(assistant);
     emit assistantChanged();
 }
 
-void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistant* assistant)
+void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistant *assistant)
 {
     delete assistant;
     d->assistants.removeAll(assistant);
@@ -66,31 +68,37 @@ void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistant* assi
 
 void KisPaintingAssistantsDecoration::removeAll()
 {
-    foreach (KisPaintingAssistant* assistant, d->assistants) {
+    foreach (KisPaintingAssistant *assistant, d->assistants) {
         delete assistant;
     }
     d->assistants.clear();
     emit assistantChanged();
 }
 
-QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
+QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF &point, const QPointF &strokeBegin)
 {
-    if (d->assistants.empty()) return point;
+    if (d->assistants.empty()) {
+        return point;
+    }
     if (d->assistants.count() == 1) {
-        if(d->assistants.first()->snapping()==true){
-        QPointF newpoint = d->assistants.first()->adjustPosition(point, strokeBegin);
-        // check for NaN
-        if (newpoint.x() != newpoint.x()) return point;
-        return newpoint;
+        if (d->assistants.first()->snapping() == true) {
+            QPointF newpoint = d->assistants.first()->adjustPosition(point, strokeBegin);
+            // check for NaN
+            if (newpoint.x() != newpoint.x()) {
+                return point;
+            }
+            return newpoint;
         }
     }
     QPointF best = point;
     double distance = DBL_MAX;
     //the following tries to find the closest point to stroke-begin. It checks all assistants for the closest point//
-    foreach(KisPaintingAssistant* assistant, d->assistants) {
-        if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
+    foreach (KisPaintingAssistant *assistant, d->assistants) {
+        if (assistant->snapping() == true) { //this checks if the assistant in question has it's snapping boolean turned on//
             QPointF pt = assistant->adjustPosition(point, strokeBegin);
-            if (pt.x() != pt.x()) continue;
+            if (pt.x() != pt.x()) {
+                continue;
+            }
             double d = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
             if (d < distance) {
                 best = pt;
@@ -103,34 +111,34 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
 
 void KisPaintingAssistantsDecoration::endStroke()
 {
-    foreach(KisPaintingAssistant* assistant, d->assistants) {
+    foreach (KisPaintingAssistant *assistant, d->assistants) {
         assistant->endStroke();
     }
 }
 
-void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
-{   
+void KisPaintingAssistantsDecoration::drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
+{
     if (!canvas) {
-        dbgFile<<"canvas does not exist in painting assistant decoration, you may have passed arguments incorrectly:"<<canvas;
-    }    
-    
-    foreach(KisPaintingAssistant* assistant, d->assistants) {
-            assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisibility());
+        dbgFile << "canvas does not exist in painting assistant decoration, you may have passed arguments incorrectly:" << canvas;
     }
-    
+
+    foreach (KisPaintingAssistant *assistant, d->assistants) {
+        assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisibility());
+    }
+
 }
 //drawPreview//
 
 QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
 {
     QList<KisPaintingAssistantHandleSP> hs;
-    foreach(KisPaintingAssistant* assistant, d->assistants) {
-        foreach(const KisPaintingAssistantHandleSP handle, assistant->handles()) {
+    foreach (KisPaintingAssistant *assistant, d->assistants) {
+        foreach (const KisPaintingAssistantHandleSP handle, assistant->handles()) {
             if (!hs.contains(handle)) {
                 hs.push_back(handle);
             }
         }
-        foreach(const KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
+        foreach (const KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
             if (!hs.contains(handle)) {
                 hs.push_back(handle);
             }
@@ -139,19 +147,19 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
     return hs;
 }
 
-QList<KisPaintingAssistant*> KisPaintingAssistantsDecoration::assistants()
+QList<KisPaintingAssistant *> KisPaintingAssistantsDecoration::assistants()
 {
     return d->assistants;
 }
 
 void KisPaintingAssistantsDecoration::setAssistantVisible(bool set)
 {
-    d->assistantVisible=set;
+    d->assistantVisible = set;
 }
 
 void KisPaintingAssistantsDecoration::setOutlineVisible(bool set)
 {
-    d->outlineVisible=set;
+    d->outlineVisible = set;
 }
 bool KisPaintingAssistantsDecoration::assistantVisibility()
 {
@@ -164,8 +172,8 @@ bool KisPaintingAssistantsDecoration::outlineVisibility()
 
 void KisPaintingAssistantsDecoration::uncache()
 {
-     foreach(KisPaintingAssistant* assistant, d->assistants) {
-            assistant->uncache();
+    foreach (KisPaintingAssistant *assistant, d->assistants) {
+        assistant->uncache();
     }
 }
 void KisPaintingAssistantsDecoration::toggleAssistantVisible()

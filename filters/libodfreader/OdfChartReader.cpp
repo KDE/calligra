@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdfTextReader.h"
 
@@ -42,7 +41,6 @@
 #include "OdfChartReaderBackend.h"
 #include "OdfReaderContext.h"
 
-
 #if 1
 static int debugIndent = 0;
 #define DEBUGSTART() \
@@ -53,8 +51,8 @@ static int debugIndent = 0;
     --debugIndent
 #define DEBUG_READING(param) \
     kDebug(30503) << QString("%1").arg(" ", debugIndent * 2) << param << ": " \
-    << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
-    << reader.qualifiedName().toString()
+                  << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
+                  << reader.qualifiedName().toString()
 #else
 #define DEBUGSTART() \
     // NOTHING
@@ -63,7 +61,6 @@ static int debugIndent = 0;
 #define DEBUG_READING(param) \
     // NOTHING
 #endif
-
 
 OdfChartReader::OdfChartReader()
     : m_parent(0)
@@ -76,9 +73,7 @@ OdfChartReader::~OdfChartReader()
 {
 }
 
-
 // ----------------------------------------------------------------
-
 
 void OdfChartReader::setParent(OdfReader *parent)
 {
@@ -95,9 +90,7 @@ void OdfChartReader::setContext(OdfReaderContext *context)
     m_context = context;
 }
 
-
 // ----------------------------------------------------------------
-
 
 void OdfChartReader::readElementOfficeChart(KoXmlStreamReader &reader)
 {
@@ -121,11 +114,10 @@ void OdfChartReader::readElementOfficeChart(KoXmlStreamReader &reader)
     //          <text:variable-decls> 7.4.2
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "chart:chart") {
-	    readElementChartChart(reader);
-        }
-        else if (tagName == "table:calculation-settings") {
+            readElementChartChart(reader);
+        } else if (tagName == "table:calculation-settings") {
             // FIXME: NYI
             reader.skipCurrentElement();
         }
@@ -153,32 +145,25 @@ void OdfChartReader::readElementChartChart(KoXmlStreamReader &reader)
     //   [done] <table:table> 9.1.2
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "chart:footer") {
-	    readElementChartFooter(reader);
-        }
-        else if (tagName == "chart:subtitle") {
-	    readElementChartSubtitle(reader);
-        }
-        else if (tagName == "chart:title") {
-	    readElementChartTitle(reader);
-        }
-        else if (tagName == "chart:legend") {
-	    readElementChartLegend(reader);
-        }
-        else if (tagName == "chart:plot-area") {
-	    readElementChartPlotArea(reader);
-        }
-        else if (tagName == "table:table") {
-	    OdfTextReader *textReader = m_parent->textReader();
-	    if (textReader) {
-		textReader->readElementTableTable(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
-        }
-        else {
+            readElementChartFooter(reader);
+        } else if (tagName == "chart:subtitle") {
+            readElementChartSubtitle(reader);
+        } else if (tagName == "chart:title") {
+            readElementChartTitle(reader);
+        } else if (tagName == "chart:legend") {
+            readElementChartLegend(reader);
+        } else if (tagName == "chart:plot-area") {
+            readElementChartPlotArea(reader);
+        } else if (tagName == "table:table") {
+            OdfTextReader *textReader = m_parent->textReader();
+            if (textReader) {
+                textReader->readElementTableTable(reader);
+            } else {
+                reader.skipCurrentElement();
+            }
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -188,31 +173,29 @@ void OdfChartReader::readElementChartChart(KoXmlStreamReader &reader)
 }
 
 #define IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(readername, name)      \
-IMPLEMENT_READER_FUNCTION_START(readername, name)                   \
+    IMPLEMENT_READER_FUNCTION_START(readername, name)                   \
     while (reader.readNextStartElement()) {                         \
         QString tagName = reader.qualifiedName().toString();        \
-                                                                    \
+        \
         if (tagName == "text:p") {                                  \
-	    OdfTextReader *textReader = m_parent->textReader();     \
-	    if (textReader) {                                       \
-		textReader->readElementTextP(reader);               \
-	    }                                                       \
-	    else {                                                  \
-		reader.skipCurrentElement();                        \
-	    }                                                       \
+            OdfTextReader *textReader = m_parent->textReader();     \
+            if (textReader) {                                       \
+                textReader->readElementTextP(reader);               \
+            }                                                       \
+            else {                                                  \
+                reader.skipCurrentElement();                        \
+            }                                                       \
         }                                                           \
         else {                                                      \
             reader.skipCurrentElement();                            \
         }                                                           \
     }                                                               \
-IMPLEMENT_READER_FUNCTION_END(name)
-
+    IMPLEMENT_READER_FUNCTION_END(name)
 
 IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartFooter)
 IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartSubtitle)
 IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartTitle)
 IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartLegend)
-
 
 void OdfChartReader::readElementChartPlotArea(KoXmlStreamReader &reader)
 {
@@ -230,33 +213,25 @@ void OdfChartReader::readElementChartPlotArea(KoXmlStreamReader &reader)
     //          <dr3d:light> 10.5.3
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
-	if (tagName == "chart:wall") {
-	    readElementChartWall(reader);
-        }
-        else if (tagName == "chart:floor") {
-	    readElementChartFloor(reader);
-        }
-        else if (tagName == "chart:axis") {
-	    readElementChartAxis(reader);
-        }
-        else if (tagName == "chart:series") {
-	    readElementChartSeries(reader);
-        }
-        else if (tagName == "chart:stock-gain-marker") {
-	    readElementChartStockGainMarker(reader);
-        }
-        else if (tagName == "chart:stock-loss-marker") {
-	    readElementChartStockLossMarker(reader);
-        }
-        else if (tagName == "chart:stock-range-line") {
-	    readElementChartStockRangeLine(reader);
-        }
-        else if (tagName == "dr3d:light") {
+
+        if (tagName == "chart:wall") {
+            readElementChartWall(reader);
+        } else if (tagName == "chart:floor") {
+            readElementChartFloor(reader);
+        } else if (tagName == "chart:axis") {
+            readElementChartAxis(reader);
+        } else if (tagName == "chart:series") {
+            readElementChartSeries(reader);
+        } else if (tagName == "chart:stock-gain-marker") {
+            readElementChartStockGainMarker(reader);
+        } else if (tagName == "chart:stock-loss-marker") {
+            readElementChartStockLossMarker(reader);
+        } else if (tagName == "chart:stock-range-line") {
+            readElementChartStockRangeLine(reader);
+        } else if (tagName == "dr3d:light") {
             // FIXME: NYI
             reader.skipCurrentElement();
-        }
-        else {
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -280,17 +255,14 @@ void OdfChartReader::readElementChartAxis(KoXmlStreamReader &reader)
 
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "chart:categories") {
-	    readElementChartCategories(reader);
-        }
-        else if (tagName == "chart:grid") {
-	    readElementChartGrid(reader);
-        }
-        else if (tagName == "chart:title") {
-	    readElementChartTitle(reader);
-        }
-        else {
+            readElementChartCategories(reader);
+        } else if (tagName == "chart:grid") {
+            readElementChartGrid(reader);
+        } else if (tagName == "chart:title") {
+            readElementChartTitle(reader);
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -318,26 +290,20 @@ void OdfChartReader::readElementChartSeries(KoXmlStreamReader &reader)
 
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "chart:data-label") {
-	    readElementChartDataLabel(reader);
-        }
-        else if (tagName == "chart:data-point") {
-	    readElementChartDataPoint(reader);
-        }
-        else if (tagName == "chart:domain") {
-	    readElementChartDomain(reader);
-        }
-        else if (tagName == "chart:error-indicator") {
-	    readElementChartErrorIndicator(reader);
-        }
-        else if (tagName == "chart:mean-value") {
-	    readElementChartMeanValue(reader);
-        }
-        else if (tagName == "chart:regression-curve") {
-	    readElementChartRegressionCurve(reader);
-        }
-        else {
+            readElementChartDataLabel(reader);
+        } else if (tagName == "chart:data-point") {
+            readElementChartDataPoint(reader);
+        } else if (tagName == "chart:domain") {
+            readElementChartDomain(reader);
+        } else if (tagName == "chart:error-indicator") {
+            readElementChartErrorIndicator(reader);
+        } else if (tagName == "chart:mean-value") {
+            readElementChartMeanValue(reader);
+        } else if (tagName == "chart:regression-curve") {
+            readElementChartRegressionCurve(reader);
+        } else {
             reader.skipCurrentElement();
         }
     }
@@ -348,22 +314,19 @@ void OdfChartReader::readElementChartSeries(KoXmlStreamReader &reader)
 
 IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartDomain)          // ODF 1.2  11.12
 IMPLEMENT_READER_FUNCTION_ONE_CHILD(OdfChartReader, ChartDataPoint,
-				    "chart:data-label", ChartDataLabel)     // ODF 1.2  11.13
+                                    "chart:data-label", ChartDataLabel)     // ODF 1.2  11.13
 IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartDataLabel)        // ODF 1.2  11.14
 IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartMeanValue)       // ODF 1.2  11.15
 IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartErrorIndicator)  // ODF 1.2  11.16
 IMPLEMENT_READER_FUNCTION_ONE_CHILD(OdfChartReader, ChartRegressionCurve,
-				    "chart:equation", ChartEquation)        // ODF 1.2  11.17
+                                    "chart:equation", ChartEquation)        // ODF 1.2  11.17
 IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartEquation)         // ODF 1.2  11.18
 IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockGainMarker) // ODF 1.2  11.19
 IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockLossMarker) // ODF 1.2  11.20
 IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockRangeLine)  // ODF 1.2  11.21
 
-
-
 // ----------------------------------------------------------------
 //                             Other functions
-
 
 void OdfChartReader::readUnknownElement(KoXmlStreamReader &reader)
 {
@@ -376,8 +339,7 @@ void OdfChartReader::readUnknownElement(KoXmlStreamReader &reader)
         // start tag here.
         reader.readNext();
         readParagraphContents(reader);
-    }
-    else {
+    } else {
         while (reader.readNextStartElement()) {
             readTextLevelElement(reader);
         }

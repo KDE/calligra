@@ -21,10 +21,9 @@
 #include <KoPathShape.h>
 #include <KoShapeRegistry.h>
 
-
-KoShape* KisShapeToolHelper::createRectangleShape(const QRectF& rect)
+KoShape *KisShapeToolHelper::createRectangleShape(const QRectF &rect)
 {
-    KoShape* shape;
+    KoShape *shape;
     KoShapeFactoryBase *rectFactory = KoShapeRegistry::instance()->value("RectangleShape");
     if (rectFactory) {
         shape = rectFactory->createDefaultShape();
@@ -32,7 +31,7 @@ KoShape* KisShapeToolHelper::createRectangleShape(const QRectF& rect)
         shape->setPosition(rect.topLeft());
     } else {
         //Fallback if the plugin wasn't found
-        KoPathShape* path = new KoPathShape();
+        KoPathShape *path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
         path->moveTo(rect.topLeft());
         path->lineTo(rect.topLeft() + QPointF(rect.width(), 0));
@@ -45,9 +44,9 @@ KoShape* KisShapeToolHelper::createRectangleShape(const QRectF& rect)
     return shape;
 }
 
-KoShape* KisShapeToolHelper::createEllipseShape(const QRectF& rect)
+KoShape *KisShapeToolHelper::createEllipseShape(const QRectF &rect)
 {
-    KoShape* shape;
+    KoShape *shape;
     KoShapeFactoryBase *rectFactory = KoShapeRegistry::instance()->value("EllipseShape");
     if (rectFactory) {
         shape = rectFactory->createDefaultShape();
@@ -55,7 +54,7 @@ KoShape* KisShapeToolHelper::createEllipseShape(const QRectF& rect)
         shape->setPosition(rect.topLeft());
     } else {
         //Fallback if the plugin wasn't found
-        KoPathShape* path = new KoPathShape();
+        KoPathShape *path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
 
         QPointF rightMiddle = QPointF(rect.left() + rect.width(), rect.top() + rect.height() / 2);

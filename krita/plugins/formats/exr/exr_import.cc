@@ -41,17 +41,19 @@ exrImport::~exrImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray &, const QByteArray &to)
 {
     dbgFile << "Importing using EXRImport!";
 
-    if (to != "application/x-krita")
+    if (to != "application/x-krita") {
         return KisImportExportFilter::BadMimeType;
+    }
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
 
-    if (!doc)
+    if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     QString filename = m_chain->inputFile();
 
@@ -61,11 +63,11 @@ KisImportExportFilter::ConversionStatus exrImport::convert(const QByteArray&, co
 
         KUrl url(filename);
 
-        if (url.isEmpty())
+        if (url.isEmpty()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
         exrConverter ib(doc, !m_chain->manager()->getBatchMode());
-
 
         switch (ib.buildImage(url)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:

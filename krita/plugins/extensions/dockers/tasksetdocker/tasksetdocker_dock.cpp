@@ -42,14 +42,14 @@
 #include <KisMainWindow.h>
 #include "tasksetmodel.h"
 
-
 class KisTasksetDelegate : public QStyledItemDelegate
 {
 public:
-    KisTasksetDelegate(QObject * parent = 0) : QStyledItemDelegate(parent) {}
+    KisTasksetDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) {}
     virtual ~KisTasksetDelegate() {}
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const {
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+    {
         return QSize(QStyledItemDelegate::sizeHint(option, index).width(),
                      qMin(QStyledItemDelegate::sizeHint(option, index).width(), 25));
     }
@@ -58,25 +58,25 @@ public:
 class KisTasksetResourceDelegate : public QStyledItemDelegate
 {
 public:
-    KisTasksetResourceDelegate(QObject * parent = 0) : QStyledItemDelegate(parent) {}
+    KisTasksetResourceDelegate(QObject *parent = 0) : QStyledItemDelegate(parent) {}
     virtual ~KisTasksetResourceDelegate() {}
     /// reimplemented
     virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
 };
 
-void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void KisTasksetResourceDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (! index.isValid())
+    if (! index.isValid()) {
         return;
+    }
 
-    TasksetResource* taskset = static_cast<TasksetResource*>(index.internalPointer());
+    TasksetResource *taskset = static_cast<TasksetResource *>(index.internalPointer());
 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
         painter->setBrush(option.palette.highlightedText());
-    }
-    else {
+    } else {
         painter->setBrush(option.palette.text());
     }
 
@@ -84,9 +84,9 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
 
 }
 
-TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canvas(0), m_blocked(false)
+TasksetDockerDock::TasksetDockerDock() : QDockWidget(i18n("Task Sets")), m_canvas(0), m_blocked(false)
 {
-    QWidget* widget = new QWidget(this);
+    QWidget *widget = new QWidget(this);
     setupUi(widget);
     m_model = new TasksetModel(this);
     tasksetView->setModel(m_model);
@@ -104,11 +104,11 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     if (!QFileInfo(m_rserver->saveLocation()).exists()) {
         QDir().mkpath(m_rserver->saveLocation());
     }
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<TasksetResource>(m_rserver));
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<TasksetResource>(m_rserver));
     m_taskThread = new KoResourceLoaderThread(m_rserver);
     m_taskThread->start();
 
-    KoResourceItemChooser* itemChooser = new KoResourceItemChooser(adapter, this);
+    KoResourceItemChooser *itemChooser = new KoResourceItemChooser(adapter, this);
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
     itemChooser->setFixedSize(500, 250);
     itemChooser->setRowHeight(30);
@@ -121,12 +121,12 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
 
     setWidget(widget);
 
-    connect( tasksetView, SIGNAL(clicked( const QModelIndex & ) ),
-            this, SLOT(activated ( const QModelIndex & ) ) );
+    connect(tasksetView, SIGNAL(clicked(QModelIndex)),
+            this, SLOT(activated(QModelIndex)));
 
-    connect( recordButton, SIGNAL(toggled(bool)), this, SLOT(recordClicked()));
-    connect( clearButton, SIGNAL(clicked(bool)), this, SLOT(clearClicked()));
-    connect( saveButton, SIGNAL(clicked(bool)), this, SLOT(saveClicked()));
+    connect(recordButton, SIGNAL(toggled(bool)), this, SLOT(recordClicked()));
+    connect(clearButton, SIGNAL(clicked(bool)), this, SLOT(clearClicked()));
+    connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(saveClicked()));
 }
 
 TasksetDockerDock::~TasksetDockerDock()
@@ -135,15 +135,15 @@ TasksetDockerDock::~TasksetDockerDock()
     delete m_rserver;
 }
 
-void TasksetDockerDock::setCanvas(KoCanvasBase * canvas)
+void TasksetDockerDock::setCanvas(KoCanvasBase *canvas)
 {
     if (m_canvas && m_canvas->viewManager()) {
-         m_canvas->viewManager()->actionCollection()->disconnect(this);
-         foreach(KXMLGUIClient* client, m_canvas->viewManager()->mainWindow()->childClients()) {
+        m_canvas->viewManager()->actionCollection()->disconnect(this);
+        foreach (KXMLGUIClient *client, m_canvas->viewManager()->mainWindow()->childClients()) {
             client->actionCollection()->disconnect(this);
         }
     }
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    m_canvas = dynamic_cast<KisCanvas2 *>(canvas);
 }
 
 void TasksetDockerDock::unsetCanvas()
@@ -152,18 +152,18 @@ void TasksetDockerDock::unsetCanvas()
     m_model->clear();
 }
 
-void TasksetDockerDock::actionTriggered(QAction* action)
+void TasksetDockerDock::actionTriggered(QAction *action)
 {
-    if(action && !action->objectName().isEmpty() &&
-       !m_blocked && recordButton->isChecked()) {
+    if (action && !action->objectName().isEmpty() &&
+            !m_blocked && recordButton->isChecked()) {
         m_model->addAction(action);
         saveButton->setEnabled(true);
     }
 }
 
-void TasksetDockerDock::activated(const QModelIndex& index)
+void TasksetDockerDock::activated(const QModelIndex &index)
 {
-    QAction* action = m_model->actionFromIndex(index);
+    QAction *action = m_model->actionFromIndex(index);
     m_blocked = true;
     action->trigger();
     m_blocked = false;
@@ -171,11 +171,11 @@ void TasksetDockerDock::activated(const QModelIndex& index)
 
 void TasksetDockerDock::recordClicked()
 {
-    if(m_canvas) {
-        KisViewManager* view = m_canvas->viewManager();
+    if (m_canvas) {
+        KisViewManager *view = m_canvas->viewManager();
         connect(view->actionCollection(), SIGNAL(actionTriggered(QAction*)),
                 this, SLOT(actionTriggered(QAction*)), Qt::UniqueConnection);
-        foreach(KXMLGUIClient* client, view->mainWindow()->childClients()) {
+        foreach (KXMLGUIClient *client, view->mainWindow()->childClients()) {
             connect(client->actionCollection(), SIGNAL(actionTriggered(QAction*)),
                     this, SLOT(actionTriggered(QAction*)), Qt::UniqueConnection);
         }
@@ -194,10 +194,10 @@ void TasksetDockerDock::saveClicked()
 
     m_taskThread->barrier();
 
-    TasksetResource* taskset = new TasksetResource("");
+    TasksetResource *taskset = new TasksetResource("");
 
     QStringList actionNames;
-    foreach(QAction* action, m_model->actions()) {
+    foreach (QAction *action, m_model->actions()) {
         actionNames.append(action->objectName());
     }
     taskset->setActionList(actionNames);
@@ -205,7 +205,7 @@ void TasksetDockerDock::saveClicked()
     QString saveLocation = m_rserver->saveLocation();
 
     bool newName = false;
-    if(name.isEmpty()) {
+    if (name.isEmpty()) {
         newName = true;
         name = i18n("Taskset");
     }
@@ -217,7 +217,7 @@ void TasksetDockerDock::saveClicked()
         i++;
     }
     taskset->setFilename(fileInfo.filePath());
-    if(newName) {
+    if (newName) {
         name = i18n("Taskset %1", i);
     }
     taskset->setName(name);
@@ -230,16 +230,16 @@ void TasksetDockerDock::clearClicked()
     m_model->clear();
 }
 
-void TasksetDockerDock::resourceSelected(KoResource* resource)
+void TasksetDockerDock::resourceSelected(KoResource *resource)
 {
-    if(!m_canvas) {
+    if (!m_canvas) {
         return;
     }
     m_model->clear();
     saveButton->setEnabled(true);
-    foreach(const QString& actionName, static_cast<TasksetResource*>(resource)->actionList()) {
-        QAction* action = m_canvas->viewManager()->actionCollection()->action(actionName);
-        if(action) {
+    foreach (const QString &actionName, static_cast<TasksetResource *>(resource)->actionList()) {
+        QAction *action = m_canvas->viewManager()->actionCollection()->action(actionName);
+        if (action) {
             m_model->addAction(action);
         }
     }

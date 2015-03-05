@@ -32,10 +32,10 @@
 #include "KPrShapeAnimation.h"
 
 KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
-: m_shapeAnimation(shapeAnimation)
-, m_begin(0)
-, m_duration(1)
-, m_fill(FillAuto)
+    : m_shapeAnimation(shapeAnimation)
+    , m_begin(0)
+    , m_duration(1)
+    , m_fill(FillAuto)
 {
 }
 
@@ -126,8 +126,7 @@ bool KPrAnimationBase::saveAttribute(KoPASavingContext &paContext) const
     if (m_shapeAnimation->textBlockUserData()) {
         writer.addAttribute("smil:targetElement", paContext.existingXmlid(m_shapeAnimation->textBlockUserData()).toString());
         writer.addAttribute("anim:sub-item", "text");
-    }
-    else {
+    } else {
         writer.addAttribute("smil:targetElement", paContext.existingXmlid(m_shapeAnimation->shape()).toString());
     }
 

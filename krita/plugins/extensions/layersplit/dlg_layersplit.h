@@ -52,7 +52,7 @@ private Q_SLOTS:
     void applyClicked();
 
 private:
-    WdgLayerSplit* m_page;
+    WdgLayerSplit *m_page;
 };
 
 #endif // DLG_LAYERSPLIT

@@ -35,8 +35,9 @@
 
 class KUndo2Command;
 
-namespace KPlato {
-    class ScheduleManager;
+namespace KPlato
+{
+class ScheduleManager;
 }
 
 namespace KPlatoWork
@@ -48,12 +49,12 @@ class KPLATOWORK_EXPORT TaskCompletionDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit TaskCompletionDialog( WorkPackage &p, ScheduleManager *sm, QWidget *parent=0 );
+    explicit TaskCompletionDialog(WorkPackage &p, ScheduleManager *sm, QWidget *parent = 0);
 
     KUndo2Command *buildCommand();
 
 protected Q_SLOTS:
-    void slotChanged( bool );
+    void slotChanged(bool);
 
 private:
     TaskCompletionPanel *m_panel;
@@ -63,7 +64,7 @@ class KPLATOWORK_EXPORT TaskCompletionPanel : public QWidget, public Ui::TaskCom
 {
     Q_OBJECT
 public:
-    explicit TaskCompletionPanel( WorkPackage &p, ScheduleManager *sm, QWidget *parent=0 );
+    explicit TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QWidget *parent = 0);
 
     KUndo2Command *buildCommand();
 
@@ -72,33 +73,33 @@ public:
     QSize sizeHint() const;
 
 Q_SIGNALS:
-    void changed( bool );
+    void changed(bool);
 
 public Q_SLOTS:
     void slotChanged();
     void slotStartedChanged(bool state);
     void slotFinishedChanged(bool state);
     void slotPercentFinishedChanged(int value);
-    void slotStartTimeChanged( const QDateTime &dt );
-    void slotFinishTimeChanged( const QDateTime &dt );
+    void slotStartTimeChanged(const QDateTime &dt);
+    void slotFinishTimeChanged(const QDateTime &dt);
     void slotAddEntry();
     void slotEntryChanged();
-    void slotSelectionChanged( const QItemSelection &sel );
+    void slotSelectionChanged(const QItemSelection &sel);
 
-    void slotEntryAdded( const QDate& date );
+    void slotEntryAdded(const QDate &date);
 
-    void slotEditmodeChanged( int );
+    void slotEditmodeChanged(int);
 
 protected Q_SLOTS:
     void slotCalculateEffort();
-    
+
 protected:
     void setFinished();
 
     WorkPackage *m_package;
     Completion m_completion;
     int m_dayLength;
-    
+
     Duration scheduledEffort;
 };
 
@@ -117,14 +118,14 @@ public:
 
     explicit CompletionEntryItemModel(QObject *parent = 0);
 
-    int columnCount( const QModelIndex &idx = QModelIndex() ) const;
-    QVariant data( const QModelIndex &idx, int role ) const;
-    bool setData( const QModelIndex &idx, const QVariant &value, int role );
+    int columnCount(const QModelIndex &idx = QModelIndex()) const;
+    QVariant data(const QModelIndex &idx, int role) const;
+    bool setData(const QModelIndex &idx, const QVariant &value, int role);
 
-    void setSource( Resource *resource, Task *task );
+    void setSource(Resource *resource, Task *task);
 
 protected:
-    virtual QVariant actualEffort( int row, int role ) const;
+    virtual QVariant actualEffort(int row, int role) const;
 
 private:
     bool m_calculate; // opens for calculating used-/remaining effort
@@ -133,6 +134,5 @@ private:
 };
 
 }  //KPlatoWork namespace
-
 
 #endif

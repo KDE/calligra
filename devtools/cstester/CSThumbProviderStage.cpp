@@ -30,7 +30,7 @@
 #include <QEventLoop>
 
 CSThumbProviderStage::CSThumbProviderStage(KoPADocument *doc)
-: m_doc(doc)
+    : m_doc(doc)
 {
 }
 
@@ -48,7 +48,7 @@ QList<QImage> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
     }
 
     QList<QImage> thumbnails;
-    foreach(KoPAPageBase *page, m_doc->pages(false)) {
+    foreach (KoPAPageBase *page, m_doc->pages(false)) {
         thumbnails.append(m_doc->pageThumbImage(page, thumbSize));
     }
 

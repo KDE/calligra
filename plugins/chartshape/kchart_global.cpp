@@ -20,12 +20,12 @@
 
 #include "kchart_global.h"
 
-namespace KChart {
+namespace KChart
+{
 
 bool isPolar(ChartType type)
 {
-    switch (type)
-    {
+    switch (type) {
     case CircleChartType:
     case RingChartType:
     case RadarChartType:
@@ -75,7 +75,7 @@ int numDimensions(ChartType type)
     case LastChartType:
         dimensions = 1;
     }
-    
+
     return dimensions;
 }
 

@@ -70,8 +70,7 @@ void LayerGroupSwitcher::moveIntoNextGroup()
         if (active) {
             active->setVisible(true);
         }
-    }
-    else if (active->parent()) {
+    } else if (active->parent()) {
         KisNodeSP parent = active->parent();
         if (parent) {
             int indexInGroup = active->parent()->index(active);
@@ -108,8 +107,7 @@ void LayerGroupSwitcher::moveIntoPreviousGroup()
         if (active) {
             active->setVisible(true);
         }
-    }
-    else if (active->parent()) {
+    } else if (active->parent()) {
         KisNodeSP parent = active->parent();
         if (parent) {
             int indexInGroup = active->parent()->index(active);

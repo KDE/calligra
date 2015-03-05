@@ -32,7 +32,6 @@
 #include <QThread>
 #include <QTimer>
 
-
 namespace KPlato
 {
 
@@ -47,7 +46,7 @@ class XMLLoaderObject;
 
  Sub-class SchedulerThread to do the actual calculation, then re-implement calculate()
  to calculate the project, and slotFinished() to fetch the result into your project.
- 
+
  There is two ways to show progress:
  <ul>
  <li> Connect the SchedulerThread::maxProgressChanged() to ScheduleManager::setMaxProgress() and
@@ -69,13 +68,16 @@ public:
     /// Localized name
     QString name() const;
     /// Name is normally set by the plugin loader, from Name in the desktop file
-    void setName( const QString &name );
+    void setName(const QString &name);
     /// Localized comment
     QString comment() const;
     /// Comment is normally set by the plugin loader, from Comment in the desktop file
-    void setComment( const QString &name );
+    void setComment(const QString &name);
     /// A more elaborate description suitable for use in what's this
-    virtual QString description() const { return QString(); }
+    virtual QString description() const
+    {
+        return QString();
+    }
     /// The schedulers capabilities
     enum Capabilities {
         AvoidOverbooking = 1,
@@ -87,17 +89,17 @@ public:
     /// By default returns all capabilities
     virtual int capabilities() const;
     /// Stop calculation of the schedule @p sm. Current result may be used.
-    void stopCalculation( ScheduleManager *sm );
+    void stopCalculation(ScheduleManager *sm);
     /// Terminate calculation of the schedule @p sm. No results will be available.
-    void haltCalculation( ScheduleManager *sm );
-    
+    void haltCalculation(ScheduleManager *sm);
+
     /// Stop calculation of the scheduling @p job. Current result may be used.
-    virtual void stopCalculation( SchedulerThread *job );
+    virtual void stopCalculation(SchedulerThread *job);
     /// Terminate calculation of the scheduling @p job. No results will be available.
-    virtual void haltCalculation( SchedulerThread *job );
-    
+    virtual void haltCalculation(SchedulerThread *job);
+
     /// Calculate the project
-    virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false ) = 0;
+    virtual void calculate(Project &project, ScheduleManager *sm, bool nothread = false) = 0;
 
     /// Return the list of supported granularities
     /// An empty list means granularity is not supported (the default)
@@ -105,20 +107,20 @@ public:
     /// Return current index of supported granularities
     int granularity() const;
     /// Set current index of supported granularities
-    void setGranularity( int index );
+    void setGranularity(int index);
 
 protected Q_SLOTS:
     virtual void slotSyncData();
 
 protected:
-    void updateProject( const Project *tp, const ScheduleManager *tm, Project *mp, ScheduleManager *sm ) const;
-    void updateNode( const Node *tn, Node *mn, long sid, XMLLoaderObject &status ) const;
-    void updateResource( const KPlato::Resource *tr, Resource *r, XMLLoaderObject &status ) const;
-    void updateAppointments( const Project *tp, const ScheduleManager *tm, Project *mp, ScheduleManager *sm, XMLLoaderObject &status ) const;
+    void updateProject(const Project *tp, const ScheduleManager *tm, Project *mp, ScheduleManager *sm) const;
+    void updateNode(const Node *tn, Node *mn, long sid, XMLLoaderObject &status) const;
+    void updateResource(const KPlato::Resource *tr, Resource *r, XMLLoaderObject &status) const;
+    void updateAppointments(const Project *tp, const ScheduleManager *tm, Project *mp, ScheduleManager *sm, XMLLoaderObject &status) const;
 
     void updateProgress();
     void updateLog();
-    void updateLog( SchedulerThread *job );
+    void updateLog(SchedulerThread *job);
 
 private:
     class Private;
@@ -126,7 +128,7 @@ private:
 
 protected:
     QTimer m_synctimer;
-    QList<SchedulerThread*> m_jobs;
+    QList<SchedulerThread *> m_jobs;
 
     int m_granularity;
     QList<long unsigned int> m_granularities;
@@ -137,13 +139,13 @@ protected:
  SchedulerThread is a basic class used to implement project calculation in a separate thread.
  The scheduling thread is meant to run on a private copy of the project to avoid that the ui thread
  changes the data while calculations are going on.
- 
+
  The constructor creates a KoXmlDocument m_pdoc of the project that can be used to
  create a private project. This should be done in the reimplemented run() method.
- 
+
  When the calculations are done the signal jobFinished() is emitted. This can be used to
  fetch data from the private calculated project into the actual project.
- 
+
  To track progress, the progress() method should be called from the ui thread with
  an appropriate interval to avoid overload of the ui thread.
  The progressChanged() signal may also be used but note that async signal handling are very slow
@@ -153,22 +155,34 @@ class KPLATOKERNEL_EXPORT SchedulerThread : public QThread
 {
     Q_OBJECT
 public:
-    SchedulerThread( Project *project, ScheduleManager *manager, QObject *parent );
+    SchedulerThread(Project *project, ScheduleManager *manager, QObject *parent);
     ~SchedulerThread();
 
-    Project *mainProject() const { return m_mainproject; }
-    ScheduleManager *mainManager() const { return m_mainmanager; }
-    
+    Project *mainProject() const
+    {
+        return m_mainproject;
+    }
+    ScheduleManager *mainManager() const
+    {
+        return m_mainmanager;
+    }
+
     Project *project() const;
     ScheduleManager *manager() const;
 
     /// Run with no thread
     void doRun();
-    
+
     /// The scheduling is stopping
-    bool isStopped() const { return m_stopScheduling; }
+    bool isStopped() const
+    {
+        return m_stopScheduling;
+    }
     /// The scheduling is halting
-    bool isHalted() const { return m_haltScheduling; }
+    bool isHalted() const
+    {
+        return m_haltScheduling;
+    }
 
     int maxProgress() const;
     int progress() const;
@@ -177,29 +191,29 @@ public:
     QMap<int, QString> phaseNames() const;
 
     /// Save the @p project into @p document
-    static void saveProject( Project *project, QDomDocument &document );
+    static void saveProject(Project *project, QDomDocument &document);
     /// Load the @p project from @p document
-    static bool loadProject( Project *project, const KoXmlDocument &document );
+    static bool loadProject(Project *project, const KoXmlDocument &document);
 
     ///Add a scheduling error log message
-    void logError( Node *n, Resource *r, const QString &msg, int phase = -1 );
+    void logError(Node *n, Resource *r, const QString &msg, int phase = -1);
     ///Add a scheduling warning log message
-    void logWarning( Node *n, Resource *r, const QString &msg, int phase = -1 );
+    void logWarning(Node *n, Resource *r, const QString &msg, int phase = -1);
     ///Add a scheduling information log message
-    void logInfo( Node *n, Resource *r, const QString &msg, int phase = -1 );
+    void logInfo(Node *n, Resource *r, const QString &msg, int phase = -1);
     ///Add a scheduling debug log message
-    void logDebug( Node *n, Resource *r, const QString &msg, int phase = -1 );
+    void logDebug(Node *n, Resource *r, const QString &msg, int phase = -1);
 
 Q_SIGNALS:
     /// Job has started
-    void jobStarted( SchedulerThread *job );
+    void jobStarted(SchedulerThread *job);
     /// Job is finished
-    void jobFinished( SchedulerThread *job );
+    void jobFinished(SchedulerThread *job);
 
     /// Maximum progress value has changed
-    void maxProgressChanged( int value, ScheduleManager *sm = 0 );
+    void maxProgressChanged(int value, ScheduleManager *sm = 0);
     /// Progress has changed
-    void progressChanged( int value, ScheduleManager *sm = 0 );
+    void progressChanged(int value, ScheduleManager *sm = 0);
 
 public Q_SLOTS:
     /// Stop scheduling. Result may still be used.
@@ -207,15 +221,14 @@ public Q_SLOTS:
     /// Halt scheduling. Discard result.
     virtual void haltScheduling();
 
-
 protected Q_SLOTS:
     virtual void slotStarted();
     virtual void slotFinished();
 
-    void setMaxProgress( int );
-    void setProgress( int );
+    void setMaxProgress(int);
+    void setProgress(int);
 
-    void slotAddLog( Schedule::Log log );
+    void slotAddLog(Schedule::Log log);
 
 protected:
     /// Re-implement to do the job
@@ -228,7 +241,7 @@ protected:
     ScheduleManager *m_mainmanager;
     /// The schedule manager identity
     QString m_mainmanagerId;
-    
+
     /// The temporary project
     Project *m_project;
     mutable QMutex m_projectMutex;
@@ -238,7 +251,7 @@ protected:
 
     bool m_stopScheduling; /// Stop asap, preliminary result may be used
     bool m_haltScheduling; /// Stop and discrad result. Delete yourself.
-    
+
     KoXmlDocument m_pdoc;
 
     int m_maxprogress;

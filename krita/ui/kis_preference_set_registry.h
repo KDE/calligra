@@ -34,10 +34,11 @@ class KIcon;
 /**
  * Implement this abstract class to provide a preferences pane for the preferences dialog.
  */
-class KRITAUI_EXPORT KisPreferenceSet : public QWidget {
-Q_OBJECT
+class KRITAUI_EXPORT KisPreferenceSet : public QWidget
+{
+    Q_OBJECT
 public:
-    KisPreferenceSet(QWidget* parent=0) : QWidget(parent)
+    KisPreferenceSet(QWidget *parent = 0) : QWidget(parent)
     {}
     virtual QString id() = 0;
     virtual QString name() = 0;
@@ -49,10 +50,11 @@ public Q_SLOTS:
     virtual void loadDefaultPreferences() = 0;
 };
 
-class KRITAUI_EXPORT KisAbstractPreferenceSetFactory {
+class KRITAUI_EXPORT KisAbstractPreferenceSetFactory
+{
 public:
     virtual ~KisAbstractPreferenceSetFactory() {}
-    virtual KisPreferenceSet* createPreferenceSet() = 0;
+    virtual KisPreferenceSet *createPreferenceSet() = 0;
     virtual QString id() const = 0;
 };
 
@@ -60,12 +62,12 @@ public:
  * This registry does not load the plugins itself: plugins with preferences panes should
  * add those panes when they are loaded themselves.
  */
-class KRITAUI_EXPORT KisPreferenceSetRegistry : public QObject, public KoGenericRegistry<KisAbstractPreferenceSetFactory*>
+class KRITAUI_EXPORT KisPreferenceSetRegistry : public QObject, public KoGenericRegistry<KisAbstractPreferenceSetFactory *>
 {
 public:
 
     virtual ~KisPreferenceSetRegistry();
-    static KisPreferenceSetRegistry * instance();
+    static KisPreferenceSetRegistry *instance();
 
 private:
     KisPreferenceSetRegistry();

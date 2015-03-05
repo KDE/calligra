@@ -39,20 +39,20 @@ using namespace Calligra::Sheets;
 class SpellCheckCommand::Private
 {
 public:
-    KoCanvasBase* canvasBase;
+    KoCanvasBase *canvasBase;
     int index;
     Region region;
     Cell currentCell;
-    Sheet* currentSheet;
+    Sheet *currentSheet;
     ValueStorage storage;
     Sonnet::Speller speller;
-    Sonnet::Dialog* dialog;
-    KUndo2Command* command;
+    Sonnet::Dialog *dialog;
+    KUndo2Command *command;
 };
 
-SpellCheckCommand::SpellCheckCommand(const Region &region, KoCanvasBase* canvasBase)
-        : BackgroundChecker(canvasBase->canvasWidget())
-        , d(new Private)
+SpellCheckCommand::SpellCheckCommand(const Region &region, KoCanvasBase *canvasBase)
+    : BackgroundChecker(canvasBase->canvasWidget())
+    , d(new Private)
 {
     d->canvasBase = canvasBase;
     d->index = 0;
@@ -101,7 +101,7 @@ QString SpellCheckCommand::fetchMoreText()
         // Ask whether we should continue on the next sheet.
         const QString question = i18n("Do you want to check the spelling in the next sheet?");
         if (KMessageBox::questionYesNo(d->canvasBase->canvasWidget(), question) == KMessageBox::Yes) {
-            const Map* map = d->currentSheet->map();
+            const Map *map = d->currentSheet->map();
             if (d->currentSheet == map->sheet(map->count() - 1)) {
                 // Switch from the last to the first sheet.
                 d->currentSheet = map->sheet(0);
@@ -130,7 +130,7 @@ void SpellCheckCommand::finishedCurrentFeed()
     if (!d->command) {
         d->command = new KUndo2Command(kundo2_i18n("Correct Misspelled Words"));
     }
-    DataManipulator* command = new DataManipulator(d->command);
+    DataManipulator *command = new DataManipulator(d->command);
     command->setSheet(d->currentSheet);
     command->setValue(Value(d->dialog->buffer()));
     command->setParsing(false);

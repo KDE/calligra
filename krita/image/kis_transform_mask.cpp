@@ -49,8 +49,7 @@
 
 #define UPDATE_DELAY 3000 /*ms */
 
-struct KisTransformMask::Private
-{
+struct KisTransformMask::Private {
     Private()
         : worker(0, QTransform(), 0),
           staticCacheValid(false),
@@ -80,7 +79,6 @@ struct KisTransformMask::Private
     qreal offBoundsReadArea;
 };
 
-
 KisTransformMask::KisTransformMask()
     : KisEffectMask(),
       m_d(new Private)
@@ -100,7 +98,7 @@ KisTransformMask::~KisTransformMask()
 {
 }
 
-KisTransformMask::KisTransformMask(const KisTransformMask& rhs)
+KisTransformMask::KisTransformMask(const KisTransformMask &rhs)
     : KisEffectMask(rhs),
       m_d(new Private(*rhs.m_d))
 {
@@ -121,7 +119,7 @@ void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP para
 {
     KIS_ASSERT_RECOVER(params) {
         params = KisTransformMaskParamsInterfaceSP(
-            new KisDumbTransformMaskParams());
+                     new KisDumbTransformMaskParams());
     }
 
     QTransform affineTransform;
@@ -146,8 +144,10 @@ void KisTransformMask::slotDelayedStaticUpdate()
      * meanwhile. Just ignore the updates in the case.
      */
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
-    if (!parentLayer) return;
+    KisLayerSP parentLayer = dynamic_cast<KisLayer *>(parent().data());
+    if (!parentLayer) {
+        return;
+    }
 
     KisImageSP image = parentLayer->image();
     if (image) {
@@ -163,8 +163,10 @@ KisPaintDeviceSP KisTransformMask::buildPreviewDevice()
      * is not entirely safe.
      */
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
-    KIS_ASSERT_RECOVER(parentLayer) { return new KisPaintDevice(colorSpace()); }
+    KisLayerSP parentLayer = dynamic_cast<KisLayer *>(parent().data());
+    KIS_ASSERT_RECOVER(parentLayer) {
+        return new KisPaintDevice(colorSpace());
+    }
 
     KisPaintDeviceSP device =
         new KisPaintDevice(parentLayer->original()->colorSpace());
@@ -183,7 +185,7 @@ void KisTransformMask::recaclulateStaticImage()
      * is not entirely safe.
      */
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer = dynamic_cast<KisLayer *>(parent().data());
     KIS_ASSERT_RECOVER_RETURN(parentLayer);
 
     if (!m_d->staticCacheDevice) {
@@ -212,7 +214,7 @@ void KisTransformMask::recaclulateStaticImage()
 
 QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
                                      KisPaintDeviceSP &dst,
-                                     const QRect & rc,
+                                     const QRect &rc,
                                      PositionToFilthy maskPos) const
 {
     Q_ASSERT(nodeProgressProxy());
@@ -220,15 +222,19 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
                "src must be != dst, because we cant create transactions "
                "during merge, as it breaks reentrancy");
 
-    KIS_ASSERT_RECOVER(m_d->params) { return rc; }
+    KIS_ASSERT_RECOVER(m_d->params) {
+        return rc;
+    }
 
-    if (m_d->params->isHidden()) return rc;
+    if (m_d->params->isHidden()) {
+        return rc;
+    }
     KIS_ASSERT_RECOVER_NOOP(maskPos == N_FILTHY ||
                             maskPos == N_ABOVE_FILTHY ||
                             maskPos == N_BELOW_FILTHY);
 
     if (!m_d->recalculatingStaticImage &&
-        (maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY)) {
+            (maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY)) {
 
         m_d->staticCacheValid = false;
         emit initiateDelayedStaticUpdate();
@@ -236,7 +242,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
 
     if (m_d->recalculatingStaticImage) {
         m_d->staticCacheDevice->clear();
-        m_d->params->transformDevice(const_cast<KisTransformMask*>(this), src, m_d->staticCacheDevice);
+        m_d->params->transformDevice(const_cast<KisTransformMask *>(this), src, m_d->staticCacheDevice);
         dst->makeCloneFrom(m_d->staticCacheDevice, m_d->staticCacheDevice->extent());
 
 #ifdef DEBUG_RENDERING
@@ -288,8 +294,12 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
      * FIXME: This check of the emptiness should be done
      * on the higher/lower level
      */
-    if (rect.isEmpty()) return rect;
-    if (!m_d->params->isAffine()) return rect;
+    if (rect.isEmpty()) {
+        return rect;
+    }
+    if (!m_d->params->isAffine()) {
+        return rect;
+    }
 
     QRect bounds;
     QRect interestRect;
@@ -299,8 +309,8 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
         bounds = parentNode->original()->defaultBounds()->bounds();
         interestRect = parentNode->original()->extent();
     } else {
-        bounds = QRect(0,0,777,777);
-        interestRect = QRect(0,0,888,888);
+        bounds = QRect(0, 0, 777, 777);
+        interestRect = QRect(0, 0, 888, 888);
         qWarning() << "WARNING: transform mask has no parent (change rect)."
                    << "Cannot run safe transformations."
                    << "Will limit bounds to" << ppVar(bounds);
@@ -314,7 +324,7 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
     return changeRect;
 }
 
-QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
+QRect KisTransformMask::needRect(const QRect &rect, PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
 
@@ -322,8 +332,12 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
      * FIXME: This check of the emptiness should be done
      * on the higher/lower level
      */
-    if (rect.isEmpty()) return rect;
-    if (!m_d->params->isAffine()) return rect;
+    if (rect.isEmpty()) {
+        return rect;
+    }
+    if (!m_d->params->isAffine()) {
+        return rect;
+    }
 
     QRect bounds;
     QRect interestRect;
@@ -333,8 +347,8 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
         bounds = parentNode->original()->defaultBounds()->bounds();
         interestRect = parentNode->original()->extent();
     } else {
-        bounds = QRect(0,0,777,777);
-        interestRect = QRect(0,0,888,888);
+        bounds = QRect(0, 0, 777, 777);
+        interestRect = QRect(0, 0, 888, 888);
         qWarning() << "WARNING: transform mask has no parent (need rect)."
                    << "Cannot run safe transformations."
                    << "Will limit bounds to" << ppVar(bounds);
@@ -354,9 +368,9 @@ QRect KisTransformMask::extent() const
 
     QRect partialChangeRect;
     QRect existentProjection;
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer = dynamic_cast<KisLayer *>(parent().data());
     if (parentLayer) {
-        partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
+        partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask *>(this), rc);
         existentProjection = parentLayer->projection()->extent();
     }
 
@@ -369,9 +383,9 @@ QRect KisTransformMask::exactBounds() const
 
     QRect partialChangeRect;
     QRect existentProjection;
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer = dynamic_cast<KisLayer *>(parent().data());
     if (parentLayer) {
-        partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
+        partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask *>(this), rc);
         existentProjection = parentLayer->projection()->exactBounds();
     }
 

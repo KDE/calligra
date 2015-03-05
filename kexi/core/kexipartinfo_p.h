@@ -32,16 +32,17 @@ namespace KexiPart
 class Info::Private
 {
 public:
-    Private(const KService::Ptr& aPtr);
+    Private(const KService::Ptr &aPtr);
 
     //! used in StaticItem class
     Private();
 
-    void getBooleanProperty(const KService::Ptr& aPtr, const char* name, bool* target)
+    void getBooleanProperty(const KService::Ptr &aPtr, const char *name, bool *target)
     {
         QVariant val = aPtr->property(name, QVariant::Bool);
-        if (val.isValid())
+        if (val.isValid()) {
             *target = val.toBool();
+        }
     }
 
     KService::Ptr ptr;
@@ -51,7 +52,7 @@ public:
 //    QString mimeType;
     QString itemIconName;
     QString objectName;
-    
+
     QString partClass;
     /*! Supported modes for dialogs created by this part.
     @see KexiPart::Info::supportedViewModes() */
@@ -60,7 +61,7 @@ public:
     /*! Supported modes for dialogs created by this part in user mode.
     @see KexiPart::Info::supportedUserViewModes() */
     Kexi::ViewModes supportedUserViewModes;
-    
+
     bool broken;
     bool isVisibleInNavigator;
     bool idStoredInPartDatabase;
@@ -75,16 +76,16 @@ class KexiNewObjectAction : public KAction
 {
     Q_OBJECT
 public:
-    KexiNewObjectAction(KexiPart::Info* info, QObject *parent);
+    KexiNewObjectAction(KexiPart::Info *info, QObject *parent);
 
 Q_SIGNALS:
-    void newObjectRequested(KexiPart::Info* info);
+    void newObjectRequested(KexiPart::Info *info);
 
 private Q_SLOTS:
     void slotTriggered();
 
 private:
-    KexiPart::Info* m_info;
+    KexiPart::Info *m_info;
 };
 
 #endif

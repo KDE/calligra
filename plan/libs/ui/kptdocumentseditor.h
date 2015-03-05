@@ -39,22 +39,31 @@ class KPLATOUI_EXPORT DocumentTreeView : public TreeViewBase
 public:
     explicit DocumentTreeView(QWidget *parent);
 
-    DocumentItemModel *model() const { return static_cast<DocumentItemModel*>( TreeViewBase::model() ); }
+    DocumentItemModel *model() const
+    {
+        return static_cast<DocumentItemModel *>(TreeViewBase::model());
+    }
 
-    Documents *documents() const { return model()->documents(); }
-    void setDocuments( Documents *docs ) { model()->setDocuments( docs ); }
+    Documents *documents() const
+    {
+        return model()->documents();
+    }
+    void setDocuments(Documents *docs)
+    {
+        model()->setDocuments(docs);
+    }
 
     Document *currentDocument() const;
-    QList<Document*> selectedDocuments() const;
-    
+    QList<Document *> selectedDocuments() const;
+
     QModelIndexList selectedRows() const;
-    
+
     using QTreeView::selectionChanged;
 Q_SIGNALS:
-    void selectionChanged( const QModelIndexList& );
-    
+    void selectionChanged(const QModelIndexList &);
+
 protected Q_SLOTS:
-    void slotSelectionChanged( const QItemSelection &selected );
+    void slotSelectionChanged(const QItemSelection &selected);
 };
 
 class KPLATOUI_EXPORT DocumentsEditor : public ViewBase
@@ -62,48 +71,54 @@ class KPLATOUI_EXPORT DocumentsEditor : public ViewBase
     Q_OBJECT
 public:
     DocumentsEditor(KoPart *part, KoDocument *doc, QWidget *parent);
-    
+
     void setupGui();
     using ViewBase::draw;
-    virtual void draw( Documents &docs );
+    virtual void draw(Documents &docs);
     virtual void draw();
 
-    DocumentItemModel *model() const { return m_view->model(); }
-    
-    virtual void updateReadWrite( bool readwrite );
+    DocumentItemModel *model() const
+    {
+        return m_view->model();
+    }
+
+    virtual void updateReadWrite(bool readwrite);
 
     virtual Document *currentDocument() const;
-    
+
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
-    
-    DocumentTreeView *view() const { return m_view; }
-    
+    virtual void saveContext(QDomElement &/*context*/) const;
+
+    DocumentTreeView *view() const
+    {
+        return m_view;
+    }
+
 Q_SIGNALS:
     void addDocument();
-    void deleteDocumentList( const QList<Document*>& );
-    void editDocument( Document *doc );
-    void viewDocument( Document *doc );
-    
+    void deleteDocumentList(const QList<Document *> &);
+    void editDocument(Document *doc);
+    void viewDocument(Document *doc);
+
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
 protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
-    void updateActionsEnabled(  bool on = true );
+    void updateActionsEnabled(bool on = true);
 
 private Q_SLOTS:
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
-    void slotHeaderContextMenuRequested( const QPoint &pos );
-    
-    void slotSelectionChanged( const QModelIndexList& );
-    void slotCurrentChanged( const QModelIndex& );
-    void slotEnableActions( bool on );
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
+    void slotHeaderContextMenuRequested(const QPoint &pos);
+
+    void slotSelectionChanged(const QModelIndexList &);
+    void slotCurrentChanged(const QModelIndex &);
+    void slotEnableActions(bool on);
 
     void slotEditDocument();
     void slotViewDocument();

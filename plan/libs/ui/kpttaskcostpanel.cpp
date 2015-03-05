@@ -35,40 +35,41 @@ TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const c
     : TaskCostPanelImpl(p, n),
       m_task(task),
       m_accounts(accounts),
-      m_locale( 0 )
+      m_locale(0)
 {
-    const Project *project = qobject_cast<const Project*>( task.projectNode() );
-    if ( project ) {
+    const Project *project = qobject_cast<const Project *>(task.projectNode());
+    if (project) {
         m_locale = project->locale();
     }
-    if ( m_locale == 0 ) {
+    if (m_locale == 0) {
         m_locale = KGlobal::locale();
     }
     m_accountList << i18n("None");
     m_accountList += accounts.costElements();
 
-    if ( task.isBaselined( BASELINESCHEDULE ) ) {
-        runningGroup->setEnabled( false );
-        startupGroup->setEnabled( false );
-        shutdownGroup->setEnabled( false );
+    if (task.isBaselined(BASELINESCHEDULE)) {
+        runningGroup->setEnabled(false);
+        startupGroup->setEnabled(false);
+        shutdownGroup->setEnabled(false);
     }
     setStartValues(task);
 }
 
-void TaskCostPanel::setStartValues(Task &task) {
+void TaskCostPanel::setStartValues(Task &task)
+{
     runningAccount->addItems(m_accountList);
     m_oldrunning = m_accounts.findRunningAccount(task);
     if (m_oldrunning) {
         setCurrentItem(runningAccount, m_oldrunning->name());
     }
-    
+
     startupCost->setText(m_locale->formatMoney(task.startupCost()));
     startupAccount->addItems(m_accountList);
     m_oldstartup = m_accounts.findStartupAccount(task);
     if (m_oldstartup) {
         setCurrentItem(startupAccount, m_oldstartup->name());
     }
-    
+
     shutdownCost->setText(m_locale->formatMoney(task.shutdownCost()));
     shutdownAccount->addItems(m_accountList);
     m_oldshutdown = m_accounts.findShutdownAccount(task);
@@ -77,7 +78,8 @@ void TaskCostPanel::setStartValues(Task &task) {
     }
 }
 
-void TaskCostPanel::setCurrentItem(QComboBox *box, const QString& name) {
+void TaskCostPanel::setCurrentItem(QComboBox *box, const QString &name)
+{
     box->setCurrentIndex(0);
     for (int i = 0; i < box->count(); ++i) {
         if (name == box->itemText(i)) {
@@ -87,22 +89,23 @@ void TaskCostPanel::setCurrentItem(QComboBox *box, const QString& name) {
     }
 }
 
-MacroCommand *TaskCostPanel::buildCommand() {
+MacroCommand *TaskCostPanel::buildCommand()
+{
     MacroCommand *cmd = new MacroCommand(kundo2_i18n("Modify Task Cost"));
     bool modified = false;
-    
+
     if ((m_oldrunning == 0 && runningAccount->currentIndex() != 0) ||
-        (m_oldrunning && m_oldrunning->name() != runningAccount->currentText())) {
+            (m_oldrunning && m_oldrunning->name() != runningAccount->currentText())) {
         cmd->addCommand(new NodeModifyRunningAccountCmd(m_task, m_oldrunning, m_accounts.findAccount(runningAccount->currentText())));
         modified = true;
     }
     if ((m_oldstartup == 0 && startupAccount->currentIndex() != 0) ||
-        (m_oldstartup && m_oldstartup->name() != startupAccount->currentText())) {
+            (m_oldstartup && m_oldstartup->name() != startupAccount->currentText())) {
         cmd->addCommand(new NodeModifyStartupAccountCmd(m_task, m_oldstartup,  m_accounts.findAccount(startupAccount->currentText())));
         modified = true;
     }
     if ((m_oldshutdown == 0 && shutdownAccount->currentIndex() != 0) ||
-        (m_oldshutdown && m_oldshutdown->name() != shutdownAccount->currentText())) {
+            (m_oldshutdown && m_oldshutdown->name() != shutdownAccount->currentText())) {
         cmd->addCommand(new NodeModifyShutdownAccountCmd(m_task, m_oldshutdown,  m_accounts.findAccount(shutdownAccount->currentText())));
         modified = true;
     }
@@ -123,32 +126,32 @@ MacroCommand *TaskCostPanel::buildCommand() {
     return cmd;
 }
 
-bool TaskCostPanel::ok() {
+bool TaskCostPanel::ok()
+{
     if (runningAccount->currentIndex() == 0 ||
-        m_accounts.findAccount(runningAccount->currentText()) == 0) {
+            m_accounts.findAccount(runningAccount->currentText()) == 0) {
         //message
         return false;
     }
     if (startupAccount->currentIndex() == 0 ||
-        m_accounts.findAccount(startupAccount->currentText()) == 0) {
+            m_accounts.findAccount(startupAccount->currentText()) == 0) {
         //message
         return false;
     }
     if (shutdownAccount->currentIndex() == 0 ||
-        m_accounts.findAccount(shutdownAccount->currentText()) == 0) {
+            m_accounts.findAccount(shutdownAccount->currentText()) == 0) {
         //message
         return false;
     }
     return true;
 }
 
-
 TaskCostPanelImpl::TaskCostPanelImpl(QWidget *p, const char *n)
     : QWidget(p)
 {
     setObjectName(n);
     setupUi(this);
-    
+
     connect(runningAccount, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(startupAccount, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(shutdownAccount, SIGNAL(activated(int)), SLOT(slotChanged()));
@@ -156,7 +159,8 @@ TaskCostPanelImpl::TaskCostPanelImpl(QWidget *p, const char *n)
     connect(shutdownCost, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
 }
 
-void TaskCostPanelImpl::slotChanged() {
+void TaskCostPanelImpl::slotChanged()
+{
     emit changed();
 }
 

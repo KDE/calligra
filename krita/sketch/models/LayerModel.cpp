@@ -44,11 +44,11 @@
 
 struct LayerModelMetaInfo {
     LayerModelMetaInfo()
-    : canMoveUp(false)
-    , canMoveRight(false)
-    , canMoveDown(false)
-    , canMoveLeft(false)
-    , depth(-1)
+        : canMoveUp(false)
+        , canMoveRight(false)
+        , canMoveDown(false)
+        , canMoveLeft(false)
+        , depth(-1)
     {}
     bool canMoveUp;
     bool canMoveRight;
@@ -57,9 +57,10 @@ struct LayerModelMetaInfo {
     int depth;
 };
 
-class LayerModel::Private {
+class LayerModel::Private
+{
 public:
-    Private(LayerModel* qq)
+    Private(LayerModel *qq)
         : q(qq)
         , nodeModel(new KisNodeModel(qq))
         , aboutToRemoveRoots(false)
@@ -73,8 +74,7 @@ public:
         , imageChangedTimer(new QTimer(qq))
     {
         QList<KisFilterSP> tmpFilters = KisFilterRegistry::instance()->values();
-        foreach(const KisFilterSP& filter, tmpFilters)
-        {
+        foreach (const KisFilterSP &filter, tmpFilters) {
             filters[filter.data()->id()] = filter.data();
         }
         updateActiveLayerWithNewFilterConfigTimer->setInterval(0);
@@ -86,24 +86,24 @@ public:
         connect(imageChangedTimer, SIGNAL(timeout()), qq, SLOT(imageHasChanged()));
     }
 
-    LayerModel* q;
+    LayerModel *q;
     QList<KisNodeSP> layers;
-    QHash<const KisNode*, LayerModelMetaInfo> layerMeta;
-    KisNodeModel* nodeModel;
+    QHash<const KisNode *, LayerModelMetaInfo> layerMeta;
+    KisNodeModel *nodeModel;
     bool aboutToRemoveRoots;
-    KisViewManager* view;
-    KisCanvas2* canvas;
+    KisViewManager *view;
+    KisCanvas2 *canvas;
     QPointer<KisNodeManager> nodeManager;
     KisImageWSP image;
     KisNodeSP activeNode;
-    QDeclarativeEngine* declarativeEngine;
-    LayerThumbProvider* thumbProvider;
-    QHash<QString, const KisFilter*> filters;
+    QDeclarativeEngine *declarativeEngine;
+    LayerThumbProvider *thumbProvider;
+    QHash<QString, const KisFilter *> filters;
 
-    KisFilterConfiguration* newConfig;
-    QTimer* updateActiveLayerWithNewFilterConfigTimer;
+    KisFilterConfiguration *newConfig;
+    QTimer *updateActiveLayerWithNewFilterConfigTimer;
 
-    QTimer* imageChangedTimer;
+    QTimer *imageChangedTimer;
     static int counter()
     {
         static int count = 0;
@@ -124,21 +124,20 @@ public:
     {
         quint32 childCount = layer->childCount();
         QList<KisNodeSP> children = layer->childNodes(layerClassNames(), KoProperties());
-        for(quint32 i = 0; i < childCount; ++i)
+        for (quint32 i = 0; i < childCount; ++i) {
             childCount += deepChildCount(children.at(i));
+        }
         return childCount;
     }
 
     void rebuildLayerList(KisNodeSP layer = 0)
     {
         bool refreshingFromRoot = false;
-        if (!image)
-        {
+        if (!image) {
             layers.clear();
             return;
         }
-        if (layer == 0)
-        {
+        if (layer == 0) {
             refreshingFromRoot = true;
             layers.clear();
             layer = image->rootLayer();
@@ -146,53 +145,57 @@ public:
         // implementation node: The root node is not a visible node, and so
         // is never added to the list of layers
         QList<KisNodeSP> children = layer->childNodes(layerClassNames(), KoProperties());
-        if (children.count() == 0)
+        if (children.count() == 0) {
             return;
-        for(quint32 i = children.count(); i > 0; --i)
-        {
-            layers << children.at(i-1);
-            rebuildLayerList(children.at(i-1));
+        }
+        for (quint32 i = children.count(); i > 0; --i) {
+            layers << children.at(i - 1);
+            rebuildLayerList(children.at(i - 1));
         }
 
-        if (refreshingFromRoot)
+        if (refreshingFromRoot) {
             refreshLayerMovementAbilities();
+        }
     }
 
     void refreshLayerMovementAbilities()
     {
         layerMeta.clear();
-        if (layers.count() == 0)
+        if (layers.count() == 0) {
             return;
-        for(int i = 0; i < layers.count(); ++i)
-        {
+        }
+        for (int i = 0; i < layers.count(); ++i) {
             const KisNodeSP layer = layers.at(i);
             LayerModelMetaInfo ability;
 
-            if (i > 0)
+            if (i > 0) {
                 ability.canMoveUp = true;
+            }
 
-            if (i < layers.count() - 1)
+            if (i < layers.count() - 1) {
                 ability.canMoveDown = true;
+            }
 
             KisNodeSP parent = layer;
-            while(parent)
-            {
+            while (parent) {
                 ++ability.depth;
                 parent = parent->parent();
             }
 
-            if (ability.depth > 1)
+            if (ability.depth > 1) {
                 ability.canMoveLeft = true;
+            }
 
-            if (i < layers.count() - 1 && qobject_cast<const KisGroupLayer*>(layers.at(i + 1).constData()))
+            if (i < layers.count() - 1 && qobject_cast<const KisGroupLayer *>(layers.at(i + 1).constData())) {
                 ability.canMoveRight = true;
+            }
 
             layerMeta[layer] = ability;
         }
     }
 };
 
-LayerModel::LayerModel(QObject* parent)
+LayerModel::LayerModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private(this))
 {
@@ -217,15 +220,15 @@ LayerModel::LayerModel(QObject* parent)
     roles[CanMoveUpRole] = "canMoveUp";
     setRoleNames(roles);
 
-    connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)),
-            this, SLOT(source_rowsAboutToBeInserted(QModelIndex, int, int)));
-    connect(d->nodeModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
-            this, SLOT(source_rowsInserted(QModelIndex, int, int)));
+    connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
+            this, SLOT(source_rowsAboutToBeInserted(QModelIndex,int,int)));
+    connect(d->nodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this, SLOT(source_rowsInserted(QModelIndex,int,int)));
 
-    connect(d->nodeModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-            this, SLOT(source_rowsAboutToBeRemoved(QModelIndex, int, int)));
-    connect(d->nodeModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-            this, SLOT(source_rowsRemoved(QModelIndex, int, int)));
+    connect(d->nodeModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+            this, SLOT(source_rowsAboutToBeRemoved(QModelIndex,int,int)));
+    connect(d->nodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            this, SLOT(source_rowsRemoved(QModelIndex,int,int)));
 
     connect(d->nodeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this, SLOT(source_dataChanged(QModelIndex,QModelIndex)));
@@ -241,14 +244,14 @@ LayerModel::~LayerModel()
     delete d;
 }
 
-QObject* LayerModel::view() const
+QObject *LayerModel::view() const
 {
     return d->view;
 }
 
 void LayerModel::setView(QObject *newView)
 {
-    KisViewManager* view = qobject_cast<KisViewManager*>(newView);
+    KisViewManager *view = qobject_cast<KisViewManager *>(newView);
     // This has to happen very early, and we will be filling it back up again soon anyway...
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this);
@@ -280,8 +283,8 @@ void LayerModel::setView(QObject *newView)
         d->image = d->canvas->imageView()->image();
         d->nodeManager = d->canvas->viewManager()->nodeManager();
 
-        KisDummiesFacadeBase *kritaDummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(d->canvas->imageView()->document()->shapeController());
-        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(d->canvas->imageView()->document()->shapeController());
+        KisDummiesFacadeBase *kritaDummiesFacade = dynamic_cast<KisDummiesFacadeBase *>(d->canvas->imageView()->document()->shapeController());
+        KisShapeController *shapeController = dynamic_cast<KisShapeController *>(d->canvas->imageView()->document()->shapeController());
         d->nodeModel->setDummiesFacade(kritaDummiesFacade, d->image, shapeController);
 
         connect(d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
@@ -301,23 +304,23 @@ void LayerModel::setView(QObject *newView)
         connect(d->nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(currentNodeChanged(KisNodeSP)));
 
         // Node manipulation methods are forwarded to the node manager
-        connect(d->nodeModel, SIGNAL(requestAddNode(KisNodeSP, KisNodeSP, KisNodeSP)),
-                d->nodeManager, SLOT(addNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
-        connect(d->nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, KisNodeSP)),
-                d->nodeManager, SLOT(moveNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
+        connect(d->nodeModel, SIGNAL(requestAddNode(KisNodeSP,KisNodeSP,KisNodeSP)),
+                d->nodeManager, SLOT(addNodeDirect(KisNodeSP,KisNodeSP,KisNodeSP)));
+        connect(d->nodeModel, SIGNAL(requestMoveNode(KisNodeSP,KisNodeSP,KisNodeSP)),
+                d->nodeManager, SLOT(moveNodeDirect(KisNodeSP,KisNodeSP,KisNodeSP)));
         d->rebuildLayerList();
         reset();
     }
 }
 
-QObject* LayerModel::engine() const
+QObject *LayerModel::engine() const
 {
     return d->declarativeEngine;
 }
 
-void LayerModel::setEngine(QObject* newEngine)
+void LayerModel::setEngine(QObject *newEngine)
 {
-    d->declarativeEngine = qobject_cast<QDeclarativeEngine*>(newEngine);
+    d->declarativeEngine = qobject_cast<QDeclarativeEngine *>(newEngine);
     emit engineChanged();
 }
 
@@ -340,28 +343,30 @@ void LayerModel::currentNodeChanged(KisNodeSP newActiveNode)
     }
 }
 
-QVariant LayerModel::data(const QModelIndex& index, int role) const
+QVariant LayerModel::data(const QModelIndex &index, int role) const
 {
     QVariant data;
     if (index.isValid()) {
         index.internalPointer();
         KisNodeSP node = d->layers.at(index.row());
-        if (node.isNull())
+        if (node.isNull()) {
             return data;
+        }
         KisNodeSP parent;
-        switch(role)
-        {
+        switch (role) {
         case IconRole:
-            if (dynamic_cast<const KisGroupLayer*>(node.constData()))
+            if (dynamic_cast<const KisGroupLayer *>(node.constData())) {
                 data = QLatin1String("../images/svg/icon-layer_group-black.svg");
-            else if (dynamic_cast<const KisFilterMask*>(node.constData()))
+            } else if (dynamic_cast<const KisFilterMask *>(node.constData())) {
                 data = QLatin1String("../images/svg/icon-layer_filter-black.svg");
-            else if (dynamic_cast<const KisAdjustmentLayer*>(node.constData()))
+            } else if (dynamic_cast<const KisAdjustmentLayer *>(node.constData())) {
                 data = QLatin1String("../images/svg/icon-layer_filter-black.svg");
-            else
+            } else
                 // We add the currentMSecsSinceEpoch to ensure we force an update (even with cache turned
                 // off, we still apparently get some caching behaviour on delegates in QML)
+            {
                 data = QString("image://layerthumb%1/%2/%3").arg(d->thumbProvider->layerID()).arg(index.row()).arg(QDateTime::currentMSecsSinceEpoch());
+            }
             break;
         case NameRole:
             data = node->name();
@@ -383,8 +388,9 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
             break;
         case CompositeDetailsRole:
             // composite op goes here...
-            if (node->compositeOp())
+            if (node->compositeOp()) {
                 data = node->compositeOp()->description();
+            }
             break;
         case FilterRole:
             break;
@@ -398,16 +404,18 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
             data = d->layerMeta[node.data()].depth;
             break;
         case PreviousItemDepthRole:
-            if (index.row() == 0)
+            if (index.row() == 0) {
                 data = -1;
-            else
+            } else {
                 data = d->layerMeta[d->layers[index.row() - 1].data()].depth;
+            }
             break;
         case NextItemDepthRole:
-            if (index.row() == d->layers.count() - 1)
+            if (index.row() == d->layers.count() - 1) {
                 data = -1;
-            else
+            } else {
                 data = d->layerMeta[d->layers[index.row() + 1].data()].depth;
+            }
             break;
         case CanMoveDownRole:
             data = (node == d->activeNode) && d->layerMeta[node.data()].canMoveDown;
@@ -428,9 +436,9 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
     return data;
 }
 
-int LayerModel::rowCount(const QModelIndex& parent) const
+int LayerModel::rowCount(const QModelIndex &parent) const
 {
-    if ( parent.isValid() ) {
+    if (parent.isValid()) {
         return 0;
     }
     return d->layers.count();
@@ -458,15 +466,16 @@ void LayerModel::moveUp()
 
     if (!d->nodeManager->activeNode()->nextSibling()) {
         //qDebug() << "Active node apparently has no next sibling, however that has happened...";
-        if (!grandParent)
+        if (!grandParent) {
             return;
+        }
         //qDebug() << "Node has grandparent";
-        if (!grandParent->parent() && node->inherits("KisMask"))
+        if (!grandParent->parent() && node->inherits("KisMask")) {
             return;
+        }
         //qDebug() << "Node isn't a mask";
         d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
-    }
-    else {
+    } else {
         //qDebug() << "Move node directly";
         d->nodeManager->lowerNode();
     }
@@ -480,15 +489,16 @@ void LayerModel::moveDown()
 
     if (!d->nodeManager->activeNode()->prevSibling()) {
         //qDebug() << "Active node apparently has no previous sibling, however that has happened...";
-        if (!grandParent)
+        if (!grandParent) {
             return;
+        }
         //qDebug() << "Node has grandparent";
-        if (!grandParent->parent() && node->inherits("KisMask"))
+        if (!grandParent->parent() && node->inherits("KisMask")) {
             return;
+        }
         //qDebug() << "Node isn't a mask";
         d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
-    } else
-    {
+    } else {
         //qDebug() << "Move node directly";
         d->nodeManager->raiseNode();
     }
@@ -501,15 +511,16 @@ void LayerModel::moveLeft()
     KisNodeSP grandParent = parent->parent();
     quint16 nodeIndex = parent->index(node);
 
-    if (!grandParent)
+    if (!grandParent) {
         return;
-    if (!grandParent->parent() && node->inherits("KisMask"))
+    }
+    if (!grandParent->parent() && node->inherits("KisMask")) {
         return;
+    }
 
     if (nodeIndex <= parent->childCount() / 2) {
         d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
-    }
-    else {
+    } else {
         d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
     }
 }
@@ -526,12 +537,10 @@ void LayerModel::moveRight()
     if (parent->at(indexBelow) && parent->at(indexBelow)->allowAsChild(node)) {
         newParent = parent->at(indexBelow);
         d->nodeManager->moveNodeAt(node, newParent, newParent->childCount());
-    }
-    else if (parent->at(indexAbove) && parent->at(indexAbove)->allowAsChild(node)) {
+    } else if (parent->at(indexAbove) && parent->at(indexAbove)->allowAsChild(node)) {
         newParent = parent->at(indexAbove);
         d->nodeManager->moveNodeAt(node, newParent, 0);
-    }
-    else {
+    } else {
         return;
     }
 }
@@ -549,8 +558,9 @@ void LayerModel::clone()
 void LayerModel::setLocked(int index, bool newLocked)
 {
     if (index > -1 && index < d->layers.count()) {
-        if(d->layers[index]->userLocked() == newLocked)
+        if (d->layers[index]->userLocked() == newLocked) {
             return;
+        }
         d->layers[index]->setUserLocked(newLocked);
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);
@@ -560,8 +570,9 @@ void LayerModel::setLocked(int index, bool newLocked)
 void LayerModel::setOpacity(int index, float newOpacity)
 {
     if (index > -1 && index < d->layers.count()) {
-        if(qFuzzyCompare(d->layers[index]->opacity() + 1, newOpacity + 1))
+        if (qFuzzyCompare(d->layers[index]->opacity() + 1, newOpacity + 1)) {
             return;
+        }
         d->layers[index]->setOpacity(newOpacity);
         d->layers[index]->setDirty();
         QModelIndex idx = createIndex(index, 0);
@@ -574,10 +585,11 @@ void LayerModel::setVisible(int index, bool newVisible)
     if (index > -1 && index < d->layers.count()) {
         KisDocumentSectionModel::PropertyList props = d->layers[index]->sectionModelProperties();
         KisDocumentSectionModel::Property prop = props[0];
-        if(props[0].state == newVisible)
+        if (props[0].state == newVisible) {
             return;
+        }
         props[0] = KisDocumentSectionModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
-        d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KisDocumentSectionModel::PropertyList>(props), KisDocumentSectionModel::PropertiesRole );
+        d->nodeModel->setData(d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KisDocumentSectionModel::PropertyList>(props), KisDocumentSectionModel::PropertiesRole);
         d->layers[index]->setDirty(d->layers[index]->extent());
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);
@@ -592,8 +604,9 @@ QImage LayerModel::layerThumbnail(QString layerID) const
     int index = layerID.section(QChar('/'), 0, 0).toInt();
     QImage thumb;
     if (index > -1 && index < d->layers.count()) {
-        if (d->thumbProvider)
+        if (d->thumbProvider) {
             thumb = d->layers[index]->createThumbnail(120, 120);
+        }
     }
     return thumb;
 }
@@ -607,8 +620,9 @@ void LayerModel::deleteCurrentLayer()
 void LayerModel::deleteLayer(int index)
 {
     if (index > -1 && index < d->layers.count()) {
-        if (d->activeNode == d->layers.at(index))
+        if (d->activeNode == d->layers.at(index)) {
             d->activeNode.clear();
+        }
         d->nodeManager->slotUiActivatedNode(d->layers.at(index));
         d->nodeManager->removeNode();
         d->rebuildLayerList();
@@ -618,18 +632,18 @@ void LayerModel::deleteLayer(int index)
 
 void LayerModel::addLayer(int layerType)
 {
-    switch(layerType) {
-        case 0:
-            d->nodeManager->createNode("KisPaintLayer");
-            break;
-        case 1:
-            d->nodeManager->createNode("KisGroupLayer");
-            break;
-        case 2:
-            d->nodeManager->createNode("KisFilterMask", true);
-            break;
-        default:
-            break;
+    switch (layerType) {
+    case 0:
+        d->nodeManager->createNode("KisPaintLayer");
+        break;
+    case 1:
+        d->nodeManager->createNode("KisGroupLayer");
+        break;
+    case 2:
+        d->nodeManager->createNode("KisFilterMask", true);
+        break;
+    default:
+        break;
     }
 }
 
@@ -659,9 +673,9 @@ void LayerModel::source_rowsRemoved(QModelIndex, int, int)
 
 void LayerModel::source_dataChanged(QModelIndex /*tl*/, QModelIndex /*br*/)
 {
-        QModelIndex top = createIndex(0, 0);
-        QModelIndex bottom = createIndex(d->layers.count() - 1, 0);
-        dataChanged(top, bottom);
+    QModelIndex top = createIndex(0, 0);
+    QModelIndex bottom = createIndex(d->layers.count() - 1, 0);
+    dataChanged(top, bottom);
 }
 
 void LayerModel::source_modelReset()
@@ -669,8 +683,7 @@ void LayerModel::source_modelReset()
     beginResetModel();
     d->rebuildLayerList();
     d->activeNode.clear();
-    if (d->layers.count() > 0)
-    {
+    if (d->layers.count() > 0) {
         d->nodeManager->slotUiActivatedNode(d->layers.at(0));
         currentNodeChanged(d->layers.at(0));
     }
@@ -727,15 +740,17 @@ void LayerModel::emitActiveChanges()
 
 QString LayerModel::activeName() const
 {
-    if (d->activeNode.isNull())
+    if (d->activeNode.isNull()) {
         return QString();
+    }
     return d->activeNode->name();
 }
 
 void LayerModel::setActiveName(QString newName)
 {
-    if (d->activeNode.isNull())
+    if (d->activeNode.isNull()) {
         return;
+    }
     d->activeNode->setName(newName);
     emit activeNameChanged();
 }
@@ -747,22 +762,24 @@ QString LayerModel::activeType() const
 
 int LayerModel::activeCompositeOp() const
 {
-    if (d->activeNode.isNull())
+    if (d->activeNode.isNull()) {
         return 0;
+    }
     KoID entry(d->activeNode->compositeOp()->id());
     QModelIndex idx = KisCompositeOpListModel::sharedInstance()->indexOf(entry);
-    if (idx.isValid())
+    if (idx.isValid()) {
         return idx.row();
+    }
     return 0;
 }
 
 void LayerModel::setActiveCompositeOp(int newOp)
 {
-    if (d->activeNode.isNull())
+    if (d->activeNode.isNull()) {
         return;
+    }
     KoID entry;
-    if (KisCompositeOpListModel::sharedInstance()->entryAt(entry, KisCompositeOpListModel::sharedInstance()->index(newOp)))
-    {
+    if (KisCompositeOpListModel::sharedInstance()->entryAt(entry, KisCompositeOpListModel::sharedInstance()->index(newOp))) {
         d->activeNode->setCompositeOp(entry.id());
         d->activeNode->setDirty();
         emit activeCompositeOpChanged();
@@ -771,8 +788,9 @@ void LayerModel::setActiveCompositeOp(int newOp)
 
 int LayerModel::activeOpacity() const
 {
-    if (d->activeNode.isNull())
+    if (d->activeNode.isNull()) {
         return 0;
+    }
     return d->activeNode->opacity();
 }
 
@@ -784,48 +802,53 @@ void LayerModel::setActiveOpacity(int newOpacity)
 }
 
 bool LayerModel::activeVisible() const
-{    if (d->activeNode.isNull())
+{
+    if (d->activeNode.isNull()) {
         return false;
+    }
     return d->activeNode->visible();
 }
 
 void LayerModel::setActiveVisibile(bool newVisible)
 {
-    if (d->activeNode.isNull())
+    if (d->activeNode.isNull()) {
         return;
+    }
     setVisible(d->layers.indexOf(d->activeNode), newVisible);
     emit activeVisibleChanged();
 }
 
 bool LayerModel::activeLocked() const
 {
-    if (d->activeNode.isNull())
+    if (d->activeNode.isNull()) {
         return false;
+    }
     return d->activeNode->userLocked();
 }
 
 void LayerModel::setActiveLocked(bool newLocked)
 {
-    if (d->activeNode.isNull())
+    if (d->activeNode.isNull()) {
         return;
+    }
     d->activeNode->setUserLocked(newLocked);
     emit activeLockedChanged();
 }
 
 bool LayerModel::activeAChannelActive() const
 {
-    KisLayer* layer = qobject_cast<KisLayer*>(d->activeNode.data());
+    KisLayer *layer = qobject_cast<KisLayer *>(d->activeNode.data());
     bool state = false;
-    if (layer)
+    if (layer) {
         state = !layer->alphaChannelDisabled();
+    }
     return state;
 }
 
 void LayerModel::setActiveAChannelActive(bool newActive)
 {
-    KisLayer* layer = qobject_cast<KisLayer*>(d->activeNode.data());
-    if (layer)
-    {
+    KisLayer *layer = qobject_cast<KisLayer *>(d->activeNode.data());
+    if (layer) {
         layer->disableAlphaChannel(!newActive);
         layer->setDirty();
         emit activeAChannelActiveChanged();
@@ -834,18 +857,18 @@ void LayerModel::setActiveAChannelActive(bool newActive)
 
 bool LayerModel::activeAChannelLocked() const
 {
-    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(d->activeNode.data());
+    KisPaintLayer *layer = qobject_cast<KisPaintLayer *>(d->activeNode.data());
     bool state = false;
-    if (layer)
+    if (layer) {
         state = layer->alphaLocked();
+    }
     return state;
 }
 
 void LayerModel::setActiveAChannelLocked(bool newLocked)
 {
-    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(d->activeNode.data());
-    if (layer)
-    {
+    KisPaintLayer *layer = qobject_cast<KisPaintLayer *>(d->activeNode.data());
+    if (layer) {
         layer->setAlphaLocked(newLocked);
         emit activeAChannelLockedChanged();
     }
@@ -853,10 +876,9 @@ void LayerModel::setActiveAChannelLocked(bool newLocked)
 
 bool getActiveChannel(KisNodeSP node, int channelIndex)
 {
-    KisLayer* layer = qobject_cast<KisLayer*>(node.data());
+    KisLayer *layer = qobject_cast<KisLayer *>(node.data());
     bool flag = false;
-    if (layer)
-    {
+    if (layer) {
         QBitArray flags = layer->channelFlags();
         if (channelIndex < flags.size()) {
             flag = flags[channelIndex];
@@ -867,7 +889,7 @@ bool getActiveChannel(KisNodeSP node, int channelIndex)
 
 bool getLockedChannel(KisNodeSP node, int channelIndex)
 {
-    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(node.data());
+    KisPaintLayer *layer = qobject_cast<KisPaintLayer *>(node.data());
     bool flag = false;
     if (layer) {
         QBitArray flags = layer->channelLockFlags();
@@ -879,7 +901,7 @@ bool getLockedChannel(KisNodeSP node, int channelIndex)
 
 void setChannelActive(KisNodeSP node, int channelIndex, bool newActive)
 {
-    KisLayer* layer = qobject_cast<KisLayer*>(node.data());
+    KisLayer *layer = qobject_cast<KisLayer *>(node.data());
     if (layer) {
         QBitArray flags = layer->channelFlags();
         flags.setBit(channelIndex, newActive);
@@ -890,7 +912,7 @@ void setChannelActive(KisNodeSP node, int channelIndex, bool newActive)
 
 void setChannelLocked(KisNodeSP node, int channelIndex, bool newLocked)
 {
-    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(node.data());
+    KisPaintLayer *layer = qobject_cast<KisPaintLayer *>(node.data());
     if (layer) {
         QBitArray flags = layer->channelLockFlags();
         flags = flags.isEmpty() ? layer->colorSpace()->channelFlags(true, true) : flags;
@@ -965,45 +987,44 @@ void LayerModel::setActiveRChannelLocked(bool newLocked)
     emit activeRChannelLockedChanged();
 }
 
-QObject* LayerModel::activeFilterConfig() const
+QObject *LayerModel::activeFilterConfig() const
 {
     QMap<QString, QVariant> props;
     QString filterId;
-    KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
+    KisFilterMask *filterMask = qobject_cast<KisFilterMask *>(d->activeNode.data());
     if (filterMask) {
         props = filterMask->filter()->getProperties();
         filterId = filterMask->filter()->name();
-    }
-    else {
-        KisAdjustmentLayer* adjustmentLayer = qobject_cast<KisAdjustmentLayer*>(d->activeNode.data());
-        if (adjustmentLayer)
-        {
+    } else {
+        KisAdjustmentLayer *adjustmentLayer = qobject_cast<KisAdjustmentLayer *>(d->activeNode.data());
+        if (adjustmentLayer) {
             props = adjustmentLayer->filter()->getProperties();
             filterId = adjustmentLayer->filter()->name();
         }
     }
-    PropertyContainer* config = new PropertyContainer(filterId, 0);
+    PropertyContainer *config = new PropertyContainer(filterId, 0);
     QMap<QString, QVariant>::const_iterator i;
-    for(i = props.constBegin(); i != props.constEnd(); ++i) {
+    for (i = props.constBegin(); i != props.constEnd(); ++i) {
         config->setProperty(i.key().toLatin1(), i.value());
         //qDebug() << "Getting active config..." << i.key() << i.value();
     }
     return config;
 }
 
-void LayerModel::setActiveFilterConfig(QObject* newConfig)
+void LayerModel::setActiveFilterConfig(QObject *newConfig)
 {
-    if (d->activeNode.isNull())
+    if (d->activeNode.isNull()) {
         return;
-    PropertyContainer* config = qobject_cast<PropertyContainer*>(newConfig);
-    if (!config)
+    }
+    PropertyContainer *config = qobject_cast<PropertyContainer *>(newConfig);
+    if (!config) {
         return;
+    }
 
     //qDebug() << "Attempting to set new config" << config->name();
-    KisFilterConfiguration* realConfig = d->filters.value(config->name())->factoryConfiguration(d->activeNode->original());
+    KisFilterConfiguration *realConfig = d->filters.value(config->name())->factoryConfiguration(d->activeNode->original());
     QMap<QString, QVariant>::const_iterator i;
-    for(i = realConfig->getProperties().constBegin(); i != realConfig->getProperties().constEnd(); ++i)
-    {
+    for (i = realConfig->getProperties().constBegin(); i != realConfig->getProperties().constEnd(); ++i) {
         realConfig->setProperty(i.key(), config->property(i.key().toLatin1()));
         //qDebug() << "Creating config..." << i.key() << i.value();
     }
@@ -1019,31 +1040,28 @@ void LayerModel::setActiveFilterConfig(QObject* newConfig)
 
 void LayerModel::updateActiveLayerWithNewFilterConfig()
 {
-    if (!d->newConfig)
+    if (!d->newConfig) {
         return;
+    }
     //qDebug() << "Setting new config..." << d->newConfig->name();
-    KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
-    if (filterMask)
-    {
+    KisFilterMask *filterMask = qobject_cast<KisFilterMask *>(d->activeNode.data());
+    if (filterMask) {
         //qDebug() << "Filter mask";
-        if (filterMask->filter() == d->newConfig)
+        if (filterMask->filter() == d->newConfig) {
             return;
+        }
         //qDebug() << "Setting filter mask";
         filterMask->setFilter(d->newConfig);
-    }
-    else
-    {
-        KisAdjustmentLayer* adjustmentLayer = qobject_cast<KisAdjustmentLayer*>(d->activeNode.data());
-        if (adjustmentLayer)
-        {
+    } else {
+        KisAdjustmentLayer *adjustmentLayer = qobject_cast<KisAdjustmentLayer *>(d->activeNode.data());
+        if (adjustmentLayer) {
             //qDebug() << "Adjustment layer";
-            if (adjustmentLayer->filter() == d->newConfig)
+            if (adjustmentLayer->filter() == d->newConfig) {
                 return;
+            }
             //qDebug() << "Setting filter on adjustment layer";
             adjustmentLayer->setFilter(d->newConfig);
-        }
-        else
-        {
+        } else {
             //qDebug() << "UNKNOWN, BAIL OUT!";
         }
     }

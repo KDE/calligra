@@ -53,40 +53,41 @@
 #include "KPrShapeAnimations.h"
 #include "animations/KPrAnimationCache.h"
 
-KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage )
-: m_view( view )
-, m_canvas( canvas )
-, m_pages( pages )
-, m_pageEffectRunner( 0 )
-, m_stepIndex( 0 )
-, m_maxShapeDuration( 0 )
-, m_hasAnimation( false )
-, m_animationCache( 0 )
+KPrAnimationDirector::KPrAnimationDirector(KoPAView *view, KoPACanvas *canvas, const QList<KoPAPageBase *> &pages, KoPAPageBase *currentPage)
+    : m_view(view)
+    , m_canvas(canvas)
+    , m_pages(pages)
+    , m_pageEffectRunner(0)
+    , m_stepIndex(0)
+    , m_maxShapeDuration(0)
+    , m_hasAnimation(false)
+    , m_animationCache(0)
 {
-    Q_ASSERT( !m_pages.empty() );
+    Q_ASSERT(!m_pages.empty());
     m_animationCache = new KPrAnimationCache();
-    if( !currentPage || !pages.contains(currentPage))
-        updateActivePage( m_pages[0] );
-    else
-        updateActivePage( currentPage );
+    if (!currentPage || !pages.contains(currentPage)) {
+        updateActivePage(m_pages[0]);
+    } else {
+        updateActivePage(currentPage);
+    }
 
-    m_pageIndex = m_pages.indexOf( m_view->activePage() );
+    m_pageIndex = m_pages.indexOf(m_view->activePage());
 
     // updatePageAnimation was called from updateZoom() [updateActivePage()]
 
-    connect( &m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()) );
+    connect(&m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()));
     // this is needed as after a call to m_canvas->showFullScreen the canvas is not made fullscreen right away
-    connect( m_canvas, SIGNAL(sizeChanged(QSize)), this, SLOT(updateZoom(QSize)) );
-    m_timeLine.setCurveShape( QTimeLine::LinearCurve );
-    m_timeLine.setUpdateInterval( 20 );
+    connect(m_canvas, SIGNAL(sizeChanged(QSize)), this, SLOT(updateZoom(QSize)));
+    m_timeLine.setCurveShape(QTimeLine::LinearCurve);
+    m_timeLine.setUpdateInterval(20);
     // set the animation strategy in the KoShapeManagers
-    m_canvas->shapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->shapeManager(), m_animationCache,
-                                                       new KPrPageSelectStrategyActive( m_view->kopaCanvas() ) ) );
-    m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->masterShapeManager(), m_animationCache,
-                                                             new KPrPageSelectStrategyActive( m_view->kopaCanvas() ) ) );
+    m_canvas->shapeManager()->setPaintingStrategy(new KPrShapeManagerAnimationStrategy(m_canvas->shapeManager(), m_animationCache,
+            new KPrPageSelectStrategyActive(m_view->kopaCanvas())));
+    m_canvas->masterShapeManager()->setPaintingStrategy(new KPrShapeManagerAnimationStrategy(m_canvas->masterShapeManager(), m_animationCache,
+            new KPrPageSelectStrategyActive(m_view->kopaCanvas())));
 
-    if ( hasAnimation() ) {
-        startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
+    if (hasAnimation()) {
+        startTimeLine(m_animations.at(m_stepIndex)->totalDuration());
     }
 }
 
@@ -96,43 +97,37 @@ KPrAnimationDirector::~KPrAnimationDirector()
     delete m_pageEffectRunner;
     delete m_animationCache;
     //set the KoShapeManagerPaintingStrategy in the KoShapeManagers
-    m_canvas->shapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->shapeManager() ) );
-    m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( m_canvas->masterShapeManager(),
-                                                             new KPrPageSelectStrategyActive( m_view->kopaCanvas() ) ) );
+    m_canvas->shapeManager()->setPaintingStrategy(new KoShapeManagerPaintingStrategy(m_canvas->shapeManager()));
+    m_canvas->masterShapeManager()->setPaintingStrategy(new KPrShapeManagerDisplayMasterStrategy(m_canvas->masterShapeManager(),
+            new KPrPageSelectStrategyActive(m_view->kopaCanvas())));
 }
 
-
-
-void KPrAnimationDirector::paint(QPainter& painter, const QRectF &paintRect)
+void KPrAnimationDirector::paint(QPainter &painter, const QRectF &paintRect)
 {
-    if ( m_pageEffectRunner )
-    {
+    if (m_pageEffectRunner) {
         bool finished = m_pageEffectRunner->isFinished();
-        if ( !m_pageEffectRunner->paint( painter ) )
-        {
+        if (!m_pageEffectRunner->paint(painter)) {
             delete m_pageEffectRunner;
             m_pageEffectRunner = 0;
 
             // check if there where a animation to start
-            if ( hasAnimation() ) {
-                if ( finished ) {
-                    QRect clipRect = m_pageRect.intersected( paintRect.toRect() );
-                    painter.setClipRect( clipRect );
-                    painter.setRenderHint( QPainter::Antialiasing );
-                    paintStep( painter );
-                }
-                else {
+            if (hasAnimation()) {
+                if (finished) {
+                    QRect clipRect = m_pageRect.intersected(paintRect.toRect());
+                    painter.setClipRect(clipRect);
+                    painter.setRenderHint(QPainter::Antialiasing);
+                    paintStep(painter);
+                } else {
                     // start the animations
-                    startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
+                    startTimeLine(m_animations.at(m_stepIndex)->totalDuration());
                 }
             }
         }
-    }
-    else {
-        QRect clipRect = m_pageRect.intersected( paintRect.toRect() );
-        painter.setClipRect( clipRect );
-        painter.setRenderHint( QPainter::Antialiasing );
-        paintStep( painter );
+    } else {
+        QRect clipRect = m_pageRect.intersected(paintRect.toRect());
+        painter.setClipRect(clipRect);
+        painter.setRenderHint(QPainter::Antialiasing);
+        paintStep(painter);
     }
     // This is needed as otherwise on some ATI graphic cards it leads to
     // 100% CPU load of the x server and no more key events are received
@@ -143,13 +138,13 @@ void KPrAnimationDirector::paint(QPainter& painter, const QRectF &paintRect)
     qApp->syncX();
 }
 
-void KPrAnimationDirector::paintEvent( QPaintEvent* event )
+void KPrAnimationDirector::paintEvent(QPaintEvent *event)
 {
-    QPainter painter( m_canvas );
+    QPainter painter(m_canvas);
     paint(painter, event->rect());
 }
 
-KoViewConverter * KPrAnimationDirector::viewConverter()
+KoViewConverter *KPrAnimationDirector::viewConverter()
 {
     return &m_zoomHandler;
 }
@@ -174,17 +169,16 @@ int KPrAnimationDirector::currentStep() const
     return m_stepIndex;
 }
 
-bool KPrAnimationDirector::navigate( Navigation navigation )
+bool KPrAnimationDirector::navigate(Navigation navigation)
 {
     bool finished = false;
-    if ( m_pageEffectRunner ) {
+    if (m_pageEffectRunner) {
         m_pageEffectRunner->finish();
         finishAnimations();
         // finish on first step
         m_timeLine.stop();
         finished = true;
-    }
-    else if ( m_timeLine.state() == QTimeLine::Running ) { // there are still shape animations running
+    } else if (m_timeLine.state() == QTimeLine::Running) { // there are still shape animations running
         finishAnimations();
         m_timeLine.stop();
         finished = true;
@@ -192,38 +186,36 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
 
     bool presentationFinished = false;
 
-    switch ( navigation )
-    {
-        case FirstPage:
-        case PreviousPage:
-        case NextPage:
-        case LastPage:
-            presentationFinished = changePage( navigation );
-            break;
-        case PreviousStep:
-            previousStep();
-            break;
-        case NextStep:
-            if ( !finished ) {
-                presentationFinished = nextStep();
-            }
-            break;
-        default:
-            break;
+    switch (navigation) {
+    case FirstPage:
+    case PreviousPage:
+    case NextPage:
+    case LastPage:
+        presentationFinished = changePage(navigation);
+        break;
+    case PreviousStep:
+        previousStep();
+        break;
+    case NextStep:
+        if (!finished) {
+            presentationFinished = nextStep();
+        }
+        break;
+    default:
+        break;
     }
 
     return presentationFinished;
 }
 
-void KPrAnimationDirector::navigateToPage( int index )
+void KPrAnimationDirector::navigateToPage(int index)
 {
-    if ( m_pageEffectRunner ) {
+    if (m_pageEffectRunner) {
         m_pageEffectRunner->finish();
         finishAnimations();
         // finish on first step
         m_timeLine.stop();
-    }
-    else if ( m_timeLine.state() == QTimeLine::Running ) { // there are still shape animations running
+    } else if (m_timeLine.state() == QTimeLine::Running) { // there are still shape animations running
         finishAnimations();
         m_timeLine.stop();
     }
@@ -233,49 +225,48 @@ void KPrAnimationDirector::navigateToPage( int index )
 
     m_stepIndex = 0;
 
-    updateActivePage( page );
+    updateActivePage(page);
     updatePageAnimation();
     updateStepAnimation();
     // trigger a repaint
     m_canvas->update();
 
-    if ( hasAnimation() ) {
-        startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
+    if (hasAnimation()) {
+        startTimeLine(m_animations.at(m_stepIndex)->totalDuration());
     }
 }
 
-void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
+void KPrAnimationDirector::updateActivePage(KoPAPageBase *page)
 {
     deactivate();
 
-    if ( m_canvas == m_view->kopaCanvas() ) {
-        m_view->viewMode()->updateActivePage( page );
-    }
-    else {
-        QList<KoShape*> shapes = page->shapes();
+    if (m_canvas == m_view->kopaCanvas()) {
+        m_view->viewMode()->updateActivePage(page);
+    } else {
+        QList<KoShape *> shapes = page->shapes();
         m_canvas->shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
         //Make the top most layer active
-        if ( !shapes.isEmpty() ) {
-            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
-            m_canvas->shapeManager()->selection()->setActiveLayer( layer );
+        if (!shapes.isEmpty()) {
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shapes.last());
+            m_canvas->shapeManager()->selection()->setActiveLayer(layer);
         }
 
         // if the page is not a master page itself set shapes of the master page
-        KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
+        KoPAPage *paPage = dynamic_cast<KoPAPage *>(page);
 
-        Q_ASSERT( paPage );
-        KoPAMasterPage * masterPage = paPage->masterPage();
-        QList<KoShape*> masterShapes = masterPage->shapes();
+        Q_ASSERT(paPage);
+        KoPAMasterPage *masterPage = paPage->masterPage();
+        QList<KoShape *> masterShapes = masterPage->shapes();
         m_canvas->masterShapeManager()->setShapes(masterShapes, KoShapeManager::AddWithoutRepaint);
         // Make the top most layer active
-        if ( !masterShapes.isEmpty() ) {
-            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
-            m_canvas->masterShapeManager()->selection()->setActiveLayer( layer );
+        if (!masterShapes.isEmpty()) {
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(masterShapes.last());
+            m_canvas->masterShapeManager()->selection()->setActiveLayer(layer);
         }
     }
 
-    KPrPage * kprPage = dynamic_cast<KPrPage *>( page );
-    Q_ASSERT( kprPage );
+    KPrPage *kprPage = dynamic_cast<KPrPage *>(page);
+    Q_ASSERT(kprPage);
     if (m_pageIndex > m_pages.size() || m_pageIndex < 0) {
         m_pageIndex = m_pages.indexOf(page);
     }
@@ -283,7 +274,7 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 
     // it can be that the pages have different sizes. So we need to recalulate
     // the zoom when we change the page
-    updateZoom( m_canvas->size() );
+    updateZoom(m_canvas->size());
 }
 
 void KPrAnimationDirector::updatePageAnimation()
@@ -306,137 +297,131 @@ void KPrAnimationDirector::updateStepAnimation()
     m_animationCache->startStep(m_stepIndex);
 }
 
-
-bool KPrAnimationDirector::changePage( Navigation navigation )
+bool KPrAnimationDirector::changePage(Navigation navigation)
 {
-    switch ( navigation )
-    {
-        case FirstPage:
-            m_pageIndex = 0;
-            break;
-        case PreviousPage:
-            m_pageIndex = m_pageIndex > 0 ? m_pageIndex - 1 : 0;
-            break;
-        case NextPage:
-            if ( m_pageIndex < m_pages.size() -1 ) {
-                ++m_pageIndex;
-            }
-            else {
-                return true;
-            }
-            break;
-        case LastPage:
-            m_pageIndex = m_pages.size() - 1;
-            if ( dynamic_cast<KPrEndOfSlideShowPage *>( m_pages[m_pageIndex] ) && m_pageIndex > 0 ) {
-                m_pageIndex--;
-            }
-            break;
-        case PreviousStep:
-        case NextStep:
-        default:
-            // this should not happen
-            Q_ASSERT( 0 );
-            break;
+    switch (navigation) {
+    case FirstPage:
+        m_pageIndex = 0;
+        break;
+    case PreviousPage:
+        m_pageIndex = m_pageIndex > 0 ? m_pageIndex - 1 : 0;
+        break;
+    case NextPage:
+        if (m_pageIndex < m_pages.size() - 1) {
+            ++m_pageIndex;
+        } else {
+            return true;
+        }
+        break;
+    case LastPage:
+        m_pageIndex = m_pages.size() - 1;
+        if (dynamic_cast<KPrEndOfSlideShowPage *>(m_pages[m_pageIndex]) && m_pageIndex > 0) {
+            m_pageIndex--;
+        }
+        break;
+    case PreviousStep:
+    case NextStep:
+    default:
+        // this should not happen
+        Q_ASSERT(0);
+        break;
     }
     m_stepIndex = 0;
 
-    updateActivePage( m_pages[m_pageIndex] );
+    updateActivePage(m_pages[m_pageIndex]);
     updatePageAnimation();
     updateStepAnimation();
 
     // trigger a repaint
     m_canvas->update();
 
-    if ( hasAnimation() ) {
-        startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
+    if (hasAnimation()) {
+        startTimeLine(m_animations.at(m_stepIndex)->totalDuration());
     }
 
     return false;
 }
 
-void KPrAnimationDirector::updateZoom( const QSize & size )
+void KPrAnimationDirector::updateZoom(const QSize &size)
 {
     KoPageLayout pageLayout = m_view->activePage()->pageLayout();
-    KoPAUtil::setZoom( pageLayout, size, m_zoomHandler );
-    m_pageRect = KoPAUtil::pageRect( pageLayout, size, m_zoomHandler );
-    m_canvas->setDocumentOffset( -m_pageRect.topLeft() );
+    KoPAUtil::setZoom(pageLayout, size, m_zoomHandler);
+    m_pageRect = KoPAUtil::pageRect(pageLayout, size, m_zoomHandler);
+    m_canvas->setDocumentOffset(-m_pageRect.topLeft());
 
     // reinit page animation, because somi init method contain zoom
     updatePageAnimation();
     updateStepAnimation();
 }
 
-void KPrAnimationDirector::paintStep( QPainter & painter )
+void KPrAnimationDirector::paintStep(QPainter &painter)
 {
     if (m_pageRect != m_canvas->rect()) {
         painter.setClipping(false);
         painter.fillRect(m_canvas->rect(), Qt::black);
         painter.setClipping(true);
     }
-    painter.translate( m_pageRect.topLeft() );
+    painter.translate(m_pageRect.topLeft());
     KoShapePaintingContext context;
-    m_view->activePage()->paintBackground( painter, m_zoomHandler, context );
+    m_view->activePage()->paintBackground(painter, m_zoomHandler, context);
 
-    if ( m_view->activePage()->displayMasterShapes() ) {
-        foreach ( KoShape *shape, m_canvas->masterShapeManager()->shapes() ) {
-            shape->waitUntilReady( m_zoomHandler, false );
+    if (m_view->activePage()->displayMasterShapes()) {
+        foreach (KoShape *shape, m_canvas->masterShapeManager()->shapes()) {
+            shape->waitUntilReady(m_zoomHandler, false);
         }
 
-        m_canvas->masterShapeManager()->paint( painter, m_zoomHandler, true );
+        m_canvas->masterShapeManager()->paint(painter, m_zoomHandler, true);
     }
-    foreach ( KoShape *shape, m_canvas->shapeManager()->shapes() ) {
-        shape->waitUntilReady( m_zoomHandler, false );
+    foreach (KoShape *shape, m_canvas->shapeManager()->shapes()) {
+        shape->waitUntilReady(m_zoomHandler, false);
     }
-    m_canvas->shapeManager()->paint( painter, m_zoomHandler, true );
+    m_canvas->shapeManager()->paint(painter, m_zoomHandler, true);
 }
 
 bool KPrAnimationDirector::nextStep()
 {
-    if ( m_stepIndex < numStepsInPage() - 1 ) {
+    if (m_stepIndex < numStepsInPage() - 1) {
         // if there are sub steps go to the next substep
         ++m_stepIndex;
         updateStepAnimation();
         startTimeLine(m_animations.at(m_stepIndex)->totalDuration());
-    }
-    else {
+    } else {
         // if there are no more sub steps go to the next page
         // The active page and the substeps are updated later as
         // first the current page has to be painted again for the page effect
-        if ( m_pageIndex < m_pages.size() -1 ) {
+        if (m_pageIndex < m_pages.size() - 1) {
             ++m_pageIndex;
-        }
-        else {
+        } else {
             return true;
         }
         m_stepIndex = 0;
 
-        KPrPageEffect * effect = KPrPage::pageData( m_pages[m_pageIndex] )->pageEffect();
+        KPrPageEffect *effect = KPrPage::pageData(m_pages[m_pageIndex])->pageEffect();
 
         // run page effect if there is one
-        if ( effect ) {
-            QPixmap oldPage( m_canvas->size() );
-            m_canvas->render( &oldPage );
+        if (effect) {
+            QPixmap oldPage(m_canvas->size());
+            m_canvas->render(&oldPage);
 
-            updateActivePage( m_pages[m_pageIndex] );
+            updateActivePage(m_pages[m_pageIndex]);
             updatePageAnimation();
             updateStepAnimation();
-            QPixmap newPage( m_canvas->size() );
-            newPage.fill( Qt::white ); // TODO
-            QPainter newPainter( &newPage );
-            newPainter.setClipRect( m_pageRect );
-            newPainter.setRenderHint( QPainter::Antialiasing );
-            paintStep( newPainter );
+            QPixmap newPage(m_canvas->size());
+            newPage.fill(Qt::white);   // TODO
+            QPainter newPainter(&newPage);
+            newPainter.setClipRect(m_pageRect);
+            newPainter.setRenderHint(QPainter::Antialiasing);
+            paintStep(newPainter);
 
-            m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, effect );
-            startTimeLine( effect->duration() );
-        }
-        else {
-            updateActivePage( m_pages[m_pageIndex] );
+            m_pageEffectRunner = new KPrPageEffectRunner(oldPage, newPage, m_canvas, effect);
+            startTimeLine(effect->duration());
+        } else {
+            updateActivePage(m_pages[m_pageIndex]);
             updatePageAnimation();
             updateStepAnimation();
             m_canvas->update();
-            if ( hasAnimation() ) {
-                startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
+            if (hasAnimation()) {
+                startTimeLine(m_animations.at(m_stepIndex)->totalDuration());
             }
         }
     }
@@ -445,17 +430,15 @@ bool KPrAnimationDirector::nextStep()
 
 void KPrAnimationDirector::previousStep()
 {
-    if ( m_stepIndex > 0 ) {
+    if (m_stepIndex > 0) {
         --m_stepIndex;
-    }
-    else {
-        if ( m_pageIndex > 0 ) {
+    } else {
+        if (m_pageIndex > 0) {
             --m_pageIndex;
-            updateActivePage( m_pages[m_pageIndex] );
-            if(hasAnimation()) {
+            updateActivePage(m_pages[m_pageIndex]);
+            if (hasAnimation()) {
                 m_stepIndex = m_animations.size() - 1;
-            }
-            else {
+            } else {
                 m_stepIndex = m_animations.size();
             }
             updatePageAnimation();
@@ -470,7 +453,6 @@ void KPrAnimationDirector::previousStep()
     finishAnimations();
 }
 
-
 bool KPrAnimationDirector::hasAnimation()
 {
     return m_animations.size() > 0;
@@ -478,10 +460,9 @@ bool KPrAnimationDirector::hasAnimation()
 
 void KPrAnimationDirector::animate()
 {
-    if ( m_pageEffectRunner ) {
-        m_pageEffectRunner->next( m_timeLine.currentTime() );
-    }
-    else if ( hasAnimation() ) { //if there are animnations
+    if (m_pageEffectRunner) {
+        m_pageEffectRunner->next(m_timeLine.currentTime());
+    } else if (hasAnimation()) { //if there are animnations
         // set current time, to the current step
         m_animationCache->next();
         m_animations.at(m_stepIndex)->setCurrentTime(m_timeLine.currentTime());
@@ -495,15 +476,14 @@ void KPrAnimationDirector::finishAnimations()
     m_canvas->update();
 }
 
-void KPrAnimationDirector::startTimeLine( int duration )
+void KPrAnimationDirector::startTimeLine(int duration)
 {
     if (duration == 0) {
-        m_timeLine.setDuration( 1 );
+        m_timeLine.setDuration(1);
+    } else {
+        m_timeLine.setDuration(duration);
     }
-    else {
-       m_timeLine.setDuration( duration );
-    }
-    m_timeLine.setCurrentTime( 0 );
+    m_timeLine.setCurrentTime(0);
     m_timeLine.start();
 }
 

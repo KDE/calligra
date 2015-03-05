@@ -30,7 +30,7 @@
 class KRITAUI_EXPORT KisSaveXmlVisitor : public KisNodeVisitor
 {
 public:
-    KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, const QString &url, bool root);
+    KisSaveXmlVisitor(QDomDocument doc, const QDomElement &element, quint32 &count, const QString &url, bool root);
 
     void setSelectedNodes(vKisNodeSP selectedNodes);
 
@@ -40,13 +40,14 @@ public:
 
 public:
 
-    bool visit(KisNode*) {
+    bool visit(KisNode *)
+    {
         return true;
     }
     bool visit(KisExternalLayer *);
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
-    bool visit(KisAdjustmentLayer* layer);
+    bool visit(KisAdjustmentLayer *layer);
     bool visit(KisGeneratorLayer *layer);
     bool visit(KisCloneLayer *layer);
     bool visit(KisFilterMask *mask);
@@ -54,7 +55,8 @@ public:
     bool visit(KisTransparencyMask *mask);
     bool visit(KisSelectionMask *mask);
 
-    QMap<const KisNode*, QString> nodeFileNames() {
+    QMap<const KisNode *, QString> nodeFileNames()
+    {
         return m_nodeFileNames;
     }
 
@@ -67,14 +69,14 @@ private:
 
 private:
 
-    void saveLayer(QDomElement & el, const QString & layerType, const KisLayer * layer);
-    void saveMask(QDomElement & el, const QString & maskType, const KisMask * mask);
-    bool saveMasks(KisNode * node, QDomElement & layerElement);
+    void saveLayer(QDomElement &el, const QString &layerType, const KisLayer *layer);
+    void saveMask(QDomElement &el, const QString &maskType, const KisMask *mask);
+    bool saveMasks(KisNode *node, QDomElement &layerElement);
 
     friend class KisKraSaveXmlVisitorTest;
 
     vKisNodeSP m_selectedNodes;
-    QMap<const KisNode*,  QString> m_nodeFileNames;
+    QMap<const KisNode *,  QString> m_nodeFileNames;
     QDomDocument m_doc;
     QDomElement m_elem;
     quint32 &m_count;

@@ -37,7 +37,7 @@ QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformatio
         ellipse.translate(-ellipse.center());
         path.addEllipse(ellipse);
 
-        ellipse.setRect(0,0, 12, 12);
+        ellipse.setRect(0, 0, 12, 12);
         ellipse.translate(-ellipse.center());
         path.addEllipse(ellipse);
 

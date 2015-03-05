@@ -31,7 +31,7 @@ class KexiProjectModelItem::Private
 {
 public:
     Private(KexiPart::Info *info_, KexiPart::Item *item_, KexiProjectModelItem *p)
-      : parentItem(p), dirty(false), info(info_), item(item_)
+        : parentItem(p), dirty(false), info(info_), item(item_)
     {
     }
 
@@ -41,7 +41,7 @@ public:
     }
 
     /* private: */
-    QList<KexiProjectModelItem*> childItems;
+    QList<KexiProjectModelItem *> childItems;
     KexiProjectModelItem *parentItem;
     QIcon icon;
     bool dirty;
@@ -51,7 +51,7 @@ public:
     QString groupName;
 };
 
-KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelItem *p)
+KexiProjectModelItem::KexiProjectModelItem(const QString &n, KexiProjectModelItem *p)
     : d(new Private(0, 0, p))
 {
     d->groupName = n;
@@ -73,7 +73,7 @@ KexiProjectModelItem::~KexiProjectModelItem()
     delete d;
 }
 
-void KexiProjectModelItem::appendChild(KexiProjectModelItem* c)
+void KexiProjectModelItem::appendChild(KexiProjectModelItem *c)
 {
     d->childItems.append(c);
 }
@@ -88,7 +88,7 @@ void KexiProjectModelItem::debugPrint() const
         kDebug() << d->groupName;
     }
 
-    foreach(KexiProjectModelItem* itm, d->childItems) {
+    foreach (KexiProjectModelItem *itm, d->childItems) {
         itm->debugPrint();
     }
 }
@@ -103,17 +103,17 @@ KexiPart::Info *KexiProjectModelItem::partInfo() const
     return d->info;
 }
 
-KexiPart::Item* KexiProjectModelItem::partItem() const
+KexiPart::Item *KexiProjectModelItem::partItem() const
 {
     return d->item;
 }
 
-KexiProjectModelItem* KexiProjectModelItem::parent()
+KexiProjectModelItem *KexiProjectModelItem::parent()
 {
     return d->parentItem;
 }
 
-KexiProjectModelItem* KexiProjectModelItem::child(int row)
+KexiProjectModelItem *KexiProjectModelItem::child(int row)
 {
     return d->childItems.value(row);
 }
@@ -150,13 +150,12 @@ QVariant KexiProjectModelItem::data(int column) const
 
 int KexiProjectModelItem::row()
 {
-     if (d->parentItem)
-     {
-         //kDebug() << d->parentItem->d->childItems << this << data(0);
-         return d->parentItem->d->childItems.indexOf(this);
-     }
-     kDebug() << "No parent item!";
-     return 0;
+    if (d->parentItem) {
+        //kDebug() << d->parentItem->d->childItems << this << data(0);
+        return d->parentItem->d->childItems.indexOf(this);
+    }
+    kDebug() << "No parent item!";
+    return 0;
 }
 
 QIcon KexiProjectModelItem::icon() const
@@ -173,17 +172,17 @@ Qt::ItemFlags KexiProjectModelItem::flags() const
     }
 }
 
-void KexiProjectModelItem::removeChild(const KexiPart::Item& item)
+void KexiProjectModelItem::removeChild(const KexiPart::Item &item)
 {
     KexiProjectModelItem *to_delete = 0;
     int i = 0;
     if (!d->item) {
-        foreach(KexiProjectModelItem *child, d->childItems) {
+        foreach (KexiProjectModelItem *child, d->childItems) {
             ++i;
             if (!to_delete) {
                 if (child->d->item) {
                     if (child->d->item && child->d->item->identifier() == item.identifier()) {
-                        to_delete = d->childItems.takeAt(i-1);
+                        to_delete = d->childItems.takeAt(i - 1);
                     }
                 }
             }
@@ -194,18 +193,18 @@ void KexiProjectModelItem::removeChild(const KexiPart::Item& item)
     }
 }
 
-KexiProjectModelItem* KexiProjectModelItem::modelItemFromItem(const KexiPart::Item& item) const
+KexiProjectModelItem *KexiProjectModelItem::modelItemFromItem(const KexiPart::Item &item) const
 {
-    KexiProjectModelItem* itm = 0;
+    KexiProjectModelItem *itm = 0;
 
     if (!d->item) {
-        foreach(KexiProjectModelItem *child, d->childItems) {
+        foreach (KexiProjectModelItem *child, d->childItems) {
             if (child->d->item) {
-               if (child->d->item && child->d->item->identifier() == item.identifier()) {
+                if (child->d->item && child->d->item->identifier() == item.identifier()) {
                     itm = child;
                 }
             } else {
-                    itm = child->modelItemFromItem(item);
+                itm = child->modelItemFromItem(item);
             }
             if (itm) {
                 return itm;
@@ -215,15 +214,15 @@ KexiProjectModelItem* KexiProjectModelItem::modelItemFromItem(const KexiPart::It
     return 0;
 }
 
-KexiProjectModelItem* KexiProjectModelItem::modelItemFromName(const QString& name) const
+KexiProjectModelItem *KexiProjectModelItem::modelItemFromName(const QString &name) const
 {
-    KexiProjectModelItem* itm = 0;
+    KexiProjectModelItem *itm = 0;
 
-    foreach(KexiProjectModelItem *child, d->childItems) {
+    foreach (KexiProjectModelItem *child, d->childItems) {
         if ((child->d->item && child->d->item->name() == name) || (child->d->info && child->d->info->partClass() == name) || (child->d->groupName == name)) {
-                itm = child;
+            itm = child;
         } else {
-                itm = child->modelItemFromName(name);
+            itm = child->modelItemFromName(name);
         }
         if (itm) {
             return itm;

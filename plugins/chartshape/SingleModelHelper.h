@@ -24,8 +24,8 @@
 // Qt
 #include <QObject>
 
-
-namespace KChart {
+namespace KChart
+{
 
 class ChartProxyModel;
 class Table;

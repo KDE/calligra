@@ -85,8 +85,9 @@ Thesaurus::Thesaurus()
 
     KConfigGroup cfg = KGlobal::config()->group("");
     m_dataFile = cfg.readEntry("datafile");
-    if (m_dataFile.isEmpty())
+    if (m_dataFile.isEmpty()) {
         m_dataFile = KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt");
+    }
     setCaption();
 
     m_noMatch = i18n("(No match)");
@@ -157,21 +158,21 @@ Thesaurus::Thesaurus()
 
     // single click -- keep display unambiguous by removing other selections:
 
-    connect(m_synListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(slotSetReplaceTermSyn(QListWidgetItem *)));
-    connect(m_hyperListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(slotSetReplaceTermHyper(QListWidgetItem *)));
-    connect(m_hypoListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
-            this, SLOT(slotSetReplaceTermHypo(QListWidgetItem *)));
+    connect(m_synListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(slotSetReplaceTermSyn(QListWidgetItem*)));
+    connect(m_hyperListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(slotSetReplaceTermHyper(QListWidgetItem*)));
+    connect(m_hypoListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(slotSetReplaceTermHypo(QListWidgetItem*)));
 
     // double click -- set the double clicked item as the new search term
 
-    connect(m_synListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
-    connect(m_hyperListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
-    connect(m_hypoListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
+    connect(m_synListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
+    connect(m_hyperListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
+    connect(m_hypoListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
 
     //
     // WordNet Tab
@@ -189,7 +190,7 @@ Thesaurus::Thesaurus()
 
     m_resultTextBrowser = new KTextBrowser(wnWidget);
     m_resultTextBrowser->setReadOnly(true);
-    connect(m_resultTextBrowser, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(slotFindTermFromUrl(const QUrl &)));
+    connect(m_resultTextBrowser, SIGNAL(anchorClicked(QUrl)), this, SLOT(slotFindTermFromUrl(QUrl)));
     wnLayout->addWidget(m_resultTextBrowser);
 
     // Connect for the history box
@@ -197,7 +198,7 @@ Thesaurus::Thesaurus()
     connect(m_edit, SIGNAL(returnPressed()), this, SLOT(slotFindTerm()));
     connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotGotoHistory(int)));
 
-    QHBoxLayout *row2 = new QHBoxLayout( /*m_top_layout*/ );
+    QHBoxLayout *row2 = new QHBoxLayout(/*m_top_layout*/);
     topLayout->addLayout(row2);
     m_replaceLineEdit = new KLineEdit(page);
     m_replaceLabel = new QLabel(i18n("&Replace with:"), page);
@@ -248,15 +249,15 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
 {
     if (endPosition == -1 && startPosition == -1) { // standalone
         m_standAlone = true;
-        if (document)
+        if (document) {
             m_word = document->toPlainText();
+        }
         m_dialog->showButton(KDialog::Ok, false);
         m_dialog->setButtonGuiItem(KDialog::Cancel,
-                KGuiItem(i18nc("@action:button Close thesaurus dialog", "&Close"), koIconName("dialog-cancel")));
+                                   KGuiItem(i18nc("@action:button Close thesaurus dialog", "&Close"), koIconName("dialog-cancel")));
         m_replaceLineEdit->setEnabled(false);
         m_replaceLabel->setEnabled(false);
-    }
-    else { // called from an application, e.g. Words
+    } else { // called from an application, e.g. Words
         QTextCursor cursor(document);
         cursor.setPosition(startPosition);
         cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
@@ -264,7 +265,7 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
         m_document = document;
         m_startPosition = startPosition;
         m_dialog->setButtonGuiItem(KDialog::Ok,
-                KGuiItem(i18n("&Replace"), koIconName("dialog-ok")));
+                                   KGuiItem(i18n("&Replace"), koIconName("dialog-ok")));
         slotFindTerm(m_word.trimmed());
         m_replaceLineEdit->setText(m_word.trimmed());
     }
@@ -274,7 +275,9 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
 void Thesaurus::process()
 {
     QString replacement = m_replaceLineEdit->text().trimmed();
-    if (replacement == m_word.trimmed()) return;
+    if (replacement == m_word.trimmed()) {
+        return;
+    }
 
     emit startMacro(i18n("Replace Word"));
     QTextCursor cursor(m_document);
@@ -286,7 +289,9 @@ void Thesaurus::process()
 
 void Thesaurus::dialogClosed()
 {
-    if (!m_standAlone) return;
+    if (!m_standAlone) {
+        return;
+    }
     KConfigGroup cfg = KGlobal::config()->group("");
     cfg.writeEntry("datafile", m_dataFile);
 }
@@ -294,7 +299,7 @@ void Thesaurus::dialogClosed()
 void Thesaurus::slotChangeLanguage()
 {
     QString filename = KFileDialog::getOpenFileName(
-            KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt"));
+                           KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt"));
     if (!filename.isNull()) {
         m_dataFile = filename;
         setCaption();
@@ -305,21 +310,23 @@ void Thesaurus::setCaption()
 {
     KUrl url = KUrl();
     url.setPath(m_dataFile);
-    m_dialog->setCaption(i18n("Related Words - %1" , url.fileName() ) );
+    m_dialog->setCaption(i18n("Related Words - %1", url.fileName()));
 }
 
 // Enable or disable back and forward button
 void Thesaurus::updateNavButtons()
 {
-    if (m_historyPos <= 1) // 1 = first position
+    if (m_historyPos <= 1) { // 1 = first position
         m_back->setEnabled(false);
-    else
+    } else {
         m_back->setEnabled(true);
+    }
 
-    if (m_historyPos >= m_edit->count())
+    if (m_historyPos >= m_edit->count()) {
         m_forward->setEnabled(false);
-    else
+    } else {
         m_forward->setEnabled(true);
+    }
 }
 
 // Go to an item from the editbale combo box.
@@ -352,8 +359,9 @@ void Thesaurus::slotSetReplaceTermSyn(QListWidgetItem *item)
 {
     m_hyperListWidget->clearSelection();
     m_hypoListWidget->clearSelection();
-    if (!item)
+    if (!item) {
         return;
+    }
     m_replaceLineEdit->setText(item->text());
 }
 
@@ -361,8 +369,9 @@ void Thesaurus::slotSetReplaceTermHyper(QListWidgetItem *item)
 {
     m_synListWidget->clearSelection();
     m_hypoListWidget->clearSelection();
-    if (!item)
+    if (!item) {
         return;
+    }
     m_replaceLineEdit->setText(item->text());
 }
 
@@ -370,8 +379,9 @@ void Thesaurus::slotSetReplaceTermHypo(QListWidgetItem *item)
 {
     m_synListWidget->clearSelection();
     m_hyperListWidget->clearSelection();
-    if (!item)
+    if (!item) {
         return;
+    }
     m_replaceLineEdit->setText(item->text());
 }
 
@@ -399,9 +409,8 @@ void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
 {
     // slotSetReplaceTerm(term);
     if (term.startsWith("http://")) {
-        (void) new KRun(KUrl(term),0L);
-    }
-    else {
+        (void) new KRun(KUrl(term), 0L);
+    } else {
         if (addToHistory && m_edit->itemText(0) != term) {
             m_edit->insertItem(0, term);
             m_historyPos = m_edit->count();
@@ -420,7 +429,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
 {
     if (!QFile::exists(m_dataFile)) {
         KMessageBox::error(0, i18n("The thesaurus file '%1' was not found. "
-            "Please use 'Change Language...' to select a thesaurus file.", m_dataFile));
+                                   "Please use 'Change Language...' to select a thesaurus file.", m_dataFile));
         return;
     }
 
@@ -493,8 +502,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
         syn.sort();
         m_synListWidget->addItems(syn);
         m_synListWidget->setEnabled(true);
-    }
-    else {
+    } else {
         m_synListWidget->addItem(m_noMatch);
         m_synListWidget->setEnabled(false);
     }
@@ -504,8 +512,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
         hyper.sort();
         m_hyperListWidget->addItems(hyper);
         m_hyperListWidget->setEnabled(true);
-    }
-    else {
+    } else {
         m_hyperListWidget->addItem(m_noMatch);
         m_hyperListWidget->setEnabled(false);
     }
@@ -515,8 +522,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
         hypo.sort();
         m_hypoListWidget->addItems(hypo);
         m_hypoListWidget->setEnabled(true);
-    }
-    else {
+    } else {
         m_hypoListWidget->addItem(m_noMatch);
         m_hypoListWidget->setEnabled(false);
     }
@@ -536,55 +542,43 @@ void Thesaurus::findTermWordnet(const QString &term)
     if (m_wnComboBox->currentIndex() == -1 || m_wnComboBox->currentIndex() == 0) {
         *m_wnProc << "-synsn" << "-synsv" << "-synsa" << "-synsr";
         m_mode = other;
-    }
-    else if (m_wnComboBox->currentIndex() == 1) {
+    } else if (m_wnComboBox->currentIndex() == 1) {
         *m_wnProc << "-simsv";
         m_mode = other;
-    }
-    else if (m_wnComboBox->currentIndex() == 2) {
+    } else if (m_wnComboBox->currentIndex() == 2) {
         *m_wnProc << "-antsn" << "-antsv" << "-antsa" << "-antsr";
         m_mode = other;
-    }
-    else if (m_wnComboBox->currentIndex() == 3) {
+    } else if (m_wnComboBox->currentIndex() == 3) {
         *m_wnProc << "-hypon" << "-hypov";
         m_mode = other;
-    }
-    else if (m_wnComboBox->currentIndex() == 4) {
+    } else if (m_wnComboBox->currentIndex() == 4) {
         *m_wnProc << "-meron";
         m_mode = other;
-    }
-    else if (m_wnComboBox->currentIndex() == 5) {
+    } else if (m_wnComboBox->currentIndex() == 5) {
         *m_wnProc << "-holon";
         m_mode = other;
-    }
-    else if (m_wnComboBox->currentIndex() == 6) {
+    } else if (m_wnComboBox->currentIndex() == 6) {
         // e.g. "size -> large/small"
         *m_wnProc << "-attrn" << "-attra";
         m_mode = other;
-    }
-    else if (m_wnComboBox->currentIndex() == 7) {
+    } else if (m_wnComboBox->currentIndex() == 7) {
         // e.g. "kill -> die"
         *m_wnProc << "-causv";
         m_mode = other;
-    }
-    else if (m_wnComboBox->currentIndex() == 8) {
+    } else if (m_wnComboBox->currentIndex() == 8) {
         // e.g. "walk -> step"
         *m_wnProc << "-entav";
         m_mode = other;
-    }
-    else if (m_wnComboBox->currentIndex() == 9) {
+    } else if (m_wnComboBox->currentIndex() == 9) {
         *m_wnProc << "-famln" << "-famlv" << "-famla" << "-famlr";
         m_mode = other;
-    }
-    else if (m_wnComboBox->currentIndex() == 10) {
+    } else if (m_wnComboBox->currentIndex() == 10) {
         *m_wnProc << "-framv";
         m_mode = other;
-    }
-    else if (m_wnComboBox->currentIndex() == 11) {
+    } else if (m_wnComboBox->currentIndex() == 11) {
         *m_wnProc << "-grepn" << "-grepv" << "-grepa" << "-grepr";
         m_mode = grep;
-    }
-    else if (m_wnComboBox->currentIndex() == 12) {
+    } else if (m_wnComboBox->currentIndex() == 12) {
         *m_wnProc << "-over";
         m_mode = other;
     }
@@ -631,18 +625,18 @@ void Thesaurus::findTermWordnet(const QString &term)
 
     if (m_wnProc->state() == QProcess::Running) {
         // should never happen
-        kDebug(31000) <<"Warning: findTerm(): process is already running?!";
+        kDebug(31000) << "Warning: findTerm(): process is already running?!";
         return;
     }
 
     m_wnProc->start();
     if (!m_wnProc->waitForFinished()) {
         m_resultTextBrowser->setHtml(i18n("<b>Error:</b> Failed to execute WordNet program 'wn'. "
-                    "WordNet has to be installed on your computer if you want to use it, "
-                    "and 'wn' has to be in your PATH. "
-                    "You can get WordNet at <a href=\"http://wordnet.princeton.edu/\">"
-                    "http://wordnet.princeton.edu/</a>. Note that WordNet only supports "
-                    "the English language."));
+                                          "WordNet has to be installed on your computer if you want to use it, "
+                                          "and 'wn' has to be in your PATH. "
+                                          "You can get WordNet at <a href=\"http://wordnet.princeton.edu/\">"
+                                          "http://wordnet.princeton.edu/</a>. Note that WordNet only supports "
+                                          "the English language."));
         m_wnComboBox->setEnabled(false);
         return;
     }
@@ -650,8 +644,7 @@ void Thesaurus::findTermWordnet(const QString &term)
     QString stdoutString = m_wnProc->readAllStandardOutput();
     if (stdoutString.isEmpty()) {
         m_resultTextBrowser->setHtml(i18n("No match for '%1'.", m_edit->currentText()));
-    }
-    else {
+    } else {
         // render in a table, each line one row:
         QStringList lines = stdoutString.split(QChar('\n'), QString::SkipEmptyParts);
         QString result = "<qt><table>\n";
@@ -679,8 +672,7 @@ void Thesaurus::findTermWordnet(const QString &term)
                 result += "\t<td width=\"15\"></td>";
                 l = l.trimmed();
                 result += "\t<td>" + l + "</td>";
-            }
-            else {
+            } else {
                 l = l.trimmed();
                 result += "<td colspan=\"2\">" + l + "</td>";
             }
@@ -701,31 +693,32 @@ void Thesaurus::findTermWordnet(const QString &term)
 QString Thesaurus::formatLine(const QString &line) const
 {
     QString l = line;
-    if (l == "--------------")
+    if (l == "--------------") {
         return QString("<hr>");
+    }
 
     QRegExp re;
 
     re.setPattern("^(\\d+\\.)(.*)$");
     if (re.indexIn(l) != -1) {
-        l = "<b>" +re.cap(1)+ "</b>" +re.cap(2);
+        l = "<b>" + re.cap(1) + "</b>" + re.cap(2);
         return l;
     }
 
     re.setPattern("^.* of (noun|verb|adj|adv) .*");
     if (re.indexIn(l) != -1) {
-        l = "<font size=\"5\">" +re.cap()+ "</font>\n\n";
+        l = "<font size=\"5\">" + re.cap() + "</font>\n\n";
         return l;
     }
 
     if (m_mode == grep) {
         l = l.trimmed();
-        return QString("<a href=\"" +l+ "\">" +l+ "</a>");
+        return QString("<a href=\"" + l + "\">" + l + "</a>");
     }
 
     re.setPattern("^(Sense \\d+)");
     if (re.indexIn(l) != -1) {
-        l = "<b>" +re.cap()+ "</b>\n";
+        l = "<b>" + re.cap() + "</b>\n";
         return l;
     }
 
@@ -744,14 +737,14 @@ QString Thesaurus::formatLine(const QString &line) const
             link.remove(QRegExp("#\\d+"));
             l += "<a href=\"" + link + "\">" + link + "</a>";
         }
-        l.prepend (' ');        // indent in table
+        l.prepend(' ');         // indent in table
     }
 
     re.setPattern("(.*)(=&gt;|HAS \\w+:|PART OF:)(.*) --");
     re.setMinimal(true);    // non-greedy
     if (re.indexIn(l) != -1) {
         int dash_pos = l.indexOf("--");
-        QString line_end = l.mid(dash_pos+2, l.length()-dash_pos);
+        QString line_end = l.mid(dash_pos + 2, l.length() - dash_pos);
         l = re.cap(1);
         l += re.cap(2) + ' ';
         QStringList links = re.cap(3).split(QChar(','), QString::SkipEmptyParts);
@@ -761,9 +754,9 @@ QString Thesaurus::formatLine(const QString &line) const
                 l += ", ";
             }
             link = link.trimmed();
-            l += "<a href=\"" +link+ "\">" +link+ "</a>";
+            l += "<a href=\"" + link + "\">" + link + "</a>";
         }
-        l += "<font color=\"#777777\">" +line_end+ "</font>";
+        l += "<font color=\"#777777\">" + line_end + "</font>";
         l.prepend(' ');        // indent in table
         return l;
     }

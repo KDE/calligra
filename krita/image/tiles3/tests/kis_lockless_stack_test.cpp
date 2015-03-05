@@ -27,14 +27,13 @@ void KisLocklessStackTest::testOperations()
 {
     KisLocklessStack<int> stack;
 
-
-    for(qint32 i = 0; i < 1024; i++) {
+    for (qint32 i = 0; i < 1024; i++) {
         stack.push(i);
     }
 
     QCOMPARE(stack.size(), 1024);
 
-    for(qint32 i = 1023; i >= 0; i--) {
+    for (qint32 i = 1023; i >= 0; i--) {
         int value;
 
         bool result = stack.pop(value);
@@ -63,7 +62,6 @@ void KisLocklessStackTest::testOperations()
 //#define NUM_CYCLES 10000000
 //#define NUM_THREADS 1
 
-
 class KisAbstractIntStack
 {
 public:
@@ -77,11 +75,13 @@ public:
 class KisTestingLocklessStack : public KisAbstractIntStack
 {
 public:
-    void push(int value) {
+    void push(int value)
+    {
         m_stack.push(value);
     }
 
-    int pop() {
+    int pop()
+    {
         int value  = 0;
 
         bool result = m_stack.pop(value);
@@ -91,11 +91,13 @@ public:
         return value;
     }
 
-    bool isEmpty() {
+    bool isEmpty()
+    {
         return m_stack.isEmpty();
     }
 
-    void clear() {
+    void clear()
+    {
         m_stack.clear();
     }
 
@@ -106,13 +108,15 @@ private:
 class KisTestingLegacyStack : public KisAbstractIntStack
 {
 public:
-    void push(int value) {
+    void push(int value)
+    {
         m_mutex.lock();
         m_stack.push(value);
         m_mutex.unlock();
     }
 
-    int pop() {
+    int pop()
+    {
         m_mutex.lock();
         int result = m_stack.pop();
         m_mutex.unlock();
@@ -120,7 +124,8 @@ public:
         return result;
     }
 
-    bool isEmpty() {
+    bool isEmpty()
+    {
         m_mutex.lock();
         bool result = m_stack.isEmpty();
         m_mutex.unlock();
@@ -128,7 +133,8 @@ public:
         return result;
     }
 
-    void clear() {
+    void clear()
+    {
         m_mutex.lock();
         m_stack.clear();
         m_mutex.unlock();
@@ -138,7 +144,6 @@ private:
     QStack<int> m_stack;
     QMutex m_mutex;
 };
-
 
 class KisStressJob : public QRunnable
 {
@@ -150,12 +155,13 @@ public:
         m_popSum = 0;
     }
 
-    void run() {
-        for(qint32 i = 0; i < NUM_CYCLES; i++) {
+    void run()
+    {
+        for (qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = i % NUM_TYPES;
             int newValue;
 
-            switch(type) {
+            switch (type) {
             case 0:
                 newValue = m_startValue + i;
 
@@ -169,11 +175,13 @@ public:
         }
     }
 
-    qint64 pushSum() {
+    qint64 pushSum()
+    {
         return m_pushSum;
     }
 
-    qint64 popSum() {
+    qint64 popSum()
+    {
         return m_popSum;
     }
 
@@ -186,10 +194,10 @@ private:
 
 void KisLocklessStackTest::runStressTest(KisAbstractIntStack &stack)
 {
-    QList<KisStressJob*> jobsList;
+    QList<KisStressJob *> jobsList;
     KisStressJob *job;
 
-    for(qint32 i = 0; i < NUM_THREADS; i++) {
+    for (qint32 i = 0; i < NUM_THREADS; i++) {
         job = new KisStressJob(stack, 1);
         job->setAutoDelete(false);
         jobsList.append(job);
@@ -199,7 +207,8 @@ void KisLocklessStackTest::runStressTest(KisAbstractIntStack &stack)
     pool.setMaxThreadCount(NUM_THREADS);
 
     QBENCHMARK {
-        foreach(job, jobsList) {
+        foreach (job, jobsList)
+        {
             pool.start(job);
         }
 
@@ -210,7 +219,7 @@ void KisLocklessStackTest::runStressTest(KisAbstractIntStack &stack)
 
     qint64 totalSum = 0;
 
-    for(qint32 i = 0; i < NUM_THREADS; i++) {
+    for (qint32 i = 0; i < NUM_THREADS; i++) {
         KisStressJob *job = jobsList.takeLast();
 
         totalSum += job->pushSum();
@@ -244,12 +253,13 @@ public:
     {
     }
 
-    void run() {
-        for(qint32 i = 0; i < NUM_CYCLES; i++) {
+    void run()
+    {
+        for (qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = i % 4;
             int newValue;
 
-            switch(type) {
+            switch (type) {
             case 0:
             case 1:
                 newValue = m_startValue + i;
@@ -279,7 +289,7 @@ void KisLocklessStackTest::stressTestClear()
     QThreadPool pool;
     pool.setMaxThreadCount(NUM_THREADS);
 
-    for(qint32 i = 0; i < NUM_THREADS; i++) {
+    for (qint32 i = 0; i < NUM_THREADS; i++) {
         job = new KisStressClearJob(stack, 1);
         pool.start(job);
     }

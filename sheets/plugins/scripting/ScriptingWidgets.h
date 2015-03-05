@@ -54,7 +54,7 @@ public:
     * as datasource for what should be displayed within the listview.
     * \param parent The parent QWidget this widget should be displayed in.
     */
-    ScriptingSheetsListView(ScriptingModule* module, QWidget* parent);
+    ScriptingSheetsListView(ScriptingModule *module, QWidget *parent);
 
     /**
     * Destructor.
@@ -70,13 +70,13 @@ public Q_SLOTS:
     * Set the selection type to \p selectiontype. This could be either
     * "SingleSelect" or "MultiSelect".
     */
-    void setSelectionType(const QString& selectiontype);
+    void setSelectionType(const QString &selectiontype);
 
     /**
     * Set the editor type to \p editortype. This could be either
     * "Disabled", "Cell" or "Range".
     */
-    void setEditorType(const QString& editortype);
+    void setEditorType(const QString &editortype);
 
     /**
     * Return the name of the sheet. This makes only sense of
@@ -110,8 +110,8 @@ public Q_SLOTS:
     QVariantList sheets();
 
 private:
-    ScriptingModule* m_module;
-    QTreeView* m_view;
+    ScriptingModule *m_module;
+    QTreeView *m_view;
     bool m_initialized;
     QVariantList m_prevlist;
 
@@ -121,7 +121,7 @@ private:
     void initialize();
     void finalize();
 
-    virtual void showEvent(QShowEvent* event);
+    virtual void showEvent(QShowEvent *event);
 };
 
 #endif

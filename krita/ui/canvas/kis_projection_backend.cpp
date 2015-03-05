@@ -22,7 +22,7 @@ KisProjectionBackend::~KisProjectionBackend()
 {
 }
 
-void KisProjectionBackend::alignSourceRect(QRect& rect, qreal scale)
+void KisProjectionBackend::alignSourceRect(QRect &rect, qreal scale)
 {
     Q_UNUSED(rect);
     Q_UNUSED(scale);

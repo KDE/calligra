@@ -34,7 +34,7 @@
 #define SCALE_TO_FLOAT( v ) KoColorSpaceMaths< _channel_type_, float>::scaleToA( v )
 #define SCALE_FROM_FLOAT( v  ) KoColorSpaceMaths< float, _channel_type_>::scaleToA( v )
 
-template<typename _channel_type_,typename traits>
+template<typename _channel_type_, typename traits>
 class KisDesaturateAdjustment : public KoColorTransformation
 {
     typedef traits RGBTrait;
@@ -49,8 +49,8 @@ public:
 
     void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
     {
-        const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
-        RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
+        const RGBPixel *src = reinterpret_cast<const RGBPixel *>(srcU8);
+        RGBPixel *dst = reinterpret_cast<RGBPixel *>(dstU8);
         float r, g, b, gray;
         while (nPixels > 0) {
 
@@ -59,37 +59,31 @@ public:
             b = SCALE_TO_FLOAT(src->blue);
 
             // http://www.tannerhelland.com/3643/grayscale-image-algorithm-vb6/
-            switch(m_type) {
-            case 0: // lightness
-            {
+            switch (m_type) {
+            case 0: { // lightness
                 gray = (qMax(qMax(r, g), b) + qMin(qMin(r, g), b)) / 2;
                 break;
             }
-            case 1: // luminosity BT 709
-            {
+            case 1: { // luminosity BT 709
                 gray = r * 0.2126 + g * 0.7152 + b * 0.0722;
                 break;
 
             }
 
-            case 2: // luminosity BT 601
-            {
+            case 2: { // luminosity BT 601
                 gray = r * 0.299 + g * 0.587 + b * 0.114;
                 break;
 
             }
-            case 3: // average
-            {
+            case 3: { // average
                 gray = (r + g + b) / 2;
                 break;
             }
-            case 4: // min
-            {
+            case 4: { // min
                 gray = qMin(qMin(r, g), b);
                 break;
             }
-            case 5: // min
-            {
+            case 5: { // min
                 gray = qMax(qMax(r, g), b);
                 break;
             }
@@ -110,12 +104,12 @@ public:
 
     virtual QList<QString> parameters() const
     {
-      QList<QString> list;
-      list << "type";
-      return list;
+        QList<QString> list;
+        list << "type";
+        return list;
     }
 
-    virtual int parameterId(const QString& name) const
+    virtual int parameterId(const QString &name) const
     {
         if (name == "type") {
             return 0;
@@ -129,10 +123,9 @@ public:
     *  1: luminosity
     *  2: average
     */
-    virtual void setParameter(int id, const QVariant& parameter)
+    virtual void setParameter(int id, const QVariant &parameter)
     {
-        switch(id)
-        {
+        switch (id) {
         case 0:
             m_type = parameter.toDouble();
             break;
@@ -147,7 +140,6 @@ private:
 
 };
 
-
 KisDesaturateAdjustmentFactory::KisDesaturateAdjustmentFactory()
     : KoColorTransformationFactory("desaturate_adjustment")
 {
@@ -156,16 +148,16 @@ KisDesaturateAdjustmentFactory::KisDesaturateAdjustmentFactory()
 QList< QPair< KoID, KoID > > KisDesaturateAdjustmentFactory::supportedModels() const
 {
     QList< QPair< KoID, KoID > > l;
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer8BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer16BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float16BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float32BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Integer8BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Integer16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Float16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Float32BitsColorDepthID));
     return l;
 }
 
-KoColorTransformation* KisDesaturateAdjustmentFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
+KoColorTransformation *KisDesaturateAdjustmentFactory::createTransformation(const KoColorSpace *colorSpace, QHash<QString, QVariant> parameters) const
 {
-    KoColorTransformation * adj;
+    KoColorTransformation *adj;
     if (colorSpace->colorModelId() != RGBAColorModelID) {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisDesaturateAdjustmentFactory::createTransformation";
         return 0;
@@ -182,8 +174,7 @@ KoColorTransformation* KisDesaturateAdjustmentFactory::createTransformation(cons
 #endif
     else if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
         adj = new KisDesaturateAdjustment< float, KoRgbTraits < float > >();
-    }
-    else {
+    } else {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisDesaturateAdjustmentFactory::createTransformation";
         return 0;
     }

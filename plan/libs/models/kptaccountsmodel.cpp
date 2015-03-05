@@ -47,13 +47,13 @@ namespace KPlato
 //--------------------------------------
 AccountModel::AccountModel()
     : QObject(),
-    m_project( 0 )
+      m_project(0)
 {
 }
 
 const QMetaEnum AccountModel::columnMap() const
 {
-    return metaObject()->enumerator( metaObject()->indexOfEnumerator("Properties") );
+    return metaObject()->enumerator(metaObject()->indexOfEnumerator("Properties"));
 }
 
 int AccountModel::propertyCount() const
@@ -61,93 +61,93 @@ int AccountModel::propertyCount() const
     return columnMap().keyCount();
 }
 
-QVariant AccountModel::data( const Account *a, int property, int role ) const
+QVariant AccountModel::data(const Account *a, int property, int role) const
 {
     QVariant result;
-    if ( a == 0 ) {
+    if (a == 0) {
         return QVariant();
     }
-    switch ( property ) {
-        case AccountModel::Name: result = name( a, role ); break;
-        case AccountModel::Description: result = description( a, role ); break;
-        default:
-            kDebug(planDbg())<<"data: invalid display value column"<<property;
-            return QVariant();
+    switch (property) {
+    case AccountModel::Name: result = name(a, role); break;
+    case AccountModel::Description: result = description(a, role); break;
+    default:
+        kDebug(planDbg()) << "data: invalid display value column" << property;
+        return QVariant();
     }
     return result;
 }
 
-QVariant AccountModel::name( const Account *a, int role ) const
+QVariant AccountModel::name(const Account *a, int role) const
 {
     //kDebug(planDbg())<<a->name()<<","<<role;
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            return a->name();
-        case Qt::ToolTipRole:
-            if ( a->isDefaultAccount() ) {
-                return i18nc( "1=account name", "%1 (Default account)", a->name() );
-            }
-            return a->name();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-         case Qt::CheckStateRole:
-             if ( a->isDefaultAccount() ) {
-                 return m_project && m_project->isBaselined() ? Qt::PartiallyChecked : Qt::Checked;
-             }
-             return  m_project && m_project->isBaselined() ? QVariant() : Qt::Unchecked;
-         case Qt::DecorationRole:
-             if ( a->isBaselined() ) {
-                return koIcon("view-time-schedule-baselined");
-             }
-             break;
+    switch (role) {
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+        return a->name();
+    case Qt::ToolTipRole:
+        if (a->isDefaultAccount()) {
+            return i18nc("1=account name", "%1 (Default account)", a->name());
+        }
+        return a->name();
+    case Qt::StatusTipRole:
+    case Qt::WhatsThisRole:
+        return QVariant();
+    case Qt::CheckStateRole:
+        if (a->isDefaultAccount()) {
+            return m_project && m_project->isBaselined() ? Qt::PartiallyChecked : Qt::Checked;
+        }
+        return  m_project && m_project->isBaselined() ? QVariant() : Qt::Unchecked;
+    case Qt::DecorationRole:
+        if (a->isBaselined()) {
+            return koIcon("view-time-schedule-baselined");
+        }
+        break;
     }
     return QVariant();
 }
 
-QVariant AccountModel::description( const Account *a, int role ) const
+QVariant AccountModel::description(const Account *a, int role) const
 {
     //kDebug(planDbg())<<res->name()<<","<<role;
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return a->description();
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
+    switch (role) {
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+    case Qt::ToolTipRole:
+        return a->description();
+        break;
+    case Qt::StatusTipRole:
+    case Qt::WhatsThisRole:
+        return QVariant();
     }
     return QVariant();
 }
 
-QVariant AccountModel::headerData( int property, int role ) const
+QVariant AccountModel::headerData(int property, int role) const
 {
-    if ( role == Qt::DisplayRole ) {
-        switch ( property ) {
-            case AccountModel::Name: return i18n( "Name" );
-            case AccountModel::Description: return i18n( "Description" );
-            default: return QVariant();
+    if (role == Qt::DisplayRole) {
+        switch (property) {
+        case AccountModel::Name: return i18n("Name");
+        case AccountModel::Description: return i18n("Description");
+        default: return QVariant();
         }
     }
-    if ( role == Qt::TextAlignmentRole ) {
+    if (role == Qt::TextAlignmentRole) {
         return QVariant();
     }
-    if ( role == Qt::ToolTipRole ) {
-        switch ( property ) {
-            case AccountModel::Name: return ToolTip::accountName();
-            case AccountModel::Description: return ToolTip::accountDescription();
-            default: return QVariant();
+    if (role == Qt::ToolTipRole) {
+        switch (property) {
+        case AccountModel::Name: return ToolTip::accountName();
+        case AccountModel::Description: return ToolTip::accountDescription();
+        default: return QVariant();
         }
     }
     return QVariant();
 }
 
 //----------------------------------------
-AccountItemModel::AccountItemModel( QObject *parent )
-    : ItemModelBase( parent ),
-    m_account( 0 )
+AccountItemModel::AccountItemModel(QObject *parent)
+    : ItemModelBase(parent),
+      m_account(0)
 {
 }
 
@@ -160,353 +160,355 @@ const QMetaEnum AccountItemModel::columnMap() const
     return m_model.columnMap();
 }
 
-void AccountItemModel::slotAccountToBeInserted( const Account *parent, int row )
+void AccountItemModel::slotAccountToBeInserted(const Account *parent, int row)
 {
     //kDebug(planDbg())<<parent->name();
-    Q_ASSERT( m_account == 0 );
-    m_account = const_cast<Account*>(parent);
-    beginInsertRows( index( parent ), row, row );
+    Q_ASSERT(m_account == 0);
+    m_account = const_cast<Account *>(parent);
+    beginInsertRows(index(parent), row, row);
 }
 
-void AccountItemModel::slotAccountInserted( const Account *account )
+void AccountItemModel::slotAccountInserted(const Account *account)
 {
     //kDebug(planDbg())<<account->name();
-    Q_ASSERT( account->parent() == m_account ); Q_UNUSED( account );
+    Q_ASSERT(account->parent() == m_account); Q_UNUSED(account);
     endInsertRows();
     m_account = 0;
 }
 
-void AccountItemModel::slotAccountToBeRemoved( const Account *account )
+void AccountItemModel::slotAccountToBeRemoved(const Account *account)
 {
     //kDebug(planDbg())<<account->name();
-    Q_ASSERT( m_account == 0 );
-    m_account = const_cast<Account*>(account);
-    int row = index( account ).row();
-    beginRemoveRows( index( account->parent() ), row, row );
+    Q_ASSERT(m_account == 0);
+    m_account = const_cast<Account *>(account);
+    int row = index(account).row();
+    beginRemoveRows(index(account->parent()), row, row);
 }
 
-void AccountItemModel::slotAccountRemoved( const Account *account )
+void AccountItemModel::slotAccountRemoved(const Account *account)
 {
     //kDebug(planDbg())<<account->name();
-    Q_ASSERT( account == m_account ); Q_UNUSED( account );
+    Q_ASSERT(account == m_account); Q_UNUSED(account);
     endRemoveRows();
     m_account = 0;
 }
 
-void AccountItemModel::setProject( Project *project )
+void AccountItemModel::setProject(Project *project)
 {
-    if ( m_project ) {
-        Accounts *acc = &( m_project->accounts() );
-        disconnect( acc , SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
+    if (m_project) {
+        Accounts *acc = &(m_project->accounts());
+        disconnect(acc, SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)));
 
-        disconnect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
-        disconnect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
+        disconnect(acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)));
+        disconnect(acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)));
 
-        disconnect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
-        disconnect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
+        disconnect(acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)));
+        disconnect(acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)));
     }
     m_project = project;
     m_model.m_project = project;
-    if ( project ) {
-        Accounts *acc = &( project->accounts() );
-        kDebug(planDbg())<<acc;
-        connect( acc, SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
+    if (project) {
+        Accounts *acc = &(project->accounts());
+        kDebug(planDbg()) << acc;
+        connect(acc, SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)));
 
-        connect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
-        connect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
+        connect(acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)));
+        connect(acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)));
 
-        connect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
-        connect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
+        connect(acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)));
+        connect(acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)));
     }
 }
 
-Qt::ItemFlags AccountItemModel::flags( const QModelIndex &index ) const
+Qt::ItemFlags AccountItemModel::flags(const QModelIndex &index) const
 {
-    Qt::ItemFlags flags = ItemModelBase::flags( index );
-    if ( ! m_readWrite ) {
+    Qt::ItemFlags flags = ItemModelBase::flags(index);
+    if (! m_readWrite) {
         return flags &= ~Qt::ItemIsEditable;
     }
-    if ( ! index.isValid() || ! m_project ) {
+    if (! index.isValid() || ! m_project) {
         return flags;
     }
-    Account *a = account( index );
-    if ( a ) {
-        switch ( index.column() ) {
-            case AccountModel::Name: {
-                if ( ! a->isBaselined() ) {
-                    flags |= Qt::ItemIsEditable;
-                    flags |= Qt::ItemIsUserCheckable;
-                }
-                break;
+    Account *a = account(index);
+    if (a) {
+        switch (index.column()) {
+        case AccountModel::Name: {
+            if (! a->isBaselined()) {
+                flags |= Qt::ItemIsEditable;
+                flags |= Qt::ItemIsUserCheckable;
             }
-            default: flags |= Qt::ItemIsEditable; break;
+            break;
+        }
+        default: flags |= Qt::ItemIsEditable; break;
         }
     }
     return flags;
 }
 
-
-QModelIndex AccountItemModel::parent( const QModelIndex &index ) const
+QModelIndex AccountItemModel::parent(const QModelIndex &index) const
 {
-    if ( !index.isValid() || m_project == 0 ) {
+    if (!index.isValid() || m_project == 0) {
         return QModelIndex();
     }
     //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
-    Account *a = account( index );
-    if ( a == 0 ) {
+    Account *a = account(index);
+    if (a == 0) {
         return QModelIndex();
     }
     Account *par = a->parent();
-    if ( par ) {
+    if (par) {
         a = par->parent();
         int row = -1;
-        if ( a ) {
-            row = a->accountList().indexOf( par );
+        if (a) {
+            row = a->accountList().indexOf(par);
         } else {
-            row = m_project->accounts().accountList().indexOf( par );
+            row = m_project->accounts().accountList().indexOf(par);
         }
         //kDebug(planDbg())<<par->name()<<":"<<row;
-        return createIndex( row, 0, par );
+        return createIndex(row, 0, par);
     }
     return QModelIndex();
 }
 
-QModelIndex AccountItemModel::index( int row, int column, const QModelIndex &parent ) const
+QModelIndex AccountItemModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
+    if (m_project == 0 || column < 0 || column >= columnCount() || row < 0) {
         return QModelIndex();
     }
-    Account *par = account( parent );
-    if ( par == 0 ) {
-        if ( row < m_project->accounts().accountList().count() ) {
-            return createIndex( row, column, m_project->accounts().accountList().at( row ) );
+    Account *par = account(parent);
+    if (par == 0) {
+        if (row < m_project->accounts().accountList().count()) {
+            return createIndex(row, column, m_project->accounts().accountList().at(row));
         }
-    } else if ( row < par->accountList().count() ) {
-        return createIndex( row, column, par->accountList().at( row ) );
+    } else if (row < par->accountList().count()) {
+        return createIndex(row, column, par->accountList().at(row));
     }
     return QModelIndex();
 }
 
-QModelIndex AccountItemModel::index( const Account *account, int column ) const
+QModelIndex AccountItemModel::index(const Account *account, int column) const
 {
-    Account *a = const_cast<Account*>(account);
-    if ( m_project == 0 || account == 0 ) {
+    Account *a = const_cast<Account *>(account);
+    if (m_project == 0 || account == 0) {
         return QModelIndex();
     }
     int row = -1;
     Account *par = a->parent();
-    if ( par == 0 ) {
-         row = m_project->accounts().accountList().indexOf( a );
+    if (par == 0) {
+        row = m_project->accounts().accountList().indexOf(a);
     } else {
-        row = par->accountList().indexOf( a );
+        row = par->accountList().indexOf(a);
     }
-    if ( row == -1 ) {
+    if (row == -1) {
         return QModelIndex();
     }
-    return createIndex( row, column, a );
+    return createIndex(row, column, a);
 
 }
 
-int AccountItemModel::columnCount( const QModelIndex & ) const
+int AccountItemModel::columnCount(const QModelIndex &) const
 {
     return m_model.propertyCount();
 }
 
-int AccountItemModel::rowCount( const QModelIndex &parent ) const
+int AccountItemModel::rowCount(const QModelIndex &parent) const
 {
-    if ( m_project == 0 ) {
+    if (m_project == 0) {
         return 0;
     }
-    Account *par = account( parent );
-    if ( par == 0 ) {
+    Account *par = account(parent);
+    if (par == 0) {
         return m_project->accounts().accountList().count();
     }
     return par->accountList().count();
 }
 
-bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
+bool AccountItemModel::setName(Account *a, const QVariant &value, int role)
 {
-    switch ( role ) {
-        case Qt::EditRole:
-            if ( value.toString() != a->name() ) {
-                emit executeCommand( new RenameAccountCmd( a, value.toString(), kundo2_i18n( "Modify account name" ) ) );
-            }
-            return true;
-        case Qt::CheckStateRole: {
-            switch ( value.toInt() ) {
-                case Qt::Unchecked:
-                    if ( a->isDefaultAccount() ) {
-                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), a, 0, kundo2_i18n( "De-select as default account" ) ) );
-                        return true;
-                    }
-                    break;
-                case Qt::Checked:
-                    if ( ! a->isDefaultAccount() ) {
-                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), m_project->accounts().defaultAccount(), a, kundo2_i18n( "Select as default account" ) ) );
-                        return true;
-                    }
-                    break;
-                default: break;
-            }
+    switch (role) {
+    case Qt::EditRole:
+        if (value.toString() != a->name()) {
+            emit executeCommand(new RenameAccountCmd(a, value.toString(), kundo2_i18n("Modify account name")));
         }
-        default: break;
-    }
-    return false;
-}
-
-bool AccountItemModel::setDescription( Account *a, const QVariant &value, int role )
-{
-    switch ( role ) {
-        case Qt::EditRole:
-            if ( value.toString() != a->description() ) {
-                emit executeCommand( new ModifyAccountDescriptionCmd( a, value.toString(), kundo2_i18n( "Modify account description" ) ) );
+        return true;
+    case Qt::CheckStateRole: {
+        switch (value.toInt()) {
+        case Qt::Unchecked:
+            if (a->isDefaultAccount()) {
+                emit executeCommand(new ModifyDefaultAccountCmd(m_project->accounts(), a, 0, kundo2_i18n("De-select as default account")));
+                return true;
             }
-            return true;
+            break;
+        case Qt::Checked:
+            if (! a->isDefaultAccount()) {
+                emit executeCommand(new ModifyDefaultAccountCmd(m_project->accounts(), m_project->accounts().defaultAccount(), a, kundo2_i18n("Select as default account")));
+                return true;
+            }
+            break;
+        default: break;
+        }
+    }
+    default: break;
     }
     return false;
 }
 
-QVariant AccountItemModel::data( const QModelIndex &index, int role ) const
+bool AccountItemModel::setDescription(Account *a, const QVariant &value, int role)
+{
+    switch (role) {
+    case Qt::EditRole:
+        if (value.toString() != a->description()) {
+            emit executeCommand(new ModifyAccountDescriptionCmd(a, value.toString(), kundo2_i18n("Modify account description")));
+        }
+        return true;
+    }
+    return false;
+}
+
+QVariant AccountItemModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
-    Account *a = account( index );
-    if ( a == 0 ) {
+    Account *a = account(index);
+    if (a == 0) {
         return QVariant();
     }
-    result = m_model.data( a, index.column(), role );
+    result = m_model.data(a, index.column(), role);
     return result;
 }
 
-bool AccountItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
+bool AccountItemModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if ( ! index.isValid() ) {
-        return ItemModelBase::setData( index, value, role );
+    if (! index.isValid()) {
+        return ItemModelBase::setData(index, value, role);
     }
-    if ( ( flags( index ) &( Qt::ItemIsEditable | Qt::CheckStateRole ) ) == 0 ) {
-        Q_ASSERT( true );
+    if ((flags(index) & (Qt::ItemIsEditable | Qt::CheckStateRole)) == 0) {
+        Q_ASSERT(true);
         return false;
     }
-    Account *a = account( index );
-    kDebug(planDbg())<<a->name()<<value<<role;
+    Account *a = account(index);
+    kDebug(planDbg()) << a->name() << value << role;
     switch (index.column()) {
-        case AccountModel::Name: return setName( a, value, role );
-        case AccountModel::Description: return setDescription( a, value, role );
-        default:
-            qWarning("data: invalid display value column %d", index.column());
-            return false;
+    case AccountModel::Name: return setName(a, value, role);
+    case AccountModel::Description: return setDescription(a, value, role);
+    default:
+        qWarning("data: invalid display value column %d", index.column());
+        return false;
     }
     return false;
 }
 
-QVariant AccountItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
+QVariant AccountItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if ( orientation == Qt::Horizontal ) {
-        return m_model.headerData( section, role );
+    if (orientation == Qt::Horizontal) {
+        return m_model.headerData(section, role);
     }
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-Account *AccountItemModel::account( const QModelIndex &index ) const
+Account *AccountItemModel::account(const QModelIndex &index) const
 {
-    return static_cast<Account*>( index.internalPointer() );
+    return static_cast<Account *>(index.internalPointer());
 }
 
-void AccountItemModel::slotAccountChanged( Account *account )
+void AccountItemModel::slotAccountChanged(Account *account)
 {
     Account *par = account->parent();
-    if ( par ) {
-        int row = par->accountList().indexOf( account );
-        emit dataChanged( createIndex( row, 0, account ), createIndex( row, columnCount() - 1, account ) );
+    if (par) {
+        int row = par->accountList().indexOf(account);
+        emit dataChanged(createIndex(row, 0, account), createIndex(row, columnCount() - 1, account));
     } else {
-        int row = m_project->accounts().accountList().indexOf( account );
-        emit dataChanged( createIndex( row, 0, account ), createIndex( row, columnCount() - 1, account ) );
+        int row = m_project->accounts().accountList().indexOf(account);
+        emit dataChanged(createIndex(row, 0, account), createIndex(row, columnCount() - 1, account));
     }
 }
 
-QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent, int index )
+QModelIndex AccountItemModel::insertAccount(Account *account, Account *parent, int index)
 {
     kDebug(planDbg());
-    if ( account->name().isEmpty() || m_project->accounts().findAccount( account->name() ) ) {
+    if (account->name().isEmpty() || m_project->accounts().findAccount(account->name())) {
         QString s = parent == 0 ? account->name() : parent->name();
-        account->setName( m_project->accounts().uniqueId( s ) );
+        account->setName(m_project->accounts().uniqueId(s));
         //m_project->accounts().insertId( account );
     }
-    emit executeCommand( new AddAccountCmd( *m_project, account, parent, index, kundo2_i18n( "Add account" ) ) );
+    emit executeCommand(new AddAccountCmd(*m_project, account, parent, index, kundo2_i18n("Add account")));
     int row = -1;
-    if ( parent ) {
-        row = parent->accountList().indexOf( account );
+    if (parent) {
+        row = parent->accountList().indexOf(account);
     } else {
-        row = m_project->accounts().accountList().indexOf( account );
+        row = m_project->accounts().accountList().indexOf(account);
     }
-    if ( row != -1 ) {
+    if (row != -1) {
         //kDebug(planDbg())<<"Inserted:"<<account->name();
-        return createIndex( row, 0, account );
+        return createIndex(row, 0, account);
     }
-    kDebug(planDbg())<<"Can't find"<<account->name();
+    kDebug(planDbg()) << "Can't find" << account->name();
     return QModelIndex();
 }
 
-void AccountItemModel::removeAccounts( QList<Account*> lst )
+void AccountItemModel::removeAccounts(QList<Account *> lst)
 {
     MacroCommand *cmd = 0;
-    KUndo2MagicString c = kundo2_i18np( "Delete Account", "Delete %1 Accounts", lst.count() );
-    while ( ! lst.isEmpty() ) {
+    KUndo2MagicString c = kundo2_i18np("Delete Account", "Delete %1 Accounts", lst.count());
+    while (! lst.isEmpty()) {
         bool del = true;
         Account *acc = lst.takeFirst();
-        foreach ( Account *a, lst ) {
-            if ( acc->isChildOf( a ) ) {
+        foreach (Account *a, lst) {
+            if (acc->isChildOf(a)) {
                 del = false; // acc will be deleted when a is deleted
                 break;
             }
         }
-        if ( del ) {
-            if ( cmd == 0 ) cmd = new MacroCommand( c );
-            cmd->addCommand( new RemoveAccountCmd( *m_project, acc ) );
+        if (del) {
+            if (cmd == 0) {
+                cmd = new MacroCommand(c);
+            }
+            cmd->addCommand(new RemoveAccountCmd(*m_project, acc));
         }
     }
-    if ( cmd )
-        emit executeCommand( cmd );
+    if (cmd) {
+        emit executeCommand(cmd);
+    }
 }
 
 //----------------------------------------
-CostBreakdownItemModel::CostBreakdownItemModel( QObject *parent )
-    : ItemModelBase( parent ),
-    m_manager( 0 ),
-    m_cumulative( false ),
-    m_periodtype( Period_Day ),
-    m_startmode( StartMode_Project ),
-    m_endmode( EndMode_Project ),
-    m_showmode( ShowMode_Both )
+CostBreakdownItemModel::CostBreakdownItemModel(QObject *parent)
+    : ItemModelBase(parent),
+      m_manager(0),
+      m_cumulative(false),
+      m_periodtype(Period_Day),
+      m_startmode(StartMode_Project),
+      m_endmode(EndMode_Project),
+      m_showmode(ShowMode_Both)
 {
-    m_format = QString( "%1 [%2]" );
+    m_format = QString("%1 [%2]");
 }
 
 CostBreakdownItemModel::~CostBreakdownItemModel()
 {
 }
 
-void CostBreakdownItemModel::slotAccountToBeInserted( const Account *parent, int row )
+void CostBreakdownItemModel::slotAccountToBeInserted(const Account *parent, int row)
 {
     //kDebug(planDbg())<<parent->name();
-    beginInsertRows( index( parent ), row, row );
+    beginInsertRows(index(parent), row, row);
 }
 
-void CostBreakdownItemModel::slotAccountInserted( const Account *account )
+void CostBreakdownItemModel::slotAccountInserted(const Account *account)
 {
     Q_UNUSED(account);
     //kDebug(planDbg())<<account->name();
     endInsertRows();
 }
 
-void CostBreakdownItemModel::slotAccountToBeRemoved( const Account *account )
+void CostBreakdownItemModel::slotAccountToBeRemoved(const Account *account)
 {
 
     //kDebug(planDbg())<<account->name();
-    int row = index( account ).row();
-    beginRemoveRows( index( account->parent() ), row, row );
+    int row = index(account).row();
+    beginRemoveRows(index(account->parent()), row, row);
 }
 
-void CostBreakdownItemModel::slotAccountRemoved( const Account *account )
+void CostBreakdownItemModel::slotAccountRemoved(const Account *account)
 {
     Q_UNUSED(account);
     //kDebug(planDbg())<<account->name();
@@ -516,60 +518,60 @@ void CostBreakdownItemModel::slotAccountRemoved( const Account *account )
 void CostBreakdownItemModel::slotDataChanged()
 {
     fetchData();
-    foreach ( Account *a, m_plannedCostMap.keys() ) {
-        QModelIndex idx1 = index( a );
-        QModelIndex idx2 = index( idx1.row(), columnCount() - 1, parent( idx1 ) );
+    foreach (Account *a, m_plannedCostMap.keys()) {
+        QModelIndex idx1 = index(a);
+        QModelIndex idx2 = index(idx1.row(), columnCount() - 1, parent(idx1));
         //kDebug(planDbg())<<a->name()<<idx1<<idx2;
-        emit dataChanged( idx1, idx2  );
+        emit dataChanged(idx1, idx2);
     }
 }
 
-void CostBreakdownItemModel::setProject( Project *project )
+void CostBreakdownItemModel::setProject(Project *project)
 {
-    if ( m_project ) {
-        Accounts *acc = &( m_project->accounts() );
-        disconnect( acc , SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
+    if (m_project) {
+        Accounts *acc = &(m_project->accounts());
+        disconnect(acc, SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)));
 
-        disconnect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
-        disconnect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
+        disconnect(acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)));
+        disconnect(acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)));
 
-        disconnect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
-        disconnect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
+        disconnect(acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)));
+        disconnect(acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)));
 
-        disconnect( m_project , SIGNAL(nodeChanged(Node*)), this, SLOT(slotDataChanged()) );
-        disconnect( m_project , SIGNAL(nodeAdded(Node*)), this, SLOT(slotDataChanged()) );
-        disconnect( m_project , SIGNAL(nodeRemoved(Node*)), this, SLOT(slotDataChanged()) );
+        disconnect(m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotDataChanged()));
+        disconnect(m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotDataChanged()));
+        disconnect(m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotDataChanged()));
 
-        disconnect( m_project , SIGNAL(resourceChanged(Resource*)), this, SLOT(slotDataChanged()) );
-        disconnect( m_project , SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotDataChanged()) );
-        disconnect( m_project , SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotDataChanged()) );
+        disconnect(m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotDataChanged()));
+        disconnect(m_project, SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotDataChanged()));
+        disconnect(m_project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotDataChanged()));
     }
     m_project = project;
-    if ( project ) {
-        Accounts *acc = &( project->accounts() );
-        kDebug(planDbg())<<acc;
-        connect( acc, SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
+    if (project) {
+        Accounts *acc = &(project->accounts());
+        kDebug(planDbg()) << acc;
+        connect(acc, SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)));
 
-        connect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
-        connect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
+        connect(acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)));
+        connect(acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)));
 
-        connect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
-        connect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
+        connect(acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)));
+        connect(acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)));
 
-        connect( m_project , SIGNAL(nodeChanged(Node*)), this, SLOT(slotDataChanged()) );
-        connect( m_project , SIGNAL(nodeAdded(Node*)), this, SLOT(slotDataChanged()) );
-        connect( m_project , SIGNAL(nodeRemoved(Node*)), this, SLOT(slotDataChanged()) );
+        connect(m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotDataChanged()));
+        connect(m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotDataChanged()));
+        connect(m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotDataChanged()));
 
-        connect( m_project , SIGNAL(resourceChanged(Resource*)), this, SLOT(slotDataChanged()) );
-        connect( m_project , SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotDataChanged()) );
-        connect( m_project , SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotDataChanged()) );
+        connect(m_project, SIGNAL(resourceChanged(Resource*)), this, SLOT(slotDataChanged()));
+        connect(m_project, SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotDataChanged()));
+        connect(m_project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotDataChanged()));
     }
 }
 
-void CostBreakdownItemModel::setScheduleManager( ScheduleManager *sm )
+void CostBreakdownItemModel::setScheduleManager(ScheduleManager *sm)
 {
-    kDebug(planDbg())<<m_project<<m_manager<<sm;
-    if ( m_manager != sm ) {
+    kDebug(planDbg()) << m_project << m_manager << sm;
+    if (m_manager != sm) {
         m_manager = sm;
         fetchData();
         reset();
@@ -581,37 +583,37 @@ long CostBreakdownItemModel::id() const
     return m_manager == 0 ? -1 : m_manager->scheduleId();
 }
 
-EffortCostMap CostBreakdownItemModel::fetchPlannedCost( Account *account )
+EffortCostMap CostBreakdownItemModel::fetchPlannedCost(Account *account)
 {
     EffortCostMap ec;
-    ec = account->plannedCost( id() );
-    m_plannedCostMap.insert( account, ec );
+    ec = account->plannedCost(id());
+    m_plannedCostMap.insert(account, ec);
     QDate s = ec.startDate();
-    if ( ! m_plannedStart.isValid() || s < m_plannedStart ) {
+    if (! m_plannedStart.isValid() || s < m_plannedStart) {
         m_plannedStart = s;
     }
     QDate e = ec.endDate();
-    if ( ! m_plannedEnd.isValid() || e > m_plannedEnd ) {
+    if (! m_plannedEnd.isValid() || e > m_plannedEnd) {
         m_plannedEnd = e;
     }
     return ec;
 }
 
-EffortCostMap CostBreakdownItemModel::fetchActualCost( Account *account )
+EffortCostMap CostBreakdownItemModel::fetchActualCost(Account *account)
 {
-    kDebug(planDbg())<<account->name();
+    kDebug(planDbg()) << account->name();
     EffortCostMap ec;
-    ec = account->actualCost( id() );
-    m_actualCostMap.insert( account, ec );
+    ec = account->actualCost(id());
+    m_actualCostMap.insert(account, ec);
     QDate s = ec.startDate();
-    if ( ! m_actualStart.isValid() || s < m_actualStart ) {
+    if (! m_actualStart.isValid() || s < m_actualStart) {
         m_actualStart = s;
     }
     QDate e = ec.endDate();
-    if ( ! m_actualEnd.isValid() || e > m_actualEnd ) {
+    if (! m_actualEnd.isValid() || e > m_actualEnd) {
         m_actualEnd = e;
     }
-    kDebug(planDbg())<<account->name()<<ec.totalEffort().toDouble(Duration::Unit_h)<<ec.totalCost();
+    kDebug(planDbg()) << account->name() << ec.totalEffort().toDouble(Duration::Unit_h) << ec.totalCost();
     return ec;
 }
 
@@ -621,308 +623,308 @@ void CostBreakdownItemModel::fetchData()
     m_plannedCostMap.clear();
     m_plannedStart = m_plannedEnd = QDate();
     m_actualStart = m_actualEnd = QDate();
-    if ( m_project == 0 || m_manager == 0 ) {
+    if (m_project == 0 || m_manager == 0) {
         return;
     }
-    foreach ( Account *a, m_project->accounts().allAccounts() ) {
-        fetchPlannedCost( a );
-        fetchActualCost( a );
+    foreach (Account *a, m_project->accounts().allAccounts()) {
+        fetchPlannedCost(a);
+        fetchActualCost(a);
     }
 }
 
-QModelIndex CostBreakdownItemModel::parent( const QModelIndex &index ) const
+QModelIndex CostBreakdownItemModel::parent(const QModelIndex &index) const
 {
-    if ( !index.isValid() || m_project == 0 ) {
+    if (!index.isValid() || m_project == 0) {
         return QModelIndex();
     }
     //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
-    Account *a = account( index );
-    if ( a == 0 ) {
+    Account *a = account(index);
+    if (a == 0) {
         return QModelIndex();
     }
     Account *par = a->parent();
-    if ( par ) {
+    if (par) {
         a = par->parent();
         int row = -1;
-        if ( a ) {
-            row = a->accountList().indexOf( par );
+        if (a) {
+            row = a->accountList().indexOf(par);
         } else {
-            row = m_project->accounts().accountList().indexOf( par );
+            row = m_project->accounts().accountList().indexOf(par);
         }
         //kDebug(planDbg())<<par->name()<<":"<<row;
-        return createIndex( row, 0, par );
+        return createIndex(row, 0, par);
     }
     return QModelIndex();
 }
 
-QModelIndex CostBreakdownItemModel::index( int row, int column, const QModelIndex &parent ) const
+QModelIndex CostBreakdownItemModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
+    if (m_project == 0 || column < 0 || column >= columnCount() || row < 0) {
         return QModelIndex();
     }
-    Account *par = account( parent );
-    if ( par == 0 ) {
-        if ( row < m_project->accounts().accountList().count() ) {
-            return createIndex( row, column, m_project->accounts().accountList().at( row ) );
+    Account *par = account(parent);
+    if (par == 0) {
+        if (row < m_project->accounts().accountList().count()) {
+            return createIndex(row, column, m_project->accounts().accountList().at(row));
         }
-    } else if ( row < par->accountList().count() ) {
-        return createIndex( row, column, par->accountList().at( row ) );
+    } else if (row < par->accountList().count()) {
+        return createIndex(row, column, par->accountList().at(row));
     }
     return QModelIndex();
 }
 
-QModelIndex CostBreakdownItemModel::index( const Account *account ) const
+QModelIndex CostBreakdownItemModel::index(const Account *account) const
 {
-    Account *a = const_cast<Account*>(account);
-    if ( m_project == 0 || account == 0 ) {
+    Account *a = const_cast<Account *>(account);
+    if (m_project == 0 || account == 0) {
         return QModelIndex();
     }
     int row = -1;
     Account *par = a->parent();
-    if ( par == 0 ) {
-        row = m_project->accounts().accountList().indexOf( a );
+    if (par == 0) {
+        row = m_project->accounts().accountList().indexOf(a);
     } else {
-        row = par->accountList().indexOf( a );
+        row = par->accountList().indexOf(a);
     }
-    if ( row == -1 ) {
+    if (row == -1) {
         return QModelIndex();
     }
-    return createIndex( row, 0, a );
+    return createIndex(row, 0, a);
 
 }
 
-int CostBreakdownItemModel::columnCount( const QModelIndex & ) const
+int CostBreakdownItemModel::columnCount(const QModelIndex &) const
 {
     int c = 3;
-    if ( startDate().isValid() && endDate().isValid() ) {
-        switch ( m_periodtype ) {
-            case Period_Day: {
-                c += startDate().daysTo( endDate()) + 1;
-                break;
-            }
-            case Period_Week: {
-                // ISO Week numbering always uses Monday as first day of week
-                const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
-                    ? Qt::Monday
-                    : KGlobal::locale()->weekStartDay();
-
-                int days = firstWeekDay - startDate().dayOfWeek();
-                if ( days > 0 ) {
-                    days -= 7;
-                }
-                QDate start = startDate().addDays( days );
-                c += (start.daysTo( endDate() ) / 7) + 1;
-                break;
-            }
-            case Period_Month: {
-                int days = startDate().daysInMonth() - startDate().day() + 1;
-                for ( QDate d = startDate(); d < endDate(); d = d.addDays( days ) ) {
-                    ++c;
-                    days = qMin( d.daysTo( endDate() ), d.daysInMonth() );
-                }
-                break;
-            }
-        }
-    }
-    return c;
-}
-
-int CostBreakdownItemModel::rowCount( const QModelIndex &parent ) const
-{
-    if ( m_project == 0 ) {
-        return 0;
-    }
-    Account *par = account( parent );
-    if ( par == 0 ) {
-        return m_project->accounts().accountList().count();
-    }
-    return par->accountList().count();
-}
-
-QString CostBreakdownItemModel::formatMoney( double cost1, double cost2 ) const
-{
-    if ( m_showmode == ShowMode_Planned ) {
-        return m_project->locale()->formatMoney( cost1, "", 0 );
-    }
-    if ( m_showmode == ShowMode_Actual ) {
-        return m_project->locale()->formatMoney( cost2, "", 0 );
-    }
-    if ( m_showmode == ShowMode_Both ) {
-        return QString(m_format).arg( m_project->locale()->formatMoney( cost2, "", 0 ) ).arg( m_project->locale()->formatMoney( cost1, "", 0 ) );
-    }
-    if ( m_showmode == ShowMode_Deviation ) {
-        return m_project->locale()->formatMoney( cost1 - cost2, "", 0 );
-    }
-    return "";
-}
-
-QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) const
-{
-    QVariant result;
-    Account *a = account( index );
-    if ( a == 0 ) {
-        return QVariant();
-    }
-    if ( role == Qt::DisplayRole ) {
-        switch ( index.column() ) {
-            case 0: return a->name();
-            case 1: return a->description();
-            case 2: {
-                return formatMoney( m_plannedCostMap.value( a ).totalCost(), m_actualCostMap.value( a ).totalCost() );
-            }
-            default: {
-                int col = index.column() - 3;
-                EffortCostMap pc = m_plannedCostMap.value( a );
-                EffortCostMap ac = m_actualCostMap.value( a );
-                switch ( m_periodtype ) {
-                    case Period_Day: {
-                        double planned = 0.0;
-                        if ( m_cumulative ) {
-                            planned = pc.costTo( startDate().addDays( col ) );
-                        } else {
-                            planned = pc.costOnDate( startDate().addDays( col ) );
-                        }
-                        double actual = 0.0;
-                        if ( m_cumulative ) {
-                            actual = ac.costTo( startDate().addDays( col ) );
-                        } else {
-                            actual = ac.costOnDate( startDate().addDays( col ) );
-                        }
-                        return formatMoney( planned, actual );
-                    }
-                    case Period_Week: {
-                        // ISO Week numbering always uses Monday as first day of week
-                        const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
-                            ? Qt::Monday
-                            : KGlobal::locale()->weekStartDay();
-
-                        int days = firstWeekDay - startDate().dayOfWeek();
-                        if ( days > 0 ) {
-                            days -= 7; ;
-                        }
-                        QDate start = startDate().addDays( days );
-                        int week = col;
-                        double planned = 0.0;
-                        if ( m_cumulative ) {
-                            planned = pc.costTo( start.addDays( ++week * 7 ) );
-                        } else {
-                            planned = week == 0 ? pc.cost( startDate(), startDate().daysTo( start.addDays( 7 ) ) ) : pc.cost( start.addDays( week * 7 ) );
-                        }
-                        double actual = 0.0;
-                        if ( m_cumulative ) {
-                            actual = ac.costTo( start.addDays( ++week * 7 ) );
-                        } else {
-                            actual = week == 0 ? ac.cost( startDate(), startDate().daysTo( start.addDays( 7 ) ) ) : ac.cost( start.addDays( week * 7 ) );
-                        }
-                        return formatMoney( planned, actual );
-                    }
-                    case Period_Month: {
-                        int days = startDate().daysInMonth() - startDate().day() + 1;
-                        QDate start = startDate();
-                        for ( int i = 0; i < col; ++i ) {
-                            start = start.addDays( days );
-                            days = start.daysInMonth();
-                        }
-                        int planned = 0.0;
-                        if ( m_cumulative ) {
-                            planned = pc.costTo( start.addDays( start.daysInMonth() - start.day() + 1 ) );
-                        } else {
-                            planned = pc.cost( start, start.daysInMonth() - start.day() + 1);
-                        }
-                        int actual = 0.0;
-                        if ( m_cumulative ) {
-                            actual = ac.costTo( start.addDays( start.daysInMonth() - start.day() + 1 ) );
-                        } else {
-                            actual = ac.cost( start, start.daysInMonth() - start.day() + 1);
-                        }
-                        return formatMoney( planned, actual );
-                    }
-                    default:
-                        return 0.0;
-                        break;
-                }
-            }
-        }
-    } else if ( role == Qt::ToolTipRole ) {
-        switch ( index.column() ) {
-            case 0: return a->name();
-            case 1: return a->description();
-            case 2: {
-                double act = m_actualCostMap.value( a ).totalCost();
-                double pl = m_plannedCostMap.value( a ).totalCost();
-                return i18n( "Actual total cost: %1, planned total cost: %2", m_project->locale()->formatMoney( act, "", 0 ), m_project->locale()->formatMoney( pl, "", 0 ) );
-            }
-            default: break;
-        }
-    } else if ( role == Qt::TextAlignmentRole ) {
-        return headerData( index.column(), Qt::Horizontal, role );
-    } else {
-        switch ( index.column() ) {
-            case 0:
-            case 1: return QVariant();
-            default: {
-                return cost( a, index.column() - 3, role );
-            }
-        }
-    }
-    return QVariant();
-}
-
-QVariant CostBreakdownItemModel::cost( const Account *a, int offset, int role ) const
-{
-    EffortCostMap costmap;
-    if ( role == Role::Planned ) {
-        costmap = m_plannedCostMap.value( const_cast<Account*>( a ) );
-    } else if ( role == Role::Actual ) {
-        costmap = m_actualCostMap.value( const_cast<Account*>( a ) );
-    } else {
-        return QVariant();
-    }
-    double cost = 0.0;
-    switch ( m_periodtype ) {
+    if (startDate().isValid() && endDate().isValid()) {
+        switch (m_periodtype) {
         case Period_Day: {
-            if ( m_cumulative ) {
-                cost = costmap.costTo( startDate().addDays( offset ) );
-            } else {
-                cost = costmap.costOnDate( startDate().addDays( offset ) );
-            }
+            c += startDate().daysTo(endDate()) + 1;
             break;
         }
         case Period_Week: {
             // ISO Week numbering always uses Monday as first day of week
             const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
-                ? Qt::Monday
-                : KGlobal::locale()->weekStartDay();
+                                     ? Qt::Monday
+                                     : KGlobal::locale()->weekStartDay();
 
             int days = firstWeekDay - startDate().dayOfWeek();
-            if ( days > 0 ) {
-                days -= 7; ;
+            if (days > 0) {
+                days -= 7;
             }
-            QDate start = startDate().addDays( days );
-            int week = offset;
-            if ( m_cumulative ) {
-                cost = costmap.costTo( start.addDays( ++week * 7 ) );
-            } else {
-                cost = week == 0 ? costmap.cost( startDate(), startDate().daysTo( start.addDays( 7 ) ) ) : costmap.cost( start.addDays( week * 7 ) );
-            }
+            QDate start = startDate().addDays(days);
+            c += (start.daysTo(endDate()) / 7) + 1;
             break;
         }
         case Period_Month: {
             int days = startDate().daysInMonth() - startDate().day() + 1;
-            QDate start = startDate();
-            for ( int i = 0; i < offset; ++i ) {
-                start = start.addDays( days );
-                days = start.daysInMonth();
-            }
-            if ( m_cumulative ) {
-                cost = costmap.costTo( start.addDays( start.daysInMonth() - start.day() + 1 ) );
-            } else {
-                cost = costmap.cost( start, start.daysInMonth() - start.day() + 1);
+            for (QDate d = startDate(); d < endDate(); d = d.addDays(days)) {
+                ++c;
+                days = qMin(d.daysTo(endDate()), d.daysInMonth());
             }
             break;
         }
-        default:
-            break;
+        }
+    }
+    return c;
+}
+
+int CostBreakdownItemModel::rowCount(const QModelIndex &parent) const
+{
+    if (m_project == 0) {
+        return 0;
+    }
+    Account *par = account(parent);
+    if (par == 0) {
+        return m_project->accounts().accountList().count();
+    }
+    return par->accountList().count();
+}
+
+QString CostBreakdownItemModel::formatMoney(double cost1, double cost2) const
+{
+    if (m_showmode == ShowMode_Planned) {
+        return m_project->locale()->formatMoney(cost1, "", 0);
+    }
+    if (m_showmode == ShowMode_Actual) {
+        return m_project->locale()->formatMoney(cost2, "", 0);
+    }
+    if (m_showmode == ShowMode_Both) {
+        return QString(m_format).arg(m_project->locale()->formatMoney(cost2, "", 0)).arg(m_project->locale()->formatMoney(cost1, "", 0));
+    }
+    if (m_showmode == ShowMode_Deviation) {
+        return m_project->locale()->formatMoney(cost1 - cost2, "", 0);
+    }
+    return "";
+}
+
+QVariant CostBreakdownItemModel::data(const QModelIndex &index, int role) const
+{
+    QVariant result;
+    Account *a = account(index);
+    if (a == 0) {
+        return QVariant();
+    }
+    if (role == Qt::DisplayRole) {
+        switch (index.column()) {
+        case 0: return a->name();
+        case 1: return a->description();
+        case 2: {
+            return formatMoney(m_plannedCostMap.value(a).totalCost(), m_actualCostMap.value(a).totalCost());
+        }
+        default: {
+            int col = index.column() - 3;
+            EffortCostMap pc = m_plannedCostMap.value(a);
+            EffortCostMap ac = m_actualCostMap.value(a);
+            switch (m_periodtype) {
+            case Period_Day: {
+                double planned = 0.0;
+                if (m_cumulative) {
+                    planned = pc.costTo(startDate().addDays(col));
+                } else {
+                    planned = pc.costOnDate(startDate().addDays(col));
+                }
+                double actual = 0.0;
+                if (m_cumulative) {
+                    actual = ac.costTo(startDate().addDays(col));
+                } else {
+                    actual = ac.costOnDate(startDate().addDays(col));
+                }
+                return formatMoney(planned, actual);
+            }
+            case Period_Week: {
+                // ISO Week numbering always uses Monday as first day of week
+                const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+                                         ? Qt::Monday
+                                         : KGlobal::locale()->weekStartDay();
+
+                int days = firstWeekDay - startDate().dayOfWeek();
+                if (days > 0) {
+                    days -= 7;;
+                }
+                QDate start = startDate().addDays(days);
+                int week = col;
+                double planned = 0.0;
+                if (m_cumulative) {
+                    planned = pc.costTo(start.addDays(++week * 7));
+                } else {
+                    planned = week == 0 ? pc.cost(startDate(), startDate().daysTo(start.addDays(7))) : pc.cost(start.addDays(week * 7));
+                }
+                double actual = 0.0;
+                if (m_cumulative) {
+                    actual = ac.costTo(start.addDays(++week * 7));
+                } else {
+                    actual = week == 0 ? ac.cost(startDate(), startDate().daysTo(start.addDays(7))) : ac.cost(start.addDays(week * 7));
+                }
+                return formatMoney(planned, actual);
+            }
+            case Period_Month: {
+                int days = startDate().daysInMonth() - startDate().day() + 1;
+                QDate start = startDate();
+                for (int i = 0; i < col; ++i) {
+                    start = start.addDays(days);
+                    days = start.daysInMonth();
+                }
+                int planned = 0.0;
+                if (m_cumulative) {
+                    planned = pc.costTo(start.addDays(start.daysInMonth() - start.day() + 1));
+                } else {
+                    planned = pc.cost(start, start.daysInMonth() - start.day() + 1);
+                }
+                int actual = 0.0;
+                if (m_cumulative) {
+                    actual = ac.costTo(start.addDays(start.daysInMonth() - start.day() + 1));
+                } else {
+                    actual = ac.cost(start, start.daysInMonth() - start.day() + 1);
+                }
+                return formatMoney(planned, actual);
+            }
+            default:
+                return 0.0;
+                break;
+            }
+        }
+        }
+    } else if (role == Qt::ToolTipRole) {
+        switch (index.column()) {
+        case 0: return a->name();
+        case 1: return a->description();
+        case 2: {
+            double act = m_actualCostMap.value(a).totalCost();
+            double pl = m_plannedCostMap.value(a).totalCost();
+            return i18n("Actual total cost: %1, planned total cost: %2", m_project->locale()->formatMoney(act, "", 0), m_project->locale()->formatMoney(pl, "", 0));
+        }
+        default: break;
+        }
+    } else if (role == Qt::TextAlignmentRole) {
+        return headerData(index.column(), Qt::Horizontal, role);
+    } else {
+        switch (index.column()) {
+        case 0:
+        case 1: return QVariant();
+        default: {
+            return cost(a, index.column() - 3, role);
+        }
+        }
+    }
+    return QVariant();
+}
+
+QVariant CostBreakdownItemModel::cost(const Account *a, int offset, int role) const
+{
+    EffortCostMap costmap;
+    if (role == Role::Planned) {
+        costmap = m_plannedCostMap.value(const_cast<Account *>(a));
+    } else if (role == Role::Actual) {
+        costmap = m_actualCostMap.value(const_cast<Account *>(a));
+    } else {
+        return QVariant();
+    }
+    double cost = 0.0;
+    switch (m_periodtype) {
+    case Period_Day: {
+        if (m_cumulative) {
+            cost = costmap.costTo(startDate().addDays(offset));
+        } else {
+            cost = costmap.costOnDate(startDate().addDays(offset));
+        }
+        break;
+    }
+    case Period_Week: {
+        // ISO Week numbering always uses Monday as first day of week
+        const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+                                 ? Qt::Monday
+                                 : KGlobal::locale()->weekStartDay();
+
+        int days = firstWeekDay - startDate().dayOfWeek();
+        if (days > 0) {
+            days -= 7;;
+        }
+        QDate start = startDate().addDays(days);
+        int week = offset;
+        if (m_cumulative) {
+            cost = costmap.costTo(start.addDays(++week * 7));
+        } else {
+            cost = week == 0 ? costmap.cost(startDate(), startDate().daysTo(start.addDays(7))) : costmap.cost(start.addDays(week * 7));
+        }
+        break;
+    }
+    case Period_Month: {
+        int days = startDate().daysInMonth() - startDate().day() + 1;
+        QDate start = startDate();
+        for (int i = 0; i < offset; ++i) {
+            start = start.addDays(days);
+            days = start.daysInMonth();
+        }
+        if (m_cumulative) {
+            cost = costmap.costTo(start.addDays(start.daysInMonth() - start.day() + 1));
+        } else {
+            cost = costmap.cost(start, start.daysInMonth() - start.day() + 1);
+        }
+        break;
+    }
+    default:
+        break;
     }
     return cost;
 }
@@ -932,9 +934,9 @@ int CostBreakdownItemModel::periodType() const
     return m_periodtype;
 }
 
-void CostBreakdownItemModel::setPeriodType( int period )
+void CostBreakdownItemModel::setPeriodType(int period)
 {
-    if ( m_periodtype != period ) {
+    if (m_periodtype != period) {
         m_periodtype = period;
         reset();
     }
@@ -945,7 +947,7 @@ int CostBreakdownItemModel::startMode() const
     return m_startmode;
 }
 
-void CostBreakdownItemModel::setStartMode( int mode )
+void CostBreakdownItemModel::setStartMode(int mode)
 {
     m_startmode = mode;
     reset();
@@ -956,7 +958,7 @@ int CostBreakdownItemModel::endMode() const
     return m_endmode;
 }
 
-void CostBreakdownItemModel::setEndMode( int mode )
+void CostBreakdownItemModel::setEndMode(int mode)
 {
     m_endmode = mode;
     reset();
@@ -964,27 +966,26 @@ void CostBreakdownItemModel::setEndMode( int mode )
 
 QDate CostBreakdownItemModel::startDate() const
 {
-    if ( m_project == 0 || m_manager == 0 ) {
+    if (m_project == 0 || m_manager == 0) {
         return m_start;
     }
-    switch ( m_startmode ) {
-        case StartMode_Project: {
-            QDate d = m_project->startTime( id() ).date();
-            if ( m_plannedStart.isValid() && m_plannedStart < d ) {
-                d = m_plannedStart;
-            }
-            if ( m_actualStart.isValid() && m_actualStart < d ) {
-                d = m_actualStart;
-            }
-            return d;
+    switch (m_startmode) {
+    case StartMode_Project: {
+        QDate d = m_project->startTime(id()).date();
+        if (m_plannedStart.isValid() && m_plannedStart < d) {
+            d = m_plannedStart;
         }
-        default: break;
+        if (m_actualStart.isValid() && m_actualStart < d) {
+            d = m_actualStart;
+        }
+        return d;
+    }
+    default: break;
     }
     return m_start;
 }
 
-
-void CostBreakdownItemModel::setStartDate( const QDate &date )
+void CostBreakdownItemModel::setStartDate(const QDate &date)
 {
     m_start = date;
     reset();
@@ -992,27 +993,27 @@ void CostBreakdownItemModel::setStartDate( const QDate &date )
 
 QDate CostBreakdownItemModel::endDate() const
 {
-    if ( m_project == 0 || m_manager == 0 ) {
+    if (m_project == 0 || m_manager == 0) {
         return m_end;
     }
-    switch ( m_endmode ) {
-        case EndMode_Project: {
-            QDate d = m_project->endTime( id() ).date();
-            if ( m_plannedEnd.isValid() && m_plannedEnd > d ) {
-                d = m_plannedEnd;
-            }
-            if ( m_actualEnd.isValid() && m_actualEnd > d ) {
-                d = m_actualEnd;
-            }
-            return d;
+    switch (m_endmode) {
+    case EndMode_Project: {
+        QDate d = m_project->endTime(id()).date();
+        if (m_plannedEnd.isValid() && m_plannedEnd > d) {
+            d = m_plannedEnd;
         }
-        case EndMode_CurrentDate: return QDate::currentDate();
-        default: break;
+        if (m_actualEnd.isValid() && m_actualEnd > d) {
+            d = m_actualEnd;
+        }
+        return d;
+    }
+    case EndMode_CurrentDate: return QDate::currentDate();
+    default: break;
     }
     return m_end;
 }
 
-void CostBreakdownItemModel::setEndDate( const QDate &date )
+void CostBreakdownItemModel::setEndDate(const QDate &date)
 {
     m_end = date;
     reset();
@@ -1023,7 +1024,7 @@ bool CostBreakdownItemModel::cumulative() const
     return m_cumulative;
 }
 
-void CostBreakdownItemModel::setCumulative( bool on )
+void CostBreakdownItemModel::setCumulative(bool on)
 {
     m_cumulative = on;
     reset();
@@ -1033,103 +1034,103 @@ int CostBreakdownItemModel::showMode() const
 {
     return m_showmode;
 }
-void CostBreakdownItemModel::setShowMode( int show )
+void CostBreakdownItemModel::setShowMode(int show)
 {
     m_showmode = show;
 }
 
-QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
+QVariant CostBreakdownItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if ( orientation == Qt::Horizontal ) {
-        if ( role == Qt::DisplayRole ) {
-            if ( section == 0 ) {
-                return i18n( "Name" );
+    if (orientation == Qt::Horizontal) {
+        if (role == Qt::DisplayRole) {
+            if (section == 0) {
+                return i18n("Name");
             }
-            if ( section == 1 ) {
-                return i18n( "Description" );
+            if (section == 1) {
+                return i18n("Description");
             }
-            if ( section == 2 ) {
-                return i18n( "Total" );
+            if (section == 2) {
+                return i18n("Total");
             }
             int col = section - 3;
-            switch ( m_periodtype ) {
-                case Period_Day: {
-                    return startDate().addDays( col ).toString( Qt::ISODate );
-                }
-                case Period_Week: {
-                    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+            switch (m_periodtype) {
+            case Period_Day: {
+                return startDate().addDays(col).toString(Qt::ISODate);
+            }
+            case Period_Week: {
+                const KCalendarSystem *calendar = KGlobal::locale()->calendar();
 #if KDE_IS_VERSION(4,7,0)
-                    return calendar->week(startDate().addDays( ( col ) * 7 ));
+                return calendar->week(startDate().addDays((col) * 7));
 #else
-                    return calendar->weekNumber(startDate().addDays( ( col ) * 7 ));
+                return calendar->weekNumber(startDate().addDays((col) * 7));
 #endif
+            }
+            case Period_Month: {
+                int days = startDate().daysInMonth() - startDate().day() + 1;
+                QDate start = startDate();
+                for (int i = 0; i < col; ++i) {
+                    start = start.addDays(days);
+                    days = start.daysInMonth();
                 }
-                case Period_Month: {
-                    int days = startDate().daysInMonth() - startDate().day() + 1;
-                    QDate start = startDate();
-                    for ( int i = 0; i < col; ++i ) {
-                        start = start.addDays( days );
-                        days = start.daysInMonth();
-                    }
-                    return QDate::shortMonthName( start.month() );
-                }
-                default:
-                    return section;
-                    break;
+                return QDate::shortMonthName(start.month());
+            }
+            default:
+                return section;
+                break;
             }
             return QVariant();
         }
-        if ( role == Qt::EditRole ) {
-            if ( section == 0 ) {
+        if (role == Qt::EditRole) {
+            if (section == 0) {
                 return "Name";
             }
-            if ( section == 1 ) {
+            if (section == 1) {
                 return "Description";
             }
-            if ( section == 2 ) {
+            if (section == 2) {
                 return "Total";
             }
             int col = section - 3;
-            switch ( m_periodtype ) {
-                case Period_Day: {
-                    return startDate().addDays( col );
-                }
-                case Period_Week: {
-                    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+            switch (m_periodtype) {
+            case Period_Day: {
+                return startDate().addDays(col);
+            }
+            case Period_Week: {
+                const KCalendarSystem *calendar = KGlobal::locale()->calendar();
 #if KDE_IS_VERSION(4,7,0)
-                    return calendar->week(startDate().addDays( ( col ) * 7 ));
+                return calendar->week(startDate().addDays((col) * 7));
 #else
-                    return calendar->weekNumber(startDate().addDays( ( col ) * 7 ));
+                return calendar->weekNumber(startDate().addDays((col) * 7));
 #endif
+            }
+            case Period_Month: {
+                int days = startDate().daysInMonth() - startDate().day() + 1;
+                QDate start = startDate();
+                for (int i = 0; i < col; ++i) {
+                    start = start.addDays(days);
+                    days = start.daysInMonth();
                 }
-                case Period_Month: {
-                    int days = startDate().daysInMonth() - startDate().day() + 1;
-                    QDate start = startDate();
-                    for ( int i = 0; i < col; ++i ) {
-                        start = start.addDays( days );
-                        days = start.daysInMonth();
-                    }
-                    return start.month();
-                }
-                default:
-                    return section;
-                    break;
+                return start.month();
+            }
+            default:
+                return section;
+                break;
             }
             return QVariant();
         }
-        if ( role == Qt::ToolTipRole ) {
-            switch ( section ) {
-                case 0: return ToolTip::accountName();
-                case 1: return ToolTip::accountDescription();
-                case 2: return i18n( "The total cost for the account shown as: Actual cost [ Planned cost ]" );
-                default: return QVariant();
+        if (role == Qt::ToolTipRole) {
+            switch (section) {
+            case 0: return ToolTip::accountName();
+            case 1: return ToolTip::accountDescription();
+            case 2: return i18n("The total cost for the account shown as: Actual cost [ Planned cost ]");
+            default: return QVariant();
             }
         }
-        if ( role == Qt::TextAlignmentRole ) {
-            switch ( section ) {
-                case 0: return QVariant();
-                case 1: return QVariant();
-                default: return (int)(Qt::AlignRight|Qt::AlignVCenter);
+        if (role == Qt::TextAlignmentRole) {
+            switch (section) {
+            case 0: return QVariant();
+            case 1: return QVariant();
+            default: return (int)(Qt::AlignRight | Qt::AlignVCenter);
             }
             return QVariant();
         }
@@ -1137,23 +1138,22 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
     return ItemModelBase::headerData(section, orientation, role);
 }
 
-Account *CostBreakdownItemModel::account( const QModelIndex &index ) const
+Account *CostBreakdownItemModel::account(const QModelIndex &index) const
 {
-    return static_cast<Account*>( index.internalPointer() );
+    return static_cast<Account *>(index.internalPointer());
 }
 
-void CostBreakdownItemModel::slotAccountChanged( Account *account )
+void CostBreakdownItemModel::slotAccountChanged(Account *account)
 {
     Q_UNUSED(account);
     fetchData();
-    foreach ( Account *a, m_plannedCostMap.keys() ) {
-        QModelIndex idx1 = index( a );
-        QModelIndex idx2 = index( idx1.row(), columnCount() - 1, parent( idx1 ) );
+    foreach (Account *a, m_plannedCostMap.keys()) {
+        QModelIndex idx1 = index(a);
+        QModelIndex idx2 = index(idx1.row(), columnCount() - 1, parent(idx1));
         //kDebug(planDbg())<<a->name()<<idx1<<idx2;
-        emit dataChanged( idx1, idx2  );
+        emit dataChanged(idx1, idx2);
     }
 }
-
 
 } // namespace KPlato
 

@@ -40,8 +40,7 @@ bool KisDeformPaintOpSettings::isAirbrushing() const
     // version 2.3
     if (hasProperty(AIRBRUSH_ENABLED)) {
         return getBool(AIRBRUSH_ENABLED);
-    }
-    else {
+    } else {
         return getBool(DEFORM_USE_MOVEMENT_PAINT);
     }
 }
@@ -50,8 +49,7 @@ int KisDeformPaintOpSettings::rate() const
 {
     if (hasProperty(AIRBRUSH_RATE)) {
         return getInt(AIRBRUSH_RATE);
-    }
-    else {
+    } else {
         return KisPaintOpSettings::rate();
     }
 }

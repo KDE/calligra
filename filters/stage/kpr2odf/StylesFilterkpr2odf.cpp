@@ -23,7 +23,7 @@
 #include <QColor>
 
 #include <kdebug.h>
-const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
+const QString Filterkpr2odf::createPageStyle(const KoXmlElement &page)
 {
     KoGenStyle style(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
     style.setAutoStyleInStylesDotXml(m_sticky);
@@ -266,7 +266,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
     return m_styles.insert(style, "dp");
 }
 
-const QString Filterkpr2odf::createGradientStyle(const KoXmlElement& gradientElement)
+const QString Filterkpr2odf::createGradientStyle(const KoXmlElement &gradientElement)
 {
     KoGenStyle style(KoGenStyle::GradientStyle);
 
@@ -399,7 +399,7 @@ const QString Filterkpr2odf::createPageLayout()
     return m_styles.insert(style, "pm");
 }
 
-const QString Filterkpr2odf::createMasterPageStyle(const KoXmlNode & objects, const KoXmlElement & masterBackground)
+const QString Filterkpr2odf::createMasterPageStyle(const KoXmlNode &objects, const KoXmlElement &masterBackground)
 {
     //KoXmlElement header( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
     //KoXmlElement footer( m_mainDoc.namedItem( "DOC" ).namedItem( "FOOTER" ).toElement() );
@@ -426,7 +426,7 @@ const QString Filterkpr2odf::createMasterPageStyle(const KoXmlNode & objects, co
     return m_styles.insert(style, "Default");
 }
 //TODO: load the tags still missing
-const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
+const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement &element)
 {
     //A graphic style is wiely used by a broad type of objects, hence can have many different properties
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
@@ -517,20 +517,21 @@ const QString Filterkpr2odf::createGraphicStyle(const KoXmlElement& element)
         } else if (brushStyle >= 2 && brushStyle <= 8) {
             //in KPR files transparency was used in ODF opacity is used instead calculated as 100-transparency
             int opacity = 100;
-            if (brushStyle == 2)
+            if (brushStyle == 2) {
                 opacity = 6;
-            else if (brushStyle == 3)
+            } else if (brushStyle == 3) {
                 opacity = 12;
-            else if (brushStyle == 4)
+            } else if (brushStyle == 4) {
                 opacity = 37;
-            else if (brushStyle == 5)
+            } else if (brushStyle == 5) {
                 opacity = 50;
-            else if (brushStyle == 6)
+            } else if (brushStyle == 6) {
                 opacity = 63;
-            else if (brushStyle == 7)
+            } else if (brushStyle == 7) {
                 opacity = 88;
-            else if (brushStyle == 8)
+            } else if (brushStyle == 8) {
                 opacity = 94;
+            }
             //Opacity is a gradient, in this case an uniform one
             style.addProperty("draw:opacity", createOpacityGradientStyle(opacity));
         }
@@ -847,7 +848,7 @@ const QString Filterkpr2odf::createHatchStyle(int brushStyle, QString fillColor)
     return m_styles.insert(style, "hs");
 }
 
-const QString Filterkpr2odf::createParagraphStyle(const KoXmlElement& element)
+const QString Filterkpr2odf::createParagraphStyle(const KoXmlElement &element)
 {
     KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph");
     style.setAutoStyleInStylesDotXml(m_sticky);
@@ -952,7 +953,7 @@ const QString Filterkpr2odf::createParagraphStyle(const KoXmlElement& element)
     return m_styles.insert(style, "P");
 }
 
-QString Filterkpr2odf::convertBorder(const KoXmlElement& border)
+QString Filterkpr2odf::convertBorder(const KoXmlElement &border)
 {
     QString style;
     int styleInt = border.attribute("style").toInt();
@@ -968,7 +969,7 @@ QString Filterkpr2odf::convertBorder(const KoXmlElement& border)
     return QString("%1 %2 %3").arg(width).arg(style).arg(color.name());
 }
 
-const QString Filterkpr2odf::createTextStyle(const KoXmlElement& element)
+const QString Filterkpr2odf::createTextStyle(const KoXmlElement &element)
 {
     KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
     style.setAutoStyleInStylesDotXml(m_sticky);
@@ -1064,17 +1065,17 @@ const QString Filterkpr2odf::createTextStyle(const KoXmlElement& element)
     return m_styles.insert(style, "T");
 }
 
-const QString Filterkpr2odf::createListStyle(const KoXmlElement& element)
+const QString Filterkpr2odf::createListStyle(const KoXmlElement &element)
 {
     KoGenStyle style(KoGenStyle::ListAutoStyle);
     style.setAutoStyleInStylesDotXml(m_sticky);
 
     static const int s_oasisCounterTypes[] = { '\0', '1', 'a', 'A', 'i', 'I',
-            '\0', '\0', // custombullet, custom
-            0x2022, // circle -> small disc
-            0xE00A, // square
-            0x25CF, // disc -> large disc
-            0x27A2  // box -> right-pointing triangle
+                                               '\0', '\0', // custombullet, custom
+                                               0x2022, // circle -> small disc
+                                               0xE00A, // square
+                                               0x25CF, // disc -> large disc
+                                               0x27A2  // box -> right-pointing triangle
                                              };
 
     KoXmlElement counter = element.namedItem("COUNTER").toElement();

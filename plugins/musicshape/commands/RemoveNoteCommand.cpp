@@ -26,7 +26,7 @@
 
 using namespace MusicCore;
 
-RemoveNoteCommand::RemoveNoteCommand(MusicShape* shape, Chord* chord, Note* note)
+RemoveNoteCommand::RemoveNoteCommand(MusicShape *shape, Chord *chord, Note *note)
     : m_chord(chord), m_note(note), m_shape(shape)
 {
     setText(kundo2_i18n("Remove note"));

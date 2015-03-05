@@ -21,18 +21,15 @@
 
 #include <kis_brush_based_paintop_options_widget.h>
 
-
 class KisColorSmudgeOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {
     Q_OBJECT
 
 public:
-    KisColorSmudgeOpSettingsWidget(QWidget* parent = 0);
+    KisColorSmudgeOpSettingsWidget(QWidget *parent = 0);
     ~KisColorSmudgeOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 };
-
-
 
 #endif // KIS_COLORSMUDGEOP_SETTINGS_WIDGET_H_

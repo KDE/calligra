@@ -22,10 +22,11 @@
 #include <QString>
 #include <QBitArray>
 
-namespace KRA {
+namespace KRA
+{
 
-QString   flagsToString(const QBitArray& flags, int size=-1, char trueToken='1', char falseToken='0', bool defaultTrue=true);
-QBitArray stringToFlags(const QString& string, int size=-1, char token='0', bool defaultTrue=true);
+QString   flagsToString(const QBitArray &flags, int size = -1, char trueToken = '1', char falseToken = '0', bool defaultTrue = true);
+QBitArray stringToFlags(const QString &string, int size = -1, char token = '0', bool defaultTrue = true);
 
 }
 

@@ -36,7 +36,7 @@ class ViewAdaptor : public KoViewAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.projectmanaging.view")
 
 public:
-    explicit ViewAdaptor( View* );
+    explicit ViewAdaptor(View *);
     virtual ~ViewAdaptor();
 
 public Q_SLOTS:
@@ -51,7 +51,7 @@ public Q_SLOTS:
 //     void slotConfigure();
 
 private:
-    View* m_view;
+    View *m_view;
 };
 
 }  //KPlato namespace

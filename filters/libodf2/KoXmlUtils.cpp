@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "KoXmlUtils.h"
 
@@ -28,20 +27,18 @@
 // libodf2
 #include "KoXmlStreamReader.h"
 
-
 void readCharacterData(KoXmlStreamReader &reader, QString &result)
 {
     while (!reader.atEnd() && !reader.isEndElement()) {
-	reader.readNext();
+        reader.readNext();
 
         if (reader.isCharacters()) {
             //kDebug(30503) << "Found character data";
-	    result.append(reader.text());
+            result.append(reader.text());
+        } else if (reader.isStartElement()) {
+            // Collect character data recursively and read past the end element.
+            readCharacterData(reader, result);
+            reader.readNext();
         }
-	else if (reader.isStartElement()) {
-	    // Collect character data recursively and read past the end element.
-	    readCharacterData(reader, result);
-	    reader.readNext(); 
-	}
     }
 }

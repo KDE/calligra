@@ -21,7 +21,6 @@
 #include "kis_convolution_kernel.h"
 #include <kis_convolution_painter.h>
 
-
 qreal KisGaussianKernel::sigmaFromRadius(qreal radius)
 {
     return 0.3 * radius + 0.3;
@@ -31,7 +30,6 @@ int KisGaussianKernel::kernelSizeFromRadius(qreal radius)
 {
     return 6 * ceil(sigmaFromRadius(radius)) + 1;
 }
-
 
 Matrix<qreal, Dynamic, Dynamic>
 KisGaussianKernel::createHorizontalMatrix(qreal radius)
@@ -52,7 +50,7 @@ KisGaussianKernel::createHorizontalMatrix(qreal radius)
 
     for (int x = 0; x < kernelSize; x++) {
         qreal xDistance = center - x;
-        matrix(0, x) = multiplicand * exp( -xDistance * xDistance * exponentMultiplicand );
+        matrix(0, x) = multiplicand * exp(-xDistance * xDistance * exponentMultiplicand);
     }
 
     return matrix;
@@ -77,7 +75,7 @@ KisGaussianKernel::createVerticalMatrix(qreal radius)
 
     for (int y = 0; y < kernelSize; y++) {
         qreal yDistance = center - y;
-        matrix(y, 0) = multiplicand * exp( -yDistance * yDistance * exponentMultiplicand );
+        matrix(y, 0) = multiplicand * exp(-yDistance * yDistance * exponentMultiplicand);
     }
 
     return matrix;
@@ -98,7 +96,7 @@ KisGaussianKernel::createVerticalKernel(qreal radius)
 }
 
 void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
-                                      const QRect& rect,
+                                      const QRect &rect,
                                       qreal xRadius, qreal yRadius,
                                       const QBitArray &channelFlags,
                                       KoUpdater *progressUpdater)
@@ -120,7 +118,6 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
                                  srcTopLeft - QPoint(0, ceil(verticalCenter)),
                                  rect.size() + QSize(0, 2 * ceil(verticalCenter)), BORDER_REPEAT);
-
 
         KisConvolutionPainter verticalPainter(device);
         verticalPainter.setChannelFlags(channelFlags);

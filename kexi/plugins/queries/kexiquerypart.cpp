@@ -37,14 +37,14 @@
 //------------------------------------------------
 
 KexiQueryPart::KexiQueryPart(QObject *parent, const QVariantList &l)
-  : KexiPart::Part(parent,
-        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-              "Use '_' character instead of spaces. First character should be a..z character. "
-              "If you cannot use latin characters in your language, use english word.",
-              "query"),
-        i18nc("tooltip", "Create new query"),
-        i18nc("what's this", "Creates new query."),
-        l)
+    : KexiPart::Part(parent,
+                     i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+                           "Use '_' character instead of spaces. First character should be a..z character. "
+                           "If you cannot use latin characters in your language, use english word.",
+                           "query"),
+                     i18nc("tooltip", "Create new query"),
+                     i18nc("what's this", "Creates new query."),
+                     l)
 {
     setInternalPropertyValue("textViewModeCaption", i18n("SQL"));
 }
@@ -53,7 +53,7 @@ KexiQueryPart::~KexiQueryPart()
 {
 }
 
-KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
+KexiWindowData *KexiQueryPart::createWindowData(KexiWindow *window)
 {
     KexiQueryPart::TempData *data = new KexiQueryPart::TempData(
         window, KexiMainWindowIface::global()->project()->dbConnection());
@@ -63,19 +63,18 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
     return data;
 }
 
-KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPart::Item &item,
-                                    Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
+KexiView *KexiQueryPart::createView(QWidget *parent, KexiWindow *window, KexiPart::Item &item,
+                                    Kexi::ViewMode viewMode, QMap<QString, QVariant> *)
 {
     Q_UNUSED(item);
     Q_UNUSED(window);
     //kDebug();
 
-    KexiView* view = 0;
+    KexiView *view = 0;
     if (viewMode == Kexi::DataViewMode) {
         view = new KexiQueryView(parent);
         view->setObjectName("dataview");
-    }
-    else if (viewMode == Kexi::DesignViewMode) {
+    } else if (viewMode == Kexi::DesignViewMode) {
         view = new KexiQueryDesignerGuiEditor(parent);
         view->setObjectName("guieditor");
         //needed for updating tables combo box:
@@ -86,8 +85,7 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
                 view, SLOT(slotItemRemoved(KexiPart::Item)));
         connect(prj, SIGNAL(itemRenamed(KexiPart::Item,QString)),
                 view, SLOT(slotItemRenamed(KexiPart::Item,QString)));
-    }
-    else if (viewMode == Kexi::TextViewMode) {
+    } else if (viewMode == Kexi::TextViewMode) {
         view = new KexiQueryDesignerSQLView(parent);
         view->setObjectName("sqldesigner");
     }
@@ -97,12 +95,14 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
 tristate KexiQueryPart::remove(KexiPart::Item &item)
 {
     if (!KexiMainWindowIface::global()->project()
-            || !KexiMainWindowIface::global()->project()->dbConnection())
+            || !KexiMainWindowIface::global()->project()->dbConnection()) {
         return false;
+    }
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     KexiDB::QuerySchema *sch = conn->querySchema(item.identifier());
-    if (sch)
+    if (sch) {
         return conn->dropQuery(sch);
+    }
     //last chance: just remove item
     return conn->removeObject(item.identifier());
 }
@@ -115,11 +115,11 @@ void KexiQueryPart::initInstanceActions()
 {
 }
 
-KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
-    KexiWindow *window, const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode,
+KexiDB::SchemaData *KexiQueryPart::loadSchemaData(
+    KexiWindow *window, const KexiDB::SchemaData &sdata, Kexi::ViewMode viewMode,
     bool *ownedByWindow)
 {
-    KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window->data());
+    KexiQueryPart::TempData *temp = static_cast<KexiQueryPart::TempData *>(window->data());
     QString sqlText;
     if (!loadDataBlock(window, sqlText, "sql")) {
         return 0;
@@ -142,31 +142,35 @@ KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
         return 0;
     }
     query->debug();
-    (KexiDB::SchemaData&)*query = sdata; //copy main attributes
+    (KexiDB::SchemaData &)*query = sdata; //copy main attributes
 
     temp->registerTableSchemaChanges(query);
-    if (ownedByWindow)
+    if (ownedByWindow) {
         *ownedByWindow = false;
+    }
 
     query->debug();
     return query;
 }
 
-KLocalizedString KexiQueryPart::i18nMessage(const QString& englishMessage, KexiWindow* window) const
+KLocalizedString KexiQueryPart::i18nMessage(const QString &englishMessage, KexiWindow *window) const
 {
-    if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
+    if (englishMessage == "Design of object <resource>%1</resource> has been modified.") {
         return ki18n(I18N_NOOP("Design of query <resource>%1</resource> has been modified."));
-    if (englishMessage == "Object <resource>%1</resource> already exists.")
+    }
+    if (englishMessage == "Object <resource>%1</resource> already exists.") {
         return ki18n(I18N_NOOP("Query <resource>%1</resource> already exists."));
+    }
 
     return Part::i18nMessage(englishMessage, window);
 }
 
-tristate KexiQueryPart::rename(KexiPart::Item &item, const QString& newName)
+tristate KexiQueryPart::rename(KexiPart::Item &item, const QString &newName)
 {
     Q_UNUSED(newName);
-    if (!KexiMainWindowIface::global()->project()->dbConnection())
+    if (!KexiMainWindowIface::global()->project()->dbConnection()) {
         return false;
+    }
     KexiMainWindowIface::global()->project()->dbConnection()
     ->setQuerySchemaObsolete(item.name());
     return true;
@@ -174,11 +178,11 @@ tristate KexiQueryPart::rename(KexiPart::Item &item, const QString& newName)
 
 //----------------
 
-KexiQueryPart::TempData::TempData(KexiWindow* window, KexiDB::Connection *conn)
-        : KexiWindowData(window)
-        , KexiDB::Connection::TableSchemaChangeListenerInterface()
-        , m_query(0)
-        , m_queryChangedInPreviousView(false)
+KexiQueryPart::TempData::TempData(KexiWindow *window, KexiDB::Connection *conn)
+    : KexiWindowData(window)
+    , KexiDB::Connection::TableSchemaChangeListenerInterface()
+    , m_query(0)
+    , m_queryChangedInPreviousView(false)
 {
     this->conn = conn;
 }
@@ -190,8 +194,9 @@ KexiQueryPart::TempData::~TempData()
 
 void KexiQueryPart::TempData::clearQuery()
 {
-    if (!m_query)
+    if (!m_query) {
         return;
+    }
     unregisterForTablesSchemaChanges();
     m_query->clear();
 }
@@ -203,16 +208,17 @@ void KexiQueryPart::TempData::unregisterForTablesSchemaChanges()
 
 void KexiQueryPart::TempData::registerTableSchemaChanges(KexiDB::QuerySchema *q)
 {
-    if (!q)
+    if (!q) {
         return;
-    foreach(KexiDB::TableSchema* table, *q->tables()) {
+    }
+    foreach (KexiDB::TableSchema *table, *q->tables()) {
         conn->registerForTableSchemaChanges(*this, *table);
     }
 }
 
 tristate KexiQueryPart::TempData::closeListener()
 {
-    KexiWindow* window = static_cast<KexiWindow*>(parent());
+    KexiWindow *window = static_cast<KexiWindow *>(parent());
     return KexiMainWindowIface::global()->closeWindow(window);
 }
 
@@ -225,12 +231,12 @@ KexiDB::QuerySchema *KexiQueryPart::TempData::takeQuery()
 
 void KexiQueryPart::TempData::setQuery(KexiDB::QuerySchema *query)
 {
-    if (m_query && m_query == query)
+    if (m_query && m_query == query) {
         return;
+    }
     if (m_query
             /* query not owned by window */
-            && (static_cast<KexiWindow*>(parent())->schemaData() != static_cast<KexiDB::SchemaData*>(m_query)))
-    {
+            && (static_cast<KexiWindow *>(parent())->schemaData() != static_cast<KexiDB::SchemaData *>(m_query))) {
         delete m_query;
     }
     m_query = query;
@@ -248,6 +254,6 @@ void KexiQueryPart::TempData::setQueryChangedInPreviousView(bool set)
 
 //----------------
 
-K_EXPORT_KEXIPART_PLUGIN( KexiQueryPart, query )
+K_EXPORT_KEXIPART_PLUGIN(KexiQueryPart, query)
 
 #include "kexiquerypart.moc"

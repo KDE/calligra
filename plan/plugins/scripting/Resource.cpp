@@ -26,8 +26,8 @@
 #include "kptdatetime.h"
 #include "kptcommand.h"
 
-Scripting::Resource::Resource( Scripting::Project *project, KPlato::Resource *resource, QObject *parent )
-    : QObject( parent ), m_project( project ), m_resource( resource )
+Scripting::Resource::Resource(Scripting::Project *project, KPlato::Resource *resource, QObject *parent)
+    : QObject(parent), m_project(project), m_resource(resource)
 {
 }
 
@@ -46,34 +46,34 @@ QString Scripting::Resource::id() const
     return m_resource->id();
 }
 
-QVariantList Scripting::Resource::appointmentIntervals( qlonglong schedule ) const
+QVariantList Scripting::Resource::appointmentIntervals(qlonglong schedule) const
 {
-    KPlato::Appointment app = m_resource->appointmentIntervals( schedule );
+    KPlato::Appointment app = m_resource->appointmentIntervals(schedule);
     QVariantList lst;
-    foreach ( const KPlato::AppointmentInterval &ai, app.intervals().map() ) {
-        lst << QVariant( QVariantList() << ai.startTime().toString() << ai.endTime().toString() << ai.load() );
+    foreach (const KPlato::AppointmentInterval &ai, app.intervals().map()) {
+        lst << QVariant(QVariantList() << ai.startTime().toString() << ai.endTime().toString() << ai.load());
     }
     return lst;
 }
 
-void Scripting::Resource::addExternalAppointment( const QVariant &id, const QString &name, const QVariantList &lst )
+void Scripting::Resource::addExternalAppointment(const QVariant &id, const QString &name, const QVariantList &lst)
 {
-    m_project->addExternalAppointment( this, id, name, lst );
+    m_project->addExternalAppointment(this, id, name, lst);
 }
 
 QVariantList Scripting::Resource::externalAppointments() const
 {
     KPlato::AppointmentIntervalList ilst = m_resource->externalAppointments();
     QVariantList lst;
-    foreach ( const KPlato::AppointmentInterval &ai, ilst.map() ) {
-        lst << QVariant( QVariantList() << ai.startTime().toString() << ai.endTime().toString() << ai.load() );
+    foreach (const KPlato::AppointmentInterval &ai, ilst.map()) {
+        lst << QVariant(QVariantList() << ai.startTime().toString() << ai.endTime().toString() << ai.load());
     }
     return lst;
 }
 
-void Scripting::Resource::clearExternalAppointments( const QString &id )
+void Scripting::Resource::clearExternalAppointments(const QString &id)
 {
-    m_project->clearExternalAppointments( this, id );
+    m_project->clearExternalAppointments(this, id);
 }
 
 int Scripting::Resource::childCount() const
@@ -81,36 +81,36 @@ int Scripting::Resource::childCount() const
     return kplatoResource()->type() == KPlato::Resource::Type_Team ? kplatoResource()->teamMembers().count() : 0;
 }
 
-QObject *Scripting::Resource::childAt( int index ) const
+QObject *Scripting::Resource::childAt(int index) const
 {
-    if ( kplatoResource()->type() == KPlato::Resource::Type_Team ) {
-        return m_project->resource( kplatoResource()->teamMembers().value( index ) );
+    if (kplatoResource()->type() == KPlato::Resource::Type_Team) {
+        return m_project->resource(kplatoResource()->teamMembers().value(index));
     }
     return 0;
 }
 
-void Scripting::Resource::setChildren( const QList<QObject*> &children )
+void Scripting::Resource::setChildren(const QList<QObject *> &children)
 {
-    qDebug()<<"setTeamMembers:"<<children;
+    qDebug() << "setTeamMembers:" << children;
     KPlato::Resource *team = kplatoResource();
     // atm. only teams have children
-    if ( team->type() != KPlato::Resource::Type_Team ) {
+    if (team->type() != KPlato::Resource::Type_Team) {
         return;
     }
-    KPlato::MacroCommand *cmd = new KPlato::MacroCommand( kundo2_i18n( "Set resource team members" ) );
-    foreach ( const QString &id, team->teamMemberIds() ) {
-       cmd->addCommand( new KPlato::RemoveResourceTeamCmd( team, id ) );
+    KPlato::MacroCommand *cmd = new KPlato::MacroCommand(kundo2_i18n("Set resource team members"));
+    foreach (const QString &id, team->teamMemberIds()) {
+        cmd->addCommand(new KPlato::RemoveResourceTeamCmd(team, id));
     }
-    foreach ( QObject *o, children ) {
-        Resource *r = qobject_cast<Resource*>( o );
-        if ( r && r->kplatoResource() ) {
-            cmd->addCommand( new KPlato::AddResourceTeamCmd( team, r->kplatoResource()->id() ) );
+    foreach (QObject *o, children) {
+        Resource *r = qobject_cast<Resource *>(o);
+        if (r && r->kplatoResource()) {
+            cmd->addCommand(new KPlato::AddResourceTeamCmd(team, r->kplatoResource()->id()));
         }
     }
-    if ( ! cmd->isEmpty() ) {
-        m_project->addCommand( cmd );
+    if (! cmd->isEmpty()) {
+        m_project->addCommand(cmd);
     }
-    qDebug()<<"setTeamMembers:"<<team->teamMembers();
+    qDebug() << "setTeamMembers:" << team->teamMembers();
 }
 
 #include "Resource.moc"

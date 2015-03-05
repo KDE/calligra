@@ -21,7 +21,6 @@
 
 #include "kis_dummies_facade_base_test.h"
 
-
 class KisDummiesFacadeTest : public KisDummiesFacadeBaseTest
 {
     Q_OBJECT
@@ -30,7 +29,7 @@ public:
     ~KisDummiesFacadeTest();
 
 protected:
-    KisDummiesFacadeBase* dummiesFacadeFactory();
+    KisDummiesFacadeBase *dummiesFacadeFactory();
     void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade);
 };
 

@@ -56,7 +56,7 @@ class ScriptingCellListener : public QObject
 {
     Q_OBJECT
 public:
-    explicit ScriptingCellListener(Calligra::Sheets::Sheet *sheet, const QRect& area);
+    explicit ScriptingCellListener(Calligra::Sheets::Sheet *sheet, const QRect &area);
     virtual ~ScriptingCellListener();
 
 Q_SIGNALS:
@@ -64,7 +64,7 @@ Q_SIGNALS:
     /**
     * This signal got emitted if the content of a region of cells changed.
     */
-    void regionChanged(const QVariantList& ranges);
+    void regionChanged(const QVariantList &ranges);
 
     /**
     * This signal got emitted if the content of a cell changed.
@@ -72,7 +72,7 @@ Q_SIGNALS:
     void cellChanged(int column, int row);
 
 private Q_SLOTS:
-    void slotChanged(const Region&);
+    void slotChanged(const Region &);
 
 private:
     Q_DISABLE_COPY(ScriptingCellListener)
@@ -80,7 +80,7 @@ private:
     /// \internal d-pointer class.
     class Private;
     /// \internal d-pointer instance.
-    Private* const d;
+    Private *const d;
 };
 
 } // namespace Sheets

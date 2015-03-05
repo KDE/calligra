@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2012 <hanna.et.scott@gmail.com> 
+    Copyright (C) 2012 <hanna.et.scott@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -45,11 +45,10 @@ void TestSnapStrategy::testOrthogonalSnap()
     bool didSnap = toTest.snap(paramMousePosition, &paramProxy, paramSnapDistance);
     QVERIFY(!didSnap);
 
-
     //Second test case - makes sure the there are shapes in the fakeShapeControllerBase thus it should snap
     OrthogonalSnapStrategy toTestTwo;
     //paramMousePosition must be within paramSnapDistance of the points in firstSnapPointList
-    const QPointF paramMousePositionTwo(3,3);
+    const QPointF paramMousePositionTwo(3, 3);
     MockShapeController fakeShapeControllerBaseTwo;
 
     //This call will be made on the paramProxy: proxy->pointsFromShape(shape) which in turn
@@ -63,16 +62,15 @@ void TestSnapStrategy::testOrthogonalSnap()
     //creating the lists of points
     //example QList<QPointF> pts; pts.push_back(QPointF(0.2, 0.3)); pts.push_back(QPointF(0.5, 0.7));
 
-
     MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo); //the shapeManager() function of this will be called
 
     KoShapeManager *fakeShapeManager = fakeKoCanvasBaseTwo.shapeManager();
     MockShape fakeShapeOne;
     QList<QPointF> firstSnapPointList;
-    firstSnapPointList.push_back(QPointF(1,2));
-    firstSnapPointList.push_back(QPointF(2,2));
-    firstSnapPointList.push_back(QPointF(3,2));
-    firstSnapPointList.push_back(QPointF(4,2));
+    firstSnapPointList.push_back(QPointF(1, 2));
+    firstSnapPointList.push_back(QPointF(2, 2));
+    firstSnapPointList.push_back(QPointF(3, 2));
+    firstSnapPointList.push_back(QPointF(4, 2));
 
     fakeShapeOne.snapData().setSnapPoints(firstSnapPointList);
     fakeShapeOne.isVisible(true);
@@ -111,10 +109,10 @@ void TestSnapStrategy::testNodeSnap()
     KoShapeManager *fakeShapeManager = fakeKoCanvasBaseTwo.shapeManager();
     MockShape fakeShapeOne;
     QList<QPointF> firstSnapPointList;
-    firstSnapPointList.push_back(QPointF(1,2));
-    firstSnapPointList.push_back(QPointF(2,2));
-    firstSnapPointList.push_back(QPointF(3,2));
-    firstSnapPointList.push_back(QPointF(4,2));
+    firstSnapPointList.push_back(QPointF(1, 2));
+    firstSnapPointList.push_back(QPointF(2, 2));
+    firstSnapPointList.push_back(QPointF(3, 2));
+    firstSnapPointList.push_back(QPointF(4, 2));
 
     qreal paramSnapDistanceTwo = 4;
 
@@ -151,19 +149,19 @@ void TestSnapStrategy::testExtensionSnap()
     KoShapeManager *fakeShapeManager = fakeKoCanvasBaseTwo.shapeManager();
     KoPathShape fakeShapeOne;
     QList<QPointF> firstSnapPointList;
-    firstSnapPointList.push_back(QPointF(1,2));
-    firstSnapPointList.push_back(QPointF(2,2));
-    firstSnapPointList.push_back(QPointF(3,2));
-    firstSnapPointList.push_back(QPointF(4,2));
+    firstSnapPointList.push_back(QPointF(1, 2));
+    firstSnapPointList.push_back(QPointF(2, 2));
+    firstSnapPointList.push_back(QPointF(3, 2));
+    firstSnapPointList.push_back(QPointF(4, 2));
 
     qreal paramSnapDistanceTwo = 4;
     fakeShapeOne.snapData().setSnapPoints(firstSnapPointList);
     fakeShapeOne.isVisible(true);
 
-    QPointF firstPoint(0,2);
-    QPointF secondPoint(1,2);
-    QPointF thirdPoint(2,3);
-    QPointF fourthPoint(3,4);
+    QPointF firstPoint(0, 2);
+    QPointF secondPoint(1, 2);
+    QPointF thirdPoint(2, 3);
+    QPointF fourthPoint(3, 4);
 
     fakeShapeOne.moveTo(firstPoint);
     fakeShapeOne.lineTo(secondPoint);
@@ -204,10 +202,10 @@ void TestSnapStrategy::testIntersectionSnap()
     KoPathShape pathShapeOne;
     QList<QPointF> firstSnapPointList;
 
-    pathShapeOne.moveTo(QPointF(1,2));
-    pathShapeOne.lineTo(QPointF(2,2));
-    pathShapeOne.lineTo(QPointF(3,2));
-    pathShapeOne.lineTo(QPointF(4,2));
+    pathShapeOne.moveTo(QPointF(1, 2));
+    pathShapeOne.lineTo(QPointF(2, 2));
+    pathShapeOne.lineTo(QPointF(3, 2));
+    pathShapeOne.lineTo(QPointF(4, 2));
 
     //pathShapeOne.snapData().setSnapPoints(firstSnapPointList);
 
@@ -217,10 +215,10 @@ void TestSnapStrategy::testIntersectionSnap()
     KoPathShape pathShapeTwo;
     QList<QPointF> secondSnapPointList;
 
-    pathShapeTwo.moveTo(QPointF(1,1));
-    pathShapeTwo.lineTo(QPointF(2,2));
-    pathShapeTwo.lineTo(QPointF(3,3));
-    pathShapeTwo.lineTo(QPointF(4,4));
+    pathShapeTwo.moveTo(QPointF(1, 1));
+    pathShapeTwo.lineTo(QPointF(2, 2));
+    pathShapeTwo.lineTo(QPointF(3, 3));
+    pathShapeTwo.lineTo(QPointF(4, 4));
 
     //pathShapeTwo.snapData().setSnapPoints(secondSnapPointList);
 
@@ -229,10 +227,10 @@ void TestSnapStrategy::testIntersectionSnap()
 
     KoPathShape pathShapeThree;
     QList<QPointF> thirdSnapPointList;
-    pathShapeThree.moveTo(QPointF(5,5));
-    pathShapeThree.lineTo(QPointF(6,6));
-    pathShapeThree.lineTo(QPointF(7,7));
-    pathShapeThree.lineTo(QPointF(8,8));
+    pathShapeThree.moveTo(QPointF(5, 5));
+    pathShapeThree.lineTo(QPointF(6, 6));
+    pathShapeThree.lineTo(QPointF(7, 7));
+    pathShapeThree.lineTo(QPointF(8, 8));
 
     pathShapeThree.isVisible(true);
     ShapeManager->addShape(&pathShapeThree);
@@ -257,7 +255,7 @@ void TestSnapStrategy::testGridSnap()
 
     //This test tests the snapping by providing the SnapGuide with a grid to snap against
     GridSnapStrategy toTestTwo;
-    const QPointF paramMousePosTwo(40,60);
+    const QPointF paramMousePosTwo(40, 60);
     MockShapeController fakeShapeControllerBaseTwo;
     MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo);
     fakeKoCanvasBaseTwo.setHorz(10);
@@ -293,10 +291,10 @@ void TestSnapStrategy::testBoundingBoxSnap()
     KoPathShape pathShapeOne;
     QList<QPointF> firstSnapPointList;
 
-    pathShapeOne.moveTo(QPointF(1,2));
-    pathShapeOne.lineTo(QPointF(2,2));
-    pathShapeOne.lineTo(QPointF(3,2));
-    pathShapeOne.lineTo(QPointF(4,2));
+    pathShapeOne.moveTo(QPointF(1, 2));
+    pathShapeOne.lineTo(QPointF(2, 2));
+    pathShapeOne.lineTo(QPointF(3, 2));
+    pathShapeOne.lineTo(QPointF(4, 2));
 
     pathShapeOne.isVisible(true);
     ShapeManager->addShape(&pathShapeOne);
@@ -304,20 +302,20 @@ void TestSnapStrategy::testBoundingBoxSnap()
     KoPathShape pathShapeTwo;
     QList<QPointF> secondSnapPointList;
 
-    pathShapeTwo.moveTo(QPointF(1,1));
-    pathShapeTwo.lineTo(QPointF(2,2));
-    pathShapeTwo.lineTo(QPointF(3,3));
-    pathShapeTwo.lineTo(QPointF(4,4));
+    pathShapeTwo.moveTo(QPointF(1, 1));
+    pathShapeTwo.lineTo(QPointF(2, 2));
+    pathShapeTwo.lineTo(QPointF(3, 3));
+    pathShapeTwo.lineTo(QPointF(4, 4));
 
     pathShapeTwo.isVisible(true);
     ShapeManager->addShape(&pathShapeTwo);
 
     KoPathShape pathShapeThree;
     QList<QPointF> thirdSnapPointList;
-    pathShapeThree.moveTo(QPointF(5,5));
-    pathShapeThree.lineTo(QPointF(6,6));
-    pathShapeThree.lineTo(QPointF(7,7));
-    pathShapeThree.lineTo(QPointF(8,8));
+    pathShapeThree.moveTo(QPointF(5, 5));
+    pathShapeThree.lineTo(QPointF(6, 6));
+    pathShapeThree.lineTo(QPointF(7, 7));
+    pathShapeThree.lineTo(QPointF(8, 8));
 
     pathShapeThree.isVisible(true);
     ShapeManager->addShape(&pathShapeThree);
@@ -374,17 +372,17 @@ void TestSnapStrategy::testOrhogonalDecoration()
 {
     //Making sure the decoration is created but is empty
     OrthogonalSnapStrategy toTestTwo;
-    const QPointF paramMousePositionTwo(3,3);
+    const QPointF paramMousePositionTwo(3, 3);
     MockShapeController fakeShapeControllerBaseTwo;
     MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo);
 
     KoShapeManager *fakeShapeManager = fakeKoCanvasBaseTwo.shapeManager();
     MockShape fakeShapeOne;
     QList<QPointF> firstSnapPointList;
-    firstSnapPointList.push_back(QPointF(1,2));
-    firstSnapPointList.push_back(QPointF(2,2));
-    firstSnapPointList.push_back(QPointF(3,2));
-    firstSnapPointList.push_back(QPointF(4,2));
+    firstSnapPointList.push_back(QPointF(1, 2));
+    firstSnapPointList.push_back(QPointF(2, 2));
+    firstSnapPointList.push_back(QPointF(3, 2));
+    firstSnapPointList.push_back(QPointF(4, 2));
 
     fakeShapeOne.snapData().setSnapPoints(firstSnapPointList);
     fakeShapeOne.isVisible(true);
@@ -402,7 +400,7 @@ void TestSnapStrategy::testOrhogonalDecoration()
     KoViewConverter irrelevantParameter;
     QPainterPath resultingDecoration = toTestTwo.decoration(irrelevantParameter);
 
-    QVERIFY( resultingDecoration.isEmpty() );
+    QVERIFY(resultingDecoration.isEmpty());
 
 }
 void TestSnapStrategy::testNodeDecoration()
@@ -413,7 +411,7 @@ void TestSnapStrategy::testNodeDecoration()
     QRectF originalRect = QRectF(-5.5, -5.5, 11, 11);
     QPainterPath resultingDecoration = toTest.decoration(irrelevantParameter);
     QRectF rectInsidePath = resultingDecoration.boundingRect();
-    QVERIFY(originalRect==rectInsidePath);
+    QVERIFY(originalRect == rectInsidePath);
 }
 void TestSnapStrategy::testExtensionDecoration()
 {
@@ -429,19 +427,19 @@ void TestSnapStrategy::testExtensionDecoration()
     KoShapeManager *fakeShapeManager = fakeKoCanvasBaseTwo.shapeManager();
     KoPathShape fakeShapeOne;
     QList<QPointF> firstSnapPointList;
-    firstSnapPointList.push_back(QPointF(1,2));
-    firstSnapPointList.push_back(QPointF(2,2));
-    firstSnapPointList.push_back(QPointF(3,2));
-    firstSnapPointList.push_back(QPointF(4,2));
+    firstSnapPointList.push_back(QPointF(1, 2));
+    firstSnapPointList.push_back(QPointF(2, 2));
+    firstSnapPointList.push_back(QPointF(3, 2));
+    firstSnapPointList.push_back(QPointF(4, 2));
 
     qreal paramSnapDistanceTwo = 4;
     fakeShapeOne.snapData().setSnapPoints(firstSnapPointList);
     fakeShapeOne.isVisible(true);
 
-    QPointF firstPoint(0,2);
-    QPointF secondPoint(1,2);
-    QPointF thirdPoint(2,3);
-    QPointF fourthPoint(3,4);
+    QPointF firstPoint(0, 2);
+    QPointF secondPoint(1, 2);
+    QPointF thirdPoint(2, 3);
+    QPointF fourthPoint(3, 4);
 
     fakeShapeOne.moveTo(firstPoint);
     fakeShapeOne.lineTo(secondPoint);
@@ -458,23 +456,23 @@ void TestSnapStrategy::testExtensionDecoration()
     QPainterPath resultingDecoration = toTestTwo.decoration(aConverter);
     QPointF resultDecorationLastPoint = resultingDecoration.currentPosition();
 
-    QVERIFY( resultDecorationLastPoint == QPointF(0,2) );
+    QVERIFY(resultDecorationLastPoint == QPointF(0, 2));
 }
 void TestSnapStrategy::testIntersectionDecoration()
 {
     //Tests the decoration by making sure that the returned rect is within the "standard outer rect"
     IntersectionSnapStrategy toTest;
     KoViewConverter irrelevantParameter;
-    QRectF originalRect = QRectF(-5.5,-5.5,11,11); //std outer rect
+    QRectF originalRect = QRectF(-5.5, -5.5, 11, 11); //std outer rect
     QPainterPath resultingDecoration = toTest.decoration(irrelevantParameter);
     QRectF rectInsidePath = resultingDecoration.boundingRect();
-    QVERIFY(originalRect==rectInsidePath);
+    QVERIFY(originalRect == rectInsidePath);
 }
 void TestSnapStrategy::testGridDecoration()
 {
     //Tests the decoration by making sure the path returned has the calculated endpoint
     GridSnapStrategy toTest;
-    const QPointF paramMousePosTwo(40,60);
+    const QPointF paramMousePosTwo(40, 60);
     MockShapeController fakeShapeControllerBaseTwo;
     MockCanvas fakeKoCanvasBaseTwo(&fakeShapeControllerBaseTwo);
     fakeKoCanvasBaseTwo.setHorz(10);
@@ -490,7 +488,7 @@ void TestSnapStrategy::testGridDecoration()
     QPointF originalEndPoint(snappedPos + QPointF(0, unzoomedSize.height()));
     QPainterPath resultingDecoration = toTest.decoration(viewConverter);
 
-    QVERIFY( resultingDecoration.currentPosition() == originalEndPoint );
+    QVERIFY(resultingDecoration.currentPosition() == originalEndPoint);
 }
 void TestSnapStrategy::testBoundingBoxDecoration()
 {
@@ -499,11 +497,11 @@ void TestSnapStrategy::testBoundingBoxDecoration()
 
     KoViewConverter viewConverter;
     QSizeF unzoomedSize = viewConverter.viewToDocument(QSizeF(5, 5));
-    QPointF snappedPos(0,0);
+    QPointF snappedPos(0, 0);
     QPointF originalEndPoint(snappedPos + QPointF(unzoomedSize.width(), -unzoomedSize.height()));
     QPainterPath resultingDecoration = toTest.decoration(viewConverter);
 
-    QVERIFY( resultingDecoration.currentPosition() == originalEndPoint );
+    QVERIFY(resultingDecoration.currentPosition() == originalEndPoint);
 }
 
 void TestSnapStrategy::testLineGuideDecoration()
@@ -539,12 +537,12 @@ void TestSnapStrategy::testLineGuideDecoration()
 
     KoViewConverter parameterConverter;
     QSizeF unzoomedSize = parameterConverter.viewToDocument(QSizeF(5, 5));
-    QPointF snappedPos(1,2);
+    QPointF snappedPos(1, 2);
     QPointF originalEndPointOne(snappedPos + QPointF(unzoomedSize.width(), 0));
     QPointF originalEndPointTwo(snappedPos + QPointF(0, unzoomedSize.height()));
     QPainterPath resultingDecoration = toTest.decoration(parameterConverter);
 
-    QVERIFY( (resultingDecoration.currentPosition() == originalEndPointOne) || (resultingDecoration.currentPosition() == originalEndPointTwo ) );
+    QVERIFY((resultingDecoration.currentPosition() == originalEndPointOne) || (resultingDecoration.currentPosition() == originalEndPointTwo));
 }
 
 void TestSnapStrategy::testSquareDistance()
@@ -560,16 +558,16 @@ void TestSnapStrategy::testSquareDistance()
     //tests that the returned value is as expected for positive values
     OrthogonalSnapStrategy toTestTwo;
 
-    QPointF p1_2(2,2);
-    QPointF p2_2(1,1);
+    QPointF p1_2(2, 2);
+    QPointF p2_2(1, 1);
 
     qreal resultingRealTwo = toTestTwo.squareDistance(p1_2, p2_2);
     QVERIFY(resultingRealTwo == 2);
     //tests that the returned value is as expected for positive and negative values
     OrthogonalSnapStrategy toTestThree;
 
-    QPointF p1_3(2,2);
-    QPointF p2_3(-2,-2);
+    QPointF p1_3(2, 2);
+    QPointF p2_3(-2, -2);
 
     qreal resultingRealThree = toTestThree.squareDistance(p1_3, p2_3);
     QVERIFY(resultingRealThree == 32);
@@ -577,8 +575,8 @@ void TestSnapStrategy::testSquareDistance()
     //tests that the returned value is 0 when the points are the same
     OrthogonalSnapStrategy toTestFour;
 
-    QPointF p1_4(2,2);
-    QPointF p2_4(2,2);
+    QPointF p1_4(2, 2);
+    QPointF p2_4(2, 2);
 
     qreal resultingRealFour = toTestFour.squareDistance(p1_4, p2_4);
     QVERIFY(resultingRealFour == 0);
@@ -592,46 +590,42 @@ void TestSnapStrategy::testScalarProduct()
     QPointF p2_5;
 
     qreal resultingRealOne = toTest.squareDistance(p1_5, p2_5);
-    QVERIFY(resultingRealOne == 0 );
+    QVERIFY(resultingRealOne == 0);
     //tests that the product is correctly calculated for positive point values
     OrthogonalSnapStrategy toTestTwo;
 
-    QPointF p1_6(2,2);
-    QPointF p2_6(3,3);
+    QPointF p1_6(2, 2);
+    QPointF p2_6(3, 3);
 
     qreal resultingRealTwo = toTestTwo.squareDistance(p1_6, p2_6);
-    QVERIFY(resultingRealTwo == 2 );
+    QVERIFY(resultingRealTwo == 2);
     //tests that the product is correctly calculated for positive and negative point values
     OrthogonalSnapStrategy toTestThree;
 
-    QPointF p1_7(2,2);
-    QPointF p2_7(-2,-2);
+    QPointF p1_7(2, 2);
+    QPointF p2_7(-2, -2);
 
     qreal resultingRealThree = toTestThree.squareDistance(p1_7, p2_7);
     QVERIFY(resultingRealThree == 32);
     //tests so the product is 0 when the points are the same
     OrthogonalSnapStrategy toTestFour;
 
-    QPointF p1_8(1,1);
-    QPointF p2_8(1,1);
+    QPointF p1_8(1, 1);
+    QPointF p2_8(1, 1);
 
     qreal resultingRealFour = toTestFour.squareDistance(p1_8, p2_8);
     QVERIFY(resultingRealFour == 0);
     //tests so there is nothing fishy when using origo
     OrthogonalSnapStrategy toTestFive;
 
-    QPointF p1_9(1,1);
-    QPointF p2_9(0,0);
+    QPointF p1_9(1, 1);
+    QPointF p2_9(0, 0);
 
     qreal resultingRealFive = toTestFive.squareDistance(p1_9, p2_9);
     QVERIFY(resultingRealFive == 2);
 }
 
-
-
 //------------------------------------------------------------------
-
-
 
 void TestSnapStrategy::testSnapToExtension()
 {
@@ -639,7 +633,7 @@ void TestSnapStrategy::testSnapToExtension()
 
     toTest.snapToExtension(paramPosition, &paramPoint, paramMatrix);
 
-qDebug() << direction << " is the returned direction for this point in TestSnapStrategy::testSnapToExtension()";
+    qDebug() << direction << " is the returned direction for this point in TestSnapStrategy::testSnapToExtension()";
     QCOMPARE(direction, );
     */
 }
@@ -648,27 +642,27 @@ void TestSnapStrategy::testProject()
     //tests for positive point values but backwards leaning line
     ExtensionSnapStrategy toTestOne;
     qreal toCompWithOne = -1;
-    QPointF lineStart(4,4);
-    QPointF lineEnd(2,2);
-    QPointF comparisonPoint(6,6);
+    QPointF lineStart(4, 4);
+    QPointF lineEnd(2, 2);
+    QPointF comparisonPoint(6, 6);
 
     qreal resultingRealOne = toTestOne.project(lineStart, lineEnd, comparisonPoint);
     QCOMPARE(resultingRealOne, toCompWithOne);
     //testing for for negative point values
     ExtensionSnapStrategy toTestTwo;
     qreal toCompWithTwo = -4;
-    QPointF lineStart_2(-2,-2);
-    QPointF lineEnd_2(-4,-4);
-    QPointF comparisonPoint_2(6,6);
+    QPointF lineStart_2(-2, -2);
+    QPointF lineEnd_2(-4, -4);
+    QPointF comparisonPoint_2(6, 6);
 
     qreal resultingRealTwo = toTestTwo.project(lineStart_2, lineEnd_2, comparisonPoint_2);
     QCOMPARE(resultingRealTwo, toCompWithTwo);
     //testing for negative and positive point values
     ExtensionSnapStrategy toTestThree;
-    qreal toCompWithThree = (10*(6/sqrt(72.0)) + 10*(6/sqrt(72.0))) / sqrt(72.0); //diffLength = sqrt(72), scalar = (10*(6/sqrt(72)) + 10*(6/sqrt(72)))
-    QPointF lineStart_3(-2,-2);
+    qreal toCompWithThree = (10 * (6 / sqrt(72.0)) + 10 * (6 / sqrt(72.0))) / sqrt(72.0); //diffLength = sqrt(72), scalar = (10*(6/sqrt(72)) + 10*(6/sqrt(72)))
+    QPointF lineStart_3(-2, -2);
     QPointF lineEnd_3(4, 4);
-    QPointF comparisonPoint_3(8,8);
+    QPointF comparisonPoint_3(8, 8);
 
     qreal resultingRealThree = toTestThree.project(lineStart_3, lineEnd_3, comparisonPoint_3);
     QCOMPARE(resultingRealThree, toCompWithThree);
@@ -680,9 +674,9 @@ void TestSnapStrategy::testProject()
 
     ExtensionSnapStrategy toTestFour;
     qreal toCompWithFour = 0.5;
-    QPointF lineStart_4(2,1);
-    QPointF lineEnd_4(6,3);
-    QPointF comparisonPoint_4(3,4);
+    QPointF lineStart_4(2, 1);
+    QPointF lineEnd_4(6, 3);
+    QPointF comparisonPoint_4(3, 4);
 
     qreal resultingRealFour = toTestFour.project(lineStart_4, lineEnd_4, comparisonPoint_4);
     QCOMPARE(resultingRealFour, toCompWithFour);
@@ -696,11 +690,11 @@ void TestSnapStrategy::testExtensionDirection()
     ExtensionSnapStrategy toTestOne;
     KoPathShape uninitiatedPathShape;
     KoPathPoint::PointProperties normal = KoPathPoint::Normal;
-    const QPointF initiatedPoint0(0,0);
+    const QPointF initiatedPoint0(0, 0);
     KoPathPoint initiatedPoint(&uninitiatedPathShape, initiatedPoint0, normal);
-    QMatrix initiatedMatrixParam(1,1,1,1,1,1);
+    QMatrix initiatedMatrixParam(1, 1, 1, 1, 1, 1);
     const QTransform initiatedMatrix(initiatedMatrixParam);
-    QPointF direction2 = toTestOne.extensionDirection( &initiatedPoint, initiatedMatrix);
+    QPointF direction2 = toTestOne.extensionDirection(&initiatedPoint, initiatedMatrix);
     QVERIFY(direction2.isNull());
 
     /* TEST CASE 1
@@ -713,26 +707,26 @@ void TestSnapStrategy::testExtensionDirection()
      = expected returning an empty QPointF
     */
     ExtensionSnapStrategy toTestTwo;
-    QPointF expectedPointTwo(0,0);
+    QPointF expectedPointTwo(0, 0);
     KoPathShape shapeOne;
 
-    QPointF firstPoint(0,1);
-    QPointF secondPoint(1,2);
-    QPointF thirdPoint(2,3);
-    QPointF fourthPoint(3,4);
+    QPointF firstPoint(0, 1);
+    QPointF secondPoint(1, 2);
+    QPointF thirdPoint(2, 3);
+    QPointF fourthPoint(3, 4);
 
     shapeOne.moveTo(firstPoint);
     shapeOne.lineTo(secondPoint);
     shapeOne.lineTo(thirdPoint);
     shapeOne.lineTo(fourthPoint);
 
-    QPointF paramPositionTwo(0,1);
+    QPointF paramPositionTwo(0, 1);
     KoPathPoint paramPointTwo;
     paramPointTwo.setPoint(paramPositionTwo);
     paramPointTwo.setParent(&shapeOne);
 
-    const QTransform paramTransMatrix(1,2,3,4,5,6);
-    QPointF directionTwo = toTestTwo.extensionDirection( &paramPointTwo, paramTransMatrix);
+    const QTransform paramTransMatrix(1, 2, 3, 4, 5, 6);
+    QPointF directionTwo = toTestTwo.extensionDirection(&paramPointTwo, paramTransMatrix);
     QCOMPARE(directionTwo, expectedPointTwo);
 
     /* TEST CASE 2
@@ -745,12 +739,12 @@ void TestSnapStrategy::testExtensionDirection()
      = expected returning an
     */
     ExtensionSnapStrategy toTestThree;
-    QPointF expectedPointThree(0,0);
-    QPointF paramPositionThree(1,1);
+    QPointF expectedPointThree(0, 0);
+    QPointF paramPositionThree(1, 1);
     KoPathPoint paramPointThree;
     paramPointThree.setPoint(paramPositionThree);
     paramPointThree.setParent(&shapeOne);
-    QPointF directionThree = toTestThree.extensionDirection( &paramPointThree, paramTransMatrix);
+    QPointF directionThree = toTestThree.extensionDirection(&paramPointThree, paramTransMatrix);
     QCOMPARE(directionThree, expectedPointThree);
 
 }
@@ -759,49 +753,49 @@ void TestSnapStrategy::testSquareDistanceToLine()
 {
     BoundingBoxSnapStrategy toTestOne;
 
-    const QPointF lineA(4,1);
-    const QPointF lineB(6,3);
-    const QPointF point(5,8);
-    QPointF pointOnLine(0,0);
+    const QPointF lineA(4, 1);
+    const QPointF lineB(6, 3);
+    const QPointF point(5, 8);
+    QPointF pointOnLine(0, 0);
 
     qreal result = toTestOne.squareDistanceToLine(lineA, lineB, point, pointOnLine);
     //Should be HUGE_VAL because scalar > diffLength
     QVERIFY(result == HUGE_VAL);
 
     BoundingBoxSnapStrategy toTestTwo;
-    QPointF lineA2(4,4);
-    QPointF lineB2(4,4);
-    QPointF point2(5,8);
-    QPointF pointOnLine2(0,0);
+    QPointF lineA2(4, 4);
+    QPointF lineB2(4, 4);
+    QPointF point2(5, 8);
+    QPointF pointOnLine2(0, 0);
 
     qreal result2 = toTestTwo.squareDistanceToLine(lineA2, lineB2, point2, pointOnLine2);
     //Should be HUGE_VAL because lineA2 == lineB2
     QVERIFY(result2 == HUGE_VAL);
 
     BoundingBoxSnapStrategy toTestThree;
-    QPointF lineA3(6,4);
-    QPointF lineB3(8,6);
-    QPointF point3(2,2);
-    QPointF pointOnLine3(0,0);
+    QPointF lineA3(6, 4);
+    QPointF lineB3(8, 6);
+    QPointF point3(2, 2);
+    QPointF pointOnLine3(0, 0);
 
     qreal result3 = toTestThree.squareDistanceToLine(lineA3, lineB3, point3, pointOnLine3);
     //Should be HUGE_VAL because scalar < 0.0
     QVERIFY(result3 == HUGE_VAL);
 
     BoundingBoxSnapStrategy toTestFour;
-    QPointF lineA4(2,2);
-    QPointF lineB4(8,6);
-    QPointF point4(3,4);
-    QPointF pointOnLine4(0,0);
+    QPointF lineA4(2, 2);
+    QPointF lineB4(8, 6);
+    QPointF point4(3, 4);
+    QPointF pointOnLine4(0, 0);
 
-    QPointF diff(6,4);
+    QPointF diff(6, 4);
     //diff = lineB3 - point3 = 6,4
     //diffLength = sqrt(52)
     //scalar = (1*(6/sqrt(52)) + 2*(4/sqrt(52)));
 
     //pointOnLine = lineA + scalar / diffLength * diff;  lineA + ((1*(6/sqrt(52)) + 2*(4/sqrt(52))) / sqrt(52)) * 6,4;
-    QPointF distToPointOnLine = (lineA4 + ((1*(6/sqrt(52.0)) + 2*(4/sqrt(52.0))) / sqrt(52.0)) * diff)-point4;
-    qreal toCompWithFour = distToPointOnLine.x()*distToPointOnLine.x()+distToPointOnLine.y()*distToPointOnLine.y();
+    QPointF distToPointOnLine = (lineA4 + ((1 * (6 / sqrt(52.0)) + 2 * (4 / sqrt(52.0))) / sqrt(52.0)) * diff) - point4;
+    qreal toCompWithFour = distToPointOnLine.x() * distToPointOnLine.x() + distToPointOnLine.y() * distToPointOnLine.y();
 
     qreal result4 = toTestFour.squareDistanceToLine(lineA4, lineB4, point4, pointOnLine4);
     //Normal case with example data

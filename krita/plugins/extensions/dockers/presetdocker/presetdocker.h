@@ -29,11 +29,11 @@ class KisViewManager;
 class PresetDockerPlugin : public QObject
 {
     Q_OBJECT
-    public:
-        PresetDockerPlugin(QObject *parent, const QVariantList &);
-        virtual ~PresetDockerPlugin();
-    private:
-        KisViewManager* m_view;
+public:
+    PresetDockerPlugin(QObject *parent, const QVariantList &);
+    virtual ~PresetDockerPlugin();
+private:
+    KisViewManager *m_view;
 };
 
 #endif

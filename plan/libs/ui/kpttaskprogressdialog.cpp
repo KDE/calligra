@@ -32,13 +32,13 @@ namespace KPlato
 {
 
 TaskProgressDialog::TaskProgressDialog(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *p)
-    : KDialog( p),
-    m_node( &task )
+    : KDialog(p),
+      m_node(&task)
 {
-    setCaption( i18n("Task Progress") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setCaption(i18n("Task Progress"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    showButtonSeparator(true);
     m_panel = new TaskProgressPanel(task, sm, workTime, this);
 
     setMainWidget(m_panel);
@@ -46,24 +46,26 @@ TaskProgressDialog::TaskProgressDialog(Task &task, ScheduleManager *sm, Standard
     enableButtonOk(false);
 
     connect(m_panel, SIGNAL(changed()), SLOT(slotChanged()));
-    Project *proj = static_cast<Project*>( task.projectNode() );
-    if ( proj ) {
+    Project *proj = static_cast<Project *>(task.projectNode());
+    if (proj) {
         connect(proj, SIGNAL(nodeRemoved(Node*)), SLOT(slotNodeRemoved(Node*)));
     }
 }
 
-void TaskProgressDialog::slotNodeRemoved( Node *node )
+void TaskProgressDialog::slotNodeRemoved(Node *node)
 {
-    if ( m_node == node ) {
+    if (m_node == node) {
         reject();
     }
 }
 
-void TaskProgressDialog::slotChanged() {
+void TaskProgressDialog::slotChanged()
+{
     enableButtonOk(true);
 }
 
-MacroCommand *TaskProgressDialog::buildCommand() {
+MacroCommand *TaskProgressDialog::buildCommand()
+{
     MacroCommand *m = new MacroCommand(kundo2_i18n("Modify Task Progress"));
     bool modified = false;
     MacroCommand *cmd = m_panel->buildCommand();
@@ -77,7 +79,6 @@ MacroCommand *TaskProgressDialog::buildCommand() {
     }
     return m;
 }
-
 
 }  //KPlato namespace
 

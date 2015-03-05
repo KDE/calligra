@@ -32,12 +32,12 @@ public:
 
     QPointF lastMousePosition;
 
-    static KisInputManager* inputManager;
+    static KisInputManager *inputManager;
 };
 
 KisInputManager *KisAbstractInputAction::Private::inputManager = 0;
 
-KisAbstractInputAction::KisAbstractInputAction(const QString & id)
+KisAbstractInputAction::KisAbstractInputAction(const QString &id)
     : d(new Private)
 {
     d->id = id;
@@ -64,15 +64,15 @@ void KisAbstractInputAction::begin(int shortcut, QEvent *event)
     Q_UNUSED(shortcut);
 
     QMouseEvent *mouseEvent;
-    if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
+    if (event && (mouseEvent = dynamic_cast<QMouseEvent *>(event))) {
         d->lastMousePosition = mouseEvent->posF();
     }
 }
 
-void KisAbstractInputAction::inputEvent(QEvent* event)
+void KisAbstractInputAction::inputEvent(QEvent *event)
 {
     QMouseEvent *mouseEvent;
-    if (event && (mouseEvent = dynamic_cast<QMouseEvent*>(event))) {
+    if (event && (mouseEvent = dynamic_cast<QMouseEvent *>(event))) {
         if (mouseEvent->type() == QEvent::MouseMove) {
             mouseMoved(d->lastMousePosition, mouseEvent->posF());
         }
@@ -96,7 +96,7 @@ bool KisAbstractInputAction::supportsHiResInputEvents() const
     return false;
 }
 
-KisInputManager* KisAbstractInputAction::inputManager() const
+KisInputManager *KisAbstractInputAction::inputManager() const
 {
     return Private::inputManager;
 }
@@ -131,17 +131,17 @@ QString KisAbstractInputAction::id() const
     return d->id;
 }
 
-void KisAbstractInputAction::setName(const QString& name)
+void KisAbstractInputAction::setName(const QString &name)
 {
     d->name = name;
 }
 
-void KisAbstractInputAction::setDescription(const QString& description)
+void KisAbstractInputAction::setDescription(const QString &description)
 {
     d->description = description;
 }
 
-void KisAbstractInputAction::setShortcutIndexes(const QHash< QString, int >& indexes)
+void KisAbstractInputAction::setShortcutIndexes(const QHash< QString, int > &indexes)
 {
     d->indexes = indexes;
 }

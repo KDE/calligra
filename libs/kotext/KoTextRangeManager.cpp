@@ -39,7 +39,6 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
         return;
     }
 
-
     if (m_textRanges.contains(textRange)) {
         return;
     }
@@ -54,8 +53,7 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
     KoBookmark *bookmark = dynamic_cast<KoBookmark *>(textRange);
     if (bookmark) {
         m_bookmarkManager.insert(bookmark->name(), bookmark);
-    }
-    else {
+    } else {
         KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(textRange);
         if (annotation) {
             m_annotationManager.insert(annotation->name(), annotation);
@@ -73,8 +71,7 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
     KoBookmark *bookmark = dynamic_cast<KoBookmark *>(textRange);
     if (bookmark) {
         m_bookmarkManager.remove(bookmark->name());
-    }
-    else {
+    } else {
         KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(textRange);
         if (annotation) {
             m_annotationManager.remove(annotation->name());
@@ -100,7 +97,6 @@ QList<KoTextRange *> KoTextRangeManager::textRanges() const
 {
     return m_textRanges.values();
 }
-
 
 QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTextDocument *doc, int first, int last, int matchFirst, int matchLast) const
 {

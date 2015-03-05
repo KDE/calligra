@@ -31,10 +31,10 @@
 
 KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransform &matrix)
     : m_side(None),
-    m_polygon(QPolygonF()),
-    m_line(QRectF()),
-    m_shape(shape),
-    m_runAroundThreshold(0)
+      m_polygon(QPolygonF()),
+      m_line(QRectF()),
+      m_shape(shape),
+      m_runAroundThreshold(0)
 {
     qreal borderHalfWidth;
     QPainterPath path = decoratedOutline(m_shape, borderHalfWidth);
@@ -68,10 +68,10 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
 
 KoTextLayoutObstruction::KoTextLayoutObstruction(const QRectF &rect, bool rtl)
     : m_side(None),
-    m_polygon(QPolygonF()),
-    m_line(QRectF()),
-    m_shape(0),
-    m_runAroundThreshold(0)
+      m_polygon(QPolygonF()),
+      m_line(QRectF()),
+      m_shape(0),
+      m_runAroundThreshold(0)
 {
     qreal borderHalfWidth = 0;
     qreal textRunAroundDistance = 1;
@@ -113,7 +113,7 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
 
     QRectF bb = shape->outlineRect();
     borderHalfWidth = 0;
- 
+
     if (shape->stroke()) {
         KoInsets insets;
         shape->stroke()->strokeInsets(shape, insets);
@@ -122,7 +122,7 @@ QPainterPath KoTextLayoutObstruction::decoratedOutline(const KoShape *shape, qre
         path = QPainterPath();
         path.addRect(bb);
         */
-        borderHalfWidth = qMax(qMax(insets.left, insets.top),qMax(insets.right, insets.bottom));
+        borderHalfWidth = qMax(qMax(insets.left, insets.top), qMax(insets.right, insets.bottom));
     }
 
     if (shape->shadow() && shape->shadow()->isVisible()) {
@@ -184,13 +184,15 @@ void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath 
     m_polygon = path.toFillPolygon();
     QPointF prev = *(m_polygon.begin());
     foreach (const QPointF &vtx, m_polygon) { //initialized edges
-        if (vtx.x() == prev.x() && vtx.y() == prev.y())
+        if (vtx.x() == prev.x() && vtx.y() == prev.y()) {
             continue;
+        }
         QLineF line;
-        if (prev.y() < vtx.y()) // Make sure the vector lines all point downwards.
+        if (prev.y() < vtx.y()) { // Make sure the vector lines all point downwards.
             line = QLineF(prev, vtx);
-        else
+        } else {
             line = QLineF(vtx, prev);
+        }
         m_edges.insert(line.y1(), line);
         prev = vtx;
     }
@@ -198,8 +200,9 @@ void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath 
 
 qreal KoTextLayoutObstruction::xAtY(const QLineF &line, qreal y)
 {
-    if (line.dx() == 0)
+    if (line.dx() == 0) {
         return line.x1();
+    }
     return line.x1() + (y - line.y1()) / line.dy() * line.dx();
 }
 
@@ -239,15 +242,19 @@ QRectF KoTextLayoutObstruction::cropToLine(const QRectF &lineRect)
         for (int i = 0; i < 2; i++) {
             const qreal y = points[i];
             QMap<qreal, QLineF>::const_iterator iter = m_edges.constBegin();
-            for (;iter != m_edges.constEnd(); ++iter) {
+            for (; iter != m_edges.constEnd(); ++iter) {
                 QLineF line = iter.value();
-                if (line.y2() < y) // not a section that will intersect with ou Y yet
+                if (line.y2() < y) { // not a section that will intersect with ou Y yet
                     continue;
+                }
                 if (line.y1() > y) // section is below our Y, so abort loop
                     //break;
+                {
                     continue;
-                if (qAbs(line.dy()) < 1E-10)  // horizontal lines don't concern us.
+                }
+                if (qAbs(line.dy()) < 1E-10) { // horizontal lines don't concern us.
                     continue;
+                }
 
                 qreal intersect = xAtY(iter.value(), y);
                 if (untilFirst) {
@@ -286,7 +293,7 @@ QRectF KoTextLayoutObstruction::getRightLinePart(const QRectF &lineRect) const
 }
 
 bool KoTextLayoutObstruction::textOnLeft() const
-{    
+{
     return  m_side == Left;
 }
 

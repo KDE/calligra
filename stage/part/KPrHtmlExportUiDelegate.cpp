@@ -20,17 +20,17 @@
 #include "KPrHtmlExportUiDelegate.h"
 
 KPrHtmlExportUiDelegate::KPrHtmlExportUiDelegate()
-: JobUiDelegate()
+    : JobUiDelegate()
 {
 }
 
-KIO::RenameDialog_Result KPrHtmlExportUiDelegate::askFileRename ( KJob* job, const QString& caption, const QString& src,
-                                                                  const QString& dest, KIO::RenameDialog_Mode mode, QString& newDest,
-                                                                  KIO::filesize_t sizeSrc, KIO::filesize_t sizeDest, time_t ctimeSrc,
-                                                                  time_t ctimeDest, time_t mtimeSrc, time_t mtimeDest)
+KIO::RenameDialog_Result KPrHtmlExportUiDelegate::askFileRename(KJob *job, const QString &caption, const QString &src,
+        const QString &dest, KIO::RenameDialog_Mode mode, QString &newDest,
+        KIO::filesize_t sizeSrc, KIO::filesize_t sizeDest, time_t ctimeSrc,
+        time_t ctimeDest, time_t mtimeSrc, time_t mtimeDest)
 {
     // Change mode, remove rename possibility
     mode = (KIO::RenameDialog_Mode)(mode | KIO::M_NORENAME);
     return KIO::JobUiDelegate::askFileRename(job, caption, src, dest, mode, newDest, sizeSrc,
-                                             sizeDest, ctimeSrc, ctimeDest, mtimeSrc, mtimeDest);
+            sizeDest, ctimeSrc, ctimeDest, mtimeSrc, mtimeDest);
 }

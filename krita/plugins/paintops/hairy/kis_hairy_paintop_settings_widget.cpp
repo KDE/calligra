@@ -30,7 +30,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_compositeop_option.h>
 
-KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
+KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget *parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
     //m_hairyShapeOption = new KisHairyShapeOption();
@@ -49,10 +49,10 @@ KisHairyPaintOpSettingsWidget::~ KisHairyPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisHairyPaintOpSettingsWidget::configuration() const
+KisPropertiesConfiguration  *KisHairyPaintOpSettingsWidget::configuration() const
 {
-    KisHairyPaintOpSettings* config = new KisHairyPaintOpSettings();
-    config->setOptionsWidget(const_cast<KisHairyPaintOpSettingsWidget*>(this));
+    KisHairyPaintOpSettings *config = new KisHairyPaintOpSettings();
+    config->setOptionsWidget(const_cast<KisHairyPaintOpSettingsWidget *>(this));
     config->setProperty("paintop", "hairybrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

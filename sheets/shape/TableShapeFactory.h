@@ -34,7 +34,7 @@ class TableShapePlugin : public QObject
     Q_OBJECT
 public:
 
-    TableShapePlugin(QObject * parent,  const QVariantList &);
+    TableShapePlugin(QObject *parent,  const QVariantList &);
     ~TableShapePlugin() {}
 };
 

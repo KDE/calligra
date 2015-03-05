@@ -20,8 +20,7 @@
 
 #include "kis_painting_information_builder.h"
 
-struct KisToolLineHelper::Private
-{
+struct KisToolLineHelper::Private {
     Private(KisPaintingInformationBuilder *_infoBuilder)
         : infoBuilder(_infoBuilder),
           useSensors(true),
@@ -62,10 +61,14 @@ void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
                                     KisStrokesFacade *strokesFacade,
                                     KisPostExecutionUndoAdapter *undoAdapter)
 {
-    if (!m_d->enabled) return;
+    if (!m_d->enabled) {
+        return;
+    }
 
     cancelPaint();
-    if (m_d->linePoints.isEmpty()) return;
+    if (m_d->linePoints.isEmpty()) {
+        return;
+    }
 
     QVector<KisPaintInformation>::const_iterator it = m_d->linePoints.constBegin();
     QVector<KisPaintInformation>::const_iterator end = m_d->linePoints.constEnd();
@@ -81,10 +84,12 @@ void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
 
 void KisToolLineHelper::start(KoPointerEvent *event)
 {
-    if (!m_d->enabled) return;
+    if (!m_d->enabled) {
+        return;
+    }
 
     KisPaintInformation pi =
-            m_d->infoBuilder->startStroke(event, elapsedStrokeTime());
+        m_d->infoBuilder->startStroke(event, elapsedStrokeTime());
 
     if (!m_d->useSensors) {
         pi = KisPaintInformation(pi.pos());
@@ -95,10 +100,12 @@ void KisToolLineHelper::start(KoPointerEvent *event)
 
 void KisToolLineHelper::addPoint(KoPointerEvent *event, const QPointF &overridePos)
 {
-    if (!m_d->enabled) return;
+    if (!m_d->enabled) {
+        return;
+    }
 
     KisPaintInformation pi =
-            m_d->infoBuilder->continueStroke(event, elapsedStrokeTime());
+        m_d->infoBuilder->continueStroke(event, elapsedStrokeTime());
 
     if (!m_d->useSensors) {
         pi = KisPaintInformation(pi.pos());
@@ -133,7 +140,9 @@ void KisToolLineHelper::addPoint(KoPointerEvent *event, const QPointF &overrideP
 
 void KisToolLineHelper::translatePoints(const QPointF &offset)
 {
-    if (!m_d->enabled) return;
+    if (!m_d->enabled) {
+        return;
+    }
 
     QVector<KisPaintInformation>::iterator it = m_d->linePoints.begin();
     while (it != m_d->linePoints.end()) {
@@ -144,17 +153,20 @@ void KisToolLineHelper::translatePoints(const QPointF &offset)
 
 void KisToolLineHelper::end()
 {
-    if (!m_d->enabled) return;
+    if (!m_d->enabled) {
+        return;
+    }
     KIS_ASSERT_RECOVER_RETURN(isRunning());
 
     endPaint();
     m_d->linePoints.clear();
 }
 
-
 void KisToolLineHelper::cancel()
 {
-    if (!m_d->enabled) return;
+    if (!m_d->enabled) {
+        return;
+    }
     KIS_ASSERT_RECOVER_RETURN(isRunning());
 
     cancelPaint();

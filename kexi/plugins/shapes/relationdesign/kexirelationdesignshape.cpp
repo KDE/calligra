@@ -59,12 +59,11 @@ void KexiRelationDesignShape::saveOdf(KoShapeSavingContext &context) const
     writer.startElement("kexirelationdesign:relation");
     writer.addAttribute("database", m_database);
     writer.addAttribute("relation", m_relation);
-    foreach(SimpleField * column, m_fieldData) {
+    foreach (SimpleField *column, m_fieldData) {
         column->save(writer);
     }
     writer.endElement(); //relation
     writer.endElement(); //kexirelation:shape
-
 
     // Save a preview image
     qreal previewDPI = 200;
@@ -121,7 +120,7 @@ bool KexiRelationDesignShape::loadOdfFrameElement(const KoXmlElement &element, K
     KoXmlElement e;
     m_fieldData.clear();
 
-    forEachElement(e, relation) {
+    forEachElement (e, relation) {
         SimpleField *sf = new SimpleField();
         sf->name = e.attribute("name");
         sf->type = e.attribute("type");
@@ -168,7 +167,7 @@ void KexiRelationDesignShape::constPaint(QPainter &painter, const KoViewConverte
 
     uint i = 0;
     uint offset;
-    foreach(SimpleField * column, m_fieldData) {
+    foreach (SimpleField *column, m_fieldData) {
         ++i;
         offset = (13.0 * i) + 20;
         painter.drawText(QPointF(15.0, offset), column->name + " - " + column->type);
@@ -248,7 +247,7 @@ void KexiRelationDesignShape::setRelation(const QString &rel)
         }
         if (m_relationSchema) { //We have the schema, so lets lets paint it
             KexiDB::QueryColumnInfo::Vector columns = m_relationSchema->columns(true);
-            foreach(KexiDB::QueryColumnInfo * column, columns) {
+            foreach (KexiDB::QueryColumnInfo *column, columns) {
                 m_fieldData.append(new SimpleField(column));
             }
         }
@@ -262,7 +261,7 @@ void KexiRelationDesignShape::addConnectionPoints()
     clearConnectionPoints();
 
     uint i = 0;
-    foreach(SimpleField * column, m_fieldData) {
+    foreach (SimpleField *column, m_fieldData) {
         Q_UNUSED(column);
         ++i;
         const int offset = (13.0 * i) + 15;

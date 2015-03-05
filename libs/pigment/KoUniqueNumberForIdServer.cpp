@@ -41,13 +41,13 @@ KoUniqueNumberForIdServer::~KoUniqueNumberForIdServer()
     delete d;
 }
 
-KoUniqueNumberForIdServer* KoUniqueNumberForIdServer::instance()
+KoUniqueNumberForIdServer *KoUniqueNumberForIdServer::instance()
 {
     K_GLOBAL_STATIC(KoUniqueNumberForIdServer, s_instance);
     return s_instance;
 }
 
-quint32 KoUniqueNumberForIdServer::numberForId(const QString& _id)
+quint32 KoUniqueNumberForIdServer::numberForId(const QString &_id)
 {
     QHash<QString, quint32>::iterator it = d->id2Number.find(_id);
     if (it != d->id2Number.end()) {

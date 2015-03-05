@@ -32,7 +32,7 @@ class KOMAIN_EXPORT KoConfigDocumentPage : public KVBox
     Q_OBJECT
 
 public:
-    explicit KoConfigDocumentPage(KoDocument* doc, char* name = 0L);
+    explicit KoConfigDocumentPage(KoDocument *doc, char *name = 0L);
     ~KoConfigDocumentPage();
 
     void apply();
@@ -42,7 +42,7 @@ public Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOCONFIGDOCUMENTPAGE_H

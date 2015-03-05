@@ -35,7 +35,8 @@ class KisWdgCustomPattern : public QWidget, public Ui::KisWdgCustomPattern
     Q_OBJECT
 
 public:
-    KisWdgCustomPattern(QWidget *parent, const char *name) : QWidget(parent) {
+    KisWdgCustomPattern(QWidget *parent, const char *name) : QWidget(parent)
+    {
         setObjectName(name); setupUi(this);
     }
 };
@@ -44,12 +45,12 @@ class KisCustomPattern : public KisWdgCustomPattern
 {
     Q_OBJECT
 public:
-    KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view);
+    KisCustomPattern(QWidget *parent, const char *name, const QString &caption, KisViewManager *view);
     virtual ~KisCustomPattern();
 
 Q_SIGNALS:
     void activatedResource(KoResource *);
-    void addPattern(KoPattern*);
+    void addPattern(KoPattern *);
 
 private Q_SLOTS:
     void slotAddPredefined();
@@ -58,10 +59,9 @@ private Q_SLOTS:
 
 private:
     void createPattern();
-    KisViewManager* m_view;
-    KoPattern* m_pattern;
+    KisViewManager *m_view;
+    KoPattern *m_pattern;
     QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
 };
-
 
 #endif // KIS_CUSTOM_PATTERN_H_

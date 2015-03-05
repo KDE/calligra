@@ -37,7 +37,6 @@
 K_PLUGIN_FACTORY(APPLIXWORDImportFactory, registerPlugin<APPLIXWORDImport>();)
 K_EXPORT_PLUGIN(APPLIXWORDImportFactory("calligrafilters"))
 
-
 /******************************************************************************
  *  class: APPLIXWORDImport        function: APPLIXWORDImport                 *
  ******************************************************************************
@@ -46,8 +45,8 @@ K_EXPORT_PLUGIN(APPLIXWORDImportFactory("calligrafilters"))
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-APPLIXWORDImport::APPLIXWORDImport(QObject *parent, const QVariantList&) :
-        KoFilter(parent)
+APPLIXWORDImport::APPLIXWORDImport(QObject *parent, const QVariantList &) :
+    KoFilter(parent)
 {
 }
 
@@ -60,7 +59,7 @@ APPLIXWORDImport::APPLIXWORDImport(QObject *parent, const QVariantList&) :
  *                                                                            *
  ******************************************************************************/
 QString
-APPLIXWORDImport::nextLine(QTextStream & stream)
+APPLIXWORDImport::nextLine(QTextStream &stream)
 {
     if (!m_nextPendingLine.isNull()) {
         const QString s = m_nextPendingLine;
@@ -75,7 +74,7 @@ APPLIXWORDImport::nextLine(QTextStream & stream)
     if (m_instep > m_stepsize) {
         m_instep    = 0;
         m_progress += 2;
-        emit sigProgress(m_progress) ;
+        emit sigProgress(m_progress);
     }
 
     return s;
@@ -83,14 +82,14 @@ APPLIXWORDImport::nextLine(QTextStream & stream)
 
 // Look for the next '"', skipping any escaped '"'.
 // Usually called with startPos being at the character just after the opening '"'.
-static int nextDoubleQuote(const QString& mystr, int startPos)
+static int nextDoubleQuote(const QString &mystr, int startPos)
 {
     int y = startPos;
     do {
         const int pos = mystr.indexOf('"', y);
         //kDebug(30517) << "POS:" << pos << " length:" << mystr.length() << " y:" << y;
         //kDebug(30517) << "<" << mystr << " >";
-        if ((pos > 0) && (mystr[pos-1] == '\\')) {
+        if ((pos > 0) && (mystr[pos - 1] == '\\')) {
             //kDebug(30517) << " escape character, keep going";
             y = pos + 1;
         } else {
@@ -101,7 +100,7 @@ static int nextDoubleQuote(const QString& mystr, int startPos)
     return -1; // NOTREACHED
 }
 
-bool APPLIXWORDImport::parseFontProperty(const QString& type, KoGenStyle& style) const
+bool APPLIXWORDImport::parseFontProperty(const QString &type, KoGenStyle &style) const
 {
     if (type == "bold") {
         style.addProperty("fo:font-weight", "bold", KoGenStyle::TextType);
@@ -150,11 +149,12 @@ bool APPLIXWORDImport::parseFontProperty(const QString& type, KoGenStyle& style)
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray &from, const QByteArray &to)
 {
 
-    if (to != "application/vnd.oasis.opendocument.text" || from != "application/x-applix-word")
+    if (to != "application/vnd.oasis.opendocument.text" || from != "application/x-applix-word") {
         return KoFilter::NotImplemented;
+    }
 
     QFile in(m_chain->inputFile());
     if (!in.open(QIODevice::ReadOnly)) {
@@ -162,7 +162,6 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
         in.close();
         return KoFilter::FileNotFound;
     }
-
 
     //create output files
     KoStore *store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, to, KoStore::Zip);
@@ -174,7 +173,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     KoOdfWriteStore odfStore(store);
     odfStore.manifestWriter(to);
 
-    KoXmlWriter* contentWriter = odfStore.contentWriter();
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
     if (!contentWriter) {
         delete store;
         return KoFilter::CreationError;
@@ -202,13 +201,14 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     // We'll get the paragraph style only at the end of the paragraph,
     // so bufferize the paragraph contents
     QBuffer paragraphBuffer;
-    KoXmlWriter* paragraphWriter = 0;
+    KoXmlWriter *paragraphWriter = 0;
 
     /**************************************************************************
      * Read header                                                            *
      **************************************************************************/
-    if (! readHeader(stream)) return KoFilter::StupidError;
-
+    if (! readHeader(stream)) {
+        return KoFilter::StupidError;
+    }
 
     while (!stream.atEnd()) {
         // Read one line
@@ -222,7 +222,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
          **********************************************************************/
         if (mystr == "<start_styles>") {
             printf("Start styles\n");
-            QString    coltxt ;
+            QString    coltxt;
             do {
                 mystr = readTagLine(stream);
                 if (mystr == "<end_styles>") {
@@ -235,9 +235,9 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
                         coltxt = mystr.left(pos);
                         mystr.remove(0, pos + 1);
                         int c, m, y, k;
-                        sscanf((const char *) mystr.toLatin1() ,
-                                       ":%d:%d:%d:%d>",
-                                       &c, &m, &y, &k);
+                        sscanf((const char *) mystr.toLatin1(),
+                               ":%d:%d:%d:%d>",
+                               &c, &m, &y, &k);
                         kDebug(30517) << " Color :" << c << "" << m << "" << y << "" << k << "" << coltxt << "";
 
                         m_colorMap.insert(coltxt, QColor::fromCmyk(c, m, y, k));
@@ -254,8 +254,9 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             kDebug(30517) << "\nEmbedded Applix object starts:";
             do {
                 mystr = readTagLine(stream);
-                if (mystr == "<end_data>") ok = false;
-                else {
+                if (mystr == "<end_data>") {
+                    ok = false;
+                } else {
                     kDebug(30517) << "" << mystr;
                 }
             } while (ok == true);
@@ -269,8 +270,9 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             kDebug(30517) << "\nHeader/Footer starts:";
             do {
                 mystr = readTagLine(stream);
-                if (mystr == "<end_hdrftr>") ok = false;
-                else {
+                if (mystr == "<end_hdrftr>") {
+                    ok = false;
+                } else {
                     kDebug(30517) << "" << mystr;
                 }
             } while (ok == true);
@@ -296,7 +298,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
             KoGenStyle paragStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
 
             const QStringList typeList = mystr.split(' ', QString::SkipEmptyParts);
-            Q_FOREACH(const QString& type, typeList) {
+            Q_FOREACH (const QString &type, typeList) {
                 if (type == "justifyFull") {
                     paragStyle.addAttribute("fo:text-align", "justify");
                 } else if (type == "justifyCenter") {
@@ -329,26 +331,26 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
         else if (mystr.startsWith("<RS")) {
 #if 0 // TODO
             if (!inTable) {
-                writer.startElement( "table:table" );
+                writer.startElement("table:table");
                 // TODO - but we have no idea about the number of columns...
 #if 0
-                for ( uint colNr = 0; colNr < getColumns(); ++colNr )
-                {
-                    writer.startElement( "table:table-column" );
-                    KoGenStyle columnStyle( KWDocument::STYLE_TABLE_COLUMN, "table-column" );
-                    columnStyle.addPropertyPt( "style:column-width", m_colPositions[colNr+1] - m_colPositions[colNr] );
-                    const QString colStyleName = context.mainStyles().lookup( columnStyle, "col" );
-                    writer.addAttribute( "table:style-name", colStyleName );
+                for (uint colNr = 0; colNr < getColumns(); ++colNr) {
+                    writer.startElement("table:table-column");
+                    KoGenStyle columnStyle(KWDocument::STYLE_TABLE_COLUMN, "table-column");
+                    columnStyle.addPropertyPt("style:column-width", m_colPositions[colNr + 1] - m_colPositions[colNr]);
+                    const QString colStyleName = context.mainStyles().lookup(columnStyle, "col");
+                    writer.addAttribute("table:style-name", colStyleName);
                     writer.endElement(); // table:table-column
                 }
 
 #endif
             }
-            if (inTableRow)
-                writer.endElement(); // table:table-row
-            writer.startElement( "table:table-row" );
+            if (inTableRow) {
+                writer.endElement();    // table:table-row
+            }
+            writer.startElement("table:table-row");
             inTableRow = true;
-            writer.startElement( "table:table-cell" );
+            writer.startElement("table:table-cell");
             inTableCell = true;
 #endif
         }
@@ -381,7 +383,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
 
             // split format
             const QStringList typeList = mystr.split(' ', QString::SkipEmptyParts);
-            Q_FOREACH(const QString& type, typeList) {
+            Q_FOREACH (const QString &type, typeList) {
                 //kDebug(30517) << "Text formatting:" << type;
                 if (!parseFontProperty(type, style)) {
                     kDebug(30517) << "Unhandled text format:" << type;
@@ -421,7 +423,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
         return KoFilter::CreationError;
     }
 
-    if ( !odfStore.closeManifestWriter() ) {
+    if (!odfStore.closeManifestWriter()) {
         kWarning() << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";
         delete store;
         return KoFilter::CreationError;
@@ -431,7 +433,6 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     return KoFilter::OK;
 }
 
-
 /******************************************************************************
  *  function: specCharfind                                                    *
  ******************************************************************************/
@@ -440,178 +441,316 @@ APPLIXWORDImport::specCharfind(QChar a, QChar b) // TODO share this code with ap
 {
     QChar chr;
 
-    if ((a == 'n') && (b == 'p')) chr = 'ß';
-
-
-    else if ((a == 'n') && (b == 'c')) chr = 'Ò';
-    else if ((a == 'p') && (b == 'c')) chr = 'ò';
-
-    else if ((a == 'n') && (b == 'd')) chr = 'Ó';
-    else if ((a == 'p') && (b == 'd')) chr = 'ó';
-
-    else if ((a == 'n') && (b == 'e')) chr = 'Ô';
-    else if ((a == 'p') && (b == 'e')) chr = 'ô';
-
-    else if ((a == 'n') && (b == 'f')) chr = 'Õ';
-    else if ((a == 'p') && (b == 'f')) chr = 'õ';
-
-    else if ((a == 'p') && (b == 'g')) chr = 'ö';
-    else if ((a == 'n') && (b == 'g')) chr = 'Ö';
-
-
-
-    else if ((a == 'n') && (b == 'j')) chr = 'Ù';
-    else if ((a == 'p') && (b == 'j')) chr = 'ù';
-
-    else if ((a == 'n') && (b == 'k')) chr = 'Ú';
-    else if ((a == 'p') && (b == 'k')) chr = 'ú';
-
-    else if ((a == 'n') && (b == 'l')) chr = 'Û';
-    else if ((a == 'p') && (b == 'l')) chr = 'û';
-
-    else if ((a == 'p') && (b == 'm')) chr = 'ü';
-    else if ((a == 'n') && (b == 'm')) chr = 'Ü';
-
-
-
-    else if ((a == 'm') && (b == 'a')) chr = 'À';
-    else if ((a == 'o') && (b == 'a')) chr = 'à';
-
-    else if ((a == 'm') && (b == 'b')) chr = 'Á';
-    else if ((a == 'o') && (b == 'b')) chr = 'á';
-
-    else if ((a == 'm') && (b == 'c')) chr = 'Â';
-    else if ((a == 'o') && (b == 'c')) chr = 'â';
-
-    else if ((a == 'm') && (b == 'd')) chr = 'Ã';
-    else if ((a == 'o') && (b == 'd')) chr = 'ã';
-
-    else if ((a == 'm') && (b == 'e')) chr = 'Ä';
-    else if ((a == 'o') && (b == 'e')) chr = 'ä';
-
-    else if ((a == 'm') && (b == 'f')) chr = 'Å';
-    else if ((a == 'o') && (b == 'f')) chr = 'å';
-
-    else if ((a == 'm') && (b == 'g')) chr = 'Æ';
-    else if ((a == 'o') && (b == 'g')) chr = 'æ';
-
-
-
-    else if ((a == 'm') && (b == 'i')) chr = 'È';
-    else if ((a == 'o') && (b == 'i')) chr = 'è';
-
-    else if ((a == 'm') && (b == 'j')) chr = 'É';
-    else if ((a == 'o') && (b == 'j')) chr = 'é';
-
-    else if ((a == 'm') && (b == 'k')) chr = 'Ê';
-    else if ((a == 'o') && (b == 'k')) chr = 'ê';
-
-    else if ((a == 'm') && (b == 'l')) chr = 'Ë';
-    else if ((a == 'o') && (b == 'l')) chr = 'ë';
-
-
-
-
-
-
-    else if ((a == 'm') && (b == 'm')) chr = 'Ì';
-    else if ((a == 'o') && (b == 'm')) chr = 'ì';
-
-    else if ((a == 'm') && (b == 'n')) chr = 'Í';
-    else if ((a == 'o') && (b == 'n')) chr = 'í';
-
-    else if ((a == 'm') && (b == 'o')) chr = 'Î';
-    else if ((a == 'o') && (b == 'o')) chr = 'î';
-
-    else if ((a == 'm') && (b == 'p')) chr = 'Ï';
-    else if ((a == 'o') && (b == 'p')) chr = 'ï';
-
-
-    else if ((a == 'n') && (b == 'b')) chr = 'Ñ';
-    else if ((a == 'p') && (b == 'b')) chr = 'ñ';
-
-
-    else if ((a == 'k') && (b == 'c')) chr = '¢';
-    else if ((a == 'k') && (b == 'j')) chr = '©';
-    else if ((a == 'l') && (b == 'f')) chr = 'µ';
-    else if ((a == 'n') && (b == 'i')) chr = 'Ø';
-    else if ((a == 'p') && (b == 'i')) chr = 'ø';
-
-    else if ((a == 'l') && (b == 'j')) chr = '¹';
-    else if ((a == 'l') && (b == 'c')) chr = '²';
-    else if ((a == 'l') && (b == 'd')) chr = '³';
-
-    else if ((a == 'l') && (b == 'm')) chr = '¼';
-    else if ((a == 'l') && (b == 'n')) chr = '½';
-    else if ((a == 'l') && (b == 'o')) chr = '¾';
-
-    else if ((a == 'l') && (b == 'a')) chr = '°';
-
-    else if ((a == 'k') && (b == 'o')) chr = '®';
-    else if ((a == 'k') && (b == 'h')) chr = '§';
-    else if ((a == 'k') && (b == 'd')) chr = '£';
-
-    else if ((a == 'p') && (b == 'a')) chr = 'ð';
-    else if ((a == 'n') && (b == 'a')) chr = 'Ð';
-
-    else if ((a == 'l') && (b == 'l')) chr = '»';
-    else if ((a == 'k') && (b == 'l')) chr = '«';
-
-    else if ((a == 'l') && (b == 'k')) chr = 'º';
-
-    else if ((a == 'l') && (b == 'h')) chr = '·';
-
-    else if ((a == 'k') && (b == 'b')) chr = '¡';
-
-    else if ((a == 'k') && (b == 'e')) chr = '¤';
-
-    else if ((a == 'l') && (b == 'b')) chr = '±';
-
-    else if ((a == 'l') && (b == 'p')) chr = '¿';
-
-    else if ((a == 'k') && (b == 'f')) chr = '¥';
-
-    else if ((a == 'p') && (b == 'o')) chr = 'þ';
-    else if ((a == 'n') && (b == 'o')) chr = 'Þ';
-
-    else if ((a == 'n') && (b == 'n')) chr = 'Ý';
-    else if ((a == 'p') && (b == 'n')) chr = 'ý';
-    else if ((a == 'p') && (b == 'p')) chr = 'ÿ';
-
-    else if ((a == 'k') && (b == 'k')) chr = 'ª';
-
-    else if ((a == 'k') && (b == 'm')) chr = '¬';
-    else if ((a == 'p') && (b == 'h')) chr = '÷';
-
-    else if ((a == 'k') && (b == 'g')) chr = '|';
-
-    else if ((a == 'l') && (b == 'e')) chr = '\'';
-
-    else if ((a == 'k') && (b == 'i')) chr = '¨';
-
-    else if ((a == 'k') && (b == 'n')) chr = '­';
-
-    else if ((a == 'k') && (b == 'p')) chr = '¯';
-
-    else if ((a == 'l') && (b == 'g')) chr = '¶';
-
-    else if ((a == 'l') && (b == 'i')) chr = '¸';
-
-    else if ((a == 'm') && (b == 'h')) chr = 'Ç';
-    else if ((a == 'o') && (b == 'h')) chr = 'ç';
-
-    else if ((a == 'n') && (b == 'h')) chr = '×';
-
-    else if ((a == 'k') && (b == 'a')) chr = ' ';
-
-    else if ((a == 'a') && (b == 'j')) chr = '!';
-
-    else  chr = '#';
+    if ((a == 'n') && (b == 'p')) {
+        chr = 'ß';
+    }
+
+    else if ((a == 'n') && (b == 'c')) {
+        chr = 'Ò';
+    } else if ((a == 'p') && (b == 'c')) {
+        chr = 'ò';
+    }
+
+    else if ((a == 'n') && (b == 'd')) {
+        chr = 'Ó';
+    } else if ((a == 'p') && (b == 'd')) {
+        chr = 'ó';
+    }
+
+    else if ((a == 'n') && (b == 'e')) {
+        chr = 'Ô';
+    } else if ((a == 'p') && (b == 'e')) {
+        chr = 'ô';
+    }
+
+    else if ((a == 'n') && (b == 'f')) {
+        chr = 'Õ';
+    } else if ((a == 'p') && (b == 'f')) {
+        chr = 'õ';
+    }
+
+    else if ((a == 'p') && (b == 'g')) {
+        chr = 'ö';
+    } else if ((a == 'n') && (b == 'g')) {
+        chr = 'Ö';
+    }
+
+    else if ((a == 'n') && (b == 'j')) {
+        chr = 'Ù';
+    } else if ((a == 'p') && (b == 'j')) {
+        chr = 'ù';
+    }
+
+    else if ((a == 'n') && (b == 'k')) {
+        chr = 'Ú';
+    } else if ((a == 'p') && (b == 'k')) {
+        chr = 'ú';
+    }
+
+    else if ((a == 'n') && (b == 'l')) {
+        chr = 'Û';
+    } else if ((a == 'p') && (b == 'l')) {
+        chr = 'û';
+    }
+
+    else if ((a == 'p') && (b == 'm')) {
+        chr = 'ü';
+    } else if ((a == 'n') && (b == 'm')) {
+        chr = 'Ü';
+    }
+
+    else if ((a == 'm') && (b == 'a')) {
+        chr = 'À';
+    } else if ((a == 'o') && (b == 'a')) {
+        chr = 'à';
+    }
+
+    else if ((a == 'm') && (b == 'b')) {
+        chr = 'Á';
+    } else if ((a == 'o') && (b == 'b')) {
+        chr = 'á';
+    }
+
+    else if ((a == 'm') && (b == 'c')) {
+        chr = 'Â';
+    } else if ((a == 'o') && (b == 'c')) {
+        chr = 'â';
+    }
+
+    else if ((a == 'm') && (b == 'd')) {
+        chr = 'Ã';
+    } else if ((a == 'o') && (b == 'd')) {
+        chr = 'ã';
+    }
+
+    else if ((a == 'm') && (b == 'e')) {
+        chr = 'Ä';
+    } else if ((a == 'o') && (b == 'e')) {
+        chr = 'ä';
+    }
+
+    else if ((a == 'm') && (b == 'f')) {
+        chr = 'Å';
+    } else if ((a == 'o') && (b == 'f')) {
+        chr = 'å';
+    }
+
+    else if ((a == 'm') && (b == 'g')) {
+        chr = 'Æ';
+    } else if ((a == 'o') && (b == 'g')) {
+        chr = 'æ';
+    }
+
+    else if ((a == 'm') && (b == 'i')) {
+        chr = 'È';
+    } else if ((a == 'o') && (b == 'i')) {
+        chr = 'è';
+    }
+
+    else if ((a == 'm') && (b == 'j')) {
+        chr = 'É';
+    } else if ((a == 'o') && (b == 'j')) {
+        chr = 'é';
+    }
+
+    else if ((a == 'm') && (b == 'k')) {
+        chr = 'Ê';
+    } else if ((a == 'o') && (b == 'k')) {
+        chr = 'ê';
+    }
+
+    else if ((a == 'm') && (b == 'l')) {
+        chr = 'Ë';
+    } else if ((a == 'o') && (b == 'l')) {
+        chr = 'ë';
+    }
+
+    else if ((a == 'm') && (b == 'm')) {
+        chr = 'Ì';
+    } else if ((a == 'o') && (b == 'm')) {
+        chr = 'ì';
+    }
+
+    else if ((a == 'm') && (b == 'n')) {
+        chr = 'Í';
+    } else if ((a == 'o') && (b == 'n')) {
+        chr = 'í';
+    }
+
+    else if ((a == 'm') && (b == 'o')) {
+        chr = 'Î';
+    } else if ((a == 'o') && (b == 'o')) {
+        chr = 'î';
+    }
+
+    else if ((a == 'm') && (b == 'p')) {
+        chr = 'Ï';
+    } else if ((a == 'o') && (b == 'p')) {
+        chr = 'ï';
+    }
+
+    else if ((a == 'n') && (b == 'b')) {
+        chr = 'Ñ';
+    } else if ((a == 'p') && (b == 'b')) {
+        chr = 'ñ';
+    }
+
+    else if ((a == 'k') && (b == 'c')) {
+        chr = '¢';
+    } else if ((a == 'k') && (b == 'j')) {
+        chr = '©';
+    } else if ((a == 'l') && (b == 'f')) {
+        chr = 'µ';
+    } else if ((a == 'n') && (b == 'i')) {
+        chr = 'Ø';
+    } else if ((a == 'p') && (b == 'i')) {
+        chr = 'ø';
+    }
+
+    else if ((a == 'l') && (b == 'j')) {
+        chr = '¹';
+    } else if ((a == 'l') && (b == 'c')) {
+        chr = '²';
+    } else if ((a == 'l') && (b == 'd')) {
+        chr = '³';
+    }
+
+    else if ((a == 'l') && (b == 'm')) {
+        chr = '¼';
+    } else if ((a == 'l') && (b == 'n')) {
+        chr = '½';
+    } else if ((a == 'l') && (b == 'o')) {
+        chr = '¾';
+    }
+
+    else if ((a == 'l') && (b == 'a')) {
+        chr = '°';
+    }
+
+    else if ((a == 'k') && (b == 'o')) {
+        chr = '®';
+    } else if ((a == 'k') && (b == 'h')) {
+        chr = '§';
+    } else if ((a == 'k') && (b == 'd')) {
+        chr = '£';
+    }
+
+    else if ((a == 'p') && (b == 'a')) {
+        chr = 'ð';
+    } else if ((a == 'n') && (b == 'a')) {
+        chr = 'Ð';
+    }
+
+    else if ((a == 'l') && (b == 'l')) {
+        chr = '»';
+    } else if ((a == 'k') && (b == 'l')) {
+        chr = '«';
+    }
+
+    else if ((a == 'l') && (b == 'k')) {
+        chr = 'º';
+    }
+
+    else if ((a == 'l') && (b == 'h')) {
+        chr = '·';
+    }
+
+    else if ((a == 'k') && (b == 'b')) {
+        chr = '¡';
+    }
+
+    else if ((a == 'k') && (b == 'e')) {
+        chr = '¤';
+    }
+
+    else if ((a == 'l') && (b == 'b')) {
+        chr = '±';
+    }
+
+    else if ((a == 'l') && (b == 'p')) {
+        chr = '¿';
+    }
+
+    else if ((a == 'k') && (b == 'f')) {
+        chr = '¥';
+    }
+
+    else if ((a == 'p') && (b == 'o')) {
+        chr = 'þ';
+    } else if ((a == 'n') && (b == 'o')) {
+        chr = 'Þ';
+    }
+
+    else if ((a == 'n') && (b == 'n')) {
+        chr = 'Ý';
+    } else if ((a == 'p') && (b == 'n')) {
+        chr = 'ý';
+    } else if ((a == 'p') && (b == 'p')) {
+        chr = 'ÿ';
+    }
+
+    else if ((a == 'k') && (b == 'k')) {
+        chr = 'ª';
+    }
+
+    else if ((a == 'k') && (b == 'm')) {
+        chr = '¬';
+    } else if ((a == 'p') && (b == 'h')) {
+        chr = '÷';
+    }
+
+    else if ((a == 'k') && (b == 'g')) {
+        chr = '|';
+    }
+
+    else if ((a == 'l') && (b == 'e')) {
+        chr = '\'';
+    }
+
+    else if ((a == 'k') && (b == 'i')) {
+        chr = '¨';
+    }
+
+    else if ((a == 'k') && (b == 'n')) {
+        chr = '­';
+    }
+
+    else if ((a == 'k') && (b == 'p')) {
+        chr = '¯';
+    }
+
+    else if ((a == 'l') && (b == 'g')) {
+        chr = '¶';
+    }
+
+    else if ((a == 'l') && (b == 'i')) {
+        chr = '¸';
+    }
+
+    else if ((a == 'm') && (b == 'h')) {
+        chr = 'Ç';
+    } else if ((a == 'o') && (b == 'h')) {
+        chr = 'ç';
+    }
+
+    else if ((a == 'n') && (b == 'h')) {
+        chr = '×';
+    }
+
+    else if ((a == 'k') && (b == 'a')) {
+        chr = ' ';
+    }
+
+    else if ((a == 'a') && (b == 'j')) {
+        chr = '!';
+    }
+
+    else {
+        chr = '#';
+    }
 
     return chr;
 }
-
-
 
 /******************************************************************************
  *  class: APPLIXWORDImport        function: readTagLine                      *
@@ -631,7 +770,7 @@ APPLIXWORDImport::readTagLine(QTextStream &stream)
     mystr = mystr.trimmed();
 
     // Look if the tag continues on the next line
-    if ((mystr.length() == 80) && (mystr[mystr.length()-1] == '\\')) {
+    if ((mystr.length() == 80) && (mystr[mystr.length() - 1] == '\\')) {
         bool ok = true;
         do {
             // Read next line
@@ -658,9 +797,6 @@ APPLIXWORDImport::readTagLine(QTextStream &stream)
     return mystr;
 }
 
-
-
-
 /******************************************************************************
  *  class: APPLIXWORDImport        function: replaceSpecial                   *
  ******************************************************************************
@@ -677,7 +813,6 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
     textstr.replace('<', "&lt;");
     textstr.replace('>', "&gt;");
 
-
     // 2. Replace part for this characters: applixwear qoutes
     bool ok = true;
     int pos = 0;
@@ -686,14 +821,12 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
         pos = textstr.indexOf('\"', pos);
 
         // Is it a textquote ?
-        if ((pos > -1) && (textstr[pos-1] == '\\')) {
+        if ((pos > -1) && (textstr[pos - 1] == '\\')) {
             textstr.replace(pos - 1, 2, '"');
         } else {
             ok = false;
         }
     } while (ok == true);
-
-
 
     // 3. Replace part for Applix Characters
     bool  foundSpecialCharakter;
@@ -711,15 +844,13 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
             foundSpecialCharakter = true;
 
             // translate the applix special character
-            newchar = specCharfind(textstr[pos+1], textstr[pos+2]);
+            newchar = specCharfind(textstr[pos + 1], textstr[pos + 2]);
 
             // replace the character
             textstr.replace(pos, 3, newchar);
         }
     } while (foundSpecialCharakter == true);
 }
-
-
 
 /******************************************************************************
  *  class: APPLIXWORDImport       function: readHeader                        *
@@ -739,13 +870,13 @@ APPLIXWORDImport::readHeader(QTextStream &stream)
 
     // Example: *BEGIN WORDS VERSION=430/320 ENCODING=7BIT
     int ret = sscanf(mystr.toLatin1(),
-                   "*BEGIN WORDS VERSION=%d/%d ENCODING=%dBIT",
-                   &vers[0], &vers[1], &vers[2]);
+                     "*BEGIN WORDS VERSION=%d/%d ENCODING=%dBIT",
+                     &vers[0], &vers[1], &vers[2]);
     if (ret <= 0) {
         // Older version. Example: *START WORDS VERSION=311 ENCODING=7BIT
         ret = sscanf(mystr.toLatin1(),
-                   "*START WORDS VERSION=%d ENCODING=%dBIT",
-                   &vers[0], &vers[2]);
+                     "*START WORDS VERSION=%d ENCODING=%dBIT",
+                     &vers[0], &vers[2]);
         vers[1] = vers[0];
     }
     printf("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]);
@@ -761,7 +892,9 @@ APPLIXWORDImport::readHeader(QTextStream &stream)
                                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr),
                               "Okay");
         return false;
-    } else return true;
+    } else {
+        return true;
+    }
 }
 
 bool APPLIXWORDImport::createMeta(KoOdfWriteStore &store)
@@ -771,7 +904,7 @@ bool APPLIXWORDImport::createMeta(KoOdfWriteStore &store)
     }
 
     KoStoreDevice dev(store.store());
-    KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
+    KoXmlWriter *xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
     xmlWriter->startElement("office:meta");
 
     xmlWriter->startElement("meta:generator");
@@ -789,7 +922,7 @@ bool APPLIXWORDImport::createMeta(KoOdfWriteStore &store)
     if (!store.store()->close()) {
         return false;
     }
-    store.manifestWriter()->addManifestEntry("meta.xml", "text/xml" );
+    store.manifestWriter()->addManifestEntry("meta.xml", "text/xml");
     return true;
 }
 

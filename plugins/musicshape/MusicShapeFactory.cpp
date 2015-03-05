@@ -35,23 +35,22 @@
 #include "MusicShapeFactory.h"
 
 K_PLUGIN_FACTORY(MusicShapePluginFactory, registerPlugin<MusicShapePlugin>();)
-K_EXPORT_PLUGIN(MusicShapePluginFactory( "calligra_shape_music" ))
+K_EXPORT_PLUGIN(MusicShapePluginFactory("calligra_shape_music"))
 
-MusicShapePlugin::MusicShapePlugin( QObject *,  const QVariantList& )
+MusicShapePlugin::MusicShapePlugin(QObject *,  const QVariantList &)
 {
-    KoShapeRegistry::instance()->add( new MusicShapeFactory() );
-    KoToolRegistry::instance()->add( new MusicToolFactory() );
-    KoToolRegistry::instance()->add( new SimpleEntryToolFactory() );
+    KoShapeRegistry::instance()->add(new MusicShapeFactory());
+    KoToolRegistry::instance()->add(new MusicToolFactory());
+    KoToolRegistry::instance()->add(new SimpleEntryToolFactory());
 }
 
-
 MusicShapeFactory::MusicShapeFactory()
-    : KoShapeFactoryBase(MusicShapeId, i18n( "Music Shape" ) )
+    : KoShapeFactoryBase(MusicShapeId, i18n("Music Shape"))
 {
-    setToolTip( i18n( "A shape which provides a music editor" ) );
-    setIconName(koIconNameCStrNeededWithSubs("icon for the Music Shape","musicshape", "music-note-16th"));
-    setXmlElementNames( "http://www.calligra.org/music", QStringList("shape") );
-    setLoadingPriority( 1 );
+    setToolTip(i18n("A shape which provides a music editor"));
+    setIconName(koIconNameCStrNeededWithSubs("icon for the Music Shape", "musicshape", "music-note-16th"));
+    setXmlElementNames("http://www.calligra.org/music", QStringList("shape"));
+    setLoadingPriority(1);
 }
 
 KoShape *MusicShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
@@ -64,14 +63,14 @@ KoShape *MusicShapeFactory::createDefaultShape(KoDocumentResourceManager *) cons
         }
         loadedFont = true;
     }
-    MusicShape* shape = new MusicShape();
+    MusicShape *shape = new MusicShape();
     shape->setSize(QSizeF(400, 300));
     shape->setShapeId(MusicShapeId);
     return shape;
 }
 
-bool MusicShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool MusicShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
-    return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.calligra.org/music" );
+    return (e.localName() == "shape") && (e.namespaceURI() == "http://www.calligra.org/music");
 }

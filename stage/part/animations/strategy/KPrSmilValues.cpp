@@ -43,8 +43,7 @@ qreal KPrSmilValues::value(qreal time) const
 
     if (m_formulaParser) {
         value = m_formulaParser->eval(m_cache, time);
-    }
-    else {
+    } else {
         for (int i = 0; i < m_values.size(); i++) {
             if (time > m_times.at(i) && (m_times.at(i + 1) - m_times.at(i))) {
                 value1 = m_values.at(i).eval(m_cache);
@@ -52,8 +51,7 @@ qreal KPrSmilValues::value(qreal time) const
                 value = (time - m_times.at(i)) * (value2 - value1);
                 value = value / (m_times.at(i + 1) - m_times.at(i));
                 value += value1;
-            }
-            else if (time == m_times.at(i)){
+            } else if (time == m_times.at(i)) {
                 value = m_values.at(i).eval(m_cache);
             }
         }
@@ -92,10 +90,9 @@ bool KPrSmilValues::loadValues(const QString &values, const QString &keyTimes, c
     // keyTimes
     if (keyTimes.isEmpty()) {
         for (int i = 0; i < m_values.size(); i++) {
-            m_times.append(qreal(i)/qreal(m_values.size()));
+            m_times.append(qreal(i) / qreal(m_values.size()));
         }
-    }
-    else {
+    } else {
         QStringList keyTimesList = keyTimes.split(QLatin1Char(';'));
         if (valuesList.size() != keyTimesList.size()) {
             return false;

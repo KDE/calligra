@@ -47,7 +47,7 @@
 #include <kexiutils/utils.h>
 
 ContainerWidget::ContainerWidget(QWidget *parent)
-        : QWidget(parent)
+    : QWidget(parent)
 {
 }
 
@@ -74,8 +74,8 @@ void ContainerWidget::dropEvent(QDropEvent *e)
 
 ////////////////////////
 
-GroupBox::GroupBox(const QString & title, QWidget *parent)
-        : QGroupBox(title, parent)
+GroupBox::GroupBox(const QString &title, QWidget *parent)
+    : QGroupBox(title, parent)
 {
 }
 
@@ -97,13 +97,13 @@ void GroupBox::dropEvent(QDropEvent *e)
 
 QSize GroupBox::sizeHint() const
 {
-    return title().isEmpty() ? QGroupBox::sizeHint() : QSize(fontMetrics().width(title()), fontMetrics().height()*3);
+    return title().isEmpty() ? QGroupBox::sizeHint() : QSize(fontMetrics().width(title()), fontMetrics().height() * 3);
 }
 
 ////////////////////////
 
 KFDTabWidget::KFDTabWidget(KFormDesigner::Container *container, QWidget *parent)
-        : KFormDesigner::TabWidget(parent), m_container(container)
+    : KFormDesigner::TabWidget(parent), m_container(container)
 {
 }
 
@@ -115,8 +115,9 @@ QSize
 KFDTabWidget::sizeHint() const
 {
     QSize s(30, 30); // default min size
-    for (int i = 0; i < count(); i++)
+    for (int i = 0; i < count(); i++) {
         s = s.expandedTo(KFormDesigner::getSizeFromChildren(widget(i)));
+    }
 
     return s + QSize(10/*margin*/, tabBar()->height() + 20/*margin*/);
 }
@@ -124,23 +125,25 @@ KFDTabWidget::sizeHint() const
 void KFDTabWidget::dragMoveEvent(QDragMoveEvent *e)
 {
     TabWidgetBase::dragMoveEvent(e);
-    if (dynamic_cast<ContainerWidget*>(currentWidget()))
-        emit dynamic_cast<ContainerWidget*>(currentWidget())->handleDragMoveEvent(e);
+    if (dynamic_cast<ContainerWidget *>(currentWidget())) {
+        emit dynamic_cast<ContainerWidget *>(currentWidget())->handleDragMoveEvent(e);
+    }
     emit handleDragMoveEvent(e);
 }
 
 void KFDTabWidget::dropEvent(QDropEvent *e)
 {
     TabWidgetBase::dropEvent(e);
-    if (dynamic_cast<ContainerWidget*>(currentWidget()))
-        emit dynamic_cast<ContainerWidget*>(currentWidget())->handleDropEvent(e);
+    if (dynamic_cast<ContainerWidget *>(currentWidget())) {
+        emit dynamic_cast<ContainerWidget *>(currentWidget())->handleDropEvent(e);
+    }
     emit handleDropEvent(e);
 }
 
 /// Various layout widgets /////////////////:
 
 HBox::HBox(QWidget *parent)
-        : QFrame(parent)
+    : QFrame(parent)
 {
 }
 
@@ -151,15 +154,16 @@ HBox::~HBox()
 void
 HBox::paintEvent(QPaintEvent *)
 {
-    if (!designMode())
+    if (!designMode()) {
         return;
+    }
     QPainter p(this);
     p.setPen(QPen(Qt::red, 2, Qt::DashLine));
     p.drawRect(1, 1, width() - 1, height() - 1);
 }
 
 VBox::VBox(QWidget *parent)
-        : QFrame(parent)
+    : QFrame(parent)
 {
 }
 
@@ -170,15 +174,16 @@ VBox::~VBox()
 void
 VBox::paintEvent(QPaintEvent *)
 {
-    if (!designMode())
+    if (!designMode()) {
         return;
+    }
     QPainter p(this);
     p.setPen(QPen(Qt::blue, 2, Qt::DashLine));
     p.drawRect(1, 1, width() - 1, height() - 1);
 }
 
 Grid::Grid(QWidget *parent)
-        : QFrame(parent)
+    : QFrame(parent)
 {
 }
 
@@ -189,15 +194,16 @@ Grid::~Grid()
 void
 Grid::paintEvent(QPaintEvent *)
 {
-    if (!designMode())
+    if (!designMode()) {
         return;
+    }
     QPainter p(this);
     p.setPen(QPen(Qt::darkGreen, 2, Qt::DashLine));
     p.drawRect(1, 1, width() - 1, height() - 1);
 }
 
 HFlow::HFlow(QWidget *parent)
-        : QFrame(parent)
+    : QFrame(parent)
 {
 }
 
@@ -208,15 +214,16 @@ HFlow::~HFlow()
 void
 HFlow::paintEvent(QPaintEvent *)
 {
-    if (!designMode())
+    if (!designMode()) {
         return;
+    }
     QPainter p(this);
     p.setPen(QPen(Qt::magenta, 2, Qt::DashLine));
     p.drawRect(1, 1, width() - 1, height() - 1);
 }
 
 VFlow::VFlow(QWidget *parent)
-        : QFrame(parent)
+    : QFrame(parent)
 {
 }
 
@@ -227,8 +234,9 @@ VFlow::~VFlow()
 void
 VFlow::paintEvent(QPaintEvent *)
 {
-    if (!designMode())
+    if (!designMode()) {
         return;
+    }
     QPainter p(this);
     p.setPen(QPen(Qt::cyan, 2, Qt::DashLine));
     p.drawRect(1, 1, width() - 1, height() - 1);
@@ -237,17 +245,18 @@ VFlow::paintEvent(QPaintEvent *)
 QSize
 VFlow::sizeHint() const
 {
-    if (layout())
+    if (layout()) {
         return layout()->sizeHint();
-    else
-        return QSize(700, 50); // default
+    } else {
+        return QSize(700, 50);    // default
+    }
 }
 
 /////// Sub forms ////////////////////////:
 
 #if 0
 SubForm::SubForm(KFormDesigner::Form *parentForm, QWidget *parent)
-        : QScrollArea(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
+    : QScrollArea(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
 {
     setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     viewport()->setPaletteBackgroundColor(colorGroup().mid());
@@ -260,8 +269,9 @@ SubForm::~SubForm()
 void
 SubForm::setFormName(const QString &name)
 {
-    if (name.isEmpty())
+    if (name.isEmpty()) {
         return;
+    }
 
     QFileInfo info(name);
     if (!info.exists() || (m_parentForm && info.fileName() == m_parentForm->filename())) {
@@ -300,14 +310,14 @@ AddTabAction::AddTabAction(KFormDesigner::Container *container,
 
 void AddTabAction::slotTriggered()
 {
-    if (!qobject_cast<QTabWidget*>(m_receiver))
+    if (!qobject_cast<QTabWidget *>(m_receiver)) {
         return;
+    }
     KFormDesigner::Command *command = new KFormDesigner::InsertPageCommand(m_container, m_receiver);
     if (m_receiver->count() == 0) {
         command->execute();
         delete command;
-    }
-    else {
+    } else {
         m_container->form()->addCommand(command);
     }
 }
@@ -327,8 +337,9 @@ RemoveTabAction::RemoveTabAction(KFormDesigner::Container *container,
 
 void RemoveTabAction::slotTriggered()
 {
-    if (!qobject_cast<QTabWidget*>(m_receiver) || m_receiver->count() == 0)
+    if (!qobject_cast<QTabWidget *>(m_receiver) || m_receiver->count() == 0) {
         return;
+    }
     KFormDesigner::Command *com = new KFormDesigner::RemovePageCommand(m_container, m_receiver);
     m_container->form()->addCommand(com);
 }
@@ -345,15 +356,17 @@ RenameTabAction::RenameTabAction(KFormDesigner::Container *container,
 
 void RenameTabAction::slotTriggered()
 {
-    if (!qobject_cast<QTabWidget*>(m_receiver))
+    if (!qobject_cast<QTabWidget *>(m_receiver)) {
         return;
+    }
     QWidget *w = m_receiver->currentWidget();
     bool ok;
     QString name = KInputDialog::getText(i18n("New Page Title"),
                                          i18n("Enter a new title for the current page:"),
                                          m_receiver->tabText(m_receiver->indexOf(w)), &ok, w->topLevelWidget());
-    if (ok)
+    if (ok) {
         m_receiver->setTabText(m_receiver->indexOf(w), name);
+    }
 }
 
 AddStackPageAction::AddStackPageAction(KFormDesigner::Container *container,
@@ -368,42 +381,39 @@ AddStackPageAction::AddStackPageAction(KFormDesigner::Container *container,
 
 void AddStackPageAction::slotTriggered()
 {
-    if (   !KexiUtils::objectIsA(m_receiver, "QStackedWidget")
-        && /* compat */ !KexiUtils::objectIsA(m_receiver, "QWidgetStack"))
-    {
+    if (!KexiUtils::objectIsA(m_receiver, "QStackedWidget")
+            && /* compat */ !KexiUtils::objectIsA(m_receiver, "QWidgetStack")) {
         return;
     }
     KFormDesigner::Command *command = new KFormDesigner::InsertPageCommand(m_container, m_receiver);
-    if (!dynamic_cast<QStackedWidget*>(m_receiver)->currentWidget()) {
+    if (!dynamic_cast<QStackedWidget *>(m_receiver)->currentWidget()) {
         command->execute();
         delete command;
-    }
-    else {
+    } else {
         m_container->form()->addCommand(command);
     }
 }
 
 RemoveStackPageAction::RemoveStackPageAction(KFormDesigner::Container *container,
-                                             QWidget *receiver, QObject *parent)
+        QWidget *receiver, QObject *parent)
     : KAction(koIcon("tab-close-other"), i18nc("Remove page from a stacked widget", "Remove Page"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
 {
     connect(this, SIGNAL(triggered()), this, SLOT(slotTriggered()));
-    if (dynamic_cast<TabWidgetBase*>(m_receiver)->count() <= 1) {
+    if (dynamic_cast<TabWidgetBase *>(m_receiver)->count() <= 1) {
         setEnabled(false);
     }
 }
 
 void RemoveStackPageAction::slotTriggered()
 {
-    if (   !KexiUtils::objectIsA(m_receiver, "QStackedWidget")
-        && /* compat */ !KexiUtils::objectIsA(m_receiver, "QWidgetStack"))
-    {
+    if (!KexiUtils::objectIsA(m_receiver, "QStackedWidget")
+            && /* compat */ !KexiUtils::objectIsA(m_receiver, "QWidgetStack")) {
         return;
     }
-    QStackedWidget *stack = dynamic_cast<QStackedWidget*>(m_receiver);
+    QStackedWidget *stack = dynamic_cast<QStackedWidget *>(m_receiver);
     QWidget *page = stack->currentWidget();
 
     QWidgetList list;
@@ -414,11 +424,9 @@ void RemoveStackPageAction::slotTriggered()
     int index = stack->indexOf(page);
     if (index > 0) {
         index--;
-    }
-    else if (index < (stack->count()-1)) {
+    } else if (index < (stack->count() - 1)) {
         index++;
-    }
-    else {
+    } else {
         index = -1;
     }
     if (index >= 0) {
@@ -429,18 +437,18 @@ void RemoveStackPageAction::slotTriggered()
 }
 
 GoToStackPageAction::GoToStackPageAction(Direction direction,
-                                         KFormDesigner::Container *container,
-                                         QWidget *receiver, QObject *parent)
+        KFormDesigner::Container *container,
+        QWidget *receiver, QObject *parent)
     : KAction(KIcon(direction == Previous ? koIconName("go-previous") : koIconName("go-next")),
               direction == Previous ? i18nc("Go to Previous Page of a Stacked Widget", "Go to Previous Page")
-                                    : i18nc("Go to Next Page of a Stacked Widget", "Go to Next Page"),
+              : i18nc("Go to Next Page of a Stacked Widget", "Go to Next Page"),
               parent)
     , m_direction(direction)
     , m_container(container)
     , m_receiver(receiver)
 {
     connect(this, SIGNAL(triggered()), this, SLOT(slotTriggered()));
-    QStackedWidget *stack = dynamic_cast<QStackedWidget*>(m_receiver);
+    QStackedWidget *stack = dynamic_cast<QStackedWidget *>(m_receiver);
     if (!stack || !stack->widget(nextWidgetIndex())) {
         setEnabled(false);
     }
@@ -448,15 +456,16 @@ GoToStackPageAction::GoToStackPageAction(Direction direction,
 
 int GoToStackPageAction::nextWidgetIndex() const
 {
-    QStackedWidget *stack = dynamic_cast<QStackedWidget*>(m_receiver);
-    if (!stack)
+    QStackedWidget *stack = dynamic_cast<QStackedWidget *>(m_receiver);
+    if (!stack) {
         return -1;
+    }
     return stack->currentIndex() + (m_direction == Previous ? -1 : 1);
 }
 
 void GoToStackPageAction::slotTriggered()
 {
-    QStackedWidget *stack = dynamic_cast<QStackedWidget*>(m_receiver);
+    QStackedWidget *stack = dynamic_cast<QStackedWidget *>(m_receiver);
     if (stack && stack->widget(nextWidgetIndex())) {
         stack->setCurrentIndex(nextWidgetIndex());
     }
@@ -465,7 +474,7 @@ void GoToStackPageAction::slotTriggered()
 /////   The factory /////////////////////////
 
 ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
-        : KFormDesigner::WidgetFactory(parent, "containers")
+    : KFormDesigner::WidgetFactory(parent, "containers")
 {
     KFormDesigner::WidgetInfo *wTabWidget = new KFormDesigner::WidgetInfo(this);
     wTabWidget->setIconName(koIconName("tabwidget"));
@@ -558,10 +567,10 @@ ContainerFactory::~ContainerFactory()
 {
 }
 
-QWidget* 
+QWidget *
 ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
-                                  KFormDesigner::Container *container,
-                                  CreateWidgetOptions options)
+                               KFormDesigner::Container *container,
+                               CreateWidgetOptions options)
 {
     Q_UNUSED(options);
     kDebug() << c;
@@ -639,7 +648,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     if (c == "KFDTabWidget") {
         // if we are loading, don't add this tab
         if (container->form()->interactiveMode()) {
-            TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w);
+            TabWidgetBase *tab = dynamic_cast<TabWidgetBase *>(w);
             AddTabAction(container, tab, 0).slotTriggered();
         }
     }
@@ -647,15 +656,16 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 }
 
 bool
-ContainerFactory::previewWidget(const QByteArray &classname, 
-    QWidget *widget, KFormDesigner::Container *container)
+ContainerFactory::previewWidget(const QByteArray &classname,
+                                QWidget *widget, KFormDesigner::Container *container)
 {
     if (classname == "QStackedWidget" || /* compat */ classname == "QWidgetStack") {
-        QStackedWidget *stack = dynamic_cast<QStackedWidget*>(widget);
+        QStackedWidget *stack = dynamic_cast<QStackedWidget *>(widget);
         KFormDesigner::ObjectTreeItem *tree = container->form()->objectTree()->lookup(
-            widget->objectName());
-        if (!tree->modifiedProperties()->contains("frameShape"))
+                widget->objectName());
+        if (!tree->modifiedProperties()->contains("frameShape")) {
             stack->setFrameStyle(QFrame::NoFrame);
+        }
     }
     return true;
 }
@@ -677,19 +687,17 @@ ContainerFactory::createMenuActions(const QByteArray &classname, QWidget *w,
         }
 #endif
 
-        TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w);
+        TabWidgetBase *tab = dynamic_cast<TabWidgetBase *>(w);
         if (tab) {
-            menu->addAction( new AddTabAction(container, tab, menu) );
-            menu->addAction( new RenameTabAction(container, tab, menu) );
-            menu->addAction( new RemoveTabAction(container, tab, menu) );
+            menu->addAction(new AddTabAction(container, tab, menu));
+            menu->addAction(new RenameTabAction(container, tab, menu));
+            menu->addAction(new RemoveTabAction(container, tab, menu));
         }
         return true;
-    }
-    else if (    (KexiUtils::objectIsA(pw, "QStackedWidget") || /* compat */ KexiUtils::objectIsA(pw, "QWidgetStack"))
-              && !pw->parentWidget()->inherits("QTabWidget")
-            )
-    {
-        QStackedWidget *stack = dynamic_cast<QStackedWidget*>(pw);
+    } else if ((KexiUtils::objectIsA(pw, "QStackedWidget") || /* compat */ KexiUtils::objectIsA(pw, "QWidgetStack"))
+               && !pw->parentWidget()->inherits("QTabWidget")
+              ) {
+        QStackedWidget *stack = dynamic_cast<QStackedWidget *>(pw);
 #ifdef __GNUC__
 #warning port this: setWidget( pw, container->form()->objectTree()->lookup(stack->objectName())->parent()->container() );
 #else
@@ -703,17 +711,17 @@ ContainerFactory::createMenuActions(const QByteArray &classname, QWidget *w,
 #endif
         KFormDesigner::Container *parentContainer
             = container->form()->objectTree()->lookup(stack->objectName())->parent()->container();
-        menu->addAction( new AddStackPageAction(parentContainer, pw, menu) );
-        menu->addAction( new RemoveStackPageAction(parentContainer, pw, menu) );
-        menu->addAction( new GoToStackPageAction(GoToStackPageAction::Previous, parentContainer, pw, menu) );
-        menu->addAction( new GoToStackPageAction(GoToStackPageAction::Next, parentContainer, pw, menu) );
+        menu->addAction(new AddStackPageAction(parentContainer, pw, menu));
+        menu->addAction(new RemoveStackPageAction(parentContainer, pw, menu));
+        menu->addAction(new GoToStackPageAction(GoToStackPageAction::Previous, parentContainer, pw, menu));
+        menu->addAction(new GoToStackPageAction(GoToStackPageAction::Next, parentContainer, pw, menu));
         return true;
     }
     return false;
 }
 
 bool
-ContainerFactory::startInlineEditing(InlineEditorCreationArguments& /*args*/)
+ContainerFactory::startInlineEditing(InlineEditorCreationArguments & /*args*/)
 {
     return false;
 }
@@ -722,17 +730,17 @@ bool
 ContainerFactory::saveSpecialProperty(const QByteArray &, const QString &name, const QVariant &, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
 {
     if ((name == "title") && (w->parentWidget()->parentWidget()->inherits("QTabWidget"))) {
-        TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w->parentWidget()->parentWidget());
+        TabWidgetBase *tab = dynamic_cast<TabWidgetBase *>(w->parentWidget()->parentWidget());
         KFormDesigner::FormIO::savePropertyElement(
             parentNode, parent, "attribute", "title", tab->tabText(tab->indexOf(w)));
-    } else if ((name == "stackIndex") 
-        && (KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget") || /*compat*/ KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")))
-    {
-        QStackedWidget *stack = dynamic_cast<QStackedWidget*>(w->parentWidget());
+    } else if ((name == "stackIndex")
+               && (KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget") || /*compat*/ KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack"))) {
+        QStackedWidget *stack = dynamic_cast<QStackedWidget *>(w->parentWidget());
         KFormDesigner::FormIO::savePropertyElement(
             parentNode, parent, "attribute", "stackIndex", stack->indexOf(w));
-    } else
+    } else {
         return false;
+    }
     return true;
 }
 
@@ -741,19 +749,18 @@ ContainerFactory::readSpecialProperty(const QByteArray &, QDomElement &node, QWi
                                       KFormDesigner::ObjectTreeItem *item)
 {
     KFormDesigner::Form *form = item->container() ? item->container()->form() : item->parent()->container()->form();
-    const QString name( node.attribute("name") );
+    const QString name(node.attribute("name"));
     if ((name == "title") && (item->parent()->widget()->inherits("QTabWidget"))) {
-        TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w->parentWidget());
+        TabWidgetBase *tab = dynamic_cast<TabWidgetBase *>(w->parentWidget());
         tab->addTab(w, node.firstChild().toElement().text());
         item->addModifiedProperty("title", node.firstChild().toElement().text());
         return true;
     }
 
     if ((name == "stackIndex")
-        && (KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget")
-            || /*compat*/ KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")))
-    {
-        QStackedWidget *stack = dynamic_cast<QStackedWidget*>(w->parentWidget());
+            && (KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget")
+                || /*compat*/ KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack"))) {
+        QStackedWidget *stack = dynamic_cast<QStackedWidget *>(w->parentWidget());
         int index = KFormDesigner::FormIO::readPropertyValue(form, node.firstChild(), w, name).toInt();
         stack->insertWidget(index, w);
         stack->setCurrentWidget(w);
@@ -770,12 +777,10 @@ ContainerFactory::isPropertyVisibleInternal(const QByteArray &classname,
 {
     bool ok = true;
 
-    if (   classname == "HBox" || classname == "VBox" || classname == "Grid"
-        || classname == "HFlow" || classname == "VFlow")
-    {
+    if (classname == "HBox" || classname == "VBox" || classname == "Grid"
+            || classname == "HFlow" || classname == "VFlow") {
         return property == "objectName" || property == "geometry";
-    }
-    else if (classname == "QGroupBox") {
+    } else if (classname == "QGroupBox") {
         ok =
 #ifndef KEXI_SHOW_UNFINISHED
             /*! @todo Hidden for now in Kexi. "checkable" and "checked" props need adding
@@ -813,18 +818,19 @@ ContainerFactory::resizeEditor(QWidget *editor, QWidget *widget, const QByteArra
 
 void ContainerFactory::reorderTabs(int oldpos, int newpos)
 {
-    KFDTabWidget *tabWidget = qobject_cast<KFDTabWidget*>(sender());
+    KFDTabWidget *tabWidget = qobject_cast<KFDTabWidget *>(sender());
     KFormDesigner::ObjectTreeItem *tab = tabWidget->container()->form()->objectTree()->lookup(tabWidget->objectName());
-    if (!tab)
+    if (!tab) {
         return;
+    }
 
     tab->children()->move(oldpos, newpos);
 }
 
-KFormDesigner::ObjectTreeItem* ContainerFactory::selectableItem(KFormDesigner::ObjectTreeItem* item)
+KFormDesigner::ObjectTreeItem *ContainerFactory::selectableItem(KFormDesigner::ObjectTreeItem *item)
 {
     if (item->parent() && item->parent()->widget()) {
-        if (qobject_cast<QTabWidget*>(item->parent()->widget())) {
+        if (qobject_cast<QTabWidget *>(item->parent()->widget())) {
             // tab widget's page
             return item->parent();
         }

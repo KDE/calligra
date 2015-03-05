@@ -26,10 +26,7 @@
 #include "kis_signals_blocker.h"
 #include "kis_slider_spin_box.h"
 
-
-
-struct KisSpacingSelectionWidget::Private
-{
+struct KisSpacingSelectionWidget::Private {
     Private(KisSpacingSelectionWidget *_q)
         : q(_q), oldSliderValue(0.1)
     {
@@ -46,7 +43,6 @@ struct KisSpacingSelectionWidget::Private
     void slotAutoSpacing(bool value);
 };
 
-
 KisSpacingSelectionWidget::KisSpacingSelectionWidget(QWidget *parent)
     : QWidget(parent),
       m_d(new Private(this))
@@ -56,7 +52,6 @@ KisSpacingSelectionWidget::KisSpacingSelectionWidget(QWidget *parent)
     m_d->slider->setSingleStep(0.01);
     m_d->slider->setValue(0.1);
     m_d->slider->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed));
-
 
     m_d->autoButton = new QCheckBox(this);
     m_d->autoButton->setText(i18nc("@action:button", "Auto"));

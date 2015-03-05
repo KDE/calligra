@@ -31,21 +31,22 @@ public:
 public:
 
     void processImpl(KisPaintDeviceSP device,
-                     const QRect& applyRect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater ) const;
-    static inline KoID id() {
+                     const QRect &applyRect,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater) const;
+    static inline KoID id()
+    {
         return KoID("oilpaint", i18n("Oilpaint"));
     }
 
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 
 private:
-    void OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h,
-                  int BrushSize, int Smoothness, KoUpdater* progressUpdater) const;
-    void MostFrequentColor(KisPaintDeviceSP src, quint8* dst, const QRect& bounds, int X, int Y, int Radius, int Intensity) const;
+    void OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint &srcTopLeft, const QPoint &dstTopLeft, int w, int h,
+                  int BrushSize, int Smoothness, KoUpdater *progressUpdater) const;
+    void MostFrequentColor(KisPaintDeviceSP src, quint8 *dst, const QRect &bounds, int X, int Y, int Radius, int Intensity) const;
 };
 
 #endif

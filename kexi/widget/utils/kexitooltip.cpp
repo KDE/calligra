@@ -37,17 +37,17 @@
 class KexiToolTip::Private
 {
 public:
-    Private(const QVariant& val)
-      : value(val)
+    Private(const QVariant &val)
+        : value(val)
     {
     }
 
     QVariant value;
 };
 
-KexiToolTip::KexiToolTip(const QVariant& value, QWidget* parent)
-        : QWidget(parent)
-        , d(new Private(value))
+KexiToolTip::KexiToolTip(const QVariant &value, QWidget *parent)
+    : QWidget(parent)
+    , d(new Private(value))
 {
     setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint
                    | Qt::X11BypassWindowManagerHint);
@@ -81,14 +81,14 @@ void KexiToolTip::paintEvent(QPaintEvent *pev)
     drawContents(p);
 }
 
-void KexiToolTip::drawFrame(QPainter& p)
+void KexiToolTip::drawFrame(QPainter &p)
 {
 //! @todo check
     p.setPen(QPen(palette().foreground().color(), 1));
     p.drawRect(rect());
 }
 
-void KexiToolTip::drawContents(QPainter& p)
+void KexiToolTip::drawContents(QPainter &p)
 {
     p.drawText(rect(), Qt::AlignCenter, d->value.toString());
 }

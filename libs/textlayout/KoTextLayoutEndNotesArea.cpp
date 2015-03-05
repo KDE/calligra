@@ -49,8 +49,8 @@ public:
 };
 
 KoTextLayoutEndNotesArea::KoTextLayoutEndNotesArea(KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
-  : KoTextLayoutArea(parent, documentLayout)
-  , d(new Private)
+    : KoTextLayoutArea(parent, documentLayout)
+    , d(new Private)
 {
     d->endNoteAutoCount = 0;
 }
@@ -76,8 +76,7 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
     KoInlineTextObjectManager *manager = KoTextDocument(documentLayout()->document()).inlineTextObjectManager();
     QList<KoInlineNote *> list = QList<KoInlineNote *>(manager->endNotes());
     qSort(list.begin(), list.end(), beforeThan); //making a list of endnotes in the order they appear
-    while (cursor->endNoteIndex < list.length())
-    {
+    while (cursor->endNoteIndex < list.length()) {
         KoInlineNote *note = list[cursor->endNoteIndex];
         if (note->autoNumbering()) {
             note->setAutoNumber(d->endNoteAutoCount++);
@@ -138,16 +137,17 @@ QRectF KoTextLayoutEndNotesArea::selectionBoundingBox(QTextCursor &cursor) const
 
 void KoTextLayoutEndNotesArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    if (d->startOfArea == 0) // We have not been layouted yet
+    if (d->startOfArea == 0) { // We have not been layouted yet
         return;
+    }
 
     if (!d->endNoteAreas.isEmpty()) {
         int left = 2;
         int right = 150;
         int shiftDown = 10;
-        painter->drawLine(left, top()+shiftDown, right, top()+shiftDown);
+        painter->drawLine(left, top() + shiftDown, right, top() + shiftDown);
     }
-    foreach(KoTextLayoutNoteArea *area, d->endNoteAreas) {
+    foreach (KoTextLayoutNoteArea *area, d->endNoteAreas) {
         area->paint(painter, context);
     }
 }

@@ -31,22 +31,22 @@ public:
 
     virtual KoShape *createShape(KoDocumentResourceManager *documentResources);
 
-    virtual void paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect, KoShapePaintingContext &paintcontext);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, const QRectF &rect, KoShapePaintingContext &paintcontext);
 
-    virtual void saveOdf( KoShapeSavingContext & context );
+    virtual void saveOdf(KoShapeSavingContext &context);
 
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     virtual void init(KoDocumentResourceManager *documentResources);
 
-    virtual KoShapeUserData * userData() const;
+    virtual KoShapeUserData *userData() const;
 
 protected:
-    KPrPlaceholderTextStrategy( const QString & presentationClass );
+    KPrPlaceholderTextStrategy(const QString &presentationClass);
 
     friend class KPrPlaceholderStrategy;
 
-    KoShape * m_textShape;
+    KoShape *m_textShape;
 };
 
 #endif /* KPRPLACEHOLDERTEXTSTRATEGY_H */

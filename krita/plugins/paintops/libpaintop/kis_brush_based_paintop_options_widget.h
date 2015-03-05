@@ -29,7 +29,7 @@ class KisBrushOptionWidget;
 class PAINTOP_EXPORT KisBrushBasedPaintopOptionWidget : public KisPaintOpOptionsWidget
 {
 public:
-    KisBrushBasedPaintopOptionWidget(QWidget* parent = 0);
+    KisBrushBasedPaintopOptionWidget(QWidget *parent = 0);
     virtual ~KisBrushBasedPaintopOptionWidget();
 
     void setPrecisionEnabled(bool value);
@@ -42,9 +42,8 @@ public:
     virtual QSizeF paintOpSize() const;
     virtual bool presetIsValid();
 
-
 private:
-    KisBrushOptionWidget * m_brushOption;
+    KisBrushOptionWidget *m_brushOption;
 };
 
 #endif // KIS_BRUSH_BASED_PAINTOP_OPTIONS_WIDGET_H

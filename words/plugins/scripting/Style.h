@@ -35,26 +35,30 @@ class CharacterStyle : public QObject
 {
     Q_OBJECT
 public:
-    CharacterStyle(QObject* parent, KoCharacterStyle* style) : QObject(parent), m_style(style) {}
+    CharacterStyle(QObject *parent, KoCharacterStyle *style) : QObject(parent), m_style(style) {}
     virtual ~CharacterStyle() {}
-    KoCharacterStyle* style() const {
+    KoCharacterStyle *style() const
+    {
         return m_style;
     }
 public Q_SLOTS:
 
     /** Return the user-visible name the character-style has. */
-    QString name() const {
+    QString name() const
+    {
         return m_style->name();
     }
     /** Set the user-visible name the character-style has. */
-    void setName(const QString& name) {
+    void setName(const QString &name)
+    {
         m_style->setName(name);
     }
 
     /***** Font *****/
 
     /** Return the font-family name. */
-    QString family() const {
+    QString family() const
+    {
         return m_style->fontFamily();
     }
     /**
@@ -67,12 +71,14 @@ public Q_SLOTS:
     * mycharstyle2.setFamily("Arial")
     * \endcode
     */
-    void setFamily(const QString &family) {
+    void setFamily(const QString &family)
+    {
         m_style->setFontFamily(family);
     }
 
     /** Return the size of the font. */
-    qreal size() const {
+    qreal size() const
+    {
         return m_style->fontPointSize();
     }
     /**
@@ -83,12 +89,14 @@ public Q_SLOTS:
     * mycharstyle.setSize(12.0)
     * \endcode
     */
-    void setSize(qreal size) {
+    void setSize(qreal size)
+    {
         m_style->setFontPointSize(size);
     }
 
     /** Return the weight of the font. */
-    int weight() const {
+    int weight() const
+    {
         return m_style->fontWeight();
     }
     /**
@@ -104,12 +112,14 @@ public Q_SLOTS:
     *     raise "Invalid style %s" % style
     * \endcode
     */
-    void setWeight(int weight) {
+    void setWeight(int weight)
+    {
         m_style->setFontWeight(weight);
     }
 
     /** Return true if the font is italic. */
-    bool italic() const {
+    bool italic() const
+    {
         return m_style->fontItalic();
     }
     /**
@@ -122,12 +132,14 @@ public Q_SLOTS:
     * mycharstyle2.setItalic(False)
     * \endcode
     */
-    void setItalic(bool italic) {
+    void setItalic(bool italic)
+    {
         m_style->setFontItalic(italic);
     }
 
     /** Return true if the font is bold. */
-    bool bold() const {
+    bool bold() const
+    {
         return m_style->fontWeight() >= 75;
     }
     /**
@@ -140,23 +152,27 @@ public Q_SLOTS:
     * mycharstyle2.setBold(False)
     * \endcode
     */
-    void setBold(bool bold) {
+    void setBold(bool bold)
+    {
         m_style->setFontWeight(bold ? 75 : 50);
     }
 
     /** Return true if there is an underline. */
-    bool underline() const {
+    bool underline() const
+    {
         return m_style->underlineStyle() != KoCharacterStyle::NoLineStyle;
     }
     /** Set the underline. */
-    void setUnderline(bool underline) {
+    void setUnderline(bool underline)
+    {
         m_style->setUnderlineStyle(underline ? KoCharacterStyle::SolidLine : KoCharacterStyle::NoLineStyle);
     }
 
     /***** Foreground *****/
 
     /** Return the font-color. */
-    QColor color() const {
+    QColor color() const
+    {
         return m_style->foreground().color();
     }
     /**
@@ -168,7 +184,8 @@ public Q_SLOTS:
     * mycharstyle.setColor("#ff0000")
     * \endcode
     */
-    void setColor(const QColor& color) {
+    void setColor(const QColor &color)
+    {
         QBrush brush = m_style->foreground();
         brush.setColor(color);
         m_style->setForeground(brush);
@@ -177,7 +194,8 @@ public Q_SLOTS:
     /***** Background *****/
 
     /** Return the background-color. */
-    QColor backgroundColor() const {
+    QColor backgroundColor() const
+    {
         return m_style->background().color();
     }
     /**
@@ -190,14 +208,15 @@ public Q_SLOTS:
     * mycharstyle.setBackgroundColor("#0000ff")
     * \endcode
     */
-    void setBackgroundColor(const QColor &color) {
+    void setBackgroundColor(const QColor &color)
+    {
         QBrush brush = m_style->background();
         brush.setColor(color);
         m_style->setBackground(brush);
     }
 
 private:
-    KoCharacterStyle* m_style;
+    KoCharacterStyle *m_style;
 };
 
 /**
@@ -209,9 +228,10 @@ class ParagraphStyle : public QObject
     Q_ENUMS(Alignment)
     Q_ENUMS(ListStyle)
 public:
-    ParagraphStyle(QObject* parent, KoParagraphStyle* style) : QObject(parent), m_style(style) {}
+    ParagraphStyle(QObject *parent, KoParagraphStyle *style) : QObject(parent), m_style(style) {}
     virtual ~ParagraphStyle() {}
-    KoParagraphStyle* style() const {
+    KoParagraphStyle *style() const
+    {
         return m_style;
     }
 
@@ -245,12 +265,14 @@ public Q_SLOTS:
     /***** Name *****/
 
     /** Return the user-visible name the paragraph-style has. */
-    QString name() const {
+    QString name() const
+    {
         return m_style->name();
     }
 
     /** Set the user-visible name the paragraph-style has. */
-    void setName(const QString& name) {
+    void setName(const QString &name)
+    {
         m_style->setName(name);
     }
 
@@ -276,24 +298,28 @@ public Q_SLOTS:
     *     print "Align Justify"
     * \endcode
     */
-    int alignment() const {
+    int alignment() const
+    {
         return m_style->alignment();
     }
 
     /** Set the alignment the paragraph-style has. */
-    void setAlignment(int alignment) {
+    void setAlignment(int alignment)
+    {
         m_style->setAlignment((Qt::Alignment) alignment);
     }
 
     /***** Padding *****/
 
     /** Return the distance between text and border. */
-    QRectF padding() const {
+    QRectF padding() const
+    {
         return QRectF(m_style->leftPadding(), m_style->topPadding(), m_style->rightPadding(), m_style->bottomPadding());
     }
 
     /** Set the distance between text and border. */
-    void setPadding(const QRectF& r) {
+    void setPadding(const QRectF &r)
+    {
         m_style->setLeftPadding(r.x());
         m_style->setTopPadding(r.y());
         m_style->setRightPadding(r.width());
@@ -303,12 +329,14 @@ public Q_SLOTS:
     /***** Margin *****/
 
     /** Return the margin between text and border. */
-    QRectF margin() const {
+    QRectF margin() const
+    {
         return QRectF(m_style->leftMargin(), m_style->topMargin(), m_style->rightMargin(), m_style->bottomMargin());
     }
 
     /** Set the margin between text and border. */
-    void setMargin(const QRectF& r) {
+    void setMargin(const QRectF &r)
+    {
         m_style->setLeftMargin(r.x());
         m_style->setTopMargin(r.y());
         m_style->setRightMargin(r.width());
@@ -327,55 +355,65 @@ public Q_SLOTS:
     }
     */
 
-    QRect borderStyle() {
+    QRect borderStyle()
+    {
         return QRect(m_style->leftBorderStyle(), m_style->topBorderStyle(), m_style->rightBorderStyle(), m_style->bottomBorderStyle());
     }
 
-    void setBorderStyle(const QRect& rect) {
+    void setBorderStyle(const QRect &rect)
+    {
         m_style->setLeftBorderStyle((KoParagraphStyle::BorderStyle) r.x());
         m_style->setTopBorderStyle((KoParagraphStyle::BorderStyle) r.y());
         m_style->setRightBorderStyle((KoParagraphStyle::BorderStyle) r.width());
         m_style->setBottomBorderStyle((KoParagraphStyle::BorderStyle) r.height());
     }
 
-    QRect borderSpacing() {
+    QRect borderSpacing()
+    {
         return QRect(m_style->leftBorderSpacing(), m_style->topBorderSpacing(), m_style->rightBorderSpacing(), m_style->bottomBorderSpacing());
     }
 
-    void setBorderSpacing(const QRect& rect) {
+    void setBorderSpacing(const QRect &rect)
+    {
         m_style->setLeftBorderSpacing(r.x());
         m_style->setTopBorderSpacing(r.y());
         m_style->setRightBorderSpacing(r.width());
         m_style->setBottomBorderSpacing(r.height());
     }
 
-    QRect borderWidth() {
+    QRect borderWidth()
+    {
         return QRect(m_style->leftBorderWidth(), m_style->topBorderWidth(), m_style->rightBorderWidth(), m_style->bottomBorderWidth());
     }
 
-    void setBorderWidth(const QRect& rect) {
+    void setBorderWidth(const QRect &rect)
+    {
         m_style->setLeftBorderWidth(r.x());
         m_style->setTopBorderWidth(r.y());
         m_style->setRightBorderWidth(r.width());
         m_style->setBottomBorderWidth(r.height());
     }
 
-    QRect innerBorderWidth() {
+    QRect innerBorderWidth()
+    {
         return QRect(m_style->leftInnerBorderWidth(), m_style->topInnerBorderWidth(), m_style->rightInnerBorderWidth(), m_style->bottomInnerBorderWidth());
     }
 
-    void setInnerBorderWidth(const QRect& rect) {
+    void setInnerBorderWidth(const QRect &rect)
+    {
         m_style->setLeftInnerBorderWidth(r.x());
         m_style->setTopInnerBorderWidth(r.y());
         m_style->setRightInnerBorderWidth(r.width());
         m_style->setBottomInnerBorderWidth(r.height());
     }
 
-    QRect borderColor() {
+    QRect borderColor()
+    {
         return QRect(m_style->leftBorderColor(), m_style->topBorderColor(), m_style->rightBorderColor(), m_style->bottomBorderColor());
     }
 
-    void setBorderColor(const QRect& rect) {
+    void setBorderColor(const QRect &rect)
+    {
         m_style->setLeftBorderColor(r.x());
         m_style->setTopBorderColor(r.y());
         m_style->setRightBorderColor(r.width());
@@ -386,23 +424,26 @@ public Q_SLOTS:
     /***** List *****/
 
     /** Return true if this item is a list item else false is returned. */
-    bool isList() const {
+    bool isList() const
+    {
         return m_style->listStyle() != 0;
     }
 
 #if 0
     /** Return the style of listitems. */
-    int listStyle() const {
+    int listStyle() const
+    {
         //return m_style->listStyle() ? m_style->listStyle()->style() : 0;
         KoListStyle liststyle = m_style->listStyle();
         return liststyle.isValid() ? new ListStyle(this, liststyle) : 0;
     }
 
     /** Set the style of listitems. */
-    void setListStyle(int liststyle) {
-        if (m_style->listStyle())
+    void setListStyle(int liststyle)
+    {
+        if (m_style->listStyle()) {
             m_style->listStyle()->setStyle((KoListStyle::Style)liststyle);
-        else {
+        } else {
             KoListStyle s;
             s.setStyle((KoListStyle::Style) liststyle);
             m_style->setListStyle(s);
@@ -411,19 +452,23 @@ public Q_SLOTS:
 #endif
 
     /** Return the character-style for this paragraph-style. */
-    QObject* characterStyle() {
-        KoCharacterStyle* charstyle = m_style->characterStyle();
+    QObject *characterStyle()
+    {
+        KoCharacterStyle *charstyle = m_style->characterStyle();
         return charstyle ? new CharacterStyle(this, charstyle) : 0;
     }
     /** Set the character-style for this paragraph-style. */
-    void setCharacterStyle(QObject *style) {
-        CharacterStyle* charstyle = dynamic_cast<CharacterStyle*>(style);
-        KoCharacterStyle* s = charstyle ? charstyle->style() : 0;
-        if (s) m_style->setCharacterStyle(s);
+    void setCharacterStyle(QObject *style)
+    {
+        CharacterStyle *charstyle = dynamic_cast<CharacterStyle *>(style);
+        KoCharacterStyle *s = charstyle ? charstyle->style() : 0;
+        if (s) {
+            m_style->setCharacterStyle(s);
+        }
     }
 
 private:
-    KoParagraphStyle* m_style;
+    KoParagraphStyle *m_style;
 };
 
 }

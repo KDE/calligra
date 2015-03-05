@@ -34,15 +34,14 @@
 
 #include <kis_paint_device.h>
 
-struct KisNodeShape::Private
-{
+struct KisNodeShape::Private {
 public:
     KisNodeSP node;
 };
 
 KisNodeShape::KisNodeShape(KisNodeSP node)
-        : KoShapeLayer()
-        , m_d(new Private())
+    : KoShapeLayer()
+    , m_d(new Private())
 {
 
     m_d->node = node;
@@ -64,7 +63,7 @@ KisNodeShape::~KisNodeShape()
     if (canvasController && canvasController->canvas() && canvasController->canvas()->shapeManager()) {
         KoSelection *activeSelection = canvasController->canvas()->shapeManager()->selection();
         KoShapeLayer *activeLayer = activeSelection->activeLayer();
-        if (activeLayer == this){
+        if (activeLayer == this) {
             activeSelection->setActiveLayer(0);
         }
     }
@@ -87,8 +86,8 @@ bool KisNodeShape::checkIfDescendant(KoShapeLayer *activeLayer)
     bool found(false);
     KoShapeLayer *layer = activeLayer;
 
-    while(layer && !(found = layer == this)) {
-        layer = dynamic_cast<KoShapeLayer*>(layer->parent());
+    while (layer && !(found = layer == this)) {
+        layer = dynamic_cast<KoShapeLayer *>(layer->parent());
     }
 
     return found;
@@ -109,11 +108,11 @@ void KisNodeShape::editabilityChanged()
 
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
 
-    if(canvasController && canvasController->canvas() && canvasController->canvas()->shapeManager()) {
+    if (canvasController && canvasController->canvas() && canvasController->canvas()->shapeManager()) {
         KoSelection *activeSelection = canvasController->canvas()->shapeManager()->selection();
         KoShapeLayer *activeLayer = activeSelection->activeLayer();
 
-        if(activeLayer && checkIfDescendant(activeLayer)) {
+        if (activeLayer && checkIfDescendant(activeLayer)) {
             activeSelection->setActiveLayer(activeLayer);
         }
     }

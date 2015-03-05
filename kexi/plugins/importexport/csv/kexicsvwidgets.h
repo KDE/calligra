@@ -48,24 +48,24 @@ public:
 
      \pre [icon] [labeltext] [filename] [comment]
     */
-    KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bool showFnameLine);
+    KexiCSVInfoLabel(const QString &labelText, QWidget *parent, bool showFnameLine);
     ~KexiCSVInfoLabel();
 
-    void setFileName(const QString& fileName);
-    void setLabelText(const QString& text);
-    void setCommentText(const QString& text);
+    void setFileName(const QString &fileName);
+    void setLabelText(const QString &text);
+    void setCommentText(const QString &text);
 
     //! sets icon pixmap to \a iconName. Used wher setIconForFilename was false in ctor.
-    void setIcon(const QString& iconName);
+    void setIcon(const QString &iconName);
 
-    QLabel* leftLabel() const;
-    QLabel* fileNameLabel() const;
-    QLabel* commentLabel() const;
-    QFrame* separator() const;
+    QLabel *leftLabel() const;
+    QLabel *fileNameLabel() const;
+    QLabel *commentLabel() const;
+    QFrame *separator() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 //! @short A combo box widget providing a list of possible delimiters
@@ -75,14 +75,14 @@ class KexiCSVDelimiterWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * parent = 0);
+    explicit KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget *parent = 0);
     ~KexiCSVDelimiterWidget();
 
     QString delimiter() const;
-    void setDelimiter(const QString& delimiter);
+    void setDelimiter(const QString &delimiter);
 
 Q_SIGNALS:
-    void delimiterChanged(const QString& delimiter);
+    void delimiterChanged(const QString &delimiter);
 
 protected Q_SLOTS:
     //! only called when a delimiter was set by user directly
@@ -93,7 +93,7 @@ protected Q_SLOTS:
 
 protected:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 //! @short A combo box widget providing a list of possible quote characters
@@ -101,12 +101,12 @@ protected:
 class KexiCSVTextQuoteComboBox : public KComboBox
 {
 public:
-    explicit KexiCSVTextQuoteComboBox(QWidget * parent = 0);
+    explicit KexiCSVTextQuoteComboBox(QWidget *parent = 0);
 
     QString textQuote() const;
 
     //! Sets text quote. Only available are: ", ', and empty string.
-    void setTextQuote(const QString& textQuote);
+    void setTextQuote(const QString &textQuote);
 };
 
 #endif

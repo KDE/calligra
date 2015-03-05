@@ -32,14 +32,14 @@ class KisSketchPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
     Q_OBJECT
 
 public:
-    KisSketchPaintOpSettingsWidget(QWidget* parent = 0);
+    KisSketchPaintOpSettingsWidget(QWidget *parent = 0);
     virtual ~KisSketchPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 
 public:
-    KisSketchOpOption* m_sketchOption;
-    KisPaintActionTypeOption* m_paintActionType;
+    KisSketchOpOption *m_sketchOption;
+    KisPaintActionTypeOption *m_paintActionType;
 };
 
 #endif

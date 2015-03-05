@@ -50,11 +50,11 @@ class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
 public:
     //! Creates action for toggling to view mode @a mode. @a slot should have signature
     //! matching switchedTo(Kexi::ViewMode mode) signal.
-    KexiToggleViewModeAction(Kexi::ViewMode mode, QObject* parent)
+    KexiToggleViewModeAction(Kexi::ViewMode mode, QObject *parent)
         : KAction(
-            KIcon(Kexi::iconNameForViewMode(mode)),
-            Kexi::nameForViewMode(mode, true/*withAmpersand*/),
-            parent)
+              KIcon(Kexi::iconNameForViewMode(mode)),
+              Kexi::nameForViewMode(mode, true/*withAmpersand*/),
+              parent)
     {
         setCheckable(true);
         if (mode == Kexi::DataViewMode) {
@@ -81,23 +81,25 @@ class KexiView::Private
 {
 public:
     explicit Private(KexiView *qq)
-            : q(qq)
-            , viewWidget(0)
-            , parentView(0)
-            , newlyAssignedID(-1)
-            , viewMode(Kexi::NoViewMode) //unknown!
-            , isDirty(false)
-            , slotSwitchToViewModeInternalEnabled(true)
-            , sortedProperties(false)
-            , recentResultOfSwitchToViewModeInternal(true)
-            , m_mainMenu(0)
+        : q(qq)
+        , viewWidget(0)
+        , parentView(0)
+        , newlyAssignedID(-1)
+        , viewMode(Kexi::NoViewMode) //unknown!
+        , isDirty(false)
+        , slotSwitchToViewModeInternalEnabled(true)
+        , sortedProperties(false)
+        , recentResultOfSwitchToViewModeInternal(true)
+        , m_mainMenu(0)
     {
     }
 
-    ~Private() {
+    ~Private()
+    {
     }
 
-    void toggleViewModeButtonBack(Kexi::ViewMode mode) {
+    void toggleViewModeButtonBack(Kexi::ViewMode mode)
+    {
         QAction *a = toggleViewModeActions.value(mode);
         if (a) {
             slotSwitchToViewModeInternalEnabled = false;
@@ -110,7 +112,7 @@ public:
         }
     }
 
-    KMenu* mainMenu()
+    KMenu *mainMenu()
     {
         if (m_mainMenu) {
             return m_mainMenu;
@@ -118,10 +120,10 @@ public:
         if (!window) {
             return 0;
         }
-        KexiSmallToolButton* menuButton = new KexiSmallToolButton(
-                         KIcon(),
-                         window->part()->info()->instanceCaption() + " ",
-                         topBarHWidget);
+        KexiSmallToolButton *menuButton = new KexiSmallToolButton(
+            KIcon(),
+            window->part()->info()->instanceCaption() + " ",
+            topBarHWidget);
         menuButton->setToolTip(i18n("Menu for the current window"));
         menuButton->setWhatsThis(i18n("Shows menu for the current window."));
         menuButton->setPopupMode(QToolButton::InstantPopup);
@@ -160,13 +162,13 @@ public:
     }
 
     KexiView *q;
-    QVBoxLayout* mainLyr;
+    QVBoxLayout *mainLyr;
     QWidget *topBarHWidget;
     KexiFlowLayout *topBarLyr;
-    QHash<Kexi::ViewMode, QAction*> toggleViewModeActions;
-    QHash<Kexi::ViewMode, KoGroupButton*> toggleViewModeButtons;
+    QHash<Kexi::ViewMode, QAction *> toggleViewModeActions;
+    QHash<Kexi::ViewMode, KoGroupButton *> toggleViewModeButtons;
 
-    KexiSmallToolButton* saveDesignButton;
+    KexiSmallToolButton *saveDesignButton;
 
     QString defaultIconName;
     KexiWindow *window;
@@ -187,15 +189,15 @@ public:
      Can be useful when single class is used for more than one view (e.g. KexiDBForm). */
     Kexi::ViewMode viewMode;
 
-    QList<KexiView*> children;
+    QList<KexiView *> children;
 
     /*! View-level actions (not shared), owned by the view. */
-    QList<QAction*> viewActions;
-    QHash<QByteArray, QAction*> viewActionsHash;
+    QList<QAction *> viewActions;
+    QHash<QByteArray, QAction *> viewActionsHash;
 
     /*! Main-meny-level actions (not shared), owned by the view. */
-    QList<QAction*> mainMenuActions;
-    QHash<QByteArray, QAction*> mainMenuActionsHash;
+    QList<QAction *> mainMenuActions;
+    QHash<QByteArray, QAction *> mainMenuActionsHash;
 
     bool isDirty;
 
@@ -209,24 +211,25 @@ public:
     //! did not succeed, so for the second time we block this call.
     tristate recentResultOfSwitchToViewModeInternal;
 private:
-    KMenu* m_mainMenu;
+    KMenu *m_mainMenu;
 };
 
 //----------------------------------------------------------
 
 KexiView::KexiView(QWidget *parent)
-        : QWidget(parent)
-        , KexiActionProxy(this)
-        , d(new Private(this))
+    : QWidget(parent)
+    , KexiActionProxy(this)
+    , d(new Private(this))
 {
     QWidget *wi = this;
     while ((wi = wi->parentWidget()) && !wi->inherits("KexiWindow"))
         ;
-    d->window = (wi && wi->inherits("KexiWindow")) ? static_cast<KexiWindow*>(wi) : 0;
+    d->window = (wi && wi->inherits("KexiWindow")) ? static_cast<KexiWindow *>(wi) : 0;
     if (d->window) {
         //init view mode number for this view (obtained from window where this view is created)
-        if (d->window->supportsViewMode(d->window->creatingViewsMode()))
+        if (d->window->supportsViewMode(d->window->creatingViewsMode())) {
             d->viewMode = d->window->creatingViewsMode();
+        }
     }
     setObjectName(
         QString("%1_for_%2_object")
@@ -252,11 +255,9 @@ KexiView::KexiView(QWidget *parent)
         if (userMode
                 || d->window->supportedViewModes() == Kexi::DataViewMode
                 || d->window->supportedViewModes() == Kexi::DesignViewMode
-                || d->window->supportedViewModes() == Kexi::TextViewMode)
-        {
+                || d->window->supportedViewModes() == Kexi::TextViewMode) {
             // nothing to do: only single view mode supported
-        }
-        else {
+        } else {
             if (parentWidget()->inherits("KexiWindow")) {
                 createViewModeToggleButtons();
             }
@@ -274,8 +275,7 @@ KexiView::KexiView(QWidget *parent)
 
             a = sharedAction("project_saveas");
             d->mainMenu()->addAction(a);
-        }
-        else {
+        } else {
             d->saveDesignButton = 0;
         }
     } else {
@@ -291,7 +291,7 @@ KexiView::~KexiView()
     delete d;
 }
 
-KexiWindow* KexiView::window() const
+KexiWindow *KexiView::window() const
 {
     return d->window;
 }
@@ -321,12 +321,12 @@ Kexi::ViewMode KexiView::viewMode() const
     return d->viewMode;
 }
 
-KexiPart::Part* KexiView::part() const
+KexiPart::Part *KexiView::part() const
 {
     return d->window ? d->window->part() : 0;
 }
 
-tristate KexiView::beforeSwitchTo(Kexi::ViewMode mode, bool & dontStore)
+tristate KexiView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
     Q_UNUSED(mode);
     Q_UNUSED(dontStore);
@@ -339,12 +339,12 @@ tristate KexiView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-QSize KexiView::preferredSizeHint(const QSize& otherSize)
+QSize KexiView::preferredSizeHint(const QSize &otherSize)
 {
     return otherSize;
 }
 
-void KexiView::closeEvent(QCloseEvent * e)
+void KexiView::closeEvent(QCloseEvent *e)
 {
     bool cancel = false;
     emit closing(&cancel);
@@ -364,12 +364,12 @@ void KexiView::propertySetSwitched()
 {
     if (window()) {
         KexiMainWindowIface::global()->propertySetSwitched(window(), false/*force*/,
-            true/*preservePrevSelection*/, d->sortedProperties);
+                true/*preservePrevSelection*/, d->sortedProperties);
     }
 }
 
 void KexiView::propertySetReloaded(bool preservePrevSelection,
-                                   const QByteArray& propertyToSelect)
+                                   const QByteArray &propertyToSelect)
 {
     if (window())
         KexiMainWindowIface::global()->propertySetSwitched(
@@ -381,13 +381,15 @@ void KexiView::setDirty(bool set)
     const bool changed = (d->isDirty != set);
     d->isDirty = set;
     d->isDirty = isDirty();
-    if (d->saveDesignButton)
+    if (d->saveDesignButton) {
         d->saveDesignButton->setEnabled(d->isDirty);
+    }
     if (d->parentView) {
         d->parentView->setDirty(d->isDirty);
     } else {
-        if (changed && d->window)
+        if (changed && d->window) {
             d->window->dirtyChanged(this);
+        }
     }
 }
 
@@ -396,9 +398,9 @@ void KexiView::setDirty()
     setDirty(true);
 }
 
-KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata,
-                                           KexiView::StoreNewDataOptions options,
-                                           bool &cancel)
+KexiDB::SchemaData *KexiView::storeNewData(const KexiDB::SchemaData &sdata,
+        KexiView::StoreNewDataOptions options,
+        bool &cancel)
 {
     Q_UNUSED(options)
     Q_UNUSED(cancel)
@@ -407,19 +409,18 @@ KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata,
 
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     if (!conn->storeObjectSchemaData(*new_schema.data(), true)
-        || !conn->removeDataBlock(new_schema->id()) // for sanity
-        || !KexiMainWindowIface::global()->project()->removeUserDataBlock(new_schema->id()) // for sanity
-       )
-    {
+            || !conn->removeDataBlock(new_schema->id()) // for sanity
+            || !KexiMainWindowIface::global()->project()->removeUserDataBlock(new_schema->id()) // for sanity
+       ) {
         return 0;
     }
     d->newlyAssignedID = new_schema->id();
     return new_schema.take();
 }
 
-KexiDB::SchemaData* KexiView::copyData(const KexiDB::SchemaData& sdata,
-                                        KexiView::StoreNewDataOptions options,
-                                        bool &cancel)
+KexiDB::SchemaData *KexiView::copyData(const KexiDB::SchemaData &sdata,
+                                       KexiView::StoreNewDataOptions options,
+                                       bool &cancel)
 {
     Q_UNUSED(options)
     Q_UNUSED(cancel)
@@ -428,10 +429,9 @@ KexiDB::SchemaData* KexiView::copyData(const KexiDB::SchemaData& sdata,
 
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     if (!conn->storeObjectSchemaData(*new_schema.data(), true)
-        || !conn->copyDataBlock(d->window->id(), new_schema->id())
-        || !KexiMainWindowIface::global()->project()->copyUserDataBlock(d->window->id(), new_schema->id())
-       )
-    {
+            || !conn->copyDataBlock(d->window->id(), new_schema->id())
+            || !KexiMainWindowIface::global()->project()->copyUserDataBlock(d->window->id(), new_schema->id())
+       ) {
         return 0;
     }
     d->newlyAssignedID = new_schema->id();
@@ -441,8 +441,9 @@ KexiDB::SchemaData* KexiView::copyData(const KexiDB::SchemaData& sdata,
 tristate KexiView::storeData(bool dontAsk)
 {
     Q_UNUSED(dontAsk);
-    if (!d->window || !d->window->schemaData())
+    if (!d->window || !d->window->schemaData()) {
         return false;
+    }
     if (!KexiMainWindowIface::global()->project()->dbConnection()
             ->storeObjectSchemaData(*d->window->schemaData(), false /*existing object*/)) {
         return false;
@@ -451,10 +452,11 @@ tristate KexiView::storeData(bool dontAsk)
     return true;
 }
 
-bool KexiView::loadDataBlock(QString &dataString, const QString& dataID, bool canBeEmpty)
+bool KexiView::loadDataBlock(QString &dataString, const QString &dataID, bool canBeEmpty)
 {
-    if (!d->window)
+    if (!d->window) {
         return false;
+    }
     const tristate res = KexiMainWindowIface::global()->project()->dbConnection()
                          ->loadDataBlock(d->window->id(), dataString, dataID);
     if (canBeEmpty && ~res) {
@@ -466,24 +468,27 @@ bool KexiView::loadDataBlock(QString &dataString, const QString& dataID, bool ca
 
 bool KexiView::storeDataBlock(const QString &dataString, const QString &dataID)
 {
-    if (!d->window)
+    if (!d->window) {
         return false;
+    }
     int effectiveID;
     if (d->newlyAssignedID > 0) {//ID not yet stored within window, but we've got ID here
         effectiveID = d->newlyAssignedID;
         d->newlyAssignedID = -1;
-    } else
+    } else {
         effectiveID = d->window->id();
+    }
 
     return effectiveID > 0
            && KexiMainWindowIface::global()->project()->dbConnection()->storeDataBlock(
                effectiveID, dataString, dataID);
 }
 
-bool KexiView::removeDataBlock(const QString& dataID)
+bool KexiView::removeDataBlock(const QString &dataID)
 {
-    if (!d->window)
+    if (!d->window) {
         return false;
+    }
     return KexiMainWindowIface::global()->project()->dbConnection()
            ->removeDataBlock(d->window->id(), dataID);
 }
@@ -506,12 +511,14 @@ bool KexiView::eventFilter(QObject *o, QEvent *e)
             if (e->type() == QEvent::FocusOut) {
 //    kDebug() << focusWidget()->className() << " " << focusWidget()->name();
 //    kDebug() << o->className() << " " << o->name();
-                KexiView *v = KexiUtils::findParent<KexiView*>(o);
+                KexiView *v = KexiUtils::findParent<KexiView *>(o);
                 if (v) {
-                    while (v->d->parentView)
+                    while (v->d->parentView) {
                         v = v->d->parentView;
-                    if (KexiUtils::hasParent(this, static_cast<QWidget*>(v->focusWidget())))
-                        v->d->lastFocusedChildBeforeFocusOut = static_cast<QWidget*>(v->focusWidget());
+                    }
+                    if (KexiUtils::hasParent(this, static_cast<QWidget *>(v->focusWidget()))) {
+                        v->d->lastFocusedChildBeforeFocusOut = static_cast<QWidget *>(v->focusWidget());
+                    }
                 }
             }
 
@@ -523,10 +530,11 @@ bool KexiView::eventFilter(QObject *o, QEvent *e)
     return false;
 }
 
-void KexiView::setViewWidget(QWidget* w, bool focusProxy)
+void KexiView::setViewWidget(QWidget *w, bool focusProxy)
 {
-    if (d->viewWidget == w)
+    if (d->viewWidget == w) {
         return;
+    }
     if (d->viewWidget) {
         d->viewWidget->removeEventFilter(this);
         d->mainLyr->removeWidget(d->viewWidget);
@@ -537,12 +545,13 @@ void KexiView::setViewWidget(QWidget* w, bool focusProxy)
         d->mainLyr->addWidget(d->viewWidget);
         d->viewWidget->installEventFilter(this);
         //}
-        if (focusProxy)
-            setFocusProxy(d->viewWidget); //js: ok?
+        if (focusProxy) {
+            setFocusProxy(d->viewWidget);    //js: ok?
+        }
     }
 }
 
-void KexiView::addChildView(KexiView* childView)
+void KexiView::addChildView(KexiView *childView)
 {
     d->children.append(childView);
     addActionProxyChild(childView);
@@ -563,32 +572,34 @@ void KexiView::setFocus()
         d->lastFocusedChildBeforeFocusOut = 0;
         w->setFocus();
     } else {
-        if (hasFocus())
+        if (hasFocus()) {
             setFocusInternal();
-        else
+        } else {
             setFocusInternal();
+        }
     }
     KexiMainWindowIface::global()->invalidateSharedActions(this);
 }
 
-QAction* KexiView::sharedAction(const QString& action_name)
+QAction *KexiView::sharedAction(const QString &action_name)
 {
     if (part()) {
         KActionCollection *ac;
         if ((ac = part()->actionCollectionForMode(viewMode()))) {
-            QAction* a = ac->action(action_name);
-            if (a)
+            QAction *a = ac->action(action_name);
+            if (a) {
                 return a;
+            }
         }
     }
     return KexiActionProxy::sharedAction(action_name);
 }
 
-void KexiView::setAvailable(const QString& action_name, bool set)
+void KexiView::setAvailable(const QString &action_name, bool set)
 {
     if (part()) {
         KActionCollection *ac;
-        QAction* a;
+        QAction *a;
         if ((ac = part()->actionCollectionForMode(viewMode())) && (a = ac->action(action_name))) {
             a->setEnabled(set);
         }
@@ -600,35 +611,35 @@ void KexiView::updateActions(bool activated)
 {
     //do nothing here
     //do the same for children :)
-    foreach(KexiView* view, d->children) {
+    foreach (KexiView *view, d->children) {
         view->updateActions(activated);
     }
 }
 
-void KexiView::setViewActions(const QList<QAction*>& actions)
+void KexiView::setViewActions(const QList<QAction *> &actions)
 {
     d->viewActions = actions;
     d->viewActionsHash.clear();
-    foreach(QAction* action, d->viewActions) {
+    foreach (QAction *action, d->viewActions) {
         d->viewActionsHash.insert(action->objectName().toLatin1(), action);
     }
 }
 
-void KexiView::setMainMenuActions(const QList<QAction*>& actions)
+void KexiView::setMainMenuActions(const QList<QAction *> &actions)
 {
     d->mainMenuActions = actions;
     d->mainMenuActionsHash.clear();
-    foreach(QAction* action, d->mainMenuActions) {
+    foreach (QAction *action, d->mainMenuActions) {
         d->mainMenuActionsHash.insert(action->objectName().toLatin1(), action);
     }
 }
 
-QAction* KexiView::viewAction(const char* name) const
+QAction *KexiView::viewAction(const char *name) const
 {
     return d->viewActionsHash.value(name);
 }
 
-QList<QAction*> KexiView::viewActions() const
+QList<QAction *> KexiView::viewActions() const
 {
     return d->viewActions;
 }
@@ -655,7 +666,7 @@ void KexiView::createViewModeToggleButtons()
     d->addViewButton(KoGroupButton::GroupLeft, Kexi::DataViewMode, btnCont,
                      SLOT(slotSwitchToDataViewModeInternal(bool)), i18n("Data"), btnLyr);
     d->addViewButton(d->window->supportsViewMode(Kexi::TextViewMode) ? KoGroupButton::GroupCenter
-                                                                     : KoGroupButton::GroupRight,
+                     : KoGroupButton::GroupRight,
                      Kexi::DesignViewMode, btnCont,
                      SLOT(slotSwitchToDesignViewModeInternal(bool)), i18n("Design"), btnLyr);
     KoGroupButton *btn = d->addViewButton(KoGroupButton::GroupRight, Kexi::TextViewMode,
@@ -666,8 +677,7 @@ void KexiView::createViewModeToggleButtons()
         if (customTextViewModeCaption.isEmpty()) {
             QAction *a = d->toggleViewModeActions.value(Kexi::TextViewMode);
             btn->setText(a->text());
-        }
-        else {
+        } else {
             btn->setText(customTextViewModeCaption);
         }
     }
@@ -692,12 +702,14 @@ void KexiView::slotSwitchToTextViewModeInternal(bool)
 
 void KexiView::slotSwitchToViewModeInternal(Kexi::ViewMode mode)
 {
-    if (!d->slotSwitchToViewModeInternalEnabled)
+    if (!d->slotSwitchToViewModeInternalEnabled) {
         return;
-    if (d->recentResultOfSwitchToViewModeInternal != true)
+    }
+    if (d->recentResultOfSwitchToViewModeInternal != true) {
         d->recentResultOfSwitchToViewModeInternal = true;
-    else
+    } else {
         d->recentResultOfSwitchToViewModeInternal = d->window->switchToViewModeInternal(mode);
+    }
 
     if (d->viewMode != mode) {
         //switch back visually
@@ -710,12 +722,13 @@ void KexiView::slotSwitchToViewModeInternal(Kexi::ViewMode mode)
 
 void KexiView::initViewActions()
 {
-    if (!d->topBarLyr)
+    if (!d->topBarLyr) {
         return;
+    }
     if (!d->viewActions.isEmpty() && d->saveDesignButton) {
         d->topBarLyr->addWidget(new KexiToolBarSeparator(d->topBarHWidget));
     }
-    foreach(QAction* action, d->viewActions) {
+    foreach (QAction *action, d->viewActions) {
         if (action->isSeparator()) {
             d->topBarLyr->addWidget(new KexiToolBarSeparator(d->topBarHWidget));
         } else {
@@ -723,7 +736,7 @@ void KexiView::initViewActions()
             btn->setText(action->text());
             btn->setToolTip(action->toolTip());
             btn->setWhatsThis(action->whatsThis());
-            if (action->dynamicPropertyNames().contains("iconOnly") && action->property("iconOnly").toBool() ) {
+            if (action->dynamicPropertyNames().contains("iconOnly") && action->property("iconOnly").toBool()) {
                 btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
             }
             d->topBarLyr->addWidget(btn);
@@ -733,13 +746,14 @@ void KexiView::initViewActions()
 
 void KexiView::initMainMenuActions()
 {
-    if (!d->topBarLyr)
+    if (!d->topBarLyr) {
         return;
+    }
     if (d->mainMenuActions.isEmpty()) {
         return;
     }
     d->mainMenu()->clear();
-    foreach(QAction* action, d->mainMenuActions) {
+    foreach (QAction *action, d->mainMenuActions) {
         d->mainMenu()->addAction(action);
     }
 }
@@ -759,7 +773,7 @@ QString KexiView::defaultIconName() const
     return d->defaultIconName;
 }
 
-void KexiView::setDefaultIconName(const QString& iconName)
+void KexiView::setDefaultIconName(const QString &iconName)
 {
     d->defaultIconName = iconName;
 }

@@ -38,33 +38,28 @@ inline double drand48()
 #include <cmath>
 #include <ctime>
 
-
-ChalkBrush::ChalkBrush(const ChalkProperties* properties, KoColorTransformation* transformation)
+ChalkBrush::ChalkBrush(const ChalkProperties *properties, KoColorTransformation *transformation)
 {
     m_transfo = transformation;
     if (m_transfo) {
         m_transfo->setParameter(m_transfo->parameterId("h"), 0.0);
         m_saturationId = m_transfo->parameterId("s"); // cache for later usage
         m_transfo->setParameter(m_transfo->parameterId("v"), 0.0);
-	m_transfo->setParameter(3, 1);//sets the type to hsv.
-	m_transfo->setParameter(4, false);//sets the colorize to none.
-    }
-    else {
+        m_transfo->setParameter(3, 1);//sets the type to hsv.
+        m_transfo->setParameter(4, false);//sets the colorize to none.
+    } else {
         m_saturationId = -1;
     }
-
 
     m_counter = 0;
     m_properties = properties;
     srand48(time(0));
 }
 
-
 ChalkBrush::~ChalkBrush()
 {
     delete m_transfo;
 }
-
 
 void ChalkBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {

@@ -34,7 +34,7 @@ public:
     virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 
     /// reimplemented from KoShapeFactoryBase
-    virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    virtual QList<KoShapeConfigWidgetBase *> createShapeOptionPanels();
 };
 
 #endif

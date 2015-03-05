@@ -21,7 +21,6 @@
 
 #include "kis_node_command.h"
 
-
 /// The command for setting the composite op
 class KRITAIMAGE_EXPORT KisNodeCompositeOpCommand : public KisNodeCommand
 {
@@ -33,7 +32,7 @@ public:
      * @param oldCompositeOp the old node composite op
      * @param newCompositeOp the new node composite op
      */
-    KisNodeCompositeOpCommand(KisNodeSP node, const QString& oldCompositeOp, const QString& newCompositeOp);
+    KisNodeCompositeOpCommand(KisNodeSP node, const QString &oldCompositeOp, const QString &newCompositeOp);
 
     virtual void redo();
     virtual void undo();

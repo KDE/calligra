@@ -32,7 +32,6 @@ class KoDocument;
 
 class QPoint;
 
-
 namespace KPlato
 {
 
@@ -40,10 +39,11 @@ class Project;
 class Account;
 class AccountTreeView;
 
-class AccountseditorConfigDialog : public KPageDialog {
+class AccountseditorConfigDialog : public KPageDialog
+{
     Q_OBJECT
 public:
-    AccountseditorConfigDialog( ViewBase *view, AccountTreeView *treeview, QWidget *parent );
+    AccountseditorConfigDialog(ViewBase *view, AccountTreeView *treeview, QWidget *parent);
 
 public Q_SLOTS:
     void slotOk();
@@ -61,30 +61,39 @@ class KPLATOUI_EXPORT AccountTreeView : public TreeViewBase
 public:
     explicit AccountTreeView(QWidget *parent);
 
-    AccountItemModel *model() const { return static_cast<AccountItemModel*>( TreeViewBase::model() ); }
+    AccountItemModel *model() const
+    {
+        return static_cast<AccountItemModel *>(TreeViewBase::model());
+    }
 
-    Project *project() const { return model()->project(); }
-    void setProject( Project *project ) { model()->setProject( project ); }
+    Project *project() const
+    {
+        return model()->project();
+    }
+    void setProject(Project *project)
+    {
+        model()->setProject(project);
+    }
 
     Account *currentAccount() const;
     Account *selectedAccount() const;
-    QList<Account*> selectedAccounts() const;
-    
-Q_SIGNALS:
-    void currentChanged( const QModelIndex& );
-    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
-    void selectionChanged( const QModelIndexList& );
+    QList<Account *> selectedAccounts() const;
 
-    void contextMenuRequested( const QModelIndex&, const QPoint& );
-    
+Q_SIGNALS:
+    void currentChanged(const QModelIndex &);
+    void currentColumnChanged(const QModelIndex &, const QModelIndex &);
+    void selectionChanged(const QModelIndexList &);
+
+    void contextMenuRequested(const QModelIndex &, const QPoint &);
+
 protected Q_SLOTS:
-    void headerContextMenuRequested( const QPoint &pos );
+    void headerContextMenuRequested(const QPoint &pos);
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-    virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
+    virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
 
 protected:
-    void contextMenuEvent ( QContextMenuEvent * event );
-    
+    void contextMenuEvent(QContextMenuEvent *event);
+
 };
 
 class KPLATOUI_EXPORT AccountsEditor : public ViewBase
@@ -92,42 +101,48 @@ class KPLATOUI_EXPORT AccountsEditor : public ViewBase
     Q_OBJECT
 public:
     AccountsEditor(KoPart *part, KoDocument *document, QWidget *parent);
-    
+
     void setupGui();
-    Project *project() const { return m_view->project(); }
-    virtual void draw( Project &project );
+    Project *project() const
+    {
+        return m_view->project();
+    }
+    virtual void draw(Project &project);
     virtual void draw();
 
-    AccountItemModel *model() const { return m_view->model(); }
-    
-    virtual void updateReadWrite( bool readwrite );
+    AccountItemModel *model() const
+    {
+        return m_view->model();
+    }
+
+    virtual void updateReadWrite(bool readwrite);
 
     virtual Account *currentAccount() const;
-    
+
     KoPrintJob *createPrintJob();
-    
+
 Q_SIGNALS:
-    void addAccount( Account *account );
-    void deleteAccounts( const QList<Account*>& );
-    
+    void addAccount(Account *account);
+    void deleteAccounts(const QList<Account *> &);
+
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
 protected:
-    void updateActionsEnabled( bool on );
-    void insertAccount( Account *account, Account *parent, int row );
+    void updateActionsEnabled(bool on);
+    void insertAccount(Account *account, Account *parent, int row);
 
 protected Q_SLOTS:
     virtual void slotOptions();
-    
-private Q_SLOTS:
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
-    void slotHeaderContextMenuRequested( const QPoint &pos );
 
-    void slotSelectionChanged( const QModelIndexList& );
-    void slotCurrentChanged( const QModelIndex& );
-    void slotEnableActions( bool on );
+private Q_SLOTS:
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
+    void slotHeaderContextMenuRequested(const QPoint &pos);
+
+    void slotSelectionChanged(const QModelIndexList &);
+    void slotCurrentChanged(const QModelIndex &);
+    void slotEnableActions(bool on);
 
     void slotAddAccount();
     void slotAddSubAccount();

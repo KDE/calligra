@@ -51,10 +51,10 @@ public:
 
 public Q_SLOTS:
     /// Sets a new color to be displayed
-    void setCurrentColor( const QColor &color );
+    void setCurrentColor(const QColor &color);
 
     /// Sets a new color to be displayed
-    void setCurrentColor( const KoColor &color );
+    void setCurrentColor(const KoColor &color);
 
     /// Returns the current color
     QColor currentColor() const;
@@ -76,13 +76,13 @@ Q_SIGNALS:
 private Q_SLOTS:
     void emitColorChanged();
     void colorWasSelected(const KoColor &color, bool final);
-    void colorWasEdited( const QColor &color );
-    void opacityWasChanged( int opacity );
+    void colorWasEdited(const QColor &color);
+    void opacityWasChanged(int opacity);
     void slotTriggered(bool);
 
 private:
     class KoColorPopupActionPrivate;
-    KoColorPopupActionPrivate * const d;
+    KoColorPopupActionPrivate *const d;
 };
 
 #endif

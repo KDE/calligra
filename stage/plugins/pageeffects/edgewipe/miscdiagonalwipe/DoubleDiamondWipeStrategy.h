@@ -29,15 +29,15 @@ public:
     virtual ~DoubleDiamondWipeStrategy();
 
     /// reimplemented from KPrPageEffectStrategy
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    virtual void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine);
     /// reimplemented from KPrPageEffectStrategy
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    virtual void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data);
     /// reimplemented from KPrPageEffectStrategy
-    virtual void next( const KPrPageEffect::Data &data );
+    virtual void next(const KPrPageEffect::Data &data);
 
 private:
     /// calculates clip path for given step
-    QPainterPath clipPath( int step, const QRect &area );
+    QPainterPath clipPath(int step, const QRect &area);
 };
 
 #endif // DOUBLEDIAMONDWIPESTRATEGY_H

@@ -26,7 +26,6 @@
 #include "kis_spontaneous_job.h"
 #include "kis_stroke.h"
 
-
 #define SCOMPARE(s1, s2) QCOMPARE(QString(s1), QString(s2))
 
 #define COMPARE_WALKER(item, walker)            \
@@ -36,20 +35,21 @@
 #define VERIFY_EMPTY(item)                                      \
     QVERIFY(!item->isRunning())
 
-void executeStrokeJobs(KisStroke *stroke) {
+void executeStrokeJobs(KisStroke *stroke)
+{
     KisStrokeJob *job;
 
-    while((job = stroke->popOneJob())) {
+    while ((job = stroke->popOneJob())) {
         job->run();
         delete job;
     }
 }
 
-bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect) {
-    if(walker->requestedRect() == rect) {
+bool checkWalker(KisBaseRectsWalkerSP walker, const QRect &rect)
+{
+    if (walker->requestedRect() == rect) {
         return true;
-    }
-    else {
+    } else {
         qDebug() << "walker rect:" << walker->requestedRect();
         qDebug() << "expected rect:" << rect;
         return false;
@@ -64,10 +64,12 @@ public:
     {
     }
 
-    void run() {
+    void run()
+    {
     }
 
-    bool overrides(const KisSpontaneousJob *otherJob) {
+    bool overrides(const KisSpontaneousJob *otherJob)
+    {
         Q_UNUSED(otherJob);
         return m_overridesEverything;
     }
@@ -79,24 +81,28 @@ private:
 class KisNoopDabStrategy : public KisStrokeJobStrategy
 {
 public:
-KisNoopDabStrategy(QString name)
-    : m_name(name),
-      m_isMarked(false)
+    KisNoopDabStrategy(QString name)
+        : m_name(name),
+          m_isMarked(false)
     {}
 
-    void run(KisStrokeJobData *data) {
+    void run(KisStrokeJobData *data)
+    {
         Q_UNUSED(data);
     }
 
-    QString name() {
+    QString name()
+    {
         return m_name;
     }
 
-    void setMarked() {
+    void setMarked()
+    {
         m_isMarked = true;
     }
 
-    bool isMarked() const {
+    bool isMarked() const
+    {
         return m_isMarked;
     }
 
@@ -118,22 +124,26 @@ public:
         setExclusive(exclusive);
     }
 
-    KisStrokeJobStrategy* createInitStrategy() {
+    KisStrokeJobStrategy *createInitStrategy()
+    {
         return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "init") : 0;
+               new KisNoopDabStrategy(m_prefix + "init") : 0;
     }
 
-    KisStrokeJobStrategy* createFinishStrategy() {
+    KisStrokeJobStrategy *createFinishStrategy()
+    {
         return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "finish") : 0;
+               new KisNoopDabStrategy(m_prefix + "finish") : 0;
     }
 
-    KisStrokeJobStrategy* createCancelStrategy() {
+    KisStrokeJobStrategy *createCancelStrategy()
+    {
         return !m_inhibitServiceJobs ?
-            new KisNoopDabStrategy(m_prefix + "cancel") : 0;
+               new KisNoopDabStrategy(m_prefix + "cancel") : 0;
     }
 
-    KisStrokeJobStrategy* createDabStrategy() {
+    KisStrokeJobStrategy *createDabStrategy()
+    {
         return new KisNoopDabStrategy(m_prefix + "dab");
     }
 
@@ -141,13 +151,17 @@ public:
     {
     public:
         CancelData(int seqNo) : m_seqNo(seqNo) {}
-        int seqNo() const { return m_seqNo; }
+        int seqNo() const
+        {
+            return m_seqNo;
+        }
 
     private:
         int m_seqNo;
     };
 
-    KisStrokeJobData* createCancelData() {
+    KisStrokeJobData *createCancelData()
+    {
         return new CancelData(m_cancelSeqNo++);
     }
 
@@ -157,17 +171,19 @@ private:
     int m_cancelSeqNo;
 };
 
-inline QString getJobName(KisStrokeJob *job) {
+inline QString getJobName(KisStrokeJob *job)
+{
     KisNoopDabStrategy *pointer =
-        dynamic_cast<KisNoopDabStrategy*>(job->testingGetDabStrategy());
+        dynamic_cast<KisNoopDabStrategy *>(job->testingGetDabStrategy());
     Q_ASSERT(pointer);
 
     return pointer->name();
 }
 
-inline int cancelSeqNo(KisStrokeJob *job) {
+inline int cancelSeqNo(KisStrokeJob *job)
+{
     KisTestingStrokeStrategy::CancelData *pointer =
-        dynamic_cast<KisTestingStrokeStrategy::CancelData*>
+        dynamic_cast<KisTestingStrokeStrategy::CancelData *>
         (job->testingGetDabData());
     Q_ASSERT(pointer);
 

@@ -43,7 +43,7 @@ public:
 };
 
 KoTextSharedSavingData::KoTextSharedSavingData()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -51,11 +51,12 @@ KoTextSharedSavingData::~KoTextSharedSavingData()
 {
 }
 
-void KoTextSharedSavingData::setGenChanges(KoGenChanges& changes) {
+void KoTextSharedSavingData::setGenChanges(KoGenChanges &changes)
+{
     d->changes = &changes;
 }
 
-KoGenChanges& KoTextSharedSavingData::genChanges() const
+KoGenChanges &KoTextSharedSavingData::genChanges() const
 {
     return *(d->changes);
 }

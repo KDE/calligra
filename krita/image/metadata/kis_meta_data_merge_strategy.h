@@ -54,7 +54,7 @@ public:
      *              to give a higher score to the biggest layer.
      * srcs and scores list must have the same size.
      */
-    virtual void merge(Store* dst, QList<const Store*> srcs, QList<double> scores) const = 0;
+    virtual void merge(Store *dst, QList<const Store *> srcs, QList<double> scores) const = 0;
 };
 
 }

@@ -24,7 +24,6 @@
 
 #include <QAbstractTextDocumentLayout>
 
-
 /**
  * Dummy TextLayouter that does nothing really, but without it the Table of Contents/Bibliography
  * can not be layout.TextLayouter
@@ -43,7 +42,7 @@ public:
     virtual ~DummyDocumentLayout();
 
     /// Returns the bounding rectangle of block.
-    virtual QRectF blockBoundingRect(const QTextBlock & block) const;
+    virtual QRectF blockBoundingRect(const QTextBlock &block) const;
     /**
      * Returns the total size of the document. This is useful to display
      * widgets since they can use to information to update their scroll bars
@@ -52,27 +51,27 @@ public:
     virtual QSizeF documentSize() const;
 
     /// Draws the layout on the given painter with the given context.
-    virtual void draw(QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context);
+    virtual void draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context);
 
-    virtual QRectF frameBoundingRect(QTextFrame*) const;
+    virtual QRectF frameBoundingRect(QTextFrame *) const;
 
     /// reimplemented DO NOT CALL - USE HITTEST IN THE ROOTAREAS INSTEAD
-    virtual int hitTest(const QPointF & point, Qt::HitTestAccuracy accuracy) const;
+    virtual int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
 
     /// reimplemented to always return 1
     virtual int pageCount() const;
 
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
-/*
-protected:
-    /// reimplemented
-    virtual void drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format);
-    /// reimplemented
-    virtual void positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
-    /// reimplemented
-    virtual void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
-*/
+    /*
+    protected:
+        /// reimplemented
+        virtual void drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format);
+        /// reimplemented
+        virtual void positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
+        /// reimplemented
+        virtual void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
+    */
 };
 
 #endif

@@ -25,7 +25,7 @@
 class StencilListView : public QListView
 {
     Q_OBJECT
-    
+
 public:
     using QListView::contentsSize;
 

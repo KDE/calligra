@@ -45,7 +45,8 @@ public:
     void save();
 
     /// reimplemented
-    virtual bool showOnShapeCreate() {
+    virtual bool showOnShapeCreate()
+    {
         return true;
     }
 
@@ -56,7 +57,7 @@ private Q_SLOTS:
 private:
     Ui::KWFrameConnectSelector widget;
 
-    QList<KWFrameSet*> m_frameSets;
+    QList<KWFrameSet *> m_frameSets;
     QList<QTreeWidgetItem *> m_items;
     FrameConfigSharedState *m_state;
     KoShape *m_shape;

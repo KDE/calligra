@@ -28,27 +28,31 @@ class KoShapeDeleteCommand::Private
 {
 public:
     Private(KoShapeBasedDocumentBase *c)
-            : controller(c),
-            deleteShapes(false) {
+        : controller(c),
+          deleteShapes(false)
+    {
     }
 
-    ~Private() {
-        if (! deleteShapes)
+    ~Private()
+    {
+        if (! deleteShapes) {
             return;
+        }
 
-        foreach(KoShape *shape, shapes)
+        foreach (KoShape *shape, shapes) {
             delete shape;
+        }
     }
 
     KoShapeBasedDocumentBase *controller; ///< the shape controller to use for removing/readding
-    QList<KoShape*> shapes; ///< the list of shapes to delete
-    QList<KoShapeContainer*> oldParents; ///< the old parents of the shapes
+    QList<KoShape *> shapes; ///< the list of shapes to delete
+    QList<KoShapeContainer *> oldParents; ///< the old parents of the shapes
     bool deleteShapes;  ///< shows if shapes should be deleted when deleting the command
 };
 
 KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent)
-        : KUndo2Command(parent),
-        d(new Private(controller))
+    : KUndo2Command(parent),
+      d(new Private(controller))
 {
     d->shapes.append(shape);
     d->oldParents.append(shape->parent());
@@ -56,13 +60,13 @@ KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller,
     setText(kundo2_i18n("Delete shape"));
 }
 
-KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes,
+KoShapeDeleteCommand::KoShapeDeleteCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> &shapes,
         KUndo2Command *parent)
-        : KUndo2Command(parent),
-        d(new Private(controller))
+    : KUndo2Command(parent),
+      d(new Private(controller))
 {
     d->shapes = shapes;
-    foreach(KoShape *shape, d->shapes) {
+    foreach (KoShape *shape, d->shapes) {
         d->oldParents.append(shape->parent());
     }
 
@@ -77,14 +81,16 @@ KoShapeDeleteCommand::~KoShapeDeleteCommand()
 void KoShapeDeleteCommand::redo()
 {
     KUndo2Command::redo();
-    if (! d->controller)
+    if (! d->controller) {
         return;
+    }
 
     for (int i = 0; i < d->shapes.count(); i++) {
         // the parent has to be there when it is removed from the KoShapeBasedDocumentBase
         d->controller->removeShape(d->shapes[i]);
-        if (d->oldParents.at(i))
+        if (d->oldParents.at(i)) {
             d->oldParents.at(i)->removeShape(d->shapes[i]);
+        }
     }
     d->deleteShapes = true;
 }
@@ -92,12 +98,14 @@ void KoShapeDeleteCommand::redo()
 void KoShapeDeleteCommand::undo()
 {
     KUndo2Command::undo();
-    if (! d->controller)
+    if (! d->controller) {
         return;
+    }
 
     for (int i = 0; i < d->shapes.count(); i++) {
-        if (d->oldParents.at(i))
+        if (d->oldParents.at(i)) {
             d->oldParents.at(i)->addShape(d->shapes[i]);
+        }
         // the parent has to be there when it is added to the KoShapeBasedDocumentBase
         d->controller->addShape(d->shapes[i]);
     }

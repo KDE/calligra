@@ -24,7 +24,7 @@
 
 using namespace Calligra::Sheets;
 
-static char encodeTokenType(const Token& token)
+static char encodeTokenType(const Token &token)
 {
     char result = '?';
     switch (token.type()) {
@@ -41,13 +41,13 @@ static char encodeTokenType(const Token& token)
 }
 
 #if 0 // not used?
-static QString describeTokenCodes(const QString& tokenCodes)
+static QString describeTokenCodes(const QString &tokenCodes)
 {
     QString result;
 
-    if (tokenCodes.isEmpty())
+    if (tokenCodes.isEmpty()) {
         result = "(invalid)";
-    else
+    } else
         for (int i = 0; i < tokenCodes.length(); i++) {
             switch (tokenCodes[i].unicode()) {
             case 'b': result.append("Boolean"); break;
@@ -59,7 +59,9 @@ static QString describeTokenCodes(const QString& tokenCodes)
             case 'x': result.append("identifier"); break;
             default:  result.append("unknown"); break;
             }
-            if (i < tokenCodes.length() - 1) result.append(", ");
+            if (i < tokenCodes.length() - 1) {
+                result.append(", ");
+            }
         }
 
     return result.prepend("{").append("}");
@@ -68,7 +70,7 @@ static QString describeTokenCodes(const QString& tokenCodes)
 
 #define CHECK_TOKENIZE(x,y) QCOMPARE(tokenizeFormula(x), QString(y))
 
-static QString tokenizeFormula(const QString& formula)
+static QString tokenizeFormula(const QString &formula)
 {
     Formula f;
     QString expr = formula;
@@ -78,29 +80,32 @@ static QString tokenizeFormula(const QString& formula)
 
     QString resultCodes;
     if (tokens.valid())
-        for (int i = 0; i < tokens.count(); i++)
+        for (int i = 0; i < tokens.count(); i++) {
             resultCodes.append(encodeTokenType(tokens[i]));
+        }
 
     return resultCodes;
 }
 
-
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
-Value TestFormula::evaluate(const QString& formula, Value& ex)
+Value TestFormula::evaluate(const QString &formula, Value &ex)
 {
     Formula f;
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
-    if (result.isFloat() && ex.isInteger())
+    if (result.isFloat() && ex.isInteger()) {
         ex = Value(ex.asFloat());
-    if (result.isInteger() && ex.isFloat())
+    }
+    if (result.isInteger() && ex.isFloat()) {
         result = Value(result.asFloat());
+    }
 
     return result;
 }

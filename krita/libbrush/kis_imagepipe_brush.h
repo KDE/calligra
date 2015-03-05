@@ -27,7 +27,6 @@
 #include "kis_gbr_brush.h"
 #include "kis_global.h"
 
-
 /**
  * Velocity won't be supported, atm Tilt isn't either,
  * but have chances of implementation
@@ -50,13 +49,13 @@ class BRUSH_EXPORT KisImagePipeBrush : public KisGbrBrush
 {
 
 public:
-    KisImagePipeBrush(const QString& filename);
+    KisImagePipeBrush(const QString &filename);
     /**
      * Specialized constructor that makes a new pipe brush from a sequence of samesize
      * devices. The fact that it's a vector of a vector, is to support multidimensional
      * brushes (not yet supported!) */
-    KisImagePipeBrush(const QString& name, int w, int h,
-                      QVector< QVector<KisPaintDevice*> > devices,
+    KisImagePipeBrush(const QString &name, int w, int h,
+                      QVector< QVector<KisPaintDevice *> > devices,
                       QVector<KisParasite::SelectionMode> modes);
 
     virtual ~KisImagePipeBrush();
@@ -64,14 +63,14 @@ public:
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
+    virtual bool saveToDevice(QIODevice *dev) const;
 
     /**
      * @return the next image in the pipe.
     */
-    virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
+    virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace *colorSpace,
             double scale, double angle,
-            const KisPaintInformation& info,
+            const KisPaintInformation &info,
             double subPixelX = 0, double subPixelY = 0) const;
 
     virtual void setUseColorAsMask(bool useColorAsMask);
@@ -79,55 +78,49 @@ public:
 
     virtual enumBrushType brushType() const;
 
-    virtual const KisBoundary* boundary() const;
+    virtual const KisBoundary *boundary() const;
 
-    virtual bool canPaintFor(const KisPaintInformation& info);
+    virtual bool canPaintFor(const KisPaintInformation &info);
 
     virtual void makeMaskImage();
 
-    virtual KisImagePipeBrush* clone() const;
+    virtual KisImagePipeBrush *clone() const;
 
     virtual QString defaultFileExtension() const;
     void setAngle(qreal _angle);
     void setScale(qreal _scale);
     void setSpacing(double _spacing);
 
-    quint32 brushIndex(const KisPaintInformation& info) const;
-    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const;
-    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const;
+    quint32 brushIndex(const KisPaintInformation &info) const;
+    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation &info) const;
+    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation &info) const;
 
     void notifyCachedDabPainted();
 
-    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation *coloringInformation,
             double scaleX, double scaleY, double angle,
-            const KisPaintInformation& info,
+            const KisPaintInformation &info,
             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
-
-
 
 protected:
     void setBrushType(enumBrushType type);
     void setHasColor(bool hasColor);
     /// Will call KisBrush's saveToDevice as well
 
-
-
-    KisImagePipeBrush(const KisImagePipeBrush& rhs);
+    KisImagePipeBrush(const KisImagePipeBrush &rhs);
 
 private:
     friend class KisImagePipeBrushTest;
 
-    KisGbrBrush* testingGetCurrentBrush(const KisPaintInformation& info) const;
-    QVector<KisGbrBrush*> testingGetBrushes() const;
-    void testingSelectNextBrush(const KisPaintInformation& info) const;
+    KisGbrBrush *testingGetCurrentBrush(const KisPaintInformation &info) const;
+    QVector<KisGbrBrush *> testingGetBrushes() const;
+    void testingSelectNextBrush(const KisPaintInformation &info) const;
 
     bool initFromData(const QByteArray &data);
     void sanitize(); // Force some default values in case the ones read in don't make sense
 private:
     struct Private;
-    Private * const m_d;
-
-
+    Private *const m_d;
 
 };
 

@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2011 Jignesh Kakadiya <jigneshhk1992@gmail.com>
- *  
+ *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; either version 2.1 of the License, or
@@ -29,7 +29,7 @@ KWPageToolFactory::KWPageToolFactory()
     : KoToolFactoryBase("PageToolFactory_ID")
 {
     setToolTip(i18n("Page layout"));
-    setToolType(dynamicToolType()+",calligrawords, calligraauthor");
+    setToolType(dynamicToolType() + ",calligrawords, calligraauthor");
     setIconName(koIconNameCStr("tool_pagelayout"));
     setPriority(25);
     setActivationShapeId("flake/always");
@@ -39,7 +39,7 @@ KWPageToolFactory::~KWPageToolFactory()
 {
 }
 
-KoToolBase* KWPageToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KWPageToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KWPageTool(canvas);
 }

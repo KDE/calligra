@@ -23,7 +23,6 @@
 
 #include "tiles3/swap/kis_chunk_allocator.h"
 
-
 void KisChunkAllocatorTest::testOperations()
 {
     KisChunkAllocator allocator;
@@ -39,9 +38,8 @@ void KisChunkAllocatorTest::testOperations()
 
     allocator.debugChunks();
     allocator.sanityCheck();
-    QVERIFY(qFuzzyCompare(allocator.debugFragmentation(), 1./6));
+    QVERIFY(qFuzzyCompare(allocator.debugFragmentation(), 1. / 6));
 }
-
 
 #define NUM_TRANSACTIONS 30
 #define NUM_CHUNKS_ALLOC 15000
@@ -56,25 +54,24 @@ quint64 getChunkSize()
     return CHUNK_AV_SIZE - CHUNK_DEV_SIZE + deviation;
 }
 
-
 qreal KisChunkAllocatorTest::measureFragmentation(qint32 transactions,
-                                                  qint32 chunksAlloc,
-                                                  qint32 chunksFree,
-                                                  bool printDetails)
+        qint32 chunksAlloc,
+        qint32 chunksFree,
+        bool printDetails)
 {
     KisChunkAllocator allocator(DEFAULT_SLAB_SIZE, SWAP_SIZE);
     QList<KisChunk> chunks;
 
-    for(qint32 k = 0; k < transactions; k++) {
-        if(chunks.size() > 0) {
-            for(qint32 i = 0; i < chunksFree; i++) {
+    for (qint32 k = 0; k < transactions; k++) {
+        if (chunks.size() > 0) {
+            for (qint32 i = 0; i < chunksFree; i++) {
                 qint32 idx = qrand() % chunks.size();
                 allocator.freeChunk(chunks.takeAt(idx));
             }
         }
         allocator.sanityCheck();
 
-        for(qint32 i = 0; i < chunksAlloc; i++) {
+        for (qint32 i = 0; i < chunksAlloc; i++) {
             chunks.append(allocator.getChunk(getChunkSize()));
         }
         allocator.sanityCheck();
@@ -98,28 +95,27 @@ void KisChunkAllocatorTest::testFragmentation()
     return;
 
     qDebug() << "fragmentation(transactions)";
-    for(qint32 t = 1; t < NUM_TRANSACTIONS; t += NUM_TRANSACTIONS/7) {
+    for (qint32 t = 1; t < NUM_TRANSACTIONS; t += NUM_TRANSACTIONS / 7) {
         qreal f = measureFragmentation(t, NUM_CHUNKS_ALLOC,
                                        NUM_CHUNKS_FREE, false);
         qDebug() << t << f;
     }
 
     qDebug() << "fragmentation(alloc)";
-    for(qint32 t = 1; t < NUM_CHUNKS_ALLOC; t += NUM_CHUNKS_ALLOC/7) {
-        qreal f = measureFragmentation(NUM_TRANSACTIONS,t,
-                                       0.8*t, false);
+    for (qint32 t = 1; t < NUM_CHUNKS_ALLOC; t += NUM_CHUNKS_ALLOC / 7) {
+        qreal f = measureFragmentation(NUM_TRANSACTIONS, t,
+                                       0.8 * t, false);
         qDebug() << t << f;
     }
 
     qDebug() << "fragmentation(free)";
-    for(qint32 t = NUM_CHUNKS_ALLOC/7; t < NUM_CHUNKS_ALLOC; t += NUM_CHUNKS_ALLOC/15) {
-        qreal f = measureFragmentation(NUM_TRANSACTIONS,NUM_CHUNKS_ALLOC,
+    for (qint32 t = NUM_CHUNKS_ALLOC / 7; t < NUM_CHUNKS_ALLOC; t += NUM_CHUNKS_ALLOC / 15) {
+        qreal f = measureFragmentation(NUM_TRANSACTIONS, NUM_CHUNKS_ALLOC,
                                        t, false);
         qDebug() << t << f;
     }
 
 }
-
 
 QTEST_KDEMAIN(KisChunkAllocatorTest, NoGUI)
 #include "kis_chunk_allocator_test.moc"

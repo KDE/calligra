@@ -42,14 +42,14 @@ class CommentDialog : public KDialog
 {
     Q_OBJECT
 public:
-    CommentDialog(QWidget* parent, Selection* selection);
+    CommentDialog(QWidget *parent, Selection *selection);
 
 public Q_SLOTS:
     void slotOk();
     void slotTextChanged();
 protected:
 
-    Selection* m_selection;
+    Selection *m_selection;
     KTextEdit *multiLine;
 };
 

@@ -43,7 +43,7 @@
 class KoSliderComboContainer : public QMenu
 {
 public:
-    KoSliderComboContainer(KoSliderCombo *parent) : QMenu(parent ), m_parent(parent) {}
+    KoSliderComboContainer(KoSliderCombo *parent) : QMenu(parent), m_parent(parent) {}
 
 protected:
     virtual void mousePressEvent(QMouseEvent *e);
@@ -58,14 +58,16 @@ void KoSliderComboContainer::mousePressEvent(QMouseEvent *e)
     opt.subControls = QStyle::SC_All;
     opt.activeSubControls = QStyle::SC_ComboBoxArrow;
     QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt,
-                                                           m_parent->mapFromGlobal(e->globalPos()),
-                                                           m_parent);
-    if (sc == QStyle::SC_ComboBoxArrow)
+                            m_parent->mapFromGlobal(e->globalPos()),
+                            m_parent);
+    if (sc == QStyle::SC_ComboBoxArrow) {
         setAttribute(Qt::WA_NoMouseReplay);
+    }
     QMenu::mousePressEvent(e);
 }
 
-class KoSliderCombo::KoSliderComboPrivate {
+class KoSliderCombo::KoSliderComboPrivate
+{
 public:
     KoSliderCombo *thePublic;
     QValidator *m_validator;

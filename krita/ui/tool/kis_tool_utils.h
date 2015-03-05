@@ -24,12 +24,12 @@
 #include <kis_types.h>
 #include <krita_export.h>
 
-
-namespace KisToolUtils {
+namespace KisToolUtils
+{
 /**
  * return the color at the given position on the given paint device.
  */
-bool KRITAUI_EXPORT pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color);
+bool KRITAUI_EXPORT pick(KisPaintDeviceSP dev, const QPoint &pos, KoColor *color);
 
 /**
  * Recursively search a node with a non-transparent pixel

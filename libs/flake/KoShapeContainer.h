@@ -152,7 +152,6 @@ public:
      */
     bool isChildLocked(const KoShape *child) const;
 
-
     /**
      * Set the shape to inherit the container transform.
      *
@@ -181,7 +180,6 @@ public:
      */
     bool inheritsTransform(const KoShape *shape) const;
 
-
     /// reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
@@ -204,7 +202,7 @@ public:
      * Return the list of all child shapes.
      * @return the list of all child shapes
      */
-    QList<KoShape*> shapes() const;
+    QList<KoShape *> shapes() const;
 
     /**
      * return the model for this container

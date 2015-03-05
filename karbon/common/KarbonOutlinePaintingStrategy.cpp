@@ -26,10 +26,12 @@
 #include <QPen>
 #include <QPainter>
 
-class OutlineStroke : public KoShapeStroke {
+class OutlineStroke : public KoShapeStroke
+{
 public:
     OutlineStroke()
-        : m_pen(Qt::black) {
+        : m_pen(Qt::black)
+    {
     }
 
     using KoShapeStroke::paint;
@@ -44,7 +46,7 @@ private:
     QPen m_pen;
 };
 
-KarbonOutlinePaintingStrategy::KarbonOutlinePaintingStrategy(KoShapeManager * shapeManager)
+KarbonOutlinePaintingStrategy::KarbonOutlinePaintingStrategy(KoShapeManager *shapeManager)
     : KoShapeManagerPaintingStrategy(shapeManager), m_stroke(new OutlineStroke())
 {
     Q_ASSERT(shapeManager);
@@ -56,7 +58,7 @@ KarbonOutlinePaintingStrategy::~KarbonOutlinePaintingStrategy()
     delete m_stroke;
 }
 
-void KarbonOutlinePaintingStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*paintContext*/)
+void KarbonOutlinePaintingStrategy::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*paintContext*/)
 {
     painter.save();
     painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());

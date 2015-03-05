@@ -32,7 +32,6 @@
 // libodfreader
 #include "OdfReaderContext.h"
 
-
 class QByteArray;
 
 class KoStore;
@@ -40,17 +39,22 @@ class KoXmlWriter;
 
 class DocxFile;
 
-
 class OdfReaderDocxContext : public OdfReaderContext
 {
- public:
+public:
     OdfReaderDocxContext(KoStore *store, DocxFile *dxf);
     virtual ~OdfReaderDocxContext();
 
-    QByteArray documentContent() const { return m_documentContent; }
-    QByteArray commentsContent() const { return m_commentsContent; }
+    QByteArray documentContent() const
+    {
+        return m_documentContent;
+    }
+    QByteArray commentsContent() const
+    {
+        return m_commentsContent;
+    }
 
- private:
+private:
 
     // These members should be accessible to the backend but nobody else.
     // Exception: see getter above.
@@ -67,6 +71,5 @@ class OdfReaderDocxContext : public OdfReaderContext
     QBuffer      m_documentIO;      //!< IODevice for the XML writer
     QBuffer      m_commentsIO;        //!< IODevice for the Comments XML Writer
 };
-
 
 #endif // ODFREADERDOCXCONTEXT_H

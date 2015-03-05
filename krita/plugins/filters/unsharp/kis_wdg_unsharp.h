@@ -29,15 +29,16 @@ class KisWdgUnsharp : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgUnsharp(QWidget * parent);
+    KisWdgUnsharp(QWidget *parent);
     virtual ~KisWdgUnsharp();
-    inline const Ui_WdgUnsharp* widget() const {
+    inline const Ui_WdgUnsharp *widget() const
+    {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration *);
+    virtual KisPropertiesConfiguration *configuration() const;
 private:
-    Ui_WdgUnsharp* m_widget;
+    Ui_WdgUnsharp *m_widget;
 };
 
 #endif

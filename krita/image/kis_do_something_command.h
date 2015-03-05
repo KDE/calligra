@@ -29,14 +29,16 @@ public:
         : m_layer(layer),
           m_finalUpdate(finalUpdate) {}
 
-    void undo() {
+    void undo()
+    {
         DoSomethingOp<LayerType> op;
         if (!m_finalUpdate) {
             op(m_layer);
         }
     }
 
-    void redo() {
+    void redo()
+    {
         DoSomethingOp<LayerType> op;
         if (m_finalUpdate) {
             op(m_layer);
@@ -48,20 +50,21 @@ private:
     bool m_finalUpdate;
 };
 
-namespace KisDoSomethingCommandOps {
+namespace KisDoSomethingCommandOps
+{
 
 template <class LayerType>
-struct ResetOp
-{
-    void operator() (LayerType layer) {
+struct ResetOp {
+    void operator()(LayerType layer)
+    {
         layer->resetCache();
     }
 };
 
 template <class LayerType>
-struct UpdateOp
-{
-    void operator() (LayerType layer) {
+struct UpdateOp {
+    void operator()(LayerType layer)
+    {
         layer->update();
     }
 };

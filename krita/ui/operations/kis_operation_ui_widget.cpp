@@ -16,20 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_operation_ui_widget.h"
 
-class KisOperationUIWidget::Private {
+class KisOperationUIWidget::Private
+{
 
 public:
     Private() {}
     QString caption;
 };
 
-
-KisOperationUIWidget::KisOperationUIWidget(const QString& caption, QWidget* parent)
-  : QWidget(parent)
-  , d(new KisOperationUIWidget::Private)
+KisOperationUIWidget::KisOperationUIWidget(const QString &caption, QWidget *parent)
+    : QWidget(parent)
+    , d(new KisOperationUIWidget::Private)
 {
     d->caption = caption;
 }

@@ -60,7 +60,6 @@ ResourceBundleServerProvider::ResourceBundleServerProvider()
     }
 }
 
-
 ResourceBundleServerProvider *ResourceBundleServerProvider::instance()
 {
     K_GLOBAL_STATIC(ResourceBundleServerProvider, s_instance);
@@ -77,8 +76,8 @@ KoResourceServer<ResourceBundle> *ResourceBundleServerProvider::resourceBundleSe
     return m_resourceBundleServer;
 }
 
-
-class ResourceManager::Private {
+class ResourceManager::Private
+{
 
 public:
 
@@ -93,12 +92,12 @@ public:
         workspaceServer = KisResourceServerProvider::instance()->workspaceServer(false);
     }
 
-    KisBrushResourceServer* brushServer;
-    KisPaintOpPresetResourceServer * paintopServer;
-    KoResourceServer<KoAbstractGradient>* gradientServer;
+    KisBrushResourceServer *brushServer;
+    KisPaintOpPresetResourceServer *paintopServer;
+    KoResourceServer<KoAbstractGradient> *gradientServer;
     KoResourceServer<KoPattern> *patternServer;
-    KoResourceServer<KoColorSet>* paletteServer;
-    KoResourceServer<KisWorkspaceResource>* workspaceServer;
+    KoResourceServer<KoColorSet> *paletteServer;
+    KoResourceServer<KisWorkspaceResource> *workspaceServer;
 
     QThread *loader;
 
@@ -171,30 +170,26 @@ void ResourceManager::slotImport()
     resourceType = filterToTypeMap[resourceType];
 
     if (resourceType == "brushes") {
-        foreach(const QString &res, resources) {
+        foreach (const QString &res, resources) {
             d->brushServer->importResourceFile(res);
         }
-    }
-    else if (resourceType == "presets") {
-        foreach(const QString &res, resources) {
+    } else if (resourceType == "presets") {
+        foreach (const QString &res, resources) {
             d->paintopServer->importResourceFile(res);
         }
-    }
-    else if (resourceType == "gradients") {
-        foreach(const QString &res, resources) {
+    } else if (resourceType == "gradients") {
+        foreach (const QString &res, resources) {
             d->gradientServer->importResourceFile(res);
         }
-    }
-    else if (resourceType == "bundles") {
-        foreach(const QString &res, resources) {
+    } else if (resourceType == "bundles") {
+        foreach (const QString &res, resources) {
             ResourceBundle *bundle = ResourceBundleServerProvider::instance()->resourceBundleServer()->createResource(res);
             bundle->load();
             if (bundle->valid()) {
                 if (!bundle->install()) {
                     QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.").arg(res));
                 }
-            }
-            else {
+            } else {
                 QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.").arg(res));
             }
 
@@ -211,23 +206,19 @@ void ResourceManager::slotImport()
             QFile::copy(res, newFilename);
             ResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(bundle, false);
         }
-    }
-    else if (resourceType == "patterns") {
-         foreach(const QString &res, resources) {
+    } else if (resourceType == "patterns") {
+        foreach (const QString &res, resources) {
             d->patternServer->importResourceFile(res);
         }
-    }
-    else if (resourceType == "palettes") {
-        foreach(const QString &res, resources) {
+    } else if (resourceType == "palettes") {
+        foreach (const QString &res, resources) {
             d->paletteServer->importResourceFile(res);
         }
-    }
-    else if (resourceType == "workspaces") {
-        foreach(const QString &res, resources) {
+    } else if (resourceType == "workspaces") {
+        foreach (const QString &res, resources) {
             d->workspaceServer->importResourceFile(res);
         }
-    }
-    else {
+    } else {
         qWarning() << "Trying to add a resource of an undefined type";
     }
 
@@ -241,7 +232,7 @@ void ResourceManager::slotCreateBundle()
     }
 
     QString bundlePath =  dlgCreateBundle.saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle";
-    ResourceBundle* newBundle = new ResourceBundle(bundlePath);
+    ResourceBundle *newBundle = new ResourceBundle(bundlePath);
 
     newBundle->addMeta("name", dlgCreateBundle.bundleName());
     newBundle->addMeta("author", dlgCreateBundle.authorName());
@@ -251,38 +242,38 @@ void ResourceManager::slotCreateBundle()
     newBundle->addMeta("description", dlgCreateBundle.description());
 
     QStringList res = dlgCreateBundle.selectedBrushes();
-    foreach(const QString &r, res) {
+    foreach (const QString &r, res) {
         KoResource *res = d->brushServer->resourceByFilename(r).data();
         newBundle->addResource("kis_brushes", res->filename(), d->brushServer->tagObject()->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedGradients();
-    foreach(const QString &r, res) {
+    foreach (const QString &r, res) {
         KoResource *res = d->gradientServer->resourceByFilename(r);
         newBundle->addResource("ko_gradients", res->filename(), d->gradientServer->tagObject()->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPalettes();
-    foreach(const QString &r, res) {
+    foreach (const QString &r, res) {
         KoResource *res = d->paletteServer->resourceByFilename(r);
         newBundle->addResource("ko_palettes", res->filename(), d->paletteServer->tagObject()->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPatterns();
-    foreach(const QString &r, res) {
+    foreach (const QString &r, res) {
         KoResource *res = d->patternServer->resourceByFilename(r);
         newBundle->addResource("ko_patterns", res->filename(), d->patternServer->tagObject()->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPresets();
-    foreach(const QString &r, res) {
+    foreach (const QString &r, res) {
         KisPaintOpPresetSP preset = d->paintopServer->resourceByFilename(r);
         KoResource *res = preset.data();
         newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->tagObject()->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedWorkspaces();
-    foreach(const QString &r, res) {
+    foreach (const QString &r, res) {
         KoResource *res = d->workspaceServer->resourceByFilename(r);
         newBundle->addResource("kis_workspaces", res->filename(), d->workspaceServer->tagObject()->assignedTagsList(res), res->md5());
     }
@@ -296,14 +287,12 @@ void ResourceManager::slotCreateBundle()
         QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("Could not create the new bundle."));
     }
 
-
 }
 
 void ResourceManager::slotManageBundles()
 {
 
-
-    DlgBundleManager* dlg = new DlgBundleManager(m_view->actionManager());
+    DlgBundleManager *dlg = new DlgBundleManager(m_view->actionManager());
     if (dlg->exec() != QDialog::Accepted) {
         return;
     }
@@ -322,14 +311,12 @@ void ResourceManager::bundlesLoaded()
     delete d->loader;
     d->loader = 0;
 
-    foreach(ResourceBundle *bundle, ResourceBundleServerProvider::instance()->resourceBundleServer()->resources()) {
+    foreach (ResourceBundle *bundle, ResourceBundleServerProvider::instance()->resourceBundleServer()->resources()) {
         if (!bundle->install()) {
             qWarning() << "Could not install resources for bundle" << bundle->name();
         }
     }
 
 }
-
-
 
 #include "resourcemanager.moc"

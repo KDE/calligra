@@ -67,7 +67,6 @@
 #include <KoIcon.h>
 #include<QtGlobal>
 
-
 #ifndef QT_NO_UNDOCOMMAND
 
 /*!
@@ -155,11 +154,12 @@ KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *paren
 */
 
 KUndo2Command::KUndo2Command(KUndo2Command *parent):
-    m_hasParent(parent != 0),m_timedID(0)
+    m_hasParent(parent != 0), m_timedID(0)
 {
     d = new KUndo2CommandPrivate;
-    if (parent != 0)
+    if (parent != 0) {
         parent->d->child_list.append(this);
+    }
     setTime();
 }
 
@@ -233,8 +233,9 @@ bool KUndo2Command::mergeWith(const KUndo2Command *command)
 
 void KUndo2Command::redo()
 {
-    for (int i = 0; i < d->child_list.size(); ++i)
+    for (int i = 0; i < d->child_list.size(); ++i) {
         d->child_list.at(i)->redo();
+    }
 }
 
 /*!
@@ -251,8 +252,9 @@ void KUndo2Command::redo()
 
 void KUndo2Command::undo()
 {
-    for (int i = d->child_list.size() - 1; i >= 0; --i)
+    for (int i = d->child_list.size() - 1; i >= 0; --i) {
         d->child_list.at(i)->undo();
+    }
 }
 
 /*!
@@ -267,10 +269,11 @@ void KUndo2Command::undo()
 
 QString KUndo2Command::actionText() const
 {
-    if(d->actionText!=NULL)
+    if (d->actionText != NULL) {
         return d->actionText;
-    else
+    } else {
         return QString();
+    }
 }
 
 /*!
@@ -326,8 +329,9 @@ int KUndo2Command::childCount() const
 
 const KUndo2Command *KUndo2Command::child(int index) const
 {
-    if (index < 0 || index >= d->child_list.count())
+    if (index < 0 || index >= d->child_list.count()) {
         return 0;
+    }
     return d->child_list.at(index);
 }
 
@@ -346,10 +350,11 @@ void KUndo2Command::setTimedID(int value)
 
 bool KUndo2Command::timedMergeWith(KUndo2Command *other)
 {
-    if(other->timedId() == this->timedId() && other->timedId()!=-1 )
+    if (other->timedId() == this->timedId() && other->timedId() != -1) {
         m_mergeCommandsVector.append(other);
-    else
+    } else {
         return false;
+    }
     return true;
 }
 void KUndo2Command::setTime()
@@ -374,10 +379,10 @@ void KUndo2Command::undoMergedCommands()
 
     undo();
     if (!mergeCommandsVector().isEmpty()) {
-        QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
+        QVectorIterator<KUndo2Command *> it(mergeCommandsVector());
         it.toFront();
         while (it.hasNext()) {
-            KUndo2Command* cmd =  dynamic_cast<KUndo2Command*>(it.next());
+            KUndo2Command *cmd =  dynamic_cast<KUndo2Command *>(it.next());
             cmd->undoMergedCommands();
         }
     }
@@ -387,16 +392,16 @@ void KUndo2Command::redoMergedCommands()
 {
     if (!mergeCommandsVector().isEmpty()) {
 
-        QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
+        QVectorIterator<KUndo2Command *> it(mergeCommandsVector());
         it.toBack();
         while (it.hasPrevious()) {
-            KUndo2Command* cmd = dynamic_cast<KUndo2Command*>(it.previous());
+            KUndo2Command *cmd = dynamic_cast<KUndo2Command *>(it.previous());
             cmd->redoMergedCommands();
         }
     }
     redo();
 }
-QVector<KUndo2Command*> KUndo2Command::mergeCommandsVector()
+QVector<KUndo2Command *> KUndo2Command::mergeCommandsVector()
 {
     return m_mergeCommandsVector;
 }
@@ -404,7 +409,6 @@ bool KUndo2Command::isMerged()
 {
     return !m_mergeCommandsVector.isEmpty();
 }
-
 
 #endif // QT_NO_UNDOCOMMAND
 
@@ -499,10 +503,11 @@ KUndo2Action::KUndo2Action(const QString &textTemplate, const QString &defaultTe
 
 void KUndo2Action::setPrefixedText(const QString &text)
 {
-    if (text.isEmpty())
+    if (text.isEmpty()) {
         setText(m_defaultText);
-    else
+    } else {
         setText(m_textTemplate.arg(text));
+    }
 }
 
 #endif // QT_NO_ACTION
@@ -520,9 +525,9 @@ void KUndo2QStack::setIndex(int idx, bool clean)
 
     } else {
         m_lastMergedSetCount = 1;
-        m_lastMergedIndex = idx-1;
+        m_lastMergedIndex = idx - 1;
     }
-    if(idx == 0){
+    if (idx == 0) {
         m_lastMergedSetCount = 0;
         m_lastMergedIndex = 0;
     }
@@ -535,12 +540,14 @@ void KUndo2QStack::setIndex(int idx, bool clean)
         emit redoTextChanged(redoText());
     }
 
-    if (clean)
+    if (clean) {
         m_clean_index = m_index;
+    }
 
     bool is_clean = m_index == m_clean_index;
-    if (is_clean != was_clean)
+    if (is_clean != was_clean) {
         emit cleanChanged(is_clean);
+    }
 }
 
 /*! \internal
@@ -552,20 +559,23 @@ void KUndo2QStack::setIndex(int idx, bool clean)
 
 bool KUndo2QStack::checkUndoLimit()
 {
-    if (m_undo_limit <= 0 || !m_macro_stack.isEmpty() || m_undo_limit >= m_command_list.count())
+    if (m_undo_limit <= 0 || !m_macro_stack.isEmpty() || m_undo_limit >= m_command_list.count()) {
         return false;
+    }
 
     int del_count = m_command_list.count() - m_undo_limit;
 
-    for (int i = 0; i < del_count; ++i)
+    for (int i = 0; i < del_count; ++i) {
         delete m_command_list.takeFirst();
+    }
 
     m_index -= del_count;
     if (m_clean_index != -1) {
-        if (m_clean_index < del_count)
-            m_clean_index = -1; // we've deleted the clean command
-        else
+        if (m_clean_index < del_count) {
+            m_clean_index = -1;    // we've deleted the clean command
+        } else {
             m_clean_index -= del_count;
+        }
     }
     return true;
 }
@@ -585,8 +595,9 @@ KUndo2QStack::KUndo2QStack(QObject *parent)
     setTimeT2(1);
     setStrokesN(2);
 #ifndef QT_NO_UNDOGROUP
-    if (KUndo2Group *group = qobject_cast<KUndo2Group*>(parent))
+    if (KUndo2Group *group = qobject_cast<KUndo2Group *>(parent)) {
         group->addStack(this);
+    }
 #endif
 }
 
@@ -600,8 +611,9 @@ KUndo2QStack::KUndo2QStack(QObject *parent)
 KUndo2QStack::~KUndo2QStack()
 {
 #ifndef QT_NO_UNDOGROUP
-    if (m_group != 0)
+    if (m_group != 0) {
         m_group->removeStack(this);
+    }
 #endif
     clear();
 }
@@ -623,8 +635,9 @@ KUndo2QStack::~KUndo2QStack()
 
 void KUndo2QStack::clear()
 {
-    if (m_command_list.isEmpty())
+    if (m_command_list.isEmpty()) {
         return;
+    }
 
     bool was_clean = isClean();
 
@@ -641,8 +654,9 @@ void KUndo2QStack::clear()
     emit canRedoChanged(false);
     emit redoTextChanged(QString());
 
-    if (!was_clean)
+    if (!was_clean) {
         emit cleanChanged(true);
+    }
 }
 
 /*!
@@ -678,15 +692,19 @@ void KUndo2QStack::push(KUndo2Command *cmd)
     KUndo2Command *cur = 0;
     if (macro) {
         KUndo2Command *macro_cmd = m_macro_stack.last();
-        if (!macro_cmd->d->child_list.isEmpty())
+        if (!macro_cmd->d->child_list.isEmpty()) {
             cur = macro_cmd->d->child_list.last();
+        }
     } else {
-        if (m_index > 0)
+        if (m_index > 0) {
             cur = m_command_list.at(m_index - 1);
-        while (m_index < m_command_list.size())
+        }
+        while (m_index < m_command_list.size()) {
             delete m_command_list.takeLast();
-        if (m_clean_index > m_index)
-            m_clean_index = -1; // we've deleted the clean state
+        }
+        if (m_clean_index > m_index) {
+            m_clean_index = -1;    // we've deleted the clean state
+        }
     }
 
     bool try_merge = cur != 0
@@ -705,53 +723,53 @@ void KUndo2QStack::push(KUndo2Command *cmd)
      *@TODO : Currently it is not able to merge two merged commands together.
     */
     if (!macro && m_command_list.size() > 1 && cmd->timedId() != -1 && m_useCumulativeUndoRedo) {
-        KUndo2Command* lastcmd = m_command_list.last();
+        KUndo2Command *lastcmd = m_command_list.last();
         if (qAbs(cmd->time().msecsTo(lastcmd->endTime())) < m_timeT2 * 1000) {
             m_lastMergedSetCount++;
         } else {
             m_lastMergedSetCount = 0;
-            m_lastMergedIndex = m_index-1;
+            m_lastMergedIndex = m_index - 1;
         }
-        if(lastcmd->timedId()==-1){
+        if (lastcmd->timedId() == -1) {
             m_lastMergedSetCount = 0;
             m_lastMergedIndex = m_index;
         }
-        if (m_lastMergedSetCount > m_strokesN) { 
-            KUndo2Command* toMerge = m_command_list.at(m_lastMergedIndex);
+        if (m_lastMergedSetCount > m_strokesN) {
+            KUndo2Command *toMerge = m_command_list.at(m_lastMergedIndex);
             if (toMerge && m_command_list.at(m_lastMergedIndex + 1)) {
-                if(toMerge->timedMergeWith(m_command_list.at(m_lastMergedIndex + 1))){
+                if (toMerge->timedMergeWith(m_command_list.at(m_lastMergedIndex + 1))) {
                     m_command_list.removeAt(m_lastMergedIndex + 1);
                 }
                 m_lastMergedSetCount--;
-                m_lastMergedIndex = m_command_list.indexOf(toMerge);       
+                m_lastMergedIndex = m_command_list.indexOf(toMerge);
             }
 
         }
         m_index = m_command_list.size();
-        if(m_lastMergedIndex<m_index){
+        if (m_lastMergedIndex < m_index) {
             if (cmd->time().msecsTo(m_command_list.at(m_lastMergedIndex)->endTime()) < -m_timeT1 * 1000) { //T1 time elapsed
-                QListIterator<KUndo2Command*> it(m_command_list);
+                QListIterator<KUndo2Command *> it(m_command_list);
                 it.toBack();
                 m_lastMergedSetCount = 1;
 
                 while (it.hasPrevious()) {
-                    KUndo2Command* curr = it.previous();
-                    KUndo2Command* lastCmdInCurrent = curr;
+                    KUndo2Command *curr = it.previous();
+                    KUndo2Command *lastCmdInCurrent = curr;
 
                     if (!lastcmd->mergeCommandsVector().isEmpty()) {
                         if (qAbs(lastcmd->mergeCommandsVector().last()->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent && lastcmd != curr) {
-                            if(lastcmd->timedMergeWith(curr)){
+                            if (lastcmd->timedMergeWith(curr)) {
                                 if (m_command_list.contains(curr)) {
                                     m_command_list.removeOne(curr);
                                 }
-                             }
+                            }
                         } else {
                             lastcmd = curr; //end of a merge set
                         }
                     } else {
-                        if (qAbs(lastcmd->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent &&lastcmd!=curr) {
-                            if(lastcmd->timedMergeWith(curr)){
-                                if (m_command_list.contains(curr)){
+                        if (qAbs(lastcmd->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent && lastcmd != curr) {
+                            if (lastcmd->timedMergeWith(curr)) {
+                                if (m_command_list.contains(curr)) {
                                     m_command_list.removeOne(curr);
                                 }
                             }
@@ -760,11 +778,11 @@ void KUndo2QStack::push(KUndo2Command *cmd)
                         }
                     }
                 }
-                m_lastMergedIndex = m_command_list.size()-1;
+                m_lastMergedIndex = m_command_list.size() - 1;
             }
         }
         m_index = m_command_list.size();
-    }   
+    }
     if (try_merge && cur->mergeWith(cmd)) {
         delete cmd;
         if (!macro) {
@@ -779,8 +797,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             m_macro_stack.last()->d->child_list.append(cmd);
         } else {
             m_command_list.append(cmd);
-            if(checkUndoLimit())
-            {
+            if (checkUndoLimit()) {
                 m_lastMergedIndex = m_index - m_strokesN;
             }
             setIndex(m_index + 1, false);
@@ -817,8 +834,9 @@ void KUndo2QStack::setClean()
 
 bool KUndo2QStack::isClean() const
 {
-    if (!m_macro_stack.isEmpty())
+    if (!m_macro_stack.isEmpty()) {
         return false;
+    }
     return m_clean_index == m_index;
 }
 
@@ -850,8 +868,9 @@ int KUndo2QStack::cleanIndex() const
 
 void KUndo2QStack::undo()
 {
-    if (m_index == 0)
+    if (m_index == 0) {
         return;
+    }
 
     if (!m_macro_stack.isEmpty()) {
         qWarning("KUndo2QStack::undo(): cannot undo in the middle of a macro");
@@ -875,8 +894,9 @@ void KUndo2QStack::undo()
 
 void KUndo2QStack::redo()
 {
-    if (m_index == m_command_list.size())
+    if (m_index == m_command_list.size()) {
         return;
+    }
 
     if (!m_macro_stack.isEmpty()) {
         qWarning("KUndo2QStack::redo(): cannot redo in the middle of a macro");
@@ -927,10 +947,11 @@ void KUndo2QStack::setIndex(int idx)
         return;
     }
 
-    if (idx < 0)
+    if (idx < 0) {
         idx = 0;
-    else if (idx > m_command_list.size())
+    } else if (idx > m_command_list.size()) {
         idx = m_command_list.size();
+    }
 
     int i = m_index;
     while (i < idx) {
@@ -956,8 +977,9 @@ void KUndo2QStack::setIndex(int idx)
 
 bool KUndo2QStack::canUndo() const
 {
-    if (!m_macro_stack.isEmpty())
+    if (!m_macro_stack.isEmpty()) {
         return false;
+    }
     return m_index > 0;
 }
 
@@ -974,8 +996,9 @@ bool KUndo2QStack::canUndo() const
 
 bool KUndo2QStack::canRedo() const
 {
-    if (!m_macro_stack.isEmpty())
+    if (!m_macro_stack.isEmpty()) {
         return false;
+    }
     return m_index < m_command_list.size();
 }
 
@@ -987,11 +1010,14 @@ bool KUndo2QStack::canRedo() const
 
 QString KUndo2QStack::undoText() const
 {
-    if (!m_macro_stack.isEmpty())
+    if (!m_macro_stack.isEmpty()) {
         return QString();
-    if (m_index > 0 && m_command_list.at(m_index-1)!=NULL)
+    }
+    if (m_index > 0 && m_command_list.at(m_index - 1) != NULL)
 
+    {
         return m_command_list.at(m_index - 1)->actionText();
+    }
     return QString();
 }
 
@@ -1003,10 +1029,12 @@ QString KUndo2QStack::undoText() const
 
 QString KUndo2QStack::redoText() const
 {
-    if (!m_macro_stack.isEmpty())
+    if (!m_macro_stack.isEmpty()) {
         return QString();
-    if (m_index < m_command_list.size())
+    }
+    if (m_index < m_command_list.size()) {
         return m_command_list.at(m_index)->actionText();
+    }
     return QString();
 }
 
@@ -1102,10 +1130,12 @@ void KUndo2QStack::beginMacro(const KUndo2MagicString &text)
     cmd->setText(text);
 
     if (m_macro_stack.isEmpty()) {
-        while (m_index < m_command_list.size())
+        while (m_index < m_command_list.size()) {
             delete m_command_list.takeLast();
-        if (m_clean_index > m_index)
-            m_clean_index = -1; // we've deleted the clean state
+        }
+        if (m_clean_index > m_index) {
+            m_clean_index = -1;    // we've deleted the clean state
+        }
         m_command_list.append(cmd);
     } else {
         m_macro_stack.last()->d->child_list.append(cmd);
@@ -1158,8 +1188,9 @@ void KUndo2QStack::endMacro()
 */
 const KUndo2Command *KUndo2QStack::command(int index) const
 {
-    if (index < 0 || index >= m_command_list.count())
+    if (index < 0 || index >= m_command_list.count()) {
         return 0;
+    }
     return m_command_list.at(index);
 }
 
@@ -1171,8 +1202,9 @@ const KUndo2Command *KUndo2QStack::command(int index) const
 
 QString KUndo2QStack::text(int idx) const
 {
-    if (idx < 0 || idx >= m_command_list.size())
+    if (idx < 0 || idx >= m_command_list.size()) {
         return QString();
+    }
     return m_command_list.at(idx)->text().toString();
 }
 
@@ -1198,8 +1230,9 @@ void KUndo2QStack::setUndoLimit(int limit)
         return;
     }
 
-    if (limit == m_undo_limit)
+    if (limit == m_undo_limit) {
         return;
+    }
     m_undo_limit = limit;
     checkUndoLimit();
 }
@@ -1232,10 +1265,11 @@ void KUndo2QStack::setActive(bool active)
     Q_UNUSED(active);
 #else
     if (m_group != 0) {
-        if (active)
+        if (active) {
             m_group->setActiveStack(this);
-        else if (m_group->activeStack() == this)
+        } else if (m_group->activeStack() == this) {
             m_group->setActiveStack(0);
+        }
     }
 #endif
 }
@@ -1285,11 +1319,9 @@ void KUndo2QStack::setStrokesN(int value)
     m_strokesN  = value;
 }
 
-
-
-QAction* KUndo2Stack::createRedoAction(KActionCollection* actionCollection, const QString& actionName)
+QAction *KUndo2Stack::createRedoAction(KActionCollection *actionCollection, const QString &actionName)
 {
-    QAction* action = KUndo2QStack::createRedoAction(actionCollection);
+    QAction *action = KUndo2QStack::createRedoAction(actionCollection);
 
     if (actionName.isEmpty()) {
         action->setObjectName(KStandardAction::name(KStandardAction::Redo));
@@ -1306,9 +1338,9 @@ QAction* KUndo2Stack::createRedoAction(KActionCollection* actionCollection, cons
     return action;
 }
 
-QAction* KUndo2Stack::createUndoAction(KActionCollection* actionCollection, const QString& actionName)
+QAction *KUndo2Stack::createUndoAction(KActionCollection *actionCollection, const QString &actionName)
 {
-    QAction* action = KUndo2QStack::createUndoAction(actionCollection);
+    QAction *action = KUndo2QStack::createUndoAction(actionCollection);
 
     if (actionName.isEmpty()) {
         action->setObjectName(KStandardAction::name(KStandardAction::Undo));

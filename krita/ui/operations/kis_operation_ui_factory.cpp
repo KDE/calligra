@@ -18,14 +18,15 @@
 
 #include "kis_operation_ui_factory.h"
 
-class KisOperationUIFactory::Private {
+class KisOperationUIFactory::Private
+{
 
 public:
     Private() {}
     QString id;
 };
 
-KisOperationUIFactory::KisOperationUIFactory(const QString& id): d(new KisOperationUIFactory::Private)
+KisOperationUIFactory::KisOperationUIFactory(const QString &id): d(new KisOperationUIFactory::Private)
 {
     d->id = id;
 }
@@ -39,5 +40,4 @@ QString KisOperationUIFactory::id() const
 {
     return d->id;
 }
-
 

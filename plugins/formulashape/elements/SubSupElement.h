@@ -27,10 +27,11 @@
 /**
  * @short Implementation of the msub, msup, msubsup elements
  */
-class KOFORMULA_EXPORT SubSupElement : public FixedElement {
+class KOFORMULA_EXPORT SubSupElement : public FixedElement
+{
 public:
     /// The standard constructor
-    explicit SubSupElement( BasicElement* parent = 0, ElementType elementType = SubSupScript);
+    explicit SubSupElement(BasicElement *parent = 0, ElementType elementType = SubSupScript);
 
     /// The destructor
     ~SubSupElement();
@@ -39,23 +40,23 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
+    const QList<BasicElement *> childElements() const;
 
     /// inherited from BasicElement
-    virtual bool replaceChild ( BasicElement* oldElement, BasicElement* newElement );
+    virtual bool replaceChild(BasicElement *oldElement, BasicElement *newElement);
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint(QPainter &painter, AttributeManager *am);
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout(const AttributeManager *am);
 
     /**
      * Insert a new child at the cursor position
@@ -64,32 +65,32 @@ public:
      */
 
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const; 
+    QString attributesDefaultValue(const QString &attribute) const;
 
     /// @return The element's ElementType
     ElementType elementType() const;
 
     virtual int endPosition() const;
 
-    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
+    virtual bool moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor);
 
-    virtual bool setCursorTo ( FormulaCursor& cursor, QPointF point );
+    virtual bool setCursorTo(FormulaCursor &cursor, QPointF point);
 protected:
     /// Read all content from the node
-    bool readMathMLContent( const KoXmlElement& element );
+    bool readMathMLContent(const KoXmlElement &element);
 
     /// Write all content to the KoXmlWriter
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    void writeMathMLContent(KoXmlWriter *writer, const QString &ns) const;
 
 private:
-    /// The base element 
-    RowElement* m_baseElement;
+    /// The base element
+    RowElement *m_baseElement;
 
     /// The subscript right to the m_baseElement
-    RowElement* m_subScript;
+    RowElement *m_subScript;
 
     /// The superscript right to the m_baseElement
-    RowElement* m_superScript;
+    RowElement *m_superScript;
 
     /// Whether this is a SubScript, SupScript or SubSupScript
     ElementType m_elementType;

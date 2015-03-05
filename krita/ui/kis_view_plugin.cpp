@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_view_plugin.h"
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
@@ -24,10 +23,10 @@
 
 #include <kstandarddirs.h>
 
-KisViewPlugin::KisViewPlugin(QObject* parent)
+KisViewPlugin::KisViewPlugin(QObject *parent)
     : m_view(0)
 {
-    m_view = qobject_cast<KisViewManager*>(parent);
+    m_view = qobject_cast<KisViewManager *>(parent);
     Q_ASSERT(m_view);
 }
 
@@ -35,21 +34,21 @@ KisViewPlugin::~KisViewPlugin()
 {
 }
 
-void KisViewPlugin::addAction(const QString& name, KisAction* action)
+void KisViewPlugin::addAction(const QString &name, KisAction *action)
 {
     if (m_view) {
         m_view->actionManager()->addAction(name, action);
     }
 }
 
-void KisViewPlugin::addUIFactory(KisOperationUIFactory* factory)
+void KisViewPlugin::addUIFactory(KisOperationUIFactory *factory)
 {
     if (m_view) {
         m_view->actionManager()->registerOperationUIFactory(factory);
     }
 }
 
-void KisViewPlugin::addOperation(KisOperation* operation)
+void KisViewPlugin::addOperation(KisOperation *operation)
 {
     if (m_view) {
         m_view->actionManager()->registerOperation(operation);

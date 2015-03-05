@@ -55,7 +55,7 @@
 K_PLUGIN_FACTORY(RoundCornersPluginFactory, registerPlugin<RoundCornersPlugin>();)
 K_EXPORT_PLUGIN(RoundCornersPluginFactory("karbonroundcornersplugin"))
 
-RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)
+RoundCornersPlugin::RoundCornersPlugin(QObject *parent, const QVariantList &)
 {
     setXMLFile(KStandardDirs::locate("data", "karbon/plugins/RoundCornersPlugin.rc"));
 
@@ -63,7 +63,7 @@ RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)
     actionCollection()->addAction("path_round_corners", actionRoundCorners);
     connect(actionRoundCorners, SIGNAL(triggered()), this, SLOT(slotRoundCorners()));
 
-    m_roundCornersDlg = new RoundCornersDlg(qobject_cast<QWidget*>(parent));
+    m_roundCornersDlg = new RoundCornersDlg(qobject_cast<QWidget *>(parent));
     m_roundCornersDlg->setRadius(10.0);
 }
 
@@ -73,35 +73,38 @@ RoundCornersPlugin::~RoundCornersPlugin()
 
 void RoundCornersPlugin::slotRoundCorners()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
-    if (! shape)
+    KoShape *shape = selection->firstSelectedShape();
+    if (! shape) {
         return;
+    }
 
     // check if we have a path based shape
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
-    if (! path)
+    KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
+    if (! path) {
         return;
+    }
 
     m_roundCornersDlg->setUnit(canvasController->canvas()->unit());
-    if (QDialog::Rejected == m_roundCornersDlg->exec())
+    if (QDialog::Rejected == m_roundCornersDlg->exec()) {
         return;
+    }
 
-    KUndo2Command * cmd = new KUndo2Command(kundo2_i18n("Round Corners"));
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Round Corners"));
 
     // convert to path before if we have a parametric shape
-    KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);
-    if (ps && ps->isParametricShape())
+    KoParameterShape *ps = dynamic_cast<KoParameterShape *>(shape);
+    if (ps && ps->isParametricShape()) {
         new KoParameterToPathCommand(ps, cmd);
+    }
 
     new RoundCornersCommand(path, m_roundCornersDlg->radius(), cmd);
     canvasController->canvas()->addCommand(cmd);
 }
 
-
-RoundCornersDlg::RoundCornersDlg(QWidget* parent, const char* name)
-        : KDialog(parent)
+RoundCornersDlg::RoundCornersDlg(QWidget *parent, const char *name)
+    : KDialog(parent)
 {
     setObjectName(name);
     setModal(true);
@@ -109,9 +112,9 @@ RoundCornersDlg::RoundCornersDlg(QWidget* parent, const char* name)
     setButtons(Ok | Cancel);
 
     // add input:
-    QGroupBox* group = new QGroupBox(i18n("Properties"), this);
+    QGroupBox *group = new QGroupBox(i18n("Properties"), this);
 
-    QHBoxLayout* layout = new QHBoxLayout;
+    QHBoxLayout *layout = new QHBoxLayout;
 
     layout->addWidget(new QLabel(i18n("Radius:")));
     m_radius = new KoUnitDoubleSpinBox(group);

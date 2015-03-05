@@ -23,7 +23,6 @@
 #include "kis_layer.h"
 #include "kis_image.h"
 
-
 KisRecalculateTransformMaskJob::KisRecalculateTransformMaskJob(KisTransformMaskSP mask)
     : m_mask(mask)
 {
@@ -32,7 +31,7 @@ KisRecalculateTransformMaskJob::KisRecalculateTransformMaskJob(KisTransformMaskS
 bool KisRecalculateTransformMaskJob::overrides(const KisSpontaneousJob *_otherJob)
 {
     const KisRecalculateTransformMaskJob *otherJob =
-        dynamic_cast<const KisRecalculateTransformMaskJob*>(_otherJob);
+        dynamic_cast<const KisRecalculateTransformMaskJob *>(_otherJob);
 
     return otherJob && otherJob->m_mask == m_mask;
 }
@@ -43,11 +42,13 @@ void KisRecalculateTransformMaskJob::run()
      * The mask might have been deleted from the layers stack. In
      * such a case, don't try do update it.
      */
-    if (!m_mask->parent()) return;
+    if (!m_mask->parent()) {
+        return;
+    }
 
     m_mask->recaclulateStaticImage();
 
-    KisLayerSP layer = dynamic_cast<KisLayer*>(m_mask->parent().data());
+    KisLayerSP layer = dynamic_cast<KisLayer *>(m_mask->parent().data());
 
     if (!layer) {
         qWarning() << "WARNING: KisRecalculateTransformMaskJob::run() Mask has no parent layer! Skipping projection update!";

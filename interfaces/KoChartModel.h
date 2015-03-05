@@ -20,16 +20,14 @@
 #ifndef KO_CHART_MODEL
 #define KO_CHART_MODEL
 
-
 #include <QHash>
 #include <QVector>
 #include <QtPlugin>
 
-
 class QRect;
 
-
-namespace KoChart {
+namespace KoChart
+{
 
 /**
 * Item data role used to retrieve the string representing the data area
@@ -72,12 +70,12 @@ public:
      * Sets the cell region.
      * \return \c true on success
      */
-    virtual bool setCellRegion(const QString& regionName) = 0;
+    virtual bool setCellRegion(const QString &regionName) = 0;
 
     /**
      * \return \c true if the cell region is valid
      */
-    virtual bool isCellRegionValid(const QString& regionName) const = 0;
+    virtual bool isCellRegionValid(const QString &regionName) const = 0;
 };
 
 } // Namespace KoChart

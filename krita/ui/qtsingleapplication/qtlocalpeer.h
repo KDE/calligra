@@ -34,8 +34,6 @@
 #include <QLocalSocket>
 #include <QDir>
 
-
-
 class QtLocalPeer : public QObject
 {
     Q_OBJECT
@@ -45,7 +43,9 @@ public:
     bool isClient();
     bool sendMessage(const QByteArray &message, int timeout, bool block);
     QString applicationId() const
-        { return id; }
+    {
+        return id;
+    }
     static QString appSessionId(const QString &appId);
 
 Q_SIGNALS:
@@ -57,6 +57,6 @@ protected Q_SLOTS:
 protected:
     QString id;
     QString socketName;
-    QLocalServer* server;
+    QLocalServer *server;
     QtLockedFile lockFile;
 };

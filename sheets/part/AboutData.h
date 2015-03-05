@@ -34,13 +34,13 @@ static const char description[] = I18N_NOOP("Calligra Spreadsheet Application");
 // Always the same as the Calligra version
 static const char version[] = CALLIGRA_VERSION_STRING;
 
-static KAboutData * newAboutData()
+static KAboutData *newAboutData()
 {
-    KAboutData * aboutData = new KAboutData("sheets", 0, ki18nc("application name", "Calligra Sheets"),
-                                            version, ki18n(description), KAboutData::License_LGPL,
-                                            ki18n("© 1998-%1, The Calligra Sheets Team").subs(CALLIGRA_YEAR),
-                                            KLocalizedString(),
-                                            "http://www.calligra.org/sheets/");
+    KAboutData *aboutData = new KAboutData("sheets", 0, ki18nc("application name", "Calligra Sheets"),
+                                           version, ki18n(description), KAboutData::License_LGPL,
+                                           ki18n("© 1998-%1, The Calligra Sheets Team").subs(CALLIGRA_YEAR),
+                                           KLocalizedString(),
+                                           "http://www.calligra.org/sheets/");
     aboutData->setProductName("calligrasheets"); // for bugs.kde.org
     aboutData->setProgramIconName(QLatin1String("calligrasheets"));
     aboutData->addAuthor(ki18n("Torben Weis"), ki18n("Original Author"), "weis@kde.org");
@@ -83,7 +83,7 @@ static KAboutData * newAboutData()
     aboutData->addAuthor(ki18n("Tomas Mecir"), KLocalizedString(), "mecirt@gmail.com");
     aboutData->addAuthor(ki18n("Raphael Langerhorst"), KLocalizedString(), "raphael.langerhorst@kdemail.net");
     aboutData->addAuthor(ki18n("John Tapsell"), KLocalizedString(), "john.tapsell@kdemail.net");
-    aboutData->addAuthor(ki18n("Robert Knight"), KLocalizedString() , "robertknight@gmail.com");
+    aboutData->addAuthor(ki18n("Robert Knight"), KLocalizedString(), "robertknight@gmail.com");
     aboutData->addAuthor(ki18n("Stefan Nikolaus"), KLocalizedString(), "stefan.nikolaus@kdemail.net");
     aboutData->addAuthor(ki18n("Sascha Pfau"), ki18n("Developer (functions)"), "mrpeacock@gmail.com");
     aboutData->addAuthor(ki18n("Brad Hards"),

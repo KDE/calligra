@@ -25,11 +25,9 @@
 #include <QTransform>
 #include "kis_algebra_2d.h"
 
-
-
 struct KisDistanceInformation::Private {
     Private() : lastDabInfoValid(false),
-                lastPaintInfoValid(false) {}
+        lastPaintInfoValid(false) {}
 
     QPointF distance;
     KisSpacingInformation spacing;
@@ -48,7 +46,7 @@ KisDistanceInformation::KisDistanceInformation()
 }
 
 KisDistanceInformation::KisDistanceInformation(const QPointF &lastPosition,
-                                               qreal lastTime)
+        qreal lastTime)
     : m_d(new Private)
 {
     m_d->lastPosition = lastPosition;
@@ -63,7 +61,7 @@ KisDistanceInformation::KisDistanceInformation(const KisDistanceInformation &rhs
 
 }
 
-KisDistanceInformation& KisDistanceInformation::operator=(const KisDistanceInformation &rhs)
+KisDistanceInformation &KisDistanceInformation::operator=(const KisDistanceInformation &rhs)
 {
     *m_d = *rhs.m_d;
     return *this;
@@ -74,7 +72,7 @@ KisDistanceInformation::~KisDistanceInformation()
     delete m_d;
 }
 
-const KisSpacingInformation& KisDistanceInformation::currentSpacing() const
+const KisSpacingInformation &KisDistanceInformation::currentSpacing() const
 {
     return m_d->spacing;
 }
@@ -104,13 +102,13 @@ bool KisDistanceInformation::hasLastPaintInformation() const
     return m_d->lastPaintInfoValid;
 }
 
-const KisPaintInformation& KisDistanceInformation::lastPaintInformation() const
+const KisPaintInformation &KisDistanceInformation::lastPaintInformation() const
 {
     return m_d->lastPaintInformation;
 }
 
 void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,
-                                                const KisSpacingInformation &spacing)
+        const KisSpacingInformation &spacing)
 {
     m_d->lastAngle = info.drawingAngleSafe(*this);
     m_d->lastPaintInformation = info;
@@ -124,15 +122,15 @@ void KisDistanceInformation::registerPaintedDab(const KisPaintInformation &info,
 }
 
 qreal KisDistanceInformation::getNextPointPosition(const QPointF &start,
-                                                   const QPointF &end)
+        const QPointF &end)
 {
     return m_d->spacing.isIsotropic() ?
-        getNextPointPositionIsotropic(start, end) :
-        getNextPointPositionAnisotropic(start, end);
+           getNextPointPositionIsotropic(start, end) :
+           getNextPointPositionAnisotropic(start, end);
 }
 
 qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start,
-                                                            const QPointF &end)
+        const QPointF &end)
 {
     qreal distance = m_d->distance.x();
     qreal spacing = qMax(qreal(0.5), m_d->spacing.spacing().x());
@@ -158,7 +156,7 @@ qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start
 }
 
 qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &start,
-                                                              const QPointF &end)
+        const QPointF &end)
 {
     if (start == end) {
         return -1;

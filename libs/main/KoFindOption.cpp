@@ -33,7 +33,7 @@ public:
 };
 
 KoFindOption::KoFindOption(const QString &name, QObject *parent)
-        : QObject(parent), d(new Private)
+    : QObject(parent), d(new Private)
 {
     d->name = name;
 }

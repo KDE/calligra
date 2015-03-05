@@ -30,23 +30,23 @@ class CACanvasController;
 class CADocumentController : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY (QString documentUri READ documentUri WRITE setDocumentUri NOTIFY documentUriChanged)
-    Q_PROPERTY (CACanvasController* canvasController READ canvasController WRITE setCanvasController NOTIFY canvasControllerChanged)
-    Q_PROPERTY (QString documentTypeName READ documentTypeName NOTIFY documentTypeNameChanged)
-    Q_PROPERTY (CAAbstractDocumentHandler* documentHandler READ documentHandler NOTIFY documentHandlerChanged)
+    Q_PROPERTY(QString documentUri READ documentUri WRITE setDocumentUri NOTIFY documentUriChanged)
+    Q_PROPERTY(CACanvasController *canvasController READ canvasController WRITE setCanvasController NOTIFY canvasControllerChanged)
+    Q_PROPERTY(QString documentTypeName READ documentTypeName NOTIFY documentTypeNameChanged)
+    Q_PROPERTY(CAAbstractDocumentHandler *documentHandler READ documentHandler NOTIFY documentHandlerChanged)
 
 public:
-    explicit CADocumentController (QObject* parent = 0);
+    explicit CADocumentController(QObject *parent = 0);
     virtual ~CADocumentController();
 
-    void setDocumentUri (const QString& uri);
+    void setDocumentUri(const QString &uri);
     QString documentUri() const;
 
-    CACanvasController* canvasController() const;
-    void setCanvasController (CACanvasController* canvasController);
+    CACanvasController *canvasController() const;
+    void setCanvasController(CACanvasController *canvasController);
 
     QString documentTypeName() const;
-    CAAbstractDocumentHandler* documentHandler();
+    CAAbstractDocumentHandler *documentHandler();
 
 Q_SIGNALS:
     void documentUriChanged();
@@ -61,7 +61,7 @@ public Q_SLOTS:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // CADOCUMENTCONTROLLER_H

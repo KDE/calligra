@@ -31,44 +31,44 @@ void GoogleDocumentList::setEtag(const QString  &etag)
     m_etag = etag;
 }
 
-QString GoogleDocumentList::etag ()
+QString GoogleDocumentList::etag()
 {
     return m_etag;
 }
 
-void GoogleDocumentList::setEmail (const QString &email)
+void GoogleDocumentList::setEmail(const QString &email)
 {
     m_email = email;
 }
 
-QString GoogleDocumentList::email ()
+QString GoogleDocumentList::email()
 {
     return m_email;
 }
 
-void GoogleDocumentList::setTitle (const QString &title)
+void GoogleDocumentList::setTitle(const QString &title)
 {
     m_title = title;
 }
 
-QString GoogleDocumentList::title ()
+QString GoogleDocumentList::title()
 {
     return m_title;
 }
 
-void GoogleDocumentList::setAuthor (const QString &author)
+void GoogleDocumentList::setAuthor(const QString &author)
 {
     m_author = author;
 }
 
-QString GoogleDocumentList::author ()
+QString GoogleDocumentList::author()
 {
     return m_author;
 }
 
 void GoogleDocumentList::append(GoogleDocument *entry)
 {
-    if (entry != 0 ) {
+    if (entry != 0) {
         QString iconPath;
         if (QString::compare(entry->documentType(), "document", Qt::CaseInsensitive) == 0) {
             iconPath = ":/images/document.png";

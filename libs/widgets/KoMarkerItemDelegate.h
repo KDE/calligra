@@ -32,7 +32,7 @@ public:
     virtual ~KoMarkerItemDelegate();
 
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 private:
     KoMarkerData::MarkerPosition m_position;
 };

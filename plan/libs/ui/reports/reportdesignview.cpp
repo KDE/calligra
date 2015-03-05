@@ -18,7 +18,6 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-
 #include "kexireportdesignview.h"
 #include <core/MainWindowIface.h>
 #include <kdebug.h>
@@ -31,66 +30,71 @@
 namespace KPlato
 {
 
-ReportDesignView::ReportDesignView ( QWidget *parent, ReportEntitySelector* r , SourceSelector *s)
-        : View ( parent ) {
-    scr = new QScrollArea ( this );
-    layout()->addWidget ( scr );
+ReportDesignView::ReportDesignView(QWidget *parent, ReportEntitySelector *r, SourceSelector *s)
+    : View(parent)
+{
+    scr = new QScrollArea(this);
+    layout()->addWidget(scr);
     res = r;
     srcsel = s;
-    
+
     _rd = 0;
 
     editCutAction = new KAction(koIcon("edit-cut"), i18n("Cut"), this);
-    editCutAction->setObjectName ( "editcut" );
+    editCutAction->setObjectName("editcut");
     editCopyAction = new KAction(koIcon("edit-copy"), i18n("Copy"), this);
-    editCopyAction->setObjectName ( "editcopy" );
+    editCopyAction->setObjectName("editcopy");
     editPasteAction = new KAction(koIcon("edit-paste"), i18n("Paste"), this);
-    editPasteAction->setObjectName ( "editpaste" );
+    editPasteAction->setObjectName("editpaste");
     editDeleteAction = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
-    editDeleteAction->setObjectName ( "editdelete" );
+    editDeleteAction->setObjectName("editdelete");
 
-    sectionEdit = new KAction ( i18n ( "Section Editor" ), this );
-    sectionEdit->setObjectName ( "sectionedit" );
+    sectionEdit = new KAction(i18n("Section Editor"), this);
+    sectionEdit->setObjectName("sectionedit");
 
     itemRaiseAction = new KAction(koIcon("arrow-up"), i18n("Raise"), this);
-    itemRaiseAction->setObjectName ( "itemraise" );
+    itemRaiseAction->setObjectName("itemraise");
     itemLowerAction = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
-    itemLowerAction->setObjectName ( "itemlower" );
+    itemLowerAction->setObjectName("itemlower");
     //parameterEdit = new KAction ( i18n ( "Parameter Editor" ), this );
     //parameterEdit->setObjectName("parameteredit");
-    QList<QAction*> al;
-    KAction *sep = new KAction ( "", this );
-    sep->setSeparator ( true );
+    QList<QAction *> al;
+    KAction *sep = new KAction("", this);
+    sep->setSeparator(true);
 
     al << editCutAction << editCopyAction << editPasteAction << editDeleteAction << sep << sectionEdit << sep << itemLowerAction << itemRaiseAction;
-    setViewActions ( al );
+    setViewActions(al);
 
 }
 
-ReportDesignView::~ReportDesignView() {
+ReportDesignView::~ReportDesignView()
+{
 }
 
-KoProperty::Set *ReportDesignView::propertySet() {
+KoProperty::Set *ReportDesignView::propertySet()
+{
     return _rd->itemPropertySet();
 }
 
-void ReportDesignView::slotDesignerPropertySetChanged() {
-    propertySetReloaded ( true );
+void ReportDesignView::slotDesignerPropertySetChanged()
+{
+    propertySetReloaded(true);
     propertySetSwitched();
 }
 
-DB::SchemaData* ReportDesignView::storeNewData ( const DB::SchemaData& sdata, bool &cancel ) {
-    DB::SchemaData *s = View::storeNewData ( sdata, cancel );
+DB::SchemaData *ReportDesignView::storeNewData(const DB::SchemaData &sdata, bool &cancel)
+{
+    DB::SchemaData *s = View::storeNewData(sdata, cancel);
     kexipluginsdbg << "new id:" << s->id();
 
-    if ( !s || cancel ) {
+    if (!s || cancel) {
         delete s;
         return 0;
     }
-    if ( !storeData() ) {
+    if (!storeData()) {
         //failure: remove object's schema data to avoid garbage
         DB::Connection *conn = MainWindowIface::global()->project()->dbConnection();
-        conn->removeObject ( s->id() );
+        conn->removeObject(s->id());
         delete s;
         return 0;
     }
@@ -98,27 +102,29 @@ DB::SchemaData* ReportDesignView::storeNewData ( const DB::SchemaData& sdata, bo
 
 }
 
-tristate ReportDesignView::storeData ( bool dontAsk ) {
+tristate ReportDesignView::storeData(bool dontAsk)
+{
 
-    QDomDocument doc ( "pgz_kexireport" );
-    QDomElement root = doc.createElement ( "report" );
+    QDomDocument doc("pgz_kexireport");
+    QDomElement root = doc.createElement("report");
     QDomElement conndata = srcsel->connectionData();
 
-    if (conndata.isNull())
+    if (conndata.isNull()) {
         kDebug(planDbg()) << "Null conn data!";
-    
-    root.appendChild ( _rd->document() );
+    }
+
+    root.appendChild(_rd->document());
     root.appendChild(conndata);
-    doc.appendChild ( root );
+    doc.appendChild(root);
 
     QString src  = doc.toString();
     kDebug(planDbg()) << src;
 
     DB::Connection *conn = MainWindowIface::global()->project()->dbConnection();
 
-    if ( storeDataBlock ( src, "pgzreport_layout" ) ) {
+    if (storeDataBlock(src, "pgzreport_layout")) {
         kDebug(planDbg()) << "Saved OK";
-        setDirty ( false );
+        setDirty(false);
         return true;
     } else {
         kDebug(planDbg()) << "NOT Saved OK";
@@ -127,34 +133,36 @@ tristate ReportDesignView::storeData ( bool dontAsk ) {
     return false;
 }
 
-tristate ReportDesignView::beforeSwitchTo ( ::ViewMode mode, bool &dontStore ) {
+tristate ReportDesignView::beforeSwitchTo(::ViewMode mode, bool &dontStore)
+{
     kDebug(planDbg()) << mode;
     dontStore = true;
-    if ( _rd && mode == ::DataViewMode ) {
+    if (_rd && mode == ::DataViewMode) {
         tempData()->reportDefinition = _rd->document();
         tempData()->reportSchemaChangedInPreviousView = true;
     }
     return true;
 }
 
-tristate ReportDesignView::afterSwitchFrom ( ::ViewMode mode ) {
+tristate ReportDesignView::afterSwitchFrom(::ViewMode mode)
+{
     kDebug(planDbg()) << tempData()->document;
-    if ( tempData()->document.isEmpty() ) {
-        _rd = new ReportDesigner ( this );
+    if (tempData()->document.isEmpty()) {
+        _rd = new ReportDesigner(this);
     } else {
-        if ( _rd ) {
+        if (_rd) {
             scr->takeWidget();
             delete _rd;
             _rd = 0;
         }
 
         QDomDocument doc;
-        doc.setContent ( tempData()->document );
+        doc.setContent(tempData()->document);
         QDomElement root = doc.documentElement();
-        QDomElement korep = root.firstChildElement( "koreport" );
-        QDomElement conn = root.firstChildElement( "connection" );
-        if ( !korep.isNull() ) {
-            _rd = new ReportDesigner ( this, korep );
+        QDomElement korep = root.firstChildElement("koreport");
+        QDomElement conn = root.firstChildElement("connection");
+        if (!korep.isNull()) {
+            _rd = new ReportDesigner(this, korep);
             if (!conn.isNull()) {
                 srcsel->setConnectionData(conn);
             }
@@ -164,51 +172,53 @@ tristate ReportDesignView::afterSwitchFrom ( ::ViewMode mode ) {
             //TODO remove...just create a blank document
             //Temp - allow load old style report definitions (no data)
             root.setTagName("koreport");
-            _rd = new ReportDesigner ( this, root );
+            _rd = new ReportDesigner(this, root);
         }
     }
 
-    scr->setWidget ( _rd );
+    scr->setWidget(_rd);
 
     //plugSharedAction ( "edit_copy", _rd, SLOT(slotEditCopy()) );
     //plugSharedAction ( "edit_cut", _rd, SLOT(slotEditCut()) );
     //plugSharedAction ( "edit_paste", _rd, SLOT(slotEditPaste()) );
     //plugSharedAction ( "edit_delete", _rd, SLOT(slotEditDelete()) );
 
-    connect ( _rd, SIGNAL(propertySetChanged()), this, SLOT(slotDesignerPropertySetChanged()) );
-    connect ( _rd, SIGNAL(dirty()), this, SLOT(setDirty()) );
+    connect(_rd, SIGNAL(propertySetChanged()), this, SLOT(slotDesignerPropertySetChanged()));
+    connect(_rd, SIGNAL(dirty()), this, SLOT(setDirty()));
 
     //Edit Actions
-    connect ( editCutAction, SIGNAL(activated()), _rd, SLOT(slotEditCut()) );
-    connect ( editCopyAction, SIGNAL(activated()), _rd, SLOT(slotEditCopy()) );
-    connect ( editPasteAction, SIGNAL(activated()), _rd, SLOT(slotEditPaste()) );
-    connect ( editDeleteAction, SIGNAL(activated()), _rd, SLOT(slotEditDelete()) );
+    connect(editCutAction, SIGNAL(activated()), _rd, SLOT(slotEditCut()));
+    connect(editCopyAction, SIGNAL(activated()), _rd, SLOT(slotEditCopy()));
+    connect(editPasteAction, SIGNAL(activated()), _rd, SLOT(slotEditPaste()));
+    connect(editDeleteAction, SIGNAL(activated()), _rd, SLOT(slotEditDelete()));
 
-    connect ( sectionEdit, SIGNAL(activated()), _rd, SLOT(slotSectionEditor()) );
+    connect(sectionEdit, SIGNAL(activated()), _rd, SLOT(slotSectionEditor()));
 
     //Control Actions
-    connect ( res->itemLabel, SIGNAL(clicked()), this, SLOT(slotLabel()) );
-    connect ( res->itemField, SIGNAL(clicked()), this, SLOT(slotField()) );
-    connect ( res->itemText, SIGNAL(clicked()), this, SLOT(slotText()) );
-    connect ( res->itemLine, SIGNAL(clicked()), this, SLOT(slotLine()) );
-    connect ( res->itemBarcode, SIGNAL(clicked()), this, SLOT(slotBarcode()) );
-    connect ( res->itemChart, SIGNAL(clicked()),this, SLOT(slotChart()) );
-    connect ( res->itemImage, SIGNAL(clicked()), this, SLOT(slotImage()) );
-    connect ( res->itemShape, SIGNAL(clicked()), this, SLOT(slotShape()) );
-    connect ( res->itemCheck, SIGNAL(clicked()), this, SLOT(slotCheck()) );
+    connect(res->itemLabel, SIGNAL(clicked()), this, SLOT(slotLabel()));
+    connect(res->itemField, SIGNAL(clicked()), this, SLOT(slotField()));
+    connect(res->itemText, SIGNAL(clicked()), this, SLOT(slotText()));
+    connect(res->itemLine, SIGNAL(clicked()), this, SLOT(slotLine()));
+    connect(res->itemBarcode, SIGNAL(clicked()), this, SLOT(slotBarcode()));
+    connect(res->itemChart, SIGNAL(clicked()), this, SLOT(slotChart()));
+    connect(res->itemImage, SIGNAL(clicked()), this, SLOT(slotImage()));
+    connect(res->itemShape, SIGNAL(clicked()), this, SLOT(slotShape()));
+    connect(res->itemCheck, SIGNAL(clicked()), this, SLOT(slotCheck()));
 
     //Raise/Lower
-    connect ( itemRaiseAction, SIGNAL(activated()), _rd, SLOT(slotRaiseSelected()) );
-    connect ( itemLowerAction, SIGNAL(activated()), _rd, SLOT(slotLowerSelected()) );
+    connect(itemRaiseAction, SIGNAL(activated()), _rd, SLOT(slotRaiseSelected()));
+    connect(itemLowerAction, SIGNAL(activated()), _rd, SLOT(slotLowerSelected()));
     return true;
 }
 
-ReportPart::TempData* ReportDesignView::tempData() const {
-    return static_cast<ReportPart::TempData*> ( window()->data() );
+ReportPart::TempData *ReportDesignView::tempData() const
+{
+    return static_cast<ReportPart::TempData *>(window()->data());
 }
 
-void ReportDesignView::slotSetData ( KoReportData* kodata ) {
-    _rd->setReportData ( kodata );
+void ReportDesignView::slotSetData(KoReportData *kodata)
+{
+    _rd->setReportData(kodata);
 }
 
 } //namespace KPlato

@@ -33,7 +33,7 @@
  * @see KoTextEditingFactory
  * @see KoTextEditingPlugin
  */
-class KOTEXT_EXPORT KoTextEditingRegistry : public KoGenericRegistry<KoTextEditingFactory*>
+class KOTEXT_EXPORT KoTextEditingRegistry : public KoGenericRegistry<KoTextEditingFactory *>
 {
 public:
     /**

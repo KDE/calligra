@@ -42,16 +42,16 @@ class KisLockedPropertiesServer;
 class KisLockedPropertiesProxy: public KisPropertiesConfiguration
 {
 public:
-    KisLockedPropertiesProxy() ;
-    KisLockedPropertiesProxy(KisLockedProperties* p);
+    KisLockedPropertiesProxy();
+    KisLockedPropertiesProxy(KisLockedProperties *p);
     KisLockedPropertiesProxy(const KisPropertiesConfiguration *, KisLockedProperties *);
     using KisPropertiesConfiguration::getProperty;
     QVariant getProperty(const QString &name) const;
     using KisPropertiesConfiguration::setProperty;
-    void setProperty(const QString & name, const QVariant & value);
+    void setProperty(const QString &name, const QVariant &value);
 private:
-    KisLockedProperties* m_lockedProperties;
-    const KisPropertiesConfiguration* m_parent;
+    KisLockedProperties *m_lockedProperties;
+    const KisPropertiesConfiguration *m_parent;
 };
 
 #endif // KIS_LOCKED_PROPERTIES_PROXY_H

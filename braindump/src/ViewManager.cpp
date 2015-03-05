@@ -29,50 +29,52 @@
 #include "RootSection.h"
 #include "Utils.h"
 
-ViewManager::ViewManager(RootSection* _rootSection) : m_lastViewInFocus(0), m_rootSection(_rootSection)
+ViewManager::ViewManager(RootSection *_rootSection) : m_lastViewInFocus(0), m_rootSection(_rootSection)
 {
 }
 
-void ViewManager::addShape(Section* section, KoShape* shape)
+void ViewManager::addShape(Section *section, KoShape *shape)
 {
-    if(!shape)
-        return;
-    if(!section) {
+    if (!shape) {
         return;
     }
-    foreach(View * view, m_views) {
-        if(section == view->activeSection()) {
+    if (!section) {
+        return;
+    }
+    foreach (View *view, m_views) {
+        if (section == view->activeSection()) {
             view->canvas()->shapeManager()->addShape(shape);
         }
     }
 }
 
-void ViewManager::removeShape(Section* section, KoShape* shape)
+void ViewManager::removeShape(Section *section, KoShape *shape)
 {
-    if(!shape)
-        return;
-    if(!section) {
+    if (!shape) {
         return;
     }
-    foreach(View * view, m_views) {
-        if(section == view->activeSection()) {
+    if (!section) {
+        return;
+    }
+    foreach (View *view, m_views) {
+        if (section == view->activeSection()) {
             view->canvas()->shapeManager()->remove(shape);
         }
     }
 }
 
-void ViewManager::addView(View* view)
+void ViewManager::addView(View *view)
 {
     Q_ASSERT(!m_views.contains(view));
     m_views.append(view);
 }
-void ViewManager::removeView(View* view)
+void ViewManager::removeView(View *view)
 {
     Q_ASSERT(m_views.contains(view));
     m_views.removeAll(view);
 }
 
-void ViewManager::viewHasFocus(View* view)
+void ViewManager::viewHasFocus(View *view)
 {
     m_lastViewInFocus = view;
 }

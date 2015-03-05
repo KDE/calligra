@@ -25,9 +25,8 @@ void KisAnnotationTest::testCreation()
 {
     QString s("Test");
     QByteArray b("test");
-    KisAnnotation test(s,s,b);
+    KisAnnotation test(s, s, b);
 }
-
 
 QTEST_KDEMAIN(KisAnnotationTest, GUI)
 #include "kis_annotation_test.moc"

@@ -32,7 +32,6 @@ class KisCustomBrushWidget;
 class KisClipboardBrushWidget;
 class KisBrush;
 
-
 /**
  * Compound widget that collects all the various brush selection widgets.
  */
@@ -41,7 +40,7 @@ class PAINTOP_EXPORT KisBrushSelectionWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisBrushSelectionWidget(QWidget * parent = 0);
+    KisBrushSelectionWidget(QWidget *parent = 0);
 
     ~KisBrushSelectionWidget();
 
@@ -59,12 +58,13 @@ public:
 
     void setBrushSize(qreal dxPixels, qreal dyPixels);
     QSizeF brushSize() const;
-    bool presetIsValid() {
+    bool presetIsValid()
+    {
         return m_presetIsValid;
     }
 
-    void writeOptionSetting(KisPropertiesConfiguration* settings) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *settings) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
     void setPrecisionEnabled(bool value);
     bool autoPrecisionEnabled();
@@ -82,8 +82,8 @@ private Q_SLOTS:
     void setDeltaValue(double value);
 
 private:
-    void setCurrentWidget(QWidget * widget);
-    void addChooser(const QString & text, QWidget * widget, int id, KoGroupButton::GroupPosition pos);
+    void setCurrentWidget(QWidget *widget);
+    void addChooser(const QString &text, QWidget *widget, int id, KoGroupButton::GroupPosition pos);
 
 private:
     enum Type {
@@ -97,17 +97,17 @@ private:
     bool m_presetIsValid;
 
     Ui_WdgBrushChooser uiWdgBrushChooser;
-    QGridLayout * m_layout;
-    QWidget * m_currentBrushWidget;
-    QHash<int, QWidget*> m_chooserMap;
-    QButtonGroup * m_buttonGroup;
+    QGridLayout *m_layout;
+    QWidget *m_currentBrushWidget;
+    QHash<int, QWidget *> m_chooserMap;
+    QButtonGroup *m_buttonGroup;
     QSize m_mininmumSize;
 
-    KisAutoBrushWidget * m_autoBrushWidget;
-    KisBrushChooser * m_brushChooser;
-    KisTextBrushChooser * m_textBrushWidget;
-    KisCustomBrushWidget * m_customBrushWidget;
-    KisClipboardBrushWidget* m_clipboardBrushWidget;
+    KisAutoBrushWidget *m_autoBrushWidget;
+    KisBrushChooser *m_brushChooser;
+    KisTextBrushChooser *m_textBrushWidget;
+    KisCustomBrushWidget *m_customBrushWidget;
+    KisClipboardBrushWidget *m_clipboardBrushWidget;
 
     KisPrecisionOption m_precisionOption;
 };

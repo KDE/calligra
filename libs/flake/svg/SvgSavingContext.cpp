@@ -64,7 +64,7 @@ public:
     KoXmlWriter *shapeWriter;
 
     QHash<QString, int> uniqueNames;
-    QHash<const KoShape*, QString> shapeIds;
+    QHash<const KoShape *, QString> shapeIds;
     QTransform userSpaceMatrix;
     bool saveInlineImages;
 };
@@ -99,7 +99,7 @@ QString SvgSavingContext::createUID(const QString &base)
 {
     QString idBase = base.isEmpty() ? "defitem" : base;
     int counter = d->uniqueNames.value(idBase);
-    d->uniqueNames.insert(idBase, counter+1);
+    d->uniqueNames.insert(idBase, counter + 1);
 
     return idBase + QString("%1").arg(counter);
 }
@@ -122,12 +122,13 @@ QString SvgSavingContext::getID(const KoShape *obj)
         } else {
             if (id.isEmpty()) {
                 // differentiate a little between shape types
-                if (dynamic_cast<const KoShapeGroup*>(obj))
+                if (dynamic_cast<const KoShapeGroup *>(obj)) {
                     id = "group";
-                else if (dynamic_cast<const KoShapeLayer*>(obj))
+                } else if (dynamic_cast<const KoShapeLayer *>(obj)) {
                     id = "layer";
-                else
+                } else {
                     id = "shape";
+                }
             }
             // create a compeletely new id based on object name
             // or a generic name
@@ -151,9 +152,10 @@ bool SvgSavingContext::isSavingInlineImages() const
 
 QString SvgSavingContext::createFileName(const QString &extension)
 {
-    QFile *file = qobject_cast<QFile*>(&d->output);
-    if (!file)
+    QFile *file = qobject_cast<QFile *>(&d->output);
+    if (!file) {
         return QString();
+    }
 
     // get url of destination directory
     KUrl url(file->fileName());
@@ -165,8 +167,9 @@ QString SvgSavingContext::createFileName(const QString &extension)
     // check if file exists already
     int i = 0;
     // change filename as long as the filename already exists
-    while (KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, 0))
+    while (KIO::NetAccess::exists(url, KIO::NetAccess::DestinationSide, 0)) {
         url.setFileName(fname + QString("_%1").arg(++i) + extension);
+    }
 
     return url.fileName();
 }
@@ -192,17 +195,19 @@ QString SvgSavingContext::saveImage(const QImage &image)
             // get extension from mimetype
             QString ext;
             QStringList patterns = mimeType->patterns();
-            if (patterns.count())
+            if (patterns.count()) {
                 ext = patterns.first().mid(1);
+            }
 
             QString dstFilename = createFileName(ext);
 
             // move the temp file to the destination directory
-            KIO::Job * job = KIO::move(KUrl(imgFile.fileName()), KUrl(dstFilename));
-            if (job && KIO::NetAccess::synchronousRun(job, 0))
+            KIO::Job *job = KIO::move(KUrl(imgFile.fileName()), KUrl(dstFilename));
+            if (job && KIO::NetAccess::synchronousRun(job, 0)) {
                 return dstFilename;
-            else
+            } else {
                 KIO::NetAccess::removeTempFile(imgFile.fileName());
+            }
         }
     }
 
@@ -230,17 +235,19 @@ QString SvgSavingContext::saveImage(KoImageData *image)
             // get extension from mimetype
             QString ext;
             QStringList patterns = mimeType->patterns();
-            if (patterns.count())
+            if (patterns.count()) {
                 ext = patterns.first().mid(1);
+            }
 
             QString dstFilename = createFileName(ext);
 
             // move the temp file to the destination directory
-            KIO::Job * job = KIO::move(KUrl(imgFile.fileName()), KUrl(dstFilename));
-            if (job && KIO::NetAccess::synchronousRun(job, 0))
+            KIO::Job *job = KIO::move(KUrl(imgFile.fileName()), KUrl(dstFilename));
+            if (job && KIO::NetAccess::synchronousRun(job, 0)) {
                 return dstFilename;
-            else
+            } else {
                 KIO::NetAccess::removeTempFile(imgFile.fileName());
+            }
         }
     }
     return QString();

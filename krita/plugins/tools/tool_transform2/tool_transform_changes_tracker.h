@@ -24,7 +24,6 @@
 #include "tool_transform_args.h"
 #include "transform_transaction_properties.h"
 
-
 /**
  * This class is supposed to support undo operations for the Transform
  * Tool. Note, that the transform tool is not going to support redo()

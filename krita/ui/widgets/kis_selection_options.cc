@@ -38,10 +38,10 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     m_page = new WdgSelectionOptions(this);
     Q_CHECK_PTR(m_page);
 
-    QVBoxLayout * l = new QVBoxLayout(this);
+    QVBoxLayout *l = new QVBoxLayout(this);
     l->addWidget(m_page);
-    l->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Preferred, QSizePolicy::Expanding));
-    l->setContentsMargins(0,0,0,0);
+    l->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Preferred, QSizePolicy::Expanding));
+    l->setContentsMargins(0, 0, 0, 0);
 
     m_mode = new QButtonGroup(this);
     m_mode->addButton(m_page->pixel, PIXEL_SELECTION);
@@ -95,10 +95,13 @@ int KisSelectionOptions::action()
     return m_action->checkedId();
 }
 
-void KisSelectionOptions::setAction(int action) {
-    QAbstractButton* button = m_action->button(action);
+void KisSelectionOptions::setAction(int action)
+{
+    QAbstractButton *button = m_action->button(action);
     Q_ASSERT(button);
-    if(button) button->setChecked(true);
+    if (button) {
+        button->setChecked(true);
+    }
 }
 
 bool KisSelectionOptions::antiAliasSelection()

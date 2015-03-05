@@ -26,7 +26,7 @@
 #include <kmessagebox.h>
 
 KexiGUIMessageHandler::KexiGUIMessageHandler(QWidget *parent)
-        : KexiDB::MessageHandler(parent)
+    : KexiDB::MessageHandler(parent)
 {
 }
 
@@ -35,7 +35,7 @@ KexiGUIMessageHandler::~KexiGUIMessageHandler()
 }
 
 void
-KexiGUIMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, const QString& msg)
+KexiGUIMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, const QString &msg)
 {
     QString _msg(msg);
     if (!obj) {
@@ -60,7 +60,7 @@ KexiGUIMessageHandler::showSorryMessage(const QString &title, const QString &det
 }
 
 void KexiGUIMessageHandler::showErrorMessage(const QString &msg, const QString &details,
-                                             KexiDB::Object *obj)
+        KexiDB::Object *obj)
 {
     QString _msg(msg);
     if (!obj) {
@@ -106,17 +106,19 @@ KexiGUIMessageHandler::showErrorMessage(const QString &message, Kexi::ObjectStat
 
 void
 KexiGUIMessageHandler::showMessage(MessageType type,
-                                   const QString &title, const QString &details, const QString& dontShowAgainName)
+                                   const QString &title, const QString &details, const QString &dontShowAgainName)
 {
-    if (!m_enableMessages)
+    if (!m_enableMessages) {
         return;
+    }
 
     //'wait' cursor is a nonsense now
     KexiUtils::removeWaitCursor();
 
     QString msg(title);
-    if (title.isEmpty())
+    if (title.isEmpty()) {
         msg = i18n("Unknown error");
+    }
     msg = "<qt><p>" + msg + "</p>";
     if (!details.isEmpty()) {
         switch (type) {
@@ -136,10 +138,11 @@ KexiGUIMessageHandler::showMessage(MessageType type,
 }
 
 void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, const QString &details,
-        const QString& dontShowAgainName)
+        const QString &dontShowAgainName)
 {
-    if (!KMessageBox::shouldBeShownContinue(dontShowAgainName))
+    if (!KMessageBox::shouldBeShownContinue(dontShowAgainName)) {
         return;
+    }
     KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
                                        title + (details.isEmpty() ? QString() : (QString("\n") + details)),
                                        QString(),
@@ -149,20 +152,19 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
                                        KMessageBox::Notify | KMessageBox::AllowLink);
 }
 
-int KexiGUIMessageHandler::askQuestionInternal(const QString& message,
-                                               KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-                                               const KGuiItem &buttonYes,
-                                               const KGuiItem &buttonNo,
-                                               const QString &dontShowAskAgainName,
-                                               KMessageBox::Options options)
+int KexiGUIMessageHandler::askQuestionInternal(const QString &message,
+        KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+        const KGuiItem &buttonYes,
+        const KGuiItem &buttonNo,
+        const QString &dontShowAskAgainName,
+        KMessageBox::Options options)
 {
     Q_UNUSED(defaultResult);
     if (KMessageBox::WarningContinueCancel == dlgType) {
         return KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
                 message, QString(), buttonYes, KStandardGuiItem::cancel(),
                 dontShowAskAgainName, options);
-    }
-    else {
+    } else {
         return KMessageBox::messageBox(m_messageHandlerParentWidget,
                                        dlgType, message, QString(), buttonYes, buttonNo, KStandardGuiItem::cancel(),
                                        dontShowAskAgainName, options);

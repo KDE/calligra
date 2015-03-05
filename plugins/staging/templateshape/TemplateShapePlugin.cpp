@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "TemplateShapePlugin.h"
 
@@ -33,18 +32,16 @@
 #include "TemplateShapeFactory.h"
 #include "TemplateToolFactory.h"
 
-
 K_PLUGIN_FACTORY(TemplateShapePluginFactory, registerPlugin<TemplateShapePlugin>();)
 K_EXPORT_PLUGIN(TemplateShapePluginFactory("calligra_shape_template"))
 
 TemplateShapePlugin::TemplateShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new TemplateShapeFactory() );
+    KoShapeRegistry::instance()->add(new TemplateShapeFactory());
 
     // Template: Disable this if you don't need editing.
-    KoToolRegistry::instance()->add( new TemplateToolFactory() );
+    KoToolRegistry::instance()->add(new TemplateToolFactory());
 }
-
 
 #include <TemplateShapePlugin.moc>

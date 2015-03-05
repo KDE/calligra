@@ -31,20 +31,20 @@
 
 using namespace MusicCore;
 
-AddPartCommand::AddPartCommand(MusicShape* shape)
+AddPartCommand::AddPartCommand(MusicShape *shape)
     : m_sheet(shape->sheet()),
-    m_shape(shape)
+      m_shape(shape)
 {
     setText(kundo2_i18n("Add part"));
     m_part = new Part(m_sheet, i18n("Part %1").arg(m_sheet->partCount() + 1));
-    Staff* s = m_part->addStaff();
+    Staff *s = m_part->addStaff();
     m_part->sheet()->bar(0)->addStaffElement(new Clef(s, 0, Clef::GClef, 2));
     // figure out time signature
     if (m_sheet->partCount() == 0) {
         m_part->sheet()->bar(0)->addStaffElement(new TimeSignature(s, 0, 4, 4));
     } else {
-        Staff* curStaff = m_sheet->part(0)->staff(0);
-        TimeSignature* ts = curStaff->lastTimeSignatureChange(0);
+        Staff *curStaff = m_sheet->part(0)->staff(0);
+        TimeSignature *ts = curStaff->lastTimeSignatureChange(0);
         if (!ts) {
             m_part->sheet()->bar(0)->addStaffElement(new TimeSignature(s, 0, 4, 4));
         } else {

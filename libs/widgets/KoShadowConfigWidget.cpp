@@ -70,7 +70,7 @@ KoShadowConfigWidget::KoShadowConfigWidget(QWidget *parent)
 
     connect(d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(applyChanges()));
     connect(d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(visibilityChanged()));
-    connect(d->actionShadowColor, SIGNAL(colorChanged(const KoColor&)), this, SLOT(applyChanges()));
+    connect(d->actionShadowColor, SIGNAL(colorChanged(KoColor)), this, SLOT(applyChanges()));
     connect(d->widget.shadowAngle, SIGNAL(valueChanged(int)), this, SLOT(applyChanges()));
     connect(d->widget.shadowOffset, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
     connect(d->widget.shadowBlur, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
@@ -86,7 +86,7 @@ void KoShadowConfigWidget::setShadowColor(const QColor &color)
     d->widget.shadowColor->blockSignals(true);
     d->actionShadowColor->blockSignals(true);
 
-    d->actionShadowColor->setCurrentColor( color );
+    d->actionShadowColor->setCurrentColor(color);
 
     d->actionShadowColor->blockSignals(false);
     d->widget.shadowColor->blockSignals(false);
@@ -99,10 +99,10 @@ QColor KoShadowConfigWidget::shadowColor() const
 
 void KoShadowConfigWidget::setShadowOffset(const QPointF &offset)
 {
-    qreal length = sqrt(offset.x()*offset.x() + offset.y()*offset.y());
+    qreal length = sqrt(offset.x() * offset.x() + offset.y() * offset.y());
     qreal angle = atan2(-offset.y(), offset.x());
     if (angle < 0.0) {
-        angle += 2*M_PI;
+        angle += 2 * M_PI;
     }
 
     d->widget.shadowAngle->blockSignals(true);
@@ -149,17 +149,17 @@ bool KoShadowConfigWidget::shadowVisible() const
 
 void KoShadowConfigWidget::visibilityChanged()
 {
-    d->widget.shadowAngle->setEnabled( d->widget.shadowVisible->isChecked() );
-    d->widget.shadowBlur->setEnabled( d->widget.shadowVisible->isChecked() );
-    d->widget.shadowColor->setEnabled( d->widget.shadowVisible->isChecked() );
-    d->widget.shadowOffset->setEnabled( d->widget.shadowVisible->isChecked() );
+    d->widget.shadowAngle->setEnabled(d->widget.shadowVisible->isChecked());
+    d->widget.shadowBlur->setEnabled(d->widget.shadowVisible->isChecked());
+    d->widget.shadowColor->setEnabled(d->widget.shadowVisible->isChecked());
+    d->widget.shadowOffset->setEnabled(d->widget.shadowVisible->isChecked());
 }
 
 void KoShadowConfigWidget::applyChanges()
 {
     if (d->canvas) {
         KoSelection *selection = d->canvas->shapeManager()->selection();
-        KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
+        KoShape *shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
         if (! shape) {
             return;
         }
@@ -180,7 +180,7 @@ void KoShadowConfigWidget::selectionChanged()
     }
 
     KoSelection *selection = d->canvas->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
+    KoShape *shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
 
     setEnabled(shape != 0);
 
@@ -189,7 +189,7 @@ void KoShadowConfigWidget::selectionChanged()
         return;
     }
 
-    KoShapeShadow * shadow = shape->shadow();
+    KoShapeShadow *shadow = shape->shadow();
     if (! shadow) {
         setShadowVisible(false);
         return;
@@ -209,8 +209,8 @@ void KoShadowConfigWidget::setCanvas(KoCanvasBase *canvas)
 
     setUnit(canvas->unit());
 
-    connect( d->canvas->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
-             this, SLOT( resourceChanged( int, const QVariant& ) ) );
+    connect(d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(resourceChanged(int,QVariant)));
 }
 
 void KoShadowConfigWidget::setUnit(const KoUnit &unit)
@@ -223,9 +223,9 @@ void KoShadowConfigWidget::setUnit(const KoUnit &unit)
     d->widget.shadowBlur->blockSignals(false);
 }
 
-void KoShadowConfigWidget::resourceChanged( int key, const QVariant & res )
+void KoShadowConfigWidget::resourceChanged(int key, const QVariant &res)
 {
-    if( key == KoCanvasResourceManager::Unit ) {
+    if (key == KoCanvasResourceManager::Unit) {
         setUnit(res.value<KoUnit>());
     }
 }

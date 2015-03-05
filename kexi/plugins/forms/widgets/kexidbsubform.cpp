@@ -34,7 +34,7 @@
 #include <QSet>
 
 KexiDBSubForm::KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent)
-        : QScrollArea(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
+    : QScrollArea(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
 {
     setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     QPalette pal(viewport()->palette());
@@ -70,8 +70,9 @@ KexiDBSubForm::paintEvent(QPaintEvent *ev)
 void
 KexiDBSubForm::setFormName(const QString &name)
 {
-    if (m_formName == name)
+    if (m_formName == name) {
         return;
+    }
 
     m_formName = name; //assign, even if the name points to nowhere
 
@@ -93,20 +94,22 @@ KexiDBSubForm::setFormName(const QString &name)
             }
             names.insert(pw->objectName());
         } else if (! view && KexiUtils::objectIsA(pw, "KexiFormView")) {
-            view = static_cast<KexiFormView*>(pw); // we need a KexiFormView*
+            view = static_cast<KexiFormView *>(pw); // we need a KexiFormView*
         }
         pw = pw->parentWidget();
     }
 
-    if (!view || !view->window() || !KexiMainWindowIface::global()->project()->dbConnection())
+    if (!view || !view->window() || !KexiMainWindowIface::global()->project()->dbConnection()) {
         return;
+    }
 
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 
     // we check if there is a form with this name
     int id = KexiDB::idForObjectName(*conn, name, KexiPart::FormObjectType);
-    if ((id == 0) || (id == view->window()->id())) // == our form
-        return; // because of recursion when loading
+    if ((id == 0) || (id == view->window()->id())) { // == our form
+        return;    // because of recursion when loading
+    }
 
     // we create the container widget
     delete m_widget;
@@ -121,8 +124,9 @@ KexiDBSubForm::setFormName(const QString &name)
     // and load the sub form
     QString data;
     tristate res = conn->loadDataBlock(id, data, QString());
-    if (res == true)
+    if (res == true) {
         res = KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
+    }
     if (res != true) {
         delete m_widget;
         m_widget = 0;

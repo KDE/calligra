@@ -27,7 +27,6 @@
 #include "abr_struct_parser.h"
 #include "kis_abr_translator.h"
 
-
 AbrStructParser::AbrStructParser()
 {
     m_types.insert(PATT, P_PATT);
@@ -60,7 +59,7 @@ QString AbrStructParser::p_tdta(QDataStream &buf)
     quint32 size;
     buf >> size;
 
-    ushort * text = new ushort[size];
+    ushort *text = new ushort[size];
     for (quint32 i = 0; i < size; i++) {
         buf >> text[i];
     }
@@ -97,7 +96,7 @@ QString AbrStructParser::p_text(QDataStream &buf)
     quint32 size;
     buf >> size;
 
-    ushort * text = new ushort[size + 1];
+    ushort *text = new ushort[size + 1];
     for (quint32 i = 0; i < size; i++) {
         buf >> text[i];
     }
@@ -112,7 +111,7 @@ QString AbrStructParser::p_objc(QDataStream &buf)
     quint32 objnamelen;
     buf >> objnamelen;
 
-    char * objname = new char[objnamelen * 2 + 1];
+    char *objname = new char[objnamelen * 2 + 1];
     buf.readRawData(objname, objnamelen * 2);
     objname[ objnamelen * 2 ] = '\0';
 
@@ -124,7 +123,7 @@ QString AbrStructParser::p_objc(QDataStream &buf)
         objtypelen = 4;
     }
 
-    char * typeName = new char[objtypelen + 1];
+    char *typeName = new char[objtypelen + 1];
     buf.readRawData(typeName, objtypelen);
     typeName [objtypelen] = '\0';
 
@@ -136,7 +135,7 @@ QString AbrStructParser::p_objc(QDataStream &buf)
 
 QString AbrStructParser::p_untf(QDataStream &buf)
 {
-    char * type = new char[5];
+    char *type = new char[5];
     buf.readRawData(type, 4);
     type[4] = '\0';
     double value;
@@ -149,10 +148,11 @@ QString AbrStructParser::p_bool(QDataStream &buf)
     //# ord converts 1 byte number
     char byte;
     buf.device()->getChar(&byte);
-    if (byte)
+    if (byte) {
         return QString("1");
-    else
+    } else {
         return QString("0");
+    }
 }
 
 QString AbrStructParser::p_doub(QDataStream &buf)
@@ -171,16 +171,16 @@ QString AbrStructParser::p_enum(QDataStream &buf)
     if (size1 == 0) {
         size1 = 4;
     }
-    char * name1 = new char[size1 + 1];
+    char *name1 = new char[size1 + 1];
     buf.readRawData(name1, size1);
     name1[size1] = '\0';
 
-    buf >> size2 ;
+    buf >> size2;
     if (size2 == 0) {
         size2 = 4;
     }
 
-    char * name2 = new char[size2 + 1];
+    char *name2 = new char[size2 + 1];
     buf.readRawData(name2, size2);
     name2[size2] = '\0';
 
@@ -202,17 +202,16 @@ quint32 AbrStructParser::parseEntry(QDataStream &buf)
         qDebug() << ABR_PRESET_START  << ABR_OBJECT << value;
         // start to create the preset here
         m_translator.addEntry(ABR_PRESET_START, ABR_OBJECT, value);
-    }
-    else {
+    } else {
         // read char with nlen bytes and convert to String
-        char * name = new char[ nlen + 1 ];
+        char *name = new char[ nlen + 1 ];
         int status = buf.readRawData(name, nlen);
         if (status == -1) {
             qDebug() << "Error, name can't be readed";
         }
         name[nlen] = '\0';
 
-        char * type = new char[5];
+        char *type = new char[5];
         status = buf.readRawData(type, 4);
         type[4] = '\0';
         QString key = QString::fromLatin1(type);
@@ -245,8 +244,7 @@ quint32 AbrStructParser::parseEntry(QDataStream &buf)
                 qDebug() << m_translator.toString();
             }
 
-        }
-        else {
+        } else {
             qDebug() << "Unknown key:\t" << name << type;
             //qDebug() << p_unkn(buf);
             return -1;
@@ -256,7 +254,6 @@ quint32 AbrStructParser::parseEntry(QDataStream &buf)
     return 0;
 }
 
-
 void AbrStructParser::parse(QString fileName)
 {
     QFile file(fileName);
@@ -265,7 +262,6 @@ void AbrStructParser::parse(QString fileName)
         return;
     }
     QDataStream buf(&file);
-
 
     // offset in bytes
     short int vermaj, vermin;
@@ -287,15 +283,12 @@ void AbrStructParser::parse(QString fileName)
     qDebug() << m_doc.toString();
 }
 
-
-
-int main(int argc, const char * argv[])
+int main(int argc, const char *argv[])
 {
     QString fileName;
     if (argc != 2) {
         fileName = "test.abr";
-    }
-    else {
+    } else {
         fileName = QString::fromLatin1(argv[1]);
     }
 

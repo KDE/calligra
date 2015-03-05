@@ -17,7 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #include "SortManipulator.h"
 
 #include "Map.h"
@@ -30,8 +29,8 @@
 using namespace Calligra::Sheets;
 
 SortManipulator::SortManipulator()
-        : AbstractDFManipulator()
-        , m_cellStorage(0)
+    : AbstractDFManipulator()
+    , m_cellStorage(0)
 {
     m_changeformat = false;
     m_rows = true;
@@ -45,7 +44,7 @@ SortManipulator::~SortManipulator()
 {
 }
 
-bool SortManipulator::process(Element* element)
+bool SortManipulator::process(Element *element)
 {
     // process one element - rectangular range
 
@@ -65,8 +64,9 @@ bool SortManipulator::preProcessing()
 {
     // Only on sorting we need to temporarily store the old data.
     // On restoring (undo) we return immediately.
-    if (m_reverse)
+    if (m_reverse) {
         return AbstractDFManipulator::preProcessing();
+    }
 
     m_cellStorage = new CellStorage(m_sheet->cellStorage()->subStorage(*this));
 
@@ -78,7 +78,9 @@ bool SortManipulator::preProcessing()
                 Cell cell = Cell(m_sheet, col, row);
                 m_styles.insert(cell, cell.style());
                 // encode the formula if there is one, so that cell references get updated correctly
-                if (cell.isFormula()) m_formulas.insert(cell, cell.encodeFormula());
+                if (cell.isFormula()) {
+                    m_formulas.insert(cell, cell.encodeFormula());
+                }
             }
     }
 
@@ -117,10 +119,11 @@ Value SortManipulator::newValue(Element *element, int col, int row,
     QRect range = element->rect();
     int colidx = col - range.left();
     int rowidx = row - range.top();
-    if (m_rows)  // sort rows
+    if (m_rows) { // sort rows
         rowidx = sorted[rowidx];
-    else
+    } else {
         colidx = sorted[colidx];
+    }
     rowidx += range.top();
     colidx += range.left();
 
@@ -143,10 +146,11 @@ Style SortManipulator::newFormat(Element *element, int col, int row)
     int colidx = col - range.left();
     int rowidx = row - range.top();
     if (m_changeformat) {
-        if (m_rows)  // sort rows
+        if (m_rows) { // sort rows
             rowidx = sorted[rowidx];
-        else
+        } else {
             colidx = sorted[colidx];
+        }
     }
 
     // have to return stored format, to avoid earlier calls disrupting latter ones
@@ -162,15 +166,18 @@ void SortManipulator::sort(Element *element)
     int count = max - min + 1;
     // initially, all values are at their original positions
     sorted.clear();
-    for (int i = 0; i < count; ++i) sorted[i] = i;
+    for (int i = 0; i < count; ++i) {
+        sorted[i] = i;
+    }
 
     // for each position, find the lowest value and move it there
     int start = m_skipfirst ? 1 : 0;
     for (int i = start; i < count - 1; ++i) {
         int lowest = i;
         for (int j = i + 1; j < count; ++j)
-            if (shouldReorder(element, sorted[lowest], sorted[j]))
+            if (shouldReorder(element, sorted[lowest], sorted[j])) {
                 lowest = j;
+            }
         // move lowest to start
         int tmp = sorted[i];
         sorted[i] = sorted[lowest];
@@ -207,10 +214,12 @@ bool SortManipulator::shouldReorder(Element *element, int first, int second)
         Value val2 = Cell(m_sheet, col2, row2).value();
         // empty values always go to the end, so if second value is empty and
         // first one is not, we don't need to reorder
-        if (!val1.isEmpty() && val2.isEmpty())
+        if (!val1.isEmpty() && val2.isEmpty()) {
             return false;
-        if (val1.isEmpty() && !val2.isEmpty())
+        }
+        if (val1.isEmpty() && !val2.isEmpty()) {
             return true;
+        }
 
         // custom list ?
         if (m_usecustomlist) {
@@ -222,23 +231,31 @@ bool SortManipulator::shouldReorder(Element *element, int first, int second)
             // Try to locate our two strings in the list. If both are there, assume
             // ordering as specified by the list.
             for (it = m_customlist.begin(); it != m_customlist.end(); ++it) {
-                if ((pos1 == -1) && ((*it).toLower() == s1))
+                if ((pos1 == -1) && ((*it).toLower() == s1)) {
                     pos1 = pos;
-                if ((pos2 == -1) && ((*it).toLower() == s2))
+                }
+                if ((pos2 == -1) && ((*it).toLower() == s2)) {
                     pos2 = pos;
+                }
                 pos++;
             }
             if ((pos1 >= 0) && (pos2 >= 0) && (pos1 != pos2))
                 // both are in the list, not the same
+            {
                 return (pos1 > pos2);
+            }
         }
 
         if (calc->naturalGreater(val1, val2, caseSensitive))
             // first one greater - must reorder if ascending, don't reorder if not
+        {
             return ascending;
+        }
         if (calc->naturalLower(val1, val2, caseSensitive))
             // first one lower - don't reorder if ascending, reorder if not
+        {
             return !ascending;
+        }
         // equal - don't know yet, continue
     }
 

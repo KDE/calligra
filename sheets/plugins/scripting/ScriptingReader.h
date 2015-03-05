@@ -81,7 +81,8 @@ public:
     * \param module The \a ScriptingModule instance that should be used
     * as datasource for this reader.
     */
-    explicit ScriptingReader(ScriptingModule* module) : QObject(module), m_module(module) {
+    explicit ScriptingReader(ScriptingModule *module) : QObject(module), m_module(module)
+    {
         clear();
     }
 
@@ -96,13 +97,18 @@ public Q_SLOTS:
     * Start the reading. This let's the reader run over the defined sheets and there ranges
     * and emits the signals this reader provides while walking over the data.
     */
-    bool start() {
-        if (m_state != Stopped) return false;
+    bool start()
+    {
+        if (m_state != Stopped) {
+            return false;
+        }
         m_state = Running;
         QStringList sheets = m_sheetnames.count() > 0 ? m_sheetnames : m_module->sheetNames();
-        foreach(QString sheetname, sheets) {
+        foreach (QString sheetname, sheets) {
             readSheet(sheetname);
-            if (m_state != Running) break;
+            if (m_state != Running) {
+                break;
+            }
         }
         clear();
         return true;
@@ -114,9 +120,11 @@ public Q_SLOTS:
     * method also from within scripting functions that connected with the signals this
     * reader provides.
     */
-    void stop() {
-        if (m_state == Running)
+    void stop()
+    {
+        if (m_state == Running) {
             m_state = Shutdown;
+        }
     }
 
     /**
@@ -124,7 +132,8 @@ public Q_SLOTS:
     * reader is stopped and can be started again by using the \a start() method false
     * got returned.
     */
-    bool isRunning() const {
+    bool isRunning() const
+    {
         return m_state != Stopped;
     }
 
@@ -132,7 +141,8 @@ public Q_SLOTS:
     * \return the names of the sheets that should be readed. If the list is empty and the
     * reader got started, then the reader will walk through all sheets the document has.
     */
-    QStringList sheetNames() const {
+    QStringList sheetNames() const
+    {
         return m_sheetnames;
     }
 
@@ -140,21 +150,24 @@ public Q_SLOTS:
     * \return the defined ranges for the \p sheetname . If there was no range defined,
     * then we walk over all the data the sheet has.
     */
-    QVariantList range(const QString& sheetname) const {
+    QVariantList range(const QString &sheetname) const
+    {
         return m_ranges.contains(sheetname) ? m_ranges[sheetname] : QVariantList();
     }
 
     /**
     * Set the defined ranges for the \p sheetname to \p range .
     */
-    void setRange(const QString& sheetname, const QVariantList& range) {
+    void setRange(const QString &sheetname, const QVariantList &range)
+    {
         m_ranges[sheetname] = range;
     }
 
     /**
     * Set the names of the sheets that should be readed to \p sheetnames .
     */
-    void setSheetNames(const QStringList& sheetnames) {
+    void setSheetNames(const QStringList &sheetnames)
+    {
         m_sheetnames = sheetnames;
         m_ranges.clear();
     }
@@ -172,15 +185,22 @@ public Q_SLOTS:
     * \li 1=enabled or 0=disabled
     * \li optional range tuple [from column, from row, to column, to row]
     */
-    void setSheets(const QVariantList& sheets = QVariantList()) {
+    void setSheets(const QVariantList &sheets = QVariantList())
+    {
         m_sheetnames.clear();
         m_ranges.clear();
-        foreach(QVariant item, sheets) {
+        foreach (QVariant item, sheets) {
             QList<QVariant> args = item.toList();
-            if (args.count() < 2) continue;
-            if (! args[1].toBool()) continue;
+            if (args.count() < 2) {
+                continue;
+            }
+            if (! args[1].toBool()) {
+                continue;
+            }
             const QString sheetname = args[0].toString();
-            if (sheetname.isEmpty()) continue;
+            if (sheetname.isEmpty()) {
+                continue;
+            }
             m_sheetnames.append(sheetname);
             if (args.count() > 2) {
                 args.removeFirst();
@@ -198,21 +218,29 @@ public Q_SLOTS:
     * The range should looks like e.g. "A1:C3" while the defined sheetname
     * should be an existing one if a range got defined.
     */
-    void setSheet(const QString& sheetname, const QString& range = QString()) {
-        if (! m_sheetnames.contains(sheetname))
+    void setSheet(const QString &sheetname, const QString &range = QString())
+    {
+        if (! m_sheetnames.contains(sheetname)) {
             m_sheetnames.append(sheetname);
+        }
         if (range.isNull()) {
             m_ranges.remove(sheetname);
             return;
         }
-        Calligra::Sheets::Sheet* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
-        if (! sheet) return;
+        Calligra::Sheets::Sheet *sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
+        if (! sheet) {
+            return;
+        }
         QVariantList ranges;
         Calligra::Sheets::Region region(range, m_module->kspreadDoc()->map(), sheet);
-        if (! region.isValid()) return;
+        if (! region.isValid()) {
+            return;
+        }
         for (Calligra::Sheets::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
             const QRect rect = (*it)->rect();
-            if (rect.isNull()) continue;
+            if (rect.isNull()) {
+                continue;
+            }
             ranges.append(rect);
         }
         m_ranges[sheetname] = ranges;
@@ -222,7 +250,8 @@ public Q_SLOTS:
     * \return the sheetname the reader currently is on. An empty/null string will be
     * returned if there is no current sheet (e.g. if the reader just doesn't run currently).
     */
-    QString currentSheetName() const {
+    QString currentSheetName() const
+    {
         return m_currentSheet ? m_currentSheet->sheetName() : QString();
     }
 
@@ -230,21 +259,24 @@ public Q_SLOTS:
     * \return the current row number the reader is on. This will be -1 if the reader
     * isn't running.
     */
-    int currentRow() const {
+    int currentRow() const
+    {
         return m_currentRow;
     }
 
     /**
     * \return the most left column the current row has or -1 if there is no current row.
     */
-    int currentFirstColumn() const {
+    int currentFirstColumn() const
+    {
         return m_currentLeft;
     }
 
     /**
     * \return the most right column the current row has or -1 if there is no current row.
     */
-    int currentLastColumn() const {
+    int currentLastColumn() const
+    {
         return m_currentRight;
     }
 
@@ -252,7 +284,8 @@ public Q_SLOTS:
     * \return a list of values for the current row. This will be an empty list of the
     * reader isn't running.
     */
-    QVariantList currentValues() const {
+    QVariantList currentValues() const
+    {
         QVariantList values;
         if (m_currentSheet && m_currentRow >= 0) {
             for (int col = m_currentLeft; col <= m_currentRight; ++col) {
@@ -277,7 +310,6 @@ public Q_SLOTS:
         return values;
     }
 
-
 Q_SIGNALS:
 
     /**
@@ -285,7 +317,7 @@ Q_SIGNALS:
     * changed to the sheet with name \p sheetname cause e.g. reading the previous
     * sheet was done.
     */
-    void changedSheet(const QString& sheetname);
+    void changedSheet(const QString &sheetname);
 
     /**
     * This signal is emitted once the reading started with the \a start() method
@@ -296,53 +328,72 @@ Q_SIGNALS:
 private:
     Q_DISABLE_COPY(ScriptingReader)
 
-    ScriptingModule* const m_module;
+    ScriptingModule *const m_module;
     QStringList m_sheetnames;
     QHash<QString, QVariantList> m_ranges;
 
     enum State { Stopped, Running, Shutdown };
     State m_state;
-    Calligra::Sheets::Sheet* m_currentSheet;
+    Calligra::Sheets::Sheet *m_currentSheet;
     int m_currentRow, m_currentLeft, m_currentRight;
 
-    void clear() {
+    void clear()
+    {
         m_state = Stopped;
         m_currentSheet = 0;
         m_currentRow = m_currentLeft = m_currentRight = -1;
     }
 
-    void readSheet(const QString& sheetname) {
+    void readSheet(const QString &sheetname)
+    {
         m_currentSheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
-        if (! m_currentSheet) return;
+        if (! m_currentSheet) {
+            return;
+        }
         emit changedSheet(sheetname);
-        if (m_state != Running) return;
+        if (m_state != Running) {
+            return;
+        }
         //kDebug()<<"ScriptingReader::readSheet sheetname="<<sheetname;
         QVariantList range = m_ranges[sheetname];
         if (range.count() > 0) {
-            foreach(QVariant r, range) {
+            foreach (QVariant r, range) {
                 QVariantList l = r.toList();
-                if (l.count() < 4) continue;
+                if (l.count() < 4) {
+                    continue;
+                }
                 QRect rect(l[0].toInt(), l[1].toInt(), l[2].toInt(), l[3].toInt());
-                if (rect.isNull() || (rect.x() == 0 && rect.y() == 0 && rect.width() == 0 && rect.height() == 0)) continue;
+                if (rect.isNull() || (rect.x() == 0 && rect.y() == 0 && rect.width() == 0 && rect.height() == 0)) {
+                    continue;
+                }
                 //kDebug()<<"  string="<<r.toString()<<" rect="<<rect;
                 Calligra::Sheets::Region region(rect, m_currentSheet);
                 readRegion(region);
-                if (m_state != Running) break;
+                if (m_state != Running) {
+                    break;
+                }
             }
         } else {
             QRect area = m_currentSheet->usedArea();
-            if (area.isNull()) return;
+            if (area.isNull()) {
+                return;
+            }
             Calligra::Sheets::Region region(area, m_currentSheet);
             readRegion(region);
         }
     }
 
-    void readRegion(const Calligra::Sheets::Region& region) {
-        if (! m_currentSheet || ! region.isValid()) return;
+    void readRegion(const Calligra::Sheets::Region &region)
+    {
+        if (! m_currentSheet || ! region.isValid()) {
+            return;
+        }
         //kDebug()<<"ScriptingReader::readRegion name="<<region.name(m_currentSheet);
         for (Calligra::Sheets::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
             QRect range = (*it)->rect();
-            if (range.isNull()) continue;
+            if (range.isNull()) {
+                continue;
+            }
             //kDebug() <<"  name=" << (*it)->name(m_currentSheet) <<" range=" << range;
             const int bottom = range.bottom();
             m_currentLeft = range.left();
@@ -350,7 +401,9 @@ private:
             for (int row = range.top(); row <= bottom; ++row) {
                 m_currentRow = row;
                 emit changedRow(row);
-                if (m_state != Running) break;
+                if (m_state != Running) {
+                    break;
+                }
             }
         }
     }

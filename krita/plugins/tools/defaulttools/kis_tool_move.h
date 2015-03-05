@@ -33,7 +33,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-
 class KoCanvasBase;
 class MoveToolOptionsWidget;
 
@@ -44,11 +43,11 @@ class KisToolMove : public KisTool
     Q_PROPERTY(MoveToolMode moveToolMode READ moveToolMode WRITE setMoveToolMode NOTIFY moveToolModeChanged);
     Q_PROPERTY(bool moveInProgress READ moveInProgress NOTIFY moveInProgressChanged);
 public:
-    KisToolMove(KoCanvasBase * canvas);
+    KisToolMove(KoCanvasBase *canvas);
     virtual ~KisToolMove();
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     void deactivate();
 
 public Q_SLOTS:
@@ -74,9 +73,9 @@ public:
     void continueAction(KoPointerEvent *event);
     void endAction(KoPointerEvent *event);
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    virtual void paint(QPainter &gc, const KoViewConverter &converter);
 
-    virtual QWidget* createOptionWidget();
+    virtual QWidget *createOptionWidget();
 
     MoveToolMode moveToolMode() const;
     bool moveInProgress() const;
@@ -89,7 +88,7 @@ Q_SIGNALS:
     void moveInProgressChanged();
 
 private:
-    void drag(const QPoint& newPos);
+    void drag(const QPoint &newPos);
     void cancelStroke();
     QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
 
@@ -98,7 +97,7 @@ private Q_SLOTS:
 
 private:
 
-    MoveToolOptionsWidget* m_optionsWidget;
+    MoveToolOptionsWidget *m_optionsWidget;
 
     QPoint m_dragStart;
     QPoint m_lastDragPos;
@@ -111,24 +110,25 @@ private:
     KConfigGroup configGroup;
 };
 
-
 class KisToolMoveFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolMoveFactory(const QStringList&)
-            : KoToolFactoryBase("KritaTransform/KisToolMove") {
+    KisToolMoveFactory(const QStringList &)
+        : KoToolFactoryBase("KritaTransform/KisToolMove")
+    {
         setToolTip(i18n("Move a layer"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(11);
         setIconName(koIconNameCStr("krita_tool_move"));
-        setShortcut( KShortcut(QKeySequence( Qt::Key_T )) );
+        setShortcut(KShortcut(QKeySequence(Qt::Key_T)));
     }
 
     virtual ~KisToolMoveFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolMove(canvas);
     }
 

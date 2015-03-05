@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "HtmlFile.h"
 
@@ -34,7 +33,6 @@
 // Calligra
 #include <KoStore.h>
 
-
 // ================================================================
 //                         class HtmlFile
 
@@ -45,7 +43,6 @@ HtmlFile::HtmlFile()
 HtmlFile::~HtmlFile()
 {
 }
-
 
 KoFilter::ConversionStatus HtmlFile::writeHtml(const QString &fileName)
 {
@@ -65,7 +62,6 @@ KoFilter::ConversionStatus HtmlFile::writeHtml(const QString &fileName)
     delete htmlStore;
     return status;
 }
-
 
 // ----------------------------------------------------------------
 //                         Private functions

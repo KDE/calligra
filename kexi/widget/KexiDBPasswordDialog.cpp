@@ -31,15 +31,15 @@
 
 class KexiDBPasswordDialog::Private
 {
- public:
-    explicit Private(KexiDB::ConnectionData* data);
+public:
+    explicit Private(KexiDB::ConnectionData *data);
     ~Private();
 
     KexiDB::ConnectionData *cdata;
     bool showConnectionDetailsRequested;
 };
 
-KexiDBPasswordDialog::Private::Private(KexiDB::ConnectionData* data)
+KexiDBPasswordDialog::Private::Private(KexiDB::ConnectionData *data)
     : cdata(data)
     , showConnectionDetailsRequested(false)
 {
@@ -49,12 +49,12 @@ KexiDBPasswordDialog::Private::~Private()
 {
 }
 
-KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata,
-                                           Flags flags)
-        : KPasswordDialog(parent,
-            ShowUsernameLine | ShowDomainLine | ((flags & ServerReadOnly) ? DomainReadOnly : KPasswordDialog::NoFlags),
-            (flags & ShowDetailsButton) ? KDialog::User1 : KDialog::None)
-        , d(new Private(&cdata))
+KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData &cdata,
+        Flags flags)
+    : KPasswordDialog(parent,
+                      ShowUsernameLine | ShowDomainLine | ((flags & ServerReadOnly) ? DomainReadOnly : KPasswordDialog::NoFlags),
+                      (flags & ShowDetailsButton) ? KDialog::User1 : KDialog::None)
+    , d(new Private(&cdata))
 {
     setCaption(i18nc("@title:window", "Opening Database"));
     setPrompt(i18nc("@info", "Supply a password below."));
@@ -66,17 +66,18 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionDa
 //    if (srv.isEmpty() || srv.toLower() == "localhost")
 //        srv = i18n("local database server");
 
-    QLabel *domainLabel = KexiUtils::findFirstChild<QLabel*>(this, "QLabel", "domainLabel");
+    QLabel *domainLabel = KexiUtils::findFirstChild<QLabel *>(this, "QLabel", "domainLabel");
     if (domainLabel) {
         domainLabel->setText(i18n("Database server:"));
     }
     setDomain(srv);
 
     QString usr;
-    if (cdata.userName.isEmpty())
+    if (cdata.userName.isEmpty()) {
         usr = i18nc("unspecified user", "(unspecified)");
-    else
+    } else {
         usr = cdata.userName;
+    }
     setUsernameReadOnly(true);
     setUsername(usr);
 
@@ -103,12 +104,11 @@ void KexiDBPasswordDialog::slotButtonClicked(int button)
 {
     if (button == KDialog::Ok || button == KDialog::User1) {
         d->cdata->password = password();
-        QLineEdit *userEdit = KexiUtils::findFirstChild<QLineEdit*>(this, "QLineEdit", "userEdit");
+        QLineEdit *userEdit = KexiUtils::findFirstChild<QLineEdit *>(this, "QLineEdit", "userEdit");
         if (!userEdit->isReadOnly()) {
             d->cdata->userName = userEdit->text();
         }
-    }
-    else {
+    } else {
         //d->cdata->password.clear();
     }
     KPasswordDialog::slotButtonClicked(button);
@@ -126,7 +126,7 @@ tristate KexiDBPasswordDialog::getPasswordIfNeeded(KexiDB::ConnectionData *data,
     if (data->passwordNeeded() && data->password.isNull() /* null means missing password */) {
         //ask for password
         KexiDBPasswordDialog pwdDlg(parent, *data, KexiDBPasswordDialog::ServerReadOnly);
-        return QDialog::Accepted == pwdDlg.exec() ? tristate(true): cancelled;
+        return QDialog::Accepted == pwdDlg.exec() ? tristate(true) : cancelled;
     }
     return false;
 }

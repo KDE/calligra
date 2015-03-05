@@ -24,7 +24,6 @@
 #include <QMutex>
 #include <QByteArray>
 
-
 class QMutex;
 class KisTileData;
 class KisAbstractTileCompressor;

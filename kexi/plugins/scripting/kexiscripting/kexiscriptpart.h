@@ -43,7 +43,7 @@ public:
      * \param name The name this part has.
      * \param args Optional list of arguments passed to this part.
      */
-    KexiScriptPart(QObject *parent, const QVariantList& args);
+    KexiScriptPart(QObject *parent, const QVariantList &args);
 
     /**
      * Destructor.
@@ -54,13 +54,13 @@ public:
      * Implementation of the \a KexiPart::Part::execute method used to
      * execute the passed \p item instance.
      */
-    virtual bool execute(KexiPart::Item* item, QObject* sender = 0);
+    virtual bool execute(KexiPart::Item *item, QObject *sender = 0);
 
     /**
      * \return the i18n message for the passed \p englishMessage string.
      */
-    virtual KLocalizedString i18nMessage(const QString& englishMessage,
-                                         KexiWindow* window) const;
+    virtual KLocalizedString i18nMessage(const QString &englishMessage,
+                                         KexiWindow *window) const;
 
 protected:
 
@@ -75,11 +75,11 @@ protected:
      *
      * @todo Port It!!!
      */
-    virtual KexiView* createView(QWidget *parent,
+    virtual KexiView *createView(QWidget *parent,
                                  KexiWindow *window,
                                  KexiPart::Item &item,
                                  Kexi::ViewMode viewMode = Kexi::DataViewMode,
-                                 QMap<QString, QVariant>* staticObjectArgs = 0);
+                                 QMap<QString, QVariant> *staticObjectArgs = 0);
 
     /**
      * Initialize the part's actions.
@@ -96,7 +96,7 @@ private:
     /// \internal d-pointer class.
     class Private;
     /// \internal d-pointer instance.
-    Private* const d;
+    Private *const d;
 };
 
 #endif

@@ -37,7 +37,6 @@
 
 #include "ui_kptresourceassignmentview.h"
 
-
 class KoDocument;
 
 class QPoint;
@@ -45,12 +44,10 @@ class QSplitter;
 
 class QTreeWidgetItem;
 
-
 namespace KPlato
 {
 
 class ResourcesList;
-
 
 class KPLATOUI_EXPORT ResourcesList : public QTreeWidget
 {
@@ -68,11 +65,14 @@ class KPLATOUI_EXPORT ResourceAssignmentView : public ViewBase
 public:
     ResourceAssignmentView(KoPart *part, KoDocument *doc, QWidget *parent);
     using ViewBase::draw;
-    Project *project() const { return m_project; }
-    void draw( Project &project );
-    void drawResourcesName( QTreeWidgetItem *parent, ResourceGroup *group );
-    void drawTasksAttributedToAResource (Resource *res, QTreeWidgetItem *parent);
-    void drawTasksAttributedToAGroup (ResourceGroup *group, QTreeWidgetItem *parent);
+    Project *project() const
+    {
+        return m_project;
+    }
+    void draw(Project &project);
+    void drawResourcesName(QTreeWidgetItem *parent, ResourceGroup *group);
+    void drawTasksAttributedToAResource(Resource *res, QTreeWidgetItem *parent);
+    void drawTasksAttributedToAGroup(ResourceGroup *group, QTreeWidgetItem *parent);
 
 private:
     QSplitter *m_splitter;
@@ -88,18 +88,17 @@ private:
 
 protected Q_SLOTS:
     void resSelectionChanged();
-    void resSelectionChanged( QTreeWidgetItem *item );
+    void resSelectionChanged(QTreeWidgetItem *item);
 
 private Q_SLOTS:
-    void slotRequestPopupMenu( const QPoint &p );
-void slotUpdate();
+    void slotRequestPopupMenu(const QPoint &p);
+    void slotUpdate();
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
 };
-
 
 }  //KPlato namespace
 

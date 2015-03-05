@@ -37,7 +37,7 @@ class KexiFindDialog : public QDialog, private Ui::KexiFindDialog
     Q_OBJECT
 public:
     //! Creates a new find dialog. Replace mode is off by default.
-    explicit KexiFindDialog(QWidget* parent);
+    explicit KexiFindDialog(QWidget *parent);
     virtual ~KexiFindDialog();
 
     //! Sets actions that receive button clicks and shortcuts within the dialog. Should be called once.
@@ -75,15 +75,15 @@ public Q_SLOTS:
      \a columnCaptions are visible values, while \a columnNames are used for returning
      in currentLookInColumn().
      "(All fields)" and "(Current field)" items are also prepended. */
-    void setLookInColumnList(const QStringList& columnNames,
-                             const QStringList& columnCaptions);
+    void setLookInColumnList(const QStringList &columnNames,
+                             const QStringList &columnCaptions);
 
     /*! Selects \a columnName to be selected 'look in column'.
      By default "(All fields)" item is selected. To select this item,
      pass empty string as \a columnName.
      To select "(Current field)" item, "(field)" string should be passed
      as \a columnName. */
-    void setCurrentLookInColumnName(const QString& columnName);
+    void setCurrentLookInColumnName(const QString &columnName);
 
     /*! Sets or clears replace mode.
      For replace mode 'prompt or replace' option is visible. */
@@ -91,7 +91,7 @@ public Q_SLOTS:
 
     /*! Sets object name for caption, so for example it will be set
      to i18n("Find \"Persons\"")). */
-    void setObjectNameForCaption(const QString& name);
+    void setObjectNameForCaption(const QString &name);
 
     /*! Enables of disables the find/replace/replace all buttons.
      This is used if for the current context the dialog could not be used.
@@ -100,7 +100,7 @@ public Q_SLOTS:
     void setButtonsEnabled(bool enable);
 
     /*! Sets message at the bottom to \a message. */
-    void setMessage(const QString& message);
+    void setMessage(const QString &message);
 
     /*! Updates message at the bottom; "The search item was not found" is set if \a found is true,
      else the message is cleared. */
@@ -125,13 +125,14 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void slotCloseClicked();
-    void updateMessage(const QString&) {
+    void updateMessage(const QString &)
+    {
         updateMessage();
     }
 
 protected:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

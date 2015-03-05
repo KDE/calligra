@@ -89,16 +89,20 @@ KisDuplicateOp::~KisDuplicateOp()
 
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation &info)
 {
-    if (!painter()->device()) return 1.0;
+    if (!painter()->device()) {
+        return 1.0;
+    }
 
     KisBrushSP brush = m_brush;
-    if (!brush)
+    if (!brush) {
         return 1.0;
+    }
 
-    if (!brush->canPaintFor(info))
+    if (!brush->canPaintFor(info)) {
         return 1.0;
+    }
 
     if (!m_duplicateStartIsSet) {
         m_duplicateStartIsSet = true;
@@ -109,13 +113,14 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     if (m_cloneFromProjection) {
         realSourceDevice = m_image->projection();
-    }
-    else {
+    } else {
         realSourceDevice = m_node->projection();
     }
 
     qreal scale = m_sizeOption.apply(info);
-    if (checkSizeTooSmall(scale)) return KisSpacingInformation();
+    if (checkSizeTooSmall(scale)) {
+        return KisSpacingInformation();
+    }
 
     setCurrentScale(scale);
 
@@ -129,15 +134,15 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
                              info, 1.0,
                              &dstRect);
 
-    if (dstRect.isEmpty()) return 1.0;
-
+    if (dstRect.isEmpty()) {
+        return 1.0;
+    }
 
     QPoint srcPoint;
 
     if (m_moveSourcePoint) {
         srcPoint = (dstRect.topLeft() - m_settings->offset()).toPoint();
-    }
-    else {
+    } else {
         QPointF hotSpot = brush->hotSpot(scale, scale, 0, info);
         srcPoint = (m_settings->position() - hotSpot).toPoint();
     }
@@ -147,13 +152,12 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     // Perspective correction ?
 
-
     if (m_perspectiveCorrection && m_image && m_image->perspectiveGrid()->countSubGrids() == 1) {
         Matrix3qreal startM = Matrix3qreal::Identity();
         Matrix3qreal endM = Matrix3qreal::Identity();
 
         // First look for the grid corresponding to the start point
-        KisSubPerspectiveGrid* subGridStart = *m_image->perspectiveGrid()->begin();
+        KisSubPerspectiveGrid *subGridStart = *m_image->perspectiveGrid()->begin();
         QRect r = QRect(0, 0, m_image->width(), m_image->height());
 
 #if 1
@@ -163,7 +167,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 #endif
 #if 1
         // Second look for the grid corresponding to the end point
-        KisSubPerspectiveGrid* subGridEnd = *m_image->perspectiveGrid()->begin();
+        KisSubPerspectiveGrid *subGridEnd = *m_image->perspectiveGrid()->begin();
         if (subGridEnd) {
             endM = KisPerspectiveMath::computeMatrixTransfoToPerspective(*subGridEnd->topLeft(), *subGridEnd->topRight(), *subGridEnd->bottomLeft(), *subGridEnd->bottomRight(), r);
         }
@@ -183,9 +187,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
             srcAcc->sampledOldRawData(dstIt.rawData());
         } while (dstIt.nextPixel());
 
-
-    }
-    else {
+    } else {
         KisPainter copyPainter(m_srcdev);
         copyPainter.setCompositeOp(COMPOSITE_COPY);
         copyPainter.bitBltOldData(0, 0, realSourceDevice, srcPoint.x(), srcPoint.y(), sw, sh);
@@ -206,20 +208,19 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         const int healSW = healRect.width();
         const int healSH = healRect.height();
 
-
         quint16 srcData[4];
         quint16 tmpData[4];
         QScopedArrayPointer<qreal> matrix(new qreal[ 3 * healSW * healSH ]);
         // First divide
-        const KoColorSpace* srcCs = realSourceDevice->colorSpace();
-        const KoColorSpace* tmpCs = m_srcdev->colorSpace();
-        KisHLineConstIteratorSP srcIt = realSourceDevice->createHLineConstIteratorNG(healRect.x(), healRect.y() , healSW);
+        const KoColorSpace *srcCs = realSourceDevice->colorSpace();
+        const KoColorSpace *tmpCs = m_srcdev->colorSpace();
+        KisHLineConstIteratorSP srcIt = realSourceDevice->createHLineConstIteratorNG(healRect.x(), healRect.y(), healSW);
         KisHLineIteratorSP tmpIt = m_srcdev->createHLineIteratorNG(0, 0, healSW);
-        qreal* matrixIt = matrix.data();
+        qreal *matrixIt = matrix.data();
         for (int j = 0; j < healSH; j++) {
             for (int i = 0; i < healSW; i++) {
-                srcCs->toLabA16(srcIt->oldRawData(), (quint8*)srcData, 1);
-                tmpCs->toLabA16(tmpIt->rawData(), (quint8*)tmpData, 1);
+                srcCs->toLabA16(srcIt->oldRawData(), (quint8 *)srcData, 1);
+                tmpCs->toLabA16(tmpIt->rawData(), (quint8 *)tmpData, 1);
                 // Division
                 for (int k = 0; k < 3; k++) {
                     matrixIt[k] = srcData[k] / (qreal)qMax((int)tmpData [k], 1);
@@ -251,12 +252,12 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
         matrixIt = &matrix[0];
         for (int j = 0; j < healSH; j++) {
             for (int i = 0; i < healSW; i++) {
-                tmpCs->toLabA16(tmpIt2->rawData(), (quint8*)tmpData, 1);
+                tmpCs->toLabA16(tmpIt2->rawData(), (quint8 *)tmpData, 1);
                 // Multiplication
                 for (int k = 0; k < 3; k++) {
                     tmpData[k] = (int)CLAMP(matrixIt[k] * qMax((int) tmpData[k], 1), 0, 65535);
                 }
-                tmpCs->fromLabA16((quint8*)tmpData, tmpIt2->rawData(), 1);
+                tmpCs->fromLabA16((quint8 *)tmpData, tmpIt2->rawData(), 1);
                 tmpIt2->nextPixel();
                 matrixIt += 3;
             }

@@ -34,19 +34,19 @@ class XlsxImport : public MSOOXML::MsooXmlImport
 {
     Q_OBJECT
 public:
-    XlsxImport(QObject * parent, const QVariantList &);
+    XlsxImport(QObject *parent, const QVariantList &);
     virtual ~XlsxImport();
 
 protected:
-    virtual bool acceptsSourceMimeType(const QByteArray& mime) const;
+    virtual bool acceptsSourceMimeType(const QByteArray &mime) const;
 
-    virtual bool acceptsDestinationMimeType(const QByteArray& mime) const;
+    virtual bool acceptsDestinationMimeType(const QByteArray &mime) const;
 
     virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers,
-            MSOOXML::MsooXmlRelationships *relationships, QString& errorMessage);
+            MSOOXML::MsooXmlRelationships *relationships, QString &errorMessage);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

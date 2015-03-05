@@ -43,7 +43,7 @@ void KoSectionUtils::setSectionStartings(QTextBlockFormat &fmt, QList<KoSection 
         fmt.clearProperty(KoParagraphStyle::SectionStartings);
     } else {
         fmt.setProperty(KoParagraphStyle::SectionStartings,
-            QVariant::fromValue< QList<KoSection *> >(list));
+                        QVariant::fromValue< QList<KoSection *> >(list));
     }
 }
 
@@ -53,7 +53,7 @@ void KoSectionUtils::setSectionEndings(QTextBlockFormat &fmt, QList<KoSectionEnd
         fmt.clearProperty(KoParagraphStyle::SectionEndings);
     } else {
         fmt.setProperty(KoParagraphStyle::SectionEndings,
-            QVariant::fromValue< QList<KoSectionEnd *> >(list));
+                        QVariant::fromValue< QList<KoSectionEnd *> >(list));
     }
 }
 

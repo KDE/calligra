@@ -27,7 +27,7 @@
 #include <KoShapeLoadingContext.h>
 
 CommentShapeFactory::CommentShapeFactory()
-: KoShapeFactoryBase(COMMENTSHAPEID, i18n("Comment"))
+    : KoShapeFactoryBase(COMMENTSHAPEID, i18n("Comment"))
 {
     setXmlElementNames(KoXmlNS::officeooo, QStringList("annotation"));
     setHidden(true);
@@ -37,13 +37,12 @@ CommentShapeFactory::~CommentShapeFactory()
 {
 }
 
-
-KoShape* CommentShapeFactory::createDefaultShape(KoDocumentResourceManager* documentResources) const
+KoShape *CommentShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     return new CommentShape(documentResources);
 }
 
-bool CommentShapeFactory::supports(const KoXmlElement& element, KoShapeLoadingContext &context) const
+bool CommentShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     return element.localName() == "annotation" && element.namespaceURI() == KoXmlNS::officeooo; //TODO change accordingly

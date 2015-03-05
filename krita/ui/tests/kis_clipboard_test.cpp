@@ -29,7 +29,6 @@
 
 #include "testutil.h"
 
-
 void KisClipboardTest::testRoundTrip()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
@@ -37,9 +36,9 @@ void KisClipboardTest::testRoundTrip()
     KisPaintDeviceSP newDev;
     QPoint errorPoint;
 
-    QRect fillRect(10,10,20,20);
+    QRect fillRect(10, 10, 20, 20);
     KoColor pixel(Qt::red, cs);
-    dev->fill(fillRect.x(),fillRect.y(),
+    dev->fill(fillRect.x(), fillRect.y(),
               fillRect.width(), fillRect.height(), pixel.data());
 
     QCOMPARE(dev->exactBounds(), fillRect);
@@ -50,7 +49,7 @@ void KisClipboardTest::testRoundTrip()
     newDev->setY(dev->y());
     QVERIFY(TestUtil::comparePaintDevices(errorPoint, dev, newDev));
 
-    QPoint offset(100,100);
+    QPoint offset(100, 100);
     dev->setX(offset.x());
     dev->setY(offset.y());
 
@@ -62,6 +61,5 @@ void KisClipboardTest::testRoundTrip()
     newDev->setY(dev->y());
     QVERIFY(TestUtil::comparePaintDevices(errorPoint, dev, newDev));
 }
-
 
 QTEST_KDEMAIN(KisClipboardTest, GUI)

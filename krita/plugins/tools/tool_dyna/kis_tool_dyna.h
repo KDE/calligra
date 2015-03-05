@@ -29,18 +29,17 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-
 class KisDoubleSliderSpinBox;
 class QCheckBox;
 class QGridLayout;
-
 
 class KoCanvasBase;
 
 class DynaFilter
 {
 public:
-    DynaFilter() {
+    DynaFilter()
+    {
         curx = 0;
         cury = 0;
         lastx = 0;
@@ -51,7 +50,8 @@ public:
         accy = 0.0;
     }
 
-    void init(qreal x, qreal y) {
+    void init(qreal x, qreal y)
+    {
         curx = x;
         cury = y;
         lastx = x;
@@ -74,17 +74,16 @@ public:
     bool fixedangle;
 };
 
-
 class KisToolDyna : public KisToolFreehand
 {
     Q_OBJECT
 
 public:
-    KisToolDyna(KoCanvasBase * canvas);
+    KisToolDyna(KoCanvasBase *canvas);
     virtual ~KisToolDyna();
 
-    QWidget * createOptionWidget();
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    QWidget *createOptionWidget();
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
 
@@ -101,13 +100,13 @@ private Q_SLOTS:
     void slotSetFixedAngle(bool fixedAngle);
 
 private:
-    QGridLayout* m_optionLayout;
+    QGridLayout *m_optionLayout;
 
     // dyna gui
-    QCheckBox * m_chkFixedAngle;
-    KisDoubleSliderSpinBox * m_massSPBox;
-    KisDoubleSliderSpinBox * m_dragSPBox;
-    KisDoubleSliderSpinBox * m_angleDSSBox;
+    QCheckBox *m_chkFixedAngle;
+    KisDoubleSliderSpinBox *m_massSPBox;
+    KisDoubleSliderSpinBox *m_dragSPBox;
+    KisDoubleSliderSpinBox *m_angleDSSBox;
 
     // dyna algorithm
     QVector<QPointF> m_prevPosition;
@@ -129,29 +128,30 @@ private:
     qreal m_yangle;
     qreal m_widthRange;
 
-
     // methods
-    qreal flerp(qreal f0, qreal f1, qreal p) {
-        return ((f0 *(1.0 - p)) + (f1 * p));
+    qreal flerp(qreal f0, qreal f1, qreal p)
+    {
+        return ((f0 * (1.0 - p)) + (f1 * p));
     }
-    void setMousePosition(const QPointF &point) {
-        m_mousePos.setX(point.x() / m_surfaceWidth );
+    void setMousePosition(const QPointF &point)
+    {
+        m_mousePos.setX(point.x() / m_surfaceWidth);
         m_mousePos.setY(point.y() / m_surfaceHeight);
     }
 
     void initDyna();
     int applyFilter(qreal mx, qreal my);
-    KoPointerEvent filterEvent(KoPointerEvent * event);
+    KoPointerEvent filterEvent(KoPointerEvent *event);
 
 };
-
 
 class KisToolDynaFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolDynaFactory(const QStringList&)
-            : KoToolFactoryBase("KritaShape/KisToolDyna") {
+    KisToolDynaFactory(const QStringList &)
+        : KoToolFactoryBase("KritaShape/KisToolDyna")
+    {
 
         setToolTip(i18n("Dynamic Brush Tool"));
 
@@ -166,12 +166,12 @@ public:
 
     virtual ~KisToolDynaFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolDyna(canvas);
     }
 
 };
-
 
 #endif // KIS_TOOL_DYNA_H_
 

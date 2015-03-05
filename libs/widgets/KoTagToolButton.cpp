@@ -37,18 +37,18 @@
 class KoTagToolButton::Private
 {
 public:
-    QToolButton* tagToolButton;
-    QAction* action_undeleteTag;
-    QAction* action_deleteTag;
-    KoLineEditAction* action_renameTag;
-    QAction* action_purgeTagUndeleteList;
+    QToolButton *tagToolButton;
+    QAction *action_undeleteTag;
+    QAction *action_deleteTag;
+    KoLineEditAction *action_renameTag;
+    QAction *action_purgeTagUndeleteList;
     QString undeleteCandidate;
 };
 
-KoTagToolButton::KoTagToolButton(QWidget* parent)
-    :QWidget(parent), d(new Private())
+KoTagToolButton::KoTagToolButton(QWidget *parent)
+    : QWidget(parent), d(new Private())
 {
-    QGridLayout* buttonLayout = new QGridLayout(this);
+    QGridLayout *buttonLayout = new QGridLayout(this);
     buttonLayout->setMargin(0);
     buttonLayout->setSpacing(0);
 
@@ -58,9 +58,9 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     d->tagToolButton->setPopupMode(QToolButton::InstantPopup);
     d->tagToolButton->setEnabled(true);
 
-    QMenu* popup = new QMenu(this);
+    QMenu *popup = new QMenu(this);
 
-    KoLineEditAction*  addTagAction = new KoLineEditAction(popup);
+    KoLineEditAction  *addTagAction = new KoLineEditAction(popup);
     addTagAction->setClickMessage(i18n("New tag"));
     addTagAction->setIcon(koIcon("document-new"));
     addTagAction->closeParentOnTrigger(true);
@@ -126,10 +126,10 @@ void KoTagToolButton::readOnlyMode(bool activate)
     d->action_deleteTag->setVisible(activate);
 }
 
-void KoTagToolButton::setUndeletionCandidate(const QString& deletedTagName)
+void KoTagToolButton::setUndeletionCandidate(const QString &deletedTagName)
 {
     d->undeleteCandidate = deletedTagName;
-    d->action_undeleteTag->setText(i18n("Undelete") +" "+ deletedTagName);
+    d->action_undeleteTag->setText(i18n("Undelete") + " " + deletedTagName);
     d->action_undeleteTag->setVisible(!deletedTagName.isEmpty());
     d->action_purgeTagUndeleteList->setVisible(!deletedTagName.isEmpty());
 }

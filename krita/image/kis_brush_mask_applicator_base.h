@@ -23,31 +23,28 @@
 #include "kis_fixed_paint_device.h"
 #include "math.h"
 
-
 struct MaskProcessingData {
     MaskProcessingData(KisFixedPaintDeviceSP _device,
-                       const KoColorSpace* _colorSpace,
+                       const KoColorSpace *_colorSpace,
                        qreal _randomness,
                        qreal _density,
                        double _centerX,
                        double _centerY,
                        double _angle)
-        {
-            device = _device;
-            colorSpace = _colorSpace;
-            randomness = _randomness;
-            density = _density;
-            centerX = _centerX;
-            centerY = _centerY;
-            cosa = cos(_angle);
-            sina = sin(_angle);
-            pixelSize = colorSpace->pixelSize();
-        }
-
-
+    {
+        device = _device;
+        colorSpace = _colorSpace;
+        randomness = _randomness;
+        density = _density;
+        centerX = _centerX;
+        centerY = _centerY;
+        cosa = cos(_angle);
+        sina = sin(_angle);
+        pixelSize = colorSpace->pixelSize();
+    }
 
     KisFixedPaintDeviceSP device;
-    const KoColorSpace* colorSpace;
+    const KoColorSpace *colorSpace;
     qreal randomness;
     qreal density;
     double centerX;
@@ -59,12 +56,12 @@ struct MaskProcessingData {
     qint32 pixelSize;
 };
 
-struct KisBrushMaskApplicatorBase
-{
+struct KisBrushMaskApplicatorBase {
     virtual ~KisBrushMaskApplicatorBase() {}
     virtual void process(const QRect &rect) = 0;
 
-    inline void initializeData(const MaskProcessingData *data) {
+    inline void initializeData(const MaskProcessingData *data)
+    {
         m_d = data;
     }
 
@@ -76,7 +73,8 @@ struct OperatorWrapper {
     OperatorWrapper(KisBrushMaskApplicatorBase *applicator)
         : m_applicator(applicator) {}
 
-    inline void operator() (const QRect& rect) {
+    inline void operator()(const QRect &rect)
+    {
         m_applicator->process(rect);
     }
 

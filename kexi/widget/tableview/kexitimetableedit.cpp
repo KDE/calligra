@@ -40,7 +40,7 @@
 #include <kexiutils/utils.h>
 
 KexiTimeTableEdit::KexiTimeTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
-        : KexiInputTableEdit(column, parent)
+    : KexiInputTableEdit(column, parent)
 {
     setObjectName("KexiTimeTableEdit");
 
@@ -56,13 +56,14 @@ KexiTimeTableEdit::~KexiTimeTableEdit()
 
 void KexiTimeTableEdit::setValueInInternalEditor(const QVariant &value)
 {
-    if (value.isValid() && value.toTime().isValid())
+    if (value.isValid() && value.toTime().isValid()) {
         m_lineedit->setText(m_formatter.toString(value.toTime()));
-    else
+    } else {
         m_lineedit->setText(QString());
+    }
 }
 
-void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
+void KexiTimeTableEdit::setValueInternal(const QVariant &add_, bool removeOld)
 {
     if (removeOld) {
         //new time entering... just fill the line edit
@@ -76,7 +77,7 @@ void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
     m_lineedit->setCursorPosition(0); //ok?
 }
 
-void KexiTimeTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val,
+void KexiTimeTableEdit::setupContents(QPainter *p, bool focused, const QVariant &val,
                                       QString &txt, int &align, int &x, int &y_offset, int &w, int &h)
 {
     Q_UNUSED(p);
@@ -89,15 +90,17 @@ void KexiTimeTableEdit::setupContents(QPainter *p, bool focused, const QVariant&
 #else
     y_offset = 0;
 #endif
-    if (!val.isNull() && val.canConvert(QVariant::Time))
+    if (!val.isNull() && val.canConvert(QVariant::Time)) {
         txt = m_formatter.toString(val.toTime());
+    }
     align |= Qt::AlignLeft;
 }
 
 bool KexiTimeTableEdit::valueIsNull()
 {
-    if (m_formatter.isEmpty(m_lineedit->text()))   //empty time is null
+    if (m_formatter.isEmpty(m_lineedit->text())) { //empty time is null
         return true;
+    }
     return !timeValue().isValid();
 }
 
@@ -118,8 +121,9 @@ QVariant KexiTimeTableEdit::value()
 
 bool KexiTimeTableEdit::valueIsValid()
 {
-    if (m_formatter.isEmpty(m_lineedit->text()))   //empty time is valid
+    if (m_formatter.isEmpty(m_lineedit->text())) { //empty time is valid
         return true;
+    }
     return m_formatter.fromString(m_lineedit->text()).isValid();
 }
 
@@ -129,16 +133,17 @@ bool KexiTimeTableEdit::valueChanged()
     return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 
-void KexiTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
+void KexiTimeTableEdit::handleCopyAction(const QVariant &value, const QVariant &visibleValue)
 {
     Q_UNUSED(visibleValue);
-    if (!value.isNull() && value.toTime().isValid())
+    if (!value.isNull() && value.toTime().isValid()) {
         qApp->clipboard()->setText(m_formatter.toString(value.toTime()));
-    else
+    } else {
         qApp->clipboard()->setText(QString());
+    }
 }
 
-void KexiTimeTableEdit::handleAction(const QString& actionName)
+void KexiTimeTableEdit::handleAction(const QString &actionName)
 {
     if (actionName == "edit_paste") {
         const bool alreadyVisible = m_lineedit->isVisible();
@@ -148,8 +153,7 @@ void KexiTimeTableEdit::handleAction(const QString& actionName)
         }
         const QVariant newValue(m_formatter.fromString(qApp->clipboard()->text()));
         setValueInInternalEditor(newValue);
-    }
-    else {
+    } else {
         KexiInputTableEdit::handleAction(actionName);
     }
 }

@@ -60,11 +60,13 @@
 class KexiFormPart::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
-        delete static_cast<QWidget*>(widgetTreeWidget);
-        delete static_cast<KexiDataSourcePage*>(dataSourcePage);
+    ~Private()
+    {
+        delete static_cast<QWidget *>(widgetTreeWidget);
+        delete static_cast<KexiDataSourcePage *>(dataSourcePage);
     }
     QPointer<KexiDataSourcePage> dataSourcePage;
     QPointer<KFormDesigner::WidgetTreeWidget> widgetTree;
@@ -73,15 +75,15 @@ public:
 };
 
 KexiFormPart::KexiFormPart(QObject *parent, const QVariantList &l)
-  : KexiPart::Part(parent,
-        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-              "Use '_' character instead of spaces. First character should be a..z character. "
-              "If you cannot use latin characters in your language, use english word.",
-              "form"),
-        i18nc("tooltip", "Create new form"),
-        i18nc("what's this", "Creates new form."),
-        l)
-  , d(new Private)
+    : KexiPart::Part(parent,
+                     i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+                           "Use '_' character instead of spaces. First character should be a..z character. "
+                           "If you cannot use latin characters in your language, use english word.",
+                           "form"),
+                     i18nc("tooltip", "Create new form"),
+                     i18nc("what's this", "Creates new form."),
+                     l)
+    , d(new Private)
 {
     setInternalPropertyValue("newObjectsAreDirty", true);
 
@@ -121,8 +123,8 @@ void KexiFormPart::initInstanceActions()
 #endif
 
     KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"),
-                                koIconName("aoleft"), KShortcut(), "formpart_align_menu", "KActionMenu");
-    KActionMenu *menu = static_cast<KActionMenu*>(action);
+                                         koIconName("aoleft"), KShortcut(), "formpart_align_menu", "KActionMenu");
+    KActionMenu *menu = static_cast<KActionMenu *>(action);
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Left"), koIconName("aoleft"),
                                        KShortcut(), "formpart_align_to_left"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Right"), koIconName("aoright"),
@@ -136,7 +138,7 @@ void KexiFormPart::initInstanceActions()
 
     action = createSharedAction(Kexi::DesignViewMode, i18n("Adjust Widgets Size"), koIconName("aogrid"),
                                 KShortcut(), "formpart_adjust_size_menu", "KActionMenu");
-    menu = static_cast<KActionMenu*>(action);
+    menu = static_cast<KActionMenu *>(action);
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Fit"), koIconName("aofit"),
                                        KShortcut(), "formpart_adjust_to_fit"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Grid"), koIconName("aogrid"),
@@ -151,22 +153,23 @@ void KexiFormPart::initInstanceActions()
                                        KShortcut(), "formpart_adjust_width_big"));
 }
 
-KexiWindowData*
-KexiFormPart::createWindowData(KexiWindow* window)
+KexiWindowData *
+KexiFormPart::createWindowData(KexiWindow *window)
 {
     return new KexiFormPartTempData(window);
 }
 
-KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
-                                   KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
+KexiView *KexiFormPart::createView(QWidget *parent, KexiWindow *window,
+                                   KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant> *)
 {
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
 
     kDebug();
     KexiMainWindowIface *win = KexiMainWindowIface::global();
-    if (!win || !win->project() || !win->project()->dbConnection())
+    if (!win || !win->project() || !win->project()->dbConnection()) {
         return 0;
+    }
 
     KexiFormView *view = new KexiFormView(parent, win->project()->dbConnection());
     view->setObjectName(item.name().toLatin1());
@@ -239,9 +242,7 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
         tNameProperty.appendChild(lTType);
         lclass.appendChild(tNameProperty);
 
-
         ///line edit!
-
 
         QDomElement vclass = domDoc.createElement("widget");
         baseWidget.appendChild(vclass);
@@ -320,23 +321,25 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 #endif
 
 KLocalizedString KexiFormPart::i18nMessage(
-    const QString& englishMessage, KexiWindow* window) const
+    const QString &englishMessage, KexiWindow *window) const
 {
     Q_UNUSED(window);
-    if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
+    if (englishMessage == "Design of object <resource>%1</resource> has been modified.") {
         return ki18n(I18N_NOOP("Design of form <resource>%1</resource> has been modified."));
-    if (englishMessage == "Object <resource>%1</resource> already exists.")
+    }
+    if (englishMessage == "Object <resource>%1</resource> already exists.") {
         return ki18n(I18N_NOOP("Form <resource>%1</resource> already exists."));
+    }
 
     return Part::i18nMessage(englishMessage, window);
 }
 
-KexiDataSourcePage* KexiFormPart::dataSourcePage() const
+KexiDataSourcePage *KexiFormPart::dataSourcePage() const
 {
     return d->dataSourcePage;
 }
 
-KFormDesigner::WidgetTreeWidget* KexiFormPart::widgetTreePage() const
+KFormDesigner::WidgetTreeWidget *KexiFormPart::widgetTreePage() const
 {
     return d->widgetTree;
 }
@@ -386,8 +389,8 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 
 //----------------
 
-KexiFormPartTempData::KexiFormPartTempData(QObject* parent)
-        : KexiWindowData(parent)
+KexiFormPartTempData::KexiFormPartTempData(QObject *parent)
+    : KexiWindowData(parent)
 {
 }
 

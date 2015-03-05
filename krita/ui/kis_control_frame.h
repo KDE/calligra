@@ -51,27 +51,28 @@ public:
     KisControlFrame(KisViewManager *view, QWidget *parent = 0, const char *name = 0);
     virtual ~KisControlFrame() {}
 
-    KisPaintopBox* paintopBox() {
+    KisPaintopBox *paintopBox()
+    {
         return m_paintopBox;
     }
 
 private Q_SLOTS:
 
-    void slotSetPattern(KoPattern * pattern);
-    void slotSetGradient(KoAbstractGradient * gradient);
+    void slotSetPattern(KoPattern *pattern);
+    void slotSetGradient(KoAbstractGradient *gradient);
 
 private:
 
-    void createPatternsChooser(KisViewManager * view);
-    void createGradientsChooser(KisViewManager * view);
+    void createPatternsChooser(KisViewManager *view);
+    void createGradientsChooser(KisViewManager *view);
 
 private:
 
     QFont m_font;
-    KisViewManager * m_viewManager;
+    KisViewManager *m_viewManager;
 
-    QTabWidget * m_gradientTab;
-    QTabWidget * m_patternsTab;
+    QTabWidget *m_gradientTab;
+    QTabWidget *m_patternsTab;
 
     KisIconWidget *m_patternWidget;
     KisIconWidget *m_gradientWidget;

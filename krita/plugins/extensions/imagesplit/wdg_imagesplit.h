@@ -30,9 +30,8 @@ class WdgImagesplit : public QWidget, public Ui::WdgImagesplit
 
 public:
 
-    WdgImagesplit(QWidget* parent);
+    WdgImagesplit(QWidget *parent);
 
 };
-
 
 #endif // WDG_IMAGESPLIT_H

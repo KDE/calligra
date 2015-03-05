@@ -47,8 +47,8 @@
 #include "ChartShape.h"
 #include "ChartPart.h"
 
-
-namespace KChart {
+namespace KChart
+{
 
 class ChartDocument::Private
 {
@@ -69,7 +69,7 @@ ChartDocument::Private::~Private()
 
 ChartDocument::ChartDocument(ChartShape *parent)
     : KoDocument(new ChartPart(0))
-    , d (new Private)
+    , d(new Private)
 {
     d->parent = parent;
     // Needed by KoDocument::nativeOasisMimeType().
@@ -81,7 +81,6 @@ ChartDocument::~ChartDocument()
 {
     delete d;
 }
-
 
 bool ChartDocument::loadOdf(KoOdfReadStore &odfStore)
 {
@@ -121,15 +120,17 @@ bool ChartDocument::saveOdf(SavingContext &context)
     KoStore *store = odfStore.store();
     KoXmlWriter *manifestWriter = odfStore.manifestWriter();
     KoXmlWriter *contentWriter  = odfStore.contentWriter();
-    if (!contentWriter)
+    if (!contentWriter) {
         return false;
+    }
 
     KoGenStyles mainStyles;
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
-    if (!bodyWriter)
+    if (!bodyWriter) {
         return false;
+    }
 
-    KoEmbeddedDocumentSaver& embeddedSaver = context.embeddedSaver;
+    KoEmbeddedDocumentSaver &embeddedSaver = context.embeddedSaver;
 
     KoShapeSavingContext savingContext(*bodyWriter, mainStyles, embeddedSaver);
 
@@ -149,8 +150,9 @@ bool ChartDocument::saveOdf(SavingContext &context)
     manifestWriter->addManifestEntry(url().path() + "/styles.xml", "text/xml");
 
     // save the styles.xml
-    if (!mainStyles.saveOdfStylesDotXml(store, manifestWriter))
+    if (!mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
         return false;
+    }
 
     if (!savingContext.saveDataCenter(store, manifestWriter)) {
         return false;
@@ -158,7 +160,6 @@ bool ChartDocument::saveOdf(SavingContext &context)
 
     return true;
 }
-
 
 void ChartDocument::paintContent(QPainter &painter, const QRect &rect)
 {

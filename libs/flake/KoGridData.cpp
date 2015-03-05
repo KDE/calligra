@@ -40,12 +40,12 @@ class KoGridData::Private
 public:
     Private()
         : snapToGrid(false),
-        showGrid(false),
-        paintGridInBackground(false),
-        gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
-        gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
-        gridColor(Qt::lightGray),
-        toggleGridAction(0)
+          showGrid(false),
+          paintGridInBackground(false),
+          gridX(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
+          gridY(MM_TO_POINT(DEFAULT_GRID_SIZE_MM)),
+          gridColor(Qt::lightGray),
+          toggleGridAction(0)
     {
     }
 
@@ -63,7 +63,7 @@ public:
 };
 
 KoGridData::KoGridData()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -103,22 +103,24 @@ QColor KoGridData::gridColor() const
     return d->gridColor;
 }
 
-void KoGridData::setGridColor(const QColor & color)
+void KoGridData::setGridColor(const QColor &color)
 {
     d->gridColor = color;
 }
 
 bool KoGridData::showGrid() const
 {
-    if (d->toggleGridAction)
+    if (d->toggleGridAction) {
         return d->toggleGridAction->isChecked();
+    }
     return d->showGrid;
 }
 
 void KoGridData::setShowGrid(bool showGrid)
 {
-    if (d->toggleGridAction)
+    if (d->toggleGridAction) {
         d->toggleGridAction->setChecked(showGrid);
+    }
     d->showGrid = showGrid;
 }
 
@@ -134,8 +136,9 @@ void KoGridData::setPaintGridInBackground(bool inBackground)
 
 void KoGridData::paintGrid(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
 {
-    if (! showGrid())
+    if (! showGrid()) {
         return;
+    }
 
     painter.setPen(gridColor());
 
@@ -168,20 +171,23 @@ void KoGridData::paintGrid(QPainter &painter, const KoViewConverter &converter, 
     };
 }
 
-bool KoGridData::loadOdfSettings(const KoXmlDocument & settingsDoc)
+bool KoGridData::loadOdfSettings(const KoXmlDocument &settingsDoc)
 {
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
-    if (viewSettings.isNull())
+    if (viewSettings.isNull()) {
         return false;
+    }
 
     KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap("Views");
-    if (viewMap.isNull())
+    if (viewMap.isNull()) {
         return false;
+    }
 
     KoOasisSettings::Items firstView = viewMap.entry(0);
-    if (firstView.isNull())
+    if (firstView.isNull()) {
         return false;
+    }
 
     qreal gridX = firstView.parseConfigItemInt("GridFineWidth", DEFAULT_GRID_SIZE_MM);
     qreal gridY = firstView.parseConfigItemInt("GridFineHeight", DEFAULT_GRID_SIZE_MM);
@@ -217,14 +223,15 @@ void KoGridData::saveOdfSettings(KoXmlWriter &settingsWriter)
     }
 }
 
-KToggleAction *KoGridData::gridToggleAction(QWidget* canvas)
+KToggleAction *KoGridData::gridToggleAction(QWidget *canvas)
 {
     if (! d->toggleGridAction) {
         d->toggleGridAction = new KToggleAction(koIcon("view-grid"), i18n("Show Grid"), 0);
         d->toggleGridAction->setToolTip(i18n("Shows or hides grid"));
         d->toggleGridAction->setChecked(d->showGrid);
     }
-    if (canvas)
+    if (canvas) {
         QObject::connect(d->toggleGridAction, SIGNAL(toggled(bool)), canvas, SLOT(update()));
+    }
     return d->toggleGridAction;
 }

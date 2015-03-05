@@ -65,8 +65,7 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
     if (index.row() == d->shortcuts.count() && role == Qt::DisplayRole) {
         if (index.column() == 0) {
             return i18n("Add shortcut...");
-        }
-        else {
+        } else {
             return QVariant();
         }
     }
@@ -104,12 +103,12 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
 
             case KisShortcutConfiguration::MouseButtonType:
                 output = KisShortcutConfiguration::buttonsInputToText(
-                    s->keys(), s->buttons());
+                             s->keys(), s->buttons());
                 break;
 
             case KisShortcutConfiguration::MouseWheelType:
                 output = KisShortcutConfiguration::wheelInputToText(
-                    s->keys(), s->wheel());
+                             s->keys(), s->wheel());
                 break;
 
             default:
@@ -128,8 +127,7 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
         default:
             break;
         }
-    }
-    else if (role == Qt::EditRole) {
+    } else if (role == Qt::EditRole) {
         KisShortcutConfiguration *s;
 
         if (index.row() == d->shortcuts.count()) {
@@ -138,8 +136,7 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
             }
 
             s = d->temporaryShortcut;
-        }
-        else {
+        } else {
             s = d->shortcuts.at(index.row());
         }
 
@@ -212,7 +209,7 @@ Qt::ItemFlags KisActionShortcutsModel::flags(const QModelIndex &index) const
         return Qt::ItemIsEnabled | Qt::ItemIsEditable;
     }
 
-    KisShortcutConfiguration* config = d->shortcuts.at(index.row());
+    KisShortcutConfiguration *config = d->shortcuts.at(index.row());
     if (index.column() == 2 && d->action->isShortcutRequired(config->mode()) && d->shortcutModeCount(config->mode()) < 2) {
         return Qt::ItemIsSelectable;
     }
@@ -248,8 +245,9 @@ bool KisActionShortcutsModel::setData(const QModelIndex &index, const QVariant &
         KisShortcutConfiguration *newData = value.value<KisShortcutConfiguration *>();
         KisShortcutConfiguration *oldData = d->shortcuts.at(index.row());
 
-        if (newData == oldData)
+        if (newData == oldData) {
             return true;
+        }
 
         oldData->setKeys(newData->keys());
         oldData->setButtons(newData->buttons());
@@ -346,8 +344,8 @@ bool KisActionShortcutsModel::removeRows(int row, int count, const QModelIndex &
 int KisActionShortcutsModel::Private::shortcutModeCount(uint mode)
 {
     int count = 0;
-    foreach(KisShortcutConfiguration* s, shortcuts) {
-        if(s->mode() == mode) {
+    foreach (KisShortcutConfiguration *s, shortcuts) {
+        if (s->mode() == mode) {
             count++;
         }
     }

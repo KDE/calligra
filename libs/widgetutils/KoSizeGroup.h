@@ -56,8 +56,7 @@ public:
      * Determines the direction in which the size group affects the requested
      * and minimum sizes of his component widgets.
      */
-    enum mode
-    {
+    enum mode {
         KO_SIZE_GROUP_NONE = 0,                                                 //! group has no effect
         KO_SIZE_GROUP_HORIZONTAL = 1 << 0,                                      //! group affects horizontal size
         KO_SIZE_GROUP_VERTICAL = 1 << 1,                                        //! group affects vertical size
@@ -70,7 +69,7 @@ public:
      * By default, the mode of the size group is KO_SIZE_GROUP_HORIZONTAL and
      * the group will not ignore hidden widgets.
      */
-    explicit KoSizeGroup(QObject* parent = 0,
+    explicit KoSizeGroup(QObject *parent = 0,
                          KoSizeGroup::mode mode = KoSizeGroup::KO_SIZE_GROUP_HORIZONTAL,
                          bool ignoreHidden = false);
 
@@ -96,7 +95,7 @@ public:
     void removeWidget(QWidget *widget);
 
 private:
-    KoSizeGroupPrivate* const d;
+    KoSizeGroupPrivate *const d;
 };
 
 #endif // KOSIZEGROUP_H

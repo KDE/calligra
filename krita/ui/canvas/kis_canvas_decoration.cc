@@ -28,7 +28,7 @@ struct KisCanvasDecoration::Private {
     QString id;
 };
 
-KisCanvasDecoration::KisCanvasDecoration(const QString& id, QPointer<KisView>parent)
+KisCanvasDecoration::KisCanvasDecoration(const QString &id, QPointer<KisView>parent)
     : QObject(parent)
     , d(new Private)
 {
@@ -47,8 +47,7 @@ void KisCanvasDecoration::setView(QPointer<KisView>imageView)
     d->view = imageView;
 }
 
-
-const QString& KisCanvasDecoration::id() const
+const QString &KisCanvasDecoration::id() const
 {
     return d->id;
 }
@@ -72,21 +71,20 @@ void KisCanvasDecoration::toggleVisibility()
     setVisible(!visible());
 }
 
-void KisCanvasDecoration::paint(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas = 0)
+void KisCanvasDecoration::paint(QPainter &gc, const QRectF &updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas = 0)
 {
     if (!canvas) {
-        dbgFile<<"canvas does not exist:"<<canvas;
-        }
-    if (visible())
-        drawDecoration(gc, updateArea, converter,canvas);
+        dbgFile << "canvas does not exist:" << canvas;
+    }
+    if (visible()) {
+        drawDecoration(gc, updateArea, converter, canvas);
+    }
 }
-
 
 QPointer<KisView>KisCanvasDecoration::imageView()
 {
     return d->view;
 }
-
 
 QPointer<KisView>KisCanvasDecoration::view() const
 {

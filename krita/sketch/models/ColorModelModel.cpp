@@ -28,7 +28,7 @@ public:
     QList<KoID> colorModels;
 };
 
-ColorModelModel::ColorModelModel(QObject* parent)
+ColorModelModel::ColorModelModel(QObject *parent)
     : QAbstractListModel(parent), d(new Private)
 {
     d->colorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible);
@@ -43,34 +43,35 @@ ColorModelModel::~ColorModelModel()
     delete d;
 }
 
-int ColorModelModel::rowCount(const QModelIndex& parent) const
+int ColorModelModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return d->colorModels.count();
 }
 
-QVariant ColorModelModel::data(const QModelIndex& index, int role) const
+QVariant ColorModelModel::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid() || index.row() < 0 || index.row() >= d->colorModels.count())
-    {
+    if (!index.isValid() || index.row() < 0 || index.row() >= d->colorModels.count()) {
         return QVariant();
     }
 
-    if( role == TextRole )
+    if (role == TextRole) {
         return d->colorModels.at(index.row()).name();
+    }
 
     return QVariant();
 }
 
 QString ColorModelModel::id(int index)
 {
-    if(index < 0 || index >= d->colorModels.count())
+    if (index < 0 || index >= d->colorModels.count()) {
         return QString();
+    }
 
     return d->colorModels.at(index).id();
 }
 
-int ColorModelModel::indexOf(const QString& id)
+int ColorModelModel::indexOf(const QString &id)
 {
     return d->colorModels.indexOf(KoID(id));
 }

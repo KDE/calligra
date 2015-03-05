@@ -26,7 +26,6 @@
 
 class KUndo2MagicString;
 
-
 class OffsetImage : public KisViewPlugin
 {
     Q_OBJECT

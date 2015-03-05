@@ -46,7 +46,7 @@ class SortDialog : public KDialog
 {
     Q_OBJECT
 public:
-    SortDialog(QWidget* parent, Selection* selection);
+    SortDialog(QWidget *parent, Selection *selection);
     ~SortDialog();
 
 public Q_SLOTS: // reimplementations

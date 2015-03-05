@@ -39,13 +39,13 @@ public:
     ~Data();
 
     //! Connection data for the source database
-    KexiDB::ConnectionData* source;
+    KexiDB::ConnectionData *source;
 
     //! Name of the source database
     QString sourceName;
 
     //! Destination project data
-    KexiProjectData* destination;
+    KexiProjectData *destination;
 
     //! Flag to determine structure copy, or structure + data
     bool keepData;

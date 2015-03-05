@@ -27,11 +27,10 @@
 #include "kis_transaction.h"
 #include <commands_new/kis_selection_move_command2.h>
 
-
 MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
-                                                         KisSelectionSP selection,
-                                                         KisUpdatesFacade *updatesFacade,
-                                                         KisPostExecutionUndoAdapter *undoAdapter)
+        KisSelectionSP selection,
+        KisUpdatesFacade *updatesFacade,
+        KisPostExecutionUndoAdapter *undoAdapter)
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move Selection"), false, undoAdapter),
       m_paintLayer(paintLayer),
       m_selection(selection),
@@ -50,7 +49,6 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
 
     KisPaintDeviceSP movedDevice = new KisPaintDevice(m_paintLayer.data(), paintDevice->colorSpace());
 
-
     QRect copyRect = m_selection->selectedRect();
     KisPainter gc(movedDevice);
     gc.setSelection(m_selection);
@@ -64,7 +62,7 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
                       KisStrokeJobData::NORMAL);
 
     KisIndirectPaintingSupport *indirect =
-        static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
+        static_cast<KisIndirectPaintingSupport *>(m_paintLayer.data());
     indirect->setTemporaryTarget(movedDevice);
     indirect->setTemporaryCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_OVER));
     indirect->setTemporaryOpacity(OPACITY_OPAQUE_U8);
@@ -75,10 +73,10 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
 void MoveSelectionStrokeStrategy::finishStrokeCallback()
 {
     KisIndirectPaintingSupport *indirect =
-        static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
+        static_cast<KisIndirectPaintingSupport *>(m_paintLayer.data());
 
     KisTransaction transaction(name(), m_paintLayer->paintDevice());
-    indirect->mergeToLayer(m_paintLayer, (KisUndoAdapter*)0, KUndo2MagicString());
+    indirect->mergeToLayer(m_paintLayer, (KisUndoAdapter *)0, KUndo2MagicString());
     runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
                       KisStrokeJobData::SEQUENTIAL,
                       KisStrokeJobData::NORMAL);
@@ -89,7 +87,7 @@ void MoveSelectionStrokeStrategy::finishStrokeCallback()
 
     m_updatesFacade->blockUpdates();
     runAndSaveCommand(
-    KUndo2CommandSP(new KisSelectionMoveCommand2(m_selection, selectionOffset, selectionOffset + m_finalOffset)),
+        KUndo2CommandSP(new KisSelectionMoveCommand2(m_selection, selectionOffset, selectionOffset + m_finalOffset)),
         KisStrokeJobData::SEQUENTIAL,
         KisStrokeJobData::EXCLUSIVE);
     m_updatesFacade->unblockUpdates();
@@ -102,7 +100,7 @@ void MoveSelectionStrokeStrategy::finishStrokeCallback()
 void MoveSelectionStrokeStrategy::cancelStrokeCallback()
 {
     KisIndirectPaintingSupport *indirect =
-        static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
+        static_cast<KisIndirectPaintingSupport *>(m_paintLayer.data());
 
     QRegion dirtyRegion = indirect->temporaryTarget()->region();
 
@@ -119,11 +117,11 @@ void MoveSelectionStrokeStrategy::cancelStrokeCallback()
 
 void MoveSelectionStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    MoveStrokeStrategy::Data *d = dynamic_cast<MoveStrokeStrategy::Data*>(data);
+    MoveStrokeStrategy::Data *d = dynamic_cast<MoveStrokeStrategy::Data *>(data);
 
     if (d) {
         KisIndirectPaintingSupport *indirect =
-            static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
+            static_cast<KisIndirectPaintingSupport *>(m_paintLayer.data());
 
         KisPaintDeviceSP movedDevice = indirect->temporaryTarget();
 

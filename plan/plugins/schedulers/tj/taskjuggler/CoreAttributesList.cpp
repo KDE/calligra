@@ -16,7 +16,6 @@
 namespace TJ
 {
 
-
 CoreAttributesList::~CoreAttributesList()
 {
     if (autoDelete()) {
@@ -59,8 +58,7 @@ CoreAttributesList::deleteContents()
     // Don't understand this code (danders)
     while (!isEmpty()) {
         for (CoreAttributesListIterator li(*this); *li; ++li)
-            if ((*li)->getParent() == 0)
-            {
+            if ((*li)->getParent() == 0) {
                 delete *li;
                 break;
             }
@@ -70,9 +68,9 @@ CoreAttributesList::deleteContents()
 void
 CoreAttributesList::setSorting(int s, int level)
 {
-    if (level >=0 && level < maxSortingLevel)
+    if (level >= 0 && level < maxSortingLevel) {
         sorting[level] = s;
-    else
+    } else
         qFatal("CoreAttributesList::setSorting: level out of range: %d",
                level);
 }
@@ -80,15 +78,19 @@ CoreAttributesList::setSorting(int s, int level)
 void
 CoreAttributesList::sort()
 {
-    QList<CoreAttributes*> lst = *this;
+    QList<CoreAttributes *> lst = *this;
     clear();
-    QStringList s; for(int i = 0; i < lst.count(); ++i) s << lst.at(i)->getId();
-    qDebug()<<"CoreAttributesList::sort:"<<s;
+    QStringList s; for (int i = 0; i < lst.count(); ++i) {
+        s << lst.at(i)->getId();
+    }
+    qDebug() << "CoreAttributesList::sort:" << s;
     while (!lst.isEmpty()) {
         inSort(lst.takeLast());
     }
-    s.clear(); for(int i = 0; i < lst.count(); ++i) s << lst.at(i)->getId();
-    qDebug()<<"CoreAttributesList::sort: sorted"<<s;
+    s.clear(); for (int i = 0; i < lst.count(); ++i) {
+        s << lst.at(i)->getId();
+    }
+    qDebug() << "CoreAttributesList::sort: sorted" << s;
 }
 
 void
@@ -98,22 +100,18 @@ CoreAttributesList::createIndex(bool initial)
      * for each list. In the other mode the index is set. This is most likely
      * called after the sorting criteria have been changed. */
     int i = 1;
-    if (initial)
-    {
+    if (initial) {
         uint hNo = 1;
-        for (int pos = 0; pos < count(); ++pos)
-        {
+        for (int pos = 0; pos < count(); ++pos) {
             CoreAttributes *a = at(pos);
             a->setSequenceNo(i);
-            if (a->getParent() == 0)
+            if (a->getParent() == 0) {
                 a->setHierarchNo(hNo++);
+            }
         }
-    }
-    else
-    {
+    } else {
         sort();
-        for (int pos = 0; pos < count(); ++pos)
-        {
+        for (int pos = 0; pos < count(); ++pos) {
             CoreAttributes *a = at(pos);
             a->setIndex(i);
             // Reset all hierarchIndices to 0.
@@ -121,23 +119,24 @@ CoreAttributesList::createIndex(bool initial)
         }
         // Then number them again.
         uint hNo = 1;
-        for (int pos = 0; pos < count(); ++pos)
-        {
+        for (int pos = 0; pos < count(); ++pos) {
             CoreAttributes *a = at(pos);
             a->setHierarchIndex(hNo);
-            if (a->getParent() == 0)
+            if (a->getParent() == 0) {
                 hNo++;
+            }
         }
     }
 }
 
 int
-CoreAttributesList::getIndex(const QString& id) const
+CoreAttributesList::getIndex(const QString &id) const
 {
     for (int pos = 0; pos < count(); ++pos) {
         CoreAttributes *a = at(pos);
-        if (a->getId() == id)
+        if (a->getId() == id) {
             return a->getIndex();
+        }
     }
     return -1;
 }
@@ -148,8 +147,9 @@ CoreAttributesList::maxDepth() const
     uint md = 0;
     for (int pos = 0; pos < count(); ++pos) {
         CoreAttributes *a = at(pos);
-        if (a->treeLevel() + 1 > md)
+        if (a->treeLevel() + 1 > md) {
             md = a->treeLevel() + 1;
+        }
     }
     return md;
 }
@@ -157,8 +157,7 @@ CoreAttributesList::maxDepth() const
 bool
 CoreAttributesList::isSupportedSortingCriteria(int sc)
 {
-    switch (sc)
-    {
+    switch (sc) {
     case SequenceUp:
     case SequenceDown:
     case TreeMode:
@@ -175,7 +174,7 @@ CoreAttributesList::isSupportedSortingCriteria(int sc)
     }
 }
 
-int CoreAttributesList::inSort(CoreAttributes* attr)
+int CoreAttributesList::inSort(CoreAttributes *attr)
 {
     int i = 0;
     for (; i < count(); ++i) {
@@ -187,39 +186,37 @@ int CoreAttributesList::inSort(CoreAttributes* attr)
     insert(i, attr);
     return i;
 }
-                                          
+
 int
-CoreAttributesList::compareItemsLevel(CoreAttributes* c1, CoreAttributes* c2,
+CoreAttributesList::compareItemsLevel(CoreAttributes *c1, CoreAttributes *c2,
                                       int level)
 {
-    if (level < 0 || level >= maxSortingLevel)
+    if (level < 0 || level >= maxSortingLevel) {
         return -1;
+    }
 
-    switch (sorting[level])
-    {
+    switch (sorting[level]) {
     case SequenceUp:
         return c1->getSequenceNo() == c2->getSequenceNo() ? 0 :
-            c1->getSequenceNo() < c2->getSequenceNo() ? -1 : 1;
+               c1->getSequenceNo() < c2->getSequenceNo() ? -1 : 1;
     case SequenceDown:
         return c1->getSequenceNo() == c2->getSequenceNo() ? 0 :
-            c1->getSequenceNo() > c2->getSequenceNo() ? -1 : 1;
-    case TreeMode:
-    {
-        if (level == 0)
+               c1->getSequenceNo() > c2->getSequenceNo() ? -1 : 1;
+    case TreeMode: {
+        if (level == 0) {
             return compareTreeItemsT(this, c1, c2);
-        else
+        } else {
             return c1->getSequenceNo() < c2->getSequenceNo() ? -1 : 1;
+        }
     }
-    case FullNameDown:
-    {
+    case FullNameDown: {
         QString fn1;
         c1->getFullName(fn1);
         QString fn2;
         c2->getFullName(fn2);
         return fn1.compare(fn2);
     }
-    case FullNameUp:
-    {
+    case FullNameUp: {
         QString fn1;
         c1->getFullName(fn1);
         QString fn2;
@@ -228,10 +225,10 @@ CoreAttributesList::compareItemsLevel(CoreAttributes* c1, CoreAttributes* c2,
     }
     case IndexUp:
         return c2->getIndex() == c1->getIndex() ? 0 :
-            c2->getIndex() < c1->getIndex() ? -1 : 1;
+               c2->getIndex() < c1->getIndex() ? -1 : 1;
     case IndexDown:
         return c1->getIndex() == c2->getIndex() ? 0 :
-            c1->getIndex() > c2->getIndex() ? -1 : 1;
+               c1->getIndex() > c2->getIndex() ? -1 : 1;
     case IdUp:
         return QString::compare(c1->getId(), c2->getId());
     case IdDown:
@@ -249,47 +246,48 @@ CoreAttributesList::compareItemsLevel(CoreAttributes* c1, CoreAttributes* c2,
 }
 
 int
-CoreAttributesList::compareItems(CoreAttributes* c1, CoreAttributes* c2)
+CoreAttributesList::compareItems(CoreAttributes *c1, CoreAttributes *c2)
 {
     int res;
     for (int i = 0; i < CoreAttributesList::maxSortingLevel; ++i)
-        if ((res = compareItemsLevel(c1, c2, i)) != 0)
+        if ((res = compareItemsLevel(c1, c2, i)) != 0) {
             return res;
+        }
     return res;
 }
 
 //static
 QStringList CoreAttributesList::getSortCriteria()
 {
-   QStringList lst;
-   lst << "SequenceUp" << "SequenceDown"
-       << "TreeMode" << "NameUp" << "NameDown" << "FullNameUp"
-       << "FullNameDown" << "IdUp" << "IdDown" << "IndexUp" << "IndexDown"
-       << "StatusUp" << "StatusDown" << "CompletedUp" << "CompletedDown"
-       << "PrioUp" << "PrioDown"
-       << "ResponsibleUp" << "ResponsibleDown"
-       << "MinEffortUp" << "MinEffortDown"
-       << "MaxEffortUp" << "MaxEffortDown"
-       << "RateUp" << "RateDown"
-       << "StartUp" << "StartDown" << "EndUp" << "EndDown"
-       << "CriticalnessUp" << "CriticalnessDown"
-       << "PathCriticalnessUp" << "PathCriticalnessDown"
+    QStringList lst;
+    lst << "SequenceUp" << "SequenceDown"
+        << "TreeMode" << "NameUp" << "NameDown" << "FullNameUp"
+        << "FullNameDown" << "IdUp" << "IdDown" << "IndexUp" << "IndexDown"
+        << "StatusUp" << "StatusDown" << "CompletedUp" << "CompletedDown"
+        << "PrioUp" << "PrioDown"
+        << "ResponsibleUp" << "ResponsibleDown"
+        << "MinEffortUp" << "MinEffortDown"
+        << "MaxEffortUp" << "MaxEffortDown"
+        << "RateUp" << "RateDown"
+        << "StartUp" << "StartDown" << "EndUp" << "EndDown"
+        << "CriticalnessUp" << "CriticalnessDown"
+        << "PathCriticalnessUp" << "PathCriticalnessDown"
         ;
     return lst;
 }
 
 } // namespace TJ
 
-QDebug operator<<( QDebug dbg, const TJ::CoreAttributesList& lst )
+QDebug operator<<(QDebug dbg, const TJ::CoreAttributesList &lst)
 {
     QStringList s;
-    for ( int i = 0; i < TJ::CoreAttributesList::maxSortingLevel; ++i ) {
-        s << TJ::CoreAttributesList::getSortCriteria().at( lst.getSorting( i ) );
+    for (int i = 0; i < TJ::CoreAttributesList::maxSortingLevel; ++i) {
+        s << TJ::CoreAttributesList::getSortCriteria().at(lst.getSorting(i));
     }
     dbg.nospace() << "CoreAttributeList{sort: " << s.join("|") << " (";
-    for( int i = 0; i < lst.count(); ++i ) {
-        dbg << lst.at( i );
-        if ( i  < lst.count() - 1 ) {
+    for (int i = 0; i < lst.count(); ++i) {
+        dbg << lst.at(i);
+        if (i  < lst.count() - 1) {
             dbg.nospace() << ',';
         }
     }

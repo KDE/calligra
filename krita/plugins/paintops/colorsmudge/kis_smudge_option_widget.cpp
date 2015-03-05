@@ -28,23 +28,22 @@
 #include "kis_smudge_option_widget.h"
 #include "kis_smudge_option.h"
 
-
-KisSmudgeOptionWidget::KisSmudgeOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked):
+KisSmudgeOptionWidget::KisSmudgeOptionWidget(const QString &label, const QString &sliderLabel, const QString &name, bool checked):
     KisCurveOptionWidget(new KisSmudgeOption(name, label, checked))
 {
     Q_UNUSED(sliderLabel);
 
     mCbSmudgeMode = new QComboBox();
     mCbSmudgeMode->addItem(i18n("Smearing"), KisSmudgeOption::SMEARING_MODE);
-    mCbSmudgeMode->addItem(i18n("Dulling") , KisSmudgeOption::DULLING_MODE);
+    mCbSmudgeMode->addItem(i18n("Dulling"), KisSmudgeOption::DULLING_MODE);
 
-    QHBoxLayout* h = new QHBoxLayout();
+    QHBoxLayout *h = new QHBoxLayout();
     h->addWidget(new QLabel(i18n("Smudge mode:")));
     h->addWidget(mCbSmudgeMode, 1);
 
-    QVBoxLayout* v = new QVBoxLayout();
+    QVBoxLayout *v = new QVBoxLayout();
     v->setMargin(0);
-    QWidget*     w = new QWidget();
+    QWidget     *w = new QWidget();
 
     v->addLayout(h);
     v->addWidget(curveWidget());
@@ -57,14 +56,14 @@ KisSmudgeOptionWidget::KisSmudgeOptionWidget(const QString& label, const QString
 
 void KisSmudgeOptionWidget::slotCurrentIndexChanged(int index)
 {
-    static_cast<KisSmudgeOption*>(curveOption())->setMode((KisSmudgeOption::Mode)index);
+    static_cast<KisSmudgeOption *>(curveOption())->setMode((KisSmudgeOption::Mode)index);
     emitSettingChanged();
 }
 
-void KisSmudgeOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisSmudgeOptionWidget::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
 
-    KisSmudgeOption::Mode mode = static_cast<KisSmudgeOption*>(curveOption())->getMode();
+    KisSmudgeOption::Mode mode = static_cast<KisSmudgeOption *>(curveOption())->getMode();
     mCbSmudgeMode->setCurrentIndex(mode == KisSmudgeOption::SMEARING_MODE ? 0 : 1);
 }

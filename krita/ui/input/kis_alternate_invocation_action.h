@@ -55,7 +55,7 @@ public:
 
     void begin(int shortcut, QEvent *event);
     void end(QEvent *event);
-    void inputEvent(QEvent* event);
+    void inputEvent(QEvent *event);
 
 private:
     KisTool::ToolAction shortcutToToolAction(int shortcut);

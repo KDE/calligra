@@ -21,7 +21,6 @@
 #ifndef KORESOURCETAGSTORE_H
 #define KORESOURCETAGSTORE_H
 
-
 #include <kdebug.h>
 #include <KoResource.h>
 #include <QDomDocument>
@@ -42,28 +41,28 @@ public:
     * Constructs a KoResourceTagging object
     *
     */
-    explicit KoResourceTagStore(KoResourceServerBase *resourceServer, const QString& resourceType, const QString& extensions);
+    explicit KoResourceTagStore(KoResourceServerBase *resourceServer, const QString &resourceType, const QString &extensions);
     ~KoResourceTagStore();
 
-    QStringList assignedTagsList(KoResource* resource) const;
+    QStringList assignedTagsList(KoResource *resource) const;
 
     /// remote the given resource from the tagstore
     void removeResource(const KoResource *resource);
 
     /// Add the given tag to the tag store. The resource can be empty, in which case
     /// the tag is added bug unused
-    void addTag(KoResource* resource, const QString& tag);
+    void addTag(KoResource *resource, const QString &tag);
 
     /// Remove the given tag for the given resource.
-    void delTag(KoResource* resource, const QString& tag);
+    void delTag(KoResource *resource, const QString &tag);
 
-    void delTag(const QString& tag);
+    void delTag(const QString &tag);
 
     /// @return a list of all the tags in this store
     QStringList tagNamesList() const;
 
     /// Return a list of filenames for the given tag
-    QStringList searchTag(const QString& tag);
+    QStringList searchTag(const QString &tag);
 
     void loadTags();
     void serializeTags();
@@ -83,7 +82,7 @@ private:
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
-    QMultiHash<const KoResource*, QString> m_resourceToTag;
+    QMultiHash<const KoResource *, QString> m_resourceToTag;
     QHash<QString, int> m_tagList;
 
     QString m_tagsXMLFile;
@@ -93,6 +92,5 @@ private:
 
     KoResourceServerBase *m_resourceServer;
 };
-
 
 #endif // KORESOURCETAGSTORE_H

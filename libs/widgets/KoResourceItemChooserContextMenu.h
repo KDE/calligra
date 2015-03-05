@@ -32,17 +32,17 @@ class ContextMenuExistingTagAction : public QAction
 {
     Q_OBJECT
 public:
-    explicit ContextMenuExistingTagAction( KoResource * resource, QString tag, QObject* parent = 0);
+    explicit ContextMenuExistingTagAction(KoResource *resource, QString tag, QObject *parent = 0);
     ~ContextMenuExistingTagAction();
 
 Q_SIGNALS:
-    void triggered(KoResource * resource, QString tag);
+    void triggered(KoResource *resource, QString tag);
 
 protected Q_SLOTS:
     void onTriggered();
 
 private:
-    KoResource * m_resource;
+    KoResource *m_resource;
     QString m_tag;
 };
 
@@ -54,42 +54,42 @@ class KoLineEditAction : public QWidgetAction
 {
     Q_OBJECT
 public:
-    explicit KoLineEditAction(QObject* parent);
+    explicit KoLineEditAction(QObject *parent);
     virtual ~KoLineEditAction();
     void setIcon(QIcon icon);
     void closeParentOnTrigger(bool closeParent);
     bool closeParentOnTrigger();
-    void setClickMessage(const QString& clickMessage);
-    void setText(const QString& text);
+    void setClickMessage(const QString &clickMessage);
+    void setText(const QString &text);
     void setVisible(bool showAction);
 
-    Q_SIGNALS:
+Q_SIGNALS:
     void triggered(const QString &tag);
 
 protected Q_SLOTS:
-    void onTriggered(const QString& text);
+    void onTriggered(const QString &text);
 
 private:
     bool m_closeParentOnTrigger;
-    QLabel * m_label;
-    KLineEdit * m_editBox;
+    QLabel *m_label;
+    KLineEdit *m_editBox;
 };
 
 class NewTagAction : public KoLineEditAction
 {
     Q_OBJECT
 public:
-    explicit NewTagAction (KoResource* resource, QMenu* parent);
+    explicit NewTagAction(KoResource *resource, QMenu *parent);
     ~NewTagAction();
 
-    Q_SIGNALS:
-    void triggered(KoResource * resource, const QString &tag);
+Q_SIGNALS:
+    void triggered(KoResource *resource, const QString &tag);
 
 protected Q_SLOTS:
-    void onTriggered(const QString& tagName);
+    void onTriggered(const QString &tagName);
 
 private:
-    KoResource * m_resource;
+    KoResource *m_resource;
 };
 
 class KoResourceItemChooserContextMenu :  public QMenu
@@ -98,20 +98,20 @@ class KoResourceItemChooserContextMenu :  public QMenu
 public:
     explicit KoResourceItemChooserContextMenu
     (
-        KoResource* resource,
-        const QStringList& resourceTags,
-        const QString& currentlySelectedTag,
-        const QStringList& allTags
+        KoResource *resource,
+        const QStringList &resourceTags,
+        const QString &currentlySelectedTag,
+        const QStringList &allTags
     );
     virtual ~KoResourceItemChooserContextMenu();
 
 Q_SIGNALS:
     /// Emitted when a resource should be added to an existing tag.
-    void resourceTagAdditionRequested(KoResource* resource, const QString& tag);
+    void resourceTagAdditionRequested(KoResource *resource, const QString &tag);
     /// Emitted when a resource should be removed from an existing tag.
-    void resourceTagRemovalRequested(KoResource* resource, const QString& tag);
+    void resourceTagRemovalRequested(KoResource *resource, const QString &tag);
     /// Emitted when a resource should be added to a new tag, which will need to be created.
-    void resourceAssignmentToNewTagRequested(KoResource* resource, const QString& tag);
+    void resourceAssignmentToNewTagRequested(KoResource *resource, const QString &tag);
 
 };
 

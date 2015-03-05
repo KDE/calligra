@@ -28,13 +28,13 @@
 class KisViewManager;
 class KisProcessingApplicator;
 
-
 class WdgClonesArray : public QWidget, public Ui::WdgClonesArray
 {
     Q_OBJECT
 
 public:
-    WdgClonesArray(QWidget *parent) : QWidget(parent) {
+    WdgClonesArray(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -45,7 +45,7 @@ class DlgClonesArray: public KDialog
     Q_OBJECT
 
 public:
-    DlgClonesArray(KisViewManager *view, QWidget * parent = 0);
+    DlgClonesArray(KisViewManager *view, QWidget *parent = 0);
     ~DlgClonesArray();
 
 private Q_SLOTS:

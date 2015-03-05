@@ -35,11 +35,11 @@ class VideoCollection::Private
 public:
     ~Private()
     {
-   }
+    }
 
-    QMap<qint64, VideoData*> videos;
+    QMap<qint64, VideoData *> videos;
     // an extra map to find all dataObjects based on the key of a store.
-    QMap<QByteArray, VideoData*> storeVideos;
+    QMap<QByteArray, VideoData *> storeVideos;
 };
 
 VideoCollection::VideoCollection(QObject *parent)
@@ -51,7 +51,7 @@ VideoCollection::VideoCollection(QObject *parent)
 
 VideoCollection::~VideoCollection()
 {
-    foreach(VideoData *id, d->videos) {
+    foreach (VideoData *id, d->videos) {
         id->setCollection(0);
     }
     delete d;
@@ -59,7 +59,7 @@ VideoCollection::~VideoCollection()
 
 bool VideoCollection::completeLoading(KoStore *store)
 {
-    Q_UNUSED( store );
+    Q_UNUSED(store);
     d->storeVideos.clear();
     return true;
 }
@@ -78,7 +78,7 @@ bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter
                 store->close();
                 // TODO error handling
                 if (ok) {
-                    const QString mimetype(KMimeType::findByPath(videoData->saveName(), 0 , true)->name());
+                    const QString mimetype(KMimeType::findByPath(videoData->saveName(), 0, true)->name());
                     manifestWriter->addManifestEntry(videoData->saveName(), mimetype);
                 } else {
                     kWarning(30006) << "saving video failed";
@@ -90,7 +90,7 @@ bool VideoCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter
         }
         ++dataIt;
     }
-    saveCounter=0;
+    saveCounter = 0;
     return true;
 }
 
@@ -124,8 +124,9 @@ VideoData *VideoCollection::createVideoData(const QString &href, KoStore *store)
     // actual video data. We need the latter so if someone else gets the same
     // video data they can find this data and share (warm fuzzy feeling here)
     QByteArray storeKey = (QString::number((qint64) store) + href).toLatin1();
-    if (d->storeVideos.contains(storeKey))
+    if (d->storeVideos.contains(storeKey)) {
         return new VideoData(*(d->storeVideos.value(storeKey)));
+    }
 
     VideoData *data = new VideoData();
     data->setVideo(href, store);

@@ -48,11 +48,11 @@ public:
         , temporaryFile(false)
     { }
 
-    ProgressProxy* proxy;
+    ProgressProxy *proxy;
     QPointer<KoDocument> document;
     QPointer<KoPart> part;
-    Settings* settingsManager;
-    RecentFileManager* recentFileManager;
+    Settings *settingsManager;
+    RecentFileManager *recentFileManager;
 
     QString saveAsFilename;
     QString openDocumentFilename;
@@ -63,40 +63,41 @@ public:
 
 DocumentManager *DocumentManager::sm_instance = 0;
 
-KoDocument* DocumentManager::document() const
+KoDocument *DocumentManager::document() const
 {
     return d->document;
 }
 
-QObject* DocumentManager::doc() const
+QObject *DocumentManager::doc() const
 {
     return d->document;
 }
 
-KoPart* DocumentManager::part(const QString& type)
+KoPart *DocumentManager::part(const QString &type)
 {
     Q_UNUSED(type)
-    if (!d->part)
+    if (!d->part) {
         d->part = new KWPart(this);
+    }
     return d->part;
 }
 
-ProgressProxy* DocumentManager::progressProxy() const
+ProgressProxy *DocumentManager::progressProxy() const
 {
     return d->proxy;
 }
 
-Settings* DocumentManager::settingsManager() const
+Settings *DocumentManager::settingsManager() const
 {
     return d->settingsManager;
 }
 
-void DocumentManager::setSettingsManager(Settings* newManager)
+void DocumentManager::setSettingsManager(Settings *newManager)
 {
     d->settingsManager = newManager;
 }
 
-void DocumentManager::setDocAndPart(KoDocument* document, KoPart* part)
+void DocumentManager::setDocAndPart(KoDocument *document, KoPart *part)
 {
     d->document = document;
     d->part = part;
@@ -104,7 +105,7 @@ void DocumentManager::setDocAndPart(KoDocument* document, KoPart* part)
     emit documentChanged();
 }
 
-RecentFileManager* DocumentManager::recentFileManager() const
+RecentFileManager *DocumentManager::recentFileManager() const
 {
     return d->recentFileManager;
 }
@@ -124,7 +125,7 @@ void DocumentManager::newDocument(int width, int height, float resolution)
     QTimer::singleShot(300, this, SLOT(delayedNewDocument()));
 }
 
-void DocumentManager::newDocument(const QVariantMap& options)
+void DocumentManager::newDocument(const QVariantMap &options)
 {
     closeDocument();
 
@@ -135,11 +136,10 @@ void DocumentManager::newDocument(const QVariantMap& options)
 void DocumentManager::delayedNewDocument()
 {
     QString filetype;
-    if(d->newDocOptions.value("type", WORDS_MIME_TYPE).toString() == WORDS_MIME_TYPE) {
+    if (d->newDocOptions.value("type", WORDS_MIME_TYPE).toString() == WORDS_MIME_TYPE) {
         filetype = "odt";
         d->document = new KWDocument(part(WORDS_MIME_TYPE));
-    }
-    else {
+    } else {
         filetype = "odp";
         d->document = new KPrDocument(part(STAGE_MIME_TYPE));
     }
@@ -147,14 +147,11 @@ void DocumentManager::delayedNewDocument()
     d->document->setSaveInBatchMode(true);
     part()->setDocument(d->document);
 
-    if(d->newDocOptions.isEmpty())
-    {
+    if (d->newDocOptions.isEmpty()) {
         //d->document->newImage("Untitled", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
         //d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
         //d->document->setUrl(KUrl("Untitled.kra"));
-    }
-    else
-    {
+    } else {
         QString name = d->newDocOptions.value("name", "Untitled").toString();
         //int width = d->newDocOptions.value("width").toInt();
         //int height = d->newDocOptions.value("height").toInt();
@@ -165,13 +162,10 @@ void DocumentManager::delayedNewDocument()
         QString colorDepthId = d->newDocOptions.value("colorDepthId").toString();
         QString colorProfileId = d->newDocOptions.value("colorProfileId").toString();
 
-        const KoColorSpace* profile;
-        if(colorModelId.isEmpty() || colorDepthId.isEmpty() || colorProfileId.isEmpty())
-        {
+        const KoColorSpace *profile;
+        if (colorModelId.isEmpty() || colorDepthId.isEmpty() || colorProfileId.isEmpty()) {
             profile = KoColorSpaceRegistry::instance()->rgb8();
-        }
-        else
-        {
+        } else {
             profile = KoColorSpaceRegistry::instance()->colorSpace(colorModelId, colorDepthId, colorProfileId);
         }
 
@@ -187,7 +181,7 @@ void DocumentManager::delayedNewDocument()
     emit documentChanged();
 }
 
-void DocumentManager::openDocument(const QString& document, bool import)
+void DocumentManager::openDocument(const QString &document, bool import)
 {
     closeDocument();
     d->openDocumentFilename = document;
@@ -207,10 +201,11 @@ void DocumentManager::delayedOpenDocument()
         d->document->setSaveInBatchMode(true);
 
         d->document->setModified(false);
-        if (d->importingDocument)
+        if (d->importingDocument) {
             d->document->importDocument(QUrl::fromLocalFile(d->openDocumentFilename));
-        else
+        } else {
             d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
+        }
         d->recentFileManager->addRecent(d->openDocumentFilename);
 
         d->temporaryFile = false;
@@ -231,8 +226,7 @@ void DocumentManager::closeDocument()
 
 bool DocumentManager::save()
 {
-    if (d->document->save())
-    {
+    if (d->document->save()) {
         d->recentFileManager->addRecent(d->document->url().toLocalFile());
         d->settingsManager->setCurrentFile(d->document->url().toLocalFile());
         emit documentSaved();
@@ -274,7 +268,7 @@ void DocumentManager::setTemporaryFile(bool temp)
     emit documentSaved();
 }
 
-DocumentManager* DocumentManager::instance()
+DocumentManager *DocumentManager::instance()
 {
     if (!sm_instance) {
         sm_instance = new DocumentManager(QCoreApplication::instance());
@@ -283,7 +277,7 @@ DocumentManager* DocumentManager::instance()
     return sm_instance;
 }
 
-DocumentManager::DocumentManager(QObject* parent)
+DocumentManager::DocumentManager(QObject *parent)
     : QObject(parent), d(new Private)
 {
     d->proxy = new ProgressProxy(this);

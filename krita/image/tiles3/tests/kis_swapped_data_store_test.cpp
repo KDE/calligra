@@ -28,7 +28,6 @@
 
 #include "tiles3/kis_tile_data_store.h"
 
-
 #define COLUMN2COLOR(col) (col%255)
 
 void KisSwappedDataStoreTest::testRoundTrip()
@@ -42,14 +41,14 @@ void KisSwappedDataStoreTest::testRoundTrip()
     config.setSwapSlabSize(1);
     config.setSwapWindowSize(1);
 
-
     KisSwappedDataStore store;
 
-    QList<KisTileData*> tileDataList;
-    for(qint32 i = 0; i < NUM_TILES; i++)
+    QList<KisTileData *> tileDataList;
+    for (qint32 i = 0; i < NUM_TILES; i++) {
         tileDataList.append(new KisTileData(pixelSize, &defaultPixel, KisTileDataStore::instance()));
+    }
 
-    for(qint32 i = 0; i < NUM_TILES; i++) {
+    for (qint32 i = 0; i < NUM_TILES; i++) {
         KisTileData *td = tileDataList[i];
         QVERIFY(memoryIsFilled(defaultPixel, td->data(), TILESIZE));
 
@@ -62,7 +61,7 @@ void KisSwappedDataStoreTest::testRoundTrip()
 
     store.debugStatistics();
 
-    for(qint32 i = 0; i < NUM_TILES; i++) {
+    for (qint32 i = 0; i < NUM_TILES; i++) {
         KisTileData *td = tileDataList[i];
         QVERIFY(!td->data());
         // TODO: check num clones
@@ -74,20 +73,20 @@ void KisSwappedDataStoreTest::testRoundTrip()
 
     store.debugStatistics();
 
-    for(qint32 i = 0; i < NUM_TILES; i++)
+    for (qint32 i = 0; i < NUM_TILES; i++) {
         delete tileDataList[i];
+    }
 }
 
 void KisSwappedDataStoreTest::processTileData(qint32 column, KisTileData *td, KisSwappedDataStore &store)
 {
-    if(td->data()) {
+    if (td->data()) {
         memset(td->data(), COLUMN2COLOR(column), TILESIZE);
         QVERIFY(memoryIsFilled(COLUMN2COLOR(column), td->data(), TILESIZE));
 
         // FIXME: take a lock of the tile data
         store.swapOutTileData(td);
-    }
-    else {
+    } else {
         // TODO: check num clones
         // FIXME: take a lock of the tile data
         store.swapInTileData(td);
@@ -108,16 +107,17 @@ void KisSwappedDataStoreTest::testRandomAccess()
     config.setSwapSlabSize(1);
     config.setSwapWindowSize(1);
 
-
     KisSwappedDataStore store;
 
-    QList<KisTileData*> tileDataList;
-    for(qint32 i = 0; i < NUM_TILES; i++)
+    QList<KisTileData *> tileDataList;
+    for (qint32 i = 0; i < NUM_TILES; i++) {
         tileDataList.append(new KisTileData(pixelSize, &defaultPixel, KisTileDataStore::instance()));
+    }
 
-    for(qint32 i = 0; i < NUM_CYCLES; i++) {
-        if(!(i%5000))
+    for (qint32 i = 0; i < NUM_CYCLES; i++) {
+        if (!(i % 5000)) {
             qDebug() << i << "of" << NUM_CYCLES;
+        }
 
         qint32 col = qrand() % NUM_TILES;
 
@@ -127,8 +127,9 @@ void KisSwappedDataStoreTest::testRandomAccess()
 
     store.debugStatistics();
 
-    for(qint32 i = 0; i < NUM_TILES; i++)
+    for (qint32 i = 0; i < NUM_TILES; i++) {
         delete tileDataList[i];
+    }
 }
 
 QTEST_KDEMAIN(KisSwappedDataStoreTest, NoGUI)

@@ -35,10 +35,8 @@
 
 #include <math.h>
 
-
 #define DEBUG_BBOX    0
 #define DEBUG_RECORDS 0
-
 
 /**
    Namespace for Windows Metafile (WMF) classes
@@ -165,7 +163,6 @@ static const struct KoWmfFunc {
     { "createRegion" } // 111 0xff
 };
 
-
 WmfParser::WmfParser()
 {
     mNbrFunc = 0;
@@ -177,13 +174,13 @@ WmfParser::WmfParser()
     mObjHandleTab = 0;
 }
 
-
 WmfParser::~WmfParser()
 {
     if (mObjHandleTab != 0) {
-        for (int i = 0 ; i < mNbrObject ; i++) {
-            if (mObjHandleTab[i] != 0)
+        for (int i = 0; i < mNbrObject; i++) {
+            if (mObjHandleTab[i] != 0) {
                 delete mObjHandleTab[i];
+            }
         }
         delete[] mObjHandleTab;
     }
@@ -193,8 +190,7 @@ WmfParser::~WmfParser()
     }
 }
 
-
-bool WmfParser::load(const QByteArray& array)
+bool WmfParser::load(const QByteArray &array)
 {
     // delete previous buffer
     if (mBuffer != 0) {
@@ -203,8 +199,9 @@ bool WmfParser::load(const QByteArray& array)
         mBuffer = 0;
     }
 
-    if (array.size() == 0)
+    if (array.size() == 0) {
         return false;
+    }
 
     // load into buffer
     mBuffer = new QBuffer();
@@ -357,8 +354,7 @@ bool WmfParser::load(const QByteArray& array)
     return mValid;
 }
 
-
-bool WmfParser::play(WmfAbstractBackend* backend)
+bool WmfParser::play(WmfAbstractBackend *backend)
 {
     if (!(mValid)) {
         kDebug(31000) << "WmfParser::play : invalid WMF file";
@@ -382,7 +378,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
 
     // Stack of handles
     mObjHandleTab = new KoWmfHandle* [ mNbrObject ];
-    for (int i = 0; i < mNbrObject ; i++) {
+    for (int i = 0; i < mNbrObject; i++) {
         mObjHandleTab[ i ] = 0;
     }
 
@@ -403,7 +399,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     mDeviceContext.windowOrg = QPoint(0, 0);
     mDeviceContext.windowExt = QSize(1, 1);
 
-    QRect bbox(QPoint(mBBoxLeft,mBBoxTop),
+    QRect bbox(QPoint(mBBoxLeft, mBBoxTop),
                QSize(mBBoxRight - mBBoxLeft, mBBoxBottom - mBBoxTop));
     if (m_backend->begin(bbox)) {
         // Play WMF functions.
@@ -416,14 +412,14 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             bufferOffset = mBuffer->pos();
             stream >> size;
             stream >> recordType;
-            
+
             // mapping between n function and index of table 'metaFuncTab'
             // lower 8 digits of the function => entry in the table
             quint16 index = recordType & 0xff;
             if (index > 0x5F) {
                 index -= 0x90;
             }
-            
+
 #if DEBUG_RECORDS
             kDebug(31000) << "Record = " << koWmfFunc[ index ].name
                           << " (" << hex << recordType
@@ -438,7 +434,7 @@ bool WmfParser::play(WmfAbstractBackend* backend)
                     quint16 param;
 
                     kDebug(31000) <<  j << " :" << index << " :";
-                    for (quint16 i = 0 ; i < (size - 3) ; i++) {
+                    for (quint16 i = 0; i < (size - 3); i++) {
                         stream >> param;
                         kDebug(31000) <<  param << "";
                     }
@@ -456,657 +452,622 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             case (META_EOF & 0xff):
                 // Don't need to do anything here.
                 break;
-            case (META_SETBKCOLOR & 0xff):
-                {
-                    quint32 color;
+            case (META_SETBKCOLOR & 0xff): {
+                quint32 color;
 
-                    stream >> color;
-                    mDeviceContext.backgroundColor = qtColor(color);
-                    mDeviceContext.changedItems |= DCBgTextColor;
-                }
-                break;
-            case (META_SETBKMODE & 0xff):
-                {
-                    quint16 bkMode;
+                stream >> color;
+                mDeviceContext.backgroundColor = qtColor(color);
+                mDeviceContext.changedItems |= DCBgTextColor;
+            }
+            break;
+            case (META_SETBKMODE & 0xff): {
+                quint16 bkMode;
 
-                    stream >> bkMode;
-                    //kDebug(31000) << "New bkMode: " << bkMode;
+                stream >> bkMode;
+                //kDebug(31000) << "New bkMode: " << bkMode;
 
-                    mDeviceContext.bgMixMode = bkMode;
-                    mDeviceContext.changedItems |= DCBgMixMode;
-                }
-                break;
-            case (META_SETMAPMODE & 0xff):
-                {
-                    stream >> mMapMode;
-                    //kDebug(31000) << "New mapmode: " << mMapMode;
+                mDeviceContext.bgMixMode = bkMode;
+                mDeviceContext.changedItems |= DCBgMixMode;
+            }
+            break;
+            case (META_SETMAPMODE & 0xff): {
+                stream >> mMapMode;
+                //kDebug(31000) << "New mapmode: " << mMapMode;
 
-                    //mDeviceContext.FontMapMode = mMapMode;Not defined yet
-                    mDeviceContext.changedItems |= DCFontMapMode;
-                }
-                break;
-            case (META_SETROP2 & 0xff):
-                {
-                    quint16  rop;
+                //mDeviceContext.FontMapMode = mMapMode;Not defined yet
+                mDeviceContext.changedItems |= DCFontMapMode;
+            }
+            break;
+            case (META_SETROP2 & 0xff): {
+                quint16  rop;
 
-                    stream >> rop;
-                    m_backend->setCompositionMode(winToQtComposition(rop));
+                stream >> rop;
+                m_backend->setCompositionMode(winToQtComposition(rop));
 
-                    mDeviceContext.rop = rop;
-                    mDeviceContext.changedItems |= DCFgMixMode;
-                }                break;
+                mDeviceContext.rop = rop;
+                mDeviceContext.changedItems |= DCFgMixMode;
+            }                break;
             case (META_SETRELABS & 0xff):
                 break;
-            case (META_SETPOLYFILLMODE & 0xff):
-                {
-                    stream >> mDeviceContext.polyFillMode;
-                    mDeviceContext.changedItems |= DCPolyFillMode;
-                }
-                break;
+            case (META_SETPOLYFILLMODE & 0xff): {
+                stream >> mDeviceContext.polyFillMode;
+                mDeviceContext.changedItems |= DCPolyFillMode;
+            }
+            break;
             case (META_SETSTRETCHBLTMODE & 0xff):
             case (META_SETTEXTCHAREXTRA & 0xff):
                 break;
-            case (META_SETTEXTCOLOR & 0xff):
-                {
-                    quint32 color;
+            case (META_SETTEXTCOLOR & 0xff): {
+                quint32 color;
 
-                    stream >> color;
-                    mDeviceContext.foregroundTextColor = qtColor(color);
-                    mDeviceContext.changedItems |= DCFgTextColor;
-                }
-                break;
+                stream >> color;
+                mDeviceContext.foregroundTextColor = qtColor(color);
+                mDeviceContext.changedItems |= DCFgTextColor;
+            }
+            break;
             case (META_SETTEXTJUSTIFICATION & 0xff):
                 break;
-            case (META_SETWINDOWORG & 0xff):
-                {
-                    qint16 top, left;
+            case (META_SETWINDOWORG & 0xff): {
+                qint16 top, left;
 
-                    stream >> top >> left;
+                stream >> top >> left;
 
-                    m_backend->setWindowOrg(left, top);
-                    mDeviceContext.windowOrg = QPoint(left, top);
+                m_backend->setWindowOrg(left, top);
+                mDeviceContext.windowOrg = QPoint(left, top);
 #if DEBUG_RECORDS
-                    kDebug(31000) <<"Org: (" << left <<","  << top <<")";
+                kDebug(31000) << "Org: (" << left << ","  << top << ")";
 #endif
-                }
-                break;
-            case (META_SETWINDOWEXT & 0xff):
-                {
-                    qint16 width, height;
+            }
+            break;
+            case (META_SETWINDOWEXT & 0xff): {
+                qint16 width, height;
 
-                    // negative value allowed for width and height
-                    stream >> height >> width;
+                // negative value allowed for width and height
+                stream >> height >> width;
 #if DEBUG_RECORDS
-                    kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
+                kDebug(31000) << "Ext: (" << width << ","  << height << ")";
 #endif
 
+                m_backend->setWindowExt(width, height);
+                mDeviceContext.windowExt = QSize(width, height);
+            }
+            break;
+            case (META_SETVIEWPORTORG & 0xff): {
+                qint16 top, left;
+
+                stream >> top >> left;
+                m_backend->setViewportOrg(left, top);
+                mDeviceContext.viewportOrg = QPoint(left, top);
+
+#if DEBUG_RECORDS
+                kDebug(31000) << "Org: (" << left << ","  << top << ")";
+#endif
+            }
+            break;
+            case (META_SETVIEWPORTEXT & 0xff): {
+                qint16 width, height;
+
+                // Negative value allowed for width and height
+                stream >> height >> width;
+#if DEBUG_RECORDS
+                kDebug(31000) << "Ext: (" << width << ","  << height << ")";
+#endif
+
+                m_backend->setViewportExt(width, height);
+                mDeviceContext.viewportExt = QSize(width, height);
+            }
+            break;
+            case (META_OFFSETWINDOWORG & 0xff): {
+                qint16 offTop, offLeft;
+
+                stream >> offTop >> offLeft;
+                m_backend->setWindowOrg(mDeviceContext.windowOrg.x() + offLeft,
+                                        mDeviceContext.windowOrg.y() + offTop);
+
+                mDeviceContext.windowOrg += QPoint(offLeft, offTop);
+            }
+            break;
+            case (META_SCALEWINDOWEXT & 0xff): {
+                // Use 32 bits in the calculations to not lose precision.
+                qint32 width, height;
+                qint16 heightDenum, heightNum, widthDenum, widthNum;
+
+                stream >> heightDenum >> heightNum >> widthDenum >> widthNum;
+
+                if ((widthDenum != 0) && (heightDenum != 0)) {
+                    width = (qint32(mDeviceContext.windowExt.width()) * widthNum) / widthDenum;
+                    height = (qint32(mDeviceContext.windowExt.height()) * heightNum) / heightDenum;
                     m_backend->setWindowExt(width, height);
                     mDeviceContext.windowExt = QSize(width, height);
                 }
-                break;
-            case (META_SETVIEWPORTORG & 0xff):
-                {
-                    qint16 top, left;
+                //kDebug(31000) <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
+            }
+            break;
+            case (META_OFFSETVIEWPORTORG & 0xff): {
+                qint16 offTop, offLeft;
 
-                    stream >> top >> left;
-                    m_backend->setViewportOrg(left, top);
-                    mDeviceContext.viewportOrg = QPoint(left, top);
+                stream >> offTop >> offLeft;
+                m_backend->setViewportOrg(mDeviceContext.windowOrg.x() + offLeft,
+                                          mDeviceContext.windowOrg.y() + offTop);
+                mDeviceContext.viewportOrg += QPoint(offLeft, offTop);
+            }
+            break;
+            case (META_SCALEVIEWPORTEXT & 0xff): {
+                // Use 32 bits in the calculations to not lose precision.
+                qint32 width, height;
+                qint16 heightDenum, heightNum, widthDenum, widthNum;
 
-#if DEBUG_RECORDS
-                    kDebug(31000) <<"Org: (" << left <<","  << top <<")";
-#endif
-                }
-                break;
-            case (META_SETVIEWPORTEXT & 0xff):
-                {
-                    qint16 width, height;
+                stream >> heightDenum >> heightNum >> widthDenum >> widthNum;
 
-                    // Negative value allowed for width and height
-                    stream >> height >> width;
-#if DEBUG_RECORDS
-                    kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
-#endif
-
+                if ((widthDenum != 0) && (heightDenum != 0)) {
+                    width = (qint32(mDeviceContext.windowExt.width()) * widthNum) / widthDenum;
+                    height = (qint32(mDeviceContext.windowExt.height()) * heightNum) / heightDenum;
                     m_backend->setViewportExt(width, height);
                     mDeviceContext.viewportExt = QSize(width, height);
                 }
-                break;
-            case (META_OFFSETWINDOWORG & 0xff):
-                {
-                    qint16 offTop, offLeft;
-
-                    stream >> offTop >> offLeft;
-                    m_backend->setWindowOrg(mDeviceContext.windowOrg.x() + offLeft,
-                                            mDeviceContext.windowOrg.y() + offTop);
-
-                    mDeviceContext.windowOrg += QPoint(offLeft, offTop);
-                }
-                break;
-            case (META_SCALEWINDOWEXT & 0xff):
-                {
-                    // Use 32 bits in the calculations to not lose precision.
-                    qint32 width, height;
-                    qint16 heightDenum, heightNum, widthDenum, widthNum;
-
-                    stream >> heightDenum >> heightNum >> widthDenum >> widthNum;
-
-                    if ((widthDenum != 0) && (heightDenum != 0)) {
-                        width = (qint32(mDeviceContext.windowExt.width()) * widthNum) / widthDenum;
-                        height = (qint32(mDeviceContext.windowExt.height()) * heightNum) / heightDenum;
-                        m_backend->setWindowExt(width, height);
-                        mDeviceContext.windowExt = QSize(width, height);
-                    }
-                    //kDebug(31000) <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
-                }
-                break;
-            case (META_OFFSETVIEWPORTORG & 0xff):
-                {
-                    qint16 offTop, offLeft;
-
-                    stream >> offTop >> offLeft;
-                    m_backend->setViewportOrg(mDeviceContext.windowOrg.x() + offLeft,
-                                              mDeviceContext.windowOrg.y() + offTop);
-                    mDeviceContext.viewportOrg += QPoint(offLeft, offTop);
-                }
-                break;
-            case (META_SCALEVIEWPORTEXT & 0xff):
-                {
-                    // Use 32 bits in the calculations to not lose precision.
-                    qint32 width, height;
-                    qint16 heightDenum, heightNum, widthDenum, widthNum;
-
-                    stream >> heightDenum >> heightNum >> widthDenum >> widthNum;
-
-                    if ((widthDenum != 0) && (heightDenum != 0)) {
-                        width = (qint32(mDeviceContext.windowExt.width()) * widthNum) / widthDenum;
-                        height = (qint32(mDeviceContext.windowExt.height()) * heightNum) / heightDenum;
-                        m_backend->setViewportExt(width, height);
-                        mDeviceContext.viewportExt = QSize(width, height);
-                    }
-                    //kDebug(31000) <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
-                }
-                break;
+                //kDebug(31000) <<"WmfParser::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
+            }
+            break;
 
             // ----------------------------------------------------------------
             //                         Drawing records
 
-            case (META_LINETO & 0xff):
-                {
-                    qint16 top, left;
+            case (META_LINETO & 0xff): {
+                qint16 top, left;
 
-                    stream >> top >> left;
-                    m_backend->lineTo(mDeviceContext, left, top);
+                stream >> top >> left;
+                m_backend->lineTo(mDeviceContext, left, top);
+            }
+            break;
+            case (META_MOVETO & 0xff): {
+                qint16 top, left;
+
+                stream >> top >> left;
+                mDeviceContext.currentPosition = QPoint(left, top);
+            }
+            break;
+            case (META_EXCLUDECLIPRECT & 0xff): {
+                qint16 top, left, right, bottom;
+
+                stream >> bottom >> right >> top >> left;
+
+                QRegion region = mDeviceContext.clipRegion;
+                QRegion newRegion(left, top, right - left, bottom - top);
+                if (region.isEmpty()) {
+                    // FIXME: I doubt that if the region is previously empty,
+                    //        it should be set to the new region.  /iw
+                    region = newRegion;
+                } else {
+                    region = region.subtract(newRegion);
                 }
-                break;
-            case (META_MOVETO & 0xff):
-                {
-                    qint16 top, left;
 
-                    stream >> top >> left;
-                    mDeviceContext.currentPosition = QPoint(left, top);
+                mDeviceContext.clipRegion = region;
+                mDeviceContext.changedItems |= DCClipRegion;
+            }
+            break;
+            case (META_INTERSECTCLIPRECT & 0xff): {
+                qint16 top, left, right, bottom;
+
+                stream >> bottom >> right >> top >> left;
+
+                QRegion region = mDeviceContext.clipRegion;
+                QRegion newRegion(left, top, right - left, bottom - top);
+                if (region.isEmpty()) {
+                    // FIXME: I doubt that if the region is previously empty,
+                    //        it should be set to the new region.  /iw
+                    region = newRegion;
+                } else {
+                    region = region.intersect(newRegion);
                 }
-                break;
-            case (META_EXCLUDECLIPRECT & 0xff):
-                {
-                    qint16 top, left, right, bottom;
 
-                    stream >> bottom >> right >> top >> left;
-                    
-                    QRegion region = mDeviceContext.clipRegion;
-                    QRegion newRegion(left, top, right - left, bottom - top);
-                    if (region.isEmpty()) {
-                        // FIXME: I doubt that if the region is previously empty,
-                        //        it should be set to the new region.  /iw
-                        region = newRegion;
-                    } else {
-                        region = region.subtract(newRegion);
-                    }
+                mDeviceContext.clipRegion = region;
+                mDeviceContext.changedItems |= DCClipRegion;
+            }
+            break;
+            case (META_ARC & 0xff): {
+                int xCenter, yCenter, angleStart, aLength;
+                qint16  topEnd, leftEnd, topStart, leftStart;
+                qint16  top, left, right, bottom;
 
-                    mDeviceContext.clipRegion = region;
-                    mDeviceContext.changedItems |= DCClipRegion;
-                }
-                break;
-            case (META_INTERSECTCLIPRECT & 0xff):
-                {
-                    qint16 top, left, right, bottom;
+                stream >> topEnd >> leftEnd >> topStart >> leftStart;
+                stream >> bottom >> right >> top >> left;
 
-                    stream >> bottom >> right >> top >> left;
+                xCenter = left + ((right - left) / 2);
+                yCenter = top + ((bottom - top) / 2);
+                xyToAngle(leftStart - xCenter, yCenter - topStart,
+                          leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
 
-                    QRegion region = mDeviceContext.clipRegion;
-                    QRegion newRegion(left, top, right - left, bottom - top);
-                    if (region.isEmpty()) {
-                        // FIXME: I doubt that if the region is previously empty,
-                        //        it should be set to the new region.  /iw
-                        region = newRegion;
-                    } else {
-                        region = region.intersect(newRegion);
-                    }
+                m_backend->drawArc(mDeviceContext, left, top, right - left, bottom - top,
+                                   angleStart, aLength);
+            }
+            break;
+            case (META_ELLIPSE & 0xff): {
+                qint16 top, left, right, bottom;
 
-                    mDeviceContext.clipRegion = region;
-                    mDeviceContext.changedItems |= DCClipRegion;
-                }
-                break;
-            case (META_ARC & 0xff):
-                {
-                    int xCenter, yCenter, angleStart, aLength;
-                    qint16  topEnd, leftEnd, topStart, leftStart;
-                    qint16  top, left, right, bottom;
-
-                    stream >> topEnd >> leftEnd >> topStart >> leftStart;
-                    stream >> bottom >> right >> top >> left;
-
-                    xCenter = left + ((right - left) / 2);
-                    yCenter = top + ((bottom - top) / 2);
-                    xyToAngle(leftStart - xCenter, yCenter - topStart,
-                              leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
-
-                    m_backend->drawArc(mDeviceContext, left, top, right - left, bottom - top,
-                                       angleStart, aLength);
-                }
-                break;
-            case (META_ELLIPSE & 0xff):
-                {
-                    qint16 top, left, right, bottom;
-
-                    stream >> bottom >> right >> top >> left;
-                    m_backend->drawEllipse(mDeviceContext, left, top, right - left, bottom - top);
-                }
-                break;
+                stream >> bottom >> right >> top >> left;
+                m_backend->drawEllipse(mDeviceContext, left, top, right - left, bottom - top);
+            }
+            break;
             case (META_FLOODFILL & 0xff):
                 break;
-            case (META_PIE & 0xff):
-                {
-                    int xCenter, yCenter, angleStart, aLength;
-                    qint16  topEnd, leftEnd, topStart, leftStart;
-                    qint16  top, left, right, bottom;
+            case (META_PIE & 0xff): {
+                int xCenter, yCenter, angleStart, aLength;
+                qint16  topEnd, leftEnd, topStart, leftStart;
+                qint16  top, left, right, bottom;
 
-                    stream >> topEnd >> leftEnd >> topStart >> leftStart;
-                    stream >> bottom >> right >> top >> left;
+                stream >> topEnd >> leftEnd >> topStart >> leftStart;
+                stream >> bottom >> right >> top >> left;
 
-                    xCenter = left + ((right - left) / 2);
-                    yCenter = top + ((bottom - top) / 2);
-                    xyToAngle(leftStart - xCenter, yCenter - topStart, leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
+                xCenter = left + ((right - left) / 2);
+                yCenter = top + ((bottom - top) / 2);
+                xyToAngle(leftStart - xCenter, yCenter - topStart, leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
 
-                    m_backend->drawPie(mDeviceContext, left, top, right - left, bottom - top,
-                                       angleStart, aLength);
+                m_backend->drawPie(mDeviceContext, left, top, right - left, bottom - top,
+                                   angleStart, aLength);
+            }
+            break;
+            case (META_RECTANGLE & 0xff): {
+                qint16 top, left, right, bottom;
+
+                stream >> bottom >> right >> top >> left;
+                //kDebug(31000) << left << top << right << bottom;
+                m_backend->drawRect(mDeviceContext, left, top, right - left, bottom - top);
+            }
+            break;
+            case (META_ROUNDRECT & 0xff): {
+                int xRnd = 0, yRnd = 0;
+                quint16 widthCorner, heightCorner;
+                qint16  top, left, right, bottom;
+
+                stream >> heightCorner >> widthCorner;
+                stream >> bottom >> right >> top >> left;
+
+                // convert (widthCorner, heightCorner) in percentage
+                if ((right - left) != 0) {
+                    xRnd = (widthCorner * 100) / (right - left);
                 }
-                break;
-            case (META_RECTANGLE & 0xff):
-                {
-                    qint16 top, left, right, bottom;
-
-                    stream >> bottom >> right >> top >> left;
-                    //kDebug(31000) << left << top << right << bottom;
-                    m_backend->drawRect(mDeviceContext, left, top, right - left, bottom - top);
+                if ((bottom - top) != 0) {
+                    yRnd = (heightCorner * 100) / (bottom - top);
                 }
-                break;
-            case (META_ROUNDRECT & 0xff):
-                {
-                    int xRnd = 0, yRnd = 0;
-                    quint16 widthCorner, heightCorner;
-                    qint16  top, left, right, bottom;
 
-                    stream >> heightCorner >> widthCorner;
-                    stream >> bottom >> right >> top >> left;
+                m_backend->drawRoundRect(mDeviceContext, left, top, right - left, bottom - top,
+                                         xRnd, yRnd);
+            }
+            break;
+            case (META_PATBLT & 0xff): {
+                quint32 rasterOperation;
+                quint16 height, width;
+                qint16  y, x;
 
-                    // convert (widthCorner, heightCorner) in percentage
-                    if ((right - left) != 0)
-                        xRnd = (widthCorner * 100) / (right - left);
-                    if ((bottom - top) != 0)
-                        yRnd = (heightCorner * 100) / (bottom - top);
+                stream >> rasterOperation;
+                stream >> height >> width;
+                stream >> y >> x;
 
-                    m_backend->drawRoundRect(mDeviceContext, left, top, right - left, bottom - top,
-                                             xRnd, yRnd);
-                }
-                break;
-            case (META_PATBLT & 0xff):
-                {
-                    quint32 rasterOperation;
-                    quint16 height, width;
-                    qint16  y, x;
+                //kDebug(31000) << "patBlt record" << hex << rasterOperation << dec
+                //              << x << y << width << height;
 
-                    stream >> rasterOperation;
-                    stream >> height >> width;
-                    stream >> y >> x;
-
-                    //kDebug(31000) << "patBlt record" << hex << rasterOperation << dec
-                    //              << x << y << width << height;
-
-                    m_backend->patBlt(mDeviceContext, x, y, width, height, rasterOperation);
-                }
-                break;
+                m_backend->patBlt(mDeviceContext, x, y, width, height, rasterOperation);
+            }
+            break;
             case (META_SAVEDC & 0xff):
                 m_backend->save();
                 break;
-            case (META_SETPIXEL & 0xff):
-                {
-                    qint16  left, top;
-                    quint32 color;
+            case (META_SETPIXEL & 0xff): {
+                qint16  left, top;
+                quint32 color;
 
-                    stream >> color >> top >> left;
-                    m_backend->setPixel(mDeviceContext, left, top, qtColor(color));
-                }
-                break;
+                stream >> color >> top >> left;
+                m_backend->setPixel(mDeviceContext, left, top, qtColor(color));
+            }
+            break;
             case (META_OFFSETCLIPRGN & 0xff):
                 break;
-            case (META_TEXTOUT & 0xff):
-                {
-                    quint16 textLength;
-                    qint16 x, y;
+            case (META_TEXTOUT & 0xff): {
+                quint16 textLength;
+                qint16 x, y;
 
-                    stream >> textLength;
+                stream >> textLength;
 
-                    QByteArray text;
-                    text.resize(textLength);
-                    stream.readRawData(text.data(), textLength);
+                QByteArray text;
+                text.resize(textLength);
+                stream.readRawData(text.data(), textLength);
 
-                    // The string is always of even length, so if the actual data is
-                    // of uneven length, read an extra byte.
-                    if (textLength & 0x01) {
-                        quint8 dummy;
-                        stream >> dummy;
-                    }
-
-                    stream >> y;
-                    stream >> x;
-
-                    m_backend->drawText(mDeviceContext, x, y, text);
+                // The string is always of even length, so if the actual data is
+                // of uneven length, read an extra byte.
+                if (textLength & 0x01) {
+                    quint8 dummy;
+                    stream >> dummy;
                 }
-                break;
+
+                stream >> y;
+                stream >> x;
+
+                m_backend->drawText(mDeviceContext, x, y, text);
+            }
+            break;
             case (META_BITBLT & 0xff):
             case (META_STRETCHBLT & 0xff):
                 break;
-            case (META_POLYGON & 0xff):
-                {
-                    quint16 num;
+            case (META_POLYGON & 0xff): {
+                quint16 num;
 
-                    stream >> num;
+                stream >> num;
 
-                    QPolygon pa(num);
+                QPolygon pa(num);
 
-                    pointArray(stream, pa);
-                    m_backend->drawPolygon(mDeviceContext, pa);
-                }
-                break;
-            case (META_POLYLINE & 0xff):
-                {
-                    quint16 num;
+                pointArray(stream, pa);
+                m_backend->drawPolygon(mDeviceContext, pa);
+            }
+            break;
+            case (META_POLYLINE & 0xff): {
+                quint16 num;
 
-                    stream >> num;
-                    QPolygon pa(num);
+                stream >> num;
+                QPolygon pa(num);
 
-                    pointArray(stream, pa);
-                    m_backend->drawPolyline(mDeviceContext, pa);
-                }
-                break;
+                pointArray(stream, pa);
+                m_backend->drawPolyline(mDeviceContext, pa);
+            }
+            break;
             case (META_ESCAPE & 0xff):
                 break;
-            case (META_RESTOREDC & 0xff):
-                {
-                    qint16  num;
+            case (META_RESTOREDC & 0xff): {
+                qint16  num;
 
-                    stream >> num;
-                    for (int i = 0; i > num ; i--)
-                        m_backend->restore();
+                stream >> num;
+                for (int i = 0; i > num; i--) {
+                    m_backend->restore();
                 }
-                break;
+            }
+            break;
             case (META_FILLREGION & 0xff):
             case (META_FRAMEREGION & 0xff):
             case (META_INVERTREGION & 0xff):
             case (META_PAINTREGION & 0xff):
             case (META_SELECTCLIPREGION & 0xff):
                 break;
-            case (META_SELECTOBJECT & 0xff):
-                {
-                    quint16 idx;
+            case (META_SELECTOBJECT & 0xff): {
+                quint16 idx;
 
-                    stream >> idx;
-                    if ((idx < mNbrObject) && (mObjHandleTab[ idx ] != 0))
-                        mObjHandleTab[ idx ]->apply(&mDeviceContext);
-                    else
-                        kDebug(31000) << "WmfParser::selectObject : selection of an empty object";
+                stream >> idx;
+                if ((idx < mNbrObject) && (mObjHandleTab[ idx ] != 0)) {
+                    mObjHandleTab[ idx ]->apply(&mDeviceContext);
+                } else {
+                    kDebug(31000) << "WmfParser::selectObject : selection of an empty object";
                 }
-                break;
+            }
+            break;
             case (META_SETTEXTALIGN & 0xff):
                 stream >> mDeviceContext.textAlign;
                 mDeviceContext.changedItems |= DCTextAlignMode;
                 break;
-            case (META_CHORD & 0xff):
-                {
-                    int xCenter, yCenter, angleStart, aLength;
-                    qint16  topEnd, leftEnd, topStart, leftStart;
-                    qint16  top, left, right, bottom;
+            case (META_CHORD & 0xff): {
+                int xCenter, yCenter, angleStart, aLength;
+                qint16  topEnd, leftEnd, topStart, leftStart;
+                qint16  top, left, right, bottom;
 
-                    stream >> topEnd >> leftEnd >> topStart >> leftStart;
-                    stream >> bottom >> right >> top >> left;
+                stream >> topEnd >> leftEnd >> topStart >> leftStart;
+                stream >> bottom >> right >> top >> left;
 
-                    xCenter = left + ((right - left) / 2);
-                    yCenter = top + ((bottom - top) / 2);
-                    xyToAngle(leftStart - xCenter, yCenter - topStart, leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
+                xCenter = left + ((right - left) / 2);
+                yCenter = top + ((bottom - top) / 2);
+                xyToAngle(leftStart - xCenter, yCenter - topStart, leftEnd - xCenter, yCenter - topEnd, angleStart, aLength);
 
-                    m_backend->drawChord(mDeviceContext, left, top, right - left, bottom - top,
-                                         angleStart, aLength);
-                }
-                break;
+                m_backend->drawChord(mDeviceContext, left, top, right - left, bottom - top,
+                                     angleStart, aLength);
+            }
+            break;
             case (META_SETMAPPERFLAGS & 0xff):
                 break;
-            case (META_EXTTEXTOUT & 0xff):
-                {
-                    qint16 y, x;
-                    qint16 stringLength;
-                    quint16 fwOpts;
-                    qint16 top, left, right, bottom; // optional cliprect
+            case (META_EXTTEXTOUT & 0xff): {
+                qint16 y, x;
+                qint16 stringLength;
+                quint16 fwOpts;
+                qint16 top, left, right, bottom; // optional cliprect
 
-                    stream >> y;
-                    stream >> x;
-                    stream >> stringLength;
-                    stream >> fwOpts;
+                stream >> y;
+                stream >> x;
+                stream >> stringLength;
+                stream >> fwOpts;
 
-                    // ETO_CLIPPED flag adds 4 parameters
-                    if (fwOpts & (ETO_CLIPPED | ETO_OPAQUE)) {
-                        // read the optional clip rect
-                        stream >> bottom >> right >> top >> left;
-                    }
+                // ETO_CLIPPED flag adds 4 parameters
+                if (fwOpts & (ETO_CLIPPED | ETO_OPAQUE)) {
+                    // read the optional clip rect
+                    stream >> bottom >> right >> top >> left;
+                }
 
-                    // Read the string. Note that it's padded to 16 bits.
-                    QByteArray text;
-                    text.resize(stringLength);
-                    stream.readRawData(text.data(), stringLength);
+                // Read the string. Note that it's padded to 16 bits.
+                QByteArray text;
+                text.resize(stringLength);
+                stream.readRawData(text.data(), stringLength);
 
-                    if (stringLength & 0x01) {
-                        quint8  padding;
-                        stream >> padding;
-                    }
+                if (stringLength & 0x01) {
+                    quint8  padding;
+                    stream >> padding;
+                }
 
 #if DEBUG_RECORDS
-                    kDebug(31000) << "text at" << x << y << "length" << stringLength
-                                  << ':' << text;
-                    //kDebug(31000) << "flags:" << hex << fwOpts << dec;
-                    kDebug(31000) << "flags:" << fwOpts;
-                    kDebug(31000) << "record length:" << size;
+                kDebug(31000) << "text at" << x << y << "length" << stringLength
+                              << ':' << text;
+                //kDebug(31000) << "flags:" << hex << fwOpts << dec;
+                kDebug(31000) << "flags:" << fwOpts;
+                kDebug(31000) << "record length:" << size;
 #endif
-                    m_backend->drawText(mDeviceContext, x, y, text);
-                }
-                break;
+                m_backend->drawText(mDeviceContext, x, y, text);
+            }
+            break;
             case (META_SETDIBTODEV & 0xff):
             case (META_SELECTPALETTE & 0xff):
             case (META_REALIZEPALETTE & 0xff):
             case (META_ANIMATEPALETTE & 0xff):
             case (META_SETPALENTRIES & 0xff):
                 break;
-            case (META_POLYPOLYGON & 0xff):
-                {
-                    quint16 numberPoly;
-                    quint16 sizePoly;
-                    QList<QPolygon> listPa;
+            case (META_POLYPOLYGON & 0xff): {
+                quint16 numberPoly;
+                quint16 sizePoly;
+                QList<QPolygon> listPa;
 
-                    stream >> numberPoly;
+                stream >> numberPoly;
 
-                    for (int i = 0 ; i < numberPoly ; i++) {
-                        stream >> sizePoly;
-                        listPa.append(QPolygon(sizePoly));
-                    }
-
-                    // list of point array
-                    for (int i = 0; i < numberPoly; i++) {
-                        pointArray(stream, listPa[i]);
-                    }
-
-                    // draw polygon's
-                    m_backend->drawPolyPolygon(mDeviceContext, listPa);
-                    listPa.clear();
+                for (int i = 0; i < numberPoly; i++) {
+                    stream >> sizePoly;
+                    listPa.append(QPolygon(sizePoly));
                 }
-                break;
+
+                // list of point array
+                for (int i = 0; i < numberPoly; i++) {
+                    pointArray(stream, listPa[i]);
+                }
+
+                // draw polygon's
+                m_backend->drawPolyPolygon(mDeviceContext, listPa);
+                listPa.clear();
+            }
+            break;
             case (META_RESIZEPALETTE & 0xff):
                 break;
-            case (META_DIBBITBLT & 0xff):
-                {
-                    quint32 raster;
-                    qint16  topSrc, leftSrc, widthSrc, heightSrc;
-                    qint16  topDst, leftDst;
+            case (META_DIBBITBLT & 0xff): {
+                quint32 raster;
+                qint16  topSrc, leftSrc, widthSrc, heightSrc;
+                qint16  topDst, leftDst;
 
-                    stream >> raster;
-                    stream >> topSrc >> leftSrc >> heightSrc >> widthSrc;
-                    stream >> topDst >> leftDst;
+                stream >> raster;
+                stream >> topSrc >> leftSrc >> heightSrc >> widthSrc;
+                stream >> topDst >> leftDst;
 
-                    if (size > 11) {      // DIB image
-                        QImage bmpSrc;
+                if (size > 11) {      // DIB image
+                    QImage bmpSrc;
 
-                        if (dibToBmp(bmpSrc, stream, (size - 11) * 2)) {
-                            m_backend->setCompositionMode(winToQtComposition(raster));
+                    if (dibToBmp(bmpSrc, stream, (size - 11) * 2)) {
+                        m_backend->setCompositionMode(winToQtComposition(raster));
 
-                            m_backend->save();
-                            if (widthSrc < 0) {
-                                // negative width => horizontal flip
-                                QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
-                                m_backend->setMatrix(mDeviceContext, m, true);
-                            }
-                            if (heightSrc < 0) {
-                                // negative height => vertical flip
-                                QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-                                m_backend->setMatrix(mDeviceContext, m, true);
-                            }
-                            m_backend->drawImage(mDeviceContext, leftDst, topDst,
-                                                 bmpSrc, leftSrc, topSrc, widthSrc, heightSrc);
-                            m_backend->restore();
+                        m_backend->save();
+                        if (widthSrc < 0) {
+                            // negative width => horizontal flip
+                            QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+                            m_backend->setMatrix(mDeviceContext, m, true);
                         }
+                        if (heightSrc < 0) {
+                            // negative height => vertical flip
+                            QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+                            m_backend->setMatrix(mDeviceContext, m, true);
+                        }
+                        m_backend->drawImage(mDeviceContext, leftDst, topDst,
+                                             bmpSrc, leftSrc, topSrc, widthSrc, heightSrc);
+                        m_backend->restore();
+                    }
+                } else {
+                    kDebug(31000) << "WmfParser::dibBitBlt without image not implemented";
+                }
+            }
+            break;
+            case (META_DIBSTRETCHBLT & 0xff): {
+                quint32 raster;
+                qint16  topSrc, leftSrc, widthSrc, heightSrc;
+                qint16  topDst, leftDst, widthDst, heightDst;
+                QImage   bmpSrc;
+
+                stream >> raster;
+                stream >> heightSrc >> widthSrc >> topSrc >> leftSrc;
+                stream >> heightDst >> widthDst >> topDst >> leftDst;
+
+                if (dibToBmp(bmpSrc, stream, (size - 13) * 2)) {
+                    m_backend->setCompositionMode(winToQtComposition(raster));
+
+                    m_backend->save();
+                    if (widthDst < 0) {
+                        // negative width => horizontal flip
+                        QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+                        m_backend->setMatrix(mDeviceContext, m, true);
+                    }
+                    if (heightDst < 0) {
+                        // negative height => vertical flip
+                        QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+                        m_backend->setMatrix(mDeviceContext, m, true);
+                    }
+                    bmpSrc = bmpSrc.copy(leftSrc, topSrc, widthSrc, heightSrc);
+                    // TODO: scale the bitmap : QImage::scale(widthDst, heightDst)
+                    // is actually too slow
+
+                    m_backend->drawImage(mDeviceContext, leftDst, topDst, bmpSrc);
+                    m_backend->restore();
+                }
+            }
+            break;
+            case (META_DIBCREATEPATTERNBRUSH & 0xff): {
+                KoWmfPatternBrushHandle *handle = new KoWmfPatternBrushHandle;
+
+                if (addHandle(handle)) {
+                    quint32 arg;
+                    QImage bmpSrc;
+
+                    stream >> arg;
+                    if (dibToBmp(bmpSrc, stream, (size - 5) * 2)) {
+                        handle->image = bmpSrc;
+                        handle->brush.setTextureImage(handle->image);
                     } else {
-                        kDebug(31000) << "WmfParser::dibBitBlt without image not implemented";
+                        kDebug(31000) << "WmfParser::dibCreatePatternBrush : incorrect DIB image";
                     }
                 }
-                break;
-            case (META_DIBSTRETCHBLT & 0xff):
-                {
-                    quint32 raster;
-                    qint16  topSrc, leftSrc, widthSrc, heightSrc;
-                    qint16  topDst, leftDst, widthDst, heightDst;
-                    QImage   bmpSrc;
+            }
+            break;
+            case (META_STRETCHDIB & 0xff): {
+                quint32 raster;
+                qint16  arg, topSrc, leftSrc, widthSrc, heightSrc;
+                qint16  topDst, leftDst, widthDst, heightDst;
+                QImage   bmpSrc;
 
-                    stream >> raster;
-                    stream >> heightSrc >> widthSrc >> topSrc >> leftSrc;
-                    stream >> heightDst >> widthDst >> topDst >> leftDst;
+                stream >> raster >> arg;
+                stream >> heightSrc >> widthSrc >> topSrc >> leftSrc;
+                stream >> heightDst >> widthDst >> topDst >> leftDst;
 
-                    if (dibToBmp(bmpSrc, stream, (size - 13) * 2)) {
-                        m_backend->setCompositionMode(winToQtComposition(raster));
+                if (dibToBmp(bmpSrc, stream, (size - 14) * 2)) {
+                    m_backend->setCompositionMode(winToQtComposition(raster));
 
-                        m_backend->save();
-                        if (widthDst < 0) {
-                            // negative width => horizontal flip
-                            QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(mDeviceContext, m, true);
-                        }
-                        if (heightDst < 0) {
-                            // negative height => vertical flip
-                            QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(mDeviceContext, m, true);
-                        }
-                        bmpSrc = bmpSrc.copy(leftSrc, topSrc, widthSrc, heightSrc);
-                        // TODO: scale the bitmap : QImage::scale(widthDst, heightDst)
-                        // is actually too slow
-
-                        m_backend->drawImage(mDeviceContext, leftDst, topDst, bmpSrc);
-                        m_backend->restore();
+                    m_backend->save();
+                    if (widthDst < 0) {
+                        // negative width => horizontal flip
+                        QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
+                        m_backend->setMatrix(mDeviceContext, m, true);
                     }
-                }
-                break;
-            case (META_DIBCREATEPATTERNBRUSH & 0xff):
-                {
-                    KoWmfPatternBrushHandle* handle = new KoWmfPatternBrushHandle;
-
-                    if (addHandle(handle)) {
-                        quint32 arg;
-                        QImage bmpSrc;
-
-                        stream >> arg;
-                        if (dibToBmp(bmpSrc, stream, (size - 5) * 2)) {
-                            handle->image = bmpSrc;
-                            handle->brush.setTextureImage(handle->image);
-                        } else {
-                            kDebug(31000) << "WmfParser::dibCreatePatternBrush : incorrect DIB image";
-                        }
+                    if (heightDst < 0) {
+                        // negative height => vertical flip
+                        QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
+                        m_backend->setMatrix(mDeviceContext, m, true);
                     }
+                    bmpSrc = bmpSrc.copy(leftSrc, topSrc, widthSrc, heightSrc);
+                    // TODO: scale the bitmap ( QImage::scale(param[ 8 ], param[ 7 ]) is actually too slow )
+
+                    m_backend->drawImage(mDeviceContext, leftDst, topDst, bmpSrc);
+                    m_backend->restore();
                 }
-                break;
-            case (META_STRETCHDIB & 0xff):
-                {
-                    quint32 raster;
-                    qint16  arg, topSrc, leftSrc, widthSrc, heightSrc;
-                    qint16  topDst, leftDst, widthDst, heightDst;
-                    QImage   bmpSrc;
-
-                    stream >> raster >> arg;
-                    stream >> heightSrc >> widthSrc >> topSrc >> leftSrc;
-                    stream >> heightDst >> widthDst >> topDst >> leftDst;
-
-                    if (dibToBmp(bmpSrc, stream, (size - 14) * 2)) {
-                        m_backend->setCompositionMode(winToQtComposition(raster));
-
-                        m_backend->save();
-                        if (widthDst < 0) {
-                            // negative width => horizontal flip
-                            QMatrix m(-1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(mDeviceContext, m, true);
-                        }
-                        if (heightDst < 0) {
-                            // negative height => vertical flip
-                            QMatrix m(1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
-                            m_backend->setMatrix(mDeviceContext, m, true);
-                        }
-                        bmpSrc = bmpSrc.copy(leftSrc, topSrc, widthSrc, heightSrc);
-                        // TODO: scale the bitmap ( QImage::scale(param[ 8 ], param[ 7 ]) is actually too slow )
-
-                        m_backend->drawImage(mDeviceContext, leftDst, topDst, bmpSrc);
-                        m_backend->restore();
-                    }
-                }
-                break;
+            }
+            break;
             case (META_EXTFLOODFILL & 0xff):
                 break;
-            case (META_SETLAYOUT & 0xff):
-                {
-                    quint16 layout;
-                    quint16 reserved;
+            case (META_SETLAYOUT & 0xff): {
+                quint16 layout;
+                quint16 reserved;
 
-                    // negative value allowed for width and height
-                    stream >> layout >> reserved;
+                // negative value allowed for width and height
+                stream >> layout >> reserved;
 #if DEBUG_RECORDS
-                    kDebug(31000) << "layout=" << layout;
+                kDebug(31000) << "layout=" << layout;
 #endif
-                    mLayout = (WmfLayout)layout;
+                mLayout = (WmfLayout)layout;
 
-                    mDeviceContext.layoutMode = mLayout;
-                    mDeviceContext.changedItems |= DCLayoutMode;
+                mDeviceContext.layoutMode = mLayout;
+                mDeviceContext.changedItems |= DCLayoutMode;
 
-                }
-                break;
-            case (META_DELETEOBJECT & 0xff):
-                {
-                    quint16 idx;
+            }
+            break;
+            case (META_DELETEOBJECT & 0xff): {
+                quint16 idx;
 
-                    stream >> idx;
-                    deleteHandle(idx);
-                }
-                break;
+                stream >> idx;
+                deleteHandle(idx);
+            }
+            break;
             case (META_CREATEPALETTE & 0xff):
                 // Unimplemented
                 createEmptyObject();
@@ -1114,146 +1075,146 @@ bool WmfParser::play(WmfAbstractBackend* backend)
             case (META_CREATEBRUSH & 0xff):
             case (META_CREATEPATTERNBRUSH & 0xff):
                 break;
-            case (META_CREATEPENINDIRECT & 0xff):
-                {
-                    // TODO: userStyle and alternateStyle
-                    quint32 color;
-                    quint16 style, width, arg;
+            case (META_CREATEPENINDIRECT & 0xff): {
+                // TODO: userStyle and alternateStyle
+                quint32 color;
+                quint16 style, width, arg;
 
-                    KoWmfPenHandle* handle = new KoWmfPenHandle;
+                KoWmfPenHandle *handle = new KoWmfPenHandle;
 
-                    if (addHandle(handle)) {
-                        stream >> style >> width >> arg >> color;
+                if (addHandle(handle)) {
+                    stream >> style >> width >> arg >> color;
 
-                        // set the style defaults
-                        handle->pen.setStyle(Qt::SolidLine);
-                        handle->pen.setCapStyle(Qt::RoundCap);
-                        handle->pen.setJoinStyle(Qt::RoundJoin);
+                    // set the style defaults
+                    handle->pen.setStyle(Qt::SolidLine);
+                    handle->pen.setCapStyle(Qt::RoundCap);
+                    handle->pen.setJoinStyle(Qt::RoundJoin);
 
-                        const int PenStyleMask = 0x0000000F;
-                        const int PenCapMask   = 0x00000F00;
-                        const int PenJoinMask  = 0x0000F000;
+                    const int PenStyleMask = 0x0000000F;
+                    const int PenCapMask   = 0x00000F00;
+                    const int PenJoinMask  = 0x0000F000;
 
-                        quint16 penStyle = style & PenStyleMask;
-                        if (penStyle < 7)
-                            handle->pen.setStyle(koWmfStylePen[ penStyle ]);
-                        else
-                            kDebug(31000) << "WmfParser::createPenIndirect: invalid pen" << style;
-
-                        quint16 capStyle = (style & PenCapMask) >> 8;
-                        if (capStyle < 3)
-                            handle->pen.setCapStyle(koWmfCapStylePen[ capStyle ]);
-                        else
-                            kDebug(31000) << "WmfParser::createPenIndirect: invalid pen cap style" << style;
-
-                        quint16 joinStyle = (style & PenJoinMask) >> 12;
-                        if (joinStyle < 3)
-                            handle->pen.setJoinStyle(koWmfJoinStylePen[ joinStyle ]);
-                        else
-                            kDebug(31000) << "WmfParser::createPenIndirect: invalid pen join style" << style;
-
-                        handle->pen.setColor(qtColor(color));
-                        handle->pen.setWidth(width);
-                        kDebug(31000) << "Creating pen" << handle->pen;
+                    quint16 penStyle = style & PenStyleMask;
+                    if (penStyle < 7) {
+                        handle->pen.setStyle(koWmfStylePen[ penStyle ]);
+                    } else {
+                        kDebug(31000) << "WmfParser::createPenIndirect: invalid pen" << style;
                     }
-                }
-                break;
-            case (META_CREATEFONTINDIRECT & 0xff):
-                {
-                    qint16  height;             // Height of the character cell
-                    qint16  width;              // Average width (not used)
-                    qint16  escapement;         // The rotation of the text in 1/10th degrees
-                    qint16  orientation;        // The rotation of each character
-                    quint16 weight, property, fixedPitch, arg;
 
-                    KoWmfFontHandle* handle = new KoWmfFontHandle;
-
-                    if (addHandle(handle)) {
-                        stream >> height >> width;
-                        stream >> escapement >> orientation;
-                        stream >> weight >> property >> arg >> arg;
-                        stream >> fixedPitch;
-
-                        //kDebug(31000) << height << width << weight << property;
-                        // text rotation (in 1/10 degree)
-                        handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
-                        handle->escapement = escapement;
-                        handle->orientation = orientation;
-
-                        // A negative height means to use device units.
-                        //kDebug(31000) << "Font height:" << height;
-                        handle->height = height;
-
-                        // FIXME: For some reason this value needs to be multiplied by
-                        //        a factor.  0.6 seems to give a good result, but why??
-                        // ANSWER(?): The doc says the height is the height of the character cell.
-                        //            But normally the font height is only the height above the
-                        //            baseline, isn't it?
-                        handle->font.setPointSize(qAbs(height) * 6 / 10);
-                        if (weight == 0)
-                            weight = QFont::Normal;
-                        else {
-                            // Linear transform between MS weights to Qt weights
-                            // MS: 400=normal, 700=bold
-                            // Qt: 50=normal, 75=bold
-                            // This makes the line cross x=0 at y=50/3.  (x=MS weight, y=Qt weight)
-                            //
-                            // FIXME: Is this a linear relationship?
-                            weight = (50 + 3 * ((weight * (75-50))/(700-400))) / 3;
-                        }
-                        handle->font.setWeight(weight);
-                        handle->font.setItalic((property & 0x01));
-                        handle->font.setUnderline((property & 0x100));
-                        // TODO: Strikethrough
-
-                        // font name
-                        int    maxChar = (size - 12) * 2;
-                        char*  nameFont = new char[maxChar];
-                        stream.readRawData(nameFont, maxChar);
-                        handle->font.setFamily(nameFont);
-                        delete[] nameFont;
+                    quint16 capStyle = (style & PenCapMask) >> 8;
+                    if (capStyle < 3) {
+                        handle->pen.setCapStyle(koWmfCapStylePen[ capStyle ]);
+                    } else {
+                        kDebug(31000) << "WmfParser::createPenIndirect: invalid pen cap style" << style;
                     }
+
+                    quint16 joinStyle = (style & PenJoinMask) >> 12;
+                    if (joinStyle < 3) {
+                        handle->pen.setJoinStyle(koWmfJoinStylePen[ joinStyle ]);
+                    } else {
+                        kDebug(31000) << "WmfParser::createPenIndirect: invalid pen join style" << style;
+                    }
+
+                    handle->pen.setColor(qtColor(color));
+                    handle->pen.setWidth(width);
+                    kDebug(31000) << "Creating pen" << handle->pen;
                 }
-                break;
-            case (META_CREATEBRUSHINDIRECT & 0xff):
-                {
-                    Qt::BrushStyle style;
-                    quint16 sty, arg2;
-                    quint32 color;
-                    KoWmfBrushHandle* handle = new KoWmfBrushHandle;
+            }
+            break;
+            case (META_CREATEFONTINDIRECT & 0xff): {
+                qint16  height;             // Height of the character cell
+                qint16  width;              // Average width (not used)
+                qint16  escapement;         // The rotation of the text in 1/10th degrees
+                qint16  orientation;        // The rotation of each character
+                quint16 weight, property, fixedPitch, arg;
 
-                    if (addHandle(handle)) {
-                        stream >> sty >> color >> arg2;
+                KoWmfFontHandle *handle = new KoWmfFontHandle;
 
-                        if (sty == 2) {
-                            if (arg2 < 6)
-                                style = koWmfHatchedStyleBrush[ arg2 ];
-                            else {
-                                kDebug(31000) << "WmfParser::createBrushIndirect: invalid hatched brush" << arg2;
-                                style = Qt::SolidPattern;
-                            }
+                if (addHandle(handle)) {
+                    stream >> height >> width;
+                    stream >> escapement >> orientation;
+                    stream >> weight >> property >> arg >> arg;
+                    stream >> fixedPitch;
+
+                    //kDebug(31000) << height << width << weight << property;
+                    // text rotation (in 1/10 degree)
+                    handle->font.setFixedPitch(((fixedPitch & 0x01) == 0));
+                    handle->escapement = escapement;
+                    handle->orientation = orientation;
+
+                    // A negative height means to use device units.
+                    //kDebug(31000) << "Font height:" << height;
+                    handle->height = height;
+
+                    // FIXME: For some reason this value needs to be multiplied by
+                    //        a factor.  0.6 seems to give a good result, but why??
+                    // ANSWER(?): The doc says the height is the height of the character cell.
+                    //            But normally the font height is only the height above the
+                    //            baseline, isn't it?
+                    handle->font.setPointSize(qAbs(height) * 6 / 10);
+                    if (weight == 0) {
+                        weight = QFont::Normal;
+                    } else {
+                        // Linear transform between MS weights to Qt weights
+                        // MS: 400=normal, 700=bold
+                        // Qt: 50=normal, 75=bold
+                        // This makes the line cross x=0 at y=50/3.  (x=MS weight, y=Qt weight)
+                        //
+                        // FIXME: Is this a linear relationship?
+                        weight = (50 + 3 * ((weight * (75 - 50)) / (700 - 400))) / 3;
+                    }
+                    handle->font.setWeight(weight);
+                    handle->font.setItalic((property & 0x01));
+                    handle->font.setUnderline((property & 0x100));
+                    // TODO: Strikethrough
+
+                    // font name
+                    int    maxChar = (size - 12) * 2;
+                    char  *nameFont = new char[maxChar];
+                    stream.readRawData(nameFont, maxChar);
+                    handle->font.setFamily(nameFont);
+                    delete[] nameFont;
+                }
+            }
+            break;
+            case (META_CREATEBRUSHINDIRECT & 0xff): {
+                Qt::BrushStyle style;
+                quint16 sty, arg2;
+                quint32 color;
+                KoWmfBrushHandle *handle = new KoWmfBrushHandle;
+
+                if (addHandle(handle)) {
+                    stream >> sty >> color >> arg2;
+
+                    if (sty == 2) {
+                        if (arg2 < 6) {
+                            style = koWmfHatchedStyleBrush[ arg2 ];
                         } else {
-                            if (sty < 9)
-                                style = koWmfStyleBrush[ sty ];
-                            else {
-                                kDebug(31000) << "WmfParser::createBrushIndirect: invalid brush" << sty;
-                                style = Qt::SolidPattern;
-                            }
+                            kDebug(31000) << "WmfParser::createBrushIndirect: invalid hatched brush" << arg2;
+                            style = Qt::SolidPattern;
                         }
-                        handle->brush.setStyle(style);
-                        handle->brush.setColor(qtColor(color));
+                    } else {
+                        if (sty < 9) {
+                            style = koWmfStyleBrush[ sty ];
+                        } else {
+                            kDebug(31000) << "WmfParser::createBrushIndirect: invalid brush" << sty;
+                            style = Qt::SolidPattern;
+                        }
                     }
+                    handle->brush.setStyle(style);
+                    handle->brush.setColor(qtColor(color));
                 }
-                break;
+            }
+            break;
 #if 0
- UNSPECIFIED in the Spec: 
-    { &WmfParser::createBitmapIndirect, "createBitmapIndirect" }, //109 0xfd
-    { &WmfParser::createBitmap, "createBitmap" }, // 110 0xfe
+        UNSPECIFIED in the Spec:
+            { &WmfParser::createBitmapIndirect, "createBitmapIndirect" }, //109 0xfd
+            { &WmfParser::createBitmap, "createBitmap" }, // 110 0xfe
 #endif
             case (META_CREATEREGION & 0xff):
                 // FIXME: Unimplemented
                 createEmptyObject();
-               break;
+                break;
             default:
                 // function outside WMF specification
                 kError(31000) << "BROKEN WMF file: Record number" << hex << recordType << dec
@@ -1269,9 +1230,10 @@ bool WmfParser::play(WmfAbstractBackend* backend)
         m_backend->end();
     }
 
-    for (int i = 0 ; i < mNbrObject ; i++) {
-        if (mObjHandleTab[ i ] != 0)
+    for (int i = 0; i < mNbrObject; i++) {
+        if (mObjHandleTab[ i ] != 0) {
             delete mObjHandleTab[ i ];
+        }
     }
     delete[] mObjHandleTab;
     mObjHandleTab = 0;
@@ -1279,16 +1241,15 @@ bool WmfParser::play(WmfAbstractBackend* backend)
     return true;
 }
 
-
 //-----------------------------------------------------------------------------
-
 
 void WmfParser::createBoundingBox(QDataStream &stream)
 {
     // Check bounding rectangle for standard meta file.
     // This calculation is done in device coordinates.
-    if (!mStandard || !mValid) 
+    if (!mStandard || !mValid) {
         return;
+    }
 
     bool windowExtIsSet = false;
     bool viewportExtIsSet = false;
@@ -1327,123 +1288,123 @@ void WmfParser::createBoundingBox(QDataStream &stream)
         qint16  extX = 0;
         qint16  extY = 0;
         switch (recordType &= 0xFF) {
-        case 11: // setWindowOrg
-            {
-                stream >> windowOrgY >> windowOrgX;
+        case 11: { // setWindowOrg
+            stream >> windowOrgY >> windowOrgX;
 #if DEBUG_BBOX
-                kDebug(31000) << "setWindowOrg" << windowOrgX << windowOrgY;
+            kDebug(31000) << "setWindowOrg" << windowOrgX << windowOrgY;
 #endif
-                if (!windowExtIsSet)
-                    break;
-
-                // The bounding box doesn't change just because we get
-                // a new window.  Remember we are working in device
-                // (viewport) coordinates when deciding the bounding
-                // box.
-                if (viewportExtIsSet)
-                    break;
-
-                // If there is no viewport, then use the window ext as
-                // size, and (0, 0) as origin.
-                //
-                // FIXME: Handle the case where the window is defined
-                //        first and then the viewport, without any
-                //        drawing in between.  If that happens, I
-                //        don't think that the window definition
-                //        should influence the bounding box.
-                orgX = 0;
-                orgY = 0;
-                extX = windowWidth;
-                extY = windowHeight;
+            if (!windowExtIsSet) {
+                break;
             }
-            break;
 
-        case 12: // setWindowExt
-            {
-                stream >> windowHeight >> windowWidth;
-                windowExtIsSet = true;
-                bboxRecalculated = false;
-
-#if DEBUG_BBOX
-                kDebug(31000) << "setWindowExt" << windowWidth << windowHeight
-                              << "(viewportOrg = " << viewportOrgX << viewportOrgY << ")";
-#endif
-
-                // If the viewport is set, then a changed window
-                // changes nothing in the bounding box.
-                if (viewportExtIsSet)
-                    break;
-
-                bboxRecalculated = false;
-
-                // Collect the maximum width and height.
-                if (abs(windowWidth - windowOrgX) > mMaxWidth)
-                    mMaxWidth = abs(windowWidth - windowOrgX);
-                if (abs(windowHeight - windowOrgY) > mMaxHeight)
-                    mMaxHeight = abs(windowHeight - windowOrgY);
-
-                orgX = 0;
-                orgY = 0;
-                extX = windowWidth;
-                extY = windowHeight;
+            // The bounding box doesn't change just because we get
+            // a new window.  Remember we are working in device
+            // (viewport) coordinates when deciding the bounding
+            // box.
+            if (viewportExtIsSet) {
+                break;
             }
-            break;
 
-        case 13: //setViewportOrg
-            {
-                stream >> viewportOrgY >> viewportOrgX;
-                bboxRecalculated = false;
+            // If there is no viewport, then use the window ext as
+            // size, and (0, 0) as origin.
+            //
+            // FIXME: Handle the case where the window is defined
+            //        first and then the viewport, without any
+            //        drawing in between.  If that happens, I
+            //        don't think that the window definition
+            //        should influence the bounding box.
+            orgX = 0;
+            orgY = 0;
+            extX = windowWidth;
+            extY = windowHeight;
+        }
+        break;
+
+        case 12: { // setWindowExt
+            stream >> windowHeight >> windowWidth;
+            windowExtIsSet = true;
+            bboxRecalculated = false;
 
 #if DEBUG_BBOX
-                kDebug(31000) << "setViewportOrg" << viewportOrgX << viewportOrgY;
+            kDebug(31000) << "setWindowExt" << windowWidth << windowHeight
+                          << "(viewportOrg = " << viewportOrgX << viewportOrgY << ")";
 #endif
-                orgX = viewportOrgX;
-                orgY = viewportOrgY;
-                if (viewportExtIsSet) {
-                    extX = viewportWidth;
-                    extY = viewportHeight;
-                }
-                else {
-                    // If the viewportExt is not set, then either a
-                    // subsequent setViewportExt will set it, or the
-                    // windowExt will be used instead.  
-                    extX = windowWidth;
-                    extY = windowHeight;
-                }
-                    break;
 
-                // FIXME: Handle the case where the org changes but
-                //        there is no subsequent Ext change (should be
-                //        rather uncommon).
+            // If the viewport is set, then a changed window
+            // changes nothing in the bounding box.
+            if (viewportExtIsSet) {
+                break;
             }
-            break;
 
-        case 14: //setViewportExt
-            {
-                stream >> viewportHeight >> viewportWidth;
-                viewportExtIsSet = true;
-                bboxRecalculated = false;
+            bboxRecalculated = false;
+
+            // Collect the maximum width and height.
+            if (abs(windowWidth - windowOrgX) > mMaxWidth) {
+                mMaxWidth = abs(windowWidth - windowOrgX);
+            }
+            if (abs(windowHeight - windowOrgY) > mMaxHeight) {
+                mMaxHeight = abs(windowHeight - windowOrgY);
+            }
+
+            orgX = 0;
+            orgY = 0;
+            extX = windowWidth;
+            extY = windowHeight;
+        }
+        break;
+
+        case 13: { //setViewportOrg
+            stream >> viewportOrgY >> viewportOrgX;
+            bboxRecalculated = false;
 
 #if DEBUG_BBOX
-                kDebug(31000) << "setViewportExt" << viewportWidth << viewportHeight;
+            kDebug(31000) << "setViewportOrg" << viewportOrgX << viewportOrgY;
 #endif
-                orgX = viewportOrgX;
-                orgY = viewportOrgY;
+            orgX = viewportOrgX;
+            orgY = viewportOrgY;
+            if (viewportExtIsSet) {
                 extX = viewportWidth;
                 extY = viewportHeight;
+            } else {
+                // If the viewportExt is not set, then either a
+                // subsequent setViewportExt will set it, or the
+                // windowExt will be used instead.
+                extX = windowWidth;
+                extY = windowHeight;
             }
             break;
 
-            // FIXME: Also support:
-            //          ScaleWindowExt, ScaleViewportExt, 
-            //          OffsetWindowOrg, OffsetViewportOrg
+            // FIXME: Handle the case where the org changes but
+            //        there is no subsequent Ext change (should be
+            //        rather uncommon).
+        }
+        break;
 
-            // The following are drawing commands.  It is only when
-            // there is an actual drawing command that we should check
-            // the bounding box. It seems that some WMF files have
-            // lots of changes of the window or viewports but without
-            // any drawing commands in between. These changes should
-            // not affect the bounding box.
+        case 14: { //setViewportExt
+            stream >> viewportHeight >> viewportWidth;
+            viewportExtIsSet = true;
+            bboxRecalculated = false;
+
+#if DEBUG_BBOX
+            kDebug(31000) << "setViewportExt" << viewportWidth << viewportHeight;
+#endif
+            orgX = viewportOrgX;
+            orgY = viewportOrgY;
+            extX = viewportWidth;
+            extY = viewportHeight;
+        }
+        break;
+
+        // FIXME: Also support:
+        //          ScaleWindowExt, ScaleViewportExt,
+        //          OffsetWindowOrg, OffsetViewportOrg
+
+        // The following are drawing commands.  It is only when
+        // there is an actual drawing command that we should check
+        // the bounding box. It seems that some WMF files have
+        // lots of changes of the window or viewports but without
+        // any drawing commands in between. These changes should
+        // not affect the bounding box.
         case 19: // lineTo
         //case 20: // moveTo
         case 23: // arc
@@ -1477,7 +1438,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
             break;
 
         default:
-          ;
+            ;
         }
 
         // Recalculate the BBox if it was indicated above that it should be.
@@ -1491,8 +1452,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
                 orgY = viewportOrgY;
                 extX = viewportWidth;
                 extY = viewportHeight;
-            }
-            else {
+            } else {
                 // If there is no defined viewport, then use the
                 // window as the fallback viewport. But only the size,
                 // the origin is always (0, 0).
@@ -1516,10 +1476,18 @@ void WmfParser::createBoundingBox(QDataStream &stream)
 #if DEBUG_BBOX
             kDebug(31000) << orgX << orgY << extX << extY;
 #endif
-            if (orgX < mBBoxLeft)          mBBoxLeft = orgX;
-            if (orgY < mBBoxTop)           mBBoxTop  = orgY;
-            if (orgX + extX > mBBoxRight)  mBBoxRight  = orgX + extX;
-            if (orgY + extY > mBBoxBottom) mBBoxBottom = orgY + extY;
+            if (orgX < mBBoxLeft) {
+                mBBoxLeft = orgX;
+            }
+            if (orgY < mBBoxTop) {
+                mBBoxTop  = orgY;
+            }
+            if (orgX + extX > mBBoxRight) {
+                mBBoxRight  = orgX + extX;
+            }
+            if (orgY + extY > mBBoxBottom) {
+                mBBoxBottom = orgY + extY;
+            }
 
             bboxRecalculated = true;
         }
@@ -1537,31 +1505,27 @@ void WmfParser::createBoundingBox(QDataStream &stream)
     }
 }
 
-
 //-----------------------------------------------------------------------------
 // Object handle
-
 
 void WmfParser::createEmptyObject()
 {
     // allocation of an empty object (to keep object counting in sync)
-    KoWmfPenHandle* handle = new KoWmfPenHandle;
+    KoWmfPenHandle *handle = new KoWmfPenHandle;
 
     addHandle(handle);
 }
 
-
 //-----------------------------------------------------------------------------
 // Misc functions
 
-
-quint16 WmfParser::calcCheckSum(WmfPlaceableHeader* apmfh)
+quint16 WmfParser::calcCheckSum(WmfPlaceableHeader *apmfh)
 {
-    quint16*  lpWord;
+    quint16  *lpWord;
     quint16   wResult, i;
 
     // Start with the first word
-    wResult = *(lpWord = (quint16*)(apmfh));
+    wResult = *(lpWord = (quint16 *)(apmfh));
     // XOR in each of the other 9 words
     for (i = 1; i <= 9; i++) {
         wResult ^= lpWord[ i ];
@@ -1569,16 +1533,17 @@ quint16 WmfParser::calcCheckSum(WmfPlaceableHeader* apmfh)
     return wResult;
 }
 
-
 //-----------------------------------------------------------------------------
 // Utilities and conversion Wmf -> Qt
 
-bool WmfParser::addHandle(KoWmfHandle* handle)
+bool WmfParser::addHandle(KoWmfHandle *handle)
 {
     int idx;
 
-    for (idx = 0; idx < mNbrObject ; idx++) {
-        if (mObjHandleTab[ idx ] == 0)  break;
+    for (idx = 0; idx < mNbrObject; idx++) {
+        if (mObjHandleTab[ idx ] == 0) {
+            break;
+        }
     }
 
     if (idx < mNbrObject) {
@@ -1592,7 +1557,6 @@ bool WmfParser::addHandle(KoWmfHandle* handle)
     }
 }
 
-
 void WmfParser::deleteHandle(int idx)
 {
     if ((idx < mNbrObject) && (mObjHandleTab[idx] != 0)) {
@@ -1603,20 +1567,18 @@ void WmfParser::deleteHandle(int idx)
     }
 }
 
-
-void WmfParser::pointArray(QDataStream& stream, QPolygon& pa)
+void WmfParser::pointArray(QDataStream &stream, QPolygon &pa)
 {
     qint16 left, top;
     int  i, max;
 
-    for (i = 0, max = pa.size() ; i < max ; i++) {
+    for (i = 0, max = pa.size(); i < max; i++) {
         stream >> left >> top;
         pa.setPoint(i, left, top);
     }
 }
 
-
-void WmfParser::xyToAngle(int xStart, int yStart, int xEnd, int yEnd, int& angleStart, int& angleLength)
+void WmfParser::xyToAngle(int xStart, int yStart, int xEnd, int yEnd, int &angleStart, int &angleLength)
 {
     double aStart, aLength;
 
@@ -1625,18 +1587,19 @@ void WmfParser::xyToAngle(int xStart, int yStart, int xEnd, int yEnd, int& angle
 
     angleStart = (int)((aStart * 2880) / 3.14166);
     angleLength = (int)((aLength * 2880) / 3.14166);
-    if (angleLength < 0) angleLength = 5760 + angleLength;
+    if (angleLength < 0) {
+        angleLength = 5760 + angleLength;
+    }
 }
-
 
 QPainter::CompositionMode WmfParser::winToQtComposition(quint16 param) const
 {
-    if (param < 17)
+    if (param < 17) {
         return koWmfOpTab16[ param ];
-    else
+    } else {
         return QPainter::CompositionMode_Source;
+    }
 }
-
 
 QPainter::CompositionMode  WmfParser::winToQtComposition(quint32 param) const
 {
@@ -1647,18 +1610,20 @@ QPainter::CompositionMode  WmfParser::winToQtComposition(quint32 param) const
     0x005A0049  dest = pattern XOR dest   */
     int i;
 
-    for (i = 0 ; i < 15 ; i++) {
-        if (koWmfOpTab32[ i ].winRasterOp == param)  break;
+    for (i = 0; i < 15; i++) {
+        if (koWmfOpTab32[ i ].winRasterOp == param) {
+            break;
+        }
     }
 
-    if (i < 15)
+    if (i < 15) {
         return koWmfOpTab32[ i ].qtRasterOp;
-    else
+    } else {
         return QPainter::CompositionMode_SourceOver;
+    }
 }
 
-
-bool WmfParser::dibToBmp(QImage& bmp, QDataStream& stream, quint32 size)
+bool WmfParser::dibToBmp(QImage &bmp, QDataStream &stream, quint32 size)
 {
     typedef struct _BMPFILEHEADER {
         quint16 bmType;
@@ -1676,8 +1641,8 @@ bool WmfParser::dibToBmp(QImage& bmp, QDataStream& stream, quint32 size)
     stream.readRawData(pattern.data() + 14, size);
 
     // add BMP header
-    BMPFILEHEADER* bmpHeader;
-    bmpHeader = (BMPFILEHEADER*)(pattern.data());
+    BMPFILEHEADER *bmpHeader;
+    bmpHeader = (BMPFILEHEADER *)(pattern.data());
     bmpHeader->bmType = 0x4D42;
     bmpHeader->bmSize = sizeBmp;
 
@@ -1689,6 +1654,5 @@ bool WmfParser::dibToBmp(QImage& bmp, QDataStream& stream, quint32 size)
         return true;
     }
 }
-
 
 }

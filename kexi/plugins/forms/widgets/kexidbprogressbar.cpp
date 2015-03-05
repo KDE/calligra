@@ -20,9 +20,8 @@
 */
 #include "kexidbprogressbar.h"
 
-
 KexiDBProgressBar::KexiDBProgressBar(QWidget *parent)
-        :QProgressBar(parent), KexiFormDataItemInterface()
+    : QProgressBar(parent), KexiFormDataItemInterface()
 {
 }
 
@@ -30,14 +29,15 @@ KexiDBProgressBar::~KexiDBProgressBar()
 {
 }
 
-void KexiDBProgressBar::setInvalidState(const QString& displayText)
+void KexiDBProgressBar::setInvalidState(const QString &displayText)
 {
     Q_UNUSED(displayText);
     m_invalidState = true;
     setEnabled(false);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-    if (focusPolicy() & Qt::TabFocus)
+    if (focusPolicy() & Qt::TabFocus) {
         setFocusPolicy(Qt::ClickFocus);
+    }
     QProgressBar::setValue(minimum());
 }
 
@@ -45,12 +45,13 @@ void
 KexiDBProgressBar::setEnabled(bool enabled)
 {
     // prevent the user from reenabling the widget when it is in invalid state
-    if (enabled && m_invalidState)
+    if (enabled && m_invalidState) {
         return;
+    }
     QProgressBar::setEnabled(enabled);
 }
 
-void KexiDBProgressBar::setValueInternal(const QVariant&, bool)
+void KexiDBProgressBar::setValueInternal(const QVariant &, bool)
 {
     QProgressBar::setValue(KexiDataItemInterface::originalValue().toInt());
 }
@@ -86,7 +87,7 @@ void KexiDBProgressBar::setReadOnly(bool set)
     Q_UNUSED(set);
 }
 
-QWidget*
+QWidget *
 KexiDBProgressBar::widget()
 {
     return this;
@@ -94,7 +95,7 @@ KexiDBProgressBar::widget()
 
 bool KexiDBProgressBar::cursorAtStart()
 {
-    return false; 
+    return false;
 }
 
 bool KexiDBProgressBar::cursorAtEnd()

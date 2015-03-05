@@ -42,14 +42,14 @@
 struct KisOpenRasterStackLoadVisitor::Private {
     KisImageWSP image;
     vKisNodeSP activeNodes;
-    KisUndoStore* undoStore;
-    KisOpenRasterLoadContext* loadContext;
+    KisUndoStore *undoStore;
+    KisOpenRasterLoadContext *loadContext;
     double xRes;
     double yRes;
 };
 
-KisOpenRasterStackLoadVisitor::KisOpenRasterStackLoadVisitor(KisUndoStore* undoStore, KisOpenRasterLoadContext* orlc)
-        : d(new Private)
+KisOpenRasterStackLoadVisitor::KisOpenRasterStackLoadVisitor(KisUndoStore *undoStore, KisOpenRasterLoadContext *orlc)
+    : d(new Private)
 {
     d->undoStore = undoStore;
     d->loadContext = orlc;
@@ -75,7 +75,6 @@ void KisOpenRasterStackLoadVisitor::loadImage()
 
     QDomDocument doc = d->loadContext->loadStack();
 
-
     for (QDomNode node = doc.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement() && node.nodeName() == "image") { // it's the image root
             QDomElement subelem = node.toElement();
@@ -90,13 +89,13 @@ void KisOpenRasterStackLoadVisitor::loadImage()
                 height = subelem.attribute("h").toInt();
             }
 
-            d->xRes = 75.0/72; // Setting the default value of the X Resolution = 75ppi
-            if(!subelem.attribute("xres").isNull()){
+            d->xRes = 75.0 / 72; // Setting the default value of the X Resolution = 75ppi
+            if (!subelem.attribute("xres").isNull()) {
                 d->xRes = (subelem.attribute("xres").toDouble() / 72);
             }
 
-            d->yRes = 75.0/72;
-            if(!subelem.attribute("yres").isNull()){
+            d->yRes = 75.0 / 72;
+            if (!subelem.attribute("yres").isNull()) {
                 d->yRes = (subelem.attribute("yres").toDouble() / 72);
             }
 
@@ -114,7 +113,7 @@ void KisOpenRasterStackLoadVisitor::loadImage()
     }
 }
 
-void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLayerSP layer)
+void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement &elem, KisLayerSP layer)
 {
     layer->setName(elem.attribute("name"));
     layer->setX(elem.attribute("x").toInt());
@@ -133,50 +132,88 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
 
     QString compop = elem.attribute("composite-op");
     if (compop.startsWith("svg:")) {
-        if (compop == "svg:clear") layer->setCompositeOp(COMPOSITE_CLEAR);
-        if (compop == "svg:src-over") layer->setCompositeOp(COMPOSITE_OVER);
-        if (compop == "svg:add") layer->setCompositeOp(COMPOSITE_ADD);
-        if (compop == "svg:multiply") layer->setCompositeOp(COMPOSITE_MULT);
-        if (compop == "svg:screen") layer->setCompositeOp(COMPOSITE_SCREEN);
-        if (compop == "svg:overlay") layer->setCompositeOp(COMPOSITE_OVERLAY);
-        if (compop == "svg:darken") layer->setCompositeOp(COMPOSITE_DARKEN);
-        if (compop == "svg:lighten") layer->setCompositeOp(COMPOSITE_LIGHTEN);
-        if (compop == "svg:color-dodge") layer->setCompositeOp(COMPOSITE_DODGE);
-        if (compop == "svg:color-burn") layer->setCompositeOp(COMPOSITE_BURN);
-        if (compop == "svg:hard-light") layer->setCompositeOp(COMPOSITE_HARD_LIGHT);
-        if (compop == "svg:soft-light") layer->setCompositeOp(COMPOSITE_SOFT_LIGHT_SVG);
-        if (compop == "svg:difference") layer->setCompositeOp(COMPOSITE_DIFF);
-        if (compop == "svg:color") layer->setCompositeOp(COMPOSITE_COLOR);
-        if (compop == "svg:luminosity") layer->setCompositeOp(COMPOSITE_LUMINIZE);
-        if (compop == "svg:hue") layer->setCompositeOp(COMPOSITE_HUE);
-        if (compop == "svg:saturation") layer->setCompositeOp(COMPOSITE_SATURATION);
-        if (compop == "svg:exclusion") layer->setCompositeOp(COMPOSITE_EXCLUSION);
-    }
-    else if (compop.startsWith("krita:")) {
+        if (compop == "svg:clear") {
+            layer->setCompositeOp(COMPOSITE_CLEAR);
+        }
+        if (compop == "svg:src-over") {
+            layer->setCompositeOp(COMPOSITE_OVER);
+        }
+        if (compop == "svg:add") {
+            layer->setCompositeOp(COMPOSITE_ADD);
+        }
+        if (compop == "svg:multiply") {
+            layer->setCompositeOp(COMPOSITE_MULT);
+        }
+        if (compop == "svg:screen") {
+            layer->setCompositeOp(COMPOSITE_SCREEN);
+        }
+        if (compop == "svg:overlay") {
+            layer->setCompositeOp(COMPOSITE_OVERLAY);
+        }
+        if (compop == "svg:darken") {
+            layer->setCompositeOp(COMPOSITE_DARKEN);
+        }
+        if (compop == "svg:lighten") {
+            layer->setCompositeOp(COMPOSITE_LIGHTEN);
+        }
+        if (compop == "svg:color-dodge") {
+            layer->setCompositeOp(COMPOSITE_DODGE);
+        }
+        if (compop == "svg:color-burn") {
+            layer->setCompositeOp(COMPOSITE_BURN);
+        }
+        if (compop == "svg:hard-light") {
+            layer->setCompositeOp(COMPOSITE_HARD_LIGHT);
+        }
+        if (compop == "svg:soft-light") {
+            layer->setCompositeOp(COMPOSITE_SOFT_LIGHT_SVG);
+        }
+        if (compop == "svg:difference") {
+            layer->setCompositeOp(COMPOSITE_DIFF);
+        }
+        if (compop == "svg:color") {
+            layer->setCompositeOp(COMPOSITE_COLOR);
+        }
+        if (compop == "svg:luminosity") {
+            layer->setCompositeOp(COMPOSITE_LUMINIZE);
+        }
+        if (compop == "svg:hue") {
+            layer->setCompositeOp(COMPOSITE_HUE);
+        }
+        if (compop == "svg:saturation") {
+            layer->setCompositeOp(COMPOSITE_SATURATION);
+        }
+        if (compop == "svg:exclusion") {
+            layer->setCompositeOp(COMPOSITE_EXCLUSION);
+        }
+    } else if (compop.startsWith("krita:")) {
         compop = compop.remove(0, 6);
         layer->setCompositeOp(compop);
-    }
-    else {
+    } else {
         // to fix old bugs in krita's ora export
-        if (compop == "color-dodge") layer->setCompositeOp(COMPOSITE_DODGE);
-        if (compop == "difference") layer->setCompositeOp(COMPOSITE_DIFF);
+        if (compop == "color-dodge") {
+            layer->setCompositeOp(COMPOSITE_DODGE);
+        }
+        if (compop == "difference") {
+            layer->setCompositeOp(COMPOSITE_DIFF);
+        }
     }
 
 }
 
-void KisOpenRasterStackLoadVisitor::loadAdjustmentLayer(const QDomElement& elem, KisAdjustmentLayerSP aL)
+void KisOpenRasterStackLoadVisitor::loadAdjustmentLayer(const QDomElement &elem, KisAdjustmentLayerSP aL)
 {
     loadLayerInfo(elem, aL);
 }
 
-void KisOpenRasterStackLoadVisitor::loadPaintLayer(const QDomElement& elem, KisPaintLayerSP pL)
+void KisOpenRasterStackLoadVisitor::loadPaintLayer(const QDomElement &elem, KisPaintLayerSP pL)
 {
     loadLayerInfo(elem, pL);
 
     dbgFile << "Loading was unsuccessful";
 }
 
-void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisGroupLayerSP gL)
+void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement &elem, KisGroupLayerSP gL)
 {
     dbgFile << "Loading group layer";
     QLocale c(QLocale::German);
@@ -213,7 +250,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                         KisPaintDeviceSP device = pngImage->projection();
                         delete pngImage.data();
 
-                        KisPaintLayerSP layer = new KisPaintLayer(gL->image() , "", opacity * 255, device);
+                        KisPaintLayerSP layer = new KisPaintLayer(gL->image(), "", opacity * 255, device);
                         d->image->addNode(layer.data(), gL.data(), 0);
                         loadPaintLayer(subelem, layer);
                         dbgFile << "Loading was successful";
@@ -227,8 +264,8 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                 if (filterTypeSplit[0] == "applications" && filterTypeSplit[1] == "krita") {
                     f = KisFilterRegistry::instance()->value(filterTypeSplit[2]);
                 }
-                KisFilterConfiguration * kfc = f->defaultConfiguration(0);
-                KisAdjustmentLayerSP layer = new KisAdjustmentLayer(gL->image() , "", kfc, KisSelectionSP(0));
+                KisFilterConfiguration *kfc = f->defaultConfiguration(0);
+                KisAdjustmentLayerSP layer = new KisAdjustmentLayer(gL->image(), "", kfc, KisSelectionSP(0));
                 d->image->addNode(layer.data(), gL.data(), 0);
                 loadAdjustmentLayer(subelem, layer);
 

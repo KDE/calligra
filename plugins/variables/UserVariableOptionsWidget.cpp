@@ -33,7 +33,7 @@
 #include <kinputdialog.h>
 #include <kdebug.h>
 
-UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable, QWidget *parent)
+UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable *userVariable, QWidget *parent)
     : QWidget(parent)
     , userVariable(userVariable)
 {
@@ -171,12 +171,12 @@ void UserVariableOptionsWidget::deleteClicked()
         return;
     }
     if (KMessageBox::questionYesNo(this,
-            i18n("Delete variable <b>%1</b>?", userVariable->name()),
-            i18n("Delete Variable"),
-            KStandardGuiItem::yes(),
-            KStandardGuiItem::cancel(),
-            QString(),
-            KMessageBox::Dangerous | KMessageBox::Notify) != KMessageBox::Yes) {
+                                   i18n("Delete variable <b>%1</b>?", userVariable->name()),
+                                   i18n("Delete Variable"),
+                                   KStandardGuiItem::yes(),
+                                   KStandardGuiItem::cancel(),
+                                   QString(),
+                                   KMessageBox::Dangerous | KMessageBox::Notify) != KMessageBox::Yes) {
         return;
     }
     variableManager()->remove(userVariable->name());

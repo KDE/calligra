@@ -44,7 +44,10 @@ public:
     virtual QRectF suggestRect(KoTextLayoutRootArea *rootArea);
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
 
-    KWTextFrameSet *frameSet() {return m_textFrameSet;}
+    KWTextFrameSet *frameSet()
+    {
+        return m_textFrameSet;
+    }
 
 private:
     KWTextFrameSet *m_textFrameSet;

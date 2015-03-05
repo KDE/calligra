@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "KoOdfStyleProperties.h"
 
@@ -29,10 +28,8 @@
 #include <KoXmlStreamReader.h>
 #include <KoXmlWriter.h>
 
-
 // ----------------------------------------------------------------
 //                         private class
-
 
 class KoOdfStyleProperties::Private
 {
@@ -43,9 +40,7 @@ public:
     AttributeSet attributes;  // name, value
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfStyleProperties::KoOdfStyleProperties()
     : d(new KoOdfStyleProperties::Private())
@@ -56,7 +51,6 @@ KoOdfStyleProperties::~KoOdfStyleProperties()
 {
     delete d;
 }
-
 
 QString KoOdfStyleProperties::attribute(const QString &property) const
 {
@@ -69,12 +63,10 @@ void KoOdfStyleProperties::setAttribute(const QString &property, const QString &
     d->attributes[property] = value;
 }
 
-
 void KoOdfStyleProperties::clear()
 {
     d->attributes.clear();
 }
-
 
 bool KoOdfStyleProperties::readOdf(KoXmlStreamReader &reader)
 {
@@ -103,7 +95,6 @@ void KoOdfStyleProperties::copyPropertiesFrom(const KoOdfStyleProperties &source
 // ----------------------------------------------------------------
 //                         protected functions
 
-
 bool KoOdfStyleProperties::readAttributes(KoXmlStreamReader &reader)
 {
     copyAttributes(reader, d->attributes);
@@ -122,9 +113,7 @@ bool KoOdfStyleProperties::saveAttributes(KoXmlWriter *writer)
     return true;
 }
 
-
 // ----------------------------------------------------------------
-
 
 void copyAttributes(KoXmlStreamReader &reader, AttributeSet &attributes)
 {

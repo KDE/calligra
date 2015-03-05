@@ -26,12 +26,10 @@
 
 #include "FileCollector.h"
 
-
 class QString;
 class QByteArray;
 
 class KoStore;
-
 
 class EpubFile : public FileCollector
 {

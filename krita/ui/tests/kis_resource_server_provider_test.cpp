@@ -23,7 +23,7 @@
 
 void KisResourceServerProviderTest::testFetchResource()
 {
-    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     Q_UNUSED(rserver);
     // get a known preset by name
     // modify it
@@ -31,7 +31,6 @@ void KisResourceServerProviderTest::testFetchResource()
     // check...
 
 }
-
 
 QTEST_KDEMAIN(KisResourceServerProviderTest, GUI)
 #include "kis_resource_server_provider_test.moc"

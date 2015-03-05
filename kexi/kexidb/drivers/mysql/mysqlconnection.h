@@ -44,28 +44,28 @@ class MySqlConnection : public Connection
 public:
     virtual ~MySqlConnection();
 
-    virtual Cursor* prepareQuery(const QString& statement = QString(), uint cursor_options = 0);
-    virtual Cursor* prepareQuery(QuerySchema& query, uint cursor_options = 0);
+    virtual Cursor *prepareQuery(const QString &statement = QString(), uint cursor_options = 0);
+    virtual Cursor *prepareQuery(QuerySchema &query, uint cursor_options = 0);
 
     virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type,
-            FieldList& fields);
+            FieldList &fields);
 
 protected:
 
     /*! Used by driver */
     MySqlConnection(Driver *driver, ConnectionData &conn_data);
 
-    virtual bool drv_connect(KexiDB::ServerVersionInfo& version);
+    virtual bool drv_connect(KexiDB::ServerVersionInfo &version);
     virtual bool drv_disconnect();
     virtual bool drv_getDatabasesList(QStringList &list);
     //! reimplemented using "SHOW DATABASES LIKE..." because MySQL stores db names in lower case.
     virtual bool drv_databaseExists(const QString &dbName, bool ignoreErrors = true);
     virtual bool drv_createDatabase(const QString &dbName = QString());
     virtual bool drv_useDatabase(const QString &dbName = QString(), bool *cancelled = 0,
-                                 MessageHandler* msgHandler = 0);
+                                 MessageHandler *msgHandler = 0);
     virtual bool drv_closeDatabase();
     virtual bool drv_dropDatabase(const QString &dbName = QString());
-    virtual bool drv_executeSQL(const QString& statement);
+    virtual bool drv_executeSQL(const QString &statement);
     virtual quint64 drv_lastInsertRowID();
 
     virtual int serverResult();
@@ -78,7 +78,7 @@ protected:
 //! @todo move this somewhere to low level class (MIGRATION?)
     virtual bool drv_containsTable(const QString &tableName);
 
-    MySqlConnectionInternal* d;
+    MySqlConnectionInternal *d;
 
     friend class MySqlDriver;
     friend class MySqlCursor;

@@ -27,7 +27,6 @@ class KisPainter;
 class KisDistanceInformation;
 class KisTransaction;
 
-
 class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
@@ -36,7 +35,8 @@ public:
      * painter individually, so we strore and manipulate with
      * them together using the structure PainterInfo
      */
-    class KRITAUI_EXPORT PainterInfo {
+    class KRITAUI_EXPORT PainterInfo
+    {
     public:
         PainterInfo(KisPainter *painter, KisDistanceInformation *dragDistance);
         ~PainterInfo();
@@ -49,17 +49,16 @@ public:
     KisPainterBasedStrokeStrategy(const QString &id,
                                   const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
-                                  QVector<PainterInfo*> painterInfos,bool useMergeID = false);
+                                  QVector<PainterInfo *> painterInfos, bool useMergeID = false);
 
     KisPainterBasedStrokeStrategy(const QString &id,
                                   const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
-                                  PainterInfo *painterInfo,bool useMergeID = false);
+                                  PainterInfo *painterInfo, bool useMergeID = false);
 
     void initStrokeCallback();
     void finishStrokeCallback();
     void cancelStrokeCallback();
-
 
 protected:
     KisPaintDeviceSP targetDevice();
@@ -72,13 +71,14 @@ private:
                       bool hasIndirectPainting,
                       const QString &indirectPaintingCompositeOp);
     void deletePainters();
-    inline int timedID(const QString &id){
+    inline int timedID(const QString &id)
+    {
         return int(qHash(id));
     }
 
 private:
     KisResourcesSnapshotSP m_resources;
-    QVector<PainterInfo*> m_painterInfos;
+    QVector<PainterInfo *> m_painterInfos;
     KisTransaction *m_transaction;
 
     KisPaintDeviceSP m_targetDevice;

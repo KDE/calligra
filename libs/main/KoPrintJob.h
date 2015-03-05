@@ -59,15 +59,18 @@ public:
     virtual QPrinter &printer() = 0;
     /// If this print job is used in combination with a printdialog the option widgets this method
     /// retuns will be shown in the print dialog.
-    virtual QList<QWidget*> createOptionWidgets() const = 0;
+    virtual QList<QWidget *> createOptionWidgets() const = 0;
 
-    virtual int documentFirstPage() const {
+    virtual int documentFirstPage() const
+    {
         return 1;
     }
-    virtual int documentLastPage() const {
+    virtual int documentLastPage() const
+    {
         return 1;
     }
-    virtual int documentCurrentPage() const {
+    virtual int documentCurrentPage() const
+    {
         return 1;
     }
 

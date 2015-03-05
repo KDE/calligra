@@ -19,16 +19,17 @@
 #ifndef __KIS_BSPLINE_H
 #define __KIS_BSPLINE_H
 
-namespace KisBSplines {
+namespace KisBSplines
+{
 
-    enum BorderCondition {
-        Periodic,
-        Deriv1,
-        Deriv2,
-        Flat,
-        Natural,
-        Antiperiodic
-    };
+enum BorderCondition {
+    Periodic,
+    Deriv1,
+    Deriv2,
+    Flat,
+    Natural,
+    Antiperiodic
+};
 
 }
 

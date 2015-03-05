@@ -44,14 +44,18 @@ public:
     bool groupFolded;
 };
 
-class TemplatesModel::Private {
+class TemplatesModel::Private
+{
 public:
     Private() {}
-    ~Private() { qDeleteAll(items);}
-    QList<ItemData*> items;
+    ~Private()
+    {
+        qDeleteAll(items);
+    }
+    QList<ItemData *> items;
 };
 
-TemplatesModel::TemplatesModel(QObject* parent)
+TemplatesModel::TemplatesModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
@@ -64,28 +68,28 @@ TemplatesModel::TemplatesModel(QObject* parent)
     roleNames[GroupFolded] = "groupFolded";
     setRoleNames(roleNames);
 
-    // Prefill a couple of 
-    ItemData* customItem = new ItemData();
+    // Prefill a couple of
+    ItemData *customItem = new ItemData();
     customItem->name = "Custom Image";
     customItem->file = "custom";
     customItem->icon = "filenew-black";
     d->items << customItem;
-    ItemData* clipItem = new ItemData();
+    ItemData *clipItem = new ItemData();
     clipItem->name = "From Clipboard";
     clipItem->file = "clip";
     clipItem->icon = "fileclip-black";
     d->items << clipItem;
-    ItemData* screenItem = new ItemData();
+    ItemData *screenItem = new ItemData();
     screenItem->name = "Blank Image (Screen Size)";
     screenItem->file = "screen";
     screenItem->icon = "filenew-black";
     d->items << screenItem;
-    ItemData* a4pItem = new ItemData();
+    ItemData *a4pItem = new ItemData();
     a4pItem->name = "Blank Image (A4 Portrait)";
     a4pItem->file = "a4p";
     a4pItem->icon = "A4portrait-black";
     d->items << a4pItem;
-    ItemData* a4lItem = new ItemData();
+    ItemData *a4lItem = new ItemData();
     a4lItem->name = "Blank Image (A4 Landscape)";
     a4lItem->file = "a4l";
     a4lItem->icon = "A4landscape-black";
@@ -99,57 +103,59 @@ TemplatesModel::~TemplatesModel()
     delete d;
 }
 
-QVariant TemplatesModel::data(const QModelIndex& index, int role) const
+QVariant TemplatesModel::data(const QModelIndex &index, int role) const
 {
     QVariant data;
-    if(index.isValid() && index.row() > -1 && index.row() < d->items.count())
-    {
-        ItemData* item = d->items[index.row()];
-        switch(role) {
-            case NameRole:
-                data = item->name;
-                break;
-            case DescriptionRole:
-                data = item->description;
-                break;
-            case FileRole:
-                data = item->file;
-                break;
-            case IconRole:
-                data = item->icon;
-                break;
-            case GroupName:
-                data = item->groupName;
-                break;
-            case GroupFolded:
-                data = item->groupFolded;
-                break;
-            default:
-                break;
+    if (index.isValid() && index.row() > -1 && index.row() < d->items.count()) {
+        ItemData *item = d->items[index.row()];
+        switch (role) {
+        case NameRole:
+            data = item->name;
+            break;
+        case DescriptionRole:
+            data = item->description;
+            break;
+        case FileRole:
+            data = item->file;
+            break;
+        case IconRole:
+            data = item->icon;
+            break;
+        case GroupName:
+            data = item->groupName;
+            break;
+        case GroupFolded:
+            data = item->groupFolded;
+            break;
+        default:
+            break;
         }
     }
     return data;
 }
 
-int TemplatesModel::rowCount(const QModelIndex& parent) const
+int TemplatesModel::rowCount(const QModelIndex &parent) const
 {
-    if(parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
     return d->items.count();
 }
 
 QString TemplatesModel::groupNameOf(int index) const
 {
-    if(index > 0 && index < d->items.count())
+    if (index > 0 && index < d->items.count()) {
         return d->items[index]->groupName;
+    }
     return QString();
 }
 
-void TemplatesModel::toggleGroup(const QString& name)
+void TemplatesModel::toggleGroup(const QString &name)
 {
-    foreach(ItemData* item, d->items) {
-        if(item->groupName == name)
+    foreach (ItemData *item, d->items) {
+        if (item->groupName == name) {
             item->groupFolded = !item->groupFolded;
+        }
     }
     dataChanged(index(0), index(d->items.count() - 1));
 }
@@ -161,11 +167,12 @@ void TemplatesModel::populate()
         if (group->isHidden()) {
             continue;
         }
-        foreach (KisTemplate* t, group->templates()) {
-            if (t->isHidden())
+        foreach (KisTemplate *t, group->templates()) {
+            if (t->isHidden()) {
                 continue;
+            }
 
-            ItemData* item = new ItemData();
+            ItemData *item = new ItemData();
             item->name = t->name();
             item->description = t->description();
             item->file = QString("template://").append(t->file());

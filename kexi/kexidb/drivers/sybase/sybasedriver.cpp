@@ -33,9 +33,9 @@ using namespace KexiDB;
 K_EXPORT_KEXIDB_DRIVER(SybaseDriver, sybase)
 
 SybaseDriver::SybaseDriver(QObject *parent, const QVariantList &args) :
-        Driver(parent, args)
+    Driver(parent, args)
 {
-    d->isFileDriver = false ;
+    d->isFileDriver = false;
 
     // Sybase supports Nested Transactions. Ignore for now
     d->features = IgnoreTransactions | CursorForward;
@@ -43,7 +43,7 @@ SybaseDriver::SybaseDriver(QObject *parent, const QVariantList &args) :
     // Last value assigned is stored in variable @@IDENTITY
     beh->ROW_ID_FIELD_NAME = "@@IDENTITY";
 
-    beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE = true ;
+    beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE = true;
 
     beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY = false;
     beh->USING_DATABASE_REQUIRED_TO_CONNECT = false;
@@ -59,7 +59,6 @@ SybaseDriver::SybaseDriver(QObject *parent, const QVariantList &args) :
     beh->QUOTATION_MARKS_FOR_IDENTIFIER = '"';
 
     initDriverSpecificKeywords(keywords);
-
 
     //predefined properties
     d->properties["client_library_version"] = ""; //!< @todo
@@ -97,7 +96,7 @@ SybaseDriver::~SybaseDriver()
 {
 }
 
-KexiDB::Connection*
+KexiDB::Connection *
 SybaseDriver::drv_createConnection(ConnectionData &conn_data)
 {
     return new SybaseConnection(this, conn_data);
@@ -107,40 +106,41 @@ bool SybaseDriver::isSystemDatabaseName(const QString &n) const
 {
     QStringList systemDatabases;
     systemDatabases << QString::fromLatin1("master")
-    << QString::fromLatin1("model")
-    << QString::fromLatin1("sybsystemprocs")
-    << QString::fromLatin1("tempdb")
-    << QString::fromLatin1("sybsecurity")
-    << QString::fromLatin1("sybsystemdb")
-    << QString::fromLatin1("pubs2")
-    << QString::fromLatin1("pubs3")
-    << QString::fromLatin1("dbccdb");
+                    << QString::fromLatin1("model")
+                    << QString::fromLatin1("sybsystemprocs")
+                    << QString::fromLatin1("tempdb")
+                    << QString::fromLatin1("sybsecurity")
+                    << QString::fromLatin1("sybsystemdb")
+                    << QString::fromLatin1("pubs2")
+                    << QString::fromLatin1("pubs3")
+                    << QString::fromLatin1("dbccdb");
 
     QStringList::iterator i = qFind(systemDatabases.begin(), systemDatabases.end(), n.toLower());
-    if (i != systemDatabases.end())
+    if (i != systemDatabases.end()) {
         return true;
+    }
 
     return Driver::isSystemObjectName(n);
 }
 
-bool SybaseDriver::drv_isSystemFieldName(const QString&) const
+bool SybaseDriver::drv_isSystemFieldName(const QString &) const
 {
     return false;
 }
 
-QString SybaseDriver::escapeString(const QString& str) const
+QString SybaseDriver::escapeString(const QString &str) const
 {
     return QString::fromLatin1("'") +
            QString(str).replace("\'", "\\''") +
            QString::fromLatin1("'");
 }
 
-QString SybaseDriver::escapeBLOB(const QByteArray& array) const
+QString SybaseDriver::escapeBLOB(const QByteArray &array) const
 {
     return KexiDB::escapeBLOB(array, KexiDB::BLOBEscape0xHex);
 }
 
-QByteArray SybaseDriver::escapeString(const QByteArray& str) const
+QByteArray SybaseDriver::escapeString(const QByteArray &str) const
 {
     // needs any modification ?
     return QByteArray("'") + QByteArray(str)
@@ -148,23 +148,23 @@ QByteArray SybaseDriver::escapeString(const QByteArray& str) const
            + QByteArray("'");
 }
 
-QString SybaseDriver::drv_escapeIdentifier(const QString& str) const
+QString SybaseDriver::drv_escapeIdentifier(const QString &str) const
 {
     // verify
     return QString("\"") + QString(str).replace("\\", "\\\\").replace("\"", "\"\"")
            + QString("\"");
 }
 
-QByteArray SybaseDriver::drv_escapeIdentifier(const QByteArray& str) const
+QByteArray SybaseDriver::drv_escapeIdentifier(const QByteArray &str) const
 {
     // verify
     return QByteArray("\"") + QByteArray(str)
            .replace("\\", "\\\\")
            .replace("\"", "\"\"")
-           + QByteArray("\"") ;
+           + QByteArray("\"");
 }
 
-QString SybaseDriver::addLimitTo1(const QString& sql, bool add)
+QString SybaseDriver::addLimitTo1(const QString &sql, bool add)
 {
     // length of "select" is 6
     // eg: before:  select foo from foobar

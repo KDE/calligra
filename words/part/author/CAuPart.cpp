@@ -34,10 +34,9 @@ CAuPart::CAuPart(QObject *parent)
     setTemplateType("words_template");
 }
 
-
 KoView *CAuPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    CAuView *view = new CAuView(this, qobject_cast<KWDocument*>(document), parent);
+    CAuView *view = new CAuView(this, qobject_cast<KWDocument *>(document), parent);
     setupViewInstance(document, view);
     return view;
 }
@@ -47,9 +46,11 @@ void CAuPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
     // print error if kotext not available
     if (KoShapeRegistry::instance()->value(TextShape_SHAPEID) == 0)
         // need to wait 1 event since exiting here would not work.
+    {
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-    else
+    } else {
         KoPart::showStartUpWidget(parent, alwaysShow);
+    }
 }
 
 void CAuPart::showErrorAndDie()

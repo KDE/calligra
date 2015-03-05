@@ -132,31 +132,32 @@ const QString COMPOSITE_LIGHTER_COLOR = "lighter color"; // XXX: not implemented
 
 const QString COMPOSITE_UNDEF        = "undefined";
 
-
 class PIGMENTCMS_EXPORT KoCompositeOpRegistry
 {
-    typedef QMultiMap<KoID,KoID> KoIDMap;
+    typedef QMultiMap<KoID, KoID> KoIDMap;
     typedef QList<KoID>          KoIDList;
     KoCompositeOpRegistry();
 
 public:
-    static const KoCompositeOpRegistry& instance();
+    static const KoCompositeOpRegistry &instance();
 
     KoID     getDefaultCompositeOp() const;
-    KoID     getKoID(const QString& compositeOpID) const;
+    KoID     getKoID(const QString &compositeOpID) const;
     KoIDMap  getCompositeOps() const;
     KoIDList getCategories() const;
-    KoIDList getCompositeOps(const KoColorSpace* colorSpace) const;
-    KoIDList getCompositeOps(const KoID& category, const KoColorSpace* colorSpace=0) const;
-    bool     colorSpaceHasCompositeOp(const KoColorSpace* colorSpace, const KoID& compositeOp) const;
+    KoIDList getCompositeOps(const KoColorSpace *colorSpace) const;
+    KoIDList getCompositeOps(const KoID &category, const KoColorSpace *colorSpace = 0) const;
+    bool     colorSpaceHasCompositeOp(const KoColorSpace *colorSpace, const KoID &compositeOp) const;
 
     template<class TKoIdIterator>
-    KoIDList filterCompositeOps(TKoIdIterator begin, TKoIdIterator end, const KoColorSpace* colorSpace, bool removeInvaliOps=true) const {
+    KoIDList filterCompositeOps(TKoIdIterator begin, TKoIdIterator end, const KoColorSpace *colorSpace, bool removeInvaliOps = true) const
+    {
         KoIDList list;
 
-        for(; begin!=end; ++begin){
-            if( colorSpaceHasCompositeOp(colorSpace, *begin) == removeInvaliOps)
+        for (; begin != end; ++begin) {
+            if (colorSpaceHasCompositeOp(colorSpace, *begin) == removeInvaliOps) {
                 list.push_back(*begin);
+            }
         }
 
         return list;
@@ -166,6 +167,5 @@ private:
     KoIDList m_categories;
     KoIDMap  m_map;
 };
-
 
 #endif // KOCOMPOSITEOPREGISTRY_H

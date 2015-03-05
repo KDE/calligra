@@ -40,11 +40,10 @@
 #include "kis_progress_widget.h"
 #include "KisPart.h"
 
-struct KisImportCatcher::Private
-{
+struct KisImportCatcher::Private {
 public:
-    KisDocument* doc;
-    KisViewManager* view;
+    KisDocument *doc;
+    KisViewManager *view;
     KUrl url;
     QString layerType;
 
@@ -82,7 +81,7 @@ void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device)
     adapter.addNode(newLayer, parent, currentActiveLayer);
 }
 
-KisImportCatcher::KisImportCatcher(const KUrl & url, KisViewManager * view, const QString &layerType)
+KisImportCatcher::KisImportCatcher(const KUrl &url, KisViewManager *view, const QString &layerType)
     : m_d(new Private)
 {
     m_d->doc = KisPart::instance()->createDocument();

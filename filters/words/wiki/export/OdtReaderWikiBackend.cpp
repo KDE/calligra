@@ -19,7 +19,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdtReaderWikiBackend.h"
 
@@ -38,20 +37,17 @@
 // This filter
 #include "OdfReaderWikiContext.h"
 
-
 #if 1
 #define DEBUG_BACKEND() \
     kDebug(30503) << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
-    << reader.qualifiedName().toString()
+                  << reader.qualifiedName().toString()
 #else
 #define DEBUG_BACKEND() \
     //NOTHING
 #endif
 
-
 // ================================================================
 //                 class OdtReaderWikiBackend
-
 
 OdtReaderWikiBackend::OdtReaderWikiBackend()
     : OdfTextReaderBackend()
@@ -62,16 +58,14 @@ OdtReaderWikiBackend::~OdtReaderWikiBackend()
 {
 }
 
-
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
-
 
 void OdtReaderWikiBackend::elementTextH(KoXmlStreamReader &reader,
                                         OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
+    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext *>(context);
     if (!wikiContext) {
         return;
     }
@@ -79,8 +73,7 @@ void OdtReaderWikiBackend::elementTextH(KoXmlStreamReader &reader,
     if (reader.isStartElement()) {
         wikiContext->outlineLevel = reader.attributes().value("text:outline-level").toString().toInt();
         outputHeadingLevel(wikiContext);
-    }
-    else {
+    } else {
         outputHeadingLevel(wikiContext);
         wikiContext->outStream << "\n";
 
@@ -92,7 +85,7 @@ void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader,
                                         OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
+    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext *>(context);
     if (!wikiContext) {
         return;
     }
@@ -117,10 +110,10 @@ void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader,
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
 void OdtReaderWikiBackend::elementTextSpan(KoXmlStreamReader &reader,
-                                           OdfReaderContext *context)
+        OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
+    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext *>(context);
     if (!wikiContext) {
         return;
     }
@@ -132,8 +125,7 @@ void OdtReaderWikiBackend::elementTextSpan(KoXmlStreamReader &reader,
         wikiContext->pushStyle(style);
 
         outputTextStyle(reader, wikiContext);
-    }
-    else {
+    } else {
         outputTextStyle(reader, wikiContext);
         wikiContext->popStyle();
     }
@@ -142,7 +134,7 @@ void OdtReaderWikiBackend::elementTextSpan(KoXmlStreamReader &reader,
 void OdtReaderWikiBackend::elementTextList(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
+    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext *>(context);
     if (!wikiContext) {
         return;
     }
@@ -154,8 +146,7 @@ void OdtReaderWikiBackend::elementTextList(KoXmlStreamReader &reader, OdfReaderC
             wikiContext->pushListStyle(listStyle);
         }
         wikiContext->listLevelCounter++;
-    }
-    else {
+    } else {
         if (wikiContext->listLevelCounter == wikiContext->listStyleStack.count()) {
             wikiContext->popListStyle();
         }
@@ -167,7 +158,7 @@ void OdtReaderWikiBackend::elementTextS(KoXmlStreamReader &reader,
                                         OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
+    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext *>(context);
     if (!wikiContext) {
         return;
     }
@@ -176,8 +167,9 @@ void OdtReaderWikiBackend::elementTextS(KoXmlStreamReader &reader,
     QString dummy = reader.attributes().value("text:c").toString();
     bool ok;
     quint32  numSpaces = dummy.toUInt(&ok);
-    if (!ok) 
+    if (!ok) {
         numSpaces = 1;
+    }
 
     // Output the required number of spaces.
     for (quint32 i = 0; i < numSpaces; ++i) {
@@ -186,10 +178,10 @@ void OdtReaderWikiBackend::elementTextS(KoXmlStreamReader &reader,
 }
 
 void OdtReaderWikiBackend::elementTextListItem(KoXmlStreamReader &reader,
-                                               OdfReaderContext *context)
+        OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
+    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext *>(context);
     if (!wikiContext) {
         return;
     }
@@ -199,8 +191,7 @@ void OdtReaderWikiBackend::elementTextListItem(KoXmlStreamReader &reader,
         char symbol;
         if (listStyle->listLevelStyleType() == "text:list-level-style-bullet") {
             symbol = '*';
-        }
-        else if (listStyle->listLevelStyleType() == "text:list-level-style-number") {
+        } else if (listStyle->listLevelStyleType() == "text:list-level-style-number") {
             symbol = '#';
         }
         wikiContext->pushListStyle(listStyle);
@@ -209,8 +200,7 @@ void OdtReaderWikiBackend::elementTextListItem(KoXmlStreamReader &reader,
             wikiContext->outStream << symbol;
         }
         wikiContext->outStream << ' ';
-    }
-    else {
+    } else {
         wikiContext->outStream << '\n';
     }
 
@@ -219,7 +209,7 @@ void OdtReaderWikiBackend::elementTextListItem(KoXmlStreamReader &reader,
 void OdtReaderWikiBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
+    OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext *>(context);
     if (!wikiContext) {
         return;
     }
@@ -227,13 +217,11 @@ void OdtReaderWikiBackend::characterData(KoXmlStreamReader &reader, OdfReaderCon
     wikiContext->outStream << reader.text().toString();
 }
 
-
 // ----------------------------------------------------------------
 //                         private functions
 
-
 void OdtReaderWikiBackend::outputTextStyle(KoXmlStreamReader &reader,
-                                           OdfReaderWikiContext *wikiContext)
+        OdfReaderWikiContext *wikiContext)
 {
     KoOdfStyle *style = wikiContext->popStyle();
     KoOdfStyleProperties *styleProperties = style->properties().value("style:text-properties");
@@ -246,8 +234,7 @@ void OdtReaderWikiBackend::outputTextStyle(KoXmlStreamReader &reader,
     QString fontWeightProperty = "fo:font-weight";
     QString fontStyleProperty = "fo:font-style";
     if ((styleProperties->attribute(fontWeightProperty) == "bold")
-        && (styleProperties->attribute(fontStyleProperty) == "italic"))
-    {
+            && (styleProperties->attribute(fontStyleProperty) == "italic")) {
         wikiContext->outStream << "'''''";
     } else if (styleProperties->attribute(fontWeightProperty) == "bold") {
         wikiContext->outStream << "'''";
@@ -264,20 +251,17 @@ void OdtReaderWikiBackend::outputTextStyle(KoXmlStreamReader &reader,
         }
         // Output sub and super script.
         if (styleProperties->attribute(textPositionProperty) == "sub") {
-           wikiContext->outStream << "<sub>";
-        }
-        else if (styleProperties->attribute(textPositionProperty) == "super") {
+            wikiContext->outStream << "<sub>";
+        } else if (styleProperties->attribute(textPositionProperty) == "super") {
             wikiContext->outStream << "<sup>";
         }
-    }
-    else {
-        if (styleProperties->attribute(textLineThroughProperty)== "solid") {
+    } else {
+        if (styleProperties->attribute(textLineThroughProperty) == "solid") {
             wikiContext->outStream << "</s>";
         }
         if (styleProperties->attribute(textPositionProperty) == "sub") {
-           wikiContext->outStream << "</sub>";
-        }
-        else if (styleProperties->attribute(textPositionProperty) == "super") {
+            wikiContext->outStream << "</sub>";
+        } else if (styleProperties->attribute(textPositionProperty) == "super") {
             wikiContext->outStream << "</sup>";
         }
     }
@@ -289,11 +273,9 @@ void OdtReaderWikiBackend::outputHeadingLevel(OdfReaderWikiContext *wikiContext)
     int level = wikiContext->outlineLevel;
     if (level == 1) {
         wikiContext->outStream << "==";
-    }
-    else if (level == 2) {
+    } else if (level == 2) {
         wikiContext->outStream << "===";
-    }
-    else if (level == 3) {
+    } else if (level == 3) {
         wikiContext->outStream  << "====";
     }
 }

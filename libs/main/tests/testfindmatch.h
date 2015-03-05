@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #ifndef TESTFINDMATCH_H
 #define TESTFINDMATCH_H
 
@@ -29,7 +27,7 @@ class TestFindMatch : public QObject
 {
     Q_OBJECT
 public:
-    
+
 private Q_SLOTS:
     void testBasic();
     void testCopyAssign();

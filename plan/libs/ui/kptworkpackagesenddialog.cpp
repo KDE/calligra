@@ -29,18 +29,17 @@
 namespace KPlato
 {
 
-WorkPackageSendDialog::WorkPackageSendDialog( const QList<Node*> &tasks,  ScheduleManager *sm, QWidget *p)
+WorkPackageSendDialog::WorkPackageSendDialog(const QList<Node *> &tasks,  ScheduleManager *sm, QWidget *p)
     : KDialog(p)
 {
-    setCaption( i18nc( "@title:window", "Send Work Packages") );
-    setButtons( Close );
-    setDefaultButton( Close );
-    showButtonSeparator( true );
+    setCaption(i18nc("@title:window", "Send Work Packages"));
+    setButtons(Close);
+    setDefaultButton(Close);
+    showButtonSeparator(true);
 
-    m_wp = new WorkPackageSendPanel( tasks, sm, this);
-    setMainWidget( m_wp );
+    m_wp = new WorkPackageSendPanel(tasks, sm, this);
+    setMainWidget(m_wp);
 }
-
 
 }  //KPlato namespace
 

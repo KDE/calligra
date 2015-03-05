@@ -19,7 +19,6 @@
 #ifndef KIS_SAFE_READ_LIST_H_
 #define KIS_SAFE_READ_LIST_H_
 
-
 #include <QList>
 
 /**
@@ -36,7 +35,8 @@
  *    QList will perform internal write operations. That will lead to
  *    a race condition in an environment with 3 and more threads.
  */
-template<class T> class KisSafeReadList : private QList<T> {
+template<class T> class KisSafeReadList : private QList<T>
+{
 public:
     KisSafeReadList() {}
 
@@ -55,15 +55,18 @@ public:
      * The thread-safe group
      */
 
-    inline const T& first() const {
+    inline const T &first() const
+    {
         return QList<T>::first();
     }
 
-    inline const T& last() const {
+    inline const T &last() const
+    {
         return QList<T>::last();
     }
 
-    inline const T& at(int i) const {
+    inline const T &at(int i) const
+    {
         return QList<T>::at(i);
     }
 
@@ -88,11 +91,9 @@ private:
     Q_DISABLE_COPY(KisSafeReadList)
 };
 
-
 #define FOREACH_SAFE(_iter, _container)         \
     for(_iter = _container.constBegin();        \
-        _iter != _container.constEnd();         \
-        _iter++)
-
+            _iter != _container.constEnd();         \
+            _iter++)
 
 #endif /* KIS_SAFE_READ_LIST_H_ */

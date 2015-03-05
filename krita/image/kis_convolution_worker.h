@@ -33,16 +33,20 @@ struct StandardIteratorFactory {
     typedef KisVLineIteratorSP VLineIterator;
     typedef KisHLineConstIteratorSP HLineConstIterator;
     typedef KisVLineConstIteratorSP VLineConstIterator;
-    inline static KisHLineIteratorSP createHLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect&) {
+    inline static KisHLineIteratorSP createHLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect &)
+    {
         return src->createHLineIteratorNG(x, y, w);
     }
-    inline static KisVLineIteratorSP createVLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect&) {
+    inline static KisVLineIteratorSP createVLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect &)
+    {
         return src->createVLineIteratorNG(x, y, h);
     }
-    inline static KisHLineConstIteratorSP createHLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect&) {
+    inline static KisHLineConstIteratorSP createHLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect &)
+    {
         return src->createHLineConstIteratorNG(x, y, w);
     }
-    inline static KisVLineConstIteratorSP createVLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect&) {
+    inline static KisVLineConstIteratorSP createVLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect &)
+    {
         return src->createVLineConstIteratorNG(x, y, h);
     }
 };
@@ -52,16 +56,20 @@ struct RepeatIteratorFactory {
     typedef KisVLineIteratorSP VLineIterator;
     typedef KisRepeatHLineConstIteratorSP HLineConstIterator;
     typedef KisRepeatVLineConstIteratorSP VLineConstIterator;
-    inline static KisHLineIteratorSP createHLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect&) {
+    inline static KisHLineIteratorSP createHLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect &)
+    {
         return src->createHLineIteratorNG(x, y, w);
     }
-    inline static KisVLineIteratorSP createVLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect&) {
+    inline static KisVLineIteratorSP createVLineIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect &)
+    {
         return src->createVLineIteratorNG(x, y, h);
     }
-    inline static HLineConstIterator createHLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect& _dataRect) {
+    inline static HLineConstIterator createHLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 w, const QRect &_dataRect)
+    {
         return src->createRepeatHLineConstIterator(x, y, w, _dataRect);
     }
-    inline static VLineConstIterator createVLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect& _dataRect) {
+    inline static VLineConstIterator createVLineConstIterator(KisPaintDeviceSP src, qint32 x, qint32 y, qint32 h, const QRect &_dataRect)
+    {
         return src->createRepeatVLineConstIterator(x, y, h, _dataRect);
     }
 };
@@ -80,7 +88,7 @@ public:
     {
     }
 
-    virtual void execute(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect& dataRect) = 0;
+    virtual void execute(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect &dataRect) = 0;
 
 protected:
     QList<KoChannelInfo *> convolvableChannelList(const KisPaintDeviceSP src)
@@ -103,9 +111,8 @@ protected:
     }
 
 protected:
-    KisPainter* m_painter;
-    KoUpdater* m_progress;
+    KisPainter *m_painter;
+    KoUpdater *m_progress;
 };
-
 
 #endif

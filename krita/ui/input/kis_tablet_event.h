@@ -35,9 +35,9 @@ public:
     };
 
     enum TabletDevice { NoDevice, Puck, Stylus, Airbrush, FourDMouse,
-                        XFreeEraser /*internal*/, RotationStylus };
+                        XFreeEraser /*internal*/, RotationStylus
+                      };
     enum PointerType { UnknownPointer, Pen, Cursor, Eraser };
-
 
     KisTabletEvent(ExtraEventType t, const QPoint &pos, const QPoint &globalPos, const QPointF &hiResGlobalPos,
                    int device, int pointerType, qreal pressure, int xTilt, int yTilt,
@@ -46,28 +46,89 @@ public:
                    Qt::MouseButton button, Qt::MouseButtons buttons);
     ~KisTabletEvent();
 
-    inline const QPoint &pos() const { return mPos; }
-    inline const QPoint &globalPos() const { return mGPos; }
-    inline const QPointF &hiResGlobalPos() const { return mHiResGlobalPos; }
-    inline int x() const { return mPos.x(); }
-    inline int y() const { return mPos.y(); }
-    inline int globalX() const { return mGPos.x(); }
-    inline int globalY() const { return mGPos.y(); }
-    inline qreal hiResGlobalX() const { return mHiResGlobalPos.x(); }
-    inline qreal hiResGlobalY() const { return mHiResGlobalPos.y(); }
-    inline TabletDevice device() const { return TabletDevice(mDev); }
-    inline PointerType pointerType() const { return PointerType(mPointerType); }
-    inline qint64 uniqueId() const { return mUnique; }
-    inline qreal pressure() const { return mPress; }
-    inline int z() const { return mZ; }
-    inline qreal tangentialPressure() const { return mTangential; }
-    inline qreal rotation() const { return mRot; }
-    inline int xTilt() const { return mXT; }
-    inline int yTilt() const { return mYT; }
-    inline Qt::MouseButton button() const { return mouseButton; }
-    inline Qt::MouseButtons buttons() const { return mouseButtons; }
+    inline const QPoint &pos() const
+    {
+        return mPos;
+    }
+    inline const QPoint &globalPos() const
+    {
+        return mGPos;
+    }
+    inline const QPointF &hiResGlobalPos() const
+    {
+        return mHiResGlobalPos;
+    }
+    inline int x() const
+    {
+        return mPos.x();
+    }
+    inline int y() const
+    {
+        return mPos.y();
+    }
+    inline int globalX() const
+    {
+        return mGPos.x();
+    }
+    inline int globalY() const
+    {
+        return mGPos.y();
+    }
+    inline qreal hiResGlobalX() const
+    {
+        return mHiResGlobalPos.x();
+    }
+    inline qreal hiResGlobalY() const
+    {
+        return mHiResGlobalPos.y();
+    }
+    inline TabletDevice device() const
+    {
+        return TabletDevice(mDev);
+    }
+    inline PointerType pointerType() const
+    {
+        return PointerType(mPointerType);
+    }
+    inline qint64 uniqueId() const
+    {
+        return mUnique;
+    }
+    inline qreal pressure() const
+    {
+        return mPress;
+    }
+    inline int z() const
+    {
+        return mZ;
+    }
+    inline qreal tangentialPressure() const
+    {
+        return mTangential;
+    }
+    inline qreal rotation() const
+    {
+        return mRot;
+    }
+    inline int xTilt() const
+    {
+        return mXT;
+    }
+    inline int yTilt() const
+    {
+        return mYT;
+    }
+    inline Qt::MouseButton button() const
+    {
+        return mouseButton;
+    }
+    inline Qt::MouseButtons buttons() const
+    {
+        return mouseButtons;
+    }
 
-    inline QEvent::Type getMouseEventType() const {
+    inline QEvent::Type getMouseEventType() const
+    {
         return
             (ExtraEventType) type() == TabletMoveEx ? MouseMove :
             (ExtraEventType) type() == TabletPressEx ? MouseButtonPress :
@@ -75,14 +136,16 @@ public:
             QEvent::None;
     }
 
-    inline QMouseEvent toQMouseEvent() const {
+    inline QMouseEvent toQMouseEvent() const
+    {
         QEvent::Type t = getMouseEventType();
 
         return QMouseEvent(t, pos(), globalPos(),
                            button(), buttons(), modifiers());
     }
 
-    inline QTabletEvent toQTabletEvent() const {
+    inline QTabletEvent toQTabletEvent() const
+    {
         QEvent::Type t =
             (ExtraEventType) type() == TabletMoveEx ? TabletMove :
             (ExtraEventType) type() == TabletPressEx ? TabletPress :
@@ -103,7 +166,6 @@ protected:
     qint64 mUnique;
     Qt::MouseButton mouseButton;
     Qt::MouseButtons mouseButtons;
-
 
 };
 

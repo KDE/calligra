@@ -18,15 +18,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "ChartTableView.h"
-
 
 using namespace KChart;
 
 ChartTableView::ChartTableView(QWidget *parent /* = 0 */)
-   : QTableView(parent)
+    : QTableView(parent)
 {
 }
 
@@ -37,7 +35,7 @@ ChartTableView::~ChartTableView()
 /**
  * \reimpl
  */
-void ChartTableView::currentChanged(const QModelIndex &current, 
+void ChartTableView::currentChanged(const QModelIndex &current,
                                     const QModelIndex &previous)
 {
     Q_UNUSED(previous);

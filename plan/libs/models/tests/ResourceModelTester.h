@@ -29,11 +29,11 @@
 
 namespace QTest
 {
-    template<>
-            char *toString(const KPlato::DateTime &dt)
-    {
-        return toString( dt.toString() );
-    }
+template<>
+char *toString(const KPlato::DateTime &dt)
+{
+    return toString(dt.toString());
+}
 }
 
 namespace KPlato
@@ -47,14 +47,14 @@ class ResourceModelTester : public QObject
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    
+
     void internalAppointments();
     void externalAppointments();
     void externalOverbook();
 
 private:
-    void printDebug( long id ) const;
-    void printSchedulingLog( const ScheduleManager &sm ) const;
+    void printDebug(long id) const;
+    void printSchedulingLog(const ScheduleManager &sm) const;
 
     Project *m_project;
     Calendar *m_calendar;

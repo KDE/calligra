@@ -30,9 +30,8 @@ public:
     explicit KPrPresentationDrawStrategy(KPrPresentationTool *tool);
     virtual ~KPrPresentationDrawStrategy();
 
-    virtual bool keyPressEvent( QKeyEvent * event );
+    virtual bool keyPressEvent(QKeyEvent *event);
 };
-
 
 #endif /* KPRPRESENTATIONDRAWSTRATEGY_H */
 

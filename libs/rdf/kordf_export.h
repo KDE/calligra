@@ -59,5 +59,4 @@
 #   define KORDF_TEST_EXPORT
 #endif
 
-
 #endif

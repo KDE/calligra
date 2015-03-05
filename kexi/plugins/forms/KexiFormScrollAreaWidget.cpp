@@ -80,8 +80,8 @@ void KexiFormScrollAreaWidget::mouseMoveEvent(QMouseEvent *e)
         }
         // we look for the max widget right() (or bottom()),
         // which would be the limit for form resizing (not to hide widgets)
-        const QList<QWidget*> list(mainAreaWidget->findChildren<QWidget*>()); /* not recursive*/
-        foreach(QWidget *w, list) {
+        const QList<QWidget *> list(mainAreaWidget->findChildren<QWidget *>()); /* not recursive*/
+        foreach (QWidget *w, list) {
             tmpx = qMax(tmpx, (w->geometry().right() + 10));
             tmpy = qMax(tmpy, (w->geometry().bottom() + 10));
         }
@@ -93,8 +93,7 @@ void KexiFormScrollAreaWidget::mouseMoveEvent(QMouseEvent *e)
         if (cursor().shape() == Qt::SizeHorCursor) {
             if (gridSize > 0) {
                 neww = int(float(tmpx) / float(gridSize) + 0.5) * gridSize;
-            }
-            else {
+            } else {
                 neww = tmpx;
             }
             newh = mainAreaWidget->height();
@@ -102,8 +101,7 @@ void KexiFormScrollAreaWidget::mouseMoveEvent(QMouseEvent *e)
             neww = mainAreaWidget->width();
             if (gridSize > 0) {
                 newh = int(float(tmpy) / float(gridSize) + 0.5) * gridSize;
-            }
-            else {
+            } else {
                 newh = tmpy;
             }
         } else if (cursor().shape() == Qt::SizeFDiagCursor) {
@@ -123,21 +121,17 @@ void KexiFormScrollAreaWidget::mouseMoveEvent(QMouseEvent *e)
             scrollArea->refreshContentsSize();
             emit resized();
         }
-    }
-    else { // update mouse cursor
+    } else { // update mouse cursor
         QRect rightRect(mainAreaWidget->width(),  0, 4, mainAreaWidget->height());
         QRect bottomRect(0, mainAreaWidget->height(), mainAreaWidget->width(), 4);
         QRect bottomRightRect(mainAreaWidget->width(), mainAreaWidget->height(), 4, 4);
         if (rightRect.contains(e->pos())) {
             setCursor(Qt::SizeHorCursor);
-        }
-        else if (bottomRect.contains(e->pos())) {
+        } else if (bottomRect.contains(e->pos())) {
             setCursor(Qt::SizeVerCursor);
-        }
-        else if (bottomRightRect.contains(e->pos())) {
+        } else if (bottomRightRect.contains(e->pos())) {
             setCursor(Qt::SizeFDiagCursor);
-        }
-        else {
+        } else {
             unsetCursor();
         }
     }

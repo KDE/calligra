@@ -43,9 +43,10 @@
 #include <git2/merge.h>
 #include <git2/cred_helpers.h>
 
-class GitOpsThread::Private {
+class GitOpsThread::Private
+{
 public:
-    Private(QString privateKey, QString publicKey, QString userForRemote, bool needsPrivateKeyPassphrase, git_signature* signature, QString gitDir, GitOperation operation, QString currentFile, QString message) 
+    Private(QString privateKey, QString publicKey, QString userForRemote, bool needsPrivateKeyPassphrase, git_signature *signature, QString gitDir, GitOperation operation, QString currentFile, QString message)
         : privateKey(privateKey)
         , publicKey(publicKey)
         , userForRemote(userForRemote)
@@ -67,14 +68,15 @@ public:
     QString message;
 
     bool abort;
-    git_signature* signature;
+    git_signature *signature;
     QString gitDir;
     GitOperation gitOp;
 
     QString getPassword()
     {
-        if(!needsPrivateKeyPassphrase)
+        if (!needsPrivateKeyPassphrase) {
             return QString();
+        }
         KPasswordDialog dlg;
         dlg.setCaption("Private Key Passphrase");
         dlg.setPrompt("Your private key file requires a password. Please enter it here. You will be asked again each time it is accessed, and the password is not stored.");
@@ -83,17 +85,17 @@ public:
     }
 
     // returns true if errorCode is 0 (in which case there was no error!)
-    bool check_error(int errorCode, const char* description)
+    bool check_error(int errorCode, const char *description)
     {
-        if(errorCode) {
-            qDebug() << "Operation failed:"<< description << errorCode;
+        if (errorCode) {
+            qDebug() << "Operation failed:" << description << errorCode;
             return false;
         }
         return true;
     }
 };
 
-GitOpsThread::GitOpsThread(QString privateKey, QString publicKey, QString userForRemote, bool needsPrivateKeyPassphrase, git_signature* signature, QString gitDir, GitOperation operation, QString currentFile, QString message, QObject *parent)
+GitOpsThread::GitOpsThread(QString privateKey, QString publicKey, QString userForRemote, bool needsPrivateKeyPassphrase, git_signature *signature, QString gitDir, GitOperation operation, QString currentFile, QString message, QObject *parent)
     : QObject(parent)
     , d(new Private(privateKey, publicKey, userForRemote, needsPrivateKeyPassphrase, signature, gitDir, operation, currentFile, message))
 {
@@ -106,18 +108,17 @@ GitOpsThread::~GitOpsThread()
 
 void GitOpsThread::run()
 {
-    switch(d->gitOp)
-    {
-        case PushOperation:
-            performPush();
-            emit pushCompleted();
-            break;
-        case PullOperation:
-            performPull();
-            emit pullCompleted();
-            break;
-        default:
-            break;
+    switch (d->gitOp) {
+    case PushOperation:
+        performPush();
+        emit pushCompleted();
+        break;
+    case PullOperation:
+        performPull();
+        emit pullCompleted();
+        break;
+    default:
+        break;
     }
 }
 
@@ -158,7 +159,7 @@ void GitOpsThread::performPush()
         LibQGit2::Reference upstreamRef(upstream);
 
         // Now find the name of the remote
-        git_buf remote_name = {0,0,0};
+        git_buf remote_name = {0, 0, 0};
         git_branch_remote_name(&remote_name, repo.data(), git_reference_name(upstreamRef.data()));
         QString remoteName = QString::fromUtf8(remote_name.ptr);
         git_buf_free(&remote_name);
@@ -177,8 +178,7 @@ void GitOpsThread::performPush()
         push.addRefSpec(QString("refs/heads/%1:refs/heads/%2").arg(branchName).arg(upstreamBranchName));
         push.execute();
         emit pushCompleted();
-    }
-    catch (const LibQGit2::Exception& ex) {
+    } catch (const LibQGit2::Exception &ex) {
         qDebug() << ex.what() << ex.category();
     }
 }
@@ -200,7 +200,7 @@ void GitOpsThread::performPull()
         LibQGit2::Reference upstreamRef(upstream);
 
         // Now find the name of the remote
-        git_buf remote_name = {0,0,0};
+        git_buf remote_name = {0, 0, 0};
         git_branch_remote_name(&remote_name, qrepo.data(), git_reference_name(upstreamRef.data()));
         QString remoteName = QString::fromUtf8(remote_name.ptr);
         git_buf_free(&remote_name);
@@ -220,23 +220,23 @@ void GitOpsThread::performPull()
 
         git_merge_head_from_ref(&merge_heads[0], qrepo.data(), upstreamRef.data());
         int error = git_merge_analysis(&analysis, &preference, qrepo.data(), (const git_merge_head **)&merge_heads, 1);
-        if(error == GIT_OK) {
-            if(GIT_MERGE_ANALYSIS_UP_TO_DATE == (analysis & GIT_MERGE_ANALYSIS_UP_TO_DATE)) {
+        if (error == GIT_OK) {
+            if (GIT_MERGE_ANALYSIS_UP_TO_DATE == (analysis & GIT_MERGE_ANALYSIS_UP_TO_DATE)) {
                 // If we're already up to date, yay, no need to do anything!
                 qDebug() << "all up to date, yeah!";
                 git_merge_head_free(merge_heads[0]);
-            } else if(GIT_MERGE_ANALYSIS_UNBORN == (analysis & GIT_MERGE_ANALYSIS_UNBORN)) {
+            } else if (GIT_MERGE_ANALYSIS_UNBORN == (analysis & GIT_MERGE_ANALYSIS_UNBORN)) {
                 // this is silly, don't give me an unborn repository you silly person
                 qDebug() << "huh, we have an unborn repo here...";
                 git_merge_head_free(merge_heads[0]);
-            } else if(GIT_MERGE_ANALYSIS_FASTFORWARD == (analysis & GIT_MERGE_ANALYSIS_FASTFORWARD) && (GIT_MERGE_PREFERENCE_NO_FASTFORWARD != (preference & GIT_MERGE_PREFERENCE_NO_FASTFORWARD))) {
+            } else if (GIT_MERGE_ANALYSIS_FASTFORWARD == (analysis & GIT_MERGE_ANALYSIS_FASTFORWARD) && (GIT_MERGE_PREFERENCE_NO_FASTFORWARD != (preference & GIT_MERGE_PREFERENCE_NO_FASTFORWARD))) {
                 // If the analysis says we can fast forward, then let's fast forward!
                 // ...unless preferences say to never fast forward, of course
                 qDebug() << "fast forwarding all up in that thang";
 
                 // the code below was modified from an original (GPL2) version by the git2r community
                 const git_oid *oid;
-                git_buf log_message = {0,0,0};
+                git_buf log_message = {0, 0, 0};
                 git_commit *commit = NULL;
                 git_tree *tree = NULL;
                 git_reference *reference = NULL;
@@ -250,29 +250,29 @@ void GitOpsThread::performPull()
                     error = git_commit_tree(&tree, commit);
                     if (error == GIT_OK) {
                         opts.checkout_strategy = GIT_CHECKOUT_SAFE;
-                        error = git_checkout_tree(qrepo.data(), (git_object*)tree, &opts);
+                        error = git_checkout_tree(qrepo.data(), (git_object *)tree, &opts);
                         if (error == GIT_OK) {
                             error = git_repository_head(&reference, qrepo.data());
                             if (error == GIT_OK && error != GIT_ENOTFOUND) {
                                 if (error == GIT_OK) {
                                     if (error == GIT_ENOTFOUND) {
                                         error = git_reference_create(
-                                            &reference,
-                                            qrepo.data(),
-                                            "HEAD",
-                                            git_commit_id(commit),
-                                            0, /* force */
-                                            d->signature,
-                                            log_message.ptr);
+                                                    &reference,
+                                                    qrepo.data(),
+                                                    "HEAD",
+                                                    git_commit_id(commit),
+                                                    0, /* force */
+                                                    d->signature,
+                                                    log_message.ptr);
                                     } else {
                                         git_reference *target_ref = NULL;
 
                                         error = git_reference_set_target(
-                                            &target_ref,
-                                            reference,
-                                            git_commit_id(commit),
-                                            d->signature,
-                                            log_message.ptr);
+                                                    &target_ref,
+                                                    reference,
+                                                    git_commit_id(commit),
+                                                    d->signature,
+                                                    log_message.ptr);
 
                                         if (target_ref) {
                                             git_reference_free(target_ref);
@@ -304,10 +304,9 @@ void GitOpsThread::performPull()
                 //qrepo.reset(headCommit);
                 git_merge_head_free(merge_heads[0]);
                 git_repository_state_cleanup(qrepo.data());
-            }
-            else if(GIT_MERGE_ANALYSIS_NORMAL == (analysis & GIT_MERGE_ANALYSIS_NORMAL)) {
+            } else if (GIT_MERGE_ANALYSIS_NORMAL == (analysis & GIT_MERGE_ANALYSIS_NORMAL)) {
                 // If the analysis says we are able to do a normal merge, let's attempt one of those...
-                if(GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY == (preference & GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)) {
+                if (GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY == (preference & GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)) {
                     // but only if we're not told to not try and not do fast forwards!
                     KMessageBox::sorry(0, "Fast Forward Only", "We're attempting to merge, but the repository is set to only do fast forwarding - sorry, we don't support this scenario and you'll need to handle things yourself...");
                 } else {
@@ -317,7 +316,7 @@ void GitOpsThread::performPull()
                         qDebug() << "There were conflicts merging. Please resolve them and commit";
                     } else {
                         git_oid commit_id;
-                        git_buf message = {0,0,0};
+                        git_buf message = {0, 0, 0};
                         git_commit *parents[2];
                         LibQGit2::Index index = qrepo.index();
                         LibQGit2::OId tree_id = index.createTree();
@@ -340,8 +339,8 @@ void GitOpsThread::performPull()
                         d->check_error(error, "looking up remote branch");
 
                         git_commit_create(&commit_id, qrepo.data(), "HEAD", d->signature, d->signature,
-                                        NULL, message.ptr,
-                                        tree.data(), 2, (const git_commit **) parents);
+                                          NULL, message.ptr,
+                                          tree.data(), 2, (const git_commit **) parents);
                     }
                 }
             } else {
@@ -352,14 +351,15 @@ void GitOpsThread::performPull()
         }
         git_repository_state_cleanup(qrepo.data());
         emit pullCompleted();
-    } catch (const LibQGit2::Exception& ex) {
+    } catch (const LibQGit2::Exception &ex) {
         qDebug() << ex.what() << ex.category();
     }
 }
 
-class GitController::Private {
+class GitController::Private
+{
 public:
-    Private(GitController* q)
+    Private(GitController *q)
         : needsPrivateKeyPassphrase(false)
         , documents(new DocumentListModel(q))
         , commitAndPushAction(0)
@@ -377,19 +377,20 @@ public:
     bool needsPrivateKeyPassphrase;
 
     QString cloneDir;
-    DocumentListModel* documents;
-    QAction* commitAndPushAction;
+    DocumentListModel *documents;
+    QAction *commitAndPushAction;
     QString currentFile;
     QString userName;
     QString userEmail;
-    git_signature* signature;
+    git_signature *signature;
 
-    GitOpsThread* opThread;
+    GitOpsThread *opThread;
 
     QString getPassword()
     {
-        if(!needsPrivateKeyPassphrase)
+        if (!needsPrivateKeyPassphrase) {
             return QString();
+        }
         KPasswordDialog dlg;
         dlg.setCaption("Private Key Passphrase");
         dlg.setPrompt("Your private key file requires a password. Please enter it here. You will be asked again each time it is accessed, and the password is not stored.");
@@ -399,17 +400,17 @@ public:
 
     bool checkUserDetails()
     {
-        git_config* config;
+        git_config *config;
         git_config_open_default(&config);
-        const char* name;
+        const char *name;
         git_config_get_string(&name, config, "user.name");
-        const char* email;
+        const char *email;
         git_config_get_string(&email, config, "user.email");
 
         userName = QString::fromLocal8Bit(name);
         userEmail = QString::fromLocal8Bit(email);
 
-        if(userName.isEmpty()) {
+        if (userName.isEmpty()) {
             bool ok;
             KUser user(KUser::UseRealUserID);
             QString systemName = user.property(KUser::FullName).toString();
@@ -417,21 +418,21 @@ public:
                                                     "There is no name set for Git on this system (this is used when committing). Please enter one below and press OK.",
                                                     systemName,
                                                     &ok);
-            if(!ok) {
+            if (!ok) {
                 return false;
             }
             userName = newName;
             git_config_set_string(config, "user.name", newName.toLocal8Bit());
         }
-        if(userEmail.isEmpty()) {
+        if (userEmail.isEmpty()) {
             bool ok;
             KEMailSettings eMailSettings;
             QString emailAddress = eMailSettings.getSetting(KEMailSettings::EmailAddress);
             QString newEmail = KInputDialog::getText("Enter Email",
-                                                    "There is no email address set for Git on this system (this is used when committing). Please enter one below and press OK.",
-                                                    emailAddress,
-                                                    &ok);
-            if(!ok) {
+                               "There is no email address set for Git on this system (this is used when committing). Please enter one below and press OK.",
+                               emailAddress,
+                               &ok);
+            if (!ok) {
                 return false;
             }
             userEmail = newEmail;
@@ -440,7 +441,7 @@ public:
 
         git_config_free(config);
 
-        if(userName.isEmpty() || userEmail.isEmpty()) {
+        if (userName.isEmpty() || userEmail.isEmpty()) {
             return false;
         }
         git_signature_now(&signature, userName.toLocal8Bit(), userEmail.toLocal8Bit());
@@ -448,17 +449,17 @@ public:
     }
 
     // returns true if errorCode is 0 (in which case there was no error!)
-    bool check_error(int errorCode, const char* description)
+    bool check_error(int errorCode, const char *description)
     {
-        if(errorCode) {
-            qDebug() << "Operation failed:"<< description << errorCode;
+        if (errorCode) {
+            qDebug() << "Operation failed:" << description << errorCode;
             return false;
         }
         return true;
     }
 };
 
-GitController::GitController(QObject* parent)
+GitController::GitController(QObject *parent)
     : QObject(parent)
 {
     LibQGit2::initLibQGit2();
@@ -476,7 +477,7 @@ QString GitController::cloneDir() const
     return d->cloneDir;
 }
 
-void GitController::setCloneDir(const QString& newDir)
+void GitController::setCloneDir(const QString &newDir)
 {
     d->cloneDir = newDir;
     d->documents->setDocumentsFolder(newDir);
@@ -489,19 +490,19 @@ QString GitController::currentFile() const
     return d->currentFile;
 }
 
-void GitController::setCurrentFile(QString& newFile)
+void GitController::setCurrentFile(QString &newFile)
 {
     d->currentFile = newFile;
     // OK, so some silliness here. This ensures a bit of sanity later, because otherwise we
     // end up comparing a localised checkout dir to a non-localised current file (since that
     // is created from a URL, and the checkout dir isn't)
-    if("\\" == QDir::separator() &&  newFile.contains("/")) {
+    if ("\\" == QDir::separator() &&  newFile.contains("/")) {
         d->currentFile = d->currentFile.replace("/", QDir::separator());
     }
     emit currentFileChanged();
 }
 
-QAbstractListModel* GitController::documents() const
+QAbstractListModel *GitController::documents() const
 {
     return d->documents;
 }
@@ -550,9 +551,9 @@ void GitController::setUserForRemote(QString newUser)
     emit userForRemoteChanged();
 }
 
-QAction* GitController::commitAndPushCurrentFileAction()
+QAction *GitController::commitAndPushCurrentFileAction()
 {
-    if(!d->commitAndPushAction) {
+    if (!d->commitAndPushAction) {
         d->commitAndPushAction = new QAction(QIcon::fromTheme("folder-remote"), "Update Git Copy", this);
         connect(d->commitAndPushAction, SIGNAL(triggered(bool)), SLOT(commitAndPushCurrentFile()));
     }
@@ -561,28 +562,28 @@ QAction* GitController::commitAndPushCurrentFileAction()
 
 void GitController::commitAndPushCurrentFile()
 {
-    if(d->opThread) {
+    if (d->opThread) {
         // if so, then we're already performing an operation of some kind, let's not confuse the point
         return;
     }
 
     // Don't allow committing unless the user details are sensible
-    if(!d->checkUserDetails()) {
+    if (!d->checkUserDetails()) {
         KMessageBox::sorry(0, "I'm sorry, we cannot create commits without a username and email set. Please try again, and enter your name and email next time.");
         return;
     }
 
-    if(d->currentFile.startsWith(d->cloneDir)) {
+    if (d->currentFile.startsWith(d->cloneDir)) {
         // ask commit message and checkbox for push (default on, remember?)
         bool ok = false;
         QString message = KInputDialog::getMultiLineText("Describe changes",
-                                                            "Please enter a description of your changes (also known as a commit message).",
-                                                            "Commit message",
-                                                            &ok, 0);
+                          "Please enter a description of your changes (also known as a commit message).",
+                          "Commit message",
+                          &ok, 0);
         // if user pressed cancel, cancel out now...
         // we explicitly leave the action enabled here because we want the user to be able to
         // regret their cancellation and commit anyway
-        if(ok) {
+        if (ok) {
             emit operationBegun(QString("Pushing local changes to remote storage"));
             d->opThread = new GitOpsThread(d->privateKey, d->publicKey, d->userForRemote, d->needsPrivateKeyPassphrase, d->signature, d->cloneDir, GitOpsThread::PushOperation, d->currentFile, message, this);
             connect(d->opThread, SIGNAL(destroyed()), this, SLOT(clearOpThread()));
@@ -609,13 +610,13 @@ void GitController::disableCommitAndPushAction()
 
 void GitController::pull()
 {
-    if(d->opThread) {
+    if (d->opThread) {
         // if so, then we're already performing an operation of some kind, let's not confuse the point
         return;
     }
 
     // Don't allow committing unless the user details are sensible
-    if(!d->checkUserDetails()) {
+    if (!d->checkUserDetails()) {
         KMessageBox::sorry(0, "I'm sorry, we cannot create commits without a name and email set, and we might need to do a merge later, so we are aborting this pull. Please try again, and enter your name and email next time.");
         return;
     }

@@ -37,7 +37,6 @@ inline QRectF relativeRect(const QRect &br /* baseRect */,
     return QRectF(x, y, w, h);
 }
 
-
 KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
                                const QByteArray &fillData, FilterMode filter,
                                bool useBuffer, int numMipmapLevels)
@@ -56,11 +55,11 @@ KisTextureTile::KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texture
     const GLvoid *fd = fillData.constData();
 
     m_textureRectInImagePixels =
-            stretchRect(m_tileRectInImagePixels, texturesInfo->border);
+        stretchRect(m_tileRectInImagePixels, texturesInfo->border);
 
     m_tileRectInTexturePixels = relativeRect(m_textureRectInImagePixels,
-                                             m_tileRectInImagePixels,
-                                             m_texturesInfo);
+                                m_tileRectInImagePixels,
+                                m_texturesInfo);
 
     glGenTextures(1, &m_textureId);
     glBindTexture(GL_TEXTURE_2D, m_textureId);
@@ -112,7 +111,7 @@ void KisTextureTile::bindToActiveTexture()
 void KisTextureTile::setNeedsMipmapRegeneration()
 {
     if (m_filter == TrilinearFilterMode ||
-        m_filter == HighQualityFiltering) {
+            m_filter == HighQualityFiltering) {
 
         m_needsMipmapRegeneration = true;
     }
@@ -127,7 +126,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
     const GLvoid *fd = updateInfo.data();
 #ifdef USE_PIXEL_BUFFERS
     if (!m_glBuffer) {
-        createTextureBuffer((const char*)updateInfo.data(), updateInfo.patchPixelsLength());
+        createTextureBuffer((const char *)updateInfo.data(), updateInfo.patchPixelsLength());
     }
 #endif
 
@@ -162,8 +161,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         }
 #endif
 
-    }
-    else {
+    } else {
         QPoint patchOffset = updateInfo.patchOffset();
         QSize patchSize = updateInfo.patchSize();
 
@@ -217,8 +215,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
                                   patchSize);
     const QSize tileSize = updateInfo.tileRect().size();
 
-
-    if(imageRect.top() == patchRect.top()) {
+    if (imageRect.top() == patchRect.top()) {
         int start = 0;
         int end = patchOffset.y() - 1;
         for (int i = start; i <= end; i++) {
@@ -233,7 +230,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 
     if (imageRect.bottom() == patchRect.bottom()) {
         int shift = patchSize.width() * (patchSize.height() - 1) *
-                pixelSize;
+                    pixelSize;
 
         int start = patchOffset.y() + patchSize.height();
         int end = tileSize.height() - 1;
@@ -252,8 +249,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         QByteArray columnBuffer(patchSize.height() * pixelSize, 0);
 
         quint8 *srcPtr = updateInfo.data();
-        quint8 *dstPtr = (quint8*) columnBuffer.data();
-        for(int i = 0; i < patchSize.height(); i++) {
+        quint8 *dstPtr = (quint8 *) columnBuffer.data();
+        for (int i = 0; i < patchSize.height(); i++) {
             memcpy(dstPtr, srcPtr, pixelSize);
 
             srcPtr += patchSize.width() * pixelSize;
@@ -277,8 +274,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         QByteArray columnBuffer(patchSize.height() * pixelSize, 0);
 
         quint8 *srcPtr = updateInfo.data() + (patchSize.width() - 1) * pixelSize;
-        quint8 *dstPtr = (quint8*) columnBuffer.data();
-        for(int i = 0; i < patchSize.height(); i++) {
+        quint8 *dstPtr = (quint8 *) columnBuffer.data();
+        for (int i = 0; i < patchSize.height(); i++) {
             memcpy(dstPtr, srcPtr, pixelSize);
 
             srcPtr += patchSize.width() * pixelSize;
@@ -316,8 +313,7 @@ void KisTextureTile::createTextureBuffer(const char *data, int size)
         memcpy(vid, data, size);
         m_glBuffer->unmap();
 
-    }
-    else {
+    } else {
         m_glBuffer = 0;
     }
 }

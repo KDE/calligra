@@ -50,12 +50,12 @@ class KexiWindow::Private
 {
 public:
     explicit Private(KexiWindow *window)
-            : win(window)
-            , schemaData(0)
-            , schemaDataOwned(false)
-            , isRegistered(false)
-            , dirtyChangedEnabled(true)
-            , switchToViewModeEnabled(true)
+        : win(window)
+        , schemaData(0)
+        , schemaDataOwned(false)
+        , isRegistered(false)
+        , dirtyChangedEnabled(true)
+        , switchToViewModeEnabled(true)
     {
         supportedViewModes = Kexi::NoViewMode; //will be set by KexiPart
         openedViewModes = Kexi::NoViewMode;
@@ -65,11 +65,12 @@ public:
         item = 0;
     }
 
-    ~Private() {
+    ~Private()
+    {
         setSchemaData(0);
     }
 
-    void setSchemaData(KexiDB::SchemaData* data)
+    void setSchemaData(KexiDB::SchemaData *data)
     {
         if (schemaDataOwned) {
             delete schemaData;
@@ -85,20 +86,20 @@ public:
         sdata->setDescription(item->description());
 
         KexiProject *project = KexiMainWindowIface::global()->project();
-        KexiPart::Item* existingItem = project->item(part->info(), sdata->name());
+        KexiPart::Item *existingItem = project->item(part->info(), sdata->name());
         if (existingItem && !(options & KexiView::OverwriteExistingData)) {
             KMessageBox::information(win,
                                      i18n("Could not create new object.")
                                      + win->part()->i18nMessage("Object <resource>%1</resource> already exists.", win)
-                                       .subs(sdata->name()).toString());
+                                     .subs(sdata->name()).toString());
             return false;
         }
         return true;
     }
 
     KexiWindow *win;
-    QVBoxLayout* mainLyr;
-    QStackedWidget* stack;
+    QVBoxLayout *mainLyr;
+    QStackedWidget *stack;
 
     Kexi::ViewModes supportedViewModes;
     Kexi::ViewModes openedViewModes;
@@ -110,7 +111,7 @@ public:
     int id;
     QPointer<KexiPart::Part> part;
     KexiPart::Item *item;
-    KexiDB::SchemaData* schemaData;
+    KexiDB::SchemaData *schemaData;
     bool schemaDataOwned;
     QPointer<KexiView> newlySelectedView; //!< Used in isDirty(), temporary set in switchToViewMode()
     //!< during view setup, when a new view is not yet raised.
@@ -125,17 +126,17 @@ public:
     bool isRegistered;
     bool dirtyChangedEnabled; //!< used in setDirty(), affects dirtyChanged()
     bool switchToViewModeEnabled; //!< used internally switchToViewMode() to avoid infinite loop
-    QMap<Kexi::ViewMode, KexiView*> views;
+    QMap<Kexi::ViewMode, KexiView *> views;
 };
 
 //----------------------------------------------------------
 
 KexiWindow::KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes,
-                       KexiPart::Part& part, KexiPart::Item& item)
-        : QWidget(parent)
-        , KexiActionProxy(this, KexiMainWindowIface::global())
-        , d(new Private(this))
-        , m_destroying(false)
+                       KexiPart::Part &part, KexiPart::Item &item)
+    : QWidget(parent)
+    , KexiActionProxy(this, KexiMainWindowIface::global())
+    , d(new Private(this))
+    , m_destroying(false)
 {
     d->part = &part;
     d->item = &item;
@@ -148,10 +149,10 @@ KexiWindow::KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes,
 }
 
 KexiWindow::KexiWindow()
-        : QWidget(0)
-        , KexiActionProxy(this, KexiMainWindowIface::global())
-        , d(new Private(this))
-        , m_destroying(false)
+    : QWidget(0)
+    , KexiActionProxy(this, KexiMainWindowIface::global())
+    , d(new Private(this))
+    , m_destroying(false)
 {
     createSubwidgets();
 #ifndef KEXI_NO_CTXT_HELP
@@ -178,9 +179,10 @@ void KexiWindow::createSubwidgets()
 
 KexiView *KexiWindow::selectedView() const
 {
-    if (m_destroying)
+    if (m_destroying) {
         return 0;
-    return static_cast<KexiView*>(d->stack->currentWidget());
+    }
+    return static_cast<KexiView *>(d->stack->currentWidget());
 }
 
 KexiView *KexiWindow::viewForMode(Kexi::ViewMode mode) const
@@ -220,16 +222,18 @@ void KexiWindow::removeView(KexiView *view)
 QSize KexiWindow::minimumSizeHint() const
 {
     KexiView *v = selectedView();
-    if (!v)
+    if (!v) {
         return QWidget::minimumSizeHint();
+    }
     return v->minimumSizeHint();
 }
 
 QSize KexiWindow::sizeHint() const
 {
     KexiView *v = selectedView();
-    if (!v)
+    if (!v) {
         return QWidget::sizeHint();
+    }
     return v->preferredSizeHint(v->sizeHint());
 }
 
@@ -238,7 +242,7 @@ void KexiWindow::setId(int id)
     d->id = id;
 }
 
-KexiPart::Part* KexiWindow::part() const
+KexiPart::Part *KexiWindow::part() const
 {
     return d->part;
 }
@@ -263,15 +267,16 @@ Kexi::ViewMode KexiWindow::currentViewMode() const
     return d->currentViewMode;
 }
 
-KexiView* KexiWindow::viewThatRecentlySetDirtyFlag() const
+KexiView *KexiWindow::viewThatRecentlySetDirtyFlag() const
 {
     return d->viewThatRecentlySetDirtyFlag;
 }
 
 void KexiWindow::registerWindow()
 {
-    if (d->isRegistered)
+    if (d->isRegistered) {
         return;
+    }
     KexiMainWindowIface::global()->registerChild(this);
     d->isRegistered = true;
 }
@@ -287,8 +292,8 @@ int KexiWindow::id() const
            ? partItem()->identifier() : d->id;
 }
 
-void KexiWindow::setContextHelp(const QString& caption,
-                                const QString& text, const QString& iconName)
+void KexiWindow::setContextHelp(const QString &caption,
+                                const QString &text, const QString &iconName)
 {
 #ifdef KEXI_NO_CTXT_HELP
     Q_UNUSED(caption);
@@ -307,22 +312,22 @@ bool KexiWindow::close(bool force)
     KexiMainWindowIface::global()->acceptPropertySetEditing();
 
     //let any view send "closing" signal
-    QList<KexiView *> list(findChildren<KexiView*>());
+    QList<KexiView *> list(findChildren<KexiView *>());
     QList< QPointer<KexiView> > listPtr;
-    foreach(KexiView * view, list) { // use QPointers for sanity
+    foreach (KexiView *view, list) { // use QPointers for sanity
         listPtr.append(QPointer<KexiView>(view));
     }
-    foreach(QPointer<KexiView> viewPtr, listPtr) {
+    foreach (QPointer<KexiView> viewPtr, listPtr) {
         if (viewPtr && viewPtr->parent() == d->stack) {
             bool cancel = false;
             emit viewPtr->closing(&cancel);
             if (!force && cancel) {
-                     return false;
+                return false;
             }
         }
     }
     emit closing();
-    foreach(QPointer<KexiView> viewPtr, listPtr) {
+    foreach (QPointer<KexiView> viewPtr, listPtr) {
         if (viewPtr && viewPtr->parent() == d->stack) {
             removeView(viewPtr.data());
             delete viewPtr.data();
@@ -331,7 +336,7 @@ bool KexiWindow::close(bool force)
     return true;
 }
 
-void KexiWindow::closeEvent(QCloseEvent * e)
+void KexiWindow::closeEvent(QCloseEvent *e)
 {
     if (!close(false /* !force*/)) {
         e->ignore();
@@ -389,17 +394,19 @@ QString KexiWindow::itemIconName()
     return d->part->info()->itemIconName();
 }
 
-KexiPart::GUIClient* KexiWindow::guiClient() const
+KexiPart::GUIClient *KexiWindow::guiClient() const
 {
-    if (!d->part || d->currentViewMode == 0)
+    if (!d->part || d->currentViewMode == 0) {
         return 0;
+    }
     return d->part->instanceGuiClient(d->currentViewMode);
 }
 
-KexiPart::GUIClient* KexiWindow::commonGUIClient() const
+KexiPart::GUIClient *KexiWindow::commonGUIClient() const
 {
-    if (!d->part)
+    if (!d->part) {
         return 0;
+    }
     return d->part->instanceGuiClient(Kexi::AllViewModes);
 }
 
@@ -412,8 +419,8 @@ bool KexiWindow::isDesignModePreloadedForTextModeHackUsed(Kexi::ViewMode newView
 
 tristate KexiWindow::switchToViewMode(
     Kexi::ViewMode newViewMode,
-    QMap<QString, QVariant>* staticObjectArgs,
-    bool& proposeOpeningInTextViewModeBecauseOfProblems)
+    QMap<QString, QVariant> *staticObjectArgs,
+    bool &proposeOpeningInTextViewModeBecauseOfProblems)
 {
     KexiMainWindowIface::global()->acceptPropertySetEditing();
 
@@ -424,16 +431,18 @@ tristate KexiWindow::switchToViewMode(
         bool _proposeOpeningInTextViewModeBecauseOfProblems = false; // used because even if opening the view failed,
         // text view can be opened
         res = switchToViewMode(Kexi::DesignViewMode, staticObjectArgs, _proposeOpeningInTextViewModeBecauseOfProblems);
-        if ((!res && !_proposeOpeningInTextViewModeBecauseOfProblems) || ~res)
+        if ((!res && !_proposeOpeningInTextViewModeBecauseOfProblems) || ~res) {
             return res;
+        }
     }
 
     kDebug();
     bool dontStore = false;
     KexiView *view = selectedView();
 
-    if (d->currentViewMode == newViewMode)
+    if (d->currentViewMode == newViewMode) {
         return true;
+    }
     if (!supportsViewMode(newViewMode)) {
         kWarning() << "!" << Kexi::nameForViewMode(newViewMode);
         return false;
@@ -448,22 +457,22 @@ tristate KexiWindow::switchToViewMode(
             KGuiItem cancelItem(KStandardGuiItem::cancel());
             cancelItem.setText(i18n("Do Not Switch"));
             const int res = KMessageBox::questionYesNoCancel(
-                selectedView(),
-                i18n("<para>There are unsaved changes in object <resource>%1</resource>.</para>"
-                     "<para>Do you want to save these changes before switching to other view?</para>",
-                     partItem()->captionOrName()),
-                    i18n("Confirm Saving Changes"),
-                    saveItem, dontSaveItem, cancelItem
-            );
+                                selectedView(),
+                                i18n("<para>There are unsaved changes in object <resource>%1</resource>.</para>"
+                                     "<para>Do you want to save these changes before switching to other view?</para>",
+                                     partItem()->captionOrName()),
+                                i18n("Confirm Saving Changes"),
+                                saveItem, dontSaveItem, cancelItem
+                            );
             if (res == KMessageBox::Yes) {
-                if (true != view->saveDataChanges())
+                if (true != view->saveDataChanges()) {
                     return cancelled;
-            }
-            else if (res == KMessageBox::No) {
-                if (true != view->cancelDataChanges())
+                }
+            } else if (res == KMessageBox::No) {
+                if (true != view->cancelDataChanges()) {
                     return cancelled;
-            }
-            else { // Cancel:
+                }
+            } else { // Cancel:
                 return cancelled;
             }
         }
@@ -474,13 +483,15 @@ tristate KexiWindow::switchToViewMode(
                 view->setDirty(false);
             }
         }
-        if (~res || !res)
+        if (~res || !res) {
             return res;
+        }
         if (!dontStore && view->isDirty()) {
             res = KexiMainWindowIface::global()->saveObject(this, i18n("Design has been changed. "
                     "You must save it before switching to other view."));
-            if (~res || !res)
+            if (~res || !res) {
                 return res;
+            }
 //   KMessageBox::questionYesNo(0, i18n("Design has been changed. You must save it before switching to other view."))
 //    ==KMessageBox::No
         }
@@ -495,16 +506,17 @@ tristate KexiWindow::switchToViewMode(
         KexiUtils::setWaitCursor();
         //ask the part to create view for the new mode
         d->creatingViewsMode = newViewMode;
-        KexiPart::StaticPart *staticPart = dynamic_cast<KexiPart::StaticPart*>((KexiPart::Part*)d->part);
-        if (staticPart)
+        KexiPart::StaticPart *staticPart = dynamic_cast<KexiPart::StaticPart *>((KexiPart::Part *)d->part);
+        if (staticPart) {
             newView = staticPart->createView(this, this, *d->item, newViewMode, staticObjectArgs);
-        else
+        } else {
             newView = d->part->createView(this, this, *d->item, newViewMode, staticObjectArgs);
+        }
         KexiUtils::removeWaitCursor();
         if (!newView) {
             //js TODO error?
             kWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
-            << d->currentViewMode << " restored.";
+                       << d->currentViewMode << " restored.";
             return false;
         }
         d->creatingViewsMode = Kexi::NoViewMode;
@@ -528,13 +540,14 @@ tristate KexiWindow::switchToViewMode(
         removeView(newViewMode);
         delete newView;
         kWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
-        << d->currentViewMode << " restored.";
+                   << d->currentViewMode << " restored.";
         return false;
     }
     d->currentViewMode = newViewMode;
     d->newlySelectedView = newView;
-    if (prevViewMode == Kexi::NoViewMode)
+    if (prevViewMode == Kexi::NoViewMode) {
         d->newlySelectedView->setDirty(false);
+    }
 
     wasDirty = newView->isDirty(); // remember and restore the flag if the view was clean
     res = newView->afterSwitchFrom(
@@ -548,7 +561,7 @@ tristate KexiWindow::switchToViewMode(
         removeView(newViewMode);
         delete newView;
         kWarning() << "Switching to mode " << newViewMode << " failed. Previous mode "
-        << prevViewMode << " restored.";
+                   << prevViewMode << " restored.";
         const Kexi::ObjectStatus status(*this);
         setStatus(KexiMainWindowIface::global()->project()->dbConnection(),
                   i18n("Switching to other view failed (%1).", Kexi::nameForViewMode(newViewMode)), "");
@@ -581,10 +594,12 @@ tristate KexiWindow::switchToViewModeInternal(Kexi::ViewMode newViewMode)
 
 tristate KexiWindow::switchToViewMode(Kexi::ViewMode newViewMode)
 {
-    if (newViewMode == d->currentViewMode)
+    if (newViewMode == d->currentViewMode) {
         return true;
-    if (!d->switchToViewModeEnabled)
+    }
+    if (!d->switchToViewModeEnabled) {
         return false;
+    }
     bool dummy;
     return switchToViewMode(newViewMode, 0, dummy);
 }
@@ -592,31 +607,33 @@ tristate KexiWindow::switchToViewMode(Kexi::ViewMode newViewMode)
 void KexiWindow::setFocus()
 {
     if (d->stack->currentWidget()) {
-        if (d->stack->currentWidget()->inherits("KexiView"))
-            static_cast<KexiView*>(d->stack->currentWidget())->setFocus();
-        else
+        if (d->stack->currentWidget()->inherits("KexiView")) {
+            static_cast<KexiView *>(d->stack->currentWidget())->setFocus();
+        } else {
             d->stack->currentWidget()->setFocus();
+        }
     } else {
         QWidget::setFocus();
     }
     activate();
 }
 
-KoProperty::Set*
+KoProperty::Set *
 KexiWindow::propertySet()
 {
     KexiView *v = selectedView();
-    if (!v)
+    if (!v) {
         return 0;
+    }
     return v->propertySet();
 }
 
-void KexiWindow::setSchemaData(KexiDB::SchemaData* schemaData)
+void KexiWindow::setSchemaData(KexiDB::SchemaData *schemaData)
 {
     d->setSchemaData(schemaData);
 }
 
-KexiDB::SchemaData* KexiWindow::schemaData() const
+KexiDB::SchemaData *KexiWindow::schemaData() const
 {
     return d->schemaData;
 }
@@ -631,17 +648,19 @@ KexiWindowData *KexiWindow::data() const
     return d->data;
 }
 
-void KexiWindow::setData(KexiWindowData* data)
+void KexiWindow::setData(KexiWindowData *data)
 {
-    if (data != d->data)
+    if (data != d->data) {
         delete d->data;
+    }
     d->data = data;
 }
 
 bool KexiWindow::eventFilter(QObject *obj, QEvent *e)
 {
-    if (QWidget::eventFilter(obj, e))
+    if (QWidget::eventFilter(obj, e)) {
         return true;
+    }
     /*if (e->type()==QEvent::FocusIn) {
       QWidget *w = m_parentWindow->activeWindow();
       w=0;
@@ -656,10 +675,11 @@ bool KexiWindow::eventFilter(QObject *obj, QEvent *e)
     return false;
 }
 
-void KexiWindow::dirtyChanged(KexiView* view)
+void KexiWindow::dirtyChanged(KexiView *view)
 {
-    if (!d->dirtyChangedEnabled)
+    if (!d->dirtyChangedEnabled) {
         return;
+    }
     d->viewThatRecentlySetDirtyFlag = isDirty() ? view : 0;
     updateCaption();
     emit dirtyChanged(this);
@@ -673,8 +693,9 @@ QString KexiWindow::windowTitleForItem(const KexiPart::Item &item)
 
 void KexiWindow::updateCaption()
 {
-    if (!d->item || !d->part)
+    if (!d->item || !d->part) {
         return;
+    }
     const QString fullCapt(windowTitleForItem(*d->item));
     setWindowTitle(fullCapt + (isDirty() ? "*" : ""));
 }
@@ -705,16 +726,18 @@ tristate KexiWindow::storeNewData(KexiView::StoreNewDataOptions options)
 
     bool cancel = false;
     d->schemaData = v->storeNewData(sdata, options, cancel);
-    if (cancel)
+    if (cancel) {
         return cancelled;
+    }
     if (!d->schemaData) {
         setStatus(project->dbConnection(), i18n("Saving object's definition failed."), "");
         return false;
     }
 
     if (project->idForClass(part()->info()->partClass()) < 0) {
-        if (!project->createIdForPart(*part()->info()))
+        if (!project->createIdForPart(*part()->info())) {
             return false;
+        }
     }
     /* Sets 'dirty' flag on every dialog's view. */
     setDirty(false);
@@ -728,15 +751,17 @@ tristate KexiWindow::storeNewData(KexiView::StoreNewDataOptions options)
 
 tristate KexiWindow::storeData(bool dontAsk)
 {
-    if (neverSaved())
+    if (neverSaved()) {
         return false;
+    }
     KexiView *v = selectedView();
-    if (!v)
+    if (!v) {
         return false;
+    }
 
 #define storeData_ERR \
     setStatus(KexiMainWindowIface::global()->project()->dbConnection(), \
-        i18n("Saving object's data failed."),"");
+              i18n("Saving object's data failed."),"");
 
     //save changes using transaction
     KexiDB::Transaction transaction = KexiMainWindowIface::global()
@@ -748,8 +773,9 @@ tristate KexiWindow::storeData(bool dontAsk)
     KexiDB::TransactionGuard tg(transaction);
 
     const tristate res = v->storeData(dontAsk);
-    if (~res) //trans. will be cancelled
+    if (~res) { //trans. will be cancelled
         return res;
+    }
     if (!res) {
         storeData_ERR;
         return res;
@@ -784,10 +810,9 @@ tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOpt
     KexiDB::SchemaData *newSchemaData;
     if (isDirty()) { // full save of new data
         newSchemaData = v->storeNewData(sdata, options, cancel);
-    }
-    else { // there were no changes; full copy of the data is enough
-           // - gives better performance (e.g. tables are copied on server side)
-           // - works without bothering the user (no unnecessary questions)
+    } else { // there were no changes; full copy of the data is enough
+        // - gives better performance (e.g. tables are copied on server side)
+        // - works without bothering the user (no unnecessary questions)
         newSchemaData = v->copyData(sdata, options, cancel);
     }
 
@@ -801,8 +826,9 @@ tristate KexiWindow::storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOpt
     setSchemaData(newSchemaData); // deletes previous schema if owned
 
     if (project->idForClass(part()->info()->partClass()) < 0) {
-        if (!project->createIdForPart(*part()->info()))
+        if (!project->createIdForPart(*part()->info())) {
             return false;
+        }
     }
     // for now this Window has new item assigned
     d->item = item;
@@ -825,39 +851,44 @@ void KexiWindow::activate()
     //kDebug() << "focusWidget(): " << focusWidget()->name();
     if (!KexiUtils::hasParent(v, KexiMainWindowIface::global()->focusWidget())) {
         //ah, focused widget is not in this view, move focus:
-        if (v)
+        if (v) {
             v->setFocus();
+        }
     }
-    if (v)
+    if (v) {
         v->updateActions(true);
+    }
 }
 
 void KexiWindow::deactivate()
 {
     KexiView *v = selectedView();
-    if (v)
+    if (v) {
         v->updateActions(false);
+    }
 }
 
 void KexiWindow::sendDetachedStateToCurrentView()
 {
     KexiView *v = selectedView();
-    if (v)
+    if (v) {
         v->windowDetached();
+    }
 }
 
 void KexiWindow::sendAttachedStateToCurrentView()
 {
     KexiView *v = selectedView();
-    if (v)
+    if (v) {
         v->windowAttached();
+    }
 }
 
 bool KexiWindow::saveSettings()
 {
     bool result = true;
     for (int i = 0; i < d->stack->count(); ++i) {
-        KexiView *view = qobject_cast<KexiView*>(d->stack->widget(i));
+        KexiView *view = qobject_cast<KexiView *>(d->stack->widget(i));
         if (!view->saveSettings()) {
             result = false;
         }
@@ -870,8 +901,8 @@ Kexi::ViewMode KexiWindow::creatingViewsMode() const
     return d->creatingViewsMode;
 }
 
-QVariant KexiWindow::internalPropertyValue(const QByteArray& name,
-        const QVariant& defaultValue) const
+QVariant KexiWindow::internalPropertyValue(const QByteArray &name,
+        const QVariant &defaultValue) const
 {
     return d->part->internalPropertyValue(name, defaultValue);
 }

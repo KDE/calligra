@@ -35,7 +35,7 @@ class KRITAIMAGE_EXPORT Parser
     friend class TypeInfo;
 public:
     virtual ~Parser();
-    virtual Value parse(const QString&) const = 0;
+    virtual Value parse(const QString &) const = 0;
 };
 }
 

@@ -43,14 +43,14 @@ class SpecialPasteDialog : public KDialog, public Ui::SpecialPasteWidget
 {
     Q_OBJECT
 public:
-    explicit SpecialPasteDialog(QWidget* parent, Selection* selection);
+    explicit SpecialPasteDialog(QWidget *parent, Selection *selection);
 
 public Q_SLOTS:
     void slotOk();
     void slotToggled(bool);
 
 private:
-    Selection* m_selection;
+    Selection *m_selection;
 };
 
 } // namespace Sheets

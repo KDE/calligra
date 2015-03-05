@@ -43,19 +43,19 @@ public:
     KexiQueryDesignerSQLEditor *editor() const;
 
 protected:
-    KexiQueryPart::TempData * tempData() const;
+    KexiQueryPart::TempData *tempData() const;
 
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
-                                             KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+    virtual KexiDB::SchemaData *storeNewData(const KexiDB::SchemaData &sdata,
+            KexiView::StoreNewDataOptions options,
+            bool &cancel);
     virtual tristate storeData(bool dontAsk = false);
 
     void setStatusOk();
-    void setStatusError(const QString& msg);
+    void setStatusError(const QString &msg);
     void setStatusEmpty();
-    void setStatusText(const QString& text);
+    void setStatusText(const QString &text);
 
     virtual void updateActions(bool activated);
 
@@ -71,7 +71,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     friend class KexiQueryView; // for storeNewData() and storeData() only
 };

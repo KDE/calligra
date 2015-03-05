@@ -71,7 +71,7 @@ class DeclarativeDragDropEvent : public QObject
      * The mime data of this operation
      * @see DeclarativeMimeData
      */
-    Q_PROPERTY(DeclarativeMimeData* mimeData READ mimeData)
+    Q_PROPERTY(DeclarativeMimeData *mimeData READ mimeData)
 
     /**
      * The possible different kind of action that can be done in the drop, is a combination of:
@@ -94,27 +94,34 @@ class DeclarativeDragDropEvent : public QObject
 
 public:
 
-    DeclarativeDragDropEvent(QGraphicsSceneDragDropEvent* e, QObject* parent = 0);
+    DeclarativeDragDropEvent(QGraphicsSceneDragDropEvent *e, QObject *parent = 0);
 
-    int x() const {
+    int x() const
+    {
         return m_x;
     }
-    int y() const {
+    int y() const
+    {
         return m_y;
     }
-    int buttons() const {
+    int buttons() const
+    {
         return m_buttons;
     }
-    int modifiers() const {
+    int modifiers() const
+    {
         return m_modifiers;
     }
-    DeclarativeMimeData* mimeData() {
+    DeclarativeMimeData *mimeData()
+    {
         return &m_data;
     }
-    Qt::DropAction proposedAction() const {
+    Qt::DropAction proposedAction() const
+    {
         return m_event->proposedAction();
     }
-    Qt::DropActions possibleActions() const {
+    Qt::DropActions possibleActions() const
+    {
         return m_event->possibleActions();
     }
 
@@ -128,7 +135,7 @@ private:
     Qt::MouseButtons m_buttons;
     Qt::KeyboardModifiers m_modifiers;
     DeclarativeMimeData m_data;
-    QGraphicsSceneDragDropEvent* m_event;
+    QGraphicsSceneDragDropEvent *m_event;
 };
 
 #endif // DECLARATIVEDRAGDROPEVENT_H

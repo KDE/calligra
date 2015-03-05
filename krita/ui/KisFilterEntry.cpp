@@ -30,9 +30,8 @@ Boston, MA 02110-1301, USA.
 
 #include <limits.h> // UINT_MAX
 
-
-KisFilterEntry::KisFilterEntry(const KService::Ptr& service)
-        : m_service(service)
+KisFilterEntry::KisFilterEntry(const KService::Ptr &service)
+    : m_service(service)
 {
     import = service->property("X-KDE-Import", QVariant::StringList).toStringList();
     export_ = service->property("X-KDE-Export", QVariant::StringList).toStringList();
@@ -49,10 +48,10 @@ QList<KisFilterEntry::Ptr> KisFilterEntry::query()
 
     KService::List::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();
-    kDebug(30500) <<"Query returned" << max <<" offers";
+    kDebug(30500) << "Query returned" << max << " offers";
     for (unsigned int i = 0; i < max; i++) {
-        kDebug(30500) <<"   desktopEntryPath=" << (*it)->entryPath()
-                       << "   library=" << (*it)->library() << endl;
+        kDebug(30500) << "   desktopEntryPath=" << (*it)->entryPath()
+                      << "   library=" << (*it)->library() << endl;
         // Append converted offer
         lst.append(KisFilterEntry::Ptr(new KisFilterEntry(*it)));
         // Next service
@@ -62,23 +61,23 @@ QList<KisFilterEntry::Ptr> KisFilterEntry::query()
     return lst;
 }
 
-KisImportExportFilter* KisFilterEntry::createFilter(KisFilterChain* chain, QObject* parent)
+KisImportExportFilter *KisFilterEntry::createFilter(KisFilterChain *chain, QObject *parent)
 {
     KPluginLoader loader(*m_service);
-    KLibFactory* factory = loader.factory();
+    KLibFactory *factory = loader.factory();
 
     if (!factory) {
         kWarning(30003) << loader.errorString();
         return 0;
     }
 
-    QObject* obj = factory->create<KisImportExportFilter>(parent);
+    QObject *obj = factory->create<KisImportExportFilter>(parent);
     if (!obj || !obj->inherits("KisImportExportFilter")) {
         delete obj;
         return 0;
     }
 
-    KisImportExportFilter* filter = static_cast<KisImportExportFilter*>(obj);
+    KisImportExportFilter *filter = static_cast<KisImportExportFilter *>(obj);
     filter->m_chain = chain;
     return filter;
 }

@@ -182,26 +182,20 @@ int main()
                 shapeAttributes.replace('"', "\\\"");
                 outStream << "attributes[\"" << currentShapeName << "\"]=\"" << shapeAttributes << "\";" << "\n";
                 shapeAttributes = "";
-            }
-            else if (xml.isStartElement() && xml.name() == "avLst") {
+            } else if (xml.isStartElement() && xml.name() == "avLst") {
                 shapeDefinition += handler.handle_avLst(&xml);
-            }
-            else if (xml.isStartElement() && xml.name() == "gdLst") {
+            } else if (xml.isStartElement() && xml.name() == "gdLst") {
                 shapeDefinition += handler.handle_gdLst(&xml);
-            }
-            else if (xml.isStartElement() && xml.name() == "pathLst") {
+            } else if (xml.isStartElement() && xml.name() == "pathLst") {
                 shapeAttributes += handler.handle_pathLst(&xml);
                 pathEquations += handler.pathEquationsCreated();
-            }
-            else if (xml.isStartElement() && xml.name() == "ahLst") {
+            } else if (xml.isStartElement() && xml.name() == "ahLst") {
                 xml.skipCurrentElement();
-            }
-            else if (xml.isStartElement() && xml.name() == "rect") {
+            } else if (xml.isStartElement() && xml.name() == "rect") {
                 // draw:text-areas
                 textareas = handler.handle_rect(&xml);
                 outStream << "textareas[\"" << currentShapeName << "\"]=\"" << textareas << "\";" << "\n";
-            }
-            else if (xml.isStartElement() && xml.name() == "cxnLst") {
+            } else if (xml.isStartElement() && xml.name() == "cxnLst") {
                 xml.skipCurrentElement();
             }
             xml.readNext();

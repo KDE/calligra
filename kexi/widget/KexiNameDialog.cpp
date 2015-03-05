@@ -46,12 +46,13 @@ class KexiNameDialog::Private
 
 public:
     Private() {}
-    ~Private() {
+    ~Private()
+    {
         delete validator;
     }
 
     QLabel *icon;
-    KexiNameWidget* widget;
+    KexiNameWidget *widget;
     const KexiProject *project;
     const KexiPart::Part *part;
     KexiNameDialogValidator *validator;
@@ -60,25 +61,25 @@ public:
     bool *overwriteNeeded;
 };
 
-KexiNameDialog::KexiNameDialog(const QString& message, QWidget * parent)
-        : KDialog(parent)
-        , d(new Private)
+KexiNameDialog::KexiNameDialog(const QString &message, QWidget *parent)
+    : KDialog(parent)
+    , d(new Private)
 {
     setMainWidget(new QWidget(this));
     d->widget = new KexiNameWidget(message, mainWidget());
     init();
 }
 
-KexiNameDialog::KexiNameDialog(const QString& message,
-                               const QString& nameLabel, const QString& nameText,
-                               const QString& captionLabel, const QString& captionText,
-                               QWidget * parent)
-        : KDialog(parent)
-        , d(new Private)
+KexiNameDialog::KexiNameDialog(const QString &message,
+                               const QString &nameLabel, const QString &nameText,
+                               const QString &captionLabel, const QString &captionText,
+                               QWidget *parent)
+    : KDialog(parent)
+    , d(new Private)
 {
     setMainWidget(new QWidget(this));
     d->widget = new KexiNameWidget(message, nameLabel, nameText,
-                                  captionLabel, captionText, mainWidget());
+                                   captionLabel, captionText, mainWidget());
     init();
 }
 
@@ -117,17 +118,16 @@ void KexiNameDialog::init()
 
 void KexiNameDialog::updateSize()
 {
-  resize(QSize(400, 140 + (!d->widget->messageLabel()->text().isEmpty() ?
-                           d->widget->messageLabel()->height() : 0))
+    resize(QSize(400, 140 + (!d->widget->messageLabel()->text().isEmpty() ?
+                             d->widget->messageLabel()->height() : 0))
            .expandedTo(minimumSizeHint()));
 }
 
 void KexiNameDialog::slotTextChanged()
 {
     bool enable = true;
-    if (   (d->widget->isNameRequired() && d->widget->nameText().isEmpty())
-        || (d->widget->isCaptionRequired() && d->widget->captionText().isEmpty()) )
-    {
+    if ((d->widget->isNameRequired() && d->widget->nameText().isEmpty())
+            || (d->widget->isCaptionRequired() && d->widget->captionText().isEmpty())) {
         enable = false;
     }
     enableButtonOk(enable);
@@ -152,14 +152,14 @@ bool KexiNameDialog::canOverwrite()
     if (!d->allowOverwriting) {
         KMessageBox::information(this,
                                  "<p>" + d->part->i18nMessage("Object <resource>%1</resource> already exists.", 0)
-                                             .subs(widget()->nameText()).toString()
+                                 .subs(widget()->nameText()).toString()
                                  + "</p><p>" + i18n("Please choose other name.") + "</p>");
         return false;
     }
 
     QString msg =
         "<p>" + d->part->i18nMessage("Object <resource>%1</resource> already exists.", 0)
-                    .subs(widget()->nameText()).toString()
+        .subs(widget()->nameText()).toString()
         + "</p><p>" + i18n("Do you want to replace it?") + "</p>";
     KGuiItem yesItem(KStandardGuiItem::yes());
     yesItem.setText(i18n("&Replace"));
@@ -182,8 +182,9 @@ void KexiNameDialog::accept()
             return;
         }
     }
-    if (!d->widget->checkValidity())
+    if (!d->widget->checkValidity()) {
         return;
+    }
 
     if (d->checkIfObjectExists && d->project) {
         if (!canOverwrite()) {
@@ -199,21 +200,21 @@ void KexiNameDialog::setDialogIcon(const QString &iconName)
     d->icon->setPixmap(DesktopIcon(iconName, KIconLoader::SizeMedium));
 }
 
-void KexiNameDialog::showEvent(QShowEvent * event)
+void KexiNameDialog::showEvent(QShowEvent *event)
 {
     d->widget->captionLineEdit()->selectAll();
     d->widget->captionLineEdit()->setFocus();
     KDialog::showEvent(event);
 }
 
-KexiNameWidget* KexiNameDialog::widget() const
+KexiNameWidget *KexiNameDialog::widget() const
 {
     return d->widget;
 }
 
 int KexiNameDialog::execAndCheckIfObjectExists(const KexiProject &project,
-                                               const KexiPart::Part &part,
-                                               bool *overwriteNeeded)
+        const KexiPart::Part &part,
+        bool *overwriteNeeded)
 {
     d->project = &project;
     d->part = &part;

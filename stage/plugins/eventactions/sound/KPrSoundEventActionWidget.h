@@ -33,22 +33,22 @@ class KPrSoundEventActionWidget : public KPrEventActionWidget
 {
     Q_OBJECT
 public:
-    explicit KPrSoundEventActionWidget( QWidget * parent = 0 );
+    explicit KPrSoundEventActionWidget(QWidget *parent = 0);
     virtual ~KPrSoundEventActionWidget();
 
 public Q_SLOTS:
-    void setData( KPrEventActionData *eventActionData );
+    void setData(KPrEventActionData *eventActionData);
 
 private Q_SLOTS:
     void soundComboChanged();
 
 private:
-    void updateCombo( const QString & title );
+    void updateCombo(const QString &title);
 
-    KoShape * m_shape;
-    KoEventAction * m_eventAction;
-    KPrSoundCollection * m_soundCollection;
-    QComboBox * m_soundCombo;
+    KoShape *m_shape;
+    KoEventAction *m_eventAction;
+    KPrSoundCollection *m_soundCollection;
+    QComboBox *m_soundCombo;
 };
 
 #endif /* KPRSOUNDEVENTACTIONWIDGET_H */

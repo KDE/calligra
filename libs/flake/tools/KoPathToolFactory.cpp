@@ -25,7 +25,7 @@
 #include <klocale.h>
 
 KoPathToolFactory::KoPathToolFactory()
-        : KoToolFactoryBase("PathToolFactoryId")
+    : KoToolFactoryBase("PathToolFactoryId")
 {
     setToolTip(i18n("Path editing"));
     setToolType(dynamicToolType());
@@ -38,7 +38,7 @@ KoPathToolFactory::~KoPathToolFactory()
 {
 }
 
-KoToolBase * KoPathToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KoPathToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoPathTool(canvas);
 }

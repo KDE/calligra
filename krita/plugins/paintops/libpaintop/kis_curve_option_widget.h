@@ -36,11 +36,11 @@ class PAINTOP_EXPORT KisCurveOptionWidget : public KisPaintOpOption
 {
     Q_OBJECT
 public:
-    KisCurveOptionWidget(KisCurveOption* curveOption, bool hideSlider = false);
+    KisCurveOptionWidget(KisCurveOption *curveOption, bool hideSlider = false);
     ~KisCurveOptionWidget();
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting);
 
     bool isCheckable();
     bool isChecked() const;
@@ -48,8 +48,8 @@ public:
 
 protected:
 
-    KisCurveOption* curveOption();
-    QWidget* curveWidget();
+    KisCurveOption *curveOption();
+    QWidget *curveWidget();
 
 private Q_SLOTS:
 
@@ -60,9 +60,9 @@ private Q_SLOTS:
     void disableWidgets(bool disable);
 
 private:
-    QWidget* m_widget;
-    Ui_WdgCurveOption* m_curveOptionWidget;
-    KisCurveOption* m_curveOption;
+    QWidget *m_widget;
+    Ui_WdgCurveOption *m_curveOptionWidget;
+    KisCurveOption *m_curveOption;
 };
 
 #endif // KIS_CURVE_OPTION_WIDGET_H

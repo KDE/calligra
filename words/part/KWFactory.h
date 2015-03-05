@@ -41,7 +41,7 @@ public:
     ~KWFactory();
 
     /// overwritten method from superclass
-    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
+    virtual QObject *create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword);
 
     /// Return an instance
     static const KComponentData &componentData();

@@ -41,7 +41,7 @@ KoPABackgroundToolFactory::~KoPABackgroundToolFactory()
 {
 }
 
-KoToolBase * KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KoPABackgroundToolFactory::createTool(KoCanvasBase *canvas)
 {
     // We need the canvas to know in which app we are to turn the tooltip to page or slide design
     if (dynamic_cast<KoPACanvasBase *>(canvas)) {

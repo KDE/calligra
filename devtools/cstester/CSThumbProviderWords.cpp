@@ -43,7 +43,7 @@
 #include <QApplication>
 
 CSThumbProviderWords::CSThumbProviderWords(KWDocument *doc)
-: m_doc(doc)
+    : m_doc(doc)
 {
 }
 
@@ -53,14 +53,15 @@ CSThumbProviderWords::~CSThumbProviderWords()
 
 QList<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 {
-    KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(m_doc->documentPart()->canvasItem(m_doc));
+    KWCanvasItem *canvasItem = static_cast<KWCanvasItem *>(m_doc->documentPart()->canvasItem(m_doc));
     KoZoomHandler zoomHandler;
 
     while (!m_doc->layoutFinishedAtleastOnce()) {
         QCoreApplication::processEvents();
 
-        if (!QCoreApplication::hasPendingEvents())
+        if (!QCoreApplication::hasPendingEvents()) {
             break;
+        }
     }
 
     KWPageManager *pageManager = m_doc->pageManager();
@@ -68,7 +69,7 @@ QList<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 
     QList<QImage> thumbnails;
 
-    foreach(const KWPage &page, pageManager->pages()) {
+    foreach (const KWPage &page, pageManager->pages()) {
 
         QRectF pRect(page.rect());
         KoPageLayout layout;
@@ -93,5 +94,4 @@ QList<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 
     return thumbnails;
 }
-
 

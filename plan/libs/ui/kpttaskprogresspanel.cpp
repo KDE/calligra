@@ -38,59 +38,57 @@
 #include "kptproject.h"
 #include "kptdebug.h"
 
-
 namespace KPlato
 {
 
-
 //-----------------
-TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *parent )
-    : TaskProgressPanelImpl( task, parent )
+TaskProgressPanel::TaskProgressPanel(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *parent)
+    : TaskProgressPanelImpl(task, parent)
 {
     kDebug(planDbg());
     started->setChecked(m_completion.isStarted());
     finished->setChecked(m_completion.isFinished());
     startTime->setDateTime(m_completion.startTime());
     finishTime->setDateTime(m_completion.finishTime());
-    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
-    
+    finishTime->setMinimumDateTime(qMax(startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime())));
+
     if (workTime) {
-        kDebug(planDbg())<<"daylength="<<workTime->durationDay().hours();
+        kDebug(planDbg()) << "daylength=" << workTime->durationDay().hours();
         m_dayLength = workTime->durationDay().hours();
         setEstimateScales(m_dayLength);
     }
-    
+
     scheduledEffort = task.estimate()->expectedValue();
-    
-    setYear( QDate::currentDate().year() );
-    
-    if ( m_completion.usedEffortMap().isEmpty() || m_task.requests().isEmpty() ) {
-        foreach ( ResourceGroupRequest *g, m_task.requests().requests() ) {
-            foreach ( ResourceRequest *r, g->resourceRequests() ) {
-                m_completion.addUsedEffort( r->resource() );
+
+    setYear(QDate::currentDate().year());
+
+    if (m_completion.usedEffortMap().isEmpty() || m_task.requests().isEmpty()) {
+        foreach (ResourceGroupRequest *g, m_task.requests().requests()) {
+            foreach (ResourceRequest *r, g->resourceRequests()) {
+                m_completion.addUsedEffort(r->resource());
             }
         }
     }
-    if ( m_completion.isStarted() ) {
-        tabWidget->setCurrentWidget( completionTab );
+    if (m_completion.isStarted()) {
+        tabWidget->setCurrentWidget(completionTab);
     }
     enableWidgets();
     started->setFocus();
-    
-    connect( weekNumber, SIGNAL(currentIndexChanged(int)), SLOT(slotWeekNumberChanged(int)) );
-    connect( addResource, SIGNAL(clicked()), SLOT(slotAddResource()) );
-    connect( addEntryBtn, SIGNAL(clicked()), entryTable, SLOT(addEntry()) );
-    connect( removeEntryBtn, SIGNAL(clicked()), entryTable, SLOT(removeEntry()) );
 
-    entryTable->model()->setManager( sm );
-    entryTable->model()->setTask( &task );
-    entryTable->setCompletion( &m_completion );
-    connect( entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotEntryAdded(QDate)) );
-    
-    resourceTable->setProject( static_cast<Project*>( task.projectNode() ) );
-    resourceTable->setCompletion( &m_completion );
-    slotWeekNumberChanged( weekNumber->currentIndex() );
-    addResource->setEnabled( resourceTable->hasFreeResources() );
+    connect(weekNumber, SIGNAL(currentIndexChanged(int)), SLOT(slotWeekNumberChanged(int)));
+    connect(addResource, SIGNAL(clicked()), SLOT(slotAddResource()));
+    connect(addEntryBtn, SIGNAL(clicked()), entryTable, SLOT(addEntry()));
+    connect(removeEntryBtn, SIGNAL(clicked()), entryTable, SLOT(removeEntry()));
+
+    entryTable->model()->setManager(sm);
+    entryTable->model()->setTask(&task);
+    entryTable->setCompletion(&m_completion);
+    connect(entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotEntryAdded(QDate)));
+
+    resourceTable->setProject(static_cast<Project *>(task.projectNode()));
+    resourceTable->setCompletion(&m_completion);
+    slotWeekNumberChanged(weekNumber->currentIndex());
+    addResource->setEnabled(resourceTable->hasFreeResources());
 
     //resourceTable->resizeColumnsToContents();
 
@@ -107,250 +105,273 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
 
 MacroCommand *TaskProgressPanel::buildCommand()
 {
-    Project *project = dynamic_cast<Project*>( m_task.projectNode() );
-    if ( project == 0 ) {
+    Project *project = dynamic_cast<Project *>(m_task.projectNode());
+    if (project == 0) {
         return 0;
     }
-    return buildCommand( *project, m_original, m_completion );
+    return buildCommand(*project, m_original, m_completion);
 }
 
-MacroCommand *TaskProgressPanel::buildCommand( const Project &project, Completion &org, Completion &curr )
+MacroCommand *TaskProgressPanel::buildCommand(const Project &project, Completion &org, Completion &curr)
 {
     MacroCommand *cmd = 0;
     KUndo2MagicString c = kundo2_i18n("Modify task completion");
-    
-    if ( org.entrymode() != curr.entrymode() ) {
-        if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionEntrymodeCmd(org, curr.entrymode() ) );
+
+    if (org.entrymode() != curr.entrymode()) {
+        if (cmd == 0) {
+            cmd = new MacroCommand(c);
+        }
+        cmd->addCommand(new ModifyCompletionEntrymodeCmd(org, curr.entrymode()));
     }
-    if ( org.startTime() != curr.startTime() ) {
-        if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime() ) );
+    if (org.startTime() != curr.startTime()) {
+        if (cmd == 0) {
+            cmd = new MacroCommand(c);
+        }
+        cmd->addCommand(new ModifyCompletionStartTimeCmd(org, curr.startTime()));
     }
-    if ( org.finishTime() != curr.finishTime() ) {
-        if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime() ) );
+    if (org.finishTime() != curr.finishTime()) {
+        if (cmd == 0) {
+            cmd = new MacroCommand(c);
+        }
+        cmd->addCommand(new ModifyCompletionFinishTimeCmd(org, curr.finishTime()));
     }
-    if ( org.isStarted() != curr.isStarted() ) {
-        if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionStartedCmd(org, curr.isStarted() ) );
+    if (org.isStarted() != curr.isStarted()) {
+        if (cmd == 0) {
+            cmd = new MacroCommand(c);
+        }
+        cmd->addCommand(new ModifyCompletionStartedCmd(org, curr.isStarted()));
     }
-    if ( org.isFinished() != curr.isFinished() ) {
-        if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
+    if (org.isFinished() != curr.isFinished()) {
+        if (cmd == 0) {
+            cmd = new MacroCommand(c);
+        }
+        cmd->addCommand(new ModifyCompletionFinishedCmd(org, curr.isFinished()));
     }
     QList<QDate> orgdates = org.entries().keys();
     QList<QDate> currdates = curr.entries().keys();
-    foreach ( const QDate &d, orgdates ) {
-        if ( currdates.contains( d ) ) {
-            if ( curr.entry( d ) == org.entry( d ) ) {
+    foreach (const QDate &d, orgdates) {
+        if (currdates.contains(d)) {
+            if (curr.entry(d) == org.entry(d)) {
                 continue;
             }
-            if ( cmd == 0 ) cmd = new MacroCommand( c );
-            kDebug(planDbg())<<"modify entry "<<d;
-            Completion::Entry *e = new Completion::Entry( *( curr.entry( d ) ) );
-            cmd->addCommand( new ModifyCompletionEntryCmd(org, d, e ) );
+            if (cmd == 0) {
+                cmd = new MacroCommand(c);
+            }
+            kDebug(planDbg()) << "modify entry " << d;
+            Completion::Entry *e = new Completion::Entry(*(curr.entry(d)));
+            cmd->addCommand(new ModifyCompletionEntryCmd(org, d, e));
         } else {
-            if ( cmd == 0 ) cmd = new MacroCommand( c );
-            kDebug(planDbg())<<"remove entry "<<d;
-            cmd->addCommand( new RemoveCompletionEntryCmd(org, d ) );
+            if (cmd == 0) {
+                cmd = new MacroCommand(c);
+            }
+            kDebug(planDbg()) << "remove entry " << d;
+            cmd->addCommand(new RemoveCompletionEntryCmd(org, d));
         }
     }
-    foreach ( const QDate &d, currdates ) {
-        if ( ! orgdates.contains( d ) ) {
-            if ( cmd == 0 ) cmd = new MacroCommand( c );
-            Completion::Entry *e = new Completion::Entry( * ( curr.entry( d ) ) );
-            kDebug(planDbg())<<"add entry "<<d<<e;
-            cmd->addCommand( new AddCompletionEntryCmd(org, d, e ) );
+    foreach (const QDate &d, currdates) {
+        if (! orgdates.contains(d)) {
+            if (cmd == 0) {
+                cmd = new MacroCommand(c);
+            }
+            Completion::Entry *e = new Completion::Entry(* (curr.entry(d)));
+            kDebug(planDbg()) << "add entry " << d << e;
+            cmd->addCommand(new AddCompletionEntryCmd(org, d, e));
         }
     }
     const Completion::ResourceUsedEffortMap &map = curr.usedEffortMap();
-    foreach ( const Resource *res, map.keys() ) {
-        Resource *r = project.findResource( res->id() );
-        if ( r == 0 ) {
-            kWarning()<<"Can't find resource:"<<res->id()<<res->name();
+    foreach (const Resource *res, map.keys()) {
+        Resource *r = project.findResource(res->id());
+        if (r == 0) {
+            kWarning() << "Can't find resource:" << res->id() << res->name();
             continue;
         }
         Completion::UsedEffort *ue = map[ r ];
-        if ( ue == 0 ) {
+        if (ue == 0) {
             continue;
         }
-        if ( org.usedEffort( r ) == 0 || *ue != *(org.usedEffort( r )) ) {
-            if ( cmd == 0 ) cmd = new MacroCommand( c );
-            cmd->addCommand( new AddCompletionUsedEffortCmd( org, r, new Completion::UsedEffort( *ue ) ) );
+        if (org.usedEffort(r) == 0 || *ue != *(org.usedEffort(r))) {
+            if (cmd == 0) {
+                cmd = new MacroCommand(c);
+            }
+            cmd->addCommand(new AddCompletionUsedEffortCmd(org, r, new Completion::UsedEffort(*ue)));
         }
     }
     return cmd;
 }
 
-void TaskProgressPanel::setEstimateScales( int day )
+void TaskProgressPanel::setEstimateScales(int day)
 {
     QVariantList lst;
-    lst << QVariant( day );
+    lst << QVariant(day);
 //    remainingEffort->setScales( lst );
 //     remainingEffort->setFieldScale(0, day);
 //     remainingEffort->setFieldRightscale(0, day);
 //     remainingEffort->setFieldLeftscale(1, day);
 
 //    actualEffort->setScales( QVariant( lst ) );
-/*    actualEffort->setFieldScale(0, day);
-    actualEffort->setFieldRightscale(0, day);
-    actualEffort->setFieldLeftscale(1, day);*/
+    /*    actualEffort->setFieldScale(0, day);
+        actualEffort->setFieldRightscale(0, day);
+        actualEffort->setFieldLeftscale(1, day);*/
 }
 
-void TaskProgressPanel::slotWeekNumberChanged( int index )
+void TaskProgressPanel::slotWeekNumberChanged(int index)
 {
-    kDebug(planDbg())<<index<<","<<m_weekOffset;
-    QDate date = QDate( m_year, 1, 1 ).addDays( Qt::Monday - QDate( m_year, 1, 1 ).dayOfWeek() );
-    date = date.addDays( index * 7 );
-    resourceTable->setCurrentMonday( date );
+    kDebug(planDbg()) << index << "," << m_weekOffset;
+    QDate date = QDate(m_year, 1, 1).addDays(Qt::Monday - QDate(m_year, 1, 1).dayOfWeek());
+    date = date.addDays(index * 7);
+    resourceTable->setCurrentMonday(date);
 }
 
 void TaskProgressPanel::slotAddResource()
 {
     kDebug(planDbg());
     resourceTable->addResource();
-    addResource->setEnabled( resourceTable->hasFreeResources() );
+    addResource->setEnabled(resourceTable->hasFreeResources());
 }
 
-void TaskProgressPanel::slotEntryAdded( const QDate &date )
+void TaskProgressPanel::slotEntryAdded(const QDate &date)
 {
-    kDebug(planDbg())<<date;
+    kDebug(planDbg()) << date;
 }
 
 //-------------------------------------
 
-TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
+TaskProgressPanelImpl::TaskProgressPanelImpl(Task &task, QWidget *parent)
     : QWidget(parent),
       m_task(task),
-      m_original( task.completion() ),
-      m_completion( m_original ),
+      m_original(task.completion()),
+      m_completion(m_original),
       m_dayLength(24),
-      m_firstIsPrevYear( false ),
-      m_lastIsNextYear( false )
+      m_firstIsPrevYear(false),
+      m_lastIsNextYear(false)
 {
     setupUi(this);
 
     addEntryBtn->setIcon(koIcon("list-add"));
     removeEntryBtn->setIcon(koIcon("list-remove"));
 
-    connect(entryTable, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged(QItemSelection)) );
-    removeEntryBtn->setEnabled( false );
+    connect(entryTable, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged(QItemSelection)));
+    removeEntryBtn->setEnabled(false);
 
-    editmode->setCurrentIndex( m_original.entrymode() - 1 );
-    connect( editmode, SIGNAL(currentIndexChanged(int)), SLOT(slotEditmodeChanged(int)) );
-    connect( editmode, SIGNAL(activated(int)), SLOT(slotChanged()) );
-    
-    connect(resourceTable, SIGNAL(changed()), SLOT(slotChanged()) );
-    connect(resourceTable, SIGNAL(resourceAdded()), SLOT(slotChanged()) );
-    
-    connect(entryTable, SIGNAL(changed()), SLOT(slotChanged()) );
-    connect(entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotChanged()) );
+    editmode->setCurrentIndex(m_original.entrymode() - 1);
+    connect(editmode, SIGNAL(currentIndexChanged(int)), SLOT(slotEditmodeChanged(int)));
+    connect(editmode, SIGNAL(activated(int)), SLOT(slotChanged()));
 
-    connect(entryTable, SIGNAL(changed()), SLOT(slotEntryChanged()) );
-    connect(entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotEntryChanged()) );
-    connect(entryTable, SIGNAL(rowRemoved(QDate)), SLOT(slotEntryChanged()) );
+    connect(resourceTable, SIGNAL(changed()), SLOT(slotChanged()));
+    connect(resourceTable, SIGNAL(resourceAdded()), SLOT(slotChanged()));
 
-    connect( prevWeekBtn, SIGNAL(clicked(bool)), SLOT(slotPrevWeekBtnClicked()) );
-    connect( nextWeekBtn, SIGNAL(clicked(bool)), SLOT(slotNextWeekBtnClicked()) );
-    
-    connect ( ui_year, SIGNAL(valueChanged(int)), SLOT(slotFillWeekNumbers(int)) );
+    connect(entryTable, SIGNAL(changed()), SLOT(slotChanged()));
+    connect(entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotChanged()));
+
+    connect(entryTable, SIGNAL(changed()), SLOT(slotEntryChanged()));
+    connect(entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotEntryChanged()));
+    connect(entryTable, SIGNAL(rowRemoved(QDate)), SLOT(slotEntryChanged()));
+
+    connect(prevWeekBtn, SIGNAL(clicked(bool)), SLOT(slotPrevWeekBtnClicked()));
+    connect(nextWeekBtn, SIGNAL(clicked(bool)), SLOT(slotNextWeekBtnClicked()));
+
+    connect(ui_year, SIGNAL(valueChanged(int)), SLOT(slotFillWeekNumbers(int)));
 
     int y = 0;
-    int wn = QDate::currentDate().weekNumber( &y );
-    setYear( y );
-    weekNumber->setCurrentIndex( wn - m_weekOffset );
+    int wn = QDate::currentDate().weekNumber(&y);
+    setYear(y);
+    weekNumber->setCurrentIndex(wn - m_weekOffset);
 
 }
 
-void TaskProgressPanelImpl::slotChanged() {
+void TaskProgressPanelImpl::slotChanged()
+{
     emit changed();
 }
 
-void TaskProgressPanelImpl::slotEditmodeChanged( int idx )
+void TaskProgressPanelImpl::slotEditmodeChanged(int idx)
 {
-    m_completion.setEntrymode( static_cast<Completion::Entrymode>( idx + 1 ) );
+    m_completion.setEntrymode(static_cast<Completion::Entrymode>(idx + 1));
     entryTable->model()->slotDataChanged();
     enableWidgets();
 }
 
-void TaskProgressPanelImpl::slotStartedChanged(bool state) {
-    m_completion.setStarted( state );
+void TaskProgressPanelImpl::slotStartedChanged(bool state)
+{
+    m_completion.setStarted(state);
     if (state) {
         QTime t = QTime::currentTime();
-        t.setHMS( t.hour(), t.minute(), 0 );
-        m_completion.setStartTime( KDateTime( QDateTime( QDate::currentDate(), t ) ) );
-        startTime->setDateTime( m_completion.startTime() );
+        t.setHMS(t.hour(), t.minute(), 0);
+        m_completion.setStartTime(KDateTime(QDateTime(QDate::currentDate(), t)));
+        startTime->setDateTime(m_completion.startTime());
         slotCalculateEffort();
     }
     enableWidgets();
 }
 
-void TaskProgressPanelImpl::setFinished() {
+void TaskProgressPanelImpl::setFinished()
+{
     QTime t = QTime::currentTime();
-    t.setHMS( t.hour(), t.minute(), 0 );
-    finishTime->setDateTime( QDateTime( QDate::currentDate(), t ) );
-    slotFinishTimeChanged( finishTime->dateTime() );
+    t.setHMS(t.hour(), t.minute(), 0);
+    finishTime->setDateTime(QDateTime(QDate::currentDate(), t));
+    slotFinishTimeChanged(finishTime->dateTime());
 }
 
-void TaskProgressPanelImpl::slotFinishedChanged(bool state) {
-    kDebug(planDbg())<<state;
-    m_completion.setFinished( state );
+void TaskProgressPanelImpl::slotFinishedChanged(bool state)
+{
+    kDebug(planDbg()) << state;
+    m_completion.setFinished(state);
     if (state) {
-        kDebug(planDbg())<<state;
+        kDebug(planDbg()) << state;
         setFinished();
-        kDebug(planDbg())<<finishTime->dateTime();
+        kDebug(planDbg()) << finishTime->dateTime();
         slotCalculateEffort();
-    }   
+    }
     enableWidgets();
 }
 
-void TaskProgressPanelImpl::slotFinishTimeChanged( const QDateTime &dt )
+void TaskProgressPanelImpl::slotFinishTimeChanged(const QDateTime &dt)
 {
-    if ( ! m_completion.isFinished() ) {
+    if (! m_completion.isFinished()) {
         return;
     }
-    m_completion.setFinishTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
-    if ( m_completion.percentFinished() < 100 ) {
-        m_completion.setPercentFinished( dt.date(), 100 );
+    m_completion.setFinishTime(KDateTime(dt, KDateTime::Spec(KDateTime::LocalZone)));
+    if (m_completion.percentFinished() < 100) {
+        m_completion.setPercentFinished(dt.date(), 100);
     }
-    entryTable->setCompletion( &m_completion ); // for refresh
+    entryTable->setCompletion(&m_completion);   // for refresh
 }
 
-void TaskProgressPanelImpl::slotStartTimeChanged( const QDateTime &dt )
+void TaskProgressPanelImpl::slotStartTimeChanged(const QDateTime &dt)
 {
-    m_completion.setStartTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
-    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
-    
+    m_completion.setStartTime(KDateTime(dt, KDateTime::Spec(KDateTime::LocalZone)));
+    finishTime->setMinimumDateTime(qMax(startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime())));
+
 }
 
 void TaskProgressPanelImpl::slotEntryChanged()
 {
-    finishTime->setMinimumDateTime( qMax( startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime() ) ) );
+    finishTime->setMinimumDateTime(qMax(startTime->dateTime(), QDateTime(m_completion.entryDate(), QTime())));
 }
 
-void TaskProgressPanelImpl::enableWidgets() {
-    editmode->setEnabled( !finished->isChecked() );
+void TaskProgressPanelImpl::enableWidgets()
+{
+    editmode->setEnabled(!finished->isChecked());
 
     started->setEnabled(!finished->isChecked());
     finished->setEnabled(started->isChecked());
     finishTime->setEnabled(finished->isChecked());
     startTime->setEnabled(started->isChecked() && !finished->isChecked());
 
-    addEntryBtn->setEnabled( started->isChecked() && !finished->isChecked() );
-    removeEntryBtn->setEnabled( ! entryTable->selectionModel()->selectedIndexes().isEmpty() && started->isChecked() && ! finished->isChecked() );
+    addEntryBtn->setEnabled(started->isChecked() && !finished->isChecked());
+    removeEntryBtn->setEnabled(! entryTable->selectionModel()->selectedIndexes().isEmpty() && started->isChecked() && ! finished->isChecked());
 
-    if ( finished->isChecked() ) {
-        for ( int i = 0; i < entryTable->model()->columnCount(); ++i ) {
-            entryTable->model()->setFlags( i, Qt::NoItemFlags );
+    if (finished->isChecked()) {
+        for (int i = 0; i < entryTable->model()->columnCount(); ++i) {
+            entryTable->model()->setFlags(i, Qt::NoItemFlags);
         }
     }
 
-    resourceTable->model()->setReadOnly( ( ! started->isChecked() ) || finished->isChecked() || m_completion.entrymode() != Completion::EnterEffortPerResource );
+    resourceTable->model()->setReadOnly((! started->isChecked()) || finished->isChecked() || m_completion.entrymode() != Completion::EnterEffortPerResource);
 }
 
-
-void TaskProgressPanelImpl::slotPercentFinishedChanged( int ) {
+void TaskProgressPanelImpl::slotPercentFinishedChanged(int)
+{
     slotCalculateEffort();
 }
 
@@ -362,77 +383,77 @@ void TaskProgressPanelImpl::slotPrevWeekBtnClicked()
 {
     kDebug(planDbg());
     int i = weekNumber->currentIndex();
-    if ( i == 0 ) {
-        kDebug(planDbg())<<i;
+    if (i == 0) {
+        kDebug(planDbg()) << i;
         int decr = m_firstIsPrevYear ? 2 : 1;
-        setYear( ui_year->value() - 1 );
-        if ( m_lastIsNextYear ) {
+        setYear(ui_year->value() - 1);
+        if (m_lastIsNextYear) {
             decr = 2;
         }
-        weekNumber->setCurrentIndex( weekNumber->count() - decr );
+        weekNumber->setCurrentIndex(weekNumber->count() - decr);
     } else  {
-        weekNumber->setCurrentIndex( i - 1 );
+        weekNumber->setCurrentIndex(i - 1);
     }
 }
 
 void TaskProgressPanelImpl::slotNextWeekBtnClicked()
 {
     int i = weekNumber->currentIndex();
-    kDebug(planDbg())<<i<<weekNumber->count();
-    if ( i == weekNumber->count() - 1 ) {
-        kDebug(planDbg())<<i;
+    kDebug(planDbg()) << i << weekNumber->count();
+    if (i == weekNumber->count() - 1) {
+        kDebug(planDbg()) << i;
         int index = m_lastIsNextYear ? 1 : 0;
-        setYear( ui_year->value() + 1 );
-        if ( m_firstIsPrevYear ) {
+        setYear(ui_year->value() + 1);
+        if (m_firstIsPrevYear) {
             index = 1;
         }
-        weekNumber->setCurrentIndex( index );
+        weekNumber->setCurrentIndex(index);
     } else {
-        weekNumber->setCurrentIndex( i + 1 );
+        weekNumber->setCurrentIndex(i + 1);
     }
 }
 
-void TaskProgressPanelImpl::setYear( int year )
+void TaskProgressPanelImpl::setYear(int year)
 {
     kDebug(planDbg());
-    ui_year->setValue( year );
+    ui_year->setValue(year);
 }
 
-void TaskProgressPanelImpl::slotFillWeekNumbers( int year )
+void TaskProgressPanelImpl::slotFillWeekNumbers(int year)
 {
     kDebug(planDbg());
     weekNumber->clear();
     m_year = year;
     m_weekOffset = 1;
     int y = 0;
-    QDate date( year, 1, 1 );
-    int wn = date.weekNumber( &y );
+    QDate date(year, 1, 1);
+    int wn = date.weekNumber(&y);
     m_firstIsPrevYear = false;
-    kDebug(planDbg())<<date<<wn<<y<<year;
-    if ( y < year ) {
-        weekNumber->addItem( i18nc( "Week number (year)", "Week %1 (%2)", wn, y ) );
+    kDebug(planDbg()) << date << wn << y << year;
+    if (y < year) {
+        weekNumber->addItem(i18nc("Week number (year)", "Week %1 (%2)", wn, y));
         m_weekOffset = 0;
         m_firstIsPrevYear = true;
-        kDebug(planDbg())<<"Added last week of prev year";
+        kDebug(planDbg()) << "Added last week of prev year";
     }
-    for ( int i=1; i <= 52; ++i ) {
-        weekNumber->addItem( i18nc( "Week number", "Week %1", i ) );
+    for (int i = 1; i <= 52; ++i) {
+        weekNumber->addItem(i18nc("Week number", "Week %1", i));
     }
-    date = QDate( year, 12, 31 );
-    wn = date.weekNumber( &y );
-    kDebug(planDbg())<<date<<wn<<y<<year;
+    date = QDate(year, 12, 31);
+    wn = date.weekNumber(&y);
+    kDebug(planDbg()) << date << wn << y << year;
     m_lastIsNextYear = false;
-    if ( wn == 53 ) {
-        weekNumber->addItem( i18nc( "Week number", "Week %1", wn ) );
-    } else if ( wn == 1 ) {
-        weekNumber->addItem( i18nc( "Week number (year)", "Week %1 (%2)", wn, y ) );
+    if (wn == 53) {
+        weekNumber->addItem(i18nc("Week number", "Week %1", wn));
+    } else if (wn == 1) {
+        weekNumber->addItem(i18nc("Week number (year)", "Week %1 (%2)", wn, y));
         m_lastIsNextYear = true;
     }
 }
 
-void TaskProgressPanelImpl::slotSelectionChanged( const QItemSelection &sel )
+void TaskProgressPanelImpl::slotSelectionChanged(const QItemSelection &sel)
 {
-    removeEntryBtn->setEnabled( ! sel.isEmpty() && started->isChecked() && ! finished->isChecked() );
+    removeEntryBtn->setEnabled(! sel.isEmpty() && started->isChecked() && ! finished->isChecked());
 }
 
 }  //KPlato namespace

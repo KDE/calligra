@@ -62,12 +62,13 @@ public:
     virtual void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) = 0;
 
 public:
-    class KRITAIMAGE_EXPORT ProgressHelper {
+    class KRITAIMAGE_EXPORT ProgressHelper
+    {
     public:
         ProgressHelper(const KisNode *node);
         ~ProgressHelper();
 
-        KoUpdater* updater() const;
+        KoUpdater *updater() const;
     private:
         KoProgressUpdater *m_progressUpdater;
         mutable QMutex m_progressMutex;

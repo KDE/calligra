@@ -48,9 +48,9 @@ KisFilterMask::~KisFilterMask()
 {
 }
 
-KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
-        : KisEffectMask(rhs)
-        , KisNodeFilterInterface(rhs)
+KisFilterMask::KisFilterMask(const KisFilterMask &rhs)
+    : KisEffectMask(rhs)
+    , KisNodeFilterInterface(rhs)
 {
 }
 
@@ -59,17 +59,17 @@ QIcon KisFilterMask::icon() const
     return koIcon("view-filter");
 }
 
-void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
+void KisFilterMask::setFilter(KisFilterConfiguration *filterConfig)
 {
     if (parent() && parent()->inherits("KisLayer")) {
-        filterConfig->setChannelFlags(qobject_cast<KisLayer*>(parent().data())->channelFlags());
+        filterConfig->setChannelFlags(qobject_cast<KisLayer *>(parent().data())->channelFlags());
     }
     KisNodeFilterInterface::setFilter(filterConfig);
 }
 
 QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
                                   KisPaintDeviceSP &dst,
-                                  const QRect & rc,
+                                  const QRect &rc,
                                   PositionToFilthy maskPos) const
 {
     Q_UNUSED(maskPos);
@@ -126,7 +126,9 @@ QRect KisFilterMask::changeRect(const QRect &rect, PositionToFilthy pos) const
      * FIXME: This check of the emptiness should be done
      * on the higher/lower level
      */
-    if(rect.isEmpty()) return rect;
+    if (rect.isEmpty()) {
+        return rect;
+    }
 
     QRect filteredRect = rect;
 
@@ -151,7 +153,7 @@ QRect KisFilterMask::changeRect(const QRect &rect, PositionToFilthy pos) const
     return rect | filteredRect;
 }
 
-QRect KisFilterMask::needRect(const QRect& rect, PositionToFilthy pos) const
+QRect KisFilterMask::needRect(const QRect &rect, PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
 
@@ -160,10 +162,14 @@ QRect KisFilterMask::needRect(const QRect& rect, PositionToFilthy pos) const
      * on the higher/lower level
      */
 
-    if(rect.isEmpty()) return rect;
+    if (rect.isEmpty()) {
+        return rect;
+    }
 
     KisSafeFilterConfigurationSP filterConfig = filter();
-    if (!filterConfig) return rect;
+    if (!filterConfig) {
+        return rect;
+    }
 
     KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
 

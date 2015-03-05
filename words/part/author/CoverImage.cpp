@@ -38,11 +38,12 @@ CoverImage::CoverImage()
 bool CoverImage::saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter, QPair<QString, QByteArray> coverData)
 {
     // There is no cover to save.
-    if (coverData.first.isEmpty())
+    if (coverData.first.isEmpty()) {
         return true;
+    }
 
     if (!store->open(coverPath + coverData.first)) {
-        kDebug(31000) << "Unable to open"<<coverPath + coverData.first;
+        kDebug(31000) << "Unable to open" << coverPath + coverData.first;
         return false;
     }
 
@@ -50,7 +51,7 @@ bool CoverImage::saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter, QPa
     device.write(coverData.second, coverData.second.size());
     store->close();
 
-    const QString mimetype(KMimeType::findByPath(coverPath + coverData.first, 0 , true)->name());
+    const QString mimetype(KMimeType::findByPath(coverPath + coverData.first, 0, true)->name());
     manifestWriter->addManifestEntry(coverPath + coverData.first, mimetype);
 
     return true;
@@ -58,7 +59,7 @@ bool CoverImage::saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter, QPa
 
 QPair<QString, QByteArray> CoverImage::readCoverImage(QString path)
 {
-    QFile file (path);
+    QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
         kDebug(31000) << "Unable to open" << path;
     }

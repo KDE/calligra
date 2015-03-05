@@ -22,12 +22,15 @@
 
 #include "SheetView.h"
 
-namespace ThreadWeaver {
-    class Job;
+namespace ThreadWeaver
+{
+class Job;
 }
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
 class PixmapCachingSheetView : public SheetView
 {
@@ -36,7 +39,7 @@ public:
     /**
      * Constructor.
      */
-    explicit PixmapCachingSheetView(const Sheet* sheet);
+    explicit PixmapCachingSheetView(const Sheet *sheet);
 
     /**
      * Destructor.
@@ -44,14 +47,14 @@ public:
     ~PixmapCachingSheetView();
 
     virtual void invalidate();
-    virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas, const QRect& visibleRect);
+    virtual void paintCells(QPainter &painter, const QRectF &paintRect, const QPointF &topLeft, CanvasBase *canvas, const QRect &visibleRect);
 protected:
     virtual void invalidateRange(const QRect &range);
 private Q_SLOTS:
-    void jobDone(ThreadWeaver::Job* job);
+    void jobDone(ThreadWeaver::Job *job);
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

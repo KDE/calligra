@@ -24,11 +24,11 @@
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-    KAboutData * aboutData = newWordsAboutData();
+    KAboutData *aboutData = newWordsAboutData();
 
 #ifdef Q_WS_X11
     // the "raster" graphicssystem is way faster then the "native" graphicssystem on x11 with Calligra Words
-    QApplication::setGraphicsSystem( QLatin1String("raster") );
+    QApplication::setGraphicsSystem(QLatin1String("raster"));
 #endif
 
     KCmdLineArgs::init(argc, argv, aboutData);
@@ -39,8 +39,9 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 
     KoApplication app(WORDS_MIME_TYPE);
 
-    if (!app.start())
+    if (!app.start()) {
         return 1;
+    }
     app.exec();
 
     delete(aboutData);

@@ -35,38 +35,43 @@ class KoCompositeOpBehind : public KoCompositeOpBase<CS_Traits, KoCompositeOpBeh
     static const qint8 alpha_pos   = CS_Traits::alpha_pos;
 
 public:
-    KoCompositeOpBehind(const KoColorSpace * cs)
+    KoCompositeOpBehind(const KoColorSpace *cs)
         : base_class(cs, COMPOSITE_BEHIND, i18n("Behind"), KoCompositeOp::categoryMix()) { }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>
-    inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
-                                                     channels_type*       dst, channels_type dstAlpha,
-                                                     channels_type  maskAlpha, channels_type  opacity,
-                                                     const QBitArray& channelFlags                    )  {
+    inline static channels_type composeColorChannels(const channels_type *src, channels_type srcAlpha,
+            channels_type       *dst, channels_type dstAlpha,
+            channels_type  maskAlpha, channels_type  opacity,
+            const QBitArray &channelFlags)
+    {
         using namespace Arithmetic;
-                
-        if (dstAlpha     == unitValue<channels_type>()) return dstAlpha;
+
+        if (dstAlpha     == unitValue<channels_type>()) {
+            return dstAlpha;
+        }
         channels_type appliedAlpha       = mul(maskAlpha, srcAlpha, opacity);
-        
-        if (appliedAlpha == zeroValue<channels_type>()) return dstAlpha;
+
+        if (appliedAlpha == zeroValue<channels_type>()) {
+            return dstAlpha;
+        }
         channels_type newDstAlpha        = unionShapeOpacity(dstAlpha, appliedAlpha);
-        
+
         if (dstAlpha != zeroValue<channels_type>()) {
             // blend the color channels as if we were painting on the layer below
             for (qint8 channel = 0; channel < channels_nb; ++channel)
-                if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel)))
+                if (channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel)))
                     dst[channel] =    /*each color blended in proportion to their calculated opacity*/
-                    ( (dst[channel] * dstAlpha)     +    (src[channel] * (appliedAlpha - mul(dstAlpha, appliedAlpha))) )
-                    /*------------------------------------------------------------------------------------------------*/
-                                             /  newDstAlpha; /*...divided by total new opacity*/
-        }
-        else {
+                        ((dst[channel] * dstAlpha)     + (src[channel] * (appliedAlpha - mul(dstAlpha, appliedAlpha))))
+                        /*------------------------------------------------------------------------------------------------*/
+                        /  newDstAlpha; /*...divided by total new opacity*/
+        } else {
             // don't blend if the color of the destination is undefined (has zero opacity)
             // copy the source channel instead
             for (qint8 channel = 0; channel < channels_nb; ++channel)
-                if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel)))
+                if (channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel))) {
                     dst[channel] = src[channel];
+                }
         }
 
         return newDstAlpha;

@@ -34,7 +34,7 @@ namespace KexiPart
 class Info;
 
 //! @short The base class for Kexi frontend parts (plugins)
-//! @see KexiPart::Part KexiInternalPart 
+//! @see KexiPart::Part KexiInternalPart
 class KEXICORE_EXPORT PartBase : public QObject, protected KexiUtils::InternalPropertyMap
 {
     Q_OBJECT
@@ -71,7 +71,7 @@ public:
        = part->i18nMessage("Design of object <resource>%1</resource> has been modified.")
         .subs(tableName).toString();
      @endcode */
-    virtual KLocalizedString i18nMessage(const QString& englishMessage,
+    virtual KLocalizedString i18nMessage(const QString &englishMessage,
                                          KexiWindow *window) const;
 
     /*! @internal
@@ -89,8 +89,8 @@ protected:
      @param parent parent of this plugin
      @param list extra arguments passed to the plugin
     */
-    PartBase(QObject *parent, 
-        const QVariantList& list);
+    PartBase(QObject *parent,
+             const QVariantList &list);
 
     /*! Sets Info structure for this part. */
     void setInfo(Info *info);
@@ -98,7 +98,7 @@ protected:
     Q_DISABLE_COPY(PartBase)
 
     class Private;
-    Private * const d;
+    Private *const d;
 
     friend class Manager;
     //friend class ::KexiWindow;

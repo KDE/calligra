@@ -21,21 +21,23 @@
 
 #include <kundo2command.h>
 
-namespace MusicCore {
-    class Sheet;
-    class Part;
+namespace MusicCore
+{
+class Sheet;
+class Part;
 }
 class MusicShape;
 
-class RemovePartCommand : public KUndo2Command {
+class RemovePartCommand : public KUndo2Command
+{
 public:
-    RemovePartCommand(MusicShape* shape, MusicCore::Part* part);
+    RemovePartCommand(MusicShape *shape, MusicCore::Part *part);
     virtual void redo();
     virtual void undo();
 private:
-    MusicCore::Sheet* m_sheet;
-    MusicCore::Part* m_part;
-    MusicShape* m_shape;
+    MusicCore::Sheet *m_sheet;
+    MusicCore::Part *m_part;
+    MusicShape *m_shape;
     int m_partIndex;
 };
 

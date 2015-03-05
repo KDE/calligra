@@ -35,22 +35,23 @@ void KoInputDeviceHandlerRegistry::init()
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Device"),
                                      QString::fromLatin1("[X-Flake-PluginVersion] == 28"), config);
 
-    foreach(const QString & id, keys()) {
-        KoInputDeviceHandler * d = value(id);
-        if (d)
+    foreach (const QString &id, keys()) {
+        KoInputDeviceHandler *d = value(id);
+        if (d) {
             d->start();
+        }
     }
 }
 
 KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
 {
-    foreach(const QString & id, keys()) {
-        KoInputDeviceHandler * d = value(id);
+    foreach (const QString &id, keys()) {
+        KoInputDeviceHandler *d = value(id);
         if (d) {
             d->stop();
         }
     }
-    foreach(const QString &id, keys()) {
+    foreach (const QString &id, keys()) {
         get(id)->deleteLater();
     }
     // just leak on exit -- we get into trouble for explicitly
@@ -58,7 +59,7 @@ KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
     //qDeleteAll(doubleEntries());
 }
 
-KoInputDeviceHandlerRegistry* KoInputDeviceHandlerRegistry::instance()
+KoInputDeviceHandlerRegistry *KoInputDeviceHandlerRegistry::instance()
 {
     K_GLOBAL_STATIC(KoInputDeviceHandlerRegistry, s_instance)
     if (!s_instance.exists()) {

@@ -27,7 +27,7 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     QStyleOptionViewItemV4 optionV4 = option;
     initStyleOption(&optionV4, index);
 
-    QStyle *style = optionV4.widget? optionV4.widget->style() : QApplication::style();
+    QStyle *style = optionV4.widget ? optionV4.widget->style() : QApplication::style();
 
     QTextDocument doc;
     doc.setHtml(optionV4.text);
@@ -39,8 +39,9 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     QAbstractTextDocumentLayout::PaintContext ctx;
 
     // Highlighting text if item is selected
-    if (optionV4.state & QStyle::State_Selected)
+    if (optionV4.state & QStyle::State_Selected) {
         ctx.palette.setColor(QPalette::Text, optionV4.palette.color(QPalette::Active, QPalette::HighlightedText));
+    }
 
     QRect textRect = style->subElementRect(QStyle::SE_ItemViewItemText, &optionV4);
     painter->save();

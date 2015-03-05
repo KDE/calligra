@@ -38,7 +38,7 @@
 #include "StateShapeChangeStateCommand.h"
 #include "CategorizedItemDelegate.h"
 
-StateToolWidget::StateToolWidget(StateTool* _stateTool) : m_tool(_stateTool)
+StateToolWidget::StateToolWidget(StateTool *_stateTool) : m_tool(_stateTool)
 {
     m_widget.setupUi(this);
     connect(m_widget.stateComboBox, SIGNAL(activated(int)), SLOT(save()));
@@ -60,9 +60,10 @@ void StateToolWidget::blockChildSignals(bool block)
 
 void StateToolWidget::open(StateShape *shape)
 {
-    m_shape = dynamic_cast<StateShape*>(shape);
-    if(! m_shape)
+    m_shape = dynamic_cast<StateShape *>(shape);
+    if (! m_shape) {
         return;
+    }
     blockChildSignals(true);
     m_widget.stateComboBox->setCurrentIndex(
         m_proxyModel->mapFromSource(
@@ -72,22 +73,23 @@ void StateToolWidget::open(StateShape *shape)
 
 void StateToolWidget::save()
 {
-    if(!m_shape)
+    if (!m_shape) {
         return;
+    }
 
 //   QString newUrl = m_widget.urlEdit->text();
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    if(canvasController) {
-        KoCanvasBase* canvas = canvasController->canvas();
-        const State* state = m_model->stateAt(
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    if (canvasController) {
+        KoCanvasBase *canvas = canvasController->canvas();
+        const State *state = m_model->stateAt(
                                  m_proxyModel->mapToSource(m_proxyModel->index(m_widget.stateComboBox->currentIndex(), 0, QModelIndex())).row());
-        if(state->category()->id() != m_shape->categoryId() || state->id() != m_shape->stateId()) {
+        if (state->category()->id() != m_shape->categoryId() || state->id() != m_shape->stateId()) {
             canvas->addCommand(new StateShapeChangeStateCommand(m_shape, state->category()->id(), state->id()));
         }
     }
 }
 
-KUndo2Command * StateToolWidget::createCommand()
+KUndo2Command *StateToolWidget::createCommand()
 {
     save();
 

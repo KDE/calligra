@@ -34,9 +34,9 @@
 
 using namespace KexiMigration;
 
-OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selectedEncoding,
-                             QWidget* parent)
-        : KDialog(parent)
+OptionsDialog::OptionsDialog(const QString &databaseFile, const QString &selectedEncoding,
+                             QWidget *parent)
+    : KDialog(parent)
 {
     setModal(true);
     setObjectName("KexiMigration::OptionsDialog");
@@ -52,7 +52,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
     m_encodingComboBox = new KexiCharacterEncodingComboBox(plainPage, selectedEncoding);
     m_encodingComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     lyr->addWidget(m_encodingComboBox, 1, 1);
-    QLabel* lbl = new QLabel(
+    QLabel *lbl = new QLabel(
         i18n("<h3>Text encoding for Microsoft Access database</h3>\n"
              "<p>Database file \"%1\" appears to be created by a version of Microsoft Access older than 2000.</p>"
              "<p>In order to properly import national characters, you may need to choose a proper text encoding "
@@ -64,7 +64,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
     lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     lyr->addWidget(lbl, 0, 0, 1, 3);
 
-    QLabel* lbl2 = new QLabel(i18n("Text encoding:"), plainPage);
+    QLabel *lbl2 = new QLabel(i18n("Text encoding:"), plainPage);
     lbl2->setBuddy(m_encodingComboBox);
     lyr->addWidget(lbl2, 1, 0);
 
@@ -92,7 +92,7 @@ OptionsDialog::~OptionsDialog()
 {
 }
 
-KexiCharacterEncodingComboBox* OptionsDialog::encodingComboBox() const
+KexiCharacterEncodingComboBox *OptionsDialog::encodingComboBox() const
 {
     return m_encodingComboBox;
 }
@@ -103,8 +103,9 @@ void OptionsDialog::accept()
     if (m_chkAlwaysUseThisEncoding->isChecked())
         importExportGroup.writeEntry("defaultEncodingForMSAccessFiles",
                                      m_encodingComboBox->selectedEncoding());
-    else
+    else {
         importExportGroup.deleteEntry("defaultEncodingForMSAccessFiles");
+    }
 
     KDialog::accept();
 }

@@ -29,16 +29,15 @@ class KisViewManager;
 class KActionCollection;
 class KisMirrorAxis;
 
-
 class KisMirrorManager : public QObject
 {
     Q_OBJECT
 
 public:
-    KisMirrorManager(KisViewManager* view);
+    KisMirrorManager(KisViewManager *view);
     virtual ~KisMirrorManager();
 
-    void setup(KActionCollection* collection);
+    void setup(KActionCollection *collection);
 
     void setView(QPointer<KisView> imageView);
 
@@ -46,8 +45,8 @@ private Q_SLOTS:
     void updateAction();
 
 private:
-    KisMirrorAxis* decoration();
-    
+    KisMirrorAxis *decoration();
+
     QPointer<KisView> m_imageView;
     KAction *m_mirrorCanvas;
 };

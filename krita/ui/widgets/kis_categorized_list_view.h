@@ -23,34 +23,27 @@
 #include <QListView>
 #include <QListWidget>
 
-
 class KRITAUI_EXPORT KisCategorizedListView: public QListView
 {
     Q_OBJECT
 public:
-    KisCategorizedListView(bool useCheckBoxHack=false, QWidget* parent=0);
+    KisCategorizedListView(bool useCheckBoxHack = false, QWidget *parent = 0);
     virtual ~KisCategorizedListView();
-    virtual void setModel(QAbstractItemModel* model);
-
-
-
+    virtual void setModel(QAbstractItemModel *model);
 
 Q_SIGNALS:
-    void sigCategoryToggled(const QModelIndex& index, bool toggled);
-    void sigEntryChecked(const QModelIndex& index);
+    void sigCategoryToggled(const QModelIndex &index, bool toggled);
+    void sigEntryChecked(const QModelIndex &index);
     void rightClickedMenuDropSettingsTriggered();
     void rightClickedMenuSaveSettingsTriggered();
 
-
 protected Q_SLOTS:
-    void slotIndexChanged(const QModelIndex& index);
-    virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
-    virtual void rowsInserted(const QModelIndex& parent, int start, int end);
+    void slotIndexChanged(const QModelIndex &index);
+    virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    virtual void rowsInserted(const QModelIndex &parent, int start, int end);
     virtual void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-
-
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     void updateRows(int begin, int end);

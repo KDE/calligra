@@ -63,8 +63,7 @@
 #include "kis_display_color_converter.h"
 #include <kis_canvas2.h>
 
-
-KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const char* name)
+KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const char *name)
     : QObject(view)
     , m_viewManager(view)
     , m_patternWidget(0)
@@ -81,7 +80,7 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     m_patternWidget->setText(i18n("Fill Patterns"));
     m_patternWidget->setToolTip(i18n("Fill Patterns"));
     m_patternWidget->setFixedSize(26, 26);
-    KAction * action  = new KAction(i18n("&Patterns"), this);
+    KAction *action  = new KAction(i18n("&Patterns"), this);
     view->actionCollection()->addAction("patterns", action);
     action->setDefaultWidget(m_patternWidget);
 
@@ -93,14 +92,14 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     view->actionCollection()->addAction("gradients", action);
     action->setDefaultWidget(m_gradientWidget);
 
-    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer(false);
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
+    KoResourceServer<KoAbstractGradient> *rserver = KoResourceServerProvider::instance()->gradientServer(false);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_gradientWidget->setResourceAdapter(adapter);
 
     // XXX: KOMVC we don't have a canvas here yet, needs a setImageView
     const KoColorDisplayRendererInterface *displayRenderer = KisDisplayColorConverter::dumbConverterInstance()->displayRendererInterface();
-    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer,
-                                                     view->mainWindow(), view->mainWindow());
+    KoDualColorButton *dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer,
+            view->mainWindow(), view->mainWindow());
     dual->setPopDialog(true);
     action  = new KAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);
@@ -123,23 +122,22 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     action->setDefaultWidget(m_paintopBox);
 }
 
-
-void KisControlFrame::slotSetPattern(KoPattern * pattern)
+void KisControlFrame::slotSetPattern(KoPattern *pattern)
 {
     m_patternWidget->slotSetItem(pattern);
     m_patternChooser->setCurrentPattern(pattern);
 }
 
-void KisControlFrame::slotSetGradient(KoAbstractGradient * gradient)
+void KisControlFrame::slotSetGradient(KoAbstractGradient *gradient)
 {
     m_gradientWidget->slotSetItem(gradient);
 }
 
-void KisControlFrame::createPatternsChooser(KisViewManager * view)
+void KisControlFrame::createPatternsChooser(KisViewManager *view)
 {
     m_patternChooserPopup = new QWidget(m_patternWidget);
     m_patternChooserPopup->setObjectName("pattern_chooser_popup");
-    QHBoxLayout * l2 = new QHBoxLayout(m_patternChooserPopup);
+    QHBoxLayout *l2 = new QHBoxLayout(m_patternChooserPopup);
     l2->setObjectName("patternpopuplayout");
 
     m_patternsTab = new QTabWidget(m_patternChooserPopup);
@@ -155,8 +153,8 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     patternChooserPageLayout->addWidget(m_patternChooser);
     m_patternsTab->addTab(patternChooserPage, i18n("Patterns"));
 
-    KisCustomPattern* customPatterns = new KisCustomPattern(0, "custompatterns",
-                                                            i18n("Custom Pattern"), m_viewManager);
+    KisCustomPattern *customPatterns = new KisCustomPattern(0, "custompatterns",
+            i18n("Custom Pattern"), m_viewManager);
     customPatterns->setFont(m_font);
     m_patternsTab->addTab(customPatterns, i18n("Custom Pattern"));
 
@@ -176,11 +174,11 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
 
 }
 
-void KisControlFrame::createGradientsChooser(KisViewManager * view)
+void KisControlFrame::createGradientsChooser(KisViewManager *view)
 {
     m_gradientChooserPopup = new QWidget(m_gradientWidget);
     m_gradientChooserPopup->setObjectName("gradient_chooser_popup");
-    QHBoxLayout * l2 = new QHBoxLayout(m_gradientChooserPopup);
+    QHBoxLayout *l2 = new QHBoxLayout(m_gradientChooserPopup);
     l2->setObjectName("gradientpopuplayout");
 
     m_gradientTab = new QTabWidget(m_gradientChooserPopup);
@@ -200,8 +198,9 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
             this, SLOT(slotSetGradient(KoAbstractGradient*)));
 
     m_gradientChooser->setCurrentItem(0, 0);
-    if (m_gradientChooser->currentResource() && view->resourceProvider())
+    if (m_gradientChooser->currentResource() && view->resourceProvider()) {
         view->resourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());
+    }
 }
 
 #include "kis_control_frame.moc"

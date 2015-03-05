@@ -25,7 +25,6 @@
 
 #include <klineedit.h>
 
-
 #include "kis_config_widget.h"
 #include "kis_transaction.h"
 #include "filter/kis_filter.h"
@@ -39,14 +38,14 @@
 #include "kis_node_filter_interface.h"
 
 KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
-                                         KisNodeFilterInterface* nfi,
-                                         KisPaintDeviceSP paintDevice,
-                                         KisViewManager *view,
-                                         KisFilterConfiguration *configuration,
-                                         const QString & layerName,
-                                         const QString & caption,
-                                         QWidget *parent,
-                                         const char *name)
+        KisNodeFilterInterface *nfi,
+        KisPaintDeviceSP paintDevice,
+        KisViewManager *view,
+        KisFilterConfiguration *configuration,
+        const QString &layerName,
+        const QString &caption,
+        QWidget *parent,
+        const char *name)
     : KDialog(parent)
     , m_node(node)
     , m_paintDevice(paintDevice)
@@ -66,9 +65,9 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     }
 
     setCaption(caption);
-    QWidget * page = new QWidget(this);
+    QWidget *page = new QWidget(this);
     page->setObjectName("page widget");
-    QHBoxLayout * layout = new QHBoxLayout(page);
+    QHBoxLayout *layout = new QHBoxLayout(page);
     layout->setMargin(0);
     setMainWidget(page);
 
@@ -77,7 +76,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     QHBoxLayout *hl = new QHBoxLayout();
     v1->addLayout(hl);
 
-    QLabel * lblName = new QLabel(i18n("Layer name:"), page);
+    QLabel *lblName = new QLabel(i18n("Layer name:"), page);
     lblName->setObjectName("lblName");
     hl->addWidget(lblName, 0);
 
@@ -98,10 +97,9 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     }
 
     if (m_currentFilter == 0 || m_currentConfigWidget == 0) {
-        QLabel * labelNoConfigWidget = new QLabel(i18n("No configuration options are available for this filter"), page);
+        QLabel *labelNoConfigWidget = new QLabel(i18n("No configuration options are available for this filter"), page);
         v1->addWidget(labelNoConfigWidget);
-    }
-    else {
+    } else {
         v1->addWidget(m_currentConfigWidget);
         connect(m_currentConfigWidget, SIGNAL(sigConfigurationUpdated()), SLOT(slotConfigChanged()));
     }
@@ -110,16 +108,16 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
 
 }
 
-void KisDlgAdjLayerProps::slotNameChanged(const QString & text)
+void KisDlgAdjLayerProps::slotNameChanged(const QString &text)
 {
     enableButtonOk(!text.isEmpty());
 }
 
-KisFilterConfiguration * KisDlgAdjLayerProps::filterConfiguration() const
+KisFilterConfiguration *KisDlgAdjLayerProps::filterConfiguration() const
 {
     if (m_currentConfigWidget) {
-        KisFilterConfiguration * config
-                = dynamic_cast<KisFilterConfiguration*>(m_currentConfigWidget->configuration());
+        KisFilterConfiguration *config
+            = dynamic_cast<KisFilterConfiguration *>(m_currentConfigWidget->configuration());
         if (config) {
             return config;
         }
@@ -135,12 +133,11 @@ QString KisDlgAdjLayerProps::layerName() const
 void KisDlgAdjLayerProps::slotConfigChanged()
 {
     enableButtonOk(true);
-    KisFilterConfiguration * config = filterConfiguration();
+    KisFilterConfiguration *config = filterConfiguration();
     if (config) {
         m_nodeFilterInterface->setFilter(config);
     }
     m_node->setDirty();
 }
-
 
 #include "kis_dlg_adj_layer_props.moc"

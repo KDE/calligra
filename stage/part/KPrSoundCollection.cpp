@@ -26,28 +26,32 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 
-class KPrSoundCollection::Private {
+class KPrSoundCollection::Private
+{
 public:
-    QList<KPrSoundData*> sounds;
+    QList<KPrSoundData *> sounds;
 };
 
 KPrSoundCollection::KPrSoundCollection(QObject *parent)
     : QObject(parent),
-    d(new Private())
+      d(new Private())
 {
 }
 
-KPrSoundCollection::~KPrSoundCollection() {
+KPrSoundCollection::~KPrSoundCollection()
+{
     delete d;
 }
 
-void KPrSoundCollection::addSound(KPrSoundData *image) {
+void KPrSoundCollection::addSound(KPrSoundData *image)
+{
     d->sounds.append(new KPrSoundData(*image));
 }
 
-void KPrSoundCollection::removeSound(KPrSoundData *image) {
-    foreach(KPrSoundData *data, d->sounds) {
-        if(data->operator==(*image)) {
+void KPrSoundCollection::removeSound(KPrSoundData *image)
+{
+    foreach (KPrSoundData *data, d->sounds) {
+        if (data->operator==(*image)) {
             d->sounds.removeAll(data);
             delete data;
         }
@@ -57,8 +61,9 @@ void KPrSoundCollection::removeSound(KPrSoundData *image) {
 KPrSoundData *KPrSoundCollection::findSound(QString title)
 {
     for (int i = 0; i < d->sounds.size(); ++i) {
-        if (d->sounds.at(i)->title() == title)
+        if (d->sounds.at(i)->title() == title) {
             return d->sounds[i];
+        }
     }
     return 0;
 }
@@ -76,12 +81,13 @@ QStringList KPrSoundCollection::titles()
 // TODO move to loading of the actual element using the sound
 bool KPrSoundCollection::completeLoading(KoStore *store)
 {
-    foreach(KPrSoundData *sound, d->sounds) {
-        if(! store->open(sound->storeHref()))
+    foreach (KPrSoundData *sound, d->sounds) {
+        if (! store->open(sound->storeHref())) {
             return false;
+        }
         bool ok = sound->loadFromFile(new KoStoreDevice(store));
         store->close();
-        if(! ok) {
+        if (! ok) {
             return false;
         }
     }
@@ -89,20 +95,21 @@ bool KPrSoundCollection::completeLoading(KoStore *store)
 }
 
 // use a KoSharedSavingData in the context to save which sounds need to be saved
-bool KPrSoundCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context )
+bool KPrSoundCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context)
 {
     Q_UNUSED(context);
-    foreach(KPrSoundData *sound, d->sounds) {
-        if(sound->isTaggedForSaving())
-        {
-            if(! store->open(sound->storeHref()))
+    foreach (KPrSoundData *sound, d->sounds) {
+        if (sound->isTaggedForSaving()) {
+            if (! store->open(sound->storeHref())) {
                 return false;
+            }
             bool ok = sound->saveToFile(new KoStoreDevice(store));
             store->close();
-            if(! ok)
+            if (! ok) {
                 return false;
-            const QString mimetype( KMimeType::findByPath( sound->storeHref(), 0 ,true )->name() );
-            manifestWriter->addManifestEntry( sound->storeHref(), mimetype );
+            }
+            const QString mimetype(KMimeType::findByPath(sound->storeHref(), 0, true)->name());
+            manifestWriter->addManifestEntry(sound->storeHref(), mimetype);
         }
     }
     return true;

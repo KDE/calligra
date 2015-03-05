@@ -19,10 +19,8 @@
 #ifndef __KIS_FILL_INTERVAL_H
 #define __KIS_FILL_INTERVAL_H
 
-
 #include <boost/operators.hpp>
 #include "kis_global.h"
-
 
 class KisFillInterval : private boost::equality_comparable1<KisFillInterval>
 {
@@ -41,19 +39,23 @@ public:
     {
     }
 
-    inline void invalidate() {
+    inline void invalidate()
+    {
         end = start - 1;
     }
 
-    inline bool operator==(const KisFillInterval &rhs) const {
+    inline bool operator==(const KisFillInterval &rhs) const
+    {
         return start == rhs.start && end == rhs.end && row == rhs.row;
     }
 
-    inline int width() const {
+    inline int width() const
+    {
         return end - start + 1;
     }
 
-    inline bool isValid() const {
+    inline bool isValid() const
+    {
         return end >= start;
     }
 
@@ -63,7 +65,7 @@ public:
 };
 
 #include <QDebug>
-inline QDebug operator<<(QDebug dbg, const KisFillInterval& i)
+inline QDebug operator<<(QDebug dbg, const KisFillInterval &i)
 {
 #ifndef NODEBUG
     dbg.nospace() << "KisFillInterval(" << i.start << ".." << i.end << "; " << i.row << ")";

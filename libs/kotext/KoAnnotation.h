@@ -68,15 +68,14 @@ public:
     /// @return the name of this annotation
     QString name() const;
 
-
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /**
      * This is called to allow Cut and Paste of annotations. This
      * method gives a correct, unique, name
      */
-    static QString createUniqueAnnotationName(const KoAnnotationManager* kam,
-                                              const QString &annotationName, bool isEndMarker);
+    static QString createUniqueAnnotationName(const KoAnnotationManager *kam,
+            const QString &annotationName, bool isEndMarker);
 
     void setAnnotationShape(KoShape *shape);
 

@@ -45,9 +45,9 @@ class ScriptingPart::Private
 public:
 };
 
-ScriptingPart::ScriptingPart(QObject* parent, const QVariantList& argList)
-        : KoScriptingPart(new ScriptingModule(parent))
-        , d(new Private())
+ScriptingPart::ScriptingPart(QObject *parent, const QVariantList &argList)
+    : KoScriptingPart(new ScriptingModule(parent))
+    , d(new Private())
 {
     Q_UNUSED(argList);
     //setComponentData(ScriptingPart::componentData());
@@ -57,7 +57,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QVariantList& argList)
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args) {
         QStringList errors;
-        foreach(const QString &ba, args->getOptionList("scriptfile")) {
+        foreach (const QString &ba, args->getOptionList("scriptfile")) {
             QUrl url(ba);
             QFileInfo fi(url.path());
             const QString file = fi.absoluteFilePath();
@@ -69,13 +69,14 @@ ScriptingPart::ScriptingPart(QObject* parent, const QVariantList& argList)
                 errors << i18n("Scriptfile \"%1\" is not executable. Please set the executable-attribute on that file.", file);
                 continue;
             }
-            { // check whether file is not in some temporary directory.
+            {
+                // check whether file is not in some temporary directory.
                 QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
                 tmpDirs += KGlobal::dirs()->resourceDirs("cache");
                 tmpDirs.append("/tmp/");
                 tmpDirs.append("/var/tmp/");
                 bool inTemp = false;
-                foreach(const QString &tmpDir, tmpDirs) {
+                foreach (const QString &tmpDir, tmpDirs) {
                     if (file.startsWith(tmpDir)) {
                         inTemp = true;
                         break;
@@ -86,11 +87,13 @@ ScriptingPart::ScriptingPart(QObject* parent, const QVariantList& argList)
                     continue;
                 }
             }
-            if (! Kross::Manager::self().executeScriptFile(url))
+            if (! Kross::Manager::self().executeScriptFile(url)) {
                 errors << i18n("Failed to execute scriptfile \"%1\"", file);
+            }
         }
-        if (errors.count() > 0)
+        if (errors.count() > 0) {
             KMessageBox::errorList(module()->view(), i18n("Errors on execution of scripts."), errors);
+        }
     }
 }
 

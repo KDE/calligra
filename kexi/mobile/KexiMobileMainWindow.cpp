@@ -59,7 +59,7 @@ KexiMobileMainWindow::KexiMobileMainWindow()
 
     m_layout->addWidget(m_mobile);
     m_layout->setSpacing(2);
-    setFixedSize(800,480);
+    setFixedSize(800, 480);
 
     setCentralWidget(m_mobile);
 
@@ -121,21 +121,21 @@ KexiProject *KexiMobileMainWindow::openProject(const KUrl &url)
     return project;
 }
 
-KexiWindow* KexiMobileMainWindow::openObject(KexiPart::Item* item)
+KexiWindow *KexiMobileMainWindow::openObject(KexiPart::Item *item)
 {
     bool cancelled;
-    KexiWindow* win = openObject(item, Kexi::DataViewMode, cancelled);
+    KexiWindow *win = openObject(item, Kexi::DataViewMode, cancelled);
 
-    if (!cancelled)
+    if (!cancelled) {
         return win;
+    }
 
     return 0;
 }
 
-
 KexiWindow *
-KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &openingCancelled,
-                                 QMap<QString, QVariant>* staticObjectArgs, QString* errorMessage)
+KexiMobileMainWindow::openObject(KexiPart::Item *item, Kexi::ViewMode viewMode, bool &openingCancelled,
+                                 QMap<QString, QVariant> *staticObjectArgs, QString *errorMessage)
 {
     qDebug() << "KexiMobileMainWindow::openObject";
 
@@ -151,8 +151,9 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
     }
     qDebug() << m_project << item;
 
-    if (!m_project || !item)
+    if (!m_project || !item) {
         return 0;
+    }
 
 //!TODO Move this to KexiUtils::WaitCursor
 #ifdef Q_WS_MAEMO_5
@@ -165,7 +166,7 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
         m_mobile->setActiveObject(window);
     }
 
-    m_toolbar->setRecordHandler(dynamic_cast<KexiRecordNavigatorHandler*>(window->selectedView()));
+    m_toolbar->setRecordHandler(dynamic_cast<KexiRecordNavigatorHandler *>(window->selectedView()));
 
 #if 0
     if (window && !alreadyOpened) {
@@ -187,14 +188,14 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
 
 }
 
-bool KexiMobileMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage)
+bool KexiMobileMainWindow::openingAllowed(KexiPart::Item *item, Kexi::ViewMode viewMode, QString *errorMessage)
 {
     kDebug() << viewMode;
     //! @todo this can be more complex once we deliver ACLs...
     //1 Load the part
     //2 Return true if the part loads AND the part supports the view mode AND the viewmode is Data
 
-    KexiPart::Part * part = Kexi::partManager().partForClass(item->partClass());
+    KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
     if (!part) {
         if (errorMessage) {
             *errorMessage = Kexi::partManager().errorMsg();
@@ -208,7 +209,7 @@ bool KexiMobileMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode v
 
 //========KexiMainWindowIFace====================
 
-void KexiMobileMainWindow::acceptProjectClosingRequested(bool& cancel)
+void KexiMobileMainWindow::acceptProjectClosingRequested(bool &cancel)
 {
 
 }
@@ -218,22 +219,22 @@ void KexiMobileMainWindow::acceptPropertySetEditing()
 
 }
 
-KActionCollection* KexiMobileMainWindow::actionCollection() const
+KActionCollection *KexiMobileMainWindow::actionCollection() const
 {
     return 0;
 }
 
-void KexiMobileMainWindow::addToolBarAction(const QString& toolBarName, QAction* action)
+void KexiMobileMainWindow::addToolBarAction(const QString &toolBarName, QAction *action)
 {
 
 }
 
-QList< QAction* > KexiMobileMainWindow::allActions() const
+QList< QAction * > KexiMobileMainWindow::allActions() const
 {
-    return QList<QAction*>();
+    return QList<QAction *>();
 }
 
-void KexiMobileMainWindow::appendWidgetToToolbar(const QString& name, QWidget* widget)
+void KexiMobileMainWindow::appendWidgetToToolbar(const QString &name, QWidget *widget)
 {
 
 }
@@ -243,62 +244,62 @@ void KexiMobileMainWindow::beforeProjectClosing()
 
 }
 
-tristate KexiMobileMainWindow::closeObject(KexiPart::Item* item)
+tristate KexiMobileMainWindow::closeObject(KexiPart::Item *item)
 {
     return true;
 }
 
-tristate KexiMobileMainWindow::closeWindow(KexiWindow* window)
+tristate KexiMobileMainWindow::closeWindow(KexiWindow *window)
 {
     return true;
 }
 
-KexiWindow* KexiMobileMainWindow::currentWindow() const
+KexiWindow *KexiMobileMainWindow::currentWindow() const
 {
     return 0;
 }
 
-tristate KexiMobileMainWindow::executeCustomActionForObject(KexiPart::Item* item, const QString& actionName)
+tristate KexiMobileMainWindow::executeCustomActionForObject(KexiPart::Item *item, const QString &actionName)
 {
     return true;
 }
 
-QWidget* KexiMobileMainWindow::focusWidget() const
+QWidget *KexiMobileMainWindow::focusWidget() const
 {
     return 0;
 }
 
-tristate KexiMobileMainWindow::getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part, bool& allowOverwriting, const QString& messageWhenAskingForName)
+tristate KexiMobileMainWindow::getNewObjectInfo(KexiPart::Item *partItem, KexiPart::Part *part, bool &allowOverwriting, const QString &messageWhenAskingForName)
 {
     return false;
 }
 
-void KexiMobileMainWindow::highlightObject(const QString& mime, const QString& name)
+void KexiMobileMainWindow::highlightObject(const QString &mime, const QString &name)
 {
 
 }
 
-bool KexiMobileMainWindow::newObject(KexiPart::Info* info, bool& openingCancelled)
+bool KexiMobileMainWindow::newObject(KexiPart::Info *info, bool &openingCancelled)
 {
     return false;
 }
 
-KexiWindow* KexiMobileMainWindow::openObject(const QString& mime, const QString& name, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs)
+KexiWindow *KexiMobileMainWindow::openObject(const QString &mime, const QString &name, Kexi::ViewMode viewMode, bool &openingCancelled, QMap< QString, QVariant > *staticObjectArgs)
 {
     return 0;
 }
 
-tristate KexiMobileMainWindow::printItem(KexiPart::Item* item)
+tristate KexiMobileMainWindow::printItem(KexiPart::Item *item)
 {
     return false;
 }
 
-tristate KexiMobileMainWindow::printPreviewForItem(KexiPart::Item* item)
+tristate KexiMobileMainWindow::printPreviewForItem(KexiPart::Item *item)
 {
     return false;
 }
 
-KexiProject* KexiMobileMainWindow::project()
+KexiProject *KexiMobileMainWindow::project()
 {
     return m_project;
 }
@@ -308,47 +309,47 @@ void KexiMobileMainWindow::projectClosed()
 
 }
 
-void KexiMobileMainWindow::propertySetSwitched(KexiWindow* window, bool force, bool preservePrevSelection, bool sortedProperties, const QByteArray& propertyToSelect)
+void KexiMobileMainWindow::propertySetSwitched(KexiWindow *window, bool force, bool preservePrevSelection, bool sortedProperties, const QByteArray &propertyToSelect)
 {
 
 }
 
-void KexiMobileMainWindow::registerChild(KexiWindow* window)
+void KexiMobileMainWindow::registerChild(KexiWindow *window)
 {
 
 }
 
-tristate KexiMobileMainWindow::saveObject(KexiWindow* window, const QString& messageWhenAskingForName, bool dontAsk)
-{
-    return false;
-}
-
-void KexiMobileMainWindow::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
-{
-
-}
-
-tristate KexiMobileMainWindow::showPageSetupForItem(KexiPart::Item* item)
+tristate KexiMobileMainWindow::saveObject(KexiWindow *window, const QString &messageWhenAskingForName, bool dontAsk)
 {
     return false;
 }
 
-void KexiMobileMainWindow::slotObjectRenamed(const KexiPart::Item& item, const QString& oldName)
+void KexiMobileMainWindow::setWidgetVisibleInToolbar(QWidget *widget, bool visible)
 {
 
 }
 
-tristate KexiMobileMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode viewMode)
+tristate KexiMobileMainWindow::showPageSetupForItem(KexiPart::Item *item)
 {
     return false;
 }
 
-KToolBar* KexiMobileMainWindow::toolBar(const QString& name) const
+void KexiMobileMainWindow::slotObjectRenamed(const KexiPart::Item &item, const QString &oldName)
+{
+
+}
+
+tristate KexiMobileMainWindow::switchToViewMode(KexiWindow &window, Kexi::ViewMode viewMode)
+{
+    return false;
+}
+
+KToolBar *KexiMobileMainWindow::toolBar(const QString &name) const
 {
     return 0;
 }
 
-void KexiMobileMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet)
+void KexiMobileMainWindow::updatePropertyEditorInfoLabel(const QString &textToDisplayForNullSet)
 {
 
 }
@@ -358,34 +359,29 @@ bool KexiMobileMainWindow::userMode() const
     return true;
 }
 
-void KexiMobileMainWindow::addSearchableModel(KexiSearchableModel*)
+void KexiMobileMainWindow::addSearchableModel(KexiSearchableModel *)
 {
 
 }
 
-tristate KexiMobileMainWindow::getNewObjectInfo(KexiPart::Item*, const QString&, KexiPart::Part*, bool, bool*, const QString&)
-{
-    return false;
-}
-
-KexiWindow* KexiMobileMainWindow::openedWindowFor(const KexiPart::Item*)
-{
-    return 0;
-}
-
-tristate KexiMobileMainWindow::saveObject(KexiWindow*, const QString&, KexiMainWindowIface::SaveObjectOptions)
+tristate KexiMobileMainWindow::getNewObjectInfo(KexiPart::Item *, const QString &, KexiPart::Part *, bool, bool *, const QString &)
 {
     return false;
 }
 
-KexiUserFeedbackAgent* KexiMobileMainWindow::userFeedbackAgent() const
+KexiWindow *KexiMobileMainWindow::openedWindowFor(const KexiPart::Item *)
 {
     return 0;
 }
 
+tristate KexiMobileMainWindow::saveObject(KexiWindow *, const QString &, KexiMainWindowIface::SaveObjectOptions)
+{
+    return false;
+}
 
-
-
-
+KexiUserFeedbackAgent *KexiMobileMainWindow::userFeedbackAgent() const
+{
+    return 0;
+}
 
 #include "KexiMobileMainWindow.moc"

@@ -53,13 +53,13 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-    Sheet* activeSheet() const;
+    Sheet *activeSheet() const;
 
 public Q_SLOTS:
     /**
      * Set the active \p sheet and emits activeSheetChanged(Sheet*) afterwards.
      */
-    void setActiveSheet(Sheet* sheet);
+    void setActiveSheet(Sheet *sheet);
 
 private Q_SLOTS:
     /**
@@ -88,11 +88,11 @@ private Q_SLOTS:
     void gotoSheetActionTriggered(QAction *action);
 
 Q_SIGNALS:
-    void activeSheetChanged(Sheet* sheet);
+    void activeSheetChanged(Sheet *sheet);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

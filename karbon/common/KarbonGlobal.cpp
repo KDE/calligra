@@ -42,9 +42,9 @@ qreal KarbonGlobal::factorialLn(unsigned n)
     // A static array is initialized to zero.
     static qreal cache[ cacheSize ];
 
-
-    if (n <= 1)
+    if (n <= 1) {
         return 0.0;
+    }
 
     if (n <= cacheSize - 1) {
         return cache[ n ]
@@ -92,5 +92,5 @@ bool KarbonGlobal::pointsAreNear(const QPointF &p1, const QPointF &p2, qreal ran
 
 QPointF KarbonGlobal::crossProduct(const QPointF &v1, const QPointF &v2)
 {
-    return QPointF(v1.x() * v2.y(), -v1.y()*v2.x());
+    return QPointF(v1.x() * v2.y(), -v1.y() * v2.x());
 }

@@ -28,15 +28,21 @@
 class Category : public Component
 {
 public:
-    Category(Component * parent = 0);
+    Category(Component *parent = 0);
     virtual ~Category();
     virtual void add(Component *c);
-    virtual Component* child(int index) const;
-    virtual Component* parent() { return m_parent; }
-    void setParent(Component * parent) { m_parent = parent; }
+    virtual Component *child(int index) const;
+    virtual Component *parent()
+    {
+        return m_parent;
+    }
+    void setParent(Component *parent)
+    {
+        m_parent = parent;
+    }
 
     virtual int row() const;
-    virtual int indexOf(Component* c) const;
+    virtual int indexOf(Component *c) const;
     virtual int childCount() const;
     virtual int columnCount() const;
 
@@ -49,13 +55,10 @@ public:
     template <typename T>
     int indexOf(const QString &categoryName) const
     {
-        for (int i = 0; i < m_components.size(); i++)
-        {
-            const T * component = dynamic_cast<T *>(m_components.at(i));
-            if (component)
-            {
-                if (component->name() == categoryName)
-                {
+        for (int i = 0; i < m_components.size(); i++) {
+            const T *component = dynamic_cast<T *>(m_components.at(i));
+            if (component) {
+                if (component->name() == categoryName) {
                     return i;
                 }
             }
@@ -64,12 +67,12 @@ public:
         return -1;
     }
 
-    void replace(int position, Component * c);
+    void replace(int position, Component *c);
 
 public:
-    QList<Component*> m_components; // categories and commands
+    QList<Component *> m_components; // categories and commands
 private:
-    Component * m_parent;
+    Component *m_parent;
 
 };
 

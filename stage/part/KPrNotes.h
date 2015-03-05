@@ -32,7 +32,7 @@ class KPrPage;
 class KPrNotes : public KoPAPageBase
 {
 public:
-    KPrNotes( KPrPage * page, KPrDocument * document );
+    KPrNotes(KPrPage *page, KPrDocument *document);
     ~KPrNotes();
 
     /// Get the main text note shape for this presentation notes
@@ -45,12 +45,12 @@ public:
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// reimplemented
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     /// Get the page layout for this presentation notes
     virtual KoPageLayout &pageLayout();
 
-    virtual const KoPageLayout& pageLayout() const;
+    virtual const KoPageLayout &pageLayout() const;
 
     /// update the page thumbnail to reflect current page
     void updatePageThumbnail();
@@ -58,19 +58,19 @@ public:
     /// reimplemented
     virtual bool displayMasterShapes();
     /// reimplemented
-    virtual void setDisplayMasterShapes( bool );
+    virtual void setDisplayMasterShapes(bool);
     /// reimplemented
     virtual bool displayMasterBackground();
     /// reimplemented
-    virtual void setDisplayMasterBackground( bool );
+    virtual void setDisplayMasterBackground(bool);
     /// reimplemented
     virtual bool displayShape(KoShape *shape) const;
 
-    virtual QImage thumbImage(const QSize& = QSize(512, 512));
+    virtual QImage thumbImage(const QSize & = QSize(512, 512));
     /// reimplemented
-    virtual QPixmap generateThumbnail( const QSize& );
+    virtual QPixmap generateThumbnail(const QSize &);
     /// reimplemented
-    virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
+    virtual void paintPage(QPainter &painter, KoZoomHandler &zoomHandler);
 
 private:
     KoShape *m_textShape;
@@ -78,7 +78,7 @@ private:
     KoPageLayout m_pageLayout;
     KPrPage *m_page;
     KPrDocument *m_doc;
-    KoImageCollection * m_imageCollection;
+    KoImageCollection *m_imageCollection;
 };
 
 #endif // KPRNOTES_H

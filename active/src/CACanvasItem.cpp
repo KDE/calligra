@@ -29,30 +29,31 @@
 #include <QGraphicsWidget>
 #include <QTimer>
 
-CACanvasItem::CACanvasItem(QDeclarativeItem* parent)
+CACanvasItem::CACanvasItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
     , m_koCanvas(0)
     , m_shouldIgnoreGeometryChange(false)
     , m_editable(false)
 {
-    setFlag (QGraphicsItem::ItemHasNoContents, false);
+    setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
 
-KoCanvasBase* CACanvasItem::koCanvas()
+KoCanvasBase *CACanvasItem::koCanvas()
 {
     return m_koCanvas;
 }
 
-void CACanvasItem::setKoCanvas(KoCanvasBase* koCanvas)
+void CACanvasItem::setKoCanvas(KoCanvasBase *koCanvas)
 {
-    if (!koCanvas)
+    if (!koCanvas) {
         return;
+    }
     if (m_koCanvasGraphicsWidget) {
         m_koCanvasGraphicsWidget->removeEventFilter(this);
         m_koCanvasGraphicsWidget->disconnect(this);
     }
     m_koCanvas = koCanvas;
-    m_koCanvasGraphicsWidget = dynamic_cast<QGraphicsWidget*>(koCanvas);
+    m_koCanvasGraphicsWidget = dynamic_cast<QGraphicsWidget *>(koCanvas);
     m_koCanvasGraphicsWidget->setParentItem(this);
     m_koCanvasGraphicsWidget->installEventFilter(this);
     m_koCanvasGraphicsWidget->setVisible(true);
@@ -60,16 +61,16 @@ void CACanvasItem::setKoCanvas(KoCanvasBase* koCanvas)
     connect(m_koCanvasGraphicsWidget, SIGNAL(geometryChanged()), SLOT(resizeToCanvas()));
 }
 
-bool CACanvasItem::eventFilter(QObject* o, QEvent* e)
+bool CACanvasItem::eventFilter(QObject *o, QEvent *e)
 {
     if (o == m_koCanvasGraphicsWidget) {
         if (e->type() == QEvent::Move) {
             m_shouldIgnoreGeometryChange = true;
-            QMoveEvent *moveEvent = static_cast<QMoveEvent*>(e);
+            QMoveEvent *moveEvent = static_cast<QMoveEvent *>(e);
             setPos(QPointF(moveEvent->pos()));
         } else if (e->type() == QEvent::Resize) {
             m_shouldIgnoreGeometryChange = true;
-            QResizeEvent *resizeEvent = static_cast<QResizeEvent*>(e);
+            QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(e);
             setWidth(resizeEvent->size().width());
             setHeight(resizeEvent->size().height());
         } else if (m_editable) {
@@ -94,8 +95,9 @@ void CACanvasItem::resetShouldIgnoreGeometryChange()
 
 void CACanvasItem::resizeToCanvas()
 {
-    if (!m_koCanvasGraphicsWidget)
+    if (!m_koCanvasGraphicsWidget) {
         return;
+    }
     m_shouldIgnoreGeometryChange = true;
     setPos(m_koCanvasGraphicsWidget->geometry().topLeft());
     setWidth(m_koCanvasGraphicsWidget->geometry().size().width());

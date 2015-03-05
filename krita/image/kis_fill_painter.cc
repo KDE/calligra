@@ -66,19 +66,19 @@
 #include "kis_selection_filters.h"
 
 KisFillPainter::KisFillPainter()
-        : KisPainter()
+    : KisPainter()
 {
     initFillPainter();
 }
 
 KisFillPainter::KisFillPainter(KisPaintDeviceSP device)
-        : KisPainter(device)
+    : KisPainter(device)
 {
     initFillPainter();
 }
 
 KisFillPainter::KisFillPainter(KisPaintDeviceSP device, KisSelectionSP selection)
-        : KisPainter(device, selection)
+    : KisPainter(device, selection)
 {
     initFillPainter();
 }
@@ -96,14 +96,14 @@ void KisFillPainter::initFillPainter()
 // 'regular' filling
 // XXX: This also needs renaming, since filling ought to keep the opacity and the composite op in mind,
 //      this is more eraseToColor.
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoColor& kc, quint8 opacity)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoColor &kc, quint8 opacity)
 {
     if (w > 0 && h > 0) {
         // Make sure we're in the right colorspace
 
         KoColor kc2(kc); // get rid of const
         kc2.convertTo(device()->colorSpace());
-        quint8 * data = kc2.data();
+        quint8 *data = kc2.data();
         device()->colorSpace()->setOpacity(data, opacity, 1);
 
         device()->fill(x1, y1, w, h, data);
@@ -112,13 +112,23 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     }
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern * pattern)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern *pattern)
 {
-    if (!pattern) return;
-    if (!pattern->valid()) return;
-    if (!device()) return;
-    if (w < 1) return;
-    if (h < 1) return;
+    if (!pattern) {
+        return;
+    }
+    if (!pattern->valid()) {
+        return;
+    }
+    if (!device()) {
+        return;
+    }
+    if (w < 1) {
+        return;
+    }
+    if (h < 1) {
+        return;
+    }
 
     KisPaintDeviceSP patternLayer = new KisPaintDevice(device()->compositionSourceColorSpace(), pattern->name());
     patternLayer->convertFromQImage(pattern->pattern(), 0);
@@ -126,7 +136,7 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     fillRect(x1, y1, w, h, patternLayer, QRect(0, 0, pattern->width(), pattern->height()));
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect &deviceRect)
 {
     Q_ASSERT(deviceRect.x() == 0); // the case x,y != 0,0 is not yet implemented
     Q_ASSERT(deviceRect.y() == 0);
@@ -164,14 +174,24 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ki
     addDirtyRect(QRect(x1, y1, w, h));
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisFilterConfiguration* generator)
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisFilterConfiguration *generator)
 {
-    if (!generator) return;
+    if (!generator) {
+        return;
+    }
     KisGeneratorSP g = KisGeneratorRegistry::instance()->value(generator->name());
-    if (!generator) return;
-    if (!device()) return;
-    if (w < 1) return;
-    if (h < 1) return;
+    if (!generator) {
+        return;
+    }
+    if (!device()) {
+        return;
+    }
+    if (w < 1) {
+        return;
+    }
+    if (h < 1) {
+        return;
+    }
 
     QRect tmpRc(x1, y1, w, h);
 
@@ -188,9 +208,9 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDe
 {
     if (!m_useCompositioning) {
         if (m_sizemod || m_feather ||
-            compositeOp()->id() != COMPOSITE_OVER ||
-            opacity() != MAX_SELECTED ||
-            sourceDevice != device()) {
+                compositeOp()->id() != COMPOSITE_OVER ||
+                opacity() != MAX_SELECTED ||
+                sourceDevice != device()) {
 
             qWarning() << "WARNING: Fast Flood Fill (no compositioning mode)"
                        << "does not support compositeOps, opacity, "
@@ -201,7 +221,9 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDe
         QRect fillBoundsRect(0, 0, m_width, m_height);
         QPoint startPoint(startX, startY);
 
-        if (!fillBoundsRect.contains(startPoint)) return;
+        if (!fillBoundsRect.contains(startPoint)) {
+            return;
+        }
 
         KisScanlineFill gc(device(), startPoint, fillBoundsRect);
         gc.setThreshold(m_threshold);
@@ -256,7 +278,6 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
 //  want that, since we want a transparent layer to be completely filled
 //     QRect rc = m_fillSelection->selectedExactRect();
 
-
     /**
      * Apply the real selection to a filled one
      */
@@ -271,7 +292,9 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
     bitBlt(0, 0, filled, 0, 0, m_width, m_height);
     setSelection(realSelection);
 
-    if (progressUpdater()) progressUpdater()->setProgress(100);
+    if (progressUpdater()) {
+        progressUpdater()->setProgress(100);
+    }
 
     m_width = m_height = -1;
 }
@@ -306,8 +329,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     if (m_sizemod > 0) {
         KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
         biggy.process(pixelSelection, selection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
-    }
-    else if (m_sizemod < 0) {
+    } else if (m_sizemod < 0) {
         KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
         tiny.process(pixelSelection, selection->selectedRect());
     }

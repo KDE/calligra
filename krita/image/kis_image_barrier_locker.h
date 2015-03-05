@@ -21,8 +21,8 @@
 
 #include "kis_image.h"
 
-
-class KisImageBarrierLocker {
+class KisImageBarrierLocker
+{
 public:
     inline KisImageBarrierLocker(KisImageSP image)
         : m_image(image)
@@ -30,7 +30,8 @@ public:
         m_image->barrierLock();
     }
 
-    inline ~KisImageBarrierLocker() {
+    inline ~KisImageBarrierLocker()
+    {
         m_image->unlock();
     }
 

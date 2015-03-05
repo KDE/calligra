@@ -29,27 +29,30 @@ K_EXPORT_PLUGIN(PaletteDockPluginFactory("krita"))
 class ArtisticColorSelectorDockFactory: public KoDockFactoryBase
 {
 public:
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return QString("ArtisticColorSelector");
     }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget() {
-        ArtisticColorSelectorDock* dockWidget = new ArtisticColorSelectorDock();
+    virtual QDockWidget *createDockWidget()
+    {
+        ArtisticColorSelectorDock *dockWidget = new ArtisticColorSelectorDock();
         dockWidget->setObjectName(id());
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const
+    {
         return DockMinimized;
     }
 };
 
-
-ArtisticColorSelectorPlugin::ArtisticColorSelectorPlugin(QObject* parent, const QVariantList &):
+ArtisticColorSelectorPlugin::ArtisticColorSelectorPlugin(QObject *parent, const QVariantList &):
     QObject(parent)
 {
     KoDockRegistry::instance()->add(new ArtisticColorSelectorDockFactory());

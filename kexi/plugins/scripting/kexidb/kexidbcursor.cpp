@@ -27,10 +27,10 @@
 
 using namespace Scripting;
 
-KexiDBCursor::KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner)
-        : QObject(parent)
-        , m_cursor(cursor)
-        , m_owner(owner)
+KexiDBCursor::KexiDBCursor(QObject *parent, ::KexiDB::Cursor *cursor, bool owner)
+    : QObject(parent)
+    , m_cursor(cursor)
+    , m_owner(owner)
 {
     setObjectName("KexiDBCursor");
 }
@@ -46,10 +46,11 @@ KexiDBCursor::~KexiDBCursor()
 
 void KexiDBCursor::clearBuffers()
 {
-    QMap<qint64, Record*>::ConstIterator
+    QMap<qint64, Record *>::ConstIterator
     it(m_modifiedrecords.constBegin()), end(m_modifiedrecords.constEnd());
-    for (; it != end; ++it)
+    for (; it != end; ++it) {
         delete it.value();
+    }
     m_modifiedrecords.clear();
 }
 
@@ -112,29 +113,31 @@ QVariant KexiDBCursor::value(uint index)
 
 bool KexiDBCursor::setValue(uint index, QVariant value)
 {
-    ::KexiDB::QuerySchema* query = m_cursor->query();
+    ::KexiDB::QuerySchema *query = m_cursor->query();
     if (! query) {
         kWarning() << "Invalid query, index=" << index << " value=" << value;
         return false;
     }
 
-    ::KexiDB::QueryColumnInfo* column = query->fieldsExpanded().at(index);
+    ::KexiDB::QueryColumnInfo *column = query->fieldsExpanded().at(index);
     if (! column) {
         kWarning() << "Invalid column, index=" << index << " value=" << value;
         return false;
     }
 
     const qint64 position = m_cursor->at();
-    if (! m_modifiedrecords.contains(position))
+    if (! m_modifiedrecords.contains(position)) {
         m_modifiedrecords.insert(position, new Record(m_cursor));
+    }
     m_modifiedrecords[position]->buffer->insert(*column, value);
     return true;
 }
 
 bool KexiDBCursor::save()
 {
-    if (m_modifiedrecords.count() < 1)
+    if (m_modifiedrecords.count() < 1) {
         return true;
+    }
 
     //It is needed to close the cursor before we are able to update the rows
     //since else the database could be locked (e.g. at the case of SQLite a
@@ -143,7 +146,7 @@ bool KexiDBCursor::save()
     m_cursor->close();
 
     bool ok = true;
-    QMap<qint64, Record*>::ConstIterator
+    QMap<qint64, Record *>::ConstIterator
     it(m_modifiedrecords.constBegin()), end(m_modifiedrecords.constEnd());
     for (; it != end; ++it) {
         bool b = m_cursor->updateRow(it.value()->rowdata, * it.value()->buffer, m_cursor->isBuffered());

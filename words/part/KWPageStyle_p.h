@@ -27,7 +27,10 @@
 class KWPageStylePrivate : public QSharedData
 {
 public:
-    KWPageStylePrivate() : fullPageBackground(0) { clear(); }
+    KWPageStylePrivate() : fullPageBackground(0)
+    {
+        clear();
+    }
     ~KWPageStylePrivate();
     void clear();
 
@@ -37,7 +40,7 @@ public:
     QString name;
     QString displayName;
     qreal headerDistance, footerDistance, footNoteDistance, endNoteDistance;
-    qreal headerMinimumHeight,footerMinimumHeight;
+    qreal headerMinimumHeight, footerMinimumHeight;
     Words::HeaderFooterType headers, footers;
     bool headerDynamicSpacing;
     bool footerDynamicSpacing;
@@ -52,7 +55,8 @@ public:
     QString nextStyleName;
 
     // called from the command
-    void copyProperties(KWPageStylePrivate *other) {
+    void copyProperties(KWPageStylePrivate *other)
+    {
         pageUsage = other->pageUsage;
         columns = other->columns;
         pageLayout = other->pageLayout;

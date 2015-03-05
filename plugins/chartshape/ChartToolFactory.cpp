@@ -31,19 +31,16 @@
 // KDE
 #include <klocale.h>
 
-
-
 using namespace KChart;
-
 
 ChartToolFactory::ChartToolFactory()
     : KoToolFactoryBase("ChartToolFactory_ID")
 {
-    setToolTip (i18n("Chart editing"));
-    setToolType (dynamicToolType());
+    setToolTip(i18n("Chart editing"));
+    setToolType(dynamicToolType());
     setIconName(koIconNameCStr("kchart"));
-    setPriority (1);
-    setActivationShapeId (ChartShapeId);
+    setPriority(1);
+    setActivationShapeId(ChartShapeId);
 }
 
 ChartToolFactory::~ChartToolFactory()
@@ -54,5 +51,4 @@ KoToolBase *ChartToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new ChartTool(canvas);
 }
-
 

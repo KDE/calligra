@@ -21,9 +21,7 @@
 #include "kis_image.h"
 #include "kis_node_dummies_graph.h"
 
-
-struct KisDummiesFacade::Private
-{
+struct KisDummiesFacade::Private {
 public:
     KisNodeDummiesGraph dummiesGraph;
 };
@@ -63,12 +61,12 @@ bool KisDummiesFacade::hasDummyForNode(KisNodeSP node) const
     return m_d->dummiesGraph.containsNode(node);
 }
 
-KisNodeDummy* KisDummiesFacade::dummyForNode(KisNodeSP node) const
+KisNodeDummy *KisDummiesFacade::dummyForNode(KisNodeSP node) const
 {
     return m_d->dummiesGraph.nodeToDummy(node);
 }
 
-KisNodeDummy* KisDummiesFacade::rootDummy() const
+KisNodeDummy *KisDummiesFacade::rootDummy() const
 {
     return m_d->dummiesGraph.rootDummy();
 }

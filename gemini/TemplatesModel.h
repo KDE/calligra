@@ -36,17 +36,17 @@ public:
         VariantCountRole,
         VariantsRole
     };
-    explicit TemplatesModel(QObject* parent = 0);
+    explicit TemplatesModel(QObject *parent = 0);
     virtual ~TemplatesModel();
 
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual int rowCount(const QModelIndex &parent) const;
 
     QString templateType() const;
-    void setTemplateType(const QString& newType);
+    void setTemplateType(const QString &newType);
 
     bool showWide() const;
-    void setShowWide(const bool& newValue);
+    void setShowWide(const bool &newValue);
 
 Q_SIGNALS:
     void templateTypeChanged();
@@ -54,7 +54,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // TEMPLATESMODEL_H

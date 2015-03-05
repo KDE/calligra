@@ -80,10 +80,7 @@ public:
      */
     ~Doc();
 
-
-
-    virtual bool completeSaving(KoStore* _store);
-
+    virtual bool completeSaving(KoStore *_store);
 
     /**
      * \ingroup NativeFormat
@@ -95,45 +92,42 @@ public:
      * \ingroup NativeFormat
      * Main loading method.
      */
-    virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
+    virtual bool loadXML(const KoXmlDocument &doc, KoStore *store);
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOdfCalculationSettings(const KoXmlElement& body);
-
+    void loadOdfCalculationSettings(const KoXmlElement &body);
 
     virtual int supportedSpecialFormats() const;
 
-    virtual bool loadChildren(KoStore* _store);
+    virtual bool loadChildren(KoStore *_store);
 
-    bool docData(QString const & xmlTag, QDomDocument & data);
+    bool docData(QString const &xmlTag, QDomDocument &data);
 
     // reimplemented; paints the thumbnail
-    virtual void paintContent(QPainter & painter, const QRect & rect);
-    virtual void paintContent(QPainter & painter, const QRect & rect, Sheet* sheet);
+    virtual void paintContent(QPainter &painter, const QRect &rect);
+    virtual void paintContent(QPainter &painter, const QRect &rect, Sheet *sheet);
 
     void initConfig();
     void saveConfig();
 
-    void addIgnoreWordAll(const QString & word);
+    void addIgnoreWordAll(const QString &word);
     void clearIgnoreWordAll();
-    void addIgnoreWordAllList(const QStringList & _lst);
-    QStringList spellListIgnoreAll() const ;
+    void addIgnoreWordAllList(const QStringList &_lst);
+    QStringList spellListIgnoreAll() const;
 
     /* Function specific when we load config from file */
     void loadConfigFromFile();
     bool configLoadFromFile() const;
 
-
     virtual bool saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag,
-                       QString* plainText = 0);
+                               QString *plainText = 0);
 
     /**
      * Requests an update of all attached user interfaces (views).
      */
     void updateAllViews();
-
 
 public Q_SLOTS:
     virtual void initEmpty();
@@ -150,27 +144,27 @@ Q_SIGNALS:
     void closeEditor(bool);
 
 protected Q_SLOTS:
-    void sheetAdded(Sheet* sheet);
+    void sheetAdded(Sheet *sheet);
 
 protected:
 
     /**
      * @reimp Overloaded function of KoDocument.
      */
-    virtual bool completeLoading(KoStore*);
+    virtual bool completeLoading(KoStore *);
 
-    virtual void saveOdfViewSettings(KoXmlWriter& settingsWriter);
+    virtual void saveOdfViewSettings(KoXmlWriter &settingsWriter);
     virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);
 private:
     Q_DISABLE_COPY(Doc)
 
     class Private;
-    Private * const dd;
+    Private *const dd;
 
     /**
      * \ingroup NativeFormat
      */
-    void loadPaper(KoXmlElement const & paper);
+    void loadPaper(KoXmlElement const &paper);
 };
 
 } // namespace Sheets

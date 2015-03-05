@@ -58,15 +58,17 @@
 #include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
 
-KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
-        : m_view(view)
+KisChannelSeparator::KisChannelSeparator(KisViewManager *view)
+    : m_view(view)
 {
 }
 
-void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
+void KisChannelSeparator::separate(KoUpdater *progressUpdater, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
 {
     KisImageWSP image = m_view->image();
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
     KisPaintDeviceSP src;
 
@@ -83,14 +85,16 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         break;
     }
 
-    if (!src) return;
+    if (!src) {
+        return;
+    }
 
     progressUpdater->setProgress(1);
 
-    const KoColorSpace * dstCs = 0;
+    const KoColorSpace *dstCs = 0;
 
     quint32 numberOfChannels = src->channelCount();
-    const KoColorSpace * srcCs  = src->colorSpace();
+    const KoColorSpace *srcCs  = src->colorSpace();
     QList<KoChannelInfo *> channels = srcCs->channels();
     vKisPaintDeviceSP layers;
 
@@ -103,7 +107,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
     int i = 0;
     for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it) {
 
-        KoChannelInfo * ch = (*it);
+        KoChannelInfo *ch = (*it);
 
         if (ch->channelType() == KoChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
             continue;
@@ -204,14 +208,14 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
     if (!progressUpdater->interrupted()) {
 
-        KisUndoAdapter * undo = image->undoAdapter();
+        KisUndoAdapter *undo = image->undoAdapter();
         if (outputOps == TO_LAYERS) {
             undo->beginMacro(kundo2_i18n("Separate Image"));
         }
 
         // Flatten the image if required
         switch (sourceOps) {
-        case(ALL_LAYERS):
+        case (ALL_LAYERS):
             image->flatten();
             break;
         default:
@@ -221,7 +225,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
         for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it) {
 
-            KoChannelInfo * ch = (*it);
+            KoChannelInfo *ch = (*it);
 
             if (ch->channelType() == KoChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
                 // Don't make an separate separation of the alpha channel if the user didn't ask for it.
@@ -231,21 +235,19 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
             if (outputOps == TO_LAYERS) {
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 adapter.addNode(l.data(), image->rootLayer(), 0);
-            }
-            else {
+            } else {
                 KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                 dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
                 dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Export));
                 KUrl url = dialog.url();
 
-                if (url.isEmpty())
+                if (url.isEmpty()) {
                     return;
-
+                }
 
                 KMimeType::Ptr mime = KMimeType::findByUrl(url);
                 QString mimefilter = mime->name();
-
 
                 KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
                 QRect r = l->exactBounds();

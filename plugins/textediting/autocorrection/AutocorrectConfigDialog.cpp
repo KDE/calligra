@@ -27,7 +27,7 @@
 
 AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     : QWidget(parent),
-    m_autocorrect(autocorrect)
+      m_autocorrect(autocorrect)
 {
     widget.setupUi(this);
     widget.upperCase->setCheckState(m_autocorrect->getUppercaseFirstCharOfSentence() ? Qt::Checked : Qt::Unchecked);
@@ -82,9 +82,9 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     connect(widget.autoCorrectionWithFormat, SIGNAL(stateChanged(int)), this, SLOT(enableAutocorrectFormat(int)));
     connect(widget.addButton, SIGNAL(clicked()), this, SLOT(addAutocorrectEntry()));
     connect(widget.removeButton, SIGNAL(clicked()), this, SLOT(removeAutocorrectEntry()));
-    connect(widget.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(setFindReplaceText(int, int)));
-    connect(widget.find, SIGNAL(textChanged(const QString &)), this, SLOT(enableAddRemoveButton()));
-    connect(widget.replace, SIGNAL(textChanged(const QString &)), this, SLOT(enableAddRemoveButton()));
+    connect(widget.tableWidget, SIGNAL(cellClicked(int,int)), this, SLOT(setFindReplaceText(int,int)));
+    connect(widget.find, SIGNAL(textChanged(QString)), this, SLOT(enableAddRemoveButton()));
+    connect(widget.replace, SIGNAL(textChanged(QString)), this, SLOT(enableAddRemoveButton()));
     connect(widget.changeFormat, SIGNAL(clicked()), this, SLOT(changeCharFormat()));
 
     /* tab 4 - Exceptions */
@@ -95,8 +95,8 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     widget.add1->setEnabled(false);
     widget.add2->setEnabled(false);
 
-    connect(widget.abbreviation, SIGNAL(textChanged(const QString &)), this, SLOT(abbreviationChanged(const QString &)));
-    connect(widget.twoUpperLetter, SIGNAL(textChanged(const QString &)), this, SLOT(twoUpperLetterChanged(const QString &)));
+    connect(widget.abbreviation, SIGNAL(textChanged(QString)), this, SLOT(abbreviationChanged(QString)));
+    connect(widget.twoUpperLetter, SIGNAL(textChanged(QString)), this, SLOT(twoUpperLetterChanged(QString)));
     connect(widget.add1, SIGNAL(clicked()), this, SLOT(addAbbreviationEntry()));
     connect(widget.remove1, SIGNAL(clicked()), this, SLOT(removeAbbreviationEntry()));
     connect(widget.add2, SIGNAL(clicked()), this, SLOT(addTwoUpperLetterEntry()));
@@ -219,7 +219,9 @@ void AutocorrectConfig::enableAdvAutocorrection(int state)
     widget.addButton->setEnabled(enable);
     widget.removeButton->setEnabled(enable);
     widget.tableWidget->setEnabled(enable);
-    if (!enable) enableAutocorrectFormat(Qt::Unchecked);
+    if (!enable) {
+        enableAutocorrectFormat(Qt::Unchecked);
+    }
 }
 
 void AutocorrectConfig::enableAutocorrectFormat(int state)
@@ -249,9 +251,9 @@ void AutocorrectConfig::addAutocorrectEntry()
     if (modify) {
         widget.tableWidget->removeRow(currentRow);
         size--;
-    }
-    else
+    } else {
         widget.tableWidget->setRowCount(++size);
+    }
 
     QTableWidgetItem *item = new QTableWidgetItem(find);
     widget.tableWidget->setItem(size - 1, 0, item);
@@ -277,28 +279,28 @@ void AutocorrectConfig::enableAddRemoveButton()
     if (m_autocorrectEntries.contains(find)) {
         currentRow = widget.tableWidget->findItems(find, Qt::MatchCaseSensitive).first()->row();
         widget.tableWidget->setCurrentCell(currentRow, 0);
-    }
-    else
+    } else {
         currentRow = widget.tableWidget->currentRow();
+    }
 
     bool enable = false;
-    if (currentRow == -1 || find.isEmpty() || replace.isEmpty()) // disable if no text in find/replace
+    if (currentRow == -1 || find.isEmpty() || replace.isEmpty()) { // disable if no text in find/replace
         enable = !(find.isEmpty() || replace.isEmpty());
-    else if (find == widget.tableWidget->item(currentRow, 0)->text()) {
+    } else if (find == widget.tableWidget->item(currentRow, 0)->text()) {
         // We disable add / remove button if no text for the replacement
         enable = !widget.tableWidget->item(currentRow, 1)->text().isEmpty();
         widget.addButton->setText(i18n("&Modify"));
-    }
-    else if (!widget.tableWidget->item(currentRow, 1)->text().isEmpty()) {
+    } else if (!widget.tableWidget->item(currentRow, 1)->text().isEmpty()) {
         enable = true;
         widget.addButton->setText(i18n("&Add"));
     }
 
     if (currentRow != -1) {
-    if (replace == widget.tableWidget->item(currentRow, 1)->text())
-        widget.addButton->setEnabled(false);
-    else
-        widget.addButton->setEnabled(enable);
+        if (replace == widget.tableWidget->item(currentRow, 1)->text()) {
+            widget.addButton->setEnabled(false);
+        } else {
+            widget.addButton->setEnabled(enable);
+        }
     }
     widget.removeButton->setEnabled(enable);
 }
@@ -342,8 +344,9 @@ void AutocorrectConfig::removeAbbreviationEntry()
 {
     int currentRow = widget.abbreviationList->currentRow();
     QListWidgetItem *item = widget.abbreviationList->takeItem(currentRow);
-    if(!item)
+    if (!item) {
         return;
+    }
     m_upperCaseExceptions.remove(item->text());
     delete item;
 }
@@ -362,8 +365,9 @@ void AutocorrectConfig::removeTwoUpperLetterEntry()
 {
     int currentRow = widget.twoUpperLetterList->currentRow();
     QListWidgetItem *item = widget.twoUpperLetterList->takeItem(currentRow);
-    if(!item)
+    if (!item) {
         return;
+    }
     m_twoUpperLetterExceptions.remove(item->text());
     delete item;
 }
@@ -386,7 +390,7 @@ CharSelectDialog::CharSelectDialog(QWidget *parent)
     : KDialog(parent)
 {
     m_charSelect = new KCharSelect(this, 0,
-            KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable);
+                                   KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable);
     setMainWidget(m_charSelect);
     setCaption(i18n("Select Character"));
 }

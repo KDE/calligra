@@ -23,7 +23,6 @@
 #include "kis_dom_utils.h"
 #include "kis_debug.h"
 
-
 const qreal f1 = 0.0003;
 const qreal f2 = 1e-15;
 const qreal f3 = 1356.78301;
@@ -36,8 +35,8 @@ const int i3 = -13;
 inline bool checkDifference(qreal a, qreal b, qreal portionTolerance)
 {
     return qAbs(a) > 1e-10 ?
-        qAbs(a - b) / qAbs(a) < portionTolerance :
-        qAbs(a - b) < 1e-10;
+           qAbs(a - b) / qAbs(a) < portionTolerance :
+           qAbs(a - b) < 1e-10;
 }
 
 QString saveData()

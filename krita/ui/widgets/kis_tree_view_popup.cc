@@ -25,11 +25,10 @@
 #include <kis_debug.h>
 
 struct KisTreeViewPopup::Private {
-    QTreeView* view;
+    QTreeView *view;
 };
 
-
-KisTreeViewPopup::KisTreeViewPopup(QWidget* parent)
+KisTreeViewPopup::KisTreeViewPopup(QWidget *parent)
     : KisPopupButton(parent)
     , d(new Private)
 {
@@ -37,9 +36,9 @@ KisTreeViewPopup::KisTreeViewPopup(QWidget* parent)
     d->view = new QTreeView;
     d->view->header()->hide();
     setPopupWidget(d->view);
-    connect(d->view, SIGNAL(entered(const QModelIndex&)), SLOT(setCurrentIndex(const QModelIndex &)));
-    connect(d->view, SIGNAL(clicked(const QModelIndex&)), SLOT(setCurrentIndex(const QModelIndex &)));
-    connect(d->view, SIGNAL(activated(const QModelIndex&)), SLOT(setCurrentIndex(const QModelIndex &)));
+    connect(d->view, SIGNAL(entered(const QModelIndex &)), SLOT(setCurrentIndex(const QModelIndex &)));
+    connect(d->view, SIGNAL(clicked(const QModelIndex &)), SLOT(setCurrentIndex(const QModelIndex &)));
+    connect(d->view, SIGNAL(activated(const QModelIndex &)), SLOT(setCurrentIndex(const QModelIndex &)));
 }
 
 KisTreeViewPopup::~KisTreeViewPopup()
@@ -47,17 +46,17 @@ KisTreeViewPopup::~KisTreeViewPopup()
     delete d;
 }
 
-void KisTreeViewPopup::setModel(QAbstractItemModel* model)
+void KisTreeViewPopup::setModel(QAbstractItemModel *model)
 {
     d->view->setModel(model);
 }
 
-void KisTreeViewPopup::resizeEvent(QResizeEvent * event)
+void KisTreeViewPopup::resizeEvent(QResizeEvent *event)
 {
     setPopupWidgetWidth(event->size().width());
 }
 
-void KisTreeViewPopup::setCurrentIndex(const QModelIndex& idx)
+void KisTreeViewPopup::setCurrentIndex(const QModelIndex &idx)
 {
     setText(idx.data(Qt::DisplayRole).toString());
     hidePopupWidget();

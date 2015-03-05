@@ -30,22 +30,22 @@ KisCurveLabel::KisCurveLabel() : d(new Private)
     d->name = "xxx UNDEFINED xxx";
 }
 
-KisCurveLabel::KisCurveLabel(const QString& name)
+KisCurveLabel::KisCurveLabel(const QString &name)
     : d(new Private)
 {
     d->name = name;
 }
-KisCurveLabel::KisCurveLabel(const QImage& icon)
+KisCurveLabel::KisCurveLabel(const QImage &icon)
     : d(new Private)
 {
     d->icon = icon;
 }
 
-KisCurveLabel::KisCurveLabel(const KisCurveLabel& _rhs) : d(new Private(*_rhs.d))
+KisCurveLabel::KisCurveLabel(const KisCurveLabel &_rhs) : d(new Private(*_rhs.d))
 {
 }
 
-KisCurveLabel& KisCurveLabel::operator=(const KisCurveLabel& _rhs)
+KisCurveLabel &KisCurveLabel::operator=(const KisCurveLabel &_rhs)
 {
     *d = *_rhs.d;
     return *this;

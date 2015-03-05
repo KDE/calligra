@@ -23,11 +23,10 @@
 #include <QMetaType>
 
 enum OutputMode {   IN_PLACE = 0,
-                        NEW_LAYERS,
-                        NEW_ACTIVE_LAYERS,
-                        NEW_IMAGE
-};
-
+                    NEW_LAYERS,
+                    NEW_ACTIVE_LAYERS,
+                    NEW_IMAGE
+                };
 
 // this enum is also index in LAYER_MODE_STRINGS list
 enum InputLayerMode {   NONE = 0,
@@ -40,17 +39,15 @@ enum InputLayerMode {   NONE = 0,
                         ALL_VISIBLE_LAYERS_DECR,
                         ALL_INVISIBLE_DECR,
                         ALL_DECR
-};
-
+                    };
 
 enum PreviewSize {    TINY = 0,
-                            SMALL,
-                            NORMAL,
-                            LARGE,
-                            ON_CANVAS
+                      SMALL,
+                      NORMAL,
+                      LARGE,
+                      ON_CANVAS
 
-
-};
+                 };
 
 static QStringList PREVIEW_SIZE = QStringList() << "Tiny" << "Small" << "Normal" << "Large" << "On Canvas";
 
@@ -63,7 +60,7 @@ enum OutputPreviewMode {    FIRST = 0,
                             FIRST_TO_FOURTH,
                             ALL
 
-};
+                       };
 
 class KisGmicFilterSetting
 {
@@ -72,10 +69,10 @@ public:
     ~KisGmicFilterSetting();
 
     void setGmicCommand(QString cmd);
-    const QString& gmicCommand() const;
+    const QString &gmicCommand() const;
 
     void setPreviewGmicCommand(QString cmd);
-    const QString& previewGmicCommand() const;
+    const QString &previewGmicCommand() const;
 
     InputLayerMode inputLayerMode() const;
     void setInputLayerMode(InputLayerMode mode);
@@ -89,8 +86,14 @@ public:
     OutputPreviewMode previewMode() const;
     void setPreviewMode(OutputPreviewMode mode);
 
-    void setBlacklisted(bool blacklist){ m_isBlacklisted = blacklist; }
-    bool isBlacklisted() const { return m_isBlacklisted; };
+    void setBlacklisted(bool blacklist)
+    {
+        m_isBlacklisted = blacklist;
+    }
+    bool isBlacklisted() const
+    {
+        return m_isBlacklisted;
+    };
 private:
     QString m_gmicCommand;
     QString m_previewGmicCommand;

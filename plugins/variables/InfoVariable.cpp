@@ -30,8 +30,8 @@
 
 static const struct {
     KoInlineObject::Property property;
-    const char * tag;
-    const char * saveTag;
+    const char *tag;
+    const char *saveTag;
 } propertyData[] = {
     { KoInlineObject::AuthorName, "creator", "text:creator" },
     { KoInlineObject::DocumentURL, "file-name", "text:file-name" },
@@ -54,8 +54,8 @@ QStringList InfoVariable::tags()
 }
 
 InfoVariable::InfoVariable()
-        : KoVariable(true),
-        m_type(KoInlineObject::AuthorName)
+    : KoVariable(true),
+      m_type(KoInlineObject::AuthorName)
 {
 }
 
@@ -71,14 +71,14 @@ void InfoVariable::propertyChanged(Property property, const QVariant &value)
     }
 }
 
-void InfoVariable::saveOdf(KoShapeSavingContext & context)
+void InfoVariable::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
 
-    typedef QMap<KoInlineObject::Property, const char*> SaveMap;
+    typedef QMap<KoInlineObject::Property, const char *> SaveMap;
     K_GLOBAL_STATIC(SaveMap, s_saveInfo)
 
-    if (!s_saveInfo.exists() ) {
+    if (!s_saveInfo.exists()) {
         for (unsigned int i = 0; i < numPropertyData; ++i) {
             s_saveInfo->insert(propertyData[i].property, propertyData[i].saveTag);
         }
@@ -91,12 +91,12 @@ void InfoVariable::saveOdf(KoShapeSavingContext & context)
     }
 }
 
-bool InfoVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & /*context*/)
+bool InfoVariable::loadOdf(const KoXmlElement &element, KoShapeLoadingContext & /*context*/)
 {
     typedef QMap<QString, KoInlineObject::Property> LoadMap;
     K_GLOBAL_STATIC(LoadMap, s_loadInfo)
 
-    if (!s_loadInfo.exists() ) {
+    if (!s_loadInfo.exists()) {
         for (unsigned int i = 0; i < numPropertyData; ++i) {
             s_loadInfo->insert(propertyData[i].tag, propertyData[i].property);
         }
@@ -105,7 +105,7 @@ bool InfoVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
     const QString localName(element.localName());
     m_type = s_loadInfo->value(localName);
 
-    for(KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() ) {
+    for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isText()) {
             setValue(node.toText().data());
             break;

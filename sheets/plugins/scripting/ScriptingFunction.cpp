@@ -45,10 +45,11 @@ class ScriptingFunctionImpl : public Calligra::Sheets::Function
 {
 public:
 
-    static Calligra::Sheets::Value callback(Calligra::Sheets::valVector args, Calligra::Sheets::ValueCalc* calc, Calligra::Sheets::FuncExtra* extra) {
+    static Calligra::Sheets::Value callback(Calligra::Sheets::valVector args, Calligra::Sheets::ValueCalc *calc, Calligra::Sheets::FuncExtra *extra)
+    {
         Q_UNUSED(calc);
         Q_ASSERT(extra && extra->function);
-        ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >(extra->function);
+        ScriptingFunctionImpl *funcimpl = static_cast< ScriptingFunctionImpl * >(extra->function);
 
         kDebug() << "ScriptingFunctionImpl::callback";
 
@@ -146,21 +147,23 @@ public:
         return resultvalue;
     }
 
-    ScriptingFunctionImpl(ScriptingFunction* function, const QDomElement& description)
-            : Calligra::Sheets::Function(function->name(), ScriptingFunctionImpl::callback)
-            , m_function(function) {
+    ScriptingFunctionImpl(ScriptingFunction *function, const QDomElement &description)
+        : Calligra::Sheets::Function(function->name(), ScriptingFunctionImpl::callback)
+        , m_function(function)
+    {
         setNeedsExtra(true);
 
         // if there exists no "Scripts" group yet, add it
-        Calligra::Sheets::FunctionRepository* repo = Calligra::Sheets::FunctionRepository::self();
-        if (! repo->groups().contains(i18n("Scripts")))
+        Calligra::Sheets::FunctionRepository *repo = Calligra::Sheets::FunctionRepository::self();
+        if (! repo->groups().contains(i18n("Scripts"))) {
             repo->addGroup(i18n("Scripts"));
+        }
 
         // register ourself at the repository
         repo->add(QSharedPointer<Calligra::Sheets::Function>(this));
 
         // create a new description for the function
-        Calligra::Sheets::FunctionDescription* desc = new Calligra::Sheets::FunctionDescription(description);
+        Calligra::Sheets::FunctionDescription *desc = new Calligra::Sheets::FunctionDescription(description);
         desc->setGroup(i18n("Scripts"));
         repo->add(desc);
     }
@@ -194,9 +197,9 @@ public:
     Private() : minparam(0), maxparam(-1) {}
 };
 
-ScriptingFunction::ScriptingFunction(QObject* parent)
-        : QObject(parent)
-        , d(new Private())
+ScriptingFunction::ScriptingFunction(QObject *parent)
+    : QObject(parent)
+    , d(new Private())
 {
     kDebug() << "ScriptingFunction::ScriptingFunction";
     d->typeName = "String";
@@ -214,7 +217,7 @@ QString ScriptingFunction::name() const
 {
     return d->name;
 }
-void ScriptingFunction::setName(const QString& name)
+void ScriptingFunction::setName(const QString &name)
 {
     d->name = name;
 }
@@ -222,7 +225,7 @@ QString ScriptingFunction::typeName() const
 {
     return d->typeName;
 }
-void ScriptingFunction::setTypeName(const QString& typeName)
+void ScriptingFunction::setTypeName(const QString &typeName)
 {
     d->typeName = typeName;
 }
@@ -246,7 +249,7 @@ QString ScriptingFunction::comment() const
 {
     return d->comment;
 }
-void ScriptingFunction::setComment(const QString& comment)
+void ScriptingFunction::setComment(const QString &comment)
 {
     d->comment = comment;
 }
@@ -254,7 +257,7 @@ QString ScriptingFunction::syntax() const
 {
     return d->syntax;
 }
-void ScriptingFunction::setSyntax(const QString& syntax)
+void ScriptingFunction::setSyntax(const QString &syntax)
 {
     d->syntax = syntax;
 }
@@ -262,7 +265,7 @@ QVariant ScriptingFunction::result() const
 {
     return d->result;
 }
-void ScriptingFunction::setResult(const QVariant& result)
+void ScriptingFunction::setResult(const QVariant &result)
 {
     d->result = result;
 }
@@ -270,19 +273,19 @@ QString ScriptingFunction::error() const
 {
     return d->error;
 }
-void ScriptingFunction::setError(const QString& error)
+void ScriptingFunction::setError(const QString &error)
 {
     d->error = error;
 }
 
-void ScriptingFunction::addExample(const QString& example)
+void ScriptingFunction::addExample(const QString &example)
 {
     QDomElement helpExampleElem = d->document.createElement("Example");
     helpExampleElem.appendChild(d->document.createTextNode(example));
     d->helpElement.appendChild(helpExampleElem);
 }
 
-void ScriptingFunction::addParameter(const QString& typeName, const QString& comment)
+void ScriptingFunction::addParameter(const QString &typeName, const QString &comment)
 {
     QDomElement paramElem = d->document.createElement("Parameter");
     QDomElement paramCommentElem = d->document.createElement("Comment");
@@ -324,7 +327,7 @@ bool ScriptingFunction::registerFunction()
     // Create a new ScriptingFunctionImpl instance which will publish itself to the
     // FunctionRepository. The FunctionRepository takes ownership of the instance
     // which may live longer then this ScriptingFunction instance.
-    ScriptingFunctionImpl* funcimpl = new ScriptingFunctionImpl(this, d->funcElement);
+    ScriptingFunctionImpl *funcimpl = new ScriptingFunctionImpl(this, d->funcElement);
     funcimpl->setParamCount(d->minparam, d->maxparam);
     funcimpl->setAcceptArray();
     return true;

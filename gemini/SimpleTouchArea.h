@@ -25,15 +25,15 @@ class SimpleTouchArea : public QDeclarativeItem
 {
     Q_OBJECT
 public:
-    explicit SimpleTouchArea(QDeclarativeItem* parent = 0);
+    explicit SimpleTouchArea(QDeclarativeItem *parent = 0);
     virtual ~SimpleTouchArea();
 
 Q_SIGNALS:
     void touched();
 
 protected:
-    virtual bool event(QEvent* event);
-    virtual bool sceneEvent(QEvent*);
+    virtual bool event(QEvent *event);
+    virtual bool sceneEvent(QEvent *);
 };
 
 #endif // SIMPLETOUCHAREA_H

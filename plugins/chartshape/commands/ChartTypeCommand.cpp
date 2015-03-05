@@ -39,8 +39,7 @@
 using namespace KChart;
 using namespace KDChart;
 
-
-ChartTypeCommand::ChartTypeCommand(ChartShape* chart)
+ChartTypeCommand::ChartTypeCommand(ChartShape *chart)
     : m_chart(chart)
     , m_oldType(BarChartType)
     , m_newType(BarChartType)
@@ -58,9 +57,9 @@ void ChartTypeCommand::redo()
     // save the old type
     m_oldType    = m_chart->chartType();
     m_oldSubtype = m_chart->chartSubType();
-    if (m_oldType == m_newType && m_oldSubtype == m_newSubtype)
+    if (m_oldType == m_newType && m_oldSubtype == m_newSubtype) {
         return;
-
+    }
 
     // Actually do the work
     m_chart->setChartType(m_newType);
@@ -71,8 +70,9 @@ void ChartTypeCommand::redo()
 
 void ChartTypeCommand::undo()
 {
-    if (m_oldType == m_newType && m_oldSubtype == m_newSubtype)
+    if (m_oldType == m_newType && m_oldSubtype == m_newSubtype) {
         return;
+    }
 
     m_chart->setChartType(m_oldType);
     m_chart->setChartSubType(m_oldSubtype);
@@ -80,15 +80,14 @@ void ChartTypeCommand::undo()
     m_chart->legend()->update();
 }
 
-
 void ChartTypeCommand::setChartType(ChartType type, ChartSubtype subtype)
 {
     m_newType    = type;
     m_newSubtype = subtype;
 
-    switch(type) {
+    switch (type) {
     case BarChartType:
-        switch(subtype) {
+        switch (subtype) {
         case NormalChartSubtype:
             setText(kundo2_i18n("Normal Bar Chart"));
             break;
@@ -103,7 +102,7 @@ void ChartTypeCommand::setChartType(ChartType type, ChartSubtype subtype)
         }
         break;
     case LineChartType:
-        switch(subtype) {
+        switch (subtype) {
         case NormalChartSubtype:
             setText(kundo2_i18n("Normal Line Chart"));
             break;
@@ -118,7 +117,7 @@ void ChartTypeCommand::setChartType(ChartType type, ChartSubtype subtype)
         }
         break;
     case AreaChartType:
-        switch(subtype) {
+        switch (subtype) {
         case NormalChartSubtype:
             setText(kundo2_i18n("Normal Area Chart"));
             break;

@@ -25,7 +25,6 @@
 #include <krita_export.h>
 class KisAbstractInputAction;
 
-
 class KRITAUI_EXPORT KisAbstractShortcut
 {
 public:
@@ -41,7 +40,7 @@ public:
     /**
      * The action associated with this shortcut.
      */
-    KisAbstractInputAction* action() const;
+    KisAbstractInputAction *action() const;
 
     /**
      * Set the action associated with this shortcut.
@@ -61,7 +60,7 @@ protected:
 
 private:
     class Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* __KIS_ABSTRACT_SHORTCUT_H */

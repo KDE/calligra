@@ -27,21 +27,21 @@
 #include "kis_node_visitor.h"
 #include "kis_image.h"
 
-
 class KisPaintDeviceWriter;
 class KoStore;
 
 class KisKraSaveVisitor : public KisNodeVisitor
 {
 public:
-    KisKraSaveVisitor(KoStore *store, const QString & name, QMap<const KisNode*, QString> nodeFileNames);
+    KisKraSaveVisitor(KoStore *store, const QString &name, QMap<const KisNode *, QString> nodeFileNames);
     virtual ~KisKraSaveVisitor();
     using KisNodeVisitor::visit;
 
 public:
     void setExternalUri(const QString &uri);
 
-    bool visit(KisNode*) {
+    bool visit(KisNode *)
+    {
         return true;
     }
 
@@ -51,9 +51,9 @@ public:
 
     bool visit(KisGroupLayer *layer);
 
-    bool visit(KisAdjustmentLayer* layer);
+    bool visit(KisAdjustmentLayer *layer);
 
-    bool visit(KisGeneratorLayer * layer);
+    bool visit(KisGeneratorLayer *layer);
 
     bool visit(KisCloneLayer *layer);
 
@@ -71,11 +71,11 @@ public:
 private:
 
     bool savePaintDevice(KisPaintDeviceSP device, QString location);
-    bool saveAnnotations(KisLayer* layer);
-    bool saveSelection(KisNode* node);
-    bool saveFilterConfiguration(KisNode* node);
-    bool saveMetaData(KisNode* node);
-    QString getLocation(KisNode* node, const QString& suffix = QString());
+    bool saveAnnotations(KisLayer *layer);
+    bool saveSelection(KisNode *node);
+    bool saveFilterConfiguration(KisNode *node);
+    bool saveMetaData(KisNode *node);
+    QString getLocation(KisNode *node, const QString &suffix = QString());
 
 private:
 
@@ -83,7 +83,7 @@ private:
     bool m_external;
     QString m_uri;
     QString m_name;
-    QMap<const KisNode*, QString> m_nodeFileNames;
+    QMap<const KisNode *, QString> m_nodeFileNames;
     KisPaintDeviceWriter *m_writer;
     QStringList m_errorMessages;
 };

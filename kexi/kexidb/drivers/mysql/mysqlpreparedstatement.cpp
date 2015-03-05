@@ -27,29 +27,31 @@ using namespace KexiDB;
 // For example prepared MySQL statement code see:
 // http://dev.mysql.com/doc/refman/4.1/en/mysql-stmt-execute.html
 
-MySqlPreparedStatement::MySqlPreparedStatement(StatementType type, ConnectionInternal& conn,
-        FieldList& fields)
-        : KexiDB::PreparedStatement(type, conn, fields)
-        , MySqlConnectionInternal(conn.connection)
+MySqlPreparedStatement::MySqlPreparedStatement(StatementType type, ConnectionInternal &conn,
+        FieldList &fields)
+    : KexiDB::PreparedStatement(type, conn, fields)
+    , MySqlConnectionInternal(conn.connection)
 #ifdef KEXI_USE_MYSQL_STMT
-        , m_statement(0)
-        , m_mysqlBind(0)
+    , m_statement(0)
+    , m_mysqlBind(0)
 #endif
-        , m_resetRequired(false)
+    , m_resetRequired(false)
 {
 // KexiDBDrvDbg;
     mysql_owned = false;
-    mysql = dynamic_cast<KexiDB::MySqlConnectionInternal&>(conn).mysql; //copy
+    mysql = dynamic_cast<KexiDB::MySqlConnectionInternal &>(conn).mysql; //copy
     m_tempStatementString = generateStatementString();
 
-    if (!init())
+    if (!init()) {
         done();
+    }
 }
 
 bool MySqlPreparedStatement::init()
 {
-    if (m_tempStatementString.isEmpty())
+    if (m_tempStatementString.isEmpty()) {
         return false;
+    }
 #ifdef KEXI_USE_MYSQL_STMT
     m_statement = mysql_stmt_init(mysql);
     if (!m_statement) {
@@ -57,7 +59,7 @@ bool MySqlPreparedStatement::init()
         return false;
     }
     res = mysql_stmt_prepare(m_statement,
-                             (const char*)m_tempStatementString, m_tempStatementString.length());
+                             (const char *)m_tempStatementString, m_tempStatementString.length());
     if (0 != res) {
 //! @todo use mysql_stmt_error(stmt); to show error
         return false;
@@ -73,7 +75,6 @@ bool MySqlPreparedStatement::init()
 #endif
     return true;
 }
-
 
 MySqlPreparedStatement::~MySqlPreparedStatement()
 {
@@ -105,8 +106,9 @@ void MySqlPreparedStatement::done()
 bool MySqlPreparedStatement::execute()
 {
 #ifdef KEXI_USE_MYSQL_STMT
-    if (!m_statement || m_realParamCount <= 0)
+    if (!m_statement || m_realParamCount <= 0) {
         return false;
+    }
     if (mysql_stmt_errno(m_statement) == CR_SERVER_LOST) {
         //sanity: connection lost: reconnect
 //! @todo KexiDB::Connection should be reconnected as well!
@@ -134,12 +136,13 @@ bool MySqlPreparedStatement::execute()
     //for INSERT, we're iterating over inserting values
     //for SELECT, we're iterating over WHERE conditions
     Field::List *fieldList = 0;
-    if (m_type == SelectStatement)
+    if (m_type == SelectStatement) {
         fieldList = m_whereFields;
-    else if (m_type == InsertStatement)
+    } else if (m_type == InsertStatement) {
         fieldList = m_fields->fields();
-    else
-        assert(0); //impl. error
+    } else {
+        assert(0);    //impl. error
+    }
 
     Field::ListIterator itFields(fieldList->constBegin());
     for (QList<QVariant>::ConstIterator it(m_args.constBegin());
@@ -152,10 +155,10 @@ bool MySqlPreparedStatement::execute()
         if (field->isTextType()) {
 //! @todo optimize
             m_stringBuffer[ 1024 ]; ? ? ?
-            char *str = qstrncpy(m_stringBuffer, (const char*)(*it).toString().toUtf8(), 1024);
+            char *str = qstrncpy(m_stringBuffer, (const char *)(*it).toString().toUtf8(), 1024);
             m_mysqlBind[arg].buffer_type = MYSQL_TYPE_STRING;
             m_mysqlBind[arg].buffer = m_stringBuffer;
-            m_mysqlBind[arg].is_null = (my_bool*)0;
+            m_mysqlBind[arg].is_null = (my_bool *)0;
             m_mysqlBind[arg].buffer_length = 1024; //?
             m_mysqlBind[arg].length = &str_length;
         } else {
@@ -167,14 +170,15 @@ bool MySqlPreparedStatement::execute()
                 bool ok;
                 const int value = (*it).toInt(&ok);
                 if (ok) {
-                    if (field->type() == KexiDB::Field::Byte)
+                    if (field->type() == KexiDB::Field::Byte) {
                         m_mysqlBind[arg].buffer_type = MYSQL_TYPE_TINY;
-                    else if (field->type() == KexiDB::Field::ShortInteger)
+                    } else if (field->type() == KexiDB::Field::ShortInteger) {
                         m_mysqlBind[arg].buffer_type = MYSQL_TYPE_SHORT;
-                    else if (field->type() == KexiDB::Field::Integer)
+                    } else if (field->type() == KexiDB::Field::Integer) {
                         m_mysqlBind[arg].buffer_type = MYSQL_TYPE_LONG;
+                    }
 
-                    m_mysqlBind[arg].is_null = (my_bool*)0;
+                    m_mysqlBind[arg].is_null = (my_bool *)0;
                     m_mysqlBind[arg].length = 0;
 
                     res = sqlite3_bind_int(prepared_st_handle, arg, value);
@@ -182,8 +186,9 @@ bool MySqlPreparedStatement::execute()
                         //! @todo msg?
                         return false;
                     }
-                } else
+                } else {
                     BIND_NULL;
+                }
                 break;
             }
             case KexiDB::Field::Float:
@@ -252,7 +257,7 @@ bool MySqlPreparedStatement::execute()
             case KexiDB::Field::BLOB: {
                 const QByteArray byteArray((*it).toByteArray());
                 res = sqlite3_bind_blob(prepared_st_handle, arg,
-                                        (const char*)byteArray, byteArray.size(), SQLITE_TRANSIENT /*??*/);
+                                        (const char *)byteArray, byteArray.size(), SQLITE_TRANSIENT /*??*/);
                 if (SQLITE_OK != res) {
                     //! @todo msg?
                     return false;
@@ -261,7 +266,7 @@ bool MySqlPreparedStatement::execute()
             }
             default:
                 KexiDBWarn << "PreparedStatement::execute(): unsupported field type: "
-                << field->type() << " - NULL value bound to column #" << arg;
+                           << field->type() << " - NULL value bound to column #" << arg;
                 res = sqlite3_bind_null(prepared_st_handle, arg);
                 if (SQLITE_OK != res) {
                     //! @todo msg?

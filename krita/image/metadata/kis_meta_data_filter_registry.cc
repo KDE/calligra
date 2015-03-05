@@ -30,26 +30,26 @@ FilterRegistry::FilterRegistry()
     add(new ToolInfoFilter());
 }
 
-FilterRegistry::FilterRegistry(const FilterRegistry&)
-        : KoGenericRegistry<const KisMetaData::Filter*>()
+FilterRegistry::FilterRegistry(const FilterRegistry &)
+    : KoGenericRegistry<const KisMetaData::Filter * >()
 {
 }
 
-FilterRegistry& FilterRegistry::operator=(const FilterRegistry&)
+FilterRegistry &FilterRegistry::operator=(const FilterRegistry &)
 {
     return *this;
 }
 
 FilterRegistry::~FilterRegistry()
 {
-    foreach(const QString &id, keys()) {
+    foreach (const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "Deleting FilterRegistry";
-    
+
 }
 
-FilterRegistry* FilterRegistry::instance()
+FilterRegistry *FilterRegistry::instance()
 {
     K_GLOBAL_STATIC(FilterRegistry, s_instance);
     return s_instance;

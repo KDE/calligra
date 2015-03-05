@@ -23,7 +23,6 @@
 #ifndef koRuler_h
 #define koRuler_h
 
-
 #include "kowidgets_export.h"
 #include <KoUnit.h>
 
@@ -41,7 +40,7 @@ class KoRulerPrivate;
  */
 class KOWIDGETS_EXPORT KoRuler : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     /**
      * Creates a ruler with the orientation @p orientation
@@ -49,7 +48,7 @@ public:
      * @param orientation the orientation of the ruler
      * @param viewConverter the view converter used to convert from point to pixel
      */
-    KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter);
+    KoRuler(QWidget *parent, Qt::Orientation orientation, const KoViewConverter *viewConverter);
     ~KoRuler();
 
     /// For paragraphs each tab definition is represented by this struct.
@@ -85,12 +84,12 @@ public:
      * @param popupActionList the list of actions
      * @see popupActionList()
      */
-    void setPopupActionList(const QList<QAction*> &popupActionList);
+    void setPopupActionList(const QList<QAction *> &popupActionList);
     /**
      * Return the actions list.
      * @see setPopupActionList()
      */
-    QList<QAction*> popupActionList() const;
+    QList<QAction *> popupActionList() const;
 
     /// reimplemented
     virtual QSize minimumSizeHint() const;
@@ -259,7 +258,7 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    virtual void paintEvent(QPaintEvent* event);
+    virtual void paintEvent(QPaintEvent *event);
     /// reimplemented
     virtual void mousePressEvent(QMouseEvent *ev);
     /// reimplemented
@@ -268,7 +267,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *ev);
 
 private:
-    KoRulerPrivate * const d;
+    KoRulerPrivate *const d;
     friend class KoRulerPrivate;
 };
 

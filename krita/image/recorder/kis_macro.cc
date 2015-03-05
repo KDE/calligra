@@ -31,14 +31,14 @@
 #include <kis_paint_device.h>
 
 struct KisMacro::Private {
-    QList<KisRecordedAction*> actions;
+    QList<KisRecordedAction *> actions;
 };
 
-KisMacro::KisMacro(QObject* parent) : QObject(parent), d(new Private)
+KisMacro::KisMacro(QObject *parent) : QObject(parent), d(new Private)
 {
 }
 
-KisMacro::KisMacro(const QList<KisRecordedAction*>& actions) : d(new Private)
+KisMacro::KisMacro(const QList<KisRecordedAction *> &actions) : d(new Private)
 {
     appendActions(actions);
 }
@@ -49,45 +49,44 @@ KisMacro::~KisMacro()
     delete d;
 }
 
-
-void KisMacro::appendActions(const QList<KisRecordedAction*>& actions)
+void KisMacro::appendActions(const QList<KisRecordedAction *> &actions)
 {
-    foreach(KisRecordedAction* action, actions) {
+    foreach (KisRecordedAction *action, actions) {
         addAction(*action);
     }
 }
 
-void KisMacro::removeActions(const QList<KisRecordedAction*>& actions)
+void KisMacro::removeActions(const QList<KisRecordedAction *> &actions)
 {
-    foreach(KisRecordedAction* action, actions) {
+    foreach (KisRecordedAction *action, actions) {
         d->actions.removeAll(action);
     }
     qDeleteAll(actions);
 }
 
-void KisMacro::addAction(const KisRecordedAction& action, const KisRecordedAction* before)
+void KisMacro::addAction(const KisRecordedAction &action, const KisRecordedAction *before)
 {
     if (before == 0) {
-        KisRecordedAction* a = action.clone();
+        KisRecordedAction *a = action.clone();
         Q_ASSERT(a);
         d->actions.append(a);
     } else {
-        d->actions.insert(d->actions.indexOf(const_cast<KisRecordedAction*>(before)), action.clone());
+        d->actions.insert(d->actions.indexOf(const_cast<KisRecordedAction *>(before)), action.clone());
     }
 }
 
-void KisMacro::moveAction(const KisRecordedAction* action, const KisRecordedAction* before)
+void KisMacro::moveAction(const KisRecordedAction *action, const KisRecordedAction *before)
 {
-    KisRecordedAction* _action = d->actions.takeAt(d->actions.indexOf(const_cast<KisRecordedAction*>(action)));
+    KisRecordedAction *_action = d->actions.takeAt(d->actions.indexOf(const_cast<KisRecordedAction *>(action)));
     if (before == 0) {
         Q_ASSERT(_action);
         d->actions.append(_action);
     } else {
-        d->actions.insert(d->actions.indexOf(const_cast<KisRecordedAction*>(before)), _action);
+        d->actions.insert(d->actions.indexOf(const_cast<KisRecordedAction *>(before)), _action);
     }
 }
 
-void KisMacro::fromXML(const QDomElement& docElem, const KisRecordedActionLoadContext* loadContext)
+void KisMacro::fromXML(const QDomElement &docElem, const KisRecordedActionLoadContext *loadContext)
 {
     d->actions.clear();
     QDomNode node = docElem.firstChild();
@@ -97,9 +96,9 @@ void KisMacro::fromXML(const QDomElement& docElem, const KisRecordedActionLoadCo
             QString id = elt.attribute("id", "");
             if (!id.isNull()) {
                 dbgImage << "Reconstruct : " << id << endl; // the node really is an element.
-                KisRecordedActionFactory* raf = KisRecordedActionFactoryRegistry::instance()->get(id);
+                KisRecordedActionFactory *raf = KisRecordedActionFactoryRegistry::instance()->get(id);
                 if (raf) {
-                    KisRecordedAction* a = raf->fromXML(elt, loadContext);
+                    KisRecordedAction *a = raf->fromXML(elt, loadContext);
                     Q_ASSERT(a);
                     d->actions.append(a); // TODO should use addAction
                 } else {
@@ -115,9 +114,9 @@ void KisMacro::fromXML(const QDomElement& docElem, const KisRecordedActionLoadCo
     }
 }
 
-void KisMacro::toXML(QDomDocument& doc, QDomElement& e, KisRecordedActionSaveContext* saveContext) const
+void KisMacro::toXML(QDomDocument &doc, QDomElement &e, KisRecordedActionSaveContext *saveContext) const
 {
-    for (QList<KisRecordedAction*>::iterator it = d->actions.begin();
+    for (QList<KisRecordedAction *>::iterator it = d->actions.begin();
             it != d->actions.end(); ++it) {
         QDomElement eAct = doc.createElement("RecordedAction");
         (*it)->toXML(doc, eAct, saveContext);
@@ -125,7 +124,7 @@ void KisMacro::toXML(QDomDocument& doc, QDomElement& e, KisRecordedActionSaveCon
     }
 }
 
-const QList<KisRecordedAction*>& KisMacro::actions() const
+const QList<KisRecordedAction *> &KisMacro::actions() const
 {
     return d->actions;
 }

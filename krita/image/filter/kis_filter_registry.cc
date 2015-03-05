@@ -43,13 +43,13 @@ KisFilterRegistry::KisFilterRegistry(QObject *parent)
 KisFilterRegistry::~KisFilterRegistry()
 {
     dbgRegistry << "deleting KisFilterRegistry";
-    foreach(KisFilterSP filter, values()) {
+    foreach (KisFilterSP filter, values()) {
         remove(filter->id());
         filter.clear();
     }
 }
 
-KisFilterRegistry* KisFilterRegistry::instance()
+KisFilterRegistry *KisFilterRegistry::instance()
 {
     KisFilterRegistry *reg = qApp->findChild<KisFilterRegistry *>("");
     if (!reg) {
@@ -70,11 +70,11 @@ void KisFilterRegistry::add(const QString &id, KisFilterSP item)
     emit(filterAdded(id));
 }
 
-KisFilterConfiguration* KisFilterRegistry::cloneConfiguration(KisFilterConfiguration* kfc)
+KisFilterConfiguration *KisFilterRegistry::cloneConfiguration(KisFilterConfiguration *kfc)
 {
     Q_ASSERT(kfc);
     KisFilterSP filter = value(kfc->name());
-    KisFilterConfiguration* newkfc = filter->defaultConfiguration(0);
+    KisFilterConfiguration *newkfc = filter->defaultConfiguration(0);
     newkfc->fromXML(kfc->toXML());
     return newkfc;
 }

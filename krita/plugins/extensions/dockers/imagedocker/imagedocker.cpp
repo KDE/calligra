@@ -26,7 +26,8 @@
 K_PLUGIN_FACTORY(ImageDockerPluginFactory, registerPlugin<ImageDockerPlugin>();)
 K_EXPORT_PLUGIN(ImageDockerPluginFactory("krita"))
 
-class ImageDockerDockFactory: public KoDockFactoryBase {
+class ImageDockerDockFactory: public KoDockFactoryBase
+{
 public:
     ImageDockerDockFactory() { }
 
@@ -40,9 +41,9 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    virtual QDockWidget *createDockWidget()
     {
-        ImageDockerDock* dockWidget = new ImageDockerDock();
+        ImageDockerDock *dockWidget = new ImageDockerDock();
         dockWidget->setObjectName(id());
         return dockWidget;
     }
@@ -53,7 +54,7 @@ public:
     }
 };
 
-ImageDockerPlugin::ImageDockerPlugin(QObject* parent, const QVariantList&):
+ImageDockerPlugin::ImageDockerPlugin(QObject *parent, const QVariantList &):
     QObject(parent)
 {
     KoDockRegistry::instance()->add(new ImageDockerDockFactory());

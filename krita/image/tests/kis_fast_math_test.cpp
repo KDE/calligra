@@ -25,9 +25,9 @@ void KisFastMathTest::testAtan2()
 {
     const int COUNT = 1000;
 
-    for (int i = 0 ; i < COUNT; ++i) {
+    for (int i = 0; i < COUNT; ++i) {
         double x = i;
-        for (int j = 0 ; j < COUNT; ++j) {
+        for (int j = 0; j < COUNT; ++j) {
 
             double y = j;
 
@@ -38,7 +38,6 @@ void KisFastMathTest::testAtan2()
         }
     }
 }
-
 
 QTEST_KDEMAIN(KisFastMathTest, GUI)
 #include "kis_fast_math_test.moc"

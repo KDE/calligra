@@ -34,24 +34,25 @@ class KisGradientSliderWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisGradientSliderWidget(QWidget *parent = 0, const char* name = 0, Qt::WFlags f = 0);
+    KisGradientSliderWidget(QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
 
 public:
     virtual void paintEvent(QPaintEvent *);
-    void setGradientResource(KoSegmentGradient* agr);
-    KoGradientSegment* selectedSegment() {
+    void setGradientResource(KoSegmentGradient *agr);
+    KoGradientSegment *selectedSegment()
+    {
         return m_selectedSegment;
     }
 
 Q_SIGNALS:
-    void sigSelectedSegment(KoGradientSegment*);
-    void sigChangedSegment(KoGradientSegment*);
+    void sigSelectedSegment(KoGradientSegment *);
+    void sigChangedSegment(KoGradientSegment *);
 
 protected:
-    virtual void mousePressEvent(QMouseEvent * e);
-    virtual void mouseReleaseEvent(QMouseEvent * e);
-    virtual void mouseMoveEvent(QMouseEvent * e);
-    virtual void contextMenuEvent(QContextMenuEvent * e);
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
+    virtual void mouseMoveEvent(QMouseEvent *e);
+    virtual void contextMenuEvent(QContextMenuEvent *e);
 
 private Q_SLOTS:
     void slotSplitSegment();
@@ -75,10 +76,10 @@ private:
         REMOVE_SEGMENT
     };
 
-    KoSegmentGradient* m_autogradientResource;
-    KoGradientSegment* m_currentSegment;
-    KoGradientSegment* m_selectedSegment;
-    KMenu* m_segmentMenu;
+    KoSegmentGradient *m_autogradientResource;
+    KoGradientSegment *m_currentSegment;
+    KoGradientSegment *m_selectedSegment;
+    KMenu *m_segmentMenu;
     int m_drag;
     KAction *m_removeSegmentAction;
 };

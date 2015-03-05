@@ -38,7 +38,7 @@
 
 const int STEP = 25;
 
-KisCanvasControlsManager::KisCanvasControlsManager(KisViewManager * view) : m_view(view)
+KisCanvasControlsManager::KisCanvasControlsManager(KisViewManager *view) : m_view(view)
 {
 
 }
@@ -78,26 +78,31 @@ void KisCanvasControlsManager::setView(QPointer<KisView>imageView)
 
 void KisCanvasControlsManager::transformColor(int step)
 {
-    if (!m_view) return;
-    if (!m_view->canvasBase()) return;
-    if (!m_view->resourceProvider()->resourceManager()) return;
+    if (!m_view) {
+        return;
+    }
+    if (!m_view->canvasBase()) {
+        return;
+    }
+    if (!m_view->resourceProvider()->resourceManager()) {
+        return;
+    }
 
     KoColor color = m_view->resourceProvider()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     QColor rgb = color.toQColor();
     int h = 0, s = 0, v = 0;
-    rgb.getHsv(&h,&s,&v);
+    rgb.getHsv(&h, &s, &v);
     if ((v < 255) || ((s == 0) || (s == 255))) {
         v += step;
-        v = qBound(0,v,255);
+        v = qBound(0, v, 255);
     } else {
         s += -step;
-        s = qBound(0,s,255);
+        s = qBound(0, s, 255);
     }
-    rgb.setHsv(h,s,v);
+    rgb.setHsv(h, s, v);
     color.fromQColor(rgb);
     m_view->resourceProvider()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
 }
-
 
 void KisCanvasControlsManager::makeColorDarker()
 {
@@ -111,14 +116,20 @@ void KisCanvasControlsManager::makeColorLighter()
 
 void KisCanvasControlsManager::stepAlpha(float step)
 {
-    if (!m_view) return;
-    if (!m_view->canvasBase()) return;
-    if (!m_view->resourceProvider()->resourceManager()) return;
+    if (!m_view) {
+        return;
+    }
+    if (!m_view->canvasBase()) {
+        return;
+    }
+    if (!m_view->resourceProvider()->resourceManager()) {
+        return;
+    }
 
     qreal alpha = m_view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::Opacity).toDouble();
     alpha += step;
     alpha = qBound<qreal>(0.0, alpha, 1.0);
-    m_view->canvasBase()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);
+    m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::Opacity, alpha);
 
     // FIXME: DK: should we uncomment it back?
     //KisLockedPropertiesProxy *p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_view->resourceProvider()->currentPreset()->settings());

@@ -32,7 +32,7 @@ class KisHatchingPressureCrosshatchingOption : public KisCurveOption
 {
 public:
     KisHatchingPressureCrosshatchingOption();
-    double apply(const KisPaintInformation & info) const;
+    double apply(const KisPaintInformation &info) const;
 };
 
 #endif

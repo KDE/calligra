@@ -52,7 +52,7 @@ class NamedAreaDialog : public KDialog
     Q_OBJECT
 
 public:
-    NamedAreaDialog(QWidget* parent, Selection* selection);
+    NamedAreaDialog(QWidget *parent, Selection *selection);
 
 public Q_SLOTS:
     void slotOk();
@@ -60,17 +60,16 @@ public Q_SLOTS:
     void slotNew();
     void slotEdit();
     void slotRemove();
-    void displayAreaValues(const QString& name);
+    void displayAreaValues(const QString &name);
 
 private:
-    Selection*      m_selection;
-    KListWidget*    m_list;
-    QLabel*         m_rangeName;
-    KPushButton*    m_newButton;
-    KPushButton*    m_editButton;
-    KPushButton*    m_removeButton;
+    Selection      *m_selection;
+    KListWidget    *m_list;
+    QLabel         *m_rangeName;
+    KPushButton    *m_newButton;
+    KPushButton    *m_editButton;
+    KPushButton    *m_removeButton;
 };
-
 
 /**
  * \ingroup UI
@@ -81,22 +80,22 @@ class EditNamedAreaDialog : public KDialog
     Q_OBJECT
 
 public:
-    EditNamedAreaDialog(QWidget* parent, Selection* selection);
+    EditNamedAreaDialog(QWidget *parent, Selection *selection);
     ~EditNamedAreaDialog();
 
     QString areaName() const;
-    void setAreaName(const QString& areaname);
-    void setRegion(const Region& region);
+    void setAreaName(const QString &areaname);
+    void setRegion(const Region &region);
 
 public Q_SLOTS:
     void slotOk();
-    void slotAreaNameModified(const QString&);
+    void slotAreaNameModified(const QString &);
 
 private:
-    Selection*  m_selection;
-    KLineEdit*  m_areaNameEdit;
-    KComboBox*  m_sheets;
-    KLineEdit*  m_cellRange;
+    Selection  *m_selection;
+    KLineEdit  *m_areaNameEdit;
+    KComboBox  *m_sheets;
+    KLineEdit  *m_cellRange;
     QString     m_initialAreaName;
 };
 

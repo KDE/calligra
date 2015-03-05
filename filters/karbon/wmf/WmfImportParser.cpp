@@ -149,10 +149,11 @@ void WMFImportParser::setViewportExt(int width, int height)
 void WMFImportParser::setMatrix(Libwmf::WmfDeviceContext &/*context*/, const QMatrix &matrix,
                                 bool combine)
 {
-    if (combine)
+    if (combine) {
         m_matrix = matrix * m_matrix;
-    else
+    } else {
         m_matrix = matrix;
+    }
 
     kDebug(30504) << "matrix =" << matrix;
     kDebug(30504) << "combine =" << combine;
@@ -183,7 +184,7 @@ void WMFImportParser::lineTo(Libwmf::WmfDeviceContext &context, int left, int to
     m_svgWriter.addAttribute("y1", p1.y());
     m_svgWriter.addAttribute("x2", p2.x());
     m_svgWriter.addAttribute("y2", p2.y());
-    m_svgWriter.addAttribute("style", strokeStyle+"fill:none");
+    m_svgWriter.addAttribute("style", strokeStyle + "fill:none");
     m_svgWriter.endElement(); // line
 
     context.currentPosition = QPoint(left, top);
@@ -204,7 +205,7 @@ void WMFImportParser::drawRect(Libwmf::WmfDeviceContext &context, int left, int 
     m_svgWriter.addAttribute("y", bound.y());
     m_svgWriter.addAttribute("width", bound.width());
     m_svgWriter.addAttribute("height", bound.height());
-    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.addAttribute("style", strokeStyle + fillStyle);
     m_svgWriter.endElement(); // rect
 }
 
@@ -212,8 +213,8 @@ void WMFImportParser::drawRoundRect(Libwmf::WmfDeviceContext &context, int left,
 {
     QRectF bound = boundBox(left, top, width, height);
     // roundw and roundh are in percent of width and height
-    const qreal rx = qAbs(roundw)/100. * bound.width();
-    const qreal ry = qAbs(roundh)/100. * bound.height();
+    const qreal rx = qAbs(roundw) / 100. * bound.width();
+    const qreal ry = qAbs(roundh) / 100. * bound.height();
 
     const QString fillStyle = saveFill(context);
     const QString strokeStyle = saveStroke(context);
@@ -226,9 +227,9 @@ void WMFImportParser::drawRoundRect(Libwmf::WmfDeviceContext &context, int left,
     m_svgWriter.addAttribute("y", bound.y());
     m_svgWriter.addAttribute("width", bound.width());
     m_svgWriter.addAttribute("height", bound.height());
-    m_svgWriter.addAttribute("rx", 0.5*rx);
-    m_svgWriter.addAttribute("ry", 0.5*ry);
-    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.addAttribute("rx", 0.5 * rx);
+    m_svgWriter.addAttribute("ry", 0.5 * ry);
+    m_svgWriter.addAttribute("style", strokeStyle + fillStyle);
     m_svgWriter.endElement(); // rect
 }
 
@@ -245,9 +246,9 @@ void WMFImportParser::drawEllipse(Libwmf::WmfDeviceContext &context, int left, i
     m_svgWriter.addAttribute("id", QString("ellipse%1").arg(++ellipseIndex));
     m_svgWriter.addAttribute("cx", bound.center().x());
     m_svgWriter.addAttribute("cy", bound.center().y());
-    m_svgWriter.addAttribute("rx", 0.5*bound.width());
-    m_svgWriter.addAttribute("ry", 0.5*bound.height());
-    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.addAttribute("rx", 0.5 * bound.width());
+    m_svgWriter.addAttribute("ry", 0.5 * bound.height());
+    m_svgWriter.addAttribute("style", strokeStyle + fillStyle);
     m_svgWriter.endElement(); // ellipse
 }
 
@@ -259,14 +260,14 @@ void WMFImportParser::drawArc(Libwmf::WmfDeviceContext &context, int x, int y, i
 
     QRectF bound = boundBox(x, y, w, h);
 
-    const qreal rx = 0.5*bound.width();
-    const qreal ry = 0.5*bound.height();
-    const QPointF p1 = bound.center() + QPointF(rx*cos(a1), -ry*sin(a1));
-    const QPointF p2 = bound.center() + QPointF(rx*cos(a1+a2), -ry*sin(a1+a2));
+    const qreal rx = 0.5 * bound.width();
+    const qreal ry = 0.5 * bound.height();
+    const QPointF p1 = bound.center() + QPointF(rx * cos(a1), -ry * sin(a1));
+    const QPointF p2 = bound.center() + QPointF(rx * cos(a1 + a2), -ry * sin(a1 + a2));
 
     QString path =
-            QString("M%1,%2 ").arg(p1.x()).arg(p1.y()) +
-            QString("A%1,%2 0 %5 0 %3,%4").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
+        QString("M%1,%2 ").arg(p1.x()).arg(p1.y()) +
+        QString("A%1,%2 0 %5 0 %3,%4").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
 
     const QString strokeStyle = saveStroke(context);
 
@@ -275,7 +276,7 @@ void WMFImportParser::drawArc(Libwmf::WmfDeviceContext &context, int x, int y, i
     m_svgWriter.startElement("path");
     m_svgWriter.addAttribute("id", QString("arc%1").arg(++arcIndex));
     m_svgWriter.addAttribute("d", path);
-    m_svgWriter.addAttribute("style", strokeStyle+"fill:none");
+    m_svgWriter.addAttribute("style", strokeStyle + "fill:none");
     m_svgWriter.endElement(); // path
 }
 
@@ -287,16 +288,16 @@ void WMFImportParser::drawPie(Libwmf::WmfDeviceContext &context, int x, int y, i
 
     QRectF bound = boundBox(x, y, w, h);
 
-    const qreal rx = 0.5*bound.width();
-    const qreal ry = 0.5*bound.height();
-    const QPointF p1 = bound.center() + QPointF(rx*cos(a1), -ry*sin(a1));
-    const QPointF p2 = bound.center() + QPointF(rx*cos(a1+a2), -ry*sin(a1+a2));
+    const qreal rx = 0.5 * bound.width();
+    const qreal ry = 0.5 * bound.height();
+    const QPointF p1 = bound.center() + QPointF(rx * cos(a1), -ry * sin(a1));
+    const QPointF p2 = bound.center() + QPointF(rx * cos(a1 + a2), -ry * sin(a1 + a2));
 
     QString path =
-            QString("M%1,%2 ").arg(bound.center().x()).arg(bound.center().y()) +
-            QString("L%1,%2 ").arg(p1.x()).arg(p1.y()) +
-            QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc) +
-            QString("L%1,%2").arg(bound.center().x()).arg(bound.center().y());
+        QString("M%1,%2 ").arg(bound.center().x()).arg(bound.center().y()) +
+        QString("L%1,%2 ").arg(p1.x()).arg(p1.y()) +
+        QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc) +
+        QString("L%1,%2").arg(bound.center().x()).arg(bound.center().y());
 
     const QString fillStyle = saveFill(context);
     const QString strokeStyle = saveStroke(context);
@@ -306,7 +307,7 @@ void WMFImportParser::drawPie(Libwmf::WmfDeviceContext &context, int x, int y, i
     m_svgWriter.startElement("path");
     m_svgWriter.addAttribute("id", QString("pie%1").arg(++pieIndex));
     m_svgWriter.addAttribute("d", path);
-    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.addAttribute("style", strokeStyle + fillStyle);
     m_svgWriter.endElement(); // path
 }
 
@@ -318,15 +319,15 @@ void WMFImportParser::drawChord(Libwmf::WmfDeviceContext &context, int x, int y,
 
     QRectF bound = boundBox(x, y, w, h);
 
-    const qreal rx = 0.5*bound.width();
-    const qreal ry = 0.5*bound.height();
-    const QPointF p1 = bound.center() + QPointF(rx*cos(a1), -ry*sin(a1));
-    const QPointF p2 = bound.center() + QPointF(rx*cos(a1+a2), -ry*sin(a1+a2));
+    const qreal rx = 0.5 * bound.width();
+    const qreal ry = 0.5 * bound.height();
+    const QPointF p1 = bound.center() + QPointF(rx * cos(a1), -ry * sin(a1));
+    const QPointF p2 = bound.center() + QPointF(rx * cos(a1 + a2), -ry * sin(a1 + a2));
 
     QString path =
-            QString("M%1,%2 ").arg(p1.x()).arg(p1.y()) +
-            QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc) +
-            QString("L%1,%2").arg(p1.x()).arg(p1.y());
+        QString("M%1,%2 ").arg(p1.x()).arg(p1.y()) +
+        QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc) +
+        QString("L%1,%2").arg(p1.x()).arg(p1.y());
 
     const QString fillStyle = saveFill(context);
     const QString strokeStyle = saveStroke(context);
@@ -336,7 +337,7 @@ void WMFImportParser::drawChord(Libwmf::WmfDeviceContext &context, int x, int y,
     m_svgWriter.startElement("path");
     m_svgWriter.addAttribute("id", QString("chord%1").arg(++chordKIndex));
     m_svgWriter.addAttribute("d", path);
-    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.addAttribute("style", strokeStyle + fillStyle);
     m_svgWriter.endElement(); // path
 }
 
@@ -344,11 +345,12 @@ void WMFImportParser::drawPolyline(Libwmf::WmfDeviceContext &context, const QPol
 {
     QString points;
     const int pointCount = pa.size();
-    if (pointCount <= 1)
+    if (pointCount <= 1) {
         return;
+    }
 
     QPointF p;
-    foreach(const QPoint &point, pa) {
+    foreach (const QPoint &point, pa) {
         p = coord(point);
         points += QString("%1,%2 ").arg(p.x()).arg(p.y());
     }
@@ -360,7 +362,7 @@ void WMFImportParser::drawPolyline(Libwmf::WmfDeviceContext &context, const QPol
     m_svgWriter.startElement("polyline");
     m_svgWriter.addAttribute("id", QString("polyline%1").arg(++polylineIndex));
     m_svgWriter.addAttribute("points", points);
-    m_svgWriter.addAttribute("style", strokeStyle+"fill:none");
+    m_svgWriter.addAttribute("style", strokeStyle + "fill:none");
     m_svgWriter.endElement(); // polyline
 }
 
@@ -368,11 +370,12 @@ void WMFImportParser::drawPolygon(Libwmf::WmfDeviceContext &context, const QPoly
 {
     QString points;
     const int pointCount = pa.size();
-    if (pointCount <= 1)
+    if (pointCount <= 1) {
         return;
+    }
 
     QPointF p;
-    foreach(const QPoint &point, pa) {
+    foreach (const QPoint &point, pa) {
         p = coord(point);
         points += QString("%1,%2 ").arg(p.x()).arg(p.y());
     }
@@ -385,24 +388,26 @@ void WMFImportParser::drawPolygon(Libwmf::WmfDeviceContext &context, const QPoly
     m_svgWriter.startElement("polygon");
     m_svgWriter.addAttribute("id", QString("polygon%1").arg(++polygonIndex));
     m_svgWriter.addAttribute("points", points);
-    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.addAttribute("style", strokeStyle + fillStyle);
     m_svgWriter.endElement(); // polygon
 }
 
-void WMFImportParser::drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<QPolygon>& listPa)
+void WMFImportParser::drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<QPolygon> &listPa)
 {
-    if (listPa.isEmpty())
+    if (listPa.isEmpty()) {
         return;
+    }
 
     QString path;
     QPointF p;
-    foreach(const QPolygon &poly, listPa) {
+    foreach (const QPolygon &poly, listPa) {
         int pointCount = poly.size();
-        if(pointCount <= 1)
+        if (pointCount <= 1) {
             continue;
+        }
         p = coord(poly[0]);
         path += QString("M%1,%2 L").arg(p.x()).arg(p.y());
-        for(int i = 1; i < pointCount; ++i) {
+        for (int i = 1; i < pointCount; ++i) {
             p = coord(poly[i]);
             path += QString("%1,%2 ").arg(p.x()).arg(p.y());
         }
@@ -417,14 +422,14 @@ void WMFImportParser::drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<Q
     m_svgWriter.startElement("path");
     m_svgWriter.addAttribute("id", QString("polyPolygon%1").arg(++polyPolygonIndex));
     m_svgWriter.addAttribute("d", path);
-    m_svgWriter.addAttribute("style", strokeStyle+fillStyle);
+    m_svgWriter.addAttribute("style", strokeStyle + fillStyle);
     m_svgWriter.endElement(); // path
 }
 
 void WMFImportParser::drawImage(Libwmf::WmfDeviceContext &/*context*/, int x, int y, const QImage &rawImage, int sx, int sy, int sw, int sh)
 {
     QPoint imgOrg(qMax(sx, 0), qMax(sy, 0));
-    QSize imgExt = QSize(rawImage.width()-imgOrg.x(), rawImage.height()-imgOrg.y());
+    QSize imgExt = QSize(rawImage.width() - imgOrg.x(), rawImage.height() - imgOrg.y());
     if (sw > 0) {
         imgExt.rwidth() = qMin(imgExt.width(), sw);
     }
@@ -435,10 +440,12 @@ void WMFImportParser::drawImage(Libwmf::WmfDeviceContext &/*context*/, int x, in
 
     QByteArray ba;
     QBuffer buffer(&ba);
-    if(!buffer.open(QIODevice::WriteOnly))
+    if (!buffer.open(QIODevice::WriteOnly)) {
         return;
-    if (!image.save(&buffer, "PNG"))
+    }
+    if (!image.save(&buffer, "PNG")) {
         return;
+    }
 
     static int imageIndex = 0;
 
@@ -465,7 +472,7 @@ void WMFImportParser::patBlt(Libwmf::WmfDeviceContext &/*context*/, int x, int y
     Q_UNUSED(rasterOperation);
 }
 
-void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, const QString& text)
+void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, const QString &text)
 {
     if (context.textAlign & TA_UPDATECP) {
         // (left, top) position = current logical position
@@ -477,7 +484,7 @@ void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, 
 
     if (context.textAlign & TA_BOTTOM) {
         y -= metrics.descent();
-    } else if(context.textAlign & TA_BASELINE) {
+    } else if (context.textAlign & TA_BASELINE) {
         // nothing to do here
     } else { // TA_TOP
         // this the is the default
@@ -492,28 +499,32 @@ void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, 
     m_svgWriter.addAttribute("id", QString("text%1").arg(++textIndex));
     m_svgWriter.addAttribute("x", pos.x());
     m_svgWriter.addAttribute("y", pos.y());
-    if (context.textAlign & TA_CENTER)
+    if (context.textAlign & TA_CENTER) {
         m_svgWriter.addAttribute("text-anchor", "middle");
-    else if (context.textAlign & TA_RIGHT)
+    } else if (context.textAlign & TA_RIGHT) {
         m_svgWriter.addAttribute("text-anchor", "end");
+    }
     m_svgWriter.addAttribute("font-family", context.font.family());
     // adjust font size
     m_svgWriter.addAttributePt("font-size", size(QSize(0, context.font.pointSize())).height());
-    if (context.font.bold())
+    if (context.font.bold()) {
         m_svgWriter.addAttribute("font-weight", "bold");
-    if (context.font.italic())
+    }
+    if (context.font.italic()) {
         m_svgWriter.addAttribute("font-style", "italic");
-    if (context.font.underline())
+    }
+    if (context.font.underline()) {
         m_svgWriter.addAttribute("text-decoration", "underline");
+    }
     m_svgWriter.addAttribute("stroke", context.foregroundTextColor.name());
 
     if (context.escapement) {
         // we rotate around the anchor point
         // rotation is in 1/10th of a degree
         QString transform =
-                QString("translate(%1,%2) ").arg(pos.x()).arg(pos.y()) +
-                QString("rotate(%1) ").arg(qreal(context.escapement) / -10.0) +
-                QString("translate(%1,%2)").arg(-pos.x()).arg(-pos.y());
+            QString("translate(%1,%2) ").arg(pos.x()).arg(pos.y()) +
+            QString("rotate(%1) ").arg(qreal(context.escapement) / -10.0) +
+            QString("translate(%1,%2)").arg(-pos.x()).arg(-pos.y());
         m_svgWriter.addAttribute("transform", transform);
     }
 
@@ -527,7 +538,7 @@ void WMFImportParser::drawText(Libwmf::WmfDeviceContext &context, int x, int y, 
 
 QString WMFImportParser::saveStroke(Libwmf::WmfDeviceContext &context)
 {
-    if(context.pen.style() == Qt::NoPen) {
+    if (context.pen.style() == Qt::NoPen) {
         return "stroke:none;";
     }
 
@@ -537,34 +548,38 @@ QString WMFImportParser::saveStroke(Libwmf::WmfDeviceContext &context)
 
     strokeStyle += QString("stroke:%1;").arg(context.pen.color().name());
     strokeStyle += QString("stroke-width:%1;").arg(width);
-    if (context.pen.capStyle() == Qt::FlatCap)
+    if (context.pen.capStyle() == Qt::FlatCap) {
         strokeStyle += "stroke-linecap:butt;";
-    else if (context.pen.capStyle() == Qt::RoundCap)
+    } else if (context.pen.capStyle() == Qt::RoundCap) {
         strokeStyle += "stroke-linecap:round;";
-    else if (context.pen.capStyle() == Qt::SquareCap)
+    } else if (context.pen.capStyle() == Qt::SquareCap) {
         strokeStyle += "stroke-linecap:square;";
+    }
 
     if (context.pen.joinStyle() == Qt::MiterJoin) {
         strokeStyle += "stroke-linejoin:miter;";
         strokeStyle += QString("stroke-miterlimit:%1;").arg(context.pen.miterLimit());
-    } else if (context.pen.joinStyle() == Qt::RoundJoin)
+    } else if (context.pen.joinStyle() == Qt::RoundJoin) {
         strokeStyle += "stroke-linejoin:round;";
-    else if (context.pen.joinStyle() == Qt::BevelJoin)
+    } else if (context.pen.joinStyle() == Qt::BevelJoin) {
         strokeStyle += "stroke-linejoin:bevel;";
+    }
 
     // dash
     if (context.pen.style() > Qt::SolidLine) {
         qreal dashFactor = width;
 
-        if (context.pen.dashOffset() != 0)
+        if (context.pen.dashOffset() != 0) {
             strokeStyle += QString("stroke-dashoffset:%1;").arg(dashFactor * context.pen.dashOffset());
+        }
 
         QString dashStr;
         const QVector<qreal> dashes = context.pen.dashPattern();
         int dashCount = dashes.size();
         for (int i = 0; i < dashCount; ++i) {
-            if (i > 0)
+            if (i > 0) {
                 dashStr += ",";
+            }
             dashStr += QString("%1").arg(dashes[i] * dashFactor);
         }
         strokeStyle += QString("stroke-dasharray:%1;").arg(dashStr);
@@ -583,8 +598,9 @@ QString WMFImportParser::saveFill(Libwmf::WmfDeviceContext &context)
 
     if (context.brush.style() == Qt::SolidPattern) {
         fillStyle = QString("fill:%1;").arg(context.brush.color().name());
-        if (context.brush.color().alphaF() < 1.0)
+        if (context.brush.color().alphaF() < 1.0) {
             fillStyle += QString("fill-opacity:%1;").arg(context.brush.color().alphaF());
+        }
 
         return fillStyle;
     }
@@ -713,8 +729,9 @@ QString WMFImportParser::saveFill(Libwmf::WmfDeviceContext &context)
 
     fillStyle = QString("fill:url(#%1);").arg(fillId);
 
-    if (context.polyFillMode == Libwmf::ALTERNATE)
+    if (context.polyFillMode == Libwmf::ALTERNATE) {
         fillStyle += "fill-rule:evenodd;";
+    }
 
     return fillStyle;
 }
@@ -726,18 +743,18 @@ void  WMFImportParser::setCompositionMode(QPainter::CompositionMode)
 
 QRectF WMFImportParser::boundBox(int left, int top, int width, int height)
 {
-    const int l = qMin(left, left+width);
-    const int t = qMin(top, top+height);
+    const int l = qMin(left, left + width);
+    const int t = qMin(top, top + height);
     const int w = qAbs(width);
     const int h = qAbs(height);
 
-    return QRectF(coord(QPoint(l,t)), size(QSize(w, h)));
+    return QRectF(coord(QPoint(l, t)), size(QSize(w, h)));
 }
 
 QPointF WMFImportParser::coord(const QPoint &p)
 {
-    const qreal dx = m_viewport.org.x()-m_window.org.x();
-    const qreal dy = m_viewport.org.y()-m_window.org.y();
+    const qreal dx = m_viewport.org.x() - m_window.org.x();
+    const qreal dy = m_viewport.org.y() - m_window.org.y();
     const qreal x = (p.x() + dx) * m_scaleX;
     const qreal y = (p.y() + dy) * m_scaleY;
     return QPointF(x, y);
@@ -745,7 +762,7 @@ QPointF WMFImportParser::coord(const QPoint &p)
 
 QSizeF WMFImportParser::size(const QSize &s)
 {
-    return QSizeF(m_scaleX *s.width(), m_scaleY*s.height());
+    return QSizeF(m_scaleX * s.width(), m_scaleY * s.height());
 }
 
 void WMFImportParser::updateTransform()

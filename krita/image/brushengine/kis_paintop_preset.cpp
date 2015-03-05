@@ -52,14 +52,13 @@ struct KisPaintOpPreset::Private {
 
 };
 
-
 KisPaintOpPreset::KisPaintOpPreset()
     : KoResource(QString())
     , m_d(new Private)
 {
 }
 
-KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
+KisPaintOpPreset::KisPaintOpPreset(const QString &fileName)
     : KoResource(fileName)
     , m_d(new Private)
 {
@@ -91,14 +90,14 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
 }
 void KisPaintOpPreset::setPresetDirty(bool value)
 {
-    m_d->dirtyPreset = value;    
+    m_d->dirtyPreset = value;
 }
 bool KisPaintOpPreset::isPresetDirty() const
 {
     return m_d->dirtyPreset;
 }
 
-void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
+void KisPaintOpPreset::setPaintOp(const KoID &paintOp)
 {
     Q_ASSERT(m_d->settings);
     m_d->settings->setProperty("paintop", paintOp.id());
@@ -159,7 +158,9 @@ bool KisPaintOpPreset::load()
             return false;
         }
 
-        if (resourceStore->isOpen()) resourceStore->close();
+        if (resourceStore->isOpen()) {
+            resourceStore->close();
+        }
 
         if (!resourceStore->open(fn)) {
             qWarning() << "Could not open preset" << fn << "in bundle" << bn;
@@ -172,11 +173,12 @@ bool KisPaintOpPreset::load()
         qDebug() << "Going to load" << fn << "size" << ba.size();
 
         resourceStore->close();
-    }
-    else {
+    } else {
         dev = new QFile(filename());
 
-        if (dev->size() == 0) return false;
+        if (dev->size() == 0) {
+            return false;
+        }
         if (!dev->open(QIODevice::ReadOnly)) {
             warnKrita << "Can't open file " << filename();
             delete dev;
@@ -236,13 +238,15 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
 bool KisPaintOpPreset::save()
 {
 
-    if (filename().isEmpty())
+    if (filename().isEmpty()) {
         return false;
+    }
 
     QString paintopid = m_d->settings->getString("paintop", "");
 
-    if (paintopid.isEmpty())
+    if (paintopid.isEmpty()) {
         return false;
+    }
 
     QFile f(filename());
     f.open(QFile::WriteOnly);
@@ -250,7 +254,7 @@ bool KisPaintOpPreset::save()
     return saveToDevice(&f);
 }
 
-void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
+void KisPaintOpPreset::toXML(QDomDocument &doc, QDomElement &elt) const
 {
     QString paintopid = m_d->settings->getString("paintop", "");
 
@@ -260,7 +264,7 @@ void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
     m_d->settings->toXML(doc, elt);
 }
 
-void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
+void KisPaintOpPreset::fromXML(const QDomElement &presetElt)
 {
     setName(presetElt.attribute("name"));
     QString paintopid = presetElt.attribute("paintopid");

@@ -37,18 +37,21 @@ public:
     {
     }
 
-    inline QSize originalRectToColumnsRows(const QRect &rect) {
+    inline QSize originalRectToColumnsRows(const QRect &rect)
+    {
         return QSize(rect.height(), rect.width());
     }
 
-    inline QPoint columnRowToXY(const QPoint &pt) const {
+    inline QPoint columnRowToXY(const QPoint &pt) const
+    {
         return QPoint(pt.y(), pt.x());
     }
 
     inline IteratorTypeSP createIterator(KisDataManager *dataManager,
                                          const QRect &rc,
                                          qint32 offsetX, qint32 offsetY,
-                                         bool writable) {
+                                         bool writable)
+    {
 
         return new KisVLineIterator2(dataManager,
                                      rc.x(), rc.y(),
@@ -58,53 +61,59 @@ public:
     }
 
     inline void completeInitialization(QVector<IteratorTypeSP> *iterators,
-                                       KisWrappedRect *splitRect) {
+                                       KisWrappedRect *splitRect)
+    {
         m_splitRect = splitRect;
         m_iterators = iterators;
 
         m_lastColumnCoord = m_splitRect->topLeft().right();
     }
 
-    inline IteratorTypeSP leftColumnIterator() const {
+    inline IteratorTypeSP leftColumnIterator() const
+    {
         return m_iterators->at(m_iteratorColumnStart + TOP_OFFSET);
     }
 
-    inline IteratorTypeSP rightColumnIterator() const {
+    inline IteratorTypeSP rightColumnIterator() const
+    {
         return m_iterators->at(m_iteratorColumnStart + BOTTOM_OFFSET);
     }
 
-    inline bool trySwitchIteratorStripe() {
+    inline bool trySwitchIteratorStripe()
+    {
         bool needSwitching = leftColumnIterator()->x() == m_lastColumnCoord;
 
-            if (needSwitching) {
-                if (m_iteratorColumnStart == KisWrappedRect::TOPLEFT &&
+        if (needSwitching) {
+            if (m_iteratorColumnStart == KisWrappedRect::TOPLEFT &&
                     m_iterators->at(KisWrappedRect::TOPRIGHT)) {
 
-                    m_iteratorColumnStart = KisWrappedRect::TOPRIGHT;
-                    m_lastColumnCoord = m_splitRect->topRight().right();
-                } else /* if (m_iteratorColumnStart == KisWrappedRect::TOPRIGHT) */ {
-                    m_iteratorColumnStart = KisWrappedRect::TOPLEFT;
-                    m_lastColumnCoord = m_splitRect->topLeft().right();
+                m_iteratorColumnStart = KisWrappedRect::TOPRIGHT;
+                m_lastColumnCoord = m_splitRect->topRight().right();
+            } else { /* if (m_iteratorColumnStart == KisWrappedRect::TOPRIGHT) */
+                m_iteratorColumnStart = KisWrappedRect::TOPLEFT;
+                m_lastColumnCoord = m_splitRect->topLeft().right();
 
-                    foreach (IteratorTypeSP it, *m_iterators) {
-                        if (it) {
-                            it->resetColumnPos();
-                        }
+                foreach (IteratorTypeSP it, *m_iterators) {
+                    if (it) {
+                        it->resetColumnPos();
                     }
                 }
             }
+        }
 
-            return needSwitching;
+        return needSwitching;
     }
 
-    inline void iteratorsToNextRow() {
+    inline void iteratorsToNextRow()
+    {
         leftColumnIterator()->nextColumn();
         if (rightColumnIterator()) {
             rightColumnIterator()->nextColumn();
         }
     }
 
-    inline bool trySwitchColumnForced() {
+    inline bool trySwitchColumnForced()
+    {
         leftColumnIterator()->resetPixelPos();
         if (rightColumnIterator()) {
             rightColumnIterator()->resetPixelPos();
@@ -122,6 +131,5 @@ private:
 
 #include "kis_wrapped_line_iterator_base.h"
 typedef KisWrappedLineIteratorBase<WrappedVLineIteratorStrategy, KisVLineIteratorNG> KisWrappedVLineIterator;
-
 
 #endif /* __KIS_WRAPPED_VLINE_ITERATOR_H */

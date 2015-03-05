@@ -52,14 +52,16 @@ void KoSizeGroupPrivate::addWidget(QWidget *widget)
             // Search for the widget index and the QLayoutItem inside of the layout
             QLayoutItem *layoutItem =  NULL;
             int layoutWidgetIndex = 0;
-            for(int i = 0; i < layout->count(); ++i) {
+            for (int i = 0; i < layout->count(); ++i) {
                 layoutItem = layout->itemAt(layoutWidgetIndex);
-                if (layoutItem->widget() == widget) break;
+                if (layoutItem->widget() == widget) {
+                    break;
+                }
                 ++layoutWidgetIndex;
             }
 
             // We need to replace the layoutItem with an instance of GroupItem
-            GroupItem *groupItem = dynamic_cast<GroupItem*>(layoutItem);
+            GroupItem *groupItem = dynamic_cast<GroupItem *>(layoutItem);
             if (groupItem) {
                 // This widget is already inside of a group
                 // One widget inside multiple groups is not supported
@@ -75,7 +77,7 @@ void KoSizeGroupPrivate::addWidget(QWidget *widget)
                 // This step depends on the actual layout specialization.
 
                 // Widget within a QFormLayout
-                QFormLayout* formLayout = qobject_cast<QFormLayout*>(layout);
+                QFormLayout *formLayout = qobject_cast<QFormLayout *>(layout);
                 if (formLayout) {
                     int row;
                     QFormLayout::ItemRole role;
@@ -89,7 +91,7 @@ void KoSizeGroupPrivate::addWidget(QWidget *widget)
                 }
 
                 // Widget within a QGridLayout
-                QGridLayout *gridLayout = qobject_cast<QGridLayout*>(layout);
+                QGridLayout *gridLayout = qobject_cast<QGridLayout *>(layout);
                 if (gridLayout) {
                     int row, column, rowspan, columnspan;
                     gridLayout->getItemPosition(layoutWidgetIndex, &row, &column, &rowspan, &columnspan);
@@ -119,7 +121,7 @@ void KoSizeGroupPrivate::removeWidget(QWidget *widget)
         if (layout) {
             // Search the GroupItem of the widget inside of the GroupItem list
             GroupItem *widgetGroupItem = NULL;
-            Q_FOREACH(GroupItem * groupItem, m_groupItems) {
+            Q_FOREACH (GroupItem *groupItem, m_groupItems) {
                 if (groupItem->widget() == widget) {
                     widgetGroupItem = groupItem;
                     break;
@@ -135,7 +137,7 @@ void KoSizeGroupPrivate::removeWidget(QWidget *widget)
                 // This step depends on the actual layout specialization.
 
                 // Widget within a QFormLayout
-                QFormLayout* formLayout = qobject_cast<QFormLayout*>(layout);
+                QFormLayout *formLayout = qobject_cast<QFormLayout *>(layout);
                 if (formLayout) {
                     int row;
                     QFormLayout::ItemRole role;
@@ -148,7 +150,7 @@ void KoSizeGroupPrivate::removeWidget(QWidget *widget)
                 }
 
                 // Widget within a QGridLayout
-                QGridLayout *gridLayout = qobject_cast<QGridLayout*>(layout);
+                QGridLayout *gridLayout = qobject_cast<QGridLayout *>(layout);
                 if (gridLayout) {
                     int row, column, rowspan, columnspan;
                     gridLayout->getItemPosition(layoutWidgetIndex, &row, &column, &rowspan, &columnspan);
@@ -176,7 +178,7 @@ void KoSizeGroupPrivate::updateSize()
 {
     if (m_mode == KoSizeGroup::KO_SIZE_GROUP_NONE) {
         // restore original widget size in each GroupItem
-        Q_FOREACH(GroupItem *groupItem, m_groupItems) {
+        Q_FOREACH (GroupItem *groupItem, m_groupItems) {
             groupItem->setSize(groupItem->widget()->sizeHint());
             groupItem->widget()->updateGeometry();
         }
@@ -184,9 +186,10 @@ void KoSizeGroupPrivate::updateSize()
         // compute widgets size
         int width = 0;
         int height = 0;
-        Q_FOREACH(GroupItem *groupItem, m_groupItems) {
-            if (m_ignoreHidden && groupItem->hidden())
+        Q_FOREACH (GroupItem *groupItem, m_groupItems) {
+            if (m_ignoreHidden && groupItem->hidden()) {
                 continue;
+            }
 
             const QWidget *widget = groupItem->widget();
             width = qMax(widget->sizeHint().width(), width);
@@ -197,11 +200,12 @@ void KoSizeGroupPrivate::updateSize()
         m_maxSizeHint.setHeight(height);
 
         // update groupItem size
-        Q_FOREACH(GroupItem *groupItem, m_groupItems) {
-            if (m_ignoreHidden && groupItem->hidden())
+        Q_FOREACH (GroupItem *groupItem, m_groupItems) {
+            if (m_ignoreHidden && groupItem->hidden()) {
                 continue;
+            }
 
-            switch(m_mode) {
+            switch (m_mode) {
             case KoSizeGroup::KO_SIZE_GROUP_HORIZONTAL:
                 groupItem->setWidth(width);
                 break;
@@ -226,7 +230,7 @@ void KoSizeGroupPrivate::updateSize()
     }
 }
 
-GroupItem::GroupItem(QWidget* widget)
+GroupItem::GroupItem(QWidget *widget)
     : QObject()
     , QWidgetItem(widget)
 {
@@ -250,8 +254,7 @@ QSize GroupItem::minimumSize() const
     return size;
 }
 
-
-bool GroupItem::eventFilter(QObject*, QEvent *event)
+bool GroupItem::eventFilter(QObject *, QEvent *event)
 {
     switch (event->type()) {
     case QEvent::Hide:
@@ -275,8 +278,6 @@ bool GroupItem::eventFilter(QObject*, QEvent *event)
     default:
         break;
     }
-
-
 
     return false;
 }

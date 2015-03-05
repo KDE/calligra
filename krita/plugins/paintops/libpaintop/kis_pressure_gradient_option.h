@@ -31,7 +31,7 @@ class PAINTOP_EXPORT KisPressureGradientOption: public KisCurveOption
 {
 public:
     KisPressureGradientOption();
-    void apply(KoColor& color, const KoAbstractGradient* gradient, const KisPaintInformation& info) const;
+    void apply(KoColor &color, const KoAbstractGradient *gradient, const KisPaintInformation &info) const;
 };
 
 #endif // KIS_PRESSURE_GRADIENT_OPTION_H

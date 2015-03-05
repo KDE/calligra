@@ -53,7 +53,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KIS_ROTATE_CANVAS_ACTION_H

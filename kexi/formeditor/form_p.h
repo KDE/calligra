@@ -50,14 +50,14 @@ class ObjectTree;
 class DesignModeStyle : public KexiUtils::StyleProxy
 {
 public:
-    explicit DesignModeStyle(QStyle* parentStyle, QObject *parent = 0);
+    explicit DesignModeStyle(QStyle *parentStyle, QObject *parent = 0);
 
     //! Reimplemented to remove handling of the State_MouseOver state.
     virtual void drawControl(ControlElement element, const QStyleOption *option,
                              QPainter *p, const QWidget *w = 0) const;
 
 private:
-    QStyleOption* alterOption(ControlElement element, const QStyleOption *option) const;
+    QStyleOption *alterOption(ControlElement element, const QStyleOption *option) const;
 };
 
 //--------------
@@ -66,10 +66,10 @@ private:
 class FormPrivate
 {
 public:
-    FormPrivate(Form *form, WidgetLibrary* _library);
+    FormPrivate(Form *form, WidgetLibrary *_library);
     ~FormPrivate();
 
-    void enableAction(const char* name, bool enable);
+    void enableAction(const char *name, bool enable);
 
     void initPropertiesDescription();
 
@@ -81,14 +81,14 @@ public:
 
     void addValueCaption(const QByteArray &value, const QString &caption);
 
-    KoProperty::Property::ListData* createValueList(WidgetInfo *winfo, const QStringList &list);
+    KoProperty::Property::ListData *createValueList(WidgetInfo *winfo, const QStringList &list);
 
     //! Sets color of selected widget(s) to value of @a p.
     //! @a roleMethod can be backgroundColor or foregroundColor.
     //! Makes background inherited if @a roleMethod if background and value is null.
-    void setColorProperty(KoProperty::Property& p,
-                          QPalette::ColorRole (QWidget::*roleMethod)() const,
-                          const QVariant& value);
+    void setColorProperty(KoProperty::Property &p,
+                          QPalette::ColorRole(QWidget::*roleMethod)() const,
+                          const QVariant &value);
 
     Form::Mode mode;
     Form::State state;
@@ -111,7 +111,7 @@ public:
     KUndo2Stack undoStack;
     KActionCollection internalCollection;
     KActionCollection *collection;
-    KFormDesigner::ActionGroup* widgetActionGroup;
+    KFormDesigner::ActionGroup *widgetActionGroup;
 
     ObjectTreeList  tabstops;
     bool autoTabstops;
@@ -124,7 +124,7 @@ public:
 #endif
 
     //! This map is used to store cursor shapes before inserting (so we can restore them later)
-    QHash<QObject*, QCursor> cursors;
+    QHash<QObject *, QCursor> cursors;
 
     //! This string list is used to store the widgets which hasMouseTracking() == true (eg lineedits)
     QStringList *mouseTrackers;
@@ -169,7 +169,7 @@ public:
     QString originalInlineText;
     bool pixmapsStoredInline;
 
-    WidgetLibrary * const library;
+    WidgetLibrary *const library;
 
 private:
     Form *q;

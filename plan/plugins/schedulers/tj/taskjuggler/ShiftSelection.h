@@ -29,31 +29,37 @@ class ShiftSelection
     friend class ShiftSelectionList;
 
 public:
-    ShiftSelection(const Interval& p, Shift* s) :
+    ShiftSelection(const Interval &p, Shift *s) :
         period(new Interval(p)),
         shift(s)
     { }
 
-    ShiftSelection(Interval* p, Shift* s) :
+    ShiftSelection(Interval *p, Shift *s) :
         period(p),
         shift(s)
     { }
 
-    ShiftSelection(const ShiftSelection& sl);
+    ShiftSelection(const ShiftSelection &sl);
 
     ~ShiftSelection()
     {
         delete period;
     }
 
-    const Interval& getPeriod() const { return *period; }
-    Shift* getShift() const { return shift; }
+    const Interval &getPeriod() const
+    {
+        return *period;
+    }
+    Shift *getShift() const
+    {
+        return shift;
+    }
 
     bool isVacationDay(time_t day) const;
 
 private:
-    Interval* period;
-    Shift* shift;
+    Interval *period;
+    Shift *shift;
 };
 
 } // namespace TJ

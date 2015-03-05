@@ -45,8 +45,7 @@ class KPrAnimationDirector : public QObject
 {
     Q_OBJECT
 public:
-    enum Navigation
-    {
+    enum Navigation {
         FirstPage,
         PreviousPage,
         PreviousStep,
@@ -55,13 +54,13 @@ public:
         LastPage
     };
 
-    KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage );
+    KPrAnimationDirector(KoPAView *view, KoPACanvas *canvas, const QList<KoPAPageBase *> &pages, KoPAPageBase *currentPage);
     virtual ~KPrAnimationDirector();
 
-    void paint(QPainter& painter, const QRectF &paintRect);
-    void paintEvent( QPaintEvent* event );
+    void paint(QPainter &painter, const QRectF &paintRect);
+    void paintEvent(QPaintEvent *event);
 
-    KoViewConverter * viewConverter();
+    KoViewConverter *viewConverter();
 
     /**
      * get the number of pages
@@ -88,12 +87,12 @@ public:
      *
      * @return true if slideshow is finished and should be exited, false otherwise
      */
-    bool navigate( Navigation navigation );
+    bool navigate(Navigation navigation);
 
     /**
      * do the navigation to the page specified
      */
-    void navigateToPage( int index );
+    void navigateToPage(int index);
 
     /**
      * Get the animation for the shape
@@ -101,19 +100,19 @@ public:
      * @param shape which should be animated
      * @return pair of the animation and the animation data for the shape or a 0, 0 if there is no animation
      */
-    KPrShapeAnimation shapeAnimation( KoShape * shape );
+    KPrShapeAnimation shapeAnimation(KoShape *shape);
 
     void deactivate();
 protected:
     // set the page to be shon and update the UI
-    void updateActivePage( KoPAPageBase * page );
+    void updateActivePage(KoPAPageBase *page);
 
     /**
      * change the page
      *
      * @return true if slideshow is finished and should be exited, false otherwise
      */
-    bool changePage( Navigation navigation );
+    bool changePage(Navigation navigation);
 
     /**
      * Update to the next step
@@ -128,7 +127,7 @@ protected:
     void previousStep();
 
     // paint the given step to the painter
-    void paintStep( QPainter & painter );
+    void paintStep(QPainter &painter);
 
     /**
      * Finish the running shape animations
@@ -138,7 +137,7 @@ protected:
     /**
      * Start the timeline
      */
-    void startTimeLine( int duration );
+    void startTimeLine(int duration);
 
     // helper method for freeing the resources of the animations
     void clearAnimations();
@@ -151,20 +150,20 @@ protected:
 
 protected Q_SLOTS:
     // update the zoom value
-    void updateZoom( const QSize & size );
+    void updateZoom(const QSize &size);
     // acts on the time line event
     void animate();
 
 private:
-    KoPAView * m_view;
-    KoPACanvas * m_canvas;
-    QList<KoPAPageBase*> m_pages;
+    KoPAView *m_view;
+    KoPACanvas *m_canvas;
+    QList<KoPAPageBase *> m_pages;
 
     KoZoomHandler m_zoomHandler;
     QPoint m_offset;
     QRect m_pageRect;
 
-    KPrPageEffectRunner * m_pageEffectRunner;
+    KPrPageEffectRunner *m_pageEffectRunner;
     QList<KPrAnimationStep *> m_animations;
     QTimeLine m_timeLine;
     int m_pageIndex;
@@ -172,7 +171,7 @@ private:
     int m_maxShapeDuration;
     // true when there is an animtion in this step
     bool m_hasAnimation;
-    KPrAnimationCache * m_animationCache;
+    KPrAnimationCache *m_animationCache;
 };
 
 #endif /* KPRANIMATIONDIRECTOR_H */

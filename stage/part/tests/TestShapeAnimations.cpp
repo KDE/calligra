@@ -59,19 +59,19 @@ void TestShapeAnimations::addRemove()
     animations.add(m_animation[6]);
 
     // Test animationByRowOutPut
-    QCOMPARE (animations.animationByRow(0), m_animation[1]);
-    QCOMPARE (animations.animationByRow(1), m_animation[2]);
-    QCOMPARE (animations.animationByRow(2), m_animation[3]);
-    QCOMPARE (animations.animationByRow(3), m_animation[4]);
-    QCOMPARE (animations.animationByRow(4), m_animation[6]);
+    QCOMPARE(animations.animationByRow(0), m_animation[1]);
+    QCOMPARE(animations.animationByRow(1), m_animation[2]);
+    QCOMPARE(animations.animationByRow(2), m_animation[3]);
+    QCOMPARE(animations.animationByRow(3), m_animation[4]);
+    QCOMPARE(animations.animationByRow(4), m_animation[6]);
 
     //Test Order is updated
     animations.remove(m_animation[1]);
     animations.remove(m_animation[3]);
 
-    QCOMPARE (animations.animationByRow(0), m_animation[2]);
-    QCOMPARE (animations.animationByRow(1), m_animation[4]);
-    QCOMPARE (animations.animationByRow(2), m_animation[6]);
+    QCOMPARE(animations.animationByRow(0), m_animation[2]);
+    QCOMPARE(animations.animationByRow(1), m_animation[4]);
+    QCOMPARE(animations.animationByRow(2), m_animation[6]);
 
     QVERIFY(animations.rowCount() == 3);
 
@@ -95,8 +95,8 @@ void TestShapeAnimations::replaceSwap()
 
     //Test swap animations
     animations.swapAnimations(m_animation[1], m_animation[3]);
-    QCOMPARE (animations.animationByRow(0), m_animation[3]);
-    QCOMPARE (animations.animationByRow(2), m_animation[1]);
+    QCOMPARE(animations.animationByRow(0), m_animation[3]);
+    QCOMPARE(animations.animationByRow(2), m_animation[1]);
     QVERIFY(animations.rowCount() == 3);
 
     //Test replace animation
@@ -479,7 +479,7 @@ void TestShapeAnimations::createAnimationTree(KPrShapeAnimations *animations)
     subStep4->addAnimation(m_animation[6]);
     subStep5->addAnimation(m_animation[7]);
     subStep5->addAnimation(m_animation[8]);
-    foreach(MockShapeAnimation *animation, m_animation) {
+    foreach (MockShapeAnimation *animation, m_animation) {
         animation->setBeginTime(0);
         animation->setGlobalDuration(1);
     }
@@ -509,7 +509,7 @@ void TestShapeAnimations::createAnimationTree(KPrShapeAnimations *animations)
 
 void TestShapeAnimations::cleanStepSubStepData()
 {
-    foreach(MockShapeAnimation *animation, m_animation) {
+    foreach (MockShapeAnimation *animation, m_animation) {
         animation->setStep(0);
         animation->setSubStep(0);
     }
@@ -518,7 +518,7 @@ void TestShapeAnimations::cleanStepSubStepData()
 void TestShapeAnimations::checkOrder(KPrShapeAnimations *animations)
 {
     for (int i = 0; i < m_animation.count(); i++) {
-        QCOMPARE (animations->animationByRow(i), m_animation[i]);
+        QCOMPARE(animations->animationByRow(i), m_animation[i]);
     }
 }
 

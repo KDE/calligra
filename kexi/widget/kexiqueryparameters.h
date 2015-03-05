@@ -39,7 +39,7 @@ public:
     //! @todo support validation rules, e.g. min/max value, unsigned
     //! @todo support Enum type (list of strings, need support for keys and user-visible strings)
     static QList<QVariant> getParameters(QWidget *parent, const KexiDB::Driver &driver,
-                                         KexiDB::QuerySchema& querySchema, bool &ok);
+                                         KexiDB::QuerySchema &querySchema, bool &ok);
 };
 
 #endif // KEXIDBCONNECTIONWIDGET_H

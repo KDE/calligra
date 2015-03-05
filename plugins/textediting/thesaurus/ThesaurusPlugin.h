@@ -23,11 +23,12 @@
 #include <QObject>
 #include <QVariant>
 
-class ThesaurusPlugin : public QObject {
+class ThesaurusPlugin : public QObject
+{
     Q_OBJECT
 
 public:
-    ThesaurusPlugin(QObject * parent,  const QVariantList &);
+    ThesaurusPlugin(QObject *parent,  const QVariantList &);
     ~ThesaurusPlugin() {}
 };
 

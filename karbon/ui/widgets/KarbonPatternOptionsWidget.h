@@ -26,7 +26,8 @@
 
 #include <QWidget>
 
-class KARBONUI_EXPORT KarbonPatternOptionsWidget : public QWidget {
+class KARBONUI_EXPORT KarbonPatternOptionsWidget : public QWidget
+{
     Q_OBJECT
 public:
     explicit KarbonPatternOptionsWidget(QWidget *parent = 0);
@@ -69,7 +70,7 @@ private Q_SLOTS:
     void updateControls();
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
 };
 

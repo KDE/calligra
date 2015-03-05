@@ -57,12 +57,12 @@ public:
      * @param parent a pointer to the parent widget
      * @param docInfo a pointer to the shown KoDocumentInfo
      */
-    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo* docInfo);
+    KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo);
 
     /** The destructor */
     virtual ~KoDocumentInfoDlg();
 
-    QList<KPageWidgetItem*> pages() const;
+    QList<KPageWidgetItem *> pages() const;
 
     /** Returns true if the document was saved when the dialog was closed */
     bool isDocumentSaved();
@@ -98,7 +98,7 @@ private:
     void slotButtonClicked(int button);
 
     class KoDocumentInfoDlgPrivate;
-    KoDocumentInfoDlgPrivate * const d;
+    KoDocumentInfoDlgPrivate *const d;
 };
 
 #endif

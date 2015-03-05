@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "KoOdfParagraphProperties.h"
 
@@ -32,10 +31,8 @@
 #include <KoXmlStreamReader.h>
 #include <KoXmlWriter.h>
 
-
 // ----------------------------------------------------------------
 //                         private class
-
 
 class KoOdfParagraphProperties::Private
 {
@@ -45,7 +42,7 @@ public:
 
     // NYI: Background Image
     KoOdfStyleDropCap         *dropCap;
-    QList<KoOdfStyleTabStop*>  tabStops;
+    QList<KoOdfStyleTabStop *>  tabStops;
 };
 
 KoOdfParagraphProperties::Private::Private()
@@ -62,9 +59,7 @@ KoOdfParagraphProperties::Private::~Private()
     qDeleteAll(tabStops);
 }
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfParagraphProperties::KoOdfParagraphProperties()
     : KoOdfStyleProperties()
@@ -77,7 +72,6 @@ KoOdfParagraphProperties::~KoOdfParagraphProperties()
     delete d;
 }
 
-
 void KoOdfParagraphProperties::clear()
 {
     KoOdfStyleProperties::clear();
@@ -89,7 +83,6 @@ void KoOdfParagraphProperties::clear()
     }
     qDeleteAll(d->tabStops);
 }
-
 
 bool KoOdfParagraphProperties::readOdf(KoXmlStreamReader &reader)
 {
@@ -107,17 +100,14 @@ bool KoOdfParagraphProperties::readOdf(KoXmlStreamReader &reader)
 
         if (child == "style:background-image") {
             // FIXME: NYI
-        }
-        else if (child == "style:drop-cap") {
+        } else if (child == "style:drop-cap") {
             if (d->dropCap) {
                 d->dropCap->attributes.clear();
-            }
-            else {
+            } else {
                 d->dropCap = new KoOdfStyleDropCap();
             }
             copyAttributes(reader, d->dropCap->attributes);
-        }
-        else if (child == "style:tab-stops") {
+        } else if (child == "style:tab-stops") {
             while (reader.readNextStartElement()) {
                 if (reader.qualifiedName() == "style:tab-stop") {
                     KoOdfStyleTabStop  *tabStop = new KoOdfStyleTabStop;

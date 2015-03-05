@@ -24,12 +24,13 @@
 #include <KoToolFactoryBase.h>
 
 /// Factory for the KPrAnimationTool
-class KPrAnimationToolFactory : public KoToolFactoryBase {
+class KPrAnimationToolFactory : public KoToolFactoryBase
+{
 public:
     /// constructor
     KPrAnimationToolFactory();
     ~KPrAnimationToolFactory();
 
-    KoToolBase* createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 #endif

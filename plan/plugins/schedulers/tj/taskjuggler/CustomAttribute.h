@@ -17,7 +17,6 @@
 namespace TJ
 {
 
-
 /*
  * @short This is the virtual base class for all user defined attribute types.
  * @author Chris Schlaeger <cs@kde.org>
@@ -28,8 +27,11 @@ public:
     CustomAttribute() { }
     virtual ~CustomAttribute() { }
 
-    virtual CustomAttributeType getType() const { return CAT_Undefined; }
-} ;
+    virtual CustomAttributeType getType() const
+    {
+        return CAT_Undefined;
+    }
+};
 
 } // namespace TJ
 

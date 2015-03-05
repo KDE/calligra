@@ -23,18 +23,17 @@
 #include <recorder/kis_node_query_path.h>
 #include <KoIcon.h>
 
-struct KisNodeQueryPathEditor::Private
-{
+struct KisNodeQueryPathEditor::Private {
     Ui_WdgNodeQueryPathEditor form;
 };
 
-KisNodeQueryPathEditor::KisNodeQueryPathEditor(QWidget* parent) : QWidget(parent), d(new Private)
+KisNodeQueryPathEditor::KisNodeQueryPathEditor(QWidget *parent) : QWidget(parent), d(new Private)
 {
     d->form.setupUi(this);
-  
+
     connect(d->form.radioButtonCurrentLayer, SIGNAL(clicked(bool)), SLOT(currentLayerEnabled(bool)));
     connect(d->form.radioButtonCustomPath, SIGNAL(clicked(bool)), SLOT(customPathEnabled(bool)));
-    
+
     d->form.kpushbutton->setIcon(koIcon("help-contents"));
     connect(d->form.kpushbutton, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
     currentLayerEnabled(true);
@@ -47,17 +46,16 @@ KisNodeQueryPathEditor::~KisNodeQueryPathEditor()
     delete d;
 }
 
-void KisNodeQueryPathEditor::setNodeQueryPath(const KisNodeQueryPath& path)
+void KisNodeQueryPathEditor::setNodeQueryPath(const KisNodeQueryPath &path)
 {
-  if(path.toString() == ".")
-  {
-    d->form.radioButtonCurrentLayer->setChecked(true);
-    currentLayerEnabled(true);
-  } else {
-    d->form.radioButtonCustomPath->setChecked(true);
-    customPathEnabled(true);
-    d->form.klineeditPath->setText(path.toString());
-  }
+    if (path.toString() == ".") {
+        d->form.radioButtonCurrentLayer->setChecked(true);
+        currentLayerEnabled(true);
+    } else {
+        d->form.radioButtonCustomPath->setChecked(true);
+        customPathEnabled(true);
+        d->form.klineeditPath->setText(path.toString());
+    }
 }
 
 KisNodeQueryPath KisNodeQueryPathEditor::nodeQueryPath() const
@@ -67,7 +65,9 @@ KisNodeQueryPath KisNodeQueryPathEditor::nodeQueryPath() const
 
 void KisNodeQueryPathEditor::currentLayerEnabled(bool v)
 {
-    if(!v) return;
+    if (!v) {
+        return;
+    }
     d->form.klineeditPath->setEnabled(false);
     d->form.kpushbutton->setEnabled(false);
     d->form.klineeditPath->setText(".");
@@ -75,7 +75,9 @@ void KisNodeQueryPathEditor::currentLayerEnabled(bool v)
 
 void KisNodeQueryPathEditor::customPathEnabled(bool v)
 {
-    if(!v) return;
+    if (!v) {
+        return;
+    }
     d->form.klineeditPath->setEnabled(true);
     d->form.kpushbutton->setEnabled(true);
 }
@@ -83,14 +85,14 @@ void KisNodeQueryPathEditor::customPathEnabled(bool v)
 void KisNodeQueryPathEditor::slotPopupQuickHelp()
 {
     QWhatsThis::showText(QCursor::pos(), i18n(
-          "<b>/</b> represents the root of the image, or a separator<br/>\n"
-          "<b>a number</b> represents a layer<br/>\n"
-          "<b>.</b> represents the current layer<br/>\n"
-          "<b>..</b> represents the parent layer<br/>\n\n"
-          "<b>Examples:</b><br/>\n"
-          "<i>/0</i> represents the bottom layer of the image<br/>\n"
-          "<i>../1</i> represents the second layer from the bottom of the parent of the current layer<br/>\n"
-          "<i>./0</i> represents the first child of the current layer" ) );
+                             "<b>/</b> represents the root of the image, or a separator<br/>\n"
+                             "<b>a number</b> represents a layer<br/>\n"
+                             "<b>.</b> represents the current layer<br/>\n"
+                             "<b>..</b> represents the parent layer<br/>\n\n"
+                             "<b>Examples:</b><br/>\n"
+                             "<i>/0</i> represents the bottom layer of the image<br/>\n"
+                             "<i>../1</i> represents the second layer from the bottom of the parent of the current layer<br/>\n"
+                             "<i>./0</i> represents the first child of the current layer"));
 }
 
 #include "kis_node_query_path_editor.moc"

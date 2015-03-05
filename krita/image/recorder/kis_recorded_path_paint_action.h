@@ -36,42 +36,41 @@ class KRITAIMAGE_EXPORT KisRecordedPathPaintAction : public KisRecordedPaintActi
 
 public:
 
-    KisRecordedPathPaintAction(const KisNodeQueryPath& path,
+    KisRecordedPathPaintAction(const KisNodeQueryPath &path,
                                const KisPaintOpPresetSP paintOpPreset);
 
-    KisRecordedPathPaintAction(const KisRecordedPathPaintAction&);
+    KisRecordedPathPaintAction(const KisRecordedPathPaintAction &);
 
     ~KisRecordedPathPaintAction();
 
-    void addPoint(const KisPaintInformation& info);
-    void addLine(const KisPaintInformation& point1, const KisPaintInformation& point2);
-    void addPolyLine(const QList<QPointF>& points);
-    void addCurve(const KisPaintInformation& point1,
-                  const QPointF& control1,
-                  const QPointF& control2,
-                  const KisPaintInformation& point2);
+    void addPoint(const KisPaintInformation &info);
+    void addLine(const KisPaintInformation &point1, const KisPaintInformation &point2);
+    void addPolyLine(const QList<QPointF> &points);
+    void addCurve(const KisPaintInformation &point1,
+                  const QPointF &control1,
+                  const QPointF &control2,
+                  const KisPaintInformation &point2);
 
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
+    virtual void toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *) const;
 
-    virtual KisRecordedAction* clone() const;
+    virtual KisRecordedAction *clone() const;
 
 protected:
 
-    virtual void playPaint(const KisPlayInfo& info, KisPainter* painter) const;
+    virtual void playPaint(const KisPlayInfo &info, KisPainter *painter) const;
 
 private:
 
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 class KisRecordedPathPaintActionFactory : public KisRecordedPaintActionFactory
 {
 public:
     KisRecordedPathPaintActionFactory();
     virtual ~KisRecordedPathPaintActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
+    virtual KisRecordedAction *fromXML(const QDomElement &elt, const KisRecordedActionLoadContext *);
 };
 
 #endif

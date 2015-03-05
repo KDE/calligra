@@ -46,8 +46,8 @@
 #include <recorder/kis_node_query_path.h>
 #include <recorder/kis_action_recorder.h>
 
-KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
-        : KisToolPaint(canvas, cursor)
+KisToolShape::KisToolShape(KoCanvasBase *canvas, const QCursor &cursor)
+    : KisToolPaint(canvas, cursor)
 {
     m_shapeOptionsWidget = 0;
 }
@@ -60,21 +60,20 @@ KisToolShape::~KisToolShape()
     }
 }
 
-void KisToolShape::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolShape::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);
     configGroup = KGlobal::config()->group(toolId());
 }
 
-
 int KisToolShape::flags() const
 {
-    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP|KisTool::FLAG_USES_CUSTOM_PRESET;
+    return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP | KisTool::FLAG_USES_CUSTOM_PRESET;
 }
 
-QWidget * KisToolShape::createOptionWidget()
+QWidget *KisToolShape::createOptionWidget()
 {
-    QWidget * optionWidget = KisToolPaint::createOptionWidget();
+    QWidget *optionWidget = KisToolPaint::createOptionWidget();
 
     m_shapeOptionsWidget = new WdgGeometryOptions(0);
     Q_CHECK_PTR(m_shapeOptionsWidget);
@@ -107,9 +106,8 @@ QWidget * KisToolShape::createOptionWidget()
     m_shapeOptionsWidget->cmbFill->setCurrentIndex(configGroup.readEntry("fillType", 0));
 
     //if both settings are empty, force the outline to brush so the tool will work when first activated
-    if (  m_shapeOptionsWidget->cmbFill->currentIndex() == 0 &&
-          m_shapeOptionsWidget->cmbOutline->currentIndex() == 0)
-    {
+    if (m_shapeOptionsWidget->cmbFill->currentIndex() == 0 &&
+            m_shapeOptionsWidget->cmbOutline->currentIndex() == 0) {
         m_shapeOptionsWidget->cmbOutline->setCurrentIndex(1); // brush
     }
 
@@ -144,7 +142,7 @@ KisPainter::StrokeStyle KisToolShape::strokeStyle(void)
     }
 }
 
-void KisToolShape::setupPaintAction(KisRecordedPaintAction* action)
+void KisToolShape::setupPaintAction(KisRecordedPaintAction *action)
 {
     KisToolPaint::setupPaintAction(action);
     action->setFillStyle(fillStyle());
@@ -154,44 +152,43 @@ void KisToolShape::setupPaintAction(KisRecordedPaintAction* action)
     action->setGradient(currentGradient());
 }
 
-void KisToolShape::addShape(KoShape* shape)
+void KisToolShape::addShape(KoShape *shape)
 {
-    KoImageCollection* imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
-    switch(fillStyle()) {
-        case KisPainter::FillStyleForegroundColor:
-            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentFgColor().toQColor())));
-            break;
-        case KisPainter::FillStyleBackgroundColor:
-            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentBgColor().toQColor())));
-            break;
-        case KisPainter::FillStylePattern:
-            if (imageCollection) {
-                QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
-                fill->setPattern(currentPattern()->pattern());
-                shape->setBackground(fill);
-            } else {
-                shape->setBackground(QSharedPointer<KoShapeBackground>(0));
-            }
-            break;
-        case KisPainter::FillStyleGradient:
-            {
-                QLinearGradient *gradient = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
-                gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
-                gradient->setStops(currentGradient()->toQGradient()->stops());
-                QSharedPointer<KoGradientBackground>  gradientFill(new KoGradientBackground(gradient));
-                shape->setBackground(gradientFill);
-            }
-            break;
-        case KisPainter::FillStyleNone:
-        default:
+    KoImageCollection *imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
+    switch (fillStyle()) {
+    case KisPainter::FillStyleForegroundColor:
+        shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentFgColor().toQColor())));
+        break;
+    case KisPainter::FillStyleBackgroundColor:
+        shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentBgColor().toQColor())));
+        break;
+    case KisPainter::FillStylePattern:
+        if (imageCollection) {
+            QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
+            fill->setPattern(currentPattern()->pattern());
+            shape->setBackground(fill);
+        } else {
             shape->setBackground(QSharedPointer<KoShapeBackground>(0));
-            break;
+        }
+        break;
+    case KisPainter::FillStyleGradient: {
+        QLinearGradient *gradient = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
+        gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+        gradient->setStops(currentGradient()->toQGradient()->stops());
+        QSharedPointer<KoGradientBackground>  gradientFill(new KoGradientBackground(gradient));
+        shape->setBackground(gradientFill);
     }
-    KUndo2Command * cmd = canvas()->shapeController()->addShape(shape);
+    break;
+    case KisPainter::FillStyleNone:
+    default:
+        shape->setBackground(QSharedPointer<KoShapeBackground>(0));
+        break;
+    }
+    KUndo2Command *cmd = canvas()->shapeController()->addShape(shape);
     canvas()->addCommand(cmd);
 }
 
-void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name)
+void KisToolShape::addPathShape(KoPathShape *pathShape, const KUndo2MagicString &name)
 {
     KisNodeSP node = currentNode();
     if (!node || node->systemLocked()) {
@@ -209,8 +206,8 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
 
     // Recorde the paint action
     KisRecordedPathPaintAction bezierCurvePaintAction(
-            KisNodeQueryPath::absolutePath(node),
-            preset );
+        KisNodeQueryPath::absolutePath(node),
+        preset);
     bezierCurvePaintAction.setPaintColor(currentFgColor());
     QPointF lastPoint, nextPoint;
     int elementCount = mapedOutline.elementCount();
@@ -231,11 +228,11 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
         case QPainterPath::CurveToElement:
             nextPoint =  QPointF(mapedOutline.elementAt(i + 2).x, mapedOutline.elementAt(i + 2).y);
             bezierCurvePaintAction.addCurve(KisPaintInformation(lastPoint),
-                                             QPointF(mapedOutline.elementAt(i).x,
-                                                     mapedOutline.elementAt(i).y),
-                                             QPointF(mapedOutline.elementAt(i + 1).x,
-                                                     mapedOutline.elementAt(i + 1).y),
-                                             KisPaintInformation(nextPoint));
+                                            QPointF(mapedOutline.elementAt(i).x,
+                                                    mapedOutline.elementAt(i).y),
+                                            QPointF(mapedOutline.elementAt(i + 1).x,
+                                                    mapedOutline.elementAt(i + 1).y),
+                                            KisPaintInformation(nextPoint));
             lastPoint = nextPoint;
             break;
         default:

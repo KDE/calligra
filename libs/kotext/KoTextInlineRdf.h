@@ -140,7 +140,6 @@ public:
      */
     QPair<int, int> findExtent() const;
 
-
     /**
      * Update the xml:id, using during cut and paste as well as document save.
      */
@@ -157,8 +156,8 @@ private:
     friend class KoDocumentRdf;
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(KoTextInlineRdf*)
+Q_DECLARE_METATYPE(KoTextInlineRdf *)
 #endif

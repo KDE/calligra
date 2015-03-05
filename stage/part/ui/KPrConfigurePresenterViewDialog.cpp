@@ -26,36 +26,36 @@
 
 #include "KPrDocument.h"
 
-KPrConfigurePresenterViewDialog::KPrConfigurePresenterViewDialog( KPrDocument *document, QWidget *parent )
-    : KDialog( parent )
-    , m_document( document )
+KPrConfigurePresenterViewDialog::KPrConfigurePresenterViewDialog(KPrDocument *document, QWidget *parent)
+    : KDialog(parent)
+    , m_document(document)
 {
-    QWidget *widget = new QWidget( this );
+    QWidget *widget = new QWidget(this);
 
-    ui.setupUi( widget );
+    ui.setupUi(widget);
 
     QDesktopWidget desktop;
     int numScreens = desktop.numScreens();
     int primaryScreen = desktop.primaryScreen();
-    for ( int i = 0; i < numScreens; i++ ) {
-        if ( i == primaryScreen ) {
-            ui.monitorComboBox->addItem( i18n( "Monitor %1 (primary)", i + 1 ) );
-        }
-        else {
-            ui.monitorComboBox->addItem( i18n( "Monitor %1", i + 1 ) );
+    for (int i = 0; i < numScreens; i++) {
+        if (i == primaryScreen) {
+            ui.monitorComboBox->addItem(i18n("Monitor %1 (primary)", i + 1));
+        } else {
+            ui.monitorComboBox->addItem(i18n("Monitor %1", i + 1));
         }
     }
 
-    if ( numScreens <= 1 )
-        ui.presenterViewCheckBox->setEnabled( false );
+    if (numScreens <= 1) {
+        ui.presenterViewCheckBox->setEnabled(false);
+    }
 
-    setMainWidget( widget );
+    setMainWidget(widget);
 
-    setCaption( i18n( "Configure Presenter View" ) );
+    setCaption(i18n("Configure Presenter View"));
 
-    ui.monitorComboBox->setCurrentIndex( document->presentationMonitor() );
+    ui.monitorComboBox->setCurrentIndex(document->presentationMonitor());
     ui.presenterViewCheckBox->setChecked(
-            document->isPresenterViewEnabled() ? Qt::Checked : Qt::Unchecked );
+        document->isPresenterViewEnabled() ? Qt::Checked : Qt::Unchecked);
 }
 
 int KPrConfigurePresenterViewDialog::presentationMonitor()
@@ -65,7 +65,7 @@ int KPrConfigurePresenterViewDialog::presentationMonitor()
 
 bool KPrConfigurePresenterViewDialog::presenterViewEnabled()
 {
-    return ( ui.presenterViewCheckBox->checkState() == Qt::Checked );
+    return (ui.presenterViewCheckBox->checkState() == Qt::Checked);
 }
 
 #include "KPrConfigurePresenterViewDialog.moc"

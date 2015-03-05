@@ -27,13 +27,13 @@
 #include <kis_processing_information.h>
 #include <kis_iterator_ng.h>
 
-typedef void (*funcMaxMin)(const quint8* , quint8* , uint);
+typedef void (*funcMaxMin)(const quint8 *, quint8 *, uint);
 
 template<typename _TYPE>
-void maximize(const quint8* s, quint8* d, uint nbpixels)
+void maximize(const quint8 *s, quint8 *d, uint nbpixels)
 {
-    const _TYPE* sT = (_TYPE*)(s);
-    _TYPE* dT = (_TYPE*)(d);
+    const _TYPE *sT = (_TYPE *)(s);
+    _TYPE *dT = (_TYPE *)(d);
     _TYPE vmax = *sT;
     for (uint i = 1; i < nbpixels; i ++) {
         if (sT[i] > vmax) {
@@ -48,10 +48,10 @@ void maximize(const quint8* s, quint8* d, uint nbpixels)
 }
 
 template<typename _TYPE>
-void minimize(const quint8* s, quint8* d, uint nbpixels)
+void minimize(const quint8 *s, quint8 *d, uint nbpixels)
 {
-    const _TYPE* sT = (_TYPE*)(s);
-    _TYPE* dT = (_TYPE*)(d);
+    const _TYPE *sT = (_TYPE *)(s);
+    _TYPE *dT = (_TYPE *)(d);
     _TYPE vmin = *sT;
     for (uint i = 1; i < nbpixels; i ++) {
         if (sT[i] < vmin) {
@@ -73,10 +73,10 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), categoryColors(), i18n("M&aximize
 }
 
 void KisFilterMax::processImpl(KisPaintDeviceSP device,
-                               const QRect& rect,
-                               const KisFilterConfiguration* config,
-                               KoUpdater* progressUpdater
-                               ) const
+                               const QRect &rect,
+                               const KisFilterConfiguration *config,
+                               KoUpdater *progressUpdater
+                              ) const
 {
     Q_UNUSED(config);
     Q_ASSERT(device != 0);
@@ -84,7 +84,7 @@ void KisFilterMax::processImpl(KisPaintDeviceSP device,
     int pixelsProcessed = 0;
     int totalCost = rect.width() * rect.height() / 100;
 
-    const KoColorSpace * cs = device->colorSpace();
+    const KoColorSpace *cs = device->colorSpace();
     qint32 nC = cs->colorChannelCount();
 
     funcMaxMin F;
@@ -103,8 +103,10 @@ void KisFilterMax::processImpl(KisPaintDeviceSP device,
 
     do {
         F(it.oldRawData(), it.rawData(), nC);
-        if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
-    } while(it.nextPixel());
+        if (progressUpdater) {
+            progressUpdater->setProgress((++pixelsProcessed) / totalCost);
+        }
+    } while (it.nextPixel());
 }
 
 KisFilterMin::KisFilterMin() : KisFilter(id(), categoryColors(), i18n("M&inimize Channel"))
@@ -115,19 +117,21 @@ KisFilterMin::KisFilterMin() : KisFilter(id(), categoryColors(), i18n("M&inimize
 }
 
 void KisFilterMin::processImpl(KisPaintDeviceSP device,
-                               const QRect& rect,
-                               const KisFilterConfiguration* config,
-                               KoUpdater* progressUpdater
-                               ) const
+                               const QRect &rect,
+                               const KisFilterConfiguration *config,
+                               KoUpdater *progressUpdater
+                              ) const
 {
     Q_UNUSED(config);
     Q_ASSERT(device != 0);
 
     int pixelsProcessed = 0;
     int totalCost = rect.width() * rect.height() / 100;
-    if (totalCost == 0) totalCost = 1;
+    if (totalCost == 0) {
+        totalCost = 1;
+    }
 
-    const KoColorSpace * cs = device->colorSpace();
+    const KoColorSpace *cs = device->colorSpace();
     qint32 nC = cs->colorChannelCount();
 
     funcMaxMin F;
@@ -145,7 +149,9 @@ void KisFilterMin::processImpl(KisPaintDeviceSP device,
     KisSequentialIterator it(device, rect);
     do {
         F(it.oldRawData(), it.rawData(), nC);
-        if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
-    } while(it.nextPixel());
+        if (progressUpdater) {
+            progressUpdater->setProgress((++pixelsProcessed) / totalCost);
+        }
+    } while (it.nextPixel());
 }
 

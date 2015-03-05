@@ -33,9 +33,9 @@ class DataSourceLabel;
 
 //! @short Multiline edit widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiDBTextEdit :  public KTextEdit,
-                                             protected KexiDBTextWidgetInterface,
-                                             public KexiFormDataItemInterface,
-                                             public KFormDesigner::FormWidgetInterface
+    protected KexiDBTextWidgetInterface,
+    public KexiFormDataItemInterface,
+    public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
@@ -45,14 +45,16 @@ public:
     explicit KexiDBTextEdit(QWidget *parent);
     virtual ~KexiDBTextEdit();
 
-    inline QString dataSource() const {
+    inline QString dataSource() const
+    {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePartClass() const
+    {
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
     virtual QVariant value();
-    virtual void setInvalidState(const QString& displayText);
+    virtual void setInvalidState(const QString &displayText);
 
     //! \return true if editor's value is null (not empty)
     //! Used for checking if a given constraint within table of form is met.
@@ -68,19 +70,19 @@ public:
     virtual bool isReadOnly() const;
 
     /*! \return the view widget of this item, e.g. line edit widget. */
-    virtual QWidget* widget();
+    virtual QWidget *widget();
 
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
     virtual void clear();
 
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KexiDB::QueryColumnInfo *cinfo);
 
     /*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue()
      is displayed in a special way. Used by KexiFormDataProvider::fillDataItems().
      \a widget is equal to 'this'.
      Reimplemented after KexiFormDataItemInterface. */
-    virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+    virtual void setDisplayDefaultValue(QWidget *widget, bool displayDefaultValue);
 
     //! Windows uses Ctrl+Tab for moving between tabs, so do not steal this shortcut
     virtual void keyPressEvent(QKeyEvent *ke);
@@ -118,9 +120,9 @@ protected:
     virtual void paintEvent(QPaintEvent *);
     virtual void contextMenuEvent(QContextMenuEvent *e);
     virtual void changeEvent(QEvent *e);
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
     virtual void focusOutEvent(QFocusEvent *e);
-    QMenu * createPopupMenu(const QPoint & pos);
+    QMenu *createPopupMenu(const QPoint &pos);
     void updateTextForDataSource();
     void createDataSourceLabel();
     void updatePalette();

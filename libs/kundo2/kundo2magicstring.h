@@ -87,7 +87,6 @@ private:
      */
     explicit KUndo2MagicString(const QString &text);
 
-
     friend KUndo2MagicString kundo2_noi18n(const QString &text);
     template <typename A1>
     friend KUndo2MagicString kundo2_noi18n(const char *text, const A1 &a1);
@@ -97,7 +96,6 @@ private:
     friend KUndo2MagicString kundo2_noi18n(const char *text, const A1 &a1, const A2 &a2, const A3 &a3);
     template <typename A1, typename A2, typename A3, typename A4>
     friend KUndo2MagicString kundo2_noi18n(const char *text, const A1 &a1, const A2 &a2, const A3 &a3, const A4 &a4);
-
 
     friend KUndo2MagicString kundo2_i18n(const char *text);
     template <typename A1>
@@ -109,7 +107,6 @@ private:
     template <typename A1, typename A2, typename A3, typename A4>
     friend KUndo2MagicString kundo2_i18n(const char *text, const A1 &a1, const A2 &a2, const A3 &a3, const A4 &a4);
 
-
     friend KUndo2MagicString kundo2_i18nc(const char *ctxt, const char *text);
     template <typename A1>
     friend KUndo2MagicString kundo2_i18nc(const char *ctxt, const char *text, const A1 &a1);
@@ -118,14 +115,12 @@ private:
     template <typename A1, typename A2, typename A3>
     friend KUndo2MagicString kundo2_i18nc(const char *ctxt, const char *text, const A1 &a1, const A2 &a2, const A3 &a3);
 
-
     template <typename A1>
     friend KUndo2MagicString kundo2_i18np(const char *sing, const char *plur, const A1 &a1);
     template <typename A1, typename A2>
     friend KUndo2MagicString kundo2_i18np(const char *sing, const char *plur, const A1 &a1, const A2 &a2);
     template <typename A1, typename A2, typename A3>
     friend KUndo2MagicString kundo2_i18np(const char *sing, const char *plur, const A1 &a1, const A2 &a2, const A3 &a3);
-
 
     template <typename A1>
     friend KUndo2MagicString kundo2_i18ncp(const char *ctxt, const char *sing, const char *plur, const A1 &a1);
@@ -148,7 +143,6 @@ inline QDebug operator<<(QDebug dbg, const KUndo2MagicString &v)
 
     return dbg.space();
 }
-
 
 /**
  * This is a special wrapper to a string which tells explicitly
@@ -285,7 +279,6 @@ inline KUndo2MagicString kundo2_i18np(const char *sing, const char *plur, const 
 {
     return i18ncp("(qtundo-format)", sing, plur, a1, a2, a3, a4);
 }
-
 
 /**
  * Same as ki18ncp, but is supposed to work with strings going to

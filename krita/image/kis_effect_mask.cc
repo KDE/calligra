@@ -21,9 +21,8 @@
 
 #include <KoIcon.h>
 
-
 KisEffectMask::KisEffectMask()
-        : KisMask("effect")
+    : KisMask("effect")
 {
 }
 
@@ -31,8 +30,8 @@ KisEffectMask::~KisEffectMask()
 {
 }
 
-KisEffectMask::KisEffectMask(const KisEffectMask& rhs)
-        : KisMask(rhs)
+KisEffectMask::KisEffectMask(const KisEffectMask &rhs)
+    : KisMask(rhs)
 {
 }
 

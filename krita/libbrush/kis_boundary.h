@@ -43,14 +43,14 @@ public:
     ~KisBoundary();
     void generateBoundary();
 
-    void paint(QPainter& painter) const;
+    void paint(QPainter &painter) const;
 
     /// returns the outline saved in QPainterPath
     QPainterPath path() const;
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // _KIS_BOUNDARY_H_

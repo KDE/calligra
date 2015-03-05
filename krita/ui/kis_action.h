@@ -56,10 +56,10 @@ public:
         SELECTION_EDITABLE = 0x4
     };
     Q_DECLARE_FLAGS(ActivationConditions, ActivationCondition)
-    
-    explicit KisAction(QObject* parent = 0);
-    KisAction(const QString& text, QObject* parent = 0);
-    KisAction(const KIcon& icon, const QString& text, QObject* parent = 0);
+
+    explicit KisAction(QObject *parent = 0);
+    KisAction(const QString &text, QObject *parent = 0);
+    KisAction(const KIcon &icon, const QString &text, QObject *parent = 0);
     virtual ~KisAction();
 
     void setActivationFlags(ActivationFlags flags);
@@ -69,14 +69,14 @@ public:
     ActivationConditions activationConditions();
 
     void setExcludedNodeTypes(const QStringList &nodeTypes);
-    const QStringList& excludedNodeTypes() const;
+    const QStringList &excludedNodeTypes() const;
 
     virtual void setActionEnabled(bool enabled);
 
-   /**
-    * Set operation id. This will used to run an operation in the KisActionManager
-    */
-    void setOperationID(const QString& id);
+    /**
+     * Set operation id. This will used to run an operation in the KisActionManager
+     */
+    void setOperationID(const QString &id);
 
 Q_SIGNALS:
     void sigEnableSlaves(bool value);
@@ -92,15 +92,13 @@ private:
     /**
      * Set the action manager. Only used by KisActionManager
      */
-     void setActionManager(KisActionManager* actionManager);
-
+    void setActionManager(KisActionManager *actionManager);
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisAction::ActivationFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisAction::ActivationConditions)
-
 
 #endif // KIS_ACTION_H

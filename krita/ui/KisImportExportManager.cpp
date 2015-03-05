@@ -47,25 +47,24 @@ Boston, MA 02110-1301, USA.
 // static cache for filter availability
 QMap<QString, bool> KisImportExportManager::m_filterAvailable;
 
-KisImportExportManager::KisImportExportManager(KisDocument* document,
-                                 KoProgressUpdater* progressUpdater) :
-        m_document(document), m_parentChain(0), m_graph(""),
-        d(new Private(progressUpdater))
+KisImportExportManager::KisImportExportManager(KisDocument *document,
+        KoProgressUpdater *progressUpdater) :
+    m_document(document), m_parentChain(0), m_graph(""),
+    d(new Private(progressUpdater))
 {
     d->batch = false;
 }
 
-
-KisImportExportManager::KisImportExportManager(const QString& url, const QByteArray& mimetypeHint,
-                                 KisFilterChain* const parentChain) :
-        m_document(0), m_parentChain(parentChain), m_importUrl(url), m_importUrlMimetypeHint(mimetypeHint),
-        m_graph(""), d(new Private)
+KisImportExportManager::KisImportExportManager(const QString &url, const QByteArray &mimetypeHint,
+        KisFilterChain *const parentChain) :
+    m_document(0), m_parentChain(parentChain), m_importUrl(url), m_importUrlMimetypeHint(mimetypeHint),
+    m_graph(""), d(new Private)
 {
     d->batch = false;
 }
 
-KisImportExportManager::KisImportExportManager(const QByteArray& mimeType) :
-        m_document(0), m_parentChain(0), m_graph(""), d(new Private)
+KisImportExportManager::KisImportExportManager(const QByteArray &mimeType) :
+    m_document(0), m_parentChain(0), m_graph(""), d(new Private)
 {
     d->batch = false;
     d->importMimeType = mimeType;
@@ -76,9 +75,9 @@ KisImportExportManager::~KisImportExportManager()
     delete d;
 }
 
-QString KisImportExportManager::importDocument(const QString& url,
-                                        const QString& documentMimeType,
-                                        KisImportExportFilter::ConversionStatus& status)
+QString KisImportExportManager::importDocument(const QString &url,
+        const QString &documentMimeType,
+        KisImportExportFilter::ConversionStatus &status)
 {
     // Find the mime type for the file to be imported.
     QString  typeName(documentMimeType);
@@ -86,8 +85,9 @@ QString KisImportExportManager::importDocument(const QString& url,
     KMimeType::Ptr t;
     if (documentMimeType.isEmpty()) {
         t = KMimeType::findByUrl(u, 0, true);
-        if (t)
+        if (t) {
             typeName = t->name();
+        }
     }
     m_graph.setSourceMimeType(typeName.toLatin1()); // .latin1() is okay here (Werner)
 
@@ -104,8 +104,8 @@ QString KisImportExportManager::importDocument(const QString& url,
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
             KisFilterChooser chooser(0,
-                    KisImportExportManager::mimeFilter(nativeFormat, KisImportExportManager::Import,
-                    m_document->extraNativeMimeTypes()), nativeFormat, u);
+                                     KisImportExportManager::mimeFilter(nativeFormat, KisImportExportManager::Import,
+                                             m_document->extraNativeMimeTypes()), nativeFormat, u);
             if (chooser.exec()) {
                 QByteArray f = chooser.filterSelected().toLatin1();
                 if (f == nativeFormat) {
@@ -115,14 +115,15 @@ QString KisImportExportManager::importDocument(const QString& url,
                 }
 
                 m_graph.setSourceMimeType(f);
-            } else
+            } else {
                 userCancelled = true;
+            }
             QApplication::restoreOverrideCursor();
         }
 
         if (!m_graph.isValid()) {
             kError(30500) << "Couldn't create a valid graph for this source mimetype: "
-                << typeName;
+                          << typeName;
             importErrorHelper(typeName, userCancelled);
             status = KisImportExportFilter::BadConversionGraph;
             return QString();
@@ -142,8 +143,9 @@ QString KisImportExportManager::importDocument(const QString& url,
             // TODO check if its the same target mime then continue
             KisFilterChain::Ptr newChain(0);
             newChain = m_graph.chain(this, extraMime);
-            if (!chain || (newChain && newChain->weight() < chain->weight()))
+            if (!chain || (newChain && newChain->weight() < chain->weight())) {
                 chain = newChain;
+            }
             ++i;
         }
     } else if (!d->importMimeType.isEmpty()) {
@@ -170,12 +172,13 @@ QString KisImportExportManager::importDocument(const QString& url,
 
     m_importUrl.clear();  // Reset the import URL
 
-    if (status == KisImportExportFilter::OK)
+    if (status == KisImportExportFilter::OK) {
         return chain->chainOutput();
+    }
     return QString();
 }
 
-KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString& url, QByteArray& mimeType)
+KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(const QString &url, QByteArray &mimeType)
 {
     bool userCancelled = false;
 
@@ -194,8 +197,9 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; !chain && it != end; ++it) {
             m_graph.setSourceMimeType((*it).toLatin1());
-            if (m_graph.isValid())
+            if (m_graph.isValid()) {
                 chain = m_graph.chain(this, mimeType);
+            }
         }
     } else if (!m_importUrlMimetypeHint.isEmpty()) {
         kDebug(30500) << "Using the mimetype hint:" << m_importUrlMimetypeHint;
@@ -215,10 +219,11 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
 
             QApplication::setOverrideCursor(Qt::ArrowCursor);
             KisFilterChooser chooser(0, KisImportExportManager::mimeFilter(), QString(), u);
-            if (chooser.exec())
+            if (chooser.exec()) {
                 m_graph.setSourceMimeType(chooser.filterSelected().toLatin1());
-            else
+            } else {
                 userCancelled = true;
+            }
 
             QApplication::restoreOverrideCursor();
         }
@@ -232,8 +237,9 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::exportDocument(c
         return KisImportExportFilter::BadConversionGraph;
     }
 
-    if (!chain)   // already set when coming from the m_document case
+    if (!chain) { // already set when coming from the m_document case
         chain = m_graph.chain(this, mimeType);
+    }
 
     if (!chain) {
         kError(30500) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
@@ -252,36 +258,43 @@ namespace  // in order not to mess with the global namespace ;)
 class Vertex
 {
 public:
-    Vertex(const QByteArray& mimeType) : m_color(White), m_mimeType(mimeType) {}
+    Vertex(const QByteArray &mimeType) : m_color(White), m_mimeType(mimeType) {}
 
     enum Color { White, Gray, Black };
-    Color color() const {
+    Color color() const
+    {
         return m_color;
     }
-    void setColor(Color color) {
+    void setColor(Color color)
+    {
         m_color = color;
     }
 
-    QByteArray mimeType() const {
+    QByteArray mimeType() const
+    {
         return m_mimeType;
     }
 
-    void addEdge(Vertex* vertex) {
-        if (vertex) m_edges.append(vertex);
+    void addEdge(Vertex *vertex)
+    {
+        if (vertex) {
+            m_edges.append(vertex);
+        }
     }
-    QList<Vertex*> edges() const {
+    QList<Vertex *> edges() const
+    {
         return m_edges;
     }
 
 private:
     Color m_color;
     QByteArray m_mimeType;
-    QList<Vertex*> m_edges;
+    QList<Vertex *> m_edges;
 };
 
 // Some helper methods for the static stuff
 // This method builds up the graph in the passed ascii dict
-void buildGraph(QHash<QByteArray, Vertex*>& vertices, KisImportExportManager::Direction direction)
+void buildGraph(QHash<QByteArray, Vertex *> &vertices, KisImportExportManager::Direction direction)
 {
     QStringList stopList; // Lists of mimetypes that are considered end of chains
     stopList << "text/plain";
@@ -303,8 +316,9 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KisImportExportManager::Di
         for (; it != end; ++it)
             if (!(*it).isEmpty()) {
                 const QByteArray key = (*it).toLatin1();
-                if (!vertices.contains(key))
+                if (!vertices.contains(key)) {
                     vertices.insert(key, new Vertex(key));
+                }
             }
         ++partIt;
     }
@@ -312,96 +326,103 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KisImportExportManager::Di
     QList<KisFilterEntry::Ptr> filters = KisFilterEntry::query(); // no constraint here - we want *all* :)
     QList<KisFilterEntry::Ptr>::ConstIterator it = filters.constBegin();
     QList<KisFilterEntry::Ptr>::ConstIterator end = filters.constEnd();
-    foreach(KisFilterEntry::Ptr filterEntry, filters)
-    for (; it != end; ++it) {
-        QStringList impList; // Import list
-        QStringList expList; // Export list
+    foreach (KisFilterEntry::Ptr filterEntry, filters)
+        for (; it != end; ++it) {
+            QStringList impList; // Import list
+            QStringList expList; // Export list
 
-        // Now we have to exclude the "stop" mimetypes (in the right direction!)
-        if (direction == KisImportExportManager::Import) {
-            // Import: "stop" mime type should not appear in export
-            foreach(const QString & testIt, (*it)->export_) {
-                if (!stopList.contains(testIt))
-                    expList.append(testIt);
-            }
-            impList = (*it)->import;
-        } else {
-            // Export: "stop" mime type should not appear in import
-            foreach(const QString & testIt, (*it)->import) {
-                if (!stopList.contains(testIt))
-                    impList.append(testIt);
-            }
-            expList = (*it)->export_;
-        }
-
-        if (impList.empty() || expList.empty()) {
-            // This filter cannot be used under these conditions
-            kDebug(30500) << "Filter:" << (*it)->service()->name() << " ruled out";
-            continue;
-        }
-
-        // First add the "starting points" to the dict
-        QStringList::ConstIterator importIt = impList.constBegin();
-        const QStringList::ConstIterator importEnd = impList.constEnd();
-        for (; importIt != importEnd; ++importIt) {
-            const QByteArray key = (*importIt).toLatin1();    // latin1 is okay here (werner)
-            // already there?
-            if (!vertices[ key ])
-                vertices.insert(key, new Vertex(key));
-        }
-
-        // Are we allowed to use this filter at all?
-        if (KisImportExportManager::filterAvailable(*it)) {
-            QStringList::ConstIterator exportIt = expList.constBegin();
-            const QStringList::ConstIterator exportEnd = expList.constEnd();
-            for (; exportIt != exportEnd; ++exportIt) {
-                // First make sure the export vertex is in place
-                const QByteArray key = (*exportIt).toLatin1();    // latin1 is okay here
-                Vertex* exp = vertices[ key ];
-                if (!exp) {
-                    exp = new Vertex(key);
-                    vertices.insert(key, exp);
+            // Now we have to exclude the "stop" mimetypes (in the right direction!)
+            if (direction == KisImportExportManager::Import) {
+                // Import: "stop" mime type should not appear in export
+                foreach (const QString &testIt, (*it)->export_) {
+                    if (!stopList.contains(testIt)) {
+                        expList.append(testIt);
+                    }
                 }
-                // Then create the appropriate edges depending on the
-                // direction (import/export)
-                // This is the chunk of code which actually differs from the
-                // graph stuff (apart from the different vertex class)
-                importIt = impList.constBegin(); // ### TODO: why only the first one?
-                if (direction == KisImportExportManager::Import) {
-                    for (; importIt != importEnd; ++importIt)
-                        exp->addEdge(vertices[(*importIt).toLatin1()]);
-                } else {
-                    for (; importIt != importEnd; ++importIt)
-                        vertices[(*importIt).toLatin1()]->addEdge(exp);
+                impList = (*it)->import;
+            } else {
+                // Export: "stop" mime type should not appear in import
+                foreach (const QString &testIt, (*it)->import) {
+                    if (!stopList.contains(testIt)) {
+                        impList.append(testIt);
+                    }
+                }
+                expList = (*it)->export_;
+            }
+
+            if (impList.empty() || expList.empty()) {
+                // This filter cannot be used under these conditions
+                kDebug(30500) << "Filter:" << (*it)->service()->name() << " ruled out";
+                continue;
+            }
+
+            // First add the "starting points" to the dict
+            QStringList::ConstIterator importIt = impList.constBegin();
+            const QStringList::ConstIterator importEnd = impList.constEnd();
+            for (; importIt != importEnd; ++importIt) {
+                const QByteArray key = (*importIt).toLatin1();    // latin1 is okay here (werner)
+                // already there?
+                if (!vertices[ key ]) {
+                    vertices.insert(key, new Vertex(key));
                 }
             }
-        } else {
-            kDebug(30500) << "Filter:" << (*it)->service()->name() << " does not apply.";
+
+            // Are we allowed to use this filter at all?
+            if (KisImportExportManager::filterAvailable(*it)) {
+                QStringList::ConstIterator exportIt = expList.constBegin();
+                const QStringList::ConstIterator exportEnd = expList.constEnd();
+                for (; exportIt != exportEnd; ++exportIt) {
+                    // First make sure the export vertex is in place
+                    const QByteArray key = (*exportIt).toLatin1();    // latin1 is okay here
+                    Vertex *exp = vertices[ key ];
+                    if (!exp) {
+                        exp = new Vertex(key);
+                        vertices.insert(key, exp);
+                    }
+                    // Then create the appropriate edges depending on the
+                    // direction (import/export)
+                    // This is the chunk of code which actually differs from the
+                    // graph stuff (apart from the different vertex class)
+                    importIt = impList.constBegin(); // ### TODO: why only the first one?
+                    if (direction == KisImportExportManager::Import) {
+                        for (; importIt != importEnd; ++importIt) {
+                            exp->addEdge(vertices[(*importIt).toLatin1()]);
+                        }
+                    } else {
+                        for (; importIt != importEnd; ++importIt) {
+                            vertices[(*importIt).toLatin1()]->addEdge(exp);
+                        }
+                    }
+                }
+            } else {
+                kDebug(30500) << "Filter:" << (*it)->service()->name() << " does not apply.";
+            }
         }
-    }
 }
 
 // This method runs a BFS on the graph to determine the connected
 // nodes. Make sure that the graph is "cleared" (the colors of the
 // nodes are all white)
-QStringList connected(const QHash<QByteArray, Vertex*>& vertices, const QByteArray& mimetype)
+QStringList connected(const QHash<QByteArray, Vertex *> &vertices, const QByteArray &mimetype)
 {
-    if (mimetype.isEmpty())
+    if (mimetype.isEmpty()) {
         return QStringList();
+    }
     Vertex *v = vertices[ mimetype ];
-    if (!v)
+    if (!v) {
         return QStringList();
+    }
 
     v->setColor(Vertex::Gray);
-    std::queue<Vertex*> queue;
+    std::queue<Vertex *> queue;
     queue.push(v);
     QStringList connected;
 
     while (!queue.empty()) {
         v = queue.front();
         queue.pop();
-        QList<Vertex*> edges = v->edges();
-        foreach(Vertex* current, edges) {
+        QList<Vertex *> edges = v->edges();
+        foreach (Vertex *current, edges) {
             if (current->color() == Vertex::White) {
                 current->setColor(Vertex::Gray);
                 queue.push(current);
@@ -419,7 +440,7 @@ QStringList connected(const QHash<QByteArray, Vertex*>& vertices, const QByteArr
 QStringList KisImportExportManager::mimeFilter(const QByteArray &mimetype, Direction direction, const QStringList &extraNativeMimeTypes)
 {
     //kDebug(30500) <<"mimetype=" << mimetype <<" extraNativeMimeTypes=" << extraNativeMimeTypes;
-    QHash<QByteArray, Vertex*> vertices;
+    QHash<QByteArray, Vertex *> vertices;
     buildGraph(vertices, direction);
 
     // TODO maybe use the fake vertex trick from the method below, to make the search faster?
@@ -432,15 +453,16 @@ QStringList KisImportExportManager::mimeFilter(const QByteArray &mimetype, Direc
     QStringList lst = nativeMimeTypes;
 
     // Now look for filters which output each of those natives mimetypes
-    foreach(const QString &natit, nativeMimeTypes) {
+    foreach (const QString &natit, nativeMimeTypes) {
         const QStringList outMimes = connected(vertices, natit.toLatin1());
         //kDebug(30500) <<"output formats connected to mime" << natit <<" :" << outMimes;
-        foreach(const QString &mit, outMimes) {
-            if (!lst.contains(mit))     // append only if not there already. Qt4: QSet<QString>?
+        foreach (const QString &mit, outMimes) {
+            if (!lst.contains(mit)) {   // append only if not there already. Qt4: QSet<QString>?
                 lst.append(mit);
+            }
         }
     }
-    foreach(Vertex* vertex, vertices) {
+    foreach (Vertex *vertex, vertices) {
         delete vertex;
     }
     vertices.clear();
@@ -449,15 +471,16 @@ QStringList KisImportExportManager::mimeFilter(const QByteArray &mimetype, Direc
 
 QStringList KisImportExportManager::mimeFilter()
 {
-    QHash<QByteArray, Vertex*> vertices;
+    QHash<QByteArray, Vertex *> vertices;
     buildGraph(vertices, KisImportExportManager::Import);
 
-    QList<KisDocumentEntry> parts(KisDocumentEntry::query( QString()));
+    QList<KisDocumentEntry> parts(KisDocumentEntry::query(QString()));
     QList<KisDocumentEntry>::ConstIterator partIt(parts.constBegin());
     QList<KisDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
-    if (partIt == partEnd)
+    if (partIt == partEnd) {
         return QStringList();
+    }
 
     // To find *all* reachable mimetypes, we have to resort to
     // a small hat trick, in order to avoid multiple searches:
@@ -472,8 +495,9 @@ QStringList KisImportExportManager::mimeFilter()
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)
-            if (!(*it).isEmpty())
+            if (!(*it).isEmpty()) {
                 v->addEdge(vertices[(*it).toLatin1()]);
+            }
         ++partIt;
     }
     QStringList result = connected(vertices, "supercalifragilistic/x-pialadocious");
@@ -487,10 +511,12 @@ QStringList KisImportExportManager::mimeFilter()
 // but I don't see any other convenient (for the user) way out :}
 bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
 {
-    if (!entry)
+    if (!entry) {
         return false;
-    if (entry->available != "check")
+    }
+    if (entry->available != "check") {
         return true;
+    }
 
     //kDebug( 30500 ) <<"Checking whether" << entry->service()->name() <<" applies.";
     // generate some "unique" key
@@ -502,7 +528,7 @@ bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
         KLibrary library(QFile::encodeName(entry->service()->library()));
         if (library.fileName().isEmpty()) {
             kWarning(30500) << "Huh?? Couldn't load the lib: "
-                << entry->service()->library();
+                            << entry->service()->library();
             m_filterAvailable[ key ] = false;
             return false;
         }
@@ -524,7 +550,7 @@ bool KisImportExportManager::filterAvailable(KisFilterEntry::Ptr entry)
     return m_filterAvailable[key];
 }
 
-void KisImportExportManager::importErrorHelper(const QString& mimeType, const bool suppressDialog)
+void KisImportExportManager::importErrorHelper(const QString &mimeType, const bool suppressDialog)
 {
     // ###### FIXME: use KLibLoader::lastErrorMessage() here
     if (!suppressDialog) {
@@ -542,7 +568,7 @@ bool KisImportExportManager::getBatchMode(void) const
     return d->batch;
 }
 
-KoProgressUpdater* KisImportExportManager::progressUpdater() const
+KoProgressUpdater *KisImportExportManager::progressUpdater() const
 {
     if (d->progressUpdater.isNull()) {
         // somebody, probably its parent, deleted our progress updater for us

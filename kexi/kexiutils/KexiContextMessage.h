@@ -26,11 +26,11 @@
 class KEXIUTILS_EXPORT KexiContextMessage
 {
 public:
-    explicit KexiContextMessage(const QString& text = QString());
+    explicit KexiContextMessage(const QString &text = QString());
 
     explicit KexiContextMessage(QWidget *contentsWidget);
 
-    explicit KexiContextMessage(const KexiContextMessage& other);
+    explicit KexiContextMessage(const KexiContextMessage &other);
 
     ~KexiContextMessage();
 
@@ -45,25 +45,25 @@ public:
     };
 
     //! Adds action. Does not take ownership.
-    void addAction(QAction* action, ButtonAlignment alignment = AlignRight);
-    
-    QList<QAction*> actions() const;
+    void addAction(QAction *action, ButtonAlignment alignment = AlignRight);
+
+    QList<QAction *> actions() const;
 
     //! @return alignment of button for action @a action.
-    ButtonAlignment buttonAlignment(QAction* action) const;
+    ButtonAlignment buttonAlignment(QAction *action) const;
 
-    //! Sets default action, i.e. button created with this action 
+    //! Sets default action, i.e. button created with this action
     //! will be the default button of the message.
     //! Does not take ownership.
-    void setDefaultAction(QAction* action);
+    void setDefaultAction(QAction *action);
 
-    QAction* defaultAction() const;
-    
-    QWidget* contentsWidget() const;
+    QAction *defaultAction() const;
+
+    QWidget *contentsWidget() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 class QFormLayout;
@@ -76,25 +76,25 @@ public:
     //! Creates message widget constructed out of context message @a message.
     /*! Inserts itself into layout @a layout on top of the widget @a context.
        If @page is not 0 and @a message has any actions added,
-       all children of @a page widget will be visually disabled to indicate 
+       all children of @a page widget will be visually disabled to indicate
        modality of the message.
        The message widget will be automatically destroyed after triggering
        of any associated action.
        If @a layout is provided, direction of callout pointer is set by default
        to KMessageWidget::Down. This can be changed using setCalloutPointerDirection(). */
     KexiContextMessageWidget(QWidget *page,
-                             QFormLayout* layout, QWidget *context,
-                             const KexiContextMessage& message);
+                             QFormLayout *layout, QWidget *context,
+                             const KexiContextMessage &message);
 
     //! @overload KexiContextMessageWidget(QWidget*, QFormLayout*, QWidget*, const KexiContextMessage&);
     //! Does not enter into modal state and does not accept actions.
-    KexiContextMessageWidget(QFormLayout* layout, QWidget *context,
-                             const KexiContextMessage& message);
+    KexiContextMessageWidget(QFormLayout *layout, QWidget *context,
+                             const KexiContextMessage &message);
 
     //! @overload KexiContextMessageWidget(QFormLayout*, QWidget*, const KexiContextMessage&);
     //! Does not enter into modal state and does not accept actions.
-    KexiContextMessageWidget(QFormLayout* layout, QWidget *context,
-                             const QString& message);
+    KexiContextMessageWidget(QFormLayout *layout, QWidget *context,
+                             const QString &message);
 
     virtual ~KexiContextMessageWidget();
 
@@ -108,7 +108,7 @@ public:
     //! Also sets tracked widget @a trackedWidget.
     //! If the widget changes its local position, the pointer position
     //! is moved by the same delta.
-    void setCalloutPointerPosition(const QPoint& globalPos,
+    void setCalloutPointerPosition(const QPoint &globalPos,
                                    QWidget *trackedWidget = 0);
 
     //! Sets tracking policy for resize of the parent widget.
@@ -126,20 +126,23 @@ public:
     void setPaletteInherited();
 
 protected:
-    virtual bool eventFilter(QObject* watched, QEvent* event);
+    virtual bool eventFilter(QObject *watched, QEvent *event);
 
 private Q_SLOTS:
     void actionTriggered();
 
 private:
-    void init(QWidget *page, QFormLayout* layout,
-        QWidget *context, const KexiContextMessage& message);
-    
+    void init(QWidget *page, QFormLayout *layout,
+              QWidget *context, const KexiContextMessage &message);
+
     //! Made private to disable addAction().
-    void addAction(QAction* action) { Q_UNUSED(action); }
+    void addAction(QAction *action)
+    {
+        Q_UNUSED(action);
+    }
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

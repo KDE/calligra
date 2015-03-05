@@ -23,12 +23,11 @@
 
 class KisDoubleSliderSpinBox;
 
-
 class BlackWhitePointChooser : public QFrame
 {
     Q_OBJECT
 public:
-    BlackWhitePointChooser(QWidget* parent);
+    BlackWhitePointChooser(QWidget *parent);
     ~BlackWhitePointChooser();
 
     void showPopup(const QPoint &basePoint);

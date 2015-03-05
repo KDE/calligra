@@ -26,20 +26,21 @@ public:
 
     void addFlag(QString flag)
     {
-        if (!hasFlag(flag))
+        if (!hasFlag(flag)) {
             append(flag);
+        }
     }
-    void clearFlag(const QString& flag)
+    void clearFlag(const QString &flag)
     {
         if (contains(flag)) {
             removeAt(indexOf(flag));
         }
     }
-    bool hasFlag(const QString& flag) const
+    bool hasFlag(const QString &flag) const
     {
         return contains(flag) > 0;
     }
-} ;
+};
 
 } // namespace TJ
 

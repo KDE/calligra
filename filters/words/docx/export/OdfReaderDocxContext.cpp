@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdfReaderDocxContext.h"
 
@@ -34,10 +33,8 @@
 // This filter
 #include "DocxFile.h"
 
-
 // ----------------------------------------------------------------
 //                     class OdfReaderDocxContext
-
 
 OdfReaderDocxContext::OdfReaderDocxContext(KoStore *store, DocxFile *dxf)
     : OdfReaderContext(store) // Collect metadata, manifest and styles

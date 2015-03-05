@@ -27,19 +27,18 @@ class KisBrushSizeOptionsWidget: public QWidget, public Ui::WdgBrushSizeOptions
 {
 public:
     KisBrushSizeOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 
 };
-
 
 KisBrushSizeOption::KisBrushSizeOption()
     : KisPaintOpOption(i18n("Brush tip"), KisPaintOpOption::generalCategory(), false)
 {
     m_checkable = false;
     m_options = new KisBrushSizeOptionsWidget();
-
 
     // init slider values
     m_options->diameter->setRange(1.0, 1000, 0);
@@ -51,23 +50,19 @@ KisBrushSizeOption::KisBrushSizeOption()
     m_options->aspectBox->setValue(1.0);
     m_options->aspectBox->setExponentRatio(1.0);
 
-
     m_options->scale->setRange(0.01, 10.0, 2);
     m_options->scale->setValue(1.0);
 
     m_options->spacing->setRange(0.01, 5.0, 2);
     m_options->spacing->setValue(0.3);
 
-
     m_options->rotationBox->setRange(0.0, 360.0, 0);
     m_options->rotationBox->setValue(0.0);
     m_options->rotationBox->setSuffix(QChar(Qt::Key_degree));
 
-
     m_options->densityBox->setRange(0.0, 100.0, 0);
     m_options->densityBox->setValue(100);
     m_options->densityBox->setSuffix("%");
-
 
     m_options->jitterMove->setRange(0.0, 5.0, 2);
     m_options->jitterMove->setValue(0.0);
@@ -90,12 +85,10 @@ KisBrushSizeOption::~KisBrushSizeOption()
     delete m_options;
 }
 
-
 int KisBrushSizeOption::diameter() const
 {
     return qRound(m_options->diameter->value());
 }
-
 
 void KisBrushSizeOption::setDiameter(int diameter)
 {
@@ -107,8 +100,7 @@ qreal KisBrushSizeOption::brushAspect() const
     return m_options->aspectBox->value();
 }
 
-
-void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(BRUSH_DIAMETER, m_options->diameter->value());
     setting->setProperty(BRUSH_ASPECT, m_options->aspectBox->value());
@@ -120,7 +112,7 @@ void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfiguration* setting)
     setting->setProperty(BRUSH_JITTER_MOVEMENT_ENABLED, m_options->jitterMoveBox->isChecked());
 }
 
-void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     m_options->diameter->setValue(setting->getDouble(BRUSH_DIAMETER));
     m_options->aspectBox->setValue(setting->getDouble(BRUSH_ASPECT));

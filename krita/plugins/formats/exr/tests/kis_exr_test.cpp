@@ -31,7 +31,6 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
-
 void KisExrTest::testFiles()
 {
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 1);
@@ -52,7 +51,6 @@ void KisExrTest::testRoundTrip()
 
     QCOMPARE(status, KisImportExportFilter::OK);
     QVERIFY(doc1->image());
-
 
     KTemporaryFile savedFile;
     savedFile.setAutoRemove(false);

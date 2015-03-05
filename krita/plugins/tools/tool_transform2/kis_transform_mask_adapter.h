@@ -24,7 +24,6 @@
 
 class ToolTransformArgs;
 
-
 class KisTransformMaskAdapter : public KisTransformMaskParamsInterface
 {
 public:
@@ -37,7 +36,7 @@ public:
 
     void transformDevice(KisNodeSP node, KisPaintDeviceSP src, KisPaintDeviceSP dst) const;
 
-    const ToolTransformArgs& savedArgs() const;
+    const ToolTransformArgs &savedArgs() const;
 
     QString id() const;
     void toXML(QDomElement *e) const;

@@ -27,7 +27,6 @@
 #include <KoCompositeOpRegistry.h>
 #include "kis_datamanager.h"
 
-
 #define NUM_CYCLES 50
 #define WARMUP_CYCLES 2
 #define SHOW_WARMUPS  0
@@ -44,22 +43,24 @@
 
 #define USE_UTIME 0
 
-
 #if(USE_UTIME==1)
 #include <sys/times.h>
 class KisTimeCounter
 {
 public:
-    KisTimeCounter() {
+    KisTimeCounter()
+    {
         m_factor = double(sysconf(_SC_CLK_TCK)) / 1000.0;
         restart();
     }
 
-    void restart() {
+    void restart()
+    {
         times(&m_startTime);
     }
 
-    double elapsed() {
+    double elapsed()
+    {
         struct tms endTime;
         times(&endTime);
         return double(endTime.tms_utime - m_startTime.tms_utime) / m_factor;
@@ -77,7 +78,6 @@ void KisFilterSelectionsBenchmark::initSelection()
 {
     m_selection = new KisSelection();
     KisPixelSelectionSP pixelSelection = m_selection->pixelSelection();
-
 
 //67.2% deselected
     qDebug() << "Deselected: 67.2%";
@@ -97,8 +97,6 @@ void KisFilterSelectionsBenchmark::initSelection()
 //    qDebug() << "Deselected: 94.9%";
 //    pixelSelection->dataManager()->clear(75,75,500,320,255);
 //    pixelSelection->dataManager()->clear(80,80,490,310,quint8(0));
-
-
 
     pixelSelection->convertToQImage(0).save("TEST_FILTER_SELECTION.png");
 }
@@ -136,7 +134,6 @@ void KisFilterSelectionsBenchmark::testFilter(const QString &name)
     blockSignals(false);
 }
 
-
 void KisFilterSelectionsBenchmark::testAll()
 {
     initSelection();
@@ -171,8 +168,9 @@ void KisFilterSelectionsBenchmark::testUsualSelections(int num)
 
     projection->convertToQImage(0).save("TFS__USUAL_SELECTIONS.png");
 
-    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS) {
         qDebug() << "Selections inside filter:\t\t" << avTime;
+    }
 }
 
 void KisFilterSelectionsBenchmark::testNoSelections(int num)
@@ -194,8 +192,9 @@ void KisFilterSelectionsBenchmark::testNoSelections(int num)
 
     projection->convertToQImage(0).save("TFS__NO_SELECTIONS.png");
 
-    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS) {
         qDebug() << "No Selections:\t\t\t\t" << avTime;
+    }
 }
 
 void KisFilterSelectionsBenchmark::testGoodSelections(int num)
@@ -220,11 +219,13 @@ void KisFilterSelectionsBenchmark::testGoodSelections(int num)
 
     projection->convertToQImage(0).save("TFS__GOOD_SELECTIONS.png");
 
-    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS) {
         qDebug() << "Selections with alpha (filter):\t" << avTime;
+    }
 #else /* if (USE_GOOD_SELECTIONS!=1) */
-    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS) {
         qDebug() << "Selections with alpha (filter):\t [Disabled]";
+    }
 #endif
 }
 
@@ -255,8 +256,9 @@ void KisFilterSelectionsBenchmark::testBitBltWOSelections(int num)
 
     projection->convertToQImage(0).save("TFS__BITBLT_WO_SELECTIONS.png");
 
-    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS) {
         qDebug() << "bitBlt w/o sel:\t\t\t" << avTime;
+    }
 }
 
 void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
@@ -287,8 +289,9 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
 
     projection->convertToQImage(0).save("TFS__BITBLT_WITH_SELECTIONS.png");
 
-    if (num > WARMUP_CYCLES || SHOW_WARMUPS)
+    if (num > WARMUP_CYCLES || SHOW_WARMUPS) {
         qDebug() << "bitBlt with sel:\t\t\t" << avTime;
+    }
 }
 
 QTEST_KDEMAIN(KisFilterSelectionsBenchmark, GUI)

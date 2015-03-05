@@ -27,7 +27,6 @@
 class KisStrokeStrategy;
 class KUndo2MagicString;
 
-
 class KRITAIMAGE_EXPORT KisStroke
 {
 public:
@@ -39,7 +38,7 @@ public:
     KUndo2MagicString name() const;
     bool hasJobs() const;
     qint32 numJobs() const;
-    KisStrokeJob* popOneJob();
+    KisStrokeJob *popOneJob();
 
     void endStroke();
     void cancelStroke();
@@ -58,14 +57,15 @@ public:
 private:
     void enqueue(KisStrokeJobStrategy *strategy,
                  KisStrokeJobData *data);
-    KisStrokeJob* dequeue();
+    KisStrokeJob *dequeue();
     void clearQueue();
 
 private:
     // for testing use only, do not use in real code
     friend class KisStrokeTest;
     friend class KisStrokeStrategyUndoCommandBasedTest;
-    QQueue<KisStrokeJob*>& testingGetQueue() {
+    QQueue<KisStrokeJob *> &testingGetQueue()
+    {
         return m_jobsQueue;
     }
 
@@ -77,7 +77,7 @@ private:
     KisStrokeJobStrategy *m_cancelStrategy;
     KisStrokeJobStrategy *m_finishStrategy;
 
-    QQueue<KisStrokeJob*> m_jobsQueue;
+    QQueue<KisStrokeJob *> m_jobsQueue;
     bool m_strokeInitialized;
     bool m_strokeEnded;
     bool m_isCancelled; // cancelled strokes are always 'ended' as well

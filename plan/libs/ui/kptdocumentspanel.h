@@ -43,36 +43,36 @@ class KPLATOUI_EXPORT DocumentsPanel : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DocumentsPanel( Node &node, QWidget *parent = 0 );
+    explicit DocumentsPanel(Node &node, QWidget *parent = 0);
     ~DocumentsPanel() {}
-    
+
     MacroCommand *buildCommand();
-    
+
     Ui::DocumentsPanel widget;
 
-    DocumentItemModel* model() const;
+    DocumentItemModel *model() const;
     Document *selectedDocument() const;
-    
+
 Q_SIGNALS:
     void changed();
-    
+
 protected Q_SLOTS:
     void slotAddUrl();
     void slotChangeUrl();
     void slotRemoveUrl();
     void slotViewUrl();
-    
-    void dataChanged( const QModelIndex& );
-    
-    void slotSelectionChanged( const QModelIndexList& );
-    void currentChanged( const QModelIndex &index );
-    
+
+    void dataChanged(const QModelIndex &);
+
+    void slotSelectionChanged(const QModelIndexList &);
+    void currentChanged(const QModelIndex &index);
+
 private:
     Node &m_node;
     Documents m_docs;
     enum State { Unmodified = 1, Modified = 2, Added = 4, Removed = 8 };
-    QMap<Document*, State> m_state;
-    QMap<Document*, KUrl> m_orgurl;
+    QMap<Document *, State> m_state;
+    QMap<Document *, KUrl> m_orgurl;
     KUndo2QStack m_cmds;
     DocumentTreeView *m_view;
 };

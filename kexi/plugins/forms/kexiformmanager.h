@@ -26,7 +26,8 @@ class KexiFormView;
 class KActionCollection;
 class KexiFormManagerPrivate;
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 class WidgetLibrary;
 class WidgetTreeWidget;
 class ActionGroup;
@@ -39,18 +40,18 @@ class KEXIFORMUTILS_EXPORT KexiFormManager : public QObject
     Q_OBJECT
 
 public:
-    static KexiFormManager* self();
+    static KexiFormManager *self();
 
     //! Called by KexiFormPart()
     void init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *widgetTree);
 
-    virtual QAction* action(const char* name);
-    virtual void enableAction(const char* name, bool enable);
+    virtual QAction *action(const char *name);
+    virtual void enableAction(const char *name, bool enable);
 
-    KFormDesigner::WidgetLibrary* library() const;
+    KFormDesigner::WidgetLibrary *library() const;
 
     /*! @return action group containing "insert widget" actions for each widget. */
-    KFormDesigner::ActionGroup* widgetActionGroup() const;
+    KFormDesigner::ActionGroup *widgetActionGroup() const;
 
     //! @internal
     KexiFormManager();
@@ -59,7 +60,7 @@ public:
 
 public Q_SLOTS:
     //! Receives signal from KexiDataSourcePage about changed form's data source
-    void setFormDataSource(const QString& mime, const QString& name);
+    void setFormDataSource(const QString &mime, const QString &name);
 
     /*! Receives signal from KexiDataSourcePage about changed widget's data source.
      This is because we couldn't pass objects like KexiDB::QueryColumnInfo.
@@ -67,12 +68,12 @@ public Q_SLOTS:
      Also sets following things in KexiDBAutoField:
      - caption related to the data source
      - data type related to the data source */
-    void setDataSourceFieldOrExpression(const QString& string, const QString& caption,
+    void setDataSourceFieldOrExpression(const QString &string, const QString &caption,
                                         KexiDB::Field::Type type);
 
     /*! Receives signal from KexiDataSourcePage and inserts autofields onto the current form. */
-    void insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
-                          const QStringList& fields);
+    void insertAutoFields(const QString &sourcePartClass, const QString &sourceName,
+                          const QStringList &fields);
 
     /*! For debugging purposes only:
      shows a text window containing contents of .ui XML definition of the current form. */
@@ -80,23 +81,23 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void slotHistoryCommandExecuted(KFormDesigner::Command *command);
-    void slotWidgetCreatedByFormsLibrary(QWidget* widget);
-    void slotWidgetActionToggled(const QByteArray& action);
+    void slotWidgetCreatedByFormsLibrary(QWidget *widget);
+    void slotWidgetActionToggled(const QByteArray &action);
     void slotAssignAction();
     void slotPointerClicked();
 
 protected:
-    QString translateName(const char* name) const;
+    QString translateName(const char *name) const;
 
 private:
     //! Helper: return active form's view widget or 0 if there's no active form having such widget
-    KexiFormView* activeFormViewWidget() const;
+    KexiFormView *activeFormViewWidget() const;
 
     //! Called by init()
-    void createActions(KActionCollection* collection);
+    void createActions(KActionCollection *collection);
 
     friend class KexiFormManagerPrivate;
-    KexiFormManagerPrivate * const d;
+    KexiFormManagerPrivate *const d;
 };
 
 #endif

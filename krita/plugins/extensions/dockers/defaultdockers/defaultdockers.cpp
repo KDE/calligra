@@ -17,7 +17,6 @@
 
 #include "defaultdockers.h"
 
-
 #include <kpluginfactory.h>
 
 #include <KoDockFactoryBase.h>
@@ -30,7 +29,7 @@ K_PLUGIN_FACTORY(KritaDefaultDockersPluginFactory, registerPlugin<KritaDefaultDo
 K_EXPORT_PLUGIN(KritaDefaultDockersPluginFactory("krita"))
 
 KritaDefaultDockersPlugin::KritaDefaultDockersPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KoDockRegistry::instance()->add(new KisLayerBoxFactory());
 }

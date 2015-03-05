@@ -25,31 +25,32 @@
 #include "ui_kptmilestoneprogresspanelbase.h"
 #include "kpttask.h"
 
-
 namespace KPlato
 {
 
 class MacroCommand;
 
-class MilestoneProgressPanelImpl : public QWidget, public Ui_MilestoneProgressPanelBase {
+class MilestoneProgressPanelImpl : public QWidget, public Ui_MilestoneProgressPanelBase
+{
     Q_OBJECT
 public:
-    explicit MilestoneProgressPanelImpl(QWidget *parent=0, const char *name=0);
-    
+    explicit MilestoneProgressPanelImpl(QWidget *parent = 0, const char *name = 0);
+
     void enableWidgets();
 
 Q_SIGNALS:
     void changed();
-    
+
 public Q_SLOTS:
     void slotChanged();
     void slotFinishedChanged(bool state);
 };
 
-class MilestoneProgressPanel : public MilestoneProgressPanelImpl {
+class MilestoneProgressPanel : public MilestoneProgressPanelImpl
+{
     Q_OBJECT
 public:
-    explicit MilestoneProgressPanel(Task &task, QWidget *parent=0, const char *name=0);
+    explicit MilestoneProgressPanel(Task &task, QWidget *parent = 0, const char *name = 0);
 
     MacroCommand *buildCommand();
 

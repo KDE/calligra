@@ -29,10 +29,12 @@ public:
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
 
-    void fromXML(const QDomElement&) {
+    void fromXML(const QDomElement &)
+    {
     }
 
-    void toXML(QDomDocument&, QDomElement&) const {
+    void toXML(QDomDocument &, QDomElement &) const
+    {
     }
 };
 
@@ -40,11 +42,13 @@ class TestConfigurationFactory : public KisSerializableConfigurationFactory
 {
 public:
 
-    virtual KisSerializableConfiguration* createDefault() {
+    virtual KisSerializableConfiguration *createDefault()
+    {
         return &tc;
     }
 
-    virtual KisSerializableConfiguration* create(const QDomElement&) {
+    virtual KisSerializableConfiguration *create(const QDomElement &)
+    {
         return &tc;
     }
 private:
@@ -52,13 +56,11 @@ private:
     TestConfiguration tc;
 };
 
-
 void KisBookmarkedConfigurationManagerTest::testCreation()
 {
     TestConfigurationFactory *tcf = new TestConfigurationFactory;
     KisBookmarkedConfigurationManager test("Test", tcf);
 }
-
 
 QTEST_KDEMAIN(KisBookmarkedConfigurationManagerTest, GUI)
 #include "kis_bookmarked_configuration_manager_test.moc"

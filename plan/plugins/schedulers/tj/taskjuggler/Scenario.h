@@ -25,36 +25,78 @@ class Project;
 
 class KPLATOTJ_EXPORT Scenario : public CoreAttributes
 {
-    friend int ScenarioList::compareItemsLevel(CoreAttributes* c1,
-                                               CoreAttributes* c2,
-                                               int level);
+    friend int ScenarioList::compareItemsLevel(CoreAttributes *c1,
+            CoreAttributes *c2,
+            int level);
 public:
-    Scenario(Project* p, const QString& i, const QString& n, Scenario* s);
+    Scenario(Project *p, const QString &i, const QString &n, Scenario *s);
     virtual ~Scenario();
 
-    virtual CAType getType() const { return CA_Scenario; }
+    virtual CAType getType() const
+    {
+        return CA_Scenario;
+    }
 
-    Scenario* getParent() const { return static_cast<Scenario*>(parent); }
+    Scenario *getParent() const
+    {
+        return static_cast<Scenario *>(parent);
+    }
 
     ScenarioListIterator getSubListIterator() const;
 
-    void setEnabled(bool e) { enabled = e; }
-    bool getEnabled() const { return enabled; }
+    void setEnabled(bool e)
+    {
+        enabled = e;
+    }
+    bool getEnabled() const
+    {
+        return enabled;
+    }
 
-    void setProjectionMode(bool p) { projectionMode = p; }
-    bool getProjectionMode() const  { return projectionMode; }
+    void setProjectionMode(bool p)
+    {
+        projectionMode = p;
+    }
+    bool getProjectionMode() const
+    {
+        return projectionMode;
+    }
 
-    void setOptimize(bool o) { optimize = o; }
-    bool getOptimize() const { return optimize; }
+    void setOptimize(bool o)
+    {
+        optimize = o;
+    }
+    bool getOptimize() const
+    {
+        return optimize;
+    }
 
-    void setStrictBookings(bool s) { strictBookings = s; }
-    bool getStrictBookings() const { return strictBookings; }
+    void setStrictBookings(bool s)
+    {
+        strictBookings = s;
+    }
+    bool getStrictBookings() const
+    {
+        return strictBookings;
+    }
 
-    void setMinSlackRate(double msr) { minSlackRate = msr; }
-    double getMinSlackRate() const { return minSlackRate; }
+    void setMinSlackRate(double msr)
+    {
+        minSlackRate = msr;
+    }
+    double getMinSlackRate() const
+    {
+        return minSlackRate;
+    }
 
-    void setMaxPaths(long l) { maxPaths = l; }
-    long getMaxPaths() const { return maxPaths; }
+    void setMaxPaths(long l)
+    {
+        maxPaths = l;
+    }
+    long getMaxPaths() const
+    {
+        return maxPaths;
+    }
 
 private:
     bool enabled;
@@ -63,7 +105,7 @@ private:
     bool optimize;
     double minSlackRate;
     long maxPaths;
-} ;
+};
 
 } // namespace TJ
 

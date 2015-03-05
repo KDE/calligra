@@ -33,8 +33,8 @@
 #include <kdebug.h>
 
 KPrFadeOverColorStrategy::KPrFadeOverColorStrategy()
-: KPrPageEffectStrategy(KPrFadeEffectFactory::FadeOverColor, "fade", "fadeOverColor", false, true)
-, m_fadeColor(Qt::black)
+    : KPrPageEffectStrategy(KPrFadeEffectFactory::FadeOverColor, "fade", "fadeOverColor", false, true)
+    , m_fadeColor(Qt::black)
 {
 }
 
@@ -65,13 +65,11 @@ void KPrFadeOverColorStrategy::next(const KPrPageEffect::Data &data)
     int frame = data.m_timeLine.frameForTime(data.m_currentTime);
     if (frame >= data.m_timeLine.endFrame()) {
         finish(data);
-    }
-    else {
+    } else {
         qreal value = 1 - (data.m_timeLine.valueForTime(data.m_currentTime) * qreal(2.0));
         if (value >= 0) {
             data.m_oldPageItem->setOpacity(value);
-        }
-        else {
+        } else {
             data.m_oldPageItem->hide();
             data.m_newPageItem->setOpacity(-value);
         }
@@ -83,19 +81,19 @@ void KPrFadeOverColorStrategy::finish(const KPrPageEffect::Data &data)
     data.m_graphicsView->hide();
 }
 
-void KPrFadeOverColorStrategy::saveOdfSmilAttributes(KoXmlWriter & xmlWriter) const
+void KPrFadeOverColorStrategy::saveOdfSmilAttributes(KoXmlWriter &xmlWriter) const
 {
     KPrPageEffectStrategy::saveOdfSmilAttributes(xmlWriter);
     xmlWriter.addAttribute("smil:fadeColor", m_fadeColor.name());
 }
 
-void KPrFadeOverColorStrategy::saveOdfSmilAttributes(KoGenStyle & style) const
+void KPrFadeOverColorStrategy::saveOdfSmilAttributes(KoGenStyle &style) const
 {
     KPrPageEffectStrategy::saveOdfSmilAttributes(style);
     style.addProperty("smil:fadeColor", m_fadeColor.name());
 }
 
-void KPrFadeOverColorStrategy::loadOdfSmilAttributes(const KoXmlElement & element)
+void KPrFadeOverColorStrategy::loadOdfSmilAttributes(const KoXmlElement &element)
 {
     // use black as default
     m_fadeColor.setNamedColor(element.attributeNS(KoXmlNS::smil, "fadeColor", "#000000"));

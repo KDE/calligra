@@ -31,13 +31,13 @@
 
 using namespace Calligra::Sheets;
 
-MergeCommand::MergeCommand(KUndo2Command* parent)
-        : AbstractRegionCommand(parent),
-        m_merge(true),
-        m_mergeHorizontal(false),
-        m_mergeVertical(false),
-        m_unmerger(0),
-        m_selection(0)
+MergeCommand::MergeCommand(KUndo2Command *parent)
+    : AbstractRegionCommand(parent),
+      m_merge(true),
+      m_mergeHorizontal(false),
+      m_mergeVertical(false),
+      m_unmerger(0),
+      m_selection(0)
 {
     m_checkLock = true;
 }
@@ -47,7 +47,7 @@ MergeCommand::~MergeCommand()
     delete m_unmerger;
 }
 
-bool MergeCommand::process(Element* element)
+bool MergeCommand::process(Element *element)
 {
     if (element->type() != Element::Range || element->isRow() || element->isColumn()) {
         // TODO Stefan: remove these elements?!
@@ -117,8 +117,9 @@ bool MergeCommand::process(Element* element)
     }
 
     // adjust selection
-    if (m_selection)
+    if (m_selection) {
         m_selection->isEmpty() ? m_selection->initialize(range, m_sheet) : m_selection->extend(range, m_sheet);
+    }
 
     return true;
 }
@@ -151,7 +152,7 @@ bool MergeCommand::preProcessing()
         Region mergedCells;
         ConstIterator endOfList = constEnd();
         for (ConstIterator it = constBegin(); it != endOfList; ++it) {
-            Element* element = *it;
+            Element *element = *it;
             QRect range = element->rect();
             int right = range.right();
             int bottom = range.bottom();
@@ -199,7 +200,9 @@ bool MergeCommand::preProcessing()
     }
     // Clear the associated selection, if any. The merge/dissociate process will restore
     // selections. This ensures that the selection isn't broken after merging.
-    if (m_selection) m_selection->Region::clear();
+    if (m_selection) {
+        m_selection->Region::clear();
+    }
 
     return AbstractRegionCommand::preProcessing();
 }

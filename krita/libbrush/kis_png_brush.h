@@ -25,13 +25,13 @@ class BRUSH_EXPORT  KisPngBrush : public KisBrush
 {
 public:
     /// Construct brush to load filename later as brush
-    KisPngBrush(const QString& filename);
+    KisPngBrush(const QString &filename);
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
     virtual bool saveToDevice(QIODevice *dev) const;
     virtual QString defaultFileExtension() const;
-    void toXML(QDomDocument& d, QDomElement& e) const;
+    void toXML(QDomDocument &d, QDomElement &e) const;
 };
 
 #endif

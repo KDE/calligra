@@ -28,7 +28,6 @@
 
 class QPolygon;
 
-
 /**
    Namespace for Windows Metafile (WMF) classes
 */
@@ -70,7 +69,6 @@ public:
     //bool play(QPainter &painter);
     bool play();
 
-
 private:
     // -------------------------------------------------------------------------
     // A virtual QPainter
@@ -106,13 +104,13 @@ private:
     void  drawArc(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen);
     void  drawPie(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen);
     void  drawChord(WmfDeviceContext &context, int x, int y, int w, int h, int a, int alen);
-    void  drawPolyline(WmfDeviceContext &context, const QPolygon& pa);
-    void  drawPolygon(WmfDeviceContext &context, const QPolygon& pa);
+    void  drawPolyline(WmfDeviceContext &context, const QPolygon &pa);
+    void  drawPolygon(WmfDeviceContext &context, const QPolygon &pa);
     /**
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon>& listPa);
+    void  drawPolyPolygon(WmfDeviceContext &context, QList<QPolygon> &listPa);
     void  drawImage(WmfDeviceContext &context, int x, int y, const QImage &,
                     int sx = 0, int sy = 0, int sw = -1, int sh = -1);
     void  patBlt(WmfDeviceContext &context, int x, int y, int width, int height,
@@ -126,7 +124,7 @@ private:
     // matrix transformation : only used in some bitmap manipulation
     void  setMatrix(WmfDeviceContext &context, const QMatrix &, bool combine = false);
 
- private:
+private:
     void updateFromDeviceContext(WmfDeviceContext &context);
 
 protected:
@@ -149,7 +147,6 @@ protected:
 
     int mSaveCount; //number of times Save() was called without Restore()
 };
-
 
 }
 

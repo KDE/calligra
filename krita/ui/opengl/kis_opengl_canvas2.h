@@ -1,20 +1,20 @@
-    /*
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+/*
+* Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2006
+*
+*  This program is free software; you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation; either version 2 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program; if not, write to the Free Software
+*  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*/
 
 #ifndef KIS_OPENGL_CANVAS_2_H
 #define KIS_OPENGL_CANVAS_2_H
@@ -36,7 +36,6 @@ class QWidget;
 class QPaintEvent;
 class KisCanvas2;
 
-
 /**
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
  *
@@ -51,18 +50,18 @@ class KRITAUI_EXPORT KisOpenGLCanvas2 : public QGLWidget, public KisCanvasWidget
 
 public:
 
-    KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent, KisOpenGLImageTexturesSP imageTextures);
+    KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisOpenGLImageTexturesSP imageTextures);
 
     virtual ~KisOpenGLCanvas2();
 
-    void setDisplayFilter(KisDisplayFilter* displayFilter);
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
     void setWrapAroundViewingMode(bool value);
 
 public: // QWidget
 
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     virtual void inputMethodEvent(QInputMethodEvent *event);
-    virtual void paintEvent(QPaintEvent* event);
+    virtual void paintEvent(QPaintEvent *event);
 
 public:
 
@@ -72,11 +71,8 @@ public:
     void renderCanvasGL() const;
     void renderDecorations(QPainter *painter);
 
-
-
 private Q_SLOTS:
     void slotConfigChanged();
-
 
 public:
 
@@ -86,7 +82,8 @@ public:
 
 public:
 
-    QWidget *widget() {
+    QWidget *widget()
+    {
         return this;
     }
 
@@ -98,10 +95,8 @@ private:
 
 private:
 
-
-
     struct Private;
-    Private * const d;
+    Private *const d;
 
     void drawImage() const;
     void drawCheckers() const;

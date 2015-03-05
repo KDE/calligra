@@ -26,7 +26,7 @@ class QIODevice;
 
 namespace KisJPEGDestination
 {
-    void setDestination(j_compress_ptr cinfo, QIODevice* destinationDevice);
+void setDestination(j_compress_ptr cinfo, QIODevice *destinationDevice);
 }
 
 #endif

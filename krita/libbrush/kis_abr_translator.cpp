@@ -36,7 +36,7 @@ void KisAbrTranslator::init()
     m_root.setAttribute("paintopid", "paintbrush");
 }
 
-void KisAbrTranslator::addEntry(const QString& attributeName, const QString& type, const QString& value)
+void KisAbrTranslator::addEntry(const QString &attributeName, const QString &type, const QString &value)
 {
     // setup object type
     // shape dynamics is not separated in the Objc so workaround by attribute name
@@ -46,8 +46,7 @@ void KisAbrTranslator::addEntry(const QString& attributeName, const QString& typ
 
         if (m_currentObjectName == ABR_DUAL_BRUSH && attributeName == OBJECT_NAME_BRUSH) {
             m_currentObjectName = ABR_DUAL_BRUSH + '_' + attributeName;
-        }
-        else {
+        } else {
             m_currentObjectName = attributeName;
         }
 
@@ -58,34 +57,26 @@ void KisAbrTranslator::addEntry(const QString& attributeName, const QString& typ
     if (m_currentObjectName == ABR_PRESET_START) {
         if (attributeName == ABR_PRESET_START) {
             clean();
-        }
-        else if (attributeName == ABR_PRESET_NAME) {
+        } else if (attributeName == ABR_PRESET_NAME) {
             m_root.setAttribute("name", value);
-        }
-        else {
+        } else {
             //qDebug() << "--Unknown attribute: " << attributeName;
         }
-    }
-    else if (m_currentObjectName == OBJECT_NAME_BRUSH) {
+    } else if (m_currentObjectName == OBJECT_NAME_BRUSH) {
         m_abrBrushProperties.setupProperty(attributeName, type, value);
         // this is not object name but shape dynamics does not start with objc :/
         // those objects has been merged with shape attributes due to serialization
         // e.g. minumumDiameter belongs to ABR_SZVR and is ABR_USE_TIP_DYNAMICS object
-    }
-    else if (m_currentObjectName == ABR_USE_TIP_DYNAMICS ||
+    } else if (m_currentObjectName == ABR_USE_TIP_DYNAMICS ||
                m_currentObjectName == ABR_SZVR ||
                m_currentObjectName == ABR_ANGLE_DYNAMICS ||
                m_currentObjectName == ABR_ROUNDNESS_DYNAMICS) {
         m_abrTipDynamics.setupProperty(attributeName, type, value);
-    }
-    else if (m_currentObjectName == ABR_USE_SCATTER) {
+    } else if (m_currentObjectName == ABR_USE_SCATTER) {
         // TODO
-    }
-    else {
+    } else {
         qDebug() << "Unknown attribute of " << m_currentObjectName << "| " << attributeName << type << value << " |";
     }
-
-
 
 }
 
@@ -99,7 +90,6 @@ void KisAbrTranslator::finishPreset()
     m_currentObjectName.clear();
 }
 
-
 QString KisAbrTranslator::toString()
 {
     return m_doc.toString();
@@ -112,8 +102,7 @@ void KisAbrTranslator::clean()
     init();
 }
 
-
-void AbrBrushProperties::setupProperty(const QString& attributeName, const QString& type, const QString& value)
+void AbrBrushProperties::setupProperty(const QString &attributeName, const QString &type, const QString &value)
 {
     Q_UNUSED(type);
     double valueDbl = 0.0;
@@ -134,32 +123,23 @@ void AbrBrushProperties::setupProperty(const QString& attributeName, const QStri
 
     if (attributeName == OBJECT_NAME_BRUSH) {
         m_brushType = list.at(0);
-    }
-    else if (attributeName == ABR_BRUSH_DIAMETER) {
+    } else if (attributeName == ABR_BRUSH_DIAMETER) {
         m_diameter = valueDbl;
-    }
-    else if (attributeName == ABR_BRUSH_HARDNESS) {
+    } else if (attributeName == ABR_BRUSH_HARDNESS) {
         m_hardness = valueDbl;
-    }
-    else if (attributeName == ABR_BRUSH_ANGLE) {
+    } else if (attributeName == ABR_BRUSH_ANGLE) {
         m_angle = valueDbl;
-    }
-    else if (attributeName == ABR_BRUSH_ROUNDNESS) {
+    } else if (attributeName == ABR_BRUSH_ROUNDNESS) {
         m_roundness = valueDbl;
-    }
-    else if (attributeName == ABR_BRUSH_SPACING) {
+    } else if (attributeName == ABR_BRUSH_SPACING) {
         m_spacing = valueDbl;
-    }
-    else if (attributeName == ABR_BRUSH_INTR) {
+    } else if (attributeName == ABR_BRUSH_INTR) {
         m_intr = value.toInt();
-    }
-    else if (attributeName == ABR_FLIP_X) {
+    } else if (attributeName == ABR_FLIP_X) {
         m_flipX = value.toInt();
-    }
-    else if (attributeName == ABR_FLIP_Y) {
+    } else if (attributeName == ABR_FLIP_Y) {
         m_flipY = value.toInt();
-    }
-    else {
+    } else {
         qDebug() << "Unknown attribute " << attributeName;
     }
 }
@@ -170,7 +150,7 @@ void AbrBrushProperties::setupProperty(const QString& attributeName, const QStri
 //         <MaskGenerator radius="5" ratio="1" type="circle" vfade="0.5" spikes="2" hfade="0.5"/>
 //     </Brush> ]]>
 // </param>
-void AbrBrushProperties::toXML(QDomDocument& doc, QDomElement& root) const
+void AbrBrushProperties::toXML(QDomDocument &doc, QDomElement &root) const
 {
     if (m_brushType != BRUSH_TYPE_COMPUTED) {
         qDebug() << m_brushType << "saved as computed brush...";
@@ -210,14 +190,12 @@ AbrTipDynamicsProperties::AbrTipDynamicsProperties()
     Q_ASSERT(m_groupType.isNull());
 }
 
-
-void AbrTipDynamicsProperties::setupProperty(const QString& attributeName, const QString& type, const QString& value)
+void AbrTipDynamicsProperties::setupProperty(const QString &attributeName, const QString &type, const QString &value)
 {
     if (type == ABR_OBJECT) {
         if (!m_groups.keys().contains(attributeName)) {
             qDebug() << "Unknown " << type << " in Tip dynamics called " << attributeName << " : " << value;
-        }
-        else {
+        } else {
             m_groupType = attributeName;
         }
         return;
@@ -242,23 +220,17 @@ void AbrTipDynamicsProperties::setupProperty(const QString& attributeName, const
 
         if (attributeName == ABR_USE_TIP_DYNAMICS) {
             m_useTipDynamics = value.toInt();
-        }
-        else if (attributeName == ABR_FLIP_X) {
+        } else if (attributeName == ABR_FLIP_X) {
             m_flipX = value.toInt();
-        }
-        else if (attributeName == ABR_FLIP_Y) {
+        } else if (attributeName == ABR_FLIP_Y) {
             m_flipY = value.toInt();
-        }
-        else if (attributeName == ABR_TIP_DYNAMICS_MINUMUM_DIAMETER) {
+        } else if (attributeName == ABR_TIP_DYNAMICS_MINUMUM_DIAMETER) {
             m_minumumDiameter = valueDbl;
-        }
-        else if (attributeName == ABR_TIP_DYNAMICS_MINUMUM_ROUNDNESS) {
+        } else if (attributeName == ABR_TIP_DYNAMICS_MINUMUM_ROUNDNESS) {
             m_minumumRoundness = valueDbl;
-        }
-        else if (attributeName == ABR_TIP_DYNAMICS_TILT_SCALE) {
+        } else if (attributeName == ABR_TIP_DYNAMICS_TILT_SCALE) {
             m_tiltScale = valueDbl;
-        }
-        else {
+        } else {
             qDebug() << "Unknown attribute for tip dynamics" << attributeName;
         }
 
@@ -267,7 +239,7 @@ void AbrTipDynamicsProperties::setupProperty(const QString& attributeName, const
     }
 }
 
-void AbrTipDynamicsProperties::toXML(QDomDocument& doc, QDomElement& root) const
+void AbrTipDynamicsProperties::toXML(QDomDocument &doc, QDomElement &root) const
 {
     QDomElement el = doc.createElement("shape_dynamics");
     el.setAttribute("useTipDynamics", m_useTipDynamics);
@@ -305,7 +277,7 @@ void AbrTipDynamicsProperties::toXML(QDomDocument& doc, QDomElement& root) const
 // <param name="PressureSize">true</param>
 // <param name="SizeSensor"><![CDATA[<!DOCTYPE params>
 // <params id="fuzzy"/> ]]></param> // controller
-void AbrGroupProperties::setupProperty(const QString& attributeName, const QString& type, const QString& value)
+void AbrGroupProperties::setupProperty(const QString &attributeName, const QString &type, const QString &value)
 {
     Q_UNUSED(type);
     double valueDbl = 0.0;
@@ -321,18 +293,13 @@ void AbrGroupProperties::setupProperty(const QString& attributeName, const QStri
 
     if (attributeName == ABR_DYNAMICS_FADE_STEP) {
         m_fadeStep = value.toInt();
-    }
-    else if (attributeName == ABR_DYNAMICS_JITTER) {
+    } else if (attributeName == ABR_DYNAMICS_JITTER) {
         m_sizeJitter = valueDbl;
-    }
-    else if (attributeName == ABR_CONTROL) {
+    } else if (attributeName == ABR_CONTROL) {
         m_bVTy = (enumAbrControllers)value.toInt();
-    }
-    else {
+    } else {
         qDebug() << "Unknown attribute for Group!" << attributeName;
     }
 
 }
-
-
 

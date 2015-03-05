@@ -36,14 +36,13 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <db/error.h>
 #include <db/utils.h>
 
-
 using namespace KexiDB;
 
 //--------------------------------------------------------------------------
 
 MySqlConnection::MySqlConnection(Driver *driver, ConnectionData &conn_data)
-        : Connection(driver, conn_data)
-        , d(new MySqlConnectionInternal(this))
+    : Connection(driver, conn_data)
+    , d(new MySqlConnectionInternal(this))
 {
 }
 
@@ -53,11 +52,12 @@ MySqlConnection::~MySqlConnection()
     delete d;
 }
 
-bool MySqlConnection::drv_connect(KexiDB::ServerVersionInfo& version)
+bool MySqlConnection::drv_connect(KexiDB::ServerVersionInfo &version)
 {
     const bool ok = d->db_connect(*data());
-    if (!ok)
+    if (!ok) {
         return false;
+    }
 
     version.string = mysql_get_host_info(d->mysql);
 
@@ -85,8 +85,9 @@ bool MySqlConnection::drv_connect(KexiDB::ServerVersionInfo& version)
     int intLowerCaseTableNames = 0;
     res = querySingleNumber(QLatin1String("SHOW VARIABLES LIKE 'lower_case_table_name'"), intLowerCaseTableNames,
                             0/*col*/, false/* !addLimitTo1 */);
-    if (res == false) // sanity
+    if (res == false) { // sanity
         return false;
+    }
     kDebug() << (res == true) << "lower_case_table_name:" << intLowerCaseTableNames;
     d->lowerCaseTableNames = intLowerCaseTableNames > 0;
     return true;
@@ -97,12 +98,12 @@ bool MySqlConnection::drv_disconnect()
     return d->db_disconnect();
 }
 
-Cursor* MySqlConnection::prepareQuery(const QString& statement, uint cursor_options)
+Cursor *MySqlConnection::prepareQuery(const QString &statement, uint cursor_options)
 {
     return new MySqlCursor(this, statement, cursor_options);
 }
 
-Cursor* MySqlConnection::prepareQuery(QuerySchema& query, uint cursor_options)
+Cursor *MySqlConnection::prepareQuery(QuerySchema &query, uint cursor_options)
 {
     return new MySqlCursor(this, query, cursor_options);
 }
@@ -132,11 +133,12 @@ bool MySqlConnection::drv_databaseExists(const QString &dbName, bool ignoreError
     /* db names can be lower case in mysql */
     const QString storedDbName(d->lowerCaseTableNames ? dbName.toLower() : dbName);
     bool exists = resultExists(
-      QString::fromLatin1("SHOW DATABASES LIKE %1")
-          .arg(driver()->escapeString(storedDbName)), success);
+                      QString::fromLatin1("SHOW DATABASES LIKE %1")
+                      .arg(driver()->escapeString(storedDbName)), success);
     if (!exists || !success) {
-        if (!ignoreErrors)
+        if (!ignoreErrors) {
             setError(ERR_OBJECT_NOT_FOUND, kexidb_i18n("The database \"%1\" does not exist.", storedDbName));
+        }
         return false;
     }
     return true;
@@ -148,13 +150,14 @@ bool MySqlConnection::drv_createDatabase(const QString &dbName)
     KexiDBDrvDbg << storedDbName;
     // mysql_create_db deprecated, use SQL here.
     // db names are lower case in mysql
-    if (drv_executeSQL(QString::fromLatin1("CREATE DATABASE %1").arg(escapeIdentifier(storedDbName))))
+    if (drv_executeSQL(QString::fromLatin1("CREATE DATABASE %1").arg(escapeIdentifier(storedDbName)))) {
         return true;
+    }
     d->storeResult();
     return false;
 }
 
-bool MySqlConnection::drv_useDatabase(const QString &dbName, bool *cancelled, MessageHandler* msgHandler)
+bool MySqlConnection::drv_useDatabase(const QString &dbName, bool *cancelled, MessageHandler *msgHandler)
 {
     Q_UNUSED(cancelled);
     Q_UNUSED(msgHandler);
@@ -176,7 +179,7 @@ bool MySqlConnection::drv_dropDatabase(const QString &dbName)
     return drv_executeSQL(QString::fromLatin1("DROP DATABASE %1").arg(escapeIdentifier(storedDbName)));
 }
 
-bool MySqlConnection::drv_executeSQL(const QString& statement)
+bool MySqlConnection::drv_executeSQL(const QString &statement)
 {
     return d->executeSQL(statement);
 }
@@ -199,8 +202,9 @@ QString MySqlConnection::serverResultName()
 
 void MySqlConnection::drv_clearServerResult()
 {
-    if (!d)
+    if (!d) {
         return;
+    }
     d->res = 0;
 }
 
@@ -211,7 +215,7 @@ QString MySqlConnection::serverErrorMsg()
 
 bool MySqlConnection::drv_containsTable(const QString &tableName)
 {
-    bool success=false;
+    bool success = false;
     return resultExists(QString("show tables like %1")
                         .arg(driver()->escapeString(tableName)), success) && success;
 }
@@ -222,7 +226,7 @@ bool MySqlConnection::drv_getTablesList(QStringList &list)
 }
 
 PreparedStatement::Ptr MySqlConnection::prepareStatement(PreparedStatement::StatementType type,
-        FieldList& fields)
+        FieldList &fields)
 {
     return KSharedPtr<PreparedStatement>(new MySqlPreparedStatement(type, *d, fields));
 }

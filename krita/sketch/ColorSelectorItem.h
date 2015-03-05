@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef COLORSELECTORITEM_H
 #define COLORSELECTORITEM_H
 
@@ -26,17 +25,17 @@ class KoColor;
 class ColorSelectorItem : public QDeclarativeItem
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
+    Q_PROPERTY(QObject *view READ view WRITE setView NOTIFY viewChanged)
     Q_PROPERTY(bool changeBackground READ changeBackground WRITE setChangeBackground NOTIFY changeBackgroundChanged)
     // This is a heuristic assistance property - if this is set to false, the item will not be painted
     Q_PROPERTY(bool shown READ shown WRITE setShown NOTIFY shownChanged)
 public:
-    ColorSelectorItem(QDeclarativeItem* parent = 0);
+    ColorSelectorItem(QDeclarativeItem *parent = 0);
     virtual ~ColorSelectorItem();
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-    QObject* view() const;
-    void setView(QObject* newView);
+    QObject *view() const;
+    void setView(QObject *newView);
 
     bool changeBackground() const;
     void setChangeBackground(bool newChangeBackground);
@@ -53,20 +52,20 @@ Q_SIGNALS:
     void colorChanged(QColor newColor, qreal newAlpha, bool backgroundChanged);
 
 protected:
-    virtual void geometryChanged(const QRectF & newGeometry, const QRectF & oldGeometry);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-    virtual void mouseEvent(QGraphicsSceneMouseEvent* event);
+    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseEvent(QGraphicsSceneMouseEvent *event);
 
 private Q_SLOTS:
-    void fgColorChanged(const KoColor& newColor);
-    void bgColorChanged(const KoColor& newColor);
+    void fgColorChanged(const KoColor &newColor);
+    void bgColorChanged(const KoColor &newColor);
     void repaint();
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // COLORSELECTORITEM_H

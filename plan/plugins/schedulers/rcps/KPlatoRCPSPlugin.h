@@ -26,12 +26,11 @@
 
 #include <QVariantList>
 
-
 namespace KPlato
 {
-    class Project;
-    class ScheduleManager;
-    class Schedule;
+class Project;
+class ScheduleManager;
+class Schedule;
 }
 
 using namespace KPlato;
@@ -41,29 +40,28 @@ class KPlatoRCPSPlugin : public SchedulerPlugin
     Q_OBJECT
 
 public:
-    KPlatoRCPSPlugin( QObject * parent,  const QVariantList & );
+    KPlatoRCPSPlugin(QObject *parent,  const QVariantList &);
     ~KPlatoRCPSPlugin();
 
     virtual QString description() const;
     virtual int capabilities() const;
     /// Calculate the project
-    virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false );
+    virtual void calculate(Project &project, ScheduleManager *sm, bool nothread = false);
 
     /// Return the scheduling granularity in milliseconds
     ulong currentGranularity() const;
 
 Q_SIGNALS:
-    void sigCalculationStarted(Project*, ScheduleManager*);
-    void sigCalculationFinished(Project*, ScheduleManager*);
+    void sigCalculationStarted(Project *, ScheduleManager *);
+    void sigCalculationFinished(Project *, ScheduleManager *);
 
 public Q_SLOTS:
     void stopAllCalculations();
-    void stopCalculation( SchedulerThread *sch );
+    void stopCalculation(SchedulerThread *sch);
 
 protected Q_SLOTS:
-    void slotStarted( SchedulerThread *job );
-    void slotFinished( SchedulerThread *job );
+    void slotStarted(SchedulerThread *job);
+    void slotFinished(SchedulerThread *job);
 };
-
 
 #endif // KPLATORCPSPLUGIN_H

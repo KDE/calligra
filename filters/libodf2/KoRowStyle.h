@@ -26,7 +26,7 @@
 
 /**
  * A \class KoRowStyle represents a style of a row to be applied to one or more rows.
- * 
+ *
  * As all the styles it can be shared
  */
 
@@ -38,10 +38,10 @@ public:
     KOSTYLE_DECLARE_SHARED_POINTER(KoRowStyle)
     ~KoRowStyle();
 
-    void setBackgroundColor(const QColor& color);
+    void setBackgroundColor(const QColor &color);
     QColor backgroundColor() const;
 
-    enum HeightType{
+    enum HeightType {
         MinimumHeight,
         ExactHeight,
         OptimalHeight
@@ -76,8 +76,8 @@ public:
 protected:
     virtual KoGenStyle::Type automaticstyleType() const;
     virtual QString defaultPrefix() const;
-    virtual void prepareStyle(KoGenStyle& style) const;
-    virtual const char* styleFamilyName() const;
+    virtual void prepareStyle(KoGenStyle &style) const;
+    virtual const char *styleFamilyName() const;
     virtual KoGenStyle::Type styleType() const;
 
 private:

@@ -39,46 +39,49 @@ void RowRepeatStorage::dump() const
 
 void RowRepeatStorage::setRowRepeat(int firstRow, int rowRepeat)
 {
-   const int lastRow = firstRow + rowRepeat - 1;
-   // see if m_data contains a range that includes firstRow
-   QMap<int, int>::iterator it = m_data.lowerBound(firstRow);
-   typedef QPair<int, int> intPair;
-   QList<intPair> newRanges;
-   // returns first range that ends at or after firstRow
-   if (it != m_data.end()) {
-       while (it != m_data.end() && (it.key() - it.value() + 1) <= lastRow) {
-           if ((it.key() - it.value() + 1) < firstRow) {
-               // starts before the new range, so we want to change the row repeat value of this range
-               // but since the key is the end of the range, we can only remove it and re-insert it later
-               newRanges.append(qMakePair(firstRow - 1, it.value() - (it.key() - firstRow + 1)));
-               if (it.key() > lastRow) {
-                   // ends after the new range, so also adjust the end
-                   it.value() = it.key() - lastRow;
-                   ++it;
-               } else {
-                   it = m_data.erase(it);
-               }
-           } else {
-               // starts inside the new range, ends in or after the new range
-               if (it.key() <= lastRow) {
-                   // ends inside the new range, so just remove
-                   it = m_data.erase(it);
-               } else {
-                   // ends after the new range, adjust and go to the next
-                   it.value() = it.key() - lastRow;
-                   ++it;
-               }
-           }
-       }
-   }
+    const int lastRow = firstRow + rowRepeat - 1;
+    // see if m_data contains a range that includes firstRow
+    QMap<int, int>::iterator it = m_data.lowerBound(firstRow);
+    typedef QPair<int, int> intPair;
+    QList<intPair> newRanges;
+    // returns first range that ends at or after firstRow
+    if (it != m_data.end()) {
+        while (it != m_data.end() && (it.key() - it.value() + 1) <= lastRow) {
+            if ((it.key() - it.value() + 1) < firstRow) {
+                // starts before the new range, so we want to change the row repeat value of this range
+                // but since the key is the end of the range, we can only remove it and re-insert it later
+                newRanges.append(qMakePair(firstRow - 1, it.value() - (it.key() - firstRow + 1)));
+                if (it.key() > lastRow) {
+                    // ends after the new range, so also adjust the end
+                    it.value() = it.key() - lastRow;
+                    ++it;
+                } else {
+                    it = m_data.erase(it);
+                }
+            } else {
+                // starts inside the new range, ends in or after the new range
+                if (it.key() <= lastRow) {
+                    // ends inside the new range, so just remove
+                    it = m_data.erase(it);
+                } else {
+                    // ends after the new range, adjust and go to the next
+                    it.value() = it.key() - lastRow;
+                    ++it;
+                }
+            }
+        }
+    }
 
-   // finally set the new range of row-repeat values
-   if (rowRepeat != 1)
-       m_data[lastRow] = rowRepeat;
+    // finally set the new range of row-repeat values
+    if (rowRepeat != 1) {
+        m_data[lastRow] = rowRepeat;
+    }
 
-   foreach (const intPair& p, newRanges) {
-       if (p.second > 1) m_data[p.first] = p.second;
-   }
+    foreach (const intPair &p, newRanges) {
+        if (p.second > 1) {
+            m_data[p.first] = p.second;
+        }
+    }
 }
 
 int RowRepeatStorage::rowRepeat(int row) const
@@ -86,7 +89,9 @@ int RowRepeatStorage::rowRepeat(int row) const
     // first range that ends at or after row
     QMap<int, int>::const_iterator it = m_data.lowerBound(row);
     // not found? default value = 1
-    if (it == m_data.end()) return 1;
+    if (it == m_data.end()) {
+        return 1;
+    }
     // otherwise, see if row is actually inside the range
     if (it.key() - it.value() + 1 <= row) {
         return it.value();
@@ -99,7 +104,9 @@ int RowRepeatStorage::firstIdenticalRow(int row) const
     // first range that ends at or after row
     QMap<int, int>::const_iterator it = m_data.lowerBound(row);
     // not found? default value = row
-    if (it == m_data.end()) return row;
+    if (it == m_data.end()) {
+        return row;
+    }
     // otherwise, see if row is actually inside the range
     if (it.key() - it.value() + 1 <= row) {
         return it.key() - it.value() + 1;
@@ -117,7 +124,7 @@ void RowRepeatStorage::insertRows(int row, int count)
     while (it != m_data.end()) {
         if (it.key() - it.value() + 1 < row) {
             // starts before the newly inserted rows, so split it up
-            newRanges.append(qMakePair(row-1, row - it.key() + it.value() - 1));
+            newRanges.append(qMakePair(row - 1, row - it.key() + it.value() - 1));
             newRanges.append(qMakePair(it.key() + count, it.key() - row + 1));
         } else {
             newRanges.append(qMakePair(it.key() + count, it.value()));
@@ -125,9 +132,11 @@ void RowRepeatStorage::insertRows(int row, int count)
         it = m_data.erase(it);
     }
 
-    m_data[row+count-1] = count;
-    foreach (const intPair& p, newRanges) {
-        if (p.second > 1) m_data[p.first] = p.second;
+    m_data[row + count - 1] = count;
+    foreach (const intPair &p, newRanges) {
+        if (p.second > 1) {
+            m_data[p.first] = p.second;
+        }
     }
 }
 
@@ -141,7 +150,7 @@ void RowRepeatStorage::removeRows(int row, int count)
     while (it != m_data.end()) {
         if (it.key() - it.value() + 1 < row) {
             // starts before removed rows
-            newRanges.append(qMakePair(row-1, row - it.key() + it.value() - 1));
+            newRanges.append(qMakePair(row - 1, row - it.key() + it.value() - 1));
         }
         if (it.key() >= row + count) {
             // ends after the removed rows
@@ -150,8 +159,10 @@ void RowRepeatStorage::removeRows(int row, int count)
         it = m_data.erase(it);
     }
 
-    foreach (const intPair& p, newRanges) {
-        if (p.second > 1) m_data[p.first] = p.second;
+    foreach (const intPair &p, newRanges) {
+        if (p.second > 1) {
+            m_data[p.first] = p.second;
+        }
     }
 }
 
@@ -176,8 +187,10 @@ void RowRepeatStorage::insertShiftDown(const QRect &rect)
     }
 
     m_data.clear();
-    foreach (const intPair& p, newRanges) {
-        if (p.second > 1) m_data[p.first] = p.second;
+    foreach (const intPair &p, newRanges) {
+        if (p.second > 1) {
+            m_data[p.first] = p.second;
+        }
     }
 }
 
@@ -202,15 +215,17 @@ void RowRepeatStorage::removeShiftUp(const QRect &rect)
     }
 
     m_data.clear();
-    foreach (const intPair& p, newRanges) {
-        if (p.second > 1) m_data[p.first] = p.second;
+    foreach (const intPair &p, newRanges) {
+        if (p.second > 1) {
+            m_data[p.first] = p.second;
+        }
     }
 }
 
 void RowRepeatStorage::insertShiftRight(const QRect &rect)
 {
     splitRowRepeat(rect.top());
-    splitRowRepeat(rect.bottom()+1);
+    splitRowRepeat(rect.bottom() + 1);
 }
 
 void RowRepeatStorage::removeShiftLeft(const QRect &rect)
@@ -228,6 +243,8 @@ void RowRepeatStorage::splitRowRepeat(int row)
         int start = it.key() - it.value() + 1;
         int count = row - start;
         it.value() = it.key() - row + 1;
-        if (count > 1) m_data[start+count-1] = count;
+        if (count > 1) {
+            m_data[start + count - 1] = count;
+        }
     }
 }

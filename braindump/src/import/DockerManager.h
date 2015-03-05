@@ -35,7 +35,7 @@ class DockerManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit DockerManager(MainWindow* mainWindow);
+    explicit DockerManager(MainWindow *mainWindow);
     ~DockerManager();
 
 public Q_SLOTS:
@@ -43,13 +43,12 @@ public Q_SLOTS:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetMap);
-
+    void newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetMap);
 
 private:
     Q_PRIVATE_SLOT(d, void moveToolBars())
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

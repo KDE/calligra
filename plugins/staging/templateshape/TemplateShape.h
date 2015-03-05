@@ -30,9 +30,7 @@
 // This shape
 //#include "Foo.h"
 
-
 #define TEMPLATESHAPEID "TemplateShape"
-
 
 class TemplateShape : public QObject, public KoShape
 {
@@ -53,10 +51,8 @@ public:
     // reimplemented from KoShape
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
 
-
 private:
     // Shape members here.  D-pointer is not needed since this is not a library.
 };
-
 
 #endif

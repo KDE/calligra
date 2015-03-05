@@ -29,156 +29,166 @@
 #include "xbaseconnection_p.h"
 #include <db/error.h>
 
-
 using namespace KexiDB;
 
-
-xBaseConnection::xBaseConnection( Driver *driver, Driver* internalDriver, ConnectionData &conn_data )
-  :Connection(driver,conn_data)
-  ,d(new xBaseConnectionInternal(this, internalDriver))
+xBaseConnection::xBaseConnection(Driver *driver, Driver *internalDriver, ConnectionData &conn_data)
+    : Connection(driver, conn_data)
+    , d(new xBaseConnectionInternal(this, internalDriver))
 {
 }
 
-xBaseConnection::~xBaseConnection() {
-  destroy();
-}
-
-bool xBaseConnection::drv_connect(KexiDB::ServerVersionInfo& version)
+xBaseConnection::~xBaseConnection()
 {
-  Q_UNUSED(version);
-  const bool ok = d->db_connect(*data());
-  if (!ok)
-    return false;
-
-  //! TODO xBase version here
-  //version.string = mysql_get_host_info(d->mysql);
-
-  return true;
+    destroy();
 }
 
-bool xBaseConnection::drv_disconnect() {
-  return d->db_disconnect(*data());
+bool xBaseConnection::drv_connect(KexiDB::ServerVersionInfo &version)
+{
+    Q_UNUSED(version);
+    const bool ok = d->db_connect(*data());
+    if (!ok) {
+        return false;
+    }
+
+    //! TODO xBase version here
+    //version.string = mysql_get_host_info(d->mysql);
+
+    return true;
 }
 
-Cursor* xBaseConnection::prepareQuery(const QString& statement, uint cursor_options) {
-  if ( !d->internalConn ) {
-    return 0;
-  }
-  Cursor* internalCursor = d->internalConn->prepareQuery(statement,cursor_options);
-  return new xBaseCursor( this, internalCursor, statement, cursor_options );
+bool xBaseConnection::drv_disconnect()
+{
+    return d->db_disconnect(*data());
 }
 
-Cursor* xBaseConnection::prepareQuery( QuerySchema& query, uint cursor_options ) {
-  if ( !d->internalConn ) {
-    return 0;
-  }
-  Cursor* internalCursor = d->internalConn->prepareQuery(query, cursor_options);
-  return new xBaseCursor( this, internalCursor, query, cursor_options );
+Cursor *xBaseConnection::prepareQuery(const QString &statement, uint cursor_options)
+{
+    if (!d->internalConn) {
+        return 0;
+    }
+    Cursor *internalCursor = d->internalConn->prepareQuery(statement, cursor_options);
+    return new xBaseCursor(this, internalCursor, statement, cursor_options);
 }
 
-bool xBaseConnection::drv_getDatabasesList( QStringList &list ) {
-  KexiDBDrvDbg << "xBaseConnection::drv_getDatabasesList()";
+Cursor *xBaseConnection::prepareQuery(QuerySchema &query, uint cursor_options)
+{
+    if (!d->internalConn) {
+        return 0;
+    }
+    Cursor *internalCursor = d->internalConn->prepareQuery(query, cursor_options);
+    return new xBaseCursor(this, internalCursor, query, cursor_options);
+}
 
-  //! TODO Check whether this is the right thing to do
-  list<<QStringList( d->dbMap.keys() );
+bool xBaseConnection::drv_getDatabasesList(QStringList &list)
+{
+    KexiDBDrvDbg << "xBaseConnection::drv_getDatabasesList()";
+
+    //! TODO Check whether this is the right thing to do
+    list << QStringList(d->dbMap.keys());
 //        list<<d->internalConn->databaseNames();
-  return true;
+    return true;
 }
 
-bool xBaseConnection::drv_createDatabase( const QString &dbName) {
-  //! TODO Check whether this function has any use.
-  KexiDBDrvDbg << "xBaseConnection::drv_createDatabase: " << dbName;
-//	return d->internalConn->createDatabase(d->dbMap[dbName]);
-  return true;
-}
-
-bool xBaseConnection::drv_useDatabase(const QString &dbName, bool *cancelled, MessageHandler* msgHandler)
+bool xBaseConnection::drv_createDatabase(const QString &dbName)
 {
-  Q_UNUSED(cancelled);
-  Q_UNUSED(msgHandler);
+    //! TODO Check whether this function has any use.
+    KexiDBDrvDbg << "xBaseConnection::drv_createDatabase: " << dbName;
+//  return d->internalConn->createDatabase(d->dbMap[dbName]);
+    return true;
+}
+
+bool xBaseConnection::drv_useDatabase(const QString &dbName, bool *cancelled, MessageHandler *msgHandler)
+{
+    Q_UNUSED(cancelled);
+    Q_UNUSED(msgHandler);
 //! @todo escaping needed?
-  return d->useDatabase(dbName);
+    return d->useDatabase(dbName);
 }
 
-bool xBaseConnection::drv_closeDatabase() {
-  if (!d->internalConn || !d->internalConn->closeDatabase() ) {
-    return false;
-  }
-  return true;
+bool xBaseConnection::drv_closeDatabase()
+{
+    if (!d->internalConn || !d->internalConn->closeDatabase()) {
+        return false;
+    }
+    return true;
 }
 
-bool xBaseConnection::drv_dropDatabase( const QString &dbName) {
-  Q_UNUSED(dbName);
+bool xBaseConnection::drv_dropDatabase(const QString &dbName)
+{
+    Q_UNUSED(dbName);
 //! @todo escaping needed?
-  // Delete the directory ?
-  return true;
+    // Delete the directory ?
+    return true;
 }
 
-bool xBaseConnection::drv_executeSQL( const QString& statement ) {
-  return d->executeSQL(statement);
+bool xBaseConnection::drv_executeSQL(const QString &statement)
+{
+    return d->executeSQL(statement);
 }
 
 quint64 xBaseConnection::drv_lastInsertRowID()
 {
-  //! TODO
-  quint64 rowID = -1;
-  if (d->internalConn)
-    d->internalConn->lastInsertedAutoIncValue(QString(), QString(), &rowID );
+    //! TODO
+    quint64 rowID = -1;
+    if (d->internalConn) {
+        d->internalConn->lastInsertedAutoIncValue(QString(), QString(), &rowID);
+    }
 
-  return rowID;
+    return rowID;
 }
 
 int xBaseConnection::serverResult()
 {
-  return d->res;
+    return d->res;
 }
 
 QString xBaseConnection::serverResultName()
 {
-  if (!d->internalConn) {
-    return QString();
-  }
-  return d->internalConn->serverResultName();
+    if (!d->internalConn) {
+        return QString();
+    }
+    return d->internalConn->serverResultName();
 }
 
 void xBaseConnection::drv_clearServerResult()
 {
-  if (!d || !d->internalConn)
-    return;
-  d->internalConn->clearError();
-  d->res = 0;
+    if (!d || !d->internalConn) {
+        return;
+    }
+    d->internalConn->clearError();
+    d->res = 0;
 }
 
 QString xBaseConnection::serverErrorMsg()
 {
-  return d->errmsg;
+    return d->errmsg;
 }
 
-bool xBaseConnection::drv_containsTable( const QString &tableName )
+bool xBaseConnection::drv_containsTable(const QString &tableName)
 {
-  bool success=false;
-  // this will be called on the SQLite database
-  return resultExists(QString("show tables like %1")
-    .arg(driver()->escapeString(tableName)), success) && success;
+    bool success = false;
+    // this will be called on the SQLite database
+    return resultExists(QString("show tables like %1")
+                        .arg(driver()->escapeString(tableName)), success) && success;
 }
 
-bool xBaseConnection::drv_getTablesList( QStringList &list )
+bool xBaseConnection::drv_getTablesList(QStringList &list)
 {
-  if ( !d->internalConn ) {
-    return false;
-  }
-  list<<d->internalConn->tableNames();
-  return true;
+    if (!d->internalConn) {
+        return false;
+    }
+    list << d->internalConn->tableNames();
+    return true;
 }
 
 PreparedStatement::Ptr xBaseConnection::prepareStatement(PreparedStatement::StatementType type,
-  FieldList& fields)
+        FieldList &fields)
 {
-  if ( !d->internalConn ) {
-    // return a null pointer
-    return KSharedPtr<PreparedStatement>();
-  }
-  return d->internalConn->prepareStatement( type, fields );
+    if (!d->internalConn) {
+        // return a null pointer
+        return KSharedPtr<PreparedStatement>();
+    }
+    return d->internalConn->prepareStatement(type, fields);
 }
 
 #include "xbaseconnection.moc"

@@ -19,12 +19,14 @@
 
 #include "kptdebug.h"
 
-int planDbg() {
-    static int s_area = KDebug::registerArea( "plan" );
+int planDbg()
+{
+    static int s_area = KDebug::registerArea("plan");
     return s_area;
 }
 
-int planDependencyEditorDbg() {
-    static int s_area = KDebug::registerArea( "plan (Dependency Editor)" );
+int planDependencyEditorDbg()
+{
+    static int s_area = KDebug::registerArea("plan (Dependency Editor)");
     return s_area;
 }

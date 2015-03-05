@@ -84,19 +84,19 @@ public:
     virtual ~Container();
 
     //! \return a pointer to the toplevel Container, or 0 if this Container is toplevel
-    Container* toplevel();
+    Container *toplevel();
 
     //! \return the same as toplevel()->widget()
-    QWidget* topLevelWidget() const;
+    QWidget *topLevelWidget() const;
 
     //! \return The form this Container belongs to.
-    Form* form() const;
+    Form *form() const;
 
     //! \return The watched widget.
-    QWidget* widget() const;
+    QWidget *widget() const;
 
     //! \return The ObjectTreeItem associated with this Container's widget.
-    ObjectTreeItem* objectTree() const;
+    ObjectTreeItem *objectTree() const;
 
     //! Sets the Form which this Container belongs to.
     void setForm(Form *form);
@@ -106,7 +106,7 @@ public:
     void setObjectTree(ObjectTreeItem *t);
 
     //! \return a pointer to the QLayout of this Container, or 0 if there is not.
-    QLayout* layout() const;
+    QLayout *layout() const;
 
     //! \return the type of the layout associated to this Container's widget (see Form::LayoutType enum).
     Form::LayoutType layoutType() const;
@@ -149,7 +149,7 @@ public Q_SLOTS:
       (and so of the Form). See Form::WidgetSelectionFlags description
       for exmplanation of possible combination of @a flags flags.
       \sa Form::selectWidget() */
-      void selectWidget(QWidget *w, Form::WidgetSelectionFlags flags = Form::DefaultWidgetSelectionFlags);
+    void selectWidget(QWidget *w, Form::WidgetSelectionFlags flags = Form::DefaultWidgetSelectionFlags);
 
     /*! Deselects the widget \a w. The widget is removed from the Form's list
      and its resizeHandles are removed. */
@@ -177,7 +177,7 @@ protected:
     /*! Internal function to create a HBoxLayout or VBoxLayout for this container.
      \a list is a subclass of CustomSortableWidgetList that can sort widgets
      depending on their orientation (i.e. HorizontalWidgetList or VerticalWidgetList). */
-    void createBoxLayout(CustomSortableWidgetList* list);
+    void createBoxLayout(CustomSortableWidgetList *list);
 
     /*! Internal function to create a GridLayout. if \a testOnly is true, the layout
       is simulated, and only the widget's grid info aris filled. */
@@ -199,10 +199,10 @@ private:
 
     QPoint selectionOrInsertingBegin() const;
 
-    void selectionWidgetsForRectangle(const QPoint& secondPoint);
+    void selectionWidgetsForRectangle(const QPoint &secondPoint);
 
     class Private;
-    Private * const d;
+    Private *const d;
     friend class InsertWidgetCommand;
     friend class PasteWidgetCommand;
     friend class DeleteWidgetCommand;
@@ -218,12 +218,12 @@ public:
     ~DesignTimeDynamicChildWidgetHandler();
 
 protected:
-    void childWidgetAdded(QWidget* w);
-    void assignItem(ObjectTreeItem* item);
+    void childWidgetAdded(QWidget *w);
+    void assignItem(ObjectTreeItem *item);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
     friend class InsertWidgetCommand;
     friend class FormIO;
 };

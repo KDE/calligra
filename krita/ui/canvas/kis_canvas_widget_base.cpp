@@ -39,8 +39,7 @@
 #include "../KisViewManager.h"
 #include "../kis_selection_manager.h"
 
-struct KisCanvasWidgetBase::Private
-{
+struct KisCanvasWidgetBase::Private {
 public:
     Private(KisCanvas2 *newCanvas, KisCoordinatesConverter *newCoordinatesConverter)
         : canvas(newCanvas)
@@ -51,18 +50,18 @@ public:
         , borderColor(Qt::gray)
     {}
 
-    QList<KisCanvasDecoration*> decorations;
-    KisCanvas2 * canvas;
+    QList<KisCanvasDecoration *> decorations;
+    KisCanvas2 *canvas;
     KisCoordinatesConverter *coordinatesConverter;
-    const KoViewConverter * viewConverter;
-    KoToolProxy * toolProxy;
+    const KoViewConverter *viewConverter;
+    KoToolProxy *toolProxy;
     QTimer blockMouseEvent;
 
     bool ignorenextMouseEventExceptRightMiddleClick; // HACK work around Qt bug not sending tablet right/dblclick http://bugreports.qt.nokia.com/browse/QTBUG-8598
     QColor borderColor;
 };
 
-KisCanvasWidgetBase::KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter)
+KisCanvasWidgetBase::KisCanvasWidgetBase(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter)
     : m_d(new Private(canvas, coordinatesConverter))
 {
     m_d->blockMouseEvent.setSingleShot(true);
@@ -73,11 +72,11 @@ KisCanvasWidgetBase::~KisCanvasWidgetBase()
     delete m_d;
 }
 
-void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const
+void KisCanvasWidgetBase::drawDecorations(QPainter &gc, const QRect &updateWidgetRect) const
 {
     gc.save();
     if (!m_d->canvas) {
-        dbgFile<<"canvas doesn't exist, in canvas widget base!";
+        dbgFile << "canvas doesn't exist, in canvas widget base!";
     }
     // Setup the painter to take care of the offset; all that the
     // classes that do painting need to keep track of is resolution
@@ -89,7 +88,6 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     // gc.setRenderHint(QPainter::HighQualityAntialiasing);
 
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
-
 
     gc.save();
     gc.setClipRect(updateWidgetRect);
@@ -103,7 +101,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     // draw green selection outlines around text shapes that are edited, so the user sees where they end
     gc.save();
     QTransform worldTransform = gc.worldTransform();
-    gc.setPen( Qt::green );
+    gc.setPen(Qt::green);
 
     foreach (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
         if (shape->shapeId() == "ArtisticText" || shape->shapeId() == "TextShapeID") {
@@ -139,26 +137,26 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     gc.restore();
 
     // ask the decorations to paint themselves
-    foreach(KisCanvasDecoration* deco, m_d->decorations) {
-        deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
+    foreach (KisCanvasDecoration *deco, m_d->decorations) {
+        deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter, m_d->canvas);
     }
 
     // then paint the guides
     m_d->canvas->viewManager()->document()->guidesData().paintGuides(gc,
-                                                                     *m_d->viewConverter,
-                                                                     updateWidgetRect);
+            *m_d->viewConverter,
+            updateWidgetRect);
 
     gc.restore();
 }
 
-void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)
+void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration *deco)
 {
     m_d->decorations.push_back(deco);
 }
 
-KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id) const
+KisCanvasDecoration *KisCanvasWidgetBase::decoration(const QString &id) const
 {
-    foreach(KisCanvasDecoration* deco, m_d->decorations) {
+    foreach (KisCanvasDecoration *deco, m_d->decorations) {
         if (deco->id() == id) {
             return deco;
         }
@@ -166,12 +164,12 @@ KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id) const
     return 0;
 }
 
-void KisCanvasWidgetBase::setDecorations(const QList<KisCanvasDecoration*> &decorations)
+void KisCanvasWidgetBase::setDecorations(const QList<KisCanvasDecoration *> &decorations)
 {
-    m_d->decorations=decorations;
+    m_d->decorations = decorations;
 }
 
-QList<KisCanvasDecoration*> KisCanvasWidgetBase::decorations() const
+QList<KisCanvasDecoration *> KisCanvasWidgetBase::decorations() const
 {
     return m_d->decorations;
 }
@@ -185,8 +183,9 @@ QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)
 {
     KisConfig cfg;
 
-    if(checkSize < 0)
+    if (checkSize < 0) {
         checkSize = cfg.checkSize();
+    }
 
     QColor checkColor1 = cfg.checkersColor1();
     QColor checkColor2 = cfg.checkersColor2();
@@ -217,7 +216,7 @@ KisCanvas2 *KisCanvasWidgetBase::canvas() const
     return m_d->canvas;
 }
 
-KisCoordinatesConverter* KisCanvasWidgetBase::coordinatesConverter() const
+KisCoordinatesConverter *KisCanvasWidgetBase::coordinatesConverter() const
 {
     return m_d->coordinatesConverter;
 }

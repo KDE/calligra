@@ -27,7 +27,6 @@
 
 class QByteArray;
 
-
 class AsciiExport : public KoFilter
 {
     Q_OBJECT
@@ -35,7 +34,7 @@ class AsciiExport : public KoFilter
 public:
     AsciiExport(QObject *parent, const QVariantList &);
     virtual ~AsciiExport();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 private:
 };

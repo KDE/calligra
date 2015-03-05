@@ -25,7 +25,7 @@
 #include <KoXmlReader.h>
 
 KoFilterEffectRegistry::KoFilterEffectRegistry()
-  : d(0)
+    : d(0)
 {
 }
 
@@ -39,14 +39,13 @@ void KoFilterEffectRegistry::init()
                                      config);
 }
 
-
 KoFilterEffectRegistry::~KoFilterEffectRegistry()
 {
     qDeleteAll(doubleEntries());
     qDeleteAll(values());
 }
 
-KoFilterEffectRegistry* KoFilterEffectRegistry::instance()
+KoFilterEffectRegistry *KoFilterEffectRegistry::instance()
 {
     K_GLOBAL_STATIC(KoFilterEffectRegistry, s_instance)
     if (!s_instance.exists()) {
@@ -55,15 +54,17 @@ KoFilterEffectRegistry* KoFilterEffectRegistry::instance()
     return s_instance;
 }
 
-KoFilterEffect * KoFilterEffectRegistry::createFilterEffectFromXml(const KoXmlElement & element, const KoFilterEffectLoadingContext &context)
+KoFilterEffect *KoFilterEffectRegistry::createFilterEffectFromXml(const KoXmlElement &element, const KoFilterEffectLoadingContext &context)
 {
-    KoFilterEffectFactoryBase * factory = get(element.tagName());
-    if (!factory)
+    KoFilterEffectFactoryBase *factory = get(element.tagName());
+    if (!factory) {
         return 0;
+    }
 
-    KoFilterEffect * filterEffect = factory->createFilterEffect();
-    if (filterEffect->load(element, context))
+    KoFilterEffect *filterEffect = factory->createFilterEffect();
+    if (filterEffect->load(element, context)) {
         return filterEffect;
+    }
 
     delete filterEffect;
     return 0;

@@ -18,13 +18,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef CALLIGRA_SHEETS_CELL_EDITOR
 #define CALLIGRA_SHEETS_CELL_EDITOR
 
 #include <kglobalsettings.h>
 #include <ktextedit.h>
-
 
 #include "calligra_sheets_export.h"
 #include "CellEditorBase.h"
@@ -57,9 +55,9 @@ public:
     explicit CellEditor(CellToolBase *cellTool, QHash<int, QString> &wordList, QWidget *parent = 0);
     ~CellEditor();
 
-    Selection* selection() const;
+    Selection *selection() const;
 
-    void setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter);
+    void setEditorFont(QFont const &font, bool updateSize, const KoViewConverter *viewConverter);
 
     int cursorPosition() const;
     void setCursorPosition(int pos);
@@ -80,16 +78,31 @@ public:
     void setActiveSubRegion(int index);
 
     // CellEditorBase interface
-    virtual QWidget* widget() { return this; }
-    virtual void cut() { KTextEdit::cut(); }
-    virtual void copy() { KTextEdit::copy(); }
-    virtual void paste() { KTextEdit::paste(); }
-    virtual QString toPlainText() const { return KTextEdit::toPlainText(); }
+    virtual QWidget *widget()
+    {
+        return this;
+    }
+    virtual void cut()
+    {
+        KTextEdit::cut();
+    }
+    virtual void copy()
+    {
+        KTextEdit::copy();
+    }
+    virtual void paste()
+    {
+        KTextEdit::paste();
+    }
+    virtual QString toPlainText() const
+    {
+        return KTextEdit::toPlainText();
+    }
 Q_SIGNALS:
     void textChanged(const QString &text);
 
 public Q_SLOTS:
-    void setText(const QString& text, int cursorPos = -1);
+    void setText(const QString &text, int cursorPos = -1);
 
     /**
      * Permutes the fixation of the reference, at which the editor's cursor
@@ -115,7 +128,7 @@ private:
     QString textUnderCursor() const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

@@ -31,7 +31,6 @@ class KoShapeAnchorPrivate;
 class QTextDocument;
 class QPointF;
 
-
 /**
  * This class is the object that explains how a shape is anchored to something.
  *
@@ -65,10 +64,11 @@ public:
     /**
     * This class is an interface that positions the shape linked to text anchor
     */
-    class PlacementStrategy {
+    class PlacementStrategy
+    {
     public:
-        PlacementStrategy(){};
-        virtual ~PlacementStrategy(){};
+        PlacementStrategy() {};
+        virtual ~PlacementStrategy() {};
 
         /**
          * Reparent the anchored shape to not have a parent shape container (and model)
@@ -85,10 +85,11 @@ public:
         virtual void updateContainerModel() = 0;
     };
 
-    class TextLocation {
+    class TextLocation
+    {
     public:
-        TextLocation(){};
-        virtual ~TextLocation(){};
+        TextLocation() {};
+        virtual ~TextLocation() {};
         virtual const QTextDocument *document() const = 0;
         virtual int position() const = 0;
     };
@@ -254,7 +255,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

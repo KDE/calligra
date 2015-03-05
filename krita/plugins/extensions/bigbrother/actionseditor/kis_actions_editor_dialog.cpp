@@ -22,8 +22,8 @@
 
 #include <klocale.h>
 
-KisActionsEditorDialog::KisActionsEditorDialog(QWidget* parent) : KDialog(parent),
-        m_actionsEditor(new KisActionsEditor(this))
+KisActionsEditorDialog::KisActionsEditorDialog(QWidget *parent) : KDialog(parent),
+    m_actionsEditor(new KisActionsEditor(this))
 {
     setMainWidget(m_actionsEditor);
     setButtons(Cancel | Ok);
@@ -35,7 +35,7 @@ KisActionsEditorDialog::~KisActionsEditorDialog()
 {
 }
 
-KisActionsEditor* KisActionsEditorDialog::actionsEditor()
+KisActionsEditor *KisActionsEditorDialog::actionsEditor()
 {
     return m_actionsEditor;
 }

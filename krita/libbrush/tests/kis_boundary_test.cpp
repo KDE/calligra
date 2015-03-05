@@ -27,11 +27,10 @@
 
 void KisBoundaryTest::testCreation()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
     KisBoundary test(dev);
 }
-
 
 QTEST_KDEMAIN(KisBoundaryTest, GUI)
 #include "kis_boundary_test.moc"

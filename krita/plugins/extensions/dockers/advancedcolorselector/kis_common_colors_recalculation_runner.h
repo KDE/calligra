@@ -8,11 +8,10 @@
 class KoColor;
 class KisCommonColors;
 
-
 class KisCommonColorsRecalculationRunner : public QRunnable
 {
 public:
-    KisCommonColorsRecalculationRunner(QImage data, int numberOfColors, KisCommonColors* parentObj)
+    KisCommonColorsRecalculationRunner(QImage data, int numberOfColors, KisCommonColors *parentObj)
         : m_imageData(data)
         , m_numColors(numberOfColors)
         , m_commonColors(parentObj)
@@ -25,7 +24,7 @@ public:
 private:
     QImage m_imageData;
     int m_numColors;
-    KisCommonColors* m_commonColors;
+    KisCommonColors *m_commonColors;
 };
 
 #endif // KIS_COMMON_COLORS_RECALCULATION_RUNNER_H

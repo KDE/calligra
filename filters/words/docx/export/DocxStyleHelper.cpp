@@ -32,9 +32,7 @@
 #include <KoOdfStyleManager.h>
 #include <KoOdfStyle.h>
 
-
 const qreal DefaultFontSize = 12.0;
-
 
 // ----------------------------------------------------------------
 //                     class DocxStyleHelper
@@ -54,7 +52,6 @@ void DocxStyleHelper::inheritTextStyles(KoOdfStyleProperties *destinationPropert
     }
 }
 
-
 static qreal getHalfPoints(const QString &fontSize, qreal defaultSize)
 {
     QString unit = fontSize.right(2);
@@ -63,11 +60,9 @@ static qreal getHalfPoints(const QString &fontSize, qreal defaultSize)
     bool ok2 = true;
     if (unit == "pt") {
         sizeInHalfPoints = ptToHalfPt(fontSize.left(fontSize.length() - 2).toDouble(&ok1));
-    }
-    else if (unit == "in") {
+    } else if (unit == "in") {
         sizeInHalfPoints = inToHalfPt(fontSize.left(fontSize.length() - 2).toDouble(&ok2));
-    }
-    else {
+    } else {
         // Other units not implemented yet?
         kWarning() << "Unit not implemented yet:" << unit;
         ok1 = false;
@@ -137,8 +132,7 @@ void DocxStyleHelper::handleTextStyles(KoOdfStyleProperties *properties, KoXmlWr
         writer->startElement("w:vertAlign");
         if (textPosition == "super") {
             writer->addAttribute("w:val", "superscript");
-        }
-        else if (textPosition == "sub") {
+        } else if (textPosition == "sub") {
             writer->addAttribute("w:val", "subscript");
         }
         writer->endElement(); // w:vertAlign
@@ -183,14 +177,11 @@ void DocxStyleHelper::handleParagraphStyles(KoOdfStyleProperties *properties, Ko
         writer->startElement("w:jc");
         if (textAlign == "center") {
             writer->addAttribute("w:val", "center");
-        }
-        else if (textAlign == "start") {
+        } else if (textAlign == "start") {
             writer->addAttribute("w:val", "left");
-        }
-        else if (textAlign == "right") {
+        } else if (textAlign == "right") {
             writer->addAttribute("w:val", "right");
-        }
-        else if (textAlign == "justify") {
+        } else if (textAlign == "justify") {
             writer->addAttribute("w:val", "both");
         }
         writer->endElement(); // w:jc

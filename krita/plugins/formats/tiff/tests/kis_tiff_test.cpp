@@ -18,7 +18,6 @@
 
 #include "kis_tiff_test.h"
 
-
 #include <QTest>
 #include <QCoreApplication>
 
@@ -35,7 +34,6 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
-
 void KisTiffTest::testFiles()
 {
     // XXX: make the exiv io backends real plugins
@@ -46,7 +44,7 @@ void KisTiffTest::testFiles()
 #ifndef CPU_32_BITS
     excludes << "flower-minisblack-06.tif";
 #endif
-    
+
 #ifdef HAVE_LCMS2
     excludes << "flower-separated-contig-08.tif"
              << "flower-separated-contig-16.tif"
@@ -70,11 +68,11 @@ void KisTiffTest::testRoundTripRGBF16()
     // Disabled for now, it's broken because we assumed integers.
 #if 0
 
-    QRect testRect(0,0,1000,1000);
-    QRect fillRect(100,100,100,100);
+    QRect testRect(0, 0, 1000, 1000);
+    QRect fillRect(100, 100, 100, 100);
 
     const KoColorSpace *csf16 = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id(), 0);
-    KisDocument *doc0 = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
+    KisDocument *doc0 = qobject_cast<KisDocument *>(KisPart::instance()->createDocument());
     doc0->newImage("test", testRect.width(), testRect.height(), csf16, KoColor(Qt::blue, csf16), QString(), 1.0);
 
     KTemporaryFile tmpFile;
@@ -89,8 +87,7 @@ void KisTiffTest::testRoundTripRGBF16()
     Q_ASSERT(layer0);
     layer0->paintDevice()->fill(fillRect, KoColor(Qt::red, csf16));
 
-
-    KisDocument *doc1 = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
+    KisDocument *doc1 = qobject_cast<KisDocument *>(KisPart::instance()->createDocument());
 
     KisImportExportManager manager(doc1);
     manager.setBatchMode(false);

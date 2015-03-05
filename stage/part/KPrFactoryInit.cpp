@@ -1,4 +1,3 @@
-// -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2005 David Faure <faure@kde.org>
 
@@ -20,5 +19,5 @@
 
 #include "KPrFactory.h"
 
-K_EXPORT_PLUGIN(KPrFactory )
+K_EXPORT_PLUGIN(KPrFactory)
 

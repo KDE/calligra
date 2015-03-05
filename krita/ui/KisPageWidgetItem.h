@@ -40,5 +40,4 @@ public:
     virtual void apply() = 0;
 };
 
-
 #endif // KOPAGEWIDGETITEM_H

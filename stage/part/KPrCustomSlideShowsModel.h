@@ -42,8 +42,7 @@ public:
 
     //List the actions that you could perform with slides
     //within a custom show.
-    enum CustomShowActions
-    {
+    enum CustomShowActions {
         SlidesAdd,       ///< add slides
         SlidesDelete,    ///< delete slides
         SlidesMove       ///< move slides

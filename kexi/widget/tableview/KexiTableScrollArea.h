@@ -57,11 +57,11 @@ class KexiTableEdit;
 //! @short KexiTableScrollArea class provides a widget for displaying data in a tabular view.
 /*! @see KexiFormScrollView */
 class KEXIDATATABLE_EXPORT KexiTableScrollArea :
-            public QScrollArea,
-            public KexiRecordNavigatorHandler,
-            public KexiSharedActionClient,
-            public KexiDataAwareObjectInterface,
-            public KexiDataItemChangesListener
+    public QScrollArea,
+    public KexiRecordNavigatorHandler,
+    public KexiSharedActionClient,
+    public KexiDataAwareObjectInterface,
+    public KexiDataItemChangesListener
 {
     Q_OBJECT
     KEXI_DATAAWAREOBJECTINTERFACE
@@ -151,24 +151,25 @@ public:
         QColor rowMouseOverAlternateHighlightingColor;
     };
 
-    explicit KexiTableScrollArea(KexiDB::TableViewData* data = 0, QWidget* parent = 0);
+    explicit KexiTableScrollArea(KexiDB::TableViewData *data = 0, QWidget *parent = 0);
 
     virtual ~KexiTableScrollArea();
 
     //! redeclared to avoid conflict with private QWidget::data
-    inline KexiDB::TableViewData *data() const {
+    inline KexiDB::TableViewData *data() const
+    {
         return KexiDataAwareObjectInterface::data();
     }
 
     /*! \return current appearance settings */
-    const Appearance& appearance() const;
+    const Appearance &appearance() const;
 
     /*! Sets appearance settings. Table view is updated automatically. */
-    void setAppearance(const Appearance& a);
+    void setAppearance(const Appearance &a);
 
     /*! Convenience function.
      \return field object that define column \a column or NULL if there is no such column */
-    KexiDB::Field* field(int column) const;
+    KexiDB::Field *field(int column) const;
 
     /*! \return maximum number of rows that can be displayed per one "page"
      for current table view's size. */
@@ -253,12 +254,13 @@ public:
     KexiDB::RecordData *highlightedItem() const;
 
     /*! \return vertical scrollbar. Implemented for KexiDataAwareObjectInterface. */
-    virtual QScrollBar* verticalScrollBar() const;
+    virtual QScrollBar *verticalScrollBar() const;
 
     virtual bool eventFilter(QObject *o, QEvent *e);
 
 public Q_SLOTS:
-    virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
+    virtual void setData(KexiDB::TableViewData *data, bool owner = true)
+    {
         KexiDataAwareObjectInterface::setData(data, owner);
     }
 
@@ -340,21 +342,24 @@ public Q_SLOTS:
      was displayed (in this case, \a setText is usually not empty, what means
      that text will be set in the cell replacing previous value).
     */
-    virtual void startEditCurrentCell(const QString& setText = QString(),
-                                      CreateEditorFlags flags = DefaultCreateEditorFlags) {
+    virtual void startEditCurrentCell(const QString &setText = QString(),
+                                      CreateEditorFlags flags = DefaultCreateEditorFlags)
+    {
         KexiDataAwareObjectInterface::startEditCurrentCell(setText, flags);
     }
 
     /*! Deletes currently selected cell's contents, if allowed.
      In most cases delete is not accepted immediately but "row editing" mode is just started. */
-    virtual void deleteAndStartEditCurrentCell() {
+    virtual void deleteAndStartEditCurrentCell()
+    {
         KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell();
     }
 
     /*! Cancels row editing All changes made to the editing
      row during this current session will be undone.
      \return true on success or false on failure (e.g. when editor does not exist) */
-    virtual bool cancelRowEdit() {
+    virtual bool cancelRowEdit()
+    {
         return KexiDataAwareObjectInterface::cancelRowEdit();
     }
 
@@ -362,14 +367,16 @@ public Q_SLOTS:
      row during this current session will be accepted (saved).
      \return true if accepting was successful, false otherwise
      (e.g. when current row contain data that does not meet given constraints). */
-    virtual bool acceptRowEdit() {
+    virtual bool acceptRowEdit()
+    {
         return KexiDataAwareObjectInterface::acceptRowEdit();
     }
 
     /*! Specifies, if this table view automatically accepts
      row editing (using acceptRowEdit()) on accepting any cell's edit
      (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
-    virtual void setAcceptsRowEditAfterCellAccepting(bool set) {
+    virtual void setAcceptsRowEditAfterCellAccepting(bool set)
+    {
         KexiDataAwareObjectInterface::setAcceptsRowEditAfterCellAccepting(set);
     }
 
@@ -379,14 +386,17 @@ public Q_SLOTS:
      - dragOverRow() signal will be emitted on dragging,
       -droppedAtRow() will be emitted on dropping
      By default this flag is set to false. */
-    virtual void setDropsAtRowEnabled(bool set) {
+    virtual void setDropsAtRowEnabled(bool set)
+    {
         KexiDataAwareObjectInterface::setDropsAtRowEnabled(set);
     }
 
-    virtual bool cancelEditor() {
+    virtual bool cancelEditor()
+    {
         return KexiDataAwareObjectInterface::cancelEditor();
     }
-    virtual bool acceptEditor() {
+    virtual bool acceptEditor()
+    {
         return KexiDataAwareObjectInterface::acceptEditor();
     }
 
@@ -404,8 +414,8 @@ Q_SIGNALS:
     void itemDblClicked(KexiDB::RecordData *, int row, int col);
     void itemMouseReleased(KexiDB::RecordData *, int row, int col);
 
-    void dragOverRow(KexiDB::RecordData *record, int row, QDragMoveEvent* e);
-    void droppedAtRow(KexiDB::RecordData *record, int row, QDropEvent *e, KexiDB::RecordData*& newRecord);
+    void dragOverRow(KexiDB::RecordData *record, int row, QDragMoveEvent *e);
+    void droppedAtRow(KexiDB::RecordData *record, int row, QDropEvent *e, KexiDB::RecordData *&newRecord);
 
     /*! Data has been refreshed on-screen - emitted from initDataContents(). */
     void dataRefreshed();
@@ -427,13 +437,14 @@ Q_SIGNALS:
 
     //! emitted when state of 'save/cancel record changes' actions should be updated.
     void updateSaveCancelActions();
-    
+
     //! Emitted in initActions() to force reload actions
     //! You should remove existing actions and add them again.
     void reloadActions();
 
 protected Q_SLOTS:
-    virtual void slotDataDestroying() {
+    virtual void slotDataDestroying()
+    {
         KexiDataAwareObjectInterface::slotDataDestroying();
     }
 
@@ -457,31 +468,36 @@ protected Q_SLOTS:
     virtual void reloadData();
 
     //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
-    virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
+    virtual void slotRowRepaintRequested(KexiDB::RecordData &record);
 
     //! Handles KexiDB::TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-    virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint) {
+    virtual void slotAboutToDeleteRow(KexiDB::RecordData &record, KexiDB::ResultInfo *result, bool repaint)
+    {
         KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint);
     }
 
     //! Handles KexiDB::TableViewData::rowDeleted() signal to repaint when needed.
-    virtual void slotRowDeleted() {
+    virtual void slotRowDeleted()
+    {
         KexiDataAwareObjectInterface::slotRowDeleted();
     }
 
     //! Handles KexiDB::TableViewData::rowInserted() signal to repaint when needed.
-    virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint) {
+    virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint)
+    {
         KexiDataAwareObjectInterface::slotRowInserted(record, repaint);
     }
 
     //! Like above, not db-aware version
-    virtual void slotRowInserted(KexiDB::RecordData *record, uint row, bool repaint) {
+    virtual void slotRowInserted(KexiDB::RecordData *record, uint row, bool repaint)
+    {
         KexiDataAwareObjectInterface::slotRowInserted(record, row, repaint);
     }
 
     /*! Handles verticalScrollBar()'s valueChanged(int) signal.
      Called when vscrollbar's value has been changed. */
-    virtual void vScrollBarValueChanged(int v) {
+    virtual void vScrollBarValueChanged(int v)
+    {
         KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
     }
 
@@ -491,7 +507,8 @@ protected Q_SLOTS:
     virtual void moveToPreviousRecordRequested();
     virtual void moveToNextRecordRequested();
     virtual void moveToFirstRecordRequested();
-    virtual void addNewRecordRequested() {
+    virtual void addNewRecordRequested()
+    {
         KexiDataAwareObjectInterface::addNewRecordRequested();
     }
 
@@ -527,35 +544,38 @@ protected:
     int topMargin() const;
 
     //! temporary
-    int bottomMargin() const { return 0; }
+    int bottomMargin() const
+    {
+        return 0;
+    }
 
     /*! @internal \return true if the row defined by \a record has default
      value at column \a col. If this is the case and \a value is not NULL,
      *value is set to the default value. */
-    bool isDefaultValueDisplayed(KexiDB::RecordData *record, int col, QVariant* value = 0);
+    bool isDefaultValueDisplayed(KexiDB::RecordData *record, int col, QVariant *value = 0);
 
     //! painting and layout
     void drawContents(QPainter *p);
-    void paintCell(QPainter* p, KexiDB::RecordData *record, int row, int col, const QRect &cr, bool print = false);
+    void paintCell(QPainter *p, KexiDB::RecordData *record, int row, int col, const QRect &cr, bool print = false);
     void paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
     void updateGeometries();
 
     QPoint contentsToViewport2(const QPoint &p);
-    void contentsToViewport2(int x, int y, int& vx, int& vy);
-    QPoint viewportToContents2(const QPoint& vp);
+    void contentsToViewport2(int x, int y, int &vx, int &vy);
+    QPoint viewportToContents2(const QPoint &vp);
 
     // event handling
-    void contentsMousePressEvent(QMouseEvent* e);
-    void contentsMouseReleaseEvent(QMouseEvent* e);
+    void contentsMousePressEvent(QMouseEvent *e);
+    void contentsMouseReleaseEvent(QMouseEvent *e);
     //! @internal called by contentsMouseOrEvent() contentsMouseReleaseEvent() to move cursor
-    bool handleContentsMousePressOrRelease(QMouseEvent* e, bool release);
-    void contentsMouseMoveEvent(QMouseEvent* e);
-    void contentsMouseDoubleClickEvent(QMouseEvent* e);
-    void contentsContextMenuEvent(QContextMenuEvent* e);
+    bool handleContentsMousePressOrRelease(QMouseEvent *e, bool release);
+    void contentsMouseMoveEvent(QMouseEvent *e);
+    void contentsMouseDoubleClickEvent(QMouseEvent *e);
+    void contentsContextMenuEvent(QContextMenuEvent *e);
     virtual void keyPressEvent(QKeyEvent *e);
     //virtual void focusInEvent(QFocusEvent* e);
-    virtual void focusOutEvent(QFocusEvent* e);
-    virtual void resizeEvent(QResizeEvent* e);
+    virtual void focusOutEvent(QFocusEvent *e);
+    virtual void resizeEvent(QResizeEvent *e);
     //virtual void viewportResizeEvent(QResizeEvent *e);
     virtual void showEvent(QShowEvent *e);
     virtual void dragMoveEvent(QDragMoveEvent *e);
@@ -573,7 +593,7 @@ protected:
     virtual void editorShowFocus(int row, int col);
 
     //! Creates editors and shows it, what usually means the beginning of a cell editing
-    virtual void createEditor(int row, int col, const QString& addText = QString(),
+    virtual void createEditor(int row, int col, const QString &addText = QString(),
                               CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     bool focusNextPrevChild(bool next);
@@ -592,20 +612,20 @@ protected:
      and keyPressEvent() for Qt::Key_Menu key.
      If \a pos is QPoint(-1,-1) (the default), menu is positioned below the current cell.
     */
-    void showContextMenu(const QPoint& pos = QPoint(-1, -1));
+    void showContextMenu(const QPoint &pos = QPoint(-1, -1));
 
     /*! internal */
     inline void paintRow(KexiDB::RecordData *record,
                          QPainter *pb, int r, int rowp, int cx, int cy,
                          int colfirst, int collast, int maxwc);
 
-    virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h);
+    virtual void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
 
     //! Setups navigator widget
     void setupNavigator();
 
     //! internal, to determine valid row number when navigator text changed
-    int validRowNumber(const QString& text);
+    int validRowNumber(const QString &text);
 
     /*! Reimplementation for KexiDataAwareObjectInterface
      (viewport()->setFocus() is just added) */
@@ -615,7 +635,8 @@ protected:
      At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
     void setBottomMarginInternal(int pixels);
 
-    virtual void updateWidgetContents() {
+    virtual void updateWidgetContents()
+    {
         update();
     }
 
@@ -638,12 +659,12 @@ protected:
     /*! Sets \a cellValue if there is a lookup value for the cell \a record.
      Used in paintCell() and KexiTableCellToolTip::maybeTip()
      \return true is \a cellValue has been found. */
-    bool getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit,
+    bool getVisibleLookupValue(QVariant &cellValue, KexiTableEdit *edit,
                                KexiDB::RecordData *record, KexiDB::TableViewColumn *tvcol) const;
 
     /*! Implementation for KexiDataItemChangesListener.
      Reaction for change of \a item. */
-    virtual void valueChanged(KexiDataItemInterface* item);
+    virtual void valueChanged(KexiDataItemInterface *item);
 
     /*! Implementation for KexiDataItemChangesListener. */
     virtual bool cursorAtNewRow() const;
@@ -657,7 +678,7 @@ protected:
     virtual int horizontalHeaderHeight() const;
 
     //! @return record navigator pane
-    QWidget* navPanelWidget() const;
+    QWidget *navPanelWidget() const;
 
     //! @return true if record navigator pane exists and is has "visible" appearance set to ON
     bool navPanelWidgetVisible() const;
@@ -672,13 +693,13 @@ protected:
     virtual void selectCellInternal(int previousRow, int previousColumn);
 
     //! @return horizontal header
-    virtual QHeaderView* horizontalHeader() const;
+    virtual QHeaderView *horizontalHeader() const;
 
     //! @return vertical header
-    virtual QHeaderView* verticalHeader() const;
+    virtual QHeaderView *verticalHeader() const;
 
     //! @return common model for header views of this area. @see KexiTableScrollAreaHeader
-    QAbstractItemModel* headerModel() const;
+    QAbstractItemModel *headerModel() const;
 
     void updateScrollAreaWidgetSize();
 
@@ -694,7 +715,7 @@ protected:
     virtual void endRemoveItem(int pos);
 
     class Private;
-    Private * const d;
+    Private *const d;
 
     friend class KexiTableScrollAreaWidget;
     friend class KexiTableCellToolTip;

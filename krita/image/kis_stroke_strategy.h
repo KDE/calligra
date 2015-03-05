@@ -26,21 +26,20 @@
 
 class KisStrokeStrategy;
 
-
 class KRITAIMAGE_EXPORT KisStrokeStrategy
 {
 public:
     KisStrokeStrategy(QString id = QString(), const KUndo2MagicString &name = KUndo2MagicString());
     virtual ~KisStrokeStrategy();
 
-    virtual KisStrokeJobStrategy* createInitStrategy();
-    virtual KisStrokeJobStrategy* createFinishStrategy();
-    virtual KisStrokeJobStrategy* createCancelStrategy();
-    virtual KisStrokeJobStrategy* createDabStrategy();
+    virtual KisStrokeJobStrategy *createInitStrategy();
+    virtual KisStrokeJobStrategy *createFinishStrategy();
+    virtual KisStrokeJobStrategy *createCancelStrategy();
+    virtual KisStrokeJobStrategy *createDabStrategy();
 
-    virtual KisStrokeJobData* createInitData();
-    virtual KisStrokeJobData* createFinishData();
-    virtual KisStrokeJobData* createCancelData();
+    virtual KisStrokeJobData *createInitData();
+    virtual KisStrokeJobData *createFinishData();
+    virtual KisStrokeJobData *createCancelData();
 
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;
@@ -53,7 +52,10 @@ public:
     /**
      * Set up by the strokes queue during the stroke initialization
      */
-    void setCancelStrokeId(KisStrokeId id) { m_cancelStrokeId = id; }
+    void setCancelStrokeId(KisStrokeId id)
+    {
+        m_cancelStrokeId = id;
+    }
 
 protected:
     /**
@@ -64,7 +66,10 @@ protected:
      * cancel job, because the stroke may be ended in any moment
      * by the user and the sequence of jobs will be broken
      */
-    KisStrokeId cancelStrokeId() { return m_cancelStrokeId; }
+    KisStrokeId cancelStrokeId()
+    {
+        return m_cancelStrokeId;
+    }
 
     // you are not supposed to change these parameters
     // after the KisStroke object has been created

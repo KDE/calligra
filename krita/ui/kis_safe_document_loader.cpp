@@ -29,8 +29,7 @@
 #include "kis_signal_compressor.h"
 #include "KisPart.h"
 
-struct KisSafeDocumentLoader::Private
-{
+struct KisSafeDocumentLoader::Private {
     Private()
         : fileChangedSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE),
           isLoading(false),
@@ -80,7 +79,9 @@ KisSafeDocumentLoader::~KisSafeDocumentLoader()
 
 void KisSafeDocumentLoader::setPath(const QString &path)
 {
-    if (path.isEmpty()) return;
+    if (path.isEmpty()) {
+        return;
+    }
 
     if (!m_d->path.isEmpty()) {
         m_d->fileWatcher.removePath(m_d->path);
@@ -102,7 +103,9 @@ void KisSafeDocumentLoader::fileChanged()
 
 void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
 {
-    if (m_d->isLoading) return;
+    if (m_d->isLoading) {
+        return;
+    }
 
     QFileInfo initialFileInfo(m_d->path);
     m_d->initialFileSize = initialFileInfo.size();
@@ -110,7 +113,9 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
 
     // it may happen when the file is flushed by
     // so other application
-    if (!m_d->initialFileSize) return;
+    if (!m_d->initialFileSize) {
+        return;
+    }
 
     m_d->isLoading = true;
     m_d->fileChangedFlag = false;
@@ -123,7 +128,6 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
         .arg(initialFileInfo.suffix());
 
     QFile::copy(m_d->path, m_d->temporaryPath);
-
 
     if (!sync) {
         m_d->delayedLoadTimer.start();
@@ -140,9 +144,9 @@ void KisSafeDocumentLoader::delayedLoadStart()
     bool successfullyLoaded = false;
 
     if (!m_d->fileChangedFlag &&
-        originalInfo.size() == m_d->initialFileSize &&
-        originalInfo.lastModified() == m_d->initialFileTimeStamp &&
-        tempInfo.size() == m_d->initialFileSize) {
+            originalInfo.size() == m_d->initialFileSize &&
+            originalInfo.lastModified() == m_d->initialFileTimeStamp &&
+            tempInfo.size() == m_d->initialFileSize) {
 
         m_d->doc.reset(KisPart::instance()->createDocument());
         successfullyLoaded = m_d->doc->openUrl(m_d->temporaryPath);
@@ -168,5 +172,4 @@ void KisSafeDocumentLoader::delayedLoadStart()
 
     m_d->doc.reset();
 }
-
 

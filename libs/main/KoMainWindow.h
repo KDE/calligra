@@ -100,7 +100,7 @@ public:
      * The application should call this to show or hide a toolbar.
      * It also takes care of the corresponding action in the settings menu.
      */
-    void showToolbar(const char * tbName, bool shown);
+    void showToolbar(const char *tbName, bool shown);
 
     /**
      * @return TRUE if the toolbar @p tbName is visible
@@ -115,7 +115,7 @@ public:
     /**
      * The document opened a URL -> store into recent documents list.
      */
-    void addRecentURL(const KUrl& url);
+    void addRecentURL(const KUrl &url);
 
     /**
      * Load the desired document and show it.
@@ -123,14 +123,14 @@ public:
      *
      * @return TRUE on success.
      */
-    bool openDocument(const KUrl & url);
+    bool openDocument(const KUrl &url);
 
     /**
      * Load the URL into this document (and make it root doc after loading)
      *
      * Special method for KoApplication::start, don't use.
      */
-    bool openDocument(KoPart *newPart, const KUrl & url);
+    bool openDocument(KoPart *newPart, const KUrl &url);
 
     /**
      * Reloads the recent documents list.
@@ -140,7 +140,7 @@ public:
     /**
      * Updates the window caption based on the document info and path.
      */
-    void updateCaption(const QString & caption, bool mod);
+    void updateCaption(const QString &caption, bool mod);
     void updateReloadFileAction(KoDocument *doc);
     void updateVersionsFileAction(KoDocument *doc);
 
@@ -152,12 +152,12 @@ public:
      * @param factory the factory used to create the dock widget if needed
      * @return the dock widget specified by @p factory (may be 0)
      */
-    QDockWidget* createDockWidget(KoDockFactoryBase* factory);
+    QDockWidget *createDockWidget(KoDockFactoryBase *factory);
 
     /// Return the list of dock widgets belonging to this main window.
-    QList<QDockWidget*> dockWidgets();
+    QList<QDockWidget *> dockWidgets();
 
-    QList<KoCanvasObserverBase*> canvasObservers();
+    QList<KoCanvasObserverBase *> canvasObservers();
 
     /**
      * @return the KoDockerManager which is assigned
@@ -166,7 +166,7 @@ public:
      * Note This should only be called by KoView
      * @ref setDockerManager to assign it.
      */
-    KoDockerManager * dockerManager() const;
+    KoDockerManager *dockerManager() const;
 
 Q_SIGNALS:
     /**
@@ -241,8 +241,8 @@ public Q_SLOTS:
     void slotFilePrint();
     void slotFilePrintPreview();
 
-    KoPrintJob* exportToPdf(const QString &pdfFileName = QString());
-    KoPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
+    KoPrintJob *exportToPdf(const QString &pdfFileName = QString());
+    KoPrintJob *exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     /**
      * Show a dialog with author and document information.
@@ -358,10 +358,10 @@ private:
     /**
      * Create a new empty document.
      */
-    KoPart* createPart() const;
+    KoPart *createPart() const;
 
-    void closeEvent(QCloseEvent * e);
-    void resizeEvent(QResizeEvent * e);
+    void closeEvent(QCloseEvent *e);
+    void resizeEvent(QResizeEvent *e);
 
     /**
      * Ask user about saving changes to the document upon exit.
@@ -409,7 +409,6 @@ private Q_SLOTS:
      */
     virtual void newView();
 
-
 // ---------------------  PartManager
 private:
 
@@ -419,7 +418,7 @@ private:
      *
      * Sets the active part to 0 if @p part is the activePart() .
      */
-    virtual void removePart( KoPart *part );
+    virtual void removePart(KoPart *part);
 
     /**
      * Sets the active part.
@@ -456,11 +455,11 @@ private:
     void saveWindowSettings();
 
     // retrieve the current KoView
-    KoView* currentView() const;
+    KoView *currentView() const;
 
 private:
 
-    KoMainWindowPrivate * const d;
+    KoMainWindowPrivate *const d;
 };
 
 #endif

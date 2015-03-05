@@ -28,7 +28,6 @@
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
 
-
 #include "modeltest.h"
 
 void KisNodeModelTest::init()
@@ -95,7 +94,6 @@ void KisNodeModelTest::testRemoveIncludingRoot()
     m_image->removeNode(m_layer2);
     m_image->removeNode(m_layer1);
     m_image->removeNode(m_image->root());
-
 
 }
 

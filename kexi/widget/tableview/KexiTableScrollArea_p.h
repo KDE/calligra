@@ -52,10 +52,10 @@ class QLabel;
 class KexiTableViewCellToolTip : public QToolTip
 {
 public:
-    explicit KexiTableViewCellToolTip(KexiTableScrollArea * tableView);
+    explicit KexiTableViewCellToolTip(KexiTableScrollArea *tableView);
     virtual ~KexiTableViewCellToolTip();
 protected:
-    virtual void maybeTip(const QPoint & p);
+    virtual void maybeTip(const QPoint &p);
 
     KexiTableScrollArea *m_tableView;
 };
@@ -65,7 +65,7 @@ protected:
 class KexiTableScrollArea::Private
 {
 public:
-    explicit Private(KexiTableScrollArea* t);
+    explicit Private(KexiTableScrollArea *t);
     ~Private();
 
     void clearVariables();
@@ -76,7 +76,7 @@ public:
     KexiTableScrollAreaWidget *scrollAreaWidget;
 
     //! editors: one for each column (indexed by KexiDB::TableViewColumn)
-    QHash<KexiDB::TableViewColumn*, KexiTableEdit*> editors;
+    QHash<KexiDB::TableViewColumn *, KexiTableEdit *> editors;
     int rowHeight;
     QTimer *pUpdateTimer;
     bool editOnDoubleClick;

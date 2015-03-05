@@ -109,7 +109,6 @@ public:
 
 };
 
-
 void KisPart::Private::loadActions()
 {
     actionCollection = new KActionCollection(part, KGlobal::mainComponent());
@@ -117,7 +116,7 @@ void KisPart::Private::loadActions()
     KGlobal::mainComponent().dirs()->addResourceType("kis_actions", "data", "krita/actions/");
     QStringList actionDefinitions = KGlobal::mainComponent().dirs()->findAllResources("kis_actions", "*.action", KStandardDirs::Recursive | KStandardDirs::NoDuplicates);
 
-    foreach(const QString &actionDefinition, actionDefinitions)  {
+    foreach (const QString &actionDefinition, actionDefinitions)  {
         QDomDocument doc;
         QFile f(actionDefinition);
         f.open(QFile::ReadOnly);
@@ -170,27 +169,25 @@ void KisPart::Private::loadActions()
     }
 
     //check for colliding shortcuts
-    QMap<QKeySequence, QAction*> existingShortcuts;
-    foreach(QAction* action, actionCollection->actions()) {
-        if(action->shortcut() == QKeySequence(0)) {
+    QMap<QKeySequence, QAction *> existingShortcuts;
+    foreach (QAction *action, actionCollection->actions()) {
+        if (action->shortcut() == QKeySequence(0)) {
             continue;
         }
         if (existingShortcuts.contains(action->shortcut())) {
             qDebug() << "action" << action->text() << "and" <<  existingShortcuts[action->shortcut()]->text() << "have the same shortcut:" << action->shortcut();
-        }
-        else {
+        } else {
             existingShortcuts[action->shortcut()] = action;
         }
     }
 
 }
 
-KisPart* KisPart::instance()
+KisPart *KisPart::instance()
 {
     K_GLOBAL_STATIC(KisPart, s_instance)
     return s_instance;
 }
-
 
 KisPart::KisPart()
     : d(new Private(this))
@@ -241,7 +238,6 @@ KisDocument *KisPart::createDocument() const
     return doc;
 }
 
-
 int KisPart::documentCount() const
 {
     return d->documents.size();
@@ -278,8 +274,9 @@ KisView *KisPart::createView(KisDocument *document, KoCanvasResourceManager *res
 
 void KisPart::addView(KisView *view, KisDocument *document)
 {
-    if (!view)
+    if (!view) {
         return;
+    }
 
     if (!d->views.contains(view)) {
         d->views.append(view);
@@ -292,7 +289,7 @@ void KisPart::addView(KisView *view, KisDocument *document)
     connect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
 
     if (d->views.size() == 1) {
-        documentOpened('/'+objectName());
+        documentOpened('/' + objectName());
     }
 
     emit sigViewAdded(view);
@@ -300,7 +297,9 @@ void KisPart::addView(KisView *view, KisDocument *document)
 
 void KisPart::removeView(KisView *view)
 {
-    if (!view) return;
+    if (!view) {
+        return;
+    }
 
     emit sigViewRemoved(view);
 
@@ -309,7 +308,7 @@ void KisPart::removeView(KisView *view)
 
     if (doc) {
         bool found = false;
-        foreach(QPointer<KisView> view, d->views) {
+        foreach (QPointer<KisView> view, d->views) {
             if (view && view->document() == doc) {
                 found = true;
                 break;
@@ -321,7 +320,7 @@ void KisPart::removeView(KisView *view)
     }
 
     if (d->views.isEmpty()) {
-        emit documentClosed('/'+objectName());
+        emit documentClosed('/' + objectName());
     }
 }
 
@@ -334,10 +333,9 @@ int KisPart::viewCount(KisDocument *doc) const
 {
     if (!doc) {
         return d->views.count();
-    }
-    else {
+    } else {
         int count = 0;
-        foreach(QPointer<KisView> view, d->views) {
+        foreach (QPointer<KisView> view, d->views) {
             if (view->document() == doc) {
                 count++;
             }
@@ -356,28 +354,34 @@ QGraphicsItem *KisPart::canvasItem(KisDocument *document, bool create)
 
 QGraphicsItem *KisPart::createCanvasItem(KisDocument *document)
 {
-    if (!document) return 0;
+    if (!document) {
+        return 0;
+    }
 
     KisView *view = createView(document, 0, 0, 0);
     QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
-    QWidget *canvasController = view->findChild<KoCanvasControllerWidget*>();
+    QWidget *canvasController = view->findChild<KoCanvasControllerWidget *>();
     proxy->setWidget(canvasController);
     return proxy;
 }
 
 void KisPart::addMainWindow(KisMainWindow *mainWindow)
 {
-    if (!mainWindow) return;
-    if (d->mainWindows.contains(mainWindow)) return;
+    if (!mainWindow) {
+        return;
+    }
+    if (d->mainWindows.contains(mainWindow)) {
+        return;
+    }
 
-    kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
+    kDebug(30003) << "mainWindow" << (void *)mainWindow << "added to doc" << this;
     d->mainWindows.append(mainWindow);
 
 }
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)
 {
-    kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"removed from doc" << this;
+    kDebug(30003) << "mainWindow" << (void *)mainWindow << "removed from doc" << this;
     if (mainWindow) {
         d->mainWindows.removeAll(mainWindow);
     }
@@ -393,14 +397,13 @@ int KisPart::mainwindowCount() const
     return d->mainWindows.count();
 }
 
-
 KisMainWindow *KisPart::currentMainwindow() const
 {
     QWidget *widget = qApp->activeWindow();
-    KisMainWindow *mainWindow = qobject_cast<KisMainWindow*>(widget);
+    KisMainWindow *mainWindow = qobject_cast<KisMainWindow *>(widget);
     while (!mainWindow && widget) {
         widget = widget->parentWidget();
-        mainWindow = qobject_cast<KisMainWindow*>(widget);
+        mainWindow = qobject_cast<KisMainWindow *>(widget);
     }
 
     if (!mainWindow && mainWindows().size() > 0) {
@@ -410,7 +413,7 @@ KisMainWindow *KisPart::currentMainwindow() const
 
 }
 
-void KisPart::openExistingFile(const KUrl& url)
+void KisPart::openExistingFile(const KUrl &url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
     KisDocument *document = createDocument();
@@ -422,7 +425,7 @@ void KisPart::openExistingFile(const KUrl& url)
 
     KisMainWindow *mw = 0;
     if (d->startupWidget) {
-        mw = qobject_cast<KisMainWindow*>(d->startupWidget->parent());
+        mw = qobject_cast<KisMainWindow *>(d->startupWidget->parent());
     }
     if (!mw) {
         mw = currentMainwindow();
@@ -445,35 +448,34 @@ void KisPart::configureShortcuts()
     }
 
     KShortcutsDialog dlg(KShortcutsEditor::WidgetAction | KShortcutsEditor::WindowAction | KShortcutsEditor::ApplicationAction);
-    dlg.setButtons(KDialog::Reset|KDialog::Ok|KDialog::Cancel|KDialog::User1);
+    dlg.setButtons(KDialog::Reset | KDialog::Ok | KDialog::Cancel | KDialog::User1);
     dlg.addCollection(d->actionCollection);
     dlg.setButtonText(KDialog::User1, i18n("Print"));
     dlg.setButtonIcon(KDialog::User1, KIcon("document-print"));
     dlg.configure();
 
-    foreach(KisMainWindow *mainWindow, d->mainWindows) {
+    foreach (KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
         ac->readSettings();
 
         // append shortcuts to tooltips if they exist
-        foreach( QAction* tempAction, ac->actions())
-        {
+        foreach (QAction *tempAction, ac->actions()) {
             // find the shortcut pattern and delete (note the preceding space in the RegEx)
             QString strippedTooltip = tempAction->toolTip().remove(QRegExp("\\s\\(.*\\)"));
 
             // append shortcut if it exists for action
-            if(tempAction->shortcut() == QKeySequence(0))
-                 tempAction->setToolTip( strippedTooltip);
-            else
-                 tempAction->setToolTip( strippedTooltip + " (" + tempAction->shortcut().toString() + ")");
+            if (tempAction->shortcut() == QKeySequence(0)) {
+                tempAction->setToolTip(strippedTooltip);
+            } else {
+                tempAction->setToolTip(strippedTooltip + " (" + tempAction->shortcut().toString() + ")");
+            }
 
         }
-
 
     }
 }
 
-void KisPart::openTemplate(const KUrl& url)
+void KisPart::openTemplate(const KUrl &url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
     KisDocument *document = createDocument();
@@ -483,9 +485,9 @@ void KisPart::openTemplate(const KUrl& url)
     document->undoStack()->clear();
 
     if (ok) {
-        QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+        QString mimeType = KMimeType::findByUrl(url, 0, true)->name();
         // in case this is a open document template remove the -template from the end
-        mimeType.remove( QRegExp( "-template$" ) );
+        mimeType.remove(QRegExp("-template$"));
         document->setMimeTypeAfterLoading(mimeType);
         document->resetURL();
         document->setEmpty();
@@ -495,8 +497,10 @@ void KisPart::openTemplate(const KUrl& url)
     }
     addDocument(document);
 
-    KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->startupWidget->parent());
-    if (!mw) mw = currentMainwindow();
+    KisMainWindow *mw = qobject_cast<KisMainWindow *>(d->startupWidget->parent());
+    if (!mw) {
+        mw = currentMainwindow();
+    }
     KisView *view = createView(document, mw->resourceManager(), mw->actionCollection(), mw);
     mw->addView(view);
 
@@ -507,7 +511,7 @@ void KisPart::openTemplate(const KUrl& url)
 
 void KisPart::viewDestroyed()
 {
-    KisView *view = qobject_cast<KisView*>(sender());
+    KisView *view = qobject_cast<KisView *>(sender());
     if (view) {
         removeView(view);
     }
@@ -516,7 +520,7 @@ void KisPart::viewDestroyed()
 void KisPart::addRecentURLToAllMainWindows(KUrl url)
 {
     // Add to recent actions list in our mainWindows
-    foreach(KisMainWindow *mainWindow, d->mainWindows) {
+    foreach (KisMainWindow *mainWindow, d->mainWindows) {
         mainWindow->addRecentURL(url);
     }
 }
@@ -525,8 +529,9 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
 {
 
 #ifndef NDEBUG
-    if (d->templateType.isEmpty())
+    if (d->templateType.isEmpty()) {
         kDebug(30003) << "showStartUpWidget called, but setTemplateType() never called. This will not show a lot";
+    }
 #endif
 
     if (!alwaysShow) {
@@ -565,20 +570,20 @@ void KisPart::showStartUpWidget(KisMainWindow *mainWindow, bool alwaysShow)
     d->startupWidget = new KisOpenPane(0, KisFactory::componentData(), mimeFilter, d->templateType);
     d->startupWidget->setWindowModality(Qt::WindowModal);
     QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
-    foreach(const CustomDocumentWidgetItem & item, widgetList) {
+    foreach (const CustomDocumentWidgetItem &item, widgetList) {
         d->startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
         connect(item.widget, SIGNAL(documentSelected(KisDocument*)), this, SLOT(startCustomDocument(KisDocument*)));
     }
 
-    connect(d->startupWidget, SIGNAL(openExistingFile(const KUrl&)), this, SLOT(openExistingFile(const KUrl&)));
-    connect(d->startupWidget, SIGNAL(openTemplate(const KUrl&)), this, SLOT(openTemplate(const KUrl&)));
+    connect(d->startupWidget, SIGNAL(openExistingFile(KUrl)), this, SLOT(openExistingFile(KUrl)));
+    connect(d->startupWidget, SIGNAL(openTemplate(KUrl)), this, SLOT(openTemplate(KUrl)));
 
     d->startupWidget->setParent(mainWindow);
     d->startupWidget->setWindowFlags(Qt::Dialog);
     d->startupWidget->exec();
 }
 
-QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QWidget * parent)
+QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QWidget *parent)
 {
     KisConfig cfg;
 
@@ -613,13 +618,12 @@ QList<KisPart::CustomDocumentWidgetItem> KisPart::createCustomDocumentWidgets(QW
 
         widgetList << item;
 
-
     }
 
     return widgetList;
 }
 
-void KisPart::setTemplateType(const QString& _templateType)
+void KisPart::setTemplateType(const QString &_templateType)
 {
     d->templateType = _templateType;
 }
@@ -629,19 +633,18 @@ QString KisPart::templateType() const
     return d->templateType;
 }
 
-void KisPart::startCustomDocument(KisDocument* doc)
+void KisPart::startCustomDocument(KisDocument *doc)
 {
     addDocument(doc);
-    KisMainWindow *mw = qobject_cast<KisMainWindow*>(d->startupWidget->parent());
-    if (!mw) mw = currentMainwindow();
+    KisMainWindow *mw = qobject_cast<KisMainWindow *>(d->startupWidget->parent());
+    if (!mw) {
+        mw = currentMainwindow();
+    }
     KisView *view = createView(doc, mw->resourceManager(), mw->actionCollection(), mw);
     mw->addView(view);
 
     d->startupWidget->setParent(0);
     d->startupWidget->hide();
 }
-
-
-
 
 #include <KisPart.moc>

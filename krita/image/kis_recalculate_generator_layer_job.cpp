@@ -23,7 +23,6 @@
 #include "kis_layer.h"
 #include "kis_image.h"
 
-
 KisRecalculateGeneratorLayerJob::KisRecalculateGeneratorLayerJob(KisGeneratorLayerSP layer)
     : m_layer(layer)
 {
@@ -32,7 +31,7 @@ KisRecalculateGeneratorLayerJob::KisRecalculateGeneratorLayerJob(KisGeneratorLay
 bool KisRecalculateGeneratorLayerJob::overrides(const KisSpontaneousJob *_otherJob)
 {
     const KisRecalculateGeneratorLayerJob *otherJob =
-        dynamic_cast<const KisRecalculateGeneratorLayerJob*>(_otherJob);
+        dynamic_cast<const KisRecalculateGeneratorLayerJob *>(_otherJob);
 
     return otherJob && otherJob->m_layer == m_layer;
 }
@@ -43,7 +42,9 @@ void KisRecalculateGeneratorLayerJob::run()
      * The layer might have been deleted from the layers stack. In
      * such a case, don't try do update it.
      */
-    if (!m_layer->parent()) return;
+    if (!m_layer->parent()) {
+        return;
+    }
 
     m_layer->update();
 }

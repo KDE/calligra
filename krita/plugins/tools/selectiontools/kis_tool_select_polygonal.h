@@ -28,14 +28,13 @@
 #include "kis_selection_tool_config_widget_helper.h"
 #include <KoIcon.h>
 
-
 class KisToolSelectPolygonal : public KisToolPolylineBase
 {
     Q_OBJECT
     Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged);
 public:
     KisToolSelectPolygonal(KoCanvasBase *canvas);
-    QWidget* createOptionWidget();
+    QWidget *createOptionWidget();
     SelectionAction selectionAction() const;
 
 public Q_SLOTS:
@@ -52,13 +51,13 @@ private:
     SelectionAction m_selectionAction;
 };
 
-
 class KisToolSelectPolygonalFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectPolygonalFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolSelectPolygonal") {
+    KisToolSelectPolygonalFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolSelectPolygonal")
+    {
         setToolTip(i18n("Polygonal Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setIconName(koIconNameCStr("tool_polygonal_selection"));
@@ -68,7 +67,8 @@ public:
 
     virtual ~KisToolSelectPolygonalFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolSelectPolygonal(canvas);
     }
 };

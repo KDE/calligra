@@ -86,7 +86,7 @@ KoPointerEvent::KoPointerEvent(QTabletEvent *ev, const QPointF &pnt)
 }
 
 KoPointerEvent::KoPointerEvent(QTouchEvent *ev, const QPointF &pnt, QList<KoTouchPoint> _touchPoints)
-    : point (pnt)
+    : point(pnt)
     , touchPoints(_touchPoints)
     , m_event(ev)
     , d(new Private())
@@ -104,7 +104,7 @@ KoPointerEvent::KoPointerEvent(QWheelEvent *ev, const QPointF &pnt)
     d->wheelEvent = ev;
 }
 
-KoPointerEvent::KoPointerEvent(KoInputDeviceHandlerEvent * ev, int x, int y, int z, int rx, int ry, int rz)
+KoPointerEvent::KoPointerEvent(KoInputDeviceHandlerEvent *ev, int x, int y, int z, int rx, int ry, int rz)
     : m_event(ev)
     , d(new Private())
 {
@@ -141,149 +141,164 @@ KoPointerEvent::~KoPointerEvent()
 
 Qt::MouseButton KoPointerEvent::button() const
 {
-    if (d->mouseEvent)
+    if (d->mouseEvent) {
         return d->mouseEvent->button();
-    else if (d->tabletEvent || d->touchEvent)
+    } else if (d->tabletEvent || d->touchEvent) {
         return d->tabletButton;
-    else if (d->deviceEvent)
+    } else if (d->deviceEvent) {
         return d->deviceEvent->button();
-    else if (d->gsMouseEvent)
+    } else if (d->gsMouseEvent) {
         return d->gsMouseEvent->button();
-    else
+    } else {
         return Qt::NoButton;
+    }
 }
 
 Qt::MouseButtons KoPointerEvent::buttons() const
 {
-    if (d->mouseEvent)
+    if (d->mouseEvent) {
         return d->mouseEvent->buttons();
-    else if (d->wheelEvent)
+    } else if (d->wheelEvent) {
         return d->wheelEvent->buttons();
-    else if (d->tabletEvent || d->touchEvent)
+    } else if (d->tabletEvent || d->touchEvent) {
         return d->tabletButton;
-    else if (d->deviceEvent)
+    } else if (d->deviceEvent) {
         return d->deviceEvent->buttons();
-    else if (d->gsMouseEvent)
+    } else if (d->gsMouseEvent) {
         return d->gsMouseEvent->buttons();
-    else if (d->gsWheelEvent)
+    } else if (d->gsWheelEvent) {
         return d->gsWheelEvent->buttons();
+    }
     return Qt::NoButton;
 }
 
 QPoint KoPointerEvent::globalPos() const
 {
-    if (d->mouseEvent)
+    if (d->mouseEvent) {
         return d->mouseEvent->globalPos();
-    else if (d->wheelEvent)
+    } else if (d->wheelEvent) {
         return d->wheelEvent->globalPos();
-    else if (d->tabletEvent)
+    } else if (d->tabletEvent) {
         return d->tabletEvent->globalPos();
-    else if (d->gsMouseEvent)
+    } else if (d->gsMouseEvent) {
         return d->gsMouseEvent->screenPos();
-    else if (d->gsWheelEvent)
+    } else if (d->gsWheelEvent) {
         return d->gsWheelEvent->screenPos();
-    else
+    } else {
         return d->globalPos;
+    }
 }
 
 QPoint KoPointerEvent::pos() const
 {
-    if (d->mouseEvent)
+    if (d->mouseEvent) {
         return d->mouseEvent->pos();
-    else if (d->wheelEvent)
+    } else if (d->wheelEvent) {
         return d->wheelEvent->pos();
-    else if (d->tabletEvent)
+    } else if (d->tabletEvent) {
         return d->tabletEvent->pos();
-    else if (d->gsMouseEvent)
+    } else if (d->gsMouseEvent) {
         return d->gsMouseEvent->pos().toPoint();
-    else if (d->gsWheelEvent)
+    } else if (d->gsWheelEvent) {
         return d->gsWheelEvent->pos().toPoint();
-    else
+    } else {
         return d->pos;
+    }
 }
 
 qreal KoPointerEvent::pressure() const
 {
-    if (d->tabletEvent)
+    if (d->tabletEvent) {
         return d->tabletEvent->pressure();
-    else
+    } else {
         return 1.0;
+    }
 }
 
 qreal KoPointerEvent::rotation() const
 {
-    if (d->tabletEvent)
+    if (d->tabletEvent) {
         return d->tabletEvent->rotation();
-    else
+    } else {
         return 0.0;
+    }
 }
 
 qreal KoPointerEvent::tangentialPressure() const
 {
-    if (d->tabletEvent)
+    if (d->tabletEvent) {
         return d->tabletEvent->tangentialPressure();
-    else
+    } else {
         return 0.0;
+    }
 }
 
 int KoPointerEvent::x() const
 {
-    if (d->tabletEvent)
+    if (d->tabletEvent) {
         return d->tabletEvent->x();
-    if (d->wheelEvent)
+    }
+    if (d->wheelEvent) {
         return d->wheelEvent->x();
-    else if (d->mouseEvent)
+    } else if (d->mouseEvent) {
         return d->mouseEvent->x();
-    else
+    } else {
         return pos().x();
+    }
 }
 
 int KoPointerEvent::xTilt() const
 {
-    if (d->tabletEvent)
+    if (d->tabletEvent) {
         return d->tabletEvent->xTilt();
-    else
+    } else {
         return 0;
+    }
 }
 
 int KoPointerEvent::y() const
 {
-    if (d->tabletEvent)
+    if (d->tabletEvent) {
         return d->tabletEvent->y();
-    if (d->wheelEvent)
+    }
+    if (d->wheelEvent) {
         return d->wheelEvent->y();
-    else if (d->mouseEvent)
+    } else if (d->mouseEvent) {
         return d->mouseEvent->y();
-    else
+    } else {
         return pos().y();
+    }
 }
 
 int KoPointerEvent::yTilt() const
 {
-    if (d->tabletEvent)
+    if (d->tabletEvent) {
         return d->tabletEvent->yTilt();
-    else
+    } else {
         return 0;
+    }
 }
 
 int KoPointerEvent::z() const
 {
-    if (d->tabletEvent)
+    if (d->tabletEvent) {
         return d->tabletEvent->z();
-    else if (d->deviceEvent)
+    } else if (d->deviceEvent) {
         return d->posZ;
-    else
+    } else {
         return 0;
+    }
 }
 
 int KoPointerEvent::delta() const
 {
-    if (d->wheelEvent)
+    if (d->wheelEvent) {
         return d->wheelEvent->delta();
-    else if (d->gsWheelEvent)
+    } else if (d->gsWheelEvent) {
         return d->gsWheelEvent->delta();
-    else
+    } else {
         return 0;
+    }
 }
 
 int KoPointerEvent::rotationX() const
@@ -303,17 +318,18 @@ int KoPointerEvent::rotationZ() const
 
 Qt::Orientation KoPointerEvent::orientation() const
 {
-    if (d->wheelEvent)
+    if (d->wheelEvent) {
         return d->wheelEvent->orientation();
-    else if (d->gsWheelEvent)
+    } else if (d->gsWheelEvent) {
         return d->gsWheelEvent->orientation();
-    else
+    } else {
         return Qt::Horizontal;
+    }
 }
 
 bool KoPointerEvent::isTabletEvent()
 {
-    return dynamic_cast<QTabletEvent*>(m_event) != 0;
+    return dynamic_cast<QTabletEvent *>(m_event) != 0;
 }
 
 void KoPointerEvent::setTabletButton(Qt::MouseButton button)
@@ -323,18 +339,19 @@ void KoPointerEvent::setTabletButton(Qt::MouseButton button)
 
 Qt::KeyboardModifiers KoPointerEvent::modifiers() const
 {
-    if (d->tabletEvent)
+    if (d->tabletEvent) {
         return d->tabletEvent->modifiers();
-    else if (d->mouseEvent)
+    } else if (d->mouseEvent) {
         return d->mouseEvent->modifiers();
-    else if (d->wheelEvent)
+    } else if (d->wheelEvent) {
         return d->wheelEvent->modifiers();
-    else if (d->deviceEvent)
+    } else if (d->deviceEvent) {
         return d->deviceEvent->modifiers();
-    else if (d->gsMouseEvent)
+    } else if (d->gsMouseEvent) {
         return d->gsMouseEvent->modifiers();
-    else if (d->gsWheelEvent)
+    } else if (d->gsWheelEvent) {
         return d->gsWheelEvent->modifiers();
-    else
+    } else {
         return Qt::NoModifier;
+    }
 }

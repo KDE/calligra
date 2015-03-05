@@ -56,12 +56,11 @@ class KisToolBrush : public KisToolFreehand
     Q_PROPERTY(bool finishStabilizedCurve READ finishStabilizedCurve WRITE setFinishStabilizedCurve NOTIFY finishStabilizedCurveChanged)
     Q_PROPERTY(bool stabilizeSensors READ stabilizeSensors WRITE setStabilizeSensors NOTIFY stabilizeSensorsChanged)
 
-
 public:
-    KisToolBrush(KoCanvasBase * canvas);
+    KisToolBrush(KoCanvasBase *canvas);
     virtual ~KisToolBrush();
 
-    QWidget * createOptionWidget();
+    QWidget *createOptionWidget();
 
     int smoothnessQuality() const;
     qreal smoothnessFactor() const;
@@ -82,7 +81,7 @@ protected Q_SLOTS:
     virtual void resetCursorStyle();
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     void deactivate();
     void slotSetSmoothnessDistance(qreal distance);
     void slotSetMagnetism(int magnetism);
@@ -133,13 +132,13 @@ private:
     QSignalMapper m_signalMapper;
 };
 
-
 class KisToolBrushFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolBrushFactory(const QStringList&)
-            : KoToolFactoryBase("KritaShape/KisToolBrush") {
+    KisToolBrushFactory(const QStringList &)
+        : KoToolFactoryBase("KritaShape/KisToolBrush")
+    {
 
         setToolTip(i18n("Freehand Brush Tool"));
 
@@ -153,11 +152,11 @@ public:
 
     virtual ~KisToolBrushFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolBrush(canvas);
     }
 
 };
-
 
 #endif // KIS_TOOL_BRUSH_H_

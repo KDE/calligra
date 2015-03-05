@@ -32,7 +32,7 @@ class KisHatchingPressureSeparationOption : public KisCurveOption
 {
 public:
     KisHatchingPressureSeparationOption();
-    double apply(const KisPaintInformation & info) const;
+    double apply(const KisPaintInformation &info) const;
 };
 
 #endif

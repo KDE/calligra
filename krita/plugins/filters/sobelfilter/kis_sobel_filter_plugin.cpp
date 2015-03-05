@@ -30,7 +30,7 @@ K_PLUGIN_FACTORY(KisSobelFilterPluginFactory, registerPlugin<KisSobelFilterPlugi
 K_EXPORT_PLUGIN(KisSobelFilterPluginFactory("krita"))
 
 KisSobelFilterPlugin::KisSobelFilterPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisFilterRegistry::instance()->add(new KisSobelFilter());
 }

@@ -39,7 +39,8 @@ public:
     {
     }
 
-    void test(const QString &testname, bool haveSelection, bool usePattern, bool selectionOnly) {
+    void test(const QString &testname, bool haveSelection, bool usePattern, bool selectionOnly)
+    {
         KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
         KisImageSP image = createImage(undoStore);
 
@@ -60,7 +61,7 @@ public:
         Q_ASSERT(newPattern->valid());
 
         QVariant v;
-        v.setValue(static_cast<void*>(newPattern));
+        v.setValue(static_cast<void *>(newPattern));
         manager->setResource(KisCanvasResourceProvider::CurrentPattern, v);
 
         KisResourcesSnapshotSP resources =
@@ -70,14 +71,13 @@ public:
                                      manager);
 
         KisProcessingVisitorSP visitor =
-            new FillProcessingVisitor(QPoint(100,100),
+            new FillProcessingVisitor(QPoint(100, 100),
                                       image->globalSelection(),
                                       resources,
                                       false, // useFastMode
                                       usePattern,
                                       selectionOnly,
                                       10, 10, 10, true, false);
-
 
         KisProcessingApplicator applicator(image, fillNode,
                                            KisProcessingApplicator::NONE);

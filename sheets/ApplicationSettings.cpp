@@ -40,7 +40,7 @@ public:
 };
 
 ApplicationSettings::ApplicationSettings()
-        : d(new Private)
+    : d(new Private)
 {
     d->gridColor = Qt::lightGray;
     d->pageOutlineColor = Qt::red;
@@ -115,7 +115,7 @@ bool ApplicationSettings::showRowHeader() const
     return d->rowHeader;
 }
 
-void ApplicationSettings::setGridColor(const QColor& color)
+void ApplicationSettings::setGridColor(const QColor &color)
 {
     d->gridColor = color;
 }
@@ -185,7 +185,7 @@ QColor ApplicationSettings::pageOutlineColor() const
     return d->pageOutlineColor;
 }
 
-void ApplicationSettings::changePageOutlineColor(const QColor& color)
+void ApplicationSettings::changePageOutlineColor(const QColor &color)
 {
     d->pageOutlineColor = color;
 }

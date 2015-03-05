@@ -116,7 +116,7 @@ class Doc::Private
 {
 public:
     Map *map;
-    static QList<Doc*> s_docs;
+    static QList<Doc *> s_docs;
     static int s_docId;
 
     // document properties
@@ -136,12 +136,12 @@ static const char CURRENT_DTD_VERSION[] = "1.2";
  *
  *****************************************************************************/
 
-QList<Doc*> Doc::Private::s_docs;
+QList<Doc *> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
 Doc::Doc(KoPart *part)
-        : DocBase(part)
-        , dd(new Private)
+    : DocBase(part)
+    , dd(new Private)
 {
     Q_ASSERT(part);
     connect(d->map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
@@ -154,7 +154,7 @@ Doc::Doc(KoPart *part)
     // Init chart shape factory with KSpread's specific configuration panels.
     KoShapeFactoryBase *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
     if (chartShape) {
-        QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(d->map);
+        QList<KoShapeConfigFactoryBase *> panels = ChartDialog::panels(d->map);
         chartShape->setOptionPanels(panels);
     }
 
@@ -178,8 +178,9 @@ void Doc::initEmpty()
     KSharedConfigPtr config = Factory::global().config();
     const int page = config->group("Parameters").readEntry("NbPage", 1);
 
-    for (int i = 0; i < page; ++i)
+    for (int i = 0; i < page; ++i) {
         map()->addNewSheet();
+    }
 
     resetURL();
     initConfig();
@@ -207,21 +208,21 @@ int Doc::supportedSpecialFormats() const
     return KoDocument::supportedSpecialFormats();
 }
 
-bool Doc::completeSaving(KoStore* _store)
+bool Doc::completeSaving(KoStore *_store)
 {
     Q_UNUSED(_store);
     return true;
 }
 
-
 QDomDocument Doc::saveXML()
 {
     /* don't pull focus away from the editor if this is just a background
        autosave */
-    if (!isAutosaving()) {/* FIXME
-        foreach(KoView* view, views())
-        static_cast<View *>(view)->selection()->emitCloseEditor(true);
-        */
+    if (!isAutosaving()) {
+        /* FIXME
+            foreach(KoView* view, views())
+            static_cast<View *>(view)->selection()->emitCloseEditor(true);
+            */
         emit closeEditor(true);
     }
 
@@ -250,17 +251,17 @@ QDomDocument Doc::saveXML()
     }
 
     QDomElement e = map()->save(doc);
-/*FIXME
-        // Save visual info for the first view, such as active sheet and active cell
-        // It looks like a hack, but reopening a document creates only one view anyway (David)
-        View *const view = static_cast<View*>(views().first());
-        Canvas *const canvas = view->canvasWidget();
-        e.setAttribute("activeTable",  canvas->activeSheet()->sheetName());
-        e.setAttribute("markerColumn", view->selection()->marker().x());
-        e.setAttribute("markerRow",    view->selection()->marker().y());
-        e.setAttribute("xOffset",      canvas->xOffset());
-        e.setAttribute("yOffset",      canvas->yOffset());
-*/
+    /*FIXME
+            // Save visual info for the first view, such as active sheet and active cell
+            // It looks like a hack, but reopening a document creates only one view anyway (David)
+            View *const view = static_cast<View*>(views().first());
+            Canvas *const canvas = view->canvasWidget();
+            e.setAttribute("activeTable",  canvas->activeSheet()->sheetName());
+            e.setAttribute("markerColumn", view->selection()->marker().x());
+            e.setAttribute("markerRow",    view->selection()->marker().y());
+            e.setAttribute("xOffset",      canvas->xOffset());
+            e.setAttribute("yOffset",      canvas->yOffset());
+    */
     spread.appendChild(e);
 
     setModified(false);
@@ -268,13 +269,12 @@ QDomDocument Doc::saveXML()
     return doc;
 }
 
-bool Doc::loadChildren(KoStore* _store)
+bool Doc::loadChildren(KoStore *_store)
 {
     return map()->loadChildren(_store);
 }
 
-
-bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
+bool Doc::loadXML(const KoXmlDocument &doc, KoStore *)
 {
     QPointer<KoUpdater> updater;
     if (progressUpdater()) {
@@ -287,7 +287,7 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
     KoXmlElement spread = doc.documentElement();
 
     if (spread.attribute("mime") != "application/x-kspread" && spread.attribute("mime") != "application/vnd.kde.kspread") {
-        setErrorMessage(i18n("Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1" , spread.attribute("mime")));
+        setErrorMessage(i18n("Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1", spread.attribute("mime")));
         return false;
     }
 
@@ -307,22 +307,27 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
 
     // <locale>
     KoXmlElement loc = spread.namedItem("locale").toElement();
-    if (!loc.isNull())
-        static_cast<Localization*>(map()->calculationSettings()->locale())->load(loc);
+    if (!loc.isNull()) {
+        static_cast<Localization *>(map()->calculationSettings()->locale())->load(loc);
+    }
 
-    if (updater) updater->setProgress(5);
+    if (updater) {
+        updater->setProgress(5);
+    }
 
     KoXmlElement defaults = spread.namedItem("defaults").toElement();
     if (!defaults.isNull()) {
         double dim = defaults.attribute("row-height").toDouble(&ok);
-        if (!ok)
+        if (!ok) {
             return false;
+        }
         map()->setDefaultRowHeight(dim);
 
         dim = defaults.attribute("col-width").toDouble(&ok);
 
-        if (!ok)
+        if (!ok) {
             return false;
+        }
 
         map()->setDefaultColumnWidth(dim);
     }
@@ -340,7 +345,9 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
         }
     }
 
-    if (updater) updater->setProgress(40);
+    if (updater) {
+        updater->setProgress(40);
+    }
     // In case of reload (e.g. from konqueror)
     qDeleteAll(map()->sheetList());
     map()->sheetList().clear();
@@ -365,8 +372,9 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
 
     // named areas
     const KoXmlElement areaname = spread.namedItem("areaname").toElement();
-    if (!areaname.isNull())
+    if (!areaname.isNull()) {
         map()->namedAreaManager()->loadXML(areaname);
+    }
 
     //Backwards compatibility with older versions for paper layout
     if (map()->syntaxVersion() < 1) {
@@ -376,7 +384,9 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
         }
     }
 
-    if (updater) updater->setProgress(85);
+    if (updater) {
+        updater->setProgress(85);
+    }
 
     KoXmlElement element(spread.firstChild().toElement());
     while (!element.isNull()) {
@@ -394,14 +404,18 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
         element = element.nextSibling().toElement();
     }
 
-    if (updater) updater->setProgress(90);
+    if (updater) {
+        updater->setProgress(90);
+    }
     initConfig();
-    if (updater) updater->setProgress(100);
+    if (updater) {
+        updater->setProgress(100);
+    }
 
     return true;
 }
 
-void Doc::loadPaper(KoXmlElement const & paper)
+void Doc::loadPaper(KoXmlElement const &paper)
 {
     KoPageLayout pageLayout;
     pageLayout.format = KoPageFormat::formatFromString(paper.attribute("format"));
@@ -418,7 +432,7 @@ void Doc::loadPaper(KoXmlElement const & paper)
     }
 
     //apply to all sheet
-    foreach(Sheet* sheet, map()->sheetList()) {
+    foreach (Sheet *sheet, map()->sheetList()) {
         sheet->printSettings()->setPageLayout(pageLayout);
     }
 
@@ -428,27 +442,33 @@ void Doc::loadPaper(KoXmlElement const & paper)
     KoXmlElement head = paper.namedItem("head").toElement();
     if (!head.isNull()) {
         KoXmlElement left = head.namedItem("left").toElement();
-        if (!left.isNull())
+        if (!left.isNull()) {
             hleft = left.text();
+        }
         KoXmlElement center = head.namedItem("center").toElement();
-        if (!center.isNull())
+        if (!center.isNull()) {
             hcenter = center.text();
+        }
         KoXmlElement right = head.namedItem("right").toElement();
-        if (!right.isNull())
+        if (!right.isNull()) {
             hright = right.text();
+        }
     }
     // <foot>
     KoXmlElement foot = paper.namedItem("foot").toElement();
     if (!foot.isNull()) {
         KoXmlElement left = foot.namedItem("left").toElement();
-        if (!left.isNull())
+        if (!left.isNull()) {
             fleft = left.text();
+        }
         KoXmlElement center = foot.namedItem("center").toElement();
-        if (!center.isNull())
+        if (!center.isNull()) {
             fcenter = center.text();
+        }
         KoXmlElement right = foot.namedItem("right").toElement();
-        if (!right.isNull())
+        if (!right.isNull()) {
             fright = right.text();
+        }
     }
     //The macro "<sheet>" formerly was typed as "<table>"
     hleft.replace("<table>", "<sheet>");
@@ -458,13 +478,13 @@ void Doc::loadPaper(KoXmlElement const & paper)
     fcenter.replace("<table>", "<sheet>");
     fright.replace("<table>", "<sheet>");
 
-    foreach(Sheet* sheet, map()->sheetList()) {
+    foreach (Sheet *sheet, map()->sheetList()) {
         sheet->print()->headerFooter()->setHeadFootLine(hleft, hcenter, hright,
                 fleft, fcenter, fright);
     }
 }
 
-bool Doc::completeLoading(KoStore* store)
+bool Doc::completeLoading(KoStore *store)
 {
     kDebug(36001) << "------------------------ COMPLETING --------------------";
 
@@ -475,18 +495,18 @@ bool Doc::completeLoading(KoStore* store)
     return ok;
 }
 
-
-bool Doc::docData(QString const & xmlTag, QDomDocument & data)
+bool Doc::docData(QString const &xmlTag, QDomDocument &data)
 {
     SavedDocParts::iterator iter = d->savedDocParts.find(xmlTag);
-    if (iter == d->savedDocParts.end())
+    if (iter == d->savedDocParts.end()) {
         return false;
+    }
     data = iter.value();
     d->savedDocParts.erase(iter);
     return true;
 }
 
-void Doc::addIgnoreWordAllList(const QStringList & _lst)
+void Doc::addIgnoreWordAllList(const QStringList &_lst)
 {
     d->spellListIgnoreAll = _lst;
 }
@@ -496,12 +516,12 @@ QStringList Doc::spellListIgnoreAll() const
     return d->spellListIgnoreAll;
 }
 
-void Doc::paintContent(QPainter& painter, const QRect& rect)
+void Doc::paintContent(QPainter &painter, const QRect &rect)
 {
     paintContent(painter, rect, 0);
 }
 
-void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* _sheet)
+void Doc::paintContent(QPainter &painter, const QRect &rect, Sheet *_sheet)
 {
     if (rect.isEmpty()) {
         return;
@@ -523,7 +543,7 @@ void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* _sheet)
 
     QPainter pixmapPainter(&thumbnail);
     pixmapPainter.setClipRect(QRect(QPoint(0, 0), thumbnail.size()));
-    sheetView.paintCells(pixmapPainter, QRect(0, 0, pageLayout.width, pageLayout.height), QPointF(0,0));
+    sheetView.paintCells(pixmapPainter, QRect(0, 0, pageLayout.width, pageLayout.height), QPointF(0, 0));
 
     // The pixmap gets scaled to fit the rectangle.
     painter.drawPixmap(rect & QRect(0, 0, 100, 100), thumbnail);
@@ -534,10 +554,11 @@ void Doc::updateAllViews()
     emit updateView();
 }
 
-void Doc::addIgnoreWordAll(const QString & word)
+void Doc::addIgnoreWordAll(const QString &word)
 {
-    if (d->spellListIgnoreAll.indexOf(word) == -1)
+    if (d->spellListIgnoreAll.indexOf(word) == -1) {
         d->spellListIgnoreAll.append(word);
+    }
 }
 
 void Doc::clearIgnoreWordAll()
@@ -555,7 +576,7 @@ bool Doc::configLoadFromFile() const
     return d->configLoadFromFile;
 }
 
-void Doc::sheetAdded(Sheet* sheet)
+void Doc::sheetAdded(Sheet *sheet)
 {
 #ifndef QT_NO_DBUS
     new SheetAdaptor(sheet);
@@ -567,7 +588,7 @@ void Doc::sheetAdded(Sheet* sheet)
 #endif
 }
 
-void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)
+void Doc::saveOdfViewSettings(KoXmlWriter &settingsWriter)
 {
     Q_UNUSED(settingsWriter);
     /*FIXME

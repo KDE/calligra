@@ -111,7 +111,7 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
 //    int originalpos = editor->position();
     KoTextMeta *startmark = new KoTextMeta(editor->document());
     editor->insertInlineObject(startmark);
-    KoTextInlineRdf *inlineRdf(new KoTextInlineRdf((QTextDocument*)editor->document(), startmark));
+    KoTextInlineRdf *inlineRdf(new KoTextInlineRdf((QTextDocument *)editor->document(), startmark));
 
     // generate an xml:id for inlineRdf
     // set it and also insert some Rdf into manifest.rdf to link
@@ -122,9 +122,9 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
 
     // we could do a paragraph relayout to update the position() values
     // of the start and end, but this is more efficient.
-    startmark->updatePosition( (QTextDocument*)editor->document(),
-                               startmark->position()-1,
-                               QTextCharFormat() );
+    startmark->updatePosition((QTextDocument *)editor->document(),
+                              startmark->position() - 1,
+                              QTextCharFormat());
     if (documentRdf()) {
         Soprano::Statement st(
             linkingSubject(),
@@ -135,9 +135,9 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
         kDebug(30015) << "KoRdfSemanticItem::insert() HAVE documentRdf(), linking statement:" << st;
 
         QSharedPointer<Soprano::Model> model(Soprano::createModel());
-        const_cast<KoDocumentRdf*>(documentRdf())->addStatements(model, newID);
+        const_cast<KoDocumentRdf *>(documentRdf())->addStatements(model, newID);
         kDebug(30015) << "KoRdfSemanticItem::insert() returned model size:" << model->statementCount();
-        const_cast<KoDocumentRdf*>(documentRdf())->rememberNewInlineRdfObject(inlineRdf);
+        const_cast<KoDocumentRdf *>(documentRdf())->rememberNewInlineRdfObject(inlineRdf);
     } else {
         kDebug(30015) << "KoRdfSemanticItem::insert() documentRdf() is not set!";
     }
@@ -217,17 +217,17 @@ hKoSemanticStylesheet KoRdfSemanticItem::defaultStylesheet() const
     QString semanticClass = metaObject()->className();
     QSharedPointer<Soprano::Model> m = documentRdf()->model();
     QString name = KoTextRdfCore::getProperty(m,
-                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
-                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet")),
-                                              "name");
+                   Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                   Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet")),
+                   "name");
     QString type = KoTextRdfCore::getProperty(m,
-                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
-                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet-type")),
-                                              KoSemanticStylesheet::stylesheetTypeSystem());
+                   Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                   Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet-type")),
+                   KoSemanticStylesheet::stylesheetTypeSystem());
     QString uuid = KoTextRdfCore::getProperty(m,
-                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
-                                              Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet-uuid")),
-                                              QString());
+                   Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
+                   Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet-uuid")),
+                   QString());
     kDebug(30015) << "name:" << name << " type:" << type << "\n uuid:" << uuid;
     hKoSemanticStylesheet ret = findStylesheetByUuid(uuid);
     if (!ret) {
@@ -286,9 +286,9 @@ hKoSemanticStylesheet KoRdfSemanticItem::createUserStylesheet(const QString &nam
                                      isMutable));
     QList<hKoSemanticStylesheet> userSheets = userStylesheets();
     userSheets << ss;
-    const_cast<KoDocumentRdf*>(documentRdf())->setUserStyleSheetList(className(),userSheets);
-    connect(ss.data(), SIGNAL(nameChanging(hKoSemanticStylesheet, QString, QString)),
-            this, SLOT(onUserStylesheetRenamed(hKoSemanticStylesheet, QString, QString)));
+    const_cast<KoDocumentRdf *>(documentRdf())->setUserStyleSheetList(className(), userSheets);
+    connect(ss.data(), SIGNAL(nameChanging(hKoSemanticStylesheet,QString,QString)),
+            this, SLOT(onUserStylesheetRenamed(hKoSemanticStylesheet,QString,QString)));
     return ss;
 }
 
@@ -311,7 +311,7 @@ void KoRdfSemanticItem::destroyUserStylesheet(hKoSemanticStylesheet ss)
 {
     QList<hKoSemanticStylesheet> userSheets = userStylesheets();
     userSheets.removeAll(ss);
-    const_cast<KoDocumentRdf*>(documentRdf())->setUserStyleSheetList(className(),userSheets);
+    const_cast<KoDocumentRdf *>(documentRdf())->setUserStyleSheetList(className(), userSheets);
 }
 
 void KoRdfSemanticItem::loadUserStylesheets(QSharedPointer<Soprano::Model> model)
@@ -349,9 +349,9 @@ void KoRdfSemanticItem::loadUserStylesheets(QSharedPointer<Soprano::Model> model
                                          isMutable));
         QList<hKoSemanticStylesheet> userSheets = userStylesheets();
         userSheets << ss;
-        const_cast<KoDocumentRdf*>(documentRdf())->setUserStyleSheetList(className(),userSheets);
-        connect(ss.data(), SIGNAL(nameChanging(hKoSemanticStylesheet, QString, QString)),
-                this, SLOT(onUserStylesheetRenamed(KoSemanticStylesheetPtr, QString, QString)));
+        const_cast<KoDocumentRdf *>(documentRdf())->setUserStyleSheetList(className(), userSheets);
+        connect(ss.data(), SIGNAL(nameChanging(hKoSemanticStylesheet,QString,QString)),
+                this, SLOT(onUserStylesheetRenamed(KoSemanticStylesheetPtr,QString,QString)));
     }
 }
 
@@ -372,11 +372,11 @@ void KoRdfSemanticItem::saveUserStylesheets(QSharedPointer<Soprano::Model> model
 
         dataBNode = model->createBlankNode();
         model->addStatement(dataBNode, Node::createResourceNode(QUrl(nodePrefix + "uuid")),
-            Node::createLiteralNode(ss->uuid()), context);
+                            Node::createLiteralNode(ss->uuid()), context);
         model->addStatement(dataBNode, Node::createResourceNode(QUrl(nodePrefix + "name")),
-            Node::createLiteralNode(ss->name()), context);
+                            Node::createLiteralNode(ss->name()), context);
         model->addStatement(dataBNode, Node::createResourceNode(QUrl(nodePrefix + "template")),
-            Node::createLiteralNode(ss->templateString()), context);
+                            Node::createLiteralNode(ss->templateString()), context);
         dataBNodeList << dataBNode;
     }
 

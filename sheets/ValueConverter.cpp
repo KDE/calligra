@@ -26,22 +26,23 @@
 
 using namespace Calligra::Sheets;
 
-ValueConverter::ValueConverter(const ValueParser* parser)
-        : m_parser(parser)
+ValueConverter::ValueConverter(const ValueParser *parser)
+    : m_parser(parser)
 {
 }
 
-const CalculationSettings* ValueConverter::settings() const
+const CalculationSettings *ValueConverter::settings() const
 {
     return m_parser->settings();
 }
 
-Value ValueConverter::asBoolean(const Value &value, bool* ok) const
+Value ValueConverter::asBoolean(const Value &value, bool *ok) const
 {
     Value val;
 
-    if (ok)
+    if (ok) {
         *ok = true;
+    }
     bool okay = true;
 
     switch (value.type()) {
@@ -62,10 +63,12 @@ Value ValueConverter::asBoolean(const Value &value, bool* ok) const
         break;
     case Value::String:
         val = m_parser->tryParseBool(value.asString(), &okay);
-        if (!okay)
+        if (!okay) {
             val = Value(false);
-        if (ok)
+        }
+        if (ok) {
             *ok = okay;
+        }
         break;
     case Value::Array:
         val = asBoolean(value.element(0, 0));
@@ -81,12 +84,13 @@ Value ValueConverter::asBoolean(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asInteger(const Value &value, bool* ok) const
+Value ValueConverter::asInteger(const Value &value, bool *ok) const
 {
     Value val;
 
-    if (ok)
+    if (ok) {
         *ok = true;
+    }
 
     switch (value.type()) {
     case Value::Empty:
@@ -108,8 +112,9 @@ Value ValueConverter::asInteger(const Value &value, bool* ok) const
         val = m_parser->parse(value.asString());
         if (!val.isNumber()) {
             val = Value(0);
-            if (ok)
+            if (ok) {
                 *ok = false;
+            }
         }
         val = Value(val.asInteger());
         break;
@@ -127,12 +132,13 @@ Value ValueConverter::asInteger(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asFloat(const Value &value, bool* ok) const
+Value ValueConverter::asFloat(const Value &value, bool *ok) const
 {
     Value val;
 
-    if (ok)
+    if (ok) {
         *ok = true;
+    }
 
     switch (value.type()) {
     case Value::Empty:
@@ -154,8 +160,9 @@ Value ValueConverter::asFloat(const Value &value, bool* ok) const
         val = m_parser->parse(value.asString());
         if (!val.isNumber()) {
             val = Value(0.0);
-            if (ok)
+            if (ok) {
                 *ok = false;
+            }
         }
         val = Value(val.asFloat());
         break;
@@ -173,12 +180,13 @@ Value ValueConverter::asFloat(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asComplex(const Value &value, bool* ok) const
+Value ValueConverter::asComplex(const Value &value, bool *ok) const
 {
     Value val;
 
-    if (ok)
+    if (ok) {
         *ok = true;
+    }
 
     switch (value.type()) {
     case Value::Empty:
@@ -198,8 +206,9 @@ Value ValueConverter::asComplex(const Value &value, bool* ok) const
         val = m_parser->parse(value.asString());
         if (!val.isNumber()) {
             val = Value(complex<Number>(0.0, 0.0));
-            if (ok)
+            if (ok) {
                 *ok = false;
+            }
         }
         val = Value(val.asComplex());
         break;
@@ -217,12 +226,13 @@ Value ValueConverter::asComplex(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asNumeric(const Value &value, bool* ok) const
+Value ValueConverter::asNumeric(const Value &value, bool *ok) const
 {
     Value val;
 
-    if (ok)
+    if (ok) {
         *ok = true;
+    }
 
     switch (value.type()) {
     case Value::Empty:
@@ -240,8 +250,9 @@ Value ValueConverter::asNumeric(const Value &value, bool* ok) const
         val = m_parser->parse(value.asString());
         if (!val.isNumber()) {
             val = Value(0.0);
-            if (ok)
+            if (ok) {
                 *ok = false;
+            }
         }
         break;
     case Value::Array:
@@ -277,57 +288,63 @@ Value ValueConverter::asString(const Value &value) const
         break;
     case Value::Integer: {
         fmt = value.format();
-        if (fmt == Value::fmt_Percent)
+        if (fmt == Value::fmt_Percent) {
             val = Value(QString::number(value.asInteger() * 100) + " %");
-        else if (fmt == Value::fmt_DateTime)
+        } else if (fmt == Value::fmt_DateTime) {
             val = Value(m_parser->settings()->locale()->formatDateTime(value.asDateTime(settings())));
-        else if (fmt == Value::fmt_Date)
+        } else if (fmt == Value::fmt_Date) {
             val = Value(m_parser->settings()->locale()->formatDate(value.asDate(settings())));
-        else if (fmt == Value::fmt_Time)
+        } else if (fmt == Value::fmt_Time) {
             val = Value(m_parser->settings()->locale()->formatTime(value.asTime(settings())));
-        else
+        } else {
             val = Value(QString::number(value.asInteger()));
+        }
     }
     break;
     case Value::Float:
         fmt = value.format();
-        if (fmt == Value::fmt_DateTime)
+        if (fmt == Value::fmt_DateTime) {
             val = Value(m_parser->settings()->locale()->formatDateTime(value.asDateTime(settings())));
-        else if (fmt == Value::fmt_Date)
+        } else if (fmt == Value::fmt_Date) {
             val = Value(m_parser->settings()->locale()->formatDate(value.asDate(settings()), KLocale::ShortDate));
-        else if (fmt == Value::fmt_Time)
+        } else if (fmt == Value::fmt_Time) {
             val = Value(m_parser->settings()->locale()->formatTime(value.asTime(settings())));
-        else {
+        } else {
             //convert the number, change decimal point from English to local
             s = QString::number(numToDouble(value.asFloat()), 'g', 10);
             const QString decimalSymbol = m_parser->settings()->locale()->decimalSymbol();
-            if (!decimalSymbol.isNull() && ((pos = s.indexOf('.')) != -1))
+            if (!decimalSymbol.isNull() && ((pos = s.indexOf('.')) != -1)) {
                 s.replace(pos, 1, decimalSymbol);
-            if (fmt == Value::fmt_Percent)
+            }
+            if (fmt == Value::fmt_Percent) {
                 s += " %";
+            }
             val = Value(s);
         }
         break;
     case Value::Complex:
         fmt = value.format();
-        if (fmt == Value::fmt_DateTime)
+        if (fmt == Value::fmt_DateTime) {
             val = Value(m_parser->settings()->locale()->formatDateTime(value.asDateTime(settings())));
-        else if (fmt == Value::fmt_Date)
+        } else if (fmt == Value::fmt_Date) {
             val = Value(m_parser->settings()->locale()->formatDate(value.asDate(settings()), KLocale::ShortDate));
-        else if (fmt == Value::fmt_Time)
+        } else if (fmt == Value::fmt_Time) {
             val = Value(m_parser->settings()->locale()->formatTime(value.asTime(settings())));
-        else {
+        } else {
             //convert the number, change decimal point from English to local
             const QString decimalSymbol = m_parser->settings()->locale()->decimalSymbol();
             QString real = QString::number(numToDouble(value.asComplex().real()), 'g', 10);
-            if (!decimalSymbol.isNull() && ((pos = real.indexOf('.')) != -1))
+            if (!decimalSymbol.isNull() && ((pos = real.indexOf('.')) != -1)) {
                 real.replace(pos, 1, decimalSymbol);
+            }
             QString imag = QString::number(numToDouble(value.asComplex().imag()), 'g', 10);
-            if (!decimalSymbol.isNull() && ((pos = imag.indexOf('.')) != -1))
+            if (!decimalSymbol.isNull() && ((pos = imag.indexOf('.')) != -1)) {
                 imag.replace(pos, 1, decimalSymbol);
+            }
             s = real;
-            if (value.asComplex().imag() >= 0.0)
+            if (value.asComplex().imag() >= 0.0) {
                 s += '+';
+            }
             // TODO Stefan: Some prefer 'j'. Configure option? Spec?
             s += imag + 'i';
             // NOTE Stefan: Never recognized a complex percentage anywhere. ;-)
@@ -353,12 +370,13 @@ Value ValueConverter::asString(const Value &value) const
     return val;
 }
 
-Value ValueConverter::asDateTime(const Value &value, bool* ok) const
+Value ValueConverter::asDateTime(const Value &value, bool *ok) const
 {
     Value val;
 
-    if (ok)
+    if (ok) {
         *ok = true;
+    }
     bool okay = true;
 
     switch (value.type()) {
@@ -378,10 +396,12 @@ Value ValueConverter::asDateTime(const Value &value, bool* ok) const
     case Value::String:
         //no DateTime m_parser, so we parse as Date, hoping for the best ...
         val = m_parser->tryParseDate(value.asString(), &okay);
-        if (!okay)
+        if (!okay) {
             val = Value::errorVALUE();
-        if (ok)
+        }
+        if (ok) {
             *ok = okay;
+        }
         val.setFormat(Value::fmt_DateTime);
         break;
     case Value::Array:
@@ -397,12 +417,13 @@ Value ValueConverter::asDateTime(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asDate(const Value &value, bool* ok) const
+Value ValueConverter::asDate(const Value &value, bool *ok) const
 {
     Value val;
 
-    if (ok)
+    if (ok) {
         *ok = true;
+    }
     bool okay = true;
 
     switch (value.type()) {
@@ -421,10 +442,12 @@ Value ValueConverter::asDate(const Value &value, bool* ok) const
         break;
     case Value::String:
         val = m_parser->tryParseDate(value.asString(), &okay);
-        if (!okay)
+        if (!okay) {
             val = Value::errorVALUE();
-        if (ok)
+        }
+        if (ok) {
             *ok = okay;
+        }
         break;
     case Value::Array:
         val = asDate(value.element(0, 0));
@@ -439,12 +462,13 @@ Value ValueConverter::asDate(const Value &value, bool* ok) const
     return val;
 }
 
-Value ValueConverter::asTime(const Value &value, bool* ok) const
+Value ValueConverter::asTime(const Value &value, bool *ok) const
 {
     Value val;
 
-    if (ok)
+    if (ok) {
         *ok = true;
+    }
     bool okay = true;
 
     switch (value.type()) {
@@ -463,10 +487,12 @@ Value ValueConverter::asTime(const Value &value, bool* ok) const
         break;
     case Value::String:
         val = m_parser->tryParseTime(value.asString(), &okay);
-        if (!okay)
+        if (!okay) {
             val = Value::errorVALUE();
-        if (ok)
+        }
+        if (ok) {
             *ok = okay;
+        }
         break;
     case Value::Array:
         val = asTime(value.element(0, 0));
@@ -481,42 +507,42 @@ Value ValueConverter::asTime(const Value &value, bool* ok) const
     return val;
 }
 
-bool ValueConverter::toBoolean(const Value& value) const
+bool ValueConverter::toBoolean(const Value &value) const
 {
     return asBoolean(value).asBoolean();
 }
 
-int ValueConverter::toInteger(const Value& value) const
+int ValueConverter::toInteger(const Value &value) const
 {
     return asInteger(value).asInteger();
 }
 
-Number ValueConverter::toFloat(const Value& value) const
+Number ValueConverter::toFloat(const Value &value) const
 {
     return asFloat(value).asFloat();
 }
 
-complex<Number> ValueConverter::toComplex(const Value& value) const
+complex<Number> ValueConverter::toComplex(const Value &value) const
 {
     return asComplex(value).asComplex();
 }
 
-QString ValueConverter::toString(const Value& value) const
+QString ValueConverter::toString(const Value &value) const
 {
     return asString(value).asString();
 }
 
-QDateTime ValueConverter::toDateTime(const Value& value) const
+QDateTime ValueConverter::toDateTime(const Value &value) const
 {
     return asDateTime(value).asDateTime(settings());
 }
 
-QDate ValueConverter::toDate(const Value& value) const
+QDate ValueConverter::toDate(const Value &value) const
 {
     return asDate(value).asDate(settings());
 }
 
-QTime ValueConverter::toTime(const Value& value) const
+QTime ValueConverter::toTime(const Value &value) const
 {
     return asTime(value).asTime(settings());
 }

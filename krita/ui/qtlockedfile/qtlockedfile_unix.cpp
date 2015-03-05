@@ -35,8 +35,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-
-
 bool QtLockedFile::lock(LockMode mode, bool block)
 {
     if (!isOpen()) {
@@ -44,14 +42,17 @@ bool QtLockedFile::lock(LockMode mode, bool block)
         return false;
     }
 
-    if (mode == NoLock)
+    if (mode == NoLock) {
         return unlock();
+    }
 
-    if (mode == m_lock_mode)
+    if (mode == m_lock_mode) {
         return true;
+    }
 
-    if (m_lock_mode != NoLock)
+    if (m_lock_mode != NoLock) {
         unlock();
+    }
 
     struct flock fl;
     fl.l_whence = SEEK_SET;
@@ -62,16 +63,15 @@ bool QtLockedFile::lock(LockMode mode, bool block)
     int ret = fcntl(handle(), cmd, &fl);
 
     if (ret == -1) {
-        if (errno != EINTR && errno != EAGAIN)
+        if (errno != EINTR && errno != EAGAIN) {
             qWarning("QtLockedFile::lock(): fcntl: %s", strerror(errno));
+        }
         return false;
     }
-
 
     m_lock_mode = mode;
     return true;
 }
-
 
 bool QtLockedFile::unlock()
 {
@@ -80,8 +80,9 @@ bool QtLockedFile::unlock()
         return false;
     }
 
-    if (!isLocked())
+    if (!isLocked()) {
         return true;
+    }
 
     struct flock fl;
     fl.l_whence = SEEK_SET;
@@ -102,6 +103,7 @@ bool QtLockedFile::unlock()
 
 QtLockedFile::~QtLockedFile()
 {
-    if (isOpen())
+    if (isOpen()) {
         unlock();
+    }
 }

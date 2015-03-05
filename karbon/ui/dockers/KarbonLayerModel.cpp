@@ -45,18 +45,20 @@
 
 KoShapeContainer *shapeToContainer(KoShape *shape)
 {
-    KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
-    if (group)
+    KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(shape);
+    if (group) {
         return group;
-    KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
-    if (layer)
+    }
+    KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shape);
+    if (layer) {
         return layer;
+    }
 
     return 0;
 }
 
-KarbonLayerModel::KarbonLayerModel(QObject * parent)
-        : KoDocumentSectionModel(parent), m_document(0)
+KarbonLayerModel::KarbonLayerModel(QObject *parent)
+    : KoDocumentSectionModel(parent), m_document(0)
 {
     setSupportedDragActions(Qt::MoveAction);
 }
@@ -67,7 +69,7 @@ void KarbonLayerModel::update()
     emit layoutChanged();
 }
 
-void KarbonLayerModel::setDocument(KarbonDocument * newDocument)
+void KarbonLayerModel::setDocument(KarbonDocument *newDocument)
 {
     m_document = newDocument;
     reset();
@@ -75,93 +77,105 @@ void KarbonLayerModel::setDocument(KarbonDocument * newDocument)
 
 int KarbonLayerModel::rowCount(const QModelIndex &parent) const
 {
-    if (! m_document)
+    if (! m_document) {
         return 0;
+    }
 
     // check if parent is root node
-    if (! parent.isValid())
+    if (! parent.isValid()) {
         return m_document->layers().count();
+    }
 
     Q_ASSERT(parent.model() == this);
     Q_ASSERT(parent.internalPointer());
 
-    KoShapeContainer *parentShape = shapeToContainer((KoShape*)parent.internalPointer());
-    if (! parentShape)
+    KoShapeContainer *parentShape = shapeToContainer((KoShape *)parent.internalPointer());
+    if (! parentShape) {
         return 0;
+    }
 
     return parentShape->shapeCount();
 }
 
 int KarbonLayerModel::columnCount(const QModelIndex &) const
 {
-    if (! m_document)
+    if (! m_document) {
         return 0;
-    else
+    } else {
         return 1;
+    }
 }
 
 QModelIndex KarbonLayerModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (! m_document)
+    if (! m_document) {
         return QModelIndex();
+    }
 
     // check if parent is root node
     if (! parent.isValid()) {
-        if (row >= 0 && row < m_document->layers().count())
+        if (row >= 0 && row < m_document->layers().count()) {
             return createIndex(row, column, m_document->layers().at(row));
-        else
+        } else {
             return QModelIndex();
+        }
     }
 
     Q_ASSERT(parent.model() == this);
     Q_ASSERT(parent.internalPointer());
 
-    KoShapeContainer *parentShape = shapeToContainer((KoShape*)parent.internalPointer());
-    if (! parentShape)
+    KoShapeContainer *parentShape = shapeToContainer((KoShape *)parent.internalPointer());
+    if (! parentShape) {
         return QModelIndex();
+    }
 
-    if (row < parentShape->shapeCount())
+    if (row < parentShape->shapeCount()) {
         return createIndex(row, column, childFromIndex(parentShape, row));
-    else
+    } else {
         return QModelIndex();
+    }
 }
 
 QModelIndex KarbonLayerModel::parent(const QModelIndex &child) const
 {
     // check if child is root node
-    if (! m_document || ! child.isValid())
+    if (! m_document || ! child.isValid()) {
         return QModelIndex();
+    }
 
     Q_ASSERT(child.model() == this);
     Q_ASSERT(child.internalPointer());
 
-    KoShape *childShape = static_cast<KoShape*>(child.internalPointer());
-    if (! childShape)
+    KoShape *childShape = static_cast<KoShape *>(child.internalPointer());
+    if (! childShape) {
         return QModelIndex();
+    }
 
     return parentIndexFromShape(childShape);
 }
 
 QVariant KarbonLayerModel::data(const QModelIndex &index, int role) const
 {
-    if (! index.isValid())
+    if (! index.isValid()) {
         return QVariant();
+    }
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
 
-    KoShape *shape = static_cast<KoShape*>(index.internalPointer());
+    KoShape *shape = static_cast<KoShape *>(index.internalPointer());
 
     switch (role) {
     case Qt::DisplayRole: {
         QString name = shape->name();
         if (name.isEmpty()) {
-            if (dynamic_cast<KoShapeLayer*>(shape))
+            if (dynamic_cast<KoShapeLayer *>(shape)) {
                 name = i18n("Layer");
-            else if (dynamic_cast<KoShapeGroup*>(shape))
+            } else if (dynamic_cast<KoShapeGroup *>(shape)) {
                 name = i18nc("A group of shapes", "Group");
-            else
+            } else {
                 name = i18n("Shape");
+            }
         }
         return name;
     }
@@ -172,43 +186,47 @@ QVariant KarbonLayerModel::data(const QModelIndex &index, int role) const
     case Qt::SizeHintRole:
         return shape->size();
     case ActiveRole: {
-        KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
-        KoSelection * selection = canvasController->canvas()->shapeManager()->selection();
-        if (! selection)
+        KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+        KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+        if (! selection) {
             return false;
+        }
 
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
-        if (layer)
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shape);
+        if (layer) {
             return (layer == selection->activeLayer());
-        else
+        } else {
             return selection->isSelected(shape);
+        }
     }
     case PropertiesRole:
         return QVariant::fromValue(properties(shape));
     case AspectRatioRole: {
         QTransform matrix = shape->absoluteTransformation(0);
         QRectF bbox = matrix.mapRect(shape->outline().boundingRect());
-        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+        KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
         if (container) {
             bbox = QRectF();
-            foreach(KoShape* shape, container->shapes()) {
+            foreach (KoShape *shape, container->shapes()) {
                 bbox = bbox.united(shape->outline().boundingRect());
             }
         }
         return qreal(bbox.width()) / bbox.height();
     }
     default:
-        if (role >= int(BeginThumbnailRole))
+        if (role >= int(BeginThumbnailRole)) {
             return createThumbnail(shape, QSize(role - int(BeginThumbnailRole), role - int(BeginThumbnailRole)));
-        else
+        } else {
             return QVariant();
+        }
     }
 }
 
 Qt::ItemFlags KarbonLayerModel::flags(const QModelIndex &index) const
 {
-    if (! index.isValid())
+    if (! index.isValid()) {
         return 0;
+    }
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
@@ -221,13 +239,14 @@ Qt::ItemFlags KarbonLayerModel::flags(const QModelIndex &index) const
 
 bool KarbonLayerModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (! index.isValid())
+    if (! index.isValid()) {
         return false;
+    }
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
 
-    KoShape *shape = static_cast<KoShape*>(index.internalPointer());
+    KoShape *shape = static_cast<KoShape *>(index.internalPointer());
     switch (role) {
     case Qt::DisplayRole:
     case Qt::EditRole:
@@ -235,14 +254,15 @@ bool KarbonLayerModel::setData(const QModelIndex &index, const QVariant &value, 
         break;
     case PropertiesRole:
         setProperties(shape, value.value<PropertyList>());
-        // fall through
+    // fall through
     case ActiveRole: {
-        KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
-        KoSelection * selection = canvasController->canvas()->shapeManager()->selection();
+        KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+        KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
-        if (layer && selection)
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shape);
+        if (layer && selection) {
             selection->setActiveLayer(layer);
+        }
     }
     break;
     default:
@@ -253,7 +273,7 @@ bool KarbonLayerModel::setData(const QModelIndex &index, const QVariant &value, 
     return true;
 }
 
-KoDocumentSectionModel::PropertyList KarbonLayerModel::properties(KoShape* shape) const
+KoDocumentSectionModel::PropertyList KarbonLayerModel::properties(KoShape *shape) const
 {
     PropertyList l;
     l << Property(i18nc("Visibility state of the shape", "Visible"), koIcon("layer-visible-on"), koIcon("layer-visible-off"), shape->isVisible());
@@ -264,7 +284,7 @@ KoDocumentSectionModel::PropertyList KarbonLayerModel::properties(KoShape* shape
     return l;
 }
 
-void KarbonLayerModel::setProperties(KoShape* shape, const PropertyList &properties)
+void KarbonLayerModel::setProperties(KoShape *shape, const PropertyList &properties)
 {
     bool oldVisibleState = shape->isVisible();
     bool oldLockedState = shape->isGeometryProtected();
@@ -274,20 +294,23 @@ void KarbonLayerModel::setProperties(KoShape* shape, const PropertyList &propert
     shape->setVisible(newVisibleState);
     shape->setGeometryProtected(newLockedState);
 
-    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
-    if (container)
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
+    if (container) {
         lockRecursively(container, newLockedState);
-    else
+    } else {
         shape->setSelectable(!newLockedState);
+    }
 
-    if ((oldVisibleState != shape->isVisible()) || (oldLockedState != shape->isGeometryProtected()))
+    if ((oldVisibleState != shape->isVisible()) || (oldLockedState != shape->isGeometryProtected())) {
         shape->update();
+    }
 }
 
 void KarbonLayerModel::lockRecursively(KoShapeContainer *container, bool lock)
 {
-    if (!container)
-       return;
+    if (!container) {
+        return;
+    }
 
     if (!lock) {
         container->setSelectable(!container->isGeometryProtected());
@@ -295,8 +318,8 @@ void KarbonLayerModel::lockRecursively(KoShapeContainer *container, bool lock)
         container->setSelectable(!lock);
     }
 
-    foreach(KoShape *shape, container->shapes()) {
-        KoShapeContainer * shapeContainer = dynamic_cast<KoShapeContainer*>(shape);
+    foreach (KoShape *shape, container->shapes()) {
+        KoShapeContainer *shapeContainer = dynamic_cast<KoShapeContainer *>(shape);
         if (shapeContainer) {
             lockRecursively(shapeContainer, lock);
         } else {
@@ -309,16 +332,17 @@ void KarbonLayerModel::lockRecursively(KoShapeContainer *container, bool lock)
     }
 }
 
-QImage KarbonLayerModel::createThumbnail(KoShape* shape, const QSize &thumbSize) const
+QImage KarbonLayerModel::createThumbnail(KoShape *shape, const QSize &thumbSize) const
 {
     KoShapePainter painter;
 
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
 
     shapes.append(shape);
-    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
-    if (container)
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
+    if (container) {
         shapes.append(container->shapes());
+    }
 
     painter.setShapes(shapes);
 
@@ -336,7 +360,7 @@ QImage KarbonLayerModel::createThumbnail(KoShape* shape, const QSize &thumbSize)
     return thumb;
 }
 
-KoShape * KarbonLayerModel::childFromIndex(KoShapeContainer *parent, int row) const
+KoShape *KarbonLayerModel::childFromIndex(KoShapeContainer *parent, int row) const
 {
     return parent->shapes().at(row);
 }
@@ -358,16 +382,18 @@ QStringList KarbonLayerModel::mimeTypes() const
     return types;
 }
 
-QMimeData * KarbonLayerModel::mimeData(const QModelIndexList & indexes) const
+QMimeData *KarbonLayerModel::mimeData(const QModelIndexList &indexes) const
 {
     // check if there is data to encode
-    if (! indexes.count())
+    if (! indexes.count()) {
         return 0;
+    }
 
     // check if we support a format
     QStringList types = mimeTypes();
-    if (types.isEmpty())
+    if (types.isEmpty()) {
         return 0;
+    }
 
     QMimeData *data = new QMimeData();
     QString format = types[0];
@@ -376,50 +402,55 @@ QMimeData * KarbonLayerModel::mimeData(const QModelIndexList & indexes) const
 
     // encode the data
     QModelIndexList::ConstIterator it = indexes.begin();
-    for (; it != indexes.end(); ++it)
+    for (; it != indexes.end(); ++it) {
         stream << QVariant::fromValue(qulonglong(it->internalPointer()));
+    }
 
     data->setData(format, encoded);
     return data;
 }
 
-bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent)
+bool KarbonLayerModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
     Q_UNUSED(row);
     Q_UNUSED(column);
 
     // check if the action is supported
-    if (! data || action != Qt::MoveAction)
+    if (! data || action != Qt::MoveAction) {
         return false;
+    }
     // check if the format is supported
     QStringList types = mimeTypes();
-    if (types.isEmpty())
+    if (types.isEmpty()) {
         return false;
+    }
     QString format = types[0];
-    if (! data->hasFormat(format))
+    if (! data->hasFormat(format)) {
         return false;
+    }
 
     QByteArray encoded = data->data(format);
     QDataStream stream(&encoded, QIODevice::ReadOnly);
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
 
     // decode the data
     while (! stream.atEnd()) {
         QVariant v;
         stream >> v;
-        shapes.append(static_cast<KoShape*>((void*)v.value<qulonglong>()));
+        shapes.append(static_cast<KoShape *>((void *)v.value<qulonglong>()));
     }
 
     // no shapes to drop, exit gracefully
-    if (shapes.count() == 0)
+    if (shapes.count() == 0) {
         return false;
+    }
 
-    QList<KoShape*> toplevelShapes;
-    QList<KoShapeLayer*> layers;
+    QList<KoShape *> toplevelShapes;
+    QList<KoShapeLayer *> layers;
     // remove shapes having its parent in the list
     // and separate the layers
-    foreach(KoShape * shape, shapes) {
-        KoShapeContainer * parent = shape->parent();
+    foreach (KoShape *shape, shapes) {
+        KoShapeContainer *parent = shape->parent();
         bool hasParentInList = false;
         while (parent) {
             if (shapes.contains(parent)) {
@@ -428,44 +459,47 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
             }
             parent = parent->parent();
         }
-        if (hasParentInList)
+        if (hasParentInList) {
             continue;
+        }
 
-        KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>(shape);
-        if (layer)
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shape);
+        if (layer) {
             layers.append(layer);
-        else
+        } else {
             toplevelShapes.append(shape);
+        }
     }
 
     if (! parent.isValid()) {
         kDebug(38000) << "KarbonLayerModel::dropMimeData parent = root";
         return false;
     }
-    KoShape *shape = static_cast<KoShape*>(parent.internalPointer());
-    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
+    KoShape *shape = static_cast<KoShape *>(parent.internalPointer());
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
     if (container) {
-        KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(container);
-        KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>(container);
+        KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(container);
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(container);
         if (layer && layers.count()) {
             kDebug(38000) << "dropping layer on a layer (not implemented yet)";
             // TODO layers are dropped on a layer, so change layer ordering
             return false;
         } else if (group || layer) {
             kDebug(38000) << "dropping on group or layer";
-            if (! toplevelShapes.count())
+            if (! toplevelShapes.count()) {
                 return false;
+            }
 
             emit layoutAboutToBeChanged();
 
             beginInsertRows(parent, container->shapeCount(), container->shapeCount() + toplevelShapes.count());
 
-            KUndo2Command * cmd = new KUndo2Command();
+            KUndo2Command *cmd = new KUndo2Command();
             cmd->setText(kundo2_i18n("Reparent shapes"));
 
             QList<bool> clipped, inheritTransform;
-            foreach(KoShape * shape, toplevelShapes) {
-                new KoShapeUngroupCommand(shape->parent(), QList<KoShape*>() << shape, QList<KoShape*>(), cmd);
+            foreach (KoShape *shape, toplevelShapes) {
+                new KoShapeUngroupCommand(shape->parent(), QList<KoShape *>() << shape, QList<KoShape *>(), cmd);
                 clipped.append(false);
                 inheritTransform.append(false);
             }
@@ -475,7 +509,7 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
             } else if (layer) {
                 new KoShapeGroupCommand(layer, toplevelShapes, clipped, inheritTransform, cmd);
             }
-            KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
+            KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
             canvasController->canvas()->addCommand(cmd);
 
             endInsertRows();
@@ -488,8 +522,9 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
         }
     } else {
         kDebug(38000) << "KarbonLayerModel::dropMimeData parent = shape";
-        if (! toplevelShapes.count())
+        if (! toplevelShapes.count()) {
             return false;
+        }
 
         // TODO shapes are dropped on a shape, reorder them
         return false;
@@ -498,34 +533,38 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
     return true;
 }
 
-QModelIndex KarbonLayerModel::parentIndexFromShape(const KoShape * child) const
+QModelIndex KarbonLayerModel::parentIndexFromShape(const KoShape *child) const
 {
-    if (! m_document)
+    if (! m_document) {
         return QModelIndex();
+    }
 
     // check if child shape is a layer, and return invalid model index if it is
-    const KoShapeLayer *childlayer = dynamic_cast<const KoShapeLayer*>(child);
-    if (childlayer)
+    const KoShapeLayer *childlayer = dynamic_cast<const KoShapeLayer *>(child);
+    if (childlayer) {
         return QModelIndex();
+    }
 
     // get the children's parent shape
     KoShapeContainer *parentShape = child->parent();
-    if (! parentShape)
+    if (! parentShape) {
         return QModelIndex();
+    }
 
     // check if the parent is a layer
-    KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer*>(parentShape);
-    if (parentLayer)
+    KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer *>(parentShape);
+    if (parentLayer) {
         return createIndex(m_document->layers().indexOf(parentLayer), 0, parentShape);
+    }
 
     // get the grandparent to determine the row of the parent shape
     KoShapeContainer *grandParentShape = parentShape->parent();
-    if (! grandParentShape)
+    if (! grandParentShape) {
         return QModelIndex();
+    }
 
     return createIndex(indexFromChild(grandParentShape, parentShape), 0, parentShape);
 }
 
 #include "KarbonLayerModel.moc"
 
-// kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

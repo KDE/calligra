@@ -27,12 +27,11 @@
 #include <QImage>
 #include <KoColor.h>
 
-
 class QTimer;
 
 class KisMyPaintShadeSelector : public KisColorSelectorBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     KisMyPaintShadeSelector(QWidget *parent = 0);
 
@@ -44,16 +43,16 @@ public:
     void setColor(const KoColor &color);
 
 protected Q_SLOTS:
-    void canvasResourceChanged(int key, const QVariant& v);
+    void canvasResourceChanged(int key, const QVariant &v);
 
 protected:
     void paintEvent(QPaintEvent *);
-    KisColorSelectorBase* createPopup() const;
+    KisColorSelectorBase *createPopup() const;
 
 private:
     qreal m_colorH, m_colorS, m_colorV;
     qreal R, G, B;
-    QTimer* m_updateTimer;
+    QTimer *m_updateTimer;
     KoColor m_lastRealColor;
     KisPaintDeviceSP m_realPixelCache;
 };

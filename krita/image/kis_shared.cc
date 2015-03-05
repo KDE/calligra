@@ -19,7 +19,6 @@
 #include "kis_shared.h"
 #include "kis_debug.h"
 
-
 /**
  * NOTE: The description of how Weak shared pointers system works:
  *
@@ -53,6 +52,7 @@ KisShared::~KisShared()
      */
     Q_ASSERT(_ref == 0);
 
-    if(_sharedWeakReference && !_sharedWeakReference->deref())
+    if (_sharedWeakReference && !_sharedWeakReference->deref()) {
         delete _sharedWeakReference;
+    }
 }

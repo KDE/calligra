@@ -42,10 +42,10 @@ K_EXPORT_KEXIMIGRATE_DRIVER(SybaseMigrate, sybase)
 
 /* ************************************************************************** */
 //! Constructor (needed for trading interface)
-SybaseMigrate::SybaseMigrate(QObject *parent, const QVariantList&args) :
-        KexiMigrate(parent, args)
-        , d(new SybaseConnectionInternal(0))
-        //,m_mysqlres(0)
+SybaseMigrate::SybaseMigrate(QObject *parent, const QVariantList &args) :
+    KexiMigrate(parent, args)
+    , d(new SybaseConnectionInternal(0))
+    //,m_mysqlres(0)
 {
     KexiDB::DriverManager manager;
     setDriver(manager.driver("sybase"));
@@ -61,8 +61,9 @@ SybaseMigrate::~SybaseMigrate()
 /*! Connect to the db backend */
 bool SybaseMigrate::drv_connect()
 {
-    if (!d->db_connect(*data()->source))
+    if (!d->db_connect(*data()->source)) {
         return false;
+    }
     return d->useDatabase(data()->sourceName);
 }
 
@@ -75,22 +76,23 @@ bool SybaseMigrate::drv_disconnect()
 /* ************************************************************************** */
 /*! Get the types and properties for each column. */
 bool SybaseMigrate::drv_readTableSchema(
-    const QString& originalName, KexiDB::TableSchema& tableSchema)
+    const QString &originalName, KexiDB::TableSchema &tableSchema)
 {
 //! @todo IDEA: ask for user input for captions
 
     //Perform a query on the table to get some data
     QString sqlStatement = QString("SELECT TOP 0 * FROM ") + drv_escapeIdentifier(originalName);
 
-    if (!query(sqlStatement))
+    if (!query(sqlStatement)) {
         return false;
+    }
 
     unsigned int numFlds = dbnumcols(d->dbProcess);
-    QVector<KexiDB::Field*> fieldVector;
+    QVector<KexiDB::Field *> fieldVector;
     for (unsigned int i = 1; i <= numFlds; i++) {
         //  dblib indexes start from 1
-        DBCOL* colInfo = new DBCOL;
-        if (dbcolinfo(d->dbProcess, CI_REGULAR, i , 0, colInfo) != SUCCEED) {
+        DBCOL *colInfo = new DBCOL;
+        if (dbcolinfo(d->dbProcess, CI_REGULAR, i, 0, colInfo) != SUCCEED) {
             return false;
         }
 
@@ -112,18 +114,19 @@ bool SybaseMigrate::drv_readTableSchema(
     }
 
     // read all the indexes on this table
-    QList<KexiDB::IndexSchema*> indexList = readIndexes(originalName, tableSchema);
-    foreach(KexiDB::IndexSchema* index, indexList) {
+    QList<KexiDB::IndexSchema *> indexList = readIndexes(originalName, tableSchema);
+    foreach (KexiDB::IndexSchema *index, indexList) {
         // We are only looking for indexes on single fields
         // **kexi limitation**
         // generalise this when we get full support for indexes
         if (index->fieldCount() != 1) {
             continue;
         }
-        KexiDB::Field* fld = index->field(0);
+        KexiDB::Field *fld = index->field(0);
 
-        if (!fld)
+        if (!fld) {
             return false;
+        }
 
         if (index->isPrimaryKey()) {
             fld->setPrimaryKey(true);
@@ -138,10 +141,11 @@ bool SybaseMigrate::drv_readTableSchema(
 }
 
 /*! Get a list of tables and put into the supplied string list */
-bool SybaseMigrate::drv_tableNames(QStringList& tableNames)
+bool SybaseMigrate::drv_tableNames(QStringList &tableNames)
 {
-    if (!query("Select name from sysobjects where type='U'"))
+    if (!query("Select name from sysobjects where type='U'")) {
         return false;
+    }
     while (dbnextrow(d->dbProcess) != NO_MORE_ROWS) {
         //kDebug() << value(0);
         tableNames << value(0);
@@ -154,10 +158,11 @@ bool SybaseMigrate::drv_tableNames(QStringList& tableNames)
  On success the result is stored in \a stringList and true is returned.
  \return cancelled if there are no records available. */
 tristate SybaseMigrate::drv_queryStringListFromSQL(
-    const QString& sqlStatement, uint columnNumber, QStringList& stringList, int numRecords)
+    const QString &sqlStatement, uint columnNumber, QStringList &stringList, int numRecords)
 {
-    if (!query(sqlStatement))
+    if (!query(sqlStatement)) {
         return false;
+    }
 
     int counter = 0;
     while (dbnextrow(d->dbProcess) != NO_MORE_ROWS && (numRecords == -1 || counter < numRecords)) {
@@ -168,18 +173,19 @@ tristate SybaseMigrate::drv_queryStringListFromSQL(
         RETCODE returnCode = dbnextrow(d->dbProcess);
         if (returnCode != SUCCEED) {
             tristate r;
-            if (returnCode == FAIL)
+            if (returnCode == FAIL) {
                 r = false;
-            else if (returnCode == NO_MORE_RESULTS)
+            } else if (returnCode == NO_MORE_RESULTS) {
                 r = (numRecords == -1) ? tristate(true) : tristate(cancelled);
+            }
             return r;
         }
 
         uint numFields = dbnumcols(d->dbProcess);
         if (columnNumber > (numFields - 1)) {
             kWarning() << sqlStatement
-                << "columnNumber too large"
-                << columnNumber << "expected 0.." << numFields;
+                       << "columnNumber too large"
+                       << columnNumber << "expected 0.." << numFields;
         }
         stringList.append(value(i));
     }
@@ -188,32 +194,35 @@ tristate SybaseMigrate::drv_queryStringListFromSQL(
 
 /*! Fetches single record from result obtained
  by running \a sqlStatement. */
-tristate SybaseMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
-        KexiDB::RecordData& data, bool &firstRecord)
+tristate SybaseMigrate::drv_fetchRecordFromSQL(const QString &sqlStatement,
+        KexiDB::RecordData &data, bool &firstRecord)
 {
     if (firstRecord) {
-        if (!query(sqlStatement))
+        if (!query(sqlStatement)) {
             return false;
+        }
         firstRecord = false;
     }
 
     RETCODE returnCode = dbnextrow(d->dbProcess);
     if (returnCode != SUCCEED) {
         tristate r = cancelled;
-        if (returnCode == FAIL)
+        if (returnCode == FAIL) {
             r = false;
+        }
         return r;
     }
     const int numFields = dbnumcols(d->dbProcess);
     data.resize(numFields);
-    for (int i = 0; i < numFields; i++)
-        data[i] = value(i) ;   //ok? utf8?
+    for (int i = 0; i < numFields; i++) {
+        data[i] = value(i);    //ok? utf8?
+    }
     return true;
 }
 
 /*! Copy Sybase table to KexiDB database */
-bool SybaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
-                                  KexiDB::TableSchema* dstTable)
+bool SybaseMigrate::drv_copyTable(const QString &srcTable, KexiDB::Connection *destConn,
+                                  KexiDB::TableSchema *dstTable)
 {
     if (!query("Select * from " + drv_escapeIdentifier(srcTable)))  {
         return false;
@@ -240,10 +249,11 @@ bool SybaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *d
     return true;
 }
 
-bool SybaseMigrate::drv_getTableSize(const QString& table, quint64& size)
+bool SybaseMigrate::drv_getTableSize(const QString &table, quint64 &size)
 {
-    if (!query("SELECT COUNT(*) FROM " + drv_escapeIdentifier(table)))
+    if (!query("SELECT COUNT(*) FROM " + drv_escapeIdentifier(table))) {
         return false;
+    }
     while (dbnextrow(d->dbProcess) != NO_MORE_ROWS) {
         //! @todo check result valid
         size = value(0).toULongLong();
@@ -252,7 +262,7 @@ bool SybaseMigrate::drv_getTableSize(const QString& table, quint64& size)
 }
 
 //! Convert a Sybase type to a KexiDB type, prompting user if necessary.
-KexiDB::Field::Type SybaseMigrate::type(const QString& table,
+KexiDB::Field::Type SybaseMigrate::type(const QString &table,
                                         int columnType)
 {
     // Field type
@@ -319,7 +329,7 @@ KexiDB::Field::Type SybaseMigrate::type(const QString& table,
     return kexiType;
 }
 
-bool SybaseMigrate::primaryKey(const QString& tableName, const QString& fieldName) const
+bool SybaseMigrate::primaryKey(const QString &tableName, const QString &fieldName) const
 {
     // table fields information
     // http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.help.ase_15.0.sqlug/html/sqlug/sqlug538.htm
@@ -329,13 +339,13 @@ bool SybaseMigrate::primaryKey(const QString& tableName, const QString& fieldNam
     // indid  -> index Id.
     // id   -> The id of the table on which this index exists
 
-    QString sqlStatement = QString("Select indid,keycnt,status from sysindexes where id = object_id('%1') and ( status & 2048 !=0 ) ").arg(drv_escapeIdentifier(tableName))  ;
+    QString sqlStatement = QString("Select indid,keycnt,status from sysindexes where id = object_id('%1') and ( status & 2048 !=0 ) ").arg(drv_escapeIdentifier(tableName));
 
     if (!query(sqlStatement)) {
         return false;
     }
 
-    int indexId = -1 ,  keyCount = -1;
+    int indexId = -1,  keyCount = -1;
     // we are expecting only one row because there can be only *one* primary key
     while (dbnextrow(d->dbProcess) != NO_MORE_ROWS) {
         // get indexid :  indid
@@ -365,7 +375,7 @@ bool SybaseMigrate::primaryKey(const QString& tableName, const QString& fieldNam
 
 }
 
-bool SybaseMigrate::uniqueKey(const QString& tableName, const QString& fieldName) const
+bool SybaseMigrate::uniqueKey(const QString &tableName, const QString &fieldName) const
 {
     // table fields information
     // http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.help.ase_15.0.sqlug/html/sqlug/sqlug538.htm
@@ -376,7 +386,7 @@ bool SybaseMigrate::uniqueKey(const QString& tableName, const QString& fieldName
     // id   -> The id of the table on which this index exists
 
     QString sqlStatement = QString("Select indid,keycnt,status from sysindexes where id = object_id('%1') and ( status & 2 !=0 ) ")
-                           .arg(drv_escapeIdentifier(tableName)) ;
+                           .arg(drv_escapeIdentifier(tableName));
     if (!query(sqlStatement)) {
         return false;
     }
@@ -394,7 +404,7 @@ bool SybaseMigrate::uniqueKey(const QString& tableName, const QString& fieldName
     }
 
     // we need to check whether the field is involved in any one of the indexes
-    foreach(int indexId, indexIdKeyCountMap.keys()) {
+    foreach (int indexId, indexIdKeyCountMap.keys()) {
         int keyCount = indexIdKeyCountMap[indexId];
         if (indexId != 1) {
             // if index is non clustered ( !=1 ), keycnt is 1 greater than the actual number of keys
@@ -403,7 +413,7 @@ bool SybaseMigrate::uniqueKey(const QString& tableName, const QString& fieldName
 
         for (int i = 1; i <= keyCount; i++) {
             sqlStatement = QString("Select 1 where index_col('%1',%2, %3 ) = '%4' ")
-                    .arg(drv_escapeIdentifier(tableName)).arg(indexId).arg(i).arg(fieldName);
+                           .arg(drv_escapeIdentifier(tableName)).arg(indexId).arg(i).arg(fieldName);
             if (!query(sqlStatement)) {
                 return false;
             }
@@ -425,16 +435,16 @@ QString SybaseMigrate::value(int pos) const
     // 512 is
     // 1. the length used internally in dblib for allocating data to each column in function dbprrow()
     // 2. it's greater than all the values returned in the dblib internal function _get_printable_size
-    long int pointerLength = qMax(columnDataLength , (long int)512);
+    long int pointerLength = qMax(columnDataLength, (long int)512);
 
-    BYTE* columnValue = new unsigned char[pointerLength + 1] ;
+    BYTE *columnValue = new unsigned char[pointerLength + 1];
 
     // convert to string representation. All values are convertible to string
-    dbconvert(d->dbProcess , dbcoltype(d->dbProcess , pos), dbdata(d->dbProcess , pos), columnDataLength , (SYBCHAR), columnValue, -2);
-    return QString::fromUtf8((const char*)columnValue, strlen((const char*)columnValue));
+    dbconvert(d->dbProcess, dbcoltype(d->dbProcess, pos), dbdata(d->dbProcess, pos), columnDataLength, (SYBCHAR), columnValue, -2);
+    return QString::fromUtf8((const char *)columnValue, strlen((const char *)columnValue));
 }
 
-bool SybaseMigrate::query(const QString& sqlStatement) const
+bool SybaseMigrate::query(const QString &sqlStatement) const
 {
 
     //kDebug()<<sqlStatement;
@@ -455,7 +465,7 @@ bool SybaseMigrate::query(const QString& sqlStatement) const
 
 }
 
-QList<KexiDB::IndexSchema*> KexiMigration::SybaseMigrate::readIndexes(const QString& tableName, KexiDB::TableSchema& tableSchema)
+QList<KexiDB::IndexSchema *> KexiMigration::SybaseMigrate::readIndexes(const QString &tableName, KexiDB::TableSchema &tableSchema)
 {
     // table fields information
     // http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.help.ase_15.0.sqlug/html/sqlug/sqlug538.htm
@@ -465,12 +475,12 @@ QList<KexiDB::IndexSchema*> KexiMigration::SybaseMigrate::readIndexes(const QStr
     // indid  -> index Id.
     // id   -> The id of the table on which this index exists
 
-    QList<KexiDB::IndexSchema*> indexList;
+    QList<KexiDB::IndexSchema *> indexList;
     QString sqlStatement = QString("Select indid,keycnt,status from sysindexes where id = object_id('%1')")
-                           .arg(drv_escapeIdentifier(tableName)) ;
+                           .arg(drv_escapeIdentifier(tableName));
 
     if (!query(sqlStatement)) {
-        return QList<KexiDB::IndexSchema*>();
+        return QList<KexiDB::IndexSchema *>();
     }
 
     // we can expect multiple rows as there can be multiple unique indexes
@@ -487,15 +497,15 @@ QList<KexiDB::IndexSchema*> KexiMigration::SybaseMigrate::readIndexes(const QStr
     }
 
     // create a FieldName -> FieldPointer Hash for faster lookup by name
-    QHash<QString, KexiDB::Field*> fieldHash;
-    const KexiDB::Field::List* fieldList = tableSchema.fields();
-    foreach(KexiDB::Field* field, *fieldList) {
+    QHash<QString, KexiDB::Field *> fieldHash;
+    const KexiDB::Field::List *fieldList = tableSchema.fields();
+    foreach (KexiDB::Field *field, *fieldList) {
         //kDebug() << field->caption();
         fieldHash[field->caption()] = field;
     }
 
     // we need to check whether the field is involved in any one of the indexes
-    foreach(int indexId, indexIdKeyCountStatusMap.keys()) {
+    foreach (int indexId, indexIdKeyCountStatusMap.keys()) {
         QPair<int, int> keyCountStatusPair = indexIdKeyCountStatusMap[indexId];
 
         int keyCount = keyCountStatusPair.first;
@@ -507,13 +517,13 @@ QList<KexiDB::IndexSchema*> KexiMigration::SybaseMigrate::readIndexes(const QStr
             keyCount = keyCount - 1;
         }
 
-        KexiDB::IndexSchema* indexSchema = new KexiDB::IndexSchema(&tableSchema);
+        KexiDB::IndexSchema *indexSchema = new KexiDB::IndexSchema(&tableSchema);
 
         for (int i = 1; i <= keyCount; i++) {
             sqlStatement = QString("Select index_col('%1',%2, %3 )").arg(drv_escapeIdentifier(tableName)).arg(indexId).arg(i);
 
             if (!query(sqlStatement)) {
-                return QList<KexiDB::IndexSchema*>();
+                return QList<KexiDB::IndexSchema *>();
             }
 
             while (dbnextrow(d->dbProcess) != NO_MORE_ROWS) {

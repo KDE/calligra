@@ -27,12 +27,12 @@ class KoStore;
 class KRITAUI_EXPORT OraSaveContext : public KisOpenRasterSaveContext
 {
 public:
-    OraSaveContext(KoStore* _store);
+    OraSaveContext(KoStore *_store);
     virtual QString saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store *metaData, KisImageWSP image);
-    virtual void saveStack(const QDomDocument& doc);
+    virtual void saveStack(const QDomDocument &doc);
 private:
     int m_id;
-    KoStore* m_store;
+    KoStore *m_store;
 };
 
 #endif

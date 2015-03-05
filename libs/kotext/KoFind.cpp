@@ -26,12 +26,11 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 
-
 KoFind::KoFind(QWidget *parent, KoCanvasResourceManager *canvasResourceManager, KActionCollection *ac)
-        : QObject(parent)
-        , d(new KoFindPrivate(this, canvasResourceManager, parent))
+    : QObject(parent)
+    , d(new KoFindPrivate(this, canvasResourceManager, parent))
 {
-    connect(canvasResourceManager, SIGNAL(canvasResourceChanged(int, const QVariant&)), this, SLOT(resourceChanged(int, const QVariant&)));
+    connect(canvasResourceManager, SIGNAL(canvasResourceChanged(int,QVariant)), this, SLOT(resourceChanged(int,QVariant)));
     ac->addAction(KStandardAction::Find, "edit_find", this, SLOT(findActivated()));
     d->findNext = ac->addAction(KStandardAction::FindNext, "edit_findnext", this, SLOT(findNextActivated()));
     d->findNext->setEnabled(false);

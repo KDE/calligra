@@ -22,7 +22,6 @@
 #include <QObject>
 #include "krita_export.h"
 
-
 /**
  * A special class for connecting UI elements to manager classes.
  * It allows to avoid direct calling blockSignals() for the sender UI

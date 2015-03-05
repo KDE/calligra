@@ -24,7 +24,8 @@ class KisShapeOptionsWidget: public QWidget, public Ui::WdgGridBrushShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -43,19 +44,17 @@ KisGridShapeOption::~KisGridShapeOption()
     delete m_options;
 }
 
-
 int KisGridShapeOption::shape() const
 {
     return m_options->shapeCBox->currentIndex();
 }
 
-void KisGridShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisGridShapeOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(GRIDSHAPE_SHAPE, shape());
 }
 
-
-void KisGridShapeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisGridShapeOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     m_options->shapeCBox->setCurrentIndex(setting->getInt(GRIDSHAPE_SHAPE));
 }

@@ -34,7 +34,7 @@
 
 #define ICON_SIZE 48
 
-DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
+DlgBundleManager::DlgBundleManager(KisActionManager *actionMgr, QWidget *parent)
     : KDialog(parent)
     , m_page(new QWidget())
     , m_ui(new Ui::WdgDlgBundleManager)
@@ -69,7 +69,7 @@ DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
     KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
     m_actionManager = actionMgr;
 
-    foreach(const QString &f, bundleServer->blackListedFiles()) {
+    foreach (const QString &f, bundleServer->blackListedFiles()) {
         ResourceBundle *bundle = new ResourceBundle(f);
         bundle->load();
         if (bundle->valid()) {
@@ -79,7 +79,7 @@ DlgBundleManager::DlgBundleManager(KisActionManager* actionMgr, QWidget *parent)
     }
     fillListWidget(m_blacklistedBundles.values(), m_ui->listInactive);
 
-    foreach(ResourceBundle *bundle, bundleServer->resources()) {
+    foreach (ResourceBundle *bundle, bundleServer->resources()) {
         if (bundle->valid()) {
             m_activeBundles[bundle->filename()] = bundle;
         }
@@ -106,7 +106,7 @@ void DlgBundleManager::accept()
         QMessageBox bundleFeedback;
         bundleFeedback.setIcon(QMessageBox::Warning);
         QString feedback = "bundlefeedback";
-        
+
         if (!bundle) {
             // Get it from the blacklisted bundles
             foreach (ResourceBundle *b2, m_blacklistedBundles.values()) {
@@ -116,33 +116,31 @@ void DlgBundleManager::accept()
                 }
             }
         }
-        
+
         if (bundle) {
-            if(!bundle->isInstalled()){
+            if (!bundle->isInstalled()) {
                 bundle->install();
                 //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
-                if(!bundleServer->addResource(bundle, false, false)){
-                
+                if (!bundleServer->addResource(bundle, false, false)) {
+
                     feedback = i18n("Couldn't add bundle to resource server");
                     bundleFeedback.setText(feedback);
                     bundleFeedback.exec();;
                 }
-                if(!bundleServer->removeFromBlacklist(bundle)){
+                if (!bundleServer->removeFromBlacklist(bundle)) {
                     feedback = i18n("Couldn't remove bundle from blacklist");
                     bundleFeedback.setText(feedback);
                     bundleFeedback.exec();;
                 }
+            } else {
+                bundleServer->removeFromBlacklist(bundle);
+                //let's asume that bundles who exist and are installed have to be removed from the blacklist, and if they were already this returns false, so that's not a problem.
             }
-            else {
-            bundleServer->removeFromBlacklist(bundle);
-            //let's asume that bundles who exist and are installed have to be removed from the blacklist, and if they were already this returns false, so that's not a problem.
-            }
-        }
-        else{
-        QString feedback = i18n("Bundle doesn't exist!");
-        bundleFeedback.setText(feedback);
-        bundleFeedback.exec();;
-        
+        } else {
+            QString feedback = i18n("Bundle doesn't exist!");
+            bundleFeedback.setText(feedback);
+            bundleFeedback.exec();;
+
         }
     }
 
@@ -157,14 +155,13 @@ void DlgBundleManager::accept()
         }
     }
 
-
     KDialog::accept();
 }
 
 void DlgBundleManager::addSelected()
 {
 
-    foreach(QListWidgetItem *item, m_ui->listActive->selectedItems()) {
+    foreach (QListWidgetItem *item, m_ui->listActive->selectedItems()) {
         m_ui->listInactive->addItem(m_ui->listActive->takeItem(m_ui->listActive->row(item)));
     }
 
@@ -172,7 +169,7 @@ void DlgBundleManager::addSelected()
 
 void DlgBundleManager::removeSelected()
 {
-    foreach(QListWidgetItem *item, m_ui->listInactive->selectedItems()) {
+    foreach (QListWidgetItem *item, m_ui->listInactive->selectedItems()) {
         m_ui->listActive->addItem(m_ui->listInactive->takeItem(m_ui->listInactive->row(item)));
     }
 }
@@ -192,8 +189,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
         m_ui->listBundleContents->clear();
         m_ui->bnEditBundle->setEnabled(false);
         m_currentBundle = 0;
-    }
-    else {
+    } else {
 
         QByteArray ba = current->data(Qt::UserRole).toByteArray();
         KoResourceServer<ResourceBundle> *bundleServer = ResourceBundleServerProvider::instance()->resourceBundleServer();
@@ -225,31 +221,26 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
             m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
             m_ui->listBundleContents->clear();
 
-            foreach(const QString & resType, bundle->resourceTypes()) {
+            foreach (const QString &resType, bundle->resourceTypes()) {
 
                 QTreeWidgetItem *toplevel = new QTreeWidgetItem();
                 if (resType == "gradients") {
                     toplevel->setText(0, i18n("Gradients"));
-                }
-                else if (resType  == "patterns") {
+                } else if (resType  == "patterns") {
                     toplevel->setText(0, i18n("Patterns"));
-                }
-                else if (resType  == "brushes") {
+                } else if (resType  == "brushes") {
                     toplevel->setText(0, i18n("Brushes"));
-                }
-                else if (resType  == "palettes") {
+                } else if (resType  == "palettes") {
                     toplevel->setText(0, i18n("Palettes"));
-                }
-                else if (resType  == "workspaces") {
+                } else if (resType  == "workspaces") {
                     toplevel->setText(0, i18n("Workspaces"));
-                }
-                else if (resType  == "paintoppresets") {
+                } else if (resType  == "paintoppresets") {
                     toplevel->setText(0, i18n("Brush Presets"));
                 }
 
                 m_ui->listBundleContents->addTopLevelItem(toplevel);
 
-                foreach(const KoResource *res, bundle->resources(resType)) {
+                foreach (const KoResource *res, bundle->resources(resType)) {
                     if (res) {
                         QTreeWidgetItem *i = new QTreeWidgetItem();
                         i->setIcon(0, QIcon(QPixmap::fromImage(res->image())));
@@ -258,8 +249,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
                     }
                 }
             }
-        }
-        else {
+        } else {
             m_currentBundle = 0;
         }
     }
@@ -285,7 +275,7 @@ void DlgBundleManager::fillListWidget(QList<ResourceBundle *> bundles, QListWidg
     w->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     w->setSelectionMode(QAbstractItemView::MultiSelection);
 
-    foreach(ResourceBundle *bundle, bundles) {
+    foreach (ResourceBundle *bundle, bundles) {
         QPixmap pixmap(ICON_SIZE, ICON_SIZE);
         if (!bundle->image().isNull()) {
             QImage scaled = bundle->image().scaled(ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -294,8 +284,7 @@ void DlgBundleManager::fillListWidget(QList<ResourceBundle *> bundles, QListWidg
             QPainter gc(&pixmap);
             gc.drawImage(x, y, scaled);
             gc.end();
-        }
-        else {
+        } else {
             pixmap.fill(Qt::gray);
         }
 
@@ -305,38 +294,37 @@ void DlgBundleManager::fillListWidget(QList<ResourceBundle *> bundles, QListWidg
     }
 }
 
+void DlgBundleManager::slotImportResource()
+{
 
-void DlgBundleManager::slotImportResource() {
-
-    if (m_actionManager)
-    {
+    if (m_actionManager) {
         KisAction *action = m_actionManager->actionByName("import_resources");
         action->trigger();
     }
 }
 
-void DlgBundleManager::slotCreateBundle() {
+void DlgBundleManager::slotCreateBundle()
+{
 
-    if (m_actionManager)
-    {
+    if (m_actionManager) {
         KisAction *action = m_actionManager->actionByName("create_bundle");
         action->trigger();
     }
 }
 
-void DlgBundleManager::slotDeleteBackupFiles() {
+void DlgBundleManager::slotDeleteBackupFiles()
+{
 
-    if (m_actionManager)
-    {
+    if (m_actionManager) {
         KisAction *action = m_actionManager->actionByName("edit_blacklist_cleanup");
         action->trigger();
     }
 }
 
-void DlgBundleManager::slotOpenResourceFolder() {
+void DlgBundleManager::slotOpenResourceFolder()
+{
 
-    if (m_actionManager)
-    {
+    if (m_actionManager) {
         KisAction *action = m_actionManager->actionByName("open_resources_directory");
         action->trigger();
     }

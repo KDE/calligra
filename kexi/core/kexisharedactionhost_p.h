@@ -30,7 +30,8 @@ class KexiSharedActionHost;
 class KexiVolatileActionData
 {
 public:
-    KexiVolatileActionData() {
+    KexiVolatileActionData()
+    {
         plugged = false;
     }
 //  KAction *kaction;
@@ -48,15 +49,15 @@ public:
     ~KexiSharedActionHostPrivate();
 
 public Q_SLOTS:
-    void slotAction(const QString& act_id);
+    void slotAction(const QString &act_id);
 
 public:
-    QHash<QObject*, KexiActionProxy*> actionProxies;
+    QHash<QObject *, KexiActionProxy *> actionProxies;
     KexiMainWindowIface *mainWin;
-    QList<KAction*> sharedActions;
+    QList<KAction *> sharedActions;
     QSignalMapper actionMapper;
-    QHash<KAction*, KexiVolatileActionData*> volatileActions;
-    QHash<QString, QWidget*> enablers;
+    QHash<KAction *, KexiVolatileActionData *> volatileActions;
+    QHash<QString, QWidget *> enablers;
     KexiSharedActionHost *host;
 };
 

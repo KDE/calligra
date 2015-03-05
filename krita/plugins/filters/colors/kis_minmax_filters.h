@@ -30,12 +30,13 @@ public:
     KisFilterMax();
 
     void processImpl(KisPaintDeviceSP src,
-                     const QRect& size,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater
-                     ) const;
+                     const QRect &size,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater
+                    ) const;
 
-    static inline KoID id() {
+    static inline KoID id()
+    {
         return KoID("maximize", i18n("Maximize Channel"));
     }
 
@@ -48,11 +49,12 @@ public:
 public:
 
     void processImpl(KisPaintDeviceSP device,
-                     const QRect& rect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater
-                     ) const;
-    static inline KoID id() {
+                     const QRect &rect,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater
+                    ) const;
+    static inline KoID id()
+    {
         return KoID("minimize", i18n("Minimize Channel"));
     }
 };

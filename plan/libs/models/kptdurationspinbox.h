@@ -38,7 +38,7 @@ namespace KPlato
  * on the unit and step up or -down.
  * Maximum- and minimum unit can be set with setMaximumUnit() and setMinimumUnit().
  * Defaults are: maximum unit Day, minimum unit Hour.
- * 
+ *
  */
 class KPLATOMODELS_EXPORT DurationSpinBox : public QDoubleSpinBox
 {
@@ -47,42 +47,45 @@ public:
     explicit DurationSpinBox(QWidget *parent = 0);
 
     /// Return the current unit
-    Duration::Unit unit() const { return m_unit; }
-    
+    Duration::Unit unit() const
+    {
+        return m_unit;
+    }
+
     /// step the value steps step. If inside unit, steps unit +/- 1 step.
-    virtual void stepBy( int steps );
+    virtual void stepBy(int steps);
     /// Set maximum unit to @p unit.
-    void setMaximumUnit( Duration::Unit unit );
+    void setMaximumUnit(Duration::Unit unit);
     /// Set maximum unit to @p unit.
-    void setMinimumUnit( Duration::Unit unit );
-    
-    double valueFromText( const QString & text ) const;
-    QString textFromValue ( double value ) const;
-    QValidator::State validate ( QString & input, int & pos ) const;
+    void setMinimumUnit(Duration::Unit unit);
+
+    double valueFromText(const QString &text) const;
+    QString textFromValue(double value) const;
+    QValidator::State validate(QString &input, int &pos) const;
 
 Q_SIGNALS:
-    void unitChanged( int );
+    void unitChanged(int);
 
 public Q_SLOTS:
     /// Set the current unit.
     /// If unit is outside minimum- or maximum unit, the limit is adjusted.
-    void setUnit( Duration::Unit unit);
+    void setUnit(Duration::Unit unit);
 
 protected Q_SLOTS:
-    void editorTextChanged( const QString &text );
+    void editorTextChanged(const QString &text);
 
 protected:
-    void keyPressEvent( QKeyEvent * event );
-    StepEnabled stepEnabled () const;
+    void keyPressEvent(QKeyEvent *event);
+    StepEnabled stepEnabled() const;
 
     void stepUnitUp();
     void stepUnitDown();
 
-    QString extractUnit ( const QString &text ) const;
-    QString extractValue ( const QString &text ) const;
+    QString extractUnit(const QString &text) const;
+    QString extractValue(const QString &text) const;
 
     /// If unit is outside minimum- or maximum unit, the limit is used.
-    void updateUnit( Duration::Unit unit);
+    void updateUnit(Duration::Unit unit);
 
     bool isOnUnit() const;
 

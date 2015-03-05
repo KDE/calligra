@@ -35,21 +35,21 @@ class KRITAUI_EXPORT KisPaintOpListWidget: public KisCategorizedListView
 {
     Q_OBJECT
 public:
-     KisPaintOpListWidget(QWidget* parent=0, const char* name=0);
+    KisPaintOpListWidget(QWidget *parent = 0, const char *name = 0);
     ~KisPaintOpListWidget();
-    
+
     QString currentItem() const;
-    
-    void setPaintOpList(const QList<KisPaintOpFactory*>& list);
-    void setCurrent(const KisPaintOpFactory* op);
-    void setCurrent(const QString & paintOpId);
-    
+
+    void setPaintOpList(const QList<KisPaintOpFactory *> &list);
+    void setCurrent(const KisPaintOpFactory *op);
+    void setCurrent(const QString &paintOpId);
+
 Q_SIGNALS:
-    void activated(const QString&);
-    
+    void activated(const QString &);
+
 private Q_SLOTS:
-    void slotOpActivated(const QModelIndex& index);
-    
+    void slotOpActivated(const QModelIndex &index);
+
 protected:
     QString itemAt(int idx) const;
 

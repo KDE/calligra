@@ -20,7 +20,6 @@
 #ifndef KPTACCOUNTSVIEWCONFIGDIALOG_H
 #define KPTACCOUNTSVIEWCONFIGDIALOG_H
 
-
 #include <kpagedialog.h>
 #include "ui_kptaccountsviewconfigurepanelbase.h"
 
@@ -37,20 +36,21 @@ class PrintingHeaderFooter;
 class AccountsviewConfigurePanelBase : public QWidget, public Ui::AccountsviewConfigurePanelBase
 {
 public:
-  explicit AccountsviewConfigurePanelBase( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
+    explicit AccountsviewConfigurePanelBase(QWidget *parent) : QWidget(parent)
+    {
+        setupUi(this);
+    }
 };
 
-
-class AccountsviewConfigDialog : public KPageDialog {
+class AccountsviewConfigDialog : public KPageDialog
+{
     Q_OBJECT
 public:
-    AccountsviewConfigDialog( ViewBase *view, AccountsTreeView *treeview, QWidget *parent );
+    AccountsviewConfigDialog(ViewBase *view, AccountsTreeView *treeview, QWidget *parent);
 
 public Q_SLOTS:
     void slotOk();
-    
+
 private:
     ViewBase *m_view;
     AccountsTreeView *m_treeview;
@@ -59,11 +59,12 @@ private:
     PrintingHeaderFooter *m_headerfooter;
 };
 
-class AccountsviewConfigPanel : public AccountsviewConfigurePanelBase {
+class AccountsviewConfigPanel : public AccountsviewConfigurePanelBase
+{
     Q_OBJECT
 public:
     explicit AccountsviewConfigPanel(QWidget *parent);
-    
+
 public Q_SLOTS:
     void slotChanged();
 

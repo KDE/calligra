@@ -50,11 +50,12 @@
 class KexiDBAutoField::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
 
     WidgetType widgetType; //!< internal: equal to m_widgetType_property or equal to result
-                           //!< of widgetTypeForFieldType() if widgetTypeForFieldType is Auto
+    //!< of widgetTypeForFieldType() if widgetTypeForFieldType is Auto
     WidgetType  widgetType_property; //!< provides widget type or Auto
     LabelPosition  lblPosition;
     QBoxLayout  *layout;
@@ -72,19 +73,19 @@ public:
 
 KexiDBAutoField::KexiDBAutoField(const QString &text, WidgetType type, LabelPosition pos,
                                  QWidget *parent)
-        : QWidget(parent)
-        , KexiFormDataItemInterface()
-        , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
-        , d(new Private())
+    : QWidget(parent)
+    , KexiFormDataItemInterface()
+    , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
+    , d(new Private())
 {
     init(text, type, pos);
 }
 
 KexiDBAutoField::KexiDBAutoField(QWidget *parent, LabelPosition pos)
-        : QWidget(parent)
-        , KexiFormDataItemInterface()
-        , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
-        , d(new Private())
+    : QWidget(parent)
+    , KexiFormDataItemInterface()
+    , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
+    , d(new Private())
 {
     init(QString()/*i18n("Auto Field")*/, Auto, pos);
 }
@@ -92,8 +93,9 @@ KexiDBAutoField::KexiDBAutoField(QWidget *parent, LabelPosition pos)
 KexiDBAutoField::~KexiDBAutoField()
 {
     setUpdatesEnabled(false);
-    if (subwidget())
+    if (subwidget()) {
         subwidget()->setUpdatesEnabled(false);
+    }
     delete d;
 }
 
@@ -122,12 +124,14 @@ KexiDBAutoField::setWidgetType(WidgetType type)
     d->widgetType_property = type;
     if (differ) {
         if (type == Auto) {// try to guess type from data source type
-            if (visibleColumnInfo())
+            if (visibleColumnInfo()) {
                 d->widgetType = KexiDBAutoField::widgetTypeForFieldType(visibleColumnInfo()->field->type());
-            else
+            } else {
                 d->widgetType = Auto;
-        } else
+            }
+        } else {
             d->widgetType = d->widgetType_property;
+        }
         createEditor();
     }
 }
@@ -179,11 +183,11 @@ KexiDBAutoField::createEditor()
     if (newSubwidget) {
         newSubwidget->setObjectName(
             QString::fromLatin1("KexiDBAutoField_") + newSubwidget->metaObject()->className());
-        dynamic_cast<KexiDataItemInterface*>(newSubwidget)->setParentDataItemInterface(this);
-        dynamic_cast<KexiFormDataItemInterface*>(newSubwidget)
-            ->setColumnInfo(columnInfo()); //needed at least by KexiDBImageBox
-        dynamic_cast<KexiFormDataItemInterface*>(newSubwidget)
-            ->setVisibleColumnInfo(visibleColumnInfo()); //needed at least by KexiDBComboBox
+        dynamic_cast<KexiDataItemInterface *>(newSubwidget)->setParentDataItemInterface(this);
+        dynamic_cast<KexiFormDataItemInterface *>(newSubwidget)
+        ->setColumnInfo(columnInfo()); //needed at least by KexiDBImageBox
+        dynamic_cast<KexiFormDataItemInterface *>(newSubwidget)
+        ->setVisibleColumnInfo(visibleColumnInfo()); //needed at least by KexiDBComboBox
         newSubwidget->setProperty("dataSource", dataSource()); //needed at least by KexiDBImageBox
         KFormDesigner::DesignTimeDynamicChildWidgetHandler::childWidgetAdded(this);
         newSubwidget->show();
@@ -194,8 +198,9 @@ KexiDBAutoField::createEditor()
             QWidget::setFocusPolicy(newSubwidget->focusPolicy());
         }
         setFocusProxy(newSubwidget); //ok?
-        if (parentWidget())
+        if (parentWidget()) {
             newSubwidget->setPalette(qApp->palette());
+        }
         copyPropertiesToEditor();
     }
 
@@ -210,10 +215,11 @@ void KexiDBAutoField::copyPropertiesToEditor()
 //   "; text col: " << d->textColor.name();
         QPalette p(subwidget()->palette());
         p.setBrush(QPalette::Base, d->baseBrush);
-        if (d->widgetType == Boolean)
+        if (d->widgetType == Boolean) {
             p.setBrush(QPalette::Foreground, d->textBrush);
-        else
+        } else {
             p.setBrush(QPalette::Text, d->textBrush);
+        }
         subwidget()->setPalette(p);
     }
 }
@@ -228,18 +234,19 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
         delete lyr;
     }
 
-    if (subwidget())
+    if (subwidget()) {
         subwidget()->show();
+    }
     //! \todo support right-to-left layout where positions are inverted
     if (position == Top || position == Left) {
         Qt::Alignment align = d->label->alignment();
         if (position == Top) {
-            d->layout = (QBoxLayout*) new QVBoxLayout(this);
+            d->layout = (QBoxLayout *) new QVBoxLayout(this);
             align |= Qt::AlignVertical_Mask;
             align ^= Qt::AlignVertical_Mask;
             align |= Qt::AlignTop;
         } else {
-            d->layout = (QBoxLayout*) new QHBoxLayout(this);
+            d->layout = (QBoxLayout *) new QHBoxLayout(this);
             align |= Qt::AlignVertical_Mask;
             align ^= Qt::AlignVertical_Mask;
             align |= Qt::AlignVCenter;
@@ -252,13 +259,15 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
             d->label->show();
         }
         d->layout->addWidget(d->label, 0, position == Top ? Qt::AlignLeft : QFlags<Qt::AlignmentFlag>(0));
-        if (position == Left && d->widgetType != Boolean)
+        if (position == Left && d->widgetType != Boolean) {
             d->layout->addSpacing(KexiDBAutoField_SPACING);
+        }
         d->layout->addWidget(subwidget(), 1);
-        KexiSubwidgetInterface *subwidgetInterface = dynamic_cast<KexiSubwidgetInterface*>((QWidget*)subwidget());
+        KexiSubwidgetInterface *subwidgetInterface = dynamic_cast<KexiSubwidgetInterface *>((QWidget *)subwidget());
         if (subwidgetInterface) {
-            if (subwidgetInterface->appendStretchRequired(this))
+            if (subwidgetInterface->appendStretchRequired(this)) {
                 d->layout->addStretch(0);
+            }
             if (subwidgetInterface->subwidgetStretchRequired(this)) {
                 QSizePolicy sizePolicy(subwidget()->sizePolicy());
                 if (position == Left) {
@@ -272,16 +281,16 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
             }
         }
     } else {
-        d->layout = (QBoxLayout*) new QHBoxLayout(this);
+        d->layout = (QBoxLayout *) new QHBoxLayout(this);
         d->label->hide();
         d->layout->addWidget(subwidget());
     }
     //a hack to force layout to be refreshed (any better idea for this?)
     resize(size() + QSize(1, 0));
     resize(size() - QSize(1, 0));
-    if (dynamic_cast<KexiDBAutoField*>((QWidget*)subwidget())) {
+    if (dynamic_cast<KexiDBAutoField *>((QWidget *)subwidget())) {
         //needed for KexiDBComboBox
-        dynamic_cast<KexiDBAutoField*>((QWidget*)subwidget())->setLabelPosition(position);
+        dynamic_cast<KexiDBAutoField *>((QWidget *)subwidget())->setLabelPosition(position);
     }
 }
 
@@ -289,13 +298,15 @@ void
 KexiDBAutoField::setInvalidState(const QString &text)
 {
     // Widget with an invalid dataSource is just a QLabel
-    if (designMode())
+    if (designMode()) {
         return;
+    }
     d->widgetType = Auto;
     createEditor();
     setFocusPolicy(Qt::NoFocus);
-    if (subwidget())
+    if (subwidget()) {
         subwidget()->setFocusPolicy(Qt::NoFocus);
+    }
 //! @todo or set this to editor's text?
     d->label->setText(text);
 }
@@ -303,82 +314,91 @@ KexiDBAutoField::setInvalidState(const QString &text)
 bool
 KexiDBAutoField::isReadOnly() const
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         return iface->isReadOnly();
-    else
+    } else {
         return false;
+    }
 }
 
 void
 KexiDBAutoField::setReadOnly(bool readOnly)
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         iface->setReadOnly(readOnly);
+    }
 }
 
 void
-KexiDBAutoField::setValueInternal(const QVariant& add, bool removeOld)
+KexiDBAutoField::setValueInternal(const QVariant &add, bool removeOld)
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         iface->setValue(KexiDataItemInterface::originalValue(), add, removeOld);
+    }
 }
 
 QVariant
 KexiDBAutoField::value()
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         return iface->value();
+    }
     return QVariant();
 }
 
 bool
 KexiDBAutoField::valueIsNull()
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         return iface->valueIsNull();
+    }
     return true;
 }
 
 bool
 KexiDBAutoField::valueIsEmpty()
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         return iface->valueIsEmpty();
+    }
     return true;
 }
 
 bool
 KexiDBAutoField::valueIsValid()
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         return iface->valueIsValid();
+    }
     return true;
 }
 
 bool
 KexiDBAutoField::valueChanged()
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
     //kDebug() << KexiDataItemInterface::originalValue();
-    if (iface)
+    if (iface) {
         return iface->valueChanged();
+    }
     return false;
 }
 
 void
-KexiDBAutoField::installListener(KexiDataItemChangesListener* listener)
+KexiDBAutoField::installListener(KexiDataItemChangesListener *listener)
 {
     KexiFormDataItemInterface::installListener(listener);
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         iface->installListener(listener);
+    }
 }
 
 KexiDBAutoField::WidgetType KexiDBAutoField::widgetType() const
@@ -401,12 +421,12 @@ bool KexiDBAutoField::hasAutoCaption() const
     return d->autoCaption;
 }
 
-QWidget* KexiDBAutoField::editor() const
+QWidget *KexiDBAutoField::editor() const
 {
     return subwidget();
 }
 
-QLabel* KexiDBAutoField::label() const
+QLabel *KexiDBAutoField::label() const
 {
     return d->label;
 }
@@ -424,27 +444,30 @@ QString KexiDBAutoField::fieldCaptionInternal() const
 bool
 KexiDBAutoField::cursorAtStart()
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         return iface->cursorAtStart();
+    }
     return false;
 }
 
 bool
 KexiDBAutoField::cursorAtEnd()
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         return iface->cursorAtEnd();
+    }
     return false;
 }
 
 void
 KexiDBAutoField::clear()
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         iface->clear();
+    }
 }
 
 void
@@ -454,12 +477,14 @@ KexiDBAutoField::setFieldTypeInternal(int kexiDBFieldType)
     KexiDB::Field::Type fieldType;
     //find real fied type to use
     if (d->fieldTypeInternal == KexiDB::Field::InvalidType) {
-        if (visibleColumnInfo())
+        if (visibleColumnInfo()) {
             fieldType = KexiDB::Field::Text;
-        else
+        } else {
             fieldType = KexiDB::Field::InvalidType;
-    } else
+        }
+    } else {
         fieldType = d->fieldTypeInternal;
+    }
 
     const WidgetType newWidgetType = KexiDBAutoField::widgetTypeForFieldType(fieldType);
 
@@ -471,36 +496,37 @@ KexiDBAutoField::setFieldTypeInternal(int kexiDBFieldType)
 }
 
 void
-KexiDBAutoField::setFieldCaptionInternal(const QString& text)
+KexiDBAutoField::setFieldCaptionInternal(const QString &text)
 {
     d->fieldCaptionInternal = text;
     //change text only if autocaption is set and no columnInfo is available
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
     if ((!iface || !iface->columnInfo()) && d->autoCaption) {
         changeText(d->fieldCaptionInternal);
     }
 }
 
 void
-KexiDBAutoField::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+KexiDBAutoField::setColumnInfo(KexiDB::QueryColumnInfo *cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     setColumnInfoInternal(cinfo, cinfo);
 }
 
 void
-KexiDBAutoField::setColumnInfoInternal(KexiDB::QueryColumnInfo* cinfo, KexiDB::QueryColumnInfo* visibleColumnInfo)
+KexiDBAutoField::setColumnInfoInternal(KexiDB::QueryColumnInfo *cinfo, KexiDB::QueryColumnInfo *visibleColumnInfo)
 {
     // change widget type depending on field type
     if (d->widgetType_property == Auto) {
         WidgetType newWidgetType = Auto;
         KexiDB::Field::Type fieldType;
-        if (cinfo)
+        if (cinfo) {
             fieldType = visibleColumnInfo->field->type();
-        else if (dataSource().isEmpty())
+        } else if (dataSource().isEmpty()) {
             fieldType = KexiDB::Field::InvalidType;
-        else
+        } else {
             fieldType = KexiDB::Field::Text;
+        }
 
         if (fieldType != KexiDB::Field::InvalidType) {
             newWidgetType = KexiDBAutoField::widgetTypeForFieldType(fieldType);
@@ -513,9 +539,10 @@ KexiDBAutoField::setColumnInfoInternal(KexiDB::QueryColumnInfo* cinfo, KexiDB::Q
     // update label's text
     changeText((cinfo && d->autoCaption) ? cinfo->captionOrAliasOrName() : d->caption);
 
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         iface->setColumnInfo(visibleColumnInfo);
+    }
 }
 
 //static
@@ -560,10 +587,11 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
     QString realText;
     bool unbound = false;
     if (d->autoCaption && (d->widgetType == Auto || dataSource().isEmpty())) {
-        if (designMode())
+        if (designMode()) {
             realText = futureI18nc2("Unbound Auto Field", "%1 (unbound)", objectName());
-        else
+        } else {
             realText.clear();
+        }
         unbound = true;
     } else {
         if (beautify) {
@@ -578,8 +606,9 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
                     realText += ": ";
                 }
             }
-        } else
+        } else {
             realText = text;
+        }
     }
 
     if (unbound) {
@@ -589,7 +618,7 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
         d->label->setAlignment(Qt::AlignCenter);
     }
     if (d->widgetType == Boolean) {
-        static_cast<QCheckBox*>((QWidget*)subwidget())->setText(realText);
+        static_cast<QCheckBox *>((QWidget *)subwidget())->setText(realText);
     } else {
         d->label->setText(realText);
     }
@@ -599,8 +628,9 @@ void
 KexiDBAutoField::setCaption(const QString &caption)
 {
     d->caption = caption;
-    if (!d->autoCaption && !caption.isEmpty())
+    if (!d->autoCaption && !caption.isEmpty()) {
         changeText(d->caption);
+    }
 }
 
 void
@@ -613,8 +643,9 @@ KexiDBAutoField::setAutoCaption(bool autoCaption)
         } else {
             changeText(d->fieldCaptionInternal);
         }
-    } else
+    } else {
         changeText(d->caption);
+    }
 }
 
 void
@@ -629,15 +660,18 @@ KexiDBAutoField::setDataSource(const QString &ds)
 QSize
 KexiDBAutoField::sizeHint() const
 {
-    if (d->lblPosition == NoLabel)
+    if (d->lblPosition == NoLabel) {
         return subwidget() ? subwidget()->sizeHint() : QWidget::sizeHint();
+    }
 
     QSize s1(0, 0);
-    if (subwidget())
+    if (subwidget()) {
         s1 = subwidget()->sizeHint();
+    }
     QSize s2(d->label->sizeHint());
-    if (d->lblPosition == Top)
+    if (d->lblPosition == Top) {
         return QSize(qMax(s1.width(), s2.width()), s1.height() + KexiDBAutoField_SPACING + s2.height());
+    }
 
     //left
     return QSize(s1.width() + KexiDBAutoField_SPACING + s2.width(), qMax(s1.height(), s2.height()));
@@ -649,8 +683,9 @@ KexiDBAutoField::setFocusPolicy(Qt::FocusPolicy policy)
     d->focusPolicyChanged = true;
     QWidget::setFocusPolicy(policy);
     d->label->setFocusPolicy(policy);
-    if (subwidget())
+    if (subwidget()) {
         subwidget()->setFocusPolicy(policy);
+    }
 }
 
 void
@@ -663,7 +698,7 @@ KexiDBAutoField::updateInformationAboutUnboundField()
 }
 
 void
-KexiDBAutoField::paletteChange(const QPalette& oldPal)
+KexiDBAutoField::paletteChange(const QPalette &oldPal)
 {
     Q_UNUSED(oldPal);
     d->label->setPalette(palette());
@@ -682,7 +717,7 @@ QColor KexiDBAutoField::paletteForegroundColor() const
     return d->textBrush.color();
 }
 
-void KexiDBAutoField::setPaletteForegroundColor(const QColor & color)
+void KexiDBAutoField::setPaletteForegroundColor(const QColor &color)
 {
 //! @todo how about brush?
     d->textBrush.setColor(color);
@@ -695,7 +730,7 @@ QColor KexiDBAutoField::paletteBackgroundColor() const
     return d->baseBrush.color();
 }
 
-void KexiDBAutoField::setPaletteBackgroundColor(const QColor & color)
+void KexiDBAutoField::setPaletteBackgroundColor(const QColor &color)
 {
     //kDebug();
 //! @todo how about brush?
@@ -705,17 +740,18 @@ void KexiDBAutoField::setPaletteBackgroundColor(const QColor & color)
 
 QColor KexiDBAutoField::foregroundLabelColor() const
 {
-    if (d->widgetType == Boolean)
+    if (d->widgetType == Boolean) {
         return paletteForegroundColor();
+    }
 
     return d->label->palette().color(d->label->foregroundRole());
 }
 
-void KexiDBAutoField::setForegroundLabelColor(const QColor & color)
+void KexiDBAutoField::setForegroundLabelColor(const QColor &color)
 {
-    if (d->widgetType == Boolean)
+    if (d->widgetType == Boolean) {
         setPaletteForegroundColor(color);
-    else {
+    } else {
         QPalette pal(d->label->palette());
         pal.setColor(d->label->foregroundRole(), color);
         d->label->setPalette(pal);
@@ -727,17 +763,18 @@ void KexiDBAutoField::setForegroundLabelColor(const QColor & color)
 
 QColor KexiDBAutoField::backgroundLabelColor() const
 {
-    if (d->widgetType == Boolean)
+    if (d->widgetType == Boolean) {
         return paletteBackgroundColor();
+    }
 
     return d->label->palette().color(d->label->backgroundRole());
 }
 
-void KexiDBAutoField::setBackgroundLabelColor(const QColor & color)
+void KexiDBAutoField::setBackgroundLabelColor(const QColor &color)
 {
-    if (d->widgetType == Boolean)
+    if (d->widgetType == Boolean) {
         setPaletteBackgroundColor(color);
-    else {
+    } else {
         QPalette pal(d->label->palette());
         pal.setColor(d->label->backgroundRole(), color);
         d->label->setPalette(pal);
@@ -747,20 +784,22 @@ void KexiDBAutoField::setBackgroundLabelColor(const QColor & color)
     }
 }
 
-QVariant KexiDBAutoField::property(const char * name) const
+QVariant KexiDBAutoField::property(const char *name) const
 {
     bool ok;
     QVariant val = KFormDesigner::WidgetWithSubpropertiesInterface::subproperty(name, ok);
-    if (ok)
+    if (ok) {
         return val;
+    }
     return QWidget::property(name);
 }
 
-bool KexiDBAutoField::setProperty(const char * name, const QVariant & value)
+bool KexiDBAutoField::setProperty(const char *name, const QVariant &value)
 {
     bool ok = KFormDesigner::WidgetWithSubpropertiesInterface::setSubproperty(name, value);
-    if (ok)
+    if (ok) {
         return true;
+    }
     return QWidget::setProperty(name, value);
 }
 
@@ -773,39 +812,44 @@ bool KexiDBAutoField::eventFilter(QObject *o, QEvent *e)
     return QWidget::eventFilter(o, e);
 }
 
-void KexiDBAutoField::setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue)
+void KexiDBAutoField::setDisplayDefaultValue(QWidget *widget, bool displayDefaultValue)
 {
     KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
-    if (dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget()))
-        dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget())->setDisplayDefaultValue(subwidget(), displayDefaultValue);
+    if (dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget())) {
+        dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget())->setDisplayDefaultValue(subwidget(), displayDefaultValue);
+    }
 }
 
 void KexiDBAutoField::moveCursorToEnd()
 {
-    KexiDataItemInterface *iface = dynamic_cast<KexiDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiDataItemInterface *iface = dynamic_cast<KexiDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         iface->moveCursorToEnd();
+    }
 }
 
 void KexiDBAutoField::moveCursorToStart()
 {
-    KexiDataItemInterface *iface = dynamic_cast<KexiDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiDataItemInterface *iface = dynamic_cast<KexiDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         iface->moveCursorToStart();
+    }
 }
 
 void KexiDBAutoField::selectAll()
 {
-    KexiDataItemInterface *iface = dynamic_cast<KexiDataItemInterface*>((QWidget*)subwidget());
-    if (iface)
+    KexiDataItemInterface *iface = dynamic_cast<KexiDataItemInterface *>((QWidget *)subwidget());
+    if (iface) {
         iface->selectAll();
+    }
 }
 
 bool KexiDBAutoField::keyPressed(QKeyEvent *ke)
 {
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    if (iface && iface->keyPressed(ke))
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>((QWidget *)subwidget());
+    if (iface && iface->keyPressed(ke)) {
         return true;
+    }
     return false;
 }
 

@@ -21,7 +21,6 @@
 #include "KisDocument.h"
 #include <kundo2stack.h>
 
-
 /*****************************************************************/
 /*                KisDocumentUndoStore                           */
 /*****************************************************************/
@@ -31,7 +30,7 @@ KisDocumentUndoStore::KisDocumentUndoStore(KisDocument *doc)
 {
 }
 
-const KUndo2Command* KisDocumentUndoStore::presentCommand()
+const KUndo2Command *KisDocumentUndoStore::presentCommand()
 {
     return m_doc->undoStack()->command(m_doc->undoStack()->index() - 1);
 }
@@ -56,11 +55,13 @@ void KisDocumentUndoStore::undoLastCommand()
 
 void KisDocumentUndoStore::addCommand(KUndo2Command *command)
 {
-    if(!command) return;
+    if (!command) {
+        return;
+    }
     m_doc->addCommand(command);
 }
 
-void KisDocumentUndoStore::beginMacro(const KUndo2MagicString& macroName)
+void KisDocumentUndoStore::beginMacro(const KUndo2MagicString &macroName)
 {
     m_doc->beginMacro(macroName);
 }

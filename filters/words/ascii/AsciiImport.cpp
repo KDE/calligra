@@ -3,7 +3,7 @@
    Copyright (C) 2000 Michael Johnson <mikej@xnet.com>
    Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
    Copyright (C) 2010-2011 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2010 Christoph Cullmann <cullmann@kde.org> 
+   Copyright (C) 2010 Christoph Cullmann <cullmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -79,7 +79,7 @@ bool checkEncoding(QTextCodec *codec, QByteArray &data)
 }
 
 AsciiImport::AsciiImport(QObject *parent, const QVariantList &)
-: KoFilter(parent)
+    : KoFilter(parent)
 {
 }
 
@@ -87,7 +87,7 @@ AsciiImport::~AsciiImport()
 {
 }
 
-KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus AsciiImport::convert(const QByteArray &from, const QByteArray &to)
 {
     // check for proper conversion
     if (to != "application/vnd.oasis.opendocument.text" || from != "text/plain") {
@@ -102,12 +102,13 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     }
 
 #ifdef OUTPUT_AS_ODT_FILE
-    
+
 #else
-    KoDocument* document = m_chain->outputDocument();
-    if (!document)
+    KoDocument *document = m_chain->outputDocument();
+    if (!document) {
         return KoFilter::StupidError;
-    KWDocument *outputDoc = qobject_cast<KWDocument*>(document);
+    }
+    KWDocument *outputDoc = qobject_cast<KWDocument *>(document);
     outputDoc->setOutputMimeType(to);
     //outputDoc->setSaveInBatchMode(true);
 
@@ -126,24 +127,34 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         KEncodingProber prober(KEncodingProber::Universal);
         prober.feed(data);
         kDebug(30502) << "guessed" << prober.encoding() << prober.confidence();
-        if (prober.confidence() > 0.5)
+        if (prober.confidence() > 0.5) {
             codec = QTextCodec::codecForName(prober.encoding());
-        if (!codec || !checkEncoding(codec, data )) {
+        }
+        if (!codec || !checkEncoding(codec, data)) {
             codec = QTextCodec::codecForName("ISO 8859-15");
-            if (!checkEncoding(codec, data))
+            if (!checkEncoding(codec, data)) {
                 codec = QTextCodec::codecForName("UTF-8");
+            }
         }
     }
 
     int paragraphStrategy = 0;
     if (!m_chain->manager()->getBatchMode()) {
         QPointer<AsciiImportDialog> dialog = new AsciiImportDialog(codec->name(), QApplication::activeWindow());
-        if (!dialog) { in.close(); return KoFilter::StupidError; }
-        if (!dialog->exec()) { in.close(); return KoFilter::UserCancelled; }
+        if (!dialog) {
+            in.close();
+            return KoFilter::StupidError;
+        }
+        if (!dialog->exec()) {
+            in.close();
+            return KoFilter::UserCancelled;
+        }
         codec = dialog->getCodec();
         paragraphStrategy = dialog->getParagraphStrategy();
     }
-    if (!codec) return KoFilter::StupidError;
+    if (!codec) {
+        return KoFilter::StupidError;
+    }
     kDebug(30502) << "Charset used:" << codec->name();
 
 #ifdef OUTPUT_AS_ODT_FILE
@@ -153,12 +164,12 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         delete store;
         return KoFilter::FileNotFound;
     }
-    
+
     kDebug(30502) << "created store.";
     KoOdfWriteStore odfStore(store);
     odfStore.manifestWriter(to);
 
-    KoXmlWriter* contentWriter = odfStore.contentWriter();
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
     if (!contentWriter) {
         delete store;
         return KoFilter::CreationError;
@@ -182,7 +193,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 
     name = mainStyles.insert(style, name, KoGenStyles::DontAddNumberToName);
 #else
-    KoStyleManager *styleManager = outputDoc->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+    KoStyleManager *styleManager = outputDoc->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager *>();
     KoParagraphStyle *p = styleManager->defaultParagraphStyle();
     p->setFontFamily("dejavu sans mono");
     p->setFontPointSize(10);
@@ -192,7 +203,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     QTextDocument *doc = outputDoc->mainFrameSet()->document();
     //doc->setDefaultFont(p->font());
 
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(doc->documentLayout());
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(doc->documentLayout());
     Q_ASSERT(lay);
     lay->setBlockLayout(true);
     connect(lay, SIGNAL(layoutProgressChanged(int)), layoutUpdater, SLOT(setProgress(int)));
@@ -201,7 +212,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     cursor.beginEditBlock();
 
     QTextCharFormat charFormat;
-    ((KoCharacterStyle*)p)->applyStyle(charFormat);
+    ((KoCharacterStyle *)p)->applyStyle(charFormat);
     cursor.setCharFormat(charFormat);
 #endif
 
@@ -217,57 +228,65 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
             QString paragraph;
             for (;;) {
                 const QString line = stream.readLine();
-                if (line.isEmpty())
+                if (line.isEmpty()) {
                     break;
+                }
                 paragraph += line + ' ';
                 int lastPos = line.length() - 1;
-                int maxCheck = lastPos >= 10 ? 10: lastPos + 1;
+                int maxCheck = lastPos >= 10 ? 10 : lastPos + 1;
                 QChar lastChar;
                 // Skip a maximum of 10 quotes (or similar) at the end of the line
                 for (int i = 0; i < maxCheck; ++i, --lastPos) {
                     lastChar = line[lastPos];
-                    if (lastPos == 0 || lastChar.isNull() || skippingEnd.indexOf(lastChar) == -1)
+                    if (lastPos == 0 || lastChar.isNull() || skippingEnd.indexOf(lastChar) == -1) {
                         break;
+                    }
                 }
                 lastChar = line[lastPos];
-                if (lastChar.isNull())
+                if (lastChar.isNull()) {
                     continue;
-                if (stoppingPunctuation.indexOf(lastChar) != -1)
+                }
+                if (stoppingPunctuation.indexOf(lastChar) != -1) {
                     break;
+                }
             }
             if (!paragraph.isNull()) {
                 QString s = paragraph.simplified();
 #ifdef OUTPUT_AS_ODT_FILE
                 bodyWriter->startElement("text:p");
                 bodyWriter->addAttribute("text:style-name", styleName);
-                if (!s.isEmpty())
+                if (!s.isEmpty()) {
                     bodyWriter->addTextSpan(s);
+                }
                 bodyWriter->endElement();
 #else
-                if (!s.isEmpty())
+                if (!s.isEmpty()) {
                     cursor.insertText(s /*, charFormat*/);
+                }
                 cursor.insertBlock();
                 loadUpdater->setValue(stream.device()->pos());
 #endif
             }
         }
     } break;
-    case 2: { // Empty Line: Line-break if the line is empty.  
+    case 2: { // Empty Line: Line-break if the line is empty.
         while (!stream.atEnd()) {
             QString paragraph;
             do {
                 const QString line = stream.readLine();
-                if (line.isEmpty())
+                if (line.isEmpty()) {
                     break;
+                }
                 paragraph.append(line + ' ');
-            } while(true);
+            } while (true);
             if (!paragraph.isNull()) {
                 QString s = paragraph.simplified();
 #ifdef OUTPUT_AS_ODT_FILE
                 bodyWriter->startElement("text:p");
                 bodyWriter->addAttribute("text:style-name", styleName);
-                if (!s.isEmpty())
+                if (!s.isEmpty()) {
                     bodyWriter->addTextSpan(s);
+                }
                 bodyWriter->endElement();
 #else
                 if (!s.isEmpty()) {
@@ -285,12 +304,14 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 #ifdef OUTPUT_AS_ODT_FILE
             bodyWriter->startElement("text:p");
             bodyWriter->addAttribute("text:style-name", styleName);
-            if (!s.isEmpty())
+            if (!s.isEmpty()) {
                 bodyWriter->addTextSpan(s);
+            }
             bodyWriter->endElement();
 #else
-            if (!s.isEmpty())
+            if (!s.isEmpty()) {
                 cursor.insertText(s /*, charFormat*/);
+            }
             cursor.insertBlock();
             loadUpdater->setValue(stream.device()->pos());
 #endif
@@ -301,7 +322,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
 #ifdef OUTPUT_AS_ODT_FILE
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body
-    
+
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
     odfStore.closeContentWriter();
 
@@ -312,7 +333,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     }
     if (store->open("meta.xml")) {
         KoStoreDevice dev(store);
-        KoXmlWriter* xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
+        KoXmlWriter *xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-meta");
         xmlWriter->startElement("office:meta");
         xmlWriter->startElement("meta:generator");
         xmlWriter->addTextNode(QString("Calligra %1").arg(CALLIGRA_VERSION_STRING));
@@ -324,8 +345,9 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         xmlWriter->endElement(); // root element
         xmlWriter->endDocument();
         delete xmlWriter;
-        if (store->close())
-            odfStore.manifestWriter()->addManifestEntry("meta.xml", "text/xml" );
+        if (store->close()) {
+            odfStore.manifestWriter()->addManifestEntry("meta.xml", "text/xml");
+        }
     }
     if (!odfStore.closeManifestWriter()) {
         kWarning() << "Error while trying to write 'META-INF/manifest.xml'. Partition full?";

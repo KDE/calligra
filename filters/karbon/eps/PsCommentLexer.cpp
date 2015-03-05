@@ -52,7 +52,7 @@ int isletterhex(char c)
     return (c == 'A') || (c == 'B') || (c == 'C') || (c == 'D') || (c == 'E') || (c == 'F');
 }
 
-const char*statetoa(State state)
+const char *statetoa(State state)
 {
     switch (state) {
     case State_Comment : return "comment";
@@ -88,7 +88,7 @@ PSCommentLexer::~PSCommentLexer()
 {
 }
 
-bool PSCommentLexer::parse(QIODevice& fin)
+bool PSCommentLexer::parse(QIODevice &fin)
 {
     char c;
 
@@ -126,7 +126,7 @@ bool PSCommentLexer::parse(QIODevice& fin)
             /* ignore */
             break;
         case Action_Abort :
-            qWarning("state %s / %s char %c (%d)" , statetoa(m_curState), statetoa(newState), c, c);
+            qWarning("state %s / %s char %c (%d)", statetoa(m_curState), statetoa(newState), c, c);
             parsingAborted();
             return false;
             break;
@@ -153,7 +153,9 @@ bool PSCommentLexer::parse(QIODevice& fin)
 
 void PSCommentLexer::doOutput()
 {
-    if (m_buffer.length() == 0) return;
+    if (m_buffer.length() == 0) {
+        return;
+    }
     switch (m_curState) {
     case State_Comment :
         gotComment(m_buffer.toLatin1());
@@ -220,7 +222,6 @@ void PSCommentLexer::nextStep(char c, State *newState, Action *newAction)
             }
         }
 
-
         i++;
     }
 }
@@ -239,7 +240,7 @@ const int addSize = 10;
 
 StringBuffer::StringBuffer()
 {
-    m_buffer = (char*)calloc(initialSize, sizeof(char));
+    m_buffer = (char *)calloc(initialSize, sizeof(char));
     m_length = 0;
     m_capacity = initialSize;
 }
@@ -258,7 +259,9 @@ void StringBuffer::append(char c)
 
 void StringBuffer::clear()
 {
-    for (uint i = 0; i < m_length; i++) m_buffer[i] = '\0';
+    for (uint i = 0; i < m_length; i++) {
+        m_buffer[i] = '\0';
+    }
     m_length = 0;
 }
 
@@ -270,13 +273,17 @@ QString StringBuffer::toString() const
 
 void StringBuffer::ensureCapacity(int p_capacity)
 {
-    if (m_capacity >= p_capacity) return;
+    if (m_capacity >= p_capacity) {
+        return;
+    }
 
     int newSize = m_capacity + addSize;
-    if (p_capacity > newSize) newSize = p_capacity;
+    if (p_capacity > newSize) {
+        newSize = p_capacity;
+    }
 
-    char* oldBuffer = m_buffer;
-    char *newBuffer = (char*)calloc(newSize, sizeof(char));
+    char *oldBuffer = m_buffer;
+    char *newBuffer = (char *)calloc(newSize, sizeof(char));
     strcpy(newBuffer, m_buffer);
     free(oldBuffer);
     m_buffer = newBuffer;
@@ -318,17 +325,23 @@ BoundingBoxExtractor::~BoundingBoxExtractor() {}
 void BoundingBoxExtractor::gotComment(const char *value)
 {
     QString data(value);
-    if (data.indexOf("%BoundingBox:") == -1) return;
+    if (data.indexOf("%BoundingBox:") == -1) {
+        return;
+    }
 
     getRectangle(value, m_llx, m_lly, m_urx, m_ury);
 }
 
-bool BoundingBoxExtractor::getRectangle(const char* input, int &llx, int &lly, int &urx, int &ury)
+bool BoundingBoxExtractor::getRectangle(const char *input, int &llx, int &lly, int &urx, int &ury)
 {
-    if (input == NULL) return false;
+    if (input == NULL) {
+        return false;
+    }
 
     QString s(input);
-    if (s.contains("(atend)")) return false;
+    if (s.contains("(atend)")) {
+        return false;
+    }
 
     s.remove("%BoundingBox:");
     QStringList values = s.split(' ');

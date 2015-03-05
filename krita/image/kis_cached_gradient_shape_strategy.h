@@ -26,7 +26,6 @@
 
 class QRect;
 
-
 class KRITAIMAGE_EXPORT KisCachedGradientShapeStrategy : public KisGradientShapeStrategy
 {
 public:

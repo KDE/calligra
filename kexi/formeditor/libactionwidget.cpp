@@ -64,8 +64,9 @@ void
 LibActionWidget::slotToggled(bool checked)
 {
     KToggleAction::slotToggled(checked);
-    if (checked)
+    if (checked) {
         emit toggled(d->className);
+    }
 }
 
 #include "libactionwidget.moc"

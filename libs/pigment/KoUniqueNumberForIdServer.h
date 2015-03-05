@@ -36,7 +36,7 @@ private:
     KoUniqueNumberForIdServer();
     ~KoUniqueNumberForIdServer();
 public:
-    static KoUniqueNumberForIdServer* instance();
+    static KoUniqueNumberForIdServer *instance();
     /**
      * @return an unique number for the given \p _id , for two different call to this function
      *         with the same \p id the function will always return the same value.
@@ -46,10 +46,10 @@ public:
      * KoUniqueNumberForIdServer::instance()->numberForId( "rgb" ) != KoUniqueNumberForIdServer::instance()->numberForId( "cmyk" );
      * @endcode
      */
-    quint32 numberForId(const QString&);
+    quint32 numberForId(const QString &);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 
 };
 

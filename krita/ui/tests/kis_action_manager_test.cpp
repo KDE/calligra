@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_action_manager_test.h"
 #include <kdebug.h>
 
@@ -30,22 +29,21 @@
 #include <kis_action_manager.h>
 #include <KisViewManager.h>
 
-
 void KisActionManagerTest::testUpdateGUI()
 {
-    KisDocument* doc = createEmptyDocument();
-    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
+    KisDocument *doc = createEmptyDocument();
+    KisMainWindow *mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisPart::instance()->addView(view, doc);
 
-    KisAction* action = new KisAction("dummy", this);
+    KisAction *action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
     view->viewManager()->actionManager()->addAction("dummy", action);
 
-    KisAction* action2 = new KisAction("dummy", this);
+    KisAction *action2 = new KisAction("dummy", this);
     action2->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
     view->viewManager()->actionManager()->addAction("dummy", action2);
-    
+
     view->viewManager()->actionManager()->updateGUI();
     QVERIFY(!action->isEnabled());
     QVERIFY(!action2->isEnabled());
@@ -60,12 +58,12 @@ void KisActionManagerTest::testUpdateGUI()
 
 void KisActionManagerTest::testCondition()
 {
-    KisDocument* doc = createEmptyDocument();
-    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
+    KisDocument *doc = createEmptyDocument();
+    KisMainWindow *mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisPart::instance()->addView(view, doc);
 
-    KisAction* action = new KisAction("dummy", this);
+    KisAction *action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     view->viewManager()->actionManager()->addAction("dummy", action);
@@ -97,18 +95,17 @@ void KisActionManagerTest::testCondition()
 
 void KisActionManagerTest::testTakeAction()
 {
-    KisDocument* doc = createEmptyDocument();
-    KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
+    KisDocument *doc = createEmptyDocument();
+    KisMainWindow *mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisPart::instance()->addView(view, doc);
 
-    KisAction* action = new KisAction("dummy", this);
+    KisAction *action = new KisAction("dummy", this);
     view->viewManager()->actionManager()->addAction("dummy", action);
     QVERIFY(view->viewManager()->actionManager()->actionByName("dummy") != 0);
 
     view->viewManager()->actionManager()->takeAction(action);
     QVERIFY(view->viewManager()->actionManager()->actionByName("dummy") == 0);
 }
-
 
 QTEST_KDEMAIN(KisActionManagerTest, GUI)

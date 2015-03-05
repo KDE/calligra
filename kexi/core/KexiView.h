@@ -64,21 +64,21 @@ public:
 
     //! \return parent KexiWindow that containing this view,
     //! or 0 if no window contain this view
-    KexiWindow* window() const;
+    KexiWindow *window() const;
 
     /*! Added for convenience.
      \return KexiPart object that was used to create this view (with a window)
      or 0 if this view is not created using KexiPart. \sa window() */
-    KexiPart::Part* part() const;
+    KexiPart::Part *part() const;
 
     /*! \return preferred size hint, that can be used to resize the view.
      It is computed using maximum of (a) \a otherSize and (b) current dock area's size,
      so the view won't exceed this maximum size. The method is used e.g. in KexiWindow::sizeHint().
      If you reimplement this method, do not forget to return value of
      yoursize.boundedTo( KexiView::preferredSizeHint(otherSize) ). */
-    virtual QSize preferredSizeHint(const QSize& otherSize);
+    virtual QSize preferredSizeHint(const QSize &otherSize);
 
-    void addChildView(KexiView* childView);
+    void addChildView(KexiView *childView);
 
     void removeView(Kexi::ViewMode mode);
 
@@ -128,11 +128,11 @@ public:
      \return shared action with name \a action_name for this view.
      If there's no such action declared in Kexi Part (part()),
      global shared action is returned (if exists). */
-    virtual QAction* sharedAction(const QString& action_name);
+    virtual QAction *sharedAction(const QString &action_name);
 
     /*! Enables or disables shared action declared in Kexi Part (part()).
      If there's no such action, global shared action is enabled or disabled (if exists). */
-    virtual void setAvailable(const QString& action_name, bool set);
+    virtual void setAvailable(const QString &action_name, bool set);
 
     enum StoreNewDataOption {
         OverwriteExistingData = 1 //!< Overwerite existing object in storeNewData()
@@ -140,7 +140,7 @@ public:
 
     QString defaultIconName() const;
 
-    void setDefaultIconName(const QString& iconName);
+    void setDefaultIconName(const QString &iconName);
 
     /*! For KexiQueryView */
     virtual QList<QVariant> currentParameters() const;
@@ -196,7 +196,7 @@ protected:
      (probably after showing some info messages), you need to return cancelled. */
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
-    virtual void closeEvent(QCloseEvent * e);
+    virtual void closeEvent(QCloseEvent *e);
 
     /*! \return a property set for this view. For reimplementation. By default returns NULL. */
     virtual KoProperty::Set *propertySet();
@@ -208,7 +208,7 @@ protected:
      assigned before call, previously selected item will be preselected
      in the editor (if found). */
     void propertySetReloaded(bool preservePrevSelection = false,
-                             const QByteArray& propertyToSelect = QByteArray());
+                             const QByteArray &propertyToSelect = QByteArray());
 
     /*! Tells this view to create and store data of the new object
      pointed by \a sdata on the backend.
@@ -229,9 +229,9 @@ protected:
 
      Should return newly created schema data object on success.
      In this case, do not store schema object yourself (make a deep copy if needed). */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
-                                             KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+    virtual KexiDB::SchemaData *storeNewData(const KexiDB::SchemaData &sdata,
+            KexiView::StoreNewDataOptions options,
+            bool &cancel);
 
     /*! Tells this view to fully copy existing object's data pointed by \a sdata on the backend.
      For example, for database tables it whould copy metadata, copy \a sdata, so the copy will
@@ -256,9 +256,9 @@ protected:
 
      Should return newly created schema data object on success.
      In this case, do not store schema object yourself (make deep copy if needed). */
-    virtual KexiDB::SchemaData* copyData(const KexiDB::SchemaData& sdata,
-                                          KexiView::StoreNewDataOptions options,
-                                          bool &cancel);
+    virtual KexiDB::SchemaData *copyData(const KexiDB::SchemaData &sdata,
+                                         KexiView::StoreNewDataOptions options,
+                                         bool &cancel);
 
     /*! Loads large string data \a dataString block (e.g. xml form's representation),
      indexed with optional \a dataID, from the database backend.
@@ -266,7 +266,7 @@ protected:
      and \a dataString is set to null string. The default is false.
      \return true on success
      \sa storeDataBlock(). */
-    bool loadDataBlock(QString &dataString, const QString& dataID = QString(),
+    bool loadDataBlock(QString &dataString, const QString &dataID = QString(),
                        bool canBeEmpty = false);
 
     /*! Tells this view to store data changes on the backend.
@@ -299,9 +299,9 @@ protected:
      \return true on success. Does not fail if the block doe not exists.
      Note that if \a dataID is not specified, all data blocks for this view will be removed.
      \sa storeDataBlock(). */
-    bool removeDataBlock(const QString& dataID = QString());
+    bool removeDataBlock(const QString &dataID = QString());
 
-    void setViewWidget(QWidget* w, bool focusProxy = false);
+    void setViewWidget(QWidget *w, bool focusProxy = false);
 
     /*! Updates actions (e.g. availability). Reimplement it, if needed (you must
      call superclass impelmentation at the end!).
@@ -311,7 +311,8 @@ protected:
      or deactivation. */
     virtual void updateActions(bool activated);
 
-    virtual void setFocusInternal() {
+    virtual void setFocusInternal()
+    {
         QWidget::setFocus();
     }
 
@@ -328,16 +329,16 @@ protected:
     virtual void windowAttached() {}
 
     /*! Assigns a list of view-level actions. Used by KexiView ctor. */
-    void setViewActions(const QList<QAction*>& actions);
+    void setViewActions(const QList<QAction *> &actions);
 
     /*! Assigns a list of main-menu-level actions. Used by KexiView ctor. */
-    void setMainMenuActions(const QList<QAction*>& actions);
+    void setMainMenuActions(const QList<QAction *> &actions);
 
     /*! @return a list of view-level actions. */
-    QList<QAction*> viewActions() const;
+    QList<QAction *> viewActions() const;
 
     /*! @return view-level action for name @a name or 0 if there is no such action. */
-    QAction* viewAction(const char* name) const;
+    QAction *viewAction(const char *name) const;
 
     void initViewActions();
     void initMainMenuActions();
@@ -357,7 +358,7 @@ private:
     void createViewModeToggleButtons();
 
     class Private;
-    Private * const d;
+    Private *const d;
     friend class KexiWindow;
 };
 

@@ -24,62 +24,67 @@
 #include <QVariant>
 #include <QDate>
 
-namespace KPlato {
-    class Node;
+namespace KPlato
+{
+class Node;
 }
 
-namespace Scripting {
-    class Project;
-    class Node;
+namespace Scripting
+{
+class Project;
+class Node;
 
-    /**
-    * The Node class represents a node in a project.
-    */
-    class Node : public QObject
+/**
+* The Node class represents a node in a project.
+*/
+class Node : public QObject
+{
+    Q_OBJECT
+public:
+    /// Create a node
+    Node(Project *project, KPlato::Node *node, QObject *parent);
+    /// Destructor
+    virtual ~Node() {}
+
+    KPlato::Node *kplatoNode() const
     {
-            Q_OBJECT
-        public:
-            /// Create a node
-            Node( Project *project, KPlato::Node *node, QObject *parent );
-            /// Destructor
-            virtual ~Node() {}
-        
-            KPlato::Node *kplatoNode() const { return m_node; }
-            
-        public Q_SLOTS:
-            /// Return the project this task is part of
-            QObject* project();
-            /// Return the tasks name
-            QString name();
+        return m_node;
+    }
 
-            QDate startDate();
-            QDate endDate();
-            
-            /// Return the nodes id
-            QString id();
-            /// Return type of node
-            QVariant type();
-            /// Return number of child nodes
-            int childCount() const;
-            /// Return the child node at @p index
-            QObject *childAt( int index );
-            /// Return the data
-            QObject *parentNode();
+public Q_SLOTS:
+    /// Return the project this task is part of
+    QObject *project();
+    /// Return the tasks name
+    QString name();
 
-            /// Return a map of planed effort and cost pr day
-            QVariant plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule );
+    QDate startDate();
+    QDate endDate();
 
-            /// Return a map of Budgeted Cost of Work Scheduled pr day
-            QVariant bcwsPrDay( const QVariant &schedule ) const;
-            /// Return a map of Budgeted Cost of Work Performed pr day
-            QVariant bcwpPrDay( const QVariant &schedule ) const;
-            /// Return a map of Actual Cost of Work Performed pr day
-            QVariant acwpPrDay( const QVariant &schedule ) const;
+    /// Return the nodes id
+    QString id();
+    /// Return type of node
+    QVariant type();
+    /// Return number of child nodes
+    int childCount() const;
+    /// Return the child node at @p index
+    QObject *childAt(int index);
+    /// Return the data
+    QObject *parentNode();
 
-        protected:
-            Project *m_project;
-            KPlato::Node *m_node;
-    };
+    /// Return a map of planed effort and cost pr day
+    QVariant plannedEffortCostPrDay(const QVariant &start, const QVariant &end, const QVariant &schedule);
+
+    /// Return a map of Budgeted Cost of Work Scheduled pr day
+    QVariant bcwsPrDay(const QVariant &schedule) const;
+    /// Return a map of Budgeted Cost of Work Performed pr day
+    QVariant bcwpPrDay(const QVariant &schedule) const;
+    /// Return a map of Actual Cost of Work Performed pr day
+    QVariant acwpPrDay(const QVariant &schedule) const;
+
+protected:
+    Project *m_project;
+    KPlato::Node *m_node;
+};
 
 }
 

@@ -47,8 +47,6 @@
 #include "kis_tool_transform_config_widget.h"
 #include "transform_transaction_properties.h"
 
-
-
 class KisCanvas2;
 
 class QTouchEvent;
@@ -58,7 +56,6 @@ class KisCageTransformStrategy;
 class KisLiquifyTransformStrategy;
 class KisFreeTransformStrategy;
 class KisPerspectiveTransformStrategy;
-
 
 /**
  * Transform tool
@@ -100,8 +97,6 @@ class KisToolTransform : public KisTool
     Q_PROPERTY(double warpFlexibility READ warpFlexibility WRITE setWarpFlexibility NOTIFY warpTransformChanged)
     Q_PROPERTY(int warpPointDensity READ warpPointDensity WRITE setWarpPointDensity NOTIFY warpTransformChanged)
 
-
-
 public:
     enum TransformToolMode {
         FreeTransformMode,
@@ -119,10 +114,10 @@ public:
     };
     Q_ENUMS(WarpType)
 
-    KisToolTransform(KoCanvasBase * canvas);
+    KisToolTransform(KoCanvasBase *canvas);
     virtual ~KisToolTransform();
 
-    virtual QWidget* createOptionWidget();
+    virtual QWidget *createOptionWidget();
 
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
@@ -143,7 +138,7 @@ public:
     void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
     void endAlternateAction(KoPointerEvent *event, AlternateAction action);
 
-    void paint(QPainter& gc, const KoViewConverter &converter);
+    void paint(QPainter &gc, const KoViewConverter &converter);
 
     bool isActive() const;
     TransformToolMode transformMode() const;
@@ -165,15 +160,18 @@ public:
     double warpFlexibility() const;
     int warpPointDensity() const;
 
-    bool wantsTouch() const { return true; }
+    bool wantsTouch() const
+    {
+        return true;
+    }
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     virtual void deactivate();
     // Applies the current transformation to the original paint device and commits it to the undo stack
     void applyTransform();
 
-    void setTransformMode( KisToolTransform::TransformToolMode newMode );
+    void setTransformMode(KisToolTransform::TransformToolMode newMode);
 
     void setTranslateX(double translateX);
     void setTranslateY(double translateY);
@@ -228,7 +226,6 @@ private:
 
     void commitChanges();
 
-
     bool tryInitTransformModeFromNode(KisNodeSP node);
     void initTransformMode(ToolTransformArgs::TransformMode mode);
     void initGuiAfterTransformMode();
@@ -248,14 +245,24 @@ private:
         StrokeData() {}
         StrokeData(KisStrokeId strokeId) : m_strokeId(strokeId) {}
 
-        void clear() {
+        void clear()
+        {
             m_strokeId.clear();
             m_clearedNodes.clear();
         }
 
-        const KisStrokeId strokeId() const { return m_strokeId; }
-        void addClearedNode(KisNodeSP node) { m_clearedNodes.append(node); }
-        const QVector<KisNodeWSP>& clearedNodes() const { return m_clearedNodes; }
+        const KisStrokeId strokeId() const
+        {
+            return m_strokeId;
+        }
+        void addClearedNode(KisNodeSP node)
+        {
+            m_clearedNodes.append(node);
+        }
+        const QVector<KisNodeWSP> &clearedNodes() const
+        {
+            return m_clearedNodes;
+        }
 
     private:
         KisStrokeId m_strokeId;
@@ -287,7 +294,7 @@ private:
     QScopedPointer<KisLiquifyTransformStrategy> m_liquifyStrategy;
     QScopedPointer<KisFreeTransformStrategy> m_freeStrategy;
     QScopedPointer<KisPerspectiveTransformStrategy> m_perspectiveStrategy;
-    KisTransformStrategyBase* currentStrategy() const;
+    KisTransformStrategyBase *currentStrategy() const;
 
     QPainterPath m_cursorOutline;
 
@@ -304,25 +311,25 @@ class KisToolTransformFactory : public KoToolFactoryBase
 {
 public:
 
-    KisToolTransformFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolTransform") {
+    KisToolTransformFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolTransform")
+    {
         setToolTip(i18n("Transform a layer or a selection"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setIconName(koIconNameCStr("krita_tool_transform"));
-        setShortcut(KShortcut( QKeySequence(Qt::CTRL + Qt::Key_T) ));
+        setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_T)));
         setPriority(11);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
     virtual ~KisToolTransformFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolTransform(canvas);
     }
 
 };
-
-
 
 #endif // KIS_TOOL_TRANSFORM_H_
 

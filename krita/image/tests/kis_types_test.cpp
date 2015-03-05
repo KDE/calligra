@@ -21,6 +21,5 @@
 #include <qtest_kde.h>
 #include "kis_types.h"
 
-
 QTEST_KDEMAIN(KisTypesTest, GUI)
 #include "kis_types_test.moc"

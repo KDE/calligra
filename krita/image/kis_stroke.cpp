@@ -20,7 +20,6 @@
 
 #include "kis_stroke_strategy.h"
 
-
 KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy)
     : m_strokeStrategy(strokeStrategy),
       m_strokeInitialized(false),
@@ -33,10 +32,9 @@ KisStroke::KisStroke(KisStrokeStrategy *strokeStrategy)
     m_cancelStrategy = m_strokeStrategy->createCancelStrategy();
     m_finishStrategy = m_strokeStrategy->createFinishStrategy();
 
-    if(!m_initStrategy) {
+    if (!m_initStrategy) {
         m_strokeInitialized = true;
-    }
-    else {
+    } else {
         enqueue(m_initStrategy, m_strokeStrategy->createInitData());
     }
 }
@@ -59,14 +57,14 @@ void KisStroke::addJob(KisStrokeJobData *data)
     enqueue(m_dabStrategy, data);
 }
 
-KisStrokeJob* KisStroke::popOneJob()
+KisStrokeJob *KisStroke::popOneJob()
 {
     KisStrokeJob *job = dequeue();
 
-    if(job) {
+    if (job) {
         m_prevJobSequential = job->isSequential();
 
-        if(!m_strokeInitialized) {
+        if (!m_strokeInitialized) {
             m_strokeInitialized = true;
         }
     }
@@ -116,16 +114,17 @@ void KisStroke::endStroke()
 void KisStroke::cancelStroke()
 {
     // case 6
-    if (m_isCancelled) return;
-
-    if(!m_strokeInitialized) {
-        clearQueue();
+    if (m_isCancelled) {
+        return;
     }
-    else if(m_strokeInitialized &&
-            (!m_jobsQueue.isEmpty() || !m_strokeEnded)) {
+
+    if (!m_strokeInitialized) {
+        clearQueue();
+    } else if (m_strokeInitialized &&
+               (!m_jobsQueue.isEmpty() || !m_strokeEnded)) {
 
         clearQueue();
-        if(m_cancelStrategy) {
+        if (m_cancelStrategy) {
             m_jobsQueue.enqueue(
                 new KisStrokeJob(m_cancelStrategy,
                                  m_strokeStrategy->createCancelData()));
@@ -141,7 +140,7 @@ void KisStroke::cancelStroke()
 
 void KisStroke::clearQueue()
 {
-    foreach(KisStrokeJob *item, m_jobsQueue) {
+    foreach (KisStrokeJob *item, m_jobsQueue) {
         delete item;
     }
     m_jobsQueue.clear();
@@ -175,20 +174,20 @@ bool KisStroke::prevJobSequential() const
 bool KisStroke::nextJobSequential() const
 {
     return !m_jobsQueue.isEmpty() ?
-        m_jobsQueue.head()->isSequential() : false;
+           m_jobsQueue.head()->isSequential() : false;
 }
 
 bool KisStroke::nextJobBarrier() const
 {
     return !m_jobsQueue.isEmpty() ?
-        m_jobsQueue.head()->isBarrier() : false;
+           m_jobsQueue.head()->isBarrier() : false;
 }
 
 void KisStroke::enqueue(KisStrokeJobStrategy *strategy,
                         KisStrokeJobData *data)
 {
     // factory methods can return null, if no action is needed
-    if(!strategy) {
+    if (!strategy) {
         delete data;
         return;
     }
@@ -196,7 +195,7 @@ void KisStroke::enqueue(KisStrokeJobStrategy *strategy,
     m_jobsQueue.enqueue(new KisStrokeJob(strategy, data));
 }
 
-KisStrokeJob* KisStroke::dequeue()
+KisStrokeJob *KisStroke::dequeue()
 {
     return !m_jobsQueue.isEmpty() ? m_jobsQueue.dequeue() : 0;
 }

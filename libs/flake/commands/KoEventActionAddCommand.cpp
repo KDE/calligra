@@ -31,19 +31,20 @@ public:
     {
     }
 
-    ~KoEventActionAddCommandPrivate() {
-        if (deleteEventAction)
+    ~KoEventActionAddCommandPrivate()
+    {
+        if (deleteEventAction) {
             delete eventAction;
+        }
     }
     KoShape *shape;
     KoEventAction *eventAction;
     bool deleteEventAction;
 };
 
-
 KoEventActionAddCommand::KoEventActionAddCommand(KoShape *shape, KoEventAction *eventAction, KUndo2Command *parent)
     : KUndo2Command(parent),
-    d(new KoEventActionAddCommandPrivate(shape, eventAction))
+      d(new KoEventActionAddCommandPrivate(shape, eventAction))
 {
 }
 

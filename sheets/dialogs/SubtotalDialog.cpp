@@ -52,9 +52,9 @@ public:
     Ui::SubtotalsDetailsWidget detailsWidget;
 };
 
-SubtotalDialog::SubtotalDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
-        , d(new Private)
+SubtotalDialog::SubtotalDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent)
+    , d(new Private)
 {
     d->selection = selection;
 
@@ -62,7 +62,7 @@ SubtotalDialog::SubtotalDialog(QWidget* parent, Selection* selection)
     setButtons(Ok | Cancel | Details | User1);
     setButtonGuiItem(User1, KGuiItem(i18n("Remove All")));
 
-    QWidget* widget = new QWidget(this);
+    QWidget *widget = new QWidget(this);
     d->mainWidget.setupUi(widget);
     setMainWidget(widget);
 
@@ -91,12 +91,13 @@ void SubtotalDialog::accept()
     bool empty = true;
     int left = range.left();
     for (int i = 0; i < d->mainWidget.m_columnList->count(); ++i) {
-        QListWidgetItem* item = d->mainWidget.m_columnList->item(i);
+        QListWidgetItem *item = d->mainWidget.m_columnList->item(i);
         if (item->checkState() == Qt::Checked) {
             columns[i] = left + i;
             empty = false;
-        } else
+        } else {
             columns[i] = -1;
+        }
     }
 
     if (empty) {
@@ -104,8 +105,9 @@ void SubtotalDialog::accept()
         return;
     }
 
-    if (d->detailsWidget.m_replaceSubtotals->isChecked())
+    if (d->detailsWidget.m_replaceSubtotals->isChecked()) {
         removeSubtotalLines();
+    }
 
     range = d->selection->lastRange();
 
@@ -139,8 +141,9 @@ void SubtotalDialog::accept()
                 for (int x = 0; x < numOfCols; ++x) {
                     kDebug() << "Column:" << x << "," << columns[x];
                     if (columns[x] != -1) {
-                        if (!addSubtotal(mainCol, columns[x], y - 1, lastChangedRow, addRow, oldText + result))
+                        if (!addSubtotal(mainCol, columns[x], y - 1, lastChangedRow, addRow, oldText + result)) {
                             reject();
+                        }
 
                         if (addRow) {
                             ++saveY;
@@ -160,8 +163,9 @@ void SubtotalDialog::accept()
         addRow = true;
         for (int x = 0; x < numOfCols; ++x) {
             if (columns[x] != -1) {
-                if (!addSubtotal(mainCol, columns[x], y - 1, lastChangedRow, addRow, oldText + result))
+                if (!addSubtotal(mainCol, columns[x], y - 1, lastChangedRow, addRow, oldText + result)) {
                     reject();
+                }
                 addRow = false;
             }
         }
@@ -212,8 +216,9 @@ void SubtotalDialog::removeSubtotalLines()
         bool containsSubtotal = false;
         for (int x = l; x <= r; ++x) {
             cell = Cell(sheet, x, y);
-            if (!cell.isFormula())
+            if (!cell.isFormula()) {
                 continue;
+            }
 
             text = cell.userInput();
             if (text.indexOf("SUBTOTAL") != -1) {
@@ -226,7 +231,7 @@ void SubtotalDialog::removeSubtotalLines()
             kDebug() << "Line" << y << " contains a subtotal";
             QRect rect(l, y, range.width(), 1);
 
-            ShiftManipulator* manipulator = new ShiftManipulator();
+            ShiftManipulator *manipulator = new ShiftManipulator();
             manipulator->setSheet(sheet);
             manipulator->setDirection(ShiftManipulator::ShiftBottom);
             manipulator->setReverse(true);
@@ -249,7 +254,7 @@ void SubtotalDialog::fillColumnBoxes()
     int row = range.top();
 
     Cell cell;
-    QListWidgetItem * item;
+    QListWidgetItem *item;
 
     QString text;
 
@@ -290,16 +295,16 @@ void SubtotalDialog::fillFunctionBox()
 }
 
 bool SubtotalDialog::addSubtotal(int mainCol, int column, int row, int topRow,
-                                 bool addRow, QString const & text)
+                                 bool addRow, QString const &text)
 {
     Sheet *const sheet = d->selection->lastSheet();
     QRect range = d->selection->lastRange();
 
     kDebug() << "Adding subtotal:" << mainCol << "," << column << ", Rows:" << row << "," << topRow
-    << ": addRow: " << addRow << ", Text: " << text << endl;
+             << ": addRow: " << addRow << ", Text: " << text << endl;
     if (addRow) {
         QRect rect(range.left(), row + 1, range.width(), 1);
-        ShiftManipulator* manipulator = new ShiftManipulator();
+        ShiftManipulator *manipulator = new ShiftManipulator();
         manipulator->setSheet(sheet);
         manipulator->setDirection(ShiftManipulator::ShiftBottom);
         manipulator->add(Region(rect));

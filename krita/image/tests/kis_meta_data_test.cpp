@@ -145,7 +145,6 @@ void KisMetaDataTest::testValueEquality()
     QVERIFY(createListValue() == createListValue());
 }
 
-
 #define TEST_VALUE_COPY(func) \
     { \
         Value v1 = func(); \
@@ -174,7 +173,6 @@ void KisMetaDataTest::testValueCopy()
         QCOMPARE(QString(schema->prefix() + ":hello"), schema->generateQualifiedName("hello")); \
     }
 
-
 void KisMetaDataTest::testSchemaBasic()
 {
     TEST_SCHEMA(TIFFSchemaUri);
@@ -189,7 +187,7 @@ void KisMetaDataTest::testSchemaBasic()
 
 void KisMetaDataTest::testEntry()
 {
-    const Schema* schema = SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
+    const Schema *schema = SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
     Value v1 = createIntegerValue(42);
     Value v2 = createIntegerValue(12);
     Entry e(schema, "test", v1);
@@ -204,7 +202,7 @@ void KisMetaDataTest::testEntry()
 
 void KisMetaDataTest::testStore()
 {
-    const Schema* schema = SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
+    const Schema *schema = SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
     Store s;
     Entry e(schema, "test", createIntegerValue());
     QVERIFY(!s.containsEntry(schema, "test"));
@@ -214,7 +212,7 @@ void KisMetaDataTest::testStore()
     QVERIFY(s.containsEntry(KisMetaData::Schema::TIFFSchemaUri, "test"));
     s.removeEntry(schema, "test");
     QVERIFY(!s.containsEntry(schema, "test"));
-    Entry& e2 = s.getEntry(schema, "hello");
+    Entry &e2 = s.getEntry(schema, "hello");
     QVERIFY(s.containsEntry(schema, "hello"));
     QVERIFY(e2.name() == "hello");
     QVERIFY(e2.schema() == schema);
@@ -225,20 +223,20 @@ void KisMetaDataTest::testFilters()
     // Test anonymizer
     {
         Store s;
-        const KisMetaData::Filter* filter = FilterRegistry::instance()->get("Anonymizer");
+        const KisMetaData::Filter *filter = FilterRegistry::instance()->get("Anonymizer");
         QVERIFY(filter);
-        const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
+        const KisMetaData::Schema *dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
         s.addEntry(Entry(dcSchema, "contributor", Value("somevalue")));
         s.addEntry(Entry(dcSchema, "creator", Value("somevalue")));
         s.addEntry(Entry(dcSchema, "publisher", Value("somevalue")));
         s.addEntry(Entry(dcSchema, "rights", Value("somevalue")));
-        const KisMetaData::Schema* psSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::PhotoshopSchemaUri);
+        const KisMetaData::Schema *psSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::PhotoshopSchemaUri);
         s.addEntry(Entry(psSchema, "AuthorsPosition", Value("somevalue")));
         s.addEntry(Entry(psSchema, "CaptionWriter", Value("somevalue")));
         s.addEntry(Entry(psSchema, "Credit", Value("somevalue")));
         s.addEntry(Entry(psSchema, "City", Value("somevalue")));
         s.addEntry(Entry(psSchema, "Country", Value("somevalue")));
-        QList<const KisMetaData::Filter*> filters;
+        QList<const KisMetaData::Filter *> filters;
         filters << filter;
         s.applyFilters(filters);
         QVERIFY(!s.containsEntry(dcSchema, "contributor"));
@@ -313,12 +311,12 @@ void KisMetaDataTest::testTypeInfo()
     badIntegerList.push_back(createIntegerValue(12));
 
     // Test OrderedArray
-    const TypeInfo* arrOA1 = TypeInfo::Private::orderedArray(TypeInfo::Private::Integer);
+    const TypeInfo *arrOA1 = TypeInfo::Private::orderedArray(TypeInfo::Private::Integer);
     QVERIFY(arrOA1->propertyType() == TypeInfo::OrderedArrayType);
     QVERIFY(arrOA1->embeddedPropertyType() == TypeInfo::Private::Integer);
     QVERIFY(arrOA1->choices().size() == 0);
     QVERIFY(arrOA1 == TypeInfo::Private::orderedArray(TypeInfo::Private::Integer));
-    const TypeInfo* arrOA2 = TypeInfo::Private::orderedArray(TypeInfo::Private::Text);
+    const TypeInfo *arrOA2 = TypeInfo::Private::orderedArray(TypeInfo::Private::Text);
     QVERIFY(arrOA1 != arrOA2);
     QVERIFY(arrOA2->embeddedPropertyType() == TypeInfo::Private::Text);
     QVERIFY(!arrOA1->hasCorrectType(Value(true)));
@@ -329,12 +327,12 @@ void KisMetaDataTest::testTypeInfo()
     QVERIFY(!arrOA1->hasCorrectType(Value(badIntegerList, Value::OrderedArray)));
 
     // Test UnarderedArray
-    const TypeInfo* arrUOA1 = TypeInfo::Private::unorderedArray(TypeInfo::Private::Integer);
+    const TypeInfo *arrUOA1 = TypeInfo::Private::unorderedArray(TypeInfo::Private::Integer);
     QVERIFY(arrUOA1->propertyType() == TypeInfo::UnorderedArrayType);
     QVERIFY(arrUOA1->embeddedPropertyType() == TypeInfo::Private::Integer);
     QVERIFY(arrUOA1->choices().size() == 0);
     QVERIFY(arrUOA1 == TypeInfo::Private::unorderedArray(TypeInfo::Private::Integer));
-    const TypeInfo* arrUOA2 = TypeInfo::Private::unorderedArray(TypeInfo::Private::Text);
+    const TypeInfo *arrUOA2 = TypeInfo::Private::unorderedArray(TypeInfo::Private::Text);
     QVERIFY(arrUOA1 != arrUOA2);
     QVERIFY(arrUOA2->embeddedPropertyType() == TypeInfo::Private::Text);
     QVERIFY(arrUOA1 != arrOA1);
@@ -347,12 +345,12 @@ void KisMetaDataTest::testTypeInfo()
     QVERIFY(!arrUOA1->hasCorrectType(Value(badIntegerList, Value::UnorderedArray)));
 
     // Test AlternativeArray
-    const TypeInfo* arrAA1 = TypeInfo::Private::alternativeArray(TypeInfo::Private::Integer);
+    const TypeInfo *arrAA1 = TypeInfo::Private::alternativeArray(TypeInfo::Private::Integer);
     QVERIFY(arrAA1->propertyType() == TypeInfo::AlternativeArrayType);
     QVERIFY(arrAA1->embeddedPropertyType() == TypeInfo::Private::Integer);
     QVERIFY(arrAA1->choices().size() == 0);
     QVERIFY(arrAA1 == TypeInfo::Private::alternativeArray(TypeInfo::Private::Integer));
-    const TypeInfo* arrAA2 = TypeInfo::Private::alternativeArray(TypeInfo::Private::Text);
+    const TypeInfo *arrAA2 = TypeInfo::Private::alternativeArray(TypeInfo::Private::Text);
     QVERIFY(arrAA1 != arrAA2);
     QVERIFY(arrAA2->embeddedPropertyType() == TypeInfo::Private::Text);
     QVERIFY(arrAA1 != arrOA1);
@@ -370,7 +368,7 @@ void KisMetaDataTest::testTypeInfo()
     QList< TypeInfo::Choice > choices;
     choices.push_back(TypeInfo::Choice(Value(12), "Hello"));
     choices.push_back(TypeInfo::Choice(Value(42), "World"));
-    const TypeInfo* oChoice = TypeInfo::Private::createChoice(TypeInfo::OpenedChoice, TypeInfo::Private::Integer, choices);
+    const TypeInfo *oChoice = TypeInfo::Private::createChoice(TypeInfo::OpenedChoice, TypeInfo::Private::Integer, choices);
     QVERIFY(oChoice->propertyType() == TypeInfo::OpenedChoice);
     QVERIFY(oChoice->embeddedPropertyType() == TypeInfo::Private::Integer);
     QVERIFY(oChoice->choices().size() == 2);
@@ -387,7 +385,7 @@ void KisMetaDataTest::testTypeInfo()
     QVERIFY(!oChoice->hasCorrectType(Value(goodIntegerList, Value::AlternativeArray)));
     QVERIFY(!oChoice->hasCorrectType(Value(badIntegerList, Value::AlternativeArray)));
 
-    const TypeInfo* cChoice = TypeInfo::Private::createChoice(TypeInfo::ClosedChoice, TypeInfo::Private::Integer, choices);
+    const TypeInfo *cChoice = TypeInfo::Private::createChoice(TypeInfo::ClosedChoice, TypeInfo::Private::Integer, choices);
     QVERIFY(cChoice->propertyType() == TypeInfo::ClosedChoice);
     QVERIFY(!cChoice->hasCorrectType(Value(true)));
     QVERIFY(cChoice->hasCorrectType(createIntegerValue(12)));
@@ -403,15 +401,14 @@ void KisMetaDataTest::testTypeInfo()
 
     // Test structure
 
-
 }
 
 void KisMetaDataTest::testSchemaParse()
 {
-    const Schema* exifSchema = SchemaRegistry::instance()->schemaFromUri(Schema::EXIFSchemaUri);
+    const Schema *exifSchema = SchemaRegistry::instance()->schemaFromUri(Schema::EXIFSchemaUri);
     QVERIFY(exifSchema);
 
-    const TypeInfo* colorSpaceType = exifSchema->propertyType("ColorSpace");
+    const TypeInfo *colorSpaceType = exifSchema->propertyType("ColorSpace");
     QVERIFY(colorSpaceType);
     QVERIFY(colorSpaceType->propertyType() == TypeInfo::ClosedChoice);
     QVERIFY(colorSpaceType->choices().size() == 2);
@@ -439,7 +436,7 @@ void KisMetaDataTest::testSchemaParse()
     QVERIFY(exifSchema->propertyType("ISOSpeedRatings")->propertyType() == TypeInfo::OrderedArrayType);
     QVERIFY(exifSchema->propertyType("ISOSpeedRatings")->embeddedPropertyType() == TypeInfo::Private::Integer);
 
-    const TypeInfo* oecfType = exifSchema->propertyType("OECF");
+    const TypeInfo *oecfType = exifSchema->propertyType("OECF");
     QVERIFY(oecfType);
     QVERIFY(oecfType->propertyType() == TypeInfo::StructureType);
     QVERIFY(oecfType == exifSchema->structure("OECFSFR"));
@@ -527,7 +524,7 @@ void KisMetaDataTest::testParser()
 void KisMetaDataTest::testValidator()
 {
     Store store;
-    const Schema* exif = SchemaRegistry::instance()->schemaFromUri(Schema::EXIFSchemaUri);
+    const Schema *exif = SchemaRegistry::instance()->schemaFromUri(Schema::EXIFSchemaUri);
     QVERIFY(exif);
     store.addEntry(Entry(exif, "PixelXDimension", createIntegerValue()));
     store.addEntry(Entry(exif, "PixelYDimension", createIntegerValue()));

@@ -30,22 +30,22 @@
 #include "kis_play_info.h"
 
 struct KisRecordedFillPaintAction::Private {
-    Private(const KisNodeQueryPath& _projectionPath) : projectionPath(_projectionPath) {}
+    Private(const KisNodeQueryPath &_projectionPath) : projectionPath(_projectionPath) {}
     QPoint pt;
     KisNodeQueryPath projectionPath;
 };
 
 KisRecordedFillPaintAction::KisRecordedFillPaintAction(
-    const KisNodeQueryPath& path,
-    const QPoint& pt,
-    const KisNodeQueryPath& projectionPath)
-        : KisRecordedPaintAction("FillPaintAction", i18n("Fill"), path, 0)
-        , d(new Private(projectionPath))
+    const KisNodeQueryPath &path,
+    const QPoint &pt,
+    const KisNodeQueryPath &projectionPath)
+    : KisRecordedPaintAction("FillPaintAction", i18n("Fill"), path, 0)
+    , d(new Private(projectionPath))
 {
     d->pt = pt;
 }
 
-KisRecordedFillPaintAction::KisRecordedFillPaintAction(const KisRecordedFillPaintAction& rhs) : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
+KisRecordedFillPaintAction::KisRecordedFillPaintAction(const KisRecordedFillPaintAction &rhs) : KisRecordedPaintAction(rhs), d(new Private(*rhs.d))
 {
 
 }
@@ -55,7 +55,7 @@ KisRecordedFillPaintAction::~KisRecordedFillPaintAction()
     delete d;
 }
 
-void KisRecordedFillPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const
+void KisRecordedFillPaintAction::toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *context) const
 {
     KisRecordedPaintAction::toXML(doc, elt, context);
     elt.setAttribute("x", d->pt.x());
@@ -63,29 +63,27 @@ void KisRecordedFillPaintAction::toXML(QDomDocument& doc, QDomElement& elt, KisR
     elt.setAttribute("projectionPath", d->projectionPath.toString());
 }
 
-KisRecordedAction* KisRecordedFillPaintAction::clone() const
+KisRecordedAction *KisRecordedFillPaintAction::clone() const
 {
     return new KisRecordedFillPaintAction(*this);
 }
 
-KisPainter* KisRecordedFillPaintAction::createPainter(KisPaintDeviceSP device) const
+KisPainter *KisRecordedFillPaintAction::createPainter(KisPaintDeviceSP device) const
 {
     return new KisFillPainter(device);
 }
 
-void KisRecordedFillPaintAction::playPaint(const KisPlayInfo& info, KisPainter* _painter) const
+void KisRecordedFillPaintAction::playPaint(const KisPlayInfo &info, KisPainter *_painter) const
 {
     QList<KisNodeSP> nodes = d->projectionPath.queryNodes(info.image(), info.currentNode());
     KisPaintDeviceSP projection = 0;
-    if (!nodes.isEmpty())
-    {
+    if (!nodes.isEmpty()) {
         projection = nodes[0]->projection();
     }
-    KisFillPainter* painter = static_cast<KisFillPainter*>(_painter);
+    KisFillPainter *painter = static_cast<KisFillPainter *>(_painter);
     painter->setWidth(info.image()->width());
     painter->setHeight(info.image()->height());
-    if (fillStyle() == KisPainter::FillStylePattern)
-    {
+    if (fillStyle() == KisPainter::FillStylePattern) {
         painter->fillPattern(d->pt.x(), d->pt.y(), projection);
     } else {
         painter->fillColor(d->pt.x(), d->pt.y(), projection);
@@ -93,7 +91,7 @@ void KisRecordedFillPaintAction::playPaint(const KisPlayInfo& info, KisPainter* 
 }
 
 KisRecordedFillPaintActionFactory::KisRecordedFillPaintActionFactory() :
-        KisRecordedPaintActionFactory("FillPaintAction")
+    KisRecordedPaintActionFactory("FillPaintAction")
 {
 }
 
@@ -102,7 +100,7 @@ KisRecordedFillPaintActionFactory::~KisRecordedFillPaintActionFactory()
 
 }
 
-KisRecordedAction* KisRecordedFillPaintActionFactory::fromXML(const QDomElement& elt, const KisRecordedActionLoadContext* context)
+KisRecordedAction *KisRecordedFillPaintActionFactory::fromXML(const QDomElement &elt, const KisRecordedActionLoadContext *context)
 {
     KisNodeQueryPath pathnode = nodeQueryPathFromXML(elt);
     KisNodeQueryPath projectionPathnode = KisNodeQueryPath::fromString(elt.attribute("projectionPath"));
@@ -110,7 +108,7 @@ KisRecordedAction* KisRecordedFillPaintActionFactory::fromXML(const QDomElement&
     int x = elt.attribute("x", "0").toInt();
     int y = elt.attribute("y", "0").toInt();
 
-    KisRecordedFillPaintAction* rplpa = new KisRecordedFillPaintAction(pathnode, QPoint(x,y), projectionPathnode);
+    KisRecordedFillPaintAction *rplpa = new KisRecordedFillPaintAction(pathnode, QPoint(x, y), projectionPathnode);
 
     setupPaintAction(rplpa, elt, context);
     return rplpa;

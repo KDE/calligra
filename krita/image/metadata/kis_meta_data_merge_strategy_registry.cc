@@ -31,24 +31,24 @@ MergeStrategyRegistry::MergeStrategyRegistry()
     add(new SmartMergeStrategy());
 }
 
-MergeStrategyRegistry::MergeStrategyRegistry(const MergeStrategyRegistry&) : KoGenericRegistry<const KisMetaData::MergeStrategy*>()
+MergeStrategyRegistry::MergeStrategyRegistry(const MergeStrategyRegistry &) : KoGenericRegistry<const KisMetaData::MergeStrategy * >()
 {
 }
 
-MergeStrategyRegistry& MergeStrategyRegistry::operator=(const MergeStrategyRegistry&)
+MergeStrategyRegistry &MergeStrategyRegistry::operator=(const MergeStrategyRegistry &)
 {
     return *this;
 }
 
 MergeStrategyRegistry::~MergeStrategyRegistry()
 {
-    foreach(const QString &id, keys()) {
+    foreach (const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "Deleting MergeStrategyRegistry";
 }
 
-MergeStrategyRegistry* MergeStrategyRegistry::instance()
+MergeStrategyRegistry *MergeStrategyRegistry::instance()
 {
     K_GLOBAL_STATIC(MergeStrategyRegistry, s_instance);
     return s_instance;

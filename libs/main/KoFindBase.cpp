@@ -141,7 +141,7 @@ void KoFindBase::finished()
 
 void KoFindBase::replaceCurrent(const QVariant &value)
 {
-    if(d->matches.count() == 0) {
+    if (d->matches.count() == 0) {
         return;
     }
 
@@ -151,7 +151,7 @@ void KoFindBase::replaceCurrent(const QVariant &value)
         replaceImplementation(match, value);
     }
 
-    if(d->matches.count() > 0) {
+    if (d->matches.count() > 0) {
         emit matchFound(d->matches.at(0));
     } else {
         emit noMatchFound();
@@ -161,7 +161,7 @@ void KoFindBase::replaceCurrent(const QVariant &value)
 
 void KoFindBase::replaceAll(const QVariant &value)
 {
-    foreach(const KoFindMatch &match, d->matches) {
+    foreach (const KoFindMatch &match, d->matches) {
         replaceImplementation(match, value);
     }
 

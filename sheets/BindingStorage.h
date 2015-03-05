@@ -37,14 +37,16 @@ class BindingStorage : public QObject, public RectStorage<Binding>
 {
     Q_OBJECT
 public:
-    explicit BindingStorage(Map* map) : QObject(map), RectStorage<Binding>(map) {}
-    BindingStorage(const BindingStorage& other) : QObject(other.parent()), RectStorage<Binding>(other) {}
+    explicit BindingStorage(Map *map) : QObject(map), RectStorage<Binding>(map) {}
+    BindingStorage(const BindingStorage &other) : QObject(other.parent()), RectStorage<Binding>(other) {}
 
 protected Q_SLOTS:
-    virtual void triggerGarbageCollection() {
+    virtual void triggerGarbageCollection()
+    {
         QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
     }
-    virtual void garbageCollection() {
+    virtual void garbageCollection()
+    {
         RectStorage<Binding>::garbageCollection();
     }
 };

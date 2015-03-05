@@ -35,7 +35,7 @@
 static const int minThumbnailSize = 400;
 static const int timeoutTime = 5000; // in msec
 
-ThumbnailHelperImpl::ThumbnailHelperImpl(QObject* parent)
+ThumbnailHelperImpl::ThumbnailHelperImpl(QObject *parent)
     : QObject(parent)
     , m_part(0)
     , m_doc(0)
@@ -44,11 +44,12 @@ ThumbnailHelperImpl::ThumbnailHelperImpl(QObject* parent)
 
 ThumbnailHelperImpl::~ThumbnailHelperImpl()
 {
-    if(m_doc)
+    if (m_doc) {
         m_doc->deleteLater();
+    }
 }
 
-bool ThumbnailHelperImpl::convert(const QString& in, const QString& out, int width, int height)
+bool ThumbnailHelperImpl::convert(const QString &in, const QString &out, int width, int height)
 {
     // Other locations for thumbnails use the embedded thumbnails. This
     // application specifically exists to ensure less crashes in situations
@@ -61,8 +62,9 @@ bool ThumbnailHelperImpl::convert(const QString& in, const QString& out, int wid
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
     m_part = documentEntry.createKoPart(&error);
 
-    if (!m_part)
+    if (!m_part) {
         return false;
+    }
 
     m_doc = m_part->document();
 
@@ -80,7 +82,7 @@ bool ThumbnailHelperImpl::convert(const QString& in, const QString& out, int wid
         return false;
     }
 
-    while(m_doc->isLoading()) {
+    while (m_doc->isLoading()) {
         qApp->processEvents();
     }
 

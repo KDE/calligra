@@ -40,26 +40,26 @@
 
 using namespace Calligra::Sheets;
 
-AddNamedAreaDialog::AddNamedAreaDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
-        , m_selection(selection)
+AddNamedAreaDialog::AddNamedAreaDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent)
+    , m_selection(selection)
 {
     setButtons(Ok | Cancel);
     setCaption(i18n("Add Named Area"));
     setModal(true);
     setObjectName(QLatin1String("AddNamedAreaDialog"));
 
-    QWidget* widget = new QWidget();
+    QWidget *widget = new QWidget();
     setMainWidget(widget);
 
-    QVBoxLayout* layout = new QVBoxLayout(widget);
+    QVBoxLayout *layout = new QVBoxLayout(widget);
 
-    QLabel* label = new QLabel(i18n("Enter the area name:"), widget);
+    QLabel *label = new QLabel(i18n("Enter the area name:"), widget);
     layout->addWidget(label);
 
     m_areaName = new KLineEdit(widget);
     m_areaName->setFocus();
-    m_areaName->setMinimumWidth(m_areaName->sizeHint().width()* 3);
+    m_areaName->setMinimumWidth(m_areaName->sizeHint().width() * 3);
     layout->addWidget(m_areaName);
 
     enableButtonOk(!m_areaName->text().isEmpty());
@@ -69,34 +69,38 @@ AddNamedAreaDialog::AddNamedAreaDialog(QWidget* parent, Selection* selection)
             this, SLOT(slotAreaNameChanged(QString)));
 }
 
-void AddNamedAreaDialog::slotAreaNameChanged(const QString& name)
+void AddNamedAreaDialog::slotAreaNameChanged(const QString &name)
 {
     enableButtonOk(!name.isEmpty());
 }
 
 void AddNamedAreaDialog::slotOk()
 {
-    if (m_areaName->text().isEmpty())
+    if (m_areaName->text().isEmpty()) {
         return;
+    }
 
     const QString name = m_areaName->text();
     const Region region(m_selection->lastRange(), m_selection->lastSheet());
-    if (m_selection->activeSheet()->map()->namedAreaManager()->namedArea(name) == region)
-        return; // nothing to do
+    if (m_selection->activeSheet()->map()->namedAreaManager()->namedArea(name) == region) {
+        return;    // nothing to do
+    }
 
-    NamedAreaCommand* command = 0;
+    NamedAreaCommand *command = 0;
     if (m_selection->activeSheet()->map()->namedAreaManager()->contains(name)) {
         const QString question = i18n("The named area '%1' already exists.\n"
                                       "Do you want to replace it?", name);
         int result = KMessageBox::warningContinueCancel(this, question, i18n("Replace Named Area"),
                      KStandardGuiItem::overwrite());
-        if (result == KMessageBox::Cancel)
+        if (result == KMessageBox::Cancel) {
             return;
+        }
 
         command = new NamedAreaCommand();
         command->setText(kundo2_i18n("Replace Named Area"));
-    } else
+    } else {
         command = new NamedAreaCommand();
+    }
     command->setSheet(m_selection->activeSheet());
     command->setAreaName(name);
     command->add(region);

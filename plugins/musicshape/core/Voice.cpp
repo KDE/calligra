@@ -23,14 +23,15 @@
 #include "Sheet.h"
 #include <QList>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Voice::Private
 {
 public:
 };
 
-Voice::Voice(Part* part) : QObject(part), d(new Private)
+Voice::Voice(Part *part) : QObject(part), d(new Private)
 {
 }
 
@@ -39,17 +40,17 @@ Voice::~Voice()
     delete d;
 }
 
-Part* Voice::part()
+Part *Voice::part()
 {
-    return qobject_cast<Part*>(parent());
+    return qobject_cast<Part *>(parent());
 }
 
-VoiceBar* Voice::bar(Bar* bar)
+VoiceBar *Voice::bar(Bar *bar)
 {
     return bar->voice(this);
 }
 
-VoiceBar* Voice::bar(int barIdx)
+VoiceBar *Voice::bar(int barIdx)
 {
     return bar(part()->sheet()->bar(barIdx));
 }

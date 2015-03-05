@@ -49,28 +49,27 @@
 
 #include <kdebug.h>
 
-
 K_PLUGIN_FACTORY(XAMLExportFactory, registerPlugin<XAMLExport>();)
 K_EXPORT_PLUGIN(XAMLExportFactory("calligrafilters"))
 
-
-XAMLExport::XAMLExport(KoFilter*, const char*, const QVariantList&)
-        : KoFilter(parent)
+XAMLExport::XAMLExport(KoFilter *, const char *, const QVariantList &)
+    : KoFilter(parent)
 {
     m_gc.setAutoDelete(true);
 }
 
 KoFilter::ConversionStatus
-XAMLExport::convert(const QByteArray& from, const QByteArray& to)
+XAMLExport::convert(const QByteArray &from, const QByteArray &to)
 {
     // TODO: ???
     if (to != "image/wvg+xml" || from != "application/x-karbon") {
         return KoFilter::NotImplemented;
     }
 
-    KoStoreDevice* storeIn = m_chain->storageFile("root", KoStore::Read);
-    if (!storeIn)
+    KoStoreDevice *storeIn = m_chain->storageFile("root", KoStore::Read);
+    if (!storeIn) {
         return KoFilter::StupidError;
+    }
 
     QFile fileOut(m_chain->outputFile());
     if (!fileOut.open(QIODevice::WriteOnly)) {
@@ -87,7 +86,6 @@ XAMLExport::convert(const QByteArray& from, const QByteArray& to)
     m_body = new QTextStream(&body, QIODevice::ReadWrite);
     QString defs;
     m_defs = new QTextStream(&defs, QIODevice::ReadWrite);
-
 
     // load the document and export it:
     KarbonDocument doc;
@@ -107,7 +105,7 @@ XAMLExport::convert(const QByteArray& from, const QByteArray& to)
 }
 
 void
-XAMLExport::visitVDocument(KarbonDocument& document)
+XAMLExport::visitVDocument(KarbonDocument &document)
 {
     // select all objects:
     document.selection()->append();
@@ -117,10 +115,10 @@ XAMLExport::visitVDocument(KarbonDocument& document)
 
     // standard header:
     *m_defs <<
-    "<?xml version=\"1.0\" ?>\n" <<
-    /* "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" " <<* */
-    // "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">"
-    /*<<*/ endl;
+            "<?xml version=\"1.0\" ?>\n" <<
+            /* "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" " <<* */
+            // "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">"
+            /*<<*/ endl;
 
     // Add one line comment to identify Content Creator,
     // probably remove this later
@@ -129,10 +127,10 @@ XAMLExport::visitVDocument(KarbonDocument& document)
     // http://schemas.microsoft.com/2003/xaml
     // need to mention defs too Defenitions namespace xmlns:def="Definition"
     *m_defs <<
-    "<!-- Generator: Calligra Karbon WVG XAML Graphics export filter  $VERSION/$DATE.  -->" << endl;
+            "<!-- Generator: Calligra Karbon WVG XAML Graphics export filter  $VERSION/$DATE.  -->" << endl;
     *m_defs <<
-    "<Canvas xmlns=\"http://schemas.microsoft.com/winfx/avalon/2005\" Width=\"" << rect.width() <<
-    "Height=\"" << rect.height() << "\">" << endl;
+            "<Canvas xmlns=\"http://schemas.microsoft.com/winfx/avalon/2005\" Width=\"" << rect.width() <<
+            "Height=\"" << rect.height() << "\">" << endl;
     *m_defs << "<Canvas.Resources>" << endl;
 
     // bleuch: this is horrible, do something about it TODO
@@ -158,15 +156,16 @@ XAMLExport::visitVDocument(KarbonDocument& document)
 QString
 XAMLExport::getID(VObject *obj)
 {
-    if (obj && !obj->name().isEmpty())
+    if (obj && !obj->name().isEmpty()) {
         return QString(" Name=\"%1\"").arg(obj->name());
+    }
     return QString();
 }
 
 // which markup to use?  Group or Canvas?
 // for now assume Group will work.  TODO: Test properly!
 void
-XAMLExport::visitVGroup(VGroup& group)
+XAMLExport::visitVGroup(VGroup &group)
 {
     *m_body << "<Canvas" << getID(&group) << ">" << endl;
     VVisitor::visitVGroup(group);
@@ -174,7 +173,7 @@ XAMLExport::visitVGroup(VGroup& group)
 }
 
 void
-XAMLExport::visitVPath(VPath& composite)
+XAMLExport::visitVPath(VPath &composite)
 {
     *m_body << "<Path" << getID(&composite);
 
@@ -188,17 +187,18 @@ XAMLExport::visitVPath(VPath& composite)
     *m_body << " Data=\"" << d << "\" ";
 
     if (composite.fillRule() != m_gc.current()->fillRule) {
-        if (composite.fillRule() == evenOdd)
+        if (composite.fillRule() == evenOdd) {
             *m_body << " FillRule=\"EvenOdd\"";
-        else
+        } else {
             *m_body << " FillRule=\"NonZero\"";
+        }
     }
 
     *m_body << " />" << endl;
 }
 
 void
-XAMLExport::visitVSubpath(VSubpath&)
+XAMLExport::visitVSubpath(VSubpath &)
 {
 }
 
@@ -210,9 +210,9 @@ QString createUID()
 }
 
 void
-XAMLExport::getColorStops(const QVector<VColorStop*> &colorStops)
+XAMLExport::getColorStops(const QVector<VColorStop *> &colorStops)
 {
-    for (unsigned int i = 0; i < colorStops.count() ; i++) {
+    for (unsigned int i = 0; i < colorStops.count(); i++) {
         *m_defs << "<GradientStop Color=\"";
         getHexColor(m_defs, colorStops.at(i)->color);
         *m_defs << "\" Offset=\"" << QString().setNum(colorStops.at(i)->rampPoint);
@@ -223,7 +223,7 @@ XAMLExport::getColorStops(const QVector<VColorStop*> &colorStops)
 }
 
 void
-XAMLExport::getGradient(const VGradient& grad)
+XAMLExport::getGradient(const VGradient &grad)
 {
     QString uid = createUID();
     if (grad.type() == VGradient::linear) {
@@ -234,10 +234,11 @@ XAMLExport::getGradient(const VGradient& grad)
         *m_defs << grad.origin().y() << "\" ";
         *m_defs << "EndPoint=\"" << grad.vector().x() << ",";
         *m_defs << grad.vector().y() << "\" ";
-        if (grad.repeatMethod() == VGradient::reflect)
+        if (grad.repeatMethod() == VGradient::reflect) {
             *m_defs << "SpreadMethod=\"Reflect\" ";
-        else if (grad.repeatMethod() == VGradient::repeat)
+        } else if (grad.repeatMethod() == VGradient::repeat) {
             *m_defs << "SpreadMethod=\"Repeat\" ";
+        }
         *m_defs << ">" << endl;
 
         // color stops
@@ -256,10 +257,11 @@ XAMLExport::getGradient(const VGradient& grad)
         *m_defs << grad.focalPoint().y() << "\" ";
         double r = sqrt(pow(grad.vector().x() - grad.origin().x(), 2) + pow(grad.vector().y() - grad.origin().y(), 2));
         *m_defs << "Radius=\"" << QString().setNum(r) << "\" ";
-        if (grad.repeatMethod() == VGradient::reflect)
+        if (grad.repeatMethod() == VGradient::reflect) {
             *m_defs << "SpreadMethod=\"Reflect\" ";
-        else if (grad.repeatMethod() == VGradient::repeat)
+        } else if (grad.repeatMethod() == VGradient::repeat) {
             *m_defs << "SpreadMethod=\"Repeat\" ";
+        }
         *m_defs << ">" << endl;
 
         // color stops
@@ -271,58 +273,65 @@ XAMLExport::getGradient(const VGradient& grad)
 }
 
 void
-XAMLExport::getFill(const VFill& fill)
+XAMLExport::getFill(const VFill &fill)
 {
     *m_body << " Fill=\"";
-    if (fill.type() == VFill::none)
+    if (fill.type() == VFill::none) {
         *m_body << "none";
-    else if (fill.type() == VFill::grad)
+    } else if (fill.type() == VFill::grad) {
         getGradient(fill.gradient());
-    else
+    } else {
         getHexColor(m_body, fill.color());
+    }
     *m_body << "\"";
 
-    if (fill.color().opacity() != m_gc.current()->fill.color().opacity())
+    if (fill.color().opacity() != m_gc.current()->fill.color().opacity()) {
         *m_body << " FillOpacity=\"" << fill.color().opacity() << "\"";
+    }
 }
 
 void
-XAMLExport::getStroke(const VStroke& stroke)
+XAMLExport::getStroke(const VStroke &stroke)
 {
     if (stroke.type() != m_gc.current()->stroke.type()) {
         *m_body << " Stroke=\"";
-        if (stroke.type() == VStroke::none)
+        if (stroke.type() == VStroke::none) {
             *m_body << "None";
-        else if (stroke.type() == VStroke::grad)
+        } else if (stroke.type() == VStroke::grad) {
             getGradient(stroke.gradient());
-        else
+        } else {
             getHexColor(m_body, stroke.color());
+        }
         *m_body << "\"";
     }
 
-    if (stroke.color().opacity() != m_gc.current()->stroke.color().opacity())
+    if (stroke.color().opacity() != m_gc.current()->stroke.color().opacity()) {
         *m_body << " StrokeOpacity=\"" << stroke.color().opacity() << "\"";
+    }
 
-    if (stroke.lineWidth() != m_gc.current()->stroke.lineWidth())
+    if (stroke.lineWidth() != m_gc.current()->stroke.lineWidth()) {
         *m_body << " StrokeThickness=\"" << stroke.lineWidth() << "\"";
+    }
 
     if (stroke.lineCap() != m_gc.current()->stroke.lineCap()) {
-        if (stroke.lineCap() == VStroke::capButt)
+        if (stroke.lineCap() == VStroke::capButt) {
             *m_body << " StrokeLineCap=\"Butt\"";
-        else if (stroke.lineCap() == VStroke::capRound)
+        } else if (stroke.lineCap() == VStroke::capRound) {
             *m_body << " StrokeLineCap=\"round\"";
-        else if (stroke.lineCap() == VStroke::capSquare)
+        } else if (stroke.lineCap() == VStroke::capSquare) {
             *m_body << " StrokeLineCap=\"square\"";
+        }
     }
 
     if (stroke.lineJoin() != m_gc.current()->stroke.lineJoin()) {
         if (stroke.lineJoin() == VStroke::joinMiter) {
             *m_body << " StrokeLineJoin=\"Miter\"";
             *m_body << " StrokeMiterLimit=\"" << stroke.miterLimit() << "\"";
-        } else if (stroke.lineJoin() == VStroke::joinRound)
+        } else if (stroke.lineJoin() == VStroke::joinRound) {
             *m_body << " StrokeLineJoin=\"Round\"";
-        else if (stroke.lineJoin() == VStroke::joinBevel)
+        } else if (stroke.lineJoin() == VStroke::joinBevel) {
             *m_body << " StrokeLineJoin=\"Bevel\"";
+        }
     }
 
     // dash
@@ -339,7 +348,7 @@ XAMLExport::getStroke(const VStroke& stroke)
 }
 
 void
-XAMLExport::getHexColor(QTextStream *stream, const VColor& color)
+XAMLExport::getHexColor(QTextStream *stream, const VColor &color)
 {
     // Convert the various color-spaces to hex
 

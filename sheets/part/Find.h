@@ -52,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    explicit Find(QObject* parent = 0);
+    explicit Find(QObject *parent = 0);
 
 public Q_SLOTS:
     /**
@@ -79,7 +79,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
 private Q_SLOTS:
     void setActiveMatch(const KoFindMatch &match);
@@ -89,6 +89,6 @@ private Q_SLOTS:
 } //namespace Calligra
 
 Q_DECLARE_METATYPE(Calligra::Sheets::Cell)
-Q_DECLARE_METATYPE(Calligra::Sheets::Sheet*)
+Q_DECLARE_METATYPE(Calligra::Sheets::Sheet *)
 
 #endif // CALLIGRA_SHEETS_FIND_H

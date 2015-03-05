@@ -27,7 +27,6 @@
 #include <QStringList>
 #include <QList>
 
-
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
@@ -45,7 +44,6 @@ class KisWorkspaceResource;
 typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
-
 class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 {
     Q_OBJECT
@@ -53,23 +51,23 @@ class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 public:
     virtual ~KisResourceServerProvider();
 
-    static KisResourceServerProvider* instance();
+    static KisResourceServerProvider *instance();
 
-    KisPaintOpPresetResourceServer* paintOpPresetServer(bool block = true);
-    KoResourceServer<KisWorkspaceResource>* workspaceServer(bool block = true);
+    KisPaintOpPresetResourceServer *paintOpPresetServer(bool block = true);
+    KoResourceServer<KisWorkspaceResource> *workspaceServer(bool block = true);
 
     void brushBlacklistCleanup();
 Q_SIGNALS:
     void notifyBrushBlacklistCleanup();
-    
+
 private:
 
     KisResourceServerProvider();
-    KisResourceServerProvider(const KisResourceServerProvider&);
-    KisResourceServerProvider operator=(const KisResourceServerProvider&);
+    KisResourceServerProvider(const KisResourceServerProvider &);
+    KisResourceServerProvider operator=(const KisResourceServerProvider &);
 
-    KisPaintOpPresetResourceServer* m_paintOpPresetServer;
-    KoResourceServer<KisWorkspaceResource>* m_workspaceServer;
+    KisPaintOpPresetResourceServer *m_paintOpPresetServer;
+    KoResourceServer<KisWorkspaceResource> *m_workspaceServer;
 
 private:
 

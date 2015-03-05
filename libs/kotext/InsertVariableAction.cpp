@@ -33,20 +33,20 @@
 #include <QLayout>
 
 InsertVariableAction::InsertVariableAction(KoCanvasBase *base, KoInlineObjectFactoryBase *factory, const KoInlineObjectTemplate &templ)
-        : InsertInlineObjectActionBase(base, templ.name)
-        , m_factory(factory)
-        , m_templateId(templ.id)
-        , m_properties(templ.properties)
-        , m_templateName(templ.name)
+    : InsertInlineObjectActionBase(base, templ.name)
+    , m_factory(factory)
+    , m_templateId(templ.id)
+    , m_properties(templ.properties)
+    , m_templateName(templ.name)
 {
 }
 
 KoInlineObject *InsertVariableAction::createInlineObject()
 {
     KoInlineObject *io = m_factory->createInlineObject(m_properties);
-    KoVariable *variable = dynamic_cast<KoVariable*>(io);
+    KoVariable *variable = dynamic_cast<KoVariable *>(io);
     Q_ASSERT(variable);
-    KoInlineTextObjectManager *objManager = m_canvas->shapeController()->resourceManager()->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager*>();
+    KoInlineTextObjectManager *objManager = m_canvas->shapeController()->resourceManager()->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager *>();
     Q_ASSERT(objManager);
     variable->setManager(objManager);
     QWidget *widget = variable->createOptionsWidget();

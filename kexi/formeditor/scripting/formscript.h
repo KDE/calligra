@@ -35,7 +35,8 @@ class Form;
 
 namespace Kross
 {
-namespace Api  {
+namespace Api
+{
 class ScriptContainer;
 }
 }
@@ -51,10 +52,12 @@ public:
     FormScript(Form *form, ScriptManager *manager, const char *name = 0);
     ~FormScript();
 
-    EventList*  eventList()  {
+    EventList  *eventList()
+    {
         return  &m_list;
     }
-    Kross::Api::ScriptContainer*   scriptContainer()  {
+    Kross::Api::ScriptContainer   *scriptContainer()
+    {
         return m_script;
     }
 

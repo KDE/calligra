@@ -57,7 +57,6 @@
 
 extern int qt_defaultDpiY();
 
-
 KoInlineObjectExtent::KoInlineObjectExtent(qreal ascent, qreal descent)
     : m_ascent(ascent),
       m_descent(descent)
@@ -68,30 +67,30 @@ class KoTextDocumentLayout::Private
 {
 public:
     Private(KoTextDocumentLayout *)
-       : styleManager(0)
-       , changeTracker(0)
-       , inlineTextObjectManager(0)
-       , textRangeManager(0)
-       , provider(0)
-       , layoutPosition(0)
-       , anchoringRootArea(0)
-       , anchoringIndex(0)
-       , anAnchorIsPlaced(false)
-       , anchoringSoftBreak(INT_MAX)
-       , allowPositionInlineObject(true)
-       , continuationObstruction(0)
-       , referencedLayout(0)
-       , annotationLayoutManager(0)
-       , defaultTabSizing(0)
-       , y(0)
-       , isLayouting(false)
-       , layoutScheduled(false)
-       , continuousLayout(true)
-       , layoutBlocked(false)
-       , changesBlocked(false)
-       , restartLayout(false)
-       , wordprocessingMode(false)
-       , showInlineObjectVisualization(false)
+        : styleManager(0)
+        , changeTracker(0)
+        , inlineTextObjectManager(0)
+        , textRangeManager(0)
+        , provider(0)
+        , layoutPosition(0)
+        , anchoringRootArea(0)
+        , anchoringIndex(0)
+        , anAnchorIsPlaced(false)
+        , anchoringSoftBreak(INT_MAX)
+        , allowPositionInlineObject(true)
+        , continuationObstruction(0)
+        , referencedLayout(0)
+        , annotationLayoutManager(0)
+        , defaultTabSizing(0)
+        , y(0)
+        , isLayouting(false)
+        , layoutScheduled(false)
+        , continuousLayout(true)
+        , layoutBlocked(false)
+        , changesBlocked(false)
+        , restartLayout(false)
+        , wordprocessingMode(false)
+        , showInlineObjectVisualization(false)
     {
     }
     KoStyleManager *styleManager;
@@ -118,8 +117,8 @@ public:
     QRectF anchoringLayoutEnvironmentRect;
     bool allowPositionInlineObject;
 
-    QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created because KoShapeAnchor from m_textAnchors is in text
-    QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored to text
+    QHash<KoShape *, KoTextLayoutObstruction *> anchoredObstructions; // all obstructions created because KoShapeAnchor from m_textAnchors is in text
+    QList<KoTextLayoutObstruction *> freeObstructions; // obstructions affecting the current rootArea, and not anchored to text
     KoTextLayoutObstruction *continuationObstruction;
 
     KoTextDocumentLayout *referencedLayout;
@@ -140,11 +139,10 @@ public:
     bool showInlineObjectVisualization;
 };
 
-
 // ------------------- KoTextDocumentLayout --------------------
 KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootAreaProvider *provider)
-        : QAbstractTextDocumentLayout(doc),
-        d(new Private(this))
+    : QAbstractTextDocumentLayout(doc),
+      d(new Private(this))
 {
     d->paintDevice = new KoPostscriptPaintDevice();
     d->provider = provider;
@@ -185,11 +183,10 @@ bool KoTextDocumentLayout::wordprocessingMode() const
     return d->wordprocessingMode;
 }
 
-
 bool KoTextDocumentLayout::relativeTabs(const QTextBlock &block) const
 {
-    return KoTextDocument(document()).relativeTabs() 
-                && KoTextDocument(block.document()).relativeTabs();
+    return KoTextDocument(document()).relativeTabs()
+           && KoTextDocument(block.document()).relativeTabs();
 }
 
 KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager() const
@@ -246,7 +243,7 @@ QSizeF KoTextDocumentLayout::documentSize() const
 QRectF KoTextDocumentLayout::selectionBoundingBox(QTextCursor &cursor) const
 {
     QRectF retval;
-    foreach(const KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+    foreach (const KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (!rootArea->isDirty()) {
             QRectF areaBB  = rootArea->selectionBoundingBox(cursor);
             if (areaBB.isValid()) {
@@ -257,7 +254,6 @@ QRectF KoTextDocumentLayout::selectionBoundingBox(QTextCursor &cursor) const
     return retval;
 }
 
-
 void KoTextDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context)
 {
     // WARNING Text shapes ask their root area directly to paint.
@@ -266,7 +262,6 @@ void KoTextDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLa
     Q_UNUSED(painter);
     Q_UNUSED(context);
 }
-
 
 int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
@@ -305,8 +300,9 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     const int to = from + charsAdded;
     while (from < to) { // find blocks that have been added
         QTextBlock block = document()->findBlock(from);
-        if (! block.isValid())
+        if (! block.isValid()) {
             break;
+        }
         if (from == block.position() && block.textList()) {
             KoTextBlockData data(block);
             data.setCounterWidth(-1);
@@ -320,7 +316,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     if (!d->rootAreaList.isEmpty()) {
         KoTextLayoutRootArea *fromArea;
         if (position) {
-            fromArea = rootAreaForPosition(position-1);
+            fromArea = rootAreaForPosition(position - 1);
         } else {
             fromArea = d->rootAreaList.at(0);
         }
@@ -344,15 +340,18 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
             }
             // The previous and following root-area of that range are selected too cause they can also be affect by
             // changes done to the range of root-areas.
-            if (startIndex >= 1)
+            if (startIndex >= 1) {
                 --startIndex;
-            if (endIndex + 1 < d->rootAreaList.count())
+            }
+            if (endIndex + 1 < d->rootAreaList.count()) {
                 ++endIndex;
+            }
         }
         // Mark all selected root-areas as dirty so they are relayouted.
-        for(int i = startIndex; i <= endIndex; ++i) {
-            if (d->rootAreaList.size() > i && d->rootAreaList[i])
+        for (int i = startIndex; i <= endIndex; ++i) {
+            if (d->rootAreaList.size() > i && d->rootAreaList[i]) {
                 d->rootAreaList[i]->setDirty();
+            }
         }
     }
 
@@ -365,22 +364,25 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
 KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) const
 {
     QTextBlock block = document()->findBlock(position);
-    if (!block.isValid())
+    if (!block.isValid()) {
         return 0;
+    }
     QTextLine line = block.layout()->lineForTextPosition(position - block.position());
-    if (!line.isValid())
+    if (!line.isValid()) {
         return 0;
+    }
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         QRectF rect = rootArea->boundingRect(); // should already be normalized()
-        if (rect.width() <= 0.0 && rect.height() <= 0.0) // ignore the rootArea if it has a size of QSizeF(0,0)
+        if (rect.width() <= 0.0 && rect.height() <= 0.0) { // ignore the rootArea if it has a size of QSizeF(0,0)
             continue;
+        }
         QPointF pos = line.position();
         qreal x = pos.x();
         qreal y = pos.y();
 
         //0.125 needed since Qt Scribe works with fixed point
-        if (x + 0.125 >= rect.x() && x<= rect.right() && y + line.height() + 0.125 >= rect.y() && y <= rect.bottom()) {
+        if (x + 0.125 >= rect.x() && x <= rect.right() && y + line.height() + 0.125 >= rect.y() && y <= rect.bottom()) {
             return rootArea;
         }
     }
@@ -389,7 +391,7 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
 
 KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPoint(const QPointF &point) const
 {
-    foreach(KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+    foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (!rootArea->isDirty()) {
             if (rootArea->boundingRect().contains(point)) {
                 return rootArea;
@@ -407,8 +409,9 @@ void KoTextDocumentLayout::showInlineObjectVisualization(bool show)
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
 {
     Q_ASSERT(format.isCharFormat());
-    if (d->inlineTextObjectManager == 0)
+    if (d->inlineTextObjectManager == 0) {
         return;
+    }
     QTextCharFormat cf = format.toCharFormat();
     if (d->showInlineObjectVisualization) {
         QColor color = cf.foreground().color();
@@ -419,8 +422,9 @@ void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rec
         cf.setBackground(QBrush(color));
     }
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
-    if (obj)
+    if (obj) {
         obj->paint(*painter, paintDevice(), document(), rect, object, position, cf);
+    }
 }
 
 QList<KoShapeAnchor *> KoTextDocumentLayout::textAnchors() const
@@ -443,7 +447,7 @@ qreal KoTextDocumentLayout::maxYOfAnchoredObstructions(int firstCursorPosition, 
         KoShapeAnchor *anchor = d->textAnchors[index];
         if (anchor->flowWithText()) {
             if (anchor->textLocation()->position() >= firstCursorPosition
-                        && anchor->textLocation()->position() <= lastCursorPosition) {
+                    && anchor->textLocation()->position() <= lastCursorPosition) {
                 y = qMax(y, anchor->shape()->boundingRect().bottom() - anchor->shape()->parent()->boundingRect().y());
             }
         }
@@ -458,13 +462,16 @@ int KoTextDocumentLayout::anchoringSoftBreak() const
 }
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
-    if (!d->anchoringRootArea)
+    if (!d->anchoringRootArea) {
         return;
+    }
     KoTextPage *page = d->anchoringRootArea->page();
-    if (!page)
+    if (!page) {
         return;
-    if (d->anAnchorIsPlaced)
+    }
+    if (d->anAnchorIsPlaced) {
         return;
+    }
 
     // The specs define 3 different anchor modes using the
     // draw:wrap-influence-on-position. We only implement the
@@ -530,10 +537,12 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     Q_UNUSED(item);
     //We are called before layout so that we can position objects
     Q_ASSERT(format.isCharFormat());
-    if (d->inlineTextObjectManager == 0)
+    if (d->inlineTextObjectManager == 0) {
         return;
-    if (!d->allowPositionInlineObject)
+    }
+    if (!d->allowPositionInlineObject) {
         return;
+    }
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     // We need some special treatment for anchors as they need to position their object during
@@ -553,8 +562,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
         static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphRect(d->anchoringParagraphRect);
         static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphContentRect(d->anchoringParagraphContentRect);
         static_cast<AnchorStrategy *>(anchor->placementStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
-    }
-    else if (obj) {
+    } else if (obj) {
         obj->updatePosition(document(), position, cf);
     }
 }
@@ -562,15 +570,16 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 // This method is called by KoTextLauoutArea every time it encounters a KoAnchorTextRange
 void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const QTextDocument *effectiveDocument)
 {
-    if (!d->allowPositionInlineObject)
+    if (!d->allowPositionInlineObject) {
         return;
+    }
 
     if (!textRangeManager()) {
         return;
     }
-    QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(effectiveDocument, pos, pos+length, pos, pos+length);
+    QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(effectiveDocument, pos, pos + length, pos, pos + length);
 
-    foreach(KoTextRange *range, ranges.values()) {
+    foreach (KoTextRange *range, ranges.values()) {
         KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
         if (anchorRange) {
             // We need some special treatment for anchors as they need to position their object during
@@ -588,20 +597,24 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
                 // properly sorted by their z-index so the FloatingAnchorStrategy::checkStacking
                 // logic stack in the proper order. Bug 274512 has a testdoc for this attached.
                 if (index > 0 &&
-                    anchor->anchorType() == KoShapeAnchor::AnchorParagraph &&
-                    (anchor->horizontalRel() == KoShapeAnchor::HParagraph || anchor->horizontalRel() == KoShapeAnchor::HParagraphContent) &&
-                    (anchor->horizontalPos() == KoShapeAnchor::HLeft || anchor->horizontalPos() == KoShapeAnchor::HRight)) {
+                        anchor->anchorType() == KoShapeAnchor::AnchorParagraph &&
+                        (anchor->horizontalRel() == KoShapeAnchor::HParagraph || anchor->horizontalRel() == KoShapeAnchor::HParagraphContent) &&
+                        (anchor->horizontalPos() == KoShapeAnchor::HLeft || anchor->horizontalPos() == KoShapeAnchor::HRight)) {
                     QTextBlock anchorBlock = document()->findBlock(anchorRange->position());
-                    for(int i = index - 1; i >= 0; --i) {
+                    for (int i = index - 1; i >= 0; --i) {
                         KoShapeAnchor *a = d->textAnchors[i];
-                        if (a->anchorType() != anchor->anchorType())
+                        if (a->anchorType() != anchor->anchorType()) {
                             break;
-                        if (a->horizontalPos() != anchor->horizontalPos())
+                        }
+                        if (a->horizontalPos() != anchor->horizontalPos()) {
                             break;
-                        if (document()->findBlock(a->textLocation()->position()) != anchorBlock)
+                        }
+                        if (document()->findBlock(a->textLocation()->position()) != anchorBlock) {
                             break;
-                        if (a->shape()->zIndex() < anchor->shape()->zIndex())
+                        }
+                        if (a->shape()->zIndex() < anchor->shape()->zIndex()) {
                             break;
+                        }
                         --index;
                     }
                 }
@@ -634,7 +647,7 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
 
 void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
 {
-    for(int i = 0; i<d->textAnchors.size(); i++ ) {
+    for (int i = 0; i < d->textAnchors.size(); i++) {
         d->textAnchors[i]->setPlacementStrategy(0);
     }
 
@@ -653,8 +666,9 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 {
     // Note: This method is called by qt during layout AND during paint
     Q_ASSERT(format.isCharFormat());
-    if (d->inlineTextObjectManager == 0)
+    if (d->inlineTextObjectManager == 0) {
         return;
+    }
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
 
@@ -667,8 +681,9 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
     }
     KoTextLayoutRootArea *rootArea = d->rootAreaForInlineObject.value(obj);
 
-    if (rootArea == 0 || rootArea->associatedShape() == 0)
+    if (rootArea == 0 || rootArea->associatedShape() == 0) {
         return;
+    }
 
     QTextDocument *doc = document();
     QVariant v;
@@ -712,25 +727,28 @@ void KoTextDocumentLayout::layout()
     }
 }
 
-RootAreaConstraint constraintsForPosition (const QTextFrame::iterator &it) {
+RootAreaConstraint constraintsForPosition(const QTextFrame::iterator &it)
+{
     RootAreaConstraint constraints;
     constraints.masterPageName = QString::null;
     constraints.visiblePageNumber = -1;
     QTextBlock firstBlock = it.currentBlock();
-    QTextTable *firstTable = qobject_cast<QTextTable*>(it.currentFrame());
+    QTextTable *firstTable = qobject_cast<QTextTable *>(it.currentFrame());
     if (firstBlock.isValid()) {
         constraints.masterPageName = firstBlock.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
         bool ok;
         int num = firstBlock.blockFormat().property(KoParagraphStyle::PageNumber).toInt(&ok);
-        if (ok)
+        if (ok) {
             constraints.visiblePageNumber = num;
+        }
     }
     if (firstTable) {
         constraints.masterPageName = firstTable->frameFormat().property(KoTableStyle::MasterPageName).toString();
         bool ok;
         int num = firstTable->frameFormat().property(KoTableStyle::PageNumber).toInt(&ok);
-        if (ok)
+        if (ok) {
             constraints.visiblePageNumber = num;
+        }
     }
     return constraints;
 }
@@ -771,14 +789,11 @@ bool KoTextDocumentLayout::doLayout()
 
         if (rootArea->top() != d->y) {
             shouldLayout = true;
-        }
-        else if (rootArea->isDirty()) {
+        } else if (rootArea->isDirty()) {
             shouldLayout = true;
-        }
-        else if (!rootArea->isStartingAt(d->layoutPosition)) {
+        } else if (!rootArea->isStartingAt(d->layoutPosition)) {
             shouldLayout = true;
-        }
-        else if (newRootArea) {
+        } else if (newRootArea) {
             shouldLayout = true;
         }
 
@@ -861,7 +876,7 @@ bool KoTextDocumentLayout::doLayout()
         footNoteAutoCount += rootArea->footNoteAutoCount();
 
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
-                                               // 50 just to separate pages
+        // 50 just to separate pages
         currentAreaNumber++;
     } while (transferedFootNoteCursor || d->layoutPosition->it != document()->rootFrame()->end());
 
@@ -924,7 +939,7 @@ bool KoTextDocumentLayout::changesBlocked() const
     return d->changesBlocked;
 }
 
-KoTextDocumentLayout* KoTextDocumentLayout::referencedLayout() const
+KoTextDocumentLayout *KoTextDocumentLayout::referencedLayout() const
 {
     return d->referencedLayout;
 }
@@ -934,7 +949,7 @@ void KoTextDocumentLayout::setReferencedLayout(KoTextDocumentLayout *layout)
     d->referencedLayout = layout;
 }
 
-QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame*) const
+QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *) const
 {
     return QRectF();
 }
@@ -947,14 +962,15 @@ void KoTextDocumentLayout::clearInlineObjectRegistry(const QTextBlock &block)
 
 void KoTextDocumentLayout::registerInlineObject(const QTextInlineObject &inlineObject)
 {
-    KoInlineObjectExtent pos(inlineObject.ascent(),inlineObject.descent());
+    KoInlineObjectExtent pos(inlineObject.ascent(), inlineObject.descent());
     d->inlineObjectExtents.insert(d->inlineObjectOffset + inlineObject.textPosition(), pos);
 }
 
 KoInlineObjectExtent KoTextDocumentLayout::inlineObjectExtent(const QTextFragment &fragment)
 {
-    if (d->inlineObjectExtents.contains(fragment.position()))
+    if (d->inlineObjectExtents.contains(fragment.position())) {
         return d->inlineObjectExtents[fragment.position()];
+    }
     return KoInlineObjectExtent();
 }
 
@@ -984,16 +1000,18 @@ QList<KoTextLayoutRootArea *> KoTextDocumentLayout::rootAreas() const
 void KoTextDocumentLayout::removeRootArea(KoTextLayoutRootArea *rootArea)
 {
     int indexOf = rootArea ? qMax(0, d->rootAreaList.indexOf(rootArea)) : 0;
-    for(int i = d->rootAreaList.count() - 1; i >= indexOf; --i)
+    for (int i = d->rootAreaList.count() - 1; i >= indexOf; --i) {
         d->rootAreaList.removeAt(i);
+    }
 }
 
-QList<KoShape*> KoTextDocumentLayout::shapes() const
+QList<KoShape *> KoTextDocumentLayout::shapes() const
 {
-    QList<KoShape*> listOfShapes;
+    QList<KoShape *> listOfShapes;
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
-        if (rootArea->associatedShape())
+        if (rootArea->associatedShape()) {
             listOfShapes.append(rootArea->associatedShape());
+        }
     }
     return listOfShapes;
 }

@@ -45,13 +45,12 @@
 K_PLUGIN_FACTORY(DefaultToolsFactory, registerPlugin<DefaultTools>();)
 K_EXPORT_PLUGIN(DefaultToolsFactory("krita"))
 
-
 DefaultTools::DefaultTools(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
+    KoToolRegistry *r = KoToolRegistry::instance();
 
-    r->add(new KisToolFillFactory( QStringList()));
+    r->add(new KisToolFillFactory(QStringList()));
     r->add(new KisToolGradientFactory(QStringList()));
     r->add(new KisToolBrushFactory(QStringList()));
     r->add(new KisToolColorPickerFactory(QStringList()));

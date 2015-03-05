@@ -35,7 +35,7 @@
 #include <QPainter>
 
 CSThumbProviderTables::CSThumbProviderTables(Calligra::Sheets::Doc *doc)
-: m_doc(doc)
+    : m_doc(doc)
 {
 }
 
@@ -47,7 +47,7 @@ QList<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
 {
     QList<QImage> thumbnails;
     if (0 != m_doc->map()) {
-        foreach(Calligra::Sheets::Sheet* sheet, m_doc->map()->sheetList()) {
+        foreach (Calligra::Sheets::Sheet *sheet, m_doc->map()->sheetList()) {
             QImage thumbnail(thumbSize, QImage::Format_RGB32);
             thumbnail.fill(QColor(Qt::white).rgb());
             QPainter p(&thumbnail);

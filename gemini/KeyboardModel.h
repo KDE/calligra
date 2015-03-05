@@ -56,14 +56,14 @@ public:
     };
     Q_ENUMS(KeyType)
 
-    explicit KeyboardModel(QObject* parent = 0);
+    explicit KeyboardModel(QObject *parent = 0);
     virtual ~KeyboardModel();
 
     virtual void classBegin();
     virtual void componentComplete();
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
     KeyboardMode keyboardMode() const;
     void setKeyboardMode(KeyboardModel::KeyboardMode mode);
@@ -76,7 +76,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KEYBOARDMODEL_H

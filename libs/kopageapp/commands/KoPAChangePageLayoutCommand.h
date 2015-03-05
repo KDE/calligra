@@ -32,7 +32,7 @@ class KoPAMasterPage;
 class KoPAChangePageLayoutCommand : public KUndo2Command
 {
 public:
-    KoPAChangePageLayoutCommand( KoPADocument *document, KoPAMasterPage *page, const KoPageLayout &newPageLayout, bool applyToDocument, KUndo2Command *parent = 0 );
+    KoPAChangePageLayoutCommand(KoPADocument *document, KoPAMasterPage *page, const KoPageLayout &newPageLayout, bool applyToDocument, KUndo2Command *parent = 0);
     virtual ~KoPAChangePageLayoutCommand();
 
     /// redo the command

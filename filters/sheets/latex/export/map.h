@@ -42,7 +42,7 @@
  */
 class Map: public XmlParser, Config
 {
-    QList<Table*> _tables;
+    QList<Table *> _tables;
 
 public:
     /**
@@ -79,8 +79,7 @@ public:
     /**
      * Write the paragraph in a file.
      */
-    void generate(QTextStream&);
-
+    void generate(QTextStream &);
 
 private:
 

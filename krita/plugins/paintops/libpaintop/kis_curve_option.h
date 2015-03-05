@@ -42,9 +42,9 @@ class KisDynamicSensor;
 class PAINTOP_EXPORT KisCurveOption
 {
 public:
-    KisCurveOption(const QString& label,
-                   const QString& name,
-                   const QString& category,
+    KisCurveOption(const QString &label,
+                   const QString &name,
+                   const QString &category,
                    bool checked,
                    qreal value = 1.0,
                    qreal min = 0.0,
@@ -52,12 +52,12 @@ public:
 
     virtual ~KisCurveOption();
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting);
 
-    const QString& name() const;
-    const QString& label() const;
-    const QString& category() const;
+    const QString &name() const;
+    const QString &label() const;
+    const QString &category() const;
     qreal minValue() const;
     qreal maxValue() const;
     qreal value() const;
@@ -80,25 +80,25 @@ public:
     void setCurve(const QString &sensorId, bool useSameCurve, const KisCubicCurve &curve);
     void setValue(qreal value);
 
-    const QString& minimumLabel() const;
-    const QString& maximumLabel() const;
+    const QString &minimumLabel() const;
+    const QString &maximumLabel() const;
 
     /**
      * Uses the curves set on the sensors to compute a single
      * double value that can control the parameters of a brush.
      */
-    double computeValue(const KisPaintInformation& info) const;
+    double computeValue(const KisPaintInformation &info) const;
 
 protected:
 
-    void setMinimumLabel(const QString& _label);
-    void setMaximumLabel(const QString& _label);
+    void setMinimumLabel(const QString &_label);
+    void setMaximumLabel(const QString &_label);
     void setValueRange(qreal min, qreal max);
 
     /**
      * Read the option using the prefix in argument
      */
-    void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting);
+    void readNamedOptionSetting(const QString &prefix, const KisPropertiesConfiguration *setting);
 
     QString m_name;
     QString m_label;

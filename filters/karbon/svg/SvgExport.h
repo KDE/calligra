@@ -37,10 +37,10 @@ class SvgExport : public KoFilter
     Q_OBJECT
 
 public:
-    SvgExport(QObject* parent, const QVariantList&);
+    SvgExport(QObject *parent, const QVariantList &);
     virtual ~SvgExport() {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif

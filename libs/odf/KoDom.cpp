@@ -19,12 +19,13 @@
 
 #include "KoDom.h"
 
-KoXmlElement KoDom::namedItemNS(const KoXmlNode& node, const char* nsURI, const char* localName)
+KoXmlElement KoDom::namedItemNS(const KoXmlNode &node, const char *nsURI, const char *localName)
 {
     KoXmlNode n = node.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
-        if (n.isElement() && n.localName() == localName && n.namespaceURI() == nsURI)
+        if (n.isElement() && n.localName() == localName && n.namespaceURI() == nsURI) {
             return n.toElement();
+        }
     }
     return KoXmlElement();
 }

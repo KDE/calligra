@@ -24,7 +24,6 @@
 #include <QQueue>
 #include <KoColorDisplayRendererInterface.h>
 
-
 class KisFavoriteResourceManager;
 class QWidget;
 class KoColor;
@@ -40,11 +39,11 @@ class KisPopupPalette : public QWidget
     Q_PROPERTY(int selectedColor READ selectedColor WRITE setSelectedColor)
 
 public:
-    KisPopupPalette(KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), QWidget *parent = 0);
+    KisPopupPalette(KisFavoriteResourceManager *, const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), QWidget *parent = 0);
     ~KisPopupPalette();
     QSize sizeHint() const;
 
-    void showPopupPalette(const QPoint&);
+    void showPopupPalette(const QPoint &);
     void showPopupPalette(bool b);
 
     //functions to set up selectedBrush
@@ -56,11 +55,11 @@ public:
 
 protected:
 
-    void paintEvent(QPaintEvent*);
-    void resizeEvent(QResizeEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
-    void mousePressEvent(QMouseEvent*);
+    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *);
 
     //functions to calculate index of favorite brush or recent color in array
     //n is the total number of favorite brushes or recent colors
@@ -75,13 +74,12 @@ protected:
     void setHoveredColor(int x);
     int hoveredColor() const;
 
-
 private:
     void setVisible(bool b);
 
     QPainterPath drawDonutPathFull(int, int, int, int);
     QPainterPath drawDonutPathAngle(int, int, int);
-    bool isPointInPixmap(QPointF&, int pos);
+    bool isPointInPixmap(QPointF &, int pos);
 
     QPainterPath pathFromPresetIndex(int index);
 
@@ -91,10 +89,10 @@ private:
     int m_hoveredPreset;
     int m_hoveredColor;
     int m_selectedColor;
-    KisFavoriteResourceManager* m_resourceManager;
-    KoTriangleColorSelector* m_triangleColorSelector;
+    KisFavoriteResourceManager *m_resourceManager;
+    KoTriangleColorSelector *m_triangleColorSelector;
 
-    QTimer* m_timer;
+    QTimer *m_timer;
 
     const KoColorDisplayRendererInterface *m_displayRenderer;
 
@@ -103,7 +101,7 @@ private:
 Q_SIGNALS:
     void sigChangeActivePaintop(int);
     void sigUpdateRecentColor(int);
-    void sigChangefGColor(const KoColor&);
+    void sigChangefGColor(const KoColor &);
 
     // These are used to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour
@@ -116,11 +114,21 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotExternalFgColorChanged(const KoColor &color);
     void slotEmitColorChanged();
-    void slotSetSelectedColor(int x) { setSelectedColor(x); update(); }
+    void slotSetSelectedColor(int x)
+    {
+        setSelectedColor(x);
+        update();
+    }
     void slotTriggerTimer();
     void slotEnableChangeFGColor();
-    void slotUpdate() { update(); }
-    void slotHide() { showPopupPalette(false); }
+    void slotUpdate()
+    {
+        update();
+    }
+    void slotHide()
+    {
+        showPopupPalette(false);
+    }
 };
 
 #endif // KIS_POPUP_PALETTE_H

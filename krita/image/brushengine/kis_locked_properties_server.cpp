@@ -24,12 +24,12 @@ KisLockedPropertiesServer::KisLockedPropertiesServer()
     m_propertiesFromLocked = false;
 }
 
-KisLockedPropertiesProxy* KisLockedPropertiesServer::createLockedPropertiesProxy(const KisPropertiesConfiguration* config)
+KisLockedPropertiesProxy *KisLockedPropertiesServer::createLockedPropertiesProxy(const KisPropertiesConfiguration *config)
 {
-    KisLockedPropertiesProxy* m = new KisLockedPropertiesProxy(config, lockedProperties());
+    KisLockedPropertiesProxy *m = new KisLockedPropertiesProxy(config, lockedProperties());
     return m;
 }
-KisLockedPropertiesServer* KisLockedPropertiesServer::instance()
+KisLockedPropertiesServer *KisLockedPropertiesServer::instance()
 {
     K_GLOBAL_STATIC(KisLockedPropertiesServer, s_instance);
 
@@ -39,7 +39,7 @@ KisLockedPropertiesServer* KisLockedPropertiesServer::instance()
 
     return NULL;
 }
-KisLockedProperties* KisLockedPropertiesServer::lockedProperties()
+KisLockedProperties *KisLockedPropertiesServer::lockedProperties()
 {
     return m_lockedProperties;
 }
@@ -64,6 +64,4 @@ bool KisLockedPropertiesServer::hasProperty(const QString &p)
 {
     return m_lockedProperties->hasProperty(p);
 }
-
-
 

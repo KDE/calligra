@@ -37,24 +37,24 @@ class QDateTime;
 
 namespace TJ
 {
-    class Project;
-    class Task;
-    class Resource;
-    class Interval;
-    class CoreAttributes;
+class Project;
+class Task;
+class Resource;
+class Interval;
+class CoreAttributes;
 
 }
 
 namespace KPlato
 {
-    class Project;
-    class ScheduleManager;
-    class Schedule;
-    class MainSchedule;
-    class Resource;
-    class Task;
-    class Node;
-    class Relation;
+class Project;
+class ScheduleManager;
+class Schedule;
+class MainSchedule;
+class Resource;
+class Task;
+class Node;
+class Relation;
 }
 using namespace KPlato;
 
@@ -65,7 +65,7 @@ class PlanTJScheduler : public KPlato::SchedulerThread
 private:
 
 public:
-    PlanTJScheduler( Project *project, ScheduleManager *sm, ulong granularity, QObject *parent = 0 );
+    PlanTJScheduler(Project *project, ScheduleManager *sm, ulong granularity, QObject *parent = 0);
     ~PlanTJScheduler();
 
     bool check();
@@ -77,47 +77,45 @@ public:
     /// Fetch project data from TJ structure
     bool kplatoFromTJ();
 
-
 Q_SIGNALS:
-    void sigCalculationStarted( Project*, ScheduleManager* );
-    void sigCalculationFinished( Project*, ScheduleManager* );
-    const char* taskname();
+    void sigCalculationStarted(Project *, ScheduleManager *);
+    void sigCalculationFinished(Project *, ScheduleManager *);
+    const char *taskname();
 
 public Q_SLOTS:
-    void slotMessage( int type, const QString &msg, TJ::CoreAttributes *object );
+    void slotMessage(int type, const QString &msg, TJ::CoreAttributes *object);
 
 protected:
     void run();
 
-    void adjustSummaryTasks( const QList<Node*> &nodes );
+    void adjustSummaryTasks(const QList<Node *> &nodes);
 
-    TJ::Resource *addResource( KPlato::Resource *resource );
+    TJ::Resource *addResource(KPlato::Resource *resource);
     void addTasks();
-    void addWorkingTime( KPlato::Task *task, TJ::Task *job );
-    TJ::Task *addTask( KPlato::Task *task , TJ::Task *parent = 0 );
+    void addWorkingTime(KPlato::Task *task, TJ::Task *job);
+    TJ::Task *addTask(KPlato::Task *task, TJ::Task *parent = 0);
     void addDependencies();
-    void addPrecedes( const Relation *rel );
-    void addDepends( const Relation *rel );
-    void addDependencies( Task *task );
+    void addPrecedes(const Relation *rel);
+    void addDepends(const Relation *rel);
+    void addDependencies(Task *task);
     void setConstraints();
-    void setConstraint( TJ::Task *job, KPlato::Task *task );
-    TJ::Task *addStartNotEarlier( Node *task );
-    TJ::Task *addFinishNotLater( Node *task );
+    void setConstraint(TJ::Task *job, KPlato::Task *task);
+    TJ::Task *addStartNotEarlier(Node *task);
+    TJ::Task *addFinishNotLater(Node *task);
     void addRequests();
-    void addRequest( TJ::Task *job, Task *task );
+    void addRequest(TJ::Task *job, Task *task);
     void addStartEndJob();
-    bool taskFromTJ( TJ::Task *job, Task *task );
-    void calcPertValues( Task *task );
-    Duration calcPositiveFloat( Task *task );
+    bool taskFromTJ(TJ::Task *job, Task *task);
+    void calcPertValues(Task *task);
+    Duration calcPositiveFloat(Task *task);
 
-    static bool exists( QList<CalendarDay*> &lst, CalendarDay *day );
-    static int toTJDayOfWeek( int day );
-    static DateTime fromTime_t( time_t );
-    static time_t toTJTime_t( const QDateTime &dt, ulong granularity );
-    AppointmentInterval fromTJInterval( const TJ::Interval &tji );
-    static TJ::Interval toTJInterval( const QDateTime &start, const QDateTime &end, ulong tjGranularity );
-    static TJ::Interval toTJInterval( const QTime &start, const QTime &end, ulong tjGranularity );
-
+    static bool exists(QList<CalendarDay *> &lst, CalendarDay *day);
+    static int toTJDayOfWeek(int day);
+    static DateTime fromTime_t(time_t);
+    static time_t toTJTime_t(const QDateTime &dt, ulong granularity);
+    AppointmentInterval fromTJInterval(const TJ::Interval &tji);
+    static TJ::Interval toTJInterval(const QDateTime &start, const QDateTime &end, ulong tjGranularity);
+    static TJ::Interval toTJInterval(const QTime &start, const QTime &end, ulong tjGranularity);
 
 private:
     KLocale *locale() const;
@@ -131,8 +129,8 @@ private:
     TJ::Project *m_tjProject;
 //     Task *m_backwardTask;
 
-    QMap<TJ::Task*, Task*> m_taskmap;
-    QMap<TJ::Resource*, Resource*> m_resourcemap;
+    QMap<TJ::Task *, Task *> m_taskmap;
+    QMap<TJ::Resource *, Resource *> m_resourcemap;
 
     ulong m_granularity;
 };

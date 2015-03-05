@@ -18,16 +18,19 @@
 class TaskTreeIterator : public virtual CoreAttributesTreeIterator
 {
 public:
-    explicit TaskTreeIterator(Task* r, IterationMode m = leavesOnly)
+    explicit TaskTreeIterator(Task *r, IterationMode m = leavesOnly)
         : CoreAttributesTreeIterator(r, m) { }
     virtual ~TaskTreeIterator() { }
 
-    Task* operator*() { return static_cast<Task*>(current); }
-    Task* operator++()
+    Task *operator*()
     {
-        return static_cast<Task*>(CoreAttributesTreeIterator::operator++());
+        return static_cast<Task *>(current);
     }
-} ;
+    Task *operator++()
+    {
+        return static_cast<Task *>(CoreAttributesTreeIterator::operator++());
+    }
+};
 
 #endif
 

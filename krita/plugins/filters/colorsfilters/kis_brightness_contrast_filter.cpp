@@ -55,7 +55,7 @@
 #include <kis_canvas_resource_provider.h>
 
 KisBrightnessContrastFilterConfiguration::KisBrightnessContrastFilterConfiguration()
-        : KisFilterConfiguration("brightnesscontrast", 1)
+    : KisFilterConfiguration("brightnesscontrast", 1)
 {
 }
 
@@ -63,7 +63,7 @@ KisBrightnessContrastFilterConfiguration::~KisBrightnessContrastFilterConfigurat
 {
 }
 
-void KisBrightnessContrastFilterConfiguration::fromLegacyXML(const QDomElement& root)
+void KisBrightnessContrastFilterConfiguration::fromLegacyXML(const QDomElement &root)
 {
     fromXML(root);
 }
@@ -79,17 +79,17 @@ void KisBrightnessContrastFilterConfiguration::setCurve(const KisCubicCurve &cur
     updateTransfer();
 }
 
-const QVector<quint16>& KisBrightnessContrastFilterConfiguration::transfer() const
+const QVector<quint16> &KisBrightnessContrastFilterConfiguration::transfer() const
 {
     return m_transfer;
 }
 
-const KisCubicCurve& KisBrightnessContrastFilterConfiguration::curve() const
+const KisCubicCurve &KisBrightnessContrastFilterConfiguration::curve() const
 {
     return m_curve;
 }
 
-void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
+void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement &root)
 {
     KisCubicCurve curve;
     int version;
@@ -124,7 +124,7 @@ void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
  */
 //void KisPerChannelFilterConfiguration::fromXML(const QString& s)
 
-void KisBrightnessContrastFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
+void KisBrightnessContrastFilterConfiguration::toXML(QDomDocument &doc, QDomElement &root) const
 {
     /**
      * <params version=1>
@@ -135,7 +135,6 @@ void KisBrightnessContrastFilterConfiguration::toXML(QDomDocument& doc, QDomElem
 
     /* This is a constant for Brightness/Contranst filter */
     const qint32 numTransfers = 1;
-
 
     root.setAttribute("version", version());
 
@@ -158,41 +157,42 @@ void KisBrightnessContrastFilterConfiguration::toXML(QDomDocument& doc, QDomElem
  */
 //QString KisPerChannelFilterConfiguration::toXML()
 
-
 KisBrightnessContrastFilter::KisBrightnessContrastFilter()
-        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Brightness/Contrast curve..."))
+    : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Brightness/Contrast curve..."))
 {
     setSupportsPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }
 
-KisConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     return new KisBrightnessContrastConfigWidget(parent, dev);
 }
 
-KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const KisPaintDeviceSP)
+KisFilterConfiguration *KisBrightnessContrastFilter::factoryConfiguration(const KisPaintDeviceSP)
 const
 {
     return new KisBrightnessContrastFilterConfiguration();
 }
 
-KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation *KisBrightnessContrastFilter::createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const
 {
-    const KisBrightnessContrastFilterConfiguration* configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration*>(config);
-    if (!configBC) return 0;
+    const KisBrightnessContrastFilterConfiguration *configBC = dynamic_cast<const KisBrightnessContrastFilterConfiguration *>(config);
+    if (!configBC) {
+        return 0;
+    }
 
-    KoColorTransformation * adjustment = cs->createBrightnessContrastAdjustment(configBC->transfer().constData());
+    KoColorTransformation *adjustment = cs->createBrightnessContrastAdjustment(configBC->transfer().constData());
     return adjustment;
 }
 
-KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
-        : KisConfigWidget(parent, f)
+KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WFlags f)
+    : KisConfigWidget(parent, f)
 {
     int i;
     int height;
     m_page = new WdgBrightnessContrast(this);
-    QHBoxLayout * l = new QHBoxLayout(this);
+    QHBoxLayout *l = new QHBoxLayout(this);
     Q_CHECK_PTR(l);
 
     //Hide these buttons and labels as they are not implemented in 1.5
@@ -204,8 +204,8 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     m_page->textLabelContrast->hide();
 
     l->addWidget(m_page, 1, Qt::AlignTop);
-    l->setContentsMargins(0,0,0,0);
-    
+    l->setContentsMargins(0, 0, 0, 0);
+
     height = 256;
     connect(m_page->curveWidget, SIGNAL(modified()), SIGNAL(sigConfigurationItemChanged()));
 
@@ -261,9 +261,9 @@ KisBrightnessContrastConfigWidget::~KisBrightnessContrastConfigWidget()
     delete m_page;
 }
 
-KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::configuration() const
+KisBrightnessContrastFilterConfiguration *KisBrightnessContrastConfigWidget::configuration() const
 {
-    KisBrightnessContrastFilterConfiguration * cfg = new KisBrightnessContrastFilterConfiguration();
+    KisBrightnessContrastFilterConfiguration *cfg = new KisBrightnessContrastFilterConfiguration();
     cfg->setCurve(m_page->curveWidget->curve());
     return cfg;
 }
@@ -271,30 +271,29 @@ KisBrightnessContrastFilterConfiguration * KisBrightnessContrastConfigWidget::co
 void KisBrightnessContrastConfigWidget::slotDrawLine(const KoColor &color)
 {
     QColor colorNew = color.toQColor();
-    int i = (colorNew.red() + colorNew.green() + colorNew.blue())/3 ;
+    int i = (colorNew.red() + colorNew.green() + colorNew.blue()) / 3;
     QPixmap pix = m_page->curveWidget->getBasePixmap();
     QPainter p(&pix);
     p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
-    p.drawLine(i,0,i,255);
+    p.drawLine(i, 0, i, 255);
     QString label = "x:";
-    label.insert(2,QString(QString::number(i)));
-    p.drawText(i,250,label);
+    label.insert(2, QString(QString::number(i)));
+    p.drawText(i, 250, label);
     m_page->curveWidget->setPixmap(pix);
 }
 
 void KisBrightnessContrastConfigWidget::setView(KisViewManager *view)
 {
-    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotDrawLine(const KoColor&)));
+    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), this, SLOT(slotDrawLine(KoColor)));
     KoToolManager::instance()->switchToolTemporaryRequested("KritaSelected/KisToolColorPicker");
 }
 
-void KisBrightnessContrastConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisBrightnessContrastConfigWidget::setConfiguration(const KisPropertiesConfiguration *config)
 {
-    const KisBrightnessContrastFilterConfiguration * cfg = dynamic_cast<const KisBrightnessContrastFilterConfiguration *>(config);
+    const KisBrightnessContrastFilterConfiguration *cfg = dynamic_cast<const KisBrightnessContrastFilterConfiguration *>(config);
     Q_ASSERT(cfg);
     m_page->curveWidget->setCurve(cfg->curve());
 }
-
 
 #include "kis_brightness_contrast_filter.moc"
 

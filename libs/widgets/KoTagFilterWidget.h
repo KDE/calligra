@@ -33,7 +33,7 @@ class KoTagFilterWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit KoTagFilterWidget(QWidget* parent);
+    explicit KoTagFilterWidget(QWidget *parent);
     virtual ~KoTagFilterWidget();
     void allowSave(bool allow);
     void clear();
@@ -45,7 +45,7 @@ private Q_SLOTS:
     void onSaveButtonClicked();
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KOTAGFILTERWIDGET_H

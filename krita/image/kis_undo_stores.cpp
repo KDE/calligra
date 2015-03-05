@@ -21,7 +21,6 @@
 #include "KisDocument.h"
 #include <kundo2stack.h>
 
-
 /*****************************************************************/
 /*                KisSurrogateUndoStore                           */
 /*****************************************************************/
@@ -36,7 +35,7 @@ KisSurrogateUndoStore::~KisSurrogateUndoStore()
     delete m_undoStack;
 }
 
-const KUndo2Command* KisSurrogateUndoStore::presentCommand()
+const KUndo2Command *KisSurrogateUndoStore::presentCommand()
 {
     return m_undoStack->command(m_undoStack->index() - 1);
 }
@@ -48,11 +47,13 @@ void KisSurrogateUndoStore::undoLastCommand()
 
 void KisSurrogateUndoStore::addCommand(KUndo2Command *command)
 {
-    if(!command) return;
+    if (!command) {
+        return;
+    }
     m_undoStack->push(command);
 }
 
-void KisSurrogateUndoStore::beginMacro(const KUndo2MagicString& macroName)
+void KisSurrogateUndoStore::beginMacro(const KUndo2MagicString &macroName)
 {
     m_undoStack->beginMacro(macroName);
 }
@@ -74,14 +75,14 @@ void KisSurrogateUndoStore::redo()
 
 void KisSurrogateUndoStore::undoAll()
 {
-    while(m_undoStack->canUndo()) {
+    while (m_undoStack->canUndo()) {
         m_undoStack->undo();
     }
 }
 
 void KisSurrogateUndoStore::redoAll()
 {
-    while(m_undoStack->canRedo()) {
+    while (m_undoStack->canRedo()) {
         m_undoStack->redo();
     }
 }
@@ -90,7 +91,7 @@ void KisSurrogateUndoStore::redoAll()
 /*                KisDumbUndoStore                               */
 /*****************************************************************/
 
-const KUndo2Command* KisDumbUndoStore::presentCommand()
+const KUndo2Command *KisDumbUndoStore::presentCommand()
 {
     return 0;
 }
@@ -111,7 +112,7 @@ void KisDumbUndoStore::addCommand(KUndo2Command *command)
     delete command;
 }
 
-void KisDumbUndoStore::beginMacro(const KUndo2MagicString& macroName)
+void KisDumbUndoStore::beginMacro(const KUndo2MagicString &macroName)
 {
     /**
      * Yes, sir! >:)

@@ -23,7 +23,7 @@
 
 KoLineStyleModel::KoLineStyleModel(QObject *parent)
     : QAbstractListModel(parent),
-    m_hasTempStyle(false)
+      m_hasTempStyle(false)
 {
     // add standard dash patterns
     for (int i = Qt::NoPen; i < Qt::CustomDashLine; i++) {
@@ -39,21 +39,23 @@ int KoLineStyleModel::rowCount(const QModelIndex &/*parent*/) const
 
 QVariant KoLineStyleModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
-         return QVariant();
+    if (!index.isValid()) {
+        return QVariant();
+    }
 
-    switch(role) {
+    switch (role) {
     case Qt::DecorationRole: {
         QPen pen(Qt::black);
         pen.setWidth(2);
-        if (index.row() < Qt::CustomDashLine)
+        if (index.row() < Qt::CustomDashLine) {
             pen.setStyle(static_cast<Qt::PenStyle>(index.row()));
-        else if (index.row() < m_styles.count())
+        } else if (index.row() < m_styles.count()) {
             pen.setDashPattern(m_styles[index.row()]);
-        else if (m_hasTempStyle)
+        } else if (m_hasTempStyle) {
             pen.setDashPattern(m_tempStyle);
-        else
+        } else {
             pen.setStyle(Qt::NoPen);
+        }
 
         return QVariant(pen);
     }
@@ -66,8 +68,9 @@ QVariant KoLineStyleModel::data(const QModelIndex &index, int role) const
 
 bool KoLineStyleModel::addCustomStyle(const QVector<qreal> &style)
 {
-    if (m_styles.contains(style))
+    if (m_styles.contains(style)) {
         return false;
+    }
 
     m_styles.append(style);
     return true;

@@ -31,16 +31,16 @@ class ScribbleArea : public QDeclarativeItem
     Q_PROPERTY(int penWidth READ penWidth WRITE setPenWidth NOTIFY penWidthChanged)
 
 public:
-    explicit ScribbleArea(QDeclarativeItem* parent = 0);
+    explicit ScribbleArea(QDeclarativeItem *parent = 0);
     virtual ~ScribbleArea();
 
     Q_INVOKABLE void clear();
 
     QColor color() const;
-    void setColor(const QColor& newColor);
+    void setColor(const QColor &newColor);
 
     int penWidth() const;
-    void setPenWidth(const int& newWidth);
+    void setPenWidth(const int &newWidth);
 
 Q_SIGNALS:
     void colorChanged();
@@ -49,12 +49,12 @@ Q_SIGNALS:
     void paintingStarted();
 
 protected:
-    virtual bool event(QEvent* event);
-    virtual bool sceneEvent(QEvent* event);
+    virtual bool event(QEvent *event);
+    virtual bool sceneEvent(QEvent *event);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
 
 private:
     void drawLineTo(const QPointF &endPoint);

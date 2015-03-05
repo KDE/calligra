@@ -67,7 +67,7 @@ public:
      * @param animShape Shape that holds the animation
      */
     KPrShapeAnimation *loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context,
-                                             KoShape *animShape = 0);
+            KoShape *animShape = 0);
 
 private:
     /**
@@ -124,8 +124,8 @@ private:
 
     QList<KPrShapeAnimation *> m_animations;
     QList<KoXmlElement> m_animationContext;
-    QMap<QString, KPrCollectionItemModel*> m_modelMap;
-    QMap<QString, KPrCollectionItemModel*> m_subModelMap;
+    QMap<QString, KPrCollectionItemModel *> m_modelMap;
+    QMap<QString, KPrCollectionItemModel *> m_subModelMap;
     QList<QListWidgetItem *> m_mainItemsCollection;
     bool m_isInitialized;
 };

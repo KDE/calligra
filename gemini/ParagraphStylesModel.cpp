@@ -25,18 +25,19 @@
 #include <KoTextEditor.h>
 #include <KWDocument.h>
 
-class ParagraphStylesModel::Private {
+class ParagraphStylesModel::Private
+{
 public:
-    Private(ParagraphStylesModel* qq)
+    Private(ParagraphStylesModel *qq)
         : q(qq)
         , document(0)
     {
     }
-    ParagraphStylesModel* q;
+    ParagraphStylesModel *q;
     QPointer<KWDocument> document;
-    QList<KoParagraphStyle*> styles;
+    QList<KoParagraphStyle *> styles;
     QPointer<KoTextEditor> textEditor;
-    KoParagraphStyle* cursorStyle;
+    KoParagraphStyle *cursorStyle;
     QFont cursorFont;
     qreal zoomLevel;
 
@@ -44,9 +45,8 @@ public:
     {
         q->beginResetModel();
         styles.clear();
-        if(document)
-        {
-            KoStyleManager* styleManager = document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+        if (document) {
+            KoStyleManager *styleManager = document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager *>();
             QList<KoParagraphStyle *> paragraphStyles = styleManager->paragraphStyles();
             KoParagraphStyle *defaultParagraphStyle = styleManager->defaultParagraphStyle();
             foreach (KoParagraphStyle *style, paragraphStyles) {
@@ -62,7 +62,7 @@ public:
 ParagraphStylesModel::ParagraphStylesModel()
     : d(new Private(this))
 {
-    QHash<int,QByteArray> roleNames;
+    QHash<int, QByteArray> roleNames;
     roleNames[Name] = "name";
     roleNames[Current] = "current";
     roleNames[Font] = "font";
@@ -79,87 +79,88 @@ ParagraphStylesModel::~ParagraphStylesModel()
     delete d;
 }
 
-QVariant ParagraphStylesModel::data(const QModelIndex& index, int role) const
+QVariant ParagraphStylesModel::data(const QModelIndex &index, int role) const
 {
     QVariant data;
-    if(index.isValid() && index.row() < d->styles.count() && d->document)
-    {
-        KoCharacterStyle* style = d->styles.at(index.row());
+    if (index.isValid() && index.row() < d->styles.count() && d->document) {
+        KoCharacterStyle *style = d->styles.at(index.row());
         QFont font = style->font();
-        switch(role)
-        {
-            case Name:
-                data.setValue(style->name());
-                break;
-            case Current:
-                data.setValue(style == d->cursorStyle);
-                break;
-            case Font:
-                font.setUnderline((style->underlineStyle() != KoCharacterStyle::NoLineStyle));
-                font.setPointSize(font.pointSize() * d->zoomLevel);
-                data.setValue(font);
-                break;
-            case FontFamily:
-                data.setValue(style->fontFamily());
-                break;
-            case FontPointSize:
-                data.setValue(style->fontPointSize() * d->zoomLevel);
-                break;
-            case FontItalic:
-                data.setValue(style->fontItalic());
-                break;
-            case FontWeight:
-                data.setValue(style->fontWeight());
-                break;
-            case FontUnderline:
-                data.setValue((style->underlineStyle() != KoCharacterStyle::NoLineStyle));
-                break;
-            default:
-                data.setValue(QString("Unknown role"));
-                break;
+        switch (role) {
+        case Name:
+            data.setValue(style->name());
+            break;
+        case Current:
+            data.setValue(style == d->cursorStyle);
+            break;
+        case Font:
+            font.setUnderline((style->underlineStyle() != KoCharacterStyle::NoLineStyle));
+            font.setPointSize(font.pointSize() * d->zoomLevel);
+            data.setValue(font);
+            break;
+        case FontFamily:
+            data.setValue(style->fontFamily());
+            break;
+        case FontPointSize:
+            data.setValue(style->fontPointSize() * d->zoomLevel);
+            break;
+        case FontItalic:
+            data.setValue(style->fontItalic());
+            break;
+        case FontWeight:
+            data.setValue(style->fontWeight());
+            break;
+        case FontUnderline:
+            data.setValue((style->underlineStyle() != KoCharacterStyle::NoLineStyle));
+            break;
+        default:
+            data.setValue(QString("Unknown role"));
+            break;
         }
     }
     return data;
 }
 
-int ParagraphStylesModel::rowCount(const QModelIndex& parent) const
+int ParagraphStylesModel::rowCount(const QModelIndex &parent) const
 {
-    if(parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
     return d->styles.count();
 }
 
-QObject* ParagraphStylesModel::document() const
+QObject *ParagraphStylesModel::document() const
 {
     return d->document;
 }
 
-void ParagraphStylesModel::setDocument(QObject* newDocument)
+void ParagraphStylesModel::setDocument(QObject *newDocument)
 {
-    d->document = qobject_cast<KWDocument*>(newDocument);
+    d->document = qobject_cast<KWDocument *>(newDocument);
     d->updateStylesList();
     emit documentChanged();
 }
 
-QObject* ParagraphStylesModel::textEditor() const
+QObject *ParagraphStylesModel::textEditor() const
 {
     return d->textEditor;
 }
 
-void ParagraphStylesModel::setTextEditor(QObject* newEditor)
+void ParagraphStylesModel::setTextEditor(QObject *newEditor)
 {
-    if(d->textEditor)
+    if (d->textEditor) {
         d->textEditor->disconnect(this);
-    d->textEditor = qobject_cast<KoTextEditor*>(newEditor);
-    if(d->textEditor)
+    }
+    d->textEditor = qobject_cast<KoTextEditor *>(newEditor);
+    if (d->textEditor) {
         connect(d->textEditor, SIGNAL(cursorPositionChanged()), SLOT(cursorPositionChanged()));
+    }
     emit textEditorChanged();
 }
 
 void ParagraphStylesModel::cursorPositionChanged()
 {
     QTextBlockFormat bf = d->textEditor->blockFormat();
-    d->cursorStyle =  d->document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>()->paragraphStyle(bf.intProperty(KoParagraphStyle::StyleId));
+    d->cursorStyle =  d->document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager *>()->paragraphStyle(bf.intProperty(KoParagraphStyle::StyleId));
     dataChanged(index(0), index(d->styles.count() - 1));
 
     QTextCharFormat charFormat = d->textEditor->charFormat();
@@ -169,10 +170,11 @@ void ParagraphStylesModel::cursorPositionChanged()
 
 void ParagraphStylesModel::activate(int index)
 {
-    if(d->textEditor && index > -1 && index < d->styles.count()) {
-        KoParagraphStyle* style = d->styles.at(index);
-        if(style == d->cursorStyle)
+    if (d->textEditor && index > -1 && index < d->styles.count()) {
+        KoParagraphStyle *style = d->styles.at(index);
+        if (style == d->cursorStyle) {
             return;
+        }
         d->textEditor->setStyle(style);
         cursorPositionChanged();
     }
@@ -193,11 +195,12 @@ qreal ParagraphStylesModel::zoomLevel() const
     return d->zoomLevel;
 }
 
-void ParagraphStylesModel::setZoomLevel(const qreal& newZoom)
+void ParagraphStylesModel::setZoomLevel(const qreal &newZoom)
 {
     d->zoomLevel = newZoom;
-    if(d->styles.count() > 0)
+    if (d->styles.count() > 0) {
         dataChanged(index(0), index(d->styles.count() - 1));
+    }
     emit zoomLevelChanged();
 }
 

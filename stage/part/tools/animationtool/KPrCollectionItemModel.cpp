@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-KPrCollectionItemModel::KPrCollectionItemModel(QObject* parent)
+KPrCollectionItemModel::KPrCollectionItemModel(QObject *parent)
     : QAbstractListModel(parent)
 {
     setSupportedDragActions(Qt::IgnoreAction);
@@ -31,25 +31,25 @@ KPrCollectionItemModel::KPrCollectionItemModel(QObject* parent)
 
 QVariant KPrCollectionItemModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || index.row() > m_animationClassList.count())
+    if (!index.isValid() || index.row() > m_animationClassList.count()) {
         return QVariant();
+    }
 
-    switch(role)
-    {
-        case Qt::ToolTipRole:
-            return m_animationClassList[index.row()].toolTip;
+    switch (role) {
+    case Qt::ToolTipRole:
+        return m_animationClassList[index.row()].toolTip;
 
-        case Qt::DecorationRole:
-            return m_animationClassList[index.row()].icon;
+    case Qt::DecorationRole:
+        return m_animationClassList[index.row()].icon;
 
-        case Qt::UserRole:
-            return m_animationClassList[index.row()].id;
+    case Qt::UserRole:
+        return m_animationClassList[index.row()].id;
 
-        case Qt::DisplayRole:
-            return m_animationClassList[index.row()].name;
+    case Qt::DisplayRole:
+        return m_animationClassList[index.row()].name;
 
-        default:
-            return QVariant();
+    default:
+        return QVariant();
     }
 
     return QVariant();

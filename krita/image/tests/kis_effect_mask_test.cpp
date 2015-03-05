@@ -19,7 +19,6 @@
 #include "kis_effect_mask_test.h"
 #include <qtest_kde.h>
 
-
 void KisEffectMaskTest::testCreation()
 {
 }
@@ -36,8 +35,6 @@ void KisEffectMaskTest::testCaching()
 {
 }
 
-
 QTEST_KDEMAIN(KisEffectMaskTest, NoGUI)
 #include "kis_effect_mask_test.moc"
-
 

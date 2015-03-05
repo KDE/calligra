@@ -29,14 +29,13 @@
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 
-
 KisTransparencyMask::KisTransparencyMask()
-        : KisEffectMask()
+    : KisEffectMask()
 {
 }
 
-KisTransparencyMask::KisTransparencyMask(const KisTransparencyMask& rhs)
-        : KisEffectMask(rhs)
+KisTransparencyMask::KisTransparencyMask(const KisTransparencyMask &rhs)
+    : KisEffectMask(rhs)
 {
 }
 
@@ -46,7 +45,7 @@ KisTransparencyMask::~KisTransparencyMask()
 
 QRect KisTransparencyMask::decorateRect(KisPaintDeviceSP &src,
                                         KisPaintDeviceSP &dst,
-                                        const QRect & rc,
+                                        const QRect &rc,
                                         PositionToFilthy maskPos) const
 {
     Q_UNUSED(maskPos);

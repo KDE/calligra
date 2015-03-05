@@ -33,8 +33,7 @@ class KoCompositeOpDissolve: public KoCompositeOp
 
     inline static quint8 getRandomValue(quint32 i)
     {
-        static const quint8 randomValues[256] =
-        {
+        static const quint8 randomValues[256] = {
             0x50, 0xAD, 0x7D, 0xA9, 0x10, 0x75, 0xCA, 0x57, 0xE2, 0x06, 0x77, 0x39, 0xD9, 0xFA, 0x5C, 0x24,
             0xEB, 0x1A, 0x6F, 0x15, 0xE7, 0x8B, 0x11, 0x71, 0xF0, 0xB9, 0x44, 0x8A, 0x27, 0x5E, 0xA1, 0x6A,
             0x47, 0x94, 0x03, 0xD5, 0xB7, 0x56, 0xEF, 0x45, 0xED, 0xBE, 0xE8, 0xB2, 0x4C, 0x0D, 0x65, 0x9E,
@@ -57,17 +56,18 @@ class KoCompositeOpDissolve: public KoCompositeOp
     }
 
 public:
-    KoCompositeOpDissolve(const KoColorSpace* cs, const QString& category)
+    KoCompositeOpDissolve(const KoColorSpace *cs, const QString &category)
         : KoCompositeOp(cs, COMPOSITE_DISSOLVE, i18n("Dissolve"), category) { }
 
     using KoCompositeOp::composite;
 
-    virtual void composite(quint8*       dstRowStart , qint32 dstRowStride ,
-                           const quint8* srcRowStart , qint32 srcRowStride ,
-                           const quint8* maskRowStart, qint32 maskRowStride,
-                           qint32 rows, qint32 cols, quint8 U8_opacity, const QBitArray& channelFlags) const {
+    virtual void composite(quint8       *dstRowStart, qint32 dstRowStride,
+                           const quint8 *srcRowStart, qint32 srcRowStride,
+                           const quint8 *maskRowStart, qint32 maskRowStride,
+                           qint32 rows, qint32 cols, quint8 U8_opacity, const QBitArray &channelFlags) const
+    {
 
-        const QBitArray& flags       = channelFlags.isEmpty() ? QBitArray(channels_nb,true) : channelFlags;
+        const QBitArray &flags       = channelFlags.isEmpty() ? QBitArray(channels_nb, true) : channelFlags;
         bool             alphaLocked = (alpha_pos != -1) && !flags.testBit(alpha_pos);
 
         using namespace Arithmetic;
@@ -76,27 +76,29 @@ public:
         qint32        srcInc    = (srcRowStride == 0) ? 0 : channels_nb;
         bool          useMask   = maskRowStart != 0;
         channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
-        channels_type opacity   = KoColorSpaceMaths<quint8,channels_type>::scaleToA(U8_opacity);
+        channels_type opacity   = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
 
-        for(; rows>0; --rows) {
-            const channels_type* src  = reinterpret_cast<const channels_type*>(srcRowStart);
-            channels_type*       dst  = reinterpret_cast<channels_type*>(dstRowStart);
-            const quint8*        mask = maskRowStart;
+        for (; rows > 0; --rows) {
+            const channels_type *src  = reinterpret_cast<const channels_type *>(srcRowStart);
+            channels_type       *dst  = reinterpret_cast<channels_type *>(dstRowStart);
+            const quint8        *mask = maskRowStart;
 
-            for(qint32 c=cols; c>0; --c) {
+            for (qint32 c = cols; c > 0; --c) {
                 channels_type srcAlpha = (alpha_pos == -1) ? unitValue : src[alpha_pos];
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue : dst[alpha_pos];
                 channels_type blend    = useMask ? mul(opacity, scale<channels_type>(*mask), srcAlpha) : mul(opacity, srcAlpha);
 
 //                 if(getRandomValue(ctr) <= scale<quint8>(blend) && blend != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
-                if((qrand() % 256) <= scale<quint8>(blend) && blend != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
-                    for(qint32 i=0; i <channels_nb; i++) {
-                        if(i != alpha_pos && flags.testBit(i))
+                if ((qrand() % 256) <= scale<quint8>(blend) && blend != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+                    for (qint32 i = 0; i < channels_nb; i++) {
+                        if (i != alpha_pos && flags.testBit(i)) {
                             dst[i] = src[i];
+                        }
                     }
 
-                    if(alpha_pos != -1)
+                    if (alpha_pos != -1) {
                         dst[alpha_pos] = alphaLocked ? dstAlpha : unitValue;
+                    }
                 }
 
                 src += srcInc;

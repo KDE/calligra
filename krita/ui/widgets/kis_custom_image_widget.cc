@@ -64,8 +64,7 @@
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
-
-KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString &defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString &imageName)
     : WdgNewImage(parent)
 {
     setObjectName("KisCustomImageWidget");
@@ -134,15 +133,15 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     intNumLayers->setValue(cfg.numDefaultLayers());
     cmbColor->setColor(cfg.defaultBackgroundColor());
     setBackgroundOpacity(cfg.defaultBackgroundOpacity());
-    
+
     KisConfig::BackgroundStyle bgStyle = cfg.defaultBackgroundStyle();
-    
+
     if (bgStyle == KisConfig::LAYER) {
-      radioBackgroundAsLayer->setChecked(true);
+        radioBackgroundAsLayer->setChecked(true);
     } else {
-      radioBackgroundAsProjection->setChecked(true);
+        radioBackgroundAsProjection->setChecked(true);
     }
-    
+
     fillPredefined();
     switchPortraitLandscape();
 }
@@ -171,7 +170,6 @@ void KisCustomImageWidget::resolutionChanged(double res)
         m_height = m_heightUnit.fromUserValue(doubleHeight->value());
     }
 }
-
 
 void KisCustomImageWidget::widthUnitChanged(int index)
 {
@@ -225,20 +223,20 @@ void KisCustomImageWidget::createImage()
     }
 }
 
-KisDocument* KisCustomImageWidget::createNewImage()
+KisDocument *KisCustomImageWidget::createNewImage()
 {
 
-    const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
+    const KoColorSpace *cs = colorSpaceSelector->currentColorSpace();
 
     if (cs->colorModelId() == RGBAColorModelID &&
-        cs->colorDepthId() == Integer8BitsColorDepthID) {
+            cs->colorDepthId() == Integer8BitsColorDepthID) {
 
         const KoColorProfile *profile = cs->profile();
 
         if (profile->name().contains("linear") ||
-            profile->name().contains("scRGB") ||
-            profile->info().contains("linear") ||
-            profile->info().contains("scRGB")) {
+                profile->name().contains("scRGB") ||
+                profile->info().contains("linear") ||
+                profile->info().contains("scRGB")) {
 
             int result =
                 QMessageBox::warning(this,
@@ -259,7 +257,7 @@ KisDocument* KisCustomImageWidget::createNewImage()
             }
         }
     }
-    KisDocument *doc = static_cast<KisDocument*>(KisPart::instance()->createDocument());
+    KisDocument *doc = static_cast<KisDocument *>(KisPart::instance()->createDocument());
 
     qint32 width, height;
     double resolution;
@@ -294,14 +292,16 @@ quint8 KisCustomImageWidget::backgroundOpacity() const
 {
     qint32 opacity = sliderOpacity->value();
 
-    if (!opacity)
+    if (!opacity) {
         return 0;
+    }
 
     return (opacity * 255) / 100;
 }
 
-void KisCustomImageWidget::setBackgroundOpacity(quint8 value) {
-  sliderOpacity->setValue((value * 100) / 255);
+void KisCustomImageWidget::setBackgroundOpacity(quint8 value)
+{
+    sliderOpacity->setValue((value * 100) / 255);
 }
 
 void KisCustomImageWidget::clipboardDataChanged()
@@ -334,7 +334,7 @@ void KisCustomImageWidget::fillPredefined()
 
     if (!definitions.empty()) {
 
-        foreach(const QString &definition, definitions) {
+        foreach (const QString &definition, definitions) {
             QFile f(definition);
             f.open(QIODevice::ReadOnly);
             if (f.exists()) {
@@ -358,10 +358,11 @@ void KisCustomImageWidget::fillPredefined()
 
 }
 
-
 void KisCustomImageWidget::predefinedClicked(int index)
 {
-    if (index < 1 || index > m_predefined.size()) return;
+    if (index < 1 || index > m_predefined.size()) {
+        return;
+    }
 
     KisPropertiesConfiguration *predefined = m_predefined[index - 1];
     txtPredefinedName->setText(predefined->getString("name"));
@@ -408,7 +409,7 @@ void KisCustomImageWidget::saveAsPredefined()
 
     int i = 0;
     bool found = false;
-    foreach(KisPropertiesConfiguration *pr, m_predefined) {
+    foreach (KisPropertiesConfiguration *pr, m_predefined) {
         if (pr->getString("name") == txtPredefinedName->text()) {
             found = true;
             break;
@@ -417,8 +418,7 @@ void KisCustomImageWidget::saveAsPredefined()
     }
     if (found) {
         m_predefined[i] = predefined;
-    }
-    else {
+    } else {
         m_predefined.append(predefined);
         cmbPredefined->addItem(txtPredefinedName->text());
     }
@@ -466,10 +466,11 @@ void KisCustomImageWidget::switchWidthHeight()
 
 void KisCustomImageWidget::switchPortraitLandscape()
 {
-    if(doubleWidth->value() > doubleHeight->value())
+    if (doubleWidth->value() > doubleHeight->value()) {
         bnLandscape->setChecked(true);
-    else
+    } else {
         bnPortrait->setChecked(true);
+    }
 }
 
 #include "kis_custom_image_widget.moc"

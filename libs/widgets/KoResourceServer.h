@@ -54,7 +54,8 @@ class KoResource;
 /**
  * KoResourceServerBase is the base class of all resource servers
  */
-class KOWIDGETS_EXPORT KoResourceServerBase {
+class KOWIDGETS_EXPORT KoResourceServerBase
+{
 
 public:
     /**
@@ -62,7 +63,7 @@ public:
     * @param resource type, has to be the same as used by KStandardDirs
     * @param extensions the file extensions separate by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
-    KoResourceServerBase(const QString& type, const QString& extensions)
+    KoResourceServerBase(const QString &type, const QString &extensions)
         : m_type(type)
         , m_extensions(extensions)
     {
@@ -73,13 +74,19 @@ public:
     virtual int resourceCount() const = 0;
     virtual void loadResources(QStringList filenames) = 0;
     virtual QStringList blackListedFiles() const = 0;
-    QString type() const { return m_type; }
+    QString type() const
+    {
+        return m_type;
+    }
 
     /**
     * File extensions for resources of the server
     * @returns the file extensions separated by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
-    QString extensions() const { return m_extensions; }
+    QString extensions() const
+    {
+        return m_extensions;
+    }
 
     QStringList fileNames() const
     {
@@ -136,7 +143,7 @@ class KoResourceServer : public KoResourceServerBase
 public:
     typedef typename Policy::PointerType PointerType;
     typedef KoResourceServerObserver<T, Policy> ObserverType;
-    KoResourceServer(const QString& type, const QString& extensions)
+    KoResourceServer(const QString &type, const QString &extensions)
         : KoResourceServerBase(type, extensions)
     {
         m_blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
@@ -150,11 +157,11 @@ public:
             delete m_tagStore;
         }
 
-        foreach(ObserverType* observer, m_observers) {
+        foreach (ObserverType *observer, m_observers) {
             observer->unsetResourceServer();
         }
 
-        foreach(PointerType res, m_resources) {
+        foreach (PointerType res, m_resources) {
             Policy::deleteResource(res);
         }
 
@@ -162,7 +169,8 @@ public:
 
     }
 
-    int resourceCount() const {
+    int resourceCount() const
+    {
         return m_resources.size();
     }
 
@@ -172,7 +180,8 @@ public:
      * be loaded or and invalid aren't added to the server.
      * @param filenames list of filenames to be loaded
      */
-    void loadResources(QStringList filenames) {
+    void loadResources(QStringList filenames)
+    {
         QStringList uniqueFiles;
 
         while (!filenames.empty()) {
@@ -189,7 +198,7 @@ public:
                 m_loadLock.lock();
                 uniqueFiles.append(fname);
                 QList<PointerType> resources = createResources(front);
-                foreach(PointerType resource, resources) {
+                foreach (PointerType resource, resources) {
                     Q_CHECK_PTR(resource);
                     if (resource->load() && resource->valid() && !resource->md5().isEmpty()) {
                         QByteArray md5 = resource->md5();
@@ -197,16 +206,15 @@ public:
 
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
-                        if ( resource->name().isEmpty() ) {
-                            resource->setName( fname );
+                        if (resource->name().isEmpty()) {
+                            resource->setName(fname);
                         }
                         if (m_resourcesByName.contains(resource->name())) {
                             resource->setName(resource->name() + "(" + resource->shortFilename() + ")");
                         }
                         m_resourcesByName[resource->name()] = resource;
                         notifyResourceAdded(resource);
-                    }
-                    else {
+                    } else {
                         kWarning() << "Loading resource " << front << "failed";
                         Policy::deleteResource(resource);
                     }
@@ -218,16 +226,16 @@ public:
         m_resources = sortedResources();
         m_tagStore->loadTags();
 
-        foreach(ObserverType* observer, m_observers) {
+        foreach (ObserverType *observer, m_observers) {
             observer->syncTaggedResourceView();
         }
 
         kDebug(30009) << "done loading  resources for type " << type();
     }
 
-
     /// Adds an already loaded resource to the server
-    bool addResource(PointerType resource, bool save = true, bool infront = false) {
+    bool addResource(PointerType resource, bool save = true, bool infront = false)
+    {
         if (!resource->valid()) {
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
@@ -255,8 +263,7 @@ public:
         Q_ASSERT(!resource->filename().isEmpty() || !resource->name().isEmpty());
         if (resource->filename().isEmpty()) {
             resource->setFilename(resource->name());
-        }
-        else if (resource->name().isEmpty()) {
+        } else if (resource->name().isEmpty()) {
             resource->setName(resource->filename());
         }
 
@@ -265,8 +272,7 @@ public:
         m_resourcesByName[resource->name()] = resource;
         if (infront) {
             m_resources.insert(0, resource);
-        }
-        else {
+        } else {
             m_resources.append(resource);
         }
 
@@ -274,26 +280,26 @@ public:
 
         return true;
     }
-    
+
     /*Removes a given resource from the blacklist.
      */
-    bool removeFromBlacklist(PointerType resource) {
+    bool removeFromBlacklist(PointerType resource)
+    {
         if (m_blackListFileNames.contains(resource->filename())) {
             m_blackListFileNames.removeAll(resource->filename());
             writeBlackListFile();
-            }
-            else{
-                kWarning(30009)<<"Doesn't contain filename";
-                return false;
-            }
-        
-        
+        } else {
+            kWarning(30009) << "Doesn't contain filename";
+            return false;
+        }
+
         //then return true//
         return true;
     }
     /// Remove a resource from Resource Server but not from a file
-    bool removeResourceFromServer(PointerType resource){
-        if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
+    bool removeResourceFromServer(PointerType resource)
+    {
+        if (!m_resourcesByFilename.contains(resource->shortFilename())) {
             return false;
         }
         m_resourcesByMd5.remove(resource->md5());
@@ -309,9 +315,10 @@ public:
 
     /// Remove a resource from the resourceserver and blacklist it
 
-    bool removeResourceAndBlacklist(PointerType resource) {
+    bool removeResourceAndBlacklist(PointerType resource)
+    {
 
-        if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
+        if (!m_resourcesByFilename.contains(resource->shortFilename())) {
             return false;
         }
         m_resourcesByMd5.remove(resource->md5());
@@ -327,10 +334,11 @@ public:
         return true;
     }
 
-    QList<PointerType> resources() {
+    QList<PointerType> resources()
+    {
         m_loadLock.lock();
         QList<PointerType> resourceList = m_resources;
-        foreach(PointerType r, m_resourceBlackList) {
+        foreach (PointerType r, m_resourceBlackList) {
             resourceList.removeOne(r);
         }
         m_loadLock.unlock();
@@ -338,7 +346,8 @@ public:
     }
 
     /// Returns path where to save user defined and imported resources to
-    virtual QString saveLocation() {
+    virtual QString saveLocation()
+    {
         return KGlobal::mainComponent().dirs()->saveLocation(type().toLatin1());
     }
 
@@ -348,15 +357,18 @@ public:
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
-    virtual bool importResourceFile(const QString & filename , bool fileCreation=true) {
+    virtual bool importResourceFile(const QString &filename, bool fileCreation = true)
+    {
 
         QFileInfo fi(filename);
-        if (!fi.exists())
+        if (!fi.exists()) {
             return false;
-        if ( fi.size() == 0)
+        }
+        if (fi.size() == 0) {
             return false;
+        }
 
-        PointerType resource = createResource( filename );
+        PointerType resource = createResource(filename);
         resource->load();
         if (!resource->valid()) {
             kWarning(30009) << "Import failed! Resource is not valid";
@@ -381,8 +393,7 @@ public:
             resource->setFilename(fileInfo.filePath());
         }
 
-
-        if(!addResource(resource)) {
+        if (!addResource(resource)) {
             Policy::deleteResource(resource);
         }
 
@@ -390,7 +401,7 @@ public:
     }
 
     /// Removes the resource file from the resource server
-    virtual void removeResourceFile(const QString & filename)
+    virtual void removeResourceFile(const QString &filename)
     {
         QFileInfo fi(filename);
 
@@ -400,24 +411,24 @@ public:
             return;
         }
 
-        if (!removeResourceFromServer(resource))
+        if (!removeResourceFromServer(resource)) {
             return;
+        }
     }
-
 
     /**
      * Addes an observer to the server
      * @param observer the observer to be added
      * @param notifyLoadedResources determines if the observer should be notified about the already loaded resources
      */
-    void addObserver(ObserverType* observer, bool notifyLoadedResources = true)
+    void addObserver(ObserverType *observer, bool notifyLoadedResources = true)
     {
         m_loadLock.lock();
-        if(observer && !m_observers.contains(observer)) {
+        if (observer && !m_observers.contains(observer)) {
             m_observers.append(observer);
 
-            if(notifyLoadedResources) {
-                foreach(PointerType resource, m_resourcesByFilename) {
+            if (notifyLoadedResources) {
+                foreach (PointerType resource, m_resourcesByFilename) {
                     observer->resourceAdded(resource);
 
                 }
@@ -430,16 +441,17 @@ public:
      * Removes an observer from the server
      * @param observer the observer to be removed
      */
-    void removeObserver(ObserverType* observer)
+    void removeObserver(ObserverType *observer)
     {
-        int index = m_observers.indexOf( observer );
-        if( index < 0 )
+        int index = m_observers.indexOf(observer);
+        if (index < 0) {
             return;
+        }
 
-        m_observers.removeAt( index );
+        m_observers.removeAt(index);
     }
 
-    PointerType resourceByFilename(const QString& filename) const
+    PointerType resourceByFilename(const QString &filename) const
     {
         if (m_resourcesByFilename.contains(filename)) {
             return m_resourcesByFilename[filename];
@@ -447,8 +459,7 @@ public:
         return 0;
     }
 
-
-    PointerType resourceByName( const QString& name ) const
+    PointerType resourceByName(const QString &name) const
     {
         if (m_resourcesByName.contains(name)) {
             return m_resourcesByName[name];
@@ -456,7 +467,7 @@ public:
         return 0;
     }
 
-    PointerType resourceByMD5(const QByteArray& md5) const
+    PointerType resourceByMD5(const QByteArray &md5) const
     {
         return m_resourcesByMd5.value(md5);
     }
@@ -465,7 +476,7 @@ public:
      * Call after changing the content of a resource;
      * Notifies the connected views.
      */
-    void updateResource( PointerType resource )
+    void updateResource(PointerType resource)
     {
         notifyResourceChanged(resource);
     }
@@ -475,11 +486,12 @@ public:
         return m_blackListFileNames;
     }
 
-    void removeBlackListedFiles() {
+    void removeBlackListedFiles()
+    {
         QStringList remainingFiles; // Files that can't be removed e.g. no rights will stay blacklisted
-        foreach(const QString &filename, m_blackListFileNames) {
-            QFile file( filename );
-            if( ! file.remove() ) {
+        foreach (const QString &filename, m_blackListFileNames) {
+            QFile file(filename);
+            if (! file.remove()) {
                 remainingFiles.append(filename);
             }
         }
@@ -488,7 +500,7 @@ public:
     }
 
     /// the below functions helps to access tagObject functions
-    QStringList assignedTagsList( KoResource* resource ) const
+    QStringList assignedTagsList(KoResource *resource) const
     {
         return m_tagStore->assignedTagsList(resource);
     }
@@ -499,35 +511,35 @@ public:
     }
 
     // don't use these method directly since it doesn't update views!
-    void addTag( KoResource* resource,const QString& tag)
+    void addTag(KoResource *resource, const QString &tag)
     {
-        m_tagStore->addTag(resource,tag);
+        m_tagStore->addTag(resource, tag);
     }
 
     // don't use these method directly since it doesn't update views!
-    void delTag( KoResource* resource,const QString& tag)
+    void delTag(KoResource *resource, const QString &tag)
     {
-        m_tagStore->delTag(resource,tag);
+        m_tagStore->delTag(resource, tag);
     }
 
-    QStringList searchTag(const QString& lineEditText)
+    QStringList searchTag(const QString &lineEditText)
     {
         return m_tagStore->searchTag(lineEditText);
     }
 
-    void tagCategoryAdded(const QString& tag)
+    void tagCategoryAdded(const QString &tag)
     {
         m_tagStore->serializeTags();
-        foreach(ObserverType* observer, m_observers) {
+        foreach (ObserverType *observer, m_observers) {
             observer->syncTagAddition(tag);
         }
     }
 
-    void tagCategoryRemoved(const QString& tag)
+    void tagCategoryRemoved(const QString &tag)
     {
         m_tagStore->delTag(tag);
         m_tagStore->serializeTags();
-        foreach(ObserverType* observer, m_observers) {
+        foreach (ObserverType *observer, m_observers) {
             observer->syncTagRemoval(tag);
         }
     }
@@ -535,37 +547,38 @@ public:
     void tagCategoryMembersChanged()
     {
         m_tagStore->serializeTags();
-        foreach(ObserverType* observer, m_observers) {
+        foreach (ObserverType *observer, m_observers) {
             observer->syncTaggedResourceView();
         }
     }
 
-    KoResourceTagStore * tagObject() const
+    KoResourceTagStore *tagObject() const
     {
         return m_tagStore;
     }
-
-
 
     /**
      * Create one or more resources from a single file. By default one resource is created.
      * Overide to create more resources from the file.
      * @param filename the filename of the resource or resource collection
      */
-    virtual QList<PointerType> createResources( const QString & filename )
+    virtual QList<PointerType> createResources(const QString &filename)
     {
         QList<PointerType> createdResources;
         createdResources.append(createResource(filename));
         return createdResources;
     }
 
-    virtual PointerType createResource( const QString & filename ) { return new T(filename); }
+    virtual PointerType createResource(const QString &filename)
+    {
+        return new T(filename);
+    }
 
     /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
     virtual QList<PointerType> sortedResources()
     {
         QMap<QString, PointerType> sortedNames;
-        foreach(const QString &name, m_resourcesByName.keys()) {
+        foreach (const QString &name, m_resourcesByName.keys()) {
             sortedNames.insert(name.toLower(), m_resourcesByName[name]);
         }
         return sortedNames.values();
@@ -575,21 +588,21 @@ protected:
 
     void notifyResourceAdded(PointerType resource)
     {
-        foreach(ObserverType* observer, m_observers) {
+        foreach (ObserverType *observer, m_observers) {
             observer->resourceAdded(resource);
         }
     }
 
     void notifyRemovingResource(PointerType resource)
     {
-        foreach(ObserverType* observer, m_observers) {
+        foreach (ObserverType *observer, m_observers) {
             observer->removingResource(resource);
         }
     }
 
     void notifyResourceChanged(PointerType resource)
     {
-        foreach(ObserverType* observer, m_observers) {
+        foreach (ObserverType *observer, m_observers) {
             observer->resourceChanged(resource);
         }
     }
@@ -622,7 +635,7 @@ protected:
             QDomNode n = file.firstChild();
             QDomElement e = n.toElement();
             if (e.tagName() == "name") {
-                filenameList.append((e.text()).replace(QString("~"),QDir::homePath()));
+                filenameList.append((e.text()).replace(QString("~"), QDir::homePath()));
             }
             file = file.nextSiblingElement("file");
         }
@@ -647,17 +660,15 @@ protected:
         doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
         root = doc.createElement("resourceFilesList");
         doc.appendChild(root);
-        
-        foreach(QString filename, m_blackListFileNames) {
+
+        foreach (QString filename, m_blackListFileNames) {
             QDomElement fileEl = doc.createElement("file");
             QDomElement nameEl = doc.createElement("name");
-            QDomText nameText = doc.createTextNode(filename.replace(QDir::homePath(),QString("~")));
+            QDomText nameText = doc.createTextNode(filename.replace(QDir::homePath(), QString("~")));
             nameEl.appendChild(nameText);
             fileEl.appendChild(nameEl);
             root.appendChild(fileEl);
         }
-        
-        
 
         QTextStream metastream(&f);
         metastream << doc.toByteArray();
@@ -665,20 +676,20 @@ protected:
     }
 protected:
 
-    KoResource* byMd5(const QByteArray &md5) const
+    KoResource *byMd5(const QByteArray &md5) const
     {
         return Policy::toResourcePointer(resourceByMD5(md5));
     }
 
-    KoResource* byFileName(const QString &fileName) const
+    KoResource *byFileName(const QString &fileName) const
     {
         return Policy::toResourcePointer(resourceByFilename(fileName));
     }
 
-
     /// Destory the tag storage, only call this directly before deleting the sever and if the automatic
     /// delete should not be used.
-    void destroyTagStorage() {
+    void destroyTagStorage()
+    {
         delete m_tagStore;
         m_tagStore = 0;
     }
@@ -691,10 +702,10 @@ private:
 
     QList<PointerType> m_resourceBlackList;
     QList<PointerType> m_resources; ///< list of resources in order of addition
-    QList<ObserverType*> m_observers;
+    QList<ObserverType *> m_observers;
     QString m_blackListFile;
     QStringList m_blackListFileNames;
-    KoResourceTagStore* m_tagStore;
+    KoResourceTagStore *m_tagStore;
 
 };
 

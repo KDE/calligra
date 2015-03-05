@@ -37,9 +37,9 @@ K_PLUGIN_FACTORY(HistogramFactory, registerPlugin<Histogram>();)
 K_EXPORT_PLUGIN(HistogramFactory("krita"))
 
 Histogram::Histogram(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+    : KisViewPlugin(parent)
 {
-    KisAction* action  = new KisAction(i18n("&Histogram..."), this);
+    KisAction *action  = new KisAction(i18n("&Histogram..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
     addAction("histogram", action);
     connect(action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
@@ -51,7 +51,7 @@ Histogram::~Histogram()
 
 void Histogram::slotActivated()
 {
-    DlgHistogram * dlgHistogram = new DlgHistogram(m_view->mainWindow(), "Histogram");
+    DlgHistogram *dlgHistogram = new DlgHistogram(m_view->mainWindow(), "Histogram");
     Q_CHECK_PTR(dlgHistogram);
 
     KisLayerSP layer = m_view->nodeManager()->activeLayer();
@@ -64,7 +64,6 @@ void Histogram::slotActivated()
         if (dlgHistogram->exec() == QDialog::Accepted) {
             // Do nothing; this is an informational dialog
         }
-
 
     }
     delete dlgHistogram;

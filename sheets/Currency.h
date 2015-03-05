@@ -58,16 +58,16 @@ public:
      * \p code e.g. EUR, USD,..
      * \param format in Gnumeric the code is: [$EUR]
      */
-    explicit Currency(QString const & code, Format format = Native);
+    explicit Currency(QString const &code, Format format = Native);
 
     /**
      * Destructor.
      */
     ~Currency();
 
-
-    bool operator==(Currency const & other) const;
-    inline bool operator!=(Currency const & other) const {
+    bool operator==(Currency const &other) const;
+    inline bool operator!=(Currency const &other) const
+    {
         return !operator==(other);
     }
 
@@ -77,14 +77,15 @@ public:
     QString symbol() const;
     int     index() const;
 
-    static QString chooseString(int type, bool & ok);
+    static QString chooseString(int type, bool &ok);
 
 private:
     int     m_index;
     QString m_code;
 };
 
-static inline uint qHash(const Currency& cur) {
+static inline uint qHash(const Currency &cur)
+{
     return ::qHash(cur.code());
 }
 

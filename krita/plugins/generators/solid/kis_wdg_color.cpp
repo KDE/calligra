@@ -27,8 +27,8 @@
 
 #include "ui_wdgcoloroptions.h"
 
-KisWdgColor::KisWdgColor(QWidget* parent)
-        : KisConfigWidget(parent)
+KisWdgColor::KisWdgColor(QWidget *parent)
+    : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgColorOptions();
     m_widget->setupUi(this);
@@ -39,16 +39,15 @@ KisWdgColor::~KisWdgColor()
     delete m_widget;
 }
 
-
-void KisWdgColor::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgColor::setConfiguration(const KisPropertiesConfiguration *config)
 {
     QVariant value;
     widget()->bnColor->setColor(config->getColor("color").toQColor());
 }
 
-KisPropertiesConfiguration* KisWdgColor::configuration() const
+KisPropertiesConfiguration *KisWdgColor::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("color", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("color", 1);
     KoColor c;
     c.fromQColor(this->widget()->bnColor->color());
     QVariant v;

@@ -43,18 +43,18 @@ public:
 
     /*! Sets table or query schema \a schema.
      The schema object will be owned by the KexiFieldListView object. */
-    void setSchema(KexiDB::TableOrQuerySchema* schema);
+    void setSchema(KexiDB::TableOrQuerySchema *schema);
 
     /*! \return table or query schema schema set for this widget. */
-    KexiDB::TableOrQuerySchema* schema() const;
+    KexiDB::TableOrQuerySchema *schema() const;
 
     /*! \return list of selected field names. */
     QStringList selectedFieldNames() const;
 
 Q_SIGNALS:
     /*! Emitted when a field is double clicked */
-    void fieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
-                            const QString& fieldName);
+    void fieldDoubleClicked(const QString &sourcePartClass, const QString &sourceName,
+                            const QString &fieldName);
 
 protected Q_SLOTS:
     void slotDoubleClicked(const QModelIndex &idx);
@@ -63,7 +63,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

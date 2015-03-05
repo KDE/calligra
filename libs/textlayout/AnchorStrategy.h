@@ -27,7 +27,6 @@
 class KoTextShapeContainerModel;
 class KoTextLayoutRootArea;
 
-
 class AnchorStrategy  : public KoShapeAnchor::PlacementStrategy
 {
 public:
@@ -84,7 +83,7 @@ public:
     /// get layout environment rectangle @see odf attribute style:flow-with-text
     QRectF layoutEnvironmentRect() const;
 
-     /// set layout environment rect @see odf attribute style:flow-with-text
+    /// set layout environment rect @see odf attribute style:flow-with-text
     void setLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);
 
     /// get number of page to which this text anchor is anchored (needed for HOutside, HInside,
@@ -96,7 +95,7 @@ public:
     void setPageNumber(int pageNumber);
 
 protected:
-    KoShapeAnchor * const m_anchor;
+    KoShapeAnchor *const m_anchor;
     KoTextLayoutRootArea *m_rootArea;
 
 private:

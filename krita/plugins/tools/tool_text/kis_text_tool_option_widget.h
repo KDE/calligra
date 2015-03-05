@@ -17,7 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_TEXT_TOOL_OPTION_WIDGET_H
 #define KIS_TEXT_TOOL_OPTION_WIDGET_H
 
@@ -28,16 +27,16 @@ class KisTextToolOptionWidget : public QWidget, public Ui_WdgTextOptions
 {
     Q_OBJECT
 public:
-    KisTextToolOptionWidget(QWidget* parent = 0);
-    QButtonGroup* m_buttonGroup;
+    KisTextToolOptionWidget(QWidget *parent = 0);
+    QButtonGroup *m_buttonGroup;
 
-    enum TextMode{
+    enum TextMode {
         MODE_ARTISTIC,
         MODE_MULTILINE
     };
-    
+
     TextMode mode();
-    
+
     KisPainter::FillStyle style();
 private Q_SLOTS:
     void modeChanged(int mode);

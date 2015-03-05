@@ -24,7 +24,7 @@
 #include <KoDockRegistry.h>
 
 TextDocumentInspectionPlugin::TextDocumentInspectionPlugin(QObject *parent, const QVariantList &)
-  : QObject(parent)
+    : QObject(parent)
 {
     KoDockRegistry::instance()->add(new TextDocumentInspectionDockerFactory());
 }

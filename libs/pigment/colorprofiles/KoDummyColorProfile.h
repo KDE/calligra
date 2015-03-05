@@ -27,12 +27,12 @@ class KoDummyColorProfile : public KoColorProfile
 public:
     KoDummyColorProfile();
     virtual ~KoDummyColorProfile();
-    virtual KoColorProfile* clone() const;
+    virtual KoColorProfile *clone() const;
     virtual bool valid() const;
     virtual bool isSuitableForOutput() const;
     virtual bool isSuitableForPrinting() const;
     virtual bool isSuitableForDisplay() const;
-    virtual bool operator==(const KoColorProfile&) const;
+    virtual bool operator==(const KoColorProfile &) const;
 };
 
 #endif

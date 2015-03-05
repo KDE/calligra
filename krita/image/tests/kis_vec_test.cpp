@@ -33,16 +33,13 @@ void KisVecTest::testCreation()
     QVERIFY(v3d.z() == 0.0);
 }
 
-
 void KisVecTest::testVec2D()
 {
 }
 
-
 void KisVecTest::testVec3D()
 {
 }
-
 
 QTEST_KDEMAIN(KisVecTest, NoGUI)
 #include "kis_vec_test.moc"

@@ -31,7 +31,6 @@
 #include "kptaccount.h"
 #include "kpteffortcostmap.h"
 
-
 namespace KPlato
 {
 
@@ -44,24 +43,24 @@ class KPLATOUI_EXPORT AccountsTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    explicit AccountsTreeView( QWidget *parent = 0 );
-    
+    explicit AccountsTreeView(QWidget *parent = 0);
+
     CostBreakdownItemModel *model() const;
-    
+
     bool cumulative() const;
-    void setCumulative( bool on );
+    void setCumulative(bool on);
     int periodType() const;
-    void setPeriodType( int period );
+    void setPeriodType(int period);
     int startMode() const;
-    void setStartMode( int mode );
+    void setStartMode(int mode);
     int endMode() const;
-    void setEndMode( int mode );
+    void setEndMode(int mode);
     QDate startDate() const;
-    void setStartDate( const QDate &date );
+    void setStartDate(const QDate &date);
     QDate endDate() const;
-    void setEndDate( const QDate &date );
+    void setEndDate(const QDate &date);
     int showMode() const;
-    void setShowMode( int show );
+    void setShowMode(int show);
 
 protected Q_SLOTS:
     void slotModelReset();
@@ -76,37 +75,40 @@ public:
 
     //~AccountsView();
     void setupGui();
-    Project *project() const { return m_project; }
-    virtual void setZoom( double zoom );
-    virtual void setProject( Project *project );
+    Project *project() const
+    {
+        return m_project;
+    }
+    virtual void setZoom(double zoom);
+    virtual void setProject(Project *project);
 
-    virtual bool loadContext( const KoXmlElement &context );
-    virtual void saveContext( QDomElement &context ) const;
+    virtual bool loadContext(const KoXmlElement &context);
+    virtual void saveContext(QDomElement &context) const;
 
     CostBreakdownItemModel *model() const;
 
     KoPrintJob *createPrintJob();
-    
+
 public Q_SLOTS:
-    void setScheduleManager( ScheduleManager *sm );
-    
+    void setScheduleManager(ScheduleManager *sm);
+
 protected Q_SLOTS:
-    void slotContextMenuRequested( const QModelIndex&, const QPoint &pos );
-    void slotHeaderContextMenuRequested( const QPoint &pos );
+    void slotContextMenuRequested(const QModelIndex &, const QPoint &pos);
+    void slotHeaderContextMenuRequested(const QPoint &pos);
     virtual void slotOptions();
-    
+
 private:
     void init();
-    
+
 private:
     Project *m_project;
     ScheduleManager *m_manager;
     AccountsTreeView *m_view;
-    
+
     QDate m_date;
     int m_period;
     bool m_cumulative;
-    
+
 };
 
 }  //KPlato namespace

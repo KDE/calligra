@@ -36,8 +36,8 @@ public:
     bool ne;   // need FunctionExtra* when called ?
 };
 
-Function::Function(const QString& name, FunctionPtr ptr)
-        : d(new Private)
+Function::Function(const QString &name, FunctionPtr ptr)
+    : d(new Private)
 {
     d->name = name;
     d->ptr = ptr;
@@ -76,11 +76,17 @@ void Function::setParamCount(int min, int max)
 bool Function::paramCountOkay(int count)
 {
     // less than needed
-    if (count < d->paramMin) return false;
+    if (count < d->paramMin) {
+        return false;
+    }
     // no upper limit
-    if (d->paramMax == -1) return true;
+    if (d->paramMax == -1) {
+        return true;
+    }
     // more than needed
-    if (count > d->paramMax) return false;
+    if (count > d->paramMax) {
+        return false;
+    }
     // okay otherwise
     return true;
 }
@@ -102,21 +108,26 @@ void Function::setNeedsExtra(bool extra)
 Value Function::exec(valVector args, ValueCalc *calc, FuncExtra *extra)
 {
     // check number of parameters
-    if (!paramCountOkay(args.count()))
+    if (!paramCountOkay(args.count())) {
         return Value::errorVALUE();
+    }
 
-    if (extra)
+    if (extra) {
         extra->function = this;
+    }
 
     // do we need to perform array expansion ?
     bool mustExpandArray = false;
     if (!d->acceptArray)
         for (int i = 0; i < args.count(); ++i) {
-            if (args[i].isArray())
+            if (args[i].isArray()) {
                 mustExpandArray = true;
+            }
         }
 
-    if (!d->ptr) return Value::errorVALUE();
+    if (!d->ptr) {
+        return Value::errorVALUE();
+    }
 
     // perform the actual array expansion if need be
 
@@ -126,10 +137,18 @@ Value Function::exec(valVector args, ValueCalc *calc, FuncExtra *extra)
         int cols = 0;
         for (int i = 0; i < args.count(); ++i) {
             int x = 1;
-            if (extra) x = extra->ranges[i].rows();
-            if (x > rows) rows = x;
-            if (extra) x = extra->ranges[i].columns();
-            if (x > cols) cols = x;
+            if (extra) {
+                x = extra->ranges[i].rows();
+            }
+            if (x > rows) {
+                rows = x;
+            }
+            if (extra) {
+                x = extra->ranges[i].columns();
+            }
+            if (x > cols) {
+                cols = x;
+            }
         }
         // allocate the resulting array
         Value res(Value::Array);
@@ -157,7 +176,9 @@ Value Function::exec(valVector args, ValueCalc *calc, FuncExtra *extra)
         return res;
     } else
         // call the function
+    {
         return (*d->ptr)(args, calc, extra);
+    }
 }
 
 FunctionCaller::FunctionCaller(FunctionPtr ptr, const valVector &args, ValueCalc *calc, FuncExtra *extra)

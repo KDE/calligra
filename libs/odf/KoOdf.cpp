@@ -23,9 +23,9 @@
 namespace KoOdf
 {
 struct DocumentData {
-    const char * mimeType;
-    const char * templateMimeType;
-    const char * bodyContentElement;
+    const char *mimeType;
+    const char *templateMimeType;
+    const char *bodyContentElement;
 };
 
 const DocumentData s_documentData[] = {
@@ -42,17 +42,17 @@ const DocumentData s_documentData[] = {
 //"application/vnd.oasis.opendocument.text-master"
 //"application/vnd.oasis.opendocument.text-web"
 
-const char * mimeType(DocumentType documentType)
+const char *mimeType(DocumentType documentType)
 {
     return s_documentData[documentType].mimeType;
 }
 
-const char * templateMimeType(DocumentType documentType)
+const char *templateMimeType(DocumentType documentType)
 {
     return s_documentData[documentType].templateMimeType;
 }
 
-const char * bodyContentElement(DocumentType documentType, bool withNamespace)
+const char *bodyContentElement(DocumentType documentType, bool withNamespace)
 {
     return withNamespace ? s_documentData[documentType].bodyContentElement : s_documentData[documentType].bodyContentElement + 7;
 }

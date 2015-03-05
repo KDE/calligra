@@ -36,7 +36,6 @@ These classes are used in the Krita core to handle painting: a further set
 of utility classes for brush engine implementators is available in
 krita/plugins/paintops/libpaintop.
 
-
 The flow of action is as follows:
 
 <ul>

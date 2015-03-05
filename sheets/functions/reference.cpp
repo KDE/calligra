@@ -59,12 +59,10 @@ Value func_sheet(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sheets(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("reference", ReferenceModule)
 
-
-ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+ReferenceModule::ReferenceModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -113,7 +111,7 @@ ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
     f->setParamCount(2, 3);
     f->setAcceptArray();
     f->setNeedsExtra(true);
-  add(f);
+    add(f);
     f = new Function("MULTIPLE.OPERATIONS", func_multiple_operations);
     f->setParamCount(3, 5);
     f->setNeedsExtra(true);
@@ -150,7 +148,6 @@ QString ReferenceModule::descriptionFileName() const
     return QString("reference.xml");
 }
 
-
 //
 // Function: ADDRESS
 //
@@ -159,12 +156,15 @@ Value func_address(valVector args, ValueCalc *calc, FuncExtra *)
     bool r1c1 = false;
     QString sheetName;
     int absNum = 1;
-    if (args.count() > 2)
+    if (args.count() > 2) {
         absNum = calc->conv()->asInteger(args[2]).asInteger();
-    if (args.count() > 3)
+    }
+    if (args.count() > 3) {
         r1c1 = !(calc->conv()->asBoolean(args[3]).asBoolean());
-    if (args.count() == 5)
+    }
+    if (args.count() == 5) {
         sheetName = calc->conv()->asString(args[4]).asString();
+    }
 
     QString result;
     int row = calc->conv()->asInteger(args[0]).asInteger();
@@ -178,45 +178,55 @@ Value func_address(valVector args, ValueCalc *calc, FuncExtra *)
     if (r1c1) {
         // row first
         bool abs = false;
-        if (absNum == 1 || absNum == 2)
+        if (absNum == 1 || absNum == 2) {
             abs = true;
+        }
 
         result += 'R';
-        if (!abs)
+        if (!abs) {
             result += '[';
+        }
         result += QString::number(row);
 
-        if (!abs)
+        if (!abs) {
             result += ']';
+        }
 
         // column
         abs = false;
-        if (absNum == 1 || absNum == 3)
+        if (absNum == 1 || absNum == 3) {
             abs = true;
+        }
 
         result += 'C';
-        if (!abs)
+        if (!abs) {
             result += '[';
+        }
         result += QString::number(col);
 
-        if (!abs)
+        if (!abs) {
             result += ']';
+        }
     } else {
         bool abs = false;
-        if (absNum == 1 || absNum == 3)
+        if (absNum == 1 || absNum == 3) {
             abs = true;
+        }
 
-        if (abs)
+        if (abs) {
             result += '$';
+        }
 
         result += Cell::columnName(col);
 
         abs = false;
-        if (absNum == 1 || absNum == 2)
+        if (absNum == 1 || absNum == 2) {
             abs = true;
+        }
 
-        if (abs)
+        if (abs) {
             result += '$';
+        }
 
         result += QString::number(row);
     }
@@ -224,25 +234,28 @@ Value func_address(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(result);
 }
 
-
 //
 // Function: AREAS
 //
 Value func_areas(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     if (e) {
-        if (e->regions[0].isValid())
+        if (e->regions[0].isValid()) {
             return Value(e->regions[0].rects().size());
+        }
 
         if ((e->ranges[0].col1 != -1) && (e->ranges[0].row1 != -1) &&
                 (e->ranges[0].col2 != -1) && (e->ranges[0].row2 != -1))
             // we have a range reference - return 1
+        {
             return Value(1);
+        }
     }
 
     QString s = calc->conv()->asString(args[0]).asString();
-    if (s[0] != '(' || s[s.length() - 1] != ')')
+    if (s[0] != '(' || s[s.length() - 1] != ')') {
         return Value::errorVALUE();
+    }
 
     int l = s.length();
 
@@ -250,14 +263,15 @@ Value func_areas(valVector args, ValueCalc *calc, FuncExtra *e)
     QString ref;
     for (int i = 1; i < l; ++i) {
         if (s[i] == ',' || s[i] == ')') {
-            if (!Calligra::Sheets::Region(ref).isValid())
+            if (!Calligra::Sheets::Region(ref).isValid()) {
                 return Value::errorVALUE();
-            else {
+            } else {
                 ++num;
                 ref.clear();
             }
-        } else
+        } else {
             ref += s[i];
+        }
     }
 
     return Value(num);
@@ -287,11 +301,13 @@ Value func_cell(valVector args, ValueCalc *calc, FuncExtra *e)
     if (type == "address") {
         const Calligra::Sheets::Region &region = args.count() ? extra.regions[0] : Calligra::Sheets::Region(QPoint(e->mycol, e->myrow), e->sheet);
         QString s;
-        if (region.firstSheet() && region.firstSheet() != e->sheet)
+        if (region.firstSheet() && region.firstSheet() != e->sheet) {
             s += '\'' + region.firstSheet()->sheetName() + "'!";
+        }
         s += '$' + Cell::columnName(region.firstRange().x()) + '$' + QString::number(region.firstRange().y());
-        if (region.firstRange() != region.lastRange())
+        if (region.firstRange() != region.lastRange()) {
             s += ":$" + Cell::columnName(region.lastRange().x()) + '$' + QString::number(region.lastRange().y());
+        }
         return Value(s);
     }
     if (type == "filename") {
@@ -319,11 +335,11 @@ Value func_choose(valVector args, ValueCalc *calc, FuncExtra *)
 {
     int cnt = args.count() - 1;
     int num = calc->conv()->asInteger(args[0]).asInteger();
-    if ((num <= 0) || (num > cnt))
+    if ((num <= 0) || (num > cnt)) {
         return Value::errorVALUE();
+    }
     return args[num];
 }
-
 
 //
 // Function: COLUMN
@@ -331,13 +347,14 @@ Value func_choose(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_column(valVector args, ValueCalc *, FuncExtra *e)
 {
     int col = e ? e->mycol : 0;
-    if (e && args.count())
+    if (e && args.count()) {
         col = e->ranges[0].col1;
-    if (col > 0)
+    }
+    if (col > 0) {
         return Value(col);
+    }
     return Value::errorVALUE();
 }
-
 
 //
 // Function: COLUMNS
@@ -346,11 +363,11 @@ Value func_columns(valVector, ValueCalc *, FuncExtra *e)
 {
     int col1 = e->ranges[0].col1;
     int col2 = e->ranges[0].col2;
-    if ((col1 == -1) || (col2 == -1))
+    if ((col1 == -1) || (col2 == -1)) {
         return Value::errorVALUE();
+    }
     return Value(col2 - col1 + 1);
 }
-
 
 //
 // Function: HLOOKUP
@@ -362,8 +379,9 @@ Value func_hlookup(valVector args, ValueCalc *calc, FuncExtra *)
     const int row = calc->conv()->asInteger(args[2]).asInteger();
     const int cols = data.columns();
     const int rows = data.rows();
-    if (row < 1 || row > rows)
+    if (row < 1 || row > rows) {
         return Value::errorVALUE();
+    }
     const bool rangeLookup = (args.count() > 3) ? calc->conv()->asBoolean(args[3]).asBoolean() : true;
 
     // now traverse the array and perform comparison
@@ -384,7 +402,6 @@ Value func_hlookup(valVector args, ValueCalc *calc, FuncExtra *)
     return v;
 }
 
-
 //
 // Function: INDEX
 //
@@ -398,11 +415,11 @@ Value func_index(valVector args, ValueCalc *calc, FuncExtra *)
     Value val = args[0];
     unsigned row = calc->conv()->asInteger(args[1]).asInteger() - 1;
     unsigned col = calc->conv()->asInteger(args[2]).asInteger() - 1;
-    if ((row >= val.rows()) || (col >= val.columns()))
+    if ((row >= val.rows()) || (col >= val.columns())) {
         return Value::errorREF();
+    }
     return val.element(col, row);
 }
-
 
 //
 // Function: INDIRECT
@@ -411,11 +428,13 @@ Value func_indirect(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     bool r1c1 = false;
     QString ref = calc->conv()->asString(args[0]).asString();
-    if (args.count() == 2)
+    if (args.count() == 2) {
         r1c1 = !(calc->conv()->asBoolean(args[1]).asBoolean());
+    }
 
-    if (ref.isEmpty())
+    if (ref.isEmpty()) {
         return Value::errorVALUE();
+    }
 
     if (r1c1) {
         // TODO: translate the r1c1 style to a1 style
@@ -423,15 +442,16 @@ Value func_indirect(valVector args, ValueCalc *calc, FuncExtra *e)
     }
 
     const Calligra::Sheets::Region region(ref, e->sheet->map(), e->sheet);
-    if (!region.isValid() || !region.isSingular())
+    if (!region.isValid() || !region.isSingular()) {
         return Value::errorVALUE();
+    }
 
     const Cell cell(region.firstSheet(), region.firstRange().topLeft());
-    if (!cell.isNull())
+    if (!cell.isNull()) {
         return cell.value();
+    }
     return Value::errorVALUE();
 }
-
 
 //
 // Function: LOOKUP
@@ -439,14 +459,16 @@ Value func_indirect(valVector args, ValueCalc *calc, FuncExtra *e)
 Value func_lookup(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value num = calc->conv()->asNumeric(args[0]);
-    if (num.isArray())
+    if (num.isArray()) {
         return Value::errorVALUE();
+    }
     Value lookup = args[1];
     Value rr = args[2];
     unsigned cols = lookup.columns();
     unsigned rows = lookup.rows();
-    if ((cols != rr.columns()) || (rows != rr.rows()))
+    if ((cols != rr.columns()) || (rows != rr.rows())) {
         return Value::errorVALUE();
+    }
     Value res = Value::errorNA();
 
     // now traverse the array and perform comparison
@@ -454,10 +476,11 @@ Value func_lookup(valVector args, ValueCalc *calc, FuncExtra *)
         for (unsigned c = 0; c < cols; ++c) {
             // update the result, return if we cross the line
             Value le = lookup.element(c, r);
-            if (calc->lower(le, num) || calc->equal(num, le))
+            if (calc->lower(le, num) || calc->equal(num, le)) {
                 res = rr.element(c, r);
-            else
+            } else {
                 return res;
+            }
         }
     return res;
 }
@@ -465,21 +488,23 @@ Value func_lookup(valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: MATCH
 //
-Value func_match(valVector args, ValueCalc *calc, FuncExtra* e)
+Value func_match(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     int matchType = 1;
     if (args.count() == 3) {
         bool ok = true;
         matchType = calc->conv()->asInteger(args[2], &ok).asInteger();
-        if (!ok)
-            return Value::errorVALUE(); // invalid matchtype
+        if (!ok) {
+            return Value::errorVALUE();    // invalid matchtype
+        }
     }
 
-    const Value& searchValue = args[0];
-    const Value& searchArray = args[1];
+    const Value &searchValue = args[0];
+    const Value &searchArray = args[1];
 
-    if (e->ranges[1].rows() != 1 && e->ranges[1].columns() != 1)
+    if (e->ranges[1].rows() != 1 && e->ranges[1].columns() != 1) {
         return Value::errorNA();
+    }
     int dr = 1, dc = 0;
     if (searchArray.columns() != 1) {
         dr = 0; dc = 1;
@@ -498,30 +523,34 @@ Value func_match(valVector args, ValueCalc *calc, FuncExtra* e)
         // binary search
         int l = -1;
         int h = n;
-        while (l+1 < h) {
-            int m = (l+h)/2;
-            if (calc->naturalLequal(searchArray.element(m*dc, m*dr), searchValue, false)) {
+        while (l + 1 < h) {
+            int m = (l + h) / 2;
+            if (calc->naturalLequal(searchArray.element(m * dc, m * dr), searchValue, false)) {
                 l = m;
             } else {
                 h = m;
             }
         }
-        if (l == -1) return Value::errorNA();
-        return Value(l+1);
-    } else /* matchType < 0 */ {
+        if (l == -1) {
+            return Value::errorNA();
+        }
+        return Value(l + 1);
+    } else { /* matchType < 0 */
         // binary search
         int l = -1;
         int h = n;
-        while (l+1 < h) {
-            int m = (l+h)/2;
-            if (calc->naturalGequal(searchArray.element(m*dc, m*dr), searchValue, false)) {
+        while (l + 1 < h) {
+            int m = (l + h) / 2;
+            if (calc->naturalGequal(searchArray.element(m * dc, m * dr), searchValue, false)) {
                 l = m;
             } else {
                 h = m;
             }
         }
-        if (l == -1) return Value::errorNA();
-        return Value(l+1);
+        if (l == -1) {
+            return Value::errorNA();
+        }
+        return Value(l + 1);
     }
 }
 
@@ -530,12 +559,14 @@ Value func_match(valVector args, ValueCalc *calc, FuncExtra* e)
 //
 Value func_multiple_operations(valVector args, ValueCalc *, FuncExtra *e)
 {
-    if (args.count() != 3 && args.count() != 5)
-        return Value::errorVALUE(); // invalid number of parameters
+    if (args.count() != 3 && args.count() != 5) {
+        return Value::errorVALUE();    // invalid number of parameters
+    }
 
     for (int i = 0; i < args.count(); i++) {
-        if (e->ranges[i].col1 == -1 || e->ranges[i].row1 == -1)
+        if (e->ranges[i].col1 == -1 || e->ranges[i].row1 == -1) {
             return Value::errorVALUE();
+        }
     }
 
     CellStorage *s = e->sheet->cellStorage();
@@ -544,8 +575,9 @@ Value func_multiple_operations(valVector args, ValueCalc *, FuncExtra *e)
     int formulaCol = e->ranges[0].col1;
     int formulaRow = e->ranges[0].row1;
     Formula formula = s->formula(formulaCol, formulaRow);
-    if (!formula.isValid())
+    if (!formula.isValid()) {
         return Value::errorVALUE();
+    }
 
     CellIndirection cellIndirections;
     cellIndirections.insert(Cell(e->sheet, e->ranges[1].col1, e->ranges[1].row1), Cell(e->sheet, e->ranges[2].col1, e->ranges[2].row1));
@@ -572,18 +604,21 @@ Value func_offset(valVector args, ValueCalc *calc, FuncExtra *e)
     //const QRect rect(e->ranges[0].col1, e->ranges[0].row1, e->ranges[0].col2, e->ranges[0].row2);
     //const Calligra::Sheets::Region region(rect, e->sheet);
 
-    if (e->regions.isEmpty())
+    if (e->regions.isEmpty()) {
         return Value::errorVALUE();
+    }
 
     const Calligra::Sheets::Region &region = e->regions[0];
 
-    if (!region.isValid() /* || !region.isSingular() */)
+    if (!region.isValid() /* || !region.isSingular() */) {
         return Value::errorVALUE();
+    }
 
     QPoint p = region.firstRange().topLeft() + QPoint(colPlus, rowPlus);
     const Cell cell(region.firstSheet(), p);
-    if (!cell.isNull())
+    if (!cell.isNull()) {
         return cell.value();
+    }
 
     return Value::errorVALUE();
 }
@@ -594,13 +629,14 @@ Value func_offset(valVector args, ValueCalc *calc, FuncExtra *e)
 Value func_row(valVector args, ValueCalc *, FuncExtra *e)
 {
     int row = e ? e->myrow : 0;
-    if (e && args.count())
+    if (e && args.count()) {
         row = e->ranges[0].row1;
-    if (row > 0)
+    }
+    if (row > 0) {
         return Value(row);
+    }
     return Value::errorVALUE();
 }
-
 
 //
 // Function: ROWS
@@ -609,8 +645,9 @@ Value func_rows(valVector, ValueCalc *, FuncExtra *e)
 {
     int row1 = e->ranges[0].row1;
     int row2 = e->ranges[0].row2;
-    if ((row1 == -1) || (row2 == -1))
+    if ((row1 == -1) || (row2 == -1)) {
         return Value::errorVALUE();
+    }
     return Value(row2 - row1 + 1);
 }
 
@@ -622,8 +659,9 @@ Value func_sheet(valVector /*args*/, ValueCalc *, FuncExtra *e)
     Sheet *sheet = e->sheet;
     if (!e->regions.isEmpty()) {
         const Calligra::Sheets::Region &region = e->regions[0];
-        if (region.isValid())
+        if (region.isValid()) {
             sheet = region.firstSheet();
+        }
     }
     return Value(sheet->map()->indexOf(sheet) + 1);
 }
@@ -636,11 +674,12 @@ Value func_sheets(valVector /*args*/, ValueCalc *, FuncExtra *e)
     if (!e->regions.isEmpty()) {
         const Calligra::Sheets::Region &region = e->regions[0];
         if (region.isValid()) {
-            QList<Calligra::Sheets::Sheet*> sheets;
+            QList<Calligra::Sheets::Sheet *> sheets;
             Calligra::Sheets::Region::ConstIterator it(region.constBegin()), end(region.constEnd());
-            for(; it != end; ++it)
-                if (!sheets.contains((*it)->sheet()))
+            for (; it != end; ++it)
+                if (!sheets.contains((*it)->sheet())) {
                     sheets.append((*it)->sheet());
+                }
             return Value(sheets.count());
         }
     }
@@ -657,8 +696,9 @@ Value func_vlookup(valVector args, ValueCalc *calc, FuncExtra *)
     const int col = calc->conv()->asInteger(args[2]).asInteger();
     const int cols = data.columns();
     const int rows = data.rows();
-    if (col < 1 || col > cols)
+    if (col < 1 || col > cols) {
         return Value::errorVALUE();
+    }
     const bool rangeLookup = (args.count() > 3) ? calc->conv()->asBoolean(args[3]).asBoolean() : true;
 
     // now traverse the array and perform comparison

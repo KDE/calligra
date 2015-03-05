@@ -29,7 +29,7 @@ static bool checkForAsymmetricZeros = false;
     do {                                                \
         Q_ASSERT(scaledIter >= beginDst);               \
         Q_ASSERT(scaledIter <= endDst);                 \
-                                                        \
+        \
         if (j == centerIndex) {                         \
             Q_ASSERT(scaledIter == centerSrc);          \
         }                                               \
@@ -40,10 +40,10 @@ static bool checkForAsymmetricZeros = false;
         if (checkForAsymmetricZeros) {                                  \
             for (int j = 0; j < span; j++) {                            \
                 int idx2 = span - j - 1;                                \
-                                                                        \
+                \
                 if ((m_filterWeights[i].weight[j] && !m_filterWeights[i].weight[idx2]) || \
-                    (!m_filterWeights[i].weight[j] && m_filterWeights[i].weight[idx2])) { \
-                                                                        \
+                        (!m_filterWeights[i].weight[j] && m_filterWeights[i].weight[idx2])) { \
+                    \
                     qDebug() << "*******";                              \
                     qDebug() << "Non-symmetric zero found:" << centerSrc; \
                     qDebug() << "Weight" << j << ":" << m_filterWeights[i].weight[j]; \
@@ -86,8 +86,6 @@ static bool checkForAsymmetricZeros = false;
 #define DEBUG_ALL() Q_UNUSED(beginDst); Q_UNUSED(endDst)
 #define DEBUG_SAMPLE()
 #endif
-
-
 
 /**
  * \class KisFilterWeightsBuffer
@@ -145,7 +143,8 @@ class KisFilterWeightsBuffer
 {
 public:
     struct FilterWeights {
-        ~FilterWeights() {
+        ~FilterWeights()
+        {
             delete[] weight;
         }
 
@@ -155,7 +154,8 @@ public:
     };
 
 public:
-    KisFilterWeightsBuffer(KisFilterStrategy *filterStrategy, qreal realScale) {
+    KisFilterWeightsBuffer(KisFilterStrategy *filterStrategy, qreal realScale)
+    {
         Q_ASSERT(realScale > 0);
 
         m_filterWeights = new FilterWeights[256];
@@ -185,7 +185,7 @@ public:
             KisFixedPoint endSrc = supportSrc - centerSrc / m_weightsPositionScale;
 
             int span = (2 * supportSrc).toInt() +
-                (beginSrc.isInteger() && endSrc.isInteger());
+                       (beginSrc.isInteger() && endSrc.isInteger());
 
             int centerIndex = -beginSrc.toInt();
 
@@ -237,14 +237,16 @@ public:
         }
     }
 
-    ~KisFilterWeightsBuffer() {
+    ~KisFilterWeightsBuffer()
+    {
         delete[] m_filterWeights;
     }
 
     /**
      * Return a weights buffer for a particular value of offset
      */
-    FilterWeights* weights(KisFixedPoint pos) const {
+    FilterWeights *weights(KisFixedPoint pos) const
+    {
         return m_filterWeights + pos.to256Frac();
     }
 
@@ -254,7 +256,8 @@ public:
      * number of support pixels that are needed for calculation of a
      * single result pixel
      */
-    int maxSpan() const {
+    int maxSpan() const
+    {
         return m_maxSpan;
     }
 
@@ -263,12 +266,14 @@ public:
      * equal to the real scale of the transformation due to
      * interpolation/blending difference.
      */
-    KisFixedPoint weightsPositionScale() const {
+    KisFixedPoint weightsPositionScale() const
+    {
         return m_weightsPositionScale;
     }
 
 private:
-    int findMaxIndex(qint16 *buf, int size) {
+    int findMaxIndex(qint16 *buf, int size)
+    {
         int maxValue = buf[0];
         int maxIndex = 0;
 

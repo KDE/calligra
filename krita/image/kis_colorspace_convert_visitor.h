@@ -18,7 +18,6 @@
 #ifndef KIS_COLORSPACE_CONVERT_VISITOR_H_
 #define KIS_COLORSPACE_CONVERT_VISITOR_H_
 
-
 #include <KoColorConversionTransformation.h>
 #include <KoColorSpace.h>
 
@@ -26,7 +25,6 @@
 #include "kis_global.h"
 #include "kis_types.h"
 #include "kis_node_visitor.h"
-
 
 /**
  * This will convert all layers to the destination color space.
@@ -45,32 +43,38 @@ public:
 
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
-    bool visit(KisAdjustmentLayer* layer);
-    bool visit(KisGeneratorLayer * layer);
+    bool visit(KisAdjustmentLayer *layer);
+    bool visit(KisGeneratorLayer *layer);
     bool visit(KisExternalLayer *);
 
-    bool visit(KisNode*) {
+    bool visit(KisNode *)
+    {
         return true;
     }
-    bool visit(KisCloneLayer*) {
+    bool visit(KisCloneLayer *)
+    {
         return true;
     }
-    bool visit(KisFilterMask*) {
+    bool visit(KisFilterMask *)
+    {
         return true;
     }
-    bool visit(KisTransformMask*) {
+    bool visit(KisTransformMask *)
+    {
         return true;
     }
-    bool visit(KisTransparencyMask*) {
+    bool visit(KisTransparencyMask *)
+    {
         return true;
     }
-    bool visit(KisSelectionMask*) {
+    bool visit(KisSelectionMask *)
+    {
         return true;
     }
 
 private:
 
-    bool convertPaintDevice(KisLayer* layer);
+    bool convertPaintDevice(KisLayer *layer);
 
     KisImageWSP m_image;
     const KoColorSpace *m_srcColorSpace;
@@ -79,7 +83,6 @@ private:
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
     QBitArray m_emptyChannelFlags;
 };
-
 
 #endif // KIS_COLORSPACE_CONVERT_VISITOR_H_
 

@@ -89,15 +89,15 @@ protected:
      * @param srcCS source color space
      * @return true if the color space given as argument can be used as a source colorspace
      */
-    bool canBeSource(const KoColorSpace* srcCS) const;
+    bool canBeSource(const KoColorSpace *srcCS) const;
     /**
      * @param dstCS destination color space
      * @return true if the color space given as argument can be used as a destination colorspace
      */
-    bool canBeDestination(const KoColorSpace* dstCS) const;
+    bool canBeDestination(const KoColorSpace *dstCS) const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

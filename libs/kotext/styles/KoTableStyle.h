@@ -58,7 +58,7 @@ public:
         BreakAfter,                 ///< If true, insert a frame break after this table
         MayBreakBetweenRows,        ///< If true, then the table is allowed to break between rows
         ColumnAndRowStyleManager,   ///< QVariant of a KoColumnAndRowStyleManager
-                                        /// It's not really a property of KoTableStyle but defined here for convenience
+        /// It's not really a property of KoTableStyle but defined here for convenience
         CollapsingBorders,          ///< If true, then the table has collapsing border model
         MasterPageName,             ///< Optional name of the master-page
         NumberHeadingRows,          ///< Count the number of heading rows
@@ -66,7 +66,7 @@ public:
         PageNumber,                 ///< The page number that is applied after the page break
         TextProgressionDirection,   ///< The direction of the text in the table
         TableIsProtected,           ///< boolean, if true, the table is protected against edits
-                                        /// It's not really a property of KoTableStyle but defined here for convenience
+        /// It's not really a property of KoTableStyle but defined here for convenience
         Shadow,                      ///< KoShadowStyle, the table shadow
         TableTemplate,               ///< KoTextTableTemplate, template for the table
         UseBandingColumnStyles,      ///< table:use-banding-column-styles ODF 1.2 19.736
@@ -95,11 +95,11 @@ public:
 
     /// The property specifies if the table should be kept together with the next paragraph
     void setKeepWithNext(bool keep);
-    
+
     bool keepWithNext() const;
 
     /// This property describe the shadow of the table, if any
-    void setShadow (const KoShadowStyle &shadow);
+    void setShadow(const KoShadowStyle &shadow);
 
     KoShadowStyle shadow() const;
 
@@ -113,9 +113,9 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
-    
+
     int pageNumber() const;
-    void setPageNumber (int page);
+    void setPageNumber(int page);
 
     void setBreakBefore(KoText::KoTextBreakProperty state);
     KoText::KoTextBreakProperty breakBefore() const;
@@ -179,7 +179,6 @@ public:
     /// Set the name of the master-page.
     void setMasterPageName(const QString &name);
 
-
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoTableStyle *style);
 
@@ -195,7 +194,7 @@ public:
     bool operator==(const KoTableStyle &other) const;
 
     void removeDuplicates(const KoTableStyle &other);
-    
+
     /// return true when there are keys defined for this style
     bool isEmpty() const;
 
@@ -250,7 +249,7 @@ private:
     QColor propertyColor(int key) const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_METATYPE(KoTableStyle *)

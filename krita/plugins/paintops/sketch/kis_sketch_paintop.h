@@ -35,17 +35,16 @@
 
 class KisDabCache;
 
-
 class KisSketchPaintOp : public KisPaintOp
 {
 
 public:
 
-    KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisSketchPaintOp();
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
 
 private:
     // pixel buffer
@@ -71,13 +70,13 @@ private:
 
     QVector<QPointF> m_points;
     int m_count;
-    KisPainter * m_painter;
+    KisPainter *m_painter;
     KisBrushSP m_brush;
     KisDabCache *m_dabCache;
 
 private:
     void drawConnection(const QPointF &start, const QPointF &end, double lineWidth);
-    void updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation);
+    void updateBrushMask(const KisPaintInformation &info, qreal scale, qreal rotation);
 
 };
 

@@ -34,7 +34,8 @@ const qreal MAX_ERROR = 0.0001;
 
 struct KisATanTable {
 
-    KisATanTable() {
+    KisATanTable()
+    {
         qreal nf = ::sqrt(MAX_SECOND_DERIV_IN_RANGE / (8 * MAX_ERROR));
         NUM_ATAN_ENTRIES = int(nf) + 1;
         // Build table
@@ -49,12 +50,13 @@ struct KisATanTable {
 
     }
 
-    ~KisATanTable() {
+    ~KisATanTable()
+    {
         delete [] ATanTable;
     }
 
     quint32 NUM_ATAN_ENTRIES;
-    qreal* ATanTable;
+    qreal *ATanTable;
 };
 
 K_GLOBAL_STATIC(KisATanTable, kisATanTable);
@@ -63,18 +65,20 @@ K_GLOBAL_STATIC(KisATanTable, kisATanTable);
 
 inline qreal interp(qreal r, qreal a, qreal b)
 {
-    return r*(b - a) + a;
+    return r * (b - a) + a;
 }
 
 inline qreal calcAngle(qreal x, qreal y)
 {
     static qreal af = kisATanTable->NUM_ATAN_ENTRIES;
     static int ai = kisATanTable->NUM_ATAN_ENTRIES;
-    static qreal* ATanTable = kisATanTable->ATanTable;
+    static qreal *ATanTable = kisATanTable->ATanTable;
     qreal di = (y / x) * af;
     int i = (int)(di);
-    if (i >= ai) return ::atan2(y, x);
-    return interp(di - i, ATanTable[i], ATanTable[i+1]);
+    if (i >= ai) {
+        return ::atan2(y, x);
+    }
+    return interp(di - i, ATanTable[i], ATanTable[i + 1]);
 }
 
 qreal KisFastMath::atan2(qreal y, qreal x)
@@ -82,7 +86,7 @@ qreal KisFastMath::atan2(qreal y, qreal x)
 
     if (y == 0.0) { // the line is horizontal
         if (x >= 0.0) { // towards the right
-            return(0.0);// the angle is 0
+            return (0.0); // the angle is 0
         }
         // toward the left
         return qreal(M_PI);
@@ -100,17 +104,17 @@ qreal KisFastMath::atan2(qreal y, qreal x)
             // we are in quadrant 1
             // now figure out which side of the 45 degree line
             if (x > y) {
-                return(calcAngle(x, y));
+                return (calcAngle(x, y));
             }
-            return(M_PI_2 - calcAngle(y, x));
+            return (M_PI_2 - calcAngle(y, x));
         }
         // we are in quadrant 4
         y = -y;
         // now figure out which side of the 45 degree line
         if (x > y) {
-            return(-calcAngle(x, y));
+            return (-calcAngle(x, y));
         }
-        return(-M_PI_2 + calcAngle(y, x));
+        return (-M_PI_2 + calcAngle(y, x));
     }
     // we are in quadrant 2 or 3
     x = -x;
@@ -119,14 +123,14 @@ qreal KisFastMath::atan2(qreal y, qreal x)
         // we are in quadrant 2
         // now figure out which side of the 45 degree line
         if (x > y) {
-            return(M_PI - calcAngle(x, y));
-        } return(M_PI_2 + calcAngle(y, x));
+            return (M_PI - calcAngle(x, y));
+        } return (M_PI_2 + calcAngle(y, x));
     }
     // we are in quadrant 3
     y = -y;
     // flip y so we can use it as a positve
     // now figure out which side of the 45 degree line
     if (x > y) {
-        return(-M_PI + calcAngle(x, y));
-    } return(-M_PI_2 - calcAngle(y, x));
+        return (-M_PI + calcAngle(x, y));
+    } return (-M_PI_2 - calcAngle(y, x));
 }

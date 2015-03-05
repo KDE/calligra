@@ -41,13 +41,12 @@ class QCheckBox;
 class KisPaintingInformationBuilder;
 class KisToolLineHelper;
 
-
 class KisToolLine : public KisToolPaint
 {
     Q_OBJECT
 
 public:
-    KisToolLine(KoCanvasBase * canvas);
+    KisToolLine(KoCanvasBase *canvas);
     virtual ~KisToolLine();
 
     void requestStrokeCancellation();
@@ -56,10 +55,10 @@ public:
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation activation, const QSet<KoShape *> &shapes);
 
     virtual int flags() const;
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    virtual void paint(QPainter &gc, const KoViewConverter &converter);
 
     virtual QString quickHelp() const;
 
@@ -69,10 +68,10 @@ private Q_SLOTS:
     void setShowOutline(bool value);
 
 private:
-    void paintLine(QPainter& gc, const QRect& rc);
+    void paintLine(QPainter &gc, const QRect &rc);
     QPointF straightLine(QPointF point);
     void updatePreview();
-    virtual QWidget* createOptionWidget();
+    virtual QWidget *createOptionWidget();
 
     void endStroke();
     void cancelStroke();
@@ -86,7 +85,6 @@ private:
 
     bool m_strokeIsRunning;
 
-
     QCheckBox *m_chkUseSensors;
     QCheckBox *m_chkShowOutline;
 
@@ -98,14 +96,14 @@ private:
     KConfigGroup configGroup;
 };
 
-
 class KisToolLineFactory : public KoToolFactoryBase
 {
 
 public:
 
-    KisToolLineFactory(const QStringList&)
-            : KoToolFactoryBase("KritaShape/KisToolLine") {
+    KisToolLineFactory(const QStringList &)
+        : KoToolFactoryBase("KritaShape/KisToolLine")
+    {
         setToolTip(i18n("Line Tool"));
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
@@ -116,14 +114,12 @@ public:
 
     virtual ~KisToolLineFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolLine(canvas);
     }
 
 };
-
-
-
 
 #endif //KIS_TOOL_LINE_H_
 

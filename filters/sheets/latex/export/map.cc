@@ -51,7 +51,7 @@ void Map::analyze(const QDomNode node)
     /* Analysis of the child markups */
     for (int index = 0; index < getNbChild(node); index++) {
         // Only tables
-        Table* table = new Table();
+        Table *table = new Table();
         table->analyze(getChild(node, index));
         _tables.append(table);
     }
@@ -67,7 +67,7 @@ void Map::analyze(const QDomNode node)
 void Map::generate(QTextStream &out)
 {
     kDebug(30522) << "  MAP GENERATION";
-    foreach(Table* table, _tables) {
+    foreach (Table *table, _tables) {
         table->generate(out);
     }
 

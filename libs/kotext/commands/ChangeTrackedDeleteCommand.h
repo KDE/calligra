@@ -42,14 +42,14 @@ public:
     ChangeTrackedDeleteCommand(DeleteMode mode,
                                QTextDocument *document,
                                KoShapeController *shapeController,
-                               KUndo2Command* parent = 0);
+                               KUndo2Command *parent = 0);
     virtual ~ChangeTrackedDeleteCommand();
 
     virtual void undo();
     virtual void redo();
 
     virtual int id() const;
-    virtual bool mergeWith ( const KUndo2Command *command);
+    virtual bool mergeWith(const KUndo2Command *command);
 
 private:
     QWeakPointer<QTextDocument> m_document;

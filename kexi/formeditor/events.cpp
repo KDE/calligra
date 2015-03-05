@@ -43,7 +43,7 @@ public:
 };
 
 Connection::Private::Private(const QString &sender_, const QString &signal_, const QString &receiver_, const QString &slot_)
-    :sender(sender_), signal(signal_), receiver(receiver_), slot(slot_)
+    : sender(sender_), signal(signal_), receiver(receiver_), slot(slot_)
 
 {
 
@@ -116,20 +116,23 @@ void
 ConnectionBuffer::fixName(const QString &oldName, const QString &newName)
 {
     foreach (Connection *c, *this) {
-        if (c->sender() == oldName)
+        if (c->sender() == oldName) {
             c->setSender(newName);
-        if (c->receiver() == oldName)
+        }
+        if (c->receiver() == oldName) {
             c->setReceiver(newName);
+        }
     }
 }
 
-ConnectionBuffer*
+ConnectionBuffer *
 ConnectionBuffer::allConnectionsForWidget(const QString &widget)
 {
     ConnectionBuffer *list = new ConnectionBuffer();
     foreach (Connection *c, *this) {
-        if ((c->sender() == widget) || (c->receiver() == widget))
+        if ((c->sender() == widget) || (c->receiver() == widget)) {
             list->append(c);
+        }
     }
 
     return list;
@@ -138,15 +141,17 @@ ConnectionBuffer::allConnectionsForWidget(const QString &widget)
 void
 ConnectionBuffer::save(QDomNode &parentNode)
 {
-    if (isEmpty())
+    if (isEmpty()) {
         return;
+    }
 
     QDomDocument domDoc = parentNode.ownerDocument();
     QDomElement connections;
-    if (!parentNode.firstChildElement("connections").isNull())
+    if (!parentNode.firstChildElement("connections").isNull()) {
         connections = parentNode.firstChildElement("connections");
-    else
+    } else {
         connections = domDoc.createElement("connections");
+    }
     parentNode.appendChild(connections);
 
     foreach (Connection *c, *this) {

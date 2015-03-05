@@ -37,7 +37,7 @@ public:
 };
 
 LongLongValidator::Private::Private()
-    :min(0), max(0)
+    : min(0), max(0)
 {
 
 }
@@ -47,17 +47,17 @@ LongLongValidator::Private::~Private()
 
 }
 
-LongLongValidator::LongLongValidator(QWidget * parent, int base)
-        : QValidator(parent)
-        , d(new Private())
+LongLongValidator::LongLongValidator(QWidget *parent, int base)
+    : QValidator(parent)
+    , d(new Private())
 {
     setBase(base);
 }
 
 LongLongValidator::LongLongValidator(qint64 bottom, qint64 top,
-                                     QWidget * parent, int base)
-        : QValidator(parent)
-        , d(new Private())
+                                     QWidget *parent, int base)
+    : QValidator(parent)
+    , d(new Private())
 {
     setBase(base);
     setRange(bottom, top);
@@ -75,29 +75,34 @@ QValidator::State LongLongValidator::validate(QString &str, int &) const
     QString newStr;
 
     newStr = str.trimmed();
-    if (d->base > 10)
+    if (d->base > 10) {
         newStr = newStr.toUpper();
+    }
 
     if (newStr == QString::fromLatin1("-")) {// a special case
-        if ((d->min || d->max) && d->min >= 0)
+        if ((d->min || d->max) && d->min >= 0) {
             ok = false;
-        else
+        } else {
             return QValidator::Acceptable;
-    } else if (!newStr.isEmpty())
+        }
+    } else if (!newStr.isEmpty()) {
         val = newStr.toLongLong(&ok, d->base);
-    else {
+    } else {
         val = 0;
         ok = true;
     }
 
-    if (! ok)
+    if (! ok) {
         return QValidator::Invalid;
+    }
 
-    if ((! d->min && ! d->max) || (val >= d->min && val <= d->max))
+    if ((! d->min && ! d->max) || (val >= d->min && val <= d->max)) {
         return QValidator::Acceptable;
+    }
 
-    if (d->max && d->min >= 0 && val < 0)
+    if (d->max && d->min >= 0 && val < 0) {
         return QValidator::Invalid;
+    }
 
     return QValidator::Intermediate;
 }
@@ -110,18 +115,22 @@ void LongLongValidator::fixup(QString &str) const
 
     state = validate(str, dummy);
 
-    if (state == QValidator::Invalid || state == QValidator::Acceptable)
+    if (state == QValidator::Invalid || state == QValidator::Acceptable) {
         return;
+    }
 
-    if (! d->min && ! d->max)
+    if (! d->min && ! d->max) {
         return;
+    }
 
     val = str.toLongLong(0, d->base);
 
-    if (val < d->min)
+    if (val < d->min) {
         val = d->min;
-    if (val > d->max)
+    }
+    if (val > d->max) {
         val = d->max;
+    }
 
     str.setNum(val, d->base);
 }
@@ -131,17 +140,20 @@ void LongLongValidator::setRange(qint64 bottom, qint64 top)
     d->min = bottom;
     d->max = top;
 
-    if (d->max < d->min)
+    if (d->max < d->min) {
         d->max = d->min;
+    }
 }
 
 void LongLongValidator::setBase(int base)
 {
     d->base = base;
-    if (d->base < 2)
+    if (d->base < 2) {
         d->base = 2;
-    if (d->base > 36)
+    }
+    if (d->base > 36) {
         d->base = 36;
+    }
 }
 
 qint64 LongLongValidator::bottom() const

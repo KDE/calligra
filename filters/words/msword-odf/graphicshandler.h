@@ -54,7 +54,7 @@ enum ObjectType { Inline, Floating };
 class DrawingWriter : public Writer
 {
 public:
-    DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, bool stylesxml_);
+    DrawingWriter(KoXmlWriter &xmlWriter, KoGenStyles &kostyles, bool stylesxml_);
 
     //position
     int xLeft;
@@ -67,10 +67,10 @@ public:
     qreal vOffset();
     qreal hOffset();
 
-    void setRect(const QRect& rect);
-    void setRectangle(wvWare::Word97::FSPA& spa);
-    void setGroupRectangle(MSO::OfficeArtFSPGR& fspgr);
-    void setChildRectangle(MSO::OfficeArtChildAnchor& anchor);
+    void setRect(const QRect &rect);
+    void setRectangle(wvWare::Word97::FSPA &spa);
+    void setGroupRectangle(MSO::OfficeArtFSPGR &fspgr);
+    void setChildRectangle(MSO::OfficeArtChildAnchor &anchor);
 };
 
 /*
@@ -90,49 +90,52 @@ private:
     class DrawClient : public ODrawToOdf::Client
     {
     private:
-        virtual QRectF getRect(const MSO::OfficeArtClientAnchor&);
+        virtual QRectF getRect(const MSO::OfficeArtClientAnchor &);
         virtual QRectF getReserveRect(void);
         virtual QString getPicturePath(const quint32 pib);
-        virtual bool onlyClientData(const MSO::OfficeArtClientData& o);
-        virtual void processClientData(const MSO::OfficeArtClientTextBox* ct,
-                                       const MSO::OfficeArtClientData& o,
-                                       Writer& out);
-        virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
-                                          const MSO::OfficeArtClientData* cd,
-                                          Writer& out);
-        virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
-        virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
-                                              const MSO::OfficeArtClientData* cd,
-                                              const DrawStyle& ds,
-                                              Writer& out);
-        virtual void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
-                                   const MSO::OfficeArtClientData* clientData,
-                                   KoGenStyle& style, Writer& out);
+        virtual bool onlyClientData(const MSO::OfficeArtClientData &o);
+        virtual void processClientData(const MSO::OfficeArtClientTextBox *ct,
+                                       const MSO::OfficeArtClientData &o,
+                                       Writer &out);
+        virtual void processClientTextBox(const MSO::OfficeArtClientTextBox &ct,
+                                          const MSO::OfficeArtClientData *cd,
+                                          Writer &out);
+        virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData &cd);
+        virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox *ct,
+                                              const MSO::OfficeArtClientData *cd,
+                                              const DrawStyle &ds,
+                                              Writer &out);
+        virtual void addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox,
+                                   const MSO::OfficeArtClientData *clientData,
+                                   KoGenStyle &style, Writer &out);
 
-        virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
+        virtual QColor toQColor(const MSO::OfficeArtCOLORREF &c);
         virtual QString formatPos(qreal v);
 
-        virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
-        virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+        virtual const MSO::OfficeArtDggContainer *getOfficeArtDggContainer();
+        virtual const MSO::OfficeArtSpContainer *getMasterShapeContainer(quint32 spid);
 
-        WordsGraphicsHandler* const gh;
+        WordsGraphicsHandler *const gh;
     public:
-        explicit DrawClient(WordsGraphicsHandler *p) :gh(p) {}
-};
+        explicit DrawClient(WordsGraphicsHandler *p) : gh(p) {}
+    };
 public:
-    WordsGraphicsHandler(Document* document,
-                         KoXmlWriter* bodyWriter,
-                         KoXmlWriter* manifestWriter,
-                         KoStore* store, KoGenStyles* mainStyles,
-                         const wvWare::Drawings* p_drawings,
-                         const wvWare::Word97::FIB& fib);
+    WordsGraphicsHandler(Document *document,
+                         KoXmlWriter *bodyWriter,
+                         KoXmlWriter *manifestWriter,
+                         KoStore *store, KoGenStyles *mainStyles,
+                         const wvWare::Drawings *p_drawings,
+                         const wvWare::Word97::FIB &fib);
     ~WordsGraphicsHandler();
 
     /**
      * Set the appropriate writer for object properties and content.
      * @param writer KoXmlWriter provided by the Document class
      */
-    void setCurrentWriter(KoXmlWriter* writer) { m_currentWriter = writer; };
+    void setCurrentWriter(KoXmlWriter *writer)
+    {
+        m_currentWriter = writer;
+    };
 
     /**
      * This method gets called when a floating object is found by wv2 parser.
@@ -144,7 +147,7 @@ public:
      * This method gets called when an inline object is found by wv2 parser.
      * @param data PictureData as defined in functordata.h
      */
-    virtual QString handleInlineObject(const wvWare::PictureData& data, const bool isBulletPicture = false);
+    virtual QString handleInlineObject(const wvWare::PictureData &data, const bool isBulletPicture = false);
 
     /**
      * Get the DrawStyle to access document backgroud properties and defaults.
@@ -192,77 +195,77 @@ private:
      *
      * @return 0 - success, 1 - failed
      */
-    int parseFloatingPictures(const MSO::OfficeArtBStoreContainer* blipStore);
+    int parseFloatingPictures(const MSO::OfficeArtBStoreContainer *blipStore);
 
     /**
      * Process the default properties for all drawing objects stored in
      * OfficeArtDggContainer.
      */
-    void defineDefaultGraphicStyle(KoGenStyles* mainStyles);
+    void defineDefaultGraphicStyle(KoGenStyles *mainStyles);
 
     /**
      * Process text wrapping related properties of a shape.  Add corresponding
      * attributes to graphic-properties of the graphic style.
      */
-    void defineWrappingAttributes(KoGenStyle& style, const DrawStyle& ds);
+    void defineWrappingAttributes(KoGenStyle &style, const DrawStyle &ds);
 
     /**
      * Process position related properties of a shape.  Add corresponding
      * attributes to graphic-properties of the graphic style.
      */
-    void definePositionAttributes(KoGenStyle& style, const DrawStyle& ds);
+    void definePositionAttributes(KoGenStyle &style, const DrawStyle &ds);
 
     /**
      * Check if the object is inline or floating and set the anchor type to
      * char or as-char.
      */
-    void setAnchorTypeAttribute(DrawingWriter& out);
+    void setAnchorTypeAttribute(DrawingWriter &out);
 
     /**
      * Set the Z-Index attribute.  Z-Index is the position of the shape on z
      * axis.  Z-Index depends on the order in which shapes are stored inside
      * OfficeArtDgContainer
      */
-    void setZIndexAttribute(DrawingWriter& out);
+    void setZIndexAttribute(DrawingWriter &out);
 
     /**
      * TODO:
      */
-    void locateDrawing(const MSO::OfficeArtSpgrContainer* o,
-                       wvWare::Word97::FSPA* spa, uint spid, DrawingWriter& out);
+    void locateDrawing(const MSO::OfficeArtSpgrContainer *o,
+                       wvWare::Word97::FSPA *spa, uint spid, DrawingWriter &out);
     /**
      * Check object types in a container of groups of shapes.
      * @param o container of groups of shapes
      * @param out drawing writer
      */
-    void processGroupShape(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out);
+    void processGroupShape(const MSO::OfficeArtSpgrContainer &o, DrawingWriter &out);
 
     /**
      * Check object type and call the appropriate method to process it.
      * @param o container for shapes
      * @param out drawing writer
      */
-    void processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
+    void processDrawingObject(const MSO::OfficeArtSpContainer &o, DrawingWriter out);
 
     /**
      * Process the properties of a TextBox, use wv2 to parse the content.
      */
-    void processTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
+    void processTextBox(const MSO::OfficeArtSpContainer &o, DrawingWriter out);
 
     /**
      * Process a line shape.
      */
-    void processLineShape(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
+    void processLineShape(const MSO::OfficeArtSpContainer &o, DrawingWriter &out);
 
     /**
      * Process a floating frame shape.
      */
-    void processFloatingPictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
+    void processFloatingPictureFrame(const MSO::OfficeArtSpContainer &o, DrawingWriter &out);
 
     /**
      * Process an inline frame shape.
      */
-    void processInlinePictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out);
+    void processInlinePictureFrame(const MSO::OfficeArtSpContainer &o, DrawingWriter &out);
 
     /**
      * Emit the textBoxFound signal.
@@ -274,25 +277,25 @@ private:
     /**
      * Insert an empty frame.  Use when the picture is an external file.
      */
-    void insertEmptyInlineFrame(DrawingWriter& out);
+    void insertEmptyInlineFrame(DrawingWriter &out);
 
     /**
      * A helper to get the correct rectangle for a shape or a childShape.
      */
     QRect getRect(const MSO::OfficeArtSpContainer &o);
 
-    Document* m_document;
-    KoStore* m_store;
-    KoXmlWriter* m_currentWriter;
-    KoXmlWriter* m_manifestWriter;
-    KoGenStyles* m_mainStyles;
+    Document *m_document;
+    KoStore *m_store;
+    KoXmlWriter *m_currentWriter;
+    KoXmlWriter *m_manifestWriter;
+    KoGenStyles *m_mainStyles;
 
-    const wvWare::Drawings* m_drawings;
-    const wvWare::Word97::FIB& m_fib;
+    const wvWare::Drawings *m_drawings;
+    const wvWare::Word97::FIB &m_fib;
 
     MSO::OfficeArtDggContainer m_officeArtDggContainer;
-    MSO::OfficeArtDgContainer* m_pOfficeArtHeaderDgContainer;
-    MSO::OfficeArtDgContainer* m_pOfficeArtBodyDgContainer;
+    MSO::OfficeArtDgContainer *m_pOfficeArtHeaderDgContainer;
+    MSO::OfficeArtDgContainer *m_pOfficeArtBodyDgContainer;
 
     QMap<QByteArray, QString> m_picNames; //picture names
 
@@ -312,7 +315,7 @@ private:
     wvWare::SharedPtr<const wvWare::Word97::PICF> m_picf;
 
     //structure that specifies placement of a floating object
-    wvWare::Word97::FSPA* m_pSpa;
+    wvWare::Word97::FSPA *m_pSpa;
 };
 
 #endif // GRAPHICSHANDLER_H

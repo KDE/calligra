@@ -27,16 +27,16 @@
 
 /**
  * A thin tool button which can be visually grouped with other buttons.
- * 
+ *
  * The group can thus look like one solid bar: ( button1 | button2 | button3 )
- * 
+ *
  * For groupping layout can be used. For exclusive checkable behaviour assign QButtonGroup on the buttons.
  */
 class KOWIDGETUTILS_EXPORT KoGroupButton : public QToolButton
 {
     Q_OBJECT
-    Q_ENUMS( GroupPosition )
-    Q_PROPERTY( GroupPosition groupPosition READ groupPosition WRITE setGroupPosition )
+    Q_ENUMS(GroupPosition)
+    Q_PROPERTY(GroupPosition groupPosition READ groupPosition WRITE setGroupPosition)
 public:
     /**
      * Position of the button within the button group what affects the appearance.
@@ -48,12 +48,12 @@ public:
         GroupCenter  //!< The button is on the center of the group, so it would have separators on both sides
     };
 
-    explicit KoGroupButton(GroupPosition position, QWidget* parent = 0);
+    explicit KoGroupButton(GroupPosition position, QWidget *parent = 0);
 
     /**
      * Creates button with no NoGroup position.
      */
-    explicit KoGroupButton(QWidget* parent = 0);
+    explicit KoGroupButton(QWidget *parent = 0);
 
     virtual ~KoGroupButton();
 
@@ -62,7 +62,7 @@ public:
     KoGroupButton::GroupPosition groupPosition() const;
 
 protected:
-    virtual void paintEvent(QPaintEvent* event);
+    virtual void paintEvent(QPaintEvent *event);
 
 private:
     class Private;

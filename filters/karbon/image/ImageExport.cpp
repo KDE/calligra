@@ -46,19 +46,18 @@
 K_PLUGIN_FACTORY(PngExportFactory, registerPlugin<ImageExport>();)
 K_EXPORT_PLUGIN(PngExportFactory("calligrafilters"))
 
-
-ImageExport::ImageExport(QObject*parent, const QVariantList&)
+ImageExport::ImageExport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
 
 KoFilter::ConversionStatus
-ImageExport::convert(const QByteArray& from, const QByteArray& to)
+ImageExport::convert(const QByteArray &from, const QByteArray &to)
 {
     QString format;
     if (to == "image/png") {
         format = "PNG";
-    } else if(to == "image/jpeg") {
+    } else if (to == "image/jpeg") {
         format = "JPG";
     }
     if (format.isEmpty()) {
@@ -68,11 +67,12 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
         return KoFilter::NotImplemented;
     }
 
-    KoDocument* document = m_chain->inputDocument();
-    if (! document)
+    KoDocument *document = m_chain->inputDocument();
+    if (! document) {
         return KoFilter::ParsingError;
+    }
 
-    KarbonDocument* doc = dynamic_cast<KarbonDocument*>(document);
+    KarbonDocument *doc = dynamic_cast<KarbonDocument *>(document);
     if (doc) {
         KoShapePainter painter;
         painter.setShapes(doc->shapes());
@@ -88,7 +88,7 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
         QColor backgroundColor(QColor(255, 255, 255, 0));
 
         if (! m_chain->manager()->getBatchMode()) {
-            ImageExportOptionsWidget * widget = new ImageExportOptionsWidget(pointSize);
+            ImageExportOptionsWidget *widget = new ImageExportOptionsWidget(pointSize);
             widget->setUnit(document->unit());
             widget->setBackgroundColor(backgroundColor);
             widget->enableBackgroundOpacity(format == "PNG");
@@ -97,8 +97,9 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
             dlg.setCaption(i18n("PNG Export Options"));
             dlg.setButtons(KDialog::Ok | KDialog::Cancel);
             dlg.setMainWidget(widget);
-            if (dlg.exec() != QDialog::Accepted)
+            if (dlg.exec() != QDialog::Accepted) {
                 return KoFilter::UserCancelled;
+            }
 
             pixelSize = widget->pixelSize();
             backgroundColor = widget->backgroundColor();
@@ -111,7 +112,7 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
         // paint the shapes
         painter.paint(image);
 
-        if(!image.save(m_chain->outputFile(), format.toLatin1())) {
+        if (!image.save(m_chain->outputFile(), format.toLatin1())) {
             return KoFilter::CreationError;
         }
 

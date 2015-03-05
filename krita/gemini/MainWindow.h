@@ -33,10 +33,10 @@ class MainWindow : public QMainWindow
     Q_PROPERTY(QString applicationName READ applicationName CONSTANT)
     Q_PROPERTY(QString currentSketchPage READ currentSketchPage WRITE setCurrentSketchPage NOTIFY currentSketchPageChanged)
     Q_PROPERTY(bool temporaryFile READ temporaryFile WRITE setTemporaryFile NOTIFY temporaryFileChanged)
-    Q_PROPERTY(QObject* sketchKisView READ sketchKisView WRITE setSketchKisView NOTIFY sketchKisViewChanged)
+    Q_PROPERTY(QObject *sketchKisView READ sketchKisView WRITE setSketchKisView NOTIFY sketchKisViewChanged)
 
 public:
-    explicit MainWindow(QStringList fileNames, QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    explicit MainWindow(QStringList fileNames, QWidget *parent = 0, Qt::WindowFlags flags = 0);
     virtual ~MainWindow();
 
     bool allowClose() const;
@@ -45,7 +45,8 @@ public:
     bool slateMode() const;
     void setSlateMode(bool newValue);
 
-    QString applicationName() const {
+    QString applicationName() const
+    {
         return QLatin1String("KRITA GEMINI");
     }
 
@@ -55,10 +56,10 @@ public:
     bool temporaryFile() const;
     void setTemporaryFile(bool newValue);
 
-    QObject* sketchKisView() const;
-    void setSketchKisView(QObject* newView);
+    QObject *sketchKisView() const;
+    void setSketchKisView(QObject *newView);
 
-    virtual void closeEvent(QCloseEvent* event);
+    virtual void closeEvent(QCloseEvent *event);
 
     Q_INVOKABLE QString openImage();
 
@@ -72,8 +73,8 @@ public Q_SLOTS:
     void switchToDesktop(bool justLoaded = false);
     void documentChanged();
     void resetWindowTitle();
-    void resourceChanged(int key, const QVariant& v);
-    void resourceChangedSketch(int key, const QVariant& v);
+    void resourceChanged(int key, const QVariant &v);
+    void resourceChangedSketch(int key, const QVariant &v);
 
 Q_SIGNALS:
     void closeRequested();
@@ -93,10 +94,10 @@ private Q_SLOTS:
 private:
     void cloneResources(KisCanvasResourceProvider *from, KisCanvasResourceProvider *to);
     class Private;
-    Private * const d;
+    Private *const d;
 
 #ifdef Q_OS_WIN
-    bool winEvent(MSG * message, long * result);
+    bool winEvent(MSG *message, long *result);
 #endif
 };
 

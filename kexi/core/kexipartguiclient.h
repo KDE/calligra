@@ -33,21 +33,22 @@ class GUIClient : public QObject
 public:
     virtual ~GUIClient();
 
-    inline Part *part() {
-        return static_cast<Part*>(QObject::parent());
+    inline Part *part()
+    {
+        return static_cast<Part *>(QObject::parent());
     }
 
-    KActionCollection* actionCollection() const;
+    KActionCollection *actionCollection() const;
 
 protected:
     /*! Creates a new GUI Client. If \a partInstanceClient is true, the part will be
      used as "instance" client, otherwise it will be defined per-view.
      \a nameSuffix is used in constructing client's name (only useful for debugging purposes). */
-    GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix);
+    GUIClient(Part *part, bool partInstanceClient, const char *nameSuffix);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     friend class Part;
 };

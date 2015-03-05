@@ -19,8 +19,7 @@
 
 #include "kis_node_graph_listener.h"
 
-struct KisNodeGraphListener::Private
-{
+struct KisNodeGraphListener::Private {
     Private() : sequenceNumber(0) {}
     int sequenceNumber;
 };
@@ -78,6 +77,6 @@ void KisNodeGraphListener::notifySelectionChanged()
 {
 }
 
-void KisNodeGraphListener::requestProjectionUpdate(KisNode * /*node*/, const QRect& /*rect*/)
+void KisNodeGraphListener::requestProjectionUpdate(KisNode * /*node*/, const QRect & /*rect*/)
 {
 }

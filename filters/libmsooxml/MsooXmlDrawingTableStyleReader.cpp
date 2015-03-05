@@ -20,7 +20,6 @@
 #include "MsooXmlDrawingTableStyleReader.h"
 #include "MsooXmlTheme.h"
 
-
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
 #include <KoOdfGraphicStyles.h>
@@ -38,11 +37,11 @@
 
 using namespace MSOOXML;
 
-MsooXmlDrawingTableStyleReader::MsooXmlDrawingTableStyleReader(KoOdfWriters* writers)
-: MsooXmlCommonReader(writers)
-, m_context(0)
-, m_currentStyle(0)
-, m_currentTableStyleProperties()
+MsooXmlDrawingTableStyleReader::MsooXmlDrawingTableStyleReader(KoOdfWriters *writers)
+    : MsooXmlCommonReader(writers)
+    , m_context(0)
+    , m_currentStyle(0)
+    , m_currentTableStyleProperties()
 {
 }
 
@@ -50,13 +49,13 @@ MsooXmlDrawingTableStyleReader::~MsooXmlDrawingTableStyleReader()
 {
 }
 
-MsooXmlDrawingTableStyleContext::MsooXmlDrawingTableStyleContext(MsooXmlImport* _import, const QString& _path, const QString& _file, DrawingMLTheme* _themes, QMap< QString, DrawingTableStyle* >* _styleList, QMap< QString, QString > _colorMap)
-: styleList(_styleList)
-, import(_import)
-, path(_path)
-, file(_file)
-, themes(_themes)
-, colorMap(_colorMap)
+MsooXmlDrawingTableStyleContext::MsooXmlDrawingTableStyleContext(MsooXmlImport *_import, const QString &_path, const QString &_file, DrawingMLTheme *_themes, QMap< QString, DrawingTableStyle * > *_styleList, QMap< QString, QString > _colorMap)
+    : styleList(_styleList)
+    , import(_import)
+    , path(_path)
+    , file(_file)
+    , themes(_themes)
+    , colorMap(_colorMap)
 {
 }
 
@@ -64,9 +63,9 @@ MsooXmlDrawingTableStyleContext::~MsooXmlDrawingTableStyleContext()
 {
 }
 
-KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read(MsooXmlReaderContext* context)
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read(MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<MsooXmlDrawingTableStyleContext*>(context);
+    m_context = dynamic_cast<MsooXmlDrawingTableStyleContext *>(context);
     Q_ASSERT(m_context);
 
     readNext();
@@ -137,10 +136,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
 
     QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(styleId)
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(band1H)
             ELSE_TRY_READ_IF(band1V)
             ELSE_TRY_READ_IF(band2H)
@@ -191,10 +190,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblBg()
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(fill)
             else if (name() == "fillRef") {
                 // NOTE: This is a heavy simplifiaction for the moment
@@ -227,10 +226,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band1H()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -250,10 +249,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band1V()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -274,10 +273,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band2H()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -297,10 +296,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band2V()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -320,10 +319,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_firstCol()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -343,10 +342,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_firstRow()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -366,10 +365,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_lastCol()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -389,10 +388,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_lastRow()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -412,10 +411,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_neCell()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -435,10 +434,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_nwCell()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -458,10 +457,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_seCell()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -481,10 +480,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_swCell()
 
     m_currentTableStyleProperties = new TableStyleProperties;
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -507,10 +506,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
         m_currentTableStyleProperties = new TableStyleProperties;
     }
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
@@ -553,10 +552,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
 //             TRY_READ_IF(cell3D)
             TRY_READ_IF(fill)
             else if (name() == "fillRef") {
@@ -662,10 +661,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcBdr()
 {
     READ_PROLOGUE
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(bottom)
 //             ELSE_TRY_READ_IF(extLst)
             ELSE_TRY_READ_IF(insideH)
@@ -689,11 +688,11 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
 {
     READ_PROLOGUE
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
-            if(QUALIFIED_NAME_IS(ln)) {
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->bottom = m_currentBorder;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::BottomBorder;
@@ -712,11 +711,11 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
 {
     READ_PROLOGUE
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
-            if(QUALIFIED_NAME_IS(ln)) {
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->top = m_currentBorder;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::TopBorder;
@@ -735,11 +734,11 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
 {
     READ_PROLOGUE
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
-            if(QUALIFIED_NAME_IS(ln)) {
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->left = m_currentBorder;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::LeftBorder;
@@ -758,11 +757,11 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 {
     READ_PROLOGUE
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
-            if(QUALIFIED_NAME_IS(ln)) {
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->right = m_currentBorder;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::RightBorder;
@@ -781,9 +780,9 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tl2br()
 {
     READ_PROLOGUE
 
-    while(!atEnd()) {
-        if(isStartElement()) {
-            if(QUALIFIED_NAME_IS(ln)) {
+    while (!atEnd()) {
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->tl2br = m_currentBorder;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::Tl2brBorder;
@@ -803,9 +802,9 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tr2bl()
 {
     READ_PROLOGUE
 
-    while(!atEnd()) {
-        if(isStartElement()) {
-            if(QUALIFIED_NAME_IS(ln)) {
+    while (!atEnd()) {
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->tr2bl = m_currentBorder;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::Tr2blBorder;
@@ -825,11 +824,11 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideV()
 {
     READ_PROLOGUE
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
-            if(QUALIFIED_NAME_IS(ln)) {
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->insideV = m_currentBorder;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::InsideVBorder;
@@ -848,11 +847,11 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideH()
 {
     READ_PROLOGUE
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
-            if(QUALIFIED_NAME_IS(ln)) {
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->insideH = m_currentBorder;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::InsideHBorder;
@@ -884,10 +883,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideH()
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
 {
     READ_PROLOGUE
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
 //             TRY_READ_IF(blipFill)
 //             ELSE_TRY_READ_IF(grandFill)
 //             ELSE_TRY_READ_IF(grpFill)
@@ -895,7 +894,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
                 SKIP_EVERYTHING_AND_RETURN
             }
 //             ELSE_TRY_READ_IF(pattFill)
-            else if(QUALIFIED_NAME_IS(solidFill)) {
+            else if (QUALIFIED_NAME_IS(solidFill)) {
                 TRY_READ(solidFill)
                 m_currentTableStyleProperties->backgroundColor = m_currentColor;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::BackgroundColor;

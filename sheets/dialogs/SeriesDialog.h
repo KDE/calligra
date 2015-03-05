@@ -47,23 +47,23 @@ class SeriesDialog : public KDialog
     Q_OBJECT
 public:
 
-    SeriesDialog(QWidget* parent, Selection* selection);
+    SeriesDialog(QWidget *parent, Selection *selection);
 
-    Sheet* sheet;
+    Sheet *sheet;
 
 public Q_SLOTS:
     virtual void slotButtonClicked(int button);
 
 protected:
-    Selection* m_selection;
+    Selection *m_selection;
     KDoubleNumInput *start;
     KDoubleNumInput *end;
     KDoubleNumInput *step;
 
-    QRadioButton* column;
-    QRadioButton* row;
-    QRadioButton* linear;
-    QRadioButton* geometric;
+    QRadioButton *column;
+    QRadioButton *row;
+    QRadioButton *linear;
+    QRadioButton *geometric;
     QPoint  marker;
 };
 

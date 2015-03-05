@@ -30,12 +30,12 @@
 
 #include "kis_png_converter.h"
 
-OraSaveContext::OraSaveContext(KoStore* _store) : m_id(0), m_store(_store)
+OraSaveContext::OraSaveContext(KoStore *_store) : m_id(0), m_store(_store)
 {
 
 }
 
-QString OraSaveContext::saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store* metaData, KisImageWSP image)
+QString OraSaveContext::saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store *metaData, KisImageWSP image)
 {
     QString filename = QString("data/layer%1.png").arg(m_id++);
 
@@ -48,7 +48,7 @@ QString OraSaveContext::saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store*
         KisPNGConverter pngconv(0);
         vKisAnnotationSP_it annotIt = 0;
 
-        KisMetaData::Store* store = new KisMetaData::Store(*metaData);
+        KisMetaData::Store *store = new KisMetaData::Store(*metaData);
         bool success = pngconv.buildFile(&io, image, dev, annotIt, annotIt, KisPNGOptions(), store);
         if (success != KisImageBuilder_RESULT_OK) {
             dbgFile << "Saving PNG failed:" << filename;
@@ -68,8 +68,7 @@ QString OraSaveContext::saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store*
     return filename;
 }
 
-
-void OraSaveContext::saveStack(const QDomDocument& doc)
+void OraSaveContext::saveStack(const QDomDocument &doc)
 {
     if (m_store->open("stack.xml")) {
         KoStoreDevice io(m_store);

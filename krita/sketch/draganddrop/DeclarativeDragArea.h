@@ -37,22 +37,22 @@ class DeclarativeDragArea : public QDeclarativeItem
      * The delegate is the item that will be displayed next to the mouse cursor during the drag and drop operation.
      * It usually consists of a large, semi-transparent icon representing the data being dragged.
      */
-    Q_PROPERTY(QDeclarativeComponent* delegate READ delegate WRITE setDelegate NOTIFY delegateChanged RESET resetDelegate)
+    Q_PROPERTY(QDeclarativeComponent *delegate READ delegate WRITE setDelegate NOTIFY delegateChanged RESET resetDelegate)
 
     /**
      * The QML element that is the source of the resulting drag and drop operation. This can be defined to any item, and will
      * be available to the DropArea as event.data.source
      */
-    Q_PROPERTY(QDeclarativeItem* source READ source WRITE setSource NOTIFY sourceChanged RESET resetSource)
+    Q_PROPERTY(QDeclarativeItem *source READ source WRITE setSource NOTIFY sourceChanged RESET resetSource)
 
     //TODO: to be implemented
-    Q_PROPERTY(QDeclarativeItem* target READ source NOTIFY targetChanged)
+    Q_PROPERTY(QDeclarativeItem *target READ source NOTIFY targetChanged)
 
     /**
      * the mime data of the drag operation
      * @see DeclarativeMimeData
      */
-    Q_PROPERTY(DeclarativeMimeData* mimeData READ mimeData CONSTANT)
+    Q_PROPERTY(DeclarativeMimeData *mimeData READ mimeData CONSTANT)
 
     /**
      * If false no drag operation will be generate
@@ -90,14 +90,14 @@ public:
     ~DeclarativeDragArea();
 
     QDeclarativeComponent *delegate() const;
-    void setDelegate(QDeclarativeComponent* delegate);
+    void setDelegate(QDeclarativeComponent *delegate);
     void resetDelegate();
 
     QVariant delegateImage() const;
     void setDelegateImage(const QVariant &image);
-    QDeclarativeItem* target() const;
-    QDeclarativeItem* source() const;
-    void setSource(QDeclarativeItem* source);
+    QDeclarativeItem *target() const;
+    QDeclarativeItem *source() const;
+    void setSource(QDeclarativeItem *source);
     void resetSource();
 
     bool isEnabled() const;
@@ -114,7 +114,7 @@ public:
     Qt::DropAction defaultAction() const;
     void setDefaultAction(Qt::DropAction action);
 
-    DeclarativeMimeData* mimeData() const;
+    DeclarativeMimeData *mimeData() const;
 
 Q_SIGNALS:
     void dragStarted(qreal startX, qreal startY);
@@ -136,13 +136,13 @@ protected:
     bool sceneEventFilter(QGraphicsItem *item, QEvent *event);
 
 private:
-    QDeclarativeComponent* m_delegate;
-    QDeclarativeItem* m_source;
-    QDeclarativeItem* m_target;
+    QDeclarativeComponent *m_delegate;
+    QDeclarativeItem *m_source;
+    QDeclarativeItem *m_target;
     bool m_enabled;
     Qt::DropActions m_supportedActions;
     Qt::DropAction m_defaultAction;
-    DeclarativeMimeData* const m_data;
+    DeclarativeMimeData *const m_data;
     QImage m_delegateImage;
     int m_startDragDistance;
 };

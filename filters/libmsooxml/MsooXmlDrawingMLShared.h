@@ -55,7 +55,7 @@ KoFilter::ConversionStatus read_headEnd();
 
 KoBorder::BorderData m_currentBorder;
 
-KoFilter::ConversionStatus read_Table_generic(const QString& endElement);
+KoFilter::ConversionStatus read_Table_generic(const QString &endElement);
 KoFilter::ConversionStatus read_Table_lnL();
 KoFilter::ConversionStatus read_Table_lnR();
 KoFilter::ConversionStatus read_Table_lnT();
@@ -73,6 +73,6 @@ qreal m_currentShadeLevel;
 qreal m_currentSatMod; //value of current saturation modulation
 qreal m_currentLineWidth;
 
-qreal* m_currentDoubleValue;
+qreal *m_currentDoubleValue;
 
 QString m_referredFontName;

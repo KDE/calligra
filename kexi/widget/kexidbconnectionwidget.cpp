@@ -51,7 +51,8 @@ class KexiDBConnectionWidget::Private
 {
 public:
     Private()
-            : connectionOnly(false) {
+        : connectionOnly(false)
+    {
     }
 
     KPushButton *btnSaveChanges, *btnTestConnection;
@@ -71,9 +72,9 @@ public:
 
 //---------
 
-KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
-        : QWidget(parent)
-        , d(new Private)
+KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget *parent)
+    : QWidget(parent)
+    , d(new Private)
 {
     setupUi(this);
     setObjectName("KexiConnectionSelectorWidget");
@@ -130,7 +131,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
 
     connect(localhostRBtn, SIGNAL(clicked()), this, SLOT(slotLocationRadioClicked()));
     connect(remotehostRBtn, SIGNAL(clicked()), this, SLOT(slotLocationRadioClicked()));
-    connect(chkPortDefault, SIGNAL(toggled(bool)), this , SLOT(slotCBToggled(bool)));
+    connect(chkPortDefault, SIGNAL(toggled(bool)), this, SLOT(slotCBToggled(bool)));
     connect(btnLoadDBList, SIGNAL(clicked()), this, SIGNAL(loadDBList()));
     connect(d->btnSaveChanges, SIGNAL(clicked()), this, SIGNAL(saveChanges()));
 }
@@ -145,8 +146,8 @@ bool KexiDBConnectionWidget::connectionOnly() const
     return d->connectionOnly;
 }
 
-void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool connectionOnly,
-        const QString& shortcutFileName)
+void KexiDBConnectionWidget::setDataInternal(const KexiProjectData &data, bool connectionOnly,
+        const QString &shortcutFileName)
 {
     d->data = data;
     d->connectionOnly = connectionOnly;
@@ -170,8 +171,7 @@ void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool c
     hostEdit->setText(d->data.connectionData()->hostName);
     if (d->data.connectionData()->hostName.isEmpty()) {
         localhostRBtn->setChecked(true);
-    }
-    else {
+    } else {
         remotehostRBtn->setChecked(true);
     }
     slotLocationRadioClicked();
@@ -185,10 +185,11 @@ void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool c
     }
     userEdit->setText(d->data.connectionData()->userName);
     passwordEdit->setText(d->data.connectionData()->password);
-    if (d->connectionOnly)
+    if (d->connectionOnly) {
         titleEdit->setText(d->data.connectionData()->caption);
-    else
+    } else {
         titleEdit->setText(d->data.caption());
+    }
 
     if (shortcutFileName.isEmpty()) {
         d->btnSaveChanges->hide();
@@ -201,32 +202,31 @@ void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool c
     adjustSize();
 }
 
-void KexiDBConnectionWidget::setData(const KexiProjectData& data, const QString& shortcutFileName)
+void KexiDBConnectionWidget::setData(const KexiProjectData &data, const QString &shortcutFileName)
 {
     setDataInternal(data, false /*!connectionOnly*/, shortcutFileName);
 }
 
-void KexiDBConnectionWidget::setData(const KexiDB::ConnectionData& data, const QString& shortcutFileName)
+void KexiDBConnectionWidget::setData(const KexiDB::ConnectionData &data, const QString &shortcutFileName)
 {
     KexiProjectData pdata(data);
     setDataInternal(pdata, true /*connectionOnly*/, shortcutFileName);
 }
 
-KPushButton* KexiDBConnectionWidget::saveChangesButton() const
+KPushButton *KexiDBConnectionWidget::saveChangesButton() const
 {
     return d->btnSaveChanges;
 }
 
-KPushButton* KexiDBConnectionWidget::testConnectionButton() const
+KPushButton *KexiDBConnectionWidget::testConnectionButton() const
 {
     return d->btnTestConnection;
 }
 
-KexiDBDriverComboBox* KexiDBConnectionWidget::driversCombo() const
+KexiDBDriverComboBox *KexiDBConnectionWidget::driversCombo() const
 {
     return d->driversCombo;
 }
-
 
 KexiProjectData KexiDBConnectionWidget::data()
 {
@@ -258,8 +258,8 @@ void KexiDBConnectionWidget::slotShowSavePasswordHelp()
 
 //-----------
 
-KexiDBConnectionWidgetDetails::KexiDBConnectionWidgetDetails(QWidget* parent)
-        : QWidget(parent)
+KexiDBConnectionWidgetDetails::KexiDBConnectionWidgetDetails(QWidget *parent)
+    : QWidget(parent)
 {
     setupUi(this);
     customSocketEdit->setMode(KFile::File | KFile::ExistingOnly | KFile::LocalOnly);
@@ -271,8 +271,8 @@ KexiDBConnectionWidgetDetails::~KexiDBConnectionWidgetDetails()
 
 //-----------
 
-KexiDBConnectionTabWidget::KexiDBConnectionTabWidget(QWidget* parent)
-        : KTabWidget(parent)
+KexiDBConnectionTabWidget::KexiDBConnectionTabWidget(QWidget *parent)
+    : KTabWidget(parent)
 {
     mainWidget = new KexiDBConnectionWidget(this);
     mainWidget->setObjectName("mainWidget");
@@ -295,7 +295,7 @@ KexiDBConnectionTabWidget::~KexiDBConnectionTabWidget()
 {
 }
 
-void KexiDBConnectionTabWidget::setData(const KexiProjectData& data, const QString& shortcutFileName)
+void KexiDBConnectionTabWidget::setData(const KexiProjectData &data, const QString &shortcutFileName)
 {
     mainWidget->setData(data, shortcutFileName);
     detailsWidget->chkUseSocket->setChecked(data.constConnectionData()->useLocalSocketFile);
@@ -306,8 +306,8 @@ void KexiDBConnectionTabWidget::setData(const KexiProjectData& data, const QStri
     detailsWidget->descriptionEdit->setText(data.description());
 }
 
-void KexiDBConnectionTabWidget::setData(const KexiDB::ConnectionData& data,
-                                        const QString& shortcutFileName)
+void KexiDBConnectionTabWidget::setData(const KexiDB::ConnectionData &data,
+                                        const QString &shortcutFileName)
 {
     mainWidget->setData(data, shortcutFileName);
     detailsWidget->chkUseSocket->setChecked(data.useLocalSocketFile);
@@ -373,7 +373,7 @@ void KexiDBConnectionTabWidget::slotTestConnection()
         if (savePasswordChecked) {
             connectionData.savePassword = false; //for getPasswordIfNeeded()
         }
-        if (~KexiDBPasswordDialog::getPasswordIfNeeded(&connectionData,this)) {
+        if (~KexiDBPasswordDialog::getPasswordIfNeeded(&connectionData, this)) {
             return;
         }
     }
@@ -397,10 +397,10 @@ void KexiDBConnectionTabWidget::slotSocketComboboxToggled(bool on)
 
 //! @todo set proper help ctxt ID
 
-KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent, const KexiProjectData& data,
-        const QString& shortcutFileName, const KGuiItem& acceptButtonGuiItem)
-        : KDialog(parent)
-        , d(new Private)
+KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget *parent, const KexiProjectData &data,
+        const QString &shortcutFileName, const KGuiItem &acceptButtonGuiItem)
+    : KDialog(parent)
+    , d(new Private)
 {
     setWindowTitle(i18nc("@title:window", "Open Database"));
     d->tabWidget = new KexiDBConnectionTabWidget(this);
@@ -408,11 +408,11 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent, const KexiProjec
     init(acceptButtonGuiItem);
 }
 
-KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent,
-        const KexiDB::ConnectionData& data,
-        const QString& shortcutFileName, const KGuiItem& acceptButtonGuiItem)
-        : KDialog(parent)
-        , d(new Private)
+KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget *parent,
+        const KexiDB::ConnectionData &data,
+        const QString &shortcutFileName, const KGuiItem &acceptButtonGuiItem)
+    : KDialog(parent)
+    , d(new Private)
 {
     setWindowTitle(i18nc("@title:window", "Connect to a Database Server"));
     d->tabWidget = new KexiDBConnectionTabWidget(this);
@@ -425,7 +425,7 @@ KexiDBConnectionDialog::~KexiDBConnectionDialog()
     delete d;
 }
 
-void KexiDBConnectionDialog::init(const KGuiItem& acceptButtonGuiItem)
+void KexiDBConnectionDialog::init(const KGuiItem &acceptButtonGuiItem)
 {
     setObjectName("KexiDBConnectionDialog");
     setButtons(KDialog::User1 | KDialog::Cancel | KDialog::Help);
@@ -443,16 +443,17 @@ void KexiDBConnectionDialog::init(const KGuiItem& acceptButtonGuiItem)
 
     adjustSize();
     resize(width(), d->tabWidget->height());
-    if (d->tabWidget->mainWidget->connectionOnly())
+    if (d->tabWidget->mainWidget->connectionOnly()) {
         d->tabWidget->mainWidget->driversCombo()->setFocus();
-    else if (d->tabWidget->mainWidget->nameCombo->currentText().isEmpty())
+    } else if (d->tabWidget->mainWidget->nameCombo->currentText().isEmpty()) {
         d->tabWidget->mainWidget->nameCombo->setFocus();
-    else if (d->tabWidget->mainWidget->userEdit->text().isEmpty())
+    } else if (d->tabWidget->mainWidget->userEdit->text().isEmpty()) {
         d->tabWidget->mainWidget->userEdit->setFocus();
-    else if (d->tabWidget->mainWidget->passwordEdit->text().isEmpty())
+    } else if (d->tabWidget->mainWidget->passwordEdit->text().isEmpty()) {
         d->tabWidget->mainWidget->passwordEdit->setFocus();
-    else //back
+    } else { //back
         d->tabWidget->mainWidget->nameCombo->setFocus();
+    }
 }
 
 KexiProjectData KexiDBConnectionDialog::currentProjectData()
@@ -465,12 +466,12 @@ bool KexiDBConnectionDialog::savePasswordOptionSelected() const
     return d->tabWidget->savePasswordOptionSelected();
 }
 
-KexiDBConnectionWidget* KexiDBConnectionDialog::mainWidget() const
+KexiDBConnectionWidget *KexiDBConnectionDialog::mainWidget() const
 {
     return d->tabWidget->mainWidget;
 }
 
-KexiDBConnectionWidgetDetails* KexiDBConnectionDialog::detailsWidget() const
+KexiDBConnectionWidgetDetails *KexiDBConnectionDialog::detailsWidget() const
 {
     return d->tabWidget->detailsWidget;
 }

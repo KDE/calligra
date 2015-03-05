@@ -33,7 +33,6 @@
 #include "kis_memento_manager.h"
 #include "kis_memento.h"
 
-
 class KisTiledDataManager;
 typedef KisSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
 
@@ -70,8 +69,7 @@ public:
     KisTiledDataManager(quint32 pixelSize, const quint8 *defPixel);
     virtual ~KisTiledDataManager();
     KisTiledDataManager(const KisTiledDataManager &dm);
-    KisTiledDataManager & operator=(const KisTiledDataManager &dm);
-
+    KisTiledDataManager &operator=(const KisTiledDataManager &dm);
 
 protected:
     // Allow the baseclass of iterators access to the interior
@@ -84,30 +82,35 @@ protected:
 
 public:
     void setDefaultPixel(const quint8 *defPixel);
-    const quint8 *defaultPixel() const {
+    const quint8 *defaultPixel() const
+    {
         return m_defaultPixel;
     }
 
-    inline KisTileSP getTile(qint32 col, qint32 row, bool writable) {
+    inline KisTileSP getTile(qint32 col, qint32 row, bool writable)
+    {
         if (writable) {
             bool newTile;
             KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
-            if (newTile)
+            if (newTile) {
                 updateExtent(tile->col(), tile->row());
+            }
             return tile;
 
         } else {
 
-            return m_hashTable->getReadOnlyTileLazy(col,row);
+            return m_hashTable->getReadOnlyTileLazy(col, row);
         }
     }
 
-    inline KisTileSP getOldTile(qint32 col, qint32 row) {
+    inline KisTileSP getOldTile(qint32 col, qint32 row)
+    {
         KisTileSP tile = m_mementoManager->getCommitedTile(col, row);
         return tile ? tile : getTile(col, row, false);
     }
 
-    KisMementoSP getMemento() {
+    KisMementoSP getMemento()
+    {
         QWriteLocker locker(&m_lock);
         KisMementoSP memento = m_mementoManager->getMemento();
         memento->saveOldDefaultPixel(m_defaultPixel, m_pixelSize);
@@ -117,40 +120,44 @@ public:
     /**
      * Finishes having already started transaction
      */
-    void commit() {
+    void commit()
+    {
         QWriteLocker locker(&m_lock);
 
         KisMementoSP memento = m_mementoManager->currentMemento();
-        if(memento) {
+        if (memento) {
             memento->saveNewDefaultPixel(m_defaultPixel, m_pixelSize);
         }
 
         m_mementoManager->commit();
     }
 
-    void rollback(KisMementoSP memento) {
+    void rollback(KisMementoSP memento)
+    {
         commit();
 
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollback(m_hashTable);
         const quint8 *defaultPixel = memento->oldDefaultPixel();
-        if(memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
+        if (memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
             setDefaultPixelImpl(defaultPixel);
         }
         recalculateExtent();
     }
-    void rollforward(KisMementoSP memento) {
+    void rollforward(KisMementoSP memento)
+    {
         commit();
 
         QWriteLocker locker(&m_lock);
         m_mementoManager->rollforward(m_hashTable);
         const quint8 *defaultPixel = memento->newDefaultPixel();
-        if(memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
+        if (memcmp(m_defaultPixel, defaultPixel, m_pixelSize)) {
             setDefaultPixelImpl(defaultPixel);
         }
         recalculateExtent();
     }
-    bool hasCurrentMemento() const {
+    bool hasCurrentMemento() const
+    {
         return m_mementoManager->hasCurrentMemento();
         //return true;
     }
@@ -161,7 +168,8 @@ public:
      * purgeHistory(someMemento) you won't be able to do
      * rollback(someMemento) anymore.
      */
-    void purgeHistory(KisMementoSP oldestMemento) {
+    void purgeHistory(KisMementoSP oldestMemento)
+    {
         QWriteLocker locker(&m_lock);
         m_mementoManager->purgeHistory(oldestMemento);
     }
@@ -170,20 +178,20 @@ public:
 
 protected:
     /**
-     * Reads and writes the tiles 
+     * Reads and writes the tiles
      */
     bool write(KisPaintDeviceWriter &store);
     bool read(QIODevice *stream);
 
-    void purge(const QRect& area);
+    void purge(const QRect &area);
 
-    inline quint32 pixelSize() const {
+    inline quint32 pixelSize() const
+    {
         return m_pixelSize;
     }
 
     /* FIXME:*/
 public:
-
 
     void  extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
     void  setExtent(qint32 x, qint32 y, qint32 w, qint32 h);
@@ -228,8 +236,7 @@ public:
     /**
      * write the specified data to x, y. There is no checking on pixelSize!
      */
-    void setPixel(qint32 x, qint32 y, const quint8 * data);
-
+    void setPixel(qint32 x, qint32 y, const quint8 *data);
 
     /**
      * Copy the bytes in the specified rect to a vector. The caller is responsible
@@ -239,7 +246,7 @@ public:
      *                      added to \p bytes pointer to get to the
      *                      next row
      */
-    void readBytes(quint8 * bytes,
+    void readBytes(quint8 *bytes,
                    qint32 x, qint32 y,
                    qint32 w, qint32 h,
                    qint32 dataRowStride = -1) const;
@@ -253,7 +260,7 @@ public:
      *                      added to \p bytes pointer to get to the
      *                      next row
      */
-    void writeBytes(const quint8 * bytes,
+    void writeBytes(const quint8 *bytes,
                     qint32 x, qint32 y,
                     qint32 w, qint32 h,
                     qint32 dataRowStride = -1);
@@ -264,7 +271,7 @@ public:
      * paint device. If the specified area is larger than the paint
      * device's extent, the default pixel will be read.
      */
-    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) const;
+    QVector<quint8 *> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Write the data in the separate arrays to the channels. If there
@@ -277,7 +284,7 @@ public:
      * your paint device with areas of memory you never wanted to be
      * read. Krita may also crash.
      */
-    void writePlanarBytes(QVector<quint8*> planes, QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
+    void writePlanarBytes(QVector<quint8 *> planes, QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h);
 
     /**
      * Get the number of contiguous columns starting at x, valid for all values
@@ -300,7 +307,7 @@ public:
 private:
     KisTileHashTable *m_hashTable;
     KisMementoManager *m_mementoManager;
-    quint8* m_defaultPixel;
+    quint8 *m_defaultPixel;
     qint32 m_pixelSize;
 
     /**
@@ -332,12 +339,12 @@ private:
     void updateExtent(qint32 col, qint32 row);
     void recalculateExtent();
 
-    quint8* duplicatePixel(qint32 num, const quint8 *pixel);
+    quint8 *duplicatePixel(qint32 num, const quint8 *pixel);
 
     template<bool useOldSrcData>
-        void bitBltImpl(KisTiledDataManager *srcDM, const QRect &rect);
+    void bitBltImpl(KisTiledDataManager *srcDM, const QRect &rect);
     template<bool useOldSrcData>
-        void bitBltRoughImpl(KisTiledDataManager *srcDM, const QRect &rect);
+    void bitBltRoughImpl(KisTiledDataManager *srcDM, const QRect &rect);
 
     void writeBytesBody(const quint8 *data,
                         qint32 x, qint32 y,
@@ -349,14 +356,15 @@ private:
                        qint32 dataRowStride = -1) const;
 
     template <bool allChannelsPresent>
-    void writePlanarBytesBody(QVector<quint8*> planes,
+    void writePlanarBytesBody(QVector<quint8 *> planes,
                               QVector<qint32> channelsizes,
                               qint32 x, qint32 y, qint32 w, qint32 h);
-    QVector<quint8*> readPlanarBytesBody(QVector<qint32> channelsizes,
-                                         qint32 x, qint32 y,
-                                         qint32 w, qint32 h) const;
+    QVector<quint8 *> readPlanarBytesBody(QVector<qint32> channelsizes,
+                                          qint32 x, qint32 y,
+                                          qint32 w, qint32 h) const;
 public:
-    void debugPrintInfo() {
+    void debugPrintInfo()
+    {
         m_mementoManager->debugPrintInfo();
     }
 

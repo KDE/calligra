@@ -45,7 +45,6 @@ KoTosContainerPrivate::~KoTosContainerPrivate()
 {
 }
 
-
 KoTosContainer::KoTosContainer()
     : KoShapeContainer(*(new KoTosContainerPrivate(this)))
 {
@@ -70,7 +69,7 @@ bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext
     Q_D(const KoTosContainer);
 
     KoXmlElement child;
-    forEachElement(child, element) {
+    forEachElement (child, element) {
         // only recreate the text shape if there's something to be loaded
         if (child.localName() == "p" || child.localName() == "list") {
 
@@ -84,7 +83,7 @@ bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext
             // In the case of text on shape, we cannot ask the text shape to load
             // the odf, since it expects a complete document with style info and
             // everything, so we have to use the KoTextShapeData object instead.
-            KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
+            KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase *>(textShape->userData());
             Q_ASSERT(shapeData);
             shapeData->loadStyle(element, context);
             bool loadOdf = shapeData->loadOdf(element, context);
@@ -167,7 +166,7 @@ void KoTosContainer::saveText(KoShapeSavingContext &context) const
     // the odf, since it would save all the frame information as well, which
     // is wrong.
     // Only save the text shape if it has content.
-    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
+    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase *>(textShape->userData());
     if (shapeData && !shapeData->document()->isEmpty()) {
         shapeData->saveOdf(context);
     }
@@ -180,7 +179,7 @@ void KoTosContainer::setPlainText(const QString &text)
         kWarning(30006) << "No text shape present in KoTosContainer";
         return;
     }
-    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
+    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase *>(textShape->userData());
     Q_ASSERT(shapeData->document());
     shapeData->document()->setPlainText(text);
 }
@@ -214,7 +213,7 @@ void KoTosContainer::setTextAlignment(Qt::Alignment alignment)
     }
 
     // vertical
-    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
+    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase *>(textShape->userData());
     shapeData->setVerticalAlignment(alignment);
 
     // horizontal
@@ -238,7 +237,7 @@ Qt::Alignment KoTosContainer::textAlignment() const
     }
 
     // vertical
-    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
+    KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase *>(textShape->userData());
     // the model makes sure it contains a shape that has a KoTextShapeDataBase set so no need to check that
     Qt::Alignment answer = shapeData->verticalAlignment() & Qt::AlignVertical_Mask;
 
@@ -283,7 +282,7 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
 
     d->model = new KoTosContainerModel();
 
-    QSet<KoShape*> delegates;
+    QSet<KoShape *> delegates;
     delegates << this;
     KoShape *textShape = 0;
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get("TextShapeID");
@@ -302,7 +301,7 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
         }
         textShape->setSelectable(false);
         textShape->setRunThrough(runThrough());
-        KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(textShape->userData());
+        KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase *>(textShape->userData());
         Q_ASSERT(shapeData); // would be a bug in kotext
         // TODO check if that is correct depending on the resize mode
         shapeData->setVerticalAlignment(Qt::AlignVCenter);
@@ -318,7 +317,7 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
 
 KoShape *KoTosContainer::textShape() const
 {
-    const QList<KoShape*> subShapes = shapes();
+    const QList<KoShape *> subShapes = shapes();
     return subShapes.isEmpty() ? 0 : subShapes.at(0);
 }
 
@@ -335,8 +334,9 @@ void KoTosContainer::shapeChanged(ChangeType type, KoShape *shape)
     }
     // TODO is this needed?
 #if 0
-    foreach(KoShape *shape, d->model->shapes())
+    foreach (KoShape *shape, d->model->shapes()) {
         shape->notifyChanged();
+    }
 #endif
 }
 

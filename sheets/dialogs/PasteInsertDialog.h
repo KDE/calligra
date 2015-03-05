@@ -41,12 +41,12 @@ class PasteInsertDialog : public KDialog
 {
     Q_OBJECT
 public:
-    PasteInsertDialog(QWidget* parent, Selection* selection);
+    PasteInsertDialog(QWidget *parent, Selection *selection);
 
 public Q_SLOTS:
     void slotOk();
 private:
-    Selection* m_selection;
+    Selection *m_selection;
     QRadioButton *rb1;
     QRadioButton *rb2;
     QRect  rect;

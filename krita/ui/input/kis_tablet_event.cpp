@@ -41,7 +41,6 @@ KisTabletEvent::KisTabletEvent(ExtraEventType type, const QPoint &pos, const QPo
 {
 }
 
-
 KisTabletEvent::~KisTabletEvent()
 {
 }

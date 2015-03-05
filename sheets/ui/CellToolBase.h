@@ -75,19 +75,19 @@ public:
     void paintReferenceSelection(QPainter &painter, const QRectF &paintRect);
     void paintSelection(QPainter &painter, const QRectF &paintRect);
 
-    virtual void mousePressEvent(KoPointerEvent* event);
-    virtual void mouseMoveEvent(KoPointerEvent* event);
-    virtual void mouseReleaseEvent(KoPointerEvent* event);
-    virtual void mouseDoubleClickEvent(KoPointerEvent* event);
-    virtual void keyPressEvent(QKeyEvent* event);
-    virtual void inputMethodEvent(QInputMethodEvent * event);
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void inputMethodEvent(QInputMethodEvent *event);
 
-    virtual Selection* selection() = 0;
+    virtual Selection *selection() = 0;
 
     virtual void deleteSelection();
 
     virtual bool createEditor(bool clear = true, bool focus = true);
-    virtual CellEditorBase* editor() const;
+    virtual CellEditorBase *editor() const;
 
     /**
      * Sets the editor \p type, which had the focus at last.
@@ -97,7 +97,7 @@ public:
     /**
      * Sets an external editor to be associated with the internal editor of this tool.
      */
-    void setExternalEditor(Calligra::Sheets::ExternalEditor* editor);
+    void setExternalEditor(Calligra::Sheets::ExternalEditor *editor);
 
     /**
      * The shape offset in document coordinates.
@@ -111,7 +111,7 @@ public Q_SLOTS:
      */
     void scrollToCell(const QPoint &location);
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     virtual void deactivate();
     virtual void deleteEditor(bool saveChanges, bool expandMatrix = false);
     void populateWordCollection();
@@ -120,7 +120,7 @@ protected:
     void init();
     virtual QList<QPointer<QWidget> > createOptionWidgets();
     void applyUserInput(const QString &userInput, bool expandMatrix = false);
-    virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
+    virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
 
     /**
      * The canvas scrolling offset in document coordinates.
@@ -128,11 +128,11 @@ protected:
     virtual QPointF canvasOffset() const = 0;
     virtual int maxCol() const = 0;
     virtual int maxRow() const = 0;
-    virtual SheetView* sheetView(const Sheet* sheet) const = 0;
+    virtual SheetView *sheetView(const Sheet *sheet) const = 0;
 
 protected Q_SLOTS:
-    void selectionChanged(const Region&);
-    void activeSheetChanged(Sheet*);
+    void selectionChanged(const Region &);
+    void activeSheetChanged(Sheet *);
     void updateEditor();
     void focusEditorRequested();
     void documentReadWriteToggled(bool enable);
@@ -142,14 +142,14 @@ protected Q_SLOTS:
     void cellStyle();
     void setDefaultStyle();
     void styleDialog();
-    void setStyle(const QString& name);
+    void setStyle(const QString &name);
     void createStyleFromCell();
     // -- font actions --
     void bold(bool enable);
     void italic(bool enable);
     void underline(bool enable);
     void strikeOut(bool enable);
-    void font(const QString& font);
+    void font(const QString &font);
     void fontSize(int size);
     void increaseFontSize();
     void decreaseFontSize();
@@ -239,7 +239,7 @@ protected Q_SLOTS:
     void insertSeries();
     void insertFormula();
     void insertSpecialChar();
-    void specialChar(QChar character, const QString& fontName);
+    void specialChar(QChar character, const QString &fontName);
     void specialCharDialogClosed();
     void insertFromDatabase();
     void insertFromTextfile();
@@ -252,7 +252,7 @@ protected Q_SLOTS:
     void pivot();
     void setAreaName();
     void namedAreaDialog();
-    void formulaSelection(const QString& expression);
+    void formulaSelection(const QString &expression);
     // -- general editing actions --
     void edit();
     virtual void cut();
@@ -283,7 +283,7 @@ protected Q_SLOTS:
     void qTableView();
     void sheetFormat();
     void listChoosePopupMenu();
-    void listChooseItemSelected(QAction*);
+    void listChooseItemSelected(QAction *);
     void documentSettingsDialog();
     void breakBeforeColumn(bool);
     void breakBeforeRow(bool);
@@ -292,7 +292,7 @@ private:
     Q_DISABLE_COPY(CellToolBase)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

@@ -40,20 +40,35 @@ class KPLATOUI_EXPORT RelationTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    explicit RelationTreeView( QWidget *parent = 0 );
-    
-    RelationItemModel *model() const { return static_cast<RelationItemModel*>( DoubleTreeViewBase::model() ); }
-    
-    Project *project() const { return model()->project(); }
-    void setProject( Project *project ) { model()->setProject( project ); }
-    
-    void setNode( Node *node ) { model()->setNode( node ); }
-    Relation *currentRelation() const { return model()->relation( selectionModel()->currentIndex() ); }
+    explicit RelationTreeView(QWidget *parent = 0);
+
+    RelationItemModel *model() const
+    {
+        return static_cast<RelationItemModel *>(DoubleTreeViewBase::model());
+    }
+
+    Project *project() const
+    {
+        return model()->project();
+    }
+    void setProject(Project *project)
+    {
+        model()->setProject(project);
+    }
+
+    void setNode(Node *node)
+    {
+        model()->setNode(node);
+    }
+    Relation *currentRelation() const
+    {
+        return model()->relation(selectionModel()->currentIndex());
+    }
 Q_SIGNALS:
-    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
-    
+    void currentColumnChanged(const QModelIndex &, const QModelIndex &);
+
 protected Q_SLOTS:
-    void slotCurrentChanged(const QModelIndex &curr, const QModelIndex& );
+    void slotCurrentChanged(const QModelIndex &curr, const QModelIndex &);
 };
 
 class KPLATOUI_EXPORT RelationEditor : public ViewBase
@@ -62,61 +77,63 @@ class KPLATOUI_EXPORT RelationEditor : public ViewBase
 public:
     /// Create a relation editor
     RelationEditor(KoPart *part, KoDocument *doc, QWidget *parent);
-    
+
     void setupGui();
-    virtual void draw( Project &project );
+    virtual void draw(Project &project);
     virtual void draw();
 
     virtual Relation *currentRelation() const;
     Relation *selectedRelation() const;
 
-    virtual void updateReadWrite( bool readwrite );
+    virtual void updateReadWrite(bool readwrite);
 
-    RelationItemModel *model() const { return m_view->model(); }
+    RelationItemModel *model() const
+    {
+        return m_view->model();
+    }
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
-    
+    virtual void saveContext(QDomElement &/*context*/) const;
+
     KoPrintJob *createPrintJob();
 
 Q_SIGNALS:
     void openNode();
     void addRelation();
-    void deleteRelation( Relation * );
+    void deleteRelation(Relation *);
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
 protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
-    void updateActionsEnabled( bool on );
+    void updateActionsEnabled(bool on);
 
 private Q_SLOTS:
-    void slotSelectionChanged( const QModelIndexList& );
-    void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
-    
+    void slotSelectionChanged(const QModelIndexList &);
+    void slotCurrentChanged(const QModelIndex &, const QModelIndex &);
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
+
     void slotEnableActions();
 
     void slotAddRelation();
-    void slotDeleteRelation( Relation *r );
+    void slotDeleteRelation(Relation *r);
 
     void slotSplitView();
-    
-    void slotHeaderContextMenuRequested( const QPoint& );
-    
+
+    void slotHeaderContextMenuRequested(const QPoint &);
+
 private:
-    void edit( QModelIndex index );
+    void edit(QModelIndex index);
 
 private:
     RelationTreeView *m_view;
 };
-
 
 } //namespace KPlato
 

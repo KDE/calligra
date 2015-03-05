@@ -47,21 +47,29 @@ class KoPageWidgetItemAdapter : public KPageWidgetItem
 {
 public:
     KoPageWidgetItemAdapter(KoPageWidgetItem *item)
-      : KPageWidgetItem(item->widget(), item->name())
-      , m_item(item)
+        : KPageWidgetItem(item->widget(), item->name())
+        , m_item(item)
     {
         setHeader(item->name());
         setIcon(KIcon(item->iconName()));
     }
-    ~KoPageWidgetItemAdapter() { delete m_item; }
+    ~KoPageWidgetItemAdapter()
+    {
+        delete m_item;
+    }
 
-    bool shouldDialogCloseBeVetoed() { return m_item->shouldDialogCloseBeVetoed(); }
-    void apply() { m_item->apply(); }
+    bool shouldDialogCloseBeVetoed()
+    {
+        return m_item->shouldDialogCloseBeVetoed();
+    }
+    void apply()
+    {
+        m_item->apply();
+    }
 
 private:
-    KoPageWidgetItem * const m_item;
+    KoPageWidgetItem *const m_item;
 };
-
 
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
@@ -72,18 +80,17 @@ public:
         documentSaved(false) {}
     ~KoDocumentInfoDlgPrivate() {}
 
-    KoDocumentInfo* info;
-    QList<KPageWidgetItem*> pages;
-    Ui::KoDocumentInfoAboutWidget* aboutUi;
-    Ui::KoDocumentInfoAuthorWidget* authorUi;
+    KoDocumentInfo *info;
+    QList<KPageWidgetItem *> pages;
+    Ui::KoDocumentInfoAboutWidget *aboutUi;
+    Ui::KoDocumentInfoAuthorWidget *authorUi;
 
     bool toggleEncryption;
     bool applyToggleEncryption;
     bool documentSaved;
 };
 
-
-KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
+KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget *parent, KoDocumentInfo *docInfo)
     : KPageDialog(parent)
     , d(new KoDocumentInfoDlgPrivate)
 {
@@ -111,11 +118,12 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     page->setHeader(i18n("General"));
 
     // Ugly hack, the mimetype should be a parameter, instead
-    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
+    KoDocumentBase *doc = dynamic_cast< KoDocumentBase * >(d->info->parent());
     if (doc) {
         KMimeType::Ptr mime = KMimeType::mimeType(doc->mimeType());
-        if (! mime)
+        if (! mime) {
             mime = KMimeType::defaultMimeTypePtr();
+        }
         page->setIcon(KIcon(mime->iconName()));
     } else {
         // hide all entries not used in pages for KoDocumentInfoPropsPage
@@ -158,8 +166,8 @@ void KoDocumentInfoDlg::slotButtonClicked(int button)
     emit buttonClicked(static_cast<KDialog::ButtonCode>(button));
     switch (button) {
     case Ok:
-        foreach(KPageWidgetItem* item, d->pages) {
-            KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+        foreach (KPageWidgetItem *item, d->pages) {
+            KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter *>(item);
             if (page) {
                 if (page->shouldDialogCloseBeVetoed()) {
                     return;
@@ -180,7 +188,7 @@ bool KoDocumentInfoDlg::isDocumentSaved()
 
 void KoDocumentInfoDlg::initAboutTab()
 {
-    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
+    KoDocumentBase *doc = dynamic_cast< KoDocumentBase * >(d->info->parent());
 
     if (doc) {
         d->aboutUi->filePathLabel->setText(doc->localFilePath());
@@ -192,14 +200,16 @@ void KoDocumentInfoDlg::initAboutTab()
     d->aboutUi->cbLanguage->setCurrentIndex(d->aboutUi->cbLanguage->findText(language));
 
     d->aboutUi->leKeywords->setToolTip(i18n("Use ';' (Example: Office;KDE;Calligra)"));
-    if (!d->info->aboutInfo("keyword").isEmpty())
+    if (!d->info->aboutInfo("keyword").isEmpty()) {
         d->aboutUi->leKeywords->setText(d->info->aboutInfo("keyword"));
+    }
 
     d->aboutUi->meComments->setPlainText(d->info->aboutInfo("description"));
     if (doc && !doc->mimeType().isEmpty()) {
         KMimeType::Ptr docmime = KMimeType::mimeType(doc->mimeType());
-        if (docmime)
+        if (docmime) {
             d->aboutUi->lblType->setText(docmime->comment());
+        }
     }
     if (!d->info->aboutInfo("creation-date").isEmpty()) {
         QDateTime t = QDateTime::fromString(d->info->aboutInfo("creation-date"),
@@ -241,7 +251,7 @@ void KoDocumentInfoDlg::initAboutTab()
         }
     } else {
         d->aboutUi->lblEncrypted->setText(i18n("This document does not support encryption"));
-        d->aboutUi->pbEncrypt->setEnabled( false );
+        d->aboutUi->pbEncrypt->setEnabled(false);
     }
     connect(d->aboutUi->pbReset, SIGNAL(clicked()),
             this, SLOT(slotResetMetaData()));
@@ -269,8 +279,8 @@ void KoDocumentInfoDlg::initAuthorTab()
 void KoDocumentInfoDlg::slotApply()
 {
     saveAboutData();
-    foreach(KPageWidgetItem* item, d->pages) {
-        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter*>(item);
+    foreach (KPageWidgetItem *item, d->pages) {
+        KoPageWidgetItemAdapter *page = dynamic_cast<KoPageWidgetItemAdapter *>(item);
         if (page) {
             page->apply();
         }
@@ -310,9 +320,10 @@ void KoDocumentInfoDlg::slotResetMetaData()
 
 void KoDocumentInfoDlg::slotToggleEncryption()
 {
-    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
-    if (!doc)
+    KoDocumentBase *doc = dynamic_cast< KoDocumentBase * >(d->info->parent());
+    if (!doc) {
         return;
+    }
 
     d->toggleEncryption = !d->toggleEncryption;
 
@@ -341,14 +352,16 @@ void KoDocumentInfoDlg::slotToggleEncryption()
 
 void KoDocumentInfoDlg::slotSaveEncryption()
 {
-    if (!d->applyToggleEncryption)
+    if (!d->applyToggleEncryption) {
         return;
+    }
 
-    KoDocumentBase* doc = dynamic_cast< KoDocumentBase* >(d->info->parent());
-    if (!doc)
+    KoDocumentBase *doc = dynamic_cast< KoDocumentBase * >(d->info->parent());
+    if (!doc) {
         return;
+    }
 
-    KMainWindow* mainWindow = dynamic_cast< KMainWindow* >(parent());
+    KMainWindow *mainWindow = dynamic_cast< KMainWindow * >(parent());
 
     if (doc->specialOutputFlag() == KoDocumentBase::SaveEncrypted) {
         // Decrypt
@@ -360,18 +373,18 @@ void KoDocumentInfoDlg::slotSaveEncryption()
                     KGuiItem(i18n("Decrypt")),
                     KStandardGuiItem::cancel(),
                     "DecryptConfirmation"
-                    ) != KMessageBox::Continue) {
+                ) != KMessageBox::Continue) {
             return;
         }
         bool modified = doc->isModified();
         doc->setOutputMimeType(doc->outputMimeType(), doc->specialOutputFlag() & ~KoDocumentBase::SaveEncrypted);
         if (!mainWindow) {
             KMessageBox::information(
-                        this,
-                        i18n("<qt>Your document could not be saved automatically."
-                             "<p>To complete the decryption, please save the document.</qt>"),
-                        i18n("Save Document"),
-                        "DecryptSaveMessage");
+                this,
+                i18n("<qt>Your document could not be saved automatically."
+                     "<p>To complete the decryption, please save the document.</qt>"),
+                i18n("Save Document"),
+                "DecryptSaveMessage");
             return;
         }
         if (modified && KMessageBox::questionYesNo(
@@ -382,7 +395,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
                     KStandardGuiItem::save(),
                     KStandardGuiItem::dontSave(),
                     "DecryptSaveConfirmation"
-                    ) != KMessageBox::Yes) {
+                ) != KMessageBox::Yes) {
             return;
         }
     } else {
@@ -399,7 +412,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
                         KGuiItem(i18n("Change")),
                         KStandardGuiItem::cancel(),
                         "EncryptChangeFiletypeConfirmation"
-                        ) != KMessageBox::Continue) {
+                    ) != KMessageBox::Continue) {
                 return;
             }
             doc->resetURL();
@@ -408,11 +421,11 @@ void KoDocumentInfoDlg::slotSaveEncryption()
         doc->setOutputMimeType(doc->nativeOasisMimeType(), KoDocumentBase::SaveEncrypted);
         if (!mainWindow) {
             KMessageBox::information(
-                        this,
-                        i18n("<qt>Your document could not be saved automatically."
-                             "<p>To complete the encryption, please save the document.</qt>"),
-                        i18n("Save Document"),
-                        "EncryptSaveMessage");
+                this,
+                i18n("<qt>Your document could not be saved automatically."
+                     "<p>To complete the encryption, please save the document.</qt>"),
+                i18n("Save Document"),
+                "EncryptSaveMessage");
             return;
         }
         if (modified && KMessageBox::questionYesNo(
@@ -423,7 +436,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
                     KStandardGuiItem::save(),
                     KStandardGuiItem::dontSave(),
                     "EncryptSaveConfirmation"
-                    ) != KMessageBox::Yes) {
+                ) != KMessageBox::Yes) {
             return;
         }
     }
@@ -435,7 +448,7 @@ void KoDocumentInfoDlg::slotSaveEncryption()
     d->documentSaved = !doc->url().isEmpty();
 }
 
-QList<KPageWidgetItem*> KoDocumentInfoDlg::pages() const
+QList<KPageWidgetItem *> KoDocumentInfoDlg::pages() const
 {
     return d->pages;
 }
@@ -444,11 +457,11 @@ void KoDocumentInfoDlg::setReadOnly(bool ro)
 {
     d->aboutUi->meComments->setReadOnly(ro);
 
-    Q_FOREACH(KPageWidgetItem* page, d->pages) {
-        Q_FOREACH(QLineEdit* le, page->widget()->findChildren<QLineEdit *>()) {
+    Q_FOREACH (KPageWidgetItem *page, d->pages) {
+        Q_FOREACH (QLineEdit *le, page->widget()->findChildren<QLineEdit *>()) {
             le->setReadOnly(ro);
         }
-        Q_FOREACH(QPushButton* le, page->widget()->findChildren<QPushButton *>()) {
+        Q_FOREACH (QPushButton *le, page->widget()->findChildren<QPushButton *>()) {
             le->setDisabled(ro);
         }
     }
@@ -456,7 +469,7 @@ void KoDocumentInfoDlg::setReadOnly(bool ro)
 
 void KoDocumentInfoDlg::addPageItem(KoPageWidgetItem *item)
 {
-    KPageWidgetItem * page = new KoPageWidgetItemAdapter(item);
+    KPageWidgetItem *page = new KoPageWidgetItemAdapter(item);
 
     addPage(page);
     d->pages.append(page);

@@ -31,35 +31,35 @@ class KEXIUTILS_EXPORT KexiAssistantPage : public QWidget
 {
     Q_OBJECT
 public:
-    KexiAssistantPage(const QString& title, const QString& description,
-                      QWidget* parent = 0);
+    KexiAssistantPage(const QString &title, const QString &description,
+                      QWidget *parent = 0);
     virtual ~KexiAssistantPage();
-    void setContents(QWidget* widget);
-    void setContents(QLayout* layout);
-    QWidget* focusWidget() const;
-    void setFocusWidget(QWidget* widget);
-    KexiLinkWidget* backButton();
-    KexiLinkWidget* nextButton();
+    void setContents(QWidget *widget);
+    void setContents(QLayout *layout);
+    QWidget *focusWidget() const;
+    void setFocusWidget(QWidget *widget);
+    KexiLinkWidget *backButton();
+    KexiLinkWidget *nextButton();
     QString title() const;
     QString description() const;
 public Q_SLOTS:
-    void setDescription(const QString& text);
+    void setDescription(const QString &text);
     void setBackButtonVisible(bool set);
     void setNextButtonVisible(bool set);
     void back();
     void next();
 Q_SIGNALS:
-    void back(KexiAssistantPage* page);
-    void next(KexiAssistantPage* page);
-    void cancelled(KexiAssistantPage* page);
+    void back(KexiAssistantPage *page);
+    void next(KexiAssistantPage *page);
+    void cancelled(KexiAssistantPage *page);
 
-private Q_SLOTS:    
-    void slotLinkActivated(const QString& link);
+private Q_SLOTS:
+    void slotLinkActivated(const QString &link);
     void slotCancel();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

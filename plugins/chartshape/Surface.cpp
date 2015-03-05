@@ -54,7 +54,6 @@
 // KChart
 #include "PlotArea.h"
 
-
 using namespace KChart;
 
 class Surface::Private
@@ -64,7 +63,7 @@ public:
     ~Private();
 
     PlotArea *plotArea;
-    
+
     QPointF  position;
     int      width;
 
@@ -83,9 +82,7 @@ Surface::Private::~Private()
 {
 }
 
-
 // ================================================================
-
 
 Surface::Surface(PlotArea *parent)
     : d(new Private(parent))
@@ -103,7 +100,6 @@ Surface::~Surface()
 {
     delete d;
 }
-
 
 QPointF Surface::position() const
 {
@@ -146,23 +142,23 @@ void Surface::setFramePen(const QPen &pen)
 }
 
 bool Surface::loadOdf(const KoXmlElement &surfaceElement,
-                       KoShapeLoadingContext &context)
+                      KoShapeLoadingContext &context)
 {
     // Get the current style stack and save it's state.
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
 
     bool brushLoaded = false;
-    
+
     if (surfaceElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
         KDChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
         KDChart::FrameAttributes frameAttributes = d->kdPlane->frameAttributes();
-        
+
         // Add the chart style to the style stack.
         styleStack.clear();
         context.odfLoadingContext().fillStyleStack(surfaceElement, KoXmlNS::chart, "style-name", "chart");
-        
+
         styleStack.setTypeProperties("graphic");
-        
+
         // If there is a "stroke" property, then get the stroke style
         // and set the pen accordingly.
         if (styleStack.hasProperty(KoXmlNS::draw, "stroke")) {
@@ -172,11 +168,11 @@ bool Surface::loadOdf(const KoXmlElement &surfaceElement,
             QPen pen(Qt::NoPen);
             if (stroke == "solid" || stroke == "dash")
                 pen = KoOdfGraphicStyles::loadOdfStrokeStyle(styleStack, stroke,
-                                                             context.odfLoadingContext().stylesReader());
+                        context.odfLoadingContext().stylesReader());
 
             frameAttributes.setPen(pen);
         }
-        
+
         // If there is a "fill" property, then get the fill style, and
         // set the brush for the surface accordingly.
         if (styleStack.hasProperty(KoXmlNS::draw, "fill")) {
@@ -187,20 +183,18 @@ bool Surface::loadOdf(const KoXmlElement &surfaceElement,
             if (fill == "solid" || fill == "hatch") {
                 brushLoaded = true;
                 brush = KoOdfGraphicStyles::loadOdfFillStyle(styleStack, fill,
-                                                             context.odfLoadingContext().stylesReader());
-            }
-            else if (fill == "gradient") {
+                        context.odfLoadingContext().stylesReader());
+            } else if (fill == "gradient") {
                 brushLoaded = true;
                 brush = KoOdfGraphicStyles::loadOdfGradientStyle(styleStack, context.odfLoadingContext().stylesReader(), QSizeF(5.0, 60.0));
-            }
-            else if (fill == "bitmap") {
+            } else if (fill == "bitmap") {
                 brushLoaded = true;
                 brush = loadOdfPatternStyle(styleStack, context.odfLoadingContext(), QSizeF(5.0, 60.0));
             }
 
             backgroundAttributes.setBrush(brush);
         }
-        
+
         // Finally actually set the attributes.
         d->kdPlane->setBackgroundAttributes(backgroundAttributes);
         d->kdPlane->setFrameAttributes(frameAttributes);
@@ -217,7 +211,7 @@ bool Surface::loadOdf(const KoXmlElement &surfaceElement,
         }
     }
 #endif
-    
+
     return true;
 }
 
@@ -231,11 +225,13 @@ void Surface::saveOdf(KoShapeSavingContext &context, const char *elementName)
     bodyWriter.startElement(elementName);
 
     QBrush backgroundBrush;
-    if (d->kdPlane->backgroundAttributes().isVisible())
+    if (d->kdPlane->backgroundAttributes().isVisible()) {
         backgroundBrush = d->kdPlane->backgroundAttributes().brush();
+    }
     QPen framePen(Qt::NoPen);
-    if (d->kdPlane->frameAttributes().isVisible())
+    if (d->kdPlane->frameAttributes().isVisible()) {
         framePen = d->kdPlane->frameAttributes().pen();
+    }
 
     KoOdfGraphicStyles::saveOdfFillStyle(style, mainStyles, backgroundBrush);
     KoOdfGraphicStyles::saveOdfStrokeStyle(style, mainStyles, framePen);
@@ -245,19 +241,21 @@ void Surface::saveOdf(KoShapeSavingContext &context, const char *elementName)
     bodyWriter.endElement(); // chart:floor or chart:wall
 }
 
-QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack, 
+QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack,
                                     KoOdfLoadingContext &context, const QSizeF &size)
 {
     QString styleName = styleStack.property(KoXmlNS::draw, "fill-image-name");
 
-    KoXmlElement* e = context.stylesReader().drawStyles("fill-image")[styleName];
-    if (! e)
+    KoXmlElement *e = context.stylesReader().drawStyles("fill-image")[styleName];
+    if (! e) {
         return QBrush();
+    }
 
     const QString href = e->attributeNS(KoXmlNS::xlink, "href", QString());
 
-    if (href.isEmpty())
+    if (href.isEmpty()) {
         return QBrush();
+    }
 
     QString strExtension;
     const int result = href.lastIndexOf('.');
@@ -268,8 +266,9 @@ QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack,
 
     KoImageData data;
     data.setImage(href, context.store());
-    if (data.errorCode() != KoImageData::Success)
+    if (data.errorCode() != KoImageData::Success) {
         return QBrush();
+    }
 
     // read the pattern repeat style
     QString style = styleStack.property(KoXmlNS::style, "repeat");
@@ -284,20 +283,24 @@ QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack,
         if (styleStack.hasProperty(KoXmlNS::draw, "fill-image-height") && styleStack.hasProperty(KoXmlNS::draw, "fill-image-width")) {
             QString height = styleStack.property(KoXmlNS::draw, "fill-image-height");
             qreal newHeight = 0.0;
-            if (height.endsWith('%'))
+            if (height.endsWith('%')) {
                 newHeight = 0.01 * height.remove('%').toDouble() * imageSize.height();
-            else
+            } else {
                 newHeight = KoUnit::parseValue(height);
+            }
             QString width = styleStack.property(KoXmlNS::draw, "fill-image-width");
             qreal newWidth = 0.0;
-            if (width.endsWith('%'))
+            if (width.endsWith('%')) {
                 newWidth = 0.01 * width.remove('%').toDouble() * imageSize.width();
-            else
+            } else {
                 newWidth = KoUnit::parseValue(width);
-            if (newHeight > 0.0)
+            }
+            if (newHeight > 0.0) {
                 imageSize.setHeight(static_cast<int>(newHeight));
-            if (newWidth > 0.0)
+            }
+            if (newWidth > 0.0) {
                 imageSize.setWidth(static_cast<int>(newWidth));
+            }
         }
     }
 
@@ -313,24 +316,25 @@ QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack,
             // align pattern to the given size
             QString align = styleStack.property(KoXmlNS::draw, "fill-image-ref-point");
             kDebug(35001) << "pattern align =" << align;
-            if (align == "top-left")
+            if (align == "top-left") {
                 matrix.translate(0, 0);
-            else if (align == "top")
-                matrix.translate(0.5*size.width(), 0);
-            else if (align == "top-right")
+            } else if (align == "top") {
+                matrix.translate(0.5 * size.width(), 0);
+            } else if (align == "top-right") {
                 matrix.translate(size.width(), 0);
-            else if (align == "left")
-                matrix.translate(0, 0.5*size.height());
-            else if (align == "center")
-                matrix.translate(0.5*size.width(), 0.5*size.height());
-            else if (align == "right")
-                matrix.translate(size.width(), 0.5*size.height());
-            else if (align == "bottom-left")
+            } else if (align == "left") {
+                matrix.translate(0, 0.5 * size.height());
+            } else if (align == "center") {
+                matrix.translate(0.5 * size.width(), 0.5 * size.height());
+            } else if (align == "right") {
+                matrix.translate(size.width(), 0.5 * size.height());
+            } else if (align == "bottom-left") {
                 matrix.translate(0, size.height());
-            else if (align == "bottom")
-                matrix.translate(0.5*size.width(), size.height());
-            else if (align == "bottom-right")
+            } else if (align == "bottom") {
+                matrix.translate(0.5 * size.width(), size.height());
+            } else if (align == "bottom-right") {
                 matrix.translate(size.width(), size.height());
+            }
         }
         if (styleStack.hasProperty(KoXmlNS::draw, "fill-image-ref-point-x")) {
             QString pointX = styleStack.property(KoXmlNS::draw, "fill-image-ref-point-x");

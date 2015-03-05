@@ -32,8 +32,7 @@
 #include <kis_curve_option_widget.h>
 #include <kis_compositeop_option.h>
 
-
-KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
+KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget *parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
@@ -53,10 +52,10 @@ KisDuplicateOpSettingsWidget::~KisDuplicateOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration* KisDuplicateOpSettingsWidget::configuration() const
+KisPropertiesConfiguration *KisDuplicateOpSettingsWidget::configuration() const
 {
     KisDuplicateOpSettings *config = new KisDuplicateOpSettings();
-    config->setOptionsWidget(const_cast<KisDuplicateOpSettingsWidget*>(this));
+    config->setOptionsWidget(const_cast<KisDuplicateOpSettingsWidget *>(this));
     config->setProperty("paintop", "duplicate"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

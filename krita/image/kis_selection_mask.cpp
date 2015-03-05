@@ -34,9 +34,7 @@
 #include <KoIcon.h>
 #include "kis_thread_safe_signal_compressor.h"
 
-
-struct KisSelectionMask::Private
-{
+struct KisSelectionMask::Private {
 public:
     Private(KisSelectionMask *_q) : q(_q) {}
 
@@ -48,8 +46,8 @@ public:
 };
 
 KisSelectionMask::KisSelectionMask(KisImageWSP image)
-        : KisMask("selection")
-        , m_d(new Private(this))
+    : KisMask("selection")
+    , m_d(new Private(this))
 {
     setActive(false);
 
@@ -62,9 +60,9 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
     this->moveToThread(image->thread());
 }
 
-KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
-        : KisMask(rhs)
-        , m_d(new Private(this))
+KisSelectionMask::KisSelectionMask(const KisSelectionMask &rhs)
+    : KisMask(rhs)
+    , m_d(new Private(this))
 {
     setActive(false);
     m_d->image = rhs.image();
@@ -76,7 +74,8 @@ KisSelectionMask::~KisSelectionMask()
     delete m_d;
 }
 
-QIcon KisSelectionMask::icon() const {
+QIcon KisSelectionMask::icon() const
+{
     return koIcon("edit-paste");
 }
 
@@ -87,7 +86,7 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
     } else {
         KisMask::setSelection(new KisSelection());
 
-        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->alpha8();
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
         KisFillPainter gc(KisPaintDeviceSP(this->selection()->pixelSelection().data()));
         gc.fillRect(image()->bounds(), KoColor(Qt::white, cs), MAX_SELECTED);
         gc.end();
@@ -129,8 +128,9 @@ void KisSelectionMask::setVisible(bool visible, bool isLoading)
     nodeProperties().setProperty("visible", visible);
 
     if (!isLoading) {
-        if (selection())
+        if (selection()) {
             selection()->setVisible(visible);
+        }
         emit(visibilityChanged(visible));
     }
 }
@@ -143,7 +143,7 @@ bool KisSelectionMask::active() const
 void KisSelectionMask::setActive(bool active)
 {
     KisImageWSP image = this->image();
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
+    KisLayerSP parentLayer = dynamic_cast<KisLayer *>(parent().data());
 
     if (active && parentLayer) {
         KisSelectionMaskSP activeMask = parentLayer->selectionMask();
@@ -168,7 +168,9 @@ void KisSelectionMask::notifySelectionChangedCompressed()
 void KisSelectionMask::Private::slotSelectionChangedCompressed()
 {
     KisSelectionSP currentSelection = q->selection();
-    if (!currentSelection) return;
+    if (!currentSelection) {
+        return;
+    }
 
     currentSelection->notifySelectionChanged();
 }

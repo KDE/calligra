@@ -47,7 +47,7 @@
 class KoFindText::Private
 {
 public:
-    Private(KoFindText* qq) : q(qq), selectionStart(-1), selectionEnd(-1) { }
+    Private(KoFindText *qq) : q(qq), selectionStart(-1), selectionEnd(-1) { }
 
     void updateSelections();
     void updateDocumentList();
@@ -57,11 +57,11 @@ public:
 
     KoFindText *q;
 
-    QList<QTextDocument*> documents;
+    QList<QTextDocument *> documents;
 
     QTextCursor currentCursor;
     QTextCursor selection;
-    QHash<QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> > selections;
+    QHash<QTextDocument *, QVector<QAbstractTextDocumentLayout::Selection> > selections;
 
     int selectionStart;
     int selectionEnd;
@@ -72,7 +72,7 @@ public:
     static QTextCharFormat replacedFormat;
     static bool formatsInitialized;
 
-    QPair<QTextDocument*, int> currentMatch;
+    QPair<QTextDocument *, int> currentMatch;
 };
 
 #endif

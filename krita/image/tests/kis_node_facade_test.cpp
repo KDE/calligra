@@ -20,7 +20,6 @@
 #include <qtest_kde.h>
 #include <limits.h>
 
-
 #include "kis_node_facade.h"
 #include "kis_types.h"
 #include "kis_global.h"
@@ -56,8 +55,9 @@ void KisNodeFacadeTest::testCreation()
 void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
 {
     for (uint i = 0; i < node->childCount(); ++i) {
-        if (node->at(i)->parent())
+        if (node->at(i)->parent()) {
             dbgImage << prefix << "\t" << node->at(i) << "node at" << i << " has index from parent:" << node->index(node->at(i));
+        }
 
         if (node->at(i)->childCount() > 0) {
             dumpNodeStack(node->at(i), prefix + '\t');
@@ -329,7 +329,6 @@ void KisNodeFacadeTest::testOrdering()
     QVERIFY(node2->prevSibling() == 0);
 
 }
-
 
 void KisNodeFacadeTest::testMove()
 {

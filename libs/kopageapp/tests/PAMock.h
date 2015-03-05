@@ -23,23 +23,34 @@
 #include "KoPADocument.h"
 
 #include <KoPart.h>
-#include <KoOdf.h> 
+#include <KoOdf.h>
 #include <QGraphicsItem>
-
 
 class MockDocument : public KoPADocument
 {
 public:
     MockDocument()
-    : KoPADocument( new MockPart )
+        : KoPADocument(new MockPart)
     {}
-    const char *odfTagName( bool b ) { return KoOdf::bodyContentElement( KoOdf::Presentation, b ); }
-    virtual KoOdf::DocumentType documentType() const { return KoOdf::Presentation; }
+    const char *odfTagName(bool b)
+    {
+        return KoOdf::bodyContentElement(KoOdf::Presentation, b);
+    }
+    virtual KoOdf::DocumentType documentType() const
+    {
+        return KoOdf::Presentation;
+    }
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return ""; }
+    virtual QByteArray nativeFormatMimeType() const
+    {
+        return "";
+    }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return "";}
+    virtual QByteArray nativeOasisMimeType() const
+    {
+        return "";
+    }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {
@@ -47,6 +58,5 @@ public:
     }
 
 };
-
 
 #endif // PAMOCK_H

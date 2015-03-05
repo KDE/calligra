@@ -19,7 +19,6 @@
 #ifndef KOSNAPPROXY_H
 #define KOSNAPPROXY_H
 
-
 class KoSnapGuide;
 class KoShape;
 class KoPathSegment;
@@ -41,7 +40,7 @@ public:
     QList<QPointF> pointsInRect(const QRectF &rect);
 
     /// returns list of shape in given rectangle in document coordinates
-    QList<KoShape*> shapesInRect(const QRectF &rect, bool omitEditedShape = false);
+    QList<KoShape *> shapesInRect(const QRectF &rect, bool omitEditedShape = false);
 
     /// returns list of points from given shape
     QList<QPointF> pointsFromShape(KoShape *shape);
@@ -50,7 +49,7 @@ public:
     QList<KoPathSegment> segmentsInRect(const QRectF &rect);
 
     /// returns list of all shapes
-    QList<KoShape*> shapes(bool omitEditedShape = false);
+    QList<KoShape *> shapes(bool omitEditedShape = false);
 
     /// returns canvas we are working on
     KoCanvasBase *canvas();

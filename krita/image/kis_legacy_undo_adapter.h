@@ -21,7 +21,6 @@
 
 #include "kis_undo_adapter.h"
 
-
 /**
  * KisLegacyUndoAdapter -- blocks the strokes and updates queue,
  * and then adds the command to a store
@@ -31,10 +30,10 @@ class KRITAIMAGE_EXPORT KisLegacyUndoAdapter : public KisUndoAdapter
 public:
     KisLegacyUndoAdapter(KisUndoStore *undoStore, KisImageWSP image);
 
-    const KUndo2Command* presentCommand();
+    const KUndo2Command *presentCommand();
     void undoLastCommand();
     void addCommand(KUndo2Command *cmd);
-    void beginMacro(const KUndo2MagicString& macroName);
+    void beginMacro(const KUndo2MagicString &macroName);
     void endMacro();
 private:
     KisImageWSP m_image;

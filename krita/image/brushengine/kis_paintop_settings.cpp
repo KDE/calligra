@@ -46,10 +46,10 @@ struct KisPaintOpSettings::Private {
     QString modelName;
     KisPaintOpPresetWSP preset;
 
-
     bool disableDirtyNotifications;
 
-    class DirtyNotificationsLocker {
+    class DirtyNotificationsLocker
+    {
     public:
         DirtyNotificationsLocker(KisPaintOpSettings::Private *d)
             : m_d(d),
@@ -58,7 +58,8 @@ struct KisPaintOpSettings::Private {
             m_d->disableDirtyNotifications = true;
         }
 
-        ~DirtyNotificationsLocker() {
+        ~DirtyNotificationsLocker()
+        {
             m_d->disableDirtyNotifications = m_oldNotificationsState;
         }
 
@@ -68,7 +69,6 @@ struct KisPaintOpSettings::Private {
         Q_DISABLE_COPY(DirtyNotificationsLocker)
     };
 };
-
 
 KisPaintOpSettings::KisPaintOpSettings()
     : d(new Private)
@@ -80,7 +80,7 @@ KisPaintOpSettings::~KisPaintOpSettings()
 {
 }
 
-void KisPaintOpSettings::setOptionsWidget(KisPaintOpSettingsWidget* widget)
+void KisPaintOpSettings::setOptionsWidget(KisPaintOpSettingsWidget *widget)
 {
     d->settingsWidget = widget;
 }
@@ -124,12 +124,12 @@ void KisPaintOpSettings::setRandomOffset()
     }
 }
 
-
 KisPaintOpSettingsSP KisPaintOpSettings::clone() const
 {
     QString paintopID = getString("paintop");
-    if (paintopID.isEmpty())
+    if (paintopID.isEmpty()) {
         return 0;
+    }
 
     KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(KoID(paintopID, ""));
     QMapIterator<QString, QVariant> i(getProperties());
@@ -152,7 +152,6 @@ void KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
         d->settingsWidget.data()->writeConfiguration(this);
     }
 }
-
 
 QSizeF KisPaintOpSettings::paintOpSize() const
 {
@@ -197,15 +196,16 @@ QString KisPaintOpSettings::modelName() const
     return d->modelName;
 }
 
-void KisPaintOpSettings::setModelName(const QString & modelName)
+void KisPaintOpSettings::setModelName(const QString &modelName)
 {
     d->modelName = modelName;
 }
 
-KisPaintOpSettingsWidget* KisPaintOpSettings::optionsWidget() const
+KisPaintOpSettingsWidget *KisPaintOpSettings::optionsWidget() const
 {
-    if (d->settingsWidget.isNull())
+    if (d->settingsWidget.isNull()) {
         return 0;
+    }
 
     return d->settingsWidget.data();
 }
@@ -268,10 +268,10 @@ void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirror
     setPropertyNotSaved("runtimeCanvasMirroredY");
 }
 
-void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
+void KisPaintOpSettings::setProperty(const QString &name, const QVariant &value)
 {
     if (value != KisPropertiesConfiguration::getProperty(name) &&
-        !d->disableDirtyNotifications && this->preset()) {
+            !d->disableDirtyNotifications && this->preset()) {
 
         this->preset()->setPresetDirty(true);
     }
@@ -279,7 +279,6 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
     KisPropertiesConfiguration::setProperty(name, value);
     onPropertyChanged();
 }
-
 
 void KisPaintOpSettings::onPropertyChanged()
 {

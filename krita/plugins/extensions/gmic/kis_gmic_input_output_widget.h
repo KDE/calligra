@@ -34,16 +34,28 @@ class KisGmicInputOutputWidget : public QWidget, public Ui::WdgGmicInputOutput
     Q_OBJECT
 
 public:
-    KisGmicInputOutputWidget(QWidget * parent);
+    KisGmicInputOutputWidget(QWidget *parent);
     ~KisGmicInputOutputWidget();
 
-    InputLayerMode inputMode() const { return m_inputMode; };
-    OutputMode outputMode() const { return m_outputMode; };
+    InputLayerMode inputMode() const
+    {
+        return m_inputMode;
+    };
+    OutputMode outputMode() const
+    {
+        return m_outputMode;
+    };
 
-    OutputPreviewMode previewMode() const { return m_previewMode; };
-    PreviewSize previewSize() const { return m_previewSize; };
+    OutputPreviewMode previewMode() const
+    {
+        return m_previewMode;
+    };
+    PreviewSize previewSize() const
+    {
+        return m_previewSize;
+    };
 
-    KisFilterPreviewWidget * previewWidget();
+    KisFilterPreviewWidget *previewWidget();
 
 Q_SIGNALS:
     void sigConfigurationChanged();
@@ -69,8 +81,6 @@ private:
     QStringListModel *m_previewSizeModel;
 
 };
-
-
 
 #endif
 

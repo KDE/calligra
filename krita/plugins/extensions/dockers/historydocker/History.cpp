@@ -18,7 +18,6 @@
  */
 #include "History.h"
 
-
 #include <kpluginfactory.h>
 #include <klocale.h>
 
@@ -28,37 +27,41 @@
 #include "HistoryDock.h"
 
 K_PLUGIN_FACTORY(HistoryPluginFactory, registerPlugin<HistoryPlugin>();)
-K_EXPORT_PLUGIN(HistoryPluginFactory( "krita" ) )
+K_EXPORT_PLUGIN(HistoryPluginFactory("krita"))
 
 class HistoryDockFactory : public KoDockFactoryBase
 {
 public:
-    HistoryDockFactory() {
+    HistoryDockFactory()
+    {
     }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return QString("History");
     }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget() {
-        HistoryDock * dockWidget = new HistoryDock();
+    virtual QDockWidget *createDockWidget()
+    {
+        HistoryDock *dockWidget = new HistoryDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const
+    {
         return DockRight;
     }
 };
 
-
 HistoryPlugin::HistoryPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
 
     KoDockRegistry::instance()->add(new HistoryDockFactory());

@@ -66,17 +66,18 @@ public:
     /// Model Methods
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant data(const QModelIndex &index,
-               int role=Qt::DisplayRole) const;
+                  int role = Qt::DisplayRole) const;
     QVariant headerData(int section, Qt::Orientation orientation,
-                     int role=Qt::DisplayRole) const;
-    int rowCount(const QModelIndex &parent=QModelIndex()) const;
-    int columnCount(const QModelIndex &parent=QModelIndex()) const;
-    bool setHeaderData(int, Qt::Orientation, const QVariant&,
-                       int=Qt::EditRole) {return false;}
+                        int role = Qt::DisplayRole) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    bool setHeaderData(int, Qt::Orientation, const QVariant &,
+                       int = Qt::EditRole)
+    {
+        return false;
+    }
     bool setData(const QModelIndex &index, const QVariant &value,
-                 int role=Qt::EditRole);
-
-
+                 int role = Qt::EditRole);
 
     void init(const QList<KPrAnimationStep *> animations);
     /**
@@ -128,7 +129,6 @@ public:
      */
     void replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation);
 
-
     /**
      * Get the animations for the given step
      *
@@ -136,8 +136,8 @@ public:
      * @return A map of the shape -> animation if the animation is 0 the shape
      *         is not visible
      */
-/*    QMap<KoShape *, KPrShapeAnimation *> animations( int step ) const;
-*/
+    /*    QMap<KoShape *, KPrShapeAnimation *> animations( int step ) const;
+    */
     /**
      * Get all steps
      */
@@ -242,7 +242,7 @@ public:
     KoShape *shapeByIndex(const QModelIndex &index);
 
     /// Return the first animation index for the given shape
-    QModelIndex indexByShape(KoShape* shape);
+    QModelIndex indexByShape(KoShape *shape);
 
     /**
      * @brief Set begin time for the animation on index
@@ -290,8 +290,7 @@ Q_SIGNALS:
 
 private:
 
-    struct AnimationTmpData
-    {
+    struct AnimationTmpData {
         int group;
         KPrShapeAnimation::NodeType nodeType;
     };

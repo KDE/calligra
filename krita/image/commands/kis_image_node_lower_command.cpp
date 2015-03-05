@@ -25,7 +25,7 @@
 #include "kis_undo_adapter.h"
 
 KisImageNodeLowerCommand::KisImageNodeLowerCommand(KisImageWSP image, KisNodeSP node)
-        : KisImageCommand(kundo2_i18n("Lower"), image), m_node(node)
+    : KisImageCommand(kundo2_i18n("Lower"), image), m_node(node)
 {
 }
 
@@ -39,6 +39,7 @@ void KisImageNodeLowerCommand::undo()
 {
     m_image->raiseNode(m_node);
 
-    if(m_node->prevSibling())
+    if (m_node->prevSibling()) {
         m_node->prevSibling()->setDirty(m_node->extent());
+    }
 }

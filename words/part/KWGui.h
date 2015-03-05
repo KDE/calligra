@@ -20,7 +20,6 @@
 #ifndef KWGUI_H
 #define KWGUI_H
 
-
 #include <QWidget>
 
 class KWView;
@@ -52,7 +51,8 @@ public:
      * Return the canvas child.
      * @return the canvas child.
      */
-    KWCanvas *canvas() const {
+    KWCanvas *canvas() const
+    {
         return m_canvas;
     }
     /**
@@ -81,7 +81,8 @@ public:
     void updateRulers() const;
 
     /// return the canvasController that wraps this view
-    KoCanvasController *canvasController() const {
+    KoCanvasController *canvasController() const
+    {
         return m_canvasController;
     }
 

@@ -56,16 +56,15 @@ public:
     KisSprayShapeDynamicsOption();
     ~KisSprayShapeDynamicsOption();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
     void setupBrushPreviewSignals();
 
 private:
-    KisShapeDynamicsOptionsWidget * m_options;
+    KisShapeDynamicsOptionsWidget *m_options;
 };
-
 
 class KisShapeDynamicsProperties
 {
@@ -85,7 +84,8 @@ public:
 
 public:
 
-    void loadSettings(const KisPropertiesConfiguration* settings) {
+    void loadSettings(const KisPropertiesConfiguration *settings)
+    {
         // Krita 2.2
         if (settings->getString(SHAPE_DYNAMICS_VERSION, "2.2") == "2.2") {
             randomSize = settings->getBool(SPRAYSHAPE_RANDOM_SIZE);

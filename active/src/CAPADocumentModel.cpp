@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 
-CAPADocumentModel::CAPADocumentModel(QObject* parent, KoPADocument* document)
+CAPADocumentModel::CAPADocumentModel(QObject *parent, KoPADocument *document)
     : KoPADocumentModel(parent, document)
     , m_document(document)
 {
@@ -42,10 +42,11 @@ CAPADocumentModel::CAPADocumentModel(QObject* parent, KoPADocument* document)
     }
 }
 
-QVariant CAPADocumentModel::data(const QModelIndex& index, int role) const
+QVariant CAPADocumentModel::data(const QModelIndex &index, int role) const
 {
-    if (!m_document)
+    if (!m_document) {
         return QVariant();
+    }
 
     if (CAImageProvider::s_imageProvider) {
 

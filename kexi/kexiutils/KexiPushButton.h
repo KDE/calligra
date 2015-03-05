@@ -77,7 +77,7 @@ public:
     /*! \property KexiPushButton::hyperlinkTool
      * Sets the tool for opening hyperlinks
      * The valid values are described by the KexiUtils::OpenHyperlinkOptions::HyperlinkTool enum
-     * 
+     *
      * The default value is DefaultHyperlinkTool
      */
     void setHyperlinkTool(KexiUtils::OpenHyperlinkOptions::HyperlinkTool tool);
@@ -103,7 +103,7 @@ protected:
     void setLocalBasePath(const QString &basePath);
 private:
     friend class KexiPushButtonPrivate;
-    KexiPushButtonPrivate * const d;
+    KexiPushButtonPrivate *const d;
     Q_PRIVATE_SLOT(d, void slotClicked())
 };
 #endif // KEXIPUSHBUTTON_H

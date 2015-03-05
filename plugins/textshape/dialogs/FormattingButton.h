@@ -39,7 +39,7 @@ public:
 
     void setNumColumns(int columns);
     void setItemsBackground(const QColor &color);
-    void addItem(QPixmap pm, int id, QString toolTip= QString());
+    void addItem(QPixmap pm, int id, QString toolTip = QString());
     void addAction(QAction *action);
     void addBlanks(int n);
     void addSeparator();
@@ -56,7 +56,7 @@ private Q_SLOTS:
     void menuShown();
 
 private:
-    int m_lastId ;
+    int m_lastId;
     QMenu *m_menu;
     QMap<int, QObject *> m_styleMap;
     ItemChooserAction *m_styleAction;

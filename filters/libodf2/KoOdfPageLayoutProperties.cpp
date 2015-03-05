@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "KoOdfPageLayoutProperties.h"
 
@@ -32,10 +31,8 @@
 #include <KoXmlStreamReader.h>
 #include <KoXmlWriter.h>
 
-
 // ----------------------------------------------------------------
 //                         private class
-
 
 class KoOdfPageLayoutProperties::Private
 {
@@ -48,9 +45,7 @@ public:
     // NYI: Footnote sep
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfPageLayoutProperties::KoOdfPageLayoutProperties()
     : KoOdfStyleProperties()
@@ -63,12 +58,10 @@ KoOdfPageLayoutProperties::~KoOdfPageLayoutProperties()
     delete d;
 }
 
-
 void KoOdfPageLayoutProperties::clear()
 {
     KoOdfStyleProperties::clear();
 }
-
 
 bool KoOdfPageLayoutProperties::readOdf(KoXmlStreamReader &reader)
 {
@@ -86,11 +79,9 @@ bool KoOdfPageLayoutProperties::readOdf(KoXmlStreamReader &reader)
 
         if (child == "style:background-image") {
             // FIXME: NYI
-        }
-        else if (child == "style:columns") {
+        } else if (child == "style:columns") {
             // FIXME: NYI
-        }
-        else if (child == "text:footnote-sep") {
+        } else if (child == "text:footnote-sep") {
             // FIXME: NYI
         }
 

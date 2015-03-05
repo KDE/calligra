@@ -28,7 +28,7 @@ class KisColorSelectorComboBox : public QComboBox
 {
     Q_OBJECT
 public:
-    KisColorSelectorComboBox(QWidget* parent=0);
+    KisColorSelectorComboBox(QWidget *parent = 0);
     ~KisColorSelectorComboBox();
     void hidePopup();
     void showPopup();
@@ -37,11 +37,11 @@ public:
 protected:
     void paintEvent(QPaintEvent *e);
 public Q_SLOTS:
-    void setColorSpace(const KoColorSpace* colorSpace);
+    void setColorSpace(const KoColorSpace *colorSpace);
     void setConfiguration(KisColorSelector::Configuration);
     void setList(int model);
 private:
-    KisColorSelectorComboBoxPrivate* m_private;
+    KisColorSelectorComboBoxPrivate *m_private;
     KisColorSelector::Configuration m_configuration;
     KisColorSelector m_currentSelector;
 };

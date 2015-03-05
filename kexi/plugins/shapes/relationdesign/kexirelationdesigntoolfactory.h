@@ -21,7 +21,6 @@
 
 #include <KoToolFactoryBase.h>
 
-
 class KexiRelationDesignToolFactory : public KoToolFactoryBase
 {
 public:

@@ -27,7 +27,7 @@ class KisTiledDataManagerTest : public QObject
     Q_OBJECT
 
 private:
-    bool checkHole(quint8* buffer, quint8 holeColor, QRect holeRect,
+    bool checkHole(quint8 *buffer, quint8 holeColor, QRect holeRect,
                    quint8 backgroundColor, QRect backgroundRect);
 
     bool checkTilesShared(KisTiledDataManager *srcDM,

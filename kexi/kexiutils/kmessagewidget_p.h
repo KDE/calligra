@@ -29,19 +29,19 @@ class KMessageWidgetFrame : public QFrame
 {
     Q_OBJECT
 public:
-    explicit KMessageWidgetFrame(QWidget* parent = 0);
+    explicit KMessageWidgetFrame(QWidget *parent = 0);
 
-    virtual void paintEvent(QPaintEvent* event);
+    virtual void paintEvent(QPaintEvent *event);
 
     KMessageWidget::CalloutPointerDirection calloutPointerDirection() const;
 
     void setCalloutPointerDirection(KMessageWidget::CalloutPointerDirection direction);
 
     QPoint calloutPointerPosition() const;
-    
+
     QPoint pointerPosition() const;
 
-    void setCalloutPointerPosition(const QPoint& globalPos);
+    void setCalloutPointerPosition(const QPoint &globalPos);
 
     void updateCalloutPointerPosition() const;
 

@@ -28,10 +28,10 @@
 
 #ifndef STAGE_EXPORT
 # if defined(MAKE_CALLIGRASTAGEPRIVATE_LIB)
-   /* We are building this library */
+/* We are building this library */
 #  define STAGE_EXPORT KDE_EXPORT
 # else
-   /* We are using this library */
+/* We are using this library */
 #  define STAGE_EXPORT KDE_IMPORT
 # endif
 #endif
@@ -41,7 +41,6 @@
 #define STAGE_EXPORT KDE_EXPORT
 
 #endif
-
 
 /* Now the same for STAGE_TEST_EXPORT, if compiling with unit tests enabled */
 

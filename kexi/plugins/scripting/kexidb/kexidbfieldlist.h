@@ -58,9 +58,10 @@ class KexiDBFieldList : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBFieldList(QObject* parent, ::KexiDB::FieldList* fieldlist, bool owner);
+    KexiDBFieldList(QObject *parent, ::KexiDB::FieldList *fieldlist, bool owner);
     virtual ~KexiDBFieldList();
-    ::KexiDB::FieldList* fieldlist() {
+    ::KexiDB::FieldList *fieldlist()
+    {
         return m_fieldlist;
     }
 
@@ -69,33 +70,33 @@ public Q_SLOTS:
     /** Returns the number of fields. */
     uint fieldCount();
     /** Return the \a KexiDBField specified by the index-number passed as an argument. */
-    QObject* field(uint index);
+    QObject *field(uint index);
     /** Return the \a KexiDBField specified by the as an argument passed fieldname. */
-    QObject* fieldByName(const QString& name);
+    QObject *fieldByName(const QString &name);
 
     /** Returns true if the passed \a KexiDBField \p field object is in the field list. */
-    bool hasField(QObject* field);
+    bool hasField(QObject *field);
     /** Return a list of field names. */
     const QStringList names() const;
 
     /** Adds the \a KexiDBField object passed as an argument to the field list. */
-    bool addField(QObject* field);
+    bool addField(QObject *field);
     /** Inserts the \a KexiDBField object passed as the second argument
     into the field list at the position defined by the first argument. */
-    bool insertField(uint index, QObject* field);
+    bool insertField(uint index, QObject *field);
     /** Removes the \a KexiDBField object passed as an argument from the field list. */
-    bool removeField(QObject* field);
+    bool removeField(QObject *field);
     /** Removes all KexiDBField objects from the fieldlist. */
     void clear();
 
     /** Set the list of field to the as argument passed \a KexiDBFieldList \p fieldlist . */
-    bool setFields(QObject* fieldlist);
+    bool setFields(QObject *fieldlist);
 
     /** Creates and returns a \a KexiDBFieldList object that contain fields selected by name. */
-    QObject* subList(QVariantList list);
+    QObject *subList(QVariantList list);
 
 private:
-    ::KexiDB::FieldList* m_fieldlist;
+    ::KexiDB::FieldList *m_fieldlist;
     bool m_owner;
 };
 

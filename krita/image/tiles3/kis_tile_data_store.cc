@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include <kglobal.h>
 
 // to disable assert when the leak tracker is active
@@ -81,7 +80,7 @@ KisTileDataStore::~KisTileDataStore()
     m_pooler.terminatePooler();
     m_swapper.terminateSwapper();
 
-    if(numTiles() > 0) {
+    if (numTiles() > 0) {
         qCritical() << "CRITICAL: According to statistics of the KisTileDataStore"
                     << "some tiles have leaked from the Krita control!";
         qCritical() << "CRITICAL: Tiles in memory:" << numTilesInMemory()
@@ -89,7 +88,7 @@ KisTileDataStore::~KisTileDataStore()
     }
 }
 
-KisTileDataStore* KisTileDataStore::instance()
+KisTileDataStore *KisTileDataStore::instance()
 {
     K_GLOBAL_STATIC(KisTileDataStore, s_instance);
     return s_instance;
@@ -112,7 +111,7 @@ inline void KisTileDataStore::unregisterTileDataImp(KisTileData *td)
 {
     KisTileDataListIterator tempIterator = td->m_listIterator;
 
-    if(m_clockIterator == tempIterator) {
+    if (m_clockIterator == tempIterator) {
         m_clockIterator = tempIterator + 1;
     }
 
@@ -163,10 +162,9 @@ void KisTileDataStore::freeTileData(KisTileData *td)
     m_listLock.lock();
     td->m_swapLock.lockForWrite();
 
-    if(!td->data()) {
+    if (!td->data()) {
         m_swappedStore.forgetTileData(td);
-    }
-    else {
+    } else {
         unregisterTileDataImp(td);
     }
 
@@ -183,7 +181,7 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
 
     td->m_swapLock.lockForRead();
 
-    while(!td->data()) {
+    while (!td->data()) {
         td->m_swapLock.unlock();
 
         /**
@@ -205,7 +203,7 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
          * m_listLock.
          */
 
-        if(!td->data()) {
+        if (!td->data()) {
             td->m_swapLock.lockForWrite();
 
             m_swappedStore.swapInTileData(td);
@@ -231,9 +229,11 @@ bool KisTileDataStore::trySwapTileData(KisTileData *td)
      */
 
     bool result = false;
-    if(!td->m_swapLock.tryLockForWrite()) return result;
+    if (!td->m_swapLock.tryLockForWrite()) {
+        return result;
+    }
 
-    if(td->data()) {
+    if (td->data()) {
         unregisterTileDataImp(td);
         m_swappedStore.swapOutTileData(td);
         result = true;
@@ -243,35 +243,35 @@ bool KisTileDataStore::trySwapTileData(KisTileData *td)
     return result;
 }
 
-KisTileDataStoreIterator* KisTileDataStore::beginIteration()
+KisTileDataStoreIterator *KisTileDataStore::beginIteration()
 {
     m_listLock.lock();
     return new KisTileDataStoreIterator(m_tileDataList, this);
 }
-void KisTileDataStore::endIteration(KisTileDataStoreIterator* iterator)
+void KisTileDataStore::endIteration(KisTileDataStoreIterator *iterator)
 {
     delete iterator;
     m_listLock.unlock();
 }
 
-KisTileDataStoreReverseIterator* KisTileDataStore::beginReverseIteration()
+KisTileDataStoreReverseIterator *KisTileDataStore::beginReverseIteration()
 {
     m_listLock.lock();
     return new KisTileDataStoreReverseIterator(m_tileDataList, this);
 }
-void KisTileDataStore::endIteration(KisTileDataStoreReverseIterator* iterator)
+void KisTileDataStore::endIteration(KisTileDataStoreReverseIterator *iterator)
 {
     delete iterator;
     m_listLock.unlock();
     DEBUG_REPORT_PRECLONE_EFFICIENCY();
 }
 
-KisTileDataStoreClockIterator* KisTileDataStore::beginClockIteration()
+KisTileDataStoreClockIterator *KisTileDataStore::beginClockIteration()
 {
     m_listLock.lock();
     return new KisTileDataStoreClockIterator(m_clockIterator, m_tileDataList, this);
 }
-void KisTileDataStore::endIteration(KisTileDataStoreClockIterator* iterator)
+void KisTileDataStore::endIteration(KisTileDataStoreClockIterator *iterator)
 {
     m_clockIterator = iterator->getFinalPosition();
     delete iterator;
@@ -281,7 +281,7 @@ void KisTileDataStore::endIteration(KisTileDataStoreClockIterator* iterator)
 void KisTileDataStore::debugPrintList()
 {
     KisTileData *item;
-    foreach(item, m_tileDataList) {
+    foreach (item, m_tileDataList) {
         dbgTiles << "-------------------------\n"
                  << "TileData:\t\t\t" << item
                  << "\n  refCount:\t" << item->m_refCount;
@@ -290,9 +290,9 @@ void KisTileDataStore::debugPrintList()
 
 void KisTileDataStore::debugSwapAll()
 {
-    KisTileDataStoreIterator* iter = beginIteration();
+    KisTileDataStoreIterator *iter = beginIteration();
     KisTileData *item;
-    while(iter->hasNext()) {
+    while (iter->hasNext()) {
         item = iter->next();
         iter->trySwapOut(item);
     }
@@ -307,7 +307,7 @@ void KisTileDataStore::debugClear()
 {
     QMutexLocker lock(&m_listLock);
 
-    foreach(KisTileData *item, m_tileDataList) {
+    foreach (KisTileData *item, m_tileDataList) {
         delete item;
     }
 
@@ -318,7 +318,8 @@ void KisTileDataStore::debugClear()
     m_memoryMetric = 0;
 }
 
-void KisTileDataStore::testingRereadConfig() {
+void KisTileDataStore::testingRereadConfig()
+{
     m_pooler.testingRereadConfig();
     m_swapper.testingRereadConfig();
     kickPooler();

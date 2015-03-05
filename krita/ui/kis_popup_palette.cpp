@@ -37,7 +37,6 @@
 #include <math.h>
 #include "kis_signal_compressor.h"
 
-
 #define brushInnerRadius 94.0
 #define brushOuterRadius 145.0
 #define colorInnerRadius 72.0
@@ -47,16 +46,18 @@
 class PopupColorTriangle : public KoTriangleColorSelector
 {
 public:
-    PopupColorTriangle(const KoColorDisplayRendererInterface *displayRenderer, QWidget* parent)
+    PopupColorTriangle(const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent)
         : KoTriangleColorSelector(displayRenderer, parent)
-        , m_dragging(false) {
+        , m_dragging(false)
+    {
     }
 
     virtual ~PopupColorTriangle() {}
 
-    void tabletEvent(QTabletEvent* event) {
+    void tabletEvent(QTabletEvent *event)
+    {
         event->accept();
-        QMouseEvent* mouseEvent = 0;
+        QMouseEvent *mouseEvent = 0;
         switch (event->type()) {
         case QEvent::TabletPress:
             mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
@@ -87,7 +88,7 @@ private:
     bool m_dragging;
 };
 
-KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent)
+KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager *manager, const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager(manager)
     , m_triangleColorSelector(0)
@@ -114,7 +115,6 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     connect(this, SIGNAL(sigChangefGColor(KoColor)),
             m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
 
-
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
 
@@ -132,8 +132,6 @@ KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoCo
     connect(this, SIGNAL(sigTriggerTimer()), this, SLOT(slotTriggerTimer()));
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotEnableChangeFGColor()));
     connect(this, SIGNAL(sigEnableChangeFGColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
-
-
 
     setMouseTracking(true);
     setHoveredPreset(-1);
@@ -245,19 +243,19 @@ QSize KisPopupPalette::sizeHint() const
     return QSize(290, 290);
 }
 
-void KisPopupPalette::resizeEvent(QResizeEvent*)
+void KisPopupPalette::resizeEvent(QResizeEvent *)
 {
     int side = qMin(width(), height());
     int fgball = 66;
     int sball = 40;
     QRegion maskedRegion(width() / 2 - side / 2, height() / 2 - side / 2, side, side, QRegion::Ellipse);
-    maskedRegion = maskedRegion.united( QRegion(50 - fgball / 2, 32 - fgball / 2 , fgball, fgball, QRegion::Ellipse) );
-    maskedRegion = maskedRegion.united( QRegion(24 - (fgball - 20 ) / 2, 60 - (fgball - 20 ) / 2 , (fgball - 20 ), (fgball - 20 ), QRegion::Ellipse) );
-    maskedRegion = maskedRegion.united( QRegion(width() / 2 + side / 2 - sball, height() / 2 + side / 2 - sball, sball , sball, QRegion::Ellipse) );
+    maskedRegion = maskedRegion.united(QRegion(50 - fgball / 2, 32 - fgball / 2, fgball, fgball, QRegion::Ellipse));
+    maskedRegion = maskedRegion.united(QRegion(24 - (fgball - 20) / 2, 60 - (fgball - 20) / 2, (fgball - 20), (fgball - 20), QRegion::Ellipse));
+    maskedRegion = maskedRegion.united(QRegion(width() / 2 + side / 2 - sball, height() / 2 + side / 2 - sball, sball, sball, QRegion::Ellipse));
     setMask(maskedRegion);
 }
 
-void KisPopupPalette::paintEvent(QPaintEvent* e)
+void KisPopupPalette::paintEvent(QPaintEvent *e)
 {
     float rotationAngle = 0.0;
 
@@ -277,7 +275,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     fgColor.addEllipse(QPoint(-width() / 2 + 50, -height() / 2 + 32), 30, 30);
     painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->realColor()));
     painter.drawPath(fgColor);
-
 
     //painting favorite brushes
     QList<QImage> images(m_resourceManager->favoritePresetImages());
@@ -358,9 +355,9 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     }
 
     int side = qMin(width(), height());
-    QPixmap settingIcon = koIcon("configure").pixmap(QSize(22,22));
+    QPixmap settingIcon = koIcon("configure").pixmap(QSize(22, 22));
     painter.drawPixmap(side / 2 - 40 + 9, side / 2 - 40 + 9, settingIcon);
-    
+
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)
@@ -386,7 +383,7 @@ QPainterPath KisPopupPalette::drawDonutPathAngle(int inner_radius, int outer_rad
     return path;
 }
 
-void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
+void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
 {
     QPointF point = event->posF();
     event->accept();
@@ -414,7 +411,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
     update();
 }
 
-void KisPopupPalette::mousePressEvent(QMouseEvent* event)
+void KisPopupPalette::mousePressEvent(QMouseEvent *event)
 {
     QPointF point = event->posF();
     event->accept();
@@ -434,22 +431,22 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
             int side = qMin(width(), height());
             QPainterPath settingCircle;
             settingCircle.addEllipse(width() / 2 + side / 2 - 40, height() / 2 + side / 2 - 40, 40, 40);
-            if (settingCircle.contains(point)) {                
-                KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+            if (settingCircle.contains(point)) {
+                KisPaintOpPresetResourceServer *rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
                 QStringList tags = rServer->tagNamesList();
                 qSort(tags);
 
                 if (!tags.isEmpty()) {
                     QMenu menu;
-                    foreach(const QString& tag, tags) {
+                    foreach (const QString &tag, tags) {
                         menu.addAction(tag);
                     }
-                    QAction* action = menu.exec(event->globalPos());
+                    QAction *action = menu.exec(event->globalPos());
                     if (action) {
                         m_resourceManager->setCurrentTag(action->text());
                     }
                 } else {
-                    QWhatsThis::showText(event->globalPos(), 
+                    QWhatsThis::showText(event->globalPos(),
                                          i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
                 }
             }
@@ -457,7 +454,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void KisPopupPalette::mouseReleaseEvent(QMouseEvent * event)
+void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
 {
     QPointF point = event->posF();
     event->accept();
@@ -499,12 +496,14 @@ int KisPopupPalette::calculateIndex(QPointF point, int n)
 
     //calculate brush index
     int pos = floor(acos(point.x() / radius) * n / (2 * M_PI));
-    if (point.y() < 0) pos =  n - pos - 1;
+    if (point.y() < 0) {
+        pos =  n - pos - 1;
+    }
 
     return pos;
 }
 
-bool KisPopupPalette::isPointInPixmap(QPointF& point, int pos)
+bool KisPopupPalette::isPointInPixmap(QPointF &point, int pos)
 {
     if (pathFromPresetIndex(pos).contains(point + QPointF(-width() / 2, -height() / 2))) {
         return true;

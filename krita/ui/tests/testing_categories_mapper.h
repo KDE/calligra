@@ -23,7 +23,8 @@
 #include <qtest_kde.h>
 
 struct QStringConverter {
-    QString operator() (const QString &entry) {
+    QString operator()(const QString &entry)
+    {
         return entry;
     }
 };
@@ -44,17 +45,20 @@ public:
         connect(this, SIGNAL(endRemoveRow()), SLOT(slotEndRemoveRow()));
     }
 
-    void checkInsertedCorrectly(int num = 1) {
+    void checkInsertedCorrectly(int num = 1)
+    {
         QCOMPARE(insertCounter, 2 * num);
         insertCounter = 0;
     }
 
-    void checkRemovedCorrectly(int num = 1) {
+    void checkRemovedCorrectly(int num = 1)
+    {
         QCOMPARE(removeCounter, 2 * num);
         removeCounter = 0;
     }
 
-    void checkRowChangedIndices(const QVector<int> indices) {
+    void checkRowChangedIndices(const QVector<int> indices)
+    {
         QCOMPARE(indices.size(), rowChangedIndices.size());
 
         foreach (int index, rowChangedIndices) {
@@ -67,25 +71,30 @@ public:
     using TestingBaseMapper::testingGetItems;
 
 protected Q_SLOTS:
-    void slotRowChanged(int row) {
+    void slotRowChanged(int row)
+    {
         rowChangedIndices.append(row);
     }
 
-    void slotBeginInsertRow(int row) {
+    void slotBeginInsertRow(int row)
+    {
         Q_UNUSED(row);
         insertCounter++;
     }
 
-    void slotEndInsertRow() {
+    void slotEndInsertRow()
+    {
         insertCounter++;
     }
 
-    void slotBeginRemoveRow(int row) {
+    void slotBeginRemoveRow(int row)
+    {
         Q_UNUSED(row);
         removeCounter++;
     }
 
-    void slotEndRemoveRow() {
+    void slotEndRemoveRow()
+    {
         removeCounter++;
     }
 

@@ -56,7 +56,7 @@ class SortDialog::Private : public QStyledItemDelegate
 {
 public:
     Private(SortDialog *parent = 0)
-            : QStyledItemDelegate(parent)
+        : QStyledItemDelegate(parent)
     {
     }
 
@@ -66,7 +66,7 @@ public:
     {
         Q_UNUSED(index)
         Q_UNUSED(option)
-        if (mainWidget.m_sortHorizontal->isChecked()) /* data grouped in columns; criteria/header per row */ {
+        if (mainWidget.m_sortHorizontal->isChecked()) { /* data grouped in columns; criteria/header per row */
             if (rows.isEmpty()) {
                 return 0;
             }
@@ -82,7 +82,7 @@ public:
         if (!index.isValid()) {
             return;
         }
-        KComboBox *const combo = static_cast<KComboBox*>(editor);
+        KComboBox *const combo = static_cast<KComboBox *>(editor);
         const QAbstractItemModel *const model = index.model();
         const QString itemText = model->data(index, Qt::DisplayRole).toString();
         const int itemIndex = model->data(index, Qt::UserRole).toInt();
@@ -90,7 +90,7 @@ public:
         Sheet *const sheet = selection->lastSheet();
         ValueConverter *const converter = sheet->map()->converter();
 
-        if (mainWidget.m_sortVertical->isChecked()) /* data grouped in rows; criteria/header per column */ {
+        if (mainWidget.m_sortVertical->isChecked()) { /* data grouped in rows; criteria/header per column */
             // Put the old item back into the map of available items.
             insertIndex(itemIndex, Qt::Horizontal);
 
@@ -115,7 +115,7 @@ public:
                     combo->setCurrentIndex(i);
                 }
             }
-        } else /* row headers */ {
+        } else { /* row headers */
             // Put the old item back into the map of available items.
             insertIndex(itemIndex, Qt::Vertical);
 
@@ -146,13 +146,13 @@ public:
     virtual void setModelData(QWidget *editor, QAbstractItemModel *model,
                               const QModelIndex &index) const
     {
-        KComboBox *const combo = static_cast<KComboBox*>(editor);
+        KComboBox *const combo = static_cast<KComboBox *>(editor);
         const int currentIndex = combo->currentIndex();
         model->setData(index, combo->itemText(currentIndex), Qt::DisplayRole);
         model->setData(index, combo->itemData(currentIndex), Qt::UserRole);
 
         // Remove the current item from the map of available items.
-        if (mainWidget.m_sortHorizontal->isChecked()) /* data grouped in columns; criteria/header per row */ {
+        if (mainWidget.m_sortHorizontal->isChecked()) { /* data grouped in columns; criteria/header per row */
             rows.removeAll(combo->itemData(currentIndex).toInt());
         } else {
             columns.removeAll(combo->itemData(currentIndex).toInt());
@@ -187,13 +187,13 @@ bool SortDialog::Private::hasHeader(const Region &region, Qt::Orientation orient
 {
     Sheet *const sheet = region.lastSheet();
     const QRect range = region.lastRange();
-    if (orientation == Qt::Horizontal) /* check for column headers */ {
+    if (orientation == Qt::Horizontal) { /* check for column headers */
         for (int col = range.left(); col <= range.right(); ++col) {
             if (!Cell(sheet, col, range.top()).value().isString())  {
                 return false;
             }
         }
-    } else /* check for row headers */ {
+    } else { /* check for row headers */
         for (int row = range.top(); row <= range.bottom(); ++row) {
             if (!Cell(sheet, range.left(), row).value().isString()) {
                 return false;
@@ -206,11 +206,11 @@ bool SortDialog::Private::hasHeader(const Region &region, Qt::Orientation orient
 void SortDialog::Private::createAvailableIndices(const Region &region, Qt::Orientation orientation)
 {
     const QRect range = region.lastRange();
-    if (orientation == Qt::Horizontal) /* available columns */ {
+    if (orientation == Qt::Horizontal) { /* available columns */
         for (int col = range.left(); col <= range.right(); ++col) {
             columns.append(col);
         }
-    } else /* available rows */ {
+    } else { /* available rows */
         for (int row = range.top(); row <= range.bottom(); ++row) {
             rows.append(row);
         }
@@ -219,14 +219,14 @@ void SortDialog::Private::createAvailableIndices(const Region &region, Qt::Orien
 
 void SortDialog::Private::insertIndex(int index, Qt::Orientation orientation) const
 {
-    if (orientation == Qt::Vertical) /* data grouped in columns; criteria/header per row */ {
+    if (orientation == Qt::Vertical) { /* data grouped in columns; criteria/header per row */
         Q_ASSERT(1 <= index && index <= KS_colMax);
         QList<int>::Iterator it = qLowerBound(rows.begin(), rows.end(), index);
         if (*it == index) {
             return;
         }
         rows.insert(it, index);
-    } else /* data grouped in rows; criteria/header per column */ {
+    } else { /* data grouped in rows; criteria/header per column */
         Q_ASSERT(1 <= index && index <= KS_rowMax);
         QList<int>::Iterator it = qLowerBound(columns.begin(), columns.end(), index);
         if (*it == index) {
@@ -241,7 +241,7 @@ QString SortDialog::Private::itemText(int index, bool useHeader) const
     Sheet *const sheet = selection->lastSheet();
     ValueConverter *const converter = sheet->map()->converter();
 
-    if (mainWidget.m_sortHorizontal->isChecked()) /* data grouped in columns; criteria/header per row */ {
+    if (mainWidget.m_sortHorizontal->isChecked()) { /* data grouped in columns; criteria/header per row */
         const int col = selection->lastRange().left();
         const int row = index;
         const QString rowName = i18n("Row %1", row);
@@ -256,7 +256,7 @@ QString SortDialog::Private::itemText(int index, bool useHeader) const
         } else {
             return rowName;
         }
-    } else /* data grouped in rows; criteria/header per column */ {
+    } else { /* data grouped in rows; criteria/header per column */
         const int col = index;
         const int row = selection->lastRange().top();
         const QString columnName = i18n("Column %1", Cell::columnName(col));
@@ -302,19 +302,18 @@ void SortDialog::Private::initCriteria(Qt::Orientation orientation, SortDialog *
     mainWidget.m_downButton->setEnabled(false);
 
     // Adjust the header usage text.
-    if (mainWidget.m_sortHorizontal->isChecked()) /* Sort horizontally */  {
+    if (mainWidget.m_sortHorizontal->isChecked()) { /* Sort horizontally */
         // data gets sorted horizontally; comparisons per row; columns get exchanged/sorted
         mainWidget.m_useHeader->setText(i18n("&First column contains row headers"));
-    } else /* Sort vertically */ {
+    } else { /* Sort vertically */
         // data gets sorted vertically; comparisons per column; rows get exchanged/sorted
         mainWidget.m_useHeader->setText(i18n("&First row contains column headers"));
     }
 }
 
-
-SortDialog::SortDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
-        , d(new Private(this))
+SortDialog::SortDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent)
+    , d(new Private(this))
 {
     d->selection = selection;
 
@@ -371,22 +370,22 @@ void SortDialog::init()
 {
     QStringList lst;
     lst << i18n("January") + ',' + i18n("February") + ',' + i18n("March") +
-    ',' + i18n("April") + ',' + i18n("May") + ',' + i18n("June") +
-    ',' + i18n("July") + ',' + i18n("August") + ',' + i18n("September") +
-    ',' + i18n("October") + ',' + i18n("November") +
-    ',' + i18n("December");
+        ',' + i18n("April") + ',' + i18n("May") + ',' + i18n("June") +
+        ',' + i18n("July") + ',' + i18n("August") + ',' + i18n("September") +
+        ',' + i18n("October") + ',' + i18n("November") +
+        ',' + i18n("December");
 
     lst << i18n("Monday") + ',' + i18n("Tuesday") + ',' + i18n("Wednesday") +
-    ',' + i18n("Thursday") + ',' + i18n("Friday") + ',' + i18n("Saturday") +
-    ',' + i18n("Sunday");
+        ',' + i18n("Thursday") + ',' + i18n("Friday") + ',' + i18n("Saturday") +
+        ',' + i18n("Sunday");
 
     KSharedConfigPtr config = KGlobal::activeComponent().config();
     const QStringList other = config->group("Parameters").readEntry("Other list", QStringList());
     QString tmp;
     for (QStringList::ConstIterator it = other.begin(); it != other.end(); ++it) {
-        if ((*it) != "\\")
+        if ((*it) != "\\") {
             tmp += (*it) + ", ";
-        else if (it != other.begin()) {
+        } else if (it != other.begin()) {
             tmp = tmp.left(tmp.length() - 2);
             lst.append(tmp);
             tmp.clear();
@@ -398,26 +397,25 @@ void SortDialog::init()
     const QRect range = d->selection->lastRange();
     const Region region(range, sheet);
 
-    if (region.isColumnSelected()) /* entire columns */ {
+    if (region.isColumnSelected()) { /* entire columns */
         d->mainWidget.m_sortHorizontal->setEnabled(false);
         d->mainWidget.m_sortVertical->setChecked(true);
 
         const bool hasHeader = d->hasHeader(region, Qt::Horizontal);
         d->mainWidget.m_useHeader->setChecked(hasHeader);
         d->createAvailableIndices(region, Qt::Horizontal);
-    }
-    else if (region.isRowSelected()) /* entire rows */ {
+    } else if (region.isRowSelected()) { /* entire rows */
         d->mainWidget.m_sortVertical->setEnabled(false);
         d->mainWidget.m_sortHorizontal->setChecked(true);
 
         const bool hasHeader = d->hasHeader(region, Qt::Vertical);
         d->mainWidget.m_useHeader->setChecked(hasHeader);
         d->createAvailableIndices(region, Qt::Vertical);
-    } else /* ordinary cell range */ {
-        if (range.top() == range.bottom()) /* only one row */{
+    } else { /* ordinary cell range */
+        if (range.top() == range.bottom()) { /* only one row */
             d->mainWidget.m_sortVertical->setEnabled(false);
             d->mainWidget.m_sortHorizontal->setChecked(true);
-        } else if (range.left() == range.right()) /* only one column */ {
+        } else if (range.left() == range.right()) { /* only one column */
             d->mainWidget.m_sortHorizontal->setEnabled(false);
             d->mainWidget.m_sortVertical->setChecked(true);
         } else {
@@ -428,7 +426,7 @@ void SortDialog::init()
             if (hasColumnHeader && range.top() + 1 == range.bottom()) /* only one data row */ {
                 d->mainWidget.m_sortVertical->setEnabled(false);
             }
-            if (hasRowHeader && range.left() + 1 == range.right()) /* only one data column */ {
+            if (hasRowHeader && range.left() + 1 == range.right()) { /* only one data column */
                 d->mainWidget.m_sortHorizontal->setEnabled(false);
             }
 #endif
@@ -498,8 +496,9 @@ void SortDialog::accept()
             if (list[i] == ',') {
                 clist.append(tmp.trimmed());
                 tmp.clear();
-            } else
+            } else {
                 tmp += list[i];
+            }
         }
 
         command->setUseCustomList(true);
@@ -535,7 +534,7 @@ void SortDialog::useHeaderChanged(bool enable)
 
 void SortDialog::itemActivated(QTableWidgetItem *item)
 {
-    if (item->column() == 1) /* Sort Order */ {
+    if (item->column() == 1) { /* Sort Order */
         if (item->data(Qt::UserRole).value<Qt::SortOrder>() == Qt::AscendingOrder) {
             item->setIcon(koIcon("view-sort-descending"));
             item->setText(i18n("Descending"));
@@ -545,7 +544,7 @@ void SortDialog::itemActivated(QTableWidgetItem *item)
             item->setText(i18n("Ascending"));
             item->setData(Qt::UserRole, QVariant::fromValue(Qt::AscendingOrder));
         }
-    } else if (item->column() == 2) /* Case Sensitivity */ {
+    } else if (item->column() == 2) { /* Case Sensitivity */
         if (item->checkState() == Qt::Checked) {
             item->setCheckState(Qt::Unchecked);
             item->setText(i18n("Case Insensitive"));
@@ -591,7 +590,7 @@ void SortDialog::addCriterion()
     QTableWidgetItem *item;
     const bool useHeader = d->mainWidget.m_useHeader->isChecked();
     // Take the first item from the map of available items.
-    if (d->mainWidget.m_sortVertical->isChecked()) /* data grouped in rows; criteria/header per column */ {
+    if (d->mainWidget.m_sortVertical->isChecked()) { /* data grouped in rows; criteria/header per column */
         const QList<int> keys = d->columns;
         if (keys.isEmpty()) {
             return;

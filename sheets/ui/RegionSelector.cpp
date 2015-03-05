@@ -42,22 +42,22 @@ using namespace Calligra::Sheets;
 class RegionSelector::Private
 {
 public:
-    Selection* selection;
-    QDialog* parentDialog;
-    KDialog* dialog;
-    KTextEdit* textEdit;
-    QToolButton* button;
-    FormulaEditorHighlighter* highlighter;
+    Selection *selection;
+    QDialog *parentDialog;
+    KDialog *dialog;
+    KTextEdit *textEdit;
+    QToolButton *button;
+    FormulaEditorHighlighter *highlighter;
     DisplayMode displayMode;
     SelectionMode selectionMode;
-    static RegionSelector* s_focussedSelector;
+    static RegionSelector *s_focussedSelector;
 };
 
-RegionSelector* RegionSelector::Private::s_focussedSelector = 0;
+RegionSelector *RegionSelector::Private::s_focussedSelector = 0;
 
-RegionSelector::RegionSelector(QWidget* parent)
-        : QWidget(parent),
-        d(new Private)
+RegionSelector::RegionSelector(QWidget *parent)
+    : QWidget(parent),
+      d(new Private)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -75,10 +75,10 @@ RegionSelector::RegionSelector(QWidget* parent)
     d->textEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     d->textEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    d->textEdit->setFixedHeight(d->button->height() - 2*d->textEdit->frameWidth());   // FIXME
+    d->textEdit->setFixedHeight(d->button->height() - 2 * d->textEdit->frameWidth()); // FIXME
     d->textEdit->setTabChangesFocus(true);
 
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
     layout->setSpacing(2);
     layout->addWidget(d->textEdit);
@@ -103,24 +103,24 @@ void RegionSelector::setSelectionMode(SelectionMode mode)
     // TODO adjust selection
 }
 
-void RegionSelector::setSelection(Selection* selection)
+void RegionSelector::setSelection(Selection *selection)
 {
     d->selection = selection;
     d->highlighter = new FormulaEditorHighlighter(d->textEdit, d->selection);
     connect(d->selection, SIGNAL(changed(Region)), this, SLOT(choiceChanged()));
 }
 
-void RegionSelector::setDialog(QDialog* dialog)
+void RegionSelector::setDialog(QDialog *dialog)
 {
     d->parentDialog = dialog;
 }
 
-KTextEdit* RegionSelector::textEdit() const
+KTextEdit *RegionSelector::textEdit() const
 {
     return d->textEdit;
 }
 
-bool RegionSelector::eventFilter(QObject* object, QEvent* event)
+bool RegionSelector::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::Close) {
         if (object == d->dialog  && d->button->isChecked()) {
@@ -145,7 +145,7 @@ bool RegionSelector::eventFilter(QObject* object, QEvent* event)
 void RegionSelector::switchDisplayMode(bool state)
 {
     Q_UNUSED(state)
-    kDebug() ;
+    kDebug();
 
     if (d->displayMode == Widget) {
         d->displayMode = Dialog;
@@ -162,8 +162,8 @@ void RegionSelector::switchDisplayMode(bool state)
             d->dialog->setCaption(i18n("Select Multiple Cells"));
         }
 
-        QWidget* widget = new QWidget(d->dialog);
-        QHBoxLayout* layout = new QHBoxLayout(widget);
+        QWidget *widget = new QWidget(d->dialog);
+        QHBoxLayout *layout = new QHBoxLayout(widget);
         layout->setMargin(0);
         layout->setSpacing(0);
         layout->addWidget(d->textEdit);
@@ -189,8 +189,9 @@ void RegionSelector::switchDisplayMode(bool state)
 
 void RegionSelector::choiceChanged()
 {
-    if (Private::s_focussedSelector != this)
+    if (Private::s_focussedSelector != this) {
         return;
+    }
 
     if (d->selection->isValid()) {
         QString area = d->selection->name();

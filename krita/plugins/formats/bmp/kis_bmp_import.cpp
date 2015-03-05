@@ -39,7 +39,6 @@
 #include <kis_node.h>
 #include <kis_group_layer.h>
 
-
 K_PLUGIN_FACTORY(KisBMPImportFactory, registerPlugin<KisBMPImport>();)
 K_EXPORT_PLUGIN(KisBMPImportFactory("calligrafilters"))
 
@@ -51,17 +50,19 @@ KisBMPImport::~KisBMPImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "BMP import! From:" << from << ", To:" << to << 0;
 
-    if (to != "application/x-krita")
+    if (to != "application/x-krita") {
         return KisImportExportFilter::BadMimeType;
+    }
 
-        KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
 
-    if (!doc)
+    if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     QString filename = m_chain->inputFile();
 
@@ -70,13 +71,13 @@ KisImportExportFilter::ConversionStatus KisBMPImport::convert(const QByteArray& 
     if (!filename.isEmpty()) {
         KUrl url(filename);
 
-        if (url.isEmpty())
+        if (url.isEmpty()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
         if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
             return KisImportExportFilter::FileNotFound;
         }
-
 
         QString localFile = url.toLocalFile();
         QImage img(localFile);

@@ -68,15 +68,18 @@ enum XlsxDocumentType {
 class XlsxImport::Private
 {
 public:
-    Private() : type(XlsxDocument), macrosEnabled(false) {
+    Private() : type(XlsxDocument), macrosEnabled(false)
+    {
     }
 
-    const char* mainDocumentContentType() const
+    const char *mainDocumentContentType() const
     {
-        if (type == XlsxMacroDocument)
+        if (type == XlsxMacroDocument) {
             return MSOOXML::ContentTypes::spreadsheetMacroDocument;
-        if (type == XlsxTemplate)
+        }
+        if (type == XlsxTemplate) {
             return MSOOXML::ContentTypes::spreadsheetTemplate;
+        }
         return MSOOXML::ContentTypes::spreadsheetDocument;
     }
 
@@ -84,8 +87,8 @@ public:
     bool macrosEnabled;
 };
 
-XlsxImport::XlsxImport(QObject* parent, const QVariantList &)
-        : MSOOXML::MsooXmlImport(QLatin1String("spreadsheet"), parent), d(new Private)
+XlsxImport::XlsxImport(QObject *parent, const QVariantList &)
+    : MSOOXML::MsooXmlImport(QLatin1String("spreadsheet"), parent), d(new Private)
 {
 }
 
@@ -94,43 +97,38 @@ XlsxImport::~XlsxImport()
     delete d;
 }
 
-bool XlsxImport::acceptsSourceMimeType(const QByteArray& mime) const
+bool XlsxImport::acceptsSourceMimeType(const QByteArray &mime) const
 {
     kDebug() << "Entering XLSX Import filter: from " << mime;
     if (mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
         d->type = XlsxDocument;
         d->macrosEnabled = false;
-    }
-    else if (mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.template") {
+    } else if (mime == "application/vnd.openxmlformats-officedocument.spreadsheetml.template") {
         d->type = XlsxTemplate;
         d->macrosEnabled = false;
-    }
-    else if (mime == "application/vnd.ms-excel.sheet.macroEnabled") {
+    } else if (mime == "application/vnd.ms-excel.sheet.macroEnabled") {
         d->type = XlsxMacroDocument;
         d->macrosEnabled = true;
-    }
-    else if (mime == "application/vnd.ms-excel.sheet.macroEnabled.12") {
+    } else if (mime == "application/vnd.ms-excel.sheet.macroEnabled.12") {
         d->type = XlsxDocument;
         d->macrosEnabled = true;
-    }
-    else if (mime == "application/vnd.ms-excel.template.macroEnabled.12") {
+    } else if (mime == "application/vnd.ms-excel.template.macroEnabled.12") {
         d->type = XlsxTemplate;
         d->macrosEnabled = true;
-    }
-    else {
+    } else {
         return false;
     }
     return true;
 }
 
-bool XlsxImport::acceptsDestinationMimeType(const QByteArray& mime) const
+bool XlsxImport::acceptsDestinationMimeType(const QByteArray &mime) const
 {
     kDebug() << "Entering XLSX Import filter: to " << mime;
     return mime == "application/vnd.oasis.opendocument.spreadsheet";
 }
 
 KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
-        MSOOXML::MsooXmlRelationships *relationships, QString& errorMessage)
+        MSOOXML::MsooXmlRelationships *relationships, QString &errorMessage)
 {
     // more here...
     // 0. temporary styles
@@ -576,16 +574,16 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
 
     MSOOXML::DrawingMLTheme themes;
     const QString spreadThemePathAndFile(relationships->targetForType(
-        spreadPath, spreadFile,
-        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
+            spreadPath, spreadFile,
+            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
     kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
 
     QString spreadThemePath, spreadThemeFile;
     MSOOXML::Utils::splitPathAndFile(spreadThemePathAndFile, &spreadThemePath, &spreadThemeFile);
 
     MSOOXML::MsooXmlThemesReader themesReader(writers);
-    MSOOXML::MsooXmlThemesReaderContext themecontext(themes, relationships, (MSOOXML::MsooXmlImport*)this,
-        spreadThemePath, spreadThemeFile);
+    MSOOXML::MsooXmlThemesReaderContext themecontext(themes, relationships, (MSOOXML::MsooXmlImport *)this,
+            spreadThemePath, spreadThemeFile);
 
     KoFilter::ConversionStatus status
         = loadAndParseDocument(&themesReader, spreadThemePathAndFile, errorMessage, &themecontext);
@@ -625,9 +623,9 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     {
         XlsxXmlCommentsReader commentsReader(writers);
         XlsxXmlCommentsReaderContext context(comments, &themes, colorContext.colorIndices);
-        RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
+        RETURN_IF_ERROR(loadAndParseDocumentFromFileIfExists(
 //! @todo only support "xl/comments1.xml" filename for comments?
-            "xl/comments1.xml", &commentsReader, writers, errorMessage, &context) )
+                            "xl/comments1.xml", &commentsReader, writers, errorMessage, &context))
     }
 
     reportProgress(40);

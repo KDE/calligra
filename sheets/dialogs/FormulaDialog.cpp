@@ -65,8 +65,8 @@
 
 using namespace Calligra::Sheets;
 
-FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& formulaName)
-        : KDialog(parent)
+FormulaDialog::FormulaDialog(QWidget *parent, Selection *selection, CellEditorBase *editor, const QString &formulaName)
+    : KDialog(parent)
 {
     setCaption(i18n("Function"));
     setButtons(Ok | Cancel);
@@ -80,12 +80,13 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     Cell cell(m_selection->activeSheet(), m_selection->marker());
     m_oldText = cell.userInput();
     // Make sure that there is a cell editor running.
-    if (cell.userInput().isEmpty())
+    if (cell.userInput().isEmpty()) {
         m_editor->setText("=");
-    else if (cell.userInput().at(0) != '=')
+    } else if (cell.userInput().at(0) != '=') {
         m_editor->setText('=' + cell.userInput());
-    else
+    } else {
         m_editor->setText(cell.userInput());
+    }
 
     QWidget *page = new QWidget(this);
     setMainWidget(page);
@@ -118,7 +119,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     functions->setModel(proxyModel);
 
-    QItemSelectionModel* selectionmodel = new QItemSelectionModel(proxyModel, this);
+    QItemSelectionModel *selectionmodel = new QItemSelectionModel(proxyModel, this);
     functions->setSelectionModel(selectionmodel);
     connect(selectionmodel, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotSelected()));
@@ -204,7 +205,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
                  this, SLOT(slotSelected(QString)) );
     */
     connect(functions, SIGNAL(activated(QModelIndex)),
-            this , SLOT(slotDoubleClicked(QModelIndex)));
+            this, SLOT(slotDoubleClicked(QModelIndex)));
 
     slotActivated(i18n("All"));
 
@@ -236,13 +237,14 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     m_column = m_selection->marker().x();
     m_row = m_selection->marker().y();
 
-    if (tmp_oldText.isEmpty())
+    if (tmp_oldText.isEmpty()) {
         result->setText("=");
-    else {
-        if (tmp_oldText.at(0) != '=')
+    } else {
+        if (tmp_oldText.at(0) != '=') {
             result->setText('=' + tmp_oldText);
-        else
+        } else {
             result->setText(tmp_oldText);
+        }
     }
 
     // Allow the user to select cells on the spreadsheet.
@@ -277,8 +279,9 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     searchFunct->setCompletionMode(KGlobalSettings::CompletionAuto);
     searchFunct->setCompletionObject(&listFunct, true);
 
-    if (functions->currentIndex().isValid())
+    if (functions->currentIndex().isValid()) {
         selectFunction->setEnabled(false);
+    }
 
     connect(searchFunct, SIGNAL(textChanged(QString)),
             this, SLOT(slotSearchText(QString)));
@@ -307,27 +310,30 @@ void FormulaDialog::slotPressReturn()
 void FormulaDialog::slotSearchText(const QString &_text)
 {
     proxyModel->setFilterFixedString(_text);
-    if (functions->currentIndex().isValid())
+    if (functions->currentIndex().isValid()) {
         functions->scrollTo(functions->currentIndex());
+    }
 }
 
-bool FormulaDialog::eventFilter(QObject* obj, QEvent* ev)
+bool FormulaDialog::eventFilter(QObject *obj, QEvent *ev)
 {
-    if (obj == firstElement && ev->type() == QEvent::FocusIn)
+    if (obj == firstElement && ev->type() == QEvent::FocusIn) {
         m_focus = firstElement;
-    else if (obj == secondElement && ev->type() == QEvent::FocusIn)
+    } else if (obj == secondElement && ev->type() == QEvent::FocusIn) {
         m_focus = secondElement;
-    else if (obj == thirdElement && ev->type() == QEvent::FocusIn)
+    } else if (obj == thirdElement && ev->type() == QEvent::FocusIn) {
         m_focus = thirdElement;
-    else if (obj == fourElement && ev->type() == QEvent::FocusIn)
+    } else if (obj == fourElement && ev->type() == QEvent::FocusIn) {
         m_focus = fourElement;
-    else if (obj == fiveElement && ev->type() == QEvent::FocusIn)
+    } else if (obj == fiveElement && ev->type() == QEvent::FocusIn) {
         m_focus = fiveElement;
-    else
+    } else {
         return false;
+    }
 
-    if (m_focus)
+    if (m_focus) {
         m_selection->startReferenceSelection();
+    }
 
     return false;
 }
@@ -348,8 +354,9 @@ void FormulaDialog::slotOk()
     if (m_editor != 0) {
         Q_ASSERT(m_editor);
         QString tmp = result->text();
-        if (tmp.at(0) != '=')
+        if (tmp.at(0) != '=') {
             tmp = '=' + tmp;
+        }
         int pos = m_editor->cursorPosition() + tmp.length();
         m_editor->setText(tmp);
         m_editor->widget()->setFocus();
@@ -390,14 +397,16 @@ void FormulaDialog::slotSelectButton()
     }
 }
 
-void FormulaDialog::slotChangeText(const QString&)
+void FormulaDialog::slotChangeText(const QString &)
 {
     // Test the lock
-    if (!refresh_result)
+    if (!refresh_result) {
         return;
+    }
 
-    if (m_focus == 0)
+    if (m_focus == 0) {
         return;
+    }
 
     QString tmp = m_leftText + m_funcName + '(' + createFormula() + ')' + m_rightText;
 
@@ -408,8 +417,9 @@ QString FormulaDialog::createFormula()
 {
     QString tmp("");
 
-    if (!m_desc)
+    if (!m_desc) {
         return QString();
+    }
 
     bool first = true;
 
@@ -422,43 +432,49 @@ QString FormulaDialog::createFormula()
 
     if (!secondElement->text().isEmpty() && count >= 2) {
         first = false;
-        if (!first)
+        if (!first) {
             tmp = tmp + ';' + createParameter(secondElement->text(), 1);
-        else
+        } else {
             tmp = tmp + createParameter(secondElement->text(), 1);
+        }
     }
     if (!thirdElement->text().isEmpty() && count >= 3) {
         first = false;
-        if (!first)
+        if (!first) {
             tmp = tmp + ';' + createParameter(thirdElement->text(), 2);
-        else
+        } else {
             tmp = tmp + createParameter(thirdElement->text(), 2);
+        }
     }
     if (!fourElement->text().isEmpty() && count >= 4) {
         first = false;
-        if (!first)
+        if (!first) {
             tmp = tmp + ';' + createParameter(fourElement->text(), 3);
-        else
+        } else {
             tmp = tmp + createParameter(fourElement->text(), 3);
+        }
     }
     if (!fiveElement->text().isEmpty() && count >= 5) {
         first = false;
-        if (!first)
+        if (!first) {
             tmp = tmp + ';' + createParameter(fiveElement->text(), 4);
-        else
+        } else {
             tmp = tmp + createParameter(fiveElement->text(), 4);
+        }
     }
 
-    return(tmp);
+    return (tmp);
 }
 
-QString FormulaDialog::createParameter(const QString& _text, int param)
+QString FormulaDialog::createParameter(const QString &_text, int param)
 {
-    if (_text.isEmpty())
+    if (_text.isEmpty()) {
         return QString("");
+    }
 
-    if (!m_desc)
+    if (!m_desc) {
         return QString("");
+    }
 
     QString text;
 
@@ -471,8 +487,9 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
         Q_UNUSED(tmp);
 
         //In case of number or boolean return _text, else return value as KSpread_String
-        if (isNumber || _text.toUpper() == "FALSE" || _text.toUpper() == "TRUE")
+        if (isNumber || _text.toUpper() == "FALSE" || _text.toUpper() == "TRUE") {
             return _text;
+        }
     }
     // fall through
     case KSpread_String: {
@@ -487,8 +504,9 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
             while ((pos = tmp.indexOf('"', start)) != -1) {
                 if (tmp[pos - 1] != '\\')
                     tmp.replace(pos, 1, "\\\"");
-                else
+                else {
                     start = pos + 1;
+                }
             }
 
             text += tmp;
@@ -505,14 +523,16 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
                 while ((pos = tmp.indexOf('"', start)) != -1) {
                     if (tmp[pos - 1] != '\\')
                         tmp.replace(pos, 1, "\\\"");
-                    else
+                    else {
                         start = pos + 1;
+                    }
                 }
 
                 text += tmp;
                 text += '"';
-            } else
+            } else {
                 text = _text;
+            }
         }
     }
     return text;
@@ -530,8 +550,8 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
     return text;
 }
 
-static void showEntry(KLineEdit* edit, QLabel* label,
-                      FunctionDescription* desc, int param)
+static void showEntry(KLineEdit *edit, QLabel *label,
+                      FunctionDescription *desc, int param)
 {
     edit->show();
     label->setText(desc->param(param).helpText() + ':');
@@ -557,16 +577,15 @@ static void showEntry(KLineEdit* edit, QLabel* label,
         break;
     }
 
-
-
 }
 
 void FormulaDialog::slotDoubleClicked(QModelIndex item)
 {
     if (!item.isValid()) {
         item = functions->currentIndex();
-        if (!item.isValid())
+        if (!item.isValid()) {
             return;
+        }
     }
     refresh_result = false;
     if (!m_desc) {
@@ -623,8 +642,9 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
         fiveElement->hide();
     }
 
-    if (m_desc->params() > 5)
+    if (m_desc->params() > 5) {
         kDebug(36001) << "Error in param->nb_param";
+    }
     refresh_result = true;
 
     //
@@ -643,8 +663,9 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
     {
         const QString text = proxyModel->data(functions->currentIndex()).toString();
         result->setText(m_leftText + text + "()" + m_rightText);
-        if (result->text()[0] != '=')
+        if (result->text()[0] != '=') {
             result->setText('=' + result->text());
+        }
     }
 
     //
@@ -660,30 +681,34 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
     slotChangeText("");
 }
 
-void FormulaDialog::slotIndexSelected(const QModelIndex& index)
+void FormulaDialog::slotIndexSelected(const QModelIndex &index)
 {
     // This slot is only called when single-click to activate is uesd in the listbox, when the mouse moves over a item; to prevent
     // the active selection to change after the user activated one, slotSelected is only called when the current tab is the Help tab,
     // and not when the parameters tab is active
-    if (m_tabwidget->currentIndex() != 0) return;
+    if (m_tabwidget->currentIndex() != 0) {
+        return;
+    }
     QString function = proxyModel->data(index).toString();
     slotSelected(function);
 }
 
-void FormulaDialog::slotSelected(const QString& afunction)
+void FormulaDialog::slotSelected(const QString &afunction)
 {
     QString function = afunction;
-    if (function.isNull())
+    if (function.isNull()) {
         function = proxyModel->data(functions->currentIndex()).toString();
+    }
 
-    FunctionDescription* desc = FunctionRepository::self()->functionInfo(function);
+    FunctionDescription *desc = FunctionRepository::self()->functionInfo(function);
     if (!desc) {
         m_browser->setText(i18n("Description is not available."));
         return;
     }
 
-    if (functions->currentIndex().isValid())
+    if (functions->currentIndex().isValid()) {
         selectFunction->setEnabled(true);
+    }
 
     // Lock
     refresh_result = false;
@@ -705,11 +730,13 @@ void FormulaDialog::slotSelected(const QString& afunction)
 }
 
 // from hyperlink in the "Related Function"
-void FormulaDialog::slotShowFunction(const QString& function)
+void FormulaDialog::slotShowFunction(const QString &function)
 {
-    FunctionDescription* desc =
+    FunctionDescription *desc =
         FunctionRepository::self()->functionInfo(function);
-    if (!desc) return;
+    if (!desc) {
+        return;
+    }
 
     // select the category
     QString category = desc->group();
@@ -720,16 +747,18 @@ void FormulaDialog::slotShowFunction(const QString& function)
     int row = functionsModel->stringList().indexOf(function);
     const QModelIndex sourcemodelindex = functionsModel->index(row, 0);
     const QModelIndex proxymodelindex = proxyModel->mapFromSource(sourcemodelindex);
-    if (proxymodelindex.isValid())
+    if (proxymodelindex.isValid()) {
         functions->setCurrentIndex(proxymodelindex);
+    }
 
     slotSelected(function);
 }
 
 void FormulaDialog::slotSelectionChanged()
 {
-    if (!m_focus)
+    if (!m_focus) {
         return;
+    }
 
     if (m_selection->isValid()) {
         QString area = m_selection->name();
@@ -737,21 +766,23 @@ void FormulaDialog::slotSelectionChanged()
     }
 }
 
-void FormulaDialog::slotActivated(const QString& category)
+void FormulaDialog::slotActivated(const QString &category)
 {
     QStringList lst;
-    if (category == i18n("All"))
+    if (category == i18n("All")) {
         lst = FunctionRepository::self()->functionNames();
-    else
+    } else {
         lst = FunctionRepository::self()->functionNames(category);
+    }
 
     kDebug(36001) << "category:" << category << " (" << lst.count() << "functions)";
 
     functionsModel->setStringList(lst);
 
     QStringList upperList;
-    for (QStringList::Iterator it = lst.begin(); it != lst.end(); ++it)
+    for (QStringList::Iterator it = lst.begin(); it != lst.end(); ++it) {
         upperList.append((*it).toUpper());
+    }
     listFunct.setItems(upperList);
 
     // Go to the first function in the list.
@@ -759,7 +790,7 @@ void FormulaDialog::slotActivated(const QString& category)
     slotSelected(text);
 }
 
-void FormulaDialog::closeEvent(QCloseEvent * e)
+void FormulaDialog::closeEvent(QCloseEvent *e)
 {
     deleteLater();
     e->accept();

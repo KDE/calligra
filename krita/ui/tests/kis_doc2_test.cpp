@@ -38,7 +38,6 @@ void KisDocumentTest::testOpenImageTwiceInSameDoc()
     QString fname2 = QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra";
     QString fname = QString(FILES_DATA_DIR) + QDir::separator() + "load_test2.kra";
 
-
     Q_ASSERT(!fname.isEmpty());
     Q_ASSERT(!fname2.isEmpty());
 
@@ -47,7 +46,6 @@ void KisDocumentTest::testOpenImageTwiceInSameDoc()
     doc->loadNativeFormat(fname);
     doc->loadNativeFormat(fname2);
 }
-
 
 QTEST_KDEMAIN(KisDocumentTest, GUI)
 #include "kis_doc2_test.moc"

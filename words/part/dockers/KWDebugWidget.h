@@ -39,7 +39,7 @@ public:
 
     friend class KWDebugDocker;
 
-    void setCanvas(KWCanvas* canvas);
+    void setCanvas(KWCanvas *canvas);
 
     void unsetCanvas();
 

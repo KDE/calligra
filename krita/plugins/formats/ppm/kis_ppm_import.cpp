@@ -55,18 +55,20 @@ KisPPMImport::~KisPPMImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray &from, const QByteArray &to)
 {
     Q_UNUSED(from);
     dbgFile << "Importing using PPMImport!";
 
-    if (to != "application/x-krita")
+    if (to != "application/x-krita") {
         return KisImportExportFilter::BadMimeType;
+    }
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
 
-    if (!doc)
+    if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     QString filename = m_chain->inputFile();
 
@@ -76,10 +78,10 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& 
 
     KUrl url(filename);
 
-
     dbgFile << "Import: " << url;
-    if (url.isEmpty())
+    if (url.isEmpty()) {
         return KisImportExportFilter::FileNotFound;
+    }
 
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
         dbgFile << "Inexistant file";
@@ -108,12 +110,14 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(const QByteArray& 
     return KisImportExportFilter::CreationError;
 }
 
-int readNumber(QIODevice* device)
+int readNumber(QIODevice *device)
 {
     char c;
     int val = 0;
     while (true) {
-        if (!device->getChar(&c)) break; // End of the file
+        if (!device->getChar(&c)) {
+            break;    // End of the file
+        }
         if (isdigit(c)) {
             val = 10 * val + c - '0';
         } else if (c == '#') {
@@ -129,9 +133,11 @@ int readNumber(QIODevice* device)
 class KisPpmFlow
 {
 public:
-    KisPpmFlow() {
+    KisPpmFlow()
+    {
     }
-    virtual ~KisPpmFlow() {
+    virtual ~KisPpmFlow()
+    {
     }
     virtual void nextRow() = 0;
     virtual bool valid() = 0;
@@ -144,43 +150,55 @@ public:
 class KisAsciiPpmFlow : public KisPpmFlow
 {
 public:
-    KisAsciiPpmFlow(QIODevice* device) : m_device(device) {
+    KisAsciiPpmFlow(QIODevice *device) : m_device(device)
+    {
     }
-    virtual ~KisAsciiPpmFlow() {
+    virtual ~KisAsciiPpmFlow()
+    {
     }
-    virtual void nextRow() {
+    virtual void nextRow()
+    {
     }
-    virtual bool valid() {
+    virtual bool valid()
+    {
         return !m_device->atEnd();
     }
-    virtual bool nextUint1() {
+    virtual bool nextUint1()
+    {
         return readNumber(m_device) == 1;
     }
-    virtual quint8 nextUint8() {
+    virtual quint8 nextUint8()
+    {
         return readNumber(m_device);
     }
-    virtual quint16 nextUint16() {
+    virtual quint16 nextUint16()
+    {
         return readNumber(m_device);
     }
 private:
-    QIODevice* m_device;
+    QIODevice *m_device;
 };
 
 class KisBinaryPpmFlow : public KisPpmFlow
 {
 public:
-    KisBinaryPpmFlow(QIODevice* device, int lineWidth) : m_pos(0), m_device(device), m_lineWidth(lineWidth) {
+    KisBinaryPpmFlow(QIODevice *device, int lineWidth) : m_pos(0), m_device(device), m_lineWidth(lineWidth)
+    {
     }
-    virtual ~KisBinaryPpmFlow() {
+    virtual ~KisBinaryPpmFlow()
+    {
     }
-    virtual void nextRow() {
+    virtual void nextRow()
+    {
         m_array = m_device->read(m_lineWidth);
         m_ptr = m_array.data();
     }
-    virtual bool valid() {
+    virtual bool valid()
+    {
         return m_array.size() == m_lineWidth;
     }
-    virtual bool nextUint1() {
+    virtual bool nextUint1()
+    {
         if (m_pos == 0) {
             m_current = nextUint8();
             m_pos = 8;
@@ -190,26 +208,28 @@ public:
         m_current = m_current >> 1;
         return v;
     }
-    virtual quint8 nextUint8() {
-        quint8 v = *reinterpret_cast<quint8*>(m_ptr);
+    virtual quint8 nextUint8()
+    {
+        quint8 v = *reinterpret_cast<quint8 *>(m_ptr);
         m_ptr += 1;
         return v;
     }
-    virtual quint16 nextUint16() {
-        quint16 v = *reinterpret_cast<quint16*>(m_ptr);
+    virtual quint16 nextUint16()
+    {
+        quint16 v = *reinterpret_cast<quint16 *>(m_ptr);
         m_ptr += 2;
         return qFromBigEndian(v);
     }
 private:
     int m_pos;
     quint8 m_current;
-    char* m_ptr;
-    QIODevice* m_device;
+    char *m_ptr;
+    QIODevice *m_device;
     QByteArray m_array;
     int m_lineWidth;
 };
 
-KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* device, KisDocument* doc)
+KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice *device, KisDocument *doc)
 {
     dbgFile << "Start decoding file";
     device->open(QIODevice::ReadOnly);
@@ -219,7 +239,9 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
 
     QByteArray array = device->read(2);
 
-    if (array.size() < 2) return KisImportExportFilter::CreationError;
+    if (array.size() < 2) {
+        return KisImportExportFilter::CreationError;
+    }
 
     // Read the type of the ppm file
     enum { Puk, P1, P2, P3, P4, P5, P6 } fileType = Puk; // Puk => unknown
@@ -252,7 +274,9 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
 
     Q_ASSERT(channels != -1);
     char c; device->getChar(&c);
-    if (!isspace(c)) return KisImportExportFilter::CreationError; // Invalid file, it should have a separator now
+    if (!isspace(c)) {
+        return KisImportExportFilter::CreationError;    // Invalid file, it should have a separator now
+    }
 
     // Read width
     int width = readNumber(device);
@@ -267,7 +291,7 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
 
     // Select the colorspace depending on the maximum value
     int pixelsize = -1;
-    const KoColorSpace* colorSpace = 0;
+    const KoColorSpace *colorSpace = 0;
     if (maxval <= 255) {
         if (channels == 1 || channels == 0) {
             pixelsize = 1;
@@ -292,7 +316,7 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
     KisImageSP image = new KisImage(doc->createUndoStore(), width, height, colorSpace, "built image");
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
-    KisPpmFlow* ppmFlow = 0;
+    KisPpmFlow *ppmFlow = 0;
     if (isAscii) {
         ppmFlow = new KisAsciiPpmFlow(device);
     } else {
@@ -302,7 +326,9 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
     for (int v = 0; v < height; ++v) {
         KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, v, width);
         ppmFlow->nextRow();
-        if (!ppmFlow->valid()) return KisImportExportFilter::CreationError;
+        if (!ppmFlow->valid()) {
+            return KisImportExportFilter::CreationError;
+        }
         if (maxval <= 255) {
             if (channels == 3) {
                 do {
@@ -313,15 +339,15 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
                 } while (it->nextPixel());
             } else if (channels == 1) {
                 do {
-                    *reinterpret_cast<quint8*>(it->rawData()) = ppmFlow->nextUint8();
+                    *reinterpret_cast<quint8 *>(it->rawData()) = ppmFlow->nextUint8();
                     colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
                 } while (it->nextPixel());
             } else if (channels == 0) {
                 do {
                     if (ppmFlow->nextUint1()) {
-                        *reinterpret_cast<quint8*>(it->rawData()) = 255;
+                        *reinterpret_cast<quint8 *>(it->rawData()) = 255;
                     } else {
-                        *reinterpret_cast<quint8*>(it->rawData()) = 0;
+                        *reinterpret_cast<quint8 *>(it->rawData()) = 0;
                     }
                     colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
                 } while (it->nextPixel());
@@ -336,7 +362,7 @@ KisImportExportFilter::ConversionStatus KisPPMImport::loadFromDevice(QIODevice* 
                 } while (it->nextPixel());
             } else if (channels == 1) {
                 do {
-                    *reinterpret_cast<quint16*>(it->rawData()) = ppmFlow->nextUint16();
+                    *reinterpret_cast<quint16 *>(it->rawData()) = ppmFlow->nextUint16();
                     colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
                 } while (it->nextPixel());
             }

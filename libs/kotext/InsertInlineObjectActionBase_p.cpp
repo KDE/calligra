@@ -27,8 +27,8 @@
 #include <kdebug.h>
 
 InsertInlineObjectActionBase::InsertInlineObjectActionBase(KoCanvasBase *canvas, const QString &name)
-        : KAction(name, canvas->canvasWidget()),
-        m_canvas(canvas)
+    : KAction(name, canvas->canvasWidget()),
+      m_canvas(canvas)
 {
     connect(this, SIGNAL(triggered(bool)), this, SLOT(activated()));
 }

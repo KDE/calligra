@@ -31,7 +31,6 @@ class KisTool;
 class KisToolFreehand;
 class KisCoordinatesConverter;
 
-
 class KRITAUI_EXPORT KisPaintingInformationBuilder : public QObject
 {
     Q_OBJECT
@@ -58,7 +57,7 @@ protected:
 private:
 
     KisPaintInformation createPaintingInformation(KoPointerEvent *event,
-                                                  int timeElapsed);
+            int timeElapsed);
 
     /**
      * Defines how many descret samples are stored in a precomputed array

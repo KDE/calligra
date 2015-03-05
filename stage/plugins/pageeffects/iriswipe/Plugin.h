@@ -24,10 +24,11 @@
 
 #include <QVariantList>
 
-class Plugin : public QObject {
+class Plugin : public QObject
+{
     Q_OBJECT
 public:
-    Plugin( QObject * parent,  const QVariantList & );
+    Plugin(QObject *parent,  const QVariantList &);
 };
 
 #endif

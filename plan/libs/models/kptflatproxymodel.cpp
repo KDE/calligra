@@ -32,9 +32,8 @@
 namespace KPlato
 {
 
-
 FlatProxyModel::FlatProxyModel(QObject *parent)
-    : QAbstractProxyModel( parent )
+    : QAbstractProxyModel(parent)
 {
 }
 
@@ -45,7 +44,7 @@ void FlatProxyModel::sourceModelDestroyed()
 
 void FlatProxyModel::sourceDataChanged(const QModelIndex &source_top_left, const QModelIndex &source_bottom_right)
 {
-    emit dataChanged( mapFromSource( source_top_left ), mapFromSource( source_bottom_right ) );
+    emit dataChanged(mapFromSource(source_top_left), mapFromSource(source_bottom_right));
 }
 
 void FlatProxyModel::sourceHeaderDataChanged(Qt::Orientation orientation, int start, int end)
@@ -73,28 +72,28 @@ void FlatProxyModel::sourceLayoutChanged()
 
 void FlatProxyModel::sourceRowsAboutToBeInserted(const QModelIndex &source_parent, int start, int end)
 {
-    int rc = sourceModel()->rowCount( source_parent );
-    if ( rc == 0 ) {
-        Q_ASSERT( start == 0 );
-        QModelIndex idx = mapFromSource( source_parent );
+    int rc = sourceModel()->rowCount(source_parent);
+    if (rc == 0) {
+        Q_ASSERT(start == 0);
+        QModelIndex idx = mapFromSource(source_parent);
         //kDebug(planDbg())<<"start<rc"<<source_parent<<start<<end<<":"<<idx;
-        if ( idx.isValid() ) {
-            beginInsertRows( QModelIndex(), idx.row() + start, idx.row() + end );
+        if (idx.isValid()) {
+            beginInsertRows(QModelIndex(), idx.row() + start, idx.row() + end);
         } else {
-            beginInsertRows( QModelIndex(), start, end );
+            beginInsertRows(QModelIndex(), start, end);
         }
-    } else if ( start < rc ) {
-        QModelIndex source_idx = sourceModel()->index( start, 0, source_parent );
-        QModelIndex idx = mapFromSource( source_idx );
+    } else if (start < rc) {
+        QModelIndex source_idx = sourceModel()->index(start, 0, source_parent);
+        QModelIndex idx = mapFromSource(source_idx);
         //kDebug(planDbg())<<"start<rc"<<source_parent<<start<<end<<":"<<idx;
-        beginInsertRows( QModelIndex(), idx.row(), idx.row() + end - start );
-    } else if ( start == rc ) {
-        QModelIndex source_idx = sourceModel()->index( start - 1, 0, source_parent );
-        QModelIndex idx = mapFromSource( source_idx );
+        beginInsertRows(QModelIndex(), idx.row(), idx.row() + end - start);
+    } else if (start == rc) {
+        QModelIndex source_idx = sourceModel()->index(start - 1, 0, source_parent);
+        QModelIndex idx = mapFromSource(source_idx);
         //kDebug(planDbg())<<"start==rc"<<source_parent<<start<<end<<":"<<idx;
-        beginInsertRows( QModelIndex(), idx.row() + 1, idx.row() + 1 + end - start );
+        beginInsertRows(QModelIndex(), idx.row() + 1, idx.row() + 1 + end - start);
     } else {
-        kFatal()<<"Strange data from source model"<<source_parent<<start<<end;
+        kFatal() << "Strange data from source model" << source_parent << start << end;
     }
 }
 
@@ -107,7 +106,7 @@ void FlatProxyModel::sourceRowsInserted(const QModelIndex &source_parent, int st
     endInsertRows();
 }
 
-void FlatProxyModel::sourceRowsAboutToBeRemoved( const QModelIndex &source_parent, int start, int end )
+void FlatProxyModel::sourceRowsAboutToBeRemoved(const QModelIndex &source_parent, int start, int end)
 {
     Q_UNUSED(source_parent);
     Q_UNUSED(start);
@@ -115,7 +114,7 @@ void FlatProxyModel::sourceRowsAboutToBeRemoved( const QModelIndex &source_paren
     beginResetModel();
 }
 
-void FlatProxyModel::sourceRowsRemoved( const QModelIndex &source_parent, int start, int end )
+void FlatProxyModel::sourceRowsRemoved(const QModelIndex &source_parent, int start, int end)
 {
     Q_UNUSED(source_parent);
     Q_UNUSED(start);
@@ -127,7 +126,7 @@ void FlatProxyModel::sourceRowsRemoved( const QModelIndex &source_parent, int st
 
 void FlatProxyModel::sourceRowsAboutToBeMoved(const QModelIndex &source_parent, int start, int end, const QModelIndex &destParent, int destStart)
 {
-    beginMoveRows(source_parent, start, end, destParent, destStart );
+    beginMoveRows(source_parent, start, end, destParent, destStart);
 }
 
 void FlatProxyModel::sourceRowsMoved(const QModelIndex &source_parent, int start, int end, const QModelIndex &destParent, int destStart)
@@ -144,30 +143,30 @@ void FlatProxyModel::sourceRowsMoved(const QModelIndex &source_parent, int start
 
 void FlatProxyModel::setSourceModel(QAbstractItemModel *model)
 {
-    if ( sourceModel() ) {
+    if (sourceModel()) {
         disconnect(sourceModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-                this, SLOT(sourceDataChanged(QModelIndex,QModelIndex)));
+                   this, SLOT(sourceDataChanged(QModelIndex,QModelIndex)));
 
         disconnect(sourceModel(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
-                this, SLOT(sourceHeaderDataChanged(Qt::Orientation,int,int)));
+                   this, SLOT(sourceHeaderDataChanged(Qt::Orientation,int,int)));
 
         disconnect(sourceModel(), SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
-                this, SLOT(sourceRowsAboutToBeInserted(QModelIndex,int,int)));
+                   this, SLOT(sourceRowsAboutToBeInserted(QModelIndex,int,int)));
 
         disconnect(sourceModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
-                this, SLOT(sourceRowsInserted(QModelIndex,int,int)));
+                   this, SLOT(sourceRowsInserted(QModelIndex,int,int)));
 
         disconnect(sourceModel(), SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-                this, SLOT(sourceRowsAboutToBeRemoved(QModelIndex,int,int)));
+                   this, SLOT(sourceRowsAboutToBeRemoved(QModelIndex,int,int)));
 
         disconnect(sourceModel(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
-                this, SLOT(sourceRowsRemoved(QModelIndex,int,int)));
+                   this, SLOT(sourceRowsRemoved(QModelIndex,int,int)));
 
         disconnect(sourceModel(), SIGNAL(layoutAboutToBeChanged()),
-                this, SLOT(sourceLayoutAboutToBeChanged()));
+                   this, SLOT(sourceLayoutAboutToBeChanged()));
 
         disconnect(sourceModel(), SIGNAL(layoutChanged()),
-                this, SLOT(sourceLayoutChanged()));
+                   this, SLOT(sourceLayoutChanged()));
 
         disconnect(sourceModel(), SIGNAL(modelReset()), this, SLOT(sourceReset()));
 
@@ -215,10 +214,10 @@ void FlatProxyModel::setSourceModel(QAbstractItemModel *model)
 
 QModelIndex FlatProxyModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if ( parent.isValid() ) {
+    if (parent.isValid()) {
         return QModelIndex();
     }
-    return createIndex( row, column );
+    return createIndex(row, column);
 }
 
 QModelIndex FlatProxyModel::parent(const QModelIndex &child) const
@@ -235,7 +234,7 @@ int FlatProxyModel::rowCount(const QModelIndex &parent) const
 int FlatProxyModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    if ( sourceModel() == 0 ) {
+    if (sourceModel() == 0) {
         return 0;
     }
     return sourceModel()->columnCount() + 1;
@@ -243,37 +242,37 @@ int FlatProxyModel::columnCount(const QModelIndex &parent) const
 
 bool FlatProxyModel::hasChildren(const QModelIndex &parent) const
 {
-    return rowCount( parent ) > 0;
+    return rowCount(parent) > 0;
 }
 
 QVariant FlatProxyModel::data(const QModelIndex &index, int role) const
 {
-    if ( sourceModel() == 0 || !index.isValid()) {
-        kDebug(planDbg())<<"No source model || invalid index";
+    if (sourceModel() == 0 || !index.isValid()) {
+        kDebug(planDbg()) << "No source model || invalid index";
         return QVariant();
     }
     QModelIndex source_index;
     int col = index.column() - sourceModel()->columnCount();
-    if ( col < 0 ) {
+    if (col < 0) {
         source_index = mapToSource(index);
         //kDebug(planDbg())<<"source column"<<col<<sourceModel()->columnCount();
     } else {
-        source_index = mapToSource( this->index( index.row(), 0 ) );
+        source_index = mapToSource(this->index(index.row(), 0));
         //kDebug(planDbg())<<"proxy column"<<col<<sourceModel()->columnCount();
     }
-    if ( !source_index.isValid() ) {
-        kDebug(planDbg())<<"index valid but source index not valid:"<<index;
+    if (!source_index.isValid()) {
+        kDebug(planDbg()) << "index valid but source index not valid:" << index;
         return QVariant();
     }
     QVariant r;
-    if ( col < 0 ) {
+    if (col < 0) {
         r = sourceModel()->data(source_index, role);
-    } else if ( col == 0 ) {
-        if ( role == Role::ColumnTag ) {
-            r = headerData( col, Qt::Horizontal, role );
+    } else if (col == 0) {
+        if (role == Role::ColumnTag) {
+            r = headerData(col, Qt::Horizontal, role);
         } else {
             source_index = source_index.parent();
-            if ( source_index.isValid() ) {
+            if (source_index.isValid()) {
                 r = sourceModel()->data(source_index, role);
             }
         }
@@ -284,7 +283,7 @@ QVariant FlatProxyModel::data(const QModelIndex &index, int role) const
 
 bool FlatProxyModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if ( sourceModel() == 0 ) {
+    if (sourceModel() == 0) {
         return false;
     }
     QModelIndex source_index = mapToSource(index);
@@ -296,23 +295,23 @@ bool FlatProxyModel::setData(const QModelIndex &index, const QVariant &value, in
 
 QVariant FlatProxyModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if ( sourceModel() == 0 ) {
+    if (sourceModel() == 0) {
         return QVariant();
     }
     int sec = section - sourceModel()->columnCount();
-    if ( sec < 0 ) {
+    if (sec < 0) {
         return sourceModel()->headerData(section, orientation, role);
     }
-    if ( sec == 0 ) {
-        return role == Role::ColumnTag ? "Parent" : i18n( "Parent" );
+    if (sec == 0) {
+        return role == Role::ColumnTag ? "Parent" : i18n("Parent");
     }
     return QVariant();
 }
 
 bool FlatProxyModel::setHeaderData(int section, Qt::Orientation orientation,
-                                          const QVariant &value, int role)
+                                   const QVariant &value, int role)
 {
-    if ( sourceModel() == 0 ) {
+    if (sourceModel() == 0) {
         return false;
     }
     //TODO
@@ -321,7 +320,7 @@ bool FlatProxyModel::setHeaderData(int section, Qt::Orientation orientation,
 
 QMimeData *FlatProxyModel::mimeData(const QModelIndexList &indexes) const
 {
-    if ( sourceModel() == 0 ) {
+    if (sourceModel() == 0) {
         return 0;
     }
     QModelIndexList source_indexes;
@@ -333,7 +332,7 @@ QMimeData *FlatProxyModel::mimeData(const QModelIndexList &indexes) const
 
 QStringList FlatProxyModel::mimeTypes() const
 {
-    if ( sourceModel() == 0 ) {
+    if (sourceModel() == 0) {
         return QStringList();
     }
     return sourceModel()->mimeTypes();
@@ -341,20 +340,21 @@ QStringList FlatProxyModel::mimeTypes() const
 
 Qt::DropActions FlatProxyModel::supportedDropActions() const
 {
-    if ( sourceModel() == 0 ) {
+    if (sourceModel() == 0) {
         return 0;
     }
     return sourceModel()->supportedDropActions();
 }
 
 bool FlatProxyModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                                         int row, int column, const QModelIndex &parent)
+                                  int row, int column, const QModelIndex &parent)
 {
-    if ( sourceModel() == 0 ) {
+    if (sourceModel() == 0) {
         return false;
     }
-    if ((row == -1) && (column == -1))
+    if ((row == -1) && (column == -1)) {
         return sourceModel()->dropMimeData(data, action, -1, -1, mapToSource(parent));
+    }
     int source_destination_row = -1;
     int source_destination_column = -1;
     QModelIndex source_parent;
@@ -369,7 +369,7 @@ bool FlatProxyModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
         source_parent = source_index.parent();
     }
     return sourceModel()->dropMimeData(data, action, source_destination_row,
-                                  source_destination_column, source_parent);
+                                       source_destination_column, source_parent);
 }
 
 bool FlatProxyModel::insertRows(int row, int count, const QModelIndex &parent)
@@ -389,7 +389,6 @@ bool FlatProxyModel::removeRows(int row, int count, const QModelIndex &parent)
     return false;
 }
 
-
 /*!
    Returns the source model index corresponding to the given \a
    proxyIndex from the sorting filter model.
@@ -398,12 +397,12 @@ bool FlatProxyModel::removeRows(int row, int count, const QModelIndex &parent)
 */
 QModelIndex FlatProxyModel::mapToSource(const QModelIndex &proxyIndex) const
 {
-    if ( ! proxyIndex.isValid() ) {
+    if (! proxyIndex.isValid()) {
         return QModelIndex();
     }
-    QModelIndex source_index = m_sourceIndexList.value( proxyIndex.row() );
-    if ( proxyIndex.column() != 0 ) {
-        source_index = sourceModel()->index( source_index.row(), proxyIndex.column(), source_index.parent() );
+    QModelIndex source_index = m_sourceIndexList.value(proxyIndex.row());
+    if (proxyIndex.column() != 0) {
+        source_index = sourceModel()->index(source_index.row(), proxyIndex.column(), source_index.parent());
     }
     //kDebug(planDbg())<<proxyIndex<<"->"<<source_index;
     return source_index;
@@ -417,15 +416,15 @@ QModelIndex FlatProxyModel::mapToSource(const QModelIndex &proxyIndex) const
 */
 QModelIndex FlatProxyModel::mapFromSource(const QModelIndex &sourceIndex) const
 {
-    if ( ! sourceIndex.isValid() ) {
+    if (! sourceIndex.isValid()) {
         return QModelIndex();
     }
     QPersistentModelIndex idx = sourceIndex;
-    if ( idx.column() != 0 ) {
+    if (idx.column() != 0) {
         // we only map indices with column 0
-        idx = sourceModel()->index( idx.row(), 0, idx.parent() );
+        idx = sourceModel()->index(idx.row(), 0, idx.parent());
     }
-    QModelIndex proxy_index = index( m_sourceIndexList.indexOf( idx ), sourceIndex.column() );
+    QModelIndex proxy_index = index(m_sourceIndexList.indexOf(idx), sourceIndex.column());
     //kDebug(planDbg())<<sourceIndex<<"->"<<proxy_index;
     return proxy_index;
 }
@@ -440,31 +439,30 @@ QItemSelection FlatProxyModel::mapSelectionFromSource(const QItemSelection &sour
     return QAbstractProxyModel::mapSelectionFromSource(sourceSelection);
 }
 
-void FlatProxyModel::initiateMaps( const QModelIndex &sourceParent )
+void FlatProxyModel::initiateMaps(const QModelIndex &sourceParent)
 {
-    if ( ! sourceParent.isValid() ) {
+    if (! sourceParent.isValid()) {
         m_sourceIndexList.clear();
         m_sourceIndexMap.clear();
     }
     QAbstractItemModel *m = sourceModel();
-    if ( m == 0 ) {
-        kDebug(planDbg())<<"No source model";
+    if (m == 0) {
+        kDebug(planDbg()) << "No source model";
         return;
     }
-    int count = m->rowCount( sourceParent );
-    for ( int row = 0; row < count; ++row ) {
-        QPersistentModelIndex idx = m->index( row, 0, sourceParent );
+    int count = m->rowCount(sourceParent);
+    for (int row = 0; row < count; ++row) {
+        QPersistentModelIndex idx = m->index(row, 0, sourceParent);
         //kDebug(planDbg())<<"map:"<<sourceParent<<row<<idx;
-        if ( idx.isValid() ) { // fail safe
-            m_sourceIndexList.append( idx );
-            m_sourceIndexMap.insert( idx.parent(), idx );
+        if (idx.isValid()) {   // fail safe
+            m_sourceIndexList.append(idx);
+            m_sourceIndexMap.insert(idx.parent(), idx);
 
-            initiateMaps( idx );
+            initiateMaps(idx);
         }
     }
     //kDebug(planDbg())<<"source index list="<<m_sourceIndexList;
 }
-
 
 } // namespace KPlato
 

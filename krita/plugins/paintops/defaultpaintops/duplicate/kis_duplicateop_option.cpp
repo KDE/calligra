@@ -29,17 +29,18 @@ class KisDuplicateOpOptionsWidget: public QWidget, public Ui::DuplicateOpOptions
 {
 public:
     KisDuplicateOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
     KisImageWSP m_image;
 protected:
-    void showEvent(QShowEvent* event) {
+    void showEvent(QShowEvent *event)
+    {
         QWidget::showEvent(event);
         cbPerspective->setEnabled(m_image && m_image->perspectiveGrid() && m_image->perspectiveGrid()->countSubGrids() == 1);
     }
 };
-
 
 KisDuplicateOpOption::KisDuplicateOpOption()
     : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::colorCategory(), false)
@@ -54,7 +55,6 @@ KisDuplicateOpOption::KisDuplicateOpOption()
 
     setConfigurationPage(m_optionWidget);
 }
-
 
 KisDuplicateOpOption::~KisDuplicateOpOption()
 {
@@ -100,7 +100,7 @@ void KisDuplicateOpOption::setCloneFromProjection(bool cloneFromProjection)
     m_optionWidget->chkCloneProjection->setChecked(cloneFromProjection);
 }
 
-void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(DUPLICATE_HEALING, healing());
     setting->setProperty(DUPLICATE_CORRECT_PERSPECTIVE, correctPerspective());
@@ -108,7 +108,7 @@ void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfiguration* settin
     setting->setProperty(DUPLICATE_CLONE_FROM_PROJECTION, cloneFromProjection());
 }
 
-void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     m_optionWidget->cbHealing->setChecked(setting->getBool(DUPLICATE_HEALING, false));
     m_optionWidget->cbPerspective->setChecked(setting->getBool(DUPLICATE_CORRECT_PERSPECTIVE, false));

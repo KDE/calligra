@@ -41,12 +41,12 @@ using namespace Calligra::Sheets;
 class PixmapCachingSheetView::Private
 {
 public:
-    Private(PixmapCachingSheetView* q) : q(q) {}
-    PixmapCachingSheetView* q;
+    Private(PixmapCachingSheetView *q) : q(q) {}
+    PixmapCachingSheetView *q;
     QCache<int, QPixmap> tileCache;
     QPointF lastScale;
 
-    QPixmap* getTile(const Sheet* sheet, int x, int y, CanvasBase* canvas);
+    QPixmap *getTile(const Sheet *sheet, int x, int y, CanvasBase *canvas);
 };
 
 #ifdef CALLIGRA_SHEETS_MT
@@ -56,21 +56,21 @@ class TileDrawingJob
 #endif
 {
 public:
-    TileDrawingJob(const Sheet* sheet, SheetView* sheetView, CanvasBase* canvas, const QPointF& scale, int x, int y);
+    TileDrawingJob(const Sheet *sheet, SheetView *sheetView, CanvasBase *canvas, const QPointF &scale, int x, int y);
     ~TileDrawingJob();
     void run();
 private:
-    const Sheet* m_sheet;
-    SheetView* m_sheetView;
+    const Sheet *m_sheet;
+    SheetView *m_sheetView;
 public:
-    CanvasBase* m_canvas;
+    CanvasBase *m_canvas;
     QPointF m_scale;
     int m_x;
     int m_y;
     QImage m_image;
 };
 
-TileDrawingJob::TileDrawingJob(const Sheet *sheet, SheetView* sheetView, CanvasBase* canvas, const QPointF& scale, int x, int y)
+TileDrawingJob::TileDrawingJob(const Sheet *sheet, SheetView *sheetView, CanvasBase *canvas, const QPointF &scale, int x, int y)
     : m_sheet(sheet), m_sheetView(sheetView), m_canvas(canvas), m_scale(scale), m_x(x), m_y(y)
     , m_image(TILESIZE, TILESIZE, QImage::Format_ARGB32)
 {
@@ -94,10 +94,10 @@ void TileDrawingJob::run()
 
     QRect globalPixelRect(QPoint(m_x * TILESIZE, m_y * TILESIZE), QSize(TILESIZE, TILESIZE));
     QRectF docRect(
-            globalPixelRect.x() / m_scale.x(),
-            globalPixelRect.y() / m_scale.y(),
-            globalPixelRect.width() / m_scale.x(),
-            globalPixelRect.height() / m_scale.y()
+        globalPixelRect.x() / m_scale.x(),
+        globalPixelRect.y() / m_scale.y(),
+        globalPixelRect.width() / m_scale.x(),
+        globalPixelRect.height() / m_scale.y()
     );
 
     if (rtl) {
@@ -122,8 +122,7 @@ void TileDrawingJob::run()
     kDebug() << "end draw for " << m_x << "," << m_y << " " << m_scale;
 }
 
-
-PixmapCachingSheetView::PixmapCachingSheetView(const Sheet* sheet)
+PixmapCachingSheetView::PixmapCachingSheetView(const Sheet *sheet)
     : SheetView(sheet), d(new Private(this))
 {
     d->tileCache.setMaxCost(128); // number of tiles to cache
@@ -137,7 +136,7 @@ PixmapCachingSheetView::~PixmapCachingSheetView()
 void PixmapCachingSheetView::jobDone(ThreadWeaver::Job *tjob)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    TileDrawingJob* job = static_cast<TileDrawingJob*>(tjob);
+    TileDrawingJob *job = static_cast<TileDrawingJob *>(tjob);
     if (job->m_scale == d->lastScale) {
         int idx = job->m_x << 16 | job->m_y;
         d->tileCache.insert(idx, new QPixmap(QPixmap::fromImage(job->m_image)));
@@ -150,16 +149,18 @@ void PixmapCachingSheetView::jobDone(ThreadWeaver::Job *tjob)
 #endif
 }
 
-QPixmap* PixmapCachingSheetView::Private::getTile(const Sheet* sheet, int x, int y, CanvasBase* canvas)
+QPixmap *PixmapCachingSheetView::Private::getTile(const Sheet *sheet, int x, int y, CanvasBase *canvas)
 {
     int idx = x << 16 | y;
-    if (tileCache.contains(idx)) return tileCache.object(idx);
+    if (tileCache.contains(idx)) {
+        return tileCache.object(idx);
+    }
 
 #ifdef CALLIGRA_SHEETS_MT
-    TileDrawingJob* job = new TileDrawingJob(sheet, q, canvas, lastScale, x, y);
+    TileDrawingJob *job = new TileDrawingJob(sheet, q, canvas, lastScale, x, y);
     QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)), q, SLOT(jobDone(ThreadWeaver::Job*)), Qt::QueuedConnection);
     ThreadWeaver::Weaver::instance()->enqueue(job);
-    QPixmap* pm = new QPixmap(TILESIZE, TILESIZE);
+    QPixmap *pm = new QPixmap(TILESIZE, TILESIZE);
     pm->fill(QColor(255, 255, 255, 0));
     if (tileCache.insert(idx, pm)) {
         return pm;
@@ -176,7 +177,7 @@ QPixmap* PixmapCachingSheetView::Private::getTile(const Sheet* sheet, int x, int
     return 0;
 }
 
-void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas, const QRect& visibleRect)
+void PixmapCachingSheetView::paintCells(QPainter &painter, const QRectF &paintRect, const QPointF &topLeft, CanvasBase *canvas, const QRect &visibleRect)
 {
     if (!canvas) {
         SheetView::paintCells(painter, paintRect, topLeft, canvas, visibleRect);
@@ -197,8 +198,8 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
     const qreal msin_sy = t.m21();
     const qreal cos_sy = t.m22();
 
-    const qreal sx = sqrt(cos_sx*cos_sx + sin_sx*sin_sx);
-    const qreal sy = sqrt(cos_sy*cos_sy + msin_sy*msin_sy);
+    const qreal sx = sqrt(cos_sx * cos_sx + sin_sx * sin_sx);
+    const qreal sy = sqrt(cos_sy * cos_sy + msin_sy * msin_sy);
     //const qreal cost = (sx > 1e-10 ? cos_sx / sx : cos_sy / sy);
     //const qreal ang = acos(cost);
 
@@ -210,12 +211,12 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
 
     QRect tiles;
     const QRect visibleCells = paintCellRange();
-    const Sheet * s = sheet();
+    const Sheet *s = sheet();
     const QPointF bottomRight(s->columnPosition(visibleCells.right() + 1), s->rowPosition(visibleCells.bottom() + 1));
     tiles.setLeft(topLeft.x() * sx / TILESIZE);
     tiles.setTop(topLeft.y() * sy / TILESIZE);
-    tiles.setRight((bottomRight.x() * sx + TILESIZE-1) / TILESIZE);
-    tiles.setBottom((bottomRight.y() * sy + TILESIZE-1) / TILESIZE);
+    tiles.setRight((bottomRight.x() * sx + TILESIZE - 1) / TILESIZE);
+    tiles.setBottom((bottomRight.y() * sy + TILESIZE - 1) / TILESIZE);
 
     bool rtl = s->layoutDirection() == Qt::RightToLeft;
 
@@ -224,7 +225,7 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
             for (int y = qMax(0, tiles.top()); y < tiles.bottom(); y++) {
                 QPixmap *p = d->getTile(s, x, y, canvas);
                 if (p) {
-                    QPointF pt(paintRect.width() - (x+1) * TILESIZE / scale.x(), y * TILESIZE / scale.y());
+                    QPointF pt(paintRect.width() - (x + 1) * TILESIZE / scale.x(), y * TILESIZE / scale.y());
                     QRectF r(pt, QSizeF(TILESIZE / sx, TILESIZE / sy));
                     painter.drawPixmap(r, *p, p->rect());
                 }

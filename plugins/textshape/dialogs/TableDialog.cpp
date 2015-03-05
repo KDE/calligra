@@ -22,7 +22,7 @@
 #include <klocale.h>
 
 TableDialog::TableDialog(QWidget *parent)
-        : KDialog(parent)
+    : KDialog(parent)
 {
     setCaption(i18n("Insert Table"));
     setButtons(KDialog::Ok | KDialog::Cancel);
@@ -44,6 +44,5 @@ int TableDialog::rows()
 {
     return widget.intRows->value();
 }
-
 
 #include <TableDialog.moc>

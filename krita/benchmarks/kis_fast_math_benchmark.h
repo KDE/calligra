@@ -21,7 +21,8 @@
 
 #include <QtTest>
 
-class KisFastMathBenchmark : public QObject {
+class KisFastMathBenchmark : public QObject
+{
     Q_OBJECT
 private Q_SLOTS:
     void benchmarkFastAtan2();

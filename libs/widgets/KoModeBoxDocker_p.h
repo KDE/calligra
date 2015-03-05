@@ -34,7 +34,10 @@ class KoModeBoxDocker : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     explicit KoModeBoxDocker(KoModeBox *modeBox);
-QString observerName() { return "KoModeBoxDocker"; }
+    QString observerName()
+    {
+        return "KoModeBoxDocker";
+    }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();

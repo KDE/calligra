@@ -41,20 +41,19 @@ void KisPaintInformationTest::testSerialisation()
     doc.appendChild(root);
     test.toXML(doc, root);
     KisPaintInformation testUnS = KisPaintInformation::fromXML(root);
-    QCOMPARE(test.pos().x() , testUnS.pos().x());
-    QCOMPARE(test.pos().y() , testUnS.pos().y());
-    QCOMPARE(test.pressure() , testUnS.pressure());
-    QCOMPARE(test.xTilt() , testUnS.xTilt());
-    QCOMPARE(test.yTilt() , testUnS.yTilt());
-    QCOMPARE(test.rotation() , testUnS.rotation());
-    QCOMPARE(test.tangentialPressure() , testUnS.tangentialPressure());
+    QCOMPARE(test.pos().x(), testUnS.pos().x());
+    QCOMPARE(test.pos().y(), testUnS.pos().y());
+    QCOMPARE(test.pressure(), testUnS.pressure());
+    QCOMPARE(test.xTilt(), testUnS.xTilt());
+    QCOMPARE(test.yTilt(), testUnS.yTilt());
+    QCOMPARE(test.rotation(), testUnS.rotation());
+    QCOMPARE(test.tangentialPressure(), testUnS.tangentialPressure());
     /**
      * drawingAngle(), velocity() and distance() are calculated basing
      * on the KisDistanceInformation data and are not available without
      * it
      */
 }
-
 
 QTEST_KDEMAIN(KisPaintInformationTest, GUI)
 #include "kis_paint_information_test.moc"

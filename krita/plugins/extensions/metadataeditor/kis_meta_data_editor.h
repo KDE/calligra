@@ -30,12 +30,12 @@ class KisMetaDataEditor : public KPageDialog
 {
     struct Private;
 public:
-    KisMetaDataEditor(QWidget* parent, KisMetaData::Store* store);
+    KisMetaDataEditor(QWidget *parent, KisMetaData::Store *store);
     ~KisMetaDataEditor();
 public Q_SLOTS:
     virtual void accept();
 private:
-    Private* const d;
+    Private *const d;
 };
 
 #endif

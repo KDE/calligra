@@ -33,7 +33,7 @@ class KoPAPageBase;
 class KOPAGEAPP_TEST_EXPORT KoPAPageInsertCommand : public KUndo2Command
 {
 public:
-    KoPAPageInsertCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent = 0 );
+    KoPAPageInsertCommand(KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent = 0);
     virtual ~KoPAPageInsertCommand();
 
     /// redo the command
@@ -42,9 +42,9 @@ public:
     void undo();
 
 private:
-    KoPADocument * m_document;
-    KoPAPageBase * m_page;
-    KoPAPageBase * m_after;
+    KoPADocument *m_document;
+    KoPAPageBase *m_page;
+    KoPAPageBase *m_after;
     bool m_deletePage;
 };
 

@@ -32,7 +32,6 @@
 #include "kis_types.h"
 #include "kis_image.h"
 
-
 #include "testutil.h"
 
 #define IMAGE_WIDTH 1000
@@ -44,10 +43,10 @@ void KisFilterMaskTest::testCreation()
 }
 
 #define initImage(image, layer, device, mask) do {                      \
-    image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
-    layer = new KisPaintLayer(image, 0, 100, device);         \
-    image->addNode(layer);                                              \
-    image->addNode(mask, layer);                                        \
+        image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
+        layer = new KisPaintLayer(image, 0, 100, device);         \
+        image->addNode(layer);                                              \
+        image->addNode(mask, layer);                                        \
     } while(0)
 
 void KisFilterMaskTest::testProjectionNotSelected()
@@ -55,14 +54,14 @@ void KisFilterMaskTest::testProjectionNotSelected()
     KisImageSP image;
     KisPaintLayerSP layer;
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
     KisFilterMaskSP mask = new KisFilterMask();
@@ -91,14 +90,14 @@ void KisFilterMaskTest::testProjectionSelected()
     KisImageSP image;
     KisPaintLayerSP layer;
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
     KisFilterMaskSP mask = new KisFilterMask();

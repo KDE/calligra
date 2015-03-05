@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+                  Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+         2006 Martin Pfeiffer <hubipete@gmx.net>
    Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
                  2007 Martin Pfeiffer <hubipete@gmx.net>
 
@@ -31,7 +31,8 @@
 /**
  * A left and/or right bracket around one child.
  */
-class KOFORMULA_EXPORT FencedElement : public RowElement {
+class KOFORMULA_EXPORT FencedElement : public RowElement
+{
 public:
     /// The standart constructor
     explicit FencedElement(BasicElement *parent = 0);
@@ -41,20 +42,20 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paint( QPainter& painter, AttributeManager* am );
+    virtual void paint(QPainter &painter, AttributeManager *am);
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout(const AttributeManager *am);
 
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const;
-    
+    QString attributesDefaultValue(const QString &attribute) const;
+
     /// @return The element's ElementType
     ElementType elementType() const;
-    
+
 private:
     /// The buffer the element paints its visual content
     QPainterPath m_fence;

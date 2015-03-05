@@ -75,7 +75,7 @@ public:
     //reimplemented from Calligra2.0, we disconnect and re- connect the 'documentChanged' signal only when the document has replaced
     void setDocument(QTextDocument *document);
 
-    void replaceWordBySuggestion(const QString &word, int startPosition,int lengthOfWord);
+    void replaceWordBySuggestion(const QString &word, int startPosition, int lengthOfWord);
 
 public Q_SLOTS:
     void setDefaultLanguage(const QString &lang);

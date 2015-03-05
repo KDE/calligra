@@ -35,14 +35,16 @@ class DatabaseStorage : public QObject, public RectStorage<Database>
 {
     Q_OBJECT
 public:
-    explicit DatabaseStorage(Map* map) : QObject(map), RectStorage<Database>(map) {}
-    DatabaseStorage(const DatabaseStorage& other) : QObject(other.parent()), RectStorage<Database>(other) {}
+    explicit DatabaseStorage(Map *map) : QObject(map), RectStorage<Database>(map) {}
+    DatabaseStorage(const DatabaseStorage &other) : QObject(other.parent()), RectStorage<Database>(other) {}
 
 protected Q_SLOTS:
-    virtual void triggerGarbageCollection() {
+    virtual void triggerGarbageCollection()
+    {
         QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
     }
-    virtual void garbageCollection() {
+    virtual void garbageCollection()
+    {
         RectStorage<Database>::garbageCollection();
     }
 };

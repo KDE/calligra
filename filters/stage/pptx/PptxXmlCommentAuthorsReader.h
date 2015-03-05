@@ -25,15 +25,15 @@
 class PptxXmlCommentAuthorsReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
-    explicit PptxXmlCommentAuthorsReader(KoOdfWriters* writers);
+    explicit PptxXmlCommentAuthorsReader(KoOdfWriters *writers);
     virtual ~PptxXmlCommentAuthorsReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
     KoFilter::ConversionStatus read_cmAuthorLst();
     KoFilter::ConversionStatus read_cmAuthor();
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 class PptxXmlCommentAuthorsReaderContext : public MSOOXML::MsooXmlReaderContext

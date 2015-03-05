@@ -48,7 +48,7 @@ public:
 
     virtual ~KisClipboard();
 
-    static KisClipboard* instance();
+    static KisClipboard *instance();
 
     /**
      * Sets the clipboard to the contents of the specified paint device; also
@@ -58,7 +58,7 @@ public:
      * @param dev The paint device that will be stored on the clipboard
      * @param topLeft a hint about the place where the clip should be pasted by default
      */
-    void setClip(KisPaintDeviceSP dev, const QPoint& topLeft);
+    void setClip(KisPaintDeviceSP dev, const QPoint &topLeft);
 
     /**
      * Get the contents of the clipboard in the form of a paint device.
@@ -72,7 +72,6 @@ public:
 Q_SIGNALS:
 
     void clipCreated();
-
 
 private Q_SLOTS:
 

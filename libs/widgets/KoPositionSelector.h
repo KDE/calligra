@@ -42,14 +42,14 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    virtual void paintEvent (QPaintEvent *event);
+    virtual void paintEvent(QPaintEvent *event);
 
 private Q_SLOTS:
     void positionChanged(int position);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

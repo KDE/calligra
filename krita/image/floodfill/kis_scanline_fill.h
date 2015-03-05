@@ -46,9 +46,8 @@ private:
     template <class T>
     void processLine(KisFillInterval interval, const int rowIncrement, T &pixelPolicy);
 
-
     template <class T>
-        void extendedPass(KisFillInterval *currentInterval, int srcRow, bool extendRight, T &pixelPolicy);
+    void extendedPass(KisFillInterval *currentInterval, int srcRow, bool extendRight, T &pixelPolicy);
 
     template <class T>
     void runImpl(T &pixelPolicy);
@@ -56,7 +55,7 @@ private:
 private:
     void testingProcessLine(const KisFillInterval &processInterval);
     QVector<KisFillInterval> testingGetForwardIntervals() const;
-    KisFillIntervalMap* testingGetBackwardIntervals() const;
+    KisFillIntervalMap *testingGetBackwardIntervals() const;
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

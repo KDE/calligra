@@ -31,9 +31,9 @@ using namespace Calligra::Sheets;
 void TestSelection::initialize()
 {
     Map map;
-    Sheet* sheet1 = new Sheet(&map, "Sheet1");
+    Sheet *sheet1 = new Sheet(&map, "Sheet1");
     map.addSheet(sheet1);
-    Sheet* sheet2 = new Sheet(&map, "Sheet2");
+    Sheet *sheet2 = new Sheet(&map, "Sheet2");
     map.addSheet(sheet2);
     Canvas canvas(0);
     Selection selection(&canvas);

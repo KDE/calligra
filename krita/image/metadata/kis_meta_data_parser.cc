@@ -34,17 +34,17 @@ Parser::~Parser()
 #include <QVariant>
 #include <kdatetime.h>
 
-Value IntegerParser::parse(const QString& _v) const
+Value IntegerParser::parse(const QString &_v) const
 {
     return Value(_v.toInt());
 }
 
-Value TextParser::parse(const QString& _v) const
+Value TextParser::parse(const QString &_v) const
 {
     return Value(_v);
 }
 
-Value DateParser::parse(const QString& _v) const
+Value DateParser::parse(const QString &_v) const
 {
     if (_v.length() <= 4) {
         return Value(QDateTime::fromString(_v, "yyyy"));
@@ -61,11 +61,12 @@ Value DateParser::parse(const QString& _v) const
     }
 }
 
-Value RationalParser::parse(const QString& _v) const
+Value RationalParser::parse(const QString &_v) const
 {
     QRegExp regexp("(\\-?\\d+)/(\\d+)");
     regexp.indexIn(_v);
-    if (regexp.capturedTexts().size() > 2)
+    if (regexp.capturedTexts().size() > 2) {
         return Value(Rational(regexp.capturedTexts()[1].toInt(), regexp.capturedTexts()[2].toInt()));
+    }
     return Value();
 }

@@ -25,48 +25,47 @@
 #include "TableRowElement.h"
 #include "TableElement.h"
 
-TableDataElement::TableDataElement( BasicElement* parent ) : RowElement( parent )
+TableDataElement::TableDataElement(BasicElement *parent) : RowElement(parent)
 {}
 
 // void TableDataElement::layout( const AttributeManager* am )
 // {}
 
-QString TableDataElement::attributesDefaultValue( const QString& attribute ) const
+QString TableDataElement::attributesDefaultValue(const QString &attribute) const
 {
-    if( attribute == "rowspan" || attribute == "columnspan" )
+    if (attribute == "rowspan" || attribute == "columnspan") {
         return "1";
-    else
+    } else {
         return QString();
-} 
+    }
+}
 
-
-bool TableDataElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor )
+bool TableDataElement::moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor)
 {
     if (newcursor.isSelecting() ||
-        newcursor.direction()==MoveLeft || newcursor.direction()==MoveRight) {
-        return RowElement::moveCursor(newcursor,oldcursor);
+            newcursor.direction() == MoveLeft || newcursor.direction() == MoveRight) {
+        return RowElement::moveCursor(newcursor, oldcursor);
     } else {
-        TableRowElement* tr= static_cast<TableRowElement*>(parentElement());
-        TableElement* te = static_cast<TableElement*>(tr->parentElement());
-        int rn=te->positionOfChild(tr)/2; //table elements have a cursor 
-        int cn=tr->positionOfChild(this);
+        TableRowElement *tr = static_cast<TableRowElement *>(parentElement());
+        TableElement *te = static_cast<TableElement *>(tr->parentElement());
+        int rn = te->positionOfChild(tr) / 2; //table elements have a cursor
+        int cn = tr->positionOfChild(this);
         //positions before and after each element
-        if (newcursor.direction()==MoveUp) {
-            if (rn>1) {
-                return newcursor.moveCloseTo(te->childElements()[rn-1]->childElements()[cn],oldcursor);
+        if (newcursor.direction() == MoveUp) {
+            if (rn > 1) {
+                return newcursor.moveCloseTo(te->childElements()[rn - 1]->childElements()[cn], oldcursor);
             } else {
                 return false;
             }
         } else {
-            if (rn < te->endPosition()/2) {
-                return newcursor.moveCloseTo(te->childElements()[rn+1]->childElements()[cn],oldcursor);
+            if (rn < te->endPosition() / 2) {
+                return newcursor.moveCloseTo(te->childElements()[rn + 1]->childElements()[cn], oldcursor);
             } else {
                 return false;
             }
         }
     }
 }
-
 
 ElementType TableDataElement::elementType() const
 {

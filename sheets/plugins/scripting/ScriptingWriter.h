@@ -74,7 +74,8 @@ public:
     * as datasource for this writer. The writer will operate on the
     * document those module provides us.
     */
-    explicit ScriptingWriter(ScriptingModule* module) : QObject(module), m_module(module), m_cell(0) {
+    explicit ScriptingWriter(ScriptingModule *module) : QObject(module), m_module(module), m_cell(0)
+    {
         clearAll();
     }
 
@@ -89,7 +90,8 @@ public Q_SLOTS:
     * \return the current sheetname the writer is on. All operations done with
     * the writer are done on this sheet.
     */
-    QString sheet() {
+    QString sheet()
+    {
         return m_sheet ? m_sheet->sheetName() : QString();
     }
 
@@ -98,9 +100,12 @@ public Q_SLOTS:
     * no sheet with such a sheetname false is returned else, so on success, true
     * is returned.
     */
-    bool setSheet(const QString& sheetname) {
-        Calligra::Sheets::Sheet* s = m_module->kspreadDoc()->map()->findSheet(sheetname);
-        if (! s) return false;
+    bool setSheet(const QString &sheetname)
+    {
+        Calligra::Sheets::Sheet *s = m_module->kspreadDoc()->map()->findSheet(sheetname);
+        if (! s) {
+            return false;
+        }
         clearAll();
         m_sheet = s;
         return true;
@@ -112,7 +117,8 @@ public Q_SLOTS:
     * defined cell. You may like to use it to manipulate the content of an
     * explicit cell.
     */
-    QString cell() {
+    QString cell()
+    {
         return Calligra::Sheets::Cell::name(m_column, m_row);
     }
 
@@ -121,10 +127,15 @@ public Q_SLOTS:
     * exist true is returned else, e.g. if the cellname was just wrong, false got
     * returned.
     */
-    bool setCell(const QString& cellname) {
-        if (! m_sheet) return false;
+    bool setCell(const QString &cellname)
+    {
+        if (! m_sheet) {
+            return false;
+        }
         const Calligra::Sheets::Region region(cellname, m_sheet->doc()->map(), m_sheet);
-        if (region.firstRange().isNull()) return false;
+        if (region.firstRange().isNull()) {
+            return false;
+        }
         QPoint point = region.firstRange().topLeft();
         m_column = point.x();
         m_row = point.y();
@@ -135,14 +146,16 @@ public Q_SLOTS:
     /**
     * Return the current row number.
     */
-    int row() {
+    int row()
+    {
         return m_row;
     }
 
     /**
     * Set the current row number to \p rownumber .
     */
-    void setRow(int rownumber) {
+    void setRow(int rownumber)
+    {
         m_row = rownumber;
         clearCell();
     }
@@ -150,14 +163,16 @@ public Q_SLOTS:
     /**
     * Return the current column number.
     */
-    int column() {
+    int column()
+    {
         return m_column;
     }
 
     /**
     * Set the current column number to \p columnnumber .
     */
-    void setColumn(int columnnumber) {
+    void setColumn(int columnnumber)
+    {
         m_column = columnnumber;
         clearCell();
     }
@@ -181,7 +196,8 @@ public Q_SLOTS:
     /**
     * Go to the next row.
     */
-    void next() {
+    void next()
+    {
         m_row++;
         clearCell();
     }
@@ -199,12 +215,13 @@ public Q_SLOTS:
     * \return true if the value was set successful else
     * false is returned.
     */
-    bool setValue(const QVariant& value, bool parse = true) {
+    bool setValue(const QVariant &value, bool parse = true)
+    {
         Calligra::Sheets::Value v;
-        if (parse)
+        if (parse) {
             v = Calligra::Sheets::Value(value.toString());
-        else {
-            const Calligra::Sheets::CalculationSettings* settings = m_module->kspreadDoc()->map()->calculationSettings();
+        } else {
+            const Calligra::Sheets::CalculationSettings *settings = m_module->kspreadDoc()->map()->calculationSettings();
             switch (value.type()) {
             case QVariant::Invalid:     v = Calligra::Sheets::Value(); break;
             case QVariant::Bool:        v = Calligra::Sheets::Value(value.toBool()); break;
@@ -240,12 +257,15 @@ public Q_SLOTS:
     * \return true if the values got set successful else
     * false is returned.
     */
-    bool setValues(const QVariantList& values, bool parse = true) {
+    bool setValues(const QVariantList &values, bool parse = true)
+    {
         bool ok = true;
         const int prevcolumn = m_column;
         m_module->doc()->beginMacro(kundo2_i18n("Set Values"));
-        foreach(QVariant v, values) {
-            if (! setValue(v, parse)) ok = false;
+        foreach (QVariant v, values) {
+            if (! setValue(v, parse)) {
+                ok = false;
+            }
             m_column++;
             clearCell();
         }
@@ -259,24 +279,29 @@ public Q_SLOTS:
 private:
     Q_DISABLE_COPY(ScriptingWriter)
 
-    ScriptingModule* const m_module;
-    Calligra::Sheets::Sheet* m_sheet;
+    ScriptingModule *const m_module;
+    Calligra::Sheets::Sheet *m_sheet;
     int m_column, m_row;
-    Calligra::Sheets::Cell* m_cell;
+    Calligra::Sheets::Cell *m_cell;
 
-    Calligra::Sheets::Cell* getCell() {
+    Calligra::Sheets::Cell *getCell()
+    {
         Q_ASSERT(m_sheet);
-        if (m_cell) return m_cell;
+        if (m_cell) {
+            return m_cell;
+        }
         m_cell = new Calligra::Sheets::Cell(m_sheet, m_column, m_row);
         return m_cell;
     }
 
-    void clearCell() {
+    void clearCell()
+    {
         delete m_cell;
         m_cell = 0;
     }
 
-    void clearAll() {
+    void clearAll()
+    {
         m_sheet = 0;
         m_column = 0;
         m_row = 0;

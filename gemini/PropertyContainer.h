@@ -32,7 +32,7 @@ class PropertyContainer : public QObject
 {
     Q_OBJECT
 public:
-    explicit PropertyContainer(QString name, QObject* parent = 0);
+    explicit PropertyContainer(QString name, QObject *parent = 0);
     virtual ~PropertyContainer();
 
     // As QObject already as setProperty and property() functions, we must

@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 
-SetAccidentalsCommand::SetAccidentalsCommand(MusicShape* shape, MusicCore::Note* note, int accidentals)
+SetAccidentalsCommand::SetAccidentalsCommand(MusicShape *shape, MusicCore::Note *note, int accidentals)
     : m_shape(shape), m_note(note), m_oldAccidentals(note->accidentals()), m_newAccidentals(accidentals)
 {
     setText(kundo2_i18n("Set accidentals"));

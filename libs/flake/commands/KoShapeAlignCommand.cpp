@@ -30,22 +30,23 @@ class KoShapeAlignCommand::Private
 {
 public:
     Private() : command(0) {}
-    ~Private() {
+    ~Private()
+    {
         delete command;
     }
     KoShapeMoveCommand *command;
 };
 
-KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align align, const QRectF &boundingRect, KUndo2Command *parent)
-        : KUndo2Command(parent),
-        d(new Private())
+KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape *> &shapes, Align align, const QRectF &boundingRect, KUndo2Command *parent)
+    : KUndo2Command(parent),
+      d(new Private())
 {
     QList<QPointF> previousPositions;
     QList<QPointF> newPositions;
     QPointF position;
     QPointF delta;
     QRectF bRect;
-    foreach(KoShape *shape, shapes) {
+    foreach (KoShape *shape, shapes) {
 //   if (dynamic_cast<KoShapeGroup*> (shape))
 //       kDebug(30006) <<"Found Group";
 //   else if (dynamic_cast<KoShapeContainer*> (shape))

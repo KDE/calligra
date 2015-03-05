@@ -20,11 +20,11 @@
 #include "VirtualKeyboardController.h"
 
 #ifdef Q_OS_WIN
-    #include <windows.h>
-    #include <QProcess>
+#include <windows.h>
+#include <QProcess>
 #endif
 
-SketchInputContext::SketchInputContext(QObject* parent)
+SketchInputContext::SketchInputContext(QObject *parent)
     : QInputContext(parent)
 {
 }
@@ -54,7 +54,7 @@ QString SketchInputContext::identifierName()
     return QString("SketchInputContext");
 }
 
-bool SketchInputContext::filterEvent(const QEvent* event)
+bool SketchInputContext::filterEvent(const QEvent *event)
 {
     if (event->type() == QEvent::RequestSoftwareInputPanel) {
         VirtualKeyboardController::instance()->requestShowKeyboard();

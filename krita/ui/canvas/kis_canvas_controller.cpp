@@ -32,7 +32,6 @@
 #include "input/kis_tablet_event.h"
 #include "krita_utils.h"
 
-
 struct KisCanvasController::Private {
     Private(KisCanvasController *qq)
         : q(qq),
@@ -53,14 +52,16 @@ struct KisCanvasController::Private {
 
 void KisCanvasController::Private::emitPointerPositionChangedSignals(QEvent *event)
 {
-    if (!coordinatesConverter) return;
+    if (!coordinatesConverter) {
+        return;
+    }
 
     QPoint pointerPos;
-    if (QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event)) {
+    if (QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event)) {
         pointerPos = mouseEvent->pos();
-    } else if (QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
+    } else if (QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent *>(event)) {
         pointerPos = tabletEvent->pos();
-    } else if (KisTabletEvent *kisTabletEvent = dynamic_cast<KisTabletEvent*>(event)) {
+    } else if (KisTabletEvent *kisTabletEvent = dynamic_cast<KisTabletEvent *>(event)) {
         pointerPos = kisTabletEvent->pos();
     }
 
@@ -76,14 +77,13 @@ void KisCanvasController::Private::updateDocumentSizeAfterTransform()
     QSize widgetSize = coordinatesConverter->imageRectInWidgetPixels().toRect().size();
     q->updateDocumentSize(widgetSize, true);
 
-    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(q->canvas());
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2 *>(q->canvas());
     Q_ASSERT(kritaCanvas);
 
     kritaCanvas->notifyZoomChanged();
 }
 
-
-KisCanvasController::KisCanvasController(QPointer<KisView>parent, KActionCollection * actionCollection)
+KisCanvasController::KisCanvasController(QPointer<KisView>parent, KActionCollection *actionCollection)
     : KoCanvasControllerWidget(actionCollection, parent),
       m_d(new Private(this))
 {
@@ -97,11 +97,11 @@ KisCanvasController::~KisCanvasController()
 
 void KisCanvasController::setCanvas(KoCanvasBase *canvas)
 {
-    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2 *>(canvas);
     Q_ASSERT(kritaCanvas);
 
     m_d->coordinatesConverter =
-        const_cast<KisCoordinatesConverter*>(kritaCanvas->coordinatesConverter());
+        const_cast<KisCoordinatesConverter *>(kritaCanvas->coordinatesConverter());
     KoCanvasControllerWidget::setCanvas(canvas);
 
     m_d->paintOpTransformationConnector =
@@ -154,10 +154,10 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
     bool isXMirrored = coordinatesConverter->xAxisMirrored();
 
     view->viewManager()->
-        showFloatingMessage(
-            i18nc("floating message about mirroring",
-                  "Horizontal mirroring: %1 ", isXMirrored ? i18n("ON") : i18n("OFF")),
-            QIcon(), 500, KisFloatingMessage::Low);
+    showFloatingMessage(
+        i18nc("floating message about mirroring",
+              "Horizontal mirroring: %1 ", isXMirrored ? i18n("ON") : i18n("OFF")),
+        QIcon(), 500, KisFloatingMessage::Low);
 }
 
 void KisCanvasController::mirrorCanvas(bool enable)
@@ -173,12 +173,11 @@ void KisCanvasController::Private::showRotationValueOnCanvas()
 {
     qreal rotationAngle = coordinatesConverter->rotationAngle();
 
-
     view->viewManager()->
-        showFloatingMessage(
-            i18nc("floating message about rotation", "Rotation: %1° ",
-                  KritaUtils::prettyFormatReal(rotationAngle)),
-            QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
+    showFloatingMessage(
+        i18nc("floating message about rotation", "Rotation: %1° ",
+              KritaUtils::prettyFormatReal(rotationAngle)),
+        QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
 }
 
 void KisCanvasController::rotateCanvas(qreal angle)
@@ -211,12 +210,12 @@ void KisCanvasController::resetCanvasRotation()
 
 void KisCanvasController::slotToggleWrapAroundMode(bool value)
 {
-    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     Q_ASSERT(kritaCanvas);
 
     if (!canvas()->canvasIsOpenGL() && value) {
         m_d->view->viewManager()->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
-                                                          "To visualize wrap-around mode, enable OpenGL."), QIcon());
+                "To visualize wrap-around mode, enable OpenGL."), QIcon());
     }
 
     kritaCanvas->setWrapAroundViewingMode(value);

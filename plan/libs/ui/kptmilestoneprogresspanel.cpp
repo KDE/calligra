@@ -28,14 +28,13 @@
 #include "kptcommand.h"
 #include "kptdebug.h"
 
-
 namespace KPlato
 {
 
 MilestoneProgressPanel::MilestoneProgressPanel(Task &task, QWidget *parent, const char *name)
     : MilestoneProgressPanelImpl(parent, name),
       m_task(task),
-      m_completion( task.completion() )
+      m_completion(task.completion())
 
 {
     kDebug(planDbg());
@@ -45,31 +44,39 @@ MilestoneProgressPanel::MilestoneProgressPanel(Task &task, QWidget *parent, cons
     finished->setFocus();
 }
 
-
-MacroCommand *MilestoneProgressPanel::buildCommand() {
+MacroCommand *MilestoneProgressPanel::buildCommand()
+{
     MacroCommand *cmd = 0;
     KUndo2MagicString c = kundo2_i18n("Modify milestone completion");
-    
-    if ( m_completion.isFinished() != finished->isChecked() ) {
-        if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionStartedCmd( m_completion, finished->isChecked()) );
-        cmd->addCommand( new ModifyCompletionFinishedCmd( m_completion, finished->isChecked()) );
+
+    if (m_completion.isFinished() != finished->isChecked()) {
+        if (cmd == 0) {
+            cmd = new MacroCommand(c);
+        }
+        cmd->addCommand(new ModifyCompletionStartedCmd(m_completion, finished->isChecked()));
+        cmd->addCommand(new ModifyCompletionFinishedCmd(m_completion, finished->isChecked()));
     }
-    if ( m_completion.finishTime() != finishTime->dateTime() ) {
-        if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionStartTimeCmd( m_completion, finishTime->dateTime() ) );
-        cmd->addCommand( new ModifyCompletionFinishTimeCmd( m_completion, finishTime->dateTime() ) );
+    if (m_completion.finishTime() != finishTime->dateTime()) {
+        if (cmd == 0) {
+            cmd = new MacroCommand(c);
+        }
+        cmd->addCommand(new ModifyCompletionStartTimeCmd(m_completion, finishTime->dateTime()));
+        cmd->addCommand(new ModifyCompletionFinishTimeCmd(m_completion, finishTime->dateTime()));
     }
-    if ( finished->isChecked() && finishTime->dateTime().isValid() ) {
-        if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionPercentFinishedCmd( m_completion, finishTime->dateTime().date(), 100 ) );
+    if (finished->isChecked() && finishTime->dateTime().isValid()) {
+        if (cmd == 0) {
+            cmd = new MacroCommand(c);
+        }
+        cmd->addCommand(new ModifyCompletionPercentFinishedCmd(m_completion, finishTime->dateTime().date(), 100));
     } else {
         Completion::EntryList::ConstIterator entriesIt = m_completion.entries().constBegin();
         const Completion::EntryList::ConstIterator entriesEnd = m_completion.entries().constEnd();
         for (; entriesIt != entriesEnd; ++entriesIt) {
             const QDate &date = entriesIt.key();
-            if ( cmd == 0 ) cmd = new MacroCommand( c );
-            cmd->addCommand( new RemoveCompletionEntryCmd( m_completion, date ) );
+            if (cmd == 0) {
+                cmd = new MacroCommand(c);
+            }
+            cmd->addCommand(new RemoveCompletionEntryCmd(m_completion, date));
         }
     }
     return cmd;
@@ -78,35 +85,37 @@ MacroCommand *MilestoneProgressPanel::buildCommand() {
 //-------------------------------------
 
 MilestoneProgressPanelImpl::MilestoneProgressPanelImpl(QWidget *parent, const char *name)
-    : QWidget(parent) {
-    
+    : QWidget(parent)
+{
+
     setObjectName(name);
     setupUi(this);
-    
+
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotChanged()));
 
     connect(finishTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotChanged()));
-    
+
 }
 
-void MilestoneProgressPanelImpl::slotChanged() {
+void MilestoneProgressPanelImpl::slotChanged()
+{
     emit changed();
 }
 
-void MilestoneProgressPanelImpl::slotFinishedChanged(bool state) {
+void MilestoneProgressPanelImpl::slotFinishedChanged(bool state)
+{
     if (state) {
         finishTime->setDateTime(QDateTime::currentDateTime());
     }
     enableWidgets();
 }
 
-
-void MilestoneProgressPanelImpl::enableWidgets() {
+void MilestoneProgressPanelImpl::enableWidgets()
+{
     finished->setEnabled(true);
     finishTime->setEnabled(finished->isChecked());
 }
-
 
 }  //KPlato namespace
 

@@ -42,29 +42,30 @@ KisBoundary::~KisBoundary()
 
 void KisBoundary::generateBoundary()
 {
-    if (!d->m_device)
+    if (!d->m_device) {
         return;
+    }
 
     KisOutlineGenerator generator(d->m_device->colorSpace(), OPACITY_TRANSPARENT_U8);
     generator.setSimpleOutline(true);
     d->m_boundary = generator.outline(d->m_device->data(), 0, 0, d->m_device->bounds().width(), d->m_device->bounds().height());
 
     d->path = QPainterPath();
-    foreach(const QPolygon & polygon, d->m_boundary) {
+    foreach (const QPolygon &polygon, d->m_boundary) {
         d->path.addPolygon(polygon);
         d->path.closeSubpath();
     }
 
 }
 
-void KisBoundary::paint(QPainter& painter) const
+void KisBoundary::paint(QPainter &painter) const
 {
     QPen pen;
     pen.setWidth(0);
     pen.setBrush(Qt::black);
     painter.setPen(pen);
 
-    foreach(const QPolygon & polygon, d->m_boundary) {
+    foreach (const QPolygon &polygon, d->m_boundary) {
         painter.drawPolygon(polygon);
     }
 }

@@ -45,9 +45,8 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
-
 protected:
-    virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget
+    virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QWidget
 public Q_SLOTS:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.
@@ -69,7 +68,7 @@ private:
     Q_PRIVATE_SLOT(d, void locationChanged(Qt::DockWidgetArea area))
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

@@ -35,13 +35,15 @@ class TestFilter : public KisFilter
 public:
 
     TestFilter()
-            : KisFilter(KoID("test", "test"), KoID("test", "test"), "TestFilter") {
+        : KisFilter(KoID("test", "test"), KoID("test", "test"), "TestFilter")
+    {
     }
 
     void processImpl(KisPaintDeviceSP src,
-                     const QRect& size,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater) const {
+                     const QRect &size,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater) const
+    {
         Q_UNUSED(src);
         Q_UNUSED(size);
         Q_UNUSED(config);
@@ -57,11 +59,11 @@ void KisFilterTest::testCreation()
 
 void KisFilterTest::testWithProgressUpdater()
 {
-    TestUtil::TestProgressBar * bar = new TestUtil::TestProgressBar();
-    KoProgressUpdater* pu = new KoProgressUpdater(bar);
+    TestUtil::TestProgressBar *bar = new TestUtil::TestProgressBar();
+    KoProgressUpdater *pu = new KoProgressUpdater(bar);
     KoUpdaterPtr updater = pu->startSubtask();
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
@@ -71,10 +73,10 @@ void KisFilterTest::testWithProgressUpdater()
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
-    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc, updater);
+    f->process(dev, QRect(QPoint(0, 0), qimage.size()), kfc, updater);
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
@@ -87,7 +89,7 @@ void KisFilterTest::testWithProgressUpdater()
 
 void KisFilterTest::testSingleThreaded()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
@@ -97,10 +99,10 @@ void KisFilterTest::testSingleThreaded()
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
-    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
+    f->process(dev, QRect(QPoint(0, 0), qimage.size()), kfc);
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
@@ -111,7 +113,7 @@ void KisFilterTest::testSingleThreaded()
 
 void KisFilterTest::testDifferentSrcAndDst()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage inverted(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
@@ -126,10 +128,10 @@ void KisFilterTest::testDifferentSrcAndDst()
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
 
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
-    f->process(src, dst, sel, QRect(QPoint(0,0), qimage.size()), kfc);
+    f->process(src, dst, sel, QRect(QPoint(0, 0), qimage.size()), kfc);
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dst->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
@@ -140,9 +142,9 @@ void KisFilterTest::testDifferentSrcAndDst()
 
 void KisFilterTest::testOldDataApiAfterCopy()
 {
-    QRect updateRect(0,0,63,63);
+    QRect updateRect(0, 0, 63, 63);
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     quint8 *whitePixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, whitePixel);
     cs->setOpacity(whitePixel, OPACITY_OPAQUE_U8, 1);
@@ -167,7 +169,7 @@ void KisFilterTest::testOldDataApiAfterCopy()
 
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
     /**
@@ -183,9 +185,9 @@ void KisFilterTest::testOldDataApiAfterCopy()
      */
     KisPaintDeviceSP reference = new KisPaintDevice(cs);
 
-    QImage refImage = reference->convertToQImage(0,0,0,63,63);
-    QImage dstImage = dst->convertToQImage(0,0,0,63,63);
-    QImage tmpImage = tmp->convertToQImage(0,0,0,63,63);
+    QImage refImage = reference->convertToQImage(0, 0, 0, 63, 63);
+    QImage dstImage = dst->convertToQImage(0, 0, 0, 63, 63);
+    QImage tmpImage = tmp->convertToQImage(0, 0, 0, 63, 63);
 
     QPoint pt;
     QVERIFY(TestUtil::compareQImages(pt, refImage, dstImage));
@@ -195,38 +197,38 @@ void KisFilterTest::testOldDataApiAfterCopy()
 
 void KisFilterTest::testBlurFilterApplicationRect()
 {
-    QRect filterRect(10,10,40,40);
-    QRect src1Rect(5,5,50,50);
-    QRect src2Rect(0,0,60,60);
+    QRect filterRect(10, 10, 40, 40);
+    QRect src1Rect(5, 5, 50, 50);
+    QRect src2Rect(0, 0, 60, 60);
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     quint8 *whitePixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, whitePixel);
     cs->setOpacity(whitePixel, OPACITY_OPAQUE_U8, 1);
 
     KisPaintDeviceSP src1 = new KisPaintDevice(cs);
-    src1->fill(src1Rect.left(),src1Rect.top(),src1Rect.width(),src1Rect.height(), whitePixel);
+    src1->fill(src1Rect.left(), src1Rect.top(), src1Rect.width(), src1Rect.height(), whitePixel);
 
     KisPaintDeviceSP src2 = new KisPaintDevice(cs);
-    src2->fill(src2Rect.left(),src2Rect.top(),src2Rect.width(),src2Rect.height(), whitePixel);
+    src2->fill(src2Rect.left(), src2Rect.top(), src2Rect.width(), src2Rect.height(), whitePixel);
 
     KisPaintDeviceSP dst1 = new KisPaintDevice(cs);
     KisPaintDeviceSP dst2 = new KisPaintDevice(cs);
 
     KisFilterSP f = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(f);
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
     f->process(src1, dst1, 0, filterRect, kfc);
     f->process(src2, dst2, 0, filterRect, kfc);
 
     KisPaintDeviceSP reference = new KisPaintDevice(cs);
-    reference->fill(filterRect.left(),filterRect.top(),filterRect.width(),filterRect.height(), whitePixel);
+    reference->fill(filterRect.left(), filterRect.top(), filterRect.width(), filterRect.height(), whitePixel);
 
-    QImage refImage = reference->convertToQImage(0,10,10,40,40);
-    QImage dst1Image = dst1->convertToQImage(0,10,10,40,40);
-    QImage dst2Image = dst2->convertToQImage(0,10,10,40,40);
+    QImage refImage = reference->convertToQImage(0, 10, 10, 40, 40);
+    QImage dst1Image = dst1->convertToQImage(0, 10, 10, 40, 40);
+    QImage dst2Image = dst2->convertToQImage(0, 10, 10, 40, 40);
 
     //dst1Image.save("DST1.png");
     //dst2Image.save("DST2.png");
@@ -235,7 +237,6 @@ void KisFilterTest::testBlurFilterApplicationRect()
     QVERIFY(TestUtil::compareQImages(pt, refImage, dst1Image));
     QVERIFY(TestUtil::compareQImages(pt, refImage, dst2Image));
 }
-
 
 QTEST_KDEMAIN(KisFilterTest, GUI)
 #include "kis_filter_test.moc"

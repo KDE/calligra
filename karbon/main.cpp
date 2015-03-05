@@ -42,7 +42,7 @@
 class KoSplashScreen : public KSplashScreen
 {
 public:
-    explicit KoSplashScreen(const QPixmap& pixmap) : KSplashScreen(pixmap) {}
+    explicit KoSplashScreen(const QPixmap &pixmap) : KSplashScreen(pixmap) {}
 
     void hideEvent(QHideEvent *event)
     {
@@ -52,13 +52,13 @@ public:
 };
 #endif
 
-extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
+extern "C" KDE_EXPORT int kdemain(int argc, char *argv[])
 {
-    KCmdLineArgs::init( argc, argv, KarbonFactory::aboutData() );
+    KCmdLineArgs::init(argc, argv, KarbonFactory::aboutData());
 
     KCmdLineOptions options;
-    options.add("+[file]", ki18n( "File to open" ));
-    KCmdLineArgs::addCmdLineOptions( options );
+    options.add("+[file]", ki18n("File to open"));
+    KCmdLineArgs::addCmdLineOptions(options);
 
     KoApplication app(KARBON_MIME_TYPE);
 
@@ -69,13 +69,14 @@ extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
     QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));
     splashScreen->show();
     splashScreen->showMessage("<p style=\"color:black\">"
-    "<b>Calligra Karbon is unmaintained!</b><br><br>"
-    "The Calligra community welcomes someone to take over.<br><br>"
-    "See community.kde.org/Calligra</p>");
+                              "<b>Calligra Karbon is unmaintained!</b><br><br>"
+                              "The Calligra community welcomes someone to take over.<br><br>"
+                              "See community.kde.org/Calligra</p>");
 #endif
 
-    if( !app.start() )  // parses command line args, create initial docs and mainwindows
+    if (!app.start()) { // parses command line args, create initial docs and mainwindows
         return 1;
+    }
 
     return app.exec();
 }

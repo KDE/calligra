@@ -21,14 +21,14 @@
 #include <QImage>
 #include <QFile>
 
-
 #include "ui_wdgsprayshapeoptions.h"
 
 class KisShapeOptionsWidget: public QWidget, public Ui::WdgSprayShapeOptions
 {
 public:
     KisShapeOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 
@@ -45,7 +45,6 @@ KisSprayShapeOption::KisSprayShapeOption()
     m_useAspect = m_options->aspectButton->keepAspectRatio();
     computeAspect();
 
-
     //initializer slider values
     m_options->widthSpin->setRange(1, 1000, 0);
     m_options->widthSpin->setValue(6);
@@ -54,7 +53,6 @@ KisSprayShapeOption::KisSprayShapeOption()
     m_options->heightSpin->setRange(1, 1000, 0);
     m_options->heightSpin->setValue(6);
     m_options->heightSpin->setSuffix(" px");
-
 
     // UI signals
     connect(m_options->proportionalBox, SIGNAL(clicked(bool)), SLOT(changeSizeUI(bool)));
@@ -67,7 +65,6 @@ KisSprayShapeOption::KisSprayShapeOption()
     setupBrushPreviewSignals();
     setConfigurationPage(m_options);
 }
-
 
 void KisSprayShapeOption::setupBrushPreviewSignals()
 {
@@ -82,7 +79,6 @@ void KisSprayShapeOption::setupBrushPreviewSignals()
     connect(m_options->imageUrl, SIGNAL(textChanged(QString)), SLOT(emitSettingChanged()));
 }
 
-
 KisSprayShapeOption::~KisSprayShapeOption()
 {
     delete m_options;
@@ -93,8 +89,7 @@ int KisSprayShapeOption::shape() const
     return m_options->shapeBox->currentIndex();
 }
 
-
-void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(SPRAYSHAPE_ENABLED, isChecked());
     setting->setProperty(SPRAYSHAPE_SHAPE, shape());
@@ -105,8 +100,7 @@ void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting
     setting->setProperty(SPRAYSHAPE_IMAGE_URL, m_options->imageUrl->url().toLocalFile());
 }
 
-
-void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     // in 2.2 there is not shape enabled so true by default
     setChecked(setting->getBool(SPRAYSHAPE_ENABLED, true));
@@ -117,7 +111,6 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
     m_options->heightSpin->setValue(setting->getInt(SPRAYSHAPE_HEIGHT));
     m_options->imageUrl->setUrl(setting->getString(SPRAYSHAPE_IMAGE_URL));
 }
-
 
 void KisSprayShapeOption::prepareImage()
 {
@@ -136,12 +129,10 @@ void KisSprayShapeOption::prepareImage()
     }
 }
 
-
 void KisSprayShapeOption::aspectToggled(bool toggled)
 {
     m_useAspect = toggled;
 }
-
 
 void KisSprayShapeOption::updateHeight(qreal value)
 {
@@ -150,12 +141,10 @@ void KisSprayShapeOption::updateHeight(qreal value)
         m_options->heightSpin->blockSignals(true);
         m_options->heightSpin->setValue(newHeight);
         m_options->heightSpin->blockSignals(false);
-    }
-    else {
+    } else {
         computeAspect();
     }
 }
-
 
 void KisSprayShapeOption::updateWidth(qreal value)
 {
@@ -164,12 +153,10 @@ void KisSprayShapeOption::updateWidth(qreal value)
         m_options->widthSpin->blockSignals(true);
         m_options->widthSpin->setValue(newWidth);
         m_options->widthSpin->blockSignals(false);
-    }
-    else {
+    } else {
         computeAspect();
     }
 }
-
 
 void KisSprayShapeOption::computeAspect()
 {
@@ -177,7 +164,6 @@ void KisSprayShapeOption::computeAspect()
     qreal h = m_options->heightSpin->value();
     m_aspect = w / h;
 }
-
 
 void KisSprayShapeOption::changeSizeUI(bool proportionalSize)
 {
@@ -187,8 +173,7 @@ void KisSprayShapeOption::changeSizeUI(bool proportionalSize)
         m_options->widthSpin->setSuffix(" px");
         m_options->heightSpin->setMaximum(m_maxSize);
         m_options->heightSpin->setSuffix(" px");
-    }
-    else {
+    } else {
         m_options->widthSpin->setMaximum(100);
         m_options->widthSpin->setSuffix("%");
         m_options->heightSpin->setMaximum(100);

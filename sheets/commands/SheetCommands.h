@@ -38,17 +38,16 @@ class Sheet;
 class RenameSheetCommand : public KUndo2Command
 {
 public:
-    RenameSheetCommand(Sheet* sheet, const QString &name);
+    RenameSheetCommand(Sheet *sheet, const QString &name);
 
     virtual void redo();
     virtual void undo();
 
 protected:
-    Sheet* sheet;
+    Sheet *sheet;
     QString oldName;
     QString newName;
 };
-
 
 /**
  * \ingroup Commands
@@ -57,16 +56,15 @@ protected:
 class HideSheetCommand : public KUndo2Command
 {
 public:
-    explicit HideSheetCommand(Sheet* sheet);
+    explicit HideSheetCommand(Sheet *sheet);
 
     virtual void redo();
     virtual void undo();
 
 protected:
-    Map* map;
+    Map *map;
     QString sheetName;
 };
-
 
 /**
  * \ingroup Commands
@@ -75,16 +73,15 @@ protected:
 class ShowSheetCommand : public KUndo2Command
 {
 public:
-    explicit ShowSheetCommand(Sheet* sheet, KUndo2Command* parent = 0);
+    explicit ShowSheetCommand(Sheet *sheet, KUndo2Command *parent = 0);
 
     virtual void redo();
     virtual void undo();
 
 protected:
-    Map* map;
+    Map *map;
     QString sheetName;
 };
-
 
 /**
  * \ingroup Commands
@@ -93,16 +90,15 @@ protected:
 class AddSheetCommand : public KUndo2Command
 {
 public:
-    explicit AddSheetCommand(Sheet* sheet);
+    explicit AddSheetCommand(Sheet *sheet);
 
     virtual void redo();
     virtual void undo();
 
 protected:
-    Sheet*  m_sheet;
+    Sheet  *m_sheet;
     bool    m_firstrun;
 };
-
 
 /**
  * \ingroup Commands
@@ -113,17 +109,16 @@ class DuplicateSheetCommand : public KUndo2Command
 public:
     explicit DuplicateSheetCommand();
 
-    void setSheet(Sheet* sheet);
+    void setSheet(Sheet *sheet);
 
     virtual void redo();
     virtual void undo();
 
 protected:
-    Sheet* m_oldSheet;
-    Sheet* m_newSheet;
+    Sheet *m_oldSheet;
+    Sheet *m_newSheet;
     bool m_firstrun;
 };
-
 
 /**
  * \ingroup Commands
@@ -132,16 +127,15 @@ protected:
 class RemoveSheetCommand : public KUndo2Command
 {
 public:
-    explicit RemoveSheetCommand(Sheet* sheet);
+    explicit RemoveSheetCommand(Sheet *sheet);
 
     virtual void redo();
     virtual void undo();
 
 protected:
-    Sheet* sheet;
-    Map* map;
+    Sheet *sheet;
+    Map *map;
 };
-
 
 /**
  * \ingroup Commands
@@ -167,8 +161,8 @@ public:
     virtual void undo();
 
 protected:
-    Sheet* sheet;
-    Map* map;
+    Sheet *sheet;
+    Map *map;
     Qt::LayoutDirection oldDirection, newDirection;
     bool oldAutoCalc, newAutoCalc;
     bool oldShowGrid, newShowGrid;

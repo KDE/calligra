@@ -29,13 +29,14 @@ const QSizeF ConnectorSize = QSize(20, 20);
 const qreal ItemWidth = 15 * ConnectorSize.height();
 const qreal FontSize = 0.8 * ConnectorSize.height();
 
-ConnectorItem::ConnectorItem(ConnectorType type, int index, QGraphicsItem * parent)
-        : QGraphicsEllipseItem(parent), m_type(type), m_index(index)
+ConnectorItem::ConnectorItem(ConnectorType type, int index, QGraphicsItem *parent)
+    : QGraphicsEllipseItem(parent), m_type(type), m_index(index)
 {
-    if (m_type == Output)
+    if (m_type == Output) {
         setBrush(QBrush(Qt::red));
-    else if (m_type == Input)
+    } else if (m_type == Input) {
         setBrush(QBrush(Qt::green));
+    }
     setAcceptDrops(true);
     setRect(QRectF(QPointF(), ConnectorSize));
 }
@@ -57,30 +58,31 @@ int ConnectorItem::connectorIndex() const
     return m_index;
 }
 
-KoFilterEffect * ConnectorItem::effect() const
+KoFilterEffect *ConnectorItem::effect() const
 {
-    if (!parentItem())
+    if (!parentItem()) {
         return 0;
-    EffectItemBase * effectItem = dynamic_cast<EffectItemBase*>(parentItem());
-    if (!effectItem)
+    }
+    EffectItemBase *effectItem = dynamic_cast<EffectItemBase *>(parentItem());
+    if (!effectItem) {
         return 0;
+    }
 
     return effectItem->effect();
 }
 
 ConnectorMimeData::ConnectorMimeData(ConnectorItem *connector)
-        : m_connector(connector)
+    : m_connector(connector)
 {
 }
 
-ConnectorItem * ConnectorMimeData::connector() const
+ConnectorItem *ConnectorMimeData::connector() const
 {
     return m_connector;
 }
 
-
 EffectItemBase::EffectItemBase(KoFilterEffect *effect)
-        : QGraphicsRectItem(0), m_effect(effect)
+    : QGraphicsRectItem(0), m_effect(effect)
 {
     setZValue(1);
     setFlags(QGraphicsItem::ItemIsSelectable);
@@ -90,7 +92,7 @@ EffectItemBase::EffectItemBase(KoFilterEffect *effect)
 
 void EffectItemBase::createText(const QString &text)
 {
-    QGraphicsSimpleTextItem * textItem = new QGraphicsSimpleTextItem(text, this);
+    QGraphicsSimpleTextItem *textItem = new QGraphicsSimpleTextItem(text, this);
     QFont font = textItem->font();
     font.setPointSize(FontSize);
     textItem->setFont(font);
@@ -101,7 +103,7 @@ void EffectItemBase::createText(const QString &text)
 
 void EffectItemBase::createOutput(const QPointF &position, const QString &name)
 {
-    ConnectorItem * connector = new ConnectorItem(ConnectorItem::Output, 0, this);
+    ConnectorItem *connector = new ConnectorItem(ConnectorItem::Output, 0, this);
     connector->setCenter(position);
 
     m_outputPosition = position;
@@ -111,7 +113,7 @@ void EffectItemBase::createOutput(const QPointF &position, const QString &name)
 void EffectItemBase::createInput(const QPointF &position)
 {
     int inputCount = m_inputPositions.count();
-    ConnectorItem * connector = new ConnectorItem(ConnectorItem::Input, inputCount, this);
+    ConnectorItem *connector = new ConnectorItem(ConnectorItem::Input, inputCount, this);
     connector->setCenter(position);
 
     m_inputPositions.append(position);
@@ -124,8 +126,9 @@ QPointF EffectItemBase::outputPosition() const
 
 QPointF EffectItemBase::inputPosition(int index) const
 {
-    if (index < 0 || index >= m_inputPositions.count())
+    if (index < 0 || index >= m_inputPositions.count()) {
         return QPointF();
+    }
     return m_inputPositions[index];
 }
 
@@ -139,16 +142,17 @@ QSizeF EffectItemBase::connectorSize() const
     return ConnectorSize;
 }
 
-KoFilterEffect * EffectItemBase::effect() const
+KoFilterEffect *EffectItemBase::effect() const
 {
     return m_effect;
 }
 
 void EffectItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    ConnectorItem * connector = connectorAtPosition(event->scenePos());
-    if (!connector)
+    ConnectorItem *connector = connectorAtPosition(event->scenePos());
+    if (!connector) {
         return;
+    }
 
     ConnectorMimeData *data = new ConnectorMimeData(connector);
 
@@ -157,59 +161,68 @@ void EffectItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
     drag->start();
 }
 
-void EffectItemBase::dragMoveEvent(QGraphicsSceneDragDropEvent * event)
+void EffectItemBase::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     event->ignore();
-    ConnectorItem * targetItem = connectorAtPosition(event->scenePos());
-    if (!targetItem)
+    ConnectorItem *targetItem = connectorAtPosition(event->scenePos());
+    if (!targetItem) {
         return;
+    }
 
-    const ConnectorMimeData * data = dynamic_cast<const ConnectorMimeData*>(event->mimeData());
-    if (!data)
+    const ConnectorMimeData *data = dynamic_cast<const ConnectorMimeData *>(event->mimeData());
+    if (!data) {
         return;
+    }
 
-    ConnectorItem * sourceItem = data->connector();
+    ConnectorItem *sourceItem = data->connector();
     int sourceItemType = sourceItem->connectorType();
     int targetItemType = targetItem->connectorType();
 
-    if (sourceItemType == targetItemType)
+    if (sourceItemType == targetItemType) {
         return;
+    }
 
     // do not accept connection within single effect item
-    if (sourceItem->parentItem() == targetItem->parentItem())
+    if (sourceItem->parentItem() == targetItem->parentItem()) {
         return;
+    }
 
     if (sourceItemType == ConnectorItem::Input) {
         // we can only connect input with output above
-        if (sourceItem->scenePos().y() < targetItem->scenePos().y())
+        if (sourceItem->scenePos().y() < targetItem->scenePos().y()) {
             return;
+        }
     }
     if (sourceItemType == ConnectorItem::Output) {
         // we can only connect output with input below
-        if (sourceItem->scenePos().y() > targetItem->scenePos().y())
+        if (sourceItem->scenePos().y() > targetItem->scenePos().y()) {
             return;
+        }
     }
 
     event->accept();
 }
 
-void EffectItemBase::dropEvent(QGraphicsSceneDragDropEvent * event)
+void EffectItemBase::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-    ConnectorItem * connector = connectorAtPosition(event->scenePos());
-    if (!connector)
+    ConnectorItem *connector = connectorAtPosition(event->scenePos());
+    if (!connector) {
         return;
+    }
 
-    const ConnectorMimeData * data = dynamic_cast<const ConnectorMimeData*>(event->mimeData());
-    if (!data)
+    const ConnectorMimeData *data = dynamic_cast<const ConnectorMimeData *>(event->mimeData());
+    if (!data) {
         return;
+    }
 }
 
-ConnectorItem * EffectItemBase::connectorAtPosition(const QPointF &scenePosition)
+ConnectorItem *EffectItemBase::connectorAtPosition(const QPointF &scenePosition)
 {
-    foreach(QGraphicsItem *childItem, childItems()) {
-        ConnectorItem * connector = dynamic_cast<ConnectorItem*>(childItem);
-        if (!connector)
+    foreach (QGraphicsItem *childItem, childItems()) {
+        ConnectorItem *connector = dynamic_cast<ConnectorItem *>(childItem);
+        if (!connector) {
             continue;
+        }
         if (connector->contains(connector->mapFromScene(scenePosition))) {
             return connector;
         }
@@ -219,11 +232,11 @@ ConnectorItem * EffectItemBase::connectorAtPosition(const QPointF &scenePosition
 }
 
 DefaultInputItem::DefaultInputItem(const QString &name, KoFilterEffect *effect)
-        : EffectItemBase(effect), m_name(name)
+    : EffectItemBase(effect), m_name(name)
 {
-    setRect(0, 0, ItemWidth, 2*ConnectorSize.height());
+    setRect(0, 0, ItemWidth, 2 * ConnectorSize.height());
 
-    createOutput(QPointF(ItemWidth, 0.5*rect().height()), name);
+    createOutput(QPointF(ItemWidth, 0.5 * rect().height()), name);
     createText(name);
 
     QLinearGradient g(QPointF(0, 0), QPointF(1, 1));
@@ -234,7 +247,7 @@ DefaultInputItem::DefaultInputItem(const QString &name, KoFilterEffect *effect)
 }
 
 EffectItem::EffectItem(KoFilterEffect *effect)
-        : EffectItemBase(effect)
+    : EffectItemBase(effect)
 {
     Q_ASSERT(effect);
     QRectF circle(QPointF(), ConnectorSize);
@@ -269,18 +282,18 @@ EffectItem::EffectItem(KoFilterEffect *effect)
     setBrush(QBrush(g));
 }
 
-ConnectionItem::ConnectionItem(EffectItemBase *source, EffectItemBase * target, int targetInput)
-        : QGraphicsPathItem(0), m_source(source), m_target(target), m_targetInput(targetInput)
+ConnectionItem::ConnectionItem(EffectItemBase *source, EffectItemBase *target, int targetInput)
+    : QGraphicsPathItem(0), m_source(source), m_target(target), m_targetInput(targetInput)
 {
     setPen(QPen(Qt::black));
 }
 
-EffectItemBase * ConnectionItem::sourceItem() const
+EffectItemBase *ConnectionItem::sourceItem() const
 {
     return m_source;
 }
 
-EffectItemBase * ConnectionItem::targetItem() const
+EffectItemBase *ConnectionItem::targetItem() const
 {
     return m_target;
 }
@@ -290,12 +303,12 @@ int ConnectionItem::targetInput() const
     return m_targetInput;
 }
 
-void ConnectionItem::setSourceItem(EffectItemBase * source)
+void ConnectionItem::setSourceItem(EffectItemBase *source)
 {
     m_source = source;
 }
 
-void ConnectionItem::setTargetItem(EffectItemBase * target, int targetInput)
+void ConnectionItem::setTargetItem(EffectItemBase *target, int targetInput)
 {
     m_target = target;
     m_targetInput = targetInput;

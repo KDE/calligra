@@ -76,20 +76,19 @@ public:
     bool isMouse() const;
 
     /// equal
-    bool operator==(const KoInputDevice&) const;
+    bool operator==(const KoInputDevice &) const;
     /// not equal
-    bool operator!=(const KoInputDevice&) const;
+    bool operator!=(const KoInputDevice &) const;
     /// assignment
-    KoInputDevice & operator=(const KoInputDevice &);
+    KoInputDevice &operator=(const KoInputDevice &);
 
     static KoInputDevice mouse();     ///< Standard mouse
     static KoInputDevice stylus();    ///< Wacom style/pen
     static KoInputDevice eraser();    ///< Wacom eraser
 
-
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_METATYPE(KoInputDevice)

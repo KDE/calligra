@@ -30,7 +30,6 @@ class QStackedWidget;
 class KisSliderSpinBox;
 class KisToolMultihandHelper;
 
-
 class KisToolMultihand : public KisToolBrush
 {
     Q_OBJECT
@@ -41,11 +40,10 @@ public:
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
 
-
 protected:
-    void paint(QPainter& gc, const KoViewConverter &converter);
+    void paint(QPainter &gc, const KoViewConverter &converter);
 
-    QWidget* createOptionWidget();
+    QWidget *createOptionWidget();
 
 private:
     void initTransformations();
@@ -76,7 +74,7 @@ private:
     int m_translateRadius;
 
     bool m_setupAxesFlag;
-    QComboBox * m_transformModesComboBox;
+    QComboBox *m_transformModesComboBox;
     KisSliderSpinBox *m_handsCountSlider;
     KisDoubleSliderSpinBox *m_axesAngleSlider;
     QCheckBox *m_axesChCkBox;
@@ -87,13 +85,13 @@ private:
     QPushButton *m_axesPointBtn;
 };
 
-
 class KisToolMultiBrushFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolMultiBrushFactory(const QStringList&)
-            : KoToolFactoryBase("KritaShape/KisToolMultiBrush") {
+    KisToolMultiBrushFactory(const QStringList &)
+        : KoToolFactoryBase("KritaShape/KisToolMultiBrush")
+    {
 
         setToolTip(i18n("Multibrush Tool"));
 
@@ -107,7 +105,8 @@ public:
 
     virtual ~KisToolMultiBrushFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolMultihand(canvas);
     }
 

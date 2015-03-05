@@ -25,7 +25,7 @@
 
 #include <Eigen/LU>
 
-Matrix3qreal KisPerspectiveMath::computeMatrixTransfo(const QPointF& topLeft1, const QPointF& topRight1, const QPointF& bottomLeft1, const QPointF& bottomRight1 , const QPointF& topLeft2, const QPointF& topRight2, const QPointF& bottomLeft2, const QPointF& bottomRight2)
+Matrix3qreal KisPerspectiveMath::computeMatrixTransfo(const QPointF &topLeft1, const QPointF &topRight1, const QPointF &bottomLeft1, const QPointF &bottomRight1, const QPointF &topLeft2, const QPointF &topRight2, const QPointF &bottomLeft2, const QPointF &bottomRight2)
 {
     Matrix9qreal a = Matrix9qreal::Zero();
     Vector9qreal b = Vector9qreal::Zero();
@@ -88,16 +88,18 @@ Matrix3qreal KisPerspectiveMath::computeMatrixTransfo(const QPointF& topLeft1, c
     Vector9qreal v;
     v = a.lu().solve(b);
     Matrix3qreal matrix;
-    for (int r = 0; r < 3; r++) for (int c = 0; c < 3; c++) matrix.coeffRef(r, c) = v.coeff(3 * r + c);
+    for (int r = 0; r < 3; r++) for (int c = 0; c < 3; c++) {
+            matrix.coeffRef(r, c) = v.coeff(3 * r + c);
+        }
     return matrix;
 }
 
-Matrix3qreal KisPerspectiveMath::computeMatrixTransfoToPerspective(const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight, const QRect& r)
+Matrix3qreal KisPerspectiveMath::computeMatrixTransfoToPerspective(const QPointF &topLeft, const QPointF &topRight, const QPointF &bottomLeft, const QPointF &bottomRight, const QRect &r)
 {
     return KisPerspectiveMath::computeMatrixTransfo(topLeft, topRight, bottomLeft, bottomRight, r.topLeft(), r.topRight(), r.bottomLeft(), r.bottomRight());
 }
 
-Matrix3qreal KisPerspectiveMath::computeMatrixTransfoFromPerspective(const QRect& r, const QPointF& topLeft, const QPointF& topRight, const QPointF& bottomLeft, const QPointF& bottomRight)
+Matrix3qreal KisPerspectiveMath::computeMatrixTransfoFromPerspective(const QRect &r, const QPointF &topLeft, const QPointF &topRight, const QPointF &bottomLeft, const QPointF &bottomRight)
 {
     return KisPerspectiveMath::computeMatrixTransfo(r.topLeft(), r.topRight(), r.bottomLeft(), r.bottomRight(), topLeft, topRight, bottomLeft, bottomRight);
 }

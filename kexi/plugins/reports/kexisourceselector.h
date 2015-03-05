@@ -34,22 +34,22 @@ class KexiSourceSelector : public QWidget
 {
     Q_OBJECT
 public:
-    KexiSourceSelector(QWidget* parent, KexiDB::Connection* conn);
+    KexiSourceSelector(QWidget *parent, KexiDB::Connection *conn);
     ~KexiSourceSelector();
 
-    KoReportData* sourceData();
+    KoReportData *sourceData();
     void setConnectionData(QDomElement);
     QDomElement connectionData();
 
 Q_SIGNALS:
-    void setData(KoReportData*);
+    void setData(KoReportData *);
 
 private Q_SLOTS:
     void setDataClicked();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KEXISOURCESELECTOR_H

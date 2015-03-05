@@ -26,7 +26,8 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "scheduler_utils.h"
 
-inline QString undoString(bool undo) {
+inline QString undoString(bool undo)
+{
     return undo ? "_undo" : "_redo";
 }
 
@@ -39,18 +40,19 @@ public:
     {
     }
 
-    void undo() {
+    void undo()
+    {
         m_result += QString(" ") + text().toString() + undoString(true);
     }
 
-    void redo() {
+    void redo()
+    {
         m_result += QString(" ") + text().toString() + undoString(false);
     }
 
 private:
     QString &m_result;
 };
-
 
 void KisStrokeStrategyUndoCommandBasedTest::testFinishedStroke()
 {
@@ -61,7 +63,7 @@ void KisStrokeStrategyUndoCommandBasedTest::testFinishedStroke()
 
     KisStrokeStrategy *strategy =
         new KisStrokeStrategyUndoCommandBased(kundo2_noi18n("test"), false, 0,
-                                              initCommand, finishCommand);
+                initCommand, finishCommand);
 
     KisStroke stroke(strategy);
     stroke.addJob(
@@ -85,8 +87,8 @@ void KisStrokeStrategyUndoCommandBasedTest::testCancelledStroke()
 
     KisStrokeStrategy *strategy =
         new KisStrokeStrategyUndoCommandBased(kundo2_noi18n("test"), false,
-                                              image->postExecutionUndoAdapter(),
-                                              initCommand, finishCommand);
+                image->postExecutionUndoAdapter(),
+                initCommand, finishCommand);
 
     KisStrokeId id = image->startStroke(strategy);
     image->addJob(id, new KisStrokeStrategyUndoCommandBased::Data(dabCommand));
@@ -113,18 +115,24 @@ public:
           m_exclusive(exclusive)
     {
     }
-    void redo() { checkState(); }
-    void undo() { checkState(); }
+    void redo()
+    {
+        checkState();
+    }
+    void undo()
+    {
+        checkState();
+    }
 
 private:
-    void checkState() {
+    void checkState()
+    {
         m_counter.ref();
-        for(int i = 0; i < NUM_CHECKS; i++) {
+        for (int i = 0; i < NUM_CHECKS; i++) {
 
-            if(m_exclusive) {
+            if (m_exclusive) {
                 Q_ASSERT(m_counter == 1);
-            }
-            else {
+            } else {
                 m_hadConcurrency.ref();
             }
 
@@ -153,18 +161,18 @@ void KisStrokeStrategyUndoCommandBasedTest::stressTestSequentialCommands()
 
     KisStrokeId id = image->startStroke(strategy);
 
-    for(int i = 0; i < NUM_JOBS; i++) {
+    for (int i = 0; i < NUM_JOBS; i++) {
         bool isSequential = i % SEQUENTIAL_NTH == 0;
 
         KisStrokeJobData::Sequentiality seq = isSequential ?
-            KisStrokeJobData::SEQUENTIAL : KisStrokeJobData::CONCURRENT;
+                                              KisStrokeJobData::SEQUENTIAL : KisStrokeJobData::CONCURRENT;
 
         KUndo2CommandSP command(new ExclusivenessCheckerCommand(counter,
-                                                                hadConcurrency,
-                                                                isSequential));
+                                hadConcurrency,
+                                isSequential));
 
         image->addJob(id,
-            new KisStrokeStrategyUndoCommandBased::Data(command, seq));
+                      new KisStrokeStrategyUndoCommandBased::Data(command, seq));
 
     }
 
@@ -173,7 +181,7 @@ void KisStrokeStrategyUndoCommandBasedTest::stressTestSequentialCommands()
 
     QVERIFY(!counter);
     qDebug() << "Concurrency observed:" << hadConcurrency
-             << "/" << NUM_CHECKS * NUM_JOBS;
+             << "/" << NUM_CHECKS *NUM_JOBS;
 }
 
 QTEST_KDEMAIN(KisStrokeStrategyUndoCommandBasedTest, NoGUI)

@@ -37,13 +37,13 @@ using namespace KSpread;
 class ReadOnlyTableModel::Private
 {
 public:
-    Sheet* sheet;
+    Sheet *sheet;
     QSize size;
 };
 
-ReadOnlyTableModel::ReadOnlyTableModel(Sheet* sheet, int columns, int rows)
-        : QAbstractTableModel(sheet)
-        , d(new Private)
+ReadOnlyTableModel::ReadOnlyTableModel(Sheet *sheet, int columns, int rows)
+    : QAbstractTableModel(sheet)
+    , d(new Private)
 {
     d->sheet = sheet;
     d->size = (columns && rows) ? QSize(columns, rows) : QSize(KS_colMax, KS_rowMax);
@@ -54,19 +54,19 @@ ReadOnlyTableModel::~ReadOnlyTableModel()
     delete d;
 }
 
-int ReadOnlyTableModel::columnCount(const QModelIndex& parent) const
+int ReadOnlyTableModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return (d->sheet->usedArea() & QRect(QPoint(1, 1), d->size)).width();
 }
 
-int ReadOnlyTableModel::rowCount(const QModelIndex& parent) const
+int ReadOnlyTableModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return (d->sheet->usedArea() & QRect(QPoint(1, 1), d->size)).height();
 }
 
-QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
+QVariant ReadOnlyTableModel::data(const QModelIndex &index, int role) const
 {
     // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
     const Cell cell = Cell(d->sheet, index.column() + 1, index.row() + 1).masterCell();
@@ -137,12 +137,12 @@ QModelIndex ReadOnlyTableModel::index(int row, int column, const QModelIndex &pa
     return index;
 }
 
-Sheet* ReadOnlyTableModel::sheet() const
+Sheet *ReadOnlyTableModel::sheet() const
 {
     return d->sheet;
 }
 
-const QSize& ReadOnlyTableModel::size() const
+const QSize &ReadOnlyTableModel::size() const
 {
     return d->size;
 }

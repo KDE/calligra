@@ -40,12 +40,16 @@ bool KraHandler::canRead() const
 bool KraHandler::read(QImage *image)
 {
     KZip zip(device());
-    if (!zip.open(QIODevice::ReadOnly)) return false;
+    if (!zip.open(QIODevice::ReadOnly)) {
+        return false;
+    }
 
     const KArchiveEntry *entry = zip.directory()->entry("mergedimage.png");
-    if (!entry || !entry->isFile()) return false;
+    if (!entry || !entry->isFile()) {
+        return false;
+    }
 
-    const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(entry);
+    const KZipFileEntry *fileZipEntry = static_cast<const KZipFileEntry *>(entry);
 
     image->loadFromData(fileZipEntry->data(), "PNG");
 
@@ -71,16 +75,19 @@ bool KraHandler::canRead(QIODevice *device)
     }
 
     KZip zip(device);
-    if (!zip.open(QIODevice::ReadOnly)) return false;
+    if (!zip.open(QIODevice::ReadOnly)) {
+        return false;
+    }
 
     const KArchiveEntry *entry = zip.directory()->entry("mimetype");
-    if (!entry || !entry->isFile()) return false;
+    if (!entry || !entry->isFile()) {
+        return false;
+    }
 
-    const KZipFileEntry* fileZipEntry = static_cast<const KZipFileEntry*>(entry);
+    const KZipFileEntry *fileZipEntry = static_cast<const KZipFileEntry *>(entry);
 
     return (qstrcmp(fileZipEntry->data().constData(), "application/x-krita") == 0);
 }
-
 
 class KraPlugin : public QImageIOPlugin
 {
@@ -98,10 +105,11 @@ QStringList KraPlugin::keys() const
 QImageIOPlugin::Capabilities KraPlugin::capabilities(QIODevice *device, const QByteArray &format) const
 {
     Q_UNUSED(device);
-    if (format == "kra" || format == "KRA")
+    if (format == "kra" || format == "KRA") {
         return Capabilities(CanRead);
-    else
+    } else {
         return 0;
+    }
 
 }
 

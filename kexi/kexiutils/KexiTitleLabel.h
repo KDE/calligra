@@ -28,17 +28,17 @@ class KEXIUTILS_EXPORT KexiTitleLabel : public QLabel
 {
     Q_OBJECT
 public:
-    explicit KexiTitleLabel(QWidget * parent = 0, Qt::WindowFlags f = 0);
-    explicit KexiTitleLabel(const QString & text, QWidget * parent = 0, Qt::WindowFlags f = 0);
+    explicit KexiTitleLabel(QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit KexiTitleLabel(const QString &text, QWidget *parent = 0, Qt::WindowFlags f = 0);
     ~KexiTitleLabel();
 protected:
-    void changeEvent(QEvent* event);
+    void changeEvent(QEvent *event);
 private:
     void updateFont();
     void init();
-    
+
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

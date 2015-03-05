@@ -39,20 +39,20 @@ public:
     KisCompositeOpOption(bool createConfigWidget = false);
     ~KisCompositeOpOption();
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private Q_SLOTS:
-    void slotCompositeOpChanged(const QModelIndex& index);
+    void slotCompositeOpChanged(const QModelIndex &index);
     void slotEraserToggled(bool toggled);
 
 private:
-    void changeCompositeOp(const KoID& compositeOp);
+    void changeCompositeOp(const KoID &compositeOp);
 
 private:
-    QLabel*                   m_label;
-    QPushButton*              m_bnEraser;
-    KisCompositeOpListWidget* m_list;
+    QLabel                   *m_label;
+    QPushButton              *m_bnEraser;
+    KisCompositeOpListWidget *m_list;
     QString                   m_prevCompositeOpID;
     QString                   m_currCompositeOpID;
     bool                      m_createConfigWidget;

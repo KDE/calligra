@@ -19,13 +19,11 @@
 #ifndef __KIS_UPDATE_COMMAND_H
 #define __KIS_UPDATE_COMMAND_H
 
-
 #include "kundo2command.h"
 #include "krita_export.h"
 #include "kis_types.h"
 
 class KisUpdatesFacade;
-
 
 class KRITAIMAGE_EXPORT KisUpdateCommand : public KUndo2Command
 {

@@ -41,7 +41,7 @@ K_PLUGIN_FACTORY(KisDropshadowPluginFactory, registerPlugin<KisDropshadowPlugin>
 K_EXPORT_PLUGIN(KisDropshadowPluginFactory("krita"))
 
 KisDropshadowPlugin::KisDropshadowPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+    : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Add Drop Shadow..."), this);
     action->setActivationFlags(KisAction::ACTIVE_LAYER);
@@ -56,12 +56,16 @@ KisDropshadowPlugin::~KisDropshadowPlugin()
 void KisDropshadowPlugin::slotDropshadow()
 {
     KisImageWSP image = m_view->image();
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
     KisLayerSP layer = m_view->activeLayer();
-    if (!layer) return;
+    if (!layer) {
+        return;
+    }
 
-    DlgDropshadow * dlgDropshadow = new DlgDropshadow(layer->colorSpace()->name(),
+    DlgDropshadow *dlgDropshadow = new DlgDropshadow(layer->colorSpace()->name(),
             image->colorSpace()->name(),
             m_view->mainWindow(), "Dropshadow");
     Q_CHECK_PTR(dlgDropshadow);
@@ -72,7 +76,7 @@ void KisDropshadowPlugin::slotDropshadow()
 
         KisDropshadow dropshadow(m_view);
 
-        KoProgressUpdater* updater = m_view->createProgressUpdater();
+        KoProgressUpdater *updater = m_view->createProgressUpdater();
         updater->start(100, i18n("Drop Shadow"));
         QPointer<KoUpdater> u = updater->startSubtask();
         dropshadow.dropshadow(u,

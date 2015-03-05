@@ -109,7 +109,7 @@ public:
     /**
      * @return the list of main windows.
      */
-    const QList<KoMainWindow*>& mainWindows() const;
+    const QList<KoMainWindow *> &mainWindows() const;
 
     /**
      * @return the number of shells for the main window
@@ -126,7 +126,7 @@ public Q_SLOTS:
      * This slot loads an existing file and deletes the start up widget.
      * @param url the file to load
      */
-    virtual void openExistingFile(const KUrl& url);
+    virtual void openExistingFile(const KUrl &url);
 
 protected Q_SLOTS:
 
@@ -134,12 +134,11 @@ protected Q_SLOTS:
      * This slot loads a template and deletes the start up widget.
      * @param url the template to load
      */
-    virtual void openTemplate(const KUrl& url);
+    virtual void openTemplate(const KUrl &url);
 
 private Q_SLOTS:
 
     void startCustomDocument();
-
 
 public:
 
@@ -167,7 +166,7 @@ public:
     /**
      * @return a list of views this document is displayed in
      */
-    QList<KoView*> views() const;
+    QList<KoView *> views() const;
 
     /**
      * @return number of views this document is displayed in
@@ -191,7 +190,6 @@ public:
      */
     QString templateType() const;
 
-
     /**
      * Creates and shows the start up widget.
      * @param parent the KoMainWindow used as parent for the widget.
@@ -210,7 +208,7 @@ protected:
      * Set the template type used. This is used by the start up widget to show
      * the correct templates.
      */
-    void setTemplateType(const QString& _templateType);
+    void setTemplateType(const QString &_templateType);
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()
@@ -244,7 +242,7 @@ protected:
      * @param templateType the template-type (group) that should be selected on creation.
      */
     KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
-                               const QString& templateType = QString());
+                               const QString &templateType = QString());
 
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent) = 0;
 
@@ -272,12 +270,24 @@ class MockPart : public KoPart
 {
 public:
     MockPart()
-    : KoPart( 0 )
+        : KoPart(0)
     {}
-    KoView *createViewInstance(KoDocument* document, QWidget* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
-    virtual KoMainWindow *createMainWindow() { return 0; }
+    KoView *createViewInstance(KoDocument *document, QWidget *parent)
+    {
+        Q_UNUSED(document);
+        Q_UNUSED(parent);
+        return 0;
+    }
+    virtual KoMainWindow *createMainWindow()
+    {
+        return 0;
+    }
 protected:
-    virtual QGraphicsItem *createCanvasItem(KoDocument* document) { Q_UNUSED(document); return 0; }
+    virtual QGraphicsItem *createCanvasItem(KoDocument *document)
+    {
+        Q_UNUSED(document);
+        return 0;
+    }
 };
 
 #endif

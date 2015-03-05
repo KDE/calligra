@@ -26,10 +26,10 @@
 
 void TestShapeBackgroundCommand::refCounting()
 {
-    MockShape * shape1 = new MockShape();
+    MockShape *shape1 = new MockShape();
     QSharedPointer<KoShapeBackground> whiteFill(new KoColorBackground(QColor(Qt::white)));
     QSharedPointer<KoShapeBackground> blackFill(new KoColorBackground(QColor(Qt::black)));
-    QSharedPointer<KoShapeBackground> redFill  (new KoColorBackground(QColor(Qt::red)));
+    QSharedPointer<KoShapeBackground> redFill(new KoColorBackground(QColor(Qt::red)));
 
     shape1->setBackground(whiteFill);
     QVERIFY(shape1->background() == whiteFill);
@@ -58,10 +58,10 @@ void TestShapeBackgroundCommand::refCounting()
     // if white is deleted when deleting cmd1 this will crash
     QPainter p;
     QPainterPath path;
-    path.addRect( QRectF(0,0,100,100) );
+    path.addRect(QRectF(0, 0, 100, 100));
     KoViewConverter converter;
     KoShapePaintingContext context;
-    whiteFill->paint( p, converter, context, path );
+    whiteFill->paint(p, converter, context, path);
 
     delete cmd2;
     delete shape1;

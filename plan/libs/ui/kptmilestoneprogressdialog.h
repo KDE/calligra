@@ -24,7 +24,6 @@
 
 #include <kdialog.h>
 
-
 namespace KPlato
 {
 
@@ -33,16 +32,17 @@ class Task;
 class Node;
 class MacroCommand;
 
-class KPLATOUI_EXPORT MilestoneProgressDialog : public KDialog {
+class KPLATOUI_EXPORT MilestoneProgressDialog : public KDialog
+{
     Q_OBJECT
 public:
-    explicit MilestoneProgressDialog(Task &task, QWidget *parent=0);
+    explicit MilestoneProgressDialog(Task &task, QWidget *parent = 0);
 
     MacroCommand *buildCommand();
 
 protected Q_SLOTS:
     void slotChanged();
-    void slotNodeRemoved( Node *node );
+    void slotNodeRemoved(Node *node);
 
 private:
     Node *m_node;

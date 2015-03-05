@@ -28,9 +28,9 @@
 
 using namespace Scripting;
 
-KexiDBDriver::KexiDBDriver(QObject* parent, ::KexiDB::Driver* driver)
-        : QObject(parent)
-        , m_driver(driver)
+KexiDBDriver::KexiDBDriver(QObject *parent, ::KexiDB::Driver *driver)
+    : QObject(parent)
+    , m_driver(driver)
 {
     setObjectName("KexiDBDriver");
 }
@@ -44,7 +44,7 @@ bool KexiDBDriver::isValid()
     return m_driver->isValid();
 }
 
-QString KexiDBDriver::escapeString(const QString& s)
+QString KexiDBDriver::escapeString(const QString &s)
 {
     return m_driver->escapeString(s);
 }
@@ -56,26 +56,26 @@ QString KexiDBDriver::fileDBDriverMimeType()
 {
     return m_driver->fileDBDriverMimeType();
 }
-bool KexiDBDriver::isSystemObjectName(const QString& name)
+bool KexiDBDriver::isSystemObjectName(const QString &name)
 {
     return m_driver->isSystemObjectName(name);
 }
-bool KexiDBDriver::isSystemDatabaseName(const QString& name)
+bool KexiDBDriver::isSystemDatabaseName(const QString &name)
 {
     return m_driver->isSystemDatabaseName(name);
 }
-bool KexiDBDriver::isSystemFieldName(const QString& name)
+bool KexiDBDriver::isSystemFieldName(const QString &name)
 {
     return m_driver->isSystemFieldName(name);
 }
-QString KexiDBDriver::valueToSQL(const QString& fieldtype, const QVariant& value)
+QString KexiDBDriver::valueToSQL(const QString &fieldtype, const QVariant &value)
 {
     return m_driver->valueToSQL(fieldtype, value);
 }
 
-QObject* KexiDBDriver::createConnection(QObject* data)
+QObject *KexiDBDriver::createConnection(QObject *data)
 {
-    KexiDBConnectionData* d = dynamic_cast<KexiDBConnectionData*>(data);
+    KexiDBConnectionData *d = dynamic_cast<KexiDBConnectionData *>(data);
     return d ? new KexiDBConnection(m_driver->createConnection(*d->data())) : 0;
 }
 

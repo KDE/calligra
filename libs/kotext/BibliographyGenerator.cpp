@@ -55,14 +55,23 @@ BibliographyGenerator::~BibliographyGenerator()
 
 static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
 {
-    if ( keyIndex == sortKeys.size() ) return false;
-    else if (sortKeys[keyIndex].second == Qt::AscendingOrder) {
-        if (c1->dataField( sortKeys[keyIndex].first ) < c2->dataField( sortKeys[keyIndex].first )) return true;
-        else if (c1->dataField( sortKeys[keyIndex].first ) > c2->dataField( sortKeys[keyIndex].first )) return false;
+    if (keyIndex == sortKeys.size()) {
+        return false;
+    } else if (sortKeys[keyIndex].second == Qt::AscendingOrder) {
+        if (c1->dataField(sortKeys[keyIndex].first) < c2->dataField(sortKeys[keyIndex].first)) {
+            return true;
+        } else if (c1->dataField(sortKeys[keyIndex].first) > c2->dataField(sortKeys[keyIndex].first)) {
+            return false;
+        }
     } else if (sortKeys[keyIndex].second == Qt::DescendingOrder) {
-        if (c1->dataField( sortKeys[keyIndex].first ) < c2->dataField( sortKeys[keyIndex].first )) return false;
-        else if (c1->dataField( sortKeys[keyIndex].first ) > c2->dataField( sortKeys[keyIndex].first )) return true;
-    } else return compare_on( keyIndex + 1, c1, c2 );
+        if (c1->dataField(sortKeys[keyIndex].first) < c2->dataField(sortKeys[keyIndex].first)) {
+            return false;
+        } else if (c1->dataField(sortKeys[keyIndex].first) > c2->dataField(sortKeys[keyIndex].first)) {
+            return true;
+        }
+    } else {
+        return compare_on(keyIndex + 1, c1, c2);
+    }
 
     return false;
 }
@@ -82,8 +91,9 @@ static QList<KoInlineCite *> sort(QList<KoInlineCite *> cites, QList<SortKeyPair
 
 void BibliographyGenerator::generate()
 {
-    if (!m_bibInfo)
+    if (!m_bibInfo) {
         return;
+    }
 
     QTextCursor cursor = m_bibDocument->rootFrame()->lastCursorPosition();
     cursor.setPosition(m_bibDocument->rootFrame()->firstPosition(), QTextCursor::KeepAnchor);
@@ -107,18 +117,17 @@ void BibliographyGenerator::generate()
 
     QTextCharFormat savedCharFormat = cursor.charFormat();
 
-    QList<KoInlineCite*> citeList;
-    if ( KoTextDocument(m_block.document()).styleManager()->bibliographyConfiguration()->sortByPosition() ) {
+    QList<KoInlineCite *> citeList;
+    if (KoTextDocument(m_block.document()).styleManager()->bibliographyConfiguration()->sortByPosition()) {
         citeList = KoTextDocument(m_block.document())
-                .inlineTextObjectManager()->citationsSortedByPosition(false, m_block.document()->firstBlock());
+                   .inlineTextObjectManager()->citationsSortedByPosition(false, m_block.document()->firstBlock());
     } else {
         KoTextDocument *doc = new KoTextDocument(m_block.document());
         citeList = sort(doc->inlineTextObjectManager()->citationsSortedByPosition(false, m_block.document()->firstBlock()),
                         KoTextDocument(m_block.document()).styleManager()->bibliographyConfiguration()->sortKeys());
     }
 
-    foreach (KoInlineCite *cite, citeList)
-    {
+    foreach (KoInlineCite *cite, citeList) {
         KoParagraphStyle *bibTemplateStyle = 0;
         BibliographyEntryTemplate bibEntryTemplate;
         if (m_bibInfo->m_entryTemplate.keys().contains(cite->bibliographyType())) {
@@ -135,48 +144,48 @@ void BibliographyGenerator::generate()
             continue;
         }
 
-        cursor.insertBlock(QTextBlockFormat(),QTextCharFormat());
+        cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
 
         QTextBlock bibEntryTextBlock = cursor.block();
         bibTemplateStyle->applyStyle(bibEntryTextBlock);
         bool spanEnabled = false;           //true if data field is not empty
 
-        foreach (IndexEntry * entry, bibEntryTemplate.indexEntries) {
-            switch(entry->name) {
-                case IndexEntry::BIBLIOGRAPHY: {
-                    IndexEntryBibliography *indexEntry = static_cast<IndexEntryBibliography *>(entry);
-                    cursor.insertText(QString(((spanEnabled)?" ":"")).append(cite->dataField(indexEntry->dataField)));
-                    spanEnabled = !cite->dataField(indexEntry->dataField).isEmpty();
-                    break;
+        foreach (IndexEntry *entry, bibEntryTemplate.indexEntries) {
+            switch (entry->name) {
+            case IndexEntry::BIBLIOGRAPHY: {
+                IndexEntryBibliography *indexEntry = static_cast<IndexEntryBibliography *>(entry);
+                cursor.insertText(QString(((spanEnabled) ? " " : "")).append(cite->dataField(indexEntry->dataField)));
+                spanEnabled = !cite->dataField(indexEntry->dataField).isEmpty();
+                break;
+            }
+            case IndexEntry::SPAN: {
+                if (spanEnabled) {
+                    IndexEntrySpan *span = static_cast<IndexEntrySpan *>(entry);
+                    cursor.insertText(span->text);
                 }
-                case IndexEntry::SPAN: {
-                    if(spanEnabled) {
-                        IndexEntrySpan *span = static_cast<IndexEntrySpan*>(entry);
-                        cursor.insertText(span->text);
-                    }
-                    break;
-                }
-                case IndexEntry::TAB_STOP: {
-                    IndexEntryTabStop *tabEntry = static_cast<IndexEntryTabStop*>(entry);
+                break;
+            }
+            case IndexEntry::TAB_STOP: {
+                IndexEntryTabStop *tabEntry = static_cast<IndexEntryTabStop *>(entry);
 
-                    cursor.insertText("\t");
+                cursor.insertText("\t");
 
-                    QTextBlockFormat blockFormat = cursor.blockFormat();
-                    QList<QVariant> tabList;
-                    if (tabEntry->m_position == "MAX") {
-                        tabEntry->tab.position = m_maxTabPosition;
-                    } else {
-                        tabEntry->tab.position = tabEntry->m_position.toDouble();
-                    }
-                    tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
-                    blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant> >(tabList));
-                    cursor.setBlockFormat(blockFormat);
-                    break;
+                QTextBlockFormat blockFormat = cursor.blockFormat();
+                QList<QVariant> tabList;
+                if (tabEntry->m_position == "MAX") {
+                    tabEntry->tab.position = m_maxTabPosition;
+                } else {
+                    tabEntry->tab.position = tabEntry->m_position.toDouble();
                 }
-                default:{
-                    qDebug() << "New or unknown index entry";
-                    break;
-                }
+                tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
+                blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant> >(tabList));
+                cursor.setBlockFormat(blockFormat);
+                break;
+            }
+            default: {
+                qDebug() << "New or unknown index entry";
+                break;
+            }
             }
         }// foreach
     }

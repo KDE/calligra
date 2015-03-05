@@ -47,7 +47,7 @@ void KoRdfSemanticItemRegistry::Private::init()
                                      QString::fromLatin1("[X-Calligra-PluginVersion] == 28"), config);
 }
 
-KoRdfSemanticItemRegistry* KoRdfSemanticItemRegistry::instance()
+KoRdfSemanticItemRegistry *KoRdfSemanticItemRegistry::instance()
 {
     K_GLOBAL_STATIC(KoRdfSemanticItemRegistry, s_instance)
     if (!s_instance.exists()) {
@@ -61,12 +61,11 @@ QStringList KoRdfSemanticItemRegistry::classNames() const
     return keys();
 }
 
-QString KoRdfSemanticItemRegistry::classDisplayName(const QString& className) const
+QString KoRdfSemanticItemRegistry::classDisplayName(const QString &className) const
 {
     const KoRdfSemanticItemFactoryBase *factory = value(className);
     return factory ? factory->classDisplayName() : QString();
 }
-
 
 hKoRdfBasicSemanticItem KoRdfSemanticItemRegistry::createSemanticItem(const QString &semanticClass, const KoDocumentRdf *docRdf, QObject *parent) const
 {
@@ -113,7 +112,7 @@ KoRdfSemanticItemRegistry::~KoRdfSemanticItemRegistry()
 }
 
 KoRdfSemanticItemRegistry::KoRdfSemanticItemRegistry()
-  : d(new Private())
+    : d(new Private())
 {
 }
 

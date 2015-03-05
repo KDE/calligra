@@ -19,12 +19,12 @@
 
 #include "kis_shade_selector_line_editor.h"
 
-KisShadeSelectorLineEditor::KisShadeSelectorLineEditor(QWidget* parent)
+KisShadeSelectorLineEditor::KisShadeSelectorLineEditor(QWidget *parent)
     : KisShadeSelectorLineBase(parent)
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
-    QHBoxLayout* lineOne = new QHBoxLayout();
+    QHBoxLayout *lineOne = new QHBoxLayout();
     layout->addLayout(lineOne);
     lineOne->addWidget(new QLabel(i18n("Delta: ")));
 
@@ -35,7 +35,7 @@ KisShadeSelectorLineEditor::KisShadeSelectorLineEditor(QWidget* parent)
     m_valueDelta = new QDoubleSpinBox();
     lineOne->addWidget(m_valueDelta);
 
-    QHBoxLayout* lineTwo = new QHBoxLayout();
+    QHBoxLayout *lineTwo = new QHBoxLayout();
     layout->addLayout(lineTwo);
     lineTwo->addWidget(new QLabel(i18n("Shift: ")));
 
@@ -45,7 +45,6 @@ KisShadeSelectorLineEditor::KisShadeSelectorLineEditor(QWidget* parent)
     lineTwo->addWidget(m_saturationShift);
     m_valueShift = new QDoubleSpinBox();
     lineTwo->addWidget(m_valueShift);
-
 
     m_hueDelta->setRange(-1, 1);
     m_saturationDelta->setRange(-1, 1);
@@ -73,13 +72,13 @@ KisShadeSelectorLineEditor::KisShadeSelectorLineEditor(QWidget* parent)
 QString KisShadeSelectorLineEditor::toString() const
 {
     return QString("%1|%2|%3|%4|%5|%6|%7")
-        .arg(m_lineNumber)
-        .arg(m_hueDelta->value())
-        .arg(m_saturationDelta->value())
-        .arg(m_valueDelta->value())
-        .arg(m_hueShift->value())
-        .arg(m_saturationShift->value())
-        .arg(m_valueShift->value());
+           .arg(m_lineNumber)
+           .arg(m_hueDelta->value())
+           .arg(m_saturationDelta->value())
+           .arg(m_valueDelta->value())
+           .arg(m_hueShift->value())
+           .arg(m_saturationShift->value())
+           .arg(m_valueShift->value());
 }
 
 void KisShadeSelectorLineEditor::fromString(const QString &string)
@@ -89,12 +88,15 @@ void KisShadeSelectorLineEditor::fromString(const QString &string)
     m_hueDelta->setValue(strili.at(1).toDouble());
     m_saturationDelta->setValue(strili.at(2).toDouble());
     m_valueDelta->setValue(strili.at(3).toDouble());
-    if(strili.size()==4) return;            // don't crash, if reading old config files.
+    if (strili.size() == 4) {
+        return;    // don't crash, if reading old config files.
+    }
     m_hueShift->setValue(strili.at(4).toDouble());
     m_saturationShift->setValue(strili.at(5).toDouble());
     m_valueShift->setValue(strili.at(6).toDouble());
 }
 
-void KisShadeSelectorLineEditor::valueChanged() {
+void KisShadeSelectorLineEditor::valueChanged()
+{
     emit requestActivateLine(this);
 }

@@ -36,9 +36,10 @@ class KexiDBField : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBField(QObject* parent, ::KexiDB::Field* field, bool owner);
+    KexiDBField(QObject *parent, ::KexiDB::Field *field, bool owner);
     virtual ~KexiDBField();
-    ::KexiDB::Field* field() {
+    ::KexiDB::Field *field()
+    {
         return m_field;
     }
 
@@ -54,7 +55,7 @@ public Q_SLOTS:
     certain QVariant type name, for example: "QPixmap", "QColor" or "QFont". */
     const QString subType();
     /** Sets the optional subtype for this field. */
-    void setSubType(const QString& subtype);
+    void setSubType(const QString &subtype);
 
     /** Returns the QVariant::typeName which is equivalent to the type this field has. */
     const QString variantType();
@@ -104,17 +105,17 @@ public Q_SLOTS:
     /** Returns the name of this field. */
     const QString name();
     /** Sets the name of this field. */
-    void setName(const QString& name);
+    void setName(const QString &name);
 
     /** Returns the caption of this field. */
     const QString caption();
     /** Sets the caption of this field. */
-    void setCaption(const QString& caption);
+    void setCaption(const QString &caption);
 
     /** Returns the descriptive text for this field. */
     const QString description();
     /** Set the description for this field. */
-    void setDescription(const QString& desc);
+    void setDescription(const QString &desc);
 
     /** Returns the length of text if the field type is text. */
     uint length();
@@ -130,10 +131,10 @@ public Q_SLOTS:
     /** Returns the default value this field has. */
     QVariant defaultValue();
     /** Sets the default value this field has. */
-    void setDefaultValue(const QVariant& defaultvalue);
+    void setDefaultValue(const QVariant &defaultvalue);
 
 private:
-    ::KexiDB::Field* m_field;
+    ::KexiDB::Field *m_field;
     bool m_owner;
 };
 

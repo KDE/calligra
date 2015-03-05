@@ -57,20 +57,24 @@ KisHeightMapExport::~KisHeightMapExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "HeightMap export! From:" << from << ", To:" << to;
 
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
     KisDocument *inputDoc = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
-    if (!inputDoc)
+    if (!inputDoc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
     KisImageWSP image = inputDoc->image();
     Q_CHECK_PTR(image);
@@ -85,13 +89,13 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
         return KisImportExportFilter::WrongFormat;
     }
 
-    KDialog* kdb = new KDialog(0);
+    KDialog *kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("HeightMap Export Options"));
     kdb->setButtons(KDialog::Ok | KDialog::Cancel);
 
     Ui::WdgOptionsHeightMap optionsHeightMap;
 
-    QWidget* wdg = new QWidget(kdb);
+    QWidget *wdg = new QWidget(kdb);
     optionsHeightMap.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
@@ -116,8 +120,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
         }
-    }
-    else {
+    } else {
         qApp->processEvents(); // For vector layers to be updated
     }
     inputDoc->image()->waitForDone();
@@ -125,8 +128,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
     if (optionsHeightMap.radioMac->isChecked()) {
         cfg.setProperty("endianness", 0);
         bo = QDataStream::BigEndian;
-    }
-    else {
+    } else {
         cfg.setProperty("endianness", 1);
         bo = QDataStream::LittleEndian;
     }
@@ -139,7 +141,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
                                            i18nc("@title:window", "Downscale Image"),
                                            i18n("You specified the .r8 extension for a 16 bit/channel image. Do you want to save as 8 bit? Your image data will not be changed."),
                                            QMessageBox::Yes | QMessageBox::No)
-                          == QMessageBox::Yes);
+                     == QMessageBox::Yes);
     }
 
     image->refreshGraph();
@@ -158,10 +160,9 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(const QByteA
         for (int j = 0; j < image->width(); ++j) {
             it->moveTo(i, j);
             if (r16) {
-                s << KoGrayU16Traits::gray(const_cast<quint8*>(it->rawDataConst()));
-            }
-            else {
-                s << KoGrayU8Traits::gray(const_cast<quint8*>(it->rawDataConst()));
+                s << KoGrayU16Traits::gray(const_cast<quint8 *>(it->rawDataConst()));
+            } else {
+                s << KoGrayU8Traits::gray(const_cast<quint8 *>(it->rawDataConst()));
             }
         }
     }

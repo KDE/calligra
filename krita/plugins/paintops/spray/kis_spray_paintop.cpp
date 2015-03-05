@@ -37,7 +37,7 @@
 #include <kis_spray_shape_option.h>
 #include <kis_color_option.h>
 
-KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
     , m_settings(settings)
     , m_isPresetValid(true)
@@ -78,8 +78,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     // spacing
     if ((m_properties.diameter * 0.5) > 1) {
         m_ySpacing = m_xSpacing = m_properties.diameter * 0.5 * m_properties.spacing;
-    }
-    else {
+    } else {
         m_ySpacing = m_xSpacing = 1.0;
     }
     m_spacing = m_xSpacing;
@@ -89,7 +88,7 @@ KisSprayPaintOp::~KisSprayPaintOp()
 {
 }
 
-KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation &info)
 {
     if (!painter() || !m_isPresetValid) {
         return m_spacing;
@@ -97,8 +96,7 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
-    }
-    else {
+    } else {
         m_dab->clear();
     }
 

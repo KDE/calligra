@@ -30,7 +30,7 @@
 #include <KoColorSpaceConstants.h>
 #include <KoColorSpaceTraits.h>
 
-uint KisTIFFReaderTarget8bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
+uint KisTIFFReaderTarget8bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream)
 {
     KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
     double coeff = quint8_MAX / (double)(pow(2.0, sourceDepth()) - 1);
@@ -38,23 +38,26 @@ uint KisTIFFReaderTarget8bit::copyDataToChannels(quint32 x, quint32 y, quint32 d
     do {
         quint8 *d = it->rawData();
         quint8 i;
-        for (i = 0; i < nbColorsSamples() ; i++) {
+        for (i = 0; i < nbColorsSamples(); i++) {
             d[poses()[i]] = (quint8)(tiffstream->nextValue() * coeff);
         }
         postProcessor()->postProcess8bit(d);
-        if (transform()) transform()->transform(d, d, 1);
+        if (transform()) {
+            transform()->transform(d, d, 1);
+        }
         d[poses()[i]] = quint8_MAX;
         for (int k = 0; k < nbExtraSamples(); k++) {
-            if (k == alphaPos())
+            if (k == alphaPos()) {
                 d[poses()[i]] = (quint32)(tiffstream->nextValue() * coeff);
-            else
+            } else {
                 tiffstream->nextValue();
+            }
         }
 
     } while (it->nextPixel());
     return 1;
 }
-uint KisTIFFReaderTarget16bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
+uint KisTIFFReaderTarget16bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream)
 {
     KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
     double coeff = quint16_MAX / (double)(pow(2.0, sourceDepth()) - 1);
@@ -66,20 +69,23 @@ uint KisTIFFReaderTarget16bit::copyDataToChannels(quint32 x, quint32 y, quint32 
             d[poses()[i]] = (quint16)(tiffstream->nextValue() * coeff);
         }
         postProcessor()->postProcess16bit(d);
-        if (transform()) transform()->transform((quint8*)d, (quint8*)d, 1);
+        if (transform()) {
+            transform()->transform((quint8 *)d, (quint8 *)d, 1);
+        }
         d[poses()[i]] = quint16_MAX;
         for (int k = 0; k < nbExtraSamples(); k++) {
-            if (k == alphaPos())
+            if (k == alphaPos()) {
                 d[poses()[i]] = (quint16)(tiffstream->nextValue() * coeff);
-            else
+            } else {
                 tiffstream->nextValue();
+            }
         }
 
     } while (it->nextPixel());
     return 1;
 }
 
-uint KisTIFFReaderTarget32bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
+uint KisTIFFReaderTarget32bit::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream)
 {
     KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
     double coeff = quint32_MAX / (double)(pow(2.0, sourceDepth()) - 1);
@@ -91,24 +97,27 @@ uint KisTIFFReaderTarget32bit::copyDataToChannels(quint32 x, quint32 y, quint32 
             d[poses()[i]] = (quint32)(tiffstream->nextValue() * coeff);
         }
         postProcessor()->postProcess32bit(d);
-        if (transform()) transform()->transform((quint8*)d, (quint8*)d, 1);
+        if (transform()) {
+            transform()->transform((quint8 *)d, (quint8 *)d, 1);
+        }
         d[poses()[i]] = quint32_MAX;
         KoBgrF32Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_F, 1);
         for (int k = 0; k < nbExtraSamples(); k++) {
-            if (k == alphaPos())
+            if (k == alphaPos()) {
                 d[poses()[i]] = (quint32)(tiffstream->nextValue() * coeff);
-            else
+            } else {
                 tiffstream->nextValue();
+            }
         }
 
     } while (it->nextPixel());
     return 1;
 }
-uint KisTIFFReaderFromPalette::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth,  KisBufferStreamBase* tiffstream)
+uint KisTIFFReaderFromPalette::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth,  KisBufferStreamBase *tiffstream)
 {
     KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(x, y, dataWidth);
     do {
-        quint16* d = reinterpret_cast<quint16 *>(it->rawData());
+        quint16 *d = reinterpret_cast<quint16 *>(it->rawData());
         uint32 index = tiffstream->nextValue();
         d[2] = m_red[index];
         d[1] = m_green[index];

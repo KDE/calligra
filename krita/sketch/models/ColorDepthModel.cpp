@@ -29,7 +29,7 @@ public:
     QList<KoID> colorDepths;
 };
 
-ColorDepthModel::ColorDepthModel(QObject* parent)
+ColorDepthModel::ColorDepthModel(QObject *parent)
     : QAbstractListModel(parent), d(new Private)
 {
     QHash<int, QByteArray> roleNames;
@@ -42,18 +42,19 @@ ColorDepthModel::~ColorDepthModel()
     delete d;
 }
 
-int ColorDepthModel::rowCount(const QModelIndex& parent) const
+int ColorDepthModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return d->colorDepths.count();
 }
 
-QVariant ColorDepthModel::data(const QModelIndex& index, int role) const
+QVariant ColorDepthModel::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid() || index.row() < 0 || index.row() >= d->colorDepths.count())
+    if (!index.isValid() || index.row() < 0 || index.row() >= d->colorDepths.count()) {
         return QVariant();
+    }
 
-    if(role == TextRole) {
+    if (role == TextRole) {
         return d->colorDepths.at(index.row()).name();
     }
 
@@ -65,16 +66,16 @@ QString ColorDepthModel::colorModelId() const
     return d->colorModelId;
 }
 
-void ColorDepthModel::setColorModelId(const QString& id)
+void ColorDepthModel::setColorModelId(const QString &id)
 {
-    if(id != d->colorModelId) {
+    if (id != d->colorModelId) {
         d->colorModelId = id;
-        if(d->colorDepths.count() > 0) {
+        if (d->colorDepths.count() > 0) {
             beginRemoveRows(QModelIndex(), 0, d->colorDepths.count() - 1);
             endRemoveRows();
         }
         d->colorDepths = KoColorSpaceRegistry::instance()->colorDepthList(d->colorModelId, KoColorSpaceRegistry::OnlyUserVisible);
-        if(d->colorDepths.count() > 0) {
+        if (d->colorDepths.count() > 0) {
             beginInsertRows(QModelIndex(), 0, d->colorDepths.count() - 1);
             endInsertRows();
         }
@@ -84,13 +85,14 @@ void ColorDepthModel::setColorModelId(const QString& id)
 
 QString ColorDepthModel::id(int index)
 {
-    if(index < 0 || index >= d->colorDepths.count())
+    if (index < 0 || index >= d->colorDepths.count()) {
         return QString();
+    }
 
     return d->colorDepths.at(index).id();
 }
 
-int ColorDepthModel::indexOf(const QString& id)
+int ColorDepthModel::indexOf(const QString &id)
 {
     return d->colorDepths.indexOf(KoID(id));
 }

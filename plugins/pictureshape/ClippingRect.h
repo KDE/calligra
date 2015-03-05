@@ -28,15 +28,14 @@
  * from standard cartesian coordinates to the format required to
  * save the information to an ODF file (using the fo::clip attribute)
  */
-struct ClippingRect
-{
+struct ClippingRect {
     ClippingRect();
-    ClippingRect(const ClippingRect& rect);
-    explicit ClippingRect(const QRectF& rect, bool isUniform=false);
+    ClippingRect(const ClippingRect &rect);
+    explicit ClippingRect(const QRectF &rect, bool isUniform = false);
 
-    void scale(const QSizeF& size, bool isUniform=false);
-    void normalize(const QSizeF& size);
-    void setRect(const QRectF& rect, bool isUniform=false);
+    void scale(const QSizeF &size, bool isUniform = false);
+    void normalize(const QSizeF &size);
+    void setRect(const QRectF &rect, bool isUniform = false);
 
     qreal width() const;
     qreal height() const;

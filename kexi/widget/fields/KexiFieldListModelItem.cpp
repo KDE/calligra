@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include "KexiFieldListModelItem.h"
 #include <db/utils.h>
 #include <kexiutils/utils.h>
@@ -28,8 +27,8 @@ class KexiFieldListModelItem::Private
 {
 public:
     Private(const QString &fname, const QString &dtype)
-      : fieldName(fname)
-      , dateType(dtype)
+        : fieldName(fname)
+        , dateType(dtype)
     {
     }
 
@@ -40,8 +39,8 @@ public:
 };
 
 KexiFieldListModelItem::KexiFieldListModelItem(const QString &fname,
-                                               const QString &dtype, bool pkey)
-        : d(new Private(fname, dtype))
+        const QString &dtype, bool pkey)
+    : d(new Private(fname, dtype))
 {
     if (pkey) {
         d->icon = koIcon("key");
@@ -74,14 +73,14 @@ QString KexiFieldListModelItem::caption() const
     return d->caption;
 }
 
-void KexiFieldListModelItem::setCaption(const QString& caption)
+void KexiFieldListModelItem::setCaption(const QString &caption)
 {
     d->caption = caption;
 }
 
 Qt::ItemFlags KexiFieldListModelItem::flags() const
 {
-    if (d->fieldName.isEmpty() || d->fieldName == "*"){
+    if (d->fieldName.isEmpty() || d->fieldName == "*") {
         return Qt::NoItemFlags;
     }
     return Qt::ItemIsDragEnabled;

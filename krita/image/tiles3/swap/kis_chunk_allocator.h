@@ -28,7 +28,6 @@
 #define DEFAULT_STORE_SIZE (4096*MiB)
 #define DEFAULT_SLAB_SIZE (64*MiB)
 
-
 //#define DEBUG_SLAB_FAILS
 
 #ifdef DEBUG_SLAB_FAILS
@@ -52,8 +51,6 @@
 
 #endif /* DEBUG_SLAB_FAILS */
 
-
-
 class KisChunkData;
 
 typedef QLinkedList<KisChunkData> KisChunkDataList;
@@ -67,18 +64,20 @@ public:
         setChunk(begin, size);
     }
 
-    inline void setChunk(quint64 begin, quint64 size) {
+    inline void setChunk(quint64 begin, quint64 size)
+    {
         m_begin = begin;
         m_end = begin + size - 1;
     }
 
-    inline quint64 size() const {
-        return m_end - m_begin +1;
+    inline quint64 size() const
+    {
+        return m_end - m_begin + 1;
     }
 
-    bool operator== (const KisChunkData& other) const
+    bool operator== (const KisChunkData &other) const
     {
-        Q_ASSERT(m_begin!=other.m_begin || m_end==other.m_end);
+        Q_ASSERT(m_begin != other.m_begin || m_end == other.m_end);
 
         /**
          * Chunks cannot overlap, so it is enough to check
@@ -101,30 +100,34 @@ public:
     {
     }
 
-    inline quint64 begin() const {
+    inline quint64 begin() const
+    {
         return m_iterator->m_begin;
     }
 
-    inline quint64 end() const {
+    inline quint64 end() const
+    {
         return m_iterator->m_end;
     }
 
-    inline quint64 size() const {
+    inline quint64 size() const
+    {
         return m_iterator->size();
     }
 
-    inline KisChunkDataListIterator position() {
+    inline KisChunkDataListIterator position()
+    {
         return m_iterator;
     }
 
-    inline const KisChunkData& data() {
+    inline const KisChunkData &data()
+    {
         return *m_iterator;
     }
 
 private:
     KisChunkDataListIterator m_iterator;
 };
-
 
 class KRITAIMAGE_EXPORT KisChunkAllocator
 {
@@ -133,7 +136,8 @@ public:
                       quint64 storeSize = DEFAULT_STORE_SIZE);
     ~KisChunkAllocator();
 
-    inline quint64 numChunks() const {
+    inline quint64 numChunks() const
+    {
         return m_list.size();
     }
 
@@ -152,7 +156,6 @@ private:
 private:
     quint64 m_storeMaxSize;
     quint64 m_storeSlabSize;
-
 
     KisChunkDataList m_list;
     KisChunkDataListIterator m_iterator;

@@ -33,13 +33,13 @@ using namespace KisMetaData;
 
 struct SchemaRegistry::Private {
     static SchemaRegistry *singleton;
-    QHash<QString, Schema*> uri2Schema;
-    QHash<QString, Schema*> prefix2Schema;
+    QHash<QString, Schema *> uri2Schema;
+    QHash<QString, Schema *> prefix2Schema;
 };
 
 SchemaRegistry *SchemaRegistry::Private::singleton = 0;
 
-SchemaRegistry* SchemaRegistry::instance()
+SchemaRegistry *SchemaRegistry::instance()
 {
     if (SchemaRegistry::Private::singleton == 0) {
         SchemaRegistry::Private::singleton = new SchemaRegistry();
@@ -56,8 +56,8 @@ SchemaRegistry::SchemaRegistry()
     QStringList schemasFilenames;
     schemasFilenames += KGlobal::mainComponent().dirs()->findAllResources("metadata_schema", "*.schema");
 
-    foreach(const QString& fileName, schemasFilenames) {
-        Schema* schema = new Schema();
+    foreach (const QString &fileName, schemasFilenames) {
+        Schema *schema = new Schema();
         schema->d->load(fileName);
         if (schemaFromUri(schema->uri())) {
             errImage << "Schema already exist uri: " << schema->uri();
@@ -80,21 +80,20 @@ SchemaRegistry::~SchemaRegistry()
     delete d;
 }
 
-
-const Schema* SchemaRegistry::schemaFromUri(const QString & uri) const
+const Schema *SchemaRegistry::schemaFromUri(const QString &uri) const
 {
     return d->uri2Schema[uri];
 }
 
-const Schema* SchemaRegistry::schemaFromPrefix(const QString & prefix) const
+const Schema *SchemaRegistry::schemaFromPrefix(const QString &prefix) const
 {
     return d->prefix2Schema[prefix];
 }
 
-const Schema* SchemaRegistry::create(const QString & uri, const QString & prefix)
+const Schema *SchemaRegistry::create(const QString &uri, const QString &prefix)
 {
     // First search for the schema
-    const Schema* schema = schemaFromUri(uri);
+    const Schema *schema = schemaFromUri(uri);
     if (schema) {
         return schema;
     }
@@ -104,7 +103,7 @@ const Schema* SchemaRegistry::create(const QString & uri, const QString & prefix
         return 0; // A schema with the same prefix already exist
     }
     // The schema doesn't exist yet, create it
-    Schema* nschema = new Schema(uri, prefix);
+    Schema *nschema = new Schema(uri, prefix);
     d->uri2Schema[uri] = nschema;
     d->prefix2Schema[prefix] = nschema;
     return nschema;

@@ -143,9 +143,11 @@ using namespace std;
  *
  **********************************************************/
 
-namespace {
+namespace
+{
 
-class DocumentProgressProxy : public KoProgressProxy {
+class DocumentProgressProxy : public KoProgressProxy
+{
 public:
     KisMainWindow *m_mainWindow;
     DocumentProgressProxy(KisMainWindow *mainWindow)
@@ -153,26 +155,31 @@ public:
     {
     }
 
-    ~DocumentProgressProxy() {
+    ~DocumentProgressProxy()
+    {
         // signal that the job is done
         setValue(-1);
     }
 
-    int maximum() const {
+    int maximum() const
+    {
         return 100;
     }
 
-    void setValue(int value) {
+    void setValue(int value)
+    {
         if (m_mainWindow) {
             m_mainWindow->slotProgress(value);
         }
     }
 
-    void setRange(int /*minimum*/, int /*maximum*/) {
+    void setRange(int /*minimum*/, int /*maximum*/)
+    {
 
     }
 
-    void setFormat(const QString &/*format*/) {
+    void setFormat(const QString &/*format*/)
+    {
 
     }
 };
@@ -186,7 +193,6 @@ QString KisDocument::newObjectName()
     return name;
 }
 
-
 class UndoStack : public KUndo2Stack
 {
 public:
@@ -195,34 +201,38 @@ public:
     {
     }
 
-    void setIndex(int idx) {
+    void setIndex(int idx)
+    {
         KisImageWSP image = this->image();
         image->requestStrokeCancellation();
-        if(image->tryBarrierLock()) {
+        if (image->tryBarrierLock()) {
             KUndo2Stack::setIndex(idx);
             image->unlock();
         }
     }
 
-    void undo() {
+    void undo()
+    {
         KisImageWSP image = this->image();
         image->requestUndoDuringStroke();
-        if(image->tryBarrierLock()) {
+        if (image->tryBarrierLock()) {
             KUndo2Stack::undo();
             image->unlock();
         }
     }
 
-    void redo() {
+    void redo()
+    {
         KisImageWSP image = this->image();
-        if(image->tryBarrierLock()) {
+        if (image->tryBarrierLock()) {
             KUndo2Stack::redo();
             image->unlock();
         }
     }
 
 private:
-    KisImageWSP image() {
+    KisImageWSP image()
+    {
         KisImageWSP currentImage = m_doc->image();
         Q_ASSERT(currentImage);
         return currentImage;
@@ -282,7 +292,8 @@ public:
         }
     }
 
-    ~Private() {
+    ~Private()
+    {
         // Don't delete m_d->shapeController because it's in a QObject hierarchy.
         delete nserver;
     }
@@ -332,9 +343,9 @@ public:
 
     KoPageLayout pageLayout;
 
-    KIO::FileCopyJob * m_job;
-    KIO::StatJob * m_statJob;
-    KIO::FileCopyJob * m_uploadJob;
+    KIO::FileCopyJob *m_job;
+    KIO::StatJob *m_statJob;
+    KIO::FileCopyJob *m_uploadJob;
     KUrl m_originalURL; // for saveAs
     QString m_originalFilePath; // for saveAs
     bool m_saveOk : 1;
@@ -356,13 +367,13 @@ public:
 
     KisImageSP image;
     KisNodeSP preActivatedNode;
-    KisShapeController* shapeController;
-    KoShapeController* koShapeController;
+    KisShapeController *shapeController;
+    KoShapeController *koShapeController;
 
-    KisKraLoader* kraLoader;
-    KisKraSaver* kraSaver;
+    KisKraLoader *kraLoader;
+    KisKraSaver *kraSaver;
 
-    QList<KisPaintingAssistant*> assistants;
+    QList<KisPaintingAssistant *> assistants;
 
     bool openFile()
     {
@@ -416,8 +427,9 @@ public:
         QFileInfo fileInfo(fileName);
         QString ext = fileInfo.completeSuffix();
         QString extension;
-        if (!ext.isEmpty() && m_url.query().isNull()) // not if the URL has a query, e.g. cgi.pl?something
-            extension = '.'+ext; // keep the '.'
+        if (!ext.isEmpty() && m_url.query().isNull()) { // not if the URL has a query, e.g. cgi.pl?something
+            extension = '.' + ext;    // keep the '.'
+        }
         KTemporaryFile tempFile;
         tempFile.setSuffix(extension);
         tempFile.setAutoRemove(false);
@@ -425,7 +437,7 @@ public:
         m_file = tempFile.fileName();
 
         KUrl destURL;
-        destURL.setPath( m_file );
+        destURL.setPath(m_file);
         KIO::JobFlags flags = KIO::DefaultFlags;
         flags |= KIO::Overwrite;
         m_job = KIO::file_copy(m_url, destURL, 0600, flags);
@@ -437,20 +449,17 @@ public:
     void prepareSaving()
     {
         // Local file
-        if ( m_url.isLocalFile() )
-        {
-            if ( m_bTemp ) // get rid of a possible temp file first
-            {              // (happens if previous url was remote)
-                QFile::remove( m_file );
+        if (m_url.isLocalFile()) {
+            if (m_bTemp) { // get rid of a possible temp file first
+                // (happens if previous url was remote)
+                QFile::remove(m_file);
                 m_bTemp = false;
             }
             m_file = m_url.toLocalFile();
-        }
-        else
-        { // Remote file
+        } else {
+            // Remote file
             // We haven't saved yet, or we did but locally - provide a temp file
-            if ( m_file.isEmpty() || !m_bTemp )
-            {
+            if (m_file.isEmpty() || !m_bTemp) {
                 KTemporaryFile tempFile;
                 tempFile.setAutoRemove(false);
                 tempFile.open();
@@ -461,24 +470,22 @@ public:
         }
     }
 
-
-    void _k_slotJobFinished( KJob * job )
+    void _k_slotJobFinished(KJob *job)
     {
-        Q_ASSERT( job == m_job );
+        Q_ASSERT(job == m_job);
         m_job = 0;
-        if (job->error())
-            emit document->canceled( job->errorString() );
-        else {
-            if ( openFile() ) {
+        if (job->error()) {
+            emit document->canceled(job->errorString());
+        } else {
+            if (openFile()) {
                 emit document->completed();
-            }
-            else {
+            } else {
                 emit document->canceled(QString());
             }
         }
     }
 
-    void _k_slotStatJobFinished(KJob * job)
+    void _k_slotStatJobFinished(KJob *job)
     {
         Q_ASSERT(job == m_statJob);
         m_statJob = 0;
@@ -487,9 +494,9 @@ public:
         // and error again. Well, maybe this even helps with wrong stat results.
         if (!job->error()) {
 #if KDE_IS_VERSION(4,4,0)
-            const KUrl localUrl = static_cast<KIO::StatJob*>(job)->mostLocalUrl();
+            const KUrl localUrl = static_cast<KIO::StatJob *>(job)->mostLocalUrl();
 #else
-            const KUrl localUrl = static_cast<KIO::StatJob*>(job)->url();
+            const KUrl localUrl = static_cast<KIO::StatJob *>(job)->url();
 #endif
             if (localUrl.isLocalFile()) {
                 m_file = localUrl.toLocalFile();
@@ -499,7 +506,6 @@ public:
         }
         openRemoteFile();
     }
-
 
     void _k_slotGotMimeType(KIO::Job *job, const QString &mime)
     {
@@ -512,25 +518,22 @@ public:
         }
     }
 
-    void _k_slotUploadFinished( KJob * )
+    void _k_slotUploadFinished(KJob *)
     {
-        if (m_uploadJob->error())
-        {
+        if (m_uploadJob->error()) {
             QFile::remove(m_uploadJob->srcUrl().toLocalFile());
             m_uploadJob = 0;
             if (m_duringSaveAs) {
                 document->setUrl(m_originalURL);
                 m_file = m_originalFilePath;
             }
-        }
-        else
-        {
-            KUrl dirUrl( m_url );
-            dirUrl.setPath( dirUrl.directory() );
-            ::org::kde::KDirNotify::emitFilesAdded( dirUrl.url() );
+        } else {
+            KUrl dirUrl(m_url);
+            dirUrl.setPath(dirUrl.directory());
+            ::org::kde::KDirNotify::emitFilesAdded(dirUrl.url());
 
             m_uploadJob = 0;
-            document->setModified( false );
+            document->setModified(false);
             emit document->completed();
             m_saveOk = true;
         }
@@ -541,7 +544,6 @@ public:
             m_eventLoop.quit();
         }
     }
-
 
 };
 
@@ -567,7 +569,6 @@ KisDocument::KisDocument()
     d->pageLayout.bottomMargin = 0;
     d->pageLayout.leftMargin = 0;
     d->pageLayout.rightMargin = 0;
-
 
     KConfigGroup cfgGrp(KisFactory::componentData().config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
@@ -597,7 +598,7 @@ KisDocument::~KisDocument()
 
     // Despite being QObject they needs to be deleted before the image
     delete d->shapeController;
-    
+
     delete d->koShapeController;
 
     if (d->image) {
@@ -630,7 +631,7 @@ bool KisDocument::reload()
     return false;
 }
 
-bool KisDocument::exportDocument(const KUrl & _url)
+bool KisDocument::exportDocument(const KUrl &_url)
 {
     bool ret;
 
@@ -653,7 +654,6 @@ bool KisDocument::exportDocument(const KUrl & _url)
     // save...
     ret = saveAs(_url);
 
-
     //
     // This is sooooo hacky :(
     // Hopefully we will restore enough state.
@@ -672,7 +672,6 @@ bool KisDocument::exportDocument(const KUrl & _url)
         d->mimeType = oldMimeType;
     }
 
-
     d->isExporting = false;
 
     return ret;
@@ -687,25 +686,27 @@ bool KisDocument::saveFile()
 
     // The output format is set by koMainWindow, and by openFile
     QByteArray outputMimeType = d->outputMimeType;
-    if (outputMimeType.isEmpty())
+    if (outputMimeType.isEmpty()) {
         outputMimeType = d->outputMimeType = nativeFormatMimeType();
+    }
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     if (backupFile()) {
-        if (url().isLocalFile())
+        if (url().isLocalFile()) {
             KSaveFile::backupFile(url().toLocalFile(), d->backupPath);
-        else {
+        } else {
             KIO::UDSEntry entry;
             if (KIO::NetAccess::stat(url(),
                                      entry,
                                      KisPart::instance()->currentMainwindow())) {     // this file exists => backup
                 emit statusBarMessage(i18n("Making backup..."));
                 KUrl backup;
-                if (d->backupPath.isEmpty())
+                if (d->backupPath.isEmpty()) {
                     backup = url();
-                else
+                } else {
                     backup = d->backupPath + '/' + url().fileName();
+                }
                 backup.setPath(backup.path() + QString::fromLatin1("~"));
                 KFileItem item(entry, url());
                 Q_ASSERT(item.name() == url().fileName());
@@ -775,18 +776,17 @@ bool KisDocument::saveFile()
     return ret;
 }
 
-
 QByteArray KisDocument::mimeType() const
 {
     return d->mimeType;
 }
 
-void KisDocument::setMimeType(const QByteArray & mimeType)
+void KisDocument::setMimeType(const QByteArray &mimeType)
 {
     d->mimeType = mimeType;
 }
 
-void KisDocument::setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag)
+void KisDocument::setOutputMimeType(const QByteArray &mimeType, int specialOutputFlag)
 {
     d->outputMimeType = mimeType;
     d->specialOutputFlag = specialOutputFlag;
@@ -881,7 +881,7 @@ void KisDocument::setReadWrite(bool readwrite)
     d->readwrite = readwrite;
     setAutoSave(d->autoSaveDelay);
 
-    foreach(KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
+    foreach (KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
         mainWindow->setReadWrite(readwrite);
     }
 
@@ -890,10 +890,11 @@ void KisDocument::setReadWrite(bool readwrite)
 void KisDocument::setAutoSave(int delay)
 {
     d->autoSaveDelay = delay;
-    if (isReadWrite() && d->autoSaveDelay > 0)
+    if (isReadWrite() && d->autoSaveDelay > 0) {
         d->autoSaveTimer.start(d->autoSaveDelay * 1000);
-    else
+    } else {
         d->autoSaveTimer.stop();
+    }
 }
 
 KoDocumentInfo *KisDocument::documentInfo() const
@@ -906,7 +907,7 @@ bool KisDocument::isModified() const
     return d->modified;
 }
 
-bool KisDocument::saveNativeFormat(const QString & file)
+bool KisDocument::saveNativeFormat(const QString &file)
 {
     const int realAutoSaveInterval = KisConfig().autoSaveInterval();
     const int emergencyAutoSaveInterval = 10; // sec
@@ -936,16 +937,16 @@ bool KisDocument::saveNativeFormat(const QString & file)
     if (d->specialOutputFlag == SaveAsDirectoryStore) {
         backend = KoStore::Directory;
         kDebug(30003) << "Saving as uncompressed XML, using directory store.";
-    }
-    else if (d->specialOutputFlag == SaveAsFlatXML) {
+    } else if (d->specialOutputFlag == SaveAsFlatXML) {
         kDebug(30003) << "Saving as a flat XML file.";
         QFile f(file);
         if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
             bool success = saveToStream(&f);
             f.close();
             return success;
-        } else
+        } else {
             return false;
+        }
     }
 
     kDebug(30003) << "KisDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType();
@@ -990,7 +991,6 @@ bool KisDocument::saveNativeFormatCalligra(KoStore *store)
         QDomDocument doc = KisDocument::createDomDocument("document-info"
                            /*DTD name*/, "document-info" /*tag name*/, "1.1");
 
-
         doc = d->docInfo->save(doc);
         KoStoreDevice dev(store);
 
@@ -1026,16 +1026,21 @@ bool KisDocument::saveToStream(QIODevice *dev)
     QByteArray s = doc.toByteArray(); // utf8 already
     dev->open(QIODevice::WriteOnly);
     int nwritten = dev->write(s.data(), s.size());
-    if (nwritten != (int)s.size())
+    if (nwritten != (int)s.size()) {
         kWarning(30003) << "wrote " << nwritten << "- expected" <<  s.size();
+    }
     return nwritten == (int)s.size();
 }
 
 QString KisDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url) const
 {
-    if (!url.isLocalFile()) return mimeType;
+    if (!url.isLocalFile()) {
+        return mimeType;
+    }
 
-    if (url.toLocalFile().endsWith(".kpp")) return "image/png";
+    if (url.toLocalFile().endsWith(".kpp")) {
+        return "image/png";
+    }
 
     QStringList imageMimeTypes;
     imageMimeTypes << "image/jpeg"
@@ -1050,7 +1055,9 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &ur
                    << "image/tiff"
                    << "image/jp2";
 
-    if (!imageMimeTypes.contains(mimeType)) return mimeType;
+    if (!imageMimeTypes.contains(mimeType)) {
+        return mimeType;
+    }
 
     int accuracy = 0;
 
@@ -1064,16 +1071,17 @@ QString KisDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &ur
 }
 
 // Called for embedded documents
-bool KisDocument::saveToStore(KoStore *_store, const QString & _path)
+bool KisDocument::saveToStore(KoStore *_store, const QString &_path)
 {
     kDebug(30003) << "Saving document to store" << _path;
 
     _store->pushDirectory();
     // Use the path as the internal url
-    if (_path.startsWith(STORE_PROTOCOL))
+    if (_path.startsWith(STORE_PROTOCOL)) {
         setUrl(KUrl(_path));
-    else // ugly hack to pass a relative URI
+    } else { // ugly hack to pass a relative URI
         setUrl(KUrl(INTERNAL_PREFIX +  _path));
+    }
 
     // In the current directory we're the king :-)
     if (_store->open("root")) {
@@ -1082,12 +1090,14 @@ bool KisDocument::saveToStore(KoStore *_store, const QString & _path)
             _store->close();
             return false;
         }
-        if (!_store->close())
+        if (!_store->close()) {
             return false;
+        }
     }
 
-    if (!completeSaving(_store))
+    if (!completeSaving(_store)) {
         return false;
+    }
 
     // Now that we're done leave the directory again
     _store->popDirectory();
@@ -1102,15 +1112,17 @@ bool KisDocument::savePreview(KoStore *store)
     QPixmap pix = generatePreview(QSize(256, 256));
     const QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
     KoStoreDevice io(store);
-    if (!io.open(QIODevice::WriteOnly))
+    if (!io.open(QIODevice::WriteOnly)) {
         return false;
-    if (! preview.save(&io, "PNG"))     // ### TODO What is -9 in quality terms?
+    }
+    if (! preview.save(&io, "PNG")) {   // ### TODO What is -9 in quality terms?
         return false;
+    }
     io.close();
     return true;
 }
 
-QPixmap KisDocument::generatePreview(const QSize& size)
+QPixmap KisDocument::generatePreview(const QSize &size)
 {
     if (d->image) {
         QRect bounds = d->image->bounds();
@@ -1120,8 +1132,7 @@ QPixmap KisDocument::generatePreview(const QSize& size)
         QImage image;
         if (bounds.width() < 10000 && bounds.height() < 10000) {
             image = d->image->convertToQImage(d->image->bounds(), 0);
-        }
-        else {
+        } else {
             image = d->image->convertToQImage(QRect(0, 0, newSize.width(), newSize.height()), newSize, 0);
         }
         image = image.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -1130,7 +1141,7 @@ QPixmap KisDocument::generatePreview(const QSize& size)
     return QPixmap(size);
 }
 
-QString KisDocument::autoSaveFile(const QString & path) const
+QString KisDocument::autoSaveFile(const QString &path) const
 {
     QString retval;
 
@@ -1140,7 +1151,9 @@ QString KisDocument::autoSaveFile(const QString & path) const
         qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", nativeFormatMimeType().constData());
     }
     QString extension = mime->property("X-KDE-NativeExtension").toString();
-    if (extension.isEmpty()) extension = mime->mainExtension();
+    if (extension.isEmpty()) {
+        extension = mime->mainExtension();
+    }
 
     if (path.isEmpty()) {
         // Never saved?
@@ -1166,7 +1179,7 @@ void KisDocument::setDisregardAutosaveFailure(bool disregardFailure)
     d->disregardAutosaveFailure = disregardFailure;
 }
 
-bool KisDocument::importDocument(const KUrl & _url)
+bool KisDocument::importDocument(const KUrl &_url)
 {
     bool ret;
 
@@ -1189,8 +1202,7 @@ bool KisDocument::importDocument(const KUrl & _url)
     return ret;
 }
 
-
-bool KisDocument::openUrl(const KUrl & _url)
+bool KisDocument::openUrl(const KUrl &_url)
 {
     kDebug(30003) << "url=" << _url.url();
     d->lastErrorMessage.clear();
@@ -1235,8 +1247,7 @@ bool KisDocument::openUrl(const KUrl & _url)
         resetURL(); // Force save to act like 'Save As'
         setReadWrite(true); // enable save button
         setModified(true);
-    }
-    else {
+    } else {
         KisPart::instance()->addRecentURLToAllMainWindows(_url);
 
         if (ret) {
@@ -1255,7 +1266,9 @@ bool KisDocument::openFile()
         QApplication::restoreOverrideCursor();
         if (d->autoErrorHandlingEnabled)
             // Maybe offer to create a new document with that name ?
+        {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
+        }
         d->isLoading = false;
         return false;
     }
@@ -1274,7 +1287,6 @@ bool KisDocument::openFile()
 
     // for images, always check content.
     typeName = checkImageMimeTypes(typeName, u);
-
 
     //kDebug(30003) << "mimetypes 4:" << typeName;
 
@@ -1434,8 +1446,9 @@ bool KisDocument::openFile()
         // - Clarence
         //
 #if 0
-        if (isReadWrite())
+        if (isReadWrite()) {
             resetURL();
+        }
 #endif
 
         // remove temp file - uncomment this to debug import filters
@@ -1443,7 +1456,7 @@ bool KisDocument::openFile()
 #ifndef NDEBUG
             if (!getenv("CALLIGRA_DEBUG_FILTERS"))
 #endif
-            QFile::remove(importedFile);
+                QFile::remove(importedFile);
         }
     }
 
@@ -1454,7 +1467,7 @@ bool KisDocument::openFile()
 
     if (progressUpdater()) {
         QPointer<KoUpdater> updater
-                = progressUpdater()->startSubtask(1, "clear undo stack");
+            = progressUpdater()->startSubtask(1, "clear undo stack");
         updater->setProgress(0);
         undoStack()->clear();
         updater->setProgress(100);
@@ -1477,7 +1490,7 @@ void KisDocument::setProgressProxy(KoProgressProxy *progressProxy)
     d->progressProxy = progressProxy;
 }
 
-KoProgressProxy* KisDocument::progressProxy() const
+KoProgressProxy *KisDocument::progressProxy() const
 {
     if (!d->progressProxy) {
         KisMainWindow *mainWindow = 0;
@@ -1490,7 +1503,7 @@ KoProgressProxy* KisDocument::progressProxy() const
 }
 
 // shared between openFile and koMainWindow's "create new empty document" code
-void KisDocument::setMimeTypeAfterLoading(const QString& mimeType)
+void KisDocument::setMimeTypeAfterLoading(const QString &mimeType)
 {
     d->mimeType = mimeType.toLatin1();
 
@@ -1502,7 +1515,7 @@ void KisDocument::setMimeTypeAfterLoading(const QString& mimeType)
 }
 
 // The caller must call store->close() if loadAndParse returns true.
-bool KisDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc)
+bool KisDocument::oldLoadAndParse(KoStore *store, const QString &filename, KoXmlDocument &doc)
 {
     //kDebug(30003) <<"Trying to open" << filename;
 
@@ -1518,19 +1531,19 @@ bool KisDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXml
     store->close();
     if (!ok) {
         kError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg << endl;
+                      << " In line: " << errorLine << ", column: " << errorColumn << endl
+                      << " Error message: " << errorMsg << endl;
         d->lastErrorMessage = i18n("Parsing error in %1 at line %2, column %3\nError message: %4"
-                                   , filename  , errorLine, errorColumn ,
+                                   , filename, errorLine, errorColumn,
                                    QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
-                                                               QCoreApplication::UnicodeUTF8));
+                                           QCoreApplication::UnicodeUTF8));
         return false;
     }
     kDebug(30003) << "File" << filename << " loaded and parsed";
     return true;
 }
 
-bool KisDocument::loadNativeFormat(const QString & file_)
+bool KisDocument::loadNativeFormat(const QString &file_)
 {
     QString file = file_;
     QFileInfo fileInfo(file);
@@ -1542,7 +1555,7 @@ bool KisDocument::loadNativeFormat(const QString & file_)
         file += "/content.xml";
         QFileInfo fileInfo2(file);
         if (!fileInfo2.exists() || !fileInfo2.isFile()) {
-            d->lastErrorMessage = i18n("%1 is not a file." , file_);
+            d->lastErrorMessage = i18n("%1 is not a file.", file_);
             return false;
         }
     }
@@ -1565,21 +1578,24 @@ bool KisDocument::loadNativeFormat(const QString & file_)
         buf[5] = 0;
         int pos = 0;
         do {
-            if (in.read(buf + pos , 1) < 1) {
+            if (in.read(buf + pos, 1) < 1) {
                 QApplication::restoreOverrideCursor();
                 in.close();
                 d->lastErrorMessage = i18n("Could not read the beginning of the file.");
                 return false;
             }
 
-            if (QChar(buf[pos]).isSpace())
+            if (QChar(buf[pos]).isSpace()) {
                 continue;
+            }
             pos++;
         } while (pos < 5);
         isRawXML = (qstrnicmp(buf, "<?xml", 5) == 0);
         if (! isRawXML)
             // also check for broken MathML files, which seem to be rather common
-            isRawXML = (qstrnicmp(buf, "<math", 5) == 0);   // file begins with <math ?
+        {
+            isRawXML = (qstrnicmp(buf, "<math", 5) == 0);    // file begins with <math ?
+        }
         //kDebug(30003) <<"PATTERN=" << buf;
     }
     // Is it plain XML?
@@ -1592,12 +1608,13 @@ bool KisDocument::loadNativeFormat(const QString & file_)
         bool res;
         if (doc.setContent(&in, &errorMsg, &errorLine, &errorColumn)) {
             res = loadXML(doc, 0);
-            if (res)
+            if (res) {
                 res = completeLoading(0);
+            }
         } else {
             kError(30003) << "Parsing Error! Aborting! (in KisDocument::loadNativeFormat (QFile))" << endl
-            << "  Line: " << errorLine << " Column: " << errorColumn << endl
-            << "  Message: " << errorMsg << endl;
+                          << "  Line: " << errorLine << " Column: " << errorColumn << endl
+                          << "  Message: " << errorMsg << endl;
             d->lastErrorMessage = i18n("parsing error in the main document at line %1, column %2\nError message: %3", errorLine, errorColumn, i18n(errorMsg.toUtf8()));
             res = false;
         }
@@ -1606,8 +1623,7 @@ bool KisDocument::loadNativeFormat(const QString & file_)
         in.close();
         d->isEmpty = false;
         return res;
-    }
-    else { // It's a calligra store (tar.gz, zip, directory, etc.)
+    } else { // It's a calligra store (tar.gz, zip, directory, etc.)
         in.close();
 
         KoStore::Backend backend = (d->specialOutputFlag == SaveAsDirectoryStore) ? KoStore::Directory : KoStore::Auto;
@@ -1621,14 +1637,16 @@ bool KisDocument::loadNativeFormat(const QString & file_)
         }
 
         // Remember that the file was encrypted
-        if (d->specialOutputFlag == 0 && store->isEncrypted() && !d->isImporting)
+        if (d->specialOutputFlag == 0 && store->isEncrypted() && !d->isImporting) {
             d->specialOutputFlag = SaveEncrypted;
+        }
 
         const bool success = loadNativeFormatFromStoreInternal(store);
 
         // Retrieve the password after loading the file, only then is it guaranteed to exist
-        if (success && store->isEncrypted() && !d->isImporting)
+        if (success && store->isEncrypted() && !d->isImporting) {
             d->password = store->password();
+        }
 
         delete store;
 
@@ -1650,14 +1668,16 @@ bool KisDocument::loadNativeFormatFromByteArray(QByteArray &data)
     }
 
     // Remember that the file was encrypted
-    if (d->specialOutputFlag == 0 && store->isEncrypted() && !d->isImporting)
+    if (d->specialOutputFlag == 0 && store->isEncrypted() && !d->isImporting) {
         d->specialOutputFlag = SaveEncrypted;
+    }
 
     succes = loadNativeFormatFromStoreInternal(store);
 
     // Retrieve the password after loading the file, only then is it guaranteed to exist
-    if (succes && store->isEncrypted() && !d->isImporting)
+    if (succes && store->isEncrypted() && !d->isImporting) {
         d->password = store->password();
+    }
 
     delete store;
 
@@ -1670,8 +1690,9 @@ bool KisDocument::loadNativeFormatFromStoreInternal(KoStore *store)
         KoXmlDocument doc = KoXmlDocument(true);
 
         bool ok = oldLoadAndParse(store, "root", doc);
-        if (ok)
+        if (ok) {
             ok = loadXML(doc, store);
+        }
         if (!ok) {
             QApplication::restoreOverrideCursor();
             return false;
@@ -1702,7 +1723,7 @@ bool KisDocument::loadNativeFormatFromStoreInternal(KoStore *store)
 }
 
 // For embedded documents
-bool KisDocument::loadFromStore(KoStore *_store, const QString& url)
+bool KisDocument::loadFromStore(KoStore *_store, const QString &url)
 {
     if (_store->open(url)) {
         KoXmlDocument doc = KoXmlDocument(true);
@@ -1733,13 +1754,12 @@ bool KisDocument::loadFromStore(KoStore *_store, const QString& url)
     return result;
 }
 
-bool KisDocument::loadOdf(KoOdfReadStore & odfStore)
+bool KisDocument::loadOdf(KoOdfReadStore &odfStore)
 {
     Q_UNUSED(odfStore);
     setErrorMessage(i18n("Krita does not support the OpenDocument file format."));
     return false;
 }
-
 
 bool KisDocument::saveOdf(SavingContext &documentContext)
 {
@@ -1748,13 +1768,10 @@ bool KisDocument::saveOdf(SavingContext &documentContext)
     return false;
 }
 
-
-
 bool KisDocument::isStoredExtern() const
 {
     return !storeInternal() && hasExternURL();
 }
-
 
 void KisDocument::setModified()
 {
@@ -1763,10 +1780,11 @@ void KisDocument::setModified()
 
 void KisDocument::setModified(bool mod)
 {
-    if (isAutosaving())   // ignore setModified calls due to autosaving
+    if (isAutosaving()) { // ignore setModified calls due to autosaving
         return;
+    }
 
-    if ( !d->readwrite && d->modified ) {
+    if (!d->readwrite && d->modified) {
         kError(1000) << "Can't set a read-only document to 'modified' !" << endl;
         return;
     }
@@ -1780,8 +1798,9 @@ void KisDocument::setModified(bool mod)
     }
     d->modifiedAfterAutosave = mod;
 
-    if (mod == isModified())
+    if (mod == isModified()) {
         return;
+    }
 
     d->modified = mod;
 
@@ -1797,7 +1816,7 @@ void KisDocument::setModified(bool mod)
 
 QString KisDocument::prettyPathOrUrl() const
 {
-    QString _url( url().pathOrUrl() );
+    QString _url(url().pathOrUrl());
 #ifdef Q_WS_WIN
     if (url().isLocalFile()) {
         _url = QDir::convertSeparators(_url);
@@ -1816,8 +1835,7 @@ QString KisDocument::caption() const
     const QString _url(url().fileName());
     if (!c.isEmpty() && !_url.isEmpty()) {
         c = QString("%1 - %2").arg(c).arg(_url);
-    }
-    else if (c.isEmpty()) {
+    } else if (c.isEmpty()) {
         c = _url; // Fall back to document URL
     }
     return c;
@@ -1828,13 +1846,12 @@ void KisDocument::setTitleModified()
     emit titleModified(caption(), isModified());
 }
 
-bool KisDocument::completeLoading(KoStore* store)
+bool KisDocument::completeLoading(KoStore *store)
 {
     if (!d->image) {
         if (d->kraLoader->errorMessages().isEmpty()) {
             setErrorMessage(i18n("Unknown error."));
-        }
-        else {
+        } else {
             setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
         }
         return false;
@@ -1873,7 +1890,7 @@ bool KisDocument::completeLoading(KoStore* store)
 
 }
 
-bool KisDocument::completeSaving(KoStore* store)
+bool KisDocument::completeSaving(KoStore *store)
 {
     QString uri = url().url();
 
@@ -1892,13 +1909,13 @@ bool KisDocument::completeSaving(KoStore* store)
     return true;
 }
 
-QDomDocument KisDocument::createDomDocument(const QString& tagName, const QString& version) const
+QDomDocument KisDocument::createDomDocument(const QString &tagName, const QString &version) const
 {
     return createDomDocument(KisFactory::componentName(), tagName, version);
 }
 
 //static
-QDomDocument KisDocument::createDomDocument(const QString& appName, const QString& tagName, const QString& version)
+QDomDocument KisDocument::createDomDocument(const QString &appName, const QString &tagName, const QString &version)
 {
     QDomImplementation impl;
     QString url = QString("http://www.calligra.org/DTD/%1-%2.dtd").arg(appName).arg(version);
@@ -1912,7 +1929,7 @@ QDomDocument KisDocument::createDomDocument(const QString& appName, const QStrin
     return doc;
 }
 
-bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore */*store*/)
+bool KisDocument::loadXML(const KoXmlDocument &doc, KoStore */*store*/)
 {
     if (d->image) {
         d->shapeController->setImage(0);
@@ -1952,15 +1969,13 @@ bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore */*store*/)
                 if (!(image = d->kraLoader->loadXML(elem))) {
                     if (d->kraLoader->errorMessages().isEmpty()) {
                         setErrorMessage(i18n("Unknown error."));
-                    }
-                    else {
+                    } else {
                         setErrorMessage(d->kraLoader->errorMessages().join(".\n"));
                     }
                     return false;
                 }
 
-            }
-            else {
+            } else {
                 if (d->kraLoader->errorMessages().isEmpty()) {
                     setErrorMessage(i18n("The file does not contain an image."));
                 }
@@ -1977,8 +1992,6 @@ bool KisDocument::loadXML(const KoXmlDocument& doc, KoStore */*store*/)
 
     return true;
 }
-
-
 
 QDomDocument KisDocument::saveXML()
 {
@@ -2000,10 +2013,11 @@ QDomDocument KisDocument::saveXML()
     return doc;
 }
 
-bool KisDocument::isNativeFormat(const QByteArray& mimetype) const
+bool KisDocument::isNativeFormat(const QByteArray &mimetype) const
 {
-    if (mimetype == nativeFormatMimeType())
+    if (mimetype == nativeFormatMimeType()) {
         return true;
+    }
     return extraNativeMimeTypes().contains(mimetype);
 }
 
@@ -2012,7 +2026,7 @@ int KisDocument::supportedSpecialFormats() const
     return 0; // we don't support encryption.
 }
 
-void KisDocument::setErrorMessage(const QString& errMsg)
+void KisDocument::setErrorMessage(const QString &errMsg)
 {
     d->lastErrorMessage = errMsg;
 }
@@ -2026,8 +2040,7 @@ void KisDocument::showLoadingErrorDialog()
 {
     if (errorMessage().isEmpty()) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open\n%1", localFilePath()));
-    }
-    else if (errorMessage() != "USER_CANCELED") {
+    } else if (errorMessage() != "USER_CANCELED") {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not open %1\nReason: %2", localFilePath(), errorMessage()));
     }
 }
@@ -2046,11 +2059,13 @@ void KisDocument::removeAutoSaveFiles()
 {
     // Eliminate any auto-save file
     QString asf = autoSaveFile(localFilePath());   // the one in the current dir
-    if (QFile::exists(asf))
+    if (QFile::exists(asf)) {
         QFile::remove(asf);
+    }
     asf = autoSaveFile(QString());   // and the one in $HOME
-    if (QFile::exists(asf))
+    if (QFile::exists(asf)) {
         QFile::remove(asf);
+    }
 }
 
 void KisDocument::setBackupFile(bool _b)
@@ -2063,8 +2078,7 @@ bool KisDocument::backupFile()const
     return d->backupFile;
 }
 
-
-void KisDocument::setBackupPath(const QString & _path)
+void KisDocument::setBackupPath(const QString &_path)
 {
     d->backupPath = _path;
 }
@@ -2073,7 +2087,6 @@ QString KisDocument::backupPath()const
 {
     return d->backupPath;
 }
-
 
 bool KisDocument::storeInternal() const
 {
@@ -2089,8 +2102,8 @@ void KisDocument::setStoreInternal(bool i)
 bool KisDocument::hasExternURL() const
 {
     return    !url().protocol().isEmpty()
-            && url().protocol() != STORE_PROTOCOL
-            && url().protocol() != INTERNAL_PROTOCOL;
+              && url().protocol() != STORE_PROTOCOL
+              && url().protocol() != INTERNAL_PROTOCOL;
 }
 
 static const struct {
@@ -2105,11 +2118,12 @@ static const struct {
 };
 static const unsigned int numTN2DT = sizeof(TN2DTArray) / sizeof(*TN2DTArray);
 
-QString KisDocument::tagNameToDocumentType(const QString& localName)
+QString KisDocument::tagNameToDocumentType(const QString &localName)
 {
-    for (unsigned int i = 0 ; i < numTN2DT ; ++i)
-        if (localName == TN2DTArray[i].localName)
+    for (unsigned int i = 0; i < numTN2DT; ++i)
+        if (localName == TN2DTArray[i].localName) {
             return i18n(TN2DTArray[i].documentType);
+        }
     return localName;
 }
 
@@ -2141,7 +2155,6 @@ void KisDocument::saveUnitOdf(KoXmlWriter *settingsWriter) const
     settingsWriter->addConfigItem("unit", unit().symbol());
 }
 
-
 KUndo2Stack *KisDocument::undoStack()
 {
     return d->undoStack;
@@ -2149,11 +2162,12 @@ KUndo2Stack *KisDocument::undoStack()
 
 void KisDocument::addCommand(KUndo2Command *command)
 {
-    if (command)
+    if (command) {
         d->undoStack->push(command);
+    }
 }
 
-void KisDocument::beginMacro(const KUndo2MagicString & text)
+void KisDocument::beginMacro(const KUndo2MagicString &text)
 {
     d->undoStack->beginMacro(text);
 }
@@ -2174,7 +2188,7 @@ void KisDocument::setProfileStream(QTextStream *profilestream)
     d->profileStream = profilestream;
 }
 
-void KisDocument::setProfileReferenceTime(const QTime& referenceTime)
+void KisDocument::setProfileReferenceTime(const QTime &referenceTime)
 {
     d->profileReferenceTime = referenceTime;
 }
@@ -2204,19 +2218,20 @@ void KisDocument::setEmpty()
     d->isEmpty = true;
 }
 
-
 // static
 int KisDocument::defaultAutoSave()
 {
     return 300;
 }
 
-void KisDocument::resetURL() {
+void KisDocument::resetURL()
+{
     setUrl(KUrl());
     setLocalFilePath(QString());
 }
 
-int KisDocument::pageCount() const {
+int KisDocument::pageCount() const
+{
     return 1;
 }
 
@@ -2240,8 +2255,8 @@ KUrl KisDocument::url() const
 bool KisDocument::closeUrl(bool promptToSave)
 {
     if (promptToSave) {
-        if ( d->document->isReadWrite() && d->document->isModified()) {
-            foreach(KisView *view, KisPart::instance()->views()) {
+        if (d->document->isReadWrite() && d->document->isModified()) {
+            foreach (KisView *view, KisPart::instance()->views()) {
                 if (view && view->document() == this) {
                     if (!view->queryClose()) {
                         return false;
@@ -2253,9 +2268,8 @@ bool KisDocument::closeUrl(bool promptToSave)
     // Not modified => ok and delete temp file.
     d->mimeType = QByteArray();
 
-    if ( d->m_bTemp )
-    {
-        QFile::remove( d->m_file );
+    if (d->m_bTemp) {
+        QFile::remove(d->m_file);
         d->m_bTemp = false;
     }
     // It always succeeds for a read-only part,
@@ -2264,11 +2278,9 @@ bool KisDocument::closeUrl(bool promptToSave)
     return true;
 }
 
-
-bool KisDocument::saveAs( const KUrl & kurl )
+bool KisDocument::saveAs(const KUrl &kurl)
 {
-    if (!kurl.isValid())
-    {
+    if (!kurl.isValid()) {
         kError(1000) << "saveAs: Malformed URL " << kurl.url() << endl;
         return false;
     }
@@ -2289,14 +2301,12 @@ bool KisDocument::saveAs( const KUrl & kurl )
     return result;
 }
 
-
-
-
 bool KisDocument::save()
 {
     d->m_saveOk = false;
-    if ( d->m_file.isEmpty() ) // document was created empty
+    if (d->m_file.isEmpty()) { // document was created empty
         d->prepareSaving();
+    }
 
     DocumentProgressProxy *progressProxy = 0;
     if (!d->document->progressProxy()) {
@@ -2320,18 +2330,17 @@ bool KisDocument::save()
 
     if (ok) {
         return saveToUrl();
-    }
-    else {
+    } else {
         emit canceled(QString());
     }
     return false;
 }
 
-
 bool KisDocument::waitSaveComplete()
 {
-    if (!d->m_uploadJob)
+    if (!d->m_uploadJob) {
         return d->m_saveOk;
+    }
 
     d->m_waitForSave = true;
 
@@ -2341,7 +2350,6 @@ bool KisDocument::waitSaveComplete()
 
     return d->m_saveOk;
 }
-
 
 void KisDocument::setUrl(const KUrl &url)
 {
@@ -2353,19 +2361,18 @@ QString KisDocument::localFilePath() const
     return d->m_file;
 }
 
-
-void KisDocument::setLocalFilePath( const QString &localFilePath )
+void KisDocument::setLocalFilePath(const QString &localFilePath)
 {
     d->m_file = localFilePath;
 }
 
 bool KisDocument::saveToUrl()
 {
-    if ( d->m_url.isLocalFile() ) {
-        d->document->setModified( false );
+    if (d->m_url.isLocalFile()) {
+        d->document->setModified(false);
         emit completed();
         // if m_url is a local file there won't be a temp file -> nothing to remove
-        Q_ASSERT( !d->m_bTemp );
+        Q_ASSERT(!d->m_bTemp);
         d->m_saveOk = true;
         d->m_duringSaveAs = false;
         d->m_originalURL = KUrl();
@@ -2384,14 +2391,14 @@ bool KisDocument::saveToUrl()
         QString uploadFile = tempFile->fileName();
         delete tempFile;
         KUrl uploadUrl;
-        uploadUrl.setPath( uploadFile );
+        uploadUrl.setPath(uploadFile);
         // Create hardlink
         if (::link(QFile::encodeName(d->m_file), QFile::encodeName(uploadFile)) != 0) {
             // Uh oh, some error happened.
             return false;
         }
-        d->m_uploadJob = KIO::file_move( uploadUrl, d->m_url, -1, KIO::Overwrite );
-        connect( d->m_uploadJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotUploadFinished(KJob*)) );
+        d->m_uploadJob = KIO::file_move(uploadUrl, d->m_url, -1, KIO::Overwrite);
+        connect(d->m_uploadJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotUploadFinished(KJob*)));
         return true;
     }
 #else
@@ -2399,11 +2406,11 @@ bool KisDocument::saveToUrl()
 #endif
 }
 
-
 bool KisDocument::openUrlInternal(const KUrl &url)
 {
-    if ( !url.isValid() )
+    if (!url.isValid()) {
         return false;
+    }
 
     if (d->m_bAutoDetectedMime) {
         d->mimeType = QByteArray();
@@ -2412,8 +2419,9 @@ bool KisDocument::openUrlInternal(const KUrl &url)
 
     QByteArray mimetype = d->mimeType;
 
-    if ( !closeUrl() )
+    if (!closeUrl()) {
         return false;
+    }
 
     d->mimeType = mimetype;
     setUrl(url);
@@ -2423,37 +2431,37 @@ bool KisDocument::openUrlInternal(const KUrl &url)
     if (d->m_url.isLocalFile()) {
         d->m_file = d->m_url.toLocalFile();
         return d->openLocalFile();
-    }
-    else {
+    } else {
         d->openRemoteFile();
         return true;
     }
 }
 
-KisImageWSP KisDocument::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace* colorspace)
+KisImageWSP KisDocument::newImage(const QString &name, qint32 width, qint32 height, const KoColorSpace *colorspace)
 {
     KoColor backgroundColor(Qt::white, colorspace);
 
     /**
      * FIXME: check whether this is a good value
      */
-    double defaultResolution=1.;
+    double defaultResolution = 1.;
 
     newImage(name, width, height, colorspace, backgroundColor, "",
              defaultResolution);
     return image();
 }
 
-bool KisDocument::newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &imageDescription, const double imageResolution) {
+bool KisDocument::newImage(const QString &name, qint32 width, qint32 height, const KoColorSpace *cs, const KoColor &bgColor, const QString &imageDescription, const double imageResolution)
+{
     return newImage(name, width, height, cs, bgColor, false, 1, imageDescription, imageResolution);
 }
 
-bool KisDocument::newImage(const QString& name,
-                       qint32 width, qint32 height,
-                       const KoColorSpace* cs,
-                       const KoColor &bgColor, bool backgroundAsLayer,
-                       int numberOfLayers,
-                       const QString &description, const double imageResolution)
+bool KisDocument::newImage(const QString &name,
+                           qint32 width, qint32 height,
+                           const KoColorSpace *cs,
+                           const KoColor &bgColor, bool backgroundAsLayer,
+                           int numberOfLayers,
+                           const QString &description, const double imageResolution)
 {
     Q_ASSERT(cs);
 
@@ -2464,7 +2472,9 @@ bool KisDocument::newImage(const QString& name,
     KisImageWSP image;
     KisPaintLayerSP layer;
 
-    if (!cs) return false;
+    if (!cs) {
+        return false;
+    }
 
     QApplication::setOverrideCursor(Qt::BusyCursor);
 
@@ -2504,7 +2514,7 @@ bool KisDocument::newImage(const QString& name,
     image->addNode(layer.data(), image->rootLayer().data());
     setCurrentImage(image);
 
-    for(int i = 1; i < numberOfLayers; ++i) {
+    for (int i = 1; i < numberOfLayers; ++i) {
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
         image->addNode(layer, image->root(), i);
         layer->setDirty(QRect(0, 0, width, height));
@@ -2527,7 +2537,7 @@ KoShapeBasedDocumentBase *KisDocument::shapeController() const
     return d->shapeController;
 }
 
-KoShapeLayer* KisDocument::shapeForNode(KisNodeSP layer) const
+KoShapeLayer *KisDocument::shapeForNode(KisNodeSP layer) const
 {
     return d->shapeController->shapeForNode(layer);
 }
@@ -2535,7 +2545,7 @@ KoShapeLayer* KisDocument::shapeForNode(KisNodeSP layer) const
 vKisNodeSP KisDocument::activeNodes() const
 {
     vKisNodeSP nodes;
-    foreach(KisView *v, KisPart::instance()->views()) {
+    foreach (KisView *v, KisPart::instance()->views()) {
         if (v->document() == this && v->viewManager()) {
             KisNodeSP activeNode = v->viewManager()->activeNode();
             if (activeNode && !nodes.contains(activeNode)) {
@@ -2549,12 +2559,12 @@ vKisNodeSP KisDocument::activeNodes() const
     return nodes;
 }
 
-QList<KisPaintingAssistant*> KisDocument::assistants()
+QList<KisPaintingAssistant *> KisDocument::assistants()
 {
-    QList<KisPaintingAssistant*> assistants;
-    foreach(KisView *view, KisPart::instance()->views()) {
+    QList<KisPaintingAssistant *> assistants;
+    foreach (KisView *view, KisPart::instance()->views()) {
         if (view && view->document() == this) {
-            KisPaintingAssistantsDecoration* assistantsDecoration = view->canvasBase()->paintingAssistantsDecoration();
+            KisPaintingAssistantsDecoration *assistantsDecoration = view->canvasBase()->paintingAssistantsDecoration();
             assistants.append(assistantsDecoration->assistants());
         }
     }
@@ -2588,10 +2598,11 @@ KisImageWSP KisDocument::image() const
     return d->image;
 }
 
-
 void KisDocument::setCurrentImage(KisImageWSP image)
 {
-    if (!image || !image.isValid()) return;
+    if (!image || !image.isValid()) {
+        return;
+    }
 
     if (d->image) {
         // Disconnect existing sig/slot connections
@@ -2610,7 +2621,7 @@ void KisDocument::setCurrentImage(KisImageWSP image)
 void KisDocument::initEmpty()
 {
     KisConfig cfg;
-    const KoColorSpace * rgb = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *rgb = KoColorSpaceRegistry::instance()->rgb8();
     newImage("", cfg.defImageWidth(), cfg.defImageHeight(), rgb);
 }
 
@@ -2619,8 +2630,7 @@ void KisDocument::setImageModified()
     setModified(true);
 }
 
-
-KisUndoStore* KisDocument::createUndoStore()
+KisUndoStore *KisDocument::createUndoStore()
 {
     return new KisDocumentUndoStore(this);
 }

@@ -29,7 +29,6 @@
 #include <QImage>
 #include <QTextDocument>
 
-
 #include <kis_gmic_parser.h>
 #include <Component.h>
 #include <kis_gmic_filter_model.h>
@@ -57,13 +56,12 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
-
 class FilterDescription
 {
 public:
-        QString filterName;
-        QString category;
-        QString gmicCommand;
+    QString filterName;
+    QString category;
+    QString gmicCommand;
 };
 
 using namespace cimg_library;
@@ -86,18 +84,17 @@ void KisGmicTests::initTestCase()
 
     m_blacklister = new KisGmicBlacklister(m_blacklistFilePath);
 
-    m_qimage = QImage(QString(FILES_DATA_DIR)+"/"+"poster_rodents_bunnysize.jpg");
+    m_qimage = QImage(QString(FILES_DATA_DIR) + "/" + "poster_rodents_bunnysize.jpg");
     m_qimage = m_qimage.convertToFormat(QImage::Format_ARGB32);
 
-    m_gmicImage.assign(m_qimage.width(),m_qimage.height(),1,4); // rgba
+    m_gmicImage.assign(m_qimage.width(), m_qimage.height(), 1, 4); // rgba
 
     KisGmicSimpleConvertor::convertFromQImage(m_qimage, m_gmicImage);;
 
     m_images.assign(1);
 
-    m_filterDefinitionsXmlFilePath = QString(FILES_DATA_DIR)+"/"+"gmic_def_" + QString::number(int(gmic_version)) + "_krita.xml";
-    if (!QFileInfo(m_filterDefinitionsXmlFilePath).exists())
-    {
+    m_filterDefinitionsXmlFilePath = QString(FILES_DATA_DIR) + "/" + "gmic_def_" + QString::number(int(gmic_version)) + "_krita.xml";
+    if (!QFileInfo(m_filterDefinitionsXmlFilePath).exists()) {
         qWarning() << "Reference xml file for the krita parser does not exist, creating one!";
         qWarning() << "Creating " << m_filterDefinitionsXmlFilePath;
         generateXmlDump();
@@ -118,15 +115,13 @@ void KisGmicTests::testColorizeFilter()
     QString filterName = "Colorize [comics]";
     QString filterCategory = "Black & white";
 
-    Component * c = KisGmicBlacklister::findFilter(m_root, filterCategory, filterName);
+    Component *c = KisGmicBlacklister::findFilter(m_root, filterCategory, filterName);
 
     KisGmicFilterSetting filterSettings;
-    if (c == 0)
-    {
-            qDebug() << "Filter not found!";
-    }else
-    {
-        Command * cmd = static_cast<Command *>(c);
+    if (c == 0) {
+        qDebug() << "Filter not found!";
+    } else {
+        Command *cmd = static_cast<Command *>(c);
         cmd->setParameter("Input layers", "Lineart + color spots");
         cmd->setParameter("Output layers", "Lineart + color spots + extrapolated colors");
         cmd->setParameter("Smoothness", "0.05");
@@ -144,9 +139,8 @@ void KisGmicTests::testColorizeFilter()
     m_images.assign(layerNames.size());
 
     int layerIndex = 0;
-    for (int i = 0; i < layerNames.size(); i++)
-    {
-        const QString& layerName = layerNames.at(i);
+    for (int i = 0; i < layerNames.size(); i++) {
+        const QString &layerName = layerNames.at(i);
         QImage layerImage = QImage(QString(FILES_DATA_DIR) + QDir::separator() + layerName).convertToFormat(QImage::Format_ARGB32);
         gmic_image<float> gmicImage;
         gmicImage.assign(layerImage.width(), layerImage.height(), 1, 4);
@@ -165,42 +159,32 @@ void KisGmicTests::testCompareToGmicGimp()
     QVector <FilterDescription> filterDescriptions;
 
     // filter name, category, command
-    QString filePath = QString(FILES_DATA_DIR)+"/"+"filterCommands.txt";
+    QString filePath = QString(FILES_DATA_DIR) + "/" + "filterCommands.txt";
     QFile inputFile(filePath);
 
-    if (inputFile.open(QIODevice::ReadOnly))
-    {
-       QTextStream in(&inputFile);
-       FilterDescription fd;
-       int fieldCounter = 0;
-       while ( !in.atEnd() )
-       {
+    if (inputFile.open(QIODevice::ReadOnly)) {
+        QTextStream in(&inputFile);
+        FilterDescription fd;
+        int fieldCounter = 0;
+        while (!in.atEnd()) {
             QString line = in.readLine();
-            if (!line.startsWith("#") && !line.isEmpty())
-            {
+            if (!line.startsWith("#") && !line.isEmpty()) {
                 line.replace("[[:home:]]", QDir::homePath());
-                if (fieldCounter == 0)
-                {
+                if (fieldCounter == 0) {
                     fd.filterName = line;
                     fieldCounter++;
-                }
-                else if (fieldCounter == 1)
-                {
+                } else if (fieldCounter == 1) {
                     fd.category = line;
                     fieldCounter++;
-                }
-                else if (fieldCounter == 2)
-                {
+                } else if (fieldCounter == 2) {
                     fd.gmicCommand = line;
                     fieldCounter = 0;
                     filterDescriptions.append(fd);
                 }
             }
-       }
-       inputFile.close();
-    }
-    else
-    {
+        }
+        inputFile.close();
+    } else {
         QString msg = "File " + filePath + " can't be open!";
         QFAIL(QTest::toString(msg));
     }
@@ -208,7 +192,6 @@ void KisGmicTests::testCompareToGmicGimp()
     verifyFilters(filterDescriptions);
 
 }
-
 
 //#define VERBOSE
 void KisGmicTests::testBlacklisterSearchByParamName()
@@ -221,8 +204,7 @@ void KisGmicTests::testBlacklisterSearchByParamName()
         "Filename"
     };
 
-    QString expectedFilterNames [] =
-    {
+    QString expectedFilterNames [] = {
         "Colorize [interactive]",
         "Colorize [interactive]",
         "User-defined",
@@ -234,39 +216,32 @@ void KisGmicTests::testBlacklisterSearchByParamName()
     beVerbose = true;
 #endif
 
-    int nameCount = sizeof(paramNames)/sizeof(paramNames[0]);
+    int nameCount = sizeof(paramNames) / sizeof(paramNames[0]);
 
-    if (beVerbose)
-    {
+    if (beVerbose) {
         qDebug() << nameCount;
     }
 
-    for (int i = 0; i < nameCount; i++)
-    {
-        if (beVerbose)
-        {
+    for (int i = 0; i < nameCount; i++) {
+        if (beVerbose) {
             qDebug() << "Parameter:" << paramNames[i];
         }
 
         QList<Command *> filters = KisGmicBlacklister::findFilterByParamName(m_root, paramNames[i], "file");
         QCOMPARE(filters.size(), 1);
 
-        Command * c = filters.at(0);
+        Command *c = filters.at(0);
         QCOMPARE(c->name(), expectedFilterNames[i]);
-        if (beVerbose)
-        {
+        if (beVerbose) {
             qDebug() << "FilterName: << \"" + c->name() + "\" << \"" + KisGmicBlacklister::toPlainText(c->parent()->name()) + "\"";
         }
 
     }
 }
 
-
-
-
 void KisGmicTests::testGatherLayers()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
     QImage background(QString(FILES_DATA_DIR) + QDir::separator() + "00_BG.png");
     QImage colorMarks(QString(FILES_DATA_DIR) + QDir::separator() + "01_ColorMarks.png");
@@ -328,35 +303,27 @@ void KisGmicTests::testAllFilters()
 
     QVector<QString> failedFilters;
 
-    while (!q.isEmpty())
-    {
-        Component * c = q.dequeue();
-        if (c->childCount() == 0)
-        {
-            Command * cmd = static_cast<Command *>(c);
+    while (!q.isEmpty()) {
+        Component *c = q.dequeue();
+        if (c->childCount() == 0) {
+            Command *cmd = static_cast<Command *>(c);
             cmd->writeConfiguration(&filterSettings);
             //qDebug() << "Filter: " << c->name() << filterSettings.gmicCommand();
-            if (!filterSettings.gmicCommand().startsWith("-_none_"))
-            {
+            if (!filterSettings.gmicCommand().startsWith("-_none_")) {
                 filterCount++;
 
 #ifdef RUN_FILTERS
                 QString filterName = KisGmicBlacklister::toPlainText(cmd->name());
                 QString categoryName = KisGmicBlacklister::toPlainText(cmd->parent()->name()); // parent is category
 
-                if (isAlreadyThere( filePathify( filterName ) ))
-                {
+                if (isAlreadyThere(filePathify(filterName))) {
                     qDebug() << "Already works, skipping filter" << filterName;
                     success++;
-                }
-                else if (m_blacklister->isBlacklisted(filterName, categoryName))
-                {
+                } else if (m_blacklister->isBlacklisted(filterName, categoryName)) {
                     qDebug() << "Blacklisted filter, increase fails" << filterName;
                     failed++;
-                    failedFilters.append(categoryName+":"+filterName);
-                }
-                else
-                {
+                    failedFilters.append(categoryName + ":" + filterName);
+                } else {
                     qDebug() << "Filtering with:";
                     qDebug() << QString("<category name=\"%0\">").arg(categoryName);
                     qDebug() << QString("<filter name=\"%0\" />").arg(filterName);
@@ -368,18 +335,14 @@ void KisGmicTests::testAllFilters()
                     bool result = filterWithGmic(&filterSettings, filterName, m_images);
                     result ? success++ : failed++;
                     qDebug() << "Progress status:" << "Failed:" << failed << " Success: " << success;
-                    if (result == false)
-                    {
-                        failedFilters.append(categoryName+":"+filterName);
+                    if (result == false) {
+                        failedFilters.append(categoryName + ":" + filterName);
                     }
                 }
 #endif
             }
-        }
-        else
-        {
-            for (int i=0; i < c->childCount(); i++)
-            {
+        } else {
+            for (int i = 0; i < c->childCount(); i++) {
                 q.enqueue(c->child(i));
             }
         }
@@ -388,11 +351,9 @@ void KisGmicTests::testAllFilters()
 #ifdef RUN_FILTERS
     qDebug() << "Finish status:" << "Failed:" << failed << " Success: " << success;
     qDebug() << "== Failed filters ==";
-    foreach (const QString &item, failedFilters)
-    {
+    foreach (const QString &item, failedFilters) {
         qDebug() << item;
     }
-
 
 #else
     Q_UNUSED(success);
@@ -400,70 +361,60 @@ void KisGmicTests::testAllFilters()
 #endif
 }
 
-
-bool KisGmicTests::filterWithGmic(KisGmicFilterSetting* gmicFilterSetting, const QString &filterName, gmic_list<float> &images)
+bool KisGmicTests::filterWithGmic(KisGmicFilterSetting *gmicFilterSetting, const QString &filterName, gmic_list<float> &images)
 {
     QString fileName = filePathify(filterName);
     qDebug() << "Filename for filter " << filterName << " : " << fileName;
     // Second step : Call G'MIC API to process input images.
     //------------------------------------------------------
-    std::fprintf(stderr,"\n- 2st step : Call G'MIC interpreter.\n");
+    std::fprintf(stderr, "\n- 2st step : Call G'MIC interpreter.\n");
     gmic_list<char> images_names;
-    try
-    {
+    try {
         QString gmicCmd = "-* 255 ";
         gmicCmd.append(gmicFilterSetting->gmicCommand());
         gmic(gmicCmd.toLocal8Bit().constData(), images, images_names);
     }
     // Catch exception, if an error occured in the interpreter.
-    catch (gmic_exception &e)
-    {
+    catch (gmic_exception &e) {
         dbgPlugins << "\n- Error encountered when calling G'MIC : '%s'\n" << e.what();
         return false;
     }
 
     // Third step : get back modified image data.
     //-------------------------------------------
-    std::fprintf(stderr,"\n- 3st step : Returned %u output images.\n", images._width);
-    for (unsigned int i = 0; i < images._width; ++i)
-    {
-        std::fprintf(stderr,"   Output image %u = %ux%ux%ux%u, buffer : %p\n",i,
-                    images._data[i]._width,
-                    images._data[i]._height,
-                    images._data[i]._depth,
-                    images._data[i]._spectrum,
-                    images._data[i]._data);
+    std::fprintf(stderr, "\n- 3st step : Returned %u output images.\n", images._width);
+    for (unsigned int i = 0; i < images._width; ++i) {
+        std::fprintf(stderr, "   Output image %u = %ux%ux%ux%u, buffer : %p\n", i,
+                     images._data[i]._width,
+                     images._data[i]._height,
+                     images._data[i]._depth,
+                     images._data[i]._spectrum,
+                     images._data[i]._data);
     }
 
     // Forth step : convert to QImage and save
-    for (unsigned int i = 0; i < images._width; ++i)
-    {
+    for (unsigned int i = 0; i < images._width; ++i) {
         KisGmicSimpleConvertor convertor;
         KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
         convertor.convertFromGmicImage(images._data[i], device, 255.0f);
-        QImage result = device->convertToQImage(0, 0,0,images._data[i]._width, images._data[i]._height);
+        QImage result = device->convertToQImage(0, 0, 0, images._data[i]._width, images._data[i]._height);
         QString indexString("_%1");
-        if (images._width > 1)
-        {
-            indexString = indexString.arg(i,4, 10, QLatin1Char('_'));
-        }else
-        {
+        if (images._width > 1) {
+            indexString = indexString.arg(i, 4, 10, QLatin1Char('_'));
+        } else {
             indexString = QString();
         }
         QString fullFileName(QString(FILES_OUTPUT_DIR) + QDir::separator() + fileName + indexString + ".png");
         QFileInfo info(fullFileName);
-        if (info.exists())
-        {
+        if (info.exists()) {
             continue;
         }
 
         bool isSaved = result.save(fullFileName);
-        if (!isSaved)
-        {
+        if (!isSaved) {
             qDebug() << "Saving " << fileName  << "failed";
             return false;
-        }else
-        {
+        } else {
             qDebug() << "Saved " << fullFileName << " -- OK";
         }
     }
@@ -471,18 +422,17 @@ bool KisGmicTests::filterWithGmic(KisGmicFilterSetting* gmicFilterSetting, const
     return true;
 }
 
-QString KisGmicTests::filePathify(const QString& fileName)
+QString KisGmicTests::filePathify(const QString &fileName)
 {
     QStringList illegalCharacters;
     illegalCharacters << QLatin1String("/")
-    << QLatin1String("\\")
-    << QLatin1String("?")
-    << QLatin1String(":");
+                      << QLatin1String("\\")
+                      << QLatin1String("?")
+                      << QLatin1String(":");
 
     QString result = fileName;
-    foreach(const QString& item, illegalCharacters)
-    {
-        result = result.replace(item ,"_");
+    foreach (const QString &item, illegalCharacters) {
+        result = result.replace(item, "_");
     }
     return result;
 }
@@ -507,19 +457,17 @@ void KisGmicTests::testConvertGrayScaleGmic()
     KisPaintDeviceSP resultDevFast = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
 
     gmic_image<float> gmicImage;
-    gmicImage.assign(m_qimage.width(),m_qimage.height(),1,1);
+    gmicImage.assign(m_qimage.width(), m_qimage.height(), 1, 1);
 
     KisGmicSimpleConvertor::convertFromQImage(m_qimage, gmicImage, 1.0);
     KisGmicSimpleConvertor::convertFromGmicImage(gmicImage, resultDev, 1.0);
     KisGmicSimpleConvertor::convertFromGmicFast(gmicImage, resultDevFast, 1.0);
 
-
-    QImage slowQImage = resultDev->convertToQImage(0,0,0,gmicImage._width, gmicImage._height);
-    QImage fastQImage = resultDevFast->convertToQImage(0,0,0,gmicImage._width, gmicImage._height);
+    QImage slowQImage = resultDev->convertToQImage(0, 0, 0, gmicImage._width, gmicImage._height);
+    QImage fastQImage = resultDevFast->convertToQImage(0, 0, 0, gmicImage._width, gmicImage._height);
 
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint,slowQImage,fastQImage))
-    {
+    if (!TestUtil::compareQImages(errpoint, slowQImage, fastQImage)) {
         QFAIL(QString("Slow method produces different result then fast to convert gmic grayscale pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         slowQImage.save("grayscale.bmp");
         fastQImage.save("grayscale_fast.bmp");
@@ -532,18 +480,17 @@ void KisGmicTests::testConvertGrayScaleAlphaGmic()
     KisPaintDeviceSP resultDevFast = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
 
     gmic_image<float> gmicImage;
-    gmicImage.assign(m_qimage.width(),m_qimage.height(),1,2);
+    gmicImage.assign(m_qimage.width(), m_qimage.height(), 1, 2);
 
     KisGmicSimpleConvertor::convertFromQImage(m_qimage, gmicImage, 1.0);
     KisGmicSimpleConvertor::convertFromGmicImage(gmicImage, resultDev, 1.0);
     KisGmicSimpleConvertor::convertFromGmicFast(gmicImage, resultDevFast, 1.0);
 
-    QImage slowQImage = resultDev->convertToQImage(0, 0,0,gmicImage._width, gmicImage._height);
-    QImage fastQImage = resultDevFast->convertToQImage(0,0,0,gmicImage._width, gmicImage._height);
+    QImage slowQImage = resultDev->convertToQImage(0, 0, 0, gmicImage._width, gmicImage._height);
+    QImage fastQImage = resultDevFast->convertToQImage(0, 0, 0, gmicImage._width, gmicImage._height);
 
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint,slowQImage,fastQImage))
-    {
+    if (!TestUtil::compareQImages(errpoint, slowQImage, fastQImage)) {
         QFAIL(QString("Slow method produces different result then fast to convert gmic grayscale pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         slowQImage.save("grayscale.bmp");
         fastQImage.save("grayscale_fast.bmp");
@@ -556,28 +503,25 @@ void KisGmicTests::testConvertRGBgmic()
     KisPaintDeviceSP resultDevFast = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
 
     gmic_image<float> gmicImage;
-    gmicImage.assign(m_qimage.width(),m_qimage.height(),1,3);
+    gmicImage.assign(m_qimage.width(), m_qimage.height(), 1, 3);
 
     KisGmicSimpleConvertor::convertFromQImage(m_qimage, gmicImage, 1.0);
     KisGmicSimpleConvertor::convertFromGmicImage(gmicImage, resultDev, 1.0);
     KisGmicSimpleConvertor::convertFromGmicFast(gmicImage, resultDevFast, 1.0);
 
-    QImage slowQImage = resultDev->convertToQImage(0,0,0,gmicImage._width, gmicImage._height);
+    QImage slowQImage = resultDev->convertToQImage(0, 0, 0, gmicImage._width, gmicImage._height);
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint,slowQImage,m_qimage))
-    {
+    if (!TestUtil::compareQImages(errpoint, slowQImage, m_qimage)) {
         QFAIL(QString("Slow method failed to convert gmic RGB pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         slowQImage.save("RGB.bmp");
     }
 
-    QImage fastQImage = resultDevFast->convertToQImage(0,0,0,gmicImage._width, gmicImage._height);
-    if (!TestUtil::compareQImages(errpoint,fastQImage,m_qimage))
-    {
+    QImage fastQImage = resultDevFast->convertToQImage(0, 0, 0, gmicImage._width, gmicImage._height);
+    if (!TestUtil::compareQImages(errpoint, fastQImage, m_qimage)) {
         QFAIL(QString("Fast method failed to convert gmic RGB pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         fastQImage.save("RGB_fast.bmp");
     }
 }
-
 
 void KisGmicTests::testConvertRGBAgmic()
 {
@@ -585,32 +529,29 @@ void KisGmicTests::testConvertRGBAgmic()
     KisPaintDeviceSP resultDevFast = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
 
     gmic_image<float> gmicImage;
-    gmicImage.assign(m_qimage.width(),m_qimage.height(),1,4);
+    gmicImage.assign(m_qimage.width(), m_qimage.height(), 1, 4);
 
     KisGmicSimpleConvertor::convertFromQImage(m_qimage, gmicImage, 1.0);
     KisGmicSimpleConvertor::convertFromGmicImage(gmicImage, resultDev, 1.0);
     KisGmicSimpleConvertor::convertFromGmicFast(gmicImage, resultDevFast, 1.0);
 
-    QImage slowQImage = resultDev->convertToQImage(0,0,0,gmicImage._width, gmicImage._height);
+    QImage slowQImage = resultDev->convertToQImage(0, 0, 0, gmicImage._width, gmicImage._height);
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint,slowQImage,m_qimage))
-    {
+    if (!TestUtil::compareQImages(errpoint, slowQImage, m_qimage)) {
         QFAIL(QString("Slow method failed to convert gmic RGBA pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         slowQImage.save("RGBA.bmp");
     }
 
-    QImage fastQImage = resultDevFast->convertToQImage(0,0,0,gmicImage._width, gmicImage._height);
-    if (!TestUtil::compareQImages(errpoint,fastQImage,m_qimage))
-    {
+    QImage fastQImage = resultDevFast->convertToQImage(0, 0, 0, gmicImage._width, gmicImage._height);
+    if (!TestUtil::compareQImages(errpoint, fastQImage, m_qimage)) {
         QFAIL(QString("Fast method failed to convert gmic RGBA pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         fastQImage.save("RGBA_fast.bmp");
     }
 }
 
-
 void KisGmicTests::testFilterOnlySelection()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
     int width = 3840;
     int height = 2400;
@@ -648,16 +589,13 @@ void KisGmicTests::testFilterOnlySelection()
     QString filterName = "Sepia";
     QString filterCategory = "Colors";
 
-    Component * c = KisGmicBlacklister::findFilter(m_root, filterCategory, filterName);
+    Component *c = KisGmicBlacklister::findFilter(m_root, filterCategory, filterName);
 
     KisGmicFilterSetting filterSettings;
-    if (c == 0)
-    {
-            qDebug() << "Filter not found!";
-    }
-    else
-    {
-        Command * cmd = static_cast<Command *>(c);
+    if (c == 0) {
+        qDebug() << "Filter not found!";
+    } else {
+        Command *cmd = static_cast<Command *>(c);
         cmd->writeConfiguration(&filterSettings);
     }
 
@@ -676,7 +614,6 @@ void KisGmicTests::testFilterOnlySelection()
 
 }
 
-
 void KisGmicTests::testLoadingGmicCommands()
 {
     QString definitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", "gmic_def.gmic");
@@ -684,14 +621,12 @@ void KisGmicTests::testLoadingGmicCommands()
     QVERIFY(data.size() > 0);
 }
 
-
 void KisGmicTests::generateXmlDump()
 {
     QDomDocument doc = KisGmicBlacklister::dumpFiltersToXML(m_root);
 
     QFile outputFile(m_filterDefinitionsXmlFilePath);
-    if (outputFile.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
+    if (outputFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream ts(&outputFile);
         ts << doc.toString();
         outputFile.close();
@@ -711,13 +646,10 @@ void KisGmicTests::testCompareToKrita()
     QDomElement child = doc.documentElement().firstChildElement();
     QQueue<QDomElement> queue;
     queue.enqueue(child);
-    while (!queue.isEmpty())
-    {
+    while (!queue.isEmpty()) {
         QDomElement elem = queue.dequeue();
-        if (elem.tagName() == "filter")
-        {
-            if (elem.parentNode().isElement())
-            {
+        if (elem.tagName() == "filter") {
+            if (elem.parentNode().isElement()) {
                 QDomElement cmdElem = elem.firstChildElement("gmicCommand");
                 QVERIFY(!cmdElem.isNull());
                 QVERIFY(elem.parentNode().isElement());
@@ -732,14 +664,10 @@ void KisGmicTests::testCompareToKrita()
                 fd.gmicCommand = fd.gmicCommand.replace("[[:home:]]", QDir::homePath());
                 filterDescriptions.append(fd);
             }
-        }
-        else
-        {
+        } else {
             QDomNodeList children = elem.childNodes();
-            for (int i = 0; i < children.size(); i++)
-            {
-                if (children.at(i).isElement())
-                {
+            for (int i = 0; i < children.size(); i++) {
+                if (children.at(i).isElement()) {
                     queue.enqueue(children.at(i).toElement());
                 }
             }
@@ -755,45 +683,37 @@ void KisGmicTests::verifyFilters(QVector< FilterDescription > filters)
     int count = filters.size();
 
     int success = 0;
-    for (int i = 0; i < count; i++)
-    {
+    for (int i = 0; i < count; i++) {
         FilterDescription fd = filters.at(i);
 
-        Component * c = KisGmicBlacklister::findFilter(m_root, fd.category, fd.filterName);
-        if (c == 0)
-        {
-            qWarning() << "Can't find "<< "filterName: " << fd.filterName << "category: " << fd.category;
+        Component *c = KisGmicBlacklister::findFilter(m_root, fd.category, fd.filterName);
+        if (c == 0) {
+            qWarning() << "Can't find " << "filterName: " << fd.filterName << "category: " << fd.category;
             continue;
         }
 
         QVERIFY(c->childCount() == 0);
-        Command * cmd = dynamic_cast<Command *>(c);
+        Command *cmd = dynamic_cast<Command *>(c);
 
         QVERIFY(cmd != 0);
 
         KisGmicFilterSetting filterSettings;
         cmd->writeConfiguration(&filterSettings);
 
-        if (filterSettings.gmicCommand() != fd.gmicCommand)
-        {
+        if (filterSettings.gmicCommand() != fd.gmicCommand) {
             qDebug() << "Category: " << fd.category << " Filter name: " << fd.filterName;
             qDebug() << "  Actual: " << filterSettings.gmicCommand();
             qDebug() << "Expected: " << fd.gmicCommand;
-        }
-        else
-        {
+        } else {
             success++;
         }
     }
 
-    if (success != count)
-    {
+    if (success != count) {
         qDebug() << "Number of failed filters: " << count - success;
     }
-    QCOMPARE(success,count);
+    QCOMPARE(success, count);
 }
-
-
 
 QTEST_KDEMAIN(KisGmicTests, NoGUI)
 

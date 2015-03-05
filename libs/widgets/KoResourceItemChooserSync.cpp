@@ -22,11 +22,9 @@
 
 #include <kglobal.h>
 
-struct KoResourceItemChooserSync::Private
-{
+struct KoResourceItemChooserSync::Private {
     int baseLength;
 };
-
 
 KoResourceItemChooserSync::KoResourceItemChooserSync() : d(new Private)
 {
@@ -38,7 +36,7 @@ KoResourceItemChooserSync::~KoResourceItemChooserSync()
 
 }
 
-KoResourceItemChooserSync* KoResourceItemChooserSync::instance()
+KoResourceItemChooserSync *KoResourceItemChooserSync::instance()
 {
     K_GLOBAL_STATIC(KoResourceItemChooserSync, s_instance);
     return s_instance;
@@ -54,10 +52,4 @@ void KoResourceItemChooserSync::setBaseLength(int length)
     d->baseLength = qBound(50, length, 150);
     emit baseLenghtChanged(d->baseLength);
 }
-
-
-
-
-
-
 

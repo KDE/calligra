@@ -22,14 +22,14 @@
 #include <stdio.h>
 
 extern "C" {
-  #include <jpeglib.h>
+#include <jpeglib.h>
 }
 
 class QIODevice;
 
 namespace KisJPEGSource
 {
-    void setSource(j_decompress_ptr cinfo, QIODevice* inputDevice);
+void setSource(j_decompress_ptr cinfo, QIODevice *inputDevice);
 }
 
 #endif

@@ -44,14 +44,13 @@ public:
 
     enumPaintActionType paintActionType() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
-
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
 
-    KisPaintActionWidget * m_optionWidget;
+    KisPaintActionWidget *m_optionWidget;
 
 };
 

@@ -29,7 +29,6 @@ class KisPressureMirrorOption;
 class KisPrecisionOption;
 struct MirrorProperties;
 
-
 class PAINTOP_EXPORT KisDabCache
 {
 public:
@@ -56,28 +55,27 @@ public:
                                    const QPointF &cursorPoint,
                                    double scaleX, double scaleY,
                                    double angle,
-                                   const KisPaintInformation& info,
+                                   const KisPaintInformation &info,
                                    qreal softnessFactor,
                                    QRect *dstDabRect);
 
     KisFixedPaintDeviceSP fetchDab(const KoColorSpace *cs,
-                                   const KoColor& color,
+                                   const KoColor &color,
                                    const QPointF &cursorPoint,
                                    double scaleX, double scaleY,
                                    double angle,
-                                   const KisPaintInformation& info,
+                                   const KisPaintInformation &info,
                                    qreal softnessFactor,
                                    QRect *dstDabRect);
-
 
 private:
     struct SavedDabParameters;
     struct DabPosition;
 private:
-    inline SavedDabParameters getDabParameters(const KoColor& color,
+    inline SavedDabParameters getDabParameters(const KoColor &color,
             double scaleX, double scaleY,
             double angle,
-            const KisPaintInformation& info,
+            const KisPaintInformation &info,
             double subPixelX, double subPixelY,
             qreal softnessFactor,
             MirrorProperties mirrorProperties);
@@ -85,7 +83,7 @@ private:
     calculateDabRect(const QPointF &cursorPoint,
                      double scaleX, double scaleY,
                      double angle,
-                     const KisPaintInformation& info,
+                     const KisPaintInformation &info,
                      const MirrorProperties &mirrorProperties);
 
     inline
@@ -93,27 +91,27 @@ private:
             const QSize &realDabSize);
 
     inline KisFixedPaintDeviceSP tryFetchFromCache(const SavedDabParameters &params,
-            const KisPaintInformation& info,
+            const KisPaintInformation &info,
             QRect *dstDabRect);
 
     inline KisFixedPaintDeviceSP fetchDabCommon(const KoColorSpace *cs,
             const KisColorSource *colorSource,
-            const KoColor& color,
+            const KoColor &color,
             const QPointF &cursorPoint,
             double scaleX, double scaleY,
             double angle,
-            const KisPaintInformation& info,
+            const KisPaintInformation &info,
             qreal softnessFactor,
             QRect *dstDabRect);
 
     void postProcessDab(KisFixedPaintDeviceSP dab,
                         const QPoint &dabTopLeft,
-                        const KisPaintInformation& info);
+                        const KisPaintInformation &info);
 
 private:
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 
 };
 

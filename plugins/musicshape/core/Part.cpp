@@ -22,18 +22,19 @@
 #include "Sheet.h"
 #include <QList>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Part::Private
 {
 public:
     QString name;
     QString shortName;
-    QList<Staff*> staves;
-    QList<Voice*> voices;
+    QList<Staff *> staves;
+    QList<Voice *> voices;
 };
 
-Part::Part(Sheet* sheet, const QString& name) : QObject(sheet), d(new Private)
+Part::Part(Sheet *sheet, const QString &name) : QObject(sheet), d(new Private)
 {
     d->name = name;
 }
@@ -43,9 +44,9 @@ Part::~Part()
     delete d;
 }
 
-Sheet* Part::sheet()
+Sheet *Part::sheet()
 {
-    return qobject_cast<Sheet*>(parent());
+    return qobject_cast<Sheet *>(parent());
 }
 
 QString Part::name() const
@@ -53,12 +54,16 @@ QString Part::name() const
     return d->name;
 }
 
-void Part::setName(const QString& name)
+void Part::setName(const QString &name)
 {
-    if (d->name == name) return;
+    if (d->name == name) {
+        return;
+    }
     d->name = name;
     emit nameChanged(name);
-    if (d->shortName.isNull()) emit shortNameChanged(name);
+    if (d->shortName.isNull()) {
+        emit shortNameChanged(name);
+    }
 }
 
 QString Part::shortName(bool useFull) const
@@ -70,9 +75,11 @@ QString Part::shortName(bool useFull) const
     }
 }
 
-void Part::setShortName(const QString& name)
+void Part::setShortName(const QString &name)
 {
-    if (d->shortName == name) return;
+    if (d->shortName == name) {
+        return;
+    }
     d->shortName = name;
     emit shortNameChanged(shortName());
 }
@@ -82,44 +89,46 @@ int Part::staffCount() const
     return d->staves.size();
 }
 
-Staff* Part::staff(int index)
+Staff *Part::staff(int index)
 {
-    Q_ASSERT( index >= 0 && index < staffCount() );
+    Q_ASSERT(index >= 0 && index < staffCount());
     return d->staves[index];
 }
 
-Staff* Part::addStaff()
+Staff *Part::addStaff()
 {
-    Staff* staff = new Staff(this);
+    Staff *staff = new Staff(this);
     d->staves.append(staff);
     return staff;
 }
 
-void Part::addStaff(Staff* staff)
+void Part::addStaff(Staff *staff)
 {
-    Q_ASSERT( staff );
+    Q_ASSERT(staff);
     d->staves.append(staff);
 }
 
-Staff* Part::insertStaff(int before)
+Staff *Part::insertStaff(int before)
 {
-    Q_ASSERT( before >= 0 && before <= staffCount() );
-    Staff* staff = new Staff(this);
+    Q_ASSERT(before >= 0 && before <= staffCount());
+    Staff *staff = new Staff(this);
     d->staves.insert(before, staff);
     return staff;
 }
 
-int Part::indexOfStaff(Staff* staff)
+int Part::indexOfStaff(Staff *staff)
 {
     Q_ASSERT(staff);
     return d->staves.indexOf(staff);
 }
 
-void Part::removeStaff(Staff* staff, bool deleteStaff)
+void Part::removeStaff(Staff *staff, bool deleteStaff)
 {
     Q_ASSERT(staff);
     d->staves.removeAll(staff);
-    if (deleteStaff) delete staff;
+    if (deleteStaff) {
+        delete staff;
+    }
 }
 
 int Part::voiceCount() const
@@ -127,20 +136,20 @@ int Part::voiceCount() const
     return d->voices.size();
 }
 
-Voice* Part::voice(int index)
+Voice *Part::voice(int index)
 {
-    Q_ASSERT( index >= 0 && index < voiceCount() );
+    Q_ASSERT(index >= 0 && index < voiceCount());
     return d->voices[index];
 }
 
-Voice* Part::addVoice()
+Voice *Part::addVoice()
 {
-    Voice* voice = new Voice(this);
+    Voice *voice = new Voice(this);
     d->voices.append(voice);
     return voice;
 }
 
-int Part::indexOfVoice(Voice* voice)
+int Part::indexOfVoice(Voice *voice)
 {
     Q_ASSERT(voice);
     return d->voices.indexOf(voice);

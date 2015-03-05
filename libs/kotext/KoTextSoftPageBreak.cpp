@@ -52,7 +52,7 @@ void KoTextSoftPageBreak::saveOdf(KoShapeSavingContext &context)
 }
 
 void KoTextSoftPageBreak::updatePosition(const QTextDocument *document,
-                                         int posInDocument, const QTextCharFormat &format)
+        int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document)
     Q_UNUSED(posInDocument)

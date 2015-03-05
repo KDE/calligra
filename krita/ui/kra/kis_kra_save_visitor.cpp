@@ -56,13 +56,13 @@
 
 using namespace KRA;
 
-KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
-        : KisNodeVisitor()
-        , m_store(store)
-        , m_external(false)
-        , m_name(name)
-        , m_nodeFileNames(nodeFileNames)
-        , m_writer(new KisStorePaintDeviceWriter(store))
+KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, const QString &name, QMap<const KisNode *, QString> nodeFileNames)
+    : KisNodeVisitor()
+    , m_store(store)
+    , m_external(false)
+    , m_name(name)
+    , m_nodeFileNames(nodeFileNames)
+    , m_writer(new KisStorePaintDeviceWriter(store))
 {
 }
 
@@ -77,16 +77,16 @@ void KisKraSaveVisitor::setExternalUri(const QString &uri)
     m_uri = uri;
 }
 
-bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
+bool KisKraSaveVisitor::visit(KisExternalLayer *layer)
 {
     bool result = false;
-    if (KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
+    if (KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer *>(layer)) {
         if (!saveMetaData(layer)) {
             m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
             return false;
         }
         m_store->pushDirectory();
-        m_store->enterDirectory(getLocation(layer, DOT_SHAPE_LAYER)) ;
+        m_store->enterDirectory(getLocation(layer, DOT_SHAPE_LAYER));
         result = shapeLayer->saveLayer(m_store);
         m_store->popDirectory();
     }
@@ -119,7 +119,7 @@ bool KisKraSaveVisitor::visit(KisGroupLayer *layer)
     return visitAllInverse(layer);
 }
 
-bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
+bool KisKraSaveVisitor::visit(KisAdjustmentLayer *layer)
 {
     if (!layer->filter()) {
         m_errorMessages << i18n("Failed to save the filter layer %1: it has no filter.", layer->name());
@@ -140,7 +140,7 @@ bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
     return visitAllInverse(layer);
 }
 
-bool KisKraSaveVisitor::visit(KisGeneratorLayer * layer)
+bool KisKraSaveVisitor::visit(KisGeneratorLayer *layer)
 {
     if (!saveSelection(layer)) {
         m_errorMessages << i18n("Failed to save the selection for layer %1.", layer->name());
@@ -237,7 +237,6 @@ QStringList KisKraSaveVisitor::errorMessages() const
     return m_errorMessages;
 }
 
-
 bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
                                         QString location)
 {
@@ -253,18 +252,24 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
         m_store->close();
     }
     if (m_store->open(location + ".defaultpixel")) {
-        m_store->write((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
+        m_store->write((char *)device->defaultPixel(), device->colorSpace()->pixelSize());
         m_store->close();
     }
     m_store->setCompressionEnabled(true);
     return true;
 }
 
-bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
+bool KisKraSaveVisitor::saveAnnotations(KisLayer *layer)
 {
-    if (!layer) return false;
-    if (!layer->paintDevice()) return false;
-    if (!layer->paintDevice()->colorSpace()) return false;
+    if (!layer) {
+        return false;
+    }
+    if (!layer->paintDevice()) {
+        return false;
+    }
+    if (!layer->paintDevice()->colorSpace()) {
+        return false;
+    }
 
     if (layer->paintDevice()->colorSpace()->profile()) {
         const KoColorProfile *profile = layer->paintDevice()->colorSpace()->profile();
@@ -293,15 +298,15 @@ bool KisKraSaveVisitor::saveAnnotations(KisLayer* layer)
     return true;
 
 }
-bool KisKraSaveVisitor::saveSelection(KisNode* node)
+bool KisKraSaveVisitor::saveSelection(KisNode *node)
 {
     KisSelectionSP selection;
     if (node->inherits("KisMask")) {
-        selection = static_cast<KisMask*>(node)->selection();
+        selection = static_cast<KisMask *>(node)->selection();
     } else if (node->inherits("KisAdjustmentLayer")) {
-        selection = static_cast<KisAdjustmentLayer*>(node)->internalSelection();
+        selection = static_cast<KisAdjustmentLayer *>(node)->internalSelection();
     } else if (node->inherits("KisGeneratorLayer")) {
-        selection = static_cast<KisGeneratorLayer*>(node)->internalSelection();
+        selection = static_cast<KisGeneratorLayer *>(node)->internalSelection();
     } else {
         return false;
     }
@@ -313,7 +318,7 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     if (selection->hasShapeSelection()) {
         m_store->pushDirectory();
         m_store->enterDirectory(getLocation(node, DOT_SHAPE_SELECTION));
-        KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+        KisShapeSelection *shapeSelection = dynamic_cast<KisShapeSelection *>(selection->shapeSelection());
         if (!shapeSelection) {
             m_store->popDirectory();
             return false;
@@ -328,10 +333,10 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     return true;
 }
 
-bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
+bool KisKraSaveVisitor::saveFilterConfiguration(KisNode *node)
 {
     KisNodeFilterInterface *filterInterface =
-        dynamic_cast<KisNodeFilterInterface*>(node);
+        dynamic_cast<KisNodeFilterInterface *>(node);
 
     KisSafeFilterConfigurationSP filter;
 
@@ -351,15 +356,19 @@ bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
     return false;
 }
 
-bool KisKraSaveVisitor::saveMetaData(KisNode* node)
+bool KisKraSaveVisitor::saveMetaData(KisNode *node)
 {
-    if (!node->inherits("KisLayer")) return true;
+    if (!node->inherits("KisLayer")) {
+        return true;
+    }
 
-    KisMetaData::Store* metadata = (static_cast<KisLayer*>(node))->metaData();
-    if (metadata->isEmpty()) return true;
+    KisMetaData::Store *metadata = (static_cast<KisLayer *>(node))->metaData();
+    if (metadata->isEmpty()) {
+        return true;
+    }
 
     // Serialize all the types of metadata there are
-    KisMetaData::IOBackend* backend = KisMetaData::IOBackendRegistry::instance()->get("xmp");
+    KisMetaData::IOBackend *backend = KisMetaData::IOBackendRegistry::instance()->get("xmp");
     if (!backend->supportSaving()) {
         dbgFile << "Backend " << backend->id() << " does not support saving.";
         return false;
@@ -381,7 +390,7 @@ bool KisKraSaveVisitor::saveMetaData(KisNode* node)
     return true;
 }
 
-QString KisKraSaveVisitor::getLocation(KisNode* node, const QString& suffix)
+QString KisKraSaveVisitor::getLocation(KisNode *node, const QString &suffix)
 {
 
     QString location = m_external ? QString() : m_uri;

@@ -55,7 +55,7 @@ public:
     /**
      * Constructor.
      */
-    explicit KoFindStyle(QObject* parent = 0);
+    explicit KoFindStyle(QObject *parent = 0);
     /**
      * Destructor.
      */
@@ -64,13 +64,13 @@ public:
     /**
      * Return the list of documents currently being used for searching.
      */
-    QList<QTextDocument*> documents();
+    QList<QTextDocument *> documents();
     /**
      * Set the list of documents to use for searching.
      *
      * \param list A list of document to search through.
      */
-    void setDocuments(const QList<QTextDocument*> &list);
+    void setDocuments(const QList<QTextDocument *> &list);
 
     /**
      * Reimplemented from KoFindBase::clearMatches()
@@ -83,15 +83,15 @@ protected:
      *
      * \note Replace is currently not supported in this class.
      */
-    virtual void replaceImplementation(const KoFindMatch& match, const QVariant& value);
+    virtual void replaceImplementation(const KoFindMatch &match, const QVariant &value);
     /**
      * Reimplemented from KoFindBase::findImplementation()
      */
-    virtual void findImplementation(const QString& pattern, KoFindBase::KoFindMatchList& matchList);
+    virtual void findImplementation(const QString &pattern, KoFindBase::KoFindMatchList &matchList);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFINDSTYLE_H

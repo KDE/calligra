@@ -35,14 +35,14 @@
 class KexiDropDownButtonStyle : public KexiUtils::StyleProxy
 {
 public:
-    explicit KexiDropDownButtonStyle(QStyle *parentStyle, QObject * parent = 0)
-            : KexiUtils::StyleProxy(parentStyle, parent)
+    explicit KexiDropDownButtonStyle(QStyle *parentStyle, QObject *parent = 0)
+        : KexiUtils::StyleProxy(parentStyle, parent)
     {
     }
     virtual ~KexiDropDownButtonStyle() {}
 
-    virtual void drawComplexControl( ComplexControl control, const QStyleOptionComplex * option,
-        QPainter * painter, const QWidget * widget = 0 ) const
+    virtual void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option,
+                                    QPainter *painter, const QWidget *widget = 0) const
     {
         if (control == CC_ToolButton && qstyleoption_cast<const QStyleOptionToolButton *>(option)) {
             QStyleOptionToolButton newOption(*qstyleoption_cast<const QStyleOptionToolButton *>(option));
@@ -54,7 +54,7 @@ public:
         StyleProxy::drawComplexControl(control, option, painter, widget);
     }
 
-    virtual int styleHint( StyleHint hint, const QStyleOption * option = 0, const QWidget * widget = 0, QStyleHintReturn * returnData = 0 ) const
+    virtual int styleHint(StyleHint hint, const QStyleOption *option = 0, const QWidget *widget = 0, QStyleHintReturn *returnData = 0) const
     {
         if (hint == QStyle::SH_ToolButton_PopupDelay) {
             return 0;
@@ -63,9 +63,8 @@ public:
     }
 };
 
-
 KexiDropDownButton::KexiDropDownButton(QWidget *parent)
-        : QToolButton(parent)
+    : QToolButton(parent)
 {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     KexiDropDownButtonStyle *s = new KexiDropDownButtonStyle(style(), this);
@@ -88,7 +87,7 @@ KexiDropDownButton::~KexiDropDownButton()
 
 QSize KexiDropDownButton::sizeHint() const
 {
-    return QSize(fontMetrics().maxWidth() + 2*2, fontMetrics().height()*2 + 2*2);
+    return QSize(fontMetrics().maxWidth() + 2 * 2, fontMetrics().height() * 2 + 2 * 2);
 }
 
 void KexiDropDownButton::paintEvent(QPaintEvent *e)
@@ -107,7 +106,7 @@ void KexiDropDownButton::paintEvent(QPaintEvent *e)
     p.drawLine(r.topLeft(), r.topRight());
 }
 
-void KexiDropDownButton::keyPressEvent(QKeyEvent * e)
+void KexiDropDownButton::keyPressEvent(QKeyEvent *e)
 {
     const int k = e->key();
     const bool dropDown =

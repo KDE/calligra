@@ -64,7 +64,7 @@ public:
 
 private:
     void saveHeaderFooter(KoShapeSavingContext &context);
-    QByteArray serializeHeaderFooter(KoShapeSavingContext &context, KWTextFrameSet* fs);
+    QByteArray serializeHeaderFooter(KoShapeSavingContext &context, KWTextFrameSet *fs);
 
     void calculateZindexOffsets();
     void addShapeToTree(KoShape *shape);

@@ -27,7 +27,7 @@
 #include <QStringListModel>
 #include <QLabel>
 
-KisGmicInputOutputWidget::KisGmicInputOutputWidget(QWidget * parent):
+KisGmicInputOutputWidget::KisGmicInputOutputWidget(QWidget *parent):
     QWidget(parent),
     m_inputMode(ACTIVE_LAYER),
     m_outputMode(IN_PLACE),
@@ -46,12 +46,10 @@ KisGmicInputOutputWidget::~KisGmicInputOutputWidget()
     delete m_previewSizeModel;
 }
 
-KisFilterPreviewWidget* KisGmicInputOutputWidget::previewWidget()
+KisFilterPreviewWidget *KisGmicInputOutputWidget::previewWidget()
 {
     return previewViewport;
 }
-
-
 
 void KisGmicInputOutputWidget::createMainLayout()
 {
@@ -59,33 +57,32 @@ void KisGmicInputOutputWidget::createMainLayout()
     zoomOutButton->setIcon(koIcon("zoom-out"));
 
     QStringList outputModeStrings = QStringList()
-            << i18n("In place (default)")
-            << i18n("New layer(s)")
-            << i18n("New active layer(s)")
-            << i18n("New image");
+                                    << i18n("In place (default)")
+                                    << i18n("New layer(s)")
+                                    << i18n("New active layer(s)")
+                                    << i18n("New image");
 
     QStringList inputModeStrings = QStringList()
-            << i18n("None")
-            << i18n("Active (default)")
-            << i18n("All")
-            << i18n("Active & below")
-            << i18n("Active & above")
-            << i18n("All visibles")
-            << i18n("All invisibles")
-            << i18n("All visibles (decr.)")
-            << i18n("All invisibles (decr.)")
-            << i18n("All (decr.)");
+                                   << i18n("None")
+                                   << i18n("Active (default)")
+                                   << i18n("All")
+                                   << i18n("Active & below")
+                                   << i18n("Active & above")
+                                   << i18n("All visibles")
+                                   << i18n("All invisibles")
+                                   << i18n("All visibles (decr.)")
+                                   << i18n("All invisibles (decr.)")
+                                   << i18n("All (decr.)");
 
     QStringList previewMode = QStringList()
-            << i18n("1st output")
-            << i18n("2nd output")
-            << i18n("3rd output")
-            << i18n("4th output")
-            << i18n("1st -> 2nd")
-            << i18n("1st -> 3rd")
-            << i18n("1st -> 4th")
-            << i18n("All outputs");
-
+                              << i18n("1st output")
+                              << i18n("2nd output")
+                              << i18n("3rd output")
+                              << i18n("4th output")
+                              << i18n("1st -> 2nd")
+                              << i18n("1st -> 3rd")
+                              << i18n("1st -> 4th")
+                              << i18n("All outputs");
 
     m_inputModel = new QStringListModel(inputModeStrings);
     inputCombo->setModel(m_inputModel);
@@ -108,13 +105,11 @@ void KisGmicInputOutputWidget::createMainLayout()
     previewSizeCombo->setCurrentIndex(static_cast<int>(m_previewSize));
 }
 
-
 void KisGmicInputOutputWidget::setIntputMode(int index)
 {
     m_inputMode = static_cast<InputLayerMode>(index);
     emit sigConfigurationChanged();
 }
-
 
 void KisGmicInputOutputWidget::setOutputMode(int index)
 {

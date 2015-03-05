@@ -75,13 +75,13 @@ public:
     StdWidgetFactory(QObject *parent, const QVariantList &args);
     ~StdWidgetFactory();
 
-    virtual QWidget* createWidget(const QByteArray &classname, QWidget *parent, const char *name,
+    virtual QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name,
                                   KFormDesigner::Container *container,
                                   CreateWidgetOptions options = DefaultOptions);
 
     virtual bool createMenuActions(const QByteArray &classname, QWidget *w,
                                    QMenu *menu, KFormDesigner::Container *container);
-    virtual bool startInlineEditing(InlineEditorCreationArguments& args);
+    virtual bool startInlineEditing(InlineEditorCreationArguments &args);
     virtual bool previewWidget(const QByteArray &classname, QWidget *widget,
                                KFormDesigner::Container *container);
     virtual bool clearWidgetContent(const QByteArray &classname, QWidget *w);
@@ -92,14 +92,20 @@ public:
     virtual bool readSpecialProperty(const QByteArray &classname, QDomElement &node,
                                      QWidget *w, KFormDesigner::ObjectTreeItem *item);
 
-    virtual void setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget *w);
+    virtual void setPropertyOptions(KoProperty::Set &set, const KFormDesigner::WidgetInfo &info, QWidget *w);
 
     //! Moved into public for EditRichTextAction
-    bool editRichText(QWidget *w, QString &text) const { return KFormDesigner::WidgetFactory::editRichText(w, text); }
+    bool editRichText(QWidget *w, QString &text) const
+    {
+        return KFormDesigner::WidgetFactory::editRichText(w, text);
+    }
 
     //! Moved into public for EditRichTextAction
     void changeProperty(KFormDesigner::Form *form, QWidget *widget, const char *name,
-        const QVariant &value) { KFormDesigner::WidgetFactory::changeProperty(form, widget, name, value); }
+                        const QVariant &value)
+    {
+        KFormDesigner::WidgetFactory::changeProperty(form, widget, name, value);
+    }
 
 public Q_SLOTS:
 #ifndef KEXI_FORMS_NO_LIST_WIDGET

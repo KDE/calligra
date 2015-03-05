@@ -1,6 +1,6 @@
 /*
  *  Copyright (C) 2011 Jignesh Kakadiya <jigneshhk1992@gmail.com>
- *  
+ *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; either version 2.1 of the License, or
@@ -40,7 +40,7 @@
 KWPageTool::KWPageTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
 {
-    m_canvas = dynamic_cast<KWCanvas*>(canvas);
+    m_canvas = dynamic_cast<KWCanvas *>(canvas);
     if (m_canvas) {
         m_document = m_canvas->document();
     }
@@ -50,13 +50,13 @@ KWPageTool::~KWPageTool()
 {
 }
 
-void KWPageTool::paint( QPainter &painter, const KoViewConverter &converter)
+void KWPageTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(painter)
     Q_UNUSED(converter)
 }
 
-void KWPageTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KWPageTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     useCursor(Qt::ArrowCursor);
     repaintDecorations();
@@ -81,7 +81,7 @@ void KWPageTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KWPageTool::insertPageBreak()
 {
-    if (m_document->mainFrameSet()) { 
+    if (m_document->mainFrameSet()) {
         // lets just add one to the main text frameset
         KoTextEditor *editor =  KoTextDocument(m_document->mainFrameSet()->document()).textEditor();
         if (editor == KoTextEditor::getTextEditorFromCanvas(m_canvas)) {
@@ -106,5 +106,4 @@ QList<QPointer<QWidget> > KWPageTool::createOptionWidgets()
 }
 
 #include "KWPageTool.moc"
-
 

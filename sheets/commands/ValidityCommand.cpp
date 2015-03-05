@@ -20,7 +20,6 @@
 // Local
 #include "ValidityCommand.h"
 
-
 #include <klocale.h>
 
 #include "CellStorage.h"
@@ -30,16 +29,17 @@
 using namespace Calligra::Sheets;
 
 ValidityCommand::ValidityCommand()
-        : AbstractRegionCommand()
+    : AbstractRegionCommand()
 {
 }
 
-bool ValidityCommand::process(Element* element)
+bool ValidityCommand::process(Element *element)
 {
     if (!m_reverse) {
         // create undo
-        if (m_firstrun)
+        if (m_firstrun) {
             m_undoData += m_sheet->validityStorage()->undoData(Region(element->rect()));
+        }
         m_sheet->cellStorage()->setValidity(Region(element->rect()), m_validity);
     }
     return true;
@@ -49,8 +49,9 @@ bool ValidityCommand::mainProcessing()
 {
     if (m_reverse) {
         m_sheet->cellStorage()->setValidity(*this, Validity());
-        for (int i = 0; i < m_undoData.count(); ++i)
+        for (int i = 0; i < m_undoData.count(); ++i) {
             m_sheet->cellStorage()->setValidity(Region(m_undoData[i].first.toRect()), m_undoData[i].second);
+        }
     }
     return AbstractRegionCommand::mainProcessing();
 }
@@ -58,8 +59,9 @@ bool ValidityCommand::mainProcessing()
 void ValidityCommand::setValidity(Validity validity)
 {
     m_validity = validity;
-    if (m_validity.isEmpty())
+    if (m_validity.isEmpty()) {
         setText(kundo2_i18n("Remove Validity Check"));
-    else
+    } else {
         setText(kundo2_i18n("Add Validity Check"));
+    }
 }

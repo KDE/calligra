@@ -36,11 +36,11 @@ public:
     QString currentFile;
     bool temporaryFile;
     QDeclarativeItem *focusItem;
-    Theme* theme;
+    Theme *theme;
 };
 
-Settings::Settings( QObject* parent )
-    : QObject( parent ), d( new Private )
+Settings::Settings(QObject *parent)
+    : QObject(parent), d(new Private)
 {
     QString theme = KGlobal::config()->group("General").readEntry<QString>("theme", "default");
     d->theme = Theme::load(theme, this);
@@ -52,13 +52,12 @@ Settings::~Settings()
     delete d;
 }
 
-
 QString Settings::currentFile() const
 {
     return d->currentFile;
 }
 
-void Settings::setCurrentFile(const QString& fileName)
+void Settings::setCurrentFile(const QString &fileName)
 {
     qApp->processEvents();
     if (fileName != d->currentFile) {
@@ -80,12 +79,12 @@ void Settings::setTemporaryFile(bool temp)
     }
 }
 
-QDeclarativeItem* Settings::focusItem()
+QDeclarativeItem *Settings::focusItem()
 {
     return d->focusItem;
 }
 
-void Settings::setFocusItem(QDeclarativeItem* item)
+void Settings::setFocusItem(QDeclarativeItem *item)
 {
     if (item != d->focusItem) {
         d->focusItem = item;
@@ -93,23 +92,24 @@ void Settings::setFocusItem(QDeclarativeItem* item)
     }
 }
 
-QObject* Settings::theme() const
+QObject *Settings::theme() const
 {
     return d->theme;
 }
 
 QString Settings::themeID() const
 {
-    if(d->theme)
+    if (d->theme) {
         return d->theme->id();
+    }
 
     return QString();
 }
 
-void Settings::setThemeID(const QString& id)
+void Settings::setThemeID(const QString &id)
 {
-    if(!d->theme || id != d->theme->id()) {
-        if(d->theme) {
+    if (!d->theme || id != d->theme->id()) {
+        if (d->theme) {
             delete d->theme;
             d->theme = 0;
         }
@@ -121,9 +121,9 @@ void Settings::setThemeID(const QString& id)
     }
 }
 
-QObject* Settings::customImageSettings() const
+QObject *Settings::customImageSettings() const
 {
-    QObject* settings = new PropertyContainer("customImageSettings", qApp);
+    QObject *settings = new PropertyContainer("customImageSettings", qApp);
     KisConfig cfg;
     settings->setProperty("Width", cfg.defImageWidth());
     settings->setProperty("Height", cfg.defImageHeight());

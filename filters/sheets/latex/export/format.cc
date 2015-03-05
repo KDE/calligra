@@ -51,34 +51,38 @@ Format::~Format()
 
 bool Format::hasTopBorder() const
 {
-    if (_topBorder == NULL)
+    if (_topBorder == NULL) {
         return false;
-    else
+    } else {
         return (_topBorder->getStyle() > 0);
+    }
 }
 
 bool Format::hasBottomBorder() const
 {
-    if (_bottomBorder == NULL)
+    if (_bottomBorder == NULL) {
         return false;
-    else
+    } else {
         return (_bottomBorder->getStyle() > 0);
+    }
 }
 
 bool Format::hasLeftBorder() const
 {
-    if (_leftBorder == NULL)
+    if (_leftBorder == NULL) {
         return false;
-    else
+    } else {
         return (_leftBorder->getStyle() > 0);
+    }
 }
 
 bool Format::hasRightBorder() const
 {
-    if (_rightBorder == NULL)
+    if (_rightBorder == NULL) {
         return false;
-    else
+    } else {
         return (_rightBorder->getStyle() > 0);
+    }
 }
 
 /* Get the set of info about a text format */
@@ -94,8 +98,9 @@ void Format::analyze(const QDomNode node)
         setAlignY(getAttr(node, "alignY").toLong());
         setAlign(getAttr(node, "align").toLong());
     }
-    if (isChild(node, "pen"))
+    if (isChild(node, "pen")) {
         analyzePen(getChild(node, "pen"));
+    }
     if (isChild(node, "bottom-border")) {
         kDebug(30522) << "bottom-border";
         _isValidFormat = true;
@@ -139,10 +144,11 @@ void Format::analyzeFont(const QDomNode node)
     setFontWeight(getAttr(node, "weight").toInt());
 }
 
-void Format::generate(QTextStream& out, Column* col, Row* row)
+void Format::generate(QTextStream &out, Column *col, Row *row)
 {
-    if (hasLeftBorder())
+    if (hasLeftBorder()) {
         out << "|";
+    }
     if (isValidFormat() && getBrushStyle() >= 1) {
         out << ">{\\columncolor";
         generateColor(out);
@@ -160,13 +166,15 @@ void Format::generate(QTextStream& out, Column* col, Row* row)
             out << "}";
         }
     }
-    if (col != NULL)
+    if (col != NULL) {
         out << "m{" << col->getWidth() << "pt}";
-    if (hasRightBorder())
+    }
+    if (hasRightBorder()) {
         out << "|";
+    }
 }
 
-void Format::generateTextFormat(QTextStream& out, QString text)
+void Format::generateTextFormat(QTextStream &out, QString text)
 {
     if (getPenStyle() > 0) {
         float red   = ((float) getPenColor().red()) / 255;
@@ -174,11 +182,11 @@ void Format::generateTextFormat(QTextStream& out, QString text)
         float blue  = ((float) getPenColor().blue()) / 255;
 
         out << "\\textcolor[rgb]{" << red << ", " << green <<
-        ", " << blue << "}{" << text << "}" << endl;
+            ", " << blue << "}{" << text << "}" << endl;
     }
 }
 
-void Format::generateColor(QTextStream& out)
+void Format::generateColor(QTextStream &out)
 {
     if (getBrushStyle() >= 1) {
         float red   = ((float) getBrushColor().red()) / 255;
@@ -186,6 +194,6 @@ void Format::generateColor(QTextStream& out)
         float blue  = ((float) getBrushColor().blue()) / 255;
 
         out << "[rgb]{" << red << ", " << green <<
-        ", " << blue << "}%" << endl;
+            ", " << blue << "}%" << endl;
     }
 }

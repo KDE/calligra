@@ -25,7 +25,7 @@
 #include <kexi_export.h>
 
 //! @short Ordinary QWidget that supports forcing size hint
-/*! The setSizeHint() method is needed be the main window to properly 
+/*! The setSizeHint() method is needed be the main window to properly
     restore size on application startup.
 
     This widgets acts as a parent for a single child that can be
@@ -34,24 +34,24 @@
 class KEXIGUIUTILS_EXPORT KexiDockableWidget : public QWidget
 {
 public:
-    explicit KexiDockableWidget(QWidget* parent = 0);
+    explicit KexiDockableWidget(QWidget *parent = 0);
     virtual ~KexiDockableWidget();
 
-    //! Sets child widget @a widget. 
+    //! Sets child widget @a widget.
     //! The child is automatically added to internal layout (without margins)
     //! This method works only once.
-    void setWidget(QWidget* widget);
+    void setWidget(QWidget *widget);
 
     //! @return widget that has been set as a child.
     QWidget *widget() const;
 
     virtual QSize sizeHint() const;
 
-    void setSizeHint(const QSize& size);
+    void setSizeHint(const QSize &size);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

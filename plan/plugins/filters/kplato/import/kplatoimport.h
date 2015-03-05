@@ -20,9 +20,7 @@
 #ifndef KPLATOIMPORT_H
 #define KPLATOIMPORT_H
 
-
 #include <KoFilter.h>
-
 
 #include <QObject>
 #include <QVariantList>
@@ -37,10 +35,10 @@ class KPlatoImport : public KoFilter
 {
     Q_OBJECT
 public:
-    KPlatoImport(QObject* parent, const QVariantList &);
+    KPlatoImport(QObject *parent, const QVariantList &);
     virtual ~KPlatoImport() {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif // KPLATOIMPORT_H

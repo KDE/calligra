@@ -25,8 +25,7 @@
 #include <KoCompositeOpRegistry.h>
 #include "kis_paint_device.h"
 
-struct KisBaseNode::Private
-{
+struct KisBaseNode::Private {
 public:
 
     QString compositeOp;
@@ -59,8 +58,7 @@ KisBaseNode::KisBaseNode()
     setUuid(QUuid::createUuid());
 }
 
-
-KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
+KisBaseNode::KisBaseNode(const KisBaseNode &rhs)
     : QObject()
     , KisShared()
     ,  m_d(new Private())
@@ -121,7 +119,7 @@ void KisBaseNode::setPercentOpacity(quint8 val)
     setOpacity(int(float(val * 255) / 100 + 0.5));
 }
 
-const QString& KisBaseNode::compositeOpId() const
+const QString &KisBaseNode::compositeOpId() const
 {
     return m_d->compositeOp;
 }
@@ -129,7 +127,7 @@ const QString& KisBaseNode::compositeOpId() const
 /**
  * FIXME: Rename this function to setCompositeOpId()
  */
-void KisBaseNode::setCompositeOp(const QString& compositeOp)
+void KisBaseNode::setCompositeOp(const QString &compositeOp)
 {
     m_d->compositeOp = compositeOp;
     baseNodeChangedCallback();
@@ -150,12 +148,12 @@ void KisBaseNode::setSectionModelProperties(const KisDocumentSectionModel::Prope
     setUserLocked(properties.at(1).state.toBool());
 }
 
-KoProperties & KisBaseNode::nodeProperties() const
+KoProperties &KisBaseNode::nodeProperties() const
 {
     return m_d->properties;
 }
 
-void KisBaseNode::mergeNodeProperties(const KoProperties & properties)
+void KisBaseNode::mergeNodeProperties(const KoProperties &properties)
 {
     QMapIterator<QString, QVariant> iter = properties.propertyIterator();
     while (iter.hasNext()) {
@@ -165,19 +163,19 @@ void KisBaseNode::mergeNodeProperties(const KoProperties & properties)
     baseNodeChangedCallback();
 }
 
-bool KisBaseNode::check(const KoProperties & properties) const
+bool KisBaseNode::check(const KoProperties &properties) const
 {
     QMapIterator<QString, QVariant> iter = properties.propertyIterator();
     while (iter.hasNext()) {
         iter.next();
         if (m_d->properties.contains(iter.key())) {
-            if (m_d->properties.value(iter.key()) != iter.value())
+            if (m_d->properties.value(iter.key()) != iter.value()) {
                 return false;
+            }
         }
     }
     return true;
 }
-
 
 QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
 {
@@ -197,7 +195,7 @@ bool KisBaseNode::visible(bool recursive) const
     KisBaseNodeSP parentNode = parentCallback();
 
     return recursive && isVisible && parentNode ?
-        parentNode->visible() : isVisible;
+           parentNode->visible() : isVisible;
 }
 
 void KisBaseNode::setVisible(bool visible, bool loading)
@@ -242,8 +240,7 @@ bool KisBaseNode::isEditable(bool checkVisibility) const
     bool editable = true;
     if (checkVisibility) {
         editable = (m_d->properties.boolProperty("visible", true) && !userLocked() && !systemLocked());
-    }
-    else {
+    } else {
         editable = (!userLocked() && !systemLocked());
     }
 
@@ -276,7 +273,7 @@ QUuid KisBaseNode::uuid() const
     return m_d->id;
 }
 
-void KisBaseNode::setUuid(const QUuid& id)
+void KisBaseNode::setUuid(const QUuid &id)
 {
     m_d->id = id;
     baseNodeChangedCallback();

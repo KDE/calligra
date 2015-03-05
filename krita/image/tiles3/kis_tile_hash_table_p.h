@@ -23,10 +23,9 @@
 
 //#define SHARED_TILES_SANITY_CHECK
 
-
 template<class T>
 KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
-        : m_lock(QReadWriteLock::NonRecursive)
+    : m_lock(QReadWriteLock::NonRecursive)
 {
     m_hashTable = new TileTypeSP [TABLE_SIZE];
     Q_CHECK_PTR(m_hashTable);
@@ -39,7 +38,7 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(KisMementoManager *mm)
 template<class T>
 KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T> &ht,
         KisMementoManager *mm)
-        : m_lock(QReadWriteLock::NonRecursive)
+    : m_lock(QReadWriteLock::NonRecursive)
 {
     QReadLocker locker(&ht.m_lock);
 
@@ -50,10 +49,9 @@ KisTileHashTableTraits<T>::KisTileHashTableTraits(const KisTileHashTableTraits<T
     m_hashTable = new TileTypeSP [TABLE_SIZE];
     Q_CHECK_PTR(m_hashTable);
 
-
     TileTypeSP foreignTile;
-    TileType* nativeTile;
-    TileType* nativeTileHead;
+    TileType *nativeTile;
+    TileType *nativeTileHead;
     for (qint32 i = 0; i < TABLE_SIZE; i++) {
         nativeTileHead = 0;
 
@@ -131,11 +129,13 @@ KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row)
         if (tile->col() == col &&
                 tile->row() == row) {
 
-            if (prevTile)
+            if (prevTile) {
                 prevTile->setNext(tile->next());
-            else
+            } else
                 /* optimize here*/
+            {
                 m_hashTable[idx] = tile->next();
+            }
 
             /**
              * The shared pointer may still be accessed by someone, so
@@ -172,11 +172,10 @@ inline void KisTileHashTableTraits<T>::setDefaultTileDataImp(KisTileData *defaul
 }
 
 template<class T>
-inline KisTileData* KisTileHashTableTraits<T>::defaultTileDataImp() const
+inline KisTileData *KisTileHashTableTraits<T>::defaultTileDataImp() const
 {
     return m_defaultTileData;
 }
-
 
 template<class T>
 bool KisTileHashTableTraits<T>::tileExists(qint32 col, qint32 row)
@@ -196,7 +195,7 @@ KisTileHashTableTraits<T>::getExistedTile(qint32 col, qint32 row)
 template<class T>
 typename KisTileHashTableTraits<T>::TileTypeSP
 KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
-                                       bool& newTile)
+                                       bool &newTile)
 {
     /**
      * FIXME: Read access is better
@@ -221,8 +220,9 @@ KisTileHashTableTraits<T>::getReadOnlyTileLazy(qint32 col, qint32 row)
     QReadLocker locker(&m_lock);
 
     TileTypeSP tile = getTile(col, row);
-    if (!tile)
+    if (!tile) {
         tile = new TileType(col, row, m_defaultTileData, 0);
+    }
 
     return tile;
 }
@@ -292,12 +292,11 @@ void KisTileHashTableTraits<T>::setDefaultTileData(KisTileData *defaultTileData)
 }
 
 template<class T>
-KisTileData* KisTileHashTableTraits<T>::defaultTileData() const
+KisTileData *KisTileHashTableTraits<T>::defaultTileData() const
 {
     QWriteLocker locker(&m_lock);
     return defaultTileDataImp();
 }
-
 
 /*************** Debugging stuff ***************/
 
@@ -316,7 +315,7 @@ template<class T>
 qint32 KisTileHashTableTraits<T>::debugChainLen(qint32 idx)
 {
     qint32 len = 0;
-    for (TileTypeSP it = m_hashTable[idx]; it; it = it->next(), len++) ;
+    for (TileTypeSP it = m_hashTable[idx]; it; it = it->next(), len++);
     return len;
 }
 
@@ -330,10 +329,12 @@ void KisTileHashTableTraits<T>::debugMaxListLength(qint32 &min, qint32 &max)
 
     for (qint32 i = 0; i < TABLE_SIZE; i++) {
         tmp = debugChainLen(i);
-        if (tmp > maxLen)
+        if (tmp > maxLen) {
             maxLen = tmp;
-        if (tmp < minLen)
+        }
+        if (tmp < minLen) {
             minLen = tmp;
+        }
     }
 
     min = minLen;
@@ -355,15 +356,16 @@ void KisTileHashTableTraits<T>::debugListLengthDistibution()
 
     for (qint32 i = 0; i < TABLE_SIZE; i++) {
         tmp = debugChainLen(i);
-        array[tmp-min]++;
+        array[tmp - min]++;
     }
 
     dbgTiles << QString("   minChain:\t\t%d\n"
                         "   maxChain:\t\t%d").arg(min, max);
 
     dbgTiles << "   Chain size distribution:";
-    for (qint32 i = 0; i < arraySize; i++)
+    for (qint32 i = 0; i < arraySize; i++) {
         dbgTiles << QString("      %1:\t%2\n").arg(i + min, array[i]);
+    }
 
     delete[] array;
 }

@@ -27,10 +27,9 @@
 #include "kis_display_color_converter.h"
 #include "kis_acs_pixel_cache_renderer.h"
 
-
-KisColorSelectorTriangle::KisColorSelectorTriangle(KisColorSelector* parent) :
+KisColorSelectorTriangle::KisColorSelectorTriangle(KisColorSelector *parent) :
     KisColorSelectorComponent(parent),
-    m_lastClickPos(-1,-1)
+    m_lastClickPos(-1, -1)
 {
 }
 
@@ -38,28 +37,28 @@ bool KisColorSelectorTriangle::containsPointInComponentCoords(int x, int y) cons
 {
     QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x, y));
 
-    if (!m_realPixelCache) return false;
+    if (!m_realPixelCache) {
+        return false;
+    }
     KoColor pixel = Acs::pickColor(m_realPixelCache, triangleCoords);
     return pixel.opacityU8() == OPACITY_OPAQUE_U8;
 }
 
-void KisColorSelectorTriangle::paint(QPainter* painter)
+void KisColorSelectorTriangle::paint(QPainter *painter)
 {
-    if(isDirty()) {
+    if (isDirty()) {
         updatePixelCache();
     }
 
+    painter->drawImage(width() / 2 - triangleWidth() / 2,
+                       height() / 2 - triangleHeight() * (2 / 3.),
+                       m_renderedPixelCache);
 
-    painter->drawImage(width()/2-triangleWidth()/2,
-                      height()/2-triangleHeight()*(2/3.),
-                      m_renderedPixelCache);
-
-
-    if(m_lastClickPos.x()>-0.1 && m_parent->displayBlip()) {
-        painter->setPen(QColor(0,0,0));
-        painter->drawEllipse(m_lastClickPos.x()*width()-5, m_lastClickPos.y()*height()-5, 10, 10);
-        painter->setPen(QColor(255,255,255));
-        painter->drawEllipse(m_lastClickPos.x()*width()-4, m_lastClickPos.y()*height()-4, 8, 8);
+    if (m_lastClickPos.x() > -0.1 && m_parent->displayBlip()) {
+        painter->setPen(QColor(0, 0, 0));
+        painter->drawEllipse(m_lastClickPos.x()*width() - 5, m_lastClickPos.y()*height() - 5, 10, 10);
+        painter->setPen(QColor(255, 255, 255));
+        painter->drawEllipse(m_lastClickPos.x()*width() - 4, m_lastClickPos.y()*height() - 4, 8, 8);
     }
 }
 
@@ -84,7 +83,7 @@ void KisColorSelectorTriangle::updatePixelCache()
     // antialiased border
     QPainter gc(&m_renderedPixelCache);
     gc.setRenderHint(QPainter::Antialiasing);
-    gc.setPen(QPen(QColor(0,0,0,128), 2.5));
+    gc.setPen(QPen(QColor(0, 0, 0, 128), 2.5));
     gc.setCompositionMode(QPainter::CompositionMode_Clear);
     gc.drawLine(QPointF(0, triangleHeight()), QPointF((triangleWidth()) / 2.0, 0));
     gc.drawLine(QPointF(triangleWidth() / 2.0 + 1.0, 0), QPointF(triangleWidth() + 1, triangleHeight()));
@@ -94,20 +93,20 @@ KoColor KisColorSelectorTriangle::selectColor(int x, int y)
 {
     emit update();
 
-    QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x,y));
+    QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x, y));
 
     triangleCoords.setY(qBound(0, triangleCoords.y(), int(triangleHeight())));
 
-    int horizontalLineLength = triangleCoords.y()*(2./sqrt(3.));
-    int horizontalLineStart = triangleWidth()/2.-horizontalLineLength/2.;
-    int horizontalLineEnd = horizontalLineStart+horizontalLineLength;
+    int horizontalLineLength = triangleCoords.y() * (2. / sqrt(3.));
+    int horizontalLineStart = triangleWidth() / 2. - horizontalLineLength / 2.;
+    int horizontalLineEnd = horizontalLineStart + horizontalLineLength;
 
     triangleCoords.setX(qBound(horizontalLineStart, triangleCoords.x(), horizontalLineEnd));
 
     QPoint widgetCoords = triangleToWidgetCoordinates(triangleCoords);
 
-    m_lastClickPos.setX(widgetCoords.x()/qreal(width()));
-    m_lastClickPos.setY(widgetCoords.y()/qreal(height()));
+    m_lastClickPos.setX(widgetCoords.x() / qreal(width()));
+    m_lastClickPos.setY(widgetCoords.y() / qreal(height()));
 
     return colorAt(triangleCoords.x(), triangleCoords.y());
 }
@@ -120,12 +119,12 @@ void KisColorSelectorTriangle::setColor(const KoColor &color)
     qreal y = v * triangleHeight();
     qreal horizontalLineLength = y * (2. / sqrt(3.));
     qreal horizontalLineStart = 0.5 * (triangleWidth() - horizontalLineLength);
-    qreal x=s * horizontalLineLength + horizontalLineStart;
+    qreal x = s * horizontalLineLength + horizontalLineStart;
 
     QPoint tmp = triangleToWidgetCoordinates(QPoint(x, y));
 
-    m_lastClickPos.setX(tmp.x()/qreal(width()));
-    m_lastClickPos.setY(tmp.y()/qreal(height()));
+    m_lastClickPos.setX(tmp.x() / qreal(width()));
+    m_lastClickPos.setY(tmp.y() / qreal(height()));
 
     // Workaround for Bug 287001
     setLastMousePosition(tmp.x(), tmp.y());
@@ -136,48 +135,49 @@ void KisColorSelectorTriangle::setColor(const KoColor &color)
 
 int KisColorSelectorTriangle::triangleWidth() const
 {
-    return triangleHeight()*2/sqrt(3.0);
+    return triangleHeight() * 2 / sqrt(3.0);
 }
 
 int KisColorSelectorTriangle::triangleHeight() const
 {
-    return height()*3./4.;
+    return height() * 3. / 4.;
 }
 
 KoColor KisColorSelectorTriangle::colorAt(int x, int y) const
 {
-    Q_ASSERT(x>=0 && x<=triangleWidth());
-    Q_ASSERT(y>=0 && y<=triangleHeight());
+    Q_ASSERT(x >= 0 && x <= triangleWidth());
+    Q_ASSERT(y >= 0 && y <= triangleHeight());
 
     int triangleHeight = this->triangleHeight();
-    int horizontalLineLength = y*(2./sqrt(3.));
-    int horizontalLineStart = triangleWidth()/2.-horizontalLineLength/2.;
-    int horizontalLineEnd = horizontalLineStart+horizontalLineLength;
+    int horizontalLineLength = y * (2. / sqrt(3.));
+    int horizontalLineStart = triangleWidth() / 2. - horizontalLineLength / 2.;
+    int horizontalLineEnd = horizontalLineStart + horizontalLineLength;
 
-    if(x<horizontalLineStart || x>horizontalLineEnd || y>triangleHeight)
+    if (x < horizontalLineStart || x > horizontalLineEnd || y > triangleHeight) {
         return KoColor(Qt::transparent, colorSpace());
+    }
 
-    qreal relativeX = x-horizontalLineStart;
+    qreal relativeX = x - horizontalLineStart;
 
-    qreal value = (y)/qreal(triangleHeight);
-    qreal saturation = relativeX/qreal(horizontalLineLength);
+    qreal value = (y) / qreal(triangleHeight);
+    qreal saturation = relativeX / qreal(horizontalLineLength);
 
     return m_parent->converter()->fromHsvF(m_hue, saturation, value);
 }
 
 QPoint KisColorSelectorTriangle::widgetToTriangleCoordinates(const QPoint &point) const
 {
-    QPoint triangleTopLeft(width()/2-triangleWidth()/2,
-                           height()/2-triangleHeight()*(2/3.));
-    QPoint ret=point-triangleTopLeft;
+    QPoint triangleTopLeft(width() / 2 - triangleWidth() / 2,
+                           height() / 2 - triangleHeight() * (2 / 3.));
+    QPoint ret = point - triangleTopLeft;
     return ret;
 }
 
 QPoint KisColorSelectorTriangle::triangleToWidgetCoordinates(const QPoint &point) const
 {
-    QPoint triangleTopLeft(width()/2.-triangleWidth()/2.,
-                           height()/2.-triangleHeight()*(2./3.));
-    QPoint ret=triangleTopLeft+point;
+    QPoint triangleTopLeft(width() / 2. - triangleWidth() / 2.,
+                           height() / 2. - triangleHeight() * (2. / 3.));
+    QPoint ret = triangleTopLeft + point;
     return ret;
 }
 

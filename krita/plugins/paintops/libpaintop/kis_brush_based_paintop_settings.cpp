@@ -24,7 +24,6 @@
 #include <kis_boundary.h>
 #include "kis_brush_server.h"
 
-
 KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings()
     : KisOutlineGenerationPolicy<KisPaintOpSettings>(KisCurrentOutlineFetcher::SIZE_OPTION |
             KisCurrentOutlineFetcher::ROTATION_OPTION |
@@ -45,7 +44,6 @@ bool KisBrushBasedPaintOpSettings::isAirbrushing() const
     return getBool(AIRBRUSH_ENABLED);
 }
 
-
 int KisBrushBasedPaintOpSettings::rate() const
 {
     return getInt(AIRBRUSH_RATE);
@@ -53,9 +51,11 @@ int KisBrushBasedPaintOpSettings::rate() const
 
 QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
-    if (mode != CursorIsOutline) return QPainterPath();
+    if (mode != CursorIsOutline) {
+        return QPainterPath();
+    }
 
-    KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
+    KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget *>(optionsWidget());
 
     if (!widget) {
         return KisPaintOpSettings::brushOutline(info, mode);

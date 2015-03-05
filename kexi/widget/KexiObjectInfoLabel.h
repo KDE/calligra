@@ -38,27 +38,27 @@
 class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 {
 public:
-    explicit KexiObjectInfoLabel(QWidget* parent);
+    explicit KexiObjectInfoLabel(QWidget *parent);
     virtual ~KexiObjectInfoLabel();
 
     void setObjectClassIconName(const QString &name);
 
     QString objectClassIconName() const;
 
-    void setObjectClassName(const QString& name);
+    void setObjectClassName(const QString &name);
 
     QString objectClassName() const;
 
-    void setObjectName(const QString& name);
+    void setObjectName(const QString &name);
 
     QString objectName() const;
 
-    void setBuddy(QWidget * buddy);
+    void setBuddy(QWidget *buddy);
 protected:
     void updateName();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

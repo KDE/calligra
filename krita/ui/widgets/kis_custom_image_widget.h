@@ -35,7 +35,8 @@ class WdgNewImage : public QWidget, public Ui::WdgNewImage
     Q_OBJECT
 
 public:
-    WdgNewImage(QWidget *parent) : QWidget(parent) {
+    WdgNewImage(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -54,9 +55,9 @@ public:
      * @param parent the parent widget
      * @param doc the document that wants to be altered
      */
-    KisCustomImageWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
+    KisCustomImageWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString &defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString &imageName);
     virtual ~KisCustomImageWidget();
-    
+
 private Q_SLOTS:
     void widthUnitChanged(int index);
     void widthChanged(double value);
@@ -75,26 +76,26 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     /// this signal is emitted (as defined by KisDocument) the moment the document is 'ready'
-    void documentSelected(KisDocument*);
+    void documentSelected(KisDocument *);
 
 protected:
-    
+
     KisDocument *createNewImage();
-    
+
     /// Set the number of layers that will be created
     void setNumberOfLayers(int layers);
 
 private:
-    
+
     double m_width, m_height;
     quint8 backgroundOpacity() const;
     void setBackgroundOpacity(quint8 value);
 
     void fillPredefined();
     void showEvent(QShowEvent *);
-    
+
     KoUnit m_widthUnit, m_heightUnit;
-    QList<KisPropertiesConfiguration*> m_predefined;
+    QList<KisPropertiesConfiguration *> m_predefined;
 };
 
 #endif

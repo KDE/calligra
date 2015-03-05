@@ -27,19 +27,22 @@ void TestTextFunctions::initTestCase()
 
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
-Value TestTextFunctions::evaluate(const QString& formula, Value& ex)
+Value TestTextFunctions::evaluate(const QString &formula, Value &ex)
 {
     Formula f;
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
-    if (result.isFloat() && ex.isInteger())
+    if (result.isFloat() && ex.isInteger()) {
         ex = Value(ex.asFloat());
-    if (result.isInteger() && ex.isFloat())
+    }
+    if (result.isInteger() && ex.isFloat()) {
         result = Value(result.asFloat());
+    }
 
     return result;
 }
@@ -174,12 +177,12 @@ void TestTextFunctions::testMID()
 
 void TestTextFunctions::testNUMBERVALUE()
 {
-    CHECK_EVAL( "NUMBERVALUE(\"6\"; \".\")", Value( 6 ) ); // VALUE converts text to numbers (unlike N).
-    CHECK_EVAL( "NUMBERVALUE(\"6,000.5\"; \".\")", Value( 6000.5 ) ); // Period works.
-    CHECK_EVAL( "NUMBERVALUE(\"6.000,5\"; \",\")", Value( 6000.5 ) ); // Comma works
-    CHECK_EVAL( "NUMBERVALUE(\"3!456!000*567\"; \"*\"; \"!\")", Value( 3456000.567 ) ); // Thousands separator works
-    CHECK_EVAL( "NUMBERVALUE(\"+6,000.5\"; \".\")", Value( 6000.5 ) ); // Positive sign
-    CHECK_EVAL( "NUMBERVALUE(\"-6,000.5\"; \".\")", Value( -6000.5 ) ); // Negative sign
+    CHECK_EVAL("NUMBERVALUE(\"6\"; \".\")", Value(6));     // VALUE converts text to numbers (unlike N).
+    CHECK_EVAL("NUMBERVALUE(\"6,000.5\"; \".\")", Value(6000.5));     // Period works.
+    CHECK_EVAL("NUMBERVALUE(\"6.000,5\"; \",\")", Value(6000.5));     // Comma works
+    CHECK_EVAL("NUMBERVALUE(\"3!456!000*567\"; \"*\"; \"!\")", Value(3456000.567));     // Thousands separator works
+    CHECK_EVAL("NUMBERVALUE(\"+6,000.5\"; \".\")", Value(6000.5));     // Positive sign
+    CHECK_EVAL("NUMBERVALUE(\"-6,000.5\"; \".\")", Value(-6000.5));     // Negative sign
 }
 
 void TestTextFunctions::testPROPER()

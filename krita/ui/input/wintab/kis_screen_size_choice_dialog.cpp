@@ -27,14 +27,14 @@
 
 #include "kis_debug.h"
 
-
-QString rectToString(const QRect &rc) {
+QString rectToString(const QRect &rc)
+{
     return i18nc("Screen rect when choosing Wintab/Qt settings", "%1x%2 offset: %3,%4", rc.width(), rc.height(), rc.x(), rc.y());
 }
 
 KisScreenSizeChoiceDialog::KisScreenSizeChoiceDialog(QWidget *parent,
-                                                     const QRect &wintabRect,
-                                                     const QRect &qtRect)
+        const QRect &wintabRect,
+        const QRect &qtRect)
     : QDialog(parent),
       ui(new Ui::KisScreenSizeChoiceDialog),
       m_wintabRect(wintabRect),

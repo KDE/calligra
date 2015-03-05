@@ -50,14 +50,14 @@ public:
      * @param name the QObject name, if any
      */
     KisDlgAdjustmentLayer(KisNodeSP node,
-                          KisNodeFilterInterface* nfi,
+                          KisNodeFilterInterface *nfi,
                           KisPaintDeviceSP paintDevice,
-                          const QString & layerName,
-                          const QString & caption,
+                          const QString &layerName,
+                          const QString &caption,
                           KisViewManager *view,
                           QWidget *parent = 0);
     ~KisDlgAdjustmentLayer();
-    KisFilterConfiguration * filterConfiguration() const;
+    KisFilterConfiguration *filterConfiguration() const;
     QString layerName() const;
 
 protected Q_SLOTS:

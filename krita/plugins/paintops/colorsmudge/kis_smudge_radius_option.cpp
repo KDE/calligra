@@ -23,9 +23,7 @@
 #include <kis_painter.h>
 #include <widgets/kis_curve_widget.h>
 
-
 #include "kis_paint_device.h"
-
 
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
@@ -39,22 +37,19 @@
 
 #include <KoColor.h>
 
+class KisRandomConstAccessorNG;
 
-
- class KisRandomConstAccessorNG;
-
-KisSmudgeRadiusOption::KisSmudgeRadiusOption(const QString& name, const QString& label, bool checked, const QString& category):
+KisSmudgeRadiusOption::KisSmudgeRadiusOption(const QString &name, const QString &label, bool checked, const QString &category):
     KisRateOption(name, label, checked, category)
 {
-    setValueRange(0.0,300.0);
+    setValueRange(0.0, 300.0);
 
 }
 
-void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scale, qreal posx, qreal posy,KisPaintDeviceSP dev) const
+void KisSmudgeRadiusOption::apply(KisPainter &painter, const KisPaintInformation &info, qreal scale, qreal posx, qreal posy, KisPaintDeviceSP dev) const
 {
     double sliderValue = computeValue(info);
-    int smudgeRadius = ((sliderValue * scale)*0.5)/100.0;//scale is diameter?
-
+    int smudgeRadius = ((sliderValue * scale) * 0.5) / 100.0; //scale is diameter?
 
     KoColor color = painter.paintColor();
     if (smudgeRadius == 1) {
@@ -62,20 +57,19 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
         painter.setPaintColor(color);
     } else {
 
-        const KoColorSpace* cs = dev->colorSpace();
+        const KoColorSpace *cs = dev->colorSpace();
         int pixelSize = cs->pixelSize();
 
-        quint8* data = new quint8[pixelSize];
-        static quint8** pixels = new quint8*[2];
-        qint16* weights = new qint16[2];
+        quint8 *data = new quint8[pixelSize];
+        static quint8 **pixels = new quint8*[2];
+        qint16 *weights = new qint16[2];
 
         pixels[1] = new quint8[pixelSize];
         pixels[0] = new quint8[pixelSize];
 
         int loop_increment = 1;
-        if(smudgeRadius >= 8)
-        {
-            loop_increment = (2*smudgeRadius)/16;
+        if (smudgeRadius >= 8) {
+            loop_increment = (2 * smudgeRadius) / 16;
         }
         int i = 0;
         int k = 0;
@@ -87,23 +81,18 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
         for (int y = 0; y <= smudgeRadius; y = y + loop_increment) {
             for (int x = 0; x <= smudgeRadius; x = x + loop_increment) {
 
-                for(j = 0;j < 2;j++)
-                {
-                    if(j == 1)
-                    {
-                        y = y*(-1);
+                for (j = 0; j < 2; j++) {
+                    if (j == 1) {
+                        y = y * (-1);
                     }
-                    for(k = 0;k < 2;k++)
-                    {
-                        if(k == 1)
-                        {
-                            x = x*(-1);
+                    for (k = 0; k < 2; k++) {
+                        if (k == 1) {
+                            x = x * (-1);
                         }
                         accessor->moveTo(posx + x, posy + y);
                         memcpy(pixels[1], accessor->rawDataConst(), pixelSize);
-                        if(i == 0)
-                        {
-                            memcpy(pixels[0],accessor->rawDataConst(),pixelSize);
+                        if (i == 0) {
+                            memcpy(pixels[0], accessor->rawDataConst(), pixelSize);
                         }
                         if (x == 0 && y == 0) {
                             // Because the sum of the weights must be 255,
@@ -111,47 +100,46 @@ void KisSmudgeRadiusOption::apply(KisPainter& painter, const KisPaintInformation
                             // to sum to 255 in total
                             // It's -(counts -1), because we'll add the center one implicitly
                             // through that calculation
-                            weights[1] = (255 - ((i + 1) * (255 /(i+2) )) );
+                            weights[1] = (255 - ((i + 1) * (255 / (i + 2))));
                         } else {
-                            weights[1] = 255 /(i+2);
+                            weights[1] = 255 / (i + 2);
                         }
 
-
                         i++;
-                        if (i>smudgeRadius){i=0;}
+                        if (i > smudgeRadius) {
+                            i = 0;
+                        }
                         weights[0] = 255 - weights[1];
-                        const quint8** cpixels = const_cast<const quint8**>(pixels);
-                        cs->mixColorsOp()->mixColors(cpixels, weights,2, data);
-                        memcpy(pixels[0],data,pixelSize);
+                        const quint8 **cpixels = const_cast<const quint8 **>(pixels);
+                        cs->mixColorsOp()->mixColors(cpixels, weights, 2, data);
+                        memcpy(pixels[0], data, pixelSize);
 
-
-                   }
-                   x = x*(-1);
+                    }
+                    x = x * (-1);
                 }
-                y = y*(-1);
+                y = y * (-1);
             }
 
-            }
+        }
 
-        KoColor color = KoColor(pixels[0],cs);
+        KoColor color = KoColor(pixels[0], cs);
         painter.setPaintColor(color);
 
-        for (int l = 0; l < 2; l++){
+        for (int l = 0; l < 2; l++) {
             delete[] pixels[l];
         }
-       // delete[] pixels;
+        // delete[] pixels;
         delete[] data;
     }
 
-
 }
 
-void KisSmudgeRadiusOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisSmudgeRadiusOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
 }
 
-void KisSmudgeRadiusOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisSmudgeRadiusOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOption::readOptionSetting(setting);
 }

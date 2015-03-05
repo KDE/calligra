@@ -18,7 +18,6 @@
 
 #include "kis_recorded_action_load_context.h"
 
-
 KisRecordedActionLoadContext::~KisRecordedActionLoadContext()
 {
 }

@@ -1,4 +1,3 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /* This file is part of the KDE project
 Copyright 2011 Aurélien Gâteau <agateau@kde.org>
 Copyright 2011 Paul Mendez <paulestebanms@gmail.com>
@@ -43,11 +42,11 @@ const int CONTEXTBAR_MOUSEOVER_LIGHTNESS = 120;
 /** Radius of ContextBarButtons */
 const int CONTEXTBAR_RADIUS = 50;
 
-KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
-: QToolButton(parent)
-, m_isHovered(false)
-, m_fadingValue(0)
-, m_fadingTimeLine(0)
+KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget *parent)
+    : QToolButton(parent)
+    , m_isHovered(false)
+    , m_fadingValue(0)
+    , m_fadingTimeLine(0)
 {
     const int size = IconSize(KIconLoader::Small);
     setIconSize(QSize(size, size));
@@ -55,13 +54,11 @@ KoContextBarButton::KoContextBarButton(const QString &iconName, QWidget* parent)
     setIcon(KIcon(iconName));
 }
 
-
 KoContextBarButton::~KoContextBarButton()
 {
 }
 
-
-void KoContextBarButton::paintEvent(QPaintEvent*)
+void KoContextBarButton::paintEvent(QPaintEvent *)
 {
     QStylePainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -73,8 +70,8 @@ void KoContextBarButton::paintEvent(QPaintEvent*)
     QColor borderColor = bgColor.light(CONTEXTBAR_BORDER_LIGHTNESS);
 
     if (opt.state & QStyle::State_MouseOver && opt.state & QStyle::State_Enabled) {
-            color = color.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
-            borderColor = borderColor.lighter(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
+        color = color.light(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
+        borderColor = borderColor.lighter(CONTEXTBAR_MOUSEOVER_LIGHTNESS);
     }
 
     const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
@@ -98,8 +95,7 @@ void KoContextBarButton::paintEvent(QPaintEvent*)
         // Left shadow
         gradient.setFinalStop(rectF.bottomLeft() + QPoint(3, 0));
         painter.fillPath(path, gradient);
-    }
-    else {
+    } else {
         // Top shadow
         QLinearGradient gradient(rectF.topLeft(), rectF.topLeft() + QPoint(0, 5));
         gradient.setColorAt(0, QColor::fromHsvF(0, 0, 0, .3));

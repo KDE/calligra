@@ -30,8 +30,9 @@ QString trimmed(const QString &string)
     QString ret;
     for (int i = 0; i < string.length(); ++i) {
         QChar tmp(string[i]);
-        if (!tmp.isSpace())
+        if (!tmp.isSpace()) {
             ret += tmp;
+        }
     }
     return ret;
 }

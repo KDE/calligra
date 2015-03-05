@@ -23,7 +23,6 @@
 
 #include <klocale.h>
 
-
 KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageWSP image, KisNodeSP oldRootLayer, KisNodeSP newRootLayer)
     : KisImageCommand(kundo2_noi18n("change-layer-command"), image)
 {
@@ -33,7 +32,7 @@ KisImageChangeLayersCommand::KisImageChangeLayersCommand(KisImageWSP image, KisN
 
 void KisImageChangeLayersCommand::redo()
 {
-    m_image->setRootLayer(static_cast<KisGroupLayer*>(m_newRootLayer.data()));
+    m_image->setRootLayer(static_cast<KisGroupLayer *>(m_newRootLayer.data()));
 
     m_image->refreshGraph();
     m_image->notifyLayersChanged();
@@ -41,7 +40,7 @@ void KisImageChangeLayersCommand::redo()
 
 void KisImageChangeLayersCommand::undo()
 {
-    m_image->setRootLayer(static_cast<KisGroupLayer*>(m_oldRootLayer.data()));
+    m_image->setRootLayer(static_cast<KisGroupLayer *>(m_oldRootLayer.data()));
 
     m_image->refreshGraph();
     m_image->notifyLayersChanged();

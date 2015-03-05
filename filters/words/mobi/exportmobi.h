@@ -37,9 +37,9 @@ class ExportMobi : public KoFilter
 public:
     ExportMobi(QObject *parent, const QVariantList &);
     virtual ~ExportMobi();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
-    
-private:   
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
+
+private:
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, MobiFile *mobi);
 
 private:
@@ -50,7 +50,6 @@ private:
     QHash<int, QByteArray> m_imagesList;
     QList<int> m_imagesSize;
 
-    
 };
 
 #endif // EXPORTMOBI_H

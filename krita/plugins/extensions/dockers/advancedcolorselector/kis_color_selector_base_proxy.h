@@ -37,11 +37,11 @@ class KisColorSelectorBaseProxy
 public:
     virtual ~KisColorSelectorBaseProxy();
 
-    virtual const KoColorSpace* colorSpace() const = 0;
+    virtual const KoColorSpace *colorSpace() const = 0;
     virtual void showColorPreview() = 0;
     virtual void updateColorPreview(const KoColor &color) = 0;
     virtual void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset) = 0;
-    virtual KisDisplayColorConverter* converter() const = 0;
+    virtual KisDisplayColorConverter *converter() const = 0;
 };
 
 class KisColorSelectorBaseProxyNoop : public KisColorSelectorBaseProxy
@@ -50,23 +50,24 @@ public:
     KisColorSelectorBaseProxyNoop();
     ~KisColorSelectorBaseProxyNoop();
 
-    const KoColorSpace* colorSpace() const;
+    const KoColorSpace *colorSpace() const;
 
     void showColorPreview() {}
 
-    void updateColorPreview(const KoColor &color) {
+    void updateColorPreview(const KoColor &color)
+    {
         Q_UNUSED(color);
     }
 
-    void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset) {
+    void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset)
+    {
         Q_UNUSED(color);
         Q_UNUSED(role);
         Q_UNUSED(needsExplicitColorReset);
     }
 
-    KisDisplayColorConverter* converter() const;
+    KisDisplayColorConverter *converter() const;
 };
-
 
 class KisColorSelectorBase;
 
@@ -75,11 +76,11 @@ class KisColorSelectorBaseProxyObject : public KisColorSelectorBaseProxy
 public:
     KisColorSelectorBaseProxyObject(KisColorSelectorBase *parent);
 
-    const KoColorSpace* colorSpace() const;
+    const KoColorSpace *colorSpace() const;
     void showColorPreview();
     void updateColorPreview(const KoColor &color);
     void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset);
-    KisDisplayColorConverter* converter() const;
+    KisDisplayColorConverter *converter() const;
 
 private:
     KisColorSelectorBase *m_parent;

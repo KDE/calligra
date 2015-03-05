@@ -38,17 +38,19 @@ namespace KexiTableDesignerCommands
 class Command : public KUndo2Command
 {
 public:
-    Command(const KUndo2MagicString &text, Command *parent, KexiTableDesignerView* view);
-    Command(Command* parent, KexiTableDesignerView* view);
+    Command(const KUndo2MagicString &text, Command *parent, KexiTableDesignerView *view);
+    Command(Command *parent, KexiTableDesignerView *view);
     virtual ~Command();
 
     //! Used to collect actions data for AlterTableHandler
     //! Can return 0 if the action should not be passed to AlterTableHandler
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const {
+    virtual KexiDB::AlterTableHandler::ActionBase *createAction() const
+    {
         return 0;
     }
 
-    virtual QString debugString() const {
+    virtual QString debugString() const
+    {
         return text().toString();
     }
 
@@ -76,23 +78,23 @@ public:
      \a oldlistData and and \a newListData can be specified so Property::setListData() will be called
      on execute() and unexecute().
     */
-    ChangeFieldPropertyCommand(Command* parent, KexiTableDesignerView* view,
-                               const KoProperty::Set& set, const QByteArray& propertyName,
-                               const QVariant& oldValue, const QVariant& newValue,
-                               KoProperty::Property::ListData* const oldListData = 0,
-                               KoProperty::Property::ListData* const newListData = 0);
+    ChangeFieldPropertyCommand(Command *parent, KexiTableDesignerView *view,
+                               const KoProperty::Set &set, const QByteArray &propertyName,
+                               const QVariant &oldValue, const QVariant &newValue,
+                               KoProperty::Property::ListData *const oldListData = 0,
+                               KoProperty::Property::ListData *const newListData = 0);
 
     virtual ~ChangeFieldPropertyCommand();
 
     virtual void redoInternal();
     virtual void undoInternal();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
+    virtual KexiDB::AlterTableHandler::ActionBase *createAction() const;
     virtual QString debugString() const;
 
 protected:
     KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
     QVariant m_oldValue;
-    KoProperty::Property::ListData* m_oldListData, *m_listData;
+    KoProperty::Property::ListData *m_oldListData, *m_listData;
 };
 
 //! @short Undo/redo command used when a field is removed from a table
@@ -101,20 +103,20 @@ class RemoveFieldCommand : public Command
 public:
     /*! Constructs RemoveFieldCommand object.
      If \a set is 0, the action only means removing empty row (internal). */
-    RemoveFieldCommand(Command* parent, KexiTableDesignerView* view, int fieldIndex,
-                       const KoProperty::Set* set);
+    RemoveFieldCommand(Command *parent, KexiTableDesignerView *view, int fieldIndex,
+                       const KoProperty::Set *set);
 
     virtual ~RemoveFieldCommand();
 
     virtual void redoInternal();
     virtual void undoInternal();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
+    virtual KexiDB::AlterTableHandler::ActionBase *createAction() const;
 
     virtual QString debugString() const;
 
 protected:
     KexiDB::AlterTableHandler::RemoveFieldAction m_alterTableAction;
-    KoProperty::Set* m_set;
+    KoProperty::Set *m_set;
     int m_fieldIndex;
 };
 
@@ -122,13 +124,13 @@ protected:
 class InsertFieldCommand : public Command
 {
 public:
-    InsertFieldCommand(Command* parent, KexiTableDesignerView* view,
-                       int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set);
+    InsertFieldCommand(Command *parent, KexiTableDesignerView *view,
+                       int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set &set);
     virtual ~InsertFieldCommand();
 
     virtual void redoInternal();
     virtual void undoInternal();
-    virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
+    virtual KexiDB::AlterTableHandler::ActionBase *createAction() const;
 
     virtual QString debugString() const;
 
@@ -136,7 +138,6 @@ protected:
     KexiDB::AlterTableHandler::InsertFieldAction *m_alterTableAction;
     KoProperty::Set m_set;
 };
-
 
 /* ---- Internal commands follow (not used for building performing ALTER TABLE ---- */
 
@@ -150,8 +151,8 @@ public:
      for field by name when more than one field exists with the same name
      (it's invalid but allowed in design time).
     */
-    ChangePropertyVisibilityCommand(Command* parent, KexiTableDesignerView* view,
-                                    const KoProperty::Set& set, const QByteArray& propertyName,
+    ChangePropertyVisibilityCommand(Command *parent, KexiTableDesignerView *view,
+                                    const KoProperty::Set &set, const QByteArray &propertyName,
                                     bool visible);
 
     virtual ~ChangePropertyVisibilityCommand();
@@ -170,7 +171,7 @@ class InsertEmptyRowCommand : public Command
 {
 public:
     /*! Creates the InsertEmptyRowCommand object. */
-    InsertEmptyRowCommand(Command* parent, KexiTableDesignerView* view, int row);
+    InsertEmptyRowCommand(Command *parent, KexiTableDesignerView *view, int row);
     virtual ~InsertEmptyRowCommand();
 
     virtual void redoInternal();

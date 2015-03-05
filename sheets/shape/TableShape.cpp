@@ -54,34 +54,32 @@ class TableShape::Private
 public:
     int         columns;
     int         rows;
-    SheetView*  sheetView;
+    SheetView  *sheetView;
     bool        isMaster;
-    TablePageManager* pageManager;
+    TablePageManager *pageManager;
 
 public:
-    void adjustColumnDimensions(Sheet* sheet, double factor);
-    void adjustRowDimensions(Sheet* sheet, double factor);
+    void adjustColumnDimensions(Sheet *sheet, double factor);
+    void adjustRowDimensions(Sheet *sheet, double factor);
 };
 
-void TableShape::Private::adjustColumnDimensions(Sheet* sheet, double factor)
+void TableShape::Private::adjustColumnDimensions(Sheet *sheet, double factor)
 {
     for (int col = 1; col <= columns; ++col) {
-        ColumnFormat* const columnFormat = sheet->nonDefaultColumnFormat(col);
+        ColumnFormat *const columnFormat = sheet->nonDefaultColumnFormat(col);
         columnFormat->setWidth(columnFormat->width() * factor);
     }
 }
 
-void TableShape::Private::adjustRowDimensions(Sheet* sheet, double factor)
+void TableShape::Private::adjustRowDimensions(Sheet *sheet, double factor)
 {
     for (int row = 1; row <= rows; ++row) {
         sheet->rowFormats()->setRowHeight(row, row, sheet->rowFormats()->rowHeight(row) * factor);
     }
 }
 
-
-
 TableShape::TableShape(int columns, int rows)
-        : d(new Private)
+    : d(new Private)
 {
     setObjectName(QLatin1String("TableShape"));
     d->columns = columns;
@@ -96,7 +94,7 @@ TableShape::~TableShape()
     delete d->pageManager;
     delete d->sheetView;
     if (KoShape::userData()) {
-        map()->removeSheet(qobject_cast<Sheet*>(KoShape::userData())); // declare the sheet as deleted
+        map()->removeSheet(qobject_cast<Sheet *>(KoShape::userData())); // declare the sheet as deleted
     }
     delete d;
 }
@@ -114,11 +112,12 @@ int TableShape::rows() const
 void TableShape::setColumns(int columns)
 {
     Q_ASSERT(columns > 0);
-    if(!sheet())
+    if (!sheet()) {
         return;
+    }
     const double factor = (double) d->columns / columns;
     d->columns = columns;
-    d->adjustColumnDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
+    d->adjustColumnDimensions(qobject_cast<Sheet *>(KoShape::userData()), factor);
     setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
     d->sheetView->invalidate();
     if (!d->pageManager) {
@@ -132,11 +131,12 @@ void TableShape::setColumns(int columns)
 void TableShape::setRows(int rows)
 {
     Q_ASSERT(rows > 0);
-    if(!sheet())
+    if (!sheet()) {
         return;
+    }
     const double factor = (double) d->rows / rows;
     d->rows = rows;
-    d->adjustRowDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
+    d->adjustRowDimensions(qobject_cast<Sheet *>(KoShape::userData()), factor);
     setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
     d->sheetView->invalidate();
     if (!d->pageManager) {
@@ -147,7 +147,7 @@ void TableShape::setRows(int rows)
     d->pageManager->setPrintSettings(settings);
 }
 
-void TableShape::paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
+void TableShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
 #ifndef NDEBUG
     if (KoShape::parent()) {
@@ -169,7 +169,7 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     //kDebug() << "LOADING TABLE SHAPE";
     if (sheet() && element.namespaceURI() == KoXmlNS::table && element.localName() == "table") {
         // pre-load auto styles
-        KoOdfLoadingContext& odfContext = context.odfLoadingContext();
+        KoOdfLoadingContext &odfContext = context.odfLoadingContext();
         OdfLoadingContext tableContext(odfContext);
         QHash<QString, Conditions> conditionalStyles;
         Map *const map = sheet()->map();
@@ -204,11 +204,12 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     return false;
 }
 
-void TableShape::saveOdf(KoShapeSavingContext & context) const
+void TableShape::saveOdf(KoShapeSavingContext &context) const
 {
-    if (!sheet())
+    if (!sheet()) {
         return;
-    const Map* map = sheet()->map();
+    }
+    const Map *map = sheet()->map();
     // Saving the custom cell styles including the default cell style.
     map->styleManager()->saveOdf(context.mainStyles());
 
@@ -231,9 +232,10 @@ void TableShape::saveOdf(KoShapeSavingContext & context) const
 
 void TableShape::setMap(Map *map)
 {
-    if (map == 0)
+    if (map == 0) {
         return;
-    Sheet* const sheet = map->addNewSheet();
+    }
+    Sheet *const sheet = map->addNewSheet();
     d->sheetView = new SheetView(sheet);
     KoShape::setUserData(sheet);
     d->isMaster = true;
@@ -251,11 +253,12 @@ void TableShape::setMap(Map *map)
     KoShape::setSize(size);
 }
 
-void TableShape::setSize(const QSizeF& newSize)
+void TableShape::setSize(const QSizeF &newSize)
 {
     const QSizeF oldSize = size();
-    if (oldSize == newSize)
+    if (oldSize == newSize) {
         return;
+    }
 
     QSizeF size2 = oldSize;
     const qreal cellWidth = map()->defaultColumnFormat()->width();
@@ -284,26 +287,27 @@ void TableShape::setSize(const QSizeF& newSize)
     }
 }
 
-Map* TableShape::map() const
+Map *TableShape::map() const
 {
-    return qobject_cast<Sheet*>(KoShape::userData())->map();
+    return qobject_cast<Sheet *>(KoShape::userData())->map();
 }
 
-Sheet* TableShape::sheet() const
+Sheet *TableShape::sheet() const
 {
-    return qobject_cast<Sheet*>(KoShape::userData());
+    return qobject_cast<Sheet *>(KoShape::userData());
 }
 
-SheetView* TableShape::sheetView() const
+SheetView *TableShape::sheetView() const
 {
     return d->sheetView;
 }
 
-void TableShape::setSheet(const QString& sheetName)
+void TableShape::setSheet(const QString &sheetName)
 {
-    Sheet* const sheet = map()->findSheet(sheetName);
-    if (! sheet)
+    Sheet *const sheet = map()->findSheet(sheetName);
+    if (! sheet) {
         return;
+    }
     delete d->sheetView;
     d->sheetView = new SheetView(sheet);
     KoShape::setUserData(sheet);
@@ -313,7 +317,7 @@ void TableShape::setSheet(const QString& sheetName)
     update();
 }
 
-void TableShape::setVisibleCellRange(const QRect& cellRange)
+void TableShape::setVisibleCellRange(const QRect &cellRange)
 {
     Q_ASSERT(KoShape::userData());
     if (!d->sheetView) {
@@ -341,27 +345,31 @@ void TableShape::shapeChanged(ChangeType type, KoShape *shape)
     d->pageManager->layoutPages();
 }
 
-void TableShape::handleDamages(const QList<Damage*>& damages)
+void TableShape::handleDamages(const QList<Damage *> &damages)
 {
-    QList<Damage*>::ConstIterator end(damages.end());
-    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
-        Damage* damage = *it;
-        if (!damage) continue;
+    QList<Damage *>::ConstIterator end(damages.end());
+    for (QList<Damage *>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage *damage = *it;
+        if (!damage) {
+            continue;
+        }
 
         if (damage->type() == Damage::Cell) {
-            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
+            CellDamage *cellDamage = static_cast<CellDamage *>(damage);
             const Region region = cellDamage->region();
 
-            if (cellDamage->changes() & CellDamage::Appearance)
+            if (cellDamage->changes() & CellDamage::Appearance) {
                 d->sheetView->invalidateRegion(region);
+            }
             continue;
         }
 
         if (damage->type() == Damage::Sheet) {
-            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            SheetDamage *sheetDamage = static_cast<SheetDamage *>(damage);
 
-            if (sheetDamage->changes() & SheetDamage::PropertiesChanged)
+            if (sheetDamage->changes() & SheetDamage::PropertiesChanged) {
                 d->sheetView->invalidate();
+            }
             continue;
         }
     }

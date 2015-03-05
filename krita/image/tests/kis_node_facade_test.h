@@ -28,20 +28,23 @@ class TestNodeA : public KisNode
 
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return new TestNodeA(*this);
     }
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const
+    {
         return true;
     }
-    const KoColorSpace * colorSpace() const {
+    const KoColorSpace *colorSpace() const
+    {
         return 0;
     }
-    virtual const KoCompositeOp * compositeOp() const {
+    virtual const KoCompositeOp *compositeOp() const
+    {
         return 0;
     }
 };
-
 
 class KisNodeFacadeTest : public QObject
 {

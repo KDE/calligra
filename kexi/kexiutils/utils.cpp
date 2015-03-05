@@ -48,7 +48,7 @@
 using namespace KexiUtils;
 
 DelayedCursorHandler::DelayedCursorHandler()
-        : startedOrActive(false)
+    : startedOrActive(false)
 {
     timer.setSingleShot(true);
     connect(&timer, SIGNAL(timeout()), this, SLOT(show()));
@@ -74,13 +74,15 @@ K_GLOBAL_STATIC(DelayedCursorHandler, _delayedCursorHandler)
 
 void KexiUtils::setWaitCursor(bool noDelay)
 {
-    if (qApp->type() != QApplication::Tty)
+    if (qApp->type() != QApplication::Tty) {
         _delayedCursorHandler->start(noDelay);
+    }
 }
 void KexiUtils::removeWaitCursor()
 {
-    if (qApp->type() != QApplication::Tty)
+    if (qApp->type() != QApplication::Tty) {
         _delayedCursorHandler->stop();
+    }
 }
 
 WaitCursor::WaitCursor(bool noDelay)
@@ -101,44 +103,50 @@ WaitCursorRemover::WaitCursorRemover()
 
 WaitCursorRemover::~WaitCursorRemover()
 {
-    if (m_reactivateCursor)
+    if (m_reactivateCursor) {
         _delayedCursorHandler->start(true);
+    }
 }
 
 //--------------------------------------------------------------------------------
 
-QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className, const char* objName)
+QObject *KexiUtils::findFirstQObjectChild(QObject *o, const char *className, const char *objName)
 {
-    if (!o)
+    if (!o) {
         return 0;
+    }
     const QObjectList list(o->children());
-    foreach(QObject *child, list) {
-        if (child->inherits(className) && (!objName || child->objectName() == objName))
+    foreach (QObject *child, list) {
+        if (child->inherits(className) && (!objName || child->objectName() == objName)) {
             return child;
+        }
     }
     //try children
-    foreach(QObject *child, list) {
+    foreach (QObject *child, list) {
         child = findFirstQObjectChild(child, className, objName);
-        if (child)
+        if (child) {
             return child;
+        }
     }
     return 0;
 }
 
-QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject* object,
-        const char* name)
+QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject *object,
+        const char *name)
 {
     const int index = object->metaObject()->indexOfProperty(name);
-    if (index == -1)
+    if (index == -1) {
         return QMetaProperty();
+    }
     return object->metaObject()->property(index);
 }
 
-bool KexiUtils::objectIsA(QObject* object, const QList<QByteArray>& classNames)
+bool KexiUtils::objectIsA(QObject *object, const QList<QByteArray> &classNames)
 {
-    foreach(const QByteArray& ba, classNames) {
-        if (objectIsA(object, ba.constData()))
+    foreach (const QByteArray &ba, classNames) {
+        if (objectIsA(object, ba.constData())) {
             return true;
+        }
     }
     return false;
 }
@@ -151,8 +159,9 @@ QList<QMetaMethod> KexiUtils::methodsForMetaObject(
     QList<QMetaMethod> result;
     for (int i = 0; i < count; i++) {
         QMetaMethod method(metaObject->method(i));
-        if (types & method.methodType() && access & method.access())
+        if (types & method.methodType() && access & method.access()) {
             result += method;
+        }
     }
     return result;
 }
@@ -166,8 +175,9 @@ QList<QMetaMethod> KexiUtils::methodsForMetaObjectWithParents(
         const int count = metaObject->methodCount();
         for (int i = 0; i < count; i++) {
             QMetaMethod method(metaObject->method(i));
-            if (types & method.methodType() && access & method.access())
+            if (types & method.methodType() && access & method.access()) {
                 result += method;
+            }
         }
         metaObject = metaObject->superClass();
     }
@@ -179,8 +189,9 @@ QList<QMetaProperty> KexiUtils::propertiesForMetaObject(
 {
     const int count = metaObject ? metaObject->propertyCount() : 0;
     QList<QMetaProperty> result;
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < count; i++) {
         result += metaObject->property(i);
+    }
     return result;
 }
 
@@ -190,104 +201,114 @@ QList<QMetaProperty> KexiUtils::propertiesForMetaObjectWithInherited(
     QList<QMetaProperty> result;
     while (metaObject) {
         const int count = metaObject->propertyCount();
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++) {
             result += metaObject->property(i);
+        }
         metaObject = metaObject->superClass();
     }
     return result;
 }
 
-QStringList KexiUtils::enumKeysForProperty(const QMetaProperty& metaProperty)
+QStringList KexiUtils::enumKeysForProperty(const QMetaProperty &metaProperty)
 {
     QStringList result;
     QMetaEnum enumerator(metaProperty.enumerator());
     const int count = enumerator.keyCount();
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < count; i++) {
         result.append(QString::fromLatin1(enumerator.key(i)));
+    }
     return result;
 }
 
-QString KexiUtils::fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat)
+QString KexiUtils::fileDialogFilterString(const KMimeType::Ptr &mime, bool kdeFormat)
 {
-    if (mime.isNull())
+    if (mime.isNull()) {
         return QString();
+    }
 
     QString str;
     if (kdeFormat) {
-        if (mime->patterns().isEmpty())
+        if (mime->patterns().isEmpty()) {
             str = "*";
-        else
+        } else {
             str = mime->patterns().join(" ");
+        }
         str += "|";
     }
     str += mime->comment();
     if (!mime->patterns().isEmpty() || !kdeFormat) {
         str += " (";
-        if (mime->patterns().isEmpty())
+        if (mime->patterns().isEmpty()) {
             str += "*";
-        else
+        } else {
             str += mime->patterns().join("; ");
+        }
         str += ")";
     }
-    if (kdeFormat)
+    if (kdeFormat) {
         str += "\n";
-    else
+    } else {
         str += ";;";
+    }
     return str;
 }
 
-QString KexiUtils::fileDialogFilterString(const QString& mimeString, bool kdeFormat)
+QString KexiUtils::fileDialogFilterString(const QString &mimeString, bool kdeFormat)
 {
     KMimeType::Ptr ptr = KMimeType::mimeType(mimeString);
     return fileDialogFilterString(ptr, kdeFormat);
 }
 
-QString KexiUtils::fileDialogFilterStrings(const QStringList& mimeStrings, bool kdeFormat)
+QString KexiUtils::fileDialogFilterStrings(const QStringList &mimeStrings, bool kdeFormat)
 {
     QString ret;
     QStringList::ConstIterator endIt = mimeStrings.constEnd();
-    for (QStringList::ConstIterator it = mimeStrings.constBegin(); it != endIt; ++it)
+    for (QStringList::ConstIterator it = mimeStrings.constBegin(); it != endIt; ++it) {
         ret += fileDialogFilterString(*it, kdeFormat);
+    }
     return ret;
 }
 
-QColor KexiUtils::blendedColors(const QColor& c1, const QColor& c2, int factor1, int factor2)
+QColor KexiUtils::blendedColors(const QColor &c1, const QColor &c2, int factor1, int factor2)
 {
     return QColor(
-               int((c1.red()*factor1 + c2.red()*factor2) / (factor1 + factor2)),
-               int((c1.green()*factor1 + c2.green()*factor2) / (factor1 + factor2)),
-               int((c1.blue()*factor1 + c2.blue()*factor2) / (factor1 + factor2)));
+               int((c1.red() * factor1 + c2.red() * factor2) / (factor1 + factor2)),
+               int((c1.green() * factor1 + c2.green() * factor2) / (factor1 + factor2)),
+               int((c1.blue() * factor1 + c2.blue() * factor2) / (factor1 + factor2)));
 }
 
-QColor KexiUtils::contrastColor(const QColor& c)
+QColor KexiUtils::contrastColor(const QColor &c)
 {
     int g = qGray(c.rgb());
-    if (g > 110)
+    if (g > 110) {
         return c.dark(200);
-    else if (g > 80)
+    } else if (g > 80) {
         return c.light(150);
-    else if (g > 20)
+    } else if (g > 20) {
         return c.light(300);
+    }
     return Qt::gray;
 }
 
-QColor KexiUtils::bleachedColor(const QColor& c, int factor)
+QColor KexiUtils::bleachedColor(const QColor &c, int factor)
 {
     int h, s, v;
     c.getHsv(&h, &s, &v);
     QColor c2;
-    if (factor < 100)
+    if (factor < 100) {
         factor = 100;
-    if (s >= 250 && v >= 250) //for colors like cyan or red, make the result more white
+    }
+    if (s >= 250 && v >= 250) { //for colors like cyan or red, make the result more white
         s = qMax(0, s - factor - 50);
-    else if (s <= 5 && v <= 5)
+    } else if (s <= 5 && v <= 5) {
         v += factor - 50;
+    }
     c2.setHsv(h, s, qMin(255, v + factor - 100));
     return c2;
 }
 
-QIcon KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette,
-                                         QPalette::ColorRole role)
+QIcon KexiUtils::colorizeIconToTextColor(const QPixmap &icon, const QPalette &palette,
+        QPalette::ColorRole role)
 {
     QPixmap pm(
         KIconEffect().apply(icon, KIconEffect::Colorize, 1.0f,
@@ -303,14 +324,14 @@ QPixmap KexiUtils::emptyIcon(KIconLoader::Group iconGroup)
     return noIcon;
 }
 
-void KexiUtils::serializeMap(const QMap<QString, QString>& map, QByteArray& array)
+void KexiUtils::serializeMap(const QMap<QString, QString> &map, QByteArray &array)
 {
     QDataStream ds(&array, QIODevice::WriteOnly);
     ds.setVersion(QDataStream::Qt_3_1);
     ds << map;
 }
 
-void KexiUtils::serializeMap(const QMap<QString, QString>& map, QString& string)
+void KexiUtils::serializeMap(const QMap<QString, QString> &map, QString &string)
 {
     QByteArray array;
     QDataStream ds(&array, QIODevice::WriteOnly);
@@ -325,7 +346,7 @@ void KexiUtils::serializeMap(const QMap<QString, QString>& map, QString& string)
     }
 }
 
-QMap<QString, QString> KexiUtils::deserializeMap(const QByteArray& array)
+QMap<QString, QString> KexiUtils::deserializeMap(const QByteArray &array)
 {
     QMap<QString, QString> map;
     QByteArray ba(array);
@@ -335,7 +356,7 @@ QMap<QString, QString> KexiUtils::deserializeMap(const QByteArray& array)
     return map;
 }
 
-QMap<QString, QString> KexiUtils::deserializeMap(const QString& string)
+QMap<QString, QString> KexiUtils::deserializeMap(const QString &string)
 {
     QByteArray array;
     const uint size = string.length();
@@ -350,32 +371,35 @@ QMap<QString, QString> KexiUtils::deserializeMap(const QString& string)
     return map;
 }
 
-QString KexiUtils::stringToFileName(const QString& string)
+QString KexiUtils::stringToFileName(const QString &string)
 {
     QString _string(string);
     _string.replace(QRegExp("[\\\\/:\\*?\"<>|]"), " ");
     return _string.simplified();
 }
 
-void KexiUtils::simpleCrypt(QString& string)
+void KexiUtils::simpleCrypt(QString &string)
 {
-    for (int i = 0; i < string.length(); i++)
+    for (int i = 0; i < string.length(); i++) {
         string[i] = QChar(string[i].unicode() + 47 + i);
+    }
 }
 
-void KexiUtils::simpleDecrypt(QString& string)
+void KexiUtils::simpleDecrypt(QString &string)
 {
-    for (int i = 0; i < string.length(); i++)
+    for (int i = 0; i < string.length(); i++) {
         string[i] = QChar(string[i].unicode() - 47 - i);
+    }
 }
 
-static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins, const QRect& rect,
-                                      QPixmap& pixmap, QPoint &pos, Qt::Alignment alignment,
+static void drawOrScalePixmapInternal(QPainter *p, const WidgetMargins &margins, const QRect &rect,
+                                      QPixmap &pixmap, QPoint &pos, Qt::Alignment alignment,
                                       bool scaledContents, bool keepAspectRatio,
                                       Qt::TransformationMode transformMode = Qt::FastTransformation)
 {
-    if (pixmap.isNull())
+    if (pixmap.isNull()) {
         return;
+    }
 
     const bool fast = false;
     const int w = rect.width() - margins.left - margins.right;
@@ -399,21 +423,21 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
             QImage img(pixmap.toImage());
             img = img.scaled(w, h, Qt::KeepAspectRatio, transformMode);
             if (img.width() < w) {
-                if (alignment & Qt::AlignRight)
+                if (alignment & Qt::AlignRight) {
                     pos.setX(pos.x() + w - img.width());
-                else if (alignment & Qt::AlignHCenter)
+                } else if (alignment & Qt::AlignHCenter) {
                     pos.setX(pos.x() + w / 2 - img.width() / 2);
-            }
-            else if (img.height() < h) {
-                if (alignment & Qt::AlignBottom)
+                }
+            } else if (img.height() < h) {
+                if (alignment & Qt::AlignBottom) {
                     pos.setY(pos.y() + h - img.height());
-                else if (alignment & Qt::AlignVCenter)
+                } else if (alignment & Qt::AlignVCenter) {
                     pos.setY(pos.y() + h / 2 - img.height() / 2);
+                }
             }
             if (p) {
                 p->drawImage(pos, img);
-            }
-            else {
+            } else {
                 pixmap = QPixmap::fromImage(img);
             }
         } else {
@@ -424,21 +448,22 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
                 }
             }
         }
-    }
-    else {
-        if (alignment & Qt::AlignRight)
+    } else {
+        if (alignment & Qt::AlignRight) {
             pos.setX(pos.x() + w - pixmap.width());
-        else if (alignment & Qt::AlignHCenter)
+        } else if (alignment & Qt::AlignHCenter) {
             pos.setX(pos.x() + w / 2 - pixmap.width() / 2);
-        else //left, etc.
+        } else { //left, etc.
             pos.setX(pos.x());
+        }
 
-        if (alignment & Qt::AlignBottom)
+        if (alignment & Qt::AlignBottom) {
             pos.setY(pos.y() + h - pixmap.height());
-        else if (alignment & Qt::AlignVCenter)
+        } else if (alignment & Qt::AlignVCenter) {
             pos.setY(pos.y() + h / 2 - pixmap.height() / 2);
-        else //top, etc.
+        } else { //top, etc.
             pos.setY(pos.y());
+        }
         pos += QPoint(margins.left, margins.top);
         if (p) {
             p->drawPixmap(pos, pixmap);
@@ -446,8 +471,8 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
     }
 }
 
-void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRect& rect,
-                           const QPixmap& pixmap, Qt::Alignment alignment, bool scaledContents, bool keepAspectRatio,
+void KexiUtils::drawPixmap(QPainter &p, const WidgetMargins &margins, const QRect &rect,
+                           const QPixmap &pixmap, Qt::Alignment alignment, bool scaledContents, bool keepAspectRatio,
                            Qt::TransformationMode transformMode)
 {
     QPixmap px(pixmap);
@@ -455,8 +480,8 @@ void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRec
     drawOrScalePixmapInternal(&p, margins, rect, px, pos, alignment, scaledContents, keepAspectRatio, transformMode);
 }
 
-QPixmap KexiUtils::scaledPixmap(const WidgetMargins& margins, const QRect& rect,
-                                const QPixmap& pixmap, QPoint& pos, Qt::Alignment alignment,
+QPixmap KexiUtils::scaledPixmap(const WidgetMargins &margins, const QRect &rect,
+                                const QPixmap &pixmap, QPoint &pos, Qt::Alignment alignment,
                                 bool scaledContents, bool keepAspectRatio, Qt::TransformationMode transformMode)
 {
     QPixmap px(pixmap);
@@ -464,10 +489,10 @@ QPixmap KexiUtils::scaledPixmap(const WidgetMargins& margins, const QRect& rect,
     return px;
 }
 
-QString KexiUtils::ptrToStringInternal(void* ptr, uint size)
+QString KexiUtils::ptrToStringInternal(void *ptr, uint size)
 {
     QString str;
-    unsigned char* cstr_ptr = (unsigned char*) & ptr;
+    unsigned char *cstr_ptr = (unsigned char *) & ptr;
     for (uint i = 0; i < size; i++) {
         QString s;
         s.sprintf("%2.2x", cstr_ptr[i]);
@@ -476,33 +501,37 @@ QString KexiUtils::ptrToStringInternal(void* ptr, uint size)
     return str;
 }
 
-void* KexiUtils::stringToPtrInternal(const QString& str, uint size)
+void *KexiUtils::stringToPtrInternal(const QString &str, uint size)
 {
-    if ((str.length() / 2) < (int)size)
+    if ((str.length() / 2) < (int)size) {
         return 0;
+    }
     QByteArray array;
     array.resize(size);
     bool ok;
     for (uint i = 0; i < size; i++) {
         array[i] = (unsigned char)(str.mid(i * 2, 2).toUInt(&ok, 16));
-        if (!ok)
+        if (!ok) {
             return 0;
+        }
     }
-    return *(void**)(array.data());
+    return *(void **)(array.data());
 }
 
-void KexiUtils::setFocusWithReason(QWidget* widget, Qt::FocusReason reason)
+void KexiUtils::setFocusWithReason(QWidget *widget, Qt::FocusReason reason)
 {
-    if (!widget)
+    if (!widget) {
         return;
+    }
     QFocusEvent fe(QEvent::FocusIn, reason);
     QCoreApplication::sendEvent(widget, &fe);
 }
 
-void KexiUtils::unsetFocusWithReason(QWidget* widget, Qt::FocusReason reason)
+void KexiUtils::unsetFocusWithReason(QWidget *widget, Qt::FocusReason reason)
 {
-    if (!widget)
+    if (!widget) {
         return;
+    }
     QFocusEvent fe(QEvent::FocusOut, reason);
     QCoreApplication::sendEvent(widget, &fe);
 }
@@ -510,7 +539,7 @@ void KexiUtils::unsetFocusWithReason(QWidget* widget, Qt::FocusReason reason)
 //--------
 
 KexiUtils::WidgetMargins::WidgetMargins()
-        : left(0), top(0), right(0), bottom(0)
+    : left(0), top(0), right(0), bottom(0)
 {
 }
 
@@ -520,12 +549,12 @@ KexiUtils::WidgetMargins::WidgetMargins(QWidget *widget)
 }
 
 KexiUtils::WidgetMargins::WidgetMargins(int _left, int _top, int _right, int _bottom)
-        : left(_left), top(_top), right(_right), bottom(_bottom)
+    : left(_left), top(_top), right(_right), bottom(_bottom)
 {
 }
 
 KexiUtils::WidgetMargins::WidgetMargins(int commonMargin)
-        : left(commonMargin), top(commonMargin), right(commonMargin), bottom(commonMargin)
+    : left(commonMargin), top(commonMargin), right(commonMargin), bottom(commonMargin)
 {
 }
 
@@ -540,7 +569,7 @@ void KexiUtils::WidgetMargins::copyToWidget(QWidget *widget)
     widget->setContentsMargins(left, top, right, bottom);
 }
 
-WidgetMargins& KexiUtils::WidgetMargins::operator+= (const WidgetMargins & margins)
+WidgetMargins &KexiUtils::WidgetMargins::operator+= (const WidgetMargins &margins)
 {
     left += margins.left;
     top += margins.top;
@@ -550,7 +579,7 @@ WidgetMargins& KexiUtils::WidgetMargins::operator+= (const WidgetMargins & margi
 }
 
 const WidgetMargins KexiUtils::operator+ (
-    const WidgetMargins& margins1, const WidgetMargins & margins2)
+    const WidgetMargins &margins1, const WidgetMargins &margins2)
 {
     // margins2 is not used
     Q_UNUSED(margins2);
@@ -580,8 +609,8 @@ QFont KexiUtils::smallFont(QWidget *init)
 
 //---------------------
 
-KTextEditorFrame::KTextEditorFrame(QWidget * parent, Qt::WindowFlags f)
-        : QFrame(parent, f)
+KTextEditorFrame::KTextEditorFrame(QWidget *parent, Qt::WindowFlags f)
+    : QFrame(parent, f)
 {
     QEvent dummy(QEvent::StyleChange);
     changeEvent(&dummy);
@@ -590,10 +619,11 @@ KTextEditorFrame::KTextEditorFrame(QWidget * parent, Qt::WindowFlags f)
 void KTextEditorFrame::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::StyleChange) {
-        if (style()->objectName() != "oxygen") // oxygen already nicely paints the frame
+        if (style()->objectName() != "oxygen") { // oxygen already nicely paints the frame
             setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
-        else
+        } else {
             setFrameStyle(QFrame::NoFrame);
+        }
     }
 }
 
@@ -602,7 +632,7 @@ void KTextEditorFrame::changeEvent(QEvent *event)
 void KexiUtils::setStandardMarginsAndSpacing(QLayout *layout)
 {
     setMargins(layout, KDialog::marginHint());
-    layout->setSpacing( KDialog::spacingHint() );
+    layout->setSpacing(KDialog::spacingHint());
 }
 
 void KexiUtils::setMargins(QLayout *layout, int value)
@@ -610,7 +640,7 @@ void KexiUtils::setMargins(QLayout *layout, int value)
     layout->setContentsMargins(value, value, value, value);
 }
 
-void KexiUtils::replaceColors(QPixmap* original, const QColor& color)
+void KexiUtils::replaceColors(QPixmap *original, const QColor &color)
 {
     Q_ASSERT(original);
     QImage dest(original->toImage());
@@ -618,7 +648,7 @@ void KexiUtils::replaceColors(QPixmap* original, const QColor& color)
     *original = QPixmap::fromImage(dest);
 }
 
-void KexiUtils::replaceColors(QImage* original, const QColor& color)
+void KexiUtils::replaceColors(QImage *original, const QColor &color)
 {
     Q_ASSERT(original);
     QPainter p(original);
@@ -637,7 +667,7 @@ int KexiUtils::dimmedAlpha()
 }
 
 QPalette KexiUtils::paletteWithDimmedColor(const QPalette &pal, QPalette::ColorGroup group,
-                                           QPalette::ColorRole role)
+        QPalette::ColorRole role)
 {
     QPalette result(pal);
     QColor color(result.color(group, role));
@@ -669,15 +699,16 @@ QPalette KexiUtils::paletteForReadOnly(const QPalette &palette)
 
 void KexiUtils::installRecursiveEventFilter(QObject *object, QObject *filter)
 {
-    if (!object || !filter || !object->isWidgetType())
+    if (!object || !filter || !object->isWidgetType()) {
         return;
+    }
 
-//    kDebug() << "Installing event filter on widget:" << object 
+//    kDebug() << "Installing event filter on widget:" << object
 //        << "directed to" << filter->objectName();
     object->installEventFilter(filter);
 
     const QObjectList list(object->children());
-    foreach(QObject *obj, list) {
+    foreach (QObject *obj, list) {
         installRecursiveEventFilter(obj, filter);
     }
 }
@@ -685,18 +716,19 @@ void KexiUtils::installRecursiveEventFilter(QObject *object, QObject *filter)
 void KexiUtils::removeRecursiveEventFilter(QObject *object, QObject *filter)
 {
     object->removeEventFilter(filter);
-    if (!object->isWidgetType())
+    if (!object->isWidgetType()) {
         return;
+    }
 
     const QObjectList list(object->children());
-    foreach(QObject *obj, list) {
+    foreach (QObject *obj, list) {
         removeRecursiveEventFilter(obj, filter);
     }
 }
 
-PaintBlocker::PaintBlocker(QWidget* parent)
- : QObject(parent)
- , m_enabled(true)
+PaintBlocker::PaintBlocker(QWidget *parent)
+    : QObject(parent)
+    , m_enabled(true)
 {
     parent->installEventFilter(this);
 }
@@ -711,7 +743,7 @@ bool PaintBlocker::enabled() const
     return m_enabled;
 }
 
-bool PaintBlocker::eventFilter(QObject* watched, QEvent* event)
+bool PaintBlocker::eventFilter(QObject *watched, QEvent *event)
 {
     if (m_enabled && watched == parent() && event->type() == QEvent::Paint) {
         return true;
@@ -758,23 +790,23 @@ void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperl
         }
     }
 
-    switch(options.tool) {
-        case OpenHyperlinkOptions::DefaultHyperlinkTool:
-            KRun::runUrl(url, type, parent);
-            break;
-        case OpenHyperlinkOptions::BrowserHyperlinkTool:
-            KToolInvocation::invokeBrowser(url.url());
-            break;
-        case OpenHyperlinkOptions::MailerHyperlinkTool:
-            KToolInvocation::invokeMailer(url);
-            break;
+    switch (options.tool) {
+    case OpenHyperlinkOptions::DefaultHyperlinkTool:
+        KRun::runUrl(url, type, parent);
+        break;
+    case OpenHyperlinkOptions::BrowserHyperlinkTool:
+        KToolInvocation::invokeBrowser(url.url());
+        break;
+    case OpenHyperlinkOptions::MailerHyperlinkTool:
+        KToolInvocation::invokeMailer(url);
+        break;
     }
 }
 
 // ----
 
 KexiDBDebugTreeWidget::KexiDBDebugTreeWidget(QWidget *parent)
- : QTreeWidget(parent)
+    : QTreeWidget(parent)
 {
 }
 
@@ -787,7 +819,7 @@ void KexiDBDebugTreeWidget::copy()
 
 // ----
 
-DebugWindow::DebugWindow(QWidget * parent)
+DebugWindow::DebugWindow(QWidget *parent)
     : QWidget(parent, Qt::Window)
 {
 }

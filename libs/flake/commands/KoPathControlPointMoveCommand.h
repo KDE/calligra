@@ -27,7 +27,6 @@
 #include "KoPathPoint.h"
 #include "flake_export.h"
 
-
 /// The undo / redo command for path point moving.
 class FLAKE_TEST_EXPORT KoPathControlPointMoveCommand : public KUndo2Command
 {
@@ -39,7 +38,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoPathControlPointMoveCommand(const KoPathPointData &pointData, const QPointF &offset,
-            KoPathPoint::PointType pointType, KUndo2Command *parent = 0);
+                                  KoPathPoint::PointType pointType, KUndo2Command *parent = 0);
     /// redo the command
     void redo();
     /// revert the actions done in redo

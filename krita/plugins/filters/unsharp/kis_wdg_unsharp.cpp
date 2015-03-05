@@ -28,7 +28,7 @@
 
 #include "ui_wdgunsharp.h"
 
-KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisConfigWidget(parent)
+KisWdgUnsharp::KisWdgUnsharp(QWidget *parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgUnsharp();
     m_widget->setupUi(this);
@@ -44,7 +44,7 @@ KisWdgUnsharp::~KisWdgUnsharp()
     delete m_widget;
 }
 
-void KisWdgUnsharp::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgUnsharp::setConfiguration(const KisPropertiesConfiguration *config)
 {
     QVariant value;
     widget()->doubleHalfSize->setValue((config->getProperty("halfSize", value)) ? value.toDouble() : 1.0);
@@ -53,15 +53,14 @@ void KisWdgUnsharp::setConfiguration(const KisPropertiesConfiguration* config)
     widget()->chkLightnessOnly->setChecked((config->getProperty("lightnessOnly", value)) ? value.toBool() : true);
 }
 
-KisPropertiesConfiguration* KisWdgUnsharp::configuration() const
+KisPropertiesConfiguration *KisWdgUnsharp::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("unsharp", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("unsharp", 1);
     config->setProperty("halfSize", widget()->doubleHalfSize->value());
     config->setProperty("amount", widget()->doubleAmount->value());
     config->setProperty("threshold", widget()->intThreshold->value());
     config->setProperty("lightnessOnly", widget()->chkLightnessOnly->isChecked());
     return config;
 }
-
 
 #include "kis_wdg_unsharp.moc"

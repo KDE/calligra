@@ -20,14 +20,13 @@
 
 #include <QtTest>
 
-
 class KisChunkAllocatorTest : public QObject
 {
     Q_OBJECT
 
 private:
-qreal measureFragmentation(qint32 transactions, qint32 chunksAlloc,
-                           qint32 chunksFree, bool printDetails);
+    qreal measureFragmentation(qint32 transactions, qint32 chunksAlloc,
+                               qint32 chunksFree, bool printDetails);
 
 private Q_SLOTS:
     void testOperations();

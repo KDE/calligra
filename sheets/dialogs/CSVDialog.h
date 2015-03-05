@@ -50,7 +50,7 @@ class CSVDialog : public KoCsvImportDialog
 public:
     enum Mode { Clipboard, File, Column };
 
-    CSVDialog(QWidget* parent, Selection* selection, Mode mode);
+    CSVDialog(QWidget *parent, Selection *selection, Mode mode);
     ~CSVDialog();
 
     bool canceled();
@@ -62,7 +62,7 @@ protected:
     void accept();
 
 private:
-    Selection* m_selection;
+    Selection *m_selection;
     bool    m_canceled;
     QRect   m_targetRect;
     Mode    m_mode;

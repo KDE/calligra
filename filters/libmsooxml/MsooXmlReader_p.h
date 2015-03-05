@@ -72,7 +72,7 @@
 #else // DEBUG
 //! returns caller name at the current scope or "top level"
 #define CALL_STACK_TOP_NAME (m_callsNamesDebug.isEmpty() \
-    ? QByteArray("top level") : m_callsNamesDebug.top()).constData()
+                             ? QByteArray("top level") : m_callsNamesDebug.top()).constData()
 # define PUSH_NAME
 //! put at beginning of each read_*() method on call stack, only in debug mode
 # define PUSH_NAME_INTERNAL \
@@ -140,7 +140,7 @@
     if (qualifiedName() == QLatin1String(qname)) { \
         if (!isStartElement()) { /* sanity check */ \
             raiseError(i18n("Start element \"%1\" expected, found \"%2\"", \
-                       QLatin1String(STRINGIFY(name)), tokenString())); \
+                            QLatin1String(STRINGIFY(name)), tokenString())); \
             return KoFilter::WrongFormat; \
         } \
         /*kDebug() << "TRY_READ_IF " STRINGIFY(name) " started";*/ \
@@ -204,70 +204,70 @@
     }
 
 //! Reads optional attribute of name @a atrname and allocates variable of the same name.
-/*! Requires the following line to be present above:
-    @code
-    const QXmlStreamAttributes attrs( attributes() );
-    @endcode
-*/
+    /*! Requires the following line to be present above:
+        @code
+        const QXmlStreamAttributes attrs( attributes() );
+        @endcode
+    */
 #define TRY_READ_ATTR(atrname) \
     QString atrname( attrs.value(QUALIFIED_NAME(atrname)).toString() );
 
 //! Reads optional attribute of name @a atrname into the variable @a destination.
-/*! Requires the following line to be present above:
-    @code
-    const QXmlStreamAttributes attrs( attributes() );
-    @endcode
-*/
+    /*! Requires the following line to be present above:
+        @code
+        const QXmlStreamAttributes attrs( attributes() );
+        @endcode
+    */
 #define TRY_READ_ATTR_INTO(atrname, destination) \
     destination = attrs.value(QUALIFIED_NAME(atrname)).toString(); \
     /*kDebug() << "TRY_READ_ATTR_INTO: " STRINGIFY(destination) << "=" << destination;*/
 
 //! Reads optional attribute of name @a atrname with explicitly specified namespace @a ns.
-/*! Creates QString variable with name \<ns\>_\<atrame\>
-*/
-/*! Requires the following line to be present above:
-    @code
-    const QXmlStreamAttributes attrs( attributes() );
-    @endcode
-*/
+    /*! Creates QString variable with name \<ns\>_\<atrame\>
+    */
+    /*! Requires the following line to be present above:
+        @code
+        const QXmlStreamAttributes attrs( attributes() );
+        @endcode
+    */
 #define TRY_READ_ATTR_WITH_NS(ns, atrname) \
     QString PASTE3(ns, _, atrname)( attrs.value(JOIN(STRINGIFY(ns) ":", atrname)).toString() );
 
 //! Reads optional attribute of name @a atrname with explicitly specified namespace @a ns
 //! into the variable @a destination.
-/*! Requires the following line to be present above:
-    @code
-    const QXmlStreamAttributes attrs( attributes() );
-    @endcode
-*/
+    /*! Requires the following line to be present above:
+        @code
+        const QXmlStreamAttributes attrs( attributes() );
+        @endcode
+    */
 #define TRY_READ_ATTR_WITH_NS_INTO(ns, atrname, destination) \
     destination = attrs.value(JOIN(STRINGIFY(ns) ":", atrname)).toString(); \
     /*kDebug() << "TRY_READ_ATTR_WITH_NS_INTO: " STRINGIFY(destination) << "=" << destination;*/
 
-inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrname)
-{
-    const QStringRef v(attrs.value(atrname));
-    return v.isNull() ? QString() : v.toString();
-}
+    inline QString atrToString(const QXmlStreamAttributes &attrs, const char *atrname)
+    {
+        const QStringRef v(attrs.value(atrname));
+        return v.isNull() ? QString() : v.toString();
+    }
 
 //! Reads optional attribute of name @a atrname without namespace.
-/*! Creates QString variable with name \<atrname\>
-*/
-/*! Requires the following line to be present above:
-    @code
-    const QXmlStreamAttributes attrs( attributes() );
-    @endcode
-*/
+    /*! Creates QString variable with name \<atrname\>
+    */
+    /*! Requires the following line to be present above:
+        @code
+        const QXmlStreamAttributes attrs( attributes() );
+        @endcode
+    */
 #define TRY_READ_ATTR_WITHOUT_NS(atrname) \
     QString atrname( atrToString(attrs, STRINGIFY(atrname)) );
 
 //! Reads required attribute of name @a atrname and allocates variable of the same name
 //! If there is no such attribute, returns KoFilter::WrongFormat.
-/*! Requires the following line to be present above:
-    @code
-    const QXmlStreamAttributes attrs( attributes() );
-    @endcode
-*/
+    /*! Requires the following line to be present above:
+        @code
+        const QXmlStreamAttributes attrs( attributes() );
+        @endcode
+    */
 #define READ_ATTR(atrname) \
     QString atrname; \
     if (attrs.hasAttribute(QUALIFIED_NAME(atrname))) { \
@@ -283,13 +283,13 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
     ELSE_WRONG_FORMAT_DEBUG( "READ_ATTR_INTO: " QUALIFIED_NAME(atrname) " not found" )
 
 //! Reads required attribute of name @a atrname with explicitly specified namespace @a ns
-/*! into the variable @a destination.
-*/
-/*! Requires the following line to be present above:
-    @code
-    const QXmlStreamAttributes attrs( attributes() );
-    @endcode
-*/
+    /*! into the variable @a destination.
+    */
+    /*! Requires the following line to be present above:
+        @code
+        const QXmlStreamAttributes attrs( attributes() );
+        @endcode
+    */
 #define READ_ATTR_WITH_NS_INTO(ns, atrname, destination) \
     if (attrs.hasAttribute(JOIN(STRINGIFY(ns) ":", atrname))) { \
         destination = attrs.value(JOIN(STRINGIFY(ns) ":", atrname)).toString(); \
@@ -297,13 +297,13 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
     ELSE_WRONG_FORMAT_DEBUG( "READ_ATTR_WITH_NS_INTO: " JOIN(STRINGIFY(ns) ":", atrname) " not found" )
 
 //! Reads required attribute of name @a atrname with explicitly specified namespace @a ns.
-/*! Creates QString variable with name \<ns\>_\<atrame\>
-*/
-/*! Requires the following line to be present above:
-    @code
-    const QXmlStreamAttributes attrs( attributes() );
-    @endcode
-*/
+    /*! Creates QString variable with name \<ns\>_\<atrame\>
+    */
+    /*! Requires the following line to be present above:
+        @code
+        const QXmlStreamAttributes attrs( attributes() );
+        @endcode
+    */
 #define READ_ATTR_WITH_NS(ns, atrname) \
     QString PASTE3(ns, _, atrname); \
     if (attrs.hasAttribute(JOIN(STRINGIFY(ns) ":", atrname))) { \
@@ -312,13 +312,13 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
     ELSE_WRONG_FORMAT_DEBUG( "READ_ATTR_WITH_NS: " JOIN(STRINGIFY(ns) ":", atrname) " not found" )
 
 //! Reads required attribute of name @a atrname without namespace.
-/*! Creates QString variable with name \<atrname\>
-*/
-/*! Requires the following line to be present above:
-    @code
-    const QXmlStreamAttributes attrs( attributes() );
-    @endcode
-*/
+    /*! Creates QString variable with name \<atrname\>
+    */
+    /*! Requires the following line to be present above:
+        @code
+        const QXmlStreamAttributes attrs( attributes() );
+        @endcode
+    */
 #define READ_ATTR_WITHOUT_NS(atrname) \
     QString atrname; \
     if (attrs.hasAttribute(STRINGIFY(atrname))) { \
@@ -333,12 +333,11 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
     } \
     ELSE_WRONG_FORMAT_DEBUG( "READ_ATTR_WITHOUT_NS_INTO: " STRINGIFY(atrname) " not found" )
 
-
-/*! Requires the following line to be present above:
-    @code
-    const QXmlStreamAttributes attrs( attributes() );
-    @endcode
-*/
+    /*! Requires the following line to be present above:
+        @code
+        const QXmlStreamAttributes attrs( attributes() );
+        @endcode
+    */
 #define TRY_READ_ATTR_QSTRING(atrname) \
     QString atrname( attrs.value(m_defaultNamespace + atrname).toString() );
 

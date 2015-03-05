@@ -37,10 +37,10 @@ class KRITAUI_EXPORT KisNodeCommandsAdapter : public QObject
     Q_OBJECT
 
 public:
-    KisNodeCommandsAdapter(KisViewManager * view);
+    KisNodeCommandsAdapter(KisViewManager *view);
     virtual ~KisNodeCommandsAdapter();
 public:
-    void beginMacro(const KUndo2MagicString& macroName);
+    void beginMacro(const KUndo2MagicString &macroName);
     void addExtraCommand(KUndo2Command *command);
     void endMacro();
     void addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
@@ -53,11 +53,11 @@ public:
     void toBottom(KisNodeSP node);
     void toTop(KisNodeSP node);
     void setOpacity(KisNodeSP node, qint32 opacity);
-    void setCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
+    void setCompositeOp(KisNodeSP node, const KoCompositeOp *compositeOp);
 
     void undoLastCommand();
 private:
-    KisViewManager* m_view;
+    KisViewManager *m_view;
 };
 
 #endif // KIS_NODE_COMMANDS_ADAPTER_H

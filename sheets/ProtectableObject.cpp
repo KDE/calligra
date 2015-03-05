@@ -34,7 +34,7 @@
 
 using namespace Calligra::Sheets;
 
-void ProtectableObject::password(QByteArray & password) const
+void ProtectableObject::password(QByteArray &password) const
 {
     password = m_password;
 }
@@ -44,17 +44,17 @@ bool ProtectableObject::isProtected() const
     return !m_password.isNull();
 }
 
-void ProtectableObject::setProtected(QByteArray const & password)
+void ProtectableObject::setProtected(QByteArray const &password)
 {
     m_password = password;
 }
 
-bool ProtectableObject::checkPassword(QByteArray const & password) const
+bool ProtectableObject::checkPassword(QByteArray const &password) const
 {
     return (password == m_password);
 }
 
-bool ProtectableObject::showPasswordDialog(QWidget* parent, Mode mode, const QString& title)
+bool ProtectableObject::showPasswordDialog(QWidget *parent, Mode mode, const QString &title)
 {
     if (mode == Lock) {
         QPointer<KNewPasswordDialog> dlg = new KNewPasswordDialog(parent);
@@ -94,7 +94,7 @@ bool ProtectableObject::showPasswordDialog(QWidget* parent, Mode mode, const QSt
     return true;
 }
 
-void ProtectableObject::loadXmlProtection(const KoXmlElement& element)
+void ProtectableObject::loadXmlProtection(const KoXmlElement &element)
 {
     if (element.hasAttribute("protected")) {
         const QString passwd = element.attribute("protected");
@@ -103,13 +103,13 @@ void ProtectableObject::loadXmlProtection(const KoXmlElement& element)
     }
 }
 
-void ProtectableObject::loadOdfProtection(const KoXmlElement& element)
+void ProtectableObject::loadOdfProtection(const KoXmlElement &element)
 {
     if (element.hasAttributeNS(KoXmlNS::table, "protection-key")) {
         QString p = element.attributeNS(KoXmlNS::table, "protection-key", QString());
         if (!p.isNull()) {
             QByteArray str(p.toUtf8());
-            kDebug(30518) <<"Decoding password:" << str;
+            kDebug(30518) << "Decoding password:" << str;
             m_password = KCodecs::base64Decode(str);
         }
     }

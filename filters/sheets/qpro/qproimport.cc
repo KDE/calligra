@@ -58,31 +58,29 @@ QpTableList::~QpTableList()
     // don't delete the list of tables
 }
 
-
 void
-QpTableList::table(unsigned pIdx, Sheet* pTable)
+QpTableList::table(unsigned pIdx, Sheet *pTable)
 {
     if (pIdx < cNameCnt) {
         cTable[pIdx] = pTable;
     }
 }
 
-Sheet*
+Sheet *
 QpTableList::table(unsigned pIdx)
 {
     return (pIdx < cNameCnt ? cTable[pIdx] : 0);
 }
 
-
 // ---------------------------------------------------------------
 
-QpImport::QpImport(QObject* parent, const QVariantList&)
-        : KoFilter(parent)
+QpImport::QpImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
 void
-QpImport::InitTableName(int pIdx, QString& pResult)
+QpImport::InitTableName(int pIdx, QString &pResult)
 {
     if (pIdx < 26) {
         pResult = (char)('A' + pIdx);
@@ -92,13 +90,14 @@ QpImport::InitTableName(int pIdx, QString& pResult)
     }
 }
 
-KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus QpImport::convert(const QByteArray &from, const QByteArray &to)
 {
     bool bSuccess = true;
 
-    KoDocument* document = m_chain->outputDocument();
-    if (!document)
+    KoDocument *document = m_chain->outputDocument();
+    if (!document) {
         return KoFilter::StupidError;
+    }
 
     kDebug(30523) << "here we go..." << document->metaObject()->className();
 
@@ -114,7 +113,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
     kDebug(30523) << "...still here...";
 
     // No need for a dynamic cast here, since we use Qt's moc magic
-    Doc *ksdoc = (Doc*)document;
+    Doc *ksdoc = (Doc *)document;
 
     if (ksdoc->mimeType() != "application/x-kspread") {
         kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
@@ -138,13 +137,13 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
     QpTableList             lTableNames;
     QP_UINT8                lPageIdx = 0;
 
-    QpRec*                  lRec = 0;
-    QpRecBop*               lRecBop = 0;
-    QpRecIntegerCell*       lRecInt = 0;
-    QpRecFloatingPointCell* lRecFloat = 0;
-    QpRecFormulaCell*       lRecFormula = 0;
-    QpRecLabelCell*         lRecLabel = 0;
-    QpRecPageName*          lRecPageName = 0;
+    QpRec                  *lRec = 0;
+    QpRecBop               *lRecBop = 0;
+    QpRecIntegerCell       *lRecInt = 0;
+    QpRecFloatingPointCell *lRecFloat = 0;
+    QpRecFormulaCell       *lRecFormula = 0;
+    QpRecLabelCell         *lRecLabel = 0;
+    QpRecPageName          *lRecPageName = 0;
 
     do {
         field.clear();
@@ -152,7 +151,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
 
         switch (lRec->type()) {
         case QpBop:
-            lRecBop = (QpRecBop*)lRec;
+            lRecBop = (QpRecBop *)lRec;
             lPageIdx = lRecBop->pageIndex();
 
             // find out if we know about this table already, if not create it
@@ -169,19 +168,20 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
             break;
 
         case QpIntegerCell:
-            lRecInt = (QpRecIntegerCell*)lRec;
+            lRecInt = (QpRecIntegerCell *)lRec;
             field.setNum(lRecInt->integer());
 //cout << "Setting R " << lRecInt->row()+1 << ", C " << ((unsigned)lRecInt->column()) << endl;
-            if (table)
+            if (table) {
                 setText(table, lRecInt->row() + 1, ((unsigned)lRecInt->column()) + 1, field, false);
+            }
             break;
 
         case QpFormulaCell:
-            lRecFormula = (QpRecFormulaCell*)lRec;
+            lRecFormula = (QpRecFormulaCell *)lRec;
             {
                 QuattroPro::Formula lAnswer(*lRecFormula, lTableNames);
 
-                char*     lFormula = lAnswer.formula();
+                char     *lFormula = lAnswer.formula();
 
                 field = lFormula;
 
@@ -194,7 +194,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
                     // we're about to reference a table that hasn't been created yet.
                     // setText gets upset about this, so create a blank table
 
-                    Sheet* lNewTable = ksdoc->map()->addNewSheet();
+                    Sheet *lNewTable = ksdoc->map()->addNewSheet();
 
                     // set up a default name for the table
                     lNewTable->setSheetName(lTableNames.name(lIdx)
@@ -204,27 +204,30 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
                 }
             }
 
-            if (table)
+            if (table) {
                 setText(table, lRecFormula->row() + 1, lRecFormula->column() + 1, field, false);
+            }
             break;
 
         case QpFloatingPointCell:
-            lRecFloat = (QpRecFloatingPointCell*)lRec;
+            lRecFloat = (QpRecFloatingPointCell *)lRec;
             field.setNum(lRecFloat->value());
-            if (table)
+            if (table) {
                 setText(table, lRecFloat->row() + 1, lRecFloat->column() + 1, field, false);
+            }
             break;
 
         case QpLabelCell:
-            lRecLabel = (QpRecLabelCell*)lRec;
+            lRecLabel = (QpRecLabelCell *)lRec;
             field = "'";
             field += lRecLabel->label();
-            if (table)
+            if (table) {
                 setText(table, lRecLabel->row() + 1, lRecLabel->column() + 1, field, false);
+            }
             break;
 
         case QpPageName:
-            lRecPageName = (QpRecPageName*)lRec;
+            lRecPageName = (QpRecPageName *)lRec;
 
             if (lTableNames.allocated(lPageIdx) && lTableNames.table(lPageIdx)) {
                 lTableNames.table(lPageIdx)->setSheetName(lRecPageName->pageName()
@@ -247,13 +250,14 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
     } while (lIn);
 
     emit sigProgress(100);
-    if (bSuccess)
+    if (bSuccess) {
         return KoFilter::OK;
-    else
+    } else {
         return KoFilter::StupidError;
+    }
 }
 
-void QpImport::setText(Sheet* sheet, int _row, int _column, const QString& _text, bool asString)
+void QpImport::setText(Sheet *sheet, int _row, int _column, const QString &_text, bool asString)
 {
     Cell cell(sheet, _column, _row);
     if (asString) {

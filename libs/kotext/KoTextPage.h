@@ -96,10 +96,13 @@ public:
     /**
      * Returns the (text) content rect of the page in document coords
      */
-    virtual QRectF contentRect() const {return rect();}
+    virtual QRectF contentRect() const
+    {
+        return rect();
+    }
 
 };
 
-Q_DECLARE_METATYPE(KoTextPage*)
+Q_DECLARE_METATYPE(KoTextPage *)
 
 #endif

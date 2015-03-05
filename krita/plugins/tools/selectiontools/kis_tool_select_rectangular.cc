@@ -35,8 +35,7 @@
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
 
-
-KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
+KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase *canvas)
     : KisToolRectangleBase(canvas, KisToolRectangleBase::SELECT,
                            KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6)),
       m_widgetHelper(i18n("Rectangular Selection"))
@@ -51,10 +50,8 @@ SelectionAction KisToolSelectRectangular::selectionAction() const
 
 void KisToolSelectRectangular::setSelectionAction(int newSelectionAction)
 {
-    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
-    {
-        if(m_widgetHelper.optionWidget())
-        {
+    if (newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction) {
+        if (m_widgetHelper.optionWidget()) {
             m_widgetHelper.slotSetAction(newSelectionAction);
         }
         m_selectionAction = (SelectionAction)newSelectionAction;
@@ -62,9 +59,9 @@ void KisToolSelectRectangular::setSelectionAction(int newSelectionAction)
     }
 }
 
-QWidget* KisToolSelectRectangular::createOptionWidget()
+QWidget *KisToolSelectRectangular::createOptionWidget()
 {
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
     Q_ASSERT(canvas);
 
     m_widgetHelper.createOptionWidget(canvas, this->toolId());
@@ -79,11 +76,12 @@ void KisToolSelectRectangular::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KisToolSelectRectangular::finishRect(const QRectF& rect)
+void KisToolSelectRectangular::finishRect(const QRectF &rect)
 {
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (!kisCanvas)
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
+    if (!kisCanvas) {
         return;
+    }
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Rectangle"));
 

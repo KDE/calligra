@@ -23,6 +23,6 @@
 class KisSmudgeRadiusOptionWidget: public KisCurveOptionWidget
 {
 public:
-    KisSmudgeRadiusOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked);
+    KisSmudgeRadiusOptionWidget(const QString &label, const QString &sliderLabel, const QString &name, bool checked);
 };
 #endif // KIS_SMUDGE_RADIUS_OPTION_WIDGET_H

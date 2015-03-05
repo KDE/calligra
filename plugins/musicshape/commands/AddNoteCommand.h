@@ -23,24 +23,26 @@
 
 #include "../core/Global.h"
 
-namespace MusicCore {
-    class Staff;
-    class Note;
-    class Chord;
+namespace MusicCore
+{
+class Staff;
+class Note;
+class Chord;
 }
 class MusicShape;
 
-class AddNoteCommand : public KUndo2Command {
+class AddNoteCommand : public KUndo2Command
+{
 public:
-    AddNoteCommand(MusicShape* shape, MusicCore::Chord* chord, MusicCore::Staff* staff, MusicCore::Duration duration, int pitch, int accidentals=0);
+    AddNoteCommand(MusicShape *shape, MusicCore::Chord *chord, MusicCore::Staff *staff, MusicCore::Duration duration, int pitch, int accidentals = 0);
     virtual void redo();
     virtual void undo();
 private:
-    MusicShape* m_shape;
-    MusicCore::Chord* m_chord;
+    MusicShape *m_shape;
+    MusicCore::Chord *m_chord;
     MusicCore::Duration m_oldDuration, m_newDuration;
     int m_oldDots;
-    MusicCore::Note* m_note;
+    MusicCore::Note *m_note;
 };
 
 #endif // ADDNOTECOMMAND_H

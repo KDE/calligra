@@ -38,7 +38,8 @@ class ColorPickerOptionsWidget : public QWidget, public Ui::ColorPickerOptionsWi
     Q_OBJECT
 
 public:
-    ColorPickerOptionsWidget(QWidget *parent) : QWidget(parent) {
+    ColorPickerOptionsWidget(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -50,7 +51,7 @@ class KisToolColorPicker : public KisTool
     Q_PROPERTY(bool toForeground READ toForeground WRITE setToForeground NOTIFY toForegroundChanged)
 
 public:
-    KisToolColorPicker(KoCanvasBase* canvas);
+    KisToolColorPicker(KoCanvasBase *canvas);
     virtual ~KisToolColorPicker();
 
 public:
@@ -69,13 +70,13 @@ public:
     };
 
 public:
-    virtual QWidget* createOptionWidget();
+    virtual QWidget *createOptionWidget();
 
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    virtual void paint(QPainter &gc, const KoViewConverter &converter);
 
     bool toForeground() const;
 
@@ -83,7 +84,7 @@ Q_SIGNALS:
     void toForegroundChanged();
 
 protected:
-    void activate(ToolActivation activation, const QSet<KoShape*> &);
+    void activate(ToolActivation activation, const QSet<KoShape *> &);
     void deactivate();
 
 public Q_SLOTS:
@@ -92,12 +93,12 @@ public Q_SLOTS:
     void slotSetNormaliseValues(bool);
     void slotSetAddPalette(bool);
     void slotChangeRadius(int);
-    void slotAddPalette(KoResource* resource);
+    void slotAddPalette(KoResource *resource);
     void slotSetColorSource(int value);
 
 private:
     void displayPickedColor();
-    void pickColor(const QPointF& pos);
+    void pickColor(const QPointF &pos);
     void updateOptionWidget();
 
     Configuration m_config;
@@ -111,15 +112,16 @@ private:
 
     ColorPickerOptionsWidget *m_optionsWidget;
 
-    QList<KoColorSet*> m_palettes;
+    QList<KoColorSet *> m_palettes;
 };
 
 class KisToolColorPickerFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolColorPickerFactory(const QStringList&)
-            : KoToolFactoryBase("KritaSelected/KisToolColorPicker") {
+    KisToolColorPickerFactory(const QStringList &)
+        : KoToolFactoryBase("KritaSelected/KisToolColorPicker")
+    {
         setToolTip(i18n("Select a color from the image or current layer"));
         setToolType(TOOL_TYPE_FILL);
         setPriority(15);
@@ -130,11 +132,11 @@ public:
 
     virtual ~KisToolColorPickerFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolColorPicker(canvas);
     }
 };
-
 
 #endif // KIS_TOOL_COLOR_PICKER_H_
 

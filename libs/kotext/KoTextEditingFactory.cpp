@@ -25,8 +25,9 @@ class KoTextEditingFactory::Private
 {
 public:
     Private(const QString &identifier)
-            : id(identifier),
-            showInMenu(false) {
+        : id(identifier),
+          showInMenu(false)
+    {
     }
 
     const QString id;

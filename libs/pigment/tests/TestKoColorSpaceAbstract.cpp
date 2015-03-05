@@ -5,7 +5,6 @@
 
 #include <cfloat>
 
-
 template <class T>
 T mixOpExpectedAlpha(T alpha1, T alpha2, const qint16 *weights)
 {
@@ -325,7 +324,6 @@ void TestKoColorSpaceAbstract::testMixColorsOpU8NoAlpha()
     QCOMPARE(outputPixel[COLOR_CHANNEL_1], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_1], pixel2[COLOR_CHANNEL_1], weights));
     QCOMPARE(outputPixel[COLOR_CHANNEL_2], mixOpNoAlphaExpectedColor(pixel1[COLOR_CHANNEL_2], pixel2[COLOR_CHANNEL_2], weights));
 }
-
 
 QTEST_MAIN(TestKoColorSpaceAbstract)
 #include <TestKoColorSpaceAbstract.moc>

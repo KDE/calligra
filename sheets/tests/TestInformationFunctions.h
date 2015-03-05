@@ -77,9 +77,9 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    Value evaluate(const QString&, Value& ex, const Cell &cell = Cell());
+    Value evaluate(const QString &, Value &ex, const Cell &cell = Cell());
 
-    Map* m_map;
+    Map *m_map;
 };
 
 } // namespace Sheets

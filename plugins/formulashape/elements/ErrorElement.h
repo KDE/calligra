@@ -25,7 +25,8 @@
 /**
  * @short Implementation of the MathML merror element
  */
-class KOFORMULA_EXPORT ErrorElement : public RowElement {
+class KOFORMULA_EXPORT ErrorElement : public RowElement
+{
 public:
     /// The standart constructor
     explicit ErrorElement(BasicElement *parent = 0);
@@ -35,7 +36,7 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paint( QPainter& painter, AttributeManager* am );
+    virtual void paint(QPainter &painter, AttributeManager *am);
 
     /// @return The element's ElementType
     ElementType elementType() const;

@@ -40,31 +40,32 @@ class WdgBrightnessContrast : public QWidget, public Ui::WdgBrightnessContrast
     Q_OBJECT
 
 public:
-    WdgBrightnessContrast(QWidget *parent) : QWidget(parent) {
+    WdgBrightnessContrast(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
 
 class KisBrightnessContrastFilterConfiguration : public KisFilterConfiguration
 {
-    
+
 public:
     using KisFilterConfiguration::fromXML;
     using KisFilterConfiguration::toXML;
     using KisFilterConfiguration::fromLegacyXML;
 
-    virtual void fromLegacyXML(const QDomElement& root);
+    virtual void fromLegacyXML(const QDomElement &root);
 
-    virtual void fromXML(const QDomElement& e);
-    virtual void toXML(QDomDocument& doc, QDomElement& root) const;
+    virtual void fromXML(const QDomElement &e);
+    virtual void toXML(QDomDocument &doc, QDomElement &root) const;
 
     KisBrightnessContrastFilterConfiguration();
     virtual ~KisBrightnessContrastFilterConfiguration();
 
     virtual void setCurve(const KisCubicCurve &curve);
 
-    const QVector<quint16>& transfer() const;
-    virtual const KisCubicCurve& curve() const;
+    const QVector<quint16> &transfer() const;
+    virtual const KisCubicCurve &curve() const;
 
 private:
     void updateTransfer();
@@ -86,27 +87,27 @@ public:
 
 public:
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation *createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const;
 
-    static inline KoID id() {
+    static inline KoID id()
+    {
         return KoID("brightnesscontrast", i18n("Brightness / Contrast"));
     }
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 };
-
 
 class KisBrightnessContrastConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
+    KisBrightnessContrastConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
     virtual ~KisBrightnessContrastConfigWidget();
 
-    virtual KisBrightnessContrastFilterConfiguration * configuration() const;
-    virtual void setConfiguration(const KisPropertiesConfiguration* config);
-    WdgBrightnessContrast * m_page;
+    virtual KisBrightnessContrastFilterConfiguration *configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration *config);
+    WdgBrightnessContrast *m_page;
     void setView(KisViewManager *view);
 
 public Q_SLOTS:

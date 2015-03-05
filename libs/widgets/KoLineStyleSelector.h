@@ -64,7 +64,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // _KOLINESTYLESELECTOR_H_

@@ -19,7 +19,6 @@
 #ifndef __KIS_DUMMIES_FACADE_H
 #define __KIS_DUMMIES_FACADE_H
 
-
 #include "kis_dummies_facade_base.h"
 
 /**
@@ -37,8 +36,8 @@ public:
     ~KisDummiesFacade();
 
     virtual bool hasDummyForNode(KisNodeSP node) const;
-    KisNodeDummy* dummyForNode(KisNodeSP node) const;
-    KisNodeDummy* rootDummy() const;
+    KisNodeDummy *dummyForNode(KisNodeSP node) const;
+    KisNodeDummy *rootDummy() const;
     int dummiesCount() const;
 
 private:
@@ -47,7 +46,7 @@ private:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* __KIS_DUMMIES_FACADE_H */

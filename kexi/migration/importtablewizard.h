@@ -32,15 +32,18 @@ class QCheckBox;
 class KexiProjectSelectorWidget;
 class KexiProjectSet;
 
-namespace KexiDB {
-    class Connection;
+namespace KexiDB
+{
+class Connection;
 }
 
-namespace Kexi {
-    class ObjectStatus;
+namespace Kexi
+{
+class ObjectStatus;
 }
 
-namespace KexiMigration {
+namespace KexiMigration
+{
 
 class MigrateManager;
 class KexiMigrate;
@@ -48,72 +51,72 @@ class AlterSchemaWidget;
 
 class KEXIMIGR_EXPORT ImportTableWizard : public KAssistantDialog
 {
-Q_OBJECT
-    public:
-        explicit ImportTableWizard(KexiDB::Connection* curDB, QWidget* parent = 0, QMap<QString, QString>* args = 0, Qt::WFlags flags = 0);
-        virtual ~ImportTableWizard( );
+    Q_OBJECT
+public:
+    explicit ImportTableWizard(KexiDB::Connection *curDB, QWidget *parent = 0, QMap<QString, QString> *args = 0, Qt::WFlags flags = 0);
+    virtual ~ImportTableWizard();
 
-        virtual void back();
-        virtual void next();
-        virtual void accept();
-        virtual void reject();
+    virtual void back();
+    virtual void next();
+    virtual void accept();
+    virtual void reject();
 
-    protected Q_SLOTS:
-        void slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*);
-        
-    private:
+protected Q_SLOTS:
+    void slot_currentPageChanged(KPageWidgetItem *, KPageWidgetItem *);
 
-        KexiDB::Connection* m_currentDatabase;
-        KexiConnectionSelectorWidget *m_srcConnSel;
-        KexiMigration::MigrateManager *m_migrateManager;
-        QPointer<KexiMigration::KexiMigrate> m_migrateDriver;
-        QListWidget *m_tableListWidget;
-        AlterSchemaWidget *m_alterSchemaWidget;
-        KexiProjectSelectorWidget *m_srcDBName;
-        KexiProjectSet* m_prjSet;
-        QString m_importTableName;
-        QMap<QString, QString>* m_args;
-        
-        bool fileBasedSrcSelected() const;
-        QString driverNameForSelectedSource();
-        KexiMigrate* prepareImport(Kexi::ObjectStatus& result);
+private:
 
-        QLabel *m_lblImportingTxt, *m_lblImportingErrTxt, *m_finishLbl;
-        QProgressBar *m_progressBar;
-        QCheckBox *m_finishCheckBox;
-        KPushButton* m_importOptionsButton;
-        bool m_importComplete;
-        bool doImport();
-        
-        //Page Items
-        KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_srcDBPageItem,
-                        *m_tablesPageItem, *m_alterTablePageItem, *m_importingPageItem,
-                        *m_finishPageItem;
-        
-        //Page Widgets
-        QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_srcDBPageWidget, *m_tablesPageWidget,
-                *m_alterTablePageWidget, *m_importingPageWidget, *m_finishPageWidget;
+    KexiDB::Connection *m_currentDatabase;
+    KexiConnectionSelectorWidget *m_srcConnSel;
+    KexiMigration::MigrateManager *m_migrateManager;
+    QPointer<KexiMigration::KexiMigrate> m_migrateDriver;
+    QListWidget *m_tableListWidget;
+    AlterSchemaWidget *m_alterSchemaWidget;
+    KexiProjectSelectorWidget *m_srcDBName;
+    KexiProjectSet *m_prjSet;
+    QString m_importTableName;
+    QMap<QString, QString> *m_args;
 
-        //Page Setup
-        void setupIntroPage();
-        void setupSrcConn();
-        void setupSrcDB();
-        void setupTableSelectPage();
-        void setupAlterTablePage();
-        void setupImportingPage();
-        void setupFinishPage();
-        
-        //Page Arrival
-        void arriveSrcConnPage();
-        void arriveSrcDBPage();
-        void arriveTableSelectPage(KPageWidgetItem *prevPage);
-        void arriveAlterTablePage();
-        void arriveImportingPage();
-        void arriveFinishPage();
-    private Q_SLOTS:
-        void slotConnPageItemSelected(bool isSelected);
-        void slotTableListWidgetSelectionChanged();
-        void slotNameChanged();
+    bool fileBasedSrcSelected() const;
+    QString driverNameForSelectedSource();
+    KexiMigrate *prepareImport(Kexi::ObjectStatus &result);
+
+    QLabel *m_lblImportingTxt, *m_lblImportingErrTxt, *m_finishLbl;
+    QProgressBar *m_progressBar;
+    QCheckBox *m_finishCheckBox;
+    KPushButton *m_importOptionsButton;
+    bool m_importComplete;
+    bool doImport();
+
+    //Page Items
+    KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_srcDBPageItem,
+                    *m_tablesPageItem, *m_alterTablePageItem, *m_importingPageItem,
+                    *m_finishPageItem;
+
+    //Page Widgets
+    QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_srcDBPageWidget, *m_tablesPageWidget,
+            *m_alterTablePageWidget, *m_importingPageWidget, *m_finishPageWidget;
+
+    //Page Setup
+    void setupIntroPage();
+    void setupSrcConn();
+    void setupSrcDB();
+    void setupTableSelectPage();
+    void setupAlterTablePage();
+    void setupImportingPage();
+    void setupFinishPage();
+
+    //Page Arrival
+    void arriveSrcConnPage();
+    void arriveSrcDBPage();
+    void arriveTableSelectPage(KPageWidgetItem *prevPage);
+    void arriveAlterTablePage();
+    void arriveImportingPage();
+    void arriveFinishPage();
+private Q_SLOTS:
+    void slotConnPageItemSelected(bool isSelected);
+    void slotTableListWidgetSelectionChanged();
+    void slotNameChanged();
 };
 }
 #endif // IMPORTTABLEWIZARD_H

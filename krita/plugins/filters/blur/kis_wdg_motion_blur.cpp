@@ -31,7 +31,7 @@
 
 #include "ui_wdg_motion_blur.h"
 
-KisWdgMotionBlur::KisWdgMotionBlur(QWidget * parent) : KisConfigWidget(parent)
+KisWdgMotionBlur::KisWdgMotionBlur(QWidget *parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgMotionBlur();
     m_widget->setupUi(this);
@@ -48,15 +48,15 @@ KisWdgMotionBlur::~KisWdgMotionBlur()
     delete m_widget;
 }
 
-KisPropertiesConfiguration* KisWdgMotionBlur::configuration() const
+KisPropertiesConfiguration *KisWdgMotionBlur::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("motion blur", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("motion blur", 1);
     config->setProperty("blurAngle", m_widget->blurAngleSlider->value());
     config->setProperty("blurLength", m_widget->blurLength->value());
     return config;
 }
 
-void KisWdgMotionBlur::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgMotionBlur::setConfiguration(const KisPropertiesConfiguration *config)
 {
     QVariant value;
     if (config->getProperty("blurAngle", value)) {
@@ -72,8 +72,7 @@ void KisWdgMotionBlur::angleSliderChanged(int v)
     int absoluteValue = -v + 270;
     if (absoluteValue < 0) {
         absoluteValue += 360;
-    }
-    else if (absoluteValue > 360) {
+    } else if (absoluteValue > 360) {
         absoluteValue = absoluteValue - 360;
     }
 

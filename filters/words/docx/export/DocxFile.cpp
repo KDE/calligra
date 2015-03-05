@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "DocxFile.h"
 
@@ -40,7 +39,6 @@
 #include "OpcContentTypes.h"
 #include "OdfReaderDocxContext.h"
 
-
 // ================================================================
 //                         class DocxFile
 
@@ -54,9 +52,9 @@ DocxFile::~DocxFile()
 
 // todo: commentsexist should be propably repalced with qlist qpair later
 KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
-                                               const QByteArray &appIdentification,
-                                               const OdfReaderDocxContext &context,
-                                               bool  commentsExist)
+        const QByteArray &appIdentification,
+        const OdfReaderDocxContext &context,
+        bool  commentsExist)
 {
     Q_UNUSED(context);
 
@@ -64,7 +62,7 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
     // Create the store and check if everything went well.
     // FIXME: Should docxStore be deleted from a finalizer?
     KoStore *docxStore = KoStore::createStore(fileName, KoStore::Write,
-                                              appIdentification, KoStore::Auto, false);
+                         appIdentification, KoStore::Auto, false);
     if (!docxStore || docxStore->bad()) {
         kWarning(30003) << "Unable to create output file!";
         delete docxStore;
@@ -106,12 +104,8 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
     return status;
 }
 
-
-
-
 // ----------------------------------------------------------------
 //                         Private functions
-
 
 KoFilter::ConversionStatus DocxFile::writeTopLevelRels(KoStore *docxStore)
 {

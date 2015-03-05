@@ -43,7 +43,8 @@ void KisOperation::runFromXML(KisViewManager *view, const KisOperationConfigurat
     qFatal("Not implemented yet");
 }
 
-KisProcessingApplicator* KisOperation::beginAction(KisViewManager *view, const KUndo2MagicString &actionName) {
+KisProcessingApplicator *KisOperation::beginAction(KisViewManager *view, const KUndo2MagicString &actionName)
+{
     KisImageSP image = view->image();
     Q_ASSERT(image);
 
@@ -51,11 +52,12 @@ KisProcessingApplicator* KisOperation::beginAction(KisViewManager *view, const K
     emitSignals << ModifiedSignal;
 
     return new KisProcessingApplicator(image, 0,
-                                        KisProcessingApplicator::NONE,
-                                        emitSignals, actionName);
+                                       KisProcessingApplicator::NONE,
+                                       emitSignals, actionName);
 }
 
-void KisOperation::endAction(KisProcessingApplicator *applicator, const QString &xmlData) {
+void KisOperation::endAction(KisProcessingApplicator *applicator, const QString &xmlData)
+{
     Q_UNUSED(xmlData);
     applicator->end();
     delete applicator;

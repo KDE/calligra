@@ -45,7 +45,7 @@ class KisLayerManager : public QObject
 
 public:
 
-    KisLayerManager(KisViewManager * view);
+    KisLayerManager(KisViewManager *view);
     ~KisLayerManager();
     void setView(QPointer<KisView>view);
 
@@ -64,7 +64,6 @@ private:
 
     KisLayerSP activeLayer();
     KisPaintDeviceSP activeDevice();
-
 
     void setup(KisActionManager *actionManager);
 
@@ -107,7 +106,7 @@ private Q_SLOTS:
     void addShapeLayer(KisNodeSP activeNode);
 
     void addAdjustmentLayer(KisNodeSP activeNode);
-    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
+    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString &name, KisFilterConfiguration *filter, KisSelectionSP selection);
 
     void addGeneratorLayer(KisNodeSP activeNode);
 
@@ -119,7 +118,7 @@ private:
 
 private:
 
-    KisViewManager * m_view;
+    KisViewManager *m_view;
     QPointer<KisView>m_imageView;
 
     KisAction *m_imageFlatten;
@@ -128,7 +127,7 @@ private:
     KisAction *m_imageResizeToLayer;
     KisAction *m_flattenLayer;
     KisAction *m_rasterizeLayer;
-    KisNodeCommandsAdapter* m_commandsAdapter;
+    KisNodeCommandsAdapter *m_commandsAdapter;
 };
 
 #endif

@@ -26,7 +26,6 @@ KRITAIMAGE_EXPORT void kis_assert_exception(const char *assertion, const char *f
 KRITAIMAGE_EXPORT void kis_assert_recoverable(const char *assertion, const char *file, int line);
 KRITAIMAGE_EXPORT void kis_assert_x_exception(const char *assertion, const char *where, const char *what, const char *file, int line);
 
-
 /**
  * KIS_ASSERT family of macros allows the user to choose whether to
  * try to continue working in Krita or to abort an application and see
@@ -47,7 +46,6 @@ KRITAIMAGE_EXPORT void kis_assert_x_exception(const char *assertion, const char 
  * \see KIS_ASSERT
  */
 #define KIS_ASSERT_X(cond, where, what) ((!(cond)) ? kis_assert_x_exception(#cond,where, what,__FILE__,__LINE__) : qt_noop())
-
 
 /**
  * This is a recoverable variant of KIS_ASSERT. It doesn't throw any

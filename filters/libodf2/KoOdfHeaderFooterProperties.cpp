@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "KoOdfHeaderFooterProperties.h"
 
@@ -32,10 +31,8 @@
 #include <KoXmlStreamReader.h>
 #include <KoXmlWriter.h>
 
-
 // ----------------------------------------------------------------
 //                         private class
-
 
 class KoOdfHeaderFooterProperties::Private
 {
@@ -46,9 +43,7 @@ public:
     // NYI: Background Image
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfHeaderFooterProperties::KoOdfHeaderFooterProperties()
     : KoOdfStyleProperties()
@@ -61,12 +56,10 @@ KoOdfHeaderFooterProperties::~KoOdfHeaderFooterProperties()
     delete d;
 }
 
-
 void KoOdfHeaderFooterProperties::clear()
 {
     KoOdfStyleProperties::clear();
 }
-
 
 bool KoOdfHeaderFooterProperties::readOdf(KoXmlStreamReader &reader)
 {

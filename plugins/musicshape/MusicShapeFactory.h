@@ -19,7 +19,6 @@
 #ifndef MUSIC_SHAPE_FACTORY
 #define MUSIC_SHAPE_FACTORY
 
-
 #include <KoShapeFactoryBase.h>
 #include <QVariantList>
 
@@ -31,7 +30,7 @@ class MusicShapePlugin : public QObject
 
 public:
 
-    MusicShapePlugin( QObject * parent,  const QVariantList& );
+    MusicShapePlugin(QObject *parent,  const QVariantList &);
     ~MusicShapePlugin() {}
 
 };
@@ -43,7 +42,7 @@ public:
     ~MusicShapeFactory() {}
 
     virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
+    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 };
 
 #endif

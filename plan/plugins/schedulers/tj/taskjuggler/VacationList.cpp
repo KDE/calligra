@@ -17,37 +17,37 @@ namespace TJ
 
 VacationList::~VacationList()
 {
-    while(!isEmpty()) {
+    while (!isEmpty()) {
         delete takeFirst();
     }
 }
 
 void
-VacationList::inSort(VacationInterval* vi)
+VacationList::inSort(VacationInterval *vi)
 {
     //TODO
     append(vi);
 }
 
 void
-VacationList::add(const QString& name, const Interval& i)
+VacationList::add(const QString &name, const Interval &i)
 {
     inSort(new VacationInterval(name, i));
 }
 
 void
-VacationList::add(VacationInterval* vi)
+VacationList::add(VacationInterval *vi)
 {
     inSort(vi);
 }
-
 
 bool
 VacationList::isVacation(time_t date) const
 {
     for (VacationList::Iterator vli(*this); vli.hasNext();)
-        if (vli.next()->contains(date))
+        if (vli.next()->contains(date)) {
             return true;
+        }
 
     return false;
 }
@@ -57,8 +57,9 @@ VacationList::vacationName(time_t date) const
 {
     for (VacationList::Iterator vli(*this);  vli.hasNext();) {
         VacationInterval *v = vli.next();
-        if (v->contains(date))
+        if (v->contains(date)) {
             return v->getName();
+        }
     }
     return QString();
 }

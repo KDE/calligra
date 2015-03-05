@@ -32,16 +32,14 @@
 #include <KoXmlStreamReader.h>
 #include <KoXmlWriter.h>
 
-
 // ----------------------------------------------------------------
 //                         private class
-
 
 class KoOdfListLevelProperties::Private
 {
 public:
     Private()
-        :hasLabelAlignment(false){};
+        : hasLabelAlignment(false) {};
     ~Private() {};
 
     bool hasLabelAlignment;
@@ -49,9 +47,7 @@ public:
     AttributeSet labelAlignmentAttributes;  // name, value
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfListLevelProperties::KoOdfListLevelProperties()
     : KoOdfStyleProperties()
@@ -64,12 +60,10 @@ KoOdfListLevelProperties::~KoOdfListLevelProperties()
     delete d;
 }
 
-
 void KoOdfListLevelProperties::clear()
 {
     KoOdfStyleProperties::clear();
 }
-
 
 bool KoOdfListLevelProperties::readOdf(KoXmlStreamReader &reader)
 {

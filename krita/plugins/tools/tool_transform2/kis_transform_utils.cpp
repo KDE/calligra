@@ -23,12 +23,10 @@
 #include <KoUnit.h>
 #include "tool_transform_args.h"
 
-
 const int KisTransformUtils::rotationHandleVisualRadius = 12;
 const int KisTransformUtils::rotationHandleRadius = 8;
 const int KisTransformUtils::handleVisualRadius = 12;
 const int KisTransformUtils::handleRadius = 8;
-
 
 QTransform KisTransformUtils::imageToFlakeTransform(const KisCoordinatesConverter *converter)
 {
@@ -47,22 +45,26 @@ qreal KisTransformUtils::effectiveRotationHandleGrabRadius(const KisCoordinatesC
     return (handleRadiusPt.x() > handleRadiusPt.y()) ? handleRadiusPt.x() : handleRadiusPt.y();
 }
 
-qreal KisTransformUtils::scaleFromAffineMatrix(const QTransform &t) {
+qreal KisTransformUtils::scaleFromAffineMatrix(const QTransform &t)
+{
     return KoUnit::approxTransformScale(t);
 }
 
-qreal KisTransformUtils::scaleFromPerspectiveMatrix(const QTransform &t, const QPointF &basePt) {
+qreal KisTransformUtils::scaleFromPerspectiveMatrix(const QTransform &t, const QPointF &basePt)
+{
     const QRectF testRect(basePt, QSizeF(1.0, 1.0));
     QRectF resultRect = t.mapRect(testRect);
 
     return 0.5 * (resultRect.width(), resultRect.height());
 }
 
-qreal KisTransformUtils::effectiveSize(const QRectF &rc) {
+qreal KisTransformUtils::effectiveSize(const QRectF &rc)
+{
     return 0.5 * (rc.width(), rc.height());
 }
 
-QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, qreal *dOut) {
+QRectF KisTransformUtils::handleRect(qreal radius, const QTransform &t, const QRectF &limitingRect, qreal *dOut)
+{
     qreal handlesExtraScale =
         scaleFromPerspectiveMatrix(t, limitingRect.center());
 
@@ -91,8 +93,7 @@ QPointF KisTransformUtils::clipInRect(QPointF p, QRectF r)
             if (t.x() < r.left()) {
                 t.setY(r.left() * slope);
                 t.setX(r.left());
-            }
-            else if (t.x() > r.right()) {
+            } else if (t.x() > r.right()) {
                 t.setY(r.right() * slope);
                 t.setX(r.right());
             }
@@ -100,24 +101,23 @@ QPointF KisTransformUtils::clipInRect(QPointF p, QRectF r)
             if (t.y() < r.top()) {
                 t.setX(r.top() / slope);
                 t.setY(r.top());
-            }
-            else if (t.y() > r.bottom()) {
+            } else if (t.y() > r.bottom()) {
                 t.setX(r.bottom() / slope);
                 t.setY(r.bottom());
             }
-        }
-        else {
-            if (t.y() < r.top())
+        } else {
+            if (t.y() < r.top()) {
                 t.setY(r.top());
-            else if (t.y() > r.bottom())
+            } else if (t.y() > r.bottom()) {
                 t.setY(r.bottom());
+            }
         }
-    }
-    else {
-        if (t.x() < r.left())
+    } else {
+        if (t.x() < r.left()) {
             t.setX(r.left());
-        else if (t.x() > r.right())
+        } else if (t.x() > r.right()) {
             t.setX(r.right());
+        }
     }
 
     t += center;
@@ -184,9 +184,9 @@ bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPac
 #include <kis_liquify_transform_worker.h>
 
 KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformArgs &config,
-                                                            KisPaintDeviceSP device,
-                                                            KoUpdaterPtr updater,
-                                                            QVector3D *transformedCenter /* OUT */)
+        KisPaintDeviceSP device,
+        KoUpdaterPtr updater,
+        QVector3D *transformedCenter /* OUT */)
 {
     {
         KisTransformWorker t(0,
@@ -262,11 +262,11 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
 
         if (config.mode() == ToolTransformArgs::FREE_TRANSFORM) {
             KisPerspectiveTransformWorker perspectiveWorker(device,
-                                                            config.transformedCenter(),
-                                                            config.aX(),
-                                                            config.aY(),
-                                                            config.cameraPos().z(),
-                                                            updater2);
+                    config.transformedCenter(),
+                    config.aX(),
+                    config.aY(),
+                    config.cameraPos().z(),
+                    updater2);
             perspectiveWorker.run();
         } else if (config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
             QTransform T =
@@ -274,8 +274,8 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
                                           config.transformedCenter().y());
 
             KisPerspectiveTransformWorker perspectiveWorker(device,
-                                                            T.inverted() * config.flattenedPerspectiveTransform() * T,
-                                                            updater2);
+                    T.inverted() * config.flattenedPerspectiveTransform() * T,
+                    updater2);
             perspectiveWorker.run();
         }
     }

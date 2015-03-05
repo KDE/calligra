@@ -44,7 +44,7 @@ public:
     //      given in the apidox.
     void setupPaintAction(KisRecordedPaintAction *action);
 
-    KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
+    KisPostExecutionUndoAdapter *postExecutionUndoAdapter() const;
     void setCurrentNode(KisNodeSP node);
     void setStrokeStyle(KisPainter::StrokeStyle strokeStyle);
     void setFillStyle(KisPainter::FillStyle fillStyle);
@@ -67,9 +67,9 @@ public:
 
     void setOpacity(qreal opacity);
     quint8 opacity() const;
-    const KoCompositeOp* compositeOp() const;
+    const KoCompositeOp *compositeOp() const;
 
-    KoPattern* currentPattern() const;
+    KoPattern *currentPattern() const;
     KoColor currentFgColor() const;
     KoColor currentBgColor() const;
     KisPaintOpPresetSP currentPaintOpPreset() const;
@@ -81,10 +81,9 @@ public:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 typedef KisSharedPtr<KisResourcesSnapshot> KisResourcesSnapshotSP;
-
 
 #endif /* __KIS_RESOURCES_SNAPSHOT_H */

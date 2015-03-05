@@ -48,7 +48,8 @@ class WdgGeneralSettings : public QWidget, public Ui::WdgGeneralSettings
     Q_OBJECT
 
 public:
-    WdgGeneralSettings(QWidget *parent, const char *name) : QWidget(parent) {
+    WdgGeneralSettings(QWidget *parent, const char *name) : QWidget(parent)
+    {
         setObjectName(name);
         setupUi(this);
         chkShowRootLayer->setVisible(false);
@@ -86,7 +87,8 @@ class WdgColorSettings : public QWidget, public Ui::WdgColorSettings
     Q_OBJECT
 
 public:
-    WdgColorSettings(QWidget *parent) : QWidget(parent) {
+    WdgColorSettings(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -101,8 +103,8 @@ public:
 
 private Q_SLOTS:
 
-    void refillMonitorProfiles(const KoID & s);
-    void refillPrintProfiles(const KoID & s);
+    void refillMonitorProfiles(const KoID &s);
+    void refillPrintProfiles(const KoID &s);
     void installProfile();
     void toggleAllowMonitorProfileSelection(bool useSystemProfile);
 
@@ -110,24 +112,27 @@ public:
     void setDefault();
     WdgColorSettings  *m_page;
     QButtonGroup m_pasteBehaviourGroup;
-    QList<QLabel*> m_monitorProfileLabels;
-    QList<SqueezedComboBox*> m_monitorProfileWidgets;
+    QList<QLabel *> m_monitorProfileLabels;
+    QList<SqueezedComboBox *> m_monitorProfileWidgets;
 };
 
 //=======================
 
-class WdgTabletSettings : public QWidget, public Ui::WdgTabletSettings {
+class WdgTabletSettings : public QWidget, public Ui::WdgTabletSettings
+{
 
     Q_OBJECT
 
 public:
-    WdgTabletSettings(QWidget *parent) : QWidget(parent) {
+    WdgTabletSettings(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 
 };
 
-class TabletSettingsTab : public QWidget {
+class TabletSettingsTab : public QWidget
+{
     Q_OBJECT
 public:
     TabletSettingsTab(QWidget *parent = 0, const char  *name = 0);
@@ -135,7 +140,6 @@ public:
 public:
     void setDefault();
     WdgTabletSettings  *m_page;
-
 
 };
 
@@ -150,7 +154,8 @@ class WdgPerformanceSettings : public QWidget, public Ui::WdgPerformanceSettings
     Q_OBJECT
 
 public:
-    WdgPerformanceSettings(QWidget *parent, const char *name) : QWidget(parent) {
+    WdgPerformanceSettings(QWidget *parent, const char *name) : QWidget(parent)
+    {
         setObjectName(name); setupUi(this);
     }
 };
@@ -173,7 +178,8 @@ class WdgDisplaySettings : public QWidget, public Ui::WdgDisplaySettings
     Q_OBJECT
 
 public:
-    WdgDisplaySettings(QWidget *parent, const char *name) : QWidget(parent) {
+    WdgDisplaySettings(QWidget *parent, const char *name) : QWidget(parent)
+    {
         setObjectName(name); setupUi(this);
     }
 };
@@ -211,7 +217,8 @@ class WdgGridSettingsBase : public QWidget, public Ui::WdgGridSettingsBase
     Q_OBJECT
 
 public:
-    WdgGridSettingsBase(QWidget *parent) : QWidget(parent) {
+    WdgGridSettingsBase(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -245,7 +252,8 @@ class WdgFullscreenSettingsBase : public QWidget, public Ui::WdgFullscreenSettin
     Q_OBJECT
 
 public:
-    WdgFullscreenSettingsBase(QWidget *parent) : QWidget(parent) {
+    WdgFullscreenSettingsBase(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -259,9 +267,7 @@ public:
     void setDefault();
 };
 
-
 //=======================
-
 
 /**
  *  Preferences dialog of KImageShop^WKrayon^WKrita
@@ -273,7 +279,6 @@ class KisDlgPreferences : public KPageDialog
 public:
 
     static bool editPreferences();
-
 
 protected:
 

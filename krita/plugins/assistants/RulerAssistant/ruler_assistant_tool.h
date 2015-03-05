@@ -21,7 +21,6 @@
 #include <QObject>
 #include <QVariant>
 
-
 class RulerAssistantToolPlugin : public QObject
 {
     Q_OBJECT

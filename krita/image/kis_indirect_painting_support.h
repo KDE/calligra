@@ -38,8 +38,8 @@ class KUndo2MagicString;
  */
 class KRITAIMAGE_EXPORT KisIndirectPaintingSupport
 {
-    KisIndirectPaintingSupport(const KisIndirectPaintingSupport&);
-    KisIndirectPaintingSupport& operator=(const KisIndirectPaintingSupport&);
+    KisIndirectPaintingSupport(const KisIndirectPaintingSupport &);
+    KisIndirectPaintingSupport &operator=(const KisIndirectPaintingSupport &);
 public:
 
     KisIndirectPaintingSupport();
@@ -48,9 +48,9 @@ public:
     bool hasTemporaryTarget() const;
 
     void setTemporaryTarget(KisPaintDeviceSP t);
-    void setTemporaryCompositeOp(const KoCompositeOp* c);
+    void setTemporaryCompositeOp(const KoCompositeOp *c);
     void setTemporaryOpacity(quint8 o);
-    void setTemporaryChannelFlags(const QBitArray& channelFlags);
+    void setTemporaryChannelFlags(const QBitArray &channelFlags);
     void setTemporarySelection(KisSelectionSP selection);
 
     /**
@@ -65,9 +65,8 @@ public:
      * Writes the temporary target into the paint device of the layer.
      * This action will lock the temporary target itself.
      */
-    void mergeToLayer(KisNodeSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID = -1);
-    void mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID = -1);
-
+    void mergeToLayer(KisNodeSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID = -1);
+    void mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID = -1);
 
     /**
      * Lock the temporary target.
@@ -79,7 +78,7 @@ public:
 
     /**
      * Unlock the temporary target
-     * 
+     *
      * \see lockTemporaryTarget()
      */
     void unlockTemporaryTarget() const;
@@ -99,15 +98,14 @@ private:
 private:
 
     template<class UndoAdapter>
-        void mergeToLayerImpl(KisNodeSP layer,
-                              UndoAdapter *undoAdapter,
-                              const KUndo2MagicString &transactionText,int timedID = -1);
+    void mergeToLayerImpl(KisNodeSP layer,
+                          UndoAdapter *undoAdapter,
+                          const KUndo2MagicString &transactionText, int timedID = -1);
     void releaseResources();
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 #endif /* KIS_INDIRECT_PAINTING_SUPPORT_H_ */

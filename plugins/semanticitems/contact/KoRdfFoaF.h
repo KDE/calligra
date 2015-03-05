@@ -24,8 +24,9 @@
 
 // contacts
 #ifdef KDEPIMLIBS_FOUND
-namespace KABC {
-    class Addressee;
+namespace KABC
+{
+class Addressee;
 }
 class KJob;
 #endif
@@ -51,7 +52,7 @@ public:
      * Export to a VCard format file
      * Prompt for a filename if none is given
      */
-    void exportToFile(const QString& fileName = QString()) const;
+    void exportToFile(const QString &fileName = QString()) const;
     /**
      * Import from VCard data contained in ba.
      */

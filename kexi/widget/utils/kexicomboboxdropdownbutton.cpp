@@ -33,14 +33,14 @@ class KexiComboBoxDropDownButtonStyle : public KexiUtils::StyleProxy
 {
 public:
     explicit KexiComboBoxDropDownButtonStyle(QStyle *parentStyle, QObject *parent = 0)
-            : KexiUtils::StyleProxy(parentStyle, parent)
+        : KexiUtils::StyleProxy(parentStyle, parent)
     {
     }
     virtual ~KexiComboBoxDropDownButtonStyle() {}
-    virtual void drawComplexControl(ComplexControl control, const QStyleOptionComplex * option,
-                                    QPainter * painter, const QWidget * widget = 0) const
+    virtual void drawComplexControl(ComplexControl control, const QStyleOptionComplex *option,
+                                    QPainter *painter, const QWidget *widget = 0) const
     {
-        QStyleOptionToolButton opt(*qstyleoption_cast<const QStyleOptionToolButton*>(option));
+        QStyleOptionToolButton opt(*qstyleoption_cast<const QStyleOptionToolButton *>(option));
         opt.state |= (State_MouseOver | State_DownArrow | State_Sunken);
         opt.state ^= (State_MouseOver | State_DownArrow | State_Sunken);
         KexiUtils::StyleProxy::drawComplexControl(control, &opt, painter, widget);
@@ -58,8 +58,8 @@ public:
 };
 
 KexiComboBoxDropDownButton::KexiComboBoxDropDownButton(QWidget *parent)
-        : QToolButton(parent)
-        , d(new Private)
+    : QToolButton(parent)
+    , d(new Private)
 {
     setAutoRaise(true);
     setArrowType(Qt::DownArrow);
@@ -73,12 +73,13 @@ KexiComboBoxDropDownButton::~KexiComboBoxDropDownButton()
 
 void KexiComboBoxDropDownButton::styleChanged()
 {
-    if (!d->styleChangeEnabled)
+    if (!d->styleChangeEnabled) {
         return;
+    }
     d->styleChangeEnabled = false;
     if (d->privateStyle) {
         setStyle(0);
-        delete static_cast<QStyle*>(d->privateStyle);
+        delete static_cast<QStyle *>(d->privateStyle);
     }
     setStyle(d->privateStyle = new KexiComboBoxDropDownButtonStyle(style(), this));
     d->styleChangeEnabled = true;
@@ -86,7 +87,8 @@ void KexiComboBoxDropDownButton::styleChanged()
 
 bool KexiComboBoxDropDownButton::event(QEvent *event)
 {
-    if (event->type() == QEvent::StyleChange)
+    if (event->type() == QEvent::StyleChange) {
         styleChanged();
+    }
     return QToolButton::event(event);
 }

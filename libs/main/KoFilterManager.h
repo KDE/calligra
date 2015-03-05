@@ -65,7 +65,7 @@ public:
      * Create a filter manager for the Shape Collection docker.
      * @param mimeType the mimetype to import to.
      */
-    explicit KoFilterManager(const QByteArray& mimeType);
+    explicit KoFilterManager(const QByteArray &mimeType);
 
     /**
      * Create a filter manager for a filter which wants to embed something.
@@ -81,8 +81,8 @@ public:
      * @param parentChain The parent filter chain of this filter manager. Used
      *        to allow embedding for filters. Most likely you do not have to care.
      */
-    explicit KoFilterManager(const QString& url, const QByteArray& mimetypeHint = QByteArray(),
-                             KoFilterChain * const parentChain = 0);
+    explicit KoFilterManager(const QString &url, const QByteArray &mimetypeHint = QByteArray(),
+                             KoFilterChain *const parentChain = 0);
 
     virtual ~KoFilterManager();
 
@@ -95,9 +95,9 @@ public:
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
      */
-    QString importDocument(const QString& url,
-                           const QString& documentMimeType,
-                           KoFilter::ConversionStatus& status);
+    QString importDocument(const QString &url,
+                           const QString &documentMimeType,
+                           KoFilter::ConversionStatus &status);
 
     /**
      * @brief Exports the given file/document to the specified URL/mimetype.
@@ -106,7 +106,7 @@ public:
      * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
-    KoFilter::ConversionStatus exportDocument(const QString& url, QByteArray& mimeType);
+    KoFilter::ConversionStatus exportDocument(const QString &url, QByteArray &mimeType);
 
     ///@name Static API
     //@{
@@ -116,8 +116,8 @@ public:
      * information here.
      * Optionally, @p extraNativeMimeTypes are added after the native mimetype.
      */
-    static QStringList mimeFilter(const QByteArray& mimetype, Direction direction,
-                                  const QStringList& extraNativeMimeTypes = QStringList());
+    static QStringList mimeFilter(const QByteArray &mimetype, Direction direction,
+                                  const QStringList &extraNativeMimeTypes = QStringList());
 
     /**
      * The same method as KoFilterManager::mimeFilter but suited for KoShell.
@@ -159,31 +159,36 @@ private:
     // just forward calls to the methods here. Should be
     // pretty safe.
     friend QString KoFilterChain::filterManagerImportFile() const;
-    QString importFile() const {
+    QString importFile() const
+    {
         return m_importUrl;
     }
     friend QString KoFilterChain::filterManagerExportFile() const;
-    QString exportFile() const {
+    QString exportFile() const
+    {
         return m_exportUrl;
     }
     friend KoDocument *KoFilterChain::filterManagerKoDocument() const;
-    KoDocument *document() const {
+    KoDocument *document() const
+    {
         return m_document;
     }
     friend int KoFilterChain::filterManagerDirection() const;
-    int direction() const {
+    int direction() const
+    {
         return static_cast<int>(m_direction);
     }
     friend KoFilterChain *KoFilterChain::filterManagerParentChain() const;
-    KoFilterChain *parentChain() const {
+    KoFilterChain *parentChain() const
+    {
         return m_parentChain;
     }
 
     // Private API
-    KoFilterManager(const KoFilterManager& rhs);
-    KoFilterManager &operator=(const KoFilterManager& rhs);
+    KoFilterManager(const KoFilterManager &rhs);
+    KoFilterManager &operator=(const KoFilterManager &rhs);
 
-    void importErrorHelper(const QString& mimeType, const bool suppressDialog = false);
+    void importErrorHelper(const QString &mimeType, const bool suppressDialog = false);
 
     KoDocument *m_document;
     KoFilterChain *const m_parentChain;
@@ -196,7 +201,7 @@ private:
     static QMap<QString, bool> m_filterAvailable;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif  // __KO_FILTER_MANAGER_H__

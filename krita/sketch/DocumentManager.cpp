@@ -44,10 +44,10 @@ public:
         , temporaryFile(false)
     { }
 
-    ProgressProxy* proxy;
+    ProgressProxy *proxy;
     QPointer<KisDocument> document;
-    Settings* settingsManager;
-    RecentFileManager* recentFileManager;
+    Settings *settingsManager;
+    RecentFileManager *recentFileManager;
 
     QString saveAsFilename;
     QString openDocumentFilename;
@@ -59,27 +59,27 @@ public:
 
 DocumentManager *DocumentManager::sm_instance = 0;
 
-KisDocument* DocumentManager::document() const
+KisDocument *DocumentManager::document() const
 {
     return d->document;
 }
 
-ProgressProxy* DocumentManager::progressProxy() const
+ProgressProxy *DocumentManager::progressProxy() const
 {
     return d->proxy;
 }
 
-Settings* DocumentManager::settingsManager() const
+Settings *DocumentManager::settingsManager() const
 {
     return d->settingsManager;
 }
 
-void DocumentManager::setSettingsManager(Settings* newManager)
+void DocumentManager::setSettingsManager(Settings *newManager)
 {
     d->settingsManager = newManager;
 }
 
-RecentFileManager* DocumentManager::recentFileManager() const
+RecentFileManager *DocumentManager::recentFileManager() const
 {
     return d->recentFileManager;
 }
@@ -99,7 +99,7 @@ void DocumentManager::newDocument(int width, int height, float resolution)
     QTimer::singleShot(300, this, SLOT(delayedNewDocument()));
 }
 
-void DocumentManager::newDocument(const QVariantMap& options)
+void DocumentManager::newDocument(const QVariantMap &options)
 {
     closeDocument();
 
@@ -116,22 +116,20 @@ void DocumentManager::delayedNewDocument()
     }
     KisPart::instance()->addDocument(d->document);
 
-    if(d->newDocOptions.isEmpty())
-    {
+    if (d->newDocOptions.isEmpty()) {
         d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
         d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
         d->document->resetURL();
-    }
-    else if(d->newDocOptions.contains("template")) {
+    } else if (d->newDocOptions.contains("template")) {
         KUrl url(d->newDocOptions.value("template").toString().remove("template://"));
         bool ok = d->document->loadNativeFormat(url.toLocalFile());
         d->document->setModified(false);
         d->document->undoStack()->clear();
 
         if (ok) {
-            QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+            QString mimeType = KMimeType::findByUrl(url, 0, true)->name();
             // in case this is a open document template remove the -template from the end
-            mimeType.remove( QRegExp( "-template$" ) );
+            mimeType.remove(QRegExp("-template$"));
             d->document->setMimeTypeAfterLoading(mimeType);
             d->document->resetURL();
             d->document->setEmpty();
@@ -139,9 +137,7 @@ void DocumentManager::delayedNewDocument()
             d->document->showLoadingErrorDialog();
             d->document->initEmpty();
         }
-    }
-    else
-    {
+    } else {
         QString name = d->newDocOptions.value("name", "New Image").toString();
         int width = d->newDocOptions.value("width").toInt();
         int height = d->newDocOptions.value("height").toInt();
@@ -152,13 +148,10 @@ void DocumentManager::delayedNewDocument()
         QString colorDepthId = d->newDocOptions.value("colorDepthId").toString();
         QString colorProfileId = d->newDocOptions.value("colorProfileId").toString();
 
-        const KoColorSpace* profile;
-        if(colorModelId.isEmpty() || colorDepthId.isEmpty() || colorProfileId.isEmpty())
-        {
+        const KoColorSpace *profile;
+        if (colorModelId.isEmpty() || colorDepthId.isEmpty() || colorProfileId.isEmpty()) {
             profile = KoColorSpaceRegistry::instance()->rgb8();
-        }
-        else
-        {
+        } else {
             profile = KoColorSpaceRegistry::instance()->colorSpace(colorModelId, colorDepthId, colorProfileId);
         }
 
@@ -175,7 +168,7 @@ void DocumentManager::delayedNewDocument()
     emit documentChanged();
 }
 
-void DocumentManager::openDocument(const QString& document, bool import)
+void DocumentManager::openDocument(const QString &document, bool import)
 {
     closeDocument();
     d->openDocumentFilename = document;
@@ -193,10 +186,11 @@ void DocumentManager::delayedOpenDocument()
     KisPart::instance()->addDocument(d->document);
 
     d->document->setModified(false);
-    if (d->importingDocument)
+    if (d->importingDocument) {
         d->document->importDocument(QUrl::fromLocalFile(d->openDocumentFilename));
-    else
+    } else {
         d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
+    }
     d->recentFileManager->addRecent(d->openDocumentFilename);
 
     d->temporaryFile = false;
@@ -216,8 +210,7 @@ void DocumentManager::closeDocument()
 
 bool DocumentManager::save()
 {
-    if (d->document->save())
-    {
+    if (d->document->save()) {
         d->recentFileManager->addRecent(d->document->url().toLocalFile());
         d->settingsManager->setCurrentFile(d->document->url().toLocalFile());
         emit documentSaved();
@@ -259,7 +252,7 @@ void DocumentManager::setTemporaryFile(bool temp)
     emit documentSaved();
 }
 
-DocumentManager* DocumentManager::instance()
+DocumentManager *DocumentManager::instance()
 {
     if (!sm_instance) {
         sm_instance = new DocumentManager(QCoreApplication::instance());
@@ -268,7 +261,7 @@ DocumentManager* DocumentManager::instance()
     return sm_instance;
 }
 
-DocumentManager::DocumentManager(QObject* parent)
+DocumentManager::DocumentManager(QObject *parent)
     : QObject(parent), d(new Private)
 {
     d->proxy = new ProgressProxy(this);

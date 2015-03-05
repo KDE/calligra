@@ -21,7 +21,6 @@
 #ifndef KIS_RANDOM_SUB_ACCESSOR_H
 #define KIS_RANDOM_SUB_ACCESSOR_H
 
-
 #include "kis_random_accessor_ng.h"
 #include "kis_types.h"
 #include <krita_export.h>
@@ -40,17 +39,19 @@ public:
     /**
      * Copy the sampled old value to destination
      */
-    void sampledOldRawData(quint8* dst);
+    void sampledOldRawData(quint8 *dst);
 
     /**
      * Copy the sampled value to destination
      */
-    void sampledRawData(quint8* dst);
+    void sampledRawData(quint8 *dst);
 
-    inline void moveTo(double x, double y) {
+    inline void moveTo(double x, double y)
+    {
         m_currentPoint.setX(x); m_currentPoint.setY(y);
     }
-    inline void moveTo(const QPointF& p) {
+    inline void moveTo(const QPointF &p)
+    {
         m_currentPoint = p;
     }
 private:

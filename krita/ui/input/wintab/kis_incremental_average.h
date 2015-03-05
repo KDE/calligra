@@ -22,11 +22,10 @@
 #include <kis_debug.h>
 #include <QVector>
 
-
 class KisIncrementalAverage
 {
 public:
-    KisIncrementalAverage(int size) 
+    KisIncrementalAverage(int size)
         : m_size(size),
           m_index(-1),
           m_sum(0),
@@ -34,7 +33,8 @@ public:
     {
     }
 
-    inline int pushThrough(int value) {
+    inline int pushThrough(int value)
+    {
         if (m_index < 0) {
             for (int i = 0; i < m_size; i++) {
                 m_values[i] = value;

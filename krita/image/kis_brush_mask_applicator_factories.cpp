@@ -22,7 +22,6 @@
 #include "kis_circle_mask_generator_p.h"
 #include "kis_brush_mask_applicators.h"
 
-
 #define a(_s) #_s
 #define b(_s) a(_s)
 
@@ -32,7 +31,7 @@ MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::ReturnTyp
 MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator>::create<VC_IMPL>(ParamType maskGenerator)
 {
     // qDebug() << "Creating scalar applicator" << b(VC_IMPL);
-    return new KisBrushMaskScalarApplicator<KisMaskGenerator,VC_IMPL>(maskGenerator);
+    return new KisBrushMaskScalarApplicator<KisMaskGenerator, VC_IMPL>(maskGenerator);
 }
 
 template<>
@@ -41,25 +40,24 @@ MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::Ret
 MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<VC_IMPL>(ParamType maskGenerator)
 {
     // qDebug() << "Creating vector applicator" << b(VC_IMPL);
-    return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator,VC_IMPL>(maskGenerator);
+    return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator, VC_IMPL>(maskGenerator);
 }
 
 #if defined HAVE_VC
 
-struct KisCircleMaskGenerator::FastRowProcessor
-{
+struct KisCircleMaskGenerator::FastRowProcessor {
     FastRowProcessor(KisCircleMaskGenerator *maskGenerator)
         : d(maskGenerator->d) {}
 
     template<Vc::Implementation _impl>
-    void process(float* buffer, int width, float y, float cosa, float sina,
+    void process(float *buffer, int width, float y, float cosa, float sina,
                  float centerX, float centerY);
 
     KisCircleMaskGenerator::Private *d;
 };
 
 template<> void KisCircleMaskGenerator::
-FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa, float sina,
+FastRowProcessor::process<VC_IMPL>(float *buffer, int width, float y, float cosa, float sina,
                                    float centerX, float centerY)
 {
     const bool useSmoothing = d->copyOfAntialiasEdges;
@@ -68,7 +66,7 @@ FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
 
-    float* bufferPointer = buffer;
+    float *bufferPointer = buffer;
 
     Vc::float_v currentIndices(Vc::int_v::IndexesFromZero());
 
@@ -88,7 +86,7 @@ FastRowProcessor::process<VC_IMPL>(float* buffer, int width, float y, float cosa
 
     Vc::float_v vOne(1.0f);
 
-    for (int i=0; i < width; i+= Vc::float_v::Size){
+    for (int i = 0; i < width; i += Vc::float_v::Size) {
 
         Vc::float_v x_ = currentIndices - vCenterX;
 

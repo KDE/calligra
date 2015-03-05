@@ -32,8 +32,9 @@
 class QTreeView;
 class QListWidget;
 
-namespace Scripting {
-    class Module;
+namespace Scripting
+{
+class Module;
 }
 
 /**
@@ -43,30 +44,29 @@ namespace Scripting {
  */
 class ScriptingScheduleListView : public QWidget
 {
-        Q_OBJECT
-    public:
+    Q_OBJECT
+public:
 
-        /**
-        * Constructor.
-        * \param module The \a ScriptingModule instance that should be used
-        * as datasource for what should be displayed within the listview.
-        * \param parent The parent QWidget this widget should be displayed in.
-        */
-        ScriptingScheduleListView(Scripting::Module* module, QWidget* parent);
+    /**
+    * Constructor.
+    * \param module The \a ScriptingModule instance that should be used
+    * as datasource for what should be displayed within the listview.
+    * \param parent The parent QWidget this widget should be displayed in.
+    */
+    ScriptingScheduleListView(Scripting::Module *module, QWidget *parent);
 
-        /**
-        * Destructor.
-        */
-        virtual ~ScriptingScheduleListView();
+    /**
+    * Destructor.
+    */
+    virtual ~ScriptingScheduleListView();
 
-    public Q_SLOTS:
-        /// Return the selected schedule
-        QVariant currentSchedule() const;
+public Q_SLOTS:
+    /// Return the selected schedule
+    QVariant currentSchedule() const;
 
-
-    private:
-        Scripting::Module* m_module;
-        QTreeView* m_view;
+private:
+    Scripting::Module *m_module;
+    QTreeView *m_view;
 };
 
 /**
@@ -76,28 +76,27 @@ class ScriptingScheduleListView : public QWidget
 class ScriptingNodePropertyListView : public KActionSelector
 {
     Q_OBJECT
-    public:
+public:
 
-        /**
-        * Constructor.
-        * \param module The \a ScriptingModule instance that should be used
-        * as datasource for what should be displayed within the listview.
-        * \param parent The parent QWidget this widget should be displayed in.
-         */
-        ScriptingNodePropertyListView(Scripting::Module* module, QWidget* parent);
+    /**
+    * Constructor.
+    * \param module The \a ScriptingModule instance that should be used
+    * as datasource for what should be displayed within the listview.
+    * \param parent The parent QWidget this widget should be displayed in.
+     */
+    ScriptingNodePropertyListView(Scripting::Module *module, QWidget *parent);
 
-        /**
-         * Destructor.
-         */
-        virtual ~ScriptingNodePropertyListView();
+    /**
+     * Destructor.
+     */
+    virtual ~ScriptingNodePropertyListView();
 
-    public Q_SLOTS:
-        /// Return the selected node properties
-        QVariant selectedProperties() const;
+public Q_SLOTS:
+    /// Return the selected node properties
+    QVariant selectedProperties() const;
 
-
-    private:
-        Scripting::Module *m_module;
+private:
+    Scripting::Module *m_module;
 };
 
 /**
@@ -106,39 +105,38 @@ class ScriptingNodePropertyListView : public KActionSelector
 class ScriptingDataQueryView : public QWidget, Ui::ScriptingDataQueryView
 {
     Q_OBJECT
-    public:
+public:
 
-        /**
-     * Constructor.
-     * \param module The \a ScriptingModule instance that should be used
-     * as datasource for what should be displayed within the listview.
-     * \param parent The parent QWidget this widget should be displayed in.
-         */
-        ScriptingDataQueryView(Scripting::Module* module, QWidget* parent);
+    /**
+    * Constructor.
+    * \param module The \a ScriptingModule instance that should be used
+    * as datasource for what should be displayed within the listview.
+    * \param parent The parent QWidget this widget should be displayed in.
+     */
+    ScriptingDataQueryView(Scripting::Module *module, QWidget *parent);
 
-        /**
-         * Destructor.
-         */
-        virtual ~ScriptingDataQueryView();
+    /**
+     * Destructor.
+     */
+    virtual ~ScriptingDataQueryView();
 
-    public Q_SLOTS:
-        /// If true, include header texts
-        QVariant includeHeaders() const;
-        /// The type of object (Node, Resource, Account)
-        QVariant objectType() const;
-        /// Return the selected properties
-        QVariant selectedProperties() const;
+public Q_SLOTS:
+    /// If true, include header texts
+    QVariant includeHeaders() const;
+    /// The type of object (Node, Resource, Account)
+    QVariant objectType() const;
+    /// Return the selected properties
+    QVariant selectedProperties() const;
 
+private Q_SLOTS:
+    void slotObjectTypeChanged(int index);
 
-    private Q_SLOTS:
-        void slotObjectTypeChanged( int index );
-        
-    private:
-        void setup();
-        void setupLists( QListWidget *list, const QString &tag, const QString &property, const QString &tooltip );
-        
-    private:
-        Scripting::Module *m_module;
+private:
+    void setup();
+    void setupLists(QListWidget *list, const QString &tag, const QString &property, const QString &tooltip);
+
+private:
+    Scripting::Module *m_module;
 };
 
 #endif

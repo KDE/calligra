@@ -38,25 +38,25 @@ class KoUpdater;
 class KRITAIMAGE_EXPORT KisRecordedAction
 {
 public:
-    KisRecordedAction(const QString& id, const QString& name);
-    KisRecordedAction(const KisRecordedAction&);
+    KisRecordedAction(const QString &id, const QString &name);
+    KisRecordedAction(const KisRecordedAction &);
     virtual ~KisRecordedAction();
     /**
      * Play the action.
      */
-    virtual void play(const KisPlayInfo& _info, KoUpdater* _updater = 0) const = 0;
+    virtual void play(const KisPlayInfo &_info, KoUpdater *_updater = 0) const = 0;
     /**
      * Clone this action.
      */
-    virtual KisRecordedAction* clone() const = 0;
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
+    virtual KisRecordedAction *clone() const = 0;
+    virtual void toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *) const;
 public:
-    const QString& id() const;
-    const QString& name() const;
-    void setName(const QString& name);
+    const QString &id() const;
+    const QString &name() const;
+    void setName(const QString &name);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 /**
@@ -67,12 +67,12 @@ class KRITAIMAGE_EXPORT KisRecordedActionFactory
 public:
     KisRecordedActionFactory(QString id);
     virtual ~KisRecordedActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*) = 0;
+    virtual KisRecordedAction *fromXML(const QDomElement &elt, const KisRecordedActionLoadContext *) = 0;
     QString id() const;
     QString name() const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

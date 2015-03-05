@@ -77,7 +77,7 @@ public:
     /**
      * Tell KisApplication to show this splashscreen when you call start();
      * when start returns, the splashscreen is hidden. Use KSplashScreen
-     * to have the splash show correctly on Xinerama displays. 
+     * to have the splash show correctly on Xinerama displays.
      */
     void setSplashScreen(QWidget *splash);
 
@@ -99,7 +99,7 @@ public:
      * to every function that may require it.
      * @return the current application object
      */
-    static KisApplication* koApplication();
+    static KisApplication *koApplication();
 
 protected:
 
@@ -108,14 +108,14 @@ protected:
 
 public Q_SLOTS:
 
-    void remoteArguments(const QByteArray &message, QObject*socket);
-    void fileOpenRequested(const QString & url);
+    void remoteArguments(const QByteArray &message, QObject *socket);
+    void fileOpenRequested(const QString &url);
 
 private:
     /// @return the number of autosavefiles opened
     int checkAutosaveFiles(KisMainWindow *mainWindow);
 
-    KisApplicationPrivate * const d;
+    KisApplicationPrivate *const d;
     class ResetStarting;
     friend class ResetStarting;
 };

@@ -16,7 +16,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #include "CompositeOpModel.h"
 #include <kis_composite_ops_model.h>
 #include <KisViewManager.h>
@@ -38,7 +37,7 @@
 class CompositeOpModel::Private
 {
 public:
-    Private(CompositeOpModel* qq)
+    Private(CompositeOpModel *qq)
         : q(qq)
         , model(KisCompositeOpListModel::sharedInstance())
         , view(0)
@@ -52,13 +51,13 @@ public:
         , presetsEnabled(true)
     {};
 
-    CompositeOpModel* q;
-    KisCompositeOpListModel* model;
-    KisViewManager* view;
+    CompositeOpModel *q;
+    KisCompositeOpListModel *model;
+    KisViewManager *view;
     QString currentCompositeOpID;
     QString prevCompositeOpID;
     bool eraserMode;
-    QMap<KisPaintOpPreset*, KisPaintOpSettingsWidget*> settingsWidgets;
+    QMap<KisPaintOpPreset *, KisPaintOpSettingsWidget *> settingsWidgets;
 
     qreal opacity;
     bool opacityEnabled;
@@ -71,18 +70,18 @@ public:
 
     void updateCompositeOp(QString compositeOpID)
     {
-        if (!view)
+        if (!view) {
             return;
+        }
 
         KisNodeSP node = view->resourceProvider()->currentNode();
 
-        if (node && node->paintDevice())
-        {
-            if (!node->paintDevice()->colorSpace()->hasCompositeOp(compositeOpID))
+        if (node && node->paintDevice()) {
+            if (!node->paintDevice()->colorSpace()->hasCompositeOp(compositeOpID)) {
                 compositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
+            }
 
-            if (compositeOpID != currentCompositeOpID)
-            {
+            if (compositeOpID != currentCompositeOpID) {
                 q->setEraserMode(compositeOpID == COMPOSITE_ERASE);
                 currentPreset->settings()->setProperty("CompositeOp", compositeOpID);
                 //m_optionWidget->setConfiguration(m_activePreset->settings().data());
@@ -96,36 +95,36 @@ public:
 
     void ofsChanged()
     {
-        if (presetsEnabled && !currentPreset.isNull() && !currentPreset->settings().isNull())
-        {
+        if (presetsEnabled && !currentPreset.isNull() && !currentPreset->settings().isNull()) {
             // IMPORTANT: set the PaintOp size before setting the other properties
             //            it wont work the other way
             qreal sizeDiff = size - currentPreset->settings()->paintOpSize().width();
             currentPreset->settings()->changePaintOpSize(sizeDiff, 0);
 
-            if (currentPreset->settings()->hasProperty("OpacityValue"))
+            if (currentPreset->settings()->hasProperty("OpacityValue")) {
                 currentPreset->settings()->setProperty("OpacityValue", opacity);
+            }
 
-            if (currentPreset->settings()->hasProperty("FlowValue"))
+            if (currentPreset->settings()->hasProperty("FlowValue")) {
                 currentPreset->settings()->setProperty("FlowValue", flow);
+            }
 
             //m_optionWidget->setConfiguration(d->currentPreset->settings().data());
         }
-        if (view)
-        {
+        if (view) {
             view->resourceProvider()->setOpacity(opacity);
         }
     }
 };
 
-CompositeOpModel::CompositeOpModel(QObject* parent)
+CompositeOpModel::CompositeOpModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private(this))
 {
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             this, SLOT(slotToolChanged(KoCanvasController*,int)));
 
-    QHash<int,QByteArray> roles;
+    QHash<int, QByteArray> roles;
     roles[TextRole] = "text";
     roles[IsCategoryRole] = "isCategory";
     setRoleNames(roles);
@@ -136,63 +135,60 @@ CompositeOpModel::~CompositeOpModel()
     delete d;
 }
 
-QVariant CompositeOpModel::data(const QModelIndex& index, int role) const
+QVariant CompositeOpModel::data(const QModelIndex &index, int role) const
 {
     QVariant data;
-    if (index.isValid())
-    {
+    if (index.isValid()) {
         QModelIndex otherIndex = d->model->index(index.row(), index.column(), QModelIndex());
-        switch(role)
-        {
-            case TextRole:
-                data = d->model->data(otherIndex, Qt::DisplayRole);
-                break;
-            case IsCategoryRole:
-                data = d->model->data(otherIndex, __CategorizedListModelBase::IsHeaderRole);
-                break;
-            default:
-                break;
+        switch (role) {
+        case TextRole:
+            data = d->model->data(otherIndex, Qt::DisplayRole);
+            break;
+        case IsCategoryRole:
+            data = d->model->data(otherIndex, __CategorizedListModelBase::IsHeaderRole);
+            break;
+        default:
+            break;
         }
     }
     return data;
 }
 
-int CompositeOpModel::rowCount(const QModelIndex& parent) const
+int CompositeOpModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
     return d->model->rowCount(QModelIndex());
 }
 
 void CompositeOpModel::activateItem(int index)
 {
-    if (index > -1 && index < d->model->rowCount(QModelIndex()))
-    {
+    if (index > -1 && index < d->model->rowCount(QModelIndex())) {
         KoID compositeOp;
-        if (d->model->entryAt(compositeOp, d->model->index(index)))
+        if (d->model->entryAt(compositeOp, d->model->index(index))) {
             d->updateCompositeOp(compositeOp.id());
+        }
     }
 }
 
-QObject* CompositeOpModel::view() const
+QObject *CompositeOpModel::view() const
 {
     return d->view;
 }
 
-void CompositeOpModel::setView(QObject* newView)
+void CompositeOpModel::setView(QObject *newView)
 {
-    if (d->view)
-    {
+    if (d->view) {
         d->view->canvasBase()->disconnect(this);
         d->view->canvasBase()->globalInputManager()->disconnect(this);
         d->view->nodeManager()->disconnect(this);
     }
-    d->view = qobject_cast<KisViewManager*>( newView );
-    if (d->view)
-    {
+    d->view = qobject_cast<KisViewManager *>(newView);
+    if (d->view) {
         if (d->view->canvasBase() && d->view->canvasBase()->resourceManager()) {
-            connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                    this, SLOT(resourceChanged(int, const QVariant&)));
+            connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                    this, SLOT(resourceChanged(int,QVariant)));
         }
         if (d->view->nodeManager()) {
             connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
@@ -210,13 +206,13 @@ bool CompositeOpModel::eraserMode() const
 
 void CompositeOpModel::setEraserMode(bool newEraserMode)
 {
-    if (d->eraserMode != newEraserMode)
-    {
+    if (d->eraserMode != newEraserMode) {
         d->eraserMode = newEraserMode;
-        if (d->eraserMode)
+        if (d->eraserMode) {
             d->updateCompositeOp(COMPOSITE_ERASE);
-        else
+        } else {
             d->updateCompositeOp(d->prevCompositeOpID);
+        }
         emit eraserModeChanged();
     }
 }
@@ -228,8 +224,7 @@ qreal CompositeOpModel::flow() const
 
 void CompositeOpModel::setFlow(qreal newFlow)
 {
-    if (d->flow != newFlow)
-    {
+    if (d->flow != newFlow) {
         d->flow = newFlow;
         d->ofsChanged();
         emit flowChanged();
@@ -254,8 +249,7 @@ qreal CompositeOpModel::opacity() const
 
 void CompositeOpModel::setOpacity(qreal newOpacity)
 {
-    if (d->opacity != newOpacity)
-    {
+    if (d->opacity != newOpacity) {
         d->opacity = newOpacity;
         d->ofsChanged();
         emit opacityChanged();
@@ -280,8 +274,7 @@ qreal CompositeOpModel::size() const
 
 void CompositeOpModel::setSize(qreal newSize)
 {
-    if (d->size != newSize)
-    {
+    if (d->size != newSize) {
         d->size = newSize;
         d->ofsChanged();
         emit sizeChanged();
@@ -301,25 +294,26 @@ void CompositeOpModel::setSizeEnabled(bool newSizeEnabled)
 
 void CompositeOpModel::changePaintopValue(QString propertyName, QVariant value)
 {
-    if (propertyName == "size" && value.toReal() != d->size)
+    if (propertyName == "size" && value.toReal() != d->size) {
         setSize(value.toReal());
-    else if (propertyName == "opacity" && value.toReal() != d->opacity)
+    } else if (propertyName == "opacity" && value.toReal() != d->opacity) {
         setOpacity(value.toReal());
-    else if (propertyName == "flow" && value.toReal() != d->flow)
+    } else if (propertyName == "flow" && value.toReal() != d->flow) {
         setFlow(value.toReal());
+    }
 }
 
 bool CompositeOpModel::mirrorHorizontally() const
 {
-    if (d->view)
+    if (d->view) {
         return d->view->resourceProvider()->mirrorHorizontal();
+    }
     return false;
 }
 
 void CompositeOpModel::setMirrorHorizontally(bool newMirrorHorizontally)
 {
-    if (d->view && d->view->resourceProvider()->mirrorHorizontal() != newMirrorHorizontally)
-    {
+    if (d->view && d->view->resourceProvider()->mirrorHorizontal() != newMirrorHorizontally) {
         d->view->resourceProvider()->setMirrorHorizontal(newMirrorHorizontally);
         emit mirrorHorizontallyChanged();
     }
@@ -327,30 +321,34 @@ void CompositeOpModel::setMirrorHorizontally(bool newMirrorHorizontally)
 
 bool CompositeOpModel::mirrorVertically() const
 {
-    if (d->view)
+    if (d->view) {
         return d->view->resourceProvider()->mirrorVertical();
+    }
     return false;
 }
 
 void CompositeOpModel::setMirrorVertically(bool newMirrorVertically)
 {
-    if (d->view && d->view->resourceProvider()->mirrorVertical() != newMirrorVertically)
-    {
+    if (d->view && d->view->resourceProvider()->mirrorVertical() != newMirrorVertically) {
         d->view->resourceProvider()->setMirrorVertical(newMirrorVertically);
         emit mirrorVerticallyChanged();
     }
 }
 
-void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
+void CompositeOpModel::slotToolChanged(KoCanvasController *canvas, int toolId)
 {
     Q_UNUSED(canvas);
     Q_UNUSED(toolId);
 
-    if (!d->view) return;
-    if (!d->view->canvasBase()) return;
+    if (!d->view) {
+        return;
+    }
+    if (!d->view->canvasBase()) {
+        return;
+    }
 
     QString  id   = KoToolManager::instance()->activeToolId();
-    KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(d->view->canvasBase(), id));
+    KisTool *tool = dynamic_cast<KisTool *>(KoToolManager::instance()->toolById(d->view->canvasBase(), id));
 
     if (tool) {
         int flags = tool->flags();
@@ -358,8 +356,7 @@ void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
         if (flags & KisTool::FLAG_USES_CUSTOM_COMPOSITEOP) {
             //setWidgetState(ENABLE_COMPOSITEOP|ENABLE_OPACITY);
             d->opacityEnabled = true;
-        }
-        else {
+        } else {
             //setWidgetState(DISABLE_COMPOSITEOP|DISABLE_OPACITY);
             d->opacityEnabled = false;
         }
@@ -368,14 +365,12 @@ void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
             d->flowEnabled = true;
             d->sizeEnabled = true;
             d->presetsEnabled = true;
-        }
-        else {
+        } else {
             d->flowEnabled = false;
             d->sizeEnabled = false;
             d->presetsEnabled = false;
         }
-    }
-    else {
+    } else {
         d->opacityEnabled = false;
         d->flowEnabled = false;
         d->sizeEnabled = false;
@@ -385,15 +380,14 @@ void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
     emit sizeEnabledChanged();
 }
 
-void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
+void CompositeOpModel::resourceChanged(int key, const QVariant & /*v*/)
 {
     if (d->view && d->view->canvasBase() && d->view->canvasBase()->resourceManager() && d->view->resourceProvider()) {
 
         if (key == KisCanvasResourceProvider::MirrorHorizontal) {
             emit mirrorHorizontallyChanged();
             return;
-        }
-        else if(key == KisCanvasResourceProvider::MirrorVertical) {
+        } else if (key == KisCanvasResourceProvider::MirrorVertical) {
             emit mirrorVerticallyChanged();
             return;
         }
@@ -418,8 +412,7 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
             if (preset->settings()->hasProperty("OpacityValue"))  {
                 d->opacityEnabled = true;
                 d->opacity = preset->settings()->getProperty("OpacityValue").toReal();
-            }
-            else {
+            } else {
                 d->opacityEnabled = false;
                 d->opacity = 1;
             }
@@ -431,8 +424,7 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
             if (preset->settings()->hasProperty("FlowValue")) {
                 d->flowEnabled = true;
                 d->flow = preset->settings()->getProperty("FlowValue").toReal();
-            }
-            else {
+            } else {
                 d->flowEnabled = false;
                 d->flow = 1;
             }
@@ -446,8 +438,7 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
             if (compositeOp == COMPOSITE_ERASE) {
                 d->currentCompositeOpID = COMPOSITE_OVER;
                 d->eraserMode = true;
-            }
-            else {
+            } else {
                 d->eraserMode = false;
             }
             emit eraserModeChanged();

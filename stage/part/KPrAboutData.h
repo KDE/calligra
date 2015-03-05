@@ -27,9 +27,9 @@
 static const char description[] = I18N_NOOP("Calligra Presentation Tool");
 static const char version[] = CALLIGRA_VERSION_STRING;
 
-KAboutData * newKPresenterAboutData()
+KAboutData *newKPresenterAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "stage", 0, ki18nc("application name", "Stage"),
+    KAboutData *aboutData = new KAboutData("stage", 0, ki18nc("application name", "Stage"),
                                            version, ki18n(description), KAboutData::License_LGPL,
                                            ki18n("© 1998-%1, The Stage Team").subs(CALLIGRA_YEAR),
                                            KLocalizedString(),
@@ -38,7 +38,7 @@ KAboutData * newKPresenterAboutData()
     aboutData->setProgramIconName(QLatin1String("calligrastage"));
     aboutData->addAuthor(ki18n("Thorsten Zachmann"), ki18n("Maintainer"), "zachmann@kde.org");
     aboutData->addAuthor(ki18n("Laurent Montel"), ki18n("Former maintainer"), "montel@kde.org");
-    aboutData->addAuthor(ki18n("Reginald Stadlbauer"),ki18n("Original author"), "reggie@kde.org");
+    aboutData->addAuthor(ki18n("Reginald Stadlbauer"), ki18n("Original author"), "reggie@kde.org");
     aboutData->addAuthor(ki18n("Werner Trobin"), KLocalizedString(), "trobin@kde.org");
     aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
     aboutData->addAuthor(ki18n("Toshitaka Fujioka"), KLocalizedString(), "fujioka@kde.org");

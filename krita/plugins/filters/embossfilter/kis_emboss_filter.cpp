@@ -24,7 +24,6 @@
 
 #include "kis_emboss_filter.h"
 
-
 #include <stdlib.h>
 #include <vector>
 
@@ -58,9 +57,9 @@ KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Em
     setSupportsAdjustmentLayers(false);
 }
 
-KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisEmbossFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("depth", 30);
     return config;
 }
@@ -79,10 +78,10 @@ KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDevi
  *                     increase it. After this, get the gray tone
  */
 void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
-                                  const QRect& applyRect,
-                                  const KisFilterConfiguration* config,
-                                  KoUpdater* progressUpdater
-                                  ) const
+                                  const QRect &applyRect,
+                                  const KisFilterConfiguration *config,
+                                  KoUpdater *progressUpdater
+                                 ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);
@@ -108,7 +107,7 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
     QColor color2;
     KisRandomConstAccessorSP acc = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
     do {
-    
+
         // XXX: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
         device->colorSpace()->toQColor(it.oldRawData(), &color1);
         acc->moveTo(srcTopLeft.x() + it.x() + Lim_Max(it.x(), 1, Width), srcTopLeft.y() + it.y() + Lim_Max(it.y(), 1, Height));
@@ -122,8 +121,13 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
         Gray = CLAMP((R + G + B) / 3, 0, quint8_MAX);
 
         device->colorSpace()->fromQColor(QColor(Gray, Gray, Gray, color1.alpha()), it.rawData());
-        if (progressUpdater) { progressUpdater->setValue(it.y()); if(progressUpdater->interrupted()) return; }
-    } while(it.nextPixel());
+        if (progressUpdater) {
+            progressUpdater->setValue(it.y());
+            if (progressUpdater->interrupted()) {
+                return;
+            }
+        }
+    } while (it.nextPixel());
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -146,18 +150,19 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
 int KisEmbossFilter::Lim_Max(int Now, int Up, int Max) const
 {
     --Max;
-    while (Now > Max - Up)
+    while (Now > Max - Up) {
         --Up;
+    }
     return (Up);
 }
 
-KisConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisEmbossFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
 
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(10, 300, 30, i18n("Depth"), "depth"));
-    KisConfigWidget * w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
+    KisConfigWidget *w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
     Q_CHECK_PTR(w);
     return w;
 }

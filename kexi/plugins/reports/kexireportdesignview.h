@@ -37,7 +37,7 @@ class KexiReportDesignView : public KexiView
 {
     Q_OBJECT
 public:
-    KexiReportDesignView(QWidget *parent, KexiSourceSelector*);
+    KexiReportDesignView(QWidget *parent, KexiSourceSelector *);
 
     ~KexiReportDesignView();
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
@@ -46,13 +46,13 @@ public:
     void triggerAction(const QString &);
 
 Q_SIGNALS:
-    void itemInserted(const QString& entity);
+    void itemInserted(const QString &entity);
 
 private:
     KoReportDesigner *m_reportDesigner;
     KoProperty::Set *m_propertySet;
-    KexiReportPart::TempData* tempData() const;
-    QScrollArea * m_scrollArea;
+    KexiReportPart::TempData *tempData() const;
+    QScrollArea *m_scrollArea;
 
     //Actions
     KAction *m_editCutAction;
@@ -69,15 +69,15 @@ private:
 protected:
     virtual KoProperty::Set *propertySet();
     virtual tristate storeData(bool dontAsk = false);
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
-                                             KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
-    
+    virtual KexiDB::SchemaData *storeNewData(const KexiDB::SchemaData &sdata,
+            KexiView::StoreNewDataOptions options,
+            bool &cancel);
+
 private Q_SLOTS:
     void slotDesignerPropertySetChanged();
 
 public Q_SLOTS:
-    void slotSetData(KoReportData*);
+    void slotSetData(KoReportData *);
 };
 
 #endif

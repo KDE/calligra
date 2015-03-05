@@ -1,5 +1,5 @@
 /**  This file is part of the KDE project
- * 
+ *
  *  Copyright (C) 2011 Adam Pigg <adam@piggz.co.uk>
  *
  *  This library is free software; you can redistribute it and/or
@@ -18,7 +18,6 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-
 #include "KexiMobileToolbar.h"
 #include <KoIcon.h>
 
@@ -29,23 +28,22 @@
 #include <QPushButton>
 #include <core/KexiRecordNavigatorHandler.h>
 
-KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent),
-                m_recordHandler(0)
+KexiMobileToolbar::KexiMobileToolbar(QWidget *parent): QToolBar(parent),
+    m_recordHandler(0)
 {
     setOrientation(Qt::Vertical);
 
     m_gotoNavigatorAction = new QAction(koIcon("application-vnd.oasis.opendocument.database"), "Project", this);
-    
-    
+
     m_previousRecord = new QAction(koIcon("go-previous"), "Previous", this);
     m_nextRecord = new QAction(koIcon("go-next"), "Next", this);
     m_recordNumber = new QAction("0 of 0", this);
 
-    setIconSize(QSize(48,48));
-    
+    setIconSize(QSize(48, 48));
+
     addAction(m_gotoNavigatorAction);
-    
-    QWidget* spacer = new QWidget();
+
+    QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     addWidget(spacer);
 
@@ -54,7 +52,7 @@ KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent),
     addAction(m_nextRecord);
 
     connect(m_gotoNavigatorAction, SIGNAL(triggered(bool)), this, SLOT(gotoNavigatorClicked()));
-    
+
     connect(m_nextRecord, SIGNAL(triggered(bool)), this, SLOT(recordNext()));
     connect(m_previousRecord, SIGNAL(triggered(bool)), this, SLOT(recordPrevious()));
 }
@@ -92,7 +90,7 @@ void KexiMobileToolbar::recordPrevious()
     }
 }
 
-void KexiMobileToolbar::setRecordHandler(KexiRecordNavigatorHandler* handler)
+void KexiMobileToolbar::setRecordHandler(KexiRecordNavigatorHandler *handler)
 {
     qDebug() << handler;
     m_recordHandler = handler;

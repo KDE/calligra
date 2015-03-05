@@ -15,7 +15,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_COLOR_SELECTOR_NG_DOCKER_WIDGET_H
 #define KIS_COLOR_SELECTOR_NG_DOCKER_WIDGET_H
 
@@ -34,10 +33,10 @@ class QHBoxLayout;
 
 class KisColorSelectorNgDockerWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit KisColorSelectorNgDockerWidget(QWidget *parent = 0);
-    void setCanvas(KisCanvas2* canvas);
+    void setCanvas(KisCanvas2 *canvas);
     void unsetCanvas();
 public Q_SLOTS:
     void openSettings();
@@ -50,15 +49,15 @@ protected Q_SLOTS:
     void reactOnLayerChange();
 
 private:
-    KisColorSelectorContainer* m_colorSelectorContainer;
-    KisColorHistory* m_colorHistoryWidget;
-    KisCommonColors* m_commonColorsWidget;
+    KisColorSelectorContainer *m_colorSelectorContainer;
+    KisColorHistory *m_colorHistoryWidget;
+    KisCommonColors *m_commonColorsWidget;
 
-    KAction* m_colorHistoryAction;
-    KAction* m_commonColorsAction;
+    KAction *m_colorHistoryAction;
+    KAction *m_commonColorsAction;
 
-    QHBoxLayout* m_verticalColorPatchesLayout; // vertical color patches should be added here
-    QVBoxLayout* m_horizontalColorPatchesLayout;//horizontal ----------"----------------------
+    QHBoxLayout *m_verticalColorPatchesLayout; // vertical color patches should be added here
+    QVBoxLayout *m_horizontalColorPatchesLayout;//horizontal ----------"----------------------
 
     QPointer<KisCanvas2> m_canvas;
 

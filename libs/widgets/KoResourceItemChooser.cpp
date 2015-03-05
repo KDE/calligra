@@ -70,10 +70,10 @@ public:
         , synced(false)
         , updatesBlocked(false)
     {}
-    KoResourceModel* model;
-    KoResourceTaggingManager* tagManager;
-    KoResourceItemView* view;
-    QButtonGroup* buttonGroup;
+    KoResourceModel *model;
+    KoResourceTaggingManager *tagManager;
+    KoResourceItemView *view;
+    QButtonGroup *buttonGroup;
     QToolButton  *viewModeButton;
 
     QString knsrcFile;
@@ -86,8 +86,8 @@ public:
     bool updatesBlocked;
 };
 
-KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent )
-    : QWidget( parent ), d( new Private() )
+KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent)
+    : QWidget(parent), d(new Private())
 {
     Q_ASSERT(resourceAdapter);
 
@@ -96,13 +96,13 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->model = new KoResourceModel(resourceAdapter, this);
     d->view = new KoResourceItemView(this);
     d->view->setModel(d->model);
-    d->view->setItemDelegate( new KoResourceItemDelegate( this ) );
-    d->view->setSelectionMode( QAbstractItemView::SingleSelection );
+    d->view->setItemDelegate(new KoResourceItemDelegate(this));
+    d->view->setSelectionMode(QAbstractItemView::SingleSelection);
     d->view->viewport()->installEventFilter(this);
 
     connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)),
             this, SLOT(activated(QModelIndex)));
-    connect (d->view, SIGNAL(contextMenuRequested(QPoint)),
+    connect(d->view, SIGNAL(contextMenuRequested(QPoint)),
             this, SLOT(contextMenuRequested(QPoint)));
 
     d->previewScroller = new QScrollArea(this);
@@ -121,9 +121,9 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->buttonGroup = new QButtonGroup(this);
     d->buttonGroup->setExclusive(false);
 
-    QGridLayout* layout = new QGridLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
 
-    QGridLayout* buttonLayout = new QGridLayout;
+    QGridLayout *buttonLayout = new QGridLayout;
 
     QPushButton *button = new QPushButton(this);
     button->setIcon(koIcon("document-open"));
@@ -152,10 +152,10 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     button->setToolTip(i18nc("@info:tooltip", "Share Resource"));
     button->setEnabled(false);
     button->hide();
-    d->buttonGroup->addButton( button, Button_GhnsUpload);
+    d->buttonGroup->addButton(button, Button_GhnsUpload);
     buttonLayout->addWidget(button, 0, 4);
 
-    connect( d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
+    connect(d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
     buttonLayout->setColumnStretch(0, 1);
     buttonLayout->setColumnStretch(1, 1);
@@ -178,7 +178,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     layout->setMargin(0);
     layout->setSpacing(0);
     updateButtonState();
-    showTaggingBar(false,false);
+    showTaggingBar(false, false);
     activated(d->model->index(0, 0));
 }
 
@@ -188,13 +188,12 @@ KoResourceItemChooser::~KoResourceItemChooser()
     delete d;
 }
 
-void KoResourceItemChooser::slotButtonClicked( int button )
+void KoResourceItemChooser::slotButtonClicked(int button)
 {
-    if (button == Button_Import ) {
+    if (button == Button_Import) {
         QString extensions = d->model->extensions();
         QString filter = QString("%1")
-                .arg(extensions.replace(QString(":"), QString(" ")));
-
+                         .arg(extensions.replace(QString(":"), QString(" ")));
 
         KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
         dialog.setNameFilter(filter);
@@ -202,15 +201,14 @@ void KoResourceItemChooser::slotButtonClicked( int button )
         QString filename = dialog.url();
 
         d->model->importResourceFile(filename);
-    }
-    else if( button == Button_Remove ) {
+    } else if (button == Button_Remove) {
         QModelIndex index = d->view->currentIndex();
         int row = index.row();
         int column = index.column();
-        if( index.isValid() ) {
+        if (index.isValid()) {
 
-            KoResource * resource = resourceFromModelIndex(index);
-            if( resource ) {
+            KoResource *resource = resourceFromModelIndex(index);
+            if (resource) {
                 d->model->removeResource(resource);
             }
         }
@@ -229,27 +227,25 @@ void KoResourceItemChooser::slotButtonClicked( int button )
         KNS3::DownloadDialog dialog(d->knsrcFile, this);
         dialog.exec();
 
-        foreach (const KNS3::Entry& e, dialog.changedEntries()) {
+        foreach (const KNS3::Entry &e, dialog.changedEntries()) {
 
-            foreach(const QString &file, e.installedFiles()) {
+            foreach (const QString &file, e.installedFiles()) {
                 QFileInfo fi(file);
-                d->model->importResourceFile( fi.absolutePath()+'/'+fi.fileName() , false );
+                d->model->importResourceFile(fi.absolutePath() + '/' + fi.fileName(), false);
             }
 
-            foreach(const QString &file, e.uninstalledFiles()) {
+            foreach (const QString &file, e.uninstalledFiles()) {
                 QFileInfo fi(file);
-                d->model->removeResourceFile(fi.absolutePath()+'/'+fi.fileName());
+                d->model->removeResourceFile(fi.absolutePath() + '/' + fi.fileName());
             }
         }
-    }
-    else if (button == Button_GhnsUpload) {
+    } else if (button == Button_GhnsUpload) {
 
         QModelIndex index = d->view->currentIndex();
-        if( index.isValid() ) {
+        if (index.isValid()) {
 
-
-            KoResource * resource = resourceFromModelIndex(index);
-            if( resource ) {
+            KoResource *resource = resourceFromModelIndex(index);
+            if (resource) {
                 KNS3::UploadDialog dialog(d->knsrcFile, this);
                 dialog.setUploadFile(KUrl::fromLocalFile(resource->filename()));
                 dialog.setUploadName(resource->name());
@@ -261,13 +257,14 @@ void KoResourceItemChooser::slotButtonClicked( int button )
     updateButtonState();
 }
 
-void KoResourceItemChooser::showButtons( bool show )
+void KoResourceItemChooser::showButtons(bool show)
 {
-    foreach( QAbstractButton * button, d->buttonGroup->buttons() )
+    foreach (QAbstractButton *button, d->buttonGroup->buttons()) {
         show ? button->show() : button->hide();
+    }
 }
 
-void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUpload )
+void KoResourceItemChooser::showGetHotNewStuff(bool showDownload, bool showUpload)
 {
 #ifdef GHNS
 
@@ -276,7 +273,9 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 
     // attica < 2.9 is broken for upload, so don't show the upload button. 2.9 is released as 3.0
     // because of binary incompatibility with 2.x.
-    if (LIBATTICA_VERSION_MAJOR < 3) return;
+    if (LIBATTICA_VERSION_MAJOR < 3) {
+        return;
+    }
 
     button = d->buttonGroup->button(Button_GhnsUpload);
     showUpload ? button->show() : button->hide();
@@ -291,10 +290,10 @@ void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
     d->tagManager->showTaggingBar(showSearchBar, showOpBar);
 }
 
-void KoResourceItemChooser::setRowCount( int rowCount )
+void KoResourceItemChooser::setRowCount(int rowCount)
 {
     int resourceCount = d->model->resourcesCount();
-    d->model->setColumnCount( static_cast<qreal>(resourceCount) / rowCount );
+    d->model->setColumnCount(static_cast<qreal>(resourceCount) / rowCount);
     //Force an update to get the right row height (in theory)
     QRect geometry = d->view->geometry();
     d->view->setViewMode(KoResourceItemView::FIXED_ROWS);
@@ -302,31 +301,31 @@ void KoResourceItemChooser::setRowCount( int rowCount )
     d->view->setGeometry(geometry);
 }
 
-void KoResourceItemChooser::setColumnCount( int columnCount )
+void KoResourceItemChooser::setColumnCount(int columnCount)
 {
-    d->model->setColumnCount( columnCount );
+    d->model->setColumnCount(columnCount);
     //Force an update to get the right column width
     QRect geometry = d->view->geometry();
     d->view->setGeometry(geometry.adjusted(0, 0, 0, 1));
     d->view->setGeometry(geometry);
 }
 
-void KoResourceItemChooser::setRowHeight( int rowHeight )
+void KoResourceItemChooser::setRowHeight(int rowHeight)
 {
-    d->view->verticalHeader()->setDefaultSectionSize( rowHeight );
+    d->view->verticalHeader()->setDefaultSectionSize(rowHeight);
 }
 
-void KoResourceItemChooser::setColumnWidth( int columnWidth )
+void KoResourceItemChooser::setColumnWidth(int columnWidth)
 {
-    d->view->horizontalHeader()->setDefaultSectionSize( columnWidth );
+    d->view->horizontalHeader()->setDefaultSectionSize(columnWidth);
 }
 
-void KoResourceItemChooser::setItemDelegate( QAbstractItemDelegate * delegate )
+void KoResourceItemChooser::setItemDelegate(QAbstractItemDelegate *delegate)
 {
     d->view->setItemDelegate(delegate);
 }
 
-KoResource *  KoResourceItemChooser::currentResource() const
+KoResource   *KoResourceItemChooser::currentResource() const
 {
     QModelIndex index = d->view->currentIndex();
     if (index.isValid()) {
@@ -335,7 +334,7 @@ KoResource *  KoResourceItemChooser::currentResource() const
     return 0;
 }
 
-void KoResourceItemChooser::setCurrentResource(KoResource* resource)
+void KoResourceItemChooser::setCurrentResource(KoResource *resource)
 {
     // don't update if the change came from the same chooser
     if (d->updatesBlocked) {
@@ -343,8 +342,9 @@ void KoResourceItemChooser::setCurrentResource(KoResource* resource)
     }
 
     QModelIndex index = d->model->indexFromResource(resource);
-    if( !index.isValid() )
+    if (!index.isValid()) {
         return;
+    }
 
     d->view->setCurrentIndex(index);
     updatePreview(resource);
@@ -373,8 +373,9 @@ void KoResourceItemChooser::setGrayscalePreview(bool grayscale)
 void KoResourceItemChooser::setCurrentItem(int row, int column)
 {
     QModelIndex index = d->model->index(row, column);
-    if( !index.isValid() )
+    if (!index.isValid()) {
         return;
+    }
 
     d->view->setCurrentIndex(index);
     if (index.isValid()) {
@@ -382,7 +383,7 @@ void KoResourceItemChooser::setCurrentItem(int row, int column)
     }
 }
 
-void KoResourceItemChooser::setProxyModel( QAbstractProxyModel* proxyModel )
+void KoResourceItemChooser::setProxyModel(QAbstractProxyModel *proxyModel)
 {
     proxyModel->setSourceModel(d->model);
     d->view->setModel(proxyModel);
@@ -390,10 +391,10 @@ void KoResourceItemChooser::setProxyModel( QAbstractProxyModel* proxyModel )
 
 void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
 {
-    KoResource* resource = currentResource();
+    KoResource *resource = currentResource();
     if (resource) {
         d->updatesBlocked = true;
-        emit resourceSelected( resource );
+        emit resourceSelected(resource);
         d->updatesBlocked = false;
 
         updatePreview(resource);
@@ -403,32 +404,36 @@ void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
 
 void KoResourceItemChooser::updateButtonState()
 {
-    QAbstractButton * removeButton = d->buttonGroup->button( Button_Remove );
-    if( ! removeButton )
+    QAbstractButton *removeButton = d->buttonGroup->button(Button_Remove);
+    if (! removeButton) {
         return;
+    }
 
-    QAbstractButton * uploadButton = d->buttonGroup->button(Button_GhnsUpload);
-    if(!uploadButton)
+    QAbstractButton *uploadButton = d->buttonGroup->button(Button_GhnsUpload);
+    if (!uploadButton) {
         return;
+    }
 
-    KoResource * resource = currentResource();
-    if( resource ) {
-        removeButton->setEnabled( true );
+    KoResource *resource = currentResource();
+    if (resource) {
+        removeButton->setEnabled(true);
         uploadButton->setEnabled(resource->removable());
         return;
     }
 
-    removeButton->setEnabled( false );
+    removeButton->setEnabled(false);
     uploadButton->setEnabled(false);
 }
 
 void KoResourceItemChooser::updatePreview(KoResource *resource)
 {
-    if (!resource) return;
+    if (!resource) {
+        return;
+    }
 
     QImage image = resource->image();
 
-    if (image.format()!= QImage::Format_RGB32 ||
+    if (image.format() != QImage::Format_RGB32 ||
             image.format() != QImage::Format_ARGB32 ||
             image.format() != QImage::Format_ARGB32_Premultiplied) {
 
@@ -450,9 +455,9 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
     // Only convert to grayscale if it is rgb. Otherwise, it's gray already.
     if (d->grayscalePreview && !image.isGrayscale()) {
 
-        QRgb* pixel = reinterpret_cast<QRgb*>( image.bits() );
-        for (int row = 0; row < image.height(); ++row ) {
-            for (int col = 0; col < image.width(); ++col ){
+        QRgb *pixel = reinterpret_cast<QRgb *>(image.bits());
+        for (int row = 0; row < image.height(); ++row) {
+            for (int col = 0; col < image.width(); ++col) {
                 const QRgb currentPixel = pixel[row * image.width() + col];
                 const int red = qRed(currentPixel);
                 const int green = qGreen(currentPixel);
@@ -466,22 +471,23 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
 }
 
-KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index) const
+KoResource *KoResourceItemChooser::resourceFromModelIndex(const QModelIndex &index) const
 {
-    if(!index.isValid())
+    if (!index.isValid()) {
         return 0;
-
-    const QAbstractProxyModel* proxyModel = dynamic_cast<const QAbstractProxyModel*>(index.model());
-    if(proxyModel) {
-        //Get original model index, because proxy models destroy the internalPointer
-        QModelIndex originalIndex = proxyModel->mapToSource(index);
-        return static_cast<KoResource*>( originalIndex.internalPointer() );
     }
 
-    return static_cast<KoResource*>( index.internalPointer() );
+    const QAbstractProxyModel *proxyModel = dynamic_cast<const QAbstractProxyModel *>(index.model());
+    if (proxyModel) {
+        //Get original model index, because proxy models destroy the internalPointer
+        QModelIndex originalIndex = proxyModel->mapToSource(index);
+        return static_cast<KoResource *>(originalIndex.internalPointer());
+    }
+
+    return static_cast<KoResource *>(index.internalPointer());
 }
 
-void KoResourceItemChooser::setKnsrcFile(const QString& knsrcFileArg)
+void KoResourceItemChooser::setKnsrcFile(const QString &knsrcFileArg)
 {
     d->knsrcFile = knsrcFileArg;
 }
@@ -496,7 +502,7 @@ KoResourceItemView *KoResourceItemChooser::itemView() const
     return d->view;
 }
 
-void KoResourceItemChooser::contextMenuRequested(const QPoint& pos)
+void KoResourceItemChooser::contextMenuRequested(const QPoint &pos)
 {
     d->tagManager->contextMenuRequested(currentResource(), pos);
 }
@@ -506,7 +512,7 @@ void KoResourceItemChooser::setViewModeButtonVisible(bool visible)
     d->viewModeButton->setVisible(visible);
 }
 
-QToolButton* KoResourceItemChooser::viewModeButton() const
+QToolButton *KoResourceItemChooser::viewModeButton() const
 {
     return d->viewModeButton;
 }
@@ -514,7 +520,7 @@ QToolButton* KoResourceItemChooser::viewModeButton() const
 void KoResourceItemChooser::setSynced(bool sync)
 {
     d->synced = sync;
-    KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+    KoResourceItemChooserSync *chooserSync = KoResourceItemChooserSync::instance();
     if (sync) {
         connect(chooserSync, SIGNAL(baseLenghtChanged(int)), SLOT(baseLengthChanged(int)));
         baseLengthChanged(chooserSync->baseLength());
@@ -528,12 +534,12 @@ void KoResourceItemChooser::baseLengthChanged(int length)
     if (d->synced) {
         int resourceCount = d->model->resourcesCount();
         int width = d->view->width();
-        int maxColums = width/length;
-        int cols = width/(2*length) + 1;
-        while(cols <= maxColums) {
-            int size = width/cols;
-            int rows = ceil(resourceCount/(double)cols);
-            if(rows*size < (d->view->height()-5)) {
+        int maxColums = width / length;
+        int cols = width / (2 * length) + 1;
+        while (cols <= maxColums) {
+            int size = width / cols;
+            int rows = ceil(resourceCount / (double)cols);
+            if (rows * size < (d->view->height() - 5)) {
                 break;
             }
             cols++;
@@ -543,15 +549,15 @@ void KoResourceItemChooser::baseLengthChanged(int length)
     d->view->updateView();
 }
 
-bool KoResourceItemChooser::eventFilter(QObject* object, QEvent* event)
+bool KoResourceItemChooser::eventFilter(QObject *object, QEvent *event)
 {
     if (d->synced && event->type() == QEvent::Wheel) {
-        KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
-        QWheelEvent* qwheel = dynamic_cast<QWheelEvent* >(event);
+        KoResourceItemChooserSync *chooserSync = KoResourceItemChooserSync::instance();
+        QWheelEvent *qwheel = dynamic_cast<QWheelEvent * >(event);
         if (qwheel->modifiers() & Qt::ControlModifier) {
 
             int degrees = qwheel->delta() / 8;
-            int newBaseLength = chooserSync->baseLength() + degrees/15 * 10;
+            int newBaseLength = chooserSync->baseLength() + degrees / 15 * 10;
             chooserSync->setBaseLength(newBaseLength);
             return true;
         }
@@ -559,13 +565,13 @@ bool KoResourceItemChooser::eventFilter(QObject* object, QEvent* event)
     return QObject::eventFilter(object, event);
 }
 
-void KoResourceItemChooser::resizeEvent(QResizeEvent* event)
+void KoResourceItemChooser::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
     updateView();
 }
 
-void KoResourceItemChooser::showEvent(QShowEvent* event)
+void KoResourceItemChooser::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
     updateView();
@@ -574,10 +580,9 @@ void KoResourceItemChooser::showEvent(QShowEvent* event)
 void KoResourceItemChooser::updateView()
 {
     if (d->synced) {
-        KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+        KoResourceItemChooserSync *chooserSync = KoResourceItemChooserSync::instance();
         baseLengthChanged(chooserSync->baseLength());
     }
 }
-
 
 #include <KoResourceItemChooser.moc>

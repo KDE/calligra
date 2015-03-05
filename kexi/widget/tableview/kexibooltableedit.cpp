@@ -28,9 +28,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-
 KexiBoolTableEdit::KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
-        : KexiTableEdit(column, parent)
+    : KexiTableEdit(column, parent)
 {
     kDebug() << "KexiDataItemInterface::d->origValue.typeName()==" << KexiDataItemInterface::originalValue().typeName();
     kDebug() << "type== " << field()->typeName();
@@ -43,7 +42,7 @@ KexiBoolTableEdit::~KexiBoolTableEdit()
 {
 }
 
-void KexiBoolTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
+void KexiBoolTableEdit::setValueInternal(const QVariant & /*add*/, bool /*removeOld*/)
 {
     m_currentValue = KexiDataItemInterface::originalValue();
     //nothing to do more...
@@ -67,10 +66,11 @@ QVariant KexiBoolTableEdit::value()
 
 void KexiBoolTableEdit::clear()
 {
-    if (field()->isNotNull())
+    if (field()->isNotNull()) {
         m_currentValue = QVariant(false);
-    else
+    } else {
         m_currentValue = QVariant();
+    }
 }
 
 bool KexiBoolTableEdit::cursorAtStart()
@@ -83,7 +83,7 @@ bool KexiBoolTableEdit::cursorAtEnd()
     return true;
 }
 
-void KexiBoolTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val,
+void KexiBoolTableEdit::setupContents(QPainter *p, bool focused, const QVariant &val,
                                       QString &txt, int &align, int &x, int &y_offset, int &w, int &h)
 {
     Q_UNUSED(focused);
@@ -101,7 +101,7 @@ void KexiBoolTableEdit::setupContents(QPainter *p, bool focused, const QVariant&
         int s = qMax(h - 5, 12);
         s = qMin(h - 3, s);
         s = qMin(w - 3, s);//avoid too large box
-        QRect r(qMax(w / 2 - s / 2, 0) , h / 2 - s / 2 /*- 1*/, s - 1, s - 1);
+        QRect r(qMax(w / 2 - s / 2, 0), h / 2 - s / 2 /*- 1*/, s - 1, s - 1);
 //already set ouotside:  p->setPen(QPen(colorGroup().text(), 1));
         p->drawRect(r);
         if (val.isNull()) { // && !field()->isNotNull()) {
@@ -116,14 +116,15 @@ void KexiBoolTableEdit::setupContents(QPainter *p, bool focused, const QVariant&
 void KexiBoolTableEdit::clickedOnContents()
 {
     const QVariant oldValue = m_currentValue;
-    if (field()->isNotNull())
+    if (field()->isNotNull()) {
         m_currentValue = QVariant(!m_currentValue.toBool());
-    else {
+    } else {
         // null allowed: use the cycle: true -> false -> null
-        if (m_currentValue.isNull())
+        if (m_currentValue.isNull()) {
             m_currentValue = QVariant(true);
-        else
+        } else {
             m_currentValue = m_currentValue.toBool() ? QVariant(false) : QVariant();
+        }
     }
     kDebug() << KexiDataItemInterface::originalValue() << m_currentValue;
     if (oldValue != m_currentValue) {
@@ -131,7 +132,7 @@ void KexiBoolTableEdit::clickedOnContents()
     }
 }
 
-void KexiBoolTableEdit::handleAction(const QString& actionName)
+void KexiBoolTableEdit::handleAction(const QString &actionName)
 {
     if (actionName == "edit_paste") {
         emit editRequested();
@@ -156,13 +157,14 @@ void KexiBoolTableEdit::handleAction(const QString& actionName)
     }
 }
 
-void KexiBoolTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
+void KexiBoolTableEdit::handleCopyAction(const QVariant &value, const QVariant &visibleValue)
 {
     Q_UNUSED(visibleValue);
-    if (value.type() == QVariant::Bool)
+    if (value.type() == QVariant::Bool) {
         qApp->clipboard()->setText(value.toBool() ? "1" : "0");
-    else
+    } else {
         qApp->clipboard()->setText(QString());
+    }
 }
 
 int KexiBoolTableEdit::widthForValue(const QVariant &val, const QFontMetrics &fm)

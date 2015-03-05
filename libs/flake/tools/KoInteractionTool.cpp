@@ -37,8 +37,9 @@ KoInteractionTool::~KoInteractionTool()
 void KoInteractionTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_D(KoInteractionTool);
-    if (d->currentStrategy)
+    if (d->currentStrategy) {
         d->currentStrategy->paint(painter, converter);
+    }
 }
 
 void KoInteractionTool::mousePressEvent(KoPointerEvent *event)
@@ -49,18 +50,20 @@ void KoInteractionTool::mousePressEvent(KoPointerEvent *event)
         return;
     }
     d->currentStrategy = createStrategy(event);
-    if (d->currentStrategy == 0)
+    if (d->currentStrategy == 0) {
         event->ignore();
+    }
 }
 
 void KoInteractionTool::mouseMoveEvent(KoPointerEvent *event)
 {
     Q_D(KoInteractionTool);
     d->lastPoint = event->point;
-    if (d->currentStrategy)
+    if (d->currentStrategy) {
         d->currentStrategy->handleMouseMove(d->lastPoint, event->modifiers());
-    else
+    } else {
         event->ignore();
+    }
 }
 
 void KoInteractionTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -69,13 +72,15 @@ void KoInteractionTool::mouseReleaseEvent(KoPointerEvent *event)
     if (d->currentStrategy) {
         d->currentStrategy->finishInteraction(event->modifiers());
         KUndo2Command *command = d->currentStrategy->createCommand();
-        if (command)
+        if (command) {
             d->canvas->addCommand(command);
+        }
         delete d->currentStrategy;
         d->currentStrategy = 0;
         repaintDecorations();
-    } else
+    } else {
         event->ignore();
+    }
 }
 
 void KoInteractionTool::keyPressEvent(QKeyEvent *event)
@@ -95,8 +100,9 @@ void KoInteractionTool::keyReleaseEvent(QKeyEvent *event)
 {
     Q_D(KoInteractionTool);
     if (d->currentStrategy == 0) { // catch all cases where no current strategy is needed
-        if (event->key() == Qt::Key_Space)
+        if (event->key() == Qt::Key_Space) {
             emit activateTemporary(KoPanTool_ID);
+        }
     } else if (event->key() == Qt::Key_Escape) {
         cancelCurrentStrategy();
         event->accept();

@@ -6,7 +6,8 @@
  * register it beforehand
  */
 struct KisUpdateInfoSPStaticRegistrar {
-    KisUpdateInfoSPStaticRegistrar() {
+    KisUpdateInfoSPStaticRegistrar()
+    {
         qRegisterMetaType<KisUpdateInfoSP>("KisUpdateInfoSP");
     }
 };
@@ -25,17 +26,20 @@ QRect KisUpdateInfo::dirtyViewportRect()
     return QRect();
 }
 
-QRect KisPPUpdateInfo::dirtyViewportRect() {
+QRect KisPPUpdateInfo::dirtyViewportRect()
+{
     return viewportRect.toAlignedRect();
 }
 
-QRect KisPPUpdateInfo::dirtyImageRect() const {
+QRect KisPPUpdateInfo::dirtyImageRect() const
+{
     return dirtyImageRectVar;
 }
 
 #ifdef HAVE_OPENGL
 
-QRect KisOpenGLUpdateInfo::dirtyViewportRect() {
+QRect KisOpenGLUpdateInfo::dirtyViewportRect()
+{
     qFatal("Not implemented yet!");
     return QRect();
 }

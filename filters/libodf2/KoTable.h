@@ -38,10 +38,10 @@ class KoGenStyles;
 * Note that, at least for now, the class is meant to be used
 * only to write tables and as such lacks much of the functionallity
 * needed to read written tables.
-* 
+*
 * All the pointers returned by this class are guaranteed to be not-null.
 * Do note, however, that there's no way to clear a cell, row or column.
-* 
+*
 * The \class KoTable owns all the pointer objects returned by
 * its methods.
 **/
@@ -52,15 +52,15 @@ public:
     KoTable();
     ~KoTable();
 
-    KoRow* rowAt(int row);
+    KoRow *rowAt(int row);
     int rowCount() const;
 
-    KoColumn* columnAt(int column);
+    KoColumn *columnAt(int column);
     int columnCount() const;
 
-    KoCell* cellAt(int row, int column);
+    KoCell *cellAt(int row, int column);
 
-    void saveOdf(KoXmlWriter& writer, KoGenStyles& styles);
+    void saveOdf(KoXmlWriter &writer, KoGenStyles &styles);
 
     KoTblStyle::Ptr tableStyle();
     void setTableStyle(KoTblStyle::Ptr style);
@@ -76,7 +76,7 @@ public:
 //     void setPrintRange(CellRange cellRange);
 //     CellRange printRange() const;
 
-    void setName(const QString& name);
+    void setName(const QString &name);
     QString name() const;
 
     void setProtected(bool isProtected);
@@ -87,10 +87,10 @@ public:
     QString protectionalgorithm() const;
 
 private:
-    QVector<KoColumn*> m_columns;
-    QVector<KoRow*> m_rows;
+    QVector<KoColumn *> m_columns;
+    QVector<KoRow *> m_rows;
 
-    QMap<QPair<int,int>, KoCell*> m_cells;
+    QMap<QPair<int, int>, KoCell *> m_cells;
 
     int m_rowCount;
     int m_columnCount;

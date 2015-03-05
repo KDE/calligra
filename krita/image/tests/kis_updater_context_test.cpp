@@ -35,9 +35,9 @@ void KisUpdaterContextTest::testJobInterference()
 {
     KisTestableUpdaterContext context(3);
 
-    QRect imageRect(0,0,100,100);
+    QRect imageRect(0, 0, 100, 100);
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), cs, "merge test");
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8);
@@ -45,11 +45,11 @@ void KisUpdaterContextTest::testJobInterference()
     image->lock();
     image->addNode(paintLayer);
 
-    QRect dirtyRect1(0,0,50,100);
+    QRect dirtyRect1(0, 0, 50, 100);
     KisBaseRectsWalkerSP walker1 = new KisMergeWalker(imageRect);
     walker1->collectRects(paintLayer, dirtyRect1);
 
-    QRect dirtyRect2(30,0,100,100);
+    QRect dirtyRect2(30, 0, 100, 100);
     KisBaseRectsWalkerSP walker2 = new KisMergeWalker(imageRect);
     walker2->collectRects(paintLayer, dirtyRect2);
 
@@ -65,7 +65,7 @@ void KisUpdaterContextTest::testSnapshot()
 {
     KisTestableUpdaterContext context(3);
 
-    QRect imageRect(0,0,100,100);
+    QRect imageRect(0, 0, 100, 100);
 
     KisBaseRectsWalkerSP walker1 = new KisMergeWalker(imageRect);
 
@@ -83,7 +83,6 @@ void KisUpdaterContextTest::testSnapshot()
     QCOMPARE(numMergeJobs, 1);
     QCOMPARE(numStrokeJobs, 0);
 
-
     KisStrokeJobData *data =
         new KisStrokeJobData(KisStrokeJobData::SEQUENTIAL,
                              KisStrokeJobData::NORMAL);
@@ -94,7 +93,6 @@ void KisUpdaterContextTest::testSnapshot()
     context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
     QCOMPARE(numMergeJobs, 1);
     QCOMPARE(numStrokeJobs, 1);
-
 
     context.addSpontaneousJob(new KisNoopSpontaneousJob());
     context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
@@ -120,16 +118,16 @@ public:
     {
     }
 
-    void run(KisStrokeJobData *data) {
+    void run(KisStrokeJobData *data)
+    {
         Q_UNUSED(data);
 
         m_counter.ref();
 
-        for(int i = 0; i < NUM_CHECKS; i++) {
-            if(data->isExclusive()) {
+        for (int i = 0; i < NUM_CHECKS; i++) {
+            if (data->isExclusive()) {
                 Q_ASSERT(m_counter == 1);
-            }
-            else if (m_counter > 1) {
+            } else if (m_counter > 1) {
                 m_hadConcurrency.ref();
             }
             QTest::qSleep(CHECK_DELAY);
@@ -149,8 +147,8 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
     QAtomicInt counter;
     QAtomicInt hadConcurrency;
 
-    for(int i = 0; i < NUM_JOBS; i++) {
-        if(context.hasSpareThread()) {
+    for (int i = 0; i < NUM_JOBS; i++) {
+        if (context.hasSpareThread()) {
             bool isExclusive = i % EXCLUSIVE_NTH == 0;
 
             KisStrokeJobData *data =
@@ -163,8 +161,7 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
                 new ExclusivenessCheckerStrategy(counter, hadConcurrency);
 
             context.addStrokeJob(new KisStrokeJob(strategy, data));
-        }
-        else {
+        } else {
             QTest::qSleep(CHECK_DELAY);
         }
     }
@@ -173,7 +170,7 @@ void KisUpdaterContextTest::stressTestExclusiveJobs()
 
     QVERIFY(!counter);
     qDebug() << "Concurrency observed:" << hadConcurrency
-             << "/" << NUM_CHECKS * NUM_JOBS;
+             << "/" << NUM_CHECKS *NUM_JOBS;
 }
 
 QTEST_KDEMAIN(KisUpdaterContextTest, NoGUI)

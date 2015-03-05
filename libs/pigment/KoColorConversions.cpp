@@ -44,38 +44,43 @@ void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V)
         maxValue = 2;
     }
 
-    if (static_cast<unsigned int>(G) < min)
+    if (static_cast<unsigned int>(G) < min) {
         min = G;
+    }
 
-    if (static_cast<unsigned int>(B) < min)
+    if (static_cast<unsigned int>(B) < min) {
         min = B;
+    }
 
     int delta = max - min;
     *V = max; // value
     *S = max ? (510 * delta + max) / (2 * max) : 0;  // saturation
 
     // calc hue
-    if (*S == 0)
-        *H = -1; // undefined hue
-    else {
+    if (*S == 0) {
+        *H = -1;    // undefined hue
+    } else {
         switch (maxValue) {
         case 0:  // red
-            if (G >= B)
+            if (G >= B) {
                 *H = (120 * (G - B) + delta) / (2 * delta);
-            else
+            } else {
                 *H = (120 * (G - B + delta) + delta) / (2 * delta) + 300;
+            }
             break;
         case 1:  // green
-            if (B > R)
+            if (B > R) {
                 *H = 120 + (120 * (B - R) + delta) / (2 * delta);
-            else
+            } else {
                 *H = 60 + (120 * (B - R + delta) + delta) / (2 * delta);
+            }
             break;
         case 2:  // blue
-            if (R > G)
+            if (R > G) {
                 *H = 240 + (120 * (R - G) + delta) / (2 * delta);
-            else
+            } else {
                 *H = 180 + (120 * (R - G + delta) + delta) / (2 * delta);
+            }
             break;
         }
     }
@@ -232,7 +237,7 @@ void HSVToRGB(float h, float s, float v, float *r, float *g, float *b)
     }
 }
 
-void rgb_to_hls(quint8 red, quint8 green, quint8 blue, float * hue, float * lightness, float * saturation)
+void rgb_to_hls(quint8 red, quint8 green, quint8 blue, float *hue, float *lightness, float *saturation)
 {
     float r = red / 255.0;
     float g = green / 255.0;
@@ -258,10 +263,11 @@ void rgb_to_hls(quint8 red, quint8 green, quint8 blue, float * hue, float * ligh
         h = 0;
         s = 0;
     } else {
-        if (l < 0.5)
+        if (l < 0.5) {
             s = delta / (max + min);
-        else
+        } else {
             s = delta / (2 - max - min);
+        }
 
         float delta_r, delta_g, delta_b;
 
@@ -269,15 +275,20 @@ void rgb_to_hls(quint8 red, quint8 green, quint8 blue, float * hue, float * ligh
         delta_g = ((max - g) / 6) / delta;
         delta_b = ((max - b) / 6) / delta;
 
-        if (r == max)
+        if (r == max) {
             h = delta_b - delta_g;
-        else if (g == max)
+        } else if (g == max) {
             h = (1.0 / 3) + delta_r - delta_b;
-        else if (b == max)
+        } else if (b == max) {
             h = (2.0 / 3) + delta_g - delta_r;
+        }
 
-        if (h < 0) h += 1;
-        if (h > 1) h += 1;
+        if (h < 0) {
+            h += 1;
+        }
+        if (h > 1) {
+            h += 1;
+        }
 
     }
 
@@ -288,28 +299,31 @@ void rgb_to_hls(quint8 red, quint8 green, quint8 blue, float * hue, float * ligh
 
 float hue_value(float n1, float n2, float hue)
 {
-    if (hue > 360)
+    if (hue > 360) {
         hue = hue - 360;
-    else if (hue < 0)
+    } else if (hue < 0) {
         hue = hue + 360;
-    if (hue < 60)
+    }
+    if (hue < 60) {
         return n1 + (((n2 - n1) * hue) / 60);
-    else if (hue < 180)
+    } else if (hue < 180) {
         return n2;
-    else if (hue < 240)
-        return n1 + (((n2 - n1) *(240 - hue)) / 60);
-    else return n1;
+    } else if (hue < 240) {
+        return n1 + (((n2 - n1) * (240 - hue)) / 60);
+    } else {
+        return n1;
+    }
 }
 
-
-void hls_to_rgb(float h, float l, float s, quint8 * r, quint8 * g, quint8 * b)
+void hls_to_rgb(float h, float l, float s, quint8 *r, quint8 *g, quint8 *b)
 {
     float m1, m2;
 
-    if (l <= 0.5)
+    if (l <= 0.5) {
         m2 = l * (1 + s);
-    else
+    } else {
         m2 = l + s - l * s;
+    }
 
     m1 = 2 * l - m2;
 
@@ -319,7 +333,7 @@ void hls_to_rgb(float h, float l, float s, quint8 * r, quint8 * g, quint8 * b)
 
 }
 
-void rgb_to_hls(quint8 r, quint8 g, quint8 b, int * h, int * l, int * s)
+void rgb_to_hls(quint8 r, quint8 g, quint8 b, int *h, int *l, int *s)
 {
     float hue, saturation, lightness;
 
@@ -329,7 +343,7 @@ void rgb_to_hls(quint8 r, quint8 g, quint8 b, int * h, int * l, int * s)
     *s = (int)(saturation * 255 + 0.5);
 }
 
-void hls_to_rgb(int h, int l, int s, quint8 * r, quint8 * g, quint8 * b)
+void hls_to_rgb(int h, int l, int s, quint8 *r, quint8 *g, quint8 *b)
 {
     float hue = h;
     float lightness = l / 255.0;
@@ -363,23 +377,23 @@ void RGBToHSL(float r, float g, float b, float *h, float *s, float *l)
     }
     if ((*s = vm = v - m) > 0.0) {
         *s /= (*l <= 0.5) ? (v + m) :
-              (2.0 - v - m) ;
+              (2.0 - v - m);
     } else {
         *h = UNDEFINED_HUE;
         return;
     }
 
-
     r2 = (v - r) / vm;
     g2 = (v - g) / vm;
     b2 = (v - b) / vm;
 
-    if (r == v)
+    if (r == v) {
         *h = (g == m ? 5.0 + b2 : 1.0 - g2);
-    else if (g == v)
+    } else if (g == v) {
         *h = (b == m ? 1.0 + r2 : 3.0 - b2);
-    else
+    } else {
         *h = (r == m ? 3.0 + g2 : 5.0 - r2);
+    }
 
     *h *= 60;
     if (*h == 360.) {
@@ -421,425 +435,558 @@ void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b)
 }
 
 //functions for converting from and back to HSI
-void HSIToRGB(const qreal h,const qreal s, const qreal i, qreal *red, qreal *green, qreal *blue)
-{//This function takes H, S and I values, which are converted to rgb.
-	qreal hue = 0.0;
-	qreal sat = 0.0;
-	qreal intensity = 0.0;
-	if (h>1.0 || h<0.0){hue=fmod(h, 1.0);} else {hue=h;}
-	if (s>1.0){sat=1.0;}
-	else if (s<0.0){sat=0.0;}
-	else {sat=s;}
-	if (i>1.0){intensity=1.0;}
-	else if (i<0.0){intensity=0.0;}
-	else {intensity=i;}
-	
-	qreal segment = 0.166667;//1/6;
-	qreal r=0.0;
-	qreal g=0.0;
-	qreal b=0.0;
+void HSIToRGB(const qreal h, const qreal s, const qreal i, qreal *red, qreal *green, qreal *blue)
+{
+    //This function takes H, S and I values, which are converted to rgb.
+    qreal hue = 0.0;
+    qreal sat = 0.0;
+    qreal intensity = 0.0;
+    if (h > 1.0 || h < 0.0) {
+        hue = fmod(h, 1.0);
+    } else {
+        hue = h;
+    }
+    if (s > 1.0) {
+        sat = 1.0;
+    } else if (s < 0.0) {
+        sat = 0.0;
+    } else {
+        sat = s;
+    }
+    if (i > 1.0) {
+        intensity = 1.0;
+    } else if (i < 0.0) {
+        intensity = 0.0;
+    } else {
+        intensity = i;
+    }
+
+    qreal segment = 0.166667;//1/6;
+    qreal r = 0.0;
+    qreal g = 0.0;
+    qreal b = 0.0;
 //HSI weights by adding up the components, so in RGB hsi, you would have to divide by 3 to normalise it.
-	qreal onethird=1.0/3.0;
+    qreal onethird = 1.0 / 3.0;
 //The intermediate variables for the weighted HSL forumala, based on the HSL in KoColorConversions.
-	qreal max_sat, m, fract, intensity_a, chroma, x;
-	if (hue >= 0.0 && hue < (segment) )
-	{
-		//need to treat this as a weighted hsl thingy.
-		//so first things first, at which intensity is the maximum saturation for this hue?
-		//between R and G+R (yellow)
-		max_sat = onethird + ( onethird*(hue*6) );	
-		if (intensity<=max_sat){intensity_a = (intensity/max_sat)*0.5; chroma=sat*2*intensity_a;}
-		else {intensity_a = ((intensity-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*intensity_a);}
-		
-			fract = hue*6.0;
-			x = (1-fabs(fmod(fract,2)-1))*chroma;
-			r = chroma; g=x; b=0;\
-			m = intensity-(onethird*(r+b+g));
-			r += m; g += m; b += m;
-			
-    
-	}	
-	else if (hue >= (segment) && hue < (2.0*segment) )
-	{
-		
-		max_sat = (onethird*2) - (onethird*(hue-segment)*6);
-		if (intensity<max_sat){intensity_a = (intensity/max_sat)*0.5; chroma=sat*(2*intensity_a);}
-		else {intensity_a = ((intensity-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*intensity_a);}
-		
-		fract = hue*6.0;
-		x = (1-fabs(fmod(fract,2)-1) )*chroma;
-		r = x; g=chroma; b=0;
-		m = intensity-(onethird*(r+b+g));
-		r += m; g += m; b += m;
-			
+    qreal max_sat, m, fract, intensity_a, chroma, x;
+    if (hue >= 0.0 && hue < (segment)) {
+        //need to treat this as a weighted hsl thingy.
+        //so first things first, at which intensity is the maximum saturation for this hue?
+        //between R and G+R (yellow)
+        max_sat = onethird + (onethird * (hue * 6));
+        if (intensity <= max_sat) {
+            intensity_a = (intensity / max_sat) * 0.5;
+            chroma = sat * 2 * intensity_a;
+        } else {
+            intensity_a = ((intensity - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * intensity_a);
+        }
 
-	}	
-	else if (hue >= (2.0*segment) && hue < (3.0*segment) )
-	{
-		max_sat = onethird + (onethird*(hue-2.0*segment)*6);
-		if (intensity<max_sat){intensity_a = (intensity/max_sat)*0.5; chroma=sat*(2*intensity_a);}
-		else {intensity_a = ((intensity-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*intensity_a);}
-		
-		fract = hue*6.0;
-		x = (1-fabs(fmod(fract,2)-1) )*chroma;
-		r = 0; g=chroma; b=x;
-		m = intensity-(onethird*(r+b+g));
-		r += m; g += m; b += m;
-	}	
-	else if (hue >= (3.0*segment) && hue < (4.0*segment) )
-	{	max_sat = (onethird*2) - (onethird*(hue-3.0*segment)*6);	
-		if (intensity<max_sat){intensity_a = (intensity/max_sat)*0.5; chroma=sat*(2*intensity_a);}
-		else {intensity_a = ((intensity-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*intensity_a);}
-		
-		fract = hue*6.0;
-		x = (1-fabs(fmod(fract,2)-1) )*chroma;
-		r = 0; g=x; b=chroma;
-		m = intensity-(onethird*(r+b+g));
-		r += m; g += m; b += m;
-	}
-	else if (hue >= (4.0*segment) && hue < (5*segment) )
-	{
-		max_sat = onethird + (onethird*((hue-4.0*segment)*6));	
-		if (intensity<max_sat){intensity_a = (intensity/max_sat)*0.5; chroma=sat*(2*intensity_a);}
-		else {intensity_a = ((intensity-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*intensity_a);}
-		
-		fract = hue*6.0;
-		x = (1-fabs(fmod(fract,2)-1) )*chroma;
-		r = x; g=0; b=chroma;
-		m = intensity-(onethird*(r+b+g));
-		r += m; g += m; b += m;
-	}
-	else if (hue >= (5.0*segment) && hue <= 1.0)
-	{
-	max_sat = (onethird*2) - (onethird*(hue-5.0*segment)*6);	
-		if (intensity<max_sat){intensity_a = (intensity/max_sat)*0.5; chroma=sat*(2*intensity_a);}
-		else {intensity_a = ((intensity-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*intensity_a);}
-		
-		fract = hue*6.0;
-		x = (1-fabs(fmod(fract,2)-1) )*chroma;
-		r = chroma; g=0; b=x;
-		m = intensity-(onethird*(r+b+g));
-		r += m; g += m; b += m;
-	}
-	else
-	{
-	r=0.0;
-	g=0.0;
-	b=0.0;
-	}
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = chroma; g = x; b = 0; \
+        m = intensity - (onethird * (r + b + g));
+        r += m; g += m; b += m;
 
-	//qDebug()<<"red: "<<r<<", green: "<<g<<", blue: "<<b;
-	if (r>1.0){r=1.0;}
-	if (g>1.0){g=1.0;}
-	if (b>1.0){b=1.0;}
-	if (r<0.0){r=0.0;}
-	if (g<0.0){g=0.0;}
-	if (b<0.0){b=0.0;}
-	
-	*red=r;
-	*green=g;
-	*blue=b;
+    } else if (hue >= (segment) && hue < (2.0 * segment)) {
+
+        max_sat = (onethird * 2) - (onethird * (hue - segment) * 6);
+        if (intensity < max_sat) {
+            intensity_a = (intensity / max_sat) * 0.5;
+            chroma = sat * (2 * intensity_a);
+        } else {
+            intensity_a = ((intensity - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * intensity_a);
+        }
+
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = x; g = chroma; b = 0;
+        m = intensity - (onethird * (r + b + g));
+        r += m; g += m; b += m;
+
+    } else if (hue >= (2.0 * segment) && hue < (3.0 * segment)) {
+        max_sat = onethird + (onethird * (hue - 2.0 * segment) * 6);
+        if (intensity < max_sat) {
+            intensity_a = (intensity / max_sat) * 0.5;
+            chroma = sat * (2 * intensity_a);
+        } else {
+            intensity_a = ((intensity - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * intensity_a);
+        }
+
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = 0; g = chroma; b = x;
+        m = intensity - (onethird * (r + b + g));
+        r += m; g += m; b += m;
+    } else if (hue >= (3.0 * segment) && hue < (4.0 * segment)) {
+        max_sat = (onethird * 2) - (onethird * (hue - 3.0 * segment) * 6);
+        if (intensity < max_sat) {
+            intensity_a = (intensity / max_sat) * 0.5;
+            chroma = sat * (2 * intensity_a);
+        } else {
+            intensity_a = ((intensity - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * intensity_a);
+        }
+
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = 0; g = x; b = chroma;
+        m = intensity - (onethird * (r + b + g));
+        r += m; g += m; b += m;
+    } else if (hue >= (4.0 * segment) && hue < (5 * segment)) {
+        max_sat = onethird + (onethird * ((hue - 4.0 * segment) * 6));
+        if (intensity < max_sat) {
+            intensity_a = (intensity / max_sat) * 0.5;
+            chroma = sat * (2 * intensity_a);
+        } else {
+            intensity_a = ((intensity - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * intensity_a);
+        }
+
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = x; g = 0; b = chroma;
+        m = intensity - (onethird * (r + b + g));
+        r += m; g += m; b += m;
+    } else if (hue >= (5.0 * segment) && hue <= 1.0) {
+        max_sat = (onethird * 2) - (onethird * (hue - 5.0 * segment) * 6);
+        if (intensity < max_sat) {
+            intensity_a = (intensity / max_sat) * 0.5;
+            chroma = sat * (2 * intensity_a);
+        } else {
+            intensity_a = ((intensity - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * intensity_a);
+        }
+
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = chroma; g = 0; b = x;
+        m = intensity - (onethird * (r + b + g));
+        r += m; g += m; b += m;
+    } else {
+        r = 0.0;
+        g = 0.0;
+        b = 0.0;
+    }
+
+    //qDebug()<<"red: "<<r<<", green: "<<g<<", blue: "<<b;
+    if (r > 1.0) {
+        r = 1.0;
+    }
+    if (g > 1.0) {
+        g = 1.0;
+    }
+    if (b > 1.0) {
+        b = 1.0;
+    }
+    if (r < 0.0) {
+        r = 0.0;
+    }
+    if (g < 0.0) {
+        g = 0.0;
+    }
+    if (b < 0.0) {
+        b = 0.0;
+    }
+
+    *red = r;
+    *green = g;
+    *blue = b;
 }
-void RGBToHSI(qreal r,qreal g, qreal b, qreal *h, qreal *s, qreal *i)
+void RGBToHSI(qreal r, qreal g, qreal b, qreal *h, qreal *s, qreal *i)
 {
 //Using these RGB values, we calculate the H, S and I.
-	qreal red; qreal green; qreal blue;
-	if (r>1.0){red=1.0;} else if (r<0.0){red=0.0;} else {red=r;}
-	if (g>1.0){green=1.0;} else if (g<0.0){green=0.0;} else {green=g;}
-	if (b>1.0){blue=1.0;} else if (b<0.0){blue=0.0;} else {blue=b;}
-	qreal minval = qMin(r, qMin(g, b));
-	qreal maxval = qMax(r, qMax(g, b));
-	qreal hue = 0.0;
-	qreal sat = 0.0;
-	qreal intensity = 0.0;
-	qreal onethird=1.0/3.0;
-	intensity=onethird*(red+green+blue);
-	qreal intensity_a;//defined later
-	qreal chroma = maxval-minval;
-	qreal max_sat=0.5;
-	if(chroma==0)
-        {
-            hue = 0.0;
-            sat = 0.0;
-        }
-        else
-        {
+    qreal red; qreal green; qreal blue;
+    if (r > 1.0) {
+        red = 1.0;
+    } else if (r < 0.0) {
+        red = 0.0;
+    } else {
+        red = r;
+    }
+    if (g > 1.0) {
+        green = 1.0;
+    } else if (g < 0.0) {
+        green = 0.0;
+    } else {
+        green = g;
+    }
+    if (b > 1.0) {
+        blue = 1.0;
+    } else if (b < 0.0) {
+        blue = 0.0;
+    } else {
+        blue = b;
+    }
+    qreal minval = qMin(r, qMin(g, b));
+    qreal maxval = qMax(r, qMax(g, b));
+    qreal hue = 0.0;
+    qreal sat = 0.0;
+    qreal intensity = 0.0;
+    qreal onethird = 1.0 / 3.0;
+    intensity = onethird * (red + green + blue);
+    qreal intensity_a;//defined later
+    qreal chroma = maxval - minval;
+    qreal max_sat = 0.5;
+    if (chroma == 0) {
+        hue = 0.0;
+        sat = 0.0;
+    } else {
         //the following finds the hue
 
-        if(maxval==r)
-            {
-                
-                //hue = fmod(((g-b)/chroma), 6.0);
-                //above doesn't work so let's try this one:
-                if (minval==b) {hue = (g-b)/chroma;}
-                else {hue = (g-b)/chroma + 6.0;}
-            }
-            else if(maxval==g)
-            {
-                hue = (b-r)/chroma + 2.0;
-            }
-            else if(maxval==b)
-            {
-                hue = (r-g)/chroma + 4.0;
-            }
-            hue /=6.0;//this makes sure that hue is in the 0-1.0 range.
- 			//This HSI formula tries to be a
-			//weighted HSL formula, where instead of 0.5, we search for a Max_Sat value, which is the I
-			//at which the saturation is maximum.
-			//This requires using the hue, and combining the weighting values accordingly.
-			qreal segment = 0.166667; //float for every 60 degrees of a 360 hue wheel.
-			if (hue>1.0 || hue<0.0){hue=fmod(hue, 1.0);}
-			if (hue>=0.0 && hue<segment)
-			{max_sat = onethird + onethird*(hue*6);}
-			else if (hue>=segment && hue<(2.0*segment))
-			{max_sat = (onethird*2) - onethird*((hue-segment)*6) ;}
-			else if (hue>=(2.0*segment) && hue<(3.0*segment))
-			{max_sat = onethird + onethird*((hue-2.0*segment)*6);}
-			else if (hue>=(3.0*segment) && hue<(4.0*segment))
-			{max_sat = (onethird*2) - onethird*((hue-3.0*segment)*6) ;}
-			else if (hue>=(4.0*segment) && hue<(5.0*segment))
-			{max_sat =  (onethird) + onethird*((hue-4.0*segment)*6);}
-			else if (hue>=(5.0*segment) && hue<=1.0)
-			{max_sat = (onethird*2) - onethird*((hue-5.0*segment)*6) ;}
-			else
-			{max_sat=0.5;}
+        if (maxval == r) {
 
-			if(max_sat>1.0 || max_sat<0.0){
-			 //this should not show up during normal use
-			 max_sat=(fmod((max_sat*2.0),2.0))/2.0;} //If it does, it'll try to correct, but it's not good!
-			if (intensity <= max_sat){intensity_a = (intensity/max_sat)*0.5;}
-			else{intensity_a = ((intensity-max_sat)/(1-max_sat)*0.5)+0.5;}//This is weighting the intensity for the saturation.
-			if ((sat = chroma) > 0.0)
-			{sat = (intensity <= max_sat) ? (chroma/ (2*intensity_a) ) :(chroma/(2.0-(2*intensity_a) ) ) ;
-			
-			}
+            //hue = fmod(((g-b)/chroma), 6.0);
+            //above doesn't work so let's try this one:
+            if (minval == b) {
+                hue = (g - b) / chroma;
+            } else {
+                hue = (g - b) / chroma + 6.0;
+            }
+        } else if (maxval == g) {
+            hue = (b - r) / chroma + 2.0;
+        } else if (maxval == b) {
+            hue = (r - g) / chroma + 4.0;
+        }
+        hue /= 6.0; //this makes sure that hue is in the 0-1.0 range.
+        //This HSI formula tries to be a
+        //weighted HSL formula, where instead of 0.5, we search for a Max_Sat value, which is the I
+        //at which the saturation is maximum.
+        //This requires using the hue, and combining the weighting values accordingly.
+        qreal segment = 0.166667; //float for every 60 degrees of a 360 hue wheel.
+        if (hue > 1.0 || hue < 0.0) {
+            hue = fmod(hue, 1.0);
+        }
+        if (hue >= 0.0 && hue < segment) {
+            max_sat = onethird + onethird * (hue * 6);
+        } else if (hue >= segment && hue < (2.0 * segment)) {
+            max_sat = (onethird * 2) - onethird * ((hue - segment) * 6);
+        } else if (hue >= (2.0 * segment) && hue < (3.0 * segment)) {
+            max_sat = onethird + onethird * ((hue - 2.0 * segment) * 6);
+        } else if (hue >= (3.0 * segment) && hue < (4.0 * segment)) {
+            max_sat = (onethird * 2) - onethird * ((hue - 3.0 * segment) * 6);
+        } else if (hue >= (4.0 * segment) && hue < (5.0 * segment)) {
+            max_sat = (onethird) + onethird * ((hue - 4.0 * segment) * 6);
+        } else if (hue >= (5.0 * segment) && hue <= 1.0) {
+            max_sat = (onethird * 2) - onethird * ((hue - 5.0 * segment) * 6);
+        } else {
+            max_sat = 0.5;
         }
 
-	//if (hue>1.0){hue=1.0;}
-	if (sat>1.0){sat=1.0;}
-	if (sat<0.0){sat=0.0;}
-	//if (intensity>1.0){intensity=1.0;}
-	//if (intensity<0.0){intensity=0.0;}
+        if (max_sat > 1.0 || max_sat < 0.0) {
+            //this should not show up during normal use
+            max_sat = (fmod((max_sat * 2.0), 2.0)) / 2.0;
+        } //If it does, it'll try to correct, but it's not good!
+        if (intensity <= max_sat) {
+            intensity_a = (intensity / max_sat) * 0.5;
+        } else {
+            intensity_a = ((intensity - max_sat) / (1 - max_sat) * 0.5) + 0.5;   //This is weighting the intensity for the saturation.
+        }
+        if ((sat = chroma) > 0.0) {
+            sat = (intensity <= max_sat) ? (chroma / (2 * intensity_a)) : (chroma / (2.0 - (2 * intensity_a)));
 
-	*h=hue;
-	*s=sat;
-	*i=intensity;
+        }
+    }
 
+    //if (hue>1.0){hue=1.0;}
+    if (sat > 1.0) {
+        sat = 1.0;
+    }
+    if (sat < 0.0) {
+        sat = 0.0;
+    }
+    //if (intensity>1.0){intensity=1.0;}
+    //if (intensity<0.0){intensity=0.0;}
+
+    *h = hue;
+    *s = sat;
+    *i = intensity;
 
 }
 //functions for converting from and back to hsy'
-void HSYToRGB(const qreal h,const qreal s, const qreal y, qreal *red, qreal *green, qreal *blue, qreal R, qreal G, qreal B)
-{//This function takes H, S and Y values, which are converted to rgb.
+void HSYToRGB(const qreal h, const qreal s, const qreal y, qreal *red, qreal *green, qreal *blue, qreal R, qreal G, qreal B)
+{
+    //This function takes H, S and Y values, which are converted to rgb.
 //Those are then used to create a qcolor.
-	qreal hue = 0.0;
-	qreal sat = 0.0;
-	qreal luma = 0.0;
-	if (h>1.0 || h<0.0){hue=fmod(h, 1.0);} else {hue=h;}
-	if (s>1.0){sat=1.0;}
-	else if (s<0.0){sat=0.0;}
-	else {sat=s;}
-	if (y>1.0){luma=1.0;}
-	else if (y<0.0){luma=0.0;}
-	else {luma=y;}
-	
-	qreal segment = 0.166667;//1/6;
-	qreal r=0.0;
-	qreal g=0.0;
-	qreal b=0.0;
+    qreal hue = 0.0;
+    qreal sat = 0.0;
+    qreal luma = 0.0;
+    if (h > 1.0 || h < 0.0) {
+        hue = fmod(h, 1.0);
+    } else {
+        hue = h;
+    }
+    if (s > 1.0) {
+        sat = 1.0;
+    } else if (s < 0.0) {
+        sat = 0.0;
+    } else {
+        sat = s;
+    }
+    if (y > 1.0) {
+        luma = 1.0;
+    } else if (y < 0.0) {
+        luma = 0.0;
+    } else {
+        luma = y;
+    }
+
+    qreal segment = 0.166667;//1/6;
+    qreal r = 0.0;
+    qreal g = 0.0;
+    qreal b = 0.0;
 //weights for rgb to Y'(Luma), these are the same weights used in color space maths and the desaturate.
 //This is not luminance or luminosity, it just quacks like it.
-	//qreal R=0.299;
-	//qreal G=0.587;
-	//qreal B=0.114;
+    //qreal R=0.299;
+    //qreal G=0.587;
+    //qreal B=0.114;
 //The intermediary variables for the weighted HSL forumala, based on the HSL in KoColorConversions.
-	qreal max_sat, m, fract, luma_a, chroma, x;
-	if (hue >= 0.0 && hue < (segment) )
-	{
-		//need to treat this as a weighted hsl thingy.
-		//so first things first, at which luma is the maximum saturation for this hue?
-		//between R and G+R (yellow)
-		max_sat = R + ( G*(hue*6) );	
-		if (luma<=max_sat){luma_a = (luma/max_sat)*0.5; chroma=sat*2*luma_a;}
-		else {luma_a = ((luma-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*luma_a);}
-		
-			fract = hue*6.0;
-			x = (1-fabs(fmod(fract,2)-1))*chroma;
-			r = chroma; g=x; b=0;
-			m = luma-( (R*r)+(B*b)+(G*g) );
-			r += m; g += m; b += m;
-			
-    
-	}	
-	else if (hue >= (segment) && hue < (2.0*segment) )
-	{
-		
-		max_sat = (G+R) - (R*(hue-segment)*6);
-		if (luma<max_sat){luma_a = (luma/max_sat)*0.5; chroma=sat*(2*luma_a);}
-		else {luma_a = ((luma-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*luma_a);}
-		
-		fract = hue*6.0;
-		x = (1-fabs(fmod(fract,2)-1) )*chroma;
-		r = x; g=chroma; b=0;
-		m = luma-( (R*r)+(B*b)+(G*g) );
-		r += m; g += m; b += m;
-			
+    qreal max_sat, m, fract, luma_a, chroma, x;
+    if (hue >= 0.0 && hue < (segment)) {
+        //need to treat this as a weighted hsl thingy.
+        //so first things first, at which luma is the maximum saturation for this hue?
+        //between R and G+R (yellow)
+        max_sat = R + (G * (hue * 6));
+        if (luma <= max_sat) {
+            luma_a = (luma / max_sat) * 0.5;
+            chroma = sat * 2 * luma_a;
+        } else {
+            luma_a = ((luma - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * luma_a);
+        }
 
-	}	
-	else if (hue >= (2.0*segment) && hue < (3.0*segment) )
-	{
-		max_sat = G + (B*(hue-2.0*segment)*6);
-		if (luma<max_sat){luma_a = (luma/max_sat)*0.5; chroma=sat*(2*luma_a);}
-		else {luma_a = ((luma-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*luma_a);}
-		
-		fract = hue*6.0;
-		x = (1-fabs(fmod(fract,2)-1) )*chroma;
-		r = 0; g=chroma; b=x;
-		m = luma-( (R*r)+(B*b)+(G*g) );
-		r += m; g += m; b += m;
-	}	
-	else if (hue >= (3.0*segment) && hue < (4.0*segment) )
-	{	max_sat = (G+B) - (G*(hue-3.0*segment)*6);	
-		if (luma<max_sat){luma_a = (luma/max_sat)*0.5; chroma=sat*(2*luma_a);}
-		else {luma_a = ((luma-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*luma_a);}
-		
-		fract = hue*6.0;
-		x = (1-fabs(fmod(fract,2)-1) )*chroma;
-		r = 0; g=x; b=chroma;
-		m = luma-( (R*r)+(B*b)+(G*g) );
-		r += m; g += m; b += m;
-	}
-	else if (hue >= (4.0*segment) && hue < (5*segment) )
-	{
-		max_sat = B + (R*((hue-4.0*segment)*6));	
-		if (luma<max_sat){luma_a = (luma/max_sat)*0.5; chroma=sat*(2*luma_a);}
-		else {luma_a = ((luma-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*luma_a);}
-		
-		fract = hue*6.0;
-		x = (1-fabs(fmod(fract,2)-1) )*chroma;
-		r = x; g=0; b=chroma;
-		m = luma-( (R*r)+(B*b)+(G*g) );
-		r += m; g += m; b += m;
-	}
-	else if (hue >= (5.0*segment) && hue <= 1.0)
-	{
-	max_sat = (B+R) - (B*(hue-5.0*segment)*6);	
-		if (luma<max_sat){luma_a = (luma/max_sat)*0.5; chroma=sat*(2*luma_a);}
-		else {luma_a = ((luma-max_sat)/(1-max_sat)*0.5)+0.5; chroma=sat*(2-2*luma_a);}
-		
-		fract = hue*6.0;
-		x = (1-fabs(fmod(fract,2)-1) )*chroma;
-		r = chroma; g=0; b=x;
-		m = luma-( (R*r)+(B*b)+(G*g) );
-		r += m; g += m; b += m;
-	}
-	else
-	{
-	r=0.0;
-	g=0.0;
-	b=0.0;
-	}
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = chroma; g = x; b = 0;
+        m = luma - ((R * r) + (B * b) + (G * g));
+        r += m; g += m; b += m;
 
-	//qDebug()<<"red: "<<r<<", green: "<<g<<", blue: "<<b;
-	if (r>1.0){r=1.0;}
-	if (g>1.0){g=1.0;}
-	if (b>1.0){b=1.0;}
-	if (r<0.0){r=0.0;}
-	if (g<0.0){g=0.0;}
-	if (b<0.0){b=0.0;}
-	
-	*red=r;
-	*green=g;
-	*blue=b;
+    } else if (hue >= (segment) && hue < (2.0 * segment)) {
+
+        max_sat = (G + R) - (R * (hue - segment) * 6);
+        if (luma < max_sat) {
+            luma_a = (luma / max_sat) * 0.5;
+            chroma = sat * (2 * luma_a);
+        } else {
+            luma_a = ((luma - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * luma_a);
+        }
+
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = x; g = chroma; b = 0;
+        m = luma - ((R * r) + (B * b) + (G * g));
+        r += m; g += m; b += m;
+
+    } else if (hue >= (2.0 * segment) && hue < (3.0 * segment)) {
+        max_sat = G + (B * (hue - 2.0 * segment) * 6);
+        if (luma < max_sat) {
+            luma_a = (luma / max_sat) * 0.5;
+            chroma = sat * (2 * luma_a);
+        } else {
+            luma_a = ((luma - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * luma_a);
+        }
+
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = 0; g = chroma; b = x;
+        m = luma - ((R * r) + (B * b) + (G * g));
+        r += m; g += m; b += m;
+    } else if (hue >= (3.0 * segment) && hue < (4.0 * segment)) {
+        max_sat = (G + B) - (G * (hue - 3.0 * segment) * 6);
+        if (luma < max_sat) {
+            luma_a = (luma / max_sat) * 0.5;
+            chroma = sat * (2 * luma_a);
+        } else {
+            luma_a = ((luma - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * luma_a);
+        }
+
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = 0; g = x; b = chroma;
+        m = luma - ((R * r) + (B * b) + (G * g));
+        r += m; g += m; b += m;
+    } else if (hue >= (4.0 * segment) && hue < (5 * segment)) {
+        max_sat = B + (R * ((hue - 4.0 * segment) * 6));
+        if (luma < max_sat) {
+            luma_a = (luma / max_sat) * 0.5;
+            chroma = sat * (2 * luma_a);
+        } else {
+            luma_a = ((luma - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * luma_a);
+        }
+
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = x; g = 0; b = chroma;
+        m = luma - ((R * r) + (B * b) + (G * g));
+        r += m; g += m; b += m;
+    } else if (hue >= (5.0 * segment) && hue <= 1.0) {
+        max_sat = (B + R) - (B * (hue - 5.0 * segment) * 6);
+        if (luma < max_sat) {
+            luma_a = (luma / max_sat) * 0.5;
+            chroma = sat * (2 * luma_a);
+        } else {
+            luma_a = ((luma - max_sat) / (1 - max_sat) * 0.5) + 0.5;
+            chroma = sat * (2 - 2 * luma_a);
+        }
+
+        fract = hue * 6.0;
+        x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+        r = chroma; g = 0; b = x;
+        m = luma - ((R * r) + (B * b) + (G * g));
+        r += m; g += m; b += m;
+    } else {
+        r = 0.0;
+        g = 0.0;
+        b = 0.0;
+    }
+
+    //qDebug()<<"red: "<<r<<", green: "<<g<<", blue: "<<b;
+    if (r > 1.0) {
+        r = 1.0;
+    }
+    if (g > 1.0) {
+        g = 1.0;
+    }
+    if (b > 1.0) {
+        b = 1.0;
+    }
+    if (r < 0.0) {
+        r = 0.0;
+    }
+    if (g < 0.0) {
+        g = 0.0;
+    }
+    if (b < 0.0) {
+        b = 0.0;
+    }
+
+    *red = r;
+    *green = g;
+    *blue = b;
 }
-void RGBToHSY(const qreal r,const qreal g,const qreal b, qreal *h, qreal *s, qreal *y, qreal R, qreal G, qreal B)
+void RGBToHSY(const qreal r, const qreal g, const qreal b, qreal *h, qreal *s, qreal *y, qreal R, qreal G, qreal B)
 {
 //This is LUMA btw, not Luminance.
 //Using these RGB values, we calculate the H, S and I.
-	qreal red; qreal green; qreal blue;
-	if (r>1.0){red=1.0;} else if (r<0.0){red=0.0;} else {red=r;}
-	if (g>1.0){green=1.0;} else if (g<0.0){green=0.0;} else {green=g;}
-	if (b>1.0){blue=1.0;} else if (b<0.0){blue=0.0;} else {blue=b;}
-	
-	qreal minval = qMin(r, qMin(g, b));
-	qreal maxval = qMax(r, qMax(g, b));
-	qreal hue = 0.0;
-	qreal sat = 0.0;
-	qreal luma = 0.0;
-	//weights for rgb, these are the same weights used in color space maths and the desaturate.
-	//qreal R=0.299;
-	//qreal G=0.587;
-	//qreal B=0.114;
-	luma=(R*red+G*green+B*blue);
-	qreal luma_a=luma;//defined later
-	qreal chroma = maxval-minval;
-	qreal max_sat=0.5;
-	if(chroma==0)
-        {
-            hue = 0.0;
-            sat = 0.0;
-        }
-        else
-        {
+    qreal red; qreal green; qreal blue;
+    if (r > 1.0) {
+        red = 1.0;
+    } else if (r < 0.0) {
+        red = 0.0;
+    } else {
+        red = r;
+    }
+    if (g > 1.0) {
+        green = 1.0;
+    } else if (g < 0.0) {
+        green = 0.0;
+    } else {
+        green = g;
+    }
+    if (b > 1.0) {
+        blue = 1.0;
+    } else if (b < 0.0) {
+        blue = 0.0;
+    } else {
+        blue = b;
+    }
+
+    qreal minval = qMin(r, qMin(g, b));
+    qreal maxval = qMax(r, qMax(g, b));
+    qreal hue = 0.0;
+    qreal sat = 0.0;
+    qreal luma = 0.0;
+    //weights for rgb, these are the same weights used in color space maths and the desaturate.
+    //qreal R=0.299;
+    //qreal G=0.587;
+    //qreal B=0.114;
+    luma = (R * red + G * green + B * blue);
+    qreal luma_a = luma; //defined later
+    qreal chroma = maxval - minval;
+    qreal max_sat = 0.5;
+    if (chroma == 0) {
+        hue = 0.0;
+        sat = 0.0;
+    } else {
         //the following finds the hue
 
-        if(maxval==r)
-            {
-                //hue = fmod(((g-b)/chroma), 6.0);
-                //above doesn't work so let's try this one:
-                if (minval==b) {hue = (g-b)/chroma;}
-                else {hue = (g-b)/chroma + 6.0;}
+        if (maxval == r) {
+            //hue = fmod(((g-b)/chroma), 6.0);
+            //above doesn't work so let's try this one:
+            if (minval == b) {
+                hue = (g - b) / chroma;
+            } else {
+                hue = (g - b) / chroma + 6.0;
             }
-            else if(maxval==g)
-            {
-                hue = (b-r)/chroma + 2.0;
-            }
-            else if(maxval==b)
-            {
-                hue = (r-g)/chroma + 4.0;
-            }
-            hue /=6.0;//this makes sure that hue is in the 0-1.0 range.
- 			//Most HSY formula will tell you that Sat=Chroma. However, this HSY' formula tries to be a
-			//weighted HSL formula, where instead of 0.5, we search for a Max_Sat value, which is the Y'
-			//at which the saturation is maximum.
-			//This requires using the hue, and combining the weighting values accordingly.
-			qreal segment = 0.166667;
-			if (hue>1.0 || hue<0.0){hue=fmod(hue, 1.0);}
-			
-			if (hue>=0.0 && hue<segment)
-			{max_sat = R + G*(hue*6);}
-			else if (hue>=segment && hue<(2.0*segment))
-			{max_sat = (G+R) - R*((hue-segment)*6) ;}
-			else if (hue>=(2.0*segment) && hue<(3.0*segment))
-			{max_sat = G + B*((hue-2.0*segment)*6);}
-			else if (hue>=(3.0*segment) && hue<(4.0*segment))
-			{max_sat = (B+G) - G*((hue-3.0*segment)*6) ;}
-			else if (hue>=(4.0*segment) && hue<(5.0*segment))
-			{max_sat =  (B) + R*((hue-4.0*segment)*6);}
-			else if (hue>=(5.0*segment) && hue<=1.0)
-			{max_sat = (R+B) - B*((hue-5.0*segment)*6);}
-			else
-			{max_sat=0.5;}
-
-			if(max_sat>1.0 || max_sat<0.0){ //This debug message should not show up during normal use
-			 max_sat=(fmod(max_sat,1.0));} //If it does, it'll try to correct, but it's not good!
-			if (luma <= max_sat){luma_a = (luma/max_sat)*0.5;}
-			else{luma_a = ((luma-max_sat)/(1-max_sat)*0.5)+0.5;}//This is weighting the luma for the saturation)
-			if ((sat = chroma) > 0.0)
-			{sat = (luma <= max_sat) ? (chroma/ (2*luma_a) ) :(chroma/(2.0-(2*luma_a) ) ) ;}
+        } else if (maxval == g) {
+            hue = (b - r) / chroma + 2.0;
+        } else if (maxval == b) {
+            hue = (r - g) / chroma + 4.0;
+        }
+        hue /= 6.0; //this makes sure that hue is in the 0-1.0 range.
+        //Most HSY formula will tell you that Sat=Chroma. However, this HSY' formula tries to be a
+        //weighted HSL formula, where instead of 0.5, we search for a Max_Sat value, which is the Y'
+        //at which the saturation is maximum.
+        //This requires using the hue, and combining the weighting values accordingly.
+        qreal segment = 0.166667;
+        if (hue > 1.0 || hue < 0.0) {
+            hue = fmod(hue, 1.0);
         }
 
-	if (sat>1.0){sat=1.0;}
-	if (luma>1.0){luma=1.0;}
-	if (sat<0.0){sat=0.0;}
-	if (luma<0.0){luma=0.0;}
+        if (hue >= 0.0 && hue < segment) {
+            max_sat = R + G * (hue * 6);
+        } else if (hue >= segment && hue < (2.0 * segment)) {
+            max_sat = (G + R) - R * ((hue - segment) * 6);
+        } else if (hue >= (2.0 * segment) && hue < (3.0 * segment)) {
+            max_sat = G + B * ((hue - 2.0 * segment) * 6);
+        } else if (hue >= (3.0 * segment) && hue < (4.0 * segment)) {
+            max_sat = (B + G) - G * ((hue - 3.0 * segment) * 6);
+        } else if (hue >= (4.0 * segment) && hue < (5.0 * segment)) {
+            max_sat = (B) + R * ((hue - 4.0 * segment) * 6);
+        } else if (hue >= (5.0 * segment) && hue <= 1.0) {
+            max_sat = (R + B) - B * ((hue - 5.0 * segment) * 6);
+        } else {
+            max_sat = 0.5;
+        }
 
-	*h=hue;
-	*s=sat;
-	*y=luma;
+        if (max_sat > 1.0 || max_sat < 0.0) { //This debug message should not show up during normal use
+            max_sat = (fmod(max_sat, 1.0));
+        } //If it does, it'll try to correct, but it's not good!
+        if (luma <= max_sat) {
+            luma_a = (luma / max_sat) * 0.5;
+        } else {
+            luma_a = ((luma - max_sat) / (1 - max_sat) * 0.5) + 0.5;   //This is weighting the luma for the saturation)
+        }
+        if ((sat = chroma) > 0.0) {
+            sat = (luma <= max_sat) ? (chroma / (2 * luma_a)) : (chroma / (2.0 - (2 * luma_a)));
+        }
+    }
 
+    if (sat > 1.0) {
+        sat = 1.0;
+    }
+    if (luma > 1.0) {
+        luma = 1.0;
+    }
+    if (sat < 0.0) {
+        sat = 0.0;
+    }
+    if (luma < 0.0) {
+        luma = 0.0;
+    }
+
+    *h = hue;
+    *s = sat;
+    *y = luma;
 
 }
-//Extra: Functions for converting from and back to HCI. Where the HSI function is forced cylindrical, HCI is a 
+//Extra: Functions for converting from and back to HCI. Where the HSI function is forced cylindrical, HCI is a
 //double cone. This is for compatibility purposes, and of course, making future programmers who expect a double-cone
 // function less sad. These algorithms were taken from wikipedia.
 
@@ -847,174 +994,238 @@ void HCIToRGB(const qreal h, const qreal c, const qreal i, qreal *red, qreal *gr
 {
 //This function may not be correct, but it's based on the HCY function on the basis of seeing HCI as similar
 //to the weighted HCY, but assuming that the weights are the same(one-third).
-	qreal hue=0.0;
-	qreal chroma=0.0;
-	qreal intensity=0.0;	
-	if (i>1.0){intensity = 1.0;} else if(i<0.0){intensity = 0.0;} else{intensity = i;}
-	if (h>1.0 || h<0.0){hue=fmod(h, 1.0);} else {hue=h;}
-	if (c>1.0){chroma = 1.0;} else if(c<0.0){chroma = 0.0;} else{chroma = c;}
-	const qreal onethird = 1.0/3.0;
-	qreal r=0.0;
-	qreal g=0.0;
-	qreal b=0.0;
-	
-	int fract = static_cast<int>(hue*6.0);
-	qreal x = (1-fabs(fmod(fract,2)-1) )*chroma;
-	switch (fract) {
-	case 0:r = chroma; g=x; b=0;break;
-	case 1:r = x; g=chroma; b=0;break;
-	case 2:r = 0; g=chroma; b=x;break;
-	case 3:r = 0; g=x; b=chroma;break;
-	case 4:r = x; g=0; b=chroma;break;
-	case 5:r = chroma; g=0; b=x;break;
-	}
-	qreal m = intensity-( onethird*(r+g+b) );
-	r += m; g += m; b += m;
+    qreal hue = 0.0;
+    qreal chroma = 0.0;
+    qreal intensity = 0.0;
+    if (i > 1.0) {
+        intensity = 1.0;
+    } else if (i < 0.0) {
+        intensity = 0.0;
+    } else {
+        intensity = i;
+    }
+    if (h > 1.0 || h < 0.0) {
+        hue = fmod(h, 1.0);
+    } else {
+        hue = h;
+    }
+    if (c > 1.0) {
+        chroma = 1.0;
+    } else if (c < 0.0) {
+        chroma = 0.0;
+    } else {
+        chroma = c;
+    }
+    const qreal onethird = 1.0 / 3.0;
+    qreal r = 0.0;
+    qreal g = 0.0;
+    qreal b = 0.0;
 
-	if (r>1.0){r=1.0;}
-	if (g>1.0){g=1.0;}
-	if (b>1.0){b=1.0;}
-	if (r<0.0){r=0.0;}
-	if (g<0.0){g=0.0;}
-	if (b<0.0){b=0.0;}
+    int fract = static_cast<int>(hue * 6.0);
+    qreal x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+    switch (fract) {
+    case 0: r = chroma; g = x; b = 0; break;
+    case 1: r = x; g = chroma; b = 0; break;
+    case 2: r = 0; g = chroma; b = x; break;
+    case 3: r = 0; g = x; b = chroma; break;
+    case 4: r = x; g = 0; b = chroma; break;
+    case 5: r = chroma; g = 0; b = x; break;
+    }
+    qreal m = intensity - (onethird * (r + g + b));
+    r += m; g += m; b += m;
 
-	*red=r;
-	*green=g;
-	*blue=b;
+    if (r > 1.0) {
+        r = 1.0;
+    }
+    if (g > 1.0) {
+        g = 1.0;
+    }
+    if (b > 1.0) {
+        b = 1.0;
+    }
+    if (r < 0.0) {
+        r = 0.0;
+    }
+    if (g < 0.0) {
+        g = 0.0;
+    }
+    if (b < 0.0) {
+        b = 0.0;
+    }
+
+    *red = r;
+    *green = g;
+    *blue = b;
 }
 
-void RGBToHCI(const qreal r,const qreal g,const qreal b, qreal *h, qreal *c, qreal *i)
+void RGBToHCI(const qreal r, const qreal g, const qreal b, qreal *h, qreal *c, qreal *i)
 {
-	qreal minval = qMin(r, qMin(g, b));
-	qreal maxval = qMax(r, qMax(g, b));
-	qreal hue = 0.0;
-	qreal sat = 0.0;
-	qreal intensity = 0.0;
-	intensity=(r+g+b)/3.0;
-	qreal chroma = maxval-minval;	
-		if(chroma==0)
-        {
-            hue = 0.0;
-            sat = 0.0;
-        }
-        else
-        {
+    qreal minval = qMin(r, qMin(g, b));
+    qreal maxval = qMax(r, qMax(g, b));
+    qreal hue = 0.0;
+    qreal sat = 0.0;
+    qreal intensity = 0.0;
+    intensity = (r + g + b) / 3.0;
+    qreal chroma = maxval - minval;
+    if (chroma == 0) {
+        hue = 0.0;
+        sat = 0.0;
+    } else {
         //the following finds the hue
 
-        if(maxval==r)
-            {
-                hue = fmod(((g-b)/chroma), 6.0);
-            }
-            else if(maxval==g)
-            {
-                hue = (b-r)/chroma + 2.0;
-            }
-            else if(maxval==b)
-            {
-                hue = (r-g)/chroma + 4.0;
-            }
-            hue /=6.0;//this makes sure that hue is in the 0-1.0 range.
-			sat= 1-(minval/intensity);
-		}
-	if (hue>1.0){hue=1.0;}
-	if (hue<0.0){hue=0.0;}
-	if (sat>1.0){sat=1.0;}
-	if (sat<0.0){sat=0.0;}
-	if (intensity>1.0){intensity=1.0;}
-	if (intensity<0.0){intensity=0.0;}
+        if (maxval == r) {
+            hue = fmod(((g - b) / chroma), 6.0);
+        } else if (maxval == g) {
+            hue = (b - r) / chroma + 2.0;
+        } else if (maxval == b) {
+            hue = (r - g) / chroma + 4.0;
+        }
+        hue /= 6.0; //this makes sure that hue is in the 0-1.0 range.
+        sat = 1 - (minval / intensity);
+    }
+    if (hue > 1.0) {
+        hue = 1.0;
+    }
+    if (hue < 0.0) {
+        hue = 0.0;
+    }
+    if (sat > 1.0) {
+        sat = 1.0;
+    }
+    if (sat < 0.0) {
+        sat = 0.0;
+    }
+    if (intensity > 1.0) {
+        intensity = 1.0;
+    }
+    if (intensity < 0.0) {
+        intensity = 0.0;
+    }
 
-	*h=hue;
-	*c=sat;
-	*i=intensity;
+    *h = hue;
+    *c = sat;
+    *i = intensity;
 
 }
 void HCYToRGB(const qreal h, const qreal c, const qreal y, qreal *red, qreal *green, qreal *blue, qreal R, qreal G, qreal B)
 {
-	qreal hue=0.0;
-	qreal chroma=0.0;
-	qreal luma=0.0;
-	if (y>1.0){luma = 1.0;} else if(y<0.0){luma = 0.0;} else{luma = y;}
-	if (h>1.0 || h<0.0){hue=(fmod((h*2.0), 2.0))/2.0;} else {hue=h;}
-	if (c>1.0){chroma = 1.0;} else if(c<0.0){chroma = 0.0;} else{chroma = c;}
-	//const qreal R=0.299;
-	//const qreal G=0.587;
-	//const qreal B=0.114;
-	qreal r=0.0;
-	qreal g=0.0;
-	qreal b=0.0;
-	
-	int fract =static_cast<int>(hue*6.0); 
-	qreal x = (1-fabs(fmod(fract,2)-1) )*chroma;
-	switch (fract) {
-	case 0:r = chroma; g=x; b=0;break;
-	case 1:r = x; g=chroma; b=0;break;
-	case 2:r = 0; g=chroma; b=x;break;
-	case 3:r = 0; g=x; b=chroma;break;
-	case 4:r = x; g=0; b=chroma;break;
-	case 5:r = chroma; g=0; b=x;break;
-	}
-	qreal m = luma-( (R*r)+(B*b)+(G*g) );
-	r += m; g += m; b += m;
+    qreal hue = 0.0;
+    qreal chroma = 0.0;
+    qreal luma = 0.0;
+    if (y > 1.0) {
+        luma = 1.0;
+    } else if (y < 0.0) {
+        luma = 0.0;
+    } else {
+        luma = y;
+    }
+    if (h > 1.0 || h < 0.0) {
+        hue = (fmod((h * 2.0), 2.0)) / 2.0;
+    } else {
+        hue = h;
+    }
+    if (c > 1.0) {
+        chroma = 1.0;
+    } else if (c < 0.0) {
+        chroma = 0.0;
+    } else {
+        chroma = c;
+    }
+    //const qreal R=0.299;
+    //const qreal G=0.587;
+    //const qreal B=0.114;
+    qreal r = 0.0;
+    qreal g = 0.0;
+    qreal b = 0.0;
 
-	if (r>1.0){r=1.0;}
-	if (g>1.0){g=1.0;}
-	if (b>1.0){b=1.0;}
-	if (r<0.0){r=0.0;}
-	if (g<0.0){g=0.0;}
-	if (b<0.0){b=0.0;}
+    int fract = static_cast<int>(hue * 6.0);
+    qreal x = (1 - fabs(fmod(fract, 2) - 1)) * chroma;
+    switch (fract) {
+    case 0: r = chroma; g = x; b = 0; break;
+    case 1: r = x; g = chroma; b = 0; break;
+    case 2: r = 0; g = chroma; b = x; break;
+    case 3: r = 0; g = x; b = chroma; break;
+    case 4: r = x; g = 0; b = chroma; break;
+    case 5: r = chroma; g = 0; b = x; break;
+    }
+    qreal m = luma - ((R * r) + (B * b) + (G * g));
+    r += m; g += m; b += m;
 
-	*red=r;
-	*green=g;
-	*blue=b;
+    if (r > 1.0) {
+        r = 1.0;
+    }
+    if (g > 1.0) {
+        g = 1.0;
+    }
+    if (b > 1.0) {
+        b = 1.0;
+    }
+    if (r < 0.0) {
+        r = 0.0;
+    }
+    if (g < 0.0) {
+        g = 0.0;
+    }
+    if (b < 0.0) {
+        b = 0.0;
+    }
+
+    *red = r;
+    *green = g;
+    *blue = b;
 }
 
-void RGBToHCY(const qreal r,const qreal g,const qreal b, qreal *h, qreal *c, qreal *y, qreal R, qreal G, qreal B)
+void RGBToHCY(const qreal r, const qreal g, const qreal b, qreal *h, qreal *c, qreal *y, qreal R, qreal G, qreal B)
 {
-	qreal minval = qMin(r, qMin(g, b));
-	qreal maxval = qMax(r, qMax(g, b));
-	qreal hue = 0.0;
-	qreal chroma = 0.0;
-	qreal luma = 0.0;
-	//weights for rgb, these are the same weights used in color space maths and the desaturate.
-	//qreal R=0.299;
-	//qreal G=0.587;
-	//qreal B=0.114;
-	luma=(R*r+G*g+B*b);
-	chroma = maxval-minval;
-	
-		if(chroma==0)
-        {
-            hue = 0.0;
-        }
-        else
-        {
+    qreal minval = qMin(r, qMin(g, b));
+    qreal maxval = qMax(r, qMax(g, b));
+    qreal hue = 0.0;
+    qreal chroma = 0.0;
+    qreal luma = 0.0;
+    //weights for rgb, these are the same weights used in color space maths and the desaturate.
+    //qreal R=0.299;
+    //qreal G=0.587;
+    //qreal B=0.114;
+    luma = (R * r + G * g + B * b);
+    chroma = maxval - minval;
+
+    if (chroma == 0) {
+        hue = 0.0;
+    } else {
         //the following finds the hue
 
-        if(maxval==r)
-            {
-                hue = fmod(((g-b)/chroma), 6.0);
-            }
-            else if(maxval==g)
-            {
-                hue = (b-r)/chroma + 2.0;
-            }
-            else if(maxval==b)
-            {
-                hue = (r-g)/chroma + 4.0;
-            }
-            hue /=6.0;//this makes sure that hue is in the 0-1.0 range.
-				
-		}
-	if (hue>1.0){hue=1.0;}
-	if (hue<0.0){hue=0.0;}
-	if (chroma>1.0){chroma=1.0;}
-	if (luma>1.0){luma=1.0;}
-	if (chroma<0.0){chroma=0.0;}
-	if (luma<0.0){luma=0.0;}
+        if (maxval == r) {
+            hue = fmod(((g - b) / chroma), 6.0);
+        } else if (maxval == g) {
+            hue = (b - r) / chroma + 2.0;
+        } else if (maxval == b) {
+            hue = (r - g) / chroma + 4.0;
+        }
+        hue /= 6.0; //this makes sure that hue is in the 0-1.0 range.
 
-	*h=hue;
-	*c=chroma;
-	*y=luma;	
+    }
+    if (hue > 1.0) {
+        hue = 1.0;
+    }
+    if (hue < 0.0) {
+        hue = 0.0;
+    }
+    if (chroma > 1.0) {
+        chroma = 1.0;
+    }
+    if (luma > 1.0) {
+        luma = 1.0;
+    }
+    if (chroma < 0.0) {
+        chroma = 0.0;
+    }
+    if (luma < 0.0) {
+        luma = 0.0;
+    }
+
+    *h = hue;
+    *c = chroma;
+    *y = luma;
 
 }
 

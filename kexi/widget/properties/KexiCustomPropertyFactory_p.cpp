@@ -28,8 +28,8 @@
 #if 0 //TODO
 KexiImagePropertyEdit::KexiImagePropertyEdit(
     KoProperty::Property *property, QWidget *parent)
-        : KoProperty::PixmapEdit(property, parent)
-        , m_id(0)
+    : KoProperty::PixmapEdit(property, parent)
+    , m_id(0)
 {
 }
 
@@ -40,13 +40,15 @@ KexiImagePropertyEdit::~KexiImagePropertyEdit()
 void KexiImagePropertyEdit::selectPixmap()
 {
     QString fileName(KoProperty::PixmapEdit::selectPixmapFileName());
-    if (fileName.isEmpty())
+    if (fileName.isEmpty()) {
         return;
+    }
     KexiBLOBBuffer::Handle h(KexiBLOBBuffer::self()->insertPixmap(KUrl(fileName)));
     setValue((uint)/*! @todo unsafe*/h.id());
 #if 0 //will be reenabled for new image collection
-    if (!m_manager->activeForm() || !property())
+    if (!m_manager->activeForm() || !property()) {
         return;
+    }
 
     ObjectTreeItem *item = m_manager->activeForm()->objectTree()->lookup(m_manager->activeForm()->selectedWidget()->name());
     QString name = item ? item->pixmapName(property()->name()) : "";
@@ -80,7 +82,7 @@ void KexiImagePropertyEdit::drawViewer(QPainter *p, cg, const QRect &r,
 //----------------------------------------------------------------
 
 KexiIdentifierPropertyEdit::KexiIdentifierPropertyEdit(QWidget *parent)
-        : KoProperty::StringEdit(parent)
+    : KoProperty::StringEdit(parent)
 {
     KexiUtils::IdentifierValidator *val = new KexiUtils::IdentifierValidator(this);
     setValidator(val);
@@ -98,8 +100,9 @@ void KexiIdentifierPropertyEdit::setValue(const QString &value)
         return;
     }
     const QString identifier(KexiUtils::stringToIdentifier(value));
-    if (identifier != value)
+    if (identifier != value) {
         kDebug() << QString("String \"%1\" converted to identifier \"%2\".").arg(value).arg(identifier);
+    }
     KoProperty::StringEdit::setValue(identifier);
 }
 

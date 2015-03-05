@@ -18,7 +18,6 @@
 
 #include "kis_ppm_test.h"
 
-
 #include <QTest>
 #include <QCoreApplication>
 

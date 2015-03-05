@@ -107,8 +107,8 @@ void KoToolBase::updateShapeController(KoShapeBasedDocumentBase *shapeController
     if (shapeController) {
         KoDocumentResourceManager *scrm = shapeController->resourceManager();
         if (scrm) {
-            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
-                    this, SLOT(documentResourceChanged(int, const QVariant &)));
+            connect(scrm, SIGNAL(resourceChanged(int,QVariant)),
+                    this, SLOT(documentResourceChanged(int,QVariant)));
         }
     }
 }
@@ -117,7 +117,7 @@ void KoToolBase::deactivate()
 {
 }
 
-void KoToolBase::canvasResourceChanged(int key, const QVariant & res)
+void KoToolBase::canvasResourceChanged(int key, const QVariant &res)
 {
     Q_UNUSED(key);
     Q_UNUSED(res);
@@ -154,7 +154,7 @@ void KoToolBase::keyReleaseEvent(QKeyEvent *e)
     e->ignore();
 }
 
-void KoToolBase::wheelEvent(KoPointerEvent * e)
+void KoToolBase::wheelEvent(KoPointerEvent *e)
 {
     e->ignore();
 }
@@ -167,8 +167,9 @@ void KoToolBase::touchEvent(QTouchEvent *event)
 QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
 {
     Q_D(const KoToolBase);
-    if (d->canvas->canvasWidget() == 0)
+    if (d->canvas->canvasWidget() == 0) {
         return QVariant();
+    }
 
     switch (query) {
     case Qt::ImMicroFocus:
@@ -180,7 +181,7 @@ QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewCo
     }
 }
 
-void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
+void KoToolBase::inputMethodEvent(QInputMethodEvent *event)
 {
     if (! event->commitString().isEmpty()) {
         QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
@@ -189,17 +190,17 @@ void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
     event->accept();
 }
 
-void KoToolBase::customPressEvent(KoPointerEvent * event)
+void KoToolBase::customPressEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
 
-void KoToolBase::customReleaseEvent(KoPointerEvent * event)
+void KoToolBase::customReleaseEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
 
-void KoToolBase::customMoveEvent(KoPointerEvent * event)
+void KoToolBase::customMoveEvent(KoPointerEvent *event)
 {
     event->ignore();
 }
@@ -234,7 +235,7 @@ void KoToolBase::addAction(const QString &name, KAction *action)
     d->actionCollection.insert(name, action);
 }
 
-QHash<QString, KAction*> KoToolBase::actions() const
+QHash<QString, KAction *> KoToolBase::actions() const
 {
     Q_D(const KoToolBase);
     return d->actionCollection;
@@ -246,7 +247,7 @@ KAction *KoToolBase::action(const QString &name) const
     return d->actionCollection.value(name);
 }
 
-QWidget * KoToolBase::createOptionWidget()
+QWidget *KoToolBase::createOptionWidget()
 {
     return 0;
 }
@@ -291,19 +292,19 @@ void KoToolBase::cut()
     deleteSelection();
 }
 
-QList<QAction*> KoToolBase::popupActionList() const
+QList<QAction *> KoToolBase::popupActionList() const
 {
     Q_D(const KoToolBase);
     return d->popupActionList;
 }
 
-void KoToolBase::setPopupActionList(const QList<QAction*> &list)
+void KoToolBase::setPopupActionList(const QList<QAction *> &list)
 {
     Q_D(KoToolBase);
     d->popupActionList = list;
 }
 
-KoCanvasBase * KoToolBase::canvas() const
+KoCanvasBase *KoToolBase::canvas() const
 {
     Q_D(const KoToolBase);
     return d->canvas;
@@ -317,8 +318,7 @@ void KoToolBase::setStatusText(const QString &statusText)
 uint KoToolBase::handleRadius() const
 {
     Q_D(const KoToolBase);
-    if(d->canvas->shapeController()->resourceManager())
-    {
+    if (d->canvas->shapeController()->resourceManager()) {
         return d->canvas->shapeController()->resourceManager()->handleRadius();
     } else {
         return 3;
@@ -328,8 +328,7 @@ uint KoToolBase::handleRadius() const
 uint KoToolBase::grabSensitivity() const
 {
     Q_D(const KoToolBase);
-    if(d->canvas->shapeController()->resourceManager())
-    {
+    if (d->canvas->shapeController()->resourceManager()) {
         return d->canvas->shapeController()->resourceManager()->grabSensitivity();
     } else {
         return 3;
@@ -339,8 +338,8 @@ uint KoToolBase::grabSensitivity() const
 QRectF KoToolBase::handleGrabRect(const QPointF &position) const
 {
     Q_D(const KoToolBase);
-    const KoViewConverter * converter = d->canvas->viewConverter();
-    uint handleSize = 2*grabSensitivity();
+    const KoViewConverter *converter = d->canvas->viewConverter();
+    uint handleSize = 2 * grabSensitivity();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
@@ -349,8 +348,8 @@ QRectF KoToolBase::handleGrabRect(const QPointF &position) const
 QRectF KoToolBase::handlePaintRect(const QPointF &position) const
 {
     Q_D(const KoToolBase);
-    const KoViewConverter * converter = d->canvas->viewConverter();
-    uint handleSize = 2*handleRadius();
+    const KoViewConverter *converter = d->canvas->viewConverter();
+    uint handleSize = 2 * handleRadius();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
@@ -359,7 +358,7 @@ QRectF KoToolBase::handlePaintRect(const QPointF &position) const
 void KoToolBase::setTextMode(bool value)
 {
     Q_D(KoToolBase);
-    d->isInTextMode=value;
+    d->isInTextMode = value;
 }
 
 QStringList KoToolBase::supportedPasteMimeTypes() const

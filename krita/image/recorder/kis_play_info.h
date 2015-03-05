@@ -28,15 +28,15 @@ class KRITAIMAGE_EXPORT KisPlayInfo
 {
 public:
     KisPlayInfo(KisImageWSP image, KisNodeSP currentNodes);
-    KisPlayInfo(const KisPlayInfo& _rhs);
-    KisPlayInfo& operator=(const KisPlayInfo& _rhs);
+    KisPlayInfo(const KisPlayInfo &_rhs);
+    KisPlayInfo &operator=(const KisPlayInfo &_rhs);
     ~KisPlayInfo();
-    KisUndoAdapter* undoAdapter() const;
+    KisUndoAdapter *undoAdapter() const;
     KisImageWSP image() const;
     KisNodeSP currentNode() const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

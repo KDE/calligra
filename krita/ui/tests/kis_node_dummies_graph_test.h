@@ -24,7 +24,6 @@
 class KisNodeDummy;
 class KisNodeDummiesGraph;
 
-
 class KisNodeDummiesGraphTest : public QObject
 {
     Q_OBJECT

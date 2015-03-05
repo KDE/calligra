@@ -29,16 +29,18 @@
 #include <QIODevice>
 
 // make it a QSharedData
-class KPrSoundData::Private {
+class KPrSoundData::Private
+{
 public:
     Private(KPrSoundCollection *c)
-    : refCount(0)
-    , collection(c)
-    , tempFile(0)
-    , taggedForSaving(false)
+        : refCount(0)
+        , collection(c)
+        , tempFile(0)
+        , taggedForSaving(false)
     { }
 
-    ~Private() {
+    ~Private()
+    {
         delete tempFile;
     }
     QString tempFileName;
@@ -63,65 +65,72 @@ KPrSoundData::KPrSoundData(KPrSoundCollection *collection, const QString &href)
 }
 
 KPrSoundData::KPrSoundData(const KPrSoundData &soundData)
-:    d(soundData.d)
+    :    d(soundData.d)
 {
     d->refCount++;
 }
 
-KPrSoundData::~KPrSoundData() {
-    if(--d->refCount == 0) {
+KPrSoundData::~KPrSoundData()
+{
+    if (--d->refCount == 0) {
         d->collection->removeSound(this);
         delete d;
     }
 }
 
-bool KPrSoundData::operator==(const KPrSoundData &other) const {
+bool KPrSoundData::operator==(const KPrSoundData &other) const
+{
     return other.d == d;
 }
 
-QString KPrSoundData::tagForSaving() {
-    d->taggedForSaving=true;
+QString KPrSoundData::tagForSaving()
+{
+    d->taggedForSaving = true;
     d->storeHref = QString("Sounds/%1").arg(d->title);
 
     return d->storeHref;
 }
 
-QString KPrSoundData::storeHref() const {
+QString KPrSoundData::storeHref() const
+{
     return d->storeHref;
 }
 
-QString KPrSoundData::nameOfTempFile() const {
+QString KPrSoundData::nameOfTempFile() const
+{
     return d->tempFileName;
 }
 
-QString KPrSoundData::title() const {
+QString KPrSoundData::title() const
+{
     return d->title;
 }
 
 bool KPrSoundData::saveToFile(QIODevice *device)
 {
-    if(! d->tempFile->open())
+    if (! d->tempFile->open()) {
         return false;
-    char * data = new char[32 * 1024];
-    while(true) {
+    }
+    char *data = new char[32 * 1024];
+    while (true) {
         bool failed = false;
-        qint64 bytes = d->tempFile->read(data, 32*1024);
-        if(bytes == 0)
+        qint64 bytes = d->tempFile->read(data, 32 * 1024);
+        if (bytes == 0) {
             break;
-        else if(bytes == -1) {
+        } else if (bytes == -1) {
             kWarning() << "Failed to read data from the tmpfile";
             failed = true;
         }
-        while(! failed && bytes > 0) {
+        while (! failed && bytes > 0) {
             qint64 written = device->write(data, bytes);
-            if(written < 0) {// error!
+            if (written < 0) { // error!
                 kWarning() << "Failed to copy the sound from the temp file";
                 failed = true;
             }
             bytes -= written;
         }
-        if(failed) { // read or write failed; so lets cleanly abort.
-                delete[] data;
+        if (failed) { // read or write failed; so lets cleanly abort.
+            delete[] data;
             return false;
         }
     }
@@ -134,11 +143,12 @@ bool KPrSoundData::isTaggedForSaving()
     return d->taggedForSaving;
 }
 
-
-bool KPrSoundData::loadFromFile(QIODevice *device) {
+bool KPrSoundData::loadFromFile(QIODevice *device)
+{
     struct Finally {
-        Finally(QIODevice *d) : device (d), bytes(0) {}
-        ~Finally() {
+        Finally(QIODevice *d) : device(d), bytes(0) {}
+        ~Finally()
+        {
             delete device;
             delete[] bytes;
         }
@@ -152,28 +162,29 @@ bool KPrSoundData::loadFromFile(QIODevice *device) {
     d->tempFile = 0;
 
     d->tempFile = new KTemporaryFile();
-    if(! d->tempFile->open())
+    if (! d->tempFile->open()) {
         return false;
-    char * data = new char[32 * 1024];
+    }
+    char *data = new char[32 * 1024];
     finally.bytes = data;
-    while(true) {
+    while (true) {
         bool failed = false;
-        qint64 bytes = device->read(data, 32*1024);
-        if(bytes == 0)
+        qint64 bytes = device->read(data, 32 * 1024);
+        if (bytes == 0) {
             break;
-        else if(bytes == -1) {
+        } else if (bytes == -1) {
             kWarning() << "Failed to read sound data";
             failed = true;
         }
-        while(! failed && bytes > 0) {
+        while (! failed && bytes > 0) {
             qint64 written = d->tempFile->write(data, bytes);
-            if(written < 0) {// error!
+            if (written < 0) { // error!
                 kWarning() << "Failed to copy the sound to temp";
                 failed = true;
             }
             bytes -= written;
         }
-        if(failed) { // read or write failed; so lets cleanly abort.
+        if (failed) { // read or write failed; so lets cleanly abort.
             delete d->tempFile;
             d->tempFile = 0;
             return false;
@@ -184,7 +195,7 @@ bool KPrSoundData::loadFromFile(QIODevice *device) {
     return true;
 }
 
-KPrSoundCollection * KPrSoundData::soundCollection()
+KPrSoundCollection *KPrSoundData::soundCollection()
 {
     return d->collection;
 }

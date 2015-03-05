@@ -39,7 +39,7 @@ class QDomElement;
 class KRITAUI_EXPORT KisOpenRasterStackSaveVisitor : public KisNodeVisitor
 {
 public:
-    KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext*, vKisNodeSP activeNodes);
+    KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext *, vKisNodeSP activeNodes);
     virtual ~KisOpenRasterStackSaveVisitor();
 
     using KisNodeVisitor::visit;
@@ -48,36 +48,40 @@ public:
     bool visit(KisPaintLayer *layer);
     bool visit(KisGroupLayer *layer);
     bool visit(KisAdjustmentLayer *layer);
-    bool visit(KisGeneratorLayer * layer);
+    bool visit(KisGeneratorLayer *layer);
 
-    bool visit(KisNode*) {
-        return true;
-    }
-
-    bool visit(KisCloneLayer*);
-
-    bool visit(KisFilterMask*) {
-        return true;
-    }
-    bool visit(KisTransformMask*) {
-        return true;
-    }
-    bool visit(KisTransparencyMask*) {
-        return true;
-    }
-    bool visit(KisSelectionMask*) {
+    bool visit(KisNode *)
+    {
         return true;
     }
 
-    bool visit(KisExternalLayer*);
+    bool visit(KisCloneLayer *);
+
+    bool visit(KisFilterMask *)
+    {
+        return true;
+    }
+    bool visit(KisTransformMask *)
+    {
+        return true;
+    }
+    bool visit(KisTransparencyMask *)
+    {
+        return true;
+    }
+    bool visit(KisSelectionMask *)
+    {
+        return true;
+    }
+
+    bool visit(KisExternalLayer *);
 
 private:
     bool saveLayer(KisLayer *layer);
-    void saveLayerInfo(QDomElement& elt, KisLayer* layer);
+    void saveLayerInfo(QDomElement &elt, KisLayer *layer);
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 #endif // KIS_LAYER_VISITOR_H_
 

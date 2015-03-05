@@ -37,14 +37,14 @@ class KRITAUI_EXPORT KisPaintOpOptionsWidget : public KisPaintOpSettingsWidget
 
 public:
 
-    KisPaintOpOptionsWidget(QWidget * parent = 0);
+    KisPaintOpOptionsWidget(QWidget *parent = 0);
 
     ~KisPaintOpOptionsWidget();
 
-    void addPaintOpOption(KisPaintOpOption * option);
+    void addPaintOpOption(KisPaintOpOption *option);
 
     /// Reimplemented
-    virtual void setConfiguration(const KisPropertiesConfiguration * config);
+    virtual void setConfiguration(const KisPropertiesConfiguration *config);
 
     /// Reimplemented
     virtual void writeConfiguration(KisPropertiesConfiguration *config) const;
@@ -55,20 +55,18 @@ public:
     ///Reimplemented, sets node on option widgets
     virtual void setNode(KisNodeWSP node);
 
-
-
 private Q_SLOTS:
 
-    void changePage(const QModelIndex&);
-    void lockProperties(const QModelIndex& index);
+    void changePage(const QModelIndex &);
+    void lockProperties(const QModelIndex &index);
     void slotLockPropertiesDrop();
     void slotLockPropertiesSave();
     void slotEntryChecked(const QModelIndex &index);
 
 private:
-    
+
     struct Private;
-    Private* const m_d;
+    Private *const m_d;
     bool m_saveLockedOption;
 
 };

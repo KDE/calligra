@@ -33,10 +33,11 @@ class WBSDefinitionPanel;
 class WBSDefinition;
 class Project;
 
-class KPLATOUI_EXPORT WBSDefinitionDialog : public KDialog {
+class KPLATOUI_EXPORT WBSDefinitionDialog : public KDialog
+{
     Q_OBJECT
 public:
-    explicit WBSDefinitionDialog(Project &project, WBSDefinition &def, QWidget *parent=0);
+    explicit WBSDefinitionDialog(Project &project, WBSDefinition &def, QWidget *parent = 0);
 
     KUndo2Command *buildCommand();
 

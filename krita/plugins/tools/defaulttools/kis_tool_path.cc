@@ -22,7 +22,7 @@
 #include <KoCanvasBase.h>
 #include <kis_cursor.h>
 
-KisToolPath::KisToolPath(KoCanvasBase * canvas)
+KisToolPath::KisToolPath(KoCanvasBase *canvas)
     : DelegatedPathTool(canvas, Qt::ArrowCursor,
                         new __KisToolPathLocalTool(canvas, this))
 {
@@ -40,7 +40,9 @@ void KisToolPath::requestStrokeCancellation()
 
 void KisToolPath::mousePressEvent(KoPointerEvent *event)
 {
-    if (!nodeEditable()) return;
+    if (!nodeEditable()) {
+        return;
+    }
     DelegatedPathTool::mousePressEvent(event);
 }
 
@@ -48,7 +50,7 @@ QList<QPointer<QWidget> > KisToolPath::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets = DelegatedPathTool::createOptionWidgets();
     QList<QPointer<QWidget> > filteredWidgets;
-    foreach(QWidget* widget, widgets) {
+    foreach (QWidget *widget, widgets) {
         if (widget->objectName() != "Stroke widget") {
             filteredWidgets.push_back(widget);
         }
@@ -56,9 +58,8 @@ QList<QPointer<QWidget> > KisToolPath::createOptionWidgets()
     return filteredWidgets;
 }
 
-
-__KisToolPathLocalTool::__KisToolPathLocalTool(KoCanvasBase * canvas, KisToolPath* parentTool)
-        : KoCreatePathTool(canvas), m_parentTool(parentTool) {}
+__KisToolPathLocalTool::__KisToolPathLocalTool(KoCanvasBase *canvas, KisToolPath *parentTool)
+    : KoCreatePathTool(canvas), m_parentTool(parentTool) {}
 
 void __KisToolPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {
@@ -70,7 +71,7 @@ void __KisToolPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter
     m_parentTool->paintToolOutline(&painter, m_parentTool->pixelToView(matrix.map(pathShape.outline())));
 }
 
-void __KisToolPathLocalTool::addPathShape(KoPathShape* pathShape)
+void __KisToolPathLocalTool::addPathShape(KoPathShape *pathShape)
 {
     m_parentTool->addPathShape(pathShape, kundo2_i18n("Draw Bezier Curve"));
 }

@@ -59,7 +59,7 @@ public:
     QString id;
     QString name;
     QString inherits;
-    Theme* inheritedTheme;
+    Theme *inheritedTheme;
 
     QVariantMap colors;
     QVariantMap sizes;
@@ -79,7 +79,7 @@ public:
     int lineCountPortrait;
 };
 
-Theme::Theme(QObject* parent)
+Theme::Theme(QObject *parent)
     : QObject(parent), d(new Private)
 {
     qApp->installEventFilter(this);
@@ -88,7 +88,7 @@ Theme::Theme(QObject* parent)
 Theme::~Theme()
 {
     QFontDatabase db;
-    Q_FOREACH(int id, d->addedFonts) {
+    Q_FOREACH (int id, d->addedFonts) {
         db.removeApplicationFont(id);
     }
 
@@ -100,9 +100,9 @@ QString Theme::id() const
     return d->id;
 }
 
-void Theme::setId(const QString& newValue)
+void Theme::setId(const QString &newValue)
 {
-    if(newValue != d->id) {
+    if (newValue != d->id) {
         d->id = newValue;
         d->basePath = KUrl(KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(d->id))).directory();
         emit idChanged();
@@ -114,9 +114,9 @@ QString Theme::name() const
     return d->name;
 }
 
-void Theme::setName(const QString& newValue)
+void Theme::setName(const QString &newValue)
 {
-    if(newValue != d->name) {
+    if (newValue != d->name) {
         d->name = newValue;
         emit nameChanged();
     }
@@ -127,16 +127,16 @@ QString Theme::inherits() const
     return d->inherits;
 }
 
-void Theme::setInherits(const QString& newValue)
+void Theme::setInherits(const QString &newValue)
 {
-    if(newValue != d->inherits) {
-        if(d->inheritedTheme) {
+    if (newValue != d->inherits) {
+        if (d->inheritedTheme) {
             delete d->inheritedTheme;
             d->inheritedTheme = 0;
         }
         d->inherits = newValue;
 
-        if(!d->inherits.isEmpty()) {
+        if (!d->inherits.isEmpty()) {
             d->inheritedTheme = Theme::load(d->inherits, this);
             connect(d->inheritedTheme, SIGNAL(fontCacheRebuilt()), SIGNAL(fontCacheRebuilt()));
         }
@@ -150,51 +150,48 @@ QVariantMap Theme::colors() const
     return d->colors;
 }
 
-void Theme::setColors(const QVariantMap& newValue)
+void Theme::setColors(const QVariantMap &newValue)
 {
-    if(newValue != d->colors) {
+    if (newValue != d->colors) {
         d->colors = newValue;
         emit colorsChanged();
     }
 }
 
-QColor Theme::color(const QString& name)
+QColor Theme::color(const QString &name)
 {
-    if(d->colorCache.contains(name))
+    if (d->colorCache.contains(name)) {
         return d->colorCache.value(name);
+    }
 
     QStringList parts = name.split('/');
     QColor result;
 
-    if(!parts.isEmpty())
-    {
+    if (!parts.isEmpty()) {
         QVariantMap map = d->colors;
         QString current = parts.takeFirst();
 
-        while(map.contains(current))
-        {
+        while (map.contains(current)) {
             QVariant value = map.value(current);
-            if(value.type() == QVariant::Map)
-            {
-                if(parts.isEmpty())
+            if (value.type() == QVariant::Map) {
+                if (parts.isEmpty()) {
                     break;
+                }
 
                 map = value.toMap();
                 current = parts.takeFirst();
-            }
-            else
-            {
+            } else {
                 result = value.value<QColor>();
                 map = QVariantMap();
             }
         }
     }
 
-    if(!result.isValid() && d->inheritedTheme) {
+    if (!result.isValid() && d->inheritedTheme) {
         result = d->inheritedTheme->color(name);
     }
 
-    if(!result.isValid()) {
+    if (!result.isValid()) {
         qWarning() << "Unable to find color" << name;
     } else {
         d->colorCache.insert(name, result);
@@ -208,15 +205,15 @@ QVariantMap Theme::sizes() const
     return d->sizes;
 }
 
-void Theme::setSizes(const QVariantMap& newValue)
+void Theme::setSizes(const QVariantMap &newValue)
 {
-    if(newValue != d->sizes) {
+    if (newValue != d->sizes) {
         d->sizes = newValue;
         emit sizesChanged();
     }
 }
 
-float Theme::size(const QString& name)
+float Theme::size(const QString &name)
 {
     Q_UNUSED(name);
     return 0.f;
@@ -227,10 +224,9 @@ QVariantMap Theme::fonts() const
     return d->fonts;
 }
 
-void Theme::setFonts(const QVariantMap& newValue)
+void Theme::setFonts(const QVariantMap &newValue)
 {
-    if(newValue != d->fonts)
-    {
+    if (newValue != d->fonts) {
         d->fonts = newValue;
 
         d->fontMap.clear();
@@ -239,27 +235,29 @@ void Theme::setFonts(const QVariantMap& newValue)
     }
 }
 
-QFont Theme::font(const QString& name)
+QFont Theme::font(const QString &name)
 {
-    if(!d->fontsAdded) {
+    if (!d->fontsAdded) {
         QDir fontDir(d->basePath + '/' + d->fontPath);
         QStringList entries = fontDir.entryList(QDir::Files);
         QFontDatabase db;
-        Q_FOREACH(QString entry, entries) {
+        Q_FOREACH (QString entry, entries) {
             d->addedFonts.append(db.addApplicationFont(fontDir.absoluteFilePath(entry)));
         }
         d->fontsAdded = true;
     }
 
-    if(d->fontMap.isEmpty()) {
+    if (d->fontMap.isEmpty()) {
         d->rebuildFontCache();
     }
 
-    if(d->fontMap.contains(name))
+    if (d->fontMap.contains(name)) {
         return d->fontMap.value(name);
+    }
 
-    if(d->inheritedTheme)
+    if (d->inheritedTheme) {
         return d->inheritedTheme->font(name);
+    }
 
     qWarning() << "Unable to find font" << name;
     return QFont();
@@ -270,12 +268,12 @@ QString Theme::fontPath() const
     return d->fontPath;
 }
 
-void Theme::setFontPath(const QString& newValue)
+void Theme::setFontPath(const QString &newValue)
 {
-    if(newValue != d->fontPath) {
-        if(!d->addedFonts.isEmpty()) {
+    if (newValue != d->fontPath) {
+        if (!d->addedFonts.isEmpty()) {
             QFontDatabase db;
-            Q_FOREACH(int id, d->addedFonts) {
+            Q_FOREACH (int id, d->addedFonts) {
                 db.removeApplicationFont(id);
             }
             d->addedFonts.clear();
@@ -288,25 +286,24 @@ void Theme::setFontPath(const QString& newValue)
     }
 }
 
-
 QString Theme::iconPath() const
 {
     return d->iconPath;
 }
 
-void Theme::setIconPath(const QString& newValue)
+void Theme::setIconPath(const QString &newValue)
 {
-    if(newValue != d->iconPath) {
+    if (newValue != d->iconPath) {
         d->iconPath = newValue;
         emit iconPathChanged();
     }
 }
 
-QUrl Theme::icon(const QString& name)
+QUrl Theme::icon(const QString &name)
 {
     QString url = QString("%1/%2/%3.svg").arg(d->basePath, d->iconPath, name);
-    if(!QFile::exists(url)) {
-        if(d->inheritedTheme) {
+    if (!QFile::exists(url)) {
+        if (d->inheritedTheme) {
             return d->inheritedTheme->icon(name);
         } else {
             qWarning() << "Unable to find icon" << url;
@@ -321,19 +318,19 @@ QString Theme::imagePath() const
     return d->imagePath;
 }
 
-void Theme::setImagePath(const QString& newValue)
+void Theme::setImagePath(const QString &newValue)
 {
-    if(newValue != d->imagePath) {
+    if (newValue != d->imagePath) {
         d->imagePath = newValue;
         emit imagePathChanged();
     }
 }
 
-QUrl Theme::image(const QString& name)
+QUrl Theme::image(const QString &name)
 {
     QString url = QString("%1/%2/%3").arg(d->basePath, d->imagePath, name);
-    if(!QFile::exists(url)) {
-        if(d->inheritedTheme) {
+    if (!QFile::exists(url)) {
+        if (d->inheritedTheme) {
             return d->inheritedTheme->image(name);
         } else {
             qWarning() << "Unable to find image" << url;
@@ -343,7 +340,7 @@ QUrl Theme::image(const QString& name)
     return QUrl::fromLocalFile(url);
 }
 
-Theme* Theme::load(const QString& id, QObject* parent)
+Theme *Theme::load(const QString &id, QObject *parent)
 {
     QString qml;
 
@@ -354,7 +351,7 @@ Theme* Theme::load(const QString& id, QObject* parent)
     // Corrects for mismatched case errors in path (qtdeclarative fails to load)
     wchar_t buffer[1024];
     QString absolute = appdir.absolutePath();
-    DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+    DWORD rv = ::GetShortPathName((wchar_t *)absolute.utf16(), buffer, 1024);
     rv = ::GetLongPathName(buffer, buffer, 1024);
     QString correctedPath((QChar *)buffer);
     appdir.setPath(correctedPath);
@@ -369,13 +366,13 @@ Theme* Theme::load(const QString& id, QObject* parent)
     QDeclarativeComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
     themeComponent.loadUrl(QUrl::fromLocalFile(qml));
 
-    if(themeComponent.isError()) {
+    if (themeComponent.isError()) {
         qWarning() << themeComponent.errorString();
         return 0;
     }
 
-    Theme* theme = qobject_cast<Theme*>(themeComponent.create());
-    if(!theme) {
+    Theme *theme = qobject_cast<Theme *>(themeComponent.create());
+    if (!theme) {
         qWarning() << "Failed to create theme instance!";
         return 0;
     }
@@ -383,9 +380,9 @@ Theme* Theme::load(const QString& id, QObject* parent)
     return theme;
 }
 
-bool Theme::eventFilter(QObject* target, QEvent* event)
+bool Theme::eventFilter(QObject *target, QEvent *event)
 {
-    if(target == qApp->activeWindow() && target->inherits("QMainWindow") && event->type() == QEvent::Resize) {
+    if (target == qApp->activeWindow() && target->inherits("QMainWindow") && event->type() == QEvent::Resize) {
         d->rebuildFontCache();
         emit fontCacheRebuilt();
     }
@@ -397,16 +394,17 @@ void Theme::Private::rebuildFontCache()
 {
     fontMap.clear();
     QFontDatabase db;
-    for(QVariantMap::iterator itr = fonts.begin(); itr != fonts.end(); ++itr)
-    {
+    for (QVariantMap::iterator itr = fonts.begin(); itr != fonts.end(); ++itr) {
         QVariantMap map = itr->toMap();
-        if(map.isEmpty())
+        if (map.isEmpty()) {
             continue;
+        }
 
         QFont font = db.font(map.value("family").toString(), map.value("style", "Regular").toString(), 10);
 
-        if(font.isCopyOf(qApp->font()))
+        if (font.isCopyOf(qApp->font())) {
             qWarning() << "Could not find font" << map.value("family") << "with style" << map.value("style", "Regular");
+        }
 
         float lineCount = qApp->activeWindow()->height() > qApp->activeWindow()->width() ? lineCountPortrait : lineCountLandscape;
         float lineHeight = qApp->activeWindow()->height() / lineCount;

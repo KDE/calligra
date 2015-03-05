@@ -31,11 +31,11 @@ KisPressureSpacingOption::KisPressureSpacingOption()
     setMaximumLabel(i18n("100%"));
 }
 
-
-double KisPressureSpacingOption::apply(const KisPaintInformation & info) const
+double KisPressureSpacingOption::apply(const KisPaintInformation &info) const
 {
-    if (!isChecked())
+    if (!isChecked()) {
         return 1.0;
+    }
 
     return computeValue(info);
 }
@@ -50,13 +50,13 @@ bool KisPressureSpacingOption::isotropicSpacing() const
     return m_isotropicSpacing;
 }
 
-void KisPressureSpacingOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPressureSpacingOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(ISOTROPIC_SPACING, m_isotropicSpacing);
 }
 
-void KisPressureSpacingOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureSpacingOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOption::readOptionSetting(setting);
     m_isotropicSpacing = setting->getBool(ISOTROPIC_SPACING, false);

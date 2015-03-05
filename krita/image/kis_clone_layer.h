@@ -33,7 +33,6 @@ enum CopyLayerType {
     COPY_ORIGINAL
 };
 
-
 /**
  * A copy layer adds the contents of another layer in another place in
  * the layer stack. It is possible to add more effect masks to the
@@ -51,10 +50,11 @@ class KRITAIMAGE_EXPORT KisCloneLayer : public KisLayer
 public:
 
     KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &name, quint8 opacity);
-    KisCloneLayer(const KisCloneLayer& rhs);
+    KisCloneLayer(const KisCloneLayer &rhs);
     virtual ~KisCloneLayer();
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return KisNodeSP(new KisCloneLayer(*this));
     }
 
@@ -74,7 +74,7 @@ public:
 
     void copyOriginalToProjection(const KisPaintDeviceSP original,
                                   KisPaintDeviceSP projection,
-                                  const QRect& rect) const;
+                                  const QRect &rect) const;
 
     QIcon icon() const;
     KisDocumentSectionModel::PropertyList sectionModelProperties() const;
@@ -124,7 +124,7 @@ protected:
 private:
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 
 };
 

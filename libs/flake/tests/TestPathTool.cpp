@@ -86,6 +86,5 @@ void TestPathTool::koPathPointSelection_selectedSegmentsData()
     QVERIFY(pd1 == pd2);
 }
 
-
 QTEST_KDEMAIN(TestPathTool, GUI)
 #include "TestPathTool.moc"

@@ -61,16 +61,16 @@
 
 using namespace KFormDesigner;
 
-Form::Form(WidgetLibrary* library, Mode mode, KActionCollection &col, ActionGroup& group)
-        : QObject(library)
-        , d( new FormPrivate(this, library) )
+Form::Form(WidgetLibrary *library, Mode mode, KActionCollection &col, ActionGroup &group)
+    : QObject(library)
+    , d(new FormPrivate(this, library))
 {
     init(mode, col, group);
 }
 
 Form::Form(Form *parent)
-        : QObject(parent->library())
-        , d( new FormPrivate(this, parent->library()) )
+    : QObject(parent->library())
+    , d(new FormPrivate(this, parent->library()))
 {
     init(parent->mode(), *parent->actionCollection(), *parent->widgetActionGroup());
 }
@@ -95,7 +95,7 @@ void Form::init(Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &g
     d->collection = &col;
 }
 
-WidgetLibrary* Form::library() const
+WidgetLibrary *Form::library() const
 {
     return d->library;
 }
@@ -105,7 +105,7 @@ KActionCollection  *Form::actionCollection() const
     return d->collection;
 }
 
-KFormDesigner::ActionGroup* Form::widgetActionGroup() const
+KFormDesigner::ActionGroup *Form::widgetActionGroup() const
 {
     return d->widgetActionGroup;
 }
@@ -120,32 +120,33 @@ Form::Features Form::features() const
     return d->features;
 }
 
-QWidget* Form::widget() const
+QWidget *Form::widget() const
 {
-    if (d->topTree)
+    if (d->topTree) {
         return d->topTree->widget();
-    else if (d->toplevel)
+    } else if (d->toplevel) {
         return d->toplevel->widget();
-    else // preview form
+    } else { // preview form
         return d->widget;
+    }
 }
 
-FormWidget* Form::formWidget() const
+FormWidget *Form::formWidget() const
 {
     return d->formWidget;
 }
 
-ObjectTree* Form::objectTree() const
+ObjectTree *Form::objectTree() const
 {
     return d->topTree;
 }
 
-QWidgetList* Form::selectedWidgets() const
+QWidgetList *Form::selectedWidgets() const
 {
     return &(d->selected);
 }
 
-QWidget* Form::selectedWidget() const
+QWidget *Form::selectedWidget() const
 {
     return d->selected.count() == 1 ? d->selected.first() : 0;
 }
@@ -217,7 +218,7 @@ void Form::setUndoStackClean()
 }
 
 #ifdef KFD_SIGSLOTS
-ConnectionBuffer* Form::connectionBuffer() const
+ConnectionBuffer *Form::connectionBuffer() const
 {
     return d->connBuffer;
 }
@@ -232,7 +233,7 @@ void Form::setConnectionBuffer(ConnectionBuffer *b)
 #endif
 
 #ifndef KEXI_NO_PIXMAPCOLLECTION
-PixmapCollection* Form::pixmapCollection() const
+PixmapCollection *Form::pixmapCollection() const
 {
     return d->pixcollection;
 }
@@ -248,12 +249,13 @@ bool Form::pixmapsStoredInline() const
     return d->pixmapsStoredInline;
 }
 
-ObjectTreeList* Form::tabStops()
+ObjectTreeList *Form::tabStops()
 {
     return &(d->tabstops);
 }
 
-bool Form::autoTabStops() const {
+bool Form::autoTabStops() const
+{
     return d->autoTabstops;
 }
 
@@ -262,14 +264,14 @@ void Form::setAutoTabStops(bool autoTab)
     d->autoTabstops = autoTab;
 }
 
-QHash<QByteArray, QString>* Form::headerProperties()
+QHash<QByteArray, QString> *Form::headerProperties()
 {
     return &d->headerProperties;
 }
 
 //////////////// Container -related functions ///////////////////////
 
-Container* Form::toplevelContainer() const
+Container *Form::toplevelContainer() const
 {
     return d->toplevel;
 }
@@ -308,29 +310,33 @@ void Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByt
     }
 }
 
-Container* Form::activeContainer()
+Container *Form::activeContainer()
 {
-    if (d->selected.isEmpty())
+    if (d->selected.isEmpty()) {
         return d->toplevel;
+    }
 
     ObjectTreeItem *it;
-    if (d->selected.count() == 1)
+    if (d->selected.count() == 1) {
         it = d->topTree->lookup(d->selected.last()->objectName());
-    else
+    } else {
         it = commonParentContainer(d->selected);
+    }
 
-    if (!it)
+    if (!it) {
         return 0;
-    if (it->container())
+    }
+    if (it->container()) {
         return it->container();
-    else
+    } else {
         return it->parent()->container();
+    }
 }
 
-ObjectTreeItem* Form::commonParentContainer(const QWidgetList& wlist)
+ObjectTreeItem *Form::commonParentContainer(const QWidgetList &wlist)
 {
     // create a list of all widget parents
-    QSet<QWidget*> parents;
+    QSet<QWidget *> parents;
     foreach (QWidget *w, wlist) {
         parents.insert(w->parentWidget());
     }
@@ -342,26 +348,28 @@ ObjectTreeItem* Form::commonParentContainer(const QWidgetList& wlist)
     ObjectTreeItem *item;
     if (parentsList.count() == 1) {
         item = d->topTree->lookup(parentsList.first()->objectName());
-    }
-    else {
+    } else {
         // we need to go one level up
         item =  commonParentContainer(parentsList);
     }
     return item;
 }
 
-Container* Form::parentContainer(QWidget *w) const
+Container *Form::parentContainer(QWidget *w) const
 {
-    if (!w)
+    if (!w) {
         return 0;
+    }
     ObjectTreeItem *it = d->topTree->lookup(w->objectName());
-    if (!it || !it->parent())
+    if (!it || !it->parent()) {
         return 0;
+    }
 
-    if (it->parent()->container())
+    if (it->parent()->container()) {
         return it->parent()->container();
-    else
+    } else {
         return it->parent()->parent()->container();
+    }
 }
 
 void Form::setMode(Mode mode)
@@ -392,13 +400,13 @@ void Form::setMode(Mode mode)
     d->designModeStyle = 0;
 }
 
-
 ///////////////////////////// Selection stuff ///////////////////////
 
 void Form::selectWidget(QWidget *w, WidgetSelectionFlags flags)
 {
-    if (!d->selectWidgetEnabled)
+    if (!d->selectWidgetEnabled) {
         return;
+    }
     d->selectWidgetEnabled = false;
     selectWidgetInternal(w, flags);
     d->selectWidgetEnabled = true;
@@ -428,13 +436,15 @@ void Form::selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags)
     QWidget *wtmp = w;
     while (!(flags & DontRaise) && wtmp && wtmp->parentWidget() && (wtmp != widget())) {
         wtmp->raise();
-        if (d->resizeHandles.value( wtmp->objectName() ))
-            d->resizeHandles.value( wtmp->objectName() )->raise();
+        if (d->resizeHandles.value(wtmp->objectName())) {
+            d->resizeHandles.value(wtmp->objectName())->raise();
+        }
         wtmp = wtmp->parentWidget();
     }
 
-    if (wtmp)
+    if (wtmp) {
         wtmp->setFocus();
+    }
 
     if (flags & ReplacePreviousSelection) {
         d->selected.clear();
@@ -451,8 +461,9 @@ void Form::selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags)
     if (!isTopLevelWidget(w) && w->parentWidget()
             && KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")) {
         w = w->parentWidget();
-        if (w->parentWidget() && w->parentWidget()->inherits("QTabWidget"))
+        if (w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) {
             w = w->parentWidget();
+        }
     }
 #endif
 
@@ -466,11 +477,11 @@ void Form::selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags)
     }
 }
 
-void Form::selectWidgets(const QList<QWidget*>& widgets, WidgetSelectionFlags flags)
+void Form::selectWidgets(const QList<QWidget *> &widgets, WidgetSelectionFlags flags)
 {
     int i = 0;
     const int count = widgets.count();
-    foreach (QWidget* widget, widgets) {
+    foreach (QWidget *widget, widgets) {
         if (i == 1) {
             flags |= AddToPreviousSelection;
         }
@@ -481,11 +492,11 @@ void Form::selectWidgets(const QList<QWidget*>& widgets, WidgetSelectionFlags fl
     }
 }
 
-QList<QWidget*> Form::widgetsForNames(const QList<QByteArray>& names) const
+QList<QWidget *> Form::widgetsForNames(const QList<QByteArray> &names) const
 {
-    QList<QWidget*> widgets;
-    foreach (const QByteArray& name, names) {
-        ObjectTreeItem* item = objectTree()->lookup(name);
+    QList<QWidget *> widgets;
+    foreach (const QByteArray &name, names) {
+        ObjectTreeItem *item = objectTree()->lookup(name);
         if (item) { //we're checking for item!=0 because the name could be of a form widget
             widgets.append(item->widget());
         }
@@ -493,7 +504,7 @@ QList<QWidget*> Form::widgetsForNames(const QList<QByteArray>& names) const
     return widgets;
 }
 
-void Form::selectWidgets(const QList<QByteArray>& names, WidgetSelectionFlags flags)
+void Form::selectWidgets(const QList<QByteArray> &names, WidgetSelectionFlags flags)
 {
     selectWidgets(widgetsForNames(names), flags);
 }
@@ -502,13 +513,14 @@ bool Form::isTopLevelWidget(QWidget *w) const
 {
     /* should not be used, just check w==formWidget() instead? */
     ObjectTreeItem *item = objectTree()->lookup(w->objectName());
-    if (!item)
+    if (!item) {
         return true;
+    }
 
     return !item->parent();
 }
 
-ResizeHandleSet* Form::resizeHandlesForWidget(QWidget* w)
+ResizeHandleSet *Form::resizeHandlesForWidget(QWidget *w)
 {
     return d->resizeHandles.value(w->objectName());
 }
@@ -539,10 +551,10 @@ void Form::setInsertionPoint(const QPoint &p)
     d->insertionPoint = p;
 }
 
-QAction* Form::action(const QString& name)
+QAction *Form::action(const QString &name)
 {
     if (name == KStandardAction::name(KStandardAction::Undo)) {
-        QAction *a = d->internalCollection.action( name );
+        QAction *a = d->internalCollection.action(name);
         if (!a) {
             a = d->undoStack.createUndoAction(&d->internalCollection);
             // connect this action to the form instead of stack
@@ -550,9 +562,8 @@ QAction* Form::action(const QString& name)
             connect(a, SIGNAL(triggered()), this, SLOT(undo()));
         }
         return a;
-    }
-    else if (name == KStandardAction::name(KStandardAction::Redo)) {
-        QAction *a = d->internalCollection.action( name );
+    } else if (name == KStandardAction::name(KStandardAction::Redo)) {
+        QAction *a = d->internalCollection.action(name);
         if (!a) {
             a = d->undoStack.createRedoAction(&d->internalCollection);
             // connect this action to the form instead of stack
@@ -568,13 +579,13 @@ void Form::emitActionSignals()
 {
     // Update menu and toolbar items
     if (selectedWidget()) {
-      if (widget() == selectedWidget())
-        emitFormWidgetSelected();
-      else
-        emitWidgetSelected( false );
-    }
-    else if (selectedWidgets()) {
-      emitWidgetSelected( true );
+        if (widget() == selectedWidget()) {
+            emitFormWidgetSelected();
+        } else {
+            emitWidgetSelected(false);
+        }
+    } else if (selectedWidgets()) {
+        emitWidgetSelected(true);
     }
 }
 
@@ -583,12 +594,14 @@ void Form::emitUndoActionSignals()
 //! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     KAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
-    if (undoAction)
+    if (undoAction) {
         emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
+    }
 
     KAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
-    if (redoAction)
+    if (redoAction) {
         emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
+    }
 #endif
 }
 
@@ -630,7 +643,7 @@ void Form::emitWidgetSelected(bool multiple)
 
     QWidgetList *wlist = selectedWidgets();
     bool fontEnabled = false;
-    foreach (QWidget* w, *wlist) {
+    foreach (QWidget *w, *wlist) {
         if (-1 != w->metaObject()->indexOfProperty("font")) {
             fontEnabled = true;
             break;
@@ -746,8 +759,9 @@ void Form::formDeleted()
 
 void Form::changeName(const QByteArray &oldname, const QByteArray &newname)
 {
-    if (oldname == newname)
+    if (oldname == newname) {
         return;
+    }
 
     if (d->topTree->rename(oldname, newname)) {
 #ifdef KFD_SIGSLOTS
@@ -755,8 +769,7 @@ void Form::changeName(const QByteArray &oldname, const QByteArray &newname)
 #endif
         ResizeHandleSet *temp = d->resizeHandles.take(oldname);
         d->resizeHandles.insert(newname, temp);
-    }
-    else { // rename failed
+    } else { // rename failed
         KMessageBox::sorry(widget()->topLevelWidget(),
                            i18n("Renaming widget \"%1\" to \"%2\" failed.",
                                 QString(oldname), QString(newname)));
@@ -775,13 +788,14 @@ void Form::emitChildRemoved(ObjectTreeItem *item)
 {
     d->tabstops.removeOne(item);
 #ifdef KFD_SIGSLOTS
-    if (d->connBuffer)
+    if (d->connBuffer) {
         d->connBuffer->removeAllConnectionsForWidget(item->name());
+    }
 #endif
     emit childRemoved(item);
 }
 
-const Command* Form::executingCommand() const
+const Command *Form::executingCommand() const
 {
     return d->executingCommand;
 }
@@ -793,13 +807,15 @@ bool Form::addCommand(Command *command, AddCommandOption option)
         command->blockRedoOnce();
     }
     const bool saveExecutingCommand = !d->executingCommand;
-    if (saveExecutingCommand)
+    if (saveExecutingCommand) {
         d->executingCommand = command;
+    }
 
     d->undoStack.push(command);
 
-    if (saveExecutingCommand)
+    if (saveExecutingCommand) {
         d->executingCommand = 0;
+    }
     //kDebug() << "ADDED:" << *command;
     return true;
 }
@@ -809,8 +825,9 @@ void Form::emitUndoEnabled()
 //! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     KAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
-    if (undoAction)
+    if (undoAction) {
         emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
+    }
 #endif
 }
 
@@ -819,8 +836,9 @@ void Form::emitRedoEnabled()
 //! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     KAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
-    if (redoAction)
+    if (redoAction) {
         emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
+    }
 #endif
 }
 
@@ -829,18 +847,18 @@ void Form::slotFormRestored()
     setModified(false);
 }
 
-
 ///////////////////////////  Tab stops ////////////////////////
 
 void Form::addWidgetToTabStops(ObjectTreeItem *it)
 {
     QWidget *w = it->widget();
-    if (!w)
+    if (!w) {
         return;
+    }
     if (!(w->focusPolicy() & Qt::TabFocus)) {
         // For composed widgets, we check if one of the child can have focus
         const QObjectList list(w->children());
-        foreach(const QObject *obj, list) {
+        foreach (const QObject *obj, list) {
             if (obj->isWidgetType()) {//QWidget::TabFocus flag will be checked later!
                 if (!d->tabstops.contains(it)) {
                     //kDebug() << "adding child of" << w << ":" << obj;
@@ -849,8 +867,7 @@ void Form::addWidgetToTabStops(ObjectTreeItem *it)
                 }
             }
         }
-    }
-    else if (!d->tabstops.contains(it)) { // not yet in the list
+    } else if (!d->tabstops.contains(it)) { // not yet in the list
         //kDebug() << "adding" << w;
         d->tabstops.append(it);
     }
@@ -870,10 +887,11 @@ void Form::updateTabStopsOrder()
 }
 
 //! Collects all the containers reculsively. Used by Form::autoAssignTabStops().
-static void collectContainers(ObjectTreeItem* item, QSet<Container*>& containers)
+static void collectContainers(ObjectTreeItem *item, QSet<Container *> &containers)
 {
-    if (!item->container())
+    if (!item->container()) {
         return;
+    }
     if (!containers.contains(item->container())) {
         //kDebug() << item->container()->objectTree()->className()
         //         << " " << item->container()->objectTree()->name();
@@ -890,7 +908,7 @@ void Form::autoAssignTabStops()
     HorizontalWidgetList hlist(toplevelContainer()->widget());
 
     // 1. Collect all the containers, as we'll be sorting widgets groupped by containers
-    QSet<Container*> containers;
+    QSet<Container *> containers;
 
     collectContainers(toplevelContainer()->objectTree(), containers);
 
@@ -909,32 +927,35 @@ void Form::autoAssignTabStops()
 
     /// We automatically sort widget from the top-left to bottom-right corner
     //! \todo Handle RTL layout (ie from top-right to bottom-left)
-    for (QWidgetList::ConstIterator it(list.constBegin()); it!=list.constEnd(); ++it) {
+    for (QWidgetList::ConstIterator it(list.constBegin()); it != list.constEnd(); ++it) {
         QWidget *w = *it;
         hlist.append(w);
 
         ++it;
-        QWidget *nextw = it==list.constEnd() ? 0 : *it;
+        QWidget *nextw = it == list.constEnd() ? 0 : *it;
         Q_UNUSED(nextw);
         QObject *page_w = 0;
         KFormDesigner::TabWidget *tab_w
-                = KFormDesigner::findParent<KFormDesigner::TabWidget>(
-                    w, "KFormDesigner::TabWidget", page_w);
-        
-        for (; it!=list.constEnd(); ++it) {
+            = KFormDesigner::findParent<KFormDesigner::TabWidget>(
+                  w, "KFormDesigner::TabWidget", page_w);
+
+        for (; it != list.constEnd(); ++it) {
             QWidget *nextw = *it;
-            if (KexiUtils::hasParent(w, nextw)) // do not group (sort) widgets where one is a child of another
+            if (KexiUtils::hasParent(w, nextw)) { // do not group (sort) widgets where one is a child of another
                 break;
-            if (nextw->y() >= (w->y() + 20))
+            }
+            if (nextw->y() >= (w->y() + 20)) {
                 break;
+            }
             if (tab_w) {
                 QObject *page_nextw = 0;
                 KFormDesigner::TabWidget *tab_nextw
-                        = KFormDesigner::findParent<KFormDesigner::TabWidget>(
-                            nextw, "KFormDesigner::TabWidget", page_nextw);
+                    = KFormDesigner::findParent<KFormDesigner::TabWidget>(
+                          nextw, "KFormDesigner::TabWidget", page_nextw);
                 if (tab_w == tab_nextw) {
-                    if (page_w != page_nextw) // 'nextw' widget within different tab page
+                    if (page_w != page_nextw) { // 'nextw' widget within different tab page
                         break;
+                    }
                 }
             }
             hlist.append(nextw);
@@ -973,11 +994,12 @@ void Form::setOriginalFormatVersion(uint ver)
     d->originalFormatVersion = ver;
 }
 
-void Form::setFormWidget(FormWidget* w)
+void Form::setFormWidget(FormWidget *w)
 {
     d->formWidget = w;
-    if (!d->formWidget)
+    if (!d->formWidget) {
         return;
+    }
     d->formWidget->setForm(this);
 }
 
@@ -991,7 +1013,7 @@ void Form::enterWidgetInsertingState(const QByteArray &classname)
     if (toplevelContainer()) {
         widget()->setCursor(QCursor(Qt::CrossCursor));
     }
-    const QList<QWidget*> list(widget()->findChildren<QWidget*>());
+    const QList<QWidget *> list(widget()->findChildren<QWidget *>());
     foreach (QWidget *w, list) {
         d->cursors.insert(w, w->cursor());
         w->setCursor(QCursor(Qt::CrossCursor));
@@ -1011,11 +1033,12 @@ QByteArray Form::selectedClass() const
 
 void Form::abortWidgetInserting()
 {
-    if (d->state != WidgetInserting)
+    if (d->state != WidgetInserting) {
         return;
+    }
 
     widget()->unsetCursor();
-    const QList<QWidget*> list(widget()->findChildren<QWidget*>());
+    const QList<QWidget *> list(widget()->findChildren<QWidget *>());
     foreach (QWidget *w, list) {
         w->unsetCursor();
     }
@@ -1045,8 +1068,9 @@ void Form::enterWidgetSelectingState()
 #ifdef KFD_SIGSLOTS
 void Form::enterConnectingState()
 {
-    if (!(d->features & EnableConnections))
+    if (!(d->features & EnableConnections)) {
         return;
+    }
     enterWidgetSelectingState();
 
     // We set a Pointing hand cursor while drawing the connection
@@ -1055,26 +1079,29 @@ void Form::enterConnectingState()
         widget()->setCursor(QCursor(Qt::PointingHandCursor));
         widget()->setMouseTracking(true);
     }
-    const QList<QWidget*> list(widget()->findChildren<QWidget*>());
-    foreach(QWidget *w, list) {
+    const QList<QWidget *> list(widget()->findChildren<QWidget *>());
+    foreach (QWidget *w, list) {
         d->cursors.insert(w, w->cursor());
         w->setCursor(QCursor(Qt::PointingHandCursor));
-        if (w->hasMouseTracking())
+        if (w->hasMouseTracking()) {
             d->mouseTrackers->append(w->objectName());
+        }
         w->setMouseTracking(true);
     }
     delete m_connection;
     m_connection = new Connection();
     m_drawingSlot = true;
-    if (m_dragConnection)
+    if (m_dragConnection) {
         m_dragConnection->setChecked(true);
+    }
 }
 
 void Form::resetSelectedConnection()
 {
 //! @todo
-    if (!(d->features & EnableConnections))
+    if (!(d->features & EnableConnections)) {
         return;
+    }
 
     delete m_connection;
     m_connection = new Connection();
@@ -1090,10 +1117,12 @@ void Form::resetSelectedConnection()
 void Form::abortCreatingConnection()
 {
 //! @todo
-    if (!(d->features & EnableConnections))
+    if (!(d->features & EnableConnections)) {
         return;
-    if (d->state != Connecting)
+    }
+    if (d->state != Connecting) {
         return;
+    }
 
     if (formWidget()) {
         formWidget()->clearForm();
@@ -1101,18 +1130,20 @@ void Form::abortCreatingConnection()
 
     widget()->unsetCursor();
     widget()->setMouseTracking(false);
-    const QList<QWidget*> list(widget()->findChildren<QWidget*>());
+    const QList<QWidget *> list(widget()->findChildren<QWidget *>());
     foreach (QWidget *w, list) {
-        QHash<QObject*, QCursor>::ConstIterator curIt(d->cursors.find(w));
-        if (curIt != d->cursors.constEnd())
+        QHash<QObject *, QCursor>::ConstIterator curIt(d->cursors.find(w));
+        if (curIt != d->cursors.constEnd()) {
             w->setCursor(*curIt);
+        }
         w->setMouseTracking(d->mouseTrackers->contains(w->objectName()));
     }
     delete d->mouseTrackers;
     d->mouseTrackers = 0;
 
-    if (m_connection->slot().isNull())
+    if (m_connection->slot().isNull()) {
         emit connectionAborted(this);
+    }
     delete m_connection;
     m_connection = 0;
     m_drawingSlot = false;
@@ -1147,16 +1178,14 @@ void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
     kDebug() << "oldValue:" << oldValues << "value:" << value;
     kDebug() << "idOfPropertyCommand:" << idOfPropertyCommand;
     d->insideAddPropertyCommand = true;
-    PropertyCommand *presentCommand = dynamic_cast<PropertyCommand*>( d->commandHistory->presentCommand() );
-    if (   presentCommand
-        && d->lastCommand == presentCommand
-        && idOfPropertyCommand > 0
-        && d->idOfPropertyCommand == idOfPropertyCommand)
-    {
-        d->lastCommand->setValue(value); // just change the value, 
-                                         // to avoid multiple PropertyCommands that only differ by value
-    }
-    else {
+    PropertyCommand *presentCommand = dynamic_cast<PropertyCommand *>(d->commandHistory->presentCommand());
+    if (presentCommand
+            && d->lastCommand == presentCommand
+            && idOfPropertyCommand > 0
+            && d->idOfPropertyCommand == idOfPropertyCommand) {
+        d->lastCommand->setValue(value); // just change the value,
+        // to avoid multiple PropertyCommands that only differ by value
+    } else {
         d->lastCommand = new PropertyCommand(*this, oldValues, value, propertyName);
         if (!addCommand(d->lastCommand, execute)) {
             d->lastCommand = 0;
@@ -1180,23 +1209,22 @@ void Form::addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
 {
 //! @todo add to merge in PropertyCommand...?
 #if 0
-    if (!commandGroup || commandGroup->commands().isEmpty())
+    if (!commandGroup || commandGroup->commands().isEmpty()) {
         return;
+    }
     kDebug() << "count:" << commandGroup->commands().count();
     kDebug() << "idOfPropertyCommand:" << idOfPropertyCommand;
     d->insideAddPropertyCommand = true;
-    PropertyCommandGroup *presentCommand = dynamic_cast<PropertyCommandGroup*>( d->commandHistory->presentCommand() );
-    if (   presentCommand
-        && d->lastCommandGroup == presentCommand
-        && idOfPropertyCommand > 0
-        && d->idOfPropertyCommand == idOfPropertyCommand)
-    {
-        presentCommand->copyPropertyValuesFrom(*commandGroup); // just change the values, 
-                                                       // to avoid multiple CommandsGroups
-                                                       // that only differ by values
+    PropertyCommandGroup *presentCommand = dynamic_cast<PropertyCommandGroup *>(d->commandHistory->presentCommand());
+    if (presentCommand
+            && d->lastCommandGroup == presentCommand
+            && idOfPropertyCommand > 0
+            && d->idOfPropertyCommand == idOfPropertyCommand) {
+        presentCommand->copyPropertyValuesFrom(*commandGroup); // just change the values,
+        // to avoid multiple CommandsGroups
+        // that only differ by values
         delete commandGroup;
-    }
-    else {
+    } else {
         d->lastCommandGroup = commandGroup;
         addCommand(d->lastCommandGroup, execute);
         d->idOfPropertyCommand = idOfPropertyCommand;
@@ -1211,18 +1239,20 @@ void Form::addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
     d->insideAddPropertyCommand = false;
 }
 
-void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
+void Form::slotPropertyChanged(KoProperty::Set &set, KoProperty::Property &p)
 {
     Q_UNUSED(set);
 
-    if (!d->slotPropertyChangedEnabled || !objectTree())
+    if (!d->slotPropertyChangedEnabled || !objectTree()) {
         return;
+    }
 
-    const QByteArray property( p.name() );
-    if (property.startsWith("this:"))
-        return; //starts with magical prefix: it's a "meta" prop.
+    const QByteArray property(p.name());
+    if (property.startsWith("this:")) {
+        return;    //starts with magical prefix: it's a "meta" prop.
+    }
 
-    const QVariant value( p.value() );
+    const QVariant value(p.value());
 
     // check if the name is valid (ie is correct identifier) and there is no name conflict
     if (property == "objectName") {
@@ -1230,27 +1260,23 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
             kWarning() << "changing objectName property only allowed for single selection";
             return;
         }
-        if (!isNameValid(value.toString()))
+        if (!isNameValid(value.toString())) {
             return;
-    }
-    else if (property == "paletteBackgroundPixmap") {
+        }
+    } else if (property == "paletteBackgroundPixmap") {
         // a widget with a background pixmap should have its own origin
         // special types of properties handled separately
-    }
-    else if (property == "paletteBackgroundColor") {
+    } else if (property == "paletteBackgroundColor") {
         d->setColorProperty(p, &QWidget::backgroundRole, p.value());
         return;
-    }
-    else if (property == "paletteForegroundColor") {
+    } else if (property == "paletteForegroundColor") {
         d->setColorProperty(p, &QWidget::foregroundRole, p.value());
         return;
-    }
-    else if (property == "autoFillBackground") {
+    } else if (property == "autoFillBackground") {
         if (!p.value().toBool()) { // make background inherited
             d->setColorProperty(p, &QWidget::backgroundRole, QVariant());
         }
-    }
-    else if (property == "hAlign" || property == "vAlign" || property == "wordbreak") {
+    } else if (property == "hAlign" || property == "vAlign" || property == "wordbreak") {
         saveAlignProperty(property);
         return;
     }
@@ -1280,36 +1306,37 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         }
         d->selected.first()->setProperty(property, value);
         handleWidgetPropertyChanged(d->selected.first(), property, value);
-    }
-    else {
+    } else {
 //! @todo add to merge in PropertyCommand if needed
         if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
             // We store old values for each widget
             QHash<QByteArray, QVariant> oldValues;
-            foreach(QWidget* widget, d->selected) {
+            foreach (QWidget *widget, d->selected) {
                 oldValues.insert(widget->objectName().toLatin1(), widget->property(property));
             }
             addPropertyCommand(oldValues, value, property, DontExecuteCommand);
         }
-        foreach(QWidget* widget, d->selected) {
+        foreach (QWidget *widget, d->selected) {
             ObjectTreeItem *titem = objectTree()->lookup(widget->objectName());
-            if (titem && p.isModified())
+            if (titem && p.isModified()) {
                 titem->addModifiedProperty(property, widget->property(property));
+            }
             widget->setProperty(property, value);
             handleWidgetPropertyChanged(widget, property, value);
         }
     }
 }
 
-void Form::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property)
+void Form::slotPropertyReset(KoProperty::Set &set, KoProperty::Property &property)
 {
     Q_UNUSED(set);
 
-    if (d->selected.count() < 2)
+    if (d->selected.count() < 2) {
         return;
+    }
 
     // We use the old value in modifProp for each widget
-    foreach(QWidget* widget, d->selected) {
+    foreach (QWidget *widget, d->selected) {
         ObjectTreeItem *titem = objectTree()->lookup(widget->objectName());
         if (titem && titem->modifiedProperties()->contains(property.name()))
             widget->setProperty(
@@ -1319,8 +1346,9 @@ void Form::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& propert
 
 bool Form::isNameValid(const QString &name) const
 {
-    if (d->selected.isEmpty())
+    if (d->selected.isEmpty()) {
         return false;
+    }
 //! @todo add to the undo buffer
     QWidget *w = d->selected.first();
     //also update widget's name in QObject member
@@ -1351,8 +1379,9 @@ bool Form::isNameValid(const QString &name) const
 
 void Form::undo()
 {
-    if (!objectTree())
+    if (!objectTree()) {
         return;
+    }
     if (!d->undoStack.canUndo()) {
         kWarning() << "cannot redo";
         return;
@@ -1360,21 +1389,24 @@ void Form::undo()
 
     const bool saveExecutingCommand = !d->executingCommand;
     //kDebug() << "saveExecutingCommand:" << saveExecutingCommand;
-    if (saveExecutingCommand)
-        d->executingCommand = dynamic_cast<const Command*>(d->undoStack.command(0));
+    if (saveExecutingCommand) {
+        d->executingCommand = dynamic_cast<const Command *>(d->undoStack.command(0));
+    }
     //kDebug() << d->undoStack.index();
     //kDebug() << d->executingCommand;
 
     d->undoStack.undo();
 
-    if (saveExecutingCommand)
+    if (saveExecutingCommand) {
         d->executingCommand = 0;
+    }
 }
 
 void Form::redo()
 {
-    if (!objectTree())
+    if (!objectTree()) {
         return;
+    }
     if (!d->undoStack.canRedo()) {
         kWarning() << "cannot redo";
         return;
@@ -1382,15 +1414,17 @@ void Form::redo()
     d->isRedoing = true;
     const bool saveExecutingCommand = !d->executingCommand;
     //kDebug() << "saveExecutingCommand:" << saveExecutingCommand;
-    if (saveExecutingCommand)
-        d->executingCommand = dynamic_cast<const Command*>(d->undoStack.command(d->undoStack.index()));
+    if (saveExecutingCommand) {
+        d->executingCommand = dynamic_cast<const Command *>(d->undoStack.command(d->undoStack.index()));
+    }
     //kDebug() << d->undoStack.index();
     //kDebug() << *d->executingCommand;
 
     d->undoStack.redo();
 
-    if (saveExecutingCommand)
+    if (saveExecutingCommand) {
         d->executingCommand = 0;
+    }
     d->isRedoing = false;
 }
 
@@ -1413,17 +1447,19 @@ bool Form::isPropertyVisible(const QByteArray &property, bool isTopLevel,
                              const QByteArray &classname) const
 {
     const bool multiple = d->selected.count() >= 2;
-    if (multiple && classname.isEmpty())
+    if (multiple && classname.isEmpty()) {
         return false;
+    }
 
     QWidget *w = d->selected.first();
-    WidgetWithSubpropertiesInterface* subpropIface
-        = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+    WidgetWithSubpropertiesInterface *subpropIface
+        = dynamic_cast<WidgetWithSubpropertiesInterface *>(w);
     QWidget *subwidget;
-    if (subpropIface && subpropIface->findMetaSubproperty(property).isValid()) // special case - subproperty
+    if (subpropIface && subpropIface->findMetaSubproperty(property).isValid()) { // special case - subproperty
         subwidget = subpropIface->subwidget();
-    else
+    } else {
         subwidget = w;
+    }
 
     return library()->isPropertyVisible(
                subwidget->metaObject()->className(), subwidget, property, multiple, isTopLevel);
@@ -1472,10 +1508,11 @@ void Form::createPropertiesForWidget(QWidget *w)
         return;
     }
     ObjectTreeItem *tree = objectTree()->lookup(w->objectName());
-    if (!tree)
+    if (!tree) {
         return;
+    }
 
-    const QHash<QString, QVariant>* modifiedProperties = tree->modifiedProperties();
+    const QHash<QString, QVariant> *modifiedProperties = tree->modifiedProperties();
     QHash<QString, QVariant>::ConstIterator modifiedPropertiesIt;
     bool isTopLevel = isTopLevelWidget(w);
     KoProperty::Property *newProp = 0;
@@ -1490,23 +1527,23 @@ void Form::createPropertiesForWidget(QWidget *w)
         KexiUtils::propertiesForMetaObjectWithInherited(w->metaObject()));
     //kDebug() << "propList.count() ==" << propList.count();
     QSet<QByteArray> propNames;
-    foreach(const QMetaProperty& mp, propList) {
+    foreach (const QMetaProperty &mp, propList) {
         propNames.insert(mp.name());
     }
 
     // add subproperties if available
-    WidgetWithSubpropertiesInterface* subpropIface
-        = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+    WidgetWithSubpropertiesInterface *subpropIface
+        = dynamic_cast<WidgetWithSubpropertiesInterface *>(w);
     if (subpropIface) {
         const QSet<QByteArray> subproperties(subpropIface->subproperties());
-        foreach(const QByteArray& propName, subproperties) {
+        foreach (const QByteArray &propName, subproperties) {
             propNames.insert(propName);
             //kDebug() << "Added subproperty: " << propName;
         }
     }
 
     // iterate over the property list, and create Property objects
-    foreach(const QByteArray& propName, propNames) {
+    foreach (const QByteArray &propName, propNames) {
         //kDebug() << ">> " << propName;
         const QMetaProperty subMeta = // special case - subproperty
             subpropIface ? subpropIface->findMetaSubproperty(propName) : QMetaProperty();
@@ -1516,19 +1553,18 @@ void Form::createPropertiesForWidget(QWidget *w)
             //kDebug() << "!meta.isValid()";
             continue;
         }
-        const char* propertyName = meta.name();
+        const char *propertyName = meta.name();
         QWidget *subwidget = subMeta.isValid()//subpropIface
                              ? subpropIface->subwidget() : w;
         WidgetInfo *subwinfo = library()->widgetInfoForClassName(
                                    subwidget->metaObject()->className());
 //  kDebug() << "$$$ " << subwidget->className();
 
-        if (   subwinfo
-            && meta.isDesignable(subwidget)
-            && meta.isWritable()
-            && meta.isReadable() && !d->propertySet.contains(propertyName)
-           )
-        {
+        if (subwinfo
+                && meta.isDesignable(subwidget)
+                && meta.isWritable()
+                && meta.isReadable() && !d->propertySet.contains(propertyName)
+           ) {
             //! \todo add another list for property description
             QString desc(d->propCaption.value(meta.name()));
             //! \todo change i18n
@@ -1558,8 +1594,7 @@ void Form::createPropertiesForWidget(QWidget *w)
                     newProp->setValue(
                         meta.enumerator().valueToKey(subwidget->property(propertyName).toInt()));
                 }
-            }
-            else {
+            } else {
                 newProp = new KoProperty::Property(
                     propertyName,
                     // assign current or older value
@@ -1572,11 +1607,13 @@ void Form::createPropertiesForWidget(QWidget *w)
                 }
             }
 
-            if (!isPropertyVisible(propertyName, isTopLevel))
+            if (!isPropertyVisible(propertyName, isTopLevel)) {
                 newProp->setVisible(false);
+            }
 //! @todo
-            if (newProp->type() == 0) // invalid type == null pixmap ?
+            if (newProp->type() == 0) { // invalid type == null pixmap ?
                 newProp->setType(KoProperty::Pixmap);
+            }
 
             d->propertySet.addProperty(newProp);
         }
@@ -1622,8 +1659,9 @@ void Form::updatePropertyValue(ObjectTreeItem *tree, const char *property, const
 //! @todo ????
 #if 0
     const char *propertyName = meta.isValid() ? meta.name() : property;
-    if (!d->propertySet.contains(propertyName))
+    if (!d->propertySet.contains(propertyName)) {
         return;
+    }
     KoProperty::Property &p = d->propertySet[propertyName];
 
 //! \todo what about set properties, and lists properties
@@ -1632,8 +1670,7 @@ void Form::updatePropertyValue(ObjectTreeItem *tree, const char *property, const
         blockSignals(true);
         if (meta.isValid() && meta.isEnumType()) {
             p.setValue(meta.enumerator().valueToKey(it.value().toInt()), false);
-        }
-        else {
+        } else {
             p.setValue(it.value(), false);
         }
         p.setValue(p.value(), true);
@@ -1666,17 +1703,16 @@ void Form::updatePropertiesForSelection(QWidget *w, WidgetSelectionFlags flags)
         createPropertiesForWidget(w);
         w->installEventFilter(this);
         connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
-    }
-    else {
+    } else {
         addWidget(w);
     }
 
     if (flags & LastSelection) {
         emit propertySetSwitched();
     }
- }
+}
 
-KoProperty::Set& Form::propertySet()
+KoProperty::Set &Form::propertySet()
 {
     return d->propertySet;
 }
@@ -1691,31 +1727,30 @@ void Form::setSnapToGridEnabled(bool enabled)
     d->snapToGrid = enabled;
 }
 
-void Form::createContextMenu(QWidget *w, Container *container, const QPoint& menuPos,
+void Form::createContextMenu(QWidget *w, Container *container, const QPoint &menuPos,
                              ContextMenuTarget target)
 {
-    if (!widget())
+    if (!widget()) {
         return;
+    }
     const bool toplevelWidgetSelected = widget() == w;
     const uint widgetsCount = container->form()->selectedWidgets()->count();
     const bool multiple = widgetsCount > 1;
 
     //set title
-    QString n( container->form()->library()->displayName(w->metaObject()->className()) );
+    QString n(container->form()->library()->displayName(w->metaObject()->className()));
     QIcon icon;
     QString titleText;
     if (!multiple) {
         if (w == container->form()->widget()) {
             icon = koIcon("form");
             titleText = i18n("%1 : Form", w->objectName());
-        }
-        else {
+        } else {
             icon = KIcon(
                        container->form()->library()->iconName(w->metaObject()->className()));
             titleText = QString(w->objectName()) + " : " + n;
         }
-    }
-    else {
+    } else {
         icon = koIcon("multiple_obj");
         titleText = i18n("Multiple Widgets (%1)", widgetsCount);
     }
@@ -1750,65 +1785,69 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     QLabel *buddyLabelWidget = 0;
     QList<QString> sortedItemNames;
     if (!multiple) {
-        buddyLabelWidget = qobject_cast<QLabel*>(w);
+        buddyLabelWidget = qobject_cast<QLabel *>(w);
         if (buddyLabelWidget) {
             if (!buddyLabelWidget->text().contains("&")
-                || buddyLabelWidget->textFormat() == Qt::RichText)
-            {
+                    || buddyLabelWidget->textFormat() == Qt::RichText) {
                 buddyLabelWidget = 0;
             }
         }
     }
     if (buddyLabelWidget) { // setup menu
-        if (separatorNeeded)
+        if (separatorNeeded) {
             menu.addSeparator();
+        }
 
         KMenu *sub = new KMenu(w);
         QWidget *buddy = buddyLabelWidget->buddy();
 
         noBuddyAction = sub->addAction(i18n("No Buddy"));
-        if (!buddy)
+        if (!buddy) {
             noBuddyAction->setChecked(true);
+        }
         sub->addSeparator();
 
         // Add all the widgets that can have focus
         // 1. Sort by name
-        QHash<QString, ObjectTreeItem*> items;
+        QHash<QString, ObjectTreeItem *> items;
         foreach (ObjectTreeItem *item, *container->form()->tabStops()) {
             items.insert(item->name().toLatin1(), item);
         }
         sortedItemNames = items.keys();
         qSort(sortedItemNames);
-        foreach (const QString& name, sortedItemNames) {
+        foreach (const QString &name, sortedItemNames) {
             ObjectTreeItem *item = items.value(name);
-            QAction* action = sub->addAction(
-                KIcon(
-                    container->form()->library()->iconName(item->className().toLatin1())),
-                item->name()
-            );
-            if (item->widget() == buddy)
+            QAction *action = sub->addAction(
+                                  KIcon(
+                                      container->form()->library()->iconName(item->className().toLatin1())),
+                                  item->name()
+                              );
+            if (item->widget() == buddy) {
                 action->setChecked(true);
+            }
         }
         separatorNeeded = true;
     }
 
 #ifdef KFD_SIGSLOTS
     if (!multiple && (d->features & EnableEvents)) {
-        if (separatorNeeded)
+        if (separatorNeeded) {
             menu.addSeparator();
+        }
 
         // We create the signals menu
         KMenu *sigMenu = new KMenu();
         const QList<QMetaMethod> list(
             KexiUtils::methodsForMetaObjectWithParents(w->metaObject(), QMetaMethod::Signal,
                     QMetaMethod::Public));
-        foreach(const QMetaMethod& m, list) {
+        foreach (const QMetaMethod &m, list) {
             sigMenu->addAction(m.signature());
         }
         QAction *eventsSubMenuAction = menu.addMenu(sigMenu);
         eventsSubMenuAction->setText(futureI18n("Events"));
-        if (list.isEmpty())
+        if (list.isEmpty()) {
             eventsSubMenuAction->setEnabled(false);
+        }
         connect(sigMenu, SIGNAL(triggered(QAction*)),
                 this, SLOT(menuSignalChosen(QAction*)));
         separatorNeeded = true;
@@ -1817,13 +1856,13 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
 
     // Other items
     if (!multiple) {
-        QAction* lastAction = 0;
+        QAction *lastAction = 0;
         if (separatorNeeded) {
             lastAction = menu.addSeparator();
         }
         const uint oldIndex = menu.actions().count() - 1;
         container->form()->library()
-            ->createMenuActions(w->metaObject()->className(), w, &menu, container);
+        ->createMenuActions(w->metaObject()->className(), w, &menu, container);
         if (oldIndex == uint(menu.actions().count() - 1)) {
             //nothing added
             if (separatorNeeded) {
@@ -1851,11 +1890,9 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     QAction *result = menu.exec(pos);
     if (!result) {
         // nothing to do
-    }
-    else if (noBuddyAction && buddyLabelWidget && result == noBuddyAction) {
+    } else if (noBuddyAction && buddyLabelWidget && result == noBuddyAction) {
         buddyLabelWidget->setBuddy(0);
-    }
-    else if (sortedItemNames.contains(result->text())) {
+    } else if (sortedItemNames.contains(result->text())) {
         ObjectTreeItem *item = objectTree()->lookup(result->text());
         if (item && item->widget()) {
             buddyLabelWidget->setBuddy(item->widget());
@@ -1899,7 +1936,7 @@ void Form::copyWidget()
     QHash<QByteArray, QByteArray> containers;
     QHash<QByteArray, QByteArray> parents;
     KFormDesigner::widgetsToXML(doc,
-        containers, parents, *this, *list);
+                                containers, parents, *this, *list);
     KFormDesigner::copyToClipboard(doc.toString());
     emitActionSignals(); // to update 'Paste' item state
     emitUndoActionSignals();
@@ -1931,14 +1968,13 @@ void Form::pasteWidget()
         return;
     }
     const QMimeData *mimeData = QApplication::clipboard()->mimeData();
-    const bool mimeDataHasXmlUiFormat = mimeData->hasFormat( KFormDesigner::mimeType() );
+    const bool mimeDataHasXmlUiFormat = mimeData->hasFormat(KFormDesigner::mimeType());
     if (!mimeDataHasXmlUiFormat && !mimeData->hasText()) {
         return;
     }
     QDomDocument doc;
-    if (!doc.setContent( mimeDataHasXmlUiFormat 
-        ? QString::fromUtf8( mimeData->data(KFormDesigner::mimeType())) : mimeData->text() ))
-    {
+    if (!doc.setContent(mimeDataHasXmlUiFormat
+                        ? QString::fromUtf8(mimeData->data(KFormDesigner::mimeType())) : mimeData->text())) {
         return;
     }
     if (!doc.firstChildElement("UI").hasChildNodes()) {
@@ -1992,7 +2028,7 @@ void Form::editConnections()
 
 void Form::alignWidgets(WidgetAlignment alignment)
 {
-    QWidgetList* selected = selectedWidgets();
+    QWidgetList *selected = selectedWidgets();
     if (!objectTree() || selected->count() < 2) {
         return;
     }
@@ -2142,10 +2178,11 @@ void Form::clearWidgetContent()
 
 // Alignment-related functions /////////////////////////////
 
-void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidget *subwidget)
+void Form::createAlignProperty(const QMetaProperty &meta, QWidget *widget, QWidget *subwidget)
 {
-    if (!objectTree())
+    if (!objectTree()) {
         return;
+    }
 
     const int alignment = subwidget->property("alignment").toInt();
     const QList<QByteArray> keys(meta.enumerator().valueToKeys(alignment).split('|'));
@@ -2159,20 +2196,21 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
     if (possibleValues.contains("AlignHCenter"))  {
         // Create the horizontal alignment property
         QString value;
-        if (keys.contains("AlignHCenter") || keys.contains("AlignCenter"))
+        if (keys.contains("AlignHCenter") || keys.contains("AlignCenter")) {
             value = "AlignHCenter";
-        else if (keys.contains("AlignRight"))
+        } else if (keys.contains("AlignRight")) {
             value = "AlignRight";
-        else if (keys.contains("AlignLeft"))
+        } else if (keys.contains("AlignLeft")) {
             value = "AlignLeft";
-        else if (keys.contains("AlignJustify"))
+        } else if (keys.contains("AlignJustify")) {
             value = "AlignJustify";
-        else
+        } else {
             value = "AlignAuto";
+        }
 
         QStringList list;
         list << "AlignAuto" << "AlignLeft" << "AlignRight"
-            << "AlignHCenter" << "AlignJustify";
+             << "AlignHCenter" << "AlignJustify";
         KoProperty::Property *p = new KoProperty::Property(
             "hAlign", d->createValueList(0, list), value,
             i18nc("Translators: please keep this string short (less than 20 chars)", "Hor. Alignment"),
@@ -2187,12 +2225,13 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
     if (possibleValues.contains("AlignTop")) {
         // Create the ver alignment property
         QString value;
-        if (keys.contains("AlignTop"))
+        if (keys.contains("AlignTop")) {
             value = "AlignTop";
-        else if (keys.contains("AlignBottom"))
+        } else if (keys.contains("AlignBottom")) {
             value = "AlignBottom";
-        else
+        } else {
             value = "AlignVCenter";
+        }
 
         QStringList list;
         list << "AlignTop" << "AlignVCenter" << "AlignBottom";
@@ -2206,7 +2245,7 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
         }
         updatePropertyValue(tree, "vAlign");
     }
-    
+
     if (possibleValues.contains("WordBreak")) {
         // Create the wordbreak property
         KoProperty::Property *p = new KoProperty::Property("wordbreak",
@@ -2215,8 +2254,7 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
         d->propertySet.addProperty(p);
         updatePropertyValue(tree, "wordbreak");
         if (!library()->isPropertyVisible(
-                subwidget->metaObject()->className(), subwidget, p->name(), false/*multiple*/, isTopLevel))
-        {
+                    subwidget->metaObject()->className(), subwidget, p->name(), false/*multiple*/, isTopLevel)) {
             p->setVisible(false);
         }
     }
@@ -2225,19 +2263,22 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
 void Form::saveAlignProperty(const QString &property)
 {
     QStringList list;
-    if (d->propertySet.contains("hAlign"))
+    if (d->propertySet.contains("hAlign")) {
         list.append(d->propertySet["hAlign"].value().toString());
-    if (d->propertySet.contains("vAlign"))
+    }
+    if (d->propertySet.contains("vAlign")) {
         list.append(d->propertySet["vAlign"].value().toString());
-    if (d->propertySet.contains("wordbreak") && d->propertySet["wordbreak"].value().toBool())
+    }
+    if (d->propertySet.contains("wordbreak") && d->propertySet["wordbreak"].value().toBool()) {
         list.append("WordBreak");
+    }
 
-    WidgetWithSubpropertiesInterface* subpropIface
-        = dynamic_cast<WidgetWithSubpropertiesInterface*>(d->selected.first());
+    WidgetWithSubpropertiesInterface *subpropIface
+        = dynamic_cast<WidgetWithSubpropertiesInterface *>(d->selected.first());
     QWidget *subwidget = (subpropIface && subpropIface->subwidget())
-                         ? subpropIface->subwidget() : (QWidget*)d->selected.first();
+                         ? subpropIface->subwidget() : (QWidget *)d->selected.first();
     int count = subwidget->metaObject()->indexOfProperty("alignment");
-    const QMetaProperty meta( subwidget->metaObject()->property(count) );
+    const QMetaProperty meta(subwidget->metaObject()->property(count));
     const int valueForKeys = meta.enumerator().keysToValue(list.join("|").toLatin1());
     subwidget->setProperty("alignment", valueForKeys);
 
@@ -2253,21 +2294,21 @@ void Form::saveAlignProperty(const QString &property)
 
     if (d->lastCommand && d->lastCommand->propertyName() == "alignment") {
         d->lastCommand->setValue(valueForKeys);
-    }
-    else {
+    } else {
         d->lastCommand = new PropertyCommand(*this, d->selected.first()->objectName().toLatin1(),
-                                 subwidget->property("alignment"), valueForKeys, "alignment");
+                                             subwidget->property("alignment"), valueForKeys, "alignment");
         if (!addCommand(d->lastCommand, DontExecuteCommand)) {
             d->lastCommand = 0;
         }
     }
 }
 
-void Form::createPropertyCommandsInDesignMode(QWidget* widget,
+void Form::createPropertyCommandsInDesignMode(QWidget *widget,
         const QHash<QByteArray, QVariant> &propValues, Command *parentCommand, bool addToActiveForm)
 {
-    if (!widget || propValues.isEmpty())
+    if (!widget || propValues.isEmpty()) {
         return;
+    }
 
     //is this widget selected? (if so, use property system)
     const bool widgetIsSelected = selectedWidget() == widget;
@@ -2283,10 +2324,9 @@ void Form::createPropertyCommandsInDesignMode(QWidget* widget,
                                   widget->property(it.key()), it.value(), it.key(), parentCommand);
         if (widgetIsSelected) {
             d->propertySet.changeProperty(it.key(), it.value());
-        }
-        else {
-            WidgetWithSubpropertiesInterface* subpropIface
-                = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
+        } else {
+            WidgetWithSubpropertiesInterface *subpropIface
+                = dynamic_cast<WidgetWithSubpropertiesInterface *>(widget);
             QWidget *subwidget
                 = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
             if (subwidget && -1 != subwidget->metaObject()->indexOfProperty(it.key())
@@ -2315,8 +2355,7 @@ void Form::handleWidgetPropertyChanged(QWidget *w, const QByteArray &name, const
     if (name == "autoTabStops") {
         //update autoTabStops setting at KFD::Form level
         setAutoTabStops(value.toBool());
-    }
-    else if (name == "geometry" && widget()) {
+    } else if (name == "geometry" && widget()) {
         //fall back to sizeInternal property....
         d->propertySet.changePropertyIfExists("sizeInternal", value.toRect().size());
     }
@@ -2328,27 +2367,29 @@ void Form::changeFont()
     QWidgetList widgetsWithFontProperty;
     QFont font;
     bool oneFontSelected = true;
-    foreach (QWidget* widget, *wlist) {
+    foreach (QWidget *widget, *wlist) {
         if (library()->isPropertyVisible(widget->metaObject()->className(), widget, "font")) {
             widgetsWithFontProperty.append(widget);
             if (oneFontSelected) {
-                if (widgetsWithFontProperty.count() == 1)
+                if (widgetsWithFontProperty.count() == 1) {
                     font = widget->font();
-                else if (font != widget->font())
+                } else if (font != widget->font()) {
                     oneFontSelected = false;
+                }
             }
         }
     }
-    if (widgetsWithFontProperty.isEmpty())
+    if (widgetsWithFontProperty.isEmpty()) {
         return;
-    if (!oneFontSelected) //many different fonts selected: pick a font from toplevel conatiner
+    }
+    if (!oneFontSelected) { //many different fonts selected: pick a font from toplevel conatiner
         font = widget()->font();
+    }
 
     if (1 == widgetsWithFontProperty.count()) {
         //single widget's settings
         if (QDialog::Accepted != KFontDialog::getFont(
-                font, KFontChooser::NoDisplayFlags, widget()))
-        {
+                    font, KFontChooser::NoDisplayFlags, widget())) {
             return;
         }
         d->propertySet.changeProperty("font", font);
@@ -2362,10 +2403,11 @@ void Form::changeFont()
         return;
     }
     //update font
-    foreach (QWidget* widget, widgetsWithFontProperty) {
+    foreach (QWidget *widget, widgetsWithFontProperty) {
         QFont prevFont(widget->font());
-        if (diffFlags & KFontChooser::FontDiffFamily)
+        if (diffFlags & KFontChooser::FontDiffFamily) {
             prevFont.setFamily(font.family());
+        }
         if (diffFlags & KFontChooser::FontDiffStyle) {
             prevFont.setBold(font.bold());
             prevFont.setItalic(font.italic());
@@ -2386,17 +2428,18 @@ void Form::setSlotPropertyChangedEnabled(bool set)
     d->slotPropertyChangedEnabled = set;
 }
 
-void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments& args)
+void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments &args)
 {
-    if (!args.execute)
+    if (!args.execute) {
         return;
+    }
     if (args.multiLine) {
         KTextEdit *textedit = new KTextEdit(args.widget->parentWidget());
         textedit->setPlainText(args.text);
         textedit->setAlignment(args.alignment);
-        if (dynamic_cast<QTextEdit*>(args.widget)) {
-            textedit->setWordWrapMode(dynamic_cast<QTextEdit*>(args.widget)->wordWrapMode());
-            textedit->setLineWrapMode(dynamic_cast<QTextEdit*>(args.widget)->lineWrapMode());
+        if (dynamic_cast<QTextEdit *>(args.widget)) {
+            textedit->setWordWrapMode(dynamic_cast<QTextEdit *>(args.widget)->wordWrapMode());
+            textedit->setLineWrapMode(dynamic_cast<QTextEdit *>(args.widget)->lineWrapMode());
         }
         textedit->moveCursor(QTextCursor::End);
         textedit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -2432,8 +2475,7 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     QBrush baseBrush;
     if (args.transparentBackground) {
         baseBrush = QBrush(Qt::transparent);
-    }
-    else {
+    } else {
         baseBrush = pal.base();
         QColor baseColor(baseBrush.color());
         if (!args.widget->inherits("KexiCommandLinkButton")) { //! @todo HACK! any idea??
@@ -2447,13 +2489,12 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     d->inlineEditor->setPalette(pal);
 
     //copy properties if available
-    WidgetWithSubpropertiesInterface* subpropIface
-        = dynamic_cast<WidgetWithSubpropertiesInterface*>(args.widget);
+    WidgetWithSubpropertiesInterface *subpropIface
+        = dynamic_cast<WidgetWithSubpropertiesInterface *>(args.widget);
     QWidget *subwidget = (subpropIface && subpropIface->subwidget())
                          ? subpropIface->subwidget() : args.widget;
-    if (   -1 != d->inlineEditor->metaObject()->indexOfProperty("margin")
-        && -1 != subwidget->metaObject()->indexOfProperty("margin"))
-    {
+    if (-1 != d->inlineEditor->metaObject()->indexOfProperty("margin")
+            && -1 != subwidget->metaObject()->indexOfProperty("margin")) {
         d->inlineEditor->setProperty("margin", subwidget->property("margin"));
     }
     ResizeHandleSet *handles = resizeHandlesForWidget(args.widget);
@@ -2463,8 +2504,9 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     }
 
     ObjectTreeItem *tree = args.container->form()->objectTree()->lookup(args.widget->objectName());
-    if (!tree)
+    if (!tree) {
         return;
+    }
     tree->eventEater()->setContainer(this);
 
     d->inlineEditorContainer = args.container;
@@ -2478,10 +2520,11 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     d->slotPropertyChangedEnabled = true;
 }
 
-void Form::changeInlineTextInternal(const QString& text)
+void Form::changeInlineTextInternal(const QString &text)
 {
-    if (d->editedWidgetClass.isEmpty())
+    if (d->editedWidgetClass.isEmpty()) {
         return;
+    }
     d->slotPropertyChangedEnabled = false;
     InlineTextEditingCommand *command = new InlineTextEditingCommand(
         *this, selectedWidget(), d->editedWidgetClass, text);
@@ -2491,26 +2534,21 @@ void Form::changeInlineTextInternal(const QString& text)
 
 bool Form::eventFilter(QObject *obj, QEvent *ev)
 {
-    if (   (ev->type() == QEvent::Resize || ev->type() == QEvent::Move)
-        && obj == selectedWidget() && d->inlineEditor)
-    {
+    if ((ev->type() == QEvent::Resize || ev->type() == QEvent::Move)
+            && obj == selectedWidget() && d->inlineEditor) {
         // resize widget using resize handles
         WidgetInfo *winfo = library()->widgetInfoForClassName(obj->metaObject()->className());
         if (winfo) {
             winfo->factory()->resizeEditor(
-                d->inlineEditor, selectedWidget(), 
+                d->inlineEditor, selectedWidget(),
                 selectedWidget()->metaObject()->className());
         }
-    }
-    else if (   ev->type() == QEvent::Paint && obj == selectedWidget()
-             && d->inlineEditor && d->inlineEditorContainer)
-    {
+    } else if (ev->type() == QEvent::Paint && obj == selectedWidget()
+               && d->inlineEditor && d->inlineEditorContainer) {
         // paint event for container edited (eg button group)
         return d->inlineEditorContainer->eventFilter(obj, ev);
-    }
-    else if (   ev->type() == QEvent::MouseButtonPress && obj == selectedWidget()
-             && d->inlineEditor && d->inlineEditorContainer)
-    {
+    } else if (ev->type() == QEvent::MouseButtonPress && obj == selectedWidget()
+               && d->inlineEditor && d->inlineEditorContainer) {
         // click outside editor --> cancel editing
         resetInlineEditor();
         return d->inlineEditorContainer->eventFilter(obj, ev);
@@ -2518,39 +2556,38 @@ bool Form::eventFilter(QObject *obj, QEvent *ev)
 
     if (ev->type() == QEvent::FocusOut && d->inlineEditor) {
         QWidget *w = d->inlineEditor;
-        if (obj != w)
+        if (obj != w) {
             return false;
+        }
 
         QWidget *focus = w->topLevelWidget()->focusWidget();
-        if (   focus
-            && w != focus
-            && !KexiUtils::findFirstChild<QWidget*>(w, focus->objectName().toLatin1(),
-                                                    focus->metaObject()->className())
-           )
-        {
+        if (focus
+                && w != focus
+                && !KexiUtils::findFirstChild<QWidget *>(w, focus->objectName().toLatin1(),
+                        focus->metaObject()->className())
+           ) {
             resetInlineEditor();
         }
-    }
-    else if (ev->type() == QEvent::KeyPress) {
+    } else if (ev->type() == QEvent::KeyPress) {
         QWidget *w = d->inlineEditor;
-        if (obj != w)
+        if (obj != w) {
             return false;
+        }
 
-        QKeyEvent *e = static_cast<QKeyEvent*>(ev);
-        if (   (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter)
-            && e->modifiers() != Qt::AltModifier)
-        {
+        QKeyEvent *e = static_cast<QKeyEvent *>(ev);
+        if ((e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter)
+                && e->modifiers() != Qt::AltModifier) {
             resetInlineEditor();
         }
         if (e->key() == Qt::Key_Escape) {
             setInlineEditorText(d->originalInlineText);
             resetInlineEditor();
         }
-    }
-    else if (ev->type() == QEvent::ContextMenu) {
+    } else if (ev->type() == QEvent::ContextMenu) {
         QWidget *w = d->inlineEditor;
-        if (obj != w)
+        if (obj != w) {
             return false;
+        }
 
         return true;
     }
@@ -2565,32 +2602,36 @@ void Form::slotInlineTextChanged()
 QString Form::inlineEditorText() const
 {
     QWidget *ed = d->inlineEditor;
-    if (!ed)
+    if (!ed) {
         return QString();
-    return dynamic_cast<KTextEdit*>(ed)
-           ? dynamic_cast<KTextEdit*>(ed)->toPlainText() : dynamic_cast<KLineEdit*>(ed)->text();
+    }
+    return dynamic_cast<KTextEdit *>(ed)
+           ? dynamic_cast<KTextEdit *>(ed)->toPlainText() : dynamic_cast<KLineEdit *>(ed)->text();
 }
 
-void Form::setInlineEditorText(const QString& text)
+void Form::setInlineEditorText(const QString &text)
 {
     QWidget *ed = d->inlineEditor;
-    if (!ed)
+    if (!ed) {
         return;
+    }
 
-    if (dynamic_cast<KTextEdit*>(ed))
-        dynamic_cast<KTextEdit*>(ed)->setPlainText(text);
-    else if (dynamic_cast<KLineEdit*>(ed))
-        dynamic_cast<KLineEdit*>(ed)->setText(text);
-    else
+    if (dynamic_cast<KTextEdit *>(ed)) {
+        dynamic_cast<KTextEdit *>(ed)->setPlainText(text);
+    } else if (dynamic_cast<KLineEdit *>(ed)) {
+        dynamic_cast<KLineEdit *>(ed)->setText(text);
+    } else {
         kWarning() << "Inline editor is neither KTextEdit nor KLineEdit";
+    }
 }
 
 void Form::disableFilter(QWidget *w, Container *container)
 {
     Q_UNUSED(container);
     ObjectTreeItem *tree = objectTree()->lookup(w->objectName());
-    if (!tree)
+    if (!tree) {
         return;
+    }
     tree->eventEater()->setContainer(this);
 
     w->setFocus();
@@ -2619,9 +2660,10 @@ void Form::resetInlineEditor()
     QWidget *ed = d->inlineEditor;
     QWidget *widget = selectedWidget();
     if (widget) {
-        FormWidgetInterface* fwiface = dynamic_cast<FormWidgetInterface*>(widget);
-        if (fwiface)
+        FormWidgetInterface *fwiface = dynamic_cast<FormWidgetInterface *>(widget);
+        if (fwiface) {
             fwiface->setEditingMode(false);
+        }
 
         ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
         if (!tree) {
@@ -2668,7 +2710,7 @@ void Form::widgetDestroyed()
         d->inlineEditor = 0;
     }
 
-    ResizeHandleSet *handles = resizeHandlesForWidget(static_cast<QWidget*>(sender()));
+    ResizeHandleSet *handles = resizeHandlesForWidget(static_cast<QWidget *>(sender()));
     if (handles) {
         handles->setEditingMode(false);
     }
@@ -2678,7 +2720,7 @@ void Form::widgetDestroyed()
 
 void Form::inlineEditorDeleted()
 {
-    ResizeHandleSet *handles = resizeHandlesForWidget(static_cast<QWidget*>(sender()));
+    ResizeHandleSet *handles = resizeHandlesForWidget(static_cast<QWidget *>(sender()));
     if (handles) {
         handles->setEditingMode(false);
     }

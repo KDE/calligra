@@ -48,9 +48,7 @@ void CompressionTest::testCompressionRLE()
     uncompressed = Compression::uncompress(ba.size(), compressed, Compression::RLE);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
 
-
 }
-
 
 void CompressionTest::testCompressionZIP()
 {
@@ -73,7 +71,6 @@ void CompressionTest::testCompressionZIP()
 
 }
 
-
 void CompressionTest::testCompressionUncompressed()
 {
     QByteArray ba("Twee eeee aaaaa asdasda47892347981    wwwwwwwwwwwwWWWWWWWWWW");
@@ -92,7 +89,6 @@ void CompressionTest::testCompressionUncompressed()
     qDebug() << compressed.size() << "uncompressed" << ba.size();
     uncompressed = Compression::uncompress(ba.size(), compressed, Compression::Uncompressed);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
-
 
 }
 

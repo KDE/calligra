@@ -45,7 +45,7 @@ public:
 
     virtual ~SpreadsheetMigrate();
 
-  protected:
+protected:
     //! Connect to source
     virtual bool drv_connect();
 
@@ -53,37 +53,37 @@ public:
     virtual bool drv_disconnect();
 
     //! Get table names in source
-    virtual bool drv_tableNames(QStringList& tablenames);
+    virtual bool drv_tableNames(QStringList &tablenames);
 
     //! Copy a table from source DB to target DB (driver specific)
-    virtual bool drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
-                               KexiDB::TableSchema* dstTable);
+    virtual bool drv_copyTable(const QString &srcTable, KexiDB::Connection *destConn,
+                               KexiDB::TableSchema *dstTable);
 
     //! Read schema for a given table
-    virtual bool drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema);
+    virtual bool drv_readTableSchema(const QString &originalName, KexiDB::TableSchema &tableSchema);
 
     //! Position the source dataset at the start of a table
-    virtual bool drv_readFromTable(const QString & tableName);
+    virtual bool drv_readFromTable(const QString &tableName);
 
     //! Move to the next row
     virtual bool drv_moveNext();
 
     //! Move to the previous row
     virtual bool drv_movePrevious();
-    
+
     //! Move to the next row
     virtual bool drv_moveFirst();
 
     //! Move to the previous row
     virtual bool drv_moveLast();
-    
+
     //! Read the data at the given row/field
     virtual QVariant drv_value(uint i);
 
-  private:
+private:
     QString m_FileName;
     Calligra::Sheets::Sheet *m_CurSheet;
-    
+
     Calligra::Sheets::Doc *m_KSDoc;
 
     QStringList m_FieldNames;

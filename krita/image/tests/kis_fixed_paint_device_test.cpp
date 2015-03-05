@@ -40,7 +40,7 @@
 
 void KisFixedPaintDeviceTest::testCreation()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
 
     dev = new KisFixedPaintDevice(cs);
@@ -53,21 +53,23 @@ void KisFixedPaintDeviceTest::testCreation()
     dev->initialize();
     QVERIFY(dev->data() != 0);
 
-    quint8* data = dev->data();
+    quint8 *data = dev->data();
     for (uint i = 0; i < 100 * 100 * cs->pixelSize(); ++i) {
         QVERIFY(data[i] == 0);
     }
 
 }
 
-void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColorSpace * dstCs)
+void logFailure(const QString &reason, const KoColorSpace *srcCs, const KoColorSpace *dstCs)
 {
     QString profile1("no profile");
     QString profile2("no profile");
-    if (srcCs->profile())
+    if (srcCs->profile()) {
         profile1 = srcCs->profile()->name();
-    if (dstCs->profile())
+    }
+    if (dstCs->profile()) {
         profile2 = dstCs->profile()->name();
+    }
 
     QWARN(QString("Failed %1 %2 -> %3 %4 %5")
           .arg(srcCs->name())
@@ -81,8 +83,8 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
 void KisFixedPaintDeviceTest::testColorSpaceConversion()
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
-    const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb8();
-    const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
+    const KoColorSpace *srcCs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->lab16();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(srcCs);
     dev->convertFromQImage(image, 0);
 
@@ -94,11 +96,10 @@ void KisFixedPaintDeviceTest::testColorSpaceConversion()
 
 }
 
-
 void KisFixedPaintDeviceTest::testRoundtripQImageConversion()
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
     dev->convertFromQImage(image, 0);
     QImage result = dev->convertToQImage(0, 0, 0, 640, 441);
@@ -115,7 +116,7 @@ void KisFixedPaintDeviceTest::testRoundtripQImageConversion()
 void KisFixedPaintDeviceTest::testBltFixed()
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
     fdev->convertFromQImage(image, 0);
 
@@ -141,7 +142,7 @@ void KisFixedPaintDeviceTest::testBltFixedOpacity()
     // blt a semi-transparent image on a white paint device
 
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
     fdev->convertFromQImage(image, 0);
 
@@ -163,7 +164,7 @@ void KisFixedPaintDeviceTest::testBltFixedOpacity()
 
 void KisFixedPaintDeviceTest::testSilly()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
     dev->initialize();
     dev->initialize();
@@ -171,7 +172,7 @@ void KisFixedPaintDeviceTest::testSilly()
 }
 void KisFixedPaintDeviceTest::testClear()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
     dev->clear(QRect(0, 0, 100, 100));
     QVERIFY(dev->bounds() == QRect(0, 0, 100, 100));
@@ -180,8 +181,8 @@ void KisFixedPaintDeviceTest::testClear()
 
 void KisFixedPaintDeviceTest::testFill()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    quint8* red = new quint8[cs->pixelSize()];
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    quint8 *red = new quint8[cs->pixelSize()];
     memcpy(red, KoColor(Qt::red, cs).data(), cs->pixelSize());
     cs->setOpacity(red, quint8(128), 1);
 
@@ -191,16 +192,16 @@ void KisFixedPaintDeviceTest::testFill()
     QVERIFY(dev->bounds() == QRect(0, 0, 100, 100));
     QVERIFY(cs->opacityU8(dev->data()) == 128);
     QVERIFY(memcmp(dev->data(), red, cs->pixelSize()) == 0);
- 
+
     //Compare fill will normal paint device
     dev = new KisFixedPaintDevice(cs);
     dev->setRect(QRect(0, 0, 150, 150));
     dev->initialize();
     dev->fill(50, 50, 50, 50, red);
-    
+
     KisPaintDeviceSP dev2 = new KisPaintDevice(cs);
     dev2->fill(50, 50, 50, 50, red);
-    
+
     QImage image = dev->convertToQImage(0);
     QImage checkImage = dev2->convertToQImage(0, 0, 0, 150, 150);
     QPoint errpoint;
@@ -209,15 +210,15 @@ void KisFixedPaintDeviceTest::testFill()
         image.save("kis_fixed_paint_device_filled_result.png");
         checkImage.save("kis_fixed_paint_device_filled_result_expected.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
-    } 
-    
+    }
+
     delete[] red;
 }
 
 void KisFixedPaintDeviceTest::testBltFixedSmall()
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "fixed_blit_small.png");
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
     fdev->convertFromQImage(image, 0);
 
@@ -240,13 +241,12 @@ void KisFixedPaintDeviceTest::testBltFixedSmall()
 void KisFixedPaintDeviceTest::testBltPerformance()
 {
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
     fdev->convertFromQImage(image, 0);
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
-
 
     QTime t;
     t.start();
@@ -258,10 +258,10 @@ void KisFixedPaintDeviceTest::testBltPerformance()
     }
 
     qDebug() << x
-    << "blits"
-    << " done in "
-    << t.elapsed()
-    << "ms";
+             << "blits"
+             << " done in "
+             << t.elapsed()
+             << "ms";
 }
 
 inline void setPixel(KisFixedPaintDeviceSP dev, int x, int y, quint8 alpha)
@@ -276,7 +276,6 @@ inline quint8 pixel(KisFixedPaintDeviceSP dev, int x, int y)
 {
     KoColor c(Qt::black, dev->colorSpace());
 
-
     dev->readBytes(c.data(), x, y, 1, 1);
     return c.opacityU8();
 }
@@ -287,17 +286,16 @@ void KisFixedPaintDeviceTest::testMirroring_data()
     QTest::addColumn<bool>("mirrorHorizontally");
     QTest::addColumn<bool>("mirrorVertically");
 
-    QTest::newRow("4, false, false") << (QRect(99,99,4,4)) << false << false;
-    QTest::newRow("4, false, true") << (QRect(99,99,4,4)) << false << true;
-    QTest::newRow("4, true, false") << (QRect(99,99,4,4)) << true << false;
-    QTest::newRow("4, true, true") << (QRect(99,99,4,4)) << true << true;
+    QTest::newRow("4, false, false") << (QRect(99, 99, 4, 4)) << false << false;
+    QTest::newRow("4, false, true") << (QRect(99, 99, 4, 4)) << false << true;
+    QTest::newRow("4, true, false") << (QRect(99, 99, 4, 4)) << true << false;
+    QTest::newRow("4, true, true") << (QRect(99, 99, 4, 4)) << true << true;
 
-    QTest::newRow("5, false, false") << (QRect(99,99,5,5)) << false << false;
-    QTest::newRow("5, false, true") << (QRect(99,99,5,5)) << false << true;
-    QTest::newRow("5, true, false") << (QRect(99,99,5,5)) << true << false;
-    QTest::newRow("5, true, true") << (QRect(99,99,5,5)) << true << true;
+    QTest::newRow("5, false, false") << (QRect(99, 99, 5, 5)) << false << false;
+    QTest::newRow("5, false, true") << (QRect(99, 99, 5, 5)) << false << true;
+    QTest::newRow("5, true, false") << (QRect(99, 99, 5, 5)) << true << false;
+    QTest::newRow("5, true, true") << (QRect(99, 99, 5, 5)) << true << true;
 }
-
 
 void KisFixedPaintDeviceTest::testMirroring()
 {
@@ -358,7 +356,7 @@ void KisFixedPaintDeviceTest::testMirroring()
     qsrand(1);
     value = 0;
 
-    for (int i = startX; i != endX ; i += incX) {
+    for (int i = startX; i != endX; i += incX) {
         for (int j = startY; j != endY; j += incY) {
             QCOMPARE(pixel(dev, i, j), (quint8)value);
             value = qrand() % 255;

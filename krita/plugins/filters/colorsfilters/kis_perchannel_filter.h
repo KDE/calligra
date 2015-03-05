@@ -35,13 +35,14 @@ class WdgPerChannel : public QWidget, public Ui::WdgPerChannel
     Q_OBJECT
 
 public:
-    WdgPerChannel(QWidget *parent) : QWidget(parent) {
+    WdgPerChannel(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
 
 class KisPerChannelFilterConfiguration
-        : public KisFilterConfiguration
+    : public KisFilterConfiguration
 {
 public:
     KisPerChannelFilterConfiguration(int n);
@@ -51,17 +52,17 @@ public:
     using KisFilterConfiguration::toXML;
     using KisFilterConfiguration::fromLegacyXML;
 
-    virtual void fromLegacyXML(const QDomElement& root);
+    virtual void fromLegacyXML(const QDomElement &root);
 
-    virtual void fromXML(const QDomElement& e);
-    virtual void toXML(QDomDocument& doc, QDomElement& root) const;
+    virtual void fromXML(const QDomElement &e);
+    virtual void toXML(QDomDocument &doc, QDomElement &root) const;
 
     virtual void setCurves(QList<KisCubicCurve> &curves);
     static inline void initDefaultCurves(QList<KisCubicCurve> &curves, int nCh);
     bool isCompatible(const KisPaintDeviceSP) const;
 
-    const QVector<QVector<quint16> >& transfers() const;
-    virtual const QList<KisCubicCurve>& curves() const;
+    const QVector<QVector<quint16> > &transfers() const;
+    virtual const QList<KisCubicCurve> &curves() const;
 private:
     QList<KisCubicCurve> m_curves;
 
@@ -71,22 +72,22 @@ private:
     QVector<QVector<quint16> > m_transfers;
 };
 
-
 /**
  * This class is generic for filters that affect channel separately
  */
 class KisPerChannelFilter
-        : public KisColorTransformationFilter
+    : public KisColorTransformationFilter
 {
 public:
     KisPerChannelFilter();
 public:
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation *createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const;
 
-    static inline KoID id() {
+    static inline KoID id()
+    {
         return KoID("perchannel", i18n("Color Adjustment"));
     }
 private:
@@ -97,11 +98,11 @@ class KisPerChannelConfigWidget : public KisConfigWidget
     Q_OBJECT
 
 public:
-    KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
+    KisPerChannelConfigWidget(QWidget *parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
     virtual ~KisPerChannelConfigWidget();
 
-    virtual void setConfiguration(const KisPropertiesConfiguration* config);
-    virtual KisPropertiesConfiguration * configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration *config);
+    virtual KisPropertiesConfiguration *configuration() const;
 
 private Q_SLOTS:
     virtual void setActiveChannel(int ch);
@@ -113,7 +114,7 @@ private:
     inline QPixmap createGradient(Qt::Orientation orient /*, int invert (not used now) */);
 
     // members
-    WdgPerChannel * m_page;
+    WdgPerChannel *m_page;
     KisPaintDeviceSP m_dev;
     KisHistogram *m_histogram;
     mutable QList<KisCubicCurve> m_curves;

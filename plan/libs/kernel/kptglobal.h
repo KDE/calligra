@@ -22,7 +22,6 @@
 
 #include "kplatokernel_export.h"
 
-
 #include <klocale.h>
 
 // The Plan file syntax is used in parts of the KPlatoWork file, so:
@@ -65,43 +64,40 @@ enum ObjectType {
 
 namespace Role
 {
-    enum Roles {
-        EnumList = Qt::UserRole + 1,
-        EnumListValue,
-        List,
-        ListValues,
-        DurationUnit,
-        DurationScales,
-        Maximum,
-        Minimum,
-        EditorType,
-        ReadWrite,
-        ObjectType,
-        InternalAppointments,
-        ExternalAppointments,
-        ColumnTag,
-        Planned,
-        Actual,
-        Foreground,
-        Object
-    };
+enum Roles {
+    EnumList = Qt::UserRole + 1,
+    EnumListValue,
+    List,
+    ListValues,
+    DurationUnit,
+    DurationScales,
+    Maximum,
+    Minimum,
+    EditorType,
+    ReadWrite,
+    ObjectType,
+    InternalAppointments,
+    ExternalAppointments,
+    ColumnTag,
+    Planned,
+    Actual,
+    Foreground,
+    Object
+};
 } //namespace Role
 
-
-struct KPLATOKERNEL_EXPORT SchedulingState
-{
-    static QString deleted( bool trans = true );
-    static QString notScheduled( bool trans = true );
-    static QString scheduled( bool trans = true );
-    static QString resourceOverbooked( bool trans = true );
-    static QString resourceNotAvailable( bool trans = true );
-    static QString resourceNotAllocated( bool trans = true );
-    static QString constraintsNotMet( bool trans = true );
-    static QString effortNotMet( bool trans = true );
-    static QString schedulingError( bool trans = true );
+struct KPLATOKERNEL_EXPORT SchedulingState {
+    static QString deleted(bool trans = true);
+    static QString notScheduled(bool trans = true);
+    static QString scheduled(bool trans = true);
+    static QString resourceOverbooked(bool trans = true);
+    static QString resourceNotAvailable(bool trans = true);
+    static QString resourceNotAllocated(bool trans = true);
+    static QString constraintsNotMet(bool trans = true);
+    static QString effortNotMet(bool trans = true);
+    static QString schedulingError(bool trans = true);
 
 }; //namespace WhatsThis
-
 
 } //namespace KPlato
 

@@ -45,9 +45,9 @@ public:
      */
     virtual ~KexiReportPart();
 
-    virtual KexiView* createView(QWidget *parent, KexiWindow* win,
-                                 KexiPart::Item &item, Kexi::ViewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
-    virtual KexiWindowData* createWindowData(KexiWindow* window);
+    virtual KexiView *createView(QWidget *parent, KexiWindow *win,
+                                 KexiPart::Item &item, Kexi::ViewMode = Kexi::DataViewMode, QMap<QString, QVariant> *staticObjectArgs = 0);
+    virtual KexiWindowData *createWindowData(KexiWindow *window);
 
     virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
@@ -56,7 +56,7 @@ public:
     class TempData : public KexiWindowData
     {
     public:
-        explicit TempData(QObject* parent);
+        explicit TempData(QObject *parent);
         QDomElement reportDefinition;
         QDomElement connectionDefinition;
 
@@ -66,18 +66,18 @@ public:
         QString name;
     };
 
-    virtual KLocalizedString i18nMessage(const QString& englishMessage,
-                                         KexiWindow* window) const;
+    virtual KLocalizedString i18nMessage(const QString &englishMessage,
+                                         KexiWindow *window) const;
 
 private Q_SLOTS:
     void slotToolboxActionTriggered(bool checked);
     //! Unchecks toolbox action for @a entity after it is used.
-    void slotItemInserted(const QString& entity);
+    void slotItemInserted(const QString &entity);
 
 private:
-    QString loadReport(const QString&);
+    QString loadReport(const QString &);
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // _KEXIREPORTPART_H_

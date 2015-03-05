@@ -21,7 +21,6 @@
 #include <kexiutils/utils.h>
 #include <QVBoxLayout>
 
-
 class KexiDockableWidget::Private
 {
 public:
@@ -31,10 +30,9 @@ public:
     QSize hint;
 };
 
-
-KexiDockableWidget::KexiDockableWidget(QWidget* parent)
-        : QWidget(parent)
-        , d(new Private)
+KexiDockableWidget::KexiDockableWidget(QWidget *parent)
+    : QWidget(parent)
+    , d(new Private)
 {
 }
 
@@ -48,20 +46,21 @@ QSize KexiDockableWidget::sizeHint() const
     return d->hint.isValid() ? d->hint : QWidget::sizeHint();
 }
 
-void KexiDockableWidget::setSizeHint(const QSize& size)
+void KexiDockableWidget::setSizeHint(const QSize &size)
 {
     d->hint = size;
 }
 
-QWidget* KexiDockableWidget::widget() const
+QWidget *KexiDockableWidget::widget() const
 {
     return d->widget;
 }
 
-void KexiDockableWidget::setWidget(QWidget* widget)
+void KexiDockableWidget::setWidget(QWidget *widget)
 {
-    if (d->widget || widget == this)
+    if (d->widget || widget == this) {
         return;
+    }
     d->widget = widget;
     d->widget->setParent(this);
     QVBoxLayout *lyr = new QVBoxLayout(this);

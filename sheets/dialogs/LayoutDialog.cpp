@@ -85,7 +85,7 @@ using namespace Calligra::Sheets;
  ***************************************************************************/
 
 PatternSelect::PatternSelect(QWidget *parent, const char *)
-        : QFrame(parent)
+    : QFrame(parent)
 {
     penStyle = Qt::NoPen;
     penWidth = 1;
@@ -147,27 +147,25 @@ void PatternSelect::slotSelect()
     repaint();
 }
 
-
-
 /***************************************************************************
  *
  * GeneralTab
  *
  ***************************************************************************/
 
-GeneralTab::GeneralTab(QWidget* parent, CellFormatDialog * dlg)
-        : QWidget(parent),
-        m_dlg(dlg)
+GeneralTab::GeneralTab(QWidget *parent, CellFormatDialog *dlg)
+    : QWidget(parent),
+      m_dlg(dlg)
 {
-    QGridLayout * layout = new QGridLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
 
-    QGroupBox * groupBox = new QGroupBox(this);
+    QGroupBox *groupBox = new QGroupBox(this);
     groupBox->setTitle(i18n("Style"));
 
-    QGridLayout * groupBoxLayout = new QGridLayout(groupBox);
+    QGridLayout *groupBoxLayout = new QGridLayout(groupBox);
     groupBoxLayout->setAlignment(Qt::AlignTop);
 
-    QLabel * label1 = new QLabel(groupBox);
+    QLabel *label1 = new QLabel(groupBox);
     label1->setText(i18nc("Name of the style", "Name:"));
     groupBoxLayout->addWidget(label1, 0, 0);
 
@@ -179,7 +177,7 @@ GeneralTab::GeneralTab(QWidget* parent, CellFormatDialog * dlg)
     m_nameStatus->hide();
     groupBoxLayout->addWidget(m_nameStatus, 1, 1);
 
-    QLabel * label2 = new QLabel(groupBox);
+    QLabel *label2 = new QLabel(groupBox);
     label2->setText(i18n("Inherit style:"));
     groupBoxLayout->addWidget(label2, 2, 0);
 
@@ -192,10 +190,11 @@ GeneralTab::GeneralTab(QWidget* parent, CellFormatDialog * dlg)
     m_parentBox->insertItem(0, i18n("Default"));
     m_parentBox->insertItems(1, tmp);
 
-    if (!m_dlg->getStyle()->parentName().isNull())
+    if (!m_dlg->getStyle()->parentName().isNull()) {
         m_parentBox->setCurrentIndex(m_parentBox->findText(m_dlg->getStyle()->parentName()));
-    else
+    } else {
         m_parentBox->setCurrentIndex(m_parentBox->findText(i18n("Default")));
+    }
 
     connect(m_parentBox, SIGNAL(activated(QString)),
             this, SLOT(parentChanged(QString)));
@@ -208,7 +207,7 @@ GeneralTab::GeneralTab(QWidget* parent, CellFormatDialog * dlg)
     m_parentStatus->hide();
     groupBoxLayout->addWidget(m_parentStatus, 3, 1);
 
-    QSpacerItem * spacer = new QSpacerItem(20, 260, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem *spacer = new QSpacerItem(20, 260, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     layout->addWidget(groupBox, 0, 0);
     layout->addItem(spacer, 1, 0);
@@ -225,7 +224,7 @@ GeneralTab::~GeneralTab()
 {
 }
 
-void GeneralTab::styleNameChanged(const QString& name)
+void GeneralTab::styleNameChanged(const QString &name)
 {
     if (!m_dlg->getStyleManager()->validateStyleName(name, m_dlg->getStyle())) {
         m_nameStatus->setText(i18n("A style with this name already exists."));
@@ -241,7 +240,7 @@ void GeneralTab::styleNameChanged(const QString& name)
     }
 }
 
-void GeneralTab::parentChanged(const QString& parentName)
+void GeneralTab::parentChanged(const QString &parentName)
 {
     if (m_nameEdit->text() == parentName) {
         m_parentStatus->setText(i18n("A style cannot inherit from itself."));
@@ -257,38 +256,39 @@ void GeneralTab::parentChanged(const QString& parentName)
         m_dlg->enableButtonOk(true);
     }
 
-    if (parentName.isEmpty() || parentName == i18n("Default"))
+    if (parentName.isEmpty() || parentName == i18n("Default")) {
         m_dlg->getStyle()->clearAttribute(Style::NamedStyleKey);
-    else
+    } else {
         m_dlg->getStyle()->setParentName(parentName);
+    }
 
     // Set difference to new parent, set GUI to parent values, add changes made before
     //  m_dlg->initGUI();
 }
 
-bool GeneralTab::apply(CustomStyle * style)
+bool GeneralTab::apply(CustomStyle *style)
 {
     if (m_nameEdit->isEnabled()) {
         if (style->type() != Style::BUILTIN) {
             QString name(style->name());
             style->setName(m_nameEdit->text());
             if (m_parentBox->isEnabled()) {
-                if (m_parentBox->currentText() == i18n("Default") || m_parentBox->currentText().isEmpty())
+                if (m_parentBox->currentText() == i18n("Default") || m_parentBox->currentText().isEmpty()) {
                     style->clearAttribute(Style::NamedStyleKey);
-                else
+                } else {
                     style->setParentName(m_parentBox->currentText());
+                }
             }
             m_dlg->getStyleManager()->changeName(name, m_nameEdit->text());
         }
     }
 
-    if (style->type() == Style::TENTATIVE)
+    if (style->type() == Style::TENTATIVE) {
         style->setType(Style::CUSTOM);
+    }
 
     return true;
 }
-
-
 
 /***************************************************************************
  *
@@ -296,12 +296,12 @@ bool GeneralTab::apply(CustomStyle * style)
  *
  ***************************************************************************/
 
-CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
-        : KPageDialog(parent)
-        , m_sheet(selection->activeSheet())
-        , m_selection(selection)
-        , m_style(0)
-        , m_styleManager(0)
+CellFormatDialog::CellFormatDialog(QWidget *parent, Selection *selection)
+    : KPageDialog(parent)
+    , m_sheet(selection->activeSheet())
+    , m_selection(selection)
+    , m_style(0)
+    , m_styleManager(0)
 {
     initMembers();
 
@@ -315,15 +315,17 @@ CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
     right = range.right();
     bottom = range.bottom();
 
-    if (left == right)
+    if (left == right) {
         oneCol = true;
-    else
+    } else {
         oneCol = false;
+    }
 
-    if (top == bottom)
+    if (top == bottom) {
         oneRow = true;
-    else
+    } else {
         oneRow = false;
+    }
 
     Cell cell = Cell(m_sheet, left, top);
     oneCell = (left == right && top == bottom &&
@@ -466,23 +468,24 @@ CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
     // row height
     if (!isColumnSelected) {
         for (int y = top; y <= bottom; y++) {
-            heightSize = qMax(m_sheet->rowFormats()->rowHeight(y), static_cast<qreal>(heightSize) );
+            heightSize = qMax(m_sheet->rowFormats()->rowHeight(y), static_cast<qreal>(heightSize));
         }
     }
 
-    if (!bTextRotation)
+    if (!bTextRotation) {
         textRotation = 0;
+    }
 
     init();
 }
 
-CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection,
-                                   CustomStyle* style, StyleManager* manager)
-        : KPageDialog(parent)
-        , m_sheet(selection->activeSheet())
-        , m_selection(selection)
-        , m_style(style)
-        , m_styleManager(manager)
+CellFormatDialog::CellFormatDialog(QWidget *parent, Selection *selection,
+                                   CustomStyle *style, StyleManager *manager)
+    : KPageDialog(parent)
+    , m_sheet(selection->activeSheet())
+    , m_selection(selection)
+    , m_style(style)
+    , m_styleManager(manager)
 {
     initMembers();
     initGUI();
@@ -607,131 +610,167 @@ void CellFormatDialog::initMembers()
 
     m_currency      = Currency(); // locale default
 
-    Sheet* sheet = m_sheet;
+    Sheet *sheet = m_sheet;
     defaultWidthSize  = sheet ? sheet->map()->defaultColumnFormat()->width() : 0;
     defaultHeightSize = sheet ? sheet->map()->defaultRowFormat()->height() : 0;
 }
 
-bool CellFormatDialog::checkCircle(QString const & name, QString const & parent)
+bool CellFormatDialog::checkCircle(QString const &name, QString const &parent)
 {
     return m_styleManager->checkCircle(name, parent);
 }
 
-KLocale* CellFormatDialog::locale() const
+KLocale *CellFormatDialog::locale() const
 {
     return m_sheet->map()->calculationSettings()->locale();
 }
 
-void CellFormatDialog::checkBorderRight(const Style& style)
+void CellFormatDialog::checkBorderRight(const Style &style)
 {
     if (borders[BorderType_Right].style != style.rightBorderPen().style() ||
-            borders[BorderType_Right].width != style.rightBorderPen().width())
+            borders[BorderType_Right].width != style.rightBorderPen().width()) {
         borders[BorderType_Right].bStyle = false;
-    if (borders[BorderType_Right].color != style.rightBorderPen().color())
+    }
+    if (borders[BorderType_Right].color != style.rightBorderPen().color()) {
         borders[BorderType_Right].bColor = false;
+    }
 }
 
-void CellFormatDialog::checkBorderLeft(const Style& style)
+void CellFormatDialog::checkBorderLeft(const Style &style)
 {
     if (borders[BorderType_Left].style != style.leftBorderPen().style() ||
-            borders[BorderType_Left].width != style.leftBorderPen().width())
+            borders[BorderType_Left].width != style.leftBorderPen().width()) {
         borders[BorderType_Left].bStyle = false;
-    if (borders[BorderType_Left].color != style.leftBorderPen().color())
+    }
+    if (borders[BorderType_Left].color != style.leftBorderPen().color()) {
         borders[BorderType_Left].bColor = false;
+    }
 }
 
-void CellFormatDialog::checkBorderTop(const Style& style)
+void CellFormatDialog::checkBorderTop(const Style &style)
 {
     if (borders[BorderType_Top].style != style.topBorderPen().style() ||
-            borders[BorderType_Top].width != style.topBorderPen().width())
+            borders[BorderType_Top].width != style.topBorderPen().width()) {
         borders[BorderType_Top].bStyle = false;
-    if (borders[BorderType_Top].color != style.topBorderPen().color())
+    }
+    if (borders[BorderType_Top].color != style.topBorderPen().color()) {
         borders[BorderType_Top].bColor = false;
+    }
 }
 
-void CellFormatDialog::checkBorderBottom(const Style& style)
+void CellFormatDialog::checkBorderBottom(const Style &style)
 {
     if (borders[BorderType_Bottom].style != style.bottomBorderPen().style() ||
-            borders[BorderType_Bottom].width != style.bottomBorderPen().width())
+            borders[BorderType_Bottom].width != style.bottomBorderPen().width()) {
         borders[BorderType_Bottom].bStyle = false;
-    if (borders[BorderType_Bottom].color != style.bottomBorderPen().color())
+    }
+    if (borders[BorderType_Bottom].color != style.bottomBorderPen().color()) {
         borders[BorderType_Bottom].bColor = false;
+    }
 }
 
-void CellFormatDialog::checkBorderVertical(const Style& style)
+void CellFormatDialog::checkBorderVertical(const Style &style)
 {
     if (borders[BorderType_Vertical].style != style.leftBorderPen().style() ||
-            borders[BorderType_Vertical].width != style.leftBorderPen().width())
+            borders[BorderType_Vertical].width != style.leftBorderPen().width()) {
         borders[BorderType_Vertical].bStyle = false;
-    if (borders[BorderType_Vertical].color != style.leftBorderPen().color())
+    }
+    if (borders[BorderType_Vertical].color != style.leftBorderPen().color()) {
         borders[BorderType_Vertical].bColor = false;
+    }
 }
 
-void CellFormatDialog::checkBorderHorizontal(const Style& style)
+void CellFormatDialog::checkBorderHorizontal(const Style &style)
 {
     if (borders[BorderType_Horizontal].style != style.topBorderPen().style() ||
-            borders[BorderType_Horizontal].width != style.topBorderPen().width())
+            borders[BorderType_Horizontal].width != style.topBorderPen().width()) {
         borders[BorderType_Horizontal].bStyle = false;
-    if (borders[BorderType_Horizontal].color != style.topBorderPen().color())
+    }
+    if (borders[BorderType_Horizontal].color != style.topBorderPen().color()) {
         borders[BorderType_Horizontal].bColor = false;
+    }
 }
 
-
-void CellFormatDialog::initParameters(const Style& style)
+void CellFormatDialog::initParameters(const Style &style)
 {
-    if (borders[BorderType_FallingDiagonal].style != style.fallDiagonalPen().style())
+    if (borders[BorderType_FallingDiagonal].style != style.fallDiagonalPen().style()) {
         borders[BorderType_FallingDiagonal].bStyle = false;
-    if (borders[BorderType_FallingDiagonal].width != style.fallDiagonalPen().width())
+    }
+    if (borders[BorderType_FallingDiagonal].width != style.fallDiagonalPen().width()) {
         borders[BorderType_FallingDiagonal].bStyle = false;
-    if (borders[BorderType_FallingDiagonal].color != style.fallDiagonalPen().color())
+    }
+    if (borders[BorderType_FallingDiagonal].color != style.fallDiagonalPen().color()) {
         borders[BorderType_FallingDiagonal].bColor = false;
+    }
 
-    if (borders[BorderType_RisingDiagonal].style != style.goUpDiagonalPen().style())
+    if (borders[BorderType_RisingDiagonal].style != style.goUpDiagonalPen().style()) {
         borders[BorderType_RisingDiagonal].bStyle = false;
-    if (borders[BorderType_RisingDiagonal].width != style.goUpDiagonalPen().width())
+    }
+    if (borders[BorderType_RisingDiagonal].width != style.goUpDiagonalPen().width()) {
         borders[BorderType_RisingDiagonal].bStyle = false;
-    if (borders[BorderType_RisingDiagonal].color != style.goUpDiagonalPen().color())
+    }
+    if (borders[BorderType_RisingDiagonal].color != style.goUpDiagonalPen().color()) {
         borders[BorderType_RisingDiagonal].bColor = false;
-    if (strike != style.strikeOut())
+    }
+    if (strike != style.strikeOut()) {
         bStrike = false;
-    if (underline != style.underline())
+    }
+    if (underline != style.underline()) {
         bUnderline = false;
-    if (prefix != style.prefix())
+    }
+    if (prefix != style.prefix()) {
         prefix.clear();
-    if (postfix != style.postfix())
+    }
+    if (postfix != style.postfix()) {
         postfix.clear();
-    if (floatFormat != style.floatFormat())
+    }
+    if (floatFormat != style.floatFormat()) {
         bFloatFormat = false;
-    if (floatColor != style.floatColor())
+    }
+    if (floatColor != style.floatColor()) {
         bFloatColor = false;
-    if (textColor != style.fontColor())
+    }
+    if (textColor != style.fontColor()) {
         bTextColor = false;
-    if (fontFamily != style.fontFamily())
+    }
+    if (fontFamily != style.fontFamily()) {
         bTextFontFamily = false;
-    if (fontSize != style.fontSize())
+    }
+    if (fontSize != style.fontSize()) {
         bTextFontSize = false;
-    if (fontBold != style.bold())
+    }
+    if (fontBold != style.bold()) {
         bTextFontBold = false;
-    if (fontItalic != style.italic())
+    }
+    if (fontItalic != style.italic()) {
         bTextFontItalic = false;
-    if (bgColor != style.backgroundColor())
+    }
+    if (bgColor != style.backgroundColor()) {
         bBgColor = false;
-    if (textRotation != style.angle())
+    }
+    if (textRotation != style.angle()) {
         bTextRotation = false;
-    if (formatType != style.formatType())
+    }
+    if (formatType != style.formatType()) {
         bFormatType = false;
-    if (bMultiRow != style.wrapText())
+    }
+    if (bMultiRow != style.wrapText()) {
         bMultiRow = false;
-    if (bVerticalText != style.verticalText())
+    }
+    if (bVerticalText != style.verticalText()) {
         bVerticalText = false;
-    if (bShrinkToFit != style.shrinkToFit())
+    }
+    if (bShrinkToFit != style.shrinkToFit()) {
         bShrinkToFit = false;
-    if (!bDontPrintText != style.printText())
+    }
+    if (!bDontPrintText != style.printText()) {
         bDontPrintText = false;
+    }
 
     Currency currency = style.currency();
-    if (currency != m_currency)
+    if (currency != m_currency) {
         bCurrency = false;
+    }
 }
 
 void CellFormatDialog::init()
@@ -754,7 +793,7 @@ void CellFormatDialog::init()
     if (m_style) {
         generalPage = new GeneralTab(this, this);
 
-        KPageWidgetItem* generalitem = addPage(generalPage, i18n("&General"));
+        KPageWidgetItem *generalitem = addPage(generalPage, i18n("&General"));
         //generalitem->setHeader( i18n( "&General" ) );
         Q_UNUSED(generalitem);
     }
@@ -783,10 +822,10 @@ void CellFormatDialog::init()
     connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
 }
 
-QPixmap * CellFormatDialog::paintFormatPixmap(const char * _string1, const QColor & _color1,
-        const char *_string2, const QColor & _color2)
+QPixmap *CellFormatDialog::paintFormatPixmap(const char *_string1, const QColor &_color1,
+        const char *_string2, const QColor &_color2)
 {
-    QPixmap * pixmap = new QPixmap(150, 14);
+    QPixmap *pixmap = new QPixmap(150, 14);
     pixmap->fill(Qt::transparent);
 
     QPainter painter;
@@ -824,19 +863,21 @@ void CellFormatDialog::slotApply()
     // We need to create a command that would act as macro,
     // but which would also ensure that updates are not painted until everything
     // is updated properly ...
-    KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Change Format"));
+    KUndo2Command *macroCommand = new KUndo2Command(kundo2_i18n("Change Format"));
 
     if (isMerged != positionPage->getMergedCellState()) {
-        MergeCommand* command = new MergeCommand(macroCommand);
+        MergeCommand *command = new MergeCommand(macroCommand);
         command->setSheet(m_sheet);
         command->setSelection(m_selection);
         if (!positionPage->getMergedCellState())
             //dissociate cells
+        {
             command->setReverse(true);
+        }
         command->add(*m_selection);
     }
 
-    StyleCommand* command = new StyleCommand(macroCommand);
+    StyleCommand *command = new StyleCommand(macroCommand);
     command->setSheet(m_sheet);
     command->add(*m_selection);
     borderPage->apply(command);
@@ -847,13 +888,13 @@ void CellFormatDialog::slotApply()
     protectPage->apply(command);
 
     if (int(positionPage->getSizeHeight()) != int(heightSize)) {
-        ResizeRowManipulator* command = new ResizeRowManipulator(macroCommand);
+        ResizeRowManipulator *command = new ResizeRowManipulator(macroCommand);
         command->setSheet(m_sheet);
         command->setSize(positionPage->getSizeHeight());
         command->add(*m_selection);
     }
     if (int(positionPage->getSizeWidth()) != int(widthSize)) {
-        ResizeColumnManipulator* command = new ResizeColumnManipulator(macroCommand);
+        ResizeColumnManipulator *command = new ResizeColumnManipulator(macroCommand);
         command->setSheet(m_sheet);
         command->setSize(positionPage->getSizeWidth());
         command->add(*m_selection);
@@ -862,19 +903,17 @@ void CellFormatDialog::slotApply()
     m_selection->canvas()->addCommand(macroCommand);
 }
 
-
-
 /***************************************************************************
  *
  * CellFormatPageFloat
  *
  ***************************************************************************/
 
-CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg)
-        : QWidget(parent),
-        dlg(_dlg)
+CellFormatPageFloat::CellFormatPageFloat(QWidget *parent, CellFormatDialog *_dlg)
+    : QWidget(parent),
+      dlg(_dlg)
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
     QGroupBox *grp = new QGroupBox(i18n("Format"), this);
     QGridLayout *grid = new QGridLayout(grp);
@@ -970,7 +1009,7 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     format->setWhatsThis(i18n("You can choose whether positive values are displayed with a leading + sign and whether negative values are shown in red."));
     grid->addWidget(format, 0, 3);
 
-    QLabel* tmpQLabel;
+    QLabel *tmpQLabel;
     tmpQLabel = new QLabel(box);
     grid->addWidget(tmpQLabel, 2, 0);
     tmpQLabel->setText(i18n("Postfix:"));
@@ -1012,68 +1051,72 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     QString text;
     while (ok) {
         text = Currency::chooseString(index, ok);
-        if (ok)
+        if (ok) {
             currency->insertItem(index - 1, text);
-        else
+        } else {
             break;
+        }
         ++index;
     }
     currency->setCurrentIndex(0);
     currency->hide();
     currencyLabel->hide();
 
-    if (!dlg->bFloatFormat || !dlg->bFloatColor)
+    if (!dlg->bFloatFormat || !dlg->bFloatColor) {
         format->setCurrentIndex(5);
-    else if (dlg->floatFormat == Style::OnlyNegSigned && dlg->floatColor == Style::AllBlack)
+    } else if (dlg->floatFormat == Style::OnlyNegSigned && dlg->floatColor == Style::AllBlack) {
         format->setCurrentIndex(0);
-    else if (dlg->floatFormat == Style::OnlyNegSigned && dlg->floatColor == Style::NegRed)
+    } else if (dlg->floatFormat == Style::OnlyNegSigned && dlg->floatColor == Style::NegRed) {
         format->setCurrentIndex(1);
-    else if (dlg->floatFormat == Style::AlwaysUnsigned && dlg->floatColor == Style::NegRed)
+    } else if (dlg->floatFormat == Style::AlwaysUnsigned && dlg->floatColor == Style::NegRed) {
         format->setCurrentIndex(2);
-    else if (dlg->floatFormat == Style::AlwaysSigned && dlg->floatColor == Style::AllBlack)
+    } else if (dlg->floatFormat == Style::AlwaysSigned && dlg->floatColor == Style::AllBlack) {
         format->setCurrentIndex(3);
-    else if (dlg->floatFormat == Style::AlwaysSigned && dlg->floatColor == Style::NegRed)
+    } else if (dlg->floatFormat == Style::AlwaysSigned && dlg->floatColor == Style::NegRed) {
         format->setCurrentIndex(4);
+    }
     layout->addWidget(box);
 
     cellFormatType = dlg->formatType;
     newFormatType = cellFormatType;
 
-    if (!cellFormatType)
+    if (!cellFormatType) {
         generic->setChecked(true);
-    else {
-        if (cellFormatType == Format::Number)
+    } else {
+        if (cellFormatType == Format::Number) {
             number->setChecked(true);
-        else if (cellFormatType == Format::Percentage)
+        } else if (cellFormatType == Format::Percentage) {
             percent->setChecked(true);
-        else if (cellFormatType == Format::Money) {
+        } else if (cellFormatType == Format::Money) {
             money->setChecked(true);
             currencyLabel->show();
             currency->show();
             if (dlg->bCurrency) {
                 QString tmp;
-                if (dlg->m_currency.index() == 1)   // custom currency unit
+                if (dlg->m_currency.index() == 1) { // custom currency unit
                     tmp = dlg->m_currency.symbol();
-                else {
+                } else {
                     bool ok = true;
                     tmp = Currency::chooseString(dlg->m_currency.index(), ok);
-                    if (!ok)
+                    if (!ok) {
                         tmp = dlg->m_currency.symbol();
+                    }
                 }
                 currency->setCurrentIndex(currency->findText(tmp));
             }
-        } else if (cellFormatType == Format::Scientific)
+        } else if (cellFormatType == Format::Scientific) {
             scientific->setChecked(true);
-        else if (Format::isDate(cellFormatType))
+        } else if (Format::isDate(cellFormatType)) {
             date->setChecked(true);
-        else if (Format::isTime(cellFormatType))
+        } else if (Format::isTime(cellFormatType)) {
             time->setChecked(true);
-        else if (Format::isFraction(cellFormatType))
+        } else if (Format::isFraction(cellFormatType)) {
             fraction->setChecked(true);
-        else if (cellFormatType == Format::Text)
+        } else if (cellFormatType == Format::Text) {
             textFormat->setChecked(true);
-        else if (cellFormatType == Format::Custom)
+        } else if (cellFormatType == Format::Custom) {
             customFormat->setChecked(true);
+        }
     }
 
     connect(generic, SIGNAL(clicked()), this, SLOT(slotChangeState()));
@@ -1123,9 +1166,9 @@ void CellFormatPageFloat::slotChangeState()
     postfix->setEnabled(true);
     format->setEnabled(true);
     if (generic->isChecked() || number->isChecked() || percent->isChecked() ||
-            scientific->isChecked() || textFormat->isChecked())
+            scientific->isChecked() || textFormat->isChecked()) {
         listFormat->setEnabled(false);
-    else if (money->isChecked()) {
+    } else if (money->isChecked()) {
         listFormat->setEnabled(false);
         precision->setValue(2);
         currency->show();
@@ -1157,26 +1200,27 @@ void CellFormatPageFloat::slotChangeState()
         list += i18n("Two digits 15/22");
         list += i18n("Three digits 153/652");
         listFormat->addItems(list);
-        if (cellFormatType == Format::fraction_half)
+        if (cellFormatType == Format::fraction_half) {
             listFormat->setCurrentRow(0);
-        else if (cellFormatType == Format::fraction_quarter)
+        } else if (cellFormatType == Format::fraction_quarter) {
             listFormat->setCurrentRow(1);
-        else if (cellFormatType == Format::fraction_eighth)
+        } else if (cellFormatType == Format::fraction_eighth) {
             listFormat->setCurrentRow(2);
-        else if (cellFormatType == Format::fraction_sixteenth)
+        } else if (cellFormatType == Format::fraction_sixteenth) {
             listFormat->setCurrentRow(3);
-        else if (cellFormatType == Format::fraction_tenth)
+        } else if (cellFormatType == Format::fraction_tenth) {
             listFormat->setCurrentRow(4);
-        else if (cellFormatType == Format::fraction_hundredth)
+        } else if (cellFormatType == Format::fraction_hundredth) {
             listFormat->setCurrentRow(5);
-        else if (cellFormatType == Format::fraction_one_digit)
+        } else if (cellFormatType == Format::fraction_one_digit) {
             listFormat->setCurrentRow(6);
-        else if (cellFormatType == Format::fraction_two_digits)
+        } else if (cellFormatType == Format::fraction_two_digits) {
             listFormat->setCurrentRow(7);
-        else if (cellFormatType == Format::fraction_three_digits)
+        } else if (cellFormatType == Format::fraction_three_digits) {
             listFormat->setCurrentRow(8);
-        else
+        } else {
             listFormat->setCurrentRow(0);
+        }
     } else if (time->isChecked()) {
         precision->setEnabled(false);
         prefix->setEnabled(false);
@@ -1184,11 +1228,9 @@ void CellFormatPageFloat::slotChangeState()
         format->setEnabled(false);
         listFormat->setEnabled(true);
 
-
         list += i18n("System: ") + dlg->locale()->formatTime(QTime::currentTime(), false);
         list += i18n("System: ") + dlg->locale()->formatTime(QTime::currentTime(), true);
         QDateTime tmpTime(QDate(1, 1, 1900), QTime(10, 35, 25), Qt::UTC);
-
 
         ValueFormatter *fmt = dlg->getSheet()->map()->formatter();
         list += fmt->timeFormat(tmpTime, Format::Time1);
@@ -1201,28 +1243,29 @@ void CellFormatPageFloat::slotChangeState()
         list += (fmt->timeFormat(tmpTime, Format::Time8) + i18n(" (=[hh]:mm)"));
         listFormat->addItems(list);
 
-        if (cellFormatType == Format::Time)
+        if (cellFormatType == Format::Time) {
             listFormat->setCurrentRow(0);
-        else if (cellFormatType == Format::SecondeTime)
+        } else if (cellFormatType == Format::SecondeTime) {
             listFormat->setCurrentRow(1);
-        else if (cellFormatType == Format::Time1)
+        } else if (cellFormatType == Format::Time1) {
             listFormat->setCurrentRow(2);
-        else if (cellFormatType == Format::Time2)
+        } else if (cellFormatType == Format::Time2) {
             listFormat->setCurrentRow(3);
-        else if (cellFormatType == Format::Time3)
+        } else if (cellFormatType == Format::Time3) {
             listFormat->setCurrentRow(4);
-        else if (cellFormatType == Format::Time4)
+        } else if (cellFormatType == Format::Time4) {
             listFormat->setCurrentRow(5);
-        else if (cellFormatType == Format::Time5)
+        } else if (cellFormatType == Format::Time5) {
             listFormat->setCurrentRow(6);
-        else if (cellFormatType == Format::Time6)
+        } else if (cellFormatType == Format::Time6) {
             listFormat->setCurrentRow(7);
-        else if (cellFormatType == Format::Time7)
+        } else if (cellFormatType == Format::Time7) {
             listFormat->setCurrentRow(8);
-        else if (cellFormatType == Format::Time8)
+        } else if (cellFormatType == Format::Time8) {
             listFormat->setCurrentRow(9);
-        else
+        } else {
             listFormat->setCurrentRow(0);
+        }
     }
 
     if (customFormat->isChecked()) {
@@ -1232,8 +1275,9 @@ void CellFormatPageFloat::slotChangeState()
         postfix->setEnabled(false);
         format->setEnabled(false);
         listFormat->setEnabled(true);
-    } else
+    } else {
         customFormatEdit->setHidden(true);
+    }
 
     m_bFormatTypeChanged = true;
 
@@ -1305,82 +1349,83 @@ void CellFormatPageFloat::init()
     list += fmt->dateFormat(tmpDate, Format::Date35);
 
     listFormat->addItems(list);
-    if (cellFormatType == Format::ShortDate)
+    if (cellFormatType == Format::ShortDate) {
         listFormat->setCurrentRow(0);
-    else if (cellFormatType == Format::TextDate)
+    } else if (cellFormatType == Format::TextDate) {
         listFormat->setCurrentRow(1);
-    else if (cellFormatType == Format::Date1)
+    } else if (cellFormatType == Format::Date1) {
         listFormat->setCurrentRow(2);
-    else if (cellFormatType == Format::Date2)
+    } else if (cellFormatType == Format::Date2) {
         listFormat->setCurrentRow(3);
-    else if (cellFormatType == Format::Date3)
+    } else if (cellFormatType == Format::Date3) {
         listFormat->setCurrentRow(4);
-    else if (cellFormatType == Format::Date4)
+    } else if (cellFormatType == Format::Date4) {
         listFormat->setCurrentRow(5);
-    else if (cellFormatType == Format::Date5)
+    } else if (cellFormatType == Format::Date5) {
         listFormat->setCurrentRow(6);
-    else if (cellFormatType == Format::Date6)
+    } else if (cellFormatType == Format::Date6) {
         listFormat->setCurrentRow(7);
-    else if (cellFormatType == Format::Date7)
+    } else if (cellFormatType == Format::Date7) {
         listFormat->setCurrentRow(8);
-    else if (cellFormatType == Format::Date8)
+    } else if (cellFormatType == Format::Date8) {
         listFormat->setCurrentRow(9);
-    else if (cellFormatType == Format::Date9)
+    } else if (cellFormatType == Format::Date9) {
         listFormat->setCurrentRow(10);
-    else if (cellFormatType == Format::Date10)
+    } else if (cellFormatType == Format::Date10) {
         listFormat->setCurrentRow(11);
-    else if (cellFormatType == Format::Date11)
+    } else if (cellFormatType == Format::Date11) {
         listFormat->setCurrentRow(12);
-    else if (cellFormatType == Format::Date12)
+    } else if (cellFormatType == Format::Date12) {
         listFormat->setCurrentRow(13);
-    else if (cellFormatType == Format::Date13)
+    } else if (cellFormatType == Format::Date13) {
         listFormat->setCurrentRow(14);
-    else if (cellFormatType == Format::Date14)
+    } else if (cellFormatType == Format::Date14) {
         listFormat->setCurrentRow(15);
-    else if (cellFormatType == Format::Date15)
+    } else if (cellFormatType == Format::Date15) {
         listFormat->setCurrentRow(16);
-    else if (cellFormatType == Format::Date16)
+    } else if (cellFormatType == Format::Date16) {
         listFormat->setCurrentRow(17);
-    else if (cellFormatType == Format::Date17)
+    } else if (cellFormatType == Format::Date17) {
         listFormat->setCurrentRow(18);
-    else if (cellFormatType == Format::Date18)
+    } else if (cellFormatType == Format::Date18) {
         listFormat->setCurrentRow(19);
-    else if (cellFormatType == Format::Date19)
+    } else if (cellFormatType == Format::Date19) {
         listFormat->setCurrentRow(20);
-    else if (cellFormatType == Format::Date20)
+    } else if (cellFormatType == Format::Date20) {
         listFormat->setCurrentRow(21);
-    else if (cellFormatType == Format::Date21)
+    } else if (cellFormatType == Format::Date21) {
         listFormat->setCurrentRow(22);
-    else if (cellFormatType == Format::Date22)
+    } else if (cellFormatType == Format::Date22) {
         listFormat->setCurrentRow(23);
-    else if (cellFormatType == Format::Date23)
+    } else if (cellFormatType == Format::Date23) {
         listFormat->setCurrentRow(24);
-    else if (cellFormatType == Format::Date24)
+    } else if (cellFormatType == Format::Date24) {
         listFormat->setCurrentRow(25);
-    else if (cellFormatType == Format::Date25)
+    } else if (cellFormatType == Format::Date25) {
         listFormat->setCurrentRow(26);
-    else if (cellFormatType == Format::Date26)
+    } else if (cellFormatType == Format::Date26) {
         listFormat->setCurrentRow(27);
-    else if (cellFormatType == Format::Date27)
+    } else if (cellFormatType == Format::Date27) {
         listFormat->setCurrentRow(28);
-    else if (cellFormatType == Format::Date28)
+    } else if (cellFormatType == Format::Date28) {
         listFormat->setCurrentRow(29);
-    else if (cellFormatType == Format::Date29)
+    } else if (cellFormatType == Format::Date29) {
         listFormat->setCurrentRow(30);
-    else if (cellFormatType == Format::Date30)
+    } else if (cellFormatType == Format::Date30) {
         listFormat->setCurrentRow(31);
-    else if (cellFormatType == Format::Date31)
+    } else if (cellFormatType == Format::Date31) {
         listFormat->setCurrentRow(32);
-    else if (cellFormatType == Format::Date32)
+    } else if (cellFormatType == Format::Date32) {
         listFormat->setCurrentRow(33);
-    else if (cellFormatType == Format::Date33)
+    } else if (cellFormatType == Format::Date33) {
         listFormat->setCurrentRow(34);
-    else if (cellFormatType == Format::Date34)
+    } else if (cellFormatType == Format::Date34) {
         listFormat->setCurrentRow(35);
-    else if (cellFormatType == Format::Date35)
+    } else if (cellFormatType == Format::Date35) {
         listFormat->setCurrentRow(36);
-    else
+    } else {
         listFormat->setCurrentRow(0);
+    }
 }
 
 void CellFormatPageFloat::datetimeInit()
@@ -1394,8 +1439,9 @@ void CellFormatPageFloat::datetimeInit()
 void CellFormatPageFloat::currencyChanged(const QString &)
 {
     int index = currency->currentIndex();
-    if (index > 0)
+    if (index > 0) {
         ++index;
+    }
     dlg->m_currency = Currency(index);
 
     makeformat();
@@ -1403,13 +1449,13 @@ void CellFormatPageFloat::currencyChanged(const QString &)
 
 void CellFormatPageFloat::updateFormatType()
 {
-    if (generic->isChecked())
+    if (generic->isChecked()) {
         newFormatType = Format::Generic;
-    else if (number->isChecked())
+    } else if (number->isChecked()) {
         newFormatType = Format::Number;
-    else if (percent->isChecked())
+    } else if (percent->isChecked()) {
         newFormatType = Format::Percentage;
-    else if (date->isChecked()) {
+    } else if (date->isChecked()) {
         newFormatType = Format::ShortDate;
         switch (listFormat->currentRow()) {
         case 0: newFormatType = Format::ShortDate; break;
@@ -1450,11 +1496,11 @@ void CellFormatPageFloat::updateFormatType()
         case 35: newFormatType = Format::Date34; break;
         case 36: newFormatType = Format::Date35; break;
         }
-    } else if (money->isChecked())
+    } else if (money->isChecked()) {
         newFormatType = Format::Money;
-    else if (scientific->isChecked())
+    } else if (scientific->isChecked()) {
         newFormatType = Format::Scientific;
-    else if (fraction->isChecked()) {
+    } else if (fraction->isChecked()) {
         newFormatType = Format::fraction_half;
         switch (listFormat->currentRow()) {
         case 0: newFormatType = Format::fraction_half; break;
@@ -1481,10 +1527,11 @@ void CellFormatPageFloat::updateFormatType()
         case 8: newFormatType = Format::Time7; break;
         case 9: newFormatType = Format::Time8; break;
         }
-    } else if (textFormat->isChecked())
+    } else if (textFormat->isChecked()) {
         newFormatType = Format::Text;
-    else if (customFormat->isChecked())
+    } else if (customFormat->isChecked()) {
         newFormatType = Format::Custom;
+    }
 }
 
 void CellFormatPageFloat::makeformat()
@@ -1526,28 +1573,32 @@ void CellFormatPageFloat::makeformat()
                           prefix->isEnabled() ? prefix->text() : QString(),
                           postfix->isEnabled() ? postfix->text() : QString(),
                           newFormatType == Format::Money ? dlg->m_currency.symbol() : QString()).asString();
-    if (tmp.length() > 50)
+    if (tmp.length() > 50) {
         tmp = tmp.left(50);
+    }
     exampleLabel->setText(tmp.prepend("<font color=" + color.name() + '>').append("</font>"));
 }
 
-void CellFormatPageFloat::apply(CustomStyle * style)
+void CellFormatPageFloat::apply(CustomStyle *style)
 {
     if (postfix->text() != dlg->postfix) {
-        if (postfix->isEnabled())
+        if (postfix->isEnabled()) {
             style->setPostfix(postfix->text());
-        else
+        } else {
             style->setPostfix("");
+        }
     }
     if (prefix->text() != dlg->prefix) {
-        if (prefix->isEnabled())
+        if (prefix->isEnabled()) {
             style->setPrefix(prefix->text());
-        else
+        } else {
             style->setPrefix("");
+        }
     }
 
-    if (dlg->precision != precision->value())
+    if (dlg->precision != precision->value()) {
         style->setPrecision(precision->value());
+    }
 
     if (m_bFormatColorChanged) {
         switch (format->currentIndex()) {
@@ -1579,10 +1630,11 @@ void CellFormatPageFloat::apply(CustomStyle * style)
             Currency currency;
             int index = this->currency->currentIndex();
             if (index == 0) {
-                if (this->currency->currentText() == i18n("Automatic"))
+                if (this->currency->currentText() == i18n("Automatic")) {
                     currency = Currency();
-                else
+                } else {
                     currency = Currency(this->currency->currentText());
+                }
             } else {
                 currency = Currency(++index);
             }
@@ -1591,25 +1643,28 @@ void CellFormatPageFloat::apply(CustomStyle * style)
     }
 }
 
-void CellFormatPageFloat::apply(StyleCommand* _obj)
+void CellFormatPageFloat::apply(StyleCommand *_obj)
 {
     if (postfix->text() != dlg->postfix)
         if (postfix->isEnabled()) {
             // If we are in here it *never* can be disabled - FIXME (Werner)!
-            if (postfix->isEnabled())
+            if (postfix->isEnabled()) {
                 _obj->setPostfix(postfix->text());
-            else
+            } else {
                 _obj->setPostfix("");
+            }
         }
     if (prefix->text() != dlg->prefix) {
-        if (prefix->isEnabled())
+        if (prefix->isEnabled()) {
             _obj->setPrefix(prefix->text());
-        else
+        } else {
             _obj->setPrefix("");
+        }
     }
 
-    if (dlg->precision != precision->value())
+    if (dlg->precision != precision->value()) {
         _obj->setPrecision(precision->value());
+    }
 
     if (m_bFormatColorChanged) {
         switch (format->currentIndex()) {
@@ -1641,10 +1696,11 @@ void CellFormatPageFloat::apply(StyleCommand* _obj)
             Currency currency;
             int index = this->currency->currentIndex();
             if (index == 0) {
-                if (this->currency->currentText() == i18n("Automatic"))
+                if (this->currency->currentText() == i18n("Automatic")) {
                     currency = Currency();
-                else
+                } else {
                     currency = Currency(this->currency->currentText());
+                }
             } else {
                 currency = Currency(++index);
             }
@@ -1653,17 +1709,15 @@ void CellFormatPageFloat::apply(StyleCommand* _obj)
     }
 }
 
-
-
 /***************************************************************************
  *
  * CellFormatPageProtection
  *
  ***************************************************************************/
 
-CellFormatPageProtection::CellFormatPageProtection(QWidget* parent, CellFormatDialog * _dlg)
-        : QWidget(parent),
-        m_dlg(_dlg)
+CellFormatPageProtection::CellFormatPageProtection(QWidget *parent, CellFormatDialog *_dlg)
+    : QWidget(parent),
+      m_dlg(_dlg)
 {
     setupUi(this);
     connect(m_bHideAll, SIGNAL(toggled(bool)), m_bIsProtected, SLOT(setDisabled(bool)));
@@ -1679,7 +1733,7 @@ CellFormatPageProtection::~CellFormatPageProtection()
 {
 }
 
-void CellFormatPageProtection::apply(CustomStyle * style)
+void CellFormatPageProtection::apply(CustomStyle *style)
 {
     if (m_dlg->bDontPrintText != m_bDontPrint->isChecked()) {
         style->setDontPrintText(m_bDontPrint->isChecked());
@@ -1698,22 +1752,24 @@ void CellFormatPageProtection::apply(CustomStyle * style)
     }
 }
 
-void CellFormatPageProtection::apply(StyleCommand* _obj)
+void CellFormatPageProtection::apply(StyleCommand *_obj)
 {
-    if (m_dlg->bDontPrintText != m_bDontPrint->isChecked())
+    if (m_dlg->bDontPrintText != m_bDontPrint->isChecked()) {
         _obj->setDontPrintText(m_bDontPrint->isChecked());
+    }
 
-    if (m_dlg->bIsProtected != m_bIsProtected->isChecked())
+    if (m_dlg->bIsProtected != m_bIsProtected->isChecked()) {
         _obj->setNotProtected(!m_bIsProtected->isChecked());
+    }
 
-    if (m_dlg->bHideAll != m_bHideAll->isChecked())
+    if (m_dlg->bHideAll != m_bHideAll->isChecked()) {
         _obj->setHideAll(m_bHideAll->isChecked());
+    }
 
-    if (m_dlg->bHideFormula != m_bHideFormula->isChecked())
+    if (m_dlg->bHideFormula != m_bHideFormula->isChecked()) {
         _obj->setHideFormula(m_bHideFormula->isChecked());
+    }
 }
-
-
 
 /***************************************************************************
  *
@@ -1721,8 +1777,8 @@ void CellFormatPageProtection::apply(StyleCommand* _obj)
  *
  ***************************************************************************/
 
-CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
-        : QWidget(parent)
+CellFormatPageFont::CellFormatPageFont(QWidget *parent, CellFormatDialog *_dlg)
+    : QWidget(parent)
 {
     setupUi(this);
 
@@ -1732,7 +1788,6 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     connect(textColorButton, SIGNAL(changed(QColor)),
             this, SLOT(slotSetTextColor(QColor)));
-
 
     QStringList tmpListFont;
     QFontDatabase *fontDataBase = new QFontDatabase();
@@ -1749,8 +1804,9 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
         if (family_combo->findItems(dlg->fontFamily, Qt::MatchExactly).size() == 0) {
             family_combo->insertItem(0, "");
             family_combo->setCurrentRow(0);
-        } else
+        } else {
             family_combo->setCurrentItem(family_combo->findItems(dlg->fontFamily, Qt::MatchExactly)[0]);
+        }
     } else {
         family_combo->insertItem(0, "");
         family_combo->setCurrentRow(0);
@@ -1761,17 +1817,17 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     QStringList lst;
     lst.append("");
-    for (unsigned int i = 1; i < 100; ++i)
+    for (unsigned int i = 1; i < 100; ++i) {
         lst.append(QString("%1").arg(i));
+    }
 
     size_combo->insertItems(0, lst);
-
 
     size_combo->setInsertPolicy(KComboBox::NoInsert);
 
     connect(size_combo, SIGNAL(activated(QString)),
             SLOT(size_chosen_slot(QString)));
-    connect(size_combo , SIGNAL(textChanged(QString)),
+    connect(size_combo, SIGNAL(textChanged(QString)),
             this, SLOT(size_chosen_slot(QString)));
 
     connect(weight_combo, SIGNAL(activated(QString)),
@@ -1805,18 +1861,21 @@ void CellFormatPageFont::slotSetTextColor(const QColor &_color)
     bTextColorUndefined = false;
 }
 
-void CellFormatPageFont::apply(CustomStyle * style)
+void CellFormatPageFont::apply(CustomStyle *style)
 {
-    if (!bTextColorUndefined && textColor != dlg->textColor)
+    if (!bTextColorUndefined && textColor != dlg->textColor) {
         style->setFontColor(textColor);
+    }
 
     if ((size_combo->currentIndex() != 0)
-            && (dlg->fontSize != selFont.pointSize()))
+            && (dlg->fontSize != selFont.pointSize())) {
         style->setFontSize(selFont.pointSize());
+    }
 
     if ((selFont.family() != dlg->fontFamily)
-            && family_combo->currentItem() != 0 && !family_combo->currentItem()->text().isEmpty())
+            && family_combo->currentItem() != 0 && !family_combo->currentItem()->text().isEmpty()) {
         style->setFontFamily(selFont.family());
+    }
 
     style->setFontBold(weight_combo->currentIndex() != 0 && selFont.bold());
     style->setFontItalic(style_combo->currentIndex() != 0 && selFont.italic());
@@ -1824,20 +1883,25 @@ void CellFormatPageFont::apply(CustomStyle * style)
     style->setFontUnderline(underline->isChecked());
 }
 
-void CellFormatPageFont::apply(StyleCommand* _obj)
+void CellFormatPageFont::apply(StyleCommand *_obj)
 {
-    if (!bTextColorUndefined && textColor != dlg->textColor)
+    if (!bTextColorUndefined && textColor != dlg->textColor) {
         _obj->setFontColor(textColor);
+    }
     if (fontChanged) {
         if ((size_combo->currentIndex() != 0)
-                && (dlg->fontSize != selFont.pointSize()))
+                && (dlg->fontSize != selFont.pointSize())) {
             _obj->setFontSize(selFont.pointSize());
-        if ((selFont.family() != dlg->fontFamily) && (family_combo->currentItem() != 0 && !family_combo->currentItem()->text().isEmpty()))
+        }
+        if ((selFont.family() != dlg->fontFamily) && (family_combo->currentItem() != 0 && !family_combo->currentItem()->text().isEmpty())) {
             _obj->setFontFamily(selFont.family());
-        if (weight_combo->currentIndex() != 0)
+        }
+        if (weight_combo->currentIndex() != 0) {
             _obj->setFontBold(selFont.bold());
-        if (style_combo->currentIndex() != 0)
+        }
+        if (style_combo->currentIndex() != 0) {
             _obj->setFontItalic(selFont.italic());
+        }
         _obj->setFontStrike(strike->isChecked());
         _obj->setFontUnderline(underline->isChecked());
     }
@@ -1855,44 +1919,49 @@ void CellFormatPageFont::strike_chosen_slot()
     emit fontSelected(selFont);
 }
 
-void CellFormatPageFont::family_chosen_slot(const QString & family)
+void CellFormatPageFont::family_chosen_slot(const QString &family)
 {
     selFont.setFamily(family);
     emit fontSelected(selFont);
 }
 
-void CellFormatPageFont::size_chosen_slot(const QString & size)
+void CellFormatPageFont::size_chosen_slot(const QString &size)
 {
     QString size_string = size;
 
-    if (size_string.toInt() > 0) selFont.setPointSize(size_string.toInt());
+    if (size_string.toInt() > 0) {
+        selFont.setPointSize(size_string.toInt());
+    }
     emit fontSelected(selFont);
 }
 
-void CellFormatPageFont::weight_chosen_slot(const QString & weight)
+void CellFormatPageFont::weight_chosen_slot(const QString &weight)
 {
     QString weight_string = weight;
 
-    if (weight_string == i18n("Normal"))
+    if (weight_string == i18n("Normal")) {
         selFont.setBold(false);
-    if (weight_string == i18n("Bold"))
+    }
+    if (weight_string == i18n("Bold")) {
         selFont.setBold(true);
+    }
     emit fontSelected(selFont);
 }
 
-void CellFormatPageFont::style_chosen_slot(const QString & style)
+void CellFormatPageFont::style_chosen_slot(const QString &style)
 {
     QString style_string = style;
 
-    if (style_string == i18n("Roman"))
+    if (style_string == i18n("Roman")) {
         selFont.setItalic(false);
-    if (style_string == i18n("Italic"))
+    }
+    if (style_string == i18n("Italic")) {
         selFont.setItalic(true);
+    }
     emit fontSelected(selFont);
 }
 
-
-void CellFormatPageFont::display_example(const QFont& font)
+void CellFormatPageFont::display_example(const QFont &font)
 {
     QString string;
     fontChanged = true;
@@ -1903,19 +1972,20 @@ void CellFormatPageFont::display_example(const QFont& font)
 void CellFormatPageFont::setCombos()
 {
     QString string;
-    KComboBox* combo;
+    KComboBox *combo;
     int number_of_entries;
 
-    if (dlg->bTextColor)
+    if (dlg->bTextColor) {
         textColor = dlg->textColor;
-    else
+    } else {
         textColor = palette().text().color();
+    }
 
-    if (!textColor.isValid())
+    if (!textColor.isValid()) {
         textColor = palette().text().color();
+    }
 
     textColorButton->setColor(textColor);
-
 
     combo = size_combo;
     if (dlg->bTextFontSize) {
@@ -1924,19 +1994,20 @@ void CellFormatPageFont::setCombos()
         number_of_entries = size_combo->count();
         string.setNum(dlg->fontSize);
 
-        for (int i = 0; i < number_of_entries ; i++) {
+        for (int i = 0; i < number_of_entries; i++) {
             if (string == (QString) combo->itemText(i)) {
                 combo->setCurrentIndex(i);
                 // kDebug(36001) <<"Found Size" << string.data() <<" setting to item" i;
                 break;
             }
         }
-    } else
+    } else {
         combo->setCurrentIndex(0);
+    }
 
-    if (!dlg->bTextFontBold)
+    if (!dlg->bTextFontBold) {
         weight_combo->setCurrentIndex(0);
-    else if (dlg->fontBold) {
+    } else if (dlg->fontBold) {
         selFont.setBold(dlg->fontBold);
         weight_combo->setCurrentIndex(2);
     } else {
@@ -1944,9 +2015,9 @@ void CellFormatPageFont::setCombos()
         weight_combo->setCurrentIndex(1);
     }
 
-    if (!dlg->bTextFontItalic)
+    if (!dlg->bTextFontItalic) {
         weight_combo->setCurrentIndex(0);
-    else if (dlg->fontItalic) {
+    } else if (dlg->fontItalic) {
         selFont.setItalic(dlg->fontItalic);
         style_combo->setCurrentIndex(2);
     } else {
@@ -1955,49 +2026,49 @@ void CellFormatPageFont::setCombos()
     }
 }
 
-
-
 /***************************************************************************
  *
  * CellFormatPagePosition
  *
  ***************************************************************************/
 
-CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog *_dlg)
-        : QWidget(parent),
-        dlg(_dlg)
+CellFormatPagePosition::CellFormatPagePosition(QWidget *parent, CellFormatDialog *_dlg)
+    : QWidget(parent),
+      dlg(_dlg)
 {
     setupUi(this);
     connect(angleRotation, SIGNAL(valueChanged(int)), spinBox3, SLOT(setValue(int)));
     connect(spinBox3, SIGNAL(valueChanged(int)), angleRotation, SLOT(setValue(int)));
 
-    if (dlg->alignX == Style::Left)
+    if (dlg->alignX == Style::Left) {
         left->setChecked(true);
-    else if (dlg->alignX == Style::Center)
+    } else if (dlg->alignX == Style::Center) {
         center->setChecked(true);
-    else if (dlg->alignX == Style::Right)
+    } else if (dlg->alignX == Style::Right) {
         right->setChecked(true);
-    else if (dlg->alignX == Style::HAlignUndefined)
+    } else if (dlg->alignX == Style::HAlignUndefined) {
         standard->setChecked(true);
+    }
 
-    QButtonGroup* horizontalGroup = new QButtonGroup(this);
+    QButtonGroup *horizontalGroup = new QButtonGroup(this);
     horizontalGroup->addButton(left);
     horizontalGroup->addButton(center);
     horizontalGroup->addButton(right);
     horizontalGroup->addButton(standard);
     connect(horizontalGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotStateChanged(int)));
 
-    if (dlg->alignY == Style::Top)
+    if (dlg->alignY == Style::Top) {
         top->setChecked(true);
-    else if (dlg->alignY == Style::Middle)
+    } else if (dlg->alignY == Style::Middle) {
         middle->setChecked(true);
-    else if (dlg->alignY == Style::Bottom)
+    } else if (dlg->alignY == Style::Bottom) {
         bottom->setChecked(true);
+    }
 
     multi->setChecked(dlg->bMultiRow);
 
     vertical->setChecked(dlg->bVerticalText);
-    
+
     shrinkToFit->setChecked(dlg->bShrinkToFit);
 
     angleRotation->setValue(-dlg->textRotation);//annma
@@ -2031,13 +2102,15 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
     dlg->widthSize = width->value();
 
-    if (dlg->isRowSelected)
+    if (dlg->isRowSelected) {
         width->setEnabled(false);
+    }
 
     double dw = dlg->selection()->canvas()->unit().toUserValue(dlg->defaultWidthSize);
     defaultWidth->setText(i18n("Default width (%1 %2)", dw, dlg->selection()->canvas()->unit().symbol()));
-    if (dlg->isRowSelected)
+    if (dlg->isRowSelected) {
         defaultWidth->setEnabled(false);
+    }
 
     height = new KoUnitDoubleSpinBox(m_heightPanel);
     QGridLayout *gridHeight = new QGridLayout(m_heightPanel);
@@ -2049,13 +2122,15 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
     dlg->heightSize = height->value();
 
-    if (dlg->isColumnSelected)
+    if (dlg->isColumnSelected) {
         height->setEnabled(false);
+    }
 
     double dh =  dlg->selection()->canvas()->unit().toUserValue(dlg->defaultHeightSize);
     defaultHeight->setText(i18n("Default height (%1 %2)", dh, dlg->selection()->canvas()->unit().symbol()));
-    if (dlg->isColumnSelected)
+    if (dlg->isColumnSelected) {
         defaultHeight->setEnabled(false);
+    }
 
     // in case we're editing a style, we disable the cell size settings
     if (dlg->getStyle()) {
@@ -2063,11 +2138,11 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
         defaultWidth->setEnabled(false);
     }
 
-    connect(defaultWidth , SIGNAL(clicked()), this, SLOT(slotChangeWidthState()));
-    connect(defaultHeight , SIGNAL(clicked()), this, SLOT(slotChangeHeightState()));
-    connect(vertical , SIGNAL(clicked()), this, SLOT(slotChangeVerticalState()));
+    connect(defaultWidth, SIGNAL(clicked()), this, SLOT(slotChangeWidthState()));
+    connect(defaultHeight, SIGNAL(clicked()), this, SLOT(slotChangeHeightState()));
+    connect(vertical, SIGNAL(clicked()), this, SLOT(slotChangeVerticalState()));
     connect(shrinkToFit, SIGNAL(clicked()), this, SLOT(slotChangeShrinkToFitState()));
-    connect(multi , SIGNAL(clicked()), this, SLOT(slotChangeMultiState()));
+    connect(multi, SIGNAL(clicked()), this, SLOT(slotChangeMultiState()));
     connect(angleRotation, SIGNAL(valueChanged(int)), this, SLOT(slotChangeAngle(int)));
 
     slotStateChanged(0);
@@ -2094,7 +2169,6 @@ void CellFormatPagePosition::slotChangeVerticalState()
     }
 }
 
-
 void CellFormatPagePosition::slotChangeShrinkToFitState()
 {
     m_bOptionText = true;
@@ -2108,10 +2182,11 @@ void CellFormatPagePosition::slotChangeShrinkToFitState()
 
 void CellFormatPagePosition::slotStateChanged(int)
 {
-    if (right->isChecked() || center->isChecked())
+    if (right->isChecked() || center->isChecked()) {
         m_indent->setEnabled(false);
-    else
+    } else {
         m_indent->setEnabled(true);
+    }
 }
 
 bool CellFormatPagePosition::getMergedCellState() const
@@ -2121,18 +2196,20 @@ bool CellFormatPagePosition::getMergedCellState() const
 
 void CellFormatPagePosition::slotChangeWidthState()
 {
-    if (defaultWidth->isChecked())
+    if (defaultWidth->isChecked()) {
         width->setEnabled(false);
-    else
+    } else {
         width->setEnabled(true);
+    }
 }
 
 void CellFormatPagePosition::slotChangeHeightState()
 {
-    if (defaultHeight->isChecked())
+    if (defaultHeight->isChecked()) {
         height->setEnabled(false);
-    else
+    } else {
         height->setEnabled(true);
+    }
 }
 
 void CellFormatPagePosition::slotChangeAngle(int _angle)
@@ -2146,23 +2223,25 @@ void CellFormatPagePosition::slotChangeAngle(int _angle)
     }
 }
 
-void CellFormatPagePosition::apply(CustomStyle * style)
+void CellFormatPagePosition::apply(CustomStyle *style)
 {
-    if (top->isChecked() && dlg->alignY != Style::Top)
+    if (top->isChecked() && dlg->alignY != Style::Top) {
         style->setVAlign(Style::Top);
-    else if (bottom->isChecked() && dlg->alignY != Style::Bottom)
+    } else if (bottom->isChecked() && dlg->alignY != Style::Bottom) {
         style->setVAlign(Style::Bottom);
-    else if (middle->isChecked() && dlg->alignY != Style::Middle)
+    } else if (middle->isChecked() && dlg->alignY != Style::Middle) {
         style->setVAlign(Style::Middle);
+    }
 
-    if (left->isChecked() && dlg->alignX != Style::Left)
+    if (left->isChecked() && dlg->alignX != Style::Left) {
         style->setHAlign(Style::Left);
-    else if (right->isChecked() && dlg->alignX != Style::Right)
+    } else if (right->isChecked() && dlg->alignX != Style::Right) {
         style->setHAlign(Style::Right);
-    else if (center->isChecked() && dlg->alignX != Style::Center)
+    } else if (center->isChecked() && dlg->alignX != Style::Center) {
         style->setHAlign(Style::Center);
-    else if (standard->isChecked() && dlg->alignX != Style::HAlignUndefined)
+    } else if (standard->isChecked() && dlg->alignX != Style::HAlignUndefined) {
         style->setHAlign(Style::HAlignUndefined);
+    }
 
     if (m_bOptionText) {
         if (multi->isEnabled()) {
@@ -2176,12 +2255,14 @@ void CellFormatPagePosition::apply(CustomStyle * style)
         }
     }
 
-    if (dlg->textRotation != angleRotation->value())
+    if (dlg->textRotation != angleRotation->value()) {
         style->setAngle((-angleRotation->value()));
+    }
 
     if (m_indent->isEnabled()
-            && dlg->indent != m_indent->value())
+            && dlg->indent != m_indent->value()) {
         style->setIndentation(m_indent->value());
+    }
 
     // setting the default column width and row height
     if (dlg->getStyle()->type() == Style::BUILTIN && dlg->getStyle()->name() == "Default") {
@@ -2194,92 +2275,101 @@ void CellFormatPagePosition::apply(CustomStyle * style)
     }
 }
 
-void CellFormatPagePosition::apply(StyleCommand* _obj)
+void CellFormatPagePosition::apply(StyleCommand *_obj)
 {
     Style::HAlign  ax;
     Style::VAlign ay;
 
-    if (top->isChecked())
+    if (top->isChecked()) {
         ay = Style::Top;
-    else if (bottom->isChecked())
+    } else if (bottom->isChecked()) {
         ay = Style::Bottom;
-    else if (middle->isChecked())
+    } else if (middle->isChecked()) {
         ay = Style::Middle;
-    else
-        ay = Style::Middle; // Default, just in case
+    } else {
+        ay = Style::Middle;    // Default, just in case
+    }
 
-    if (left->isChecked())
+    if (left->isChecked()) {
         ax = Style::Left;
-    else if (right->isChecked())
+    } else if (right->isChecked()) {
         ax = Style::Right;
-    else if (center->isChecked())
+    } else if (center->isChecked()) {
         ax = Style::Center;
-    else if (standard->isChecked())
+    } else if (standard->isChecked()) {
         ax = Style::HAlignUndefined;
-    else
-        ax = Style::HAlignUndefined; //Default, just in case
+    } else {
+        ax = Style::HAlignUndefined;    //Default, just in case
+    }
 
-    if (top->isChecked() && ay != dlg->alignY)
+    if (top->isChecked() && ay != dlg->alignY) {
         _obj->setVerticalAlignment(Style::Top);
-    else if (bottom->isChecked() && ay != dlg->alignY)
+    } else if (bottom->isChecked() && ay != dlg->alignY) {
         _obj->setVerticalAlignment(Style::Bottom);
-    else if (middle->isChecked() && ay != dlg->alignY)
+    } else if (middle->isChecked() && ay != dlg->alignY) {
         _obj->setVerticalAlignment(Style::Middle);
+    }
 
-    if (left->isChecked() && ax != dlg->alignX)
+    if (left->isChecked() && ax != dlg->alignX) {
         _obj->setHorizontalAlignment(Style::Left);
-    else if (right->isChecked() && ax != dlg->alignX)
+    } else if (right->isChecked() && ax != dlg->alignX) {
         _obj->setHorizontalAlignment(Style::Right);
-    else if (center->isChecked() && ax != dlg->alignX)
+    } else if (center->isChecked() && ax != dlg->alignX) {
         _obj->setHorizontalAlignment(Style::Center);
-    else if (standard->isChecked() && ax != dlg->alignX)
+    } else if (standard->isChecked() && ax != dlg->alignX) {
         _obj->setHorizontalAlignment(Style::HAlignUndefined);
+    }
 
     if (m_bOptionText) {
-        if (multi->isEnabled())
+        if (multi->isEnabled()) {
             _obj->setMultiRow(multi->isChecked());
-        else
+        } else {
             _obj->setMultiRow(false);
+        }
     }
 
     if (m_bOptionText) {
-        if (vertical->isEnabled())
+        if (vertical->isEnabled()) {
             _obj->setVerticalText(vertical->isChecked());
-        else
+        } else {
             _obj->setVerticalText(false);
+        }
     }
 
     if (m_bOptionText) {
-        if (shrinkToFit->isEnabled())
+        if (shrinkToFit->isEnabled()) {
             _obj->setShrinkToFit(shrinkToFit->isChecked());
-        else
+        } else {
             _obj->setShrinkToFit(false);
+        }
     }
 
-    if (dlg->textRotation != angleRotation->value())
+    if (dlg->textRotation != angleRotation->value()) {
         _obj->setAngle((-angleRotation->value()));
+    }
     if (m_indent->isEnabled()
-            && dlg->indent != m_indent->value())
+            && dlg->indent != m_indent->value()) {
         _obj->setIndentation(m_indent->value());
+    }
 }
 
 double CellFormatPagePosition::getSizeHeight() const
 {
-    if (defaultHeight->isChecked())
-        return dlg->defaultHeightSize; // guess who calls this!
-    else
+    if (defaultHeight->isChecked()) {
+        return dlg->defaultHeightSize;    // guess who calls this!
+    } else {
         return height->value();
+    }
 }
 
 double CellFormatPagePosition::getSizeWidth() const
 {
-    if (defaultWidth->isChecked())
-        return dlg->defaultWidthSize; // guess who calls this!
-    else
+    if (defaultWidth->isChecked()) {
+        return dlg->defaultWidthSize;    // guess who calls this!
+    } else {
         return width->value();
+    }
 }
-
-
 
 /***************************************************************************
  *
@@ -2310,7 +2400,6 @@ void BorderButton::setUndefined()
     setColor(palette().midlight().color());
 }
 
-
 void BorderButton::unselect()
 {
     setChecked(false);
@@ -2320,8 +2409,6 @@ void BorderButton::unselect()
     setChanged(true);
 }
 
-
-
 /***************************************************************************
  *
  * Border
@@ -2329,14 +2416,13 @@ void BorderButton::unselect()
  ***************************************************************************/
 
 Border::Border(QWidget *parent, const char * /*_name*/, bool _oneCol, bool _oneRow)
-        : QFrame(parent)
+    : QFrame(parent)
 {
     setAutoFillBackground(true);
 
     oneCol = _oneCol;
     oneRow = _oneRow;
 }
-
 
 #define OFFSETX 5
 #define OFFSETY 5
@@ -2349,38 +2435,36 @@ void Border::paintEvent(QPaintEvent *_ev)
     pen = QPen(palette().midlight(), 2, Qt::SolidLine).color();
     painter.setPen(pen);
 
-    painter.drawLine(OFFSETX - 5, OFFSETY, OFFSETX , OFFSETY);
-    painter.drawLine(OFFSETX, OFFSETY - 5, OFFSETX , OFFSETY);
-    painter.drawLine(width() - OFFSETX, OFFSETY, width() , OFFSETY);
-    painter.drawLine(width() - OFFSETX, OFFSETY - 5, width() - OFFSETX , OFFSETY);
+    painter.drawLine(OFFSETX - 5, OFFSETY, OFFSETX, OFFSETY);
+    painter.drawLine(OFFSETX, OFFSETY - 5, OFFSETX, OFFSETY);
+    painter.drawLine(width() - OFFSETX, OFFSETY, width(), OFFSETY);
+    painter.drawLine(width() - OFFSETX, OFFSETY - 5, width() - OFFSETX, OFFSETY);
 
-    painter.drawLine(OFFSETX, height() - OFFSETY, OFFSETX , height());
-    painter.drawLine(OFFSETX - 5, height() - OFFSETY, OFFSETX , height() - OFFSETY);
+    painter.drawLine(OFFSETX, height() - OFFSETY, OFFSETX, height());
+    painter.drawLine(OFFSETX - 5, height() - OFFSETY, OFFSETX, height() - OFFSETY);
 
-    painter.drawLine(width() - OFFSETX, height() - OFFSETY, width() , height() - OFFSETY);
-    painter.drawLine(width() - OFFSETX, height() - OFFSETY, width() - OFFSETX , height());
+    painter.drawLine(width() - OFFSETX, height() - OFFSETY, width(), height() - OFFSETY);
+    painter.drawLine(width() - OFFSETX, height() - OFFSETY, width() - OFFSETX, height());
     if (oneCol == false) {
-        painter.drawLine(width() / 2, OFFSETY - 5, width() / 2 , OFFSETY);
-        painter.drawLine(width() / 2 - 5, OFFSETY, width() / 2 + 5 , OFFSETY);
-        painter.drawLine(width() / 2, height() - OFFSETY, width() / 2 , height());
-        painter.drawLine(width() / 2 - 5, height() - OFFSETY, width() / 2 + 5 , height() - OFFSETY);
+        painter.drawLine(width() / 2, OFFSETY - 5, width() / 2, OFFSETY);
+        painter.drawLine(width() / 2 - 5, OFFSETY, width() / 2 + 5, OFFSETY);
+        painter.drawLine(width() / 2, height() - OFFSETY, width() / 2, height());
+        painter.drawLine(width() / 2 - 5, height() - OFFSETY, width() / 2 + 5, height() - OFFSETY);
     }
     if (oneRow == false) {
-        painter.drawLine(OFFSETX - 5, height() / 2, OFFSETX , height() / 2);
-        painter.drawLine(OFFSETX, height() / 2 - 5, OFFSETX , height() / 2 + 5);
+        painter.drawLine(OFFSETX - 5, height() / 2, OFFSETX, height() / 2);
+        painter.drawLine(OFFSETX, height() / 2 - 5, OFFSETX, height() / 2 + 5);
         painter.drawLine(width() - OFFSETX, height() / 2, width(), height() / 2);
-        painter.drawLine(width() - OFFSETX, height() / 2 - 5, width() - OFFSETX , height() / 2 + 5);
+        painter.drawLine(width() - OFFSETX, height() / 2 - 5, width() - OFFSETX, height() / 2 + 5);
     }
     painter.end();
     emit redraw();
 }
 
-void Border::mousePressEvent(QMouseEvent* _ev)
+void Border::mousePressEvent(QMouseEvent *_ev)
 {
     emit choosearea(_ev);
 }
-
-
 
 /***************************************************************************
  *
@@ -2388,9 +2472,9 @@ void Border::mousePressEvent(QMouseEvent* _ev)
  *
  ***************************************************************************/
 
-CellFormatPageBorder::CellFormatPageBorder(QWidget* parent, CellFormatDialog *_dlg)
-        : QWidget(parent),
-        dlg(_dlg)
+CellFormatPageBorder::CellFormatPageBorder(QWidget *parent, CellFormatDialog *_dlg)
+    : QWidget(parent),
+      dlg(_dlg)
 {
     sheet = dlg->getSheet();
 
@@ -2404,7 +2488,7 @@ CellFormatPageBorder::CellFormatPageBorder(QWidget* parent, CellFormatDialog *_d
 
     style->setEnabled(false);
     size->setEnabled(false);
-    preview->setPattern(Qt::black , 1, Qt::SolidLine);
+    preview->setPattern(Qt::black, 1, Qt::SolidLine);
     this->resize(400, 400);
 }
 
@@ -2412,7 +2496,7 @@ void CellFormatPageBorder::InitializeGrids()
 {
     QGridLayout *grid = new QGridLayout(this);
     QGridLayout *grid2 = 0;
-    QGroupBox* tmpQGroupBox = 0;
+    QGroupBox *tmpQGroupBox = 0;
 
     /***********************/
     /* here is the data to initialize all the border buttons with */
@@ -2595,7 +2679,6 @@ void CellFormatPageBorder::InitializeBorderButtons()
         }
     }
 
-
 }
 
 void CellFormatPageBorder::InitializePatterns()
@@ -2634,14 +2717,14 @@ void CellFormatPageBorder::SetConnections()
                 this, SLOT(preselect(BorderButton*)));
     }
 
-    connect(area , SIGNAL(redraw()), this, SLOT(draw()));
-    connect(area , SIGNAL(choosearea(QMouseEvent*)),
+    connect(area, SIGNAL(redraw()), this, SLOT(draw()));
+    connect(area, SIGNAL(choosearea(QMouseEvent*)),
             this, SLOT(slotPressEvent(QMouseEvent*)));
 
     connect(style, SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
     connect(size, SIGNAL(textChanged(QString)),
             this, SLOT(slotChangeStyle(QString)));
-    connect(size , SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
+    connect(size, SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
 }
 
 void CellFormatPageBorder::cutomize_chosen_slot()
@@ -2654,7 +2737,7 @@ void CellFormatPageBorder::cutomize_chosen_slot()
         style->setEnabled(false);
         size->setEnabled(false);
         pattern[2]->slotSelect();
-        preview->setPattern(Qt::black , 1, Qt::SolidLine);
+        preview->setPattern(Qt::black, 1, Qt::SolidLine);
     }
 }
 
@@ -2713,108 +2796,123 @@ void CellFormatPageBorder::loadIcon(const QString &iconName, BorderButton *_butt
     _button->setIcon(KIcon(iconName));
 }
 
-void CellFormatPageBorder::apply(StyleCommand* obj)
+void CellFormatPageBorder::apply(StyleCommand *obj)
 {
-    if (borderButtons[BorderType_Horizontal]->isChanged())
+    if (borderButtons[BorderType_Horizontal]->isChanged()) {
         applyHorizontalOutline(obj);
+    }
 
-    if (borderButtons[BorderType_Vertical]->isChanged())
+    if (borderButtons[BorderType_Vertical]->isChanged()) {
         applyVerticalOutline(obj);
+    }
 
-    if (borderButtons[BorderType_Left]->isChanged())
+    if (borderButtons[BorderType_Left]->isChanged()) {
         applyLeftOutline(obj);
+    }
 
-    if (borderButtons[BorderType_Right]->isChanged())
+    if (borderButtons[BorderType_Right]->isChanged()) {
         applyRightOutline(obj);
+    }
 
-    if (borderButtons[BorderType_Top]->isChanged())
+    if (borderButtons[BorderType_Top]->isChanged()) {
         applyTopOutline(obj);
+    }
 
-    if (borderButtons[BorderType_Bottom]->isChanged())
+    if (borderButtons[BorderType_Bottom]->isChanged()) {
         applyBottomOutline(obj);
+    }
 
     if (borderButtons[BorderType_RisingDiagonal]->isChanged() ||
-            borderButtons[BorderType_FallingDiagonal]->isChanged())
+            borderButtons[BorderType_FallingDiagonal]->isChanged()) {
         applyDiagonalOutline(obj);
+    }
 }
 
-void CellFormatPageBorder::applyTopOutline(StyleCommand* obj)
+void CellFormatPageBorder::applyTopOutline(StyleCommand *obj)
 {
-    BorderButton * top = borderButtons[BorderType_Top];
+    BorderButton *top = borderButtons[BorderType_Top];
 
     QPen tmpPen(top->getColor(), top->getPenWidth(), top->getPenStyle());
 
     if (dlg->getStyle()) {
         dlg->getStyle()->setTopBorderPen(tmpPen);
     } else {
-        if (borderButtons[BorderType_Top]->isChanged())
+        if (borderButtons[BorderType_Top]->isChanged()) {
             obj->setTopBorderPen(tmpPen);
+        }
     }
 }
 
-void CellFormatPageBorder::applyBottomOutline(StyleCommand* obj)
+void CellFormatPageBorder::applyBottomOutline(StyleCommand *obj)
 {
-    BorderButton * bottom = borderButtons[BorderType_Bottom];
+    BorderButton *bottom = borderButtons[BorderType_Bottom];
 
     QPen tmpPen(bottom->getColor(), bottom->getPenWidth(), bottom->getPenStyle());
 
     if (dlg->getStyle()) {
         dlg->getStyle()->setBottomBorderPen(tmpPen);
     } else {
-        if (borderButtons[BorderType_Bottom]->isChanged())
+        if (borderButtons[BorderType_Bottom]->isChanged()) {
             obj->setBottomBorderPen(tmpPen);
+        }
     }
 }
 
-void CellFormatPageBorder::applyLeftOutline(StyleCommand* obj)
+void CellFormatPageBorder::applyLeftOutline(StyleCommand *obj)
 {
-    BorderButton * left = borderButtons[BorderType_Left];
+    BorderButton *left = borderButtons[BorderType_Left];
     QPen tmpPen(left->getColor(), left->getPenWidth(), left->getPenStyle());
 
     if (dlg->getStyle()) {
         dlg->getStyle()->setLeftBorderPen(tmpPen);
     } else {
-        if (borderButtons[BorderType_Left]->isChanged())
+        if (borderButtons[BorderType_Left]->isChanged()) {
             obj->setLeftBorderPen(tmpPen);
+        }
     }
 }
 
-void CellFormatPageBorder::applyRightOutline(StyleCommand* obj)
+void CellFormatPageBorder::applyRightOutline(StyleCommand *obj)
 {
-    BorderButton* right = borderButtons[BorderType_Right];
+    BorderButton *right = borderButtons[BorderType_Right];
     QPen tmpPen(right->getColor(), right->getPenWidth(), right->getPenStyle());
 
     if (dlg->getStyle()) {
         dlg->getStyle()->setRightBorderPen(tmpPen);
     } else {
-        if (borderButtons[BorderType_Right]->isChanged())
+        if (borderButtons[BorderType_Right]->isChanged()) {
             obj->setRightBorderPen(tmpPen);
+        }
     }
 }
 
-void CellFormatPageBorder::applyDiagonalOutline(StyleCommand* obj)
+void CellFormatPageBorder::applyDiagonalOutline(StyleCommand *obj)
 {
-    BorderButton * fallDiagonal = borderButtons[BorderType_FallingDiagonal];
-    BorderButton * goUpDiagonal = borderButtons[BorderType_RisingDiagonal];
+    BorderButton *fallDiagonal = borderButtons[BorderType_FallingDiagonal];
+    BorderButton *goUpDiagonal = borderButtons[BorderType_RisingDiagonal];
     QPen tmpPenFall(fallDiagonal->getColor(), fallDiagonal->getPenWidth(),
                     fallDiagonal->getPenStyle());
     QPen tmpPenGoUp(goUpDiagonal->getColor(), goUpDiagonal->getPenWidth(),
                     goUpDiagonal->getPenStyle());
 
     if (dlg->getStyle()) {
-        if (fallDiagonal->isChanged())
+        if (fallDiagonal->isChanged()) {
             dlg->getStyle()->setFallDiagonalPen(tmpPenFall);
-        if (goUpDiagonal->isChanged())
+        }
+        if (goUpDiagonal->isChanged()) {
             dlg->getStyle()->setGoUpDiagonalPen(tmpPenGoUp);
+        }
     } else {
-        if (fallDiagonal->isChanged())
+        if (fallDiagonal->isChanged()) {
             obj->setFallDiagonalPen(tmpPenFall);
-        if (goUpDiagonal->isChanged())
+        }
+        if (goUpDiagonal->isChanged()) {
             obj->setGoUpDiagonalPen(tmpPenGoUp);
+        }
     }
 }
 
-void CellFormatPageBorder::applyHorizontalOutline(StyleCommand* obj)
+void CellFormatPageBorder::applyHorizontalOutline(StyleCommand *obj)
 {
     QPen tmpPen(borderButtons[BorderType_Horizontal]->getColor(),
                 borderButtons[BorderType_Horizontal]->getPenWidth(),
@@ -2823,25 +2921,26 @@ void CellFormatPageBorder::applyHorizontalOutline(StyleCommand* obj)
     if (dlg->getStyle()) {
         dlg->getStyle()->setTopBorderPen(tmpPen);
     } else {
-        if (borderButtons[BorderType_Horizontal]->isChanged())
+        if (borderButtons[BorderType_Horizontal]->isChanged()) {
             obj->setHorizontalPen(tmpPen);
+        }
     }
 }
 
-void CellFormatPageBorder::applyVerticalOutline(StyleCommand* obj)
+void CellFormatPageBorder::applyVerticalOutline(StyleCommand *obj)
 {
-    BorderButton* vertical = borderButtons[BorderType_Vertical];
+    BorderButton *vertical = borderButtons[BorderType_Vertical];
     QPen tmpPen(vertical->getColor(), vertical->getPenWidth(),
                 vertical->getPenStyle());
 
     if (dlg->getStyle()) {
         dlg->getStyle()->setLeftBorderPen(tmpPen);
     } else {
-        if (borderButtons[BorderType_Vertical]->isChanged())
+        if (borderButtons[BorderType_Vertical]->isChanged()) {
             obj->setVerticalPen(tmpPen);
+        }
     }
 }
-
 
 void CellFormatPageBorder::slotSetColorButton(const QColor &_color)
 {
@@ -2865,15 +2964,15 @@ void CellFormatPageBorder::slotUnselect2(PatternSelect *_p)
 
 void CellFormatPageBorder::preselect(BorderButton *_p)
 {
-    BorderButton* top = borderButtons[BorderType_Top];
-    BorderButton* bottom = borderButtons[BorderType_Bottom];
-    BorderButton* left = borderButtons[BorderType_Left];
-    BorderButton* right = borderButtons[BorderType_Right];
-    BorderButton* vertical = borderButtons[BorderType_Vertical];
-    BorderButton* horizontal = borderButtons[BorderType_Horizontal];
-    BorderButton* remove = shortcutButtons[BorderShortcutType_Remove];
-    BorderButton* outline = shortcutButtons[BorderShortcutType_Outline];
-    BorderButton* all = shortcutButtons[BorderShortcutType_All];
+    BorderButton *top = borderButtons[BorderType_Top];
+    BorderButton *bottom = borderButtons[BorderType_Bottom];
+    BorderButton *left = borderButtons[BorderType_Left];
+    BorderButton *right = borderButtons[BorderType_Right];
+    BorderButton *vertical = borderButtons[BorderType_Vertical];
+    BorderButton *horizontal = borderButtons[BorderType_Horizontal];
+    BorderButton *remove = shortcutButtons[BorderShortcutType_Remove];
+    BorderButton *outline = shortcutButtons[BorderShortcutType_Outline];
+    BorderButton *all = shortcutButtons[BorderShortcutType_All];
 
     _p->setChecked(false);
     if (_p == remove) {
@@ -2943,14 +3042,14 @@ void CellFormatPageBorder::changeState(BorderButton *_p)
 
 void CellFormatPageBorder::draw()
 {
-    BorderButton* top = borderButtons[BorderType_Top];
-    BorderButton* bottom = borderButtons[BorderType_Bottom];
-    BorderButton* left = borderButtons[BorderType_Left];
-    BorderButton* right = borderButtons[BorderType_Right];
-    BorderButton* risingDiagonal = borderButtons[BorderType_RisingDiagonal];
-    BorderButton* fallingDiagonal = borderButtons[BorderType_FallingDiagonal];
-    BorderButton* vertical = borderButtons[BorderType_Vertical];
-    BorderButton* horizontal = borderButtons[BorderType_Horizontal];
+    BorderButton *top = borderButtons[BorderType_Top];
+    BorderButton *bottom = borderButtons[BorderType_Bottom];
+    BorderButton *left = borderButtons[BorderType_Left];
+    BorderButton *right = borderButtons[BorderType_Right];
+    BorderButton *risingDiagonal = borderButtons[BorderType_RisingDiagonal];
+    BorderButton *fallingDiagonal = borderButtons[BorderType_FallingDiagonal];
+    BorderButton *vertical = borderButtons[BorderType_Vertical];
+    BorderButton *horizontal = borderButtons[BorderType_Horizontal];
     QPen pen;
     QPainter painter;
     painter.begin(area);
@@ -2958,7 +3057,7 @@ void CellFormatPageBorder::draw()
     if ((bottom->getPenStyle()) != Qt::NoPen) {
         pen = QPen(bottom->getColor(), bottom->getPenWidth(), bottom->getPenStyle());
         painter.setPen(pen);
-        painter.drawLine(OFFSETX, area->height() - OFFSETY, area->width() - OFFSETX , area->height() - OFFSETY);
+        painter.drawLine(OFFSETX, area->height() - OFFSETY, area->width() - OFFSETX, area->height() - OFFSETY);
     }
     if ((top->getPenStyle()) != Qt::NoPen) {
         pen = QPen(top->getColor(), top->getPenWidth(), top->getPenStyle());
@@ -2968,7 +3067,7 @@ void CellFormatPageBorder::draw()
     if ((left->getPenStyle()) != Qt::NoPen) {
         pen = QPen(left->getColor(), left->getPenWidth(), left->getPenStyle());
         painter.setPen(pen);
-        painter.drawLine(OFFSETX, OFFSETY, OFFSETX , area->height() - OFFSETY);
+        painter.drawLine(OFFSETX, OFFSETY, OFFSETX, area->height() - OFFSETY);
     }
     if ((right->getPenStyle()) != Qt::NoPen) {
         pen = QPen(right->getColor(), right->getPenWidth(), right->getPenStyle());
@@ -2986,7 +3085,7 @@ void CellFormatPageBorder::draw()
         if (dlg->oneCol == false && dlg->oneRow == false) {
             painter.drawLine(area->width() / 2, OFFSETY, area->width() - OFFSETX,
                              area->height() / 2);
-            painter.drawLine(OFFSETX, area->height() / 2 , area->width() / 2,
+            painter.drawLine(OFFSETX, area->height() / 2, area->width() / 2,
                              area->height() - OFFSETY);
         }
     }
@@ -2994,11 +3093,11 @@ void CellFormatPageBorder::draw()
         pen = QPen(risingDiagonal->getColor(), risingDiagonal->getPenWidth(),
                    risingDiagonal->getPenStyle());
         painter.setPen(pen);
-        painter.drawLine(OFFSETX, area->height() - OFFSETY , area->width() - OFFSETX ,
+        painter.drawLine(OFFSETX, area->height() - OFFSETY, area->width() - OFFSETX,
                          OFFSETY);
         if (dlg->oneCol == false && dlg->oneRow == false) {
             painter.drawLine(area->width() / 2, OFFSETY, OFFSETX, area->height() / 2);
-            painter.drawLine(area->width() / 2, area->height() - OFFSETY ,
+            painter.drawLine(area->width() / 2, area->height() - OFFSETY,
                              area->width() - OFFSETX, area->height() / 2);
         }
 
@@ -3007,7 +3106,7 @@ void CellFormatPageBorder::draw()
         pen = QPen(vertical->getColor(), vertical->getPenWidth(),
                    vertical->getPenStyle());
         painter.setPen(pen);
-        painter.drawLine(area->width() / 2, 5 , area->width() / 2 , area->height() - 5);
+        painter.drawLine(area->width() / 2, 5, area->width() / 2, area->height() - 5);
     }
     if ((horizontal->getPenStyle()) != Qt::NoPen) {
         pen = QPen(horizontal->getColor(), horizontal->getPenWidth(),
@@ -3034,13 +3133,12 @@ void CellFormatPageBorder::invertState(BorderButton *_p)
 
 void CellFormatPageBorder::slotPressEvent(QMouseEvent *_ev)
 {
-    BorderButton* top = borderButtons[BorderType_Top];
-    BorderButton* bottom = borderButtons[BorderType_Bottom];
-    BorderButton* left = borderButtons[BorderType_Left];
-    BorderButton* right = borderButtons[BorderType_Right];
-    BorderButton* vertical = borderButtons[BorderType_Vertical];
-    BorderButton* horizontal = borderButtons[BorderType_Horizontal];
-
+    BorderButton *top = borderButtons[BorderType_Top];
+    BorderButton *bottom = borderButtons[BorderType_Bottom];
+    BorderButton *left = borderButtons[BorderType_Left];
+    BorderButton *right = borderButtons[BorderType_Right];
+    BorderButton *vertical = borderButtons[BorderType_Vertical];
+    BorderButton *horizontal = borderButtons[BorderType_Horizontal];
 
     QRect rect(OFFSETX, OFFSETY - 8, area->width() - OFFSETX, OFFSETY + 8);
     if (rect.contains(QPoint(_ev->x(), _ev->y()))) {
@@ -3052,8 +3150,9 @@ void CellFormatPageBorder::slotPressEvent(QMouseEvent *_ev)
             top->setPenStyle(preview->getPenStyle());
             top->setColor(currentColor);
             top->setChanged(true);
-        } else
+        } else {
             invertState(top);
+        }
     }
     rect.setCoords(OFFSETX, area->height() - OFFSETY - 8, area->width() - OFFSETX,
                    area->height() - OFFSETY + 8);
@@ -3066,8 +3165,9 @@ void CellFormatPageBorder::slotPressEvent(QMouseEvent *_ev)
             bottom->setPenStyle(preview->getPenStyle());
             bottom->setColor(currentColor);
             bottom->setChanged(true);
-        } else
+        } else {
             invertState(bottom);
+        }
     }
 
     rect.setCoords(OFFSETX - 8, OFFSETY, OFFSETX + 8, area->height() - OFFSETY);
@@ -3080,8 +3180,9 @@ void CellFormatPageBorder::slotPressEvent(QMouseEvent *_ev)
             left->setPenStyle(preview->getPenStyle());
             left->setColor(currentColor);
             left->setChanged(true);
-        } else
+        } else {
             invertState(left);
+        }
     }
     rect.setCoords(area->width() - OFFSETX - 8, OFFSETY, area->width() - OFFSETX + 8,
                    area->height() - OFFSETY);
@@ -3094,8 +3195,9 @@ void CellFormatPageBorder::slotPressEvent(QMouseEvent *_ev)
             right->setPenStyle(preview->getPenStyle());
             right->setColor(currentColor);
             right->setChanged(true);
-        } else
+        } else {
             invertState(right);
+        }
     }
 
 //don't work because I don't know how create a rectangle
@@ -3124,8 +3226,9 @@ void CellFormatPageBorder::slotPressEvent(QMouseEvent *_ev)
                 vertical->setPenStyle(preview->getPenStyle());
                 vertical->setColor(currentColor);
                 vertical->setChanged(true);
-            } else
+            } else {
                 invertState(vertical);
+            }
         }
     }
     if (dlg->oneRow == false) {
@@ -3140,15 +3243,14 @@ void CellFormatPageBorder::slotPressEvent(QMouseEvent *_ev)
                 horizontal->setPenStyle(preview->getPenStyle());
                 horizontal->setColor(currentColor);
                 horizontal->setChanged(true);
-            } else
+            } else {
                 invertState(horizontal);
+            }
         }
     }
 
     area->repaint();
 }
-
-
 
 /***************************************************************************
  *
@@ -3169,7 +3271,6 @@ void BrushSelect::setPattern(const QColor &_color, Qt::BrushStyle _style)
     brushColor = _color;
     repaint();
 }
-
 
 void BrushSelect::paintEvent(QPaintEvent *_ev)
 {
@@ -3209,21 +3310,19 @@ void BrushSelect::slotSelect()
     repaint();
 }
 
-
-
 /***************************************************************************
  *
  * CellFormatPagePattern
  *
  ***************************************************************************/
 
-CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *_dlg) : QWidget(parent)
+CellFormatPagePattern::CellFormatPagePattern(QWidget *parent, CellFormatDialog *_dlg) : QWidget(parent)
 {
     dlg = _dlg;
 
     QGridLayout *grid = new QGridLayout(this);
 
-    QGroupBox* tmpQGroupBox;
+    QGroupBox *tmpQGroupBox;
     tmpQGroupBox = new QGroupBox(this);
     tmpQGroupBox->setTitle(i18n("Pattern"));
     tmpQGroupBox->setAlignment(Qt::AlignLeft);
@@ -3231,7 +3330,6 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
     QGridLayout *grid2 = new QGridLayout(tmpQGroupBox);
     int fHeight = tmpQGroupBox->fontMetrics().height();
     grid2->addItem(new QSpacerItem(0, fHeight / 2), 0, 0);  // groupbox title
-
 
     brush1 = new BrushSelect(tmpQGroupBox, "Frame_1");
     brush1->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -3311,13 +3409,15 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
 
     bgColorButton = new KColorButton(tmpQGroupBox);
     grid3->addWidget(bgColorButton, 0, 1);
-    if (dlg->bBgColor)
+    if (dlg->bBgColor) {
         bgColor = dlg->bgColor;
-    else
+    } else {
         bgColor = palette().base().color();
+    }
 
-    if (!bgColor.isValid())
+    if (!bgColor.isValid()) {
         bgColor = palette().base().color();
+    }
 
     bgColorButton->setColor(bgColor);
     connect(bgColorButton, SIGNAL(changed(QColor)),
@@ -3459,8 +3559,9 @@ void CellFormatPagePattern::init()
         brush14->slotSelect();
     } else if (dlg->brushStyle == Qt::NoBrush) {
         brush15->slotSelect();
-    } else
+    } else {
         kDebug(36001) << "Error in brushStyle";
+    }
 }
 
 void CellFormatPagePattern::slotSetColorButton(const QColor &_color)
@@ -3489,63 +3590,83 @@ void CellFormatPagePattern::slotUnselect2(BrushSelect *_p)
 {
     selectedBrush = _p;
 
-    if (brush1 != _p)
+    if (brush1 != _p) {
         brush1->slotUnselect();
-    if (brush2 != _p)
+    }
+    if (brush2 != _p) {
         brush2->slotUnselect();
-    if (brush3 != _p)
+    }
+    if (brush3 != _p) {
         brush3->slotUnselect();
-    if (brush4 != _p)
+    }
+    if (brush4 != _p) {
         brush4->slotUnselect();
-    if (brush5 != _p)
+    }
+    if (brush5 != _p) {
         brush5->slotUnselect();
-    if (brush6 != _p)
+    }
+    if (brush6 != _p) {
         brush6->slotUnselect();
-    if (brush7 != _p)
+    }
+    if (brush7 != _p) {
         brush7->slotUnselect();
-    if (brush8 != _p)
+    }
+    if (brush8 != _p) {
         brush8->slotUnselect();
-    if (brush9 != _p)
+    }
+    if (brush9 != _p) {
         brush9->slotUnselect();
-    if (brush10 != _p)
+    }
+    if (brush10 != _p) {
         brush10->slotUnselect();
-    if (brush11 != _p)
+    }
+    if (brush11 != _p) {
         brush11->slotUnselect();
-    if (brush12 != _p)
+    }
+    if (brush12 != _p) {
         brush12->slotUnselect();
-    if (brush13 != _p)
+    }
+    if (brush13 != _p) {
         brush13->slotUnselect();
-    if (brush14 != _p)
+    }
+    if (brush14 != _p) {
         brush14->slotUnselect();
-    if (brush15 != _p)
+    }
+    if (brush15 != _p) {
         brush15->slotUnselect();
+    }
 
     current->setBrushStyle(selectedBrush->getBrushStyle());
 }
 
-void CellFormatPagePattern::apply(CustomStyle * style)
+void CellFormatPagePattern::apply(CustomStyle *style)
 {
     if (selectedBrush != 0
             && (dlg->brushStyle != selectedBrush->getBrushStyle()
-                || dlg->brushColor != selectedBrush->getBrushColor()))
+                || dlg->brushColor != selectedBrush->getBrushColor())) {
         style->setBackgroundBrush(QBrush(selectedBrush->getBrushColor(), selectedBrush->getBrushStyle()));
+    }
 
-    if (!b_notAnyColor && bgColor != dlg->getStyle()->backgroundColor())
+    if (!b_notAnyColor && bgColor != dlg->getStyle()->backgroundColor()) {
         style->setBackgroundColor(bgColor);
+    }
 }
 
 void CellFormatPagePattern::apply(StyleCommand *_obj)
 {
     if (selectedBrush != 0
             && (dlg->brushStyle != selectedBrush->getBrushStyle()
-                || dlg->brushColor != selectedBrush->getBrushColor()))
+                || dlg->brushColor != selectedBrush->getBrushColor())) {
         _obj->setBackgroundBrush(QBrush(selectedBrush->getBrushColor(), selectedBrush->getBrushStyle()));
+    }
 
-    if (bgColor == dlg->bgColor)
+    if (bgColor == dlg->bgColor) {
         return;
+    }
 
-    if (!b_notAnyColor)
+    if (!b_notAnyColor) {
         _obj->setBackgroundColor(bgColor);
+    }
 }
 
 #include "LayoutDialog.moc"

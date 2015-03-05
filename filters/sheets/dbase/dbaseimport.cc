@@ -36,16 +36,16 @@
 K_PLUGIN_FACTORY(DBaseImportFactory, registerPlugin<DBaseImport>();)
 K_EXPORT_PLUGIN(DBaseImportFactory("calligrafilters"))
 
-
-DBaseImport::DBaseImport(QObject* parent, const QVariantList&)
-        : KoFilter(parent)
+DBaseImport::DBaseImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus DBaseImport::convert(const QByteArray &from, const QByteArray &to)
 {
-    if (to != "application/x-kspread" || from != "application/x-dbf")
+    if (to != "application/x-kspread" || from != "application/x-dbf") {
         return KoFilter::NotImplemented;
+    }
 
     QString inputFile = m_chain->inputFile();
 
@@ -65,28 +65,28 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
     QString documentInfo;
 
     QString root = QLatin1String(
-        "<!DOCTYPE spreadsheet >\n"
-        "<spreadsheet mime=\"application/x-kspread\" editor=\"KSpread\" >\n"
-        "<paper format=\"A4\" orientation=\"Portrait\" >\n"
-        "<borders right=\"20\" left=\"20\" bottom=\"20\" top=\"20\" />\n"
-        "<head/>\n"
-        "<foot/>\n"
-        "</paper>\n"
-        "<map activeTable=\"Table1\" >\n"
+                       "<!DOCTYPE spreadsheet >\n"
+                       "<spreadsheet mime=\"application/x-kspread\" editor=\"KSpread\" >\n"
+                       "<paper format=\"A4\" orientation=\"Portrait\" >\n"
+                       "<borders right=\"20\" left=\"20\" bottom=\"20\" top=\"20\" />\n"
+                       "<head/>\n"
+                       "<foot/>\n"
+                       "</paper>\n"
+                       "<map activeTable=\"Table1\" >\n"
 
-        "<locale positivePrefixCurrencySymbol=\"True\""
-        "  negativeMonetarySignPosition=\"0\""
-        "  negativePrefixCurrencySymbol=\"True\" fracDigits=\"2\""
-        "  thousandsSeparator=\",\" dateFormat=\"%A %d %B %Y\""
-        "  timeFormat=\"%H:%M:%S\" monetaryDecimalSymbol=\".\""
-        "  weekStartsMonday=\"True\" currencySymbol=\"$\""
-        "  negativeSign=\"-\" positiveSign=\"\""
-        "  positiveMonetarySignPosition=\"1\" decimalSymbol=\".\""
-        "  monetaryThousandsSeparator=\",\" dateFormatShort=\"%Y-%m-%d\" />\n"
+                       "<locale positivePrefixCurrencySymbol=\"True\""
+                       "  negativeMonetarySignPosition=\"0\""
+                       "  negativePrefixCurrencySymbol=\"True\" fracDigits=\"2\""
+                       "  thousandsSeparator=\",\" dateFormat=\"%A %d %B %Y\""
+                       "  timeFormat=\"%H:%M:%S\" monetaryDecimalSymbol=\".\""
+                       "  weekStartsMonday=\"True\" currencySymbol=\"$\""
+                       "  negativeSign=\"-\" positiveSign=\"\""
+                       "  positiveMonetarySignPosition=\"1\" decimalSymbol=\".\""
+                       "  monetaryThousandsSeparator=\",\" dateFormatShort=\"%Y-%m-%d\" />\n"
 
-        "<table name=\"Table1\" columnnumber=\"0\" borders=\"0\""
-        "  hide=\"0\" hidezero=\"0\" firstletterupper=\"0\" grid=\"1\""
-        "  formular=\"0\" lcmode=\"0\" >\n");
+                       "<table name=\"Table1\" columnnumber=\"0\" borders=\"0\""
+                       "  hide=\"0\" hidezero=\"0\" firstletterupper=\"0\" grid=\"1\""
+                       "  formular=\"0\" lcmode=\"0\" >\n");
 
     // Calligra default font
     QFont font = KoGlobal::defaultFont();
@@ -144,13 +144,13 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
             "</spreadsheet>";
 
     // prepare storage
-    KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
+    KoStoreDevice *out = m_chain->storageFile("root", KoStore::Write);
 
     // store output document
     if (out) {
         QByteArray cstring = root.toUtf8();
         cstring.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        out->write((const char*) cstring, cstring.length());
+        out->write((const char *) cstring, cstring.length());
     }
 
     // store document info
@@ -159,7 +159,7 @@ KoFilter::ConversionStatus DBaseImport::convert(const QByteArray& from, const QB
         QByteArray cstring = documentInfo.toUtf8();
         cstring.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
-        out->write((const char*) cstring, cstring.length());
+        out->write((const char *) cstring, cstring.length());
     }
 
     return KoFilter::OK;

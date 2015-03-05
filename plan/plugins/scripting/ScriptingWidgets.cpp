@@ -40,15 +40,14 @@
 
 extern int planScriptingDebugArea();
 
-
-ScriptingScheduleListView::ScriptingScheduleListView(Scripting::Module* module, QWidget* parent)
+ScriptingScheduleListView::ScriptingScheduleListView(Scripting::Module *module, QWidget *parent)
     : QWidget(parent), m_module(module)
 {
-    kDebug(planScriptingDebugArea())<<this<<parent;
-    if ( parent->layout() ) {
-        parent->layout()->addWidget( this );
+    kDebug(planScriptingDebugArea()) << this << parent;
+    if (parent->layout()) {
+        parent->layout()->addWidget(this);
     }
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setSpacing(0);
     layout->setMargin(0);
     setLayout(layout);
@@ -59,63 +58,63 @@ ScriptingScheduleListView::ScriptingScheduleListView(Scripting::Module* module, 
     m_view->setItemsExpandable(false);
 //    m_view->setEditTriggers(QAbstractItemView::AllEditTriggers);
     QStandardItemModel *model = new QStandardItemModel(m_view);
-    model->setHorizontalHeaderLabels( QStringList() << i18n( "Schedule Name" ) );
-    KPlato::Project *p = static_cast<Scripting::Project*>( m_module->project() )->kplatoProject();
-    kDebug(planScriptingDebugArea())<<p;
-    foreach ( KPlato::ScheduleManager *sm, p->allScheduleManagers() ) {
-        if ( sm->isScheduled() ) {
-            QStandardItem *i = new QStandardItem( sm->name() );
-            i->setData( (qlonglong)sm->scheduleId() );
-            model->appendRow( i );
-            kDebug(planScriptingDebugArea())<<i<<model->rowCount();
+    model->setHorizontalHeaderLabels(QStringList() << i18n("Schedule Name"));
+    KPlato::Project *p = static_cast<Scripting::Project *>(m_module->project())->kplatoProject();
+    kDebug(planScriptingDebugArea()) << p;
+    foreach (KPlato::ScheduleManager *sm, p->allScheduleManagers()) {
+        if (sm->isScheduled()) {
+            QStandardItem *i = new QStandardItem(sm->name());
+            i->setData((qlonglong)sm->scheduleId());
+            model->appendRow(i);
+            kDebug(planScriptingDebugArea()) << i << model->rowCount();
         }
     }
     layout->addWidget(m_view);
-    m_view->setModel( model );
+    m_view->setModel(model);
 }
 
 ScriptingScheduleListView::~ScriptingScheduleListView()
 {
-    kDebug(planScriptingDebugArea())<<"gone!";
+    kDebug(planScriptingDebugArea()) << "gone!";
 }
 
 QVariant ScriptingScheduleListView::currentSchedule() const
 {
     QModelIndex i = m_view->currentIndex();
-    kDebug(planScriptingDebugArea())<<i<<i.isValid();
-    if ( ! i.isValid() ) {
-        kDebug(planScriptingDebugArea())<<"index not valid";
+    kDebug(planScriptingDebugArea()) << i << i.isValid();
+    if (! i.isValid()) {
+        kDebug(planScriptingDebugArea()) << "index not valid";
         return -1;
     }
-    kDebug(planScriptingDebugArea())<<m_view->model();
-    QStandardItem *item = static_cast<QStandardItemModel*>(m_view->model())->itemFromIndex( i );
-    kDebug(planScriptingDebugArea())<<item;
-    if ( item == 0 ) {
+    kDebug(planScriptingDebugArea()) << m_view->model();
+    QStandardItem *item = static_cast<QStandardItemModel *>(m_view->model())->itemFromIndex(i);
+    kDebug(planScriptingDebugArea()) << item;
+    if (item == 0) {
         return -1;
     }
-    kDebug(planScriptingDebugArea())<<item->data();
+    kDebug(planScriptingDebugArea()) << item->data();
     return item->data();
 }
 
 //--------------------------------
-ScriptingNodePropertyListView::ScriptingNodePropertyListView(Scripting::Module* module, QWidget* parent)
-    : KActionSelector( parent ),
+ScriptingNodePropertyListView::ScriptingNodePropertyListView(Scripting::Module *module, QWidget *parent)
+    : KActionSelector(parent),
       m_module(module)
 {
-    kDebug(planScriptingDebugArea())<<this<<parent;
+    kDebug(planScriptingDebugArea()) << this << parent;
 
     KPlato::NodeModel m;
     const QMetaEnum e = m.columnMap();
-    if ( e.keyCount() > 0 ) {
-        QListWidgetItem *item = new QListWidgetItem( m.headerData( 0 ).toString() );
-        item->setToolTip( m.headerData( 0 ).toString() );
-        item->setData( Qt::UserRole, e.key( 0 ) );  // should be name
-        selectedListWidget()->addItem( item );
-        for ( int i = 1; i < e.keyCount(); ++i ) {
-            QListWidgetItem *item = new QListWidgetItem( m.headerData( i ).toString() );
-            item->setToolTip( m.headerData( i ).toString() );
-            item->setData( Qt::UserRole, e.key( i ) );
-            availableListWidget()->addItem( item );
+    if (e.keyCount() > 0) {
+        QListWidgetItem *item = new QListWidgetItem(m.headerData(0).toString());
+        item->setToolTip(m.headerData(0).toString());
+        item->setData(Qt::UserRole, e.key(0));      // should be name
+        selectedListWidget()->addItem(item);
+        for (int i = 1; i < e.keyCount(); ++i) {
+            QListWidgetItem *item = new QListWidgetItem(m.headerData(i).toString());
+            item->setToolTip(m.headerData(i).toString());
+            item->setData(Qt::UserRole, e.key(i));
+            availableListWidget()->addItem(item);
         }
     }
 }
@@ -128,22 +127,22 @@ QVariant ScriptingNodePropertyListView::selectedProperties() const
 {
     QStringList lst;
     QListWidget *s = selectedListWidget();
-    for ( int i = 0; i < s->count(); ++i ) {
-        lst << s->item( i )->data( Qt::UserRole ).toString();
+    for (int i = 0; i < s->count(); ++i) {
+        lst << s->item(i)->data(Qt::UserRole).toString();
     }
     return lst;
 }
 
 //--------------------------------
-ScriptingDataQueryView::ScriptingDataQueryView(Scripting::Module* module, QWidget* parent)
-    : QWidget( parent ),
+ScriptingDataQueryView::ScriptingDataQueryView(Scripting::Module *module, QWidget *parent)
+    : QWidget(parent),
       m_module(module)
 {
-    kDebug(planScriptingDebugArea())<<this<<parent;
-    setupUi( this );
+    kDebug(planScriptingDebugArea()) << this << parent;
+    setupUi(this);
     setup();
 
-    connect( ui_objectType, SIGNAL(currentIndexChanged(int)), SLOT(slotObjectTypeChanged(int)) );
+    connect(ui_objectType, SIGNAL(currentIndexChanged(int)), SLOT(slotObjectTypeChanged(int)));
 }
 
 ScriptingDataQueryView::~ScriptingDataQueryView()
@@ -152,56 +151,56 @@ ScriptingDataQueryView::~ScriptingDataQueryView()
 
 void ScriptingDataQueryView::setup()
 {
-    slotObjectTypeChanged( objectType().toInt() );
+    slotObjectTypeChanged(objectType().toInt());
 }
 
-void ScriptingDataQueryView::setupLists( QListWidget *list, const QString &tag, const QString &property, const QString &tooltip )
+void ScriptingDataQueryView::setupLists(QListWidget *list, const QString &tag, const QString &property, const QString &tooltip)
 {
-    QListWidgetItem *item = new QListWidgetItem( property );
-    item->setToolTip( tooltip );
-    item->setData( Qt::UserRole, tag );
-    list->addItem( item );
+    QListWidgetItem *item = new QListWidgetItem(property);
+    item->setToolTip(tooltip);
+    item->setData(Qt::UserRole, tag);
+    list->addItem(item);
 }
 
-void ScriptingDataQueryView::slotObjectTypeChanged( int /*index*/ )
+void ScriptingDataQueryView::slotObjectTypeChanged(int /*index*/)
 {
     ui_properties->availableListWidget()->clear();
     ui_properties->selectedListWidget()->clear();
 
     QMetaEnum e;
-    switch ( objectType().toInt() ) {
-        case 0: {
-            KPlato::NodeModel m; e = m.columnMap();
-            if ( e.keyCount() > 0 ) {
-                setupLists( ui_properties->selectedListWidget(), e.key( 0 ), m.headerData( 0 ).toString(), m.headerData( 0, Qt::ToolTipRole ).toString() );
-                for ( int i = 1; i < e.keyCount(); ++i ) {
-                    setupLists( ui_properties->availableListWidget(), e.key( i ), m.headerData( i ).toString(), m.headerData( i, Qt::ToolTipRole ).toString() );
-                }
+    switch (objectType().toInt()) {
+    case 0: {
+        KPlato::NodeModel m; e = m.columnMap();
+        if (e.keyCount() > 0) {
+            setupLists(ui_properties->selectedListWidget(), e.key(0), m.headerData(0).toString(), m.headerData(0, Qt::ToolTipRole).toString());
+            for (int i = 1; i < e.keyCount(); ++i) {
+                setupLists(ui_properties->availableListWidget(), e.key(i), m.headerData(i).toString(), m.headerData(i, Qt::ToolTipRole).toString());
             }
-            break;
         }
-        case 1: {
-            KPlato::ResourceModel m; e = m.columnMap();
-            if ( e.keyCount() > 0 ) {
-                setupLists( ui_properties->selectedListWidget(), e.key( 0 ), m.headerData( 0 ).toString(), m.headerData( 0, Qt::ToolTipRole ).toString() );
-                for ( int i = 1; i < e.keyCount(); ++i ) {
-                    setupLists( ui_properties->availableListWidget(), e.key( i ), m.headerData( i ).toString(), m.headerData( i, Qt::ToolTipRole ).toString() );
-                }
+        break;
+    }
+    case 1: {
+        KPlato::ResourceModel m; e = m.columnMap();
+        if (e.keyCount() > 0) {
+            setupLists(ui_properties->selectedListWidget(), e.key(0), m.headerData(0).toString(), m.headerData(0, Qt::ToolTipRole).toString());
+            for (int i = 1; i < e.keyCount(); ++i) {
+                setupLists(ui_properties->availableListWidget(), e.key(i), m.headerData(i).toString(), m.headerData(i, Qt::ToolTipRole).toString());
             }
-            break;
         }
-        case 2: {
-            KPlato::AccountModel m; e = m.columnMap();
-            if ( e.keyCount() > 0 ) {
-                setupLists( ui_properties->selectedListWidget(), e.key( 0 ), m.headerData( 0 ).toString(), m.headerData( 0, Qt::ToolTipRole ).toString() );
-                for ( int i = 1; i < e.keyCount(); ++i ) {
-                    setupLists( ui_properties->availableListWidget(), e.key( i ), m.headerData( i ).toString(), m.headerData( i, Qt::ToolTipRole ).toString() );
-                }
+        break;
+    }
+    case 2: {
+        KPlato::AccountModel m; e = m.columnMap();
+        if (e.keyCount() > 0) {
+            setupLists(ui_properties->selectedListWidget(), e.key(0), m.headerData(0).toString(), m.headerData(0, Qt::ToolTipRole).toString());
+            for (int i = 1; i < e.keyCount(); ++i) {
+                setupLists(ui_properties->availableListWidget(), e.key(i), m.headerData(i).toString(), m.headerData(i, Qt::ToolTipRole).toString());
             }
-            break;
         }
-        default:
-            break;
+        break;
+    }
+    default:
+        break;
     }
 }
 
@@ -219,8 +218,8 @@ QVariant ScriptingDataQueryView::selectedProperties() const
 {
     QStringList lst;
     QListWidget *s = ui_properties->selectedListWidget();
-    for ( int i = 0; i < s->count(); ++i ) {
-        lst << s->item( i )->data( Qt::UserRole ).toString();
+    for (int i = 0; i < s->count(); ++i) {
+        lst << s->item(i)->data(Qt::UserRole).toString();
     }
     return lst;
 }

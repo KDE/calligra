@@ -19,11 +19,10 @@
 #include "kis_surrogate_undo_adapter.h"
 #include "kis_undo_stores.h"
 
-
 KisSurrogateUndoAdapter::KisSurrogateUndoAdapter()
     : KisUndoAdapter(new KisSurrogateUndoStore)
 {
-    m_undoStore = static_cast<KisSurrogateUndoStore*>(undoStore());
+    m_undoStore = static_cast<KisSurrogateUndoStore *>(undoStore());
 }
 
 KisSurrogateUndoAdapter::~KisSurrogateUndoAdapter()
@@ -31,7 +30,7 @@ KisSurrogateUndoAdapter::~KisSurrogateUndoAdapter()
     delete m_undoStore;
 }
 
-const KUndo2Command* KisSurrogateUndoAdapter::presentCommand()
+const KUndo2Command *KisSurrogateUndoAdapter::presentCommand()
 {
     return m_undoStore->presentCommand();
 }
@@ -46,7 +45,7 @@ void KisSurrogateUndoAdapter::addCommand(KUndo2Command *command)
     m_undoStore->addCommand(command);
 }
 
-void KisSurrogateUndoAdapter::beginMacro(const KUndo2MagicString& macroName)
+void KisSurrogateUndoAdapter::beginMacro(const KUndo2MagicString &macroName)
 {
     m_undoStore->beginMacro(macroName);
 }

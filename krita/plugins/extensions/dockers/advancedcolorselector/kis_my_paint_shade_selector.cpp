@@ -51,10 +51,9 @@ inline int sqr(int x);
 inline qreal sqr2(qreal x);
 inline int signedSqr(int x);
 
-
 KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
-        KisColorSelectorBase(parent),
-        m_updateTimer(new QTimer(this))
+    KisColorSelectorBase(parent),
+    m_updateTimer(new QTimer(this))
 {
     setAcceptDrops(true);
 
@@ -68,7 +67,8 @@ KisMyPaintShadeSelector::KisMyPaintShadeSelector(QWidget *parent) :
     connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
-void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
+void KisMyPaintShadeSelector::paintEvent(QPaintEvent *)
+{
     // Hint to the casual reader: some of the calculation here do not
     // what Martin Renold originally intended. Not everything here will make sense.
     // It does not matter in the end, as long as the result looks good.
@@ -78,50 +78,52 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     m_realPixelCache = new KisPaintDevice(this->colorSpace());
     KisPaintDeviceSP realCircleBorder = new KisPaintDevice(this->colorSpace());
 
-	KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-	QString shadeMyPaintType=cfg.readEntry("shadeMyPaintType", "HSV");
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    QString shadeMyPaintType = cfg.readEntry("shadeMyPaintType", "HSV");
 
     int size = qMin(width(), height());
-    int s_radius = size/2.6;
+    int s_radius = size / 2.6;
 
-    for (int x=0; x<width(); x++) {
-        for (int y=0; y<height(); y++) {
+    for (int x = 0; x < width(); x++) {
+        for (int y = 0; y < height(); y++) {
 
             float v_factor = 0.6f;
             float s_factor = 0.6f;
             float v_factor2 = 0.013f;
             float s_factor2 = 0.013f;
 
-            int stripe_width = 15*size/255.;
+            int stripe_width = 15 * size / 255.;
 
             float h = 0;
             float s = 0;
             float v = 0;
 
-            int dx = x-width()/2;
-            int dy = y-height()/2;
-            int diag = sqrt(2.0)*size/2;
+            int dx = x - width() / 2;
+            int dy = y - height() / 2;
+            int diag = sqrt(2.0) * size / 2;
 
             int dxs, dys;
-            if (dx > 0)
+            if (dx > 0) {
                 dxs = dx - stripe_width;
-            else
+            } else {
                 dxs = dx + stripe_width;
-            if (dy > 0)
+            }
+            if (dy > 0) {
                 dys = dy - stripe_width;
-            else
+            } else {
                 dys = dy + stripe_width;
+            }
 
-            qreal r = std::sqrt(qreal(sqr(dxs)+sqr(dys)));
+            qreal r = std::sqrt(qreal(sqr(dxs) + sqr(dys)));
 
             if (qMin(abs(dx), abs(dy)) < stripe_width) {
                 // horizontal and vertical lines
-                dx = (dx/qreal(width()))*255;
-                dy = (dy/qreal(height()))*255;
+                dx = (dx / qreal(width())) * 255;
+                dy = (dy / qreal(height())) * 255;
                 h = 0;
                 // x-axis = value, y-axis = saturation
-                v =    dx*v_factor + signedSqr(dx)*v_factor2;
-                s = - (dy*s_factor + signedSqr(dy)*s_factor2);
+                v =    dx * v_factor + signedSqr(dx) * v_factor2;
+                s = - (dy * s_factor + signedSqr(dy) * s_factor2);
                 // but not both at once
                 if (std::abs(dx) > std::abs(dy)) {
                     // horizontal stripe
@@ -130,71 +132,82 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
                     // vertical stripe
                     v = 0.0;
                 }
-            }
-            else if (r < s_radius+1) {
+            } else if (r < s_radius + 1) {
                 // hue
-                if (dx > 0)
-                    h = 90*sqr2(r/s_radius);
-                else
-                    h = 360 - 90*sqr2(r/s_radius);
-                s = 256*(atan2f(std::abs(dxs),dys)/M_PI) - 128;
+                if (dx > 0) {
+                    h = 90 * sqr2(r / s_radius);
+                } else {
+                    h = 360 - 90 * sqr2(r / s_radius);
+                }
+                s = 256 * (atan2f(std::abs(dxs), dys) / M_PI) - 128;
 
                 if (r > s_radius) {
                     // antialiasing boarder
-                    qreal aaFactor = r-floor(r); // part after the decimal point
-                    aaFactor = 1-aaFactor;
+                    qreal aaFactor = r - floor(r); // part after the decimal point
+                    aaFactor = 1 - aaFactor;
 
-                    qreal fh = m_colorH + h/360.0;
-                    qreal fs = m_colorS + s/255.0;
-                    qreal fv = m_colorV + v/255.0;
+                    qreal fh = m_colorH + h / 360.0;
+                    qreal fs = m_colorS + s / 255.0;
+                    qreal fv = m_colorV + v / 255.0;
 
                     fh -= floor(fh);
                     fs = qBound(qreal(0.0), fs, qreal(1.0));
                     fv = qBound(qreal(0.01), fv, qreal(1.0));
-					KoColor color;
+                    KoColor color;
                     //KoColor color = converter()->fromHsvF(fh, fs, fv);
-					if(shadeMyPaintType=="HSV"){color = converter()->fromHsvF(fh, fs, fv);}
-					else if(shadeMyPaintType=="HSL"){color = converter()->fromHslF(fh, fs, fv);}	
-					else if(shadeMyPaintType=="HSI"){color = converter()->fromHsiF(fh, fs, fv);}	
-					else if(shadeMyPaintType=="HSY"){color = converter()->fromHsyF(fh, fs, fv, R, G, B);}
-					else{qDebug()<<"MyPaint Color selector don't work right.";
-					color = converter()->fromHsvF(fh, fs, fv);}
+                    if (shadeMyPaintType == "HSV") {
+                        color = converter()->fromHsvF(fh, fs, fv);
+                    } else if (shadeMyPaintType == "HSL") {
+                        color = converter()->fromHslF(fh, fs, fv);
+                    } else if (shadeMyPaintType == "HSI") {
+                        color = converter()->fromHsiF(fh, fs, fv);
+                    } else if (shadeMyPaintType == "HSY") {
+                        color = converter()->fromHsyF(fh, fs, fv, R, G, B);
+                    } else {
+                        qDebug() << "MyPaint Color selector don't work right.";
+                        color = converter()->fromHsvF(fh, fs, fv);
+                    }
 //qDebug()<<color->toQcolor();
                     color.setOpacity(aaFactor);
                     Acs::setColor(realCircleBorder, QPoint(x, y), color);
 
-                    h = 180 + 180*atan2f(dys,-dxs)/M_PI;
-                    v = 255*(r-s_radius)/(diag-s_radius) - 128;
+                    h = 180 + 180 * atan2f(dys, -dxs) / M_PI;
+                    v = 255 * (r - s_radius) / (diag - s_radius) - 128;
                 }
-            }
-            else {
+            } else {
                 // background (hue+darkness gradient)
-                h = 180 + 180*atan2f(dys,-dxs)/M_PI;
-                v = 255*(r-s_radius)/(diag-s_radius) - 128;
+                h = 180 + 180 * atan2f(dys, -dxs) / M_PI;
+                v = 255 * (r - s_radius) / (diag - s_radius) - 128;
             }
 
-            qreal fh = m_colorH + h/360.0;
-            qreal fs = m_colorS + s/255.0;
-            qreal fv = m_colorV + v/255.0;
+            qreal fh = m_colorH + h / 360.0;
+            qreal fs = m_colorS + s / 255.0;
+            qreal fv = m_colorV + v / 255.0;
 
             fh -= floor(fh);
             fs = qBound(qreal(0.0), fs, qreal(1.0));
             fv = qBound(qreal(0.01), fv, qreal(1.0));
-			KoColor color;
+            KoColor color;
             //KoColor color = converter()->fromHsvF(fh, fs, fv);
-			if(shadeMyPaintType=="HSV"){color = converter()->fromHsvF(fh, fs, fv);}
-			else if(shadeMyPaintType=="HSL"){color = converter()->fromHslF(fh, fs, fv);}	
-			else if(shadeMyPaintType=="HSI"){color = converter()->fromHsiF(fh, fs, fv);}	
-			else if(shadeMyPaintType=="HSY"){color = converter()->fromHsyF(fh, fs, fv);}
-			else{qDebug()<<"MyPaint Color selector don't work right.";
-			color = converter()->fromHsvF(fh, fs, fv);}
+            if (shadeMyPaintType == "HSV") {
+                color = converter()->fromHsvF(fh, fs, fv);
+            } else if (shadeMyPaintType == "HSL") {
+                color = converter()->fromHslF(fh, fs, fv);
+            } else if (shadeMyPaintType == "HSI") {
+                color = converter()->fromHsiF(fh, fs, fv);
+            } else if (shadeMyPaintType == "HSY") {
+                color = converter()->fromHsyF(fh, fs, fv);
+            } else {
+                qDebug() << "MyPaint Color selector don't work right.";
+                color = converter()->fromHsvF(fh, fs, fv);
+            }
 
             Acs::setColor(m_realPixelCache, QPoint(x, y), color);
         }
     }
 
     KisPainter gc(m_realPixelCache);
-    gc.bitBlt(QPoint(0,0), realCircleBorder, rect());
+    gc.bitBlt(QPoint(0, 0), realCircleBorder, rect());
 
     QPainter painter(this);
     QImage renderedImage = converter()->toQImage(m_realPixelCache);
@@ -202,8 +215,7 @@ void KisMyPaintShadeSelector::paintEvent(QPaintEvent *) {
     painter.drawImage(0, 0, renderedImage);
 }
 
-
-void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
+void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent *e)
 {
     e->setAccepted(false);
     KisColorSelectorBase::mousePressEvent(e);
@@ -211,7 +223,7 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 
 void KisMyPaintShadeSelector::mouseMoveEvent(QMouseEvent *e)
 {
-    if(rect().contains(e->pos())) {
+    if (rect().contains(e->pos())) {
         KoColor color(Acs::pickColor(m_realPixelCache, e->pos()));
         this->updateColorPreview(color);
     }
@@ -223,7 +235,7 @@ void KisMyPaintShadeSelector::mouseReleaseEvent(QMouseEvent *e)
     e->setAccepted(false);
     KisColorSelectorBase::mouseReleaseEvent(e);
 
-    if(!e->isAccepted()) {
+    if (!e->isAccepted()) {
         KoColor color(Acs::pickColor(m_realPixelCache, e->pos()));
 
         Acs::ColorRole role = Acs::buttonToRole(e->button());
@@ -242,26 +254,35 @@ void KisMyPaintShadeSelector::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-KisColorSelectorBase* KisMyPaintShadeSelector::createPopup() const
+KisColorSelectorBase *KisMyPaintShadeSelector::createPopup() const
 {
-    KisColorSelectorBase* popup = new KisMyPaintShadeSelector(0);
+    KisColorSelectorBase *popup = new KisMyPaintShadeSelector(0);
     popup->setColor(m_lastRealColor);
     return popup;
 }
 
-void KisMyPaintShadeSelector::setColor(const KoColor &color) {
+void KisMyPaintShadeSelector::setColor(const KoColor &color)
+{
 
-	KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-	QString shadeMyPaintType=cfg.readEntry("shadeMyPaintType", "HSV");
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    QString shadeMyPaintType = cfg.readEntry("shadeMyPaintType", "HSV");
 
     R = cfg.readEntry("lumaR", 0.2126);
     G = cfg.readEntry("lumaG", 0.7152);
     B = cfg.readEntry("lumaB", 0.0722);
 
-	if(shadeMyPaintType=="HSV"){this->converter()->getHsvF(color, &m_colorH, &m_colorS, &m_colorV);}
-	if(shadeMyPaintType=="HSL"){this->converter()->getHslF(color, &m_colorH, &m_colorS, &m_colorV);}	
-	if(shadeMyPaintType=="HSI"){this->converter()->getHsiF(color, &m_colorH, &m_colorS, &m_colorV);}	
-	if(shadeMyPaintType=="HSY"){this->converter()->getHsyF(color, &m_colorH, &m_colorS, &m_colorV, R, G, B);}
+    if (shadeMyPaintType == "HSV") {
+        this->converter()->getHsvF(color, &m_colorH, &m_colorS, &m_colorV);
+    }
+    if (shadeMyPaintType == "HSL") {
+        this->converter()->getHslF(color, &m_colorH, &m_colorS, &m_colorV);
+    }
+    if (shadeMyPaintType == "HSI") {
+        this->converter()->getHsiF(color, &m_colorH, &m_colorS, &m_colorV);
+    }
+    if (shadeMyPaintType == "HSY") {
+        this->converter()->getHsyF(color, &m_colorH, &m_colorS, &m_colorV, R, G, B);
+    }
     m_lastRealColor = color;
     this->updateColorPreview(color);
 
@@ -270,8 +291,9 @@ void KisMyPaintShadeSelector::setColor(const KoColor &color) {
 
 void KisMyPaintShadeSelector::canvasResourceChanged(int key, const QVariant &v)
 {
-    if(m_colorUpdateAllowed==false)
+    if (m_colorUpdateAllowed == false) {
         return;
+    }
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
@@ -279,21 +301,24 @@ void KisMyPaintShadeSelector::canvasResourceChanged(int key, const QVariant &v)
     bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);
 
     if ((key == KoCanvasResourceManager::ForegroundColor && onForeground) ||
-        (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
+            (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
 
         setColor(v.value<KoColor>());
     }
 }
 
-inline int sqr(int x) {
-    return x*x;
+inline int sqr(int x)
+{
+    return x * x;
 }
 
-inline qreal sqr2(qreal x) {
-    return (x*x)/2+x/2;
+inline qreal sqr2(qreal x)
+{
+    return (x * x) / 2 + x / 2;
 }
 
-inline int signedSqr(int x) {
-    int sign = x>0?1:-1;
-    return x*x*sign;
+inline int signedSqr(int x)
+{
+    int sign = x > 0 ? 1 : -1;
+    return x * x * sign;
 }

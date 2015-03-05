@@ -33,7 +33,7 @@
 class KoSplashScreen : public KSplashScreen
 {
 public:
-    explicit KoSplashScreen(const QPixmap& pixmap) : KSplashScreen(pixmap) {}
+    explicit KoSplashScreen(const QPixmap &pixmap) : KSplashScreen(pixmap) {}
 
     void hideEvent(QHideEvent *event)
     {
@@ -43,14 +43,14 @@ public:
 };
 #endif
 
+extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
+{
+    KAboutData *aboutData = KPlato::newAboutData();
 
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
-    KAboutData * aboutData=KPlato::newAboutData();
-
-    KCmdLineArgs::init( argc, argv, aboutData);
+    KCmdLineArgs::init(argc, argv, aboutData);
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
-    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::addCmdLineOptions(options);
 
     KoApplication app(PLAN_MIME_TYPE);
 
@@ -61,18 +61,19 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     QSplashScreen *splashScreen = new KoSplashScreen(QPixmap(splash_screen_xpm));
     splashScreen->show();
     splashScreen->showMessage("<p style=\"color:black\">"
-    "<b>Calligra Plan is unmaintained!</b><br><br>"
-    "The Calligra community welcomes someone to take over.<br><br>"
-    "See community.kde.org/Calligra</p>");
+                              "<b>Calligra Plan is unmaintained!</b><br><br>"
+                              "The Calligra community welcomes someone to take over.<br><br>"
+                              "See community.kde.org/Calligra</p>");
 #endif
 
     // This is disabled for now so the crude test below will run
-    if (!app.start())
-	return 1;
+    if (!app.start()) {
+        return 1;
+    }
 
     app.exec();
 
-    delete (aboutData);
+    delete(aboutData);
 
     return 0;
 }

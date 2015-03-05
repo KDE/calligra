@@ -43,26 +43,26 @@ class KPLATOUI_EXPORT ItemViewSettup : public QWidget, public Ui::ItemViewSettin
 {
     Q_OBJECT
 public:
-    explicit ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget *parent = 0 );
-    
+    explicit ItemViewSettup(TreeViewBase *view, bool includeColumn0, QWidget *parent = 0);
+
     class Item : public QListWidgetItem
     {
     public:
-        Item( int column, const QString &text );
+        Item(int column, const QString &text);
         int column() const;
-        bool operator<( const QListWidgetItem & other ) const;
+        bool operator<(const QListWidgetItem &other) const;
     private:
         int m_column;
     };
-    
+
 Q_SIGNALS:
-    void enableButtonOk( bool );
-    
+    void enableButtonOk(bool);
+
 public Q_SLOTS:
     void slotChanged();
     void slotOk();
     void setDefault();
-    
+
 private:
     TreeViewBase *m_view;
     bool m_includeColumn0;
@@ -72,9 +72,9 @@ class KPLATOUI_EXPORT ItemViewSettupDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit ItemViewSettupDialog( ViewBase *view, TreeViewBase *treeview, bool includeColumn0 = false, QWidget *parent = 0 );
+    explicit ItemViewSettupDialog(ViewBase *view, TreeViewBase *treeview, bool includeColumn0 = false, QWidget *parent = 0);
 
-    KPageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
+    KPageWidgetItem *insertWidget(int before, QWidget *widget, const QString &name, const QString &header);
     void addPrintingOptions();
 
 protected Q_SLOTS:
@@ -85,7 +85,7 @@ protected:
     TreeViewBase *m_treeview;
     KoPageLayoutWidget *m_pagelayout;
     PrintingHeaderFooter *m_headerfooter;
-    QList<KPageWidgetItem*> m_pageList;
+    QList<KPageWidgetItem *> m_pageList;
     ItemViewSettup *m_panel;
 };
 
@@ -93,9 +93,9 @@ class KPLATOUI_EXPORT SplitItemViewSettupDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit SplitItemViewSettupDialog( ViewBase *view, DoubleTreeViewBase *treeview, QWidget *parent = 0 );
+    explicit SplitItemViewSettupDialog(ViewBase *view, DoubleTreeViewBase *treeview, QWidget *parent = 0);
 
-    KPageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
+    KPageWidgetItem *insertWidget(int before, QWidget *widget, const QString &name, const QString &header);
     void addPrintingOptions();
 
 protected Q_SLOTS:
@@ -104,7 +104,7 @@ protected Q_SLOTS:
 private:
     ViewBase *m_view;
     DoubleTreeViewBase *m_treeview;
-    QList<KPageWidgetItem*> m_pageList;
+    QList<KPageWidgetItem *> m_pageList;
     ItemViewSettup *m_page1;
     ItemViewSettup *m_page2;
     KoPageLayoutWidget *m_pagelayout;

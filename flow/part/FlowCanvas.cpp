@@ -22,12 +22,11 @@
 #include "FlowPage.h"
 #include "FlowLayout.h"
 
-
-FlowCanvas::FlowCanvas( FlowView *view, FlowDocument *document)
-          : KoPACanvas(view, document, parent),
-          m_view(view)
+FlowCanvas::FlowCanvas(FlowView *view, FlowDocument *document)
+    : KoPACanvas(view, document, parent),
+      m_view(view)
 {
-    
+
 }
 
 FlowCanvas::~FlowCanvas()

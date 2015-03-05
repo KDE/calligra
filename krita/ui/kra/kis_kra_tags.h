@@ -21,8 +21,6 @@
 
 #include <QString>
 
-
-
 /**
  * Tag definitions for our xml file format
  */
@@ -103,7 +101,5 @@ const QString Y_SHEAR = "y_shear";
 const QString Y_TRANSLATION = "y_translation";
 const QString ACTIVE = "active";
 }
-
-
 
 #endif

@@ -37,7 +37,7 @@ public:
      * @param transparency the new shape transparency
      * @param parent the parent command used for macro commands
      */
-    KoShapeTransparencyCommand(const QList<KoShape*> &shapes, qreal transparency, KUndo2Command *parent = 0);
+    KoShapeTransparencyCommand(const QList<KoShape *> &shapes, qreal transparency, KUndo2Command *parent = 0);
 
     /**
      * Command to set a new shape transparency.
@@ -53,7 +53,7 @@ public:
      * @param fills the new transparencies, one for each shape
      * @param parent the parent command used for macro commands
      */
-    KoShapeTransparencyCommand(const QList<KoShape*> &shapes, const QList<qreal> &transparencies, KUndo2Command *parent = 0);
+    KoShapeTransparencyCommand(const QList<KoShape *> &shapes, const QList<qreal> &transparencies, KUndo2Command *parent = 0);
 
     virtual ~KoShapeTransparencyCommand();
     /// redo the command
@@ -62,7 +62,7 @@ public:
     void undo();
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOSHAPETRANSPARENCYCOMMAND_H

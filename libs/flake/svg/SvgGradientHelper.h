@@ -43,12 +43,12 @@ public:
     Units gradientUnits() const;
 
     /// Sets the gradient
-    void setGradient(QGradient * g);
+    void setGradient(QGradient *g);
     /// Retrurns the gradient
-    QGradient * gradient();
+    QGradient *gradient();
 
     /// Copies the given gradient
-    void copyGradient(QGradient * g);
+    void copyGradient(QGradient *g);
 
     /// Returns fill adjusted to the given bounding box
     QBrush adjustedFill(const QRectF &bound);
@@ -59,19 +59,19 @@ public:
     void setTransform(const QTransform &transform);
 
     /// Assigment operator
-    SvgGradientHelper & operator = (const SvgGradientHelper & rhs);
+    SvgGradientHelper &operator = (const SvgGradientHelper &rhs);
 
-    QGradient * adjustedGradient(const QRectF &bound) const;
+    QGradient *adjustedGradient(const QRectF &bound) const;
 
-    /// Converts a gradient from LogicalMode to ObjectBoundingMode 
-    static QGradient *convertGradient(const QGradient * originalGradient, const QSizeF &size);
+    /// Converts a gradient from LogicalMode to ObjectBoundingMode
+    static QGradient *convertGradient(const QGradient *originalGradient, const QSizeF &size);
 
 private:
 
     /// Duplicates the given gradient and applies the given transformation
-    static QGradient *duplicateGradient(const QGradient * g, const QTransform &transform);
+    static QGradient *duplicateGradient(const QGradient *g, const QTransform &transform);
 
-    QGradient * m_gradient;
+    QGradient *m_gradient;
     Units m_gradientUnits;
     QTransform m_gradientTransform;
 };

@@ -75,10 +75,9 @@ public:
     void setContent(Sheet *sheet, int row, int column, const QString &text, KUndo2Command *parent);
 };
 
-
-ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
-        , d(new Private)
+ConsolidateDialog::ConsolidateDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent)
+    , d(new Private)
 {
     d->selection = selection;
 
@@ -148,21 +147,22 @@ void ConsolidateDialog::accept()
         const QString address = d->mainWidget.m_sourceRanges->item(i)->text();
         const Region region(address, map, destinationSheet);
         if (!region.isValid()) {
-            KMessageBox::error(this, i18n("%1 is not a valid cell range." , address));
+            KMessageBox::error(this, i18n("%1 is not a valid cell range.", address));
             return;
         }
         ranges.append(region);
     }
 
     enum { D_ROW, D_COL, D_NONE, D_BOTH } desc;
-    if (d->detailsWidget.m_rowHeader->isChecked() && d->detailsWidget.m_columnHeader->isChecked())
+    if (d->detailsWidget.m_rowHeader->isChecked() && d->detailsWidget.m_columnHeader->isChecked()) {
         desc = D_BOTH;
-    else if (d->detailsWidget.m_rowHeader->isChecked())
+    } else if (d->detailsWidget.m_rowHeader->isChecked()) {
         desc = D_ROW;
-    else if (d->detailsWidget.m_columnHeader->isChecked())
+    } else if (d->detailsWidget.m_columnHeader->isChecked()) {
         desc = D_COL;
-    else
+    } else {
         desc = D_NONE;
+    }
 
     const QRect firstRange = ranges[0].firstRange();
     const int columns = firstRange.width();
@@ -177,7 +177,7 @@ void ConsolidateDialog::accept()
 
     // Check, if the first cell range is too large.
     if (ranges[0].isAllSelected() || ranges[0].isColumnOrRowSelected()) {
-        KMessageBox::error(this, i18n("The range\n%1\nis too large" , ranges[0].name()));
+        KMessageBox::error(this, i18n("The range\n%1\nis too large", ranges[0].name()));
         return;
     }
 
@@ -188,7 +188,7 @@ void ConsolidateDialog::accept()
 
         // Check, if the cell range is too large.
         if (ranges[i].isAllSelected() || ranges[i].isColumnOrRowSelected()) {
-            KMessageBox::error(this, i18n("The range\n%1\nis too large" , ranges[i].name()));
+            KMessageBox::error(this, i18n("The range\n%1\nis too large", ranges[i].name()));
             return;
         }
 
@@ -199,7 +199,7 @@ void ConsolidateDialog::accept()
         if ((desc == D_NONE && (columns != columns2 || rows != rows2)) ||
                 (desc == D_COL && rows != rows2) ||
                 (desc == D_ROW && columns != columns2)) {
-            QString tmp = i18n("The ranges\n%1\nand\n%2\nhave different size", ranges[0].name() , ranges[i].name());
+            QString tmp = i18n("The ranges\n%1\nand\n%2\nhave different size", ranges[0].name(), ranges[i].name());
             KMessageBox::error(this, tmp);
             return;
         }
@@ -234,8 +234,9 @@ void ConsolidateDialog::accept()
                     Q_ASSERT(sheet);
                     const QRect range = ranges[i].firstRange();
                     const Cell cell(sheet, col + range.left(), row + range.top());
-                    if (!cell.value().isEmpty())
+                    if (!cell.value().isEmpty()) {
                         novalue = false;
+                    }
                     if (i != 0) {
                         formula += ';';
                     }
@@ -255,7 +256,7 @@ void ConsolidateDialog::accept()
             Sheet *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
-            for (int col = range.left(); col <= range.right() ; ++col) {
+            for (int col = range.left(); col <= range.right(); ++col) {
                 const Cell cell(sheet, col, range.top());
                 const Value value = cell.value();
                 const QString columnHeader = converter->asString(value).asString();
@@ -310,7 +311,7 @@ void ConsolidateDialog::accept()
             Sheet *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
-            for (int row = range.top(); row <= range.bottom() ; ++row) {
+            for (int row = range.top(); row <= range.bottom(); ++row) {
                 const Cell cell(sheet, range.left(), row);
                 const Value value = cell.value();
                 const QString rowHeader = converter->asString(value).asString();
@@ -365,7 +366,7 @@ void ConsolidateDialog::accept()
             Sheet *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
-            for (int row = range.top() + 1; row <= range.bottom() ; ++row) {
+            for (int row = range.top() + 1; row <= range.bottom(); ++row) {
                 const Value value = Cell(sheet, range.left(), row).value();
                 const QString rowHeader = converter->asString(value).asString();
                 if (!rowHeaders.contains(rowHeader)) {
@@ -381,7 +382,7 @@ void ConsolidateDialog::accept()
             Sheet *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
-            for (int col = range.left() + 1; col <= range.right() ; ++col) {
+            for (int col = range.left() + 1; col <= range.right(); ++col) {
                 const Value value = Cell(sheet, col, range.top()).value();
                 const QString columnHeader = converter->asString(value).asString();
                 if (!columnHeaders.contains(columnHeader)) {
@@ -410,10 +411,10 @@ void ConsolidateDialog::accept()
             Sheet *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
-            for (int col = range.left() + 1; col <= range.right() ; ++col) {
+            for (int col = range.left() + 1; col <= range.right(); ++col) {
                 const Value columnValue = Cell(sheet, col, range.top()).value();
                 const QString columnHeader = converter->asString(columnValue).asString();
-                for (int row = range.top() + 1; row <= range.bottom() ; ++row) {
+                for (int row = range.top() + 1; row <= range.bottom(); ++row) {
                     const Value rowValue = Cell(sheet, range.left(), row).value();
                     const QString rowHeader = converter->asString(rowValue).asString();
                     list[rowHeader][columnHeader].append(Cell(sheet, col, row));
@@ -466,13 +467,15 @@ void ConsolidateDialog::slotAdd()
 void ConsolidateDialog::slotRemove()
 {
     int i = d->mainWidget.m_sourceRanges->currentRow();
-    if (i < 0)
+    if (i < 0) {
         return;
+    }
 
     delete d->mainWidget.m_sourceRanges->takeItem(i);
 
-    if (d->mainWidget.m_sourceRanges->count() == 0)
+    if (d->mainWidget.m_sourceRanges->count() == 0) {
         enableButton(Ok, false);
+    }
 }
 
 void ConsolidateDialog::slotSelectionChanged()
@@ -504,7 +507,7 @@ void ConsolidateDialog::slotReturnPressed()
 }
 
 void ConsolidateDialog::Private::setContent(Sheet *sheet, int row, int column,
-                                            const QString &text, KUndo2Command *parent)
+        const QString &text, KUndo2Command *parent)
 {
     Value value;
     // Directly evaluate the formula, i.e. copy data, i.e. do not link to data?

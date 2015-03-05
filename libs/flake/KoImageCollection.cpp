@@ -35,18 +35,19 @@ class KoImageCollection::Private
 public:
     ~Private()
     {
-        foreach(KoImageDataPrivate *id, images)
+        foreach (KoImageDataPrivate *id, images) {
             id->collection = 0;
+        }
     }
 
-    QMap<qint64, KoImageDataPrivate*> images;
+    QMap<qint64, KoImageDataPrivate *> images;
     // an extra map to find all dataObjects based on the key of a store.
-    QMap<QByteArray, KoImageDataPrivate*> storeImages;
+    QMap<QByteArray, KoImageDataPrivate *> storeImages;
 };
 
 KoImageCollection::KoImageCollection(QObject *parent)
     : QObject(parent),
-    d(new Private())
+      d(new Private())
 {
 }
 
@@ -75,20 +76,18 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
             kWarning(30006) << "image not found";
             Q_ASSERT(0);
             break;
-        }
-        else if (knownImagesIter.key() == imagesToSaveIter.key()) {
+        } else if (knownImagesIter.key() == imagesToSaveIter.key()) {
             KoImageDataPrivate *imageData = knownImagesIter.value();
             if (imageData->imageLocation.isValid()) {
                 // TODO store url
                 Q_ASSERT(0); // not implemented yet
-            }
-            else if (store->open(imagesToSaveIter.value())) {
+            } else if (store->open(imagesToSaveIter.value())) {
                 KoStoreDevice device(store);
                 bool ok = imageData->saveData(device);
                 store->close();
                 // TODO error handling
                 if (ok) {
-                    const QString mimetype(KMimeType::findByPath(imagesToSaveIter.value(), 0 , true)->name());
+                    const QString mimetype(KMimeType::findByPath(imagesToSaveIter.value(), 0, true)->name());
                     manifestWriter->addManifestEntry(imagesToSaveIter.value(), mimetype);
                 } else {
                     kWarning(30006) << "saving image" << imagesToSaveIter.value() << "failed";
@@ -127,8 +126,9 @@ KoImageData *KoImageCollection::createExternalImageData(const QUrl &url)
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(url.toEncoded());
     qint64 key = KoImageDataPrivate::generateKey(md5.result());
-    if (d->images.contains(key))
+    if (d->images.contains(key)) {
         return new KoImageData(d->images.value(key));
+    }
     KoImageData *data = new KoImageData();
     data->setExternalImage(url);
     data->priv()->collection = this;
@@ -149,8 +149,9 @@ KoImageData *KoImageCollection::createImageData(const QString &href, KoStore *st
     // image data they can find this data and share (insert warm fuzzy feeling here).
     //
     QByteArray storeKey = (QString::number((qint64) store) + href).toLatin1();
-    if (d->storeImages.contains(storeKey))
+    if (d->storeImages.contains(storeKey)) {
         return new KoImageData(d->storeImages.value(storeKey));
+    }
 
     KoImageData *data = new KoImageData();
     data->setImage(href, store);
@@ -165,8 +166,9 @@ KoImageData *KoImageCollection::createImageData(const QByteArray &imageData)
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(imageData);
     qint64 key = KoImageDataPrivate::generateKey(md5.result());
-    if (d->images.contains(key))
+    if (d->images.contains(key)) {
         return new KoImageData(d->images.value(key));
+    }
     KoImageData *data = new KoImageData();
     data->setImage(imageData);
     data->priv()->collection = this;
@@ -177,12 +179,11 @@ KoImageData *KoImageCollection::createImageData(const QByteArray &imageData)
 
 KoImageData *KoImageCollection::cacheImage(KoImageData *data)
 {
-    QMap<qint64, KoImageDataPrivate*>::const_iterator it(d->images.constFind(data->key()));
+    QMap<qint64, KoImageDataPrivate *>::const_iterator it(d->images.constFind(data->key()));
     if (it == d->images.constEnd()) {
         d->images.insert(data->key(), data->priv());
         data->priv()->collection = this;
-    }
-    else {
+    } else {
         delete data;
         data = new KoImageData(it.value());
     }

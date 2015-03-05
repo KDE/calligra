@@ -26,8 +26,9 @@
 
 #define _USE_QT_TYPES_
 
-namespace Ko {
-  #include "lut.h"
+namespace Ko
+{
+#include "lut.h"
 }
 
 #endif

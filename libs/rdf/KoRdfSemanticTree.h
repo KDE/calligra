@@ -30,7 +30,8 @@
 class KoDocumentRdf;
 class KoRdfSemanticTreePrivate;
 
-namespace Soprano {
+namespace Soprano
+{
 class Model;
 }
 /**
@@ -68,5 +69,4 @@ private:
 };
 
 #endif
-
 

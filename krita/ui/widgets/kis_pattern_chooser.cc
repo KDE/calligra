@@ -31,17 +31,16 @@
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 
-
 #include "kis_global.h"
 #include "KoPattern.h"
 
 KisPatternChooser::KisPatternChooser(QWidget *parent)
-        : QFrame(parent)
+    : QFrame(parent)
 {
     m_lbName = new QLabel(this);
 
-    KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoPattern>(rserver));
+    KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer(false);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoPattern>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->showPreview(true);
     m_itemChooser->setPreviewTiled(true);
@@ -71,10 +70,10 @@ KisPatternChooser::~KisPatternChooser()
 {
 }
 
-KoResource *  KisPatternChooser::currentResource()
+KoResource   *KisPatternChooser::currentResource()
 {
     if (!m_itemChooser->currentResource()) {
-        KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
+        KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer(false);
         if (rserver->resources().size() > 0) {
             m_itemChooser->setCurrentResource(rserver->resources().first());
         }
@@ -100,7 +99,7 @@ void KisPatternChooser::setPreviewOrientation(Qt::Orientation orientation)
     m_itemChooser->setPreviewOrientation(orientation);
 }
 
-void KisPatternChooser::update(KoResource * resource)
+void KisPatternChooser::update(KoResource *resource)
 {
     KoPattern *pattern = static_cast<KoPattern *>(resource);
 

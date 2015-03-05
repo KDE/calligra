@@ -22,8 +22,8 @@
 #include "kis_global.h"
 #include "kis_paint_information.h"
 
-
-namespace KisPaintOpUtils {
+namespace KisPaintOpUtils
+{
 
 template <class PaintOp>
 bool paintFan(PaintOp &op,
@@ -36,7 +36,7 @@ bool paintFan(PaintOp &op,
     const qreal initialAngle = currentDistance->lastDrawingAngle();
     const qreal finalAngle = pi2.drawingAngleSafe(*currentDistance);
     const qreal fullDistance = shortestAngularDistance(initialAngle,
-                                                       pi2.drawingAngleSafe(*currentDistance));
+                               pi2.drawingAngleSafe(*currentDistance));
     qreal lastAngle = initialAngle;
 
     int i = 0;
@@ -54,7 +54,6 @@ bool paintFan(PaintOp &op,
 
     return i;
 }
-
 
 template <class PaintOp>
 void paintLine(PaintOp &op,
@@ -75,7 +74,7 @@ void paintLine(PaintOp &op,
         pi = KisPaintInformation::mix(pt, t, pi, pi2);
 
         if (fanCornersEnabled &&
-            currentDistance->hasLastPaintInformation()) {
+                currentDistance->hasLastPaintInformation()) {
 
             paintFan(op,
                      currentDistance->lastPaintInformation(),
@@ -107,7 +106,8 @@ public:
      * \return the previously used point, which is guaranteed not to
      *         be equal to \p pt and updates the history if needed
      */
-    QPointF pushThroughHistory(const QPointF &pt) {
+    QPointF pushThroughHistory(const QPointF &pt)
+    {
         QPointF result;
         const qreal pointSwapThreshold = 7.0;
 
@@ -117,7 +117,7 @@ public:
          * Efficienty generating the 'stairs' pattern.
          */
         if (qAbs(pt.x() - m_second.x()) > pointSwapThreshold &&
-            qAbs(pt.y() - m_second.y()) > pointSwapThreshold) {
+                qAbs(pt.y() - m_second.y()) > pointSwapThreshold) {
 
             result = m_second;
             m_first = m_second;

@@ -39,18 +39,17 @@ class KisWdgGenerator : public QWidget
 
 public:
 
-    KisWdgGenerator(QWidget * parent);
+    KisWdgGenerator(QWidget *parent);
 
-    KisWdgGenerator(QWidget * parent, KisPaintDeviceSP dev);
+    KisWdgGenerator(QWidget *parent, KisPaintDeviceSP dev);
 
     ~KisWdgGenerator();
 
     void initialize(KisViewManager *view);
 
-    void setConfiguration(const KisFilterConfiguration * config);
+    void setConfiguration(const KisFilterConfiguration *config);
 
-    KisFilterConfiguration * configuration();
-
+    KisFilterConfiguration *configuration();
 
 private Q_SLOTS:
 
@@ -59,7 +58,7 @@ private Q_SLOTS:
 private:
 
     struct Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

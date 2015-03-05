@@ -39,13 +39,15 @@ public:
     {
     }
 
-    ~KisConvolutionWorkerSpatial() {
+    ~KisConvolutionWorkerSpatial()
+    {
     }
 
-    inline void loadPixelToCache(qreal **cache, const quint8 *data, int index) {
+    inline void loadPixelToCache(qreal **cache, const quint8 *data, int index)
+    {
         // no alpha is rare case, so just multiply by 1.0 in that case
         qreal alphaValue = m_alphaRealPos >= 0 ?
-            m_toDoubleFuncPtr[m_alphaCachePos](data, m_alphaRealPos) : 1.0;
+                           m_toDoubleFuncPtr[m_alphaCachePos](data, m_alphaRealPos) : 1.0;
 
         for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
             if (k != (quint32)m_alphaCachePos) {
@@ -58,7 +60,8 @@ public:
 
     }
 
-    virtual void execute(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect& dataRect) {
+    virtual void execute(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect &dataRect)
+    {
         // store some kernel characteristics
         m_kw = kernel->width();
         m_kh = kernel->height();
@@ -87,8 +90,9 @@ public:
             areaSize = r.size();
         }
 
-        if (areaSize.width() == 0 || areaSize.height() == 0)
+        if (areaSize.width() == 0 || areaSize.height() == 0) {
             return;
+        }
 
         // Don't convolve with an even sized kernel
         Q_ASSERT((m_kw & 0x01) == 1 || (m_kh & 0x01) == 1 || kernel->factor() != 0);
@@ -105,8 +109,9 @@ public:
         }
 
         bool hasProgressUpdater = this->m_progress;
-        if (hasProgressUpdater)
+        if (hasProgressUpdater) {
             this->m_progress->setProgress(0);
+        }
 
         // Iterate over all pixels in our rect, create a cache of pixels around the current pixel and convolve them.
         m_pixelPtrCache = new qreal*[m_cacheSize];
@@ -123,14 +128,16 @@ public:
             traversingDirection = Horizontal;
         }
 
-        KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(src->colorSpace()->mathToolboxId().id());
+        KisMathToolbox *mathToolbox = KisMathToolboxRegistry::instance()->value(src->colorSpace()->mathToolboxId().id());
         m_toDoubleFuncPtr = QVector<PtrToDouble>(m_convolveChannelsNo);
-        if (!mathToolbox->getToDoubleChannelPtr(m_convChannelList, m_toDoubleFuncPtr))
+        if (!mathToolbox->getToDoubleChannelPtr(m_convChannelList, m_toDoubleFuncPtr)) {
             return;
+        }
 
         m_fromDoubleFuncPtr = QVector<PtrFromDouble>(m_convolveChannelsNo);
-        if (!mathToolbox->getFromDoubleChannelPtr(m_convChannelList, m_fromDoubleFuncPtr))
+        if (!mathToolbox->getFromDoubleChannelPtr(m_convChannelList, m_fromDoubleFuncPtr)) {
             return;
+        }
 
         m_kernelFactor = kernel->factor() ? 1.0 / kernel->factor() : 1;
         m_maxClamp = new qreal[m_convChannelList.count()];
@@ -151,16 +158,15 @@ public:
 
         for (quint32 krow = 0; krow < m_kh; ++krow) {
             do {
-                const quint8* data = hitInitSrc->oldRawData();
+                const quint8 *data = hitInitSrc->oldRawData();
                 loadPixelToCache(m_pixelPtrCacheCopy, data, i);
                 ++i;
             } while (hitInitSrc->nextPixel());
             hitInitSrc->nextRow();
         }
 
-
         if (traversingDirection == Horizontal) {
-            if(hasProgressUpdater) {
+            if (hasProgressUpdater) {
                 this->m_progress->setRange(0, areaSize.height());
             }
             typename _IteratorFactory_::HLineIterator hitDst = _IteratorFactory_::createHLineIterator(this->m_painter->device(), dstPos.x(), dstPos.y(), areaSize.width(), dataRect);
@@ -169,8 +175,9 @@ public:
             typename _IteratorFactory_::HLineConstIterator khitSrc = _IteratorFactory_::createHLineConstIterator(src, col - m_khalfWidth, row + m_khalfHeight, m_kw, dataRect);
             for (int prow = 0; prow < areaSize.height(); ++prow) {
                 // reload cache from copy
-                for (quint32 i = 0; i < m_cacheSize; ++i)
+                for (quint32 i = 0; i < m_cacheSize; ++i) {
                     memcpy(m_pixelPtrCache[i], m_pixelPtrCacheCopy[i], channelCount * sizeof(qreal));
+                }
 
                 typename _IteratorFactory_::VLineConstIterator kitSrc = _IteratorFactory_::createVLineConstIterator(src, col + m_khalfWidth, row - m_khalfHeight, m_kh, dataRect);
                 for (int pcol = 0; pcol < areaSize.width(); ++pcol) {
@@ -204,7 +211,7 @@ public:
 
             }
         } else if (traversingDirection == Vertical) {
-            if(hasProgressUpdater) {
+            if (hasProgressUpdater) {
                 this->m_progress->setRange(0, areaSize.width());
             }
             typename _IteratorFactory_::VLineIterator vitDst = _IteratorFactory_::createVLineIterator(this->m_painter->device(), dstPos.x(), dstPos.y(), areaSize.height(), dataRect);
@@ -213,8 +220,9 @@ public:
             typename _IteratorFactory_::VLineConstIterator kitSrc = _IteratorFactory_::createVLineConstIterator(src, col + m_khalfWidth, row - m_khalfHeight, m_kh, dataRect);
             for (int pcol = 0; pcol < areaSize.width(); pcol++) {
                 // reload cache from copy
-                for (quint32 i = 0; i < m_cacheSize; ++i)
+                for (quint32 i = 0; i < m_cacheSize; ++i) {
                     memcpy(m_pixelPtrCache[i], m_pixelPtrCacheCopy[i], channelCount * sizeof(qreal));
+                }
 
                 typename _IteratorFactory_::HLineConstIterator khitSrc = _IteratorFactory_::createHLineConstIterator(src, col - m_khalfWidth, row + m_khalfHeight, m_kw, dataRect);
                 for (int prow = 0; prow < areaSize.height(); prow++) {
@@ -250,16 +258,18 @@ public:
         cleanUp();
     }
 
-    inline void limitValue(qreal *value, qreal lowBound, qreal highBound) {
+    inline void limitValue(qreal *value, qreal lowBound, qreal highBound)
+    {
         if (*value > highBound) {
             *value = highBound;
-        } else if (*value < lowBound){
+        } else if (*value < lowBound) {
             *value = lowBound;
         }
     }
 
     template <bool additionalMultiplierActive>
-    inline qreal convolveOneChannelFromCache(quint8* dstPtr, quint32 channel, qreal additionalMultiplier = 0.0) {
+    inline qreal convolveOneChannelFromCache(quint8 *dstPtr, quint32 channel, qreal additionalMultiplier = 0.0)
+    {
         qreal interimConvoResult = 0;
 
         for (quint32 pIndex = 0; pIndex < m_cacheSize; ++pIndex) {
@@ -282,7 +292,8 @@ public:
         return channelPixelValue;
     }
 
-    inline void convolveCache(quint8* dstPtr) {
+    inline void convolveCache(quint8 *dstPtr)
+    {
         if (m_alphaCachePos >= 0) {
             qreal alphaValue = convolveOneChannelFromCache<false>(dstPtr, m_alphaCachePos);
 
@@ -290,12 +301,16 @@ public:
                 qreal alphaValueInv = 1.0 / alphaValue;
 
                 for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
-                    if (k == (quint32)m_alphaCachePos) continue;
+                    if (k == (quint32)m_alphaCachePos) {
+                        continue;
+                    }
                     convolveOneChannelFromCache<true>(dstPtr, k, alphaValueInv);
                 }
             } else {
                 for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
-                    if (k == (quint32)m_alphaCachePos) continue;
+                    if (k == (quint32)m_alphaCachePos) {
+                        continue;
+                    }
 
                     const qreal zeroValue = 0.0;
                     const quint32 channelPos = m_convChannelList[k]->pos();
@@ -309,11 +324,12 @@ public:
         }
     }
 
-    inline void moveKernelRight(typename _IteratorFactory_::VLineConstIterator& kitSrc, qreal **pixelPtrCache) {
-        qreal** d = pixelPtrCache;
+    inline void moveKernelRight(typename _IteratorFactory_::VLineConstIterator &kitSrc, qreal **pixelPtrCache)
+    {
+        qreal **d = pixelPtrCache;
 
         for (quint32 krow = 0; krow < m_kh; ++krow) {
-            qreal* first = *d;
+            qreal *first = *d;
             memmove(d, d + 1, (m_kw - 1) * sizeof(qreal *));
             *(d + m_kw - 1) = first;
             d += m_kw;
@@ -321,28 +337,30 @@ public:
 
         qint32 i = m_kw - 1;
         do {
-            const quint8* data = kitSrc->oldRawData();
+            const quint8 *data = kitSrc->oldRawData();
             loadPixelToCache(pixelPtrCache, data, i);
             i += m_kw;
         } while (kitSrc->nextPixel());
     }
 
-    inline void moveKernelDown(typename _IteratorFactory_::HLineConstIterator& kitSrc, qreal **pixelPtrCache) {
+    inline void moveKernelDown(typename _IteratorFactory_::HLineConstIterator &kitSrc, qreal **pixelPtrCache)
+    {
         quint8 **tmp = new quint8*[m_kw];
         memcpy(tmp, pixelPtrCache, m_kw * sizeof(qreal *));
         memmove(pixelPtrCache, pixelPtrCache + m_kw, (m_kw * m_kh - m_kw) * sizeof(quint8 *));
-        memcpy(pixelPtrCache + m_kw *(m_kh - 1), tmp, m_kw * sizeof(quint8 *));
+        memcpy(pixelPtrCache + m_kw * (m_kh - 1), tmp, m_kw * sizeof(quint8 *));
         delete[] tmp;
 
         qint32 i = m_kw * (m_kh - 1);
         do {
-            const quint8* data = kitSrc->oldRawData();
+            const quint8 *data = kitSrc->oldRawData();
             loadPixelToCache(pixelPtrCache, data, i);
             i++;
         } while (kitSrc->nextPixel());
     }
 
-    void cleanUp() {
+    void cleanUp()
+    {
         for (quint32 c = 0; c < m_cacheSize; ++c) {
             delete[] m_pixelPtrCache[c];
             delete[] m_pixelPtrCacheCopy[c];
@@ -367,14 +385,13 @@ private:
     int m_alphaRealPos;
 
     qreal *m_kernelData;
-    qreal** m_pixelPtrCache, ** m_pixelPtrCacheCopy;
-    qreal* m_minClamp, *m_maxClamp, *m_absoluteOffset;
+    qreal **m_pixelPtrCache, * *m_pixelPtrCacheCopy;
+    qreal *m_minClamp, *m_maxClamp, *m_absoluteOffset;
 
     qreal m_kernelFactor;
     QList<KoChannelInfo *> m_convChannelList;
     QVector<PtrToDouble> m_toDoubleFuncPtr;
     QVector<PtrFromDouble> m_fromDoubleFuncPtr;
 };
-
 
 #endif

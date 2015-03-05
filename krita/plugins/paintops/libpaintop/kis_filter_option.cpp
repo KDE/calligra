@@ -40,8 +40,9 @@
 class KisFilterOptionWidget : public QWidget, public Ui::FilterOpOptions
 {
 public:
-    KisFilterOptionWidget(QWidget* parent = 0)
-        : QWidget(parent) {
+    KisFilterOptionWidget(QWidget *parent = 0)
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -69,7 +70,7 @@ KisFilterOption::KisFilterOption()
         }
     }
     m_options->filtersList->setIDList(l2);
-    connect(m_options->filtersList, SIGNAL(activated(const KoID &)), SLOT(setCurrentFilter(const KoID &)));
+    connect(m_options->filtersList, SIGNAL(activated(KoID)), SLOT(setCurrentFilter(KoID)));
     if (!l2.empty()) {
         setCurrentFilter(l2.first());
     }
@@ -82,10 +83,12 @@ const KisFilterSP KisFilterOption::filter() const
     return m_currentFilter;
 }
 
-KisFilterConfiguration* KisFilterOption::filterConfig() const
+KisFilterConfiguration *KisFilterOption::filterConfig() const
 {
-    if (!m_currentFilterConfigWidget) return 0;
-    return static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration());
+    if (!m_currentFilterConfigWidget) {
+        return 0;
+    }
+    return static_cast<KisFilterConfiguration *>(m_currentFilterConfigWidget->configuration());
 }
 
 bool KisFilterOption::smudgeMode() const
@@ -103,22 +106,23 @@ void KisFilterOption::setNode(KisNodeWSP node)
         // created before any layer is selected in the view
         if (!m_currentFilterConfigWidget
                 || (m_currentFilterConfigWidget
-                    && static_cast<KisFilterConfiguration*>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice)
+                    && static_cast<KisFilterConfiguration *>(m_currentFilterConfigWidget->configuration())->isCompatible(m_paintDevice)
                    )
            ) {
             if (m_currentFilter) {
-                KisPropertiesConfiguration* configuration = 0;
-                if (m_currentFilterConfigWidget)
+                KisPropertiesConfiguration *configuration = 0;
+                if (m_currentFilterConfigWidget) {
                     configuration = m_currentFilterConfigWidget->configuration();
+                }
 
                 setCurrentFilter(KoID(m_currentFilter->id()));
-                if (configuration)
+                if (configuration) {
                     m_currentFilterConfigWidget->setConfiguration(configuration);
+                }
                 delete configuration;
             }
         }
-    }
-    else {
+    } else {
         m_paintDevice = 0;
     }
 }
@@ -131,14 +135,13 @@ void KisFilterOption::setImage(KisImageWSP image)
     }
 }
 
-void KisFilterOption::setCurrentFilter(const KoID& id)
+void KisFilterOption::setCurrentFilter(const KoID &id)
 {
     m_currentFilter = KisFilterRegistry::instance()->get(id.id());
     m_options->filtersList->setCurrent(id);
     updateFilterConfigWidget();
     emitSettingChanged();
 }
-
 
 void KisFilterOption::updateFilterConfigWidget()
 {
@@ -164,9 +167,11 @@ void KisFilterOption::updateFilterConfigWidget()
     m_layout->update();
 }
 
-void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
-    if (!m_currentFilter) return;
+    if (!m_currentFilter) {
+        return;
+    }
 
     setting->setProperty(FILTER_ID, m_currentFilter->id());
     setting->setProperty(FILTER_SMUDGE_MODE, smudgeMode());
@@ -175,12 +180,12 @@ void KisFilterOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     }
 }
 
-void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisFilterOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KoID id(setting->getString(FILTER_ID), "");
     setCurrentFilter(id);
     m_options->checkBoxSmudgeMode->setChecked(setting->getBool(FILTER_SMUDGE_MODE));
-    KisFilterConfiguration* configuration = filterConfig();
+    KisFilterConfiguration *configuration = filterConfig();
     if (configuration) {
         configuration->fromXML(setting->getString(FILTER_CONFIGURATION));
         m_currentFilterConfigWidget->setConfiguration(configuration);

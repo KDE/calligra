@@ -1,6 +1,5 @@
 
 
-
 #include "squeezedcombobox_test.h"
 #include <qtest_kde.h>
 

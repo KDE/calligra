@@ -35,19 +35,19 @@ public:
     virtual ~KoPABackgroundTool();
 
     ///Reimplemented from KoToolBase
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     ///Reimplemented from KoToolBase
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     ///Reimplemented from KoToolBase
     virtual void deactivate();
     ///Reimplemented from KoToolBase
-    virtual void mousePressEvent( KoPointerEvent *event );
+    virtual void mousePressEvent(KoPointerEvent *event);
     ///Reimplemented from KoToolBase
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent(KoPointerEvent *event);
     ///Reimplemented from KoToolBase
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    KoPAViewBase * view() const;
+    KoPAViewBase *view() const;
 
     void addOptionWidget(QWidget *widget);
 public Q_SLOTS:
@@ -58,7 +58,7 @@ protected:
     virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
-    KoPAViewBase * m_view;
+    KoPAViewBase *m_view;
     QList<QPointer<QWidget> > m_addOnWidgets;
 };
 

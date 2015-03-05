@@ -69,7 +69,7 @@ private:
     QString inheritedAttribute(const QString &attributeName, const KoXmlElement &e);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // SVGSTYLEPARSER_H

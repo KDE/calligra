@@ -42,28 +42,28 @@
 class KoConfigMiscPage::Private
 {
 public:
-    Private(KoDocument* doc, KoDocumentResourceManager *documentResources)
-            : doc(doc), docResources(documentResources)
+    Private(KoDocument *doc, KoDocumentResourceManager *documentResources)
+        : doc(doc), docResources(documentResources)
     {}
 
-    KoDocument* doc;
+    KoDocument *doc;
     KSharedConfigPtr config;
     KoDocumentResourceManager *docResources;
 
     KoUnit oldUnit;
     QComboBox *unit;
-    KIntNumInput * handleRadius;
+    KIntNumInput *handleRadius;
     uint oldHandleRadius;
-    KIntNumInput * grabSensitivity;
+    KIntNumInput *grabSensitivity;
     uint oldGrabSensitivity;
-    KoUnitDoubleSpinBox* pasteOffset;
+    KoUnitDoubleSpinBox *pasteOffset;
     qreal oldPasteOffset;
     QCheckBox *pasteAtCursor;
     bool oldPasteAtCursor;
 };
 
-KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *documentResources, char* name)
-        : d(new Private(doc, documentResources))
+KoConfigMiscPage::KoConfigMiscPage(KoDocument *doc, KoDocumentResourceManager *documentResources, char *name)
+    : d(new Private(doc, documentResources))
 {
     setObjectName(name);
 
@@ -137,7 +137,7 @@ void KoConfigMiscPage::apply()
 
     uint currentHandleRadius = d->handleRadius->value();
     if (currentHandleRadius != d->oldHandleRadius) {
-        miscGroup.writeEntry( "HandleRadius", currentHandleRadius );
+        miscGroup.writeEntry("HandleRadius", currentHandleRadius);
         d->docResources->setHandleRadius(currentHandleRadius);
     }
 

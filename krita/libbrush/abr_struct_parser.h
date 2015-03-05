@@ -76,7 +76,6 @@ private:
 
     quint32 parseEntry(QDataStream &buf);
 
-
 private:
     QHash<QString, enumFuncNames> m_types;
     QDomDocument m_doc;

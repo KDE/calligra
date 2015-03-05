@@ -40,12 +40,12 @@
 
 KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
     : QWidget(parent),
-    m_colorSets(palettes),
-    m_gridLayout(0),
-    m_activeColorSet(0),
-    m_activePatch(0),
-    m_initialColorSetCount(palettes.count()),
-    m_activeColorSetRequested(false)
+      m_colorSets(palettes),
+      m_gridLayout(0),
+      m_activeColorSet(0),
+      m_activePatch(0),
+      m_initialColorSetCount(palettes.count()),
+      m_activeColorSetRequested(false)
 {
     widget.setupUi(this);
     foreach (KoColorSet *colorSet, m_colorSets) {
@@ -71,7 +71,7 @@ KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, 
         index = widget.selector->findText(m_activeColorSet->name());
     }
 
-    m_scrollArea->setMinimumWidth(16*(12+2));
+    m_scrollArea->setMinimumWidth(16 * (12 + 2));
 
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);
@@ -97,12 +97,13 @@ KoEditColorSetWidget::~KoEditColorSetWidget()
 {
     // only delete new color sets
     uint colorSetCount = m_colorSets.count();
-    for( uint i = m_initialColorSetCount; i < colorSetCount; ++i ) {
-        KoColorSet * cs = m_colorSets[i];
+    for (uint i = m_initialColorSetCount; i < colorSetCount; ++i) {
+        KoColorSet *cs = m_colorSets[i];
         // if the active color set was requested by activeColorSet()
         // the caller takes ownership and then we do not delete it here
-        if( cs == m_activeColorSet && m_activeColorSetRequested )
+        if (cs == m_activeColorSet && m_activeColorSetRequested) {
             continue;
+        }
         delete cs;
     }
 }
@@ -126,8 +127,8 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
         for (int i = 0; i < m_activeColorSet->nColors(); i++) {
             KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
             patch->setColor(m_activeColorSet->getColor(i).color);
-            connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
-            m_gridLayout->addWidget(patch, i/16, i%16);
+            connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
+            m_gridLayout->addWidget(patch, i / 16, i % 16);
         }
     }
 
@@ -158,10 +159,10 @@ void KoEditColorSetWidget::addColor()
         newEntry.name = KInputDialog::getText(i18n("Add Color To Palette"), i18n("Color name:"));
         KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
         patch->setColor(newEntry.color);
-        connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
+        connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
         Q_ASSERT(m_gridLayout);
         Q_ASSERT(m_activeColorSet);
-        m_gridLayout->addWidget(patch, m_activeColorSet->nColors()/16, m_activeColorSet->nColors()%16);
+        m_gridLayout->addWidget(patch, m_activeColorSet->nColors() / 16, m_activeColorSet->nColors() % 16);
         m_activeColorSet->add(newEntry);
     }
 }
@@ -195,8 +196,9 @@ void KoEditColorSetWidget::open()
 void KoEditColorSetWidget::save()
 {
     Q_ASSERT(m_activeColorSet);
-    if (!m_activeColorSet->save())
+    if (!m_activeColorSet->save()) {
         KMessageBox::error(0, i18n("Cannot write to palette file %1. Maybe it is read-only. ", m_activeColorSet->filename()), i18n("Palette"));
+    }
 }
 
 KoColorSet *KoEditColorSetWidget::activeColorSet()

@@ -70,7 +70,7 @@ protected:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 
     void updatePosition(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option);
 

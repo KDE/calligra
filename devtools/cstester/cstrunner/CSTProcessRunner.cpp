@@ -28,8 +28,8 @@
 static const char PROGRAM[] = "cstwrapper.sh";
 
 CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &resultDir, int concurrentProcesses, bool pickup)
-: m_resultDir(resultDir)
-, m_concurrentProcesses(concurrentProcesses)
+    : m_resultDir(resultDir)
+    , m_concurrentProcesses(concurrentProcesses)
 {
     if (!QDir::current().exists(resultDir)) {
         qWarning() << "Creating result directory " << resultDir;
@@ -39,13 +39,13 @@ CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &re
     }
     QDir docDir(documentDir);
     QFileInfoList list = docDir.entryInfoList(QDir::Files, QDir::Name);
-    foreach(const QFileInfo &entry, list) {
+    foreach (const QFileInfo &entry, list) {
         m_documents.append(entry.filePath());
     }
     if (pickup) {
         QDir resDir(resultDir);
         QFileInfoList resList = resDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
-        foreach(const QFileInfo &entry, resList) {
+        foreach (const QFileInfo &entry, resList) {
             QString fileName = entry.fileName();
             if (fileName.endsWith(".check")) {
                 fileName.resize(fileName.length() - 6);
@@ -65,7 +65,7 @@ void CSTProcessRunner::start()
 {
     for (int i = 0; i < m_concurrentProcesses; ++i) {
         QProcess *process = new QProcess();
-        connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(processFinished(int, QProcess::ExitStatus)));
+        connect(process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processFinished(int,QProcess::ExitStatus)));
         startCstester(process);
     }
 }
@@ -97,19 +97,16 @@ void CSTProcessRunner::processFinished(int exitCode, QProcess::ExitStatus exitSt
 //                     qDebug() << "exit with signal:" << signal;
                 }
                 startCstester(process);
-            }
-            else {
+            } else {
                 QString tmp(document);
                 document.clear();
                 startMd5(process, tmp);
             }
-        }
-        else {
+        } else {
 //             qDebug() << "md5 done";
             startCstester(process);
         }
-    }
-    else {
+    } else {
         qWarning("processFinished but progress not there");
     }
 }
@@ -130,8 +127,7 @@ void CSTProcessRunner::startCstester(QProcess *process)
 
             QCoreApplication::exit(0);
         }
-    }
-    else {
+    } else {
         //TODO: check if result is already there and then do nothing
         QString document = m_documents.takeFirst();
         //qDebug() << "start:" << process << document << m_resultDir;
@@ -159,8 +155,7 @@ void CSTProcessRunner::logResult()
     for (; it != m_killed.constEnd(); ++it) {
         out << "Signal " << it.key() << ", " << it.value().size() << " documents\n";
         QList<QString>::const_iterator lIt = it.value().constBegin();
-        for (; lIt != it.value().constEnd(); ++lIt)
-        {
+        for (; lIt != it.value().constEnd(); ++lIt) {
             out << *lIt << "\n";
         }
     }

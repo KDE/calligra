@@ -31,7 +31,7 @@
 
 #include "ui_wdg_gaussian_blur.h"
 
-KisWdgGaussianBlur::KisWdgGaussianBlur(QWidget * parent) : KisConfigWidget(parent)
+KisWdgGaussianBlur::KisWdgGaussianBlur(QWidget *parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgGaussianBlur();
     m_widget->setupUi(this);
@@ -61,16 +61,16 @@ KisWdgGaussianBlur::~KisWdgGaussianBlur()
     delete m_widget;
 }
 
-KisPropertiesConfiguration* KisWdgGaussianBlur::configuration() const
+KisPropertiesConfiguration *KisWdgGaussianBlur::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("gaussian blur", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("gaussian blur", 1);
     config->setProperty("horizRadius", m_widget->horizontalRadius->value());
     config->setProperty("vertRadius", m_widget->verticalRadius->value());
     config->setProperty("lockAspect", m_widget->aspectButton->keepAspectRatio());
     return config;
 }
 
-void KisWdgGaussianBlur::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgGaussianBlur::setConfiguration(const KisPropertiesConfiguration *config)
 {
     QVariant value;
     if (config->getProperty("horizRadius", value)) {
@@ -113,7 +113,7 @@ void KisWdgGaussianBlur::verticalRadiusChanged(qreal v)
 void KisWdgGaussianBlur::aspectLockChanged(bool v)
 {
     if (v) {
-        m_widget->verticalRadius->setValue( m_widget->horizontalRadius->value() );
+        m_widget->verticalRadius->setValue(m_widget->horizontalRadius->value());
     }
 }
 

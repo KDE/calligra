@@ -20,7 +20,6 @@
 #ifndef KOPAMASTERPAGE_H
 #define KOPAMASTERPAGE_H
 
-
 #include "KoPAPageBase.h"
 
 #include <KoPageLayout.h>
@@ -33,26 +32,35 @@ public:
     ~KoPAMasterPage();
 
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
 
     /// @return the page layout set for this masterpage
-    KoPageLayout & pageLayout() { return m_pageLayout; }
-    const KoPageLayout & pageLayout() const { return m_pageLayout; }
+    KoPageLayout &pageLayout()
+    {
+        return m_pageLayout;
+    }
+    const KoPageLayout &pageLayout() const
+    {
+        return m_pageLayout;
+    }
 
     /// Set the page layout to @p layout
-    void setPageLayout(const KoPageLayout& layout) { m_pageLayout = layout; }
+    void setPageLayout(const KoPageLayout &layout)
+    {
+        m_pageLayout = layout;
+    }
 
     /// reimplemented
     virtual bool displayMasterShapes();
 
     /// reimplemented
-    virtual void setDisplayMasterShapes( bool display );
+    virtual void setDisplayMasterShapes(bool display);
 
     /// reimplemented
     virtual bool displayMasterBackground();
 
     /// reimplemented
-    virtual void setDisplayMasterBackground( bool display );
+    virtual void setDisplayMasterBackground(bool display);
 
     /// reimplemented
     virtual bool displayShape(KoShape *shape) const;
@@ -61,11 +69,11 @@ public:
     virtual void pageUpdated();
 
     /// reimplemented
-    virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
+    virtual void paintPage(QPainter &painter, KoZoomHandler &zoomHandler);
 
 protected:
     /// Reimplemented from KoPageBase
-    virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+    virtual void loadOdfPageTag(const KoXmlElement &element, KoPALoadingContext &loadingContext);
 
     KoPageLayout m_pageLayout;
 };

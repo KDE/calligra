@@ -44,9 +44,9 @@ private Q_SLOTS:
     void testCreateNumberFormat_data();
     void testCreateNumberFormat();
 private:
-    CalculationSettings* m_calcsettings;
-    ValueParser* m_parser;
-    ValueConverter* m_converter;
+    CalculationSettings *m_calcsettings;
+    ValueParser *m_parser;
+    ValueConverter *m_converter;
 };
 
 } // namespace Sheets

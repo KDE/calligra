@@ -31,7 +31,6 @@ class QSize;
 class QTransform;
 class QDomElement;
 
-
 class KRITAIMAGE_EXPORT KisLiquifyTransformWorker : boost::equality_comparable<KisLiquifyTransformWorker>
 {
 public:
@@ -70,8 +69,8 @@ public:
                     qreal amount,
                     qreal sigma);
 
-    const QVector<QPointF>& originalPoints() const;
-    QVector<QPointF>& transformedPoints();
+    const QVector<QPointF> &originalPoints() const;
+    QVector<QPointF> &transformedPoints();
 
     void run(KisPaintDeviceSP device);
     QImage runOnQImage(const QImage &srcImage,
@@ -80,7 +79,7 @@ public:
                        QPointF *newOffset);
 
     void toXML(QDomElement *e) const;
-    static KisLiquifyTransformWorker* fromXML(const QDomElement &e);
+    static KisLiquifyTransformWorker *fromXML(const QDomElement &e);
 
     void translate(const QPointF &offset);
 

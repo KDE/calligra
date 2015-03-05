@@ -40,7 +40,7 @@
 
 #define DEFAULT_SPACING 0.25
 
-KisAbrBrush::KisAbrBrush(const QString& filename, const QByteArray &parentMD5, KisAbrBrushCollection *parent)
+KisAbrBrush::KisAbrBrush(const QString &filename, const QByteArray &parentMD5, KisAbrBrushCollection *parent)
     : KisBrush(filename)
     , m_parentMD5(parentMD5)
     , m_parent(parent)
@@ -67,21 +67,21 @@ bool KisAbrBrush::save()
     return true;
 }
 
-bool KisAbrBrush::saveToDevice(QIODevice* /*dev*/) const
+bool KisAbrBrush::saveToDevice(QIODevice * /*dev*/) const
 {
     return true;
 }
 
-void KisAbrBrush::setBrushTipImage(const QImage& image)
+void KisAbrBrush::setBrushTipImage(const QImage &image)
 {
     setValid(true);
     setBrushType(MASK);
     setHasColor(false);
 
 #if QT_VERSION >= 0x040700
-    QByteArray ba = QByteArray::fromRawData((const char*)image.constBits(), image.byteCount());
+    QByteArray ba = QByteArray::fromRawData((const char *)image.constBits(), image.byteCount());
 #else
-    QByteArray ba = QByteArray::fromRawData((const char*)image.bits(), image.byteCount());
+    QByteArray ba = QByteArray::fromRawData((const char *)image.bits(), image.byteCount());
 #endif
 
     QCryptographicHash md5(QCryptographicHash::Md5);
@@ -92,7 +92,7 @@ void KisAbrBrush::setBrushTipImage(const QImage& image)
     KisBrush::setBrushTipImage(image);
 }
 
-void KisAbrBrush::toXML(QDomDocument& d, QDomElement& e) const
+void KisAbrBrush::toXML(QDomDocument &d, QDomElement &e) const
 {
     e.setAttribute("name", name()); // legacy
     predefinedBrushToXML("abr_brush", e);

@@ -35,9 +35,9 @@
 #include <kicon.h>
 
 KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h)
-        : QObject()
-        , actionMapper(this)
-        , host(h)
+    : QObject()
+    , actionMapper(this)
+    , host(h)
 {
     setObjectName("KexiSharedActionHostPrivate");
     connect(&actionMapper, SIGNAL(mapped(QString)), this, SLOT(slotAction(QString)));
@@ -49,7 +49,7 @@ KexiSharedActionHostPrivate::~KexiSharedActionHostPrivate()
     volatileActions.clear();
 }
 
-void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
+void KexiSharedActionHostPrivate::slotAction(const QString &act_id)
 {
     QWidget *w = host->focusWindow();
     KexiActionProxy *proxy = w ? actionProxies.value(w) : 0;
@@ -57,11 +57,13 @@ void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
     if (!proxy || !proxy->activateSharedAction(act_id.toLatin1())) {
         //also try to find previous enabler
         w = enablers.contains(act_id) ? enablers.value(act_id) : 0;
-        if (!w)
+        if (!w) {
             return;
+        }
         proxy = actionProxies.value(w);
-        if (!proxy)
+        if (!proxy) {
             return;
+        }
         proxy->activateSharedAction(act_id.toLatin1());
     }
 }
@@ -72,12 +74,13 @@ void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
 K_GLOBAL_STATIC_WITH_ARGS(KexiSharedActionHost, KexiSharedActionHost_dummy, (0))
 
 //! default host
-KexiSharedActionHost* KexiSharedActionHost_defaultHost = 0;
+KexiSharedActionHost *KexiSharedActionHost_defaultHost = 0;
 
-KexiSharedActionHost* KexiSharedActionHost::defaultHost()
+KexiSharedActionHost *KexiSharedActionHost::defaultHost()
 {
-    if (!KexiSharedActionHost_defaultHost)
+    if (!KexiSharedActionHost_defaultHost) {
         return KexiSharedActionHost_dummy;
+    }
     return KexiSharedActionHost_defaultHost;
 }
 
@@ -88,8 +91,8 @@ void KexiSharedActionHost::setAsDefaultHost()
 
 //--------------------------------------------------
 
-KexiSharedActionHost::KexiSharedActionHost(KexiMainWindowIface* mainWin)
-        : d(new KexiSharedActionHostPrivate(this))
+KexiSharedActionHost::KexiSharedActionHost(KexiMainWindowIface *mainWin)
+    : d(new KexiSharedActionHostPrivate(this))
 {
     d->mainWin = mainWin;
 }
@@ -103,7 +106,7 @@ KexiSharedActionHost::~KexiSharedActionHost()
     d = 0; //! to let takeActionProxyFor() know that we are almost dead :)
 }
 
-void KexiSharedActionHost::setActionAvailable(const QString& action_name, bool avail)
+void KexiSharedActionHost::setActionAvailable(const QString &action_name, bool avail)
 {
     QAction *act = d->mainWin->actionCollection()->action(action_name);
     if (act) {
@@ -111,15 +114,18 @@ void KexiSharedActionHost::setActionAvailable(const QString& action_name, bool a
     }
 }
 
-void KexiSharedActionHost::updateActionAvailable(const QString& action_name, bool avail, QObject *obj)
+void KexiSharedActionHost::updateActionAvailable(const QString &action_name, bool avail, QObject *obj)
 {
-    if (!d)
-        return; //sanity
+    if (!d) {
+        return;    //sanity
+    }
     QWidget *fw = d->mainWin->focusWidget();
-    while (fw && obj != fw)
+    while (fw && obj != fw) {
         fw = fw->parentWidget();
-    if (!fw)
+    }
+    if (!fw) {
         return;
+    }
 
     setActionAvailable(action_name, avail);
     if (avail) {
@@ -134,23 +140,24 @@ void KexiSharedActionHost::plugActionProxy(KexiActionProxy *proxy)
     d->actionProxies.insert(proxy->receiver(), proxy);
 }
 
-KexiMainWindowIface* KexiSharedActionHost::mainWindow() const
+KexiMainWindowIface *KexiSharedActionHost::mainWindow() const
 {
     return d->mainWin;
 }
 
 void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 {
-    if (!d)
+    if (!d) {
         return;
+    }
 
     KexiActionProxy *p = o ? d->actionProxies.value(o) : 0;
-    foreach(KAction* a, d->sharedActions) {
+    foreach (KAction *a, d->sharedActions) {
         const bool avail = p && p->isAvailable(a->objectName());
         KexiVolatileActionData *va = d->volatileActions.value(a);
         if (va != 0) {
             if (p && p->isSupported(a->objectName())) {
-                QList<KAction*> actions_list;
+                QList<KAction *> actions_list;
                 actions_list.append(a);
                 if (!va->plugged) {
                     va->plugged = true;
@@ -166,33 +173,35 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
     }
 }
 
-KexiActionProxy* KexiSharedActionHost::actionProxyFor(QObject *o) const
+KexiActionProxy *KexiSharedActionHost::actionProxyFor(QObject *o) const
 {
     return d->actionProxies.value(o);
 }
 
-KexiActionProxy* KexiSharedActionHost::takeActionProxyFor(QObject *o)
+KexiActionProxy *KexiSharedActionHost::takeActionProxyFor(QObject *o)
 {
-    if (d)
+    if (d) {
         return d->actionProxies.take(o);
+    }
     return 0;
 }
 
-QWidget* KexiSharedActionHost::findWindow(QWidget */*w*/)
+QWidget *KexiSharedActionHost::findWindow(QWidget */*w*/)
 {
     return 0;
 }
 
-QWidget* KexiSharedActionHost::focusWindow()
+QWidget *KexiSharedActionHost::focusWindow()
 {
     QWidget *aw = QApplication::activeWindow();
-    if (!aw)
-        aw = dynamic_cast<QWidget*>(d->mainWin);
+    if (!aw) {
+        aw = dynamic_cast<QWidget *>(d->mainWin);
+    }
     QWidget *fw = aw->focusWidget();
     return findWindow(fw);
 }
 
-KAction* KexiSharedActionHost::createSharedActionInternal(KAction *action)
+KAction *KexiSharedActionHost::createSharedActionInternal(KAction *action)
 {
     QObject::connect(action, SIGNAL(activated()), &d->actionMapper, SLOT(map()));
     d->actionMapper.setMapping(action, action->objectName());
@@ -200,16 +209,17 @@ KAction* KexiSharedActionHost::createSharedActionInternal(KAction *action)
     return action;
 }
 
-QList<KAction*> KexiSharedActionHost::sharedActions() const
+QList<KAction *> KexiSharedActionHost::sharedActions() const
 {
     return d->sharedActions;
 }
 
-KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &iconName,
-        const KShortcut &cut, const char *name, KActionCollection* col, const char *subclassName)
+KAction *KexiSharedActionHost::createSharedAction(const QString &text, const QString &iconName,
+        const KShortcut &cut, const char *name, KActionCollection *col, const char *subclassName)
 {
-    if (!col)
+    if (!col) {
         col = d->mainWin->actionCollection();
+    }
 
     if (subclassName == 0) {
         KAction *action = new KAction(KIcon(iconName), text, col);
@@ -234,25 +244,27 @@ KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QSt
     return 0;
 }
 
-KAction* KexiSharedActionHost::createSharedAction(KStandardAction::StandardAction id,
-        const char *name, KActionCollection* col)
+KAction *KexiSharedActionHost::createSharedAction(KStandardAction::StandardAction id,
+        const char *name, KActionCollection *col)
 {
-    if (!col)
+    if (!col) {
         col = d->mainWin->actionCollection();
+    }
 
-    KAction* action = createSharedActionInternal(
+    KAction *action = createSharedActionInternal(
                           KStandardAction::create(id, 0/*receiver*/, 0/*slot*/, col)
                       );
     action->setObjectName(name);
     return action;
 }
 
-KAction* KexiSharedActionHost::createSharedAction(const KGuiItem& guiItem, const KShortcut &cut,
-        const char *name, KActionCollection* col)
+KAction *KexiSharedActionHost::createSharedAction(const KGuiItem &guiItem, const KShortcut &cut,
+        const char *name, KActionCollection *col)
 {
-    if (!col)
+    if (!col) {
         col = d->mainWin->actionCollection();
-    KAction* action = new KAction(guiItem.icon(), guiItem.text(), col);
+    }
+    KAction *action = new KAction(guiItem.icon(), guiItem.text(), col);
     action->setObjectName(name);
     action->setShortcut(cut);
     action->setEnabled(guiItem.isEnabled());
@@ -269,8 +281,9 @@ void KexiSharedActionHost::setActionVolatile(KAction *a, bool set)
         delete a;
         return;
     }
-    if (d->volatileActions.value(a))
+    if (d->volatileActions.value(a)) {
         return;
+    }
     d->volatileActions.insert(a, new KexiVolatileActionData());
 }
 

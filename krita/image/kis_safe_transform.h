@@ -28,7 +28,6 @@ class QRect;
 class QRectF;
 class QPolygonF;
 
-
 class KRITAIMAGE_EXPORT KisSafeTransform
 {
 public:

@@ -34,7 +34,6 @@
 
 class KoCompositeOp;
 
-
 class KisHairyProperties
 {
 public:
@@ -75,11 +74,13 @@ public:
 
     void paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const KisPaintInformation &pi1, const KisPaintInformation &pi2, qreal scale, qreal rotation);
     /// set ink color for the whole bristle shape
-    void setInkColor(const KoColor &color) {
+    void setInkColor(const KoColor &color)
+    {
         m_color = color;
     }
     /// set parameters for the brush engine
-    void setProperties(KisHairyProperties * properties) {
+    void setProperties(KisHairyProperties *properties)
+    {
         m_properties = properties;
     }
     /// set the shape of the bristles according the dab
@@ -93,9 +94,9 @@ private:
     /// check the opacity of dab pixel and if the opacity is less then color, it will copy color to dab
     void darkenPixel(int wx, int wy, const KoColor &color);
     /// paint wu particle by copying the color and setup just the opacity, weight is complementary to opacity of the color
-    void paintParticle(QPointF pos, const KoColor& color, qreal weight);
+    void paintParticle(QPointF pos, const KoColor &color, qreal weight);
     /// paint wu particle using composite operation
-    void paintParticle(QPointF pos, const KoColor& color);
+    void paintParticle(QPointF pos, const KoColor &color);
     /// similar to sample input color in spray
     void colorifyBristles(KisPaintDeviceSP source, QPointF point);
 
@@ -104,18 +105,18 @@ private:
     double computeMousePressure(double distance);
 
     /// simulate running out of saturation
-    void saturationDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
+    void saturationDepletion(Bristle *bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
     /// simulate running out of ink through opacity decreasing
-    void opacityDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
+    void opacityDepletion(Bristle *bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
     /// fetch actaul ink status according depletion curve
-    qreal fetchInkDepletion(Bristle * bristle, int inkDepletionSize);
+    qreal fetchInkDepletion(Bristle *bristle, int inkDepletionSize);
 
     void initAndCache();
 
 private:
-    const KisHairyProperties * m_properties;
+    const KisHairyProperties *m_properties;
 
-    QVector<Bristle*> m_bristles;
+    QVector<Bristle *> m_bristles;
     QTransform m_transform;
 
     // used for interpolation the path of bristles
@@ -124,7 +125,7 @@ private:
     // temporary device
     KisPaintDeviceSP m_dab;
     KisRandomAccessorSP m_dabAccessor;
-    const KoCompositeOp * m_compositeOp;
+    const KoCompositeOp *m_compositeOp;
     quint32 m_pixelSize;
 
     int m_counter;
@@ -134,10 +135,11 @@ private:
     KoColor m_color;
 
     int m_saturationId;
-    KoColorTransformation * m_transfo;
+    KoColorTransformation *m_transfo;
 
     // internal counter counts the calls of paint, the counter is 1 when the first call occurs
-    inline bool firstStroke() const {
+    inline bool firstStroke() const
+    {
         return (m_counter == 1);
     }
 };

@@ -50,7 +50,7 @@ void Row::analyze(const QDomNode node)
 /*******************************************/
 /* generate                                */
 /*******************************************/
-void Row::generate(QTextStream& out)
+void Row::generate(QTextStream &out)
 {
     //generateTopBorder(out);
     if (getBrushStyle() >= 1) {
@@ -62,5 +62,4 @@ void Row::generate(QTextStream& out)
     //out << "m{" << getHeight() << "pt}";
 
 }
-
 

@@ -26,33 +26,40 @@ class KoColorPopupAction;
 class KoColorSlider;
 class KoColorPatch;
 
-class DigitalMixerDock : public QDockWidget, public KoCanvasObserverBase {
+class DigitalMixerDock : public QDockWidget, public KoCanvasObserverBase
+{
     Q_OBJECT
 public:
-    DigitalMixerDock( );
-    QString observerName() { return "DigitalMixerDock"; }
+    DigitalMixerDock();
+    QString observerName()
+    {
+        return "DigitalMixerDock";
+    }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
+    virtual void unsetCanvas()
+    {
+        m_canvas = 0;
+        setEnabled(false);
+    }
 public Q_SLOTS:
-    void setCurrentColor(const KoColor& );
-    void canvasResourceChanged(int, const QVariant&);
+    void setCurrentColor(const KoColor &);
+    void canvasResourceChanged(int, const QVariant &);
 private Q_SLOTS:
     void popupColorChanged(int i);
     void colorSliderChanged(int i);
     void targetColorChanged(int);
 private:
-    KoCanvasBase* m_canvas;
+    KoCanvasBase *m_canvas;
     KoColor m_currentColor;
-    KoColorPatch* m_currentColorPatch;
+    KoColorPatch *m_currentColorPatch;
     struct Mixer {
-      KoColorPatch* targetColor;
-      KoColorSlider* targetSlider;
-      KoColorPopupAction* actionColor;
+        KoColorPatch *targetColor;
+        KoColorSlider *targetSlider;
+        KoColorPopupAction *actionColor;
     };
     QList<Mixer> m_mixers;
     bool m_tellCanvas;
 };
-
 
 #endif

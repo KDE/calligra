@@ -24,12 +24,12 @@
 #include <klocale.h>
 
 KoParameterHandleMoveCommand::KoParameterHandleMoveCommand(KoParameterShape *shape, int handleId, const QPointF &startPoint, const QPointF &endPoint, Qt::KeyboardModifiers keyModifiers, KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , m_shape(shape)
-        , m_handleId(handleId)
-        , m_startPoint(startPoint)
-        , m_endPoint(endPoint)
-        , m_keyModifiers(keyModifiers)
+    : KUndo2Command(parent)
+    , m_shape(shape)
+    , m_handleId(handleId)
+    , m_startPoint(startPoint)
+    , m_endPoint(endPoint)
+    , m_keyModifiers(keyModifiers)
 {
     setText(kundo2_i18n("Change parameter"));
 }

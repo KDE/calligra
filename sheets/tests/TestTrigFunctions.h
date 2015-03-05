@@ -48,7 +48,7 @@ private Q_SLOTS:
     void testSECH();
 
 private:
-    Value evaluate(const QString&);
+    Value evaluate(const QString &);
 };
 
 } // namespace Sheets

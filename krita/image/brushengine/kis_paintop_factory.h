@@ -51,7 +51,7 @@ public:
     /**
      * @param whiteListedCompositeOps list of compositeops that don't work with this paintop
      */
-    KisPaintOpFactory(const QStringList & whiteListedCompositeOps = QStringList());
+    KisPaintOpFactory(const QStringList &whiteListedCompositeOps = QStringList());
     virtual ~KisPaintOpFactory() {}
 
     static QString categoryStable();
@@ -65,7 +65,7 @@ public:
      * @param settings the settings associated with the input device
      * @param painter the painter used to draw
      */
-    virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image) = 0;
+    virtual KisPaintOp *createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) = 0;
     virtual QString id() const = 0;
     virtual QString name() const = 0;
     virtual QString category() const = 0;
@@ -74,7 +74,6 @@ public:
      * List of usually hidden compositeops that are useful for this paintop.
      */
     QStringList whiteListedCompositeOps() const;
-
 
     /**
      * The filename of the pixmap we can use to represent this paintop in the ui.
@@ -89,7 +88,7 @@ public:
     /**
      * create a widget that can display paintop settings
      */
-    virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent) = 0;
+    virtual KisPaintOpSettingsWidget *createSettingsWidget(QWidget *parent) = 0;
 
     /**
      * Set the priority of this paintop, as it is shown in the UI; lower number means

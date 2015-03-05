@@ -36,10 +36,10 @@ class LATEXExport : public KoFilter
     Q_OBJECT
 
 public:
-    LATEXExport(QObject* parent, const QVariantList&);
+    LATEXExport(QObject *parent, const QVariantList &);
     virtual ~LATEXExport() {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif /* __LATEXExport_H__ */

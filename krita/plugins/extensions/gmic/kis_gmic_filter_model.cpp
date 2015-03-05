@@ -26,7 +26,7 @@
 
 // debug
 
-KisGmicFilterModel::KisGmicFilterModel(Component * rootComponent, QObject* parent):
+KisGmicFilterModel::KisGmicFilterModel(Component *rootComponent, QObject *parent):
     QAbstractItemModel(parent),
     m_rootComponent(rootComponent),
     m_blacklister(0)
@@ -40,95 +40,84 @@ KisGmicFilterModel::~KisGmicFilterModel()
     delete m_blacklister;
 }
 
-
-QModelIndex KisGmicFilterModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex KisGmicFilterModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (!hasIndex(row, column, parent)){
-         return QModelIndex();
+    if (!hasIndex(row, column, parent)) {
+        return QModelIndex();
     }
 
-    Component * parentItem;
-    if (!parent.isValid())
-    {
+    Component *parentItem;
+    if (!parent.isValid()) {
         parentItem = m_rootComponent;
-    } else
-    {
-        parentItem = static_cast<Component*>(parent.internalPointer());
+    } else {
+        parentItem = static_cast<Component *>(parent.internalPointer());
     }
 
     Component *childItem = parentItem->child(row);
     if (childItem) {
         return createIndex(row, column, childItem);
-    }
-    else
-    {
+    } else {
         return QModelIndex();
     }
 
 }
 
-QModelIndex KisGmicFilterModel::parent(const QModelIndex& index) const
+QModelIndex KisGmicFilterModel::parent(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QModelIndex();
+    }
 
-    Component *childItem = static_cast<Component*>(index.internalPointer());
+    Component *childItem = static_cast<Component *>(index.internalPointer());
     Component *parentItem = childItem->parent();
 
-    if (parentItem == 0)
-    {
+    if (parentItem == 0) {
         return QModelIndex();
     }
 
     return createIndex(parentItem->row(), 0, parentItem);
 }
 
-int KisGmicFilterModel::rowCount(const QModelIndex& parent) const
- {
-     Component *parentItem;
-     if (parent.column() > 0)
-         return 0;
-
-     if (!parent.isValid()){
-         parentItem = m_rootComponent;
-     }
-     else
-     {
-         parentItem = static_cast<Component*>(parent.internalPointer());
-     }
-
-     return parentItem->childCount();
- }
-
-int KisGmicFilterModel::columnCount(const QModelIndex& parent) const
+int KisGmicFilterModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
-    {
-         return static_cast<Component*>(parent.internalPointer())->columnCount();
+    Component *parentItem;
+    if (parent.column() > 0) {
+        return 0;
     }
-    else
-    {
-         return m_rootComponent->columnCount();
+
+    if (!parent.isValid()) {
+        parentItem = m_rootComponent;
+    } else {
+        parentItem = static_cast<Component *>(parent.internalPointer());
+    }
+
+    return parentItem->childCount();
+}
+
+int KisGmicFilterModel::columnCount(const QModelIndex &parent) const
+{
+    if (parent.isValid()) {
+        return static_cast<Component *>(parent.internalPointer())->columnCount();
+    } else {
+        return m_rootComponent->columnCount();
     }
 }
 
-QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
+QVariant KisGmicFilterModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QVariant();
+    }
 
-    if (role == Qt::DisplayRole)
-    {
-        Component *item = static_cast<Component*>(index.internalPointer());
+    if (role == Qt::DisplayRole) {
+        Component *item = static_cast<Component *>(index.internalPointer());
         return item->data(index.column());
     }
 
-    if (role == CommandRole)
-    {
-        Component *item = static_cast<Component*>(index.internalPointer());
-        Command * commandItem = dynamic_cast<Command *>(item);
-        if (commandItem)
-        {
+    if (role == CommandRole) {
+        Component *item = static_cast<Component *>(index.internalPointer());
+        Command *commandItem = dynamic_cast<Command *>(item);
+        if (commandItem) {
             //KisGmicSettingsWidget * filterSettingsWidget = new  KisGmicSettingsWidget(commandItem);
             /*if (filterSettingsWidget)
             {
@@ -139,19 +128,15 @@ QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
         }
     }
 
-    if (role == FilterSettingsRole)
-    {
-        Component *item = static_cast<Component*>(index.internalPointer());
-        Command * commandItem = dynamic_cast<Command *>(item);
-        if (commandItem)
-        {
-            KisGmicFilterSetting * settings = new KisGmicFilterSetting;
+    if (role == FilterSettingsRole) {
+        Component *item = static_cast<Component *>(index.internalPointer());
+        Command *commandItem = dynamic_cast<Command *>(item);
+        if (commandItem) {
+            KisGmicFilterSetting *settings = new KisGmicFilterSetting;
             commandItem->writeConfiguration(settings);
 
-            if (m_blacklister)
-            {
-                if (m_blacklister->isBlacklisted(commandItem->name(), commandItem->parent()->name()))
-                {
+            if (m_blacklister) {
+                if (m_blacklister->isBlacklisted(commandItem->name(), commandItem->parent()->name())) {
                     settings->setBlacklisted(true);
                 }
             }
@@ -161,14 +146,14 @@ QVariant KisGmicFilterModel::data(const QModelIndex& index, int role) const
 
     }
 
-
     return QVariant();
 }
 
-Qt::ItemFlags KisGmicFilterModel::flags(const QModelIndex& index) const
+Qt::ItemFlags KisGmicFilterModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid())
-         return 0;
+    if (!index.isValid()) {
+        return 0;
+    }
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
@@ -181,10 +166,9 @@ QVariant KisGmicFilterModel::headerData(int section, Qt::Orientation orientation
     return m_rootComponent->name();
 }
 
-void KisGmicFilterModel::setBlacklister(KisGmicBlacklister* blacklister)
+void KisGmicFilterModel::setBlacklister(KisGmicBlacklister *blacklister)
 {
-    if (m_blacklister)
-    {
+    if (m_blacklister) {
         delete m_blacklister;
     }
     m_blacklister = blacklister;

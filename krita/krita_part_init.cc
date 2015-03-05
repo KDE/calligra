@@ -20,5 +20,4 @@
 
 #include "ui/kis_factory2.h"
 
-
 K_EXPORT_PLUGIN(KisFactory)

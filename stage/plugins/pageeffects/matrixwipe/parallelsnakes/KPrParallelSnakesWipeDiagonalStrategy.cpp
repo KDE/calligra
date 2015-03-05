@@ -21,8 +21,8 @@
 #include "KPrParallelSnakesWipeEffectFactory.h"
 
 KPrParallelSnakesWipeDiagonalStrategy::KPrParallelSnakesWipeDiagonalStrategy(bool reverseAngle, bool reverse)
-    : KPrMatrixWipeStrategy( reverse ? (reverseAngle ? KPrParallelSnakesWipeEffectFactory::DiagonalBottomLeftOppositeIn : KPrParallelSnakesWipeEffectFactory::DiagonalTopLeftOppositeIn) : (reverseAngle ? KPrParallelSnakesWipeEffectFactory::DiagonalBottomLeftOppositeOut : KPrParallelSnakesWipeEffectFactory::DiagonalTopLeftOppositeOut), "parallelSnakesWipe", reverseAngle ? "diagonalTopLeftOpposite" : "diagonalBottomLeftOpposite", reverse ),
-    m_reverseAngle(reverseAngle)
+    : KPrMatrixWipeStrategy(reverse ? (reverseAngle ? KPrParallelSnakesWipeEffectFactory::DiagonalBottomLeftOppositeIn : KPrParallelSnakesWipeEffectFactory::DiagonalTopLeftOppositeIn) : (reverseAngle ? KPrParallelSnakesWipeEffectFactory::DiagonalBottomLeftOppositeOut : KPrParallelSnakesWipeEffectFactory::DiagonalTopLeftOppositeOut), "parallelSnakesWipe", reverseAngle ? "diagonalTopLeftOpposite" : "diagonalBottomLeftOpposite", reverse),
+      m_reverseAngle(reverseAngle)
 {
     setNeedEvenSquares(true, false);
 }
@@ -37,7 +37,7 @@ int KPrParallelSnakesWipeDiagonalStrategy::maxIndex(int columns, int rows)
     int idx = 0;
     int i = 0, j = 0;
     int dx = 1, dy = -1;
-    while (idx < columns*rows / 2) {
+    while (idx < columns * rows / 2) {
         m_indices[i * rows + j] = idx;
         m_indices[(columns - i - 1) * rows + (rows - j - 1)] = idx;
         idx++;
@@ -66,8 +66,13 @@ int KPrParallelSnakesWipeDiagonalStrategy::maxIndex(int columns, int rows)
 
 int KPrParallelSnakesWipeDiagonalStrategy::squareIndex(int x, int y, int columns, int rows)
 {
-    if (m_reverseAngle) y = rows - y - 1;
+    if (m_reverseAngle) {
+        y = rows - y - 1;
+    }
     int idx = m_indices[x * rows + y];
-    if (reverse()) return idx;
-    else return columns * rows / 2 - idx - 1;
+    if (reverse()) {
+        return idx;
+    } else {
+        return columns * rows / 2 - idx - 1;
+    }
 }

@@ -30,8 +30,6 @@ extern "C" {
 
 #include <kio/job.h>
 
-
-
 #include "kis_types.h"
 #include "kis_annotation.h"
 class KisDocument;
@@ -71,7 +69,7 @@ struct KisJPEGOptions {
     bool exif;
     bool iptc;
     bool xmp;
-    QList<const KisMetaData::Filter*> filters;
+    QList<const KisMetaData::Filter *> filters;
     QColor transparencyFillColor;
     bool forceSRGB;
 };
@@ -88,15 +86,15 @@ public:
     KisJPEGConverter(KisDocument *doc);
     virtual ~KisJPEGConverter();
 public:
-    KisImageBuilder_Result buildImage(const KUrl& uri);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
+    KisImageBuilder_Result buildImage(const KUrl &uri);
+    KisImageBuilder_Result buildFile(const KUrl &uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store *metaData);
     /** Retrieve the constructed image
     */
     KisImageWSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
-    KisImageBuilder_Result decode(const KUrl& uri);
+    KisImageBuilder_Result decode(const KUrl &uri);
 private:
     KisImageWSP m_image;
     KisDocument *m_doc;

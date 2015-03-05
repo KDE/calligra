@@ -27,35 +27,42 @@ class RootNode : public KisNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return new RootNode(*this);
     }
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const
+    {
         return true;
     }
-    const KoColorSpace * colorSpace() const {
+    const KoColorSpace *colorSpace() const
+    {
         return 0;
     }
-    virtual const KoCompositeOp * compositeOp() const {
+    virtual const KoCompositeOp *compositeOp() const
+    {
         return 0;
     }
 };
-
 
 class TestNodeA : public KisNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return new TestNodeA(*this);
     }
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const
+    {
         return true;
     }
-    const KoColorSpace * colorSpace() const {
+    const KoColorSpace *colorSpace() const
+    {
         return 0;
     }
-    virtual const KoCompositeOp * compositeOp() const {
+    virtual const KoCompositeOp *compositeOp() const
+    {
         return 0;
     }
 };
@@ -64,16 +71,20 @@ class TestNodeB : public KisNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return new TestNodeB(*this);
     }
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const
+    {
         return true;
     }
-    const KoColorSpace * colorSpace() const {
+    const KoColorSpace *colorSpace() const
+    {
         return 0;
     }
-    virtual const KoCompositeOp * compositeOp() const {
+    virtual const KoCompositeOp *compositeOp() const
+    {
         return 0;
     }
 };
@@ -82,20 +93,23 @@ class TestNodeC : public KisNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return new TestNodeC(*this);
     }
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const
+    {
         return true;
     }
-    const KoColorSpace * colorSpace() const {
+    const KoColorSpace *colorSpace() const
+    {
         return 0;
     }
-    virtual const KoCompositeOp * compositeOp() const {
+    virtual const KoCompositeOp *compositeOp() const
+    {
         return 0;
     }
 };
-
 
 class KisCountVisitorTest : public QObject
 {

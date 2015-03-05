@@ -35,13 +35,13 @@ public:
     ResourceList();
     virtual ~ResourceList() { }
 
-    Resource* getResource(const QString& id) const;
+    Resource *getResource(const QString &id) const;
 
     static bool isSupportedSortingCriteria(int sc);
 
-    virtual int compareItemsLevel(CoreAttributes* c1, CoreAttributes* c2,
+    virtual int compareItemsLevel(CoreAttributes *c1, CoreAttributes *c2,
                                   int level);
-} ;
+};
 
 /**
  * @short Iterator class for ResourceList objects.
@@ -50,14 +50,14 @@ public:
 class ResourceListIterator : public virtual CoreAttributesListIterator
 {
 public:
-    explicit ResourceListIterator(const CoreAttributesList& l) :
+    explicit ResourceListIterator(const CoreAttributesList &l) :
         CoreAttributesListIterator(l)
     { }
 
     ~ResourceListIterator() { }
 
-    Resource* operator*();
-} ;
+    Resource *operator*();
+};
 
 } // namespace TJ
 

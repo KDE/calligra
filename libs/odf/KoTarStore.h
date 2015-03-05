@@ -31,38 +31,39 @@ class KUrl;
 class KoTarStore : public KoStore
 {
 public:
-    KoTarStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification,
+    KoTarStore(const QString &_filename, Mode _mode, const QByteArray &appIdentification,
                bool writeMimetype);
-    KoTarStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
+    KoTarStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification,
                bool writeMimetype);
     /**
      * KUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
      */
-    KoTarStore(QWidget* window, const KUrl& url, const QString & _filename, Mode _mode,
-               const QByteArray & appIdentification, bool writeMimetype = true);
+    KoTarStore(QWidget *window, const KUrl &url, const QString &_filename, Mode _mode,
+               const QByteArray &appIdentification, bool writeMimetype = true);
     ~KoTarStore();
 protected:
     void init(const QByteArray &appIdentification);
     virtual bool doFinalize();
-    virtual bool openWrite(const QString& name);
-    virtual bool openRead(const QString& name);
+    virtual bool openWrite(const QString &name);
+    virtual bool openRead(const QString &name);
     virtual bool closeWrite();
-    virtual bool closeRead() {
+    virtual bool closeRead()
+    {
         return true;
     }
-    virtual bool enterRelativeDirectory(const QString& dirName);
-    virtual bool enterAbsoluteDirectory(const QString& path);
-    virtual bool fileExists(const QString& absPath) const;
+    virtual bool enterRelativeDirectory(const QString &dirName);
+    virtual bool enterAbsoluteDirectory(const QString &path);
+    virtual bool fileExists(const QString &absPath) const;
 
-    static QByteArray completeMagic(const QByteArray& appMimetype);
+    static QByteArray completeMagic(const QByteArray &appMimetype);
 
     /// The tar archive
-    KTar * m_pTar;
+    KTar *m_pTar;
 
     /** In "Read" mode this pointer is pointing to the
     current directory in the archive to speed up the verification process */
-    const KArchiveDirectory* m_currentDir;
+    const KArchiveDirectory *m_currentDir;
 
     /// Buffer used when writing
     QByteArray m_byteArray;

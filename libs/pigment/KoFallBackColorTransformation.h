@@ -46,7 +46,7 @@ public:
      * @param fallBackCS color space use natively by the color transformation
      * @param transfo the color transformation (working in the fallback color space)
      */
-    KoFallBackColorTransformation(const KoColorSpace* _cs, const KoColorSpace* _fallBackCS, KoColorTransformation* _transfo);
+    KoFallBackColorTransformation(const KoColorSpace *_cs, const KoColorSpace *_fallBackCS, KoColorTransformation *_transfo);
     /**
      * Creates a fall back color transformation using the two transformations
      * given as parameters. The created object take ownership of the
@@ -57,15 +57,15 @@ public:
      * @param fallBackToCs transformation from the fallback to the color space
      * @param transfo the color transformation (working in the fallback color space)
      */
-    KoFallBackColorTransformation(KoColorConversionTransformation* _csToFallBack, KoColorConversionTransformation* _fallBackToCs, KoColorTransformation* _transfo);
+    KoFallBackColorTransformation(KoColorConversionTransformation *_csToFallBack, KoColorConversionTransformation *_fallBackToCs, KoColorTransformation *_transfo);
     virtual ~KoFallBackColorTransformation();
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
     virtual QList<QString> parameters() const;
-    virtual int parameterId(const QString& name) const;
-    virtual void setParameter(int id, const QVariant& parameter);
+    virtual int parameterId(const QString &name) const;
+    virtual void setParameter(int id, const QVariant &parameter);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

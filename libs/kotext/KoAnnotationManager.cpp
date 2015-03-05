@@ -29,13 +29,13 @@ class KoAnnotationManagerPrivate
 {
 public:
     KoAnnotationManagerPrivate() { }
-    QHash<QString, KoAnnotation*> annotationHash;
+    QHash<QString, KoAnnotation *> annotationHash;
     QList<QString> annotationNameList;
     int lastId;
 };
 
 KoAnnotationManager::KoAnnotationManager()
-        : d(new KoAnnotationManagerPrivate)
+    : d(new KoAnnotationManagerPrivate)
 {
 }
 
@@ -59,7 +59,7 @@ void KoAnnotationManager::remove(const QString &name)
 
 void KoAnnotationManager::rename(const QString &oldName, const QString &newName)
 {
-    QHash<QString, KoAnnotation*>::iterator i = d->annotationHash.begin();
+    QHash<QString, KoAnnotation *>::iterator i = d->annotationHash.begin();
 
     while (i != d->annotationHash.end()) {
         if (i.key() == oldName) {

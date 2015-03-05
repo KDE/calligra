@@ -26,11 +26,11 @@
 #include "layouts/ColumnLayout.h"
 
 struct LayoutFactoryRegistry::Private {
-    static LayoutFactoryRegistry* s_instance;
-    QMap< QString, LayoutFactory* > factories;
+    static LayoutFactoryRegistry *s_instance;
+    QMap< QString, LayoutFactory * > factories;
 };
 
-LayoutFactoryRegistry* LayoutFactoryRegistry::Private::s_instance = 0;
+LayoutFactoryRegistry *LayoutFactoryRegistry::Private::s_instance = 0;
 
 LayoutFactoryRegistry::LayoutFactoryRegistry() : d(new Private)
 {
@@ -43,24 +43,24 @@ LayoutFactoryRegistry::~LayoutFactoryRegistry()
     delete d;
 }
 
-LayoutFactoryRegistry* LayoutFactoryRegistry::instance()
+LayoutFactoryRegistry *LayoutFactoryRegistry::instance()
 {
-    if(!Private::s_instance) {
+    if (!Private::s_instance) {
         Private::s_instance = new LayoutFactoryRegistry;
     }
     return Private::s_instance;
 }
 
-void LayoutFactoryRegistry::addFactory(LayoutFactory* _factory)
+void LayoutFactoryRegistry::addFactory(LayoutFactory *_factory)
 {
     d->factories[_factory->id()] = _factory;
 }
 
-Layout* LayoutFactoryRegistry::createLayout(const QString& id) const
+Layout *LayoutFactoryRegistry::createLayout(const QString &id) const
 {
-    LayoutFactory* factory = d->factories.value(id);
-    if(factory) {
-        Layout* layout = factory->createLayout();
+    LayoutFactory *factory = d->factories.value(id);
+    if (factory) {
+        Layout *layout = factory->createLayout();
         Q_ASSERT(layout->id() == id);
         return layout;
     } else {
@@ -71,7 +71,7 @@ Layout* LayoutFactoryRegistry::createLayout(const QString& id) const
 QList< QPair<QString, QString> > LayoutFactoryRegistry::factories() const
 {
     QList< QPair<QString, QString> > lists;
-    foreach(LayoutFactory * factory, d->factories) {
+    foreach (LayoutFactory *factory, d->factories) {
         lists.push_back(QPair<QString, QString>(factory->id(), factory->name()));
     }
     return lists;

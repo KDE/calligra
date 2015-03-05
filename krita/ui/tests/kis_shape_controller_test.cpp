@@ -25,12 +25,11 @@
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
 
-
 KisShapeControllerTest::~KisShapeControllerTest()
 {
 }
 
-KisDummiesFacadeBase* KisShapeControllerTest::dummiesFacadeFactory()
+KisDummiesFacadeBase *KisShapeControllerTest::dummiesFacadeFactory()
 {
 
     m_doc = KisPart::instance()->createDocument();

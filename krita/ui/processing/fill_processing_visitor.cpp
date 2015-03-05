@@ -22,18 +22,17 @@
 #include <kis_image.h>
 #include <kis_fill_painter.h>
 
-
 FillProcessingVisitor::FillProcessingVisitor(const QPoint &startPoint,
-                               KisSelectionSP selection,
-                               KisResourcesSnapshotSP resources,
-                               bool useFastMode,
-                               bool usePattern,
-                               bool selectionOnly,
-                               int feather,
-                               int sizemod,
-                               int fillThreshold,
-                               bool unmerged,
-                               bool useBgColor)
+        KisSelectionSP selection,
+        KisResourcesSnapshotSP resources,
+        bool useFastMode,
+        bool usePattern,
+        bool selectionOnly,
+        int feather,
+        int sizemod,
+        int fillThreshold,
+        bool unmerged,
+        bool useBgColor)
     : m_startPoint(startPoint),
       m_selection(selection),
       m_useFastMode(useFastMode),
@@ -86,7 +85,7 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
 
         m_resources->setupPainter(painter);
 
-        foreach(const QRect &rc, dirtyRect) {
+        foreach (const QRect &rc, dirtyRect) {
             painter->bitBlt(rc.topLeft(), filledDevice, rc);
         }
 
@@ -119,6 +118,4 @@ void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapt
         fillPainter.endTransaction(undoAdapter);
     }
 }
-
-
 

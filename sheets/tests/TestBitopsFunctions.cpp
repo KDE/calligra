@@ -28,19 +28,22 @@ void TestBitopsFunctions::initTestCase()
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
-Value TestBitopsFunctions::evaluate(const QString& formula, Value& ex)
+Value TestBitopsFunctions::evaluate(const QString &formula, Value &ex)
 {
     Formula f;
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
-    if (result.isFloat() && ex.isInteger())
+    if (result.isFloat() && ex.isInteger()) {
         ex = Value(ex.asFloat());
-    if (result.isInteger() && ex.isFloat())
+    }
+    if (result.isInteger() && ex.isFloat()) {
         result = Value(result.asFloat());
+    }
 
     return result;
 }
@@ -64,7 +67,6 @@ void TestBitopsFunctions::testBITAND()
     // test of 48 bit value
     CHECK_EVAL("BITAND(281474976710655; 281474976710655)<>281474976710656", Value(true));
 }
-
 
 void TestBitopsFunctions::testBITOR()
 {

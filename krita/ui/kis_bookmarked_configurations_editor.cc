@@ -23,12 +23,11 @@
 
 struct KisBookmarkedConfigurationsEditor::Private {
     Ui_WdgBookmarkedConfigurationsEditor editorUi;
-    KisBookmarkedConfigurationsModel* model;
-    const KisSerializableConfiguration* currentConfig;
+    KisBookmarkedConfigurationsModel *model;
+    const KisSerializableConfiguration *currentConfig;
 };
 
-
-KisBookmarkedConfigurationsEditor::KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* model, const KisSerializableConfiguration* currentConfig) : QDialog(parent), d(new Private)
+KisBookmarkedConfigurationsEditor::KisBookmarkedConfigurationsEditor(QWidget *parent, KisBookmarkedConfigurationsModel *model, const KisSerializableConfiguration *currentConfig) : QDialog(parent), d(new Private)
 {
     d->editorUi.setupUi(this);
     d->model = model;
@@ -36,8 +35,8 @@ KisBookmarkedConfigurationsEditor::KisBookmarkedConfigurationsEditor(QWidget* pa
     d->editorUi.listConfigurations->setModel(d->model);
     connect(d->editorUi.pushButtonClose, SIGNAL(pressed()), SLOT(accept()));
 
-    connect(d->editorUi.listConfigurations->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-            this, SLOT(currentConfigChanged(const QItemSelection&, const QItemSelection&)));
+    connect(d->editorUi.listConfigurations->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+            this, SLOT(currentConfigChanged(const QItemSelection &, const QItemSelection &)));
     currentConfigChanged(d->editorUi.listConfigurations->selectionModel()->selection(),
                          d->editorUi.listConfigurations->selectionModel()->selection());
 
@@ -54,7 +53,7 @@ KisBookmarkedConfigurationsEditor::~KisBookmarkedConfigurationsEditor()
     delete d;
 }
 
-void KisBookmarkedConfigurationsEditor::currentConfigChanged(const QItemSelection& selected, const QItemSelection&)
+void KisBookmarkedConfigurationsEditor::currentConfigChanged(const QItemSelection &selected, const QItemSelection &)
 {
     if (d->model) {
         d->editorUi.pushButtonDelete->setEnabled(!(selected.indexes().isEmpty()) ?

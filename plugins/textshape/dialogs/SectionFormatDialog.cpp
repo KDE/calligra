@@ -31,9 +31,9 @@ class SectionFormatDialog::SectionNameValidator : public QValidator
 {
 public:
     SectionNameValidator(QObject *parent, KoSectionManager *sectionManager, KoSection *section)
-    : QValidator(parent)
-    , m_sectionManager(sectionManager)
-    , m_section(section)
+        : QValidator(parent)
+        , m_sectionManager(sectionManager)
+        , m_section(section)
     {
     }
 
@@ -124,7 +124,7 @@ void SectionFormatDialog::updateTreeState()
     enableButtonOk(allOk);
 }
 
-inline KoSection* SectionFormatDialog::sectionFromModel(QModelIndex idx)
+inline KoSection *SectionFormatDialog::sectionFromModel(QModelIndex idx)
 {
     return m_widget.sectionTree->model()->itemData(idx)[Qt::UserRole + 1].value<KoSection *>();
 }

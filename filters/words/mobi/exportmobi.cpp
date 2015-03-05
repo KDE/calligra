@@ -33,8 +33,6 @@
 #include "PalmDocCompression.h"
 #include "MobiHeaderGenerator.h"
 
-
-
 K_PLUGIN_FACTORY(ExportMobiFactory, registerPlugin<ExportMobi>();)
 K_EXPORT_PLUGIN(ExportMobiFactory("calligrafilters"))
 
@@ -56,7 +54,7 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
 
     // Open the infile and return an error if it fails.
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
-                                             "", KoStore::Auto);
+                        "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
         kError(31000) << "Unable to open input file!" << endl;
         delete odfStore;
@@ -82,7 +80,6 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
         return status;
     }
 
-
     // Create content files.
     MobiFile mobi;
 
@@ -106,7 +103,6 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
         return status;
     }
 
-
     // I need the text content in FileCollector
     QByteArray textContent;
     foreach (FileCollector::FileInfo *file, mobi.files()) {
@@ -128,7 +124,6 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
     headerGenerator.generateMobiHeaders(m_metaData, (compressContent.size()/* - recordOffset.size()*/),
                                         textContent.size(), m_imagesSize, recordOffset);
 
-
     // After each text block i should insert a zero byte, i use record offset to
     // set them after each inser record offset move one byte to forward.
     int move = 0;
@@ -138,7 +133,6 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
     }
 
     mobi.addContentRawText(compressContent);
-
 
     // Write Mobi file
     status = mobi.writeMobiFile(m_chain->outputFile(), headerGenerator);
@@ -159,7 +153,7 @@ KoFilter::ConversionStatus ExportMobi::extractImages(KoStore *odfStore, MobiFile
     int imgId = 1;
     foreach (const QString &imgSrc, m_imagesSrcList.keys()) {
         if (!odfStore->hasFile(imgSrc)) {
-            kWarning(30503) << "Can not to extract this image, image "<< imgSrc<< "is an external image";
+            kWarning(30503) << "Can not to extract this image, image " << imgSrc << "is an external image";
             // Ignore the external image.
             continue;
         }

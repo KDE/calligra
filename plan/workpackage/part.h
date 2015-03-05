@@ -47,9 +47,9 @@ class QFileSystemWatcher;
 
 namespace KPlato
 {
-    class Project;
-    class Document;
-    class MacroCommand;
+class Project;
+class Document;
+class MacroCommand;
 }
 
 using namespace KPlato;
@@ -72,51 +72,78 @@ public:
     // The type of document this child handles
     enum DocType { Type_Unknown = 0, Type_Calligra, Type_KParts, Type_Other };
 
-    explicit DocumentChild( WorkPackage *parent );
+    explicit DocumentChild(WorkPackage *parent);
 //    DocumentChild( KParts::ReadWritePart *editor, const KUrl &url, const Document *doc, Part *parent);
-    
+
     ~DocumentChild();
-    
+
     WorkPackage *parentPackage() const;
-    const Document *doc() const { return m_doc; }
+    const Document *doc() const
+    {
+        return m_doc;
+    }
     /// Set document, return true if ok, false if failure
-    bool setDoc( const Document *doc );
+    bool setDoc(const Document *doc);
     /// Open @p doc from @p store
-    bool openDoc( const Document *doc, KoStore *store );
+    bool openDoc(const Document *doc, KoStore *store);
     /// Open document for editing, return true if ok, false if failure
     bool editDoc();
-    bool isOpen() const { return m_process != 0; }
+    bool isOpen() const
+    {
+        return m_process != 0;
+    }
     bool isModified() const;
     bool isFileModified() const;
-    
-    QString fileName() const { return m_fileinfo.fileName(); }
-    QString filePath() const { return m_fileinfo.canonicalFilePath(); }
-    void setFileInfo( const KUrl &url );
-    const QFileInfo &fileInfo() const { return m_fileinfo; }
 
-    KUrl url() const { return KUrl( filePath() ); }
-    KParts::ReadWritePart *editor() const { return m_editor; }
-    bool startProcess( KService::Ptr service, const KUrl &url = KUrl() );
-    int type() const { return m_type; }
-    void setType( int type ) { m_type = type; }
-    
-    bool saveToStore( KoStore *store );
+    QString fileName() const
+    {
+        return m_fileinfo.fileName();
+    }
+    QString filePath() const
+    {
+        return m_fileinfo.canonicalFilePath();
+    }
+    void setFileInfo(const KUrl &url);
+    const QFileInfo &fileInfo() const
+    {
+        return m_fileinfo;
+    }
+
+    KUrl url() const
+    {
+        return KUrl(filePath());
+    }
+    KParts::ReadWritePart *editor() const
+    {
+        return m_editor;
+    }
+    bool startProcess(KService::Ptr service, const KUrl &url = KUrl());
+    int type() const
+    {
+        return m_type;
+    }
+    void setType(int type)
+    {
+        m_type = type;
+    }
+
+    bool saveToStore(KoStore *store);
 
 Q_SIGNALS:
-    void modified( bool );
-    void fileModified( bool );
-    
+    void modified(bool);
+    void fileModified(bool);
+
 public Q_SLOTS:
-    void setModified( bool mod );
-    
+    void setModified(bool mod);
+
 protected Q_SLOTS:
-    void slotEditFinished( int,  QProcess::ExitStatus );
-    void slotEditError( QProcess::ProcessError status );
-    
-    void slotDirty( const QString &file );
+    void slotEditFinished(int,  QProcess::ExitStatus);
+    void slotEditError(QProcess::ProcessError status);
+
+    void slotDirty(const QString &file);
 
     void slotUpdateModified();
-    
+
 protected:
     const Document *m_doc;
     int m_type;
@@ -140,75 +167,91 @@ class KPLATOWORK_EXPORT Part : public KParts::ReadWritePart
     Q_OBJECT
 
 public:
-    explicit Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*/ = QVariantList() );
+    explicit Part(QWidget *parentWidget, QObject *parent, const QVariantList & /*args*/ = QVariantList());
     ~Part();
 
-    int docType( const Document *doc ) const;
-    
+    int docType(const Document *doc) const;
+
     bool loadWorkPackages();
     bool loadKPlatoWorkPackages();
-    virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
+    virtual bool loadXML(const KoXmlDocument &document, KoStore *store);
     virtual QDomDocument saveXML();
-    
-    bool saveAs( const KUrl &url );
+
+    bool saveAs(const KUrl &url);
     /// Check if we have documents open for editing before saving
-    virtual bool completeSaving( KoStore* store );
+    virtual bool completeSaving(KoStore *store);
 
     /// Extract document file from the store to disk
-    KUrl extractFile( const Document *doc );
-    
+    KUrl extractFile(const Document *doc);
+
     //Config &config() { return m_config; }
-    
+
     /// Open Calligra document for editing
 //     DocumentChild *openCalligraDocument( KMimeType::Ptr mimetype, const Document *doc );
     /// Open KParts document for editing
 //     DocumentChild *openKPartsDocument( KService::Ptr service, const Document *doc );
     /// Open document for editing, return true if ok, false if failure
-    bool editWorkpackageDocument( const Document *doc );
+    bool editWorkpackageDocument(const Document *doc);
     /// Open document for editing, return true if ok, false if failure
-    bool editOtherDocument( const Document *doc );
+    bool editOtherDocument(const Document *doc);
     /// Remove the document @p doc from its workpackage
-    bool removeDocument( Document *doc );
+    bool removeDocument(Document *doc);
     /// Remove the child document
 //    void removeChildDocument( DocumentChild *child );
     /// Find the child that handles document @p doc
-    DocumentChild *findChild( const Document *doc ) const;
+    DocumentChild *findChild(const Document *doc) const;
     /// Add @p child document to work package @p wp
 //    void addChild( WorkPackage *wp, DocumentChild *child );
 
     /// Number of workpackages
-    int workPackageCount() const { return m_packageMap.count(); }
-    /// Work package at index
-    WorkPackage *workPackage( int index ) const { return m_packageMap.values().value( index ); }
-    /// Work package containing node
-    WorkPackage *workPackage( Node *node ) const { 
-        return m_packageMap.value( node->projectNode()->id() + node->id() );
+    int workPackageCount() const
+    {
+        return m_packageMap.count();
     }
-    int indexOf( WorkPackage *package ) const { return m_packageMap.values().indexOf( package ); }
-    void addWorkPackage( WorkPackage *wp );
-    void removeWorkPackage( WorkPackage *wp );
-    void removeWorkPackage( Node *node, MacroCommand *m = 0 );
-    void removeWorkPackages( const QList<Node*> &nodes );
+    /// Work package at index
+    WorkPackage *workPackage(int index) const
+    {
+        return m_packageMap.values().value(index);
+    }
+    /// Work package containing node
+    WorkPackage *workPackage(Node *node) const
+    {
+        return m_packageMap.value(node->projectNode()->id() + node->id());
+    }
+    int indexOf(WorkPackage *package) const
+    {
+        return m_packageMap.values().indexOf(package);
+    }
+    void addWorkPackage(WorkPackage *wp);
+    void removeWorkPackage(WorkPackage *wp);
+    void removeWorkPackage(Node *node, MacroCommand *m = 0);
+    void removeWorkPackages(const QList<Node *> &nodes);
 
     /// Find the work package that handles document @p doc
-    WorkPackage *findWorkPackage( const Document *doc ) const;
+    WorkPackage *findWorkPackage(const Document *doc) const;
     /// Find the work package that handles document child @p child
-    WorkPackage *findWorkPackage( const DocumentChild *child ) const;
+    WorkPackage *findWorkPackage(const DocumentChild *child) const;
     /// Find the work package that handles @p node
-    WorkPackage *findWorkPackage( const Node *node ) const;
+    WorkPackage *findWorkPackage(const Node *node) const;
 
     /// Save all work packages
-    bool saveWorkPackages( bool silent );
+    bool saveWorkPackages(bool silent);
 
     Node *node() const;
-    
+
     bool queryClose();
 
     bool openFile();
     bool saveFile();
 
-    KUndo2QStack *undoStack() const { return m_undostack; }
-    int commandIndex() const { return m_undostack->index(); }
+    KUndo2QStack *undoStack() const
+    {
+        return m_undostack;
+    }
+    int commandIndex() const
+    {
+        return m_undostack->index();
+    }
 
 public Q_SLOTS:
     /**
@@ -217,47 +260,45 @@ public Q_SLOTS:
      */
     virtual void setDocumentClean(bool clean);
 
-    virtual void setModified( bool mod );
+    virtual void setModified(bool mod);
     void saveModifiedWorkPackages();
-    void saveWorkPackage( WorkPackage *wp );
-    void addCommand( KUndo2Command *cmd );
+    void saveWorkPackage(WorkPackage *wp);
+    void addCommand(KUndo2Command *cmd);
 
-    void viewWorkpackageDocument( Document *doc );
+    void viewWorkpackageDocument(Document *doc);
 
 Q_SIGNALS:
     void changed();
-    void workPackageAdded( WorkPackage *package, int index );
-    void workPackageRemoved( WorkPackage *wp, int index );
-    void captionChanged( const QString&, bool );
+    void workPackageAdded(WorkPackage *package, int index);
+    void workPackageRemoved(WorkPackage *wp, int index);
+    void captionChanged(const QString &, bool);
 
 protected:
     /// Load the old kplato format
-    bool loadKPlatoXML( const KoXmlDocument &document, KoStore *store );
+    bool loadKPlatoXML(const KoXmlDocument &document, KoStore *store);
     /// Adds work package @p wp to the list of workpackages.
     /// If it already exists, the user is asked if it shall be merged with the existing one.
-    bool setWorkPackage( WorkPackage *wp, KoStore *store = 0 );
-    bool completeLoading( KoStore *store );
+    bool setWorkPackage(WorkPackage *wp, KoStore *store = 0);
+    bool completeLoading(KoStore *store);
 
-    bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
-    bool loadNativeFormatFromStore(const QString& file);
-    bool loadNativeFormatFromStoreInternal(KoStore * store);
-    
-    bool viewDocument( const KUrl &filename );
+    bool loadAndParse(KoStore *store, const QString &filename, KoXmlDocument &doc);
+    bool loadNativeFormatFromStore(const QString &file);
+    bool loadNativeFormatFromStoreInternal(KoStore *store);
+
+    bool viewDocument(const KUrl &filename);
 
 private:
     XMLLoaderObject m_xmlLoader;
     //Config m_config;
-    
-    QMap<QString, WorkPackage*> m_packageMap;
+
+    QMap<QString, WorkPackage *> m_packageMap;
 
     bool m_modified;
     bool m_loadingFromProjectStore;
 
     KUndo2QStack *m_undostack;
 
-
 };
-
 
 }  //KPlatoWork namespace
 

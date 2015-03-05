@@ -36,5 +36,4 @@ private:
     void insertDeleteChanges();
 };
 
-
 #endif // INSERTDELETECHANGESCOMMAND_H

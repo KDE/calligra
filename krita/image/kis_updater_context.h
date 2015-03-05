@@ -39,7 +39,6 @@ public:
     KisUpdaterContext(qint32 threadCount = -1);
     virtual ~KisUpdaterContext();
 
-
     /**
      * Returns the number of currently running jobs of each type.
      * To use this information you should lock the context beforehand.
@@ -83,7 +82,6 @@ public:
      */
     virtual void addStrokeJob(KisStrokeJob *strokeJob);
 
-
     /**
      * Adds a spontaneous job to the context. The prerequisites are
      * the same as for addMergeJob()
@@ -110,7 +108,7 @@ public:
     void unlock();
 
 Q_SIGNALS:
-    void sigContinueUpdate(const QRect& rc);
+    void sigContinueUpdate(const QRect &rc);
     void sigDoSomeUsefulWork();
     void sigSpareThreadAppeared();
 
@@ -119,7 +117,7 @@ protected Q_SLOTS:
 
 protected:
     static bool walkerIntersectsJob(KisBaseRectsWalkerSP walker,
-                                    const KisUpdateJobItem* job);
+                                    const KisUpdateJobItem *job);
     qint32 findSpareThread();
 
 protected:
@@ -132,7 +130,7 @@ protected:
     QReadWriteLock m_exclusiveJobLock;
 
     QMutex m_lock;
-    QVector<KisUpdateJobItem*> m_jobs;
+    QVector<KisUpdateJobItem *> m_jobs;
     QThreadPool m_threadPool;
 };
 
@@ -153,10 +151,9 @@ public:
     void addStrokeJob(KisStrokeJob *strokeJob);
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
-    const QVector<KisUpdateJobItem*> getJobs();
+    const QVector<KisUpdateJobItem *> getJobs();
     void clear();
 };
-
 
 #endif /* __KIS_UPDATER_CONTEXT_H */
 

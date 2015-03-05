@@ -37,8 +37,9 @@ class KisPaintDeviceConvertTypeCommand : public KUndo2Command
 
 public:
     KisPaintDeviceConvertTypeCommand(KisPaintDeviceSP paintDevice,
-                                     KisDataManagerSP beforeData, const KoColorSpace * beforeColorSpace,
-                                     KisDataManagerSP afterData, const KoColorSpace * afterColorSpace) {
+                                     KisDataManagerSP beforeData, const KoColorSpace *beforeColorSpace,
+                                     KisDataManagerSP afterData, const KoColorSpace *afterColorSpace)
+    {
         m_firstRedo = true;
 
         Q_ASSERT(paintDevice);
@@ -61,12 +62,14 @@ public:
         }
     }
 
-    virtual ~KisPaintDeviceConvertTypeCommand() {
+    virtual ~KisPaintDeviceConvertTypeCommand()
+    {
     }
 
 public:
 
-    virtual void redo() {
+    virtual void redo()
+    {
 
         //KUndo2QStack calls redo(), so the first call needs to be blocked
         if (m_firstRedo) {
@@ -74,15 +77,16 @@ public:
             return;
         }
         dbgImage << m_paintDevice << m_beforeColorSpaceModelId << m_beforeColorSpaceDepthId << "to" << m_afterColorSpaceModelId << m_afterColorSpaceDepthId;
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(m_afterColorSpaceModelId, m_afterColorSpaceDepthId, m_afterProfileName);
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(m_afterColorSpaceModelId, m_afterColorSpaceDepthId, m_afterProfileName);
         m_paintDevice->setDataManager(m_afterData, cs);
         m_paintDevice->setDirty();
     }
 
-    virtual void undo() {
+    virtual void undo()
+    {
 
-        dbgImage << m_paintDevice << m_afterColorSpaceModelId << m_afterColorSpaceDepthId << "to" << m_beforeColorSpaceModelId << m_beforeColorSpaceDepthId ;
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(m_beforeColorSpaceModelId, m_beforeColorSpaceDepthId, m_beforeProfileName);
+        dbgImage << m_paintDevice << m_afterColorSpaceModelId << m_afterColorSpaceDepthId << "to" << m_beforeColorSpaceModelId << m_beforeColorSpaceDepthId;
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(m_beforeColorSpaceModelId, m_beforeColorSpaceDepthId, m_beforeProfileName);
         m_paintDevice->setDataManager(m_beforeData, cs);
         m_paintDevice->setDirty();
     }

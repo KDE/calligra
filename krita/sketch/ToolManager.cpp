@@ -16,7 +16,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #include "ToolManager.h"
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
@@ -36,12 +35,12 @@ public:
         toolManager = KoToolManager::instance();
     };
 
-    KoToolManager* toolManager;
-    KisViewManager* view;
-    KisTool* currentTool;
+    KoToolManager *toolManager;
+    KisViewManager *view;
+    KisTool *currentTool;
 };
 
-ToolManager::ToolManager(QDeclarativeItem* parent)
+ToolManager::ToolManager(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
     , d(new Private)
 {
@@ -54,14 +53,14 @@ ToolManager::~ToolManager()
     delete d;
 }
 
-QObject* ToolManager::view() const
+QObject *ToolManager::view() const
 {
     return d->view;
 }
 
-void ToolManager::setView(QObject* newView)
+void ToolManager::setView(QObject *newView)
 {
-    d->view = qobject_cast<KisViewManager*>( newView );
+    d->view = qobject_cast<KisViewManager *>(newView);
     slotToolChanged(0, 0);
     emit viewChanged();
 }
@@ -73,22 +72,25 @@ void ToolManager::requestToolChange(QString toolID)
     }
 }
 
-QObject* ToolManager::currentTool() const
+QObject *ToolManager::currentTool() const
 {
     return d->currentTool;
 }
 
-void ToolManager::slotToolChanged(KoCanvasController* canvas, int toolId)
+void ToolManager::slotToolChanged(KoCanvasController *canvas, int toolId)
 {
     Q_UNUSED(canvas);
     Q_UNUSED(toolId);
 
-    if (!d->view) return;
-    if (!d->view->canvasBase()) return;
-
+    if (!d->view) {
+        return;
+    }
+    if (!d->view->canvasBase()) {
+        return;
+    }
 
     QString  id   = KoToolManager::instance()->activeToolId();
-    d->currentTool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(d->view->canvasBase(), id));
+    d->currentTool = dynamic_cast<KisTool *>(KoToolManager::instance()->toolById(d->view->canvasBase(), id));
     emit currentToolChanged();
 }
 

@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "KoXmlStreamReader.h"
 
@@ -30,10 +29,8 @@
 // KDE
 #include <kdebug.h>
 
-
 // ================================================================
 //             class KoXmlStreamReader and Private class
-
 
 class KoXmlStreamReader::Private
 {
@@ -76,7 +73,6 @@ public:
     QSet<QString>  qualifiedNamesCache;
 };
 
-
 KoXmlStreamReader::Private::Private(KoXmlStreamReader *qq)
     : q(qq)
 {
@@ -86,7 +82,6 @@ KoXmlStreamReader::Private::Private(KoXmlStreamReader *qq)
 KoXmlStreamReader::Private::~Private()
 {
 }
-
 
 void KoXmlStreamReader::Private::clear()
 {
@@ -104,7 +99,6 @@ void KoXmlStreamReader::Private::clear()
     qualifiedNamesCache.clear();
 }
 
-
 void KoXmlStreamReader::Private::checkSoundness()
 {
     isSound = true;
@@ -115,13 +109,13 @@ void KoXmlStreamReader::Private::checkSoundness()
 
     // Initialize by setting all expected prefixes and all extra ones.
     prefixes.clear();
-    foreach(const QString &nsUri, expectedNamespaces.keys()) {
+    foreach (const QString &nsUri, expectedNamespaces.keys()) {
         QString prefix = expectedNamespaces.value(nsUri);
 
         prefixes.insert(nsUri, prefix);
         usedPrefixes.insert(prefix);
     }
-    foreach(const QString &nsUri, extraNamespaces.keys()) {
+    foreach (const QString &nsUri, extraNamespaces.keys()) {
         QString prefix = extraNamespaces.value(nsUri);
 
         prefixes.insert(nsUri, prefix);
@@ -139,7 +133,7 @@ void KoXmlStreamReader::Private::checkSoundness()
     // strange beast).
     //
     QXmlStreamNamespaceDeclarations  nsDeclarations = q->QXmlStreamReader::namespaceDeclarations();
-    foreach(const QXmlStreamNamespaceDeclaration &decl, nsDeclarations) {
+    foreach (const QXmlStreamNamespaceDeclaration &decl, nsDeclarations) {
 
         QString nsUri(decl.namespaceUri().toString());
         QString prefix(decl.prefix().toString());
@@ -151,8 +145,7 @@ void KoXmlStreamReader::Private::checkSoundness()
                 //
                 // Soundness is not disturbed. Let's continue with the next declaration.
                 continue;
-            }
-            else {
+            } else {
                 // 2. nsUri = expected nsUri AND prefix != expected prefix:
                 //
                 // Document is not sound but we don't need to do
@@ -162,8 +155,7 @@ void KoXmlStreamReader::Private::checkSoundness()
                 isSound = false;
                 continue;
             }
-        }
-        else {
+        } else {
             // 3. nsUri is not among the expected nsUri's
             //
             // Let's check if the prefix is unique or if it already
@@ -177,8 +169,7 @@ void KoXmlStreamReader::Private::checkSoundness()
                 // later when all namespaces and prefixes are known.
                 isSound = false;
                 namespacesToFix.append(nsUri);
-            }
-            else {
+            } else {
                 prefixes.insert(nsUri, prefix);
                 usedPrefixes.insert(prefix);
             }
@@ -262,7 +253,7 @@ QStringRef KoXmlStreamReader::Private::buildQName()
     // FIXME: Handle undeclared prefixes.  (Is that even legal?)
     //QString nsUri = q->QXmlStreamReader::namespaceUri().toString();
     QString qualifiedName = prefixes.value(q->QXmlStreamReader::namespaceUri().toString())
-        + ':' + q->QXmlStreamReader::name().toString();
+                            + ':' + q->QXmlStreamReader::name().toString();
 
     // The following code is because qualifiedName() returns a
     // QStringRef, not a QString.  So we need to make sure that the
@@ -289,10 +280,8 @@ QStringRef KoXmlStreamReader::Private::buildQName()
     return (*it).leftRef(-1);
 }
 
-
 // ----------------------------------------------------------------
 //                     class KoXmlStreamReader
-
 
 KoXmlStreamReader::KoXmlStreamReader()
     : QXmlStreamReader()
@@ -329,14 +318,12 @@ KoXmlStreamReader::~KoXmlStreamReader()
     delete d;
 }
 
-
 void KoXmlStreamReader::clear()
 {
     d->clear();
 
     QXmlStreamReader::clear();
 }
-
 
 void KoXmlStreamReader::addExpectedNamespace(const QString &prefix, const QString &namespaceUri)
 {
@@ -354,10 +341,8 @@ void KoXmlStreamReader::addExtraNamespace(const QString &prefix, const QString &
     d->isSound = false;
 }
 
-
 // ----------------------------------------------------------------
 //                 Reimplemented from QXmlStreamReader
-
 
 // Should these be made inline?  that would make it very fast at the
 // cost of a possibly unstable API.
@@ -371,7 +356,6 @@ QStringRef KoXmlStreamReader::qualifiedName() const
 {
     return d->isSound ? QXmlStreamReader::qualifiedName() : d->buildQName();
 }
-
 
 void KoXmlStreamReader::setDevice(QIODevice *device)
 {
@@ -391,20 +375,16 @@ KoXmlStreamAttributes KoXmlStreamReader::attributes() const
     return retval;
 }
 
-
 // ----------------------------------------------------------------
 //                         private functions
-
 
 bool KoXmlStreamReader::isSound() const
 {
     return d->isSound;
 }
 
-
 // ================================================================
 //             class KoXmlStreamAttribute and Private class
-
 
 class KoXmlStreamAttribute::Private
 {
@@ -443,7 +423,6 @@ KoXmlStreamAttribute::Private::~Private()
 {
 }
 
-
 void KoXmlStreamAttribute::Private::generateQName()
 {
     qName = reader->d->prefixes.value(qAttr->namespaceUri().toString());
@@ -458,10 +437,7 @@ void KoXmlStreamAttribute::Private::generateQName()
 #endif
 }
 
-
 // ----------------------------------------------------------------
-
-
 
 KoXmlStreamAttribute::KoXmlStreamAttribute()
     : d(new KoXmlStreamAttribute::Private(0, 0))
@@ -470,7 +446,7 @@ KoXmlStreamAttribute::KoXmlStreamAttribute()
 }
 
 KoXmlStreamAttribute::KoXmlStreamAttribute(const QXmlStreamAttribute *attr,
-                                           const KoXmlStreamReader *reader)
+        const KoXmlStreamReader *reader)
     : d(new KoXmlStreamAttribute::Private(attr, reader))
 {
     //kDebug() << "normal constructor called";
@@ -487,7 +463,6 @@ KoXmlStreamAttribute::~KoXmlStreamAttribute()
     delete d;
 }
 
-
 bool KoXmlStreamAttribute::isDefault() const
 {
     return d->qAttr->isDefault();
@@ -503,7 +478,6 @@ QStringRef KoXmlStreamAttribute::namespaceUri() const
     return d->qAttr->namespaceUri();
 }
 
-
 QStringRef KoXmlStreamAttribute::prefix() const
 {
     if (d->reader->isSound()) {
@@ -516,7 +490,6 @@ QStringRef KoXmlStreamAttribute::prefix() const
 
     return d->qName.leftRef(d->prefixLen);
 }
-
 
 QStringRef KoXmlStreamAttribute::qualifiedName() const
 {
@@ -531,12 +504,10 @@ QStringRef KoXmlStreamAttribute::qualifiedName() const
     return d->qName.leftRef(-1);
 }
 
-
 QStringRef KoXmlStreamAttribute::value() const
 {
     return d->qAttr->value();
 }
-
 
 bool KoXmlStreamAttribute::operator==(const KoXmlStreamAttribute &other) const
 {
@@ -548,7 +519,6 @@ bool KoXmlStreamAttribute::operator!=(const KoXmlStreamAttribute &other) const
     return d->qAttr != other.d->qAttr;
 }
 
-
 KoXmlStreamAttribute &KoXmlStreamAttribute::operator=(const KoXmlStreamAttribute &other)
 {
     d->qAttr = other.d->qAttr;
@@ -559,10 +529,8 @@ KoXmlStreamAttribute &KoXmlStreamAttribute::operator=(const KoXmlStreamAttribute
     return *this;
 }
 
-
 // ================================================================
 //             class KoXmlStreamAttributes and Private class
-
 
 class KoXmlStreamAttributes::Private : public QSharedData
 {
@@ -586,12 +554,10 @@ KoXmlStreamAttributes::Private::~Private()
 {
 }
 
-
 // ----------------------------------------------------------------
 
-
 KoXmlStreamAttributes::KoXmlStreamAttributes(const KoXmlStreamReader *r,
-                                             const QXmlStreamAttributes &qAttrs)
+        const QXmlStreamAttributes &qAttrs)
     : d(new KoXmlStreamAttributes::Private(r, qAttrs))
 {
     for (int i = 0; i < qAttrs.size(); ++i) {
@@ -615,9 +581,8 @@ KoXmlStreamAttributes &KoXmlStreamAttributes::operator=(const KoXmlStreamAttribu
     return *this;
 }
 
-
 // Relevant parts of the QVector API
-const KoXmlStreamAttribute& KoXmlStreamAttributes::at(int i) const
+const KoXmlStreamAttribute &KoXmlStreamAttributes::at(int i) const
 {
     return d->koAttrs[i];
 }
@@ -632,7 +597,7 @@ KoXmlStreamAttribute KoXmlStreamAttributes::value(int i) const
     return d->koAttrs.value(i);
 }
 
-const KoXmlStreamAttribute& KoXmlStreamAttributes::operator[](int i) const
+const KoXmlStreamAttribute &KoXmlStreamAttributes::operator[](int i) const
 {
     return d->koAttrs[i];//.operator[](i);
 }
@@ -647,7 +612,6 @@ KoXmlStreamAttributes::const_iterator KoXmlStreamAttributes::end() const
     return const_iterator(d->koAttrs.end());
 }
 
-
 // reimplemented from QXmlStreamAttributes
 bool KoXmlStreamAttributes::hasAttribute(const QString &qualifiedName) const
 {
@@ -660,7 +624,6 @@ bool KoXmlStreamAttributes::hasAttribute(const QString &qualifiedName) const
 
     return false;
 }
-
 
 bool KoXmlStreamAttributes::hasAttribute(const QLatin1String &qualifiedName) const
 {
@@ -678,7 +641,6 @@ bool KoXmlStreamAttributes::hasAttribute(const QLatin1String &qualifiedName) con
 #endif
 }
 
-
 QStringRef KoXmlStreamAttributes::value(const QString &qualifiedName) const
 {
     for (int i = 0; i < size(); ++i) {
@@ -690,7 +652,6 @@ QStringRef KoXmlStreamAttributes::value(const QString &qualifiedName) const
     return QStringRef();
 }
 
-
 QStringRef KoXmlStreamAttributes::value(const QLatin1String &qualifiedName) const
 {
     // FIXME: Find faster way.
@@ -698,10 +659,8 @@ QStringRef KoXmlStreamAttributes::value(const QLatin1String &qualifiedName) cons
     return value(qName);
 }
 
-
 // ================================================================
 //                         non-class functions
-
 
 void prepareForOdf(KoXmlStreamReader &reader)
 {

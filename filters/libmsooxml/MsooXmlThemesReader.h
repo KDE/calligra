@@ -41,10 +41,10 @@ namespace MSOOXML
 class KOMSOOXML_EXPORT MsooXmlThemesReaderContext : public MsooXmlReaderContext
 {
 public:
-    MsooXmlThemesReaderContext(DrawingMLTheme& t, MSOOXML::MsooXmlRelationships* rel,
-			       MSOOXML::MsooXmlImport* imp,
-			       QString pathName, QString fileName);
-    DrawingMLTheme * const theme;
+    MsooXmlThemesReaderContext(DrawingMLTheme &t, MSOOXML::MsooXmlRelationships *rel,
+                               MSOOXML::MsooXmlImport *imp,
+                               QString pathName, QString fileName);
+    DrawingMLTheme *const theme;
     MSOOXML::MsooXmlRelationships *relationships;
     MSOOXML::MsooXmlImport        *import;
     QString path;
@@ -64,7 +64,7 @@ public:
     virtual ~MsooXmlThemesReader();
 
     //! Reads/parses the file. The output goes mainly to KoGenStyles* KoOdfWriters::mainStyles
-    virtual KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MsooXmlReaderContext *context = 0);
 
 protected:
     KoFilter::ConversionStatus readInternal();
@@ -78,13 +78,13 @@ protected:
 
     KoFilter::ConversionStatus read_clrScheme();
     KoFilter::ConversionStatus read_color(); //!< helper
-    DrawingMLColorSchemeItemBase* m_currentColor_local; //!< used by *Clr()
+    DrawingMLColorSchemeItemBase *m_currentColor_local; //!< used by *Clr()
 
     KoFilter::ConversionStatus read_fmtScheme();
     KoFilter::ConversionStatus read_fontScheme();
     KoFilter::ConversionStatus read_clrMap();
 
-    KoFilter::ConversionStatus fillStyleReadHelper(int& index);
+    KoFilter::ConversionStatus fillStyleReadHelper(int &index);
     KoFilter::ConversionStatus read_bgFillStyleLst();
     KoFilter::ConversionStatus read_fillStyleLst();
     KoFilter::ConversionStatus read_majorFont();
@@ -103,7 +103,7 @@ protected:
 private:
     void init();
 
-    MsooXmlThemesReaderContext* m_context;
+    MsooXmlThemesReaderContext *m_context;
 
     typedef KoFilter::ConversionStatus(MsooXmlThemesReader::*ReadMethod)();
     QHash<QString, ReadMethod> m_readMethods;
@@ -111,8 +111,8 @@ private:
     bool m_clrScheme_initialized;
     bool m_color_initialized;
 
-    MSOOXML::MsooXmlRelationships* m_relationships;
-    MSOOXML::MsooXmlImport* m_import;
+    MSOOXML::MsooXmlRelationships *m_relationships;
+    MSOOXML::MsooXmlImport *m_import;
     QString m_path;
     QString m_file;
 };

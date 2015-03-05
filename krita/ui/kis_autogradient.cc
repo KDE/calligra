@@ -32,7 +32,7 @@
 
 /****************************** KisAutogradient ******************************/
 
-KisAutogradient::KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption)
+KisAutogradient::KisAutogradient(KoSegmentGradient *gradient, QWidget *parent, const char *name, const QString &caption)
     : QWidget(parent), m_autogradientResource(gradient)
 {
     setObjectName(name);
@@ -40,18 +40,18 @@ KisAutogradient::KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, c
     setWindowTitle(caption);
     gradientSlider->setGradientResource(m_autogradientResource);
     nameedit->setText(gradient->name());
-    KoGradientSegment* segment = gradientSlider->selectedSegment();
+    KoGradientSegment *segment = gradientSlider->selectedSegment();
     if (segment) {
         slotSelectedSegment(segment);
     }
 
     connect(nameedit, SIGNAL(editingFinished()), this, SLOT(slotChangedName()));
-    connect(gradientSlider, SIGNAL(sigSelectedSegment(KoGradientSegment*)), SLOT(slotSelectedSegment(KoGradientSegment*)));
-    connect(gradientSlider, SIGNAL(sigChangedSegment(KoGradientSegment*)), SLOT(slotChangedSegment(KoGradientSegment*)));
+    connect(gradientSlider, SIGNAL(sigSelectedSegment(KoGradientSegment *)), SLOT(slotSelectedSegment(KoGradientSegment *)));
+    connect(gradientSlider, SIGNAL(sigChangedSegment(KoGradientSegment *)), SLOT(slotChangedSegment(KoGradientSegment *)));
     connect(comboBoxColorInterpolationType, SIGNAL(activated(int)), SLOT(slotChangedColorInterpolation(int)));
     connect(comboBoxInterpolationType, SIGNAL(activated(int)), SLOT(slotChangedInterpolation(int)));
-    connect(leftColorButton, SIGNAL(changed(const QColor&)), SLOT(slotChangedLeftColor(const QColor&)));
-    connect(rightColorButton, SIGNAL(changed(const QColor&)), SLOT(slotChangedRightColor(const QColor&)));
+    connect(leftColorButton, SIGNAL(changed(const QColor &)), SLOT(slotChangedLeftColor(const QColor &)));
+    connect(rightColorButton, SIGNAL(changed(const QColor &)), SLOT(slotChangedRightColor(const QColor &)));
 
     connect(intNumInputLeftOpacity, SIGNAL(valueChanged(int)), SLOT(slotChangedLeftOpacity(int)));
     connect(intNumInputRightOpacity, SIGNAL(valueChanged(int)), SLOT(slotChangedRightOpacity(int)));
@@ -63,7 +63,7 @@ void KisAutogradient::activate()
     paramChanged();
 }
 
-void KisAutogradient::slotSelectedSegment(KoGradientSegment* segment)
+void KisAutogradient::slotSelectedSegment(KoGradientSegment *segment)
 {
     QColor startColor;
     QColor endColor;
@@ -85,16 +85,17 @@ void KisAutogradient::slotSelectedSegment(KoGradientSegment* segment)
     paramChanged();
 }
 
-void KisAutogradient::slotChangedSegment(KoGradientSegment*)
+void KisAutogradient::slotChangedSegment(KoGradientSegment *)
 {
     paramChanged();
 }
 
 void KisAutogradient::slotChangedInterpolation(int type)
 {
-    KoGradientSegment* segment = gradientSlider->selectedSegment();
-    if (segment)
+    KoGradientSegment *segment = gradientSlider->selectedSegment();
+    if (segment) {
         segment->setInterpolation(type);
+    }
     gradientSlider->update();
 
     paramChanged();
@@ -102,17 +103,18 @@ void KisAutogradient::slotChangedInterpolation(int type)
 
 void KisAutogradient::slotChangedColorInterpolation(int type)
 {
-    KoGradientSegment* segment = gradientSlider->selectedSegment();
-    if (segment)
+    KoGradientSegment *segment = gradientSlider->selectedSegment();
+    if (segment) {
         segment->setColorInterpolation(type);
+    }
     gradientSlider->update();
 
     paramChanged();
 }
 
-void KisAutogradient::slotChangedLeftColor(const QColor& color)
+void KisAutogradient::slotChangedLeftColor(const QColor &color)
 {
-    KoGradientSegment* segment = gradientSlider->selectedSegment();
+    KoGradientSegment *segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(color, segment->startColor().colorSpace());
         c.setOpacity(segment->startColor().opacityU8());
@@ -123,9 +125,9 @@ void KisAutogradient::slotChangedLeftColor(const QColor& color)
     paramChanged();
 }
 
-void KisAutogradient::slotChangedRightColor(const QColor& color)
+void KisAutogradient::slotChangedRightColor(const QColor &color)
 {
-    KoGradientSegment* segment = gradientSlider->selectedSegment();
+    KoGradientSegment *segment = gradientSlider->selectedSegment();
     if (segment) {
         QColor unused;
         KoColor c(color, segment->endColor().colorSpace());
@@ -139,7 +141,7 @@ void KisAutogradient::slotChangedRightColor(const QColor& color)
 
 void KisAutogradient::slotChangedLeftOpacity(int value)
 {
-    KoGradientSegment* segment = gradientSlider->selectedSegment();
+    KoGradientSegment *segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(segment->startColor().toQColor(), segment->startColor().colorSpace());
         c.setOpacity(qreal(value) / qreal(100.0));
@@ -152,10 +154,10 @@ void KisAutogradient::slotChangedLeftOpacity(int value)
 
 void KisAutogradient::slotChangedRightOpacity(int value)
 {
-    KoGradientSegment* segment = gradientSlider->selectedSegment();
+    KoGradientSegment *segment = gradientSlider->selectedSegment();
     if (segment) {
         KoColor c(segment->endColor().toQColor(), segment->endColor().colorSpace());
-        c.setOpacity(quint8((value *OPACITY_OPAQUE_U8) / 100));
+        c.setOpacity(quint8((value * OPACITY_OPAQUE_U8) / 100));
         segment->setEndColor(c);
     }
     gradientSlider->repaint();

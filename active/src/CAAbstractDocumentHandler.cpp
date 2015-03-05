@@ -38,14 +38,14 @@ public:
     CADocumentController *documentController;
 };
 
-CAAbstractDocumentHandler::CAAbstractDocumentHandler (CADocumentController* documentController)
-    : QObject (documentController)
-    , d (new Private())
+CAAbstractDocumentHandler::CAAbstractDocumentHandler(CADocumentController *documentController)
+    : QObject(documentController)
+    , d(new Private())
 {
     d->documentController = documentController;
 }
 
-CADocumentController* CAAbstractDocumentHandler::documentController() const
+CADocumentController *CAAbstractDocumentHandler::documentController() const
 {
     return d->documentController;
 }
@@ -55,19 +55,19 @@ CAAbstractDocumentHandler::~CAAbstractDocumentHandler()
     delete d;
 }
 
-KoCanvasBase* CAAbstractDocumentHandler::canvas() const
+KoCanvasBase *CAAbstractDocumentHandler::canvas() const
 {
     return documentController()->canvasController()->canvas();
 }
 
-void CAAbstractDocumentHandler::setCanvas (KoCanvasBase* canvas)
+void CAAbstractDocumentHandler::setCanvas(KoCanvasBase *canvas)
 {
-    documentController()->canvasController()->setCanvas (canvas);
+    documentController()->canvasController()->setCanvas(canvas);
 }
 
-bool CAAbstractDocumentHandler::canOpenDocument (const QString& uri)
+bool CAAbstractDocumentHandler::canOpenDocument(const QString &uri)
 {
-    return supportedMimetypes().contains (KMimeType::findByUrl (uri)->name());
+    return supportedMimetypes().contains(KMimeType::findByUrl(uri)->name());
 }
 
 QString CAAbstractDocumentHandler::bottomToolbarSource() const

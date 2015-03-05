@@ -37,12 +37,12 @@ KisAbstractShortcut::~KisAbstractShortcut()
     delete m_d;
 }
 
-KisAbstractInputAction* KisAbstractShortcut::action() const
+KisAbstractInputAction *KisAbstractShortcut::action() const
 {
     return m_d->action;
 }
 
-void KisAbstractShortcut::setAction(KisAbstractInputAction* action)
+void KisAbstractShortcut::setAction(KisAbstractInputAction *action)
 {
     m_d->action = action;
 }
@@ -55,10 +55,14 @@ int KisAbstractShortcut::shortcutIndex() const
 bool KisAbstractShortcut::compareKeys(const QList<Qt::Key> &keys1,
                                       const QList<Qt::Key> &keys2)
 {
-    if (keys1.size() != keys2.size()) return false;
+    if (keys1.size() != keys2.size()) {
+        return false;
+    }
 
-    foreach(Qt::Key key, keys1) {
-        if (!keys2.contains(key)) return false;
+    foreach (Qt::Key key, keys1) {
+        if (!keys2.contains(key)) {
+            return false;
+        }
     }
     return true;
 }

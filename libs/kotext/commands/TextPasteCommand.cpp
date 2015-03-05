@@ -40,9 +40,9 @@
 #else
 namespace Soprano
 {
-    class Model
-    {
-    };
+class Model
+{
+};
 }
 #endif
 
@@ -50,7 +50,7 @@ TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,
                                    QTextDocument *document,
                                    KoShapeController *shapeController,
                                    KoCanvasBase *canvas, KUndo2Command *parent, bool pasteAsText)
-    : KUndo2Command (parent),
+    : KUndo2Command(parent),
       m_mimeData(mimeData),
       m_document(document),
       m_rdf(0),
@@ -59,12 +59,13 @@ TextPasteCommand::TextPasteCommand(const QMimeData *mimeData,
       m_pasteAsText(pasteAsText),
       m_first(true)
 {
-    m_rdf = qobject_cast<KoDocumentRdfBase*>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject*>());
+    m_rdf = qobject_cast<KoDocumentRdfBase *>(shapeController->resourceManager()->resource(KoText::DocumentRdf).value<QObject *>());
 
-    if (m_pasteAsText)
+    if (m_pasteAsText) {
         setText(kundo2_i18n("Paste As Text"));
-    else
+    } else {
         setText(kundo2_i18n("Paste"));
+    }
 }
 
 void TextPasteCommand::undo()
@@ -74,7 +75,9 @@ void TextPasteCommand::undo()
 
 void TextPasteCommand::redo()
 {
-    if (m_document.isNull()) return;
+    if (m_document.isNull()) {
+        return;
+    }
 
     KoTextDocument textDocument(m_document);
     KoTextEditor *editor = textDocument.textEditor();
@@ -90,7 +93,7 @@ void TextPasteCommand::redo()
 
         // check for mime type
         if (m_mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text))
-                        || m_mimeData->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
+                || m_mimeData->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard))) {
             KoOdf::DocumentType odfType = KoOdf::Text;
             if (!m_mimeData->hasFormat(KoOdf::mimeType(odfType))) {
                 odfType = KoOdf::OpenOfficeClipboard;
@@ -102,7 +105,7 @@ void TextPasteCommand::redo()
 
                 QSharedPointer<Soprano::Model> rdfModel;
 #ifdef SHOULD_BUILD_RDF
-                if(!m_rdf) {
+                if (!m_rdf) {
                     rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
                 } else {
                     rdfModel = m_rdf->model();

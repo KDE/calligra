@@ -24,7 +24,6 @@
 
 class KoProgressProxy;
 
-
 class KRITAIMAGE_EXPORT KisQueuesProgressUpdater : public QObject
 {
     Q_OBJECT
@@ -41,7 +40,7 @@ private Q_SLOTS:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* __KIS_QUEUES_PROGRESS_UPDATER_H */

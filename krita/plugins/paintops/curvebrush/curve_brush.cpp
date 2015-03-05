@@ -28,7 +28,6 @@
 
 #include "kis_curve_line_option.h"
 
-
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
 inline double drand48()
@@ -71,10 +70,8 @@ QPointF CurveBrush::getQuadraticBezier(const QPointF &p0, const QPointF &p1, con
         2 * u * (1.0 - u)    * p1.y() +
         pow(u, 2)           * p2.y();
 
-
     return QPointF(rx, ry);
 }
-
 
 QPointF CurveBrush::getCubicBezier(const QPointF &p0, const QPointF &p1, const QPointF &p2, const QPointF &p3, qreal u)
 {
@@ -90,10 +87,8 @@ QPointF CurveBrush::getCubicBezier(const QPointF &p0, const QPointF &p1, const Q
         3.0  * pow(u, 2) * (1.0 - u) * p2.y() +
         pow(u, 3) * p3.y();
 
-
     return QPointF(rx, ry);
 }
-
 
 void CurveBrush::putPixel(QPointF pos, KoColor &color)
 {
@@ -108,7 +103,7 @@ void CurveBrush::putPixel(QPointF pos, KoColor &color)
     qreal bbr = (fx)   * (fy);
 
     color.setOpacity(btl);
-    m_writeAccessor->moveTo(ipx  , ipy);
+    m_writeAccessor->moveTo(ipx, ipy);
     if (cs->opacityU8(m_writeAccessor->rawData()) < color.opacityU8()) {
         memcpy(m_writeAccessor->rawData(), color.data(), m_pixelSize);
     }
@@ -173,8 +168,7 @@ void CurveBrush::strokePens(QPointF pi1, QPointF pi2, KisPainter &/*painter*/)
         m_pens.append(m_newPen);
         qDebug() << m_pens.length();
         m_branch = 0;
-    }
-    else {
+    } else {
         m_branch++;
     }
 }

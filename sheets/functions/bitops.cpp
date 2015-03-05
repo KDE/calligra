@@ -38,12 +38,10 @@ Value func_bitxor(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitlshift(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitrshift(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("bitops", BitOpsModule)
 
-
-BitOpsModule::BitOpsModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+BitOpsModule::BitOpsModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -68,7 +66,6 @@ QString BitOpsModule::descriptionFileName() const
 {
     return QString("bitops.xml");
 }
-
 
 // Function: BITAND
 Value func_bitand(valVector args, ValueCalc *, FuncExtra *)
@@ -99,12 +96,13 @@ Value func_bitlshift(valVector args, ValueCalc *, FuncExtra *)
 {
     const quint64 x = args[0].asInteger();
     const int numshift = args[1].asInteger();
-    if (numshift == 0)
+    if (numshift == 0) {
         return Value(static_cast<qint64>(x));
-    else if (numshift > 0)
+    } else if (numshift > 0) {
         return Value(static_cast<qint64>(x << numshift));
-    else // negative left shift, becomes right shift
+    } else { // negative left shift, becomes right shift
         return Value(static_cast<qint64>(x >>(-1 * numshift)));
+    }
 }
 
 // Function: BITRSHIFT
@@ -112,12 +110,13 @@ Value func_bitrshift(valVector args, ValueCalc *, FuncExtra *)
 {
     const quint64 x = args[0].asInteger();
     const int numshift = args[1].asInteger();
-    if (numshift == 0)
+    if (numshift == 0) {
         return Value(static_cast<qint64>(x));
-    else if (numshift > 0)
+    } else if (numshift > 0) {
         return Value(static_cast<qint64>(x >> numshift));
-    else // negative right shift, becomes left shift
+    } else { // negative right shift, becomes left shift
         return Value(static_cast<qint64>(x << (-1 * numshift)));
+    }
 }
 
 #include "BitOpsModule.moc"

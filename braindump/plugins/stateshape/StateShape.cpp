@@ -48,15 +48,15 @@ void StateShape::paint(QPainter &painter,
                        const KoViewConverter &converter, KoShapePaintingContext &)
 {
     QRectF target = converter.documentToView(QRectF(QPointF(0, 0), size()));
-    const State* state = StatesRegistry::instance()->state(m_categoryId, m_stateId);
-    if(state) {
+    const State *state = StatesRegistry::instance()->state(m_categoryId, m_stateId);
+    if (state) {
         state->renderer()->render(&painter, target);
     } else {
         kError() << "No state found for m_categoryId = " << m_categoryId << " m_stateId = " << m_stateId;
     }
 }
 
-void StateShape::saveOdf(KoShapeSavingContext & context) const
+void StateShape::saveOdf(KoShapeSavingContext &context) const
 {
     KoXmlWriter &writer = context.xmlWriter();
 
@@ -69,7 +69,7 @@ void StateShape::saveOdf(KoShapeSavingContext & context) const
     writer.endElement(); // braindump:shape
 }
 
-bool StateShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool StateShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     m_categoryId = element.attribute("category");
     m_stateId = element.attribute("state");
@@ -77,24 +77,24 @@ bool StateShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &co
     return true;
 }
 
-const QString& StateShape::categoryId() const
+const QString &StateShape::categoryId() const
 {
     return m_categoryId;
 }
 
-void StateShape::setCategoryId(const QString& _categoryId)
+void StateShape::setCategoryId(const QString &_categoryId)
 {
     m_categoryId = _categoryId;
     notifyChanged();
     update();
 }
 
-const QString& StateShape::stateId() const
+const QString &StateShape::stateId() const
 {
     return m_stateId;
 }
 
-void StateShape::setStateId(const QString& _stateId)
+void StateShape::setStateId(const QString &_stateId)
 {
     m_stateId = _stateId;
     notifyChanged();

@@ -39,135 +39,133 @@
 #include <QObject>
 #include <QVBoxLayout>
 
-
 #include <kaction.h>
 #include <klocale.h>
 
 namespace KPlato
 {
 
-
-ResourceAllocationTreeView::ResourceAllocationTreeView( QWidget *parent )
-    : DoubleTreeViewBase( parent )
+ResourceAllocationTreeView::ResourceAllocationTreeView(QWidget *parent)
+    : DoubleTreeViewBase(parent)
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    ResourceAllocationItemModel *m = new ResourceAllocationItemModel( this );
-    setModel( m );
+    ResourceAllocationItemModel *m = new ResourceAllocationItemModel(this);
+    setModel(m);
 
-    setSelectionMode( QAbstractItemView::ExtendedSelection );
-    setSelectionBehavior( QAbstractItemView::SelectRows );
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    createItemDelegates( m );
+    createItemDelegates(m);
 
-    connect( m, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(dataChanged()) );
+    connect(m, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(dataChanged()));
 }
 
 QObject *ResourceAllocationTreeView::currentObject() const
 {
-    return model()->object( selectionModel()->currentIndex() );
+    return model()->object(selectionModel()->currentIndex());
 }
 
 //-----------------------------------
 ResourceAllocationEditor::ResourceAllocationEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     : ViewBase(part, doc, parent)
 {
-    QVBoxLayout * l = new QVBoxLayout( this );
-    l->setMargin( 0 );
-    m_view = new ResourceAllocationTreeView( this );
-    l->addWidget( m_view );
+    QVBoxLayout *l = new QVBoxLayout(this);
+    l->setMargin(0);
+    m_view = new ResourceAllocationTreeView(this);
+    l->addWidget(m_view);
     setupGui();
 
-    m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
+    m_view->setEditTriggers(m_view->editTriggers() | QAbstractItemView::EditKeyPressed);
 
     QList<int> lst1; lst1 << 1 << -1;
     QList<int> lst2; lst2 << 0;
-    m_view->hideColumns( lst1, lst2 );
+    m_view->hideColumns(lst1, lst2);
 
-    m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
+    m_view->masterView()->setDefaultColumns(QList<int>() << 0);
     QList<int> show;
-    for ( int c = 1; c < model()->columnCount(); ++c ) {
+    for (int c = 1; c < model()->columnCount(); ++c) {
         show << c;
     }
-    m_view->slaveView()->setDefaultColumns( show );
+    m_view->slaveView()->setDefaultColumns(show);
 
-    connect( model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
+    connect(model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)));
 
-    connect( m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex)) );
+    connect(m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex)));
 
-    connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
+    connect(m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)));
 
-    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
+    connect(m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)));
 
-    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
+    connect(m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)));
 
 }
 
-void ResourceAllocationEditor::updateReadWrite( bool readwrite )
+void ResourceAllocationEditor::updateReadWrite(bool readwrite)
 {
-    m_view->setReadWrite( readwrite );
+    m_view->setReadWrite(readwrite);
 }
 
-void ResourceAllocationEditor::setGuiActive( bool activate )
+void ResourceAllocationEditor::setGuiActive(bool activate)
 {
-    kDebug(planDbg())<<activate;
-    updateActionsEnabled( true );
-    ViewBase::setGuiActive( activate );
-    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
-        m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
+    kDebug(planDbg()) << activate;
+    updateActionsEnabled(true);
+    ViewBase::setGuiActive(activate);
+    if (activate && !m_view->selectionModel()->currentIndex().isValid()) {
+        m_view->selectionModel()->setCurrentIndex(m_view->model()->index(0, 0), QItemSelectionModel::NoUpdate);
     }
 }
 
-void ResourceAllocationEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
+void ResourceAllocationEditor::slotContextMenuRequested(const QModelIndex &index, const QPoint &pos)
 {
     //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
-    if ( index.isValid() ) {
-        QObject *obj = m_view->model()->object( index );
-        ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
-        if ( g ) {
+    if (index.isValid()) {
+        QObject *obj = m_view->model()->object(index);
+        ResourceGroup *g = qobject_cast<ResourceGroup *>(obj);
+        if (g) {
             //name = "resourceeditor_group_popup";
         } else {
-            Resource *r = qobject_cast<Resource*>( obj );
-            if ( r ) {
+            Resource *r = qobject_cast<Resource *>(obj);
+            if (r) {
                 //name = "resourceeditor_resource_popup";
             }
         }
     }
-    if ( name.isEmpty() ) {
-        slotHeaderContextMenuRequested( pos );
+    if (name.isEmpty()) {
+        slotHeaderContextMenuRequested(pos);
         return;
     }
-    emit requestPopupMenu( name, pos );
+    emit requestPopupMenu(name, pos);
 }
 
 Resource *ResourceAllocationEditor::currentResource() const
 {
-    return qobject_cast<Resource*>( m_view->currentObject() );
+    return qobject_cast<Resource *>(m_view->currentObject());
 }
 
 ResourceGroup *ResourceAllocationEditor::currentResourceGroup() const
 {
-    return qobject_cast<ResourceGroup*>( m_view->currentObject() );
+    return qobject_cast<ResourceGroup *>(m_view->currentObject());
 }
 
-void ResourceAllocationEditor::slotCurrentChanged(  const QModelIndex & )
+void ResourceAllocationEditor::slotCurrentChanged(const QModelIndex &)
 {
     //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 //    slotEnableActions();
 }
 
-void ResourceAllocationEditor::slotSelectionChanged( const QModelIndexList& )
+void ResourceAllocationEditor::slotSelectionChanged(const QModelIndexList &)
 {
     //kDebug(planDbg())<<list.count();
     updateActionsEnabled();
 }
 
-void ResourceAllocationEditor::slotEnableActions( bool on )
+void ResourceAllocationEditor::slotEnableActions(bool on)
 {
-    updateActionsEnabled( on );
+    updateActionsEnabled(on);
 }
 
-void ResourceAllocationEditor::updateActionsEnabled(  bool /*on */)
+void ResourceAllocationEditor::updateActionsEnabled(bool /*on */)
 {
 }
 
@@ -175,7 +173,7 @@ void ResourceAllocationEditor::setupGui()
 {
     // Add the context menu actions for the view options
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
-    addContextAction( m_view->actionSplitView() );
+    addContextAction(m_view->actionSplitView());
 
     createOptionAction();
 }
@@ -183,14 +181,14 @@ void ResourceAllocationEditor::setupGui()
 void ResourceAllocationEditor::slotSplitView()
 {
     kDebug(planDbg());
-    m_view->setViewSplitMode( ! m_view->isViewSplit() );
+    m_view->setViewSplitMode(! m_view->isViewSplit());
     emit optionsModified();
 }
 
 void ResourceAllocationEditor::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog(this, m_view, this);
     dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
@@ -198,26 +196,24 @@ void ResourceAllocationEditor::slotOptions()
     dlg->activateWindow();
 }
 
-
-bool ResourceAllocationEditor::loadContext( const KoXmlElement &context )
+bool ResourceAllocationEditor::loadContext(const KoXmlElement &context)
 {
-    kDebug(planDbg())<<objectName();
-    ViewBase::loadContext( context );
-    return m_view->loadContext( model()->columnMap(), context );
+    kDebug(planDbg()) << objectName();
+    ViewBase::loadContext(context);
+    return m_view->loadContext(model()->columnMap(), context);
 }
 
-void ResourceAllocationEditor::saveContext( QDomElement &context ) const
+void ResourceAllocationEditor::saveContext(QDomElement &context) const
 {
-    kDebug(planDbg())<<objectName();
-    ViewBase::saveContext( context );
-    m_view->saveContext( model()->columnMap(), context );
+    kDebug(planDbg()) << objectName();
+    ViewBase::saveContext(context);
+    m_view->saveContext(model()->columnMap(), context);
 }
 
 KoPrintJob *ResourceAllocationEditor::createPrintJob()
 {
-    return m_view->createPrintJob( this );
+    return m_view->createPrintJob(this);
 }
-
 
 } // namespace KPlato
 

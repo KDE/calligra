@@ -46,7 +46,7 @@ protected: // reimplementations
     virtual void resizeEvent(QResizeEvent *event);
 
 private Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    void toolChanged(const QString &toolId);
 
 private:
     class Private;
@@ -59,8 +59,9 @@ public:
     CellEditorDockerFactory();
 
     virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-    DockPosition defaultDockPosition() const {
+    virtual QDockWidget *createDockWidget();
+    DockPosition defaultDockPosition() const
+    {
         return DockTop;
     }
 };

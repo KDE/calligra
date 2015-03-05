@@ -22,11 +22,11 @@
 #include "kis_types.h"
 #include "kis_painter_based_stroke_strategy.h"
 
-
 class KRITAUI_EXPORT KisFilterStrokeStrategy : public KisPainterBasedStrokeStrategy
 {
 public:
-    class Data : public KisStrokeJobData {
+    class Data : public KisStrokeJobData
+    {
     public:
         Data(const QRect &_processRect, bool concurrent)
             : KisStrokeJobData(concurrent ? CONCURRENT : SEQUENTIAL),
@@ -34,7 +34,8 @@ public:
         QRect processRect;
     };
 
-    class CancelSilentlyMarker : public KisStrokeJobData {
+    class CancelSilentlyMarker : public KisStrokeJobData
+    {
     public:
         CancelSilentlyMarker()
             : KisStrokeJobData(SEQUENTIAL)
@@ -52,10 +53,9 @@ public:
     void cancelStrokeCallback();
     void finishStrokeCallback();
 
-
 private:
     struct Private;
-    Private* const m_d;
+    Private *const m_d;
 };
 
 #endif /* __KIS_FILTER_STROKE_STRATEGY_H */

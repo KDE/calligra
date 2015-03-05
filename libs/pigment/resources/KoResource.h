@@ -63,7 +63,7 @@ public:
      *@return true if saving the resource succeeded.
      */
     virtual bool save() = 0;
-    virtual bool saveToDevice(QIODevice* dev) const = 0;
+    virtual bool saveToDevice(QIODevice *dev) const = 0;
 
     /**
      * @returns a QImage thumbnail image representing this resource.
@@ -81,14 +81,14 @@ public:
 
     /// @return the full path to this resource
     QString filename() const;
-    void setFilename(const QString& filename);
+    void setFilename(const QString &filename);
 
     /// @return the name of the file without the path
     QString shortFilename() const;
 
     /// @return the user-visible name of the resource
     QString name() const;
-    void setName(const QString& name);
+    void setName(const QString &name);
 
     /// @return true if the resource is ready for use
     bool valid() const;
@@ -107,13 +107,13 @@ protected:
 
 private:
     /// save the resource as XML to the given document with the given element as root
-    virtual void toXML(QDomDocument& doc, QDomElement& element) const;
+    virtual void toXML(QDomDocument &doc, QDomElement &element) const;
 
     Q_DISABLE_COPY(KoResource)
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 static inline bool operator==(const KoResource &resource1, const KoResource &resource2)

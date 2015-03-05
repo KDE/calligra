@@ -39,7 +39,7 @@ public:
     /**
      * Constructor.
      */
-    explicit PageLayoutDialog(QWidget* parent, Sheet* sheet);
+    explicit PageLayoutDialog(QWidget *parent, Sheet *sheet);
 
     /**
      * Destructor.
@@ -51,7 +51,7 @@ public Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

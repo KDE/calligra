@@ -24,7 +24,8 @@ class KisBristleOptionsWidget: public QWidget, public Ui::WdgBristleOptions
 {
 public:
     KisBristleOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
 
         rndBox->setRange(-10.0, 10.0, 2);
@@ -66,9 +67,7 @@ KisHairyBristleOption::~KisHairyBristleOption()
     delete m_options;
 }
 
-
-
-void KisHairyBristleOption::readOptionSetting(const KisPropertiesConfiguration* config)
+void KisHairyBristleOption::readOptionSetting(const KisPropertiesConfiguration *config)
 {
     m_options->thresholdCBox->setChecked(config->getBool(HAIRY_BRISTLE_THRESHOLD));
     m_options->mousePressureCBox->setChecked(config->getBool(HAIRY_BRISTLE_USE_MOUSEPRESSURE));
@@ -81,8 +80,7 @@ void KisHairyBristleOption::readOptionSetting(const KisPropertiesConfiguration* 
     m_options->compositingCBox->setChecked(config->getBool(HAIRY_BRISTLE_USE_COMPOSITING));
 }
 
-
-void KisHairyBristleOption::writeOptionSetting(KisPropertiesConfiguration* config) const
+void KisHairyBristleOption::writeOptionSetting(KisPropertiesConfiguration *config) const
 {
     config->setProperty(HAIRY_BRISTLE_THRESHOLD, m_options->thresholdCBox->isChecked());
     config->setProperty(HAIRY_BRISTLE_USE_MOUSEPRESSURE, m_options->mousePressureCBox->isChecked());

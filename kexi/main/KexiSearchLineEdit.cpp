@@ -54,35 +54,37 @@ public:
     void addSearchableModel(KexiSearchableModel *model);
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 class KexiSearchLineEditCompleterPopupModel::Private
 {
 public:
     Private()
-     : cachedCount(-1)
+        : cachedCount(-1)
     {
     }
-    ~Private() {
+    ~Private()
+    {
         qDeleteAll(searchableObjects);
     }
-    void updateCachedCount() {
+    void updateCachedCount()
+    {
         if (searchableModels.isEmpty()) {
             return;
         }
         cachedCount = 0;
-        foreach (KexiSearchableModel* searchableModel, searchableModels) {
+        foreach (KexiSearchableModel *searchableModel, searchableModels) {
             cachedCount += searchableModel->searchableObjectCount();
         }
     }
     int cachedCount;
-    QList<KexiSearchableModel*> searchableModels;
-    QMap<int, SearchableObject*> searchableObjects;
+    QList<KexiSearchableModel *> searchableModels;
+    QMap<int, SearchableObject *> searchableObjects;
 };
 
 KexiSearchLineEditCompleterPopupModel::KexiSearchLineEditCompleterPopupModel(QObject *parent)
- : QAbstractListModel(parent), d(new Private)
+    : QAbstractListModel(parent), d(new Private)
 {
 }
 
@@ -106,13 +108,13 @@ QVariant KexiSearchLineEditCompleterPopupModel::data(const QModelIndex &index, i
     if (d->cachedCount <= row) {
         return QVariant();
     }
-    SearchableObject *object = static_cast<SearchableObject*>(index.internalPointer());
+    SearchableObject *object = static_cast<SearchableObject *>(index.internalPointer());
     QModelIndex sourceIndex = object->model->sourceIndexForSearchableObject(object->index);
     return object->model->searchableData(sourceIndex, role);
 }
 
 QModelIndex KexiSearchLineEditCompleterPopupModel::index(int row, int column,
-                                                         const QModelIndex &parent) const
+        const QModelIndex &parent) const
 {
     //kDebug() << row;
     if (!hasIndex(row, column, parent)) {
@@ -123,7 +125,7 @@ QModelIndex KexiSearchLineEditCompleterPopupModel::index(int row, int column,
     int r = row;
     SearchableObject *sobject = d->searchableObjects.value(row);
     if (!sobject) {
-        foreach (KexiSearchableModel* searchableModel, d->searchableModels) {
+        foreach (KexiSearchableModel *searchableModel, d->searchableModels) {
             const int count = searchableModel->searchableObjectCount();
             if (r < count) {
                 sobject = new SearchableObject;
@@ -131,8 +133,7 @@ QModelIndex KexiSearchLineEditCompleterPopupModel::index(int row, int column,
                 sobject->index = r;
                 d->searchableObjects.insert(row, sobject);
                 break;
-            }
-            else {
+            } else {
                 r -= count;
             }
         }
@@ -155,14 +156,17 @@ void KexiSearchLineEditCompleterPopupModel::addSearchableModel(KexiSearchableMod
 class KexiSearchLineEditCompleter : public KexiCompleter
 {
 public:
-    explicit KexiSearchLineEditCompleter(QObject *parent = 0) : KexiCompleter(parent) {
+    explicit KexiSearchLineEditCompleter(QObject *parent = 0) : KexiCompleter(parent)
+    {
         setCompletionRole(Qt::DisplayRole);
     }
 
-    virtual QString pathFromIndex(const QModelIndex &index) const {
-        if (!index.isValid())
+    virtual QString pathFromIndex(const QModelIndex &index) const
+    {
+        if (!index.isValid()) {
             return QString();
-        SearchableObject *object = static_cast<SearchableObject*>(index.internalPointer());
+        }
+        SearchableObject *object = static_cast<SearchableObject *>(index.internalPointer());
         QModelIndex sourceIndex = object->model->sourceIndexForSearchableObject(object->index);
         return object->model->pathFromIndex(sourceIndex);
     }
@@ -176,15 +180,15 @@ class KexiSearchLineEdit::Private
 {
 public:
     explicit Private(KexiSearchLineEdit *_q)
-     : q(_q), clearShortcut(QKeySequence(Qt::Key_Escape), _q),
-       recentlyHighlightedModel(0)
+        : q(_q), clearShortcut(QKeySequence(Qt::Key_Escape), _q),
+          recentlyHighlightedModel(0)
     {
         // make Escape key clear the search box
         QObject::connect(&clearShortcut, SIGNAL(activated()),
                          q, SLOT(slotClearShortcutActivated()));
     }
 
-    void highlightSearchableObject(const QPair<QModelIndex, KexiSearchableModel*> &source)
+    void highlightSearchableObject(const QPair<QModelIndex, KexiSearchableModel *> &source)
     {
         source.second->highlightSearchableObject(source.first);
         recentlyHighlightedModel = source.second;
@@ -218,8 +222,9 @@ static QSizeF viewItemTextLayout(QTextLayout &textLayout, int lineWidth)
     textLayout.beginLayout();
     while (true) {
         QTextLine line = textLayout.createLine();
-        if (!line.isValid())
+        if (!line.isValid()) {
             break;
+        }
         line.setLineWidth(lineWidth);
         line.setPosition(QPointF(0, height));
         height += line.height();
@@ -232,8 +237,8 @@ static QSizeF viewItemTextLayout(QTextLayout &textLayout, int lineWidth)
 class KexiSearchLineEditPopupItemDelegate : public QStyledItemDelegate
 {
 public:
-    KexiSearchLineEditPopupItemDelegate(QObject *parent, KexiCompleter *completer) 
-     : QStyledItemDelegate(parent), highlightMatchingSubstrings(true), m_completer(completer)
+    KexiSearchLineEditPopupItemDelegate(QObject *parent, KexiCompleter *completer)
+        : QStyledItemDelegate(parent), highlightMatchingSubstrings(true), m_completer(completer)
     {
     }
 
@@ -248,18 +253,17 @@ public:
             painter->save();
             painter->setClipRect(v4.rect);
             QPalette::ColorGroup cg = v4.state & QStyle::State_Enabled
-                                    ? QPalette::Normal : QPalette::Disabled;
+                                      ? QPalette::Normal : QPalette::Disabled;
             if (cg == QPalette::Normal && !(v4.state & QStyle::State_Active)) {
                 cg = QPalette::Inactive;
             }
             if (v4.state & QStyle::State_Selected) {
                 painter->setPen(v4.palette.color(cg, QPalette::HighlightedText));
-            }
-            else {
+            } else {
                 painter->setPen(v4.palette.color(cg, QPalette::Text));
             }
             QRect textRect = v4.widget->style()->subElementRect(QStyle::SE_ItemViewItemText,
-                                                                &v4, v4.widget);
+                             &v4, v4.widget);
             viewItemDrawText(painter, &v4, textRect);
             painter->restore();
         }
@@ -297,8 +301,9 @@ protected:
 
             for (int i = 0; i < text.length();) {
                 i = text.indexOf(substring, i, Qt::CaseInsensitive);
-                if (i == -1)
+                if (i == -1) {
                     break;
+                }
                 QTextLayout::FormatRange formatRange;
                 formatRange.format.setFontWeight(QFont::Normal);
                 formatRange.length = substring.length();
@@ -320,7 +325,7 @@ protected:
     virtual void initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const
     {
         QStyledItemDelegate::initStyleOption(option, index);
-        QStyleOptionViewItemV4 *v4 = qstyleoption_cast<QStyleOptionViewItemV4*>(option);
+        QStyleOptionViewItemV4 *v4 = qstyleoption_cast<QStyleOptionViewItemV4 *>(option);
         if (v4) {
             v4->text.clear();
         }
@@ -331,7 +336,7 @@ protected:
 // ----
 
 KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
- : KLineEdit(parent), d(new Private(this))
+    : KLineEdit(parent), d(new Private(this))
 {
     d->completer = new KexiSearchLineEditCompleter(this);
     QTreeView *treeView = new QTreeView;
@@ -346,12 +351,12 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
     // Moreover, sorting KexiCompleter::CaseInsensitivelySortedModel breaks
     // filtering so only table names are displayed.
     d->completer->setModelSorting(KexiCompleter::UnsortedModel);
-    
+
     treeView->setHeaderHidden(true);
     treeView->setRootIsDecorated(false);
     treeView->setItemDelegate(
         d->delegate = new KexiSearchLineEditPopupItemDelegate(treeView, d->completer));
-    
+
     // forked initialization like in QLineEdit::setCompleter:
     d->completer->setWidget(this);
     if (hasFocus()) {
@@ -359,9 +364,9 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
     }
 
     setFocusPolicy(Qt::NoFocus); // We cannot focus set any policy here.
-                                 // Qt::ClickFocus would make it impossible to find
-                                 // previously focus widget in KexiSearchLineEdit::setFocus().
-                                 // We need this information to focus back when pressing Escape key.
+    // Qt::ClickFocus would make it impossible to find
+    // previously focus widget in KexiSearchLineEdit::setFocus().
+    // We need this information to focus back when pressing Escape key.
     setClearButtonShown(true);
     setClickMessage(i18n("Search"));
 }
@@ -396,8 +401,7 @@ void KexiSearchLineEdit::slotClearShortcutActivated()
         // after second Escape, go back to previously focused widget
         d->previouslyFocusedWidget->setFocus();
         d->previouslyFocusedWidget = 0;
-    }
-    else {
+    } else {
         clear();
     }
 }
@@ -407,16 +411,16 @@ void KexiSearchLineEdit::addSearchableModel(KexiSearchableModel *model)
     d->model->addSearchableModel(model);
 }
 
-QPair<QModelIndex, KexiSearchableModel*> KexiSearchLineEdit::mapCompletionIndexToSource(const QModelIndex &index) const
+QPair<QModelIndex, KexiSearchableModel *> KexiSearchLineEdit::mapCompletionIndexToSource(const QModelIndex &index) const
 {
     QModelIndex realIndex
-        = qobject_cast<QAbstractProxyModel*>(d->completer->completionModel())->mapToSource(index);
+        = qobject_cast<QAbstractProxyModel *>(d->completer->completionModel())->mapToSource(index);
     if (!realIndex.isValid()) {
-        return qMakePair(QModelIndex(), static_cast<KexiSearchableModel*>(0));
+        return qMakePair(QModelIndex(), static_cast<KexiSearchableModel *>(0));
     }
-    SearchableObject *object = static_cast<SearchableObject*>(realIndex.internalPointer());
+    SearchableObject *object = static_cast<SearchableObject *>(realIndex.internalPointer());
     if (!object) {
-        return qMakePair(QModelIndex(), static_cast<KexiSearchableModel*>(0));
+        return qMakePair(QModelIndex(), static_cast<KexiSearchableModel *>(0));
     }
     return qMakePair(object->model->sourceIndexForSearchableObject(object->index), object->model);
 }
@@ -425,8 +429,7 @@ void KexiSearchLineEdit::slotCompletionHighlighted(const QString &newText)
 {
     if (d->completer->completionMode() != KexiCompleter::InlineCompletion) {
         setText(newText);
-    }
-    else {
+    } else {
         int p = cursorPosition();
         QString t = text();
         setText(t.left(p) + newText.mid(p));
@@ -437,20 +440,22 @@ void KexiSearchLineEdit::slotCompletionHighlighted(const QString &newText)
 
 void KexiSearchLineEdit::slotCompletionHighlighted(const QModelIndex &index)
 {
-    QPair<QModelIndex, KexiSearchableModel*> source = mapCompletionIndexToSource(index);
-    if (!source.first.isValid())
+    QPair<QModelIndex, KexiSearchableModel *> source = mapCompletionIndexToSource(index);
+    if (!source.first.isValid()) {
         return;
+    }
     //kDebug() << source.second->searchableData(source.first, Qt::EditRole);
     d->highlightSearchableObject(source);
 }
 
 void KexiSearchLineEdit::slotCompletionActivated(const QModelIndex &index)
 {
-    QPair<QModelIndex, KexiSearchableModel*> source = mapCompletionIndexToSource(index);
-    if (!source.first.isValid())
+    QPair<QModelIndex, KexiSearchableModel *> source = mapCompletionIndexToSource(index);
+    if (!source.first.isValid()) {
         return;
+    }
     //kDebug() << source.second->searchableData(source.first, Qt::EditRole);
-    
+
     d->highlightSearchableObject(source);
     d->removeHighlightingForSearchableObject();
     if (source.second->activateSearchableObject(source.first)) {
@@ -462,8 +467,9 @@ void KexiSearchLineEdit::slotCompletionActivated(const QModelIndex &index)
 void KexiSearchLineEdit::inputMethodEvent(QInputMethodEvent *e)
 {
     KLineEdit::inputMethodEvent(e);
-    if (isReadOnly() || !e->isAccepted())
+    if (isReadOnly() || !e->isAccepted()) {
         return;
+    }
     if (!e->commitString().isEmpty()) {
         complete(Qt::Key_unknown);
     }
@@ -520,8 +526,8 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
     KexiCompleter::CompletionMode completionMode = d->completer->completionMode();
     if ((completionMode == KexiCompleter::PopupCompletion
             || completionMode == KexiCompleter::UnfilteredPopupCompletion)
-        && d->completer->popup()
-        && d->completer->popup()->isVisible()) {
+            && d->completer->popup()
+            && d->completer->popup()->isVisible()) {
         // The following keys are forwarded by the completer to the widget
         // Ignoring the events lets the completer provide suitable default behavior
         switch (event->key()) {
@@ -530,8 +536,9 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
             return;
 #ifdef QT_KEYPAD_NAVIGATION
         case Qt::Key_Select:
-            if (!QApplication::keypadNavigationEnabled())
+            if (!QApplication::keypadNavigationEnabled()) {
                 break;
+            }
 #endif
             d->completer->popup()->hide(); // just hide. will end up propagating to parent
         default:
@@ -544,12 +551,12 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
         case Qt::Key_F4:
 #ifdef QT_KEYPAD_NAVIGATION
         case Qt::Key_Select:
-            if (!QApplication::keypadNavigationEnabled())
+            if (!QApplication::keypadNavigationEnabled()) {
                 break;
+            }
 #endif
             if (!d->completer->currentCompletion().isEmpty() && hasSelectedText()
-                && textAfterSelection().isEmpty())
-            {
+                    && textAfterSelection().isEmpty()) {
                 setText(d->completer->currentCompletion());
                 inlineCompletionAccepted = true;
             }
@@ -559,14 +566,11 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
     }
 
     if (d->completer->popup() && !d->completer->popup()->isVisible()
-        && (event->key() == Qt::Key_F4 || event->key() == Qt::Key_Down))
-    {
+            && (event->key() == Qt::Key_F4 || event->key() == Qt::Key_Down)) {
         // go back to completing when popup is closed and F4/Down pressed
         d->completer->complete();
-    }
-    else if (d->completer->popup() && d->completer->popup()->isVisible()
-        && event->key() == Qt::Key_F4)
-    {
+    } else if (d->completer->popup() && d->completer->popup()->isVisible()
+               && event->key() == Qt::Key_F4) {
         // hide popup if F4 pressed
         d->completer->popup()->hide();
     }
@@ -591,13 +595,12 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
         if (d->completer->popup() && d->completer->completionCount() > 1) {
             //kDebug () << "11111" << d->completer->completionPrefix()
             //          << d->completer->completionCount();
-            
+
             // more than one item on completion list, find exact match, if found, accept
             for (int i = 0; i < d->completer->completionCount(); i++) {
                 //kDebug() << d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString();
                 if (d->completer->completionPrefix()
-                    == d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString())
-                {
+                        == d->completer->completionModel()->index(i, 0, QModelIndex()).data(Qt::EditRole).toString()) {
                     d->completer->setCurrentRow(i);
                     slotCompletionActivated(d->completer->currentIndex());
                     event->accept();
@@ -625,18 +628,18 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
                                                 emit returnPressed();
                                                 emit editingFinished();
                                             } */
-        if (inlineCompletionAccepted)
+        if (inlineCompletionAccepted) {
             event->accept();
-        else
+        } else {
             event->ignore();
+        }
         return;
     }
 
     if (event == QKeySequence::MoveToNextChar) {
 #if defined(Q_WS_WIN)
         if (hasSelectedText()
-            && d->completer->completionMode() == KexiCompleter::InlineCompletion)
-        {
+                && d->completer->completionMode() == KexiCompleter::InlineCompletion) {
             int selEnd = selectionEnd();
             if (selEnd >= 0) {
                 setCursorPosition(selEnd);
@@ -645,12 +648,10 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
             return;
         }
 #endif
-    }
-    else if (event == QKeySequence::MoveToPreviousChar) {
+    } else if (event == QKeySequence::MoveToPreviousChar) {
 #if defined(Q_WS_WIN)
         if (hasSelectedText()
-            && d->completer->completionMode() == KexiCompleter::InlineCompletion)
-        {
+                && d->completer->completionMode() == KexiCompleter::InlineCompletion) {
             int selStart = selectionStart();
             if (selStart >= 0) {
                 setCursorPosition(selStart);
@@ -659,8 +660,7 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
             return;
         }
 #endif
-    }
-    else {
+    } else {
         if (event->modifiers() & Qt::ControlModifier) {
             switch (event->key()) {
             case Qt::Key_Up:
@@ -708,20 +708,24 @@ void KexiSearchLineEdit::keyPressEvent(QKeyEvent *event)
 bool KexiSearchLineEdit::advanceToEnabledItem(int dir)
 {
     int start = d->completer->currentRow();
-    if (start == -1)
+    if (start == -1) {
         return false;
+    }
     int i = start + dir;
-    if (dir == 0)
+    if (dir == 0) {
         dir = 1;
+    }
     do {
         if (!d->completer->setCurrentRow(i)) {
-            if (!d->completer->wrapAround())
+            if (!d->completer->wrapAround()) {
                 break;
+            }
             i = i > 0 ? 0 : d->completer->completionCount() - 1;
         } else {
             QModelIndex currentIndex = d->completer->currentIndex();
-            if (d->completer->completionModel()->flags(currentIndex) & Qt::ItemIsEnabled)
+            if (d->completer->completionModel()->flags(currentIndex) & Qt::ItemIsEnabled) {
                 return true;
+            }
             i += dir;
         }
     } while (i != start);
@@ -743,26 +747,29 @@ QString KexiSearchLineEdit::textAfterSelection() const
 int KexiSearchLineEdit::selectionEnd() const
 {
     return hasSelectedText() ?
-        (selectionStart() + selectedText().length()) : -1;
+           (selectionStart() + selectedText().length()) : -1;
 }
 
 // forked bits from QLineControl::complete()
 void KexiSearchLineEdit::complete(int key)
 {
-    if (isReadOnly() || echoMode() != QLineEdit::Normal)
+    if (isReadOnly() || echoMode() != QLineEdit::Normal) {
         return;
+    }
 
     QString text = this->text();
     if (d->completer->completionMode() == KexiCompleter::InlineCompletion) {
-        if (key == Qt::Key_Backspace)
+        if (key == Qt::Key_Backspace) {
             return;
+        }
         int n = 0;
         if (key == Qt::Key_Up || key == Qt::Key_Down) {
-            if (textAfterSelection().length())
+            if (textAfterSelection().length()) {
                 return;
+            }
             QString prefix = hasSelectedText() ? textBeforeSelection() : text;
             if (text.compare(d->completer->currentCompletion(), d->completer->caseSensitivity()) != 0
-                || prefix.compare(d->completer->completionPrefix(), d->completer->caseSensitivity()) != 0) {
+                    || prefix.compare(d->completer->completionPrefix(), d->completer->caseSensitivity()) != 0) {
                 d->completer->setCompletionPrefix(prefix);
             } else {
                 n = (key == Qt::Key_Up) ? -1 : +1;
@@ -770,8 +777,9 @@ void KexiSearchLineEdit::complete(int key)
         } else {
             d->completer->setCompletionPrefix(text);
         }
-        if (!advanceToEnabledItem(n))
+        if (!advanceToEnabledItem(n)) {
             return;
+        }
     } else {
 #ifndef QT_KEYPAD_NAVIGATION
         if (text.isEmpty()) {

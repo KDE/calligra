@@ -43,7 +43,6 @@
 
 #define FRAME_SPACING 10.0
 
-
 void TestTableLayout::initTestCase()
 {
     m_doc = 0;
@@ -82,7 +81,7 @@ QTextCursor TestTableLayout::setupTest()
     return cursor;
 }
 
-void TestTableLayout::setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle)
+void TestTableLayout::setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle *tableStyle)
 {
     QTextCursor cursor = setupTest();
 
@@ -90,54 +89,55 @@ void TestTableLayout::setupTest(const QString &mergedText, const QString &topRig
     style.setStyleId(101); // needed to do manually since we don't use the stylemanager
     style.applyStyle(m_block);
     QTextTableFormat tableFormat;
-    if (tableStyle)
+    if (tableStyle) {
         tableStyle->applyStyle(tableFormat);
+    }
 
-    m_table = cursor.insertTable(3,3,tableFormat);
-    m_table->mergeCells(0,0,2,2);
+    m_table = cursor.insertTable(3, 3, tableFormat);
+    m_table->mergeCells(0, 0, 2, 2);
     if (mergedText.length() > 0) {
-        m_table->cellAt(0,0).firstCursorPosition().insertText(mergedText);
-        QTextBlock b2 = m_table->cellAt(0,0).firstCursorPosition().block();
+        m_table->cellAt(0, 0).firstCursorPosition().insertText(mergedText);
+        QTextBlock b2 = m_table->cellAt(0, 0).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
         }
     }
     if (topRightText.length() > 0) {
-        m_table->cellAt(0,2).firstCursorPosition().insertText(topRightText);
-        QTextBlock b2 = m_table->cellAt(0,2).firstCursorPosition().block();
+        m_table->cellAt(0, 2).firstCursorPosition().insertText(topRightText);
+        QTextBlock b2 = m_table->cellAt(0, 2).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
         }
     }
     if (midRightText.length() > 0) {
-        m_table->cellAt(1,2).firstCursorPosition().insertText(midRightText);
-        QTextBlock b2 = m_table->cellAt(1,2).firstCursorPosition().block();
+        m_table->cellAt(1, 2).firstCursorPosition().insertText(midRightText);
+        QTextBlock b2 = m_table->cellAt(1, 2).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
         }
     }
     if (bottomLeftText.length() > 0) {
-        m_table->cellAt(2,0).firstCursorPosition().insertText(bottomLeftText);
-        QTextBlock b2 = m_table->cellAt(2,0).firstCursorPosition().block();
+        m_table->cellAt(2, 0).firstCursorPosition().insertText(bottomLeftText);
+        QTextBlock b2 = m_table->cellAt(2, 0).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
         }
     }
     if (bottomMidText.length() > 0) {
-        m_table->cellAt(2,1).firstCursorPosition().insertText(bottomMidText);
-        QTextBlock b2 = m_table->cellAt(2,1).firstCursorPosition().block();
+        m_table->cellAt(2, 1).firstCursorPosition().insertText(bottomMidText);
+        QTextBlock b2 = m_table->cellAt(2, 1).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
         }
     }
     if (bottomRightText.length() > 0) {
-        m_table->cellAt(2,2).firstCursorPosition().insertText(bottomRightText);
-        QTextBlock b2 = m_table->cellAt(2,2).firstCursorPosition().block();
+        m_table->cellAt(2, 2).firstCursorPosition().insertText(bottomRightText);
+        QTextBlock b2 = m_table->cellAt(2, 2).firstCursorPosition().block();
         while (b2.isValid()) {
             style.applyStyle(b2);
             b2 = b2.next();
@@ -147,37 +147,37 @@ void TestTableLayout::setupTest(const QString &mergedText, const QString &topRig
 
 QTextBlock TestTableLayout::mergedCellBlock() const
 {
-    return m_table->cellAt(0,0).firstCursorPosition().block();
+    return m_table->cellAt(0, 0).firstCursorPosition().block();
 }
 
 QTextBlock TestTableLayout::topRightCellBlock() const
 {
-    return m_table->cellAt(0,2).firstCursorPosition().block();
+    return m_table->cellAt(0, 2).firstCursorPosition().block();
 }
 
 QTextBlock TestTableLayout::midRightCellBlock() const
 {
-    return m_table->cellAt(1,2).firstCursorPosition().block();
+    return m_table->cellAt(1, 2).firstCursorPosition().block();
 }
 
 QTextBlock TestTableLayout::bottomLeftCellBlock() const
 {
-    return m_table->cellAt(2,0).firstCursorPosition().block();
+    return m_table->cellAt(2, 0).firstCursorPosition().block();
 }
 
 QTextBlock TestTableLayout::bottomMidCellBlock() const
 {
-    return m_table->cellAt(2,1).firstCursorPosition().block();
+    return m_table->cellAt(2, 1).firstCursorPosition().block();
 }
 
 QTextBlock TestTableLayout::bottomRightCellBlock() const
 {
-    return m_table->cellAt(2,2).firstCursorPosition().block();
+    return m_table->cellAt(2, 2).firstCursorPosition().block();
 }
-    
+
 void TestTableLayout::testSetupTest()
 {
-    setupTest("m","02","12","20","21","22");
+    setupTest("m", "02", "12", "20", "21", "22");
     m_layout->layout();
     QCOMPARE(mergedCellBlock().text(), QString("m"));
     QCOMPARE(topRightCellBlock().text(), QString("02"));
@@ -192,21 +192,21 @@ void TestTableLayout::testMergedCells()
     QTextCursor cursor = setupTest();
 
     m_table = cursor.insertTable(3, 5);
-    m_table->mergeCells(0,0,2,2);
-    m_table->mergeCells(0,2,3,1);
-    m_table->mergeCells(0,3,3,1);
-    m_table->mergeCells(0,4,3,1);
-    m_table->mergeCells(2,0,1,1);
-    m_table->mergeCells(2,1,1,1);
+    m_table->mergeCells(0, 0, 2, 2);
+    m_table->mergeCells(0, 2, 3, 1);
+    m_table->mergeCells(0, 3, 3, 1);
+    m_table->mergeCells(0, 4, 3, 1);
+    m_table->mergeCells(2, 0, 1, 1);
+    m_table->mergeCells(2, 1, 1, 1);
 
     m_layout->layout();
 
-    QVERIFY(!dynamic_cast<MockRootAreaProvider*>(m_layout->provider())->m_askedForMoreThenOneArea);
+    QVERIFY(!dynamic_cast<MockRootAreaProvider *>(m_layout->provider())->m_askedForMoreThenOneArea);
 }
 
 void TestTableLayout::testColumnWidthUndefined()
 {
-    setupTest("","","","","","");
+    setupTest("", "", "", "", "", "");
     m_layout->layout();
 
     QCOMPARE(m_table->columns(), 3);
@@ -215,15 +215,15 @@ void TestTableLayout::testColumnWidthUndefined()
     QTextLayout *lay = bottomLeftCellBlock().layout();
     QVERIFY(lay);
     QCOMPARE(lay->lineCount(), 1);
-    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0/3) < ROUNDING);
+    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0 / 3) < ROUNDING);
     lay = bottomMidCellBlock().layout();
     QVERIFY(lay);
     QCOMPARE(lay->lineCount(), 1);
-    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0/3) < ROUNDING);
+    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0 / 3) < ROUNDING);
     lay = bottomRightCellBlock().layout();
     QVERIFY(lay);
     QCOMPARE(lay->lineCount(), 1);
-    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0/3) < ROUNDING);
+    QVERIFY(qAbs(lay->lineAt(0).width() - 200.0 / 3) < ROUNDING);
 }
 
 void TestTableLayout::testColumnWidthFixed()
@@ -330,11 +330,11 @@ void TestTableLayout::testColumnWidthRelative()
 
     m_layout->layout();
 
-    QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).width() - 200.0*0.2 - 200.0*0.5) < ROUNDING);
-    QVERIFY(qAbs(topRightCellBlock().layout()->lineAt(0).width() - 200.0*0.1) < ROUNDING);
-    QVERIFY(qAbs(bottomLeftCellBlock().layout()->lineAt(0).width() - 200.0*0.2) < ROUNDING);
-    QVERIFY(qAbs(bottomMidCellBlock().layout()->lineAt(0).width() - 200.0*0.5) < ROUNDING);
-    QVERIFY(qAbs(bottomRightCellBlock().layout()->lineAt(0).width() - 200.0*0.1) < ROUNDING);
+    QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).width() - 200.0 * 0.2 - 200.0 * 0.5) < ROUNDING);
+    QVERIFY(qAbs(topRightCellBlock().layout()->lineAt(0).width() - 200.0 * 0.1) < ROUNDING);
+    QVERIFY(qAbs(bottomLeftCellBlock().layout()->lineAt(0).width() - 200.0 * 0.2) < ROUNDING);
+    QVERIFY(qAbs(bottomMidCellBlock().layout()->lineAt(0).width() - 200.0 * 0.5) < ROUNDING);
+    QVERIFY(qAbs(bottomRightCellBlock().layout()->lineAt(0).width() - 200.0 * 0.1) < ROUNDING);
 }
 
 void TestTableLayout::testRowHeightFixed()
@@ -349,7 +349,7 @@ void TestTableLayout::testRowHeightFixed()
 
     m_layout->layout();
 
-    QVERIFY(!dynamic_cast<MockRootAreaProvider*>(m_layout->provider())->m_askedForMoreThenOneArea);
+    QVERIFY(!dynamic_cast<MockRootAreaProvider *>(m_layout->provider())->m_askedForMoreThenOneArea);
     //QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).height() - 14) < ROUNDING);
 }
 
@@ -365,7 +365,7 @@ void TestTableLayout::testRowHeightMinimum()
 
     m_layout->layout();
 
-    QVERIFY(!dynamic_cast<MockRootAreaProvider*>(m_layout->provider())->m_askedForMoreThenOneArea);
+    QVERIFY(!dynamic_cast<MockRootAreaProvider *>(m_layout->provider())->m_askedForMoreThenOneArea);
     //QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).height() - 14) < ROUNDING);
 }
 

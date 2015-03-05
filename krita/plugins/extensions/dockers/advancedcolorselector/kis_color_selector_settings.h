@@ -19,16 +19,17 @@
 #ifndef KIS_COLOR_SELECTOR_SETTINGS_H
 #define KIS_COLOR_SELECTOR_SETTINGS_H
 
-
 #include <QDialog>
 #include "kis_preference_set_registry.h"
 
-namespace Ui {
-    class KisColorSelectorSettings;
+namespace Ui
+{
+class KisColorSelectorSettings;
 }
 class KIcon;
 
-class KisColorSelectorSettings : public KisPreferenceSet {
+class KisColorSelectorSettings : public KisPreferenceSet
+{
     Q_OBJECT
 public:
     KisColorSelectorSettings(QWidget *parent = 0);
@@ -56,34 +57,41 @@ private:
     Ui::KisColorSelectorSettings *ui;
 };
 
-class KisColorSelectorSettingsUpdateRepeater : public QObject {
+class KisColorSelectorSettingsUpdateRepeater : public QObject
+{
     Q_OBJECT
 Q_SIGNALS:
     void settingsUpdated();
 public Q_SLOTS:
-    void updateSettings() {
+    void updateSettings()
+    {
         emit settingsUpdated();
     }
 };
 
-class KisColorSelectorSettingsFactory : public KisAbstractPreferenceSetFactory {
+class KisColorSelectorSettingsFactory : public KisAbstractPreferenceSetFactory
+{
 public:
-    KisPreferenceSet* createPreferenceSet() {
-        KisColorSelectorSettings* ps = new KisColorSelectorSettings();
+    KisPreferenceSet *createPreferenceSet()
+    {
+        KisColorSelectorSettings *ps = new KisColorSelectorSettings();
         QObject::connect(ps, SIGNAL(settingsChanged()), &repeater, SLOT(updateSettings()), Qt::UniqueConnection);
         return ps;
     }
-    virtual QString id() const { return "ColorSelectorSettings"; }
+    virtual QString id() const
+    {
+        return "ColorSelectorSettings";
+    }
     KisColorSelectorSettingsUpdateRepeater repeater;
 };
 
-class KisColorSelectorSettingsDialog : public QDialog {
-Q_OBJECT
+class KisColorSelectorSettingsDialog : public QDialog
+{
+    Q_OBJECT
 public:
     KisColorSelectorSettingsDialog(QWidget *parent = 0);
 private:
-    KisColorSelectorSettings* m_widget;
+    KisColorSelectorSettings *m_widget;
 };
-
 
 #endif // KIS_COLOR_SELECTOR_SETTINGS_H

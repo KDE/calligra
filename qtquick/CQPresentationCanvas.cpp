@@ -59,10 +59,10 @@ class CQPresentationCanvas::Private
 public:
     Private() : canvasBase(0), view(0), document(0), part(0), currentSlide(0) { }
 
-    KoCanvasBase* canvasBase;
-    CQPresentationView* view;
-    KPrDocument* document;
-    KoPart* part;
+    KoCanvasBase *canvasBase;
+    CQPresentationView *view;
+    KPrDocument *document;
+    KoPart *part;
 
     int currentSlide;
     QSizeF pageSize;
@@ -76,18 +76,18 @@ public:
         if (!view) {
             return;
         }
-        foreach(const KoShape* shape, view->activePage()->shapes()) {
+        foreach (const KoShape *shape, view->activePage()->shapes()) {
             if (!shape->hyperLink().isEmpty()) {
-                QObject * obj = new QObject(view);
+                QObject *obj = new QObject(view);
                 obj->setProperty("linkRect", shape->boundingRect());
                 obj->setProperty("linkTarget", QUrl(shape->hyperLink()));
                 linkTargets.append(obj);
             }
         }
 
-        QList<QTextDocument*> texts;
+        QList<QTextDocument *> texts;
         KoFindText::findTextInShapes(view->activePage()->shapes(), texts);
-        foreach(QTextDocument* text, texts) {
+        foreach (QTextDocument *text, texts) {
             QTextBlock block = text->rootFrame()->firstCursorPosition().block();
             for (; block.isValid(); block = block.next()) {
                 block.begin();
@@ -98,7 +98,7 @@ public:
                         QTextCharFormat format = fragment.charFormat();
                         if (format.isAnchor()) {
                             // This is an anchor, store target and position...
-                            QObject * obj = new QObject(view);
+                            QObject *obj = new QObject(view);
                             QRectF rect = getFragmentPosition(block, fragment);
                             obj->setProperty("linkRect", canvasBase->viewConverter()->documentToView(rect));
                             obj->setProperty("linkTarget", QUrl(format.anchorHref()));
@@ -110,15 +110,14 @@ public:
         }
     }
 
-    QRectF getFragmentPosition(const QTextBlock& block, const QTextFragment& fragment)
+    QRectF getFragmentPosition(const QTextBlock &block, const QTextFragment &fragment)
     {
         // TODO this only produces a position for the first part, if the link spans more than one line...
         // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
         // For now leave it like this, more important things are needed.
-        QTextLayout* layout = block.layout();
+        QTextLayout *layout = block.layout();
         QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
-        if (!line.isValid())
-        {
+        if (!line.isValid()) {
             // fragment has no valid position and consequently no line...
             return QRectF();
         }
@@ -131,7 +130,7 @@ public:
     }
 };
 
-CQPresentationCanvas::CQPresentationCanvas(QDeclarativeItem* parent)
+CQPresentationCanvas::CQPresentationCanvas(QDeclarativeItem *parent)
     : CQCanvasBase(parent), d(new Private)
 {
 
@@ -159,17 +158,17 @@ QObjectList CQPresentationCanvas::linkTargets() const
     return d->linkTargets;
 }
 
-KPrDocument* CQPresentationCanvas::document() const
+KPrDocument *CQPresentationCanvas::document() const
 {
     return d->document;
 }
 
-QObject* CQPresentationCanvas::doc() const
+QObject *CQPresentationCanvas::doc() const
 {
     return d->document;
 }
 
-QObject* CQPresentationCanvas::part() const
+QObject *CQPresentationCanvas::part() const
 {
     return d->part;
 }
@@ -192,7 +191,7 @@ void CQPresentationCanvas::setCurrentSlide(int slide)
     }
 }
 
-void CQPresentationCanvas::render(QPainter* painter, const QRectF& target)
+void CQPresentationCanvas::render(QPainter *painter, const QRectF &target)
 {
     QStyleOptionGraphicsItem option;
     option.exposedRect = target;
@@ -200,7 +199,7 @@ void CQPresentationCanvas::render(QPainter* painter, const QRectF& target)
     d->canvasBase->canvasItem()->paint(painter, &option);
 }
 
-QObject* CQPresentationCanvas::textEditor() const
+QObject *CQPresentationCanvas::textEditor() const
 {
     if (d->canvasBase) {
         return KoTextEditor::getTextEditorFromCanvas(d->canvasBase);
@@ -210,7 +209,7 @@ QObject* CQPresentationCanvas::textEditor() const
 
 void CQPresentationCanvas::deselectEverything()
 {
-    KoTextEditor* editor = KoTextEditor::getTextEditorFromCanvas(d->canvasBase);
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(d->canvasBase);
     if (editor) {
         editor->clearSelection();
     }
@@ -220,7 +219,7 @@ void CQPresentationCanvas::deselectEverything()
 qreal CQPresentationCanvas::shapeTransparency() const
 {
     if (d->canvasBase && d->canvasBase->shapeManager()) {
-        KoShape* shape = d->canvasBase->shapeManager()->selection()->firstSelectedShape();
+        KoShape *shape = d->canvasBase->shapeManager()->selection()->firstSelectedShape();
         if (shape) {
             return shape->transparency();
         }
@@ -231,7 +230,7 @@ qreal CQPresentationCanvas::shapeTransparency() const
 void CQPresentationCanvas::setShapeTransparency(qreal newTransparency)
 {
     if (d->canvasBase && d->canvasBase->shapeManager()) {
-        KoShape* shape = d->canvasBase->shapeManager()->selection()->firstSelectedShape();
+        KoShape *shape = d->canvasBase->shapeManager()->selection()->firstSelectedShape();
         if (shape) {
             if (!qFuzzyCompare(1 + shape->transparency(), 1 + newTransparency)) {
                 shape->setTransparency(newTransparency);
@@ -241,7 +240,7 @@ void CQPresentationCanvas::setShapeTransparency(qreal newTransparency)
     }
 }
 
-void CQPresentationCanvas::openFile(const QString& uri)
+void CQPresentationCanvas::openFile(const QString &uri)
 {
     emit loadingBegun();
     KService::Ptr service = KService::serviceByDesktopName("stagepart");
@@ -251,7 +250,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
     }
 
     d->part = service->createInstance<KoPart>(this);
-    d->document = dynamic_cast<KPrDocument*>(d->part->document());
+    d->document = dynamic_cast<KPrDocument *>(d->part->document());
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);
     if (uri.endsWith(QLatin1String("otp"), Qt::CaseInsensitive)) {
@@ -261,9 +260,9 @@ void CQPresentationCanvas::openFile(const QString& uri)
         d->document->undoStack()->clear();
 
         if (ok) {
-            QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+            QString mimeType = KMimeType::findByUrl(url, 0, true)->name();
             // in case this is a open document template remove the -template from the end
-            mimeType.remove( QRegExp( "-template$" ) );
+            mimeType.remove(QRegExp("-template$"));
             d->document->setMimeTypeAfterLoading(mimeType);
             d->document->resetURL();
             d->document->setEmpty();
@@ -273,17 +272,17 @@ void CQPresentationCanvas::openFile(const QString& uri)
             d->document->initEmpty();
         }
     } else {
-        d->document->openUrl (KUrl (uri));
+        d->document->openUrl(KUrl(uri));
     }
 
     d->document->setModified(false);
     qApp->processEvents();
 
-    KoPACanvasItem *paCanvasItem = static_cast<KoPACanvasItem*>(d->part->canvasItem(d->part->document()));
+    KoPACanvasItem *paCanvasItem = static_cast<KoPACanvasItem *>(d->part->canvasItem(d->part->document()));
     d->canvasBase = paCanvasItem;
     createAndSetCanvasControllerOn(d->canvasBase);
 
-    d->view = new CQPresentationView(canvasController(), static_cast<KoPACanvasBase*>(d->canvasBase), dynamic_cast<KPrDocument*>(d->document));
+    d->view = new CQPresentationView(canvasController(), static_cast<KoPACanvasBase *>(d->canvasBase), dynamic_cast<KPrDocument *>(d->document));
     paCanvasItem->setView(d->view);
 
     d->canvasBase->resourceManager()->setResource(KoDocumentResourceManager::HandleRadius, 9);
@@ -293,7 +292,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
     d->view->setZoomController(zoomController());
     d->view->connectToZoomController();
 
-    QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
+    QGraphicsWidget *graphicsWidget = dynamic_cast<QGraphicsWidget *>(d->canvasBase);
     graphicsWidget->setParentItem(this);
     graphicsWidget->installEventFilter(this);
     graphicsWidget->setVisible(true);
@@ -312,67 +311,68 @@ void CQPresentationCanvas::openFile(const QString& uri)
     emit loadingFinished();
 }
 
-void CQPresentationCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
+void CQPresentationCanvas::createAndSetCanvasControllerOn(KoCanvasBase *canvas)
 {
     //TODO: pass a proper action collection
     CQCanvasController *controller = new CQCanvasController(new KActionCollection(this));
     setCanvasController(controller);
     controller->setCanvas(canvas);
-    KoToolManager::instance()->addController (controller);
+    KoToolManager::instance()->addController(controller);
 }
 
-void CQPresentationCanvas::createAndSetZoomController(KoCanvasBase* canvas)
+void CQPresentationCanvas::createAndSetZoomController(KoCanvasBase *canvas)
 {
-    KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (canvas->viewConverter());
+    KoZoomHandler *zoomHandler = static_cast<KoZoomHandler *>(canvas->viewConverter());
     setZoomController(new KoZoomController(canvasController(),
                                            zoomHandler,
                                            new KActionCollection(this)));
 
-    KoPACanvasItem* canvasItem = static_cast<KoPACanvasItem*>(canvas);
+    KoPACanvasItem *canvasItem = static_cast<KoPACanvasItem *>(canvas);
 
     // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-    connect (canvasController()->proxyObject,
-                SIGNAL(moveDocumentOffset(QPoint)), canvasItem, SLOT(slotSetDocumentOffset(QPoint)));
+    connect(canvasController()->proxyObject,
+            SIGNAL(moveDocumentOffset(QPoint)), canvasItem, SLOT(slotSetDocumentOffset(QPoint)));
     // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-    connect (canvasItem, SIGNAL(documentSize(QSize)), this, SLOT(updateDocumentSize(QSize)));
+    connect(canvasItem, SIGNAL(documentSize(QSize)), this, SLOT(updateDocumentSize(QSize)));
     canvasItem->updateSize();
     canvasItem->update();
 }
 
-void CQPresentationCanvas::updateDocumentSize(const QSize& size)
+void CQPresentationCanvas::updateDocumentSize(const QSize &size)
 {
     zoomController()->setDocumentSize(d->canvasBase->viewConverter()->viewToDocument(size), false);
 }
 
-bool CQPresentationCanvas::event(QEvent* event)
-{    switch(static_cast<int>(event->type())) {
-        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
-            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+bool CQPresentationCanvas::event(QEvent *event)
+{
+    switch (static_cast<int>(event->type())) {
+    case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+        ViewModeSynchronisationObject *syncObject = static_cast<ViewModeSwitchEvent *>(event)->synchronisationObject();
 
-            // Simplest of transfer - no zoom transfer for presentations, just current slide
-            syncObject->currentSlide = d->currentSlide;
-            syncObject->shapes = d->canvasBase->shapeManager()->shapes();
-            syncObject->initialized = true;
+        // Simplest of transfer - no zoom transfer for presentations, just current slide
+        syncObject->currentSlide = d->currentSlide;
+        syncObject->shapes = d->canvasBase->shapeManager()->shapes();
+        syncObject->initialized = true;
 
-            return true;
+        return true;
+    }
+    case ViewModeSwitchEvent::SwitchedToTouchModeEvent: {
+        ViewModeSynchronisationObject *syncObject = static_cast<ViewModeSwitchEvent *>(event)->synchronisationObject();
+
+        if (syncObject->initialized) {
+            d->canvasBase->shapeManager()->setShapes(syncObject->shapes);
+
+            zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+            zoomController()->zoomAction()->zoomOut();
+
+            setCurrentSlide(syncObject->currentSlide);
+            qApp->processEvents();
+
+            KoToolManager::instance()->switchToolRequested("InteractionTool");
         }
-        case ViewModeSwitchEvent::SwitchedToTouchModeEvent: {
-            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
-            if (syncObject->initialized) {
-                d->canvasBase->shapeManager()->setShapes(syncObject->shapes);
-
-                zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
-                zoomController()->zoomAction()->zoomOut();
-
-                setCurrentSlide(syncObject->currentSlide);
-                qApp->processEvents();
-
-                KoToolManager::instance()->switchToolRequested("InteractionTool");
-            }
-
-            return true;
-        }
+        return true;
+    }
 //         case KisTabletEvent::TabletPressEx:
 //         case KisTabletEvent::TabletReleaseEx:
 //             emit interactionStarted();
@@ -385,16 +385,16 @@ bool CQPresentationCanvas::event(QEvent* event)
 // #endif
 //                 d->canvas->inputManager()->eventFilter(this, event);
 //             return true;
-        default:
-            break;
+    default:
+        break;
     }
-    return QDeclarativeItem::event( event );
+    return QDeclarativeItem::event(event);
 }
 
-void CQPresentationCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+void CQPresentationCanvas::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     if (d->canvasBase) {
-        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget*>(d->canvasBase);
+        QGraphicsWidget *widget = dynamic_cast<QGraphicsWidget *>(d->canvasBase);
         if (widget) {
             widget->setGeometry(newGeometry);
         }

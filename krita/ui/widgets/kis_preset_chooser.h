@@ -43,7 +43,7 @@ public:
     KisPresetChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisPresetChooser();
 
-    enum ViewMode{
+    enum ViewMode {
         THUMBNAIL, /// Shows thumbnails
         DETAIL,  /// Shows thumbsnails with text next to it
         STRIP  /// Shows thumbnails arranged in a single row
@@ -53,16 +53,16 @@ public:
     void setViewMode(ViewMode mode);
     void showButtons(bool show);
 
-    KoResource* currentResource();
+    KoResource *currentResource();
     /// Sets the visibility of tagging klineEdits
-    void showTaggingBar( bool showSearchBar, bool showOpBar );
+    void showTaggingBar(bool showSearchBar, bool showOpBar);
 
     KoResourceItemChooser *itemChooser();
 
-    void setPresetFilter(const QString& paintOpId);
+    void setPresetFilter(const QString &paintOpId);
 
 Q_SIGNALS:
-    void resourceSelected(KoResource * resource);
+    void resourceSelected(KoResource *resource);
 
 public Q_SLOTS:
     void updateViewSettings();
@@ -71,11 +71,11 @@ private Q_SLOTS:
     void notifyConfigChanged();
 
 protected:
-    virtual void resizeEvent(QResizeEvent* event);
+    virtual void resizeEvent(QResizeEvent *event);
 
 private:
     KoResourceItemChooser *m_chooser;
-    KisPresetDelegate* m_delegate;
+    KisPresetDelegate *m_delegate;
     ViewMode m_mode;
     QSharedPointer<KoAbstractResourceServerAdapter> m_adapter;
 };

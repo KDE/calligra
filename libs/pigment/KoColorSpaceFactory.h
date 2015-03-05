@@ -70,7 +70,7 @@ public:
      * @return true if the color profile can be used by a color space created by
      * this factory
      */
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const = 0;
+    virtual bool profileIsCompatible(const KoColorProfile *profile) const = 0;
 
     /**
      * @return the name of the color space engine for this color space, or "" if none
@@ -96,7 +96,7 @@ public:
      * @return the list of color conversion provided by this colorspace, the factories
      * constructed by this functions are owned by the caller of the function
      */
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const = 0;
+    virtual QList<KoColorConversionTransformationFactory *> colorConversionLinks() const = 0;
 
     /**
      * Returns the default icc profile for use with this colorspace. This may be ""
@@ -111,7 +111,7 @@ public:
      *
      * This will call the decendant's createColorProfile()
      */
-    const KoColorProfile* colorProfile(const QByteArray& rawData) const;
+    const KoColorProfile *colorProfile(const QByteArray &rawData) const;
 
     /**
      * Create or reuse the existing colorspace for the given profile.
@@ -125,10 +125,10 @@ protected:
      * creates a color space using the given profile.
      */
     virtual KoColorSpace *createColorSpace(const KoColorProfile *) const = 0;
-    virtual KoColorProfile* createColorProfile(const QByteArray& rawData) const = 0;
+    virtual KoColorProfile *createColorProfile(const QByteArray &rawData) const = 0;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KOCOLORSPACEFACTORY_H

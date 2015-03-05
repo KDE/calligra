@@ -32,10 +32,9 @@
 
 #include "testutil.h"
 
-
 void KisCloneLayerTest::testCreation()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     KisLayerSP layer = new KisPaintLayer(image, "clone test", OPACITY_OPAQUE_U8);
 
@@ -59,9 +58,9 @@ KisImageSP createImage()
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 128, 128, colorSpace, "clones test");
 
-    QRect fillRect(10,10,100,100);
+    QRect fillRect(10, 10, 100, 100);
     KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
-    device1->fill(fillRect, KoColor( Qt::white, colorSpace));
+    device1->fill(fillRect, KoColor(Qt::white, colorSpace));
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
     KisLayerSP groupLayer1 = new KisGroupLayer(image, "group1", OPACITY_OPAQUE_U8);
@@ -89,13 +88,15 @@ KisImageSP createImage()
     return image;
 }
 
-KisNodeSP groupLayer1(KisImageSP image) {
+KisNodeSP groupLayer1(KisImageSP image)
+{
     KisNodeSP node = image->root()->lastChild();
     Q_ASSERT(node->name() == "group1");
     return node;
 }
 
-KisNodeSP paintLayer1(KisImageSP image) {
+KisNodeSP paintLayer1(KisImageSP image)
+{
     KisNodeSP node = groupLayer1(image)->firstChild();
     Q_ASSERT(node->name() == "paint1");
     return node;
@@ -112,7 +113,7 @@ void KisCloneLayerTest::testOriginalUpdates()
     paintLayer1(image)->setDirty(image->bounds());
     image->waitForDone();
 
-    const QRect expectedRect(10,10,110,110);
+    const QRect expectedRect(10, 10, 110, 110);
     QCOMPARE(root->projection()->exactBounds(), expectedRect);
 }
 
@@ -124,12 +125,12 @@ void KisCloneLayerTest::testOriginalUpdatesOutOfBounds()
 
     QCOMPARE(root->projection()->exactBounds(), nullRect);
 
-    QRect fillRect(-10,-10,10,10);
+    QRect fillRect(-10, -10, 10, 10);
     paintLayer1(image)->paintDevice()->fill(fillRect, KoColor(Qt::white, image->colorSpace()));
     paintLayer1(image)->setDirty(fillRect);
     image->waitForDone();
 
-    const QRect expectedRect(0,0,10,10);
+    const QRect expectedRect(0, 0, 10, 10);
     QCOMPARE(root->projection()->exactBounds(), expectedRect);
 
     QCOMPARE(groupLayer1(image)->projection()->exactBounds(), fillRect);
@@ -146,7 +147,7 @@ void KisCloneLayerTest::testOriginalRefresh()
     image->refreshGraph();
     image->waitForDone();
 
-    const QRect expectedRect(10,10,110,110);
+    const QRect expectedRect(10, 10, 110, 110);
     QCOMPARE(root->projection()->exactBounds(), expectedRect);
 }
 
@@ -176,9 +177,11 @@ void KisCloneLayerTest::testRemoveSourceLayer()
     KisNodeWSP group1_wsp = group1;
     KisNode *group1_ptr = group1.data();
     group1 = 0;
-    if(group1_wsp.isValid()) {
+    if (group1_wsp.isValid()) {
         group1_wsp = 0;
-        while(group1_ptr->refCount()) group1_ptr->deref();
+        while (group1_ptr->refCount()) {
+            group1_ptr->deref();
+        }
         delete group1_ptr;
     }
 
@@ -195,7 +198,6 @@ void KisCloneLayerTest::testRemoveSourceLayerParent()
     KisNodeSP group1 = TestUtil::findNode(root, "group1");
     KisNodeSP group2 = TestUtil::findNode(root, "group2");
     KisNodeSP cloneLayer1 = TestUtil::findNode(root, "clone_of_g1");
-
 
     KisLayerSP paintLayer4 = new KisPaintLayer(image, "paint4", OPACITY_OPAQUE_U8);
     KisLayerSP cloneLayer4 = new KisCloneLayer(paintLayer4, image, "clone_of_p4", OPACITY_OPAQUE_U8);
@@ -222,10 +224,10 @@ void KisCloneLayerTest::testRemoveSourceLayerParent()
     KisNodeSP newCloneLayer4 = TestUtil::findNode(group2, "clone_of_p4");
 
     QVERIFY(newCloneLayer1 != KisNodeSP(cloneLayer1));
-    QVERIFY(dynamic_cast<KisPaintLayer*>(newCloneLayer1.data()));
+    QVERIFY(dynamic_cast<KisPaintLayer *>(newCloneLayer1.data()));
 
     QVERIFY(newCloneLayer4 != KisNodeSP(cloneLayer4));
-    QVERIFY(dynamic_cast<KisPaintLayer*>(newCloneLayer4.data()));
+    QVERIFY(dynamic_cast<KisPaintLayer *>(newCloneLayer4.data()));
 }
 
 void KisCloneLayerTest::testUndoingRemovingSource()
@@ -315,7 +317,7 @@ void KisCloneLayerTest::testDuplicateGroup()
     QVERIFY(copyGroupLayer4 != KisNodeSP(groupLayer4));
     QVERIFY(copyCloneLayer4 != KisNodeSP(cloneLayer4));
 
-    KisCloneLayerSP newClone = dynamic_cast<KisCloneLayer*>(copyCloneLayer4.data());
+    KisCloneLayerSP newClone = dynamic_cast<KisCloneLayer *>(copyCloneLayer4.data());
 
     /**
      * The newly created clone should now point to the *newly created*
@@ -325,7 +327,8 @@ void KisCloneLayerTest::testDuplicateGroup()
 }
 
 struct CyclingTester {
-    CyclingTester() {
+    CyclingTester()
+    {
         const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
         image = new KisImage(0, 128, 128, colorSpace, "clones test");
 
@@ -336,7 +339,8 @@ struct CyclingTester {
         cloneOfGroup2 = new KisCloneLayer(groupLayer2, image, "clone_of_g2", OPACITY_OPAQUE_U8);
     }
 
-    void reset() {
+    void reset()
+    {
         image->removeNode(groupLayer1);
         image->removeNode(groupLayer2);
         image->removeNode(cloneOfGroup1);
@@ -352,7 +356,7 @@ struct CyclingTester {
 
 inline void addIfNotPresent(KisNodeSP node, CyclingTester &t, KisNodeSP group1Child, KisNodeSP group2Child)
 {
-    if(node != group1Child && node != group2Child) {
+    if (node != group1Child && node != group2Child) {
         t.image->addNode(node);
     }
 }
@@ -369,7 +373,7 @@ inline void testCyclingCase(CyclingTester &t, KisNodeSP group1Child, KisNodeSP g
 
     t.image->addNode(t.groupLayer1);
 
-    if(group2Child) {
+    if (group2Child) {
         t.image->addNode(group2Child, t.groupLayer2);
     }
 

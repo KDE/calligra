@@ -28,19 +28,16 @@
 #include <QPair>
 #include <KoColor.h>
 
-struct LabColor
-{
+struct LabColor {
     quint16 L;
     quint16 a;
     quint16 b;
 };
 
-struct IndexColorPalette
-{
+struct IndexColorPalette {
     QVector<LabColor> colors;
 
-    struct
-    {
+    struct {
         float L;
         float a;
         float b;
@@ -50,13 +47,13 @@ struct IndexColorPalette
     void insertShades(QColor clrA, QColor clrB, int shades);
     void insertShades(KoColor clrA, KoColor clrB, int shades);
     void insertShades(LabColor clrA, LabColor clrB, int shades);
-    
+
     void insertColor(QColor clr);
     void insertColor(KoColor clr);
     void insertColor(LabColor clr);
-    
+
     void mergeMostReduantColors();
-    
+
     LabColor getNearestIndex(LabColor clr) const;
     int numColors() const;
     float similarity(LabColor c0, LabColor c1) const;

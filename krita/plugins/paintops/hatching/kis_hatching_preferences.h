@@ -31,11 +31,11 @@ public:
     KisHatchingPreferences();
     ~KisHatchingPreferences();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
-    KisHatchingPreferencesWidget * m_options;
+    KisHatchingPreferencesWidget *m_options;
 
 };
 

@@ -46,7 +46,7 @@ class KRITAIMAGE_EXPORT KisGenerator : public KisBaseProcessor
     friend class KisGeneratorConfigurationFactory;
 public:
 
-    KisGenerator(const KoID& id, const KoID & category, const QString & entry);
+    KisGenerator(const KoID &id, const KoID &category, const QString &entry);
     virtual ~KisGenerator();
 
 public:
@@ -59,17 +59,17 @@ public:
      * @param config the parameters of the filter
      */
     virtual void generate(KisProcessingInformation dst,
-                          const QSize& size,
-                          const KisFilterConfiguration* config,
-                          KoUpdater* progressUpdater
+                          const QSize &size,
+                          const KisFilterConfiguration *config,
+                          KoUpdater *progressUpdater
                          ) const = 0;
 
     /**
      * Provided for convenience when no progress reporting is needed.
      */
     virtual void generate(KisProcessingInformation dst,
-                          const QSize& size,
-                          const KisFilterConfiguration* config
+                          const QSize &size,
+                          const KisFilterConfiguration *config
                          ) const;
 
     /**
@@ -77,7 +77,7 @@ public:
      * If so, this function returns in instance of that colorspace, else
      * it return 0.
      */
-    virtual const KoColorSpace * colorSpace();
+    virtual const KoColorSpace *colorSpace();
 
     /**
      * @param _imageArea the rectangle of the image
@@ -85,7 +85,7 @@ public:
      *         is supposed to affect all pixels, then the function should return
      *         @p _imageArea
      */
-    virtual QRect generatedRect(QRect _imageArea, const KisFilterConfiguration* = 0) const;
+    virtual QRect generatedRect(QRect _imageArea, const KisFilterConfiguration * = 0) const;
 
 protected:
 
@@ -93,6 +93,5 @@ protected:
     QString configEntryGroup() const;
 
 };
-
 
 #endif

@@ -33,22 +33,22 @@ class KoRdfSemanticTreePrivate : public QSharedData
 {
 public:
     QTreeWidget *m_tree;
-    QHash<QString, QTreeWidgetItem*> m_treeWidgetItems;
+    QHash<QString, QTreeWidgetItem *> m_treeWidgetItems;
 
     KoRdfSemanticTreePrivate(QTreeWidget *tree)
-        {
-            m_tree = tree;
-            if(m_tree)  {
-                tree->sortItems(1, Qt::DescendingOrder);
+    {
+        m_tree = tree;
+        if (m_tree)  {
+            tree->sortItems(1, Qt::DescendingOrder);
 
-                foreach (const QString &semanticClass, KoRdfSemanticItemRegistry::instance()->classNames()) {
-                    QTreeWidgetItem *treeWidgetItem = new QTreeWidgetItem(tree);
-                    treeWidgetItem->setText(0, KoRdfSemanticItemRegistry::instance()->classDisplayName(semanticClass));
-                    tree->expandItem(treeWidgetItem);
-                    m_treeWidgetItems.insert(semanticClass, treeWidgetItem);
-                }
+            foreach (const QString &semanticClass, KoRdfSemanticItemRegistry::instance()->classNames()) {
+                QTreeWidgetItem *treeWidgetItem = new QTreeWidgetItem(tree);
+                treeWidgetItem->setText(0, KoRdfSemanticItemRegistry::instance()->classDisplayName(semanticClass));
+                tree->expandItem(treeWidgetItem);
+                m_treeWidgetItems.insert(semanticClass, treeWidgetItem);
             }
         }
+    }
     void update(KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> model);
     /**
      * Add the name of each selected child of parent to the 'ret' set.
@@ -66,7 +66,7 @@ KoRdfSemanticTree::KoRdfSemanticTree()
 }
 
 KoRdfSemanticTree::KoRdfSemanticTree(QTreeWidget *tree)
-    : d(new KoRdfSemanticTreePrivate (tree))
+    : d(new KoRdfSemanticTreePrivate(tree))
 {
 }
 KoRdfSemanticTree::KoRdfSemanticTree(const KoRdfSemanticTree &orig)
@@ -78,16 +78,16 @@ KoRdfSemanticTree::~KoRdfSemanticTree()
 {
 }
 
-KoRdfSemanticTree KoRdfSemanticTree::createTree(QTreeWidget* tree)
+KoRdfSemanticTree KoRdfSemanticTree::createTree(QTreeWidget *tree)
 {
-    KoRdfSemanticTree ret (tree);
+    KoRdfSemanticTree ret(tree);
     return ret;
 }
 
 void KoRdfSemanticTreePrivate::clear(QTreeWidgetItem *parent)
 {
     while (parent->childCount()) {
-        QTreeWidgetItem* c = parent->child(0);
+        QTreeWidgetItem *c = parent->child(0);
         parent->removeChild(c);
         delete c;
     }
@@ -98,7 +98,7 @@ void KoRdfSemanticTreePrivate::buildSelectedSet(QTreeWidgetItem *parent, QSet<QS
     for (int i = 0; i < parent->childCount(); ++i) {
         QTreeWidgetItem *c = parent->child(i);
         if (c->isSelected()) {
-            if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(c)) {
+            if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem *>(c)) {
                 ret << item->semanticItem()->name();
             }
         }
@@ -107,9 +107,9 @@ void KoRdfSemanticTreePrivate::buildSelectedSet(QTreeWidgetItem *parent, QSet<QS
 
 void KoRdfSemanticTreePrivate::update(KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> model)
 {
-    QHash<QString, QTreeWidgetItem*>::ConstIterator it = m_treeWidgetItems.constBegin();
-    QHash<QString, QTreeWidgetItem*>::ConstIterator end = m_treeWidgetItems.constEnd();
-    for( ; it != end; ++it) {
+    QHash<QString, QTreeWidgetItem *>::ConstIterator it = m_treeWidgetItems.constBegin();
+    QHash<QString, QTreeWidgetItem *>::ConstIterator end = m_treeWidgetItems.constEnd();
+    for (; it != end; ++it) {
         const QString &semanticClass = it.key();
         QTreeWidgetItem *treeWidgetItem = it.value();
 
@@ -151,9 +151,8 @@ void KoRdfSemanticTreePrivate::update(KoDocumentRdf *rdf, QSharedPointer<Soprano
 
 void KoRdfSemanticTree::update(KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> model)
 {
-    d->update(rdf,model);
+    d->update(rdf, model);
 }
-
 
 KoRdfSemanticTree &KoRdfSemanticTree::operator=(const KoRdfSemanticTree &other)
 {

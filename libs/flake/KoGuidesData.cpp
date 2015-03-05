@@ -31,11 +31,12 @@ class KoGuidesData::Private
 public:
     Private() : showGuideLines(true), guidesColor(Qt::lightGray) {}
 
-    void parseHelpLine(const QString &text) {
+    void parseHelpLine(const QString &text)
+    {
         //<config:config-item config:name="SnapLinesDrawing" config:type="string">V7939H1139</config:config-item>
         QString str;
         int newPos = text.length() - 1; //start to element = 1
-        for (int pos = text.length() - 1; pos >= 0;--pos) {
+        for (int pos = text.length() - 1; pos >= 0; --pos) {
             if (text[pos] == 'P') {
                 //point element
                 str = text.mid(pos + 1, (newPos - pos));
@@ -75,7 +76,7 @@ public:
 };
 
 KoGuidesData::KoGuidesData()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -125,19 +126,22 @@ QList<qreal> KoGuidesData::verticalGuideLines() const
 
 void KoGuidesData::paintGuides(QPainter &painter, const KoViewConverter &converter, const QRectF &area) const
 {
-    if (! showGuideLines())
+    if (! showGuideLines()) {
         return;
+    }
 
     painter.setPen(d->guidesColor);
-    foreach(qreal guide, d->horzGuideLines) {
-        if (guide < area.top() || guide > area.bottom())
+    foreach (qreal guide, d->horzGuideLines) {
+        if (guide < area.top() || guide > area.bottom()) {
             continue;
+        }
         painter.drawLine(converter.documentToView(QPointF(area.left(), guide)),
                          converter.documentToView(QPointF(area.right(), guide)));
     }
-    foreach(qreal guide, d->vertGuideLines) {
-        if (guide < area.left() || guide > area.right())
+    foreach (qreal guide, d->vertGuideLines) {
+        if (guide < area.left() || guide > area.right()) {
             continue;
+        }
         painter.drawLine(converter.documentToView(QPointF(guide, area.top())),
                          converter.documentToView(QPointF(guide, area.bottom())));
     }
@@ -153,27 +157,31 @@ QColor KoGuidesData::guidesColor() const
     return d->guidesColor;
 }
 
-bool KoGuidesData::loadOdfSettings(const KoXmlDocument & settingsDoc)
+bool KoGuidesData::loadOdfSettings(const KoXmlDocument &settingsDoc)
 {
     d->vertGuideLines.clear();
     d->horzGuideLines.clear();
 
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("ooo:view-settings");
-    if (viewSettings.isNull())
+    if (viewSettings.isNull()) {
         return false;
+    }
 
     KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap("Views");
-    if (viewMap.isNull())
+    if (viewMap.isNull()) {
         return false;
+    }
 
     KoOasisSettings::Items firstView = viewMap.entry(0);
-    if (firstView.isNull())
+    if (firstView.isNull()) {
         return false;
+    }
 
     QString str = firstView.parseConfigItemString("SnapLinesDrawing");
-    if (!str.isEmpty())
+    if (!str.isEmpty()) {
         d->parseHelpLine(str);
+    }
 
     return true;
 }
@@ -186,11 +194,11 @@ void KoGuidesData::saveOdfSettings(KoXmlWriter &settingsWriter)
 
     QString lineStr;
 
-    foreach(qreal h, d->horzGuideLines) {
+    foreach (qreal h, d->horzGuideLines) {
         int tmpY = static_cast<int>(POINT_TO_MM(h * 100.0));
         lineStr += 'H' + QString::number(tmpY);
     }
-    foreach(qreal v, d->vertGuideLines) {
+    foreach (qreal v, d->vertGuideLines) {
         int tmpX = static_cast<int>(POINT_TO_MM(v * 100.0));
         lineStr += 'V' + QString::number(tmpX);
     }

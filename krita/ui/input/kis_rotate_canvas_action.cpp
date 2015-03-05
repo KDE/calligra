@@ -37,7 +37,6 @@ public:
     qreal angleDrift;
 };
 
-
 KisRotateCanvasAction::KisRotateCanvasAction()
     : KisAbstractInputAction("Rotate Canvas")
     , d(new Private())
@@ -68,7 +67,7 @@ void KisRotateCanvasAction::activate(int shortcut)
 {
     if (shortcut == DiscreteRotateModeShortcut) {
         QApplication::setOverrideCursor(KisCursor::rotateCanvasDiscreteCursor());
-    } else /* if (shortcut == SmoothRotateModeShortcut) */ {
+    } else { /* if (shortcut == SmoothRotateModeShortcut) */
         QApplication::setOverrideCursor(KisCursor::rotateCanvasSmoothCursor());
     }
 }
@@ -84,25 +83,25 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     KisCanvasController *canvasController =
-        dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
+        dynamic_cast<KisCanvasController *>(inputManager()->canvas()->canvasController());
 
-    switch(shortcut) {
-        case RotateModeShortcut:
-            d->mode = (Shortcut)shortcut;
-            break;
-        case DiscreteRotateModeShortcut:
-            d->mode = (Shortcut)shortcut;
-            d->angleDrift = 0;
-            break;
-        case RotateLeftShortcut:
-            canvasController->rotateCanvasLeft15();
-            break;
-        case RotateRightShortcut:
-            canvasController->rotateCanvasRight15();
-            break;
-        case RotateResetShortcut:
-            canvasController->resetCanvasRotation();
-            break;
+    switch (shortcut) {
+    case RotateModeShortcut:
+        d->mode = (Shortcut)shortcut;
+        break;
+    case DiscreteRotateModeShortcut:
+        d->mode = (Shortcut)shortcut;
+        d->angleDrift = 0;
+        break;
+    case RotateLeftShortcut:
+        canvasController->rotateCanvasLeft15();
+        break;
+    case RotateRightShortcut:
+        canvasController->rotateCanvasRight15();
+        break;
+    case RotateResetShortcut:
+        canvasController->resetCanvasRotation();
+        break;
     }
 }
 
@@ -127,6 +126,6 @@ void KisRotateCanvasAction::mouseMoved(const QPointF &lastPos, const QPointF &po
     }
 
     KisCanvasController *canvasController =
-        dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
+        dynamic_cast<KisCanvasController *>(inputManager()->canvas()->canvasController());
     canvasController->rotateCanvas(angle);
 }

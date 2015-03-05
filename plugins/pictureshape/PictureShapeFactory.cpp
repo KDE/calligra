@@ -55,7 +55,7 @@ PictureShapeFactory::PictureShapeFactory()
 
 KoShape *PictureShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    PictureShape * defaultShape = new PictureShape();
+    PictureShape *defaultShape = new PictureShape();
     defaultShape->setShapeId(PICTURESHAPEID);
     if (documentResources) {
         defaultShape->setImageCollection(documentResources->imageCollection());
@@ -65,7 +65,7 @@ KoShape *PictureShapeFactory::createDefaultShape(KoDocumentResourceManager *docu
 
 KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
-    PictureShape *shape = static_cast<PictureShape*>(createDefaultShape(documentResources));
+    PictureShape *shape = static_cast<PictureShape *>(createDefaultShape(documentResources));
     if (params->contains("qimage")) {
         QImage image = params->property("qimage").value<QImage>();
         Q_ASSERT(!image.isNull());
@@ -93,33 +93,32 @@ bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext 
             QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
             if (!mimetype.isEmpty()) {
                 return mimetype.startsWith("image");
+            } else {
+                return (href.endsWith("bmp") ||
+                        href.endsWith("jpg") ||
+                        href.endsWith("gif") ||
+                        href.endsWith("eps") ||
+                        href.endsWith("png") ||
+                        href.endsWith("tif") ||
+                        href.endsWith("tiff"));
             }
-            else {
-                return ( href.endsWith("bmp") ||
-                         href.endsWith("jpg") ||
-                         href.endsWith("gif") ||
-                         href.endsWith("eps") ||
-                         href.endsWith("png") ||
-                         href.endsWith("tif") ||
-                         href.endsWith("tiff"));
-            }
-        }
-        else {
+        } else {
             return !KoXml::namedItemNS(e, KoXmlNS::office, "binary-data").isNull();
         }
     }
     return false;
 }
 
-QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> PictureShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> panels;
-    panels.append( new PictureShapeConfigWidget() );
+    QList<KoShapeConfigWidgetBase *> panels;
+    panels.append(new PictureShapeConfigWidget());
     return panels;
 }
 
 void PictureShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
-    if (!manager->imageCollection())
+    if (!manager->imageCollection()) {
         manager->setImageCollection(new KoImageCollection(manager));
+    }
 }

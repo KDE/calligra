@@ -42,21 +42,21 @@
 
 using namespace Calligra::Sheets;
 
-StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager)
-        : KDialog(parent)
-        , m_selection(selection)
-        , m_styleManager(manager)
+StyleManagerDialog::StyleManagerDialog(QWidget *parent, Selection *selection, StyleManager *manager)
+    : KDialog(parent)
+    , m_selection(selection)
+    , m_styleManager(manager)
 {
     setButtons(Apply | Close);
     setCaption(i18n("Style Manager"));
 
-    QWidget* widget = new QWidget(this);
+    QWidget *widget = new QWidget(this);
     setMainWidget(widget);
 
     QHBoxLayout *hboxLayout = new QHBoxLayout(widget);
     hboxLayout->setMargin(0);
 
-    QVBoxLayout* layout = new QVBoxLayout();
+    QVBoxLayout *layout = new QVBoxLayout();
 
     m_styleList = new QTreeWidget(this);
     m_styleList->setHeaderLabel(i18n("Style"));
@@ -110,7 +110,7 @@ StyleManagerDialog::~StyleManagerDialog()
 
 void StyleManagerDialog::fillComboBox()
 {
-    typedef QMap<CustomStyle*, QTreeWidgetItem*> Map;
+    typedef QMap<CustomStyle *, QTreeWidgetItem *> Map;
     Map entries;
 
     entries.clear();
@@ -125,18 +125,20 @@ void StyleManagerDialog::fillComboBox()
                 entries[iter.value()] = new QTreeWidgetItem(entries[m_styleManager->defaultStyle()],
                         QStringList(iter.value()->name()));
             else {
-                CustomStyle* parentStyle = m_styleManager->style(iter.value()->parentName());
+                CustomStyle *parentStyle = m_styleManager->style(iter.value()->parentName());
                 if (parentStyle) {
                     Map::const_iterator i = entries.constFind(parentStyle);
-                    if (i != entries.constEnd())
+                    if (i != entries.constEnd()) {
                         entries[iter.value()] = new QTreeWidgetItem(i.value(), QStringList(iter.value()->name()));
+                    }
                 }
             }
         }
 
         ++iter;
-        if (iter == end)
+        if (iter == end) {
             iter = m_styleManager->m_styles.constBegin();
+        }
     }
     entries.clear();
 }
@@ -145,32 +147,35 @@ void StyleManagerDialog::slotDisplayMode(int mode)
 {
     m_styleList->clear();
 
-    if (mode != 2) // NOT "Hierarchical"
+    if (mode != 2) { // NOT "Hierarchical"
         m_styleList->setRootIsDecorated(false);
-    else { // "Hierarchical"
+    } else { // "Hierarchical"
         m_styleList->setRootIsDecorated(true);
         fillComboBox();
         return;
     }
 
-    if (mode != 1) // NOT "Custom Styles"
+    if (mode != 1) { // NOT "Custom Styles"
         new QTreeWidgetItem(m_styleList, QStringList(i18n("Default")));
+    }
 
     CustomStyles::iterator iter = m_styleManager->m_styles.begin();
     CustomStyles::iterator end  = m_styleManager->m_styles.end();
 
     while (iter != end) {
-        CustomStyle* styleData = iter.value();
+        CustomStyle *styleData = iter.value();
         if (!styleData || styleData->name().isEmpty()) {
             ++iter;
             continue;
         }
 
         if (mode == 1) { // "Custom Styles"
-            if (styleData->type() == Style::CUSTOM)
+            if (styleData->type() == Style::CUSTOM) {
                 new QTreeWidgetItem(m_styleList, QStringList(styleData->name()));
-        } else
+            }
+        } else {
             new QTreeWidgetItem(m_styleList, QStringList(styleData->name()));
+        }
 
         ++iter;
     }
@@ -178,8 +183,8 @@ void StyleManagerDialog::slotDisplayMode(int mode)
 
 void StyleManagerDialog::slotOk()
 {
-    kDebug() ;
-    QTreeWidgetItem* item = m_styleList->currentItem();
+    kDebug();
+    QTreeWidgetItem *item = m_styleList->currentItem();
 
     if (!item) {
         accept();
@@ -188,13 +193,13 @@ void StyleManagerDialog::slotOk()
 
     QString name(item->text(0));
     if (name == i18n("Default")) {
-        StyleCommand* command = new StyleCommand();
+        StyleCommand *command = new StyleCommand();
         command->setSheet(m_selection->activeSheet());
         command->setDefault();
         command->add(*m_selection);
         command->execute(m_selection->canvas());
     } else {
-        StyleCommand* command = new StyleCommand();
+        StyleCommand *command = new StyleCommand();
         command->setSheet(m_selection->activeSheet());
         command->setParentName(name);
         command->add(*m_selection);
@@ -205,25 +210,27 @@ void StyleManagerDialog::slotOk()
 
 void StyleManagerDialog::slotNew()
 {
-    CustomStyle* parentStyle = 0;
-    QTreeWidgetItem* item = m_styleList->currentItem();
+    CustomStyle *parentStyle = 0;
+    QTreeWidgetItem *item = m_styleList->currentItem();
     if (item) {
         const QString name = item->text(0);
-        if (name == i18n("Default"))
+        if (name == i18n("Default")) {
             parentStyle = m_styleManager->defaultStyle();
-        else
+        } else {
             parentStyle = m_styleManager->style(name);
-    } else
+        }
+    } else {
         parentStyle = m_styleManager->defaultStyle();
-
-    int i = 1;
-    QString newName(i18n("style%1" , m_styleManager->count() + i));
-    while (m_styleManager->style(newName) != 0) {
-        ++i;
-        newName = i18n("style%1" , m_styleManager->count() + i);
     }
 
-    CustomStyle* style = new CustomStyle(newName, parentStyle);
+    int i = 1;
+    QString newName(i18n("style%1", m_styleManager->count() + i));
+    while (m_styleManager->style(newName) != 0) {
+        ++i;
+        newName = i18n("style%1", m_styleManager->count() + i);
+    }
+
+    CustomStyle *style = new CustomStyle(newName, parentStyle);
     style->setType(Style::TENTATIVE);
 
     QPointer<CellFormatDialog> dialog = new CellFormatDialog(this, m_selection, style, m_styleManager);
@@ -242,27 +249,31 @@ void StyleManagerDialog::slotNew()
 
 void StyleManagerDialog::slotEdit()
 {
-    QTreeWidgetItem* item = m_styleList->currentItem();
+    QTreeWidgetItem *item = m_styleList->currentItem();
 
-    if (!item)
+    if (!item) {
         return;
+    }
 
-    CustomStyle* style = 0;
+    CustomStyle *style = 0;
 
     QString name(item->text(0));
-    if (name == i18n("Default"))
+    if (name == i18n("Default")) {
         style = m_styleManager->defaultStyle();
-    else
+    } else {
         style = m_styleManager->style(name);
+    }
 
-    if (!style)
+    if (!style) {
         return;
+    }
 
     QPointer<CellFormatDialog> dialog = new CellFormatDialog(this, m_selection, style, m_styleManager);
     dialog->exec();
 
-    if (dialog->result() == Accepted)
+    if (dialog->result() == Accepted) {
         m_selection->emitRefreshSheetViews();
+    }
 
     slotDisplayMode(m_displayBox->currentIndex());
     delete dialog;
@@ -270,37 +281,43 @@ void StyleManagerDialog::slotEdit()
 
 void StyleManagerDialog::slotRemove()
 {
-    QTreeWidgetItem* item = m_styleList->currentItem();
-    if (!item)
+    QTreeWidgetItem *item = m_styleList->currentItem();
+    if (!item) {
         return;
+    }
 
     const QString name = item->text(0);
-    CustomStyle* style = 0;
-    if (name == i18n("Default"))
+    CustomStyle *style = 0;
+    if (name == i18n("Default")) {
         style = m_styleManager->defaultStyle();
-    else
+    } else {
         style = m_styleManager->style(name);
+    }
 
-    if (!style)
+    if (!style) {
         return;
+    }
 
-    if (style->type() != Style::CUSTOM)
+    if (style->type() != Style::CUSTOM) {
         return;
+    }
 
     m_styleManager->takeStyle(style);
     slotDisplayMode(m_displayBox->currentIndex());
 }
 
-void StyleManagerDialog::selectionChanged(QTreeWidgetItem* item)
+void StyleManagerDialog::selectionChanged(QTreeWidgetItem *item)
 {
-    if (!item)
+    if (!item) {
         return;
+    }
     const QString name = item->text(0);
-    CustomStyle* style = 0;
-    if (name == i18n("Default"))
+    CustomStyle *style = 0;
+    if (name == i18n("Default")) {
         style = m_styleManager->defaultStyle();
-    else
+    } else {
         style = m_styleManager->style(name);
+    }
     if (!style) {
         m_deleteButton->setEnabled(false);
         return;

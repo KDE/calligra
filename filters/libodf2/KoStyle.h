@@ -27,7 +27,6 @@
 
 #include "koodf2_export.h"
 
-
 /**
  * A \class KoStyle is the base for all of the styles used in KoOdf.
  * Allows to easily share the styles amoung different compononents.
@@ -41,7 +40,7 @@ public:
     KoStyle();
     virtual ~KoStyle();
 
-    QString saveOdf(KoGenStyles& styles) const;
+    QString saveOdf(KoGenStyles &styles) const;
 
     void setName(QString name);
     QString name() const;
@@ -50,11 +49,11 @@ public:
     bool autoStyleInStylesDotXml() const;
 
 protected:
-    virtual void prepareStyle(KoGenStyle& style) const =0;
-    virtual QString defaultPrefix() const =0;
-    virtual KoGenStyle::Type styleType() const =0;
-    virtual KoGenStyle::Type automaticstyleType() const =0;
-    virtual const char* styleFamilyName() const =0;
+    virtual void prepareStyle(KoGenStyle &style) const = 0;
+    virtual QString defaultPrefix() const = 0;
+    virtual KoGenStyle::Type styleType() const = 0;
+    virtual KoGenStyle::Type automaticstyleType() const = 0;
+    virtual const char *styleFamilyName() const = 0;
 
 private:
     KoGenStyles::InsertionFlags insertionFlags() const;
@@ -70,8 +69,8 @@ private:
 
 #define KOSTYLE_DECLARE_SHARED_POINTER_IMPL(class) \
     class::Ptr class::create() \
-    { \
-        return QSharedPointer<class>(new class); \
-    }
+        { \
+            return QSharedPointer<class>(new class); \
+        }
 
 #endif

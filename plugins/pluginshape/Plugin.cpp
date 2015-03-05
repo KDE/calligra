@@ -24,14 +24,13 @@
 
 #include <kpluginfactory.h>
 
-
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
 K_EXPORT_PLUGIN(PluginFactory("calligra_shape_plugin"))
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new PluginShapeFactory() );
+    KoShapeRegistry::instance()->add(new PluginShapeFactory());
 }
 
 #include <Plugin.moc>

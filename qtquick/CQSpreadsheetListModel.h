@@ -25,7 +25,7 @@
 class CQSpreadsheetListModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* canvas READ canvas WRITE setCanvas NOTIFY canvasChanged)
+    Q_PROPERTY(QObject *canvas READ canvas WRITE setCanvas NOTIFY canvasChanged)
     Q_PROPERTY(QSize thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 
 public:
@@ -34,19 +34,19 @@ public:
         ThumbnailRole
     };
 
-    explicit CQSpreadsheetListModel(QObject* parent = 0);
+    explicit CQSpreadsheetListModel(QObject *parent = 0);
     virtual ~CQSpreadsheetListModel();
 
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual int rowCount(const QModelIndex &parent) const;
 
-    QObject* canvas() const;
+    QObject *canvas() const;
 
     QSize thumbnailSize() const;
 
 public Q_SLOTS:
-    void setCanvas(QObject* canvas);
-    void setThumbnailSize(const QSize& size);
+    void setCanvas(QObject *canvas);
+    void setThumbnailSize(const QSize &size);
 
 Q_SIGNALS:
     void canvasChanged();
@@ -54,7 +54,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // CQSPREADSHEETLISTMODEL_H

@@ -44,10 +44,10 @@ public:
 
     void addSection(Section *section, const QString &name);
 
-    QMap<QString, Section*> sections;
+    QMap<QString, Section *> sections;
     KoToolBoxLayout *layout;
     QButtonGroup *buttonGroup;
-    QHash<QToolButton*, QString> visibilityCodes;
+    QHash<QToolButton *, QString> visibilityCodes;
     bool floating;
 };
 
@@ -68,7 +68,7 @@ KoToolBox::KoToolBox()
 
     d->buttonGroup = new QButtonGroup(this);
     setLayout(d->layout);
-    foreach(const KoToolButton & button, KoToolManager::instance()->createToolList()) {
+    foreach (const KoToolButton &button, KoToolManager::instance()->createToolList()) {
         addButton(button.button, button.section, button.priority, button.buttonGroupId);
         d->visibilityCodes.insert(button.button, button.visibilityCode);
     }
@@ -76,14 +76,14 @@ KoToolBox::KoToolBox()
     // Update visibility of buttons
     setButtonsVisible(QList<QString>());
 
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)),
-            this, SLOT(setActiveTool(KoCanvasController*, int)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
+            this, SLOT(setActiveTool(KoCanvasController*,int)));
     connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
             this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
     connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(setButtonsVisible(QList<QString>)));
     connect(KoToolManager::instance(),
-            SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
-            this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
+            SIGNAL(addedTool(KoToolButton,KoCanvasController*)),
+            this, SLOT(toolAdded(KoToolButton,KoCanvasController*)));
 
     QTimer::singleShot(0, this, SLOT(adjustToFit()));
 }
@@ -117,10 +117,11 @@ void KoToolBox::addButton(QToolButton *button, const QString &section, int prior
     }
     sectionWidget->addButton(button, priority);
 
-    if (buttonGroupId < 0)
+    if (buttonGroupId < 0) {
         d->buttonGroup->addButton(button);
-    else
+    } else {
         d->buttonGroup->addButton(button, buttonGroupId);
+    }
 }
 
 void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
@@ -129,31 +130,28 @@ void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
     QAbstractButton *button = d->buttonGroup->button(id);
     if (button) {
         button->setChecked(true);
-    }
-    else {
+    } else {
         kWarning(30004) << "KoToolBox::setActiveTool(" << id << "): no such button found";
     }
 }
 
 void KoToolBox::setButtonsVisible(const QList<QString> &codes)
 {
-    foreach(QToolButton *button, d->visibilityCodes.keys()) {
+    foreach (QToolButton *button, d->visibilityCodes.keys()) {
         QString code = d->visibilityCodes.value(button);
 
         if (code.startsWith(QLatin1String("flake/"))) {
             continue;
         }
 
-        if (code.endsWith( QLatin1String( "/always"))) {
+        if (code.endsWith(QLatin1String("/always"))) {
             button->setVisible(true);
-            button->setEnabled( true );
-        }
-        else if (code.isEmpty()) {
+            button->setEnabled(true);
+        } else if (code.isEmpty()) {
             button->setVisible(true);
-            button->setEnabled( codes.count() != 0 );
-        }
-        else {
-            button->setVisible( codes.contains(code) );
+            button->setEnabled(codes.count() != 0);
+        } else {
+            button->setVisible(codes.contains(code));
         }
     }
     layout()->invalidate();
@@ -165,7 +163,7 @@ void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeL
     Q_UNUSED(canvas);
     const bool enabled = layer == 0 || (layer->isEditable() && layer->isVisible());
     foreach (QToolButton *button, d->visibilityCodes.keys()) {
-        if (d->visibilityCodes[button].endsWith( QLatin1String( "/always") ) ) {
+        if (d->visibilityCodes[button].endsWith(QLatin1String("/always"))) {
             continue;
         }
         button->setEnabled(enabled);
@@ -178,13 +176,13 @@ void KoToolBox::paintEvent(QPaintEvent *)
 
     painter.setBrush(palette().shadow());
 
-    const QList<Section*> sections = d->sections.values();
-    QList<Section*>::const_iterator iterator = sections.begin();
+    const QList<Section *> sections = d->sections.values();
+    QList<Section *>::const_iterator iterator = sections.begin();
     int halfSpacing = layout()->spacing();
     if (halfSpacing > 0) {
         halfSpacing /= 2;
     }
-    while(iterator != sections.end()) {
+    while (iterator != sections.end()) {
         Section *section = *iterator;
         QStyleOptionFrameV3 frameoption;
         frameoption.lineWidth = 1;
@@ -210,7 +208,7 @@ void KoToolBox::paintEvent(QPaintEvent *)
     painter.end();
 }
 
-void KoToolBox::resizeEvent(QResizeEvent* event)
+void KoToolBox::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
     if (!d->floating) {
@@ -222,14 +220,14 @@ void KoToolBox::setOrientation(Qt::Orientation orientation)
 {
     d->layout->setOrientation(orientation);
     QTimer::singleShot(0, this, SLOT(update()));
-    foreach(Section* section, d->sections) {
+    foreach (Section *section, d->sections) {
         section->setOrientation(orientation);
     }
 }
 
 void KoToolBox::setFloating(bool v)
 {
-    setMinimumSize(QSize(1,1));
+    setMinimumSize(QSize(1, 1));
     d->floating = v;
 }
 
@@ -245,7 +243,7 @@ void KoToolBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas
 void KoToolBox::adjustToFit()
 {
     int newWidth = width() - (width() % layout()->minimumSize().width());
-    if(newWidth != width() && newWidth >= layout()->minimumSize().width()) {
+    if (newWidth != width() && newWidth >= layout()->minimumSize().width()) {
         setMaximumWidth(newWidth);
         QTimer::singleShot(0, this, SLOT(resizeUnlock()));
     }

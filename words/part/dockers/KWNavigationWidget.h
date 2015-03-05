@@ -51,7 +51,7 @@ public:
 
     friend class KWNavigationDocker;
 
-    void setCanvas(KWCanvas* canvas);
+    void setCanvas(KWCanvas *canvas);
 
     void unsetCanvas();
 

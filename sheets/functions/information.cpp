@@ -77,9 +77,8 @@ Value func_version(valVector args, ValueCalc *calc, FuncExtra *);
 
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("information", InformationModule)
 
-
-InformationModule::InformationModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+InformationModule::InformationModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -188,21 +187,23 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString type = calc->conv()->asString(args[0]).asString().toLower();
 
-    if (type == "directory")
+    if (type == "directory") {
         return Value(QDir::currentPath());
+    }
 
-    if (type == "release")
+    if (type == "release") {
         return Value(QString(CALLIGRA_VERSION_STRING));
+    }
 
     if (type == "numfile") {
-        KoApplication *app = qobject_cast<KoApplication*>(qApp);
-        if(! app) {
-           return Value(0);
+        KoApplication *app = qobject_cast<KoApplication *>(qApp);
+        if (! app) {
+            return Value(0);
         } else {
 
             QSet<QString> nameList;
-            QList<KoPart*> parts = app->partList();
-            foreach(KoPart* part, parts) {
+            QList<KoPart *> parts = app->partList();
+            foreach (KoPart *part, parts) {
                 nameList.insert(part->document()->objectName());
             }
             return Value(nameList.size());
@@ -211,28 +212,36 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
 
     if (type == "recalc") {
         QString result;
-        if (!calc->settings()->isAutoCalculationEnabled())
+        if (!calc->settings()->isAutoCalculationEnabled()) {
             result = i18n("Manual");
-        else
+        } else {
             result = i18n("Automatic");
+        }
         return Value(result);
     }
 
     if (type == "memavail")
         // not supported
+    {
         return Value::errorVALUE();
+    }
     if (type == "memused")
         // not supported
+    {
         return Value::errorVALUE();
+    }
     if (type == "origin")
         // not supported
+    {
         return Value::errorVALUE();
+    }
 
     if (type == "system") {
 #ifndef Q_OS_WIN
         struct utsname name;
-        if (uname(&name) >= 0)
+        if (uname(&name) >= 0) {
             return Value(QString(name.sysname));
+        }
 #else
         return Value(QString("Windows"));
 #endif
@@ -240,7 +249,9 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
 
     if (type == "totmem")
         // not supported
+    {
         return Value::errorVALUE();
+    }
 
     if (type == "osversion") {
 #ifndef Q_OS_WIN
@@ -254,13 +265,13 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         OSVERSIONINFO versionInfo;
         SYSTEM_INFO sysInfo;
         QString architecture;
-        
+
         versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-        
+
         GetVersionEx(&versionInfo);
         GetSystemInfo(&sysInfo);
-        
-        switch(sysInfo.wProcessorArchitecture) {
+
+        switch (sysInfo.wProcessorArchitecture) {
         case PROCESSOR_ARCHITECTURE_AMD64:
             architecture = QString("x86_64");
             break;
@@ -273,9 +284,9 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         default:
             architecture = QString("unknown");
         }
-        
+
         QString os = QString("Windows %1.%2 (%3)").arg(versionInfo.dwMajorVersion).arg(versionInfo.dwMinorVersion).arg(architecture);
-        
+
         return Value(os);
 #endif
     }
@@ -304,10 +315,13 @@ Value func_istext(valVector args, ValueCalc *, FuncExtra *)
 // Function: ISREF
 Value func_isref(valVector args, ValueCalc * /*calc*/, FuncExtra *e)
 {
-    if (args[0].isError()) return args[0];  // errors pass through
+    if (args[0].isError()) {
+        return args[0];    // errors pass through
+    }
     // no reference ?
-    if ((e == 0) || (e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
+    if ((e == 0) || (e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1)) {
         return Value(false);
+    }
     // if we are here, it is a reference (cell/range)
     return Value(true);
 }
@@ -347,8 +361,9 @@ Value func_isodd(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ISEVEN
 Value func_iseven(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args[0].isError())
+    if (args[0].isError()) {
         return args[0];
+    }
     return Value(calc->isEven(args[0]));
 }
 
@@ -387,16 +402,21 @@ Value func_type(valVector args, ValueCalc *, FuncExtra *)
 {
     // Returns 1 for numbers, 2 for text, 4 for boolean, 16 for error,
     // 64 for arrays
-    if (args[0].isArray())
+    if (args[0].isArray()) {
         return Value(64);
-    if (args[0].isNumber())
+    }
+    if (args[0].isNumber()) {
         return Value(1);
-    if (args[0].isString())
+    }
+    if (args[0].isString()) {
         return Value(2);
-    if (args[0].isBoolean())
+    }
+    if (args[0].isBoolean()) {
         return Value(4);
-    if (args[0].isError())
+    }
+    if (args[0].isError()) {
         return Value(16);
+    }
 
     // something else ?
     return Value(0);
@@ -409,13 +429,16 @@ Value func_filename(valVector, ValueCalc *calc, FuncExtra *)
 
 Value func_formula(valVector, ValueCalc *, FuncExtra *e)
 {
-    if(e->ranges[0].col1 < 1 || e->ranges[0].row1 < 1)
+    if (e->ranges[0].col1 < 1 || e->ranges[0].row1 < 1) {
         return Value::errorVALUE();
+    }
     const Calligra::Sheets::Cell c(e->sheet, e->ranges[0].col1, e->ranges[0].row1);
-    if (c.isNull())
+    if (c.isNull()) {
         return Value::errorVALUE();
-    if (!c.isFormula())
+    }
+    if (!c.isFormula()) {
         return Value::errorNA();
+    }
     return Value(c.formula().expression());
 }
 

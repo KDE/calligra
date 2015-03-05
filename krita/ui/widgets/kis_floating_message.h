@@ -57,10 +57,10 @@ public:
     /// Show message above parent widget instead of screen
     void setShowOverParent(bool show);
 
-    void setIcon(const QIcon& icon);
+    void setIcon(const QIcon &icon);
 
     void tryOverrideMessage(const QString message,
-                            const QIcon& icon,
+                            const QIcon &icon,
                             int timeout,
                             KisFloatingMessage::Priority priority,
                             int alignment = Qt::AlignCenter | Qt::TextWordWrap);

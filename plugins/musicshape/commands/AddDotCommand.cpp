@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 
-AddDotCommand::AddDotCommand(MusicShape* shape, MusicCore::Chord* chord)
+AddDotCommand::AddDotCommand(MusicShape *shape, MusicCore::Chord *chord)
     : m_shape(shape), m_chord(chord)
 {
     setText(kundo2_i18n("Add dot"));

@@ -41,18 +41,18 @@ public:
      * @param srcCs the first color space in the chain
      * @param dstCs the last color space in the chain
      */
-    KoMultipleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs, KoColorConversionTransformation::Intent, KoColorConversionTransformation::ConversionFlags conversionFlags);
+    KoMultipleColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs, KoColorConversionTransformation::Intent, KoColorConversionTransformation::ConversionFlags conversionFlags);
     ~KoMultipleColorConversionTransformation();
     /**
      * Add a transformation to the chain.
      * @param transfo this transformation is then deleted when the
      *                KoMultipleColorConversionTransformation is deleted.
      */
-    void appendTransfo(KoColorConversionTransformation* transfo);
+    void appendTransfo(KoColorConversionTransformation *transfo);
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

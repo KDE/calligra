@@ -35,13 +35,15 @@ class KRITAUI_EXPORT KisTemplateTree
 
 public:
     KisTemplateTree(const QByteArray &templateType, const KComponentData &instance,
-                   bool readTree = false);
+                    bool readTree = false);
     ~KisTemplateTree();
 
-    QByteArray templateType() const {
+    QByteArray templateType() const
+    {
         return m_templateType;
     }
-    KComponentData componentData() const {
+    KComponentData componentData() const
+    {
         return m_componentData;
     }
     void readTemplateTree();
@@ -50,14 +52,19 @@ public:
     void add(KisTemplateGroup *g);
     KisTemplateGroup *find(const QString &name) const;
 
-    KisTemplateGroup *defaultGroup() const {
+    KisTemplateGroup *defaultGroup() const
+    {
         return m_defaultGroup;
     }
-    KisTemplate *defaultTemplate() const {
+    KisTemplate *defaultTemplate() const
+    {
         return m_defaultTemplate;
     }
 
-    QList<KisTemplateGroup*> groups () const { return m_groups; }
+    QList<KisTemplateGroup *> groups() const
+    {
+        return m_groups;
+    }
 
 private:
     void readGroups();
@@ -67,7 +74,7 @@ private:
 
     QByteArray m_templateType;
     KComponentData m_componentData;
-    QList<KisTemplateGroup*> m_groups;
+    QList<KisTemplateGroup *> m_groups;
     KisTemplateGroup *m_defaultGroup;
     KisTemplate *m_defaultTemplate;
 };

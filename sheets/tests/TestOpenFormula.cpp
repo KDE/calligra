@@ -36,19 +36,22 @@ using namespace Calligra::Sheets;
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
-Value TestOpenFormula::evaluate(const QString& formula, Value& ex)
+Value TestOpenFormula::evaluate(const QString &formula, Value &ex)
 {
     Formula f;
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
-    if (result.isFloat() && ex.isInteger())
+    if (result.isFloat() && ex.isInteger()) {
         ex = Value(ex.asFloat());
-    if (result.isInteger() && ex.isFloat())
+    }
+    if (result.isInteger() && ex.isFloat()) {
         result = Value(result.asFloat());
+    }
 
     return result;
 }
@@ -56,7 +59,7 @@ Value TestOpenFormula::evaluate(const QString& formula, Value& ex)
 namespace QTest
 {
 template<>
-char *toString(const Value& value)
+char *toString(const Value &value)
 {
     QString message;
     QTextStream ts(&message, QIODevice::WriteOnly);
@@ -69,7 +72,7 @@ char *toString(const Value& value)
     { QCOMPARE(convertToOpenFormula(x),QString(y)); \
         QCOMPARE(convertFromOpenFormula(y),QString(x)); }
 
-QString TestOpenFormula::convertToOpenFormula(const QString& expr)
+QString TestOpenFormula::convertToOpenFormula(const QString &expr)
 {
     KLocale locale("en_US");
     locale.setDecimalSymbol(",");
@@ -79,7 +82,7 @@ QString TestOpenFormula::convertToOpenFormula(const QString& expr)
     return formula;
 }
 
-QString TestOpenFormula::convertFromOpenFormula(const QString& expr)
+QString TestOpenFormula::convertFromOpenFormula(const QString &expr)
 {
     KLocale locale("en_US");
     locale.setDecimalSymbol(",");

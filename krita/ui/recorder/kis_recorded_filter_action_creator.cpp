@@ -30,14 +30,13 @@
 #include <recorder/kis_recorded_filter_action.h>
 #include <recorder/kis_node_query_path.h>
 
-
-KisRecordedFilterActionCreator::KisRecordedFilterActionCreator(QWidget* parent , Qt::WindowFlags f) : KisRecordedActionCreator(parent, f)
+KisRecordedFilterActionCreator::KisRecordedFilterActionCreator(QWidget *parent, Qt::WindowFlags f) : KisRecordedActionCreator(parent, f)
 {
     m_filterModel = new KisFiltersModel(true, 0);
     m_filterTree = new QTreeView(this);
     m_filterTree->setModel(m_filterModel);
     m_filterTree->header()->setVisible(false);
-    QGridLayout* layout = new QGridLayout();
+    QGridLayout *layout = new QGridLayout();
     setLayout(layout);
     layout->addWidget(m_filterTree, 0, 0, 1, 1);
 }
@@ -48,13 +47,14 @@ KisRecordedFilterActionCreator::~KisRecordedFilterActionCreator()
     delete m_filterModel;
 }
 
-KisRecordedAction* KisRecordedFilterActionCreator::createAction() const
+KisRecordedAction *KisRecordedFilterActionCreator::createAction() const
 {
-    const KisFilter* filter = m_filterModel->indexToFilter(m_filterTree->currentIndex());
-    if(!filter) return 0;
+    const KisFilter *filter = m_filterModel->indexToFilter(m_filterTree->currentIndex());
+    if (!filter) {
+        return 0;
+    }
     return new KisRecordedFilterAction(filter->name(), KisNodeQueryPath::fromString(""), filter, filter->defaultConfiguration(0));
 }
-
 
 KisRecordedFilterActionCreatorFactory::KisRecordedFilterActionCreatorFactory() : KisRecordedActionCreatorFactory("filter", i18nc("recorded filter action", "Apply Filter"))
 {
@@ -66,10 +66,10 @@ KisRecordedFilterActionCreatorFactory::~KisRecordedFilterActionCreatorFactory()
 
 bool KisRecordedFilterActionCreatorFactory::requireCreator() const
 {
-	return true;
+    return true;
 }
 
-KisRecordedActionCreator* KisRecordedFilterActionCreatorFactory::createCreator(QWidget* parent) const
+KisRecordedActionCreator *KisRecordedFilterActionCreatorFactory::createCreator(QWidget *parent) const
 {
-	return new KisRecordedFilterActionCreator(parent);
+    return new KisRecordedFilterActionCreator(parent);
 }

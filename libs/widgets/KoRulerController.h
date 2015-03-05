@@ -47,7 +47,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     Q_PRIVATE_SLOT(d, void canvasResourceChanged(int))
     Q_PRIVATE_SLOT(d, void indentsChanged())

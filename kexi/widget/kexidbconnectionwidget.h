@@ -34,32 +34,32 @@ class KexiDBDriverComboBox;
 class KexiDBConnectionTabWidget;
 
 class KEXIEXTWIDGETS_EXPORT KexiDBConnectionWidget
-            : public QWidget, protected Ui::KexiDBConnectionWidget
+    : public QWidget, protected Ui::KexiDBConnectionWidget
 {
     Q_OBJECT
 
 public:
-    explicit KexiDBConnectionWidget(QWidget* parent = 0);
+    explicit KexiDBConnectionWidget(QWidget *parent = 0);
     virtual ~KexiDBConnectionWidget();
 
     /*! Sets project data \a data.
      \a shortcutFileName is only used to check if the file is writable
      (if no, "save changes" button will be disabled). */
-    void setData(const KexiProjectData& data, const QString& shortcutFileName = QString());
+    void setData(const KexiProjectData &data, const QString &shortcutFileName = QString());
 
     /*! Sets connection data \a data.
      \a shortcutFileName is only used to check if the file is writable
      (if no, "save changes" button will be disabled). */
-    void setData(const KexiDB::ConnectionData& data,
-                 const QString& shortcutFileName = QString());
+    void setData(const KexiDB::ConnectionData &data,
+                 const QString &shortcutFileName = QString());
 
     KexiProjectData data();
 
     //! \return a pointer to 'save changes' button. You can call hide() for this to hide it.
-    KPushButton* saveChangesButton() const;
+    KPushButton *saveChangesButton() const;
 
     //! \return a pointer to 'test connection' button. You can call hide() for this to hide it.
-    KPushButton* testConnectionButton() const;
+    KPushButton *testConnectionButton() const;
 
     KexiDBDriverComboBox *driversCombo() const;
 
@@ -78,22 +78,22 @@ protected Q_SLOTS:
     void slotShowSavePasswordHelp();
 
 protected:
-    void setDataInternal(const KexiProjectData& data, bool connectionOnly,
-                         const QString& shortcutFileName);
+    void setDataInternal(const KexiProjectData &data, bool connectionOnly,
+                         const QString &shortcutFileName);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     friend class KexiDBConnectionTabWidget;
     friend class KexiDBConnectionDialog;
 };
 
 class KEXIEXTWIDGETS_EXPORT KexiDBConnectionWidgetDetails
-            : public QWidget, public Ui::KexiDBConnectionWidgetDetails
+    : public QWidget, public Ui::KexiDBConnectionWidgetDetails
 {
 public:
-    explicit KexiDBConnectionWidgetDetails(QWidget* parent = 0);
+    explicit KexiDBConnectionWidgetDetails(QWidget *parent = 0);
     ~KexiDBConnectionWidgetDetails();
 };
 
@@ -102,16 +102,16 @@ class KEXIEXTWIDGETS_EXPORT KexiDBConnectionTabWidget : public KTabWidget
     Q_OBJECT
 
 public:
-    explicit KexiDBConnectionTabWidget(QWidget* parent = 0);
+    explicit KexiDBConnectionTabWidget(QWidget *parent = 0);
     virtual ~KexiDBConnectionTabWidget();
 
     /*! Sets connection data \a data.
      \a shortcutFileName is only used to check if the file is writable
      (if no, "save changes" button will be disabled). */
-    void setData(const KexiProjectData& data, const QString& shortcutFileName = QString());
+    void setData(const KexiProjectData &data, const QString &shortcutFileName = QString());
 
-    void setData(const KexiDB::ConnectionData& data,
-                 const QString& shortcutFileName = QString());
+    void setData(const KexiDB::ConnectionData &data,
+                 const QString &shortcutFileName = QString());
 
     KexiProjectData currentProjectData();
 
@@ -128,11 +128,10 @@ protected Q_SLOTS:
 
 protected:
     KexiDBConnectionWidget *mainWidget;
-    KexiDBConnectionWidgetDetails* detailsWidget;
+    KexiDBConnectionWidgetDetails *detailsWidget;
 
     friend class KexiDBConnectionDialog;
 };
-
 
 class KEXIEXTWIDGETS_EXPORT KexiDBConnectionDialog : public KDialog
 {
@@ -147,9 +146,9 @@ public:
      Connect to saveChanges() signal to react on saving changes.
      If \a shortcutFileName is empty, the button will be hidden.
      \a acceptButtonGuiItem allows to override default "Open" button's appearance. */
-    KexiDBConnectionDialog(QWidget* parent, const KexiProjectData& data,
-                           const QString& shortcutFileName = QString(),
-                           const KGuiItem& acceptButtonGuiItem = KGuiItem());
+    KexiDBConnectionDialog(QWidget *parent, const KexiProjectData &data,
+                           const QString &shortcutFileName = QString(),
+                           const KGuiItem &acceptButtonGuiItem = KGuiItem());
 
     /*! Creates a new connection dialog for connection data \a data.
      Only connection data is visible: database name and and title fields are hidden.
@@ -157,9 +156,9 @@ public:
      (if no, "save changes" button will be disabled).
      The shortcut file is in .KEXIC format.
      See above constructor for more details. */
-    KexiDBConnectionDialog(QWidget* parent, const KexiDB::ConnectionData& data,
-                           const QString& shortcutFileName = QString(),
-                           const KGuiItem& acceptButtonGuiItem = KGuiItem());
+    KexiDBConnectionDialog(QWidget *parent, const KexiDB::ConnectionData &data,
+                           const QString &shortcutFileName = QString(),
+                           const KGuiItem &acceptButtonGuiItem = KGuiItem());
 
     ~KexiDBConnectionDialog();
 
@@ -172,7 +171,7 @@ public:
     bool savePasswordOptionSelected() const;
 
     KexiDBConnectionWidget *mainWidget() const;
-    KexiDBConnectionWidgetDetails* detailsWidget() const;
+    KexiDBConnectionWidgetDetails *detailsWidget() const;
 
 Q_SIGNALS:
     //! emitted when data saving is needed
@@ -184,10 +183,10 @@ Q_SIGNALS:
     void loadDBList();
 
 private:
-    void init(const KGuiItem& acceptButtonGuiItem);
+    void init(const KGuiItem &acceptButtonGuiItem);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KEXIDBCONNECTIONWIDGET_H

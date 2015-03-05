@@ -26,7 +26,7 @@ class KisOffsetScaleOption : public KisCurveOption
 {
 public:
     KisOffsetScaleOption();
-    double apply(const KisPaintInformation & info, double offsetScale) const;
+    double apply(const KisPaintInformation &info, double offsetScale) const;
 };
 
 #endif

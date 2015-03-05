@@ -21,7 +21,6 @@
 
 #include "../kis_dynamic_sensor.h"
 
-
 #include "kis_paint_information.h"
 
 class KisDynamicSensorSpeed : public KisDynamicSensor
@@ -29,8 +28,9 @@ class KisDynamicSensorSpeed : public KisDynamicSensor
 public:
     KisDynamicSensorSpeed();
     virtual ~KisDynamicSensorSpeed() { }
-    virtual qreal value(const KisPaintInformation& info);
-    void reset() {
+    virtual qreal value(const KisPaintInformation &info);
+    void reset()
+    {
         m_speed = -1.0;
     }
 private:
@@ -42,7 +42,8 @@ class KisDynamicSensorRotation : public KisDynamicSensor
 public:
     KisDynamicSensorRotation();
     virtual ~KisDynamicSensorRotation() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    virtual qreal value(const KisPaintInformation &info)
+    {
         return info.rotation() / 360.0;
     }
 };
@@ -52,7 +53,8 @@ class KisDynamicSensorPressure : public KisDynamicSensor
 public:
     KisDynamicSensorPressure();
     virtual ~KisDynamicSensorPressure() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    virtual qreal value(const KisPaintInformation &info)
+    {
         return info.pressure();
     }
 };
@@ -62,7 +64,8 @@ class KisDynamicSensorXTilt : public KisDynamicSensor
 public:
     KisDynamicSensorXTilt();
     virtual ~KisDynamicSensorXTilt() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    virtual qreal value(const KisPaintInformation &info)
+    {
         return 1.0 - fabs(info.xTilt()) / 60.0;
     }
 };
@@ -72,7 +75,8 @@ class KisDynamicSensorYTilt : public KisDynamicSensor
 public:
     KisDynamicSensorYTilt();
     virtual ~KisDynamicSensorYTilt() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    virtual qreal value(const KisPaintInformation &info)
+    {
         return 1.0 - fabs(info.yTilt()) / 60.0;
     }
 };
@@ -82,7 +86,8 @@ class KisDynamicSensorTiltDirection : public KisDynamicSensor
 public:
     KisDynamicSensorTiltDirection();
     virtual ~KisDynamicSensorTiltDirection() {}
-    virtual qreal value(const KisPaintInformation& info) {
+    virtual qreal value(const KisPaintInformation &info)
+    {
         return KisPaintInformation::tiltDirection(info, true);
     }
 };
@@ -92,7 +97,8 @@ class KisDynamicSensorTiltElevation : public KisDynamicSensor
 public:
     KisDynamicSensorTiltElevation();
     virtual ~KisDynamicSensorTiltElevation() {}
-    virtual qreal value(const KisPaintInformation& info) {
+    virtual qreal value(const KisPaintInformation &info)
+    {
         return KisPaintInformation::tiltElevation(info, 60.0, 60.0, true);
     }
 };
@@ -102,7 +108,8 @@ class KisDynamicSensorPerspective : public KisDynamicSensor
 public:
     KisDynamicSensorPerspective();
     virtual ~KisDynamicSensorPerspective() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    virtual qreal value(const KisPaintInformation &info)
+    {
         return info.perspective();
     }
 };
@@ -112,7 +119,8 @@ class KisDynamicSensorTangentialPressure : public KisDynamicSensor
 public:
     KisDynamicSensorTangentialPressure();
     virtual ~KisDynamicSensorTangentialPressure() { }
-    virtual qreal value(const KisPaintInformation& info) {
+    virtual qreal value(const KisPaintInformation &info)
+    {
         return info.tangentialPressure();
     }
 };

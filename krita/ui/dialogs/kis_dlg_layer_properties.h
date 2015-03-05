@@ -27,7 +27,6 @@
 
 #include "ui_wdglayerproperties.h"
 
-
 class QWidget;
 class QBitArray;
 class KisViewManager;
@@ -38,7 +37,8 @@ class WdgLayerProperties : public QWidget, public Ui::WdgLayerProperties
     Q_OBJECT
 
 public:
-    WdgLayerProperties(QWidget *parent) : QWidget(parent) {
+    WdgLayerProperties(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -81,7 +81,7 @@ protected Q_SLOTS:
 private:
 
     struct Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KIS_DLG_LAYER_PROPERTIES_H_

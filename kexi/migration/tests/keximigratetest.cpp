@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init(argc, argv, &aboutData);
     KApplication app;
 
-    ImportWizard* iw = new ImportWizard();
+    ImportWizard *iw = new ImportWizard();
     iw->setGeometry(300, 300, 300, 250);
     iw->show();
 

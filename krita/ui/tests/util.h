@@ -52,7 +52,6 @@
 #include "kis_default_bounds.h"
 #include "kis_transform_mask_params_interface.h"
 
-
 KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 {
     KisSelectionSP pixelSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
@@ -68,7 +67,7 @@ KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP image)
 {
     KisSelectionSP vectorSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
-    KoPathShape* path = new KoPathShape();
+    KoPathShape *path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
     path->moveTo(QPointF(10, 10));
     path->lineTo(QPointF(10, 10) + QPointF(100, 0));
@@ -76,22 +75,23 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP i
     path->lineTo(QPointF(10, 10) + QPointF(0, 100));
     path->close();
     path->normalize();
-    KisShapeSelection* shapeSelection = new KisShapeSelection(image, vectorSelection);
+    KisShapeSelection *shapeSelection = new KisShapeSelection(image, vectorSelection);
     shapeSelection->addShape(path);
     vectorSelection->setShapeSelection(shapeSelection);
 
     return vectorSelection;
 }
 
-QTransform createTestingTransform() {
-    return QTransform(1,2,3,4,5,6,7,8,9);
+QTransform createTestingTransform()
+{
+    return QTransform(1, 2, 3, 4, 5, 6, 7, 8, 9);
 }
 
-KisDocument* createCompleteDocument()
+KisDocument *createCompleteDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
-    KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
+    KisDocument *doc = qobject_cast<KisDocument *>(KisPart::instance()->createDocument());
 
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());
@@ -121,13 +121,12 @@ KisDocument* createCompleteDocument()
         gc.end();
     }
 
-
     KisCloneLayerSP cloneLayer1 = new KisCloneLayer(group1, image, "clonelayer1", 150);
     cloneLayer1->setX(100);
     cloneLayer1->setY(100);
 
     KisSelectionSP pixelSelection = createPixelSelection(paintLayer1->paintDevice());
-    KisFilterConfiguration* kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
+    KisFilterConfiguration *kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration(group2->projection());
     Q_ASSERT(kfc);
     KisAdjustmentLayerSP adjustmentLayer1 = new KisAdjustmentLayer(image, "adjustmentLayer1", kfc, pixelSelection);
     kfc = 0; // kfc cannot be shared!
@@ -147,7 +146,7 @@ KisDocument* createCompleteDocument()
 //    KoShapeContainer * parentContainer =
 //        dynamic_cast<KoShapeContainer*>(doc->shapeForNode(group1));
 
-    KoPathShape* path = new KoPathShape();
+    KoPathShape *path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
     path->moveTo(QPointF(10, 10));
     path->lineTo(QPointF(10, 10) + QPointF(100, 0));
@@ -214,13 +213,12 @@ KisDocument *createEmptyDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
-    KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
+    KisDocument *doc = qobject_cast<KisDocument *>(KisPart::instance()->createDocument());
 
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());
 
     return doc;
 }
-
 
 #endif

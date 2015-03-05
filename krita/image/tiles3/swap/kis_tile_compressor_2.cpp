@@ -24,7 +24,6 @@
 
 const QString KisTileCompressor2::m_compressionName = "LZF";
 
-
 KisTileCompressor2::KisTileCompressor2()
 {
     m_compression = new KisLzfCompression();
@@ -43,7 +42,7 @@ void KisTileCompressor2::writeTile(KisTileSP tile, KisPaintDeviceWriter &store)
     qint32 bytesWritten;
 
     tile->lockForRead();
-    compressTileData(tile->tileData(), (quint8*)m_streamingBuffer.data(),
+    compressTileData(tile->tileData(), (quint8 *)m_streamingBuffer.data(),
                      m_streamingBuffer.size(), bytesWritten);
     tile->unlock();
 
@@ -77,7 +76,7 @@ bool KisTileCompressor2::readTile(QIODevice *stream, KisTiledDataManager *dm)
         stream->read(m_streamingBuffer.data(), dataSize);
 
         tile->lockForWrite();
-        bool res = decompressTileData((quint8*)m_streamingBuffer.data(), dataSize, tile->tileData());
+        bool res = decompressTileData((quint8 *)m_streamingBuffer.data(), dataSize, tile->tileData());
         tile->unlock();
         return res;
     }
@@ -102,9 +101,9 @@ void KisTileCompressor2::prepareWorkBuffers(qint32 tileDataSize)
 }
 
 void KisTileCompressor2::compressTileData(KisTileData *tileData,
-                                          quint8 *buffer,
-                                          qint32 bufferSize,
-                                          qint32 &bytesWritten)
+        quint8 *buffer,
+        qint32 bufferSize,
+        qint32 &bytesWritten)
 {
     const qint32 pixelSize = tileData->pixelSize();
     const qint32 tileDataSize = TILE_DATA_SIZE(pixelSize);
@@ -118,18 +117,17 @@ void KisTileCompressor2::compressTileData(KisTileData *tileData,
 
     prepareWorkBuffers(tileDataSize);
 
-    KisAbstractCompression::linearizeColors(tileData->data(), (quint8*)m_linearizationBuffer.data(),
+    KisAbstractCompression::linearizeColors(tileData->data(), (quint8 *)m_linearizationBuffer.data(),
                                             tileDataSize, pixelSize);
 
-    compressedBytes = m_compression->compress((quint8*)m_linearizationBuffer.data(), tileDataSize,
-                                              (quint8*)m_compressionBuffer.data(), m_compressionBuffer.size());
+    compressedBytes = m_compression->compress((quint8 *)m_linearizationBuffer.data(), tileDataSize,
+                      (quint8 *)m_compressionBuffer.data(), m_compressionBuffer.size());
 
-    if(compressedBytes < tileDataSize) {
+    if (compressedBytes < tileDataSize) {
         buffer[0] = COMPRESSED_DATA_FLAG;
         memcpy(buffer + 1, m_compressionBuffer.data(), compressedBytes);
         bytesWritten = compressedBytes + 1;
-    }
-    else {
+    } else {
         buffer[0] = RAW_DATA_FLAG;
         memcpy(buffer + 1, tileData->data(), tileDataSize);
         bytesWritten = tileDataSize + 1;
@@ -137,27 +135,26 @@ void KisTileCompressor2::compressTileData(KisTileData *tileData,
 }
 
 bool KisTileCompressor2::decompressTileData(quint8 *buffer,
-                                            qint32 bufferSize,
-                                            KisTileData *tileData)
+        qint32 bufferSize,
+        KisTileData *tileData)
 {
     const qint32 pixelSize = tileData->pixelSize();
     const qint32 tileDataSize = TILE_DATA_SIZE(pixelSize);
 
-    if(buffer[0] == COMPRESSED_DATA_FLAG) {
+    if (buffer[0] == COMPRESSED_DATA_FLAG) {
         prepareWorkBuffers(tileDataSize);
 
         qint32 bytesWritten;
         bytesWritten = m_compression->decompress(buffer + 1, bufferSize - 1,
-                                                 (quint8*)m_linearizationBuffer.data(), tileDataSize);
+                       (quint8 *)m_linearizationBuffer.data(), tileDataSize);
         if (bytesWritten == tileDataSize) {
-            KisAbstractCompression::delinearizeColors((quint8*)m_linearizationBuffer.data(),
-                                                      tileData->data(),
-                                                      tileDataSize, pixelSize);
+            KisAbstractCompression::delinearizeColors((quint8 *)m_linearizationBuffer.data(),
+                    tileData->data(),
+                    tileDataSize, pixelSize);
             return true;
         }
         return false;
-    }
-    else {
+    } else {
         memcpy(tileData->data(), buffer + 1, tileDataSize);
         return true;
     }
@@ -180,7 +177,7 @@ inline qint32 KisTileCompressor2::maxHeaderLength()
 }
 
 inline QString KisTileCompressor2::getHeader(KisTileSP tile,
-                                             qint32 compressedSize)
+        qint32 compressedSize)
 {
     qint32 x, y;
     qint32 width, height;

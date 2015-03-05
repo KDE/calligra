@@ -57,16 +57,18 @@ public:
      */
     struct AdditionalAttributeData {
         AdditionalAttributeData(const QString &ns, const QString &tag, const QString &name)
-                : ns(ns)
-                , tag(tag)
-                , name(name) {
+            : ns(ns)
+            , tag(tag)
+            , name(name)
+        {
         }
 
         const QString ns;
         const QString tag;
         const QString name;
 
-        bool operator==(const AdditionalAttributeData &other) const {
+        bool operator==(const AdditionalAttributeData &other) const
+        {
             return name == other.name;
         }
     };
@@ -205,7 +207,7 @@ public:
 private:
     // to allow only the KoShapeRegistry access to the KoShapeBasedDocumentBase
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOSHAPELOADINGCONTEXT_H */

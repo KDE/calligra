@@ -37,7 +37,7 @@ public:
      can be decoded as "kexi/fields" data. If decoding of "kexi/field"
      type is supported, decoding of "kexi/fields" is always supported.
      */
-    static bool canDecode(QMimeSource* e);
+    static bool canDecode(QMimeSource *e);
 
     /*! Decodes data of multiple-field drag ("kexi/fields" mime type) coming with event \a e.
      Sets \a sourceMimeType, \a sourceName and \a fields. Also works with "kexi/field" data.
@@ -50,12 +50,12 @@ public:
 class KEXICORE_EXPORT KexiDataProviderDrag : public QDrag
 {
 public:
-    KexiDataProviderDrag(const QString& sourceMimeType, const QString& sourceName,
+    KexiDataProviderDrag(const QString &sourceMimeType, const QString &sourceName,
                          QWidget *parent = 0);
     ~KexiDataProviderDrag();
 
-    static bool canDecode(QDragMoveEvent* e);
-    static bool decode(QDropEvent* e, QString* sourceMimeType, QString* sourceName);
+    static bool canDecode(QDragMoveEvent *e);
+    static bool decode(QDropEvent *e, QString *sourceMimeType, QString *sourceName);
 
 };
 

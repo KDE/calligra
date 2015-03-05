@@ -44,12 +44,14 @@ public:
     static const int rotationHandleRadius;
 
     template <class T>
-    static T flakeToImage(const KisCoordinatesConverter *converter, T object) {
+    static T flakeToImage(const KisCoordinatesConverter *converter, T object)
+    {
         return converter->documentToImage(converter->flakeToDocument(object));
     }
 
     template <class T>
-    static T imageToFlake(const KisCoordinatesConverter *converter, T object) {
+    static T imageToFlake(const KisCoordinatesConverter *converter, T object)
+    {
         return converter->documentToFlake(converter->imageToDocument(object));
     }
 
@@ -66,8 +68,7 @@ public:
 
     static QPointF clipInRect(QPointF p, QRectF r);
 
-    struct MatricesPack
-    {
+    struct MatricesPack {
         MatricesPack(const ToolTransformArgs &args);
 
         QTransform TS;
@@ -85,16 +86,17 @@ public:
     static bool checkImageTooBig(const QRectF &bounds, const MatricesPack &m);
 
     static KisTransformWorker createTransformWorker(const ToolTransformArgs &config,
-                                                    KisPaintDeviceSP device,
-                                                    KoUpdaterPtr updater,
-                                                    QVector3D *transformedCenter /* OUT */);
+            KisPaintDeviceSP device,
+            KoUpdaterPtr updater,
+            QVector3D *transformedCenter /* OUT */);
 
     static void transformDevice(const ToolTransformArgs &config,
                                 KisPaintDeviceSP device,
                                 KisProcessingVisitor::ProgressHelper *helper);
 
     template<typename Function>
-    class HandleChooser {
+    class HandleChooser
+    {
     public:
         HandleChooser(const QPointF &cursorPos, Function defaultFunction)
             : m_cursorPos(cursorPos),
@@ -103,7 +105,8 @@ public:
         {
         }
 
-        bool addFunction(const QPointF &pt, qreal radius, Function function) {
+        bool addFunction(const QPointF &pt, qreal radius, Function function)
+        {
             bool result = false;
             qreal distance = kisSquareDistance(pt, m_cursorPos);
 
@@ -116,7 +119,8 @@ public:
             return result;
         }
 
-        Function function() const {
+        Function function() const
+        {
             return m_function;
         }
 

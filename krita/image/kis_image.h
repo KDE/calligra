@@ -65,12 +65,12 @@ class MergeStrategy;
  * functions to manipulate the whole image.
  */
 class KRITAIMAGE_EXPORT KisImage : public QObject,
-        public KisStrokesFacade,
-        public KisUpdatesFacade,
-        public KisProjectionUpdateListener,
-        public KisNodeFacade,
-        public KisNodeGraphListener,
-        public KisShared
+    public KisStrokesFacade,
+    public KisUpdatesFacade,
+    public KisProjectionUpdateListener,
+    public KisNodeFacade,
+    public KisNodeGraphListener,
+    public KisShared
 {
 
     Q_OBJECT
@@ -78,7 +78,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject,
 public:
 
     /// @param colorSpace can be null. in that case it will be initialised to a default color space.
-    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection = true);
+    KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, const QString &name, bool startProjection = true);
     virtual ~KisImage();
 
 public: // KisNodeGraphListener implementation
@@ -86,9 +86,9 @@ public: // KisNodeGraphListener implementation
     void aboutToAddANode(KisNode *parent, int index);
     void nodeHasBeenAdded(KisNode *parent, int index);
     void aboutToRemoveANode(KisNode *parent, int index);
-    void nodeChanged(KisNode * node);
+    void nodeChanged(KisNode *node);
     void notifySelectionChanged();
-    void requestProjectionUpdate(KisNode *node, const QRect& rect);
+    void requestProjectionUpdate(KisNode *node, const QRect &rect);
 
 public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc);
@@ -102,20 +102,19 @@ public:
                            qint32 y1,
                            qint32 width,
                            qint32 height,
-                           const KoColorProfile * profile);
+                           const KoColorProfile *profile);
 
     /**
      * Render the projection onto a QImage.
      * (this is an overloaded function)
      */
     QImage convertToQImage(QRect imageRect,
-                           const KoColorProfile * profile);
-
+                           const KoColorProfile *profile);
 
     /**
      * XXX: docs!
      */
-    QImage convertToQImage(const QRect& scaledRect, const QSize& scaledImageSize, const KoColorProfile *profile);
+    QImage convertToQImage(const QRect &scaledRect, const QSize &scaledImageSize, const KoColorProfile *profile);
 
     /**
      * Calls KisUpdateScheduler::lock
@@ -151,7 +150,7 @@ public:
     /**
      * @return the perspective grid associated to this image
      */
-    KisPerspectiveGrid* perspectiveGrid();
+    KisPerspectiveGrid *perspectiveGrid();
 
     /**
      * Resize the image to the specified rect. The resize
@@ -160,7 +159,7 @@ public:
      * @param newRect the rect describing the new width, height and offset
      *        of the image
      */
-    void resizeImage(const QRect& newRect);
+    void resizeImage(const QRect &newRect);
 
     /**
      * Crop the image to the specified rect. The crop
@@ -169,14 +168,13 @@ public:
      * @param newRect the rect describing the new width, height and offset
      *        of the image
      */
-    void cropImage(const QRect& newRect);
-
+    void cropImage(const QRect &newRect);
 
     /**
      * Crop a node to @newRect. The node will *not* be moved anywhere,
      * it just drops some content
      */
-    void cropNode(KisNodeSP node, const QRect& newRect);
+    void cropNode(KisNodeSP node, const QRect &newRect);
 
     void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
     void scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy);
@@ -221,7 +219,7 @@ public:
     void convertProjectionColorSpace(const KoColorSpace *dstColorSpace);
 
     // Get the profile associated with this image
-    const KoColorProfile *  profile() const;
+    const KoColorProfile   *profile() const;
 
     /**
      * Set the profile of the image to the new profile and do the same for
@@ -245,7 +243,7 @@ public:
      * all the porcessing at the scheduler, waits until it's finished
      * adn executes commands exclusively.
      */
-    KisUndoAdapter* undoAdapter() const;
+    KisUndoAdapter *undoAdapter() const;
 
     /**
      * This adapter is used by the strokes system. The commands are added
@@ -253,7 +251,7 @@ public:
      * wrapped into a special command and added to the undo stack. redo()
      * in not called.
      */
-    KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
+    KisPostExecutionUndoAdapter *postExecutionUndoAdapter() const;
 
     /**
      * Replace current undo store with the new one. The old store
@@ -266,12 +264,12 @@ public:
     /**
      * Return current undo store of the image
      */
-    KisUndoStore* undoStore();
+    KisUndoStore *undoStore();
 
     /**
      * @return the action recorder associated with this image
      */
-    KisActionRecorder* actionRecorder() const;
+    KisActionRecorder *actionRecorder() const;
 
     /**
      * Tell the image it's modified; this emits the sigImageModified
@@ -283,7 +281,7 @@ public:
      * The default colorspace of this image: new layers will have this
      * colorspace and the projection will have this colorspace.
      */
-    const KoColorSpace * colorSpace() const;
+    const KoColorSpace *colorSpace() const;
 
     /**
      * X resolution in pixels per pt
@@ -363,7 +361,8 @@ public:
     /**
      * Return the size of the image
      */
-    QSize size() const {
+    QSize size() const
+    {
         return QSize(width(), height());
     }
 
@@ -399,7 +398,7 @@ public:
      * Merge the specified layer with the layer
      * below this layer, remove the specified layer.
      */
-    KisLayerSP mergeDown(KisLayerSP l, const KisMetaData::MergeStrategy* strategy);
+    KisLayerSP mergeDown(KisLayerSP l, const KisMetaData::MergeStrategy *strategy);
 
     /**
      * flatten the layer: that is, the projection becomes the layer
@@ -407,7 +406,6 @@ public:
      * into a paint layer.
      */
     KisLayerSP flattenLayer(KisLayerSP layer);
-
 
     /// This overrides interface for KisDefaultBounds
     /// @return the exact bounds of the image in pixel coordinates.
@@ -437,10 +435,10 @@ public:
     void addAnnotation(KisAnnotationSP annotation);
 
     /** get the annotation with the given type, can return 0 */
-    KisAnnotationSP annotation(const QString& type);
+    KisAnnotationSP annotation(const QString &type);
 
     /** delete the annotation, if the image contains it */
-    void removeAnnotation(const QString& type);
+    void removeAnnotation(const QString &type);
 
     /**
      * Start of an iteration over the annotations of this image (including the ICC Profile)
@@ -455,7 +453,7 @@ public:
      */
     void notifyAboutToBeDeleted();
 
-    KisImageSignalRouter* signalRouter();
+    KisImageSignalRouter *signalRouter();
 
     /**
      * Returns whether we can reselect current global selection
@@ -467,17 +465,17 @@ public:
     /**
      * Returns the layer compositions for the image
      */
-    QList<KisLayerComposition*> compositions();
+    QList<KisLayerComposition *> compositions();
 
     /**
      * Adds a new layer composition, will be saved with the image
      */
-    void addComposition(KisLayerComposition* composition);
+    void addComposition(KisLayerComposition *composition);
 
     /**
      * Remove the layer compostion
      */
-    void removeComposition(KisLayerComposition* composition);
+    void removeComposition(KisLayerComposition *composition);
 
     /**
      * Permit or deny the wrap-around mode for all the paint devices
@@ -497,7 +495,6 @@ public:
      * \see setWrapAroundMode
      */
     bool wrapAroundModePermitted() const;
-
 
     /**
      * \return whether the wraparound mode is activated for all the
@@ -551,8 +548,8 @@ Q_SIGNALS:
      */
     void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
 
-    void sigProfileChanged(const KoColorProfile *  profile);
-    void sigColorSpaceChanged(const KoColorSpace*  cs);
+    void sigProfileChanged(const KoColorProfile   *profile);
+    void sigColorSpaceChanged(const KoColorSpace  *cs);
     void sigResolutionChanged(double xRes, double yRes);
 
     /**
@@ -652,7 +649,7 @@ Q_SIGNALS:
     void sigNodeCollapsedChanged();
 
 public Q_SLOTS:
-    KisCompositeProgressProxy* compositeProgressProxy();
+    KisCompositeProgressProxy *compositeProgressProxy();
 
     void barrierLock();
     bool tryBarrierLock();
@@ -706,7 +703,7 @@ public Q_SLOTS:
      * Triggers synchronous recomposition of the projection
      */
     void refreshGraph(KisNodeSP root = 0);
-    void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
+    void refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRect);
     void initialRefreshGraph();
 
     /**
@@ -762,12 +759,12 @@ public Q_SLOTS:
 
 private:
 
-    KisImage(const KisImage& rhs);
-    KisImage& operator=(const KisImage& rhs);
+    KisImage(const KisImage &rhs);
+    KisImage &operator=(const KisImage &rhs);
 
     void emitSizeChanged();
 
-    void resizeImageImpl(const QRect& newRect, bool cropLayers);
+    void resizeImageImpl(const QRect &newRect, bool cropLayers);
     void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
                     bool resizeImage, double radians);
     void shearImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
@@ -780,15 +777,14 @@ private:
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());
 
     void requestProjectionUpdateImpl(KisNode *node,
-                                     const QRect& rect,
+                                     const QRect &rect,
                                      const QRect &cropRect);
 
     friend class KisImageResizeCommand;
-    void setSize(const QSize& size);
+    void setSize(const QSize &size);
 
     friend class KisImageSetProjectionColorSpaceCommand;
-    void setProjectionColorSpace(const KoColorSpace * colorSpace);
-
+    void setProjectionColorSpace(const KoColorSpace *colorSpace);
 
     friend class KisDeselectGlobalSelectionCommand;
     friend class KisReselectGlobalSelectionCommand;
@@ -817,7 +813,7 @@ private:
 
 private:
     class KisImagePrivate;
-    KisImagePrivate * const m_d;
+    KisImagePrivate *const m_d;
 };
 
 #endif // KIS_IMAGE_H_

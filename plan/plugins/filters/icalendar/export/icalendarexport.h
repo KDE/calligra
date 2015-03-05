@@ -20,7 +20,6 @@
 #ifndef ICALENDAREXPORT_H
 #define ICALENDAREXPORT_H
 
-
 #include <KoFilter.h>
 
 #include <kcalcore/calendar.h>
@@ -43,10 +42,10 @@ class ICalendarExport : public KoFilter
     Q_OBJECT
 
 public:
-    ICalendarExport(QObject* parent, const QVariantList &);
+    ICalendarExport(QObject *parent, const QVariantList &);
     virtual ~ICalendarExport() {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 protected:
     KoFilter::ConversionStatus convert(const KPlato::Project &project, QFile &file);

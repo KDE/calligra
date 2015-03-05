@@ -26,7 +26,6 @@
 #include "kis_image.h"
 #include "commands_new/kis_node_move_command2.h"
 
-
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
     : KisExternalLayer(image, name, opacity)
     , m_basePath(basePath)
@@ -108,8 +107,7 @@ QString KisFileLayer::path() const
 {
     if (m_basePath.isEmpty()) {
         return m_filename;
-    }
-    else {
+    } else {
         return m_basePath + '/' + m_filename;
     }
 }
@@ -134,8 +132,7 @@ void KisFileLayer::slotLoadingFinished(KisImageSP importedImage)
 
         KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
         worker.run();
-    }
-    else if (m_scalingMethod == ToImageSize) {
+    } else if (m_scalingMethod == ToImageSize) {
         QSize sz = importedImage->size();
         sz.scale(image()->size(), Qt::KeepAspectRatio);
         qreal xscale =  sz.width() / importedImage->width();
@@ -160,7 +157,7 @@ bool KisFileLayer::allowAsChild(KisNodeSP node) const
     return node->inherits("KisMask");
 }
 
-bool KisFileLayer::accept(KisNodeVisitor& visitor)
+bool KisFileLayer::accept(KisNodeVisitor &visitor)
 {
     return visitor.visit(this);
 }
@@ -170,7 +167,7 @@ void KisFileLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAda
     return visitor.visit(this, undoAdapter);
 }
 
-KUndo2Command* KisFileLayer::crop(const QRect & rect)
+KUndo2Command *KisFileLayer::crop(const QRect &rect)
 {
     QPoint oldPos(x(), y());
     QPoint newPos = oldPos - rect.topLeft();
@@ -178,7 +175,7 @@ KUndo2Command* KisFileLayer::crop(const QRect & rect)
     return new KisNodeMoveCommand2(this, oldPos, newPos);
 }
 
-KUndo2Command* KisFileLayer::transform(const QTransform &/*transform*/)
+KUndo2Command *KisFileLayer::transform(const QTransform &/*transform*/)
 {
     qWarning() << "WARNING: File Layer does not support transformations!" << name();
     return 0;

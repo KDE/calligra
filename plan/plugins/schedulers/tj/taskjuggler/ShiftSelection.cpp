@@ -12,11 +12,10 @@
 
 #include "ShiftSelection.h"
 
-
 namespace TJ
 {
 
-ShiftSelection::ShiftSelection(const ShiftSelection& sl) :
+ShiftSelection::ShiftSelection(const ShiftSelection &sl) :
     period(new Interval(*sl.period)),
     shift(sl.shift)
 {

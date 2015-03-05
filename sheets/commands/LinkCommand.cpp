@@ -28,7 +28,7 @@
 
 using namespace Calligra::Sheets;
 
-LinkCommand::LinkCommand(const Cell& c, const QString& text, const QString& link)
+LinkCommand::LinkCommand(const Cell &c, const QString &text, const QString &link)
 {
     cell = c;
     oldText = cell.userInput();
@@ -41,10 +41,13 @@ LinkCommand::LinkCommand(const Cell& c, const QString& text, const QString& link
 
 void LinkCommand::redo()
 {
-    if (!cell) return;
+    if (!cell) {
+        return;
+    }
 
-    if (!newText.isEmpty())
+    if (!newText.isEmpty()) {
         cell.parseUserInput(newText);
+    }
     cell.setLink(newLink);
 
     cell.sheet()->map()->addDamage(new CellDamage(cell, CellDamage::Appearance));
@@ -52,7 +55,9 @@ void LinkCommand::redo()
 
 void LinkCommand::undo()
 {
-    if (!cell) return;
+    if (!cell) {
+        return;
+    }
 
     cell.parseUserInput(oldText);
     cell.setLink(oldLink);

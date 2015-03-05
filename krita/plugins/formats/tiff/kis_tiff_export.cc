@@ -36,7 +36,6 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 
-
 #include "kis_tiff_converter.h"
 #include "kis_dlg_options_tiff.h"
 #include "ui_kis_wdg_options_tiff.h"
@@ -52,21 +51,22 @@ KisTIFFExport::~KisTIFFExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "Tiff export! From:" << from << ", To:" << to << "";
 
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
-
-    KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0);
+    KisDlgOptionsTIFF *kdb = new KisDlgOptionsTIFF(0);
 
     KisDocument *input = m_chain->inputDocument();
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
-    const KoColorSpace* cs = input->image()->colorSpace();
+    const KoColorSpace *cs = input->image()->colorSpace();
     KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
     if (type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) {
         kdb->optionswdg->kComboBoxPredictor->removeItem(1);
@@ -82,8 +82,7 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
-    }
-    else {
+    } else {
         qApp->processEvents(); // For vector layers to be updated
 
     }
@@ -98,7 +97,9 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(const QByteArray&
 
     QString filename = m_chain->outputFile();
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
     KUrl url;
     url.setPath(filename);

@@ -28,7 +28,7 @@
 using namespace KFormDesigner;
 
 KFDPixmapEdit::KFDPixmapEdit(KoProperty::Property *property, QWidget *parent)
-        : KoProperty::PixmapEdit(property, parent)
+    : KoProperty::PixmapEdit(property, parent)
 {
 }
 
@@ -40,8 +40,9 @@ KFDPixmapEdit::selectPixmap()
 {
     KoProperty::PixmapEdit::selectPixmap();
 #if 0 //will be reenabled for new image collection
-    if (!m_manager->activeForm() || !property())
+    if (!m_manager->activeForm() || !property()) {
         return;
+    }
 
     ObjectTreeItem *item = m_manager->activeForm()->objectTree()->lookup(m_manager->activeForm()->selectedWidget()->name());
     QString name = item ? item->pixmapName(property()->name()) : "";

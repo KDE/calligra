@@ -25,11 +25,11 @@
 #include <KoPageLayout.h>
 #include <KoZoomHandler.h>
 
-void KoPAUtil::setZoom( const KoPageLayout & pageLayout, const QSize & size, KoZoomHandler & zoomHandler )
+void KoPAUtil::setZoom(const KoPageLayout &pageLayout, const QSize &size, KoZoomHandler &zoomHandler)
 {
-    qreal zoom = size.width() / ( zoomHandler.resolutionX() * pageLayout.width );
-    zoom = qMin( zoom, size.height() / ( zoomHandler.resolutionY() * pageLayout.height ) );
-    zoomHandler.setZoom( zoom );
+    qreal zoom = size.width() / (zoomHandler.resolutionX() * pageLayout.width);
+    zoom = qMin(zoom, size.height() / (zoomHandler.resolutionY() * pageLayout.height));
+    zoomHandler.setZoom(zoom);
 }
 
 void KoPAUtil::setSizeAndZoom(const KoPageLayout &pageLayout, QSize &thumbnailSize, KoZoomHandler &zoomHandler)
@@ -42,10 +42,10 @@ void KoPAUtil::setSizeAndZoom(const KoPageLayout &pageLayout, QSize &thumbnailSi
 
     // adapt thumbnailSize to match the rendered page
     if (widthScale > heightScale) {
-        const int thumbnailWidth = qMin(thumbnailSize.width(), qRound(realWidth*heightScale));
+        const int thumbnailWidth = qMin(thumbnailSize.width(), qRound(realWidth * heightScale));
         thumbnailSize.setWidth(thumbnailWidth);
     } else {
-        const int thumbnailHeight = qMin(thumbnailSize.height(), qRound(realHeight*widthScale));
+        const int thumbnailHeight = qMin(thumbnailSize.height(), qRound(realHeight * widthScale));
         thumbnailSize.setHeight(thumbnailHeight);
     }
 
@@ -54,11 +54,11 @@ void KoPAUtil::setSizeAndZoom(const KoPageLayout &pageLayout, QSize &thumbnailSi
     zoomHandler.setZoom(zoom);
 }
 
-QRect KoPAUtil::pageRect( const KoPageLayout & pageLayout, const QSize & size, const KoZoomHandler & zoomHandler )
+QRect KoPAUtil::pageRect(const KoPageLayout &pageLayout, const QSize &size, const KoZoomHandler &zoomHandler)
 {
-    int width = int( 0.5 + zoomHandler.documentToViewX( pageLayout.width ) );
-    int height = int( 0.5 + zoomHandler.documentToViewY( pageLayout.height ) );
-    int x = int( ( size.width() - width ) / 2.0 );
-    int y = int( ( size.height() - height ) / 2.0 );
-    return QRect( x, y, width, height );
+    int width = int(0.5 + zoomHandler.documentToViewX(pageLayout.width));
+    int height = int(0.5 + zoomHandler.documentToViewY(pageLayout.height));
+    int x = int((size.width() - width) / 2.0);
+    int y = int((size.height() - height) / 2.0);
+    return QRect(x, y, width, height);
 }

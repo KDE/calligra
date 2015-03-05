@@ -30,46 +30,56 @@ class KisTemplate
 
 public:
     explicit KisTemplate(const QString &name,
-                        const QString &description = QString(),
-                        const QString &file = QString(),
-                        const QString &picture = QString(),
-                        const QString &fileName = QString(),
-                        const QString &_measureSystem = QString(),
-                        bool hidden = false, bool touched = false);
+                         const QString &description = QString(),
+                         const QString &file = QString(),
+                         const QString &picture = QString(),
+                         const QString &fileName = QString(),
+                         const QString &_measureSystem = QString(),
+                         bool hidden = false, bool touched = false);
     ~KisTemplate() {}
 
-    QString name() const {
+    QString name() const
+    {
         return m_name;
     }
-    QString description() const {
+    QString description() const
+    {
         return m_descr;
     }
-    QString file() const {
+    QString file() const
+    {
         return m_file;
     }
-    QString picture() const {
+    QString picture() const
+    {
         return m_picture;
     }
-    QString fileName() const {
+    QString fileName() const
+    {
         return m_fileName;
     }
     const QPixmap &loadPicture();
 
-    bool isHidden() const {
+    bool isHidden() const
+    {
         return m_hidden;
     }
-    void setHidden(bool hidden = true) {
+    void setHidden(bool hidden = true)
+    {
         m_hidden = hidden; m_touched = true;
     }
 
-    bool touched() const {
+    bool touched() const
+    {
         return m_touched;
     }
 
-    QString measureSystem() const {
+    QString measureSystem() const
+    {
         return m_measureSystem;
     }
-    void setMeasureSystem(const QString& system) {
+    void setMeasureSystem(const QString &system)
+    {
         m_measureSystem = system;
     }
 
@@ -81,6 +91,5 @@ private:
     QPixmap m_pixmap;
     QString m_measureSystem;
 };
-
 
 #endif

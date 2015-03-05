@@ -25,8 +25,7 @@
 #include <QColor>
 #include "indexcolorpalette.h"
 
-struct PaletteGeneratorConfig
-{
+struct PaletteGeneratorConfig {
     QColor colors[4][4];
     bool   colorsEnabled[4][4];
     int    gradientSteps[3];
@@ -35,6 +34,6 @@ struct PaletteGeneratorConfig
 
     PaletteGeneratorConfig();
     QByteArray toByteArray();
-    void fromByteArray(const QByteArray& str);
+    void fromByteArray(const QByteArray &str);
     IndexColorPalette generate();
 };

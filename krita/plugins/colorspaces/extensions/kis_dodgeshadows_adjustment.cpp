@@ -40,12 +40,12 @@ class KisDodgeShadowsAdjustment : public KoColorTransformation
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
-    KisDodgeShadowsAdjustment(){}
+    KisDodgeShadowsAdjustment() {}
 
- 	void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
- 	{
-        const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
-        RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
+    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
+    {
+        const RGBPixel *src = reinterpret_cast<const RGBPixel *>(srcU8);
+        RGBPixel *dst = reinterpret_cast<RGBPixel *>(dstU8);
         float factor, value_red, value_green, value_blue, new_value_red, new_value_green, new_value_blue;
         while (nPixels > 0) {
 
@@ -57,36 +57,36 @@ public:
             new_value_red = factor + value_red  - factor * value_red;
             new_value_green = factor + value_green  - factor * value_green;
             new_value_blue = factor + value_blue  - factor * value_blue;
-            
+
             dst->red = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(new_value_red);
             dst->green = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(new_value_green);
             dst->blue = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(new_value_blue);
             dst->alpha = src->alpha;
-            
+
             --nPixels;
             ++src;
             ++dst;
         }
     }
 
-	virtual QList<QString> parameters() const
-	{
+    virtual QList<QString> parameters() const
+    {
         QList<QString> list;
         list << "exposure";
         return list;
-	}
+    }
 
-	virtual int parameterId(const QString& name) const
+    virtual int parameterId(const QString &name) const
     {
-        if (name == "exposure")
-        return 0;
+        if (name == "exposure") {
+            return 0;
+        }
         return -1;
     }
 
-    virtual void setParameter(int id, const QVariant& parameter)
+    virtual void setParameter(int id, const QVariant &parameter)
     {
-        switch(id)
-        {
+        switch (id) {
         case 0:
             exposure = parameter.toDouble();
             break;
@@ -96,10 +96,10 @@ public:
     }
 private:
 
-	float exposure;
- };
+    float exposure;
+};
 
- KisDodgeShadowsAdjustmentFactory::KisDodgeShadowsAdjustmentFactory()
+KisDodgeShadowsAdjustmentFactory::KisDodgeShadowsAdjustmentFactory()
     : KoColorTransformationFactory("DodgeShadows")
 {
 }
@@ -107,16 +107,16 @@ private:
 QList< QPair< KoID, KoID > > KisDodgeShadowsAdjustmentFactory::supportedModels() const
 {
     QList< QPair< KoID, KoID > > l;
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer8BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer16BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float16BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float32BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Integer8BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Integer16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Float16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Float32BitsColorDepthID));
     return l;
 }
 
-KoColorTransformation* KisDodgeShadowsAdjustmentFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
+KoColorTransformation *KisDodgeShadowsAdjustmentFactory::createTransformation(const KoColorSpace *colorSpace, QHash<QString, QVariant> parameters) const
 {
-    KoColorTransformation * adj;
+    KoColorTransformation *adj;
     if (colorSpace->colorModelId() != RGBAColorModelID) {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisDodgeShadowsAdjustmentFactory::createTransformation";
         return 0;

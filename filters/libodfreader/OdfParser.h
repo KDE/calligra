@@ -27,11 +27,10 @@
 
 // Calligra
 #include <KoFilter.h>           // For the return values.
-                                // If we ever move this out of filters/ we should move the
-                                // filterstatus return values to bools.
+// If we ever move this out of filters/ we should move the
+// filterstatus return values to bools.
 
 class KoStore;
-
 
 /** @brief Provide a parser for some parts of an ODF file.
  *
@@ -60,8 +59,8 @@ public:
      * @return returns an error status otherwise.
      */
     KoFilter::ConversionStatus parseMetadata(KoStore &odfStore,
-                                             // Out parameter:
-                                             QHash<QString, QString> *metadata);
+            // Out parameter:
+            QHash<QString, QString> *metadata);
 
     /*** Parse manifest
      *
@@ -76,8 +75,8 @@ public:
      * @return returns an error status otherwise.
      */
     KoFilter::ConversionStatus parseManifest(KoStore &odfStore,
-                                             // Out parameter:
-                                             QHash<QString, QString> *manifest);
+            // Out parameter:
+            QHash<QString, QString> *manifest);
 
 private:
 };

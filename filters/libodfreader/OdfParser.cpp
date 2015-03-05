@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdfParser.h"
 
@@ -30,7 +29,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
-
 OdfParser::OdfParser()
 {
 }
@@ -39,10 +37,9 @@ OdfParser::~OdfParser()
 {
 }
 
-
 KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore &odfStore,
-                                                    // out parameters:
-                                                    QHash<QString, QString> *metadata)
+        // out parameters:
+        QHash<QString, QString> *metadata)
 {
     if (!odfStore.open("meta.xml")) {
         kDebug(30503) << "Cannot open meta.xml";
@@ -73,10 +70,9 @@ KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore &odfStore,
     return KoFilter::OK;
 }
 
-
 KoFilter::ConversionStatus OdfParser::parseManifest(KoStore &odfStore,
-                                                    // out parameters:
-                                                    QHash<QString, QString> *manifest)
+        // out parameters:
+        QHash<QString, QString> *manifest)
 {
     if (!odfStore.open("META-INF/manifest.xml")) {
         kDebug(30503) << "Cannot to open manifest.xml.";
@@ -99,8 +95,9 @@ KoFilter::ConversionStatus OdfParser::parseManifest(KoStore &odfStore,
     forEachElement (nodeElement, childNode) {
         // Normalize the file name, i.e. remove trailing slashes.
         QString path = nodeElement.attribute("full-path");
-        if (path.endsWith(QLatin1Char('/')))
+        if (path.endsWith(QLatin1Char('/'))) {
             path.chop(1);
+        }
         QString type = nodeElement.attribute("media-type");
 
         manifest->insert(path, type);

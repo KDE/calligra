@@ -38,63 +38,63 @@
 #include "KPrPresenterViewToolWidget.h"
 #include "KPrViewModePresentation.h"
 
-KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMode, const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent )
-    : QWidget( parent )
-    , m_viewMode( viewMode )
-    , m_pages( pages )
-    , m_canvas( canvas )
+KPrPresenterViewWidget::KPrPresenterViewWidget(KPrViewModePresentation *viewMode, const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent)
+    : QWidget(parent)
+    , m_viewMode(viewMode)
+    , m_pages(pages)
+    , m_canvas(canvas)
 {
     QVBoxLayout *vLayout = new QVBoxLayout;
 
-    vLayout->setContentsMargins( 20, 20, 20, 0 );
+    vLayout->setContentsMargins(20, 20, 20, 0);
 
     m_stackedLayout = new QStackedLayout;
-    m_mainWidget = new KPrPresenterViewInterface( pages, m_canvas );
-    m_stackedLayout->addWidget( m_mainWidget );
+    m_mainWidget = new KPrPresenterViewInterface(pages, m_canvas);
+    m_stackedLayout->addWidget(m_mainWidget);
 
-    m_slidesWidget = new KPrPresenterViewSlidesInterface( pages );
-    m_stackedLayout->addWidget( m_slidesWidget );
-    connect( m_slidesWidget, SIGNAL(selectedPageChanged(int,bool)), this,
-            SLOT(requestChangePage(int,bool)) );
-    
-    vLayout->addLayout( m_stackedLayout );
+    m_slidesWidget = new KPrPresenterViewSlidesInterface(pages);
+    m_stackedLayout->addWidget(m_slidesWidget);
+    connect(m_slidesWidget, SIGNAL(selectedPageChanged(int,bool)), this,
+            SLOT(requestChangePage(int,bool)));
+
+    vLayout->addLayout(m_stackedLayout);
 
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addStretch();
     m_toolWidget = new KPrPresenterViewToolWidget;
-    connect( m_toolWidget, SIGNAL(slideThumbnailsToggled(bool)), this, SLOT(showSlideThumbnails(bool)) );
-    connect( m_toolWidget, SIGNAL(previousSlideClicked()), this, SLOT(requestPreviousSlide()) );
-    connect( m_toolWidget, SIGNAL(nextSlideClicked()), this, SLOT(requestNextSlide()) );
-    hLayout->addWidget( m_toolWidget );
+    connect(m_toolWidget, SIGNAL(slideThumbnailsToggled(bool)), this, SLOT(showSlideThumbnails(bool)));
+    connect(m_toolWidget, SIGNAL(previousSlideClicked()), this, SLOT(requestPreviousSlide()));
+    connect(m_toolWidget, SIGNAL(nextSlideClicked()), this, SLOT(requestNextSlide()));
+    hLayout->addWidget(m_toolWidget);
     hLayout->addStretch();
 
-    vLayout->addLayout( hLayout );
+    vLayout->addLayout(hLayout);
 
     setLayout(vLayout);
 
     m_activeWidget = m_mainWidget;
     KoPAPageBase *activePage = m_viewMode->view()->activePage();
-    if ( !m_pages.contains( activePage ) ) {
+    if (!m_pages.contains(activePage)) {
         activePage = m_pages[0];
     }
-    m_activeWidget->setActivePage( activePage );
+    m_activeWidget->setActivePage(activePage);
 }
 
 KPrPresenterViewWidget::~KPrPresenterViewWidget()
 {
 }
 
-void KPrPresenterViewWidget::setActivePage( KoPAPageBase *page )
+void KPrPresenterViewWidget::setActivePage(KoPAPageBase *page)
 {
-    m_activeWidget->setActivePage( page );
+    m_activeWidget->setActivePage(page);
 }
 
-void KPrPresenterViewWidget::setActivePage( int pageIndex )
+void KPrPresenterViewWidget::setActivePage(int pageIndex)
 {
-    m_activeWidget->setActivePage( pageIndex );
+    m_activeWidget->setActivePage(pageIndex);
 }
 
-void KPrPresenterViewWidget::updateWidget( const QSize &widgetSize, const QSize &canvasSize )
+void KPrPresenterViewWidget::updateWidget(const QSize &widgetSize, const QSize &canvasSize)
 {
     // a better way to resize the canvas, still need to find optimum value
 
@@ -104,46 +104,45 @@ void KPrPresenterViewWidget::updateWidget( const QSize &widgetSize, const QSize 
     int previewWidth = ratio * previewHeight;
 
     // if it doesn't fit, make the width 40% of the widget width
-    if ( previewWidth * 2 > 0.8 * widgetSize.width() ) {
+    if (previewWidth * 2 > 0.8 * widgetSize.width()) {
         previewWidth = 0.4 * widgetSize.width();
         previewHeight = previewWidth / ratio;
     }
 
-    QSize previewSize( previewHeight * ratio, previewHeight );
+    QSize previewSize(previewHeight * ratio, previewHeight);
 
-    m_mainWidget->setPreviewSize( previewSize );
+    m_mainWidget->setPreviewSize(previewSize);
 }
 
-void KPrPresenterViewWidget::showSlideThumbnails( bool show )
+void KPrPresenterViewWidget::showSlideThumbnails(bool show)
 {
-    if ( show ) {
-        m_stackedLayout->setCurrentIndex( 1 );
+    if (show) {
+        m_stackedLayout->setCurrentIndex(1);
         m_activeWidget = m_slidesWidget;
-    }
-    else {
-        m_stackedLayout->setCurrentIndex( 0 );
+    } else {
+        m_stackedLayout->setCurrentIndex(0);
         m_activeWidget = m_mainWidget;
     }
 }
 
 void KPrPresenterViewWidget::requestPreviousSlide()
 {
-    m_viewMode->keyPressEvent( new QKeyEvent( QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier ) );
+    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier));
 }
 
 void KPrPresenterViewWidget::requestNextSlide()
 {
-    m_viewMode->keyPressEvent( new QKeyEvent( QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier ) );
+    m_viewMode->keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier));
 }
 
-void KPrPresenterViewWidget::requestChangePage( int index, bool enableMainView )
+void KPrPresenterViewWidget::requestChangePage(int index, bool enableMainView)
 {
-    if ( enableMainView ) {
-        m_toolWidget->toggleSlideThumbnails( false );
+    if (enableMainView) {
+        m_toolWidget->toggleSlideThumbnails(false);
     }
-    m_viewMode->navigateToPage( index );
-    m_mainWidget->setActivePage( index );
-    m_slidesWidget->setActivePage( index );
+    m_viewMode->navigateToPage(index);
+    m_mainWidget->setActivePage(index);
+    m_slidesWidget->setActivePage(index);
 }
 
 #include "KPrPresenterViewWidget.moc"

@@ -31,17 +31,18 @@ class KexiDBConnectionSetPrivate
 {
 public:
     KexiDBConnectionSetPrivate()
-            : maxid(-1) {
+        : maxid(-1)
+    {
     }
     KexiDB::ConnectionData::List list;
     QHash<QString, QString> filenamesForData;
-    QHash<QString, KexiDB::ConnectionData*> dataForFilenames;
+    QHash<QString, KexiDB::ConnectionData *> dataForFilenames;
     int maxid;
 };
 
 KexiDBConnectionSet::KexiDBConnectionSet()
-        : QObject()
-        , d(new KexiDBConnectionSetPrivate())
+    : QObject()
+    , d(new KexiDBConnectionSetPrivate())
 {
 }
 
@@ -50,43 +51,49 @@ KexiDBConnectionSet::~KexiDBConnectionSet()
     delete d;
 }
 
-bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const QString& _filename)
+bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const QString &_filename)
 {
-    if (!data)
+    if (!data) {
         return false;
-    if (data->id < 0)
+    }
+    if (data->id < 0) {
         data->id = d->maxid + 1;
+    }
     //! @todo check for id-duplicates
 
     d->maxid = qMax(d->maxid, data->id);
 
     QString filename(_filename);
     bool generateUniqueFilename = filename.isEmpty()
-        || (!filename.isEmpty() && data == d->dataForFilenames.value(filename));
+                                  || (!filename.isEmpty() && data == d->dataForFilenames.value(filename));
 
     if (generateUniqueFilename) {
         QString dir = KGlobal::dirs()->saveLocation("data", "kexi/connections/", false /*!create*/);
-        if (dir.isEmpty())
+        if (dir.isEmpty()) {
             return false;
+        }
         QString baseFilename(dir + (data->hostName.isEmpty() ? "localhost" : data->hostName));
         int i = 0;
-        while (KStandardDirs::exists(baseFilename + (i > 0 ? QString::number(i) : QString()) + ".kexic"))
+        while (KStandardDirs::exists(baseFilename + (i > 0 ? QString::number(i) : QString()) + ".kexic")) {
             i++;
+        }
         if (!KStandardDirs::exists(dir)) {
             //make 'connections' dir and protect it
-            if (!KStandardDirs::makeDir(dir, 0700))
+            if (!KStandardDirs::makeDir(dir, 0700)) {
                 return false;
+            }
         }
         filename = baseFilename + (i > 0 ? QString::number(i) : QString()) + ".kexic";
     }
     addConnectionDataInternal(data, filename);
     bool result = saveConnectionData(data, *data);
-    if (!result)
+    if (!result) {
         removeConnectionDataInternal(data);
+    }
     return result;
 }
 
-void KexiDBConnectionSet::addConnectionDataInternal(KexiDB::ConnectionData *data, const QString& filename)
+void KexiDBConnectionSet::addConnectionDataInternal(KexiDB::ConnectionData *data, const QString &filename)
 {
     d->filenamesForData.insert(key(*data), filename);
     d->dataForFilenames.insert(filename, data);
@@ -96,15 +103,18 @@ void KexiDBConnectionSet::addConnectionDataInternal(KexiDB::ConnectionData *data
 bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData,
         const KexiDB::ConnectionData &newData)
 {
-    if (!oldData)
+    if (!oldData) {
         return false;
+    }
     const QString oldDataKey = key(*oldData);
     const QString filename(d->filenamesForData.value(oldDataKey));
-    if (filename.isEmpty())
+    if (filename.isEmpty()) {
         return false;
+    }
     KexiDBConnShortcutFile shortcutFile(filename);
-    if (!shortcutFile.saveConnectionData(newData, newData.savePassword)) // true/*savePassword*/))
+    if (!shortcutFile.saveConnectionData(newData, newData.savePassword)) { // true/*savePassword*/))
         return false;
+    }
     if (oldData != &newData) {
         *oldData = newData;
     }
@@ -128,19 +138,22 @@ void KexiDBConnectionSet::removeConnectionDataInternal(KexiDB::ConnectionData *d
 
 bool KexiDBConnectionSet::removeConnectionData(KexiDB::ConnectionData *data)
 {
-    if (!data)
+    if (!data) {
         return false;
+    }
     const QString filename(d->filenamesForData.value(key(*data)));
-    if (filename.isEmpty())
+    if (filename.isEmpty()) {
         return false;
+    }
     QFile file(filename);
-    if (!file.remove())
+    if (!file.remove()) {
         return false;
+    }
     removeConnectionDataInternal(data);
     return true;
 }
 
-const KexiDB::ConnectionData::List& KexiDBConnectionSet::list() const
+const KexiDB::ConnectionData::List &KexiDBConnectionSet::list() const
 {
     return d->list;
 }
@@ -156,7 +169,7 @@ void KexiDBConnectionSet::load()
 {
     clear();
     QStringList files(KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic"));
-    foreach(const QString& file, files) {
+    foreach (const QString &file, files) {
         KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
         KexiDBConnShortcutFile shortcutFile(file);
         if (!shortcutFile.loadConnectionData(*data)) {
@@ -173,7 +186,7 @@ QString KexiDBConnectionSet::fileNameForConnectionData(const KexiDB::ConnectionD
     return d->filenamesForData.value(key(data));
 }
 
-KexiDB::ConnectionData* KexiDBConnectionSet::connectionDataForFileName(const QString& fileName) const
+KexiDB::ConnectionData *KexiDBConnectionSet::connectionDataForFileName(const QString &fileName) const
 {
     return d->dataForFilenames.value(fileName);
 }
@@ -182,10 +195,10 @@ KexiDB::ConnectionData* KexiDBConnectionSet::connectionDataForFileName(const QSt
 QString KexiDBConnectionSet::key(const KexiDB::ConnectionData &data)
 {
     return data.driverName.toLower() + ','
-        + data.userName.toLower() + ','
-        + data.hostName.toLower() + ','
-        + QString::number(data.port) + ','
-        + QString::number(data.useLocalSocketFile) + ','
-        + data.localSocketFileName + ','
-        + data.fileName();
+           + data.userName.toLower() + ','
+           + data.hostName.toLower() + ','
+           + QString::number(data.port) + ','
+           + QString::number(data.useLocalSocketFile) + ','
+           + data.localSocketFileName + ','
+           + data.fileName();
 }

@@ -24,56 +24,58 @@
 
 #include <kis_debug.h>
 
-bool psdwrite(QIODevice* io, quint8 v)
+bool psdwrite(QIODevice *io, quint8 v)
 {
-    int written = io->write((char*)&v, 1);
+    int written = io->write((char *)&v, 1);
     return written == 1;
 }
 
-bool psdwrite(QIODevice* io, quint16 v)
+bool psdwrite(QIODevice *io, quint16 v)
 {
     quint16 val = htons(v);
-    int written = io->write((char*)&val, 2);
+    int written = io->write((char *)&val, 2);
     return written == 2;
 }
 
-bool psdwrite(QIODevice* io, qint16 v)
+bool psdwrite(QIODevice *io, qint16 v)
 {
     qint16 val = htons(v);
-    int written = io->write((char*)&val, 2);
+    int written = io->write((char *)&val, 2);
     return written == 2;
 }
 
-bool psdwrite(QIODevice* io, quint32 v)
+bool psdwrite(QIODevice *io, quint32 v)
 {
     quint32 val = htonl(v);
-    int written = io->write((char*)&val, 4);
+    int written = io->write((char *)&val, 4);
     return written == 4;
 }
 
-bool psdpad(QIODevice* io, quint32 padding)
+bool psdpad(QIODevice *io, quint32 padding)
 {
-    char* pad = new char[padding];
+    char *pad = new char[padding];
     memset(pad, 0, padding);
     quint32 written = io->write(pad, padding);
     delete [] pad;
     return written == padding;
 }
 
-bool psdwrite(QIODevice* io, const QString &s)
+bool psdwrite(QIODevice *io, const QString &s)
 {
     int l = s.length();
     QByteArray b = s.toLatin1();
-    char* str = b.data();
+    char *str = b.data();
     int written = io->write(str, l);
     return written == l;
 }
 
-bool psdwrite_pascalstring(QIODevice* io, const QString &s)
+bool psdwrite_pascalstring(QIODevice *io, const QString &s)
 {
     Q_ASSERT(s.length() < 256);
     Q_ASSERT(s.length() >= 0);
-    if (s.length() < 0 || s.length() > 255) return false;
+    if (s.length() < 0 || s.length() > 255) {
+        return false;
+    }
 
     if (s.isNull()) {
         psdwrite(io, (quint8)0);
@@ -84,9 +86,11 @@ bool psdwrite_pascalstring(QIODevice* io, const QString &s)
     psdwrite(io, length);
 
     QByteArray b = s.toLatin1();
-    char* str = b.data();
+    char *str = b.data();
     int written = io->write(str, length);
-    if (written != length) return false;
+    if (written != length) {
+        return false;
+    }
 
     if ((length & 0x01) != 0) {
         return psdwrite(io, (quint8)0);
@@ -95,11 +99,13 @@ bool psdwrite_pascalstring(QIODevice* io, const QString &s)
     return true;
 }
 
-bool psdwrite_pascalstring(QIODevice* io, const QString &s, int padding)
+bool psdwrite_pascalstring(QIODevice *io, const QString &s, int padding)
 {
     Q_ASSERT(s.length() < 256);
     Q_ASSERT(s.length() >= 0);
-    if (s.length() < 0 || s.length() > 255) return false;
+    if (s.length() < 0 || s.length() > 255) {
+        return false;
+    }
 
     if (s.isNull()) {
         psdwrite(io, (quint8)0);
@@ -110,14 +116,16 @@ bool psdwrite_pascalstring(QIODevice* io, const QString &s, int padding)
     psdwrite(io, length);
 
     QByteArray b = s.toLatin1();
-    char* str = b.data();
+    char *str = b.data();
     int written = io->write(str, length);
-    if (written != length) return false;
+    if (written != length) {
+        return false;
+    }
 
     // If the total length (length byte + content) is not a multiple of padding, add zeroes to pad
     length++;
     if ((length % padding) != 0) {
-        for (int i = 0; i < (padding - (length %padding)); i++) {
+        for (int i = 0; i < (padding - (length % padding)); i++) {
             psdwrite(io, (quint8)0);
         }
     }
@@ -125,62 +133,71 @@ bool psdwrite_pascalstring(QIODevice* io, const QString &s, int padding)
     return true;
 }
 
-
 bool psdread(QIODevice *io, quint8 *v)
 {
-    quint64 read = io->read((char*)v, 1);
-    if (read != 1) return false;
+    quint64 read = io->read((char *)v, 1);
+    if (read != 1) {
+        return false;
+    }
     return true;
 }
 
-bool psdread(QIODevice* io, quint16* v)
+bool psdread(QIODevice *io, quint16 *v)
 {
     quint16 val;
-    quint64 read = io->read((char*)&val, 2);
-    if (read != 2) return false;
+    quint64 read = io->read((char *)&val, 2);
+    if (read != 2) {
+        return false;
+    }
     *v = ntohs(val);
     return true;
 }
 
-bool psdread(QIODevice* io, qint16* v)
+bool psdread(QIODevice *io, qint16 *v)
 {
     qint16 val;
-    quint64 read = io->read((char*)&val, 2);
-    if (read != 2) return false;
+    quint64 read = io->read((char *)&val, 2);
+    if (read != 2) {
+        return false;
+    }
     *v = ntohs(val);
     return true;
 }
 
-
-bool psdread(QIODevice* io, quint32* v)
+bool psdread(QIODevice *io, quint32 *v)
 {
     quint32 val;
-    quint64 read = io->read((char*)&val, 4);
-    if (read != 4) return false;
+    quint64 read = io->read((char *)&val, 4);
+    if (read != 4) {
+        return false;
+    }
     *v = ntohl(val);
     return true;
 }
 
-
-bool psdread(QIODevice* io, qint32* v)
+bool psdread(QIODevice *io, qint32 *v)
 {
     qint32 val;
-    quint64 read = io->read((char*)&val, 4);
-    if (read != 4) return false;
+    quint64 read = io->read((char *)&val, 4);
+    if (read != 4) {
+        return false;
+    }
     *v = ntohl(val);
     return true;
 }
 
-bool psdread(QIODevice* io, quint64* v)
+bool psdread(QIODevice *io, quint64 *v)
 {
     quint64 val;
-    quint64 read = io->read((char*)&val, 8);
-    if (read != 8) return false;
+    quint64 read = io->read((char *)&val, 8);
+    if (read != 8) {
+        return false;
+    }
     *v = ntohl(val);
     return true;
 }
 
-bool psdread_pascalstring(QIODevice* io, QString& s, int padding)
+bool psdread_pascalstring(QIODevice *io, QString &s, int padding)
 {
     quint8 length;
     if (!psdread(io, &length)) {
@@ -192,7 +209,7 @@ bool psdread_pascalstring(QIODevice* io, QString& s, int padding)
 
     if (length == 0) {
         // read the padding
-        for (int i = 0; i < padding -1; ++i) {
+        for (int i = 0; i < padding - 1; ++i) {
             io->seek(io->pos() + 1);
         }
         //dbgFile << 3 << (length == 0);
@@ -220,7 +237,6 @@ bool psdread_pascalstring(QIODevice* io, QString& s, int padding)
 
     s.append(QString::fromLatin1(chars));
     ////dbgFile << "psdread_pascalstring bytes:" << s;
-
 
     return true;
 }

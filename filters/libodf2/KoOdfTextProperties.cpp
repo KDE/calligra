@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "KoOdfTextProperties.h"
 
@@ -32,10 +31,8 @@
 #include <KoXmlStreamReader.h>
 #include <KoXmlWriter.h>
 
-
 // ----------------------------------------------------------------
 //                         private class
-
 
 class KoOdfTextProperties::Private
 {
@@ -46,9 +43,7 @@ public:
     int dummy;                          // This class is currently empty
 };
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfTextProperties::KoOdfTextProperties()
     : KoOdfStyleProperties()
@@ -61,12 +56,10 @@ KoOdfTextProperties::~KoOdfTextProperties()
     delete d;
 }
 
-
 void KoOdfTextProperties::clear()
 {
     KoOdfStyleProperties::clear();
 }
-
 
 bool KoOdfTextProperties::readOdf(KoXmlStreamReader &reader)
 {

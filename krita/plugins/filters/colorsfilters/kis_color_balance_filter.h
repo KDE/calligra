@@ -26,7 +26,6 @@
 #include "ui_wdg_color_balance.h"
 #include "filter/kis_color_transformation_filter.h"
 
-
 class QWidget;
 class KoColorTransformation;
 
@@ -35,40 +34,41 @@ class KisColorBalanceFilter : public  KisColorTransformationFilter
 
 public:
 
-	KisColorBalanceFilter();
+    KisColorBalanceFilter();
 public:
     enum Type {
-      SHADOWS,
-      MIDTONES,
-      HIGHLIGHTS
+        SHADOWS,
+        MIDTONES,
+        HIGHLIGHTS
     };
 
 public:
 
-	virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
+    virtual KoColorTransformation *createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const;
 
-	static inline KoID id() {
+    static inline KoID id()
+    {
         return KoID("colorbalance", i18n("Color Balance"));
-	}
+    }
 
-    virtual KisFilterConfiguration * factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 
 };
 
 class KisColorBalanceConfigWidget : public KisConfigWidget
 {
 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-    KisColorBalanceConfigWidget(QWidget * parent);
-	virtual ~KisColorBalanceConfigWidget();
+    KisColorBalanceConfigWidget(QWidget *parent);
+    virtual ~KisColorBalanceConfigWidget();
 
-	virtual KisPropertiesConfiguration * configuration() const;
-	virtual void setConfiguration(const KisPropertiesConfiguration* config);
-    Ui_Form * m_page;
+    virtual KisPropertiesConfiguration *configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration *config);
+    Ui_Form *m_page;
     QString m_id;
 
 public Q_SLOTS:

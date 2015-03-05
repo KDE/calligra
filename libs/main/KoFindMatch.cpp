@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #include "KoFindMatch.h"
 
 #include <QVariant>
@@ -30,9 +28,9 @@ public:
     Private() { }
     ~Private() { }
     Private(const Private &other)
-            : QSharedData(other),
-            container(other.container),
-            location(other.location)
+        : QSharedData(other),
+          container(other.container),
+          location(other.location)
     { }
 
     QVariant container;

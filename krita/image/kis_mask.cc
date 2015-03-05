@@ -19,7 +19,6 @@
 
 #include "kis_mask.h"
 
-
 #include <kis_debug.h>
 
 // to prevent incomplete class types on "delete selection->flatten();"
@@ -39,7 +38,6 @@
 #include "kis_layer.h"
 
 #include "kis_cached_paint_device.h"
-
 
 struct KisMask::Private {
     Private(KisMask *_q) : q(_q) {}
@@ -61,17 +59,17 @@ struct KisMask::Private {
     void initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP parentLayer, KisPaintDeviceSP copyFromDevice);
 };
 
-KisMask::KisMask(const QString & name)
-        : KisNode()
-        , m_d(new Private(this))
+KisMask::KisMask(const QString &name)
+    : KisNode()
+    , m_d(new Private(this))
 {
     setName(name);
 }
 
-KisMask::KisMask(const KisMask& rhs)
-        : KisNode(rhs)
-        , KisIndirectPaintingSupport()
-        , m_d(new Private(this))
+KisMask::KisMask(const KisMask &rhs)
+    : KisNode(rhs)
+    , KisIndirectPaintingSupport()
+    , m_d(new Private(this))
 {
     setName(rhs.name());
 
@@ -92,13 +90,13 @@ bool KisMask::allowAsChild(KisNodeSP node) const
     return false;
 }
 
-const KoColorSpace * KisMask::colorSpace() const
+const KoColorSpace *KisMask::colorSpace() const
 {
     KisNodeSP parentNode = parent();
     return parentNode ? parentNode->colorSpace() : 0;
 }
 
-const KoCompositeOp * KisMask::compositeOp() const
+const KoCompositeOp *KisMask::compositeOp() const
 {
     /**
      * FIXME: This function duplicates the same function from
@@ -108,10 +106,14 @@ const KoCompositeOp * KisMask::compositeOp() const
      */
 
     KisNodeSP parentNode = parent();
-    if (!parentNode) return 0;
+    if (!parentNode) {
+        return 0;
+    }
 
-    if (!parentNode->colorSpace()) return 0;
-    const KoCompositeOp* op = parentNode->colorSpace()->compositeOp(compositeOpId());
+    if (!parentNode->colorSpace()) {
+        return 0;
+    }
+    const KoCompositeOp *op = parentNode->colorSpace()->compositeOp(compositeOpId());
     return op ? op : parentNode->colorSpace()->compositeOp(COMPOSITE_OVER);
 }
 
@@ -194,13 +196,13 @@ void KisMask::setSelection(KisSelectionSP selection)
 {
     m_d->selection = selection;
     if (parent()) {
-        const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
+        const KisLayer *parentLayer = qobject_cast<const KisLayer *>(parent());
         m_d->selection->setDefaultBounds(new KisDefaultBounds(parentLayer->image()));
     }
     m_d->selection->setParentNode(this);
 }
 
-void KisMask::select(const QRect & rc, quint8 selectedness)
+void KisMask::select(const QRect &rc, quint8 selectedness)
 {
     KisSelectionSP sel = selection();
     KisPixelSelectionSP psel = sel->pixelSelection();
@@ -208,10 +210,9 @@ void KisMask::select(const QRect & rc, quint8 selectedness)
     sel->updateProjection(rc);
 }
 
-
 QRect KisMask::decorateRect(KisPaintDeviceSP &src,
                             KisPaintDeviceSP &dst,
-                            const QRect & rc,
+                            const QRect &rc,
                             PositionToFilthy maskPos) const
 {
     Q_UNUSED(src);
@@ -227,8 +228,9 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const Q
 
         m_d->selection->updateProjection(applyRect);
 
-        if(!extent().intersects(applyRect))
+        if (!extent().intersects(applyRect)) {
             return;
+        }
 
         KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
 
@@ -258,8 +260,9 @@ QRect KisMask::needRect(const QRect &rect,  PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
     QRect resultRect = rect;
-    if (m_d->selection)
+    if (m_d->selection) {
         resultRect &= m_d->selection->selectedRect();
+    }
 
     return resultRect;
 }
@@ -268,8 +271,9 @@ QRect KisMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
     QRect resultRect = rect;
-    if (m_d->selection)
+    if (m_d->selection) {
         resultRect &= m_d->selection->selectedRect();
+    }
 
     return resultRect;
 }

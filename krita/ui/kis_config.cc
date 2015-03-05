@@ -70,7 +70,6 @@ KisConfig::~KisConfig()
     s_synchLocker.unlock();
 }
 
-
 bool KisConfig::disableTouchOnCanvas() const
 {
     return m_cfg.readEntry("disableTouchOnCanvas", false);
@@ -112,7 +111,7 @@ void KisConfig::setUndoStackLimit(int limit) const
 }
 bool KisConfig::useCumulativeUndoRedo()
 {
-    return m_cfg.readEntry("useCumulativeUndoRedo",false);
+    return m_cfg.readEntry("useCumulativeUndoRedo", false);
 }
 
 void KisConfig::setCumulativeUndoRedo(bool value)
@@ -122,7 +121,7 @@ void KisConfig::setCumulativeUndoRedo(bool value)
 
 double KisConfig::stackT1()
 {
-     return m_cfg.readEntry("stackT1",5);
+    return m_cfg.readEntry("stackT1", 5);
 }
 
 void KisConfig::setStackT1(int T1)
@@ -132,7 +131,7 @@ void KisConfig::setStackT1(int T1)
 
 double KisConfig::stackT2()
 {
-     return m_cfg.readEntry("stackT2",1);
+    return m_cfg.readEntry("stackT2", 1);
 }
 
 void KisConfig::setStackT2(int T2)
@@ -142,12 +141,12 @@ void KisConfig::setStackT2(int T2)
 
 int KisConfig::stackN()
 {
-    return m_cfg.readEntry("stackN",5);
+    return m_cfg.readEntry("stackN", 5);
 }
 
 void KisConfig::setStackN(int N)
 {
-     m_cfg.writeEntry("stackN", N);
+    m_cfg.writeEntry("stackN", N);
 }
 
 qint32 KisConfig::defImageWidth() const
@@ -170,7 +169,7 @@ QString KisConfig::defColorModel() const
     return m_cfg.readEntry("colorModelDef", KoColorSpaceRegistry::instance()->rgb8()->colorModelId().id());
 }
 
-void KisConfig::defColorModel(const QString & model) const
+void KisConfig::defColorModel(const QString &model) const
 {
     m_cfg.writeEntry("colorModelDef", model);
 }
@@ -180,7 +179,7 @@ QString KisConfig::defaultColorDepth() const
     return m_cfg.readEntry("colorDepthDef", KoColorSpaceRegistry::instance()->rgb8()->colorDepthId().id());
 }
 
-void KisConfig::setDefaultColorDepth(const QString & depth) const
+void KisConfig::setDefaultColorDepth(const QString &depth) const
 {
     m_cfg.writeEntry("colorDepthDef", depth);
 }
@@ -190,7 +189,7 @@ QString KisConfig::defColorProfile() const
     return m_cfg.readEntry("colorProfileDef", KoColorSpaceRegistry::instance()->rgb8()->profile()->name());
 }
 
-void KisConfig::defColorProfile(const QString & profile) const
+void KisConfig::defColorProfile(const QString &profile) const
 {
     m_cfg.writeEntry("colorProfileDef", profile);
 }
@@ -207,7 +206,7 @@ void KisConfig::defImageHeight(qint32 height) const
 
 void KisConfig::defImageResolution(double res) const
 {
-    m_cfg.writeEntry("imageResolutionDef", res*72.0);
+    m_cfg.writeEntry("imageResolutionDef", res * 72.0);
 }
 
 bool KisConfig::defAutoFrameBreakEnabled() const
@@ -277,22 +276,22 @@ void KisConfig::setCursorStyle(enumCursorStyle style) const
 
 bool KisConfig::useDirtyPresets() const
 {
-   return m_cfg.readEntry("useDirtyPresets",false);
+    return m_cfg.readEntry("useDirtyPresets", false);
 }
 void KisConfig::setUseDirtyPresets(bool value)
 {
-    m_cfg.writeEntry("useDirtyPresets",value);
+    m_cfg.writeEntry("useDirtyPresets", value);
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
 bool KisConfig::useEraserBrushSize() const
 {
-   return m_cfg.readEntry("useEraserBrushSize",false);
+    return m_cfg.readEntry("useEraserBrushSize", false);
 }
 
 void KisConfig::setUseEraserBrushSize(bool value)
 {
-    m_cfg.writeEntry("useEraserBrushSize",value);
+    m_cfg.writeEntry("useEraserBrushSize", value);
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
@@ -319,7 +318,7 @@ void KisConfig::setMDIBackgroundImage(const QString &filename) const
 
 QString KisConfig::monitorProfile(int screen) const
 {
-    QString profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), "");
+    QString profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "" : QString("_%1").arg(screen)), "");
     //qDebug() << "KisConfig::monitorProfile()" << profile;
     return profile;
 }
@@ -329,15 +328,15 @@ QString KisConfig::monitorForScreen(int screen, const QString &defaultMonitor) c
     return m_cfg.readEntry(QString("monitor_for_screen_%1").arg(screen), defaultMonitor);
 }
 
-void KisConfig::setMonitorForScreen(int screen, const QString& monitor)
+void KisConfig::setMonitorForScreen(int screen, const QString &monitor)
 {
     m_cfg.writeEntry(QString("monitor_for_screen_%1").arg(screen), monitor);
 }
 
-void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile, bool override) const
+void KisConfig::setMonitorProfile(int screen, const QString &monitorProfile, bool override) const
 {
     m_cfg.writeEntry("monitorProfile/OverrideX11", override);
-    m_cfg.writeEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), monitorProfile);
+    m_cfg.writeEntry("monitorProfile" + QString(screen == 0 ? "" : QString("_%1").arg(screen)), monitorProfile);
 }
 
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
@@ -354,8 +353,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
         const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
         //qDebug() << "KisConfig::getScreenProfile for screen" << screen << profile->name();
         return profile;
-    }
-    else {
+    } else {
         //qDebug() << "Could not get a system monitor profile";
         return 0;
     }
@@ -383,8 +381,7 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
         }
         if (profile) {
             //qDebug() << "\t\tsuitable for display6" << profile->isSuitableForDisplay();
-        }
-        else {
+        } else {
             //qDebug() << "\t\tstill no profile";
         }
     }
@@ -397,8 +394,7 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
 
     if (profile) {
         //qDebug() << "\tKisConfig::displayProfile for screen" << screen << "is" << profile->name();
-    }
-    else {
+    } else {
         //qDebug() << "\tCOuldn't get a display profile at all";
     }
 
@@ -410,7 +406,7 @@ QString KisConfig::workingColorSpace() const
     return m_cfg.readEntry("workingColorSpace", "RGBA");
 }
 
-void KisConfig::setWorkingColorSpace(const QString & workingColorSpace) const
+void KisConfig::setWorkingColorSpace(const QString &workingColorSpace) const
 {
     m_cfg.writeEntry("workingColorSpace", workingColorSpace);
 }
@@ -422,22 +418,20 @@ QString KisConfig::printerColorSpace() const
     return QString("RGBA");
 }
 
-void KisConfig::setPrinterColorSpace(const QString & printerColorSpace) const
+void KisConfig::setPrinterColorSpace(const QString &printerColorSpace) const
 {
     m_cfg.writeEntry("printerColorSpace", printerColorSpace);
 }
-
 
 QString KisConfig::printerProfile() const
 {
     return m_cfg.readEntry("printerProfile", "");
 }
 
-void KisConfig::setPrinterProfile(const QString & printerProfile) const
+void KisConfig::setPrinterProfile(const QString &printerProfile) const
 {
     m_cfg.writeEntry("printerProfile", printerProfile);
 }
-
 
 bool KisConfig::useBlackPointCompensation() const
 {
@@ -459,7 +453,6 @@ void KisConfig::setAllowLCMSOptimization(bool allowLCMSOptimization)
     m_cfg.writeEntry("allowLCMSOptimization", allowLCMSOptimization);
 }
 
-
 bool KisConfig::showRulers() const
 {
     return m_cfg.readEntry("showrulers", false);
@@ -469,7 +462,6 @@ void KisConfig::setShowRulers(bool rulers) const
 {
     m_cfg.writeEntry("showrulers", rulers);
 }
-
 
 qint32 KisConfig::pasteBehaviour() const
 {
@@ -481,19 +473,26 @@ void KisConfig::setPasteBehaviour(qint32 renderIntent) const
     m_cfg.writeEntry("pasteBehaviour", renderIntent);
 }
 
-
 qint32 KisConfig::renderIntent() const
 {
     qint32 intent = m_cfg.readEntry("renderIntent", INTENT_PERCEPTUAL);
-    if (intent > 3) intent = 3;
-    if (intent < 0) intent = 0;
+    if (intent > 3) {
+        intent = 3;
+    }
+    if (intent < 0) {
+        intent = 0;
+    }
     return intent;
 }
 
 void KisConfig::setRenderIntent(qint32 renderIntent) const
 {
-    if (renderIntent > 3) renderIntent = 3;
-    if (renderIntent < 0) renderIntent = 0;
+    if (renderIntent > 3) {
+        renderIntent = 3;
+    }
+    if (renderIntent < 0) {
+        renderIntent = 0;
+    }
     m_cfg.writeEntry("renderIntent", renderIntent);
 }
 
@@ -503,8 +502,7 @@ bool KisConfig::useOpenGL() const
         //qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
         return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
-    }
-    else if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
+    } else if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
         return true; // for sketch and gemini
     } else {
         return false;
@@ -540,7 +538,6 @@ int KisConfig::openGLTextureSize() const
 {
     return m_cfg.readEntry("textureSize", 256);
 }
-
 
 bool KisConfig::disableDoubleBuffering() const
 {
@@ -605,8 +602,9 @@ void KisConfig::setMaxTilesInMem(qint32 tiles) const
 quint32 KisConfig::getGridMainStyle() const
 {
     quint32 v = m_cfg.readEntry("gridmainstyle", 0);
-    if (v > 2)
+    if (v > 2) {
         v = 2;
+    }
     return v;
 }
 
@@ -618,7 +616,9 @@ void KisConfig::setGridMainStyle(quint32 v) const
 quint32 KisConfig::getGridSubdivisionStyle() const
 {
     quint32 v = m_cfg.readEntry("gridsubdivisionstyle", 1);
-    if (v > 2) v = 2;
+    if (v > 2) {
+        v = 2;
+    }
     return v;
 }
 
@@ -633,7 +633,7 @@ QColor KisConfig::getGridMainColor() const
     return m_cfg.readEntry("gridmaincolor", col);
 }
 
-void KisConfig::setGridMainColor(const QColor & v) const
+void KisConfig::setGridMainColor(const QColor &v) const
 {
     m_cfg.writeEntry("gridmaincolor", v);
 }
@@ -644,7 +644,7 @@ QColor KisConfig::getGridSubdivisionColor() const
     return m_cfg.readEntry("gridsubdivisioncolor", col);
 }
 
-void KisConfig::setGridSubdivisionColor(const QColor & v) const
+void KisConfig::setGridSubdivisionColor(const QColor &v) const
 {
     m_cfg.writeEntry("gridsubdivisioncolor", v);
 }
@@ -748,11 +748,11 @@ void KisConfig::setScrollingCheckers(bool sc) const
 
 QColor KisConfig::canvasBorderColor() const
 {
-    QColor color(QColor(128,128,128));
+    QColor color(QColor(128, 128, 128));
     return m_cfg.readEntry("canvasBorderColor", color);
 }
 
-void KisConfig::setCanvasBorderColor(const QColor& color) const
+void KisConfig::setCanvasBorderColor(const QColor &color) const
 {
     m_cfg.writeEntry("canvasBorderColor", color);
 }
@@ -767,14 +767,13 @@ void KisConfig::setHideScrollbars(bool value) const
     m_cfg.writeEntry("hideScrollbars", value);
 }
 
-
 QColor KisConfig::checkersColor1() const
 {
     QColor col(220, 220, 220);
     return m_cfg.readEntry("checkerscolor", col);
 }
 
-void KisConfig::setCheckersColor1(const QColor & v) const
+void KisConfig::setCheckersColor1(const QColor &v) const
 {
     m_cfg.writeEntry("checkerscolor", v);
 }
@@ -784,7 +783,7 @@ QColor KisConfig::checkersColor2() const
     return m_cfg.readEntry("checkerscolor2", QColor(Qt::white));
 }
 
-void KisConfig::setCheckersColor2(const QColor & v) const
+void KisConfig::setCheckersColor2(const QColor &v) const
 {
     m_cfg.writeEntry("checkerscolor2", v);
 }
@@ -917,7 +916,7 @@ QString KisConfig::defaultPainterlyColorModelId() const
     return m_cfg.readEntry("defaultpainterlycolormodel", "KS6");
 }
 
-void KisConfig::setDefaultPainterlyColorModelId(const QString& def) const
+void KisConfig::setDefaultPainterlyColorModelId(const QString &def) const
 {
     m_cfg.writeEntry("defaultpainterlycolormodel", def);
 }
@@ -927,7 +926,7 @@ QString KisConfig::defaultPainterlyColorDepthId() const
     return m_cfg.readEntry("defaultpainterlycolordepth", "F32");
 }
 
-void KisConfig::setDefaultPainterlyColorDepthId(const QString& def) const
+void KisConfig::setDefaultPainterlyColorDepthId(const QString &def) const
 {
     m_cfg.writeEntry("defaultpainterlycolordepth", def);
 }
@@ -937,7 +936,7 @@ QString KisConfig::canvasState() const
     return m_cfg.readEntry("canvasState", "OPENGL_NOT_TRIED");
 }
 
-void KisConfig::setCanvasState(const QString& state) const
+void KisConfig::setCanvasState(const QString &state) const
 {
     static QStringList acceptableStates;
     if (acceptableStates.isEmpty()) {
@@ -961,10 +960,10 @@ void KisConfig::setPaintopPopupDetached(bool detached) const
 
 QString KisConfig::pressureTabletCurve() const
 {
-    return m_cfg.readEntry("tabletPressureCurve","0,0;1,1;");
+    return m_cfg.readEntry("tabletPressureCurve", "0,0;1,1;");
 }
 
-void KisConfig::setPressureTabletCurve(const QString& curveString) const
+void KisConfig::setPressureTabletCurve(const QString &curveString) const
 {
     m_cfg.writeEntry("tabletPressureCurve", curveString);
 }
@@ -1027,7 +1026,6 @@ void KisConfig::setClicklessSpacePan(const bool toggle) const
 {
     m_cfg.writeEntry("clicklessSpacePan", toggle);
 }
-
 
 int KisConfig::hideDockersFullscreen() const
 {
@@ -1104,7 +1102,7 @@ QStringList KisConfig::favoriteCompositeOps() const
     return m_cfg.readEntry("favoriteCompositeOps", QStringList());
 }
 
-void KisConfig::setFavoriteCompositeOps(const QStringList& compositeOps) const
+void KisConfig::setFavoriteCompositeOps(const QStringList &compositeOps) const
 {
     m_cfg.writeEntry("favoriteCompositeOps", compositeOps);
 }
@@ -1144,7 +1142,6 @@ void KisConfig::setFavoritePresets(const int value)
 {
     m_cfg.writeEntry("favoritePresets", value);
 }
-
 
 KisConfig::OcioColorManagementMode
 KisConfig::ocioColorManagementMode() const
@@ -1202,7 +1199,7 @@ QString KisConfig::defaultPalette() const
     return m_cfg.readEntry("defaultPalette", QString());
 }
 
-void KisConfig::setDefaultPalette(const QString& name) const
+void KisConfig::setDefaultPalette(const QString &name) const
 {
     m_cfg.writeEntry("defaultPalette", name);
 }
@@ -1229,7 +1226,7 @@ QString KisConfig::currentInputProfile() const
     return m_cfg.readEntry("currentInputProfile", QString());
 }
 
-void KisConfig::setCurrentInputProfile(const QString& name)
+void KisConfig::setCurrentInputProfile(const QString &name)
 {
     m_cfg.writeEntry("currentInputProfile", name);
 }
@@ -1264,7 +1261,6 @@ void KisConfig::setScratchpadVisible(bool visible)
     m_cfg.writeEntry("scratchpadVisible", visible);
 }
 
-
 bool KisConfig::showSingleChannelAsColor() const
 {
     return m_cfg.readEntry("showSingleChannelAsColor", false);
@@ -1297,32 +1293,32 @@ void KisConfig::setNumDefaultLayers(int num)
 
 quint8 KisConfig::defaultBackgroundOpacity() const
 {
-  return m_cfg.readEntry("BackgroundOpacityForNewImage", (int)OPACITY_OPAQUE_U8);
+    return m_cfg.readEntry("BackgroundOpacityForNewImage", (int)OPACITY_OPAQUE_U8);
 }
 
 void KisConfig::setDefaultBackgroundOpacity(quint8 value)
 {
-  m_cfg.writeEntry("BackgroundOpacityForNewImage", (int)value);
+    m_cfg.writeEntry("BackgroundOpacityForNewImage", (int)value);
 }
 
 QColor KisConfig::defaultBackgroundColor() const
 {
-  return m_cfg.readEntry("BackgroundColorForNewImage", QColor(Qt::white)); 
+    return m_cfg.readEntry("BackgroundColorForNewImage", QColor(Qt::white));
 }
 
-void KisConfig::setDefaultBackgroundColor(QColor value) 
+void KisConfig::setDefaultBackgroundColor(QColor value)
 {
-  m_cfg.writeEntry("BackgroundColorForNewImage", value);
+    m_cfg.writeEntry("BackgroundColorForNewImage", value);
 }
 
 KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle() const
 {
-  return (KisConfig::BackgroundStyle)m_cfg.readEntry("BackgroundStyleForNewImage", (int)LAYER);
+    return (KisConfig::BackgroundStyle)m_cfg.readEntry("BackgroundStyleForNewImage", (int)LAYER);
 }
 
 void KisConfig::setDefaultBackgroundStyle(KisConfig::BackgroundStyle value)
 {
-  m_cfg.writeEntry("BackgroundStyleForNewImage", (int)value);
+    m_cfg.writeEntry("BackgroundStyleForNewImage", (int)value);
 }
 
 int KisConfig::lineSmoothingType() const
@@ -1474,13 +1470,13 @@ void KisConfig::setShowCanvasMessages(bool show)
     m_cfg.writeEntry("showOnCanvasMessages", show);
 }
 
-const KoColorSpace* KisConfig::customColorSelectorColorSpace() const
+const KoColorSpace *KisConfig::customColorSelectorColorSpace() const
 {
     const KoColorSpace *cs = 0;
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-    if(cfg.readEntry("useCustomColorSpace", true)) {
-        KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
+    if (cfg.readEntry("useCustomColorSpace", true)) {
+        KoColorSpaceRegistry *csr = KoColorSpaceRegistry::instance();
         cs = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
                              cfg.readEntry("customColorSpaceDepthID", "U8"),
                              cfg.readEntry("customColorSpaceProfile", "sRGB built-in - (lcms internal)"));
@@ -1493,7 +1489,7 @@ void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
 {
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     cfg.writeEntry("useCustomColorSpace", bool(cs));
-    if(cs) {
+    if (cs) {
         cfg.writeEntry("customColorSpaceModel", cs->colorModelId().id());
         cfg.writeEntry("customColorSpaceDepthID", cs->colorDepthId().id());
         cfg.writeEntry("customColorSpaceProfile", cs->profile()->name());

@@ -39,7 +39,7 @@ public:
 };
 
 KoDockWidgetTitleBarButton::KoDockWidgetTitleBarButton(QWidget *parent)
-        : QAbstractButton(parent), d(new Private())
+    : QAbstractButton(parent), d(new Private())
 {
     setFocusPolicy(Qt::NoFocus);
 }
@@ -60,9 +60,9 @@ QSize KoDockWidgetTitleBarButton::sizeHint() const
 
     int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);
     if (iconSize != d->iconSize) {
-        const_cast<KoDockWidgetTitleBarButton*>(this)->d->iconSize = iconSize;
+        const_cast<KoDockWidgetTitleBarButton *>(this)->d->iconSize = iconSize;
         const QPixmap pm = icon().pixmap(iconSize);
-        const_cast<KoDockWidgetTitleBarButton*>(this)->d->styleSize = QSize(pm.width() + margin, pm.height() + margin);
+        const_cast<KoDockWidgetTitleBarButton *>(this)->d->styleSize = QSize(pm.width() + margin, pm.height() + margin);
     }
     return d->styleSize;
 }
@@ -75,15 +75,17 @@ QSize KoDockWidgetTitleBarButton::minimumSizeHint() const
 // redraw the button when the mouse enters or leaves it
 void KoDockWidgetTitleBarButton::enterEvent(QEvent *event)
 {
-    if (isEnabled())
+    if (isEnabled()) {
         update();
+    }
     QAbstractButton::enterEvent(event);
 }
 
 void KoDockWidgetTitleBarButton::leaveEvent(QEvent *event)
 {
-    if (isEnabled())
+    if (isEnabled()) {
         update();
+    }
     QAbstractButton::leaveEvent(event);
 }
 
@@ -95,12 +97,15 @@ void KoDockWidgetTitleBarButton::paintEvent(QPaintEvent *)
     opt.init(this);
     opt.state |= QStyle::State_AutoRaise;
 
-    if (isEnabled() && underMouse() && !isChecked() && !isDown())
+    if (isEnabled() && underMouse() && !isChecked() && !isDown()) {
         opt.state |= QStyle::State_Raised;
-    if (isChecked())
+    }
+    if (isChecked()) {
         opt.state |= QStyle::State_On;
-    if (isDown())
+    }
+    if (isDown()) {
         opt.state |= QStyle::State_Sunken;
+    }
     style()->drawPrimitive(QStyle::PE_PanelButtonTool, &opt, &p, this);
 
     opt.icon = icon();

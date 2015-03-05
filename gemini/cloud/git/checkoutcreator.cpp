@@ -53,12 +53,13 @@ public:
 
     QString userName;
     QString userEmail;
-    git_signature* signature;
+    git_signature *signature;
 
     QString getPassword()
     {
-        if(!needsPrivateKeyPassphrase)
+        if (!needsPrivateKeyPassphrase) {
             return QString();
+        }
         KPasswordDialog dlg;
         dlg.setCaption("Private Key Passphrase");
         dlg.setPrompt("Your private key file requires a password. Please enter it here. You will be asked again each time it is accessed, and the password is not stored.");
@@ -68,17 +69,17 @@ public:
 
     bool checkUserDetails()
     {
-        git_config* config;
+        git_config *config;
         git_config_open_default(&config);
-        const char* name;
+        const char *name;
         git_config_get_string(&name, config, "user.name");
-        const char* email;
+        const char *email;
         git_config_get_string(&email, config, "user.email");
 
         userName = QString::fromLocal8Bit(name);
         userEmail = QString::fromLocal8Bit(email);
 
-        if(userName.isEmpty()) {
+        if (userName.isEmpty()) {
             bool ok;
             KUser user(KUser::UseRealUserID);
             QString systemName = user.property(KUser::FullName).toString();
@@ -86,21 +87,21 @@ public:
                                                     "There is no name set for Git on this system (this is used when committing). Please enter one below and press OK.",
                                                     systemName,
                                                     &ok);
-            if(!ok) {
+            if (!ok) {
                 return false;
             }
             userName = newName;
             git_config_set_string(config, "user.name", newName.toLocal8Bit());
         }
-        if(userEmail.isEmpty()) {
+        if (userEmail.isEmpty()) {
             bool ok;
             KEMailSettings eMailSettings;
             QString emailAddress = eMailSettings.getSetting(KEMailSettings::EmailAddress);
             QString newEmail = KInputDialog::getText("Enter Email",
-                                                    "There is no email address set for Git on this system (this is used when committing). Please enter one below and press OK.",
-                                                    emailAddress,
-                                                    &ok);
-            if(!ok) {
+                               "There is no email address set for Git on this system (this is used when committing). Please enter one below and press OK.",
+                               emailAddress,
+                               &ok);
+            if (!ok) {
                 return false;
             }
             userEmail = newEmail;
@@ -109,7 +110,7 @@ public:
 
         git_config_free(config);
 
-        if(userName.isEmpty() || userEmail.isEmpty()) {
+        if (userName.isEmpty() || userEmail.isEmpty()) {
             return false;
         }
         git_signature_now(&signature, userName.toLocal8Bit(), userEmail.toLocal8Bit());
@@ -117,7 +118,7 @@ public:
     }
 };
 
-CheckoutCreator::CheckoutCreator(QObject* parent)
+CheckoutCreator::CheckoutCreator(QObject *parent)
     : QObject(parent)
     , d(new Private)
 {
@@ -133,8 +134,9 @@ CheckoutCreator::~CheckoutCreator()
 QString CheckoutCreator::getFile(QString caption, QString filter, QString extraSubDir) const
 {
     KUrl searchDir;
-    if(QDir::home().exists(extraSubDir))
+    if (QDir::home().exists(extraSubDir)) {
         searchDir = KUrl(QDir::homePath().append(QDir::separator()).append(extraSubDir));
+    }
     QString url = KFileDialog::getOpenFileName(searchDir, filter, 0, caption);
     return url;
 }
@@ -148,20 +150,21 @@ QString CheckoutCreator::getDir() const
 bool CheckoutCreator::isGitDir(QString directory) const
 {
     QDir dir(directory);
-    if(dir.exists(".git/config"))
+    if (dir.exists(".git/config")) {
         return true;
+    }
     return false;
 }
 
-QString CheckoutCreator::createClone(QString userVisibleName, QString url, QString localPath, QObject* credentials) const
+QString CheckoutCreator::createClone(QString userVisibleName, QString url, QString localPath, QObject *credentials) const
 {
-    if(!d->checkUserDetails()) {
+    if (!d->checkUserDetails()) {
         KMessageBox::sorry(0, "I'm sorry, we cannot perform git actions without a name and email set, and the git setup on this machine lacks this information. As a result, we are aborting this clone. Please try again, and enter your name and email next time.");
         LibQGit2::shutdownLibQGit2();
         return QString();
     }
 
-    if(userVisibleName.isEmpty()) {
+    if (userVisibleName.isEmpty()) {
         // this should normally not be hit, as the form which calls this checks for this
         // anyway, but let's just be sure
         KMessageBox::sorry(0, "You forgot to name your account. Please do that and try again.");
@@ -174,9 +177,13 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
     d->publicKey = credentials->property("publicKeyFile").toString();
     d->userForRemote = credentials->property("userForRemote").toString();
     d->needsPrivateKeyPassphrase = credentials->property("needsPrivateKeyPassphrase").toBool();
-    if(!QFile::exists(d->privateKey) && credentialsOk) { credentialsOk = false; }
-    if(!QFile::exists(d->publicKey) && credentialsOk) { credentialsOk = false; }
-    if(!credentialsOk) {
+    if (!QFile::exists(d->privateKey) && credentialsOk) {
+        credentialsOk = false;
+    }
+    if (!QFile::exists(d->publicKey) && credentialsOk) {
+        credentialsOk = false;
+    }
+    if (!credentialsOk) {
         KMessageBox::sorry(0, "Something is wrong with your security credentials. Please check them and try again. This is likely due to one or another keyfile not existing, or there being no username entered.");
         LibQGit2::shutdownLibQGit2();
         return QString();
@@ -184,7 +191,7 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
 
     // a general Repository url is server.name:somedir/reponame.git - sometimes different, but very common, so try that first
     QString repoName = url.split('/').last().split('.').first();
-    if(repoName.isEmpty()) {
+    if (repoName.isEmpty()) {
         repoName = userVisibleName;
         repoName = repoName.remove('/');
         repoName = repoName.remove('.');
@@ -197,8 +204,7 @@ QString CheckoutCreator::createClone(QString userVisibleName, QString url, QStri
     try {
         repo.setRemoteCredentials("origin", LibQGit2::Credentials::ssh(d->privateKey, d->publicKey, d->userForRemote.toUtf8(), d->getPassword().toUtf8()));
         repo.clone(url, checkoutLocation);
-    }
-    catch (const LibQGit2::Exception& ex) {
+    } catch (const LibQGit2::Exception &ex) {
         qDebug() << ex.what() << ex.category();
         return QString();
     }

@@ -28,9 +28,9 @@
 
 using namespace Calligra::Sheets;
 
-KoShapeConfigWidgetBase* ChartDatabaseSelectorFactory::createConfigWidget(KoShape* shape)
+KoShapeConfigWidgetBase *ChartDatabaseSelectorFactory::createConfigWidget(KoShape *shape)
 {
-    ChartDatabaseSelector* widget = new ChartDatabaseSelector(m_map);
+    ChartDatabaseSelector *widget = new ChartDatabaseSelector(m_map);
     widget->open(shape);
     return widget;
 }

@@ -55,8 +55,7 @@ struct GimpPatternHeader {
 quint32 const GimpPatternMagic = (('G' << 24) + ('P' << 16) + ('A' << 8) + ('T' << 0));
 }
 
-
-KoPattern::KoPattern(const QString& file)
+KoPattern::KoPattern(const QString &file)
     : KoResource(file)
 {
 }
@@ -79,7 +78,6 @@ KoPattern::KoPattern(const QImage &image, const QString &name, const QString &fo
     setFilename(fileInfo.filePath());
 }
 
-
 KoPattern::~KoPattern()
 {
 }
@@ -87,7 +85,9 @@ KoPattern::~KoPattern()
 bool KoPattern::load()
 {
     QFile file(filename());
-    if (file.size() == 0) return false;
+    if (file.size() == 0) {
+        return false;
+    }
 
     bool result;
     if (!file.open(QIODevice::ReadOnly)) {
@@ -105,17 +105,16 @@ bool KoPattern::loadFromDevice(QIODevice *dev)
     QString fileExtension;
     int index = filename().lastIndexOf('.');
 
-    if (index != -1)
+    if (index != -1) {
         fileExtension = filename().mid(index).toLower();
+    }
 
     bool result;
-
 
     if (fileExtension == ".pat") {
         QByteArray data = dev->readAll();
         result = init(data);
-    }
-    else {
+    } else {
         QImage image;
         result = image.load(dev, fileExtension.toUpper().toLatin1());
         setPatternImage(image);
@@ -146,7 +145,7 @@ bool KoPattern::saveToDevice(QIODevice *dev) const
 
     GimpPatternHeader ph;
     QByteArray utf8Name = name().toUtf8();
-    char const* name = utf8Name.data();
+    char const *name = utf8Name.data();
     int nameLength = qstrlen(name);
 
     ph.header_size = htonl(sizeof(GimpPatternHeader) + nameLength + 1); // trailing 0
@@ -156,16 +155,18 @@ bool KoPattern::saveToDevice(QIODevice *dev) const
     ph.bytes = htonl(4);
     ph.magic_number = htonl(GimpPatternMagic);
 
-    QByteArray bytes = QByteArray::fromRawData(reinterpret_cast<char*>(&ph), sizeof(GimpPatternHeader));
+    QByteArray bytes = QByteArray::fromRawData(reinterpret_cast<char *>(&ph), sizeof(GimpPatternHeader));
     int wrote = dev->write(bytes);
     bytes.clear();
 
-    if (wrote == -1)
+    if (wrote == -1) {
         return false;
+    }
 
     wrote = dev->write(name, nameLength + 1); // Trailing 0 apparantly!
-    if (wrote == -1)
+    if (wrote == -1) {
         return false;
+    }
 
     int k = 0;
     bytes.resize(width() * height() * 4);
@@ -181,22 +182,23 @@ bool KoPattern::saveToDevice(QIODevice *dev) const
     }
 
     wrote = dev->write(bytes);
-    if (wrote == -1)
+    if (wrote == -1) {
         return false;
+    }
 
     return true;
 
 }
 
-bool KoPattern::init(QByteArray& bytes)
+bool KoPattern::init(QByteArray &bytes)
 {
     int dataSize = bytes.size();
-    const char* data = bytes.constData();
+    const char *data = bytes.constData();
 
     // load Gimp patterns
     GimpPatternHeader bh;
     qint32 k;
-    char* name;
+    char *name;
 
     if ((int)sizeof(GimpPatternHeader) > dataSize) {
         return false;
@@ -223,7 +225,7 @@ bool KoPattern::init(QByteArray& bytes)
     }
 
     // size -1 so we don't add the end 0 to the QString...
-    setName(QString::fromLatin1(name, size -1));
+    setName(QString::fromLatin1(name, size - 1));
     delete[] name;
 
     if (bh.width == 0 || bh.height == 0) {
@@ -248,7 +250,7 @@ bool KoPattern::init(QByteArray& bytes)
         // Grayscale
         qint32 val;
         for (quint32 y = 0; y < bh.height; ++y) {
-            QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
+            QRgb *pixels = reinterpret_cast<QRgb *>(pattern.scanLine(y));
             for (quint32 x = 0; x < bh.width; ++x, ++k) {
                 if (k > dataSize) {
                     kWarning(30009) << "failed in gray";
@@ -262,13 +264,12 @@ bool KoPattern::init(QByteArray& bytes)
         // It was grayscale, so make the pattern as small as possible
         // by converting it to Indexed8
         pattern = pattern.convertToFormat(QImage::Format_Indexed8);
-    }
-    else if (bh.bytes == 2) {
+    } else if (bh.bytes == 2) {
         // Grayscale + A
         qint32 val;
         qint32 alpha;
         for (quint32 y = 0; y < bh.height; ++y) {
-            QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
+            QRgb *pixels = reinterpret_cast<QRgb *>(pattern.scanLine(y));
             for (quint32 x = 0; x < bh.width; ++x, ++k) {
                 if (k + 2 > dataSize) {
                     kWarning(30009) << "failed in grayA";
@@ -280,11 +281,10 @@ bool KoPattern::init(QByteArray& bytes)
                 pixels[x] = qRgba(val, val, val, alpha);
             }
         }
-    }
-    else if (bh.bytes == 3) {
+    } else if (bh.bytes == 3) {
         // RGB without alpha
         for (quint32 y = 0; y < bh.height; ++y) {
-            QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
+            QRgb *pixels = reinterpret_cast<QRgb *>(pattern.scanLine(y));
             for (quint32 x = 0; x < bh.width; ++x) {
                 if (k + 3 > dataSize) {
                     kWarning(30009) << "failed in RGB";
@@ -299,7 +299,7 @@ bool KoPattern::init(QByteArray& bytes)
     } else if (bh.bytes == 4) {
         // Has alpha
         for (quint32 y = 0; y < bh.height; ++y) {
-            QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
+            QRgb *pixels = reinterpret_cast<QRgb *>(pattern.scanLine(y));
             for (quint32 x = 0; x < bh.width; ++x) {
                 if (k + 4 > dataSize) {
                     kWarning(30009) << "failed in RGBA";
@@ -337,14 +337,14 @@ qint32 KoPattern::height() const
     return m_pattern.height();
 }
 
-void KoPattern::setPatternImage(const QImage& image)
+void KoPattern::setPatternImage(const QImage &image)
 {
     m_pattern = image;
     setImage(image);
     setValid(true);
 }
 
-KoPattern& KoPattern::operator=(const KoPattern & pattern)
+KoPattern &KoPattern::operator=(const KoPattern &pattern)
 {
     setFilename(pattern.filename());
     setPatternImage(pattern.pattern());
@@ -357,9 +357,9 @@ QString KoPattern::defaultFileExtension() const
     return QString(".pat");
 }
 
-KoPattern* KoPattern::clone() const
+KoPattern *KoPattern::clone() const
 {
-    KoPattern* pat = new KoPattern(filename());
+    KoPattern *pat = new KoPattern(filename());
     pat->setPatternImage(pattern());
     pat->setName(name());
     return pat;
@@ -375,9 +375,9 @@ QByteArray KoPattern::generateMD5() const
     if (!pattern().isNull()) {
         QImage im = m_pattern.convertToFormat(QImage::Format_ARGB32);
 #if QT_VERSION >= 0x040700
-        QByteArray ba = QByteArray::fromRawData((const char*)im.constBits(), im.byteCount());
+        QByteArray ba = QByteArray::fromRawData((const char *)im.constBits(), im.byteCount());
 #else
-        QByteArray ba = QByteArray::fromRawData((const char*)im.bits(), im.byteCount());
+        QByteArray ba = QByteArray::fromRawData((const char *)im.bits(), im.byteCount());
 #endif
 
         QCryptographicHash md5(QCryptographicHash::Md5);

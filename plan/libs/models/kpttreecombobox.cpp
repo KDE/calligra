@@ -31,44 +31,43 @@
 namespace KPlato
 {
 
-
 //----------------------
-TreeComboBox::TreeComboBox( QWidget *parent )
-    : KComboBox( parent ),
-    m_selectionmode( QAbstractItemView::ExtendedSelection )
+TreeComboBox::TreeComboBox(QWidget *parent)
+    : KComboBox(parent),
+      m_selectionmode(QAbstractItemView::ExtendedSelection)
 {
     m_showcolumns << 0;
     m_showheader = false;
 
     updateView();
 
-    connect( this, SIGNAL(activated(int)), SLOT(slotSelectionChanged()) );
+    connect(this, SIGNAL(activated(int)), SLOT(slotSelectionChanged()));
 }
 
 void TreeComboBox::updateView()
 {
     QTreeView *v = new QTreeView();
-    setView( v );
-    v->setSelectionMode( m_selectionmode );
+    setView(v);
+    v->setSelectionMode(m_selectionmode);
     // don't want to have mouseover select an item
     v->disconnect(SIGNAL(entered(QModelIndex)));
 
     QHeaderView *h = v->header();
-    for ( int i = 0; i < h->count(); ++i ) {
-        h->setSectionHidden( i, ! m_showcolumns.contains( i ) );
+    for (int i = 0; i < h->count(); ++i) {
+        h->setSectionHidden(i, ! m_showcolumns.contains(i));
     }
-    h->setVisible( m_showheader );
-    v->setRootIsDecorated( false );
+    h->setVisible(m_showheader);
+    v->setRootIsDecorated(false);
 }
 
 QTreeView *TreeComboBox::view() const
 {
-    return static_cast<QTreeView*>( KComboBox::view() );
+    return static_cast<QTreeView *>(KComboBox::view());
 }
 
-void TreeComboBox::setModel( QAbstractItemModel *model )
+void TreeComboBox::setModel(QAbstractItemModel *model)
 {
-    KComboBox::setModel( model );
+    KComboBox::setModel(model);
     updateView();
 }
 
@@ -77,15 +76,15 @@ QAbstractItemModel *TreeComboBox::model() const
     return KComboBox::model();
 }
 
-void TreeComboBox::setSelectionMode( QAbstractItemView::SelectionMode mode )
+void TreeComboBox::setSelectionMode(QAbstractItemView::SelectionMode mode)
 {
     m_selectionmode = mode;
-    view()->setSelectionMode( mode );
+    view()->setSelectionMode(mode);
 }
 
 void TreeComboBox::slotSelectionChanged()
 {
-    updateCurrentIndexes( view()->selectionModel()->selectedRows() );
+    updateCurrentIndexes(view()->selectionModel()->selectedRows());
 }
 
 void TreeComboBox::showPopup()
@@ -94,19 +93,19 @@ void TreeComboBox::showPopup()
     // now clean up things we want different
     QItemSelectionModel *sm = view()->selectionModel();
     sm->clearSelection();
-    view()->setSelectionMode( m_selectionmode );
-    view()->setSelectionBehavior( QAbstractItemView::SelectRows );
-    foreach ( const QModelIndex &i, m_currentIndexes ) {
-        if ( i.isValid() ) {
-            sm->select( i, QItemSelectionModel::Select | QItemSelectionModel::Rows );
+    view()->setSelectionMode(m_selectionmode);
+    view()->setSelectionBehavior(QAbstractItemView::SelectRows);
+    foreach (const QModelIndex &i, m_currentIndexes) {
+        if (i.isValid()) {
+            sm->select(i, QItemSelectionModel::Select | QItemSelectionModel::Rows);
         }
     }
-    if ( ! sm->selectedRows().contains( sm->currentIndex() ) ) {
-        sm->setCurrentIndex( sm->selectedRows().value( 0 ), QItemSelectionModel::NoUpdate );
+    if (! sm->selectedRows().contains(sm->currentIndex())) {
+        sm->setCurrentIndex(sm->selectedRows().value(0), QItemSelectionModel::NoUpdate);
     }
 }
 
-void TreeComboBox::paintEvent( QPaintEvent *event )
+void TreeComboBox::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QStylePainter painter(this);
@@ -116,38 +115,38 @@ void TreeComboBox::paintEvent( QPaintEvent *event )
     QStyleOptionComboBox opt;
     initStyleOption(&opt);
     QStringList lst;
-    foreach ( const QPersistentModelIndex &idx, m_currentIndexes ) {
-        if ( idx.isValid() ) {
+    foreach (const QPersistentModelIndex &idx, m_currentIndexes) {
+        if (idx.isValid()) {
             lst << idx.data().toString();
         }
     }
-    opt.currentText = lst.isEmpty() ? i18n( "None" ) : lst.join( "," );
+    opt.currentText = lst.isEmpty() ? i18n("None") : lst.join(",");
     painter.drawComplexControl(QStyle::CC_ComboBox, opt);
 
     // draw the icon and text
     painter.drawControl(QStyle::CE_ComboBoxLabel, opt);
 }
 
-void TreeComboBox::setCurrentIndexes( const QModelIndexList &lst )
+void TreeComboBox::setCurrentIndexes(const QModelIndexList &lst)
 {
     m_currentIndexes.clear();
-    foreach ( const QModelIndex &idx, lst ) {
-        m_currentIndexes << QPersistentModelIndex( idx );
+    foreach (const QModelIndex &idx, lst) {
+        m_currentIndexes << QPersistentModelIndex(idx);
     }
 }
 
-void TreeComboBox::setCurrentIndexes( const QList<QPersistentModelIndex> &lst )
+void TreeComboBox::setCurrentIndexes(const QList<QPersistentModelIndex> &lst)
 {
     m_currentIndexes = lst;
 }
 
-void TreeComboBox::updateCurrentIndexes( const QModelIndexList &lst )
+void TreeComboBox::updateCurrentIndexes(const QModelIndexList &lst)
 {
     QList<QPersistentModelIndex> x;
-    foreach ( const QModelIndex &idx, lst ) {
-        x << QPersistentModelIndex( idx );
+    foreach (const QModelIndex &idx, lst) {
+        x << QPersistentModelIndex(idx);
     }
-    if ( x == m_currentIndexes ) {
+    if (x == m_currentIndexes) {
         return;
     }
     m_currentIndexes = x;

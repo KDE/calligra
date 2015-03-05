@@ -32,7 +32,7 @@ K_PLUGIN_FACTORY(PluginFactory, registerPlugin<KoLocationSemanticItemPlugin>();)
 K_EXPORT_PLUGIN(PluginFactory("calligra_semanticitem_location"))
 
 KoLocationSemanticItemPlugin::KoLocationSemanticItemPlugin(QObject *parent, const QVariantList &/*args */)
-  : QObject(parent)
+    : QObject(parent)
 {
     KoRdfSemanticItemRegistry::instance()->add(new KoLocationSemanticItemFactory());
 }

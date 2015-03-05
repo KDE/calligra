@@ -27,7 +27,7 @@
 #include <kis_image.h>
 #include <operations/kis_operation_configuration.h>
 
-WdgBorderSelection::WdgBorderSelection(QWidget* parent, KisViewManager *view)
+WdgBorderSelection::WdgBorderSelection(QWidget *parent, KisViewManager *view)
     : KisOperationUIWidget(i18n("Border Selection"), parent)
     , m_width(1)
 {
@@ -97,7 +97,7 @@ void WdgBorderSelection::updateWidthUIValue(double value)
     }
 }
 
-void WdgBorderSelection::getConfiguration(KisOperationConfiguration* config)
+void WdgBorderSelection::getConfiguration(KisOperationConfiguration *config)
 {
     config->setProperty("x-radius", m_width);
     config->setProperty("y-radius", m_width);

@@ -31,26 +31,25 @@ namespace KPlato
 */
 class KDateInternalYearSelector : public QLineEdit
 {
-  Q_OBJECT
+    Q_OBJECT
 protected:
-  QIntValidator *val;
-  int result;
-  
-  virtual void focusOutEvent(QFocusEvent*);
-    
+    QIntValidator *val;
+    int result;
+
+    virtual void focusOutEvent(QFocusEvent *);
+
 public Q_SLOTS:
-  void yearEnteredSlot();
+    void yearEnteredSlot();
 Q_SIGNALS:
-  void closeMe(int);
+    void closeMe(int);
 public:
-  KDateInternalYearSelector( QWidget* parent=0);
-  int getYear();
-  void setYear(int year);
+    KDateInternalYearSelector(QWidget *parent = 0);
+    int getYear();
+    void setYear(int year);
 
 private:
-  Q_DISABLE_COPY(KDateInternalYearSelector)
+    Q_DISABLE_COPY(KDateInternalYearSelector)
 };
-
 
 } //namespace KPlato
 

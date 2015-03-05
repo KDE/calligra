@@ -82,6 +82,5 @@ private:
     const Flags m_flags;
 };
 
-
 #endif /* __KIS_MERGE_WALKER_H */
 

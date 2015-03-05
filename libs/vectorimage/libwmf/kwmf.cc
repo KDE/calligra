@@ -34,7 +34,6 @@ DESCRIPTION
 
 #include <kdebug.h>
 
-
 #define PI (3.14159265358979323846)
 
 const int KWmf::s_area = 30504;
@@ -75,7 +74,7 @@ unsigned KWmf::getColor(
 }
 
 void KWmf::genericArc(
-    const QString & type,
+    const QString &type,
     QDataStream &operands)
 {
     QPoint topLeft;
@@ -130,7 +129,7 @@ void KWmf::invokeHandler(
     U32 words,
     QDataStream &operands)
 {
-    typedef void (KWmf::*method)(U32 words, QDataStream &operands);
+    typedef void (KWmf::*method)(U32 words, QDataStream & operands);
 
     typedef struct {
         const char *name;
@@ -226,12 +225,12 @@ void KWmf::invokeHandler(
     if (!result) {
         if (funcTab[i].name)
             kError(s_area) << "invokeHandler: unsupported opcode: " <<
-            funcTab[i].name <<
-            " operands: " << words << endl;
+                           funcTab[i].name <<
+                           " operands: " << words << endl;
         else
             kError(s_area) << "invokeHandler: unsupported opcode: 0x" <<
-            QString::number(opcode, 16) <<
-            " operands: " << words << endl;
+                           QString::number(opcode, 16) <<
+                           " operands: " << words << endl;
 
         // Skip data we cannot use.
 
@@ -242,7 +241,7 @@ void KWmf::invokeHandler(
         }
     } else {
         kDebug(s_area) << "invokeHandler: opcode:" << funcTab[i].name <<
-        " operands: " << words << endl;
+                       " operands: " << words << endl;
 
         // We don't invoke the handler directly on the incoming operands, but
         // via a temporary datastream. This adds overhead, but eliminates the
@@ -252,7 +251,7 @@ void KWmf::invokeHandler(
 
         if (words) {
             QByteArray *record = new QByteArray();
-            record->resize(words*2);
+            record->resize(words * 2);
             QDataStream *body;
 
             operands.readRawData(record->data(), words * 2);
@@ -411,19 +410,22 @@ bool KWmf::parse(
         for (unsigned i = 0; i < sizeof(WmfPlaceableHeader) / sizeof(S16); i++) {
             checksum ^= ptr[i];
         }
-        if (pheader.checksum != checksum)
+        if (pheader.checksum != checksum) {
             isPlaceable = false;
+        }
         m_dpi = (unsigned)((double)pheader.inch / m_dpi);
         m_windowOrgX = pheader.bbox.left;
         m_windowOrgY = pheader.bbox.top;
-        if (pheader.bbox.right > pheader.bbox.left)
+        if (pheader.bbox.right > pheader.bbox.left) {
             m_windowFlipX = 1;
-        else
+        } else {
             m_windowFlipX = -1;
-        if (pheader.bbox.bottom > pheader.bbox.top)
+        }
+        if (pheader.bbox.bottom > pheader.bbox.top) {
             m_windowFlipY = 1;
-        else
+        } else {
             m_windowFlipY = -1;
+        }
     } else {
         stream.device()->seek(startedAt);
         m_dpi = (unsigned)((double)576 / m_dpi);
@@ -552,15 +554,14 @@ void KWmf::opBrushCreateIndirect(
             kError(s_area) << "createBrushIndirect: invalid hatched brush " << arg << endl;
             style = Qt::SolidPattern;
         }
-    } else
-        if (arg >= 0 && arg < 9) {
-            style = styleTab[arg];
-            operands >> discard;
-        } else {
-            kError(s_area) << "createBrushIndirect: invalid brush " << arg << endl;
-            style = Qt::SolidPattern;
-            operands >> discard;
-        }
+    } else if (arg >= 0 && arg < 9) {
+        style = styleTab[arg];
+        operands >> discard;
+    } else {
+        kError(s_area) << "createBrushIndirect: invalid brush " << arg << endl;
+        style = Qt::SolidPattern;
+        operands >> discard;
+    }
     handle->m_style = style;
 }
 
@@ -628,8 +629,9 @@ void KWmf::opObjectSelect(
     S16 idx;
 
     operands >> idx;
-    if (idx >= 0 && idx < m_objectHandles.count())
+    if (idx >= 0 && idx < m_objectHandles.count()) {
         m_objectHandles[idx]->apply(*this);
+    }
 }
 
 //
@@ -776,14 +778,16 @@ void KWmf::opWindowSetExt(
     S16 width;
 
     operands >> height >> width;
-    if (width > 0)
+    if (width > 0) {
         m_windowFlipX = 1;
-    else
+    } else {
         m_windowFlipX = -1;
-    if (height > 0)
+    }
+    if (height > 0) {
         m_windowFlipY = 1;
-    else
+    } else {
         m_windowFlipY = -1;
+    }
 }
 
 void KWmf::penSet(

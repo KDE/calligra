@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef PALETTEMODEL_H
 #define PALETTEMODEL_H
 
@@ -31,16 +30,16 @@ class PaletteModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    PaletteModel(QObject* parent = 0);
+    PaletteModel(QObject *parent = 0);
     virtual ~PaletteModel();
-    
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
 
-    void setColorSet(KoColorSet* colorSet);
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+
+    void setColorSet(KoColorSet *colorSet);
 
     /**
      * Installs a display renderer object for a palette that will
@@ -53,7 +52,7 @@ private Q_SLOTS:
     void slotDisplayConfigurationChanged();
 
 private:
-    KoColorSet* m_colorSet;
+    KoColorSet *m_colorSet;
     KoColorDisplayRendererInterface *m_displayRenderer;
 };
 

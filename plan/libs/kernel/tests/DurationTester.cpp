@@ -22,69 +22,78 @@
 namespace KPlato
 {
 
-void DurationTester::add() {
+void DurationTester::add()
+{
     Duration d1(0, 2, 0);
     Duration d2(1, 0, 0);
-    
-    QVERIFY((d1+d1) == Duration(0, 4, 0));
+
+    QVERIFY((d1 + d1) == Duration(0, 4, 0));
 }
-void DurationTester::subtract() {
+void DurationTester::subtract()
+{
     Duration d1(0, 2, 0);
     Duration d2(1, 0, 0);
-    
-    QVERIFY((d1-d1) == Duration(0, 0, 0));
-    QVERIFY((d2-d1) == Duration(0, 22, 0));
-    QVERIFY((d1-d2) == Duration::zeroDuration); // underflow, return 0
+
+    QVERIFY((d1 - d1) == Duration(0, 0, 0));
+    QVERIFY((d2 - d1) == Duration(0, 22, 0));
+    QVERIFY((d1 - d2) == Duration::zeroDuration); // underflow, return 0
 }
-void DurationTester::divide() {
+void DurationTester::divide()
+{
     Duration d1(0, 2, 0);
-    
-    QVERIFY((d1/2) == Duration(0, 1, 0));
+
+    QVERIFY((d1 / 2) == Duration(0, 1, 0));
 }
-void DurationTester::equal() {
+void DurationTester::equal()
+{
     Duration d1(0, 2, 0);
-    
-    QVERIFY(d1==d1);
+
+    QVERIFY(d1 == d1);
 }
-void DurationTester::lessThanOrEqual() {
-    Duration d1(0, 2, 0);
-    Duration d2(1, 0, 0);
-    
-    QVERIFY(d1<=d1);
-    QVERIFY(d1<=d2);
-}
-void DurationTester::greaterThanOrEqual() {
+void DurationTester::lessThanOrEqual()
+{
     Duration d1(0, 2, 0);
     Duration d2(1, 0, 0);
-    
-    QVERIFY(d1>=d1);
-    QVERIFY(d2>=d1);
+
+    QVERIFY(d1 <= d1);
+    QVERIFY(d1 <= d2);
 }
-void DurationTester::notEqual() {
+void DurationTester::greaterThanOrEqual()
+{
     Duration d1(0, 2, 0);
     Duration d2(1, 0, 0);
-    
-    QVERIFY(!(d1!=d1));
-    QVERIFY(d1!=d2);
-    QVERIFY(d2!=d1);
+
+    QVERIFY(d1 >= d1);
+    QVERIFY(d2 >= d1);
 }
-void DurationTester::greaterThan() {
+void DurationTester::notEqual()
+{
     Duration d1(0, 2, 0);
     Duration d2(1, 0, 0);
-    
-    QVERIFY(d2>d1);
-    QVERIFY(d1 > 1*60*60*1000);
+
+    QVERIFY(!(d1 != d1));
+    QVERIFY(d1 != d2);
+    QVERIFY(d2 != d1);
 }
-void DurationTester::lessThan() {
+void DurationTester::greaterThan()
+{
     Duration d1(0, 2, 0);
     Duration d2(1, 0, 0);
-    
-    QVERIFY(d1<d2);
-    QVERIFY(d1 < 3*60*60*1000);
+
+    QVERIFY(d2 > d1);
+    QVERIFY(d1 > 1 * 60 * 60 * 1000);
+}
+void DurationTester::lessThan()
+{
+    Duration d1(0, 2, 0);
+    Duration d2(1, 0, 0);
+
+    QVERIFY(d1 < d2);
+    QVERIFY(d1 < 3 * 60 * 60 * 1000);
 }
 
 } //namespace KPlato
 
-QTEST_MAIN( KPlato::DurationTester )
+QTEST_MAIN(KPlato::DurationTester)
 
 #include "DurationTester.moc"

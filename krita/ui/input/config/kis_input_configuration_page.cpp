@@ -46,7 +46,7 @@ KisInputConfigurationPage::KisInputConfigurationPage(QWidget *parent, Qt::Window
     connect(KisInputProfileManager::instance(), SIGNAL(profilesChanged()), SLOT(updateSelectedProfile()));
 
     QList<KisAbstractInputAction *> actions = KisInputProfileManager::instance()->actions();
-    Q_FOREACH(KisAbstractInputAction * action, actions) {
+    Q_FOREACH (KisAbstractInputAction *action, actions) {
         KisInputConfigurationPageItem *item = new KisInputConfigurationPageItem(this);
         item->setAction(action);
         ui->configurationItemsArea->addWidget(item);
@@ -73,9 +73,11 @@ void KisInputConfigurationPage::setDefaults()
 #else
         QStringList entries = profileDir.entryList(QStringList() << "*.profile");
 #endif
-        Q_FOREACH(const QString & file, entries) {
+        Q_FOREACH (const QString &file, entries) {
 #if QT_VERSION < 0x040700
-            if (file == "." || file == "..") continue;
+            if (file == "." || file == "..") {
+                continue;
+            }
 #endif
             profileDir.remove(file);
         }

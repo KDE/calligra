@@ -34,21 +34,21 @@ public:
         CategoryRole = 0xA2BEF158
     };
 
-    explicit KexiTemplatesModel(const KexiTemplateCategoryInfoList& templateCategories,
+    explicit KexiTemplatesModel(const KexiTemplateCategoryInfoList &templateCategories,
                                 QObject *parent = 0);
     ~KexiTemplatesModel();
 
     QModelIndex  index(int row, int column = 0,
-                       const QModelIndex& parent = QModelIndex() ) const;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    QVariant data(const QModelIndex& index, int role) const;
-    Qt::ItemFlags flags( const QModelIndex& index ) const;
+                       const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
- 
+
 class KexiTemplatesProxyModel : public KCategorizedSortFilterProxyModel
 {
 public:

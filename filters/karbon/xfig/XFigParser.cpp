@@ -32,7 +32,6 @@
 
 #include <kdebug.h>
 
-
 enum XFig3_2TextFlag {
     XFig3_2TextNotScaled =  1 << 0,
     XFig3_2TextForLaTeX =   1 << 1,
@@ -40,8 +39,7 @@ enum XFig3_2TextFlag {
     XFig3_2TextHidden =     1 << 3
 };
 
-enum XFig3_2ObjectCode
-{
+enum XFig3_2ObjectCode {
     XFig3_2CompoundObjectEndId = -6,
     XFig3_2ColorObjectId = 0,
     XFig3_2EllipseObjectId = 1,
@@ -52,14 +50,12 @@ enum XFig3_2ObjectCode
     XFig3_2CompoundObjectId = 6
 };
 
-enum XFig3_2ArcSubTypeCode
-{
+enum XFig3_2ArcSubTypeCode {
     XFig3_2ArcOpenEndedId = 1,
-    XFig3_2ArcPieWedgeId= 2
+    XFig3_2ArcPieWedgeId = 2
 };
 
-enum XFig3_2PolylineSubTypeCode
-{
+enum XFig3_2PolylineSubTypeCode {
     XFig3_2PolylinePolylineId = 1,
     XFig3_2PolylineBoxId = 2,
     XFig3_2PolylinePolygonId = 3,
@@ -67,8 +63,7 @@ enum XFig3_2PolylineSubTypeCode
     XFig3_2PolylinePictureBoundingBoxId = 5
 };
 
-enum XFig3_2SplineSubtypeCode
-{
+enum XFig3_2SplineSubtypeCode {
     XFig3_2SplineOpenApproximatedId  = 0,
     XFig3_2SplineClosedApproximatedId  = 1,
     XFig3_2SplineOpenInterpolatedId  = 2,
@@ -85,9 +80,10 @@ enum XFig3_2TextAlignment {
 
 static const int arrowHeadTypeMapSize = 15;
 static const
-struct { XFigArrowHeadType style[2]; }
-arrowHeadTypeMap[arrowHeadTypeMapSize] =
-{
+struct {
+    XFigArrowHeadType style[2];
+}
+arrowHeadTypeMap[arrowHeadTypeMapSize] = {
     { {XFigArrowHeadStick,                     XFigArrowHeadStick} },
     { {XFigArrowHeadHollowTriangle,            XFigArrowHeadFilledTriangle} },
     { {XFigArrowHeadHollowConcaveSpear,        XFigArrowHeadFilledConcaveSpear} },
@@ -107,18 +103,17 @@ arrowHeadTypeMap[arrowHeadTypeMapSize] =
 
 static inline
 XFigArrowHeadType
-arrowHeadType( int type3_2, int style3_2 )
+arrowHeadType(int type3_2, int style3_2)
 {
     XFigArrowHeadType result = XFigArrowHeadStick;
-    if ((0<=type3_2) && (type3_2<arrowHeadTypeMapSize) &&
-        ((style3_2 == 0) || (style3_2 == 1))) {
+    if ((0 <= type3_2) && (type3_2 < arrowHeadTypeMapSize) &&
+            ((style3_2 == 0) || (style3_2 == 1))) {
         result = arrowHeadTypeMap[type3_2].style[style3_2];
     }
     return result;
 }
 
-enum XFig3_2LineType
-{
+enum XFig3_2LineType {
     XFig3_2LineDefault = -1,
     XFig3_2LineSolid = 0,
     XFig3_2LineDashed = 1,
@@ -129,25 +124,27 @@ enum XFig3_2LineType
 };
 
 static const
-struct { int type3_2; XFigLineType type; }
-lineTypeMap[] =
-{
+struct {
+    int type3_2;
+    XFigLineType type;
+}
+lineTypeMap[] = {
     { XFig3_2LineDefault, XFigLineDefault },
     { XFig3_2LineSolid, XFigLineSolid },
-    { XFig3_2LineDashed,XFigLineDashed  },
+    { XFig3_2LineDashed, XFigLineDashed  },
     { XFig3_2LineDotted, XFigLineDotted },
     { XFig3_2LineDashDotted, XFigLineDashDotted },
-    { XFig3_2LineDashDoubleDotted,XFigLineDashDoubleDotted  },
+    { XFig3_2LineDashDoubleDotted, XFigLineDashDoubleDotted  },
     { XFig3_2LineDashTrippleDotted, XFigLineDashTrippleDotted }
 };
-static const int lineTypeMapSize = sizeof(lineTypeMap)/sizeof(lineTypeMap[0]);
+static const int lineTypeMapSize = sizeof(lineTypeMap) / sizeof(lineTypeMap[0]);
 
 static inline
 XFigLineType
-lineType( int type3_2 )
+lineType(int type3_2)
 {
     XFigLineType result = XFigLineDefault;
-    for (int i = 0; i<lineTypeMapSize; ++i) {
+    for (int i = 0; i < lineTypeMapSize; ++i) {
         if (lineTypeMap[i].type3_2 == type3_2) {
             result = lineTypeMap[i].type;
             break;
@@ -156,29 +153,30 @@ lineType( int type3_2 )
     return result;
 }
 
-enum XFig3_2CapType
-{
+enum XFig3_2CapType {
     XFig3_2CapButt = 0,
     XFig3_2CapRound = 1,
     XFig3_2CapProjecting = 2,
 };
 
 static const
-struct { int type3_2; XFigCapType type; }
-capTypeMap[] =
-{
+struct {
+    int type3_2;
+    XFigCapType type;
+}
+capTypeMap[] = {
     {XFig3_2CapButt, XFigCapButt },
     {XFig3_2CapRound, XFigCapRound},
-    {XFig3_2CapProjecting,XFigCapProjecting}
+    {XFig3_2CapProjecting, XFigCapProjecting}
 };
-static const int capTypeMapSize = sizeof(capTypeMap)/sizeof(capTypeMap[0]);
+static const int capTypeMapSize = sizeof(capTypeMap) / sizeof(capTypeMap[0]);
 
 static inline
 XFigCapType
-capType( int type3_2 )
+capType(int type3_2)
 {
     XFigCapType result = XFigCapButt;
-    for (int i = 0; i<capTypeMapSize; ++i) {
+    for (int i = 0; i < capTypeMapSize; ++i) {
         if (capTypeMap[i].type3_2 == type3_2) {
             result = capTypeMap[i].type;
             break;
@@ -187,29 +185,30 @@ capType( int type3_2 )
     return result;
 }
 
-enum XFig3_2JoinType
-{
+enum XFig3_2JoinType {
     XFig3_2JoinMiter = 0,
     XFig3_2JoinRound = 1,
     XFig3_2JoinBevel = 2,
 };
 
 static const
-struct { int type3_2; XFigJoinType type; }
-joinTypeMap[] =
-{
+struct {
+    int type3_2;
+    XFigJoinType type;
+}
+joinTypeMap[] = {
     {XFig3_2JoinMiter, XFigJoinMiter},
     {XFig3_2JoinRound, XFigJoinRound},
     {XFig3_2JoinBevel, XFigJoinBevel}
 };
-static const int joinTypeMapSize = sizeof(joinTypeMap)/sizeof(joinTypeMap[0]);
+static const int joinTypeMapSize = sizeof(joinTypeMap) / sizeof(joinTypeMap[0]);
 
 static inline
 XFigJoinType
-joinType( int type3_2 )
+joinType(int type3_2)
 {
     XFigJoinType result = XFigJoinMiter;
-    for (int i = 0; i<joinTypeMapSize; ++i) {
+    for (int i = 0; i < joinTypeMapSize; ++i) {
         if (joinTypeMap[i].type3_2 == type3_2) {
             result = joinTypeMap[i].type;
             break;
@@ -227,8 +226,7 @@ XFigFillType fillType(int type3_2)
         /*(type3_2 == -1) ?*/                  XFigFillNone;
 }
 
-enum XFig3_2FillPatternType
-{
+enum XFig3_2FillPatternType {
     XFig3_2FillLeftDiagonal30Degree = 41,
     XFig3_2FillRightDiagonal30Degree = 42,
     XFig3_2FillCrossHatch30Degree = 43,
@@ -253,9 +251,11 @@ enum XFig3_2FillPatternType
     XFig3_2FillVerticalTireTreads = 62
 };
 static const
-struct { XFig3_2FillPatternType type3_2; XFigFillPatternType type; }
-fillPatternTypeMap[] =
-{
+struct {
+    XFig3_2FillPatternType type3_2;
+    XFigFillPatternType type;
+}
+fillPatternTypeMap[] = {
     {XFig3_2FillLeftDiagonal30Degree, XFigFillLeftDiagonal30Degree},
     {XFig3_2FillRightDiagonal30Degree, XFigFillRightDiagonal30Degree},
     {XFig3_2FillCrossHatch30Degree, XFigFillCrossHatch30Degree},
@@ -279,13 +279,13 @@ fillPatternTypeMap[] =
     {XFig3_2FillHorizontalTireTreads, XFigFillHorizontalTireTreads},
     {XFig3_2FillVerticalTireTreads, XFigFillVerticalTireTreads}
 };
-static const int fillPatternTypeMapSize = sizeof(fillPatternTypeMap)/sizeof(fillPatternTypeMap[0]);
+static const int fillPatternTypeMapSize = sizeof(fillPatternTypeMap) / sizeof(fillPatternTypeMap[0]);
 
 static inline
 XFigFillPatternType fillPatternType(int type3_2)
 {
     XFigFillPatternType result = XFigFillLeftDiagonal30Degree;
-    for (int i = 0; i<fillPatternTypeMapSize; ++i) {
+    for (int i = 0; i < fillPatternTypeMapSize; ++i) {
         if (fillPatternTypeMap[i].type3_2 == type3_2) {
             result = fillPatternTypeMap[i].type;
             break;
@@ -296,7 +296,7 @@ XFigFillPatternType fillPatternType(int type3_2)
 
 static const
 struct XFig3_2PostScriptFontData {
-    const char* family;
+    const char *family;
     QFont::Weight weight;
     QFont::Style style;
 } postScriptFontDataTable[35] = {
@@ -337,7 +337,7 @@ struct XFig3_2PostScriptFontData {
     { "zapfdingbats", QFont::Normal, QFont::StyleNormal },  // Zapf Dingbats
 };
 
-enum XFig3_2LatexFontType{
+enum XFig3_2LatexFontType {
     XFig3_2LatexFontDefault = 0,
     XFig3_2LatexFontRoman = 1,
     XFig3_2LatexFontBold = 2,
@@ -348,7 +348,7 @@ enum XFig3_2LatexFontType{
 
 static const
 struct PaperSizeIdMap {
-    const char* stringId;
+    const char *stringId;
     XFigPageSizeType type;
 } paperSizeTable[] = {
     { "Letter",  XFigPageSizeLetter },
@@ -385,15 +385,15 @@ struct PaperSizeIdMap {
     { "B1",  XFigPageSizeB1 },
     { "B0",  XFigPageSizeB0 }
 };
-static const int paperSizeCount = sizeof(paperSizeTable)/sizeof(paperSizeTable[0]);
+static const int paperSizeCount = sizeof(paperSizeTable) / sizeof(paperSizeTable[0]);
 
 static inline
 XFigPageSizeType
-pageSizeType( const QString& stringId )
+pageSizeType(const QString &stringId)
 {
     XFigPageSizeType result = XFigPageSizeUnknown;
-    for( int i = 0; i<paperSizeCount; ++i) {
-        const PaperSizeIdMap& idMap = paperSizeTable[i];
+    for (int i = 0; i < paperSizeCount; ++i) {
+        const PaperSizeIdMap &idMap = paperSizeTable[i];
         if (stringId == QLatin1String(idMap.stringId)) {
             result = idMap.type;
             break;
@@ -402,30 +402,31 @@ pageSizeType( const QString& stringId )
     return result;
 }
 
-XFigDocument*
-XFigParser::parse( QIODevice* device )
+XFigDocument *
+XFigParser::parse(QIODevice *device)
 {
     XFigParser parser(device);
-    XFigDocument* document = parser.takeDocument();
+    XFigDocument *document = parser.takeDocument();
     return document;
 }
 
-
-XFigParser::XFigParser( QIODevice* device )
-  : m_Document(0)
-  , m_XFigStreamLineReader( device )
+XFigParser::XFigParser(QIODevice *device)
+    : m_Document(0)
+    , m_XFigStreamLineReader(device)
 {
-    if( (device == 0) || (m_XFigStreamLineReader.hasError()) )
+    if ((device == 0) || (m_XFigStreamLineReader.hasError())) {
         return;
+    }
 
-    const QTextCodec* codec = QTextCodec::codecForName("ISO 8859-1");
+    const QTextCodec *codec = QTextCodec::codecForName("ISO 8859-1");
     m_TextDecoder = codec->makeDecoder();
 
     // setup
-    if (! parseHeader())
+    if (! parseHeader()) {
         return;
+    }
 
-    XFigPage* page = new XFigPage;
+    XFigPage *page = new XFigPage;
 
     while (! m_XFigStreamLineReader.readNextObjectLine()) {
         const int objectCode = m_XFigStreamLineReader.objectCode();
@@ -433,8 +434,8 @@ XFigParser::XFigParser( QIODevice* device )
 
         if (objectCode == XFig3_2ColorObjectId) {
             parseColorObject();
-        } else if ((XFig3_2EllipseObjectId<=objectCode) && (objectCode<=XFig3_2CompoundObjectId)) {
-            XFigAbstractObject* object =
+        } else if ((XFig3_2EllipseObjectId <= objectCode) && (objectCode <= XFig3_2CompoundObjectId)) {
+            XFigAbstractObject *object =
                 (objectCode == XFig3_2EllipseObjectId) ?  parseEllipse() :
                 (objectCode == XFig3_2PolylineObjectId) ? parsePolyline() :
                 (objectCode == XFig3_2SplineObjectId) ?   parseSpline() :
@@ -451,7 +452,7 @@ XFigParser::XFigParser( QIODevice* device )
         }
     }
 
-    m_Document->addPage( page );
+    m_Document->addPage(page);
 }
 
 XFigParser::~XFigParser()
@@ -467,7 +468,7 @@ XFigParser::parseHeader()
     m_XFigStreamLineReader.readNextLine(XFigStreamLineReader::TakeComment);
     const QString versionString = m_XFigStreamLineReader.line();
     if (! versionString.startsWith(QLatin1String("#FIG 3.")) ||
-        (versionString.length() < 8)) {
+            (versionString.length() < 8)) {
         kDebug() << "ERROR: no xfig file or wrong header";
         return false;
     }
@@ -493,12 +494,13 @@ XFigParser::parseHeader()
             const XFigPageOrientation pageOrientation =
                 (orientationString == QLatin1String("Landscape")) ? XFigPageLandscape :
                 (orientationString == QLatin1String("Portrait")) ?  XFigPagePortrait :
-                                                                    XFigPageOrientationUnknown;
-qDebug()<<"orientation:"<<orientationString<<pageOrientation;
-            if (pageOrientation == XFigPageOrientationUnknown)
+                XFigPageOrientationUnknown;
+            qDebug() << "orientation:" << orientationString << pageOrientation;
+            if (pageOrientation == XFigPageOrientationUnknown) {
                 kDebug() << "ERROR: invalid orientation";
+            }
 
-            m_Document->setPageOrientation( pageOrientation );
+            m_Document->setPageOrientation(pageOrientation);
         } else {
             break;
         }
@@ -514,12 +516,13 @@ qDebug()<<"orientation:"<<orientationString<<pageOrientation;
             const XFigUnitType unitType =
                 (unitTypeString == QLatin1String("Metric")) ? XFigUnitMetric :
                 (unitTypeString == QLatin1String("Inches")) ? XFigUnitInches :
-                                                            XFigUnitTypeUnknown;
-    qDebug() << "unittype:"<<unitTypeString<<unitType;
-            if (unitType == XFigUnitTypeUnknown)
+                XFigUnitTypeUnknown;
+            qDebug() << "unittype:" << unitTypeString << unitType;
+            if (unitType == XFigUnitTypeUnknown) {
                 kDebug() << "ERROR: invalid units";
+            }
 
-            m_Document->setUnitType( unitType );
+            m_Document->setUnitType(unitType);
         } else {
             break;
         }
@@ -528,7 +531,7 @@ qDebug()<<"orientation:"<<orientationString<<pageOrientation;
             if (m_XFigStreamLineReader.readNextLine()) {
                 const QString pageSizeString = m_XFigStreamLineReader.line().trimmed();
                 const XFigPageSizeType pageSizeType = ::pageSizeType(pageSizeString);
-qDebug() << "pagesize:"<<pageSizeString<<pageSizeType;
+                qDebug() << "pagesize:" << pageSizeString << pageSizeType;
                 m_Document->setPageSizeType(pageSizeType);
             } else {
                 break;
@@ -538,7 +541,7 @@ qDebug() << "pagesize:"<<pageSizeString<<pageSizeType;
             if (m_XFigStreamLineReader.readNextLine()) {
                 const QString magnificationString = m_XFigStreamLineReader.line();
                 const float magnification = magnificationString.toFloat();
-qDebug() << "magnification:"<<magnificationString<<magnification;
+                qDebug() << "magnification:" << magnificationString << magnification;
             } else {
                 break;
             }
@@ -558,7 +561,7 @@ qDebug() << "magnification:"<<magnificationString<<magnification;
             if (m_XFigStreamLineReader.readNextLine()) {
                 const QString transparentColorString = m_XFigStreamLineReader.line();
                 const int transparentColor = transparentColorString.toInt();
-qDebug() << "transparentColor:"<<transparentColorString<<transparentColor;
+                qDebug() << "transparentColor:" << transparentColorString << transparentColor;
             } else {
                 break;
             }
@@ -575,12 +578,12 @@ qDebug() << "transparentColor:"<<transparentColorString<<transparentColor;
             const XFigCoordSystemOriginType coordSystemOriginType =
                 (coordinateSystemType == 1) ? XFigCoordSystemOriginLowerLeft :
                 (coordinateSystemType == 2) ? XFigCoordSystemOriginUpperLeft :
-                                            XFigCoordSystemOriginTypeUnknown;
-            m_Document->setCoordSystemOriginType( coordSystemOriginType ); // said to be ignored and always upper-left
+                XFigCoordSystemOriginTypeUnknown;
+            m_Document->setCoordSystemOriginType(coordSystemOriginType);   // said to be ignored and always upper-left
             m_Document->setResolution(resolution);
             m_Document->setComment(m_XFigStreamLineReader.comment());
 
-    qDebug() << "resolution+coordinateSystemType:"<<resolution<<coordinateSystemType;
+            qDebug() << "resolution+coordinateSystemType:" << resolution << coordinateSystemType;
         } else {
             break;
         }
@@ -595,10 +598,9 @@ qDebug() << "transparentColor:"<<transparentColorString<<transparentColor;
     return isHeaderCorrect;
 }
 
-
 static inline
 int
-parseTwoDigitHexValue(QTextStream& textStream)
+parseTwoDigitHexValue(QTextStream &textStream)
 {
     int result = 0;
 
@@ -640,16 +642,16 @@ void XFigParser::parseColorObject()
     m_Document->setUserColor(colorNumber, QColor(red, green, blue));
 }
 
-XFigAbstractObject*
+XFigAbstractObject *
 XFigParser::parseArc()
 {
-qDebug()<<"arc";
+    qDebug() << "arc";
 
     QScopedPointer<XFigArcObject> arcObject(new XFigArcObject);
 
     int sub_type, line_style, thickness, pen_color, fill_color,
-    depth, pen_style, area_fill, cap_style, direction,
-    forwardArrow, backwardArrow, x1, y1, x2, y2, x3, y3;
+        depth, pen_style, area_fill, cap_style, direction,
+        forwardArrow, backwardArrow, x1, y1, x2, y2, x3, y3;
     float center_x, center_y;
     float style_val;
 
@@ -657,10 +659,10 @@ qDebug()<<"arc";
     QString line = m_XFigStreamLineReader.line();
     QTextStream textStream(&line, QIODevice::ReadOnly);
     textStream
-        >> sub_type >> line_style >> thickness >> pen_color >> fill_color
-        >> depth >> pen_style >> area_fill >> style_val >> cap_style
-        >> direction >> forwardArrow >> backwardArrow
-        >> center_x >> center_y >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
+            >> sub_type >> line_style >> thickness >> pen_color >> fill_color
+            >> depth >> pen_style >> area_fill >> style_val >> cap_style
+            >> direction >> forwardArrow >> backwardArrow
+            >> center_x >> center_y >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
 
     if (forwardArrow > 0) {
         QScopedPointer<XFigArrowHead> arrowHead(parseArrowHead());
@@ -679,17 +681,17 @@ qDebug()<<"arc";
     }
 
     const XFigArcObject::Subtype subtype =
-        (sub_type==1) ?   XFigArcObject::OpenEnded :
+        (sub_type == 1) ?   XFigArcObject::OpenEnded :
         /*(sub_type==2)*/ XFigArcObject::PieWedgeClosed;
     arcObject->setSubtype(subtype);
     const XFigArcObject::Direction arcDirection =
-        (direction==1) ?   XFigArcObject::CounterClockwise :
+        (direction == 1) ?   XFigArcObject::CounterClockwise :
         /*(direction==0)*/ XFigArcObject::Clockwise;
     arcObject->setDirection(arcDirection);
     arcObject->setCenterPoint(XFigPoint(center_x, center_y));
     arcObject->setPoints(XFigPoint(x1, y1), XFigPoint(x2, y2), XFigPoint(x3, y3));
     arcObject->setCapType(capType(cap_style));
-    arcObject->setDepth( depth );
+    arcObject->setDepth(depth);
     const XFigFillType fillType = ::fillType(area_fill);
     if (fillType == XFigFillSolid) {
         arcObject->setFillTinting(area_fill);
@@ -699,15 +701,15 @@ qDebug()<<"arc";
         arcObject->setFillNone();
     }
     arcObject->setFillColorId(fill_color);
-    arcObject->setLine( lineType(line_style), thickness, style_val, pen_color );
+    arcObject->setLine(lineType(line_style), thickness, style_val, pen_color);
 
     return arcObject.take();
 }
 
-XFigAbstractObject*
+XFigAbstractObject *
 XFigParser::parseEllipse()
 {
-qDebug()<<"ellipse";
+    qDebug() << "ellipse";
 
     QScopedPointer<XFigEllipseObject> ellipseObject(new XFigEllipseObject);
 
@@ -720,23 +722,23 @@ qDebug()<<"ellipse";
     QString line = m_XFigStreamLineReader.line();
     QTextStream textStream(&line, QIODevice::ReadOnly);
     textStream
-        >> sub_type >> line_style >> thickness >> pen_color >> fill_color
-        >> depth >> pen_style >> area_fill >> style_val >> direction
-        >> angle >> center_x >> center_y >> radius_x >> radius_y
-        >> start_x >> start_y >> end_x >> end_y;
+            >> sub_type >> line_style >> thickness >> pen_color >> fill_color
+            >> depth >> pen_style >> area_fill >> style_val >> direction
+            >> angle >> center_x >> center_y >> radius_x >> radius_y
+            >> start_x >> start_y >> end_x >> end_y;
 
     const XFigEllipseObject::Subtype subtype =
-        (sub_type==1) ?   XFigEllipseObject::EllipseByRadii :
-        (sub_type==2) ?   XFigEllipseObject::EllipseByDiameter :
-        (sub_type==3) ?   XFigEllipseObject::CircleByRadius :
+        (sub_type == 1) ?   XFigEllipseObject::EllipseByRadii :
+        (sub_type == 2) ?   XFigEllipseObject::EllipseByDiameter :
+        (sub_type == 3) ?   XFigEllipseObject::CircleByRadius :
         /*(sub_type==4)*/ XFigEllipseObject::CircleByDiameter;
     ellipseObject->setSubtype(subtype);
     ellipseObject->setCenterPoint(XFigPoint(center_x, center_y));
-    ellipseObject->setStartEnd(XFigPoint(start_x,start_y), XFigPoint(end_x,end_y));
+    ellipseObject->setStartEnd(XFigPoint(start_x, start_y), XFigPoint(end_x, end_y));
     ellipseObject->setRadii(radius_x, radius_y);
     ellipseObject->setXAxisAngle(angle);
 
-    ellipseObject->setDepth( depth );
+    ellipseObject->setDepth(depth);
     const XFigFillType fillType = ::fillType(area_fill);
     if (fillType == XFigFillSolid) {
         ellipseObject->setFillTinting(area_fill);
@@ -746,15 +748,15 @@ qDebug()<<"ellipse";
         ellipseObject->setFillNone();
     }
     ellipseObject->setFillColorId(fill_color);
-    ellipseObject->setLine( lineType(line_style), thickness, style_val, pen_color );
+    ellipseObject->setLine(lineType(line_style), thickness, style_val, pen_color);
 
     return ellipseObject.take();
 }
 
-XFigAbstractObject*
+XFigAbstractObject *
 XFigParser::parsePolyline()
 {
-qDebug()<<"polyline";
+    qDebug() << "polyline";
 
     QScopedPointer<XFigAbstractPolylineObject> abstractPolylineObject(0);
 
@@ -767,32 +769,32 @@ qDebug()<<"polyline";
     QString line = m_XFigStreamLineReader.line();
     QTextStream textStream(&line, QIODevice::ReadOnly);
     textStream
-        >> sub_type >> line_style >> thickness >> pen_color >> fill_color
-        >> depth >> pen_style >> area_fill >> style_val >> join_style
-        >> cap_style >> radius >> forward_arrow >> backward_arrow
-        >> npoints;
-qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
-         << area_fill << style_val << join_style << cap_style << radius << forward_arrow << backward_arrow << npoints;
+            >> sub_type >> line_style >> thickness >> pen_color >> fill_color
+            >> depth >> pen_style >> area_fill >> style_val >> join_style
+            >> cap_style >> radius >> forward_arrow >> backward_arrow
+            >> npoints;
+    qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
+             << area_fill << style_val << join_style << cap_style << radius << forward_arrow << backward_arrow << npoints;
 
     // ignore line with useless point number
     if (npoints < 1) {
         return 0;
     }
 
-    if (sub_type==XFig3_2PolylinePolylineId) {
-        XFigPolylineObject* polylineObject = new XFigPolylineObject;
+    if (sub_type == XFig3_2PolylinePolylineId) {
+        XFigPolylineObject *polylineObject = new XFigPolylineObject;
         polylineObject->setCapType(capType(cap_style));
         abstractPolylineObject.reset(polylineObject);
-    } else if (sub_type==XFig3_2PolylinePolygonId) {
+    } else if (sub_type == XFig3_2PolylinePolygonId) {
         abstractPolylineObject.reset(new XFigPolygonObject);
-    } else if (sub_type==XFig3_2PolylineBoxId) {
+    } else if (sub_type == XFig3_2PolylineBoxId) {
         abstractPolylineObject.reset(new XFigBoxObject);
-    } else if (sub_type==XFig3_2PolylineArcBoxId) {
-        XFigBoxObject* boxObject = new XFigBoxObject;
+    } else if (sub_type == XFig3_2PolylineArcBoxId) {
+        XFigBoxObject *boxObject = new XFigBoxObject;
         boxObject->setRadius(radius);
         abstractPolylineObject.reset(boxObject);
-    } else if (sub_type==XFig3_2PolylinePictureBoundingBoxId) {
-        XFigPictureBoxObject* pictureBoxObject = new XFigPictureBoxObject;
+    } else if (sub_type == XFig3_2PolylinePictureBoundingBoxId) {
+        XFigPictureBoxObject *pictureBoxObject = new XFigPictureBoxObject;
         if (! m_XFigStreamLineReader.readNextLine()) {
             return 0;
         }
@@ -804,8 +806,8 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
         QString fileName;
         textStream >> flipped >> fileName;
 
-        pictureBoxObject->setIsFlipped( flipped != 0 );
-        pictureBoxObject->setFileName( fileName );
+        pictureBoxObject->setIsFlipped(flipped != 0);
+        pictureBoxObject->setFileName(fileName);
 
         abstractPolylineObject.reset(pictureBoxObject);
     } else {
@@ -818,8 +820,8 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigPolylineObject* polylineObject =
-                static_cast<XFigPolylineObject*>(abstractPolylineObject.data());
+            XFigPolylineObject *polylineObject =
+                static_cast<XFigPolylineObject *>(abstractPolylineObject.data());
             polylineObject->setForwardArrow(arrowHead.take());
         }
     }
@@ -831,8 +833,8 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigPolylineObject* polylineObject =
-                static_cast<XFigPolylineObject*>(abstractPolylineObject.data());
+            XFigPolylineObject *polylineObject =
+                static_cast<XFigPolylineObject *>(abstractPolylineObject.data());
             polylineObject->setBackwardArrow(arrowHead.take());
         }
     }
@@ -844,8 +846,8 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
     }
 
     // check box:
-    if ((abstractPolylineObject->typeId()==XFigAbstractObject::BoxId) &&
-        (points.count()!=5)) {
+    if ((abstractPolylineObject->typeId() == XFigAbstractObject::BoxId) &&
+            (points.count() != 5)) {
         kDebug() << "box object does not have 5 points, but points:" << points.count();
         return 0;
     }
@@ -866,10 +868,10 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
     return abstractPolylineObject.take();
 }
 
-XFigAbstractObject*
+XFigAbstractObject *
 XFigParser::parseSpline()
 {
-qDebug()<<"spline";
+    qDebug() << "spline";
 
     qint32 sub_type, line_style, thickness, pen_color, fill_color, depth,
            pen_style, area_fill, cap_style, forward_arrow, backward_arrow, npoints;
@@ -879,11 +881,11 @@ qDebug()<<"spline";
     QString line = m_XFigStreamLineReader.line();
     QTextStream textStream(&line, QIODevice::ReadOnly);
     textStream
-        >> sub_type >> line_style >> thickness >> pen_color >> fill_color
-        >>  depth >> pen_style >> area_fill >> style_val >> cap_style
-        >> forward_arrow >> backward_arrow >> npoints;
-qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
-         << area_fill << style_val << cap_style << forward_arrow << backward_arrow << npoints;
+            >> sub_type >> line_style >> thickness >> pen_color >> fill_color
+            >>  depth >> pen_style >> area_fill >> style_val >> cap_style
+            >> forward_arrow >> backward_arrow >> npoints;
+    qDebug() << sub_type << line_style << thickness << pen_color << fill_color << depth << pen_style
+             << area_fill << style_val << cap_style << forward_arrow << backward_arrow << npoints;
 
     // ignore line with useless point number
     if (npoints < 1) {
@@ -894,10 +896,10 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
     // thus simply creating polygones/polylines for now :/
     QScopedPointer<XFigAbstractPolylineObject> abstractPolylineObject(0);
 
-    if ((sub_type==XFig3_2SplineOpenApproximatedId) ||
-        (sub_type==XFig3_2SplineOpenInterpolatedId) ||
-        (sub_type==XFig3_2SplineOpenXId)) {
-        XFigPolylineObject* polylineObject = new XFigPolylineObject;
+    if ((sub_type == XFig3_2SplineOpenApproximatedId) ||
+            (sub_type == XFig3_2SplineOpenInterpolatedId) ||
+            (sub_type == XFig3_2SplineOpenXId)) {
+        XFigPolylineObject *polylineObject = new XFigPolylineObject;
         polylineObject->setCapType(capType(cap_style));
         abstractPolylineObject.reset(polylineObject);
     } else {
@@ -911,8 +913,8 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigPolylineObject* polylineObject =
-                static_cast<XFigPolylineObject*>(abstractPolylineObject.data());
+            XFigPolylineObject *polylineObject =
+                static_cast<XFigPolylineObject *>(abstractPolylineObject.data());
             polylineObject->setForwardArrow(arrowHead.take());
         }
     }
@@ -924,8 +926,8 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
         }
 
         if (abstractPolylineObject->typeId() == XFigAbstractObject::PolylineId) {
-            XFigPolylineObject* polylineObject =
-                static_cast<XFigPolylineObject*>(abstractPolylineObject.data());
+            XFigPolylineObject *polylineObject =
+                static_cast<XFigPolylineObject *>(abstractPolylineObject.data());
             polylineObject->setBackwardArrow(arrowHead.take());
         }
     }
@@ -956,10 +958,10 @@ qDebug() << sub_type << line_style << thickness << pen_color << fill_color << de
     return abstractPolylineObject.take();
 }
 
-XFigAbstractObject*
+XFigAbstractObject *
 XFigParser::parseText()
 {
-qDebug()<<"text";
+    qDebug() << "text";
 
     QScopedPointer<XFigTextObject> textObject(new XFigTextObject);
 
@@ -969,28 +971,28 @@ qDebug()<<"text";
     QString line = m_XFigStreamLineReader.line();
     QTextStream textStream(&line, QIODevice::ReadOnly);
     textStream
-        >> sub_type >> color >> depth >> pen_style >> font >> font_size
-        >> angle >> font_flags >> height >> length >> x >> y;
+            >> sub_type >> color >> depth >> pen_style >> font >> font_size
+            >> angle >> font_flags >> height >> length >> x >> y;
 
     const XFigTextAlignment textAlignment =
         (sub_type == XFig3_2TextCenterAligned) ? XFigTextCenterAligned :
         (sub_type == XFig3_2TextRightAligned) ?  XFigTextRightAligned :
         /*(sub_type == XFig3_2TextLeftAligned)*/ XFigTextLeftAligned;
     textObject->setTextAlignment(textAlignment);
-    textObject->setBaselineStartPoint(XFigPoint(x,y));
+    textObject->setBaselineStartPoint(XFigPoint(x, y));
     textObject->setSize(length, height);
     textObject->setXAxisAngle(angle);
     textObject->setColorId(color);
     textObject->setDepth(depth);
-    textObject->setIsHidden(font_flags&XFig3_2TextHidden);
+    textObject->setIsHidden(font_flags & XFig3_2TextHidden);
 
     XFigFontData fontData;
-    if (font_flags&XFig3_2TextPostScriptFont) {
+    if (font_flags & XFig3_2TextPostScriptFont) {
         if (font == -1) {
             /* default means */;
         } else {
-            if ((0<=font) && (font<=34)) {
-                const XFig3_2PostScriptFontData& postScriptFontData = postScriptFontDataTable[font];
+            if ((0 <= font) && (font <= 34)) {
+                const XFig3_2PostScriptFontData &postScriptFontData = postScriptFontDataTable[font];
                 fontData.mFamily = QLatin1String(postScriptFontData.family);
                 fontData.mWeight = postScriptFontData.weight;
                 fontData.mStyle = postScriptFontData.style;
@@ -1002,11 +1004,11 @@ qDebug()<<"text";
             fontData.mFamily = QLatin1String("helvetica");
         } else if (font == XFig3_2LatexFontTypewriter) {
             fontData.mFamily = QLatin1String("courier");
-        } else if ((XFig3_2LatexFontDefault<=font) && (font<=XFig3_2LatexFontItalic)) {
+        } else if ((XFig3_2LatexFontDefault <= font) && (font <= XFig3_2LatexFontItalic)) {
             fontData.mFamily = QLatin1String("times");
-            if (font==XFig3_2LatexFontBold) {
+            if (font == XFig3_2LatexFontBold) {
                 fontData.mWeight = QFont::Bold;
-            } else if (font==XFig3_2LatexFontItalic) {
+            } else if (font == XFig3_2LatexFontItalic) {
                 fontData.mStyle = QFont::StyleItalic;
             }
         }
@@ -1016,7 +1018,7 @@ qDebug()<<"text";
 
     // read text
     // skip one space char used as separator
-    const QString textData = line.mid(textStream.pos()+1);
+    const QString textData = line.mid(textStream.pos() + 1);
 
     // TODO: improve this, not really sane yet
     QString text;
@@ -1024,7 +1026,7 @@ qDebug()<<"text";
         const QChar textChar = textData.at(i);
         if (textChar == QLatin1Char('\\')) {
 
-            if ((i+3) >= textData.length()) {
+            if ((i + 3) >= textData.length()) {
                 // encoded char, especially end marker not possible, is broken
                 break;
             }
@@ -1032,7 +1034,7 @@ qDebug()<<"text";
             int digitValues[3];
             bool isOctalEncodedChar = true;
             for (int d = 0; d < 3; ++d) {
-                const int digitValue = textData.at(i+1+d).digitValue();
+                const int digitValue = textData.at(i + 1 + d).digitValue();
                 if ((digitValue < 0) || (7 < digitValue)) {
                     isOctalEncodedChar = false;
                     break;
@@ -1049,17 +1051,17 @@ qDebug()<<"text";
                     break;
                 }
                 const char encodedChar = static_cast<char>(charValue);
-                text.append( m_TextDecoder->toUnicode(&encodedChar,1) );
+                text.append(m_TextDecoder->toUnicode(&encodedChar, 1));
 
                 // digits are consumed
                 i += 3;
-            } else if (textData.at(i+1) == QLatin1Char('\\')) {
-                text.append( textChar );
+            } else if (textData.at(i + 1) == QLatin1Char('\\')) {
+                text.append(textChar);
                 // double \ is consumed
                 ++i;
             }
         } else {
-            text.append( textChar );
+            text.append(textChar);
         }
     }
     textObject->setText(text);
@@ -1067,10 +1069,10 @@ qDebug()<<"text";
     return textObject.take();
 }
 
-XFigAbstractObject*
+XFigAbstractObject *
 XFigParser::parseCompoundObject()
 {
-qDebug()<<"compound";
+    qDebug() << "compound";
 
     QScopedPointer<XFigCompoundObject> compoundObject(new XFigCompoundObject);
 
@@ -1081,9 +1083,9 @@ qDebug()<<"compound";
         QTextStream textStream(&line, QIODevice::ReadOnly);
         textStream >> upperLeftX >> upperLeftY >> lowerRightX >> lowerRightY;
 
-        const XFigBoundingBox boundingBox( XFigPoint(upperLeftX, upperLeftY),
-                                    XFigPoint(lowerRightX, lowerRightY) );
-        compoundObject->setBoundingBox( boundingBox );
+        const XFigBoundingBox boundingBox(XFigPoint(upperLeftX, upperLeftY),
+                                          XFigPoint(lowerRightX, lowerRightY));
+        compoundObject->setBoundingBox(boundingBox);
     }
 
     while (! m_XFigStreamLineReader.readNextObjectLine()) {
@@ -1097,8 +1099,8 @@ qDebug()<<"compound";
 
         if (objectCode == XFig3_2ColorObjectId) {
             parseColorObject();
-        } else if ((XFig3_2EllipseObjectId<=objectCode) && (objectCode<=XFig3_2CompoundObjectId)) {
-            XFigAbstractObject* object =
+        } else if ((XFig3_2EllipseObjectId <= objectCode) && (objectCode <= XFig3_2CompoundObjectId)) {
+            XFigAbstractObject *object =
                 (objectCode == XFig3_2EllipseObjectId) ?  parseEllipse() :
                 (objectCode == XFig3_2PolylineObjectId) ? parsePolyline() :
                 (objectCode == XFig3_2SplineObjectId) ?   parseSpline() :
@@ -1114,12 +1116,12 @@ qDebug()<<"compound";
             kDebug() << "unknown object type:" << objectCode;
         }
     }
-qDebug()<<"compound end";
+    qDebug() << "compound end";
 
     return compoundObject.take();
 }
 
-XFigArrowHead* XFigParser::parseArrowHead()
+XFigArrowHead *XFigParser::parseArrowHead()
 {
     if (! m_XFigStreamLineReader.readNextLine()) {
         return 0;
@@ -1131,12 +1133,12 @@ XFigArrowHead* XFigParser::parseArrowHead()
     int arrow_type, arrow_style;
     float arrow_thickness, arrow_width, arrow_height;
     textStream
-        >> arrow_type >> arrow_style >> arrow_thickness
-        >> arrow_width >> arrow_height;
+            >> arrow_type >> arrow_style >> arrow_thickness
+            >> arrow_width >> arrow_height;
 
-    XFigArrowHead* arrowHead = new XFigArrowHead;
+    XFigArrowHead *arrowHead = new XFigArrowHead;
     arrowHead->setType(arrowHeadType(arrow_type, arrow_style));
-    arrowHead->setThickness(arrow_thickness );
+    arrowHead->setThickness(arrow_thickness);
     arrowHead->setSize(arrow_width, arrow_height);
 
     return arrowHead;

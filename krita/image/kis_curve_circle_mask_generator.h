@@ -31,17 +31,16 @@ class QDomDocument;
 
 class QPointF;
 
-
 /**
  * This mask generator use softness/hardness defined by user curve
- * It used to be soft brush paintop. 
+ * It used to be soft brush paintop.
  */
 class KRITAIMAGE_EXPORT KisCurveCircleMaskGenerator : public KisMaskGenerator
 {
 
 public:
 
-    KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes,const KisCubicCurve& curve, bool antialiasEdges);
+    KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve, bool antialiasEdges);
     virtual ~KisCurveCircleMaskGenerator();
 
     virtual quint8 valueAt(qreal x, qreal y) const;
@@ -50,20 +49,21 @@ public:
 
     bool shouldSupersample() const;
 
-    virtual void toXML(QDomDocument& , QDomElement&) const;
+    virtual void toXML(QDomDocument &, QDomElement &) const;
     virtual void setSoftness(qreal softness);
 
-    static void transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector<qreal> &result);
+    static void transformCurveForSoftness(qreal softness, const QList<QPointF> &points, int curveResolution, QVector<qreal> &result);
 
 private:
 
-    qreal norme(qreal a, qreal b) const {
-        return a*a + b*b;
+    qreal norme(qreal a, qreal b) const
+    {
+        return a * a + b * b;
     }
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

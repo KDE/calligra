@@ -18,19 +18,18 @@
 */
 #include "KPrShapeAnimationFactory.h"
 
-struct KPrShapeAnimationFactory::Private
-{
-    Private( const QString & id, const QString & name )
-    : id( id )
-    , name( name )
+struct KPrShapeAnimationFactory::Private {
+    Private(const QString &id, const QString &name)
+        : id(id)
+        , name(name)
     {}
 
     QString id;
     QString name;
 };
 
-KPrShapeAnimationFactory::KPrShapeAnimationFactory( const QString & id, const QString & name )
-: d( new Private( id, name ) )
+KPrShapeAnimationFactory::KPrShapeAnimationFactory(const QString &id, const QString &name)
+    : d(new Private(id, name))
 {
 }
 

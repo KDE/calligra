@@ -42,13 +42,13 @@ class AngleDialog : public KDialog
 {
     Q_OBJECT
 public:
-    AngleDialog(QWidget* parent, Selection* selection);
+    AngleDialog(QWidget *parent, Selection *selection);
 
 public Q_SLOTS:
     void slotOk();
     void slotDefault();
 protected:
-    Selection* m_selection;
+    Selection *m_selection;
     KIntNumInput *m_pAngle;
 };
 

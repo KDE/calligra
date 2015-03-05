@@ -48,14 +48,14 @@ public Q_SLOTS:
     void clearVisibleColumnSelection();
 
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
-    void assignPropertySet(KoProperty::Set* propertySet);
+    void assignPropertySet(KoProperty::Set *propertySet);
 
 Q_SIGNALS:
     //! Signal emitted when helper button 'Go to selected record sourcesource' is clicked.
-    void jumpToObjectRequested(const QString& mime, const QString& name);
+    void jumpToObjectRequested(const QString &mime, const QString &name);
 
 protected Q_SLOTS:
-    void slotRowSourceTextChanged(const QString & string);
+    void slotRowSourceTextChanged(const QString &string);
     void slotRowSourceChanged();
     void slotGotoSelectedRowSource();
     void slotBoundColumnSelected();
@@ -69,7 +69,7 @@ protected:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

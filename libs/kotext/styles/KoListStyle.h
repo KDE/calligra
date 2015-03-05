@@ -155,8 +155,7 @@ public:
         TabStopPosition   ///< Specifies the additional tab stops
     };
 
-    enum ListLabelFollowedBy
-    {
+    enum ListLabelFollowedBy {
         ListTab,  ///< Label is followed by a list tab
         Space,    ///< Label followed by a Space
         Nothing      ///< Nothing is present between label and the text
@@ -238,7 +237,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdf(KoShapeLoadingContext& context, const KoXmlElement& style = KoXmlElement());
+    void loadOdf(KoShapeLoadingContext &context, const KoXmlElement &style = KoXmlElement());
 
     /**
      * Save the style to a KoGenStyle object using the OpenDocument format
@@ -273,8 +272,7 @@ private:
     void refreshLevelProperties(const KoListLevelProperties &properties);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

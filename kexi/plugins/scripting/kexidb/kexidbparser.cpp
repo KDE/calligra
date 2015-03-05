@@ -17,29 +17,29 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-
 #include "kexidbparser.h"
 #include "kexidbschema.h"
 #include "kexidbconnection.h"
 
 using namespace Scripting;
 
-KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser, bool owner)
-        : QObject(connection)
-        , m_connection(connection)
-        , m_parser(parser)
-        , m_owner(owner)
+KexiDBParser::KexiDBParser(KexiDBConnection *connection, ::KexiDB::Parser *parser, bool owner)
+    : QObject(connection)
+    , m_connection(connection)
+    , m_parser(parser)
+    , m_owner(owner)
 {
     setObjectName("KexiDBParser");
 }
 
 KexiDBParser::~KexiDBParser()
 {
-    if (m_owner)
+    if (m_owner) {
         delete m_parser;
+    }
 }
 
-bool KexiDBParser::parse(const QString& sql)
+bool KexiDBParser::parse(const QString &sql)
 {
     return m_parser->parse(sql);
 }
@@ -52,19 +52,19 @@ const QString KexiDBParser::operation()
     return m_parser->operationString();
 }
 
-QObject* KexiDBParser::table()
+QObject *KexiDBParser::table()
 {
-    ::KexiDB::TableSchema* t = m_parser->table();
+    ::KexiDB::TableSchema *t = m_parser->table();
     return t ? new KexiDBTableSchema(this, t, false) : 0;
 }
 
-QObject* KexiDBParser::query()
+QObject *KexiDBParser::query()
 {
-    ::KexiDB::QuerySchema* q = m_parser->query();
+    ::KexiDB::QuerySchema *q = m_parser->query();
     return q ? new KexiDBQuerySchema(this, q, false) : 0;
 }
 
-QObject* KexiDBParser::connection()
+QObject *KexiDBParser::connection()
 {
     return m_connection;
 }

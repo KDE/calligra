@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net> 
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,19 +38,20 @@ enum Align {
     InvalidAlign
 };
 
-class Length {
-  public:
+class Length
+{
+public:
     enum Unit {
-        Em,	/**< ems (font-relative unit traditionally used for horizontal lengths) */
-        Ex, 	/**< exs (font-relative unit traditionally used for vertical lengths) */
-        Px,  	/**< pixels, or pixel size of a "typical computer display" */
-        In,  	/**< inches (1 inch = 2.54 centimeters) */
-        Cm,  	/**< centimeters */
-        Mm,  	/**< millimeters */
-        Pt,  	/**< points (1 point = 1/72 inch) */
-        Pc,  	/**< picas (1 pica = 12 points) */
+        Em, /**< ems (font-relative unit traditionally used for horizontal lengths) */
+        Ex,     /**< exs (font-relative unit traditionally used for vertical lengths) */
+        Px,     /**< pixels, or pixel size of a "typical computer display" */
+        In,     /**< inches (1 inch = 2.54 centimeters) */
+        Cm,     /**< centimeters */
+        Mm,     /**< millimeters */
+        Pt,     /**< points (1 point = 1/72 inch) */
+        Pc,     /**< picas (1 pica = 12 points) */
         Percentage, /**< percentage of default value */
-        None	/**< For when no unit has been specified */
+        None    /**< For when no unit has been specified */
     };
 
     enum UnitType {
@@ -82,7 +83,8 @@ class Length {
  *
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */
-class KOFORMULA_EXPORT AttributeManager {
+class KOFORMULA_EXPORT AttributeManager
+{
 public:
     /// The constructor
     AttributeManager();
@@ -96,7 +98,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    QColor colorOf( const QString& attribute, const BasicElement* element  ) const;
+    QColor colorOf(const QString &attribute, const BasicElement *element) const;
 
     /**
      * Obtain the @p attribute's value as boolean
@@ -104,7 +106,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    bool boolOf( const QString& attribute, const BasicElement* element ) const;
+    bool boolOf(const QString &attribute, const BasicElement *element) const;
 
     /**
      * Obtain the @p attribute's value as qreal
@@ -112,7 +114,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    qreal doubleOf( const QString& attribute, const BasicElement* element ) const;
+    qreal doubleOf(const QString &attribute, const BasicElement *element) const;
 
     /**
      * Obtain the @p attribute's value as list of qreals
@@ -120,8 +122,8 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    QList<qreal> doubleListOf( const QString& attribute,
-                                const BasicElement* element ) const;
+    QList<qreal> doubleListOf(const QString &attribute,
+                              const BasicElement *element) const;
 
     /**
      * Obtain the @p attribute's value as string
@@ -129,7 +131,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    QString stringOf( const QString& attribute, const BasicElement* element ) const;
+    QString stringOf(const QString &attribute, const BasicElement *element) const;
 
     /**
      * Obtain the @p attribute's value as align
@@ -137,7 +139,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    Align alignOf( const QString& attribute, const BasicElement* element ) const;
+    Align alignOf(const QString &attribute, const BasicElement *element) const;
 
     /**
      * Obtain the @p attribute's value as list of aligns
@@ -145,7 +147,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    QList<Align> alignListOf( const QString& attribute, const BasicElement* element ) const;
+    QList<Align> alignListOf(const QString &attribute, const BasicElement *element) const;
 
     /**
      * Obtain the @p attribute's value as Qt::PenStyle
@@ -153,7 +155,7 @@ public:
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    Qt::PenStyle penStyleOf( const QString& attribute, const BasicElement* element ) const;
+    Qt::PenStyle penStyleOf(const QString &attribute, const BasicElement *element) const;
 
     /**
      * Obtain the @p attribute's value as list of Qt::PenStyles
@@ -161,66 +163,66 @@ public:
      * @param element The element the value is looked up for
      * @return The valuefont  that was looked up
      */
-    QList<Qt::PenStyle> penStyleListOf( const QString& attribute,
-                                        const BasicElement* element ) const;
+    QList<Qt::PenStyle> penStyleListOf(const QString &attribute,
+                                       const BasicElement *element) const;
 
     /**
      * Obtain the scaling level for @p parent's child element at index @p index
-     * Usually the first child is treated different.  For example in 
+     * Usually the first child is treated different.  For example in
      * <msup><mi>b</mi><mn>2</mn></msup>  to represent  b^2,  the 2 is smaller
      * than the b.
      * @param element The parent of the element for which scaling is determined
      * @param index The index of the child element for which scaling is determined
      * @return The scaling level for the font size
      */
-    int scriptLevel( const BasicElement* parent, int index ) const;
-    
+    int scriptLevel(const BasicElement *parent, int index) const;
+
     /// @return Line thickness for mfrac, mroot etc lines
-    qreal lineThickness( const BasicElement* element ) const;
+    qreal lineThickness(const BasicElement *element) const;
 
     /// @return A value used for spacing tasks during layouting
-    qreal layoutSpacing( const BasicElement* element ) const;
+    qreal layoutSpacing(const BasicElement *element) const;
 
     /**
      * Determine the maximal height of an given element's child elements
      * @param element The element whos children are used
      * @return The maximal height
      */
-    qreal maxHeightOfChildren( const BasicElement* element ) const;
+    qreal maxHeightOfChildren(const BasicElement *element) const;
 
     /**
      * Determine the maximal height of an given element's child elements
      * @param element The element whos children are used
      * @return The maximal height
      */
-    qreal maxWidthOfChildren( const BasicElement* element ) const;
+    qreal maxWidthOfChildren(const BasicElement *element) const;
 
     /// @return The Align value that was passed as QString @p value
-    Align parseAlign( const QString& value ) const;
+    Align parseAlign(const QString &value) const;
 
-    /// @return The font that is set for @p element 
-    QFont font( const BasicElement* element ) const;
+    /// @return The font that is set for @p element
+    QFont font(const BasicElement *element) const;
 
     /// Set the KoViewConverter to use
-    void setViewConverter( KoViewConverter* converter );
+    void setViewConverter(KoViewConverter *converter);
 
     /// @return The parsed the @p value into a Qt::PenStyle
-    Qt::PenStyle parsePenStyle( const QString& value ) const;
+    Qt::PenStyle parsePenStyle(const QString &value) const;
 
     /// @return The parsed @p value which is given with a unit
-    Length parseUnit( const QString& value, const BasicElement* element ) const;
+    Length parseUnit(const QString &value, const BasicElement *element) const;
 
     //// @return The given Length converted to units of pixels
-    qreal lengthToPixels( Length length, const BasicElement* element, const QString &attribute) const;
+    qreal lengthToPixels(Length length, const BasicElement *element, const QString &attribute) const;
 
     /// Find a value for @p attribute that applies to @p element
-    QString findValue( const QString& attribute, const BasicElement* element ) const;
+    QString findValue(const QString &attribute, const BasicElement *element) const;
 
     /// Convert a math space string, such as "thinmathspace", to a size in pixels
-    qreal parseMathSpace( const QString& value, const BasicElement *element ) const;
+    qreal parseMathSpace(const QString &value, const BasicElement *element) const;
 
     /// The KoViewConverter used to determine the point values of pixels
-    KoViewConverter* m_viewConverter;
+    KoViewConverter *m_viewConverter;
 };
 
 #endif // ATTRIBUTEMANAGER_H

@@ -28,7 +28,6 @@
 
 class KoViewConverter;
 
-
 #define KIS_NODE_SHAPE_ID "KisNodeShape"
 
 /**
@@ -49,8 +48,8 @@ public:
     QRectF boundingRect() const;
     void setPosition(const QPointF &);
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-    void saveOdf(KoShapeSavingContext & context) const;
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    void saveOdf(KoShapeSavingContext &context) const;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private Q_SLOTS:
     void setNodeVisible(bool);
@@ -61,7 +60,7 @@ private:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif

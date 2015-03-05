@@ -29,7 +29,8 @@ class AlterTableHandler::Private
 {
 public:
     Private() {}
-    ~Private() {
+    ~Private()
+    {
         qDeleteAll(actions);
     }
     ActionList actions;
@@ -48,9 +49,9 @@ AlterTableHandler::MoveFieldPositionAction nullMoveFieldPositionAction(true);
 //--------------------------------------------------------
 
 AlterTableHandler::ActionBase::ActionBase(bool null)
-        : m_alteringRequirements(0)
-        , m_order(-1)
-        , m_null(null)
+    : m_alteringRequirements(0)
+    , m_order(-1)
+    , m_null(null)
 {
 }
 
@@ -58,46 +59,50 @@ AlterTableHandler::ActionBase::~ActionBase()
 {
 }
 
-AlterTableHandler::ChangeFieldPropertyAction& AlterTableHandler::ActionBase::toChangeFieldPropertyAction()
+AlterTableHandler::ChangeFieldPropertyAction &AlterTableHandler::ActionBase::toChangeFieldPropertyAction()
 {
-    if (dynamic_cast<ChangeFieldPropertyAction*>(this))
-        return *dynamic_cast<ChangeFieldPropertyAction*>(this);
+    if (dynamic_cast<ChangeFieldPropertyAction *>(this)) {
+        return *dynamic_cast<ChangeFieldPropertyAction *>(this);
+    }
     return nullChangeFieldPropertyAction;
 }
 
-AlterTableHandler::RemoveFieldAction& AlterTableHandler::ActionBase::toRemoveFieldAction()
+AlterTableHandler::RemoveFieldAction &AlterTableHandler::ActionBase::toRemoveFieldAction()
 {
-    if (dynamic_cast<RemoveFieldAction*>(this))
-        return *dynamic_cast<RemoveFieldAction*>(this);
+    if (dynamic_cast<RemoveFieldAction *>(this)) {
+        return *dynamic_cast<RemoveFieldAction *>(this);
+    }
     return nullRemoveFieldAction;
 }
 
-AlterTableHandler::InsertFieldAction& AlterTableHandler::ActionBase::toInsertFieldAction()
+AlterTableHandler::InsertFieldAction &AlterTableHandler::ActionBase::toInsertFieldAction()
 {
-    if (dynamic_cast<InsertFieldAction*>(this))
-        return *dynamic_cast<InsertFieldAction*>(this);
+    if (dynamic_cast<InsertFieldAction *>(this)) {
+        return *dynamic_cast<InsertFieldAction *>(this);
+    }
     return nullInsertFieldAction;
 }
 
-AlterTableHandler::MoveFieldPositionAction& AlterTableHandler::ActionBase::toMoveFieldPositionAction()
+AlterTableHandler::MoveFieldPositionAction &AlterTableHandler::ActionBase::toMoveFieldPositionAction()
 {
-    if (dynamic_cast<MoveFieldPositionAction*>(this))
-        return *dynamic_cast<MoveFieldPositionAction*>(this);
+    if (dynamic_cast<MoveFieldPositionAction *>(this)) {
+        return *dynamic_cast<MoveFieldPositionAction *>(this);
+    }
     return nullMoveFieldPositionAction;
 }
 
 //--------------------------------------------------------
 
-AlterTableHandler::FieldActionBase::FieldActionBase(const QString& fieldName, int uid)
-        : ActionBase()
-        , m_fieldUID(uid)
-        , m_fieldName(fieldName)
+AlterTableHandler::FieldActionBase::FieldActionBase(const QString &fieldName, int uid)
+    : ActionBase()
+    , m_fieldUID(uid)
+    , m_fieldName(fieldName)
 {
 }
 
 AlterTableHandler::FieldActionBase::FieldActionBase(bool)
-        : ActionBase(true)
-        , m_fieldUID(-1)
+    : ActionBase(true)
+    , m_fieldUID(-1)
 {
 }
 
@@ -109,7 +114,8 @@ AlterTableHandler::FieldActionBase::~FieldActionBase()
 
 //! @internal
 struct KexiDB_AlterTableHandlerStatic {
-    KexiDB_AlterTableHandlerStatic() {
+    KexiDB_AlterTableHandlerStatic()
+    {
 #define I(name, type) \
     types.insert(QByteArray(name).toLower(), (int)AlterTableHandler::type)
 #define I2(name, type1, type2) \
@@ -175,15 +181,16 @@ struct KexiDB_AlterTableHandlerStatic {
 K_GLOBAL_STATIC(KexiDB_AlterTableHandlerStatic, KexiDB_alteringTypeForProperty)
 
 //! @internal
-int AlterTableHandler::alteringTypeForProperty(const QByteArray& propertyName)
+int AlterTableHandler::alteringTypeForProperty(const QByteArray &propertyName)
 {
     const int res = KexiDB_alteringTypeForProperty->types[propertyName.toLower()];
     if (res == 0) {
-        if (KexiDB::isExtendedTableFieldProperty(propertyName))
+        if (KexiDB::isExtendedTableFieldProperty(propertyName)) {
             return (int)ExtendedSchemaAlteringRequired;
+        }
         KexiDBWarn <<
-        QString("AlterTableHandler::alteringTypeForProperty(): property \"%1\" not found!")
-        .arg(QString(propertyName));
+                   QString("AlterTableHandler::alteringTypeForProperty(): property \"%1\" not found!")
+                   .arg(QString(propertyName));
     }
     return res;
 }
@@ -191,15 +198,15 @@ int AlterTableHandler::alteringTypeForProperty(const QByteArray& propertyName)
 //---
 
 AlterTableHandler::ChangeFieldPropertyAction::ChangeFieldPropertyAction(
-    const QString& fieldName, const QString& propertyName, const QVariant& newValue, int uid)
-        : FieldActionBase(fieldName, uid)
-        , m_propertyName(propertyName)
-        , m_newValue(newValue)
+    const QString &fieldName, const QString &propertyName, const QVariant &newValue, int uid)
+    : FieldActionBase(fieldName, uid)
+    , m_propertyName(propertyName)
+    , m_newValue(newValue)
 {
 }
 
 AlterTableHandler::ChangeFieldPropertyAction::ChangeFieldPropertyAction(bool)
-        : FieldActionBase(true)
+    : FieldActionBase(true)
 {
 }
 
@@ -213,49 +220,54 @@ void AlterTableHandler::ChangeFieldPropertyAction::updateAlteringRequirements()
     setAlteringRequirements(alteringTypeForProperty(m_propertyName.toLatin1()));
 }
 
-QString AlterTableHandler::ChangeFieldPropertyAction::debugString(const DebugOptions& debugOptions)
+QString AlterTableHandler::ChangeFieldPropertyAction::debugString(const DebugOptions &debugOptions)
 {
     QString s = QString("Set \"%1\" property for table field \"%2\" to \"%3\"")
                 .arg(m_propertyName).arg(fieldName()).arg(m_newValue.toString());
-    if (debugOptions.showUID)
+    if (debugOptions.showUID) {
         s.append(QString(" (UID=%1)").arg(m_fieldUID));
+    }
     return s;
 }
 
-static AlterTableHandler::ActionDict* createActionDict(
+static AlterTableHandler::ActionDict *createActionDict(
     AlterTableHandler::ActionDictDict &fieldActions, int forFieldUID)
 {
-    AlterTableHandler::ActionDict* dict = new AlterTableHandler::ActionDict();
+    AlterTableHandler::ActionDict *dict = new AlterTableHandler::ActionDict();
     fieldActions.insert(forFieldUID, dict);
     return dict;
 }
 
 static void debugAction(AlterTableHandler::ActionBase *action, int nestingLevel,
-                        bool simulate, const QString& prependString = QString(), QString * debugTarget = 0)
+                        bool simulate, const QString &prependString = QString(), QString *debugTarget = 0)
 {
     Q_UNUSED(simulate);
     Q_UNUSED(nestingLevel);
-    
+
     QString debugString;
-    if (!debugTarget)
+    if (!debugTarget) {
         debugString = prependString;
+    }
     if (action) {
         AlterTableHandler::ActionBase::DebugOptions debugOptions;
         debugOptions.showUID = debugTarget == 0;
         debugOptions.showFieldDebug = debugTarget != 0;
         debugString += action->debugString(debugOptions);
     } else {
-        if (!debugTarget)
-            debugString += "[No action]"; //hmm
+        if (!debugTarget) {
+            debugString += "[No action]";    //hmm
+        }
     }
     if (debugTarget) {
-        if (!debugString.isEmpty())
+        if (!debugString.isEmpty()) {
             *debugTarget += debugString + '\n';
+        }
     } else {
         KexiDBDbg << debugString;
 #ifdef KEXI_DEBUG_GUI
-        if (simulate)
+        if (simulate) {
             KexiDB::alterTableActionDebugGUI(debugString, nestingLevel);
+        }
 #endif
     }
 }
@@ -264,21 +276,21 @@ static void debugActionDict(AlterTableHandler::ActionDict *dict, int fieldUID, b
 {
     QString fieldName;
     AlterTableHandler::ActionDictConstIterator it(dict->constBegin());
-    if (it != dict->constEnd() && dynamic_cast<AlterTableHandler::FieldActionBase*>(it.value())) {
+    if (it != dict->constEnd() && dynamic_cast<AlterTableHandler::FieldActionBase *>(it.value())) {
         //retrieve field name from the 1st related action
-        fieldName = dynamic_cast<AlterTableHandler::FieldActionBase*>(it.value())->fieldName();
-    }
-    else {
+        fieldName = dynamic_cast<AlterTableHandler::FieldActionBase *>(it.value())->fieldName();
+    } else {
         fieldName = "??";
     }
     QString dbg = QString("Action dict for field \"%1\" (%2, UID=%3):")
                   .arg(fieldName).arg(dict->count()).arg(fieldUID);
     KexiDBDbg << dbg;
 #ifdef KEXI_DEBUG_GUI
-    if (simulate)
+    if (simulate) {
         KexiDB::alterTableActionDebugGUI(dbg, 1);
+    }
 #endif
-    for (;it != dict->constEnd(); ++it) {
+    for (; it != dict->constEnd(); ++it) {
         debugAction(it.value(), 2, simulate);
     }
 }
@@ -286,8 +298,9 @@ static void debugActionDict(AlterTableHandler::ActionDict *dict, int fieldUID, b
 static void debugFieldActions(const AlterTableHandler::ActionDictDict &fieldActions, bool simulate)
 {
 #ifdef KEXI_DEBUG_GUI
-    if (simulate)
+    if (simulate) {
         KexiDB::alterTableActionDebugGUI("** Simplified Field Actions:");
+    }
 #endif
     for (AlterTableHandler::ActionDictDictConstIterator it(fieldActions.constBegin()); it != fieldActions.constEnd(); ++it) {
         debugActionDict(it.value(), it.key(), simulate);
@@ -322,10 +335,10 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
         QByteArray newName(newValue().toString().toLatin1());
         // try to find rename(newName, otherName) action
         ActionBase *renameActionLikeThis = actionsLikeThis ? actionsLikeThis->value(newName) : 0;
-        if (dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)) {
+        if (dynamic_cast<ChangeFieldPropertyAction *>(renameActionLikeThis)) {
             // 1. instead of having rename(fieldName(), newValue()) action,
             // let's have rename(fieldName(), otherName) action
-            m_newValue = dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)->m_newValue;
+            m_newValue = dynamic_cast<ChangeFieldPropertyAction *>(renameActionLikeThis)->m_newValue;
             /*   AlterTableHandler::ChangeFieldPropertyAction* newRenameAction
                     = new AlterTableHandler::ChangeFieldPropertyAction( *this );
                   newRenameAction->m_newValue = dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)->m_newValue;
@@ -343,12 +356,13 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
                 // and do not add a new action
             } else {
                 //just insert a copy of the rename action
-                if (!actionsLikeThis)
+                if (!actionsLikeThis) {
                     actionsLikeThis = createActionDict(fieldActions, uid());
-                AlterTableHandler::ChangeFieldPropertyAction* newRenameAction
+                }
+                AlterTableHandler::ChangeFieldPropertyAction *newRenameAction
                     = new AlterTableHandler::ChangeFieldPropertyAction(*this);
                 KexiDBDbg << "insert into" << fieldName()
-                    << "dict:"  << newRenameAction->debugString();
+                          << "dict:"  << newRenameAction->debugString();
                 actionsLikeThis->insert(m_propertyName.toLatin1(), newRenameAction);
                 return;
             }
@@ -358,8 +372,8 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
             //    is related to newName
             //    e.g. if there is setCaption("B", "captionA") action after rename("A","B"),
             //    replace setCaption action with setCaption("A", "captionA")
-            foreach(ActionBase* action, *actionsLikeThis) {
-                dynamic_cast<FieldActionBase*>(action)->setFieldName(fieldName());
+            foreach (ActionBase *action, *actionsLikeThis) {
+                dynamic_cast<FieldActionBase *>(action)->setFieldName(fieldName());
             }
         }
         return;
@@ -376,10 +390,11 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
     ActionDict *nextActionsLikeThis = fieldActions.value(uid());
     if (!nextActionsLikeThis || !nextActionsLikeThis->value(m_propertyName.toLatin1())) {
         //no such action, add this
-        AlterTableHandler::ChangeFieldPropertyAction* newAction
+        AlterTableHandler::ChangeFieldPropertyAction *newAction
             = new AlterTableHandler::ChangeFieldPropertyAction(*this);
-        if (!nextActionsLikeThis)
+        if (!nextActionsLikeThis) {
             nextActionsLikeThis = createActionDict(fieldActions, uid());
+        }
         nextActionsLikeThis->insert(m_propertyName.toLatin1(), newAction);
     }
 }
@@ -390,8 +405,8 @@ bool AlterTableHandler::ChangeFieldPropertyAction::shouldBeRemoved(ActionDictDic
     return fieldName().toLower() == m_newValue.toString().toLower();
 }
 
-tristate AlterTableHandler::ChangeFieldPropertyAction::updateTableSchema(TableSchema &table, Field* field,
-        QHash<QString, QString>& fieldHash)
+tristate AlterTableHandler::ChangeFieldPropertyAction::updateTableSchema(TableSchema &table, Field *field,
+        QHash<QString, QString> &fieldHash)
 {
     //1. Simpler cases first: changes that do not affect table schema at all
     // "caption", "description", "width", "visibleDecimalPlaces"
@@ -401,8 +416,9 @@ tristate AlterTableHandler::ChangeFieldPropertyAction::updateTableSchema(TableSc
     }
 
     if (m_propertyName == "name") {
-        if (fieldHash.value(field->name()) == field->name())
+        if (fieldHash.value(field->name()) == field->name()) {
             fieldHash.remove(field->name());
+        }
         fieldHash.insert(newValue().toString(), field->name());
         table.renameField(field, newValue().toString());
         return true;
@@ -465,7 +481,6 @@ tristate AlterTableHandler::ChangeFieldPropertyAction::execute(Connection &conn,
          "defaultValue", "primaryKey", "unique", "notNull", "allowEmpty",
          "autoIncrement", "indexed",
 
-
       bool result = KexiDB::setFieldProperty(*field, m_propertyName.toLatin1(), newValue());
     */
     return result;
@@ -473,13 +488,13 @@ tristate AlterTableHandler::ChangeFieldPropertyAction::execute(Connection &conn,
 
 //--------------------------------------------------------
 
-AlterTableHandler::RemoveFieldAction::RemoveFieldAction(const QString& fieldName, int uid)
-        : FieldActionBase(fieldName, uid)
+AlterTableHandler::RemoveFieldAction::RemoveFieldAction(const QString &fieldName, int uid)
+    : FieldActionBase(fieldName, uid)
 {
 }
 
 AlterTableHandler::RemoveFieldAction::RemoveFieldAction(bool)
-        : FieldActionBase(true)
+    : FieldActionBase(true)
 {
 }
 
@@ -495,11 +510,12 @@ void AlterTableHandler::RemoveFieldAction::updateAlteringRequirements()
     //! @todo
 }
 
-QString AlterTableHandler::RemoveFieldAction::debugString(const DebugOptions& debugOptions)
+QString AlterTableHandler::RemoveFieldAction::debugString(const DebugOptions &debugOptions)
 {
     QString s = QString("Remove table field \"%1\"").arg(fieldName());
-    if (debugOptions.showUID)
+    if (debugOptions.showUID) {
         s.append(QString(" (UID=%1)").arg(uid()));
+    }
     return s;
 }
 
@@ -512,23 +528,24 @@ QString AlterTableHandler::RemoveFieldAction::debugString(const DebugOptions& de
 void AlterTableHandler::RemoveFieldAction::simplifyActions(ActionDictDict &fieldActions)
 {
     //! @todo not checked
-    AlterTableHandler::RemoveFieldAction* newAction
+    AlterTableHandler::RemoveFieldAction *newAction
         = new AlterTableHandler::RemoveFieldAction(*this);
     ActionDict *actionsLikeThis = fieldActions.value(uid());
-    if (!actionsLikeThis)
+    if (!actionsLikeThis) {
         actionsLikeThis = createActionDict(fieldActions, uid());
+    }
     actionsLikeThis->insert(":remove:", newAction);   //special
 }
 
-tristate AlterTableHandler::RemoveFieldAction::updateTableSchema(TableSchema &table, Field* field,
-        QHash<QString, QString>& fieldHash)
+tristate AlterTableHandler::RemoveFieldAction::updateTableSchema(TableSchema &table, Field *field,
+        QHash<QString, QString> &fieldHash)
 {
     fieldHash.remove(field->name());
     table.removeField(field);
     return true;
 }
 
-tristate AlterTableHandler::RemoveFieldAction::execute(Connection& conn, TableSchema& table)
+tristate AlterTableHandler::RemoveFieldAction::execute(Connection &conn, TableSchema &table)
 {
     Q_UNUSED(conn);
     Q_UNUSED(table);
@@ -539,25 +556,25 @@ tristate AlterTableHandler::RemoveFieldAction::execute(Connection& conn, TableSc
 //--------------------------------------------------------
 
 AlterTableHandler::InsertFieldAction::InsertFieldAction(int fieldIndex, KexiDB::Field *field, int uid)
-        : FieldActionBase(field->name(), uid)
-        , m_index(fieldIndex)
-        , m_field(0)
+    : FieldActionBase(field->name(), uid)
+    , m_index(fieldIndex)
+    , m_field(0)
 {
     Q_ASSERT(field);
     setField(field);
 }
 
-AlterTableHandler::InsertFieldAction::InsertFieldAction(const InsertFieldAction& action)
-        : FieldActionBase(action) //action.fieldName(), action.uid())
-        , m_index(action.index())
+AlterTableHandler::InsertFieldAction::InsertFieldAction(const InsertFieldAction &action)
+    : FieldActionBase(action) //action.fieldName(), action.uid())
+    , m_index(action.index())
 {
     m_field = new KexiDB::Field(*action.field());
 }
 
 AlterTableHandler::InsertFieldAction::InsertFieldAction(bool)
-        : FieldActionBase(true)
-        , m_index(0)
-        , m_field(0)
+    : FieldActionBase(true)
+    , m_index(0)
+    , m_field(0)
 {
 }
 
@@ -566,10 +583,11 @@ AlterTableHandler::InsertFieldAction::~InsertFieldAction()
     delete m_field;
 }
 
-void AlterTableHandler::InsertFieldAction::setField(KexiDB::Field* field)
+void AlterTableHandler::InsertFieldAction::setField(KexiDB::Field *field)
 {
-    if (m_field)
+    if (m_field) {
         delete m_field;
+    }
     m_field = field;
     setFieldName(m_field ? m_field->name() : QString());
 }
@@ -582,20 +600,21 @@ void AlterTableHandler::InsertFieldAction::updateAlteringRequirements()
     //! @todo
 }
 
-QString AlterTableHandler::InsertFieldAction::debugString(const DebugOptions& debugOptions)
+QString AlterTableHandler::InsertFieldAction::debugString(const DebugOptions &debugOptions)
 {
     QString s = QString("Insert table field \"%1\" at position %2")
                 .arg(m_field->name()).arg(m_index);
-    if (debugOptions.showUID)
+    if (debugOptions.showUID) {
         s.append(QString(" (UID=%1)").arg(m_fieldUID));
-    if (debugOptions.showFieldDebug)
+    }
+    if (debugOptions.showFieldDebug) {
         s.append(QString(" (%1)").arg(m_field->debugString()));
+    }
     return s;
 }
 
 /*!
  Legend: A,B==fields, P==property, [....]==action, (..,..,..) group of actions, <...> internal operation.
-
 
  Case 1: there are "change property" actions after the Insert action.
   -> change the properties in the Insert action itself and remove the "change property" actions.
@@ -621,9 +640,9 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
         //collect property values that have to be changed in this field
         QMap<QByteArray, QVariant> values;
         ActionDict *newActionsForThisField = new ActionDict(); // this will replace actionsForThisField after the loop
-        QSet<ActionBase*> actionsToDelete; // used to collect actions taht we soon delete but cannot delete in the loop below
-        for (ActionDictConstIterator it(actionsForThisField->constBegin()); it != actionsForThisField->constEnd();++it) {
-            ChangeFieldPropertyAction* changePropertyAction = dynamic_cast<ChangeFieldPropertyAction*>(it.value());
+        QSet<ActionBase *> actionsToDelete; // used to collect actions taht we soon delete but cannot delete in the loop below
+        for (ActionDictConstIterator it(actionsForThisField->constBegin()); it != actionsForThisField->constEnd(); ++it) {
+            ChangeFieldPropertyAction *changePropertyAction = dynamic_cast<ChangeFieldPropertyAction *>(it.value());
             if (changePropertyAction) {
                 //if this field is going to be renamed, also update fieldName()
                 if (changePropertyAction->propertyName() == "name") {
@@ -666,15 +685,16 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
     }
     //ok, insert this action
     //! @todo not checked
-    AlterTableHandler::InsertFieldAction* newAction
+    AlterTableHandler::InsertFieldAction *newAction
         = new AlterTableHandler::InsertFieldAction(*this);
-    if (!actionsForThisField)
+    if (!actionsForThisField) {
         actionsForThisField = createActionDict(fieldActions, uid());
+    }
     actionsForThisField->insert(":insert:", newAction);   //special
 }
 
-tristate AlterTableHandler::InsertFieldAction::updateTableSchema(TableSchema &table, Field* field,
-        QHash<QString, QString>& fieldMap)
+tristate AlterTableHandler::InsertFieldAction::updateTableSchema(TableSchema &table, Field *field,
+        QHash<QString, QString> &fieldMap)
 {
     //in most cases we won't add the field to fieldMap
     Q_UNUSED(field);
@@ -684,7 +704,7 @@ tristate AlterTableHandler::InsertFieldAction::updateTableSchema(TableSchema &ta
     return true;
 }
 
-tristate AlterTableHandler::InsertFieldAction::execute(Connection& conn, TableSchema& table)
+tristate AlterTableHandler::InsertFieldAction::execute(Connection &conn, TableSchema &table)
 {
     Q_UNUSED(conn);
     Q_UNUSED(table);
@@ -695,14 +715,14 @@ tristate AlterTableHandler::InsertFieldAction::execute(Connection& conn, TableSc
 //--------------------------------------------------------
 
 AlterTableHandler::MoveFieldPositionAction::MoveFieldPositionAction(
-    int fieldIndex, const QString& fieldName, int uid)
-        : FieldActionBase(fieldName, uid)
-        , m_index(fieldIndex)
+    int fieldIndex, const QString &fieldName, int uid)
+    : FieldActionBase(fieldName, uid)
+    , m_index(fieldIndex)
 {
 }
 
 AlterTableHandler::MoveFieldPositionAction::MoveFieldPositionAction(bool)
-        : FieldActionBase(true)
+    : FieldActionBase(true)
 {
 }
 
@@ -716,12 +736,13 @@ void AlterTableHandler::MoveFieldPositionAction::updateAlteringRequirements()
     //! @todo
 }
 
-QString AlterTableHandler::MoveFieldPositionAction::debugString(const DebugOptions& debugOptions)
+QString AlterTableHandler::MoveFieldPositionAction::debugString(const DebugOptions &debugOptions)
 {
     QString s = QString("Move table field \"%1\" to position %2")
                 .arg(fieldName()).arg(m_index);
-    if (debugOptions.showUID)
+    if (debugOptions.showUID) {
         s.append(QString(" (UID=%1)").arg(uid()));
+    }
     return s;
 }
 
@@ -731,7 +752,7 @@ void AlterTableHandler::MoveFieldPositionAction::simplifyActions(ActionDictDict 
     //! @todo
 }
 
-tristate AlterTableHandler::MoveFieldPositionAction::execute(Connection& conn, TableSchema& table)
+tristate AlterTableHandler::MoveFieldPositionAction::execute(Connection &conn, TableSchema &table)
 {
     Q_UNUSED(conn);
     Q_UNUSED(table);
@@ -742,8 +763,8 @@ tristate AlterTableHandler::MoveFieldPositionAction::execute(Connection& conn, T
 //--------------------------------------------------------
 
 AlterTableHandler::AlterTableHandler(Connection &conn)
-        : Object()
-        , d(new Private())
+    : Object()
+    , d(new Private())
 {
     d->conn = &conn;
 }
@@ -753,18 +774,18 @@ AlterTableHandler::~AlterTableHandler()
     delete d;
 }
 
-void AlterTableHandler::addAction(ActionBase* action)
+void AlterTableHandler::addAction(ActionBase *action)
 {
     d->actions.append(action);
 }
 
-AlterTableHandler& AlterTableHandler::operator<< (ActionBase* action)
+AlterTableHandler &AlterTableHandler::operator<< (ActionBase *action)
 {
     d->actions.append(action);
     return *this;
 }
 
-const AlterTableHandler::ActionList& AlterTableHandler::actions() const
+const AlterTableHandler::ActionList &AlterTableHandler::actions() const
 {
     return d->actions;
 }
@@ -779,7 +800,7 @@ void AlterTableHandler::clear()
     d->actions.clear();
 }
 
-void AlterTableHandler::setActions(const ActionList& actions)
+void AlterTableHandler::setActions(const ActionList &actions)
 {
     qDeleteAll(d->actions);
     d->actions = actions;
@@ -788,12 +809,12 @@ void AlterTableHandler::setActions(const ActionList& actions)
 void AlterTableHandler::debug()
 {
     KexiDBDbg << "AlterTableHandler's actions:";
-    foreach(ActionBase* action, d->actions) {
+    foreach (ActionBase *action, d->actions) {
         action->debug();
     }
 }
 
-TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArguments& args)
+TableSchema *AlterTableHandler::execute(const QString &tableName, ExecutionArguments &args)
 {
     args.result = false;
     if (!d->conn) {
@@ -814,12 +835,13 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
         return 0;
     }
 
-    if (!args.debugString)
+    if (!args.debugString) {
         debug();
+    }
 
     // Find a sum of requirements...
     int allActionsCount = 0;
-    foreach(ActionBase* action, d->actions) {
+    foreach (ActionBase *action, d->actions) {
         action->updateAlteringRequirements();
         action->m_order = allActionsCount++;
     }
@@ -853,17 +875,16 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
      and a source of unwanted questions sent to the user.
     */
 
-
-
     // Fields-related actions.
     ActionDictDict fieldActions;
-    ActionBase* action;
+    ActionBase *action;
     for (int i = d->actions.count() - 1; i >= 0; i--) {
         d->actions[i]->simplifyActions(fieldActions);
     }
 
-    if (!args.debugString)
+    if (!args.debugString) {
         debugFieldActions(fieldActions, args.simulate);
+    }
 
     // Prepare actions for execution ----
     // - Sort actions by order
@@ -875,16 +896,17 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
     for (ActionDictDictConstIterator it(fieldActions.constBegin()); it != fieldActions.constEnd(); ++it) {
         for (AlterTableHandler::ActionDictConstIterator it2(it.value()->constBegin());
                 it2 != it.value()->constEnd(); ++it2, ++currentActionsCount) {
-            if (it2.value()->shouldBeRemoved(fieldActions))
+            if (it2.value()->shouldBeRemoved(fieldActions)) {
                 continue;
+            }
             actionsVector[ it2.value()->m_order ] = it2.value();
             // a sum of requirements...
             const int r = it2.value()->alteringRequirements();
             args.requirements |= r;
-            if (r & MainSchemaAlteringRequired && dynamic_cast<ChangeFieldPropertyAction*>(it2.value())) {
+            if (r & MainSchemaAlteringRequired && dynamic_cast<ChangeFieldPropertyAction *>(it2.value())) {
                 // Remember, this will be used when recreateTable is false to update kexi__fields, below.
                 fieldsWithChangedMainSchema.insert(
-                    dynamic_cast<ChangeFieldPropertyAction*>(it2.value())->fieldName());
+                    dynamic_cast<ChangeFieldPropertyAction *>(it2.value())->fieldName());
             }
         }
     }
@@ -900,15 +922,17 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
     const bool recreateTable = (args.requirements & PhysicalAlteringRequired);
 
 #ifdef KEXI_DEBUG_GUI
-    if (args.simulate)
+    if (args.simulate) {
         KexiDB::alterTableActionDebugGUI(dbg, 0);
+    }
 #endif
     dbg = QString("** Ordered, simplified actions (%1, was %2):")
           .arg(currentActionsCount).arg(allActionsCount);
     KexiDBDbg << dbg;
 #ifdef KEXI_DEBUG_GUI
-    if (args.simulate)
+    if (args.simulate) {
         KexiDB::alterTableActionDebugGUI(dbg, 0);
+    }
 #endif
     for (int i = 0; i < allActionsCount; i++) {
         debugAction(actionsVector.at(i), 1, args.simulate, QString("%1: ").arg(i + 1), args.debugString);
@@ -931,28 +955,31 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
         QString tempDestTableName;
         while (true) {
             tempDestTableName = QString("%1_temp%2%3").arg(newTable->name()).arg(QString::number(rand(), 16)).arg(QString::number(rand(), 16));
-            if (!d->conn->tableSchema(tempDestTableName))
+            if (!d->conn->tableSchema(tempDestTableName)) {
                 break;
+            }
         }
         newTable->setName(tempDestTableName);
     }
     oldTable->debug();
-    if (recreateTable && !args.debugString)
+    if (recreateTable && !args.debugString) {
         newTable->debug();
+    }
 
     // Update table schema in memory ----
     int lastUID = -1;
     Field *currentField = 0;
     QHash<QString, QString> fieldHash; // a map from new value to old value
-    foreach(Field* f, *newTable->fields()) {
+    foreach (Field *f, *newTable->fields()) {
         fieldHash.insert(f->name(), f->name());
     }
     for (int i = 0; i < allActionsCount; i++) {
         action = actionsVector.at(i);
-        if (!action)
+        if (!action) {
             continue;
+        }
         //remember the current Field object because soon we may be unable to find it by name:
-        FieldActionBase *fieldAction = dynamic_cast<FieldActionBase*>(action);
+        FieldActionBase *fieldAction = dynamic_cast<FieldActionBase *>(action);
         if (!fieldAction) {
             currentField = 0;
         } else {
@@ -960,7 +987,7 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
                 currentField = newTable->field(fieldAction->fieldName());
                 lastUID = currentField ? fieldAction->uid() : -1;
             }
-            InsertFieldAction *insertFieldAction = dynamic_cast<InsertFieldAction*>(action);
+            InsertFieldAction *insertFieldAction = dynamic_cast<InsertFieldAction *>(action);
             if (insertFieldAction && insertFieldAction->index() > (int)newTable->fieldCount()) {
                 //update index: there can be empty rows
                 insertFieldAction->setIndex(newTable->fieldCount());
@@ -970,8 +997,9 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
         // continue;
         args.result = action->updateTableSchema(*newTable, currentField, fieldHash);
         if (args.result != true) {
-            if (recreateTable)
+            if (recreateTable) {
                 delete newTable;
+            }
             return 0;
         }
     }
@@ -990,8 +1018,9 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
     // Execute actions ----
     for (int i = 0; i < allActionsCount; i++) {
         action = actionsVector.at(i);
-        if (!action)
+        if (!action) {
             continue;
+        }
         args.result = action->execute(*d->conn, *newTable);
         if (!args.result || ~args.result) {
 //! @todo delete newTable...
@@ -1022,7 +1051,7 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
         //insert list of dest. fields
         bool first = true;
         QString sourceFields;
-        foreach(Field* f, *newTable->fields()) {
+        foreach (Field *f, *newTable->fields()) {
             QString renamedFieldName(fieldHash.value(f->name()));
             QString sourceSQLString;
             if (!renamedFieldName.isEmpty()) {
@@ -1088,7 +1117,7 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
     if (!recreateTable) {
         if ((MainSchemaAlteringRequired & args.requirements) && !fieldsWithChangedMainSchema.isEmpty()) {
             //update main schema (kexi__fields) for changed fields
-            foreach(const QString& changeFieldPropertyActionName, fieldsWithChangedMainSchema) {
+            foreach (const QString &changeFieldPropertyActionName, fieldsWithChangedMainSchema) {
                 Field *f = newTable->field(changeFieldPropertyActionName);
                 if (f) {
                     if (!d->conn->storeMainFieldSchema(f)) {

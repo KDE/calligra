@@ -37,15 +37,15 @@ KEXIUTILS_EXPORT QString stringToIdentifier(const QString &s);
 /*! \return useful message "Value of "valueName" column must be an identifier.
   "v" is not a valid identifier.". It is also used by IdentifierValidator.  */
 KEXIUTILS_EXPORT QString identifierExpectedMessage(const QString &valueName,
-        const QVariant& v);
+        const QVariant &v);
 
 //! Validates input for identifier name.
 class KEXIUTILS_EXPORT IdentifierValidator : public KexiDB::Validator
 {
 public:
-    explicit IdentifierValidator(QObject * parent = 0);
+    explicit IdentifierValidator(QObject *parent = 0);
     virtual ~IdentifierValidator();
-    virtual State validate(QString & input, int & pos) const;
+    virtual State validate(QString &input, int &pos) const;
 
     //! @return true if lower case letters are forced.
     //! By default letters are not forced to lowercase.
@@ -55,10 +55,10 @@ public:
     void setLowerCaseForced(bool set);
 
 protected:
-    virtual Validator::Result internalCheck(const QString &valueName, const QVariant& v,
+    virtual Validator::Result internalCheck(const QString &valueName, const QVariant &v,
                                             QString &message, QString &details);
     class Private;
-    Private * const d;
+    Private *const d;
 };
 }
 

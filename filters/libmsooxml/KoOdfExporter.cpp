@@ -35,7 +35,7 @@
 #include <memory>
 
 KoOdfWriters::KoOdfWriters()
-        : content(0), body(0), meta(0), manifest(0), mainStyles(0)
+    : content(0), body(0), meta(0), manifest(0), mainStyles(0)
 {
 }
 
@@ -50,9 +50,9 @@ public:
 
 //------------------------------------------
 
-KoOdfExporter::KoOdfExporter(const QString& bodyContentElement, QObject* parent)
-        : KoFilter(parent)
-        , d(new Private)
+KoOdfExporter::KoOdfExporter(const QString &bodyContentElement, QObject *parent)
+    : KoFilter(parent)
+    , d(new Private)
 {
     d->bodyContentElement = QByteArray("office:") + bodyContentElement.toLatin1();
 }
@@ -62,7 +62,7 @@ KoOdfExporter::~KoOdfExporter()
     delete d;
 }
 
-KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray &from, const QByteArray &to)
 {
     // check for proper conversion
     if (!acceptsSourceMimeType(from)) {
@@ -117,7 +117,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(d->bodyContentElement.constData());
 
-    RETURN_IF_ERROR( createDocument(outputStore, &writers) )
+    RETURN_IF_ERROR(createDocument(outputStore, &writers))
 
     //save the office:automatic-styles & and fonts in content.xml
     mainStyles.saveOdfStyles(KoGenStyles::FontFaceDecls, &contentWriter);
@@ -128,7 +128,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     bodyWriter.endElement();//office:body
 
     //now create real content/body writers & dump the information there
-    KoXmlWriter* realContentWriter = oasisStore.contentWriter();
+    KoXmlWriter *realContentWriter = oasisStore.contentWriter();
     if (!realContentWriter) {
         kWarning(30003) << "Error creating the content writer.";
         delete outputStore;
@@ -136,7 +136,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     }
     realContentWriter->addCompleteElement(&contentBuf);
 
-    KoXmlWriter* realBodyWriter = oasisStore.bodyWriter();
+    KoXmlWriter *realBodyWriter = oasisStore.bodyWriter();
     if (!realBodyWriter) {
         kWarning(30003) << "Error creating the body writer.";
         delete outputStore;
@@ -154,7 +154,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     kDebug(30003) << "closed content & body writers.";
 
     //create the manifest file
-    KoXmlWriter* realManifestWriter = oasisStore.manifestWriter(to);
+    KoXmlWriter *realManifestWriter = oasisStore.manifestWriter(to);
     //create the styles.xml file
     mainStyles.saveOdfStylesDotXml(outputStore, realManifestWriter);
     realManifestWriter->addManifestEntry("content.xml", "text/xml");
@@ -170,7 +170,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     }
 
     KoStoreDevice settingsDev(outputStore);
-    KoXmlWriter* settings = KoOdfWriteStore::createOasisXmlWriter(&settingsDev, "office:document-settings");
+    KoXmlWriter *settings = KoOdfWriteStore::createOasisXmlWriter(&settingsDev, "office:document-settings");
     settings->startElement("office:settings");
     settings->startElement("config:config-item-set");
     settings->addAttribute("config:name", "ooo:configuration-settings");
@@ -192,7 +192,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
         return KoFilter::CreationError;
     }
     KoStoreDevice metaDev(outputStore);
-    KoXmlWriter* meta = KoOdfWriteStore::createOasisXmlWriter(&metaDev, "office:document-meta");
+    KoXmlWriter *meta = KoOdfWriteStore::createOasisXmlWriter(&metaDev, "office:document-meta");
     meta->startElement("office:meta");
     meta->addCompleteElement(&buf);
     meta->endElement(); //office:meta

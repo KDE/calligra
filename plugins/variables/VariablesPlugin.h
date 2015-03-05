@@ -27,7 +27,7 @@ class VariablesPlugin : public QObject
     Q_OBJECT
 
 public:
-    VariablesPlugin(QObject * parent, const QVariantList &);
+    VariablesPlugin(QObject *parent, const QVariantList &);
     ~VariablesPlugin() {}
 };
 

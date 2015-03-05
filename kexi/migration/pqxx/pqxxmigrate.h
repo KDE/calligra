@@ -43,18 +43,18 @@ public:
 
 protected:
     //! Driver specific function to return table names
-    virtual bool drv_tableNames(QStringList& tablenames);
+    virtual bool drv_tableNames(QStringList &tablenames);
 
     //! Driver specific implementation to read a table schema
     virtual bool drv_readTableSchema(
-        const QString& originalName, KexiDB::TableSchema& tableSchema);
+        const QString &originalName, KexiDB::TableSchema &tableSchema);
 
     //! Driver specific connection implementation
     virtual bool drv_connect();
     virtual bool drv_disconnect();
 
     virtual tristate drv_queryStringListFromSQL(
-        const QString& sqlStatement, uint columnNumber, QStringList& stringList,
+        const QString &sqlStatement, uint columnNumber, QStringList &stringList,
         int numRecords = -1);
 
     /*! Fetches single record from result obtained
@@ -65,14 +65,14 @@ protected:
     On success the result is stored in \a data and true is returned,
     \a data is resized to appropriate size. cancelled is returned on EOF. */
 //! @todo SQL-dependent!
-    virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
-                                            KexiDB::RecordData& data, bool &firstRecord);
+    virtual tristate drv_fetchRecordFromSQL(const QString &sqlStatement,
+                                            KexiDB::RecordData &data, bool &firstRecord);
 
-    virtual bool drv_copyTable(const QString& srcTable,
-                               KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+    virtual bool drv_copyTable(const QString &srcTable,
+                               KexiDB::Connection *destConn, KexiDB::TableSchema *dstTable);
 
     //! Position the source dataset at the start of a table
-    virtual bool drv_readFromTable(const QString & tableName);
+    virtual bool drv_readFromTable(const QString &tableName);
 
     //! Move to the next row
     virtual bool drv_moveNext();
@@ -88,19 +88,18 @@ protected:
 
     //! Read the data at the given row/field
     virtual QVariant drv_value(uint i);
-                               
 
 private:
     //! perform a query on the database
-    bool query(const QString& statement);
+    bool query(const QString &statement);
 
     //! Clear the result info
     void clearResultInfo();
 
-    pqxx::oid tableOid(const QString& tablename);
+    pqxx::oid tableOid(const QString &tablename);
 
     //! Convert the pqxx type to a kexi type
-    KexiDB::Field::Type type(int t, const QString& fname);
+    KexiDB::Field::Type type(int t, const QString &fname);
 
     //! Find out the field constraints
     //! Return whether or not the field is a pkey
@@ -123,13 +122,13 @@ private:
 
     //! lowlevel functions/objects
     //! database connection
-    pqxx::connection* m_conn;
+    pqxx::connection *m_conn;
 
     //! transaction
-    pqxx::nontransaction* m_trans;
+    pqxx::nontransaction *m_trans;
 
     //! lowlevel result
-    pqxx::result* m_res;
+    pqxx::result *m_res;
 
     //! Used in drv_fetchRecordFromSQL
     pqxx::result::const_iterator m_fetchRecordFromSQL_iter;

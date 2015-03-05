@@ -16,7 +16,6 @@
 namespace TJ
 {
 
-
 class LoopDetectorInfo;
 
 /**
@@ -37,7 +36,7 @@ public:
         atEnd(false)
     { }
 
-    LoopDetectorInfo(const Task* _t, bool ae) :
+    LoopDetectorInfo(const Task *_t, bool ae) :
         nextLDI(0),
         prevLDI(0),
         t(_t),
@@ -46,25 +45,37 @@ public:
 
     ~LoopDetectorInfo() { }
 
-    bool operator==(const LoopDetectorInfo& ldi) const
+    bool operator==(const LoopDetectorInfo &ldi) const
     {
         return t == ldi.t && atEnd == ldi.atEnd;
     }
-    bool operator!=(const LoopDetectorInfo& ldi) const
+    bool operator!=(const LoopDetectorInfo &ldi) const
     {
         return t != ldi.t || atEnd != ldi.atEnd;
     }
-    const Task* getTask() const { return t; }
-    bool getAtEnd() const { return atEnd; }
-    LoopDetectorInfo* next() const { return nextLDI; }
-    LoopDetectorInfo* prev() const { return prevLDI; }
+    const Task *getTask() const
+    {
+        return t;
+    }
+    bool getAtEnd() const
+    {
+        return atEnd;
+    }
+    LoopDetectorInfo *next() const
+    {
+        return nextLDI;
+    }
+    LoopDetectorInfo *prev() const
+    {
+        return prevLDI;
+    }
 protected:
-    LoopDetectorInfo* nextLDI;
-    LoopDetectorInfo* prevLDI;
+    LoopDetectorInfo *nextLDI;
+    LoopDetectorInfo *prevLDI;
 private:
-    const Task* t;
+    const Task *t;
     bool atEnd;
-} ;
+};
 
 /**
  * This class stores the waypoints the dependency loop detector passes when
@@ -83,45 +94,52 @@ public:
         leaf(0)
     { }
 
-    LDIList(const LDIList& list) :
+    LDIList(const LDIList &list) :
         items(0),
         root(0),
         leaf(0)
     {
-        for (LoopDetectorInfo* p = list.root; p; p = p->nextLDI)
+        for (LoopDetectorInfo *p = list.root; p; p = p->nextLDI) {
             append(new LoopDetectorInfo(p->t, p->atEnd));
+        }
     }
 
     virtual ~LDIList()
     {
-        for (LoopDetectorInfo* p = root; p; p = root)
-        {
+        for (LoopDetectorInfo *p = root; p; p = root) {
             root = p->nextLDI;
             delete p;
         }
     }
-    LoopDetectorInfo* first() const { return root; }
-    LoopDetectorInfo* last() const { return leaf; }
-    long count() const { return items; }
-
-    bool find(const LoopDetectorInfo* ref) const
+    LoopDetectorInfo *first() const
     {
-        for (LoopDetectorInfo* p = root; p; p = p->nextLDI)
-            if (*p == *ref)
+        return root;
+    }
+    LoopDetectorInfo *last() const
+    {
+        return leaf;
+    }
+    long count() const
+    {
+        return items;
+    }
+
+    bool find(const LoopDetectorInfo *ref) const
+    {
+        for (LoopDetectorInfo *p = root; p; p = p->nextLDI)
+            if (*p == *ref) {
                 return true;
+            }
 
         return false;
     }
 
-    void append(LoopDetectorInfo* p)
+    void append(LoopDetectorInfo *p)
     {
-        if (root == 0)
-        {
+        if (root == 0) {
             root = leaf = p;
             leaf->prevLDI = 0;
-        }
-        else
-        {
+        } else {
             leaf->nextLDI = p;
             p->prevLDI = leaf;
             leaf = leaf->nextLDI;
@@ -131,26 +149,22 @@ public:
     }
     void removeLast()
     {
-        if (leaf == root)
-        {
+        if (leaf == root) {
             delete leaf;
             root = leaf = 0;
-        }
-        else
-        {
+        } else {
             leaf = leaf->prevLDI;
             delete leaf->nextLDI;
             leaf->nextLDI = 0;
         }
         --items;
     }
-    LoopDetectorInfo* popLast()
+    LoopDetectorInfo *popLast()
     {
-        LoopDetectorInfo* lst = leaf;
-        if (leaf == root)
+        LoopDetectorInfo *lst = leaf;
+        if (leaf == root) {
             root = leaf = 0;
-        else
-        {
+        } else {
             leaf = leaf->prevLDI;
             leaf->nextLDI = 0;
         }
@@ -160,9 +174,9 @@ public:
     }
 private:
     long items;
-    LoopDetectorInfo* root;
-    LoopDetectorInfo* leaf;
-} ;
+    LoopDetectorInfo *root;
+    LoopDetectorInfo *leaf;
+};
 
 } // namespace TJ
 

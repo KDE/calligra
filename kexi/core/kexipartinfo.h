@@ -125,8 +125,8 @@ public:
     bool isExecuteSupported() const;
 
     /**
-     * \return true if the property editing facilities should 
-     * be displayed even if the item's property set 
+     * \return true if the property editing facilities should
+     * be displayed even if the item's property set
      * (KexiWindow::propertySet()) is 0.
      * False by default. It is set to true e.g. for table part.
      */
@@ -135,7 +135,7 @@ public:
     /**
      * \return "New object" action for this part.
      */
-    QAction* newObjectAction();
+    QAction *newObjectAction();
 
 protected:
     /**
@@ -154,7 +154,7 @@ protected:
      * Sets the broken flag and error message.
      * Most likely to be called by @ref KexiPart::Manager
      */
-    void setBroken(bool broken, const QString& errorMessage);
+    void setBroken(bool broken, const QString &errorMessage);
 
     /**
      * \return i18n'd error message set by setBroken().
@@ -174,7 +174,7 @@ protected:
 private:
     Q_DISABLE_COPY(Info)
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 }

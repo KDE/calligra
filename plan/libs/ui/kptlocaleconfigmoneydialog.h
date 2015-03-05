@@ -33,12 +33,13 @@ namespace KPlato
 class LocaleConfigMoney;
 class Project;
 
-class KPLATOUI_EXPORT LocaleConfigMoneyDialog : public KDialog {
+class KPLATOUI_EXPORT LocaleConfigMoneyDialog : public KDialog
+{
     Q_OBJECT
 public:
-    explicit LocaleConfigMoneyDialog( KLocale *locale, QWidget *parent=0);
+    explicit LocaleConfigMoneyDialog(KLocale *locale, QWidget *parent = 0);
 
-    KUndo2Command *buildCommand( Project &project );
+    KUndo2Command *buildCommand(Project &project);
 
 protected Q_SLOTS:
     void slotChanged();

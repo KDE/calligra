@@ -40,7 +40,8 @@ public:
     KisBrushChooser(QWidget *parent = 0, const char *name = 0);
     virtual ~KisBrushChooser();
 
-    KisBrushSP brush() {
+    KisBrushSP brush()
+    {
         return m_brush;
     };
 
@@ -62,16 +63,16 @@ Q_SIGNALS:
     void sigBrushChanged();
 
 private:
-    QLabel* m_lbName;
-    QLabel* m_lbRotation;
-    QLabel* m_lbSize;
-    QLabel* m_lbSpacing;
-    KisDoubleSliderSpinBox* m_slRotation;
-    KisDoubleSliderSpinBox* m_slSize;
-    KisSpacingSelectionWidget* m_slSpacing;
-    QCheckBox* m_chkColorMask;
+    QLabel *m_lbName;
+    QLabel *m_lbRotation;
+    QLabel *m_lbSize;
+    QLabel *m_lbSpacing;
+    KisDoubleSliderSpinBox *m_slRotation;
+    KisDoubleSliderSpinBox *m_slSize;
+    KisSpacingSelectionWidget *m_slSpacing;
+    QCheckBox *m_chkColorMask;
     KisBrushSP m_brush;
-    KoResourceItemChooser* m_itemChooser;
+    KoResourceItemChooser *m_itemChooser;
 
 };
 

@@ -24,14 +24,13 @@
 
 #include <KWDocument.h>
 
-
 class CATextDocumentModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    CATextDocumentModel(QObject* parent, KWDocument* document, KoShapeManager *shapemanager);
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    CATextDocumentModel(QObject *parent, KWDocument *document, KoShapeManager *shapemanager);
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
 Q_SIGNALS:
     void documentControllerChanged();

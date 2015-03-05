@@ -57,9 +57,9 @@ public:
      * that is can be fetched without serialization
      */
     static QList<KisNodeSP> tryLoadInternalNodes(const QMimeData *data,
-                                                 KisImageWSP image,
-                                                 KisShapeController *shapeController,
-                                                 bool /* IN-OUT */ &copyNode);
+            KisImageWSP image,
+            KisShapeController *shapeController,
+            bool /* IN-OUT */ &copyNode);
 
     /**
      * Loads a node from a mime container

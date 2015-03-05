@@ -24,7 +24,7 @@
 #include <QPainter>
 
 KPrSlideWipeFromRightStrategy::KPrSlideWipeFromRightStrategy()
-: KPrPageEffectStrategy( KPrSlideWipeEffectFactory::FromRight, "slideWipe", "fromRight", false )
+    : KPrPageEffectStrategy(KPrSlideWipeEffectFactory::FromRight, "slideWipe", "fromRight", false)
 {
 }
 
@@ -32,23 +32,23 @@ KPrSlideWipeFromRightStrategy::~KPrSlideWipeFromRightStrategy()
 {
 }
 
-void KPrSlideWipeFromRightStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
+void KPrSlideWipeFromRightStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {
-    timeLine.setFrameRange( 0, data.m_widget->width() );
+    timeLine.setFrameRange(0, data.m_widget->width());
 }
 
-void KPrSlideWipeFromRightStrategy::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
+void KPrSlideWipeFromRightStrategy::paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data)
 {
     int height = data.m_widget->height();
     int width = data.m_widget->width();
-    QRect rect1( 0, 0, width - currPos, height );
-    QRect rect2( 0, 0, currPos, height );
-    p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, rect1 );
-    p.drawPixmap( QPoint( width - currPos, 0 ), data.m_newPage, rect2 );
+    QRect rect1(0, 0, width - currPos, height);
+    QRect rect2(0, 0, currPos, height);
+    p.drawPixmap(QPoint(0, 0), data.m_oldPage, rect1);
+    p.drawPixmap(QPoint(width - currPos, 0), data.m_newPage, rect2);
 }
 
-void KPrSlideWipeFromRightStrategy::next( const KPrPageEffect::Data &data )
+void KPrSlideWipeFromRightStrategy::next(const KPrPageEffect::Data &data)
 {
-    int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
-    data.m_widget->update( data.m_widget->width() - currPos, 0, currPos, data.m_widget->height() );
+    int currPos = data.m_timeLine.frameForTime(data.m_currentTime);
+    data.m_widget->update(data.m_widget->width() - currPos, 0, currPos, data.m_widget->height());
 }

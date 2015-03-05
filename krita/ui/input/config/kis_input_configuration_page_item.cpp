@@ -72,8 +72,7 @@ void KisInputConfigurationPageItem::setExpanded(bool expand)
         ui->descriptionLabel->setVisible(true);
         ui->shortcutsView->setVisible(true);
         ui->collapseButton->setArrowType(Qt::DownArrow);
-    }
-    else {
+    } else {
         ui->descriptionLabel->setVisible(false);
         ui->shortcutsView->setVisible(false);
         ui->collapseButton->setArrowType(Qt::RightArrow);

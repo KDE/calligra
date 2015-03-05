@@ -21,7 +21,7 @@
 #include <db/utils.h>
 #include <kdebug.h>
 
-KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KexiDB::Connection* conn)
+KRScriptFunctions::KRScriptFunctions(const KoReportData *kodata, KexiDB::Connection *conn)
 {
     m_cursor = kodata;
     m_connection = conn;
@@ -32,7 +32,7 @@ KRScriptFunctions::~KRScriptFunctions()
 {
 }
 
-void KRScriptFunctions::setWhere(const QString&w)
+void KRScriptFunctions::setWhere(const QString &w)
 {
     m_where = w;
 }
@@ -40,7 +40,7 @@ void KRScriptFunctions::setWhere(const QString&w)
 qreal KRScriptFunctions::math(const QString &function, const QString &field)
 {
     qreal ret;
-    QString sql = "SELECT " + function + '(' + field + ") FROM (" + m_source + ')' ;
+    QString sql = "SELECT " + function + '(' + field + ") FROM (" + m_source + ')';
 
     if (!m_where.isEmpty()) {
         sql += " WHERE(" + m_where + ')';

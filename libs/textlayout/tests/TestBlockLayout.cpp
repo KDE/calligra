@@ -40,7 +40,6 @@
 
 #define FRAME_SPACING 10.0
 
-
 void TestBlockLayout::initTestCase()
 {
     m_doc = 0;
@@ -84,7 +83,6 @@ void TestBlockLayout::setupTest(const QString &initText)
     }
 }
 
-
 void TestBlockLayout::testLineBreaking()
 {
     setupTest(m_loremIpsum);
@@ -94,7 +92,6 @@ void TestBlockLayout::testLineBreaking()
     //QCOMPARE(blockLayout->lineCount(), 16);
     QCOMPARE(blockLayout->lineForTextPosition(1).width(), 200.0);
 }
-
 
 void TestBlockLayout::testBasicLineSpacing()
 {
@@ -182,7 +179,7 @@ void TestBlockLayout::testBasicLineSpacing2()
 
 void TestBlockLayout::testFixedLineSpacing()
 {
-    setupTest(QString("Line1")+QChar(0x2028)+"Line2"+QChar(0x2028)+"Line3");
+    setupTest(QString("Line1") + QChar(0x2028) + "Line2" + QChar(0x2028) + "Line3");
     QTextCursor cursor(m_doc);
 
     KoParagraphStyle style;
@@ -198,9 +195,9 @@ void TestBlockLayout::testFixedLineSpacing()
 
     // lines with fontsize less than the fixed height are bottom aligned, resulting in
     // positive y for first line
-    QCOMPARE(blockLayout->lineAt(0).y(), 28.0-12.0 + 100.0);
-    QCOMPARE(blockLayout->lineAt(1).y(), 28.0 + 28.0-12.0 + 100.0);
-    QCOMPARE(blockLayout->lineAt(2).y(), 56.0 + 28.0-12.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 28.0 - 12.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 28.0 + 28.0 - 12.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 56.0 + 28.0 - 12.0 + 100.0);
 
     style.setLineHeightAbsolute(8.0);
     style.applyStyle(block);
@@ -212,14 +209,14 @@ void TestBlockLayout::testFixedLineSpacing()
 
     // lines with fontsize more than the fixed height are bottom aligned, resulting in
     //negative y for first line
-    QCOMPARE(blockLayout->lineAt(0).y(), 8.0-12.0 + 100.0);
-    QCOMPARE(blockLayout->lineAt(1).y(), 8.0-12.0 + 8.0 + 100.0);
-    QCOMPARE(blockLayout->lineAt(2).y(), 8.0-12.0 + 8.0 + 8.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 8.0 - 12.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(1).y(), 8.0 - 12.0 + 8.0 + 100.0);
+    QCOMPARE(blockLayout->lineAt(2).y(), 8.0 - 12.0 + 8.0 + 8.0 + 100.0);
 }
 
 void TestBlockLayout::testPercentageLineSpacing()
 {
-    setupTest(QString("Line1")+QChar(0x2028)+"Line2"+QChar(0x2028)+"Line3");
+    setupTest(QString("Line1") + QChar(0x2028) + "Line2" + QChar(0x2028) + "Line3");
     QTextCursor cursor(m_doc);
 
     KoParagraphStyle style;
@@ -305,13 +302,13 @@ void TestBlockLayout::testAdvancedLineSpacing()
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0-12.0 + 100.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8 * 12 + 28.0 - 12.0 + 100.0)) < ROUNDING);
 
     block = block.next(); // line3
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 100.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8 * 12 + 28.0 + 100.0)) < ROUNDING);
 
     block = block.next(); // line4
     QVERIFY(block.isValid());
@@ -319,26 +316,26 @@ void TestBlockLayout::testAdvancedLineSpacing()
     //qDebug() << blockLayout->lineAt(0).y();
     // percentage overrides minimum so percentage value is the right to test against
     //QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 40.0 + 100.0)) < ROUNDING);
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 100.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8 * 12 + 28.0 + 1.2 * 12 + 100.0)) < ROUNDING);
 
     block = block.next(); // line5
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
     // minimum of 5 is irelevant and percentage of 1.2 was still there
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12 + 100.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8 * 12 + 28.0 + 1.2 * 12 + 1.2 * 12 + 100.0)) < ROUNDING);
 
     block = block.next(); // line6
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12 + 12+8 + 100.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8 * 12 + 28.0 + 1.2 * 12 + 1.2 * 12 + 12 + 8 + 100.0)) < ROUNDING);
 
     block = block.next(); // line 7
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8*12 + 28.0 + 1.2*12 + 1.2*12 + 12+8 + 1.2*12 + 100.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (0.8 * 12 + 28.0 + 1.2 * 12 + 1.2 * 12 + 12 + 8 + 1.2 * 12 + 100.0)) < ROUNDING);
 }
 
 void TestBlockLayout::testEmptyLineHeights()
@@ -348,7 +345,7 @@ void TestBlockLayout::testEmptyLineHeights()
     // 2) a final line if blank can have it's height specified by a special textstyle
     //    If the special style is empty the par style is used for the line
 
-    setupTest(QString("")+QChar(0x2028)+QChar(0x2028)+"\nNextBlock");
+    setupTest(QString("") + QChar(0x2028) + QChar(0x2028) + "\nNextBlock");
     QTextCursor cursor(m_doc);
 
     QTextCharFormat bigCharFormat;
@@ -370,7 +367,6 @@ void TestBlockLayout::testEmptyLineHeights()
     cursor.setPosition(1);
     cursor.setPosition(2, QTextCursor::KeepAnchor);
     cursor.mergeCharFormat(smallCharFormat);
-
 
     m_layout->layout();
     QTextLayout *blockLayout = block.layout();
@@ -417,7 +413,6 @@ void TestBlockLayout::testEmptyLineHeights()
     blockLayout = block.layout();
     QCOMPARE(blockLayout->lineAt(0).y(), 20.0 + 8.0 + 6.0 + 100.0);
 }
-
 
 // Test that spacing between blocks are the max of bottomMargin and topMargin
 // of the top and bottom block respectively
@@ -488,7 +483,6 @@ void TestBlockLayout::testBlockSpacing()
                             // Between 1st and 2nd block is max of spaces
                             QVERIFY(qAbs((block2Layout->lineAt(0).y() - block1Layout->lineAt(lastLineNum).y() - lineSpacing) - qMax(spaces[b1], spaces[t2])) < ROUNDING);
 
-
                             // Between 2nd and 3rd block is max of spaces
                             QVERIFY(qAbs((block3Layout->lineAt(0).y() - block2Layout->lineAt(lastLineNum).y() - lineSpacing) - qMax(spaces[b2], spaces[t3])) < ROUNDING);
 
@@ -531,7 +525,6 @@ void TestBlockLayout::testBlockSpacing()
 
                             // Between 1st and 2nd block is max of spaces
                             QVERIFY(qAbs((block2Layout->lineAt(0).y() - block1Layout->lineAt(lastLineNum).y() - lineSpacing) - qMax(spaces[b1], spaces[t2])) < ROUNDING);
-
 
                             // Between 2nd and 3rd block is max of spaces
                             QVERIFY(qAbs((block3Layout->lineAt(0).y() - block2Layout->lineAt(lastLineNum).y() - lineSpacing) - qMax(spaces[b2], spaces[t3])) < ROUNDING);
@@ -648,12 +641,12 @@ void TestBlockLayout::testTabs_data()
         { true, 20, 10, 5, 70},
         { true, 20, -10, 0, 20},
         { true, 20, -10, 5, 20},
-        { true, -20, 0, 0+20, 30}, //+20 to avoid extra tab fitting in
-        { true, -20, 0, 5+20, 30}, //+20 to avoid extra tab fitting in
-        { true, -20, 10, 0+20, 30}, //+20 to avoid extra tab fitting in
-        { true, -20, 10, 5+20, 30}, //+20 to avoid extra tab fitting in
-        { true, -20, -10, 0+20, -20}, //+20 to avoid extra tab fitting in
-        { true, -20, -10, 5+20, -20}, //+20 to avoid extra tab fitting in
+        { true, -20, 0, 0 + 20, 30}, //+20 to avoid extra tab fitting in
+        { true, -20, 0, 5 + 20, 30}, //+20 to avoid extra tab fitting in
+        { true, -20, 10, 0 + 20, 30}, //+20 to avoid extra tab fitting in
+        { true, -20, 10, 5 + 20, 30}, //+20 to avoid extra tab fitting in
+        { true, -20, -10, 0 + 20, -20}, //+20 to avoid extra tab fitting in
+        { true, -20, -10, 5 + 20, -20}, //+20 to avoid extra tab fitting in
 
         { false, 0, 0, 0, 50},
         { false, 0, 0, 5, 50},
@@ -667,14 +660,14 @@ void TestBlockLayout::testTabs_data()
         { false, 20, 10, 5, 50},
         { false, 20, -10, 0, 50},
         { false, 20, -10, 5, 50},
-        { false, -20, 0, 0+70, 0}, //+70 to avoid extra tab fitting in
-        { false, -20, 0, 5+70, 0}, //+70 to avoid extra tab fitting in
-        { false, -20, 10, 0+70, 0}, //+70 to avoid extra tab fitting in
-        { false, -20, 10, 5+70, 0}, //+70 to avoid extra tab fitting in
-        { false, -20, -10, 0+70, 0}, //+70 to avoid extra tab fitting in
-        { false, -20, -10, 5+70, 0}, //+70 to avoid extra tab fitting in
+        { false, -20, 0, 0 + 70, 0}, //+70 to avoid extra tab fitting in
+        { false, -20, 0, 5 + 70, 0}, //+70 to avoid extra tab fitting in
+        { false, -20, 10, 0 + 70, 0}, //+70 to avoid extra tab fitting in
+        { false, -20, 10, 5 + 70, 0}, //+70 to avoid extra tab fitting in
+        { false, -20, -10, 0 + 70, 0}, //+70 to avoid extra tab fitting in
+        { false, -20, -10, 5 + 70, 0}, //+70 to avoid extra tab fitting in
     };
-    static const int testcasesCount = sizeof(testcaseDataList)/sizeof(testcaseDataList[0]);
+    static const int testcasesCount = sizeof(testcaseDataList) / sizeof(testcaseDataList[0]);
 
     QTest::addColumn<bool>("relativeTabs");
     QTest::addColumn<qreal>("leftMargin");
@@ -686,11 +679,11 @@ void TestBlockLayout::testTabs_data()
         const TestCaseData &testcaseData = testcaseDataList[i];
 
         QTest::newRow(QString::number(i).toLatin1())
-            << testcaseData.relativeTabs
-            << testcaseData.leftMargin
-            << testcaseData.textIndent
-            << testcaseData.rightMargin
-            << testcaseData.expected;
+                << testcaseData.relativeTabs
+                << testcaseData.leftMargin
+                << testcaseData.textIndent
+                << testcaseData.rightMargin
+                << testcaseData.expected;
     }
 }
 
@@ -720,24 +713,26 @@ void TestBlockLayout::testTabs()
     cursor.setBlockFormat(bf);
     m_layout->layout();
 
-    for (int pos=0; pos<4; pos++) {
-        if (pos==0)
-            QCOMPARE(blockLayout->lineAt(0).cursorToX(pos*2), leftMargin + textIndent);
-        else {
-            kDebug() << blockLayout->lineAt(0).cursorToX(pos*2) << expected+(pos-1)*tabSpacing;
-            QVERIFY(qAbs(blockLayout->lineAt(0).cursorToX(pos*2) - (expected+(pos-1)*tabSpacing)) < 1.0);
+    for (int pos = 0; pos < 4; pos++) {
+        if (pos == 0) {
+            QCOMPARE(blockLayout->lineAt(0).cursorToX(pos * 2), leftMargin + textIndent);
+        } else {
+            kDebug() << blockLayout->lineAt(0).cursorToX(pos * 2) << expected + (pos - 1)*tabSpacing;
+            QVERIFY(qAbs(blockLayout->lineAt(0).cursorToX(pos * 2) - (expected + (pos - 1)*tabSpacing)) < 1.0);
         }
     }
     if (textIndent == 0.0) { // excluding known fails
-        for (int pos=0; pos<4; pos++) {
+        for (int pos = 0; pos < 4; pos++) {
             // pos==0 is known to fail see https://bugs.kde.org/show_bug.cgi?id=239819
-            if (pos!=0)
-                QVERIFY(qAbs(blockLayout->lineAt(1).cursorToX(pos*2+8)- (expected+(pos-1)*tabSpacing)) < 1.0);
+            if (pos != 0) {
+                QVERIFY(qAbs(blockLayout->lineAt(1).cursorToX(pos * 2 + 8) - (expected + (pos - 1)*tabSpacing)) < 1.0);
+            }
         }
-        for (int pos=0; pos<4; pos++) {
+        for (int pos = 0; pos < 4; pos++) {
             // pos==0 is known to fail see https://bugs.kde.org/show_bug.cgi?id=239819
-            if (pos!=0)
-                QVERIFY(qAbs(blockLayout->lineAt(2).cursorToX(pos*2+16)- (expected+(pos-1)*tabSpacing)) < 1.0);
+            if (pos != 0) {
+                QVERIFY(qAbs(blockLayout->lineAt(2).cursorToX(pos * 2 + 16) - (expected + (pos - 1)*tabSpacing)) < 1.0);
+            }
         }
     }
 }
@@ -968,7 +963,6 @@ void TestBlockLayout::testBorderData()
     KoTextBlockData data2(block);
     QCOMPARE(data2.counterPosition(), QPointF(3 + 100.0, 48.8 + 100.0));
 
-
     style.setBottomMargin(QTextLength(QTextLength::FixedLength, 5)); //bottom spacing
     // manually reapply and relayout to force immediate reaction.
     block = m_doc->begin().next();
@@ -1024,7 +1018,7 @@ void TestBlockLayout::testDropCaps()
     m_layout->layout();
 
     // dummy version, caps is still false.
-    QTextLayout *blockLayout =block.layout();
+    QTextLayout *blockLayout = block.layout();
     QVERIFY(blockLayout->lineCount() > 2);
     QTextLine line = blockLayout->lineAt(0);
     QVERIFY(line.textLength() > 3);
@@ -1071,7 +1065,6 @@ void TestBlockLayout::testDropCaps()
     QVERIFY(line.textLength() > 1);
     QCOMPARE(line.height(), heightNormalLine);
 }
-
 
 QTEST_KDEMAIN(TestBlockLayout, GUI)
 

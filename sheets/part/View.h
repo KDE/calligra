@@ -95,39 +95,39 @@ public:
     ~View();
 
     /** \return the document this view displays. */
-    Doc* doc() const;
+    Doc *doc() const;
 
     /** \return the canvas of the view */
-    Canvas* canvasWidget() const;
+    Canvas *canvasWidget() const;
 
     /** \return the canvas controller of the view */
-    KoCanvasController* canvasController() const;
+    KoCanvasController *canvasController() const;
 
     /** \return the column header */
-    ColumnHeaderWidget* columnHeader() const;
+    ColumnHeaderWidget *columnHeader() const;
 
     /** \return the row header */
-    RowHeaderWidget* rowHeader() const;
+    RowHeaderWidget *rowHeader() const;
 
     /** \return the horizontal scrollbar */
-    QScrollBar* horzScrollBar() const;
+    QScrollBar *horzScrollBar() const;
 
     /** \return the vertical scrollbar */
-    QScrollBar* vertScrollBar() const;
+    QScrollBar *vertScrollBar() const;
 
     /** \return the tab bar */
-    TabBar* tabBar() const;
+    TabBar *tabBar() const;
 
     /** \return the zoom handler */
-    KoZoomHandler* zoomHandler() const;
+    KoZoomHandler *zoomHandler() const;
 
     /** \return the sheet, that is currently displayed */
-    Sheet* activeSheet() const;
+    Sheet *activeSheet() const;
 
     /**
      * \return the SheetView for \p sheet
      */
-    SheetView* sheetView(const Sheet* sheet) const;
+    SheetView *sheetView(const Sheet *sheet) const;
 
     /** Loads the view settings. */
     void initConfig();
@@ -147,7 +147,7 @@ public:
     /**
      * \return the current cell selection.
      */
-    Selection* selection() const;
+    Selection *selection() const;
 
     /**
      * Updates the action, that unhides a hidden sheet.
@@ -159,12 +159,12 @@ public:
     /**
      * @return marker for @p sheet
      */
-    QPoint markerFromSheet(Sheet* sheet) const;
+    QPoint markerFromSheet(Sheet *sheet) const;
 
     /**
      * @return scroll offset for @p sheet
      */
-    QPointF offsetFromSheet(Sheet* sheet) const;
+    QPointF offsetFromSheet(Sheet *sheet) const;
 
     /**
      * Save current sheet selection.
@@ -185,14 +185,14 @@ public Q_SLOTS:
     void refreshSheetViews();
 
     /** Invalidates all visual cached data for the cells in \p region. */
-    void refreshSelection(const Region& region);
+    void refreshSelection(const Region &region);
 
     void finishLoading();
     /**
      * Prepares this view for a modification of \p region, e.g. closes the cell
      * editor.
      */
-    void aboutToModify(const Region& region);
+    void aboutToModify(const Region &region);
 
     /** Sets the initial scrolling offset and selection after loading. */
     void initialPosition();
@@ -231,13 +231,13 @@ public Q_SLOTS:
      * Sets the currently displayed \p sheet.
      * \param updateTabBar if \c true, updates the tab bar
      */
-    void setActiveSheet(Sheet* sheet, bool updateTabBar = true);
+    void setActiveSheet(Sheet *sheet, bool updateTabBar = true);
 
     /**
      * Switch the active sheet to the name. This slot is connected to the tab bar
      * and activated when the user selects a new sheet in the tab bar.
      */
-    void changeSheet(const QString& _name);
+    void changeSheet(const QString &_name);
 
     /**
      * Switch the active sheet to the next visible sheet. Does nothing if the current
@@ -268,10 +268,10 @@ public Q_SLOTS:
      * Shapes can either be anchored to cells or to the sheet/page.
      * \param mode string indicating cell or sheet anchoring
      */
-    void setShapeAnchoring(const QString& mode);
+    void setShapeAnchoring(const QString &mode);
 
     /** Shows the context menu for the on-the-fly calculation method. */
-    void statusBarClicked(const QPoint& pos);
+    void statusBarClicked(const QPoint &pos);
 
     /** Updates the on-the-fly calculation method menu. */
     void menuCalc(bool);
@@ -309,13 +309,13 @@ public Q_SLOTS:
     /**
      * Shows context menu when tabbar is double-clicked.
      */
-    void popupTabBarMenu(const QPoint&);
+    void popupTabBarMenu(const QPoint &);
 
     /**
      * \ingroup Damages
      * Handles damages that need visual updates.
      */
-    void handleDamages(const QList<Damage*>& damages);
+    void handleDamages(const QList<Damage *> &damages);
 
     /**
      * write in statusBar result of calc (Min, or Max, average, sum, count)
@@ -328,10 +328,10 @@ protected Q_SLOTS:
 
 public Q_SLOTS:
     /** Reacts on selection changes. */
-    void slotChangeSelection(const Region&);
+    void slotChangeSelection(const Region &);
 
     /** Reacts on reference selection changes. */
-    void slotScrollChoice(const Region&);
+    void slotScrollChoice(const Region &);
 
     /** Updates the shape anchoring action. */
     void shapeSelectionChanged();
@@ -339,7 +339,7 @@ public Q_SLOTS:
     /** Calls KoToolProxy::deleteSelection(). */
     void editDeleteSelection();
 
-    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
+    void updateAccessedCellRange(Sheet *sheet, const QPoint &location);
 
 public: // reimplementations
     // KoView interface
@@ -370,13 +370,12 @@ public:
      */
     void disableAutoScroll();
 
-
 protected: // reimplementations
     // QWidget interface
-    virtual void keyPressEvent(QKeyEvent * _ev);
+    virtual void keyPressEvent(QKeyEvent *_ev);
     // KoView interface
     virtual void updateReadWrite(bool readwrite);
-    virtual KoPrintJob * createPrintJob();
+    virtual KoPrintJob *createPrintJob();
 public:
     virtual KoZoomController *zoomController() const;
 
@@ -394,21 +393,20 @@ private Q_SLOTS:
     void addSheet(Sheet *sheet);
 
     /** Removes \p sheet from the displayed sheets. */
-    void removeSheet(Sheet* sheet);
+    void removeSheet(Sheet *sheet);
 
     /** Called if a Sheet-instance is deleted to proper clean-up internal pointers. */
-    void sheetDestroyed(QObject* obj);
+    void sheetDestroyed(QObject *obj);
 
     void slotAutoScroll();
 
 private:
     Q_DISABLE_COPY(View)
 
-
     int autoScrollAcceleration(int offset) const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 
     /** Creates and initializes the canvas and other child widgets. */
     void initView();

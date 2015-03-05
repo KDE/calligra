@@ -29,13 +29,12 @@ IOBackendRegistry::IOBackendRegistry()
 
 IOBackendRegistry::~IOBackendRegistry()
 {
-    foreach(const QString &id, keys()) {
+    foreach (const QString &id, keys()) {
         delete get(id);
-    }    
+    }
 }
 
-
-IOBackendRegistry* IOBackendRegistry::instance()
+IOBackendRegistry *IOBackendRegistry::instance()
 {
     K_GLOBAL_STATIC(IOBackendRegistry, s_instance);
     // XXX: load backend plugins

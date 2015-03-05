@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_WORKSPACE_CHOOSER_H
 #define KIS_WORKSPACE_CHOOSER_H
 
@@ -32,17 +31,17 @@ class KisWorkspaceChooser : public QWidget
 {
     Q_OBJECT
 public:
-    KisWorkspaceChooser(KisViewManager * view, QWidget* parent = 0);
+    KisWorkspaceChooser(KisViewManager *view, QWidget *parent = 0);
     virtual ~KisWorkspaceChooser();
 
 private Q_SLOTS:
     void slotSave();
-    void resourceSelected( KoResource * resource );
-    
+    void resourceSelected(KoResource *resource);
+
 private:
-    KoResourceItemChooser * m_itemChooser;
-    KisViewManager* m_view;
-    KLineEdit* m_nameEdit;
+    KoResourceItemChooser *m_itemChooser;
+    KisViewManager *m_view;
+    KLineEdit *m_nameEdit;
 };
 
 #endif // KIS_WORKSPACE_CHOOSER_H

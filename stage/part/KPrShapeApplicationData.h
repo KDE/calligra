@@ -34,7 +34,7 @@ public:
     KPrShapeApplicationData();
     ~KPrShapeApplicationData();
 
-    QSet<KPrShapeAnimation *> & animations();
+    QSet<KPrShapeAnimation *> &animations();
 
     void setDeleteAnimations(bool enabled);
 
@@ -43,7 +43,6 @@ private:
     QSet<KPrShapeAnimation *> m_animations;
     bool m_deleteAnimations;
 };
-
 
 #endif
 

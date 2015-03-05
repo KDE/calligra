@@ -23,8 +23,8 @@
 
 #include <kptschedule.h>
 
-Scripting::Schedule::Schedule( Scripting::Project *project, KPlato::ScheduleManager *schedule, QObject *parent )
-    : QObject( parent ), m_project( project ), m_schedule( schedule )
+Scripting::Schedule::Schedule(Scripting::Project *project, KPlato::ScheduleManager *schedule, QObject *parent)
+    : QObject(parent), m_project(project), m_schedule(schedule)
 {
 }
 
@@ -58,10 +58,10 @@ int Scripting::Schedule::childCount() const
     return m_schedule ? m_schedule->childCount() : 0;
 }
 
-QObject *Scripting::Schedule::childAt( int index )
+QObject *Scripting::Schedule::childAt(int index)
 {
-    if ( m_schedule && m_project ) {
-        return m_project->schedule( m_schedule->childAt( index ) );
+    if (m_schedule && m_project) {
+        return m_project->schedule(m_schedule->childAt(index));
     }
     return 0;
 }

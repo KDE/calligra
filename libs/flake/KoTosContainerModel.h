@@ -35,7 +35,7 @@ public:
     virtual bool inheritsTransform(const KoShape *shape) const;
     virtual bool isChildLocked(const KoShape *child) const;
     virtual int count() const;
-    virtual QList<KoShape*> shapes() const;
+    virtual QList<KoShape *> shapes() const;
     virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
 
 private:

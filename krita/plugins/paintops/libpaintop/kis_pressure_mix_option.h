@@ -32,8 +32,7 @@ class PAINTOP_EXPORT KisPressureMixOption : public KisCurveOption
 {
 public:
     KisPressureMixOption();
-    double apply(const KisPaintInformation & info) const;
-
+    double apply(const KisPaintInformation &info) const;
 
 };
 

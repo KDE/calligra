@@ -40,7 +40,7 @@ class KexiSharedActionClient;
  used by shared KexiFindDialog.
 */
 class KEXIDATAVIEWCOMMON_EXPORT KexiDataAwareView : public KexiView,
-            public KexiSearchAndReplaceViewInterface
+    public KexiSearchAndReplaceViewInterface
 {
     Q_OBJECT
 
@@ -49,29 +49,29 @@ public:
 
     virtual ~KexiDataAwareView();
 
-    QWidget* mainWidget() const;
+    QWidget *mainWidget() const;
 
     virtual QSize minimumSizeHint() const;
 
     virtual QSize sizeHint() const;
 
-    KexiDataAwareObjectInterface* dataAwareObject() const;
+    KexiDataAwareObjectInterface *dataAwareObject() const;
 
     /*! Sets up data for find/replace dialog, based on view's data model.
      Implemented for KexiSearchAndReplaceViewInterface. */
-    virtual bool setupFindAndReplace(QStringList& columnNames, QStringList& columnCaptions,
-                                     QString& currentColumnName);
+    virtual bool setupFindAndReplace(QStringList &columnNames, QStringList &columnCaptions,
+                                     QString &currentColumnName);
 
     /*! Finds \a valueToFind within the view.
      Implemented for KexiSearchAndReplaceViewInterface. */
-    virtual tristate find(const QVariant& valueToFind,
-                          const KexiSearchAndReplaceViewInterface::Options& options, bool next);
+    virtual tristate find(const QVariant &valueToFind,
+                          const KexiSearchAndReplaceViewInterface::Options &options, bool next);
 
     /*! Finds \a valueToFind within the view and replaces with \a replacement.
      Implemented for KexiSearchAndReplaceViewInterface. */
-    virtual tristate findNextAndReplace(const QVariant& valueToFind,
-                                        const QVariant& replacement,
-                                        const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
+    virtual tristate findNextAndReplace(const QVariant &valueToFind,
+                                        const QVariant &replacement,
+                                        const KexiSearchAndReplaceViewInterface::Options &options, bool replaceAll);
 
 public Q_SLOTS:
     void deleteAllRows();
@@ -111,25 +111,25 @@ protected Q_SLOTS:
     void slotUpdateRowActions(int row);
     //! Updates 'save/cancel record changes' actions
     void slotUpdateSaveCancelActions();
-    void slotClosing(bool* cancel);
+    void slotClosing(bool *cancel);
 
 protected:
-    void init(QWidget* viewWidget, KexiSharedActionClient* actionClient,
-              KexiDataAwareObjectInterface* dataAwareObject,
+    void init(QWidget *viewWidget, KexiSharedActionClient *actionClient,
+              KexiDataAwareObjectInterface *dataAwareObject,
               // temporary, for KexiFormView in design mode
               bool noDataAware = false
              );
     void initActions();
     virtual void updateActions(bool activated);
 
-    QWidget* internalView() const;
+    QWidget *internalView() const;
 
     virtual bool eventFilter(QObject *o, QEvent *e);
-    QAction* sharedActionRequested(QKeyEvent *ke, const char *actionName);
+    QAction *sharedActionRequested(QKeyEvent *ke, const char *actionName);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

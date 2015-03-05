@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "FileCollector.h"
 
@@ -34,15 +33,12 @@
 // Calligra
 #include <KoStore.h>
 
-
 // ================================================================
 //                     class FileCollectorPrivate
 
-
 // Struct FileInfo holds the information about a file inside the EPUB store.
 
-struct FileInfo
-{
+struct FileInfo {
     FileInfo(QString id, QString fileName, QByteArray mimetype, QByteArray fileContents, QString label)
         : m_id(id), m_fileName(fileName), m_mimetype(mimetype), m_fileContents(fileContents), m_label(label)
     {}
@@ -54,7 +50,6 @@ struct FileInfo
     QString     m_label;
 };
 
-
 class FileCollectorPrivate
 {
 public:
@@ -65,7 +60,7 @@ public:
     QString  fileSuffix;        // default: ".xhtml"
     QString  pathPrefix;        // default: "OEBPS/"
 
-    QList<FileCollector::FileInfo*>  m_files;  // Embedded files
+    QList<FileCollector::FileInfo *>  m_files; // Embedded files
 };
 
 FileCollectorPrivate::FileCollectorPrivate()
@@ -78,7 +73,6 @@ FileCollectorPrivate::FileCollectorPrivate()
 FileCollectorPrivate::~FileCollectorPrivate()
 {
 }
-
 
 // ================================================================
 //                         class FileCollector
@@ -94,7 +88,6 @@ FileCollector::~FileCollector()
 
     delete d;
 }
-
 
 void FileCollector::setFilePrefix(QString prefix)
 {
@@ -126,7 +119,6 @@ QString FileCollector::pathPrefix() const
     return d->pathPrefix;
 }
 
-
 // ----------------------------------------------------------------
 
 void FileCollector::addContentFile(QString id, QString fileName,
@@ -142,7 +134,7 @@ void FileCollector::addContentFile(QString id, QString fileName,
     d->m_files.append(newFile);
 }
 
-QList<FileCollector::FileInfo*>  FileCollector::files() const
+QList<FileCollector::FileInfo *>  FileCollector::files() const
 {
     return d->m_files;
 }
@@ -150,7 +142,7 @@ QList<FileCollector::FileInfo*>  FileCollector::files() const
 KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
 {
     // Write contents of added files.
-    foreach(FileInfo *file, d->m_files) {
+    foreach (FileInfo *file, d->m_files) {
         if (!store->open(file->m_fileName)) {
             kDebug(30503) << "Can not create" << file->m_fileName;
             return KoFilter::CreationError;
@@ -161,7 +153,6 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
 
     return KoFilter::OK;
 }
-
 
 // ----------------------------------------------------------------
 //                         Private functions

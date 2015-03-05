@@ -63,15 +63,18 @@ enum PptxDocumentType {
 class PptxImport::Private
 {
 public:
-    Private() : type(PptxDocumentPresentation), macrosEnabled(false) {
+    Private() : type(PptxDocumentPresentation), macrosEnabled(false)
+    {
     }
 
-    const char* mainDocumentContentType() const
+    const char *mainDocumentContentType() const
     {
-        if (type == PptxDocumentSlideShow)
+        if (type == PptxDocumentSlideShow) {
             return MSOOXML::ContentTypes::presentationSlideShow;
-        if (type == PptxDocumentTemplate)
+        }
+        if (type == PptxDocumentTemplate) {
             return MSOOXML::ContentTypes::presentationTemplate;
+        }
         return MSOOXML::ContentTypes::presentationDocument;
     }
 
@@ -79,8 +82,8 @@ public:
     bool macrosEnabled;
 };
 
-PptxImport::PptxImport(QObject* parent, const QVariantList &)
-        : MSOOXML::MsooXmlImport(QLatin1String("presentation"), parent), d(new Private)
+PptxImport::PptxImport(QObject *parent, const QVariantList &)
+    : MSOOXML::MsooXmlImport(QLatin1String("presentation"), parent), d(new Private)
 {
 }
 
@@ -89,53 +92,48 @@ PptxImport::~PptxImport()
     delete d;
 }
 
-bool PptxImport::acceptsSourceMimeType(const QByteArray& mime) const
+bool PptxImport::acceptsSourceMimeType(const QByteArray &mime) const
 {
     kDebug() << "Entering PPTX Import filter: from " << mime;
     if (mime == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
         d->type = PptxDocumentPresentation;
         d->macrosEnabled = false;
-    }
-    else if (mime == "application/vnd.openxmlformats-officedocument.presentationml.template") {
+    } else if (mime == "application/vnd.openxmlformats-officedocument.presentationml.template") {
         d->type = PptxDocumentTemplate;
         d->macrosEnabled = false;
-    }
-    else if (mime == "application/vnd.openxmlformats-officedocument.presentationml.slideshow") {
+    } else if (mime == "application/vnd.openxmlformats-officedocument.presentationml.slideshow") {
         d->type = PptxDocumentSlideShow;
         d->macrosEnabled = false;
-    }
-    else if (mime == "application/vnd.ms-powerpoint.presentation.macroEnabled.12") {
+    } else if (mime == "application/vnd.ms-powerpoint.presentation.macroEnabled.12") {
         d->type = PptxDocumentPresentation;
         d->macrosEnabled = true;
-    }
-    else if (mime == "application/vnd.ms-powerpoint.template.macroEnabled.12") {
+    } else if (mime == "application/vnd.ms-powerpoint.template.macroEnabled.12") {
         d->type = PptxDocumentTemplate;
         d->macrosEnabled = true;
-    }
-    else if (mime == "application/vnd.ms-powerpoint.slideshow.macroEnabled.12") {
+    } else if (mime == "application/vnd.ms-powerpoint.slideshow.macroEnabled.12") {
         d->type = PptxDocumentSlideShow;
         d->macrosEnabled = true;
-    }
-    else
+    } else {
         return false;
+    }
     return true;
 }
 
-bool PptxImport::acceptsDestinationMimeType(const QByteArray& mime) const
+bool PptxImport::acceptsDestinationMimeType(const QByteArray &mime) const
 {
     kDebug() << "Entering PPTX Import filter: to " << mime;
     return mime == "application/vnd.oasis.opendocument.presentation";
 }
 
 KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
-        MSOOXML::MsooXmlRelationships *relationships, QString& errorMessage)
+        MSOOXML::MsooXmlRelationships *relationships, QString &errorMessage)
 {
     // more here...
     // 0. Document properties
     {
         MSOOXML::MsooXmlDocPropertiesReader docPropsReader(writers);
-        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
-            MSOOXML::ContentTypes::coreProps, &docPropsReader, writers, errorMessage) )
+        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
+                            MSOOXML::ContentTypes::coreProps, &docPropsReader, writers, errorMessage))
     }
 
     // 1. temporary styles
@@ -946,7 +944,6 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
 //         "\n    <!-- /COPIED -->"
 //     );
 
-
 //     writers->mainStyles->insertRawOdfStyles(
 //         KoGenStyles::StylesXmlAutomaticStyles,
 //         "    <!-- COPIED -->"
@@ -1085,7 +1082,6 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
 //         "\n    <!-- /COPIED -->"
 //     );
 
-
     QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
     if (partNames.count() != 1) {
         errorMessage = i18n("Unable to find part for type %1", d->mainDocumentContentType());
@@ -1102,14 +1098,14 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
             documentPath, documentFile,
             *relationships);
         PptxXmlDocumentReader documentReader(writers);
-        RETURN_IF_ERROR( loadAndParseDocument(
-            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
+        RETURN_IF_ERROR(loadAndParseDocument(
+                            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context))
         // Reading twice. In the 1st round everything except defaultTextStyle
         // is ignored and the number of slides/slideMasters/noteMasters for
         // progress reporting purposes is calculated.
         context.firstReadRound = false;
-        RETURN_IF_ERROR( loadAndParseDocument(
-            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
+        RETURN_IF_ERROR(loadAndParseDocument(
+                            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context))
     }
     return KoFilter::OK;
 }

@@ -22,17 +22,16 @@
 
 #include "kis_image.h"
 
-
 #define CONNECT_TO_IMAGE(signal)                                        \
     connect(this, SIGNAL(signal), m_image, SIGNAL(signal), Qt::DirectConnection)
 
 struct ImageSignalsStaticRegistrar {
-    ImageSignalsStaticRegistrar() {
+    ImageSignalsStaticRegistrar()
+    {
         qRegisterMetaType<KisImageSignalType>("KisImageSignalType");
     }
 };
 static ImageSignalsStaticRegistrar __registrar;
-
 
 KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     : m_image(image)
@@ -41,9 +40,9 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
             SLOT(slotNotification(KisImageSignalType)));
 
     CONNECT_TO_IMAGE(sigImageModified());
-    CONNECT_TO_IMAGE(sigSizeChanged(const QPointF&, const QPointF&));
-    CONNECT_TO_IMAGE(sigProfileChanged(const KoColorProfile*));
-    CONNECT_TO_IMAGE(sigColorSpaceChanged(const KoColorSpace*));
+    CONNECT_TO_IMAGE(sigSizeChanged(const QPointF &, const QPointF &));
+    CONNECT_TO_IMAGE(sigProfileChanged(const KoColorProfile *));
+    CONNECT_TO_IMAGE(sigColorSpaceChanged(const KoColorSpace *));
     CONNECT_TO_IMAGE(sigResolutionChanged(double, double));
 
     CONNECT_TO_IMAGE(sigNodeChanged(KisNodeSP));
@@ -58,7 +57,7 @@ KisImageSignalRouter::~KisImageSignalRouter()
 
 void KisImageSignalRouter::emitNotifications(KisImageSignalVector notifications)
 {
-    foreach(const KisImageSignalType &type, notifications) {
+    foreach (const KisImageSignalType &type, notifications) {
         emitNotification(type);
     }
 }
@@ -83,10 +82,9 @@ void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
     emit sigRemoveNodeAsync(parent->at(index));
 }
 
-
 void KisImageSignalRouter::slotNotification(KisImageSignalType type)
 {
-    switch(type.id) {
+    switch (type.id) {
     case LayersChangedSignal:
         emit sigLayersChangedAsync();
         break;

@@ -44,8 +44,8 @@ public:
 /******************************************************************/
 
 CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &name, const QChar &_chr, const QString &_font, bool _modal)
-        : KDialog(parent),
-        d(new Private())
+    : KDialog(parent),
+      d(new Private())
 {
     setCaption(i18n("Select Character"));
     setModal(_modal);
@@ -62,8 +62,8 @@ CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &nam
 }
 
 CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &name, const QString &_font, const QChar &_chr, bool _modal)
-        : KDialog(parent),
-        d(new Private())
+    : KDialog(parent),
+      d(new Private())
 {
     setCaption(i18n("Select Character"));
     setModal(_modal);
@@ -110,7 +110,7 @@ void CharacterSelectDialog::closeDialog()
 }
 
 // static
-bool CharacterSelectDialog::selectChar(QString &_font, QChar &_chr, QWidget* parent, const char* name)
+bool CharacterSelectDialog::selectChar(QString &_font, QChar &_chr, QWidget *parent, const char *name)
 {
     bool res = false;
 

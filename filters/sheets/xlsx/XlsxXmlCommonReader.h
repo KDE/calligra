@@ -42,7 +42,7 @@ public:
     virtual ~XlsxXmlCommonReader();
 
 protected:
-    QColor tintedColor(const QColor& color, qreal tint);
+    QColor tintedColor(const QColor &color, qreal tint);
 
     KoFilter::ConversionStatus read_t();
     KoFilter::ConversionStatus read_r();
@@ -66,14 +66,14 @@ protected:
     //! Used for creating style in w:pPr (style:style/@style:name attr)
     KoGenStyle m_currentTextStyle;
 
-    MSOOXML::DrawingMLTheme* m_themes;
+    MSOOXML::DrawingMLTheme *m_themes;
     QVector<QString> m_colorIndices;
 
 private:
     void init();
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif //XLSXXMLSHAREDSTRINGSREADER_H

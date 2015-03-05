@@ -56,7 +56,7 @@ public:
      * @param videoData the other one.
      */
     VideoData(const VideoData &videoData);
-    
+
     /// destructor
     virtual ~VideoData();
 
@@ -76,7 +76,10 @@ public:
 
     VideoData &operator=(const VideoData &other);
 
-    inline bool operator!=(const VideoData &other) const { return !operator==(other); }
+    inline bool operator!=(const VideoData &other) const
+    {
+        return !operator==(other);
+    }
     bool operator==(const VideoData &other) const;
 
     /// returns if this is a valid imageData with actual video data present on it.

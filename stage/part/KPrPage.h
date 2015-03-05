@@ -37,7 +37,7 @@ class KPrDeclarations;
 class STAGE_EXPORT KPrPage : public KoPAPage, public KPrPageData
 {
 public:
-    KPrPage( KoPAMasterPage * masterPage, KPrDocument * document );
+    KPrPage(KoPAMasterPage *masterPage, KPrDocument *document);
     virtual ~KPrPage();
 
     /**
@@ -47,7 +47,7 @@ public:
      * As every KPrPage needs to have a KPrPageApplicationData this call fails with a
      * assertion when it is not possible to retrieve.
      */
-    static KPrPageApplicationData * pageData( KoPAPageBase * page );
+    static KPrPageApplicationData *pageData(KoPAPageBase *page);
 
     /**
      * Get the presentation notes for this page
@@ -57,25 +57,25 @@ public:
     KPrNotes *pageNotes();
 
     /// reimplemented
-    virtual void shapeAdded( KoShape * shape );
+    virtual void shapeAdded(KoShape *shape);
 
     /// reimplemented
-    virtual void shapeRemoved( KoShape * shape );
+    virtual void shapeRemoved(KoShape *shape);
 
     /**
      * Set the layout to use on the page
      *
-     * @param layout the layout that should be used from now. 
+     * @param layout the layout that should be used from now.
      *        If 0 no layout will be used.
      */
-    void setLayout( KPrPageLayout * layout, KoPADocument * document  );
+    void setLayout(KPrPageLayout *layout, KoPADocument *document);
 
     /**
      * Get the layout used on the page
      *
      * @return layout that is used or 0 if no layout is used
      */
-    KPrPageLayout * layout() const;
+    KPrPageLayout *layout() const;
 
     /**
      * Get the page type used in the document
@@ -94,29 +94,29 @@ public:
 
 protected:
     /// reimplemented
-    virtual void saveOdfPageContent( KoPASavingContext & paContext ) const;
+    virtual void saveOdfPageContent(KoPASavingContext &paContext) const;
 
     /// reimplemented
-    virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
+    virtual void saveOdfPageStyleData(KoGenStyle &style, KoPASavingContext &paContext) const;
 
     /// reimplemented
-    virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+    virtual void loadOdfPageTag(const KoXmlElement &element, KoPALoadingContext &loadingContext);
 
     /// reimplemented
-    virtual void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext );
+    virtual void loadOdfPageExtra(const KoXmlElement &element, KoPALoadingContext &loadingContext);
 
     /// reimplemented
-    virtual bool saveOdfAnimations(KoPASavingContext & paContext) const;
+    virtual bool saveOdfAnimations(KoPASavingContext &paContext) const;
 
     /// reimplemented
     virtual bool saveOdfPresentationNotes(KoPASavingContext &paContext) const;
 
     /// reimplemented
-    virtual KoShapeManagerPaintingStrategy * getPaintingStrategy() const;
+    virtual KoShapeManagerPaintingStrategy *getPaintingStrategy() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KPRPAGE_H */

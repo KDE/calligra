@@ -25,14 +25,14 @@
 namespace KPlato
 {
 
-ColorsConfigPanel::ColorsConfigPanel(QWidget *p )
+ColorsConfigPanel::ColorsConfigPanel(QWidget *p)
     : QWidget(p)
 {
 
     setupUi(this);
 
-    kcfg_ColorGradientType->addItem( i18n( "Linear" ) );
-    kcfg_ColorGradientType->addItem( i18n( "Flat" ) );
+    kcfg_ColorGradientType->addItem(i18n("Linear"));
+    kcfg_ColorGradientType->addItem(i18n("Flat"));
 }
 
 }  //KPlato namespace

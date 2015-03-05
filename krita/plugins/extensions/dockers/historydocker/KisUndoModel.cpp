@@ -82,8 +82,9 @@ KUndo2QStack *KisUndoModel::stack() const
 
 void KisUndoModel::setStack(KUndo2QStack *stack)
 {
-    if (m_stack == stack)
+    if (m_stack == stack) {
         return;
+    }
 
     if (m_stack != 0) {
         disconnect(m_stack, SIGNAL(cleanChanged(bool)), this, SLOT(stackChanged()));
@@ -106,8 +107,9 @@ void KisUndoModel::setStack(KUndo2QStack *stack)
 
 void KisUndoModel::stackDestroyed(QObject *obj)
 {
-    if (obj != m_stack)
+    if (obj != m_stack) {
         return;
+    }
     m_stack = 0;
 
     stackChanged();
@@ -124,17 +126,21 @@ void KisUndoModel::stackChanged()
 
 void KisUndoModel::setStackCurrentIndex(const QModelIndex &index)
 {
-    if (m_blockOutgoingHistoryChange)
+    if (m_blockOutgoingHistoryChange) {
         return;
+    }
 
-    if (m_stack == 0)
+    if (m_stack == 0) {
         return;
+    }
 
-    if (index == selectedIndex())
+    if (index == selectedIndex()) {
         return;
+    }
 
-    if (index.column() != 0)
+    if (index.column() != 0) {
         return;
+    }
 
     m_stack->setIndex(index.row());
 }
@@ -146,66 +152,71 @@ QModelIndex KisUndoModel::selectedIndex() const
 
 QModelIndex KisUndoModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (m_stack == 0)
+    if (m_stack == 0) {
         return QModelIndex();
+    }
 
-    if (parent.isValid())
+    if (parent.isValid()) {
         return QModelIndex();
+    }
 
-    if (column != 0)
+    if (column != 0) {
         return QModelIndex();
+    }
 
-    if (row < 0 || row > m_stack->count())
+    if (row < 0 || row > m_stack->count()) {
         return QModelIndex();
+    }
 
     return createIndex(row, column);
 }
 
-QModelIndex KisUndoModel::parent(const QModelIndex&) const
+QModelIndex KisUndoModel::parent(const QModelIndex &) const
 {
     return QModelIndex();
 }
 
 int KisUndoModel::rowCount(const QModelIndex &parent) const
 {
-    if (m_stack == 0)
+    if (m_stack == 0) {
         return 0;
+    }
 
-    if (parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
 
     return m_stack->count() + 1;
 }
 
-int KisUndoModel::columnCount(const QModelIndex&) const
+int KisUndoModel::columnCount(const QModelIndex &) const
 {
     return 1;
 }
 
 QVariant KisUndoModel::data(const QModelIndex &index, int role) const
 {
-    if (m_stack == 0){
+    if (m_stack == 0) {
         return QVariant();
     }
 
-    if (index.column() != 0){
+    if (index.column() != 0) {
         return QVariant();
     }
 
-    if (index.row() < 0 || index.row() > m_stack->count()){
+    if (index.row() < 0 || index.row() > m_stack->count()) {
         return QVariant();
     }
 
     if (role == Qt::DisplayRole) {
-        if (index.row() == 0){
+        if (index.row() == 0) {
             return m_empty_label;
         }
-        KUndo2Command* currentCommand = const_cast<KUndo2Command*>(m_stack->command(index.row() - 1));
-        return currentCommand->isMerged()?m_stack->text(index.row() - 1)+"(Merged)":m_stack->text(index.row() - 1);
-    }
-    else if (role == Qt::DecorationRole) {
+        KUndo2Command *currentCommand = const_cast<KUndo2Command *>(m_stack->command(index.row() - 1));
+        return currentCommand->isMerged() ? m_stack->text(index.row() - 1) + "(Merged)" : m_stack->text(index.row() - 1);
+    } else if (role == Qt::DecorationRole) {
         if (index.row() > 0) {
-            const KUndo2Command* currentCommand = m_stack->command(index.row() - 1);
+            const KUndo2Command *currentCommand = m_stack->command(index.row() - 1);
             if (m_imageMap.contains(currentCommand)) {
                 return m_imageMap[currentCommand];
             }
@@ -248,27 +259,26 @@ void KisUndoModel::addImage(int idx)
         return;
     }
 
-    const KUndo2Command* currentCommand = m_stack->command(idx-1);
+    const KUndo2Command *currentCommand = m_stack->command(idx - 1);
     if (m_stack->count() == idx && !m_imageMap.contains(currentCommand)) {
         KisImageWSP historyImage = m_canvas->viewManager()->image();
         KisPaintDeviceSP paintDevice = historyImage->projection();
         QImage image = paintDevice->createThumbnail(32, 32,
-                                                    KoColorConversionTransformation::InternalRenderingIntent,
-                                                    KoColorConversionTransformation::InternalConversionFlags);
+                       KoColorConversionTransformation::InternalRenderingIntent,
+                       KoColorConversionTransformation::InternalConversionFlags);
         m_imageMap[currentCommand] = image;
     }
 
-    QList<const KUndo2Command*> list;
+    QList<const KUndo2Command *> list;
 
     for (int i = 0; i < m_stack->count(); ++i) {
         list << m_stack->command(i);
     }
 
-    for (QMap<const KUndo2Command*, QImage>:: iterator it = m_imageMap.begin(); it != m_imageMap.end();) {
+    for (QMap<const KUndo2Command *, QImage>:: iterator it = m_imageMap.begin(); it != m_imageMap.end();) {
         if (!list.contains(it.key())) {
             it = m_imageMap.erase(it);
-        }
-        else {
+        } else {
             ++it;
         }
     }

@@ -32,16 +32,16 @@
 static const QString percentStr(i18n("Percent (%)"));
 
 DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double resolution)
-        : KDialog(parent)
-        , m_keepAspect(true)
-        , m_aspectRatio((double)width / height)
-        , m_resolution(resolution)
-        , m_originalWidth(width)
-        , m_originalHeight(height)
-        , m_newWidth(width)
-        , m_newHeight(height)
-        , m_xOffset(0)
-        , m_yOffset(0)
+    : KDialog(parent)
+    , m_keepAspect(true)
+    , m_aspectRatio((double)width / height)
+    , m_resolution(resolution)
+    , m_originalWidth(width)
+    , m_originalHeight(height)
+    , m_newWidth(width)
+    , m_newHeight(height)
+    , m_xOffset(0)
+    , m_yOffset(0)
 {
     setCaption(i18n("Resize Canvas"));
     setButtons(Ok | Cancel);
@@ -88,7 +88,6 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
     m_page->aspectRatioBtn->setKeepAspectRatio(cfg.readEntry("CanvasSize/KeepAspectRatio", false));
     m_page->constrainProportionsCkb->setChecked(cfg.readEntry("CanvasSize/ConstrainProportions", false));
     m_keepAspect = cfg.readEntry("CanvasSize/KeepAspectRatio", false);
-
 
     m_group = new QButtonGroup(m_page);
     m_group->addButton(m_page->topLeft, NORTH_WEST);
@@ -197,7 +196,6 @@ void DlgCanvasSize::slotAspectChanged(bool keep)
     m_page->constrainProportionsCkb->blockSignals(false);
 
     m_keepAspect = keep;
-
 
     if (keep) {
         // size values may be out of sync, so we need to reset it to defaults
@@ -526,7 +524,7 @@ void DlgCanvasSize::loadAnchorIcons()
     m_anchorIcons[NORTH] = koIcon("arrow_north");
     m_anchorIcons[NORTH_EAST] = koIcon("arrow_north_east");
     m_anchorIcons[EAST] = koIcon("arrow_east");
-    m_anchorIcons[CENTER] = koIconWanted("though currently m_anchorIcons[CENTER] is not used","arrow_center");
+    m_anchorIcons[CENTER] = koIconWanted("though currently m_anchorIcons[CENTER] is not used", "arrow_center");
     m_anchorIcons[WEST] = koIcon("arrow_west");
     m_anchorIcons[SOUTH_WEST] = koIcon("arrow_south_west");
     m_anchorIcons[SOUTH] = koIcon("arrow_south");
@@ -642,7 +640,9 @@ void DlgCanvasSize::updateButtons(int forceId)
 
 void DlgCanvasSize::updateOffset(int id)
 {
-    if (id == -1) return;
+    if (id == -1) {
+        return;
+    }
 
     double xOffset;
     double yOffset;

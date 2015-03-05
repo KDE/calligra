@@ -25,7 +25,6 @@
 #include "kis_transform_worker.h"
 #include "processing/kis_transform_processing_visitor.h"
 
-
 KisMirrorProcessingVisitor::KisMirrorProcessingVisitor(const QRect &bounds, Qt::Orientation orientation)
     : m_bounds(bounds), m_orientation(orientation)
 {
@@ -37,8 +36,8 @@ void KisMirrorProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndo
     KisTransaction transaction(dev);
 
     qreal axis = m_orientation == Qt::Horizontal ?
-        m_bounds.x() + 0.5 * m_bounds.width() :
-        m_bounds.y() + 0.5 * m_bounds.height();
+                 m_bounds.x() + 0.5 * m_bounds.width() :
+                 m_bounds.y() + 0.5 * m_bounds.height();
 
     KisTransformWorker::mirror(dev, axis, m_orientation);
 

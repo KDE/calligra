@@ -42,44 +42,44 @@ public:
     virtual tristate remove(KexiPart::Item &item);
 
     virtual tristate rename(KexiPart::Item &item,
-                            const QString& newName);
+                            const QString &newName);
 
     class TempData : public KexiWindowData
     {
     public:
-        explicit TempData(QObject* parent);
+        explicit TempData(QObject *parent);
         KexiDB::TableSchema *table;
         /*! true, if \a table member has changed in previous view. Used on view switching.
          We're checking this flag to see if we should refresh data for DataViewMode. */
-    bool tableSchemaChangedInPreviousView;
+        bool tableSchemaChangedInPreviousView;
     };
 
     static tristate askForClosingObjectsUsingTableSchema(
-        QWidget *parent, KexiDB::Connection& conn,
-        KexiDB::TableSchema& table, const QString& msg);
+        QWidget *parent, KexiDB::Connection &conn,
+        KexiDB::TableSchema &table, const QString &msg);
 
-    virtual KLocalizedString i18nMessage(const QString& englishMessage,
-                                         KexiWindow* window) const;
+    virtual KLocalizedString i18nMessage(const QString &englishMessage,
+                                         KexiWindow *window) const;
 
-    KexiLookupColumnPage* lookupColumnPage() const;
+    KexiLookupColumnPage *lookupColumnPage() const;
 
 protected:
-    virtual KexiWindowData* createWindowData(KexiWindow* window);
+    virtual KexiWindowData *createWindowData(KexiWindow *window);
 
-    virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
+    virtual KexiView *createView(QWidget *parent, KexiWindow *window,
+                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant> *staticObjectArgs = 0);
 
     virtual void initPartActions();
     virtual void initInstanceActions();
 
     virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
-    virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
+    virtual KexiDB::SchemaData *loadSchemaData(KexiWindow *window, const KexiDB::SchemaData &sdata,
             Kexi::ViewMode viewMode, bool *ownedByWindow);
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

@@ -44,8 +44,9 @@ QPointF KisWarpTransformWorker::affineTransformMath(QPointF v, QVector<QPointF> 
     QVarLengthArray<QPointF> pHat(nbPoints), qHat(nbPoints);
 
     for (int i = 0; i < nbPoints; ++i) {
-        if (v == p[i])
+        if (v == p[i]) {
             return q[i];
+        }
 
         QVector2D tmp(p[i] - v);
         w[i] = 1. / pow(tmp.lengthSquared(), alpha);
@@ -70,8 +71,9 @@ QPointF KisWarpTransformWorker::affineTransformMath(QPointF v, QVector<QPointF> 
 
     qreal A_tmp_inv[4];
 
-    if (det_A_tmp == 0)
+    if (det_A_tmp == 0) {
         return v;
+    }
 
     A_tmp_inv[0] = A_tmp[3] / det_A_tmp;
     A_tmp_inv[1] = - A_tmp[1] / det_A_tmp;
@@ -101,8 +103,9 @@ QPointF KisWarpTransformWorker::similitudeTransformMath(QPointF v, QVector<QPoin
     QVarLengthArray<QPointF> pHat(nbPoints), qHat(nbPoints);
 
     for (int i = 0; i < nbPoints; ++i) {
-        if (v == p[i])
+        if (v == p[i]) {
             return q[i];
+        }
 
         QVector2D tmp(p[i] - v);
         w[i] = 1. / pow(tmp.lengthSquared(), alpha);
@@ -148,8 +151,9 @@ QPointF KisWarpTransformWorker::rigidTransformMath(QPointF v, QVector<QPointF> p
     QVarLengthArray<QPointF> pHat(nbPoints), qHat(nbPoints);
 
     for (int i = 0; i < nbPoints; ++i) {
-        if (v == p[i])
+        if (v == p[i]) {
             return q[i];
+        }
 
         QVector2D tmp(p[i] - v);
         w[i] = 1. / pow(tmp.lengthSquared(), alpha);
@@ -183,13 +187,13 @@ QPointF KisWarpTransformWorker::rigidTransformMath(QPointF v, QVector<QPointF> p
 }
 
 KisWarpTransformWorker::KisWarpTransformWorker(WarpType warpType, KisPaintDeviceSP dev, QVector<QPointF> origPoint, QVector<QPointF> transfPoint, qreal alpha, KoUpdater *progress)
-        : m_dev(dev), m_progress(progress)
+    : m_dev(dev), m_progress(progress)
 {
     m_origPoint = origPoint;
     m_transfPoint = transfPoint;
     m_alpha = alpha;
 
-    switch(warpType) {
+    switch (warpType) {
     case AFFINE_TRANSFORM:
         m_warpMathFunction = &affineTransformMath;
         break;
@@ -209,8 +213,7 @@ KisWarpTransformWorker::~KisWarpTransformWorker()
 {
 }
 
-struct KisWarpTransformWorker::FunctionTransformOp
-{
+struct KisWarpTransformWorker::FunctionTransformOp {
     FunctionTransformOp(KisWarpTransformWorker::WarpMathFunction function,
                         const QVector<QPointF> &p,
                         const QVector<QPointF> &q,
@@ -222,7 +225,8 @@ struct KisWarpTransformWorker::FunctionTransformOp
     {
     }
 
-    QPointF operator() (const QPointF &pt) const {
+    QPointF operator()(const QPointF &pt) const
+    {
         return m_function(pt, m_p, m_q, m_alpha);
     }
 
@@ -236,8 +240,8 @@ void KisWarpTransformWorker::run()
 {
 
     if (!m_warpMathFunction ||
-        m_origPoint.isEmpty() ||
-        m_origPoint.size() != m_transfPoint.size()) {
+            m_origPoint.isEmpty() ||
+            m_origPoint.size() != m_transfPoint.size()) {
 
         return;
     }
@@ -263,12 +267,12 @@ void KisWarpTransformWorker::run()
 }
 
 QImage KisWarpTransformWorker::transformQImage(WarpType warpType,
-                                               const QVector<QPointF> &origPoint,
-                                               const QVector<QPointF> &transfPoint,
-                                               qreal alpha,
-                                               const QImage& srcImage,
-                                               const QPointF &srcQImageOffset,
-                                               QPointF *newOffset)
+        const QVector<QPointF> &origPoint,
+        const QVector<QPointF> &transfPoint,
+        qreal alpha,
+        const QImage &srcImage,
+        const QPointF &srcQImageOffset,
+        QPointF *newOffset)
 {
     KIS_ASSERT_RECOVER(srcImage.format() == QImage::Format_ARGB32) {
         return QImage();
@@ -287,12 +291,14 @@ QImage KisWarpTransformWorker::transformQImage(WarpType warpType,
         warpMathFunction = &rigidTransformMath;
         break;
     default:
-        KIS_ASSERT_RECOVER(0 && "Unknown warp mode") { return QImage(); }
+        KIS_ASSERT_RECOVER(0 && "Unknown warp mode") {
+            return QImage();
+        }
     }
 
     if (!warpMathFunction ||
-        origPoint.isEmpty() ||
-        origPoint.size() != transfPoint.size()) {
+            origPoint.isEmpty() ||
+            origPoint.size() != transfPoint.size()) {
 
         return srcImage;
     }
@@ -318,7 +324,7 @@ QImage KisWarpTransformWorker::transformQImage(WarpType warpType,
         QPolygonF::iterator it = testPoints.begin() + 1;
 
         while (it != testPoints.end()) {
-            it = testPoints.insert(it, 0.5 * (*it + *(it - 1)));
+            it = testPoints.insert(it, 0.5 * (*it + * (it - 1)));
             it += 2;
         }
 

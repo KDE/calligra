@@ -25,7 +25,6 @@
 
 #include "kis_hatching_paintop_settings_widget.h"
 
-
 class KisHatchingPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
 
@@ -66,9 +65,9 @@ public:
     double separationsensorvalue;
     double thicknesssensorvalue;
 
-    void initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const;
+    void initializeTwin(KisHatchingPaintOpSettings *convenienttwin) const;
     using KisPropertiesConfiguration::fromXML;
-    virtual void fromXML(const QDomElement&);
+    virtual void fromXML(const QDomElement &);
 
 };
 

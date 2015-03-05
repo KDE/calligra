@@ -28,10 +28,10 @@
 #else
 #pragma WARNING( not threadsafe )
 #endif
-KexiMainWindowIface* kexiMainWindow = 0;
+KexiMainWindowIface *kexiMainWindow = 0;
 
 KexiMainWindowIface::KexiMainWindowIface()
-        : KexiSharedActionHost(this)
+    : KexiSharedActionHost(this)
 {
     kexiMainWindow = this; //for singleton
 }
@@ -40,12 +40,12 @@ KexiMainWindowIface::~KexiMainWindowIface()
 {
 }
 
-KexiMainWindowIface* KexiMainWindowIface::global()
+KexiMainWindowIface *KexiMainWindowIface::global()
 {
     return kexiMainWindow;
 }
 
-QWidget* KexiMainWindowIface::thisWidget()
+QWidget *KexiMainWindowIface::thisWidget()
 {
-    return dynamic_cast<QWidget*>(this);
+    return dynamic_cast<QWidget *>(this);
 }

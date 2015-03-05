@@ -20,12 +20,12 @@
 
 #include <krita_export.h>
 
-class KRITAIMAGE_EXPORT KisPaintDeviceWriter {
+class KRITAIMAGE_EXPORT KisPaintDeviceWriter
+{
 public:
     virtual ~KisPaintDeviceWriter() {}
     virtual qint64 write(const QByteArray &data) = 0;
-    virtual qint64 write(const char* data, qint64 length) = 0;
+    virtual qint64 write(const char *data, qint64 length) = 0;
 };
-
 
 #endif // KIS_PAINT_DEVICE_WRITER_H

@@ -42,22 +42,22 @@ public:
         Position,
         Expanded
     };
-    explicit CQTextDocumentNotesModel(QObject* parent = 0);
+    explicit CQTextDocumentNotesModel(QObject *parent = 0);
     virtual ~CQTextDocumentNotesModel();
 
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual int rowCount(const QModelIndex &parent) const;
     int count() const;
 
     Q_INVOKABLE void toggleExpanded(int index);
-    void addEntry(const QString& text, const QString& image, const QString& color, KoShape* shape);
+    void addEntry(const QString &text, const QString &image, const QString &color, KoShape *shape);
 
 Q_SIGNALS:
     void countChanged();
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // CQTEXTDOCUMENTNOTESMODEL_H

@@ -102,7 +102,7 @@ public:
         LAYER_COMPS       = 1065,         /* 0x0429 - (Photoshop CS) Layer Comps. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
         ALTERNATE_DUOTONE = 1066,         /* 0x042A - (Photoshop CS) Alternate Duotone Colors. 2 bytes (version = 1), 2 bytes count, following is repeated for each count: [ Color: 2 bytes for space followed by 4 * 2 byte color component ], following this is another 2 byte count, usually 256, followed by Lab colors one byte each for L, a, b. This resource is not read or used by Photoshop. */
         ALTERNATE_SPOT    = 1067,         /* 0x042B - (Photoshop CS)Alternate Spot Colors. 2 bytes (version = 1), 2 bytes channel count, following is repeated for each count: 4 bytes channel ID, Color: 2 bytes for space followed by 4 * 2 byte color component. This resource is not read or used by Photoshop. */
-        LAYER_SELECTION_ID =1069,         /* 0x042D - (Photoshop CS2) Layer Selection ID(s). 2 bytes count, following is repeated for each count: 4 bytes layer ID */
+        LAYER_SELECTION_ID = 1069,        /* 0x042D - (Photoshop CS2) Layer Selection ID(s). 2 bytes count, following is repeated for each count: 4 bytes layer ID */
 
         HDR_TONING        = 1070,         /* 0x042E - (Photoshop CS2) HDR Toning information */
         CS2_PRINT_INFO    = 1071,         /* 0x042F - (Photoshop CS2) Print info */
@@ -140,17 +140,16 @@ public:
         PRINT_FLAGS_2     = 10000         /* 0x2710 - Print flags */
     };
 
-
     PSDResourceSection();
     ~PSDResourceSection();
 
-    bool read(QIODevice* io);
-    bool write(QIODevice* io);
+    bool read(QIODevice *io);
+    bool write(QIODevice *io);
     bool valid();
 
     static QString idToString(PSDResourceID id);
 
-    QMap<PSDResourceID, PSDResourceBlock*> resources;
+    QMap<PSDResourceID, PSDResourceBlock *> resources;
 
     QString error;
 };

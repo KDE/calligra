@@ -31,12 +31,12 @@
 #include <QTimer>
 
 GoogleDocumentService::GoogleDocumentService(OnlineDocument::DocumentType type)
-          : newInformation(true)
-          , waitingForDoc(false)
-          , haveDocAuthToken(false)
-          , documentList(0)
-          , loggedin(false)
-          , m_type(type)
+    : newInformation(true)
+    , waitingForDoc(false)
+    , haveDocAuthToken(false)
+    , documentList(0)
+    , loggedin(false)
+    , m_type(type)
 {
     //QNetworkProxy::setApplicationProxy(QNetworkProxy(QNetworkProxy::HttpProxy, "proxy.jf.intel.com", 911));
     connect(&networkManager, SIGNAL(finished(QNetworkReply*)),
@@ -55,12 +55,12 @@ GoogleDocumentService::~GoogleDocumentService()
     gHandler = 0;
 }
 
-void GoogleDocumentService::clientLogin(const QString & username, const QString & password)
+void GoogleDocumentService::clientLogin(const QString &username, const QString &password)
 {
     QByteArray data;
     data.append(QString("accountType=HOSTED_OR_GOOGLE&Email=" + username + "&Passwd=" + password).toUtf8());
 
-    if(!haveDocAuthToken) {
+    if (!haveDocAuthToken) {
         data.append(QString("&service=writely&source=Calligrav2").toUtf8());
         this->username = username;
         this->password = password;
@@ -111,8 +111,8 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
             QString text(networkReply->readAll());
             text = text.right(text.length() - text.indexOf("Auth=") - 5);
             authToken = QString("GoogleLogin auth=") + text.left(text.indexOf('\n'));
-            if(authToken.length() > 20) {
-                if(!haveDocAuthToken) {
+            if (authToken.length() > 20) {
+                if (!haveDocAuthToken) {
                     docAuthToken = authToken;
                     haveDocAuthToken = true;
                     qDebug() << "Received Doc token = " << docAuthToken;
@@ -126,8 +126,7 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
                 listDocuments();
                 emit userAuthenticated(loggedin, "");
             }
-        }
-        else if (waitingForDoc) {
+        } else if (waitingForDoc) {
             QByteArray data = networkReply->readAll();
             QFile file(QDir::tempPath() + QLatin1Char('/') + documentList->currentDocument());
             file.open(QIODevice::ReadWrite);
@@ -137,8 +136,7 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
             emit receivedDocument(file.fileName());
             waitingForDoc = false;
             showDocumentListWindow(false);
-        }
-        else {
+        } else {
             QByteArray bytAry = networkReply->readAll();
 //            qDebug() << bytAry;
 
@@ -169,17 +167,16 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
 
 void GoogleDocumentService::getDocument()
 {
-    if(gHandler->documentList()->documentsCount() > 0) {
+    if (gHandler->documentList()->documentsCount() > 0) {
         emit showingDocumentList();
         documentList = new DocumentListWindow(this, gHandler->documentList());
-    }
-    else {
+    } else {
         QMessageBox msgBox(QMessageBox::Information, i18n("Online Document Services"), i18n("No Documents Found !!!"));
         msgBox.exec();
     }
 }
 
-void GoogleDocumentService::downloadDocument(const QString & _url, const QString & _type)
+void GoogleDocumentService::downloadDocument(const QString &_url, const QString &_type)
 {
     authToken = docAuthToken;
     QString url = _url;
@@ -187,13 +184,12 @@ void GoogleDocumentService::downloadDocument(const QString & _url, const QString
     url.replace("docId", "docID", Qt::CaseInsensitive);
     QString exportFormat;
 
-    if(QString::compare(type, "spreadsheet", Qt::CaseInsensitive) == 0) {
+    if (QString::compare(type, "spreadsheet", Qt::CaseInsensitive) == 0) {
         exportFormat = "&exportFormat=ods&format=ods";
         authToken = spreadAuthToken;
-    } else if(QString::compare(type, "presentation", Qt::CaseInsensitive) == 0) {
+    } else if (QString::compare(type, "presentation", Qt::CaseInsensitive) == 0) {
         exportFormat = "&exportFormat=ppt&format=ppt";
-    }
-    else if(QString::compare(type, "document", Qt::CaseInsensitive) == 0) {
+    } else if (QString::compare(type, "document", Qt::CaseInsensitive) == 0) {
         exportFormat = "&exportFormat=odt&format=odt";
     }
 
@@ -206,8 +202,9 @@ void GoogleDocumentService::downloadDocument(const QString & _url, const QString
     requestHeader.setRawHeader("Authorization", authToken.toUtf8());
 
     QList<QByteArray> headerlist = requestHeader.rawHeaderList();
-    foreach (const QByteArray &element, headerlist)
+    foreach (const QByteArray &element, headerlist) {
         qDebug() << element << requestHeader.rawHeader(element);
+    }
 
     networkManager.get(requestHeader);
 
@@ -218,8 +215,9 @@ void GoogleDocumentService::downloadDocument(const QString & _url, const QString
 void GoogleDocumentService::showDocumentListWindow(bool visible)
 {
     if (visible) {
-        if (documentList)
+        if (documentList) {
             documentList->show();
+        }
     } else {
         documentList->hideDialog();
     }

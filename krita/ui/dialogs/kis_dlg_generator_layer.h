@@ -44,10 +44,10 @@ public:
      * @param name the proposed name for this layer
      * @param parent the widget parent of this dialog
      */
-    KisDlgGeneratorLayer(const QString & name, KisViewManager *view, QWidget *parent);
+    KisDlgGeneratorLayer(const QString &name, KisViewManager *view, QWidget *parent);
 
-    void setConfiguration(const KisFilterConfiguration * config);
-    KisFilterConfiguration * configuration() const;
+    void setConfiguration(const KisFilterConfiguration *config);
+    KisFilterConfiguration *configuration() const;
     QString layerName() const;
 
 protected Q_SLOTS:

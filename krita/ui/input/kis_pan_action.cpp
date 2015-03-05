@@ -36,7 +36,7 @@ class KisPanAction::Private
 public:
     Private() : panDistance(10) { }
 
-        QPointF averagePoint( QTouchEvent* event );
+    QPointF averagePoint(QTouchEvent *event);
 
     const int panDistance;
 
@@ -86,51 +86,52 @@ void KisPanAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     switch (shortcut) {
-        case PanModeShortcut: {
-            QTouchEvent *tevent = dynamic_cast<QTouchEvent*>(event);
-            if(tevent)
-                d->lastPosition = d->averagePoint(tevent);
-            break;
+    case PanModeShortcut: {
+        QTouchEvent *tevent = dynamic_cast<QTouchEvent *>(event);
+        if (tevent) {
+            d->lastPosition = d->averagePoint(tevent);
         }
-        case PanLeftShortcut:
-            inputManager()->canvas()->canvasController()->pan(QPoint(d->panDistance, 0));
-            break;
-        case PanRightShortcut:
-            inputManager()->canvas()->canvasController()->pan(QPoint(-d->panDistance, 0));
-            break;
-        case PanUpShortcut:
-            inputManager()->canvas()->canvasController()->pan(QPoint(0, d->panDistance));
-            break;
-        case PanDownShortcut:
-            inputManager()->canvas()->canvasController()->pan(QPoint(0, -d->panDistance));
-            break;
+        break;
+    }
+    case PanLeftShortcut:
+        inputManager()->canvas()->canvasController()->pan(QPoint(d->panDistance, 0));
+        break;
+    case PanRightShortcut:
+        inputManager()->canvas()->canvasController()->pan(QPoint(-d->panDistance, 0));
+        break;
+    case PanUpShortcut:
+        inputManager()->canvas()->canvasController()->pan(QPoint(0, d->panDistance));
+        break;
+    case PanDownShortcut:
+        inputManager()->canvas()->canvasController()->pan(QPoint(0, -d->panDistance));
+        break;
     }
 }
 
 void KisPanAction::inputEvent(QEvent *event)
 {
     switch (event->type()) {
-        case QEvent::Gesture: {
-            QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
-            if (gevent->activeGestures().at(0)->gestureType() == Qt::PanGesture) {
-                QPanGesture *pan = static_cast<QPanGesture*>(gevent->activeGestures().at(0));
-                inputManager()->canvas()->canvasController()->pan(-pan->delta().toPoint() * 0.2);
-            }
+    case QEvent::Gesture: {
+        QGestureEvent *gevent = static_cast<QGestureEvent *>(event);
+        if (gevent->activeGestures().at(0)->gestureType() == Qt::PanGesture) {
+            QPanGesture *pan = static_cast<QPanGesture *>(gevent->activeGestures().at(0));
+            inputManager()->canvas()->canvasController()->pan(-pan->delta().toPoint() * 0.2);
         }
-        case QEvent::TouchUpdate: {
-            QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
-            QPointF newPos = d->averagePoint(tevent);
-            QPointF delta = newPos - d->lastPosition;
-            // If this is enormously large, then we are likely in the process of ending the gesture,
-            // with fingers being lifted one by one from the perspective of our very speedy operations,
-            // and as such, ignore those big jumps.
-            if(delta.manhattanLength() < 50) {
-                inputManager()->canvas()->canvasController()->pan(-delta.toPoint());
-                d->lastPosition = newPos;
-            }
+    }
+    case QEvent::TouchUpdate: {
+        QTouchEvent *tevent = static_cast<QTouchEvent *>(event);
+        QPointF newPos = d->averagePoint(tevent);
+        QPointF delta = newPos - d->lastPosition;
+        // If this is enormously large, then we are likely in the process of ending the gesture,
+        // with fingers being lifted one by one from the perspective of our very speedy operations,
+        // and as such, ignore those big jumps.
+        if (delta.manhattanLength() < 50) {
+            inputManager()->canvas()->canvasController()->pan(-delta.toPoint());
+            d->lastPosition = newPos;
         }
-        default:
-            break;
+    }
+    default:
+        break;
     }
 
     KisAbstractInputAction::inputEvent(event);
@@ -142,19 +143,19 @@ void KisPanAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
     inputManager()->canvas()->canvasController()->pan(relMovement.toPoint());
 }
 
-QPointF KisPanAction::Private::averagePoint( QTouchEvent* event )
+QPointF KisPanAction::Private::averagePoint(QTouchEvent *event)
 {
     QPointF result;
     int count = 0;
 
-    foreach( QTouchEvent::TouchPoint point, event->touchPoints() ) {
-        if( point.state() != Qt::TouchPointReleased ) {
+    foreach (QTouchEvent::TouchPoint point, event->touchPoints()) {
+        if (point.state() != Qt::TouchPointReleased) {
             result += point.screenPos();
             count++;
         }
     }
 
-    if( count > 0 ) {
+    if (count > 0) {
         return result / count;
     } else {
         return QPointF();

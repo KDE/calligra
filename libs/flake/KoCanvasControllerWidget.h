@@ -45,7 +45,7 @@ public:
      * Constructor.
      * @param parent the parent this widget will belong to
      */
-    explicit KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent = 0);
+    explicit KoCanvasControllerWidget(KActionCollection *actionCollection, QWidget *parent = 0);
     virtual ~KoCanvasControllerWidget();
 
     /// Reimplemented from QObject
@@ -188,7 +188,7 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void activate())
 
-    Private * const d;
+    Private *const d;
 };
 
 #endif

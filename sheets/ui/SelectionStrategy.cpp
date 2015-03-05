@@ -39,8 +39,8 @@ public:
 
 SelectionStrategy::SelectionStrategy(CellToolBase *cellTool,
                                      const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-        : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
-        , d(new Private)
+    : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
+    , d(new Private)
 {
     d->startCell = Cell();
 

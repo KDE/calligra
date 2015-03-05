@@ -32,7 +32,7 @@ public:
     void setInnerRingRadiusFraction(qreal newFraction);
 
 protected:
-    void paint(QPainter*);
+    void paint(QPainter *);
     KoColor selectColor(int x, int y);
     bool containsPointInComponentCoords(int x, int y) const;
 
@@ -42,7 +42,7 @@ private:
     int outerRadius() const;
 
     QImage m_pixelCache;
-    const KoColorSpace* m_cachedColorSpace;
+    const KoColorSpace *m_cachedColorSpace;
     int m_cachedSize;
     qreal m_lastHue;
     QList<QRgb> m_cachedColors;

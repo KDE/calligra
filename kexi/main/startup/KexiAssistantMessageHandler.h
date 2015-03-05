@@ -37,15 +37,15 @@ protected:
                                           const QString &details = QString());
 
     //! Implementation for KexiDB::MessageHandler.
-    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString& msg = QString());
+    virtual void showErrorMessageInternal(KexiDB::Object *obj, const QString &msg = QString());
 
-    virtual QWidget* calloutWidget() const = 0;
+    virtual QWidget *calloutWidget() const = 0;
 
-    KexiContextMessageWidget* messageWidget();
+    KexiContextMessageWidget *messageWidget();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KEXIASSISTANTMESSAGEHANDLER_H

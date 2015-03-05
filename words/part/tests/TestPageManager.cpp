@@ -465,8 +465,9 @@ void TestPageManager::testPageNumber()
 void TestPageManager::testPageTraversal()
 {
     KWPageManager manager;
-    for (int i = 1; i < 6; ++i)
+    for (int i = 1; i < 6; ++i) {
         manager.appendPage();
+    }
     KWPage page = manager.begin();
     QCOMPARE(page.pageNumber(), 1);
     page = page.next();
@@ -547,7 +548,6 @@ void TestPageManager::testPageSpreadLayout()
 
     QCOMPARE(manager.pageNumber(QPointF(10, 200)), 4);
     QCOMPARE(manager.pageNumber(QPointF(10, 151)), 4);
-
 
     KWPage four = page.next();
     QCOMPARE(four.pageNumber(), 4);
@@ -632,7 +632,7 @@ void TestPageManager::testPadding()
 void TestPageManager::testPageOffset()
 {
     KWPageManager *pageManager = new KWPageManager();
-    for (int i=0; i < 500; ++i) {
+    for (int i = 0; i < 500; ++i) {
         KWPage page = pageManager->appendPage();
     }
 
@@ -756,7 +756,6 @@ void TestPageManager::testRemovePageSpread()
     QCOMPARE(pageSpread1.pageSide(), KWPage::PageSpread);
     QCOMPARE(pageSpread2.pageSide(), KWPage::PageSpread);
     QCOMPARE(manager.pageCount(), 5);
-
 
     manager.removePage(pageSpread1); // remove pages 2&3
     QVERIFY(!pageSpread1.isValid());

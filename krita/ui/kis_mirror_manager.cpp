@@ -29,7 +29,7 @@
 
 #include "canvas/kis_mirror_axis.h"
 
-KisMirrorManager::KisMirrorManager(KisViewManager* view) : QObject(view)
+KisMirrorManager::KisMirrorManager(KisViewManager *view) : QObject(view)
     , m_imageView(0)
 {
 
@@ -40,7 +40,7 @@ KisMirrorManager::~KisMirrorManager()
 
 }
 
-void KisMirrorManager::setup(KActionCollection * collection)
+void KisMirrorManager::setup(KActionCollection *collection)
 {
     m_mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
     m_mirrorCanvas->setChecked(false);
@@ -62,7 +62,7 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
         m_imageView->canvasBase()->addDecoration(new KisMirrorAxis(m_imageView->viewManager()->resourceProvider(), m_imageView));
     }
     if (m_imageView && decoration()) {
-        connect(m_mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(m_imageView->canvasController()), SLOT(mirrorCanvas(bool)));
+        connect(m_mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController *>(m_imageView->canvasController()), SLOT(mirrorCanvas(bool)));
     }
     updateAction();
 }
@@ -77,10 +77,10 @@ void KisMirrorManager::updateAction()
     }
 }
 
-KisMirrorAxis* KisMirrorManager::decoration()
+KisMirrorAxis *KisMirrorManager::decoration()
 {
     if (m_imageView && m_imageView->canvasBase()) {
-        return dynamic_cast<KisMirrorAxis*>(m_imageView->canvasBase()->decoration("mirror_axis"));
+        return dynamic_cast<KisMirrorAxis *>(m_imageView->canvasBase()->decoration("mirror_axis"));
     }
     return 0;
 }

@@ -32,12 +32,12 @@
 
 KoPAMasterPageDialog::KoPAMasterPageDialog(KoPADocument *document, KoPAMasterPage *activeMaster, QWidget *parent)
     : KDialog(parent),
-    m_document(document)
+      m_document(document)
 {
     QSize iconSize(128, 128);
     QWidget *mainWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout;
-    if(m_document->pageType() == KoPageApp::Slide ) {
+    if (m_document->pageType() == KoPageApp::Slide) {
         layout->addWidget(new QLabel(i18n("Select a master slide design:"), mainWidget));
         setCaption(i18n("Master Slide"));
     } else {
@@ -66,12 +66,12 @@ KoPAMasterPageDialog::KoPAMasterPageDialog(KoPADocument *document, KoPAMasterPag
     m_listView->setCurrentIndex(index);
 
     connect(m_listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-                this, SLOT(selectionChanged()));
+            this, SLOT(selectionChanged()));
 
     mainWidget->setLayout(layout);
     setMainWidget(mainWidget);
     setModal(true);
-    setButtons(Ok|Cancel);
+    setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 }
 

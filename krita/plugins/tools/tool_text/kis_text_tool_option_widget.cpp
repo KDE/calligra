@@ -19,10 +19,10 @@
 
 #include "kis_text_tool_option_widget.h"
 
-KisTextToolOptionWidget::KisTextToolOptionWidget(QWidget* parent): QWidget(parent)
+KisTextToolOptionWidget::KisTextToolOptionWidget(QWidget *parent): QWidget(parent)
 {
     setupUi(this);
-    
+
     m_buttonGroup = new QButtonGroup(this);
     m_buttonGroup->setExclusive(true);
     m_buttonGroup->addButton(buttonArtistic);
@@ -42,8 +42,6 @@ KisPainter::FillStyle KisTextToolOptionWidget::style()
 {
     return static_cast<KisPainter::FillStyle>(cmbStyle->currentIndex() + 1);
 }
-
-
 
 void KisTextToolOptionWidget::modeChanged(int mode)
 {

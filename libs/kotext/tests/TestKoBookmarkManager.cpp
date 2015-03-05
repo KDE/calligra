@@ -36,7 +36,7 @@ void TestKoBookmarkManager::testCreation()
     KoBookmarkManager *manager = new KoBookmarkManager();
     Q_ASSERT(manager);
 
-    KoBookmark* bm = manager->bookmark("bla");
+    KoBookmark *bm = manager->bookmark("bla");
     Q_ASSERT(bm == 0); Q_UNUSED(bm);
 
     QList<QString> bmlist = manager->bookmarkNameList();
@@ -44,7 +44,6 @@ void TestKoBookmarkManager::testCreation()
 
     delete manager;
 }
-
 
 void TestKoBookmarkManager::testInsertAndRetrieve()
 {

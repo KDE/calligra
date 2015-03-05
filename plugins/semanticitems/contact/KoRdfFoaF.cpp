@@ -38,7 +38,6 @@
 
 using namespace Soprano;
 
-
 KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *rdf)
     : KoRdfSemanticItem(parent, rdf)
 {
@@ -61,13 +60,12 @@ KoRdfFoaF::~KoRdfFoaF()
     kDebug(30015) << "~KoRdfFoaF() this:" << this << " name:" << name();
 }
 
-
 QString KoRdfFoaF::name() const
 {
     return m_name;
 }
 
-QWidget* KoRdfFoaF::createEditor(QWidget * parent)
+QWidget *KoRdfFoaF::createEditor(QWidget *parent)
 {
     QWidget *ret = new QWidget(parent);
     editWidget.setupUi(ret);
@@ -93,7 +91,7 @@ void KoRdfFoaF::updateFromEditorData()
     updateTriple(m_homePage, editWidget.url->text(), predBase + "homepage");
     updateTriple(m_phone, editWidget.phone->text(), predBase + "phone");
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
+        const_cast<KoDocumentRdf *>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 }
 
@@ -203,12 +201,12 @@ void KoRdfFoaF::saveToKABC()
     item.setMimeType(KABC::Addressee::mimeType());
 
     Akonadi::ItemCreateJob *itemCreateJob = new Akonadi::ItemCreateJob(item, collection);
-    connect(itemCreateJob, SIGNAL(result(KJob*) ), SLOT(onCreateJobFinished(KJob*)));
+    connect(itemCreateJob, SIGNAL(result(KJob*)), SLOT(onCreateJobFinished(KJob*)));
 #endif
 }
 
 #ifdef KDEPIMLIBS_FOUND
-void KoRdfFoaF::onCreateJobFinished( KJob *job )
+void KoRdfFoaF::onCreateJobFinished(KJob *job)
 {
     if (job->error()) {
         kDebug(30015) << "Could not add entry:" << name();
@@ -217,7 +215,6 @@ void KoRdfFoaF::onCreateJobFinished( KJob *job )
     }
 }
 #endif
-
 
 void KoRdfFoaF::exportToFile(const QString &fileNameConst) const
 {

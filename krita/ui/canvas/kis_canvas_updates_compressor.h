@@ -25,7 +25,6 @@
 
 #include "kis_update_info.h"
 
-
 class KisCanvasUpdatesCompressor
 {
     typedef QList<KisUpdateInfoSP> UpdateInfoList;

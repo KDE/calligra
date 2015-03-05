@@ -21,11 +21,10 @@
 #ifndef KCHART_FORMAT_ERRORBAR_DIALOG_DIALOG_H
 #define KCHART_FORMAT_ERRORBAR_DIALOG_DIALOG_H
 
-
 #include "ui_FormatErrorBarDialog.h"
 
-
-namespace KChart {
+namespace KChart
+{
 
 class FormatErrorBarDialog : public QDialog, public Ui::FormatErrorBarDialog
 {
@@ -43,6 +42,5 @@ private Q_SLOTS:
 };
 
 } // Namespace KChart
-
 
 #endif // KCHART_FORMAT_ERRORBAR_DIALOG_H

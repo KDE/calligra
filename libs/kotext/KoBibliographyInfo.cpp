@@ -28,7 +28,7 @@
 
 int KoBibliographyInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, const QString &styleName)
 {
-    KoParagraphStyle * style = sharedLoadingData->paragraphStyle(styleName, true);
+    KoParagraphStyle *style = sharedLoadingData->paragraphStyle(styleName, true);
     if (style) {
         return style->styleId();
     }
@@ -37,7 +37,7 @@ int KoBibliographyInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadin
 }
 
 KoBibliographyInfo::KoBibliographyInfo()
-  : m_generator(0)
+    : m_generator(0)
 {
 }
 
@@ -50,12 +50,12 @@ KoBibliographyInfo::~KoBibliographyInfo()
     m_generator = 0; // just to be safe
 }
 
-void KoBibliographyInfo::loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement& element)
+void KoBibliographyInfo::loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element)
 {
     Q_ASSERT(element.localName() == "bibliography-source" && element.namespaceURI() == KoXmlNS::text);
 
     KoXmlElement p;
-    forEachElement(p, element) {
+    forEachElement (p, element) {
         if (p.namespaceURI() != KoXmlNS::text) {
             continue;
         }
@@ -65,63 +65,63 @@ void KoBibliographyInfo::loadOdf(KoTextSharedLoadingData *sharedLoadingData, con
             m_indexTitleTemplate.styleName = p.attribute("style-name");
             m_indexTitleTemplate.styleId = styleNameToStyleId(sharedLoadingData, m_indexTitleTemplate.styleName);
             m_indexTitleTemplate.text = p.text();
-        // second child
+            // second child
         } else if (p.localName() == "bibliography-entry-template") {
             BibliographyEntryTemplate bibEntryTemplate;
             bibEntryTemplate.styleName = p.attribute("style-name");
             bibEntryTemplate.bibliographyType = p.attribute("bibliography-type");
-            bibEntryTemplate.styleId = styleNameToStyleId(sharedLoadingData, bibEntryTemplate.styleName );
+            bibEntryTemplate.styleId = styleNameToStyleId(sharedLoadingData, bibEntryTemplate.styleName);
 
             KoXmlElement indexEntry;
-            forEachElement(indexEntry, p) {
+            forEachElement (indexEntry, p) {
                 if (indexEntry.namespaceURI() != KoXmlNS::text) {
                     continue;
                 }
 
                 if (indexEntry.localName() == "index-entry-bibliography") {
                     // use null String if the style name is not present, it means that we inherit it from the parent
-                    IndexEntryBibliography * entryBibliography = new IndexEntryBibliography(
+                    IndexEntryBibliography *entryBibliography = new IndexEntryBibliography(
                         indexEntry.attribute("style-name", QString())
                     );
 
                     entryBibliography->dataField = indexEntry.attribute("bibliography-data-field", "article");
-                    bibEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryBibliography));
+                    bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(entryBibliography));
 
                 } else if (indexEntry.localName() == "index-entry-span") {
-                    IndexEntrySpan * entrySpan = new IndexEntrySpan(indexEntry.attribute("style-name", QString()));
+                    IndexEntrySpan *entrySpan = new IndexEntrySpan(indexEntry.attribute("style-name", QString()));
                     entrySpan->text = indexEntry.text();
-                    bibEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entrySpan));
+                    bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(entrySpan));
 
                 } else if (indexEntry.localName() == "index-entry-tab-stop") {
-                    IndexEntryTabStop * entryTabStop = new IndexEntryTabStop(indexEntry.attribute("style-name", QString()));
+                    IndexEntryTabStop *entryTabStop = new IndexEntryTabStop(indexEntry.attribute("style-name", QString()));
 
-                    QString type = indexEntry.attribute("type","right"); // left or right
+                    QString type = indexEntry.attribute("type", "right"); // left or right
                     if (type == "left") {
                         entryTabStop->tab.type = QTextOption::LeftTab;
                     } else {
                         entryTabStop->tab.type = QTextOption::RightTab;
                     }
                     entryTabStop->setPosition(indexEntry.attribute("position", QString()));
-                    entryTabStop->tab.leaderText = indexEntry.attribute("leader-char",".");
-                    bibEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryTabStop));
+                    entryTabStop->tab.leaderText = indexEntry.attribute("leader-char", ".");
+                    bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(entryTabStop));
                 }
             }
             m_entryTemplate[bibEntryTemplate.bibliographyType] = bibEntryTemplate;
 
-        // third child
+            // third child
         }
     }// forEachElement
 }
 
-void KoBibliographyInfo::saveOdf(KoXmlWriter * writer) const
+void KoBibliographyInfo::saveOdf(KoXmlWriter *writer) const
 {
     writer->startElement("text:bibliography-source");
 
-        m_indexTitleTemplate.saveOdf(writer);
+    m_indexTitleTemplate.saveOdf(writer);
 
-        foreach (const BibliographyEntryTemplate &entry, m_entryTemplate.values()) {
-            entry.saveOdf(writer);
-        }
+    foreach (const BibliographyEntryTemplate &entry, m_entryTemplate.values()) {
+        entry.saveOdf(writer);
+    }
 
     writer->endElement();
 }
@@ -145,7 +145,7 @@ KoBibliographyInfo *KoBibliographyInfo::clone()
     newBibInfo->m_styleName = QString(m_name);
     newBibInfo->m_indexTitleTemplate = m_indexTitleTemplate;
 
-    for (int i = 0; i < m_entryTemplate.size() ; i++) {
+    for (int i = 0; i < m_entryTemplate.size(); i++) {
         newBibInfo->m_entryTemplate.insert(KoOdfBibliographyConfiguration::bibTypes.at(i),
                                            m_entryTemplate[KoOdfBibliographyConfiguration::bibTypes.at(i)]);
     }

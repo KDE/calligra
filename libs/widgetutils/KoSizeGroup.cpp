@@ -20,7 +20,6 @@
 #include "KoSizeGroup.h"
 #include "KoSizeGroupPrivate.h"
 
-
 KoSizeGroup::KoSizeGroup(QObject *parent, KoSizeGroup::mode mode, bool ignoreHidden)
     : QObject(parent)
     , d(new KoSizeGroupPrivate(this, mode, ignoreHidden))
@@ -68,6 +67,5 @@ void KoSizeGroup::removeWidget(QWidget *widget)
     d->removeWidget(widget);
     d->scheduleSizeUpdate();
 }
-
 
 #include <KoSizeGroup.moc>

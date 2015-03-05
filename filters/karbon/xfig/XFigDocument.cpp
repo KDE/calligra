@@ -20,11 +20,10 @@
 
 #include "XFigDocument.h"
 
-
 void
-XFigBoxObject::setPoints(const QVector<XFigPoint>& points)
+XFigBoxObject::setPoints(const QVector<XFigPoint> &points)
 {
-    if (points.count()!=5) {
+    if (points.count() != 5) {
         return;
     }
 
@@ -59,7 +58,7 @@ XFigBoxObject::setPoints(const QVector<XFigPoint>& points)
 }
 
 static void
-fillColorTable( QHash<int, QColor>& colorTable )
+fillColorTable(QHash<int, QColor> &colorTable)
 {
     static const unsigned int colorValues[24] = {
         // four shades of blue (dark to lighter)
@@ -87,25 +86,25 @@ fillColorTable( QHash<int, QColor>& colorTable )
     colorTable.insert(6, QColor(Qt::yellow));
     colorTable.insert(7, QColor(Qt::white));
 
-    for (int i = 8; i < 32; i++)
-        colorTable.insert(i, QColor(colorValues[i-8]));
+    for (int i = 8; i < 32; i++) {
+        colorTable.insert(i, QColor(colorValues[i - 8]));
+    }
 }
-
 
 XFigDocument::XFigDocument()
-  : m_PageOrientation(XFigPageOrientationUnknown)
-  , m_CoordSystemOriginType(XFigCoordSystemOriginTypeUnknown)
-  , m_UnitType(XFigUnitTypeUnknown)
-  , m_PageSizeType(XFigPageSizeUnknown)
-  , m_Resolution(1200)
+    : m_PageOrientation(XFigPageOrientationUnknown)
+    , m_CoordSystemOriginType(XFigCoordSystemOriginTypeUnknown)
+    , m_UnitType(XFigUnitTypeUnknown)
+    , m_PageSizeType(XFigPageSizeUnknown)
+    , m_Resolution(1200)
 {
-    fillColorTable( m_ColorTable );
+    fillColorTable(m_ColorTable);
 }
 
-const QColor*
+const QColor *
 XFigDocument::color(int id) const
 {
     QHash<int, QColor>::ConstIterator it = m_ColorTable.constFind(id);
 
-    return (it!=m_ColorTable.constEnd()) ? &it.value() : 0;
+    return (it != m_ColorTable.constEnd()) ? &it.value() : 0;
 }

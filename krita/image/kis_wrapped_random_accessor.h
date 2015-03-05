@@ -21,7 +21,6 @@
 
 #include "tiles3/kis_random_accessor.h"
 
-
 class KisWrappedRandomAccessor : public KisRandomAccessor2
 {
 public:

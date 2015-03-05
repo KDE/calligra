@@ -28,17 +28,16 @@
 #include "kis_paint_device.h"
 #include <KoProgressUpdater.h>
 
-struct KisRecordedNodeAction::Private
-{
-    Private(const KisNodeQueryPath& _path) : path(_path) {}
+struct KisRecordedNodeAction::Private {
+    Private(const KisNodeQueryPath &_path) : path(_path) {}
     KisNodeQueryPath path;
 };
 
-KisRecordedNodeAction::KisRecordedNodeAction(const QString& id, const QString& name, const KisNodeQueryPath& path) : KisRecordedAction(id, name), d(new Private(path))
+KisRecordedNodeAction::KisRecordedNodeAction(const QString &id, const QString &name, const KisNodeQueryPath &path) : KisRecordedAction(id, name), d(new Private(path))
 {
 }
 
-KisRecordedNodeAction::KisRecordedNodeAction(const KisRecordedNodeAction& _rhs) : KisRecordedAction(_rhs), d(new Private(*_rhs.d))
+KisRecordedNodeAction::KisRecordedNodeAction(const KisRecordedNodeAction &_rhs) : KisRecordedAction(_rhs), d(new Private(*_rhs.d))
 {
 }
 
@@ -47,29 +46,28 @@ KisRecordedNodeAction::~KisRecordedNodeAction()
     delete d;
 }
 
-void KisRecordedNodeAction::play(const KisPlayInfo& _info, KoUpdater* _updater) const
+void KisRecordedNodeAction::play(const KisPlayInfo &_info, KoUpdater *_updater) const
 {
     QList<KisNodeSP> nodes = nodeQueryPath().queryNodes(_info.image(), _info.currentNode());
     KoProgressUpdater updater(_updater);
     updater.start(nodes.size(), i18n("Applying action to all selected nodes"));
-    foreach(KisNodeSP node, nodes)
-    {
+    foreach (KisNodeSP node, nodes) {
         play(node, _info, updater.startSubtask());
     }
 }
 
-const KisNodeQueryPath& KisRecordedNodeAction::nodeQueryPath() const
+const KisNodeQueryPath &KisRecordedNodeAction::nodeQueryPath() const
 {
     return d->path;
 }
 
-void KisRecordedNodeAction::setNodeQueryPath(const KisNodeQueryPath& nqp)
+void KisRecordedNodeAction::setNodeQueryPath(const KisNodeQueryPath &nqp)
 {
     d->path = nqp;
 }
 
-void KisRecordedNodeAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const
+void KisRecordedNodeAction::toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *) const
 {
     Q_UNUSED(doc)
-    elt.setAttribute("path", d->path.toString());    
+    elt.setAttribute("path", d->path.toString());
 }

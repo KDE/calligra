@@ -35,14 +35,11 @@
 #include <klocale.h>
 #include <krandom.h>
 
-
 #include "kis_global.h"
 #include "kis_paint_device.h"
 #include "kis_brush.h"
 #include "kis_layer.h"
 #include "kis_boundary.h"
-
-
 
 /**
  * The parasite info that gets loaded from the terribly documented gimp pipe brush parasite.
@@ -69,7 +66,8 @@ public:
     KisPipeBrushParasite()
         : ncells(0)
         , dim(0)
-        , needsMovement(false) {
+        , needsMovement(false)
+    {
         init();
     }
 
@@ -80,13 +78,12 @@ public:
     void setBrushesCount();
 
     /// Load the parasite from the source string
-    KisPipeBrushParasite(const QString& source);
+    KisPipeBrushParasite(const QString &source);
 
     /**
      * Saves a GIMP-compatible representation of this parasite to the device. Also writes the
      * number of brushes (== ncells) (no trailing '\n') */
-    bool saveToDevice(QIODevice* dev) const;
-
+    bool saveToDevice(QIODevice *dev) const;
 
     enum Placement { DefaultPlacement, ConstantPlacement, RandomPlacement };
 

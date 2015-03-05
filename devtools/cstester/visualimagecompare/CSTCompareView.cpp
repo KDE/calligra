@@ -29,13 +29,13 @@
 #include <QKeyEvent>
 
 CSTCompareView::CSTCompareView(QWidget *parent)
-: QWidget(parent)
+    : QWidget(parent)
 #ifdef HAS_POPPLER
-, m_showPdf(false)
-, m_pdfDelta(0)
-, m_pdfDocument(0)
+    , m_showPdf(false)
+    , m_pdfDelta(0)
+    , m_pdfDocument(0)
 #endif
-, m_currentIndex(0)
+    , m_currentIndex(0)
 {
     QGridLayout *layout = new QGridLayout(this);
     m_current = new QLabel(this);
@@ -82,14 +82,14 @@ bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QS
     }
 
     qint64 lineLength = -1;
-    do
-    {
+    do {
         char buf[10000];
         lineLength = file.readLine(buf, sizeof(buf));
         if (lineLength != -1) {
             QString line = QString::fromUtf8(buf).trimmed();
-            if (!line.isEmpty())
+            if (!line.isEmpty()) {
                 m_result.append(line);
+            }
         }
     } while (lineLength != -1);
 
@@ -106,7 +106,7 @@ bool CSTCompareView::open(const QString &inDir1, const QString &inDir2, const QS
     return true;
 }
 
-void CSTCompareView::keyPressEvent(QKeyEvent * event)
+void CSTCompareView::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
     case Qt::Key_PageUp:
@@ -149,8 +149,9 @@ void CSTCompareView::keyPressEvent(QKeyEvent * event)
         break;
 #ifdef HAS_POPPLER
     case Qt::Key_P:
-        if (m_pdfDir.exists())
+        if (m_pdfDir.exists()) {
             m_showPdf = !m_showPdf;
+        }
         break;
     case Qt::Key_Plus:
         m_pdfDelta++;
@@ -168,23 +169,26 @@ void CSTCompareView::keyPressEvent(QKeyEvent * event)
 
 int CSTCompareView::updateResult(int index)
 {
-    if (index < 0 || index >= m_result.count())
+    if (index < 0 || index >= m_result.count()) {
         return 0;
+    }
 
     QString result(m_result[index]);
 
     QStringList list = result.split(' ');
     QStringList filename;
     QList<int> pageNumbers;
-    for(int i = list.count() - 1 ; i >= 0; --i) {
+    for (int i = list.count() - 1; i >= 0; --i) {
         bool ok;
         int n = list[i].toInt(&ok);
         if (i >= 1 && ok) {
-            if (!pageNumbers.contains(n))
+            if (!pageNumbers.contains(n)) {
                 pageNumbers.append(n);
+            }
         } else {
-            for(int j = 0; j <= i; ++j)
+            for (int j = 0; j <= i; ++j) {
                 filename.append(list[j]);
+            }
             break;
         }
     }
@@ -192,8 +196,9 @@ int CSTCompareView::updateResult(int index)
     m_data.clear();
     m_data.append(filename.join(" "));
     qSort(pageNumbers);
-    foreach(int n, pageNumbers)
+    foreach (int n, pageNumbers) {
         m_data.append(QString::number(n));
+    }
 
     if (m_data.size()) {
         m_current->setText(m_data[0]);
@@ -259,7 +264,7 @@ void CSTCompareView::updateImage(int index)
     }
 #endif
 
-    m_changesAndDocument->setText(QString("Document: %1/%2").arg(m_currentIndex+1).arg(m_result.size()));
+    m_changesAndDocument->setText(QString("Document: %1/%2").arg(m_currentIndex + 1).arg(m_result.size()));
 
     m_currentPage->setText(currentPageText);
 

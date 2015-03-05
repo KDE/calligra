@@ -16,8 +16,8 @@
 namespace TJ
 {
 
-Scenario::Scenario(Project* p, const QString& i, const QString& n,
-                   Scenario* pr) :
+Scenario::Scenario(Project *p, const QString &i, const QString &n,
+                   Scenario *pr) :
     CoreAttributes(p, i, n, pr),
     enabled(true),
     projectionMode(false),
@@ -27,8 +27,7 @@ Scenario::Scenario(Project* p, const QString& i, const QString& n,
     maxPaths(10000000)
 {
     p->addScenario(this);
-    if (pr)
-    {
+    if (pr) {
         // Inherit settings from parent scenario.
         enabled = pr->enabled;
         projectionMode = pr->projectionMode;

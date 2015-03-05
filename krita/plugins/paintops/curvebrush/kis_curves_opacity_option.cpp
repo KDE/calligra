@@ -26,8 +26,7 @@ KisCurvesOpacityOption::KisCurvesOpacityOption()
     setMaximumLabel(i18n("100%"));
 }
 
-
-qreal KisCurvesOpacityOption::apply(const KisPaintInformation & info, qreal opacity) const
+qreal KisCurvesOpacityOption::apply(const KisPaintInformation &info, qreal opacity) const
 {
     if (!isChecked()) {
         return opacity;

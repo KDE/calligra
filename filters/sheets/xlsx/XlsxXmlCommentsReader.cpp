@@ -46,8 +46,8 @@ XlsxComments::XlsxComments()
 {
 }
 
-XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments& _comments, MSOOXML::DrawingMLTheme* _themes,
-    QVector<QString>& _colorIndices)
+XlsxXmlCommentsReaderContext::XlsxXmlCommentsReaderContext(XlsxComments &_comments, MSOOXML::DrawingMLTheme *_themes,
+        QVector<QString> &_colorIndices)
     : comments(&_comments)
     , themes(_themes)
     , colorIndices(_colorIndices)
@@ -67,9 +67,9 @@ XlsxXmlCommentsReader::~XlsxXmlCommentsReader()
 {
 }
 
-KoFilter::ConversionStatus XlsxXmlCommentsReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus XlsxXmlCommentsReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<XlsxXmlCommentsReaderContext*>(context);
+    m_context = dynamic_cast<XlsxXmlCommentsReaderContext *>(context);
     Q_ASSERT(m_context);
     m_colorIndices = m_context->colorIndices;
     m_themes = m_context->themes;

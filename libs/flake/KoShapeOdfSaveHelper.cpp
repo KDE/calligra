@@ -28,13 +28,13 @@ class KoShapeOdfSaveHelperPrivate : public KoDragOdfSaveHelperPrivate
 {
 public:
     KoShapeOdfSaveHelperPrivate(const QList<KoShape *> &shapes)
-    : shapes(shapes) {}
+        : shapes(shapes) {}
 
     QList<KoShape *> shapes;
 };
 
 KoShapeOdfSaveHelper::KoShapeOdfSaveHelper(const QList<KoShape *> &shapes)
-        : KoDragOdfSaveHelper(*(new KoShapeOdfSaveHelperPrivate(shapes)))
+    : KoDragOdfSaveHelper(*(new KoShapeOdfSaveHelperPrivate(shapes)))
 {
 }
 

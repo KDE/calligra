@@ -27,7 +27,7 @@
 #include <kis_linewidth_option.h>
 #include "kis_curves_opacity_option.h"
 
-KisCurvePaintOpSettingsWidget:: KisCurvePaintOpSettingsWidget(QWidget* parent)
+KisCurvePaintOpSettingsWidget:: KisCurvePaintOpSettingsWidget(QWidget *parent)
     : KisPaintOpOptionsWidget(parent)
 {
     addPaintOpOption(new KisCurveOpOption());
@@ -42,11 +42,10 @@ KisCurvePaintOpSettingsWidget::~ KisCurvePaintOpSettingsWidget()
 {
 }
 
-
-KisPropertiesConfiguration*  KisCurvePaintOpSettingsWidget::configuration() const
+KisPropertiesConfiguration  *KisCurvePaintOpSettingsWidget::configuration() const
 {
-    KisCurvePaintOpSettings* config = new KisCurvePaintOpSettings();
-    config->setOptionsWidget(const_cast<KisCurvePaintOpSettingsWidget*>(this));
+    KisCurvePaintOpSettings *config = new KisCurvePaintOpSettings();
+    config->setOptionsWidget(const_cast<KisCurvePaintOpSettingsWidget *>(this));
     config->setProperty("paintop", "chalkbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

@@ -31,7 +31,8 @@ class WdgLayerSize : public QWidget, public Ui::WdgLayerSize
     Q_OBJECT
 
 public:
-    WdgLayerSize(QWidget *parent) : QWidget(parent) {
+    WdgLayerSize(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -45,7 +46,7 @@ class DlgLayerSize: public KDialog
 
 public:
 
-    DlgLayerSize(QWidget * parent, const char* name,
+    DlgLayerSize(QWidget *parent, const char *name,
                  int width, int height, double resolution);
     ~DlgLayerSize();
 
@@ -67,7 +68,7 @@ private:
     void updateWidthUIValue(double value);
     void updateHeightUIValue(double value);
 
-    WdgLayerSize * m_page;
+    WdgLayerSize *m_page;
     const double m_aspectRatio;
     const int m_originalWidth, m_originalHeight;
     int m_width, m_height;

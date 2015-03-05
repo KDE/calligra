@@ -16,32 +16,29 @@
 
 #define TJURL "http://www.taskjuggler.org"
 
-typedef enum CAType
-{
+typedef enum CAType {
     CA_Undefined = 0, CA_Task, CA_Resource, CA_Account, CA_Shift, CA_Scenario
 } CAType;
 
-typedef enum CustomAttributeType
-{
+typedef enum CustomAttributeType {
     CAT_Undefined = 0, CAT_Reference, CAT_Text
 } CustomAttributeType;
 
-typedef enum TaskStatus
-{
+typedef enum TaskStatus {
     Undefined = 0, NotStarted, InProgressLate, InProgress, OnTime,
     InProgressEarly, Finished, Late
 } TaskStatus;
 
 typedef enum AccountType { AllAccounts = 0, Cost, Revenue } AccountType;
 
-typedef enum LoadUnit
-{
+typedef enum LoadUnit {
     minutes = 0, hours, days, weeks, months, years, shortAuto, longAuto
 } LoadUnit;
 
 // type of log message
-namespace TJ {
-    enum LogMessageType { DebugMsg = 0, InfoMsg, WarningMsg, ErrorMsg };
+namespace TJ
+{
+enum LogMessageType { DebugMsg = 0, InfoMsg, WarningMsg, ErrorMsg };
 }
 
 #endif

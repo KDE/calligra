@@ -35,12 +35,12 @@ class CAPresentationHandler : public CAAbstractDocumentHandler
     Q_PROPERTY(int slideshowDelay READ slideshowDelay WRITE setSlideshowDelay NOTIFY slideshowDelayChanged)
     Q_PROPERTY(int currentSlideNumber READ currentSlideNumber WRITE setCurrentSlideNumber NOTIFY currentSlideNumberChanged)
     Q_PROPERTY(int totalNumberOfSlides READ totalNumberOfSlides NOTIFY totalNumberOfSlidesChanged)
-    Q_PROPERTY (QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
+    Q_PROPERTY(QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
 
 public:
-    explicit CAPresentationHandler (CADocumentController* documentController);
+    explicit CAPresentationHandler(CADocumentController *documentController);
     virtual ~CAPresentationHandler();
-    virtual bool openDocument (const QString& uri);
+    virtual bool openDocument(const QString &uri);
     virtual QStringList supportedMimetypes();
     virtual QString documentTypeName();
     virtual KoZoomMode::Mode preferredZoomMode() const;
@@ -63,11 +63,11 @@ public:
     int currentSlideNumber() const;
     int totalNumberOfSlides() const;
     QString searchString() const;
-    void setSearchString (const QString& searchString);
+    void setSearchString(const QString &searchString);
     void setTextData(int slideNumber);
     enum SearchDirection {
-         SearchForward,
-         SearchBackwards
+        SearchForward,
+        SearchBackwards
     };
     void searchOtherSlides(SearchDirection direction);
 
@@ -96,17 +96,17 @@ Q_SIGNALS:
     void searchStringChanged();
 
 protected:
-    virtual KoDocument* document();
+    virtual KoDocument *document();
 
 private Q_SLOTS:
     void advanceSlideshow();
     void gotoCurrentSlide();
-    void findMatchFound(const KoFindMatch& match);
+    void findMatchFound(const KoFindMatch &match);
     void findNoMatchFound();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // CAPRESENTATIONHANDLER_H

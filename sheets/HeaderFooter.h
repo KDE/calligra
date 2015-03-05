@@ -37,51 +37,87 @@ class Sheet;
 class CALLIGRA_SHEETS_ODF_EXPORT HeaderFooter
 {
 public:
-    explicit HeaderFooter(Sheet* sheet);
+    explicit HeaderFooter(Sheet *sheet);
     ~HeaderFooter();
 
-    QString headLeft(int _p, const QString &_t)const {
-        if (m_headLeft.isNull()) return "";
+    QString headLeft(int _p, const QString &_t)const
+    {
+        if (m_headLeft.isNull()) {
+            return "";
+        }
         return completeHeading(m_headLeft, _p, _t);
     }
-    QString headMid(int _p, const QString &_t)const {
-        if (m_headMid.isNull()) return "";
+    QString headMid(int _p, const QString &_t)const
+    {
+        if (m_headMid.isNull()) {
+            return "";
+        }
         return completeHeading(m_headMid, _p, _t);
     }
-    QString headRight(int _p, const QString &_t)const {
-        if (m_headRight.isNull()) return "";
+    QString headRight(int _p, const QString &_t)const
+    {
+        if (m_headRight.isNull()) {
+            return "";
+        }
         return completeHeading(m_headRight, _p, _t);
     }
-    QString footLeft(int _p, const QString &_t)const {
-        if (m_footLeft.isNull()) return "";
+    QString footLeft(int _p, const QString &_t)const
+    {
+        if (m_footLeft.isNull()) {
+            return "";
+        }
         return completeHeading(m_footLeft, _p, _t);
     }
-    QString footMid(int _p, const QString &_t)const {
-        if (m_footMid.isNull()) return "";
+    QString footMid(int _p, const QString &_t)const
+    {
+        if (m_footMid.isNull()) {
+            return "";
+        }
         return completeHeading(m_footMid, _p, _t);
     }
-    QString footRight(int _p, const QString &_t)const {
-        if (m_footRight.isNull()) return "";
+    QString footRight(int _p, const QString &_t)const
+    {
+        if (m_footRight.isNull()) {
+            return "";
+        }
         return completeHeading(m_footRight, _p, _t);
     }
 
-    QString headLeft()const {
-        if (m_headLeft.isNull()) return ""; return m_headLeft;
+    QString headLeft()const
+    {
+        if (m_headLeft.isNull()) {
+            return "";
+        } return m_headLeft;
     }
-    QString headMid()const {
-        if (m_headMid.isNull()) return ""; return m_headMid;
+    QString headMid()const
+    {
+        if (m_headMid.isNull()) {
+            return "";
+        } return m_headMid;
     }
-    QString headRight()const {
-        if (m_headRight.isNull()) return ""; return m_headRight;
+    QString headRight()const
+    {
+        if (m_headRight.isNull()) {
+            return "";
+        } return m_headRight;
     }
-    QString footLeft()const {
-        if (m_footLeft.isNull()) return ""; return m_footLeft;
+    QString footLeft()const
+    {
+        if (m_footLeft.isNull()) {
+            return "";
+        } return m_footLeft;
     }
-    QString footMid()const {
-        if (m_footMid.isNull()) return ""; return m_footMid;
+    QString footMid()const
+    {
+        if (m_footMid.isNull()) {
+            return "";
+        } return m_footMid;
     }
-    QString footRight()const {
-        if (m_footRight.isNull()) return ""; return m_footRight;
+    QString footRight()const
+    {
+        if (m_footRight.isNull()) {
+            return "";
+        } return m_footRight;
     }
 
     /**
@@ -116,7 +152,7 @@ private:
      * @param _page is the page number for which the heading is produced.
      * @param _Sheet is the name of the Sheet for which we generate the headings.
      */
-    QString completeHeading(const QString &_data, int _page, const QString &_sheet) const ;
+    QString completeHeading(const QString &_data, int _page, const QString &_sheet) const;
 
     Sheet *m_pSheet;
 

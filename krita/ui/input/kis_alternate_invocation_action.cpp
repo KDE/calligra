@@ -28,8 +28,7 @@
 #include "kis_tool.h"
 #include "kis_cursor.h"
 
-struct KisAlternateInvocationAction::Private
-{
+struct KisAlternateInvocationAction::Private {
     KisTool::ToolAction savedAction;
 };
 
@@ -103,11 +102,13 @@ int KisAlternateInvocationAction::priority() const
 
 void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 {
-    if (!event) return;
+    if (!event) {
+        return;
+    }
 
     KisAbstractInputAction::begin(shortcut, event);
 
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
     QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);;
 
     m_d->savedAction = shortcutToToolAction(shortcut);
@@ -119,9 +120,11 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
 
 void KisAlternateInvocationAction::end(QEvent *event)
 {
-    if (!event) return;
+    if (!event) {
+        return;
+    }
 
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
 
     QMouseEvent targetEvent(*mouseEvent);
 
@@ -143,10 +146,10 @@ void KisAlternateInvocationAction::end(QEvent *event)
     KisAbstractInputAction::end(event);
 }
 
-void KisAlternateInvocationAction::inputEvent(QEvent* event)
+void KisAlternateInvocationAction::inputEvent(QEvent *event)
 {
     if (event && event->type() == QEvent::MouseMove) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 
         QMouseEvent targetEvent(QEvent::MouseMove, mouseEvent->pos(), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
 

@@ -39,14 +39,15 @@ class KisToolPerspectiveGrid : public KisTool
     };
 
 public:
-    KisToolPerspectiveGrid(KoCanvasBase * canvas);
+    KisToolPerspectiveGrid(KoCanvasBase *canvas);
     virtual ~KisToolPerspectiveGrid();
 
     //
     // KisToolPaint interface
     //
 
-    virtual quint32 priority() {
+    virtual quint32 priority()
+    {
         return 3;
     }
 
@@ -55,21 +56,21 @@ public:
     void endPrimaryAction(KoPointerEvent *event);
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     void deactivate();
 
 protected:
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
-    void drawGridCreation(QPainter& gc);
-    void drawGrid(QPainter& gc);
+    virtual void paint(QPainter &gc, const KoViewConverter &converter);
+    void drawGridCreation(QPainter &gc);
+    void drawGrid(QPainter &gc);
 
 private:
-    void drawSmallRectangle(QPainter& gc, const QPointF& p);
-    bool mouseNear(const QPointF& mousep, const QPointF& point);
-    KisPerspectiveGridNodeSP nodeNearPoint(KisSubPerspectiveGrid* grid, QPointF point);
+    void drawSmallRectangle(QPainter &gc, const QPointF &p);
+    bool mouseNear(const QPointF &mousep, const QPointF &point);
+    KisPerspectiveGridNodeSP nodeNearPoint(KisSubPerspectiveGrid *grid, QPointF point);
 
-    KisPerspectiveGridDecoration* decoration();
+    KisPerspectiveGridDecoration *decoration();
 protected:
     QPointF m_dragEnd;
 
@@ -82,16 +83,16 @@ private:
     PerspectiveGridEditionMode m_internalMode;
     qint32 m_handleSize, m_handleHalfSize;
     KisPerspectiveGridNodeSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
-    KisCanvas2* m_canvas;
+    KisCanvas2 *m_canvas;
 };
-
 
 class KisToolPerspectiveGridFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPerspectiveGridFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolPerspectiveGrid") {
+    KisToolPerspectiveGridFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolPerspectiveGrid")
+    {
         setToolTip(i18n("Edit the perspective grid"));
         setToolType(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("tool_perspectivegrid"));
@@ -99,15 +100,14 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };
 
-
     virtual ~KisToolPerspectiveGridFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase * canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolPerspectiveGrid(canvas);
     }
 
 };
-
 
 #endif
 

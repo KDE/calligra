@@ -20,16 +20,15 @@
 #include "kis_node.h"
 #include "commands/kis_node_property_list_command.h"
 
-
 KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisDocumentSectionModel::PropertyList newPropertyList)
     : KisNodeCommand(kundo2_i18n("Property Changes"), node),
       m_newPropertyList(newPropertyList),
       m_oldPropertyList(node->sectionModelProperties())
-/**
- * TODO instead of "Property Changes" check which property
- * has been changed and display either lock/unlock, visible/hidden
- * or "Property Changes" (this require new strings)
- */
+      /**
+       * TODO instead of "Property Changes" check which property
+       * has been changed and display either lock/unlock, visible/hidden
+       * or "Property Changes" (this require new strings)
+       */
 {
 }
 

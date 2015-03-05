@@ -98,7 +98,8 @@ public:
     * Load the TextShape from ODF.
     * Overloaded method provided for your convenience.
     */
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) {
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+    {
         return loadOdf(element, context, 0);
     }
 
@@ -112,7 +113,8 @@ public:
     * Store the TextShape data as ODF.
     * Overloaded method provided for your convenience.
     */
-    virtual void saveOdf(KoShapeSavingContext &context, int from = 0, int to  = -1) const {
+    virtual void saveOdf(KoShapeSavingContext &context, int from = 0, int to  = -1) const
+    {
         saveOdf(context, 0, from, to);
     }
 

@@ -18,12 +18,11 @@
 
 #include "kis_serializable_configuration.h"
 
-
 #include <QDomElement>
 #include <QDomDocument>
 #include <QString>
 
-void KisSerializableConfiguration::fromXML(const QString & s)
+void KisSerializableConfiguration::fromXML(const QString &s)
 {
     QDomDocument doc;
     doc.setContent(s);

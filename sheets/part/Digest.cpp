@@ -50,9 +50,9 @@ typedef quint8 sal_uInt8;
 typedef quint16 sal_uInt16;
 typedef quint32 sal_uInt32;
 
-void rtl_freeZeroMemory(void * p, sal_uInt32 n);
-void rtl_freeMemory(void * p);
-void rtl_zeroMemory(void * Ptr, sal_uInt32 Bytes);
+void rtl_freeZeroMemory(void *p, sal_uInt32 n);
+void rtl_freeMemory(void *p);
+void rtl_zeroMemory(void *Ptr, sal_uInt32 Bytes);
 void rtl_copyMemory(void *Dst, const void *Src, sal_uInt32 Bytes);
 
 #ifndef OSL_LOBYTE
@@ -83,7 +83,6 @@ void rtl_copyMemory(void *Dst, const void *Src, sal_uInt32 Bytes);
 # define OSL_SWAPDWORD(d)        OSL_MAKEDWORD(OSL_SWAPWORD(OSL_HIWORD(d)),OSL_SWAPWORD(OSL_LOWORD(d)))
 #endif
 
-
 /*========================================================================
  *
  * rtlDigest.
@@ -91,7 +90,7 @@ void rtl_copyMemory(void *Dst, const void *Src, sal_uInt32 Bytes);
  *======================================================================*/
 /** Digest Handle opaque type.
  */
-typedef void* rtlDigest;
+typedef void *rtlDigest;
 
 /** Digest Algorithm enumeration.
     @see rtl_digest_create()
@@ -113,7 +112,6 @@ enum __rtl_DigestAlgorithm {
  */
 typedef enum __rtl_DigestAlgorithm rtlDigestAlgorithm;
 
-
 /** Error Code enumeration.
  */
 enum __rtl_DigestError {
@@ -130,13 +128,13 @@ enum __rtl_DigestError {
  */
 typedef enum __rtl_DigestError rtlDigestError;
 
-typedef rtlDigestError Digest_init_t(void * ctx, const sal_uInt8 * Data, sal_uInt32 DatLen);
+typedef rtlDigestError Digest_init_t(void *ctx, const sal_uInt8 *Data, sal_uInt32 DatLen);
 
 typedef void Digest_delete_t(void *ctx);
 
-typedef rtlDigestError Digest_update_t(void * ctx, const void * Data, sal_uInt32 DatLen);
+typedef rtlDigestError Digest_update_t(void *ctx, const void *Data, sal_uInt32 DatLen);
 
-typedef rtlDigestError Digest_get_t(void * ctx, sal_uInt8 * Buffer, sal_uInt32 BufLen);
+typedef rtlDigestError Digest_get_t(void *ctx, sal_uInt8 *Buffer, sal_uInt32 BufLen);
 
 /*========================================================================
  *
@@ -155,24 +153,20 @@ typedef rtlDigestError Digest_get_t(void * ctx, sal_uInt8 * Buffer, sal_uInt32 B
  */
 rtlDigest rtl_digest_createSHA1(void);
 
-
 /** Destroy a SHA1 Digest.handle.
     @see rtl_digest_destroy()
  */
 void rtl_digest_destroySHA1(rtlDigest Digest);
 
-
 /** Update a SHA1 digest with given data.
     @see rtl_digest_update()
  */
-rtlDigestError rtl_digest_updateSHA1(rtlDigest Digest, const void * pData, uint nDatLen);
-
+rtlDigestError rtl_digest_updateSHA1(rtlDigest Digest, const void *pData, uint nDatLen);
 
 /** Finalize a SHA1 digest and retrieve the digest value.
     @see rtl_digest_get()
  */
-rtlDigestError rtl_digest_getSHA1(rtlDigest Digest, sal_uInt8 * pBuffer, uint nBufLen);
-
+rtlDigestError rtl_digest_getSHA1(rtlDigest Digest, sal_uInt8 *pBuffer, uint nBufLen);
 
 /** Evaluate a SHA1 digest value from given data.
     @descr This function performs an optimized call sequence on a
@@ -188,9 +182,8 @@ rtlDigestError rtl_digest_getSHA1(rtlDigest Digest, sal_uInt8 * pBuffer, uint nB
 
  @return rtl_Digest_E_None upon success.
  */
-rtlDigestError rtl_digest_SHA1(const void * pData,      uint nDatLen,
-                               unsigned char * pBuffer, uint nBufLen);
-
+rtlDigestError rtl_digest_SHA1(const void *pData,      uint nDatLen,
+                               unsigned char *pBuffer, uint nBufLen);
 
 /*========================================================================
  *
@@ -198,7 +191,7 @@ rtlDigestError rtl_digest_SHA1(const void * pData,      uint nDatLen,
  *
  *======================================================================*/
 
-void rtl_zeroMemory(void * Ptr, sal_uInt32 Bytes)
+void rtl_zeroMemory(void *Ptr, sal_uInt32 Bytes)
 {
     memset(Ptr, 0, Bytes);
 }
@@ -208,12 +201,12 @@ void rtl_copyMemory(void *Dst, const void *Src, sal_uInt32 Bytes)
     memcpy(Dst, Src, Bytes);
 }
 
-void rtl_freeMemory(void * p)
+void rtl_freeMemory(void *p)
 {
     free(p);
 }
 
-void rtl_freeZeroMemory(void * p, sal_uInt32 n)
+void rtl_freeZeroMemory(void *p, sal_uInt32 n)
 {
     if (p) {
         memset(p, 0, n);
@@ -257,8 +250,9 @@ static void __rtl_digest_swapLong(sal_uInt32 *pData, sal_uInt32 nDatLen)
     X = pData;
     n = nDatLen;
 
-    for (i = 0; i < n; ++i)
+    for (i = 0; i < n; ++i) {
         X[i] = OSL_SWAPDWORD(X[i]);
+    }
 }
 
 /*========================================================================
@@ -303,7 +297,6 @@ rtlDigest rtl_digest_create (rtlDigestAlgorithm Algorithm)
  }
  return Digest;
 }
-
 
 // rtl_digest_queryAlgorithm.
 
@@ -608,14 +601,16 @@ static void __rtl_digest_endSHA(DigestContextSHA *ctx)
     i += 1;
 
     if (i >= (DIGEST_LBLOCK_SHA - 2)) {
-        for (; i < DIGEST_LBLOCK_SHA; ++i)
+        for (; i < DIGEST_LBLOCK_SHA; ++i) {
             X[i] = 0;
+        }
         __rtl_digest_updateSHA(ctx);
         i = 0;
     }
 
-    for (; i < (DIGEST_LBLOCK_SHA - 2); ++i)
+    for (; i < (DIGEST_LBLOCK_SHA - 2); ++i) {
         X[i] = 0;
+    }
 
     X[DIGEST_LBLOCK_SHA - 2] = ctx->m_nH;
     X[DIGEST_LBLOCK_SHA - 1] = ctx->m_nL;
@@ -632,11 +627,11 @@ static void __rtl_digest_endSHA(DigestContextSHA *ctx)
  * __rtl_digest_SHA_1.
  */
 static const Digest_Impl __rtl_digest_SHA_1 = { rtl_Digest_AlgorithmSHA1,
-        RTL_DIGEST_LENGTH_SHA1,
-        0,
-        rtl_digest_destroySHA1,
-        rtl_digest_updateSHA1,
-        rtl_digest_getSHA1
+                                                RTL_DIGEST_LENGTH_SHA1,
+                                                0,
+                                                rtl_digest_destroySHA1,
+                                                rtl_digest_updateSHA1,
+                                                rtl_digest_getSHA1
                                               };
 
 /*
@@ -666,8 +661,9 @@ rtlDigestError rtl_digest_SHA1(
     __rtl_digest_initSHA(&(digest.m_context), __rtl_digest_updateSHA_1);
 
     result = rtl_digest_updateSHA1(&digest, pData, nDatLen);
-    if (result == rtl_Digest_E_None)
+    if (result == rtl_Digest_E_None) {
         result = rtl_digest_getSHA1(&digest, pBuffer, nBufLen);
+    }
 
     rtl_zeroMemory(&digest, sizeof(digest));
     return (result);
@@ -678,7 +674,7 @@ rtlDigestError rtl_digest_SHA1(
  */
 rtlDigest rtl_digest_createSHA1(void)
 {
-    DigestSHA_Impl *pImpl = (DigestSHA_Impl*)0;
+    DigestSHA_Impl *pImpl = (DigestSHA_Impl *)0;
     pImpl = RTL_DIGEST_CREATE(DigestSHA_Impl);
     if (pImpl) {
         pImpl->m_digest = __rtl_digest_SHA_1;
@@ -699,19 +695,24 @@ rtlDigestError rtl_digest_updateSHA1(
     DigestContextSHA *ctx;
     sal_uInt32        len;
 
-    if ((pImpl == 0) || (pData == 0))
+    if ((pImpl == 0) || (pData == 0)) {
         return rtl_Digest_E_Argument;
+    }
 
-    if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1))
+    if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1)) {
         return rtl_Digest_E_Algorithm;
+    }
 
-    if (nDatLen == 0)
+    if (nDatLen == 0) {
         return rtl_Digest_E_None;
+    }
 
     ctx = &(pImpl->m_context);
 
     len = ctx->m_nL + (nDatLen << 3);
-    if (len < ctx->m_nL) ctx->m_nH += 1;
+    if (len < ctx->m_nL) {
+        ctx->m_nH += 1;
+    }
     ctx->m_nH += (nDatLen >> 29);
     ctx->m_nL  = len;
 
@@ -767,14 +768,17 @@ rtlDigestError rtl_digest_getSHA1(
 
     DigestContextSHA *ctx;
 
-    if ((pImpl == 0) || (pBuffer == 0))
+    if ((pImpl == 0) || (pBuffer == 0)) {
         return rtl_Digest_E_Argument;
+    }
 
-    if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1))
+    if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1)) {
         return rtl_Digest_E_Algorithm;
+    }
 
-    if (!(pImpl->m_digest.m_length <= nBufLen))
+    if (!(pImpl->m_digest.m_length <= nBufLen)) {
         return rtl_Digest_E_BufferSize;
+    }
 
     ctx = &(pImpl->m_context);
 
@@ -796,10 +800,11 @@ void rtl_digest_destroySHA1(rtlDigest Digest)
 {
     DigestSHA_Impl *pImpl = (DigestSHA_Impl *)Digest;
     if (pImpl) {
-        if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1)
+        if (pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1) {
             rtl_freeZeroMemory(pImpl, sizeof(DigestSHA_Impl));
-        else
+        } else {
             rtl_freeMemory(pImpl);
+        }
     }
 }
 
@@ -809,7 +814,7 @@ void rtl_digest_destroySHA1(rtlDigest Digest)
  *
  *======================================================================*/
 
-bool SHA1::getHash(QString const & text, QByteArray & hash)
+bool SHA1::getHash(QString const &text, QByteArray &hash)
 {
     rtlDigest aDigest     = rtl_digest_createSHA1();
     rtlDigestError aError = rtl_digest_updateSHA1(aDigest, text.unicode(), text.length() * sizeof(QChar));
@@ -821,8 +826,9 @@ bool SHA1::getHash(QString const & text, QByteArray & hash)
 
         aError = rtl_digest_getSHA1(aDigest, (unsigned char *) digest.data(), RTL_DIGEST_LENGTH_SHA1);
 
-        if (aError != rtl_Digest_E_None)
+        if (aError != rtl_Digest_E_None) {
             return false;
+        }
 
         hash = digest;
 

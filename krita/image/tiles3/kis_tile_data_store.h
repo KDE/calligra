@@ -40,7 +40,7 @@ private:
     KisTileDataStore();
 
 public:
-    static KisTileDataStore* instance();
+    static KisTileDataStore *instance();
 
     ~KisTileDataStore();
 
@@ -50,43 +50,49 @@ public:
      * Returns total number of tiles present: in memory
      * or in a swap file
      */
-    inline qint32 numTiles() const {
+    inline qint32 numTiles() const
+    {
         return m_numTiles + m_swappedStore.numTiles();
     }
 
     /**
      * Returns the number of tiles present in memory only
      */
-    inline qint32 numTilesInMemory() const {
+    inline qint32 numTilesInMemory() const
+    {
         return m_numTiles;
     }
 
-    inline void checkFreeMemory() {
+    inline void checkFreeMemory()
+    {
         m_swapper.checkFreeMemory();
     }
 
     /**
      * \see m_memoryMetric
      */
-    inline qint64 memoryMetric() const {
+    inline qint64 memoryMetric() const
+    {
         return m_memoryMetric;
     }
 
-    KisTileDataStoreIterator* beginIteration();
-    void endIteration(KisTileDataStoreIterator* iterator);
+    KisTileDataStoreIterator *beginIteration();
+    void endIteration(KisTileDataStoreIterator *iterator);
 
-    KisTileDataStoreReverseIterator* beginReverseIteration();
-    void endIteration(KisTileDataStoreReverseIterator* iterator);
+    KisTileDataStoreReverseIterator *beginReverseIteration();
+    void endIteration(KisTileDataStoreReverseIterator *iterator);
 
-    KisTileDataStoreClockIterator* beginClockIteration();
-    void endIteration(KisTileDataStoreClockIterator* iterator);
+    KisTileDataStoreClockIterator *beginClockIteration();
+    void endIteration(KisTileDataStoreClockIterator *iterator);
 
-    inline KisTileData* createDefaultTileData(qint32 pixelSize, const quint8 *defPixel) {
+    inline KisTileData *createDefaultTileData(qint32 pixelSize, const quint8 *defPixel)
+    {
         return allocTileData(pixelSize, defPixel);
     }
 
     // Called by The Memento Manager after every commit
-    inline void kickPooler() {
+    inline void kickPooler()
+    {
         m_pooler.kick();
 
         //FIXME: maybe, rename a function?
@@ -99,7 +105,6 @@ public:
      * at the same moment of time.
      */
     bool trySwapTileData(KisTileData *td);
-
 
     /**
      * WARN: The following three method are only for usage

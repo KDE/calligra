@@ -36,11 +36,11 @@
 #include <kis_algebra_2d.h>
 
 KisInfinityManager::KisInfinityManager(QPointer<KisView>view, KisCanvas2 *canvas)
-  : KisCanvasDecoration(INFINITY_DECORATION_ID, view),
-    m_filteringEnabled(false),
-    m_cursorSwitched(false),
-    m_sideRects(NSides),
-    m_canvas(canvas)
+    : KisCanvasDecoration(INFINITY_DECORATION_ID, view),
+      m_filteringEnabled(false),
+      m_cursorSwitched(false),
+      m_sideRects(NSides),
+      m_canvas(canvas)
 {
     connect(canvas, SIGNAL(documentOffsetUpdateFinished()), SLOT(imagePositionChanged()));
 }
@@ -132,13 +132,15 @@ void KisInfinityManager::imagePositionChanged()
     }
 }
 
-void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
+void KisInfinityManager::drawDecoration(QPainter &gc, const QRectF &updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
     Q_UNUSED(updateArea);
     Q_UNUSED(converter);
     Q_UNUSED(canvas);
 
-    if (!m_filteringEnabled) return;
+    if (!m_filteringEnabled) {
+        return;
+    }
 
     gc.save();
     gc.setTransform(QTransform(), false);
@@ -176,7 +178,7 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
     case QEvent::Enter:
     case QEvent::Leave:
     case QEvent::MouseMove: {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 
         if (m_decorationPath.contains(mouseEvent->pos())) {
             if (!m_cursorSwitched) {
@@ -192,7 +194,7 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
         break;
     }
     case QEvent::MouseButtonPress: {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         retval = mouseEvent->button() == Qt::LeftButton && m_cursorSwitched;
 
         if (mouseEvent->button() == Qt::RightButton) {
@@ -202,7 +204,7 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
         break;
     }
     case QEvent::MouseButtonRelease: {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         retval = mouseEvent->button() == Qt::LeftButton && m_cursorSwitched;
 
         if (retval) {

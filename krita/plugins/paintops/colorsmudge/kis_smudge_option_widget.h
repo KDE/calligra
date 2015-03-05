@@ -27,15 +27,15 @@ class KisSmudgeOptionWidget: public KisCurveOptionWidget
     Q_OBJECT
 
 public:
-    KisSmudgeOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked);
+    KisSmudgeOptionWidget(const QString &label, const QString &sliderLabel, const QString &name, bool checked);
 
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private Q_SLOTS:
     void slotCurrentIndexChanged(int index);
 
 private:
-    QComboBox* mCbSmudgeMode;
+    QComboBox *mCbSmudgeMode;
 };
 
 #endif // KIS_SMUDGE_OPTION_WIDGET_H

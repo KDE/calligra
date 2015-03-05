@@ -71,7 +71,7 @@ public:
     * of string like e.g. "python", "kjs" or "sql"
     * KTextEditor supports.
     */
-    void setHighlightMode(const QString& highlightmodename);
+    void setHighlightMode(const QString &highlightmodename);
 
     /**
     * Find row and column for this \p character and jump to the
@@ -93,7 +93,7 @@ public:
     /**
     * \return a default context menu implementation.
     */
-    virtual QMenu* defaultContextMenu();
+    virtual QMenu *defaultContextMenu();
 
 public Q_SLOTS:
     /*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. */
@@ -115,7 +115,7 @@ Q_SIGNALS:
 private:
     /*! Private d-pointer class. */
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

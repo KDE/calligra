@@ -51,7 +51,7 @@ public:
     bool useBuiltIn;
 };
 
-KeyboardModel::KeyboardModel(QObject* parent)
+KeyboardModel::KeyboardModel(QObject *parent)
     : QAbstractListModel(parent), d(new Private)
 {
     QHash<int, QByteArray> roleNames;
@@ -227,26 +227,27 @@ void KeyboardModel::componentComplete()
     //d->numericKeys.append(Key("Close", CloseKey));
 }
 
-QVariant KeyboardModel::data(const QModelIndex& index, int role) const
+QVariant KeyboardModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QVariant();
+    }
 
-    switch(role) {
-        case TextRole:
-            return d->currentKeys->at(index.row()).text;
-        case TypeRole:
-            return QVariant::fromValue<int>(d->currentKeys->at(index.row()).keyType);
-        case WidthRole:
-            return d->currentKeys->at(index.row()).width;
-        default:
-            break;
+    switch (role) {
+    case TextRole:
+        return d->currentKeys->at(index.row()).text;
+    case TypeRole:
+        return QVariant::fromValue<int>(d->currentKeys->at(index.row()).keyType);
+    case WidthRole:
+        return d->currentKeys->at(index.row()).width;
+    default:
+        break;
     }
 
     return QVariant();
 }
 
-int KeyboardModel::rowCount(const QModelIndex& parent) const
+int KeyboardModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return d->currentKeys->count();
@@ -265,16 +266,16 @@ void KeyboardModel::setKeyboardMode(KeyboardModel::KeyboardMode mode)
         beginRemoveRows(QModelIndex(), 0, d->currentKeys->count() - 1);
         endRemoveRows();
 
-        switch(d->mode) {
-            case NormalMode:
-                d->currentKeys = &d->normalKeys;
-                break;
-            case CapitalMode:
-                d->currentKeys = &d->capitalKeys;
-                break;
-            case NumericMode:
-                d->currentKeys = &d->numericKeys;
-                break;
+        switch (d->mode) {
+        case NormalMode:
+            d->currentKeys = &d->normalKeys;
+            break;
+        case CapitalMode:
+            d->currentKeys = &d->capitalKeys;
+            break;
+        case NumericMode:
+            d->currentKeys = &d->numericKeys;
+            break;
         }
 
         beginInsertRows(QModelIndex(), 0, d->currentKeys->count() - 1);

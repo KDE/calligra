@@ -22,7 +22,6 @@
 #include "kis_image.h"
 #include "kis_simple_stroke_strategy.h"
 
-
 class TestingSimpleStrokeStrategy : public KisSimpleStrokeStrategy
 {
 public:
@@ -35,26 +34,31 @@ public:
         enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
     }
 
-    ~TestingSimpleStrokeStrategy() {
+    ~TestingSimpleStrokeStrategy()
+    {
         QCOMPARE(m_stageCounter, 3);
     }
 
-    void initStrokeCallback() {
+    void initStrokeCallback()
+    {
         QCOMPARE(m_stageCounter, 0);
         m_stageCounter++;
     }
 
-    void finishStrokeCallback() {
+    void finishStrokeCallback()
+    {
         QCOMPARE(m_stageCounter, 2);
         m_stageCounter++;
     }
 
-    void cancelStrokeCallback() {
+    void cancelStrokeCallback()
+    {
         QCOMPARE(m_stageCounter, 2);
         m_stageCounter++;
     }
 
-    void doStrokeCallback(KisStrokeJobData *data) {
+    void doStrokeCallback(KisStrokeJobData *data)
+    {
         Q_UNUSED(data);
 
         QCOMPARE(m_stageCounter, 1);

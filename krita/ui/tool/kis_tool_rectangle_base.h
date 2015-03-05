@@ -25,48 +25,48 @@
 
 class KRITAUI_EXPORT KisToolRectangleBase : public KisToolShape
 {
-Q_OBJECT
+    Q_OBJECT
 
 Q_SIGNALS:
     void rectangleChanged(const QRectF &newRect);
-    
+
 public Q_SLOTS:
     void constraintsChanged(bool forceRatio, bool forceWidth, bool forceHeight, float ratio, float width, float height);
-    
+
 public:
     enum ToolType {
         PAINT,
         SELECT
     };
 
-    explicit KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_rectangle_cursor.png", 6, 6));
+    explicit KisToolRectangleBase(KoCanvasBase *canvas, KisToolRectangleBase::ToolType type, const QCursor &cursor = KisCursor::load("tool_rectangle_cursor.png", 6, 6));
 
     virtual void beginPrimaryAction(KoPointerEvent *event);
     virtual void continuePrimaryAction(KoPointerEvent *event);
     virtual void endPrimaryAction(KoPointerEvent *event);
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    virtual void paint(QPainter &gc, const KoViewConverter &converter);
     virtual void deactivate();
 
     QList<QPointer<QWidget> > createOptionWidgets();
-    
+
 protected:
-    virtual void finishRect(const QRectF&)=0;
+    virtual void finishRect(const QRectF &) = 0;
 
     QPointF m_dragCenter;
     QPointF m_dragStart;
     QPointF m_dragEnd;
     ToolType m_type;
-    
+
     bool m_isRatioForced;
     bool m_isWidthForced;
     bool m_isHeightForced;
     float m_forcedRatio;
     float m_forcedWidth;
     float m_forcedHeight;
-    
+
     bool isFixedSize();
-    void applyConstraints(QSizeF& area, bool overrideRatio);
+    void applyConstraints(QSizeF &area, bool overrideRatio);
 
     void updateArea();
     virtual void paintRectangle(QPainter &gc, const QRectF &imageRect);

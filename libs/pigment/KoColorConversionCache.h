@@ -44,10 +44,10 @@ public:
      * @param src source color space
      * @param dst destination color space
      */
-    KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src,
-                                                          const KoColorSpace* dst,
-                                                          KoColorConversionTransformation::Intent _renderingIntent,
-                                                          KoColorConversionTransformation::ConversionFlags conversionFlags);
+    KoCachedColorConversionTransformation cachedConverter(const KoColorSpace *src,
+            const KoColorSpace *dst,
+            KoColorConversionTransformation::Intent _renderingIntent,
+            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * This function is called by the destructor of the color space to
@@ -55,10 +55,10 @@ public:
      * be invalid and that the cache needs to stop using those pointers.
      * @param src source color space
      */
-    void colorSpaceIsDestroyed(const KoColorSpace* src);
+    void colorSpaceIsDestroyed(const KoColorSpace *src);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 /**
@@ -72,17 +72,16 @@ class KoCachedColorConversionTransformation
 {
     friend class KoColorConversionCache;
 private:
-    KoCachedColorConversionTransformation(KoColorConversionCache* cache,
-                                          KoColorConversionCache::CachedTransformation* transfo);
+    KoCachedColorConversionTransformation(KoColorConversionCache *cache,
+                                          KoColorConversionCache::CachedTransformation *transfo);
 public:
-    KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation&);
+    KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation &);
     ~KoCachedColorConversionTransformation();
 public:
-    const KoColorConversionTransformation* transformation() const;
+    const KoColorConversionTransformation *transformation() const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 #endif

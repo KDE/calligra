@@ -25,14 +25,14 @@
 using namespace Calligra::Sheets::Plugins;
 using namespace Calligra::Sheets;
 
-SolverDialog::SolverDialog(Selection* selection, QWidget* parent)
-        : KDialog(parent)
+SolverDialog::SolverDialog(Selection *selection, QWidget *parent)
+    : KDialog(parent)
 {
     setCaption(i18n("Function Optimizer"));
     setButtons(Ok | Cancel | Details);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    QWidget* widget = new QWidget(this);
+    QWidget *widget = new QWidget(this);
     Ui::Solver::setupUi(widget);
     setMainWidget(widget);
     setModal(false);
@@ -43,7 +43,7 @@ SolverDialog::SolverDialog(Selection* selection, QWidget* parent)
     parameters->setDialog(this);
     parameters->setSelectionMode(RegionSelector::MultipleCells);
 
-    QWidget* detailsWidget = new QWidget(this);
+    QWidget *detailsWidget = new QWidget(this);
     Ui::SolverDetails::setupUi(detailsWidget);
     setDetailsWidget(detailsWidget);
 

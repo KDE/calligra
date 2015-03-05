@@ -50,7 +50,6 @@ private:
     ReportData *m_reportdata;
 };
 
-
 } // namespace KPlato
 
 #endif

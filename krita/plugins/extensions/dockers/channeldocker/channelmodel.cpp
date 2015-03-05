@@ -22,7 +22,7 @@
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 
-ChannelModel::ChannelModel(QObject* parent): QAbstractTableModel(parent), m_currentLayer(0)
+ChannelModel::ChannelModel(QObject *parent): QAbstractTableModel(parent), m_currentLayer(0)
 {
 }
 
@@ -30,28 +30,26 @@ ChannelModel::~ChannelModel()
 {
 }
 
-QVariant ChannelModel::data(const QModelIndex& index, int role) const
+QVariant ChannelModel::data(const QModelIndex &index, int role) const
 {
-    if (m_currentLayer.isValid() && index.isValid())
-    {
-        QList<KoChannelInfo*> channels = m_currentLayer->colorSpace()->channels();
+    if (m_currentLayer.isValid() && index.isValid()) {
+        QList<KoChannelInfo *> channels = m_currentLayer->colorSpace()->channels();
         int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
 
         switch (role) {
-        case Qt::DisplayRole:
-        {
+        case Qt::DisplayRole: {
             return channels.at(channelIndex)->name();
-        }   
+        }
         case Qt::CheckStateRole: {
             Q_ASSERT(index.row() < rowCount());
             Q_ASSERT(index.column() < columnCount());
-            
+
             if (index.column() == 0) {
                 QBitArray flags = m_currentLayer->channelFlags();
                 return (flags.isEmpty() || flags.testBit(channelIndex)) ? Qt::Checked : Qt::Unchecked;
             }
-            
-            QBitArray flags = dynamic_cast<const KisPaintLayer*>(m_currentLayer.data())->channelLockFlags();
+
+            QBitArray flags = dynamic_cast<const KisPaintLayer *>(m_currentLayer.data())->channelLockFlags();
             return (flags.isEmpty() || flags.testBit(channelIndex)) ? Qt::Unchecked : Qt::Checked;
         }
         }
@@ -61,58 +59,59 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const
 
 QVariant ChannelModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if(orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-        if(section == 0)
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+        if (section == 0) {
             return i18n("Enabled");
-        
+        }
+
         return i18n("Locked");
     }
-    
+
     return QAbstractItemModel::headerData(section, orientation, role);
 }
 
-
-int ChannelModel::rowCount(const QModelIndex& /*parent*/) const
+int ChannelModel::rowCount(const QModelIndex & /*parent*/) const
 {
-    if (!m_currentLayer) return 0;
+    if (!m_currentLayer) {
+        return 0;
+    }
 
     return m_currentLayer.isValid() ? m_currentLayer->colorSpace()->channelCount() : 0;
 }
 
-int ChannelModel::columnCount(const QModelIndex& /*parent*/) const
+int ChannelModel::columnCount(const QModelIndex & /*parent*/) const
 {
-    if (!m_currentLayer) return 0;
+    if (!m_currentLayer) {
+        return 0;
+    }
 
-    return dynamic_cast<const KisPaintLayer*>(m_currentLayer.data()) ? 2 : 1;
+    return dynamic_cast<const KisPaintLayer *>(m_currentLayer.data()) ? 2 : 1;
 }
 
-
-bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool ChannelModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (m_currentLayer.isValid() && index.isValid())
-    {
-        QList<KoChannelInfo*> channels = m_currentLayer->colorSpace()->channels();
+    if (m_currentLayer.isValid() && index.isValid()) {
+        QList<KoChannelInfo *> channels = m_currentLayer->colorSpace()->channels();
         int channelIndex = KoChannelInfo::displayPositionToChannelIndex(index.row(), channels);
-        
+
         if (role == Qt::CheckStateRole) {
             Q_ASSERT(index.row() < rowCount());
             Q_ASSERT(index.column() < columnCount());
-            
+
             if (index.column() == 0) {
                 QBitArray flags = m_currentLayer->channelFlags();
 
                 flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true) : flags;
                 flags.setBit(channelIndex, value.toInt() == Qt::Checked);
                 m_currentLayer->setChannelFlags(flags);
-            }
-            else { //if (index.column() == 1)
-                KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(m_currentLayer.data());
+            } else { //if (index.column() == 1)
+                KisPaintLayer *paintLayer = dynamic_cast<KisPaintLayer *>(m_currentLayer.data());
                 QBitArray      flags      = paintLayer->channelLockFlags();
                 flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true) : flags;
                 flags.setBit(channelIndex, value.toInt() == Qt::Unchecked);
                 paintLayer->setChannelLockFlags(flags);
             }
-            
+
             emit channelFlagsChanged();
             return true;
         }
@@ -120,7 +119,7 @@ bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int 
     return false;
 }
 
-Qt::ItemFlags ChannelModel::flags(const QModelIndex& /*index*/) const
+Qt::ItemFlags ChannelModel::flags(const QModelIndex & /*index*/) const
 {
     Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
     return flags;

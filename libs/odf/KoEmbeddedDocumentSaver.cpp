@@ -34,7 +34,6 @@
 #include "KoDocumentBase.h"
 #include <KoOdfManifestEntry.h>
 
-
 #define INTERNAL_PROTOCOL "intern"
 
 struct FileEntry {
@@ -42,7 +41,6 @@ struct FileEntry {
     QByteArray mimeType;       // QBA because this is what addManifestEntry wants
     QByteArray contents;
 };
-
 
 class KoEmbeddedDocumentSaver::Private
 {
@@ -52,9 +50,9 @@ public:
     QHash<QString, int> prefixes; // Used in getFilename();
 
     // These will be saved when saveEmbeddedDocuments() is called.
-    QList<KoDocumentBase*> documents; // Embedded documents
-    QList<FileEntry*> files;    // Embedded files.
-    QList<KoOdfManifestEntry*> manifestEntries;
+    QList<KoDocumentBase *> documents; // Embedded documents
+    QList<FileEntry *> files;   // Embedded files.
+    QList<KoOdfManifestEntry *> manifestEntries;
 };
 
 KoEmbeddedDocumentSaver::KoEmbeddedDocumentSaver()
@@ -68,7 +66,6 @@ KoEmbeddedDocumentSaver::~KoEmbeddedDocumentSaver()
     qDeleteAll(d->manifestEntries);
     delete d;
 }
-
 
 QString KoEmbeddedDocumentSaver::getFilename(const QString &prefix)
 {
@@ -84,7 +81,7 @@ QString KoEmbeddedDocumentSaver::getFilename(const QString &prefix)
     return prefix + QString("%1").arg(index);
 }
 
-void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoDocumentBase * doc)
+void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoDocumentBase *doc)
 {
     Q_ASSERT(doc);
     d->documents.append(doc);
@@ -168,18 +165,17 @@ void KoEmbeddedDocumentSaver::saveFile(const QString &path, const QByteArray &mi
  *
  */
 void KoEmbeddedDocumentSaver::saveManifestEntry(const QString &fullPath, const QString &mediaType,
-                                                const QString &version)
+        const QString &version)
 {
     d->manifestEntries.append(new KoOdfManifestEntry(fullPath, mediaType, version));
 }
 
-
-bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContext & documentContext)
+bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContext &documentContext)
 {
     KoStore *store = documentContext.odfStore.store();
 
     // Write embedded documents.
-    foreach(KoDocumentBase *doc, d->documents) {
+    foreach (KoDocumentBase *doc, d->documents) {
         QString path;
         if (doc->isStoredExtern()) {
             kDebug(30003) << " external (don't save) url:" << doc->url().url();
@@ -233,7 +229,7 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContex
     }
 
     // Write the embedded files.
-    foreach(FileEntry *entry, d->files) {
+    foreach (FileEntry *entry, d->files) {
         QString path = entry->path;
         kDebug(30003) << "saving" << path;
 
@@ -263,7 +259,7 @@ bool KoEmbeddedDocumentSaver::saveEmbeddedDocuments(KoDocumentBase::SavingContex
 
     // Write the manifest entries.
     KoXmlWriter *manifestWriter = documentContext.odfStore.manifestWriter();
-    foreach(KoOdfManifestEntry *entry, d->manifestEntries) {
+    foreach (KoOdfManifestEntry *entry, d->manifestEntries) {
         manifestWriter->startElement("manifest:file-entry");
         manifestWriter->addAttribute("manifest:version", entry->version());
         manifestWriter->addAttribute("manifest:media-type", entry->mediaType());

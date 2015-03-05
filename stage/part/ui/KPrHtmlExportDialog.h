@@ -31,9 +31,9 @@ class KPrHtmlExportDialog  : public KDialog
 {
     Q_OBJECT
 public:
-    KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, const QString &title, const QString &author, QWidget *parent=0);
+    KPrHtmlExportDialog(const QList<KoPAPageBase *> &slides, const QString &title, const QString &author, QWidget *parent = 0);
 
-    QList<KoPAPageBase*> checkedSlides();
+    QList<KoPAPageBase *> checkedSlides();
     QStringList slidesNames();
     KUrl templateUrl();
     QString title();
@@ -48,12 +48,11 @@ private Q_SLOTS:
     void updateFavoriteButton();
     void generateNext();
     void generatePrevious();
-    void generatePreview(int item=-1);
+    void generatePreview(int item = -1);
     void browserAction();
 
-
 private:
-    void generateSlidesNames(const QList<KoPAPageBase*> &slides);
+    void generateSlidesNames(const QList<KoPAPageBase *> &slides);
     void loadTemplatesList();
     bool selectedTemplateIsFavorite();
     bool selectedTemplateIsSystemFavorite();
@@ -61,15 +60,12 @@ private:
     void addSelectedTemplateToFavorite();
     void delSelectedTemplateFromFavorite();
 
-    QList<KoPAPageBase*> m_allSlides;
+    QList<KoPAPageBase *> m_allSlides;
     QString m_title;
     Ui::KPrHtmlExport ui;
     QWebPage preview;
     int frameToRender;
 
-
 };
-
-
 
 #endif // KPRHTMLEXPORTDIALOG_H

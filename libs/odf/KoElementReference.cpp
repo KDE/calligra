@@ -48,7 +48,9 @@ KoElementReference::KoElementReference(const KoElementReference &other)
 
 KoElementReference &KoElementReference::operator=(const KoElementReference &rhs)
 {
-    if (this == &rhs) return *this;
+    if (this == &rhs) {
+        return *this;
+    }
     d = rhs.d;
 
     return *this;
@@ -71,7 +73,9 @@ bool KoElementReference::isValid() const
 
 void KoElementReference::saveOdf(KoXmlWriter *writer, SaveOption saveOptions) const
 {
-    if (d->xmlid.isEmpty()) return;
+    if (d->xmlid.isEmpty()) {
+        return;
+    }
 
     writer->addAttribute("xml:id", d->xmlid);
 
@@ -88,18 +92,15 @@ QString KoElementReference::toString() const
     return d->xmlid;
 }
 
-
 KoElementReference KoElementReference::loadOdf(const KoXmlElement &element)
 {
     QString xmlid;
 
     if (element.hasAttributeNS(KoXmlNS::xml, "id")) {
         xmlid = element.attributeNS(KoXmlNS::xml, "id");
-    }
-    else if (element.hasAttributeNS(KoXmlNS::draw, "id")) {
+    } else if (element.hasAttributeNS(KoXmlNS::draw, "id")) {
         xmlid = element.attributeNS(KoXmlNS::draw, "id");
-    }
-    else if (element.hasAttributeNS(KoXmlNS::text, "id")) {
+    } else if (element.hasAttributeNS(KoXmlNS::text, "id")) {
         xmlid = element.attributeNS(KoXmlNS::text, "id");
     }
 

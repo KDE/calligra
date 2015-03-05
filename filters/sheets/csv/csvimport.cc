@@ -59,18 +59,19 @@ using namespace Calligra::Sheets;
 K_PLUGIN_FACTORY(CSVImportFactory, registerPlugin<CSVFilter>();)
 K_EXPORT_PLUGIN(CSVImportFactory("calligrafilters"))
 
-CSVFilter::CSVFilter(QObject* parent, const QVariantList&) :
-        KoFilter(parent)
+CSVFilter::CSVFilter(QObject *parent, const QVariantList &) :
+    KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus CSVFilter::convert(const QByteArray &from, const QByteArray &to)
 {
     QString file(m_chain->inputFile());
-    KoDocument* document = m_chain->outputDocument();
+    KoDocument *document = m_chain->outputDocument();
 
-    if (!document)
+    if (!document) {
         return KoFilter::StupidError;
+    }
 
     if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {
         kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
@@ -103,12 +104,13 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     QByteArray inputFile(in.readAll());
     in.close();
 
-    KoCsvImportDialog* dialog = new KoCsvImportDialog(0);
+    KoCsvImportDialog *dialog = new KoCsvImportDialog(0);
     dialog->setData(inputFile);
     dialog->setDecimalSymbol(ksdoc->map()->calculationSettings()->locale()->decimalSymbol());
     dialog->setThousandsSeparator(ksdoc->map()->calculationSettings()->locale()->thousandsSeparator());
-    if (!m_chain->manager()->getBatchMode() && !dialog->exec())
+    if (!m_chain->manager()->getBatchMode() && !dialog->exec()) {
         return KoFilter::UserCancelled;
+    }
     inputFile.resize(0);   // Release memory (input file content)
 
     ElapsedTime t("Filling data into document");
@@ -118,8 +120,9 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     int numRows = dialog->rows();
     int numCols = dialog->cols();
 
-    if (numRows == 0)
+    if (numRows == 0) {
         ++numRows;
+    }
 
     // Initialize the decimal symbol and thousands separator to use for parsing.
     const QString documentDecimalSymbol = ksdoc->map()->calculationSettings()->locale()->decimalSymbol();
@@ -135,8 +138,9 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
 
     const double defaultWidth = ksdoc->map()->defaultColumnFormat()->width();
     QVector<double> widths(numCols);
-    for (int i = 0; i < numCols; ++i)
+    for (int i = 0; i < numCols; ++i) {
         widths[i] = defaultWidth;
+    }
 
     Cell cell(sheet, 1, 1);
     QFontMetrics fm(cell.style().font());
@@ -149,8 +153,9 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
 
             // ### FIXME: how to calculate the width of numbers (as they might not be in the right format)
             const double len = fm.width(text);
-            if (len > widths[col])
+            if (len > widths[col]) {
                 widths[col] = len;
+            }
 
             cell = Cell(sheet, col + 1, row + 1);
 
@@ -190,8 +195,9 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     emit sigProgress(98);
 
     for (int i = 0; i < numCols; ++i) {
-        if (widths[i] > defaultWidth)
+        if (widths[i] > defaultWidth) {
             sheet->nonDefaultColumnFormat(i + 1)->setWidth(widths[i]);
+        }
     }
 
     // Restore the document's decimal symbol and thousands separator.

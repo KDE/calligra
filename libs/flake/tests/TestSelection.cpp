@@ -75,7 +75,6 @@ void TestSelection::testSelectedShapes()
     // toplevel returns only group2
     QCOMPARE(selection.selectedShapes(KoFlake::TopLevelSelection).count(), 1);
 
-
     group1->removeShape(shape1);
     group1->removeShape(shape2);
     MockContainer *container = new MockContainer();
@@ -99,31 +98,31 @@ void TestSelection::testSize()
     KoSelection selection;
 
     MockShape shape1;
-    shape1.setSize( QSizeF( 100, 100 ) );
-    shape1.setPosition( QPointF( 0, 0 ) );
+    shape1.setSize(QSizeF(100, 100));
+    shape1.setPosition(QPointF(0, 0));
 
-    selection.select( &shape1 );
-    QCOMPARE(selection.size(), QSizeF( 100, 100 ));
+    selection.select(&shape1);
+    QCOMPARE(selection.size(), QSizeF(100, 100));
 
     MockShape shape2;
-    shape2.setSize( QSizeF( 100, 100 ) );
-    shape2.setPosition( QPointF( 100, 100 ) );
+    shape2.setSize(QSizeF(100, 100));
+    shape2.setPosition(QPointF(100, 100));
 
-    selection.select( &shape2 );
-    QCOMPARE(selection.size(), QSizeF( 200, 200 ));
+    selection.select(&shape2);
+    QCOMPARE(selection.size(), QSizeF(200, 200));
 
     MockShape shape3;
-    shape3.setSize( QSizeF( 100, 100 ) );
-    shape3.setPosition( QPointF( 200, 200 ) );
+    shape3.setSize(QSizeF(100, 100));
+    shape3.setPosition(QPointF(200, 200));
 
-    selection.select( &shape3 );
-    QCOMPARE(selection.size(), QSizeF( 300, 300 ));
+    selection.select(&shape3);
+    QCOMPARE(selection.size(), QSizeF(300, 300));
 
-    selection.deselect( &shape3 );
-    QCOMPARE(selection.size(), QSizeF( 200, 200 ));
+    selection.deselect(&shape3);
+    QCOMPARE(selection.size(), QSizeF(200, 200));
 
-    selection.deselect( &shape2 );
-    QCOMPARE(selection.size(), QSizeF( 100, 100 ));
+    selection.deselect(&shape2);
+    QCOMPARE(selection.size(), QSizeF(100, 100));
 }
 
 QTEST_MAIN(TestSelection)

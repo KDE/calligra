@@ -28,16 +28,15 @@ class KisSprayPaintOpSettingsWidget : public KisPaintOpOptionsWidget
     Q_OBJECT
 
 public:
-    KisSprayPaintOpSettingsWidget(QWidget* parent = 0);
+    KisSprayPaintOpSettingsWidget(QWidget *parent = 0);
     virtual ~KisSprayPaintOpSettingsWidget();
-
 
     virtual void changePaintOpSize(qreal x, qreal y);
     virtual QSizeF paintOpSize() const;
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 
 public:
-    KisSprayOpOption* m_sprayArea;
+    KisSprayOpOption *m_sprayArea;
 };
 
 #endif

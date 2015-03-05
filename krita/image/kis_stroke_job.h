@@ -32,25 +32,30 @@ public:
     {
     }
 
-    ~KisStrokeJob() {
+    ~KisStrokeJob()
+    {
         delete m_dabData;
     }
 
-    void run() {
+    void run()
+    {
         m_dabStrategy->run(m_dabData);
     }
 
-    bool isSequential() const {
+    bool isSequential() const
+    {
         // Default value is 'SEQUENTIAL'
         return m_dabData ? m_dabData->isSequential() : true;
     }
 
-    bool isBarrier() const {
+    bool isBarrier() const
+    {
         // Default value is simply 'SEQUENTIAL', *not* 'BARRIER'
         return m_dabData ? m_dabData->isBarrier() : false;
     }
 
-    bool isExclusive() const {
+    bool isExclusive() const
+    {
         // Default value is 'NORMAL'
         return m_dabData ? m_dabData->isExclusive() : false;
     }
@@ -61,11 +66,13 @@ private:
     friend QString getCommandName(KisStrokeJob *job);
     friend int cancelSeqNo(KisStrokeJob *job);
 
-    KisStrokeJobStrategy* testingGetDabStrategy() {
+    KisStrokeJobStrategy *testingGetDabStrategy()
+    {
         return m_dabStrategy;
     }
 
-    KisStrokeJobData* testingGetDabData() {
+    KisStrokeJobData *testingGetDabData()
+    {
         return m_dabData;
     }
 

@@ -20,23 +20,20 @@
 #include <KoColorTransformation.h>
 #include <kis_debug.h>
 
-KisPressureHSVOption* KisPressureHSVOption::createHueOption()
+KisPressureHSVOption *KisPressureHSVOption::createHueOption()
 {
     return new KisPressureHSVOption(i18n("Hue"), "h", -1, 1);
 }
 
-KisPressureHSVOption* KisPressureHSVOption::createSaturationOption()
+KisPressureHSVOption *KisPressureHSVOption::createSaturationOption()
 {
     return new KisPressureHSVOption(i18n("Saturation"), "s", -1, 1);
 }
 
-KisPressureHSVOption* KisPressureHSVOption::createValueOption()
+KisPressureHSVOption *KisPressureHSVOption::createValueOption()
 {
     return new KisPressureHSVOption(i18n("Value"), "v", -1, 1);
 }
-
-
-
 
 struct KisPressureHSVOption::Private {
     QString parameterName;
@@ -44,7 +41,7 @@ struct KisPressureHSVOption::Private {
     double min, max;
 };
 
-KisPressureHSVOption::KisPressureHSVOption(const QString& name, const QString& parameterName, double min, double max)
+KisPressureHSVOption::KisPressureHSVOption(const QString &name, const QString &parameterName, double min, double max)
     : KisCurveOption(name, parameterName, KisPaintOpOption::colorCategory(), false), d(new Private)
 {
     d->parameterName = parameterName;
@@ -61,17 +58,14 @@ KisPressureHSVOption::KisPressureHSVOption(const QString& name, const QString& p
     if (parameterName == "h") {
         setMaximumLabel(QString(fullPercent + br + i18n("CW hue")));
         setMinimumLabel(QString(zeroPercent + br + i18n("CCW hue") + br + activeColorMsg));
-    }
-    else if (parameterName == "s") {
+    } else if (parameterName == "s") {
         setMaximumLabel(QString(fullPercent + br + i18n("More saturation")));
         setMinimumLabel(QString(zeroPercent + br + i18n("Less saturation ") + br + activeColorMsg));
 
-    }
-    else if (parameterName == "v") {
+    } else if (parameterName == "v") {
         setMaximumLabel(QString(fullPercent + br + i18n("Higher value")));
         setMinimumLabel(QString(zeroPercent + br + i18n("Lower value ") + br + activeColorMsg));
     }
-
 
     else {
         // defaults to unchanged labels
@@ -79,8 +73,7 @@ KisPressureHSVOption::KisPressureHSVOption(const QString& name, const QString& p
     }
 }
 
-
-void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintInformation& info) const
+void KisPressureHSVOption::apply(KoColorTransformation *transfo, const KisPaintInformation &info) const
 {
     if (!isChecked()) {
         return;
@@ -89,8 +82,6 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
     if (d->paramId == -1) {
         d->paramId = transfo->parameterId(d->parameterName);
     }
-
-
 
     double v = computeValue(info) * (d->max - d->min) + d->min;
 

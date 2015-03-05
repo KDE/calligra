@@ -94,7 +94,7 @@ MySqlDriver::~MySqlDriver()
 {
 }
 
-KexiDB::Connection*
+KexiDB::Connection *
 MySqlDriver::drv_createConnection(ConnectionData &conn_data)
 {
     return new MySqlConnection(this, conn_data);
@@ -103,16 +103,16 @@ MySqlDriver::drv_createConnection(ConnectionData &conn_data)
 bool MySqlDriver::isSystemDatabaseName(const QString &n) const
 {
     return QString::compare(n, "mysql", Qt::CaseInsensitive) == 0
-        || QString::compare(n, "information_schema", Qt::CaseInsensitive) == 0
-        || QString::compare(n, "performance_schema", Qt::CaseInsensitive) == 0;
+           || QString::compare(n, "information_schema", Qt::CaseInsensitive) == 0
+           || QString::compare(n, "performance_schema", Qt::CaseInsensitive) == 0;
 }
 
-bool MySqlDriver::drv_isSystemFieldName(const QString&) const
+bool MySqlDriver::drv_isSystemFieldName(const QString &) const
 {
     return false;
 }
 
-QString MySqlDriver::escapeString(const QString& str) const
+QString MySqlDriver::escapeString(const QString &str) const
 {
     //escape as in http://dev.mysql.com/doc/refman/5.0/en/string-syntax.html
 //! @todo support more characters, like %, _
@@ -121,8 +121,9 @@ QString MySqlDriver::escapeString(const QString& str) const
     int i;
     for (i = 0; i < old_length; i++) {   //anything to escape?
         const unsigned int ch = str[i].unicode();
-        if (ch == '\\' || ch == '\'' || ch == '"' || ch == '\n' || ch == '\r' || ch == '\t' || ch == '\b' || ch == '\0')
+        if (ch == '\\' || ch == '\'' || ch == '"' || ch == '\n' || ch == '\r' || ch == '\t' || ch == '\b' || ch == '\0') {
             break;
+        }
     }
     if (i >= old_length) { //no characters to escape
         return QString::fromLatin1("'") + str + QString::fromLatin1("'");
@@ -159,10 +160,12 @@ QString MySqlDriver::escapeString(const QString& str) const
             } else if (ch == '\0') {
                 new_string[new_length++] = '\\';
                 new_string[new_length] = '0';
-            } else
+            } else {
                 new_string[new_length] = str[i];
-        } else
+            }
+        } else {
             new_string[new_length] = str[i];
+        }
     }
 
     new_string[new_length++] = '\''; //append '
@@ -171,12 +174,12 @@ QString MySqlDriver::escapeString(const QString& str) const
     return result;
 }
 
-QString MySqlDriver::escapeBLOB(const QByteArray& array) const
+QString MySqlDriver::escapeBLOB(const QByteArray &array) const
 {
     return KexiDB::escapeBLOB(array, KexiDB::BLOBEscape0xHex);
 }
 
-QByteArray MySqlDriver::escapeString(const QByteArray& str) const
+QByteArray MySqlDriver::escapeString(const QByteArray &str) const
 {
 //! @todo optimize using mysql_real_escape_string()?
 //! see http://dev.mysql.com/doc/refman/5.0/en/string-syntax.html
@@ -191,12 +194,12 @@ QByteArray MySqlDriver::escapeString(const QByteArray& str) const
 /*! Add back-ticks to an identifier, and replace any back-ticks within
  * the name with single quotes.
  */
-QString MySqlDriver::drv_escapeIdentifier(const QString& str) const
+QString MySqlDriver::drv_escapeIdentifier(const QString &str) const
 {
     return QString(str).replace('`', '\'');
 }
 
-QByteArray MySqlDriver::drv_escapeIdentifier(const QByteArray& str) const
+QByteArray MySqlDriver::drv_escapeIdentifier(const QByteArray &str) const
 {
     return QByteArray(str).replace('`', '\'');
 }

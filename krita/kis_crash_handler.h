@@ -20,10 +20,11 @@
 #ifndef KIS_CRASH_HANDLER_H
 #define KIS_CRASH_HANDLER_H
 
-class KisCrashHandler {
+class KisCrashHandler
+{
 public:
     KisCrashHandler();
     ~KisCrashHandler();
 };
 
-#endif 
+#endif

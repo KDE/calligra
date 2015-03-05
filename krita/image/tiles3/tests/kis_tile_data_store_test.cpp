@@ -29,7 +29,6 @@
 #include "tiles3/kis_tile_data_store.h"
 #include "tiles3/kis_tile_data_store_iterators.h"
 
-
 void KisTileDataStoreTest::testClockIterator()
 {
     KisTileDataStore::instance()->debugClear();
@@ -37,12 +36,11 @@ void KisTileDataStoreTest::testClockIterator()
     const qint32 pixelSize = 1;
     quint8 defaultPixel = 128;
 
-    QList<KisTileData*> tileDataList;
+    QList<KisTileData *> tileDataList;
 
     tileDataList.append(KisTileDataStore::instance()->createDefaultTileData(pixelSize, &defaultPixel));
     tileDataList.append(KisTileDataStore::instance()->createDefaultTileData(pixelSize, &defaultPixel));
     tileDataList.append(KisTileDataStore::instance()->createDefaultTileData(pixelSize, &defaultPixel));
-
 
     /// First, full cycle!
     KisTileDataStoreClockIterator *iter = KisTileDataStore::instance()->beginClockIteration();
@@ -64,7 +62,6 @@ void KisTileDataStoreTest::testClockIterator()
 
     KisTileDataStore::instance()->endIteration(iter);
 
-
     /// Second, iterate until the second item!
     iter = KisTileDataStore::instance()->beginClockIteration();
 
@@ -73,7 +70,6 @@ void KisTileDataStoreTest::testClockIterator()
     QCOMPARE(item, tileDataList[0]);
 
     KisTileDataStore::instance()->endIteration(iter);
-
 
     /// Third, check the position restored!
     iter = KisTileDataStore::instance()->beginClockIteration();
@@ -93,7 +89,6 @@ void KisTileDataStoreTest::testClockIterator()
     QVERIFY(!iter->hasNext());
 
     KisTileDataStore::instance()->endIteration(iter);
-
 
     /// By this moment KisTileDataStore::instance()->m_clockIterator has been set
     /// onto the second (tileDataList[1]) item.
@@ -150,13 +145,11 @@ void KisTileDataStoreTest::testSwapping()
 
     KisTileDataStore::instance()->debugClear();
 
-
-
     const qint32 pixelSize = 1;
     quint8 defaultPixel = 128;
     KisTiledDataManager dm(pixelSize, &defaultPixel);
 
-    for(qint32 col = 0; col < 1000; col++) {
+    for (qint32 col = 0; col < 1000; col++) {
         KisTileSP tile = dm.getTile(col, 0, true);
         tile->lockForWrite();
 
@@ -171,7 +164,7 @@ void KisTileDataStoreTest::testSwapping()
 
     //KisTileDataStore::instance()->debugSwapAll();
 
-    for(qint32 col = 0; col < 1000; col++) {
+    for (qint32 col = 0; col < 1000; col++) {
         KisTileSP tile = dm.getTile(col, 0, true);
         tile->lockForRead();
 

@@ -26,14 +26,14 @@
 class KRITA_SKETCH_EXPORT SketchInputContext : public QInputContext
 {
 public:
-    explicit SketchInputContext(QObject* parent = 0);
+    explicit SketchInputContext(QObject *parent = 0);
     virtual ~SketchInputContext();
 
     virtual bool isComposing() const;
     virtual void reset();
     virtual QString language();
     virtual QString identifierName();
-    virtual bool filterEvent(const QEvent* event);
+    virtual bool filterEvent(const QEvent *event);
 };
 
 #endif // SKETCHINPUTCONTEXT_H

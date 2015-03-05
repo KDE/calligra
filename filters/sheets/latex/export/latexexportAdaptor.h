@@ -32,7 +32,7 @@ class LatexExportAdaptor: public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.filter.kspread.latex")
 
 public:
-    explicit LatexExportAdaptor(LatexExportDialog* dialog);
+    explicit LatexExportAdaptor(LatexExportDialog *dialog);
 
     ~LatexExportAdaptor();
 
@@ -40,7 +40,7 @@ public Q_SLOTS: // METHODS
     Q_SCRIPTABLE void useDefaultConfig();
 
 private:
-    LatexExportDialog* _dialog;
+    LatexExportDialog *_dialog;
 };
 
 #endif /* __LATEXEXPORTADAPTOR_H__ */

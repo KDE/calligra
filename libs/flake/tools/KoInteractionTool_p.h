@@ -29,11 +29,12 @@ class KoInteractionToolPrivate : public KoToolBasePrivate
 public:
     KoInteractionToolPrivate(KoToolBase *qq, KoCanvasBase *canvas)
         : KoToolBasePrivate(qq, canvas),
-        currentStrategy(0)
+          currentStrategy(0)
     {
     }
 
-    ~KoInteractionToolPrivate() {
+    ~KoInteractionToolPrivate()
+    {
         delete currentStrategy;
     }
 

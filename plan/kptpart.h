@@ -49,7 +49,7 @@ public:
     /// reimplemented
     virtual KoMainWindow *createMainWindow();
 protected:
-    virtual void openTemplate( const KUrl& url );
+    virtual void openTemplate(const KUrl &url);
 
     KPlato::MainDocument *m_document;
 };

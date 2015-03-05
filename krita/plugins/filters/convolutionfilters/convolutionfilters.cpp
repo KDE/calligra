@@ -42,9 +42,9 @@ K_PLUGIN_FACTORY(KritaConvolutionFiltersFactory, registerPlugin<KritaConvolution
 K_EXPORT_PLUGIN(KritaConvolutionFiltersFactory("krita"))
 
 KritaConvolutionFilters::KritaConvolutionFilters(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
-    KisFilterRegistry * manager = KisFilterRegistry::instance();
+    KisFilterRegistry *manager = KisFilterRegistry::instance();
     manager->add(new KisSharpenFilter());
     manager->add(new KisMeanRemovalFilter());
     manager->add(new KisEmbossLaplascianFilter());
@@ -64,149 +64,148 @@ KritaConvolutionFilters::~KritaConvolutionFilters()
 }
 
 KisSharpenFilter::KisSharpenFilter()
-        : KisConvolutionFilter(id(), categoryEnhance(), i18n("&Sharpen"))
+    : KisConvolutionFilter(id(), categoryEnhance(), i18n("&Sharpen"))
 {
     setSupportsPainting(true);
     setShowConfigurationWidget(false);
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix <<  0, -2,   0,
-                    -2,  11, -2,
-                     0, -2,   0;
+                 -2,  11, -2,
+                 0, -2,   0;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0, 3);
 }
 
 KisMeanRemovalFilter::KisMeanRemovalFilter()
-        : KisConvolutionFilter(id(), categoryEnhance(), i18n("&Mean Removal"))
+    : KisConvolutionFilter(id(), categoryEnhance(), i18n("&Mean Removal"))
 {
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, -1, -1,
-                    -1,  9, -1,
-                    -1, -1, -1;
+                 -1,  9, -1,
+                 -1, -1, -1;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0, 1);
 }
 
 KisEmbossLaplascianFilter::KisEmbossLaplascianFilter()
-        : KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss (Laplacian)"))
+    : KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss (Laplacian)"))
 {
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, 0, -1,
-                     0, 4,  0,
-                    -1, 0, -1;
+                 0, 4,  0,
+                 -1, 0, -1;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);
 }
 
 KisEmbossInAllDirectionsFilter::KisEmbossInAllDirectionsFilter()
-        : KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss in All Directions"))
+    : KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss in All Directions"))
 {
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, -1, -1,
-                    -1,  8, -1,
-                    -1, -1, -1;
+                 -1,  8, -1,
+                 -1, -1, -1;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);
 }
 
 KisEmbossHorizontalVerticalFilter::KisEmbossHorizontalVerticalFilter()
-        : KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss Horizontal && Vertical"))
+    : KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss Horizontal && Vertical"))
 {
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix <<  0, -1,  0,
-                    -1,  4, -1,
-                     0, -1,  0;
+                 -1,  4, -1,
+                 0, -1,  0;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);
 }
 
 KisEmbossVerticalFilter::KisEmbossVerticalFilter()
-        : KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss Vertical Only"))
+    : KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss Vertical Only"))
 {
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix << 0, -1, 0,
-                    0,  2, 0,
-                    0, -1, 0;
+                 0,  2, 0,
+                 0, -1, 0;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);
 }
 
 KisEmbossHorizontalFilter::KisEmbossHorizontalFilter() :
-        KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss Horizontal Only"))
+    KisConvolutionFilter(id(), categoryEmboss(), i18n("Emboss Horizontal Only"))
 {
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix <<  0, 0,  0,
-                    -1, 2, -1,
-                     0, 0,  0;
+                 -1, 2, -1,
+                 0, 0,  0;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);
 }
 
 KisEmbossDiagonalFilter::KisEmbossDiagonalFilter()
-        : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Top Edge Detection"))
+    : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Top Edge Detection"))
 {
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, 0, -1,
-                     0, 4,  0,
-                    -1, 0, -1;
+                 0, 4,  0,
+                 -1, 0, -1;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);
 }
 
-
 KisTopEdgeDetectionFilter::KisTopEdgeDetectionFilter()
-        : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Top Edge Detection"))
+    : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Top Edge Detection"))
 {
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix <<  1,  1,  1,
-                     0,  0,  0,
-                    -1, -1, -1;
+                 0,  0,  0,
+                 -1, -1, -1;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);
 }
 
 KisRightEdgeDetectionFilter::KisRightEdgeDetectionFilter()
-        : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Right Edge Detection"))
+    : KisConvolutionFilter(id(), categoryEdgeDetection(), i18n("Right Edge Detection"))
 {
     setSupportsPainting(false);
     setShowConfigurationWidget(false);
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, 0, 1,
-                    -1, 0, 1,
-                    -1, 0, 1;
+                 -1, 0, 1,
+                 -1, 0, 1;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);
@@ -219,8 +218,8 @@ KisBottomEdgeDetectionFilter::KisBottomEdgeDetectionFilter() : KisConvolutionFil
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix << -1, -1, -1,
-                     0,  0,  0,
-                     1,  1,  1;
+                 0,  0,  0,
+                 1,  1,  1;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);
@@ -233,8 +232,8 @@ KisLeftEdgeDetectionFilter::KisLeftEdgeDetectionFilter() : KisConvolutionFilter(
 
     Matrix<qreal, Dynamic, Dynamic> kernelMatrix(3, 3);
     kernelMatrix << 1, 0, -1,
-                    1, 0, -1,
-                    1, 0, -1;
+                 1, 0, -1,
+                 1, 0, -1;
 
     m_matrix = KisConvolutionKernel::fromMatrix(kernelMatrix, 0.5, 1);
     setIgnoreAlpha(true);

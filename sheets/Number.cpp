@@ -28,12 +28,14 @@ using namespace Calligra::Sheets;
 class Number::Private : public QSharedData
 {
 public:
-    Private() {
+    Private()
+    {
         type = Number::Float;
         f = 0;
     }
 
-    Private(const Private &o) : QSharedData(o), type(o.type) {
+    Private(const Private &o) : QSharedData(o), type(o.type)
+    {
         switch (type) {
         case Number::Float:
             f = o.f;
@@ -48,12 +50,15 @@ public:
     };
 
     // static empty data to be shared
-    static Private* null() {
-        if (!s_null) s_null = new Private; return s_null;
+    static Private *null()
+    {
+        if (!s_null) {
+            s_null = new Private;
+        } return s_null;
     }
 
 private:
-    void operator=(const Number::Private& o);
+    void operator=(const Number::Private &o);
     static Private *s_null;
 };
 
@@ -62,28 +67,28 @@ Number::Private *Number::Private::s_null = 0;
 // constructors
 
 Number::Number()
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Number::Float;
     d->f = 0.0;
 }
 
 Number::Number(int num)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Number::Float;
     d->f = (long double) num;
 }
 
 Number::Number(long double num)
-        : d(Private::null())
+    : d(Private::null())
 {
     d->type = Number::Float;
     d->f = num;
 }
 
-Number::Number(const Number& n)
-        : d(n.d)
+Number::Number(const Number &n)
+    : d(n.d)
 {
 }
 
@@ -94,12 +99,11 @@ Number::~Number()
 }
 
 // set/get
-Number& Number::operator= (const Number & n)
+Number &Number::operator= (const Number &n)
 {
     d = n.d;
     return *this;
 }
-
 
 long double Number::asFloat() const
 {
@@ -127,22 +131,22 @@ Number Number::operator/ (const Number &n) const
     return Number(d->f / n.d->f);
 }
 
-void Number::operator+= (const Number & n)
+void Number::operator+= (const Number &n)
 {
     d->f += n.d->f;
 }
 
-void Number::operator-= (const Number & n)
+void Number::operator-= (const Number &n)
 {
     d->f -= n.d->f;
 }
 
-void Number::operator*= (const Number & n)
+void Number::operator*= (const Number &n)
 {
     d->f *= n.d->f;
 }
 
-void Number::operator/= (const Number & n)
+void Number::operator/= (const Number &n)
 {
     d->f /= n.d->f;
 }
@@ -244,7 +248,6 @@ Number Number::atan2(const Number &y, const Number &x)
 {
     return Number(::atan2(y.d->f, x.d->f));
 }
-
 
 // hyperbolic functions
 Number Number::sinh() const

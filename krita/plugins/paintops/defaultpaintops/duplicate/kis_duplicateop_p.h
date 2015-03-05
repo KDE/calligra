@@ -23,9 +23,10 @@
 #ifndef KIS_DUPLICATEOP_P_H_
 #define KIS_DUPLICATEOP_P_H_
 
-namespace DuplicateOpUtils {
+namespace DuplicateOpUtils
+{
 
-inline qreal minimizeEnergy(const qreal* m, qreal* sol, int w, int h)
+inline qreal minimizeEnergy(const qreal *m, qreal *sol, int w, int h)
 {
     qreal err = 0;
 

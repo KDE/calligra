@@ -35,13 +35,13 @@ namespace KPlato
 
 /**
     FlatProxyModel is a proxy model that makes a tree source model flat.
-    
+
     This might be useful to present data from a tree model in e.g. a table view or a report.
-    
+
     Note that the source model should have the same number of columns for all parent indices,
     since a flat model obviously have the same number of columns for all indices.
     If this is not the case, the behavior is undefined.
-    
+
     The row sequence of the flat model is the same as if the source model was fully expanded.
 
     The flat model adds a Parent column at the end of the source model columns,
@@ -53,19 +53,19 @@ class KPLATOMODELS_EXPORT FlatProxyModel : public QAbstractProxyModel
 public:
     explicit FlatProxyModel(QObject *parent = 0);
 
-    virtual QModelIndex mapFromSource ( const QModelIndex & sourceIndex ) const;
-    virtual QItemSelection mapSelectionFromSource ( const QItemSelection & sourceSelection ) const;
-    virtual QItemSelection mapSelectionToSource ( const QItemSelection & proxySelection ) const;
-    virtual QModelIndex mapToSource ( const QModelIndex & proxyIndex ) const;
-    virtual void setSourceModel ( QAbstractItemModel * sourceModel );
+    virtual QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
+    virtual QItemSelection mapSelectionFromSource(const QItemSelection &sourceSelection) const;
+    virtual QItemSelection mapSelectionToSource(const QItemSelection &proxySelection) const;
+    virtual QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
+    virtual void setSourceModel(QAbstractItemModel *sourceModel);
 
-    QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &child) const;
-    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
-    int columnCount(const QModelIndex &parent  = QModelIndex() ) const;
-    bool hasChildren(const QModelIndex &parent = QModelIndex() ) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole ) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent  = QModelIndex()) const;
+    bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
@@ -74,10 +74,9 @@ public:
     QStringList mimeTypes() const;
     Qt::DropActions supportedDropActions() const;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent = QModelIndex());
-    
+
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-
 
 public Q_SLOTS:
     void sourceDataChanged(const QModelIndex &source_top_left,
@@ -90,27 +89,27 @@ public Q_SLOTS:
     void sourceLayoutChanged();
 
     void sourceRowsAboutToBeInserted(const QModelIndex &source_parent,
-                                        int start, int end);
+                                     int start, int end);
     void sourceRowsInserted(const QModelIndex &source_parent,
-                               int start, int end);
+                            int start, int end);
     void sourceRowsAboutToBeRemoved(const QModelIndex &source_parent,
-                                       int start, int end);
+                                    int start, int end);
     void sourceRowsRemoved(const QModelIndex &source_parent,
-                              int start, int end);
+                           int start, int end);
 
-    void sourceRowsAboutToBeMoved( const QModelIndex &source_parent,
-                                  int start, int end, const QModelIndex &destParent, int destStart );
-    void sourceRowsMoved( const QModelIndex &source_parent,
-                                  int start, int end, const QModelIndex &destParent, int destStart );
+    void sourceRowsAboutToBeMoved(const QModelIndex &source_parent,
+                                  int start, int end, const QModelIndex &destParent, int destStart);
+    void sourceRowsMoved(const QModelIndex &source_parent,
+                         int start, int end, const QModelIndex &destParent, int destStart);
 
 protected:
-    int mapFromSourceRow( const QModelIndex & sourceIndex ) const;
-    int mapToSourceRow( const  QModelIndex & sourceIndex ) const;
+    int mapFromSourceRow(const QModelIndex &sourceIndex) const;
+    int mapToSourceRow(const  QModelIndex &sourceIndex) const;
 
 private Q_SLOTS:
-    void initiateMaps( const QModelIndex &sourceParent = QModelIndex() );
+    void initiateMaps(const QModelIndex &sourceParent = QModelIndex());
     void sourceModelDestroyed();
-    
+
 private:
     /// List of sourceIndexes
     QList<QPersistentModelIndex> m_sourceIndexList;
@@ -119,6 +118,5 @@ private:
 };
 
 } //namespace KPlato
-
 
 #endif

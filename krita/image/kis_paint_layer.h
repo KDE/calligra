@@ -47,7 +47,7 @@ public:
      * @param opacity in the range between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
      * @param dev is the paint device, that should be used
      */
-    KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev);
+    KisPaintLayer(KisImageWSP image, const QString &name, quint8 opacity, KisPaintDeviceSP dev);
 
     /**
      * Construct a paint layer with the given parameters
@@ -55,7 +55,7 @@ public:
      * @param name of the layer
      * @param opacity in the range between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
      */
-    KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity);
+    KisPaintLayer(KisImageWSP image, const QString &name, quint8 opacity);
 
     /**
      * Construct a paint layer with the given parameters
@@ -64,29 +64,30 @@ public:
      * @param opacity in the range between OPACITY_TRANSPARENT_U8 and OPACITY_OPAQUE_U8
      * @param colorSpace is the color space, that should be used to construct the paint device. it can be null, if the image is valid.
      */
-    KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace);
+    KisPaintLayer(KisImageWSP image, const QString &name, quint8 opacity, const KoColorSpace *colorSpace);
     /**
      * Copy Constructor
      */
-    KisPaintLayer(const KisPaintLayer& rhs);
+    KisPaintLayer(const KisPaintLayer &rhs);
     virtual ~KisPaintLayer();
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return KisNodeSP(new KisPaintLayer(*this));
     }
 
     bool allowAsChild(KisNodeSP) const;
 
-    const KoColorSpace * colorSpace() const;
+    const KoColorSpace *colorSpace() const;
 
     bool needProjection() const;
 
     void copyOriginalToProjection(const KisPaintDeviceSP original,
                                   KisPaintDeviceSP projection,
-                                  const QRect& rect) const;
+                                  const QRect &rect) const;
 
     using KisLayer::setDirty;
-    void setDirty(const QRect & rect);
+    void setDirty(const QRect &rect);
 
     QIcon icon() const;
     void setImage(KisImageWSP image);
@@ -109,14 +110,14 @@ public:
      * the colorspace this layer is in, or be empty, in which case all
      * channels are active.
      */
-    void setChannelLockFlags(const QBitArray& channelFlags);
-    
+    void setChannelLockFlags(const QBitArray &channelFlags);
+
     /**
      * Return a bit array where each bit indicates whether a
      * particular channel is locked or not (used by painting tools).
      * If the channelflags bit array is empty, all channels are active.
      */
-    const QBitArray& channelLockFlags() const;
+    const QBitArray &channelLockFlags() const;
 
     /**
      * Returns the paintDevice that accompanies this layer
@@ -141,15 +142,15 @@ public:
 public Q_SLOTS:
 
     // KisIndirectPaintingSupport
-    KisLayer* layer() {
+    KisLayer *layer()
+    {
         return this;
     }
-
 
 private:
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 typedef KisSharedPtr<KisPaintLayer> KisPaintLayerSP;

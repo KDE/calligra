@@ -18,7 +18,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_motion_blur_filter.h"
 #include "kis_wdg_motion_blur.h"
 
@@ -38,7 +37,6 @@
 
 #include <math.h>
 
-
 KisMotionBlurFilter::KisMotionBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Motion Blur..."))
 {
     setSupportsPainting(true);
@@ -46,14 +44,14 @@ KisMotionBlurFilter::KisMotionBlurFilter() : KisFilter(id(), categoryBlur(), i18
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget *KisMotionBlurFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP) const
 {
     return new KisWdgMotionBlur(parent);
 }
 
-KisFilterConfiguration* KisMotionBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisMotionBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("blurAngle", 0);
     config->setProperty("blurLength", 5);
 
@@ -61,30 +59,33 @@ KisFilterConfiguration* KisMotionBlurFilter::factoryConfiguration(const KisPaint
 }
 
 void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
-                                      const QRect& rect,
-                                      const KisFilterConfiguration* config,
-                                      KoUpdater* progressUpdater
-                                      ) const
+                                      const QRect &rect,
+                                      const KisFilterConfiguration *config,
+                                      KoUpdater *progressUpdater
+                                     ) const
 {
     QPoint srcTopLeft = rect.topLeft();
 
     Q_ASSERT(device != 0);
 
-    if (!config) config = new KisFilterConfiguration(id().id(), 1);
+    if (!config) {
+        config = new KisFilterConfiguration(id().id(), 1);
+    }
 
     QVariant value;
     config->getProperty("blurAngle", value);
     uint blurAngle = value.toUInt();
     config->getProperty("blurLength", value);
     uint blurLength = value.toUInt();
-    
-    if (blurLength == 0)
+
+    if (blurLength == 0) {
         return;
+    }
 
     QBitArray channelFlags;
     if (config) {
         channelFlags = config->channelFlags();
-    } 
+    }
     if (channelFlags.isEmpty() || !config) {
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
@@ -109,7 +110,7 @@ void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
     QPainter imagePainter(&kernelRepresentation);
     imagePainter.setRenderHint(QPainter::Antialiasing);
     imagePainter.setPen(QPen(QColor::fromRgb(255, 255, 255), 1.0));
-    imagePainter.drawLine(QPointF(kernelWidth / 2 - halfWidth, kernelHeight / 2 + halfHeight), 
+    imagePainter.drawLine(QPointF(kernelWidth / 2 - halfWidth, kernelHeight / 2 + halfHeight),
                           QPointF(kernelWidth / 2 + halfWidth, kernelHeight / 2 - halfHeight));
 
     // construct kernel from image
@@ -129,7 +130,7 @@ void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
     painter.applyMatrix(kernel, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
 }
 
-QRect KisMotionBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisMotionBlurFilter::neededRect(const QRect &rect, const KisFilterConfiguration *_config) const
 {
     QVariant value;
     uint blurAngle = (_config->getProperty("blurAngle", value)) ? value.toUInt() : 0;
@@ -142,7 +143,7 @@ QRect KisMotionBlurFilter::neededRect(const QRect & rect, const KisFilterConfigu
     return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }
 
-QRect KisMotionBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisMotionBlurFilter::changedRect(const QRect &rect, const KisFilterConfiguration *_config) const
 {
     QVariant value;
     uint blurAngle = (_config->getProperty("blurAngle", value)) ? value.toUInt() : 0;

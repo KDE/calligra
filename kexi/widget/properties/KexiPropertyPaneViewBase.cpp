@@ -33,14 +33,15 @@
 class KexiPropertyPaneViewBase::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
     KexiObjectInfoLabel *infoLabel;
 };
 
-KexiPropertyPaneViewBase::KexiPropertyPaneViewBase(QWidget* parent)
-        : QWidget(parent)
-        , d(new Private())
+KexiPropertyPaneViewBase::KexiPropertyPaneViewBase(QWidget *parent)
+    : QWidget(parent)
+    , d(new Private())
 {
     //! @todo set a nice icon
 //    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
@@ -65,7 +66,7 @@ KexiObjectInfoLabel *KexiPropertyPaneViewBase::infoLabel() const
 }
 
 void KexiPropertyPaneViewBase::updateInfoLabelForPropertySet(
-        KoProperty::Set* set, const QString& textToDisplayForNullSet)
+    KoProperty::Set *set, const QString &textToDisplayForNullSet)
 {
     QString className, iconName, objectName;
     if (set) {
@@ -74,7 +75,7 @@ void KexiPropertyPaneViewBase::updateInfoLabelForPropertySet(
         const bool useCaptionAsObjectName
             = set->propertyValue("this:useCaptionAsObjectName", false).toBool();
         objectName = set->propertyValue(
-            useCaptionAsObjectName ? "caption" : "objectName").toString();
+                         useCaptionAsObjectName ? "caption" : "objectName").toString();
         if (objectName.isEmpty() && useCaptionAsObjectName) {
             // get name if there is no caption
             objectName = set->propertyValue("objectName").toString();
@@ -86,24 +87,26 @@ void KexiPropertyPaneViewBase::updateInfoLabelForPropertySet(
         iconName.clear();
     }
 
-    if (className.isEmpty() && objectName.isEmpty())
+    if (className.isEmpty() && objectName.isEmpty()) {
         d->infoLabel->hide();
-    else
+    } else {
         d->infoLabel->show();
+    }
 
     if (d->infoLabel->objectClassName() == className
             && d->infoLabel->objectClassIconName() == iconName
-            && d->infoLabel->objectName() == objectName)
+            && d->infoLabel->objectName() == objectName) {
         return;
+    }
 
     d->infoLabel->setObjectClassIconName(iconName);
     d->infoLabel->setObjectClassName(className);
     d->infoLabel->setObjectName(objectName);
 }
 
-QVBoxLayout* KexiPropertyPaneViewBase::mainLayout() const
+QVBoxLayout *KexiPropertyPaneViewBase::mainLayout() const
 {
-    return qobject_cast<QVBoxLayout*>(layout());
+    return qobject_cast<QVBoxLayout *>(layout());
 }
 
 int KexiPropertyPaneViewBase::spacing() const
@@ -113,10 +116,10 @@ int KexiPropertyPaneViewBase::spacing() const
 
 void KexiPropertyPaneViewBase::addSpacing()
 {
-    return mainLayout()->addSpacing( spacing() );
+    return mainLayout()->addSpacing(spacing());
 }
 
-QWidget* KexiPropertyPaneViewBase::addWidgetSpacer()
+QWidget *KexiPropertyPaneViewBase::addWidgetSpacer()
 {
     QWidget *sp = new QWidget(this);
     sp->setFixedHeight(spacing());

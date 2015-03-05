@@ -16,14 +16,13 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #include "kptpackage.h"
 
 using namespace KPlato;
 
 Package::Package()
-    : task( 0 ),
-    toTask( 0 )
+    : task(0),
+      toTask(0)
 {
 }
 

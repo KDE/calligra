@@ -13,12 +13,11 @@ puts "const unsigned char salt[256][256] = {"
 for i in 0..255
 puts "    {"
 a = `seq 0 255 | sort --random - sort | xargs - n1 printf "0x%02x, "`
-    a = a[0, a.length-2]
+    a = a[0, a.length - 2]
             puts a
             print "    }"
             puts "," unless i == 255
             end
-
 
             puts "};"
 

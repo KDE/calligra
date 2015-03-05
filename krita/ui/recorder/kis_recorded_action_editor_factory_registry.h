@@ -37,23 +37,23 @@ private:
     KisRecordedActionEditorFactoryRegistry();
     ~KisRecordedActionEditorFactoryRegistry();
 public:
-    static KisRecordedActionEditorFactoryRegistry* instance();
+    static KisRecordedActionEditorFactoryRegistry *instance();
     /**
      * Add a factory of action editor.
      */
-    void add(KisRecordedActionEditorFactory* factory);
+    void add(KisRecordedActionEditorFactory *factory);
     /**
      * @return an editor for the given action, or a null pointer if there is
      *         no factory for that action.
      */
-    QWidget* createEditor(QWidget* parent, KisRecordedAction* action) const;
+    QWidget *createEditor(QWidget *parent, KisRecordedAction *action) const;
     /**
      * @return true if there is an editor for this action.
      */
-    bool hasEditor(KisRecordedAction* action) const;
+    bool hasEditor(KisRecordedAction *action) const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

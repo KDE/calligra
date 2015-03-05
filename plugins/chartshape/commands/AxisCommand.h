@@ -26,7 +26,6 @@
 // KChart
 #include "kchart_global.h"
 
-
 #if 0
 namespace KDChart
 {
@@ -35,7 +34,6 @@ class AbstractDiagram;
 class Chart;
 }
 #endif
-
 
 namespace KChart
 {
@@ -49,7 +47,7 @@ public:
     /**
      * Constructor.
      */
-    AxisCommand(Axis* axis, ChartShape* chart);
+    AxisCommand(Axis *axis, ChartShape *chart);
 
     /**
      * Destructor.
@@ -67,14 +65,14 @@ public:
     virtual void undo();
 
     void setAxisShowTitle(bool show);
-    void setAxisTitle(const QString& title);
+    void setAxisTitle(const QString &title);
     void setAxisShowGridLines(bool show);
     void setAxisUseLogarithmicScaling(bool b);
     void setAxisStepWidth(qreal width);
     void setAxisSubStepWidth(qreal width);
     void setAxisUseAutomaticStepWidth(bool automatic);
     void setAxisUseAutomaticSubStepWidth(bool automatic);
-    void setAxisLabelsFont(const QFont& font);
+    void setAxisLabelsFont(const QFont &font);
 
 private:
     ChartShape *m_chart;

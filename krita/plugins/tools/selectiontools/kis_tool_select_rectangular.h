@@ -28,14 +28,13 @@
 #include <KoIcon.h>
 #include <kshortcut.h>
 
-
 class KisToolSelectRectangular : public KisToolRectangleBase
 {
     Q_OBJECT
     Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged);
 public:
-    KisToolSelectRectangular(KoCanvasBase * canvas);
-    QWidget* createOptionWidget();
+    KisToolSelectRectangular(KoCanvasBase *canvas);
+    QWidget *createOptionWidget();
     SelectionAction selectionAction() const;
 
 public Q_SLOTS:
@@ -46,20 +45,20 @@ Q_SIGNALS:
 
 private:
     void keyPressEvent(QKeyEvent *event);
-    void finishRect(const QRectF& rect);
+    void finishRect(const QRectF &rect);
 
 private:
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
     SelectionAction m_selectionAction;
 };
 
-
 class KisToolSelectRectangularFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectRectangularFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolSelectRectangular") {
+    KisToolSelectRectangularFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolSelectRectangular")
+    {
         setToolTip(i18n("Rectangular Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -70,12 +69,11 @@ public:
 
     virtual ~KisToolSelectRectangularFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return  new KisToolSelectRectangular(canvas);
     }
 };
-
-
 
 #endif // KIS_TOOL_SELECT_RECTANGULAR_H_
 

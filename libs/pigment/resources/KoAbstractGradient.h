@@ -36,19 +36,23 @@ public:
     explicit KoAbstractGradient(const QString &filename);
     virtual ~KoAbstractGradient();
 
-    virtual bool load() {
+    virtual bool load()
+    {
         return false;
     }
 
-    virtual bool loadFromDevice(QIODevice *) {
+    virtual bool loadFromDevice(QIODevice *)
+    {
         return false;
     }
 
-    virtual bool save() {
+    virtual bool save()
+    {
         return false;
     }
 
-    virtual bool saveToDevice(QIODevice*) const {
+    virtual bool saveToDevice(QIODevice *) const
+    {
         return false;
     }
 
@@ -56,15 +60,16 @@ public:
     * Creates a QGradient from the gradient.
     * The resulting QGradient might differ from original gradient
     */
-    virtual QGradient* toQGradient() const {
+    virtual QGradient *toQGradient() const
+    {
         return new QGradient();
     }
 
     /// gets the color at position 0 <= t <= 1
-    virtual void colorAt(KoColor&, qreal t) const;
+    virtual void colorAt(KoColor &, qreal t) const;
 
-    void setColorSpace(KoColorSpace* colorSpace);
-    const KoColorSpace * colorSpace() const;
+    void setColorSpace(KoColorSpace *colorSpace);
+    const KoColorSpace *colorSpace() const;
 
     void setSpread(QGradient::Spread spreadMethod);
     QGradient::Spread spread() const;
@@ -80,7 +85,7 @@ protected:
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KOABSTRACTGRADIENT_H

@@ -40,14 +40,14 @@ class KoTable;
 class PptxXmlDocumentReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    PptxXmlDocumentReaderContext(PptxImport& _import, const QString& _path, const QString& _file,
-                                 MSOOXML::MsooXmlRelationships& _relationships);
+    PptxXmlDocumentReaderContext(PptxImport &_import, const QString &_path, const QString &_file,
+                                 MSOOXML::MsooXmlRelationships &_relationships);
     PptxImport *import;
     const QString path;
     const QString file;
-    MSOOXML::MsooXmlRelationships* relationships;
+    MSOOXML::MsooXmlRelationships *relationships;
     bool firstReadRound;
-    MSOOXML::DrawingMLTheme* themes;
+    MSOOXML::DrawingMLTheme *themes;
     unsigned numberOfItems;
 };
 
@@ -61,7 +61,7 @@ public:
 
     //! Reads/parses the file of format document.xml.
     //! The output goes mainly to KoXmlWriter* KoOdfWriters::body
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
 protected:
     KoFilter::ConversionStatus readInternal();
@@ -77,10 +77,10 @@ protected:
     KoFilter::ConversionStatus read_defaultTextStyle();
 
     // Locates slide layout informaitons for given slide. Caches the result.
-    PptxSlideProperties* slideLayoutProperties(const QString& slidePath, const QString& slideFile);
+    PptxSlideProperties *slideLayoutProperties(const QString &slidePath, const QString &slideFile);
 
     KoOdfWriters *m_writers;
-    PptxXmlDocumentReaderContext* m_context;
+    PptxXmlDocumentReaderContext *m_context;
 
     // Default pptx styles
     QVector<KoGenStyle> defaultParagraphStyles;
@@ -98,7 +98,7 @@ private:
     void init();
 
     class Private;
-    Private* const d;
+    Private *const d;
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
 #include <MsooXmlDrawingReaderTableMethods.h>

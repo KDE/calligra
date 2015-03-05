@@ -56,7 +56,7 @@ KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds)
     m_d->pixelSelection->setParentNode(m_d->parentNode);
 }
 
-KisSelection::KisSelection(const KisSelection& rhs)
+KisSelection::KisSelection(const KisSelection &rhs)
     : KisShared(),
       m_d(new Private)
 {
@@ -81,13 +81,11 @@ void KisSelection::copyFrom(const KisSelection &rhs)
     m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection);
     m_d->pixelSelection->setParentSelection(this);
 
-
     if (rhs.m_d->shapeSelection) {
         m_d->shapeSelection = rhs.m_d->shapeSelection->clone(this);
         Q_ASSERT(m_d->shapeSelection);
         Q_ASSERT(m_d->shapeSelection != rhs.m_d->shapeSelection);
-    }
-    else {
+    } else {
         m_d->shapeSelection = 0;
     }
 }
@@ -113,7 +111,7 @@ KisNodeWSP KisSelection::parentNode() const
 bool KisSelection::outlineCacheValid() const
 {
     return hasShapeSelection() ||
-        m_d->pixelSelection->outlineCacheValid();
+           m_d->pixelSelection->outlineCacheValid();
 }
 
 QPainterPath KisSelection::outlineCache() const
@@ -175,12 +173,12 @@ KisPixelSelectionSP KisSelection::pixelSelection() const
     return m_d->pixelSelection;
 }
 
-KisSelectionComponent* KisSelection::shapeSelection() const
+KisSelectionComponent *KisSelection::shapeSelection() const
 {
     return m_d->shapeSelection;
 }
 
-void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
+void KisSelection::setShapeSelection(KisSelectionComponent *shapeSelection)
 {
     m_d->shapeSelection = shapeSelection;
 }
@@ -192,7 +190,7 @@ KisPixelSelectionSP KisSelection::projection() const
 
 void KisSelection::updateProjection(const QRect &rc)
 {
-    if(hasShapeSelection()) {
+    if (hasShapeSelection()) {
         m_d->shapeSelection->renderToProjection(m_d->pixelSelection, rc);
         m_d->pixelSelection->setOutlineCache(m_d->shapeSelection->outlineCache());
     }
@@ -200,7 +198,7 @@ void KisSelection::updateProjection(const QRect &rc)
 
 void KisSelection::updateProjection()
 {
-    if(hasShapeSelection()) {
+    if (hasShapeSelection()) {
         m_d->pixelSelection->clear();
         m_d->shapeSelection->renderToProjection(m_d->pixelSelection);
         m_d->pixelSelection->setOutlineCache(m_d->shapeSelection->outlineCache());
@@ -223,7 +221,7 @@ bool KisSelection::isVisible()
     return m_d->isVisible;
 }
 
-bool KisSelection::isTotallyUnselected(const QRect & r) const
+bool KisSelection::isTotallyUnselected(const QRect &r) const
 {
     return m_d->pixelSelection->isTotallyUnselected(r);
 }
@@ -285,7 +283,7 @@ void KisSelection::clear()
     m_d->pixelSelection->clear();
 }
 
-KUndo2Command* KisSelection::flatten()
+KUndo2Command *KisSelection::flatten()
 {
     KUndo2Command *command = 0;
 
@@ -299,10 +297,14 @@ KUndo2Command* KisSelection::flatten()
 void KisSelection::notifySelectionChanged()
 {
     KisNodeWSP parentNode;
-    if (!(parentNode = this->parentNode())) return;
+    if (!(parentNode = this->parentNode())) {
+        return;
+    }
 
     KisNodeGraphListener *listener;
-    if (!(listener = parentNode->graphListener())) return;
+    if (!(listener = parentNode->graphListener())) {
+        return;
+    }
 
     listener->notifySelectionChanged();
 }

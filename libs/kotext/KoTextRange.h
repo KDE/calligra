@@ -64,10 +64,10 @@ public:
      */
     KoTextRangeManager *manager() const;
 
-     /**
-     * Return the textdocument the range points to.
-     */
-   QTextDocument *document() const;
+    /**
+    * Return the textdocument the range points to.
+    */
+    QTextDocument *document() const;
 
     /**
      * Save the part of this text range corresponding to position as ODF

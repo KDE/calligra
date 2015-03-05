@@ -34,8 +34,8 @@ class KWPageSettingsDialog : public KoPageLayoutDialog
 {
     Q_OBJECT
 public:
-    explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, const KWPage &page);
-    KPageWidgetItem* pageItem(const QString &name) const;
+    explicit KWPageSettingsDialog(QWidget *parent, KWDocument *document, const KWPage &page);
+    KPageWidgetItem *pageItem(const QString &name) const;
 
 protected:
     void accept();
@@ -55,7 +55,7 @@ private:
     KWDocumentColumns *m_columns;
     QListWidget *m_pageStylesView;
     QPushButton *m_clonePageStyleButton, *m_deletePageStyleButton;
-    QMap<QString, KPageWidgetItem*> m_pages;
+    QMap<QString, KPageWidgetItem *> m_pages;
     QString m_prevSelectedPageStyle;
 
     void reloadPageStyles();

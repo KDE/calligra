@@ -26,11 +26,10 @@
 #include <kundo2command.h>
 #include <QSize>
 
-
 class KisImageResizeCommand : public KUndo2Command
 {
 public:
-    KisImageResizeCommand(KisImageWSP image, const QSize& newRect);
+    KisImageResizeCommand(KisImageWSP image, const QSize &newRect);
 
     void redo();
     void undo();

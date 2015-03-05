@@ -30,8 +30,6 @@
 #include <KoIcon.h>
 #include <KPushButton>
 
-
-
 KisCategorizedItemDelegate::KisCategorizedItemDelegate(bool indicateError, QObject *parent)
     : QStyledItemDelegate(parent),
       m_indicateError(indicateError),
@@ -39,34 +37,35 @@ KisCategorizedItemDelegate::KisCategorizedItemDelegate(bool indicateError, QObje
 {
 }
 
-void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void KisCategorizedItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     painter->resetTransform();
 
-    if(!index.data(__CategorizedListModelBase::IsHeaderRole).toBool()) {
+    if (!index.data(__CategorizedListModelBase::IsHeaderRole).toBool()) {
         QStyleOptionViewItem sovi(option);
 
-        if(m_indicateError)
+        if (m_indicateError) {
             sovi.decorationPosition = QStyleOptionViewItem::Right;
+        }
 
         QStyledItemDelegate::paint(painter, sovi, index);
         if (index.data(__CategorizedListModelBase::isLockableRole).toBool()) {
             bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
             const KIcon icon = locked ? koIcon(koIconName("locked")) : koIcon(koIconName("unlocked"));
-            QPixmap pixmap = icon.pixmap(QSize(sovi.rect.height() - 8, sovi.rect.height() -8));
+            QPixmap pixmap = icon.pixmap(QSize(sovi.rect.height() - 8, sovi.rect.height() - 8));
             painter->drawPixmap(sovi.rect.width() - pixmap.width(), sovi.rect.y() + 4, pixmap);
         }
         painter->setOpacity(1);
-    }
-    else {
+    } else {
         QPalette palette = QApplication::palette();
-        if(option.state & QStyle::State_MouseOver)
+        if (option.state & QStyle::State_MouseOver) {
             painter->fillRect(option.rect, palette.midlight());
-        else
+        } else {
             painter->fillRect(option.rect, palette.button());
+        }
 
         painter->setBrush(palette.buttonText());
-        painter->drawText(option.rect, index.data().toString(), QTextOption(Qt::AlignVCenter|Qt::AlignHCenter));
+        painter->drawText(option.rect, index.data().toString(), QTextOption(Qt::AlignVCenter | Qt::AlignHCenter));
 
         paintTriangle(
             painter,
@@ -79,11 +78,11 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
     painter->resetTransform();
 }
 
-QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     //on first calling this calculates the minimal height of the items
     if (m_minimumItemHeight == 0) {
-        for(int i=0; i<index.model()->rowCount(); i++) {
+        for (int i = 0; i < index.model()->rowCount(); i++) {
             QSize indexSize = QStyledItemDelegate::sizeHint(option, index.model()->index(i, 0));
             m_minimumItemHeight = qMax(m_minimumItemHeight, indexSize.height());
         }
@@ -91,18 +90,19 @@ QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem& option, c
     return QSize(QStyledItemDelegate::sizeHint(option, index).width(), m_minimumItemHeight);
 }
 
-void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const
+void KisCategorizedItemDelegate::paintTriangle(QPainter *painter, qint32 x, qint32 y, qint32 size, bool rotate) const
 {
     QPolygonF triangle;
-    triangle.push_back(QPointF(-0.2,-0.2));
-    triangle.push_back(QPointF( 0.2,-0.2));
-    triangle.push_back(QPointF( 0.0, 0.2));
+    triangle.push_back(QPointF(-0.2, -0.2));
+    triangle.push_back(QPointF(0.2, -0.2));
+    triangle.push_back(QPointF(0.0, 0.2));
 
-    painter->translate(x + size/2, y + size/2);
+    painter->translate(x + size / 2, y + size / 2);
     painter->scale(size, size);
 
-    if(rotate)
+    if (rotate) {
         painter->rotate(-90);
+    }
 
     QPalette palette = QApplication::palette();
     painter->setBrush(palette.buttonText());

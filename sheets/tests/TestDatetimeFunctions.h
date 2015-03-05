@@ -70,7 +70,7 @@ private Q_SLOTS:
     void testWEEKS();
 
 private:
-    Value evaluate(const QString&, Value& ex);
+    Value evaluate(const QString &, Value &ex);
 };
 
 } // namespace Sheets

@@ -50,8 +50,8 @@ public:
 
 KoCopyControllerPrivate::KoCopyControllerPrivate(KoCopyController *p, KoCanvasBase *c, QAction *a)
     : parent(p),
-    canvas(c),
-    action(a)
+      canvas(c),
+      action(a)
 {
     appHasSelection = false;
 }
@@ -60,17 +60,18 @@ void KoCopyControllerPrivate::copy()
 {
     if (canvas->toolProxy()->hasSelection())
         // means the copy can be done by a flake tool
+    {
         canvas->toolProxy()->copy();
-    else // if not; then the application gets a request to do the copy
+    } else { // if not; then the application gets a request to do the copy
         emit parent->copyRequested();
+    }
 }
 
 void KoCopyControllerPrivate::cut()
 {
     if (canvas->toolProxy()->hasSelection()) {
         canvas->toolProxy()->cut();
-    }
-    else {
+    } else {
         emit parent->copyRequested();
     }
 }
@@ -80,11 +81,10 @@ void KoCopyControllerPrivate::selectionChanged(bool hasSelection)
     action->setEnabled(appHasSelection || hasSelection);
 }
 
-
 // KoCopyController
 KoCopyController::KoCopyController(KoCanvasBase *canvas, QAction *copyAction)
     : QObject(copyAction),
-    d(new KoCopyControllerPrivate(this, canvas, copyAction))
+      d(new KoCopyControllerPrivate(this, canvas, copyAction))
 {
     connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
     connect(copyAction, SIGNAL(triggered()), this, SLOT(copy()));

@@ -31,26 +31,26 @@ class KEXIUTILS_EXPORT KexiAssistantWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KexiAssistantWidget(QWidget* parent = 0);
+    explicit KexiAssistantWidget(QWidget *parent = 0);
     ~KexiAssistantWidget();
 
-    void addPage(KexiAssistantPage* page);
+    void addPage(KexiAssistantPage *page);
 
-    KexiAssistantPage* currentPage() const;
+    KexiAssistantPage *currentPage() const;
 
 public Q_SLOTS:
-    void setCurrentPage(KexiAssistantPage* page);
+    void setCurrentPage(KexiAssistantPage *page);
 
-    virtual void nextPageRequested(KexiAssistantPage* page);
+    virtual void nextPageRequested(KexiAssistantPage *page);
 
-    virtual void cancelRequested(KexiAssistantPage* page);
+    virtual void cancelRequested(KexiAssistantPage *page);
 
 private Q_SLOTS:
-    virtual void previousPageRequested(KexiAssistantPage* page);
+    virtual void previousPageRequested(KexiAssistantPage *page);
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

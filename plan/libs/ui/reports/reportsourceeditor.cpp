@@ -30,62 +30,62 @@
 namespace KPlato
 {
 
-ReportSourceEditor::ReportSourceEditor( QWidget *parent )
-    : QWidget( parent )
+ReportSourceEditor::ReportSourceEditor(QWidget *parent)
+    : QWidget(parent)
 {
-    setupUi( this );
+    setupUi(this);
 
     connect(ui_source, SIGNAL(currentIndexChanged(int)), SLOT(slotCurrentIndexChanged()));
 }
 
-void ReportSourceEditor::setModel( QAbstractItemModel *model )
+void ReportSourceEditor::setModel(QAbstractItemModel *model)
 {
-    ui_source->setModel( model );
-    ui_source->setCurrentIndex( 0 );
+    ui_source->setModel(model);
+    ui_source->setCurrentIndex(0);
 }
 
 void ReportSourceEditor::slotCurrentIndexChanged()
 {
-    emit selectFromChanged( selectFromTag() );
+    emit selectFromChanged(selectFromTag());
 }
 
 QString ReportSourceEditor::selectFromTag() const
 {
     QString tag;
-    if ( ui_source->currentIndex() >= 0 ) {
+    if (ui_source->currentIndex() >= 0) {
         QAbstractItemModel *m = ui_source->model();
-        tag = m->index( ui_source->currentIndex(), 0 ).data( Reports::TagRole ).toString();
+        tag = m->index(ui_source->currentIndex(), 0).data(Reports::TagRole).toString();
     }
     return tag;
 }
 
-void ReportSourceEditor::setSourceData( const QDomElement &element )
+void ReportSourceEditor::setSourceData(const QDomElement &element)
 {
-    if ( element.tagName() != "data-source" ) {
-        kDebug(planDbg())<<"no source element";
-        ui_source->setCurrentIndex( 0 );
+    if (element.tagName() != "data-source") {
+        kDebug(planDbg()) << "no source element";
+        ui_source->setCurrentIndex(0);
         return;
     }
-    QString selectfrom = element.attribute( "select-from" );
+    QString selectfrom = element.attribute("select-from");
     QAbstractItemModel *m = ui_source->model();
-    for ( int row = 0; row < m->rowCount(); ++row ) {
-        QString name = m->index( row, 0 ).data( Reports::TagRole ).toString();
-        if ( ! name.isEmpty() && name == selectfrom ) {
-            ui_source->setCurrentIndex( row );
+    for (int row = 0; row < m->rowCount(); ++row) {
+        QString name = m->index(row, 0).data(Reports::TagRole).toString();
+        if (! name.isEmpty() && name == selectfrom) {
+            ui_source->setCurrentIndex(row);
             return;
         }
     }
-    kDebug(planDbg())<<"no source";
-    ui_source->setCurrentIndex( 0 );
+    kDebug(planDbg()) << "no source";
+    ui_source->setCurrentIndex(0);
 }
 
-void ReportSourceEditor::sourceData( QDomElement &element ) const
+void ReportSourceEditor::sourceData(QDomElement &element) const
 {
-    QDomElement e = element.ownerDocument().createElement( "data-source" );
-    element.appendChild( e );
+    QDomElement e = element.ownerDocument().createElement("data-source");
+    element.appendChild(e);
     int row = ui_source->currentIndex();
     QAbstractItemModel *m = ui_source->model();
-    e.setAttribute( "select-from", m->index( row, 0 ).data( Reports::TagRole ).toString() );
+    e.setAttribute("select-from", m->index(row, 0).data(Reports::TagRole).toString());
 }
 
 } //namespace KPlato

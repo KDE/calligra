@@ -25,12 +25,11 @@
 #include <kglobal.h>
 #include <kis_debug.h>
 
-KisRecordedActionFactoryRegistry* KisRecordedActionFactoryRegistry::instance()
+KisRecordedActionFactoryRegistry *KisRecordedActionFactoryRegistry::instance()
 {
     K_GLOBAL_STATIC(KisRecordedActionFactoryRegistry, s_instance);
     return s_instance;
 }
-
 
 KisRecordedActionFactoryRegistry::KisRecordedActionFactoryRegistry()
 {
@@ -42,7 +41,7 @@ KisRecordedActionFactoryRegistry::KisRecordedActionFactoryRegistry()
 
 KisRecordedActionFactoryRegistry::~KisRecordedActionFactoryRegistry()
 {
-    foreach(const QString &id, keys()) {
+    foreach (const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "deleting KisRecordedActionFactoryRegistry";

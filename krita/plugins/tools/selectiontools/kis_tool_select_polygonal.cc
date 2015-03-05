@@ -35,7 +35,6 @@
 
 #include "kis_system_locker.h"
 
-
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas)
     : KisToolPolylineBase(canvas, KisToolPolylineBase::SELECT,
                           KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6)),
@@ -52,10 +51,8 @@ SelectionAction KisToolSelectPolygonal::selectionAction() const
 
 void KisToolSelectPolygonal::setSelectionAction(int newSelectionAction)
 {
-    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
-    {
-        if(m_widgetHelper.optionWidget())
-        {
+    if (newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction) {
+        if (m_widgetHelper.optionWidget()) {
             m_widgetHelper.slotSetAction(newSelectionAction);
         }
         m_selectionAction = (SelectionAction)newSelectionAction;
@@ -63,9 +60,9 @@ void KisToolSelectPolygonal::setSelectionAction(int newSelectionAction)
     }
 }
 
-QWidget* KisToolSelectPolygonal::createOptionWidget()
+QWidget *KisToolSelectPolygonal::createOptionWidget()
 {
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
     Q_ASSERT(canvas);
 
     m_widgetHelper.createOptionWidget(canvas, this->toolId());
@@ -81,10 +78,11 @@ void KisToolSelectPolygonal::keyPressEvent(QKeyEvent *event)
 
 void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
 {
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     Q_ASSERT(kisCanvas);
-    if (!kisCanvas)
+    if (!kisCanvas) {
         return;
+    }
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Polygon"));
 
@@ -107,14 +105,15 @@ void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
 
         helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
     } else {
-        KoPathShape* path = new KoPathShape();
+        KoPathShape *path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
 
         QTransform resolutionMatrix;
         resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
         path->moveTo(resolutionMatrix.map(points[0]));
-        for (int i = 1; i < points.count(); i++)
+        for (int i = 1; i < points.count(); i++) {
             path->lineTo(resolutionMatrix.map(points[i]));
+        }
         path->close();
         path->normalize();
 

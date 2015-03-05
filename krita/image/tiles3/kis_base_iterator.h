@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -25,9 +25,11 @@
 #include "kis_types.h"
 #include "kis_shared.h"
 
-class KisBaseIterator {
+class KisBaseIterator
+{
 protected:
-    KisBaseIterator(KisTiledDataManager * _dataManager, bool _writable) {
+    KisBaseIterator(KisTiledDataManager *_dataManager, bool _writable)
+    {
         m_dataManager = _dataManager;
         m_pixelSize = m_dataManager->pixelSize();
         m_writable = _writable;
@@ -35,35 +37,43 @@ protected:
     qint32 m_pixelSize;        // bytes per pixel
     KisTiledDataManager *m_dataManager;
     bool m_writable;
-    inline void lockTile(KisTileSP &tile) {
-        if (m_writable)
+    inline void lockTile(KisTileSP &tile)
+    {
+        if (m_writable) {
             tile->lockForWrite();
-        else
+        } else {
             tile->lockForRead();
+        }
     }
-    inline void lockOldTile(KisTileSP &tile) {
+    inline void lockOldTile(KisTileSP &tile)
+    {
         // Doesn't depend on current access type
         tile->lockForRead();
     }
-    inline void unlockTile(KisTileSP &tile) {
+    inline void unlockTile(KisTileSP &tile)
+    {
         tile->unlock();
     }
 
-    inline quint32 xToCol(quint32 x) const {
+    inline quint32 xToCol(quint32 x) const
+    {
         return m_dataManager ? m_dataManager->xToCol(x) : 0;
     }
-    inline quint32 yToRow(quint32 y) const {
+    inline quint32 yToRow(quint32 y) const
+    {
         return m_dataManager ? m_dataManager->yToRow(y) : 0;
     }
 
-    inline qint32 calcXInTile(qint32 x, qint32 col) const {
+    inline qint32 calcXInTile(qint32 x, qint32 col) const
+    {
         return x - col * KisTileData::WIDTH;
     }
 
-    inline qint32 calcYInTile(qint32 y, qint32 row) const {
+    inline qint32 calcYInTile(qint32 y, qint32 row) const
+    {
         return y - row * KisTileData::HEIGHT;
     }
-    
+
 };
 
 #endif

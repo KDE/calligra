@@ -53,20 +53,20 @@ void CAuMetaDataManager::registerAuthorRdfFile()
     KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(m_doc->documentRdf());
 
     const QString sparqlQuery = QString(
-        "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        "PREFIX odf: <http://docs.oasis-open.org/ns/office/1.2/meta/odf#> \n"
-        "PREFIX pkg: <http://docs.oasis-open.org/ns/office/1.2/meta/pkg#> \n"
-        "SELECT ?metafile ?metafilename \n"
-        "WHERE { \n"
-        "    ?metafile rdf:type odf:MetaDataFile . \n"
-        "    ?metafile pkg:path ?metafilename    . \n"
-        "    FILTER( str(?metafilename) = \"%1\" ) \n"
-        "} \n").arg(AUTHOR_RDF_FILE_NAME).toLatin1();
+                                    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+                                    "PREFIX odf: <http://docs.oasis-open.org/ns/office/1.2/meta/odf#> \n"
+                                    "PREFIX pkg: <http://docs.oasis-open.org/ns/office/1.2/meta/pkg#> \n"
+                                    "SELECT ?metafile ?metafilename \n"
+                                    "WHERE { \n"
+                                    "    ?metafile rdf:type odf:MetaDataFile . \n"
+                                    "    ?metafile pkg:path ?metafilename    . \n"
+                                    "    FILTER( str(?metafilename) = \"%1\" ) \n"
+                                    "} \n").arg(AUTHOR_RDF_FILE_NAME).toLatin1();
 
     QueryResultIterator it = rdf->model()->executeQuery(
-        sparqlQuery,
-        Query::QueryLanguageSparql
-    );
+                                 sparqlQuery,
+                                 Query::QueryLanguageSparql
+                             );
 
     int cnt = it.bindingCount();
     it.close();

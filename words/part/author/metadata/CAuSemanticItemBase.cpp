@@ -48,7 +48,6 @@ void CAuSemanticItemBase::init(QueryResultIterator &it)
     }
 }
 
-
 void CAuSemanticItemBase::setupProps()
 {
     foreach (const QString &propName, stringProps()) {
@@ -77,19 +76,19 @@ QString CAuSemanticItemBase::formQuery()
     }
 
     QString result = QString(
-        "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        "PREFIX cau:  <%1> \n"
-        "PREFIX type: <%2> \n"
-        "SELECT DISTINCT ?graph ?uri ?magicid%3\n"
-        "WHERE { \n"
-        "  GRAPH ?graph { \n"
-        "    ?uri rdf:type cau:%4 . \n"
-        "    ?uri type:magicid ?magicid . \n"
-        "%5"
-        "    }\n"
-        "}\n").arg(authorPrefix, typePrefix, bindingsList, className(), queryList);
+                         "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+                         "PREFIX cau:  <%1> \n"
+                         "PREFIX type: <%2> \n"
+                         "SELECT DISTINCT ?graph ?uri ?magicid%3\n"
+                         "WHERE { \n"
+                         "  GRAPH ?graph { \n"
+                         "    ?uri rdf:type cau:%4 . \n"
+                         "    ?uri type:magicid ?magicid . \n"
+                         "%5"
+                         "    }\n"
+                         "}\n").arg(authorPrefix, typePrefix, bindingsList, className(), queryList);
 
-   return result;
+    return result;
 }
 
 void CAuSemanticItemBase::updateFromEditorData()
@@ -143,6 +142,6 @@ void CAuSemanticItemBase::setIntProp(const QString &propName, const int &value)
 void CAuSemanticItemBase::finishUpdateFromEditorData()
 {
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfBasicSemanticItem(this));
+        const_cast<KoDocumentRdf *>(documentRdf())->emitSemanticObjectUpdated(hKoRdfBasicSemanticItem(this));
     }
 }

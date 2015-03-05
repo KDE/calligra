@@ -19,7 +19,6 @@
 #ifndef __KIS_LAZY_WAIT_CONDITION_H
 #define __KIS_LAZY_WAIT_CONDITION_H
 
-
 #include <QWaitCondition>
 
 /**
@@ -67,43 +66,50 @@ public:
     {
     }
 
-    void initWaiting() {
+    void initWaiting()
+    {
         QMutexLocker locker(&m_mutex);
-        if(!m_waitCounter) {
+        if (!m_waitCounter) {
             m_wakeupCounter = 0;
         }
 
         m_waitCounter++;
     }
 
-    void endWaiting() {
+    void endWaiting()
+    {
         QMutexLocker locker(&m_mutex);
         m_waitCounter--;
     }
 
-    bool wait(unsigned long time = ULONG_MAX) {
+    bool wait(unsigned long time = ULONG_MAX)
+    {
         QMutexLocker locker(&m_mutex);
         bool result = true;
-        if(!m_wakeupCounter) {
+        if (!m_wakeupCounter) {
             result = m_condition.wait(&m_mutex, time);
         }
-        if(result) {
+        if (result) {
             m_wakeupCounter--;
         }
         return result;
     }
 
-    void wakeAll() {
-        if(!m_waitCounter) return;
+    void wakeAll()
+    {
+        if (!m_waitCounter) {
+            return;
+        }
 
         QMutexLocker locker(&m_mutex);
-        if(m_waitCounter) {
+        if (m_waitCounter) {
             m_wakeupCounter += m_waitCounter;
             m_condition.wakeAll();
         }
     }
 
-    bool isSomeoneWaiting() {
+    bool isSomeoneWaiting()
+    {
         return m_waitCounter;
     }
 

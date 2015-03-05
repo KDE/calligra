@@ -23,11 +23,11 @@
 
 KPrEditCustomSlideShowsCommand::KPrEditCustomSlideShowsCommand(
     KPrDocument *doc, const QString &name, QList<KoPAPageBase *> newCustomShow, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_doc(doc)
-, m_name(name)
-, m_newCustomShow(newCustomShow)
-, m_oldCustomShow(doc->customSlideShows()->getByName(name))
+    : KUndo2Command(parent)
+    , m_doc(doc)
+    , m_name(name)
+    , m_newCustomShow(newCustomShow)
+    , m_oldCustomShow(doc->customSlideShows()->getByName(name))
 {
     setText(kundo2_i18n("Edit custom slide show"));
 }

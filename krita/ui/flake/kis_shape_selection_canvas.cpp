@@ -19,15 +19,14 @@
 
 #include "kis_shape_selection_canvas.h"
 
-
 #include <QPainter>
 
 #include <KoShapeManager.h>
 #include <KoUnit.h>
 
 KisShapeSelectionCanvas::KisShapeSelectionCanvas()
-        : KoCanvasBase(0)
-        , m_shapeManager(new KoShapeManager(this))
+    : KoCanvasBase(0)
+    , m_shapeManager(new KoShapeManager(this))
 {
 }
 
@@ -59,12 +58,12 @@ KoShapeManager *KisShapeSelectionCanvas::shapeManager() const
     return m_shapeManager;
 }
 
-void KisShapeSelectionCanvas::updateCanvas(const QRectF& rc)
+void KisShapeSelectionCanvas::updateCanvas(const QRectF &rc)
 {
     Q_UNUSED(rc);
 }
 
-KoToolProxy * KisShapeSelectionCanvas::toolProxy() const
+KoToolProxy *KisShapeSelectionCanvas::toolProxy() const
 {
 //     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     return 0;
@@ -75,12 +74,12 @@ KoViewConverter *KisShapeSelectionCanvas::viewConverter() const
     return 0;
 }
 
-QWidget* KisShapeSelectionCanvas::canvasWidget()
+QWidget *KisShapeSelectionCanvas::canvasWidget()
 {
     return 0;
 }
 
-const QWidget* KisShapeSelectionCanvas::canvasWidget() const
+const QWidget *KisShapeSelectionCanvas::canvasWidget() const
 {
     return 0;
 }

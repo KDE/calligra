@@ -17,7 +17,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
- 
+
 #include "FullScreenPlayer.h"
 
 #include <KoIcon.h>
@@ -160,9 +160,9 @@ void FullScreenPlayer::mousePressEvent(QMouseEvent *event)
 
 void FullScreenPlayer::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key()==Qt::Key_Escape) {
-       m_mediaObject->stop();
-       deleteLater();
+    if (event->key() == Qt::Key_Escape) {
+        m_mediaObject->stop();
+        deleteLater();
     }
 }
 
@@ -171,35 +171,34 @@ void FullScreenPlayer::playStateChanged(Phonon::State newState, Phonon::State ol
     Q_UNUSED(oldState);
 
     switch (newState) {
-        case Phonon::PlayingState:
-                m_play->setVisible(false);
-                m_pause->setVisible(true);
-                break;
-        case Phonon::PausedState:
-                m_play->setVisible(true);
-                m_pause->setVisible(false);
-                break;
-        default:
-            ;
+    case Phonon::PlayingState:
+        m_play->setVisible(false);
+        m_pause->setVisible(true);
+        break;
+    case Phonon::PausedState:
+        m_play->setVisible(true);
+        m_pause->setVisible(false);
+        break;
+    default:
+        ;
     }
 }
 
 void FullScreenPlayer::updatePlaybackTime(qint64 currentTime)
 {
     QString currentPlayTime = QString("%1:%2:%3")
-            .arg((currentTime / 3600000) % 60, 2, 10, QChar('0'))
-            .arg((currentTime / 60000) % 60, 2, 10, QChar('0'))
-            .arg((currentTime / 1000) % 60, 2, 10, QChar('0'));
+                              .arg((currentTime / 3600000) % 60, 2, 10, QChar('0'))
+                              .arg((currentTime / 60000) % 60, 2, 10, QChar('0'))
+                              .arg((currentTime / 1000) % 60, 2, 10, QChar('0'));
 
     qint64 time = m_mediaObject->totalTime();
     QString totalTime = QString("%1:%2:%3")
-            .arg((time / 3600000) % 60, 2, 10, QChar('0'))
-            .arg((time / 60000) % 60, 2, 10, QChar('0'))
-            .arg((time / 1000) % 60, 2, 10, QChar('0'));
+                        .arg((time / 3600000) % 60, 2, 10, QChar('0'))
+                        .arg((time / 60000) % 60, 2, 10, QChar('0'))
+                        .arg((time / 1000) % 60, 2, 10, QChar('0'));
 
     m_playbackTime->setText(QString("%1/%2").arg(currentPlayTime).arg(totalTime));
 }
-
 
 void FullScreenPlayer::muteStateChanged(bool muted)
 {

@@ -23,14 +23,14 @@
 #include <QMultiMap>
 #include "krita_export.h"
 
-
 class  ResourceBundleManifest
 {
 public:
 
     struct ResourceReference {
 
-        ResourceReference(const QString &_resourcePath, const QList<QString> &_tagList, const QByteArray &_md5) {
+        ResourceReference(const QString &_resourcePath, const QList<QString> &_tagList, const QByteArray &_md5)
+        {
             resourcePath = _resourcePath;
             tagList = _tagList;
             md5sum = _md5;
@@ -52,7 +52,6 @@ public:
      */
     virtual ~ResourceBundleManifest();
 
-
     /**
      * @brief load the ResourceBundleManifest from the given device
      */
@@ -72,7 +71,6 @@ public:
      */
     void addResource(const QString &fileType, const QString &fileName, const QStringList &tagFileList, const QByteArray &md5);
 
-
     QStringList types() const;
 
     QStringList tags() const;
@@ -89,7 +87,6 @@ public:
 private:
     QMap<QString, QMap<QString, ResourceReference> > m_resources;
 };
-
 
 #endif // KOXMLRESOURCEBUNDLEMANIFEST_H
 

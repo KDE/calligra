@@ -21,15 +21,12 @@
 #include <QPainterPath>
 #include <QTransform>
 
-
 #include "kis_paint_information.h"
 #include "kis_liquify_transform_worker.h"
 #include "kis_algebra_2d.h"
 #include "kis_liquify_properties.h"
 
-
-struct KisLiquifyPaintop::Private
-{
+struct KisLiquifyPaintop::Private {
     Private(const KisLiquifyProperties &_props, KisLiquifyTransformWorker *_worker)
         : props(_props), worker(_worker) {}
 
@@ -47,7 +44,7 @@ KisLiquifyPaintop::~KisLiquifyPaintop()
 }
 
 QPainterPath KisLiquifyPaintop::brushOutline(const KisLiquifyProperties &props,
-                                             const KisPaintInformation &info)
+        const KisPaintInformation &info)
 {
     const qreal diameter = props.size();
     const qreal reverseCoeff = props.reverseDirection() ? -1.0 : 1.0;
@@ -109,9 +106,9 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
 {
     static const qreal sizeToSigmaCoeff = 1.0 / 3.0;
     const qreal size = sizeToSigmaCoeff *
-        (m_d->props.sizeHasPressure() ?
-         pi.pressure() * m_d->props.size():
-         m_d->props.size());
+                       (m_d->props.sizeHasPressure() ?
+                        pi.pressure() * m_d->props.size() :
+                        m_d->props.size());
 
     const qreal spacing = m_d->props.spacing() * size;
 
@@ -120,8 +117,8 @@ KisSpacingInformation KisLiquifyPaintop::paintAt(const KisPaintInformation &pi)
         KisLiquifyProperties::UNDO &&
         m_d->props.reverseDirection() ? -1.0 : 1.0;
     const qreal amount = m_d->props.amountHasPressure() ?
-        pi.pressure() * reverseCoeff * m_d->props.amount():
-        reverseCoeff * m_d->props.amount();
+                         pi.pressure() * reverseCoeff * m_d->props.amount() :
+                         reverseCoeff * m_d->props.amount();
 
     const bool useWashMode = m_d->props.useWashMode();
     const qreal flow = m_d->props.flow();

@@ -29,9 +29,9 @@
 
 void KisColorSpaceConvertVisitorTest::testCreation()
 {
-    const KoColorSpace * rgb = KoColorSpaceRegistry::instance()->rgb16();
+    const KoColorSpace *rgb = KoColorSpaceRegistry::instance()->rgb16();
     QVERIFY(rgb);
-    const KoColorSpace * lab = KoColorSpaceRegistry::instance()->lab16();
+    const KoColorSpace *lab = KoColorSpaceRegistry::instance()->lab16();
     QVERIFY(lab);
     KisImageSP image = new KisImage(0, 100, 100, lab, "test");
     KisPaintLayerSP layer = new KisPaintLayer(image, "test", OPACITY_OPAQUE_U8, lab);
@@ -41,7 +41,6 @@ void KisColorSpaceConvertVisitorTest::testCreation()
     layer->accept(test);
     QVERIFY(layer->colorSpace()->colorModelId() == rgb->colorModelId());
 }
-
 
 QTEST_KDEMAIN(KisColorSpaceConvertVisitorTest, GUI)
 #include "kis_colorspace_convert_visitor_test.moc"

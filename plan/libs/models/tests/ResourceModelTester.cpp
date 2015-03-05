@@ -35,99 +35,98 @@
 namespace KPlato
 {
 
-void ResourceModelTester::printDebug( long id ) const {
+void ResourceModelTester::printDebug(long id) const
+{
     Project *p = m_project;
     Resource *r = m_resource;
-    qDebug()<<"Debug info -------------------------------------";
-    qDebug()<<"project start time:"<<p->startTime().toString();
-    qDebug()<<"project end time  :"<<p->endTime().toString();
+    qDebug() << "Debug info -------------------------------------";
+    qDebug() << "project start time:" << p->startTime().toString();
+    qDebug() << "project end time  :" << p->endTime().toString();
 
-    qDebug()<<"Resource start:"<<r->startTime( id ).toString();
-    qDebug()<<"Resource end  :"<<r->endTime( id ).toString();
-    qDebug()<<"Appointments:"<<r->numAppointments( id )<<"(internal)";
-    foreach ( Appointment *a, r->appointments( id ) ) {
-        foreach ( const AppointmentInterval &i, a->intervals().map() ) {
-            qDebug()<<"  "<<i.startTime().toString()<<"-"<<i.endTime().toString()<<";"<<i.load();
+    qDebug() << "Resource start:" << r->startTime(id).toString();
+    qDebug() << "Resource end  :" << r->endTime(id).toString();
+    qDebug() << "Appointments:" << r->numAppointments(id) << "(internal)";
+    foreach (Appointment *a, r->appointments(id)) {
+        foreach (const AppointmentInterval &i, a->intervals().map()) {
+            qDebug() << "  " << i.startTime().toString() << "-" << i.endTime().toString() << ";" << i.load();
         }
     }
-    qDebug()<<"Appointments:"<<r->numExternalAppointments()<<"(external)";
-    foreach ( Appointment *a, r->externalAppointmentList() ) {
-        foreach ( const AppointmentInterval &i, a->intervals().map() ) {
-            qDebug()<<"  "<<i.startTime().toString()<<"-"<<i.endTime().toString()<<";"<<i.load();
+    qDebug() << "Appointments:" << r->numExternalAppointments() << "(external)";
+    foreach (Appointment *a, r->externalAppointmentList()) {
+        foreach (const AppointmentInterval &i, a->intervals().map()) {
+            qDebug() << "  " << i.startTime().toString() << "-" << i.endTime().toString() << ";" << i.load();
         }
     }
 }
 
-void ResourceModelTester::printSchedulingLog( const ScheduleManager &sm ) const
+void ResourceModelTester::printSchedulingLog(const ScheduleManager &sm) const
 {
-    qDebug()<<"Scheduling log ---------------------------------";
-    foreach ( const QString &s, sm.expected()->logMessages() ) {
-        qDebug()<<s;
+    qDebug() << "Scheduling log ---------------------------------";
+    foreach (const QString &s, sm.expected()->logMessages()) {
+        qDebug() << s;
     }
 }
 
 void ResourceModelTester::initTestCase()
 {
     m_project = new Project();
-    m_project->setName( "P1" );
-    m_project->setId( m_project->uniqueNodeId() );
-    m_project->registerNodeId( m_project );
-    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
-    DateTime targetend = DateTime( targetstart.addDays( 3 ) );
-    m_project->setConstraintStartTime( targetstart );
-    m_project->setConstraintEndTime( targetend);
+    m_project->setName("P1");
+    m_project->setId(m_project->uniqueNodeId());
+    m_project->registerNodeId(m_project);
+    DateTime targetstart = DateTime(QDate::currentDate(), QTime(0, 0, 0));
+    DateTime targetend = DateTime(targetstart.addDays(3));
+    m_project->setConstraintStartTime(targetstart);
+    m_project->setConstraintEndTime(targetend);
 
     // standard worktime defines 8 hour day as default
-    QVERIFY( m_project->standardWorktime() );
-    QCOMPARE( m_project->standardWorktime()->day(), 8.0 );
-    m_calendar = new Calendar( "Test" );
-    m_calendar->setDefault( true );
-    QTime t1( 9, 0, 0 );
-    QTime t2 ( 17, 0, 0 );
-    int length = t1.msecsTo( t2 );
-    for ( int i=1; i <= 7; ++i ) {
-        CalendarDay *d = m_calendar->weekday( i );
-        d->setState( CalendarDay::Working );
-        d->addInterval( t1, length );
+    QVERIFY(m_project->standardWorktime());
+    QCOMPARE(m_project->standardWorktime()->day(), 8.0);
+    m_calendar = new Calendar("Test");
+    m_calendar->setDefault(true);
+    QTime t1(9, 0, 0);
+    QTime t2(17, 0, 0);
+    int length = t1.msecsTo(t2);
+    for (int i = 1; i <= 7; ++i) {
+        CalendarDay *d = m_calendar->weekday(i);
+        d->setState(CalendarDay::Working);
+        d->addInterval(t1, length);
     }
-    m_project->addCalendar( m_calendar );
-
+    m_project->addCalendar(m_calendar);
 
     ResourceGroup *g = new ResourceGroup();
-    g->setName( "G1" );
-    m_project->addResourceGroup( g );
+    g->setName("G1");
+    m_project->addResourceGroup(g);
     m_resource = new Resource();
-    m_resource->setName( "R1" );
-    m_resource->setCalendar( m_calendar );
-    m_project->addResource( g, m_resource );
+    m_resource->setName("R1");
+    m_resource->setCalendar(m_calendar);
+    m_project->addResource(g, m_resource);
 
     m_task = m_project->createTask();
-    m_task->setName( "T1" );
-    m_project->addTask( m_task, m_project );
-    m_task->estimate()->setUnit( Duration::Unit_h );
-    m_task->estimate()->setExpectedEstimate( 8.0 );
-    m_task->estimate()->setType( Estimate::Type_Effort );
+    m_task->setName("T1");
+    m_project->addTask(m_task, m_project);
+    m_task->estimate()->setUnit(Duration::Unit_h);
+    m_task->estimate()->setExpectedEstimate(8.0);
+    m_task->estimate()->setType(Estimate::Type_Effort);
 
+    ResourceGroupRequest *gr = new ResourceGroupRequest(g);
+    gr->addResourceRequest(new ResourceRequest(m_resource, 100));
+    m_task->addRequest(gr);
 
-    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
-    gr->addResourceRequest( new ResourceRequest( m_resource, 100 ) );
-    m_task->addRequest( gr );
-
-    m_model.setProject( m_project );
+    m_model.setProject(m_project);
 
     QModelIndex idx;
-    int rows = m_model.rowCount( idx );
-    QCOMPARE( rows, 1 );
-    idx = m_model.index( 0, 0, idx );
-    QCOMPARE( g->name(), m_model.data( idx ).toString() );
-    
-    rows = m_model.rowCount( idx );
-    QCOMPARE( rows, 1 );
-    idx = m_model.index( 0, 0, idx );
-    QCOMPARE( m_resource->name(), m_model.data( idx ).toString() );
+    int rows = m_model.rowCount(idx);
+    QCOMPARE(rows, 1);
+    idx = m_model.index(0, 0, idx);
+    QCOMPARE(g->name(), m_model.data(idx).toString());
 
-    idx = m_model.parent( idx );
-    QCOMPARE( g->name(), m_model.data( idx ).toString() );
+    rows = m_model.rowCount(idx);
+    QCOMPARE(rows, 1);
+    idx = m_model.index(0, 0, idx);
+    QCOMPARE(m_resource->name(), m_model.data(idx).toString());
+
+    idx = m_model.parent(idx);
+    QCOMPARE(g->name(), m_model.data(idx).toString());
 }
 
 void ResourceModelTester::cleanupTestCase()
@@ -137,61 +136,61 @@ void ResourceModelTester::cleanupTestCase()
 
 void ResourceModelTester::internalAppointments()
 {
-    ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
-    m_project->addScheduleManager( sm );
+    ScheduleManager *sm = m_project->createScheduleManager("Test Plan");
+    m_project->addScheduleManager(sm);
     sm->createSchedules();
-    m_project->calculate( *sm );
+    m_project->calculate(*sm);
     long id = sm->scheduleId();
-    m_model.setScheduleManager( sm );
+    m_model.setScheduleManager(sm);
 
     //printDebug( sm->scheduleId() );
 
     QModelIndex idx;
     // resource group
-    int rows = m_model.rowCount( idx );
-    QCOMPARE( rows, 1 );
-    QModelIndex gidx = m_model.index( 0, 0, idx );
-    QVERIFY( gidx.isValid() );
+    int rows = m_model.rowCount(idx);
+    QCOMPARE(rows, 1);
+    QModelIndex gidx = m_model.index(0, 0, idx);
+    QVERIFY(gidx.isValid());
 
     // reosurce
-    rows = m_model.rowCount( gidx );
-    QCOMPARE( rows, 1 );
-    QModelIndex ridx = m_model.index( 0, 0, gidx );
-    QCOMPARE( m_resource->name(), m_model.data( ridx ).toString() );
+    rows = m_model.rowCount(gidx);
+    QCOMPARE(rows, 1);
+    QModelIndex ridx = m_model.index(0, 0, gidx);
+    QCOMPARE(m_resource->name(), m_model.data(ridx).toString());
 
-    ridx = m_model.index( m_resource );
-    QVERIFY( ridx.isValid() );
+    ridx = m_model.index(m_resource);
+    QVERIFY(ridx.isValid());
 
     // appointment
-    rows = m_model.rowCount( ridx );
-    QCOMPARE( rows, m_resource->numAppointments( id ) );
-    QCOMPARE( rows, 1 );
+    rows = m_model.rowCount(ridx);
+    QCOMPARE(rows, m_resource->numAppointments(id));
+    QCOMPARE(rows, 1);
 
-    QModelIndex aidx = m_model.index( 0, 0, ridx ); // first appointment
-    QVERIFY( aidx.isValid() );
-    rows = m_model.rowCount( aidx ); // num intervals
-    QCOMPARE( rows, 1 );
+    QModelIndex aidx = m_model.index(0, 0, ridx);   // first appointment
+    QVERIFY(aidx.isValid());
+    rows = m_model.rowCount(aidx);   // num intervals
+    QCOMPARE(rows, 1);
 
     // interval
-    QModelIndex iidx = m_model.index( 0, 0, aidx ); // first interval
-    QVERIFY( iidx.isValid() );
-    rows = m_model.rowCount( iidx ); // intervals don't have children
-    QCOMPARE( rows, 0 );
+    QModelIndex iidx = m_model.index(0, 0, aidx);   // first interval
+    QVERIFY(iidx.isValid());
+    rows = m_model.rowCount(iidx);   // intervals don't have children
+    QCOMPARE(rows, 0);
 
     // appointment
-    idx = m_model.parent( iidx );
-    QCOMPARE( idx, aidx );
+    idx = m_model.parent(iidx);
+    QCOMPARE(idx, aidx);
     // resource
-    idx = m_model.parent( aidx );
-    QCOMPARE( idx, ridx );
+    idx = m_model.parent(aidx);
+    QCOMPARE(idx, ridx);
 
     // resource group
-    idx = m_model.parent( ridx );
-    QCOMPARE( idx, gidx );
+    idx = m_model.parent(ridx);
+    QCOMPARE(idx, gidx);
 
     // top
-    idx = m_model.parent( gidx );
-    QVERIFY( ! idx.isValid() );
+    idx = m_model.parent(gidx);
+    QVERIFY(! idx.isValid());
 
 }
 
@@ -202,76 +201,76 @@ void ResourceModelTester::externalAppointments()
     Task *t = m_task;
     Resource *r = m_resource;
 
-    r->addExternalAppointment( "Ext-1", "External project 1", targetstart, targetstart.addDays( 1 ), 100 );
-    r->addExternalAppointment( "Ext-1", "External project 1", targetend.addDays( -1 ), targetend, 100 );
+    r->addExternalAppointment("Ext-1", "External project 1", targetstart, targetstart.addDays(1), 100);
+    r->addExternalAppointment("Ext-1", "External project 1", targetend.addDays(-1), targetend, 100);
 
-    ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
-    m_project->addScheduleManager( sm );
+    ScheduleManager *sm = m_project->createScheduleManager("Test Plan");
+    m_project->addScheduleManager(sm);
     sm->createSchedules();
-    m_project->calculate( *sm );
+    m_project->calculate(*sm);
     long id = sm->scheduleId();
-    m_model.setScheduleManager( sm );
+    m_model.setScheduleManager(sm);
     //printSchedulingLog( *sm );
     //printDebug( sm->scheduleId() );
-    
+
     // resource group
     QModelIndex idx;
-    int rows = m_model.rowCount( idx );
-    QCOMPARE( rows, 1 );
-    idx = m_model.index( 0, 0, idx );
-    QVERIFY( idx.isValid() );
-    QVERIFY( ! m_model.parent( idx ).isValid() );
+    int rows = m_model.rowCount(idx);
+    QCOMPARE(rows, 1);
+    idx = m_model.index(0, 0, idx);
+    QVERIFY(idx.isValid());
+    QVERIFY(! m_model.parent(idx).isValid());
 
     // resource
-    rows = m_model.rowCount( idx );
-    QCOMPARE( rows, 1 );
-    QModelIndex ridx = m_model.index( 0, 0, idx );
-    QCOMPARE( m_resource->name(), m_model.data( ridx ).toString() );
-    QCOMPARE( ridx.parent(), idx );
+    rows = m_model.rowCount(idx);
+    QCOMPARE(rows, 1);
+    QModelIndex ridx = m_model.index(0, 0, idx);
+    QCOMPARE(m_resource->name(), m_model.data(ridx).toString());
+    QCOMPARE(ridx.parent(), idx);
 
-    ridx = m_model.index( m_resource );
-    QVERIFY( ridx.isValid() );
+    ridx = m_model.index(m_resource);
+    QVERIFY(ridx.isValid());
 
     // appointments
-    rows = m_model.rowCount( ridx );
-    QCOMPARE( rows, m_resource->numAppointments( id ) + m_resource->numExternalAppointments() );
-    QCOMPARE( rows, 2 ); // one internal, one external
+    rows = m_model.rowCount(ridx);
+    QCOMPARE(rows, m_resource->numAppointments(id) + m_resource->numExternalAppointments());
+    QCOMPARE(rows, 2);   // one internal, one external
 
     // internal appointment
-    QModelIndex aidx = m_model.index( 0, 0, ridx ); // first appointment (internal)
-    QVERIFY( aidx.isValid() );
-    rows = m_model.rowCount( aidx ); // num intervals
-    QCOMPARE( rows, 1 );
-    QCOMPARE( aidx.parent(), ridx );
+    QModelIndex aidx = m_model.index(0, 0, ridx);   // first appointment (internal)
+    QVERIFY(aidx.isValid());
+    rows = m_model.rowCount(aidx);   // num intervals
+    QCOMPARE(rows, 1);
+    QCOMPARE(aidx.parent(), ridx);
 
-    QModelIndex iidx = m_model.index( 0, 0, aidx ); // first interval
-    QVERIFY( iidx.isValid() );
-    rows = m_model.rowCount( iidx ); // intervals don't have children
-    QCOMPARE( rows, 0 );
-    QCOMPARE( iidx.parent(), aidx );
+    QModelIndex iidx = m_model.index(0, 0, aidx);   // first interval
+    QVERIFY(iidx.isValid());
+    rows = m_model.rowCount(iidx);   // intervals don't have children
+    QCOMPARE(rows, 0);
+    QCOMPARE(iidx.parent(), aidx);
 
     // external appointment
-    aidx = m_model.index( 1, 0, ridx ); // second appointment (external)
-    QVERIFY( aidx.isValid() );
-    rows = m_model.rowCount( aidx ); // num intervals
-    QCOMPARE( rows, 2 );
-    QCOMPARE( aidx.parent(), ridx );
+    aidx = m_model.index(1, 0, ridx);   // second appointment (external)
+    QVERIFY(aidx.isValid());
+    rows = m_model.rowCount(aidx);   // num intervals
+    QCOMPARE(rows, 2);
+    QCOMPARE(aidx.parent(), ridx);
 
-    iidx = m_model.index( 0, 0, aidx ); // first interval
-    QVERIFY( iidx.isValid() );
-    rows = m_model.rowCount( iidx ); // intervals don't have children
-    QCOMPARE( rows, 0 );
-    QCOMPARE( iidx.parent(), aidx );
+    iidx = m_model.index(0, 0, aidx);   // first interval
+    QVERIFY(iidx.isValid());
+    rows = m_model.rowCount(iidx);   // intervals don't have children
+    QCOMPARE(rows, 0);
+    QCOMPARE(iidx.parent(), aidx);
 
-    iidx = m_model.index( 1, 0, aidx ); // second interval
-    QVERIFY( iidx.isValid() );
-    rows = m_model.rowCount( iidx ); // intervals don't have children
-    QCOMPARE( rows, 0 );
-    QCOMPARE( iidx.parent(), aidx );
+    iidx = m_model.index(1, 0, aidx);   // second interval
+    QVERIFY(iidx.isValid());
+    rows = m_model.rowCount(iidx);   // intervals don't have children
+    QCOMPARE(rows, 0);
+    QCOMPARE(iidx.parent(), aidx);
 
-    QCOMPARE( t->startTime(), m_calendar->firstAvailableAfter( targetstart + Duration( 1, 0, 0 ), t->endTime() ) );
-    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
-    
+    QCOMPARE(t->startTime(), m_calendar->firstAvailableAfter(targetstart + Duration(1, 0, 0), t->endTime()));
+    QCOMPARE(t->endTime(), t->startTime() + Duration(0, 8, 0));
+
 }
 
 void ResourceModelTester::externalOverbook()
@@ -281,76 +280,74 @@ void ResourceModelTester::externalOverbook()
     Task *t = m_task;
     Resource *r = m_resource;
 
-    r->addExternalAppointment( "Ext-1", "External project 1", targetstart, targetstart.addDays( 1 ), 100 );
-    r->addExternalAppointment( "Ext-1", "External project 1", targetend.addDays( -1 ), targetend, 100 );
+    r->addExternalAppointment("Ext-1", "External project 1", targetstart, targetstart.addDays(1), 100);
+    r->addExternalAppointment("Ext-1", "External project 1", targetend.addDays(-1), targetend, 100);
 
-    ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
-    m_project->addScheduleManager( sm );
-    sm->setAllowOverbooking( true );
+    ScheduleManager *sm = m_project->createScheduleManager("Test Plan");
+    m_project->addScheduleManager(sm);
+    sm->setAllowOverbooking(true);
     sm->createSchedules();
-    m_project->calculate( *sm );
+    m_project->calculate(*sm);
     long id = sm->scheduleId();
-    m_model.setScheduleManager( sm );
+    m_model.setScheduleManager(sm);
     //printSchedulingLog( *sm );
     //printDebug( id );
 
     // resource group
     QModelIndex idx;
-    int rows = m_model.rowCount( idx );
-    QCOMPARE( rows, 1 );
-    idx = m_model.index( 0, 0, idx );
-    QVERIFY( idx.isValid() );
-    
-    // resource
-    rows = m_model.rowCount( idx );
-    QCOMPARE( rows, 1 );
-    idx = m_model.index( 0, 0, idx );
-    QCOMPARE( m_resource->name(), m_model.data( idx ).toString() );
+    int rows = m_model.rowCount(idx);
+    QCOMPARE(rows, 1);
+    idx = m_model.index(0, 0, idx);
+    QVERIFY(idx.isValid());
 
-    idx = m_model.index( m_resource );
-    QVERIFY( idx.isValid() );
+    // resource
+    rows = m_model.rowCount(idx);
+    QCOMPARE(rows, 1);
+    idx = m_model.index(0, 0, idx);
+    QCOMPARE(m_resource->name(), m_model.data(idx).toString());
+
+    idx = m_model.index(m_resource);
+    QVERIFY(idx.isValid());
 
     // appointments
-    rows = m_model.rowCount( idx );
-    QCOMPARE( rows, m_resource->numAppointments( id ) + m_resource->numExternalAppointments() );
-    QCOMPARE( rows, 2 ); // one internal, one external
+    rows = m_model.rowCount(idx);
+    QCOMPARE(rows, m_resource->numAppointments(id) + m_resource->numExternalAppointments());
+    QCOMPARE(rows, 2);   // one internal, one external
 
     // internal appointment
-    QModelIndex aidx = m_model.index( 0, 0, idx ); // first appointment (internal)
-    QVERIFY( aidx.isValid() );
-    rows = m_model.rowCount( aidx ); // num intervals
-    QCOMPARE( rows, 1 );
+    QModelIndex aidx = m_model.index(0, 0, idx);   // first appointment (internal)
+    QVERIFY(aidx.isValid());
+    rows = m_model.rowCount(aidx);   // num intervals
+    QCOMPARE(rows, 1);
 
-    QModelIndex iidx = m_model.index( 0, 0, aidx ); // first interval
-    QVERIFY( iidx.isValid() );
-    rows = m_model.rowCount( iidx ); // intervals don't have children
-    QCOMPARE( rows, 0 );
+    QModelIndex iidx = m_model.index(0, 0, aidx);   // first interval
+    QVERIFY(iidx.isValid());
+    rows = m_model.rowCount(iidx);   // intervals don't have children
+    QCOMPARE(rows, 0);
 
     // external appointment
-    aidx = m_model.index( 1, 0, idx ); // second appointment (external)
-    QVERIFY( aidx.isValid() );
-    rows = m_model.rowCount( aidx ); // num intervals
-    QCOMPARE( rows, 2 );
+    aidx = m_model.index(1, 0, idx);   // second appointment (external)
+    QVERIFY(aidx.isValid());
+    rows = m_model.rowCount(aidx);   // num intervals
+    QCOMPARE(rows, 2);
 
-    iidx = m_model.index( 0, 0, aidx ); // first interval
-    QVERIFY( iidx.isValid() );
-    rows = m_model.rowCount( iidx ); // intervals don't have children
-    QCOMPARE( rows, 0 );
+    iidx = m_model.index(0, 0, aidx);   // first interval
+    QVERIFY(iidx.isValid());
+    rows = m_model.rowCount(iidx);   // intervals don't have children
+    QCOMPARE(rows, 0);
 
-    iidx = m_model.index( 1, 0, aidx ); // second interval
-    QVERIFY( iidx.isValid() );
-    rows = m_model.rowCount( iidx ); // intervals don't have children
-    QCOMPARE( rows, 0 );
+    iidx = m_model.index(1, 0, aidx);   // second interval
+    QVERIFY(iidx.isValid());
+    rows = m_model.rowCount(iidx);   // intervals don't have children
+    QCOMPARE(rows, 0);
 
-
-    QCOMPARE( t->startTime(), m_calendar->firstAvailableAfter( targetstart, t->endTime() ) );
-    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE(t->startTime(), m_calendar->firstAvailableAfter(targetstart, t->endTime()));
+    QCOMPARE(t->endTime(), t->startTime() + Duration(0, 8, 0));
 
 }
 
-
 } //namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::ResourceModelTester )
+QTEST_KDEMAIN_CORE(KPlato::ResourceModelTester)
 
 #include "ResourceModelTester.moc"

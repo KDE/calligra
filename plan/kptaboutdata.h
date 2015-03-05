@@ -32,21 +32,21 @@ namespace KPlato
 static const char PLAN_DESCRIPTION[] = I18N_NOOP("Project Planning and Management Tool");
 static const char PLAN_VERSION[] = CALLIGRA_VERSION_STRING;
 
-KAboutData * newAboutData()
+KAboutData *newAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "plan", QByteArray(), ki18nc("application name", "Plan"),
+    KAboutData *aboutData = new KAboutData("plan", QByteArray(), ki18nc("application name", "Plan"),
                                            PLAN_VERSION, ki18n(PLAN_DESCRIPTION), KAboutData::License_GPL,
                                            ki18n("© 1998-%1, The Plan Team").subs(CALLIGRA_YEAR),
                                            KLocalizedString(),
-                                           "http://www.calligra.org/plan/" );
+                                           "http://www.calligra.org/plan/");
     aboutData->addAuthor(ki18n("Thomas Zander")); // please don't re-add, I don't like getting personal emails :)
     aboutData->addAuthor(ki18n("Bo Thorsen"), KLocalizedString(), "bo@sonofthor.dk");
     aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
-    aboutData->addAuthor(ki18n("Raphael Langerhorst"),KLocalizedString(),"raphael.langerhorst@kdemail.net");
+    aboutData->addAuthor(ki18n("Raphael Langerhorst"), KLocalizedString(), "raphael.langerhorst@kdemail.net");
 
-    aboutData->setProgramIconName( "calligraplan" );
+    aboutData->setProgramIconName("calligraplan");
 
-    aboutData->setProductName( "calligraplan" ); // for bugs.kde.org
+    aboutData->setProductName("calligraplan");   // for bugs.kde.org
 
     return aboutData;
 }

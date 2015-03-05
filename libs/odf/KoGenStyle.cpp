@@ -31,24 +31,25 @@
 #include <kdebug.h>
 
 // Returns -1, 0 (equal) or 1
-static int compareMap(const QMap<QString, QString>& map1, const QMap<QString, QString>& map2)
+static int compareMap(const QMap<QString, QString> &map1, const QMap<QString, QString> &map2)
 {
     QMap<QString, QString>::const_iterator it = map1.constBegin();
     QMap<QString, QString>::const_iterator oit = map2.constBegin();
     for (; it != map1.constEnd(); ++it, ++oit) {   // both maps have been checked for size already
-        if (it.key() != oit.key())
+        if (it.key() != oit.key()) {
             return it.key() < oit.key() ? -1 : + 1;
-        if (it.value() != oit.value())
+        }
+        if (it.value() != oit.value()) {
             return it.value() < oit.value() ? -1 : + 1;
+        }
     }
     return 0; // equal
 }
 
-
-KoGenStyle::KoGenStyle(Type type, const char* familyName,
-                       const QString& parentName)
-        : m_type(type), m_familyName(familyName), m_parentName(parentName),
-        m_autoStyleInStylesDotXml(false), m_defaultStyle(false)
+KoGenStyle::KoGenStyle(Type type, const char *familyName,
+                       const QString &parentName)
+    : m_type(type), m_familyName(familyName), m_parentName(parentName),
+      m_autoStyleInStylesDotXml(false), m_defaultStyle(false)
 {
     switch (type) {
     case TextStyle:
@@ -128,7 +129,7 @@ static const KoGenStyle::PropertyType s_propertyTypes[] = {
     KoGenStyle::TextType,
 };
 
-static const char* const s_propertyNames[] = {
+static const char *const s_propertyNames[] = {
     0,
     "style:section-properties",
     "style:ruby-properties",
@@ -145,7 +146,7 @@ static const char* const s_propertyNames[] = {
 
 static const int s_propertyNamesCount = sizeof(s_propertyNames) / sizeof(*s_propertyNames);
 
-static KoGenStyle::PropertyType propertyTypeByElementName(const char* propertiesElementName)
+static KoGenStyle::PropertyType propertyTypeByElementName(const char *propertiesElementName)
 {
     for (int i = 0; i < s_propertyNamesCount; ++i) {
         if (qstrcmp(s_propertyNames[i], propertiesElementName) == 0) {
@@ -155,46 +156,49 @@ static KoGenStyle::PropertyType propertyTypeByElementName(const char* properties
     return KoGenStyle::DefaultType;
 }
 
-void KoGenStyle::writeStyleProperties(KoXmlWriter* writer, PropertyType type,
-                                      const KoGenStyle* parentStyle) const
+void KoGenStyle::writeStyleProperties(KoXmlWriter *writer, PropertyType type,
+                                      const KoGenStyle *parentStyle) const
 {
-    const char* elementName = 0;
-    for (int i=0; i<s_propertyNamesCount; ++i) {
+    const char *elementName = 0;
+    for (int i = 0; i < s_propertyNamesCount; ++i) {
         if (s_propertyTypes[i] == type) {
             elementName = s_propertyNames[i];
         }
     }
     Q_ASSERT(elementName);
-    const StyleMap& map = m_properties[type];
-    const StyleMap& mapChild = m_childProperties[type];
+    const StyleMap &map = m_properties[type];
+    const StyleMap &mapChild = m_childProperties[type];
     if (!map.isEmpty() || !mapChild.isEmpty()) {
         writer->startElement(elementName);
         QMap<QString, QString>::const_iterator it = map.constBegin();
         const QMap<QString, QString>::const_iterator end = map.constEnd();
         for (; it != end; ++it) {
-            if (!parentStyle || parentStyle->property(it.key(), type) != it.value())
+            if (!parentStyle || parentStyle->property(it.key(), type) != it.value()) {
                 writer->addAttribute(it.key().toUtf8(), it.value().toUtf8());
+            }
         }
         QMap<QString, QString>::const_iterator itChild = mapChild.constBegin();
         const QMap<QString, QString>::const_iterator endChild = mapChild.constEnd();
         for (; itChild != endChild; ++itChild) {
-            if (!parentStyle || parentStyle->childProperty(itChild.key(), type) != itChild.value())
+            if (!parentStyle || parentStyle->childProperty(itChild.key(), type) != itChild.value()) {
                 writer->addCompleteElement(itChild.value().toUtf8());
+            }
         }
         writer->endElement();
     }
 }
 
-void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement) const
+void KoGenStyle::writeStyle(KoXmlWriter *writer, const KoGenStyles &styles, const char *elementName, const QString &name, const char *propertiesElementName, bool closeElement, bool drawElement) const
 {
     //kDebug(30003) <<"writing out style" << name <<" display-name=" << m_attributes["style:display-name"] <<" family=" << m_familyName;
     writer->startElement(elementName);
-    const KoGenStyle* parentStyle = 0;
+    const KoGenStyle *parentStyle = 0;
     if (!m_defaultStyle) {
-        if (!drawElement)
+        if (!drawElement) {
             writer->addAttribute("style:name", name);
-        else
+        } else {
             writer->addAttribute("draw:name", name);
+        }
         if (!m_parentName.isEmpty()) {
             Q_ASSERT(!m_familyName.isEmpty());
             parentStyle = styles.style(m_parentName, m_familyName);
@@ -205,8 +209,9 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
                 m_familyName = parentStyle->attribute("style:family").toLatin1();
                 //kDebug(30003) <<"Got familyname" << m_familyName <<" from parent";
             }
-            if (parentStyle && !parentStyle->isDefaultStyle())
+            if (parentStyle && !parentStyle->isDefaultStyle()) {
                 writer->addAttribute("style:parent-style-name", m_parentName);
+            }
         }
     } else { // default-style
         Q_ASSERT(qstrcmp(elementName, "style:default-style") == 0);
@@ -216,8 +221,9 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
         const_cast<KoGenStyle *>(this)->
         addAttribute("style:family", QString::fromLatin1(m_familyName));
     else {
-        if (qstrcmp(elementName, "style:style") == 0)
+        if (qstrcmp(elementName, "style:style") == 0) {
             kWarning(30003) << "User style " << name << " is without family - invalid. m_type=" << m_type;
+        }
     }
 
 #if 0 // #ifndef NDEBUG
@@ -237,33 +243,39 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
     for (; it != m_attributes.constEnd(); ++it) {
         bool writeit = true;
         if (parentStyle && it.key() != "style:family"  // always write the family out
-                && parentStyle->attribute(it.key()) == it.value())
+                && parentStyle->attribute(it.key()) == it.value()) {
             writeit = false;
-        if (writeit)
+        }
+        if (writeit) {
             writer->addAttribute(it.key().toUtf8(), it.value().toUtf8());
+        }
     }
     bool createPropertiesTag = propertiesElementName && propertiesElementName[0] != '\0';
     KoGenStyle::PropertyType i = KoGenStyle::DefaultType;
     KoGenStyle::PropertyType defaultPropertyType = KoGenStyle::DefaultType;
-    if (createPropertiesTag)
+    if (createPropertiesTag) {
         defaultPropertyType = propertyTypeByElementName(propertiesElementName);
+    }
     if (!m_properties[i].isEmpty() ||
             !m_childProperties[defaultPropertyType].isEmpty() ||
             !m_properties[defaultPropertyType].isEmpty()) {
-        if (createPropertiesTag)
-            writer->startElement(propertiesElementName);   // e.g. paragraph-properties
+        if (createPropertiesTag) {
+            writer->startElement(propertiesElementName);    // e.g. paragraph-properties
+        }
         it = m_properties[i].constBegin();
         for (; it != m_properties[i].constEnd(); ++it) {
-            if (!parentStyle || parentStyle->property(it.key(), i) != it.value())
+            if (!parentStyle || parentStyle->property(it.key(), i) != it.value()) {
                 writer->addAttribute(it.key().toUtf8(), it.value().toUtf8());
+            }
         }
         //write the explicitly-defined properties that are the same type as the default,
         //but only if defaultPropertyType is Text, Paragraph, or GraphicType
         if (defaultPropertyType != 0) {
             it = m_properties[defaultPropertyType].constBegin();
             for (; it != m_properties[defaultPropertyType].constEnd(); ++it) {
-                if (!parentStyle || parentStyle->property(it .key(), defaultPropertyType) != it.value())
+                if (!parentStyle || parentStyle->property(it .key(), defaultPropertyType) != it.value()) {
                     writer->addAttribute(it.key().toUtf8(), it.value().toUtf8());
+                }
             }
         }
         //write child elements of the properties elements
@@ -273,8 +285,9 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
                 writer->addCompleteElement(it.value().toUtf8());
             }
         }
-        if (createPropertiesTag)
+        if (createPropertiesTag) {
             writer->endElement();
+        }
     }
 
     // now write out any other properties elements
@@ -298,8 +311,9 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
     // And now the style maps
     for (int i = 0; i < m_maps.count(); ++i) {
         bool writeit = true;
-        if (parentStyle && compareMap(m_maps[i], parentStyle->m_maps[i]) == 0)
+        if (parentStyle && compareMap(m_maps[i], parentStyle->m_maps[i]) == 0) {
             writeit = false;
+        }
         if (writeit) {
             writer->startElement("style:map");
             QMap<QString, QString>::const_iterator it = m_maps[i].constBegin();
@@ -309,11 +323,12 @@ void KoGenStyle::writeStyle(KoXmlWriter* writer, const KoGenStyles& styles, cons
             writer->endElement(); // style:map
         }
     }
-    if (closeElement)
+    if (closeElement) {
         writer->endElement();
+    }
 }
 
-void KoGenStyle::addPropertyPt(const QString& propName, qreal propValue, PropertyType type)
+void KoGenStyle::addPropertyPt(const QString &propName, qreal propValue, PropertyType type)
 {
     if (type == DefaultType) {
         type = m_propertyType;
@@ -324,7 +339,7 @@ void KoGenStyle::addPropertyPt(const QString& propName, qreal propValue, Propert
     m_properties[type].insert(propName, str);
 }
 
-void KoGenStyle::addPropertyLength(const QString& propName, const QTextLength &propValue, PropertyType type)
+void KoGenStyle::addPropertyLength(const QString &propName, const QTextLength &propValue, PropertyType type)
 {
     if (type == DefaultType) {
         type = m_propertyType;
@@ -339,7 +354,7 @@ void KoGenStyle::addPropertyLength(const QString& propName, const QTextLength &p
     }
 }
 
-void KoGenStyle::addAttributePt(const QString& attrName, qreal attrValue)
+void KoGenStyle::addAttributePt(const QString &attrName, qreal attrValue)
 {
     QString str;
     str.setNum(attrValue, 'f', DBL_DIG);
@@ -363,19 +378,19 @@ void KoGenStyle::addAttributePercent(const QString &attrName, int value)
     addAttribute(attrName, str.data());
 }
 
-void KoGenStyle::addStyleMap(const QMap<QString, QString>& styleMap)
+void KoGenStyle::addStyleMap(const QMap<QString, QString> &styleMap)
 {
     // check, if already present
-    for (int i = 0 ; i < m_maps.count() ; ++i) {
+    for (int i = 0; i < m_maps.count(); ++i) {
         if (m_maps[i].count() == styleMap.count()) {
             int comp = compareMap(m_maps[i], styleMap);
-            if (comp == 0)
+            if (comp == 0) {
                 return;
+            }
         }
     }
     m_maps.append(styleMap);
 }
-
 
 #ifndef NDEBUG
 void KoGenStyle::printDebug() const
@@ -422,11 +437,19 @@ void KoGenStyle::printDebug() const
 
 bool KoGenStyle::operator<(const KoGenStyle &other) const
 {
-    if (m_type != other.m_type) return m_type < other.m_type;
-    if (m_parentName != other.m_parentName) return m_parentName < other.m_parentName;
-    if (m_familyName != other.m_familyName) return m_familyName < other.m_familyName;
-    if (m_autoStyleInStylesDotXml != other.m_autoStyleInStylesDotXml) return m_autoStyleInStylesDotXml;
-    for (uint i = 0 ; i <= LastPropertyType; ++i) {
+    if (m_type != other.m_type) {
+        return m_type < other.m_type;
+    }
+    if (m_parentName != other.m_parentName) {
+        return m_parentName < other.m_parentName;
+    }
+    if (m_familyName != other.m_familyName) {
+        return m_familyName < other.m_familyName;
+    }
+    if (m_autoStyleInStylesDotXml != other.m_autoStyleInStylesDotXml) {
+        return m_autoStyleInStylesDotXml;
+    }
+    for (uint i = 0; i <= LastPropertyType; ++i) {
         if (m_properties[i].count() != other.m_properties[i].count()) {
             return m_properties[i].count() < other.m_properties[i].count();
         }
@@ -434,37 +457,53 @@ bool KoGenStyle::operator<(const KoGenStyle &other) const
             return m_childProperties[i].count() < other.m_childProperties[i].count();
         }
     }
-    if (m_attributes.count() != other.m_attributes.count()) return m_attributes.count() < other.m_attributes.count();
-    if (m_maps.count() != other.m_maps.count()) return m_maps.count() < other.m_maps.count();
-    // Same number of properties and attributes, no other choice than iterating
-    for (uint i = 0 ; i <= LastPropertyType; ++i) {
-        int comp = compareMap(m_properties[i], other.m_properties[i]);
-        if (comp != 0)
-            return comp < 0;
+    if (m_attributes.count() != other.m_attributes.count()) {
+        return m_attributes.count() < other.m_attributes.count();
     }
-    for (uint i = 0 ; i <= LastPropertyType; ++i) {
-        int comp = compareMap(m_childProperties[i], other.m_childProperties[i]);
-        if (comp != 0)
+    if (m_maps.count() != other.m_maps.count()) {
+        return m_maps.count() < other.m_maps.count();
+    }
+    // Same number of properties and attributes, no other choice than iterating
+    for (uint i = 0; i <= LastPropertyType; ++i) {
+        int comp = compareMap(m_properties[i], other.m_properties[i]);
+        if (comp != 0) {
             return comp < 0;
+        }
+    }
+    for (uint i = 0; i <= LastPropertyType; ++i) {
+        int comp = compareMap(m_childProperties[i], other.m_childProperties[i]);
+        if (comp != 0) {
+            return comp < 0;
+        }
     }
     int comp = compareMap(m_attributes, other.m_attributes);
-    if (comp != 0)
+    if (comp != 0) {
         return comp < 0;
-    for (int i = 0 ; i < m_maps.count() ; ++i) {
+    }
+    for (int i = 0; i < m_maps.count(); ++i) {
         int comp = compareMap(m_maps[i], other.m_maps[i]);
-        if (comp != 0)
+        if (comp != 0) {
             return comp < 0;
+        }
     }
     return false;
 }
 
 bool KoGenStyle::operator==(const KoGenStyle &other) const
 {
-    if (m_type != other.m_type) return false;
-    if (m_parentName != other.m_parentName) return false;
-    if (m_familyName != other.m_familyName) return false;
-    if (m_autoStyleInStylesDotXml != other.m_autoStyleInStylesDotXml) return false;
-    for (uint i = 0 ; i <= LastPropertyType; ++i) {
+    if (m_type != other.m_type) {
+        return false;
+    }
+    if (m_parentName != other.m_parentName) {
+        return false;
+    }
+    if (m_familyName != other.m_familyName) {
+        return false;
+    }
+    if (m_autoStyleInStylesDotXml != other.m_autoStyleInStylesDotXml) {
+        return false;
+    }
+    for (uint i = 0; i <= LastPropertyType; ++i) {
         if (m_properties[i].count() != other.m_properties[i].count()) {
             return false;
         }
@@ -472,37 +511,47 @@ bool KoGenStyle::operator==(const KoGenStyle &other) const
             return false;
         }
     }
-    if (m_attributes.count() != other.m_attributes.count()) return false;
-    if (m_maps.count() != other.m_maps.count()) return false;
-    // Same number of properties and attributes, no other choice than iterating
-    for (uint i = 0 ; i <= LastPropertyType; ++i) {
-        int comp = compareMap(m_properties[i], other.m_properties[i]);
-        if (comp != 0)
-            return false;
+    if (m_attributes.count() != other.m_attributes.count()) {
+        return false;
     }
-    for (uint i = 0 ; i <= LastPropertyType; ++i) {
-        int comp = compareMap(m_childProperties[i], other.m_childProperties[i]);
-        if (comp != 0)
+    if (m_maps.count() != other.m_maps.count()) {
+        return false;
+    }
+    // Same number of properties and attributes, no other choice than iterating
+    for (uint i = 0; i <= LastPropertyType; ++i) {
+        int comp = compareMap(m_properties[i], other.m_properties[i]);
+        if (comp != 0) {
             return false;
+        }
+    }
+    for (uint i = 0; i <= LastPropertyType; ++i) {
+        int comp = compareMap(m_childProperties[i], other.m_childProperties[i]);
+        if (comp != 0) {
+            return false;
+        }
     }
     int comp = compareMap(m_attributes, other.m_attributes);
-    if (comp != 0)
+    if (comp != 0) {
         return false;
-    for (int i = 0 ; i < m_maps.count() ; ++i) {
+    }
+    for (int i = 0; i < m_maps.count(); ++i) {
         int comp = compareMap(m_maps[i], other.m_maps[i]);
-        if (comp != 0)
+        if (comp != 0) {
             return false;
+        }
     }
     return true;
 }
 
 bool KoGenStyle::isEmpty() const
 {
-    if (!m_attributes.isEmpty() || ! m_maps.isEmpty())
+    if (!m_attributes.isEmpty() || ! m_maps.isEmpty()) {
         return false;
-    for (uint i = 0 ; i <= LastPropertyType; ++i)
-        if (! m_properties[i].isEmpty())
+    }
+    for (uint i = 0; i <= LastPropertyType; ++i)
+        if (! m_properties[i].isEmpty()) {
             return false;
+        }
     return true;
 }
 
@@ -512,7 +561,7 @@ void KoGenStyle::copyPropertiesFromStyle(const KoGenStyle &sourceStyle, KoGenSty
         type = sourceStyle.m_propertyType;
     }
 
-    const StyleMap& map = sourceStyle.m_properties[type];
+    const StyleMap &map = sourceStyle.m_properties[type];
     if (!map.isEmpty()) {
         QMap<QString, QString>::const_iterator it = map.constBegin();
         const QMap<QString, QString>::const_iterator end = map.constEnd();

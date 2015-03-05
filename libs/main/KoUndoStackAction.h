@@ -34,10 +34,10 @@ public:
         RED0
     };
 
-    KoUndoStackAction(KUndo2Stack* stack, Type type);
+    KoUndoStackAction(KUndo2Stack *stack, Type type);
 
 private Q_SLOTS:
-    void slotUndoTextChanged(const QString& text);
+    void slotUndoTextChanged(const QString &text);
 
 private:
     Type m_type;

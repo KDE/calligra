@@ -26,12 +26,12 @@
 #include "commands/KoPathControlPointMoveCommand.h"
 
 KoPathControlPointMoveStrategy::KoPathControlPointMoveStrategy(KoPathTool *tool, const KoPathPointData &pointData, KoPathPoint::PointType type, const QPointF &pos)
-        : KoInteractionStrategy(tool)
-        , m_lastPosition(pos)
-        , m_move(0, 0)
-        , m_tool(tool)
-        , m_pointData(pointData)
-        , m_pointType(type)
+    : KoInteractionStrategy(tool)
+    , m_lastPosition(pos)
+    , m_move(0, 0)
+    , m_tool(tool)
+    , m_pointData(pointData)
+    , m_pointType(type)
 {
 }
 
@@ -58,7 +58,7 @@ void KoPathControlPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers mod
     Q_UNUSED(modifiers);
 }
 
-KUndo2Command* KoPathControlPointMoveStrategy::createCommand()
+KUndo2Command *KoPathControlPointMoveStrategy::createCommand()
 {
     KUndo2Command *cmd = 0;
     if (!m_move.isNull()) {

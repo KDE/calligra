@@ -57,20 +57,23 @@ KisOiioImport::~KisOiioImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisOiioImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisOiioImport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "Oiio import! From:" << from << ", To:" << to << 0;
 
-    if (!(from == "image/oiio" || from == "image/x-xpixmap" || from == "image/gif" || from == "image/x-xbitmap"))
+    if (!(from == "image/oiio" || from == "image/x-xpixmap" || from == "image/gif" || from == "image/x-xbitmap")) {
         return KisImportExportFilter::NotImplemented;
+    }
 
-    if (to != "application/x-krita")
+    if (to != "application/x-krita") {
         return KisImportExportFilter::BadMimeType;
+    }
 
-        KisDocument * doc = dynamic_cast<KisDocument*>(m_chain -> outputDocument());
+    KisDocument *doc = dynamic_cast<KisDocument *>(m_chain -> outputDocument());
 
-    if (!doc)
+    if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     QString filename = m_chain -> inputFile();
 
@@ -79,24 +82,22 @@ KisImportExportFilter::ConversionStatus KisOiioImport::convert(const QByteArray&
     if (!filename.isEmpty()) {
         KUrl url(filename);
 
-        if (url.isEmpty())
+        if (url.isEmpty()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
         if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp->activeWindow())) {
             return KisImportExportFilter::FileNotFound;
         }
-
 
         QString localFile = url.toLocalFile();
 
         ImageBuf buf(localFile::toStdString());
         int nSubImages = buf.nsubimages();
 
-
 //        const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
 //                                                                                      Float32BitsColorDepthID.id(),
 //                                                                                      "");
-
 
 //        KisImageSP image = new KisImage(doc->createUndoStore(), img.width(), img.height(), colorSpace, localFile);
 

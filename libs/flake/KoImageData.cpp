@@ -47,10 +47,11 @@ KoImageData::KoImageData()
 
 KoImageData::KoImageData(const KoImageData &imageData)
     : KoShapeUserData(),
-    d(imageData.d)
+      d(imageData.d)
 {
-    if (d)
+    if (d) {
         d->refCount.ref();
+    }
 }
 
 KoImageData::KoImageData(KoImageDataPrivate *priv)
@@ -61,19 +62,23 @@ KoImageData::KoImageData(KoImageDataPrivate *priv)
 
 KoImageData::~KoImageData()
 {
-    if (d && !d->refCount.deref())
+    if (d && !d->refCount.deref()) {
         delete d;
+    }
 }
 
 QPixmap KoImageData::pixmap(const QSize &size)
 {
-    if (!d) return QPixmap();
+    if (!d) {
+        return QPixmap();
+    }
     QSize wantedSize = size;
     if (! wantedSize.isValid()) {
-        if (d->pixmap.isNull()) // we have a problem, Houston..
+        if (d->pixmap.isNull()) { // we have a problem, Houston..
             wantedSize = QSize(100, 100);
-        else
+        } else {
             wantedSize = d->pixmap.size();
+        }
     }
     if (d->pixmap.isNull() || d->pixmap.size() != wantedSize) {
         switch (d->dataStoreState) {
@@ -93,7 +98,7 @@ QPixmap KoImageData::pixmap(const QSize &size)
         }
         case KoImageDataPrivate::StateNotLoaded:
             image(); // forces load
-            // fall through
+        // fall through
         case KoImageDataPrivate::StateImageLoaded:
         case KoImageDataPrivate::StateImageOnly:
             if (!d->image.isNull()) {
@@ -104,8 +109,9 @@ QPixmap KoImageData::pixmap(const QSize &size)
         }
 
         if (d->dataStoreState == KoImageDataPrivate::StateImageLoaded) {
-            if (d->cleanCacheTimer.isActive())
+            if (d->cleanCacheTimer.isActive()) {
                 d->cleanCacheTimer.stop();
+            }
             // schedule an auto-unload of the big QImage in a second.
             d->cleanCacheTimer.start();
         }
@@ -122,18 +128,21 @@ QSizeF KoImageData::imageSize()
 {
     if (!d->imageSize.isValid()) {
         // The imagesize have not yet been calculated
-        if (image().isNull()) // auto loads the image
+        if (image().isNull()) { // auto loads the image
             return QSizeF(100, 100);
+        }
 
-        if (d->image.dotsPerMeterX())
+        if (d->image.dotsPerMeterX()) {
             d->imageSize.setWidth(DM_TO_POINT(d->image.width() / (qreal) d->image.dotsPerMeterX() * 10.0));
-        else
+        } else {
             d->imageSize.setWidth(d->image.width() / 72.0);
+        }
 
-        if (d->image.dotsPerMeterY())
+        if (d->image.dotsPerMeterY()) {
             d->imageSize.setHeight(DM_TO_POINT(d->image.height() / (qreal) d->image.dotsPerMeterY() * 10.0));
-        else
+        } else {
             d->imageSize.setHeight(d->image.height() / 72.0);
+        }
     }
     return d->imageSize;
 }
@@ -167,11 +176,11 @@ bool KoImageData::hasCachedImage() const
 
 void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
 {
-  qint64 oldKey = 0;
-  if (d) {
-    oldKey = d->key;
-  }
-  Q_ASSERT(!image.isNull());
+    qint64 oldKey = 0;
+    if (d) {
+        oldKey = d->key;
+    }
+    Q_ASSERT(!image.isNull());
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
         // again and well go to the other clause
@@ -269,7 +278,10 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
 
         if (store->open(url)) {
             struct Finalizer {
-                ~Finalizer() { store->close(); }
+                ~Finalizer()
+                {
+                    store->close();
+                }
                 KoStore *store;
             };
             Finalizer closer;
@@ -355,7 +367,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
 bool KoImageData::isValid() const
 {
     return d && d->dataStoreState != KoImageDataPrivate::StateEmpty
-        && d->errorCode == Success;
+           && d->errorCode == Success;
 }
 
 bool KoImageData::operator==(const KoImageData &other) const
@@ -365,10 +377,12 @@ bool KoImageData::operator==(const KoImageData &other) const
 
 KoImageData &KoImageData::operator=(const KoImageData &other)
 {
-    if (other.d)
+    if (other.d) {
         other.d->refCount.ref();
-    if (d && !d->refCount.deref())
+    }
+    if (d && !d->refCount.deref()) {
         delete d;
+    }
     d = other.d;
     return *this;
 }

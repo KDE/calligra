@@ -49,7 +49,6 @@ class KarbonDocument;
 
 class KoColor;
 
-
 class KarbonPart;
 class KarbonCanvas;
 
@@ -58,14 +57,14 @@ class KARBONUI_EXPORT KarbonView : public KoView
     Q_OBJECT
 
 public:
-    KarbonView(KarbonPart *part, KarbonDocument* doc, QWidget* parent = 0);
+    KarbonView(KarbonPart *part, KarbonDocument *doc, QWidget *parent = 0);
     virtual ~KarbonView();
 
     /// Returns the view is attached to
-    KarbonDocument * part() const;
+    KarbonDocument *part() const;
 
     /// Returns the canvas widget of this view
-    KarbonCanvas * canvasWidget() const;
+    KarbonCanvas *canvasWidget() const;
 
     void reorganizeGUI();
     void setNumberOfRecentFiles(uint number);
@@ -76,7 +75,6 @@ public:
     virtual void dropEvent(QDropEvent *e);
     /// Reimplemented from KoView
     virtual KoZoomController *zoomController() const;
-
 
 public Q_SLOTS:
     // editing:
@@ -146,16 +144,16 @@ protected Q_SLOTS:
 
 protected:
     virtual void updateReadWrite(bool readwrite);
-    virtual void resizeEvent(QResizeEvent* event);
-    virtual void dragEnterEvent(QDragEnterEvent * event);
+    virtual void resizeEvent(QResizeEvent *event);
+    virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
 
     void createLayersTabDock();
     void createStrokeDock();
     void createColorDock();
 
-    virtual KoPrintJob * createPrintJob();
-    virtual KoPrintJob * createPdfPrintJob();
+    virtual KoPrintJob *createPrintJob();
+    virtual KoPrintJob *createPdfPrintJob();
 
 private:
     void initActions();
@@ -166,10 +164,10 @@ private:
     void selectionFlip(bool horizontally, bool vertically);
 
     /// Returns a list of all selected path shapes
-    QList<KoPathShape*> selectedPathShapes();
+    QList<KoPathShape *> selectedPathShapes();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // __KARBON_VIEW__

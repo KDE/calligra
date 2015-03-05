@@ -23,15 +23,15 @@
 #include "Words.h"
 
 KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
-        : m_state(state),
-        m_shape(0)
+    : m_state(state),
+      m_shape(0)
 {
     widget.setupUi(this);
 
-    connect(widget.framesList, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+    connect(widget.framesList, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
             this, SLOT(frameSetSelected()));
-    connect(widget.frameSetName, SIGNAL(textChanged(const QString &)),
-            this, SLOT(nameChanged(const QString &)));
+    connect(widget.frameSetName, SIGNAL(textChanged(QString)),
+            this, SLOT(nameChanged(QString)));
 }
 
 bool KWFrameConnectSelector::canOpen(KoShape *shape)
@@ -42,9 +42,10 @@ bool KWFrameConnectSelector::canOpen(KoShape *shape)
     }
 
     if (KWFrameSet::from(shape)) { // already has a frameset
-        KWTextFrameSet *textFs = static_cast<KWTextFrameSet*>(KWFrameSet::from(shape));
-        if (textFs->textFrameSetType() != Words::OtherTextFrameSet)
-            return false; // can't alter shapesequence of this auto-generated shape
+        KWTextFrameSet *textFs = static_cast<KWTextFrameSet *>(KWFrameSet::from(shape));
+        if (textFs->textFrameSetType() != Words::OtherTextFrameSet) {
+            return false;    // can't alter shapesequence of this auto-generated shape
+        }
     }
 
     return true;
@@ -58,8 +59,9 @@ void KWFrameConnectSelector::frameSetSelected()
 void KWFrameConnectSelector::nameChanged(const QString &text)
 {
     widget.newRadio->setChecked(true);
-    foreach (QTreeWidgetItem *item, widget.framesList->selectedItems())
+    foreach (QTreeWidgetItem *item, widget.framesList->selectedItems()) {
         widget.framesList->setItemSelected(item, false);
+    }
     foreach (QTreeWidgetItem *item, m_items) {
         if (item->text(0) == text) {
             widget.framesList->setCurrentItem(item);
@@ -87,7 +89,7 @@ void KWFrameConnectSelector::save()
             new KWFrame(m_shape, newFS);
         }
     }
-   m_state->removeUser();
+    m_state->removeUser();
 }
 
 void KWFrameConnectSelector::open(KoShape *shape)
@@ -96,24 +98,27 @@ void KWFrameConnectSelector::open(KoShape *shape)
     m_shape = shape;
     widget.framesList->clear();
 
-    if (widget.frameSetName->text().isEmpty())
+    if (widget.frameSetName->text().isEmpty()) {
         widget.frameSetName->setText(m_state->document()->uniqueFrameSetName(i18n("frameset")));
+    }
 
     foreach (KWFrameSet *fs, m_state->document()->frameSets()) {
-        KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (textFs == 0 || textFs->textFrameSetType() != Words::OtherTextFrameSet)
+        KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *>(fs);
+        if (textFs == 0 || textFs->textFrameSetType() != Words::OtherTextFrameSet) {
             continue;
+        }
         m_frameSets.append(textFs);
         QTreeWidgetItem *row = new QTreeWidgetItem(widget.framesList);
         row->setText(0, textFs->name());
-        if (KWFrameSet::from(m_shape) == fs)
+        if (KWFrameSet::from(m_shape) == fs) {
             widget.framesList->setCurrentItem(row);
+        }
         m_items.append(row);
     }
 
     if (KWFrameSet::from(shape)) { // already has a frameset
-        KWTextFrameSet *textFs = static_cast<KWTextFrameSet*>(KWFrameSet::from(shape));
- 
+        KWTextFrameSet *textFs = static_cast<KWTextFrameSet *>(KWFrameSet::from(shape));
+
         if (textFs->shapeCount() == 1) { // don't allow us to remove the last frame of an FS
             widget.newRadio->setEnabled(false);
             widget.frameSetName->setEnabled(false);

@@ -26,7 +26,7 @@
 #include <kexiutils/utils.h>
 
 KexiCSVImportExportPart::KexiCSVImportExportPart(QObject *parent, const QVariantList &args)
-        : KexiInternalPart(parent, args)
+    : KexiInternalPart(parent, args)
 {
 }
 
@@ -34,8 +34,8 @@ KexiCSVImportExportPart::~KexiCSVImportExportPart()
 {
 }
 
-QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
-        QWidget *parent, const char *objName, QMap<QString, QString>* args)
+QWidget *KexiCSVImportExportPart::createWidget(const char *widgetClass,
+        QWidget *parent, const char *objName, QMap<QString, QString> *args)
 {
     if (0 == qstrcmp(widgetClass, "KexiCSVImportDialog")) {
         KexiCSVImportDialog::Mode mode = (args && (*args)["sourceType"] == "file")
@@ -49,11 +49,13 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
         }
         return dlg;
     } else if (0 == qstrcmp(widgetClass, "KexiCSVExportWizard")) {
-        if (!args)
+        if (!args) {
             return 0;
+        }
         KexiCSVExport::Options options;
-        if (!options.assign(*args))
+        if (!options.assign(*args)) {
             return 0;
+        }
         KexiCSVExportWizard *dlg = new KexiCSVExportWizard(options, parent);
         dlg->setObjectName(objName);
         KexiInternalPart::setCancelled(dlg->cancelled());
@@ -66,21 +68,23 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
     return 0;
 }
 
-bool KexiCSVImportExportPart::executeCommand(const char* commandName,
-        QMap<QString, QString>* args)
+bool KexiCSVImportExportPart::executeCommand(const char *commandName,
+        QMap<QString, QString> *args)
 {
     if (0 == qstrcmp(commandName, "KexiCSVExport")) {
         KexiCSVExport::Options options;
-        if (!options.assign(*args))
+        if (!options.assign(*args)) {
             return false;
+        }
         KexiDB::TableOrQuerySchema tableOrQuery(
             KexiMainWindowIface::global()->project()->dbConnection(), options.itemId);
         QTextStream *stream = 0;
-        if (args->contains("textStream"))
+        if (args->contains("textStream")) {
             stream = KexiUtils::stringToPtr<QTextStream>((*args)["textStream"]);
+        }
         return KexiCSVExport::exportData(tableOrQuery, options, -1, stream);
     }
     return false;
 }
 
-K_EXPORT_KEXIPART_PLUGIN( KexiCSVImportExportPart, csv_importexport )
+K_EXPORT_KEXIPART_PLUGIN(KexiCSVImportExportPart, csv_importexport)

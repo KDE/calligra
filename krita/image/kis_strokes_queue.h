@@ -60,7 +60,7 @@ private:
                               bool externalJobsPending);
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* __KIS_STROKES_QUEUE_H */

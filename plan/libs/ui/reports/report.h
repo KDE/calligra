@@ -25,8 +25,8 @@ namespace KPlato
 
 namespace Reports
 {
-    enum ItemRoles { TagRole = Qt::UserRole + 1 };
-    enum ExportFormat { EF_Unknown, EF_OdtTable, EF_OdtFrames, EF_Ods, EF_Html, EF_XHtml };
+enum ItemRoles { TagRole = Qt::UserRole + 1 };
+enum ExportFormat { EF_Unknown, EF_OdtTable, EF_OdtFrames, EF_Ods, EF_Html, EF_XHtml };
 }
 
 }

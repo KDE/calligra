@@ -40,11 +40,11 @@
 #include <QDebug>
 
 PageVariable::PageVariable()
-        : KoVariable(true),
-        m_type(PageNumber),
-        m_pageselect(KoTextPage::CurrentPage),
-        m_pageadjust(0),
-        m_fixed(false)
+    : KoVariable(true),
+      m_type(PageNumber),
+      m_pageselect(KoTextPage::CurrentPage),
+      m_pageadjust(0),
+      m_fixed(false)
 {
 }
 
@@ -88,7 +88,7 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject &obje
     KoTextPage *page = 0;
     if (m_type != PageCount) {
 #if 0 // the code is left here to do some testing
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(document->documentLayout());
         KoTextLayoutRootArea *rootArea = 0;
         KoTextPage *page2 = 0;
         if (lay) {
@@ -98,7 +98,7 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject &obje
             }
         }
 #endif
-        page = document->resource(KoTextDocument::LayoutTextPage, KoTextDocument::LayoutTextPageUrl).value<KoTextPage*>();
+        page = document->resource(KoTextDocument::LayoutTextPage, KoTextDocument::LayoutTextPageUrl).value<KoTextPage *>();
     }
     int pagenumber = 0;
 
@@ -116,7 +116,7 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject &obje
                 QString newValue = pagenumber >= 0 ? m_numberFormat.formattedNumber(pagenumber, &defaultDefinition) : QString();
                 // only update value when changed
                 if (currentValue != newValue) {
-                     setValue(newValue);
+                    setValue(newValue);
                 }
             }
         }
@@ -133,7 +133,7 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject &obje
     KoVariable::resize(document, object, posInDocument, format, pd);
 }
 
-void PageVariable::saveOdf(KoShapeSavingContext & context)
+void PageVariable::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
     switch (m_type) {
@@ -147,20 +147,23 @@ void PageVariable::saveOdf(KoShapeSavingContext & context)
         // <text:page-number text:select-page="current" text:page-adjust="2" text:fixed="true">3</text:page-number>
         writer->startElement("text:page-number", false);
 
-        if (m_pageselect == KoTextPage::CurrentPage)
+        if (m_pageselect == KoTextPage::CurrentPage) {
             writer->addAttribute("text:select-page", "current");
-        else if (m_pageselect == KoTextPage::PreviousPage)
+        } else if (m_pageselect == KoTextPage::PreviousPage) {
             writer->addAttribute("text:select-page", "previous");
-        else if (m_pageselect == KoTextPage::NextPage)
+        } else if (m_pageselect == KoTextPage::NextPage) {
             writer->addAttribute("text:select-page", "next");
+        }
 
-        if (m_pageadjust != 0)
+        if (m_pageadjust != 0) {
             writer->addAttribute("text:page-adjust", QString::number(m_pageadjust));
+        }
 
         m_numberFormat.saveOdf(writer);
 
-        if (m_fixed)
+        if (m_fixed) {
             writer->addAttribute("text:fixed", "true");
+        }
 
         writer->addTextNode(value());
         writer->endElement();
@@ -169,10 +172,11 @@ void PageVariable::saveOdf(KoShapeSavingContext & context)
         // <text:page-continuation-string text:select-page="previous">The Text</text:page-continuation-string>
         writer->startElement("page-continuation-string", false);
 
-        if (m_pageselect == KoTextPage::PreviousPage)
+        if (m_pageselect == KoTextPage::PreviousPage) {
             writer->addAttribute("text:select-page", "previous");
-        else if (m_pageselect == KoTextPage::NextPage)
+        } else if (m_pageselect == KoTextPage::NextPage) {
             writer->addAttribute("text:select-page", "next");
+        }
 
         writer->addTextNode(m_continuation);
         writer->endElement();
@@ -180,7 +184,7 @@ void PageVariable::saveOdf(KoShapeSavingContext & context)
     }
 }
 
-bool PageVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
+bool PageVariable::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(context);
     const QString localName(element.localName());
@@ -194,12 +198,13 @@ bool PageVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
         // The text:select-page attribute is used to display the number of the previous or the following
         // page rather than the number of the current page.
         QString pageselect = element.attributeNS(KoXmlNS::text, "select-page", QString());
-        if (pageselect == "previous")
+        if (pageselect == "previous") {
             m_pageselect = KoTextPage::PreviousPage;
-        else if (pageselect == "next")
+        } else if (pageselect == "next") {
             m_pageselect = KoTextPage::NextPage;
-        else // "current"
+        } else { // "current"
             m_pageselect = KoTextPage::CurrentPage;
+        }
 
         // The value of a page number field can be adjusted by a specified number, allowing the display
         // of page numbers of following or preceding pages. The adjustment amount is specified using
@@ -219,12 +224,13 @@ bool PageVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
         // This attribute specifies whether to check for a previous or next page and if the page exists, the
         // continuation text is printed.
         QString pageselect = element.attributeNS(KoXmlNS::text, "select-page", QString());
-        if (pageselect == "previous")
+        if (pageselect == "previous") {
             m_pageselect = KoTextPage::PreviousPage;
-        else if (pageselect == "next")
+        } else if (pageselect == "next") {
             m_pageselect = KoTextPage::NextPage;
-        else
+        } else {
             m_pageselect = KoTextPage::CurrentPage;
+        }
 
         // The text to display
         m_continuation = element.text();

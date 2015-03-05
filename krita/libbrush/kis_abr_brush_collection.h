@@ -49,9 +49,12 @@ protected:
 public:
 
     /// Construct brush to load filename later as brush
-    KisAbrBrushCollection(const QString& filename);
+    KisAbrBrushCollection(const QString &filename);
 
-    virtual ~KisAbrBrushCollection() { qDebug() << "deleting" << filename(); }
+    virtual ~KisAbrBrushCollection()
+    {
+        qDebug() << "deleting" << filename();
+    }
 
     virtual bool load();
 
@@ -59,7 +62,7 @@ public:
 
     virtual bool save();
 
-    virtual bool saveToDevice(QIODevice* dev) const;
+    virtual bool saveToDevice(QIODevice *dev) const;
 
     /**
      * @return a preview of the brush
@@ -71,20 +74,21 @@ public:
      */
     virtual QString defaultFileExtension() const;
 
-    QList<KisAbrBrush*> brushes() {
+    QList<KisAbrBrush *> brushes()
+    {
         return m_abrBrushes.values();
     }
 
 protected:
 
-    void toXML(QDomDocument& d, QDomElement& e) const;
+    void toXML(QDomDocument &d, QDomElement &e) const;
 
 private:
 
-    qint32 abr_brush_load(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
-    qint32 abr_brush_load_v12(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
-    quint32 abr_brush_load_v6(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
-    QMap<QString, KisAbrBrush*> m_abrBrushes;
+    qint32 abr_brush_load(QDataStream &abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
+    qint32 abr_brush_load_v12(QDataStream &abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
+    quint32 abr_brush_load_v6(QDataStream &abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
+    QMap<QString, KisAbrBrush *> m_abrBrushes;
 };
 
 #endif

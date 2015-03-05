@@ -35,14 +35,14 @@ namespace MSOOXML
 class KOMSOOXML_EXPORT MsooXmlDocPropertiesReader : public MsooXmlReader
 {
 public:
-    explicit MsooXmlDocPropertiesReader(KoOdfWriters* writers);
+    explicit MsooXmlDocPropertiesReader(KoOdfWriters *writers);
 
     //! Reads/parses the file. The output goes to KoGenStyles* KoOdfWriters::meta
-    KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus read(MsooXmlReaderContext *context = 0);
 
     KoFilter::ConversionStatus read_coreProperties();
 private:
-    QMap<QString,QString> elemMap;
+    QMap<QString, QString> elemMap;
 };
 
 } // namespace MSOOXML

@@ -80,17 +80,20 @@ public:
     void setData(KexiDB::TableViewData *data, bool owner = true);
 
     /*! \return data structure displayed for this object */
-    inline KexiDB::TableViewData *data() const {
+    inline KexiDB::TableViewData *data() const
+    {
         return m_data;
     }
 
     /*! \return currently selected column number or -1. */
-    inline int currentColumn() const {
+    inline int currentColumn() const
+    {
         return m_curCol;
     }
 
     /*! \return currently selected row number or -1. */
-    inline int currentRow() const {
+    inline int currentRow() const
+    {
         return m_curRow;
     }
 
@@ -100,7 +103,8 @@ public:
     virtual int lastVisibleRow() const = 0;
 
     /*! \return currently selected record data or null. */
-    KexiDB::RecordData *selectedItem() const {
+    KexiDB::RecordData *selectedItem() const
+    {
         return m_currentItem;
     }
 
@@ -139,7 +143,8 @@ public:
     void setReadOnly(bool set);
 
     /*! \return true if sorting is enabled. */
-    inline bool isSortingEnabled() const {
+    inline bool isSortingEnabled() const
+    {
         return m_isSortingEnabled;
     }
 
@@ -206,7 +211,8 @@ public:
      Mostly usable for not db-aware objects (e.g. used in Kexi Alter Table).
      Note, that if inserting is disabled, or the data set is read-only,
      this flag will be ignored. */
-    bool isEmptyRowInsertingEnabled() const {
+    bool isEmptyRowInsertingEnabled() const
+    {
         return m_emptyRowInsertingEnabled;
     }
 
@@ -218,7 +224,8 @@ public:
     virtual void setFilteringEnabled(bool set);
 
     /*! \return true if filtering is enabled. */
-    inline bool isFilteringEnabled() const {
+    inline bool isFilteringEnabled() const
+    {
         return m_isFilteringEnabled;
     }
 
@@ -231,12 +238,14 @@ public:
     virtual void setSpreadSheetMode(bool set);
 
     /*! \return true id "spreadSheetMode" is enabled. It's false by default. */
-    bool spreadSheetMode() const {
+    bool spreadSheetMode() const
+    {
         return m_spreadSheetMode;
     }
 
     /*! \return true if currently selected row is edited. */
-    inline bool rowEditing() const {
+    inline bool rowEditing() const
+    {
         return m_rowEditing;
     }
 
@@ -249,7 +258,8 @@ public:
 
     /*! \return deletion policy for this object.
      The default (after allocating) is AskDelete. */
-    DeletionPolicy deletionPolicy() const {
+    DeletionPolicy deletionPolicy() const
+    {
         return m_deletionPolicy;
     }
 
@@ -309,7 +319,6 @@ public:
     virtual void selectLastRow();
     virtual void addNewRecordRequested();
 
-
     /*! Clears current selection. Current row and column will be now unspecified:
      currentRow(), currentColumn() will return -1, and selectedItem() will return null. */
     virtual void clearSelection();
@@ -318,10 +327,10 @@ public:
     enum CursorPositionFlag {
         NoCursorPositionFlags = 0,  //!< Default flag
         ForceSetCursorPosition = 1, //!< Update cursor position even if row and col doesn't
-                                    //!< differ from actual position.
+        //!< differ from actual position.
         DontEnsureCursorVisibleIfPositionUnchanged = 2 //!< Don't call ensureCellVisible()
-                                                       //!< when position is unchanged and
-                                                       //!< ForceSetCursorPosition is off.
+                //!< when position is unchanged and
+                //!< ForceSetCursorPosition is off.
     };
     Q_DECLARE_FLAGS(CursorPositionFlags, CursorPositionFlag)
 
@@ -355,12 +364,14 @@ public:
      be impossible for the flag set to true, because of constraints violation.
      However, setting this flag to true can be useful especially for not-db-aware
      data set (it's used e.g. in Kexi Alter Table's field editor). */
-    bool acceptsRowEditAfterCellAccepting() const {
+    bool acceptsRowEditAfterCellAccepting() const
+    {
         return m_acceptsRowEditAfterCellAccepting;
     }
 
     /*! \return true, if this table accepts dropping data on the rows. */
-    bool dropsAtRowEnabled() const {
+    bool dropsAtRowEnabled() const
+    {
         return m_dropsAtRowEnabled;
     }
 
@@ -373,7 +384,8 @@ public:
     virtual void setDropsAtRowEnabled(bool set);
 
     /*! \return currently used data (field/cell) editor or 0 if there is no data editing. */
-    inline KexiDataItemInterface *editor() const {
+    inline KexiDataItemInterface *editor() const
+    {
         return m_editor;
     }
 
@@ -408,7 +420,7 @@ public:
     Q_DECLARE_FLAGS(CreateEditorFlags, CreateEditorFlag)
 
     //! Creates editors and shows it, what usually means the beginning of a cell editing
-    virtual void createEditor(int row, int col, const QString& addText = QString(),
+    virtual void createEditor(int row, int col, const QString &addText = QString(),
                               CreateEditorFlags flags = DefaultCreateEditorFlags) = 0;
 
     /*! Used when Return key is pressed on cell, the cell has been double clicked
@@ -417,7 +429,7 @@ public:
      was displayed (in this case, \a setText is usually not empty, what means
      that text will be set in the cell replacing previous value).
     */
-    virtual void startEditCurrentCell(const QString& setText = QString(),
+    virtual void startEditCurrentCell(const QString &setText = QString(),
                                       CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     /*! Deletes currently selected cell's contents, if allowed.
@@ -431,17 +443,18 @@ public:
      but for Kexi Forms column data
      corresponding to widget number is used here
      (see KexiFormScrollView::fieldNumberForColumn()). */
-    virtual KexiDB::TableViewColumn* column(int col);
+    virtual KexiDB::TableViewColumn *column(int col);
 
     /*! \return field number within data model connected to a data-aware
      widget at column \a col. Can return -1 if there's no such column. */
-    virtual int fieldNumberForColumn(int col) {
+    virtual int fieldNumberForColumn(int col)
+    {
         return col;
     }
 
-    bool hasDefaultValueAt(const KexiDB::TableViewColumn& tvcol);
+    bool hasDefaultValueAt(const KexiDB::TableViewColumn &tvcol);
 
-    const QVariant* bufferedValueAt(int col, bool useDefaultValueIfPossible = true);
+    const QVariant *bufferedValueAt(int col, bool useDefaultValueIfPossible = true);
 
     //! \return a type of column \a col - one of KexiDB::Field::Type
     int columnType(int col);
@@ -463,9 +476,9 @@ public:
     virtual int horizontalHeaderHeight() const;
 
     //! signals
-    virtual void itemChanged(KexiDB::RecordData*, int row, int col) = 0;
-    virtual void itemChanged(KexiDB::RecordData*, int row, int col, QVariant oldValue) = 0;
-    virtual void itemDeleteRequest(KexiDB::RecordData*, int row, int col) = 0;
+    virtual void itemChanged(KexiDB::RecordData *, int row, int col) = 0;
+    virtual void itemChanged(KexiDB::RecordData *, int row, int col, QVariant oldValue) = 0;
+    virtual void itemDeleteRequest(KexiDB::RecordData *, int row, int col) = 0;
     virtual void currentItemDeleteRequest() = 0;
     //! Emitted for spreadsheet mode when an item was deleted and a new item has been appended
     virtual void newItemAppendedForAfterDeletingInSpreadSheetMode() = 0;
@@ -475,18 +488,21 @@ public:
     virtual void dataSet(KexiDB::TableViewData *data) = 0;
 
     /*! \return a pointer to context menu. This can be used to plug some actions there. */
-    KMenu* contextMenu() const {
+    KMenu *contextMenu() const
+    {
         return m_contextMenu;
     }
 
     /*! \return true if the context menu is enabled (visible) for the view.
       True by default. */
-    bool contextMenuEnabled() const {
+    bool contextMenuEnabled() const
+    {
         return m_contextMenuEnabled;
     }
 
     /*! Enables or disables the context menu for the view. */
-    void setContextMenuEnabled(bool set) {
+    void setContextMenuEnabled(bool set)
+    {
         m_contextMenuEnabled = set;
     }
 
@@ -497,12 +513,14 @@ public:
     void setContextMenuTitle(const QIcon &icon, const QString &text);
 
     /*! \return title text of the context menu. */
-    QString contextMenuTitleText() const {
+    QString contextMenuTitleText() const
+    {
         return m_contextMenuTitleText;
     }
 
     /*! \return title icon of the context menu. */
-    QIcon contextMenuTitleIcon() const {
+    QIcon contextMenuTitleIcon() const
+    {
         return m_contextMenuTitleIcon;
     }
 
@@ -518,7 +536,8 @@ public:
     void startEditOrToggleValue();
 
     /*! \return true if new row is edited; implies: rowEditing==true. */
-    inline bool newRowEditing() const {
+    inline bool newRowEditing() const
+    {
         return m_newRowEditing;
     }
 
@@ -526,26 +545,26 @@ public:
      we're starting to edit the cell and inverting it's state. */
     virtual void boolToggled();
 
-    virtual void connectCellSelectedSignal(const QObject* receiver,
-                                           const char* intIntMember) = 0;
+    virtual void connectCellSelectedSignal(const QObject *receiver,
+                                           const char *intIntMember) = 0;
 
-    virtual void connectRowEditStartedSignal(const QObject* receiver,
-            const char* intMember) = 0;
+    virtual void connectRowEditStartedSignal(const QObject *receiver,
+            const char *intMember) = 0;
 
-    virtual void connectRowEditTerminatedSignal(const QObject* receiver,
-            const char* voidMember) = 0;
+    virtual void connectRowEditTerminatedSignal(const QObject *receiver,
+            const char *voidMember) = 0;
 
-    virtual void connectUpdateSaveCancelActionsSignal(const QObject* receiver,
-            const char* voidMember) = 0;
+    virtual void connectUpdateSaveCancelActionsSignal(const QObject *receiver,
+            const char *voidMember) = 0;
 
-    virtual void connectReloadActionsSignal(const QObject* receiver,
-                                            const char* voidMember) = 0;
+    virtual void connectReloadActionsSignal(const QObject *receiver,
+                                            const char *voidMember) = 0;
 
-    virtual void connectDataSetSignal(const QObject* receiver,
-                                      const char* kexiTableViewDataMember) = 0;
+    virtual void connectDataSetSignal(const QObject *receiver,
+                                      const char *kexiTableViewDataMember) = 0;
 
-    virtual void connectToReloadDataSlot(const QObject* sender,
-                                         const char* voidSignal) = 0;
+    virtual void connectToReloadDataSlot(const QObject *sender,
+                                         const char *voidSignal) = 0;
 
     virtual void slotDataDestroying();
 
@@ -573,8 +592,8 @@ public:
 
      \return true if value has been found, false if value has not been found,
      and cancelled if there is nothing to find or there is no data to search in. */
-    virtual tristate find(const QVariant& valueToFind,
-                          const KexiSearchAndReplaceViewInterface::Options& options, bool next);
+    virtual tristate find(const QVariant &valueToFind,
+                          const KexiSearchAndReplaceViewInterface::Options &options, bool next);
 
     /*! Finds \a valueToFind within the data items and replaces with \a replacement
      \a options are used to control the process.
@@ -582,12 +601,12 @@ public:
      has not been found and replaced, and cancelled if there is nothing
      to find or there is no data to search in or the data is read only.
      If \a replaceAll is true, all found values are replaced. */
-    virtual tristate findNextAndReplace(const QVariant& valueToFind,
-                                        const QVariant& replacement,
-                                        const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
+    virtual tristate findNextAndReplace(const QVariant &valueToFind,
+                                        const QVariant &replacement,
+                                        const KexiSearchAndReplaceViewInterface::Options &options, bool replaceAll);
 
     /*! \return vertical scrollbar */
-    virtual QScrollBar* verticalScrollBar() const = 0;
+    virtual QScrollBar *verticalScrollBar() const = 0;
 
     /*! Used in KexiTableView::keyPressEvent() (and in continuous forms).
      \return true when the key press event \e was consumed.
@@ -685,7 +704,7 @@ protected:
 
     /*! for implementation as a signal */
     virtual void updateSaveCancelActions() = 0;
-    
+
     /*! Prototype for signal rowEditStarted(int), implemented by KexiFormScrollView. */
     virtual void rowEditStarted(int row) = 0;
 
@@ -730,12 +749,13 @@ protected:
     virtual void updateAfterAcceptRowEdit();
 
     //! Handles TableViewData::rowRepaintRequested() signal
-    virtual void slotRowRepaintRequested(KexiDB::RecordData& record) {
+    virtual void slotRowRepaintRequested(KexiDB::RecordData &record)
+    {
         Q_UNUSED(record);
     }
 
     //! Handles TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-    virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result,
+    virtual void slotAboutToDeleteRow(KexiDB::RecordData &record, KexiDB::ResultInfo *result,
                                       bool repaint);
 
     //! Handles TableViewData::rowDeleted() signal to repaint when needed.
@@ -766,7 +786,8 @@ protected:
     /*! Used in KexiDataAwareObjectInterface::slotRowDeleted()
      to repaint tow \a row and all visible below.
      Implemented if there is more than one row displayed, i.e. currently for KexiTableView. */
-    virtual void updateAllVisibleRowsBelow(int row) {
+    virtual void updateAllVisibleRowsBelow(int row)
+    {
         Q_UNUSED(row);
     }
 
@@ -774,7 +795,7 @@ protected:
     virtual QRect viewportGeometry() const = 0;
 
     //! Call this from the subclass. */
-    virtual void focusOutEvent(QFocusEvent* e);
+    virtual void focusOutEvent(QFocusEvent *e);
 
     /*! Handles verticalScrollBar()'s valueChanged(int) signal.
      Called when vscrollbar's value has been changed.
@@ -792,14 +813,14 @@ protected:
      message box or "queryYesNo" if resultInfo->allowToDiscardChanges is true.
      \return code of button clicked: KMessageBox::Ok in case of "sorry" or "detailedSorry" messages
      and KMessageBox::Yes or KMessageBox::No in case of "queryYesNo" message. */
-    int showErrorMessageForResult(const KexiDB::ResultInfo& resultInfo);
+    int showErrorMessageForResult(const KexiDB::ResultInfo &resultInfo);
 
     /*! Shows context message @a message for editor @a item. */
     void showEditorContextMessage(
-            KexiDataItemInterface *item,
-            const QString &message,
-            KMessageWidget::MessageType type,
-            KMessageWidget::CalloutPointerDirection direction);
+        KexiDataItemInterface *item,
+        const QString &message,
+        KMessageWidget::MessageType type,
+        KMessageWidget::CalloutPointerDirection direction);
 
     /*! Shows context message about exceeded length for editor @a item.
      If @a exceeded is true, a new message is created, else the message will be removed. */
@@ -817,10 +838,10 @@ protected:
     void updateIndicesForVisibleValues();
 
     //! @return horizontal header, 0 by default.
-    virtual QHeaderView* horizontalHeader() const;
+    virtual QHeaderView *horizontalHeader() const;
 
     //! @return vertical header, 0 by default.
-    virtual QHeaderView* verticalHeader() const;
+    virtual QHeaderView *verticalHeader() const;
 
     //! Update section of vertical header
     virtual void updateVerticalHeaderSection(int section) = 0;
@@ -994,17 +1015,18 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDataAwareObjectInterface::CursorPositionFlags)
 
 inline bool KexiDataAwareObjectInterface::hasData() const
 {
-    if (!m_data)
+    if (!m_data) {
         kDebug() << "KexiDataAwareObjectInterface: No data assigned!";
+    }
     return m_data != 0;
 }
 
 inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
 {
     KexiDB::RecordData *record = m_data->at(pos);
-    if (!record)
+    if (!record) {
         kDebug() << "pos:" << pos << "- NO ITEM!!";
-    else {
+    } else {
         /*  kDebug() << "record:" << row;
             int i=1;
             for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
@@ -1026,7 +1048,7 @@ inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
         connect(this, SIGNAL(rowEditTerminated(int)), receiver, voidMember); \
     } \
     void connectUpdateSaveCancelActionsSignal(const QObject* receiver, \
-                                              const char* voidMember) { \
+            const char* voidMember) { \
         connect(this, SIGNAL(updateSaveCancelActions()), receiver, voidMember); \
     } \
     void connectReloadActionsSignal(const QObject* receiver, const char* voidMember) { \

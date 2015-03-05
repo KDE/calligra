@@ -44,7 +44,7 @@ bool InlineAnchorStrategy::moveSubject()
         return false; // let's fake we moved to force another relayout
     }
 
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
+    KoTextShapeData *data = qobject_cast<KoTextShapeData *>(m_anchor->shape()->parent()->userData());
     if (!data) {
         return false; // let's fake we moved to force another relayout
     }

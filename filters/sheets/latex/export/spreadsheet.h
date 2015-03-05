@@ -72,23 +72,23 @@ public:
     void analyze(const QDomNode);
     void analyze_attr(const QDomNode);
 
-    void generate(QTextStream&, bool);
+    void generate(QTextStream &, bool);
 
 private:
     /**
      * Generate the second part of the preamble
      */
-    void generatePreamble(QTextStream&);
+    void generatePreamble(QTextStream &);
 
     /**
      * Generate the header
      */
-    void  generateTypeHeader(QTextStream&);
+    void  generateTypeHeader(QTextStream &);
 
     /**
      * Generate the footer
      */
-    void  generateTypeFooter(QTextStream&);
+    void  generateTypeFooter(QTextStream &);
 };
 
 #endif /* __CALLIGRA_SHEETS_LATEX_SPREADSHEET_H__ */

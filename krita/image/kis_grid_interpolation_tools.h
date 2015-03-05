@@ -36,7 +36,8 @@
 #include <QPainter>
 #endif /* DEBUG_PAINTING_POLYGONS */
 
-namespace GridIterationTools {
+namespace GridIterationTools
+{
 
 inline int calcGridDimension(int start, int end, const int pixelPrecision)
 {
@@ -58,14 +59,14 @@ inline int calcGridDimension(int start, int end, const int pixelPrecision)
     return size;
 }
 
-inline QSize calcGridSize(const QRect &srcBounds, const int pixelPrecision) {
+inline QSize calcGridSize(const QRect &srcBounds, const int pixelPrecision)
+{
     return QSize(calcGridDimension(srcBounds.x(), srcBounds.right(), pixelPrecision),
                  calcGridDimension(srcBounds.y(), srcBounds.bottom(), pixelPrecision));
 }
 
 template <class ProcessPolygon, class ForwardTransform>
-struct CellOp
-{
+struct CellOp {
     CellOp(ProcessPolygon &_polygonOp, ForwardTransform &_transformOp)
         : polygonOp(_polygonOp),
           transformOp(_transformOp)
@@ -74,7 +75,8 @@ struct CellOp
 
     inline void processPoint(int col, int row,
                              int prevCol, int prevRow,
-                             int colIndex, int rowIndex) {
+                             int colIndex, int rowIndex)
+    {
 
         QPointF dstPosF = transformOp(QPointF(col, row));
         currLinePoints << dstPosF;
@@ -99,7 +101,8 @@ struct CellOp
 
     }
 
-    inline void nextLine() {
+    inline void nextLine()
+    {
         std::swap(prevLinePoints, currLinePoints);
 
         // we are erasing elements for not free'ing the occupied
@@ -119,7 +122,9 @@ void processGrid(ProcessCell &cellOp,
                  const QRect &srcBounds,
                  const int pixelPrecision)
 {
-    if (srcBounds.isEmpty()) return;
+    if (srcBounds.isEmpty()) {
+        return;
+    }
 
     const int alignmentMask = ~(pixelPrecision - 1);
 
@@ -141,7 +146,7 @@ void processGrid(ProcessCell &cellOp,
             colIndex++;
 
             if (col > srcBounds.right() &&
-                col <= srcBounds.right() + pixelPrecision - 1) {
+                    col <= srcBounds.right() + pixelPrecision - 1) {
 
                 col = srcBounds.right();
             } else {
@@ -157,7 +162,7 @@ void processGrid(ProcessCell &cellOp,
         rowIndex++;
 
         if (row > srcBounds.bottom() &&
-            row <= srcBounds.bottom() + pixelPrecision - 1) {
+                row <= srcBounds.bottom() + pixelPrecision - 1) {
 
             row = srcBounds.bottom();
         } else {
@@ -174,18 +179,21 @@ void processGrid(ProcessPolygon &polygonOp, ForwardTransform &transformOp,
     processGrid(cellOp, srcBounds, pixelPrecision);
 }
 
-struct PaintDevicePolygonOp
-{
+struct PaintDevicePolygonOp {
     PaintDevicePolygonOp(KisPaintDeviceSP srcDev, KisPaintDeviceSP dstDev)
         : m_srcDev(srcDev), m_dstDev(dstDev) {}
 
-    void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon) {
-        this->operator() (srcPolygon, dstPolygon, dstPolygon);
+    void operator()(const QPolygonF &srcPolygon, const QPolygonF &dstPolygon)
+    {
+        this->operator()(srcPolygon, dstPolygon, dstPolygon);
     }
 
-    void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon, const QPolygonF &clipDstPolygon) {
+    void operator()(const QPolygonF &srcPolygon, const QPolygonF &dstPolygon, const QPolygonF &clipDstPolygon)
+    {
         QRect boundRect = clipDstPolygon.boundingRect().toAlignedRect();
-        if (boundRect.isEmpty()) return;
+        if (boundRect.isEmpty()) {
+            return;
+        }
 
         KisSequentialIterator dstIt(m_dstDev, boundRect);
         KisRandomSubAccessorSP srcAcc = m_srcDev->createRandomSubAccessor();
@@ -229,8 +237,7 @@ struct PaintDevicePolygonOp
     KisPaintDeviceSP m_dstDev;
 };
 
-struct QImagePolygonOp
-{
+struct QImagePolygonOp {
     QImagePolygonOp(const QImage &srcImage, QImage &dstImage,
                     const QPointF &srcImageOffset,
                     const QPointF &dstImageOffset)
@@ -242,11 +249,13 @@ struct QImagePolygonOp
     {
     }
 
-    void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon) {
-        this->operator() (srcPolygon, dstPolygon, dstPolygon);
+    void operator()(const QPolygonF &srcPolygon, const QPolygonF &dstPolygon)
+    {
+        this->operator()(srcPolygon, dstPolygon, dstPolygon);
     }
 
-    void operator() (const QPolygonF &srcPolygon, const QPolygonF &dstPolygon, const QPolygonF &clipDstPolygon) {
+    void operator()(const QPolygonF &srcPolygon, const QPolygonF &dstPolygon, const QPolygonF &clipDstPolygon)
+    {
         QRect boundRect = clipDstPolygon.boundingRect().toAlignedRect();
         KisFourPointInterpolatorBackward interp(srcPolygon, dstPolygon);
 
@@ -269,8 +278,12 @@ struct QImagePolygonOp
                     QPoint srcPointI = srcPoint.toPoint();
                     QPoint dstPointI = dstPoint.toPoint();
 
-                    if (!m_dstImageRect.contains(srcPointI)) continue;
-                    if (!m_srcImageRect.contains(dstPointI)) continue;
+                    if (!m_dstImageRect.contains(srcPointI)) {
+                        continue;
+                    }
+                    if (!m_srcImageRect.contains(dstPointI)) {
+                        continue;
+                    }
 
                     m_dstImage.setPixel(srcPointI, m_srcImage.pixel(dstPointI));
                 }
@@ -330,61 +343,62 @@ inline QVector<int> calculateCellIndexes(int col, int row, const QSize &gridSize
 inline int pointToIndex(const QPoint &cellPt, const QSize &gridSize)
 {
     return cellPt.x() +
-        cellPt.y() * gridSize.width();
+           cellPt.y() * gridSize.width();
 }
 
-namespace Private {
-    inline QPoint pointPolygonIndexToColRow(QPoint baseColRow, int index)
-    {
-        static QVector<QPoint> pointOffsets;
-        if (pointOffsets.isEmpty()) {
-            pointOffsets << QPoint(0,0);
-            pointOffsets << QPoint(1,0);
-            pointOffsets << QPoint(1,1);
-            pointOffsets << QPoint(0,1);
-        }
-
-        return baseColRow + pointOffsets[index];
+namespace Private
+{
+inline QPoint pointPolygonIndexToColRow(QPoint baseColRow, int index)
+{
+    static QVector<QPoint> pointOffsets;
+    if (pointOffsets.isEmpty()) {
+        pointOffsets << QPoint(0, 0);
+        pointOffsets << QPoint(1, 0);
+        pointOffsets << QPoint(1, 1);
+        pointOffsets << QPoint(0, 1);
     }
 
-    struct PointExtension {
-        int near;
-        int far;
-    };
+    return baseColRow + pointOffsets[index];
+}
+
+struct PointExtension {
+    int near;
+    int far;
+};
 }
 
 template <class IndexesOp>
 bool getOrthogonalPointApproximation(const QPoint &cellPt,
-                                const QVector<QPointF> &originalPoints,
-                                const QVector<QPointF> &transformedPoints,
-                                IndexesOp indexesOp,
-                                QPointF *srcPoint,
-                                QPointF *dstPoint)
+                                     const QVector<QPointF> &originalPoints,
+                                     const QVector<QPointF> &transformedPoints,
+                                     IndexesOp indexesOp,
+                                     QPointF *srcPoint,
+                                     QPointF *dstPoint)
 {
     QVector<Private::PointExtension> extensionPoints;
     Private::PointExtension ext;
 
     // left
     if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(-1, 0))) >= 0 &&
-        (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(-2, 0))) >= 0) {
+            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(-2, 0))) >= 0) {
 
         extensionPoints << ext;
     }
     // top
     if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(0, -1))) >= 0 &&
-        (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(0, -2))) >= 0) {
+            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(0, -2))) >= 0) {
 
         extensionPoints << ext;
     }
     // right
     if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(1, 0))) >= 0 &&
-        (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(2, 0))) >= 0) {
+            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(2, 0))) >= 0) {
 
         extensionPoints << ext;
     }
     // bottom
     if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(0, 1))) >= 0 &&
-        (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(0, 2))) >= 0) {
+            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(0, 2))) >= 0) {
 
         extensionPoints << ext;
     }
@@ -392,25 +406,25 @@ bool getOrthogonalPointApproximation(const QPoint &cellPt,
     if (extensionPoints.isEmpty()) {
         // top-left
         if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(-1, -1))) >= 0 &&
-            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(-2, -2))) >= 0) {
+                (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(-2, -2))) >= 0) {
 
             extensionPoints << ext;
         }
         // top-right
         if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(1, -1))) >= 0 &&
-            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(2, -2))) >= 0) {
+                (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(2, -2))) >= 0) {
 
             extensionPoints << ext;
         }
         // bottom-right
         if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(1, 1))) >= 0 &&
-            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(2, 2))) >= 0) {
+                (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(2, 2))) >= 0) {
 
             extensionPoints << ext;
         }
         // bottom-left
         if ((ext.near = indexesOp.tryGetValidIndex(cellPt + QPoint(-1, 1))) >= 0 &&
-            (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(-2, 2))) >= 0) {
+                (ext.far = indexesOp.tryGetValidIndex(cellPt + QPoint(-2, 2))) >= 0) {
 
             extensionPoints << ext;
         }
@@ -435,7 +449,7 @@ bool getOrthogonalPointApproximation(const QPoint &cellPt,
         QPointF base2 = near - far;
 
         QPointF pt = near +
-            KisAlgebra2D::transformAsBase(*srcPoint - nearSrc, base1, base2);
+                     KisAlgebra2D::transformAsBase(*srcPoint - nearSrc, base1, base2);
 
         *dstPoint += pt;
         numResultPoints++;
@@ -457,8 +471,12 @@ struct IncompletePolygonPolicy {
                                          const QVector<QPointF> &originalPoints,
                                          const QVector<QPointF> &transformedPoints)
     {
-        if (numExistingPoints >= 4) return false;
-        if (numExistingPoints == 0) return true;
+        if (numExistingPoints >= 4) {
+            return false;
+        }
+        if (numExistingPoints == 0) {
+            return true;
+        }
 
         QPolygonF srcPolygon;
         QPolygonF dstPolygon;
@@ -569,13 +587,13 @@ void iterateThroughGrid(PolygonOp &polygonOp,
             polygonPoints = indexesOp.calculateMappedIndexes(col, row, &numExistingPoints);
 
             if (!IncompletePolygonPolicy<PolygonOp, IndexesOp>::
-                 tryProcessPolygon(col, row,
-                                   numExistingPoints,
-                                   polygonOp,
-                                   indexesOp,
-                                   polygonPoints,
-                                   originalPoints,
-                                   transformedPoints)) {
+                    tryProcessPolygon(col, row,
+                                      numExistingPoints,
+                                      polygonOp,
+                                      indexesOp,
+                                      polygonPoints,
+                                      originalPoints,
+                                      transformedPoints)) {
 
                 QPolygonF srcPolygon;
                 QPolygonF dstPolygon;

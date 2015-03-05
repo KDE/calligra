@@ -25,7 +25,6 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
-
 const QString SHARPNESS_FACTOR = "Sharpness/factor";
 const QString SHARPNESS_THRESHOLD  = "Sharpness/threshold";
 
@@ -47,21 +46,25 @@ public:
     */
     void applyThreshold(KisFixedPaintDeviceSP dab);
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
     /// threshold has 100 levels (like opacity)
-    void setThreshold(qint32 threshold) {
+    void setThreshold(qint32 threshold)
+    {
         m_threshold = qBound<qint32>(0, threshold, 100);
     }
-    qint32 threshold() {
+    qint32 threshold()
+    {
         return m_threshold;
     }
 
-    void setSharpnessFactor(qreal factor) {
+    void setSharpnessFactor(qreal factor)
+    {
         KisCurveOption::setValue(factor);
     }
-    qreal sharpnessFactor() {
+    qreal sharpnessFactor()
+    {
         return KisCurveOption::value();
     }
 

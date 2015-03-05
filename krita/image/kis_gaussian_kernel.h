@@ -31,22 +31,22 @@ class KRITAIMAGE_EXPORT KisGaussianKernel
 {
 public:
     static Matrix<qreal, Dynamic, Dynamic>
-        createHorizontalMatrix(qreal radius);
+    createHorizontalMatrix(qreal radius);
 
     static Matrix<qreal, Dynamic, Dynamic>
-        createVerticalMatrix(qreal radius);
+    createVerticalMatrix(qreal radius);
 
     static KisConvolutionKernelSP
-        createHorizontalKernel(qreal radius);
+    createHorizontalKernel(qreal radius);
 
     static KisConvolutionKernelSP
-        createVerticalKernel(qreal radius);
+    createVerticalKernel(qreal radius);
 
     static qreal sigmaFromRadius(qreal radius);
     static int kernelSizeFromRadius(qreal radius);
 
     static void applyGaussian(KisPaintDeviceSP device,
-                              const QRect& rect,
+                              const QRect &rect,
                               qreal xRadius, qreal yRadius,
                               const QBitArray &channelFlags,
                               KoUpdater *updater);

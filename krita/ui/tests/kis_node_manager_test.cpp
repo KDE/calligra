@@ -31,33 +31,39 @@ public:
         nodeManager = view->nodeManager();
     }
 
-    void activateShapeLayer() {
+    void activateShapeLayer()
+    {
         KisNodeSP shape = findNode(image->root(), "shape");
         Q_ASSERT(shape);
         nodeManager->slotNonUiActivatedNode(shape);
     }
 
-    KisNodeSP findCloneLayer() {
+    KisNodeSP findCloneLayer()
+    {
         return findNode(image->root(), "clone1");;
     }
 
-    void activateCloneLayer() {
+    void activateCloneLayer()
+    {
         KisNodeSP node = findCloneLayer();
         Q_ASSERT(node);
         nodeManager->slotNonUiActivatedNode(findCloneLayer());
     }
 
-    KisNodeSP findBlurLayer() {
+    KisNodeSP findBlurLayer()
+    {
         return findNode(image->root(), "blur1");;
     }
 
-    void activateBlurLayer() {
+    void activateBlurLayer()
+    {
         KisNodeSP node = findBlurLayer();
         Q_ASSERT(node);
         nodeManager->slotNonUiActivatedNode(findBlurLayer());
     }
 
-    void checkUndoWait() {
+    void checkUndoWait()
+    {
         undoStore->undo();
         QTest::qWait(1000);
         image->waitForDone();
@@ -70,7 +76,7 @@ public:
 void testRotateNode(bool useShapeLayer, const QString &name)
 {
     NodeManagerTester t;
-    if(useShapeLayer) {
+    if (useShapeLayer) {
         t.activateShapeLayer();
     }
 
@@ -95,7 +101,7 @@ void testRotateNode(bool useShapeLayer, const QString &name)
 void testShearNode(bool useShapeLayer, const QString &name)
 {
     NodeManagerTester t;
-    if(useShapeLayer) {
+    if (useShapeLayer) {
         t.activateShapeLayer();
     }
 
@@ -120,7 +126,7 @@ void testScaleNode(bool useShapeLayer, const QString &name)
     KisFilterStrategy *strategy = new KisBicubicFilterStrategy();
 
     NodeManagerTester t;
-    if(useShapeLayer) {
+    if (useShapeLayer) {
         t.activateShapeLayer();
     }
 
@@ -144,7 +150,7 @@ void testScaleNode(bool useShapeLayer, const QString &name)
 void testMirrorNode(bool useShapeLayer, const QString &name, bool mirrorX)
 {
     NodeManagerTester t;
-    if(useShapeLayer) {
+    if (useShapeLayer) {
         t.activateShapeLayer();
     }
 
@@ -231,7 +237,7 @@ void KisNodeManagerTest::testConvertCloneToPaintLayer()
     QTest::qWait(1000);
     t.image->waitForDone();
 
-    QVERIFY(dynamic_cast<KisPaintLayer*>(node.data()));
+    QVERIFY(dynamic_cast<KisPaintLayer *>(node.data()));
 
     // No visible change should happen!
     QVERIFY(t.checkLayersInitial());
@@ -271,9 +277,8 @@ void testConvertToSelectionMask(bool fromClone)
     QVERIFY(!selection->outlineCacheValid() ||
             !selection->outlineCache().isEmpty());
 
-
     QString testName = fromClone ?
-        "selection_from_clone_layer" : "selection_from_blur_layer";
+                       "selection_from_clone_layer" : "selection_from_blur_layer";
 
     QVERIFY(t.checkSelectionOnly(testName));
 }

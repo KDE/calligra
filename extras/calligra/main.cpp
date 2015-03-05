@@ -44,7 +44,7 @@ static void listApplicationNames()
         names.append(service->desktopEntryName());
     }
     names.sort();
-    foreach (const QString& name, names) {
+    foreach (const QString &name, names) {
         out << name << '\n';
     }
 }
@@ -53,15 +53,15 @@ static void showWelcomeWindow()
 {
 }
 
-static bool startService(KService::Ptr service, const KUrl& url)
+static bool startService(KService::Ptr service, const KUrl &url)
 {
     kDebug() << "service->entryPath():" << service->entryPath();
     QString error;
     QString serviceName;
     int pid = 0;
     int res = KToolInvocation::startServiceByDesktopPath(
-        service->entryPath(), url.url(), &error, &serviceName, &pid
-    );
+                  service->entryPath(), url.url(), &error, &serviceName, &pid
+              );
     // could not check result - does not work for custom KDEDIRS: ok = res == 0;
     //ok = true;
     kDebug() << "KToolInvocation::startServiceByDesktopPath:" << res << pid << error << serviceName;
@@ -70,7 +70,7 @@ static bool startService(KService::Ptr service, const KUrl& url)
 
 static int handleUrls(const KCmdLineArgs *args)
 {
-    KMimeTypeTrader* mimeTrader = KMimeTypeTrader::self();
+    KMimeTypeTrader *mimeTrader = KMimeTypeTrader::self();
     KUrl::List notHandledUrls;
     for (int i = 0; i < args->count(); i++) {
         KUrl url = args->url(i);
@@ -81,13 +81,13 @@ static int handleUrls(const KCmdLineArgs *args)
             return 1;
         }
         kDebug() << url << mimetype->name();
-        /* 
+        /*
             Find apps marked with Calligra/Applications service type
             and having given mimetype on the X-Calligra-Default-MimeTypes list.
             This is needed because, single mimetype can be supported by more than
             one Calligra application but only one application should be selected
             for opening given document using the calligra command.
-            
+
             Example: application/vnd.oasis.opendocument.graphic, supported
             by Flow and Karbon already; out of these two, Karbon is selected
             for opening the document.
@@ -96,7 +96,7 @@ static int handleUrls(const KCmdLineArgs *args)
         kDebug() << constraint;
         KService::List services;
         KService::List offers = KoServiceLocator::instance()->entries("Calligra/Application");
-        foreach(KService::Ptr offer, offers) {
+        foreach (KService::Ptr offer, offers) {
             QStringList defaultMimeTypes = offer->property("X-Calligra-DefaultMimeTypes").toStringList();
             if (defaultMimeTypes.contains(mimetype->name())) {
                 services << offer;
@@ -124,9 +124,9 @@ static int handleUrls(const KCmdLineArgs *args)
             //kDebug() << "-" << service->name() << service->property("X-DBUS-ServiceName", QVariant::String);
             kDebug() << "-" << service->name() << service->hasServiceType("Calligra/Application")
 #if KDE_IS_VERSION( 4, 6, 0 )
-                << service->hasMimeType(mimetype->name());
+                     << service->hasMimeType(mimetype->name());
 #else
-                << service->hasMimeType(mimetype.data());
+                     << service->hasMimeType(mimetype.data());
 #endif
             //QVariant isCalligraApp = service->property("X-Calligra-App", QVariant::Bool);
             /*if (isCalligraApp.isValid() && isCalligraApp.toBool()) {
@@ -139,27 +139,24 @@ static int handleUrls(const KCmdLineArgs *args)
             if (service) {
                 KGuiItem openItem(KStandardGuiItem::open());
                 openItem.setText(i18nc("@action:button", "Open with <application>%1</application>",
-                                      service->property("Name").toString()));
+                                       service->property("Name").toString()));
                 if (KMessageBox::Yes != KMessageBox::questionYesNo(
-                    0, 
-                    i18nc("@info",
-                         "Could not find Calligra application suitable for opening <filename>%1</filename>.<nl/>"
-                         "Do you want to open the file using default application <application>%2</application>?",
-                         url.url(), service->property("Name").toString()),
-                    i18nc("@title:window", "Calligra Application Not Found"), openItem, KStandardGuiItem::cancel()))
-                {
+                            0,
+                            i18nc("@info",
+                                  "Could not find Calligra application suitable for opening <filename>%1</filename>.<nl/>"
+                                  "Do you want to open the file using default application <application>%2</application>?",
+                                  url.url(), service->property("Name").toString()),
+                            i18nc("@title:window", "Calligra Application Not Found"), openItem, KStandardGuiItem::cancel())) {
                     return 2;
                 }
             }
-        }
-        else {
+        } else {
             service = mimeServices.first();
         }
         if (service) {
             startService(service, url);
             return 0;
-        }
-        else {
+        } else {
             notHandledUrls.append(url);
         }
         //}
@@ -171,19 +168,19 @@ static int handleUrls(const KCmdLineArgs *args)
     return 0;
 }
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
     KAboutData aboutData("calligra", 0, ki18n("Calligra Opener"), CALLIGRA_VERSION_STRING,
                          ki18n("Calligra Document Opener"),
                          KAboutData::License_GPL,
                          ki18n("(c) 2010-2011 Calligra developers"));
-    aboutData.addAuthor(ki18n("Jarosław Staniek"),KLocalizedString(), "staniek@kde.org");
+    aboutData.addAuthor(ki18n("Jarosław Staniek"), KLocalizedString(), "staniek@kde.org");
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
     options.add("apps", ki18n("Lists names of all available Calligra applications"));
     options.add("+FILES", ki18n("Files to open"));
-    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::addCmdLineOptions(options);
 
     KApplication app;
     KGlobal::locale()->insertCatalog("calligra");
@@ -196,8 +193,7 @@ int main( int argc, char **argv )
     if (args->count() == 0) {
         //! @todo show cool Welcome window for app selection
         showWelcomeWindow();
-    }
-    else {
+    } else {
         return handleUrls(args);
     }
     return 0;

@@ -28,7 +28,7 @@ class KisShadeSelectorLinesSettings : public QWidget
 public:
     explicit KisShadeSelectorLinesSettings(QWidget *parent = 0);
     QString toString() const;
-    void fromString(const QString& stri);
+    void fromString(const QString &stri);
 
 public Q_SLOTS:
     void updateSettings();
@@ -44,7 +44,7 @@ Q_SIGNALS:
     void lineCountChanged(int newLineCount);
 
 private:
-    QList<KisShadeSelectorLineComboBox*> m_lineList;
+    QList<KisShadeSelectorLineComboBox *> m_lineList;
 
 };
 

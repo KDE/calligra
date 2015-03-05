@@ -30,35 +30,37 @@ class ImageItem;
 class ImageLoader: public QThread
 {
     Q_OBJECT
-    
-    struct Data
-    {
+
+    struct Data {
         Data() { }
-        Data(const QString& p):
+        Data(const QString &p):
             path(p), isLoaded(false) { };
-        Data(const Data& d):
+        Data(const Data &d):
             image(d.image), path(d.path), isLoaded(d.isLoaded) { };
-        
+
         QImage     image;
         QString    path;
         QAtomicInt isLoaded;
     };
-    
+
 Q_SIGNALS:
-    void sigItemContentChanged(ImageItem* item);
-    
+    void sigItemContentChanged(ImageItem *item);
+
 public:
     ImageLoader(float size);
-    
-    void addPath(ImageItem* item, const QString& path) {
+
+    void addPath(ImageItem *item, const QString &path)
+    {
         m_data[item] = Data(path);
     }
-    
-    bool isImageLoaded(ImageItem* item) const {
+
+    bool isImageLoaded(ImageItem *item) const
+    {
         return m_data[item].isLoaded != 0;
     }
-    
-    QImage getImage(ImageItem* item) const {
+
+    QImage getImage(ImageItem *item) const
+    {
         return m_data[item].image;
     }
 
@@ -70,52 +72,55 @@ public Q_SLOTS:
 
 private:
     float                     m_size;
-    QHash<ImageItem*,Data> m_data;
+    QHash<ImageItem *, Data> m_data;
     QAtomicInt                m_run;
 };
 
 class ImageItem: public QGraphicsWidget
 {
 public:
-    ImageItem(float size, const QString& path, ImageLoader* loader):
+    ImageItem(float size, const QString &path, ImageLoader *loader):
         m_size(size), m_loader(loader), m_path(path)
     {
         setFlag(QGraphicsItem::ItemIsSelectable, true);
     }
-    
-    const QString& path() const { return m_path; }
-    
-    virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint=QSizeF()) const;
-    virtual void   paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget=0);
-    
+
+    const QString &path() const
+    {
+        return m_path;
+    }
+
+    virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+    virtual void   paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
 private:
     float m_size;
-    ImageLoader* m_loader;
+    ImageLoader *m_loader;
     QString m_path;
 };
 
 class ImageStripScene: public QGraphicsScene
 {
     Q_OBJECT
-    
+
 public:
     ImageStripScene();
     ~ImageStripScene();
-    bool setCurrentDirectory(const QString& path);
-    
+    bool setCurrentDirectory(const QString &path);
+
 Q_SIGNALS:
-    void sigImageActivated(const QString& path);
-    
+    void sigImageActivated(const QString &path);
+
 private:
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event);
-    
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+
 private Q_SLOTS:
-    void slotItemContentChanged(ImageItem* item);
-    
+    void slotItemContentChanged(ImageItem *item);
+
 private:
     float  m_imgSize;
     quint32 m_numItems;
-    ImageLoader* m_loader;
+    ImageLoader *m_loader;
     QMutex m_mutex;
 };
 

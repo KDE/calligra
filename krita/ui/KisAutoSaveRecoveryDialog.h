@@ -47,5 +47,4 @@ private:
     FileItemModel *m_model;
 };
 
-
 #endif // KOAUTOSAVERECOVERYDIALOG_H

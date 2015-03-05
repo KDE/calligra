@@ -47,7 +47,8 @@ class KoShapeLayer;
  * rotating in a smart way to show the buttons optimally.
  * @see KoToolManager
  */
-class KoToolBox : public QWidget {
+class KoToolBox : public QWidget
+{
     Q_OBJECT
 public:
     /// constructor
@@ -67,7 +68,7 @@ public:
      *      this button
      * @see setup()
      */
-    void addButton(QToolButton *button, const QString &section, int priority, int buttonGroupId=-1);
+    void addButton(QToolButton *button, const QString &section, int priority, int buttonGroupId = -1);
 
 public Q_SLOTS:
     /**
@@ -88,14 +89,13 @@ public Q_SLOTS:
      */
     void setButtonsVisible(const QList<QString> &codes);
 
-
     /// Set the orientation of the layout to @p orientation
     void setOrientation(Qt::Orientation orientation);
 
     void setFloating(bool v);
 
 private Q_SLOTS:
-    void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
+    void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *newLayer);
 
     /// add a tool post-initialization. The tool will also be activated.
     void toolAdded(const KoToolButton &button, KoCanvasController *canvas);
@@ -108,11 +108,11 @@ private Q_SLOTS:
 protected:
     void paintEvent(QPaintEvent *event);
 protected:
-    void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent *event);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // _KO_TOOLBOX_H_

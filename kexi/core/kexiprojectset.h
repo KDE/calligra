@@ -38,14 +38,14 @@ public:
 
     /*! Creates empty project set. Use addProjectData to add a project data.
       \a handler can be provided to receive error messages. */
-    explicit KexiProjectSet(KexiDB::MessageHandler* handler = 0);
+    explicit KexiProjectSet(KexiDB::MessageHandler *handler = 0);
 
     /*! Creates project set filled with all projects found using \a conndata.
     There may be error during project list retrieving - use appropriate
     KexiDB::Object::error(), and similar methods to get error message.
     \a handler can be provided to receive error messages. */
-    explicit KexiProjectSet(KexiDB::ConnectionData* conndata,
-                            KexiDB::MessageHandler* handler = 0);
+    explicit KexiProjectSet(KexiDB::ConnectionData *conndata,
+                            KexiDB::MessageHandler *handler = 0);
 
     ~KexiProjectSet();
 
@@ -55,17 +55,17 @@ public:
 
     /*! Takes \a data project data from the set without deleting it.
         @return 0 if there is no such data in this set. */
-    KexiProjectData* takeProjectData(KexiProjectData *data);
+    KexiProjectData *takeProjectData(KexiProjectData *data);
 
     //! \return list object
     KexiProjectData::List list() const;
 
     //! Case insensitive lookup.
     //! \return project data for databased \a dbName or NULL if not found
-    KexiProjectData* findProject(const QString &dbName) const;
+    KexiProjectData *findProject(const QString &dbName) const;
 
 private:
-    KexiProjectSetPrivate * const d;
+    KexiProjectSetPrivate *const d;
 };
 
 #endif // KEXIPROJECTSET_H

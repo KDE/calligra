@@ -48,8 +48,7 @@ class ScheduleManager;
 #define TIP_USE_DEFAULT_TEXT "TIP_USE_DEFAULT_TEXT"
 
 //--------------
-struct ViewInfo
-{
+struct ViewInfo {
     QString name;
     QString tip;
 };
@@ -57,130 +56,139 @@ struct ViewInfo
 //--------------
 class KPLATO_EXPORT ViewListItem : public QTreeWidgetItem
 {
-    public:
-        enum ItemType { ItemType_Category = Type, ItemType_SubView = UserType };
+public:
+    enum ItemType { ItemType_Category = Type, ItemType_SubView = UserType };
 
-        enum DataRole { DataRole_View = Qt::UserRole, DataRole_Document };
+    enum DataRole { DataRole_View = Qt::UserRole, DataRole_Document };
 
-        ViewListItem( const QString &tag, const QStringList &strings, int type = ItemType_Category );
-        ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
-        ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category );
+    ViewListItem(const QString &tag, const QStringList &strings, int type = ItemType_Category);
+    ViewListItem(QTreeWidget *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category);
+    ViewListItem(QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type = ItemType_Category);
 
-        void setView( ViewBase *view );
-        ViewBase *view() const;
-        void setDocument( KoDocument *doc );
-        KoDocument *document() const;
+    void setView(ViewBase *view);
+    ViewBase *view() const;
+    void setDocument(KoDocument *doc);
+    KoDocument *document() const;
 
-        void setViewInfo( const ViewInfo &vi ) { m_viewinfo = vi; }
-        QString viewType() const;
-        QString tag() const { return m_tag; }
-        void save( QDomElement &element ) const;
+    void setViewInfo(const ViewInfo &vi)
+    {
+        m_viewinfo = vi;
+    }
+    QString viewType() const;
+    QString tag() const
+    {
+        return m_tag;
+    }
+    void save(QDomElement &element) const;
 
-        void setReadWrite( bool rw );
+    void setReadWrite(bool rw);
 
-    private:
-        QString m_tag;
-        ViewInfo m_viewinfo;
+private:
+    QString m_tag;
+    ViewInfo m_viewinfo;
 };
 
 class KPLATO_EXPORT ViewListTreeWidget : public QTreeWidget
 {
     Q_OBJECT
 public:
-    explicit ViewListTreeWidget( QWidget *parent );
-    ViewListItem *findCategory( const QString &cat );
+    explicit ViewListTreeWidget(QWidget *parent);
+    ViewListItem *findCategory(const QString &cat);
 
     /// Return the category of @p view
-    ViewListItem *category( const KoView *view ) const;
+    ViewListItem *category(const KoView *view) const;
 
-    void save( QDomElement &element ) const;
+    void save(QDomElement &element) const;
 
 protected:
-    void drawRow( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-    virtual void mousePressEvent ( QMouseEvent *event );
+    void drawRow(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    virtual void mousePressEvent(QMouseEvent *event);
     /// Setup drop enabled/disabled dependent on the selected item
-    virtual void startDrag( Qt::DropActions supportedActions );
+    virtual void startDrag(Qt::DropActions supportedActions);
     /// If modified by the drop, emit modified
-    void dropEvent( QDropEvent *event );
+    void dropEvent(QDropEvent *event);
 
 Q_SIGNALS:
-    void activated( QTreeWidgetItem* );
-    void updateViewInfo( ViewListItem *itm );
+    void activated(QTreeWidgetItem *);
+    void updateViewInfo(ViewListItem *itm);
     void modified();
 
 private Q_SLOTS:
-    void handleMousePress( QTreeWidgetItem *item );
+    void handleMousePress(QTreeWidgetItem *item);
 };
 
 class KPLATO_EXPORT ViewListWidget : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    ViewListWidget( MainDocument *part, QWidget *parent );//QString name, KXmlGuiWindow *parent );
+    ViewListWidget(MainDocument *part, QWidget *parent);  //QString name, KXmlGuiWindow *parent );
     ~ViewListWidget();
 
     /// Set read/write permission on all views.
-    void setReadWrite( bool rw );
+    void setReadWrite(bool rw);
     /// Add a category if it does not already exist
-    ViewListItem *addCategory( const QString &tag, const QString& name );
+    ViewListItem *addCategory(const QString &tag, const QString &name);
     /// Return a list of all categories
-    QList<ViewListItem*> categories() const;
+    QList<ViewListItem *> categories() const;
 
     /// Return the category with @p tag
-    ViewListItem *findCategory( const QString &tag ) const;
+    ViewListItem *findCategory(const QString &tag) const;
     /// Return the category of @p view
-    ViewListItem *category( const KoView *view ) const;
+    ViewListItem *category(const KoView *view) const;
 
     /// Create a unique tag
-    QString uniqueTag( const QString &seed ) const;
+    QString uniqueTag(const QString &seed) const;
     /// Add a sub-view
-    ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString &name, ViewBase *view, KoDocument *doc, const QString &iconName = QString(), int index = -1 );
+    ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString &name, ViewBase *view, KoDocument *doc, const QString &iconName = QString(), int index = -1);
 
-    void setSelected( QTreeWidgetItem *item );
+    void setSelected(QTreeWidgetItem *item);
     ViewListItem *currentItem() const;
-    void setCurrentItem( QTreeWidgetItem *item );
+    void setCurrentItem(QTreeWidgetItem *item);
     ViewListItem *currentCategory() const;
-    KoView *findView( const QString &tag ) const;
-    ViewListItem *findItem( const QString &tag ) const;
-    ViewListItem *findItem( const QString &tag, QTreeWidgetItem* parent ) const;
-    ViewListItem *findItem( const ViewBase *view, QTreeWidgetItem* parent = 0 ) const;
+    KoView *findView(const QString &tag) const;
+    ViewListItem *findItem(const QString &tag) const;
+    ViewListItem *findItem(const QString &tag, QTreeWidgetItem *parent) const;
+    ViewListItem *findItem(const ViewBase *view, QTreeWidgetItem *parent = 0) const;
 
     /// Remove @p item, don't emit signal
-    int removeViewListItem( ViewListItem *item );
+    int removeViewListItem(ViewListItem *item);
     /// Add @p item to @p parent at @p index, don't emit signal
-    void addViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index );
+    void addViewListItem(ViewListItem *item, QTreeWidgetItem *parent, int index);
 
     /// Remove @p item, emit signal
-    int takeViewListItem( ViewListItem *item );
+    int takeViewListItem(ViewListItem *item);
     /// Add @p item to @p parent at @ index, emit signal
-    void insertViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index );
+    void insertViewListItem(ViewListItem *item, QTreeWidgetItem *parent, int index);
 
-    void save( QDomElement &element ) const;
+    void save(QDomElement &element) const;
 
-    ViewListItem *previousViewItem() const { return m_prev; }
+    ViewListItem *previousViewItem() const
+    {
+        return m_prev;
+    }
 
     ScheduleManager *selectedSchedule() const;
 
 Q_SIGNALS:
-    void activated( ViewListItem*, ViewListItem* );
+    void activated(ViewListItem *, ViewListItem *);
     void createView();
-    void viewListItemRemoved( ViewListItem *item );
-    void viewListItemInserted( ViewListItem *item, ViewListItem *parent, int index );
+    void viewListItemRemoved(ViewListItem *item);
+    void viewListItemInserted(ViewListItem *item, ViewListItem *parent, int index);
 
-    void selectionChanged( ScheduleManager* );
+    void selectionChanged(ScheduleManager *);
 
-    void updateViewInfo( ViewListItem *itm );
+    void updateViewInfo(ViewListItem *itm);
 
     void modified();
 
 public Q_SLOTS:
-    void setProject( Project *project );
-    void setSelectedSchedule( ScheduleManager *sm );
+    void setProject(Project *project);
+    void setSelectedSchedule(ScheduleManager *sm);
     void setModified();
 
 protected Q_SLOTS:
-    void slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev );
-    void slotItemChanged( QTreeWidgetItem *item, int col );
+    void slotActivated(QTreeWidgetItem *item, QTreeWidgetItem *prev);
+    void slotItemChanged(QTreeWidgetItem *item, int col);
     void renameCategory();
     void slotAddView();
     void slotRemoveCategory();
@@ -189,13 +197,13 @@ protected Q_SLOTS:
     void slotEditDocumentTitle();
     void slotConfigureItem();
 
-    void slotCurrentScheduleChanged( int );
-    void slotScheduleManagerAdded( ScheduleManager* );
+    void slotCurrentScheduleChanged(int);
+    void slotScheduleManagerAdded(ScheduleManager *);
 
-    void slotDialogFinished( int result );
+    void slotDialogFinished(int result);
 
 protected:
-    virtual void contextMenuEvent ( QContextMenuEvent *event );
+    virtual void contextMenuEvent(QContextMenuEvent *event);
 
 private:
     void setupContextMenus();
@@ -208,9 +216,9 @@ private:
     ScheduleItemModel m_model;
 
     ViewListItem *m_contextitem;
-    QList<QAction*> m_categoryactions;
-    QList<QAction*> m_viewactions;
-    QList<QAction*> m_listactions;
+    QList<QAction *> m_categoryactions;
+    QList<QAction *> m_viewactions;
+    QList<QAction *> m_listactions;
 
     ViewListItem *m_prev;
 

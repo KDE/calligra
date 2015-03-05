@@ -34,27 +34,27 @@ int main(int /*argc*/, char ** /*argv*/)
     kDebug() << "Trying to build some filter chains...";
     QByteArray mimeType("foo/bar");
     KoFilterChain::Ptr chain = g.chain(manager, mimeType);
-    if (!chain)
+    if (!chain) {
         kDebug() << "Chain for 'foo/bar' is not available, OK";
-    else {
+    } else {
         kError() << "Chain for 'foo/bar' is available!" << endl;
         chain->dump();
     }
 
     mimeType = "application/x-krita";
     chain = g.chain(manager, mimeType);
-    if (!chain)
+    if (!chain) {
         kDebug() << "Chain for 'application/x-krita' is not available, OK";
-    else {
+    } else {
         kError() << "Chain 'application/x-krita' is available!" << endl;
         chain->dump();
     }
 
     mimeType = "text/csv";
     chain = g.chain(manager, mimeType);
-    if (!chain)
+    if (!chain) {
         kError() << "Chain for 'text/csv' is not available!" << endl;
-    else {
+    } else {
         kDebug() << "Chain for 'text/csv' is available, OK";
         chain->dump();
     }
@@ -62,38 +62,42 @@ int main(int /*argc*/, char ** /*argv*/)
     // Try to find the closest Calligra part
     mimeType = "";
     chain = g.chain(manager, mimeType);
-    if (!chain)
+    if (!chain) {
         kDebug() << "It was already a Calligra part, OK";
-    else
+    } else {
         kError() << "We really got a chain? ugh :}" << endl;
+    }
 
     g.setSourceMimeType("text/csv");
     mimeType = "";
     chain = g.chain(manager, mimeType);
-    if (!chain)
+    if (!chain) {
         kError() << "Hmm... why didn't we find a chain?" << endl;
-    else {
+    } else {
         kDebug() << "Chain for 'text/csv' -> closest part is available ("
-        << mimeType << "), OK" << endl;
+                 << mimeType << "), OK" << endl;
         chain->dump();
     }
 
     kDebug() << "Checking mimeFilter() for Import:";
     QStringList list = KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.text",  KoFilterManager::Import);
-    Q_FOREACH(const QString& it, list)
+    Q_FOREACH (const QString &it, list) {
         kDebug() << "" << it;
+    }
     kDebug() << "" << list.count() << " entries.";
 
     kDebug() << "Checking mimeFilter() for Export:";
     list = KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.text",  KoFilterManager::Export);
-    Q_FOREACH(const QString& it, list)
+    Q_FOREACH (const QString &it, list) {
         kDebug() << "" << it;
+    }
     kDebug() << "" << list.count() << " entries.";
 
     kDebug() << "Checking KoShell's mimeFilter():";
     list = KoFilterManager::mimeFilter();
-    Q_FOREACH(const QString& it, list)
+    Q_FOREACH (const QString &it, list) {
         kDebug() << "" << it;
+    }
     kDebug() << "" << list.count() << " entries.";
 
     delete manager;

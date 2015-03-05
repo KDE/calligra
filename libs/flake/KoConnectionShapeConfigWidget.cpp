@@ -45,9 +45,10 @@ void KoConnectionShapeConfigWidget::setConnectionType(int type)
 
 void KoConnectionShapeConfigWidget::open(KoShape *shape)
 {
-    m_connection = dynamic_cast<KoConnectionShape*>(shape);
-    if (! m_connection)
+    m_connection = dynamic_cast<KoConnectionShape *>(shape);
+    if (! m_connection) {
         return;
+    }
 
     widget.connectionType->blockSignals(true);
     widget.connectionType->setCurrentIndex(m_connection->type());
@@ -62,7 +63,7 @@ void KoConnectionShapeConfigWidget::save()
     m_connection->setType(static_cast<KoConnectionShape::Type>(widget.connectionType->currentIndex()));
 }
 
-KUndo2Command * KoConnectionShapeConfigWidget::createCommand()
+KUndo2Command *KoConnectionShapeConfigWidget::createCommand()
 {
     if (!m_connection) {
         return 0;

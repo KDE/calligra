@@ -19,7 +19,7 @@
 
 #include "kis_buffer_stream.h"
 
-KisBufferStreamContigBase::KisBufferStreamContigBase(uint8* src, uint16 depth, uint32 lineSize) : KisBufferStreamBase(depth), m_src(src), m_lineSize(lineSize)
+KisBufferStreamContigBase::KisBufferStreamContigBase(uint8 *src, uint16 depth, uint32 lineSize) : KisBufferStreamBase(depth), m_src(src), m_lineSize(lineSize)
 {
     restart();
 }
@@ -45,7 +45,9 @@ uint32 KisBufferStreamContigBelow16::nextValue()
     while (remain > 0) {
         register uint8 toread;
         toread = remain;
-        if (toread > m_posinc) toread = m_posinc;
+        if (toread > m_posinc) {
+            toread = m_posinc;
+        }
         remain -= toread;
         m_posinc -= toread;
         value = (value << toread) | (((*m_srcIt) >> (m_posinc)) & ((1 << toread) - 1));
@@ -66,7 +68,9 @@ uint32 KisBufferStreamContigBelow32::nextValue()
     while (remain > 0) {
         register uint8 toread;
         toread = remain;
-        if (toread > m_posinc) toread = m_posinc;
+        if (toread > m_posinc) {
+            toread = m_posinc;
+        }
         remain -= toread;
         m_posinc -= toread;
         value = (value) | ((((*m_srcIt) >> (m_posinc)) & ((1 << toread) - 1)) << (m_depth - 8 - remain));
@@ -87,7 +91,9 @@ uint32 KisBufferStreamContigAbove32::nextValue()
     while (remain > 0) {
         register uint8 toread;
         toread = remain;
-        if (toread > m_posinc) toread = m_posinc;
+        if (toread > m_posinc) {
+            toread = m_posinc;
+        }
         remain -= toread;
         m_posinc -= toread;
         if (remain < 32) {
@@ -101,7 +107,7 @@ uint32 KisBufferStreamContigAbove32::nextValue()
     return value;
 }
 
-KisBufferStreamSeperate::KisBufferStreamSeperate(uint8** srcs, uint8 nb_samples , uint16 depth, uint32* lineSize) : KisBufferStreamBase(depth), m_nb_samples(nb_samples)
+KisBufferStreamSeperate::KisBufferStreamSeperate(uint8 **srcs, uint8 nb_samples, uint16 depth, uint32 *lineSize) : KisBufferStreamBase(depth), m_nb_samples(nb_samples)
 {
     streams = new KisBufferStreamContigBase*[nb_samples];
     if (depth < 16) {
@@ -131,8 +137,9 @@ KisBufferStreamSeperate::~KisBufferStreamSeperate()
 uint32 KisBufferStreamSeperate::nextValue()
 {
     uint32 value = streams[ m_current_sample ]->nextValue();
-    if ((++m_current_sample) >= m_nb_samples)
+    if ((++m_current_sample) >= m_nb_samples) {
         m_current_sample = 0;
+    }
     return value;
 }
 

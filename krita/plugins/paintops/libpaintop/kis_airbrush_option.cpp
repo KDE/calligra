@@ -29,7 +29,8 @@ class KisAirbrushWidget: public QWidget, public Ui::WdgAirbrush
 {
 public:
     KisAirbrushWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
 
         sliderRate->setRange(0, MAXIMUM_RATE);
@@ -37,7 +38,6 @@ public:
         sliderRate->setValue(100);
     }
 };
-
 
 KisAirbrushOption::KisAirbrushOption(bool enabled)
     : KisPaintOpOption(i18n("Airbrush"), KisPaintOpOption::colorCategory(), enabled)
@@ -49,19 +49,17 @@ KisAirbrushOption::KisAirbrushOption(bool enabled)
     setConfigurationPage(m_optionWidget);
 }
 
-
 KisAirbrushOption::~KisAirbrushOption()
 {
 }
 
-
-void KisAirbrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisAirbrushOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(AIRBRUSH_ENABLED, isChecked());
     setting->setProperty(AIRBRUSH_RATE, m_optionWidget->sliderRate->value());
 }
 
-void KisAirbrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisAirbrushOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     setChecked(setting->getBool(AIRBRUSH_ENABLED));
     m_optionWidget->sliderRate->setValue(setting->getInt(AIRBRUSH_RATE, 100));

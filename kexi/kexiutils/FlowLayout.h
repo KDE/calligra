@@ -31,18 +31,17 @@ class KEXIUTILS_EXPORT KexiFlowLayout : public QLayout
 {
 public:
     explicit KexiFlowLayout(QWidget *parent, int margin = 0, int spacing = -1);
-    explicit KexiFlowLayout(QLayout* parent, int margin = 0, int spacing = -1);
+    explicit KexiFlowLayout(QLayout *parent, int margin = 0, int spacing = -1);
     explicit KexiFlowLayout(int margin = 0, int spacing = -1);
 
     virtual ~KexiFlowLayout();
 
     /*! \return the widgets in the order of the layout,
      ie as it is stored in m_list. You must delete the list after using it. */
-    QList<QWidget*>* widgetList() const;
+    QList<QWidget *> *widgetList() const;
 
     /*! Sets layout's orientation to \a orientation. Default orientation is Vertical. */
     void  setOrientation(Qt::Orientation orientation);
-
 
     /*! \return layout's orientation. */
     Qt::Orientation orientation() const;
@@ -52,7 +51,7 @@ public:
 
     virtual void addItem(QLayoutItem *item);
     virtual void addSpacing(int size);
-    void insertWidget(int index, QWidget* widget, int stretch = 0, Qt::Alignment alignment = 0);
+    void insertWidget(int index, QWidget *widget, int stretch = 0, Qt::Alignment alignment = 0);
     virtual void invalidate();
 
     virtual bool hasHeightForWidth() const;
@@ -62,19 +61,19 @@ public:
     virtual Qt::Orientations expandingDirections() const;
     virtual int count() const;
     virtual bool isEmpty() const;
-    virtual void setGeometry(const QRect&);
+    virtual void setGeometry(const QRect &);
     virtual QLayoutItem *itemAt(int index) const;
     virtual QLayoutItem *takeAt(int index);
 
 protected:
     int simulateLayout(const QRect &r);
-    int doHorizontalLayout(const QRect&, bool testonly = false);
-    int doVerticalLayout(const QRect&, bool testonly = false);
+    int doHorizontalLayout(const QRect &, bool testonly = false);
+    int doVerticalLayout(const QRect &, bool testonly = false);
 
 private:
     class Private;
 
-    Private* const d;
+    Private *const d;
 };
 
 #endif

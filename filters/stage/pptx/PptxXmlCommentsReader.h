@@ -30,7 +30,7 @@ class PptxXmlCommentsReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit PptxXmlCommentsReader(KoOdfWriters *writers);
     virtual ~PptxXmlCommentsReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
     KoFilter::ConversionStatus read_cmLst();
     KoFilter::ConversionStatus read_cm();
@@ -42,7 +42,7 @@ private:
     void saveOdfComments();
 
     class Private;
-    Private* d;
+    Private *d;
 };
 
 class PptxXmlCommentsReaderContext : public MSOOXML::MsooXmlReaderContext

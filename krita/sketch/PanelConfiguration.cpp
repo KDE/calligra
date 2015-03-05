@@ -28,13 +28,13 @@
 class PanelConfiguration::Private
 {
 public:
-    QList<QDeclarativeItem*> panels;
-    QList<QDeclarativeItem*> panelAreas;
+    QList<QDeclarativeItem *> panels;
+    QList<QDeclarativeItem *> panelAreas;
 
     QHash<QString, QString> panelAreaMap;
 };
 
-PanelConfiguration::PanelConfiguration(QObject* parent)
+PanelConfiguration::PanelConfiguration(QObject *parent)
     : QObject(parent), d(new Private)
 {
     connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), SLOT(save()));
@@ -51,7 +51,7 @@ void PanelConfiguration::componentComplete()
     QSettings panelConfig(configFile, QSettings::IniFormat);
 
     int count = panelConfig.beginReadArray("Panels");
-    for(int i = 0; i < count; ++i) {
+    for (int i = 0; i < count; ++i) {
         panelConfig.setArrayIndex(i);
 
         QString panel = panelConfig.value("panel").toString();
@@ -79,11 +79,11 @@ QDeclarativeListProperty< QDeclarativeItem > PanelConfiguration::panelAreas()
 void PanelConfiguration::restore()
 {
     if (d->panelAreaMap.count() == d->panels.count()) {
-        foreach(QDeclarativeItem* panel, d->panels) {
+        foreach (QDeclarativeItem *panel, d->panels) {
             QString panelName = panel->objectName();
             QString area = d->panelAreaMap.value(panelName);
 
-            foreach(QDeclarativeItem* panelArea, d->panelAreas) {
+            foreach (QDeclarativeItem *panelArea, d->panelAreas) {
                 if (panelArea->objectName() == area) {
                     panel->setParentItem(panelArea);
                     break;
@@ -91,7 +91,7 @@ void PanelConfiguration::restore()
             }
         }
     } else if (d->panels.count() <= d->panelAreas.count()) {
-        for(int i = 0; i < d->panels.count(); ++i) {
+        for (int i = 0; i < d->panels.count(); ++i) {
             d->panels.at(i)->setParentItem(d->panelAreas.at(i));
         }
     }
@@ -104,7 +104,7 @@ void PanelConfiguration::save()
 
     panelConfig.beginWriteArray("Panels");
     int index = 0;
-    foreach(QDeclarativeItem* panel, d->panels) {
+    foreach (QDeclarativeItem *panel, d->panels) {
         panelConfig.setArrayIndex(index++);
 
         panelConfig.setValue("panel", panel->objectName());
@@ -112,6 +112,4 @@ void PanelConfiguration::save()
     }
     panelConfig.endArray();
 }
-
-
 

@@ -42,19 +42,20 @@
 #include <koproperty/Property.h>
 #include <koproperty/Utils.h>
 
-QString partClassToType(const QString& partClass)
+QString partClassToType(const QString &partClass)
 {
-    if (partClass == "org.kexi-project.table")
+    if (partClass == "org.kexi-project.table") {
         return "table";
-    else if (partClass == "org.kexi-project.query")
+    } else if (partClass == "org.kexi-project.query") {
         return "query";
+    }
 //! @todo more types
     return partClass;
 }
 
-QString typeToPartClass(const QString& type)
+QString typeToPartClass(const QString &type)
 {
-    return QString::fromLatin1("org.kexi-project.")+type;
+    return QString::fromLatin1("org.kexi-project.") + type;
 //! @todo more types
 }
 
@@ -65,34 +66,42 @@ class KexiLookupColumnPage::Private
 {
 public:
     explicit Private(KexiLookupColumnPage *that)
-            : q(that)
-            , currentFieldUid(-1)
-            , insideClearRowSourceSelection(false)
-            , propertySetEnabled(true) {
+        : q(that)
+        , currentFieldUid(-1)
+        , insideClearRowSourceSelection(false)
+        , propertySetEnabled(true)
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
 
-    bool hasPropertySet() const {
+    bool hasPropertySet() const
+    {
         return propertySet;
     }
 
-    void setPropertySet(KoProperty::Set* aPropertySet) {
+    void setPropertySet(KoProperty::Set *aPropertySet)
+    {
         propertySet = aPropertySet;
     }
 
-    QVariant propertyValue(const QByteArray& propertyName) const {
+    QVariant propertyValue(const QByteArray &propertyName) const
+    {
         return propertySet ? propertySet->property(propertyName).value() : QVariant();
     }
 
-    void changeProperty(const QByteArray& propertyName, const QVariant &value) {
-        if (!propertySetEnabled)
+    void changeProperty(const QByteArray &propertyName, const QVariant &value)
+    {
+        if (!propertySetEnabled) {
             return;
+        }
         propertySet->changeProperty(propertyName, value);
     }
 
-    void updateInfoLabelForPropertySet(const QString& textToDisplayForNullSet) {
-        q->updateInfoLabelForPropertySet( propertySet, textToDisplayForNullSet);
+    void updateInfoLabelForPropertySet(const QString &textToDisplayForNullSet)
+    {
+        q->updateInfoLabelForPropertySet(propertySet, textToDisplayForNullSet);
     }
 
     KexiLookupColumnPage *q;
@@ -116,8 +125,8 @@ private:
 //----------------------------------------------
 
 KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
-        : KexiPropertyPaneViewBase(parent)
-        , d(new Private(this))
+    : KexiPropertyPaneViewBase(parent)
+    , d(new Private(this))
 {
     setObjectName("KexiLookupColumnPage");
 
@@ -145,7 +154,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     d->rowSourceCombo->setObjectName("rowSourceCombo");
     d->rowSourceLabel->setBuddy(d->rowSourceCombo);
     connect(d->rowSourceCombo->lineEdit(), SIGNAL(clearButtonClicked()),
-        this, SLOT(clearRowSourceSelection()));
+            this, SLOT(clearRowSourceSelection()));
     mainLayout()->addWidget(d->rowSourceCombo);
 
     addWidgetSpacer();
@@ -161,7 +170,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     d->boundColumnCombo->setObjectName("boundColumnCombo");
     d->boundColumnLabel->setBuddy(d->boundColumnCombo);
     connect(d->boundColumnCombo->lineEdit(), SIGNAL(clearButtonClicked()),
-        this, SLOT(clearBoundColumnSelection()));
+            this, SLOT(clearBoundColumnSelection()));
     mainLayout()->addWidget(d->boundColumnCombo);
 
     addWidgetSpacer();
@@ -177,7 +186,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     d->visibleColumnCombo->setObjectName("visibleColumnCombo");
     d->visibleColumnLabel->setBuddy(d->visibleColumnCombo);
     connect(d->visibleColumnCombo->lineEdit(), SIGNAL(clearButtonClicked()),
-        this, SLOT(clearVisibleColumnSelection()));
+            this, SLOT(clearVisibleColumnSelection()));
     mainLayout()->addWidget(d->visibleColumnCombo);
 
     mainLayout()->addStretch(1);
@@ -206,10 +215,11 @@ void KexiLookupColumnPage::setProject(KexiProject *prj)
     d->visibleColumnCombo->setProject(prj);
 }
 
-void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
+void KexiLookupColumnPage::assignPropertySet(KoProperty::Set *propertySet)
 {
-    if (propertySet && d->currentFieldUid == (*propertySet)["uid"].value().toInt())
-        return; //already assigned
+    if (propertySet && d->currentFieldUid == (*propertySet)["uid"].value().toInt()) {
+        return;    //already assigned
+    }
 
     d->propertySetEnabled = false;
     d->setPropertySet(propertySet);
@@ -284,8 +294,9 @@ void KexiLookupColumnPage::slotVisibleColumnSelected()
 
 void KexiLookupColumnPage::slotRowSourceChanged()
 {
-    if (!d->rowSourceCombo->project())
+    if (!d->rowSourceCombo->project()) {
         return;
+    }
     QString partClass(d->rowSourceCombo->selectedPartClass());
     bool rowSourceFound = false;
     QString name = d->rowSourceCombo->selectedName();
@@ -320,7 +331,7 @@ void KexiLookupColumnPage::slotRowSourceChanged()
 //! @todo update d->propertySet ^^
 }
 
-void KexiLookupColumnPage::slotRowSourceTextChanged(const QString & string)
+void KexiLookupColumnPage::slotRowSourceTextChanged(const QString &string)
 {
     Q_UNUSED(string);
     const bool enable = d->rowSourceCombo->isSelectionValid();
@@ -333,8 +344,9 @@ void KexiLookupColumnPage::slotRowSourceTextChanged(const QString & string)
 
 void KexiLookupColumnPage::clearRowSourceSelection(bool alsoClearComboBox)
 {
-    if (d->insideClearRowSourceSelection)
+    if (d->insideClearRowSourceSelection) {
         return;
+    }
     d->insideClearRowSourceSelection = true;
     if (alsoClearComboBox) {
         d->rowSourceCombo->setDataSource("", "");
@@ -345,10 +357,11 @@ void KexiLookupColumnPage::clearRowSourceSelection(bool alsoClearComboBox)
 
 void KexiLookupColumnPage::slotGotoSelectedRowSource()
 {
-    const QString partClass( d->rowSourceCombo->selectedPartClass() );
+    const QString partClass(d->rowSourceCombo->selectedPartClass());
     if (partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") {
-        if (d->rowSourceCombo->isSelectionValid())
+        if (d->rowSourceCombo->isSelectionValid()) {
             emit jumpToObjectRequested(partClass, d->rowSourceCombo->selectedName());
+        }
     }
 }
 

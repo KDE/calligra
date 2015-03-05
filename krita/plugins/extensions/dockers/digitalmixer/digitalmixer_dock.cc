@@ -30,43 +30,43 @@
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 
-class DigitalMixerPatch : public KoColorPatch {
-    public:
-        DigitalMixerPatch(QWidget* parent) : KoColorPatch(parent) {}
-        QSize sizeHint() const
-        {
-            return QSize(24,24);
-        }
+class DigitalMixerPatch : public KoColorPatch
+{
+public:
+    DigitalMixerPatch(QWidget *parent) : KoColorPatch(parent) {}
+    QSize sizeHint() const
+    {
+        return QSize(24, 24);
+    }
 };
 
-DigitalMixerDock::DigitalMixerDock( )
+DigitalMixerDock::DigitalMixerDock()
     : QDockWidget(i18n("Digital Colors Mixer")), m_canvas(0)
     , m_tellCanvas(true)
 {
     QColor initColors[6] = { Qt::black, Qt::white, Qt::red, Qt::green, Qt::blue, Qt::yellow };
 
-    QWidget* widget = new QWidget(this);
-    QGridLayout* layout = new QGridLayout( widget );
+    QWidget *widget = new QWidget(this);
+    QGridLayout *layout = new QGridLayout(widget);
 
     // Current Color
     m_currentColorPatch = new KoColorPatch(this);
     m_currentColorPatch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_currentColorPatch->setMinimumWidth(48);
-    layout->addWidget(m_currentColorPatch, 0, 0,3,1);
+    layout->addWidget(m_currentColorPatch, 0, 0, 3, 1);
 
     // Create the sliders
 
-    QSignalMapper* signalMapperSelectColor = new QSignalMapper(this);
+    QSignalMapper *signalMapperSelectColor = new QSignalMapper(this);
     connect(signalMapperSelectColor, SIGNAL(mapped(int)), SLOT(popupColorChanged(int)));
 
-    QSignalMapper* signalMapperColorSlider = new QSignalMapper(this);
+    QSignalMapper *signalMapperColorSlider = new QSignalMapper(this);
     connect(signalMapperColorSlider, SIGNAL(mapped(int)), SLOT(colorSliderChanged(int)));
 
-    QSignalMapper* signalMapperTargetColor = new QSignalMapper(this);
+    QSignalMapper *signalMapperTargetColor = new QSignalMapper(this);
     connect(signalMapperTargetColor, SIGNAL(mapped(int)), SLOT(targetColorChanged(int)));
 
-    for(int i = 0; i < 6; ++i)
-    {
+    for (int i = 0; i < 6; ++i) {
         Mixer mixer;
         mixer.targetColor = new DigitalMixerPatch(this);
         mixer.targetColor->setFixedSize(32, 22);
@@ -75,7 +75,7 @@ DigitalMixerDock::DigitalMixerDock( )
         mixer.targetSlider->setFixedWidth(22);
         mixer.targetSlider->setMinimumHeight(66);
         layout->addWidget(mixer.targetSlider, 1, i + 1);
-        QToolButton* colorSelector = new QToolButton( this );
+        QToolButton *colorSelector = new QToolButton(this);
         mixer.actionColor = new KoColorPopupAction(this);
         mixer.actionColor->setCurrentColor(initColors[i]);
         colorSelector->setDefaultAction(mixer.actionColor);
@@ -91,14 +91,14 @@ DigitalMixerDock::DigitalMixerDock( )
         signalMapperColorSlider->setMapping(mixer.targetSlider, i);
         mixer.targetSlider->setValue(125);
 
-        connect(mixer.targetColor, SIGNAL(triggered(KoColorPatch*)), signalMapperTargetColor, SLOT(map()));
+        connect(mixer.targetColor, SIGNAL(triggered(KoColorPatch *)), signalMapperTargetColor, SLOT(map()));
         signalMapperTargetColor->setMapping(mixer.targetColor, i);
     }
     setCurrentColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
-    setWidget( widget );
+    setWidget(widget);
 }
 
-void DigitalMixerDock::setCanvas(KoCanvasBase * canvas)
+void DigitalMixerDock::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
 
@@ -109,12 +109,12 @@ void DigitalMixerDock::setCanvas(KoCanvasBase * canvas)
     m_canvas = canvas;
 
     if (m_canvas) {
-        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                this, SLOT(canvasResourceChanged(int, const QVariant&)));
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant &)),
+                this, SLOT(canvasResourceChanged(int, const QVariant &)));
 
-        m_tellCanvas=false;
+        m_tellCanvas = false;
         setCurrentColor(m_canvas->resourceManager()->foregroundColor());
-        m_tellCanvas=true;
+        m_tellCanvas = true;
     }
 }
 
@@ -122,7 +122,7 @@ void DigitalMixerDock::popupColorChanged(int i)
 {
     KoColor color = m_mixers[i].actionColor->currentKoColor();
     color.convertTo(m_currentColor.colorSpace());
-    m_mixers[i].targetSlider->setColors( color, m_currentColor);
+    m_mixers[i].targetSlider->setColors(color, m_currentColor);
     colorSliderChanged(i);
 }
 
@@ -136,26 +136,25 @@ void DigitalMixerDock::targetColorChanged(int i)
     setCurrentColor(m_mixers[i].targetColor->color());
 }
 
-void DigitalMixerDock::setCurrentColor(const KoColor& color)
+void DigitalMixerDock::setCurrentColor(const KoColor &color)
 {
     m_currentColor = color;
     m_currentColorPatch->setColor(color);
-    for(int i = 0; i < m_mixers.size(); ++i)
-    {
+    for (int i = 0; i < m_mixers.size(); ++i) {
         popupColorChanged(i);
         colorSliderChanged(i);
     }
-    if (m_canvas && m_tellCanvas)
-    {
+    if (m_canvas && m_tellCanvas) {
         m_canvas->resourceManager()->setForegroundColor(m_currentColor);
     }
 }
 
-void DigitalMixerDock::canvasResourceChanged(int key, const QVariant& v)
+void DigitalMixerDock::canvasResourceChanged(int key, const QVariant &v)
 {
     m_tellCanvas = false;
-    if (key == KoCanvasResourceManager::ForegroundColor)
+    if (key == KoCanvasResourceManager::ForegroundColor) {
         setCurrentColor(v.value<KoColor>());
+    }
     m_tellCanvas = true;
 }
 

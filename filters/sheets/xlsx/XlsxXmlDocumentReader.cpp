@@ -43,23 +43,23 @@
 #include <MsooXmlReader_p.h>
 
 XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
-    XlsxImport& _import,
-    MSOOXML::DrawingMLTheme* _themes,
-    const QVector<QString>& _sharedStrings,
-    const XlsxComments& _comments,
-    const XlsxStyles& _styles,
-    MSOOXML::MsooXmlRelationships& _relationships,
+    XlsxImport &_import,
+    MSOOXML::DrawingMLTheme *_themes,
+    const QVector<QString> &_sharedStrings,
+    const XlsxComments &_comments,
+    const XlsxStyles &_styles,
+    MSOOXML::MsooXmlRelationships &_relationships,
     QString _file,
     QString _path
-    )
-        : MSOOXML::MsooXmlReaderContext(&_relationships)
-        , import(&_import)
-        , themes(_themes)
-        , sharedStrings(&_sharedStrings)
-        , comments(&_comments)
-        , styles(&_styles)
-        , file(_file)
-        , path(_path)
+)
+    : MSOOXML::MsooXmlReaderContext(&_relationships)
+    , import(&_import)
+    , themes(_themes)
+    , sharedStrings(&_sharedStrings)
+    , comments(&_comments)
+    , styles(&_styles)
+    , file(_file)
+    , path(_path)
 {
 }
 
@@ -67,18 +67,20 @@ class XlsxXmlDocumentReader::Private
 {
 public:
     Private()
-            : worksheetNumber(0) {
+        : worksheetNumber(0)
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
     uint worksheetNumber;
 private:
 };
 
 XlsxXmlDocumentReader::XlsxXmlDocumentReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(writers)
-        , m_context(0)
-        , d(new Private)
+    : MSOOXML::MsooXmlReader(writers)
+    , m_context(0)
+    , d(new Private)
 {
     init();
 }
@@ -93,14 +95,15 @@ void XlsxXmlDocumentReader::init()
     m_defaultNamespace = "";
 }
 
-KoFilter::ConversionStatus XlsxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus XlsxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<XlsxXmlDocumentReaderContext*>(context);
+    m_context = dynamic_cast<XlsxXmlDocumentReaderContext *>(context);
     Q_ASSERT(m_context);
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
-    if (result == KoFilter::OK)
+    if (result == KoFilter::OK) {
         return KoFilter::OK;
+    }
     return result;
 }
 
@@ -220,8 +223,8 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
     READ_PROLOGUE
 
     unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets") +
-        m_context->relationships->targetCountWithWord("dialogsheets") +
-        m_context->relationships->targetCountWithWord("chartsheets");
+                                  m_context->relationships->targetCountWithWord("dialogsheets") +
+                                  m_context->relationships->targetCountWithWord("chartsheets");
     unsigned worksheet = 1;
 
     while (!atEnd()) {
@@ -232,7 +235,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
             if (name() == "sheet") {
                 TRY_READ(sheet)
                 ++worksheet;
-                m_context->import->reportProgress(45 + (55/numberOfWorkSheets) * worksheet);
+                m_context->import->reportProgress(45 + (55 / numberOfWorkSheets) * worksheet);
             }
             ELSE_WRONG_FORMAT
         }
@@ -251,11 +254,9 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
             if (filterConditionSize > 0) {
                 if (type == "and") {
                     body->startElement("table:filter-and");
-                }
-                else if (type == "or") {
+                } else if (type == "or") {
                     body->startElement("table:filter-or");
-                }
-                else {
+                } else {
                     body->startElement("table:filter");
                 }
                 int conditionIndex = 0;
@@ -275,7 +276,6 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheets()
 
         body->endElement(); // table:database-ranges
     }
-
 
     READ_EPILOGUE
 }
@@ -303,8 +303,8 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     kDebug() << "r:id:" << r_id << "sheetId:" << sheetId << "name:" << name << "state:" << state;
 
     unsigned numberOfWorkSheets = m_context->relationships->targetCountWithWord("worksheets") +
-        m_context->relationships->targetCountWithWord("dialogsheets") +
-        m_context->relationships->targetCountWithWord("chartsheets");
+                                  m_context->relationships->targetCountWithWord("dialogsheets") +
+                                  m_context->relationships->targetCountWithWord("chartsheets");
     d->worksheetNumber++; // counted from 1
     QString path, file;
     QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
@@ -314,7 +314,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     // Loading potential ole replacements
     VmlDrawingReader vmlreader(this);
     QString vmlTarget = m_context->relationships->targetForType(path, file,
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
 
     if (!vmlTarget.isEmpty()) {
         QString errorMessage, vmlPath, vmlFile;
@@ -322,7 +322,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
         MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
 
         VmlDrawingReaderContext vmlContext(*m_context->import,
-            vmlPath, vmlFile, *m_context->relationships);
+                                           vmlPath, vmlFile, *m_context->relationships);
 
         const KoFilter::ConversionStatus status =
             m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);

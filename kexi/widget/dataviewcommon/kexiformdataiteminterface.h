@@ -38,29 +38,33 @@ public:
 
     //! \return the name of the data source for this widget.
     //! Data source usually means here a table or query, a field name or an expression.
-    inline QString dataSource() const {
+    inline QString dataSource() const
+    {
         return m_dataSource;
     }
 
     //! Sets the name of the data source for this widget.
     //! Data source usually means here a table or query or field name name.
-    inline void setDataSource(const QString &ds) {
+    inline void setDataSource(const QString &ds)
+    {
         m_dataSource = ds;
     }
 
     /*! \return the class of the part for the widget's data source.
-     Data source part class means here types like "org.kexi-project.table" 
+     Data source part class means here types like "org.kexi-project.table"
      or "org.kexi-project.query" if the data source is set to object
      (as within form or subform)
      or is empty if the data source is set to table field or query column. */
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePartClass() const
+    {
         return m_dataSourcePartClass;
     }
 
     /*! Sets the class of the part for the data widget's data source.
      Data source usually means here a "org.kexi-project.table" or "org.kexi-project.query".
      @see dataSourcePartClass() */
-    inline void setDataSourcePartClass(const QString &partClass) {
+    inline void setDataSourcePartClass(const QString &partClass)
+    {
         m_dataSourcePartClass = partClass;
     }
 
@@ -70,17 +74,19 @@ public:
      You can reimplement this in the widget. Always call the superclass' implementation.
      setDisplayDefaultValue(.., false) is called in KexiFormScrollView::valueChanged()
      as a response on data change performed by user. */
-    virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+    virtual void setDisplayDefaultValue(QWidget *widget, bool displayDefaultValue);
 
     /*! \return true if default value is displayed for this item. */
-    virtual bool hasDisplayedDefaultValue() const {
+    virtual bool hasDisplayedDefaultValue() const
+    {
         return m_displayDefaultValue;
     }
 
     /*! Convenience function: casts this item to a QWidget.
      Can return 0 if the item is not a QWidget-derived object. */
-    virtual QWidget* widget() {
-        return dynamic_cast<QWidget*>(this);
+    virtual QWidget *widget()
+    {
+        return dynamic_cast<QWidget *>(this);
     }
 
     /*! Sets 'invalid' state, e.g. a text editor widget should display
@@ -90,7 +96,7 @@ public:
      Note: that even widgets that usually do not display texts (e.g. pixmaps)
      should display \a displayText too.
     */
-    virtual void setInvalidState(const QString& displayText) = 0;
+    virtual void setInvalidState(const QString &displayText) = 0;
 
     /*! Changes 'read only' flag, for this widget.
      Typically this flag can be passed to a widget itself,
@@ -98,10 +104,11 @@ public:
     virtual void setReadOnly(bool readOnly) = 0;
 
     //! \return database column information for this item
-    virtual KexiDB::Field* field() const;
+    virtual KexiDB::Field *field() const;
 
     //! \return database column information for this item
-    virtual KexiDB::QueryColumnInfo* columnInfo() const {
+    virtual KexiDB::QueryColumnInfo *columnInfo() const
+    {
         return m_columnInfo;
     }
 
@@ -109,19 +116,22 @@ public:
      Reimplement if you need to do additional actions,
      e.g. set data validator based on field type. Don't forget about
      calling superclass implementation. */
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo) {
+    virtual void setColumnInfo(KexiDB::QueryColumnInfo *cinfo)
+    {
         m_columnInfo = cinfo;
     }
 
     /*! Used internally to set visible database column information.
      Reimplemented in KexiDBComboBox: except for combo box, this does nothing. */
-    virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo* cinfo) {
+    virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo *cinfo)
+    {
         Q_UNUSED(cinfo);
     }
 
     /*! \return visible database column information for this item.
      Except for combo box, this is exactly the same as columnInfo(). */
-    virtual KexiDB::QueryColumnInfo* visibleColumnInfo() const {
+    virtual KexiDB::QueryColumnInfo *visibleColumnInfo() const
+    {
         return columnInfo();
     }
 
@@ -151,7 +161,8 @@ public:
      \return true if \a ke should be accepted by the widget item.
      This method is used e.g. in KexiDBImageBox for Key_Escape to if the popup is visible,
      so the key press won't be consumed to perform "cancel editing". */
-    virtual bool keyPressed(QKeyEvent *ke) {
+    virtual bool keyPressed(QKeyEvent *ke)
+    {
         Q_UNUSED(ke); return false;
     }
 
@@ -162,7 +173,7 @@ public:
 protected:
     QString m_dataSource;
     QString m_dataSourcePartClass;
-    KexiDB::QueryColumnInfo* m_columnInfo;
+    KexiDB::QueryColumnInfo *m_columnInfo;
     KexiDisplayUtils::DisplayParameters *m_displayParametersForEnteredValue; //!< used in setDisplayDefaultValue()
     KexiDisplayUtils::DisplayParameters *m_displayParametersForDefaultValue; //!< used in setDisplayDefaultValue()
     bool m_displayDefaultValue; //!< used by setDisplayDefaultValue()

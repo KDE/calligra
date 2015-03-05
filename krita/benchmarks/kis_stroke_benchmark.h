@@ -33,12 +33,12 @@ class KisStrokeBenchmark : public QObject
 {
     Q_OBJECT
 private:
-    const KoColorSpace * m_colorSpace;
+    const KoColorSpace *m_colorSpace;
     KoColor m_color;
     KisImageSP m_image;
     KisLayerSP m_layer;
 
-    KisPainter * m_painter;
+    KisPainter *m_painter;
 
     KisPaintInformation m_pi1;
     KisPaintInformation m_pi2;
@@ -56,11 +56,11 @@ private:
     QString m_dataPath;
     QString m_outputPath;
 
-    private:
-        inline void benchmarkRandomLines(QString presetFileName);
-        inline void benchmarkStroke(QString presetFileName);
-        inline void benchmarkLine(QString presetFileName);
-        inline void benchmarkCircle(QString presetFileName);
+private:
+    inline void benchmarkRandomLines(QString presetFileName);
+    inline void benchmarkStroke(QString presetFileName);
+    inline void benchmarkLine(QString presetFileName);
+    inline void benchmarkCircle(QString presetFileName);
 
 private Q_SLOTS:
     void initTestCase();
@@ -119,10 +119,10 @@ private Q_SLOTS:
 
     void colorsmudge();
     void colorsmudgeRL();
-/*
-    void predefinedBrush();
-    void predefinedBrushRL();
-*/
+    /*
+        void predefinedBrush();
+        void predefinedBrushRL();
+    */
     void benchmarkRand();
     void benchmarkRand48();
 };

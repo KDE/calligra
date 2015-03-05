@@ -73,7 +73,7 @@
 #include "SectionPropertiesDock.h"
 #include "commands/RememberPositionCommand.h"
 
-View::View(RootSection *document, MainWindow* parent)
+View::View(RootSection *document, MainWindow *parent)
     : QWidget(parent)
     , m_doc(document)
     , m_canvas(0)
@@ -93,7 +93,7 @@ View::View(RootSection *document, MainWindow* parent)
     initActions();
     loadExtensions();
 
-    if(m_doc->sections().count() > 0) {
+    if (m_doc->sections().count() > 0) {
         setActiveSection(m_doc->sections()[0]);
     } else {
         setActiveSection(0);
@@ -109,8 +109,7 @@ View::~View()
     delete m_zoomController;
 }
 
-
-Section* View::activeSection() const
+Section *View::activeSection() const
 {
     return m_activeSection;
 }
@@ -118,18 +117,17 @@ Section* View::activeSection() const
 void View::initGUI()
 {
     // add all plugins.
-    foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
+    foreach (const QString &docker, KoDockRegistry::instance()->keys()) {
         kDebug() << "Creating docker: " << docker;
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
         m_mainWindow->createDockWidget(factory);
     }
 
     // Init the widgets
-    QGridLayout * gridLayout = new QGridLayout(this);
+    QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setMargin(0);
     gridLayout->setSpacing(0);
     setLayout(gridLayout);
-
 
     m_canvasController = new KoCanvasControllerWidget(actionCollection(), this);
     m_canvasController->setCanvasMode(KoCanvasController::Infinite);
@@ -159,12 +157,12 @@ void View::initGUI()
     connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), m_mainWindow->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
     SectionsBoxDockFactory structureDockerFactory;
-    m_sectionsBoxDock = qobject_cast<SectionsBoxDock*>(m_mainWindow->createDockWidget(&structureDockerFactory));
+    m_sectionsBoxDock = qobject_cast<SectionsBoxDock *>(m_mainWindow->createDockWidget(&structureDockerFactory));
     Q_ASSERT(m_sectionsBoxDock);
     m_sectionsBoxDock->setup(m_doc, this);
 
     SectionPropertiesDockFactory sectionPropertiesDockerFactory;
-    m_sectionPropertiesDock = qobject_cast<SectionPropertiesDock*>(m_mainWindow->createDockWidget(&sectionPropertiesDockerFactory));
+    m_sectionPropertiesDock = qobject_cast<SectionPropertiesDock *>(m_mainWindow->createDockWidget(&sectionPropertiesDockerFactory));
     Q_ASSERT(m_sectionPropertiesDock);
     m_sectionPropertiesDock->setRootSection(m_doc);
 
@@ -209,22 +207,21 @@ void View::loadExtensions()
     const KService::List offers = KoServiceLocator::instance()->entries("Braindump/Extensions");
 
     KService::List::ConstIterator iter;
-    for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
+    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 
         KService::Ptr service = *iter;
         QString error;
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
-        if(plugin) {
+        KXMLGUIClient *plugin =
+            dynamic_cast<KXMLGUIClient *>(service->createInstance<QObject>(this, QVariantList(), &error));
+        if (plugin) {
             insertChildClient(plugin);
         } else {
-            if(!error.isEmpty()) {
+            if (!error.isEmpty()) {
                 kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
             }
         }
     }
 }
-
 
 void View::editPaste()
 {
@@ -238,14 +235,15 @@ void View::editDeleteSelection()
 
 void View::editSelectAll()
 {
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    if(!selection)
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    if (!selection) {
         return;
+    }
 
     KoShapeLayer *layer = activeSection()->sectionContainer()->layer();
 
-    QList<KoShape*> layerShapes(layer->shapes());
-    foreach(KoShape * layerShape, layerShapes) {
+    QList<KoShape *> layerShapes(layer->shapes());
+    foreach (KoShape *layerShape, layerShapes) {
         selection->select(layerShape);
         layerShape->update();
     }
@@ -253,9 +251,10 @@ void View::editSelectAll()
 
 void View::editDeselectAll()
 {
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    if(selection)
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    if (selection) {
         selection->deselectAll();
+    }
 
     canvas()->update();
 }
@@ -268,9 +267,9 @@ void View::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     canvas()->update();
 }
 
-void View::createCanvas(Section* _currentSection)
+void View::createCanvas(Section *_currentSection)
 {
-    Canvas* canvas = new Canvas(this, m_doc, _currentSection);
+    Canvas *canvas = new Canvas(this, m_doc, _currentSection);
     m_canvasController->setCanvas(canvas);
     // No need to delete the current canvas, it will be deleted in Viewport::setCanvas (flake/KoCanvasController_p.cpp)
     m_canvas = canvas;
@@ -291,7 +290,7 @@ void View::createCanvas(Section* _currentSection)
     setEnabled(_currentSection);
 }
 
-void View::setActiveSection(Section* page)
+void View::setActiveSection(Section *page)
 {
 
     m_activeSection = page;
@@ -300,7 +299,7 @@ void View::setActiveSection(Section* page)
 
     createCanvas(m_activeSection);
 
-    if(m_activeSection) {
+    if (m_activeSection) {
         documentRectChanged(m_activeSection->layout()->boundingBox());
     }
 
@@ -308,7 +307,7 @@ void View::setActiveSection(Section* page)
     m_sectionPropertiesDock->setSection(m_activeSection);
 }
 
-void View::updateMousePosition(const QPoint& /*position*/)
+void View::updateMousePosition(const QPoint & /*position*/)
 {
     QPoint canvasOffset(m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY());
     // the offset is positive it the canvas is shown fully visible
@@ -318,17 +317,17 @@ void View::updateMousePosition(const QPoint& /*position*/)
 
 void View::clipboardDataChanged()
 {
-    const QMimeData* data = QApplication::clipboard()->mimeData();
+    const QMimeData *data = QApplication::clipboard()->mimeData();
     bool paste = false;
 
-    if(data) {
+    if (data) {
         // TODO see if we can use the KoPasteController instead of having to add this feature in each calligra app.
         QStringList mimeTypes = m_canvas->toolProxy()->supportedPasteMimeTypes();
         mimeTypes << KoOdf::mimeType(KoOdf::Graphics);
         mimeTypes << KoOdf::mimeType(KoOdf::Presentation);
 
-        foreach(const QString & mimeType, mimeTypes) {
-            if(data->hasFormat(mimeType)) {
+        foreach (const QString &mimeType, mimeTypes) {
+            if (data->hasFormat(mimeType)) {
                 paste = true;
                 break;
             }
@@ -339,7 +338,7 @@ void View::clipboardDataChanged()
     m_editPaste->setEnabled(paste);
 }
 
-void View::focusInEvent(QFocusEvent * event)
+void View::focusInEvent(QFocusEvent *event)
 {
     QWidget::focusInEvent(event);
     m_doc->viewManager()->viewHasFocus(this);
@@ -350,11 +349,11 @@ void View::canvasReceivedFocus()
     m_doc->viewManager()->viewHasFocus(this);
 }
 
-void View::documentRectChanged(const QRectF& bb)
+void View::documentRectChanged(const QRectF &bb)
 {
     QSizeF pageSize(400, 400);
     // Make sure we never use an empty size
-    if(!bb.isNull() && !bb.isEmpty()) {
+    if (!bb.isNull() && !bb.isEmpty()) {
         pageSize = bb.size();
     }
     m_zoomController->setPageSize(pageSize);
@@ -369,22 +368,25 @@ void View::selectionDuplicate()
 
 void View::groupSelection()
 {
-    KoSelection* selection = m_canvas->shapeManager()->selection();
-    if(! selection)
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    if (! selection) {
         return;
+    }
 
-    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
-    QList<KoShape*> groupedShapes;
+    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> groupedShapes;
 
     // only group shapes with an unselected parent
-    foreach(KoShape * shape, selectedShapes) {
-        if(selectedShapes.contains(shape->parent()))
+    foreach (KoShape *shape, selectedShapes) {
+        if (selectedShapes.contains(shape->parent())) {
             continue;
+        }
         groupedShapes << shape;
     }
     KoShapeGroup *group = new KoShapeGroup();
-    if(selection->activeLayer())
+    if (selection->activeLayer()) {
         selection->activeLayer()->addShape(group);
+    }
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Group shapes"));
     new KoShapeCreateCommand(m_activeSection->sectionContainer(), group, cmd);
     new KoShapeGroupCommand(group, groupedShapes, cmd);
@@ -393,27 +395,29 @@ void View::groupSelection()
 
 void View::ungroupSelection()
 {
-    KoSelection* selection = m_canvas->shapeManager()->selection();
-    if(! selection)
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    if (! selection) {
         return;
+    }
 
-    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
-    QList<KoShape*> containerSet;
+    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> containerSet;
 
     // only ungroup shape containers with an unselected parent
-    foreach(KoShape * shape, selectedShapes) {
-        if(selectedShapes.contains(shape->parent()))
+    foreach (KoShape *shape, selectedShapes) {
+        if (selectedShapes.contains(shape->parent())) {
             continue;
+        }
         containerSet << shape;
     }
 
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Ungroup shapes"));
 
     // add a ungroup command for each found shape container to the macro command
-    foreach(KoShape * shape, containerSet) {
-        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
-        if(container) {
-            new KoShapeUngroupCommand(container, container->shapes(), QList<KoShape*>(), cmd);
+    foreach (KoShape *shape, containerSet) {
+        KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(shape);
+        if (container) {
+            new KoShapeUngroupCommand(container, container->shapes(), QList<KoShape *>(), cmd);
             new KoShapeDeleteCommand(m_activeSection->sectionContainer(), container, cmd);
             new RememberPositionCommand(container->shapes(), cmd);
         }

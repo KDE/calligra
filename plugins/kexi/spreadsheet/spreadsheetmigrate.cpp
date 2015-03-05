@@ -32,72 +32,85 @@ class MockPart : public KoPart
 {
 public:
     MockPart()
-    : KoPart( 0 )
+        : KoPart(0)
     {}
-    KoView *createViewInstance(KoDocument* document, QWidget* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
-    virtual KoMainWindow *createMainWindow() { return 0; }
+    KoView *createViewInstance(KoDocument *document, QWidget *parent)
+    {
+        Q_UNUSED(document);
+        Q_UNUSED(parent);
+        return 0;
+    }
+    virtual KoMainWindow *createMainWindow()
+    {
+        return 0;
+    }
 protected:
-    virtual QGraphicsItem *createCanvasItem(KoDocument* document) { Q_UNUSED(document); return 0; }
+    virtual QGraphicsItem *createCanvasItem(KoDocument *document)
+    {
+        Q_UNUSED(document);
+        return 0;
+    }
 };
 
 // ---
 
 SpreadsheetMigrate::SpreadsheetMigrate(QObject *parent, const QVariantList &args)
-        : KexiMigrate(parent, args)
+    : KexiMigrate(parent, args)
 {
-  m_CurSheet = 0;
-  m_KSDoc = 0;
-  m_Row = 0;
+    m_CurSheet = 0;
+    m_KSDoc = 0;
+    m_Row = 0;
 }
 
 SpreadsheetMigrate::~SpreadsheetMigrate()
 {
-  if (m_KSDoc) {
-    m_KSDoc->closeUrl();
-    m_KSDoc->deleteLater();
-  }
+    if (m_KSDoc) {
+        m_KSDoc->closeUrl();
+        m_KSDoc->deleteLater();
+    }
 }
 
 bool SpreadsheetMigrate::drv_connect()
 {
-  drv_disconnect();
-  m_FileName = data()->source->dbPath() + '/' + data()->source->dbFileName();
-  
-  if (!QFile::exists(m_FileName)) 
-    return false;
-  
-  if (!m_KSDoc) {
-      m_KSDoc = new Calligra::Sheets::Doc(new MockPart);
-  }
-  kDebug();
-  return m_KSDoc->openUrl(m_FileName);
+    drv_disconnect();
+    m_FileName = data()->source->dbPath() + '/' + data()->source->dbFileName();
+
+    if (!QFile::exists(m_FileName)) {
+        return false;
+    }
+
+    if (!m_KSDoc) {
+        m_KSDoc = new Calligra::Sheets::Doc(new MockPart);
+    }
+    kDebug();
+    return m_KSDoc->openUrl(m_FileName);
 }
 
 bool SpreadsheetMigrate::drv_disconnect()
 {
-  if (m_KSDoc) {
-    m_KSDoc->closeUrl();
-    delete m_KSDoc;
-    m_KSDoc = 0;
-  }
-  return true;
+    if (m_KSDoc) {
+        m_KSDoc->closeUrl();
+        delete m_KSDoc;
+        m_KSDoc = 0;
+    }
+    return true;
 }
 
-bool SpreadsheetMigrate::drv_tableNames(QStringList& tablenames)
+bool SpreadsheetMigrate::drv_tableNames(QStringList &tablenames)
 {
-    QList<Calligra::Sheets::Sheet*> sheets = m_KSDoc->map()->sheetList();
-  
+    QList<Calligra::Sheets::Sheet *> sheets = m_KSDoc->map()->sheetList();
+
     kDebug() << sheets.size() << "sheets" << m_KSDoc->map()->sheetList().size();
-  
-    foreach(Calligra::Sheets::Sheet *sheet, sheets) {
+
+    foreach (Calligra::Sheets::Sheet *sheet, sheets) {
         tablenames << sheet->sheetName();
     }
-  
-  return true;
+
+    return true;
 }
 
-bool SpreadsheetMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
-                                       KexiDB::TableSchema* dstTable)
+bool SpreadsheetMigrate::drv_copyTable(const QString &srcTable, KexiDB::Connection *destConn,
+                                       KexiDB::TableSchema *dstTable)
 {
     Q_UNUSED(srcTable);
     Q_UNUSED(destConn);
@@ -106,110 +119,111 @@ bool SpreadsheetMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connecti
     return true;
 }
 
-bool SpreadsheetMigrate::drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema)
+bool SpreadsheetMigrate::drv_readTableSchema(const QString &originalName, KexiDB::TableSchema &tableSchema)
 {
-  Calligra::Sheets::Sheet *sheet = m_KSDoc->map()->findSheet(originalName);
-  
-  if (!sheet)
-  {
-      kWarning() << "unable to find sheet" << originalName;
-      return false;
-  }
-  
-  int row=1, col = 1;
-  
-  Calligra::Sheets::Cell *cell;
-  
-  forever {
-      cell = new Calligra::Sheets::Cell(sheet, col, row);
-      if (cell->isEmpty()) {
-          break;
-      }
-      QString fieldCaption = cell->displayText();
-      // find unique field name
-      QString fieldBaseName = KexiUtils::stringToIdentifier(fieldCaption).toLower();
-      int fieldNameAdd = 0;
-      QString fieldName;
-      forever {
-          fieldName = fieldBaseName;
-          if (fieldNameAdd > 0) {
-              fieldName.append(QLatin1Char('_') + QString::number(fieldNameAdd));
-          }
-          if (!tableSchema.field(fieldName)) {
-              break;
-          }
-          fieldNameAdd++;
-      }
-      KexiDB::Field *fld = new KexiDB::Field(fieldName, KexiDB::Field::Text);
-      fld->setCaption(fieldCaption);
-      tableSchema.addField( fld );
-      kDebug() << fieldName;
-      col++;
-  }
-  
-  return true;
+    Calligra::Sheets::Sheet *sheet = m_KSDoc->map()->findSheet(originalName);
+
+    if (!sheet) {
+        kWarning() << "unable to find sheet" << originalName;
+        return false;
+    }
+
+    int row = 1, col = 1;
+
+    Calligra::Sheets::Cell *cell;
+
+    forever {
+        cell = new Calligra::Sheets::Cell(sheet, col, row);
+        if (cell->isEmpty()) {
+            break;
+        }
+        QString fieldCaption = cell->displayText();
+        // find unique field name
+        QString fieldBaseName = KexiUtils::stringToIdentifier(fieldCaption).toLower();
+        int fieldNameAdd = 0;
+        QString fieldName;
+        forever {
+            fieldName = fieldBaseName;
+            if (fieldNameAdd > 0) {
+                fieldName.append(QLatin1Char('_') + QString::number(fieldNameAdd));
+            }
+            if (!tableSchema.field(fieldName)) {
+                break;
+            }
+            fieldNameAdd++;
+        }
+        KexiDB::Field *fld = new KexiDB::Field(fieldName, KexiDB::Field::Text);
+        fld->setCaption(fieldCaption);
+        tableSchema.addField(fld);
+        kDebug() << fieldName;
+        col++;
+    }
+
+    return true;
 }
 
-bool SpreadsheetMigrate::drv_readFromTable(const QString & tableName)
+bool SpreadsheetMigrate::drv_readFromTable(const QString &tableName)
 {
-  m_CurSheet = m_KSDoc->map()->findSheet(tableName);
-  
-  m_Row = 1;
-  
-  return m_CurSheet;
+    m_CurSheet = m_KSDoc->map()->findSheet(tableName);
+
+    m_Row = 1;
+
+    return m_CurSheet;
 }
 
 bool SpreadsheetMigrate::drv_moveNext()
 {
-  if (!m_CurSheet)
+    if (!m_CurSheet) {
+        return false;
+    }
+
+    Calligra::Sheets::Cell cell = Calligra::Sheets::Cell(m_CurSheet, 1, m_Row + 1);
+
+    if (!cell.isEmpty()) {
+        m_Row++;
+        return true;
+    }
+
     return false;
-  
-  Calligra::Sheets::Cell cell = Calligra::Sheets::Cell(m_CurSheet, 1, m_Row + 1);
-  
-  if (!cell.isEmpty())
-  {
-    m_Row++;
-    return true;
-  }
-  
-  return false;
 }
 
 bool SpreadsheetMigrate::drv_movePrevious()
 {
-  if (!m_CurSheet)
+    if (!m_CurSheet) {
+        return false;
+    }
+
+    if (m_Row > 1) {
+        m_Row--;
+        return true;
+    }
     return false;
-  
-  if (m_Row > 1)
-  {
-    m_Row--;
-    return true;
-  }
-  return false;
 }
 
 bool SpreadsheetMigrate::drv_moveFirst()
 {
-  if (!m_CurSheet)
-    return false;
-  
-  m_Row = 1;
-  return drv_moveNext();
+    if (!m_CurSheet) {
+        return false;
+    }
+
+    m_Row = 1;
+    return drv_moveNext();
 }
 
 bool SpreadsheetMigrate::drv_moveLast()
 {
-  if (!m_CurSheet)
-    return false;
-  
-  while(drv_moveNext()){}
-  
-  return true;
+    if (!m_CurSheet) {
+        return false;
+    }
+
+    while (drv_moveNext()) {}
+
+    return true;
 }
 
 QVariant SpreadsheetMigrate::drv_value(uint i)
 {
-    return Calligra::Sheets::Cell(m_CurSheet, i+1, m_Row).value().asVariant();
+    return Calligra::Sheets::Cell(m_CurSheet, i + 1, m_Row).value().asVariant();
 }
 
 }

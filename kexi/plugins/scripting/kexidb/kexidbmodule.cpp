@@ -43,15 +43,16 @@ extern "C"
      * Exported an loadable function as entry point to use
      * the \a KexiDBModule.
      */
-    KDE_EXPORT QObject* krossmodule() {
+    KDE_EXPORT QObject *krossmodule()
+    {
         return new Scripting::KexiDBModule();
     }
 }
 
 using namespace Scripting;
 
-KexiDBModule::KexiDBModule(QObject* parent)
-        : QObject(parent)
+KexiDBModule::KexiDBModule(QObject *parent)
+    : QObject(parent)
 {
     kDebug();
     setObjectName("KexiDB");
@@ -72,7 +73,7 @@ const QStringList KexiDBModule::driverNames()
     return m_drivermanager.driverNames();
 }
 
-QObject* KexiDBModule::driver(const QString& drivername)
+QObject *KexiDBModule::driver(const QString &drivername)
 {
     QPointer< ::KexiDB::Driver > driver = m_drivermanager.driver(drivername); // caching is done by the DriverManager
     if (! driver) {
@@ -86,37 +87,39 @@ QObject* KexiDBModule::driver(const QString& drivername)
     return new KexiDBDriver(this, driver);
 }
 
-const QString KexiDBModule::lookupByMime(const QString& mimetype)
+const QString KexiDBModule::lookupByMime(const QString &mimetype)
 {
     return m_drivermanager.lookupByMime(mimetype);
 }
 
-const QString KexiDBModule::mimeForFile(const QString& filename)
+const QString KexiDBModule::mimeForFile(const QString &filename)
 {
     QString mimename = KMimeType::findByFileContent(filename)->name();
-    if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain")
+    if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain") {
         mimename = KMimeType::findByUrl(filename)->name();
+    }
     return mimename;
 }
 
-QObject* KexiDBModule::createConnectionData()
+QObject *KexiDBModule::createConnectionData()
 {
     return new KexiDBConnectionData(this, new ::KexiDB::ConnectionData(), true);
 }
 
-QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
+QObject *KexiDBModule::createConnectionDataByFile(const QString &filename)
 {
     //! @todo reuse the original code!
 
     QString mimename = KMimeType::findByFileContent(filename)->name();
-    if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain")
+    if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain") {
         mimename = KMimeType::findByUrl(filename)->name();
+    }
 
     if (mimename == "application/x-kexiproject-shortcut" || mimename == "application/x-kexi-connectiondata") {
         KConfig _config(filename, KConfig::NoGlobals);
 
         QString groupkey;
-        foreach(const QString &s, _config.groupList()) {
+        foreach (const QString &s, _config.groupList()) {
             if (s.toLower() != "file information") {
                 groupkey = s;
                 break;
@@ -128,7 +131,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
         }
 
         KConfigGroup config(&_config, groupkey);
-        ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
+        ::KexiDB::ConnectionData *data = new ::KexiDB::ConnectionData();
         int version = config.readEntry("version", 2); //KexiDBShortcutFile_version
         data->setFileName(QString());
         data->caption = config.readEntry("caption");
@@ -143,16 +146,18 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
         if (version >= 2 && config.hasKey("encryptedPassword")) {
             data->password = config.readEntry("encryptedPassword");
             uint len = data->password.length();
-            for (uint i = 0; i < len; i++)
+            for (uint i = 0; i < len; i++) {
                 data->password[i] = QChar(data->password[i].unicode() - 47 - i);
+            }
         }
-        if (data->password.isEmpty())
+        if (data->password.isEmpty()) {
             data->password = config.readEntry("password");
+        }
 
         data->savePassword = ! data->password.isEmpty();
         data->userName = config.readEntry("user");
 
-        KexiDBConnectionData* c = new KexiDBConnectionData(this, data, true);
+        KexiDBConnectionData *c = new KexiDBConnectionData(this, data, true);
         c->setDatabaseName(dbname);
         return c;
     }
@@ -163,30 +168,30 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
         return 0;
     }
 
-    ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
+    ::KexiDB::ConnectionData *data = new ::KexiDB::ConnectionData();
     data->setFileName(filename);
     data->driverName = drivername;
     return new KexiDBConnectionData(this, data, true);
 }
 
-QObject* KexiDBModule::field()
+QObject *KexiDBModule::field()
 {
     return new KexiDBField(this, new ::KexiDB::Field(), true);
 }
 
-QObject* KexiDBModule::tableSchema(const QString& tablename)
+QObject *KexiDBModule::tableSchema(const QString &tablename)
 {
     return new KexiDBTableSchema(this, new ::KexiDB::TableSchema(tablename), true);
 }
 
-QObject* KexiDBModule::querySchema()
+QObject *KexiDBModule::querySchema()
 {
     return new KexiDBQuerySchema(this, new ::KexiDB::QuerySchema(), true);
 }
 
-QObject* KexiDBModule::connectionWrapper(QObject* connection)
+QObject *KexiDBModule::connectionWrapper(QObject *connection)
 {
-    ::KexiDB::Connection* c = dynamic_cast< ::KexiDB::Connection* >(connection);
+    ::KexiDB::Connection *c = dynamic_cast< ::KexiDB::Connection * >(connection);
     return c ? new KexiDBConnection(c) : 0;
 }
 

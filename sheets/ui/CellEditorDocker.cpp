@@ -64,7 +64,7 @@ CellEditorDocker::CellEditorDocker()
     d->canvas = 0;
     d->canvasResetBugWorkaround = false;
 
-    QWidget* w = new QWidget(this);
+    QWidget *w = new QWidget(this);
 
     d->locationComboBox = new LocationComboBox(w);
     d->locationComboBox->setMinimumWidth(100);
@@ -108,7 +108,7 @@ void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
     if (d->toolProxy) {
         disconnect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
     }
-    d->canvas = dynamic_cast<CanvasBase*>(canvas);
+    d->canvas = dynamic_cast<CanvasBase *>(canvas);
     if (d->canvas) {
         d->locationComboBox->setSelection(d->canvas->selection());
         d->toolProxy = d->canvas->toolProxy();
@@ -118,7 +118,9 @@ void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
 
 void CellEditorDocker::unsetCanvas()
 {
-    if (d->canvasResetBugWorkaround) return;
+    if (d->canvasResetBugWorkaround) {
+        return;
+    }
     kDebug() << "unsetting canvas";
     if (d->toolProxy) {
         disconnect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
@@ -145,7 +147,7 @@ void CellEditorDocker::resizeEvent(QResizeEvent *event)
             return;
         }
         const int itemWidth = item->minimumSize().width();
-        if (newWidth <= 2 *(minWidth - itemWidth) + margin) {
+        if (newWidth <= 2 * (minWidth - itemWidth) + margin) {
             d->layout->removeItem(item);
             d->layout->addItem(item, 1, 0, 1, column + 1);
             d->layout->setRowStretch(0, 0);
@@ -171,8 +173,8 @@ void CellEditorDocker::toolChanged(const QString &toolId)
     setEnabled(isCellTool);
 
     if (isCellTool) {
-        KoToolBase* tool = KoToolManager::instance()->toolById(d->canvas, toolId);
-        d->cellTool = qobject_cast<CellToolBase*>(tool);
+        KoToolBase *tool = KoToolManager::instance()->toolById(d->canvas, toolId);
+        d->cellTool = qobject_cast<CellToolBase *>(tool);
         Q_ASSERT(d->cellTool);
         d->editor->setCellTool(d->cellTool);
         d->cellTool->setExternalEditor(d->editor);
@@ -190,9 +192,9 @@ QString CellEditorDockerFactory::id() const
     return QString::fromLatin1("CalligraSheetsCellEditor");
 }
 
-QDockWidget* CellEditorDockerFactory::createDockWidget()
+QDockWidget *CellEditorDockerFactory::createDockWidget()
 {
-    CellEditorDocker* widget = new CellEditorDocker();
+    CellEditorDocker *widget = new CellEditorDocker();
     widget->setObjectName(id());
 
     return widget;

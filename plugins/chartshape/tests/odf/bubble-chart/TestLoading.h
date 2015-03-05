@@ -23,7 +23,8 @@
 
 #include "../TestLoadingBase.h"
 
-namespace KChart {
+namespace KChart
+{
 
 class TestLoading : public TestLoadingBase
 {

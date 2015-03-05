@@ -23,17 +23,18 @@
 #include <KoResourceServerProvider.h>
 #include <ui/kis_resource_server_provider.h>
 
-class PaletteModel::Private {
+class PaletteModel::Private
+{
 public:
-    Private(QObject* q)
+    Private(QObject *q)
         : currentSet(0)
     {
-        KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+        KoResourceServer<KoColorSet> *rServer = KoResourceServerProvider::instance()->paletteServer();
         serverAdaptor = new KoResourceServerAdapter<KoColorSet>(rServer, q);
         serverAdaptor->connectToResourceServer();
     }
-    KoResourceServerAdapter<KoColorSet>* serverAdaptor;
-    KoColorSet* currentSet;
+    KoResourceServerAdapter<KoColorSet> *serverAdaptor;
+    KoColorSet *currentSet;
 };
 
 PaletteModel::PaletteModel(QObject *parent)
@@ -53,18 +54,17 @@ PaletteModel::~PaletteModel()
 
 int PaletteModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
     return d->serverAdaptor->resources().count();
 }
 
 QVariant PaletteModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
-    if (index.isValid())
-    {
-        switch(role)
-        {
+    if (index.isValid()) {
+        switch (role) {
         case ImageRole:
             result = "../images/help-about.png";
             break;
@@ -82,10 +82,8 @@ QVariant PaletteModel::headerData(int section, Qt::Orientation orientation, int 
 {
     Q_UNUSED(orientation);
     QVariant result;
-    if (section == 0)
-    {
-        switch(role)
-        {
+    if (section == 0) {
+        switch (role) {
         case ImageRole:
             result = QString("Thumbnail");
             break;
@@ -101,15 +99,14 @@ QVariant PaletteModel::headerData(int section, Qt::Orientation orientation, int 
 
 void PaletteModel::itemActivated(int index)
 {
-    QList<KoResource*> resources = d->serverAdaptor->resources();
-    if (index >= 0 && index < resources.count())
-    {
-        d->currentSet = dynamic_cast<KoColorSet*>(resources.at(index));
+    QList<KoResource *> resources = d->serverAdaptor->resources();
+    if (index >= 0 && index < resources.count()) {
+        d->currentSet = dynamic_cast<KoColorSet *>(resources.at(index));
         emit colorSetChanged();
     }
 }
 
-QObject* PaletteModel::colorSet() const
+QObject *PaletteModel::colorSet() const
 {
     return d->currentSet;
 }

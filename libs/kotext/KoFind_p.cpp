@@ -40,33 +40,35 @@
 class InUse
 {
 public:
-    InUse(bool & variable)
-            : m_variable(variable) {
+    InUse(bool &variable)
+        : m_variable(variable)
+    {
         m_variable = true;
     }
-    ~InUse() {
+    ~InUse()
+    {
         m_variable = false;
     }
 
 private:
-    bool & m_variable;
+    bool &m_variable;
 };
 
 KoFindPrivate::KoFindPrivate(KoFind *find, KoCanvasResourceManager *crp, QWidget *w)
-        : findNext(0)
-        , findPrev(0)
-        , q(find)
-        , provider(crp)
-        , findStrategy(w)
-        , replaceStrategy(w)
-        , strategy(&findStrategy)
-        , document(0)
-        , restarted(false)
-        , start(false)
-        , inFind(false)
-        , findDirection(0)
-        , findForward(crp)
-        , findBackward(crp)
+    : findNext(0)
+    , findPrev(0)
+    , q(find)
+    , provider(crp)
+    , findStrategy(w)
+    , replaceStrategy(w)
+    , strategy(&findStrategy)
+    , document(0)
+    , restarted(false)
+    , start(false)
+    , inFind(false)
+    , findDirection(0)
+    , findForward(crp)
+    , findBackward(crp)
 {
     QObject::connect(findStrategy.dialog(), SIGNAL(okClicked()), q, SLOT(startFind()));
     QObject::connect(replaceStrategy.dialog(), SIGNAL(okClicked()), q, SLOT(startReplace()));
@@ -75,7 +77,7 @@ KoFindPrivate::KoFindPrivate(KoFind *find, KoCanvasResourceManager *crp, QWidget
 void KoFindPrivate::resourceChanged(int key, const QVariant &variant)
 {
     if (key == KoText::CurrentTextDocument) {
-        document = static_cast<QTextDocument*>(variant.value<void*>());
+        document = static_cast<QTextDocument *>(variant.value<void *>());
         if (!inFind) {
             start = true;
         }
@@ -149,20 +151,21 @@ void KoFindPrivate::startReplace()
     parseSettingsAndFind();
 }
 
-void KoFindPrivate::findDocumentSetNext(QTextDocument * document)
+void KoFindPrivate::findDocumentSetNext(QTextDocument *document)
 {
     emit q->findDocumentSetNext(document);
 }
 
-void KoFindPrivate::findDocumentSetPrevious(QTextDocument * document)
+void KoFindPrivate::findDocumentSetPrevious(QTextDocument *document)
 {
     emit q->findDocumentSetPrevious(document);
 }
 
 void KoFindPrivate::parseSettingsAndFind()
 {
-    if (document == 0)
+    if (document == 0) {
         return;
+    }
 
     InUse used(inFind);
 

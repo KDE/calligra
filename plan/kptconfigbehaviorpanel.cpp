@@ -25,8 +25,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <QDateTime> 
-#include <QCheckBox> 
+#include <QDateTime>
+#include <QCheckBox>
 
 namespace KPlato
 {
@@ -37,25 +37,27 @@ ConfigBehaviorPanel::ConfigBehaviorPanel(Behavior &behavior, QWidget *p, const c
       m_behavior(behavior)
 {
     setStartValues();
-    
+
     allowOverbooking->setEnabled(false); // not yet used
 }
 
-void ConfigBehaviorPanel::setStartValues() {
+void ConfigBehaviorPanel::setStartValues()
+{
     calculationGroup->setButton(m_oldvalues.calculationMode);
     allowOverbooking->setChecked(m_oldvalues.allowOverbooking);
 }
 
-bool ConfigBehaviorPanel::ok() {
+bool ConfigBehaviorPanel::ok()
+{
     return true;
 }
 
-bool ConfigBehaviorPanel::apply() {
+bool ConfigBehaviorPanel::apply()
+{
     m_behavior.calculationMode = calculationGroup->selectedId();
     m_behavior.allowOverbooking = allowOverbooking->isChecked();
     return true;
 }
-
 
 }  //KPlato namespace
 

@@ -36,9 +36,11 @@
 class DocxXmlFooterReader::Private
 {
 public:
-    Private() : counter(0) {
+    Private() : counter(0)
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
     QString pathAndFile;
     int counter;
@@ -68,9 +70,9 @@ QString DocxXmlFooterReader::content()
     return m_content;
 }
 
-KoFilter::ConversionStatus DocxXmlFooterReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus DocxXmlFooterReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = static_cast<DocxXmlDocumentReaderContext*>(context);
+    m_context = static_cast<DocxXmlDocumentReaderContext *>(context);
 
     kDebug() << "=============================";
     readNext();

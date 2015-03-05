@@ -36,7 +36,7 @@ private:
     static inline bool dependOnLowerNodes(KisNodeSP node);
 
     inline void resetProjection();
-    inline void setupProjection(KisNodeSP currentNode, const QRect& rect, bool useTempProjection);
+    inline void setupProjection(KisNodeSP currentNode, const QRect &rect, bool useTempProjection);
     inline void writeProjection(KisNodeSP topmostNode, bool useTempProjection, QRect rect);
     inline bool compositeWithProjection(KisLayerSP layer, const QRect &rect);
     inline void doNotifyClones(KisBaseRectsWalker &walker);
@@ -67,7 +67,6 @@ private:
      */
     KisPaintDeviceSP m_cachedPaintDevice;
 };
-
 
 #endif /* __KIS_ASYNC_MERGER_H */
 

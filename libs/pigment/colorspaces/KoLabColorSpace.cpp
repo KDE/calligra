@@ -34,10 +34,10 @@
 #include "../compositeops/KoCompositeOps.h"
 
 KoLabColorSpace::KoLabColorSpace() :
-        KoSimpleColorSpace<KoLabU16Traits>(colorSpaceId(),
-                                           i18n("L*a*b* (16-bit integer/channel, unmanaged)"),
-                                           LABAColorModelID,
-                                           Integer16BitsColorDepthID)
+    KoSimpleColorSpace<KoLabU16Traits>(colorSpaceId(),
+                                       i18n("L*a*b* (16-bit integer/channel, unmanaged)"),
+                                       LABAColorModelID,
+                                       Integer16BitsColorDepthID)
 {
     addChannel(new KoChannelInfo(i18n("Lightness"), CHANNEL_L     * sizeof(quint16), CHANNEL_L, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(100, 100, 100)));
     addChannel(new KoChannelInfo(i18n("a*"),        CHANNEL_A     * sizeof(quint16), CHANNEL_A, KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), QColor(150, 150, 150)));
@@ -53,19 +53,17 @@ KoLabColorSpace::~KoLabColorSpace()
 {
 }
 
-
 QString KoLabColorSpace::colorSpaceId()
 {
     return QString("LABA");
 }
 
-
-KoColorSpace* KoLabColorSpace::clone() const
+KoColorSpace *KoLabColorSpace::clone() const
 {
     return new KoLabColorSpace();
 }
 
-void KoLabColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
+void KoLabColorSpace::fromQColor(const QColor &c, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
     // Convert between RGB and CIE-Lab color spaces
     // Uses ITU-R recommendation BT.709 with D65 as reference white.
@@ -94,15 +92,17 @@ void KoLabColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProf
         L = static_cast<int>(903.3 * Y + 0.5);
     }
 
-    if (X > 0.008856)
+    if (X > 0.008856) {
         fX = pow(X, 1.0 / 3.0);
-    else
+    } else {
         fX = 7.787 * X + 16.0 / 116.0;
+    }
 
-    if (Z > 0.008856)
+    if (Z > 0.008856) {
         fZ = pow(Z, 1.0 / 3.0);
-    else
+    } else {
         fZ = 7.787 * Z + 16.0 / 116.0;
+    }
 
     a = static_cast<int>(500.0 * (fX - fY) + 0.5);
     b = static_cast<int>(200.0 * (fY - fZ) + 0.5);
@@ -113,7 +113,7 @@ void KoLabColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProf
     dst[CHANNEL_ALPHA] = UINT8_TO_UINT16(A);
 }
 
-void KoLabColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
+void KoLabColorSpace::toQColor(const quint8 *src, QColor *c, const KoColorProfile * /*profile*/) const
 {
     // Convert between RGB and CIE-Lab color spaces
     // Uses ITU-R recommendation BT.709 with D65 as reference white.
@@ -128,26 +128,30 @@ void KoLabColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfi
     int RR, GG, BB;
 
     fY = pow((L + 16.0) / 116.0, 3.0);
-    if (fY < 0.008856)
+    if (fY < 0.008856) {
         fY = L / 903.3;
+    }
     Y = fY;
 
-    if (fY > 0.008856)
+    if (fY > 0.008856) {
         fY = pow(fY, 1.0 / 3.0);
-    else
+    } else {
         fY = 7.787 * fY + 16.0 / 116.0;
+    }
 
     fX = a / 500.0 + fY;
-    if (fX > 0.206893)
+    if (fX > 0.206893) {
         X = pow(fX, 3.0);
-    else
+    } else {
         X = (fX - 16.0 / 116.0) / 7.787;
+    }
 
     fZ = fY - b / 200.0;
-    if (fZ > 0.206893)
+    if (fZ > 0.206893) {
         Z = pow(fZ, 3.0);
-    else
+    } else {
         Z = (fZ - 16.0 / 116.0) / 7.787;
+    }
 
     X *= 0.950456 * 255;
     Y *= 255;

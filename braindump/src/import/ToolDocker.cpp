@@ -54,7 +54,7 @@ ToolDocker::ToolDocker(QWidget *parent)
 
     toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
     setFeatures(DockWidgetMovable | DockWidgetFloatable);
-    if(d->hasTitle) {
+    if (d->hasTitle) {
         setTitleBarWidget(new KoDockWidgetTitleBar(this));
     } else {
         setTitleBarWidget(new QWidget());
@@ -77,7 +77,7 @@ ToolDocker::ToolDocker(QWidget *parent)
     setWidget(d->scrollArea);
 
     d->lockButton = new QToolButton(this);
-    if(d->hasTitle) {
+    if (d->hasTitle) {
         d->lockButton->setIcon(d->unlockIcon);
     } else {
         d->lockButton->setIcon(d->lockIcon);
@@ -117,7 +117,7 @@ void ToolDocker::setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetL
     d->recreateLayout(optionWidgetList);
 }
 
-void ToolDocker::resizeEvent(QResizeEvent*)
+void ToolDocker::resizeEvent(QResizeEvent *)
 {
     int fw = isFloating() ? style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, this) : 0;
     d->lockButton->move(width() - d->lockButton->width() - d->scrollArea->verticalScrollBar()->sizeHint().width(), fw);

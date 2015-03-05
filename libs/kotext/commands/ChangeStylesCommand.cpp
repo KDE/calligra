@@ -36,7 +36,7 @@ ChangeStylesCommand::ChangeStylesCommand(QTextDocument *qDoc
         , const QList<KoParagraphStyle *> &origParagraphStyles
         , const QSet<int> &changedStyles
         , KUndo2Command *parent)
-    : KUndo2Command(kundo2_noi18n("stylechangecommand"),parent)
+    : KUndo2Command(kundo2_noi18n("stylechangecommand"), parent)
     , m_origCharacterStyles(origCharacterStyles)
     , m_origParagraphStyles(origParagraphStyles)
     , m_changedStyles(changedStyles)
@@ -165,7 +165,7 @@ void ChangeStylesCommand::redo()
 
             QList<QTextCharFormat>::Iterator fmtIt = memento->fragmentDirectFormats.begin();
             QList<int>::Iterator idIt = memento->fragmentStyleId.begin();
-            foreach(QTextCursor fragCursor, memento->fragmentCursors) {
+            foreach (QTextCursor fragCursor, memento->fragmentCursors) {
                 QTextCharFormat cf(block.charFormat()); // start with block formatting
 
                 if (*idIt > 0) {
@@ -193,11 +193,10 @@ void ChangeStylesCommand::undo()
     KUndo2Command::undo();
 }
 
-
 void ChangeStylesCommand::clearCommonProperties(QTextFormat *firstFormat, const QTextFormat &secondFormat)
 {
     Q_ASSERT(firstFormat);
-    foreach(int key, secondFormat.properties().keys()) {
+    foreach (int key, secondFormat.properties().keys()) {
         if (firstFormat->property(key) == secondFormat.property(key)) {
             firstFormat->clearProperty(key);
         }

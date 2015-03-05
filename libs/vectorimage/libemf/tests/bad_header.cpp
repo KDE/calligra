@@ -3,15 +3,15 @@
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either 
+  License as published by the Free Software Foundation; either
   version 2.1 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public 
+  You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -22,12 +22,12 @@ using namespace EnhancedMetafile;
 
 void BadHeader::checkWmfHeader()
 {
-    QTest::ignoreMessage( QtWarningMsg, "Failed to parse header, perhaps not an EMF file" );
+    QTest::ignoreMessage(QtWarningMsg, "Failed to parse header, perhaps not an EMF file");
     Parser parser;
     DebugOutput output;
-    parser.setOutput( &output );
-    QVERIFY( ! parser.load( QString( "cof.wmf" ) ) );
+    parser.setOutput(&output);
+    QVERIFY(! parser.load(QString("cof.wmf")));
 }
 
-QTEST_MAIN( BadHeader )
+QTEST_MAIN(BadHeader)
 #include <bad_header.moc>

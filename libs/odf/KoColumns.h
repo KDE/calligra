@@ -32,7 +32,6 @@
 class KoGenStyle;
 class KoXmlElement;
 
-
 /** structure for columns */
 struct KoColumns {
     enum SeparatorVerticalAlignment {
@@ -49,8 +48,7 @@ struct KoColumns {
         DotDashed = Qt::DashDotLine
     };
 
-    struct ColumnDatum
-    {
+    struct ColumnDatum {
         /** Left indent in points */
         qreal leftMargin;
         /** Right indent in points */
@@ -65,7 +63,7 @@ struct KoColumns {
 
         ColumnDatum() {}
         ColumnDatum(qreal lm, qreal rm, qreal tm, qreal bm, int rw)
-        : leftMargin(lm), rightMargin(rm), topMargin(tm), bottomMargin(bm), relativeWidth(rw) {}
+            : leftMargin(lm), rightMargin(rm), topMargin(tm), bottomMargin(bm), relativeWidth(rw) {}
 
         bool operator==(const KoColumns::ColumnDatum &rhs) const
         {
@@ -118,14 +116,14 @@ struct KoColumns {
     qreal totalRelativeWidth() const
     {
         qreal result = 0.0;
-        foreach(const ColumnDatum &c, columnData) {
+        foreach (const ColumnDatum &c, columnData) {
             result += c.relativeWidth;
         }
         return result;
     }
 
-    KOODF_EXPORT static const char * separatorStyleString(KoColumns::SeparatorStyle separatorStyle);
-    KOODF_EXPORT static const char * separatorVerticalAlignmentString(KoColumns::SeparatorVerticalAlignment separatorVerticalAlignment);
+    KOODF_EXPORT static const char *separatorStyleString(KoColumns::SeparatorStyle separatorStyle);
+    KOODF_EXPORT static const char *separatorVerticalAlignmentString(KoColumns::SeparatorVerticalAlignment separatorVerticalAlignment);
     KOODF_EXPORT static KoColumns::SeparatorVerticalAlignment parseSeparatorVerticalAlignment(const QString &value);
     KOODF_EXPORT static QColor parseSeparatorColor(const QString &value);
     KOODF_EXPORT static int parseSeparatorHeight(const QString &value);

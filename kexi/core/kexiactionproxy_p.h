@@ -30,7 +30,10 @@ class KexiActionProxySignal : public QObject
     Q_OBJECT
 public:
     explicit KexiActionProxySignal(QObject *parent) : QObject(parent) {}
-    void activate() { emit invoke(); }
+    void activate()
+    {
+        emit invoke();
+    }
 Q_SIGNALS:
     void invoke();
 };

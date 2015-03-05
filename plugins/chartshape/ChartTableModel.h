@@ -19,10 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef KCHART_CHARTTABLEMODEL_H
 #define KCHART_CHARTTABLEMODEL_H
-
 
 // Qt
 #include <QVector>
@@ -34,12 +32,12 @@
 // KChart
 #include "ChartShape.h"
 
-
 class QString;
 
 // FIXME: Should it inherit QAbstractTableModel instead?
 
-namespace KChart {
+namespace KChart
+{
 
 /**
  * @brief The ChartTableModel class is used to store a data table inside a chart document.  It's main difference to a normal table model is that it can load and store to ODF.
@@ -55,13 +53,13 @@ public:
 
     // KoChart::ChartModel interface
     virtual QHash<QString, QVector<QRect> > cellRegion() const;
-    virtual bool setCellRegion(const QString& regionName);
-    virtual bool isCellRegionValid(const QString& regionName) const;
+    virtual bool setCellRegion(const QString &regionName);
+    virtual bool isCellRegionValid(const QString &regionName) const;
 
     // Load and save the contained data in an ODF DOM tree.
     // FIXME: Move saving/loading logic to helper class like TableLoaderAndSaver,
     // this class is outdated and should be removed.
-    bool loadOdf(const KoXmlElement &tableElement, 
+    bool loadOdf(const KoXmlElement &tableElement,
                  KoShapeLoadingContext &context);
     bool saveOdf(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles) const;
 };

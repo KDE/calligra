@@ -29,18 +29,23 @@
 
 using namespace Calligra::Sheets;
 
-static ParameterType toType(const QString& type)
+static ParameterType toType(const QString &type)
 {
-    if (type == "Boolean")
+    if (type == "Boolean") {
         return KSpread_Boolean;
-    if (type == "Int")
+    }
+    if (type == "Int") {
         return KSpread_Int;
-    if (type == "String")
+    }
+    if (type == "String") {
         return KSpread_String;
-    if (type == "Any")
+    }
+    if (type == "Any") {
         return KSpread_Any;
-    if (type == "Date")
+    }
+    if (type == "Date") {
         return KSpread_Date;
+    }
 
     return KSpread_Float;
 }
@@ -88,14 +93,14 @@ FunctionParameter::FunctionParameter()
     m_range = false;
 }
 
-FunctionParameter::FunctionParameter(const FunctionParameter& param)
+FunctionParameter::FunctionParameter(const FunctionParameter &param)
 {
     m_help = param.m_help;
     m_type = param.m_type;
     m_range = param.m_range;
 }
 
-FunctionParameter::FunctionParameter(const QDomElement& element)
+FunctionParameter::FunctionParameter(const QDomElement &element)
 {
     m_type  = KSpread_Float;
     m_range = false;
@@ -104,13 +109,14 @@ FunctionParameter::FunctionParameter(const QDomElement& element)
     for (; !n.isNull(); n = n.nextSibling())
         if (n.isElement()) {
             QDomElement e = n.toElement();
-            if (e.tagName() == "Comment")
+            if (e.tagName() == "Comment") {
                 m_help = i18n(e.text().toUtf8());
-            else if (e.tagName() == "Type") {
+            } else if (e.tagName() == "Type") {
                 m_type = toType(e.text());
                 if (e.hasAttribute("range")) {
-                    if (e.attribute("range").toLower() == "true")
+                    if (e.attribute("range").toLower() == "true") {
                         m_range = true;
+                    }
                 }
             }
         }
@@ -121,39 +127,42 @@ FunctionDescription::FunctionDescription()
     m_type = KSpread_Float;
 }
 
-FunctionDescription::FunctionDescription(const QDomElement& element)
+FunctionDescription::FunctionDescription(const QDomElement &element)
 {
     QDomNode n = element.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
-        if (!n.isElement())
+        if (!n.isElement()) {
             continue;
+        }
         QDomElement e = n.toElement();
-        if (e.tagName() == "Name")
+        if (e.tagName() == "Name") {
             m_name = e.text();
-        else if (e.tagName() == "Type")
+        } else if (e.tagName() == "Type") {
             m_type = toType(e.text());
-        else if (e.tagName() == "Parameter")
+        } else if (e.tagName() == "Parameter") {
             m_params.append(FunctionParameter(e));
-        else if (e.tagName() == "Help") {
+        } else if (e.tagName() == "Help") {
             QDomNode n2 = e.firstChild();
             for (; !n2.isNull(); n2 = n2.nextSibling()) {
-                if (!n2.isElement())
+                if (!n2.isElement()) {
                     continue;
+                }
                 QDomElement e2 = n2.toElement();
-                if (e2.tagName() == "Text")
+                if (e2.tagName() == "Text") {
                     m_help.append(i18n(e2.text().toUtf8()));
-                else if (e2.tagName() == "Syntax")
+                } else if (e2.tagName() == "Syntax") {
                     m_syntax.append(i18n(e2.text().toUtf8()));
-                else if (e2.tagName() == "Example")
+                } else if (e2.tagName() == "Example") {
                     m_examples.append(i18n(e2.text().toUtf8()));
-                else if (e2.tagName() == "Related")
+                } else if (e2.tagName() == "Related") {
                     m_related.append(i18n(e2.text().toUtf8()));
+                }
             }
         }
     }
 }
 
-FunctionDescription::FunctionDescription(const FunctionDescription& desc)
+FunctionDescription::FunctionDescription(const FunctionDescription &desc)
 {
     m_examples = desc.m_examples;
     m_related = desc.m_related;

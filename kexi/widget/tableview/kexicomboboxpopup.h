@@ -43,14 +43,14 @@ public:
      If the column is lookup column, it's definition is used to display
      one or more column within the popup. Otherwise column.field() is used
      to display single-column data. */
-    KexiComboBoxPopup(QWidget* parent, KexiDB::TableViewColumn &column);
+    KexiComboBoxPopup(QWidget *parent, KexiDB::TableViewColumn &column);
 
     /*! Alternative constructor supporting lookup fields and enum hints. */
-    KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field);
+    KexiComboBoxPopup(QWidget *parent, KexiDB::Field &field);
 
     virtual ~KexiComboBoxPopup();
 
-    KexiTableScrollArea* tableView();
+    KexiTableScrollArea *tableView();
 
     /*! Sets maximum number of rows for this popup. */
     void setMaxRows(int r);
@@ -86,7 +86,7 @@ protected:
     //! used by setData()
     void setDataInternal(KexiDB::TableViewData *data, bool owner = true);   //!< helper
 
-    KexiComboBoxPopupPrivate * const d;
+    KexiComboBoxPopupPrivate *const d;
 
     friend class KexiComboBoxTableEdit;
 };

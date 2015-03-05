@@ -47,8 +47,8 @@ public:
     bool valid;
 };
 
-KoChangeTrackerElement::KoChangeTrackerElement(const KUndo2MagicString& title, KoGenChange::Type type)
-    :d(new Private())
+KoChangeTrackerElement::KoChangeTrackerElement(const KUndo2MagicString &title, KoGenChange::Type type)
+    : d(new Private())
 {
     d->title = title;
     d->type = type;
@@ -57,12 +57,12 @@ KoChangeTrackerElement::KoChangeTrackerElement(const KUndo2MagicString& title, K
 }
 
 KoChangeTrackerElement::KoChangeTrackerElement()
-    :d(new Private())
+    : d(new Private())
 {
 }
 
-KoChangeTrackerElement::KoChangeTrackerElement(const KoChangeTrackerElement& other)
-    :d(new Private())
+KoChangeTrackerElement::KoChangeTrackerElement(const KoChangeTrackerElement &other)
+    : d(new Private())
 {
     d->title = other.d->title;
     d->type = other.d->type;
@@ -122,7 +122,7 @@ KoGenChange::Type KoChangeTrackerElement::getChangeType() const
     return d->type;
 }
 
-void KoChangeTrackerElement::setChangeTitle(const KUndo2MagicString& title)
+void KoChangeTrackerElement::setChangeTitle(const KUndo2MagicString &title)
 {
     d->title = title;
 }
@@ -157,7 +157,7 @@ bool KoChangeTrackerElement::hasCreator() const
     return !d->creator.isEmpty();
 }
 
-void KoChangeTrackerElement::setCreator(const QString& creator)
+void KoChangeTrackerElement::setCreator(const QString &creator)
 {
     d->creator = creator;
 }
@@ -172,7 +172,7 @@ bool KoChangeTrackerElement::hasDate() const
     return !d->date.isEmpty();
 }
 
-void KoChangeTrackerElement::setDate(const QString& date)
+void KoChangeTrackerElement::setDate(const QString &date)
 {
     d->date = date;
 }
@@ -187,7 +187,7 @@ bool KoChangeTrackerElement::hasExtraMetaData() const
     return !d->extraMetaData.isEmpty();
 }
 
-void KoChangeTrackerElement::setExtraMetaData(const QString& metaData)
+void KoChangeTrackerElement::setExtraMetaData(const QString &metaData)
 {
     d->extraMetaData = metaData;
 }
@@ -202,7 +202,7 @@ bool KoChangeTrackerElement::hasDeleteData() const
     return !d->deleteFragment.isEmpty();
 }
 
-void KoChangeTrackerElement::setDeleteData(const QTextDocumentFragment& fragment)
+void KoChangeTrackerElement::setDeleteData(const QTextDocumentFragment &fragment)
 {
     d->deleteFragment = fragment;
 }

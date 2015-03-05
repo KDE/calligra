@@ -22,7 +22,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-
 #include <klocale.h>
 
 #include <kis_slider_spin_box.h>
@@ -36,16 +35,15 @@ KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
 {
     QCheckBox *isotropicSpacing = new QCheckBox(i18n("Isotropic Spacing"));
 
-    QVBoxLayout* vl = new QVBoxLayout;
+    QVBoxLayout *vl = new QVBoxLayout;
     vl->setMargin(0);
     vl->addWidget(isotropicSpacing);
     vl->addWidget(KisCurveOptionWidget::curveWidget());
 
-    QWidget* w = new QWidget;
+    QWidget *w = new QWidget;
     w->setLayout(vl);
 
     KisCurveOptionWidget::setConfigurationPage(w);
-
 
     connect(isotropicSpacing, SIGNAL(stateChanged(int)),
             this, SLOT(setIsotropicSpacing(int)));
@@ -55,6 +53,6 @@ KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
 
 void KisPressureSpacingOptionWidget::setIsotropicSpacing(int isotropic)
 {
-    dynamic_cast<KisPressureSpacingOption*>(KisCurveOptionWidget::curveOption())->setIsotropicSpacing(isotropic);
+    dynamic_cast<KisPressureSpacingOption *>(KisCurveOptionWidget::curveOption())->setIsotropicSpacing(isotropic);
     emitSettingChanged();
 }

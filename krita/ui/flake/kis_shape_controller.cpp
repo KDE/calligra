@@ -18,7 +18,6 @@
 
 #include "kis_shape_controller.h"
 
-
 #include <klocale.h>
 
 #include <KoShape.h>
@@ -58,9 +57,7 @@
 #include <commands/kis_image_layer_add_command.h>
 #include <kis_undo_adapter.h>
 
-
-struct KisShapeController::Private
-{
+struct KisShapeController::Private {
 public:
     KisDocument *doc;
     KisNameServer *nameServer;
@@ -76,7 +73,6 @@ KisShapeController::KisShapeController(KisDocument *doc, KisNameServer *nameServ
     m_d->nameServer = nameServer;
     resourceManager()->setUndoStack(doc->undoStack());
 }
-
 
 KisShapeController::~KisShapeController()
 {
@@ -95,7 +91,7 @@ void KisShapeController::addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP
     // XXX: what are we going to do with this shape?
     Q_UNUSED(newShape);
 
-    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer *>(node.data());
     if (shapeLayer) {
         /**
          * Forward signals for global shape manager
@@ -112,7 +108,7 @@ void KisShapeController::addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP
 
 void KisShapeController::removeNodeImpl(KisNodeSP node)
 {
-    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer *>(node.data());
     if (shapeLayer) {
         shapeLayer->disconnect(this);
     }
@@ -125,12 +121,12 @@ bool KisShapeController::hasDummyForNode(KisNodeSP node) const
     return m_d->shapesGraph.containsNode(node);
 }
 
-KisNodeDummy* KisShapeController::dummyForNode(KisNodeSP node) const
+KisNodeDummy *KisShapeController::dummyForNode(KisNodeSP node) const
 {
     return m_d->shapesGraph.nodeToDummy(node);
 }
 
-KisNodeDummy* KisShapeController::rootDummy() const
+KisNodeDummy *KisShapeController::rootDummy() const
 {
     return m_d->shapesGraph.rootDummy();
 }
@@ -140,13 +136,16 @@ int KisShapeController::dummiesCount() const
     return m_d->shapesGraph.shapesCount();
 }
 
-static inline bool belongsToShapeSelection(KoShape* shape) {
-    return dynamic_cast<KisShapeSelectionMarker*>(shape->userData());
+static inline bool belongsToShapeSelection(KoShape *shape)
+{
+    return dynamic_cast<KisShapeSelectionMarker *>(shape->userData());
 }
 
-void KisShapeController::addShape(KoShape* shape)
+void KisShapeController::addShape(KoShape *shape)
 {
-    if (!image()) return;
+    if (!image()) {
+        return;
+    }
 
     /**
      * Krita layers have their own creation path.
@@ -155,8 +154,7 @@ void KisShapeController::addShape(KoShape* shape)
     Q_ASSERT(shape->shapeId() != KIS_NODE_SHAPE_ID  &&
              shape->shapeId() != KIS_SHAPE_LAYER_ID);
 
-
-    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas());
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(KoToolManager::instance()->activeCanvasController()->canvas());
     Q_ASSERT(canvas);
 
     if (belongsToShapeSelection(shape)) {
@@ -166,12 +164,12 @@ void KisShapeController::addShape(KoShape* shape)
             if (!selection->shapeSelection()) {
                 selection->setShapeSelection(new KisShapeSelection(image(), selection));
             }
-            KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
+            KisShapeSelection *shapeSelection = static_cast<KisShapeSelection *>(selection->shapeSelection());
             shapeSelection->addShape(shape);
         }
 
     } else {
-        KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(shape->parent());
+        KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer *>(shape->parent());
 
         if (!shapeLayer) {
             shapeLayer = new KisShapeLayer(this, image(),
@@ -187,7 +185,7 @@ void KisShapeController::addShape(KoShape* shape)
     m_d->doc->setModified(true);
 }
 
-void KisShapeController::removeShape(KoShape* shape)
+void KisShapeController::removeShape(KoShape *shape)
 {
     /**
      * Krita layers have their own destruction path.
@@ -202,7 +200,9 @@ void KisShapeController::removeShape(KoShape* shape)
 
 void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
 {
-    if (!image()) return;
+    if (!image()) {
+        return;
+    }
 
     KisNodeSP rootNode = image()->root();
 
@@ -217,7 +217,7 @@ void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
     }
 }
 
-KoShapeLayer* KisShapeController::shapeForNode(KisNodeSP node) const
+KoShapeLayer *KisShapeController::shapeForNode(KisNodeSP node) const
 {
     return m_d->shapesGraph.nodeToShape(node);
 }

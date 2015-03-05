@@ -35,7 +35,6 @@
 #include "kis_iterator_ng.h"
 #include "kis_image.h"
 
-
 #ifndef FILES_DATA_DIR
 #define FILES_DATA_DIR "."
 #endif
@@ -44,7 +43,6 @@
 #define FILES_DEFAULT_DATA_DIR "."
 #endif
 
-
 /**
  * Routines that are useful for writing efficient tests
  */
@@ -52,12 +50,17 @@
 namespace TestUtil
 {
 
-inline KisNodeSP findNode(KisNodeSP root, const QString &name) {
-    if(root->name() == name) return root;
+inline KisNodeSP findNode(KisNodeSP root, const QString &name)
+{
+    if (root->name() == name) {
+        return root;
+    }
 
     KisNodeSP child = root->firstChild();
     while (child) {
-        if((root = findNode(child, name))) return root;
+        if ((root = findNode(child, name))) {
+            return root;
+        }
         child = child->nextSibling();
     }
 
@@ -130,30 +133,47 @@ inline void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
     }
 }
 
-class TestProgressBar : public KoProgressProxy {
+class TestProgressBar : public KoProgressProxy
+{
 public:
     TestProgressBar()
         : m_min(0), m_max(0), m_value(0)
     {}
 
-    int maximum() const {
+    int maximum() const
+    {
         return m_max;
     }
-    void setValue(int value) {
+    void setValue(int value)
+    {
         m_value = value;
     }
-    void setRange(int min, int max) {
+    void setRange(int min, int max)
+    {
         m_min = min;
         m_max = max;
     }
-    void setFormat(const QString &format) {
+    void setFormat(const QString &format)
+    {
         m_format = format;
     }
 
-    int min() { return m_min; }
-    int max() { return m_max; }
-    int value() { return m_value; }
-    QString format() { return m_format; }
+    int min()
+    {
+        return m_min;
+    }
+    int max()
+    {
+        return m_max;
+    }
+    int value()
+    {
+        return m_value;
+    }
+    QString format()
+    {
+        return m_format;
+    }
 
 private:
     int m_min;
@@ -162,8 +182,7 @@ private:
     QString m_format;
 };
 
-
-inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0)
+inline bool compareQImages(QPoint &pt, const QImage &image1, const QImage &image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0)
 {
     //     QTime t;
     //     t.start();
@@ -184,8 +203,8 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
     int numFailingPixels = 0;
 
     for (int y = 0; y < h1; ++y) {
-        const QRgb * const firstLine = reinterpret_cast<const QRgb *>(image2.scanLine(y));
-        const QRgb * const secondLine = reinterpret_cast<const QRgb *>(image1.scanLine(y));
+        const QRgb *const firstLine = reinterpret_cast<const QRgb *>(image2.scanLine(y));
+        const QRgb *const secondLine = reinterpret_cast<const QRgb *>(image1.scanLine(y));
 
         if (memcmp(firstLine, secondLine, bytesPerLine) != 0) {
             for (int x = 0; x < w1; ++x) {
@@ -195,7 +214,7 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
                                   && qAbs(qGreen(a) - qGreen(b)) <= fuzzy
                                   && qAbs(qBlue(a) - qBlue(b)) <= fuzzy;
                 const bool sameAlpha = qAlpha(a) - qAlpha(b) <= fuzzyAlpha;
-                const bool bothTransparent = sameAlpha && qAlpha(a)==0;
+                const bool bothTransparent = sameAlpha && qAlpha(a) == 0;
 
                 if (!bothTransparent && (!same || !sameAlpha)) {
                     pt.setX(x);
@@ -209,7 +228,6 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
                              << "fuzzyAlpha" << fuzzyAlpha
                              << "(" << numFailingPixels << "of" << maxNumFailingPixels << "allowed )";
 
-
                     if (numFailingPixels > maxNumFailingPixels) {
                         return false;
                     }
@@ -222,7 +240,7 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
     return true;
 }
 
-inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2)
+inline bool comparePaintDevices(QPoint &pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2)
 {
     //     QTime t;
     //     t.start();
@@ -243,8 +261,9 @@ inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const 
     for (int y = 0; y < rc1.height(); ++y) {
 
         do {
-            if (memcmp(iter1->oldRawData(), iter2->oldRawData(), pixelSize) != 0)
+            if (memcmp(iter1->oldRawData(), iter2->oldRawData(), pixelSize) != 0) {
                 return false;
+            }
         } while (iter1->nextPixel() && iter2->nextPixel());
 
         iter1->nextRow();
@@ -274,10 +293,12 @@ inline bool comparePaintDevicesClever(const KisPaintDeviceSP dev1, const KisPain
 
         do {
             if (memcmp(iter1->oldRawData(), iter2->oldRawData(), pixelSize) != 0) {
-                const channel_type* p1 = reinterpret_cast<const channel_type*>(iter1->oldRawData());
-                const channel_type* p2 = reinterpret_cast<const channel_type*>(iter2->oldRawData());
+                const channel_type *p1 = reinterpret_cast<const channel_type *>(iter1->oldRawData());
+                const channel_type *p2 = reinterpret_cast<const channel_type *>(iter2->oldRawData());
 
-                if (p1[3] < alphaThreshold && p2[3] < alphaThreshold) continue;
+                if (p1[3] < alphaThreshold && p2[3] < alphaThreshold) {
+                    continue;
+                }
 
                 qDebug() << "Failed compare paint devices:" << iter1->x() << iter1->y();
                 qDebug() << "src:" << p1[0] << p1[1] << p1[2] << p1[3];
@@ -335,7 +356,7 @@ inline bool checkQImageImpl(bool externalTest,
 
     bool valid = true;
     QPoint t;
-    if(!compareQImages(t, image, ref, fuzzy, fuzzyAlpha, maxNumFailingPixels)) {
+    if (!compareQImages(t, image, ref, fuzzy, fuzzyAlpha, maxNumFailingPixels)) {
         bool saveStandardResults = true;
 
         if (canSkipExternalTest) {
@@ -389,20 +410,21 @@ inline bool checkQImageExternal(const QImage &image, const QString &testName,
                            fuzzy, fuzzyAlpha, maxNumFailingPixels);
 }
 
-struct ExternalImageChecker
-{
+struct ExternalImageChecker {
     ExternalImageChecker(const QString &prefix, const QString &testName)
         : m_prefix(prefix),
           m_testName(testName),
           m_success(true)
-        {
-        }
+    {
+    }
 
-    bool testPassed() const {
+    bool testPassed() const
+    {
         return m_success;
     }
 
-    inline bool checkDevice(KisPaintDeviceSP device, KisImageSP image, const QString &caseName) {
+    inline bool checkDevice(KisPaintDeviceSP device, KisImageSP image, const QString &caseName)
+    {
         bool result =
             checkQImageExternal(device->convertToQImage(0, image->bounds()),
                                 m_testName,
@@ -413,7 +435,8 @@ struct ExternalImageChecker
         return result;
     }
 
-    inline bool checkImage(KisImageSP image, const QString &testName) {
+    inline bool checkImage(KisImageSP image, const QString &testName)
+    {
         bool result = checkDevice(image->projection(), image, testName);
 
         m_success &= result;
@@ -426,7 +449,6 @@ private:
 
     bool m_success;
 };
-
 
 #endif
 
@@ -451,10 +473,10 @@ inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &r
     for (int y = rc.y(); y < rc.y() + rc.height(); y++) {
         for (int x = rc.x(); x < rc.x() + rc.width(); x++) {
 
-            if(*((quint8*)it->rawData()) != expected) {
+            if (*((quint8 *)it->rawData()) != expected) {
                 qCritical() << "At point:" << x << y;
                 qCritical() << "Expected pixel:" << expected;
-                qCritical() << "Actual pixel:  " << *((quint8*)it->rawData());
+                qCritical() << "Actual pixel:  " << *((quint8 *)it->rawData());
                 return false;
             }
             it->nextPixel();
@@ -470,40 +492,46 @@ class TestNode : public KisNode
 public:
     KisNodeSP clone() const;
     bool allowAsChild(KisNodeSP) const;
-    const KoColorSpace * colorSpace() const;
-    const KoCompositeOp * compositeOp() const;
+    const KoColorSpace *colorSpace() const;
+    const KoCompositeOp *compositeOp() const;
 };
 
 class TestGraphListener : public KisNodeGraphListener
 {
 public:
 
-    virtual void aboutToAddANode(KisNode *parent, int index) {
+    virtual void aboutToAddANode(KisNode *parent, int index)
+    {
         KisNodeGraphListener::aboutToAddANode(parent, index);
         beforeInsertRow = true;
     }
 
-    virtual void nodeHasBeenAdded(KisNode *parent, int index) {
+    virtual void nodeHasBeenAdded(KisNode *parent, int index)
+    {
         KisNodeGraphListener::nodeHasBeenAdded(parent, index);
         afterInsertRow = true;
     }
 
-    virtual void aboutToRemoveANode(KisNode *parent, int index) {
+    virtual void aboutToRemoveANode(KisNode *parent, int index)
+    {
         KisNodeGraphListener::aboutToRemoveANode(parent, index);
         beforeRemoveRow  = true;
     }
 
-    virtual void nodeHasBeenRemoved(KisNode *parent, int index) {
+    virtual void nodeHasBeenRemoved(KisNode *parent, int index)
+    {
         KisNodeGraphListener::nodeHasBeenRemoved(parent, index);
         afterRemoveRow = true;
     }
 
-    virtual void aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex) {
+    virtual void aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex)
+    {
         KisNodeGraphListener::aboutToMoveNode(parent, oldIndex, newIndex);
         beforeMove = true;
     }
 
-    virtual void nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex) {
+    virtual void nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex)
+    {
         KisNodeGraphListener::nodeHasBeenMoved(parent, oldIndex, newIndex);
         afterMove = true;
     }
@@ -515,7 +543,8 @@ public:
     bool beforeMove;
     bool afterMove;
 
-    void resetBools() {
+    void resetBools()
+    {
         beforeRemoveRow = false;
         afterRemoveRow = false;
         beforeInsertRow = false;
@@ -531,18 +560,18 @@ public:
 #include <kis_image.h>
 #include "kis_undo_stores.h"
 
-namespace TestUtil {
-
-struct MaskParent
+namespace TestUtil
 {
-    MaskParent(const QRect &_imageRect = QRect(0,0,512,512))
-        : imageRect(_imageRect) {
-        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+struct MaskParent {
+    MaskParent(const QRect &_imageRect = QRect(0, 0, 512, 512))
+        : imageRect(_imageRect)
+    {
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
         image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
         layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
         image->addNode(layer);
     }
-
 
     const QRect imageRect;
     KisImageSP image;
@@ -551,35 +580,40 @@ struct MaskParent
 
 }
 
-namespace TestUtil {
+namespace TestUtil
+{
 
 class MeasureAvgPortion
 {
 public:
     MeasureAvgPortion(int period)
         : m_period(period),
-        m_val(0),
-        m_total(0),
-        m_cycles(0)
+          m_val(0),
+          m_total(0),
+          m_cycles(0)
     {
     }
 
-    ~MeasureAvgPortion() {
+    ~MeasureAvgPortion()
+    {
         printValues(true);
     }
 
-    void addVal(int x) {
+    void addVal(int x)
+    {
         m_val += x;
     }
 
-    void addTotal(int x) {
+    void addTotal(int x)
+    {
         m_total += x;
         m_cycles++;
         printValues();
     }
 
 private:
-    void printValues(bool force = false) {
+    void printValues(bool force = false)
+    {
         if (m_cycles > m_period || force) {
             qDebug() << "Val / Total:" << qreal(m_val) / qreal(m_total);
             qDebug() << "Avg. Val:   " << qreal(m_val) / m_cycles;

@@ -30,7 +30,7 @@
 #include <kdebug.h>
 
 KPrPlaceholderPictureStrategy::KPrPlaceholderPictureStrategy()
-: KPrPlaceholderStrategy( "graphic" )
+    : KPrPlaceholderStrategy("graphic")
 {
 }
 
@@ -40,10 +40,10 @@ KPrPlaceholderPictureStrategy::~KPrPlaceholderPictureStrategy()
 
 KoShape *KPrPlaceholderPictureStrategy::createShape(KoDocumentResourceManager *rm)
 {
-    KoShape * shape = 0;
+    KoShape *shape = 0;
 
     KUrl url = KFileDialog::getOpenUrl();
-    if ( !url.isEmpty() ) {
+    if (!url.isEmpty()) {
         shape = KPrPlaceholderStrategy::createShape(rm);
 
         KoImageCollection *collection = rm->imageCollection();
@@ -56,9 +56,9 @@ KoShape *KPrPlaceholderPictureStrategy::createShape(KoDocumentResourceManager *r
                 //setSuffix(url.prettyUrl());
                 KoImageData *data = collection->createImageData(image);
                 if (data->isValid()) {
-                    shape->setUserData( data );
+                    shape->setUserData(data);
                     // TODO the pic should be fit into the space provided
-                    shape->setSize( data->imageSize() );
+                    shape->setSize(data->imageSize());
                 }
             }
         } else {

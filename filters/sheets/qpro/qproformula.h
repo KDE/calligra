@@ -31,7 +31,7 @@ namespace QuattroPro
 class Formula : public QpFormula
 {
 public:
-    Formula(QpRecFormulaCell& pCell, QpTableNames& pTable);
+    Formula(QpRecFormulaCell &pCell, QpTableNames &pTable);
     ~Formula();
 };
 

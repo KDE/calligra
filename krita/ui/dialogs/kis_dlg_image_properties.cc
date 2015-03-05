@@ -64,7 +64,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     m_page->lblWidthValue->setText(QString::number(image->width()));
     m_page->lblHeightValue->setText(QString::number(image->height()));
 
-    m_page->lblResolutionValue->setText(KGlobal::locale()->formatNumber(image->xRes()*72, 2)); // XXX: separate values for x & y?
+    m_page->lblResolutionValue->setText(KGlobal::locale()->formatNumber(image->xRes() * 72, 2)); // XXX: separate values for x & y?
 
     m_defaultColorAction = new KoColorPopupAction(this);
     m_defaultColorAction->setCurrentColor(m_image->defaultProjectionColor());
@@ -73,10 +73,10 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     m_page->bnBackgroundColor->setDefaultAction(m_defaultColorAction);
 
     KisSignalCompressor *compressor = new KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE, this);
-    connect(m_defaultColorAction, SIGNAL(colorChanged(const KoColor&)), compressor, SLOT(start()));
+    connect(m_defaultColorAction, SIGNAL(colorChanged(const KoColor &)), compressor, SLOT(start()));
     connect(compressor, SIGNAL(timeout()), this, SLOT(setCurrentColor()));
 
-    connect(m_defaultColorAction, SIGNAL(colorChanged(const KoColor&)), this, SLOT(setCurrentColor()));
+    connect(m_defaultColorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setCurrentColor()));
 
     m_page->colorSpaceSelector->setCurrentColorSpace(image->colorSpace());
 
@@ -105,7 +105,7 @@ KisDlgImageProperties::~KisDlgImageProperties()
     delete m_page;
 }
 
-const KoColorSpace * KisDlgImageProperties::colorSpace()
+const KoColorSpace *KisDlgImageProperties::colorSpace()
 {
     return m_page->colorSpaceSelector->currentColorSpace();
 }
@@ -124,8 +124,7 @@ void KisDlgImageProperties::setAnnotation(const QString &type)
         m_page->txtAnnotation->clear();
         m_page->lblDescription->setText(annotation->description());
         m_page->txtAnnotation->appendPlainText(annotation->displayText());
-    }
-    else {
+    } else {
         m_page->lblDescription->clear();
         m_page->txtAnnotation->clear();
     }

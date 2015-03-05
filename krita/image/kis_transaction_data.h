@@ -23,7 +23,6 @@
 #include "kis_types.h"
 #include <krita_export.h>
 
-
 /**
  * A tile based undo command.
  *
@@ -36,7 +35,7 @@
 class KRITAIMAGE_EXPORT KisTransactionData : public KUndo2Command
 {
 public:
-    KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent);
+    KisTransactionData(const KUndo2MagicString &name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command *parent);
     virtual ~KisTransactionData();
 
 public:
@@ -57,7 +56,7 @@ private:
 
 private:
     class Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* KIS_TRANSACTION_DATA_H_ */

@@ -28,11 +28,11 @@ public:
     KPrSlideWipeToRightStrategy();
     virtual ~KPrSlideWipeToRightStrategy();
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    virtual void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine);
 
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    virtual void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data);
 
-    virtual void next( const KPrPageEffect::Data &data );
+    virtual void next(const KPrPageEffect::Data &data);
 };
 
 #endif // KPRSLIDEWIPETORIGHTSTRATEGY_H

@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include "KPrReorderAnimationCommand.h"
 
 #include "KPrShapeAnimations.h"
@@ -25,7 +24,7 @@
 #include "KLocale"
 
 KPrReorderAnimationCommand::KPrReorderAnimationCommand(KPrShapeAnimations *shapeAnimationsModel, KPrShapeAnimation *oldAnimation,
-                                                       KPrShapeAnimation *newAnimation, KUndo2Command *parent)
+        KPrShapeAnimation *newAnimation, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shapeAnimationsModel(shapeAnimationsModel)
     , m_oldAnimation(oldAnimation)

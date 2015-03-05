@@ -35,17 +35,17 @@ class KisGmicWidget : public QWidget, public Ui::WdgGmic
 
 public:
     // takes ownership of filter model
-    KisGmicWidget(KisGmicFilterModel * filters, const QString &updateUrl = QString());
+    KisGmicWidget(KisGmicFilterModel *filters, const QString &updateUrl = QString());
     ~KisGmicWidget();
 
-    KisFilterPreviewWidget * previewWidget();
+    KisFilterPreviewWidget *previewWidget();
 
     void createMainLayout();
-    virtual void closeEvent(QCloseEvent* );
+    virtual void closeEvent(QCloseEvent *);
 
 Q_SIGNALS:
-    void sigFilterCurrentImage(KisGmicFilterSetting * setting); //TODO:const
-    void sigPreviewFilterCommand(KisGmicFilterSetting * setting); //TODO:const
+    void sigFilterCurrentImage(KisGmicFilterSetting *setting);  //TODO:const
+    void sigPreviewFilterCommand(KisGmicFilterSetting *setting);  //TODO:const
     void sigAcceptOnCanvasPreview();
     void sigCancelOnCanvasPreview();
     void sigPreviewActiveLayer();
@@ -53,7 +53,7 @@ Q_SIGNALS:
     void sigRequestFinishAndClose();
 
 private Q_SLOTS:
-    void slotSelectedFilterChanged(const QItemSelection & newSelection, const QItemSelection & oldSelection);
+    void slotSelectedFilterChanged(const QItemSelection &newSelection, const QItemSelection &oldSelection);
     // buttons
     void slotApplyClicked();
     void slotOkClicked();
@@ -74,15 +74,13 @@ private Q_SLOTS:
     void slotNotImplemented();
 
 private:
-    KisGmicFilterSetting * currentFilterSettings();
+    KisGmicFilterSetting *currentFilterSettings();
     void requestComputePreview();
-    void switchOptionsWidgetFor(QWidget * widget);
-
-
+    void switchOptionsWidgetFor(QWidget *widget);
 
 private:
-    KisGmicFilterModel * m_filterModel;
-    KisGmicUpdater * m_updater;
+    KisGmicFilterModel *m_filterModel;
+    KisGmicUpdater *m_updater;
 
     QWidget *m_filterOptions;
 

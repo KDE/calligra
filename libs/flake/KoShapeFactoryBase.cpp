@@ -37,8 +37,6 @@
 #include <QMutexLocker>
 #include <QMutex>
 
-
-
 #include <kdebug.h>
 
 class KoShapeFactoryBase::Private
@@ -54,9 +52,11 @@ public:
     {
     }
 
-    ~Private() {
-        foreach(const KoShapeTemplate & t, templates)
+    ~Private()
+    {
+        foreach (const KoShapeTemplate &t, templates) {
             delete t.properties;
+        }
         templates.clear();
     }
 
@@ -64,7 +64,7 @@ public:
     QMutex pluginLoadingMutex;
     QString deferredPluginName;
     QList<KoShapeTemplate> templates;
-    QList<KoShapeConfigFactoryBase*> configPanels;
+    QList<KoShapeConfigFactoryBase *> configPanels;
     const QString id;
     const QString name;
     QString family;
@@ -75,7 +75,6 @@ public:
     bool hidden;
     QList<KoDocumentResourceManager *> resourceManagers;
 };
-
 
 KoShapeFactoryBase::KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName)
     : d(new Private(id, name, deferredPluginName))
@@ -124,7 +123,7 @@ void KoShapeFactoryBase::addTemplate(const KoShapeTemplate &params)
     d->templates.append(tmplate);
 }
 
-void KoShapeFactoryBase::setToolTip(const QString & tooltip)
+void KoShapeFactoryBase::setToolTip(const QString &tooltip)
 {
     d->tooltip = tooltip;
 }
@@ -134,7 +133,7 @@ void KoShapeFactoryBase::setIconName(const char *iconName)
     d->iconName = QLatin1String(iconName);
 }
 
-void KoShapeFactoryBase::setFamily(const QString & family)
+void KoShapeFactoryBase::setFamily(const QString &family)
 {
     d->family = family;
 }
@@ -144,12 +143,12 @@ QString KoShapeFactoryBase::id() const
     return d->id;
 }
 
-void KoShapeFactoryBase::setOptionPanels(const QList<KoShapeConfigFactoryBase*> &panelFactories)
+void KoShapeFactoryBase::setOptionPanels(const QList<KoShapeConfigFactoryBase *> &panelFactories)
 {
     d->configPanels = panelFactories;
 }
 
-QList<KoShapeConfigFactoryBase*> KoShapeFactoryBase::panelFactories()
+QList<KoShapeConfigFactoryBase *> KoShapeFactoryBase::panelFactories()
 {
     return d->configPanels;
 }
@@ -164,7 +163,7 @@ void KoShapeFactoryBase::setLoadingPriority(int priority)
     d->loadingPriority = priority;
 }
 
-void KoShapeFactoryBase::setXmlElementNames(const QString & nameSpace, const QStringList & names)
+void KoShapeFactoryBase::setXmlElementNames(const QString &nameSpace, const QStringList &names)
 {
     d->xmlElements.clear();
     d->xmlElements.append(QPair<QString, QStringList>(nameSpace, names));
@@ -188,7 +187,7 @@ void KoShapeFactoryBase::setHidden(bool hidden)
 void KoShapeFactoryBase::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     d->resourceManagers.append(manager);
-    connect(manager, SIGNAL(destroyed(QObject *)), this, SLOT(pruneDocumentResourceManager(QObject*)));
+    connect(manager, SIGNAL(destroyed(QObject*)), this, SLOT(pruneDocumentResourceManager(QObject*)));
 }
 
 QList<KoDocumentResourceManager *> KoShapeFactoryBase::documentResourceManagers() const
@@ -199,7 +198,7 @@ QList<KoDocumentResourceManager *> KoShapeFactoryBase::documentResourceManagers(
 KoShape *KoShapeFactoryBase::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     if (!d->deferredPluginName.isEmpty()) {
-        const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
+        const_cast<KoShapeFactoryBase *>(this)->getDeferredPlugin();
         Q_ASSERT(d->deferredFactory);
         if (d->deferredFactory) {
             return d->deferredFactory->createDefaultShape(documentResources);
@@ -208,11 +207,11 @@ KoShape *KoShapeFactoryBase::createDefaultShape(KoDocumentResourceManager *docum
     return 0;
 }
 
-KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
-                                         KoDocumentResourceManager *documentResources) const
+KoShape *KoShapeFactoryBase::createShape(const KoProperties *properties,
+        KoDocumentResourceManager *documentResources) const
 {
     if (!d->deferredPluginName.isEmpty()) {
-        const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
+        const_cast<KoShapeFactoryBase *>(this)->getDeferredPlugin();
         Q_ASSERT(d->deferredFactory);
         if (d->deferredFactory) {
             return d->deferredFactory->createShape(properties, documentResources);
@@ -224,11 +223,13 @@ KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
 KoShape *KoShapeFactoryBase::createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     KoShape *shape = createDefaultShape(context.documentResourceManager());
-    if (!shape)
+    if (!shape) {
         return 0;
+    }
 
-    if (shape->shapeId().isEmpty())
+    if (shape->shapeId().isEmpty()) {
         shape->setShapeId(id());
+    }
 
     context.odfLoadingContext().styleStack().save();
     bool loaded = shape->loadOdf(element, context);
@@ -245,12 +246,14 @@ KoShape *KoShapeFactoryBase::createShapeFromOdf(const KoXmlElement &element, KoS
 void KoShapeFactoryBase::getDeferredPlugin()
 {
     QMutexLocker(&d->pluginLoadingMutex);
-    if (d->deferredFactory) return;
+    if (d->deferredFactory) {
+        return;
+    }
 
     const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Deferred");
     Q_ASSERT(offers.size() > 0);
 
-    foreach(KSharedPtr<KService> service, offers) {
+    foreach (KSharedPtr<KService> service, offers) {
         KoDeferredShapeFactoryBase *plugin = service->createInstance<KoDeferredShapeFactoryBase>(this);
         if (plugin && plugin->deferredPluginName() == d->deferredPluginName) {
             d->deferredFactory = plugin;
@@ -261,6 +264,6 @@ void KoShapeFactoryBase::getDeferredPlugin()
 
 void KoShapeFactoryBase::pruneDocumentResourceManager(QObject *obj)
 {
-    KoDocumentResourceManager *r = qobject_cast<KoDocumentResourceManager*>(obj);
+    KoDocumentResourceManager *r = qobject_cast<KoDocumentResourceManager *>(obj);
     d->resourceManagers.removeAll(r);
 }

@@ -24,13 +24,11 @@
 
 #include "ui_kptconfigtaskpanelbase.h"
 
-
 namespace KPlato
 {
 
 class DateTime;
 class Task;
-
 
 class ConfigTaskPanelImpl : public QWidget, public Ui_ConfigTaskPanelBase
 {
@@ -42,18 +40,18 @@ public:
 
 public Q_SLOTS:
     virtual void changeLeader();
-    void startDateTimeChanged( const QDateTime& );
-    void endDateTimeChanged( const QDateTime& );
-    void unitChanged( int unit );
-    void currentUnitChanged( int );
+    void startDateTimeChanged(const QDateTime &);
+    void endDateTimeChanged(const QDateTime &);
+    void unitChanged(int unit);
+    void currentUnitChanged(int);
 };
 
 class KPLATO_EXPORT TaskDefaultPanel : public ConfigTaskPanelImpl
 {
     Q_OBJECT
 public:
-    explicit TaskDefaultPanel( QWidget *parent=0 );
-    
+    explicit TaskDefaultPanel(QWidget *parent = 0);
+
 };
 
 } //KPlato namespace

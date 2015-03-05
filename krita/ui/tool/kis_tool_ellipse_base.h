@@ -26,7 +26,7 @@
 class KRITAUI_EXPORT KisToolEllipseBase : public KisToolRectangleBase
 {
 public:
-    KisToolEllipseBase(KoCanvasBase * canvas, KisToolEllipseBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_ellipse_cursor.png", 6, 6));
+    KisToolEllipseBase(KoCanvasBase *canvas, KisToolEllipseBase::ToolType type, const QCursor &cursor = KisCursor::load("tool_ellipse_cursor.png", 6, 6));
 
     void paintRectangle(QPainter &gc, const QRectF &imageRect);
 };

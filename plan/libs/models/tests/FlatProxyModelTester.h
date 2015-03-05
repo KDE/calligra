@@ -29,7 +29,6 @@
 namespace KPlato
 {
 
-
 class FlatProxyModelTester : public QObject
 {
     Q_OBJECT

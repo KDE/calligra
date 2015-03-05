@@ -17,24 +17,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_global.h"
 #include "kis_default_bounds.h"
 #include "kis_paint_device.h"
 
 const QRect KisDefaultBounds::infiniteRect =
-    QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX);
-
+    QRect(qint32_MIN / 2, qint32_MIN / 2, qint32_MAX, qint32_MAX);
 
 /******************************************************************/
 /*                  KisDefaultBounds                              */
 /******************************************************************/
 
-struct KisDefaultBounds::Private
-{
+struct KisDefaultBounds::Private {
     KisImageWSP image;
 };
-
 
 KisDefaultBounds::KisDefaultBounds(KisImageWSP image)
     : m_d(new Private())
@@ -64,8 +60,7 @@ bool KisDefaultBounds::wrapAroundMode() const
 /*                  KisSelectionDefaultBounds                     */
 /******************************************************************/
 
-struct KisSelectionDefaultBounds::Private
-{
+struct KisSelectionDefaultBounds::Private {
     KisPaintDeviceSP parentDevice;
 };
 
@@ -86,7 +81,6 @@ QRect KisSelectionDefaultBounds::bounds() const
     QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->extent() : QRect();
     return additionalRect | KisDefaultBounds::bounds();
 }
-
 
 /******************************************************************/
 /*                   KisSelectionEmptyBounds                      */

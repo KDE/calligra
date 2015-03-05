@@ -25,8 +25,9 @@ int tablesTest();
 int cursorsTest()
 {
     if (!conn->databaseExists(db_name)) {
-        if (tablesTest() != 0)
+        if (tablesTest() != 0) {
             return 1;
+        }
         kDebug() << "DB created & filled";
     }
 
@@ -37,8 +38,9 @@ int cursorsTest()
 
     KexiDB::Cursor *cursor = conn->executeQuery("select * from persons", cursor_options);
     kDebug() << "executeQuery() = " << !!cursor;
-    if (!cursor)
+    if (!cursor) {
         return 1;
+    }
 
     kDebug() << "Cursor::moveLast() ---------------------";
     kDebug() << "-- Cursor::moveLast() == " << cursor->moveLast();

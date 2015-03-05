@@ -59,67 +59,67 @@ public:
 
     void setBibliographyType(const QString &bibliographyType);
 
-    void setAddress (const QString &addr);
+    void setAddress(const QString &addr);
 
-    void setAnnotation (const QString &annotation);
+    void setAnnotation(const QString &annotation);
 
-    void setAuthor (const QString &author);
+    void setAuthor(const QString &author);
 
-    void setBookTitle (const QString &booktitle);
+    void setBookTitle(const QString &booktitle);
 
-    void setChapter (const QString &chapter);
+    void setChapter(const QString &chapter);
 
-    void setEdition (const QString &edition);
+    void setEdition(const QString &edition);
 
-    void setEditor (const QString &editor);
+    void setEditor(const QString &editor);
 
-    void setPublicationType (const QString &publicationType);
+    void setPublicationType(const QString &publicationType);
 
-    void setInstitution (const QString &institution);
+    void setInstitution(const QString &institution);
 
-    void setJournal (const QString &journal);
+    void setJournal(const QString &journal);
 
     void setLabel(const QString &label);
 
-    void setMonth (const QString &month);
+    void setMonth(const QString &month);
 
-    void setNote (const QString &note);
+    void setNote(const QString &note);
 
-    void setNumber (const QString &number);
+    void setNumber(const QString &number);
 
-    void setOrganisation (const QString &organisation);
+    void setOrganisation(const QString &organisation);
 
-    void setPages (const QString &pages);
+    void setPages(const QString &pages);
 
-    void setPublisher (const QString &publisher);
+    void setPublisher(const QString &publisher);
 
-    void setSchool (const QString &school);
+    void setSchool(const QString &school);
 
-    void setSeries (const QString &series);
+    void setSeries(const QString &series);
 
-    void setTitle (const QString &title);
+    void setTitle(const QString &title);
 
-    void setReportType (const QString &reportType);
+    void setReportType(const QString &reportType);
 
-    void setVolume (const QString &volume);
+    void setVolume(const QString &volume);
 
-    void setYear (const QString &year);
+    void setYear(const QString &year);
 
-    void setURL (const QString &url);
+    void setURL(const QString &url);
 
-    void setISBN (const QString &isbn);
+    void setISBN(const QString &isbn);
 
-    void setISSN (const QString &issn);
+    void setISSN(const QString &issn);
 
-    void setCustom1 (const QString &custom1);
+    void setCustom1(const QString &custom1);
 
-    void setCustom2 (const QString &custom2);
+    void setCustom2(const QString &custom2);
 
-    void setCustom3 (const QString &custom3);
+    void setCustom3(const QString &custom3);
 
-    void setCustom4 (const QString &custom4);
+    void setCustom4(const QString &custom4);
 
-    void setCustom5 (const QString &custom5);
+    void setCustom5(const QString &custom5);
 
     QString identifier() const;
 
@@ -204,7 +204,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
 };
 

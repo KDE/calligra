@@ -23,7 +23,6 @@
 
 #include "kis_brush_mask_applicator_base.h"
 
-
 template<class MaskGenerator, Vc::Implementation _impl>
 struct KisBrushMaskScalarApplicator;
 
@@ -40,10 +39,9 @@ struct KisBrushMaskVectorApplicator;
 
 template<class MaskGenerator,
          template<class U, Vc::Implementation V> class Applicator>
-struct MaskApplicatorFactory
-{
-    typedef MaskGenerator* ParamType;
-    typedef KisBrushMaskApplicatorBase* ReturnType;
+struct MaskApplicatorFactory {
+    typedef MaskGenerator *ParamType;
+    typedef KisBrushMaskApplicatorBase *ReturnType;
 
     template<Vc::Implementation _impl>
     static ReturnType create(ParamType maskGenerator);

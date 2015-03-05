@@ -36,10 +36,10 @@ class CommentCommand : public AbstractRegionCommand
 {
 public:
     explicit CommentCommand(KUndo2Command *parent = 0);
-    void setComment(const QString& comment);
+    void setComment(const QString &comment);
 
 protected:
-    virtual bool process(Element* element);
+    virtual bool process(Element *element);
     virtual bool mainProcessing();
 
 private:

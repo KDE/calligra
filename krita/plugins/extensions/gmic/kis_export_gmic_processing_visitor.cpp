@@ -30,14 +30,12 @@ KisExportGmicProcessingVisitor::KisExportGmicProcessingVisitor(const KisNodeList
 {
 }
 
-
 void KisExportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     Q_UNUSED(undoAdapter);
 
     int index = m_nodes->indexOf(node);
-    if (index >= 0)
-    {
+    if (index >= 0) {
         /* fill the image with data here */
         KisPaintDeviceSP device = node->paintDevice();
         gmic_image<float> &gimg = m_images->_data[index];
@@ -46,7 +44,7 @@ void KisExportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
         quint32 y = m_rc.height();
         quint32 z = 1;
         quint32 colorChannelCount = 4; // RGBA
-        gimg.assign(x,y,z,colorChannelCount);
+        gimg.assign(x, y, z, colorChannelCount);
         KisGmicSimpleConvertor::convertToGmicImageFast(device, gimg, m_rc);
     }
 }

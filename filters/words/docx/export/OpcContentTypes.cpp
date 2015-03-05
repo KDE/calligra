@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OpcContentTypes.h"
 
@@ -33,7 +32,6 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
-
 // ================================================================
 //                         class OpcContentTypes
 
@@ -45,7 +43,6 @@ OpcContentTypes::~OpcContentTypes()
 {
 }
 
-
 void OpcContentTypes::addDefault(const QString &extension, const QString &contentType)
 {
     defaults[extension] = contentType;
@@ -55,7 +52,6 @@ void OpcContentTypes::addFile(const QString &partName, const QString &contentTyp
 {
     parts[partName] = contentType;
 }
-
 
 KoFilter::ConversionStatus OpcContentTypes::writeToStore(KoStore *opcStore)
 {
@@ -99,7 +95,6 @@ KoFilter::ConversionStatus OpcContentTypes::writeToStore(KoStore *opcStore)
         writer.addAttribute("ContentType", parts.value(part));
         writer.endElement(); // Override
     }
-
 
     writer.endElement();  // Types
     writer.endDocument();

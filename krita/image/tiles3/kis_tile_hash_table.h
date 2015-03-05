@@ -22,8 +22,6 @@
 
 #include "kis_tile.h"
 
-
-
 /**
  * This is a  template for a hash table that stores  tiles (or some other
  * objects  resembling tiles).   Actually, this  object should  only have
@@ -47,7 +45,8 @@ public:
     /* virtual? */
     ~KisTileHashTableTraits();
 
-    bool isEmpty() {
+    bool isEmpty()
+    {
         return !m_numTiles;
     }
 
@@ -69,7 +68,7 @@ public:
      * \param newTile out-parameter, returns true if a new tile
      *                was created
      */
-    TileTypeSP getTileLazy(qint32 col, qint32 row, bool& newTile);
+    TileTypeSP getTileLazy(qint32 col, qint32 row, bool &newTile);
 
     /**
      * Returns a tile in position (col,row). If no tile exists,
@@ -87,9 +86,10 @@ public:
     void clear();
 
     void setDefaultTileData(KisTileData *defaultTileData);
-    KisTileData* defaultTileData() const;
+    KisTileData *defaultTileData() const;
 
-    qint32 numTiles() {
+    qint32 numTiles()
+    {
         return m_numTiles;
     }
 
@@ -102,7 +102,7 @@ private:
     TileTypeSP unlinkTile(qint32 col, qint32 row);
 
     inline void setDefaultTileDataImp(KisTileData *defaultTileData);
-    inline KisTileData* defaultTileDataImp() const;
+    inline KisTileData *defaultTileDataImp() const;
 
     static inline quint32 calculateHash(qint32 col, qint32 row);
 
@@ -124,8 +124,6 @@ private:
 
 #include "kis_tile_hash_table_p.h"
 
-
-
 /**
  * Walks through all tiles inside hash table
  * Note: You can't work with your hash table in a regular way
@@ -139,26 +137,32 @@ public:
     typedef T               TileType;
     typedef KisSharedPtr<T> TileTypeSP;
 
-    KisTileHashTableIteratorTraits(KisTileHashTableTraits<T> *ht) {
+    KisTileHashTableIteratorTraits(KisTileHashTableTraits<T> *ht)
+    {
         m_hashTable = ht;
         m_index = nextNonEmptyList(0);
-        if (m_index < KisTileHashTableTraits<T>::TABLE_SIZE)
+        if (m_index < KisTileHashTableTraits<T>::TABLE_SIZE) {
             m_tile = m_hashTable->m_hashTable[m_index];
+        }
 
         m_hashTable->m_lock.lockForWrite();
     }
 
-    ~KisTileHashTableIteratorTraits<T>() {
-        if (m_index != -1)
+    ~KisTileHashTableIteratorTraits<T>()
+    {
+        if (m_index != -1) {
             m_hashTable->m_lock.unlock();
+        }
     }
 
-    KisTileHashTableIteratorTraits<T>& operator++() {
+    KisTileHashTableIteratorTraits<T> &operator++()
+    {
         next();
         return *this;
     }
 
-    void next() {
+    void next()
+    {
         if (m_tile) {
             m_tile = m_tile->next();
             if (!m_tile) {
@@ -174,20 +178,24 @@ public:
         }
     }
 
-    TileTypeSP tile() const {
+    TileTypeSP tile() const
+    {
         return m_tile;
     }
-    bool isDone() const {
+    bool isDone() const
+    {
         return !m_tile;
     }
 
-    void deleteCurrent() {
+    void deleteCurrent()
+    {
         TileTypeSP tile = m_tile;
         next();
         m_hashTable->unlinkTile(tile->col(), tile->row());
     }
 
-    void moveCurrentToHashTable(KisTileHashTableTraits<T> *newHashTable) {
+    void moveCurrentToHashTable(KisTileHashTableTraits<T> *newHashTable)
+    {
         TileTypeSP tile = m_tile;
         next();
         m_hashTable->unlinkTile(tile->col(), tile->row());
@@ -195,7 +203,8 @@ public:
         newHashTable->addTile(tile);
     }
 
-    void destroy() {
+    void destroy()
+    {
         m_index = -1;
         m_hashTable->m_lock.unlock();
     }
@@ -205,7 +214,8 @@ protected:
     KisTileHashTableTraits<T> *m_hashTable;
 
 protected:
-    qint32 nextNonEmptyList(qint32 startIdx) {
+    qint32 nextNonEmptyList(qint32 startIdx)
+    {
         qint32 idx = startIdx;
 
         while (idx < KisTileHashTableTraits<T>::TABLE_SIZE &&
@@ -218,7 +228,6 @@ protected:
 private:
     Q_DISABLE_COPY(KisTileHashTableIteratorTraits<T>)
 };
-
 
 typedef KisTileHashTableTraits<KisTile> KisTileHashTable;
 typedef KisTileHashTableIteratorTraits<KisTile> KisTileHashTableIterator;

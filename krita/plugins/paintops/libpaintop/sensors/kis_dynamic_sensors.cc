@@ -18,14 +18,13 @@
 
 #include "kis_dynamic_sensors.h"
 
-
 KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
 {
     setMinimumLabel(i18n("Slow"));
     setMaximumLabel(i18n("Fast"));
 }
 
-qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info)
+qreal KisDynamicSensorSpeed::value(const KisPaintInformation &info)
 {
     /**
      * The value of maximum speed was measured empirically. This is
@@ -40,8 +39,7 @@ qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info)
     if (m_speed >= 0.0) {
         m_speed = qMin(1.0, (m_speed * (1 - blendExponent) +
                              currentSpeed * blendExponent));
-    }
-    else {
+    } else {
         m_speed = currentSpeed;
     }
 
@@ -83,7 +81,6 @@ KisDynamicSensorTiltElevation::KisDynamicSensorTiltElevation() : KisDynamicSenso
     setMinimumLabel(i18n("90°"));
     setMaximumLabel(i18n("0°"));
 }
-
 
 KisDynamicSensorPerspective::KisDynamicSensorPerspective() : KisDynamicSensor(PerspectiveId)
 {

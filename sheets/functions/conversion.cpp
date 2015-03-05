@@ -48,12 +48,10 @@ Value func_inttobool(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_booltoint(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ToString(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("conversion", ConversionModule)
 
-
-ConversionModule::ConversionModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+ConversionModule::ConversionModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -102,7 +100,6 @@ QString ConversionModule::descriptionFileName() const
     return QString("conversion.xml");
 }
 
-
 // Function: POLR
 Value func_polr(valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -118,8 +115,9 @@ Value func_pola(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // acos (a / polr(a,b))
     Value polr = func_polr(args, calc, 0);
-    if (calc->isZero(polr))
+    if (calc->isZero(polr)) {
         return Value::errorDIV0();
+    }
     Value res = calc->acos(calc->div(args[0], polr));
     return res;
 }
@@ -214,20 +212,30 @@ int func_arabic_helper(QChar c)
 Value func_arabic(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString roman = calc->conv()->asString(args[0]).asString();
-    if (roman.isEmpty()) return Value::errorVALUE();
+    if (roman.isEmpty()) {
+        return Value::errorVALUE();
+    }
 
     int val = 0, lastd = 0, d = 0;
 
     for (int i = 0; i < roman.length(); i++) {
         d = func_arabic_helper(roman[i]);
-        if (d < 0) return Value::errorVALUE();
+        if (d < 0) {
+            return Value::errorVALUE();
+        }
 
-        if (lastd < d) val -= lastd;
-        else val += lastd;
+        if (lastd < d) {
+            val -= lastd;
+        } else {
+            val += lastd;
+        }
         lastd = d;
     }
-    if (lastd < d) val -= lastd;
-    else val += lastd;
+    if (lastd < d) {
+        val -= lastd;
+    } else {
+        val += lastd;
+    }
 
     return Value(val);
 }
@@ -237,11 +245,14 @@ void func_a2c_helper(ValueCalc *calc, QString &s, Value val)
 {
     if (val.isArray()) {
         for (uint row = 0; row < val.rows(); ++row)
-            for (uint col = 0; col < val.columns(); ++col)
+            for (uint col = 0; col < val.columns(); ++col) {
                 func_a2c_helper(calc, s, val.element(col, row));
+            }
     } else {
         int v = calc->conv()->asInteger(val).asInteger();
-        if (v == 0) return;
+        if (v == 0) {
+            return;
+        }
         QChar c(v);
         s = s + c;
     }
@@ -251,8 +262,9 @@ void func_a2c_helper(ValueCalc *calc, QString &s, Value val)
 Value func_AsciiToChar(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str;
-    for (int i = 0; i < args.count(); i++)
+    for (int i = 0; i < args.count(); i++) {
         func_a2c_helper(calc, str, args[i]);
+    }
     return Value(str);
 }
 
@@ -260,8 +272,9 @@ Value func_AsciiToChar(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_CharToAscii(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString val = calc->conv()->asString(args[0]).asString();
-    if (val.length() == 1)
+    if (val.length() == 1) {
         return Value(QString(val[0]));
+    }
     return Value::errorVALUE();
 }
 

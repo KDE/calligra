@@ -62,7 +62,7 @@
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
 
-void KritaSketchPlugin::registerTypes(const char* uri)
+void KritaSketchPlugin::registerTypes(const char *uri)
 {
     Q_UNUSED(uri)
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
@@ -91,14 +91,14 @@ void KritaSketchPlugin::registerTypes(const char* uri)
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 }
 
-void KritaSketchPlugin::initializeEngine(QDeclarativeEngine* engine, const char* uri)
+void KritaSketchPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
     Q_UNUSED(uri)
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
 
-    Constants *constants = new Constants( this );
-    Settings *settings = new Settings( this );
-    DocumentManager::instance()->setSettingsManager( settings );
+    Constants *constants = new Constants(this);
+    Settings *settings = new Settings(this);
+    DocumentManager::instance()->setSettingsManager(settings);
     RecentFileManager *recentFileManager = DocumentManager::instance()->recentFileManager();
 
     engine->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);

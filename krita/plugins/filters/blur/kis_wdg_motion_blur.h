@@ -29,18 +29,19 @@ class KisWdgMotionBlur : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgMotionBlur(QWidget * parent);
+    KisWdgMotionBlur(QWidget *parent);
     virtual ~KisWdgMotionBlur();
-    inline const Ui_WdgMotionBlur* widget() const {
+    inline const Ui_WdgMotionBlur *widget() const
+    {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration *);
+    virtual KisPropertiesConfiguration *configuration() const;
 public Q_SLOTS:
     void angleSliderChanged(int);
     void angleDialChanged(int);
 private:
-    Ui_WdgMotionBlur* m_widget;
+    Ui_WdgMotionBlur *m_widget;
 };
 
 #endif

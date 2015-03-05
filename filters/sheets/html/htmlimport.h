@@ -37,8 +37,8 @@
 
 namespace DOM
 {
-    class Node;
-    class Element;
+class Node;
+class Element;
 }
 
 class KoOdfWriteStore;
@@ -49,10 +49,10 @@ class HTMLImport : public KoFilter
 {
     Q_OBJECT
 public:
-    HTMLImport(QObject* parent, const QVariantList&);
+    HTMLImport(QObject *parent, const QVariantList &);
     virtual ~HTMLImport();
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 Q_SIGNALS:
     void completed();
@@ -66,11 +66,11 @@ private:
 private:
     enum State { InNone, InFrameset, InBody, InTable, InRow, InCell };
     QStack<State> m_states;
-    
-    QDir m_inputDir;    
-    KoOdfWriteStore* m_store;
-    KoXmlWriter* m_manifestWriter;
-    KoGenStyles* m_mainStyles;
+
+    QDir m_inputDir;
+    KoOdfWriteStore *m_store;
+    KoXmlWriter *m_manifestWriter;
+    KoGenStyles *m_mainStyles;
 };
 
 #endif

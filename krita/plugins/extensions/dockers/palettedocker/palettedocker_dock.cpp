@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "palettedocker_dock.h"
 
 #include <QPainter>
@@ -50,16 +49,18 @@
 class PaletteDelegate : public QAbstractItemDelegate
 {
 public:
-    PaletteDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent), m_showText(false) {}
+    PaletteDelegate(QObject *parent = 0) : QAbstractItemDelegate(parent), m_showText(false) {}
     virtual ~PaletteDelegate() {}
     /// reimplemented
     virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &) const
+    {
         return option.decorationSize;
     }
 
-    void setShowText(bool showText) {
+    void setShowText(bool showText)
+    {
         m_showText = showText;
     }
 
@@ -67,12 +68,13 @@ private:
     bool m_showText;
 };
 
-void PaletteDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void PaletteDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     painter->save();
 
-    if (! index.isValid())
+    if (! index.isValid()) {
         return;
+    }
 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlightedText(), 2.0));
@@ -87,10 +89,10 @@ void PaletteDelegate::paint(QPainter * painter, const QStyleOptionViewItem & opt
     painter->restore();
 }
 
-bool PaletteDockerDock::eventFilter(QObject* object, QEvent* event)
+bool PaletteDockerDock::eventFilter(QObject *object, QEvent *event)
 {
     if (object == m_wdgPaletteDock->paletteView->viewport() && event->type() == QEvent::Wheel) {
-        QWheelEvent* qwheel = dynamic_cast<QWheelEvent* >(event);
+        QWheelEvent *qwheel = dynamic_cast<QWheelEvent * >(event);
         if (qwheel->modifiers() & Qt::ControlModifier) {
 
             int numDegrees = qwheel->delta() / 8;
@@ -98,7 +100,7 @@ bool PaletteDockerDock::eventFilter(QObject* object, QEvent* event)
             int curSize = m_wdgPaletteDock->paletteView->horizontalHeader()->sectionSize(0);
             int setSize = numSteps + curSize;
 
-            if ( setSize >= 12 ) {
+            if (setSize >= 12) {
                 m_wdgPaletteDock->paletteView->horizontalHeader()->setDefaultSectionSize(setSize);
                 m_wdgPaletteDock->paletteView->verticalHeader()->setDefaultSectionSize(setSize);
                 KisConfig cfg;
@@ -113,13 +115,13 @@ bool PaletteDockerDock::eventFilter(QObject* object, QEvent* event)
     }
 }
 
-PaletteDockerDock::PaletteDockerDock( )
+PaletteDockerDock::PaletteDockerDock()
     : QDockWidget(i18n("Palette"))
     , m_wdgPaletteDock(new Ui_WdgPaletteDock())
     , m_currentColorSet(0)
     , m_resourceProvider(0)
 {
-    QWidget* mainWidget = new QWidget(this);
+    QWidget *mainWidget = new QWidget(this);
     setWidget(mainWidget);
     m_wdgPaletteDock->setupUi(mainWidget);
     m_wdgPaletteDock->bnAdd->setIcon(koIcon("list-add"));
@@ -152,7 +154,7 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_wdgPaletteDock->paletteView, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
     m_wdgPaletteDock->paletteView->viewport()->installEventFilter(this);
 
-    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer(false);
+    KoResourceServer<KoColorSet> *rServer = KoResourceServerProvider::instance()->paletteServer(false);
     m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
     m_serverAdapter->connectToResourceServer();
     rServer->addObserver(this);
@@ -169,7 +171,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->paletteView->verticalHeader()->setDefaultSectionSize(defaultSectionSize);
 
     QString defaultPalette = cfg.defaultPalette();
-    KoColorSet* defaultColorSet = rServer->resourceByName(defaultPalette);
+    KoColorSet *defaultColorSet = rServer->resourceByName(defaultPalette);
     if (defaultColorSet) {
         setColorSet(defaultColorSet);
     }
@@ -177,7 +179,7 @@ PaletteDockerDock::PaletteDockerDock( )
 
 PaletteDockerDock::~PaletteDockerDock()
 {
-    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    KoResourceServer<KoColorSet> *rServer = KoResourceServerProvider::instance()->paletteServer();
     rServer->removeObserver(this);
 
     if (m_currentColorSet) {
@@ -186,7 +188,7 @@ PaletteDockerDock::~PaletteDockerDock()
     }
 }
 
-void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
+void PaletteDockerDock::setMainWindow(KisViewManager *kisview)
 {
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
@@ -194,18 +196,16 @@ void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
 
     kisview->nodeManager()->disconnect(m_model);
 
-
 }
 
 void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
     if (canvas) {
-        KisCanvas2 *cv = dynamic_cast<KisCanvas2*>(canvas);
+        KisCanvas2 *cv = dynamic_cast<KisCanvas2 *>(canvas);
         m_model->setDisplayRenderer(cv->displayColorConverter()->displayRendererInterface());
     }
 }
-
 
 void PaletteDockerDock::unsetCanvas()
 {
@@ -215,7 +215,7 @@ void PaletteDockerDock::unsetCanvas()
 
 void PaletteDockerDock::unsetResourceServer()
 {
-    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    KoResourceServer<KoColorSet> *rServer = KoResourceServerProvider::instance()->paletteServer();
     rServer->removeObserver(this);
 }
 
@@ -231,8 +231,7 @@ void PaletteDockerDock::resourceChanged(KoColorSet *resource)
     setColorSet(resource);
 }
 
-
-void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
+void PaletteDockerDock::setColorSet(KoColorSet *colorSet)
 {
     m_model->setColorSet(colorSet);
     if (colorSet && colorSet->removable()) {
@@ -283,7 +282,7 @@ void PaletteDockerDock::removeColor()
     if (!index.isValid()) {
         return;
     }
-    int i = index.row()*m_model->columnCount()+index.column();
+    int i = index.row() * m_model->columnCount() + index.column();
     KoColorSetEntry entry = m_currentColorSet->getColor(i);
     m_currentColorSet->remove(entry);
     m_currentColorSet->save();
@@ -296,7 +295,7 @@ void PaletteDockerDock::entrySelected(QModelIndex index)
         return;
     }
 
-    int i = index.row()*m_model->columnCount()+index.column();
+    int i = index.row() * m_model->columnCount() + index.column();
     if (i < m_currentColorSet->nColors()) {
         KoColorSetEntry entry = m_currentColorSet->getColor(i);
         if (m_resourceProvider) {
@@ -308,23 +307,22 @@ void PaletteDockerDock::entrySelected(QModelIndex index)
     }
 }
 
-void PaletteDockerDock::saveToWorkspace(KisWorkspaceResource* workspace)
+void PaletteDockerDock::saveToWorkspace(KisWorkspaceResource *workspace)
 {
     if (m_currentColorSet) {
         workspace->setProperty("palette", m_currentColorSet->name());
     }
 }
 
-void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
+void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource *workspace)
 {
     if (workspace->hasProperty("palette")) {
-        KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        KoColorSet* colorSet = rServer->resourceByName(workspace->getString("palette"));
+        KoResourceServer<KoColorSet> *rServer = KoResourceServerProvider::instance()->paletteServer();
+        KoColorSet *colorSet = rServer->resourceByName(workspace->getString("palette"));
         if (colorSet) {
             setColorSet(colorSet);
         }
     }
 }
-
 
 #include "palettedocker_dock.moc"

@@ -26,7 +26,6 @@
 #include <QObject>
 #include <QVBoxLayout>
 
-
 #include <klocale.h>
 #include <khtmlview.h>
 #include <kurl.h>
@@ -40,53 +39,53 @@ namespace KPlato
 HtmlView::HtmlView(KoPart *part, KoDocument *doc, QWidget *parent)
     : ViewBase(part, doc, parent)
 {
-    m_htmlPart = new KHTMLPart( this );
-    m_htmlPart->view()->setFrameStyle( QFrame::StyledPanel );
-    m_htmlPart->view()->setFrameShadow( QFrame::Sunken );
+    m_htmlPart = new KHTMLPart(this);
+    m_htmlPart->view()->setFrameStyle(QFrame::StyledPanel);
+    m_htmlPart->view()->setFrameShadow(QFrame::Sunken);
 
-    QVBoxLayout * l = new QVBoxLayout( this );
-    l->setMargin( 0 );
-    l->addWidget( m_htmlPart->view() );
+    QVBoxLayout *l = new QVBoxLayout(this);
+    l->setMargin(0);
+    l->addWidget(m_htmlPart->view());
     m_htmlPart->show();
 
     setupGui();
 
     KParts::BrowserExtension *ext = m_htmlPart->browserExtension();
-    if ( ext ) {
-        connect( ext, SIGNAL(openUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)), SLOT(slotOpenUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)) );
+    if (ext) {
+        connect(ext, SIGNAL(openUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)), SLOT(slotOpenUrlRequest(KUrl,KParts::OpenUrlArguments,KParts::BrowserArguments)));
     }
 }
 
 void HtmlView::slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &/*arguments*/, const KParts::BrowserArguments &/*browserArguments*/)
 {
-    emit openUrlRequest( this, url );
+    emit openUrlRequest(this, url);
 }
 
-bool HtmlView::openHtml( const KUrl &url )
+bool HtmlView::openHtml(const KUrl &url)
 {
-    return m_htmlPart->openUrl( url );
+    return m_htmlPart->openUrl(url);
 }
 
-void HtmlView::updateReadWrite( bool /*readwrite */)
+void HtmlView::updateReadWrite(bool /*readwrite */)
 {
 }
 
-void HtmlView::setGuiActive( bool activate )
+void HtmlView::setGuiActive(bool activate)
 {
-    kDebug(planDbg())<<activate;
+    kDebug(planDbg()) << activate;
 }
 
-void HtmlView::slotContextMenuRequested( const QModelIndex &/*index*/, const QPoint& /*pos */)
+void HtmlView::slotContextMenuRequested(const QModelIndex &/*index*/, const QPoint & /*pos */)
 {
     //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
 }
 
-void HtmlView::slotEnableActions( bool on )
+void HtmlView::slotEnableActions(bool on)
 {
-    updateActionsEnabled( on );
+    updateActionsEnabled(on);
 }
 
-void HtmlView::updateActionsEnabled(  bool /*on */)
+void HtmlView::updateActionsEnabled(bool /*on */)
 {
 }
 
@@ -99,7 +98,6 @@ KoPrintJob *HtmlView::createPrintJob()
 {
     return 0;//m_view->createPrintJob( this );
 }
-
 
 } // namespace KPlato
 

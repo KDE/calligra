@@ -35,7 +35,7 @@ K_EXPORT_KEXIDB_DRIVER(pqxxSqlDriver, pqxxsql)
 //==================================================================================
 //
 pqxxSqlDriver::pqxxSqlDriver(QObject *parent, const QVariantList &args)
-        : Driver(parent, args)
+    : Driver(parent, args)
 {
     d->isFileDriver = false;
     d->features = SingleTransactions | CursorForward | CursorBackward;
@@ -74,8 +74,9 @@ pqxxSqlDriver::pqxxSqlDriver(QObject *parent, const QVariantList &args)
 //Override the default implementation to allow for NUMERIC type natively
 QString pqxxSqlDriver::sqlTypeName(int id_t, int p) const
 {
-    if (id_t == Field::Null)
+    if (id_t == Field::Null) {
         return "NULL";
+    }
     if (id_t == Field::Float || id_t == Field::Double) {
         if (p > 0) {
             return "NUMERIC";
@@ -95,7 +96,7 @@ pqxxSqlDriver::~pqxxSqlDriver()
 
 //==================================================================================
 //
-KexiDB::Connection*
+KexiDB::Connection *
 pqxxSqlDriver::drv_createConnection(ConnectionData &conn_data)
 {
     return new pqxxSqlConnection(this, conn_data);
@@ -103,30 +104,30 @@ pqxxSqlDriver::drv_createConnection(ConnectionData &conn_data)
 
 //==================================================================================
 //
-bool pqxxSqlDriver::isSystemObjectName(const QString& n) const
+bool pqxxSqlDriver::isSystemObjectName(const QString &n) const
 {
     return Driver::isSystemObjectName(n);
 }
 
 //==================================================================================
 //
-bool pqxxSqlDriver::drv_isSystemFieldName(const QString&) const
+bool pqxxSqlDriver::drv_isSystemFieldName(const QString &) const
 {
     return false;
 }
 
 //==================================================================================
 //
-bool pqxxSqlDriver::isSystemDatabaseName(const QString& n) const
+bool pqxxSqlDriver::isSystemDatabaseName(const QString &n) const
 {
     return     n.compare("template1", Qt::CaseInsensitive) == 0
-            || n.compare("postgres", Qt::CaseInsensitive) == 0
-            || n.compare("template0", Qt::CaseInsensitive) == 0;
+               || n.compare("postgres", Qt::CaseInsensitive) == 0
+               || n.compare("template0", Qt::CaseInsensitive) == 0;
 }
 
 //==================================================================================
 //
-QString pqxxSqlDriver::escapeString(const QString& str) const
+QString pqxxSqlDriver::escapeString(const QString &str) const
 {
     //Cannot use pqxx or libpq escape functions as they require a db connection
     //to escape using the char encoding of the database
@@ -137,7 +138,7 @@ QString pqxxSqlDriver::escapeString(const QString& str) const
 
 //==================================================================================
 //
-QByteArray pqxxSqlDriver::escapeString(const QByteArray& str) const
+QByteArray pqxxSqlDriver::escapeString(const QByteArray &str) const
 {
     //Cannot use pqxx or libpq escape functions as they require a db connection
     //to escape using the char encoding of the database
@@ -147,26 +148,26 @@ QByteArray pqxxSqlDriver::escapeString(const QByteArray& str) const
 
 //==================================================================================
 //
-QString pqxxSqlDriver::drv_escapeIdentifier(const QString& str) const
+QString pqxxSqlDriver::drv_escapeIdentifier(const QString &str) const
 {
     return QByteArray(str.toLatin1()).replace('"', "\"\"");
 }
 
 //==================================================================================
 //
-QByteArray pqxxSqlDriver::drv_escapeIdentifier(const QByteArray& str) const
+QByteArray pqxxSqlDriver::drv_escapeIdentifier(const QByteArray &str) const
 {
     return QByteArray(str).replace('"', "\"\"");
 }
 
 //==================================================================================
 //
-QString pqxxSqlDriver::escapeBLOB(const QByteArray& array) const
+QString pqxxSqlDriver::escapeBLOB(const QByteArray &array) const
 {
     return KexiDB::escapeBLOB(array, KexiDB::BLOBEscapeOctal);
 }
 
-QString pqxxSqlDriver::valueToSQL(uint ftype, const QVariant& v) const
+QString pqxxSqlDriver::valueToSQL(uint ftype, const QVariant &v) const
 {
     if (ftype == Field::Boolean) {
         // use SQL compliant TRUE or FALSE as described here

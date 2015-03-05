@@ -77,8 +77,7 @@ DlgCreateBundle::DlgCreateBundle(ResourceBundle *bundle, QWidget *parent)
         m_ui->editWebsite->setText(bundle->getMeta("website"));
         m_ui->editDescription->document()->setPlainText(bundle->getMeta("description"));
         m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
-    }
-    else {
+    } else {
 
         setCaption(i18n("Create Resource Bundle"));
 
@@ -169,16 +168,14 @@ void DlgCreateBundle::accept()
         m_ui->editBundleName->setStyleSheet(QString(" border: 1px solid red"));
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The resource bundle name cannot be empty."));
         return;
-    }
-    else {
+    } else {
         QFileInfo fileInfo(m_ui->lblSaveLocation->text() + "/" + name + ".bundle");
 
         if (fileInfo.exists()) {
             m_ui->editBundleName->setStyleSheet("border: 1px solid red");
             QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("A bundle with this name already exists."));
             return;
-        }
-        else {
+        } else {
             if (!m_bundle) {
                 KisConfig cfg;
                 cfg.writeEntry<QString>("BunleExportLocation", m_ui->lblSaveLocation->text());
@@ -203,26 +200,21 @@ void DlgCreateBundle::selectSaveLocation()
 
 void DlgCreateBundle::addSelected()
 {
-    foreach(QListWidgetItem *item, m_ui->tableAvailable->selectedItems()) {
+    foreach (QListWidgetItem *item, m_ui->tableAvailable->selectedItems()) {
         m_ui->tableSelected->addItem(m_ui->tableAvailable->takeItem(m_ui->tableAvailable->row(item)));
         QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
         if (resourceType == "brushes") {
             m_selectedBrushes.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "presets") {
+        } else if (resourceType == "presets") {
             m_selectedPresets.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "gradients") {
+        } else if (resourceType == "gradients") {
             m_selectedGradients.append(item->data(Qt::UserRole).toString());
 
-        }
-        else if (resourceType == "patterns") {
+        } else if (resourceType == "patterns") {
             m_selectedPatterns.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "palettes") {
+        } else if (resourceType == "palettes") {
             m_selectedPalettes.append(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "workspaces") {
+        } else if (resourceType == "workspaces") {
             m_selectedWorkspaces.append(item->data(Qt::UserRole).toString());
         }
     }
@@ -230,32 +222,28 @@ void DlgCreateBundle::addSelected()
 
 void DlgCreateBundle::removeSelected()
 {
-    foreach(QListWidgetItem *item, m_ui->tableSelected->selectedItems()) {
+    foreach (QListWidgetItem *item, m_ui->tableSelected->selectedItems()) {
         m_ui->tableAvailable->addItem(m_ui->tableSelected->takeItem(m_ui->tableSelected->row(item)));
         QString resourceType = m_ui->cmbResourceTypes->itemData(m_ui->cmbResourceTypes->currentIndex()).toString();
         if (resourceType == "brushes") {
             m_selectedBrushes.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "presets") {
+        } else if (resourceType == "presets") {
             m_selectedPresets.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "gradients") {
+        } else if (resourceType == "gradients") {
             m_selectedGradients.removeAll(item->data(Qt::UserRole).toString());
 
-        }
-        else if (resourceType == "patterns") {
+        } else if (resourceType == "patterns") {
             m_selectedPatterns.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "palettes") {
+        } else if (resourceType == "palettes") {
             m_selectedPalettes.removeAll(item->data(Qt::UserRole).toString());
-        }
-        else if (resourceType == "workspaces") {
+        } else if (resourceType == "workspaces") {
             m_selectedWorkspaces.removeAll(item->data(Qt::UserRole).toString());
         }
     }
 }
 
-QPixmap imageToIcon(const QImage &img) {
+QPixmap imageToIcon(const QImage &img)
+{
     QPixmap pixmap(ICON_SIZE, ICON_SIZE);
     pixmap.fill();
     QImage scaled = img.scaled(ICON_SIZE, ICON_SIZE, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -276,88 +264,77 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
 
     if (resourceType == "brushes") {
         KisBrushResourceServer *server = KisBrushServer::instance()->brushServer();
-        foreach(KisBrushSP res, server->resources()) {
+        foreach (KisBrushSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
             if (m_selectedBrushes.contains(res->shortFilename())) {
                 m_ui->tableSelected->addItem(item);
-            }
-            else {
+            } else {
                 m_ui->tableAvailable->addItem(item);
             }
         }
-    }
-    else if (resourceType == "presets") {
-        KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
-        foreach(KisPaintOpPresetSP res, server->resources()) {
+    } else if (resourceType == "presets") {
+        KisPaintOpPresetResourceServer *server = KisResourceServerProvider::instance()->paintOpPresetServer();
+        foreach (KisPaintOpPresetSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
             if (m_selectedPresets.contains(res->shortFilename())) {
                 m_ui->tableSelected->addItem(item);
-            }
-            else {
+            } else {
                 m_ui->tableAvailable->addItem(item);
             }
         }
-    }
-    else if (resourceType == "gradients") {
-        KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
-        foreach(KoResource *res, server->resources()) {
-            if (res->filename()!="Foreground to Transparent" && res->filename()!="Foreground to Background") {
-            //technically we should read from the file-name whether or not the file can be opened, but this works for now. The problem is making sure that bundle-resource know where they are stored.//
-            //qDebug()<<res->filename();
+    } else if (resourceType == "gradients") {
+        KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
+        foreach (KoResource *res, server->resources()) {
+            if (res->filename() != "Foreground to Transparent" && res->filename() != "Foreground to Background") {
+                //technically we should read from the file-name whether or not the file can be opened, but this works for now. The problem is making sure that bundle-resource know where they are stored.//
+                //qDebug()<<res->filename();
                 QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
                 item->setData(Qt::UserRole, res->shortFilename());
 
                 if (m_selectedGradients.contains(res->shortFilename())) {
                     m_ui->tableSelected->addItem(item);
-                }
-                else {
+                } else {
                     m_ui->tableAvailable->addItem(item);
                 }
             }
         }
-    }
-    else if (resourceType == "patterns") {
-        KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
-        foreach(KoResource *res, server->resources()) {
+    } else if (resourceType == "patterns") {
+        KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
+        foreach (KoResource *res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
             if (m_selectedPatterns.contains(res->shortFilename())) {
                 m_ui->tableSelected->addItem(item);
-            }
-            else {
+            } else {
                 m_ui->tableAvailable->addItem(item);
             }
         }
-    }
-    else if (resourceType == "palettes") {
-        KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
-        foreach(KoResource *res, server->resources()) {
+    } else if (resourceType == "palettes") {
+        KoResourceServer<KoColorSet> *server = KoResourceServerProvider::instance()->paletteServer();
+        foreach (KoResource *res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
             if (m_selectedPalettes.contains(res->shortFilename())) {
                 m_ui->tableSelected->addItem(item);
-            }
-            else {
+            } else {
                 m_ui->tableAvailable->addItem(item);
             }
         }
-    }
-    else if (resourceType == "workspaces") {
-        KoResourceServer<KisWorkspaceResource>* server = KisResourceServerProvider::instance()->workspaceServer();
-        foreach(KoResource *res, server->resources()) {
+    } else if (resourceType == "workspaces") {
+        KoResourceServer<KisWorkspaceResource> *server = KisResourceServerProvider::instance()->workspaceServer();
+        foreach (KoResource *res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
             if (m_selectedWorkspaces.contains(res->shortFilename())) {
                 m_ui->tableSelected->addItem(item);
-            }
-            else {
+            } else {
                 m_ui->tableAvailable->addItem(item);
             }
         }
@@ -375,5 +352,4 @@ void DlgCreateBundle::getPreviewImage()
     img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     m_ui->lblPreview->setPixmap(QPixmap::fromImage(img));
 }
-
 

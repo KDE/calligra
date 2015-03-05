@@ -45,7 +45,7 @@ public:
      */
     virtual ~NamedAreaCommand();
 
-    void setAreaName(const QString& name);
+    void setAreaName(const QString &name);
 
     virtual void setReverse(bool reverse);
 

@@ -23,8 +23,8 @@
 
 #include "KPrAnimationData.h"
 
-KPrAnimationMoveAppear::KPrAnimationMoveAppear( KoShape * shape, int step )
-: KPrTranslateAnimation( shape, step, Appear )
+KPrAnimationMoveAppear::KPrAnimationMoveAppear(KoShape *shape, int step)
+    : KPrTranslateAnimation(shape, step, Appear)
 {
 }
 
@@ -32,15 +32,15 @@ KPrAnimationMoveAppear::~KPrAnimationMoveAppear()
 {
 }
 
-KPrAnimationData * KPrAnimationMoveAppear::animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect )
+KPrAnimationData *KPrAnimationMoveAppear::animationData(KoCanvasBase *canvas, KoShapeManager *shapeManager, const QRectF &pageRect)
 {
-    Q_UNUSED( pageRect );
-    KPrAnimationDataTranslate * data = new KPrAnimationDataTranslate( canvas, shapeManager, m_shape->boundingRect() );
+    Q_UNUSED(pageRect);
+    KPrAnimationDataTranslate *data = new KPrAnimationDataTranslate(canvas, shapeManager, m_shape->boundingRect());
     // TODO use bounding rect + shadow
     double x = data->m_boundingRect.x() + data->m_boundingRect.width();
-    data->m_translate = QPointF( -x, 0 );
-    data->m_timeLine.setDuration( 5000 );
-    data->m_timeLine.setCurveShape( QTimeLine::LinearCurve );
-    data->m_timeLine.setFrameRange( int( -x * TIMEFACTOR ), 0 );
+    data->m_translate = QPointF(-x, 0);
+    data->m_timeLine.setDuration(5000);
+    data->m_timeLine.setCurveShape(QTimeLine::LinearCurve);
+    data->m_timeLine.setFrameRange(int(-x * TIMEFACTOR), 0);
     return data;
 }

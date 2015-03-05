@@ -45,11 +45,11 @@ public:
     ScheduleManager *selectedSchedule() const;
 
 Q_SIGNALS:
-    void selectionChanged( ScheduleManager *sm );
+    void selectionChanged(ScheduleManager *sm);
 
 public Q_SLOTS:
-    void setProject( Project *project );
-    void setSelectedSchedule( ScheduleManager *sm );
+    void setProject(Project *project);
+    void setSelectedSchedule(ScheduleManager *sm);
 
 protected Q_SLOTS:
     void slotSelectionChanged();
@@ -66,9 +66,12 @@ public:
     SchedulesDockerFactory();
 
     virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
+    virtual QDockWidget *createDockWidget();
     /// @return the dock widget area the widget should appear in by default
-    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const { return DockLeft; }
+    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const
+    {
+        return DockLeft;
+    }
 
 };
 

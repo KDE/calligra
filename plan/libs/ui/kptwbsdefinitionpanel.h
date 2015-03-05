@@ -42,11 +42,11 @@ public:
     explicit ComboBoxDelegate(QStringList &list, QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                            const QModelIndex &index) const;
+                          const QModelIndex &index) const;
 
     void setEditorData(QWidget *editor, const QModelIndex &index) const;
     void setModelData(QWidget *editor, QAbstractItemModel *model,
-                        const QModelIndex &index) const;
+                      const QModelIndex &index) const;
 
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 private:
@@ -54,10 +54,11 @@ private:
 };
 
 //---------------
-class WBSDefinitionPanel : public QWidget, public Ui_WBSDefinitionPanelBase {
+class WBSDefinitionPanel : public QWidget, public Ui_WBSDefinitionPanelBase
+{
     Q_OBJECT
 public:
-    explicit WBSDefinitionPanel( Project &project, WBSDefinition &def, QWidget *parent=0, const char *name=0);
+    explicit WBSDefinitionPanel(Project &project, WBSDefinition &def, QWidget *parent = 0, const char *name = 0);
 
     KUndo2Command *buildCommand();
 
@@ -67,7 +68,7 @@ public:
 
 Q_SIGNALS:
     void changed(bool enable);
-    
+
 protected Q_SLOTS:
     void slotChanged();
     void slotSelectionChanged();

@@ -50,12 +50,12 @@ Value func_amordegrc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_amorlinc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_compound(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_continuous(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_coupdaybs (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_coupdays (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_coupdaysnc (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_coupncd (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_coupdaybs(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_coupdays(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_coupdaysnc(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_coupncd(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_coupnum(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_couppcd (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_couppcd(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_cumipmt(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_cumprinc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_db(valVector args, ValueCalc *calc, FuncExtra *);
@@ -73,7 +73,7 @@ Value func_fvschedule(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fv_annuity(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_intrate(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ipmt(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_irr (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_irr(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ispmt(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_level_coupon(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mduration(valVector args, ValueCalc *calc, FuncExtra *);
@@ -108,11 +108,10 @@ Value func_yielddisc(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yieldmat(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_zero_coupon(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("financial", FinancialModule)
 
-FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+FinancialModule::FinancialModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -138,29 +137,29 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
     f = new Function("CONTINUOUS", func_continuous);
     f->setParamCount(3);
     add(f);
-    f = new Function ("COUPDAYBS", func_coupdaybs);
+    f = new Function("COUPDAYBS", func_coupdaybs);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYBS");
-    f->setParamCount (3, 4);
+    f->setParamCount(3, 4);
     add(f);
-    f = new Function ("COUPDAYS", func_coupdays);
+    f = new Function("COUPDAYS", func_coupdays);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYS");
-    f->setParamCount (3, 4);
+    f->setParamCount(3, 4);
     add(f);
-    f = new Function ("COUPDAYSNC", func_coupdaysnc);
+    f = new Function("COUPDAYSNC", func_coupdaysnc);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYSNC");
-    f->setParamCount (3, 4);
+    f->setParamCount(3, 4);
     add(f);
-    f = new Function ("COUPNCD", func_coupncd);
+    f = new Function("COUPNCD", func_coupncd);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNCD");
-    f->setParamCount (3, 4);
+    f->setParamCount(3, 4);
     add(f);
     f = new Function("COUPNUM", func_coupnum);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNUM");
     f->setParamCount(3, 5);
     add(f);
-    f = new Function ("COUPPCD", func_couppcd);
+    f = new Function("COUPPCD", func_couppcd);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPPCD");
-    f->setParamCount (3, 4);
+    f->setParamCount(3, 4);
     add(f);
     f = new Function("CUMIPMT", func_cumipmt);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCUMIPMT");
@@ -226,10 +225,10 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
     f = new Function("IPMT", func_ipmt);
     f->setParamCount(4, 6);
     add(f);
-    f = new Function ("IRR", func_irr);
-    f->setParamCount (1, 2);
+    f = new Function("IRR", func_irr);
+    f->setParamCount(1, 2);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("ISPMT", func_ispmt);
     f->setParamCount(4);
     add(f);
@@ -298,8 +297,8 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
     f = new Function("PV_ANNUITY", func_pv_annuity);
     f->setParamCount(3);
     add(f);
-    f = new Function ("RATE", func_rate);
-    f->setParamCount (3, 6);
+    f = new Function("RATE", func_rate);
+    f->setParamCount(3, 6);
     add(f);
     f = new Function("RECEIVED", func_received);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRECEIVED");
@@ -361,7 +360,6 @@ QString FinancialModule::descriptionFileName() const
     return QString("financial.xml");
 }
 
-
 ///////////////////////////////////////////////////////////////////////////
 
 //
@@ -384,12 +382,12 @@ static Value calc_fvifa(ValueCalc * /*calc*/, Value rate,
 {
     Value res;
 
-    if (rate.isZero())
+    if (rate.isZero()) {
         return (nper);
-    else
+    } else {
         return Value(pow1pm1(rate.asFloat(), nper.asFloat()) / rate.asFloat());
+    }
 }
-
 
 //
 // helper: getPay
@@ -401,8 +399,9 @@ static Value getPay(ValueCalc *calc, Value rate,
 
     // TODO This is for PMT. Check constraints of the other function using this
     //if (calc->isZero (rate)) return Value::errorVALUE();
-    if (calc->isZero(rate))
+    if (calc->isZero(rate)) {
         return calc->mul(calc->div(calc->add(pv, fv), nper), Value(-1.0));
+    }
 
     //pvif  = pow( 1 + rate, nper );
     //fvifa = ( pvif - 1 ) / rate;
@@ -414,7 +413,6 @@ static Value getPay(ValueCalc *calc, Value rate,
     Value val1 = calc->sub(calc->mul(calc->mul(Value(-1), pv), pvif), fv);
     Value val2 = calc->mul(calc->add(Value(1.0), calc->mul(rate, type)),
                            fvifa);
-
 
     kDebug() << "(1.0 + " << rate << "*" << type << ")*" << fvifa << ") =" << val2;
     return calc->div(val1, val2);
@@ -440,32 +438,54 @@ static Value getPrinc(ValueCalc *calc, Value start,
 //
 // helper: eurofactor
 //
-static double helper_eurofactor(const QString& currency)
+static double helper_eurofactor(const QString &currency)
 {
     QString cur = currency.toUpper();
     double result = -1;
 
-    if (cur == "ATS") result = 13.7603;        // Austria
-    else if (cur == "BEF") result = 40.3399;   // Belgium
-    else if (cur == "CYP") result = 0.585274;  // Cyprus
-    else if (cur == "DEM") result = 1.95583;   // Germany
-    else if (cur == "EEK") result = 15.6466;   // Estonia
-    else if (cur == "ESP") result = 166.386;   // Spain
-    else if (cur == "EUR") result = 1.0;       // Euro
-    else if (cur == "FIM") result = 5.94573;   // Finland
-    else if (cur == "FRF") result = 6.55957;   // France
-    else if (cur == "GRD") result = 340.75;    // Greece
-    else if (cur == "IEP") result = 0.787564;  // Ireland
-    else if (cur == "ITL") result = 1936.27;   // Italy
-    else if (cur == "LTL") result = 3.45280;   // Lithuania
-    else if (cur == "LUX") result = 40.3399;   // Luxembourg <-- This is the wrong code only here for compatibility with old versions
-    else if (cur == "LUF") result = 40.3399;   // Luxembourg
-    else if (cur == "LVL") result = 0.702804;  // Latvia
-    else if (cur == "MTL") result = 0.4293;    // Malta
-    else if (cur == "NLG") result = 2.20371;   // Netherlands
-    else if (cur == "PTE") result = 200.482;   // Portugal
-    else if (cur == "SIT") result = 239.64;    // Slovenia
-    else if (cur == "SKK") result = 30.126;    // Slovakia
+    if (cur == "ATS") {
+        result = 13.7603;    // Austria
+    } else if (cur == "BEF") {
+        result = 40.3399;    // Belgium
+    } else if (cur == "CYP") {
+        result = 0.585274;    // Cyprus
+    } else if (cur == "DEM") {
+        result = 1.95583;    // Germany
+    } else if (cur == "EEK") {
+        result = 15.6466;    // Estonia
+    } else if (cur == "ESP") {
+        result = 166.386;    // Spain
+    } else if (cur == "EUR") {
+        result = 1.0;    // Euro
+    } else if (cur == "FIM") {
+        result = 5.94573;    // Finland
+    } else if (cur == "FRF") {
+        result = 6.55957;    // France
+    } else if (cur == "GRD") {
+        result = 340.75;    // Greece
+    } else if (cur == "IEP") {
+        result = 0.787564;    // Ireland
+    } else if (cur == "ITL") {
+        result = 1936.27;    // Italy
+    } else if (cur == "LTL") {
+        result = 3.45280;    // Lithuania
+    } else if (cur == "LUX") {
+        result = 40.3399;    // Luxembourg <-- This is the wrong code only here for compatibility with old versions
+    } else if (cur == "LUF") {
+        result = 40.3399;    // Luxembourg
+    } else if (cur == "LVL") {
+        result = 0.702804;    // Latvia
+    } else if (cur == "MTL") {
+        result = 0.4293;    // Malta
+    } else if (cur == "NLG") {
+        result = 2.20371;    // Netherlands
+    } else if (cur == "PTE") {
+        result = 200.482;    // Portugal
+    } else if (cur == "SIT") {
+        result = 239.64;    // Slovenia
+    } else if (cur == "SKK") {
+        result = 30.126;    // Slovakia
+    }
 
     return result;
 }
@@ -473,7 +493,7 @@ static double helper_eurofactor(const QString& currency)
 //
 // helper for IPMT and CUMIPMT is calculation of IPMT
 //
-static Value helper_ipmt(ValueCalc* calc, Value rate, Value per, Value nper, Value pv, Value fv, Value type)
+static Value helper_ipmt(ValueCalc *calc, Value rate, Value per, Value nper, Value pv, Value fv, Value type)
 {
 //     const Value payment = getPay (calc, rate, nper, pv, fv, type);
 //     const Value ineg = getPrinc (calc, pv, payment, rate, calc->sub (per, Value(1)));
@@ -494,7 +514,6 @@ static Value helper_ipmt(ValueCalc* calc, Value rate, Value per, Value nper, Val
     return (type.isZero()) ? ipmt : calc->div(ipmt, calc->add(Value(1), rate));
 }
 
-
 //
 // helper vdbGetGDA
 //
@@ -506,26 +525,29 @@ static double vdbGetGDA(const double cost, const double salvage, const double li
     rate = depreciationFactor / life;
     if (rate >= 1.0) {
         rate = 1.0;
-        if (period == 1.0)
+        if (period == 1.0) {
             oldCost = cost;
-        else
+        } else {
             oldCost = 0.0;
-    } else
+        }
+    } else {
         oldCost = cost * pow(1.0 - rate, period - 1.0);
+    }
 
     newCost = cost * pow(1.0 - rate, period);
 
-    if (newCost < salvage)
+    if (newCost < salvage) {
         res = oldCost - salvage;
-    else
+    } else {
         res = oldCost - newCost;
+    }
 
-    if (res < 0.0)
+    if (res < 0.0) {
         res = 0.0;
+    }
 
     return (res);
 }
-
 
 //
 // helper vdbInterVDB
@@ -561,8 +583,9 @@ static double vdbInterVDB(const double cost, const double salvage,
             term = lia;
         }
 
-        if (i == loopEnd)
+        if (i == loopEnd) {
             term *= (period + 1.0 - intEnd);
+        }
 
         res += term;
     }
@@ -570,14 +593,13 @@ static double vdbInterVDB(const double cost, const double salvage,
     return (res);
 }
 
-
 //
 // helper: xirrResult
 //
 // args[0] = values
 // args[1] = dates
 //
-static double xirrResult(valVector& args, ValueCalc *calc, double& rate)
+static double xirrResult(valVector &args, ValueCalc *calc, double &rate)
 {
     QDate date;
 
@@ -597,14 +619,13 @@ static double xirrResult(valVector& args, ValueCalc *calc, double& rate)
     return res;
 }
 
-
 //
 // helper: xirrResultDerive
 //
 // args[0] = values
 // args[1] = dates
 //
-static double xirrResultDerive(valVector& args, ValueCalc *calc, double& rate)
+static double xirrResultDerive(valVector &args, ValueCalc *calc, double &rate)
 {
     QDate date;
 
@@ -624,9 +645,7 @@ static double xirrResultDerive(valVector& args, ValueCalc *calc, double& rate)
     return res;
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////
-
 
 //
 // Function: ACCRINT
@@ -641,12 +660,14 @@ Value func_accrint(valVector args, ValueCalc *calc, FuncExtra *)
     int frequency = calc->conv()->asInteger(args[5]).asInteger();
 
     int basis = 0;
-    if (args.count() == 7)
+    if (args.count() == 7) {
         basis = calc->conv()->asInteger(args[6]).asInteger();
+    }
 
     if (basis < 0 || basis > 4 || (calc->isZero(Value(frequency))) ||
-            (12 % frequency != 0))
+            (12 % frequency != 0)) {
         return Value::errorVALUE();
+    }
 
     if (maturity >= settlement) {
         kDebug() << "maturity >= settlement";
@@ -657,15 +678,15 @@ Value func_accrint(valVector args, ValueCalc *calc, FuncExtra *)
     double y = daysPerYear(maturity, basis);
 
     if (d < 0 || y <= 0 || calc->lower(par, Value(0)) || calc->lower(rate, Value(0)) ||
-            calc->isZero(rate))
+            calc->isZero(rate)) {
         return Value::errorVALUE();
+    }
 
     Value coeff = calc->div(calc->mul(par, rate), frequency);
     double n = d / y;
 
     return calc->mul(coeff, n * frequency);
 }
-
 
 //
 // Function: ACCRINTM
@@ -678,22 +699,24 @@ Value func_accrintm(valVector args, ValueCalc *calc, FuncExtra *)
 
     Value par = Value(1000);
     int basis = 0;
-    if (args.count() > 3)
+    if (args.count() > 3) {
         par = args[3];
-    if (args.count() == 5)
+    }
+    if (args.count() == 5) {
         basis = calc->conv()->asInteger(args[4]).asInteger();
+    }
 
     double d = daysBetweenDates(issue, maturity, basis);
     double y = daysPerYear(issue, basis);
 
     if (d < 0 || y <= 0 || calc->isZero(par) || calc->isZero(rate) ||
-            calc->lower(par, Value(0)) || calc->lower(rate, Value(0)) || basis < 0 || basis > 4)
+            calc->lower(par, Value(0)) || calc->lower(rate, Value(0)) || basis < 0 || basis > 4) {
         return Value::errorVALUE();
+    }
 
     // par*date * d/y
     return calc->mul(calc->mul(par, rate), d / y);
 }
-
 
 //
 // Function: AMORDEGRC
@@ -710,8 +733,9 @@ Value func_amordegrc(valVector args, ValueCalc *calc, FuncExtra *)
     double rate = calc->conv()->asFloat(args[5]).asFloat();
 
     int basis = 0;
-    if (args.count() > 6)
+    if (args.count() > 6) {
         basis = calc->conv()->asInteger(args[6]).asInteger();
+    }
 
     int n;
     double amorCoeff, nRate, rest, usePer;
@@ -720,14 +744,15 @@ Value func_amordegrc(valVector args, ValueCalc *calc, FuncExtra *)
 
     usePer = 1.0 / rate;
 
-    if (usePer < 3.0)
+    if (usePer < 3.0) {
         amorCoeff = 1.0;
-    else if (usePer < 5.0)
+    } else if (usePer < 5.0) {
         amorCoeff = 1.5;
-    else if (usePer <= 6.0)
+    } else if (usePer <= 6.0) {
         amorCoeff = 2.0;
-    else
+    } else {
         amorCoeff = 2.5;
+    }
 
     QDate date0 = calc->settings()->referenceDate(); // referenceDat
 
@@ -736,7 +761,7 @@ Value func_amordegrc(valVector args, ValueCalc *calc, FuncExtra *)
     cost -= nRate;
     rest = cost - salvage;
 
-    for (n = 0 ; n < period ; ++n) {
+    for (n = 0; n < period; ++n) {
         nRate = ROUND(rate * cost, 0);
         rest -= nRate;
 
@@ -772,8 +797,9 @@ Value func_amorlinc(valVector args, ValueCalc *calc, FuncExtra *)
     double rate = calc->conv()->asFloat(args[5]).asFloat();
 
     int basis = 0;
-    if (args.count() > 6)
+    if (args.count() > 6) {
         basis = calc->conv()->asInteger(args[6]).asInteger();
+    }
 
     QDate date0 = calc->settings()->referenceDate(); // referenceDate
 
@@ -782,16 +808,17 @@ Value func_amorlinc(valVector args, ValueCalc *calc, FuncExtra *)
     double nullRate = yearFrac(date0, purchaseDate, firstPeriodEndDate, basis) * rate * cost;
     int numOfFullPeriods = (cost - salvage - nullRate) / oneRate;
 
-    double res ;
+    double res;
 
-    if (period == 0)
+    if (period == 0) {
         res = nullRate;
-    else if (period <= numOfFullPeriods)
+    } else if (period <= numOfFullPeriods) {
         res = oneRate;
-    else if (period == numOfFullPeriods + 1)
+    } else if (period == numOfFullPeriods + 1) {
         res = costDelta - oneRate * numOfFullPeriods - nullRate;
-    else
+    } else {
         res = 0.0;
+    }
 
     return Value(res);
 #undef ROUND
@@ -815,7 +842,6 @@ Value func_compound(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->mul(principal, calc->pow(base, calc->mul(periods, years)));
 }
 
-
 //
 // Function: continuous
 //
@@ -833,7 +859,6 @@ Value func_continuous(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->mul(principal, calc->exp(calc->mul(interest, years)));
 }
 
-
 enum CoupBasis {
     BASIS_MSRB_30_360     = 0,
     BASIS_ACT_ACT         = 1,
@@ -849,7 +874,7 @@ struct CoupSettings {
     bool eom; // not sure what this is...
 };
 
-static Value coup_checkparams(valVector args, ValueCalc *calc, QDate& settlement, QDate& maturity, CoupSettings& conf)
+static Value coup_checkparams(valVector args, ValueCalc *calc, QDate &settlement, QDate &maturity, CoupSettings &conf)
 {
     settlement = calc->conv()->asDate(args[0]).asDate(calc->settings());
     maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
@@ -858,27 +883,30 @@ static Value coup_checkparams(valVector args, ValueCalc *calc, QDate& settlement
     conf.basis = BASIS_MSRB_30_360;
     conf.eom = true;
 
-    if (args.count() > 3)
+    if (args.count() > 3) {
         conf.basis = static_cast<CoupBasis>(calc->conv()->asInteger(args[3]).asInteger());
-    if (args.count() > 4)
+    }
+    if (args.count() > 4) {
         conf.eom = calc->conv()->asBoolean(args[4]).asBoolean();
+    }
 
     if (conf.basis < 0 || conf.basis > 5 || (conf.frequency == 0) || (12 % conf.frequency != 0)
-            || settlement.daysTo(maturity) <= 0)
+            || settlement.daysTo(maturity) <= 0) {
         return Value::errorVALUE();
+    }
 
     return Value();
 }
 
-
-static QDate coup_cd(const QDate& settlement, const QDate& maturity, int freq, bool eom, bool next)
+static QDate coup_cd(const QDate &settlement, const QDate &maturity, int freq, bool eom, bool next)
 {
     bool is_eom_special = eom && maturity.day() == maturity.daysInMonth();
 
     int months = 12 / freq;
     int periods = maturity.year() - settlement.year();
-    if (periods > 0)
+    if (periods > 0) {
         periods = (periods - 1) * freq;
+    }
 
     QDate result;
     do {
@@ -900,7 +928,7 @@ static QDate coup_cd(const QDate& settlement, const QDate& maturity, int freq, b
     return result;
 }
 
-static int daysBetween_30E_360(const QDate& from, const QDate& to)
+static int daysBetween_30E_360(const QDate &from, const QDate &to)
 {
     int y1 = from.year();
     int m1 = from.month();
@@ -909,35 +937,17 @@ static int daysBetween_30E_360(const QDate& from, const QDate& to)
     int m2 = to.month();
     int d2 = to.day();
 
-    if (d1 == 31)
-            d1 = 30;
-    if (d2 == 31)
-            d2 = 30;
-
-    return (y2 - y1) * 360 + (m2 - m1) * 30 + (d2 - d1);
-}
-
-static int daysBetween_30Ep_360(const QDate& from, const QDate& to)
-{
-    int y1 = from.year();
-    int m1 = from.month();
-    int d1 = from.day();
-    int y2 = to.year();
-    int m2 = to.month();
-    int d2 = to.day();
-
-    if (d1 == 31)
-            d1 = 30;
+    if (d1 == 31) {
+        d1 = 30;
+    }
     if (d2 == 31) {
-            d2 = 1;
-            ++m2;
-            /* No need to check for m2 == 13 since 12*30 == 360 */
+        d2 = 30;
     }
 
     return (y2 - y1) * 360 + (m2 - m1) * 30 + (d2 - d1);
 }
 
-static int daysBetween_MSRB_30_360(const QDate& from, const QDate& to)
+static int daysBetween_30Ep_360(const QDate &from, const QDate &to)
 {
     int y1 = from.year();
     int m1 = from.month();
@@ -946,19 +956,44 @@ static int daysBetween_MSRB_30_360(const QDate& from, const QDate& to)
     int m2 = to.month();
     int d2 = to.day();
 
-    if (m1 == 2 && d1 == from.daysInMonth())
-            d1 = 30;
-    if (m2 == 2 && d2 == to.daysInMonth())
-            d2 = 30;
-    if (d2 == 31 && d1 >= 30)
-            d2 = 30;
-    if (d1 == 31)
-            d1 = 30;
+    if (d1 == 31) {
+        d1 = 30;
+    }
+    if (d2 == 31) {
+        d2 = 1;
+        ++m2;
+        /* No need to check for m2 == 13 since 12*30 == 360 */
+    }
 
     return (y2 - y1) * 360 + (m2 - m1) * 30 + (d2 - d1);
 }
 
-static int daysBetweenBasis(const QDate& from, const QDate& to, CoupBasis basis)
+static int daysBetween_MSRB_30_360(const QDate &from, const QDate &to)
+{
+    int y1 = from.year();
+    int m1 = from.month();
+    int d1 = from.day();
+    int y2 = to.year();
+    int m2 = to.month();
+    int d2 = to.day();
+
+    if (m1 == 2 && d1 == from.daysInMonth()) {
+        d1 = 30;
+    }
+    if (m2 == 2 && d2 == to.daysInMonth()) {
+        d2 = 30;
+    }
+    if (d2 == 31 && d1 >= 30) {
+        d2 = 30;
+    }
+    if (d1 == 31) {
+        d1 = 30;
+    }
+
+    return (y2 - y1) * 360 + (m2 - m1) * 30 + (d2 - d1);
+}
+
+static int daysBetweenBasis(const QDate &from, const QDate &to, CoupBasis basis)
 {
     const int sign = from < to ? 1 : -1;
     const QDate f = qMin(from, to);
@@ -979,7 +1014,6 @@ static int daysBetweenBasis(const QDate& from, const QDate& to, CoupBasis basis)
     }
 }
 
-
 //
 // Function: COUPDAYBS
 //
@@ -998,8 +1032,7 @@ Value func_coupdaybs(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(daysBetweenBasis(d, settlement, conf.basis));
 }
 
-
-static double coupdays(const QDate& settlement, const QDate& maturity, const CoupSettings& conf)
+static double coupdays(const QDate &settlement, const QDate &maturity, const CoupSettings &conf)
 {
     switch (conf.basis) {
     case BASIS_MSRB_30_360:
@@ -1011,9 +1044,9 @@ static double coupdays(const QDate& settlement, const QDate& maturity, const Cou
         return 365.0 / conf.frequency;
     case BASIS_ACT_ACT:
     default:
-            QDate next = coup_cd(settlement, maturity, conf.frequency, conf.eom, true);
-            QDate prev = coup_cd(settlement, maturity, conf.frequency, conf.eom, false);
-            return daysBetweenBasis(prev, next, BASIS_ACT_ACT);
+        QDate next = coup_cd(settlement, maturity, conf.frequency, conf.eom, true);
+        QDate prev = coup_cd(settlement, maturity, conf.frequency, conf.eom, false);
+        return daysBetweenBasis(prev, next, BASIS_ACT_ACT);
     }
 }
 
@@ -1030,10 +1063,8 @@ Value func_coupdays(valVector args, ValueCalc *calc, FuncExtra *)
         return res;
     }
 
-
     return Value(coupdays(settlement, maturity, conf));
 }
-
 
 //
 // Function: COUPDAYSNC
@@ -1053,7 +1084,6 @@ Value func_coupdaysnc(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(daysBetweenBasis(settlement, d, conf.basis));
 }
 
-
 //
 // Function: COUPNCD
 //
@@ -1069,7 +1099,6 @@ Value func_coupncd(valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value(coup_cd(settlement, maturity, conf.frequency, conf.eom, true), calc->settings());
 }
-
 
 //
 // Function: COUPNUM - taken from GNUMERIC
@@ -1088,14 +1117,17 @@ Value func_coupnum(valVector args, ValueCalc *calc, FuncExtra *)
     int   basis = 0;
     bool  eom   = true;
 
-    if (args.count() > 3)
+    if (args.count() > 3) {
         basis = calc->conv()->asInteger(args[3]).asInteger();
-    if (args.count() == 5)
+    }
+    if (args.count() == 5) {
         eom = calc->conv()->asBoolean(args[4]).asBoolean();
+    }
 
     if (basis < 0 || basis > 5 || (frequency == 0) || (12 % frequency != 0)
-            || settlement.daysTo(maturity) <= 0)
+            || settlement.daysTo(maturity) <= 0) {
         return Value::errorVALUE();
+    }
 
     double result;
     QDate cDate(maturity);
@@ -1106,18 +1138,19 @@ Value func_coupnum(valVector args, ValueCalc *calc, FuncExtra *)
     cDate = calc->settings()->locale()->calendar()->addMonths(cDate, -months);
 
     if (eom && maturity.daysInMonth() == maturity.day()) {
-        while (cDate.daysInMonth() != cDate.day())
+        while (cDate.daysInMonth() != cDate.day()) {
             cDate = cDate.addDays(1);
+        }
     }
 
-    if (settlement.day() >= cDate.day())
+    if (settlement.day() >= cDate.day()) {
         --months;
+    }
 
     result = (1 + months / (12 / frequency));
 
     return Value(result);
 }
-
 
 //
 // Function: COUPPCD
@@ -1135,45 +1168,52 @@ Value func_couppcd(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(coup_cd(settlement, maturity, conf.frequency, conf.eom, false), calc->settings());
 }
 
-
 //
 // Function: CUMIPMT
 //
 Value func_cumipmt(valVector args, ValueCalc *calc, FuncExtra *)
 {
     const Value rate = args[0];
-    if (rate.asFloat() <= 0.0)
+    if (rate.asFloat() <= 0.0) {
         return Value::errorVALUE();
+    }
     const Value nper = args[1];
     const int periods = nper.asInteger();
-    if (periods <= 0)
+    if (periods <= 0) {
         return Value::errorVALUE();
+    }
     const Value pv = args[2];
-    if (pv.asFloat() <= 0.0)
+    if (pv.asFloat() <= 0.0) {
         return Value::errorVALUE();
+    }
     const Value v1(calc->conv()->asInteger(args[3]));
-    if (v1.isError())
+    if (v1.isError()) {
         return Value::errorVALUE();
+    }
     const int start = v1.asInteger();
-    if (start <= 0 || start > periods)
+    if (start <= 0 || start > periods) {
         return Value::errorVALUE();
+    }
     const Value v2(calc->conv()->asInteger(args[4]));
-    if (v2.isError())
+    if (v2.isError()) {
         return Value::errorVALUE();
+    }
     const int end = v2.asInteger();
-    if (end < start || end > periods)
+    if (end < start || end > periods) {
         return Value::errorVALUE();
+    }
     const Value type(calc->conv()->asInteger(args[5]));
-    if (type.isError())
+    if (type.isError()) {
         return Value::errorVALUE();
+    }
 
     Value result(0.0);
-    for (int per = start; per <= end; ++per)
+    for (int per = start; per <= end; ++per) {
         result = calc->add(result, helper_ipmt(calc, rate, Value(per), nper, pv, Value(0.0), type));
+    }
 
     return result;
 }
-
 
 //
 // Function: CUMPRINC
@@ -1181,37 +1221,44 @@ Value func_cumipmt(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_cumprinc(valVector args, ValueCalc *calc, FuncExtra *)
 {
     const Value rate = args[0];
-    if (rate.asFloat() <= 0.0)
+    if (rate.asFloat() <= 0.0) {
         return Value::errorVALUE();
+    }
     const Value nper = args[1];
     const int periods = nper.asInteger();
-    if (periods <= 0)
+    if (periods <= 0) {
         return Value::errorVALUE();
+    }
     const Value pv = args[2];
-    if (pv.asFloat() <= 0.0)
+    if (pv.asFloat() <= 0.0) {
         return Value::errorVALUE();
+    }
     const Value v1(calc->conv()->asInteger(args[3]));
-    if (v1.isError())
+    if (v1.isError()) {
         return Value::errorVALUE();
+    }
     const int start = v1.asInteger();
-    if (start <= 0 || start > periods)
+    if (start <= 0 || start > periods) {
         return Value::errorVALUE();
+    }
     const Value v2(calc->conv()->asInteger(args[4]));
-    if (v2.isError())
+    if (v2.isError()) {
         return Value::errorVALUE();
+    }
     const int end = v2.asInteger();
-    if (end <= 0 || end < start || end > periods)
+    if (end <= 0 || end < start || end > periods) {
         return Value::errorVALUE();
+    }
     const Value type(calc->conv()->asInteger(args[5]));
-    if (type.isError())
+    if (type.isError()) {
         return Value::errorVALUE();
+    }
 
     const Value pay = getPay(calc, rate, nper, pv, Value(0.0), type);
     const Value cumipmt = func_cumipmt(args, calc, 0);
 
     return calc->sub(calc->mul(pay, Value(end - start + 1)), cumipmt);
 }
-
 
 //
 // Function: DB
@@ -1228,32 +1275,37 @@ Value func_db(valVector args, ValueCalc *calc, FuncExtra *)
     double life = numToDouble(calc->conv()->toFloat(args[2]));
     double period = numToDouble(calc->conv()->toFloat(args[3]));
     double month = 12;
-    if (args.count() == 5)
+    if (args.count() == 5) {
         month = numToDouble(calc->conv()->toFloat(args[4]));
+    }
 
     // sentinel check
-    if (cost == 0 || life <= 0.0 || period == 0)
+    if (cost == 0 || life <= 0.0 || period == 0) {
         return Value::errorNUM();
+    }
 
-    if (calc->lower(calc->div(Value(salvage), Value(cost)), Value(0)))
+    if (calc->lower(calc->div(Value(salvage), Value(cost)), Value(0))) {
         return Value::errorNUM();
+    }
 
     double rate = 1000 * (1 - pow((salvage / cost), (1 / life)));
     rate = floor(rate + 0.5)  / 1000;
 
     double total = cost * rate * month / 12;
 
-    if (period == 1)
+    if (period == 1) {
         return Value(total);
+    }
 
     for (int i = 1; i < life; ++i)
-        if (i == period - 1)
-            return Value(rate *(cost - total));
-        else total += rate * (cost - total);
+        if (i == period - 1) {
+            return Value(rate * (cost - total));
+        } else {
+            total += rate * (cost - total);
+        }
 
-    return Value((cost - total) * rate *(12 - month) / 12);
+    return Value((cost - total) * rate * (12 - month) / 12);
 }
-
 
 //
 // Function: DDB
@@ -1267,18 +1319,21 @@ Value func_ddb(valVector args, ValueCalc *calc, FuncExtra *)
     double life = numToDouble(calc->conv()->toFloat(args[2]));
     double period = numToDouble(calc->conv()->toFloat(args[3]));
     double factor = 2;
-    if (args.count() == 5)
+    if (args.count() == 5) {
         factor = numToDouble(calc->conv()->toFloat(args[4]));
+    }
 
-    if (cost < 0.0 || salvage < 0.0 || life <= 0.0 || period < 0.0 || factor < 0.0)
+    if (cost < 0.0 || salvage < 0.0 || life <= 0.0 || period < 0.0 || factor < 0.0) {
         return Value::errorVALUE();
+    }
 
     double result = 0.0;
 
     if (factor >= life)
         // special case: amazingly gigantic depreciating rate
+    {
         result = (period > 1) ? 0 : (cost < salvage) ? 0 : cost - salvage;
-    else {
+    } else {
         // depreciation is the value between two periods
         double invrate = (life - factor) / life;
         double current = (period == 1) ? invrate : pow(invrate, period);
@@ -1288,17 +1343,18 @@ Value func_ddb(valVector args, ValueCalc *calc, FuncExtra *)
         result = previous - current;
 
         // should not be more than the salvage
-        if (current < salvage)
+        if (current < salvage) {
             result = previous - salvage;
+        }
     }
 
     // can't be negative
-    if (result < 0.0)
+    if (result < 0.0) {
         result = 0.0;
+    }
 
     return Value(result);
 }
-
 
 //
 // Function: DISC
@@ -1317,12 +1373,14 @@ Value func_disc(valVector args, ValueCalc *calc, FuncExtra *)
     Value redemp = args[3];
 
     // check parameters
-    if (settlement > maturity || redemp.asFloat() <= 0.0 || par.asFloat() <= 0.0)
+    if (settlement > maturity || redemp.asFloat() <= 0.0 || par.asFloat() <= 0.0) {
         return Value(false);
+    }
 
     int basis = 0;
-    if (args.count() == 5)
+    if (args.count() == 5) {
         basis = calc->conv()->asInteger(args[4]).asInteger();
+    }
 
     /*  double y = daysPerYear (settlement, basis);
       double d = daysBetweenDates (settlement, maturity, basis);
@@ -1336,7 +1394,6 @@ Value func_disc(valVector args, ValueCalc *calc, FuncExtra *)
     return Value((1.0 - par.asFloat() / redemp.asFloat()) / yearFrac(date0, settlement, maturity, basis));
 }
 
-
 //
 // Function: DOLLARDE
 //
@@ -1345,8 +1402,9 @@ Value func_dollarde(valVector args, ValueCalc *calc, FuncExtra *)
     double dollarFrac = args[0].asFloat();
     double frac = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (frac <= 0)
+    if (frac <= 0) {
         return Value::errorVALUE();
+    }
 
     double fl;
     double res = modf(dollarFrac, &fl);
@@ -1358,7 +1416,6 @@ Value func_dollarde(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(res);
 }
 
-
 //
 // Function: DOLLARFR
 //
@@ -1367,8 +1424,9 @@ Value func_dollarfr(valVector args, ValueCalc *calc, FuncExtra *)
     double dollarFrac = args[0].asFloat();
     double frac = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (frac <= 0)
+    if (frac <= 0) {
         return Value::errorVALUE();
+    }
 
     double fl;
     double res = modf(dollarFrac, &fl);
@@ -1379,7 +1437,6 @@ Value func_dollarfr(valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value(res);
 }
-
 
 //
 // Function: DURATION
@@ -1393,19 +1450,21 @@ Value func_duration(valVector args, ValueCalc *calc, FuncExtra *)
     Value pv   = args[1];
     Value fv   = args[2];
 
-    if (!calc->greater(rate, Value(0.0)))
+    if (!calc->greater(rate, Value(0.0))) {
         return Value::errorVALUE();
-    if (calc->isZero(fv) || calc->isZero(pv))
+    }
+    if (calc->isZero(fv) || calc->isZero(pv)) {
         return Value::errorDIV0();
+    }
 
-    if (calc->lower(calc->div(fv, pv), Value(0)))
+    if (calc->lower(calc->div(fv, pv), Value(0))) {
         return Value::errorVALUE();
+    }
 
     // log(fv / pv) / log(1.0 + rate)
     return calc->div(calc->ln(calc->div(fv, pv)),
                      calc->ln(calc->add(rate, Value(1.0))));
 }
-
 
 //
 // Function: DURATION
@@ -1423,12 +1482,14 @@ Value func_duration_add(valVector args, ValueCalc *calc, FuncExtra *)
     int freq = calc->conv()->asInteger(args[4]).asInteger();
 
     int basis = 0;
-    if (args.count() > 5)
+    if (args.count() > 5) {
         basis = calc->conv()->asInteger(args[3]).asInteger();
+    }
 
     // TODO add chk_freq
-    if (coup < 0.0 || yield < 0.0)
+    if (coup < 0.0 || yield < 0.0) {
         return Value::errorVALUE();
+    }
 
     QDate date0 = calc->settings()->referenceDate(); // referenceDate
 
@@ -1443,10 +1504,8 @@ Value func_duration_add(valVector args, ValueCalc *calc, FuncExtra *)
     kDebug(36002) << "DURATION";
     kDebug(36002) << "numOfCoup =" << numOfCoups;
 
-
     return Value(duration(date0, settlement, maturity, coup, yield, freq, basis, numOfCoups));
 }
-
 
 //
 // Function: effective
@@ -1464,7 +1523,6 @@ Value func_effective(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->sub(calc->pow(base, periods), 1);
 }
 
-
 //
 // Function: EURO
 //
@@ -1472,12 +1530,12 @@ Value func_euro(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString currency = calc->conv()->asString(args[0]).asString();
     double result = helper_eurofactor(currency);
-    if (result < 0)
+    if (result < 0) {
         return Value::errorNUM();
+    }
 
     return Value(result);
 }
-
 
 //
 // EUROCONVERT(number,source,target)
@@ -1491,16 +1549,17 @@ Value func_euroconvert(valVector args, ValueCalc *calc, FuncExtra *)
     double factor1 = helper_eurofactor(source);
     double factor2 = helper_eurofactor(target);
 
-    if (factor1 < 0)
+    if (factor1 < 0) {
         return Value::errorNUM();
-    if (factor2 < 0)
+    }
+    if (factor2 < 0) {
         return Value::errorNUM();
+    }
 
     double result = number * factor2 / factor1;
 
     return Value(result);
 }
-
 
 //
 // Function: FV
@@ -1517,11 +1576,13 @@ Value func_fv(valVector args, ValueCalc *calc, FuncExtra *)
     Value pv(0.0);
     int type = 0;
 
-    if (args.count() > 3)
+    if (args.count() > 3) {
         pv = Value(calc->conv()->asFloat(args[3]).asFloat());
+    }
 
-    if (args.count() == 5)
+    if (args.count() == 5) {
         type = calc->conv()->asInteger(args[4]).asInteger();
+    }
 
     //TODO check payType
 
@@ -1559,7 +1620,6 @@ Value func_fvschedule(valVector args, ValueCalc *calc, FuncExtra *)
     return (res);
 }
 
-
 //
 // Function: FV_annnuity
 //
@@ -1578,7 +1638,6 @@ Value func_fv_annuity(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->mul(amount, calc->div(calc->sub(pw, 1), interest));
 }
 
-
 //
 // Function: INTRATE
 //
@@ -1591,19 +1650,20 @@ Value func_intrate(valVector args, ValueCalc *calc, FuncExtra *)
     Value redemption = args[3];
 
     int basis = 0;
-    if (args.count() == 5)
+    if (args.count() == 5) {
         basis = calc->conv()->asInteger(args[4]).asInteger();
+    }
 
     double d = daysBetweenDates(settlement, maturity, basis);
     double y = daysPerYear(settlement, basis);
 
-    if (d <= 0 || y <= 0 || calc->isZero(invest) || basis < 0 || basis > 4)
+    if (d <= 0 || y <= 0 || calc->isZero(invest) || basis < 0 || basis > 4) {
         return Value::errorVALUE();
+    }
 
     // (redemption - invest) / invest * (y / d)
     return calc->mul(calc->div(calc->sub(redemption, invest), invest), y / d);
 }
-
 
 //
 // Function: IPMT
@@ -1617,8 +1677,12 @@ Value func_ipmt(valVector args, ValueCalc *calc, FuncExtra *)
 
     Value fv = Value(0.0);
     Value type = Value(0);
-    if (args.count() > 4) fv = args[4];
-    if (args.count() == 6) type = args[5];
+    if (args.count() > 4) {
+        fv = args[4];
+    }
+    if (args.count() == 6) {
+        type = args[5];
+    }
 
     return helper_ipmt(calc, rate, per, nper, pv, fv, type);
 }
@@ -1654,7 +1718,9 @@ Value func_irr(valVector args, ValueCalc *calc, FuncExtra *)
     Value seq = args[0];
 
     double rate = 0.1;
-    if (args.count() > 1) rate = calc->conv()->asFloat(args[1]).asFloat();
+    if (args.count() > 1) {
+        rate = calc->conv()->asFloat(args[1]).asFloat();
+    }
 
     bool contLoop;
     int i = 0;
@@ -1678,8 +1744,9 @@ Value func_ispmt(valVector args, ValueCalc *calc, FuncExtra *)
     Value nper = args[2];
     Value pv   = args[3];
 
-    if (calc->lower(per, Value(1)) || calc->greater(per, nper))
+    if (calc->lower(per, Value(1)) || calc->greater(per, nper)) {
         return Value::errorVALUE();
+    }
 
     // d = -pv * rate
     Value d = calc->mul(calc->mul(pv, Value(-1)), rate);
@@ -1687,7 +1754,6 @@ Value func_ispmt(valVector args, ValueCalc *calc, FuncExtra *)
     // d - (d / nper * per)
     return calc->sub(d, calc->mul(calc->div(d, nper), per));
 }
-
 
 //
 // Function: MDURATION
@@ -1705,12 +1771,14 @@ Value func_mduration(valVector args, ValueCalc *calc, FuncExtra *)
     int freq = calc->conv()->asInteger(args[4]).asInteger();
 
     int basis = 0;
-    if (args.count() > 5)
+    if (args.count() > 5) {
         basis = calc->conv()->asInteger(args[3]).asInteger();
+    }
 
     // TODO add chk_freq
-    if (coup < 0.0 || yield < 0.0)
+    if (coup < 0.0 || yield < 0.0) {
         return Value::errorVALUE();
+    }
 
     QDate date0 = calc->settings()->referenceDate(); // referenceDate
 
@@ -1728,7 +1796,6 @@ Value func_mduration(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(res);
 }
 
-
 //
 // Function: MIRR
 //
@@ -1744,20 +1811,21 @@ Value func_mirr(valVector args, ValueCalc *calc, FuncExtra *)
 
     for (i = 0, npv_pos = npv_neg = 0; i < n; ++i) {
         v = args[0].element(i);
-        if (v.asFloat() >= 0)
+        if (v.asFloat() >= 0) {
             npv_pos += v.asFloat() / pow1p(reInvRate, i);
-        else
+        } else {
             npv_neg += v.asFloat() / pow1p(inv, i);
+        }
     }
 
-    if (npv_neg == 0 || npv_pos == 0 || reInvRate <= -1.0l)
+    if (npv_neg == 0 || npv_pos == 0 || reInvRate <= -1.0l) {
         return Value::errorVALUE();
+    }
 
     long double res = std::pow((-npv_pos * pow1p(reInvRate, n)) / (npv_neg * (1 + reInvRate)), (1.0l / (n - 1))) - 1.0l;
 
     return Value(res);
 }
-
 
 //
 // Function: level_coupon
@@ -1784,7 +1852,6 @@ Value func_level_coupon(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->add(calc->mul(coupon, pv_annuity), calc->div(face, pw));
 }
 
-
 //
 // Function: nominal
 //
@@ -1794,14 +1861,18 @@ Value func_nominal(valVector args, ValueCalc *calc, FuncExtra *)
     Value periods = args[1];
 
     // sentinel checks
-    if (calc->isZero(periods))
+    if (calc->isZero(periods)) {
         return Value::errorDIV0();
-    if (!calc->greater(periods, Value(0.0)))
+    }
+    if (!calc->greater(periods, Value(0.0))) {
         return Value::errorVALUE();
-    if (calc->isZero(effective))
+    }
+    if (calc->isZero(effective)) {
         return Value::errorVALUE();
-    if (!calc->greater(effective, Value(0.0)))
+    }
+    if (!calc->greater(effective, Value(0.0))) {
         return Value::errorVALUE();
+    }
 
     // pw = pow (effective + 1, 1 / periods)
     // result = periods * (pw - 1);
@@ -1809,7 +1880,6 @@ Value func_nominal(valVector args, ValueCalc *calc, FuncExtra *)
     pw = calc->pow(calc->add(effective, Value(1)), calc->div(Value(1), periods));
     return calc->mul(periods, calc->sub(pw, Value(1)));
 }
-
 
 //
 // Function: NPER
@@ -1825,25 +1895,30 @@ Value func_nper(valVector args, ValueCalc *calc, FuncExtra *)
     double type = 0;
 
     // opt. params
-    if (args.count() > 3) fv = calc->conv()->asFloat(args[3]).asFloat();
-    if (args.count() == 5) type = calc->conv()->asFloat(args[4]).asFloat();
+    if (args.count() > 3) {
+        fv = calc->conv()->asFloat(args[3]).asFloat();
+    }
+    if (args.count() == 5) {
+        type = calc->conv()->asFloat(args[4]).asFloat();
+    }
 
     // if rate is 0, ther NPER solves this
     //   PV = -FV -( Payment*NPER )
-    if (rate == 0.0)
+    if (rate == 0.0) {
         return Value(-(pv + fv) / pmt);
+    }
 
-    if (type > 0)
-        return Value(log(-(rate*fv - pmt*(1.0 + rate)) / (rate*pv + pmt*(1.0 + rate))) / log(1.0 + rate));
-    else
-        return Value(log(-(rate*fv - pmt) / (rate*pv + pmt)) / log(1.0 + rate));
+    if (type > 0) {
+        return Value(log(-(rate * fv - pmt * (1.0 + rate)) / (rate * pv + pmt * (1.0 + rate))) / log(1.0 + rate));
+    } else {
+        return Value(log(-(rate * fv - pmt) / (rate * pv + pmt)) / log(1.0 + rate));
+    }
 }
-
 
 //
 // NPV
 //
-Value func_npv(valVector args, ValueCalc* calc, FuncExtra*)
+Value func_npv(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value result(Value::Array);
     result.setElement(0, 0, Value(0.0));     // actual result
@@ -1858,27 +1933,27 @@ Value func_npv(valVector args, ValueCalc* calc, FuncExtra*)
     return result.element(0, 0);
 }
 
-static double date_ratio(const QDate& d1, const QDate& d2, const QDate& d3, const CoupSettings& conv)
+static double date_ratio(const QDate &d1, const QDate &d2, const QDate &d3, const CoupSettings &conv)
 {
     QDate next = coup_cd(d1, d3, conv.frequency, conv.eom, true);
     QDate prev = coup_cd(d1, d3, conv.frequency, conv.eom, false);
 
     if (next >= d2) {
         return daysBetweenBasis(d1, d2, conv.basis) /
-                coupdays(prev, next, conv);
+               coupdays(prev, next, conv);
     }
 
     double res = daysBetweenBasis(d1, next, conv.basis) /
-            coupdays(prev, next, conv);
+                 coupdays(prev, next, conv);
 
     while (true) {
         prev = next;
         next = next.addMonths(12 / conv.frequency);
         //if (!next.isValid())
-            //
+        //
         if (next >= d2) {
             res += daysBetweenBasis(prev, d2, conv.basis) /
-                        coupdays(prev, next, conv);
+                   coupdays(prev, next, conv);
             return res;
         }
         res += 1;
@@ -1900,8 +1975,9 @@ Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
 
     // opt. basis
     int basis = 0;
-    if (args.count() > 7)
+    if (args.count() > 7) {
         basis = calc->conv()->asInteger(args[7]).asInteger();
+    }
 
     CoupSettings conv;
     conv.basis = static_cast<CoupBasis>(basis);
@@ -1912,8 +1988,9 @@ Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
 //   kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" yield="<<yield<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
 
     // TODO check frequency
-    if (yield <= 0.0 || rate <= 0.0 || maturity <= settlement || settlement <= last)
+    if (yield <= 0.0 || rate <= 0.0 || maturity <= settlement || settlement <= last) {
         return Value::errorVALUE();
+    }
 
     QDate d = last;
     do {
@@ -1925,10 +2002,9 @@ Value func_oddlprice(valVector args, ValueCalc *calc, FuncExtra *)
     double x3 = date_ratio(settlement, maturity, d, conv);
 
     return Value((redemp * conv.frequency +
-              100 * rate * (x2 - x1 * (1 + yield * x3 / conv.frequency))) /
-              (yield * x3 + conv.frequency));
+                  100 * rate * (x2 - x1 * (1 + yield * x3 / conv.frequency))) /
+                 (yield * x3 + conv.frequency));
 }
-
 
 //
 // ODDLYIELD
@@ -1945,8 +2021,9 @@ Value func_oddlyield(valVector args, ValueCalc *calc, FuncExtra *)
 
     // opt. basis
     int basis = 0;
-    if (args.count() > 7)
+    if (args.count() > 7) {
         basis = calc->conv()->asInteger(args[7]).asInteger();
+    }
 
     CoupSettings conv;
     conv.basis = static_cast<CoupBasis>(basis);
@@ -1957,9 +2034,9 @@ Value func_oddlyield(valVector args, ValueCalc *calc, FuncExtra *)
 //   kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" price="<<price<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
 
     // TODO check frequency
-    if (rate < 0.0 || price <= 0.0 || maturity <= settlement || settlement <= last)
+    if (rate < 0.0 || price <= 0.0 || maturity <= settlement || settlement <= last) {
         return Value::errorVALUE();
-
+    }
 
     QDate d = last;
     do {
@@ -1970,11 +2047,9 @@ Value func_oddlyield(valVector args, ValueCalc *calc, FuncExtra *)
     double x2 = date_ratio(last, maturity, d, conv);
     double x3 = date_ratio(settlement, maturity, d, conv);
 
-
     return Value((conv.frequency * (redemp - price) + 100 * rate * (x2 - x1)) /
-            (x3 * price + 100 * rate * x1 * x3 / conv.frequency));
+                 (x3 * price + 100 * rate * x1 * x3 / conv.frequency));
 }
-
 
 //
 // Function: PMT
@@ -1986,12 +2061,15 @@ Value func_pmt(valVector args, ValueCalc *calc, FuncExtra *)
     Value pv   = args[2];
     Value fv = Value(0.0);
     Value type = Value(0);
-    if (args.count() > 3) fv = args[3];
-    if (args.count() == 5) type = args[4];
+    if (args.count() > 3) {
+        fv = args[3];
+    }
+    if (args.count() == 5) {
+        type = args[4];
+    }
 
     return getPay(calc, rate, nper, pv, fv, type);
 }
-
 
 //
 // Function: PPMT
@@ -2021,8 +2099,12 @@ Value func_ppmt(valVector args, ValueCalc *calc, FuncExtra *)
     Value fv = Value(0.0);
     Value type = Value(0);
 
-    if (args.count() > 4) fv = args[4];
-    if (args.count() == 6) type = args[5];
+    if (args.count() > 4) {
+        fv = args[4];
+    }
+    if (args.count() == 6) {
+        type = args[5];
+    }
 
     kDebug() << "Type=" << type;
 
@@ -2030,7 +2112,6 @@ Value func_ppmt(valVector args, ValueCalc *calc, FuncExtra *)
     Value ipmt = func_ipmt(args, calc, 0);
     return calc->sub(pay, ipmt);
 }
-
 
 //
 // PRICEMAT
@@ -2045,17 +2126,21 @@ Value func_pricemat(valVector args, ValueCalc *calc, FuncExtra *)
 
     // opt. basis
     int basis = 0;
-    if (args.count() > 5)
+    if (args.count() > 5) {
         basis = calc->conv()->asInteger(args[5]).asInteger();
+    }
 
     //kDebug(36002)<<"PRICEMAT";
     //kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" issue="<<issue<<" rate="<<rate<<" yield="<<yield<<" basis="<<basis;
 
-    if (rate < 0.0 || yield < 0.0 || settlement >= maturity)
+    if (rate < 0.0 || yield < 0.0 || settlement >= maturity) {
         return Value::errorVALUE();
+    }
 
     long double y = daysPerYear(settlement, basis);
-    if (!y) return Value::errorVALUE();
+    if (!y) {
+        return Value::errorVALUE();
+    }
     long double issMat = daysBetweenDates(issue, maturity, basis) / y;
     long double issSet = daysBetweenDates(issue, settlement, basis) / y;
     long double setMat = daysBetweenDates(settlement, maturity, basis) / y;
@@ -2067,7 +2152,6 @@ Value func_pricemat(valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value(res);
 }
-
 
 //
 // Function: PV
@@ -2083,24 +2167,25 @@ Value func_pv(valVector args, ValueCalc *calc, FuncExtra *)
     double fv = 0;
     int type = 0;
 
-    if (args.count() > 3)
+    if (args.count() > 3) {
         fv = calc->conv()->asFloat(args[3]).asFloat();
-    if (args.count() > 4)
+    }
+    if (args.count() > 4) {
         type = calc->conv()->asInteger(args[4]).asInteger();
+    }
     // TODO error Value checking for type
-
 
     double pvif = pow(1 + rate, nper);
     double fvifa = (pvif - 1) / rate;
 
-    if (pvif == 0)
+    if (pvif == 0) {
         return Value::errorDIV0();
+    }
 
     double res = (-fv - pmt * (1.0 + rate * type) * fvifa) / pvif;
 
     return Value(res);
 }
-
 
 //
 // Function: PV_annuity
@@ -2118,7 +2203,6 @@ Value func_pv_annuity(valVector args, ValueCalc *calc, FuncExtra *)
     return calc->mul(amount, calc->div(calc->sub(Value(1), recpow), interest));
 }
 
-
 //
 // Function: RATE
 //
@@ -2132,8 +2216,9 @@ Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
     double fPayType = (args.count() > 4) ? calc->conv()->asFloat(args[4]).asFloat() : 0;
     double fGuess = (args.count() > 5) ? calc->conv()->asFloat(args[5]).asFloat() : 0.1;
 
-    if (fNper <= 0.0)
+    if (fNper <= 0.0) {
         return Value::errorVALUE();
+    }
 
     bool bValid = true, bFound = false;
     double fX, fXnew, fTerm, fTermDerivation;
@@ -2149,49 +2234,51 @@ Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
         fX = fGuess;
         double fPowN, fPowNminus1;
         while (!bFound && nCount < nIterationsMax) {
-            fPowNminus1 = pow( 1.0+fX, fNper-1.0);
-            fPowN = fPowNminus1 * (1.0+fX);
+            fPowNminus1 = pow(1.0 + fX, fNper - 1.0);
+            fPowN = fPowNminus1 * (1.0 + fX);
             if (calc->approxEqual(Value(fabs(fX)), Value(0.0))) {
                 fGeoSeries = fNper;
-                fGeoSeriesDerivation = fNper * (fNper-1.0)/2.0;
+                fGeoSeriesDerivation = fNper * (fNper - 1.0) / 2.0;
             } else {
-                fGeoSeries = (fPowN-1.0)/fX;
+                fGeoSeries = (fPowN - 1.0) / fX;
                 fGeoSeriesDerivation = fNper * fPowNminus1 / fX - fGeoSeries / fX;
             }
-            fTerm = fFv + fPv *fPowN+ fPayment * fGeoSeries;
+            fTerm = fFv + fPv * fPowN + fPayment * fGeoSeries;
             fTermDerivation = fPv * fNper * fPowNminus1 + fPayment * fGeoSeriesDerivation;
             if (fabs(fTerm) < fEpsilonSmall) {
                 bFound = true;
             } else {
-                if (calc->approxEqual(Value(fabs(fTermDerivation)), Value(0.0)))
+                if (calc->approxEqual(Value(fabs(fTermDerivation)), Value(0.0))) {
                     fXnew = fX + 1.1 * fEpsilon;
-                else
+                } else {
                     fXnew = fX - fTerm / fTermDerivation;
+                }
                 ++nCount;
                 bFound = (fabs(fXnew - fX) < fEpsilon);
                 fX = fXnew;
             }
         }
-        bValid =(fX >=-1.0);
+        bValid = (fX >= -1.0);
     } else {
         fX = (fGuess < -1.0) ? -1.0 : fGuess;
         while (bValid && !bFound && nCount < nIterationsMax) {
             if (calc->approxEqual(Value(fabs(fX)), Value(0.0))) {
                 fGeoSeries = fNper;
-                fGeoSeriesDerivation = fNper * (fNper-1.0)/2.0;
+                fGeoSeriesDerivation = fNper * (fNper - 1.0) / 2.0;
             } else {
-                fGeoSeries = (pow( 1.0+fX, fNper) - 1.0) / fX;
-                fGeoSeriesDerivation = fNper * pow( 1.0+fX, fNper-1.0) / fX - fGeoSeries / fX;
+                fGeoSeries = (pow(1.0 + fX, fNper) - 1.0) / fX;
+                fGeoSeriesDerivation = fNper * pow(1.0 + fX, fNper - 1.0) / fX - fGeoSeries / fX;
             }
-            fTerm = fFv + fPv *pow(1.0 + fX,fNper)+ fPayment * fGeoSeries;
-            fTermDerivation = fPv * fNper * pow(1.0+fX, fNper-1.0) + fPayment * fGeoSeriesDerivation;
+            fTerm = fFv + fPv * pow(1.0 + fX, fNper) + fPayment * fGeoSeries;
+            fTermDerivation = fPv * fNper * pow(1.0 + fX, fNper - 1.0) + fPayment * fGeoSeriesDerivation;
             if (fabs(fTerm) < fEpsilonSmall) {
                 bFound = true;
             } else {
-                if (calc->approxEqual(Value(fabs(fTermDerivation)), Value(0.0)))
+                if (calc->approxEqual(Value(fabs(fTermDerivation)), Value(0.0))) {
                     fXnew = fX + 1.1 * fEpsilon;
-                else
+                } else {
                     fXnew = fX - fTerm / fTermDerivation;
+                }
                 ++nCount;
                 bFound = (fabs(fXnew - fX) < fEpsilon);
                 fX = fXnew;
@@ -2205,7 +2292,6 @@ Value func_rate(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(fGuess);
 }
 
-
 //
 // Function: RECEIVED
 //
@@ -2218,23 +2304,25 @@ Value func_received(valVector args, ValueCalc *calc, FuncExtra *)
     Value discount = args[3];
 
     int basis = 0;
-    if (args.count() == 5)
+    if (args.count() == 5) {
         basis = calc->conv()->asInteger(args[4]).asInteger();
+    }
 
     double d = daysBetweenDates(settlement, maturity, basis);
     double y = daysPerYear(settlement, basis);
 
-    if (d <= 0 || y <= 0 || basis < 0 || basis > 4)
+    if (d <= 0 || y <= 0 || basis < 0 || basis > 4) {
         return Value(false);
+    }
 
     // 1.0 - ( discount * d / y )
     Value x = calc->sub(Value(1.0), (calc->mul(discount, d / y)));
 
-    if (calc->isZero(x))
+    if (calc->isZero(x)) {
         return Value::errorVALUE();
+    }
     return calc->div(investment, x);
 }
-
 
 //
 // Function: RRI
@@ -2246,13 +2334,13 @@ Value func_rri(valVector args, ValueCalc *calc, FuncExtra *)
     double fv = calc->conv()->asFloat(args[2]).asFloat();
 
     // constraints N>0
-    if (p < 1)
+    if (p < 1) {
         return Value::errorVALUE();
+    }
 
     double res = pow((fv / pv), 1 / p) - 1;
     return Value(res);
 }
-
 
 //
 // Function: SLN
@@ -2266,13 +2354,13 @@ Value func_sln(valVector args, ValueCalc *calc, FuncExtra *)
     Value life = args[2];
 
     // sentinel check
-    if (!calc->greater(life, Value(0.0)))
+    if (!calc->greater(life, Value(0.0))) {
         return Value::errorVALUE();
+    }
 
     // (cost - salvage_value) / life
     return calc->div(calc->sub(cost, salvage_value), life);
 }
-
 
 //
 // Function: SYD
@@ -2287,8 +2375,9 @@ Value func_syd(valVector args, ValueCalc *calc, FuncExtra *)
     Value period = args[3];
 
     // sentinel check
-    if (!calc->greater(life, Value(0.0)))
+    if (!calc->greater(life, Value(0.0))) {
         return Value::errorVALUE();
+    }
 
     // v1 = cost - salvage_value
     // v2 = life - period + 1
@@ -2300,7 +2389,6 @@ Value func_syd(valVector args, ValueCalc *calc, FuncExtra *)
     v3 = calc->mul(life, calc->add(life, 1.0));
     return calc->div(calc->mul(calc->mul(v1, v2), 2), v3);
 }
-
 
 //
 // Function: TBILLEQ
@@ -2314,14 +2402,14 @@ Value func_tbilleq(valVector args, ValueCalc *calc, FuncExtra *)
     maturity = maturity.addDays(1);
     int days = days360(settlement, maturity, false);  // false -> US
 
-    if (settlement >= maturity || discount <= 0.0 || days > 360)
+    if (settlement >= maturity || discount <= 0.0 || days > 360) {
         return Value::errorVALUE();
+    }
 
     double res = (365 * discount) / (360 - (discount * double(days)));
 
     return Value(res);
 }
-
 
 //
 // Function: TBILLPRICE
@@ -2337,17 +2425,17 @@ Value func_tbillprice(valVector args, ValueCalc *calc, FuncExtra *)
     double fraction = yearFrac(date0, settlement, maturity.addDays(1), 0); // basis: USA 30/360
     double dummy;
 
-    if (modf(fraction, &dummy) == 0.0)
+    if (modf(fraction, &dummy) == 0.0) {
         return Value::errorVALUE();
+    }
 
 //   double days = settlement.daysTo( maturity );
 // TODO error value checking
 //   if (settlement > maturity || calc->lower (discount, Value(0)) || days > 265)
 //     return Value::errorVALUE();
 
-    return Value(100.0*(1.0 - discount.asFloat()*fraction));
+    return Value(100.0 * (1.0 - discount.asFloat() * fraction));
 }
-
 
 //
 // Function: TBILLYIELD
@@ -2361,8 +2449,9 @@ Value func_tbillyield(valVector args, ValueCalc *calc, FuncExtra *)
     double days = days360(settlement, maturity, false);  // false -> US
     ++days;
 
-    if (settlement >= maturity || days > 360 || price <= 0.0)
+    if (settlement >= maturity || days > 360 || price <= 0.0) {
         return Value::errorVALUE();
+    }
 
     double res = 100.0;
     res /= price;
@@ -2372,7 +2461,6 @@ Value func_tbillyield(valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value(res);
 }
-
 
 //
 // Function: VDB
@@ -2392,14 +2480,17 @@ Value func_vdb(valVector args, ValueCalc *calc, FuncExtra *)
     bool flag = false;
 
     // opt. parameter
-    if (args.count() > 6)
+    if (args.count() > 6) {
         flag = calc->conv()->asInteger(args[6]).asInteger();
-    if (args.count() >= 5)
+    }
+    if (args.count() >= 5) {
         depreciationFactor = calc->conv()->asFloat(args[5]).asFloat();
+    }
 
     // check if parameters are valid
-    if (cost < 0.0 || endPeriod < startPeriod || endPeriod > life || cost < 0.0 || salvage > cost || depreciationFactor <= 0.0)
+    if (cost < 0.0 || endPeriod < startPeriod || endPeriod > life || cost < 0.0 || salvage > cost || depreciationFactor <= 0.0) {
         return Value::errorVALUE();
+    }
 
     // calc loop start and end
     double         intStart = floor(startPeriod);
@@ -2415,10 +2506,11 @@ Value func_vdb(valVector args, ValueCalc *calc, FuncExtra *)
             double term = vdbGetGDA(cost, salvage, life, (double) i, depreciationFactor);
 
             //
-            if (i == loopStart + 1)
+            if (i == loopStart + 1) {
                 term *= (fmin(endPeriod, intStart + 1.0) - startPeriod);
-            else if (i == loopEnd)
+            } else if (i == loopEnd) {
                 term *= (endPeriod + 1.0 - intEnd);
+            }
 
             res += term;
         }
@@ -2444,7 +2536,6 @@ Value func_vdb(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(res);
 }
 
-
 //
 // Function: XIRR
 //
@@ -2457,12 +2548,14 @@ Value func_vdb(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_xirr(valVector args, ValueCalc *calc, FuncExtra *)
 {
     double resultRate = 0.1;
-    if (args.count() > 2)
+    if (args.count() > 2) {
         resultRate = calc->conv()->asFloat(args[2]).asFloat();
+    }
 
     // check pairs and count >= 2 and guess > -1.0
-    if (args[0].count() != args[1].count() || args[1].count() < 2 || resultRate <= -1.0)
+    if (args[0].count() != args[1].count() || args[1].count() < 2 || resultRate <= -1.0) {
         return Value::errorVALUE();
+    }
 
     // define max epsilon
     static const double maxEpsilon = 1e-10;
@@ -2483,8 +2576,9 @@ Value func_xirr(valVector args, ValueCalc *calc, FuncExtra *)
         contLoop = (rateEpsilon > maxEpsilon) && (fabs(resultValue) > maxEpsilon);
     } while (contLoop && (++i < maxIter));
 
-    if (contLoop)
+    if (contLoop) {
         return Value::errorVALUE();
+    }
 
     return Value(resultRate);
 }
@@ -2507,11 +2601,13 @@ Value func_xnpv(valVector args, ValueCalc *calc, FuncExtra *)
     double res = 0;
 
     // check pairs
-    if (numValues != numDates || numValues < 2)
+    if (numValues != numDates || numValues < 2) {
         return Value::errorVALUE();
+    }
     // check rate
-    if (rate < -1.0)
+    if (rate < -1.0) {
         return Value::errorNUM();
+    }
 
     QDate date0 = calc->conv()->asDate(args[2].element(0)).asDate(calc->settings());
     double val;
@@ -2521,12 +2617,15 @@ Value func_xnpv(valVector args, ValueCalc *calc, FuncExtra *)
         val  = calc->conv()->asFloat(args[1].element(i)).asFloat();
         Value tmpDate(calc->conv()->asDate(args[2].element(i)));
 
-        if (tmpDate.isError()) return tmpDate;
+        if (tmpDate.isError()) {
+            return tmpDate;
+        }
         date = tmpDate.asDate(calc->settings());
 
         // check if date is valid
-        if (!date.isValid())
+        if (!date.isValid()) {
             return Value::errorNUM();
+        }
 
         int days = date0.daysTo(date);
 
@@ -2535,7 +2634,6 @@ Value func_xnpv(valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value(res);
 }
-
 
 //
 // YIELDDISC
@@ -2549,11 +2647,13 @@ Value func_yielddisc(valVector args, ValueCalc *calc, FuncExtra *)
 
     // opt. basis
     int basis = 0;
-    if (args.count() > 4)
+    if (args.count() > 4) {
         basis = calc->conv()->asInteger(args[4]).asInteger();
+    }
 
-    if (price <= 0.0 || redemp <= 0.0 || settlement >= maturity)
+    if (price <= 0.0 || redemp <= 0.0 || settlement >= maturity) {
         return Value::errorVALUE();
+    }
 
     QDate date0 = calc->settings()->referenceDate(); // referenceDate
 
@@ -2562,7 +2662,6 @@ Value func_yielddisc(valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value(res);
 }
-
 
 //
 // YIELDMAT
@@ -2577,11 +2676,13 @@ Value func_yieldmat(valVector args, ValueCalc *calc, FuncExtra *)
 
     // opt. basis
     int basis = 0;
-    if (args.count() > 5)
+    if (args.count() > 5) {
         basis = calc->conv()->asInteger(args[5]).asInteger();
+    }
 
-    if (price <= 0.0 || rate <= 0.0 || settlement >= maturity)
+    if (price <= 0.0 || rate <= 0.0 || settlement >= maturity) {
         return Value::errorVALUE();
+    }
 
     QDate date0 = calc->settings()->referenceDate(); // referenceDate
 

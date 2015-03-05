@@ -35,14 +35,14 @@ class KisFilterOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 
 public:
 
-    KisFilterOpSettingsWidget(QWidget* parent = 0);
+    KisFilterOpSettingsWidget(QWidget *parent = 0);
 
     virtual ~KisFilterOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 
 public:
-    KisFilterOption* m_filterOption;
+    KisFilterOption *m_filterOption;
 };
 
 #endif // KIS_FILTEROP_SETTINGS_WIDGET_H_

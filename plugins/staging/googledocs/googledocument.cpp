@@ -22,64 +22,64 @@ GoogleDocument::GoogleDocument()
 {
 }
 
-void GoogleDocument::setEtag(const QString & etag)
+void GoogleDocument::setEtag(const QString &etag)
 {
     m_etag = etag;
 }
 
-QString GoogleDocument::etag () const
+QString GoogleDocument::etag() const
 {
     return m_etag;
 }
 
-void GoogleDocument::setId (const QString & id)
+void GoogleDocument::setId(const QString &id)
 {
     m_id = id;
 
     setDocumentType(id.left(id.indexOf(':')));
 }
 
-QString GoogleDocument::id () const
+QString GoogleDocument::id() const
 {
     return m_id;
 }
 
-void GoogleDocument::setTitle (const QString & title)
+void GoogleDocument::setTitle(const QString &title)
 {
     m_title = title;
 }
 
-QString GoogleDocument::title () const
+QString GoogleDocument::title() const
 {
     return m_title;
 }
 
-void GoogleDocument::setAuthor (const QString & author)
+void GoogleDocument::setAuthor(const QString &author)
 {
     m_author = author;
 }
 
-QString GoogleDocument::author () const
+QString GoogleDocument::author() const
 {
     return m_author;
 }
 
-void GoogleDocument::setDocumentType (const QString & docType)
+void GoogleDocument::setDocumentType(const QString &docType)
 {
     m_docType = docType;
 }
 
-QString GoogleDocument::documentType () const
+QString GoogleDocument::documentType() const
 {
     return m_docType;
 }
 
-void GoogleDocument::setDocumentUrl (const QString & url)
+void GoogleDocument::setDocumentUrl(const QString &url)
 {
     m_documetUrl = url;
 }
 
-QString GoogleDocument::documentUrl () const
+QString GoogleDocument::documentUrl() const
 {
     return m_documetUrl;
 }

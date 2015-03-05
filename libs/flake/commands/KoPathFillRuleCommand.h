@@ -37,7 +37,7 @@ public:
      * @param fillRule the new fill rule
      * @param parent the parent command used for macro commands
      */
-    KoPathFillRuleCommand(const QList<KoPathShape*> &shapes, Qt::FillRule fillRule, KUndo2Command *parent = 0);
+    KoPathFillRuleCommand(const QList<KoPathShape *> &shapes, Qt::FillRule fillRule, KUndo2Command *parent = 0);
     virtual ~KoPathFillRuleCommand();
     /// redo the command
     void redo();
@@ -45,7 +45,7 @@ public:
     void undo();
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOPATHFILLRULECOMMAND_H

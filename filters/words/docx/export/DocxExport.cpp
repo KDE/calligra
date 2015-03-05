@@ -45,10 +45,8 @@
 #include "OdtReaderDocxBackend.h"
 #include "OdfTextReaderDocxBackend.h"
 
-
 K_PLUGIN_FACTORY(DocxExportFactory, registerPlugin<DocxExport>();)
 K_EXPORT_PLUGIN(DocxExportFactory("wordsdocxexportng", "calligrafilters"))
-
 
 DocxExport::DocxExport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
@@ -59,17 +57,17 @@ DocxExport::~DocxExport()
 {
 }
 
-KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus DocxExport::convert(const QByteArray &from, const QByteArray &to)
 {
     // Check for types
     if (from != "application/vnd.oasis.opendocument.text"
-        || to != "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+            || to != "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
         return KoFilter::NotImplemented;
     }
 
     // Open the infile and return an error if it fails.
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
-                                             "", KoStore::Auto);
+                        "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
         kError(30503) << "Unable to open input file!" << endl;
         delete odfStore;
@@ -105,7 +103,6 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     docxFile.addContentFile("", "/word/styles.xml",
                             "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
                             styleWriter.documentContent());
-
 
     if (!odtReader.readContent(&docxBackend, &docxBackendContext)) {
         return KoFilter::ParsingError;

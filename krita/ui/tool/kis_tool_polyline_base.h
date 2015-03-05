@@ -25,14 +25,14 @@
 
 class KRITAUI_EXPORT KisToolPolylineBase : public KisToolShape
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     enum ToolType {
         PAINT,
         SELECT
     };
 
-    KisToolPolylineBase(KoCanvasBase * canvas, KisToolPolylineBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_polygon_cursor.png", 6, 6));
+    KisToolPolylineBase(KoCanvasBase *canvas, KisToolPolylineBase::ToolType type, const QCursor &cursor = KisCursor::load("tool_polygon_cursor.png", 6, 6));
 
     void beginPrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
@@ -41,15 +41,15 @@ public:
 
     void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    virtual void paint(QPainter &gc, const KoViewConverter &converter);
 
-    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation activation, const QSet<KoShape *> &shapes);
     void deactivate();
     void requestStrokeEnd();
     void requestStrokeCancellation();
 
 protected:
-    virtual void finishPolyline(const QVector<QPointF>& points) = 0;
+    virtual void finishPolyline(const QVector<QPointF> &points) = 0;
 
 private:
     void endStroke();

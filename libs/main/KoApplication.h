@@ -80,12 +80,11 @@ public:
     /**
      * Tell KoApplication to show this splashscreen when you call start();
      * when start returns, the splashscreen is hidden. Use KSplashScreen
-     * to have the splash show correctly on Xinerama displays. 
+     * to have the splash show correctly on Xinerama displays.
      */
     void setSplashScreen(QWidget *splash);
 
-
-    QList<KoPart*> partList() const;
+    QList<KoPart *> partList() const;
 
     /**
      * return a list of mimetypes this application supports.
@@ -105,7 +104,7 @@ public:
      * to every function that may require it.
      * @return the current application object
      */
-    static KoApplication* koApplication();
+    static KoApplication *koApplication();
 
 Q_SIGNALS:
 
@@ -131,7 +130,7 @@ protected:
 
 private:
     bool initHack();
-    KoApplicationPrivate * const d;
+    KoApplicationPrivate *const d;
     class ResetStarting;
     friend class ResetStarting;
 };

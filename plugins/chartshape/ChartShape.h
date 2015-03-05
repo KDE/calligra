@@ -23,7 +23,6 @@
 #ifndef KCHART_SHAPE_H
 #define KCHART_SHAPE_H
 
-
 // Qt
 #include <Qt>
 
@@ -34,7 +33,6 @@
 // KChart
 #include "kchart_global.h"
 #include "KoChartInterface.h"
-
 
 class QAbstractItemModel;
 
@@ -57,15 +55,15 @@ class KoGenStyles;
 class KoOdfStylesReader;
 class KoOdfLoadingContext;
 
-
 // FIXME: Remove all mentions of KDChart from the public API.
-namespace KDChart {
-    class Chart;
-    class Legend;
-    class CartesianAxis;
-    class CartesianCoordinatePlane;
-    class AbstractCoordinatePlane;
-    class AbstractDiagram;
+namespace KDChart
+{
+class Chart;
+class Legend;
+class CartesianAxis;
+class CartesianCoordinatePlane;
+class AbstractCoordinatePlane;
+class AbstractDiagram;
 }
 
 // Interface to SimpleTextShape plugin
@@ -74,7 +72,8 @@ class KoTextShapeData;
 #define OdfLoadingHelperId "OdfLoadingHelperId"
 typedef KoTextShapeData TextLabelData;
 
-namespace KChart {
+namespace KChart
+{
 
 class DataSet;
 class ChartProxyModel;
@@ -88,11 +87,10 @@ class ChartTableModel;
 class ChartLayout;
 class TableSource;
 
-void saveOdfFont(KoGenStyle &style, const QFont& font, const QColor& color);
-QString saveOdfFont(KoGenStyles& mainStyles, const QFont& font, const QColor& color);
+void saveOdfFont(KoGenStyle &style, const QFont &font, const QColor &color);
+QString saveOdfFont(KoGenStyles &mainStyles, const QFont &font, const QColor &color);
 QColor defaultDataSetColor(int dataSetNum);
-const char * odfCharttype(int charttype);
-
+const char *odfCharttype(int charttype);
 
 class ChartShape
     : public QObject
@@ -126,7 +124,7 @@ public:
      * Use this method with caution, as it re-creates the list every
      * time you call it.
      */
-    QList<KoShape*> labels() const;
+    QList<KoShape *> labels() const;
 
     void showTitle(bool doShow);
     void showSubTitle(bool doShow);
@@ -178,7 +176,7 @@ public:
      *
      * See kspread/SheetAccessModel.h for details.
      */
-    void setSheetAccessModel(QAbstractItemModel* model);
+    void setSheetAccessModel(QAbstractItemModel *model);
 
     /**
      * Re-initializes the chart with data from an arbitrary region.
@@ -191,7 +189,7 @@ public:
      *
      * @see ChartProxyModel::init()
      */
-    void reset(const QString& region,
+    void reset(const QString &region,
                bool firstRowIsLabel,
                bool firstColumnIsLabel,
                Qt::Orientation dataDirection);

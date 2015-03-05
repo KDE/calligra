@@ -28,23 +28,23 @@ class GoogleDocument : public QObject
 public:
     GoogleDocument();
 
-    void setEtag(const QString & etag);
-    QString etag () const;
+    void setEtag(const QString &etag);
+    QString etag() const;
 
-    void setId (const QString & id);
-    QString id () const;
+    void setId(const QString &id);
+    QString id() const;
 
-    void setTitle (const QString & title);
-    QString title () const;
+    void setTitle(const QString &title);
+    QString title() const;
 
-    void setAuthor (const QString & author);
-    QString author () const;
+    void setAuthor(const QString &author);
+    QString author() const;
 
-    void setDocumentType (const QString & docType);
-    QString documentType () const;
+    void setDocumentType(const QString &docType);
+    QString documentType() const;
 
-    void setDocumentUrl (const QString & url);
-    QString documentUrl () const;
+    void setDocumentUrl(const QString &url);
+    QString documentUrl() const;
 
 private:
     QString m_etag;

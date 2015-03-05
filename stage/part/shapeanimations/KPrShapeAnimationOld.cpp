@@ -19,15 +19,15 @@
 
 #include "KPrShapeAnimationOld.h"
 
-KPrShapeAnimationOld::KPrShapeAnimationOld( KoShape * shape, int step, Type type )
-: m_shape( shape )
-, m_step( step )
-, m_type( type )
-, m_finished( false )
+KPrShapeAnimationOld::KPrShapeAnimationOld(KoShape *shape, int step, Type type)
+    : m_shape(shape)
+    , m_step(step)
+    , m_type(type)
+    , m_finished(false)
 {
     // TODO make setable
-    m_timeLine.setDuration( 5000 );
-    m_timeLine.setCurveShape( QTimeLine::LinearCurve );
+    m_timeLine.setDuration(5000);
+    m_timeLine.setCurveShape(QTimeLine::LinearCurve);
 }
 
 KPrShapeAnimationOld::~KPrShapeAnimationOld()
@@ -44,12 +44,12 @@ int KPrShapeAnimationOld::step() const
     return m_step;
 }
 
-void KPrShapeAnimationOld::setStep( int step )
+void KPrShapeAnimationOld::setStep(int step)
 {
     m_step = step;
 }
 
-KoShape * KPrShapeAnimationOld::shape() const
+KoShape *KPrShapeAnimationOld::shape() const
 {
     return m_shape;
 }

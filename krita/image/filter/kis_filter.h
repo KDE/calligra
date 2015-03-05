@@ -55,7 +55,7 @@ public:
     /**
      * Construct a Krita filter
      */
-    KisFilter(const KoID& id, const KoID & category, const QString & entry);
+    KisFilter(const KoID &id, const KoID &category, const QString &entry);
     virtual ~KisFilter();
 
 public:
@@ -73,9 +73,9 @@ public:
      * @param progressUpdater to pass on the progress the filter is making
      */
     virtual void processImpl(KisPaintDeviceSP device,
-                             const QRect& applyRect,
-                             const KisFilterConfiguration* config,
-                             KoUpdater* progressUpdater = 0 ) const = 0;
+                             const QRect &applyRect,
+                             const KisFilterConfiguration *config,
+                             KoUpdater *progressUpdater = 0) const = 0;
 
     /**
      * Filter \p src device and write the result into \p dst device.
@@ -92,24 +92,23 @@ public:
     void process(const KisPaintDeviceSP src,
                  KisPaintDeviceSP dst,
                  KisSelectionSP selection,
-                 const QRect& applyRect,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0 ) const;
-
+                 const QRect &applyRect,
+                 const KisFilterConfiguration *config,
+                 KoUpdater *progressUpdater = 0) const;
 
     /**
      * A convenience method for a two-device process() function
      */
     void process(KisPaintDeviceSP device,
-                 const QRect& applyRect,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater = 0 ) const;
+                 const QRect &applyRect,
+                 const KisFilterConfiguration *config,
+                 KoUpdater *progressUpdater = 0) const;
 
     /**
      * Some filters need pixels outside the current processing rect to compute the new
      * value (for instance, convolution filters)
      */
-    virtual QRect neededRect(const QRect & rect, const KisFilterConfiguration* = 0) const;
+    virtual QRect neededRect(const QRect &rect, const KisFilterConfiguration * = 0) const;
 
     /**
     * Similar to \ref neededRect: some filters will alter a lot of pixels that are
@@ -117,14 +116,12 @@ public:
     * in a device, the actual rectangle that will feel the influence of this change
     * might be bigger. Use this function to determine that rect.
      */
-    virtual QRect changedRect(const QRect & rect, const KisFilterConfiguration* = 0) const;
+    virtual QRect changedRect(const QRect &rect, const KisFilterConfiguration * = 0) const;
 
 protected:
 
     QString configEntryGroup() const;
 
-
 };
-
 
 #endif

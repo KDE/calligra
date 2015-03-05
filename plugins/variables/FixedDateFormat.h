@@ -38,7 +38,7 @@ private Q_SLOTS:
     void listClicked(QListWidgetItem *item);
     void offsetChanged(int offset);
     void insertCustomButtonPressed();
-    void customTextChanged(const QString& text);
+    void customTextChanged(const QString &text);
 
 private:
     Ui::FixedDateFormat widget;

@@ -54,7 +54,8 @@ public:
     };
 
     struct DocumentInfo {
-        bool operator==(const DocumentInfo &other) const {
+        bool operator==(const DocumentInfo &other) const
+        {
             return filePath == other.filePath;
         }
         QString filePath;
@@ -72,7 +73,6 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-
 
     DocumentType filter();
 

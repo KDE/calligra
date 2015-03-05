@@ -162,12 +162,30 @@ class KexiEmptyItemModel : public QAbstractItemModel
 {
 public:
     explicit KexiEmptyItemModel(QObject *parent = 0) : QAbstractItemModel(parent) {}
-    QModelIndex index(int, int, const QModelIndex &) const { return QModelIndex(); }
-    QModelIndex parent(const QModelIndex &) const { return QModelIndex(); }
-    int rowCount(const QModelIndex &) const { return 0; }
-    int columnCount(const QModelIndex &) const { return 0; }
-    bool hasChildren(const QModelIndex &) const { return false; }
-    QVariant data(const QModelIndex &, int) const { return QVariant(); }
+    QModelIndex index(int, int, const QModelIndex &) const
+    {
+        return QModelIndex();
+    }
+    QModelIndex parent(const QModelIndex &) const
+    {
+        return QModelIndex();
+    }
+    int rowCount(const QModelIndex &) const
+    {
+        return 0;
+    }
+    int columnCount(const QModelIndex &) const
+    {
+        return 0;
+    }
+    bool hasChildren(const QModelIndex &) const
+    {
+        return false;
+    }
+    QVariant data(const QModelIndex &, int) const
+    {
+        return QVariant();
+    }
 };
 
 Q_GLOBAL_STATIC(KexiEmptyItemModel, kexiEmptyModel)
@@ -177,27 +195,27 @@ QAbstractItemModel *KexiAbstractItemModelPrivate::staticEmptyModel()
     return kexiEmptyModel();
 }
 
-namespace {
-    struct DefaultRoleNames : public QHash<int, QByteArray>
+namespace
+{
+struct DefaultRoleNames : public QHash<int, QByteArray> {
+    DefaultRoleNames()
     {
-        DefaultRoleNames() {
-            (*this)[Qt::DisplayRole] = "display";
-            (*this)[Qt::DecorationRole] = "decoration";
-            (*this)[Qt::EditRole] = "edit";
-            (*this)[Qt::ToolTipRole] = "toolTip";
-            (*this)[Qt::StatusTipRole] = "statusTip";
-            (*this)[Qt::WhatsThisRole] = "whatsThis";
-        }
-    };
+        (*this)[Qt::DisplayRole] = "display";
+        (*this)[Qt::DecorationRole] = "decoration";
+        (*this)[Qt::EditRole] = "edit";
+        (*this)[Qt::ToolTipRole] = "toolTip";
+        (*this)[Qt::StatusTipRole] = "statusTip";
+        (*this)[Qt::WhatsThisRole] = "whatsThis";
+    }
+};
 }
 
 Q_GLOBAL_STATIC(DefaultRoleNames, qDefaultRoleNames)
 
-const QHash<int,QByteArray> &KexiAbstractItemModelPrivate::defaultRoleNames()
+const QHash<int, QByteArray> &KexiAbstractItemModelPrivate::defaultRoleNames()
 {
     return *qDefaultRoleNames();
 }
-
 
 KexiCompletionModel::KexiCompletionModel(KexiCompleterPrivate *c, QObject *parent)
     : QAbstractProxyModel(parent),
@@ -221,8 +239,9 @@ void KexiCompletionModel::setSourceModel(QAbstractItemModel *source)
 {
     bool hadModel = (sourceModel() != 0);
 
-    if (hadModel)
+    if (hadModel) {
         QObject::disconnect(sourceModel(), 0, this, 0);
+    }
 
     QAbstractProxyModel::setSourceModel(source ? source : KexiAbstractItemModelPrivate::staticEmptyModel());
 
@@ -256,24 +275,27 @@ void KexiCompletionModel::createEngine()
         break;
     }
 
-    if (sortedEngine)
+    if (sortedEngine) {
         engine.reset(new QSortedModelEngine(c));
-    else
+    } else {
         engine.reset(new QUnsortedModelEngine(c));
+    }
 }
 
-QModelIndex KexiCompletionModel::mapToSource(const QModelIndex& index) const
+QModelIndex KexiCompletionModel::mapToSource(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return engine->curParent;
+    }
 
     int row;
     QModelIndex parent = engine->curParent;
     if (!showAll) {
-        if (!engine->matchCount())
+        if (!engine->matchCount()) {
             return QModelIndex();
+        }
         Q_ASSERT(index.row() < engine->matchCount());
-        KexiIndexMapper& rootIndices = engine->historyMatch.indices;
+        KexiIndexMapper &rootIndices = engine->historyMatch.indices;
         if (index.row() < rootIndices.count()) {
             row = rootIndices[index.row()];
             parent = QModelIndex();
@@ -287,37 +309,43 @@ QModelIndex KexiCompletionModel::mapToSource(const QModelIndex& index) const
     return sourceModel()->index(row, index.column(), parent);
 }
 
-QModelIndex KexiCompletionModel::mapFromSource(const QModelIndex& idx) const
+QModelIndex KexiCompletionModel::mapFromSource(const QModelIndex &idx) const
 {
-    if (!idx.isValid())
+    if (!idx.isValid()) {
         return QModelIndex();
+    }
 
     int row = -1;
     if (!showAll) {
-        if (!engine->matchCount())
+        if (!engine->matchCount()) {
             return QModelIndex();
+        }
 
-        KexiIndexMapper& rootIndices = engine->historyMatch.indices;
+        KexiIndexMapper &rootIndices = engine->historyMatch.indices;
         if (idx.parent().isValid()) {
-            if (idx.parent() != engine->curParent)
+            if (idx.parent() != engine->curParent) {
                 return QModelIndex();
+            }
         } else {
             row = rootIndices.indexOf(idx.row());
-            if (row == -1 && engine->curParent.isValid())
-                return QModelIndex(); // source parent and our parent don't match
+            if (row == -1 && engine->curParent.isValid()) {
+                return QModelIndex();    // source parent and our parent don't match
+            }
         }
 
         if (row == -1) {
-            KexiIndexMapper& indices = engine->curMatch.indices;
+            KexiIndexMapper &indices = engine->curMatch.indices;
             engine->filterOnDemand(idx.row() - indices.last());
             row = indices.indexOf(idx.row()) + rootIndices.count();
         }
 
-        if (row == -1)
+        if (row == -1) {
             return QModelIndex();
+        }
     } else {
-        if (idx.parent() != engine->curParent)
+        if (idx.parent() != engine->curParent) {
             return QModelIndex();
+        }
         row = idx.row();
     }
 
@@ -326,14 +354,17 @@ QModelIndex KexiCompletionModel::mapFromSource(const QModelIndex& idx) const
 
 bool KexiCompletionModel::setCurrentRow(int row)
 {
-    if (row < 0 || !engine->matchCount())
+    if (row < 0 || !engine->matchCount()) {
         return false;
+    }
 
-    if (row >= engine->matchCount())
+    if (row >= engine->matchCount()) {
         engine->filterOnDemand(row + 1 - engine->matchCount());
+    }
 
-    if (row >= engine->matchCount()) // invalid row
+    if (row >= engine->matchCount()) { // invalid row
         return false;
+    }
 
     engine->curRow = row;
     return true;
@@ -341,37 +372,45 @@ bool KexiCompletionModel::setCurrentRow(int row)
 
 QModelIndex KexiCompletionModel::currentIndex(bool sourceIndex) const
 {
-    if (!engine->matchCount())
+    if (!engine->matchCount()) {
         return QModelIndex();
+    }
 
     int row = engine->curRow;
-    if (showAll)
+    if (showAll) {
         row = engine->curMatch.indices[engine->curRow];
+    }
 
     QModelIndex idx = createIndex(row, c->column);
-    if (!sourceIndex)
+    if (!sourceIndex) {
         return idx;
+    }
     return mapToSource(idx);
 }
 
-QModelIndex KexiCompletionModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex KexiCompletionModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (row < 0 || column < 0 || column >= columnCount(parent) || parent.isValid())
+    if (row < 0 || column < 0 || column >= columnCount(parent) || parent.isValid()) {
         return QModelIndex();
+    }
 
     if (!showAll) {
-        if (!engine->matchCount())
+        if (!engine->matchCount()) {
             return QModelIndex();
+        }
         if (row >= engine->historyMatch.indices.count()) {
             int want = row + 1 - engine->matchCount();
-            if (want > 0)
+            if (want > 0) {
                 engine->filterOnDemand(want);
-            if (row >= engine->matchCount())
+            }
+            if (row >= engine->matchCount()) {
                 return QModelIndex();
+            }
         }
     } else {
-        if (row >= sourceModel()->rowCount(engine->curParent))
+        if (row >= sourceModel()->rowCount(engine->curParent)) {
             return QModelIndex();
+        }
     }
 
     return createIndex(row, column);
@@ -379,8 +418,9 @@ QModelIndex KexiCompletionModel::index(int row, int column, const QModelIndex& p
 
 int KexiCompletionModel::completionCount() const
 {
-    if (!engine->matchCount())
+    if (!engine->matchCount()) {
         return 0;
+    }
 
     engine->filterOnDemand(INT_MAX);
     return engine->matchCount();
@@ -388,14 +428,16 @@ int KexiCompletionModel::completionCount() const
 
 int KexiCompletionModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
 
     if (showAll) {
         // Show all items below current parent, even if we have no valid matches
         if (engine->curParts.count() != 1  && !engine->matchCount()
-            && !engine->curParent.isValid())
+                && !engine->curParent.isValid()) {
             return 0;
+        }
         return sourceModel()->rowCount(engine->curParent);
     }
 
@@ -404,27 +446,31 @@ int KexiCompletionModel::rowCount(const QModelIndex &parent) const
 
 void KexiCompletionModel::setFiltered(bool filtered)
 {
-    if (showAll == !filtered)
+    if (showAll == !filtered) {
         return;
+    }
     showAll = !filtered;
     resetModel();
 }
 
 bool KexiCompletionModel::hasChildren(const QModelIndex &parent) const
 {
-    if (parent.isValid())
+    if (parent.isValid()) {
         return false;
+    }
 
-    if (showAll)
+    if (showAll) {
         return sourceModel()->hasChildren(mapToSource(parent));
+    }
 
-    if (!engine->matchCount())
+    if (!engine->matchCount()) {
         return false;
+    }
 
     return true;
 }
 
-QVariant KexiCompletionModel::data(const QModelIndex& index, int role) const
+QVariant KexiCompletionModel::data(const QModelIndex &index, int role) const
 {
     return sourceModel()->data(mapToSource(index), role);
 }
@@ -447,13 +493,14 @@ void KexiCompletionModel::invalidate()
     filter(engine->curParts);
 }
 
-void KexiCompletionModel::filter(const QStringList& parts)
+void KexiCompletionModel::filter(const QStringList &parts)
 {
     engine->filter(parts);
     resetModel();
 
-    if (sourceModel()->canFetchMore(engine->curParent))
+    if (sourceModel()->canFetchMore(engine->curParent)) {
         sourceModel()->fetchMore(engine->curParent);
+    }
 }
 
 void KexiCompletionModel::resetModel()
@@ -466,64 +513,70 @@ void KexiCompletionModel::resetModel()
     emit layoutAboutToBeChanged();
     QModelIndexList piList = persistentIndexList();
     QModelIndexList empty;
-    for (int i = 0; i < piList.size(); i++)
+    for (int i = 0; i < piList.size(); i++) {
         empty.append(QModelIndex());
+    }
     changePersistentIndexList(piList, empty);
     emit layoutChanged();
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void KexiCompletionEngine::filter(const QStringList& parts)
+void KexiCompletionEngine::filter(const QStringList &parts)
 {
     const QAbstractItemModel *model = c->proxy->sourceModel();
     curParts = parts;
-    if (curParts.isEmpty())
+    if (curParts.isEmpty()) {
         curParts.append(QString());
+    }
 
     curRow = -1;
     curParent = QModelIndex();
     curMatch = KexiMatchData();
     historyMatch = filterHistory();
 
-    if (!model)
+    if (!model) {
         return;
+    }
 
     QModelIndex parent;
     for (int i = 0; i < curParts.count() - 1; i++) {
         QString part = curParts[i];
         int emi = filter(part, parent, -1).exactMatchIndex;
-        if (emi == -1)
+        if (emi == -1) {
             return;
+        }
         parent = model->index(emi, c->column, parent);
     }
 
     // Note that we set the curParent to a valid parent, even if we have no matches
     // When filtering is disabled, we show all the items under this parent
     curParent = parent;
-    if (curParts.last().isEmpty())
+    if (curParts.last().isEmpty()) {
         curMatch = KexiMatchData(KexiIndexMapper(0, model->rowCount(curParent) - 1), -1, false);
-    else
-        curMatch = filter(curParts.last(), curParent, 1); // build at least one
+    } else {
+        curMatch = filter(curParts.last(), curParent, 1);    // build at least one
+    }
     curRow = curMatch.isValid() ? 0 : -1;
 }
 
-inline bool matchPrefix(const QString& s1, const QString& s2, Qt::CaseSensitivity cs)
+inline bool matchPrefix(const QString &s1, const QString &s2, Qt::CaseSensitivity cs)
 {
     return s1.startsWith(s2, cs);
 }
 
-inline bool matchSubstring(const QString& s1, const QString& s2, Qt::CaseSensitivity cs)
+inline bool matchSubstring(const QString &s1, const QString &s2, Qt::CaseSensitivity cs)
 {
     return s1.contains(s2, cs);
 }
 
-typedef bool (*MatchFunction)(const QString&, const QString&, Qt::CaseSensitivity);
+typedef bool (*MatchFunction)(const QString &, const QString &, Qt::CaseSensitivity);
 
 KexiMatchData KexiCompletionEngine::filterHistory()
 {
     QAbstractItemModel *source = c->proxy->sourceModel();
-    if (curParts.count() <= 1 || c->proxy->showAll || !source)
+    if (curParts.count() <= 1 || c->proxy->showAll || !source) {
         return KexiMatchData();
+    }
 #ifdef QT_NO_DIRMODEL
     bool isDirModel = false;
 #else
@@ -543,21 +596,23 @@ KexiMatchData KexiCompletionEngine::filterHistory()
         QString str = source->index(i, c->column).data().toString();
         if (matchFunction(str, c->prefix, c->cs)
 #if (!defined(Q_OS_WIN) || defined(Q_OS_WINCE)) && !defined(Q_OS_SYMBIAN)
-            && ((!isFsModel && !isDirModel) || QDir::toNativeSeparators(str) != QDir::separator())
+                && ((!isFsModel && !isDirModel) || QDir::toNativeSeparators(str) != QDir::separator())
 #endif
-            )
+           ) {
             m.indices.append(i);
+        }
     }
     return m;
 }
 
 // Returns a match hint from the cache by chopping the search string
-bool KexiCompletionEngine::matchHint(QString part, const QModelIndex& parent, KexiMatchData *hint)
+bool KexiCompletionEngine::matchHint(QString part, const QModelIndex &parent, KexiMatchData *hint)
 {
-    if (c->cs == Qt::CaseInsensitive)
+    if (c->cs == Qt::CaseInsensitive) {
         part = part.toLower();
+    }
 
-    const CacheItem& map = cache[parent];
+    const CacheItem &map = cache[parent];
 
     QString key = part;
     while (!key.isEmpty()) {
@@ -571,27 +626,29 @@ bool KexiCompletionEngine::matchHint(QString part, const QModelIndex& parent, Ke
     return false;
 }
 
-bool KexiCompletionEngine::lookupCache(QString part, const QModelIndex& parent, KexiMatchData *m)
+bool KexiCompletionEngine::lookupCache(QString part, const QModelIndex &parent, KexiMatchData *m)
 {
-   if (c->cs == Qt::CaseInsensitive)
+    if (c->cs == Qt::CaseInsensitive) {
         part = part.toLower();
-   const CacheItem& map = cache[parent];
-   if (!map.contains(part))
-       return false;
-   *m = map[part];
-   return true;
+    }
+    const CacheItem &map = cache[parent];
+    if (!map.contains(part)) {
+        return false;
+    }
+    *m = map[part];
+    return true;
 }
 
 // When the cache size exceeds 1MB, it clears out about 1/2 of the cache.
-void KexiCompletionEngine::saveInCache(QString part, const QModelIndex& parent, const KexiMatchData& m)
+void KexiCompletionEngine::saveInCache(QString part, const QModelIndex &parent, const KexiMatchData &m)
 {
     KexiMatchData old = cache[parent].take(part);
     cost = cost + m.indices.cost() - old.indices.cost();
     if (cost * sizeof(int) > 1024 * 1024) {
         QMap<QModelIndex, CacheItem>::iterator it1 = cache.begin();
         while (it1 != cache.end()) {
-            CacheItem& ci = it1.value();
-            int sz = ci.count()/2;
+            CacheItem &ci = it1.value();
+            int sz = ci.count() / 2;
             QMap<QString, KexiMatchData>::iterator it2 = ci.begin();
             int i = 0;
             while (it2 != ci.end() && i < sz) {
@@ -600,27 +657,29 @@ void KexiCompletionEngine::saveInCache(QString part, const QModelIndex& parent, 
                 i++;
             }
             if (ci.count() == 0) {
-              it1 = cache.erase(it1);
+                it1 = cache.erase(it1);
             } else {
-              ++it1;
+                ++it1;
             }
         }
     }
 
-    if (c->cs == Qt::CaseInsensitive)
+    if (c->cs == Qt::CaseInsensitive) {
         part = part.toLower();
+    }
     cache[parent][part] = m;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-KexiIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex& parent, Qt::SortOrder order)
+KexiIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex &parent, Qt::SortOrder order)
 {
     const QAbstractItemModel *model = c->proxy->sourceModel();
 
-    if (c->cs == Qt::CaseInsensitive)
+    if (c->cs == Qt::CaseInsensitive) {
         part = part.toLower();
+    }
 
-    const CacheItem& map = cache[parent];
+    const CacheItem &map = cache[parent];
 
     // Try to find a lower and upper bound for the search from previous results
     int to = model->rowCount(parent) - 1;
@@ -628,8 +687,8 @@ KexiIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex& p
     const CacheItem::const_iterator it = map.lowerBound(part);
 
     // look backward for first valid hint
-    for(CacheItem::const_iterator it1 = it; it1-- != map.constBegin();) {
-        const KexiMatchData& value = it1.value();
+    for (CacheItem::const_iterator it1 = it; it1-- != map.constBegin();) {
+        const KexiMatchData &value = it1.value();
         if (value.isValid()) {
             if (order == Qt::AscendingOrder) {
                 from = value.indices.last() + 1;
@@ -641,8 +700,8 @@ KexiIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex& p
     }
 
     // look forward for first valid hint
-    for(CacheItem::const_iterator it2 = it; it2 != map.constEnd(); ++it2) {
-        const KexiMatchData& value = it2.value();
+    for (CacheItem::const_iterator it2 = it; it2 != map.constEnd(); ++it2) {
+        const KexiMatchData &value = it2.value();
         if (value.isValid() && !it2.key().startsWith(part)) {
             if (order == Qt::AscendingOrder) {
                 to = value.indices.first() - 1;
@@ -661,27 +720,30 @@ Qt::SortOrder QSortedModelEngine::sortOrder(const QModelIndex &parent) const
     const QAbstractItemModel *model = c->proxy->sourceModel();
 
     int rowCount = model->rowCount(parent);
-    if (rowCount < 2)
+    if (rowCount < 2) {
         return Qt::AscendingOrder;
+    }
     QString first = model->data(model->index(0, c->column, parent), c->role).toString();
     QString last = model->data(model->index(rowCount - 1, c->column, parent), c->role).toString();
     return QString::compare(first, last, c->cs) <= 0 ? Qt::AscendingOrder : Qt::DescendingOrder;
 }
 
-KexiMatchData QSortedModelEngine::filter(const QString& part, const QModelIndex& parent, int)
+KexiMatchData QSortedModelEngine::filter(const QString &part, const QModelIndex &parent, int)
 {
     const QAbstractItemModel *model = c->proxy->sourceModel();
 
     KexiMatchData hint;
-    if (lookupCache(part, parent, &hint))
+    if (lookupCache(part, parent, &hint)) {
         return hint;
+    }
 
     KexiIndexMapper indices;
     Qt::SortOrder order = sortOrder(parent);
 
     if (matchHint(part, parent, &hint)) {
-        if (!hint.isValid())
+        if (!hint.isValid()) {
             return KexiMatchData();
+        }
         indices = hint.indices;
     } else {
         indices = indexHint(part, parent, order);
@@ -694,14 +756,13 @@ KexiMatchData QSortedModelEngine::filter(const QString& part, const QModelIndex&
     QModelIndex probeIndex;
     QString probeData;
 
-    while (high - low > 1)
-    {
+    while (high - low > 1) {
         probe = (high + low) / 2;
         probeIndex = model->index(probe, c->column, parent);
         probeData = model->data(probeIndex, c->role).toString();
         const int cmp = QString::compare(probeData, part, c->cs);
         if ((order == Qt::AscendingOrder && cmp >= 0)
-            || (order == Qt::DescendingOrder && cmp < 0)) {
+                || (order == Qt::DescendingOrder && cmp < 0)) {
             high = probe;
         } else {
             low = probe;
@@ -709,12 +770,12 @@ KexiMatchData QSortedModelEngine::filter(const QString& part, const QModelIndex&
     }
 
     if ((order == Qt::AscendingOrder && low == indices.to())
-        || (order == Qt::DescendingOrder && high == indices.from())) { // not found
+            || (order == Qt::DescendingOrder && high == indices.from())) { // not found
         saveInCache(part, parent, KexiMatchData());
         return KexiMatchData();
     }
 
-    probeIndex = model->index(order == Qt::AscendingOrder ? low+1 : high-1, c->column, parent);
+    probeIndex = model->index(order == Qt::AscendingOrder ? low + 1 : high - 1, c->column, parent);
     probeData = model->data(probeIndex, c->role).toString();
     if (!probeData.startsWith(part, c->cs)) {
         saveInCache(part, parent, KexiMatchData());
@@ -722,7 +783,7 @@ KexiMatchData QSortedModelEngine::filter(const QString& part, const QModelIndex&
     }
 
     const bool exactMatch = QString::compare(probeData, part, c->cs) == 0;
-    int emi =  exactMatch ? (order == Qt::AscendingOrder ? low+1 : high-1) : -1;
+    int emi =  exactMatch ? (order == Qt::AscendingOrder ? low + 1 : high - 1) : -1;
 
     int from = 0;
     int to = 0;
@@ -736,28 +797,27 @@ KexiMatchData QSortedModelEngine::filter(const QString& part, const QModelIndex&
         high = to;
     }
 
-    while (high - low > 1)
-    {
+    while (high - low > 1) {
         probe = (high + low) / 2;
         probeIndex = model->index(probe, c->column, parent);
         probeData = model->data(probeIndex, c->role).toString();
         const bool startsWith = probeData.startsWith(part, c->cs);
         if ((order == Qt::AscendingOrder && startsWith)
-            || (order == Qt::DescendingOrder && !startsWith)) {
+                || (order == Qt::DescendingOrder && !startsWith)) {
             low = probe;
         } else {
             high = probe;
         }
     }
 
-    KexiMatchData m(order == Qt::AscendingOrder ? KexiIndexMapper(from, high - 1) : KexiIndexMapper(low+1, to), emi, false);
+    KexiMatchData m(order == Qt::AscendingOrder ? KexiIndexMapper(from, high - 1) : KexiIndexMapper(low + 1, to), emi, false);
     saveInCache(part, parent, m);
     return m;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-int QUnsortedModelEngine::buildIndices(const QString& str, const QModelIndex& parent, int n,
-                                      const KexiIndexMapper& indices, KexiMatchData* m)
+int QUnsortedModelEngine::buildIndices(const QString &str, const QModelIndex &parent, int n,
+                                       const KexiIndexMapper &indices, KexiMatchData *m)
 {
     Q_ASSERT(m->partial);
     Q_ASSERT(n != -1 || m->exactMatchIndex == -1);
@@ -768,24 +828,27 @@ int QUnsortedModelEngine::buildIndices(const QString& str, const QModelIndex& pa
     for (i = 0; i < indices.count() && count != n; ++i) {
         QModelIndex idx = model->index(indices[i], c->column, parent);
         QString data = model->data(idx, c->role).toString();
-        if (!matchFunction(data, str, c->cs) || !(model->flags(idx) & Qt::ItemIsSelectable))
+        if (!matchFunction(data, str, c->cs) || !(model->flags(idx) & Qt::ItemIsSelectable)) {
             continue;
+        }
         m->indices.append(indices[i]);
         ++count;
         if (m->exactMatchIndex == -1 && QString::compare(data, str, c->cs) == 0) {
             m->exactMatchIndex = indices[i];
-            if (n == -1)
+            if (n == -1) {
                 return indices[i];
+            }
         }
     }
-    return indices[i-1];
+    return indices[i - 1];
 }
 
 void QUnsortedModelEngine::filterOnDemand(int n)
 {
     Q_ASSERT(matchCount());
-    if (!curMatch.partial)
+    if (!curMatch.partial) {
         return;
+    }
     Q_ASSERT(n >= -1);
     const QAbstractItemModel *model = c->proxy->sourceModel();
     int lastRow = model->rowCount(curParent) - 1;
@@ -795,7 +858,7 @@ void QUnsortedModelEngine::filterOnDemand(int n)
     saveInCache(curParts.last(), curParent, curMatch);
 }
 
-KexiMatchData QUnsortedModelEngine::filter(const QString& part, const QModelIndex& parent, int n)
+KexiMatchData QUnsortedModelEngine::filter(const QString &part, const QModelIndex &parent, int n)
 {
     KexiMatchData hint;
 
@@ -807,8 +870,9 @@ KexiMatchData QUnsortedModelEngine::filter(const QString& part, const QModelInde
     bool foundInCache = lookupCache(part, parent, &m);
 
     if (!foundInCache) {
-        if (matchHint(part, parent, &hint) && !hint.isValid())
+        if (matchHint(part, parent, &hint) && !hint.isValid()) {
             return KexiMatchData();
+        }
     }
 
     if (!foundInCache && !hint.isValid()) {
@@ -837,10 +901,10 @@ KexiMatchData QUnsortedModelEngine::filter(const QString& part, const QModelInde
 
 ///////////////////////////////////////////////////////////////////////////////
 KexiCompleterPrivate::KexiCompleterPrivate(KexiCompleter *q)
-: widget(0), proxy(0), popup(0), cs(Qt::CaseSensitive), substringCompletion(false),
-  role(Qt::EditRole), column(0), maxVisibleItems(7), sorting(KexiCompleter::UnsortedModel),
-  wrap(true), eatFocusOut(true),
-  hiddenBecauseNoMatch(false), q(q)
+    : widget(0), proxy(0), popup(0), cs(Qt::CaseSensitive), substringCompletion(false),
+      role(Qt::EditRole), column(0), maxVisibleItems(7), sorting(KexiCompleter::UnsortedModel),
+      wrap(true), eatFocusOut(true),
+      hiddenBecauseNoMatch(false), q(q)
 {
 }
 
@@ -858,29 +922,32 @@ void KexiCompleterPrivate::init(QAbstractItemModel *m)
 
 void KexiCompleterPrivate::setCurrentIndex(QModelIndex index, bool select)
 {
-    if (!q->popup())
+    if (!q->popup()) {
         return;
+    }
     if (!select) {
         popup->selectionModel()->setCurrentIndex(index, QItemSelectionModel::NoUpdate);
     } else {
-        if (!index.isValid())
+        if (!index.isValid()) {
             popup->selectionModel()->clear();
-        else
+        } else
             popup->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select
-                                                            | QItemSelectionModel::Rows);
+                    | QItemSelectionModel::Rows);
     }
     index = popup->selectionModel()->currentIndex();
-    if (!index.isValid())
+    if (!index.isValid()) {
         popup->scrollToTop();
-    else
+    } else {
         popup->scrollTo(index, QAbstractItemView::PositionAtTop);
+    }
 }
 
-void KexiCompleterPrivate::_q_completionSelected(const QItemSelection& selection)
+void KexiCompleterPrivate::_q_completionSelected(const QItemSelection &selection)
 {
     QModelIndex index;
-    if (!selection.indexes().isEmpty())
+    if (!selection.indexes().isEmpty()) {
         index = selection.indexes().first();
+    }
 
     _q_complete(index, true);
 }
@@ -892,23 +959,26 @@ void KexiCompleterPrivate::_q_complete(QModelIndex index, bool highlighted)
     if (!index.isValid() || (!proxy->showAll && (index.row() >= proxy->engine->matchCount()))) {
         completion = prefix;
     } else {
-        if (!(index.flags() & Qt::ItemIsEnabled))
+        if (!(index.flags() & Qt::ItemIsEnabled)) {
             return;
+        }
         QModelIndex si = proxy->mapToSource(index);
         si = si.sibling(si.row(), column); // for clicked()
         completion = q->pathFromIndex(si);
 #ifndef QT_NO_DIRMODEL
         // add a trailing separator in inline
         if (mode == KexiCompleter::InlineCompletion) {
-            if (qobject_cast<QDirModel *>(proxy->sourceModel()) && QFileInfo(completion).isDir())
+            if (qobject_cast<QDirModel *>(proxy->sourceModel()) && QFileInfo(completion).isDir()) {
                 completion += QDir::separator();
+            }
         }
 #endif
 #ifndef QT_NO_FILESYSTEMMODEL
         // add a trailing separator in inline
         if (mode == KexiCompleter::InlineCompletion) {
-            if (qobject_cast<QFileSystemModel *>(proxy->sourceModel()) && QFileInfo(completion).isDir())
+            if (qobject_cast<QFileSystemModel *>(proxy->sourceModel()) && QFileInfo(completion).isDir()) {
                 completion += QDir::separator();
+            }
         }
 #endif
     }
@@ -924,12 +994,13 @@ void KexiCompleterPrivate::_q_complete(QModelIndex index, bool highlighted)
 
 void KexiCompleterPrivate::_q_autoResizePopup()
 {
-    if (!popup || !popup->isVisible())
+    if (!popup || !popup->isVisible()) {
         return;
+    }
     showPopup(popupRect);
 }
 
-void KexiCompleterPrivate::showPopup(const QRect& rect)
+void KexiCompleterPrivate::showPopup(const QRect &rect)
 {
     const QRect screen = QApplication::desktop()->availableGeometry(widget);
     Qt::LayoutDirection dir = widget->layoutDirection();
@@ -937,8 +1008,9 @@ void KexiCompleterPrivate::showPopup(const QRect& rect)
     int rh, w;
     int h = (popup->sizeHintForRow(0) * qMin(maxVisibleItems, popup->model()->rowCount()) + 3) + 3;
     QScrollBar *hsb = popup->horizontalScrollBar();
-    if (hsb && hsb->isVisible())
+    if (hsb && hsb->isVisible()) {
         h += popup->horizontalScrollBar()->sizeHint().height();
+    }
 
     if (rect.isValid()) {
         rh = rect.height();
@@ -950,12 +1022,15 @@ void KexiCompleterPrivate::showPopup(const QRect& rect)
         w = widget->width();
     }
 
-    if (w > screen.width())
+    if (w > screen.width()) {
         w = screen.width();
-    if ((pos.x() + w) > (screen.x() + screen.width()))
+    }
+    if ((pos.x() + w) > (screen.x() + screen.width())) {
         pos.setX(screen.x() + screen.width() - w);
-    if (pos.x() < screen.x())
+    }
+    if (pos.x() < screen.x()) {
         pos.setX(screen.x());
+    }
 
     int top = pos.y() - rh - screen.top() + 2;
     int bottom = screen.bottom() - pos.y();
@@ -963,14 +1038,16 @@ void KexiCompleterPrivate::showPopup(const QRect& rect)
     if (h > bottom) {
         h = qMin(qMax(top, bottom), h);
 
-        if (top > bottom)
+        if (top > bottom) {
             pos.setY(pos.y() - h - rh + 2);
+        }
     }
 
     popup->setGeometry(pos.x(), pos.y(), w, h);
 
-    if (!popup->isVisible())
+    if (!popup->isVisible()) {
         popup->show();
+    }
 }
 
 void KexiCompleterPrivate::_q_fileSystemModelDirectoryLoaded(const QString &path)
@@ -979,8 +1056,8 @@ void KexiCompleterPrivate::_q_fileSystemModelDirectoryLoaded(const QString &path
     // If we hide the popup because there was no match because the model was not loaded yet,
     // we re-start the completion when we get the results
     if (hiddenBecauseNoMatch
-        && prefix.startsWith(path) && prefix != (path + QLatin1Char('/'))
-        && widget) {
+            && prefix.startsWith(path) && prefix != (path + QLatin1Char('/'))
+            && widget) {
         q->complete();
     }
 }
@@ -989,7 +1066,7 @@ void KexiCompleterPrivate::_q_fileSystemModelDirectoryLoaded(const QString &path
     Constructs a completer object with the given \a parent.
 */
 KexiCompleter::KexiCompleter(QObject *parent)
-: QObject(parent), d(new KexiCompleterPrivate(this))
+    : QObject(parent), d(new KexiCompleterPrivate(this))
 {
     d->init();
 }
@@ -1009,7 +1086,7 @@ KexiCompleter::KexiCompleter(QAbstractItemModel *model, QObject *parent)
     Constructs a KexiCompleter object with the given \a parent that uses the specified
     \a list as a source of possible completions.
 */
-KexiCompleter::KexiCompleter(const QStringList& list, QObject *parent)
+KexiCompleter::KexiCompleter(const QStringList &list, QObject *parent)
     : QObject(parent), d(new KexiCompleterPrivate(this))
 {
     d->init(new QStringListModel(list, this));
@@ -1035,13 +1112,16 @@ KexiCompleter::~KexiCompleter()
  */
 void KexiCompleter::setWidget(QWidget *widget)
 {
-    if (widget && d->widget == widget)
+    if (widget && d->widget == widget) {
         return;
-    if (d->widget)
+    }
+    if (d->widget) {
         d->widget->removeEventFilter(this);
+    }
     d->widget = widget;
-    if (d->widget)
+    if (d->widget) {
         d->widget->installEventFilter(this);
+    }
     if (d->popup) {
         d->popup->hide();
         d->popup->setFocusProxy(d->widget);
@@ -1073,10 +1153,12 @@ void KexiCompleter::setModel(QAbstractItemModel *model)
 {
     QAbstractItemModel *oldModel = d->proxy->sourceModel();
     d->proxy->setSourceModel(model);
-    if (d->popup)
-        setPopup(d->popup); // set the model and make new connections
-    if (oldModel && oldModel->QObject::parent() == this)
+    if (d->popup) {
+        setPopup(d->popup);    // set the model and make new connections
+    }
+    if (oldModel && oldModel->QObject::parent() == this) {
         delete oldModel;
+    }
 #ifndef QT_NO_DIRMODEL
     if (qobject_cast<QDirModel *>(model)) {
 #if (defined(Q_OS_WIN) && !defined(Q_OS_WINCE)) || defined(Q_OS_SYMBIAN)
@@ -1134,15 +1216,17 @@ void KexiCompleter::setCompletionMode(KexiCompleter::CompletionMode mode)
     d->proxy->setFiltered(mode != KexiCompleter::UnfilteredPopupCompletion);
 
     if (mode == KexiCompleter::InlineCompletion) {
-        if (d->widget)
+        if (d->widget) {
             d->widget->removeEventFilter(this);
+        }
         if (d->popup) {
             d->popup->deleteLater();
             d->popup = 0;
         }
     } else {
-        if (d->widget)
+        if (d->widget) {
             d->widget->installEventFilter(this);
+        }
     }
 }
 
@@ -1173,23 +1257,27 @@ void KexiCompleter::setPopup(QAbstractItemView *popup)
         QObject::disconnect(d->popup->selectionModel(), 0, this, 0);
         QObject::disconnect(d->popup, 0, this, 0);
     }
-    if (d->popup != popup)
+    if (d->popup != popup) {
         delete d->popup;
-    if (popup->model() != d->proxy)
+    }
+    if (popup->model() != d->proxy) {
         popup->setModel(d->proxy);
+    }
 #if defined(Q_OS_MAC) && !defined(QT_MAC_USE_COCOA)
-     popup->show();
+    popup->show();
 #else
-     popup->hide();
+    popup->hide();
 #endif
 
     Qt::FocusPolicy origPolicy = Qt::NoFocus;
-    if (d->widget)
+    if (d->widget) {
         origPolicy = d->widget->focusPolicy();
+    }
     popup->setParent(0, Qt::Popup);
     popup->setFocusPolicy(Qt::NoFocus);
-    if (d->widget)
+    if (d->widget) {
         d->widget->setFocusPolicy(origPolicy);
+    }
 
     popup->setFocusProxy(d->widget);
     popup->installEventFilter(this);
@@ -1225,7 +1313,7 @@ QAbstractItemView *KexiCompleter::popup() const
         listView->setSelectionBehavior(QAbstractItemView::SelectRows);
         listView->setSelectionMode(QAbstractItemView::SingleSelection);
         listView->setModelColumn(d->column);
-        KexiCompleter *that = const_cast<KexiCompleter*>(this);
+        KexiCompleter *that = const_cast<KexiCompleter *>(this);
         that->setPopup(listView);
     }
 #endif // QT_NO_LISTVIEW
@@ -1247,12 +1335,14 @@ bool KexiCompleter::eventFilter(QObject *o, QEvent *e)
 {
     if (d->eatFocusOut && o == d->widget && e->type() == QEvent::FocusOut) {
         d->hiddenBecauseNoMatch = false;
-        if (d->popup && d->popup->isVisible())
+        if (d->popup && d->popup->isVisible()) {
             return true;
+        }
     }
 
-    if (o != d->popup)
+    if (o != d->popup) {
         return QObject::eventFilter(o, e);
+    }
 
     switch (e->type()) {
     case QEvent::KeyPress: {
@@ -1264,9 +1354,9 @@ bool KexiCompleter::eventFilter(QObject *o, QEvent *e)
         const int key = ke->key();
         // In UnFilteredPopup mode, select the current item
         if ((key == Qt::Key_Up || key == Qt::Key_Down) && selList.isEmpty() && curIndex.isValid()
-            && d->mode == KexiCompleter::UnfilteredPopupCompletion) {
-              d->setCurrentIndex(curIndex);
-              return true;
+                && d->mode == KexiCompleter::UnfilteredPopupCompletion) {
+            d->setCurrentIndex(curIndex);
+            return true;
         }
 
         // Handle popup navigation keys. These are hardcoded because up/down might make the
@@ -1274,8 +1364,9 @@ bool KexiCompleter::eventFilter(QObject *o, QEvent *e)
         switch (key) {
         case Qt::Key_End:
         case Qt::Key_Home:
-            if (ke->modifiers() & Qt::ControlModifier)
+            if (ke->modifiers() & Qt::ControlModifier) {
                 return false;
+            }
             break;
 
         case Qt::Key_Up:
@@ -1285,8 +1376,9 @@ bool KexiCompleter::eventFilter(QObject *o, QEvent *e)
                 d->setCurrentIndex(lastIndex);
                 return true;
             } else if (curIndex.row() == 0) {
-                if (d->wrap)
+                if (d->wrap) {
                     d->setCurrentIndex(QModelIndex());
+                }
                 return true;
             }
             return false;
@@ -1297,8 +1389,9 @@ bool KexiCompleter::eventFilter(QObject *o, QEvent *e)
                 d->setCurrentIndex(firstIndex);
                 return true;
             } else if (curIndex.row() == d->proxy->rowCount() - 1) {
-                if (d->wrap)
+                if (d->wrap) {
                     d->setCurrentIndex(QModelIndex());
+                }
                 return true;
             }
             return false;
@@ -1317,32 +1410,37 @@ bool KexiCompleter::eventFilter(QObject *o, QEvent *e)
             // widget lost focus, hide the popup
             if (d->widget && (!d->widget->hasFocus()
 #ifdef QT_KEYPAD_NAVIGATION
-                || (QApplication::keypadNavigationEnabled() && !d->widget->hasEditFocus())
+                              || (QApplication::keypadNavigationEnabled() && !d->widget->hasEditFocus())
 #endif
-                ))
+                             )) {
                 d->popup->hide();
-            if (e->isAccepted())
+            }
+            if (e->isAccepted()) {
                 return true;
+            }
         }
 
         // default implementation for keys not handled by the widget when popup is open
         switch (key) {
 #ifdef QT_KEYPAD_NAVIGATION
         case Qt::Key_Select:
-            if (!QApplication::keypadNavigationEnabled())
+            if (!QApplication::keypadNavigationEnabled()) {
                 break;
+            }
 #endif
         case Qt::Key_Return:
         case Qt::Key_Enter:
         case Qt::Key_Tab:
             d->popup->hide();
-            if (curIndex.isValid())
+            if (curIndex.isValid()) {
                 d->_q_complete(curIndex);
+            }
             break;
 
         case Qt::Key_F4:
-            if (ke->modifiers() & Qt::AltModifier)
+            if (ke->modifiers() & Qt::AltModifier) {
                 d->popup->hide();
+            }
             break;
 
         case Qt::Key_Backtab:
@@ -1384,7 +1482,7 @@ bool KexiCompleter::eventFilter(QObject *o, QEvent *e)
                 QPoint pos = source->mapToGlobal((static_cast<QMouseEvent *>(e))->pos());
                 QWidget *target = QApplication::widgetAt(pos);
                 if (target && (d->widget->isAncestorOf(target) ||
-                    target == d->widget)) {
+                               target == d->widget)) {
                     d->eatFocusOut = false;
                     static_cast<QObject *>(target)->event(e);
                     d->eatFocusOut = true;
@@ -1397,8 +1495,8 @@ bool KexiCompleter::eventFilter(QObject *o, QEvent *e)
             d->popup->hide();
             return true;
         }
-        }
-        return false;
+    }
+    return false;
 
     case QEvent::InputMethod:
     case QEvent::ShortcutOverride:
@@ -1421,28 +1519,31 @@ bool KexiCompleter::eventFilter(QObject *o, QEvent *e)
     For KexiCompleter::InlineCompletion mode, the highlighted() signal is fired
     with the current completion.
 */
-void KexiCompleter::complete(const QRect& rect)
+void KexiCompleter::complete(const QRect &rect)
 {
     QModelIndex idx = d->proxy->currentIndex(false);
     d->hiddenBecauseNoMatch = false;
     if (d->mode == KexiCompleter::InlineCompletion) {
-        if (idx.isValid())
+        if (idx.isValid()) {
             d->_q_complete(idx, true);
+        }
         return;
     }
 
     Q_ASSERT(d->widget != 0);
     if ((d->mode == KexiCompleter::PopupCompletion && !idx.isValid())
-        || (d->mode == KexiCompleter::UnfilteredPopupCompletion && d->proxy->rowCount() == 0)) {
-        if (d->popup)
-            d->popup->hide(); // no suggestion, hide
+            || (d->mode == KexiCompleter::UnfilteredPopupCompletion && d->proxy->rowCount() == 0)) {
+        if (d->popup) {
+            d->popup->hide();    // no suggestion, hide
+        }
         d->hiddenBecauseNoMatch = true;
         return;
     }
 
     popup();
-    if (d->mode == KexiCompleter::UnfilteredPopupCompletion)
+    if (d->mode == KexiCompleter::UnfilteredPopupCompletion) {
         d->setCurrentIndex(idx, false);
+    }
 
     d->showPopup(rect);
     d->popupRect = rect;
@@ -1518,8 +1619,9 @@ int KexiCompleter::completionCount() const
 */
 void KexiCompleter::setModelSorting(KexiCompleter::ModelSorting sorting)
 {
-    if (d->sorting == sorting)
+    if (d->sorting == sorting) {
         return;
+    }
     d->sorting = sorting;
     d->proxy->createEngine();
     d->proxy->invalidate();
@@ -1543,11 +1645,13 @@ KexiCompleter::ModelSorting KexiCompleter::modelSorting() const
 */
 void KexiCompleter::setCompletionColumn(int column)
 {
-    if (d->column == column)
+    if (d->column == column) {
         return;
+    }
 #ifndef QT_NO_LISTVIEW
-    if (QListView *listView = qobject_cast<QListView *>(d->popup))
+    if (QListView *listView = qobject_cast<QListView *>(d->popup)) {
         listView->setModelColumn(column);
+    }
 #endif
     d->column = column;
     d->proxy->invalidate();
@@ -1568,8 +1672,9 @@ int KexiCompleter::completionColumn() const
 */
 void KexiCompleter::setCompletionRole(int role)
 {
-    if (d->role == role)
+    if (d->role == role) {
         return;
+    }
     d->role = role;
     d->proxy->invalidate();
 }
@@ -1588,8 +1693,9 @@ int KexiCompleter::completionRole() const
 */
 void KexiCompleter::setWrapAround(bool wrap)
 {
-    if (d->wrap == wrap)
+    if (d->wrap == wrap) {
         return;
+    }
     d->wrap = wrap;
 }
 
@@ -1630,8 +1736,9 @@ void KexiCompleter::setMaxVisibleItems(int maxItems)
 */
 void KexiCompleter::setCaseSensitivity(Qt::CaseSensitivity cs)
 {
-    if (d->cs == cs)
+    if (d->cs == cs) {
         return;
+    }
     d->cs = cs;
     d->proxy->createEngine();
     d->proxy->invalidate();
@@ -1653,8 +1760,9 @@ Qt::CaseSensitivity KexiCompleter::caseSensitivity() const
 */
 void KexiCompleter::setSubstringCompletion(bool substringCompletion)
 {
-    if (d->substringCompletion == substringCompletion)
+    if (d->substringCompletion == substringCompletion) {
         return;
+    }
     d->substringCompletion = substringCompletion;
     d->proxy->invalidate();
 }
@@ -1731,14 +1839,16 @@ QAbstractItemModel *KexiCompleter::completionModel() const
     \sa splitPath()
 */
 
-QString KexiCompleter::pathFromIndex(const QModelIndex& index) const
+QString KexiCompleter::pathFromIndex(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return QString();
+    }
 
     QAbstractItemModel *sourceModel = d->proxy->sourceModel();
-    if (!sourceModel)
+    if (!sourceModel) {
         return QString();
+    }
     bool isDirModel = false;
     bool isFsModel = false;
 #ifndef QT_NO_DIRMODEL
@@ -1747,18 +1857,21 @@ QString KexiCompleter::pathFromIndex(const QModelIndex& index) const
 #ifndef QT_NO_FILESYSTEMMODEL
     isFsModel = qobject_cast<QFileSystemModel *>(d->proxy->sourceModel()) != 0;
 #endif
-    if (!isDirModel && !isFsModel)
+    if (!isDirModel && !isFsModel) {
         return sourceModel->data(index, d->role).toString();
+    }
 
     QModelIndex idx = index;
     QStringList list;
     do {
         QString t;
-        if (isDirModel)
+        if (isDirModel) {
             t = sourceModel->data(idx, Qt::EditRole).toString();
+        }
 #ifndef QT_NO_FILESYSTEMMODEL
-        else
+        else {
             t = sourceModel->data(idx, QFileSystemModel::FileNameRole).toString();
+        }
 #endif
         list.prepend(t);
         QModelIndex parent = idx.parent();
@@ -1766,9 +1879,10 @@ QString KexiCompleter::pathFromIndex(const QModelIndex& index) const
     } while (idx.isValid());
 
 #if (!defined(Q_OS_WIN) || defined(Q_OS_WINCE)) && !defined(Q_OS_SYMBIAN)
-    if (list.count() == 1) // only the separator or some other text
+    if (list.count() == 1) { // only the separator or some other text
         return list[0];
-    list[0].clear() ; // the join below will provide the separator
+    }
+    list[0].clear(); // the join below will provide the separator
 #endif
 
     return list.join(QDir::separator());
@@ -1786,7 +1900,7 @@ QString KexiCompleter::pathFromIndex(const QModelIndex& index) const
 
     \sa pathFromIndex(), {Handling Tree Models}
 */
-QStringList KexiCompleter::splitPath(const QString& path) const
+QStringList KexiCompleter::splitPath(const QString &path) const
 {
     bool isDirModel = false;
     bool isFsModel = false;
@@ -1799,22 +1913,26 @@ QStringList KexiCompleter::splitPath(const QString& path) const
     isFsModel = qobject_cast<QFileSystemModel *>(d->proxy->sourceModel()) != 0;
 #endif
 
-    if ((!isDirModel && !isFsModel) || path.isEmpty())
+    if ((!isDirModel && !isFsModel) || path.isEmpty()) {
         return QStringList(completionPrefix());
+    }
 
     QString pathCopy = QDir::toNativeSeparators(path);
     QString sep = QDir::separator();
 #if defined(Q_OS_SYMBIAN)
-    if (pathCopy == QLatin1String("\\"))
+    if (pathCopy == QLatin1String("\\")) {
         return QStringList(pathCopy);
+    }
 #elif defined(Q_OS_WIN) && !defined(Q_OS_WINCE)
-    if (pathCopy == QLatin1String("\\") || pathCopy == QLatin1String("\\\\"))
+    if (pathCopy == QLatin1String("\\") || pathCopy == QLatin1String("\\\\")) {
         return QStringList(pathCopy);
+    }
     QString doubleSlash(QLatin1String("\\\\"));
-    if (pathCopy.startsWith(doubleSlash))
+    if (pathCopy.startsWith(doubleSlash)) {
         pathCopy.remove(0, 2);
-    else
+    } else {
         doubleSlash.clear();
+    }
 #endif
 
     QRegExp re(QLatin1Char('[') + QRegExp::escape(sep) + QLatin1Char(']'));
@@ -1823,11 +1941,13 @@ QStringList KexiCompleter::splitPath(const QString& path) const
 #if defined(Q_OS_SYMBIAN)
     // Do nothing
 #elif defined(Q_OS_WIN) && !defined(Q_OS_WINCE)
-    if (!doubleSlash.isEmpty())
+    if (!doubleSlash.isEmpty()) {
         parts[0].prepend(doubleSlash);
+    }
 #else
-    if (pathCopy[0] == sep[0]) // readd the "/" at the beginning as the split removed it
+    if (pathCopy[0] == sep[0]) { // readd the "/" at the beginning as the split removed it
         parts[0] = QDir::fromNativeSeparators(QString(sep[0]));
+    }
 #endif
 
     return parts;
@@ -1867,12 +1987,12 @@ QStringList KexiCompleter::splitPath(const QString& path) const
     set to KexiCompleter::InlineCompletion. The item's \a text is given.
 */
 
-void KexiCompleter::_q_complete(const QModelIndex& index)
+void KexiCompleter::_q_complete(const QModelIndex &index)
 {
     d->_q_complete(index);
 }
 
-void KexiCompleter::_q_completionSelected(const QItemSelection& selection)
+void KexiCompleter::_q_completionSelected(const QItemSelection &selection)
 {
     d->_q_completionSelected(selection);
 }
@@ -1882,13 +2002,13 @@ void KexiCompleter::_q_autoResizePopup()
     d->_q_autoResizePopup();
 }
 
-void KexiCompleter::_q_fileSystemModelDirectoryLoaded(const QString& dir)
+void KexiCompleter::_q_fileSystemModelDirectoryLoaded(const QString &dir)
 {
     d->_q_fileSystemModelDirectoryLoaded(dir);
 }
 
 KexiCompletionModelPrivate::KexiCompletionModelPrivate(KexiCompletionModel *q)
- : q(q)
+    : q(q)
 {
 }
 

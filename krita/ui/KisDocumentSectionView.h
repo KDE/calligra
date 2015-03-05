@@ -71,7 +71,7 @@ public:
         MinimalMode
     };
 
-    virtual void paintEvent (QPaintEvent *event);
+    virtual void paintEvent(QPaintEvent *event);
 
     virtual void dropEvent(QDropEvent *ev);
 
@@ -128,7 +128,7 @@ protected:
     virtual bool viewportEvent(QEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
     virtual void showContextMenu(const QPoint &globalPos, const QModelIndex &index);
-    virtual void startDrag (Qt::DropActions supportedActions);
+    virtual void startDrag(Qt::DropActions supportedActions);
     QPixmap createDragPixmap() const;
 
     /**
@@ -166,7 +166,7 @@ private:
     typedef KisDocumentSectionModel Model;
     class PropertyAction;
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

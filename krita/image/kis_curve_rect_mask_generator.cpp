@@ -27,9 +27,7 @@
 #include "kis_cubic_curve.h"
 #include "kis_antialiasing_fade_maker.h"
 
-
-struct KisCurveRectangleMaskGenerator::Private
-{
+struct KisCurveRectangleMaskGenerator::Private {
     Private(bool enableAntialiasing)
         : fadeMaker(*this, enableAntialiasing)
     {
@@ -51,8 +49,8 @@ struct KisCurveRectangleMaskGenerator::Private
 KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve, bool antialiasEdges)
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, SoftId), d(new Private(antialiasEdges))
 {
-    d->curveResolution = qRound( qMax(width(),height()) * OVERSAMPLING);
-    d->curveData = curve.floatTransfer( d->curveResolution + 1);
+    d->curveResolution = qRound(qMax(width(), height()) * OVERSAMPLING);
+    d->curveData = curve.floatTransfer(d->curveResolution + 1);
     d->curvePoints = curve.points();
     setCurveString(curve.toString());
     d->dirty = false;
@@ -108,7 +106,7 @@ quint8 KisCurveRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     if (KisMaskGenerator::d->spikes > 2) {
         double angle = (KisFastMath::atan2(yr, xr));
 
-        while (angle > KisMaskGenerator::d->cachedSpikesAngle ){
+        while (angle > KisMaskGenerator::d->cachedSpikesAngle) {
             double sx = xr;
             double sy = yr;
 
@@ -127,7 +125,7 @@ quint8 KisCurveRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     return d->value(xr, yr);
 }
 
-void KisCurveRectangleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
+void KisCurveRectangleMaskGenerator::toXML(QDomDocument &doc, QDomElement &e) const
 {
     KisMaskGenerator::toXML(doc, e);
     e.setAttribute("softness_curve", curveString());
@@ -136,10 +134,12 @@ void KisCurveRectangleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) co
 void KisCurveRectangleMaskGenerator::setSoftness(qreal softness)
 {
     // performance
-    if (!d->dirty && softness == 1.0) return;
+    if (!d->dirty && softness == 1.0) {
+        return;
+    }
     d->dirty = true;
     KisMaskGenerator::setSoftness(softness);
-    KisCurveCircleMaskGenerator::transformCurveForSoftness(softness,d->curvePoints, d->curveResolution + 1, d->curveData);
+    KisCurveCircleMaskGenerator::transformCurveForSoftness(softness, d->curvePoints, d->curveResolution + 1, d->curveData);
     d->dirty = false;
 }
 

@@ -32,28 +32,25 @@
 #include "kis_layer.h"
 #include "KisDocument.h"
 
-
-
-
-class KisActionManager::Private {
+class KisActionManager::Private
+{
 
 public:
     Private()
         : viewManager(0)
     {}
 
-    KisViewManager* viewManager;
-    QList<KisAction*> actions;
-    KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
+    KisViewManager *viewManager;
+    QList<KisAction *> actions;
+    KoGenericRegistry<KisOperationUIFactory *> uiRegistry;
     KisOperationRegistry operationRegistry;
 
 };
 
-KisActionManager::KisActionManager(KisViewManager* viewManager)
+KisActionManager::KisActionManager(KisViewManager *viewManager)
     : d(new Private)
 {
     d->viewManager = viewManager;
-
 
 }
 
@@ -67,7 +64,7 @@ void KisActionManager::setView(QPointer<KisView> imageView)
     Q_UNUSED(imageView);
 }
 
-void KisActionManager::addAction(const QString& name, KisAction* action)
+void KisActionManager::addAction(const QString &name, KisAction *action)
 {
     Q_ASSERT(!name.isEmpty());
     Q_ASSERT(action);
@@ -81,7 +78,7 @@ void KisActionManager::addAction(const QString& name, KisAction* action)
     action->setActionManager(this);
 }
 
-void KisActionManager::takeAction(KisAction* action)
+void KisActionManager::takeAction(KisAction *action)
 {
     d->actions.removeOne(action);
 
@@ -93,7 +90,7 @@ void KisActionManager::takeAction(KisAction* action)
 
 KisAction *KisActionManager::actionByName(const QString &name) const
 {
-    foreach(KisAction *action, d->actions) {
+    foreach (KisAction *action, d->actions) {
         if (action->objectName() == name) {
             return action;
         }
@@ -110,16 +107,15 @@ void KisActionManager::updateGUI()
     KisNodeSP node;
     KisLayerSP layer;
     KisPaintDeviceSP device;
-    KisDocument* document = 0;
-    KisSelectionManager* selectionManager = 0;
+    KisDocument *document = 0;
+    KisSelectionManager *selectionManager = 0;
     KisAction::ActivationConditions conditions = KisAction::NO_CONDITION;
 
     if (d->viewManager) {
 
         // if there are no views, that means no document is open.
         // we cannot have nodes (selections), devices, or documents without a view
-        if ( d->viewManager->viewCount() > 0 )
-        {
+        if (d->viewManager->viewCount() > 0) {
             image = d->viewManager->image();
             flags |= KisAction::ACTIVE_IMAGE;
 
@@ -143,29 +139,25 @@ void KisActionManager::updateGUI()
 
     }
 
-
     // is there a selection/mask?
     // you have to have at least one view(document) open for this to be true
-    if (node)
-    {
+    if (node) {
 
         // if a node exists, we know there is an active layer as well
         flags |= KisAction::ACTIVE_NODE;
 
-        layer = dynamic_cast<KisLayer*>(node.data());
+        layer = dynamic_cast<KisLayer *>(node.data());
         flags |= KisAction::ACTIVE_LAYER;
 
         if (node->inherits("KisTransparencyMask")) {
             flags |= KisAction::ACTIVE_TRANSPARENCY_MASK;
         }
 
-
         if (layer && layer->inherits("KisShapeLayer")) {
             flags |= KisAction::ACTIVE_SHAPE_LAYER;
         }
 
-        if (selectionManager)
-        {
+        if (selectionManager) {
             if (selectionManager->havePixelsSelected()) {
                 flags |= KisAction::PIXELS_SELECTED;
             }
@@ -200,21 +192,18 @@ void KisActionManager::updateGUI()
         }
     }
 
-
-
     // loop through all actions in action manager and determine what should be enabled
-    foreach(KisAction* action, d->actions) {
+    foreach (KisAction *action, d->actions) {
         bool enable;
 
         if (action->activationFlags() == KisAction::NONE) {
             enable = true;
-        }
-        else {
+        } else {
             enable = action->activationFlags() & flags; // combine action flags with updateGUI flags
         }
 
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
-        
+
         if (node && enable) {
             foreach (const QString &type, action->excludedNodeTypes()) {
                 if (node->inherits(type.toLatin1())) {
@@ -245,11 +234,9 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
     if (receiver && member) {
         if (actionType == KStandardAction::OpenRecent) {
             QObject::connect(action, SIGNAL(urlSelected(KUrl)), receiver, member);
-        }
-        else if (actionType == KStandardAction::ConfigureToolbars) {
+        } else if (actionType == KStandardAction::ConfigureToolbars) {
             QObject::connect(action, SIGNAL(triggered(bool)), receiver, member, Qt::QueuedConnection);
-        }
-        else {
+        } else {
             QObject::connect(action, SIGNAL(triggered(bool)), receiver, member);
         }
     }
@@ -259,21 +246,21 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
     return action;
 }
 
-void KisActionManager::registerOperationUIFactory(KisOperationUIFactory* factory)
+void KisActionManager::registerOperationUIFactory(KisOperationUIFactory *factory)
 {
     d->uiRegistry.add(factory);
 }
 
-void KisActionManager::registerOperation(KisOperation* operation)
+void KisActionManager::registerOperation(KisOperation *operation)
 {
     d->operationRegistry.add(operation);
 }
 
-void KisActionManager::runOperation(const QString& id)
+void KisActionManager::runOperation(const QString &id)
 {
-    KisOperationConfiguration* config = new KisOperationConfiguration(id);
+    KisOperationConfiguration *config = new KisOperationConfiguration(id);
 
-    KisOperationUIFactory* uiFactory = d->uiRegistry.get(id);
+    KisOperationUIFactory *uiFactory = d->uiRegistry.get(id);
     if (uiFactory) {
         bool gotConfig = uiFactory->fetchConfiguration(d->viewManager, config);
         if (!gotConfig) {
@@ -283,9 +270,9 @@ void KisActionManager::runOperation(const QString& id)
     runOperationFromConfiguration(config);
 }
 
-void KisActionManager::runOperationFromConfiguration(KisOperationConfiguration* config)
+void KisActionManager::runOperationFromConfiguration(KisOperationConfiguration *config)
 {
-    KisOperation* operation = d->operationRegistry.get(config->id());
+    KisOperation *operation = d->operationRegistry.get(config->id());
     Q_ASSERT(operation);
     if (operation) {
         operation->runFromXML(d->viewManager, *config);
@@ -299,7 +286,7 @@ void KisActionManager::dumpActionFlags()
     if (data.open(QFile::WriteOnly | QFile::Truncate)) {
         QTextStream out(&data);
 
-        foreach(KisAction* action, d->actions) {
+        foreach (KisAction *action, d->actions) {
             KisAction::ActivationFlags flags = action->activationFlags();
             out << "-------- " << action->text() << " --------\n";
             out << "Action will activate on: \n";

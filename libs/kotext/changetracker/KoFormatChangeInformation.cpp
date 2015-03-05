@@ -30,7 +30,7 @@ KoFormatChangeInformation::FormatChangeType KoFormatChangeInformation::formatTyp
 }
 
 KoTextStyleChangeInformation::KoTextStyleChangeInformation(KoFormatChangeInformation::FormatChangeType formatChangeType):
-                              KoFormatChangeInformation(formatChangeType)
+    KoFormatChangeInformation(formatChangeType)
 {
 }
 
@@ -39,13 +39,13 @@ void KoTextStyleChangeInformation::setPreviousCharFormat(QTextCharFormat &previo
     this->previousTextCharFormat = previousFormat;
 }
 
-QTextCharFormat& KoTextStyleChangeInformation::previousCharFormat()
+QTextCharFormat &KoTextStyleChangeInformation::previousCharFormat()
 {
     return this->previousTextCharFormat;
 }
 
 KoParagraphStyleChangeInformation::KoParagraphStyleChangeInformation():
-                                   KoTextStyleChangeInformation(KoFormatChangeInformation::eParagraphStyleChange)
+    KoTextStyleChangeInformation(KoFormatChangeInformation::eParagraphStyleChange)
 {
 }
 
@@ -54,14 +54,14 @@ void KoParagraphStyleChangeInformation::setPreviousBlockFormat(QTextBlockFormat 
     this->previousTextBlockFormat = previousFormat;
 }
 
-QTextBlockFormat& KoParagraphStyleChangeInformation::previousBlockFormat()
+QTextBlockFormat &KoParagraphStyleChangeInformation::previousBlockFormat()
 {
     return this->previousTextBlockFormat;
 }
 
 KoListItemNumChangeInformation::KoListItemNumChangeInformation(KoListItemNumChangeInformation::ListItemNumChangeType type):
-                                                               KoFormatChangeInformation(KoFormatChangeInformation::eListItemNumberingChange),
-                                                               eSubType(type)
+    KoFormatChangeInformation(KoFormatChangeInformation::eListItemNumberingChange),
+    eSubType(type)
 {
 }
 

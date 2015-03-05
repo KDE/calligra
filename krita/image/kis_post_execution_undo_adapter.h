@@ -27,7 +27,6 @@ class KisUndoStore;
 class KisSavedMacroCommand;
 class KisStrokesFacade;
 
-
 /**
  * KisPostExecutionUndoAdapter -- used by the strokes. It doesn't
  * call redo() when you add a command. It is assumed, that you have
@@ -43,10 +42,11 @@ public:
 
     void addCommand(KUndo2CommandSP command);
 
-    KisSavedMacroCommand* createMacro(const KUndo2MagicString& macroName);
+    KisSavedMacroCommand *createMacro(const KUndo2MagicString &macroName);
     void addMacro(KisSavedMacroCommand *macro);
 
-    inline void setUndoStore(KisUndoStore *undoStore) {
+    inline void setUndoStore(KisUndoStore *undoStore)
+    {
         m_undoStore = undoStore;
     }
 

@@ -29,7 +29,6 @@
 #include <QTransform>
 #include <KoUpdater.h>
 
-
 class KRITAIMAGE_EXPORT KisPerspectiveTransformWorker
 {
 public:

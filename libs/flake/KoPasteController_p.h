@@ -27,13 +27,16 @@
 #include <kdebug.h>
 #include <QAction>
 
-class KoPasteController::Private {
+class KoPasteController::Private
+{
 public:
-    Private(KoPasteController *p, KoCanvasBase *c, QAction *a) : parent(p), canvas(c), action(a) {
+    Private(KoPasteController *p, KoCanvasBase *c, QAction *a) : parent(p), canvas(c), action(a)
+    {
     }
 
-    void paste() {
-        kDebug(30004) <<"Paste!";
+    void paste()
+    {
+        kDebug(30004) << "Paste!";
         canvas->toolProxy()->paste();
     }
 
@@ -41,6 +44,5 @@ public:
     KoCanvasBase *canvas;
     QAction *action;
 };
-
 
 #endif

@@ -23,16 +23,17 @@
 #include "kis_fixed_paint_device.h"
 #include "kis_random_sub_accessor.h"
 
-
 struct PickerTraitReal {
     typedef qreal coord_type;
     typedef KisRandomSubAccessorSP accessor_type;
-    static inline accessor_type createAccessor(KisPaintDeviceSP dev) {
+    static inline accessor_type createAccessor(KisPaintDeviceSP dev)
+    {
         return dev->createRandomSubAccessor();
     }
 
     template <bool useOldData>
-    static inline void sampleData(accessor_type accessor, quint8 *data, const KoColorSpace*) {
+    static inline void sampleData(accessor_type accessor, quint8 *data, const KoColorSpace *)
+    {
         if (useOldData) {
             accessor->sampledOldRawData(data);
         } else {
@@ -44,12 +45,14 @@ struct PickerTraitReal {
 struct PickerTraitInt {
     typedef int coord_type;
     typedef KisRandomConstAccessorSP accessor_type;
-    static inline accessor_type createAccessor(KisPaintDeviceSP dev) {
-        return dev->createRandomConstAccessorNG(0,0);
+    static inline accessor_type createAccessor(KisPaintDeviceSP dev)
+    {
+        return dev->createRandomConstAccessorNG(0, 0);
     }
 
     template <bool useOldData>
-    static inline void sampleData(accessor_type accessor, quint8 *data, const KoColorSpace *cs) {
+    static inline void sampleData(accessor_type accessor, quint8 *data, const KoColorSpace *cs)
+    {
         if (useOldData) {
             memcpy(data, accessor->oldRawData(), cs->pixelSize());
         } else {
@@ -75,37 +78,44 @@ template <class Traits>
 class KisCrossDeviceColorPickerImpl
 {
 public:
-    KisCrossDeviceColorPickerImpl(KisPaintDeviceSP src, KisPaintDeviceSP dst) {
+    KisCrossDeviceColorPickerImpl(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+    {
         init(src, dst);
     }
 
-    KisCrossDeviceColorPickerImpl(KisPaintDeviceSP src, KisFixedPaintDeviceSP dst) {
+    KisCrossDeviceColorPickerImpl(KisPaintDeviceSP src, KisFixedPaintDeviceSP dst)
+    {
         init(src, dst);
     }
 
-    KisCrossDeviceColorPickerImpl(KisPaintDeviceSP src, const KoColor &dst) {
+    KisCrossDeviceColorPickerImpl(KisPaintDeviceSP src, const KoColor &dst)
+    {
         init(src, &dst);
     }
 
-    ~KisCrossDeviceColorPickerImpl() {
+    ~KisCrossDeviceColorPickerImpl()
+    {
         delete[] m_data;
     }
 
     inline void pickColor(typename Traits::coord_type x,
                           typename Traits::coord_type y,
-                          quint8 *dst) {
+                          quint8 *dst)
+    {
         pickColorImpl<false>(x, y, dst);
     }
 
     inline void pickOldColor(typename Traits::coord_type x,
                              typename Traits::coord_type y,
-                             quint8 *dst) {
+                             quint8 *dst)
+    {
         pickColorImpl<true>(x, y, dst);
     }
 
 private:
     template <typename T>
-    inline void init(KisPaintDeviceSP src, T dst) {
+    inline void init(KisPaintDeviceSP src, T dst)
+    {
         m_srcCS = src->colorSpace();
         m_dstCS = dst->colorSpace();
         m_data = new quint8[m_srcCS->pixelSize()];
@@ -116,7 +126,8 @@ private:
     template <bool useOldData>
     inline void pickColorImpl(typename Traits::coord_type x,
                               typename Traits::coord_type y,
-                              quint8 *dst) {
+                              quint8 *dst)
+    {
         m_accessor->moveTo(x, y);
 
         Traits::template sampleData<useOldData>(m_accessor, m_data, m_srcCS);

@@ -26,24 +26,24 @@ class Interval;
  * @short A list of vacations.
  * @author Chris Schlaeger <cs@kde.org>
  */
-class VacationList : public QList<VacationInterval*>
+class VacationList : public QList<VacationInterval *>
 {
 public:
     VacationList() {}
     virtual ~VacationList();
 
-    typedef QListIterator<VacationInterval*> Iterator;
+    typedef QListIterator<VacationInterval *> Iterator;
 
-    void inSort(VacationInterval* vi); //TODO
+    void inSort(VacationInterval *vi); //TODO
 
-    void add(const QString& name, const Interval& i);
-    void add(VacationInterval* vi);
+    void add(const QString &name, const Interval &i);
+    void add(VacationInterval *vi);
     bool isVacation(time_t date) const;
     QString vacationName(time_t date) const;
 
 protected:
 //     virtual int compareItems(QCollection::Item i1, QCollection::Item i2);
-} ;
+};
 
 } // namespace TJ
 

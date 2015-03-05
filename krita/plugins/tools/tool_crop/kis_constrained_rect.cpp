@@ -22,7 +22,6 @@
 #include "kis_debug.h"
 #include "kis_algebra_2d.h"
 
-
 KisConstrainedRect::KisConstrainedRect()
     : m_centered(false),
       m_canGrow(true),
@@ -51,25 +50,31 @@ void KisConstrainedRect::setCropRect(const QRect &cropRect)
     m_cropRect = cropRect;
 }
 
-bool KisConstrainedRect::centered() const {
+bool KisConstrainedRect::centered() const
+{
     return m_centered;
 }
-void KisConstrainedRect::setCentered(bool value) {
+void KisConstrainedRect::setCentered(bool value)
+{
     m_centered = value;
 }
 
-bool KisConstrainedRect::canGrow() const {
+bool KisConstrainedRect::canGrow() const
+{
     return m_canGrow;
 }
-void KisConstrainedRect::setCanGrow(bool value) {
+void KisConstrainedRect::setCanGrow(bool value)
+{
     m_canGrow = value;
 }
 
-QRect KisConstrainedRect::rect() const {
+QRect KisConstrainedRect::rect() const
+{
     return m_rect.normalized();
 }
 
-qreal KisConstrainedRect::ratio() const {
+qreal KisConstrainedRect::ratio() const
+{
     return qAbs(m_ratio);
 }
 
@@ -154,7 +159,6 @@ void KisConstrainedRect::moveHandle(HandleType handle, const QPoint &offset, con
             yOffsetFromSizeChange = -0.5;
         }
 
-
         QSize sizeDiff(offset.x() * xSizeCoeff * centeringSizeCoeff,
                        offset.y() * ySizeCoeff * centeringSizeCoeff);
 
@@ -222,7 +226,8 @@ void KisConstrainedRect::setOffset(const QPoint &offset)
     emit sigValuesChanged();
 }
 
-void KisConstrainedRect::setRatio(qreal value) {
+void KisConstrainedRect::setRatio(qreal value)
+{
     KIS_ASSERT_RECOVER_RETURN(value >= 0);
 
     const qreal eps = 1e-7;
@@ -325,31 +330,37 @@ int KisConstrainedRect::heightFromWidthUnsignedRatio(int width, qreal ratio, int
     return KisAlgebra2D::copysign(newHeight, oldHeight);
 }
 
-bool KisConstrainedRect::widthLocked() const {
+bool KisConstrainedRect::widthLocked() const
+{
     return m_widthLocked;
 }
-bool KisConstrainedRect::heightLocked() const {
+bool KisConstrainedRect::heightLocked() const
+{
     return m_heightLocked;
 }
-bool KisConstrainedRect::ratioLocked() const {
+bool KisConstrainedRect::ratioLocked() const
+{
     return m_ratioLocked;
 }
 
-void KisConstrainedRect::setWidthLocked(bool value) {
+void KisConstrainedRect::setWidthLocked(bool value)
+{
     m_widthLocked = value;
     m_ratioLocked &= !(m_widthLocked || m_heightLocked);
 
     emit sigLockValuesChanged();
 }
 
-void KisConstrainedRect::setHeightLocked(bool value) {
+void KisConstrainedRect::setHeightLocked(bool value)
+{
     m_heightLocked = value;
     m_ratioLocked &= !(m_widthLocked || m_heightLocked);
 
     emit sigLockValuesChanged();
 }
 
-void KisConstrainedRect::setRatioLocked(bool value) {
+void KisConstrainedRect::setRatioLocked(bool value)
+{
     m_ratioLocked = value;
 
     m_widthLocked &= !m_ratioLocked;

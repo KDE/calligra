@@ -24,7 +24,6 @@
 
 class QDomElement;
 
-
 class KisLiquifyProperties : boost::equality_comparable<KisLiquifyProperties>
 {
 public:
@@ -53,74 +52,94 @@ public:
 
     bool operator==(const KisLiquifyProperties &other) const;
 
-    LiquifyMode mode() const {
+    LiquifyMode mode() const
+    {
         return m_mode;
     }
-    void setMode(LiquifyMode value) {
+    void setMode(LiquifyMode value)
+    {
         m_mode = value;
     }
 
-    qreal size() const {
+    qreal size() const
+    {
         return m_size;
     }
-    void setSize(qreal value) {
+    void setSize(qreal value)
+    {
         m_size = value;
     }
 
-    static qreal minSize() {
+    static qreal minSize()
+    {
         return 5.0;
     }
 
-    static qreal maxSize() {
+    static qreal maxSize()
+    {
         return 1000.0;
     }
 
-    qreal amount() const {
+    qreal amount() const
+    {
         return m_amount;
     }
-    void setAmount(qreal value) {
+    void setAmount(qreal value)
+    {
         m_amount = value;
     }
 
-    qreal spacing() const {
+    qreal spacing() const
+    {
         return m_spacing;
     }
-    void setSpacing(qreal value) {
+    void setSpacing(qreal value)
+    {
         m_spacing = value;
     }
 
-    bool sizeHasPressure() const {
+    bool sizeHasPressure() const
+    {
         return m_sizeHasPressure;
     }
-    void setSizeHasPressure(bool value) {
+    void setSizeHasPressure(bool value)
+    {
         m_sizeHasPressure = value;
     }
 
-    bool amountHasPressure() const {
+    bool amountHasPressure() const
+    {
         return m_amountHasPressure;
     }
-    void setAmountHasPressure(bool value) {
+    void setAmountHasPressure(bool value)
+    {
         m_amountHasPressure = value;
     }
 
-    bool reverseDirection() const {
+    bool reverseDirection() const
+    {
         return m_reverseDirection;
     }
-    void setReverseDirection(bool value) {
+    void setReverseDirection(bool value)
+    {
         m_reverseDirection = value;
     }
 
-    bool useWashMode() const {
+    bool useWashMode() const
+    {
         return m_useWashMode;
     }
-    void setUseWashMode(bool value) {
+    void setUseWashMode(bool value)
+    {
         m_useWashMode = value;
     }
 
-    qreal flow() const {
+    qreal flow() const
+    {
         return m_flow;
     }
-    void setFlow(qreal value) {
+    void setFlow(qreal value)
+    {
         m_flow = value;
     }
 

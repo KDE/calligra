@@ -31,16 +31,17 @@ public:
 
     ~ResourceScenario() { }
 
-    void addTask(const Task* t)
+    void addTask(const Task *t)
     {
-        if (!allocatedTasks.contains(const_cast<Task*>(t)))
-            allocatedTasks.append(const_cast<Task*>(t));
+        if (!allocatedTasks.contains(const_cast<Task *>(t))) {
+            allocatedTasks.append(const_cast<Task *>(t));
+        }
     }
 private:
     TaskList allocatedTasks;
     int firstSlot;
     int lastSlot;
-} ;
+};
 
 } // namespace TJ
 

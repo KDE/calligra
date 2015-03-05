@@ -32,13 +32,13 @@ class LayoutFactoryRegistry
     LayoutFactoryRegistry();
     ~LayoutFactoryRegistry();
 public:
-    static LayoutFactoryRegistry* instance();
-    void addFactory(LayoutFactory* _factory);
-    Layout* createLayout(const QString& id) const;
+    static LayoutFactoryRegistry *instance();
+    void addFactory(LayoutFactory *_factory);
+    Layout *createLayout(const QString &id) const;
     QList< QPair<QString, QString> > factories() const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

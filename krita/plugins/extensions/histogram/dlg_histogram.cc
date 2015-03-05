@@ -27,9 +27,8 @@
 #include "kis_paint_device.h"
 #include "kis_histogram_widget.h"
 
-
-DlgHistogram::DlgHistogram(QWidget *  parent, const char * name)
-        : KDialog(parent)
+DlgHistogram::DlgHistogram(QWidget   *parent, const char *name)
+    : KDialog(parent)
 {
     setCaption(i18n("Histogram"));
     setButtons(Ok | Cancel);

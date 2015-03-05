@@ -30,20 +30,19 @@
 
 #include <KoScriptingModule.h>
 
-
 class TestResult : public QObject
 {
     Q_OBJECT
 public:
-    explicit TestResult(QObject* parent = 0);
+    explicit TestResult(QObject *parent = 0);
     virtual ~TestResult();
 
     bool isOk() const;
     QString message;
 
 public Q_SLOTS:
-    void setMessage( const QString &message );
-    void setResult( bool ok );
+    void setMessage(const QString &message);
+    void setResult(bool ok);
 
 private:
     bool m_result;

@@ -24,7 +24,6 @@
 #include <QPointF>
 #include "KoInteractionStrategy.h"
 
-
 class KoPathTool;
 
 /**

@@ -40,8 +40,8 @@
 #include <kdebug.h>
 
 KoSliderCombo::KoSliderCombo(QWidget *parent)
-   : QComboBox(parent)
-    ,d(new KoSliderComboPrivate())
+    : QComboBox(parent)
+    , d(new KoSliderComboPrivate())
 {
     d->thePublic = this;
     d->minimum = 0.0;
@@ -61,7 +61,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     // When set to true, causes flicker on Qt 4.6. Any reason to keep it?
     d->firstShowOfSlider = false; //true;
 
-    QHBoxLayout * l = new QHBoxLayout();
+    QHBoxLayout *l = new QHBoxLayout();
     l->setMargin(2);
     l->setSpacing(2);
     l->addWidget(d->slider);
@@ -109,14 +109,14 @@ QSize KoSliderCombo::minimumSizeHint() const
 
 void KoSliderCombo::KoSliderComboPrivate::showPopup()
 {
-    if(firstShowOfSlider) {
+    if (firstShowOfSlider) {
         container->show(); //show container a bit early so the slider can be layout'ed
         firstShowOfSlider = false;
     }
 
     QStyleOptionSlider opt;
     opt.init(slider);
-    opt.maximum=256;
+    opt.maximum = 256;
     opt.sliderPosition = opt.sliderValue = slider->value();
     int hdlPos = thePublic->style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle).center().x();
 
@@ -131,12 +131,15 @@ void KoSliderCombo::KoSliderComboPrivate::showPopup()
 
     // Make sure the popup is not drawn outside the screen area
     QRect screenRect = QApplication::desktop()->availableGeometry(thePublic);
-    if (popupRect.right() > screenRect.right())
+    if (popupRect.right() > screenRect.right()) {
         popupRect.translate(screenRect.right() - popupRect.right(), 0);
-    if (popupRect.left() < screenRect.left())
+    }
+    if (popupRect.left() < screenRect.left()) {
         popupRect.translate(screenRect.left() - popupRect.left(), 0);
-    if (popupRect.bottom() > screenRect.bottom())
+    }
+    if (popupRect.bottom() > screenRect.bottom()) {
         popupRect.translate(0, -(thePublic->height() + container->height()));
+    }
 
     container->setGeometry(popupRect);
     container->raise();
@@ -156,17 +159,17 @@ void KoSliderCombo::hideEvent(QHideEvent *)
 
 void KoSliderCombo::changeEvent(QEvent *e)
 {
-    switch (e->type())
-    {
-        case QEvent::EnabledChange:
-            if (!isEnabled())
-                d->hidePopup();
-            break;
-        case QEvent::PaletteChange:
-            d->container->setPalette(palette());
-            break;
-        default:
-            break;
+    switch (e->type()) {
+    case QEvent::EnabledChange:
+        if (!isEnabled()) {
+            d->hidePopup();
+        }
+        break;
+    case QEvent::PaletteChange:
+        d->container->setPalette(palette());
+        break;
+    default:
+        break;
     }
     QComboBox::changeEvent(e);
 }
@@ -192,26 +195,32 @@ void KoSliderCombo::mousePressEvent(QMouseEvent *e)
     opt.subControls = QStyle::SC_All;
     opt.editable = true;
     QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt, e->pos(),
-                                                           this);
-    if (sc == QStyle::SC_ComboBoxArrow && !d->container->isVisible())
-    {
+                            this);
+    if (sc == QStyle::SC_ComboBoxArrow && !d->container->isVisible()) {
         d->showPopup();
-    }
-    else
+    } else {
         QComboBox::mousePressEvent(e);
+    }
 }
 
 void KoSliderCombo::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Up) setValue(value() + d->slider->singleStep() * (maximum() - minimum()) / 256 + 0.5);
-    else if (e->key() == Qt::Key_Down) setValue(value() - d->slider->singleStep() * (maximum() - minimum()) / 256 - 0.5);
-    else QComboBox::keyPressEvent(e);
+    if (e->key() == Qt::Key_Up) {
+        setValue(value() + d->slider->singleStep() * (maximum() - minimum()) / 256 + 0.5);
+    } else if (e->key() == Qt::Key_Down) {
+        setValue(value() - d->slider->singleStep() * (maximum() - minimum()) / 256 - 0.5);
+    } else {
+        QComboBox::keyPressEvent(e);
+    }
 }
 
 void KoSliderCombo::wheelEvent(QWheelEvent *e)
 {
-    if (e->delta() > 0) setValue(value() + d->slider->singleStep() * (maximum() - minimum()) / 256 + 0.5);
-    else setValue(value() - d->slider->singleStep() * (maximum() - minimum()) / 256 - 0.5);
+    if (e->delta() > 0) {
+        setValue(value() + d->slider->singleStep() * (maximum() - minimum()) / 256 + 0.5);
+    } else {
+        setValue(value() - d->slider->singleStep() * (maximum() - minimum()) / 256 - 0.5);
+    }
 }
 
 void KoSliderCombo::KoSliderComboPrivate::lineEditFinished()
@@ -225,7 +234,7 @@ void KoSliderCombo::KoSliderComboPrivate::lineEditFinished()
 
 void KoSliderCombo::KoSliderComboPrivate::sliderValueChanged(int slidervalue)
 {
-    thePublic->setEditText(KGlobal::locale()->formatNumber(minimum + (maximum - minimum)*slidervalue/256, decimals));
+    thePublic->setEditText(KGlobal::locale()->formatNumber(minimum + (maximum - minimum)*slidervalue / 256, decimals));
 
     qreal value = KGlobal::locale()->readNumber(thePublic->currentText());
     emit thePublic->valueChanged(value, false);
@@ -260,8 +269,11 @@ qreal KoSliderCombo::value() const
 void KoSliderCombo::setDecimals(int dec)
 {
     d->decimals = dec;
-    if (dec == 0) lineEdit()->setValidator(new QIntValidator(this));
-    else lineEdit()->setValidator(new QDoubleValidator(this));
+    if (dec == 0) {
+        lineEdit()->setValidator(new QIntValidator(this));
+    } else {
+        lineEdit()->setValidator(new QDoubleValidator(this));
+    }
 }
 
 void KoSliderCombo::setMinimum(qreal min)
@@ -276,10 +288,12 @@ void KoSliderCombo::setMaximum(qreal max)
 
 void KoSliderCombo::setValue(qreal value)
 {
-    if(value < d->minimum)
+    if (value < d->minimum) {
         value = d->minimum;
-    if(value > d->maximum)
+    }
+    if (value > d->maximum) {
         value = d->maximum;
+    }
     setEditText(KGlobal::locale()->formatNumber(value, d->decimals));
     d->slider->blockSignals(true);
     d->slider->setValue(int((value - d->minimum) * 256 / (d->maximum - d->minimum) + 0.5));

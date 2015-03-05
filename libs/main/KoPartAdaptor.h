@@ -42,7 +42,7 @@ class KOMAIN_EXPORT KoPartAdaptor : public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.document")
 public:
 
-    explicit KoPartAdaptor(KoPart* doc);
+    explicit KoPartAdaptor(KoPart *doc);
     ~KoPartAdaptor();
 
 public Q_SLOTS: // METHODS
@@ -56,7 +56,7 @@ public Q_SLOTS: // METHODS
      * Warning: this is asynchronous. The document might not be loaded yet when
      * this call returns. See isLoading.
      */
-    Q_SCRIPTABLE void openUrl(const QString & url);
+    Q_SCRIPTABLE void openUrl(const QString &url);
 
     /**
      * @return TRUE is the document is still loading
@@ -86,9 +86,9 @@ public Q_SLOTS: // METHODS
     /**
      * Saves the document under a new name
      */
-    Q_SCRIPTABLE void saveAs(const QString & url);
+    Q_SCRIPTABLE void saveAs(const QString &url);
 
-    Q_SCRIPTABLE void setOutputMimeType(const QByteArray & mimetype);
+    Q_SCRIPTABLE void setOutputMimeType(const QByteArray &mimetype);
 
     Q_SCRIPTABLE QString documentInfoAuthorName() const;
     Q_SCRIPTABLE QString documentInfoEmail() const;
@@ -107,7 +107,7 @@ public Q_SLOTS: // METHODS
     Q_SCRIPTABLE QString documentInfoStreet() const;
     Q_SCRIPTABLE QString documentInfoInitial() const;
     Q_SCRIPTABLE QString documentInfoAuthorPostion() const;
-    Q_SCRIPTABLE void setDocumentInfoAuthorName(const QString & text);
+    Q_SCRIPTABLE void setDocumentInfoAuthorName(const QString &text);
     Q_SCRIPTABLE void setDocumentInfoEmail(const QString &text);
     Q_SCRIPTABLE void setDocumentInfoCompanyName(const QString &text);
     Q_SCRIPTABLE void setDocumentInfoTelephone(const QString &text);
@@ -115,23 +115,22 @@ public Q_SLOTS: // METHODS
     Q_SCRIPTABLE void setDocumentInfoTelephoneHome(const QString &text);
     Q_SCRIPTABLE void setDocumentInfoFax(const QString &text);
     Q_SCRIPTABLE void setDocumentInfoCountry(const QString &text);
-    Q_SCRIPTABLE void setDocumentInfoTitle(const QString & text);
+    Q_SCRIPTABLE void setDocumentInfoTitle(const QString &text);
     Q_SCRIPTABLE void setDocumentInfoPostalCode(const QString &text);
-    Q_SCRIPTABLE void setDocumentInfoCity(const QString & text);
+    Q_SCRIPTABLE void setDocumentInfoCity(const QString &text);
     Q_SCRIPTABLE void setDocumentInfoStreet(const QString &text);
     Q_SCRIPTABLE void setDocumentInfoAbstract(const QString &text);
-    Q_SCRIPTABLE void setDocumentInfoInitial(const QString & text);
-    Q_SCRIPTABLE void setDocumentInfoKeywords(const QString & text);
-    Q_SCRIPTABLE void setDocumentInfoSubject(const QString & text);
-    Q_SCRIPTABLE void setDocumentInfoAuthorPosition(const QString & text);
+    Q_SCRIPTABLE void setDocumentInfoInitial(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoKeywords(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoSubject(const QString &text);
+    Q_SCRIPTABLE void setDocumentInfoAuthorPosition(const QString &text);
 
 Q_SIGNALS:
-    
-    
+
 public:
 
 protected:
-    KoPart* m_pDoc;
+    KoPart *m_pDoc;
 };
 
 #endif // QT_NO_DBUS

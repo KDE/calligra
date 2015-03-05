@@ -29,40 +29,39 @@
 #include "KPrCustomSlideShows.h"
 #include "KPrViewModeSlidesSorter.h"
 
-KPrConfigureSlideShowDialog::KPrConfigureSlideShowDialog( KPrDocument *document, KPrView *parent )
-    : KDialog( parent )
-    , m_document( document )
+KPrConfigureSlideShowDialog::KPrConfigureSlideShowDialog(KPrDocument *document, KPrView *parent)
+    : KDialog(parent)
+    , m_document(document)
     , m_view(parent)
 {
-    QWidget *widget = new QWidget( this );
+    QWidget *widget = new QWidget(this);
 
-    ui.setupUi( widget );
+    ui.setupUi(widget);
 
-    ui.slidesComboBox->addItem( i18n( "All slides" ) );
+    ui.slidesComboBox->addItem(i18n("All slides"));
     KPrCustomSlideShows *customSlideShows = document->customSlideShows();
-    ui.slidesComboBox->addItems( customSlideShows->names() );
+    ui.slidesComboBox->addItems(customSlideShows->names());
 
-    setMainWidget( widget );
+    setMainWidget(widget);
 
-    setCaption( i18n( "Configure Slide Show" ) );
+    setCaption(i18n("Configure Slide Show"));
 
     QString activeCustomSlideShow = document->activeCustomSlideShow();
-    if ( activeCustomSlideShow.isEmpty() ) {
-        ui.slidesComboBox->setCurrentIndex( 0 );
-    }
-    else {
+    if (activeCustomSlideShow.isEmpty()) {
+        ui.slidesComboBox->setCurrentIndex(0);
+    } else {
         QList<QString> customSlideShows = document->customSlideShows()->names();
-        int index = customSlideShows.indexOf( activeCustomSlideShow ) + 1;
-        Q_ASSERT( index < ui.slidesComboBox->count() );
-        ui.slidesComboBox->setCurrentIndex( index );
+        int index = customSlideShows.indexOf(activeCustomSlideShow) + 1;
+        Q_ASSERT(index < ui.slidesComboBox->count());
+        ui.slidesComboBox->setCurrentIndex(index);
     }
 
-    connect( ui.editSlidesButton, SIGNAL(clicked()), this, SLOT(editCustomSlideShow()) );
+    connect(ui.editSlidesButton, SIGNAL(clicked()), this, SLOT(editCustomSlideShow()));
 }
 
 QString KPrConfigureSlideShowDialog::activeCustomSlideShow() const
 {
-    if ( ui.slidesComboBox->currentIndex() != 0 ) {
+    if (ui.slidesComboBox->currentIndex() != 0) {
         return ui.slidesComboBox->currentText();
     }
 

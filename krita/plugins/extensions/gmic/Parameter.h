@@ -46,7 +46,7 @@ public:
     };
 
     Parameter(const QString &name, bool updatePreview = true);
-    virtual ~Parameter(){}
+    virtual ~Parameter() {}
 
     QString m_name;
     ParameterType m_type;
@@ -57,9 +57,12 @@ public:
     virtual QString value() const;
     virtual void setValue(const QString &value);
 
-    virtual void parseValues(const QString& typeDefinition);
+    virtual void parseValues(const QString &typeDefinition);
 
-    QString name() const { return m_name; }
+    QString name() const
+    {
+        return m_name;
+    }
     bool isPresentationalOnly() const;
 
     virtual void reset() { };
@@ -68,17 +71,17 @@ public:
 
 protected:
     // strips parameter type (int, note, etc.) and enclosing brackets
-    QString extractValues(const QString& typeDefinition);
+    QString extractValues(const QString &typeDefinition);
     // returns list of parameter values or empty item if parameter list is empty
-    QStringList getValues(const QString& typeDefinition);
-    static QString stripQuotes(const QString& str);
-    static QString addQuotes(const QString& str);
+    QStringList getValues(const QString &typeDefinition);
+    static QString stripQuotes(const QString &str);
+    static QString addQuotes(const QString &str);
 };
 
 static QMap<Parameter::ParameterType, QString> initMap()
 {
     QMap<Parameter::ParameterType, QString> map;
-    map.insert(Parameter::FLOAT_P,"float");
+    map.insert(Parameter::FLOAT_P, "float");
     map.insert(Parameter::INT_P, "int");
     map.insert(Parameter::BOOL_P, "bool");
     map.insert(Parameter::CHOICE_P, "choice");
@@ -89,8 +92,8 @@ static QMap<Parameter::ParameterType, QString> initMap()
     map.insert(Parameter::NOTE_P, "note");
     map.insert(Parameter::LINK_P, "link");
     map.insert(Parameter::SEPARATOR_P, "separator");
-    map.insert(Parameter::CONST_P,"const");
-    map.insert(Parameter::BUTTON_P,"button");
+    map.insert(Parameter::CONST_P, "const");
+    map.insert(Parameter::BUTTON_P, "button");
     return map;
 }
 
@@ -98,11 +101,10 @@ static const QMap<Parameter::ParameterType, QString> PARAMETER_NAMES = initMap()
 
 static const QList<QString> PARAMETER_NAMES_STRINGS = PARAMETER_NAMES.values();
 
-
 class FloatParameter : public Parameter
 {
 public:
-    FloatParameter(const QString& name, bool updatePreview = true);
+    FloatParameter(const QString &name, bool updatePreview = true);
 
     float m_defaultValue;
     float m_value;
@@ -110,9 +112,9 @@ public:
     float m_maxValue;
 
     virtual QString value() const;
-    virtual void setValue(const QString& value);
+    virtual void setValue(const QString &value);
 
-    virtual void parseValues(const QString& typeDefinition);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
     virtual void reset();
 };
@@ -120,8 +122,8 @@ public:
 class IntParameter : public Parameter
 {
 public:
-    IntParameter(const QString& name, bool updatePreview = true);
-    virtual ~IntParameter(){}
+    IntParameter(const QString &name, bool updatePreview = true);
+    virtual ~IntParameter() {}
 
     int m_defaultValue;
     int m_value;
@@ -129,9 +131,9 @@ public:
     int m_maxValue;
 
     virtual QString value() const;
-    virtual void setValue(const QString& value);
+    virtual void setValue(const QString &value);
 
-    virtual void parseValues(const QString& typeDefinition);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
     // reset parameter to default value from gmic definition
     // some parameters do not need reset, e.g. const is not mutable
@@ -141,16 +143,16 @@ public:
 class SeparatorParameter : public Parameter
 {
 public:
-    SeparatorParameter(const QString& name, bool updatePreview = true);
-    virtual void parseValues(const QString& typeDefinition);
+    SeparatorParameter(const QString &name, bool updatePreview = true);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
 };
 
 class ChoiceParameter : public Parameter
 {
 public:
-    ChoiceParameter(const QString& name, bool updatePreview = true);
-    virtual void parseValues(const QString& typeDefinition);
+    ChoiceParameter(const QString &name, bool updatePreview = true);
+    virtual void parseValues(const QString &typeDefinition);
 
     // default index
     int m_defaultValue;
@@ -161,7 +163,7 @@ public:
     virtual QString value() const;
     // you can use int or name, if it is int, it will be set as index,
     // if you use name of choice, index will be determined
-    virtual void setValue(const QString& value);
+    virtual void setValue(const QString &value);
     void setIndex(int i);
     virtual QString toString();
     virtual void reset();
@@ -170,8 +172,8 @@ public:
 class NoteParameter : public Parameter
 {
 public:
-    NoteParameter(const QString& name, bool updatePreview = true);
-    virtual void parseValues(const QString& typeDefinition);
+    NoteParameter(const QString &name, bool updatePreview = true);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
 
     QString m_label;
@@ -181,10 +183,9 @@ public:
 class LinkParameter : public Parameter
 {
 public:
-    LinkParameter(const QString& name, bool updatePreview = true);
-    virtual void parseValues(const QString& typeDefinition);
+    LinkParameter(const QString &name, bool updatePreview = true);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
-
 
     QString m_link;
 };
@@ -192,8 +193,8 @@ public:
 class BoolParameter : public Parameter
 {
 public:
-    BoolParameter(const QString& name, bool updatePreview = true);
-    virtual void parseValues(const QString& typeDefinition);
+    BoolParameter(const QString &name, bool updatePreview = true);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
     virtual QString value() const;
     virtual void reset();
@@ -208,8 +209,8 @@ public:
 class ColorParameter : public Parameter
 {
 public:
-    ColorParameter(const QString& name, bool updatePreview = true);
-    virtual void parseValues(const QString& typeDefinition);
+    ColorParameter(const QString &name, bool updatePreview = true);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
     virtual QString value() const;
     virtual void reset();
@@ -222,11 +223,11 @@ public:
 class TextParameter : public Parameter
 {
 public:
-    TextParameter(const QString& name, bool updatePreview = true);
-    virtual void parseValues(const QString& typeDefinition);
+    TextParameter(const QString &name, bool updatePreview = true);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
     virtual QString value() const;
-    virtual void setValue(const QString& value);
+    virtual void setValue(const QString &value);
     virtual void reset();
 
     QString toUiValue() const;
@@ -242,11 +243,11 @@ private:
 class FolderParameter : public Parameter
 {
 public:
-    FolderParameter(const QString& name, bool updatePreview = true);
-    virtual void parseValues(const QString& typeDefinition);
+    FolderParameter(const QString &name, bool updatePreview = true);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
     virtual QString value() const;
-    virtual void setValue(const QString& value);
+    virtual void setValue(const QString &value);
     virtual void reset();
 
     QString toUiValue();
@@ -259,11 +260,11 @@ public:
 class FileParameter : public Parameter
 {
 public:
-    FileParameter(const QString& name, bool updatePreview = true);
-    virtual void parseValues(const QString& typeDefinition);
+    FileParameter(const QString &name, bool updatePreview = true);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
     virtual QString value() const;
-    virtual void setValue(const QString& value);
+    virtual void setValue(const QString &value);
     virtual void reset();
 
     QString toUiValue();
@@ -276,8 +277,8 @@ public:
 class ConstParameter : public Parameter
 {
 public:
-    ConstParameter(const QString& name, bool updatePreview = false);
-    virtual void parseValues(const QString& typeDefinition);
+    ConstParameter(const QString &name, bool updatePreview = false);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
     virtual QString value() const;
 
@@ -287,13 +288,13 @@ public:
 class ButtonParameter : public Parameter
 {
 public:
-    ButtonParameter(const QString& name, bool updatePreview = false);
+    ButtonParameter(const QString &name, bool updatePreview = false);
     enum Aligment { AlignLeft, AlignRight, AlignCenter };
 
-    virtual void parseValues(const QString& typeDefinition);
+    virtual void parseValues(const QString &typeDefinition);
     virtual QString toString();
     virtual QString value() const;
-    virtual void setValue(const QString& value);
+    virtual void setValue(const QString &value);
     virtual void reset();
     void initValue(bool value);
 
@@ -301,8 +302,6 @@ public:
     bool m_defaultValue;
     Aligment m_buttonAligment;
 
-
 };
-
 
 #endif

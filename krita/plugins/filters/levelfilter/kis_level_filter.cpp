@@ -43,7 +43,7 @@
 #include "kis_types.h"
 
 KisLevelFilter::KisLevelFilter()
-        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Levels..."))
+    : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Levels..."))
 {
     setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_L)));
     setSupportsPainting(false);
@@ -54,12 +54,12 @@ KisLevelFilter::~KisLevelFilter()
 {
 }
 
-KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisLevelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     return new KisLevelConfigWidget(parent, dev);
 }
 
-KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation *KisLevelFilter::createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const
 {
     if (!config) {
         warnKrita << "No configuration object for level filter\n";
@@ -76,22 +76,23 @@ KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* 
 
     quint16 transfer[256];
     for (int i = 0; i < 256; i++) {
-        if (i <= blackvalue)
+        if (i <= blackvalue) {
             transfer[i] = outblackvalue;
-        else if (i < whitevalue) {
+        } else if (i < whitevalue) {
             double a = (double)(i - blackvalue) / (double)(whitevalue - blackvalue);
             a = (double)(outwhitevalue - outblackvalue) * pow(a, (1.0 / gammavalue));
             transfer[i] = int(outblackvalue + a);
-        } else
+        } else {
             transfer[i] = outwhitevalue;
+        }
         // TODO use floats instead of integer in the configuration
-        transfer[i] = ((int)transfer[i] * 0xFFFF) / 0xFF ;
+        transfer[i] = ((int)transfer[i] * 0xFFFF) / 0xFF;
     }
     return cs->createBrightnessContrastAdjustment(transfer);
 }
 
-KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev)
-        : KisConfigWidget(parent)
+KisLevelConfigWidget::KisLevelConfigWidget(QWidget *parent, KisPaintDeviceSP dev)
+    : KisConfigWidget(parent)
 {
     m_page.setupUi(this);
 
@@ -118,7 +119,6 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect(m_page.ingradient, SIGNAL(sigModifiedWhite(int)), m_page.whitespin, SLOT(setValue(int)));
     connect(m_page.ingradient, SIGNAL(sigModifiedGamma(double)), m_page.gammaspin, SLOT(setValue(double)));
 
-
     connect(m_page.outblackspin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page.outwhitespin, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 
@@ -131,14 +131,14 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect(m_page.outgradient, SIGNAL(sigModifiedBlack(int)), m_page.outblackspin, SLOT(setValue(int)));
     connect(m_page.outgradient, SIGNAL(sigModifiedWhite(int)), m_page.outwhitespin, SLOT(setValue(int)));
 
-    connect(m_page.butauto, SIGNAL(clicked(bool)), this, SLOT(slotAutoLevel(void)));
+    connect(m_page.butauto, SIGNAL(clicked(bool)), this, SLOT(slotAutoLevel()));
 
-    connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
+    connect((QObject *)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
-    m_histogram.reset( new KisHistogram(dev, dev->exactBounds(), producer, LINEAR) );
+    m_histogram.reset(new KisHistogram(dev, dev->exactBounds(), producer, LINEAR));
     m_histlog = false;
-    m_page.histview->resize(288,100);
+    m_page.histview->resize(288, 100);
     slotDrawHistogram();
 
 }
@@ -155,14 +155,15 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
 
     if (m_histlog != logarithmic) {
         // Update the m_histogram
-        if (logarithmic)
+        if (logarithmic) {
             m_histogram->setHistogramType(LOGARITHMIC);
-        else
+        } else {
             m_histogram->setHistogramType(LINEAR);
+        }
         m_histlog = logarithmic;
     }
 
-    QPixmap pix(wWidth-100, wHeight);
+    QPixmap pix(wWidth - 100, wHeight);
     pix.fill();
     QPainter p(&pix);
 
@@ -176,15 +177,17 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
         double factor = (double)(wHeight - wHeight / 5.0) / highest;
         for (int i = 0; i < wWidth; i++) {
             int binNo = qRound((double)i / wWidth * (bins - 1));
-            if ((int)m_histogram->getValue(binNo) != 0)
+            if ((int)m_histogram->getValue(binNo) != 0) {
                 p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - (int)m_histogram->getValue(binNo) * factor);
+            }
         }
     } else {
         double factor = (double)(wHeight - wHeight / 5.0) / (double)log(highest);
         for (int i = 0; i < wWidth; i++) {
-            int binNo = qRound((double)i / wWidth * (bins - 1)) ;
-            if ((int)m_histogram->getValue(binNo) != 0)
+            int binNo = qRound((double)i / wWidth * (bins - 1));
+            if ((int)m_histogram->getValue(binNo) != 0) {
                 p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - log((double)m_histogram->getValue(binNo)) * factor);
+            }
         }
     }
 
@@ -219,7 +222,7 @@ void KisLevelConfigWidget::slotAutoLevel(void)
 
     Q_ASSERT(num_bins > 1);
 
-    int chosen_low_bin = 0, chosen_high_bin = num_bins-1;
+    int chosen_low_bin = 0, chosen_high_bin = num_bins - 1;
     int count_thus_far = m_histogram->getValue(0);
     const int total_count = m_histogram->producer()->count();
     const double threshold = 0.006;
@@ -229,8 +232,8 @@ void KisLevelConfigWidget::slotAutoLevel(void)
     // this implementation is a port of GIMP's auto level implementation
     // (use a GPLv2 version as reference, specifically commit 51bfd07f18ef045a3e43632218fd92cae9ff1e48)
 
-    for (int bin=0; bin<(num_bins-1); ++bin) {
-        int next_count_thus_far = count_thus_far + m_histogram->getValue(bin+1);
+    for (int bin = 0; bin < (num_bins - 1); ++bin) {
+        int next_count_thus_far = count_thus_far + m_histogram->getValue(bin + 1);
 
         double this_percentage = static_cast<double>(count_thus_far) /  total_count;
         double next_percentage = static_cast<double>(next_count_thus_far) / total_count;
@@ -244,9 +247,9 @@ void KisLevelConfigWidget::slotAutoLevel(void)
         count_thus_far = next_count_thus_far;
     }
 
-    count_thus_far = m_histogram->getValue(num_bins-1);
-    for (int bin=(num_bins-1); bin>0; --bin) {
-        int next_count_thus_far = count_thus_far + m_histogram->getValue(bin-1);
+    count_thus_far = m_histogram->getValue(num_bins - 1);
+    for (int bin = (num_bins - 1); bin > 0; --bin) {
+        int next_count_thus_far = count_thus_far + m_histogram->getValue(bin - 1);
 
         double this_percentage = static_cast<double>(count_thus_far) /  total_count;
         double next_percentage = static_cast<double>(next_count_thus_far) / total_count;
@@ -269,9 +272,9 @@ void KisLevelConfigWidget::slotAutoLevel(void)
     }
 }
 
-KisPropertiesConfiguration * KisLevelConfigWidget::configuration() const
+KisPropertiesConfiguration *KisLevelConfigWidget::configuration() const
 {
-    KisFilterConfiguration * config = new KisFilterConfiguration(KisLevelFilter::id().id(), 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration(KisLevelFilter::id().id(), 1);
 
     config->setProperty("blackvalue", m_page.blackspin->value());
     config->setProperty("whitevalue", m_page.whitespin->value());
@@ -282,7 +285,7 @@ KisPropertiesConfiguration * KisLevelConfigWidget::configuration() const
     return config;
 }
 
-void KisLevelConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisLevelConfigWidget::setConfiguration(const KisPropertiesConfiguration *config)
 {
     QVariant value;
     if (config->getProperty("blackvalue", value)) {

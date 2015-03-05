@@ -23,7 +23,6 @@
 #include "kptitemmodelbase.h"
 #include "kptschedule.h"
 
-
 class QModelIndex;
 class KUndo2Command;
 
@@ -42,17 +41,17 @@ public:
         : QObject()
     {}
     ~RelationModel() {}
-    
-    QVariant data( const Relation *relation, int property, int role = Qt::DisplayRole ) const; 
-    
-    static QVariant headerData( int section, int role = Qt::DisplayRole );
+
+    QVariant data(const Relation *relation, int property, int role = Qt::DisplayRole) const;
+
+    static QVariant headerData(int section, int role = Qt::DisplayRole);
 
     static int propertyCount();
-    
-    QVariant parentName( const Relation *r, int role ) const;
-    QVariant childName( const Relation *r, int role ) const;
-    QVariant type( const Relation *r, int role ) const;
-    QVariant lag( const Relation *r, int role ) const;
+
+    QVariant parentName(const Relation *r, int role) const;
+    QVariant childName(const Relation *r, int role) const;
+    QVariant type(const Relation *r, int role) const;
+    QVariant lag(const Relation *r, int role) const;
 
 };
 
@@ -60,52 +59,51 @@ class KPLATOMODELS_EXPORT RelationItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit RelationItemModel( QObject *parent = 0 );
+    explicit RelationItemModel(QObject *parent = 0);
     ~RelationItemModel();
-    
-    virtual void setProject( Project *project );
-    virtual void setNode( Node *node );
-    
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
-    
-    virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    
-    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
-    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
-    
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
 
-    
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-    
-    Relation *relation( const QModelIndex &index ) const;
-    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    virtual void setProject(Project *project);
+    virtual void setNode(Node *node);
+
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    virtual QModelIndex parent(const QModelIndex &index) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
+    Relation *relation(const QModelIndex &index) const;
+    QAbstractItemDelegate *createDelegate(int column, QWidget *parent) const;
 
 Q_SIGNALS:
-    void executeCommand( KUndo2Command* );
-    
+    void executeCommand(KUndo2Command *);
+
 protected Q_SLOTS:
-    void slotNodeChanged( Node* );
-    void slotNodeToBeRemoved( Node *node );
-    void slotNodeRemoved( Node *node );
-    void slotRelationToBeRemoved( Relation *r );
-    void slotRelationRemoved( Relation *r );
-    void slotRelationToBeAdded( Relation *r, int, int );
-    void slotRelationAdded( Relation *r );
-    void slotRelationModified( Relation *r );
+    void slotNodeChanged(Node *);
+    void slotNodeToBeRemoved(Node *node);
+    void slotNodeRemoved(Node *node);
+    void slotRelationToBeRemoved(Relation *r);
+    void slotRelationRemoved(Relation *r);
+    void slotRelationToBeAdded(Relation *r, int, int);
+    void slotRelationAdded(Relation *r);
+    void slotRelationModified(Relation *r);
 
     void slotLayoutChanged();
-    
+
 protected:
-    bool setType( Relation *r, const QVariant &value, int role );
-    bool setLag( Relation *r, const QVariant &value, int role );
-    
+    bool setType(Relation *r, const QVariant &value, int role);
+    bool setLag(Relation *r, const QVariant &value, int role);
+
 private:
     Node *m_node;
     RelationModel m_relationmodel;
-    
+
     Relation *m_removedRelation; // to control endRemoveRows()
 };
 

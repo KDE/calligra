@@ -35,7 +35,7 @@ KisDlgBlacklistCleanup::KisDlgBlacklistCleanup()
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 
-    QWidget* page = new QWidget(this);
+    QWidget *page = new QWidget(this);
     setupUi(page);
     setMainWidget(page);
     labelWarning->setPixmap(koIcon("dialog-warning").pixmap(32, 32));

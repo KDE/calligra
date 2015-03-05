@@ -18,7 +18,6 @@
 
 #include "kis_update_outline_job.h"
 
-
 KisUpdateOutlineJob::KisUpdateOutlineJob(KisSelectionSP selection, bool updateThumbnail, const QColor &maskColor)
     : m_selection(selection),
       m_updateThumbnail(updateThumbnail),
@@ -28,7 +27,7 @@ KisUpdateOutlineJob::KisUpdateOutlineJob(KisSelectionSP selection, bool updateTh
 
 bool KisUpdateOutlineJob::overrides(const KisSpontaneousJob *otherJob)
 {
-    return dynamic_cast<const KisUpdateOutlineJob*>(otherJob);
+    return dynamic_cast<const KisUpdateOutlineJob *>(otherJob);
 }
 
 void KisUpdateOutlineJob::run()

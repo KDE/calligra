@@ -105,11 +105,12 @@ static google_breakpad::ExceptionHandler *exceptionHandler = 0;
 
 // Note: we've crashed so we cannot use the heap here. So we cannot use any Q* class.
 static bool startCrashReporter(const HD_CHAR *dumpPath, const HD_CHAR *minidumpID, void *context,
-                               #ifdef Q_WS_WIN
+#ifdef Q_WS_WIN
                                EXCEPTION_POINTERS *exceptionInfo,
                                MDRawAssertionInfo *assertion,
-                               #endif
-                               bool succeeded) {
+#endif
+                               bool succeeded)
+{
 
     if (!succeeded) {
         return false;
@@ -134,8 +135,8 @@ static bool startCrashReporter(const HD_CHAR *dumpPath, const HD_CHAR *minidumpI
     ZeroMemory(&pi, sizeof(pi));
 
     if (CreateProcessW(NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
-        CloseHandle( pi.hProcess );
-        ( pi.hThread );
+        CloseHandle(pi.hProcess);
+        (pi.hThread);
         TerminateProcess(GetCurrentProcess(), 1);
     }
 
@@ -146,13 +147,13 @@ static bool startCrashReporter(const HD_CHAR *dumpPath, const HD_CHAR *minidumpI
     if (pid == -1) {
         return false;
     } else if (pid == 0) {
-        execl(CRASH_REPORTER_BINARY, CRASH_REPORTER_BINARY, dumpPath, minidumpID, (char*)0);
+        execl(CRASH_REPORTER_BINARY, CRASH_REPORTER_BINARY, dumpPath, minidumpID, (char *)0);
     }
 #ifdef Q_WS_X11
     abort();
 #endif
     return true;
-#endif	
+#endif
 }
 
 // Copied from Qt's QString class because of weird linking errors
@@ -166,11 +167,11 @@ int toWCharArray(const QString str, wchar_t *array)
         const unsigned short *uc = str.utf16();
         for (int i = 0; i < str.length(); ++i) {
             uint u = uc[i];
-            if (u >= 0xd800 && u < 0xdc00 && i < str.length()-1) {
-                ushort low = uc[i+1];
+            if (u >= 0xd800 && u < 0xdc00 && i < str.length() - 1) {
+                ushort low = uc[i + 1];
                 if (low >= 0xdc00 && low < 0xe000) {
                     ++i;
-                    u = (u - 0xd800)*0x400 + (low - 0xdc00) + 0x10000;
+                    u = (u - 0xd800) * 0x400 + (low - 0xdc00) + 0x10000;
                 }
             }
             *a = wchar_t(u);
@@ -192,16 +193,16 @@ KisCrashHandler::KisCrashHandler()
     str.resize(tempPath.length());
     str.resize(toWCharArray(tempPath, &(*str.begin())));
     exceptionHandler = new google_breakpad::ExceptionHandler(str, 0,
-                                                             startCrashReporter, 0,
-                                                             google_breakpad::ExceptionHandler::HANDLER_ALL);
+            startCrashReporter, 0,
+            google_breakpad::ExceptionHandler::HANDLER_ALL);
 
 #else
     qDebug() << "Installing CrashHandler"; // do not remove this line; it is needed to make it work on linux.
 
     exceptionHandler = new google_breakpad::ExceptionHandler(tempPath.toStdString(), 0,
-                                                             startCrashReporter, 0,
-                                                             true);
-#endif	
+            startCrashReporter, 0,
+            true);
+#endif
     Q_CHECK_PTR(exceptionHandler);
 }
 

@@ -27,7 +27,7 @@ class KoFontFacePrivate : public QSharedData
 {
 public:
     KoFontFacePrivate(const QString &_name)
-    : name(_name), pitch(KoFontFace::VariablePitch)
+        : name(_name), pitch(KoFontFace::VariablePitch)
     {
     }
 
@@ -35,15 +35,17 @@ public:
     {
     }
 
-    void saveOdf(KoXmlWriter* xmlWriter) const
+    void saveOdf(KoXmlWriter *xmlWriter) const
     {
         xmlWriter->startElement("style:font-face");
         xmlWriter->addAttribute("style:name", name);
         xmlWriter->addAttribute("svg:font-family", family.isEmpty() ? name : family);
-        if (!familyGeneric.isEmpty())
+        if (!familyGeneric.isEmpty()) {
             xmlWriter->addAttribute("style:font-family-generic", familyGeneric);
-        if (!style.isEmpty())
+        }
+        if (!style.isEmpty()) {
             xmlWriter->addAttribute("svg:font-style", style);
+        }
         xmlWriter->addAttribute("style:font-pitch", pitch == KoFontFace::FixedPitch ? "fixed" : "variable");
         xmlWriter->endElement(); // style:font-face
     }
@@ -55,14 +57,13 @@ public:
     KoFontFace::Pitch pitch; //!< for style:font-pitch attribute
 };
 
-
 KoFontFace::KoFontFace(const QString &_name)
- : d(new KoFontFacePrivate(_name))
+    : d(new KoFontFacePrivate(_name))
 {
 }
 
 KoFontFace::KoFontFace(const KoFontFace &other)
- : d(other.d)
+    : d(other.d)
 {
 }
 
@@ -78,8 +79,9 @@ KoFontFace &KoFontFace::operator=(const KoFontFace &other)
 
 bool KoFontFace::operator==(const KoFontFace &other) const
 {
-    if (isNull() && other.isNull())
+    if (isNull() && other.isNull()) {
         return true;
+    }
     return d.data() == other.d.data();
 }
 
@@ -142,7 +144,7 @@ void KoFontFace::setPitch(KoFontFace::Pitch pitch)
     d->pitch = pitch;
 }
 
-void KoFontFace::saveOdf(KoXmlWriter* xmlWriter) const
+void KoFontFace::saveOdf(KoXmlWriter *xmlWriter) const
 {
     Q_ASSERT(!isNull());
     if (isNull()) {

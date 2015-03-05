@@ -39,7 +39,7 @@ public:
     /**
      * @brief ResourceBundle : Ctor * @param bundlePath the path of the bundle
      */
-    ResourceBundle(QString const& fileName);
+    ResourceBundle(QString const &fileName);
 
     /**
      * @brief ~ResourceBundle : Dtor
@@ -65,7 +65,7 @@ public:
      */
     bool save();
 
-    virtual bool saveToDevice(QIODevice* dev) const;
+    virtual bool saveToDevice(QIODevice *dev) const;
 
     /**
      * @brief install : Install the contents of the resource bundle.
@@ -101,14 +101,14 @@ public:
     bool isInstalled();
     /**
      * @brief setInstalled
-     * This allows you to set installed or uninstalled upon loading. This is used with blacklists. 
+     * This allows you to set installed or uninstalled upon loading. This is used with blacklists.
      */
     void setInstalled(bool install);
 
     void setThumbnail(QString);
 
     QStringList resourceTypes();
-    QList<KoResource*> resources(const QString &resType);
+    QList<KoResource *> resources(const QString &resType);
 
 protected:
 
@@ -131,7 +131,7 @@ private:
     QList<QByteArray> m_palettesMd5Installed;
     QList<QByteArray> m_workspacesMd5Installed;
     QList<QByteArray> m_presetsMd5Installed;
-    
+
 };
 
 #endif // KORESOURCEBUNDLE_H

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * 
+ *
  * Copyright (C) 2007 Boudewijn Rempt <boud@kde.org>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
@@ -29,7 +29,7 @@
 class KoPathConnectionPointStrategyPrivate : public KoParameterChangeStrategyPrivate
 {
 public:
-    KoPathConnectionPointStrategyPrivate(KoToolBase* owner, KoConnectionShape* connectionShape, int handle)
+    KoPathConnectionPointStrategyPrivate(KoToolBase *owner, KoConnectionShape *connectionShape, int handle)
         : KoParameterChangeStrategyPrivate(owner, connectionShape, handle)
         , connectionShape(connectionShape)
         , oldConnectionShape(0), oldConnectionId(-1)

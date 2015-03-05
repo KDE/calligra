@@ -26,12 +26,11 @@
 
 #include <QMessageBox>
 
-
 LoginWindow::LoginWindow(OnlineDocument::DocumentType type, QWidget *parent)
-	: QDialog(parent),
-          m_type(type),
-          m_authDialog(new Ui_Dialog),
-          m_wallet(0)
+    : QDialog(parent),
+      m_type(type),
+      m_authDialog(new Ui_Dialog),
+      m_wallet(0)
 {
     m_authDialog->setupUi(this);
 
@@ -84,7 +83,7 @@ void LoginWindow::loginService()
         showProgressIndicator(true);
         m_authDialog->headerLabel->setText("Signing in...");
         gdoc->clientLogin(m_authDialog->userEdit->text(), m_authDialog->passwordEdit->text());
-        connect(gdoc, SIGNAL(userAuthenticated(bool, QString)), this, SLOT(authenticated(bool, QString)));
+        connect(gdoc, SIGNAL(userAuthenticated(bool,QString)), this, SLOT(authenticated(bool,QString)));
         connect(gdoc, SIGNAL(progressUpdate(QString)), this, SLOT(updateProgress(QString)));
         connect(gdoc, SIGNAL(showingDocumentList()), this, SLOT(accept()));
     }
@@ -98,7 +97,7 @@ void LoginWindow::saveUserDetails()
 
     if (wallet()) {
         wallet()->writePassword(QString("%1-%2").arg(settingsGroup).arg(m_authDialog->userEdit->text()),
-                               m_authDialog->passwordEdit->text());
+                                m_authDialog->passwordEdit->text());
     }
 }
 

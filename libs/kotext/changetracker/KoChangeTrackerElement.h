@@ -28,12 +28,11 @@ class QString;
 class QTextFormat;
 class QTextDocumentFragment;
 
-
 class KOTEXT_EXPORT KoChangeTrackerElement
 {
 public:
 
-    KoChangeTrackerElement(const KUndo2MagicString& title, KoGenChange::Type type);
+    KoChangeTrackerElement(const KUndo2MagicString &title, KoGenChange::Type type);
 
     KoChangeTrackerElement();
 
@@ -54,7 +53,7 @@ public:
     void setChangeType(KoGenChange::Type type);
     KoGenChange::Type getChangeType() const;
 
-    void setChangeTitle(const KUndo2MagicString& title);
+    void setChangeTitle(const KUndo2MagicString &title);
     KUndo2MagicString getChangeTitle() const;
 
     void setChangeFormat(const QTextFormat &format);
@@ -64,25 +63,24 @@ public:
     QTextFormat getPrevFormat() const;
 
     bool hasCreator() const;
-    void setCreator(const QString& creator);
+    void setCreator(const QString &creator);
     QString getCreator() const;
 
     bool hasDate() const;
-    void setDate(const QString& date);
+    void setDate(const QString &date);
     QString getDate() const;
 
     bool hasExtraMetaData()const;
-    void setExtraMetaData(const QString& metaData);
+    void setExtraMetaData(const QString &metaData);
     QString getExtraMetaData() const;
 
     bool hasDeleteData() const;
-    void setDeleteData(const QTextDocumentFragment& fragment);
+    void setDeleteData(const QTextDocumentFragment &fragment);
     QTextDocumentFragment getDeleteData() const;
-
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

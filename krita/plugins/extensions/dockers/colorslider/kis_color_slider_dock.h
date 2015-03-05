@@ -33,19 +33,21 @@ class ColorSliderDock : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     ColorSliderDock();
-    QString observerName() { return "ColorSliderDock"; }
+    QString observerName()
+    {
+        return "ColorSliderDock";
+    }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 public Q_SLOTS:
     void layerChanged(const KisNodeSP);
-    
+
 private:
     KisCanvas2 *m_canvas;
     KisViewManager *m_view;
-    KoCanvasBase * b_canvas;
-    KisColorSliderWidget* m_colorSliders;
+    KoCanvasBase *b_canvas;
+    KisColorSliderWidget *m_colorSliders;
 };
-
 
 #endif

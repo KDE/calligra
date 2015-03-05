@@ -148,11 +148,13 @@ public:
         noCleanup = false;
     }
 
-    ~KoMainWindowPrivate() {
+    ~KoMainWindowPrivate()
+    {
         qDeleteAll(toolbarList);
     }
 
-    void applyDefaultSettings(QPrinter &printer) {
+    void applyDefaultSettings(QPrinter &printer)
+    {
         QString title = rootDocument->documentInfo()->aboutInfo("title");
         if (title.isEmpty()) {
             title = rootDocument->url().fileName();
@@ -161,15 +163,16 @@ public:
             if (mime) {
                 QString extension = mime->property("X-KDE-NativeExtension").toString();
 
-                if (title.endsWith(extension))
+                if (title.endsWith(extension)) {
                     title.chop(extension.length());
+                }
             }
         }
 
         if (title.isEmpty()) {
             // #139905
             const QString programName = parent->componentData().aboutData() ?
-                        parent->componentData().aboutData()->programName() : parent->componentData().componentName();
+                                        parent->componentData().aboutData()->programName() : parent->componentData().componentName();
             title = i18n("%1 unsaved document (%2)", programName,
                          KGlobal::locale()->formatDate(QDate::currentDate(), KLocale::ShortDate));
         }
@@ -180,7 +183,7 @@ public:
 
     KoMainWindow *parent;
     KoDocument *rootDocument;
-    QList<KoView*> rootViews;
+    QList<KoView *> rootViews;
 
     // PartManager
     QPointer<KoPart> rootPart;
@@ -243,7 +246,6 @@ public:
     KActivities::ResourceInstance *activityResource;
 #endif
 
-
     KHelpMenu *m_helpMenu;
 
     bool noCleanup;
@@ -255,12 +257,12 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     , d(new KoMainWindowPrivate(nativeMimeType, this))
 {
 #ifdef Q_OS_MAC
-    #if QT_VERSION < 0x050000
+#if QT_VERSION < 0x050000
     MacSupport::addFullscreen(this);
-    #endif
-    #if QT_VERSION >= 0x050201
+#endif
+#if QT_VERSION >= 0x050201
     setUnifiedTitleAndToolBarOnMac(true);
-    #endif
+#endif
 #endif
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
@@ -286,7 +288,7 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
 
     actionCollection()->addAction(KStandardAction::New, "file_new", this, SLOT(slotFileNew()));
     actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
-    d->recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
+    d->recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(KUrl)), actionCollection());
     connect(d->recent, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
     d->saveAction = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
     d->saveActionAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT(slotFileSaveAs()));
@@ -385,7 +387,6 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() : KGlobal::config();
     d->recent->loadEntries(configPtr->group("RecentFiles"));
 
-
     createMainwindowGUI();
     d->mainWindowGuiIsBuilt = true;
 
@@ -415,8 +416,7 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
                 // height to componensate for the window decs
                 w = (deskWidth / 3) * 2;
                 h = (desk.height() / 3) * 2;
-            }
-            else {
+            } else {
                 w = desk.width();
                 h = desk.height();
             }
@@ -424,7 +424,7 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
             x += (desk.width() - w) / 2;
             y += (desk.height() - h) / 2;
 
-            move(x,y);
+            move(x, y);
             setGeometry(geometry().x(), geometry().y(), w, h);
         }
     }
@@ -449,8 +449,9 @@ KoMainWindow::~KoMainWindow()
     d->dockerManager = 0;
 
     // The doc and view might still exist (this is the case when closing the window)
-    if (d->rootPart)
+    if (d->rootPart) {
         d->rootPart->removeMainWindow(this);
+    }
 
     if (d->partToOpen) {
         d->partToOpen->removeMainWindow(this);
@@ -468,8 +469,9 @@ KoMainWindow::~KoMainWindow()
         delete d->rootViews.takeFirst();
     }
 
-    if(d->noCleanup)
+    if (d->noCleanup) {
         return;
+    }
     // We have to check if this was a root document.
     // This has to be checked from queryClose, too :)
     if (d->rootPart && d->rootPart->viewCount() == 0) {
@@ -482,17 +484,20 @@ KoMainWindow::~KoMainWindow()
 
 void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePrevious)
 {
-    if (d->rootDocument == doc)
+    if (d->rootDocument == doc) {
         return;
+    }
 
     if (d->partToOpen && d->partToOpen->document() != doc) {
         d->partToOpen->removeMainWindow(this);
-        if (deletePrevious) delete d->partToOpen;
+        if (deletePrevious) {
+            delete d->partToOpen;
+        }
     }
     d->partToOpen = 0;
 
     //kDebug(30003) <<"KoMainWindow::setRootDocument this =" << this <<" doc =" << doc;
-    QList<KoView*> oldRootViews = d->rootViews;
+    QList<KoView *> oldRootViews = d->rootViews;
     d->rootViews.clear();
     KoDocument *oldRootDoc = d->rootDocument;
     KoPart *oldRootPart = d->rootPart;
@@ -508,7 +513,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
         // Hide all dockwidgets and remember their old state
         d->dockWidgetVisibilityMap.clear();
 
-        foreach(QDockWidget* dockWidget, d->dockWidgetsMap) {
+        foreach (QDockWidget *dockWidget, d->dockWidgetsMap) {
             d->dockWidgetVisibilityMap.insert(dockWidget, dockWidget->isVisible());
             dockWidget->setVisible(false);
         }
@@ -521,8 +526,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
     // XXX remove this after the splitting
     if (!part && doc) {
         d->rootPart = doc->documentPart();
-    }
-    else {
+    } else {
         d->rootPart = part;
     }
 
@@ -564,26 +568,26 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
     setActivePart(d->rootPart, doc ? d->rootViews.first() : 0);
     emit restoringDone();
 
-    while(!oldRootViews.isEmpty()) {
+    while (!oldRootViews.isEmpty()) {
         delete oldRootViews.takeFirst();
     }
     if (oldRootPart && oldRootPart->viewCount() == 0) {
         //kDebug(30003) <<"No more views, deleting old doc" << oldRootDoc;
         oldRootDoc->clearUndoHistory();
-        if(deletePrevious)
+        if (deletePrevious) {
             delete oldRootDoc;
+        }
     }
 
     if (doc && !d->dockWidgetVisibilityMap.isEmpty()) {
-        foreach(QDockWidget* dockWidget, d->dockWidgetsMap) {
+        foreach (QDockWidget *dockWidget, d->dockWidgetsMap) {
             dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
         }
     }
 
     if (!d->rootDocument) {
         statusBar()->setVisible(false);
-    }
-    else {
+    } else {
 #ifdef Q_OS_MAC
         statusBar()->setMaximumHeight(28);
 #endif
@@ -610,7 +614,7 @@ void KoMainWindow::setReadWrite(bool readwrite)
     updateCaption();
 }
 
-void KoMainWindow::addRecentURL(const KUrl& url)
+void KoMainWindow::addRecentURL(const KUrl &url)
 {
     kDebug(30003) << "KoMainWindow::addRecentURL url=" << url.prettyUrl();
     // Add entry to recent documents list
@@ -620,9 +624,10 @@ void KoMainWindow::addRecentURL(const KUrl& url)
         if (url.isLocalFile()) {
             QString path = url.toLocalFile(KUrl::RemoveTrailingSlash);
             const QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
-            for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
-                if (path.contains(*it))
-                    ok = false; // it's in the tmp resource
+            for (QStringList::ConstIterator it = tmpDirs.begin(); ok && it != tmpDirs.end(); ++it)
+                if (path.contains(*it)) {
+                    ok = false;    // it's in the tmp resource
+                }
             if (ok) {
                 KRecentDocument::add(path);
 #if KDE_IS_VERSION(4,6,0)
@@ -656,8 +661,9 @@ void KoMainWindow::saveRecentFiles()
 
     // Tell all windows to reload their list, after saving
     // Doesn't work multi-process, but it's a start
-    foreach(KMainWindow* window, KMainWindow::memberList())
+    foreach (KMainWindow *window, KMainWindow::memberList()) {
         static_cast<KoMainWindow *>(window)->reloadRecentFileList();
+    }
 }
 
 void KoMainWindow::reloadRecentFileList()
@@ -666,7 +672,7 @@ void KoMainWindow::reloadRecentFileList()
     d->recent->loadEntries(config->group("RecentFiles"));
 }
 
-KoPart* KoMainWindow::createPart() const
+KoPart *KoMainWindow::createPart() const
 {
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
     QString errorMsg;
@@ -683,22 +689,22 @@ void KoMainWindow::updateCaption()
     kDebug(30003) << "KoMainWindow::updateCaption()";
     if (!d->rootDocument) {
         updateCaption(QString(), false);
-    }
-    else {
-        QString caption( d->rootDocument->caption() );
+    } else {
+        QString caption(d->rootDocument->caption());
         if (d->readOnly) {
             caption += ' ' + i18n("(write protected)");
         }
 
         updateCaption(caption, d->rootDocument->isModified());
-        if (!rootDocument()->url().fileName(KUrl::ObeyTrailingSlash).isEmpty())
+        if (!rootDocument()->url().fileName(KUrl::ObeyTrailingSlash).isEmpty()) {
             d->saveAction->setToolTip(i18n("Save as %1", d->rootDocument->url().fileName(KUrl::ObeyTrailingSlash)));
-        else
+        } else {
             d->saveAction->setToolTip(i18n("Save"));
+        }
     }
 }
 
-void KoMainWindow::updateCaption(const QString & caption, bool mod)
+void KoMainWindow::updateCaption(const QString &caption, bool mod)
 {
     kDebug(30003) << "KoMainWindow::updateCaption(" << caption << "," << mod << ")";
 #ifdef CALLIGRA_ALPHA
@@ -724,12 +730,13 @@ KoDocument *KoMainWindow::rootDocument() const
 
 KoView *KoMainWindow::rootView() const
 {
-    if (d->rootViews.indexOf(d->activeView) != -1)
+    if (d->rootViews.indexOf(d->activeView) != -1) {
         return d->activeView;
+    }
     return d->rootViews.first();
 }
 
-bool KoMainWindow::openDocument(const KUrl & url)
+bool KoMainWindow::openDocument(const KUrl &url)
 {
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
         KMessageBox::error(0, i18n("The file %1 does not exist.", url.url()));
@@ -740,7 +747,7 @@ bool KoMainWindow::openDocument(const KUrl & url)
     return openDocumentInternal(url);
 }
 
-bool KoMainWindow::openDocument(KoPart *newPart, const KUrl & url)
+bool KoMainWindow::openDocument(KoPart *newPart, const KUrl &url)
 {
     // the part always has a document; the document doesn't know about the part.
     KoDocument *newdoc = newPart->document();
@@ -749,8 +756,9 @@ bool KoMainWindow::openDocument(KoPart *newPart, const KUrl & url)
         setRootDocument(newdoc, newPart);
         newdoc->setUrl(url);
         QString mime = KMimeType::findByUrl(url)->name();
-        if (mime.isEmpty() || mime == KMimeType::defaultMimeType())
+        if (mime.isEmpty() || mime == KMimeType::defaultMimeType()) {
             mime = newdoc->nativeFormatMimeType();
+        }
         newdoc->setMimeTypeAfterLoading(mime);
         updateCaption();
         return true;
@@ -758,23 +766,26 @@ bool KoMainWindow::openDocument(KoPart *newPart, const KUrl & url)
     return openDocumentInternal(url, newPart, newdoc);
 }
 
-bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDocument *newdoc)
+bool KoMainWindow::openDocumentInternal(const KUrl &url, KoPart *newpart, KoDocument *newdoc)
 {
-    kDebug(30003) <<"KoMainWindow::openDocument" << url.url();
+    kDebug(30003) << "KoMainWindow::openDocument" << url.url();
 
-    if (!newpart)
+    if (!newpart) {
         newpart = createPart();
+    }
 
-    if (!newpart)
+    if (!newpart) {
         return false;
+    }
 
-    if (!newdoc)
+    if (!newdoc) {
         newdoc = newpart->document();
+    }
 
     d->firstTime = true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    connect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
     newpart->addMainWindow(this);   // used by openUrl
     bool openRet = (!isImporting()) ? newdoc->openUrl(url) : newdoc->importDocument(url);
     if (!openRet) {
@@ -797,7 +808,7 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDoc
 void KoMainWindow::slotLoadCompleted()
 {
     kDebug(30003) << "KoMainWindow::slotLoadCompleted";
-    KoDocument *newdoc = qobject_cast<KoDocument*>(sender());
+    KoDocument *newdoc = qobject_cast<KoDocument *>(sender());
     KoPart *newpart = newdoc->documentPart();
 
     if (d->rootDocument && d->rootDocument->isEmpty()) {
@@ -818,40 +829,42 @@ void KoMainWindow::slotLoadCompleted()
     slotProgress(-1);
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    disconnect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
     emit loadCompleted();
 }
 
-void KoMainWindow::slotLoadCanceled(const QString & errMsg)
+void KoMainWindow::slotLoadCanceled(const QString &errMsg)
 {
     kDebug(30003) << "KoMainWindow::slotLoadCanceled";
-    if (!errMsg.isEmpty())   // empty when canceled by user
+    if (!errMsg.isEmpty()) { // empty when canceled by user
         KMessageBox::error(this, errMsg);
+    }
     // ... can't delete the document, it's the one who emitted the signal...
 
-    KoDocument* doc = qobject_cast<KoDocument*>(sender());
+    KoDocument *doc = qobject_cast<KoDocument *>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    disconnect(doc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    disconnect(doc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 }
 
 void KoMainWindow::slotSaveCanceled(const QString &errMsg)
 {
     kDebug(30003) << "KoMainWindow::slotSaveCanceled";
-    if (!errMsg.isEmpty())   // empty when canceled by user
+    if (!errMsg.isEmpty()) { // empty when canceled by user
         KMessageBox::error(this, errMsg);
+    }
     slotSaveCompleted();
 }
 
 void KoMainWindow::slotSaveCompleted()
 {
     kDebug(30003) << "KoMainWindow::slotSaveCompleted";
-    KoDocument* doc = qobject_cast<KoDocument*>(sender());
+    KoDocument *doc = qobject_cast<KoDocument *>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    disconnect(doc, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
+    disconnect(doc, SIGNAL(canceled(QString)), this, SLOT(slotSaveCanceled(QString)));
 
     if (d->deferredClosingEvent) {
         KXmlGuiWindow::closeEvent(d->deferredClosingEvent);
@@ -873,28 +886,28 @@ bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
     int ret;
     if (!isExporting()) { // File --> Save
         ret = KMessageBox::warningContinueCancel
-                (
-                    this,
-                    i18n("<qt>Saving as a %1 may result in some loss of formatting."
-                         "<p>Do you still want to save in this format?</qt>",
-                         QString("<b>%1</b>").arg(comment)),      // in case we want to remove the bold later
-                    i18n("Confirm Save"),
-                    KStandardGuiItem::save(),
-                    KStandardGuiItem::cancel(),
-                    "NonNativeSaveConfirmation"
-                    );
+              (
+                  this,
+                  i18n("<qt>Saving as a %1 may result in some loss of formatting."
+                       "<p>Do you still want to save in this format?</qt>",
+                       QString("<b>%1</b>").arg(comment)),      // in case we want to remove the bold later
+                  i18n("Confirm Save"),
+                  KStandardGuiItem::save(),
+                  KStandardGuiItem::cancel(),
+                  "NonNativeSaveConfirmation"
+              );
     } else { // File --> Export
         ret = KMessageBox::warningContinueCancel
-                (
-                    this,
-                    i18n("<qt>Exporting as a %1 may result in some loss of formatting."
-                         "<p>Do you still want to export to this format?</qt>",
-                         QString("<b>%1</b>").arg(comment)),      // in case we want to remove the bold later
-                    i18n("Confirm Export"),
-                    KGuiItem(i18n("Export")),
-                    KStandardGuiItem::cancel(),
-                    "NonNativeExportConfirmation" // different to the one used for Save (above)
-                    );
+              (
+                  this,
+                  i18n("<qt>Exporting as a %1 may result in some loss of formatting."
+                       "<p>Do you still want to export to this format?</qt>",
+                       QString("<b>%1</b>").arg(comment)),      // in case we want to remove the bold later
+                  i18n("Confirm Export"),
+                  KGuiItem(i18n("Export")),
+                  KStandardGuiItem::cancel(),
+                  "NonNativeExportConfirmation" // different to the one used for Save (above)
+              );
     }
 
     return (ret == KMessageBox::Continue);
@@ -918,7 +931,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 
     connect(d->rootDocument, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(d->rootDocument, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    connect(d->rootDocument, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
+    connect(d->rootDocument, SIGNAL(canceled(QString)), this, SLOT(slotSaveCanceled(QString)));
 
     KUrl oldURL = d->rootDocument->url();
     QString oldFile = d->rootDocument->localFilePath();
@@ -932,15 +945,15 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 
     QStringList mimeFilter;
     KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
-    if (! mime)
+    if (! mime) {
         mime = KMimeType::defaultMimeTypePtr();
-    if (specialOutputFlag)
+    }
+    if (specialOutputFlag) {
         mimeFilter = mime->patterns();
-    else
+    } else
         mimeFilter = KoFilterManager::mimeFilter(_native_format,
-                                                 KoFilterManager::Export,
-                                                 d->rootDocument->extraNativeMimeTypes());
-
+                     KoFilterManager::Export,
+                     d->rootDocument->extraNativeMimeTypes());
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
         kDebug(30003) << "KoMainWindow::saveDocument no export filter for" << oldOutputFormat;
@@ -955,10 +968,11 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 
             QString ext = mime->property("X-KDE-NativeExtension").toString();
             if (!ext.isEmpty()) {
-                if (c < 0)
+                if (c < 0) {
                     suggestedFilename += ext;
-                else
+                } else {
                     suggestedFilename = suggestedFilename.left(c) + ext;
+                }
             } else { // current filename extension wrong anyway
                 if (c > 0) {
                     // this assumes that a . signifies an extension, not just a .
@@ -983,7 +997,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
         dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
-                                d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
+                             d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
         dialog.setMimeTypeFilters(mimeFilter);
         KUrl newURL = dialog.url();
 
@@ -1004,16 +1018,14 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
             outputFormat = outputFormatString.toLatin1();
         }
 
-
         if (!isExporting())
             justChangingFilterOptions = (newURL == d->rootDocument->url()) &&
-                    (outputFormat == d->rootDocument->mimeType()) &&
-                    (specialOutputFlag == oldSpecialOutputFlag);
+                                        (outputFormat == d->rootDocument->mimeType()) &&
+                                        (specialOutputFlag == oldSpecialOutputFlag);
         else
             justChangingFilterOptions = (newURL == d->lastExportUrl) &&
-                    (outputFormat == d->lastExportedFormat) &&
-                    (specialOutputFlag == d->lastExportSpecialOutputFlag);
-
+                                        (outputFormat == d->lastExportedFormat) &&
+                                        (specialOutputFlag == d->lastExportSpecialOutputFlag);
 
         bool bOk = true;
         if (newURL.isEmpty()) {
@@ -1023,17 +1035,21 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         // adjust URL before doing checks on whether the file exists.
         if (specialOutputFlag) {
             QString fileName = newURL.fileName();
-            if ( specialOutputFlag== KoDocument::SaveAsDirectoryStore) {
+            if (specialOutputFlag == KoDocument::SaveAsDirectoryStore) {
                 // Do nothing
-            }
-            else if (specialOutputFlag == KoDocument::SaveEncrypted) {
+            } else if (specialOutputFlag == KoDocument::SaveEncrypted) {
                 int dot = fileName.lastIndexOf('.');
                 QString ext = mime->mainExtension();
                 if (!ext.isEmpty()) {
-                    if (dot < 0) fileName += ext;
-                    else fileName = fileName.left(dot) + ext;
+                    if (dot < 0) {
+                        fileName += ext;
+                    } else {
+                        fileName = fileName.left(dot) + ext;
+                    }
                 } else { // current filename extension wrong anyway
-                    if (dot > 0) fileName = fileName.left(dot);
+                    if (dot > 0) {
+                        fileName = fileName.left(dot);
+                    }
                 }
                 newURL.setFileName(fileName);
             }
@@ -1044,8 +1060,9 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 
             // don't change this line unless you know what you're doing :)
             if (!justChangingFilterOptions || d->rootDocument->confirmNonNativeSave(isExporting())) {
-                if (!d->rootDocument->isNativeFormat(outputFormat))
+                if (!d->rootDocument->isNativeFormat(outputFormat)) {
                     wantToSave = exportConfirmation(outputFormat);
+                }
             }
 
             if (wantToSave) {
@@ -1072,7 +1089,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                 //
                 // - Clarence
                 //
-
 
                 d->rootDocument->setOutputMimeType(outputFormat, specialOutputFlag);
                 if (!isExporting()) {  // Save As
@@ -1102,21 +1118,24 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                     d->rootDocument->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
                 }
 
-                if (silent) // don't let the document change the window caption
+                if (silent) { // don't let the document change the window caption
                     d->rootDocument->setTitleModified();
+                }
             }   // if (wantToSave)  {
-            else
+            else {
                 ret = false;
+            }
         }   // if (bOk) {
-        else
+        else {
             ret = false;
+        }
     } else { // saving
 
         bool needConfirm = d->rootDocument->confirmNonNativeSave(false) && !d->rootDocument->isNativeFormat(oldOutputFormat);
 
         if (!needConfirm ||
                 (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
-                ) {
+           ) {
             // be sure d->rootDocument has the correct outputMimeType!
             if (isExporting() || d->rootDocument->isModified()) {
                 ret = d->rootDocument->save();
@@ -1127,13 +1146,14 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                 d->rootDocument->setUrl(oldURL);
                 d->rootDocument->setLocalFilePath(oldFile);
             }
-        } else
+        } else {
             ret = false;
+        }
     }
 
-
-    if (!ret && reset_url)
-        d->rootDocument->resetURL(); //clean the suggested filename as the save dialog was rejected
+    if (!ret && reset_url) {
+        d->rootDocument->resetURL();    //clean the suggested filename as the save dialog was rejected
+    }
 
     updateReloadFileAction(d->rootDocument);
     updateCaption();
@@ -1143,7 +1163,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
-    if(rootDocument() && rootDocument()->isLoading()) {
+    if (rootDocument() && rootDocument()->isLoading()) {
         e->setAccepted(false);
         return;
     }
@@ -1160,12 +1180,14 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
         menuBar()->setVisible(true);
 
         saveWindowSettings();
-        if(d->noCleanup)
+        if (d->noCleanup) {
             return;
+        }
         setRootDocument(0);
         if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
-            foreach(QDockWidget* dockWidget, d->dockWidgetsMap)
+            foreach (QDockWidget *dockWidget, d->dockWidgetsMap) {
                 dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
+            }
         }
     } else {
         e->setAccepted(false);
@@ -1176,7 +1198,7 @@ void KoMainWindow::saveWindowSettings()
 {
     KSharedConfigPtr config = componentData().config();
 
-    if (d->windowSizeDirty ) {
+    if (d->windowSizeDirty) {
 
         // Save window size into the config file of our componentData
         kDebug(30003) << "KoMainWindow::saveWindowSettings";
@@ -1185,7 +1207,7 @@ void KoMainWindow::saveWindowSettings()
         d->windowSizeDirty = false;
     }
 
-    if ( rootDocument() && d->rootPart) {
+    if (rootDocument() && d->rootPart) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
         KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName());
@@ -1193,8 +1215,8 @@ void KoMainWindow::saveWindowSettings()
         saveMainWindowSettings(group);
 
         // Save collapsable state of dock widgets
-        for (QMap<QString, QDockWidget*>::const_iterator i = d->dockWidgetsMap.constBegin();
-             i != d->dockWidgetsMap.constEnd(); ++i) {
+        for (QMap<QString, QDockWidget *>::const_iterator i = d->dockWidgetsMap.constBegin();
+                i != d->dockWidgetsMap.constEnd(); ++i) {
             if (i.value()->widget()) {
                 KConfigGroup dockGroup = group.group(QString("DockWidget ") + i.key());
                 dockGroup.writeEntry("Collapsed", i.value()->widget()->isHidden());
@@ -1210,7 +1232,7 @@ void KoMainWindow::saveWindowSettings()
 
 }
 
-void KoMainWindow::resizeEvent(QResizeEvent * e)
+void KoMainWindow::resizeEvent(QResizeEvent *e)
 {
     d->windowSizeDirty = true;
     KXmlGuiWindow::resizeEvent(e);
@@ -1218,13 +1240,16 @@ void KoMainWindow::resizeEvent(QResizeEvent * e)
 
 bool KoMainWindow::queryClose()
 {
-    if (rootDocument() == 0)
+    if (rootDocument() == 0) {
         return true;
+    }
     //kDebug(30003) <<"KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
     //               << " mainWindowCount=" << rootDocument()->mainWindowCount() << endl;
     if (!d->forQuit && d->rootPart && d->rootPart->mainwindowCount() > 1)
         // there are more open, and we are closing just one, so no problem for closing
+    {
         return true;
+    }
 
     // main doc + internally stored child documents
     if (d->rootDocument->isModified()) {
@@ -1232,23 +1257,26 @@ bool KoMainWindow::queryClose()
         if (rootDocument()->documentInfo()) {
             name = rootDocument()->documentInfo()->aboutInfo("title");
         }
-        if (name.isEmpty())
+        if (name.isEmpty()) {
             name = rootDocument()->url().fileName();
+        }
 
-        if (name.isEmpty())
+        if (name.isEmpty()) {
             name = i18n("Untitled");
+        }
 
         int res = KMessageBox::warningYesNoCancel(this,
-                                                  i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
-                                                  QString(),
-                                                  KStandardGuiItem::save(),
-                                                  KStandardGuiItem::discard());
+                  i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
+                  QString(),
+                  KStandardGuiItem::save(),
+                  KStandardGuiItem::discard());
 
         switch (res) {
         case KMessageBox::Yes : {
             bool isNative = (d->rootDocument->outputMimeType() == d->rootDocument->nativeFormatMimeType());
-            if (!saveDocument(!isNative))
+            if (!saveDocument(!isNative)) {
                 return false;
+            }
             break;
         }
         case KMessageBox::No :
@@ -1266,12 +1294,13 @@ bool KoMainWindow::queryClose()
 // Helper method for slotFileNew and slotFileClose
 void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
 {
-    KoDocument* doc = rootDocument();
+    KoDocument *doc = rootDocument();
     KoPart *newpart = createPart();
     KoDocument *newdoc = newpart->document();
 
-    if (!newdoc)
+    if (!newdoc) {
         return;
+    }
 
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
@@ -1285,8 +1314,9 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
 
     if (doc) {
         setRootDocument(0);
-        if(d->rootDocument)
+        if (d->rootDocument) {
             d->rootDocument->clearUndoHistory();
+        }
         delete d->rootDocument;
         d->rootDocument = 0;
     }
@@ -1307,8 +1337,8 @@ void KoMainWindow::slotFileOpen()
         KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
         dialog.setCaption(i18n("Open Document"));
         dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
-                               ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                               : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+                             ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                             : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
         dialog.setHideNameFilterDetailsOption();
         url = dialog.url();
@@ -1316,20 +1346,21 @@ void KoMainWindow::slotFileOpen()
         KoFileDialog dialog(this, KoFileDialog::ImportFile, "OpenDocument");
         dialog.setCaption(i18n("Import Document"));
         dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
-                                ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
-                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+                             ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
+                             : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
         dialog.setHideNameFilterDetailsOption();
         url = dialog.url();
     }
 
-    if (url.isEmpty())
+    if (url.isEmpty()) {
         return;
+    }
 
     (void) openDocument(url);
 }
 
-void KoMainWindow::slotFileOpenRecent(const KUrl & url)
+void KoMainWindow::slotFileOpenRecent(const KUrl &url)
 {
     // Create a copy, because the original KUrl in the map of recent files in
     // KRecentFilesAction may get deleted.
@@ -1338,37 +1369,43 @@ void KoMainWindow::slotFileOpenRecent(const KUrl & url)
 
 void KoMainWindow::slotFileSave()
 {
-    if (saveDocument())
+    if (saveDocument()) {
         emit documentSaved();
+    }
 }
 
 void KoMainWindow::slotFileSaveAs()
 {
-    if (saveDocument(true))
+    if (saveDocument(true)) {
         emit documentSaved();
+    }
 }
 
 void KoMainWindow::slotEncryptDocument()
 {
-    if (saveDocument(false, false, KoDocument::SaveEncrypted))
+    if (saveDocument(false, false, KoDocument::SaveEncrypted)) {
         emit documentSaved();
+    }
 }
 
 void KoMainWindow::slotUncompressToDir()
 {
-    if (saveDocument(true, false, KoDocument::SaveAsDirectoryStore))
+    if (saveDocument(true, false, KoDocument::SaveAsDirectoryStore)) {
         emit documentSaved();
+    }
 }
 
 void KoMainWindow::slotDocumentInfo()
 {
-    if (!rootDocument())
+    if (!rootDocument()) {
         return;
+    }
 
     KoDocumentInfo *docInfo = rootDocument()->documentInfo();
 
-    if (!docInfo)
+    if (!docInfo) {
         return;
+    }
 
     KoDocumentInfoDlg *dlg = d->rootDocument->createDocumentInfoDialog(this, docInfo);
 
@@ -1389,8 +1426,9 @@ void KoMainWindow::slotFileClose()
     if (queryClose()) {
         saveWindowSettings();
         setRootDocument(0);   // don't delete this main window when deleting the document
-        if(d->rootDocument)
+        if (d->rootDocument) {
             d->rootDocument->clearUndoHistory();
+        }
         delete d->rootDocument;
         d->rootDocument = 0;
         chooseNewDocument(InitDocFileClose);
@@ -1404,27 +1442,32 @@ void KoMainWindow::slotFileQuit()
 
 void KoMainWindow::slotFilePrint()
 {
-    if (!rootView())
+    if (!rootView()) {
         return;
+    }
     KoPrintJob *printJob = rootView()->createPrintJob();
-    if (printJob == 0)
+    if (printJob == 0) {
         return;
+    }
     d->applyDefaultSettings(printJob->printer());
-    QPrintDialog *printDialog = rootView()->createPrintDialog( printJob, this );
-    if (printDialog && printDialog->exec() == QDialog::Accepted)
+    QPrintDialog *printDialog = rootView()->createPrintDialog(printJob, this);
+    if (printDialog && printDialog->exec() == QDialog::Accepted) {
         printJob->startPrinting(KoPrintJob::DeleteWhenDone);
-    else
+    } else {
         delete printJob;
+    }
     delete printDialog;
 }
 
 void KoMainWindow::slotFilePrintPreview()
 {
-    if (!rootView())
+    if (!rootView()) {
         return;
+    }
     KoPrintJob *printJob = rootView()->createPrintJob();
-    if (printJob == 0)
+    if (printJob == 0) {
         return;
+    }
 
     /* Sets the startPrinting() slot to be blocking.
      The Qt print-preview dialog requires the printing to be completely blocking
@@ -1439,32 +1482,35 @@ void KoMainWindow::slotFilePrintPreview()
     delete preview;
 }
 
-KoPrintJob* KoMainWindow::exportToPdf(const QString &pdfFileName)
+KoPrintJob *KoMainWindow::exportToPdf(const QString &pdfFileName)
 {
-    if (!rootView())
+    if (!rootView()) {
         return 0;
+    }
     KoPageLayout pageLayout;
     pageLayout = rootView()->pageLayout();
     return exportToPdf(pageLayout, pdfFileName);
 }
 
-KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileName)
+KoPrintJob *KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileName)
 {
-    if (!rootView())
+    if (!rootView()) {
         return 0;
+    }
     if (pdfFileName.isEmpty()) {
         KConfigGroup group = KGlobal::config()->group("File Dialogs");
         QString defaultDir = group.readEntry("SavePdfDialog");
-        if (defaultDir.isEmpty())
+        if (defaultDir.isEmpty()) {
             defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+        }
         KUrl startUrl = KUrl(defaultDir);
-        KoDocument* pDoc = rootDocument();
+        KoDocument *pDoc = rootDocument();
         /** if document has a file name, take file name and replace extension with .pdf */
         if (pDoc && pDoc->url().isValid()) {
             startUrl = pDoc->url();
             QString fileName = startUrl.fileName();
-            fileName = fileName.replace( QRegExp( "\\.\\w{2,5}$", Qt::CaseInsensitive ), ".pdf" );
-            startUrl.setFileName( fileName );
+            fileName = fileName.replace(QRegExp("\\.\\w{2,5}$", Qt::CaseInsensitive), ".pdf");
+            startUrl.setFileName(fileName);
         }
 
         QPointer<KoPageLayoutDialog> layoutDlg(new KoPageLayoutDialog(this, pageLayout));
@@ -1483,13 +1529,15 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
         KUrl url = dialog.url();
 
         pdfFileName = url.toLocalFile();
-        if (pdfFileName.isEmpty())
+        if (pdfFileName.isEmpty()) {
             return 0;
+        }
     }
 
     KoPrintJob *printJob = rootView()->createPdfPrintJob();
-    if (printJob == 0)
+    if (printJob == 0) {
         return 0;
+    }
     if (isHidden()) {
         printJob->setProperty("noprogressdialog", true);
     }
@@ -1523,11 +1571,11 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
 
 void KoMainWindow::slotConfigureKeys()
 {
-    QAction* undoAction=0;
-    QAction* redoAction=0;
+    QAction *undoAction = 0;
+    QAction *redoAction = 0;
     QString oldUndoText;
     QString oldRedoText;
-    if(currentView()) {
+    if (currentView()) {
         //The undo/redo action text is "undo" + command, replace by simple text while inside editor
         undoAction = currentView()->actionCollection()->action("edit_undo");
         redoAction = currentView()->actionCollection()->action("edit_redo");
@@ -1539,7 +1587,7 @@ void KoMainWindow::slotConfigureKeys()
 
     guiFactory()->configureShortcuts();
 
-    if(currentView()) {
+    if (currentView()) {
         undoAction->setText(oldUndoText);
         redoAction->setText(oldRedoText);
     }
@@ -1549,8 +1597,9 @@ void KoMainWindow::slotConfigureKeys()
 
 void KoMainWindow::slotConfigureToolbars()
 {
-    if (rootDocument())
+    if (rootDocument()) {
         saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+    }
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1566,8 +1615,9 @@ void KoMainWindow::slotNewToolbarConfig()
     Q_UNUSED(factory);
 
     // Check if there's an active view
-    if (!d->activeView)
+    if (!d->activeView) {
         return;
+    }
 
     plugActionList("toolbarlist", d->toolbarList);
 }
@@ -1576,17 +1626,20 @@ void KoMainWindow::slotToolbarToggled(bool toggle)
 {
     //kDebug(30003) <<"KoMainWindow::slotToolbarToggled" << sender()->name() <<" toggle=" << true;
     // The action (sender) and the toolbar have the same name
-    KToolBar * bar = toolBar(sender()->objectName());
+    KToolBar *bar = toolBar(sender()->objectName());
     if (bar) {
-        if (toggle)
+        if (toggle) {
             bar->show();
-        else
+        } else {
             bar->hide();
+        }
 
-        if (rootDocument())
+        if (rootDocument()) {
             saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
-    } else
+        }
+    } else {
         kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
+    }
 }
 
 bool KoMainWindow::toolbarIsVisible(const char *tbName)
@@ -1595,20 +1648,21 @@ bool KoMainWindow::toolbarIsVisible(const char *tbName)
     return !tb->isHidden();
 }
 
-void KoMainWindow::showToolbar(const char * tbName, bool shown)
+void KoMainWindow::showToolbar(const char *tbName, bool shown)
 {
-    QWidget * tb = toolBar(tbName);
+    QWidget *tb = toolBar(tbName);
     if (!tb) {
         kWarning(30003) << "KoMainWindow: toolbar " << tbName << " not found.";
         return;
     }
-    if (shown)
+    if (shown) {
         tb->show();
-    else
+    } else {
         tb->hide();
+    }
 
     // Update the action appropriately
-    foreach(QAction* action, d->toolbarList) {
+    foreach (QAction *action, d->toolbarList) {
         if (action->objectName() != tbName) {
             //kDebug(30003) <<"KoMainWindow::showToolbar setChecked" << shown;
             static_cast<KToggleAction *>(action)->setChecked(shown);
@@ -1674,8 +1728,9 @@ void KoMainWindow::setMaxRecentItems(uint _number)
 
 void KoMainWindow::slotEmailFile()
 {
-    if (!rootDocument())
+    if (!rootDocument()) {
         return;
+    }
 
     // Subject = Document file name
     // Attachment = The current file
@@ -1731,8 +1786,9 @@ void KoMainWindow::slotEmailFile()
 
 void KoMainWindow::slotVersionsFile()
 {
-    if (!rootDocument())
+    if (!rootDocument()) {
         return;
+    }
     KoVersionDialog *dlg = new KoVersionDialog(this, rootDocument());
     dlg->exec();
     delete dlg;
@@ -1740,23 +1796,26 @@ void KoMainWindow::slotVersionsFile()
 
 void KoMainWindow::slotReloadFile()
 {
-    KoDocument* pDoc = rootDocument();
-    if (!pDoc || pDoc->url().isEmpty() || !pDoc->isModified())
+    KoDocument *pDoc = rootDocument();
+    if (!pDoc || pDoc->url().isEmpty() || !pDoc->isModified()) {
         return;
+    }
 
     bool bOk = KMessageBox::questionYesNo(this,
                                           i18n("You will lose all changes made since your last save\n"
-                                               "Do you want to continue?"),
+                                                  "Do you want to continue?"),
                                           i18n("Warning")) == KMessageBox::Yes;
-    if (!bOk)
+    if (!bOk) {
         return;
+    }
 
     KUrl url = pDoc->url();
     if (!pDoc->isEmpty()) {
         saveWindowSettings();
         setRootDocument(0);   // don't delete this main window when deleting the document
-        if(d->rootDocument)
+        if (d->rootDocument) {
             d->rootDocument->clearUndoHistory();
+        }
         delete d->rootDocument;
         d->rootDocument = 0;
     }
@@ -1798,16 +1857,18 @@ void KoMainWindow::setPartToOpen(KoPart *part)
     d->partToOpen = part;
 }
 
-QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
+QDockWidget *KoMainWindow::createDockWidget(KoDockFactoryBase *factory)
 {
-    QDockWidget* dockWidget = 0;
+    QDockWidget *dockWidget = 0;
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
 
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.
-        if (!dockWidget) return 0;
+        if (!dockWidget) {
+            return 0;
+        }
         d->dockWidgets.push_back(dockWidget);
 
         KoDockWidgetTitleBar *titleBar = 0;
@@ -1821,8 +1882,9 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
 
-        if (dockWidget->widget() && dockWidget->widget()->layout())
+        if (dockWidget->widget() && dockWidget->widget()->layout()) {
             dockWidget->widget()->layout()->setContentsMargins(1, 1, 1, 1);
+        }
 
         Qt::DockWidgetArea side = Qt::RightDockWidgetArea;
         bool visible = true;
@@ -1848,13 +1910,16 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (rootDocument()) {
             KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName()).group("DockWidget " + factory->id());
             side = static_cast<Qt::DockWidgetArea>(group.readEntry("DockArea", static_cast<int>(side)));
-            if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
+            if (side == Qt::NoDockWidgetArea) {
+                side = Qt::RightDockWidgetArea;
+            }
         }
         addDockWidget(side, dockWidget);
         if (dockWidget->features() & QDockWidget::DockWidgetClosable) {
             d->dockWidgetMenu->addAction(dockWidget->toggleViewAction());
-            if (!visible)
+            if (!visible) {
                 dockWidget->hide();
+            }
         }
 
         bool collapsed = factory->defaultCollapsed();
@@ -1864,10 +1929,12 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
             collapsed = group.readEntry("Collapsed", collapsed);
             locked = group.readEntry("Locked", locked);
         }
-        if (titleBar && collapsed)
+        if (titleBar && collapsed) {
             titleBar->setCollapsed(true);
-        if (titleBar && locked)
+        }
+        if (titleBar && locked) {
             titleBar->setLocked(true);
+        }
 
         if (titleBar) {
             KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
@@ -1907,18 +1974,18 @@ void KoMainWindow::forceDockTabFonts()
     }
 }
 
-QList<QDockWidget*> KoMainWindow::dockWidgets()
+QList<QDockWidget *> KoMainWindow::dockWidgets()
 {
     return d->dockWidgetsMap.values();
 }
 
-QList<KoCanvasObserverBase*> KoMainWindow::canvasObservers()
+QList<KoCanvasObserverBase *> KoMainWindow::canvasObservers()
 {
 
-    QList<KoCanvasObserverBase*> observers;
+    QList<KoCanvasObserverBase *> observers;
 
-    foreach(QDockWidget *docker, dockWidgets()) {
-        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
+    foreach (QDockWidget *docker, dockWidgets()) {
+        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase *>(docker);
         if (observer) {
             observers << observer;
         }
@@ -1926,8 +1993,7 @@ QList<KoCanvasObserverBase*> KoMainWindow::canvasObservers()
     return observers;
 }
 
-
-KoDockerManager * KoMainWindow::dockerManager() const
+KoDockerManager *KoMainWindow::dockerManager() const
 {
     return d->dockerManager;
 }
@@ -1937,16 +2003,15 @@ void KoMainWindow::toggleDockersVisibility(bool visible)
     if (!visible) {
         d->m_dockerStateBeforeHiding = saveState();
 
-        foreach(QObject* widget, children()) {
+        foreach (QObject *widget, children()) {
             if (widget->inherits("QDockWidget")) {
-                QDockWidget* dw = static_cast<QDockWidget*>(widget);
+                QDockWidget *dw = static_cast<QDockWidget *>(widget);
                 if (dw->isVisible()) {
                     dw->hide();
                 }
             }
         }
-    }
-    else {
+    } else {
         restoreState(d->m_dockerStateBeforeHiding);
     }
 }
@@ -1956,13 +2021,12 @@ KRecentFilesAction *KoMainWindow::recentAction() const
     return d->recent;
 }
 
-KoView* KoMainWindow::currentView() const
+KoView *KoMainWindow::currentView() const
 {
     // XXX
     if (d->activeView) {
         return d->activeView;
-    }
-    else if (!d->rootViews.isEmpty()) {
+    } else if (!d->rootViews.isEmpty()) {
         return d->rootViews.first();
     }
     return 0;
@@ -1979,37 +2043,37 @@ void KoMainWindow::newView()
 
 void KoMainWindow::createMainwindowGUI()
 {
-    if ( isHelpMenuEnabled() && !d->m_helpMenu )
-        d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), false, actionCollection() );
-
-    QString f = xmlFile();
-    setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc", componentData() ) );
-    if ( !f.isEmpty() )
-        setXMLFile( f, true );
-    else
-    {
-        QString auto_file( componentData().componentName() + "ui.rc" );
-        setXMLFile( auto_file, true );
+    if (isHelpMenuEnabled() && !d->m_helpMenu) {
+        d->m_helpMenu = new KHelpMenu(this, componentData().aboutData(), false, actionCollection());
     }
 
-    guiFactory()->addClient( this );
+    QString f = xmlFile();
+    setXMLFile(KStandardDirs::locate("config", "ui/ui_standards.rc", componentData()));
+    if (!f.isEmpty()) {
+        setXMLFile(f, true);
+    } else {
+        QString auto_file(componentData().componentName() + "ui.rc");
+        setXMLFile(auto_file, true);
+    }
+
+    guiFactory()->addClient(this);
 
 }
 
 // PartManager
 
-void KoMainWindow::removePart( KoPart *part )
+void KoMainWindow::removePart(KoPart *part)
 {
     if (d->m_registeredPart.data() != part) {
         return;
     }
     d->m_registeredPart = 0;
-    if ( part == d->m_activePart ) {
+    if (part == d->m_activePart) {
         setActivePart(0, 0);
     }
 }
 
-void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
+void KoMainWindow::setActivePart(KoPart *part, QWidget *widget)
 {
     if (part && d->m_registeredPart.data() != part) {
         kWarning(1000) << "trying to activate a non-registered part!" << part->objectName();
@@ -2017,9 +2081,10 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
     }
 
     // don't activate twice
-    if ( d->m_activePart && part && d->m_activePart == part &&
-         (!widget || d->m_activeWidget == widget) )
+    if (d->m_activePart && part && d->m_activePart == part &&
+            (!widget || d->m_activeWidget == widget)) {
         return;
+    }
 
     KoPart *oldActivePart = d->m_activePart;
     QWidget *oldActiveWidget = d->m_activeWidget;
@@ -2031,22 +2096,22 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
         KoPart *savedActivePart = part;
         QWidget *savedActiveWidget = widget;
 
-        if ( oldActiveWidget ) {
-            disconnect( oldActiveWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
+        if (oldActiveWidget) {
+            disconnect(oldActiveWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()));
         }
 
         d->m_activePart = savedActivePart;
         d->m_activeWidget = savedActiveWidget;
     }
 
-    if (d->m_activePart && d->m_activeWidget ) {
-        connect( d->m_activeWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
+    if (d->m_activePart && d->m_activeWidget) {
+        connect(d->m_activeWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()));
     }
     // Set the new active instance in KGlobal
     KGlobal::setActiveComponent(d->m_activePart ? d->m_activePart->componentData() : KGlobal::mainComponent());
 
     // old slot called from part manager
-    KoPart *newPart = static_cast<KoPart*>(d->m_activePart.data());
+    KoPart *newPart = static_cast<KoPart *>(d->m_activePart.data());
 
     if (d->activePart && d->activePart == newPart) {
         //kDebug(30003) <<"no need to change the GUI";
@@ -2091,22 +2156,22 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
         }
 
         // Create and plug toolbar list for Settings menu
-        foreach(QWidget* it, factory->containers("ToolBar")) {
-            KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
+        foreach (QWidget *it, factory->containers("ToolBar")) {
+            KToolBar *toolBar = ::qobject_cast<KToolBar *>(it);
             if (toolBar) {
-                KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
+                KToggleAction *act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
                 actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
                 act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
                 connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
                 act->setChecked(!toolBar->isHidden());
                 d->toolbarList.append(act);
-            } else
+            } else {
                 kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
+            }
         }
         plugActionList("toolbarlist", d->toolbarList);
 
-    }
-    else {
+    } else {
         d->activeView = 0;
         d->activePart = 0;
     }
@@ -2119,8 +2184,9 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
 void KoMainWindow::slotWidgetDestroyed()
 {
     kDebug(1000);
-    if ( static_cast<const QWidget *>( sender() ) == d->m_activeWidget )
-        setActivePart(0, 0); //do not remove the part because if the part's widget dies, then the
+    if (static_cast<const QWidget *>(sender()) == d->m_activeWidget) {
+        setActivePart(0, 0);    //do not remove the part because if the part's widget dies, then the
+    }
     //part will delete itself anyway, invoking removePart() in its destructor
 }
 
@@ -2143,7 +2209,5 @@ void KoMainWindow::showDockerTitleBars(bool show)
     KConfigGroup configGroupInterface = KGlobal::config()->group("Interface");
     configGroupInterface.writeEntry("ShowDockerTitleBars", show);
 }
-
-
 
 #include <KoMainWindow.moc>

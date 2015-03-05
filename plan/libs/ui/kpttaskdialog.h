@@ -25,7 +25,6 @@
 
 #include <kpagedialog.h>
 
-
 namespace KPlato
 {
 
@@ -43,7 +42,8 @@ class MacroCommand;
 /**
  * The dialog that shows and allows you to alter any task.
  */
-class KPLATOUI_EXPORT TaskDialog : public KPageDialog {
+class KPLATOUI_EXPORT TaskDialog : public KPageDialog
+{
     Q_OBJECT
 public:
     /**
@@ -52,14 +52,14 @@ public:
      * @param accounts all defined accounts
      * @param parent parent widget
      */
-    TaskDialog(Project &project, Task &task, Accounts &accounts, QWidget *parent=0);
+    TaskDialog(Project &project, Task &task, Accounts &accounts, QWidget *parent = 0);
 
     virtual MacroCommand *buildCommand();
 
 protected Q_SLOTS:
     void slotButtonClicked(int button);
-    void slotTaskRemoved( Node *node );
-    void slotCurrentChanged( KPageWidgetItem*, KPageWidgetItem* );
+    void slotTaskRemoved(Node *node);
+    void slotCurrentChanged(KPageWidgetItem *, KPageWidgetItem *);
 
 protected:
     Project &m_project;
@@ -72,31 +72,33 @@ protected:
     TaskDescriptionPanel *m_descriptionTab;
 };
 
-class KPLATOUI_EXPORT TaskAddDialog : public TaskDialog {
+class KPLATOUI_EXPORT TaskAddDialog : public TaskDialog
+{
     Q_OBJECT
 public:
-    TaskAddDialog(Project &project, Task &task, Node *currentNode, Accounts &accounts, QWidget *parent=0);
+    TaskAddDialog(Project &project, Task &task, Node *currentNode, Accounts &accounts, QWidget *parent = 0);
     ~TaskAddDialog();
 
     virtual MacroCommand *buildCommand();
 
 protected Q_SLOTS:
-    void slotNodeRemoved( Node* );
+    void slotNodeRemoved(Node *);
 
 private:
     Node *m_currentnode;
 };
 
-class KPLATOUI_EXPORT SubTaskAddDialog : public TaskDialog {
+class KPLATOUI_EXPORT SubTaskAddDialog : public TaskDialog
+{
     Q_OBJECT
 public:
-    SubTaskAddDialog(Project &project, Task &task, Node *currentNode, Accounts &accounts, QWidget *parent=0);
+    SubTaskAddDialog(Project &project, Task &task, Node *currentNode, Accounts &accounts, QWidget *parent = 0);
     ~SubTaskAddDialog();
 
     virtual MacroCommand *buildCommand();
 
 protected Q_SLOTS:
-    void slotNodeRemoved( Node* );
+    void slotNodeRemoved(Node *);
 
 private:
     Node *m_currentnode;

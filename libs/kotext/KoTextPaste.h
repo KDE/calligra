@@ -31,7 +31,7 @@ class KoCanvasBase;
 #include <QSharedPointer>
 namespace Soprano
 {
-    class Model;
+class Model;
 }
 
 class KOTEXT_EXPORT KoTextPaste : public KoOdfPaste
@@ -53,7 +53,7 @@ protected:
     virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOTEXTPASTE_H */

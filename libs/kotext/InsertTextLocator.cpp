@@ -22,9 +22,8 @@
 
 #include <KoCanvasBase.h>
 
-
 InsertTextLocator::InsertTextLocator(KoCanvasBase *canvas)
-        : InsertInlineObjectActionBase(canvas, i18n("Index Reference"))
+    : InsertInlineObjectActionBase(canvas, i18n("Index Reference"))
 {
 }
 

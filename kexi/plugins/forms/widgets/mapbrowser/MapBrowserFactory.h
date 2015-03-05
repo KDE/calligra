@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #ifndef MAPBROWSERFACTORY_H
 #define MAPBROWSERFACTORY_H
 
@@ -26,16 +25,16 @@
 //! Factory providing map browser widget
 class MapBrowserFactory: public KexiDBFactoryBase
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-    MapBrowserFactory(QObject* parent, const QVariantList &args);
+    MapBrowserFactory(QObject *parent, const QVariantList &args);
     virtual ~MapBrowserFactory();
-    virtual QWidget* createWidget(const QByteArray &classname, QWidget *parent, const char *name,
+    virtual QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name,
                                   KFormDesigner::Container *container,
                                   CreateWidgetOptions options = DefaultOptions);
     virtual bool createMenuActions(const QByteArray &classname, QWidget *w,
                                    QMenu *menu, KFormDesigner::Container *container);
-    virtual bool startInlineEditing(InlineEditorCreationArguments& args);
+    virtual bool startInlineEditing(InlineEditorCreationArguments &args);
     virtual bool previewWidget(const QByteArray &classname, QWidget *widget,
                                KFormDesigner::Container *container);
 };

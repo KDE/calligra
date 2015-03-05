@@ -23,40 +23,45 @@
 
 #include <kglobal.h>
 
-inline QString button(const QWheelEvent &ev) {
+inline QString button(const QWheelEvent &ev)
+{
     Q_UNUSED(ev);
     return "-";
 }
 
-inline QString button(const QTabletEvent &ev) {
+inline QString button(const QTabletEvent &ev)
+{
     Q_UNUSED(ev);
     return "-";
 }
 
-inline QString buttons(const QTabletEvent &ev) {
+inline QString buttons(const QTabletEvent &ev)
+{
     Q_UNUSED(ev);
     return "-";
 }
 
 template <class T>
-QString button(const T &ev) {
+QString button(const T &ev)
+{
     return QString::number(ev.button());
 }
 
 template <class T>
-QString buttons(const T &ev) {
+QString buttons(const T &ev)
+{
     return QString::number(ev.buttons());
 }
 
 template <class Event>
-    void dumpBaseParams(QTextStream &s, const Event &ev, const QString &prefix)
+void dumpBaseParams(QTextStream &s, const Event &ev, const QString &prefix)
 {
     s << qSetFieldWidth(10) << left << prefix << reset << " ";
     s << qSetFieldWidth(17) << left << exTypeToString(ev.type()) << reset;
 }
 
 template <class Event>
-    void dumpMouseRelatedParams(QTextStream &s, const Event &ev)
+void dumpMouseRelatedParams(QTextStream &s, const Event &ev)
 {
     s << "btn: " << button(ev) << " ";
     s << "btns: " << buttons(ev) << " ";
@@ -64,7 +69,8 @@ template <class Event>
     s << "gpos: "  << qSetFieldWidth(4) << ev.globalX() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.globalY() << qSetFieldWidth(0) << " ";
 }
 
-QString exTypeToString(QEvent::Type type) {
+QString exTypeToString(QEvent::Type type)
+{
     return
         type == QEvent::TabletEnterProximity ? "TabletEnterProximity" :
         type == QEvent::TabletLeaveProximity ? "TabletLeaveProximity" :
@@ -88,13 +94,12 @@ QString exTypeToString(QEvent::Type type) {
         "unknown";
 }
 
-
 KisTabletDebugger::KisTabletDebugger()
     : m_debugEnabled(false)
 {
 }
 
-KisTabletDebugger* KisTabletDebugger::instance()
+KisTabletDebugger *KisTabletDebugger::instance()
 {
     K_GLOBAL_STATIC(KisTabletDebugger, s_instance);
     return s_instance;
@@ -172,7 +177,7 @@ QString KisTabletDebugger::eventToString(const QEvent &ev, const QString &prefix
 }
 
 template <class Event>
-    QString tabletEventToString(const Event &ev, const QString &prefix)
+QString tabletEventToString(const Event &ev, const QString &prefix)
 {
     QString string;
     QTextStream s(&string);
@@ -219,7 +224,8 @@ QString KisTabletDebugger::tabletDeviceToString(QTabletEvent::TabletDevice devic
         "unknown";
 }
 
-QString KisTabletDebugger::pointerTypeToString(QTabletEvent::PointerType pointer) {
+QString KisTabletDebugger::pointerTypeToString(QTabletEvent::PointerType pointer)
+{
     return
         pointer == QTabletEvent::UnknownPointer ? "UnknownPointer" :
         pointer == QTabletEvent::Pen ? "Pen" :

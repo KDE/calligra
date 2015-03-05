@@ -50,7 +50,7 @@ public:
      * \p view The view pointer. Used to access the cells.
      * \p parent the parent widget
      */
-    SolverDialog(Selection* selection, QWidget* parent);
+    SolverDialog(Selection *selection, QWidget *parent);
 
 protected Q_SLOTS:
     /**

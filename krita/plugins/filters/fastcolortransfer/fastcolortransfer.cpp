@@ -43,9 +43,8 @@
 K_PLUGIN_FACTORY(KritaFastColorTransferFactory, registerPlugin<FastColorTransferPlugin>();)
 K_EXPORT_PLUGIN(KritaFastColorTransferFactory("krita"))
 
-
 FastColorTransferPlugin::FastColorTransferPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisFilterRegistry::instance()->add(new KisFilterFastColorTransfer());
 
@@ -63,16 +62,15 @@ KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), categ
     setSupportsAdjustmentLayers(false);
 }
 
-
-KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisFilterFastColorTransfer::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
     return new KisWdgFastColorTransfer(parent);
 }
 
-KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisFilterFastColorTransfer::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("filename", "");  // TODO: put an exemple image in share/krita, like a sunset that what's give the best results
     return config;
 }
@@ -80,26 +78,26 @@ KisFilterConfiguration* KisFilterFastColorTransfer::factoryConfiguration(const K
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
 void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
-                                             const QRect& applyRect,
-                                             const KisFilterConfiguration* config,
-                                             KoUpdater* progressUpdater) const
+        const QRect &applyRect,
+        const KisFilterConfiguration *config,
+        KoUpdater *progressUpdater) const
 {
     Q_ASSERT(device != 0);
 
     dbgPlugins << "Start transferring color";
 
     // Convert ref and src to LAB
-    const KoColorSpace* labCS = KoColorSpaceRegistry::instance()->lab16();
+    const KoColorSpace *labCS = KoColorSpaceRegistry::instance()->lab16();
     if (!labCS) {
         dbgPlugins << "The LAB colorspace is not available.";
         return;
     }
-    
+
     dbgPlugins << "convert a copy of src to lab";
-    const KoColorSpace* oldCS = device->colorSpace();
+    const KoColorSpace *oldCS = device->colorSpace();
     KisPaintDeviceSP srcLAB = new KisPaintDevice(*device.data());
     dbgPlugins << "srcLab : " << srcLAB->extent();
-    KUndo2Command* cmd = srcLAB->convertTo(labCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    KUndo2Command *cmd = srcLAB->convertTo(labCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     delete cmd;
 
     if (progressUpdater) {
@@ -115,7 +113,7 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
     KisSequentialConstIterator srcIt(srcLAB, applyRect);
 
     do {
-        const quint16* data = reinterpret_cast<const quint16*>(srcIt.oldRawData());
+        const quint16 *data = reinterpret_cast<const quint16 *>(srcIt.oldRawData());
         quint32 L = data[0];
         quint32 A = data[1];
         quint32 B = data[2];
@@ -125,9 +123,11 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
         sigmaL_src += L * L;
         sigmaA_src += A * A;
         sigmaB_src += B * B;
-        if (progressUpdater) progressUpdater->setValue(++count);
+        if (progressUpdater) {
+            progressUpdater->setValue(++count);
+        }
     } while (srcIt.nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
-    
+
     double totalSize = 1. / (applyRect.width() * applyRect.height());
     meanL_src *= totalSize;
     meanA_src *= totalSize;
@@ -135,17 +135,16 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
     sigmaL_src *= totalSize;
     sigmaA_src *= totalSize;
     sigmaB_src *= totalSize;
-    
+
     dbgPlugins << totalSize << "" << meanL_src << "" << meanA_src << "" << meanB_src << "" << sigmaL_src << "" << sigmaA_src << "" << sigmaB_src;
-    
+
     double meanL_ref = config->getDouble("meanL");
     double meanA_ref = config->getDouble("meanA");
     double meanB_ref = config->getDouble("meanB");
     double sigmaL_ref = config->getDouble("sigmaL");
     double sigmaA_ref = config->getDouble("sigmaA");
     double sigmaB_ref = config->getDouble("sigmaB");
-    
-    
+
     // Transfer colors
     dbgPlugins << "Transfer colors";
     {
@@ -157,15 +156,17 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
         quint16 labPixel[4];
         for (int y = 0; y < applyRect.height() && !(progressUpdater && progressUpdater->interrupted()); ++y) {
             do {
-                const quint16* data = reinterpret_cast<const quint16*>(srcLABIt->oldRawData());
+                const quint16 *data = reinterpret_cast<const quint16 *>(srcLABIt->oldRawData());
                 labPixel[0] = (quint16)CLAMP(((double)data[0] - meanL_src) * coefL + meanL_ref, 0., 65535.);
                 labPixel[1] = (quint16)CLAMP(((double)data[1] - meanA_src) * coefA + meanA_ref, 0., 65535.);
                 labPixel[2] = (quint16)CLAMP(((double)data[2] - meanB_src) * coefB + meanB_ref, 0., 65535.);
                 labPixel[3] = data[3];
-                oldCS->fromLabA16(reinterpret_cast<const quint8*>(labPixel), dstIt->rawData(), 1);
-                if (progressUpdater) progressUpdater->setValue(++count);
+                oldCS->fromLabA16(reinterpret_cast<const quint8 *>(labPixel), dstIt->rawData(), 1);
+                if (progressUpdater) {
+                    progressUpdater->setValue(++count);
+                }
                 srcLABIt->nextPixel();
-            } while(dstIt->nextPixel());
+            } while (dstIt->nextPixel());
             dstIt->nextRow();
             srcLABIt->nextRow();
         }

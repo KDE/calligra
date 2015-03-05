@@ -39,7 +39,6 @@
 
 #include <KoColor.h>
 
-
 struct AbrInfo {
     //big endian
     short version;
@@ -49,7 +48,7 @@ struct AbrInfo {
 };
 
 /// save the QImages as png files to directory image_tests
-static QImage convertToQImage(char * buffer, qint32 width, qint32 height)
+static QImage convertToQImage(char *buffer, qint32 width, qint32 height)
 {
     // create 8-bit indexed image
     QImage img(width, height, QImage::Format_RGB32);
@@ -59,7 +58,7 @@ static QImage convertToQImage(char * buffer, qint32 width, qint32 height)
         QRgb *pixel = reinterpret_cast<QRgb *>(img.scanLine(y));
         for (int x = 0; x < width; x++, pos++) {
             value = 255 - buffer[pos];
-            pixel[x] = qRgb(value, value , value);
+            pixel[x] = qRgb(value, value, value);
         }
 
     }
@@ -67,7 +66,7 @@ static QImage convertToQImage(char * buffer, qint32 width, qint32 height)
     return img;
 }
 
-static qint32 rle_decode(QDataStream & abr, char *buffer, qint32 height)
+static qint32 rle_decode(QDataStream &abr, char *buffer, qint32 height)
 {
     qint32 n;
     char ptmp;
@@ -93,11 +92,13 @@ static qint32 rle_decode(QDataStream & abr, char *buffer, qint32 height)
             n = ptmp;
 
             j++;
-            if (n >= 128)     // force sign
+            if (n >= 128) {   // force sign
                 n -= 256;
+            }
             if (n < 0) {      // copy the following char -n + 1 times
-                if (n == -128)  // it's a nop
+                if (n == -128) { // it's a nop
                     continue;
+                }
                 n = -n + 1;
                 // char
                 if (!abr.device()->getChar(&ch)) {
@@ -108,8 +109,7 @@ static qint32 rle_decode(QDataStream & abr, char *buffer, qint32 height)
                 for (c = 0; c < n; c++, data++) {
                     *data = ch;
                 }
-            }
-            else {
+            } else {
                 // read the following n + 1 chars (no compr)
                 for (c = 0; c < n + 1; c++, j++, data++) {
                     // char
@@ -123,7 +123,6 @@ static qint32 rle_decode(QDataStream & abr, char *buffer, qint32 height)
     delete [] cscanline_len;
     return 0;
 }
-
 
 static QString abr_v1_brush_name(const QString filename, qint32 id)
 {
@@ -142,14 +141,15 @@ static bool abr_supported_content(AbrInfo *abr_hdr)
         return true;
         break;
     case 6:
-        if (abr_hdr->subversion == 1 || abr_hdr->subversion == 2)
+        if (abr_hdr->subversion == 1 || abr_hdr->subversion == 2) {
             return true;
+        }
         break;
     }
     return false;
 }
 
-static bool abr_reach_8BIM_section(QDataStream & abr, const QString name)
+static bool abr_reach_8BIM_section(QDataStream &abr, const QString name)
 {
     char tag[4];
     char tagname[5];
@@ -191,7 +191,7 @@ static bool abr_reach_8BIM_section(QDataStream & abr, const QString name)
     return true;
 }
 
-static qint32 find_sample_count_v6(QDataStream & abr, AbrInfo *abr_info)
+static qint32 find_sample_count_v6(QDataStream &abr, AbrInfo *abr_info)
 {
     qint64 origin;
     qint32 sample_section_size;
@@ -202,8 +202,9 @@ static qint32 find_sample_count_v6(QDataStream & abr, AbrInfo *abr_info)
     qint32 brush_size;
     qint32 brush_end;
 
-    if (!abr_supported_content(abr_info))
+    if (!abr_supported_content(abr_info)) {
         return 0;
+    }
 
     origin = abr.device()->pos();
 
@@ -224,7 +225,9 @@ static qint32 find_sample_count_v6(QDataStream & abr, AbrInfo *abr_info)
         abr >> brush_size;
         brush_end = brush_size;
         // complement to 4
-        while (brush_end % 4 != 0) brush_end++;
+        while (brush_end % 4 != 0) {
+            brush_end++;
+        }
         abr.device()->seek(abr.device()->pos() + brush_end);
         samples++;
     }
@@ -236,9 +239,7 @@ static qint32 find_sample_count_v6(QDataStream & abr, AbrInfo *abr_info)
     return samples;
 }
 
-
-
-static bool abr_read_content(QDataStream & abr, AbrInfo *abr_hdr)
+static bool abr_read_content(QDataStream &abr, AbrInfo *abr_hdr)
 {
 
     abr >> abr_hdr->version;
@@ -263,8 +264,7 @@ static bool abr_read_content(QDataStream & abr, AbrInfo *abr_hdr)
     return true;
 }
 
-
-static QString abr_read_ucs2_text(QDataStream & abr)
+static QString abr_read_ucs2_text(QDataStream &abr)
 {
     quint32 name_size;
     quint32 buf_size;
@@ -287,8 +287,8 @@ static QString abr_read_ucs2_text(QDataStream & abr)
     //name_ucs2 = (char*) malloc (buf_size * sizeof (char));
     //name_ucs2 = new char[buf_size];
 
-    ushort * name_ucs2 = new ushort[buf_size];
-    for (i = 0; i < buf_size ; i++) {
+    ushort *name_ucs2 = new ushort[buf_size];
+    for (i = 0; i < buf_size; i++) {
         //* char*/
         //abr >> name_ucs2[i];
 
@@ -301,8 +301,7 @@ static QString abr_read_ucs2_text(QDataStream & abr)
     return name_utf8;
 }
 
-
-quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id)
+quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream &abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id)
 {
     qDebug() << "abr_brush_load_v6()" << filename;
     Q_UNUSED(image_ID);
@@ -336,10 +335,13 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
     abr.device()->seek(abr.device()->pos() + 37);
     if (abr_hdr->subversion == 1)
         // discard short coordinates and unknown short
+    {
         abr.device()->seek(abr.device()->pos() + 10);
-    else
+    } else
         // discard unknown bytes
+    {
         abr.device()->seek(abr.device()->pos() + 264);
+    }
 
     // long
     abr >> top;
@@ -358,7 +360,7 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
     // remove .abr and add some id, so something like test.abr -> test_12345
     QString name = abr_v1_brush_name(filename, id);
 
-    buffer = (char*)malloc(size);
+    buffer = (char *)malloc(size);
 
     // data decoding
     if (!compression) {
@@ -372,11 +374,10 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
     if (width < quint16_MAX && height < quint16_MAX) {
         // filename - filename of the file , e.g. test.abr
         // name - test_number_of_the_brush, e.g test_1, test_2
-        KisAbrBrush* abrBrush = 0;
+        KisAbrBrush *abrBrush = 0;
         if (m_abrBrushes.contains(name)) {
             abrBrush = m_abrBrushes[name];
-        }
-        else {
+        } else {
             abrBrush = new KisAbrBrush(name, md5(), this);
         }
 
@@ -395,8 +396,7 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
     return layer_ID;
 }
 
-
-qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id)
+qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream &abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id)
 {
     qDebug() << "abr_brush_load_v12()" << filename;
 
@@ -428,14 +428,14 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
         warnKrita  << "WARNING: computed brush unsupported, skipping.";
         abr.device()->seek(abr.device()->pos() + next_brush);
         // TODO: test also this one abr.skipRawData(next_brush);
-    }
-    else if (brush_type == 2) {
+    } else if (brush_type == 2) {
         // sampled brush
         // discard 4 misc bytes and 2 spacing bytes
         abr.device()->seek(abr.device()->pos() + 6);
 
-        if (abr_hdr->version == 2)
+        if (abr_hdr->version == 2) {
             name = abr_read_ucs2_text(abr);
+        }
         if (name.isNull()) {
             name = abr_v1_brush_name(filename, id);
         }
@@ -461,9 +461,8 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
         if (height > 16384) {
             warnKrita << "WARNING: wide brushes not supported";
             abr.device()->seek(next_brush);
-        }
-        else {
-            buffer = (char*)malloc(size);
+        } else {
+            buffer = (char *)malloc(size);
 
             if (!compression) {
                 // not compressed - read raw bytes as brush data
@@ -472,11 +471,10 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
                 rle_decode(abr, buffer, height);
             }
 
-            KisAbrBrush* abrBrush = 0;
+            KisAbrBrush *abrBrush = 0;
             if (m_abrBrushes.contains(name)) {
                 abrBrush = m_abrBrushes[name];
-            }
-            else {
+            } else {
                 abrBrush = new KisAbrBrush(name, md5(), this);
             }
 
@@ -487,8 +485,7 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
             m_abrBrushes[name] = abrBrush;
             layer_ID = 1;
         }
-    }
-    else {
+    } else {
         warnKrita << "Unknown ABR brush type, skipping.";
         abr.device()->seek(next_brush);
     }
@@ -496,13 +493,12 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
     return layer_ID;
 }
 
-
-qint32 KisAbrBrushCollection::abr_brush_load(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id)
+qint32 KisAbrBrushCollection::abr_brush_load(QDataStream &abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id)
 {
     qint32 layer_ID = -1;
     switch (abr_hdr->version) {
     case 1:
-        // fall through, version 1 and 2 are compatible
+    // fall through, version 1 and 2 are compatible
     case 2:
         layer_ID = abr_brush_load_v12(abr, abr_hdr, filename, image_ID, id);
         break;
@@ -514,8 +510,7 @@ qint32 KisAbrBrushCollection::abr_brush_load(QDataStream & abr, AbrInfo *abr_hdr
     return layer_ID;
 }
 
-
-KisAbrBrushCollection::KisAbrBrushCollection(const QString& filename)
+KisAbrBrushCollection::KisAbrBrushCollection(const QString &filename)
     : KisBrush(filename)
 {
 }
@@ -551,7 +546,6 @@ bool KisAbrBrushCollection::loadFromDevice(QIODevice *dev)
     QBuffer buf(&ba);
     buf.open(QIODevice::ReadOnly);
     QDataStream abr(&buf);
-
 
     if (!abr_read_content(abr, &abr_hdr)) {
         warnKrita << "Error: cannot parse ABR file: " << filename();
@@ -596,7 +590,7 @@ QImage KisAbrBrushCollection::image() const
     return QImage();
 }
 
-void KisAbrBrushCollection::toXML(QDomDocument& d, QDomElement& e) const
+void KisAbrBrushCollection::toXML(QDomDocument &d, QDomElement &e) const
 {
     Q_UNUSED(d);
     Q_UNUSED(e);

@@ -25,7 +25,7 @@
    Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
    Copyright 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
    Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -119,14 +119,14 @@ using namespace Calligra::Sheets;
  *
  ****************************************************************/
 
-CanvasBase::CanvasBase(Doc* doc)
-        : KoCanvasBase(0)
-        , d(new Private)
+CanvasBase::CanvasBase(Doc *doc)
+    : KoCanvasBase(0)
+    , d(new Private)
 {
     d->validationInfo = 0;
     d->offset = QPointF(0.0, 0.0);
     d->doc = doc;
-    
+
     // flake
     d->shapeManager = new KoShapeManager(this);
     d->toolProxy = new KoToolProxy(this);
@@ -140,12 +140,12 @@ CanvasBase::~CanvasBase()
     delete d;
 }
 
-Doc* CanvasBase::doc() const
+Doc *CanvasBase::doc() const
 {
     return d->doc;
 }
 
-void CanvasBase::gridSize(qreal* horizontal, qreal* vertical) const
+void CanvasBase::gridSize(qreal *horizontal, qreal *vertical) const
 {
     *horizontal = doc()->map()->defaultColumnFormat()->width();
     *vertical = doc()->map()->defaultRowFormat()->height();
@@ -156,17 +156,17 @@ bool CanvasBase::snapToGrid() const
     return false; // FIXME
 }
 
-void CanvasBase::addCommand(KUndo2Command* command)
+void CanvasBase::addCommand(KUndo2Command *command)
 {
     doc()->addCommand(command);
 }
 
-KoShapeManager* CanvasBase::shapeManager() const
+KoShapeManager *CanvasBase::shapeManager() const
 {
     return d->shapeManager;
 }
 
-void CanvasBase::updateCanvas(const QRectF& rc)
+void CanvasBase::updateCanvas(const QRectF &rc)
 {
     QRectF clipRect(viewConverter()->documentToView(rc.translated(-offset())));
     clipRect.adjust(-2, -2, 2, 2);   // Resize to fit anti-aliasing
@@ -178,7 +178,7 @@ KoUnit CanvasBase::unit() const
     return doc()->unit();
 }
 
-KoToolProxy* CanvasBase::toolProxy() const
+KoToolProxy *CanvasBase::toolProxy() const
 {
     return d->toolProxy;
 }
@@ -203,11 +203,12 @@ bool CanvasBase::eventFilter(QObject *o, QEvent *e)
     /* this canvas event filter acts on events sent to the line edit as well
        as events to this filter itself.
     */
-    if (!o || !e)
+    if (!o || !e) {
         return true;
+    }
     switch (e->type()) {
     case QEvent::KeyPress: {
-        QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+        QKeyEvent *keyev = static_cast<QKeyEvent *>(e);
         if ((keyev->key() == Qt::Key_Tab) || (keyev->key() == Qt::Key_Backtab)) {
             keyPressed(keyev);
             return true;
@@ -220,7 +221,7 @@ bool CanvasBase::eventFilter(QObject *o, QEvent *e)
         //break;
     }
     case QEvent::ToolTip: {
-        QHelpEvent* helpEvent = static_cast<QHelpEvent*>(e);
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
         showToolTip(helpEvent->pos());
     }
     default:
@@ -231,19 +232,21 @@ bool CanvasBase::eventFilter(QObject *o, QEvent *e)
 
 void CanvasBase::validateSelection()
 {
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = activeSheet();
+    if (!sheet) {
         return;
+    }
 #if 0
-XXX TODO
+    XXX TODO
     if (selection()->isSingular()) {
         const Cell cell = Cell(sheet, selection()->marker()).masterCell();
         Validity validity = cell.validity();
         if (validity.displayValidationInformation()) {
             const QString title = validity.titleInfo();
             QString message = validity.messageInfo();
-            if (title.isEmpty() && message.isEmpty())
+            if (title.isEmpty() && message.isEmpty()) {
                 return;
+            }
 
             if (!d->validationInfo) {
                 d->validationInfo = new QLabel(this);
@@ -285,24 +288,28 @@ XXX TODO
 #endif
 }
 
-void CanvasBase::setDocumentOffset(const QPoint& offset)
+void CanvasBase::setDocumentOffset(const QPoint &offset)
 {
     const QPoint delta = offset - viewConverter()->documentToView(d->offset).toPoint();
     d->offset = viewConverter()->viewToDocument(offset);
 
-    ColumnHeader* ch = columnHeader();
-    if (ch) ch->scroll(-delta.x(), 0);
-    RowHeader* rh = rowHeader();
-    if (rh) rh->scroll(0, -delta.y());
+    ColumnHeader *ch = columnHeader();
+    if (ch) {
+        ch->scroll(-delta.x(), 0);
+    }
+    RowHeader *rh = rowHeader();
+    if (rh) {
+        rh->scroll(0, -delta.y());
+    }
 }
 
-void CanvasBase::setDocumentSize(const QSizeF& size)
+void CanvasBase::setDocumentSize(const QSizeF &size)
 {
     const QSize s = viewConverter()->documentToView(size).toSize();
     documentSizeChanged(s);
 }
 
-void CanvasBase::mousePressed(KoPointerEvent* event)
+void CanvasBase::mousePressed(KoPointerEvent *event)
 {
     KoPointerEvent *const origEvent = event;
     QPointF documentPosition;
@@ -327,7 +334,7 @@ void CanvasBase::mousePressed(KoPointerEvent* event)
     event = new KoPointerEvent(event, documentPosition);
 
     // flake
-    if(d->toolProxy) {
+    if (d->toolProxy) {
         d->toolProxy->mousePressEvent(event);
         if (!event->isAccepted() && event->button() == Qt::RightButton) {
             showContextMenu(origEvent->globalPos());
@@ -340,7 +347,7 @@ void CanvasBase::mousePressed(KoPointerEvent* event)
     delete event;
 }
 
-void CanvasBase::mouseReleased(KoPointerEvent* event)
+void CanvasBase::mouseReleased(KoPointerEvent *event)
 {
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
@@ -355,16 +362,17 @@ void CanvasBase::mouseReleased(KoPointerEvent* event)
     event = new KoPointerEvent(event, documentPosition);
 
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy) {
         d->toolProxy->mouseReleaseEvent(event);
+    }
 
     if (layoutDirection() == Qt::RightToLeft) {
-       // delete event;
+        // delete event;
     }
     delete event;
 }
 
-void CanvasBase::mouseMoved(KoPointerEvent* event)
+void CanvasBase::mouseMoved(KoPointerEvent *event)
 {
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
@@ -379,16 +387,17 @@ void CanvasBase::mouseMoved(KoPointerEvent* event)
     event = new KoPointerEvent(event, documentPosition);
 
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy) {
         d->toolProxy->mouseMoveEvent(event);
+    }
 
     if (layoutDirection() == Qt::RightToLeft) {
-       // delete event;
+        // delete event;
     }
     delete event;
 }
 
-void CanvasBase::mouseDoubleClicked(KoPointerEvent* event)
+void CanvasBase::mouseDoubleClicked(KoPointerEvent *event)
 {
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
@@ -403,27 +412,30 @@ void CanvasBase::mouseDoubleClicked(KoPointerEvent* event)
     event = new KoPointerEvent(event, documentPosition);
 
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy) {
         d->toolProxy->mouseDoubleClickEvent(event);
+    }
 
     if (layoutDirection() == Qt::RightToLeft) {
-       // delete event;
+        // delete event;
     }
     delete event;
 }
 
-void CanvasBase::keyPressed(QKeyEvent* event)
+void CanvasBase::keyPressed(QKeyEvent *event)
 {
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy) {
         d->toolProxy->keyPressEvent(event);
+    }
 }
 
 void CanvasBase::tabletEvent(QTabletEvent *e)
 {
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy) {
         d->toolProxy->tabletEvent(e, viewConverter()->viewToDocument(e->pos() + offset()));
+    }
 }
 
 QVariant CanvasBase::inputMethodQuery(Qt::InputMethodQuery query) const
@@ -435,18 +447,21 @@ QVariant CanvasBase::inputMethodQuery(Qt::InputMethodQuery query) const
 void CanvasBase::inputMethodEvent(QInputMethodEvent *event)
 {
     // flake
-    if(d->toolProxy)
+    if (d->toolProxy) {
         d->toolProxy->inputMethodEvent(event);
+    }
 }
 
-void CanvasBase::paint(QPainter* painter, const QRectF& painterRect)
+void CanvasBase::paint(QPainter *painter, const QRectF &painterRect)
 {
-    if (doc()->map()->isLoading() || isViewLoading())
+    if (doc()->map()->isLoading() || isViewLoading()) {
         return;
+    }
 
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = activeSheet();
+    if (!sheet) {
         return;
+    }
 
 //     ElapsedTime et("Painting cells", ElapsedTime::PrintOnlyTime);
 
@@ -483,8 +498,9 @@ void CanvasBase::paint(QPainter* painter, const QRectF& painterRect)
 //     const QPointF p = -viewConverter()->documentToView(this->offset());
 //     painter.translate(p.x() /*+ width()*/, p.y());
     painter->setRenderHint(QPainter::Antialiasing, false);
-    if(d->toolProxy)
+    if (d->toolProxy) {
         d->toolProxy->paint(*painter, *viewConverter());
+    }
 }
 
 void CanvasBase::focusIn(QFocusEvent *event)
@@ -503,7 +519,7 @@ void CanvasBase::focusIn(QFocusEvent *event)
     //XXX TODO QWidget::focusInEvent(event);
 }
 
-bool CanvasBase::dragEnter(const QMimeData* mimeData)
+bool CanvasBase::dragEnter(const QMimeData *mimeData)
 {
     if (mimeData->hasText() ||
             mimeData->hasFormat("application/x-kspread-snippet")) {
@@ -512,9 +528,9 @@ bool CanvasBase::dragEnter(const QMimeData* mimeData)
     return false;
 }
 
-bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, const QWidget *source)
+bool CanvasBase::dragMove(const QMimeData *mimeData, const QPointF &eventPos, const QWidget *source)
 {
-    register Sheet * const sheet = activeSheet();
+    register Sheet *const sheet = activeSheet();
     if (!sheet) {
         return false;
     }
@@ -540,8 +556,8 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, co
             if (!doc.setContent(data, false, &errorMsg, &errorLine, &errorColumn)) {
                 // an error occurred
                 kDebug(36005) << "CanvasBase::daragMoveEvent: an error occurred" << endl
-                << "line: " << errorLine << " col: " << errorColumn
-                << ' ' << errorMsg << endl;
+                              << "line: " << errorLine << " col: " << errorColumn
+                              << ' ' << errorMsg << endl;
                 dragMarkingRect = QRect(1, 1, 1, 1);
             } else {
                 QDomElement root = doc.documentElement(); // "spreadsheet-snippet"
@@ -593,9 +609,9 @@ void CanvasBase::dragLeave()
 {
 }
 
-bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos, const QWidget *source)
+bool CanvasBase::drop(const QMimeData *mimeData, const QPointF &eventPos, const QWidget *source)
 {
-    register Sheet * const sheet = activeSheet();
+    register Sheet *const sheet = activeSheet();
     // FIXME Sheet protection: Not all cells have to be protected.
     if (!sheet || sheet->isProtected()) {
         return false;
@@ -653,11 +669,12 @@ bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos, const 
     return true;
 }
 
-QRect CanvasBase::viewToCellCoordinates(const QRectF& viewRect) const
+QRect CanvasBase::viewToCellCoordinates(const QRectF &viewRect) const
 {
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = activeSheet();
+    if (!sheet) {
         return QRect();
+    }
 
     // NOTE Stefan: Do not consider the layout direction in this case.
     const QRectF rect = viewConverter()->viewToDocument(viewRect.normalized()).translated(offset());
@@ -682,11 +699,12 @@ QRect CanvasBase::visibleCells() const
 //
 //---------------------------------------------
 
-QRectF CanvasBase::cellCoordinatesToView(const QRect& cellRange) const
+QRectF CanvasBase::cellCoordinatesToView(const QRect &cellRange) const
 {
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = activeSheet();
+    if (!sheet) {
         return QRectF();
+    }
 
     QRectF rect = sheet->cellCoordinatesToDocument(cellRange);
     // apply scrolling offset
@@ -703,12 +721,13 @@ QRectF CanvasBase::cellCoordinatesToView(const QRect& cellRange) const
     return rect;
 }
 
-void CanvasBase::showToolTip(const QPoint& p)
+void CanvasBase::showToolTip(const QPoint &p)
 {
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = activeSheet();
+    if (!sheet) {
         return;
-    SheetView * const sheetView = this->sheetView(sheet);
+    }
+    SheetView *const sheetView = this->sheetView(sheet);
 
     // Over which cell is the mouse ?
     qreal ypos, xpos;
@@ -721,18 +740,17 @@ void CanvasBase::showToolTip(const QPoint& p)
         col = sheet->leftColumn((viewConverter()->viewToDocumentX(p.x()) +
                                  xOffset()), xpos);
 
-
     int row = sheet->topRow((viewConverter()->viewToDocumentY(p.y()) +
                              yOffset()), ypos);
 
     Cell cell = Cell(sheet, col, row).masterCell();
-    const CellView& baseCellView = sheetView->cellView(cell.column(), cell.row());
+    const CellView &baseCellView = sheetView->cellView(cell.column(), cell.row());
     const bool baseIsObscured = sheetView->isObscured(cell.cellPosition());
     const QPoint cellPos = baseIsObscured ? sheetView->obscuringCell(cell.cellPosition())
-                                          : cell.cellPosition();
-    const CellView& cellView = baseIsObscured
-               ? sheetView->cellView(cellPos)
-               : baseCellView;
+                           : cell.cellPosition();
+    const CellView &cellView = baseIsObscured
+                               ? sheetView->cellView(cellPos)
+                               : baseCellView;
     if (sheetView->isObscured(cellPos)) {
         cell = Cell(sheet, sheetView->obscuringCell(cellPos));
     }
@@ -745,21 +763,25 @@ void CanvasBase::showToolTip(const QPoint& p)
     // Not funny if (intentional or not) <a> appears as hyperlink.
     QString tipText;
     // If cell is too small, show the content
-    if (!cellView.dimensionFits())
+    if (!cellView.dimensionFits()) {
         tipText = cell.displayText().replace('<', "&lt;");
+    }
 
     // Show hyperlink, if any
-    if (tipText.isEmpty())
+    if (tipText.isEmpty()) {
         tipText = cell.link().replace('<', "&lt;");
+    }
 
     // Nothing to display, bail out
-    if (tipText.isEmpty() && cell.comment().isEmpty())
+    if (tipText.isEmpty() && cell.comment().isEmpty()) {
         return;
+    }
 
     // Cut if the tip is ridiculously long
     const int maxLen = 256;
-    if (tipText.length() > maxLen)
+    if (tipText.length() > maxLen) {
         tipText = tipText.left(maxLen).append("...");
+    }
 
     // Determine position and width of the current cell.
     const double cellWidth = cellView.cellWidth();
@@ -779,19 +801,21 @@ void CanvasBase::showToolTip(const QPoint& p)
     }
 
     // No use if mouse is somewhere else
-    if (!insideCellRect)
+    if (!insideCellRect) {
         return;
+    }
 
     // Show comment, if any.
-    if (tipText.isEmpty())
+    if (tipText.isEmpty()) {
         tipText = cell.comment().replace('<', "&lt;");
-    else if (!cell.comment().isEmpty())
+    } else if (!cell.comment().isEmpty()) {
         tipText += "</p><h4>" + i18n("Comment:") + "</h4><p>" + cell.comment().replace('<', "&lt;");
+    }
 
     // Now we show the tip
     QToolTip::showText(mapToGlobal(cellRect.bottomRight()),
                        "<p>" + tipText.replace('\n', "<br>") + "</p>");
-                       // TODO XXX this, cellRect.translated(-mapToGlobal(cellRect.topLeft())));
+    // TODO XXX this, cellRect.translated(-mapToGlobal(cellRect.topLeft())));
 }
 
 void CanvasBase::updateInputMethodInfo()
@@ -799,7 +823,7 @@ void CanvasBase::updateInputMethodInfo()
     updateMicroFocus();
 }
 
-KoViewConverter* CanvasBase::viewConverter() const
+KoViewConverter *CanvasBase::viewConverter() const
 {
     return zoomHandler();
 }

@@ -25,12 +25,12 @@ KisCloneInfo::KisCloneInfo()
 {
 }
 
-KisCloneInfo::KisCloneInfo(const QUuid& uuid)
+KisCloneInfo::KisCloneInfo(const QUuid &uuid)
 {
     m_uuid = uuid;
 }
 
-KisCloneInfo::KisCloneInfo(const QString& name)
+KisCloneInfo::KisCloneInfo(const QString &name)
 {
     m_name = name;
 }
@@ -43,13 +43,13 @@ KisCloneInfo::KisCloneInfo(KisNodeSP node)
 
 KisNodeSP KisCloneInfo::findNode(KisNodeSP rootNode)
 {
-    if (check(rootNode))
+    if (check(rootNode)) {
         return rootNode;
-    
+    }
+
     KisNodeSP child = rootNode->firstChild();
     KisNodeSP node = 0;
-    while (child && !node)
-    {
+    while (child && !node) {
         node = findNode(child);
         child = child->nextSibling();
     }
@@ -58,9 +58,11 @@ KisNodeSP KisCloneInfo::findNode(KisNodeSP rootNode)
 
 bool KisCloneInfo::check(KisNodeSP node)
 {
-    if (m_uuid == node->uuid())                     // every node has valid uuid
+    if (m_uuid == node->uuid()) {                   // every node has valid uuid
         return true;
-    if (m_uuid.isNull() && m_name == node->name())  // but some may have empty names
+    }
+    if (m_uuid.isNull() && m_name == node->name()) { // but some may have empty names
         return true;
+    }
     return false;
 }

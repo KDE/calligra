@@ -38,7 +38,7 @@ KWDebugDocker::~KWDebugDocker()
 
 void KWDebugDocker::setCanvas(KoCanvasBase *_canvas)
 {
-    KWCanvas *canvas = dynamic_cast<KWCanvas*>(_canvas);
+    KWCanvas *canvas = dynamic_cast<KWCanvas *>(_canvas);
     m_debugWidget->setCanvas(canvas);
 }
 

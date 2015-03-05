@@ -24,19 +24,20 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-class KarbonPathRefineCommand::Private {
+class KarbonPathRefineCommand::Private
+{
 public:
-    Private(KoPathShape * p, uint insertPointsCount)
-            : path(p), insertCount(insertPointsCount), initialized(false) {}
+    Private(KoPathShape *p, uint insertPointsCount)
+        : path(p), insertCount(insertPointsCount), initialized(false) {}
     ~Private() {}
 
-    KoPathShape * path; ///< the path to refine
+    KoPathShape *path;  ///< the path to refine
     uint insertCount;   ///< the number of points to insert into segments
     bool initialized;   ///< tells whether the subcommands are already created
 };
 
-KarbonPathRefineCommand::KarbonPathRefineCommand(KoPathShape * path, uint insertPointsCount, KUndo2Command *parent)
-        : KUndo2Command(parent), d(new Private(path, insertPointsCount))
+KarbonPathRefineCommand::KarbonPathRefineCommand(KoPathShape *path, uint insertPointsCount, KUndo2Command *parent)
+    : KUndo2Command(parent), d(new Private(path, insertPointsCount))
 {
     setText(kundo2_i18n("Refine path"));
 }
@@ -65,13 +66,14 @@ void KarbonPathRefineCommand::redo()
                 // iterate over the subpaths points
                 for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
                     // we only collect the (iteration+1)th point
-                    if ((pointIndex + 1) % (iteration + 1) != 0)
+                    if ((pointIndex + 1) % (iteration + 1) != 0) {
                         continue;
+                    }
                     pointData.append(KoPathPointData(d->path, KoPathPointIndex(subpathIndex, pointIndex)));
                 }
             }
             // create the command and execute it
-            KUndo2Command * cmd = new KoPathPointInsertCommand(pointData, insertPosition, this);
+            KUndo2Command *cmd = new KoPathPointInsertCommand(pointData, insertPosition, this);
             cmd->redo();
         }
         d->initialized = true;

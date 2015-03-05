@@ -29,8 +29,7 @@
 using namespace KChart;
 using namespace KDChart;
 
-
-AxisCommand::AxisCommand(Axis* axis, ChartShape* chart)
+AxisCommand::AxisCommand(Axis *axis, ChartShape *chart)
     : m_chart(chart)
     , m_axis(axis)
 {
@@ -60,8 +59,9 @@ void AxisCommand::redo()
     m_oldUseAutomaticSubStepWidth = m_axis->useAutomaticMinorInterval();*/
 
     if (m_oldShowTitle == m_newShowTitle && m_oldTitleText == m_newTitleText && m_oldShowGridLines == m_newShowGridLines
-            && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont)
+            && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont) {
         return;
+    }
 
     // Actually do the work
     m_axis->title()->setVisible(m_newShowTitle);
@@ -81,8 +81,9 @@ void AxisCommand::redo()
 void AxisCommand::undo()
 {
     if (m_oldShowTitle == m_newShowTitle && m_oldTitleText == m_newTitleText && m_oldShowGridLines == m_newShowGridLines
-            && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont)
+            && m_oldUseLogarithmicScaling == m_newUseLogarithmicScaling && m_oldLabelsFont == m_newLabelsFont) {
         return;
+    }
 
     m_axis->title()->setVisible(m_oldShowTitle);
     m_axis->setTitleText(m_oldTitleText);

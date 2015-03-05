@@ -56,16 +56,16 @@ class KexiUserFeedbackAgent::Private
 {
 public:
     Private()
-     : configGroup(KConfigGroup(KGlobal::config()->group("User Feedback")))
-     , areas(KexiUserFeedbackAgent::NoAreas)
-     , sentDataInThisSession(KexiUserFeedbackAgent::NoAreas)
-     , url(QLatin1String("http://www.kexi-project.org/feedback"))
-     , redirectChecked(false)
+        : configGroup(KConfigGroup(KGlobal::config()->group("User Feedback")))
+        , areas(KexiUserFeedbackAgent::NoAreas)
+        , sentDataInThisSession(KexiUserFeedbackAgent::NoAreas)
+        , url(QLatin1String("http://www.kexi-project.org/feedback"))
+        , redirectChecked(false)
     {
     }
-    
+
     void updateData();
-    
+
     KConfigGroup configGroup;
     KexiUserFeedbackAgent::Areas areas;
     KexiUserFeedbackAgent::Areas sentDataInThisSession;
@@ -85,7 +85,7 @@ void KexiUserFeedbackAgent::Private::updateData()
     keys.clear();
     data.clear();
     areasForKeys.clear();
-    #define ADD(key, val, area) { \
+#define ADD(key, val, area) { \
         keys.append(QByteArray(key)); data.insert(QByteArray(key), QVariant(val)); \
         areasForKeys.insert(key, KexiUserFeedbackAgent::area); \
     }
@@ -115,50 +115,36 @@ void KexiUserFeedbackAgent::Private::updateData()
             runningDesktop = "KDE Plasma";
             //! @todo run kde{4|5}-config --kde-version to know full version and save in runningDesktopVersion
             runningDesktopVersion = qgetenv("KDE_SESSION_VERSION").trimmed();
-        }
-        else if (desktop.contains("unity")) {
+        } else if (desktop.contains("unity")) {
             runningDesktop = "Unity";
-        }
-        else if (desktop.contains("razor")) {
+        } else if (desktop.contains("razor")) {
             runningDesktop = "Razor-qt";
-        }
-        else if (desktop.contains("rox")) {
+        } else if (desktop.contains("rox")) {
             runningDesktop = "ROX";
-        }
-        else if (desktop.contains("tde")) {
+        } else if (desktop.contains("tde")) {
             runningDesktop = "Trinity";
-        }
-        else if (desktop.contains("mate")) {
+        } else if (desktop.contains("mate")) {
             runningDesktop = "MATE";
-        }
-        else if (desktop.contains("lxde") || gdm.contains("lubuntu")) {
+        } else if (desktop.contains("lxde") || gdm.contains("lubuntu")) {
             runningDesktop = "LXDE";
-        }
-        else if (desktop.contains("xfce") || gdm.contains("xfce")) {
+        } else if (desktop.contains("xfce") || gdm.contains("xfce")) {
             runningDesktop = "Xfce";
-        }
-        else if (desktop.contains("ede")) {
+        } else if (desktop.contains("ede")) {
             runningDesktop = "EDE";
-        }
-        else if (desktop.contains("cinnamon")) {
+        } else if (desktop.contains("cinnamon")) {
             runningDesktop = "Cinnamon";
-        }
-        else if (desktop.contains("gnome") || gdm.contains("gnome")) {
+        } else if (desktop.contains("gnome") || gdm.contains("gnome")) {
             if (gdm.contains("cinnamon")) {
                 runningDesktop = "Cinnamon";
-            }
-            else if (gdm.contains("classic")) {
+            } else if (gdm.contains("classic")) {
                 runningDesktop = "GNOME Classic";
-            }
-            else {
+            } else {
                 runningDesktop = "GNOME";
             }
-        }
-        else {
+        } else {
             if (!desktop.isEmpty()) {
                 runningDesktop = "Other: " + desktop;
-            }
-            else if (!gdm.isEmpty()) {
+            } else if (!gdm.isEmpty()) {
                 runningDesktop = "Other: " + gdm;
             }
         }
@@ -176,14 +162,11 @@ void KexiUserFeedbackAgent::Private::updateData()
             if (info.toLower() == "ubuntu") { // Ubuntu derivatives (http://askubuntu.com/a/227669/226642)
                 if (runningDesktop == "KDE Plasma") {
                     info = "Kubuntu";
-                }
-                else if (runningDesktop ==  "LXDE") {
+                } else if (runningDesktop ==  "LXDE") {
                     info = "Lubuntu";
-                }
-                else if (runningDesktop == "Xfce") {
+                } else if (runningDesktop == "Xfce") {
                     info = "Xubuntu";
-                }
-                else if (runningDesktop.contains(QLatin1String("gnome"), Qt::CaseInsensitive)) {
+                } else if (runningDesktop.contains(QLatin1String("gnome"), Qt::CaseInsensitive)) {
                     info = "Ubuntu GNOME";
                 }
             }
@@ -219,19 +202,19 @@ void KexiUserFeedbackAgent::Private::updateData()
 #elif defined(Q_OS_WIN)
     OSVERSIONINFO versionInfo;
     SYSTEM_INFO sysInfo;
-    char* releaseStr;
+    char *releaseStr;
     releaseStr = new char[6]; // "xx.xx\0"
-    
+
     versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx(&versionInfo);
     GetSystemInfo(&sysInfo);
-    
+
     snprintf(releaseStr, 6, "%2d.%2d", versionInfo.dwMajorVersion, versionInfo.dwMinorVersion);
     ADD("os_release", releaseStr, SystemInfoArea);
-    
+
     delete [6] releaseStr;
-    
-    switch(sysInfo.wProcessorArchitecture) {
+
+    switch (sysInfo.wProcessorArchitecture) {
     case PROCESSOR_ARCHITECTURE_AMD64:
         ADD("os_machine", "x86_64", SystemInfoArea);
         break;
@@ -247,7 +230,7 @@ void KexiUserFeedbackAgent::Private::updateData()
 #endif
 
     QSize screen(QApplication::desktop()->screenGeometry(
-                        KexiMainWindowIface::global()->thisWidget()).size());
+                     KexiMainWindowIface::global()->thisWidget()).size());
     ADD("screen_width", screen.width(), ScreenInfoArea);
     ADD("screen_height", screen.height(), ScreenInfoArea);
     ADD("screen_count", QApplication::desktop()->screenCount(), ScreenInfoArea);
@@ -263,8 +246,8 @@ void KexiUserFeedbackAgent::Private::updateData()
 
 // ---
 
-KexiUserFeedbackAgent::KexiUserFeedbackAgent(QObject* parent)
- : QObject(parent), d(new Private)
+KexiUserFeedbackAgent::KexiUserFeedbackAgent(QObject *parent)
+    : QObject(parent), d(new Private)
 {
     if (d->configGroup.readEntry("BasicInfo", false)) {
         d->areas |= BasicArea | AnonymousIdentificationArea;
@@ -278,7 +261,7 @@ KexiUserFeedbackAgent::KexiUserFeedbackAgent(QObject* parent)
     if (d->configGroup.readEntry("RegionalSettings", false)) {
         d->areas |= RegionalSettingsArea;
     }
-    
+
     // load or create uid
     QString uidString = d->configGroup.readEntry("Uid", QString());
     d->uid = QUuid(uidString);
@@ -322,10 +305,10 @@ KexiUserFeedbackAgent::Areas  KexiUserFeedbackAgent::enabledAreas() const
 }
 
 //! Escapes string for json format (see http://json.org/string.gif).
-inline QString escapeJson(const QString& s)
+inline QString escapeJson(const QString &s)
 {
     QString res;
-    for (int i=0; i<s.length(); i++) {
+    for (int i = 0; i < s.length(); i++) {
         switch (s[i].toLatin1()) {
         case '\\': res += QLatin1String("\\\\"); break;
         case '/': res += QLatin1String("\\/"); break;
@@ -357,30 +340,30 @@ void KexiUserFeedbackAgent::sendData()
     }
 
     QByteArray postData;
-    foreach (const QByteArray& key, d->keys) {
+    foreach (const QByteArray &key, d->keys) {
         Area area = d->areasForKeys.value(key);
         if (area != NoAreas && (d->areas & area)) {
             if (!postData.isEmpty()) {
                 postData += ',';
             }
             postData += (QByteArray("\"") + key + "\":\""
-                        + escapeJson(d->data.value(key).toString()).toUtf8() + '"');
+                         + escapeJson(d->data.value(key).toString()).toUtf8() + '"');
         }
     }
     kDebug() << postData;
-    
-    KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
+
+    KIO::Job *sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
     connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendDataFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }
 
-void KexiUserFeedbackAgent::sendDataFinished(KJob* job)
+void KexiUserFeedbackAgent::sendDataFinished(KJob *job)
 {
     if (job->error()) {
         //! @todo error...
         return;
     }
-    KIO::StoredTransferJob* sendJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    KIO::StoredTransferJob *sendJob = qobject_cast<KIO::StoredTransferJob *>(job);
     QByteArray result = sendJob->data();
     result.chop(1); // remove \n
     kDebug() << result;
@@ -389,7 +372,7 @@ void KexiUserFeedbackAgent::sendDataFinished(KJob* job)
     }
 }
 
-QVariant KexiUserFeedbackAgent::value(const QString& key) const
+QVariant KexiUserFeedbackAgent::value(const QString &key) const
 {
     return d->data.value(key.toLatin1());
 }
@@ -398,26 +381,24 @@ void KexiUserFeedbackAgent::sendRedirectQuestion()
 {
     QByteArray postData = "get_url";
     kDebug() << postData;
-    KIO::Job* sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
+    KIO::Job *sendJob = KIO::storedHttpPost(postData, KUrl(d->url + "/send"), KIO::HideProgressInfo);
     connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendRedirectQuestionFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }
 
-void KexiUserFeedbackAgent::sendRedirectQuestionFinished(KJob* job)
+void KexiUserFeedbackAgent::sendRedirectQuestionFinished(KJob *job)
 {
     if (job->error()) {
         //! @todo error...
         kDebug() << "Error, no URL Redirect";
-    }
-    else {
-        KIO::StoredTransferJob* sendJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    } else {
+        KIO::StoredTransferJob *sendJob = qobject_cast<KIO::StoredTransferJob *>(job);
         QByteArray result = sendJob->data();
         result.chop(1); // remove \n
         kDebug() << result;
         if (result.isEmpty()) {
             kDebug() << "No URL Redirect";
-        }
-        else {
+        } else {
             d->url = QString::fromUtf8(result);
             kDebug() << "URL Redirect to" << d->url;
         }
@@ -432,15 +413,14 @@ QString KexiUserFeedbackAgent::serviceUrl() const
     return d->url;
 }
 
-void KexiUserFeedbackAgent::waitForRedirect(QObject *receiver, const char* slot)
+void KexiUserFeedbackAgent::waitForRedirect(QObject *receiver, const char *slot)
 {
     if (!receiver) {
         return;
     }
     if (d->redirectChecked) {
         QMetaObject::invokeMethod(receiver, slot);
-    }
-    else {
+    } else {
         connect(this, SIGNAL(redirectLoaded()), receiver, slot, Qt::UniqueConnection);
         if (d->areas == NoAreas) {
             sendRedirectQuestion();

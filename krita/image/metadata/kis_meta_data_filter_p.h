@@ -33,7 +33,7 @@ public:
     virtual QString name() const;
     virtual QString description() const;
     virtual bool defaultEnabled() const;
-    virtual void filter(KisMetaData::Store*) const;
+    virtual void filter(KisMetaData::Store *) const;
 };
 /**
  * Filter that add the name of the creation program and the date
@@ -47,7 +47,7 @@ public:
     virtual QString name() const;
     virtual QString description() const;
     virtual bool defaultEnabled() const;
-    virtual void filter(KisMetaData::Store*) const;
+    virtual void filter(KisMetaData::Store *) const;
 };
 }
 #endif

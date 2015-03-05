@@ -38,8 +38,8 @@ public:
     virtual ~KexiDBFactoryBase();
 
 protected:
-    virtual bool isPropertyVisibleInternal(const QByteArray& classname, QWidget *w,
-                                           const QByteArray& property, bool isTopLevel);
+    virtual bool isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,
+                                           const QByteArray &property, bool isTopLevel);
 };
 
 #endif

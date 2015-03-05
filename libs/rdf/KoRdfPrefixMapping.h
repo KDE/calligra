@@ -28,7 +28,6 @@
 #include <QMap>
 #include <QString>
 
-
 class KoRdfPrefixMappingPrivate;
 
 /**
@@ -47,7 +46,7 @@ class KoRdfPrefixMappingPrivate;
 class KORDF_EXPORT KoRdfPrefixMapping : public QObject
 {
     Q_OBJECT
-    KoRdfPrefixMappingPrivate * const d;
+    KoRdfPrefixMappingPrivate *const d;
 public:
     explicit KoRdfPrefixMapping(KoDocumentRdf *rdf);
     ~KoRdfPrefixMapping();

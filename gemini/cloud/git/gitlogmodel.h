@@ -46,7 +46,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
     QString repoDir() const;
-    void setRepoDir(const QString& repoDir);
+    void setRepoDir(const QString &repoDir);
 
 public Q_SLOTS:
     void refreshLog();
@@ -56,7 +56,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // CALLIGRAGEMINI_GIT_GITLOGMODEL_H

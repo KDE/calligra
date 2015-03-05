@@ -50,58 +50,69 @@ class KoCompositeOpBase : public KoCompositeOp
     static const qint32 pixel_size   = _CSTraits::pixelSize;
 
 public:
-    KoCompositeOpBase(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
+    KoCompositeOpBase(const KoColorSpace *cs, const QString &id, const QString &description, const QString &category)
         : KoCompositeOp(cs, id, description, category) { }
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const {
+    virtual void composite(const KoCompositeOp::ParameterInfo &params) const
+    {
 
-        const QBitArray& flags           = params.channelFlags.isEmpty() ? QBitArray(channels_nb,true) : params.channelFlags;
-        bool             allChannelFlags = params.channelFlags.isEmpty() || params.channelFlags == QBitArray(channels_nb,true);
+        const QBitArray &flags           = params.channelFlags.isEmpty() ? QBitArray(channels_nb, true) : params.channelFlags;
+        bool             allChannelFlags = params.channelFlags.isEmpty() || params.channelFlags == QBitArray(channels_nb, true);
         bool             alphaLocked     = (alpha_pos != -1) && !flags.testBit(alpha_pos);
         bool             useMask         = params.maskRowStart != 0;
 
-        if(useMask) {
-            if(alphaLocked) {
-                if(allChannelFlags) { genericComposite<true,true,true> (params, flags); }
-                else                { genericComposite<true,true,false>(params, flags); }
+        if (useMask) {
+            if (alphaLocked) {
+                if (allChannelFlags) {
+                    genericComposite<true, true, true> (params, flags);
+                } else                {
+                    genericComposite<true, true, false>(params, flags);
+                }
+            } else {
+                if (allChannelFlags) {
+                    genericComposite<true, false, true> (params, flags);
+                } else                {
+                    genericComposite<true, false, false>(params, flags);
+                }
             }
-            else {
-                if(allChannelFlags) { genericComposite<true,false,true> (params, flags); }
-                else                { genericComposite<true,false,false>(params, flags); }
-            }
-        }
-        else {
-            if(alphaLocked) {
-                if(allChannelFlags) { genericComposite<false,true,true> (params, flags); }
-                else                { genericComposite<false,true,false>(params, flags); }
-            }
-            else {
-                if(allChannelFlags) { genericComposite<false,false,true> (params, flags); }
-                else                { genericComposite<false,false,false>(params, flags); }
+        } else {
+            if (alphaLocked) {
+                if (allChannelFlags) {
+                    genericComposite<false, true, true> (params, flags);
+                } else                {
+                    genericComposite<false, true, false>(params, flags);
+                }
+            } else {
+                if (allChannelFlags) {
+                    genericComposite<false, false, true> (params, flags);
+                } else                {
+                    genericComposite<false, false, false>(params, flags);
+                }
             }
         }
     }
 
 private:
     template<bool useMask, bool alphaLocked, bool allChannelFlags>
-    void genericComposite(const KoCompositeOp::ParameterInfo& params, const QBitArray& channelFlags) const {
+    void genericComposite(const KoCompositeOp::ParameterInfo &params, const QBitArray &channelFlags) const
+    {
 
         using namespace Arithmetic;
 
         qint32        srcInc       = (params.srcRowStride == 0) ? 0 : channels_nb;
         channels_type opacity      = scale<channels_type>(params.opacity);
-        quint8*       dstRowStart  = params.dstRowStart;
-        const quint8* srcRowStart  = params.srcRowStart;
-        const quint8* maskRowStart = params.maskRowStart;
+        quint8       *dstRowStart  = params.dstRowStart;
+        const quint8 *srcRowStart  = params.srcRowStart;
+        const quint8 *maskRowStart = params.maskRowStart;
 
-        for(qint32 r=0; r<params.rows; ++r) {
-            const channels_type* src  = reinterpret_cast<const channels_type*>(srcRowStart);
-            channels_type*       dst  = reinterpret_cast<channels_type*>(dstRowStart);
-            const quint8*        mask = maskRowStart;
+        for (qint32 r = 0; r < params.rows; ++r) {
+            const channels_type *src  = reinterpret_cast<const channels_type *>(srcRowStart);
+            channels_type       *dst  = reinterpret_cast<channels_type *>(dstRowStart);
+            const quint8        *mask = maskRowStart;
 
-            for(qint32 c=0; c<params.cols; ++c) {
+            for (qint32 c = 0; c < params.cols; ++c) {
                 channels_type srcAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : src[alpha_pos];
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : dst[alpha_pos];
                 channels_type mskAlpha = useMask ? scale<channels_type>(*mask) : unitValue<channels_type>();
@@ -110,18 +121,20 @@ private:
                     memset(dst, 0, pixel_size);
                 }
 
-                channels_type newDstAlpha = _compositeOp::template composeColorChannels<alphaLocked,allChannelFlags>(
+                channels_type newDstAlpha = _compositeOp::template composeColorChannels<alphaLocked, allChannelFlags>(
                     src, srcAlpha, dst, dstAlpha, mskAlpha, opacity, channelFlags
                 );
 
-                if(alpha_pos != -1)
+                if (alpha_pos != -1) {
                     dst[alpha_pos] = alphaLocked ? dstAlpha : newDstAlpha;
+                }
 
                 src += srcInc;
                 dst += channels_nb;
 
-                if(useMask)
+                if (useMask) {
                     ++mask;
+                }
             }
 
             srcRowStart  += params.srcRowStride;

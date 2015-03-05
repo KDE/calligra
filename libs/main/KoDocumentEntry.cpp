@@ -32,12 +32,12 @@
 #include <limits.h> // UINT_MAX
 
 KoDocumentEntry::KoDocumentEntry()
-        : m_service(0)
+    : m_service(0)
 {
 }
 
-KoDocumentEntry::KoDocumentEntry(const KService::Ptr& service)
-        : m_service(service)
+KoDocumentEntry::KoDocumentEntry(const KService::Ptr &service)
+    : m_service(service)
 {
 }
 
@@ -45,55 +45,60 @@ KoDocumentEntry::~KoDocumentEntry()
 {
 }
 
-
-KService::Ptr KoDocumentEntry::service() const {
+KService::Ptr KoDocumentEntry::service() const
+{
     return m_service;
 }
 
 /**
  * @return TRUE if the service pointer is null
  */
-bool KoDocumentEntry::isEmpty() const {
+bool KoDocumentEntry::isEmpty() const
+{
     return m_service.isNull();
 }
 
 /**
  * @return name of the associated service
  */
-QString KoDocumentEntry::name() const {
+QString KoDocumentEntry::name() const
+{
     return m_service->name();
 }
 
 /**
  *  Mimetypes (and other service types) which this document can handle.
  */
-QStringList KoDocumentEntry::mimeTypes() const {
+QStringList KoDocumentEntry::mimeTypes() const
+{
     return m_service->serviceTypes();
 }
 
 /**
  *  @return TRUE if the document can handle the requested mimetype.
  */
-bool KoDocumentEntry::supportsMimeType(const QString & _mimetype) const {
+bool KoDocumentEntry::supportsMimeType(const QString &_mimetype) const
+{
     return mimeTypes().contains(_mimetype);
 }
 
-KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
+KoPart *KoDocumentEntry::createKoPart(QString *errorMsg) const
 {
     QString error;
-    KoPart* part = m_service->createInstance<KoPart>(0, QVariantList(), &error);
+    KoPart *part = m_service->createInstance<KoPart>(0, QVariantList(), &error);
 
     if (!part) {
         kWarning(30003) << error;
-        if (errorMsg)
+        if (errorMsg) {
             *errorMsg = error;
+        }
         return 0;
     }
 
     return part;
 }
 
-KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
+KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString &mimetype)
 {
     QList<KoDocumentEntry> vec = query(mimetype);
 
@@ -124,7 +129,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
     return KoDocumentEntry(vec[0]);
 }
 
-QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
+QList<KoDocumentEntry> KoDocumentEntry::query(const QString &mimetype)
 {
 
     QList<KoDocumentEntry> lst;
@@ -132,7 +137,7 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
     // Query the trader
     const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Part");
 
-    foreach(KService::Ptr offer, offers) {
+    foreach (KService::Ptr offer, offers) {
 
         QStringList nativeMimeTypes = offer->property("X-KDE-NativeMimeType", QVariant::StringList).toStringList();
         QStringList extraNativeMimeTypes = offer->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
@@ -140,14 +145,15 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
 
         if (nativeMimeTypes.contains(mimetype) || extraNativeMimeTypes.contains(mimetype) || serviceTypes.contains(mimetype)) {
 
-            if (offer->noDisplay())
+            if (offer->noDisplay()) {
                 continue;
+            }
             KoDocumentEntry d(offer);
             // Append converted offer
             lst.append(d);
 
             // And if it's the part that belongs to the current application it's our own, so break off
-            if (offer->desktopEntryName() == (qAppName().replace("calligra","") + "part")) {
+            if (offer->desktopEntryName() == (qAppName().replace("calligra", "") + "part")) {
                 lst.clear();
                 lst.append(d);
                 break;
@@ -159,7 +165,7 @@ QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
 
     if (lst.count() > 1 && !mimetype.isEmpty()) {
         kWarning(30003) << "KoDocumentEntry::query " << mimetype << " got " << lst.count() << " offers!";
-        foreach(const KoDocumentEntry &entry, lst) {
+        foreach (const KoDocumentEntry &entry, lst) {
             qDebug() << entry.name();
         }
     }

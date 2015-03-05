@@ -28,7 +28,7 @@ KoDummyCellValue::~KoDummyCellValue()
 
 QString KoDummyCellValue::type() const
 {
-    return QString(); 
+    return QString();
 }
 
 QList< QPair<QString, QString> > KoDummyCellValue::attributes()  const

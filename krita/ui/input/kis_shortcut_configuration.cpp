@@ -98,8 +98,9 @@ QString KisShortcutConfiguration::serialize()
 
 bool KisShortcutConfiguration::unserialize(const QString &serialized)
 {
-    if (!serialized.startsWith('{'))
+    if (!serialized.startsWith('{')) {
         return false;
+    }
 
     //Parse the serialized data and apply it to the current shortcut
     QString remainder = serialized;
@@ -110,8 +111,9 @@ bool KisShortcutConfiguration::unserialize(const QString &serialized)
     //Split the remainder by ;
     QStringList parts = remainder.split(';');
 
-    if (parts.size() < 6)
-        return false; //Invalid input, abort
+    if (parts.size() < 6) {
+        return false;    //Invalid input, abort
+    }
 
     //First entry in the list is the mode
     d->mode = parts.at(0).toUInt();
@@ -130,7 +132,7 @@ bool KisShortcutConfiguration::unserialize(const QString &serialized)
     serializedKeys.remove('[').remove(']');
     //Split by , and add each entry as a key
     QStringList keylist = serializedKeys.split(',');
-    Q_FOREACH(QString key, keylist) {
+    Q_FOREACH (QString key, keylist) {
         if (!key.isEmpty()) {
             d->keys.append(static_cast<Qt::Key>(key.toUInt(0, 16)));
         }
@@ -274,12 +276,11 @@ QString KisShortcutConfiguration::buttonsToText(Qt::MouseButtons buttons)
 
     if (buttonCount == 0) {
         text.append(i18nc("No mouse buttons for shortcut", "None"));
-    }
-    else {
+    } else {
         text = i18ncp(
-            "%1 = List of mouse buttons for shortcut. "
-            "Plural form is chosen upon the number of buttons in that list.",
-            "%1 Button", "%1 Buttons", text, buttonCount);
+                   "%1 = List of mouse buttons for shortcut. "
+                   "Plural form is chosen upon the number of buttons in that list.",
+                   "%1 Button", "%1 Buttons", text, buttonCount);
     }
 
     return text;
@@ -357,12 +358,11 @@ QString KisShortcutConfiguration::buttonsInputToText(const QList<Qt::Key> &keys,
 
     if (keys.size() > 0) {
         return i18nc(
-            "%1 = modifier keys in shortcut; %2 = mouse buttons in shortcut",
-            "%1 + %2",
-            KisShortcutConfiguration::keysToText(keys),
-            buttonsText);
-    }
-    else {
+                   "%1 = modifier keys in shortcut; %2 = mouse buttons in shortcut",
+                   "%1 + %2",
+                   KisShortcutConfiguration::keysToText(keys),
+                   buttonsText);
+    } else {
         return buttonsText;
     }
 }
@@ -373,12 +373,11 @@ QString KisShortcutConfiguration::wheelInputToText(const QList<Qt::Key> &keys, K
 
     if (keys.size() > 0) {
         return i18nc(
-            "%1 = modifier keys in shortcut; %2 = mouse wheel buttons in shortcut",
-            "%1 + %2",
-            KisShortcutConfiguration::keysToText(keys),
-            wheelText);
-    }
-    else {
+                   "%1 = modifier keys in shortcut; %2 = mouse wheel buttons in shortcut",
+                   "%1 + %2",
+                   KisShortcutConfiguration::keysToText(keys),
+                   wheelText);
+    } else {
         return wheelText;
     }
 }

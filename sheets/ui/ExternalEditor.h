@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef CALLIGRA_SHEETS_EXTERNAL_EDITOR
 #define CALLIGRA_SHEETS_EXTERNAL_EDITOR
 
@@ -45,10 +44,10 @@ public:
 
     virtual QSize sizeHint() const;
 
-    void setCellTool(CellToolBase* cellTool);
+    void setCellTool(CellToolBase *cellTool);
 
-    QAction* applyAction() const;
-    QAction* cancelAction() const;
+    QAction *applyAction() const;
+    QAction *cancelAction() const;
 Q_SIGNALS:
     void textChanged(const QString &text);
 
@@ -70,7 +69,7 @@ private:
     Q_DISABLE_COPY(ExternalEditor)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

@@ -27,11 +27,11 @@ class QSize;
 class QPixmap;
 
 /**
- * This class is a cache for pixmaps which will be cached for different sizes 
+ * This class is a cache for pixmaps which will be cached for different sizes
  * of the same pixmap If a key is removed from the cache all cached sizes will
  * be removed from the cache.
  *
- * The API is similar to QPixmpaCache. The only addition is that you need to 
+ * The API is similar to QPixmpaCache. The only addition is that you need to
  * specify the size of the pixmap when you search it.
  *
  * The implementation uses QPixmapCache.
@@ -46,7 +46,7 @@ public:
     /**
      * Get the pixmap cache singleton
      */
-    static KoPAPixmapCache * instance();
+    static KoPAPixmapCache *instance();
 
     ~KoPAPixmapCache();
 
@@ -58,47 +58,47 @@ public:
     /**
      * Removes all pixmaps from the cache.
      *
-     * @param all If true QPixmpaCache::clear will be called. 
+     * @param all If true QPixmpaCache::clear will be called.
      *            If false only the pixmaps which were added via this object
      *            will be removed
      */
-    void clear( bool all = true );
+    void clear(bool all = true);
 
     /**
-     * Looks for a cached pixmap associated with the key in the cache. 
+     * Looks for a cached pixmap associated with the key in the cache.
      *
-     * If the pixmap is found, the function sets pm to that pixmap and returns true; 
+     * If the pixmap is found, the function sets pm to that pixmap and returns true;
      * otherwise it leaves pm alone and returns false.
      *
-     * @param key the key of the pixmap 
+     * @param key the key of the pixmap
      * @param size the size you want to have the pixmap
      * @param pm the pixmap
      */
-    bool find( const QString & key, const QSize & size, QPixmap & pm );
+    bool find(const QString &key, const QSize &size, QPixmap &pm);
 
     /**
      * Insert a copy of the pixmap into the cache.
      *
      * The size is taken from the pixmap.
      */
-    bool insert( const QString & key, const QPixmap & pm );
+    bool insert(const QString &key, const QPixmap &pm);
 
     /**
      * Remove all pixmaps associated with key from the cache
      */
-    void remove( const QString & key );
+    void remove(const QString &key);
 
     /**
      * Sets the cache limit to n kilobytes
      */
-    void setCacheLimit( int n );
+    void setCacheLimit(int n);
 
 private:
     KoPAPixmapCache();
-    KoPAPixmapCache( const KoPAPixmapCache & );
-    KoPAPixmapCache operator=( const KoPAPixmapCache & );
+    KoPAPixmapCache(const KoPAPixmapCache &);
+    KoPAPixmapCache operator=(const KoPAPixmapCache &);
 
-    QString generateKey( const QString &key, const QSize & size );
+    QString generateKey(const QString &key, const QSize &size);
     QMap<QString, QList<QSize> > m_keySize;
 };
 

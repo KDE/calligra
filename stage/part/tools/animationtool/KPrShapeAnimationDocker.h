@@ -181,7 +181,7 @@ private Q_SLOTS:
     /// load predefined animations
     void initializeView();
 protected:
-     bool eventFilter(QObject *ob, QEvent *ev);
+    bool eventFilter(QObject *ob, QEvent *ev);
 
 private:
     /// Return a pointer to the KPrShapeAnimations for the given page

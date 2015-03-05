@@ -38,8 +38,8 @@ public:
 
     KisPressureDarkenOption();
 
-    KoColor apply(KisPainter * painter, const KisPaintInformation& info) const;
-    void apply(KisColorSource* colorSource, const KisPaintInformation& info) const;
+    KoColor apply(KisPainter *painter, const KisPaintInformation &info) const;
+    void apply(KisColorSource *colorSource, const KisPaintInformation &info) const;
 };
 
 #endif

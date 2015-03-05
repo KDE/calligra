@@ -33,8 +33,8 @@
 
 VideoEventAction::VideoEventAction(VideoShape *parent)
     : KoEventAction()
-    ,m_shape(parent)
-    ,m_player(0)
+    , m_shape(parent)
+    , m_player(0)
 {
     setId(QString("videoeventaction"));
 }
@@ -57,7 +57,7 @@ void VideoEventAction::saveOdf(KoShapeSavingContext &context) const
 
 void VideoEventAction::start()
 {
-    VideoData *videoData = qobject_cast<VideoData*>(m_shape->userData());
+    VideoData *videoData = qobject_cast<VideoData *>(m_shape->userData());
     Q_ASSERT(videoData);
     m_player = new FullScreenPlayer(videoData->playableUrl());
 }

@@ -9,19 +9,15 @@ class KisFilterPreviewWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisFilterPreviewWidget(QWidget * parent);
+    KisFilterPreviewWidget(QWidget *parent);
     ~KisFilterPreviewWidget();
 
     virtual QSize sizeHint() const;
-    virtual void paintEvent(QPaintEvent* event);
+    virtual void paintEvent(QPaintEvent *event);
 
     void setImage(const QImage &img);
 
 protected:
-
-
-
-
 
 private:
     QPixmap m_pixmap;

@@ -69,7 +69,6 @@
 #include <metadata/kis_meta_data_io_backend.h>
 #include "kisexiv2/kis_exiv2.h"
 
-
 SketchApplication::SketchApplication()
     : KApplication()
 {
@@ -78,7 +77,7 @@ SketchApplication::SketchApplication()
 void SketchApplication::start()
 {
     // Load various global plugins
-    KoShapeRegistry* r = KoShapeRegistry::instance();
+    KoShapeRegistry *r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
 
     KisFilterRegistry::instance();
@@ -92,7 +91,6 @@ void SketchApplication::start()
     // Load dockers
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
-
 
     // XXX_EXIV: make the exiv io backends real plugins
     KisExiv2::initialize();

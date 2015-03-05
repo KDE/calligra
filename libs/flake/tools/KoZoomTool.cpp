@@ -30,8 +30,8 @@
 #include <kdebug.h>
 
 KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
-        : KoInteractionTool(canvas),
-        m_temporary(false), m_zoomInMode(true)
+    : KoInteractionTool(canvas),
+      m_temporary(false), m_zoomInMode(true)
 {
     QPixmap inPixmap, outPixmap;
     inPixmap.load(KStandardDirs::locate("data", "calligra/icons/zoom_in_cursor.png"));
@@ -79,7 +79,7 @@ void KoZoomTool::keyReleaseEvent(QKeyEvent *event)
     KoInteractionTool::keyReleaseEvent(event);
 }
 
-void KoZoomTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
+void KoZoomTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &)
 {
     m_temporary = toolActivation == TemporaryActivation;
     updateCursor(false);

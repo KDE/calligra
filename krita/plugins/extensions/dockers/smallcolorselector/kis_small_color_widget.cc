@@ -48,7 +48,7 @@ struct KisSmallColorWidget::Private {
     QTimer updateTimer;
 };
 
-KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(new Private)
+KisSmallColorWidget::KisSmallColorWidget(QWidget *parent) : QWidget(parent), d(new Private)
 {
     setMinimumHeight(50);
     d->hue = 0;
@@ -110,13 +110,13 @@ void KisSmallColorWidget::setHSV(int h, int s, int v)
     d->value = v;
     d->saturation = s;
     tellColorChanged();
-    if(newH) {
+    if (newH) {
         generateSquare();
     }
     d->updateTimer.start();
 }
 
-void KisSmallColorWidget::setQColor(const QColor& c)
+void KisSmallColorWidget::setQColor(const QColor &c)
 {
     if (d->updateAllowed) {
         int hue;
@@ -136,18 +136,18 @@ void KisSmallColorWidget::tellColorChanged()
     d->updateAllowed = true;
 }
 
-void KisSmallColorWidget::paintEvent(QPaintEvent * event)
+void KisSmallColorWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
     p.drawPixmap(0, 0, d->rubberPixmap);
-    p.drawPixmap(width() - d->rectangleWidth, 0 , d->squarePixmap);
+    p.drawPixmap(width() - d->rectangleWidth, 0, d->squarePixmap);
     // Draw Hue handle
     p.save();
     p.setPen(QPen(Qt::white, 1.0));
-    p.translate((d->hue * d->rubberWidth) / 360.0 , 0.0);
-    p.drawRect(QRectF(-1.5, 0 , 3.0, height()));
+    p.translate((d->hue * d->rubberWidth) / 360.0, 0.0);
+    p.drawRect(QRectF(-1.5, 0, 3.0, height()));
     p.restore();
     // Draw Saturation / Value handle
     p.setPen(QPen(Qt::white, 1.0));
@@ -158,7 +158,7 @@ void KisSmallColorWidget::paintEvent(QPaintEvent * event)
     p.end();
 }
 
-void KisSmallColorWidget::resizeEvent(QResizeEvent * event)
+void KisSmallColorWidget::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
     setMaximumHeight(50);
@@ -171,7 +171,7 @@ void KisSmallColorWidget::updateParameters()
 {
     d->margin = 5;
     d->rectangleWidthProportion = 0.3;
-    d->rectangleWidth = qMax((int)(width() * d->rectangleWidthProportion) , height());
+    d->rectangleWidth = qMax((int)(width() * d->rectangleWidthProportion), height());
     d->rectangleHeight = height();
     d->rubberWidth = width() - d->rectangleWidth - d->margin;
     d->rubberHeight = height();
@@ -183,7 +183,7 @@ void KisSmallColorWidget::generateRubber()
     QImage image(d->rubberWidth, d->rubberHeight, QImage::Format_RGB32);
     for (int y = 0; y < d->rubberHeight; y++) {
         for (int x = 0; x < d->rubberWidth; x++) {
-            int h = (x * 360) / d->rubberWidth ;
+            int h = (x * 360) / d->rubberWidth;
             int r, g, b;
             hsv_to_rgb(h, 255, 255, &r, &g, &b);
             image.setPixel(x, y, qRgb(r, g, b));
@@ -197,7 +197,7 @@ void KisSmallColorWidget::generateSquare()
     QImage image(d->rectangleWidth, d->rectangleHeight, QImage::Format_RGB32);
     for (int y = 0; y < d->rectangleHeight; ++y) {
         int v = (y * 255) / d->rectangleHeight;
-        uint* data = reinterpret_cast<uint*>(image.scanLine(y));
+        uint *data = reinterpret_cast<uint *>(image.scanLine(y));
         for (int x = 0; x < d->rectangleWidth; ++x, ++data) {
             int s = (x * 255) / d->rectangleWidth;
             int r, g, b;
@@ -208,7 +208,7 @@ void KisSmallColorWidget::generateSquare()
     d->squarePixmap = QPixmap::fromImage(image);
 }
 
-void KisSmallColorWidget::mouseReleaseEvent(QMouseEvent * event)
+void KisSmallColorWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         selectColorAt(event->x(), event->y());
@@ -218,7 +218,7 @@ void KisSmallColorWidget::mouseReleaseEvent(QMouseEvent * event)
     }
 }
 
-void KisSmallColorWidget::mousePressEvent(QMouseEvent * event)
+void KisSmallColorWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         d->handle = NoHandle;
@@ -228,7 +228,7 @@ void KisSmallColorWidget::mousePressEvent(QMouseEvent * event)
     }
 }
 
-void KisSmallColorWidget::mouseMoveEvent(QMouseEvent * event)
+void KisSmallColorWidget::mouseMoveEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton) {
         selectColorAt(event->x(), event->y());
@@ -239,8 +239,7 @@ void KisSmallColorWidget::mouseMoveEvent(QMouseEvent * event)
 
 void KisSmallColorWidget::selectColorAt(int _x, int _y)
 {
-    if (d->lastX == _x && d->lastY == _y)
-    {
+    if (d->lastX == _x && d->lastY == _y) {
         return;
     }
     d->lastX = _x;

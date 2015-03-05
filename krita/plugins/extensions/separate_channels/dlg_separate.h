@@ -27,7 +27,8 @@
 class WdgSeparations : public QWidget, public Ui::WdgSeparations
 {
 public:
-    WdgSeparations(QWidget *parent) : QWidget(parent) {
+    WdgSeparations(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -43,8 +44,8 @@ class DlgSeparate: public KDialog
 
 public:
 
-    DlgSeparate(const QString & imageCS, const QString & layerCS, QWidget * parent = 0,
-                const char* name = 0);
+    DlgSeparate(const QString &imageCS, const QString &layerCS, QWidget *parent = 0,
+                const char *name = 0);
     ~DlgSeparate();
 
 public:
@@ -58,7 +59,6 @@ public:
 
     bool getToColor();
 
-
 private Q_SLOTS:
 
     void slotSetColorSpaceLabel();
@@ -66,7 +66,7 @@ private Q_SLOTS:
 
 private:
 
-    WdgSeparations * m_page;
+    WdgSeparations *m_page;
     QString m_imageCS;
     QString m_layerCS;
 

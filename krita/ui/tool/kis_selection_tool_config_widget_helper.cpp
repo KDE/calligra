@@ -21,7 +21,6 @@
 #include <QKeyEvent>
 #include "kis_selection_options.h"
 
-
 KisSelectionToolConfigWidgetHelper::KisSelectionToolConfigWidgetHelper(const QString &windowTitle)
     : m_optionsWidget(0),
       m_selectionAction(SELECTION_REPLACE),
@@ -52,7 +51,7 @@ void KisSelectionToolConfigWidgetHelper::createOptionWidget(KisCanvas2 *canvas, 
     m_optionsWidget->adjustSize();
 }
 
-KisSelectionOptions* KisSelectionToolConfigWidgetHelper::optionWidget() const
+KisSelectionOptions *KisSelectionToolConfigWidgetHelper::optionWidget() const
 {
     return m_optionsWidget;
 }
@@ -85,7 +84,7 @@ bool KisSelectionToolConfigWidgetHelper::processKeyPressEvent(QKeyEvent *event)
 {
     event->accept();
 
-    switch(event->key()) {
+    switch (event->key()) {
     case Qt::Key_A:
         slotSetAction(SELECTION_ADD);
         break;

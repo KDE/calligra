@@ -57,13 +57,12 @@
 #include "ocio_display_filter.h"
 #include "black_white_point_chooser.h"
 
-
 OCIO::ConstConfigRcPtr defaultRawProfile()
 {
     /**
      * Copied from OCIO, just a noop profile
      */
-    const char * INTERNAL_RAW_PROFILE = 
+    const char *INTERNAL_RAW_PROFILE =
         "ocio_profile_version: 1\n"
         "strictparsing: false\n"
         "roles:\n"
@@ -80,7 +79,6 @@ OCIO::ConstConfigRcPtr defaultRawProfile()
         "      isdata: true\n"
         "      allocation: uniform\n"
         "      description: 'A raw color space. Conversions to and from this space are no-ops.'\n";
-
 
     std::istringstream istream;
     istream.str(INTERNAL_RAW_PROFILE);
@@ -109,7 +107,7 @@ LutDockerDock::LutDockerDock()
     m_txtConfigurationPath->setText(cfg.ocioConfigurationPath());
 
     m_bnSelectConfigurationFile->setToolTip(i18n("Select custom configuration file."));
-    connect(m_bnSelectConfigurationFile,SIGNAL(clicked()), SLOT(selectOcioConfiguration()));
+    connect(m_bnSelectConfigurationFile, SIGNAL(clicked()), SLOT(selectOcioConfiguration()));
 
     m_txtLut->setText(cfg.ocioLutPath());
 
@@ -177,7 +175,7 @@ LutDockerDock::~LutDockerDock()
 {
 }
 
-void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
+void LutDockerDock::setCanvas(KoCanvasBase *_canvas)
 {
     if (m_canvas) {
         m_canvas->disconnect(this);
@@ -186,16 +184,15 @@ void LutDockerDock::setCanvas(KoCanvasBase* _canvas)
 
     setEnabled(_canvas != 0);
 
-    if (KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(_canvas)) {
+    if (KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(_canvas)) {
         m_canvas = canvas;
         if (m_canvas) {
             if (!m_canvas->displayFilter()) {
                 m_displayFilter = new OcioDisplayFilter(this);
                 resetOcioConfiguration();
                 updateDisplaySettings();
-            }
-            else {
-                m_displayFilter = dynamic_cast<OcioDisplayFilter*>(m_canvas->displayFilter());
+            } else {
+                m_displayFilter = dynamic_cast<OcioDisplayFilter *>(m_canvas->displayFilter());
                 Q_ASSERT(m_displayFilter);
                 m_ocioConfig = m_displayFilter->config;
                 KisSignalsBlocker exposureBlocker(m_exposureDoubleWidget);
@@ -234,32 +231,42 @@ bool LutDockerDock::canChangeExposureAndGamma() const
 
 qreal LutDockerDock::currentExposure() const
 {
-    if (!m_displayFilter) return 0.0;
+    if (!m_displayFilter) {
+        return 0.0;
+    }
     return canChangeExposureAndGamma() ? m_displayFilter->exposure : 0.0;
 }
 
 void LutDockerDock::setCurrentExposure(qreal value)
 {
-    if (!canChangeExposureAndGamma()) return;
+    if (!canChangeExposureAndGamma()) {
+        return;
+    }
     m_exposureCompressor->start(value);
 }
 
 qreal LutDockerDock::currentGamma() const
 {
-    if (!m_displayFilter) return 1.0;
+    if (!m_displayFilter) {
+        return 1.0;
+    }
     return canChangeExposureAndGamma() ? m_displayFilter->gamma : 1.0;
 }
 
 void LutDockerDock::setCurrentGamma(qreal value)
 {
-    if (!canChangeExposureAndGamma()) return;
+    if (!canChangeExposureAndGamma()) {
+        return;
+    }
     m_gammaCompressor->start(value);
 }
 
 void LutDockerDock::setCurrentExposureImpl(qreal value)
 {
     m_exposureDoubleWidget->setValue(value);
-    if (!m_canvas) return;
+    if (!m_canvas) {
+        return;
+    }
 
     m_canvas->viewManager()->showFloatingMessage(
         i18nc("floating message about exposure", "Exposure: %1",
@@ -270,7 +277,9 @@ void LutDockerDock::setCurrentExposureImpl(qreal value)
 void LutDockerDock::setCurrentGammaImpl(qreal value)
 {
     m_gammaDoubleWidget->setValue(value);
-    if (!m_canvas) return;
+    if (!m_canvas) {
+        return;
+    }
 
     m_canvas->viewManager()->showFloatingMessage(
         i18nc("floating message about gamma", "Gamma: %1",
@@ -303,7 +312,6 @@ void LutDockerDock::exposureSliderReleased()
     m_draggingSlider = false;
     exposureValueChanged(m_exposureDoubleWidget->value());
 }
-
 
 void LutDockerDock::gammaValueChanged(double gamma)
 {
@@ -388,8 +396,7 @@ void LutDockerDock::updateDisplaySettings()
 
         m_displayFilter->updateProcessor();
         m_canvas->setDisplayFilter(m_displayFilter);
-    }
-    else {
+    } else {
         m_canvas->setDisplayFilter(0);
     }
     m_canvas->updateCanvas();
@@ -439,8 +446,7 @@ void LutDockerDock::resetOcioConfiguration()
             m_ocioConfig = defaultRawProfile();
         } else if (cfg.ocioColorManagementMode() == KisConfig::OCIO_ENVIRONMENT) {
             m_ocioConfig = OCIO::Config::CreateFromEnv();
-        }
-        else if (cfg.ocioColorManagementMode() == KisConfig::OCIO_CONFIG) {
+        } else if (cfg.ocioColorManagementMode() == KisConfig::OCIO_CONFIG) {
             QString configFile = cfg.ocioConfigurationPath();
 
             if (QFile::exists(configFile)) {
@@ -452,8 +458,7 @@ void LutDockerDock::resetOcioConfiguration()
         if (m_ocioConfig) {
             OCIO::SetCurrentConfig(m_ocioConfig);
         }
-    }
-    catch (OCIO::Exception &exception) {
+    } catch (OCIO::Exception &exception) {
         kWarning() << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
     }
 
@@ -462,51 +467,59 @@ void LutDockerDock::resetOcioConfiguration()
 
 void LutDockerDock::refillControls()
 {
-    if (!m_canvas) return;
+    if (!m_canvas) {
+        return;
+    }
     KIS_ASSERT_RECOVER_RETURN(m_ocioConfig);
 
-    { // Color Management Mode
+    {
+        // Color Management Mode
         KisConfig cfg;
         KisSignalsBlocker modeBlocker(m_colorManagement);
         m_colorManagement->setCurrentIndex((int) cfg.ocioColorManagementMode());
     }
 
-    { // Exposure
+    {
+        // Exposure
         KisSignalsBlocker exposureBlocker(m_exposureDoubleWidget);
         m_exposureDoubleWidget->setValue(m_canvas->viewManager()->resourceProvider()->HDRExposure());
     }
 
-    { // Gamma
+    {
+        // Gamma
         KisSignalsBlocker gammaBlocker(m_gammaDoubleWidget);
         m_gammaDoubleWidget->setValue(m_canvas->viewManager()->resourceProvider()->HDRGamma());
     }
 
-    { // Components
+    {
+        // Components
         const KoColorSpace *cs = m_canvas->viewManager()->image()->colorSpace();
 
         KisSignalsBlocker componentsBlocker(m_cmbComponents);
         m_cmbComponents->clear();
         m_cmbComponents->addSqueezedItem(i18n("Luminance"));
         m_cmbComponents->addSqueezedItem(i18n("All Channels"));
-        foreach(KoChannelInfo *channel, KoChannelInfo::displayOrderSorted(cs->channels())) {
+        foreach (KoChannelInfo *channel, KoChannelInfo::displayOrderSorted(cs->channels())) {
             m_cmbComponents->addSqueezedItem(channel->name());
         }
         m_cmbComponents->setCurrentIndex(1); // All Channels...
     }
 
-    { // Input Color Space
+    {
+        // Input Color Space
         KisSignalsBlocker inputCSBlocker(m_cmbInputColorSpace);
         m_cmbInputColorSpace->clear();
 
         int numOcioColorSpaces = m_ocioConfig->getNumColorSpaces();
-        for(int i = 0; i < numOcioColorSpaces; ++i) {
+        for (int i = 0; i < numOcioColorSpaces; ++i) {
             const char *cs = m_ocioConfig->getColorSpaceNameByIndex(i);
             OCIO::ConstColorSpaceRcPtr colorSpace = m_ocioConfig->getColorSpace(cs);
             m_cmbInputColorSpace->addSqueezedItem(QString::fromUtf8(colorSpace->getName()));
         }
     }
 
-    { // Display Device
+    {
+        // Display Device
         KisSignalsBlocker displayDeviceLocker(m_cmbDisplayDevice);
         m_cmbDisplayDevice->clear();
         int numDisplays = m_ocioConfig->getNumDisplays();
@@ -515,7 +528,8 @@ void LutDockerDock::refillControls()
         }
     }
 
-    { // Lock Current Color
+    {
+        // Lock Current Color
         KisSignalsBlocker locker(m_btnConvertCurrentColor);
         KisConfig cfg;
         m_btnConvertCurrentColor->setChecked(cfg.ocioLockColorVisualRepresentation());
@@ -530,7 +544,9 @@ void LutDockerDock::refillViewCombobox()
     KisSignalsBlocker viewComboLocker(m_cmbView);
     m_cmbView->clear();
 
-    if (!m_canvas || !m_ocioConfig) return;
+    if (!m_canvas || !m_ocioConfig) {
+        return;
+    }
 
     const char *display = m_ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
     int numViews = m_ocioConfig->getNumViews(display);

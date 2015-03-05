@@ -27,8 +27,8 @@ class KisSelectionFilter;
 class KisViewManager;
 
 struct KRITAUI_EXPORT KisFilterSelectionOperation : public KisOperation {
-    KisFilterSelectionOperation(const QString& id) : KisOperation(id) {}
-    void runFilter(KisSelectionFilter* filter, KisViewManager *view, const KisOperationConfiguration &config);
+    KisFilterSelectionOperation(const QString &id) : KisOperation(id) {}
+    void runFilter(KisSelectionFilter *filter, KisViewManager *view, const KisOperationConfiguration &config);
 };
 
 #endif // KIS_FILTER_SELECTION_OPERATION_H

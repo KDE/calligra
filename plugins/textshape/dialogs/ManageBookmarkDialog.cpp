@@ -26,8 +26,8 @@
 static QString lastBookMarkItem;
 
 ManageBookmark::ManageBookmark(QList<QString> nameList, KoTextEditor *editor, QWidget *parent)
-        : QWidget(parent),
-          m_editor(editor)
+    : QWidget(parent),
+      m_editor(editor)
 {
     widget.setupUi(this);
     widget.bookmarkList->addItems(nameList);
@@ -37,8 +37,9 @@ ManageBookmark::ManageBookmark(QList<QString> nameList, KoTextEditor *editor, QW
         int row = 0;
         if (! lastBookMarkItem.isNull()) {
             QList<QListWidgetItem *> items = widget.bookmarkList->findItems(lastBookMarkItem, Qt::MatchExactly);
-            if (items.count() > 0)
+            if (items.count() > 0) {
                 row = widget.bookmarkList->row(items[0]);
+            }
         }
         widget.bookmarkList->setCurrentRow(row);
     }
@@ -47,8 +48,8 @@ ManageBookmark::ManageBookmark(QList<QString> nameList, KoTextEditor *editor, QW
     connect(widget.buttonRename, SIGNAL(clicked()), this, SLOT(slotBookmarkRename()));
     connect(widget.buttonDelete, SIGNAL(clicked()), this, SLOT(slotBookmarkDelete()));
     connect(widget.buttonInsert, SIGNAL(clicked()), this, SLOT(slotBookmarkInsert()));
-    connect(widget.bookmarkList, SIGNAL(itemActivated(QListWidgetItem *)),
-            this, SLOT(slotBookmarkItemActivated(QListWidgetItem *)));
+    connect(widget.bookmarkList, SIGNAL(itemActivated(QListWidgetItem*)),
+            this, SLOT(slotBookmarkItemActivated(QListWidgetItem*)));
     selectionChanged(bookmarkRow());
 }
 
@@ -119,10 +120,10 @@ void ManageBookmark::slotBookmarkInsert()
     bool ok = 0;
     while (true) {
         bookmarkName = KInputDialog::getText(i18n("Insert Bookmark"),
-                                            i18n("Please provide a name for the bookmark"),
-                                            bookmarkName,
-                                            &ok,
-                                            parentWidget());
+                                             i18n("Please provide a name for the bookmark"),
+                                             bookmarkName,
+                                             &ok,
+                                             parentWidget());
         if (ok) {
             QList<QListWidgetItem *> items = widget.bookmarkList->findItems(bookmarkName, Qt::MatchExactly);
             if (items.count() > 0) {
@@ -138,7 +139,7 @@ void ManageBookmark::slotBookmarkInsert()
 }
 
 ManageBookmarkDialog::ManageBookmarkDialog(QList<QString> nameList, KoTextEditor *editor, QWidget *parent)
-        : KDialog(parent)
+    : KDialog(parent)
 {
     ui = new ManageBookmark(nameList, editor, this);
     setMainWidget(ui);
@@ -148,12 +149,12 @@ ManageBookmarkDialog::ManageBookmarkDialog(QList<QString> nameList, KoTextEditor
     setDefaultButton(Ok);
     showButtonSeparator(true);
     connect(ui, SIGNAL(bookmarkSelectionChanged(int)), this, SLOT(selectionChanged(int)));
-    connect(ui, SIGNAL(bookmarkNameChanged(const QString &, const QString &)),
-            this, SIGNAL(nameChanged(const QString &, const QString &)));
-    connect(ui, SIGNAL(bookmarkItemDeleted(const QString &)),
-                this, SIGNAL(bookmarkDeleted(const QString &)));
-    connect(ui, SIGNAL(bookmarkItemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(bookmarkDoubleClicked(QListWidgetItem *)));
+    connect(ui, SIGNAL(bookmarkNameChanged(QString,QString)),
+            this, SIGNAL(nameChanged(QString,QString)));
+    connect(ui, SIGNAL(bookmarkItemDeleted(QString)),
+            this, SIGNAL(bookmarkDeleted(QString)));
+    connect(ui, SIGNAL(bookmarkItemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(bookmarkDoubleClicked(QListWidgetItem*)));
     selectionChanged(ui->bookmarkRow());
 }
 

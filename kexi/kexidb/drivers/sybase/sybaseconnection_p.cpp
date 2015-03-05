@@ -37,29 +37,29 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 using namespace NAMESPACE;
 
-QMap<DBPROCESS*, SybaseConnectionInternal*> SybaseConnectionInternal::dbProcessConnectionMap;
+QMap<DBPROCESS *, SybaseConnectionInternal *> SybaseConnectionInternal::dbProcessConnectionMap;
 
-
-int connectionMessageHandler(DBPROCESS* dbproc, DBINT msgno, int msgstate, int severity, char* msgtext
-                             , char* srvname, char* procname, int line)
+int connectionMessageHandler(DBPROCESS *dbproc, DBINT msgno, int msgstate, int severity, char *msgtext
+                             , char *srvname, char *procname, int line)
 {
     if (!dbproc) {
         return 0;
     }
 
-    SybaseConnectionInternal* conn = SybaseConnectionInternal::dbProcessConnectionMap[dbproc];
-    if (conn)
+    SybaseConnectionInternal *conn = SybaseConnectionInternal::dbProcessConnectionMap[dbproc];
+    if (conn) {
         conn->messageHandler(msgno, msgstate, severity, msgtext, srvname, procname, line);
+    }
 
     return (0);
 }
 
 /* ************************************************************************** */
-SybaseConnectionInternal::SybaseConnectionInternal(KexiDB::Connection* connection)
-        : ConnectionInternal(connection)
-        , dbProcess(0)
-        , sybase_owned(false)
-        , res(0)
+SybaseConnectionInternal::SybaseConnectionInternal(KexiDB::Connection *connection)
+    : ConnectionInternal(connection)
+    , dbProcess(0)
+    , sybase_owned(false)
+    , res(0)
 
 {
 }
@@ -79,7 +79,7 @@ void SybaseConnectionInternal::storeResult()
     // so don't do anything here
 }
 
-void SybaseConnectionInternal::messageHandler(DBINT msgno, int msgstate, int severity, char* msgtext, char* srvname, char* procname, int line)
+void SybaseConnectionInternal::messageHandler(DBINT msgno, int msgstate, int severity, char *msgtext, char *srvname, char *procname, int line)
 {
 
     Q_UNUSED(msgstate);
@@ -103,10 +103,11 @@ void SybaseConnectionInternal::messageHandler(DBINT msgno, int msgstate, int sev
  */
 //bool SybaseConnectionInternal::db_connect(QCString host, QCString user,
 //  QCString password, unsigned short int port, QString socket)
-bool SybaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
+bool SybaseConnectionInternal::db_connect(const KexiDB::ConnectionData &data)
 {
-    if (dbinit() == FAIL)
+    if (dbinit() == FAIL) {
         return false;
+    }
 
     // set message handler
     dbmsghandle(connectionMessageHandler);
@@ -115,25 +116,21 @@ bool SybaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
     QByteArray localSocket;
     QString hostName = data.hostName;
 
-
     if (data.serverName.isEmpty()) {
         KexiDBDrvDbg << "Can't connect without server name";
         return false;
     }
 
-
     // set error handlers
     // set message handlers
 
-    LOGINREC* login;
+    LOGINREC *login;
 
     login = dblogin();
     if (login == NULL) {
         //dbexit();
         return false;
     }
-
-
 
     // umm, copied from pqxx driver.
     if (hostName.isEmpty() || hostName.toLower() == "localhost") {
@@ -143,21 +140,21 @@ bool SybaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 #ifndef Q_WS_WIN
                 sockets.append("/tmp/s.sybase.2638");
 
-                foreach(const QString& socket, sockets) {
+                foreach (const QString &socket, sockets) {
                     if (QFile(socket).exists()) {
                         localSocket = socket.toLatin1();
                         break;
                     }
                 }
 #endif
-            } else
+            } else {
                 localSocket = QFile::encodeName(data.localSocketFileName);
+            }
         } else {
             //we're not using local socket
             hostName = "127.0.0.1";
         }
     }
-
 
     KTemporaryFile confFile;
     confFile.setSuffix(".conf");
@@ -167,17 +164,17 @@ bool SybaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 
     // write global portion
     out << "[global]" << "\n";
-    out << " text size = " << 64512 << "\n" ; // Copied from default freetds.conf. is there a more reasonable number?
-
+    out << " text size = " << 64512 << "\n"; // Copied from default freetds.conf. is there a more reasonable number?
 
     // write server portion
     out << '[' << data.serverName << ']' << "\n";
     out << " host = " << hostName << "\n";
 
-    if (data.port == 0)
-        out << " port = " << 5000 << "\n"; // default port to be used
-    else
+    if (data.port == 0) {
+        out << " port = " << 5000 << "\n";    // default port to be used
+    } else {
         out << " port = " << data.port << "\n";
+    }
 
     out << " tds version = " << 5.0 << "\n";
 
@@ -247,7 +244,7 @@ bool SybaseConnectionInternal::useDatabase(const QString &dbName)
 
 /*! Executes the given SQL statement on the server.
  */
-bool SybaseConnectionInternal::executeSQL(const QString& statement)
+bool SybaseConnectionInternal::executeSQL(const QString &statement)
 {
 
     QByteArray queryStr(statement.toUtf8());
@@ -270,18 +267,16 @@ bool SybaseConnectionInternal::executeSQL(const QString& statement)
     return false;
 }
 
-QString SybaseConnectionInternal::escapeIdentifier(const QString& str) const
+QString SybaseConnectionInternal::escapeIdentifier(const QString &str) const
 {
     return QString(str).replace("'", "''");
 }
 
-
-
 //--------------------------------------
 
-SybaseCursorData::SybaseCursorData(KexiDB::Connection* connection)
-        : SybaseConnectionInternal(connection)
-        , numRows(0)
+SybaseCursorData::SybaseCursorData(KexiDB::Connection *connection)
+    : SybaseConnectionInternal(connection)
+    , numRows(0)
 {
 }
 

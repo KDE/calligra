@@ -59,13 +59,13 @@ public:
     KisNodeDummy(KisNodeShape *nodeShape, KisNodeSP node);
     ~KisNodeDummy();
 
-    KisNodeDummy* firstChild() const;
-    KisNodeDummy* lastChild() const;
-    KisNodeDummy* nextSibling() const;
-    KisNodeDummy* prevSibling() const;
-    KisNodeDummy* parent() const;
+    KisNodeDummy *firstChild() const;
+    KisNodeDummy *lastChild() const;
+    KisNodeDummy *nextSibling() const;
+    KisNodeDummy *prevSibling() const;
+    KisNodeDummy *parent() const;
 
-    KisNodeDummy* at(int index) const;
+    KisNodeDummy *at(int index) const;
     int childCount() const;
     int indexOf(KisNodeDummy *child) const;
 
@@ -74,11 +74,11 @@ public:
 private:
     friend class KisNodeShapesGraph; // for ::nodeShape() method
     friend class KisNodeShapesGraphTest;
-    KisNodeShape* nodeShape() const;
+    KisNodeShape *nodeShape() const;
 
     friend class KisNodeDummiesGraph;
     KisNodeDummy *m_parent;
-    QList<KisNodeDummy*> m_children;
+    QList<KisNodeDummy *> m_children;
 
     KisNodeShape *m_nodeShape;
     KisNodeSP m_node;
@@ -94,9 +94,9 @@ class KRITAUI_EXPORT KisNodeDummiesGraph
 public:
     KisNodeDummiesGraph();
 
-    KisNodeDummy* rootDummy() const;
+    KisNodeDummy *rootDummy() const;
 
-    KisNodeDummy* nodeToDummy(KisNodeSP node);
+    KisNodeDummy *nodeToDummy(KisNodeSP node);
     bool containsNode(KisNodeSP node) const;
     int dummiesCount() const;
 
@@ -135,7 +135,7 @@ private:
     void unmapDummyRecursively(KisNodeDummy *dummy);
 
 private:
-    typedef QMap<KisNodeSP, KisNodeDummy*> NodeMap;
+    typedef QMap<KisNodeSP, KisNodeDummy *> NodeMap;
 
 private:
     KisNodeDummy *m_rootDummy;

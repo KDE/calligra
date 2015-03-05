@@ -34,15 +34,15 @@ class SheetsEditor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SheetsEditor(TableShape* tableShape, QWidget* parent = 0);
+    explicit SheetsEditor(TableShape *tableShape, QWidget *parent = 0);
     virtual ~SheetsEditor();
 
 private Q_SLOTS:
-    void sheetAdded(Sheet* sheet);
-    void sheetNameChanged(Sheet* sheet, const QString& old_name);
+    void sheetAdded(Sheet *sheet);
+    void sheetNameChanged(Sheet *sheet, const QString &old_name);
 
     void selectionChanged();
-    void itemChanged(QListWidgetItem* item);
+    void itemChanged(QListWidgetItem *item);
 
     void renameClicked();
     void addClicked();
@@ -52,7 +52,7 @@ private:
     Q_DISABLE_COPY(SheetsEditor)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

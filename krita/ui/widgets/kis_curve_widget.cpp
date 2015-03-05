@@ -17,7 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 // C++ includes.
 
 #include <cmath>
@@ -50,7 +49,6 @@
 
 #include "widgets/kis_curve_widget.h"
 
-
 #define bounds(x,a,b) (x<a ? a : (x>b ? b :x))
 #define MOUSE_AWAY_THRES 15
 #define POINT_AREA       1E-4
@@ -58,12 +56,10 @@
 
 #include "kis_curve_widget_p.h"
 
-
 //static bool pointLessThan(const QPointF &a, const QPointF &b);
 
-
 KisCurveWidget::KisCurveWidget(QWidget *parent, Qt::WFlags f)
-        : QWidget(parent, f), d(new KisCurveWidget::Private(this))
+    : QWidget(parent, f), d(new KisCurveWidget::Private(this))
 {
     setObjectName("KisCurveWidget");
     d->m_grab_point_index = -1;
@@ -98,15 +94,15 @@ void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int min, in
     d->m_intIn = in;
     d->m_intOut = out;
 
-    if (!d->m_intIn || !d->m_intOut)
+    if (!d->m_intIn || !d->m_intOut) {
         return;
+    }
 
     d->m_inOutMin = min;
     d->m_inOutMax = max;
 
     d->m_intIn->setRange(d->m_inOutMin, d->m_inOutMax);
     d->m_intOut->setRange(d->m_inOutMin, d->m_inOutMax);
-
 
     connect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
     connect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
@@ -115,8 +111,9 @@ void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int min, in
 }
 void KisCurveWidget::dropInOutControls()
 {
-    if (!d->m_intIn || !d->m_intOut)
+    if (!d->m_intIn || !d->m_intOut) {
         return;
+    }
 
     disconnect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
     disconnect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
@@ -138,9 +135,9 @@ void KisCurveWidget::inOutChanged(int)
         d->m_curve.setPoint(d->m_grab_point_index, pt);
         d->m_grab_point_index = d->m_curve.points().indexOf(pt);
         emit pointSelectedChanged();
-    } else
+    } else {
         pt = d->m_curve.points()[d->m_grab_point_index];
-
+    }
 
     d->m_intIn->blockSignals(true);
     d->m_intOut->blockSignals(true);
@@ -154,7 +151,6 @@ void KisCurveWidget::inOutChanged(int)
     d->setCurveModified();
 }
 
-
 void KisCurveWidget::reset(void)
 {
     d->m_grab_point_index = -1;
@@ -164,14 +160,14 @@ void KisCurveWidget::reset(void)
     d->setCurveModified();
 }
 
-void KisCurveWidget::setCurveGuide(const QColor & color)
+void KisCurveWidget::setCurveGuide(const QColor &color)
 {
     d->m_guideVisible = true;
     d->m_colorGuide   = color;
 
 }
 
-void KisCurveWidget::setPixmap(const QPixmap & pix)
+void KisCurveWidget::setPixmap(const QPixmap &pix)
 {
     d->m_pix = pix;
     d->m_pixmapDirty = true;
@@ -224,7 +220,7 @@ void KisCurveWidget::keyPressEvent(QKeyEvent *e)
         e->accept();
         d->setCurveModified();
     } else if (e->key() == Qt::Key_Escape && d->state() != ST_NORMAL) {
-        d->m_curve.setPoint(d->m_grab_point_index, QPointF(d->m_grabOriginalX, d->m_grabOriginalY) );
+        d->m_curve.setPoint(d->m_grab_point_index, QPointF(d->m_grabOriginalX, d->m_grabOriginalY));
         setCursor(Qt::ArrowCursor);
         d->setState(ST_NORMAL);
 
@@ -234,22 +230,25 @@ void KisCurveWidget::keyPressEvent(QKeyEvent *e)
         /* FIXME: Lets user choose the hotkeys */
         addPointInTheMiddle();
         e->accept();
-    } else
+    } else {
         QWidget::keyPressEvent(e);
+    }
 }
 
 void KisCurveWidget::addPointInTheMiddle()
 {
     QPointF pt(0.5, d->m_curve.value(0.5));
 
-    if (!d->jumpOverExistingPoints(pt, -1))
+    if (!d->jumpOverExistingPoints(pt, -1)) {
         return;
+    }
 
     d->m_grab_point_index = d->m_curve.addPoint(pt);
     emit pointSelectedChanged();
 
-    if (d->m_intIn)
+    if (d->m_intIn) {
         d->m_intIn->setFocus(Qt::TabFocusReason);
+    }
     d->setCurveModified();
 }
 
@@ -272,7 +271,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     //p.setRenderHint(QPainter::Antialiasing);
 
     // fill with color to show widget bounds
-     p.fillRect(rect(), palette().base());
+    p.fillRect(rect(), palette().base());
 
     //  draw background
     if (!d->m_pix.isNull()) {
@@ -281,7 +280,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
             d->m_pixmapCache = new QPixmap(width(), height());
             QPainter cachePainter(d->m_pixmapCache);
 
-            cachePainter.scale(1.0*width() / d->m_pix.width(), 1.0*height() / d->m_pix.height());
+            cachePainter.scale(1.0 * width() / d->m_pix.width(), 1.0 * height() / d->m_pix.height());
             cachePainter.drawPixmap(0, 0, d->m_pix);
             d->m_pixmapDirty = false;
         }
@@ -291,8 +290,9 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     d->drawGrid(p, wWidth, wHeight);
 
     KisConfig cfg;
-    if (cfg.antialiasCurves())
+    if (cfg.antialiasCurves()) {
         p.setRenderHint(QPainter::Antialiasing);
+    }
 
     // Draw curve.
     double curY;
@@ -302,7 +302,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     QPolygonF poly;
 
     p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
-    for (x = 0 ; x < wWidth ; x++) {
+    for (x = 0; x < wWidth; x++) {
         normalizedX = double(x) / wWidth;
         curY = wHeight - d->m_curve.value(normalizedX) * wHeight;
 
@@ -337,23 +337,25 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     }
 }
 
-void KisCurveWidget::mousePressEvent(QMouseEvent * e)
+void KisCurveWidget::mousePressEvent(QMouseEvent *e)
 {
-    if (d->m_readOnlyMode) return;
-
-    if (e->button() != Qt::LeftButton)
+    if (d->m_readOnlyMode) {
         return;
+    }
+
+    if (e->button() != Qt::LeftButton) {
+        return;
+    }
 
     double x = e->pos().x() / (double)(width() - 1);
     double y = 1.0 - e->pos().y() / (double)(height() - 1);
 
-
-
     int closest_point_index = d->nearestPointInRange(QPointF(x, y), width(), height());
     if (closest_point_index < 0) {
         QPointF newPoint(x, y);
-        if (!d->jumpOverExistingPoints(newPoint, -1))
+        if (!d->jumpOverExistingPoints(newPoint, -1)) {
             return;
+        }
         d->m_grab_point_index = d->m_curve.addPoint(newPoint);
         emit pointSelectedChanged();
     } else {
@@ -370,17 +372,18 @@ void KisCurveWidget::mousePressEvent(QMouseEvent * e)
     d->m_draggedAwayPointIndex = -1;
     d->setState(ST_DRAG);
 
-
     d->setCurveModified();
 }
 
-
 void KisCurveWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (d->m_readOnlyMode) return;
-
-    if (e->button() != Qt::LeftButton)
+    if (d->m_readOnlyMode) {
         return;
+    }
+
+    if (e->button() != Qt::LeftButton) {
+        return;
+    }
 
     setCursor(Qt::ArrowCursor);
     d->setState(ST_NORMAL);
@@ -388,10 +391,11 @@ void KisCurveWidget::mouseReleaseEvent(QMouseEvent *e)
     d->setCurveModified();
 }
 
-
-void KisCurveWidget::mouseMoveEvent(QMouseEvent * e)
+void KisCurveWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    if (d->m_readOnlyMode) return;
+    if (d->m_readOnlyMode) {
+        return;
+    }
 
     double x = e->pos().x() / (double)(width() - 1);
     double y = 1.0 - e->pos().y() / (double)(height() - 1);
@@ -399,10 +403,11 @@ void KisCurveWidget::mouseMoveEvent(QMouseEvent * e)
     if (d->state() == ST_NORMAL) { // If no point is selected set the cursor shape if on top
         int nearestPointIndex = d->nearestPointInRange(QPointF(x, y), width(), height());
 
-        if (nearestPointIndex < 0)
+        if (nearestPointIndex < 0) {
             setCursor(Qt::ArrowCursor);
-        else
+        } else {
             setCursor(Qt::CrossCursor);
+        }
     } else { // Else, drag the selected point
         bool crossedHoriz = e->pos().x() - width() > MOUSE_AWAY_THRES ||
                             e->pos().x() < -MOUSE_AWAY_THRES;
@@ -419,9 +424,9 @@ void KisCurveWidget::mouseMoveEvent(QMouseEvent * e)
         }
 
         if (removePoint &&
-                (d->m_draggedAwayPointIndex >= 0))
+                (d->m_draggedAwayPointIndex >= 0)) {
             return;
-
+        }
 
         setCursor(Qt::CrossCursor);
 
@@ -432,10 +437,11 @@ void KisCurveWidget::mouseMoveEvent(QMouseEvent * e)
         double rightX;
         if (d->m_grab_point_index == 0) {
             leftX = 0.0;
-            if (d->m_curve.points().count() > 1)
+            if (d->m_curve.points().count() > 1) {
                 rightX = d->m_curve.points()[d->m_grab_point_index + 1].x() - POINT_AREA;
-            else
+            } else {
                 rightX = 1.0;
+            }
         } else if (d->m_grab_point_index == d->m_curve.points().count() - 1) {
             leftX = d->m_curve.points()[d->m_grab_point_index - 1].x() + POINT_AREA;
             rightX = 1.0;

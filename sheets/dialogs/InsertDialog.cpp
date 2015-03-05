@@ -31,7 +31,6 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 
-
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -44,8 +43,8 @@
 
 using namespace Calligra::Sheets;
 
-InsertDialog::InsertDialog(QWidget* parent, Selection* selection, Mode _mode)
-        : KDialog(parent)
+InsertDialog::InsertDialog(QWidget *parent, Selection *selection, Mode _mode)
+    : KDialog(parent)
 {
     setCaption("");
     setButtons(Ok | Cancel);
@@ -73,13 +72,13 @@ InsertDialog::InsertDialog(QWidget* parent, Selection* selection, Mode _mode)
         vbox->addWidget(rb3 = new QRadioButton(i18n("Remove rows")));
         vbox->addWidget(rb4 = new QRadioButton(i18n("Remove columns")));
         setWindowTitle(i18n("Remove Cells"));
-    } else
+    } else {
         kDebug(36001) << "Error in kspread_dlg_InsertDialog";
+    }
     grp->setLayout(vbox);
     lay1->addWidget(grp);
 
     rb1->setChecked(true);
-
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
 }
@@ -88,13 +87,13 @@ void InsertDialog::slotOk()
 {
     if (rb1->isChecked()) {
         if (insRem == Insert) {
-            ShiftManipulator* manipulator = new ShiftManipulator();
+            ShiftManipulator *manipulator = new ShiftManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setDirection(ShiftManipulator::ShiftRight);
             manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         } else if (insRem == Remove) {
-            ShiftManipulator* manipulator = new ShiftManipulator();
+            ShiftManipulator *manipulator = new ShiftManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setDirection(ShiftManipulator::ShiftRight);
             manipulator->setReverse(true);
@@ -103,13 +102,13 @@ void InsertDialog::slotOk()
         }
     } else if (rb2->isChecked()) {
         if (insRem == Insert) {
-            ShiftManipulator* manipulator = new ShiftManipulator();
+            ShiftManipulator *manipulator = new ShiftManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setDirection(ShiftManipulator::ShiftBottom);
             manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         } else if (insRem == Remove) {
-            ShiftManipulator* manipulator = new ShiftManipulator();
+            ShiftManipulator *manipulator = new ShiftManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setDirection(ShiftManipulator::ShiftBottom);
             manipulator->setReverse(true);
@@ -118,12 +117,12 @@ void InsertDialog::slotOk()
         }
     } else if (rb3->isChecked()) {
         if (insRem == Insert) {
-            InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+            InsertDeleteRowManipulator *manipulator = new InsertDeleteRowManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         } else if (insRem == Remove) {
-            InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+            InsertDeleteRowManipulator *manipulator = new InsertDeleteRowManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setReverse(true);
             manipulator->add(*m_selection);
@@ -131,12 +130,12 @@ void InsertDialog::slotOk()
         }
     } else if (rb4->isChecked()) {
         if (insRem == Insert) {
-            InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+            InsertDeleteColumnManipulator *manipulator = new InsertDeleteColumnManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         } else if (insRem == Remove) {
-            InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+            InsertDeleteColumnManipulator *manipulator = new InsertDeleteColumnManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setReverse(true);
             manipulator->add(*m_selection);

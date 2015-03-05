@@ -27,17 +27,19 @@ class TestPaintOp : public KisPaintOp
 {
 public:
 
-    TestPaintOp(KisPainter * gc)
-            : KisPaintOp(gc) {
+    TestPaintOp(KisPainter *gc)
+        : KisPaintOp(gc)
+    {
     }
 
-    KisSpacingInformation paintAt(const KisPaintInformation&) {
+    KisSpacingInformation paintAt(const KisPaintInformation &)
+    {
         return 0.0;
     }
-    qreal spacing(qreal&, qreal&, qreal, qreal) const {
+    qreal spacing(qreal &, qreal &, qreal, qreal) const
+    {
         return 0.5;
     }
-
 
 };
 
@@ -46,7 +48,6 @@ void KisPaintopTest::testCreation()
     KisPainter p;
     TestPaintOp test(&p);
 }
-
 
 QTEST_KDEMAIN(KisPaintopTest, GUI)
 #include "kis_paintop_test.moc"

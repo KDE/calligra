@@ -28,7 +28,7 @@
 #include <QPainterPath>
 
 class TableRowElement;
-	
+
 /**
  * @short A matrix or table element in a formula
  *
@@ -37,11 +37,12 @@ class TableRowElement;
  * TableElement takes care that the different TableRowElements are informed how
  * to lay out their children correctly as they need to be synced.
  */
-class KOFORMULA_EXPORT TableElement : public BasicElement {
+class KOFORMULA_EXPORT TableElement : public BasicElement
+{
 public:
     /// The standard constructor
     explicit TableElement(BasicElement *parent = 0);
-    
+
     /// The standard destructor
     ~TableElement();
 
@@ -50,62 +51,62 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint(QPainter &painter, AttributeManager *am);
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout(const AttributeManager *am);
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
+    const QList<BasicElement *> childElements() const;
 
     /// inherited from BasicElement
-    virtual bool acceptCursor( const FormulaCursor& cursor );
-    
+    virtual bool acceptCursor(const FormulaCursor &cursor);
+
     /// inherited from BasicElement
-    virtual int positionOfChild(BasicElement* child) const;
-    
+    virtual int positionOfChild(BasicElement *child) const;
+
     /// inherited from BasicElement
     virtual int endPosition() const;
-    
+
     /// inherited from BasicElement
-    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
-    
-    virtual bool insertChild ( int position, BasicElement* child );
-    bool removeChild (BasicElement* child); 
-    
+    virtual bool setCursorTo(FormulaCursor &cursor, QPointF point);
+
+    virtual bool insertChild(int position, BasicElement *child);
+    bool removeChild(BasicElement *child);
+
     /// inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
-    
+    virtual bool moveCursor(FormulaCursor &newcursor, FormulaCursor &oldcursor);
+
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const;
+    QString attributesDefaultValue(const QString &attribute) const;
 
     /// @return The width of the column with the index @p column
-    qreal columnWidth( int column );
+    qreal columnWidth(int column);
 
     /// @return The height of the @p TableRowElement
-    qreal rowHeight( TableRowElement* row );
-    
+    qreal rowHeight(TableRowElement *row);
+
     /// inherited from BasicElement
-    virtual QLineF cursorLine ( int position ) const;
-    
+    virtual QLineF cursorLine(int position) const;
+
     /// inherited from BasicElement
-    virtual QPainterPath selectionRegion ( const int pos1, const int pos2 ) const;
-    
+    virtual QPainterPath selectionRegion(const int pos1, const int pos2) const;
+
     /// @return The element's ElementType
     virtual ElementType elementType() const;
-    
+
 protected:
     /// Read all content from the node - reimplemented by child elements
-    bool readMathMLContent( const KoXmlElement& element );
+    bool readMathMLContent(const KoXmlElement &element);
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    void writeMathMLContent(KoXmlWriter *writer, const QString &ns) const;
 
 private:
     /// @return The base line computed out of the align attribute
@@ -119,9 +120,9 @@ private:
 
     /// Storage for widths of each column calculated in determineDimensions()
     QList<qreal> m_colWidths;
-    
+
     /// The rows a matrix contains
-    QList<TableRowElement*> m_rows;
+    QList<TableRowElement *> m_rows;
 
     /// Buffer for the pen style used for the table's frame
     Qt::PenStyle m_framePenStyle;

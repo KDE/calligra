@@ -21,7 +21,6 @@
 
 #include <klocale.h>
 
-
 const KoID AlphaColorModelID("A", ki18n("Alpha mask"));
 const KoID RGBAColorModelID("RGBA", ki18n("RGB"));
 const KoID XYZAColorModelID("XYZA", ki18n("XYZ"));

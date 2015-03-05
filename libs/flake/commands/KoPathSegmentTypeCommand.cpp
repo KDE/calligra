@@ -23,19 +23,19 @@
 #include <KoPathSegment.h>
 #include <klocale.h>
 
-KoPathSegmentTypeCommand::KoPathSegmentTypeCommand(const KoPathPointData & pointData, SegmentType segmentType, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_segmentType(segmentType)
+KoPathSegmentTypeCommand::KoPathSegmentTypeCommand(const KoPathPointData &pointData, SegmentType segmentType, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_segmentType(segmentType)
 {
     QList<KoPathPointData> pointDataList;
     pointDataList.append(pointData);
     initialize(pointDataList);
 }
 
-KoPathSegmentTypeCommand::KoPathSegmentTypeCommand(const QList<KoPathPointData> & pointDataList, SegmentType segmentType,
+KoPathSegmentTypeCommand::KoPathSegmentTypeCommand(const QList<KoPathPointData> &pointDataList, SegmentType segmentType,
         KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , m_segmentType(segmentType)
+    : KUndo2Command(parent)
+    , m_segmentType(segmentType)
 {
     initialize(pointDataList);
 }
@@ -49,7 +49,7 @@ void KoPathSegmentTypeCommand::redo()
     KUndo2Command::redo();
     QList<KoPathPointData>::const_iterator it(m_pointDataList.constBegin());
     for (; it != m_pointDataList.constEnd(); ++it) {
-        KoPathShape * pathShape = it->pathShape;
+        KoPathShape *pathShape = it->pathShape;
         pathShape->update();
 
         KoPathSegment segment = pathShape->segmentByIndex(it->pointIndex);
@@ -74,7 +74,7 @@ void KoPathSegmentTypeCommand::undo()
 {
     KUndo2Command::undo();
     for (int i = 0; i < m_pointDataList.size(); ++i) {
-        const KoPathPointData & pd = m_pointDataList.at(i);
+        const KoPathPointData &pd = m_pointDataList.at(i);
         pd.pathShape->update();
         KoPathSegment segment = pd.pathShape->segmentByIndex(pd.pointIndex);
         const SegmentTypeData segmentData(m_segmentData.at(i));
@@ -97,7 +97,7 @@ void KoPathSegmentTypeCommand::undo()
     }
 }
 
-void KoPathSegmentTypeCommand::initialize(const QList<KoPathPointData> & pointDataList)
+void KoPathSegmentTypeCommand::initialize(const QList<KoPathPointData> &pointDataList)
 {
     QList<KoPathPointData>::const_iterator it(pointDataList.begin());
     for (; it != pointDataList.end(); ++it) {
@@ -105,18 +105,20 @@ void KoPathSegmentTypeCommand::initialize(const QList<KoPathPointData> & pointDa
         if (segment.isValid()) {
             if (m_segmentType == Curve) {
                 // don not change segment if already a curve
-                if (segment.first()->activeControlPoint2() || segment.second()->activeControlPoint1())
+                if (segment.first()->activeControlPoint2() || segment.second()->activeControlPoint1()) {
                     continue;
+                }
             } else {
                 // do not change segment if already a line
-                if (! segment.first()->activeControlPoint2() && ! segment.second()->activeControlPoint1())
+                if (! segment.first()->activeControlPoint2() && ! segment.second()->activeControlPoint1()) {
                     continue;
+                }
             }
 
             m_pointDataList.append(*it);
             SegmentTypeData segmentData;
 
-            KoPathShape * pathShape = segment.first()->parent();
+            KoPathShape *pathShape = segment.first()->parent();
 
             // we are changing a curve to a line -> save control point positions
             if (m_segmentType == Line) {

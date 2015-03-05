@@ -43,7 +43,6 @@
 #include "SceneObject.h"
 //#include "ThreedShapeConfigWidget.h"
 
-
 ThreedShapeFactory::ThreedShapeFactory()
     : KoShapeFactoryBase(THREEDSHAPEID, i18n("3D Scene"))
 {
@@ -82,18 +81,18 @@ KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *docum
 }
 
 KoShape *ThreedShapeFactory::createShape(const KoProperties *params,
-                                         KoDocumentResourceManager *documentResources) const
+        KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(params);
 
-    SceneObject *shape = static_cast<SceneObject*>(createDefaultShape(documentResources));
+    SceneObject *shape = static_cast<SceneObject *>(createDefaultShape(documentResources));
 
     return shape;
 }
 
-QList<KoShapeConfigWidgetBase*> ThreedShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> ThreedShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> result;
+    QList<KoShapeConfigWidgetBase *> result;
 
     return result;
 }

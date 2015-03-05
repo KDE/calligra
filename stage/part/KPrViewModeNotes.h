@@ -32,7 +32,7 @@ public:
     KPrViewModeNotes(KoPAViewBase *view, KoPACanvasBase *canvas);
     ~KPrViewModeNotes();
 
-    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect);
+    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect);
     void tabletEvent(QTabletEvent *event, const QPointF &point);
     void mousePressEvent(QMouseEvent *event, const QPointF &point);
     void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
@@ -40,12 +40,12 @@ public:
     void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
-    void wheelEvent(QWheelEvent * event, const QPointF &point);
+    void wheelEvent(QWheelEvent *event, const QPointF &point);
 
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
 
-    void updateActivePage( KoPAPageBase *page );
+    void updateActivePage(KoPAPageBase *page);
 
     void addShape(KoShape *shape);
     void removeShape(KoShape *shape);

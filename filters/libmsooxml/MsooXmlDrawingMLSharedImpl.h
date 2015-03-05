@@ -100,7 +100,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Table_ln()
     READ_EPILOGUE
 }
 
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Table_generic(const QString& endElement)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Table_generic(const QString &endElement)
 {
     QXmlStreamAttributes attrs = attributes();
 
@@ -109,7 +109,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Table_generic(const QStri
     //compound line type
     TRY_READ_ATTR_WITHOUT_NS(cmpd)
     //double lines
-    if( cmpd.isEmpty() || cmpd == "sng" ) {
+    if (cmpd.isEmpty() || cmpd == "sng") {
         m_currentBorder.style = KoBorder::BorderSolid;
     }
     //single line
@@ -140,14 +140,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Table_generic(const QStri
         if (isEndElement() && name() == endElement) {
             break;
         }
-        if(isStartElement()) {
-            if(QUALIFIED_NAME_IS(solidFill)) {
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(solidFill)) {
                 TRY_READ(solidFill);
                 m_currentBorder.style = KoBorder::BorderSolid;
                 m_currentBorder.innerPen.setColor(m_currentColor);
                 m_currentBorder.outerPen.setColor(m_currentColor);
-            }
-            else if (QUALIFIED_NAME_IS(prstDash)) {
+            } else if (QUALIFIED_NAME_IS(prstDash)) {
                 attrs = attributes();
                 //TODO find out how other colors are handled
                 m_currentBorder.innerPen.setColor(Qt::black);
@@ -156,11 +155,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Table_generic(const QStri
                 //TODO support other dash types. Make it its own function.
                 if (val == "dash") {
                     m_currentBorder.style = KoBorder::BorderDashed;
-                }
-                else if(val == "dashDot") {
+                } else if (val == "dashDot") {
                     m_currentBorder.style = KoBorder::BorderDashDot;
-                }
-                else if(val == "dot") {
+                } else if (val == "dot") {
                     m_currentBorder.style = KoBorder::BorderDotted;
                 }
             }
@@ -220,12 +217,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     //line ending cap
     TRY_READ_ATTR_WITHOUT_NS(cap)
     if (cap.isEmpty() || cap == "sq") {
-       m_currentDrawStyle->addProperty("svg:stroke-linecap", "square");
-    }
-    else if (cap == "rnd") {
+        m_currentDrawStyle->addProperty("svg:stroke-linecap", "square");
+    } else if (cap == "rnd") {
         m_currentDrawStyle->addProperty("svg:stroke-linecap", "round");
-    }
-    else if (cap == "flat") {
+    } else if (cap == "flat") {
         m_currentDrawStyle->addProperty("svg:stroke-linecap", "butt");
     }
 
@@ -233,7 +228,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     TRY_READ_ATTR_WITHOUT_NS(cmpd)
 
     //single line
-    if( cmpd.isEmpty() || cmpd == "sng" ) {
+    if (cmpd.isEmpty() || cmpd == "sng") {
     }
     //double lines
     else if (cmpd == "dbl") {
@@ -259,7 +254,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if ( isStartElement() ) {
+        if (isStartElement()) {
 
             // line head/tail end
             TRY_READ_IF(headEnd)
@@ -268,11 +263,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
             // linejoin
             else if (qualifiedName() == QLatin1String("a:bevel")) {
                 m_currentDrawStyle->addProperty("draw:stroke-linejoin", "bevel");
-            }
-            else if (qualifiedName() == QLatin1String("a:miter")) {
+            } else if (qualifiedName() == QLatin1String("a:miter")) {
                 m_currentDrawStyle->addProperty("draw:stroke-linejoin", "miter");
-            }
-            else if (qualifiedName() == QLatin1String("a:round")) {
+            } else if (qualifiedName() == QLatin1String("a:round")) {
                 m_currentDrawStyle->addProperty("draw:stroke-linejoin", "round");
             }
 
@@ -302,11 +295,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
                 //     m_currentDrawStyle->addProperty("svg:stroke-opacity",
                 //     QString("%1%").arg(m_currentAlpha/100.0));
                 // }
-            }
-            else if (qualifiedName() == QLatin1String("a:noFill")) {
+            } else if (qualifiedName() == QLatin1String("a:noFill")) {
                 m_currentDrawStyle->addProperty("draw:stroke", "none");
-            }
-            else if (qualifiedName() == QLatin1String("a:prstDash")) {
+            } else if (qualifiedName() == QLatin1String("a:prstDash")) {
                 attrs = attributes();
                 TRY_READ_ATTR_WITHOUT_NS(val)
                 QPen pen;
@@ -502,8 +493,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fontRef()
     if (!idx.isEmpty()) {
         if (idx.startsWith("major")) {
             m_referredFontName = m_context->themes->fontScheme.majorFonts.latinTypeface;
-        }
-        else if (idx.startsWith("minor")) {
+        } else if (idx.startsWith("minor")) {
             m_referredFontName = m_context->themes->fontScheme.minorFonts.latinTypeface;
         }
     }
@@ -562,7 +552,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hslClr()
     READ_EPILOGUE
 }
 
-
 #undef CURRENT_EL
 #define CURRENT_EL prstClr
 //! prstClr (preset color)
@@ -577,53 +566,37 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
     if (!val.isEmpty()) {
         if (val == "aliceBlue") {
             m_currentColor = QColor(240, 248, 255);
-        }
-        else if (val == "antiqueWhite") {
+        } else if (val == "antiqueWhite") {
             m_currentColor = QColor(250, 235, 215);
-        }
-        else if (val == "aqua") {
+        } else if (val == "aqua") {
             m_currentColor = QColor(0, 255, 255);
-        }
-        else if (val == "aquamarine") {
+        } else if (val == "aquamarine") {
             m_currentColor = QColor(127, 255, 212);
-        }
-        else if (val == "azure") {
+        } else if (val == "azure") {
             m_currentColor = QColor(240, 255, 255);
-        }
-        else if (val == "beige") {
+        } else if (val == "beige") {
             m_currentColor = QColor(245, 245, 220);
-        }
-        else if (val == "bisque") {
+        } else if (val == "bisque") {
             m_currentColor = QColor(255, 228, 196);
-        }
-        else if (val == "black") {
+        } else if (val == "black") {
             m_currentColor = QColor(0, 0, 0);
-        }
-        else if (val == "blue") {
+        } else if (val == "blue") {
             m_currentColor = QColor(0, 0, 215);
-        }
-        else if (val == "green") {
+        } else if (val == "green") {
             m_currentColor = QColor(0, 255, 0);
-        }
-        else if (val == "red") {
+        } else if (val == "red") {
             m_currentColor = QColor(255, 0, 0);
-        }
-        else if (val == "violet") {
+        } else if (val == "violet") {
             m_currentColor = QColor(238, 130, 238);
-        }
-        else if (val == "wheat") {
+        } else if (val == "wheat") {
             m_currentColor = QColor(245, 222, 179);
-        }
-        else if (val == "white") {
+        } else if (val == "white") {
             m_currentColor = QColor(255, 255, 255);
-        }
-        else if (val == "whiteSmoke") {
+        } else if (val == "whiteSmoke") {
             m_currentColor = QColor(245, 245, 245);
-        }
-        else if (val == "yellow") {
+        } else if (val == "yellow") {
             m_currentColor = QColor(255, 255, 0);
-        }
-        else if (val == "yellowGreen") {
+        } else if (val == "yellowGreen") {
             m_currentColor = QColor(154, 205, 50);
         }
     }
@@ -753,8 +726,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     // time of reading.
     if (m_colorState == PptxXmlDocumentReader::defRPrState) {
         defaultTextColors[defaultTextColors.size() - 1] = val;
-    }
-    else {
+    } else {
         defaultBulletColors[defaultBulletColors.size() - 1] = val;
     }
     skipCurrentElement();
@@ -839,7 +811,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
     TRY_READ_ATTR_WITHOUT_NS(lastClr)
 
     if (!lastClr.isEmpty()) {
-        m_currentColor = QColor( QLatin1Char('#') + lastClr );
+        m_currentColor = QColor(QLatin1Char('#') + lastClr);
     }
 
     //TODO: all the color transformations
@@ -987,7 +959,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 
     READ_ATTR_WITHOUT_NS(val)
 
-    m_currentColor = QColor( QLatin1Char('#') + val );
+    m_currentColor = QColor(QLatin1Char('#') + val);
 
     //TODO: all the color transformations
     while (!atEnd()) {
@@ -1022,7 +994,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shade()
         if (!ok) {
             value = 0;
         }
-        m_currentShadeLevel = value/100000.0; // To get percentage (form 0.x)
+        m_currentShadeLevel = value / 100000.0; // To get percentage (form 0.x)
     }
 
     readNext();
@@ -1044,7 +1016,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tint()
         if (!ok) {
             value = 0;
         }
-        m_currentTint = value/100000.0; // To get percentage (form 0.x)
+        m_currentTint = value / 100000.0; // To get percentage (form 0.x)
     }
 
     readNext();
@@ -1066,7 +1038,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_alpha()
         if (!ok) {
             value = 0;
         }
-        m_currentAlpha = value/1000; // To get percentage
+        m_currentAlpha = value / 1000; // To get percentage
     }
 
     readNext();
@@ -1087,8 +1059,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lumMod()
     bool ok;
     Q_ASSERT(m_currentDoubleValue);
     *m_currentDoubleValue = MSOOXML::Utils::ST_Percentage_withMsooxmlFix_to_double(val, ok);
-    if (!ok)
+    if (!ok) {
         return KoFilter::WrongFormat;
+    }
 
     readNext();
     READ_EPILOGUE
@@ -1109,7 +1082,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_satMod()
         if (!ok) {
             value = 0;
         }
-        m_currentSatMod = value/100000.0; // To get percentage in from 0.x
+        m_currentSatMod = value / 100000.0; // To get percentage in from 0.x
     }
 
     readNext();
@@ -1130,8 +1103,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lumOff()
     bool ok;
     Q_ASSERT(m_currentDoubleValue);
     *m_currentDoubleValue = MSOOXML::Utils::ST_Percentage_withMsooxmlFix_to_double(val, ok);
-    if (!ok)
+    if (!ok) {
         return KoFilter::WrongFormat;
+    }
 
     readNext();
     READ_EPILOGUE

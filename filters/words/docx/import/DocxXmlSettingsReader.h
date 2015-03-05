@@ -30,9 +30,9 @@
 class DocxXmlSettingsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    DocxXmlSettingsReaderContext(QMap<QString, QVariant>& _documentSettings);
+    DocxXmlSettingsReaderContext(QMap<QString, QVariant> &_documentSettings);
 
-    QMap<QString, QVariant>& documentSettings;
+    QMap<QString, QVariant> &documentSettings;
 };
 
 //! A class reading application settings
@@ -41,7 +41,7 @@ class DocxXmlSettingsReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit DocxXmlSettingsReader(KoOdfWriters *writers);
     virtual ~DocxXmlSettingsReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
 protected:
     KoFilter::ConversionStatus read_settings();
@@ -49,12 +49,12 @@ protected:
     KoFilter::ConversionStatus read_displayBackgroundShape();
     KoFilter::ConversionStatus read_clrSchemeMapping();
 
-    DocxXmlSettingsReaderContext* m_context;
+    DocxXmlSettingsReaderContext *m_context;
 
 private:
     void init();
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif //DOCXXMLSETTINGSREADER_H

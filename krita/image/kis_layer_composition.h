@@ -35,46 +35,46 @@
 class KRITAIMAGE_EXPORT KisLayerComposition
 {
 public:
-    KisLayerComposition(KisImageWSP image, const QString& name);
+    KisLayerComposition(KisImageWSP image, const QString &name);
     ~KisLayerComposition();
 
-   /**
-    * Sets name of the composition
-    */
-    void setName(const QString& name);
+    /**
+     * Sets name of the composition
+     */
+    void setName(const QString &name);
 
-   /**
-    * Name of the composition as show in the docker
-    * \return name of the composition
-    */
+    /**
+     * Name of the composition as show in the docker
+     * \return name of the composition
+     */
     QString name();
 
-   /**
-    * Stores the current visibility of all layers in the composition
-    */
+    /**
+     * Stores the current visibility of all layers in the composition
+     */
     void store();
-    
-   /**
-    * Applies the stored visibility to all the nodes
-    */
+
+    /**
+     * Applies the stored visibility to all the nodes
+     */
     void apply();
 
-   /**
-    * Set the export enabled flag, if false the compositions will not be exported
-    */
+    /**
+     * Set the export enabled flag, if false the compositions will not be exported
+     */
     void setExportEnabled(bool enabled);
 
-   /**
-    * Export enabled flag, if false the compositions will not be exported
-    * \return name of the composition
-    */
+    /**
+     * Export enabled flag, if false the compositions will not be exported
+     * \return name of the composition
+     */
     bool isExportEnabled();
 
     void setVisible(QUuid id, bool visible);
 
     void setCollapsed(QUuid id, bool collapsed);
 
-    void save(QDomDocument& doc, QDomElement& element);
+    void save(QDomDocument &doc, QDomElement &element);
 
 private:
     KisImageWSP m_image;
@@ -82,7 +82,7 @@ private:
     QMap<QUuid, bool> m_visibilityMap;
     QMap<QUuid, bool> m_collapsedMap;
     bool m_exportEnabled;
-    
+
     friend class KisCompositionVisitor;
 };
 

@@ -27,7 +27,7 @@
 #include <QTimer>
 #include <QTime>
 
-KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, const char * customCommands):
+KisGmicCommand::KisGmicCommand(const QString &gmicCommandString, QSharedPointer< gmic_list<float> > images, const char *customCommands):
     m_gmicCommandString(gmicCommandString),
     m_images(images),
     m_customCommands(customCommands),
@@ -44,7 +44,6 @@ KisGmicCommand::~KisGmicCommand()
     delete m_progress;
 }
 
-
 void KisGmicCommand::undo()
 {
     // do nothing
@@ -52,12 +51,10 @@ void KisGmicCommand::undo()
 
 void KisGmicCommand::redo()
 {
-    if (m_firstRedo)
-    {
+    if (m_firstRedo) {
         m_firstRedo = false;
         dbgPlugins << "Calling G'MIC interpreter:";
-        for (unsigned int i = 0; i<m_images->_width; ++i)
-        {
+        for (unsigned int i = 0; i < m_images->_width; ++i) {
             dbgPlugins << "G'MIC Input image " << i << " = " << KisGmicCommand::gmicDimensionString(m_images->_data[i]) << ", buffer : " << m_images->_data[i]._data;
         }
 
@@ -70,12 +67,9 @@ void KisGmicCommand::redo()
 
         QTime timer;
         timer.start();
-        try
-        {
+        try {
             gmic(gmicCmd.toLocal8Bit().constData(), *m_images, images_names, m_customCommands, include_default_commands, m_progress, m_cancel);
-        }
-        catch (gmic_exception &e)
-        {
+        } catch (gmic_exception &e) {
             QString message = QString::fromUtf8(e.what());
             dbgPlugins << "Error encountered when calling G'MIC : " << message;
             int elapsed = timer.elapsed();
@@ -85,9 +79,8 @@ void KisGmicCommand::redo()
         }
 
         dbgPlugins << "G'MIC returned " << m_images->_width << " output images.";
-        for (unsigned int i = 0; i<m_images->_width; ++i)
-        {
-            dbgPlugins << "   Output image "<< i << " = " << KisGmicCommand::gmicDimensionString(m_images->_data[i]) << ", buffer : " << m_images->_data[i]._data;
+        for (unsigned int i = 0; i < m_images->_width; ++i) {
+            dbgPlugins << "   Output image " << i << " = " << KisGmicCommand::gmicDimensionString(m_images->_data[i]) << ", buffer : " << m_images->_data[i]._data;
         }
 
         int elapsed = timer.elapsed();
@@ -99,17 +92,17 @@ void KisGmicCommand::redo()
     }
 }
 
-float*KisGmicCommand::progressPtr()
+float *KisGmicCommand::progressPtr()
 {
     return m_progress;
 }
 
-bool * KisGmicCommand::cancelPtr()
+bool *KisGmicCommand::cancelPtr()
 {
     return m_cancel;
 }
 
-QString KisGmicCommand::gmicDimensionString(const gmic_image<float>& img)
+QString KisGmicCommand::gmicDimensionString(const gmic_image<float> &img)
 {
     return QString("%1x%2x%3x%4").arg(img._width).arg(img._height).arg(img._depth).arg(img._spectrum);
 }
@@ -118,5 +111,4 @@ bool KisGmicCommand::isSuccessfullyDone()
 {
     return m_isSuccessfullyDone;
 }
-
 

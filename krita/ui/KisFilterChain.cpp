@@ -42,22 +42,21 @@ Boston, MA 02110-1301, USA.
 // Please always keep the strings and the length in sync!
 using namespace CalligraFilter;
 
-
-KisFilterChain::KisFilterChain(const KisImportExportManager* manager) :
-        m_manager(manager), m_state(Beginning), m_inputStorage(0),
-        m_inputStorageDevice(0), m_outputStorage(0), m_outputStorageDevice(0),
-        m_inputDocument(0), m_outputDocument(0), m_inputTempFile(0),
-        m_outputTempFile(0), m_inputQueried(Nil), m_outputQueried(Nil), d(0)
+KisFilterChain::KisFilterChain(const KisImportExportManager *manager) :
+    m_manager(manager), m_state(Beginning), m_inputStorage(0),
+    m_inputStorageDevice(0), m_outputStorage(0), m_outputStorageDevice(0),
+    m_inputDocument(0), m_outputDocument(0), m_inputTempFile(0),
+    m_outputTempFile(0), m_inputQueried(Nil), m_outputQueried(Nil), d(0)
 {
 }
-
 
 KisFilterChain::~KisFilterChain()
 {
     m_chainLinks.deleteAll();
 
-    if (filterManagerParentChain() && filterManagerParentChain()->m_outputStorage)
+    if (filterManagerParentChain() && filterManagerParentChain()->m_outputStorage) {
         filterManagerParentChain()->m_outputStorage->leaveDirectory();
+    }
     manageIO(); // Called for the 2nd time in a row -> clean up
 }
 
@@ -69,9 +68,10 @@ KisImportExportFilter::ConversionStatus KisFilterChain::invokeChain()
     int count = m_chainLinks.count();
 
     // This is needed due to nasty Microsoft design
-    const ChainLink* parentChainLink = 0;
-    if (filterManagerParentChain())
+    const ChainLink *parentChainLink = 0;
+    if (filterManagerParentChain()) {
         parentChainLink = filterManagerParentChain()->m_chainLinks.current();
+    }
 
     // No iterator here, as we need m_chainLinks.current() in outputDocument()
     m_chainLinks.first();
@@ -88,32 +88,35 @@ KisImportExportFilter::ConversionStatus KisFilterChain::invokeChain()
     }
 
     if (status == KisImportExportFilter::OK) {
-        if (m_state & Beginning)
+        if (m_state & Beginning) {
             m_state |= End;
-        else
+        } else {
             m_state = End;
+        }
         status = m_chainLinks.current()->invokeFilter(parentChainLink);
         manageIO();
     }
 
     m_state = Done;
-    if (status == KisImportExportFilter::OK)
+    if (status == KisImportExportFilter::OK) {
         finalizeIO();
+    }
     return status;
 }
 
 QString KisFilterChain::chainOutput() const
 {
-    if (m_state == Done)
-        return m_inputFile; // as we already called manageIO()
+    if (m_state == Done) {
+        return m_inputFile;    // as we already called manageIO()
+    }
     return QString();
 }
 
 QString KisFilterChain::inputFile()
 {
-    if (m_inputQueried == File)
+    if (m_inputQueried == File) {
         return m_inputFile;
-    else if (m_inputQueried != Nil) {
+    } else if (m_inputQueried != Nil) {
         kWarning(30500) << "You already asked for some different source.";
         return QString();
     }
@@ -121,13 +124,14 @@ QString KisFilterChain::inputFile()
 
     if (m_state & Beginning) {
         if (static_cast<KisImportExportManager::Direction>(filterManagerDirection()) ==
-                KisImportExportManager::Import)
+                KisImportExportManager::Import) {
             m_inputFile = filterManagerImportFile();
-        else
+        } else {
             inputFileHelper(filterManagerKisDocument(), filterManagerImportFile());
-    } else
-        if (m_inputFile.isEmpty())
-            inputFileHelper(m_inputDocument, QString());
+        }
+    } else if (m_inputFile.isEmpty()) {
+        inputFileHelper(m_inputDocument, QString());
+    }
 
     return m_inputFile;
 }
@@ -136,12 +140,13 @@ QString KisFilterChain::outputFile()
 {
     // sanity check: No embedded filter should ask for a plain file
     // ###### CHECK: This will break as soon as we support exporting embedding filters
-    if (filterManagerParentChain())
+    if (filterManagerParentChain()) {
         kWarning(30500) << "An embedded filter has to use storageFile()!";
+    }
 
-    if (m_outputQueried == File)
+    if (m_outputQueried == File) {
         return m_outputFile;
-    else if (m_outputQueried != Nil) {
+    } else if (m_outputQueried != Nil) {
         kWarning(30500) << "You already asked for some different destination.";
         return QString();
     }
@@ -149,26 +154,28 @@ QString KisFilterChain::outputFile()
 
     if (m_state & End) {
         if (static_cast<KisImportExportManager::Direction>(filterManagerDirection()) ==
-                KisImportExportManager::Import)
+                KisImportExportManager::Import) {
             outputFileHelper(false);    // This (last) one gets deleted by the caller
-        else
+        } else {
             m_outputFile = filterManagerExportFile();
-    } else
+        }
+    } else {
         outputFileHelper(true);
+    }
 
     return m_outputFile;
 }
 
-KoStoreDevice* KisFilterChain::storageFile(const QString& name, KoStore::Mode mode)
+KoStoreDevice *KisFilterChain::storageFile(const QString &name, KoStore::Mode mode)
 {
     // Plain normal use case
     if (m_inputQueried == Storage && mode == KoStore::Read &&
-            m_inputStorage && m_inputStorage->mode() == KoStore::Read)
+            m_inputStorage && m_inputStorage->mode() == KoStore::Read) {
         return storageNewStreamHelper(&m_inputStorage, &m_inputStorageDevice, name);
-    else if (m_outputQueried == Storage && mode == KoStore::Write &&
-             m_outputStorage && m_outputStorage->mode() == KoStore::Write)
+    } else if (m_outputQueried == Storage && mode == KoStore::Write &&
+               m_outputStorage && m_outputStorage->mode() == KoStore::Write) {
         return storageNewStreamHelper(&m_outputStorage, &m_outputStorageDevice, name);
-    else if (m_inputQueried == Nil && mode == KoStore::Read)
+    } else if (m_inputQueried == Nil && mode == KoStore::Read)
         return storageHelper(inputFile(), name, KoStore::Read,
                              &m_inputStorage, &m_inputStorageDevice);
     else if (m_outputQueried == Nil && mode == KoStore::Write)
@@ -176,32 +183,33 @@ KoStoreDevice* KisFilterChain::storageFile(const QString& name, KoStore::Mode mo
                              &m_outputStorage, &m_outputStorageDevice);
     else {
         kWarning(30500) << "Oooops, how did we get here? You already asked for a"
-        << " different source/destination?" << endl;
+                        << " different source/destination?" << endl;
         return 0;
     }
 }
 
-KisDocument* KisFilterChain::inputDocument()
+KisDocument *KisFilterChain::inputDocument()
 {
-    if (m_inputQueried == Document)
+    if (m_inputQueried == Document) {
         return m_inputDocument;
-    else if (m_inputQueried != Nil) {
+    } else if (m_inputQueried != Nil) {
         kWarning(30500) << "You already asked for some different source.";
         return 0;
     }
 
     if ((m_state & Beginning) &&
             static_cast<KisImportExportManager::Direction>(filterManagerDirection()) == KisImportExportManager::Export &&
-            filterManagerKisDocument())
+            filterManagerKisDocument()) {
         m_inputDocument = filterManagerKisDocument();
-    else if (!m_inputDocument)
+    } else if (!m_inputDocument) {
         m_inputDocument = createDocument(inputFile());
+    }
 
     m_inputQueried = Document;
     return m_inputDocument;
 }
 
-KisDocument* KisFilterChain::outputDocument()
+KisDocument *KisFilterChain::outputDocument()
 {
     // sanity check: No embedded filter should ask for a document
     // ###### CHECK: This will break as soon as we support exporting embedding filters
@@ -210,19 +218,20 @@ KisDocument* KisFilterChain::outputDocument()
         return 0;
     }
 
-    if (m_outputQueried == Document)
+    if (m_outputQueried == Document) {
         return m_outputDocument;
-    else if (m_outputQueried != Nil) {
+    } else if (m_outputQueried != Nil) {
         kWarning(30500) << "You already asked for some different destination.";
         return 0;
     }
 
     if ((m_state & End) &&
             static_cast<KisImportExportManager::Direction>(filterManagerDirection()) == KisImportExportManager::Import &&
-            filterManagerKisDocument())
+            filterManagerKisDocument()) {
         m_outputDocument = filterManagerKisDocument();
-    else
+    } else {
         m_outputDocument = createDocument(m_chainLinks.current()->to());
+    }
 
     m_outputQueried = Document;
     return m_outputDocument;
@@ -231,7 +240,7 @@ KisDocument* KisFilterChain::outputDocument()
 void KisFilterChain::dump()
 {
     kDebug(30500) << "########## KisFilterChain with" << m_chainLinks.count() << " members:";
-    ChainLink* link = m_chainLinks.first();
+    ChainLink *link = m_chainLinks.first();
     while (link) {
         link->dump();
         link = m_chainLinks.next();
@@ -239,12 +248,12 @@ void KisFilterChain::dump()
     kDebug(30500) << "########## KisFilterChain (done) ##########";
 }
 
-void KisFilterChain::appendChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to)
+void KisFilterChain::appendChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray &from, const QByteArray &to)
 {
     m_chainLinks.append(new ChainLink(this, filterEntry, from, to));
 }
 
-void KisFilterChain::prependChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to)
+void KisFilterChain::prependChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray &from, const QByteArray &to)
 {
     m_chainLinks.prepend(new ChainLink(this, filterEntry, from, to));
 }
@@ -259,7 +268,7 @@ QString KisFilterChain::filterManagerExportFile() const
     return m_manager->exportFile();
 }
 
-KisDocument* KisFilterChain::filterManagerKisDocument() const
+KisDocument *KisFilterChain::filterManagerKisDocument() const
 {
     return m_manager->document();
 }
@@ -269,7 +278,7 @@ int KisFilterChain::filterManagerDirection() const
     return m_manager->direction();
 }
 
-KisFilterChain* KisFilterChain::filterManagerParentChain() const
+KisFilterChain *KisFilterChain::filterManagerParentChain() const
 {
     return m_manager->parentChain();
 }
@@ -295,8 +304,7 @@ void KisFilterChain::manageIO()
             m_inputTempFile = new KTemporaryFile;
             m_inputTempFile->setAutoRemove(true);
             m_inputTempFile->setFileName(m_outputFile);
-        }
-        else {
+        } else {
             m_inputTempFile = m_outputTempFile;
             m_outputTempFile = 0;
         }
@@ -311,14 +319,16 @@ void KisFilterChain::manageIO()
             m_outputStorage->close();
             // Don't delete the storage if we're just pointing to the
             // storage of the parent filter chain
-            if (!filterManagerParentChain() || m_outputStorage->mode() != KoStore::Write)
+            if (!filterManagerParentChain() || m_outputStorage->mode() != KoStore::Write) {
                 delete m_outputStorage;
+            }
             m_outputStorage = 0;
         }
     }
 
-    if (m_inputDocument != filterManagerKisDocument())
+    if (m_inputDocument != filterManagerKisDocument()) {
         delete m_inputDocument;
+    }
     m_inputDocument = m_outputDocument;
     m_outputDocument = 0;
 }
@@ -338,7 +348,7 @@ void KisFilterChain::finalizeIO()
     }
 }
 
-bool KisFilterChain::createTempFile(KTemporaryFile** tempFile, bool autoDelete)
+bool KisFilterChain::createTempFile(KTemporaryFile **tempFile, bool autoDelete)
 {
     if (*tempFile) {
         kError(30500) << "Ooops, why is there already a temp file???" << endl;
@@ -369,7 +379,7 @@ bool KisFilterChain::createTempFile(KTemporaryFile** tempFile, bool autoDelete)
     and is left for... you :)
 */
 
-void KisFilterChain::inputFileHelper(KisDocument* document, const QString& alternativeFile)
+void KisFilterChain::inputFileHelper(KisDocument *document, const QString &alternativeFile)
 {
     if (document) {
         if (!createTempFile(&m_inputTempFile)) {
@@ -393,8 +403,9 @@ void KisFilterChain::inputFileHelper(KisDocument* document, const QString& alter
             m_inputFile.clear();
             return;
         }
-    } else
+    } else {
         m_inputFile = alternativeFile;
+    }
 }
 
 void KisFilterChain::outputFileHelper(bool autoDelete)
@@ -416,28 +427,32 @@ void KisFilterChain::outputFileHelper(bool autoDelete)
     }
 }
 
-KoStoreDevice* KisFilterChain::storageNewStreamHelper(KoStore** storage, KoStoreDevice** device,
-        const QString& name)
+KoStoreDevice *KisFilterChain::storageNewStreamHelper(KoStore **storage, KoStoreDevice **device,
+        const QString &name)
 {
     delete *device;
     *device = 0;
-    if ((*storage)->isOpen())
+    if ((*storage)->isOpen()) {
         (*storage)->close();
-    if ((*storage)->bad())
+    }
+    if ((*storage)->bad()) {
         return storageCleanupHelper(storage);
-    if (!(*storage)->open(name))
+    }
+    if (!(*storage)->open(name)) {
         return 0;
+    }
 
     *device = new KoStoreDevice(*storage);
     return *device;
 }
 
-KoStoreDevice* KisFilterChain::storageHelper(const QString& file, const QString& streamName,
-        KoStore::Mode mode, KoStore** storage,
-        KoStoreDevice** device)
+KoStoreDevice *KisFilterChain::storageHelper(const QString &file, const QString &streamName,
+        KoStore::Mode mode, KoStore **storage,
+        KoStoreDevice **device)
 {
-    if (file.isEmpty())
+    if (file.isEmpty()) {
         return 0;
+    }
     if (*storage) {
         kDebug(30500) << "Uh-oh, we forgot to clean up...";
         return 0;
@@ -445,21 +460,23 @@ KoStoreDevice* KisFilterChain::storageHelper(const QString& file, const QString&
 
     storageInit(file, mode, storage);
 
-    if ((*storage)->bad())
+    if ((*storage)->bad()) {
         return storageCleanupHelper(storage);
+    }
 
     // Seems that we got a valid storage, at least. Even if we can't open
     // the stream the "user" asked us to open, we nonetheless change the
     // IOState from File to Storage, as it might be possible to open other streams
-    if (mode == KoStore::Read)
+    if (mode == KoStore::Read) {
         m_inputQueried = Storage;
-    else // KoStore::Write
+    } else { // KoStore::Write
         m_outputQueried = Storage;
+    }
 
     return storageCreateFirstStream(streamName, storage, device);
 }
 
-void KisFilterChain::storageInit(const QString& file, KoStore::Mode mode, KoStore** storage)
+void KisFilterChain::storageInit(const QString &file, KoStore::Mode mode, KoStore **storage)
 {
     QByteArray appIdentification("");
     if (mode == KoStore::Write) {
@@ -474,11 +491,12 @@ void KisFilterChain::storageInit(const QString& file, KoStore::Mode mode, KoStor
     *storage = KoStore::createStore(file, mode, appIdentification);
 }
 
-KoStoreDevice* KisFilterChain::storageCreateFirstStream(const QString& streamName, KoStore** storage,
-        KoStoreDevice** device)
+KoStoreDevice *KisFilterChain::storageCreateFirstStream(const QString &streamName, KoStore **storage,
+        KoStoreDevice **device)
 {
-    if (!(*storage)->open(streamName))
+    if (!(*storage)->open(streamName)) {
         return 0;
+    }
 
     if (*device) {
         kDebug(30500) << "Uh-oh, we forgot to clean up the storage device!";
@@ -489,17 +507,18 @@ KoStoreDevice* KisFilterChain::storageCreateFirstStream(const QString& streamNam
     return *device;
 }
 
-KoStoreDevice* KisFilterChain::storageCleanupHelper(KoStore** storage)
+KoStoreDevice *KisFilterChain::storageCleanupHelper(KoStore **storage)
 {
     // Take care not to delete the storage of the parent chain
     if (*storage != m_outputStorage || !filterManagerParentChain() ||
-            (*storage)->mode() != KoStore::Write)
+            (*storage)->mode() != KoStore::Write) {
         delete *storage;
+    }
     *storage = 0;
     return 0;
 }
 
-KisDocument* KisFilterChain::createDocument(const QString& file)
+KisDocument *KisFilterChain::createDocument(const QString &file)
 {
     KUrl url;
     url.setPath(file);
@@ -519,7 +538,7 @@ KisDocument* KisFilterChain::createDocument(const QString& file)
     return doc;
 }
 
-KisDocument* KisFilterChain::createDocument(const QByteArray& mimeType)
+KisDocument *KisFilterChain::createDocument(const QByteArray &mimeType)
 {
     Q_UNUSED(mimeType);
     return KisPart::instance()->createDocument();

@@ -26,21 +26,24 @@
 
 using namespace KexiUtils;
 
-inline QString charToIdentifier(const QChar& c)
+inline QString charToIdentifier(const QChar &c)
 {
-    if (c.unicode() >= TRANSLITERATION_TABLE_SIZE)
+    if (c.unicode() >= TRANSLITERATION_TABLE_SIZE) {
         return QString(QChar('_'));
+    }
     const char *const s = transliteration_table()[c.unicode()];
     return s ? QString::fromLatin1(s) : QString(QChar('_'));
 }
 
 QString KexiUtils::stringToIdentifier(const QString &s)
 {
-    if (s.isEmpty())
+    if (s.isEmpty()) {
         return QString();
+    }
     QString r, id = s.simplified();
-    if (id.isEmpty())
+    if (id.isEmpty()) {
         return QString();
+    }
     r.reserve(id.length());
     id.replace(' ', '_');
     QChar c = id[0];
@@ -58,8 +61,9 @@ QString KexiUtils::stringToIdentifier(const QString &s)
     const uint idLength = id.length();
     for (uint i = 1; i < idLength; i++) {
         add = charToIdentifier(id.at(i));
-        if (wasUnderscore && add == "_")
+        if (wasUnderscore && add == "_") {
             continue;
+        }
         wasUnderscore = add == "_";
         r += add;
     }
@@ -68,7 +72,7 @@ QString KexiUtils::stringToIdentifier(const QString &s)
 
 //--------------------------------------------------------------------------------
 
-QString KexiUtils::identifierExpectedMessage(const QString &valueName, const QVariant& v)
+QString KexiUtils::identifierExpectedMessage(const QString &valueName, const QVariant &v)
 {
     return "<p>" + i18n("Value of \"%1\" column must be an identifier.", valueName)
            + "</p><p>" + i18n("\"%1\" is not a valid identifier.", v.toString()) + "</p>";
@@ -83,8 +87,8 @@ public:
     bool isLowerCaseForced;
 };
 
-IdentifierValidator::IdentifierValidator(QObject * parent)
- : KexiDB::Validator(parent), d(new Private)
+IdentifierValidator::IdentifierValidator(QObject *parent)
+    : KexiDB::Validator(parent), d(new Private)
 {
 }
 
@@ -93,29 +97,33 @@ IdentifierValidator::~IdentifierValidator()
     delete d;
 }
 
-QValidator::State IdentifierValidator::validate(QString& input, int& pos) const
+QValidator::State IdentifierValidator::validate(QString &input, int &pos) const
 {
     uint i;
     for (i = 0; (int)i < input.length() && input.at(i) == ' '; i++)
         ;
     pos -= i; //i chars will be removed from beginning
-    if ((int)i < input.length() && input.at(i) >= '0' && input.at(i) <= '9')
-        pos++; //_ will be added at the beginning
+    if ((int)i < input.length() && input.at(i) >= '0' && input.at(i) <= '9') {
+        pos++;    //_ will be added at the beginning
+    }
     bool addspace = (input.right(1) == " ");
     input = d->isLowerCaseForced ? stringToIdentifier(input).toLower() : stringToIdentifier(input);
-    if (addspace)
+    if (addspace) {
         input += "_";
-    if (pos > input.length())
+    }
+    if (pos > input.length()) {
         pos = input.length();
+    }
     return input.isEmpty() ? QValidator::Intermediate : Acceptable;
 }
 
 KexiDB::Validator::Result IdentifierValidator::internalCheck(
-    const QString &valueName, const QVariant& v,
+    const QString &valueName, const QVariant &v,
     QString &message, QString & /*details*/)
 {
-    if (KexiDB::isIdentifier(v.toString()))
+    if (KexiDB::isIdentifier(v.toString())) {
         return Validator::Ok;
+    }
     message = identifierExpectedMessage(valueName, v);
     return Validator::Error;
 }

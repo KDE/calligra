@@ -35,7 +35,6 @@ class QWidget;
 
 class SqueezedComboBox;
 
-
 /** @class SqueezedComboBox
  *
  * This widget is a QComboBox, but then a little bit
@@ -70,15 +69,15 @@ public:
      * version of text.
      * @param text the original (not-squeezed) text to check for
      */
-    bool contains(const QString & text) const;
+    bool contains(const QString &text) const;
 
     /**
      *
      * Returns index of a orinal text, -1 if the text isn't found
      * @param text the original (not-squeezed) text to search for
      */
-    qint32 findOriginalText(const QString & text) const;
-    
+    qint32 findOriginalText(const QString &text) const;
+
     /**
      * This inserts a item to the list. See QComboBox::insertItem()
      * for detaills. Please do not use QComboBox::insertItem() to this
@@ -87,21 +86,21 @@ public:
      *                to be added to the combobox
      * @param index the position in the widget.
      */
-    void insertSqueezedItem(const QString& newItem, int index, QVariant userData = QVariant());
+    void insertSqueezedItem(const QString &newItem, int index, QVariant userData = QVariant());
 
     /**
      * Append an item.
      * @param newItem the original (long version) of the item which needs
      *                to be added to the combobox
      */
-    void addSqueezedItem(const QString& newItem, QVariant userData = QVariant());
+    void addSqueezedItem(const QString &newItem, QVariant userData = QVariant());
 
     /**
      * Set the current item to the one matching the given text.
      *
      * @param itemText the original (long version) of the item text
      */
-    void setCurrent(const QString& itemText);
+    void setCurrent(const QString &itemText);
 
     /**
      * This method returns the full text (not squeezed) of the currently
@@ -121,16 +120,16 @@ private Q_SLOTS:
 
 private:
     void resizeEvent(QResizeEvent *);
-    QString squeezeText(const QString& original);
+    QString squeezeText(const QString &original);
 
     // Prevent these from being used.
-    void setCurrentText(const QString& itemText);
+    void setCurrentText(const QString &itemText);
     void insertItem(const QString &text);
     void insertItem(qint32 index, const QString &text);
     void addItem(const QString &text);
 
     QMap<int, QString>   m_originalItems;
-    QTimer*             m_timer;
+    QTimer             *m_timer;
 
 };
 

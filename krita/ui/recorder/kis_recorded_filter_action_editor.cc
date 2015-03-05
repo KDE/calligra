@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_recorded_filter_action_editor.h"
 #include <recorder/kis_recorded_filter_action.h>
 #include <filter/kis_filter.h>
@@ -28,9 +27,9 @@
 #include "kis_node_query_path_editor.h"
 #include <recorder/kis_node_query_path.h>
 
-KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, KisRecordedAction* action) : QWidget(parent),
-        m_action(dynamic_cast<KisRecordedFilterAction*>(action)),
-        m_gridLayout(new QGridLayout(this))
+KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget *parent, KisRecordedAction *action) : QWidget(parent),
+    m_action(dynamic_cast<KisRecordedFilterAction *>(action)),
+    m_gridLayout(new QGridLayout(this))
 {
     Q_ASSERT(m_action);
 
@@ -61,7 +60,7 @@ KisRecordedFilterActionEditor::~KisRecordedFilterActionEditor()
 
 void KisRecordedFilterActionEditor::configurationUpdated()
 {
-    KisFilterConfiguration* config = dynamic_cast<KisFilterConfiguration*>(m_configWidget->configuration());
+    KisFilterConfiguration *config = dynamic_cast<KisFilterConfiguration *>(m_configWidget->configuration());
     if (config) {
         m_action->setFilterConfiguration(config);
         emit(actionEdited());
@@ -82,12 +81,12 @@ KisRecordedFilterActionEditorFactory::~KisRecordedFilterActionEditorFactory()
 {
 }
 
-QWidget* KisRecordedFilterActionEditorFactory::createEditor(QWidget* parent, KisRecordedAction* action) const
+QWidget *KisRecordedFilterActionEditorFactory::createEditor(QWidget *parent, KisRecordedAction *action) const
 {
     return new KisRecordedFilterActionEditor(parent, action);
 }
 
-bool KisRecordedFilterActionEditorFactory::canEdit(const KisRecordedAction* action) const
+bool KisRecordedFilterActionEditorFactory::canEdit(const KisRecordedAction *action) const
 {
     return action->id() == "FilterAction";
 }

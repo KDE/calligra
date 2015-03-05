@@ -27,7 +27,6 @@
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 
-
 class KisUpdateJobItem :  public QObject, public QRunnable
 {
     Q_OBJECT
@@ -47,14 +46,15 @@ public:
         setAutoDelete(false);
     }
 
-    void run() {
-        if(m_exclusive) {
+    void run()
+    {
+        if (m_exclusive) {
             m_exclusiveJobLock->lockForWrite();
         } else {
             m_exclusiveJobLock->lockForRead();
         }
 
-        if(m_type == MERGE) {
+        if (m_type == MERGE) {
             runMergeJob();
         } else {
             Q_ASSERT(m_type == STROKE || m_type == SPONTANEOUS);
@@ -70,7 +70,8 @@ public:
         m_exclusiveJobLock->unlock();
     }
 
-    inline void runMergeJob() {
+    inline void runMergeJob()
+    {
         Q_ASSERT(m_type == MERGE);
         // qDebug() << "Executing merge job" << m_walker->changeRect()
         //          << "on thread" << QThread::currentThreadId();
@@ -80,7 +81,8 @@ public:
         emit sigContinueUpdate(changeRect);
     }
 
-    inline void setWalker(KisBaseRectsWalkerSP walker) {
+    inline void setWalker(KisBaseRectsWalkerSP walker)
+    {
         m_type = MERGE;
         m_accessRect = walker->accessRect();
         m_changeRect = walker->changeRect();
@@ -90,7 +92,8 @@ public:
         m_runnableJob = 0;
     }
 
-    inline void setStrokeJob(KisStrokeJob *strokeJob) {
+    inline void setStrokeJob(KisStrokeJob *strokeJob)
+    {
         m_type = STROKE;
         m_runnableJob = strokeJob;
 
@@ -99,7 +102,8 @@ public:
         m_accessRect = m_changeRect = QRect();
     }
 
-    inline void setSpontaneousJob(KisSpontaneousJob *spontaneousJob) {
+    inline void setSpontaneousJob(KisSpontaneousJob *spontaneousJob)
+    {
         m_type = SPONTANEOUS;
         m_runnableJob = spontaneousJob;
 
@@ -108,30 +112,35 @@ public:
         m_accessRect = m_changeRect = QRect();
     }
 
-    inline void setDone() {
+    inline void setDone()
+    {
         m_walker = 0;
         m_runnableJob = 0;
         m_type = EMPTY;
     }
 
-    inline bool isRunning() const {
+    inline bool isRunning() const
+    {
         return m_type != EMPTY;
     }
 
-    inline Type type() const {
+    inline Type type() const
+    {
         return m_type;
     }
 
-    inline const QRect& accessRect() const {
+    inline const QRect &accessRect() const
+    {
         return m_accessRect;
     }
 
-    inline const QRect& changeRect() const {
+    inline const QRect &changeRect() const
+    {
         return m_changeRect;
     }
 
 Q_SIGNALS:
-    void sigContinueUpdate(const QRect& rc);
+    void sigContinueUpdate(const QRect &rc);
     void sigDoSomeUsefulWork();
     void sigJobFinished();
 
@@ -145,19 +154,22 @@ private:
     friend class KisUpdateSchedulerTest;
     friend class KisTestableUpdaterContext;
 
-    inline KisBaseRectsWalkerSP walker() const {
+    inline KisBaseRectsWalkerSP walker() const
+    {
         return m_walker;
     }
 
-    inline KisStrokeJob* strokeJob() const {
-        KisStrokeJob *job = dynamic_cast<KisStrokeJob*>(m_runnableJob);
+    inline KisStrokeJob *strokeJob() const
+    {
+        KisStrokeJob *job = dynamic_cast<KisStrokeJob *>(m_runnableJob);
         Q_ASSERT(job);
 
         return job;
     }
 
-    inline void testingSetDone() {
-        if(m_type == STROKE) {
+    inline void testingSetDone()
+    {
+        if (m_type == STROKE) {
             delete m_runnableJob;
         }
         setDone();
@@ -193,6 +205,5 @@ private:
     QRect m_accessRect;
     QRect m_changeRect;
 };
-
 
 #endif /* __KIS_UPDATE_JOB_ITEM_H */

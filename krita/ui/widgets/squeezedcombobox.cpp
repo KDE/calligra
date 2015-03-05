@@ -32,7 +32,7 @@
 #include <kdebug.h>
 
 SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
-        : QComboBox(parent)
+    : QComboBox(parent)
 {
     setObjectName(name);
     setMinimumWidth(100);
@@ -52,12 +52,13 @@ SqueezedComboBox::~SqueezedComboBox()
     delete m_timer;
 }
 
-bool SqueezedComboBox::contains(const QString& _text) const
+bool SqueezedComboBox::contains(const QString &_text) const
 {
-    if (_text.isEmpty())
+    if (_text.isEmpty()) {
         return false;
+    }
 
-    for (QMap<int, QString>::const_iterator it = m_originalItems.begin() ; it != m_originalItems.end();
+    for (QMap<int, QString>::const_iterator it = m_originalItems.begin(); it != m_originalItems.end();
             ++it) {
         if (it.value() == _text) {
             return true;
@@ -66,16 +67,15 @@ bool SqueezedComboBox::contains(const QString& _text) const
     return false;
 }
 
-qint32 SqueezedComboBox::findOriginalText(const QString& text) const
+qint32 SqueezedComboBox::findOriginalText(const QString &text) const
 {
-    for(int i = 0; i < m_originalItems.size(); i++) {
-        if(m_originalItems.value(i) == text) {
+    for (int i = 0; i < m_originalItems.size(); i++) {
+        if (m_originalItems.value(i) == text) {
             return i;
         }
     }
     return -1;
 }
-
 
 QSize SqueezedComboBox::sizeHint() const
 {
@@ -92,22 +92,23 @@ QSize SqueezedComboBox::sizeHint() const
                                      QSize(maxW, maxH), this).expandedTo(QApplication::globalStrut());
 }
 
-void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index, QVariant userData)
+void SqueezedComboBox::insertSqueezedItem(const QString &newItem, int index, QVariant userData)
 {
     m_originalItems[index] = newItem;
     QComboBox::insertItem(index, squeezeText(newItem), userData);
 
     // if this is the first item, set the tooltip.
-    if (index == 0)
+    if (index == 0) {
         slotUpdateToolTip(0);
+    }
 }
 
-void SqueezedComboBox::addSqueezedItem(const QString& newItem, QVariant userData)
+void SqueezedComboBox::addSqueezedItem(const QString &newItem, QVariant userData)
 {
     insertSqueezedItem(newItem, count(), userData);
 }
 
-void SqueezedComboBox::setCurrent(const QString& itemText)
+void SqueezedComboBox::setCurrent(const QString &itemText)
 {
     qint32 itemIndex = findOriginalText(itemText);
     if (itemIndex >= 0) {
@@ -122,26 +123,27 @@ void SqueezedComboBox::resizeEvent(QResizeEvent *)
 
 void SqueezedComboBox::slotTimeOut()
 {
-    for (QMap<int, QString>::iterator it = m_originalItems.begin() ; it != m_originalItems.end();
+    for (QMap<int, QString>::iterator it = m_originalItems.begin(); it != m_originalItems.end();
             ++it) {
         setItemText(it.key(), squeezeText(it.value()));
     }
 }
 
-QString SqueezedComboBox::squeezeText(const QString& original)
+QString SqueezedComboBox::squeezeText(const QString &original)
 {
     // not the complete widgetSize is usable. Need to compensate for that.
     int widgetSize = width() - 30;
     QFontMetrics fm(fontMetrics());
 
     // If we can fit the full text, return that.
-    if (fm.width(original) < widgetSize)
-        return(original);
+    if (fm.width(original) < widgetSize) {
+        return (original);
+    }
 
     // We need to squeeze.
     QString sqItem = original; // prevent empty return value;
     widgetSize = widgetSize - fm.width("...");
-    for (int i = 0 ; i != original.length(); ++i) {
+    for (int i = 0; i != original.length(); ++i) {
         if ((int)fm.width(original.right(i)) > widgetSize) {
             sqItem = QString("..." + original.right(--i));
             break;

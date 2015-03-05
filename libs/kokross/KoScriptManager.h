@@ -87,7 +87,7 @@ private Q_SLOTS:
     /// The selected item changed.
     void slotSelectionChanged();
     /// The data changed.
-    void slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 #endif
 
 private:

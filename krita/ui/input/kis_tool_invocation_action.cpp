@@ -63,7 +63,9 @@ KisToolInvocationAction::~KisToolInvocationAction()
 void KisToolInvocationAction::activate(int shortcut)
 {
     Q_UNUSED(shortcut);
-    if (!inputManager()) return;
+    if (!inputManager()) {
+        return;
+    }
 
     if (shortcut == LineToolShortcut) {
         KoToolManager::instance()->switchToolTemporaryRequested("KritaShape/KisToolLine");
@@ -75,12 +77,14 @@ void KisToolInvocationAction::activate(int shortcut)
 void KisToolInvocationAction::deactivate(int shortcut)
 {
     Q_UNUSED(shortcut);
-    if (!inputManager()) return;
+    if (!inputManager()) {
+        return;
+    }
 
     inputManager()->toolProxy()->deactivateToolAction(KisTool::Primary);
 
     if (shortcut == LineToolShortcut) {
-            KoToolManager::instance()->switchBackRequested();
+        KoToolManager::instance()->switchBackRequested();
     }
 }
 
@@ -128,8 +132,8 @@ void KisToolInvocationAction::end(QEvent *event)
 {
     if (d->active) {
         inputManager()->toolProxy()->
-            forwardEvent(KisToolProxy::END, KisTool::Primary, event, event,
-                         inputManager()->lastTabletEvent());
+        forwardEvent(KisToolProxy::END, KisTool::Primary, event, event,
+                     inputManager()->lastTabletEvent());
 
         d->active = false;
     }
@@ -137,17 +141,18 @@ void KisToolInvocationAction::end(QEvent *event)
     KisAbstractInputAction::end(event);
 }
 
-void KisToolInvocationAction::inputEvent(QEvent* event)
+void KisToolInvocationAction::inputEvent(QEvent *event)
 {
-    if (!d->active) return;
-
+    if (!d->active) {
+        return;
+    }
 
     inputManager()->toolProxy()->
-        forwardEvent(KisToolProxy::CONTINUE, KisTool::Primary, event, event,
-                     inputManager()->lastTabletEvent());
+    forwardEvent(KisToolProxy::CONTINUE, KisTool::Primary, event, event,
+                 inputManager()->lastTabletEvent());
 }
 
-void KisToolInvocationAction::processUnhandledEvent(QEvent* event)
+void KisToolInvocationAction::processUnhandledEvent(QEvent *event)
 {
     bool savedState = d->active;
     d->active = true;

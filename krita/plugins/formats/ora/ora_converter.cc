@@ -45,21 +45,21 @@ OraConverter::~OraConverter()
 {
 }
 
-KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
+KisImageBuilder_Result OraConverter::buildImage(const KUrl &uri)
 {
-    if (uri.isEmpty())
+    if (uri.isEmpty()) {
         return KisImageBuilder_RESULT_NO_URI;
+    }
 
     if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, QApplication::activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
-    KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Read, "image/openraster", KoStore::Zip);
+    KoStore *store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
         delete store;
         return KisImageBuilder_RESULT_FAILURE;
     }
-    
 
     OraLoadContext olc(store);
     KisOpenRasterStackLoadVisitor orslv(m_doc->createUndoStore(), &olc);
@@ -82,20 +82,22 @@ vKisNodeSP OraConverter::activeNodes()
     return m_activeNodes;
 }
 
-KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP image, vKisNodeSP activeNodes)
+KisImageBuilder_Result OraConverter::buildFile(const KUrl &uri, KisImageWSP image, vKisNodeSP activeNodes)
 {
 
-    if (uri.isEmpty())
+    if (uri.isEmpty()) {
         return KisImageBuilder_RESULT_NO_URI;
+    }
 
-    if (!uri.isLocalFile())
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_LOCAL;
+    }
     // Open file for writing
-    KoStore* store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Write, "image/openraster", KoStore::Zip);
+    KoStore *store = KoStore::createStore(QApplication::activeWindow(), uri, KoStore::Write, "image/openraster", KoStore::Zip);
     if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-    
+
     OraSaveContext osc(store);
     KisOpenRasterStackSaveVisitor orssv(&osc, activeNodes);
 
@@ -103,7 +105,7 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
 
     if (store->open("Thumbnails/thumbnail.png")) {
         QSize previewSize = image->bounds().size();
-        previewSize.scale(QSize(256,256), Qt::KeepAspectRatio);
+        previewSize.scale(QSize(256, 256), Qt::KeepAspectRatio);
 
         QImage preview = image->convertToQImage(QRect(0, 0, previewSize.width(), previewSize.height()), previewSize, 0);
 
@@ -128,7 +130,6 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
     delete store;
     return KisImageBuilder_RESULT_OK;
 }
-
 
 void OraConverter::cancel()
 {

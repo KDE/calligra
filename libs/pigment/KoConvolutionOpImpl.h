@@ -73,7 +73,8 @@ public:
      *      @factor and incremented by @offset.
      */
 
-    virtual void convolveColors(const quint8* const* colors, const qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nPixels, const QBitArray & channelFlags) const {
+    virtual void convolveColors(const quint8 *const *colors, const qreal *kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nPixels, const QBitArray &channelFlags) const
+    {
 
         // Create and initialize to 0 the array of totals
         qreal totals[_CSTrait::channels_nb];
@@ -85,7 +86,7 @@ public:
 
         for (; nPixels--; colors++, kernelValues++) {
             qreal weight = *kernelValues;
-            const channels_type* color = _CSTrait::nativeArray(*colors);
+            const channels_type *color = _CSTrait::nativeArray(*colors);
             if (weight != 0) {
                 if (_CSTrait::opacityU8(*colors) == 0) {
                     totalWeightTransparent += weight;
@@ -98,7 +99,7 @@ public:
             }
         }
 
-        typename _CSTrait::channels_type* dstColor = _CSTrait::nativeArray(dst);
+        typename _CSTrait::channels_type *dstColor = _CSTrait::nativeArray(dst);
 
         bool allChannels = channelFlags.isEmpty();
         Q_ASSERT(allChannels || channelFlags.size() == (int)_CSTrait::channels_nb);

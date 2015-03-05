@@ -30,7 +30,7 @@ class KexiUserFeedbackAgent : public QObject
     Q_OBJECT
 
 public:
-    explicit KexiUserFeedbackAgent(QObject* parent = 0);
+    explicit KexiUserFeedbackAgent(QObject *parent = 0);
 
     ~KexiUserFeedbackAgent();
 
@@ -49,7 +49,7 @@ public:
 
     Areas enabledAreas() const;
 
-    QVariant value(const QString& key) const;
+    QVariant value(const QString &key) const;
 
     QString serviceUrl() const;
 
@@ -57,18 +57,18 @@ Q_SIGNALS:
     void redirectLoaded();
 
 public Q_SLOTS:
-    void waitForRedirect(QObject *receiver, const char* slot);
+    void waitForRedirect(QObject *receiver, const char *slot);
 
 private Q_SLOTS:
-    void sendDataFinished(KJob* job);
-    void sendRedirectQuestionFinished(KJob* job);
+    void sendDataFinished(KJob *job);
+    void sendRedirectQuestionFinished(KJob *job);
 
 private:
     void sendData();
     void sendRedirectQuestion();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiUserFeedbackAgent::Areas)

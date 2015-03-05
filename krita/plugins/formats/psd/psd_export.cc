@@ -40,7 +40,7 @@ class KisExternalLayer;
 K_PLUGIN_FACTORY(ExportFactory, registerPlugin<psdExport>();)
 K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
-bool checkHomogenity(KisNodeSP root, const KoColorSpace* cs)
+bool checkHomogenity(KisNodeSP root, const KoColorSpace *cs)
 {
     bool res = true;
     KisNodeSP child = root->firstChild();
@@ -51,7 +51,7 @@ bool checkHomogenity(KisNodeSP root, const KoColorSpace* cs)
                 break;
             }
         }
-        KisLayer *layer = dynamic_cast<KisLayer*>(child.data());
+        KisLayer *layer = dynamic_cast<KisLayer *>(child.data());
         if (layer) {
             if (layer->colorSpace() != cs) {
                 res = false;
@@ -71,19 +71,20 @@ psdExport::~psdExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray &from, const QByteArray &to)
 {
-    dbgFile <<"PSD export! From:" << from <<", To:" << to <<"";
+    dbgFile << "PSD export! From:" << from << ", To:" << to << "";
 
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
     KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
-
+    }
 
     if (input->image()->width() > 30000 || input->image()->height() > 30000) {
         if (!m_chain->manager()->getBatchMode()) {
@@ -94,7 +95,6 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
         }
         return KisImportExportFilter::InvalidFormat;
     }
-
 
     if (!checkHomogenity(input->image()->rootLayer(), input->image()->colorSpace())) {
         if (!m_chain->manager()->getBatchMode()) {
@@ -109,7 +109,9 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
     qApp->processEvents(); // For vector layers to be updated
     input->image()->waitForDone();
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
     KUrl url;
     url.setPath(filename);
@@ -118,10 +120,10 @@ KisImportExportFilter::ConversionStatus psdExport::convert(const QByteArray& fro
     KisImageBuilder_Result res;
 
     if ((res = kpc.buildFile(url)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success !";
+        dbgFile << "success !";
         return KisImportExportFilter::OK;
     }
-    dbgFile <<" Result =" << res;
+    dbgFile << " Result =" << res;
     return KisImportExportFilter::InternalError;
 }
 

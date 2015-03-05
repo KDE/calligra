@@ -19,7 +19,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdfReaderWikiContext.h"
 
@@ -29,10 +28,8 @@
 #include <KoOdfStyleProperties.h>
 #include <KoOdfStyle.h>
 
-
 // ----------------------------------------------------------------
 //                     class OdfReaderWikiContext
-
 
 OdfReaderWikiContext::OdfReaderWikiContext(KoStore *store, QFile &file)
     : OdfReaderContext(store)
@@ -44,7 +41,6 @@ OdfReaderWikiContext::OdfReaderWikiContext(KoStore *store, QFile &file)
 OdfReaderWikiContext::~OdfReaderWikiContext()
 {
 }
-
 
 void OdfReaderWikiContext::pushStyle(KoOdfStyle *style)
 {

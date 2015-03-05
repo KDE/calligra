@@ -39,13 +39,13 @@
 #include <KoRuler.h>
 
 KoRulerController::KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceManager *crp)
-        : QObject(horizontalRuler),
-        d(new Private(horizontalRuler, crp))
+    : QObject(horizontalRuler),
+      d(new Private(horizontalRuler, crp))
 {
-    connect(crp, SIGNAL(canvasResourceChanged(int, const QVariant &)), this, SLOT(canvasResourceChanged(int)));
+    connect(crp, SIGNAL(canvasResourceChanged(int,QVariant)), this, SLOT(canvasResourceChanged(int)));
     connect(horizontalRuler, SIGNAL(indentsChanged(bool)), this, SLOT(indentsChanged()));
     connect(horizontalRuler, SIGNAL(aboutToChange()), this, SLOT(tabChangeInitiated()));
-    connect(horizontalRuler, SIGNAL(tabChanged(int, KoRuler::Tab*)), this, SLOT(tabChanged(int, KoRuler::Tab*)));
+    connect(horizontalRuler, SIGNAL(tabChanged(int,KoRuler::Tab*)), this, SLOT(tabChanged(int,KoRuler::Tab*)));
 }
 
 KoRulerController::~KoRulerController()

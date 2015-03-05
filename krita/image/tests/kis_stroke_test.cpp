@@ -25,7 +25,7 @@
 void KisStrokeTest::testRegularStroke()
 {
     KisStroke stroke(new KisTestingStrokeStrategy());
-    QQueue<KisStrokeJob*> &queue = stroke.testingGetQueue();
+    QQueue<KisStrokeJob *> &queue = stroke.testingGetQueue();
 
     QCOMPARE(queue.size(), 1);
     SCOMPARE(getJobName(queue[0]), "init");
@@ -49,7 +49,7 @@ void KisStrokeTest::testRegularStroke()
     // uncomment this line to catch an assert:
     // stroke.addJob(0);
 
-    KisStrokeJob* job;
+    KisStrokeJob *job;
 
     job = stroke.popOneJob();
     delete job;
@@ -67,13 +67,13 @@ void KisStrokeTest::testRegularStroke()
     QCOMPARE(queue.size(), 0);
 
     job = stroke.popOneJob();
-    QCOMPARE(job, (KisStrokeJob*)0);
+    QCOMPARE(job, (KisStrokeJob *)0);
 }
 
 void KisStrokeTest::testCancelStrokeCase1()
 {
     KisStroke stroke(new KisTestingStrokeStrategy());
-    QQueue<KisStrokeJob*> &queue = stroke.testingGetQueue();
+    QQueue<KisStrokeJob *> &queue = stroke.testingGetQueue();
 
     stroke.addJob(0);
 
@@ -95,7 +95,7 @@ void KisStrokeTest::testCancelStrokeCase1()
 void KisStrokeTest::testCancelStrokeCase2and3()
 {
     KisStroke stroke(new KisTestingStrokeStrategy());
-    QQueue<KisStrokeJob*> &queue = stroke.testingGetQueue();
+    QQueue<KisStrokeJob *> &queue = stroke.testingGetQueue();
 
     stroke.addJob(0);
     delete stroke.popOneJob();
@@ -118,7 +118,7 @@ void KisStrokeTest::testCancelStrokeCase2and3()
 void KisStrokeTest::testCancelStrokeCase5()
 {
     KisStroke stroke(new KisTestingStrokeStrategy());
-    QQueue<KisStrokeJob*> &queue = stroke.testingGetQueue();
+    QQueue<KisStrokeJob *> &queue = stroke.testingGetQueue();
 
     // initialized, no jobs, not finished
 
@@ -139,7 +139,7 @@ void KisStrokeTest::testCancelStrokeCase5()
 void KisStrokeTest::testCancelStrokeCase4()
 {
     KisStroke stroke(new KisTestingStrokeStrategy());
-    QQueue<KisStrokeJob*> &queue = stroke.testingGetQueue();
+    QQueue<KisStrokeJob *> &queue = stroke.testingGetQueue();
 
     stroke.addJob(0);
     stroke.endStroke();
@@ -157,7 +157,7 @@ void KisStrokeTest::testCancelStrokeCase4()
 void KisStrokeTest::testCancelStrokeCase6()
 {
     KisStroke stroke(new KisTestingStrokeStrategy());
-    QQueue<KisStrokeJob*> &queue = stroke.testingGetQueue();
+    QQueue<KisStrokeJob *> &queue = stroke.testingGetQueue();
 
     stroke.addJob(0);
     delete stroke.popOneJob();

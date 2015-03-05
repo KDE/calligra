@@ -79,7 +79,6 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
     }
 }
 
-
 void kis_assert_recoverable(const char *assertion, const char *file, int line)
 {
     kis_assert_common(assertion, file, line, false);

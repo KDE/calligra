@@ -89,13 +89,13 @@ Value func_maxa(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mdeterm(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_min(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mina(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_minverse(valVector args, ValueCalc* calc, FuncExtra*);
+Value func_minverse(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mmult(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mod(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mround(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mult(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_multinomial(valVector args, ValueCalc *calc, FuncExtra *);
-Value func_munit(valVector args, ValueCalc* calc, FuncExtra*);
+Value func_munit(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_odd(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pow(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_quotient(valVector args, ValueCalc *calc, FuncExtra *);
@@ -125,15 +125,12 @@ Value func_sumsq(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_transpose(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 // Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *);
-
 
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("math", MathModule)
 
-
-MathModule::MathModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+MathModule::MathModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -381,15 +378,15 @@ QString MathModule::descriptionFileName() const
     return QString("math.xml");
 }
 
-
 // Function: SQRT
 Value func_sqrt(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value arg = args[0];
-    if (calc->gequal(arg, Value(0.0)))
+    if (calc->gequal(arg, Value(0.0))) {
         return calc->sqrt(arg);
-    else
+    } else {
         return Value::errorVALUE();
+    }
 }
 
 // Function: SQRTPI
@@ -397,10 +394,11 @@ Value func_sqrtpi(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // sqrt (val * PI)
     Value arg = args[0];
-    if (calc->gequal(arg, Value(0.0)))
+    if (calc->gequal(arg, Value(0.0))) {
         return calc->sqrt(calc->mul(args[0], calc->pi()));
-    else
+    } else {
         return Value::errorVALUE();
+    }
 }
 
 // Function: ROOTN
@@ -438,32 +436,37 @@ Value func_ceiling(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value number = args[0];
     Value res;
-    if (args.count() >= 2)
+    if (args.count() >= 2) {
         res = args[1];
-    else
+    } else {
         res = calc->gequal(number, Value(0.0)) ? Value(1.0) : Value(-1.0);
-    bool mode = (args.count() >= 3) ? calc->isZero (args[2]) : true;
+    }
+    bool mode = (args.count() >= 3) ? calc->isZero(args[2]) : true;
 
     // short-circuit, and allow CEILING(0;0) to give 0 (which is correct)
     // instead of DIV0 error
-    if (calc->isZero(number))
+    if (calc->isZero(number)) {
         return Value(0.0);
+    }
 
-    if (calc->isZero(res))
+    if (calc->isZero(res)) {
         return Value::errorDIV0();
+    }
 
     Value d = calc->div(number, res);
-    if (calc->greater(Value(0), d))
+    if (calc->greater(Value(0), d)) {
         return Value::errorNUM();
+    }
 
     Value rud = calc->roundDown(d);
-    if (calc->approxEqual(rud, d))
+    if (calc->approxEqual(rud, d)) {
         d = calc->mul(rud, res);
-    else
-    {
+    } else {
         // positive number or mode is 0 - round up
-        if ((!mode) || calc->gequal (number, Value(0))) rud = calc->roundUp(d);
-        d = calc->mul (rud, res);
+        if ((!mode) || calc->gequal(number, Value(0))) {
+            rud = calc->roundUp(d);
+        }
+        d = calc->mul(rud, res);
     }
 
     return d;
@@ -472,32 +475,37 @@ Value func_ceiling(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: FLOOR
 Value func_floor(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (calc->approxEqual(args[0], Value(0.0)))
+    if (calc->approxEqual(args[0], Value(0.0))) {
         return Value(0);
+    }
     Number number = args[0].asFloat();
 
     Number significance;
     if (args.count() >= 2) { // we have the optional "significance" argument
         significance = args[1].asFloat();
         // Sign of number and significance must match.
-        if (calc->gequal(args[0], Value(0.0)) != calc->gequal(args[1], Value(0.0)))
+        if (calc->gequal(args[0], Value(0.0)) != calc->gequal(args[1], Value(0.0))) {
             return Value::errorVALUE();
-    } else // use 1 or -1, depending on the sign of the first argument
+        }
+    } else { // use 1 or -1, depending on the sign of the first argument
         significance = calc->gequal(args[0], Value(0.0)) ? 1.0 : -1.0;
-    if (calc->approxEqual(Value(significance), Value(0.0)))
+    }
+    if (calc->approxEqual(Value(significance), Value(0.0))) {
         return Value(0);
+    }
 
     const bool mode = (args.count() == 3) ? (args[2].asFloat() != 0.0) : false;
 
     Number result;
-    if (mode) // round towards zero
+    if (mode) { // round towards zero
         result = ((int)(number / significance)) * significance;
-    else { // round towards negative infinity
+    } else { // round towards negative infinity
         result = number / significance; // always positive, because signs match
-        if (calc->gequal(args[0], Value(0.0))) // positive values
+        if (calc->gequal(args[0], Value(0.0))) { // positive values
             result = floor(result) * significance;
-        else // negative values
+        } else { // negative values
             result = ceil(result) * significance;
+        }
     }
     return Value(result);
 }
@@ -511,34 +519,44 @@ Value func_gamma(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ln
 Value func_ln(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if ((args [0].isNumber() == false) || args[0].asFloat() <= 0)
+    if ((args [0].isNumber() == false) || args[0].asFloat() <= 0) {
         return Value::errorNUM();
+    }
     return calc->ln(args[0]);
 }
 
 // Function: LOGn
 Value func_logn(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args [0].isError())
+    if (args [0].isError()) {
         return args [0];
-    if (args [0].isEmpty())
+    }
+    if (args [0].isEmpty()) {
         return Value::errorNUM();
-    if (args [0].isNumber() == false)
+    }
+    if (args [0].isNumber() == false) {
         return Value::errorVALUE();
-    if (args[0].asFloat() <= 0)
+    }
+    if (args[0].asFloat() <= 0) {
         return Value::errorNUM();
+    }
     if (args.count() == 2) {
-        if (args [1].isError())
+        if (args [1].isError()) {
             return args [1];
-        if (args [1].isEmpty())
+        }
+        if (args [1].isEmpty()) {
             return Value::errorNUM();
-        if (args [1].isNumber() == false)
+        }
+        if (args [1].isNumber() == false) {
             return Value::errorVALUE();
-        if (args [1].asFloat() <= 0)
+        }
+        if (args [1].asFloat() <= 0) {
             return Value::errorNUM();
+        }
         return calc->log(args[0], args[1]);
-    } else
+    } else {
         return calc->log(args[0]);
+    }
 }
 
 // Function: LOG2
@@ -550,10 +568,12 @@ Value func_log2(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: LOG10
 Value func_log10(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args [0].isError())
+    if (args [0].isError()) {
         return args [0];
-    if ((args [0].isNumber() == false) || (args[0].asFloat() <= 0))
+    }
+    if ((args [0].isNumber() == false) || (args[0].asFloat() <= 0)) {
         return Value::errorNUM();
+    }
     return calc->log(args[0]);
 }
 
@@ -588,7 +608,7 @@ Value func_sumif(valVector args, ValueCalc *calc, FuncExtra *e)
 //Function: SUMIFS
 Value func_sumifs(valVector args, ValueCalc *calc, FuncExtra *e)
 {
-    int lim = (int) (args.count()-1)/2;
+    int lim = (int)(args.count() - 1) / 2;
 
     QList<Value> c_Range;
     QStringList condition;
@@ -598,7 +618,7 @@ Value func_sumifs(valVector args, ValueCalc *calc, FuncExtra *e)
 
     for (int i = 1; i < args.count(); i += 2) {
         c_Range.append(args[i]);
-        condition.append(calc->conv()->asString(args[i+1]).asString());
+        condition.append(calc->conv()->asString(args[i + 1]).asString());
         Condition c;
         calc->getCond(c, Value(condition.last()));
         cond.append(c);
@@ -620,14 +640,15 @@ Value func_seriessum(valVector args, ValueCalc *calc, FuncExtra *)
     double fN = calc->conv()->asFloat(args[1]).asFloat();
     double fM = calc->conv()->asFloat(args[2]).asFloat();
 
-    if (fX == 0.0 && fN == 0.0)
+    if (fX == 0.0 && fN == 0.0) {
         return Value::errorNUM();
+    }
 
     double res = 0.0;
 
     if (fX != 0.0) {
 
-        for (unsigned int i = 0 ; i < args[3].count(); i++) {
+        for (unsigned int i = 0; i < args[3].count(); i++) {
             res += args[3].element(i).asFloat() * pow(fX, fN);
             fN += fM;
         }
@@ -648,8 +669,9 @@ Value func_div(valVector args, ValueCalc *calc, FuncExtra *)
     Value val = args[0];
     for (int i = 1; i < args.count(); ++i) {
         val = calc->div(val, args[i]);
-        if (val.isError())
+        if (val.isError()) {
             return val;
+        }
     }
     return val;
 }
@@ -699,18 +721,19 @@ Value func_int(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: QUOTIENT
 Value func_quotient(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (calc->isZero(args[1]))
+    if (calc->isZero(args[1])) {
         return Value::errorDIV0();
+    }
 
     double res = calc->conv()->toFloat(calc->div(args[0], args[1]));
-    if (res < 0)
+    if (res < 0) {
         res = ceil(res);
-    else
+    } else {
         res = floor(res);
+    }
 
     return Value(res);
 }
-
 
 // Function: eps
 Value func_eps(valVector, ValueCalc *calc, FuncExtra *)
@@ -731,11 +754,13 @@ Value func_randbinom(valVector args, ValueCalc *calc, FuncExtra *)
     double d  = numToDouble(calc->conv()->toFloat(args[0]));
     int    tr = calc->conv()->toInteger(args[1]);
 
-    if (d < 0 || d > 1)
+    if (d < 0 || d > 1) {
         return Value::errorVALUE();
+    }
 
-    if (tr < 0)
+    if (tr < 0) {
         return Value::errorVALUE();
+    }
 
     // taken from gnumeric
     double x = pow(1 - d, tr);
@@ -759,12 +784,13 @@ Value func_randnegbinom(valVector args, ValueCalc *calc, FuncExtra *)
     double d  = numToDouble(calc->conv()->toFloat(args[0]));
     int    f = calc->conv()->toInteger(args[1]);
 
-    if (d < 0 || d > 1)
+    if (d < 0 || d > 1) {
         return Value::errorVALUE();
+    }
 
-    if (f < 0)
+    if (f < 0) {
         return Value::errorVALUE();
-
+    }
 
     // taken from Gnumeric
     double x = pow(d, f);
@@ -773,7 +799,7 @@ Value func_randnegbinom(valVector args, ValueCalc *calc, FuncExtra *)
     int i = 0;
 
     while (r > t) {
-        x *= (((f + i) * (1 - d)) / (1 + i)) ;
+        x *= (((f + i) * (1 - d)) / (1 + i));
         i++;
         t += x;
     }
@@ -815,8 +841,9 @@ Value func_randnorm(valVector args, ValueCalc *calc, FuncExtra *)
 
 Value func_randpoisson(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (calc->lower(args[0], Value(0)))
+    if (calc->lower(args[0], Value(0))) {
         return Value::errorVALUE();
+    }
 
     // taken from Gnumeric...
     Value x = calc->exp(calc->mul(Value(-1), args[0]));     // e^(-A)
@@ -866,19 +893,21 @@ Value func_mod(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: fact
 Value func_fact(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args[0].isInteger() || args[0].asInteger() > 0)
+    if (args[0].isInteger() || args[0].asInteger() > 0) {
         return calc->fact(args[0]);
-    else
+    } else {
         return Value::errorNUM();
+    }
 }
 
 // Function: FACTDOUBLE
 Value func_factdouble(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args[0].isInteger() || args[0].asInteger() > 0)
+    if (args[0].isInteger() || args[0].asInteger() > 0) {
         return calc->factDouble(args[0]);
-    else
+    } else {
         return Value::errorNUM();
+    }
 }
 
 // Function: MULTINOMIAL
@@ -914,8 +943,9 @@ Value func_mround(valVector args, ValueCalc *calc, FuncExtra *)
 
     // signs must be the same
     if ((calc->greater(d, Value(0)) && calc->lower(m, Value(0)))
-            || (calc->lower(d, Value(0)) && calc->greater(m, Value(0))))
+            || (calc->lower(d, Value(0)) && calc->greater(m, Value(0)))) {
         return Value::errorVALUE();
+    }
 
     int sign = 1;
 
@@ -930,8 +960,9 @@ Value func_mround(valVector args, ValueCalc *calc, FuncExtra *)
     Value div = calc->sub(d, mod);
 
     Value result = div;
-    if (calc->gequal(mod, calc->div(m, Value(2))))  // mod >= m/2
-        result = calc->add(result, m);      // result += m
+    if (calc->gequal(mod, calc->div(m, Value(2)))) { // mod >= m/2
+        result = calc->add(result, m);    // result += m
+    }
     result = calc->mul(result, sign);     // add the sign
 
     return result;
@@ -941,39 +972,44 @@ Value func_mround(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_rounddown(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if (args.count() == 2) {
-        if (calc->greater(args[0], 0.0))
+        if (calc->greater(args[0], 0.0)) {
             return calc->roundDown(args[0], args[1]);
-        else
+        } else {
             return calc->roundUp(args[0], args[1]);
+        }
     }
 
-    if (calc->greater(args[0], 0.0))
+    if (calc->greater(args[0], 0.0)) {
         return calc->roundDown(args[0], 0);
-    else
+    } else {
         return calc->roundUp(args[0], 0);
+    }
 }
 
 // Function: ROUNDUP
 Value func_roundup(valVector args, ValueCalc *calc, FuncExtra *)
 {
     if (args.count() == 2) {
-        if (calc->greater(args[0], 0.0))
+        if (calc->greater(args[0], 0.0)) {
             return calc->roundUp(args[0], args[1]);
-        else
+        } else {
             return calc->roundDown(args[0], args[1]);
+        }
     }
 
-    if (calc->greater(args[0], 0.0))
+    if (calc->greater(args[0], 0.0)) {
         return calc->roundUp(args[0], 0);
-    else
+    } else {
         return calc->roundDown(args[0], 0);
+    }
 }
 
 // Function: ROUND
 Value func_round(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args.count() == 2)
+    if (args.count() == 2) {
         return calc->round(args[0], args[1]);
+    }
     return calc->round(args[0], 0);
 }
 
@@ -1005,11 +1041,13 @@ Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Q_UNUSED(calc)
     Number result = args[0].asFloat();
-    if (args.count() == 2)
+    if (args.count() == 2) {
         result = result * ::qPow(10, (int)args[1].asInteger());
+    }
     result = (args[0].asFloat() < 0) ? -(qint64)(-result) : (qint64)result;
-    if (args.count() == 2)
+    if (args.count() == 2) {
         result = result * ::qPow(10, -(int)args[1].asInteger());
+    }
     return Value(result);
 }
 
@@ -1035,10 +1073,12 @@ Value func_countblank(valVector args, ValueCalc *, FuncExtra *)
             int cols = args[i].columns();
             for (int r = 0; r < rows; ++r)
                 for (int c = 0; c < cols; ++c)
-                    if (args[i].element(c, r).isEmpty())
+                    if (args[i].element(c, r).isEmpty()) {
                         cnt++;
-        } else if (args[i].isEmpty())
+                    }
+        } else if (args[i].isEmpty()) {
             cnt++;
+        }
     return Value(cnt);
 }
 
@@ -1046,8 +1086,9 @@ Value func_countblank(valVector args, ValueCalc *, FuncExtra *)
 Value func_countif(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     // the first parameter must be a reference
-    if ((e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
+    if ((e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1)) {
         return Value::errorNA();
+    }
 
     Value range = args[0];
     QString condition = calc->conv()->asString(args[1]).asString();
@@ -1062,10 +1103,11 @@ Value func_countif(valVector args, ValueCalc *calc, FuncExtra *e)
 Value func_countifs(valVector args, ValueCalc *calc, FuncExtra *e)
 {
     // the first parameter must be a reference
-    if ((e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
+    if ((e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1)) {
         return Value::errorNA();
+    }
 
-    int lim = (int) (args.count()-1)/2; 
+    int lim = (int)(args.count() - 1) / 2;
 
     QList<Value> c_Range;
     QStringList condition;
@@ -1073,7 +1115,7 @@ Value func_countifs(valVector args, ValueCalc *calc, FuncExtra *e)
 
     for (int i = 0; i < args.count(); i += 2) {
         c_Range.append(args[i]);
-        condition.append(calc->conv()->asString(args[i+1]).asString());
+        condition.append(calc->conv()->asString(args[i + 1]).asString());
         Condition c;
         calc->getCond(c, Value(condition.last()));
         cond.append(c);
@@ -1094,11 +1136,13 @@ Value func_fib(valVector args, ValueCalc *calc, FuncExtra *)
 
     */
     Value n = args[0];
-    if (!n.isNumber())
+    if (!n.isNumber()) {
         return Value::errorVALUE();
+    }
 
-    if (!calc->greater(n, Value(0.0)))
+    if (!calc->greater(n, Value(0.0))) {
         return Value::errorNUM();
+    }
 
     Value s = calc->sqrt(Value(5.0));
     // u1 = ((1+sqrt(5))/2)^n
@@ -1113,13 +1157,15 @@ Value func_fib(valVector args, ValueCalc *calc, FuncExtra *)
 static Value func_gcd_helper(const Value &val, ValueCalc *calc)
 {
     Value res(0);
-    if (!val.isArray())
+    if (!val.isArray()) {
         return val;
+    }
     for (uint row = 0; row < val.rows(); ++row)
         for (uint col = 0; col < val.columns(); ++col) {
             Value v = val.element(col, row);
-            if (v.isArray())
+            if (v.isArray()) {
                 v = func_gcd_helper(v, calc);
+            }
             res = calc->gcd(res, calc->roundDown(v));
         }
     return res;
@@ -1146,13 +1192,15 @@ Value func_gcd(valVector args, ValueCalc *calc, FuncExtra *)
 static Value func_lcm_helper(const Value &val, ValueCalc *calc)
 {
     Value res = Value(0);
-    if (!val.isArray())
+    if (!val.isArray()) {
         return val;
+    }
     for (unsigned int row = 0; row < val.rows(); ++row)
         for (unsigned int col = 0; col < val.columns(); ++col) {
             Value v = val.element(col, row);
-            if (v.isArray())
+            if (v.isArray()) {
                 v = func_lcm_helper(v, calc);
+            }
             res = calc->lcm(res, calc->roundDown(v));
         }
     return res;
@@ -1183,7 +1231,7 @@ Value func_lcm(valVector args, ValueCalc *calc, FuncExtra *)
     return result;
 }
 
-static Eigen::MatrixXd convert(const Value& matrix, ValueCalc *calc)
+static Eigen::MatrixXd convert(const Value &matrix, ValueCalc *calc)
 {
     const int rows = matrix.rows(), cols = matrix.columns();
     Eigen::MatrixXd eMatrix(rows, cols);
@@ -1195,7 +1243,7 @@ static Eigen::MatrixXd convert(const Value& matrix, ValueCalc *calc)
     return eMatrix;
 }
 
-static Value convert(const Eigen::MatrixXd& eMatrix)
+static Value convert(const Eigen::MatrixXd &eMatrix)
 {
     const int rows = eMatrix.rows(), cols = eMatrix.cols();
     Value matrix(Value::Array);
@@ -1208,11 +1256,12 @@ static Value convert(const Eigen::MatrixXd& eMatrix)
 }
 
 // Function: MDETERM
-Value func_mdeterm(valVector args, ValueCalc* calc, FuncExtra*)
+Value func_mdeterm(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value matrix = args[0];
-    if (matrix.columns() != matrix.rows() || matrix.rows() < 1)
+    if (matrix.columns() != matrix.rows() || matrix.rows() < 1) {
         return Value::errorVALUE();
+    }
 
     const Eigen::MatrixXd eMatrix = convert(matrix, calc);
 
@@ -1220,19 +1269,21 @@ Value func_mdeterm(valVector args, ValueCalc* calc, FuncExtra*)
 }
 
 // Function: MINVERSE
-Value func_minverse(valVector args, ValueCalc* calc, FuncExtra*)
+Value func_minverse(valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value matrix = args[0];
-    if (matrix.columns() != matrix.rows() || matrix.rows() < 1)
+    if (matrix.columns() != matrix.rows() || matrix.rows() < 1) {
         return Value::errorVALUE();
+    }
 
     Eigen::MatrixXd eMatrix = convert(matrix, calc);
     Eigen::FullPivLU<Eigen::MatrixXd> lu(eMatrix);
     if (lu.isInvertible()) {
         Eigen::MatrixXd eMatrixInverse = lu.inverse();
         return convert(eMatrixInverse);
-    } else
+    } else {
         return Value::errorDIV0();
+    }
 }
 
 // Function: mmult
@@ -1241,22 +1292,25 @@ Value func_mmult(valVector args, ValueCalc *calc, FuncExtra *)
     const Eigen::MatrixXd eMatrix1 = convert(args[0], calc);
     const Eigen::MatrixXd eMatrix2 = convert(args[1], calc);
 
-    if (eMatrix1.cols() != eMatrix2.rows())    // row/column counts must match
+    if (eMatrix1.cols() != eMatrix2.rows()) {  // row/column counts must match
         return Value::errorVALUE();
+    }
 
     return convert(eMatrix1 * eMatrix2);
 }
 
 // Function: MUNIT
-Value func_munit(valVector args, ValueCalc* calc, FuncExtra*)
+Value func_munit(valVector args, ValueCalc *calc, FuncExtra *)
 {
     const int dim = calc->conv()->asInteger(args[0]).asInteger();
-    if (dim < 1)
+    if (dim < 1) {
         return Value::errorVALUE();
+    }
     Value result(Value::Array);
     for (int row = 0; row < dim; ++row)
-        for (int col = 0; col < dim; ++col)
+        for (int col = 0; col < dim; ++col) {
             result.setElement(col, row, Value(col == row ? 1 : 0));
+        }
     return result;
 }
 
@@ -1278,7 +1332,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
 
     // exclude manually hidden rows. http://tools.oasis-open.org/issues/browse/OFFICE-2030
     bool excludeHiddenRows = false;
-    if(function > 100) {
+    if (function > 100) {
         excludeHiddenRows = true;
         function = function % 100; // translate e.g. 106 to 6.
     }
@@ -1290,14 +1344,15 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
             const bool setAllEmpty = excludeHiddenRows && e->sheet->rowFormats()->isHidden(r);
             for (int c = c1; c <= c2; ++c) {
                 // put an empty value to all cells in a hidden row
-                if(setAllEmpty) {
+                if (setAllEmpty) {
                     range.setElement(c - c1, r - r1, empty);
                     continue;
                 }
                 Cell cell(e->sheet, c, r);
                 // put an empty value to the place of all occurrences of the SUBTOTAL function
-                if (!cell.isDefault() && cell.isFormula() && cell.userInput().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1)
+                if (!cell.isDefault() && cell.isFormula() && cell.userInput().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1) {
                     range.setElement(c - c1, r - r1, empty);
+                }
             }
         }
     }
@@ -1336,14 +1391,18 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
         break;
     case 10: // Var
         f = FunctionRepository::self()->function("VAR");
-        if (!f) return Value::errorVALUE();
+        if (!f) {
+            return Value::errorVALUE();
+        }
         a.resize(1);
         a[0] = range;
         res = f->exec(a, calc, 0);
         break;
     case 11: // VarP
         f = FunctionRepository::self()->function("VARP");
-        if (!f) return Value::errorVALUE();
+        if (!f) {
+            return Value::errorVALUE();
+        }
         a.resize(1);
         a[0] = range;
         res = f->exec(a, calc, 0);
@@ -1365,8 +1424,9 @@ Value func_transpose(valVector args, ValueCalc *calc, FuncExtra *)
     Value transpose(Value::Array);
     for (int row = 0; row < rows; ++row) {
         for (int col = 0; col < cols; ++col) {
-            if (!matrix.element(col, row).isEmpty())
+            if (!matrix.element(col, row).isEmpty()) {
                 transpose.setElement(row, col, matrix.element(col, row));
+            }
         }
     }
     return transpose;

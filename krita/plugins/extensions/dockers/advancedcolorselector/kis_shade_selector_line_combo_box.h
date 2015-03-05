@@ -39,7 +39,7 @@ protected:
     void resizeEvent(QResizeEvent *e);
 
 public Q_SLOTS:
-    void setConfiguration(const QString& stri);
+    void setConfiguration(const QString &stri);
     void updateSettings();
     void setGradient(bool);
     void setPatches(bool);
@@ -47,9 +47,9 @@ public Q_SLOTS:
     void setLineHeight(int height);
 
 private:
-    KisShadeSelectorLineComboBoxPopup* m_popup;
+    KisShadeSelectorLineComboBoxPopup *m_popup;
     QScopedPointer<KisColorSelectorBaseProxy> m_parentProxy;
-    KisShadeSelectorLine* m_currentLine;
+    KisShadeSelectorLine *m_currentLine;
 
 };
 

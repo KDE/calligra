@@ -32,8 +32,8 @@ public:
     ~KPrPresentationHighlightWidget();
 
 protected:
-    void mouseMoveEvent( QMouseEvent * event );
-    void paintEvent( QPaintEvent * event );
+    void mouseMoveEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *event);
 
 private:
     QSize m_size;

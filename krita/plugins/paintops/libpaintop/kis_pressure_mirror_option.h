@@ -25,7 +25,6 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
-
 struct MirrorProperties {
     MirrorProperties()
         : horizontalMirror(false),
@@ -37,7 +36,8 @@ struct MirrorProperties {
 
     bool coordinateSystemFlipped;
 
-    bool isEmpty() const {
+    bool isEmpty() const
+    {
         return !horizontalMirror && !verticalMirror;
     }
 };
@@ -56,10 +56,10 @@ public:
     /**
     * Set the
     */
-    MirrorProperties apply(const KisPaintInformation& info) const;
+    MirrorProperties apply(const KisPaintInformation &info) const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
     void enableVerticalMirror(bool mirror);
     void enableHorizontalMirror(bool mirror);

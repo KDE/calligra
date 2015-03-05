@@ -44,8 +44,8 @@ public:
     // context passed on saving to saveOdf
     struct SavingContext {
         SavingContext(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedSaver)
-                : odfStore(odfStore)
-                , embeddedSaver(embeddedSaver) {}
+            : odfStore(odfStore)
+            , embeddedSaver(embeddedSaver) {}
 
         KoOdfWriteStore &odfStore;
         KoEmbeddedDocumentSaver &embeddedSaver;
@@ -124,7 +124,7 @@ public:
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
-    virtual void setMimeType(const QByteArray & mimeType) = 0;
+    virtual void setMimeType(const QByteArray &mimeType) = 0;
 
     virtual QString localFilePath() const = 0;
 
@@ -152,7 +152,7 @@ public:
      * @param mimeType the mime type (format) to use.
      * @param specialOutputFlag is for "save as older version" etc.
      */
-    virtual void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0) = 0;
+    virtual void setOutputMimeType(const QByteArray &mimeType, int specialOutputFlag = 0) = 0;
 
     virtual QByteArray outputMimeType() const = 0;
 
@@ -168,6 +168,5 @@ private:
     class Private;
     Private *const d;
 };
-
 
 #endif

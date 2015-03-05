@@ -40,7 +40,7 @@ public:
 
     ~KoTblStyle();
 
-    void setBackgroundColor(const QColor& color);
+    void setBackgroundColor(const QColor &color);
     QColor backgroundColor() const;
 
     enum BreakType {
@@ -58,8 +58,8 @@ public:
     void setAllowBreakBetweenRows(bool allow);
     bool allowBreakBetweenRows() const;
 
-    void setMasterPageName(const QString& name);
-    void setMasterPageName(const char* name);
+    void setMasterPageName(const QString &name);
+    void setMasterPageName(const char *name);
     QString masterPageName() const;
 
     void setLeftMargin(qreal left);
@@ -122,10 +122,10 @@ public:
     WritingMode writingMode() const;
 
 protected:
-    virtual void prepareStyle(KoGenStyle& style) const;
+    virtual void prepareStyle(KoGenStyle &style) const;
     virtual KoGenStyle::Type automaticstyleType() const;
     virtual KoGenStyle::Type styleType() const;
-    virtual const char* styleFamilyName() const;
+    virtual const char *styleFamilyName() const;
     virtual QString defaultPrefix() const;
 
 private:

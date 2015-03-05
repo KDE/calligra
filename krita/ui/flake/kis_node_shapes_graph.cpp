@@ -20,25 +20,24 @@
 
 #include "kis_node_shape.h"
 
-
-KisNodeShape* KisNodeShapesGraph::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
+KisNodeShape *KisNodeShapesGraph::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
 {
     KisNodeDummy *parentDummy = 0;
     KisNodeDummy *aboveThisDummy = 0;
 
     KisNodeShape *parentShape = 0;
 
-    if(parent) {
+    if (parent) {
         parentDummy = nodeToDummy(parent);
         parentShape = parentDummy->nodeShape();
     }
 
-    if(aboveThis) {
+    if (aboveThis) {
         aboveThisDummy = nodeToDummy(aboveThis);
     }
 
     KisNodeShape *newShape = new KisNodeShape(node);
-    ((KoShapeLayer*)newShape)->setParent(parentShape);
+    ((KoShapeLayer *)newShape)->setParent(parentShape);
 
     KisNodeDummy *newDummy = new KisNodeDummy(newShape, newShape->node());
 
@@ -71,17 +70,17 @@ void KisNodeShapesGraph::removeNode(KisNodeSP node)
     delete tempShape;
 }
 
-KisNodeDummy* KisNodeShapesGraph::rootDummy() const
+KisNodeDummy *KisNodeShapesGraph::rootDummy() const
 {
     return m_dummiesGraph.rootDummy();
 }
 
-KisNodeDummy* KisNodeShapesGraph::nodeToDummy(KisNodeSP node)
+KisNodeDummy *KisNodeShapesGraph::nodeToDummy(KisNodeSP node)
 {
     return m_dummiesGraph.nodeToDummy(node);
 }
 
-KisNodeShape* KisNodeShapesGraph::nodeToShape(KisNodeSP node)
+KisNodeShape *KisNodeShapesGraph::nodeToShape(KisNodeSP node)
 {
     return nodeToDummy(node)->nodeShape();
 }

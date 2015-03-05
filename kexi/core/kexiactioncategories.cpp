@@ -32,11 +32,13 @@ class ActionInternal
 {
 public:
     ActionInternal(int _categories)
-            : categories(_categories)
-            , supportedObjectTypes(0)
-            , allObjectTypesAreSupported(false) {
+        : categories(_categories)
+        , supportedObjectTypes(0)
+        , allObjectTypesAreSupported(false)
+    {
     }
-    ~ActionInternal() {
+    ~ActionInternal()
+    {
         delete supportedObjectTypes;
     }
     int categories;
@@ -50,14 +52,16 @@ K_GLOBAL_STATIC(ActionCategories, Kexi_actionCategories)
 class ActionCategories::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
         qDeleteAll(actions);
         actions.clear();
     }
 
-    QMap<QByteArray, ActionInternal*> actions;
+    QMap<QByteArray, ActionInternal *> actions;
 };
 
 KEXICORE_EXPORT ActionCategories *actionCategories()
@@ -72,7 +76,7 @@ using namespace Kexi;
 //----------------------------------
 
 ActionCategories::ActionCategories()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -81,13 +85,13 @@ ActionCategories::~ActionCategories()
     delete d;
 }
 
-void ActionCategories::addAction(const char* name, int categories,
+void ActionCategories::addAction(const char *name, int categories,
                                  KexiPart::ObjectType supportedObjectType1, KexiPart::ObjectType supportedObjectType2,
                                  KexiPart::ObjectType supportedObjectType3, KexiPart::ObjectType supportedObjectType4,
                                  KexiPart::ObjectType supportedObjectType5, KexiPart::ObjectType supportedObjectType6,
                                  KexiPart::ObjectType supportedObjectType7, KexiPart::ObjectType supportedObjectType8)
 {
-    ActionInternal * a = d->actions.value(name);
+    ActionInternal *a = d->actions.value(name);
     if (a) {
         a->categories |= categories;
     } else {
@@ -95,8 +99,9 @@ void ActionCategories::addAction(const char* name, int categories,
         d->actions.insert(name, a);
     }
     if (supportedObjectType1 > 0) {
-        if (!a->supportedObjectTypes)
+        if (!a->supportedObjectTypes) {
             a->supportedObjectTypes = new QSet<int>();
+        }
         a->supportedObjectTypes->insert(supportedObjectType1);
         if (supportedObjectType2 > 0) {
             a->supportedObjectTypes->insert(supportedObjectType2);
@@ -122,25 +127,27 @@ void ActionCategories::addAction(const char* name, int categories,
     }
 }
 
-void ActionCategories::setAllObjectTypesSupported(const char* name, bool set)
+void ActionCategories::setAllObjectTypesSupported(const char *name, bool set)
 {
-    ActionInternal * a = d->actions.value(name);
-    if (a)
+    ActionInternal *a = d->actions.value(name);
+    if (a) {
         a->allObjectTypesAreSupported = set;
-    else
+    } else {
         kWarning() << "no such action:" << name;
+    }
 }
 
-int ActionCategories::actionCategories(const char* name) const
+int ActionCategories::actionCategories(const char *name) const
 {
-    const ActionInternal * a = d->actions.value(name);
+    const ActionInternal *a = d->actions.value(name);
     return a ? a->categories : 0;
 }
 
-bool ActionCategories::actionSupportsObjectType(const char* name, KexiPart::ObjectType objectType) const
+bool ActionCategories::actionSupportsObjectType(const char *name, KexiPart::ObjectType objectType) const
 {
-    const ActionInternal * a = d->actions.value(name);
-    if (a && a->allObjectTypesAreSupported)
+    const ActionInternal *a = d->actions.value(name);
+    if (a && a->allObjectTypesAreSupported) {
         return true;
+    }
     return (a && a->supportedObjectTypes) ? a->supportedObjectTypes->contains(objectType) : false;
 }

@@ -39,13 +39,13 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
-KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
- : KexiAssistantPage(i18nc("@title:window", "Open Project"),
-                     i18nc("@info", "Select project to open. "
-                          "You can choose project stored in file or on database server."),
-                     parent)
- , connSelector(0)
- , m_errorMessagePopup(0)
+KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget *parent)
+    : KexiAssistantPage(i18nc("@title:window", "Open Project"),
+                        i18nc("@info", "Select project to open. "
+                              "You can choose project stored in file or on database server."),
+                        parent)
+    , connSelector(0)
+    , m_errorMessagePopup(0)
 {
     setNextButtonVisible(true);
 
@@ -69,14 +69,14 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
     //connect(fileSelector->fileWidget, SIGNAL(accepted()), this, SLOT(accept()));
     connect(fileSelector->fileWidget, SIGNAL(fileHighlighted()),
             this, SLOT(next()));
-                      
+
     m_connSelectorWidget = new QWidget;
     tabWidget->addTab(m_connSelectorWidget, Kexi::serverIcon(),
                       i18nc("@title:tab", "Projects Stored on Database Server"));
 
     setFocusWidget(tabWidget);
     setContents(tabWidget);
-    
+
     connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     // delayed opening:
     QTimer::singleShot(500, this, SLOT(init()));
@@ -85,7 +85,7 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
 void KexiMainOpenProjectPage::init()
 {
     // file-based:
-    QVBoxLayout* fileSelectorLayout = new QVBoxLayout(m_fileSelectorWidget);
+    QVBoxLayout *fileSelectorLayout = new QVBoxLayout(m_fileSelectorWidget);
     fileSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
     fileSelectorLayout->addWidget(fileSelector);
     fileSelector->show();
@@ -93,12 +93,11 @@ void KexiMainOpenProjectPage::init()
 
 void KexiMainOpenProjectPage::tabChanged(int index)
 {
-    QVBoxLayout* connSelectorLayout;
+    QVBoxLayout *connSelectorLayout;
     if (!m_connSelectorWidget->layout()) {
         connSelectorLayout = new QVBoxLayout(m_connSelectorWidget);
-    }
-    else {
-        connSelectorLayout = dynamic_cast<QVBoxLayout*>(m_connSelectorWidget->layout());
+    } else {
+        connSelectorLayout = dynamic_cast<QVBoxLayout *>(m_connSelectorWidget->layout());
     }
 
     if (index == 1) {
@@ -106,7 +105,7 @@ void KexiMainOpenProjectPage::tabChanged(int index)
             if (!connSelector) {
                 // server-based:
                 connSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
-                QLabel* connSelectorLabel = new QLabel(
+                QLabel *connSelectorLabel = new QLabel(
                     i18nc("@info",
                           "<para>Select database server's connection with project you wish to open.</para>"
                           "<para>Here you may also add, edit or remove connections from the list.</para>"));
@@ -125,8 +124,7 @@ void KexiMainOpenProjectPage::tabChanged(int index)
                 connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
                         this, SLOT(next()));
             }
-        }
-        else {
+        } else {
             if (!m_errorMessagePopup) {
                 setNextButtonVisible(false);
                 setDescription(QString());
@@ -148,9 +146,9 @@ KexiMainOpenProjectPage::~KexiMainOpenProjectPage()
 // ----
 
 KexiProjectDatabaseSelectionPage::KexiProjectDatabaseSelectionPage(
-   KexiOpenProjectAssistant* parent)
- : KexiAssistantPage(i18nc("@title:window", "Open Project on Database Server"), QString(), parent)
- , m_assistant(parent)
+    KexiOpenProjectAssistant *parent)
+    : KexiAssistantPage(i18nc("@title:window", "Open Project on Database Server"), QString(), parent)
+    , m_assistant(parent)
 {
     setBackButtonVisible(true);
     setNextButtonVisible(true);
@@ -173,7 +171,7 @@ KexiProjectDatabaseSelectionPage::~KexiProjectDatabaseSelectionPage()
 {
 }
 
-bool KexiProjectDatabaseSelectionPage::setConnection(KexiDB::ConnectionData* data)
+bool KexiProjectDatabaseSelectionPage::setConnection(KexiDB::ConnectionData *data)
 {
     if (conndataToShow != data) {
         projectSelector->setProjectSet(0);
@@ -204,26 +202,30 @@ class KexiOpenProjectAssistant::Private
 {
 public:
     explicit Private(KexiOpenProjectAssistant *qq)
-     : q(qq)
+        : q(qq)
     {
     }
-    
+
     ~Private()
     {
     }
-    
-    KexiMainOpenProjectPage* projectOpenPage() {
+
+    KexiMainOpenProjectPage *projectOpenPage()
+    {
         return page<KexiMainOpenProjectPage>(&m_projectOpenPage);
     }
-    KexiProjectDatabaseSelectionPage* projectDatabaseSelectionPage() {
+    KexiProjectDatabaseSelectionPage *projectDatabaseSelectionPage()
+    {
         return page<KexiProjectDatabaseSelectionPage>(&m_projectDatabaseSelectionPage, q);
     }
-    KexiPasswordPage* passwordPage() {
+    KexiPasswordPage *passwordPage()
+    {
         return page<KexiPasswordPage>(&m_passwordPage, q);
     }
 
     template <class C>
-    C* page(QPointer<C>* p, KexiOpenProjectAssistant *parent = 0) {
+    C *page(QPointer<C> *p, KexiOpenProjectAssistant *parent = 0)
+    {
         if (p->isNull()) {
             *p = new C(parent);
             q->addPage(*p);
@@ -240,9 +242,9 @@ public:
 
 // ----
 
-KexiOpenProjectAssistant::KexiOpenProjectAssistant(QWidget* parent)
- : KexiAssistantWidget(parent)
- , d(new Private(this))
+KexiOpenProjectAssistant::KexiOpenProjectAssistant(QWidget *parent)
+    : KexiAssistantWidget(parent)
+    , d(new Private(this))
 {
     setCurrentPage(d->projectOpenPage());
     setFocusProxy(d->projectOpenPage());
@@ -253,17 +255,17 @@ KexiOpenProjectAssistant::~KexiOpenProjectAssistant()
     delete d;
 }
 
-void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage* page)
+void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage *page)
 {
     if (page == d->m_projectOpenPage) {
         if (d->m_projectOpenPage->tabWidget->currentIndex() == 0) {
             // file-based
-            if (!d->m_projectOpenPage->fileSelector->fileWidget->checkSelectedFile())
+            if (!d->m_projectOpenPage->fileSelector->fileWidget->checkSelectedFile()) {
                 return;
+            }
             emit openProject(
                 d->m_projectOpenPage->fileSelector->fileWidget->highlightedFile());
-        }
-        else { // server-based
+        } else { // server-based
             KexiDB::ConnectionData *cdata
                 = d->m_projectOpenPage->connSelector->selectedConnectionData();
             if (cdata) {
@@ -277,31 +279,30 @@ void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage* page)
                 }
             }
         }
-    }
-    else if (page == d->m_passwordPage) {
+    } else if (page == d->m_passwordPage) {
         KexiDB::ConnectionData *cdata
             = d->projectOpenPage()->connSelector->selectedConnectionData();
         d->passwordPage()->updateConnectionData(cdata);
         if (cdata && d->projectDatabaseSelectionPage()->setConnection(cdata)) {
             setCurrentPage(d->projectDatabaseSelectionPage());
         }
-    }
-    else if (page == d->m_projectDatabaseSelectionPage) {
+    } else if (page == d->m_projectDatabaseSelectionPage) {
         slotOpenProject(
             d->m_projectDatabaseSelectionPage->projectSelector->selectedProjectData());
     }
 }
 
-void KexiOpenProjectAssistant::cancelRequested(KexiAssistantPage* page)
+void KexiOpenProjectAssistant::cancelRequested(KexiAssistantPage *page)
 {
     Q_UNUSED(page);
     //! @todo
 }
 
-void KexiOpenProjectAssistant::slotOpenProject(KexiProjectData* data)
+void KexiOpenProjectAssistant::slotOpenProject(KexiProjectData *data)
 {
-    if (data)
+    if (data) {
         emit openProject(*data);
+    }
 }
 
 void KexiOpenProjectAssistant::tryAgainActionTriggered()
@@ -317,7 +318,7 @@ void KexiOpenProjectAssistant::cancelActionTriggered()
     }
 }
 
-QWidget* KexiOpenProjectAssistant::calloutWidget() const
+QWidget *KexiOpenProjectAssistant::calloutWidget() const
 {
     return currentPage()->nextButton();
 }

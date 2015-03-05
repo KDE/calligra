@@ -31,8 +31,7 @@ ResourceList::ResourceList() :
 bool
 ResourceList::isSupportedSortingCriteria(int sc)
 {
-    switch (sc)
-    {
+    switch (sc) {
     case TreeMode:
     case MinEffortUp:
     case MinEffortDown:
@@ -47,35 +46,35 @@ ResourceList::isSupportedSortingCriteria(int sc)
 }
 
 int
-ResourceList::compareItemsLevel(CoreAttributes* c1, CoreAttributes* c2,
+ResourceList::compareItemsLevel(CoreAttributes *c1, CoreAttributes *c2,
                                 int level)
 {
-    Resource* r1 = static_cast<Resource*>(c1);
-    Resource* r2 = static_cast<Resource*>(c2);
+    Resource *r1 = static_cast<Resource *>(c1);
+    Resource *r2 = static_cast<Resource *>(c2);
 
-    if (level < 0 || level >= maxSortingLevel)
+    if (level < 0 || level >= maxSortingLevel) {
         return -1;
+    }
 
-    switch (sorting[level])
-    {
+    switch (sorting[level]) {
     case TreeMode:
-        if (level == 0)
+        if (level == 0) {
             return compareTreeItemsT(this, r1, r2);
-        else
+        } else
             return r1->getSequenceNo() == r2->getSequenceNo() ? 0 :
-                r1->getSequenceNo() < r2->getSequenceNo() ? -1 : 1;
+                   r1->getSequenceNo() < r2->getSequenceNo() ? -1 : 1;
     case MinEffortUp:
         return r1->minEffort == r2->minEffort ? 0 :
-            r1->minEffort < r2->minEffort ? -1 : 1;
+               r1->minEffort < r2->minEffort ? -1 : 1;
     case MinEffortDown:
         return r1->minEffort == r2->minEffort ? 0 :
-            r1->minEffort < r2->minEffort ? 1 : -1;
+               r1->minEffort < r2->minEffort ? 1 : -1;
     case MaxEffortUp:
         return r1->limits->getDailyMax() == r2->limits->getDailyMax() ? 0 :
-            r1->limits->getDailyMax() < r2->limits->getDailyMax() ? -1 : 1;
+               r1->limits->getDailyMax() < r2->limits->getDailyMax() ? -1 : 1;
     case MaxEffortDown:
         return r1->limits->getDailyMax() == r2->limits->getDailyMax() ? 0 :
-            r1->limits->getDailyMax() < r2->limits->getDailyMax() ? 1 : -1;
+               r1->limits->getDailyMax() < r2->limits->getDailyMax() ? 1 : -1;
     case RateUp:
         return r1->rate == r2->rate ? 0 : r1->rate < r2->rate ? -1 : 1;
     case RateDown:
@@ -85,19 +84,20 @@ ResourceList::compareItemsLevel(CoreAttributes* c1, CoreAttributes* c2,
     }
 }
 
-Resource*
-ResourceList::getResource(const QString& id) const
+Resource *
+ResourceList::getResource(const QString &id) const
 {
     for (ResourceListIterator rli(*this); *rli != 0; ++rli)
-        if ((*rli)->getId() == id)
+        if ((*rli)->getId() == id) {
             return *rli;
+        }
 
     return 0;
 }
 
-Resource* ResourceListIterator::operator*()
+Resource *ResourceListIterator::operator*()
 {
-    return static_cast<Resource*>(CoreAttributesListIterator::operator*());
+    return static_cast<Resource *>(CoreAttributesListIterator::operator*());
 }
 
 } // namespace TJ

@@ -26,17 +26,16 @@
 
 typedef class QList<QVariant> QVariantList;
 
-
 class XFigImportFilter : public KoFilter
 {
     Q_OBJECT
 
 public:
-    XFigImportFilter( QObject* parent, const QVariantList& );
+    XFigImportFilter(QObject *parent, const QVariantList &);
     virtual ~XFigImportFilter();
 
 public: // KoFilter API
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif

@@ -48,13 +48,13 @@ class KEXICORE_EXPORT KexiSharedActionConnector
 {
 public:
     /* Connects shared actions offered by \a proxy to \a obj. */
-    KexiSharedActionConnector(KexiActionProxy* proxy, QObject *obj);
+    KexiSharedActionConnector(KexiActionProxy *proxy, QObject *obj);
     ~KexiSharedActionConnector();
 
 protected:
-    void plugSharedAction(const QString& action_name, const char *slot);
+    void plugSharedAction(const QString &action_name, const char *slot);
 
-    KexiActionProxy* m_proxy;
+    KexiActionProxy *m_proxy;
     QObject *m_object;
 };
 
@@ -72,36 +72,38 @@ public:
     /*! Constructs action proxy for object \a receiver, using \a host.
      If \a host is NULL, KexiSharedActionHost::defaultHost() is used.
      (you must be sure that it's true) -- it is casted to QObject and assigned as the receiver.*/
-    explicit KexiActionProxy(QObject *receiver , KexiSharedActionHost *host = 0);
+    explicit KexiActionProxy(QObject *receiver, KexiSharedActionHost *host = 0);
     virtual ~KexiActionProxy();
 
     /*! Activates  action named \a action_name for this proxy. If the action is executed
      (accepted), true is returned. */
-    bool activateSharedAction(const QString& action_name, bool alsoCheckInChildren = true);
+    bool activateSharedAction(const QString &action_name, bool alsoCheckInChildren = true);
 
     /*! Sets host to \a host; rerely used. */
-    void setSharedActionHost(KexiSharedActionHost& host) {
+    void setSharedActionHost(KexiSharedActionHost &host)
+    {
         m_host = &host;
     }
 
     /*! \return true, if action named \a action_name is enabled within the proxy.
      False is returned either if the action is not available or is not supported.
      \ sa isSupported() */
-    bool isAvailable(const QString& action_name, bool alsoCheckInChildren = true) const;
+    bool isAvailable(const QString &action_name, bool alsoCheckInChildren = true) const;
 
     /*! \return true, if action named \a action_name is supported by the proxy. */
-    bool isSupported(const QString& action_name) const;
+    bool isSupported(const QString &action_name) const;
 
 protected:
     /*! Plugs shared action named \a action_name to slot \a slot in \a receiver.
      \a Receiver is usually a child of _this_ widget. */
-    void plugSharedAction(const QString& action_name, QObject* receiver, const char *slot);
+    void plugSharedAction(const QString &action_name, QObject *receiver, const char *slot);
 
-    void unplugSharedAction(const QString& action_name);
+    void unplugSharedAction(const QString &action_name);
 
     /*! Typical version of plugAction() method -- plugs action named \a action_name
      to slot \a slot in _this_ widget. */
-    inline void plugSharedAction(const QString& action_name, const char *slot) {
+    inline void plugSharedAction(const QString &action_name, const char *slot)
+    {
         plugSharedAction(action_name, m_receiver, slot);
     }
 
@@ -110,11 +112,11 @@ protected:
      Does nothing if no action found, so generally this is safer than just caling e.g.
      <code> action("myaction")->plug(myPopup); </code>
      \sa action(), QWidget::addAction(QAction*) */
-    void plugSharedAction(const QString& action_name, QWidget* w);
+    void plugSharedAction(const QString &action_name, QWidget *w);
 
     /*! Unplugs action named \a action_name from a widget \a w.
      \sa plugSharedAction(const char *action_name, QWidget* w) */
-    void unplugSharedAction(const QString& action_name, QWidget* w);
+    void unplugSharedAction(const QString &action_name, QWidget *w);
 
     /*! Like above, but creates alternative action as a copy of \a action_name,
      with \a alternativeText set. When this action is activated, just original action
@@ -122,16 +124,17 @@ protected:
      action_name + "_alt". The new action's owner is \a w. You can delete
      this action without informing action proxy about this.
      \return newly created action or 0 if \a action_name not found. */
-    KAction* plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w);
+    KAction *plugSharedAction(const QString &action_name, const QString &alternativeText, QWidget *w);
 
     /*! \return action named with \a name or NULL if there is no such action. */
-    virtual QAction* sharedAction(const QString& action_name);
+    virtual QAction *sharedAction(const QString &action_name);
 
-    inline QObject *receiver() const {
+    inline QObject *receiver() const
+    {
         return m_receiver;
     }
 
-    virtual void setAvailable(const QString& action_name, bool set);
+    virtual void setAvailable(const QString &action_name, bool set);
 
     /*! Adds \a child of this proxy. Children will receive activateSharedAction() event,
      If activateSharedAction() "event" is not consumed by the main proxy,
@@ -140,24 +143,24 @@ protected:
 
      If proxy child is destroyed, it is automatically detached from its parent proxy.
      Parent proxy is 0 by default. This pointer is properly cleared when parent proxy is destroyed. */
-    void addActionProxyChild(KexiActionProxy* child);
+    void addActionProxyChild(KexiActionProxy *child);
 
-    void takeActionProxyChild(KexiActionProxy* child);
+    void takeActionProxyChild(KexiActionProxy *child);
 
     KexiSharedActionHost *m_host;
     QPointer<QObject> m_receiver;
 
-    QList<KexiActionProxy*> m_sharedActionChildren;
+    QList<KexiActionProxy *> m_sharedActionChildren;
 
-    QList<KAction*> m_alternativeActions;
+    QList<KAction *> m_alternativeActions;
 
-    KexiActionProxy* m_actionProxyParent;
+    KexiActionProxy *m_actionProxyParent;
 
     QObject m_signal_parent; //!< it's just to have common parent for owned signals
 
 public:
     //! For internal use by addActionProxyChild(). \a parent can be 0.
-    void setActionProxyParent_internal(KexiActionProxy* parent);
+    void setActionProxyParent_internal(KexiActionProxy *parent);
 
     //! @internal
     KexiActionProxy *m_focusedChild;
@@ -167,7 +170,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

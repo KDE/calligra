@@ -32,18 +32,17 @@ class KRITA_SKETCH_EXPORT Settings : public QObject
     Q_OBJECT
     Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged)
     Q_PROPERTY(bool temporaryFile READ isTemporaryFile WRITE setTemporaryFile NOTIFY temporaryFileChanged)
-    Q_PROPERTY(QDeclarativeItem* focusItem READ focusItem WRITE setFocusItem NOTIFY focusItemChanged)
-    Q_PROPERTY(QObject* theme READ theme NOTIFY themeChanged)
+    Q_PROPERTY(QDeclarativeItem *focusItem READ focusItem WRITE setFocusItem NOTIFY focusItemChanged)
+    Q_PROPERTY(QObject *theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QString themeID READ themeID WRITE setThemeID NOTIFY themeChanged)
-    Q_PROPERTY(QObject* customImageSettings READ customImageSettings NOTIFY customImageSettingsChanged)
+    Q_PROPERTY(QObject *customImageSettings READ customImageSettings NOTIFY customImageSettingsChanged)
     Q_PROPERTY(QString lastPreset READ lastPreset NOTIFY lastPresetChanged)
 
 public:
-    explicit Settings( QObject* parent = 0);
+    explicit Settings(QObject *parent = 0);
     virtual ~Settings();
 
 public Q_SLOTS:
-
 
     QString currentFile() const;
     void setCurrentFile(const QString &fileName);
@@ -54,12 +53,12 @@ public Q_SLOTS:
     QDeclarativeItem *focusItem();
     void setFocusItem(QDeclarativeItem *item);
 
-    QObject* theme() const;
+    QObject *theme() const;
 
     QString themeID() const;
-    void setThemeID(const QString& id);
+    void setThemeID(const QString &id);
 
-    QObject* customImageSettings() const;
+    QObject *customImageSettings() const;
     QString lastPreset() const;
 
 Q_SIGNALS:
@@ -72,7 +71,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // SETTINGS_H

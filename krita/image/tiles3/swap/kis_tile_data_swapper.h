@@ -23,7 +23,6 @@
 
 #include "krita_export.h"
 
-
 class KisTileDataStore;
 class KisTileData;
 
@@ -55,10 +54,8 @@ private:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
-
-
 
 #endif /* KIS_TILE_DATA_SWAPPER_H_ */
 

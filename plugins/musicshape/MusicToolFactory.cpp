@@ -25,22 +25,21 @@
 #include <KoIcon.h>
 #include <klocale.h>
 
-
 MusicToolFactory::MusicToolFactory()
     : KoToolFactoryBase("MusicToolFactoryId")
 {
-    setToolTip( i18n( "Music editing, parts" ) );
+    setToolTip(i18n("Music editing, parts"));
     setIconName(koIconNameCStr("musicshape"));
-    setToolType( dynamicToolType() );
-    setPriority( 2 );
-    setActivationShapeId( MusicShapeId );
+    setToolType(dynamicToolType());
+    setPriority(2);
+    setActivationShapeId(MusicShapeId);
 }
 
 MusicToolFactory::~MusicToolFactory()
 {
 }
 
-KoToolBase* MusicToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase *MusicToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new MusicTool( canvas );
+    return new MusicTool(canvas);
 }

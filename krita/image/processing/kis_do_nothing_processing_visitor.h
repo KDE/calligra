@@ -21,7 +21,6 @@
 
 #include "kis_processing_visitor.h"
 
-
 class KRITAIMAGE_EXPORT KisDoNothingProcessingVisitor : public KisProcessingVisitor
 {
 public:

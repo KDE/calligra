@@ -43,7 +43,7 @@ public:
     static QImage difference(const QImage &image1, const QImage &image2);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent * event);
+    virtual void keyPressEvent(QKeyEvent *event);
 
     virtual void resizeEvent(QResizeEvent *event);
 

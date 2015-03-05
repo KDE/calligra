@@ -30,8 +30,8 @@
 
 using namespace Calligra::Sheets;
 
-NamedAreaCommand::NamedAreaCommand(KUndo2Command* parent)
-        : AbstractRegionCommand(parent)
+NamedAreaCommand::NamedAreaCommand(KUndo2Command *parent)
+    : AbstractRegionCommand(parent)
 {
     setText(kundo2_i18n("Add Named Area"));
 }
@@ -40,7 +40,7 @@ NamedAreaCommand::~NamedAreaCommand()
 {
 }
 
-void NamedAreaCommand::setAreaName(const QString& name)
+void NamedAreaCommand::setAreaName(const QString &name)
 {
     m_areaName = name;
 }
@@ -48,23 +48,27 @@ void NamedAreaCommand::setAreaName(const QString& name)
 void NamedAreaCommand::setReverse(bool reverse)
 {
     AbstractRegionCommand::setReverse(reverse);
-    if (!m_reverse)
+    if (!m_reverse) {
         setText(kundo2_i18n("Add Named Area"));
-    else
+    } else {
         setText(kundo2_i18n("Remove Named Area"));
+    }
 }
 
 bool NamedAreaCommand::preProcessing()
 {
-    if (!m_firstrun)
+    if (!m_firstrun) {
         return true;
-    if (m_reverse)
+    }
+    if (m_reverse) {
         return true;
+    }
 
     const Region namedArea = m_sheet->map()->namedAreaManager()->namedArea(m_areaName);
     if (!namedArea.isEmpty()) {
-        if (namedArea == *this)
+        if (namedArea == *this) {
             return false;
+        }
         m_oldArea = namedArea;
     }
     // no protection or matrix lock check needed
@@ -73,15 +77,17 @@ bool NamedAreaCommand::preProcessing()
 
 bool NamedAreaCommand::mainProcessing()
 {
-    kDebug() ;
+    kDebug();
     if (!m_reverse) {
-        if (!m_oldArea.isEmpty())
+        if (!m_oldArea.isEmpty()) {
             m_sheet->map()->namedAreaManager()->remove(m_areaName);
+        }
         m_sheet->map()->namedAreaManager()->insert(*this, m_areaName);
     } else {
         m_sheet->map()->namedAreaManager()->remove(m_areaName);
-        if (!m_oldArea.isEmpty())
+        if (!m_oldArea.isEmpty()) {
             m_sheet->map()->namedAreaManager()->insert(m_oldArea, m_areaName);
+        }
     }
     return true;
 }
@@ -89,10 +95,10 @@ bool NamedAreaCommand::mainProcessing()
 bool NamedAreaCommand::postProcessing()
 {
     // update formulas containing either the new or the old name
-    Map* const map = m_sheet->map();
-    foreach(Sheet* sheet, map->sheetList()) {
+    Map *const map = m_sheet->map();
+    foreach (Sheet *sheet, map->sheetList()) {
         const QString tmp = '\'' + m_areaName + '\'';
-        const FormulaStorage* const storage = sheet->formulaStorage();
+        const FormulaStorage *const storage = sheet->formulaStorage();
         for (int c = 0; c < storage->count(); ++c) {
             if (storage->data(c).expression().contains(tmp)) {
                 Cell cell(sheet, storage->col(c), storage->row(c));

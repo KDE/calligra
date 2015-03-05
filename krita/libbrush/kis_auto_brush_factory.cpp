@@ -24,9 +24,9 @@
 #include "kis_auto_brush.h"
 #include "kis_mask_generator.h"
 
-KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
+KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement &brushDefinition)
 {
-    KisMaskGenerator* mask = KisMaskGenerator::fromXML(brushDefinition.firstChildElement("MaskGenerator"));
+    KisMaskGenerator *mask = KisMaskGenerator::fromXML(brushDefinition.firstChildElement("MaskGenerator"));
     bool result;
     QLocale c(QLocale::German);
 

@@ -33,7 +33,7 @@ class PropertyContainer : public QObject
 {
     Q_OBJECT
 public:
-    PropertyContainer(QString name, QObject* parent = 0);
+    PropertyContainer(QString name, QObject *parent = 0);
     virtual ~PropertyContainer();
 
     // As QObject already as setProperty and property() functions, we must
@@ -48,13 +48,13 @@ public:
     // two functions above, this makes for more explicit handling,
     // which, while it does expand the API, makes it clearer in use.
     Q_INVOKABLE void setCurve(const KisCubicCurve &curve);
-    Q_INVOKABLE const KisCubicCurve& curve() const;
-    Q_INVOKABLE void setCurves(const QList<KisCubicCurve>& curves);
-    Q_INVOKABLE QList<KisCubicCurve>& curves() const;
+    Q_INVOKABLE const KisCubicCurve &curve() const;
+    Q_INVOKABLE void setCurves(const QList<KisCubicCurve> &curves);
+    Q_INVOKABLE QList<KisCubicCurve> &curves() const;
     Q_INVOKABLE int curveCount() const;
     Q_INVOKABLE KisCubicCurve specificCurve(int index) const;
     Q_INVOKABLE QString specificCurveName(int index) const;
-    Q_INVOKABLE void setSpecificCurve(int index, const KisCubicCurve& curve) const;
+    Q_INVOKABLE void setSpecificCurve(int index, const KisCubicCurve &curve) const;
 
     Q_INVOKABLE QString name();
 private:

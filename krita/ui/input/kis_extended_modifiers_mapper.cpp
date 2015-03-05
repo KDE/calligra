@@ -37,8 +37,7 @@ struct KeyMapping {
 
 #endif /* Q_WS_X11 */
 
-struct KisExtendedModifiersMapper::Private
-{
+struct KisExtendedModifiersMapper::Private {
     Private();
 
 #ifdef Q_WS_X11
@@ -72,19 +71,18 @@ KisExtendedModifiersMapper::Private::Private()
     mapping.append(KeyMapping(XK_Hyper_L, Qt::Key_Hyper_L));
     mapping.append(KeyMapping(XK_Hyper_R, Qt::Key_Hyper_R));
 
-
     mapping.append(KeyMapping(XK_space, Qt::Key_Space));
 
     for (int qtKey = Qt::Key_0, x11Sym = XK_0;
-         qtKey <= Qt::Key_9;
-         qtKey++, x11Sym++) {
+            qtKey <= Qt::Key_9;
+            qtKey++, x11Sym++) {
 
         mapping.append(KeyMapping(x11Sym, Qt::Key(qtKey)));
     }
 
     for (int qtKey = Qt::Key_A, x11Sym = XK_a;
-         qtKey <= Qt::Key_Z;
-         qtKey++, x11Sym++) {
+            qtKey <= Qt::Key_Z;
+            qtKey++, x11Sym++) {
 
         mapping.append(KeyMapping(x11Sym, Qt::Key(qtKey)));
     }
@@ -111,7 +109,6 @@ KisExtendedModifiersMapper::Private::Private()
 }
 
 #endif /* Q_WS_X11 */
-
 
 KisExtendedModifiersMapper::KisExtendedModifiersMapper()
     : m_d(new Private)

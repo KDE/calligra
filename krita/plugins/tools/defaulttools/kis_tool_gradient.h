@@ -37,7 +37,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-
 class QLabel;
 class QPoint;
 class QWidget;
@@ -51,7 +50,7 @@ class KisToolGradient : public KisToolPaint
     Q_OBJECT
 
 public:
-    KisToolGradient(KoCanvasBase * canvas);
+    KisToolGradient(KoCanvasBase *canvas);
     virtual ~KisToolGradient();
 
     void beginPrimaryAction(KoPointerEvent *event);
@@ -60,10 +59,10 @@ public:
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
-    QWidget* createOptionWidget();
+    QWidget *createOptionWidget();
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     void slotSetShape(int);
     void slotSetRepeat(int);
     void slotSetReverse(bool);
@@ -71,14 +70,15 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void areaDone(const QRect & rc) {
+    void areaDone(const QRect &rc)
+    {
         currentNode()->setDirty(rc); // Starts computing the projection for the area we've done.
 
     }
 
 private:
 
-    void paintLine(QPainter& gc);
+    void paintLine(QPainter &gc);
 
     QPointF straightLine(QPointF point);
 
@@ -106,8 +106,9 @@ class KisToolGradientFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolGradientFactory(const QStringList&)
-            : KoToolFactoryBase("KritaFill/KisToolGradient") {
+    KisToolGradientFactory(const QStringList &)
+        : KoToolFactoryBase("KritaFill/KisToolGradient")
+    {
         setToolTip(i18n("Draw a gradient."));
         setToolType(TOOL_TYPE_FILL);
         setIconName(koIconNameCStr("krita_tool_gradient"));
@@ -118,7 +119,8 @@ public:
 
     virtual ~KisToolGradientFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return  new KisToolGradient(canvas);
     }
 

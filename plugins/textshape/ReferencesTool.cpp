@@ -63,7 +63,7 @@ LabeledWidget::LabeledWidget(KAction *action, const QString label, LabelPosition
     if (lb == LabeledWidget::INLINE) { // label followed by line edit
         layout = new QHBoxLayout();
         l->setIndent(l->style()->pixelMetric(QStyle::PM_SmallIconSize)
-                    + l->style()->pixelMetric(QStyle::PM_MenuPanelWidth) + 4);
+                     + l->style()->pixelMetric(QStyle::PM_MenuPanelWidth) + 4);
     } else { //Label goes above the text edit
         layout = new QVBoxLayout();
         m_lineEdit->setFixedWidth(300); //TODO : assuming a reasonable width, is there a better way?
@@ -95,7 +95,7 @@ void LabeledWidget::enterEvent(QEvent *event)
     QWidget::enterEvent(event);
 }
 
-void LabeledWidget::setWarningText(int pos, const QString& warning)
+void LabeledWidget::setWarningText(int pos, const QString &warning)
 {
     if ((m_warningLabel[pos] == NULL)) {
         return;
@@ -108,7 +108,7 @@ void LabeledWidget::clearLineEdit()
     m_lineEdit->setText("");
 }
 
-ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
+ReferencesTool::ReferencesTool(KoCanvasBase *canvas): TextTool(canvas),
     m_configure(0),
     m_stocw(0),
     m_canvas(canvas)
@@ -135,8 +135,8 @@ void ReferencesTool::createActions()
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
 
-    action = new KAction(i18n("Insert footnote with auto number"),this);
-    addAction("insert_autofootnote",action);
+    action = new KAction(i18n("Insert footnote with auto number"), this);
+    addAction("insert_autofootnote", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoFootNote()));
 
     action = new KAction(i18n("Insert Labeled Footnote"), this);
@@ -145,8 +145,8 @@ void ReferencesTool::createActions()
     addAction("insert_labeledfootnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledFootNote(QString)));
 
-    action = new KAction(i18n("Insert endnote with auto number"),this);
-    addAction("insert_autoendnote",action);
+    action = new KAction(i18n("Insert endnote with auto number"), this);
+    addAction("insert_autoendnote", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoEndNote()));
 
     action = new KAction(i18n("Insert Labeled Endnote"), this);
@@ -156,28 +156,28 @@ void ReferencesTool::createActions()
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
 
     action = new KAction(koIcon("configure"), i18n("Settings..."), this);
-    addAction("format_footnotes",action);
+    addAction("format_footnotes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(showFootnotesConfigureDialog()));
 
     action = new KAction(koIcon("configure"), i18n("Settings..."), this);
-    addAction("format_endnotes",action);
+    addAction("format_endnotes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(showEndnotesConfigureDialog()));
 
     action = new KAction(i18n("Insert Citation"), this);
-    addAction("insert_citation",action);
+    addAction("insert_citation", action);
     action->setToolTip(i18n("Insert a citation into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertCitation()));
 
     action = new KAction(i18n("Insert Bibliography"), this);
-    addAction("insert_bibliography",action);
+    addAction("insert_bibliography", action);
     action->setToolTip(i18n("Insert a bibliography into the document."));
 
     action = new KAction(i18n("Insert Custom Bibliography"), this);
     addAction("insert_custom_bibliography", action);
     action->setToolTip(i18n("Insert a custom Bibliography into the document."));
 
-    action = new KAction(i18n("Configure"),this);
-    addAction("configure_bibliography",action);
+    action = new KAction(i18n("Configure"), this);
+    addAction("configure_bibliography", action);
     action->setToolTip(i18n("Configure the bibliography"));
     connect(action, SIGNAL(triggered()), this, SLOT(configureBibliography()));
 
@@ -203,8 +203,7 @@ void ReferencesTool::createActions()
     action->setToolTip(i18n("Manage your Bookmarks. Check where are they pointing to, Delete or Rename."));
 }
 
-
-void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     TextTool::activate(toolActivation, shapes);
 }

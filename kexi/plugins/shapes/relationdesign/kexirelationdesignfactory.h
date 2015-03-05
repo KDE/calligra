@@ -21,7 +21,6 @@
 
 #include <KoShapeFactoryBase.h>
 
-
 class KexiRelationDesignFactory : public KoShapeFactoryBase
 {
 public:

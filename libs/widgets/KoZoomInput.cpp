@@ -35,27 +35,27 @@
 
 class KoZoomInput::Private
 {
-    public:
-        QComboBox* combo;
-        QLabel* label;
-        bool inside;
+public:
+    QComboBox *combo;
+    QLabel *label;
+    bool inside;
 };
 
-KoZoomInput::KoZoomInput(QWidget* parent)
+KoZoomInput::KoZoomInput(QWidget *parent)
     : QStackedWidget(parent), d(new Private)
 {
 #ifdef Q_OS_MAC
     setAttribute(Qt::WA_MacMiniSize, true);
 #endif
 
-    QWidget* first = new QWidget(this);
-    QHBoxLayout* layout = new QHBoxLayout(first);
+    QWidget *first = new QWidget(this);
+    QHBoxLayout *layout = new QHBoxLayout(first);
     layout->setSpacing(0);
     layout->setMargin(0);
     d->label = new QLabel(first);
     d->label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(d->label, 10);
-    QLabel* icon = new QLabel(first);
+    QLabel *icon = new QLabel(first);
     QStyleOption option;
     option.state = QStyle::State_Enabled;
     QPixmap pixmap(16, 16);
@@ -73,7 +73,7 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     addWidget(d->combo);
     d->inside = false;
 
-    connect(d->combo, SIGNAL(activated(const QString&)), this, SIGNAL(zoomLevelChanged(const QString&)));
+    connect(d->combo, SIGNAL(activated(QString)), this, SIGNAL(zoomLevelChanged(QString)));
 }
 
 KoZoomInput::~KoZoomInput()
@@ -81,65 +81,60 @@ KoZoomInput::~KoZoomInput()
     delete d;
 }
 
-void KoZoomInput::enterEvent(QEvent* event)
+void KoZoomInput::enterEvent(QEvent *event)
 {
     Q_UNUSED(event);
 
     d->inside = true;
-    if (d->combo->view())
-    {
+    if (d->combo->view()) {
         d->combo->view()->removeEventFilter(this);
     }
 
     setCurrentIndex(1);
 }
 
-void KoZoomInput::leaveEvent(QEvent* event)
+void KoZoomInput::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
 
     d->inside = false;
-    if(d->combo->view() && d->combo->view()->isVisible())
-    {
+    if (d->combo->view() && d->combo->view()->isVisible()) {
         d->combo->view()->installEventFilter(this);
         return;
     }
 
-    if(!d->combo->hasFocus())
+    if (!d->combo->hasFocus()) {
         setCurrentIndex(0);
+    }
 }
 
-void KoZoomInput::keyPressEvent(QKeyEvent* event)
+void KoZoomInput::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return ||
-        event->key() == Qt::Key_Enter)
-    {
+            event->key() == Qt::Key_Enter) {
         focusNextChild();
     }
 }
 
-void KoZoomInput::setZoomLevels(const QStringList& levels)
+void KoZoomInput::setZoomLevels(const QStringList &levels)
 {
     d->combo->clear();
     d->combo->addItems(levels);
 }
 
-void KoZoomInput::setCurrentZoomLevel(const QString& level)
+void KoZoomInput::setCurrentZoomLevel(const QString &level)
 {
     d->combo->setCurrentIndex(d->combo->findText(level));
     d->label->setText(level);
 }
 
-bool KoZoomInput::eventFilter(QObject* watched, QEvent* event)
+bool KoZoomInput::eventFilter(QObject *watched, QEvent *event)
 {
-    if(watched == d->combo->view() && event->type() == QEvent::Hide)
-    {
+    if (watched == d->combo->view() && event->type() == QEvent::Hide) {
         focusNextChild();
         setCurrentIndex(0);
-    }
-    else if (watched == d->combo && event->type() == QEvent::FocusOut &&
-            (d->combo->view() && !d->combo->view()->hasFocus()) && !d->inside)
-    {
+    } else if (watched == d->combo && event->type() == QEvent::FocusOut &&
+               (d->combo->view() && !d->combo->view()->hasFocus()) && !d->inside) {
         setCurrentIndex(0);
     }
     return false;

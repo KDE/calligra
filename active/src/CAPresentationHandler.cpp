@@ -62,29 +62,29 @@ public:
     }
 
     QString searchString;
-    KPrDocument* document;
-    CAPAView* paView;
+    KPrDocument *document;
+    CAPAView *paView;
     int currentSlideNum;
     int countMatchesPerSlide;
     int searchSlideNumber;
     bool matchFound;
-    QList<QTextDocument*> texts;
-    KoFindText* findText;
+    QList<QTextDocument *> texts;
+    KoFindText *findText;
     QTimer slideshowTimer;
-    QList<KoPAPageBase*> slideShow;
+    QList<KoPAPageBase *> slideShow;
     CAPADocumentModel *paDocumentModel;
 };
 
-CAPresentationHandler::CAPresentationHandler (CADocumentController* documentController)
-    : CAAbstractDocumentHandler (documentController)
-    , d (new Private())
+CAPresentationHandler::CAPresentationHandler(CADocumentController *documentController)
+    : CAAbstractDocumentHandler(documentController)
+    , d(new Private())
 {
-    QList<QTextDocument*> texts;
+    QList<QTextDocument *> texts;
     d->findText = new KoFindText(this);
     connect(&d->slideshowTimer, SIGNAL(timeout()), SLOT(advanceSlideshow()));
-    connect (d->findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
-    connect (d->findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
-    connect (d->findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
+    connect(d->findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
+    connect(d->findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
+    connect(d->findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
 }
 
 CAPresentationHandler::~CAPresentationHandler()
@@ -97,55 +97,55 @@ KoZoomMode::Mode CAPresentationHandler::preferredZoomMode() const
     return KoZoomMode::ZOOM_PAGE;
 }
 
-KoDocument* CAPresentationHandler::document()
+KoDocument *CAPresentationHandler::document()
 {
     return d->document;
 }
 
-bool CAPresentationHandler::openDocument (const QString& uri)
+bool CAPresentationHandler::openDocument(const QString &uri)
 {
     QString error;
-    QString mimetype = KMimeType::findByPath (uri)->name();
+    QString mimetype = KMimeType::findByPath(uri)->name();
     KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
-                      QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
+                   QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
 
     if (!part) {
         kDebug() << "Doc can't be openend" << error;
         return false;
     }
 
-    d->document = qobject_cast<KPrDocument*> (part->document());
-    d->document->openUrl (KUrl (uri));
+    d->document = qobject_cast<KPrDocument *> (part->document());
+    d->document->openUrl(KUrl(uri));
 
-    KoCanvasBase* paCanvas = dynamic_cast<KoCanvasBase*>(part->canvasItem(d->document));
-    KoPACanvasItem* paCanvasItem = dynamic_cast<KoPACanvasItem*> (paCanvas);
+    KoCanvasBase *paCanvas = dynamic_cast<KoCanvasBase *>(part->canvasItem(d->document));
+    KoPACanvasItem *paCanvasItem = dynamic_cast<KoPACanvasItem *>(paCanvas);
     if (!paCanvasItem) {
         kDebug() << "Failed to fetch a canvas item";
         return false;
     }
 
     if (paCanvasItem) {
-        d->paView = new CAPAView (documentController()->canvasController(), dynamic_cast<KoPACanvasBase*> (paCanvas),
-                                d->document);
-        paCanvasItem->setView (d->paView);
+        d->paView = new CAPAView(documentController()->canvasController(), dynamic_cast<KoPACanvasBase *>(paCanvas),
+                                 d->document);
+        paCanvasItem->setView(d->paView);
 
-        documentController()->canvasController()->setZoomHandler (static_cast<KoZoomHandler*> (paCanvasItem->viewConverter()));
+        documentController()->canvasController()->setZoomHandler(static_cast<KoZoomHandler *>(paCanvasItem->viewConverter()));
         d->paView->connectToZoomController();
 
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-        connect (documentController()->canvasController()->canvasControllerProxyObject(),
-                 SIGNAL(moveDocumentOffset(QPoint)), paCanvasItem, SLOT(slotSetDocumentOffset(QPoint)));
+        connect(documentController()->canvasController()->canvasControllerProxyObject(),
+                SIGNAL(moveDocumentOffset(QPoint)), paCanvasItem, SLOT(slotSetDocumentOffset(QPoint)));
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-        connect (paCanvasItem, SIGNAL(documentSize(QSize)), this, SLOT(tellZoomControllerToSetDocumentSize(QSize)));
+        connect(paCanvasItem, SIGNAL(documentSize(QSize)), this, SLOT(tellZoomControllerToSetDocumentSize(QSize)));
 
         paCanvasItem->update();
     }
 
-    setCanvas (paCanvas);
-    KoToolManager::instance()->addController (documentController()->canvasController());
+    setCanvas(paCanvas);
+    KoToolManager::instance()->addController(documentController()->canvasController());
 
     connect(documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
-    connect (documentController()->canvasController(), SIGNAL(needCanvasUpdate()), SLOT(updateCanvas()));
+    connect(documentController()->canvasController(), SIGNAL(needCanvasUpdate()), SLOT(updateCanvas()));
 
     d->paDocumentModel = new CAPADocumentModel(this, d->document);
     emit totalNumberOfSlidesChanged();
@@ -164,8 +164,9 @@ QStringList CAPresentationHandler::supportedMimetypes()
 
 void CAPresentationHandler::nextSlide()
 {
-    if (d->currentSlideNum == d->document->pageCount()-1)
+    if (d->currentSlideNum == d->document->pageCount() - 1) {
         return;
+    }
     d->currentSlideNum++;
     emit currentSlideNumberChanged();
 
@@ -175,8 +176,7 @@ void CAPresentationHandler::nextSlide()
 
 void CAPresentationHandler::previousSlide()
 {
-    if (d->currentSlideNum > 0)
-    {
+    if (d->currentSlideNum > 0) {
         d->currentSlideNum--;
         emit currentSlideNumberChanged();
     }
@@ -187,14 +187,15 @@ void CAPresentationHandler::previousSlide()
 
 void CAPresentationHandler::gotoCurrentSlide()
 {
-    d->paView->doUpdateActivePage (d->document->pageByIndex (d->currentSlideNum, false));
+    d->paView->doUpdateActivePage(d->document->pageByIndex(d->currentSlideNum, false));
     emit previousPageImageChanged();
     emit nextPageImageChanged();
 }
 
-void CAPresentationHandler::setTextData(int slideNumber) {
+void CAPresentationHandler::setTextData(int slideNumber)
+{
     d->texts.clear();
-    KoFindText::findTextInShapes(d->document->pageByIndex(slideNumber,false)->shapes(), d->texts);
+    KoFindText::findTextInShapes(d->document->pageByIndex(slideNumber, false)->shapes(), d->texts);
     d->findText->setDocuments(d->texts);
 }
 
@@ -204,14 +205,14 @@ void CAPresentationHandler::zoomToFit()
     setTextData(d->currentSlideNum);
 }
 
-void CAPresentationHandler::tellZoomControllerToSetDocumentSize (const QSize& size)
+void CAPresentationHandler::tellZoomControllerToSetDocumentSize(const QSize &size)
 {
-    documentController()->canvasController()->zoomController()->setDocumentSize (size);
+    documentController()->canvasController()->zoomController()->setDocumentSize(size);
 }
 
 void CAPresentationHandler::updateCanvas()
 {
-    dynamic_cast<KoPACanvasItem*> (canvas())->update();
+    dynamic_cast<KoPACanvasItem *>(canvas())->update();
 }
 
 QString CAPresentationHandler::documentTypeName()
@@ -219,21 +220,21 @@ QString CAPresentationHandler::documentTypeName()
     return "presentation";
 }
 
-void CAPresentationHandler::resizeCanvas (const QSizeF& canvasSize)
+void CAPresentationHandler::resizeCanvas(const QSizeF &canvasSize)
 {
     QSizeF pageSize = d->paView->activePage()->boundingRect().size();
-    QGraphicsWidget* canvasItem = static_cast<QGraphicsWidget*>(canvas()->canvasItem());
-    QSizeF newSize (pageSize);
-    newSize.scale (canvasSize, Qt::KeepAspectRatio);
+    QGraphicsWidget *canvasItem = static_cast<QGraphicsWidget *>(canvas()->canvasItem());
+    QSizeF newSize(pageSize);
+    newSize.scale(canvasSize, Qt::KeepAspectRatio);
 
     if (canvasSize.width() < canvasSize.height()) {
-        canvasItem->setGeometry (0, (canvasSize.height() - newSize.height()) / 2,
-                                 newSize.width(), newSize.height());
-        documentController()->canvasController()->zoomHandler()->setZoom (canvasSize.width() / pageSize.width() * 0.75);
+        canvasItem->setGeometry(0, (canvasSize.height() - newSize.height()) / 2,
+                                newSize.width(), newSize.height());
+        documentController()->canvasController()->zoomHandler()->setZoom(canvasSize.width() / pageSize.width() * 0.75);
     } else {
-        canvasItem->setGeometry ( (canvasSize.width() - newSize.width()) / 2, 0,
-                                  newSize.width(), newSize.height());
-        documentController()->canvasController()->zoomHandler()->setZoom (canvasSize.height() / pageSize.height() * 0.75);
+        canvasItem->setGeometry((canvasSize.width() - newSize.width()) / 2, 0,
+                                newSize.width(), newSize.height());
+        documentController()->canvasController()->zoomHandler()->setZoom(canvasSize.height() / pageSize.height() * 0.75);
     }
 }
 
@@ -242,7 +243,7 @@ QString CAPresentationHandler::searchString() const
     return d->searchString;
 }
 
-void CAPresentationHandler::setSearchString (const QString& searchString)
+void CAPresentationHandler::setSearchString(const QString &searchString)
 {
     d->searchString = searchString;
     d->findText->find(searchString);
@@ -250,62 +251,65 @@ void CAPresentationHandler::setSearchString (const QString& searchString)
     emit searchStringChanged();
 }
 
-void CAPresentationHandler::searchOtherSlides(SearchDirection direction) {
+void CAPresentationHandler::searchOtherSlides(SearchDirection direction)
+{
     //Reset the count
     d->countMatchesPerSlide = 0;
-    if( direction == SearchForward) {
+    if (direction == SearchForward) {
         d->searchSlideNumber = d->currentSlideNum + 1;
-    } else if ( direction == SearchBackwards) {
-        if( d->currentSlideNum != 0) {
+    } else if (direction == SearchBackwards) {
+        if (d->currentSlideNum != 0) {
             d->searchSlideNumber = d->currentSlideNum - 1;
         } else {
-           return;
+            return;
         }
     }
     while ((d->searchSlideNumber < totalNumberOfSlides()) && (d->searchSlideNumber >= 0)) {
         setTextData(d->searchSlideNumber);
         setSearchString(d->searchString);
-        if(d->matchFound == true) {
+        if (d->matchFound == true) {
             d->currentSlideNum = d->searchSlideNumber;
             setCurrentSlideNumber(d->currentSlideNum);
             setSearchString(d->searchString);
-            if(direction == SearchBackwards) {
-               d->countMatchesPerSlide = d->findText->matches().count() - 1;
-               d->findText->findPrevious();
+            if (direction == SearchBackwards) {
+                d->countMatchesPerSlide = d->findText->matches().count() - 1;
+                d->findText->findPrevious();
             }
             break;
         }
-        if(direction == SearchForward) {
-           d->searchSlideNumber++;
-        } else if(direction == SearchBackwards) {
-           d->searchSlideNumber--;
+        if (direction == SearchForward) {
+            d->searchSlideNumber++;
+        } else if (direction == SearchBackwards) {
+            d->searchSlideNumber--;
         }
     }
 }
 
-void CAPresentationHandler::findNext() {
+void CAPresentationHandler::findNext()
+{
     d->countMatchesPerSlide++;
     d->findText->findNext();
-    if((d->countMatchesPerSlide >= d->findText->matches().count()) || (d->findText->matches().count() == 0)) {
-      searchOtherSlides(SearchForward);
+    if ((d->countMatchesPerSlide >= d->findText->matches().count()) || (d->findText->matches().count() == 0)) {
+        searchOtherSlides(SearchForward);
     }
 }
 
-void CAPresentationHandler::findPrevious() {
+void CAPresentationHandler::findPrevious()
+{
     d->countMatchesPerSlide--;
     d->findText->findPrevious();
-    if( d->countMatchesPerSlide < 0) {
-       searchOtherSlides(SearchBackwards);
+    if (d->countMatchesPerSlide < 0) {
+        searchOtherSlides(SearchBackwards);
     }
 }
 
-void CAPresentationHandler::findMatchFound (const KoFindMatch& match)
+void CAPresentationHandler::findMatchFound(const KoFindMatch &match)
 {
     QTextCursor cursor = match.location().value<QTextCursor>();
     updateCanvas();
 
-    canvas()->resourceManager()->setResource (KoText::CurrentTextAnchor, cursor.anchor());
-    canvas()->resourceManager()->setResource (KoText::CurrentTextPosition, cursor.position());
+    canvas()->resourceManager()->setResource(KoText::CurrentTextAnchor, cursor.anchor());
+    canvas()->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
     d->matchFound = true;
 }
 
@@ -342,12 +346,12 @@ QString CAPresentationHandler::bottomToolbarSource() const
 
 void CAPresentationHandler::setSlideshowDelay(int delay)
 {
-    d->slideshowTimer.setInterval(delay*1000);
+    d->slideshowTimer.setInterval(delay * 1000);
 }
 
 int CAPresentationHandler::slideshowDelay() const
 {
-    return d->slideshowTimer.interval()/1000;
+    return d->slideshowTimer.interval() / 1000;
 }
 
 void CAPresentationHandler::startSlideshow()
@@ -385,7 +389,7 @@ int CAPresentationHandler::totalNumberOfSlides() const
     return d->document->pageCount();
 }
 
-CAPADocumentModel* CAPresentationHandler::paDocumentModel() const
+CAPADocumentModel *CAPresentationHandler::paDocumentModel() const
 {
     return d->paDocumentModel;
 }
@@ -399,12 +403,12 @@ void CAPresentationHandler::setCurrentSlideNumber(int number)
 
 QString CAPresentationHandler::nextPageImage() const
 {
-    return paDocumentModel()->data(paDocumentModel()->index(d->currentSlideNum+1, 0), CAPADocumentModel::SlideImageRole).toString();
+    return paDocumentModel()->data(paDocumentModel()->index(d->currentSlideNum + 1, 0), CAPADocumentModel::SlideImageRole).toString();
 }
 
 QString CAPresentationHandler::previousPageImage() const
 {
-    return paDocumentModel()->data(paDocumentModel()->index(d->currentSlideNum-1, 0), CAPADocumentModel::SlideImageRole).toString();
+    return paDocumentModel()->data(paDocumentModel()->index(d->currentSlideNum - 1, 0), CAPADocumentModel::SlideImageRole).toString();
 }
 
 void CAPresentationHandler::gotoNextPage()

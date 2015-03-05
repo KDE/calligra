@@ -36,13 +36,12 @@ class QWidget;
 
 class KoCanvasBase;
 
-
 class KisToolMeasureOptionsWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    KisToolMeasureOptionsWidget(QWidget* parent, double resolution);
+    KisToolMeasureOptionsWidget(QWidget *parent, double resolution);
 
 public Q_SLOTS:
     void slotSetDistance(double distance);
@@ -53,8 +52,8 @@ private:
     void updateDistance();
 
     double m_resolution;
-    QLabel* m_distanceLabel;
-    QLabel* m_angleLabel;
+    QLabel *m_distanceLabel;
+    QLabel *m_angleLabel;
     double m_distance;
     KoUnit m_unit;
 };
@@ -65,16 +64,16 @@ class KisToolMeasure : public KisTool
     Q_OBJECT
 
 public:
-    KisToolMeasure(KoCanvasBase * canvas);
+    KisToolMeasure(KoCanvasBase *canvas);
     virtual ~KisToolMeasure();
 
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
     void endPrimaryAction(KoPointerEvent *event);
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    virtual void paint(QPainter &gc, const KoViewConverter &converter);
 
-    QWidget * createOptionWidget();
+    QWidget *createOptionWidget();
 
 Q_SIGNALS:
     void sigDistanceChanged(double distance);
@@ -85,10 +84,12 @@ private:
     double angle();
     double distance();
 
-    double deltaX() {
+    double deltaX()
+    {
         return m_endPos.x() - m_startPos.x();
     }
-    double deltaY() {
+    double deltaY()
+    {
         return m_startPos.y() - m_endPos.y();
     }
 
@@ -99,14 +100,14 @@ private:
     QPointF m_endPos;
 };
 
-
 class KisToolMeasureFactory : public KoToolFactoryBase
 {
 
 public:
 
-    KisToolMeasureFactory(const QStringList&)
-            : KoToolFactoryBase("KritaShape/KisToolMeasure") {
+    KisToolMeasureFactory(const QStringList &)
+        : KoToolFactoryBase("KritaShape/KisToolMeasure")
+    {
         setToolType(TOOL_TYPE_TRANSFORM);
         setToolTip(i18n("Measure the distance between two points"));
         setIconName(koIconNameCStr("krita_tool_measure"));
@@ -116,14 +117,12 @@ public:
 
     virtual ~KisToolMeasureFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolMeasure(canvas);
     }
 
 };
-
-
-
 
 #endif //KIS_TOOL_MEASURE_H_
 

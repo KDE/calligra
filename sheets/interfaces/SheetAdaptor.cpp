@@ -47,8 +47,8 @@
 
 using namespace Calligra::Sheets;
 
-SheetAdaptor::SheetAdaptor(Sheet* t)
-        : QDBusAbstractAdaptor(t)
+SheetAdaptor::SheetAdaptor(Sheet *t)
+    : QDBusAbstractAdaptor(t)
 {
     setAutoRelaySignals(false);
     m_sheet = t;
@@ -76,21 +76,22 @@ QString SheetAdaptor::cellName(int x, int y)
     return Cell::name(x, y);
 }
 
-int SheetAdaptor::cellRow(const QString& cellname)
+int SheetAdaptor::cellRow(const QString &cellname)
 {
     return cellLocation(cellname).x();
 }
 
-int SheetAdaptor::cellColumn(const QString& cellname)
+int SheetAdaptor::cellColumn(const QString &cellname)
 {
     return cellLocation(cellname).y();
 }
 
-QPoint SheetAdaptor::cellLocation(const QString& cellname)
+QPoint SheetAdaptor::cellLocation(const QString &cellname)
 {
     const Region region(cellname, m_sheet->map(), m_sheet);
-    if (region.firstRange().isNull())
+    if (region.firstRange().isNull()) {
         return QPoint();
+    }
     return region.firstRange().topLeft();
 }
 
@@ -100,13 +101,13 @@ QString SheetAdaptor::text(int x, int y)
     return cell.userInput();
 }
 
-QString SheetAdaptor::text(const QString& cellname)
+QString SheetAdaptor::text(const QString &cellname)
 {
     const QPoint location = cellLocation(cellname);
     return text(location.x(), location.y());
 }
 
-bool SheetAdaptor::setText(int x, int y, const QString& text, bool parse)
+bool SheetAdaptor::setText(int x, int y, const QString &text, bool parse)
 {
     //FIXME: there is some problem with asString parameter, when it's set
     //to true KSpread says: ASSERT: "f" in Dependencies.cpp (621)
@@ -120,13 +121,13 @@ bool SheetAdaptor::setText(int x, int y, const QString& text, bool parse)
     return dm->execute();
 }
 
-bool SheetAdaptor::setText(const QString& cellname, const QString& text, bool parse)
+bool SheetAdaptor::setText(const QString &cellname, const QString &text, bool parse)
 {
     const QPoint location = cellLocation(cellname);
     return setText(location.x(), location.y(), text, parse);
 }
 
-QVariant valueToVariant(const Calligra::Sheets::Value& value, Sheet* sheet)
+QVariant valueToVariant(const Calligra::Sheets::Value &value, Sheet *sheet)
 {
     //Should we use following value-format enums here?
     //fmt_None, fmt_Boolean, fmt_Number, fmt_Percent, fmt_Money, fmt_DateTime, fmt_Date, fmt_Time, fmt_String
@@ -171,16 +172,18 @@ QVariant SheetAdaptor::value(int x, int y)
     return valueToVariant(cell.value(), m_sheet);
 }
 
-QVariant SheetAdaptor::value(const QString& cellname)
+QVariant SheetAdaptor::value(const QString &cellname)
 {
     const QPoint location = cellLocation(cellname);
     return value(location.x(), location.y());
 }
 
-bool SheetAdaptor::setValue(int x, int y, const QVariant& value)
+bool SheetAdaptor::setValue(int x, int y, const QVariant &value)
 {
     Cell cell = Cell(m_sheet, x, y);
-    if (! cell) return false;
+    if (! cell) {
+        return false;
+    }
     Calligra::Sheets::Value v = cell.value();
     switch (value.type()) {
     case QVariant::Bool: v = Value(value.toBool()); break;
@@ -188,15 +191,15 @@ bool SheetAdaptor::setValue(int x, int y, const QVariant& value)
     case QVariant::Int: v = Value(value.toInt()); break;
     case QVariant::Double: v = Value(value.toDouble()); break;
     case QVariant::String: v = Value(value.toString()); break;
-        //case QVariant::Date: v = Value( value.toDate() ); break;
-        //case QVariant::Time: v = Value( value.toTime() ); break;
-        //case QVariant::DateTime: v = Value( value.toDateTime() ); break;
+    //case QVariant::Date: v = Value( value.toDate() ); break;
+    //case QVariant::Time: v = Value( value.toTime() ); break;
+    //case QVariant::DateTime: v = Value( value.toDateTime() ); break;
     default: return false;
     }
     return true;
 }
 
-bool SheetAdaptor::setValue(const QString& cellname, const QVariant& value)
+bool SheetAdaptor::setValue(const QString &cellname, const QVariant &value)
 {
     const QPoint location = cellLocation(cellname);
     return setValue(location.x(), location.y(), value);
@@ -206,8 +209,9 @@ bool SheetAdaptor::setValue(const QString& cellname, const QVariant& value)
 QString SheetAdaptor::column(int _col)
 {
     //First col number = 1
-    if (_col < 1)
+    if (_col < 1) {
         return QString();
+    }
     return "";//m_sheet->nonDefaultColumnFormat( _col )->getName/*objectName*/();/*dcopObject()->objId()*/
 
 }
@@ -215,8 +219,9 @@ QString SheetAdaptor::column(int _col)
 QString SheetAdaptor::row(int _row)
 {
     //First row number = 1
-    if (_row < 1)
+    if (_row < 1) {
         return QString();
+    }
     return "";//m_sheet->nonDefaultRowFormat( _row )->/*dcopObject()->*/getName/*objectName*/();
 }
 #endif
@@ -226,7 +231,7 @@ QString SheetAdaptor::sheetName() const
     return m_sheet->sheetName();
 }
 
-bool SheetAdaptor::setSheetName(const QString & name)
+bool SheetAdaptor::setSheetName(const QString &name)
 {
     return m_sheet->setSheetName(name);
 }
@@ -269,7 +274,7 @@ int SheetAdaptor::lastRow() const
 
 void SheetAdaptor::insertColumn(int col, int nbCol)
 {
-    InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+    InsertDeleteColumnManipulator *manipulator = new InsertDeleteColumnManipulator();
     manipulator->setSheet(m_sheet);
     manipulator->add(Region(QRect(col, 1, nbCol, 1)));
     manipulator->execute();
@@ -277,7 +282,7 @@ void SheetAdaptor::insertColumn(int col, int nbCol)
 
 void SheetAdaptor::insertRow(int row, int nbRow)
 {
-    InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+    InsertDeleteRowManipulator *manipulator = new InsertDeleteRowManipulator();
     manipulator->setSheet(m_sheet);
     manipulator->add(Region(QRect(1, row, 1, nbRow)));
     manipulator->execute();
@@ -285,7 +290,7 @@ void SheetAdaptor::insertRow(int row, int nbRow)
 
 void SheetAdaptor::removeColumn(int col, int nbCol)
 {
-    InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+    InsertDeleteColumnManipulator *manipulator = new InsertDeleteColumnManipulator();
     manipulator->setSheet(m_sheet);
     manipulator->setReverse(true);
     manipulator->add(Region(QRect(col, 1, nbCol, 1)));
@@ -294,7 +299,7 @@ void SheetAdaptor::removeColumn(int col, int nbCol)
 
 void SheetAdaptor::removeRow(int row, int nbRow)
 {
-    InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+    InsertDeleteRowManipulator *manipulator = new InsertDeleteRowManipulator();
     manipulator->setSheet(m_sheet);
     manipulator->setReverse(true);
     manipulator->add(Region(QRect(1, row, 1, nbRow)));
@@ -412,7 +417,7 @@ QString SheetAdaptor::paperOrientation() const
 
 void SheetAdaptor::setPaperLayout(float leftBorder, float topBorder,
                                   float rightBorder, float bottomBoder,
-                                  const QString& format, const QString& orientation)
+                                  const QString &format, const QString &orientation)
 {
     KoPageLayout pageLayout;
     pageLayout.format = KoPageFormat::formatFromString(format);
@@ -456,45 +461,45 @@ QString SheetAdaptor::printFootRight()const
     return m_sheet->print()->footRight();
 }
 
-void SheetAdaptor::setPrintHeaderLeft(const QString & text)
+void SheetAdaptor::setPrintHeaderLeft(const QString &text)
 {
     m_sheet->print()->setHeadFootLine(text,       headMid(), headRight(),
                                       footLeft(), footMid(), footRight());
 }
 
-void SheetAdaptor::setPrintHeaderMiddle(const QString & text)
+void SheetAdaptor::setPrintHeaderMiddle(const QString &text)
 {
     m_sheet->print()->setHeadFootLine(headLeft(), text,      headRight(),
                                       footLeft(), footMid(), footRight());
 
 }
 
-void SheetAdaptor::setPrintHeaderRight(const QString & text)
+void SheetAdaptor::setPrintHeaderRight(const QString &text)
 {
     m_sheet->print()->setHeadFootLine(headLeft(), headMid(), text,
                                       footLeft(), footMid(), footRight());
 }
 
-void SheetAdaptor::setPrintFooterLeft(const QString & text)
+void SheetAdaptor::setPrintFooterLeft(const QString &text)
 {
     m_sheet->print()->setHeadFootLine(headLeft(), headMid(), headRight(),
                                       text,       footMid(), footRight());
 }
 
-void SheetAdaptor::setPrintFooterMiddle(const QString & text)
+void SheetAdaptor::setPrintFooterMiddle(const QString &text)
 {
     m_sheet->print()->setHeadFootLine(headLeft(), headMid(), headRight(),
                                       footLeft(), text,      footRight());
 }
 
-void SheetAdaptor::setPrintFooterRight(const QString & text)
+void SheetAdaptor::setPrintFooterRight(const QString &text)
 {
     m_sheet->print()->setHeadFootLine(headLeft(), headMid(), headRight(),
                                       footLeft(), footMid(), text);
 }
 #endif
 
-bool SheetAdaptor::checkPassword(const QByteArray& passwd) const
+bool SheetAdaptor::checkPassword(const QByteArray &passwd) const
 {
     return m_sheet->checkPassword(passwd);
 }
@@ -504,15 +509,15 @@ bool SheetAdaptor::isProtected() const
     return m_sheet->isProtected();
 }
 
-void SheetAdaptor::setProtected(const QByteArray& passwd)
+void SheetAdaptor::setProtected(const QByteArray &passwd)
 {
     m_sheet->setProtected(passwd);
 }
 
-void SheetAdaptor::handleDamages(const QList<Damage*>& damages)
+void SheetAdaptor::handleDamages(const QList<Damage *> &damages)
 {
-    const QList<Damage*>::ConstIterator end(damages.end());
-    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
+    const QList<Damage *>::ConstIterator end(damages.end());
+    for (QList<Damage *>::ConstIterator it = damages.begin(); it != end; ++it) {
         const Damage *const damage = *it;
         if (!damage) {
             continue;

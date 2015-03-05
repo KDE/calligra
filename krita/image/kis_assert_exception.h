@@ -22,17 +22,22 @@
 #include <QtCore>
 #include <stdexcept>
 
-
 class KisAssertException : public std::runtime_error, public QtConcurrent::Exception
 {
 public:
-    KisAssertException(const std::string& what_arg)
+    KisAssertException(const std::string &what_arg)
         : std::runtime_error(what_arg)
     {
     }
 
-    Exception* clone() const { return new KisAssertException(*this); }
-    void raise() const { throw *this; }
+    Exception *clone() const
+    {
+        return new KisAssertException(*this);
+    }
+    void raise() const
+    {
+        throw *this;
+    }
 };
 
 #endif /* __KIS_ASSERT_EXCEPTION_H */

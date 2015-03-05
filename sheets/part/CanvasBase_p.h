@@ -48,7 +48,7 @@ public:
     QLabel *validationInfo;
 
     // flake
-    KoShapeManager* shapeManager;
+    KoShapeManager *shapeManager;
     QPointer<KoToolProxy> toolProxy;
 };
 

@@ -21,9 +21,9 @@
 class QWinMetaFile;
 
 static const struct MetaFuncRec {
-    const char* name;
+    const char *name;
     unsigned short func;
-    void (QWinMetaFile::*method)(long, short*);
+    void (QWinMetaFile::*method)(long, short *);
 } metaFuncTab[] = {
     { "SETBKCOLOR",           0x0201, &QWinMetaFile::setBkColor },
     { "SETBKMODE",            0x0102, &QWinMetaFile::setBkMode },
@@ -97,6 +97,5 @@ static const struct MetaFuncRec {
     // always the latest in the table : in case of unknown function
     { NULL,                   0,      &QWinMetaFile::noop },
 };
-
 
 #endif /*metafunc_h*/

@@ -69,29 +69,28 @@ public:
     /**
      * This enum holds identifiers to the resources that can be stored in here.
      */
-enum DocumentResource {
-    UndoStack,              ///< The document-wide undo stack (KUndo2Stack)
-    ImageCollection,        ///< The KoImageCollection for the document
-    OdfDocument,            ///< The document this canvas shows (KoDocumentBase)
-    PasteOffset,            ///< Application wide paste offset
-    PasteAtCursor,          ///< Application wide paste at cursor setting
-    HandleRadius,           ///< The handle radius used for drawing handles of any kind
-    GrabSensitivity,        ///< The grab sensitivity used for grabbing handles of any kind
-    MarkerCollection,       ///< The collection holding all markers
-    ShapeController,       ///< The KoShapeController for the document
+    enum DocumentResource {
+        UndoStack,              ///< The document-wide undo stack (KUndo2Stack)
+        ImageCollection,        ///< The KoImageCollection for the document
+        OdfDocument,            ///< The document this canvas shows (KoDocumentBase)
+        PasteOffset,            ///< Application wide paste offset
+        PasteAtCursor,          ///< Application wide paste at cursor setting
+        HandleRadius,           ///< The handle radius used for drawing handles of any kind
+        GrabSensitivity,        ///< The grab sensitivity used for grabbing handles of any kind
+        MarkerCollection,       ///< The collection holding all markers
+        ShapeController,       ///< The KoShapeController for the document
 
-    KarbonStart = 1000,      ///< Base number for Karbon specific values.
-    KexiStart = 2000,        ///< Base number for Kexi specific values.
-    FlowStart = 3000,        ///< Base number for Flow specific values.
-    PlanStart = 4000,        ///< Base number for Plan specific values.
-    StageStart = 5000,       ///< Base number for Stage specific values.
-    KritaStart = 6000,       ///< Base number for Krita specific values.
-    SheetsStart = 7000,      ///< Base number for Sheets specific values.
-    WordsStart = 8000,       ///< Base number for Words specific values.
-    KoPageAppStart = 9000,   ///< Base number for KoPageApp specific values.
-    KoTextStart = 10000      ///< Base number for KoText specific values.
-};
-
+        KarbonStart = 1000,      ///< Base number for Karbon specific values.
+        KexiStart = 2000,        ///< Base number for Kexi specific values.
+        FlowStart = 3000,        ///< Base number for Flow specific values.
+        PlanStart = 4000,        ///< Base number for Plan specific values.
+        StageStart = 5000,       ///< Base number for Stage specific values.
+        KritaStart = 6000,       ///< Base number for Krita specific values.
+        SheetsStart = 7000,      ///< Base number for Sheets specific values.
+        WordsStart = 8000,       ///< Base number for Words specific values.
+        KoPageAppStart = 9000,   ///< Base number for KoPageApp specific values.
+        KoTextStart = 10000      ///< Base number for KoText specific values.
+    };
 
     /**
      * Constructor.
@@ -204,11 +203,11 @@ enum DocumentResource {
      */
     void clearResource(int key);
 
-        /**
-     * Tools that provide a handle for controlling the content that the tool can edit can
-     * use this property to alter the radius that a circular handle should have on screen.
-     * @param handleSize the radius in pixels.
-     */
+    /**
+    * Tools that provide a handle for controlling the content that the tool can edit can
+    * use this property to alter the radius that a circular handle should have on screen.
+    * @param handleSize the radius in pixels.
+    */
     void setHandleRadius(int handleSize);
     /// Returns the actual handle radius
     int handleRadius() const;
@@ -259,8 +258,8 @@ Q_SIGNALS:
     void resourceChanged(int key, const QVariant &value);
 
 private:
-    KoDocumentResourceManager(const KoDocumentResourceManager&);
-    KoDocumentResourceManager& operator=(const KoDocumentResourceManager&);
+    KoDocumentResourceManager(const KoDocumentResourceManager &);
+    KoDocumentResourceManager &operator=(const KoDocumentResourceManager &);
 
     class Private;
     Private *const d;

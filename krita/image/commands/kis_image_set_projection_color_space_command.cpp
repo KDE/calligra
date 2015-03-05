@@ -24,8 +24,7 @@
 
 #include <klocale.h>
 
-
-KisImageSetProjectionColorSpaceCommand::KisImageSetProjectionColorSpaceCommand(KisImageWSP image, const KoColorSpace * afterColorSpace)
+KisImageSetProjectionColorSpaceCommand::KisImageSetProjectionColorSpaceCommand(KisImageWSP image, const KoColorSpace *afterColorSpace)
     : KisImageCommand(kundo2_i18n("Convert Image Type"), image)
 {
     m_beforeColorSpace = image->colorSpace();

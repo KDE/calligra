@@ -45,7 +45,7 @@ public:
 private:
     void init();
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

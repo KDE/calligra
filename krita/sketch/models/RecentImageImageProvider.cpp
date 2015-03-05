@@ -64,8 +64,7 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
             }
             delete store;
 
-        }
-        else {
+        } else {
             QImage img(id);
             if (img.width() >= sz.width() || img.height() >= sz.height()) {
                 thumbnail = img.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);

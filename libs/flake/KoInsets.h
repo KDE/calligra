@@ -27,8 +27,7 @@
 /**
  * An Insets object is a representation of the strokes of a shape.
  */
-struct FLAKE_EXPORT KoInsets
-{
+struct FLAKE_EXPORT KoInsets {
 public:
     /**
      * Constructor.
@@ -37,7 +36,8 @@ public:
      * @param bottom the inset at the bottom
      * @param right the inset at the right
      */
-    KoInsets(qreal top, qreal left, qreal bottom, qreal right) {
+    KoInsets(qreal top, qreal left, qreal bottom, qreal right)
+    {
         this->top = top;
         this->left = left;
         this->bottom = bottom;
@@ -47,11 +47,13 @@ public:
      * Constructor.
      * Initializes all values to 0
      */
-    KoInsets() : top(0.), bottom(0.), left(0.), right(0.) {
+    KoInsets() : top(0.), bottom(0.), left(0.), right(0.)
+    {
     }
 
     /// clears the insets so all sides are set to zero
-    void clear() {
+    void clear()
+    {
         top = 0;
         bottom = 0;
         left = 0;

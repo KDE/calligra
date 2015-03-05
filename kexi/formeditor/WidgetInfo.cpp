@@ -26,11 +26,12 @@
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 class WidgetInfo::Private
 {
 public:
-    Private (WidgetFactory *f)
+    Private(WidgetFactory *f)
         : overriddenAlternateNames(0)
         , factory(f)
         , propertiesWithDisabledAutoSync(0)
@@ -39,7 +40,8 @@ public:
     {
     }
 
-    ~Private() {
+    ~Private()
+    {
         delete overriddenAlternateNames;
         delete propertiesWithDisabledAutoSync;
         delete customTypesForProperty;
@@ -60,7 +62,7 @@ public:
     QHash<QByteArray, int> *customTypesForProperty;
     QByteArray parentFactoryName;
     QByteArray inheritedClassName; //!< Used for inheriting widgets between factories
-    WidgetInfo* inheritedClass;
+    WidgetInfo *inheritedClass;
 
 };
 }
@@ -70,7 +72,7 @@ public:
 using namespace KFormDesigner;
 
 WidgetInfo::WidgetInfo(WidgetFactory *f)
- : d(new Private(f) )
+    : d(new Private(f))
 {
 }
 
@@ -104,11 +106,12 @@ QByteArray WidgetInfo::inheritedClassName() const
     return d->inheritedClassName;
 }
 
-void WidgetInfo::setInheritedClassName(const QByteArray& inheritedClassName)
+void WidgetInfo::setInheritedClassName(const QByteArray &inheritedClassName)
 {
     d->inheritedClassName = inheritedClassName;
-    if (d->className.isEmpty())
-        d->className = inheritedClassName; // the default
+    if (d->className.isEmpty()) {
+        d->className = inheritedClassName;    // the default
+    }
 }
 
 void WidgetInfo::setInheritedClass(WidgetInfo *inheritedClass)
@@ -116,7 +119,7 @@ void WidgetInfo::setInheritedClass(WidgetInfo *inheritedClass)
     d->inheritedClass = inheritedClass;
 }
 
-WidgetInfo* WidgetInfo::inheritedClass() const
+WidgetInfo *WidgetInfo::inheritedClass() const
 {
     return d->inheritedClass;
 }
@@ -146,7 +149,6 @@ QString WidgetInfo::description() const
     return d->desc;
 }
 
-
 void WidgetInfo::setDescription(const QString &desc)
 {
     d->desc = desc;
@@ -172,12 +174,12 @@ QByteArray WidgetInfo::savingName() const
     return d->saveName;
 }
 
-WidgetFactory* WidgetInfo::factory() const
+WidgetFactory *WidgetInfo::factory() const
 {
     return d->factory;
 }
 
-void WidgetInfo::setSavingName(const QByteArray& saveName)
+void WidgetInfo::setSavingName(const QByteArray &saveName)
 {
     d->saveName = saveName;
 }
@@ -187,34 +189,37 @@ QByteArray WidgetInfo::parentFactoryName() const
     return d->parentFactoryName;
 }
 
-void WidgetInfo::setParentFactoryName(const QByteArray& parentFactoryName)
+void WidgetInfo::setParentFactoryName(const QByteArray &parentFactoryName)
 {
     d->parentFactoryName = QByteArray("kformdesigner_") + parentFactoryName;
 }
 
-void WidgetInfo::addAlternateClassName(const QByteArray& alternateName, bool override)
+void WidgetInfo::addAlternateClassName(const QByteArray &alternateName, bool override)
 {
     d->alternateNames += alternateName;
     if (override) {
-        if (!d->overriddenAlternateNames)
+        if (!d->overriddenAlternateNames) {
             d->overriddenAlternateNames = new QList<QByteArray>;
+        }
         d->overriddenAlternateNames->append(alternateName);
     } else {
-        if (d->overriddenAlternateNames)
+        if (d->overriddenAlternateNames) {
             d->overriddenAlternateNames->removeAll(alternateName);
+        }
     }
 }
 
-bool WidgetInfo::isOverriddenClassName(const QByteArray& alternateName) const
+bool WidgetInfo::isOverriddenClassName(const QByteArray &alternateName) const
 {
     return d->overriddenAlternateNames && d->overriddenAlternateNames->contains(alternateName);
 }
 
-void WidgetInfo::setAutoSyncForProperty(const QByteArray& propertyName, tristate flag)
+void WidgetInfo::setAutoSyncForProperty(const QByteArray &propertyName, tristate flag)
 {
     if (!d->propertiesWithDisabledAutoSync) {
-        if (~flag)
+        if (~flag) {
             return;
+        }
         d->propertiesWithDisabledAutoSync = new QHash<QByteArray, tristate>;
     }
 
@@ -225,30 +230,33 @@ void WidgetInfo::setAutoSyncForProperty(const QByteArray& propertyName, tristate
     }
 }
 
-tristate WidgetInfo::autoSyncForProperty(const QByteArray& propertyName) const
+tristate WidgetInfo::autoSyncForProperty(const QByteArray &propertyName) const
 {
-    if (!d->propertiesWithDisabledAutoSync)
+    if (!d->propertiesWithDisabledAutoSync) {
         return cancelled;
+    }
     tristate flag = d->propertiesWithDisabledAutoSync->value(propertyName);
     return flag;
 }
 
-void WidgetInfo::setAutoSaveProperties(const QList<QByteArray>& properties)
+void WidgetInfo::setAutoSaveProperties(const QList<QByteArray> &properties)
 {
     d->autoSaveProperties = properties;
 }
 
 QList<QByteArray> WidgetInfo::autoSaveProperties() const
 {
-    if (!d->inheritedClass)
+    if (!d->inheritedClass) {
         return d->autoSaveProperties;
+    }
     return d->inheritedClass->autoSaveProperties() + d->autoSaveProperties;
 }
 
-void WidgetInfo::setCustomTypeForProperty(const QByteArray& propertyName, int type)
+void WidgetInfo::setCustomTypeForProperty(const QByteArray &propertyName, int type)
 {
-    if (propertyName.isEmpty() || type == (int)KoProperty::Auto)
+    if (propertyName.isEmpty() || type == (int)KoProperty::Auto) {
         return;
+    }
     if (!d->customTypesForProperty) {
         d->customTypesForProperty = new QHash<QByteArray, int>();
     }
@@ -256,20 +264,21 @@ void WidgetInfo::setCustomTypeForProperty(const QByteArray& propertyName, int ty
     d->customTypesForProperty->insert(propertyName, type);
 }
 
-int WidgetInfo::customTypeForProperty(const QByteArray& propertyName) const
+int WidgetInfo::customTypeForProperty(const QByteArray &propertyName) const
 {
-    if (!d->customTypesForProperty || !d->customTypesForProperty->contains(propertyName))
+    if (!d->customTypesForProperty || !d->customTypesForProperty->contains(propertyName)) {
         return KoProperty::Auto;
+    }
     return d->customTypesForProperty->value(propertyName);
 }
 
-QVariant WidgetInfo::internalProperty(const QByteArray& property) const
+QVariant WidgetInfo::internalProperty(const QByteArray &property) const
 {
     return d->factory->internalProperty(d->className, property);
 }
 
-void WidgetInfo::setInternalProperty(const QByteArray& property, const QVariant& value)
+void WidgetInfo::setInternalProperty(const QByteArray &property, const QVariant &value)
 {
-    InternalPropertyHandlerInterface *iface = static_cast<InternalPropertyHandlerInterface*>(d->factory);
+    InternalPropertyHandlerInterface *iface = static_cast<InternalPropertyHandlerInterface *>(d->factory);
     iface->setInternalProperty(d->className, property, value);
 }

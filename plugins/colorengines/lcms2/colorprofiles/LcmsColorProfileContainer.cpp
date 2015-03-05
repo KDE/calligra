@@ -42,7 +42,7 @@ public:
     QString productDescription;
     QString manufacturer;
     QString name;
-    IccColorProfile::Data * data;
+    IccColorProfile::Data *data;
     bool valid;
     bool suitableForOutput;
 };
@@ -53,7 +53,7 @@ LcmsColorProfileContainer::LcmsColorProfileContainer()
     d->profile = 0;
 }
 
-LcmsColorProfileContainer::LcmsColorProfileContainer(IccColorProfile::Data * data)
+LcmsColorProfileContainer::LcmsColorProfileContainer(IccColorProfile::Data *data)
     : d(new Private())
 {
     d->data = data;
@@ -77,9 +77,9 @@ QByteArray LcmsColorProfileContainer::lcmsProfileToByteArray(const cmsHPROFILE p
     return rawData;
 }
 
-IccColorProfile* LcmsColorProfileContainer::createFromLcmsProfile(const cmsHPROFILE profile)
+IccColorProfile *LcmsColorProfileContainer::createFromLcmsProfile(const cmsHPROFILE profile)
 {
-    IccColorProfile* iccprofile = new IccColorProfile(lcmsProfileToByteArray(profile));
+    IccColorProfile *iccprofile = new IccColorProfile(lcmsProfileToByteArray(profile));
     cmsCloseProfile(profile);
     return iccprofile;
 }
@@ -94,9 +94,11 @@ LcmsColorProfileContainer::~LcmsColorProfileContainer()
 
 bool LcmsColorProfileContainer::init()
 {
-    if (d->profile) cmsCloseProfile(d->profile);
+    if (d->profile) {
+        cmsCloseProfile(d->profile);
+    }
 
-    d->profile = cmsOpenProfileFromMem((void*)d->data->rawData().constData(), d->data->rawData().size());
+    d->profile = cmsOpenProfileFromMem((void *)d->data->rawData().constData(), d->data->rawData().size());
 
 #ifndef NDEBUG
     if (d->data->rawData().size() == 4096) {
@@ -116,15 +118,15 @@ bool LcmsColorProfileContainer::init()
 
         cmsGetProfileInfo(d->profile, cmsInfoManufacturer, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->manufacturer = QString::fromWCharArray(buffer);
-        
+
         cmsProfileClassSignature profile_class;
         profile_class = cmsGetDeviceClass(d->profile);
         d->valid = (profile_class != cmsSigNamedColorClass);
 
         // Check if the profile can convert (something->this)
         d->suitableForOutput = cmsIsMatrixShaper(d->profile)
-                || ( cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
-                     cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT) );
+                               || (cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
+                                   cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT));
 
         dbgPigment << "Loaded ICC Profile"
                    << "\n\tSignature:" << d->colorSpaceSignature

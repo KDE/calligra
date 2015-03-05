@@ -39,9 +39,8 @@ NotesConfigurationDialog::NotesConfigurationDialog(QTextDocument *doc, bool foot
         setWindowTitle(i18n("Endnote Settings"));
         endnoteSetup();
     }
-    connect(widget.buttonBox,SIGNAL(clicked(QAbstractButton*)),this,SLOT(apply(QAbstractButton*)));
+    connect(widget.buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(apply(QAbstractButton*)));
 }
-
 
 void NotesConfigurationDialog::setStyleManager(KoStyleManager *sm)
 {
@@ -51,7 +50,7 @@ void NotesConfigurationDialog::setStyleManager(KoStyleManager *sm)
 void NotesConfigurationDialog::footnoteSetup()
 {
     m_notesConfig = KoTextDocument(m_document).styleManager()
-                                ->notesConfiguration(KoOdfNotesConfiguration::Footnote);
+                    ->notesConfiguration(KoOdfNotesConfiguration::Footnote);
     if (!m_notesConfig) {
         m_notesConfig = new KoOdfNotesConfiguration();
         m_notesConfig->setNoteClass(KoOdfNotesConfiguration::Footnote);
@@ -107,7 +106,7 @@ void NotesConfigurationDialog::endnoteSetup()
     widget.continuationBox->hide();
     widget.beginAtCombo->hide();
     m_notesConfig = KoTextDocument(m_document).styleManager()
-                                    ->notesConfiguration(KoOdfNotesConfiguration::Endnote);
+                    ->notesConfiguration(KoOdfNotesConfiguration::Endnote);
     if (!m_notesConfig) {
         m_notesConfig = new KoOdfNotesConfiguration();
         m_notesConfig->setNoteClass(KoOdfNotesConfiguration::Endnote);
@@ -116,7 +115,7 @@ void NotesConfigurationDialog::endnoteSetup()
     widget.suffixLineEdit->setText(m_notesConfig->numberFormat().suffix());
     widget.startAtSpinBox->setValue(m_notesConfig->startValue());
 
-    switch(m_notesConfig->numberFormat().formatSpecification()) {
+    switch (m_notesConfig->numberFormat().formatSpecification()) {
     case KoOdfNumberDefinition::Numeric:
         widget.numStyleCombo->setCurrentIndex(0);
         break;
@@ -154,7 +153,7 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
         //set suffix
         numFormat->setSuffix(widget.suffixLineEdit->text());
 
-        switch(widget.numStyleCombo->currentIndex()) {
+        switch (widget.numStyleCombo->currentIndex()) {
         case 0:
             numFormat->setFormatSpecification(KoOdfNumberDefinition::Numeric);
             m_notesConfig->setNumberFormat(*numFormat);
@@ -232,8 +231,7 @@ void NotesConfigurationDialog::apply(QAbstractButton *button)
         //set note paragraph style
 
         this->close();
-    }
-    else if (widget.buttonBox->standardButton(button) == widget.buttonBox->Discard) {
+    } else if (widget.buttonBox->standardButton(button) == widget.buttonBox->Discard) {
         this->close();
     }
 }

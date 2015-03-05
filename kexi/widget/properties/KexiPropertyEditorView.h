@@ -42,7 +42,7 @@ class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public KexiPropertyPaneView
     Q_OBJECT
 
 public:
-    explicit KexiPropertyEditorView(QWidget* parent);
+    explicit KexiPropertyEditorView(QWidget *parent);
     virtual ~KexiPropertyEditorView();
 
     virtual QSize sizeHint() const;
@@ -50,11 +50,11 @@ public:
     KoProperty::EditorView *editor() const;
 
 protected Q_SLOTS:
-    void slotPropertySetChanged(KoProperty::Set*);
+    void slotPropertySetChanged(KoProperty::Set *);
 
 protected:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

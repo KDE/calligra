@@ -25,11 +25,11 @@
 class KisUpdatesFacade;
 class KisPostExecutionUndoAdapter;
 
-
 class KDE_EXPORT MoveStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:
-    class KDE_EXPORT Data : public KisStrokeJobData {
+    class KDE_EXPORT Data : public KisStrokeJobData
+    {
     public:
         Data(QPoint _offset)
             : KisStrokeJobData(SEQUENTIAL, EXCLUSIVE),

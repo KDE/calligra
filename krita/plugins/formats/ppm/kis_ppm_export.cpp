@@ -43,7 +43,6 @@
 
 #include <QApplication>
 
-
 K_PLUGIN_FACTORY(KisPPMExportFactory, registerPlugin<KisPPMExport>();)
 K_EXPORT_PLUGIN(KisPPMExportFactory("krita"))
 
@@ -58,9 +57,11 @@ KisPPMExport::~KisPPMExport()
 class KisPPMFlow
 {
 public:
-    KisPPMFlow() {
+    KisPPMFlow()
+    {
     }
-    virtual ~KisPPMFlow() {
+    virtual ~KisPPMFlow()
+    {
     }
     virtual void writeBool(quint8 v) = 0;
     virtual void writeBool(quint16 v) = 0;
@@ -73,42 +74,52 @@ private:
 class KisPPMAsciiFlow : public KisPPMFlow
 {
 public:
-    KisPPMAsciiFlow(QIODevice* device) : m_device(device) {
+    KisPPMAsciiFlow(QIODevice *device) : m_device(device)
+    {
     }
-    ~KisPPMAsciiFlow() {
+    ~KisPPMAsciiFlow()
+    {
     }
-    virtual void writeBool(quint8 v) {
+    virtual void writeBool(quint8 v)
+    {
         if (v > 127) {
             m_device->write("1 ");
         } else {
             m_device->write("0 ");
         }
     }
-    virtual void writeBool(quint16 v) {
+    virtual void writeBool(quint16 v)
+    {
         writeBool(quint8(v >> 8));
     }
-    virtual void writeNumber(quint8 v) {
+    virtual void writeNumber(quint8 v)
+    {
         m_device->write(QByteArray::number(v));
         m_device->write(" ");
     }
-    virtual void writeNumber(quint16 v) {
+    virtual void writeNumber(quint16 v)
+    {
         m_device->write(QByteArray::number(v));
         m_device->write(" ");
     }
-    virtual void flush() {
+    virtual void flush()
+    {
     }
 private:
-    QIODevice* m_device;
+    QIODevice *m_device;
 };
 
 class KisPPMBinaryFlow : public KisPPMFlow
 {
 public:
-    KisPPMBinaryFlow(QIODevice* device) : m_device(device), m_pos(0), m_current(0) {
+    KisPPMBinaryFlow(QIODevice *device) : m_device(device), m_pos(0), m_current(0)
+    {
     }
-    virtual ~KisPPMBinaryFlow() {
+    virtual ~KisPPMBinaryFlow()
+    {
     }
-    virtual void writeBool(quint8 v) {
+    virtual void writeBool(quint8 v)
+    {
         m_current = m_current << 1;
         m_current |= (v > 127);
         ++m_pos;
@@ -118,47 +129,55 @@ public:
             flush();
         }
     }
-    virtual void writeBool(quint16 v) {
+    virtual void writeBool(quint16 v)
+    {
         writeBool(quint8(v >> 8));
     }
-    virtual void writeNumber(quint8 v) {
-        m_device->write((char*)&v, 1);
+    virtual void writeNumber(quint8 v)
+    {
+        m_device->write((char *)&v, 1);
     }
-    virtual void writeNumber(quint16 v) {
+    virtual void writeNumber(quint16 v)
+    {
         quint16 vo = qToBigEndian(v);
-        m_device->write((char*)&vo, 2);
+        m_device->write((char *)&vo, 2);
     }
-    virtual void flush() {
-        m_device->write((char*)&m_current, 1);
+    virtual void flush()
+    {
+        m_device->write((char *)&m_current, 1);
     }
 private:
-    QIODevice* m_device;
+    QIODevice *m_device;
     int m_pos;
     quint8 m_current;
 };
 
-KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "PPM export! From:" << from << ", To:" << to << "";
 
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
     KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
-    KDialog* kdb = new KDialog(0);
+    KDialog *kdb = new KDialog(0);
     kdb->setWindowTitle(i18n("PPM Export Options"));
     kdb->setButtons(KDialog::Ok | KDialog::Cancel);
 
     Ui::WdgOptionsPPM optionsPPM;
 
-    QWidget* wdg = new QWidget(kdb);
+    QWidget *wdg = new QWidget(kdb);
     optionsPPM.setupUi(wdg);
 
     kdb->setMainWidget(wdg);
@@ -174,12 +193,10 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
         if (kdb->exec() == QDialog::Rejected) {
             return KisImportExportFilter::OK; // FIXME Cancel doesn't exist :(
         }
-    }
-    else {
+    } else {
         qApp->processEvents(); // For vector layers to be updated
     }
     input->image()->waitForDone();
-
 
     bool rgb = (to == "image/x-portable-pixmap");
     bool binary = optionsPPM.type->currentIndex() == 0;
@@ -200,8 +217,7 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
             || (!rgb && (pd->colorSpace()->id() != "GRAYA" && pd->colorSpace()->id() != "GRAYA16" && pd->colorSpace()->id() != "GRAYAU16")))) {
         if (rgb) {
             pd->convertTo(KoColorSpaceRegistry::instance()->rgb8(0), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
-        }
-        else {
+        } else {
             pd->convertTo(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), 0), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
         }
     }
@@ -214,14 +230,23 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
 
     // Write the magic
     if (rgb) {
-        if (binary) fp.write("P6");
-        else fp.write("P3");
+        if (binary) {
+            fp.write("P6");
+        } else {
+            fp.write("P3");
+        }
     } else if (bitmap) {
-        if (binary) fp.write("P4");
-        else fp.write("P1");
+        if (binary) {
+            fp.write("P4");
+        } else {
+            fp.write("P1");
+        }
     } else {
-        if (binary) fp.write("P5");
-        else fp.write("P2");
+        if (binary) {
+            fp.write("P5");
+        } else {
+            fp.write("P2");
+        }
     }
     fp.write("\n");
 
@@ -230,16 +255,22 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
     fp.write(" ");
     fp.write(QByteArray::number(image->height()));
     if (!bitmap) {
-        if (is16bit) fp.write(" 65535\n");
-        else fp.write(" 255\n");
+        if (is16bit) {
+            fp.write(" 65535\n");
+        } else {
+            fp.write(" 255\n");
+        }
     } else {
         fp.write("\n");
     }
 
     // Write the data
-    KisPPMFlow* flow = 0;
-    if (binary) flow = new KisPPMBinaryFlow(&fp);
-    else flow = new KisPPMAsciiFlow(&fp);
+    KisPPMFlow *flow = 0;
+    if (binary) {
+        flow = new KisPPMBinaryFlow(&fp);
+    } else {
+        flow = new KisPPMAsciiFlow(&fp);
+    }
 
     for (int y = 0; y < image->height(); ++y) {
         KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, image->width());
@@ -253,12 +284,12 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
                 } while (it->nextPixel());
             } else if (bitmap) {
                 do {
-                    flow->writeBool(*reinterpret_cast<quint16*>(it->rawData()));
+                    flow->writeBool(*reinterpret_cast<quint16 *>(it->rawData()));
 
                 } while (it->nextPixel());
             } else {
                 do {
-                    flow->writeNumber(*reinterpret_cast<quint16*>(it->rawData()));
+                    flow->writeNumber(*reinterpret_cast<quint16 *>(it->rawData()));
                 } while (it->nextPixel());
             }
         } else {
@@ -271,12 +302,12 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(const QByteArray& 
                 } while (it->nextPixel());
             } else if (bitmap) {
                 do {
-                    flow->writeBool(*reinterpret_cast<quint8*>(it->rawData()));
+                    flow->writeBool(*reinterpret_cast<quint8 *>(it->rawData()));
 
                 } while (it->nextPixel());
             } else {
                 do {
-                    flow->writeNumber(*reinterpret_cast<quint8*>(it->rawData()));
+                    flow->writeNumber(*reinterpret_cast<quint8 *>(it->rawData()));
 
                 } while (it->nextPixel());
             }

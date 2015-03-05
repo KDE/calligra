@@ -27,7 +27,6 @@
 #include <KisPart.h>
 #include <KisApplication.h>
 
-
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>
@@ -90,8 +89,9 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
         if (!path.isEmpty()) {
             QString name = cfg2.readPathEntry(QString("Name%1").arg(i), QString());
             KUrl url(path);
-            if (name.isEmpty())
+            if (name.isEmpty()) {
                 name = url.fileName();
+            }
 
             if (!url.isLocalFile() || QFile::exists(url.toLocalFile())) {
                 recentfiles.insert(0, QString("<p><a href=\"%1\"><span style=\"color:#FFFFFF;\">%2</span></a></p>").arg(path).arg(name));
@@ -103,11 +103,10 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     recent += recentfiles.join("\n");
     recent += "</body>"
-            "</html>";
+              "</html>";
     lblRecent->setText(recent);
     connect(lblRecent, SIGNAL(linkActivated(QString)), SLOT(linkClicked(QString)));
 }
-
 
 void KisSplashScreen::repaint()
 {

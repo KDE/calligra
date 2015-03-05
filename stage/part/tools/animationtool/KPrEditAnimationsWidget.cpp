@@ -73,12 +73,12 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
 
     QLabel *delayLabel = new QLabel(i18n("Delay: "));
     m_delayEdit = new QTimeEdit;
-    m_delayEdit->setTimeRange(QTime(0,0,0), QTime(0,30,0));
+    m_delayEdit->setTimeRange(QTime(0, 0, 0), QTime(0, 30, 0));
     m_delayEdit->setDisplayFormat("mm:ss.zzz");
 
     QLabel *durationLabel = new QLabel(i18n("Duration: "));
     m_durationEdit = new QTimeEdit;
-    m_durationEdit->setTimeRange(QTime(0,0,0), QTime(1,0,0));
+    m_durationEdit->setTimeRange(QTime(0, 0, 0), QTime(1, 0, 0));
     m_durationEdit->setDisplayFormat("H:mm:ss.zzz");
 
     QToolButton *m_buttonPreviewAnimation = new QToolButton();
@@ -195,9 +195,13 @@ void KPrEditAnimationsWidget::setTriggerEvent(int row)
         QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::NodeType);
         if (row != m_timeLineModel->data(triggerIndex).toInt()) {
             KPrShapeAnimation::NodeType newType;
-            if (row == 0) newType = KPrShapeAnimation::OnClick;
-            else if (row == 1) newType = KPrShapeAnimation::AfterPrevious;
-            else newType = KPrShapeAnimation::WithPrevious;
+            if (row == 0) {
+                newType = KPrShapeAnimation::OnClick;
+            } else if (row == 1) {
+                newType = KPrShapeAnimation::AfterPrevious;
+            } else {
+                newType = KPrShapeAnimation::WithPrevious;
+            }
             m_docker->mainModel()->setTriggerEvent(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), newType);
         }
     }
@@ -247,11 +251,9 @@ void KPrEditAnimationsWidget::showTimeLineCustomContextMenu(const QPoint &pos)
         // Select current nodetype
         if (currentType == KPrShapeAnimation::OnClick) {
             onClickAction->setChecked(true);
-        }
-        else if (currentType == KPrShapeAnimation::AfterPrevious) {
+        } else if (currentType == KPrShapeAnimation::AfterPrevious) {
             afterAction->setChecked(true);
-        }
-        else {
+        } else {
             withAction->setChecked(true);
         }
 

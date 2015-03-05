@@ -21,7 +21,6 @@
 
 #include "kis_tool_freehand_helper.h"
 
-
 class KisToolLineHelper : private KisToolFreehandHelper
 {
 public:
@@ -50,7 +49,7 @@ public:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* __KIS_TOOL_LINE_HELPER_H */

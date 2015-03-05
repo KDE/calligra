@@ -19,7 +19,6 @@
 #include "kis_stroke_strategy.h"
 #include <KoCompositeOpRegistry.h>
 
-
 KisStrokeStrategy::KisStrokeStrategy(QString id, const KUndo2MagicString &name)
     : m_exclusive(false),
       m_supportsWrapAroundMode(false),
@@ -34,38 +33,37 @@ KisStrokeStrategy::~KisStrokeStrategy()
 {
 }
 
-
-KisStrokeJobStrategy* KisStrokeStrategy::createInitStrategy()
+KisStrokeJobStrategy *KisStrokeStrategy::createInitStrategy()
 {
     return 0;
 }
 
-KisStrokeJobStrategy* KisStrokeStrategy::createFinishStrategy()
+KisStrokeJobStrategy *KisStrokeStrategy::createFinishStrategy()
 {
     return 0;
 }
 
-KisStrokeJobStrategy* KisStrokeStrategy::createCancelStrategy()
+KisStrokeJobStrategy *KisStrokeStrategy::createCancelStrategy()
 {
     return 0;
 }
 
-KisStrokeJobStrategy* KisStrokeStrategy::createDabStrategy()
+KisStrokeJobStrategy *KisStrokeStrategy::createDabStrategy()
 {
     return 0;
 }
 
-KisStrokeJobData* KisStrokeStrategy::createInitData()
+KisStrokeJobData *KisStrokeStrategy::createInitData()
 {
     return 0;
 }
 
-KisStrokeJobData* KisStrokeStrategy::createFinishData()
+KisStrokeJobData *KisStrokeStrategy::createFinishData()
 {
     return 0;
 }
 
-KisStrokeJobData* KisStrokeStrategy::createCancelData()
+KisStrokeJobData *KisStrokeStrategy::createCancelData()
 {
     return 0;
 }

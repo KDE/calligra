@@ -25,7 +25,7 @@
 #include <QBuffer>
 #include <QCryptographicHash>
 
-KisPngBrush::KisPngBrush(const QString& filename)
+KisPngBrush::KisPngBrush(const QString &filename)
     : KisBrush(filename)
 {
     setBrushType(INVALID);
@@ -36,8 +36,12 @@ KisPngBrush::KisPngBrush(const QString& filename)
 bool KisPngBrush::load()
 {
     QFile f(filename());
-    if (f.size() == 0) return false;
-    if (!f.exists()) return false;
+    if (f.size() == 0) {
+        return false;
+    }
+    if (!f.exists()) {
+        return false;
+    }
     if (!f.open(QIODevice::ReadOnly)) {
         warnKrita << "Can't open file " << filename();
         return false;
@@ -56,8 +60,8 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     QImageReader reader(&buf, "PNG");
 
     if (!reader.canRead()) {
-      setValid(false);
-      return false;
+        setValid(false);
+        return false;
     }
 
     if (reader.textKeys().contains("brush_spacing")) {
@@ -66,8 +70,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
 
     if (reader.textKeys().contains("brush_name")) {
         setName(reader.text("brush_name"));
-    }
-    else {
+    } else {
         QFileInfo info(filename());
         setName(info.baseName());
     }
@@ -75,9 +78,9 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     QImage image = reader.read();
 
     if (image.isNull()) {
-      kWarning() << "Could not read brush" << filename() << ". Error:" << reader.errorString();
-      setValid(false);
-      return false;
+        kWarning() << "Could not read brush" << filename() << ". Error:" << reader.errorString();
+        setValid(false);
+        return false;
     }
 
     setBrushTipImage(image);
@@ -86,8 +89,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     if (brushTipImage().isGrayscale()) {
         setBrushType(MASK);
         setHasColor(false);
-    }
-    else {
+    } else {
         setBrushType(IMAGE);
         setHasColor(true);
     }
@@ -100,7 +102,9 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
 bool KisPngBrush::save()
 {
     QFile f(filename());
-    if (!f.open(QFile::WriteOnly)) return false;
+    if (!f.open(QFile::WriteOnly)) {
+        return false;
+    }
     bool res = saveToDevice(&f);
     f.close();
     return res;
@@ -116,7 +120,7 @@ QString KisPngBrush::defaultFileExtension() const
     return QString(".png");
 }
 
-void KisPngBrush::toXML(QDomDocument& d, QDomElement& e) const
+void KisPngBrush::toXML(QDomDocument &d, QDomElement &e) const
 {
     predefinedBrushToXML("png_brush", e);
     KisBrush::toXML(d, e);

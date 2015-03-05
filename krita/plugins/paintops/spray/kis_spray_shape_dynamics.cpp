@@ -24,7 +24,8 @@ class KisShapeDynamicsOptionsWidget: public QWidget, public Ui::WdgShapeDynamics
 {
 public:
     KisShapeDynamicsOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -34,7 +35,6 @@ KisSprayShapeDynamicsOption::KisSprayShapeDynamicsOption()
 {
     m_checkable = true;
     m_options = new KisShapeDynamicsOptionsWidget();
-
 
     // UI signals
     connect(m_options->fixedRotation, SIGNAL(toggled(bool)), m_options->fixedAngleBox, SLOT(setEnabled(bool)));
@@ -46,11 +46,9 @@ KisSprayShapeDynamicsOption::KisSprayShapeDynamicsOption()
     setConfigurationPage(m_options);
 }
 
-
 void KisSprayShapeDynamicsOption::setupBrushPreviewSignals()
 {
-     // initialize sliders
-
+    // initialize sliders
 
     m_options->drawingAngleWeight->setRange(0.0, 1.0, 2);
     m_options->drawingAngleWeight->setDisabled(true);
@@ -77,13 +75,12 @@ void KisSprayShapeDynamicsOption::setupBrushPreviewSignals()
     connect(m_options->drawingAngleWeight, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
 }
 
-
 KisSprayShapeDynamicsOption::~KisSprayShapeDynamicsOption()
 {
     delete m_options;
 }
 
-void KisSprayShapeDynamicsOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisSprayShapeDynamicsOption::writeOptionSetting(KisPropertiesConfiguration *settings) const
 {
     settings->setProperty(SHAPE_DYNAMICS_VERSION, "2.3");
     settings->setProperty(SHAPE_DYNAMICS_ENABLED, isChecked());
@@ -98,8 +95,7 @@ void KisSprayShapeDynamicsOption::writeOptionSetting(KisPropertiesConfiguration*
     settings->setProperty(SHAPE_DYNAMICS_DRAWING_ANGLE_WEIGHT, m_options->drawingAngleWeight->value());
 }
 
-
-void KisSprayShapeDynamicsOption::readOptionSetting(const KisPropertiesConfiguration* settings)
+void KisSprayShapeDynamicsOption::readOptionSetting(const KisPropertiesConfiguration *settings)
 {
     // backward compatibility with 2.2
     if (settings->getString(SHAPE_DYNAMICS_VERSION, "2.2") == "2.2") {
@@ -113,8 +109,7 @@ void KisSprayShapeDynamicsOption::readOptionSetting(const KisPropertiesConfigura
         m_options->drawingAngleWeight->setValue(settings->getDouble(SPRAYSHAPE_DRAWING_ANGLE_WEIGHT));
         m_options->randomRotation->setChecked(settings->getBool(SPRAYSHAPE_RANDOM_ROTATION));
         m_options->randomAngleWeight->setValue(settings->getDouble(SPRAYSHAPE_RANDOM_ROTATION_WEIGHT));
-    }
-    else {
+    } else {
         setChecked(settings->getBool(SHAPE_DYNAMICS_ENABLED));
         m_options->randomSizeCHBox->setChecked(settings->getBool(SHAPE_DYNAMICS_RANDOM_SIZE));
         m_options->fixedRotation->setChecked(settings->getBool(SHAPE_DYNAMICS_FIXED_ROTATION));

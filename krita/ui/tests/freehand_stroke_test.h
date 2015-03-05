@@ -21,7 +21,6 @@
 
 #include <QtTest>
 
-
 class FreehandStrokeTest : public QObject
 {
     Q_OBJECT

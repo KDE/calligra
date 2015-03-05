@@ -17,13 +17,11 @@
  */
 #include "particle_paintop_plugin.h"
 
-
 #include <klocale.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
-
 
 #include "kis_particle_paintop.h"
 #include "kis_particle_paintop_settings_widget.h"

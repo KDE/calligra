@@ -25,18 +25,25 @@ class ChannelModel;
 class QTableView;
 class KisCanvas2;
 
-class ChannelDockerDock : public QDockWidget, public KoCanvasObserverBase {
+class ChannelDockerDock : public QDockWidget, public KoCanvasObserverBase
+{
     Q_OBJECT
 public:
     ChannelDockerDock();
-    QString observerName() { return "ChannelDockerDock"; }
+    QString observerName()
+    {
+        return "ChannelDockerDock";
+    }
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
+    virtual void unsetCanvas()
+    {
+        m_canvas = 0;
+        setEnabled(false);
+    }
 private:
     KisCanvas2 *m_canvas;
     QTableView *m_channelTable;
     ChannelModel *m_model;
 };
-
 
 #endif

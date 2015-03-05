@@ -59,7 +59,8 @@ public:
     {
     }
 
-    ~Private() {
+    ~Private()
+    {
         delete selection;
         delete strategy;
     }
@@ -81,32 +82,40 @@ public:
     {
     public:
         DetectCollision() {}
-        void detect(KoRTree<KoShape *> &tree, KoShape *s, int prevZIndex) {
-            foreach(KoShape *shape, tree.intersects(s->boundingRect())) {
+        void detect(KoRTree<KoShape *> &tree, KoShape *s, int prevZIndex)
+        {
+            foreach (KoShape *shape, tree.intersects(s->boundingRect())) {
                 bool isChild = false;
                 KoShapeContainer *parent = s->parent();
                 while (parent && !isChild) {
-                    if (parent == shape)
+                    if (parent == shape) {
                         isChild = true;
+                    }
                     parent = parent->parent();
                 }
-                if (isChild)
+                if (isChild) {
                     continue;
+                }
                 if (s->zIndex() <= shape->zIndex() && prevZIndex <= shape->zIndex())
                     // Moving a shape will only make it collide with shapes below it.
+                {
                     continue;
-                if (shape->collisionDetection() && !shapesWithCollisionDetection.contains(shape))
+                }
+                if (shape->collisionDetection() && !shapesWithCollisionDetection.contains(shape)) {
                     shapesWithCollisionDetection.append(shape);
+                }
             }
         }
 
-        void fireSignals() {
-            foreach(KoShape *shape, shapesWithCollisionDetection)
+        void fireSignals()
+        {
+            foreach (KoShape *shape, shapesWithCollisionDetection) {
                 shape->priv()->shapeChanged(KoShape::CollisionDetected);
+            }
         }
 
     private:
-        QList<KoShape*> shapesWithCollisionDetection;
+        QList<KoShape *> shapesWithCollisionDetection;
     };
 
     QList<KoShape *> shapes;
@@ -115,7 +124,7 @@ public:
     KoCanvasBase *canvas;
     KoRTree<KoShape *> tree;
     QSet<KoShape *> aggregate4update;
-    QHash<KoShape*, int> shapeIndexesBeforeUpdate;
+    QHash<KoShape *, int> shapeIndexesBeforeUpdate;
     KoShapeManagerPaintingStrategy *strategy;
     KoShapeManager *q;
 };

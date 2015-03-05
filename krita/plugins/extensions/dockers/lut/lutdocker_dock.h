@@ -34,16 +34,13 @@
 #include <OpenColorIO/OpenColorIO.h>
 #include "kis_signal_compressor_with_param.h"
 
-
 namespace OCIO = OCIO_NAMESPACE;
-
 
 class KisCanvas2;
 class BlackWhitePointChooser;
 
 #include "ocio_display_filter.h"
 #include "kis_exposure_gamma_correction_interface.h"
-
 
 class LutDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgLut, public KisExposureGammaCorrectionInterface
 {
@@ -53,10 +50,18 @@ public:
 
     LutDockerDock();
     ~LutDockerDock();
-QString observerName() { return "LutDockerDock"; }
+    QString observerName()
+    {
+        return "LutDockerDock";
+    }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false); m_displayFilter = 0;}
+    virtual void unsetCanvas()
+    {
+        m_canvas = 0;
+        setEnabled(false);
+        m_displayFilter = 0;
+    }
 
     bool canChangeExposureAndGamma() const;
     qreal currentExposure() const;
@@ -113,7 +118,6 @@ private:
 
     BlackWhitePointChooser *m_bwPointChooser;
 };
-
 
 #endif // LUT_DOCKER_DOCK_H
 

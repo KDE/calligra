@@ -25,21 +25,20 @@
 #include <kis_selection.h>
 #include <kis_resources_snapshot.h>
 
-
 class KDE_EXPORT FillProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
     FillProcessingVisitor(const QPoint &startPoint,
-                   KisSelectionSP selection,
-                   KisResourcesSnapshotSP resources,
-                   bool useFastMode,
-                   bool usePattern,
-                   bool selectionOnly,
-                   int feather,
-                   int sizemod,
-                   int fillThreshold,
-                   bool unmerged,
-                   bool m_useBgColor);
+                          KisSelectionSP selection,
+                          KisResourcesSnapshotSP resources,
+                          bool useFastMode,
+                          bool usePattern,
+                          bool selectionOnly,
+                          int feather,
+                          int sizemod,
+                          int fillThreshold,
+                          bool unmerged,
+                          bool m_useBgColor);
 
 private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);

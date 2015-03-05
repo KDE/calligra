@@ -33,24 +33,24 @@ class KRITA_SKETCH_EXPORT DocumentManager : public QObject
 {
     Q_OBJECT
 public:
-    KisDocument* document() const;
-    ProgressProxy* progressProxy() const;
-    Settings* settingsManager() const;
-    void setSettingsManager(Settings* newManager);
-    RecentFileManager* recentFileManager() const;
+    KisDocument *document() const;
+    ProgressProxy *progressProxy() const;
+    Settings *settingsManager() const;
+    void setSettingsManager(Settings *newManager);
+    RecentFileManager *recentFileManager() const;
     bool isTemporaryFile() const;
 
 public Q_SLOTS:
     void newDocument(int width, int height, float resolution);
-    void newDocument(const QVariantMap& options);
-    void openDocument(const QString& document, bool import = false);
+    void newDocument(const QVariantMap &options);
+    void openDocument(const QString &document, bool import = false);
     void closeDocument();
     bool save();
     void saveAs(const QString &filename, const QString &mimetype);
     void reload();
     void setTemporaryFile(bool temp);
 
-    static DocumentManager* instance();
+    static DocumentManager *instance();
 
 Q_SIGNALS:
     void documentChanged();
@@ -62,7 +62,7 @@ private:
     virtual ~DocumentManager();
 
     class Private;
-    Private * const d;
+    Private *const d;
 
     static DocumentManager *sm_instance;
 

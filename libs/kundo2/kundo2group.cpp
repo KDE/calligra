@@ -120,12 +120,14 @@ KUndo2Group::~KUndo2Group()
 
 void KUndo2Group::addStack(KUndo2QStack *stack)
 {
-    if (m_stack_list.contains(stack))
+    if (m_stack_list.contains(stack)) {
         return;
+    }
     m_stack_list.append(stack);
 
-    if (KUndo2Group *other = stack->m_group)
+    if (KUndo2Group *other = stack->m_group) {
         other->removeStack(stack);
+    }
     stack->m_group = this;
 }
 
@@ -138,10 +140,12 @@ void KUndo2Group::addStack(KUndo2QStack *stack)
 
 void KUndo2Group::removeStack(KUndo2QStack *stack)
 {
-    if (m_stack_list.removeAll(stack) == 0)
+    if (m_stack_list.removeAll(stack) == 0) {
         return;
-    if (stack == m_active)
+    }
+    if (stack == m_active) {
         setActiveStack(0);
+    }
     stack->m_group = 0;
 }
 
@@ -151,7 +155,7 @@ void KUndo2Group::removeStack(KUndo2QStack *stack)
     \sa addStack() removeStack()
 */
 
-QList<KUndo2QStack*> KUndo2Group::stacks() const
+QList<KUndo2QStack *> KUndo2Group::stacks() const
 {
     return m_stack_list;
 }
@@ -172,8 +176,9 @@ QList<KUndo2QStack*> KUndo2Group::stacks() const
 
 void KUndo2Group::setActiveStack(KUndo2QStack *stack)
 {
-    if (m_active == stack)
+    if (m_active == stack) {
         return;
+    }
 
     if (m_active != 0) {
         disconnect(m_active, SIGNAL(canUndoChanged(bool)),
@@ -248,8 +253,9 @@ KUndo2QStack *KUndo2Group::activeStack() const
 
 void KUndo2Group::undo()
 {
-    if (m_active != 0)
+    if (m_active != 0) {
         m_active->undo();
+    }
 }
 
 /*!
@@ -261,11 +267,11 @@ void KUndo2Group::undo()
     \sa undo() canRedo() setActiveStack()
 */
 
-
 void KUndo2Group::redo()
 {
-    if (m_active != 0)
+    if (m_active != 0) {
         m_active->redo();
+    }
 }
 
 /*!

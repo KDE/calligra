@@ -21,7 +21,6 @@
 #include <kis_painter.h>
 #include <KoColor.h>
 
-
 KisPressureOpacityOption::KisPressureOpacityOption()
     : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::generalCategory(), true)
 {
@@ -30,14 +29,13 @@ KisPressureOpacityOption::KisPressureOpacityOption()
     setMaximumLabel(i18n("Opaque"));
 }
 
-
-void KisPressureOpacityOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPressureOpacityOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty("OpacityVersion", "2");
 }
 
-void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOption::readOptionSetting(setting);
     if (setting->getString("OpacityVersion", "1") == "1") {
@@ -45,7 +43,7 @@ void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfiguratio
         if (pressureSensor) {
             QList<QPointF> points = pressureSensor->curve().points();
             QList<QPointF> points_new;
-            foreach(const QPointF & p, points) {
+            foreach (const QPointF &p, points) {
                 points_new.push_back(QPointF(p.x() * 0.5, p.y()));
             }
             pressureSensor->setCurve(KisCubicCurve(points_new));
@@ -53,7 +51,7 @@ void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfiguratio
     }
 }
 
-quint8 KisPressureOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info) const
+quint8 KisPressureOpacityOption::apply(KisPainter *painter, const KisPaintInformation &info) const
 {
 
     if (!isChecked()) {
@@ -68,7 +66,7 @@ quint8 KisPressureOpacityOption::apply(KisPainter* painter, const KisPaintInform
     return origOpacity;
 }
 
-qreal KisPressureOpacityOption::getOpacityf(const KisPaintInformation& info)
+qreal KisPressureOpacityOption::getOpacityf(const KisPaintInformation &info)
 {
     return isChecked() ? computeValue(info) : 1.0;
 }

@@ -18,7 +18,7 @@
  */
 #include "kis_imagepipe_brush_p.h"
 
-KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
+KisPipeBrushParasite::KisPipeBrushParasite(const QString &source)
 {
     init();
     needsMovement = false;
@@ -43,40 +43,31 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
                 QString selectionMode = split.at(1);
                 if (selectionMode == "incremental") {
                     selection[selIndex] = KisParasite::Incremental;
-                }
-                else if (selectionMode == "angular") {
+                } else if (selectionMode == "angular") {
                     selection[selIndex] = KisParasite::Angular;
                     needsMovement = true;
-                }
-                else if (selectionMode == "random") {
+                } else if (selectionMode == "random") {
                     selection[selIndex] = KisParasite::Random;
-                }
-                else if (selectionMode == "pressure") {
+                } else if (selectionMode == "pressure") {
                     selection[selIndex] = KisParasite::Pressure;
-                }
-                else if (selectionMode == "xtilt") {
+                } else if (selectionMode == "xtilt") {
                     selection[selIndex] = KisParasite::TiltX;
-                }
-                else if (selectionMode == "ytilt") {
+                } else if (selectionMode == "ytilt") {
                     selection[selIndex] = KisParasite::TiltY;
-                }
-                else {
+                } else {
                     selection[selIndex] = KisParasite::Constant;
                 }
-            }
-            else {
+            } else {
                 warnImage << "Sel: wrong index: " << selIndex << "(dim = " << dim << ")";
             }
-        }
-        else if (index.startsWith(QString("rank"))) {
+        } else if (index.startsWith(QString("rank"))) {
             int rankIndex = index.mid(strlen("rank")).toInt();
             if (rankIndex < 0 || rankIndex > dim) {
                 warnImage << "Rankindex out of range: " << rankIndex;
                 continue;
             }
             rank[rankIndex] = (split.at(1)).toInt();
-        }
-        else if (index == "ncells") {
+        } else if (index == "ncells") {
             ncells = (split.at(1)).toInt();
             if (ncells < 1) {
                 warnImage << "ncells out of range: " << ncells;
@@ -119,22 +110,20 @@ void KisPipeBrushParasite::setBrushesCount()
     // I assume ncells is correct. If it isn't, complain to the parasite header.
     if (rank[0] != 0) {
         brushesCount[0] = ncells / rank[0];
-    }
-    else {
+    } else {
         brushesCount[0] = ncells;
     }
-    
+
     for (int i = 1; i < dim; i++) {
         if (rank[i] == 0) {
             brushesCount[i] = brushesCount[i - 1];
-        }
-        else {
+        } else {
             brushesCount[i] = brushesCount[i - 1] / rank[i];
         }
     }
 }
 
-bool KisPipeBrushParasite::saveToDevice(QIODevice* dev) const
+bool KisPipeBrushParasite::saveToDevice(QIODevice *dev) const
 {
     // write out something like
     // <count> ncells:<count> dim:<dim> rank0:<rank0> sel0:<sel0> <...>

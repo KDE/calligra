@@ -39,13 +39,12 @@
 #include "kis_coordinates_converter.h"
 #include "kis_filter_strategy.h"
 
-
 class ZoomAndPanTester : public TestUtil::QImageBasedTest
 {
 public:
     ZoomAndPanTester()
-        // we are not going to use our own QImage sets,so
-        // just exploit the set of the selection manager test
+    // we are not going to use our own QImage sets,so
+    // just exploit the set of the selection manager test
         : QImageBasedTest("selection_manager_test")
     {
         m_undoStore = new KisSurrogateUndoStore();
@@ -65,7 +64,8 @@ public:
         m_mainWindow->show();
     }
 
-    ~ZoomAndPanTester() {
+    ~ZoomAndPanTester()
+    {
         m_image->waitForDone();
         QApplication::processEvents();
 
@@ -81,35 +81,43 @@ public:
         QApplication::removePostedEvents(0);
     }
 
-    QPointer<KisView> view() {
+    QPointer<KisView> view()
+    {
         return m_view;
     }
 
-    KisMainWindow* mainWindow() {
+    KisMainWindow *mainWindow()
+    {
         return m_mainWindow;
     }
 
-    KisImageWSP image() {
+    KisImageWSP image()
+    {
         return m_image;
     }
 
-    KisCanvas2* canvas() {
+    KisCanvas2 *canvas()
+    {
         return m_view->canvasBase();
     }
 
-    QWidget* canvasWidget() {
+    QWidget *canvasWidget()
+    {
         return m_view->canvasBase()->canvasWidget();
     }
 
-    KoZoomController* zoomController() {
+    KoZoomController *zoomController()
+    {
         return m_view->zoomController();
     }
 
-    KisCanvasController* canvasController() {
-        return dynamic_cast<KisCanvasController*>(m_view->canvasController());
+    KisCanvasController *canvasController()
+    {
+        return dynamic_cast<KisCanvasController *>(m_view->canvasController());
     }
 
-    const KisCoordinatesConverter* coordinatesConverter() {
+    const KisCoordinatesConverter *coordinatesConverter()
+    {
         return m_view->canvasBase()->coordinatesConverter();
     }
 
@@ -125,20 +133,21 @@ template<class P, class T>
 inline bool compareWithRounding(const P &pt0, const P &pt1, T tolerance)
 {
     return qAbs(pt0.x() - pt1.x()) <= tolerance &&
-        qAbs(pt0.y() - pt1.y()) <= tolerance;
+           qAbs(pt0.y() - pt1.y()) <= tolerance;
 }
 
-bool verifyOffset(ZoomAndPanTester &t, const QPoint &offset) {
+bool verifyOffset(ZoomAndPanTester &t, const QPoint &offset)
+{
 
     if (t.coordinatesConverter()->documentOffset() != offset) {
-            qDebug() << "########################";
-            qDebug() << "Expected Offset:" << offset;
-            qDebug() << "Actual values:";
-            qDebug() << "Offset:" << t.coordinatesConverter()->documentOffset();
-            qDebug() << "wsize:"  << t.canvasWidget()->size();
-            qDebug() << "vport:"  << t.canvasController()->viewportSize();
-            qDebug() << "pref:"  << t.canvasController()->preferredCenter();
-            qDebug() << "########################";
+        qDebug() << "########################";
+        qDebug() << "Expected Offset:" << offset;
+        qDebug() << "Actual values:";
+        qDebug() << "Offset:" << t.coordinatesConverter()->documentOffset();
+        qDebug() << "wsize:"  << t.canvasWidget()->size();
+        qDebug() << "vport:"  << t.canvasController()->viewportSize();
+        qDebug() << "pref:"  << t.canvasController()->preferredCenter();
+        qDebug() << "########################";
     }
 
     return t.coordinatesConverter()->documentOffset() == offset;
@@ -158,7 +167,6 @@ bool KisZoomAndPanTest::checkPan(ZoomAndPanTester &t, QPoint shift)
     QPoint expectedOffset  = oldOffset + shift;
     QPointF expectedPrefCenter = oldPrefCenter + shift;
 
-
     // no tolerance accepted for pan
     bool offsetAsExpected = newOffset == expectedOffset;
 
@@ -170,20 +178,20 @@ bool KisZoomAndPanTest::checkPan(ZoomAndPanTester &t, QPoint shift)
     bool topLeftAsExpected = newTopLeft.toPoint() == -newOffset;
 
     if (!offsetAsExpected ||
-        !preferredCenterAsExpected ||
-        !topLeftAsExpected) {
+            !preferredCenterAsExpected ||
+            !topLeftAsExpected) {
 
         qDebug() << "***** PAN *****************";
 
-        if(!offsetAsExpected) {
+        if (!offsetAsExpected) {
             qDebug() << " ### Offset invariant broken";
         }
 
-        if(!preferredCenterAsExpected) {
+        if (!preferredCenterAsExpected) {
             qDebug() << " ### Preferred center invariant broken";
         }
 
-        if(!topLeftAsExpected) {
+        if (!topLeftAsExpected) {
             qDebug() << " ### TopLeft invariant broken";
         }
 
@@ -240,20 +248,20 @@ bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
     bool topLeftAsExpected = newTopLeft.toPoint() == -newOffset;
 
     if (!offsetAsExpected ||
-        !preferredCenterAsExpected ||
-        !topLeftAsExpected) {
+            !preferredCenterAsExpected ||
+            !topLeftAsExpected) {
 
         qDebug() << "***** ZOOM ****************";
 
-        if(!offsetAsExpected) {
+        if (!offsetAsExpected) {
             qDebug() << " ### Offset invariant broken";
         }
 
-        if(!preferredCenterAsExpected) {
+        if (!preferredCenterAsExpected) {
             qDebug() << " ### Preferred center invariant broken";
         }
 
-        if(!topLeftAsExpected) {
+        if (!topLeftAsExpected) {
             qDebug() << " ### TopLeft invariant broken";
         }
 
@@ -321,72 +329,70 @@ void KisZoomAndPanTest::testZoom100ChangingWidgetSize()
 {
     ZoomAndPanTester t;
 
-    QCOMPARE(t.image()->size(), QSize(640,441));
+    QCOMPARE(t.image()->size(), QSize(640, 441));
     QCOMPARE(t.image()->xRes(), 1.0);
     QCOMPARE(t.image()->yRes(), 1.0);
 
-    t.canvasController()->resize(QSize(1000,1000));
+    t.canvasController()->resize(QSize(1000, 1000));
     t.zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
-    t.canvasController()->setPreferredCenter(QPoint(320,220));
+    t.canvasController()->setPreferredCenter(QPoint(320, 220));
 
-    QCOMPARE(t.canvasWidget()->size(), QSize(983,983));
+    QCOMPARE(t.canvasWidget()->size(), QSize(983, 983));
     QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
-    QVERIFY(verifyOffset(t, QPoint(-171,-271)));
+    QVERIFY(verifyOffset(t, QPoint(-171, -271)));
 
-    t.canvasController()->resize(QSize(700,700));
+    t.canvasController()->resize(QSize(700, 700));
 
-    QCOMPARE(t.canvasWidget()->size(), QSize(683,683));
+    QCOMPARE(t.canvasWidget()->size(), QSize(683, 683));
     QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
-    QVERIFY(verifyOffset(t, QPoint(-171,-271)));
+    QVERIFY(verifyOffset(t, QPoint(-171, -271)));
 
-    t.canvasController()->setPreferredCenter(QPoint(320,220));
+    t.canvasController()->setPreferredCenter(QPoint(320, 220));
 
-    QVERIFY(verifyOffset(t, QPoint(-21,-121)));
+    QVERIFY(verifyOffset(t, QPoint(-21, -121)));
 
-    t.canvasController()->resize(QSize(400,400));
+    t.canvasController()->resize(QSize(400, 400));
 
-    QCOMPARE(t.canvasWidget()->size(), QSize(383,383));
+    QCOMPARE(t.canvasWidget()->size(), QSize(383, 383));
     QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
-    QVERIFY(verifyOffset(t, QPoint(-21,-121)));
+    QVERIFY(verifyOffset(t, QPoint(-21, -121)));
 
-    t.canvasController()->setPreferredCenter(QPoint(320,220));
+    t.canvasController()->setPreferredCenter(QPoint(320, 220));
 
-    QVERIFY(verifyOffset(t, QPoint(129,29)));
+    QVERIFY(verifyOffset(t, QPoint(129, 29)));
 
-    t.canvasController()->pan(QPoint(100,100));
+    t.canvasController()->pan(QPoint(100, 100));
 
-    QVERIFY(verifyOffset(t, QPoint(229,129)));
+    QVERIFY(verifyOffset(t, QPoint(229, 129)));
 }
 
 void KisZoomAndPanTest::initializeViewport(ZoomAndPanTester &t, bool fullscreenMode, bool rotate, bool mirror)
 {
-    QCOMPARE(t.image()->size(), QSize(640,441));
+    QCOMPARE(t.image()->size(), QSize(640, 441));
     QCOMPARE(t.image()->xRes(), 1.0);
     QCOMPARE(t.image()->yRes(), 1.0);
 
-    t.canvasController()->resize(QSize(500,500));
+    t.canvasController()->resize(QSize(500, 500));
     t.zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
-    t.canvasController()->setPreferredCenter(QPoint(320,220));
+    t.canvasController()->setPreferredCenter(QPoint(320, 220));
 
-    QCOMPARE(t.canvasWidget()->size(), QSize(483,483));
+    QCOMPARE(t.canvasWidget()->size(), QSize(483, 483));
     QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
-    QVERIFY(verifyOffset(t, QPoint(79,-21)));
+    QVERIFY(verifyOffset(t, QPoint(79, -21)));
 
     if (fullscreenMode) {
-        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(320,220));
+        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(320, 220));
 
         QAction *action = t.view()->viewManager()->actionCollection()->action("view_show_just_the_canvas");
         action->setChecked(true);
 
-        QVERIFY(verifyOffset(t, QPoint(79,-21)));
-        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(329,220));
+        QVERIFY(verifyOffset(t, QPoint(79, -21)));
+        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(329, 220));
 
-
-        t.canvasController()->resize(QSize(483,483));
-        QCOMPARE(t.canvasWidget()->size(), QSize(483,483));
+        t.canvasController()->resize(QSize(483, 483));
+        QCOMPARE(t.canvasWidget()->size(), QSize(483, 483));
         QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
-        QVERIFY(verifyOffset(t, QPoint(79,-21)));
-
+        QVERIFY(verifyOffset(t, QPoint(79, -21)));
 
         /**
          * FIXME: here is a small flaw in KoCanvasControllerWidget
@@ -395,20 +401,20 @@ void KisZoomAndPanTest::initializeViewport(ZoomAndPanTester &t, bool fullscreenM
          * different. Make the preferredCenter() return real center of the
          * image instead of the set value
          */
-        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(320.5,220));
+        QCOMPARE(t.canvasController()->preferredCenter(), QPointF(320.5, 220));
     }
 
     if (rotate) {
         t.canvasController()->rotateCanvas(90);
-        QVERIFY(verifyOffset(t, QPoint(-21,79)));
-        QVERIFY(compareWithRounding(QPointF(220,320), t.canvasController()->preferredCenter(), 2));
+        QVERIFY(verifyOffset(t, QPoint(-21, 79)));
+        QVERIFY(compareWithRounding(QPointF(220, 320), t.canvasController()->preferredCenter(), 2));
         QCOMPARE(t.coordinatesConverter()->imageRectInWidgetPixels().topLeft().toPoint(), -t.coordinatesConverter()->documentOffset());
     }
 
     if (mirror) {
         t.canvasController()->mirrorCanvas(true);
         QVERIFY(verifyOffset(t, QPoint(78, -21)));
-        QVERIFY(compareWithRounding(QPointF(320,220), t.canvasController()->preferredCenter(), 2));
+        QVERIFY(compareWithRounding(QPointF(320, 220), t.canvasController()->preferredCenter(), 2));
         QCOMPARE(t.coordinatesConverter()->imageRectInWidgetPixels().topLeft().toPoint(), -t.coordinatesConverter()->documentOffset());
     }
 }
@@ -419,22 +425,22 @@ void KisZoomAndPanTest::testSequentialActionZoomAndPan(bool fullscreenMode, bool
     initializeViewport(t, fullscreenMode, rotate, mirror);
 
     QVERIFY(checkZoomWithAction(t, 0.5));
-    QVERIFY(checkPan(t, QPoint(100,100)));
+    QVERIFY(checkPan(t, QPoint(100, 100)));
 
     QVERIFY(checkZoomWithAction(t, 0.25));
-    QVERIFY(checkPan(t, QPoint(-100,-100)));
+    QVERIFY(checkPan(t, QPoint(-100, -100)));
 
     QVERIFY(checkZoomWithAction(t, 0.35));
-    QVERIFY(checkPan(t, QPoint(100,100)));
+    QVERIFY(checkPan(t, QPoint(100, 100)));
 
     QVERIFY(checkZoomWithAction(t, 0.45));
-    QVERIFY(checkPan(t, QPoint(100,100)));
+    QVERIFY(checkPan(t, QPoint(100, 100)));
 
     QVERIFY(checkZoomWithAction(t, 0.85));
-    QVERIFY(checkPan(t, QPoint(-100,-100)));
+    QVERIFY(checkPan(t, QPoint(-100, -100)));
 
     QVERIFY(checkZoomWithAction(t, 2.35));
-    QVERIFY(checkPan(t, QPoint(100,100)));
+    QVERIFY(checkPan(t, QPoint(100, 100)));
 }
 
 void KisZoomAndPanTest::testSequentialWheelZoomAndPan(bool fullscreenMode, bool rotate, bool mirror)
@@ -442,27 +448,27 @@ void KisZoomAndPanTest::testSequentialWheelZoomAndPan(bool fullscreenMode, bool 
     ZoomAndPanTester t;
     initializeViewport(t, fullscreenMode, rotate, mirror);
 
-    QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 0.5));
-    QVERIFY(checkPan(t, QPoint(100,100)));
+    QVERIFY(checkZoomWithWheel(t, QPoint(100, 100), 0.5));
+    QVERIFY(checkPan(t, QPoint(100, 100)));
 
-    QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 0.5));
-    QVERIFY(checkPan(t, QPoint(-100,-100)));
+    QVERIFY(checkZoomWithWheel(t, QPoint(100, 100), 0.5));
+    QVERIFY(checkPan(t, QPoint(-100, -100)));
 
-    QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 1.25));
-    QVERIFY(checkPan(t, QPoint(100,100)));
+    QVERIFY(checkZoomWithWheel(t, QPoint(100, 100), 1.25));
+    QVERIFY(checkPan(t, QPoint(100, 100)));
 
-    QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 1.5));
-    QVERIFY(checkPan(t, QPoint(100,100)));
+    QVERIFY(checkZoomWithWheel(t, QPoint(100, 100), 1.5));
+    QVERIFY(checkPan(t, QPoint(100, 100)));
 
-    QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 2.5));
-    QVERIFY(checkPan(t, QPoint(-100,-100)));
+    QVERIFY(checkZoomWithWheel(t, QPoint(100, 100), 2.5));
+    QVERIFY(checkPan(t, QPoint(-100, -100)));
 
     // check one point which is outside the widget
-    QVERIFY(checkZoomWithWheel(t, QPoint(-100,100), 2.5));
-    QVERIFY(checkPan(t, QPoint(-100,-100)));
+    QVERIFY(checkZoomWithWheel(t, QPoint(-100, 100), 2.5));
+    QVERIFY(checkPan(t, QPoint(-100, -100)));
 
-    QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 0.5));
-    QVERIFY(checkPan(t, QPoint(-100,-100)));
+    QVERIFY(checkZoomWithWheel(t, QPoint(100, 100), 0.5));
+    QVERIFY(checkPan(t, QPoint(-100, -100)));
 }
 
 void KisZoomAndPanTest::testSequentialActionZoomAndPan()
@@ -520,22 +526,22 @@ void KisZoomAndPanTest::testZoomOnBorderZoomLevels()
     ZoomAndPanTester t;
     initializeViewport(t, false, false, false);
 
-    QPoint widgetPoint(100,100);
+    QPoint widgetPoint(100, 100);
 
     // test min zoom level
     t.zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, KoZoomMode::minimumZoom());
-    QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 0.5, true));
+    QVERIFY(checkZoomWithWheel(t, QPoint(100, 100), 0.5, true));
     QVERIFY(checkZoomWithAction(t, KoZoomMode::minimumZoom() * 0.5, true));
 
     // test max zoom level
     t.zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, KoZoomMode::maximumZoom());
-    QVERIFY(checkZoomWithWheel(t, QPoint(100,100), 2.0, true));
+    QVERIFY(checkZoomWithWheel(t, QPoint(100, 100), 2.0, true));
     QVERIFY(checkZoomWithAction(t, KoZoomMode::maximumZoom() * 2.0, true));
 }
 
 inline QTransform correctionMatrix(qreal angle)
 {
-    return QTransform(0,0,0,sin(M_PI * angle / 180),0,0,0,0,1);
+    return QTransform(0, 0, 0, sin(M_PI * angle / 180), 0, 0, 0, 0, 1);
 }
 
 bool KisZoomAndPanTest::checkRotation(ZoomAndPanTester &t, qreal angle)
@@ -557,7 +563,6 @@ bool KisZoomAndPanTest::checkRotation(ZoomAndPanTester &t, qreal angle)
     QPointF newRealCenterPoint = t.coordinatesConverter()->widgetToImage(t.coordinatesConverter()->widgetCenterPoint());
     QSize newDocumentSize = t.canvasController()->documentSize();
 
-
     // calculate theoretical preferred center
     QTransform rot;
     rot.rotate(angle);
@@ -567,7 +572,7 @@ bool KisZoomAndPanTest::checkRotation(ZoomAndPanTester &t, qreal angle)
 
     QPointF expectedPreferredCenter =
         (oldPreferredCenter - dPoint * correctionMatrix(baseAngle)) * rot +
-         dPoint * correctionMatrix(baseAngle + angle);
+        dPoint * correctionMatrix(baseAngle + angle);
 
     // calculate theoretical offset based on the real preferred center
     QPointF wPoint(t.canvasWidget()->size().width(), t.canvasWidget()->size().height());
@@ -583,29 +588,28 @@ bool KisZoomAndPanTest::checkRotation(ZoomAndPanTester &t, qreal angle)
 
     qreal zoom = t.zoomController()->zoomAction()->effectiveZoom();
     bool realCenterPointAsExpected =
-        compareWithRounding(oldRealCenterPoint, newRealCenterPoint, 2/zoom);
-
+        compareWithRounding(oldRealCenterPoint, newRealCenterPoint, 2 / zoom);
 
     if (!oldOffsetAsExpected ||
-        !newOffsetAsExpected ||
-        !preferredCenterAsExpected ||
-        !realCenterPointAsExpected) {
+            !newOffsetAsExpected ||
+            !preferredCenterAsExpected ||
+            !realCenterPointAsExpected) {
 
         qDebug() << "***** ROTATE **************";
 
-        if(!oldOffsetAsExpected) {
+        if (!oldOffsetAsExpected) {
             qDebug() << " ### Old offset invariant broken";
         }
 
-        if(!newOffsetAsExpected) {
+        if (!newOffsetAsExpected) {
             qDebug() << " ### New offset invariant broken";
         }
 
-        if(!preferredCenterAsExpected) {
+        if (!preferredCenterAsExpected) {
             qDebug() << " ### Preferred center invariant broken";
         }
 
-        if(!realCenterPointAsExpected) {
+        if (!realCenterPointAsExpected) {
             qDebug() << " ### *Real* center invariant broken";
         }
 
@@ -632,23 +636,23 @@ void KisZoomAndPanTest::testRotation(qreal vastScrolling, qreal zoom)
 
     ZoomAndPanTester t;
 
-    QCOMPARE(t.image()->size(), QSize(640,441));
+    QCOMPARE(t.image()->size(), QSize(640, 441));
     QCOMPARE(t.image()->xRes(), 1.0);
     QCOMPARE(t.image()->yRes(), 1.0);
 
     QPointF preferredCenter = zoom * t.image()->bounds().center();
 
-    t.canvasController()->resize(QSize(500,500));
+    t.canvasController()->resize(QSize(500, 500));
     t.zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
     t.canvasController()->setPreferredCenter(preferredCenter.toPoint());
 
-    QCOMPARE(t.canvasWidget()->size(), QSize(483,483));
+    QCOMPARE(t.canvasWidget()->size(), QSize(483, 483));
     QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
 
     QPointF realCenterPoint = t.coordinatesConverter()->widgetToImage(t.coordinatesConverter()->widgetCenterPoint());
     QPointF expectedCenterPoint = QPointF(t.image()->bounds().center());
 
-    if(!compareWithRounding(realCenterPoint, expectedCenterPoint, 2/zoom)) {
+    if (!compareWithRounding(realCenterPoint, expectedCenterPoint, 2 / zoom)) {
         qDebug() << "Failed to set initial center point";
         qDebug() << ppVar(expectedCenterPoint) << ppVar(realCenterPoint);
         QFAIL("FAIL: Failed to set initial center point");
@@ -661,7 +665,7 @@ void KisZoomAndPanTest::testRotation(qreal vastScrolling, qreal zoom)
     QVERIFY(checkRotation(t, 5));
     QVERIFY(checkRotation(t, 5));
 
-    if(vastScrolling < 0.5 && zoom < 1) {
+    if (vastScrolling < 0.5 && zoom < 1) {
         qWarning() << "Disabling a few tests for vast scrolling ="
                    << vastScrolling << ". See comment for more";
         /**
@@ -718,7 +722,7 @@ void KisZoomAndPanTest::testImageRescaled_0_5()
     QApplication::processEvents();
     initializeViewport(t, false, false, false);
     QApplication::processEvents();
-    QVERIFY(checkPan(t, QPoint(200,200)));
+    QVERIFY(checkPan(t, QPoint(200, 200)));
     QApplication::processEvents();
 
     QPointF oldStillPoint =
@@ -742,18 +746,18 @@ void KisZoomAndPanTest::testImageCropped()
     QApplication::processEvents();
     initializeViewport(t, false, false, false);
     QApplication::processEvents();
-    QVERIFY(checkPan(t, QPoint(-150,-150)));
+    QVERIFY(checkPan(t, QPoint(-150, -150)));
     QApplication::processEvents();
 
     QPointF oldStillPoint =
-        t.coordinatesConverter()->imageToWidget(QPointF(150,150));
+        t.coordinatesConverter()->imageToWidget(QPointF(150, 150));
 
-    t.image()->cropImage(QRect(100,100,100,100));
+    t.image()->cropImage(QRect(100, 100, 100, 100));
     t.image()->waitForDone();
     QApplication::processEvents();
 
     QPointF newStillPoint =
-        t.coordinatesConverter()->imageToWidget(QPointF(50,50));
+        t.coordinatesConverter()->imageToWidget(QPointF(50, 50));
 
     QVERIFY(compareWithRounding(oldStillPoint, newStillPoint, 1.0));
 }

@@ -24,7 +24,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoFilter.h>
 #include <QMap>
 
-
 typedef QMap<QString, QString> KSpreadFilterProperty;
 
 class KSpreadBaseWorker

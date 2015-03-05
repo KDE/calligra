@@ -31,20 +31,16 @@
 // libodfreader
 #include "OdfReaderContext.h"
 
-
 class QFile;
 class KoStore;
 
-
-
-class OdfReaderAsciiContext : public OdfReaderContext 
+class OdfReaderAsciiContext : public OdfReaderContext
 {
- public: 
+public:
     OdfReaderAsciiContext(KoStore *store, QFile &file);
     virtual ~OdfReaderAsciiContext();
 
     QTextStream  outStream;
 };
-
 
 #endif // ODFREADERASCIICONTEXT_H

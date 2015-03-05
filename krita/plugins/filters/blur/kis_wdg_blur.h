@@ -29,13 +29,14 @@ class KisWdgBlur : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgBlur(QWidget * parent);
+    KisWdgBlur(QWidget *parent);
     virtual ~KisWdgBlur();
-    inline const Ui_WdgBlur* widget() const {
+    inline const Ui_WdgBlur *widget() const
+    {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration *);
+    virtual KisPropertiesConfiguration *configuration() const;
 
 private Q_SLOTS:
 
@@ -46,7 +47,7 @@ private Q_SLOTS:
 private:
 
     bool m_halfSizeLink;
-    Ui_WdgBlur* m_widget;
+    Ui_WdgBlur *m_widget;
 };
 
 #endif

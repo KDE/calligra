@@ -22,29 +22,29 @@
 #include "kis_recorded_action.h"
 
 /**
- * Used for action that applys on nodes that are 
+ * Used for action that applys on nodes that are
  */
 class KRITAIMAGE_EXPORT KisRecordedNodeAction : public KisRecordedAction
 {
 public:
-    KisRecordedNodeAction(const QString& id, const QString& name, const KisNodeQueryPath& path);
-    KisRecordedNodeAction(const KisRecordedNodeAction& _rhs);
+    KisRecordedNodeAction(const QString &id, const QString &name, const KisNodeQueryPath &path);
+    KisRecordedNodeAction(const KisRecordedNodeAction &_rhs);
     virtual ~KisRecordedNodeAction();
     /**
      * Play the action on one node
      */
-    virtual void play(KisNodeSP node, const KisPlayInfo&, KoUpdater* _updater) const = 0;
+    virtual void play(KisNodeSP node, const KisPlayInfo &, KoUpdater *_updater) const = 0;
     /**
      * Play the action on all the nodes returned by the nodeQueryPath
      */
-    virtual void play(const KisPlayInfo& _info, KoUpdater* _updater) const;
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
+    virtual void play(const KisPlayInfo &_info, KoUpdater *_updater) const;
+    virtual void toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *) const;
 public:
-    const KisNodeQueryPath& nodeQueryPath() const;
-    void setNodeQueryPath(const KisNodeQueryPath&);
+    const KisNodeQueryPath &nodeQueryPath() const;
+    void setNodeQueryPath(const KisNodeQueryPath &);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

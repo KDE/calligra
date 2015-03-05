@@ -41,7 +41,7 @@
 
 namespace MSO
 {
-    class OfficeArtDgContainer;
+class OfficeArtDgContainer;
 }
 
 namespace Swinder
@@ -84,11 +84,13 @@ public:
     virtual ~Object();
 
     /// Returns the object type.
-    Type type() const {
+    Type type() const
+    {
         return m_type;
     }
     /// Returns the unique object identifier.
-    unsigned long id() const {
+    unsigned long id() const
+    {
         return m_id;
     }
 
@@ -103,7 +105,6 @@ protected:
     unsigned long m_id;
 };
 
-
 /**
  * Note objects used to store comments attached to a cell or revision.
  */
@@ -113,11 +114,13 @@ public:
     NoteObject(unsigned long id) : Object(Note, id) {}
     virtual ~NoteObject() {}
     /// Returns the comment.
-    QString note() const {
+    QString note() const
+    {
         return m_note;
     }
     /// Set the comment.
-    void setNote(const QString &n) {
+    void setNote(const QString &n)
+    {
         m_note = n;
     }
 private:
@@ -130,16 +133,25 @@ private:
 class ChartObject : public Object
 {
 public:
-    KoChart::Chart* m_chart;
+    KoChart::Chart *m_chart;
 
     explicit ChartObject(unsigned long id) : Object(Chart, id), m_chart(new KoChart::Chart) {}
-    virtual ~ChartObject() { delete m_chart; }
-    bool operator==(const ChartObject &other) const { return this == &other; }
-    bool operator!=(const ChartObject &other) const { return ! (*this == other); }
+    virtual ~ChartObject()
+    {
+        delete m_chart;
+    }
+    bool operator==(const ChartObject &other) const
+    {
+        return this == &other;
+    }
+    bool operator!=(const ChartObject &other) const
+    {
+        return !(*this == other);
+    }
 
 private:
-    ChartObject(const ChartObject& co);
-    ChartObject& operator=(const ChartObject& co);
+    ChartObject(const ChartObject &co);
+    ChartObject &operator=(const ChartObject &co);
 };
 
 /**
@@ -148,15 +160,21 @@ private:
 class OfficeArtObject
 {
 public:
-    explicit OfficeArtObject(const MSO::OfficeArtSpContainer& object, quint32 index = 0);
+    explicit OfficeArtObject(const MSO::OfficeArtSpContainer &object, quint32 index = 0);
     ~OfficeArtObject();
     MSO::OfficeArtSpContainer object() const;
-    void setText(const TxORecord& text);
+    void setText(const TxORecord &text);
     TxORecord text() const;
     void setIndex(quint32 index);
     quint32 index() const;
-    bool operator==(const OfficeArtObject& other) const { return this == &other; }
-    bool operator!=(const OfficeArtObject& other) const { return !(*this == other); }
+    bool operator==(const OfficeArtObject &other) const
+    {
+        return this == &other;
+    }
+    bool operator!=(const OfficeArtObject &other) const
+    {
+        return !(*this == other);
+    }
 private:
     MSO::OfficeArtSpContainer m_object;
     TxORecord m_text;

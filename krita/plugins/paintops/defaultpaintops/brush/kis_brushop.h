@@ -37,22 +37,20 @@
 #include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
 
-
 class KisBrushBasedPaintOpSettings;
 
 class KisPainter;
 class KisColorSource;
-
 
 class KisBrushOp : public KisBrushBasedPaintOp
 {
 
 public:
 
-    KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisBrushOp();
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
 
 private:
@@ -67,7 +65,7 @@ private:
     KisPressureRotationOption m_rotationOption;
     KisPressureMixOption m_mixOption;
     KisPressureScatterOption m_scatterOption;
-    QList<KisPressureHSVOption*> m_hsvOptions;
+    QList<KisPressureHSVOption *> m_hsvOptions;
 
     KoColorTransformation *m_hsvTransformation;
     KisPaintDeviceSP m_lineCacheDevice;

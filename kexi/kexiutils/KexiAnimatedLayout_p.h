@@ -31,10 +31,10 @@ class KexiAnimatedLayout::Private : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Private(KexiAnimatedLayout* qq);
-    void animateTo(QWidget* destination);
+    explicit Private(KexiAnimatedLayout *qq);
+    void animateTo(QWidget *destination);
 protected:
-    void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent *event);
 protected Q_SLOTS:
     void animationFinished();
 private:

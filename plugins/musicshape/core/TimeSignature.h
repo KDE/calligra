@@ -21,7 +21,8 @@
 
 #include "StaffElement.h"
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Staff;
 
@@ -40,7 +41,7 @@ public:
     /**
      * Create a new time signature instance and place it on a specified staff.
      */
-    TimeSignature(Staff* staff, int startTime, int beats, int beat, TimeSignatureType type = Classical);
+    TimeSignature(Staff *staff, int startTime, int beats, int beat, TimeSignatureType type = Classical);
 
     /**
      * Destructor.
@@ -62,7 +63,7 @@ public:
      */
     TimeSignatureType type() const;
     virtual int priority() const;
-    
+
     QList<int> beatLengths() const;
 public Q_SLOTS:
     /**
@@ -89,7 +90,7 @@ Q_SIGNALS:
     void typeChanged(TimeSignatureType type);
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

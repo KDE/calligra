@@ -28,7 +28,6 @@
 
 #include <kdebug.h>
 
-
 class KoAnchorTextRangePrivate
 {
 public:

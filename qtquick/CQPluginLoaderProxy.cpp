@@ -24,7 +24,7 @@
 #include <KoInlineObjectRegistry.h>
 #include <KoFilterEffectRegistry.h>
 
-CQPluginLoaderProxy::CQPluginLoaderProxy(QObject* parent)
+CQPluginLoaderProxy::CQPluginLoaderProxy(QObject *parent)
     : QObject(parent)
 {
 

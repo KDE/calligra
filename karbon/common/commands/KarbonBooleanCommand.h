@@ -44,7 +44,7 @@ public:
      * @param operation the booelan operation to execute
      * @param parent the parent command used for macro commands
      */
-    explicit KarbonBooleanCommand(KoShapeBasedDocumentBase *controller, KoPathShape* pathA, KoPathShape * pathB,
+    explicit KarbonBooleanCommand(KoShapeBasedDocumentBase *controller, KoPathShape *pathA, KoPathShape *pathB,
                                   BooleanOperation operation, KUndo2Command *parent = 0);
     virtual ~KarbonBooleanCommand();
     /// redo the command
@@ -53,7 +53,7 @@ public:
     void undo();
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // _KARBONBOOLEANCOMMAND_H_

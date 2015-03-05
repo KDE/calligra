@@ -41,9 +41,9 @@
 
 KoScriptingDockerFactory::KoScriptingDockerFactory(QWidget *parent, KoScriptingModule *module, Kross::Action *action)
     : KoDockFactoryBase(),
-    m_parent(parent),
-    m_module(module),
-    m_action(action)
+      m_parent(parent),
+      m_module(module),
+      m_action(action)
 {
 }
 
@@ -60,10 +60,11 @@ KoDockFactoryBase::DockPosition  KoScriptingDockerFactory::defaultDockPosition()
 QDockWidget *KoScriptingDockerFactory::createDockWidget()
 {
     QDockWidget *dw = 0;
-    if (m_action)
+    if (m_action) {
         dw = new KoScriptingActionDocker(m_module, m_action, m_parent);
-    else
+    } else {
         dw = new KoScriptingDocker(m_parent);
+    }
     dw->setObjectName(id());
     return dw;
 }
@@ -114,14 +115,14 @@ KoScriptingDocker::KoScriptingDocker(QWidget *parent)
     d->tb->addSeparator();
     QLineEdit *filter = new QLineEdit(tb);
     d->tb->addWidget(filter);
-    connect(filter, SIGNAL(textChanged(const QString&)), model, SLOT(setFilterRegExp(const QString&)));
+    connect(filter, SIGNAL(textChanged(QString)), model, SLOT(setFilterRegExp(QString)));
     */
 
     setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
     setWidget(widget);
 
-    connect(m_view, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(slotDoubleClicked()));
-    connect(m_view, SIGNAL(enabledChanged(const QString&)), this, SLOT(slotEnabledChanged(const QString&)));
+    connect(m_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotDoubleClicked()));
+    connect(m_view, SIGNAL(enabledChanged(QString)), this, SLOT(slotEnabledChanged(QString)));
 }
 
 void KoScriptingDocker::slotShowScriptManager()
@@ -134,8 +135,9 @@ void KoScriptingDocker::slotShowScriptManager()
 void KoScriptingDocker::slotEnabledChanged(const QString &actionname)
 {
     if (m_actions.contains(actionname))
-        if (QAction *a = m_view->actionCollection()->action(actionname))
+        if (QAction *a = m_view->actionCollection()->action(actionname)) {
             m_actions[actionname]->setEnabled(a->isEnabled());
+        }
 }
 
 void KoScriptingDocker::slotDoubleClicked()
@@ -150,8 +152,8 @@ void KoScriptingDocker::slotDoubleClicked()
 
 KoScriptingActionDocker::KoScriptingActionDocker(KoScriptingModule *module, Kross::Action *action, QWidget *parent)
     : QDockWidget(action->text(), parent),
-    m_module(module),
-    m_action(action)
+      m_module(module),
+      m_action(action)
 {
     kDebug(32010);
     m_action->addObject(this, "KoDocker", Kross::ChildrenInterface::AutoConnectSignals);
@@ -166,7 +168,7 @@ KoScriptingActionDocker::~KoScriptingActionDocker()
 
 void KoScriptingActionDocker::slotVisibilityChanged(bool visible)
 {
-    kDebug(32010)<<"visible="<<visible;
+    kDebug(32010) << "visible=" << visible;
     if (visible) {
         if (m_module && m_action->isFinalized()) {
             //KoView *view = m_module->view();

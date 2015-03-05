@@ -31,7 +31,7 @@
 using namespace Calligra::Sheets;
 
 PrecisionCommand::PrecisionCommand()
-        : AbstractRegionCommand()
+    : AbstractRegionCommand()
 {
     setText(kundo2_i18n("Increase Precision"));
 }
@@ -58,8 +58,9 @@ bool PrecisionCommand::postProcessing()
 void PrecisionCommand::setReverse(bool reverse)
 {
     AbstractRegionCommand::setReverse(reverse);
-    if (!m_reverse)
+    if (!m_reverse) {
         setText(kundo2_i18n("Increase Precision"));
-    else
+    } else {
         setText(kundo2_i18n("Decrease Precision"));
+    }
 }

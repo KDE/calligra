@@ -24,7 +24,6 @@
 
 #include "KoResourceServerPolicies.h"
 
-
 /**
  * The KoResourceServerObserver class provides a interface to observe a KoResourceServer.
  * To receive notifications it needs to be added to the resource server.
@@ -56,21 +55,21 @@ public:
      */
     virtual void resourceChanged(PointerType resource) = 0;
 
-     /**
-     * Will be called by the resource server when resources are added or removed
-     * from a tag category
-     */
-    virtual void syncTaggedResourceView()=0;
+    /**
+    * Will be called by the resource server when resources are added or removed
+    * from a tag category
+    */
+    virtual void syncTaggedResourceView() = 0;
 
-     /**
-     * Will be called by the resource server when a new tag category has been created
-     */
-    virtual void syncTagAddition(const QString& tag)=0;
+    /**
+    * Will be called by the resource server when a new tag category has been created
+    */
+    virtual void syncTagAddition(const QString &tag) = 0;
 
-     /**
-     * Will be called by the resource server when a new tag category has been deleted
-     */
-    virtual void syncTagRemoval(const QString& tag)=0;
+    /**
+    * Will be called by the resource server when a new tag category has been deleted
+    */
+    virtual void syncTagRemoval(const QString &tag) = 0;
 
 };
 

@@ -83,7 +83,7 @@ class KisCanvas2::KisCanvas2Private
 
 public:
 
-    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter* coordConverter, QPointer<KisView> view, KoCanvasResourceManager* resourceManager)
+    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter *coordConverter, QPointer<KisView> view, KoCanvasResourceManager *resourceManager)
         : coordinatesConverter(coordConverter)
         , view(view)
         , canvasWidget(0)
@@ -96,7 +96,8 @@ public:
     {
     }
 
-    ~KisCanvas2Private() {
+    ~KisCanvas2Private()
+    {
         delete shapeManager;
         delete toolProxy;
     }
@@ -155,7 +156,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      * globalShapeManager.selection()
      */
 
-    KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(sc);
+    KisShapeController *kritaShapeController = dynamic_cast<KisShapeController *>(sc);
     connect(kritaShapeController, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
     connect(kritaShapeController, SIGNAL(selectionContentChanged()),
@@ -172,29 +173,30 @@ KisCanvas2::~KisCanvas2()
     delete m_d;
 }
 
-void KisCanvas2::setCanvasWidget(QWidget * widget)
+void KisCanvas2::setCanvasWidget(QWidget *widget)
 {
-    KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
+    KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget *>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
     if (m_d->popupPalette) {
         m_d->popupPalette->setParent(widget);
     }
 
-    if(m_d->canvasWidget != 0)
-    {
+    if (m_d->canvasWidget != 0) {
         tmp->setDecorations(m_d->canvasWidget->decorations());
 
         // Redundant check for the constructor case, see below
-        if(viewManager() != 0)
+        if (viewManager() != 0) {
             viewManager()->inputManager()->removeTrackedCanvas(this);
+        }
     }
 
     m_d->canvasWidget = tmp;
 
     // Either tmp was null or we are being called by KisCanvas2 constructor that is called by KisView
     // constructor, so the view manager still doesn't exists.
-    if(m_d->canvasWidget != 0 && viewManager() != 0)
+    if (m_d->canvasWidget != 0 && viewManager() != 0) {
         viewManager()->inputManager()->addTrackedCanvas(this);
+    }
 
     if (!m_d->canvasWidget->decoration(INFINITY_DECORATION_ID)) {
         KisInfinityManager *manager = new KisInfinityManager(m_d->view, this);
@@ -207,7 +209,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     widget->setMouseTracking(true);
     widget->setAcceptDrops(true);
 
-    KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget*>(canvasController());
+    KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget *>(canvasController());
     if (controller) {
         Q_ASSERT(controller->canvas() == this);
         controller->changeCanvasWidget(widget);
@@ -271,21 +273,25 @@ void KisCanvas2::addCommand(KUndo2Command *command)
     m_d->view->document()->addCommand(command);
 }
 
-KoShapeManager* KisCanvas2::shapeManager() const
+KoShapeManager *KisCanvas2::shapeManager() const
 {
-    if (!viewManager()) return m_d->shapeManager;
-    if (!viewManager()->nodeManager()) return m_d->shapeManager;
+    if (!viewManager()) {
+        return m_d->shapeManager;
+    }
+    if (!viewManager()->nodeManager()) {
+        return m_d->shapeManager;
+    }
 
     KisLayerSP activeLayer = viewManager()->nodeManager()->activeLayer();
     if (activeLayer && activeLayer->isEditable()) {
-        KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(activeLayer.data());
+        KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer *>(activeLayer.data());
         if (shapeLayer) {
             return shapeLayer->shapeManager();
         }
         KisSelectionSP selection = activeLayer->selection();
         if (selection && !selection.isNull()) {
             if (selection->hasShapeSelection()) {
-                KoShapeManager* m = dynamic_cast<KisShapeSelection*>(selection->shapeSelection())->shapeManager();
+                KoShapeManager *m = dynamic_cast<KisShapeSelection *>(selection->shapeSelection())->shapeManager();
                 return m;
             }
 
@@ -294,7 +300,7 @@ KoShapeManager* KisCanvas2::shapeManager() const
     return m_d->shapeManager;
 }
 
-KoShapeManager * KisCanvas2::globalShapeManager() const
+KoShapeManager *KisCanvas2::globalShapeManager() const
 {
     return m_d->shapeManager;
 }
@@ -304,31 +310,30 @@ void KisCanvas2::updateInputMethodInfo()
     // TODO call (the protected) QWidget::updateMicroFocus() on the proper canvas widget...
 }
 
-const KisCoordinatesConverter* KisCanvas2::coordinatesConverter() const
+const KisCoordinatesConverter *KisCanvas2::coordinatesConverter() const
 {
     return m_d->coordinatesConverter;
 }
 
-KoViewConverter* KisCanvas2::viewConverter() const
+KoViewConverter *KisCanvas2::viewConverter() const
 {
     return m_d->coordinatesConverter;
 }
 
-KisInputManager* KisCanvas2::globalInputManager() const
+KisInputManager *KisCanvas2::globalInputManager() const
 {
     return m_d->view->globalInputManager();
 }
 
-QWidget* KisCanvas2::canvasWidget()
+QWidget *KisCanvas2::canvasWidget()
 {
     return m_d->canvasWidget->widget();
 }
 
-const QWidget* KisCanvas2::canvasWidget() const
+const QWidget *KisCanvas2::canvasWidget() const
 {
     return m_d->canvasWidget->widget();
 }
-
 
 KoUnit KisCanvas2::unit() const
 {
@@ -349,7 +354,7 @@ KoUnit KisCanvas2::unit() const
     return unit;
 }
 
-KoToolProxy * KisCanvas2::toolProxy() const
+KoToolProxy *KisCanvas2::toolProxy() const
 {
     return m_d->toolProxy;
 }
@@ -358,12 +363,12 @@ void KisCanvas2::createQPainterCanvas()
 {
     m_d->currentCanvasIsOpenGL = false;
 
-    KisQPainterCanvas * canvasWidget = new KisQPainterCanvas(this, m_d->coordinatesConverter, m_d->view);
+    KisQPainterCanvas *canvasWidget = new KisQPainterCanvas(this, m_d->coordinatesConverter, m_d->view);
     m_d->prescaledProjection = new KisPrescaledProjection();
     m_d->prescaledProjection->setCoordinatesConverter(m_d->coordinatesConverter);
     m_d->prescaledProjection->setMonitorProfile(m_d->displayColorConverter->monitorProfile(),
-                                                m_d->displayColorConverter->renderingIntent(),
-                                                m_d->displayColorConverter->conversionFlags());
+            m_d->displayColorConverter->renderingIntent(),
+            m_d->displayColorConverter->conversionFlags());
     m_d->prescaledProjection->setDisplayFilter(m_d->displayColorConverter->displayFilter());
     canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
     setCanvasWidget(canvasWidget);
@@ -379,9 +384,9 @@ void KisCanvas2::createOpenGLCanvas()
     KisOpenGL::makeSharedContextCurrent();
 
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(),
-                                                                        m_d->displayColorConverter->monitorProfile(),
-                                                                        m_d->displayColorConverter->renderingIntent(),
-                                                                        m_d->displayColorConverter->conversionFlags());
+                               m_d->displayColorConverter->monitorProfile(),
+                               m_d->displayColorConverter->renderingIntent(),
+                               m_d->displayColorConverter->conversionFlags());
 
     KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->openGLImageTextures);
     canvasWidget->setDisplayFilter(m_d->displayColorConverter->displayFilter());
@@ -433,7 +438,7 @@ void KisCanvas2::initializeImage()
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
     connect(this, SIGNAL(sigCanvasCacheUpdated()), SLOT(updateCanvasProjection()));
-    connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
+    connect(image, SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
 
     connectCurrentCanvas();
@@ -476,8 +481,8 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
 #ifdef HAVE_OPENGL
     KisConfig cfg;
     bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
-        (m_d->currentCanvasIsOpenGL &&
-         m_d->openGLFilterMode != cfg.openGLFilteringMode());
+                     (m_d->currentCanvasIsOpenGL &&
+                      m_d->openGLFilterMode != cfg.openGLFilteringMode());
 
     if (needReset) {
         disconnectCurrentCanvas();
@@ -536,8 +541,7 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 
         image->unlock();
 #endif
-    }
-    else {
+    } else {
         KisImageWSP image = this->image();
         image->barrierLock();
 
@@ -554,19 +558,19 @@ KisDisplayFilter *KisCanvas2::displayFilter() const
     return m_d->displayColorConverter->displayFilter();
 }
 
-KisDisplayColorConverter* KisCanvas2::displayColorConverter() const
+KisDisplayColorConverter *KisCanvas2::displayColorConverter() const
 {
     return m_d->displayColorConverter;
 }
 
-KisExposureGammaCorrectionInterface* KisCanvas2::exposureGammaCorrectionInterface() const
+KisExposureGammaCorrectionInterface *KisCanvas2::exposureGammaCorrectionInterface() const
 {
     KisDisplayFilter *displayFilter =
         m_d->displayColorConverter->displayFilter();
 
     return displayFilter ?
-        displayFilter->correctionInterface() :
-        KisDumbExposureGammaCorrectionInterface::instance();
+           displayFilter->correctionInterface() :
+           KisDumbExposureGammaCorrectionInterface::instance();
 }
 
 void KisCanvas2::startResizingImage()
@@ -596,7 +600,7 @@ void KisCanvas2::finishResizingImage(qint32 w, qint32 h)
     }
 }
 
-void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
+void KisCanvas2::startUpdateCanvasProjection(const QRect &rc)
 {
     KisUpdateInfoSP info;
 
@@ -631,9 +635,10 @@ void KisCanvas2::updateCanvasProjection()
          * type of the info may come. So just check it here.
          */
 #ifdef HAVE_OPENGL
-        bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
-        if (isOpenGLUpdateInfo != m_d->currentCanvasIsOpenGL)
+        bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo *>(info.data());
+        if (isOpenGLUpdateInfo != m_d->currentCanvasIsOpenGL) {
             continue;
+        }
 #endif
 
         if (m_d->currentCanvasIsOpenGL) {
@@ -650,15 +655,14 @@ void KisCanvas2::updateCanvasProjection()
 #else
             Q_ASSERT_X(0, "updateCanvasProjection()", "Bad use of updateCanvasProjection(). It shouldn't have happened =(");
 #endif
-        }
-        else {
+        } else {
             // See comment in startUpdateCanvasProjection()
             Q_ASSERT(m_d->prescaledProjection);
 
             m_d->prescaledProjection->recalculateCache(info);
 
             QRect vRect = m_d->coordinatesConverter->
-                viewportToWidget(info->dirtyViewportRect()).toAlignedRect();
+                          viewportToWidget(info->dirtyViewportRect()).toAlignedRect();
 
             if (!vRect.isEmpty()) {
                 updateCanvasWidgetImpl(vRect);
@@ -689,7 +693,7 @@ void KisCanvas2::slotDoCanvasUpdate()
 void KisCanvas2::updateCanvasWidgetImpl(const QRect &rc)
 {
     if (!m_d->updateSignalCompressor->isActive() ||
-        !m_d->savedUpdateRect.isEmpty()) {
+            !m_d->savedUpdateRect.isEmpty()) {
         m_d->savedUpdateRect |= rc;
     }
     m_d->updateSignalCompressor->start();
@@ -700,12 +704,11 @@ void KisCanvas2::updateCanvas()
     updateCanvasWidgetImpl();
 }
 
-void KisCanvas2::updateCanvas(const QRectF& documentRect)
+void KisCanvas2::updateCanvas(const QRectF &documentRect)
 {
     if (m_d->currentCanvasIsOpenGL && m_d->canvasWidget->decorations().size() > 0) {
         updateCanvasWidgetImpl();
-    }
-    else {
+    } else {
         // updateCanvas is called from tools, never from the projection
         // updates, so no need to prescale!
         QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
@@ -740,12 +743,12 @@ void KisCanvas2::preScale()
     }
 }
 
-const KoColorProfile *  KisCanvas2::monitorProfile()
+const KoColorProfile   *KisCanvas2::monitorProfile()
 {
     return m_d->displayColorConverter->monitorProfile();
 }
 
-KisViewManager* KisCanvas2::viewManager() const
+KisViewManager *KisCanvas2::viewManager() const
 {
     if (m_d->view) {
         return m_d->view->viewManager();
@@ -777,8 +780,9 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 
     QPointF moveOffset = offsetAfter - offsetBefore;
 
-    if (!m_d->currentCanvasIsOpenGL)
+    if (!m_d->currentCanvasIsOpenGL) {
         m_d->prescaledProjection->viewportMoved(moveOffset);
+    }
 
     emit documentOffsetUpdateFinished();
 
@@ -793,9 +797,11 @@ void KisCanvas2::slotConfigChanged()
 
 }
 
-void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)
+void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
 {
-    if (m_d->displayColorConverter->monitorProfile() == monitorProfile) return;
+    if (m_d->displayColorConverter->monitorProfile() == monitorProfile) {
+        return;
+    }
 
     m_d->displayColorConverter->setMonitorProfile(monitorProfile);
 
@@ -807,16 +813,16 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)
 #ifdef HAVE_OPENGL
         Q_ASSERT(m_d->openGLImageTextures);
         m_d->openGLImageTextures->setMonitorProfile(m_d->displayColorConverter->monitorProfile(),
-                                                    m_d->displayColorConverter->renderingIntent(),
-                                                    m_d->displayColorConverter->conversionFlags());
+                m_d->displayColorConverter->renderingIntent(),
+                m_d->displayColorConverter->conversionFlags());
 #else
         Q_ASSERT_X(0, "KisCanvas2::setMonitorProfile", "Bad use of setMonitorProfile(). It shouldn't have happened =(");
 #endif
     } else {
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->setMonitorProfile(m_d->displayColorConverter->monitorProfile(),
-                                                    m_d->displayColorConverter->renderingIntent(),
-                                                    m_d->displayColorConverter->conversionFlags());
+                m_d->displayColorConverter->renderingIntent(),
+                m_d->displayColorConverter->conversionFlags());
     }
 
     startUpdateInPatches(image->bounds());
@@ -824,16 +830,15 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * monitorProfile)
     image->unlock();
 }
 
-void KisCanvas2::addDecoration(KisCanvasDecoration* deco)
+void KisCanvas2::addDecoration(KisCanvasDecoration *deco)
 {
     m_d->canvasWidget->addDecoration(deco);
 }
 
-KisCanvasDecoration* KisCanvas2::decoration(const QString& id) const
+KisCanvasDecoration *KisCanvas2::decoration(const QString &id) const
 {
     return m_d->canvasWidget->decoration(id);
 }
-
 
 QPoint KisCanvas2::documentOrigin() const
 {
@@ -851,7 +856,7 @@ QPoint KisCanvas2::documentOffset() const
     return m_d->coordinatesConverter->documentOffset();
 }
 
-void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager)
+void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager *favoriteResourceManager)
 {
     m_d->popupPalette = new KisPopupPalette(favoriteResourceManager, displayColorConverter()->displayRendererInterface(), m_d->canvasWidget->widget());
     m_d->popupPalette->showPopupPalette(false);
@@ -864,12 +869,12 @@ void KisCanvas2::setCursor(const QCursor &cursor)
 
 void KisCanvas2::slotSelectionChanged()
 {
-    KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(viewManager()->activeLayer().data());
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer *>(viewManager()->activeLayer().data());
     if (!shapeLayer) {
         return;
     }
     m_d->shapeManager->selection()->deselectAll();
-    foreach(KoShape* shape, shapeLayer->shapeManager()->selection()->selectedShapes()) {
+    foreach (KoShape *shape, shapeLayer->shapeManager()->selection()->selectedShapes()) {
         m_d->shapeManager->selection()->select(shape);
     }
 }
@@ -881,7 +886,6 @@ bool KisCanvas2::isPopupPaletteVisible()
     }
     return m_d->popupPalette->isVisible();
 }
-
 
 void KisCanvas2::setWrapAroundViewingMode(bool value)
 {
@@ -909,11 +913,10 @@ void KisCanvas2::slotShowPopupPalette(const QPoint &p)
     m_d->popupPalette->showPopupPalette(p);
 }
 
-KisPaintingAssistantsDecoration* KisCanvas2::paintingAssistantsDecoration()
+KisPaintingAssistantsDecoration *KisCanvas2::paintingAssistantsDecoration()
 {
-    KisCanvasDecoration* deco = decoration("paintingAssistantsDecoration");
-    return qobject_cast<KisPaintingAssistantsDecoration*>(deco);
+    KisCanvasDecoration *deco = decoration("paintingAssistantsDecoration");
+    return qobject_cast<KisPaintingAssistantsDecoration *>(deco);
 }
-
 
 #include "kis_canvas2.moc"

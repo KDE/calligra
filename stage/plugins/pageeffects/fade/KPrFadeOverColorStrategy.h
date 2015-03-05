@@ -31,22 +31,22 @@ public:
     KPrFadeOverColorStrategy();
     virtual ~KPrFadeOverColorStrategy();
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    virtual void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine);
 
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    virtual void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data);
 
-    virtual void next( const KPrPageEffect::Data &data );
+    virtual void next(const KPrPageEffect::Data &data);
 
     virtual void finish(const KPrPageEffect::Data &data);
 
     // reimplemented
-    virtual void saveOdfSmilAttributes(KoXmlWriter & xmlWriter) const;
+    virtual void saveOdfSmilAttributes(KoXmlWriter &xmlWriter) const;
 
     // reimplemented
-    virtual void saveOdfSmilAttributes(KoGenStyle & style) const;
+    virtual void saveOdfSmilAttributes(KoGenStyle &style) const;
 
     // reimplemented
-    virtual void loadOdfSmilAttributes(const KoXmlElement & element);
+    virtual void loadOdfSmilAttributes(const KoXmlElement &element);
 
 private:
     QColor m_fadeColor;

@@ -37,7 +37,7 @@ public:
     virtual ~KexiDBReportData();
 
     virtual QStringList fieldNames() const;
-    virtual void setSorting(const QList<SortedField>& sorting);
+    virtual void setSorting(const QList<SortedField> &sorting);
     virtual void addExpression(const QString &field, const QVariant &value, int relation = '=');
 
     virtual QString sourceName() const;
@@ -56,14 +56,14 @@ public:
     virtual qint64 recordCount() const;
 
     //Utility Functions
-    virtual QStringList scriptList(const QString& language) const;
-    virtual QString scriptCode(const QString& script, const QString& language) const;
+    virtual QStringList scriptList(const QString &language) const;
+    virtual QString scriptCode(const QString &script, const QString &language) const;
     virtual QStringList dataSources() const;
-    virtual KoReportData* data(const QString&);
+    virtual KoReportData *data(const QString &);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     bool getSchema();
 };

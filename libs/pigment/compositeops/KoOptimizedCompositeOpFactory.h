@@ -40,8 +40,8 @@ class KoColorSpace;
 class PIGMENTCMS_EXPORT KoOptimizedCompositeOpFactory
 {
 public:
-    static KoCompositeOp* createAlphaDarkenOp32(const KoColorSpace *cs);
-    static KoCompositeOp* createOverOp32(const KoColorSpace *cs);
+    static KoCompositeOp *createAlphaDarkenOp32(const KoColorSpace *cs);
+    static KoCompositeOp *createOverOp32(const KoColorSpace *cs);
 };
 
 #endif /* KOOPTIMIZEDCOMPOSITEOPFACTORY_H */

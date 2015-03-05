@@ -23,22 +23,20 @@
 class QString;
 class QImage;
 
-struct PAINTOP_EXPORT KisCurveLabel
-{
+struct PAINTOP_EXPORT KisCurveLabel {
 public:
     KisCurveLabel();
-    KisCurveLabel(const QString&);
-    KisCurveLabel(const QImage&);
-    KisCurveLabel(const KisCurveLabel&);
-    KisCurveLabel& operator=(const KisCurveLabel&);
+    KisCurveLabel(const QString &);
+    KisCurveLabel(const QImage &);
+    KisCurveLabel(const KisCurveLabel &);
+    KisCurveLabel &operator=(const KisCurveLabel &);
     ~KisCurveLabel();
 
     QString name() const;
     QImage icon() const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 #endif

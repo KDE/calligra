@@ -62,16 +62,22 @@ KisSeparateChannelsPlugin::~KisSeparateChannelsPlugin()
 void KisSeparateChannelsPlugin::slotSeparate()
 {
     KisImageWSP image = m_view->image();
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
     KisLayerSP l = m_view->nodeManager()->activeLayer();
-    if (!l) return;
+    if (!l) {
+        return;
+    }
 
     KisPaintDeviceSP dev = l->paintDevice();
-    if (!dev) return;
+    if (!dev) {
+        return;
+    }
 
-    DlgSeparate * dlgSeparate = new DlgSeparate(dev->colorSpace()->name(),
-                                                image->colorSpace()->name(), m_view->mainWindow(), "Separate");
+    DlgSeparate *dlgSeparate = new DlgSeparate(dev->colorSpace()->name(),
+            image->colorSpace()->name(), m_view->mainWindow(), "Separate");
     Q_CHECK_PTR(dlgSeparate);
 
     dlgSeparate->setCaption(i18n("Separate Image"));
@@ -84,7 +90,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     if (dlgSeparate->exec() == QDialog::Accepted) {
 
         QApplication::setOverrideCursor(Qt::BusyCursor);
-        KoProgressUpdater* pu = m_view->createProgressUpdater(KoProgressUpdater::Unthreaded);
+        KoProgressUpdater *pu = m_view->createProgressUpdater(KoProgressUpdater::Unthreaded);
         pu->start(100, i18n("Separate Image"));
         QPointer<KoUpdater> u = pu->startSubtask();
 

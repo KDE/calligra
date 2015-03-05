@@ -27,22 +27,23 @@
 /**
  * @short Implementation of the MathML annotation element
  *
- * Support for annotation elements in MathML. 
+ * Support for annotation elements in MathML.
  */
 
-class KOFORMULA_EXPORT AnnotationElement : public BasicElement {
+class KOFORMULA_EXPORT AnnotationElement : public BasicElement
+{
 public:
     /// The standard constructor
     explicit AnnotationElement(BasicElement *parent = 0);
 
-    void setContent(const QString& content);
+    void setContent(const QString &content);
     QString content() const;
-    
+
     /// @return The element's ElementType
     ElementType elementType() const;
-    
-    virtual bool readMathMLContent(const KoXmlElement& element);
-    virtual void writeMathMLContent(KoXmlWriter* writer, const QString& ns) const;
+
+    virtual bool readMathMLContent(const KoXmlElement &element);
+    virtual void writeMathMLContent(KoXmlWriter *writer, const QString &ns) const;
 private:
     QString m_content;
 };

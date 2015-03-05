@@ -21,7 +21,6 @@
 
 #include <QtTest>
 
-
 class KisStrokesQueueTest : public QObject
 {
     Q_OBJECT

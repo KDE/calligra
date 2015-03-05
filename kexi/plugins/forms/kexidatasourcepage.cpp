@@ -44,14 +44,14 @@
 #include <koproperty/Utils.h>
 
 KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
-        : KexiPropertyPaneViewBase(parent)
-        , m_noDataSourceAvailableSingleText(
-            i18n("No data source could be assigned for this widget.") )
-        , m_noDataSourceAvailableMultiText(
-            i18n("No data source could be assigned for multiple widgets.") )
-        , m_insideClearFormDataSourceSelection(false)
+    : KexiPropertyPaneViewBase(parent)
+    , m_noDataSourceAvailableSingleText(
+          i18n("No data source could be assigned for this widget."))
+    , m_noDataSourceAvailableMultiText(
+          i18n("No data source could be assigned for multiple widgets."))
+    , m_insideClearFormDataSourceSelection(false)
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
-        , m_tableOrQuerySchema(0)
+    , m_tableOrQuerySchema(0)
 #endif
 {
     infoLabel()->setContentsMargins(0, 0, 0, spacing());
@@ -93,9 +93,9 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     m_widgetDataSourceCombo->setContentsMargins(0, 0, 0, 0);
     m_widgetDSLabel->setBuddy(m_widgetDataSourceCombo);
     connect(m_widgetDataSourceCombo->lineEdit(), SIGNAL(clearButtonClicked()),
-        this, SLOT(clearWidgetDataSourceSelection()));
+            this, SLOT(clearWidgetDataSourceSelection()));
     mainLayout()->addWidget(m_widgetDataSourceCombo);
-    
+
     m_widgetDataSourceComboSpacer = addWidgetSpacer();
 
     //- Form's Data Source
@@ -130,7 +130,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     m_formDataSourceCombo->setContentsMargins(0, 0, 0, 0);
     m_dataSourceLabel->setBuddy(m_formDataSourceCombo);
     connect(m_formDataSourceCombo->lineEdit(), SIGNAL(clearButtonClicked()),
-        this, SLOT(clearFormDataSourceSelection()));
+            this, SLOT(clearFormDataSourceSelection()));
     mainLayout()->addWidget(m_formDataSourceCombo);
 
     m_formDataSourceComboSpacer = addWidgetSpacer();
@@ -154,7 +154,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
                                        ? m_mousePointerLabel->pixmap()->width() : 0);
     m_availableFieldsDescriptionLabel = new QLabel(
         futureI18n("Select fields from the list below and drag them onto"
-             " a form or click the <interface>Insert</interface> button"), this);
+                   " a form or click the <interface>Insert</interface> button"), this);
     m_availableFieldsDescriptionLabel->setAlignment(Qt::AlignLeft);
     m_availableFieldsDescriptionLabel->setWordWrap(true);
     hlyr->addWidget(m_availableFieldsDescriptionLabel);
@@ -177,7 +177,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     connect(m_addField, SIGNAL(clicked()), this, SLOT(slotInsertSelectedFields()));
 
     m_fieldListView = new KexiFieldListView(this,
-        KexiFieldListView::ShowDataTypes | KexiFieldListView::AllowMultiSelection);
+                                            KexiFieldListView::ShowDataTypes | KexiFieldListView::AllowMultiSelection);
     m_fieldListView->setObjectName("fieldListView");
     m_fieldListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
     m_availableFieldsLabel->setBuddy(m_fieldListView);
@@ -217,11 +217,13 @@ void KexiDataSourcePage::setProject(KexiProject *prj)
 
 void KexiDataSourcePage::clearFormDataSourceSelection(bool alsoClearComboBox)
 {
-    if (m_insideClearFormDataSourceSelection)
+    if (m_insideClearFormDataSourceSelection) {
         return;
+    }
     m_insideClearFormDataSourceSelection = true;
-    if (alsoClearComboBox && !m_formDataSourceCombo->selectedName().isEmpty())
+    if (alsoClearComboBox && !m_formDataSourceCombo->selectedName().isEmpty()) {
         m_formDataSourceCombo->setDataSource(QString(), QString());
+    }
     m_gotoButton->setEnabled(false);
     m_widgetDataSourceCombo->setFieldOrExpression(QString());
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
@@ -241,8 +243,9 @@ void KexiDataSourcePage::slotGotoSelected()
 {
     const QString partClass(m_formDataSourceCombo->selectedPartClass());
     if (partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") {
-        if (m_formDataSourceCombo->isSelectionValid())
+        if (m_formDataSourceCombo->isSelectionValid()) {
             emit jumpToObjectRequested(partClass, m_formDataSourceCombo->selectedName());
+        }
     }
 }
 
@@ -250,17 +253,18 @@ void KexiDataSourcePage::slotInsertSelectedFields()
 {
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
     QStringList selectedFieldNames(m_fieldListView->selectedFieldNames());
-    if (selectedFieldNames.isEmpty())
+    if (selectedFieldNames.isEmpty()) {
         return;
+    }
 
     emit insertAutoFields(m_fieldListView->schema()->table()
-                            ? "org.kexi-project.table" : "org.kexi-project.query",
+                          ? "org.kexi-project.table" : "org.kexi-project.query",
                           m_fieldListView->schema()->name(), selectedFieldNames);
 #endif
 }
 
-void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
-        const QString& fieldName)
+void KexiDataSourcePage::slotFieldDoubleClicked(const QString &sourcePartClass, const QString &sourceName,
+        const QString &fieldName)
 {
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
     Q_UNUSED(sourcePartClass);
@@ -273,7 +277,7 @@ void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourcePartClass, 
 #endif
 }
 
-void KexiDataSourcePage::slotFormDataSourceTextChanged(const QString & string)
+void KexiDataSourcePage::slotFormDataSourceTextChanged(const QString &string)
 {
     Q_UNUSED(string);
     const bool enable = m_formDataSourceCombo->isSelectionValid();
@@ -285,17 +289,17 @@ void KexiDataSourcePage::slotFormDataSourceTextChanged(const QString & string)
 
 void KexiDataSourcePage::slotFormDataSourceChanged()
 {
-    if (!m_formDataSourceCombo->project())
+    if (!m_formDataSourceCombo->project()) {
         return;
+    }
     const QString partClass(m_formDataSourceCombo->selectedPartClass());
     bool dataSourceFound = false;
     QString name(m_formDataSourceCombo->selectedName());
     const bool isPartAcceptable = partClass == QLatin1String("org.kexi-project.table")
-        || partClass == QLatin1String("org.kexi-project.query");
-    if (isPartAcceptable && m_formDataSourceCombo->isSelectionValid())
-    {
+                                  || partClass == QLatin1String("org.kexi-project.query");
+    if (isPartAcceptable && m_formDataSourceCombo->isSelectionValid()) {
         KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
-            m_formDataSourceCombo->project()->dbConnection(), name.toLatin1(), 
+            m_formDataSourceCombo->project()->dbConnection(), name.toLatin1(),
             partClass == "org.kexi-project.table");
         if (tableOrQuery->table() || tableOrQuery->query()) {
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
@@ -335,8 +339,9 @@ void KexiDataSourcePage::slotFieldSelected()
     KexiDB::Field *field = m_fieldListView->schema()->field(
                                m_widgetDataSourceCombo->fieldOrExpression());
 #endif
-    if (field)
+    if (field) {
         dataType = field->type();
+    }
 
     emit dataSourceFieldOrExpressionChanged(
         m_widgetDataSourceCombo->fieldOrExpression(),
@@ -345,27 +350,30 @@ void KexiDataSourcePage::slotFieldSelected()
     );
 }
 
-void KexiDataSourcePage::setFormDataSource(const QString& partClass, const QString& name)
+void KexiDataSourcePage::setFormDataSource(const QString &partClass, const QString &name)
 {
     m_formDataSourceCombo->setDataSource(partClass, name);
 }
 
 #define KexiDataSourcePage_FADE 1
 
-void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
+void KexiDataSourcePage::assignPropertySet(KoProperty::Set *propertySet)
 {
     QString objectName;
-    if (propertySet)
+    if (propertySet) {
         objectName = propertySet->propertyValue("objectName").toString();
-    if (!objectName.isEmpty() && objectName == m_currentObjectName)
-        return; //the same object
+    }
+    if (!objectName.isEmpty() && objectName == m_currentObjectName) {
+        return;    //the same object
+    }
     m_currentObjectName = objectName;
 
 //! @todo
 #if KexiDataSourcePage_FADE
     KFadeWidgetEffect *animation = 0;
-    if (isVisible())
+    if (isVisible()) {
         animation = new KFadeWidgetEffect(this);
+    }
 #endif
     QString objectClassName;
     if (propertySet) {
@@ -397,12 +405,10 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 
     if (isForm) {
         m_noDataSourceAvailableLabel->hide();
-    }
-    else if (!hasDataSourceProperty) {
+    } else if (!hasDataSourceProperty) {
         if (multipleSelection) {
             m_noDataSourceAvailableLabel->setText(m_noDataSourceAvailableMultiText);
-        }
-        else {
+        } else {
             m_noDataSourceAvailableLabel->setText(m_noDataSourceAvailableSingleText);
         }
         m_noDataSourceAvailableLabel->show();
@@ -417,8 +423,9 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
     }
 //! @todo
 #if KexiDataSourcePage_FADE
-    if (animation)
+    if (animation) {
         animation->start(100);
+    }
 #endif
 }
 

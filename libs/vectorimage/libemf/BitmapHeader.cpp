@@ -3,7 +3,7 @@
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either 
+ * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -11,7 +11,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -25,20 +25,18 @@
 
 #include <kdebug.h>
 
-
 namespace Libemf
 {
 
-static void soakBytes( QDataStream &stream, int numBytes )
+static void soakBytes(QDataStream &stream, int numBytes)
 {
     quint8 scratch;
-    for ( int i = 0; i < numBytes; ++i ) {
+    for (int i = 0; i < numBytes; ++i) {
         stream >> scratch;
     }
 }
 
-
-BitmapHeader::BitmapHeader( QDataStream &stream, int size )
+BitmapHeader::BitmapHeader(QDataStream &stream, int size)
 {
     m_headerType = BitmapInfoHeader;  // The default
 
@@ -79,8 +77,9 @@ BitmapHeader::BitmapHeader( QDataStream &stream, int size )
         stream >> m_colorSpaceType;
 
         // FIXME sometime: Implement the real CIEXYZTriple
-        for (int i = 0; i < 9; ++i)
+        for (int i = 0; i < 9; ++i) {
             stream >> m_endpoints[i];
+        }
 
         stream >> m_gammaRed;
         stream >> m_gammaGreen;
@@ -104,14 +103,13 @@ BitmapHeader::BitmapHeader( QDataStream &stream, int size )
     kDebug(33100) << "read bytes: " << read;
 #endif
     // Read away the overshot from the size parameter;
-    if (size > read)
+    if (size > read) {
         soakBytes(stream, size - read);
+    }
 }
 
 BitmapHeader::~BitmapHeader()
 {
 }
-
-
 
 } // namespace Libemf

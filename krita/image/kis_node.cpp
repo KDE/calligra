@@ -38,19 +38,18 @@
 #include "kis_safe_read_list.h"
 typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 
-
 /**
  *The link between KisProjection ans KisImageUpdater
  *uses queued signals with an argument of KisNodeSP type,
  *so we should register it beforehand
  */
 struct KisNodeSPStaticRegistrar {
-    KisNodeSPStaticRegistrar() {
+    KisNodeSPStaticRegistrar()
+    {
         qRegisterMetaType<KisNodeSP>("KisNodeSP");
     }
 };
 static KisNodeSPStaticRegistrar __registrar;
-
 
 /**
  * Note about "thread safety" of KisNode
@@ -72,12 +71,12 @@ static KisNodeSPStaticRegistrar __registrar;
  *    read by the reader threads yourself!
  */
 
-struct KisNode::Private
-{
+struct KisNode::Private {
 public:
     Private()
-            : graphListener(0)
-            , nodeProgressProxy(0) {
+        : graphListener(0)
+        , nodeProgressProxy(0)
+    {
     }
 
     KisNodeWSP parent;
@@ -86,8 +85,7 @@ public:
     KisNodeProgressProxy *nodeProgressProxy;
     QReadWriteLock nodeSubgraphLock;
 
-
-    const KisNode* findSymmetricClone(const KisNode *srcRoot,
+    const KisNode *findSymmetricClone(const KisNode *srcRoot,
                                       const KisNode *dstRoot,
                                       const KisNode *srcTarget);
     void processDuplicatedClones(const KisNode *srcDuplicationRoot,
@@ -99,11 +97,13 @@ public:
  * Finds the layer in \p dstRoot subtree, which has the same path as
  * \p srcTarget has in \p srcRoot
  */
-const KisNode* KisNode::Private::findSymmetricClone(const KisNode *srcRoot,
-                                                    const KisNode *dstRoot,
-                                                    const KisNode *srcTarget)
+const KisNode *KisNode::Private::findSymmetricClone(const KisNode *srcRoot,
+        const KisNode *dstRoot,
+        const KisNode *srcTarget)
 {
-    if (srcRoot == srcTarget) return dstRoot;
+    if (srcRoot == srcTarget) {
+        return dstRoot;
+    }
 
     KisSafeReadNodeList::const_iterator srcIter = srcRoot->m_d->nodes.constBegin();
     KisSafeReadNodeList::const_iterator dstIter = dstRoot->m_d->nodes.constBegin();
@@ -114,7 +114,9 @@ const KisNode* KisNode::Private::findSymmetricClone(const KisNode *srcRoot,
                                         (dstIter != dstRoot->m_d->nodes.constEnd()), 0);
 
         const KisNode *node = findSymmetricClone(srcIter->data(), dstIter->data(), srcTarget);
-        if (node) return node;
+        if (node) {
+            return node;
+        }
 
     }
 
@@ -132,17 +134,17 @@ const KisNode* KisNode::Private::findSymmetricClone(const KisNode *srcRoot,
  * "internal" and not point to the layers of the older group.
  */
 void KisNode::Private::processDuplicatedClones(const KisNode *srcDuplicationRoot,
-                                               const KisNode *dstDuplicationRoot,
-                                               KisNode *node)
+        const KisNode *dstDuplicationRoot,
+        KisNode *node)
 {
-    if (KisCloneLayer *clone = dynamic_cast<KisCloneLayer*>(node)) {
+    if (KisCloneLayer *clone = dynamic_cast<KisCloneLayer *>(node)) {
         KIS_ASSERT_RECOVER_RETURN(clone->copyFrom());
         const KisNode *newCopyFrom = findSymmetricClone(srcDuplicationRoot,
-                                                        dstDuplicationRoot,
-                                                        clone->copyFrom());
+                                     dstDuplicationRoot,
+                                     clone->copyFrom());
 
         if (newCopyFrom) {
-            KisLayer *newCopyFromLayer = dynamic_cast<KisLayer*>(const_cast<KisNode*>(newCopyFrom));
+            KisLayer *newCopyFromLayer = dynamic_cast<KisLayer *>(const_cast<KisNode *>(newCopyFrom));
             KIS_ASSERT_RECOVER_RETURN(newCopyFromLayer);
 
             clone->setCopyFrom(newCopyFromLayer);
@@ -151,21 +153,21 @@ void KisNode::Private::processDuplicatedClones(const KisNode *srcDuplicationRoot
 
     KisSafeReadNodeList::const_iterator iter;
     FOREACH_SAFE(iter, node->m_d->nodes) {
-        KisNode *child = const_cast<KisNode*>((*iter).data());
+        KisNode *child = const_cast<KisNode *>((*iter).data());
         processDuplicatedClones(srcDuplicationRoot, dstDuplicationRoot, child);
     }
 }
 
 KisNode::KisNode()
-        : m_d(new Private())
+    : m_d(new Private())
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
 }
 
-KisNode::KisNode(const KisNode & rhs)
-        : KisBaseNode(rhs)
-        , m_d(new Private())
+KisNode::KisNode(const KisNode &rhs)
+    : KisBaseNode(rhs)
+    , m_d(new Private())
 {
     m_d->parent = 0;
     m_d->graphListener = 0;
@@ -186,8 +188,9 @@ KisNode::KisNode(const KisNode & rhs)
 
 KisNode::~KisNode()
 {
-    if (m_d->nodeProgressProxy)
+    if (m_d->nodeProgressProxy) {
         m_d->nodeProgressProxy->deleteLater();
+    }
 
     {
         QWriteLocker l(&m_d->nodeSubgraphLock);
@@ -277,7 +280,7 @@ void KisNode::notifyParentVisibilityChanged(bool value)
 
 void KisNode::baseNodeChangedCallback()
 {
-    if(m_d->graphListener) {
+    if (m_d->graphListener) {
         m_d->graphListener->nodeChanged(this);
     }
 }
@@ -326,13 +329,13 @@ KisNodeSP KisNode::nextChildImpl(KisNodeSP child)
 KisNodeSP KisNode::prevSibling() const
 {
     KisNodeSP parentNode = parent();
-    return parentNode ? parentNode->prevChildImpl(const_cast<KisNode*>(this)) : 0;
+    return parentNode ? parentNode->prevChildImpl(const_cast<KisNode *>(this)) : 0;
 }
 
 KisNodeSP KisNode::nextSibling() const
 {
     KisNodeSP parentNode = parent();
-    return parentNode ? parentNode->nextChildImpl(const_cast<KisNode*>(this)) : 0;
+    return parentNode ? parentNode->nextChildImpl(const_cast<KisNode *>(this)) : 0;
 }
 
 quint32 KisNode::childCount() const
@@ -340,7 +343,6 @@ quint32 KisNode::childCount() const
     QReadLocker l(&m_d->nodeSubgraphLock);
     return m_d->nodes.size();
 }
-
 
 KisNodeSP KisNode::at(quint32 index) const
 {
@@ -360,7 +362,7 @@ int KisNode::index(const KisNodeSP node) const
     return m_d->nodes.indexOf(node);
 }
 
-QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProperties & properties) const
+QList<KisNodeSP> KisNode::childNodes(const QStringList &nodeTypes, const KoProperties &properties) const
 {
     QReadLocker l(&m_d->nodeSubgraphLock);
 
@@ -372,9 +374,9 @@ QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProp
             if (properties.isEmpty() || (*iter)->check(properties)) {
                 bool rightType = true;
 
-                if(!nodeTypes.isEmpty()) {
+                if (!nodeTypes.isEmpty()) {
                     rightType = false;
-                    foreach(const QString &nodeType,  nodeTypes) {
+                    foreach (const QString &nodeType,  nodeTypes) {
                         if ((*iter)->inherits(nodeType.toLatin1())) {
                             rightType = true;
                             break;
@@ -394,11 +396,21 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
 {
     Q_ASSERT(newNode);
 
-    if (!newNode) return false;
-    if (aboveThis && aboveThis->parent().data() != this) return false;
-    if (!allowAsChild(newNode)) return false;
-    if (newNode->parent()) return false;
-    if (index(newNode) >= 0) return false;
+    if (!newNode) {
+        return false;
+    }
+    if (aboveThis && aboveThis->parent().data() != this) {
+        return false;
+    }
+    if (!allowAsChild(newNode)) {
+        return false;
+    }
+    if (newNode->parent()) {
+        return false;
+    }
+    if (index(newNode) >= 0) {
+        return false;
+    }
 
     int idx = aboveThis ? this->index(aboveThis) + 1 : 0;
 
@@ -425,7 +437,6 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
     if (m_d->graphListener) {
         m_d->graphListener->nodeHasBeenAdded(this, idx);
     }
-
 
     return true;
 }
@@ -463,7 +474,7 @@ bool KisNode::remove(KisNodeSP node)
     return node->parent().data() == this ? remove(index(node)) : false;
 }
 
-KisNodeProgressProxy* KisNode::nodeProgressProxy() const
+KisNodeProgressProxy *KisNode::nodeProgressProxy() const
 {
     if (m_d->nodeProgressProxy) {
         return m_d->nodeProgressProxy;
@@ -487,7 +498,7 @@ void KisNode::setDirty()
 
 void KisNode::setDirty(const QVector<QRect> &rects)
 {
-    foreach(const QRect &rc, rects) {
+    foreach (const QRect &rc, rects) {
         setDirty(rc);
     }
 }
@@ -497,9 +508,9 @@ void KisNode::setDirty(const QRegion &region)
     setDirty(region.rects());
 }
 
-void KisNode::setDirty(const QRect & rect)
+void KisNode::setDirty(const QRect &rect)
 {
-    if(m_d->graphListener) {
+    if (m_d->graphListener) {
         m_d->graphListener->requestProjectionUpdate(this, rect);
     }
 }

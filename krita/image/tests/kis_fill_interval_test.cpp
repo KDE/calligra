@@ -27,7 +27,7 @@ void KisFillIntervalTest::testIsValid()
     KisFillInterval i1;
     QVERIFY(!i1.isValid());
 
-    KisFillInterval i2(0,1,0);
+    KisFillInterval i2(0, 1, 0);
     QVERIFY(i2.isValid());
 
     i2.invalidate();

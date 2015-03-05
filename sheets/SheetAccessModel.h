@@ -63,11 +63,11 @@ public:
 public Q_SLOTS:
     void slotSheetAdded(Sheet *sheet);
     void slotSheetRemoved(Sheet *sheet);
-        void handleDamages(const QList<Damage*> &damages);
+    void handleDamages(const QList<Damage *> &damages);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

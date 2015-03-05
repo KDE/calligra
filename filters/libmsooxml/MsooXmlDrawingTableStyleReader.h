@@ -25,7 +25,6 @@
 #include "MsooXmlDrawingTableStyle.h"
 #include "MsooXmlCommonReader.h"
 
-
 #include <QMap>
 
 /**
@@ -42,19 +41,19 @@ class MsooXmlImport;
 class KOMSOOXML_EXPORT MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path,
-				    const QString& _file, MSOOXML::DrawingMLTheme* _themes,
-				    QMap< QString, MSOOXML::DrawingTableStyle* >* _styleList,
-				    QMap< QString, QString > _colorMap);
+    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport *_import, const QString &_path,
+                                    const QString &_file, MSOOXML::DrawingMLTheme *_themes,
+                                    QMap< QString, MSOOXML::DrawingTableStyle * > *_styleList,
+                                    QMap< QString, QString > _colorMap);
     virtual ~MsooXmlDrawingTableStyleContext();
 
-    QMap<QString, MSOOXML::DrawingTableStyle*>* styleList;
+    QMap<QString, MSOOXML::DrawingTableStyle *> *styleList;
 
     //Those members are used by some methods included
-    MsooXmlImport* import;
+    MsooXmlImport *import;
     QString path;
     QString file;
-    MSOOXML::DrawingMLTheme* themes;
+    MSOOXML::DrawingMLTheme *themes;
     QMap<QString, QString> colorMap;
 };
 
@@ -64,7 +63,7 @@ public:
     explicit MsooXmlDrawingTableStyleReader(KoOdfWriters *writers);
     virtual ~MsooXmlDrawingTableStyleReader();
 
-    virtual KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MsooXmlReaderContext *context = 0);
 
 protected:
     KoFilter::ConversionStatus read_tblStyleLst();
@@ -99,10 +98,10 @@ protected:
 #include "MsooXmlDrawingMLShared.h"
 
 private:
-    MsooXmlDrawingTableStyleContext* m_context;
+    MsooXmlDrawingTableStyleContext *m_context;
 
-    DrawingTableStyle* m_currentStyle;
-    TableStyleProperties* m_currentTableStyleProperties;
+    DrawingTableStyle *m_currentStyle;
+    TableStyleProperties *m_currentTableStyleProperties;
 };
 
 }

@@ -45,7 +45,7 @@ class ResizeRow: public KDialog
     Q_OBJECT
 
 public:
-    explicit ResizeRow(QWidget* parent, Selection* selection);
+    explicit ResizeRow(QWidget *parent, Selection *selection);
     double rowHeight;
 
 protected Q_SLOTS:
@@ -53,7 +53,7 @@ protected Q_SLOTS:
     virtual void slotDefault();
 
 protected:
-    Selection* m_selection;
+    Selection *m_selection;
     KoUnitDoubleSpinBox *m_pHeight;
 };
 
@@ -66,7 +66,7 @@ class ResizeColumn: public KDialog
     Q_OBJECT
 
 public:
-    explicit ResizeColumn(QWidget* parent, Selection* selection);
+    explicit ResizeColumn(QWidget *parent, Selection *selection);
     double columnWidth;
 
 protected Q_SLOTS:
@@ -74,7 +74,7 @@ protected Q_SLOTS:
     virtual void slotDefault();
 
 protected:
-    Selection* m_selection;
+    Selection *m_selection;
     KoUnitDoubleSpinBox *m_pWidth;
 };
 

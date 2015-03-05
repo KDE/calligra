@@ -29,7 +29,7 @@ namespace KexiDB
 class SybasePreparedStatement : public PreparedStatement
 {
 public:
-    SybasePreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
+    SybasePreparedStatement(StatementType type, ConnectionInternal &conn, FieldList &fields);
 
     virtual ~SybasePreparedStatement();
 
@@ -40,7 +40,7 @@ public:
     bool m_resetRequired;
 
 private:
-    Connection* m_conn;
+    Connection *m_conn;
 
 };
 }

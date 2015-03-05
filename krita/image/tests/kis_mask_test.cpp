@@ -29,20 +29,22 @@
 #include "kis_group_layer.h"
 #include "testutil.h"
 
-
 class TestMask : public KisMask
 {
 public:
     using KisMask::apply;
 
-    TestMask() : KisMask("TestMask") {
+    TestMask() : KisMask("TestMask")
+    {
     }
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return new TestMask(*this);
     }
 
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const
+    {
         return false;
     }
 
@@ -50,15 +52,14 @@ public:
 
 typedef KisSharedPtr<TestMask> TestMaskSP;
 
-
 void KisMaskTest::testCreation()
 {
     TestUtil::MaskParent p;
     TestMaskSP mask = new TestMask;
     mask->initSelection(p.layer);
 
-    QCOMPARE(mask->extent(), QRect(0,0,512,512));
-    QCOMPARE(mask->exactBounds(), QRect(0,0,512,512));
+    QCOMPARE(mask->extent(), QRect(0, 0, 512, 512));
+    QCOMPARE(mask->exactBounds(), QRect(0, 0, 512, 512));
 }
 
 void KisMaskTest::testSelection()
@@ -67,17 +68,17 @@ void KisMaskTest::testSelection()
     TestMaskSP mask = new TestMask;
 
     KisSelectionSP sel = new KisSelection();
-    sel->pixelSelection()->select(QRect(0,0,100,100), MAX_SELECTED);
+    sel->pixelSelection()->select(QRect(0, 0, 100, 100), MAX_SELECTED);
 
     mask->initSelection(sel, p.layer);
 
-    QCOMPARE(mask->extent(), QRect(0,0,128,128));
-    QCOMPARE(mask->exactBounds(), QRect(0,0,100,100));
+    QCOMPARE(mask->extent(), QRect(0, 0, 128, 128));
+    QCOMPARE(mask->exactBounds(), QRect(0, 0, 100, 100));
 
-    mask->select(QRect(0,0,500,500), MAX_SELECTED);;
+    mask->select(QRect(0, 0, 500, 500), MAX_SELECTED);;
 
-    QCOMPARE(mask->extent(), QRect(0,0,512,512));
-    QCOMPARE(mask->exactBounds(), QRect(0,0,500,500));
+    QCOMPARE(mask->extent(), QRect(0, 0, 512, 512));
+    QCOMPARE(mask->exactBounds(), QRect(0, 0, 500, 500));
 }
 
 void KisMaskTest::testCropUpdateBySelection()
@@ -111,7 +112,7 @@ void KisMaskTest::testCropUpdateBySelection()
 void KisMaskTest::testSelectionParent()
 {
     {
-        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
         KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
 
         KisMaskSP mask = new TestMask;
@@ -130,7 +131,7 @@ void KisMaskTest::testSelectionParent()
 
 void KisMaskTest::testDeferredOffsetInitialization()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
 
     KisMaskSP mask = new TestMask;

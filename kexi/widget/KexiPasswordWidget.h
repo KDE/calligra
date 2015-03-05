@@ -38,8 +38,7 @@ class KEXIEXTWIDGETS_EXPORT KexiPasswordWidget : public QWidget
     Q_OBJECT
 
 public:
-    enum KexiPasswordWidgetFlag
-    {
+    enum KexiPasswordWidgetFlag {
         NoFlags = 0x00,
         /**
          * If this flag is set, the "keep this password" checkbox will been shown,
@@ -81,8 +80,7 @@ public:
     };
     Q_DECLARE_FLAGS(KexiPasswordWidgetFlags, KexiPasswordWidgetFlag)
 
-    enum ErrorType
-    {
+    enum ErrorType {
         UnknownError = 0,
 
         /**
@@ -113,7 +111,7 @@ public:
      * @param flags a set of KexiPasswordWidgetFlag flags
      */
     explicit KexiPasswordWidget(QWidget *parent = 0L,
-                                const KexiPasswordWidgetFlags& flags = NoFlags);
+                                const KexiPasswordWidgetFlags &flags = NoFlags);
 
     /**
      * Destructor
@@ -124,7 +122,7 @@ public:
      * Sets the prompt to show to the user.
      * @param prompt        instructional text to be shown.
      */
-    void setPrompt(const QString& prompt);
+    void setPrompt(const QString &prompt);
 
     /**
      * Returns the prompt
@@ -134,7 +132,7 @@ public:
     /**
      * set an image that appears next to the prompt.
      */
-    void setPixmap(const QPixmap&);
+    void setPixmap(const QPixmap &);
     /**
      *
      */
@@ -150,14 +148,14 @@ public:
      * @param label       label for comment (ex:"Command:")
      * @param comment     the actual comment text.
      */
-    void addCommentLine(const QString& label, const QString& comment);
+    void addCommentLine(const QString &label, const QString &comment);
 
     /**
      * Shows an error message in the widget.
      *
      * @param message the error message to show
      */
-    void showErrorMessage(const QString& message, const ErrorType type = PasswordError);
+    void showErrorMessage(const QString &message, const ErrorType type = PasswordError);
 
     /**
      * Returns the password entered by the user.
@@ -168,7 +166,7 @@ public:
     /**
      * set the default username.
      */
-    void setUsername(const QString&);
+    void setUsername(const QString &);
 
     /**
      * Returns the username entered by the user.
@@ -179,7 +177,7 @@ public:
     /**
      * set the default domain.
      */
-    void setDomain(const QString&);
+    void setDomain(const QString &);
 
     /**
      * Returns the domain entered by the user.
@@ -245,13 +243,13 @@ public:
     /**
      * Set the database name.
      */
-    void setDatabaseName(const QString& databaseName);
+    void setDatabaseName(const QString &databaseName);
 
     /**
      * Presets the password.
      * @param password the password to set
      */
-    void setPassword(const QString& password);
+    void setPassword(const QString &password);
 
     /**
      * Presets a number of login+password pairs that the user can choose from.
@@ -260,7 +258,7 @@ public:
      * This require the flag ShowUnernameLine to be set in the constructoe, and not the flag UsernameReadOnly
      * @param knownLogins map of known logins: the keys are usernames, the values are passwords.
      */
-    void setKnownLogins(const QMap<QString, QString>& knownLogins);
+    void setKnownLogins(const QMap<QString, QString> &knownLogins);
 
 Q_SIGNALS:
     /**
@@ -268,7 +266,7 @@ Q_SIGNALS:
      * @param password  the entered password
      * @param keep true if the "remember password" checkbox was checked, false otherwise.  false if ShowKeepPassword was not set in the constructor
      */
-    void gotPassword(const QString& password, bool keep);
+    void gotPassword(const QString &password, bool keep);
 
     /**
      * emitted when the widget has been accepted, and ShowUsernameLine was set on the constructor
@@ -276,7 +274,7 @@ Q_SIGNALS:
      * @param password  the entered password
      * @param keep true if the "remember password" checkbox was checked, false otherwise.  false if ShowKeepPassword was not set in the constructor
      */
-    void gotUsernameAndPassword(const QString& username, const QString& password, bool keep);
+    void gotUsernameAndPassword(const QString &username, const QString &password, bool keep);
 
     /**
      * emitted when the user presses the return key on the widget
@@ -292,13 +290,13 @@ protected:
     virtual bool checkPassword();
 
 private:
-    Q_PRIVATE_SLOT(d, void activated( const QString& userName ))
+    Q_PRIVATE_SLOT(d, void activated(const QString &userName))
     Q_PRIVATE_SLOT(d, void updateFields())
 
 private:
     class KexiPasswordWidgetPrivate;
     friend class KexiPasswordWidgetPrivate;
-    KexiPasswordWidgetPrivate* const d;
+    KexiPasswordWidgetPrivate *const d;
 
     Q_DISABLE_COPY(KexiPasswordWidget)
 };

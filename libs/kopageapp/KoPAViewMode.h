@@ -48,23 +48,23 @@ class KOPAGEAPP_EXPORT KoPAViewMode : public QObject
 
     Q_OBJECT
 public:
-    KoPAViewMode(KoPAViewBase * view, KoPACanvasBase * canvas, const QString& name = QString());
+    KoPAViewMode(KoPAViewBase *view, KoPACanvasBase *canvas, const QString &name = QString());
     virtual ~KoPAViewMode();
 
-    virtual void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect) = 0;
+    virtual void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect) = 0;
     //virtual void paintEvent( KoPACanvas * canvas, QPaintEvent* event ) = 0;
-    virtual void tabletEvent( QTabletEvent *event, const QPointF &point ) = 0;
-    virtual void mousePressEvent( QMouseEvent *event, const QPointF &point ) = 0;
-    virtual void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point ) = 0;
-    virtual void mouseMoveEvent( QMouseEvent *event, const QPointF &point ) = 0;
-    virtual void mouseReleaseEvent( QMouseEvent *event, const QPointF &point ) = 0;
-    virtual void keyPressEvent( QKeyEvent *event ) = 0;
-    virtual void keyReleaseEvent( QKeyEvent *event ) = 0;
-    virtual void wheelEvent( QWheelEvent * event, const QPointF &point ) = 0;
+    virtual void tabletEvent(QTabletEvent *event, const QPointF &point) = 0;
+    virtual void mousePressEvent(QMouseEvent *event, const QPointF &point) = 0;
+    virtual void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point) = 0;
+    virtual void mouseMoveEvent(QMouseEvent *event, const QPointF &point) = 0;
+    virtual void mouseReleaseEvent(QMouseEvent *event, const QPointF &point) = 0;
+    virtual void keyPressEvent(QKeyEvent *event) = 0;
+    virtual void keyReleaseEvent(QKeyEvent *event) = 0;
+    virtual void wheelEvent(QWheelEvent *event, const QPointF &point) = 0;
     /**
      * The default implementation ignores this event
      */
-    virtual void closeEvent( QCloseEvent * event );
+    virtual void closeEvent(QCloseEvent *event);
 
     /**
      * @brief Switch the active view mode to work on master/normal pages
@@ -74,7 +74,7 @@ public:
      *
      * @param master if true work on master pages, if false work on normal pages
      */
-    virtual void setMasterMode( bool master );
+    virtual void setMasterMode(bool master);
 
     /**
      * @brief Check if the active view mode works on master/normal pages
@@ -93,7 +93,7 @@ public:
      * @param previousViewMode the view mode which was active before the
      *        activation of this view mode;
      */
-    virtual void activate( KoPAViewMode * previousViewMode );
+    virtual void activate(KoPAViewMode *previousViewMode);
 
     /**
      * @brief This method is called when the view mode is deactivated
@@ -107,14 +107,14 @@ public:
      *
      * @return canvas canvas used by the view mode
      */
-    KoPACanvasBase * canvas() const;
+    KoPACanvasBase *canvas() const;
 
     /**
      * @brief Get the view
      *
      * @return view view used by the view mode
      */
-    KoPAViewBase * view() const;
+    KoPAViewBase *view() const;
 
     /**
      * @brief Get the view mode's implementation of view converter
@@ -123,12 +123,11 @@ public:
      *
      * @return the view converter used in the view mode
      */
-    virtual KoViewConverter * viewConverter( KoPACanvasBase * canvas );
-
+    virtual KoViewConverter *viewConverter(KoPACanvasBase *canvas);
 
     virtual const KoPageLayout &activePageLayout() const;
 
-    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0 );
+    virtual void changePageLayout(const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0);
 
     QPointF origin();
 
@@ -146,7 +145,7 @@ public Q_SLOTS:
      *
      * @param shape the new shape added to the document
      */
-    virtual void addShape( KoShape *shape );
+    virtual void addShape(KoShape *shape);
 
     /**
      * @brief Update the view when a shape is removed from the document
@@ -156,7 +155,7 @@ public Q_SLOTS:
      *
      * @param shape the shape removed from the document
      */
-    virtual void removeShape( KoShape *shape );
+    virtual void removeShape(KoShape *shape);
 
     /**
      * @brief Update the view based on the active page
@@ -169,12 +168,12 @@ public Q_SLOTS:
      *
      * @param page the new page to be updated on the view mode
      */
-    virtual void updateActivePage(KoPAPageBase * page);
+    virtual void updateActivePage(KoPAPageBase *page);
 
 protected:
-    KoPACanvasBase * m_canvas;
-    KoToolProxy * m_toolProxy;
-    KoPAViewBase * m_view;
+    KoPACanvasBase *m_canvas;
+    KoToolProxy *m_toolProxy;
+    KoPAViewBase *m_view;
     QPointF m_origin;
     QString m_name;
 };

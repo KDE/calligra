@@ -32,14 +32,13 @@
 
 #include <krita_export.h>
 
-
 class KisPaintOp;
 class KisPainter;
 
 /**
  * Manages the loading and creating of all paintop plugins.
  */
-class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KoGenericRegistry<KisPaintOpFactory*>
+class KRITAIMAGE_EXPORT KisPaintOpRegistry : public QObject, public KoGenericRegistry<KisPaintOpFactory *>
 {
 
     Q_OBJECT
@@ -55,7 +54,7 @@ public:
      * Create and return a paintop based on the given preset. A preset defines
      * a paintop, a settings object and possible a brush tip.
      */
-    KisPaintOp* paintOp(const KisPaintOpPresetSP preset, KisPainter * painter, KisNodeSP node, KisImageSP image) const;
+    KisPaintOp *paintOp(const KisPaintOpPresetSP preset, KisPainter *painter, KisNodeSP node, KisImageSP image) const;
 
     /**
      * Create and return an (abstracted) configuration widget
@@ -63,15 +62,15 @@ public:
      * with the specified parent as widget parent. Returns 0 if there
      * are no settings available for the given device.
      */
-    KisPaintOpSettingsSP settings(const KoID& id) const;
+    KisPaintOpSettingsSP settings(const KoID &id) const;
 
     /**
      * @return a default preset for the given paintop.
      */
-    KisPaintOpPresetSP defaultPreset(const KoID& id) const;
+    KisPaintOpPresetSP defaultPreset(const KoID &id) const;
 
     // Get the name of the icon to show in the toolchest
-    QString pixmap(const KoID & id) const;
+    QString pixmap(const KoID &id) const;
 
     /**
      * This function return a list of all the keys in KoID format by using the name() method
@@ -81,14 +80,13 @@ public:
 
 public:
 
-    static KisPaintOpRegistry* instance();
+    static KisPaintOpRegistry *instance();
 
 private:
 
     KisPaintOpRegistry();
-    KisPaintOpRegistry(const KisPaintOpRegistry&);
-    KisPaintOpRegistry operator=(const KisPaintOpRegistry&);
-
+    KisPaintOpRegistry(const KisPaintOpRegistry &);
+    KisPaintOpRegistry operator=(const KisPaintOpRegistry &);
 
     // So the settings can get a paintop to render their sample image
     friend class KisPaintOpSettings;
@@ -96,7 +94,7 @@ private:
     /**
      * Return a newly created paintop. You are responsible for deleting
      */
-    KisPaintOp * paintOp(const QString& id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image) const;
+    KisPaintOp *paintOp(const QString &id, const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image) const;
 
 };
 

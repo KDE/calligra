@@ -45,7 +45,7 @@
 #endif
 
 KoTextDrag::KoTextDrag()
-        : m_mimeData(0)
+    : m_mimeData(0)
 {
 }
 
@@ -56,7 +56,7 @@ KoTextDrag::~KoTextDrag()
     }
 }
 
-bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
+bool KoTextDrag::setOdf(const char *mimeType, KoTextOdfSaveHelper &helper)
 {
     QBuffer buffer;
     QScopedPointer<KoStore> store(KoStore::createStore(&buffer, KoStore::Write, mimeType));
@@ -66,8 +66,8 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     KoOdfWriteStore odfStore(store.data());
     KoEmbeddedDocumentSaver embeddedSaver;
 
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
-    KoXmlWriter* contentWriter = odfStore.contentWriter();
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
 
     if (!contentWriter) {
         return false;
@@ -75,7 +75,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
 
     KoGenStyles mainStyles;
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
-    KoShapeSavingContext * context = helper.context(bodyWriter, mainStyles, embeddedSaver);
+    KoShapeSavingContext *context = helper.context(bodyWriter, mainStyles, embeddedSaver);
     KoGenChanges changes;
 
     KoSharedSavingData *sharedData = context->sharedData(KOTEXT_SHARED_SAVING_ID);
@@ -117,7 +117,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     kDebug(30015) << "testing to see if we should add rdf to odf file?";
 
 #ifdef SHOULD_BUILD_RDF
-    kDebug(30015) << "helper has model" << ( helper.rdfModel() != 0 );
+    kDebug(30015) << "helper has model" << (helper.rdfModel() != 0);
     // RDF: Copy relevant RDF to output ODF
     if (QSharedPointer<Soprano::Model> m = helper.rdfModel()) {
         kDebug(30015) << "rdf model size:" << m->statementCount();
@@ -153,7 +153,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     return true;
 }
 
-void KoTextDrag::setData(const QString & mimeType, const QByteArray & data)
+void KoTextDrag::setData(const QString &mimeType, const QByteArray &data)
 {
     if (m_mimeData == 0) {
         m_mimeData = new QMimeData();
@@ -161,9 +161,9 @@ void KoTextDrag::setData(const QString & mimeType, const QByteArray & data)
     m_mimeData->setData(mimeType, data);
 }
 
-QMimeData * KoTextDrag::takeMimeData()
+QMimeData *KoTextDrag::takeMimeData()
 {
-    QMimeData * mimeData = m_mimeData;
+    QMimeData *mimeData = m_mimeData;
     m_mimeData = 0;
     return mimeData;
 }

@@ -35,13 +35,11 @@ class RecordData;
 class QLabel;
 class KexiTableView;
 
-
 namespace KFormDesigner
 {
 
 class Form;
 class Connection;
-
 
 /*! This dialog is used to edit the connections of a form. It uses KexiTableView for this. There is also a details widget (icon + text)) that shows correctness
   of current connection.  */
@@ -73,7 +71,7 @@ protected:
 
 protected Q_SLOTS:
     /*! Slot called when the user modifies a cell. Signal and/or slot cells are cleared if necessary (not valid anymore). */
-    void slotCellChanged(KexiDB::RecordData *, int, QVariant&, KexiDB::ResultInfo*);
+    void slotCellChanged(KexiDB::RecordData *, int, QVariant &, KexiDB::ResultInfo *);
     /*! This function checks if the connection represented by \a record is valid. It checks if all args (sender, receiver, signal and slot)
      are given, and then if signal/slot args are compatible (should be always true, as we don't show non-compatible slots). It calls \ref setStatusOk()
      or \ref setStatusError() following the result of checks. */
@@ -93,7 +91,7 @@ protected Q_SLOTS:
     void slotConnectionAborted(KFormDesigner::Form *form);
 
     void slotCellSelected(int row, int col);
-    void slotRowInserted(KexiDB::RecordData*, bool);
+    void slotRowInserted(KexiDB::RecordData *, bool);
 
     /*! Slot called when the user presses 'Ok' button. The Form::connectionBuffer() is deleted, created again and filled with Connection.
      If the user presses 'Cancel', nothing happens. */
@@ -102,7 +100,7 @@ protected Q_SLOTS:
 private:
     class Private;
 
-    Private* const d;
+    Private *const d;
 };
 
 }

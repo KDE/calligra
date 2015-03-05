@@ -25,7 +25,6 @@
 class KisPostExecutionUndoAdapter;
 class KisUpdatesFacade;
 
-
 class MoveSelectionStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:

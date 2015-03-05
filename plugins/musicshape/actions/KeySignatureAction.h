@@ -24,10 +24,10 @@
 class KeySignatureAction : public AbstractMusicAction
 {
 public:
-    KeySignatureAction(SimpleEntryTool* tool, int accidentals);
-    explicit KeySignatureAction(SimpleEntryTool* tool);
+    KeySignatureAction(SimpleEntryTool *tool, int accidentals);
+    explicit KeySignatureAction(SimpleEntryTool *tool);
 
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    virtual void mousePress(MusicCore::Staff *staff, int bar, const QPointF &pos);
 private:
     int m_accidentals;
     bool m_showDialog;

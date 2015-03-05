@@ -26,14 +26,11 @@
 #include <KoFilter.h>
 #include <OdfTextReaderBackend.h>
 
-
-
 class OdfReaderContext;
-
 
 class OdtReaderAsciiBackend : public OdfTextReaderBackend
 {
- public:
+public:
     explicit OdtReaderAsciiBackend();
     virtual ~OdtReaderAsciiBackend();
 
@@ -57,6 +54,5 @@ class OdtReaderAsciiBackend : public OdfTextReaderBackend
 
     void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
 };
-
 
 #endif // ODTREADERASCIIBACKEND_H

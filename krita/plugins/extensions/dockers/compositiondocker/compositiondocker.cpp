@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -38,9 +37,10 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(CompositionDockerPluginFactory, registerPlugin<CompositionDockerPlugin>();)
-K_EXPORT_PLUGIN(CompositionDockerPluginFactory( "krita" ) )
+K_EXPORT_PLUGIN(CompositionDockerPluginFactory("krita"))
 
-class CompositionDockerDockFactory : public KoDockFactoryBase {
+class CompositionDockerDockFactory : public KoDockFactoryBase
+{
 public:
     CompositionDockerDockFactory()
     {
@@ -48,7 +48,7 @@ public:
 
     virtual QString id() const
     {
-        return QString( "CompositionDocker" );
+        return QString("CompositionDocker");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
@@ -56,10 +56,10 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    virtual QDockWidget *createDockWidget()
     {
-        CompositionDockerDock * dockWidget = new CompositionDockerDock();
-        
+        CompositionDockerDock *dockWidget = new CompositionDockerDock();
+
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -71,9 +71,7 @@ public:
     }
 private:
 
-
 };
-
 
 CompositionDockerPlugin::CompositionDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

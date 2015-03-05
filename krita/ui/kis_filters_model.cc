@@ -38,7 +38,8 @@ struct KisFiltersModel::Private {
         virtual ~Node() {}
 
         QString name;
-        QString displayRole() {
+        QString displayRole()
+        {
             return name;
         }
         virtual int childrenCount() = 0;
@@ -51,7 +52,8 @@ struct KisFiltersModel::Private {
         QString id;
         QPixmap icon;
         KisFilterSP filter;
-        virtual int childrenCount() {
+        virtual int childrenCount()
+        {
             return 0;
         }
     };
@@ -61,7 +63,8 @@ struct KisFiltersModel::Private {
 
         QString id;
         QList<Filter> filters;
-        virtual int childrenCount() {
+        virtual int childrenCount()
+        {
             return filters.count();
         }
     };
@@ -76,7 +79,7 @@ KisFiltersModel::KisFiltersModel(bool showAll, KisPaintDeviceSP thumb)
 {
     d->thumb = thumb;
     QList<KisFilterSP> filters = KisFilterRegistry::instance()->values();
-    foreach(const KisFilterSP filter, filters) {
+    foreach (const KisFilterSP filter, filters) {
         if (!showAll && !filter->supportsAdjustmentLayers()) {
             continue;
         }
@@ -106,7 +109,7 @@ KisFiltersModel::~KisFiltersModel()
 int KisFiltersModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid()) {
-        Private::Node* node = static_cast<Private::Node*>(parent.internalPointer());
+        Private::Node *node = static_cast<Private::Node *>(parent.internalPointer());
         return node->childrenCount();
     } else {
         return d->categoriesKeys.count();
@@ -119,24 +122,24 @@ int KisFiltersModel::columnCount(const QModelIndex &parent) const
     return 1;
 }
 
-QModelIndex KisFiltersModel::indexForFilter(const QString& id)
+QModelIndex KisFiltersModel::indexForFilter(const QString &id)
 {
     for (int i = 0; i < d->categoriesKeys.size(); i++) {
-        KisFiltersModel::Private::Category& category = d->categories[ d->categoriesKeys[ i ] ];
+        KisFiltersModel::Private::Category &category = d->categories[ d->categoriesKeys[ i ] ];
         for (int j = 0; j < category.filters.size(); j++) {
-            KisFiltersModel::Private::Filter& filter = category.filters[j];
+            KisFiltersModel::Private::Filter &filter = category.filters[j];
             if (filter.id == id) {
-                return index(j, i, index(i , 0, QModelIndex()));
+                return index(j, i, index(i, 0, QModelIndex()));
             }
         }
     }
     return QModelIndex();
 }
 
-const KisFilter* KisFiltersModel::indexToFilter(const QModelIndex& idx)
+const KisFilter *KisFiltersModel::indexToFilter(const QModelIndex &idx)
 {
-    Private::Node* node = static_cast<Private::Node*>(idx.internalPointer());
-    Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
+    Private::Node *node = static_cast<Private::Node *>(idx.internalPointer());
+    Private::Filter *filter = dynamic_cast<Private::Filter *>(node);
     if (filter) {
         return filter->filter;
     }
@@ -147,7 +150,7 @@ QModelIndex KisFiltersModel::index(int row, int column, const QModelIndex &paren
 {
 //     dbgKrita << parent.isValid() << row << endl;
     if (parent.isValid()) {
-        Private::Category* category = static_cast<Private::Category*>(parent.internalPointer());
+        Private::Category *category = static_cast<Private::Category *>(parent.internalPointer());
         return createIndex(row, column, &category->filters[row]);
     } else {
         return createIndex(row, column, &d->categories[ d->categoriesKeys[row] ]);
@@ -156,13 +159,14 @@ QModelIndex KisFiltersModel::index(int row, int column, const QModelIndex &paren
 
 QModelIndex KisFiltersModel::parent(const QModelIndex &child) const
 {
-    if (!child.isValid())
+    if (!child.isValid()) {
         return QModelIndex();
-    Private::Node* node = static_cast<Private::Node*>(child.internalPointer());
-    Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
+    }
+    Private::Node *node = static_cast<Private::Node *>(child.internalPointer());
+    Private::Filter *filter = dynamic_cast<Private::Filter *>(node);
     if (filter) {
         QString catId = filter->filter->menuCategory().id();
-        return createIndex(d->categoriesKeys.indexOf(catId) , 0, &d->categories[ catId ]);
+        return createIndex(d->categoriesKeys.indexOf(catId), 0, &d->categories[ catId ]);
     }
     return QModelIndex(); // categories don't have parents
 }
@@ -171,25 +175,26 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid()) {
         if (role == Qt::DisplayRole) {
-            Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
+            Private::Node *node = static_cast<Private::Node *>(index.internalPointer());
             return QVariant(node->displayRole());
         }
     }
     return QVariant();
 }
 
-Qt::ItemFlags KisFiltersModel::flags(const QModelIndex & index) const
+Qt::ItemFlags KisFiltersModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid()) return 0;
+    if (!index.isValid()) {
+        return 0;
+    }
 
-    Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
-    Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
+    Private::Node *node = static_cast<Private::Node *>(index.internalPointer());
+    Private::Filter *filter = dynamic_cast<Private::Filter *>(node);
     if (filter) {
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     } else {
         return Qt::ItemIsEnabled;
     }
 }
-
 
 #include "kis_filters_model.moc"

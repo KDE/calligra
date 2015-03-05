@@ -84,14 +84,14 @@ public:
      * Get the number of videos inside the collection
      */
     int count() const;
-    
+
     int saveCounter;
 
 private:
     VideoData *cacheVideo(VideoData *data);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // VIDEOCOLLECTION_H

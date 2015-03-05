@@ -27,7 +27,6 @@
 
 template<class factory> class KisConvolutionWorker;
 
-
 enum KisConvolutionBorderOp {
     BORDER_IGNORE = 0, // read the pixels outside of the application rect
     BORDER_REPEAT = 1  // Use the border for the missing pixels
@@ -77,15 +76,13 @@ protected:
         FFTW
     };
 
-
     KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference);
-
 
 private:
     template<class factory>
-        KisConvolutionWorker<factory>* createWorker(const KisConvolutionKernelSP kernel,
-                                                    KisPainter *painter,
-                                                    KoUpdater *progress);
+    KisConvolutionWorker<factory> *createWorker(const KisConvolutionKernelSP kernel,
+            KisPainter *painter,
+            KoUpdater *progress);
 
 private:
     TestingEnginePreference m_enginePreference;

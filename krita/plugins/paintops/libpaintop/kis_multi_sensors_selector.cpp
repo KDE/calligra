@@ -25,19 +25,19 @@
 
 struct KisMultiSensorsSelector::Private {
     Ui_WdgMultiSensorsSelector form;
-    KisMultiSensorsModel* model;
-    QWidget* currentConfigWidget;
-    QHBoxLayout* layout;
+    KisMultiSensorsModel *model;
+    QWidget *currentConfigWidget;
+    QHBoxLayout *layout;
 };
 
-KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent)
+KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget *parent)
     : QWidget(parent)
     , d(new Private)
 {
     d->currentConfigWidget = 0;
     d->form.setupUi(this);
     d->model = new KisMultiSensorsModel(this);
-    connect(d->model, SIGNAL(sensorChanged(KisDynamicSensorSP )), SIGNAL(sensorChanged(KisDynamicSensorSP )));
+    connect(d->model, SIGNAL(sensorChanged(KisDynamicSensorSP)), SIGNAL(sensorChanged(KisDynamicSensorSP)));
     connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
     connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
     connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
@@ -75,7 +75,7 @@ KisDynamicSensorSP KisMultiSensorsSelector::currentHighlighted()
     return d->model->getSensor(d->form.sensorsList->currentIndex());
 }
 
-void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
+void KisMultiSensorsSelector::sensorActivated(const QModelIndex &index)
 {
     delete d->currentConfigWidget;
     KisDynamicSensorSP sensor = d->model->getSensor(index);
@@ -88,7 +88,7 @@ void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
     }
 }
 
-void KisMultiSensorsSelector::setCurrentCurve(const KisCubicCurve& curve, bool useSameCurve)
+void KisMultiSensorsSelector::setCurrentCurve(const KisCubicCurve &curve, bool useSameCurve)
 {
     d->model->setCurrentCurve(d->form.sensorsList->currentIndex(), curve, useSameCurve);
 }

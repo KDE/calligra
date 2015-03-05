@@ -23,8 +23,8 @@
 #include <KoIcon.h>
 #include "KoZoomTool.h"
 
-KoZoomToolWidget::KoZoomToolWidget(KoZoomTool* tool, QWidget* parent)
-        : QWidget(parent), m_tool(tool)
+KoZoomToolWidget::KoZoomToolWidget(KoZoomTool *tool, QWidget *parent)
+    : QWidget(parent), m_tool(tool)
 {
     setupUi(this);
     m_dirtyThumbnail = true;
@@ -62,14 +62,14 @@ void KoZoomToolWidget::paintBirdEye()
     p.end();
 }
 
-bool KoZoomToolWidget::eventFilter(QObject* object, QEvent* event)
+bool KoZoomToolWidget::eventFilter(QObject *object, QEvent *event)
 {
     if (object == birdEyeLabel) {
         if (event->type() == QEvent::Paint) {
             paintBirdEye();
             return true;
         } else if (event->type() == QEvent::MouseMove) {
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (mouseEvent->buttons() | Qt::LeftButton) {
                 // m_tool->canvasController()->pan
                 // TODO implement panning
@@ -77,8 +77,9 @@ bool KoZoomToolWidget::eventFilter(QObject* object, QEvent* event)
             return true;
         } else if (event->type() == QEvent::Resize) {
             m_dirtyThumbnail = true;
-        } else
+        } else {
             return false;
+        }
     }
     return QWidget::eventFilter(object, event);
 }

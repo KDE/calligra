@@ -86,25 +86,26 @@ using namespace Calligra::Sheets;
  ****************************************************************/
 
 RowHeader::RowHeader(CanvasBase *_canvas)
-        : m_pCanvas(_canvas), m_bSelection(false),
-        m_iSelectionAnchor(1), m_bResize(false), m_lSize(0), m_bMousePressed(false),
-        m_cellToolIsActive(true), m_font(KoGlobal::defaultFont())
+    : m_pCanvas(_canvas), m_bSelection(false),
+      m_iSelectionAnchor(1), m_bResize(false), m_lSize(0), m_bMousePressed(false),
+      m_cellToolIsActive(true), m_font(KoGlobal::defaultFont())
 {
 }
-
 
 RowHeader::~RowHeader()
 {
 }
 
-void RowHeader::mousePress(KoPointerEvent * _ev)
+void RowHeader::mousePress(KoPointerEvent *_ev)
 {
-    if (!m_cellToolIsActive)
+    if (!m_cellToolIsActive) {
         return;
+    }
 
-    register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = m_pCanvas->activeSheet();
+    if (!sheet) {
         return;
+    }
 
     if (_ev->button() == Qt::LeftButton) {
         m_bMousePressed = true;
@@ -127,12 +128,14 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
     while (y < (dHeight + m_pCanvas->yOffset()) && (!m_bResize) && row <= KS_rowMax) {
         double h = sheet->rowFormats()->rowHeight(row);
         row++;
-        if (row > KS_rowMax)
+        if (row > KS_rowMax) {
             row = KS_rowMax;
+        }
         if ((ev_PosY >= y + h - 2) &&
                 (ev_PosY <= y + h + 1) &&
-                !(sheet->rowFormats()->isHiddenOrFiltered(row) && row == 1))
+                !(sheet->rowFormats()->isHiddenOrFiltered(row) && row == 1)) {
             m_bResize = true;
+        }
         y += h;
     }
 
@@ -140,16 +143,18 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
     //you mustn't resize it.
     qreal tmp2;
     int tmpRow = sheet->topRow(ev_PosY - 1, tmp2);
-    if (sheet->rowFormats()->isHiddenOrFiltered(tmpRow) && tmpRow == 1)
+    if (sheet->rowFormats()->isHiddenOrFiltered(tmpRow) && tmpRow == 1) {
         m_bResize = false;
+    }
 
     // So the user clicked between two rows ?
     if (m_bResize) {
         // Determine row to resize
         qreal tmp;
         m_iResizedRow = sheet->topRow(ev_PosY - 1, tmp);
-        if (!sheet->isProtected())
+        if (!sheet->isProtected()) {
             paintSizeIndicator(_ev->pos().y());
+        }
     } else {
         if (_ev->button() != Qt::RightButton) {
             m_bSelection = true;
@@ -157,8 +162,9 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
 
         qreal tmp;
         int hit_row = sheet->topRow(ev_PosY, tmp);
-        if (hit_row > KS_rowMax)
+        if (hit_row > KS_rowMax) {
             return;
+        }
 
         m_iSelectionAnchor = hit_row;
 
@@ -182,19 +188,22 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
     }
 }
 
-void RowHeader::mouseRelease(KoPointerEvent * _ev)
+void RowHeader::mouseRelease(KoPointerEvent *_ev)
 {
-    if (!m_cellToolIsActive)
+    if (!m_cellToolIsActive) {
         return;
+    }
     m_pCanvas->disableAutoScroll();
-    if (m_lSize)
+    if (m_lSize) {
         m_lSize->hide();
+    }
 
     m_bMousePressed = false;
 
-    register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = m_pCanvas->activeSheet();
+    if (!sheet) {
         return;
+    }
 
     double ev_PosY = m_pCanvas->zoomHandler()->unzoomItY(_ev->pos().y()) + m_pCanvas->yOffset();
 
@@ -212,25 +221,28 @@ void RowHeader::mouseRelease(KoPointerEvent * _ev)
 
         double height = 0.0;
         double y = sheet->rowPosition(m_iResizedRow);
-        if (ev_PosY - y <= 0.0)
+        if (ev_PosY - y <= 0.0) {
             height = 0.0;
-        else
+        } else {
             height = ev_PosY - y;
+        }
 
         if (height != 0.0) {
-            ResizeRowManipulator* command = new ResizeRowManipulator();
+            ResizeRowManipulator *command = new ResizeRowManipulator();
             command->setSheet(sheet);
             command->setSize(height);
             command->add(Region(rect, sheet));
-            if (!command->execute())
+            if (!command->execute()) {
                 delete command;
+            }
         } else { // hide
-            HideShowManipulator* command = new HideShowManipulator();
+            HideShowManipulator *command = new HideShowManipulator();
             command->setSheet(sheet);
             command->setManipulateRows(true);
             command->add(Region(rect, sheet));
-            if (!command->execute())
+            if (!command->execute()) {
                 delete command;
+            }
         }
         delete m_lSize;
         m_lSize = 0;
@@ -258,7 +270,7 @@ void RowHeader::mouseRelease(KoPointerEvent * _ev)
                     return;
                 }
 
-                HideShowManipulator* command = new HideShowManipulator();
+                HideShowManipulator *command = new HideShowManipulator();
                 command->setSheet(sheet);
                 command->setManipulateRows(true);
                 command->setReverse(true);
@@ -275,66 +287,73 @@ void RowHeader::mouseRelease(KoPointerEvent * _ev)
 void RowHeader::equalizeRow(double resize)
 {
     if (resize != 0.0) {
-        ResizeRowManipulator* command = new ResizeRowManipulator();
+        ResizeRowManipulator *command = new ResizeRowManipulator();
         command->setSheet(m_pCanvas->activeSheet());
         command->setSize(qMax(2.0, resize));
         command->add(*m_pCanvas->selection());
-        if (!command->execute())
+        if (!command->execute()) {
             delete command;
+        }
     } else { // hide
-        HideShowManipulator* command = new HideShowManipulator();
+        HideShowManipulator *command = new HideShowManipulator();
         command->setSheet(m_pCanvas->activeSheet());
         command->setManipulateRows(true);
         command->add(*m_pCanvas->selection());
-        if (!command->execute())
+        if (!command->execute()) {
             delete command;
+        }
     }
 }
 
-void RowHeader::mouseDoubleClick(KoPointerEvent*)
+void RowHeader::mouseDoubleClick(KoPointerEvent *)
 {
-    if (!m_cellToolIsActive)
+    if (!m_cellToolIsActive) {
         return;
-    register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
+    }
+    register Sheet *const sheet = m_pCanvas->activeSheet();
+    if (!sheet) {
         return;
+    }
 
-    if (sheet->isProtected())
+    if (sheet->isProtected()) {
         return;
+    }
 
-    AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
+    AdjustColumnRowManipulator *command = new AdjustColumnRowManipulator();
     command->setSheet(sheet);
     command->setAdjustRow(true);
     command->add(*m_pCanvas->selection());
     command->execute();
 }
 
-
-void RowHeader::mouseMove(KoPointerEvent* _ev)
+void RowHeader::mouseMove(KoPointerEvent *_ev)
 {
     if (!m_cellToolIsActive) {
         setCursor(Qt::ArrowCursor);
         return;
     }
 
-    register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = m_pCanvas->activeSheet();
+    if (!sheet) {
         return;
+    }
 
     qreal ev_PosY = m_pCanvas->zoomHandler()->unzoomItY(_ev->pos().y()) + m_pCanvas->yOffset();
     qreal dHeight = m_pCanvas->zoomHandler()->unzoomItY(height());
 
     // The button is pressed and we are resizing ?
     if (m_bResize) {
-        if (!sheet->isProtected())
+        if (!sheet->isProtected()) {
             paintSizeIndicator(_ev->pos().y());
+        }
     }
     // The button is pressed and we are selecting ?
     else if (m_bSelection) {
         qreal y;
         int row = sheet->topRow(ev_PosY, y);
-        if (row > KS_rowMax || row <= 0)
+        if (row > KS_rowMax || row <= 0) {
             return;
+        }
 
         QPoint newAnchor = m_pCanvas->selection()->anchor();
         QPoint newMarker = m_pCanvas->selection()->marker();
@@ -342,9 +361,9 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
         newAnchor.setY(m_iSelectionAnchor);
         m_pCanvas->selection()->update(newMarker);
 
-        if (_ev->pos().y() < 0)
+        if (_ev->pos().y() < 0) {
             m_pCanvas->setVertScrollBarPos(qMax<qreal>(0, ev_PosY));
-        else if (_ev->pos().y() > m_pCanvas->height()) {
+        } else if (_ev->pos().y() > m_pCanvas->height()) {
             if (row < KS_rowMax) {
                 const qreal rowHeight = sheet->rowFormats()->rowHeight(row + 1);
                 y = sheet->rowPosition(row + 1);
@@ -377,11 +396,12 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
     }
 }
 
-void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
+void RowHeader::paint(QPainter *painter, const QRectF &painterRect)
 {
-    register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = m_pCanvas->activeSheet();
+    if (!sheet) {
         return;
+    }
 
 //     ElapsedTime et( "Painting vertical header", ElapsedTime::PrintOnlyTime );
 
@@ -451,10 +471,11 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
         painter->setFont(normalFont);
         painter->setPen(palette().text().color());
 
-        if (selected)
+        if (selected) {
             painter->setPen(palette().highlightedText().color());
-        else if (highlighted)
+        } else if (highlighted) {
             painter->setFont(boldFont);
+        }
 
         QFontMetricsF fm(painter->font());
 #if 0
@@ -466,8 +487,9 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
             while (minSize > 1) {
                 font.setPointSizeF(minSize);
                 const QFontMetricsF fm2(font);
-                if (height >= fm2.ascent() - fm2.descent())
+                if (height >= fm2.ascent() - fm2.descent()) {
                     break;
+                }
                 minSize /= 2;
             }
             while (minSize < 0.99 * maxSize) {
@@ -493,14 +515,13 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
     }
 }
 
-
-void RowHeader::focusOut(QFocusEvent*)
+void RowHeader::focusOut(QFocusEvent *)
 {
     m_pCanvas->disableAutoScroll();
     m_bMousePressed = false;
 }
 
-void RowHeader::doToolChanged(const QString& toolId)
+void RowHeader::doToolChanged(const QString &toolId)
 {
     m_cellToolIsActive = toolId.startsWith(QLatin1String("KSpread"));
     update();
@@ -525,39 +546,41 @@ QFont RowHeader::headerFont() const
 
 ColumnHeader::ColumnHeader(CanvasBase *_canvas)
     : m_pCanvas(_canvas), m_bSelection(false),
-    m_iSelectionAnchor(1), m_bResize(false), m_lSize(0), m_bMousePressed(false),
-    m_cellToolIsActive(true), m_font(KoGlobal::defaultFont())
+      m_iSelectionAnchor(1), m_bResize(false), m_lSize(0), m_bMousePressed(false),
+      m_cellToolIsActive(true), m_font(KoGlobal::defaultFont())
 {
 }
-
 
 ColumnHeader::~ColumnHeader()
 {
 }
 
-void ColumnHeader::mousePress(KoPointerEvent * _ev)
+void ColumnHeader::mousePress(KoPointerEvent *_ev)
 {
-    if (!m_cellToolIsActive)
+    if (!m_cellToolIsActive) {
         return;
+    }
 
     if (_ev->button() == Qt::LeftButton) {
         m_bMousePressed = true;
         m_pCanvas->enableAutoScroll();
     }
 
-    const register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
+    const register Sheet *const sheet = m_pCanvas->activeSheet();
+    if (!sheet) {
         return;
+    }
 
     // We were editing a cell -> save value and get out of editing mode
     m_pCanvas->selection()->emitCloseEditor(true); // save changes
 
     double ev_PosX;
     double dWidth = m_pCanvas->zoomHandler()->unzoomItX(width());
-    if (sheet->layoutDirection() == Qt::RightToLeft)
+    if (sheet->layoutDirection() == Qt::RightToLeft) {
         ev_PosX = dWidth - m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
-    else
+    } else {
         ev_PosX = m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
+    }
     m_bResize = false;
     m_bSelection = false;
 
@@ -575,8 +598,9 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
             kDebug() << "evPos:" << ev_PosX << ", x:" << x << ", w:" << w << ", COL:" << tmpCol;
 
             ++tmpCol;
-            if (tmpCol > KS_colMax)
+            if (tmpCol > KS_colMax) {
                 tmpCol = KS_colMax;
+            }
             //if col is hide and it's the first column
             //you mustn't resize it.
 
@@ -605,12 +629,14 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
         while (x < (dWidth + m_pCanvas->xOffset()) && (!m_bResize) && col <= KS_colMax) {
             double w = sheet->columnFormat(col)->width();
             col++;
-            if (col > KS_colMax)
+            if (col > KS_colMax) {
                 col = KS_colMax;
+            }
             if ((ev_PosX >= x + w - unzoomedPixel) &&
                     (ev_PosX <= x + w + unzoomedPixel) &&
-                    !(sheet->columnFormat(col)->isHiddenOrFiltered() && col == 1))
+                    !(sheet->columnFormat(col)->isHiddenOrFiltered() && col == 1)) {
                 m_bResize = true;
+            }
             x += w;
         }
 
@@ -618,8 +644,9 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
         //you mustn't resize it.
         qreal tmp2;
         int tmpCol = sheet->leftColumn(ev_PosX - 1, tmp2);
-        if (sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 1)
+        if (sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 1) {
             m_bResize = false;
+        }
     }
 
     // So the user clicked between two rows ?
@@ -630,13 +657,15 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
             m_iResizedColumn = sheet->leftColumn(ev_PosX - 1, tmp);
             // kDebug() <<"RColumn:" << m_iResizedColumn <<", PosX:" << ev_PosX;
 
-            if (!sheet->isProtected())
+            if (!sheet->isProtected()) {
                 paintSizeIndicator(_ev->pos().x());
+            }
         } else {
             m_iResizedColumn = sheet->leftColumn(ev_PosX - 1, tmp);
 
-            if (!sheet->isProtected())
+            if (!sheet->isProtected()) {
                 paintSizeIndicator(_ev->pos().x());
+            }
         }
 
         // kDebug() <<"Column:" << m_iResizedColumn;
@@ -647,8 +676,9 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
 
         qreal tmp;
         int hit_col = sheet->leftColumn(ev_PosX, tmp);
-        if (hit_col > KS_colMax)
+        if (hit_col > KS_colMax) {
             return;
+        }
 
         m_iSelectionAnchor = hit_col;
 
@@ -672,19 +702,22 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
     }
 }
 
-void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
+void ColumnHeader::mouseRelease(KoPointerEvent *_ev)
 {
-    if (!m_cellToolIsActive)
+    if (!m_cellToolIsActive) {
         return;
+    }
     m_pCanvas->disableAutoScroll();
-    if (m_lSize)
+    if (m_lSize) {
         m_lSize->hide();
+    }
 
     m_bMousePressed = false;
 
-    register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = m_pCanvas->activeSheet();
+    if (!sheet) {
         return;
+    }
 
     if (m_bResize) {
         double dWidth = m_pCanvas->zoomHandler()->unzoomItX(width());
@@ -704,32 +737,36 @@ void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
         double width = 0.0;
         double x;
 
-        if (sheet->layoutDirection() == Qt::RightToLeft)
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
             ev_PosX = dWidth - m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
-        else
+        } else {
             ev_PosX = m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
+        }
 
         x = sheet->columnPosition(m_iResizedColumn);
 
-        if (ev_PosX - x <= 0.0)
+        if (ev_PosX - x <= 0.0) {
             width = 0.0;
-        else
+        } else {
             width = ev_PosX - x;
+        }
 
         if (width != 0.0) {
-            ResizeColumnManipulator* command = new ResizeColumnManipulator();
+            ResizeColumnManipulator *command = new ResizeColumnManipulator();
             command->setSheet(sheet);
             command->setSize(width);
             command->add(Region(rect, sheet));
-            if (!command->execute())
+            if (!command->execute()) {
                 delete command;
+            }
         } else { // hide
-            HideShowManipulator* command = new HideShowManipulator();
+            HideShowManipulator *command = new HideShowManipulator();
             command->setSheet(sheet);
             command->setManipulateColumns(true);
             command->add(Region(rect, sheet));
-            if (!command->execute())
+            if (!command->execute()) {
                 delete command;
+            }
         }
         delete m_lSize;
         m_lSize = 0;
@@ -757,7 +794,7 @@ void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
                     return;
                 }
 
-                HideShowManipulator* command = new HideShowManipulator();
+                HideShowManipulator *command = new HideShowManipulator();
                 command->setSheet(sheet);
                 command->setManipulateColumns(true);
                 command->setReverse(true);
@@ -774,69 +811,79 @@ void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
 void ColumnHeader::equalizeColumn(double resize)
 {
     if (resize != 0.0) {
-        ResizeColumnManipulator* command = new ResizeColumnManipulator();
+        ResizeColumnManipulator *command = new ResizeColumnManipulator();
         command->setSheet(m_pCanvas->activeSheet());
         command->setSize(qMax(2.0, resize));
         command->add(*m_pCanvas->selection());
-        if (!command->execute())
+        if (!command->execute()) {
             delete command;
+        }
     } else { // hide
-        HideShowManipulator* command = new HideShowManipulator();
+        HideShowManipulator *command = new HideShowManipulator();
         command->setSheet(m_pCanvas->activeSheet());
         command->setManipulateColumns(true);
         command->add(*m_pCanvas->selection());
-        if (!command->execute())
+        if (!command->execute()) {
             delete command;
+        }
     }
 }
 
-void ColumnHeader::mouseDoubleClick(KoPointerEvent*)
+void ColumnHeader::mouseDoubleClick(KoPointerEvent *)
 {
-    if (!m_cellToolIsActive)
+    if (!m_cellToolIsActive) {
         return;
-    register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
+    }
+    register Sheet *const sheet = m_pCanvas->activeSheet();
+    if (!sheet) {
         return;
+    }
 
-    if (sheet->isProtected())
+    if (sheet->isProtected()) {
         return;
+    }
 
-    AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
+    AdjustColumnRowManipulator *command = new AdjustColumnRowManipulator();
     command->setSheet(sheet);
     command->setAdjustColumn(true);
     command->add(*m_pCanvas->selection());
     command->execute();
 }
 
-void ColumnHeader::mouseMove(KoPointerEvent* _ev)
+void ColumnHeader::mouseMove(KoPointerEvent *_ev)
 {
-    if (!m_cellToolIsActive)
+    if (!m_cellToolIsActive) {
         return;
+    }
 
-    register Sheet * const sheet = m_pCanvas->activeSheet();
+    register Sheet *const sheet = m_pCanvas->activeSheet();
 
-    if (!sheet)
+    if (!sheet) {
         return;
+    }
 
     double dWidth = m_pCanvas->zoomHandler()->unzoomItX(width());
     double ev_PosX;
-    if (sheet->layoutDirection() == Qt::RightToLeft)
+    if (sheet->layoutDirection() == Qt::RightToLeft) {
         ev_PosX = dWidth - m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
-    else
+    } else {
         ev_PosX = m_pCanvas->zoomHandler()->unzoomItX(_ev->pos().x()) + m_pCanvas->xOffset();
+    }
 
     // The button is pressed and we are resizing ?
     if (m_bResize) {
-        if (!sheet->isProtected())
+        if (!sheet->isProtected()) {
             paintSizeIndicator(_ev->pos().x());
+        }
     }
     // The button is pressed and we are selecting ?
     else if (m_bSelection) {
         qreal x;
         int col = sheet->leftColumn(ev_PosX, x);
 
-        if (col > KS_colMax || col <= 0)
+        if (col > KS_colMax || col <= 0) {
             return;
+        }
 
         QPoint newMarker = m_pCanvas->selection()->marker();
         QPoint newAnchor = m_pCanvas->selection()->anchor();
@@ -849,12 +896,13 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
                 const ColumnFormat *cl = sheet->columnFormat(col + 1);
                 x = sheet->columnPosition(col + 1);
                 m_pCanvas->setHorizScrollBarPos(- (int)((ev_PosX + cl->width()) - dWidth));
-            } else if (_ev->pos().x() > width())
+            } else if (_ev->pos().x() > width()) {
                 m_pCanvas->setHorizScrollBarPos(- (ev_PosX - dWidth + m_pCanvas->zoomHandler()->unzoomItX(m_pCanvas->width())));
+            }
         } else {
-            if (_ev->pos().x() < 0)
+            if (_ev->pos().x() < 0) {
                 m_pCanvas->setHorizScrollBarPos(ev_PosX);
-            else if (_ev->pos().x() > m_pCanvas->width()) {
+            } else if (_ev->pos().x() > m_pCanvas->width()) {
                 if (col < KS_colMax) {
                     const ColumnFormat *cl = sheet->columnFormat(col + 1);
                     x = sheet->columnPosition(col + 1);
@@ -909,11 +957,12 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
     }
 }
 
-void ColumnHeader::resize(const QSizeF& size, const QSizeF& oldSize)
+void ColumnHeader::resize(const QSizeF &size, const QSizeF &oldSize)
 {
-    register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = m_pCanvas->activeSheet();
+    if (!sheet) {
         return;
+    }
 
     // workaround to allow horizontal resizing and zoom changing when sheet
     // direction and interface direction don't match (e.g. an RTL sheet on an
@@ -927,11 +976,12 @@ void ColumnHeader::resize(const QSizeF& size, const QSizeF& oldSize)
     }
 }
 
-void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
+void ColumnHeader::paint(QPainter *painter, const QRectF &painterRect)
 {
-    register Sheet * const sheet = m_pCanvas->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = m_pCanvas->activeSheet();
+    if (!sheet) {
         return;
+    }
 
 //     ElapsedTime et( "Painting horizontal header", ElapsedTime::PrintOnlyTime );
 
@@ -985,8 +1035,9 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
 
     int deltaX = 1;
     if (sheet->layoutDirection() == Qt::RightToLeft) {
-        if (x > KS_colMax)
+        if (x > KS_colMax) {
             x = KS_colMax;
+        }
 
         xPos -= sheet->columnFormat(x)->width();
         deltaX = -1;
@@ -1018,10 +1069,11 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
         painter->setFont(normalFont);
         painter->setPen(palette().text().color());
 
-        if (selected)
+        if (selected) {
             painter->setPen(palette().highlightedText().color());
-        else if (highlighted)
+        } else if (highlighted) {
             painter->setFont(boldFont);
+        }
 
         QString colText = sheet->getShowColumnNumber() ? QString::number(x) : Cell::columnName(x);
         QFontMetricsF fm(painter->font());
@@ -1034,8 +1086,9 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
             while (minSize > 1) {
                 font.setPointSizeF(minSize);
                 const QFontMetricsF fm2(font);
-                if (width >= fm2.width(colText))
+                if (width >= fm2.width(colText)) {
                     break;
+                }
                 minSize /= 2;
             }
             while (minSize < 0.99 * maxSize) {
@@ -1069,13 +1122,13 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
     }
 }
 
-void ColumnHeader::focusOut(QFocusEvent*)
+void ColumnHeader::focusOut(QFocusEvent *)
 {
     m_pCanvas->disableAutoScroll();
     m_bMousePressed = false;
 }
 
-void ColumnHeader::doToolChanged(const QString& toolId)
+void ColumnHeader::doToolChanged(const QString &toolId)
 {
     m_cellToolIsActive = toolId.startsWith(QLatin1String("KSpread"));
     update();
@@ -1098,10 +1151,10 @@ QFont ColumnHeader::headerFont() const
  *
  ****************************************************************/
 
-SelectAllButton::SelectAllButton(CanvasBase* canvasBase)
-        : m_canvasBase(canvasBase)
-        , m_mousePressed(false)
-        , m_cellToolIsActive(true)
+SelectAllButton::SelectAllButton(CanvasBase *canvasBase)
+    : m_canvasBase(canvasBase)
+    , m_mousePressed(false)
+    , m_cellToolIsActive(true)
 {
 }
 
@@ -1109,7 +1162,7 @@ SelectAllButton::~SelectAllButton()
 {
 }
 
-void SelectAllButton::paint(QPainter* painter, const QRectF& painterRect)
+void SelectAllButton::paint(QPainter *painter, const QRectF &painterRect)
 {
     // the painter
     painter->setClipRect(painterRect);
@@ -1135,26 +1188,30 @@ void SelectAllButton::paint(QPainter* painter, const QRectF& painterRect)
     painter->drawRect(painterRect.adjusted(0, 0, -1, -1));
 }
 
-void SelectAllButton::mousePress(KoPointerEvent* event)
+void SelectAllButton::mousePress(KoPointerEvent *event)
 {
-    if (!m_cellToolIsActive)
+    if (!m_cellToolIsActive) {
         return;
-    if (event->button() == Qt::LeftButton)
+    }
+    if (event->button() == Qt::LeftButton) {
         m_mousePressed = true;
+    }
 }
 
-void SelectAllButton::mouseRelease(KoPointerEvent* event)
+void SelectAllButton::mouseRelease(KoPointerEvent *event)
 {
-    if (!m_cellToolIsActive)
+    if (!m_cellToolIsActive) {
         return;
+    }
     Q_UNUSED(event);
-    if (!m_mousePressed)
+    if (!m_mousePressed) {
         return;
+    }
     m_mousePressed = false;
     m_canvasBase->selection()->selectAll();
 }
 
-void SelectAllButton::doToolChanged(const QString& toolId)
+void SelectAllButton::doToolChanged(const QString &toolId)
 {
     m_cellToolIsActive = toolId.startsWith(QLatin1String("KSpread"));
     update();

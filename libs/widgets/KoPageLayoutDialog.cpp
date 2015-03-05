@@ -38,7 +38,6 @@ public:
     QCheckBox *documentCheckBox;
 };
 
-
 KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layout)
     : KPageDialog(parent)
     , d(new Private)
@@ -53,18 +52,18 @@ KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layo
 
     d->pageLayoutWidget = new KoPageLayoutWidget(widget, layout);
     d->pageLayoutWidget->showUnitchooser(false);
-    lay->addWidget(d->pageLayoutWidget,1);
+    lay->addWidget(d->pageLayoutWidget, 1);
 
     KoPagePreviewWidget *prev = new KoPagePreviewWidget(widget);
     prev->setPageLayout(layout);
     lay->addWidget(prev, 1);
 
-    connect (d->pageLayoutWidget, SIGNAL(layoutChanged(const KoPageLayout&)),
-            prev, SLOT(setPageLayout(const KoPageLayout&)));
-    connect (d->pageLayoutWidget, SIGNAL(layoutChanged(const KoPageLayout&)),
-            this, SLOT(setPageLayout(const KoPageLayout&)));
-    connect (d->pageLayoutWidget, SIGNAL(unitChanged(const KoUnit&)),
-            this, SIGNAL(unitChanged(const KoUnit&)));
+    connect(d->pageLayoutWidget, SIGNAL(layoutChanged(KoPageLayout)),
+            prev, SLOT(setPageLayout(KoPageLayout)));
+    connect(d->pageLayoutWidget, SIGNAL(layoutChanged(KoPageLayout)),
+            this, SLOT(setPageLayout(KoPageLayout)));
+    connect(d->pageLayoutWidget, SIGNAL(unitChanged(KoUnit)),
+            this, SIGNAL(unitChanged(KoUnit)));
 }
 
 KoPageLayoutDialog::~KoPageLayoutDialog()
@@ -103,7 +102,7 @@ void KoPageLayoutDialog::showApplyToDocument(bool on)
 {
     if (on && d->documentCheckBox == 0) {
         for (int i = 0; i < children().count(); ++i) {
-            if (QDialogButtonBox *buttonBox = qobject_cast<QDialogButtonBox*>(children()[i])) {
+            if (QDialogButtonBox *buttonBox = qobject_cast<QDialogButtonBox *>(children()[i])) {
                 d->documentCheckBox = new QCheckBox(i18n("Apply to document"), buttonBox);
                 d->documentCheckBox->setChecked(true);
                 buttonBox->addButton(d->documentCheckBox, QDialogButtonBox::ResetRole);
@@ -112,7 +111,7 @@ void KoPageLayoutDialog::showApplyToDocument(bool on)
         }
 
         Q_ASSERT(d->pageLayoutWidget);
-        connect (d->documentCheckBox, SIGNAL(toggled(bool)),
+        connect(d->documentCheckBox, SIGNAL(toggled(bool)),
                 d->pageLayoutWidget, SLOT(setApplyToDocument(bool)));
     } else if (d->documentCheckBox) {
         d->documentCheckBox->setVisible(on);

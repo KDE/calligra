@@ -22,13 +22,12 @@
 
 #include <QWidget>
 
-
 //! Status sidebar for the welcome page
 class KexiWelcomeStatusBar : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KexiWelcomeStatusBar(QWidget* parent = 0);
+    explicit KexiWelcomeStatusBar(QWidget *parent = 0);
     ~KexiWelcomeStatusBar();
 
     QPixmap userProgressPixmap();
@@ -53,7 +52,7 @@ private:
     void updateContributionGroupCheckboxes();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

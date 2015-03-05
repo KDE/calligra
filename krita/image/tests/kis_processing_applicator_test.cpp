@@ -48,8 +48,8 @@ KisImageSP createImage(KisUndoStore *undoStore,
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(undoStore, 300, 300, cs, "test");
 
-    QRect fillRect1(50,50,100,100);
-    QRect fillRect2(75,75,50,50);
+    QRect fillRect1(50, 50, 100, 100);
+    QRect fillRect2(75, 75, 50, 50);
 
     paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
     paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
@@ -82,13 +82,13 @@ bool checkLayers(KisImageWSP image,
     names[2] = QString("applicator_") + prefix + "_layer2.png";
 
     bool valid = true;
-    for(int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
                    "applicator" + QDir::separator() + names[i]);
 
         QPoint temp;
 
-        if(!TestUtil::compareQImages(temp, ref, images[i], 1)) {
+        if (!TestUtil::compareQImages(temp, ref, images[i], 1)) {
             qDebug() << "--- Wrong image:" << names[i];
             valid = false;
             images[i].save(QString(FILES_OUTPUT_DIR) + QDir::separator() + names[i]);
@@ -98,7 +98,6 @@ bool checkLayers(KisImageWSP image,
     return valid;
 }
 
-
 void KisProcessingApplicatorTest::testNonRecursiveProcessing()
 {
     KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
@@ -106,8 +105,8 @@ void KisProcessingApplicatorTest::testNonRecursiveProcessing()
     KisPaintLayerSP paintLayer2;
     KisImageSP image = createImage(undoStore, paintLayer1, paintLayer2);
 
-    QRect cropRect1(25,25,75,75);
-    QRect cropRect2(100,100,50,50);
+    QRect cropRect1(25, 25, 75, 75);
+    QRect cropRect2(100, 100, 50, 50);
 
     QVERIFY(checkLayers(image, "initial"));
 
@@ -153,7 +152,7 @@ void KisProcessingApplicatorTest::testRecursiveProcessing()
     KisPaintLayerSP paintLayer2;
     KisImageSP image = createImage(undoStore, paintLayer1, paintLayer2);
 
-    QRect cropRect1(40,40,86,86);
+    QRect cropRect1(40, 40, 86, 86);
 
     QVERIFY(checkLayers(image, "recursive_initial"));
 
@@ -181,9 +180,9 @@ void KisProcessingApplicatorTest::testNoUIUpdates()
     KisPaintLayerSP paintLayer1;
     KisPaintLayerSP paintLayer2;
     KisImageSP image = createImage(undoStore, paintLayer1, paintLayer2);
-    QSignalSpy uiSignalsCounter(image.data(), SIGNAL(sigImageUpdated(const QRect&)));
+    QSignalSpy uiSignalsCounter(image.data(), SIGNAL(sigImageUpdated(QRect)));
 
-    QRect cropRect1(40,40,86,86);
+    QRect cropRect1(40, 40, 86, 86);
 
     {
         KisProcessingApplicator applicator(image, image->rootLayer(),

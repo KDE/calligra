@@ -36,23 +36,23 @@ public:
     }
     ~KexiProjectSetPrivate()
     {
-        foreach (KexiProjectData* data, list) {
+        foreach (KexiProjectData *data, list) {
             delete data;
         }
     }
     KexiProjectData::List list;
 };
 
-KexiProjectSet::KexiProjectSet(KexiDB::MessageHandler* handler)
-        : KexiDB::Object(handler)
-        , d(new KexiProjectSetPrivate())
+KexiProjectSet::KexiProjectSet(KexiDB::MessageHandler *handler)
+    : KexiDB::Object(handler)
+    , d(new KexiProjectSetPrivate())
 {
 }
 
-KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData* conndata,
-                               KexiDB::MessageHandler* handler)
-        : KexiDB::Object(handler)
-        , d(new KexiProjectSetPrivate())
+KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData *conndata,
+                               KexiDB::MessageHandler *handler)
+    : KexiDB::Object(handler)
+    , d(new KexiProjectSetPrivate())
 {
     Q_ASSERT(conndata);
     KexiDB::Driver *drv = Kexi::driverManager().driver(conndata->driverName);
@@ -96,7 +96,7 @@ void KexiProjectSet::addProjectData(KexiProjectData *data)
     d->list.append(data);
 }
 
-KexiProjectData* KexiProjectSet::takeProjectData(KexiProjectData *data)
+KexiProjectData *KexiProjectSet::takeProjectData(KexiProjectData *data)
 {
     return d->list.removeOne(data) ? data : 0;
 }
@@ -106,12 +106,13 @@ KexiProjectData::List KexiProjectSet::list() const
     return d->list;
 }
 
-KexiProjectData* KexiProjectSet::findProject(const QString &dbName) const
+KexiProjectData *KexiProjectSet::findProject(const QString &dbName) const
 {
     const QString _dbName(dbName.toLower());
-    foreach(KexiProjectData* data, d->list) {
-        if (data->databaseName().toLower() == _dbName)
+    foreach (KexiProjectData *data, d->list) {
+        if (data->databaseName().toLower() == _dbName) {
             return data;
+        }
     }
     return 0;
 }

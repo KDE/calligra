@@ -36,7 +36,7 @@ class MigrateManagerInternal;
 
 //! @short Migration library management, for finding and loading migration drivers.
 class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object,
-                                       public KexiMigrateManagerInterface
+    public KexiMigrateManagerInterface
 {
 public:
     typedef QMap<QString, KService::Ptr> ServicesMap;
@@ -47,7 +47,7 @@ public:
     /*! Tries to load db driver with named name \a name.
       The name is case insensitive.
       \return db driver, or 0 if error (then error message is also set) */
-    KexiMigrate* driver(const QString& name);
+    KexiMigrate *driver(const QString &name);
 
     /*! returns list of available drivers names.
       That drivers can be loaded by first use of driver() method. */

@@ -28,11 +28,10 @@
 
 using namespace Calligra::Sheets;
 
-
 namespace QTest
 {
 template<>
-char *toString(const Value& value)
+char *toString(const Value &value)
 {
     QString message;
     QTextStream ts(&message, QIODevice::WriteOnly);
@@ -40,5 +39,4 @@ char *toString(const Value& value)
     return qstrdup(message.toLatin1());
 }
 }
-
 

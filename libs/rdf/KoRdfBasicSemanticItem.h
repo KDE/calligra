@@ -59,7 +59,6 @@ public:
     KoRdfBasicSemanticItem(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it);
     virtual ~KoRdfBasicSemanticItem();
 
-
 protected:
     /**
      * Create a bnode with a uuid
@@ -173,7 +172,7 @@ private:
      */
     void updateTriple_remove(const Soprano::LiteralValue &toModify,
                              const QString &predString,
-                             const Soprano::Node& explicitLinkingSubject);
+                             const Soprano::Node &explicitLinkingSubject);
 
     /**
      * After updateTriple() calls remove() it can set toModify to the

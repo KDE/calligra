@@ -69,7 +69,7 @@ bool KPrPredefinedAnimationsLoader::populateMainView(QListWidget *view)
     if (m_mainItemsCollection.isEmpty()) {
         return false;
     }
-    foreach(QListWidgetItem *item, m_mainItemsCollection) {
+    foreach (QListWidgetItem *item, m_mainItemsCollection) {
         QListWidgetItem *collectionChooserItem = new QListWidgetItem(item->icon(), item->text());
         collectionChooserItem->setData(Qt::UserRole, item->data(Qt::UserRole).toString());
         view->addItem(collectionChooserItem);
@@ -80,9 +80,8 @@ bool KPrPredefinedAnimationsLoader::populateMainView(QListWidget *view)
 KPrCollectionItemModel *KPrPredefinedAnimationsLoader::modelById(const QString &id)
 {
     if (m_modelMap.contains(id)) {
-       return m_modelMap[id];
-    }
-    else {
+        return m_modelMap[id];
+    } else {
         kWarning(31000) << "Didn't find a model with id ==" << id;
     }
     return 0;
@@ -114,7 +113,7 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
 
     QMap<QString, QList<KPrCollectionItem> > subModelList;
     int row = -1;
-    foreach(KPrShapeAnimation *animation, m_animations) {
+    foreach (KPrShapeAnimation *animation, m_animations) {
         row++;
         bool isSubItem = true;
         QString animId = animation->id();
@@ -147,34 +146,27 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
         temp.animationContext = m_animationContext.value(row);
         if (animation->presetClass() == KPrShapeAnimation::MotionPath) {
             temp.icon = loadMotionPathIcon(temp.animationContext);
-        }
-        else {
+        } else {
             temp.icon = loadAnimationIcon(temp.name);
         }
 
         if (animation->presetClass() == KPrShapeAnimation::Entrance) {
             entranceList.append(temp);
-        }
-        else if (animation->presetClass() == KPrShapeAnimation::Exit) {
+        } else if (animation->presetClass() == KPrShapeAnimation::Exit) {
             exitList.append(temp);
-        }
-        else if (animation->presetClass() == KPrShapeAnimation::Emphasis) {
+        } else if (animation->presetClass() == KPrShapeAnimation::Emphasis) {
             emphasisList.append(temp);
-        }
-        else if (animation->presetClass() == KPrShapeAnimation::Custom) {
+        } else if (animation->presetClass() == KPrShapeAnimation::Custom) {
             customList.append(temp);
-        }
-        else if (animation->presetClass() == KPrShapeAnimation::MotionPath) {
+        } else if (animation->presetClass() == KPrShapeAnimation::MotionPath) {
             motion_PathList.append(temp);
-        }
-        else if (animation->presetClass() == KPrShapeAnimation::OleAction) {
+        } else if (animation->presetClass() == KPrShapeAnimation::OleAction) {
             ole_ActionList.append(temp);
-        }
-        else if (animation->presetClass() == KPrShapeAnimation::MediaCall) {
+        } else if (animation->presetClass() == KPrShapeAnimation::MediaCall) {
             media_CallList.append(temp);
         }
     }
-    KPrCollectionItemModel* model = new KPrCollectionItemModel(this);
+    KPrCollectionItemModel *model = new KPrCollectionItemModel(this);
     model->setAnimationClassList(entranceList);
     addCollection("entrance", i18n("Entrance"), model);
 
@@ -229,7 +221,7 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
     KoShapeLoadingContext shapeContext(context, 0);
     KoXmlDocument doc;
 
-    const KStandardDirs* dirs = KGlobal::activeComponent().dirs();
+    const KStandardDirs *dirs = KGlobal::activeComponent().dirs();
     const QString filePath = dirs->findResource("data", "stage/animations/animations.xml");
     if (!filePath.isEmpty()) {
         QFile file(filePath);
@@ -238,11 +230,11 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
         if (KoOdfReadStore::loadAndParse(&file, doc, errorMessage, filePath)) {
             const KoXmlElement docElement  = doc.documentElement();
             KoXmlElement animationElement;
-            forEachElement(animationElement, docElement) {
+            forEachElement (animationElement, docElement) {
                 KoXmlElement parAnimation;
-                forEachElement(parAnimation, animationElement) {
+                forEachElement (parAnimation, animationElement) {
                     KoXmlElement animation;
-                    forEachElement(animation, parAnimation) {
+                    forEachElement (animation, parAnimation) {
                         KPrShapeAnimation *shapeAnimation = 0;
                         shapeAnimation = loadOdfShapeAnimation(animation, shapeContext);
                         if (shapeAnimation) {
@@ -253,12 +245,10 @@ void KPrPredefinedAnimationsLoader::readDefaultAnimations()
                     }
                 }
             }
-        }
-        else {
+        } else {
             kWarning(30006) << "reading of" << filePath << "failed:" << errorMessage;
         }
-    }
-    else {
+    } else {
         kDebug(30006) << "animations.xml not found";
     }
 }
@@ -306,8 +296,7 @@ QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString mainId, const
     QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
     if (!path.isNull()) {
         icon = KIcon(name);
-    }
-    else {
+    } else {
         // If an specific animation icon does not exist then return a generic
         // unrecognized animation icon
         icon = koIcon("unrecognized_animation");
@@ -319,7 +308,7 @@ QIcon KPrPredefinedAnimationsLoader::loadMotionPathIcon(const KoXmlElement &elem
 {
     KoXmlElement e;
     QString path;
-    forEachElement(e, element) {
+    forEachElement (e, element) {
         path = e.attributeNS(KoXmlNS::svg, "path");
         if (!path.isEmpty()) {
             break;
@@ -361,7 +350,7 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
     KPrShapeAnimation *shapeAnimation = 0;
     // The shape info and create a KPrShapeAnimation. If there is
     KoXmlElement e;
-    forEachElement(e, element) {
+    forEachElement (e, element) {
         if (shapeAnimation == 0) {
             KoShape *shape = animShape;
             QTextBlockUserData *textBlockData = 0;
@@ -382,23 +371,17 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
         }
         if (presetClass == "entrance") {
             shapeAnimation->setPresetClass(KPrShapeAnimation::Entrance);
-        }
-        else if (presetClass == "exit") {
+        } else if (presetClass == "exit") {
             shapeAnimation->setPresetClass(KPrShapeAnimation::Exit);
-        }
-        else if (presetClass == "emphasis") {
+        } else if (presetClass == "emphasis") {
             shapeAnimation->setPresetClass(KPrShapeAnimation::Emphasis);
-        }
-        else if (presetClass == "motion-path") {
+        } else if (presetClass == "motion-path") {
             shapeAnimation->setPresetClass(KPrShapeAnimation::MotionPath);
-        }
-        else if (presetClass == "ole-action") {
+        } else if (presetClass == "ole-action") {
             shapeAnimation->setPresetClass(KPrShapeAnimation::OleAction);
-        }
-        else if (presetClass == "media-call") {
+        } else if (presetClass == "media-call") {
             shapeAnimation->setPresetClass(KPrShapeAnimation::MediaCall);
-        }
-        else{
+        } else {
             shapeAnimation->setPresetClass(KPrShapeAnimation::None);
         }
         if (!animationId.isEmpty()) {
@@ -423,8 +406,7 @@ bool KPrPredefinedAnimationsLoader::addCollection(const QString &id, const QStri
     QString path = KIconLoader::global()->iconPath(iconName, KIconLoader::Toolbar, true);
     if (!path.isNull()) {
         icon = KIcon(iconName);
-    }
-    else {
+    } else {
         icon = koIcon("unrecognized_animation");
     }
 

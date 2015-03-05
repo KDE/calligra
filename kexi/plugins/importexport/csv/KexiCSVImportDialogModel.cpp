@@ -36,7 +36,7 @@ class KexiCSVImportDialogModel::Private
 {
 public:
     Private()
-     : firstRowForFieldNames(true)
+        : firstRowForFieldNames(true)
     {
     }
     bool firstRowForFieldNames;
@@ -80,7 +80,7 @@ QVariant KexiCSVImportDialogModel::data(const QModelIndex &index, int role) cons
 }
 
 QVariant KexiCSVImportDialogModel::headerData(int section, Qt::Orientation orientation,
-                                              int role) const
+        int role) const
 {
     QVariant value = QStandardItemModel::headerData(section, orientation, role);
     if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
@@ -105,7 +105,7 @@ bool KexiCSVImportDialogModel::setData(const QModelIndex &index, const QVariant 
 
 void KexiCSVImportDialogModel::setColumnCount(int col)
 {
-    if (d->columnNames.size()<col) {
+    if (d->columnNames.size() < col) {
         d->columnNames.resize(col);
     }
     QStandardItemModel::setColumnCount(col);

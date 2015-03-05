@@ -24,13 +24,13 @@
 
 #include <KoTextEditingRegistry.h>
 
-K_PLUGIN_FACTORY( ChangecasePluginFactory, registerPlugin<ChangecasePlugin>(); )
-K_EXPORT_PLUGIN( ChangecasePluginFactory("calligra_textediting_changecase") )
+K_PLUGIN_FACTORY(ChangecasePluginFactory, registerPlugin<ChangecasePlugin>();)
+K_EXPORT_PLUGIN(ChangecasePluginFactory("calligra_textediting_changecase"))
 
-ChangecasePlugin::ChangecasePlugin( QObject *parent, const QVariantList& )
+ChangecasePlugin::ChangecasePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoTextEditingRegistry::instance()->add( new ChangecaseFactory());
+    KoTextEditingRegistry::instance()->add(new ChangecaseFactory());
 }
 
 #include <ChangecasePlugin.moc>

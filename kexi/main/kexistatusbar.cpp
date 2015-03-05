@@ -42,21 +42,21 @@ class Menu : public KMenu
 public:
     explicit Menu(QWidget *parent) : KMenu(parent) {}
 protected:
-    void mouseReleaseEvent(QMouseEvent* e);
+    void mouseReleaseEvent(QMouseEvent *e);
 };
 
-void Menu::mouseReleaseEvent(QMouseEvent* e)
+void Menu::mouseReleaseEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
-    if (activeAction())
+    if (activeAction()) {
         activeAction()->trigger();
+    }
 }
 
-
 KexiStatusBar::KexiStatusBar(QWidget *parent)
-        : KStatusBar(parent)
+    : KStatusBar(parent)
 #ifdef KexiStatusBar_KTEXTEDITOR_USED
-        , m_cursorIface(0)
+    , m_cursorIface(0)
 #endif
 {
     setObjectName("KexiStatusBar");

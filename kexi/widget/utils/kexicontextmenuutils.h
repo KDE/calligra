@@ -35,8 +35,8 @@ class KEXIGUIUTILS_EXPORT KexiContextMenuUtils
 public:
     /*! Updates title for context menu.
      \return true if the title has been updated. */
-    static bool updateTitle(KMenu *menu, const QString& objectName,
-                            const QString& objectTypeName, const QString& iconName);
+    static bool updateTitle(KMenu *menu, const QString &objectName,
+                            const QString &objectTypeName, const QString &iconName);
 };
 
 //! @short A context menu used for images within form and table views
@@ -55,13 +55,13 @@ public:
     explicit KexiImageContextMenu(QWidget *parent = 0);
     virtual ~KexiImageContextMenu();
 
-    KActionCollection* actionCollection() const;
+    KActionCollection *actionCollection() const;
 
     /*! Updates title for context menu.
      Used in KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu) and KexiDBImageBox.
      \return true if the title has been updated. */
-    static bool updateTitle(KMenu *menu, const QString& title,
-                            const QString& iconName = QString());
+    static bool updateTitle(KMenu *menu, const QString &title,
+                            const QString &iconName = QString());
 
 public Q_SLOTS:
     void updateActionsAvailability();
@@ -77,7 +77,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     //! Emitted when actions availability should be performed. Just connect this signal
     //! to a slot and set \a valueIsNull and \a valueIsReadOnly.
-    void updateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+    void updateActionsAvailabilityRequested(bool &valueIsNull, bool &valueIsReadOnly);
 
     /*! Emitted before "insertFromFile" action was requested. */
     void insertFromFileRequested(const KUrl &url);
@@ -85,10 +85,10 @@ Q_SIGNALS:
     /*! Emitted before "saveAs" action was requested.
      You should fill \a origFilename, \a fileExtension and \a dataIsEmpty values.
      If \a dataIsEmpty is false, saving will be cancelled. */
-    void aboutToSaveAsRequested(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
+    void aboutToSaveAsRequested(QString &origFilename, QString &fileExtension, bool &dataIsEmpty);
 
     //! Emitted when "saveAs" action was requested
-    void saveAsRequested(const QString& fileName);
+    void saveAsRequested(const QString &fileName);
 
     //! Emitted when "cut" action was requested
     void cutRequested();
@@ -107,7 +107,7 @@ Q_SIGNALS:
 
 protected:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

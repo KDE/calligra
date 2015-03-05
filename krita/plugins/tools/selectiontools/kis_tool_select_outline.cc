@@ -51,12 +51,11 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 
-
-KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
-        : KisToolSelectBase(canvas,
-                            KisCursor::load("tool_outline_selection_cursor.png", 5, 5),
-                            i18n("Outline Selection")),
-          m_paintPath(new QPainterPath())
+KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase *canvas)
+    : KisToolSelectBase(canvas,
+                        KisCursor::load("tool_outline_selection_cursor.png", 5, 5),
+                        i18n("Outline Selection")),
+      m_paintPath(new QPainterPath())
 {
 }
 
@@ -95,7 +94,7 @@ void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->updateCanvas();
 
@@ -125,14 +124,15 @@ void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
             helper.selectPixelSelection(tmpSel, selectionAction());
         } else {
 
-            KoPathShape* path = new KoPathShape();
+            KoPathShape *path = new KoPathShape();
             path->setShapeId(KoPathShapeId);
 
             QTransform resolutionMatrix;
             resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
             path->moveTo(resolutionMatrix.map(m_points[0]));
-            for (int i = 1; i < m_points.count(); i++)
+            for (int i = 1; i < m_points.count(); i++) {
                 path->lineTo(resolutionMatrix.map(m_points[i]));
+            }
             path->close();
             path->normalize();
 
@@ -146,12 +146,12 @@ void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
     m_paintPath = new QPainterPath();
 }
 
-void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
+void KisToolSelectOutline::paint(QPainter &gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
     if (mode() == KisTool::PAINT_MODE && !m_points.isEmpty()) {
-            paintToolOutline(&gc, *m_paintPath);
+        paintToolOutline(&gc, *m_paintPath);
     }
 }
 
@@ -171,7 +171,7 @@ void KisToolSelectOutline::updateFeedback()
 
 void KisToolSelectOutline::deactivate()
 {
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->updateCanvas();
 

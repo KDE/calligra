@@ -67,7 +67,7 @@ public:
     void movedFocus(QWidget *from, QWidget *to);
     void updateCursor(const QCursor &cursor);
     void switchBackRequested();
-    void selectionChanged(QList<KoShape*> shapes);
+    void selectionChanged(QList<KoShape *> shapes);
     void currentLayerChanged(const KoShapeLayer *layer);
     void updateToolForProxy();
     void switchToolTemporaryRequested(const QString &id);
@@ -90,14 +90,13 @@ public:
 
     void switchToolByShortcut(QKeyEvent *event);
 
-
     KoToolManager *q;
 
-    QList<ToolHelper*> tools; // list of all available tools via their factories.
+    QList<ToolHelper *> tools; // list of all available tools via their factories.
 
-    QHash<KoToolBase*, int> uniqueToolIds; // for the changedTool signal
-    QHash<KoCanvasController*, QList<CanvasData*> > canvasses;
-    QHash<KoCanvasBase*, KoToolProxy*> proxies;
+    QHash<KoToolBase *, int> uniqueToolIds; // for the changedTool signal
+    QHash<KoCanvasController *, QList<CanvasData *> > canvasses;
+    QHash<KoCanvasBase *, KoToolProxy *> proxies;
 
     CanvasData *canvasData; // data about the active canvas.
 
@@ -124,7 +123,8 @@ public:
     /// wrapper around KoToolFactoryBase::priority();
     int priority() const;
     KoToolBase *createTool(KoCanvasBase *canvas) const;
-    int uniqueId() const {
+    int uniqueId() const
+    {
         return m_uniqueId;
     }
     /// wrapper around KoToolFactoryBase::shortcut()
@@ -154,7 +154,7 @@ public Q_SLOTS:
     void selectionChanged();
 
 Q_SIGNALS:
-    void selectionChanged(QList<KoShape*> shape);
+    void selectionChanged(QList<KoShape *> shape);
 
 private:
     KoShapeManager *m_shapeManager;
@@ -166,14 +166,14 @@ class ToolAction : public KAction
 {
     Q_OBJECT
 public:
-    ToolAction(KoToolManager* toolManager, QString id, QString name, QObject *parent);
+    ToolAction(KoToolManager *toolManager, QString id, QString name, QObject *parent);
     virtual ~ToolAction();
 
 private Q_SLOTS:
     void actionTriggered();
 
 private:
-    KoToolManager* m_toolManager;
+    KoToolManager *m_toolManager;
     QString m_toolID;
 };
 

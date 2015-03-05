@@ -21,28 +21,31 @@
 
 #include <KoUpdater.h>
 
-class KisProgressUpdateHelper {
+class KisProgressUpdateHelper
+{
 public:
     KisProgressUpdateHelper(KoUpdaterPtr progressUpdater, int portion, int numSteps)
         : m_progressUpdater(progressUpdater),
           m_portion(portion),
           m_currentStep(0),
           m_numSteps(numSteps)
-     {
-         if (m_progressUpdater) {
-             m_baseProgress = m_progressUpdater->progress();
-         }
-     }
+    {
+        if (m_progressUpdater) {
+            m_baseProgress = m_progressUpdater->progress();
+        }
+    }
 
-    ~KisProgressUpdateHelper() {
+    ~KisProgressUpdateHelper()
+    {
         if (m_progressUpdater) {
             m_progressUpdater->setProgress(m_baseProgress + m_portion);
         }
     }
 
-    void step() {
+    void step()
+    {
         int localProgress = m_numSteps ?
-            m_portion * (++m_currentStep) / m_numSteps : m_portion;
+                            m_portion * (++m_currentStep) / m_numSteps : m_portion;
 
         if (m_progressUpdater) {
             m_progressUpdater->setProgress(m_baseProgress + localProgress);

@@ -24,7 +24,6 @@
 
 #include "kis_mask_generator.h"
 
-
 /**
  * This mask generator uses a Gaussian-blurred rectangle
  */
@@ -41,13 +40,14 @@ public:
 
 private:
 
-    qreal norme(qreal a, qreal b) const {
-        return a*a + b*b;
+    qreal norme(qreal a, qreal b) const
+    {
+        return a * a + b * b;
     }
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

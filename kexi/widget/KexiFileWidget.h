@@ -24,7 +24,6 @@
 #include <kfilewidget.h>
 #include <kexi_export.h>
 
-
 //! @short Widget for opening/saving files supported by Kexi
 /*! For simplicity, initially the widget has hidden the preview pane. */
 class KEXIEXTWIDGETS_EXPORT KexiFileWidget : public KFileWidget
@@ -55,7 +54,7 @@ public:
     \a parent is used as a parent of the KMessageBox.
     \return true if \a filePath file does not exists or user has agreed on overwriting,
     false in user do not want to overwrite. */
-    static bool askForOverwriting(const QString& filePath, QWidget *parent = 0);
+    static bool askForOverwriting(const QString &filePath, QWidget *parent = 0);
 
     using KFileWidget::setMode;
 
@@ -64,25 +63,25 @@ public:
     QSet<QString> additionalFilters() const;
 
     //! Sets additional filters list, e.g. "text/x-csv"
-    void setAdditionalFilters(const QSet<QString>& mimeTypes);
+    void setAdditionalFilters(const QSet<QString> &mimeTypes);
 
     QSet<QString> excludedFilters() const;
 
     //! Excludes filters list
-    void setExcludedFilters(const QSet<QString>& mimeTypes);
+    void setExcludedFilters(const QSet<QString> &mimeTypes);
 
     // KUrl currentURL();
     virtual QString highlightedFile() const;
 
     //! just sets locationWidget()->setCurrentText(fn)
     //! (and something similar on win32)
-    void setLocationText(const QString& fn);
+    void setLocationText(const QString &fn);
 
     //! Sets default extension which will be added after accepting
     //! if user didn't provided one. This method is usable when there is
     //! more than one filter so there is no rule what extension should be selected
     //! (by default first one is selected).
-    void setDefaultExtension(const QString& ext);
+    void setDefaultExtension(const QString &ext);
 
     /*! \return true if the current URL meets requies constraints
     (i.e. exists or doesn't exist);
@@ -94,7 +93,7 @@ public:
     void setConfirmOverwrites(bool set);
 
 public Q_SLOTS:
-    virtual void showEvent(QShowEvent * event);
+    virtual void showEvent(QShowEvent *event);
     virtual void focusInEvent(QFocusEvent *);
 
     //! Typing a file that doesn't exist closes the file dialog, we have to
@@ -109,13 +108,13 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     virtual void reject();
-    void slotExistingFileHighlighted(const QString& fileName);
+    void slotExistingFileHighlighted(const QString &fileName);
 
 private:
     void updateFilters();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiFileWidget::Mode)

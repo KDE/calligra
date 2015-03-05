@@ -36,35 +36,39 @@ void TestFinancialFunctions::initTestCase()
 #define CHECK_EVAL_SHORT(x,y) QCOMPARE(TestDouble(x,y,11),y)
 #define CHECK_EVAL_EQUAL(x,y) QCOMPARE(TestSimple(x),y)
 
-static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
+static Value TestDouble(const QString &formula, const Value &v2, int accuracy)
 {
     double epsilon = DBL_EPSILON * pow(10.0, (double)(accuracy));
 
     Formula f;
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
     bool res = fabs(v2.asFloat() - result.asFloat()) < epsilon;
 
-    if (!res)
+    if (!res) {
         kDebug(36002) << "check failed -->" << "Epsilon =" << epsilon << "" << (double)v2.asFloat() << " to" << (double)result.asFloat() << "  diff =" << (double)(v2.asFloat() - result.asFloat());
+    }
 //   else
 //     kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
-    if (res)
+    if (res) {
         return v2;
-    else
+    } else {
         return result;
+    }
 }
 
-static Value TestSimple(const QString& formula)
+static Value TestSimple(const QString &formula)
 {
     Formula f;
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     return f.eval();
 }
@@ -108,27 +112,27 @@ void TestFinancialFunctions::testACCRINTM()
 void TestFinancialFunctions::testAMORDEGRC()
 {
     // Excel Formen und Funktionen
-    CHECK_EVAL("AMORDEGRC( 2400; 34199; 34334; 300; 1; 0.15; 1 )" , Value(775));
+    CHECK_EVAL("AMORDEGRC( 2400; 34199; 34334; 300; 1; 0.15; 1 )", Value(775));
 
     // bettersolution.com
-    CHECK_EVAL("AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 1; 0.15; 1 )" , Value(11738));     //
-    CHECK_EVAL("AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 2; 0.15; 1 )" , Value(7336));      //
-    CHECK_EVAL("AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 3; 0.15; 1 )" , Value(4585));      //
-    CHECK_EVAL("AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 4; 0.15; 1 )" , Value(2866));      //
+    CHECK_EVAL("AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 1; 0.15; 1 )", Value(11738));     //
+    CHECK_EVAL("AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 2; 0.15; 1 )", Value(7336));      //
+    CHECK_EVAL("AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 3; 0.15; 1 )", Value(4585));      //
+    CHECK_EVAL("AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 4; 0.15; 1 )", Value(2866));      //
 //   CHECK_EVAL_SHORT( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 5; 0.15; 1 )" , Value(  2388 ) ); // TODO check KSpread -> 1791
 
     // odf tests
-    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )"  , Value(228));     // the first period (10 years life time)
-    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 8; 0.1; 1 )"  , Value(26));      // (specs. 52) the period before last (10 years)
-    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 9; 0.1; 1 )"  , Value(19));      // (specs. 52) the last period (10 years life time)
-    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 10; 0.1; 1 )" , Value(15));      // (specs. 15) - beyond life time (10 years life time)
-    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.25; 1 )" , Value(342));     // the first period (4 years life time)
-    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 0 )"  , Value(229));     // leap year, US (NASD) 30/360
-    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )"  , Value(228));     // leap year, actual/actual
-    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 2 )"  , Value(231));     // (specs 232) leap year, actual/360
-    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 3 )"  , Value(228));     // leap year, actual/365
-    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 4 )"  , Value(228));     // leap year, European 30/360
-    
+    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )", Value(228));     // the first period (10 years life time)
+    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 8; 0.1; 1 )", Value(26));      // (specs. 52) the period before last (10 years)
+    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 9; 0.1; 1 )", Value(19));      // (specs. 52) the last period (10 years life time)
+    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 10; 0.1; 1 )", Value(15));      // (specs. 15) - beyond life time (10 years life time)
+    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.25; 1 )", Value(342));     // the first period (4 years life time)
+    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 0 )", Value(229));     // leap year, US (NASD) 30/360
+    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )", Value(228));     // leap year, actual/actual
+    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 2 )", Value(231));     // (specs 232) leap year, actual/360
+    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 3 )", Value(228));     // leap year, actual/365
+    CHECK_EVAL("AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 4 )", Value(228));     // leap year, European 30/360
+
     // alternate function name
     CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETAMORDEGRC(2400;34199;34334;300;1;0.15;1)", Value(775));
 }
@@ -136,8 +140,8 @@ void TestFinancialFunctions::testAMORDEGRC()
 // AMORLINC
 void TestFinancialFunctions::testAMORLINC()
 {
-    CHECK_EVAL_SHORT("AMORLINC( 1000; \"2004-02-01\"; \"2004-12-31\"; 10; 0; 0.1; 1 )" , Value(91.2568306011));     // the first period (10 years life time)
-    CHECK_EVAL_SHORT("AMORLINC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 3 )" , Value(91.2328767123));     // leap year, actual/365
+    CHECK_EVAL_SHORT("AMORLINC( 1000; \"2004-02-01\"; \"2004-12-31\"; 10; 0; 0.1; 1 )", Value(91.2568306011));     // the first period (10 years life time)
+    CHECK_EVAL_SHORT("AMORLINC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 3 )", Value(91.2328767123));     // leap year, actual/365
     CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETAMORLINC(1000;\"2004-02-01\";\"2004-12-31\";10;0;0.1;1)", Value(91.2568306011));
 }
 
@@ -401,69 +405,69 @@ void TestFinancialFunctions::testDISC()
 void TestFinancialFunctions::testDOLLARDE()
 {
     // http://publib.boulder.ibm.com/infocenter/iadthelp/v7r0/index.jsp?topic=/com.businessobjects.integration.eclipse.designer.doc/designer/Functions68.html
-    CHECK_EVAL_SHORT("DOLLARDE(   1.1 ; 8)" , Value(1.125));          //
-    CHECK_EVAL_SHORT("DOLLARDE(   2.13;16)" , Value(2.8125));         //
-    CHECK_EVAL_SHORT("DOLLARDE(   2.45;16)" , Value(4.8125));         //
-    CHECK_EVAL_SHORT("DOLLARDE(   1.16; 8)" , Value(1.2));            //
+    CHECK_EVAL_SHORT("DOLLARDE(   1.1 ; 8)", Value(1.125));          //
+    CHECK_EVAL_SHORT("DOLLARDE(   2.13;16)", Value(2.8125));         //
+    CHECK_EVAL_SHORT("DOLLARDE(   2.45;16)", Value(4.8125));         //
+    CHECK_EVAL_SHORT("DOLLARDE(   1.16; 8)", Value(1.2));            //
 
     // http://www.bettersolutions.com/excel/EDH113/LR849116511.htm
-    CHECK_EVAL_SHORT("DOLLARDE(   1.1 ; 2)" , Value(1.5));            //
-    CHECK_EVAL_SHORT("DOLLARDE(   1.25; 5)" , Value(1.5));            //
-    CHECK_EVAL_SHORT("DOLLARDE(   5.08; 4)" , Value(5.2));            //
-    CHECK_EVAL_SHORT("DOLLARDE(   5.24; 4)" , Value(5.6));            //
-    CHECK_EVAL_SHORT("DOLLARDE( 100.24; 4)" , Value(100.6));          //
+    CHECK_EVAL_SHORT("DOLLARDE(   1.1 ; 2)", Value(1.5));            //
+    CHECK_EVAL_SHORT("DOLLARDE(   1.25; 5)", Value(1.5));            //
+    CHECK_EVAL_SHORT("DOLLARDE(   5.08; 4)", Value(5.2));            //
+    CHECK_EVAL_SHORT("DOLLARDE(   5.24; 4)", Value(5.6));            //
+    CHECK_EVAL_SHORT("DOLLARDE( 100.24; 4)", Value(100.6));          //
     CHECK_EVAL_SHORT("DOLLARFR(DOLLARDE( 101.2; 4);4)", Value(101.2));      // for- and backward
 
     // ODF
-    CHECK_EVAL_SHORT("DOLLARDE(   1.1; 4)"  , Value(1.25));           //
-    CHECK_EVAL_SHORT("DOLLARDE(   1.1; 3)"  , Value(1.333333));       //
-    CHECK_EVAL_SHORT("DOLLARDE(  -1.1;10)"  , Value(-1.1));           //
-    CHECK_EVAL_SHORT("DOLLARDE(   1.0; 5)"  , Value(1));              //
-    CHECK_EVAL_SHORT("DOLLARDE(   1.1;10)"  , Value(1.1));            //
-    CHECK_EVAL_SHORT("DOLLARDE(   1.1; 0)"  , Value::errorVALUE());   //
+    CHECK_EVAL_SHORT("DOLLARDE(   1.1; 4)", Value(1.25));           //
+    CHECK_EVAL_SHORT("DOLLARDE(   1.1; 3)", Value(1.333333));       //
+    CHECK_EVAL_SHORT("DOLLARDE(  -1.1;10)", Value(-1.1));           //
+    CHECK_EVAL_SHORT("DOLLARDE(   1.0; 5)", Value(1));              //
+    CHECK_EVAL_SHORT("DOLLARDE(   1.1;10)", Value(1.1));            //
+    CHECK_EVAL_SHORT("DOLLARDE(   1.1; 0)", Value::errorVALUE());   //
 
     // alternate function name
-    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDOLLARDE(1.1;8)" , Value(1.125));
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDOLLARDE(1.1;8)", Value(1.125));
 }
 
 // DOLLARFR
 void TestFinancialFunctions::testDOLLARFR()
 {
     // my tests
-    CHECK_EVAL_SHORT("DOLLARFR(    1.1 ;  9)" , Value(1.09));          //
-    CHECK_EVAL_SHORT("DOLLARFR(    1.1 ; 11)" , Value(1.011));         //
-    CHECK_EVAL_SHORT("DOLLARFR(    1.1 ; 10)" , Value(1.1));           //
+    CHECK_EVAL_SHORT("DOLLARFR(    1.1 ;  9)", Value(1.09));          //
+    CHECK_EVAL_SHORT("DOLLARFR(    1.1 ; 11)", Value(1.011));         //
+    CHECK_EVAL_SHORT("DOLLARFR(    1.1 ; 10)", Value(1.1));           //
 
     // http://www.bettersolutions.com/excel/EDH113/QR810212321.htm
-    CHECK_EVAL_SHORT("DOLLARFR(    1.125 ; 8)" , Value(1.1));          //
-    CHECK_EVAL_SHORT("DOLLARFR(    1.5   ; 2)" , Value(1.1));          //
-    CHECK_EVAL_SHORT("DOLLARFR(    1.5   ; 8)" , Value(1.4));          //
-    CHECK_EVAL_SHORT("DOLLARFR(    1.5   ; 5)" , Value(1.25));         //
+    CHECK_EVAL_SHORT("DOLLARFR(    1.125 ; 8)", Value(1.1));          //
+    CHECK_EVAL_SHORT("DOLLARFR(    1.5   ; 2)", Value(1.1));          //
+    CHECK_EVAL_SHORT("DOLLARFR(    1.5   ; 8)", Value(1.4));          //
+    CHECK_EVAL_SHORT("DOLLARFR(    1.5   ; 5)", Value(1.25));         //
 
     // ODF
-    CHECK_EVAL_SHORT("DOLLARFR(    1.1 ;10)" , Value(1.1));            //
-    CHECK_EVAL_SHORT("DOLLARFR(    1.25; 4)" , Value(1.1));            //
-    CHECK_EVAL_SHORT("DOLLARFR(-1.33333; 3)" , Value(-1.099999));      // ODF specs error (1.1) must be -1.1
-    CHECK_EVAL_SHORT("DOLLARFR(     1.0; 5)" , Value(1));              //
-    CHECK_EVAL_SHORT("DOLLARFR(     1.1; 0)" , Value::errorVALUE());   //
-    
+    CHECK_EVAL_SHORT("DOLLARFR(    1.1 ;10)", Value(1.1));            //
+    CHECK_EVAL_SHORT("DOLLARFR(    1.25; 4)", Value(1.1));            //
+    CHECK_EVAL_SHORT("DOLLARFR(-1.33333; 3)", Value(-1.099999));      // ODF specs error (1.1) must be -1.1
+    CHECK_EVAL_SHORT("DOLLARFR(     1.0; 5)", Value(1));              //
+    CHECK_EVAL_SHORT("DOLLARFR(     1.1; 0)", Value::errorVALUE());   //
+
     // alternate function name
-    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDOLLARFR(    1.1 ;  9)" , Value(1.09));
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDOLLARFR(    1.1 ;  9)", Value(1.09));
 }
 
 // DURATION
 void TestFinancialFunctions::testDURATION()
 {
     // kspread
-    CHECK_EVAL("DURATION( 0.1; 1000; 2000 )" , Value(7.2725408973));     //
+    CHECK_EVAL("DURATION( 0.1; 1000; 2000 )", Value(7.2725408973));     //
     // alternate function name
-    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDURATION( 0.1; 1000; 2000 )" , Value(7.2725408973));
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDURATION( 0.1; 1000; 2000 )", Value(7.2725408973));
 }
 
 // DURATION_ADD
 void TestFinancialFunctions::testDURATION_ADD()
 {
-    CHECK_EVAL("DURATION_ADD( \"1998-01-01\";  \"2006-01-01\"; 0.08; 0.09; 2; 1 )" , Value(5.9937749555));     //
+    CHECK_EVAL("DURATION_ADD( \"1998-01-01\";  \"2006-01-01\"; 0.08; 0.09; 2; 1 )", Value(5.9937749555));     //
 }
 
 // EFFECT
@@ -560,195 +564,195 @@ void TestFinancialFunctions::testEUROCONVERT()
     CHECK_EVAL("EUROCONVERT(1;\"PTE\";\"pte\")", Value(1.0));
 
     // all other combinations
-    CHECK_EVAL("EUROCONVERT(   2; \"ATS\"; \"bef\" )", Value(2*40.3399 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(   3; \"ATS\"; \"dem\" )", Value(3*1.95583 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(   4; \"ATS\"; \"esp\" )", Value(4*166.386 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(   5; \"ATS\"; \"eur\" )", Value(5*1 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(   6; \"ATS\"; \"fim\" )", Value(6*5.94573 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(   7; \"ATS\"; \"frf\" )", Value(7*6.55957 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(   8; \"ATS\"; \"grd\" )", Value(8*340.75 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(   9; \"ATS\"; \"iep\" )", Value(9*0.787564 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(  10; \"ATS\"; \"itl\" )", Value(10*1936.27 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(  11; \"ATS\"; \"lux\" )", Value(11*40.3399 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(  12; \"ATS\"; \"nlg\" )", Value(12*2.20371 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(  13; \"ATS\"; \"pte\" )", Value(13*200.482 / 13.7603));
-    CHECK_EVAL("EUROCONVERT(  14; \"BEF\"; \"ats\" )", Value(14*13.7603 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  15; \"BEF\"; \"dem\" )", Value(15*1.95583 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  16; \"BEF\"; \"esp\" )", Value(16*166.386 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  17; \"BEF\"; \"eur\" )", Value(17*1 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  18; \"BEF\"; \"fim\" )", Value(18*5.94573 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  19; \"BEF\"; \"frf\" )", Value(19*6.55957 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  20; \"BEF\"; \"grd\" )", Value(20*340.75 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  21; \"BEF\"; \"iep\" )", Value(21*0.787564 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  22; \"BEF\"; \"itl\" )", Value(22*1936.27 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  23; \"BEF\"; \"lux\" )", Value(23*40.3399 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  24; \"BEF\"; \"nlg\" )", Value(24*2.20371 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  25; \"BEF\"; \"pte\" )", Value(25*200.482 / 40.3399));
-    CHECK_EVAL("EUROCONVERT(  26; \"DEM\"; \"ats\" )", Value(26*13.7603 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  27; \"DEM\"; \"bef\" )", Value(27*40.3399 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  28; \"DEM\"; \"esp\" )", Value(28*166.386 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  29; \"DEM\"; \"eur\" )", Value(29*1 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  30; \"DEM\"; \"fim\" )", Value(30*5.94573 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  31; \"DEM\"; \"frf\" )", Value(31*6.55957 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  32; \"DEM\"; \"grd\" )", Value(32*340.75 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  33; \"DEM\"; \"iep\" )", Value(33*0.787564 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  34; \"DEM\"; \"itl\" )", Value(34*1936.27 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  35; \"DEM\"; \"lux\" )", Value(35*40.3399 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  36; \"DEM\"; \"nlg\" )", Value(36*2.20371 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  37; \"DEM\"; \"pte\" )", Value(37*200.482 / 1.95583));
-    CHECK_EVAL("EUROCONVERT(  38; \"ESP\"; \"ats\" )", Value(38*13.7603 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  39; \"ESP\"; \"bef\" )", Value(39*40.3399 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  40; \"ESP\"; \"dem\" )", Value(40*1.95583 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  41; \"ESP\"; \"eur\" )", Value(41*1 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  42; \"ESP\"; \"fim\" )", Value(42*5.94573 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  43; \"ESP\"; \"frf\" )", Value(43*6.55957 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  44; \"ESP\"; \"grd\" )", Value(44*340.75 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  45; \"ESP\"; \"iep\" )", Value(45*0.787564 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  46; \"ESP\"; \"itl\" )", Value(46*1936.27 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  47; \"ESP\"; \"lux\" )", Value(47*40.3399 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  48; \"ESP\"; \"nlg\" )", Value(48*2.20371 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  49; \"ESP\"; \"pte\" )", Value(49*200.482 / 166.386));
-    CHECK_EVAL("EUROCONVERT(  50; \"EUR\"; \"ats\" )", Value(50*13.7603 / 1));
-    CHECK_EVAL("EUROCONVERT(  51; \"EUR\"; \"bef\" )", Value(51*40.3399 / 1));
-    CHECK_EVAL("EUROCONVERT(  52; \"EUR\"; \"dem\" )", Value(52*1.95583 / 1));
-    CHECK_EVAL("EUROCONVERT(  53; \"EUR\"; \"esp\" )", Value(53*166.386 / 1));
-    CHECK_EVAL("EUROCONVERT(  54; \"EUR\"; \"fim\" )", Value(54*5.94573 / 1));
-    CHECK_EVAL("EUROCONVERT(  55; \"EUR\"; \"frf\" )", Value(55*6.55957 / 1));
-    CHECK_EVAL("EUROCONVERT(  56; \"EUR\"; \"grd\" )", Value(56*340.75 / 1));
-    CHECK_EVAL("EUROCONVERT(  57; \"EUR\"; \"iep\" )", Value(57*0.787564 / 1));
-    CHECK_EVAL("EUROCONVERT(  58; \"EUR\"; \"itl\" )", Value(58*1936.27 / 1));
-    CHECK_EVAL("EUROCONVERT(  59; \"EUR\"; \"lux\" )", Value(59*40.3399 / 1));
-    CHECK_EVAL("EUROCONVERT(  60; \"EUR\"; \"nlg\" )", Value(60*2.20371 / 1));
-    CHECK_EVAL("EUROCONVERT(  61; \"EUR\"; \"pte\" )", Value(61*200.482 / 1));
-    CHECK_EVAL("EUROCONVERT(  62; \"FIM\"; \"ats\" )", Value(62*13.7603 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  63; \"FIM\"; \"bef\" )", Value(63*40.3399 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  64; \"FIM\"; \"dem\" )", Value(64*1.95583 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  65; \"FIM\"; \"esp\" )", Value(65*166.386 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  66; \"FIM\"; \"eur\" )", Value(66*1 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  67; \"FIM\"; \"frf\" )", Value(67*6.55957 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  68; \"FIM\"; \"grd\" )", Value(68*340.75 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  69; \"FIM\"; \"iep\" )", Value(69*0.787564 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  70; \"FIM\"; \"itl\" )", Value(70*1936.27 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  71; \"FIM\"; \"lux\" )", Value(71*40.3399 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  72; \"FIM\"; \"nlg\" )", Value(72*2.20371 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  73; \"FIM\"; \"pte\" )", Value(73*200.482 / 5.94573));
-    CHECK_EVAL("EUROCONVERT(  74; \"FRF\"; \"ats\" )", Value(74*13.7603 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  75; \"FRF\"; \"bef\" )", Value(75*40.3399 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  76; \"FRF\"; \"dem\" )", Value(76*1.95583 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  77; \"FRF\"; \"esp\" )", Value(77*166.386 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  78; \"FRF\"; \"eur\" )", Value(78*1 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  79; \"FRF\"; \"fim\" )", Value(79*5.94573 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  80; \"FRF\"; \"grd\" )", Value(80*340.75 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  81; \"FRF\"; \"iep\" )", Value(81*0.787564 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  82; \"FRF\"; \"itl\" )", Value(82*1936.27 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  83; \"FRF\"; \"lux\" )", Value(83*40.3399 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  84; \"FRF\"; \"nlg\" )", Value(84*2.20371 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  85; \"FRF\"; \"pte\" )", Value(85*200.482 / 6.55957));
-    CHECK_EVAL("EUROCONVERT(  86; \"GRD\"; \"ats\" )", Value(86*13.7603 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  87; \"GRD\"; \"bef\" )", Value(87*40.3399 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  88; \"GRD\"; \"dem\" )", Value(88*1.95583 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  89; \"GRD\"; \"esp\" )", Value(89*166.386 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  90; \"GRD\"; \"eur\" )", Value(90*1 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  91; \"GRD\"; \"fim\" )", Value(91*5.94573 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  92; \"GRD\"; \"frf\" )", Value(92*6.55957 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  93; \"GRD\"; \"iep\" )", Value(93*0.787564 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  94; \"GRD\"; \"itl\" )", Value(94*1936.27 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  95; \"GRD\"; \"lux\" )", Value(95*40.3399 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  96; \"GRD\"; \"nlg\" )", Value(96*2.20371 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  97; \"GRD\"; \"pte\" )", Value(97*200.482 / 340.75));
-    CHECK_EVAL("EUROCONVERT(  98; \"IEP\"; \"ats\" )", Value(98*13.7603 / 0.787564));
-    CHECK_EVAL("EUROCONVERT(  99; \"IEP\"; \"bef\" )", Value(99*40.3399 / 0.787564));
-    CHECK_EVAL("EUROCONVERT( 100; \"IEP\"; \"dem\" )", Value(100*1.95583 / 0.787564));
-    CHECK_EVAL("EUROCONVERT( 101; \"IEP\"; \"esp\" )", Value(101*166.386 / 0.787564));
-    CHECK_EVAL("EUROCONVERT( 102; \"IEP\"; \"eur\" )", Value(102*1 / 0.787564));
-    CHECK_EVAL("EUROCONVERT( 103; \"IEP\"; \"fim\" )", Value(103*5.94573 / 0.787564));
-    CHECK_EVAL("EUROCONVERT( 104; \"IEP\"; \"frf\" )", Value(104*6.55957 / 0.787564));
-    CHECK_EVAL("EUROCONVERT( 105; \"IEP\"; \"grd\" )", Value(105*340.75 / 0.787564));
-    CHECK_EVAL("EUROCONVERT( 106; \"IEP\"; \"itl\" )", Value(106*1936.27 / 0.787564));
-    CHECK_EVAL("EUROCONVERT( 107; \"IEP\"; \"lux\" )", Value(107*40.3399 / 0.787564));
-    CHECK_EVAL("EUROCONVERT( 108; \"IEP\"; \"nlg\" )", Value(108*2.20371 / 0.787564));
-    CHECK_EVAL("EUROCONVERT( 109; \"IEP\"; \"pte\" )", Value(109*200.482 / 0.787564));
-    CHECK_EVAL("EUROCONVERT( 110; \"ITL\"; \"ats\" )", Value(110*13.7603 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 111; \"ITL\"; \"bef\" )", Value(111*40.3399 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 112; \"ITL\"; \"dem\" )", Value(112*1.95583 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 113; \"ITL\"; \"esp\" )", Value(113*166.386 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 114; \"ITL\"; \"eur\" )", Value(114*1 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 115; \"ITL\"; \"fim\" )", Value(115*5.94573 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 116; \"ITL\"; \"frf\" )", Value(116*6.55957 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 117; \"ITL\"; \"grd\" )", Value(117*340.75 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 118; \"ITL\"; \"iep\" )", Value(118*0.787564 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 119; \"ITL\"; \"lux\" )", Value(119*40.3399 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 120; \"ITL\"; \"nlg\" )", Value(120*2.20371 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 121; \"ITL\"; \"pte\" )", Value(121*200.482 / 1936.27));
-    CHECK_EVAL("EUROCONVERT( 122; \"LUX\"; \"ats\" )", Value(122*13.7603 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 123; \"LUX\"; \"bef\" )", Value(123*40.3399 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 124; \"LUX\"; \"dem\" )", Value(124*1.95583 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 125; \"LUX\"; \"esp\" )", Value(125*166.386 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 126; \"LUX\"; \"eur\" )", Value(126*1 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 127; \"LUX\"; \"fim\" )", Value(127*5.94573 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 128; \"LUX\"; \"frf\" )", Value(128*6.55957 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 129; \"LUX\"; \"grd\" )", Value(129*340.75 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 130; \"LUX\"; \"iep\" )", Value(130*0.787564 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 131; \"LUX\"; \"itl\" )", Value(131*1936.27 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 132; \"LUX\"; \"nlg\" )", Value(132*2.20371 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 133; \"LUX\"; \"pte\" )", Value(133*200.482 / 40.3399));
-    CHECK_EVAL("EUROCONVERT( 134; \"NLG\"; \"ats\" )", Value(134*13.7603 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 135; \"NLG\"; \"bef\" )", Value(135*40.3399 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 136; \"NLG\"; \"dem\" )", Value(136*1.95583 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 137; \"NLG\"; \"esp\" )", Value(137*166.386 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 138; \"NLG\"; \"eur\" )", Value(138*1 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 139; \"NLG\"; \"fim\" )", Value(139*5.94573 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 140; \"NLG\"; \"frf\" )", Value(140*6.55957 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 141; \"NLG\"; \"grd\" )", Value(141*340.75 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 142; \"NLG\"; \"iep\" )", Value(142*0.787564 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 143; \"NLG\"; \"itl\" )", Value(143*1936.27 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 144; \"NLG\"; \"lux\" )", Value(144*40.3399 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 145; \"NLG\"; \"pte\" )", Value(145*200.482 / 2.20371));
-    CHECK_EVAL("EUROCONVERT( 146; \"PTE\"; \"ats\" )", Value(146*13.7603 / 200.482));
-    CHECK_EVAL("EUROCONVERT( 147; \"PTE\"; \"bef\" )", Value(147*40.3399 / 200.482));
-    CHECK_EVAL("EUROCONVERT( 148; \"PTE\"; \"dem\" )", Value(148*1.95583 / 200.482));
-    CHECK_EVAL("EUROCONVERT( 149; \"PTE\"; \"esp\" )", Value(149*166.386 / 200.482));
-    CHECK_EVAL("EUROCONVERT( 150; \"PTE\"; \"eur\" )", Value(150*1 / 200.482));
-    CHECK_EVAL("EUROCONVERT( 151; \"PTE\"; \"fim\" )", Value(151*5.94573 / 200.482));
-    CHECK_EVAL("EUROCONVERT( 152; \"PTE\"; \"frf\" )", Value(152*6.55957 / 200.482));
-    CHECK_EVAL("EUROCONVERT( 153; \"PTE\"; \"grd\" )", Value(153*340.75 / 200.482));
-    CHECK_EVAL("EUROCONVERT( 154; \"PTE\"; \"iep\" )", Value(154*0.787564 / 200.482));
-    CHECK_EVAL("EUROCONVERT( 155; \"PTE\"; \"itl\" )", Value(155*1936.27 / 200.482));
-    CHECK_EVAL("EUROCONVERT( 156; \"PTE\"; \"lux\" )", Value(156*40.3399 / 200.482));
-    CHECK_EVAL("EUROCONVERT( 157; \"PTE\"; \"nlg\" )", Value(157*2.20371 / 200.482));
+    CHECK_EVAL("EUROCONVERT(   2; \"ATS\"; \"bef\" )", Value(2 * 40.3399 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(   3; \"ATS\"; \"dem\" )", Value(3 * 1.95583 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(   4; \"ATS\"; \"esp\" )", Value(4 * 166.386 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(   5; \"ATS\"; \"eur\" )", Value(5 * 1 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(   6; \"ATS\"; \"fim\" )", Value(6 * 5.94573 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(   7; \"ATS\"; \"frf\" )", Value(7 * 6.55957 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(   8; \"ATS\"; \"grd\" )", Value(8 * 340.75 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(   9; \"ATS\"; \"iep\" )", Value(9 * 0.787564 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(  10; \"ATS\"; \"itl\" )", Value(10 * 1936.27 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(  11; \"ATS\"; \"lux\" )", Value(11 * 40.3399 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(  12; \"ATS\"; \"nlg\" )", Value(12 * 2.20371 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(  13; \"ATS\"; \"pte\" )", Value(13 * 200.482 / 13.7603));
+    CHECK_EVAL("EUROCONVERT(  14; \"BEF\"; \"ats\" )", Value(14 * 13.7603 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  15; \"BEF\"; \"dem\" )", Value(15 * 1.95583 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  16; \"BEF\"; \"esp\" )", Value(16 * 166.386 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  17; \"BEF\"; \"eur\" )", Value(17 * 1 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  18; \"BEF\"; \"fim\" )", Value(18 * 5.94573 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  19; \"BEF\"; \"frf\" )", Value(19 * 6.55957 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  20; \"BEF\"; \"grd\" )", Value(20 * 340.75 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  21; \"BEF\"; \"iep\" )", Value(21 * 0.787564 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  22; \"BEF\"; \"itl\" )", Value(22 * 1936.27 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  23; \"BEF\"; \"lux\" )", Value(23 * 40.3399 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  24; \"BEF\"; \"nlg\" )", Value(24 * 2.20371 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  25; \"BEF\"; \"pte\" )", Value(25 * 200.482 / 40.3399));
+    CHECK_EVAL("EUROCONVERT(  26; \"DEM\"; \"ats\" )", Value(26 * 13.7603 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  27; \"DEM\"; \"bef\" )", Value(27 * 40.3399 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  28; \"DEM\"; \"esp\" )", Value(28 * 166.386 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  29; \"DEM\"; \"eur\" )", Value(29 * 1 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  30; \"DEM\"; \"fim\" )", Value(30 * 5.94573 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  31; \"DEM\"; \"frf\" )", Value(31 * 6.55957 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  32; \"DEM\"; \"grd\" )", Value(32 * 340.75 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  33; \"DEM\"; \"iep\" )", Value(33 * 0.787564 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  34; \"DEM\"; \"itl\" )", Value(34 * 1936.27 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  35; \"DEM\"; \"lux\" )", Value(35 * 40.3399 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  36; \"DEM\"; \"nlg\" )", Value(36 * 2.20371 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  37; \"DEM\"; \"pte\" )", Value(37 * 200.482 / 1.95583));
+    CHECK_EVAL("EUROCONVERT(  38; \"ESP\"; \"ats\" )", Value(38 * 13.7603 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  39; \"ESP\"; \"bef\" )", Value(39 * 40.3399 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  40; \"ESP\"; \"dem\" )", Value(40 * 1.95583 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  41; \"ESP\"; \"eur\" )", Value(41 * 1 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  42; \"ESP\"; \"fim\" )", Value(42 * 5.94573 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  43; \"ESP\"; \"frf\" )", Value(43 * 6.55957 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  44; \"ESP\"; \"grd\" )", Value(44 * 340.75 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  45; \"ESP\"; \"iep\" )", Value(45 * 0.787564 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  46; \"ESP\"; \"itl\" )", Value(46 * 1936.27 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  47; \"ESP\"; \"lux\" )", Value(47 * 40.3399 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  48; \"ESP\"; \"nlg\" )", Value(48 * 2.20371 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  49; \"ESP\"; \"pte\" )", Value(49 * 200.482 / 166.386));
+    CHECK_EVAL("EUROCONVERT(  50; \"EUR\"; \"ats\" )", Value(50 * 13.7603 / 1));
+    CHECK_EVAL("EUROCONVERT(  51; \"EUR\"; \"bef\" )", Value(51 * 40.3399 / 1));
+    CHECK_EVAL("EUROCONVERT(  52; \"EUR\"; \"dem\" )", Value(52 * 1.95583 / 1));
+    CHECK_EVAL("EUROCONVERT(  53; \"EUR\"; \"esp\" )", Value(53 * 166.386 / 1));
+    CHECK_EVAL("EUROCONVERT(  54; \"EUR\"; \"fim\" )", Value(54 * 5.94573 / 1));
+    CHECK_EVAL("EUROCONVERT(  55; \"EUR\"; \"frf\" )", Value(55 * 6.55957 / 1));
+    CHECK_EVAL("EUROCONVERT(  56; \"EUR\"; \"grd\" )", Value(56 * 340.75 / 1));
+    CHECK_EVAL("EUROCONVERT(  57; \"EUR\"; \"iep\" )", Value(57 * 0.787564 / 1));
+    CHECK_EVAL("EUROCONVERT(  58; \"EUR\"; \"itl\" )", Value(58 * 1936.27 / 1));
+    CHECK_EVAL("EUROCONVERT(  59; \"EUR\"; \"lux\" )", Value(59 * 40.3399 / 1));
+    CHECK_EVAL("EUROCONVERT(  60; \"EUR\"; \"nlg\" )", Value(60 * 2.20371 / 1));
+    CHECK_EVAL("EUROCONVERT(  61; \"EUR\"; \"pte\" )", Value(61 * 200.482 / 1));
+    CHECK_EVAL("EUROCONVERT(  62; \"FIM\"; \"ats\" )", Value(62 * 13.7603 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  63; \"FIM\"; \"bef\" )", Value(63 * 40.3399 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  64; \"FIM\"; \"dem\" )", Value(64 * 1.95583 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  65; \"FIM\"; \"esp\" )", Value(65 * 166.386 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  66; \"FIM\"; \"eur\" )", Value(66 * 1 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  67; \"FIM\"; \"frf\" )", Value(67 * 6.55957 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  68; \"FIM\"; \"grd\" )", Value(68 * 340.75 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  69; \"FIM\"; \"iep\" )", Value(69 * 0.787564 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  70; \"FIM\"; \"itl\" )", Value(70 * 1936.27 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  71; \"FIM\"; \"lux\" )", Value(71 * 40.3399 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  72; \"FIM\"; \"nlg\" )", Value(72 * 2.20371 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  73; \"FIM\"; \"pte\" )", Value(73 * 200.482 / 5.94573));
+    CHECK_EVAL("EUROCONVERT(  74; \"FRF\"; \"ats\" )", Value(74 * 13.7603 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  75; \"FRF\"; \"bef\" )", Value(75 * 40.3399 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  76; \"FRF\"; \"dem\" )", Value(76 * 1.95583 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  77; \"FRF\"; \"esp\" )", Value(77 * 166.386 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  78; \"FRF\"; \"eur\" )", Value(78 * 1 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  79; \"FRF\"; \"fim\" )", Value(79 * 5.94573 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  80; \"FRF\"; \"grd\" )", Value(80 * 340.75 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  81; \"FRF\"; \"iep\" )", Value(81 * 0.787564 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  82; \"FRF\"; \"itl\" )", Value(82 * 1936.27 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  83; \"FRF\"; \"lux\" )", Value(83 * 40.3399 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  84; \"FRF\"; \"nlg\" )", Value(84 * 2.20371 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  85; \"FRF\"; \"pte\" )", Value(85 * 200.482 / 6.55957));
+    CHECK_EVAL("EUROCONVERT(  86; \"GRD\"; \"ats\" )", Value(86 * 13.7603 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  87; \"GRD\"; \"bef\" )", Value(87 * 40.3399 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  88; \"GRD\"; \"dem\" )", Value(88 * 1.95583 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  89; \"GRD\"; \"esp\" )", Value(89 * 166.386 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  90; \"GRD\"; \"eur\" )", Value(90 * 1 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  91; \"GRD\"; \"fim\" )", Value(91 * 5.94573 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  92; \"GRD\"; \"frf\" )", Value(92 * 6.55957 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  93; \"GRD\"; \"iep\" )", Value(93 * 0.787564 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  94; \"GRD\"; \"itl\" )", Value(94 * 1936.27 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  95; \"GRD\"; \"lux\" )", Value(95 * 40.3399 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  96; \"GRD\"; \"nlg\" )", Value(96 * 2.20371 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  97; \"GRD\"; \"pte\" )", Value(97 * 200.482 / 340.75));
+    CHECK_EVAL("EUROCONVERT(  98; \"IEP\"; \"ats\" )", Value(98 * 13.7603 / 0.787564));
+    CHECK_EVAL("EUROCONVERT(  99; \"IEP\"; \"bef\" )", Value(99 * 40.3399 / 0.787564));
+    CHECK_EVAL("EUROCONVERT( 100; \"IEP\"; \"dem\" )", Value(100 * 1.95583 / 0.787564));
+    CHECK_EVAL("EUROCONVERT( 101; \"IEP\"; \"esp\" )", Value(101 * 166.386 / 0.787564));
+    CHECK_EVAL("EUROCONVERT( 102; \"IEP\"; \"eur\" )", Value(102 * 1 / 0.787564));
+    CHECK_EVAL("EUROCONVERT( 103; \"IEP\"; \"fim\" )", Value(103 * 5.94573 / 0.787564));
+    CHECK_EVAL("EUROCONVERT( 104; \"IEP\"; \"frf\" )", Value(104 * 6.55957 / 0.787564));
+    CHECK_EVAL("EUROCONVERT( 105; \"IEP\"; \"grd\" )", Value(105 * 340.75 / 0.787564));
+    CHECK_EVAL("EUROCONVERT( 106; \"IEP\"; \"itl\" )", Value(106 * 1936.27 / 0.787564));
+    CHECK_EVAL("EUROCONVERT( 107; \"IEP\"; \"lux\" )", Value(107 * 40.3399 / 0.787564));
+    CHECK_EVAL("EUROCONVERT( 108; \"IEP\"; \"nlg\" )", Value(108 * 2.20371 / 0.787564));
+    CHECK_EVAL("EUROCONVERT( 109; \"IEP\"; \"pte\" )", Value(109 * 200.482 / 0.787564));
+    CHECK_EVAL("EUROCONVERT( 110; \"ITL\"; \"ats\" )", Value(110 * 13.7603 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 111; \"ITL\"; \"bef\" )", Value(111 * 40.3399 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 112; \"ITL\"; \"dem\" )", Value(112 * 1.95583 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 113; \"ITL\"; \"esp\" )", Value(113 * 166.386 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 114; \"ITL\"; \"eur\" )", Value(114 * 1 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 115; \"ITL\"; \"fim\" )", Value(115 * 5.94573 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 116; \"ITL\"; \"frf\" )", Value(116 * 6.55957 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 117; \"ITL\"; \"grd\" )", Value(117 * 340.75 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 118; \"ITL\"; \"iep\" )", Value(118 * 0.787564 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 119; \"ITL\"; \"lux\" )", Value(119 * 40.3399 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 120; \"ITL\"; \"nlg\" )", Value(120 * 2.20371 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 121; \"ITL\"; \"pte\" )", Value(121 * 200.482 / 1936.27));
+    CHECK_EVAL("EUROCONVERT( 122; \"LUX\"; \"ats\" )", Value(122 * 13.7603 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 123; \"LUX\"; \"bef\" )", Value(123 * 40.3399 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 124; \"LUX\"; \"dem\" )", Value(124 * 1.95583 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 125; \"LUX\"; \"esp\" )", Value(125 * 166.386 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 126; \"LUX\"; \"eur\" )", Value(126 * 1 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 127; \"LUX\"; \"fim\" )", Value(127 * 5.94573 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 128; \"LUX\"; \"frf\" )", Value(128 * 6.55957 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 129; \"LUX\"; \"grd\" )", Value(129 * 340.75 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 130; \"LUX\"; \"iep\" )", Value(130 * 0.787564 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 131; \"LUX\"; \"itl\" )", Value(131 * 1936.27 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 132; \"LUX\"; \"nlg\" )", Value(132 * 2.20371 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 133; \"LUX\"; \"pte\" )", Value(133 * 200.482 / 40.3399));
+    CHECK_EVAL("EUROCONVERT( 134; \"NLG\"; \"ats\" )", Value(134 * 13.7603 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 135; \"NLG\"; \"bef\" )", Value(135 * 40.3399 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 136; \"NLG\"; \"dem\" )", Value(136 * 1.95583 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 137; \"NLG\"; \"esp\" )", Value(137 * 166.386 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 138; \"NLG\"; \"eur\" )", Value(138 * 1 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 139; \"NLG\"; \"fim\" )", Value(139 * 5.94573 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 140; \"NLG\"; \"frf\" )", Value(140 * 6.55957 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 141; \"NLG\"; \"grd\" )", Value(141 * 340.75 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 142; \"NLG\"; \"iep\" )", Value(142 * 0.787564 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 143; \"NLG\"; \"itl\" )", Value(143 * 1936.27 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 144; \"NLG\"; \"lux\" )", Value(144 * 40.3399 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 145; \"NLG\"; \"pte\" )", Value(145 * 200.482 / 2.20371));
+    CHECK_EVAL("EUROCONVERT( 146; \"PTE\"; \"ats\" )", Value(146 * 13.7603 / 200.482));
+    CHECK_EVAL("EUROCONVERT( 147; \"PTE\"; \"bef\" )", Value(147 * 40.3399 / 200.482));
+    CHECK_EVAL("EUROCONVERT( 148; \"PTE\"; \"dem\" )", Value(148 * 1.95583 / 200.482));
+    CHECK_EVAL("EUROCONVERT( 149; \"PTE\"; \"esp\" )", Value(149 * 166.386 / 200.482));
+    CHECK_EVAL("EUROCONVERT( 150; \"PTE\"; \"eur\" )", Value(150 * 1 / 200.482));
+    CHECK_EVAL("EUROCONVERT( 151; \"PTE\"; \"fim\" )", Value(151 * 5.94573 / 200.482));
+    CHECK_EVAL("EUROCONVERT( 152; \"PTE\"; \"frf\" )", Value(152 * 6.55957 / 200.482));
+    CHECK_EVAL("EUROCONVERT( 153; \"PTE\"; \"grd\" )", Value(153 * 340.75 / 200.482));
+    CHECK_EVAL("EUROCONVERT( 154; \"PTE\"; \"iep\" )", Value(154 * 0.787564 / 200.482));
+    CHECK_EVAL("EUROCONVERT( 155; \"PTE\"; \"itl\" )", Value(155 * 1936.27 / 200.482));
+    CHECK_EVAL("EUROCONVERT( 156; \"PTE\"; \"lux\" )", Value(156 * 40.3399 / 200.482));
+    CHECK_EVAL("EUROCONVERT( 157; \"PTE\"; \"nlg\" )", Value(157 * 2.20371 / 200.482));
 }
 
 // FV
 void TestFinancialFunctions::testFV()
 {
     // ODF
-    CHECK_EVAL("FV(10%;12;-100;100)" , Value(1824.5855390489));     // A trivial example of FV.
+    CHECK_EVAL("FV(10%;12;-100;100)", Value(1824.5855390489));     // A trivial example of FV.
 }
 
 // FVSCHEDULE
 void TestFinancialFunctions::testFVSCHEDULE()
 {
     // ODF
-    CHECK_EVAL_SHORT("FVSCHEDULE(1000000; {0.03; 0.04; 0.05})" , Value(1124760));     // A trivial example of FVSCHEDULE.
+    CHECK_EVAL_SHORT("FVSCHEDULE(1000000; {0.03; 0.04; 0.05})", Value(1124760));     // A trivial example of FVSCHEDULE.
     // alternate function name
-    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFVSCHEDULE(1000000; {0.03; 0.04; 0.05})" , Value(1124760));
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFVSCHEDULE(1000000; {0.03; 0.04; 0.05})", Value(1124760));
 }
 
 // INTRATE
 void TestFinancialFunctions::testINTRATE()
 {
     // ODF
-    CHECK_EVAL_SHORT("INTRATE( DATE(2002; 6;8); DATE(1995;10;5); 100000; 200000; 0 )" , Value::errorVALUE());     // Settlement date must be before the maturity date.
-    CHECK_EVAL_SHORT("INTRATE( DATE(2002; 6;8); DATE(2002; 6;8); 100000; 200000; 0 )" , Value::errorVALUE());     // Settlement date must be before the maturity date.
-    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 50)" , Value::errorVALUE());     // Unknown Basis returns Error.
-    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 0 )" , Value(0.1498127341));     // An example of INTRATE.
-    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000    )" , Value(0.1498127341));     // Basis defaults to 0.
-    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 1 )" , Value(0.1497128794));     //
-    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 2 )" , Value(0.1476620180));     //
-    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 3 )" , Value(0.1497128794));     //
-    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 4 )" , Value(0.1498127341));     //
+    CHECK_EVAL_SHORT("INTRATE( DATE(2002; 6;8); DATE(1995;10;5); 100000; 200000; 0 )", Value::errorVALUE());     // Settlement date must be before the maturity date.
+    CHECK_EVAL_SHORT("INTRATE( DATE(2002; 6;8); DATE(2002; 6;8); 100000; 200000; 0 )", Value::errorVALUE());     // Settlement date must be before the maturity date.
+    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 50)", Value::errorVALUE());     // Unknown Basis returns Error.
+    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 0 )", Value(0.1498127341));     // An example of INTRATE.
+    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000    )", Value(0.1498127341));     // Basis defaults to 0.
+    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 1 )", Value(0.1497128794));     //
+    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 2 )", Value(0.1476620180));     //
+    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 3 )", Value(0.1497128794));     //
+    CHECK_EVAL_SHORT("INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 4 )", Value(0.1498127341));     //
     // alternate function name
-    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETINTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 0 )" , Value(0.1498127341));
+    CHECK_EVAL_SHORT("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETINTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 0 )", Value(0.1498127341));
 }
 
 // IPMT
@@ -790,12 +794,12 @@ void TestFinancialFunctions::testLEVELCOUPON()
 // MDURATION
 void TestFinancialFunctions::testMDURATION()
 {
-    CHECK_EVAL("MDURATION(\"2004-02-01\"; \"2004-05-31\"; 0.08; 0.09; 2; 0)" , Value(0.3189792663));     // These tests go over a leap year day,
+    CHECK_EVAL("MDURATION(\"2004-02-01\"; \"2004-05-31\"; 0.08; 0.09; 2; 0)", Value(0.3189792663));     // These tests go over a leap year day,
     // and intentionally end on May 31, which
     // illustrates the differences between
     // many bases
     // alternate function name
-    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMDURATION(\"2004-02-01\"; \"2004-05-31\"; 0.08; 0.09; 2; 0)" , Value(0.3189792663));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMDURATION(\"2004-02-01\"; \"2004-05-31\"; 0.08; 0.09; 2; 0)", Value(0.3189792663));
 }
 
 // MIRR
@@ -835,7 +839,7 @@ void TestFinancialFunctions::testNOMINAL()
     CHECK_EVAL("NOMINAL(8%;4)",      Value(0.0777061876330940));
     CHECK_EVAL("NOMINAL(12.5%;12)",  Value(0.118362966638538));
     CHECK_EVAL("NOMINAL(1%;2)",      Value(0.00997512422417790));
-    
+
     // alternate function name
     CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETNOMINAL(8%;4)",      Value(0.0777061876330940));
 }
@@ -863,27 +867,27 @@ void TestFinancialFunctions::testNPV()
 void TestFinancialFunctions::testODDLPRICE()
 {
     // ODF tests. Not all tests pass, but I'm not sure if the spec or the implementation is wrong
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2)",      Value( 90.9975570033  ) ); //
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;1;0)",    Value( 90.9975570033  ) ); // f=1, b=0
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2;0)",    Value( 90.9975570033  ) ); // f=2, b=0
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;4;0)",    Value( 90.9975570033  ) ); // f=4, b=0
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;1;1)",  Value( 102.5120875338 ) ); // f=1, b=1
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;2;1)",  Value( 102.510143853 ) ); // f=2, b=1
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;4;1)",  Value( 102.509884509 ) ); // f=4, b=1
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2)",      Value(90.9975570033));      //
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;1;0)",    Value(90.9975570033));      // f=1, b=0
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2;0)",    Value(90.9975570033));      // f=2, b=0
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;4;0)",    Value(90.9975570033));      // f=4, b=0
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;1;1)",  Value(102.5120875338));     // f=1, b=1
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;2;1)",  Value(102.510143853));     // f=2, b=1
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;4;1)",  Value(102.509884509));     // f=4, b=1
     QEXPECT_FAIL("", "Wrong?", Continue);
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;1;2)",  Value( 102.512087534 ) ); // f=1, b=2
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;1;2)",  Value(102.512087534));     // f=1, b=2
     QEXPECT_FAIL("", "Wrong?", Continue);
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;2;2)",  Value( 102.510143853 ) ); // f=2, b=2
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;2;2)",  Value(102.510143853));     // f=2, b=2
     QEXPECT_FAIL("", "Wrong?", Continue);
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;4;2)",  Value( 102.509884509 ) ); // f=4, b=2
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;1;3)",   Value( 794.575995564 ) ); // f=1, b=3
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;4;2)",  Value(102.509884509));     // f=4, b=2
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;1;3)",   Value(794.575995564));     // f=1, b=3
     QEXPECT_FAIL("", "Wrong?", Continue);
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;2;3)",   Value( 794.671729071 ) ); // f=2, b=3
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;2;3)",   Value(794.671729071));     // f=2, b=3
     QEXPECT_FAIL("", "Wrong?", Continue);
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;4;3)",   Value( 794.684531308 ) ); // f=4, b=3
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;1;4)", Value( 932.992137337  ) ); // f=1, b=4
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;2;4)", Value( 932.992137337  ) ); // f=2, b=4
-    CHECK_EVAL_SHORT( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;4;4)", Value( 932.992137337  ) ); // f=4, b=4
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;1000;4;3)",   Value(794.684531308));     // f=4, b=3
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;1;4)", Value(932.992137337));      // f=1, b=4
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;2;4)", Value(932.992137337));      // f=2, b=4
+    CHECK_EVAL_SHORT("ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;4;4)", Value(932.992137337));      // f=4, b=4
 }
 
 // ODDLYIELD
@@ -892,42 +896,42 @@ void TestFinancialFunctions::testODDLYIELD()
     // ODF tests
 
     // Basis 0
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;2  )", Value( 4.997775351/100.0 ) ); // Without Basis parameter
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;1;0)", Value( 4.997775351/100.0 ) ); // With Frequency=1 and Basis=0
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;2;0)", Value( 4.997775351/100.0 ) ); // With Frequency=2 and Basis=0
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;4;0)", Value( 4.997775351/100.0 ) ); // With Frequency=4 and Basis=0
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;2  )", Value(4.997775351 / 100.0));   // Without Basis parameter
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;1;0)", Value(4.997775351 / 100.0));   // With Frequency=1 and Basis=0
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;2;0)", Value(4.997775351 / 100.0));   // With Frequency=2 and Basis=0
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;4;0)", Value(4.997775351 / 100.0));   // With Frequency=4 and Basis=0
 
     // Basis 1
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;1;1)", Value( 1.408788601/100.0 ) ); // With Frequency=1 and Basis=1
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;2;1)", Value( 1.408379719/100.0 ) ); // With Frequency=2 and Basis=1
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;4;1)", Value( 1.408325114/100.0 ) ); // With Frequency=4 and Basis=1
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;1;1)", Value(1.408788601 / 100.0));   // With Frequency=1 and Basis=1
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;2;1)", Value(1.408379719 / 100.0));   // With Frequency=2 and Basis=1
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;4;1)", Value(1.408325114 / 100.0));   // With Frequency=4 and Basis=1
 
     // Basis 2
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100;1;2)", Value( 1.408788601/100.0 ) ); // With Frequency=1 and Basis=2
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;4;2)", Value( 1.408379719/100.0 ) ); // With Frequency=2 and Basis=2
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;2;2)", Value( 1.408325114/100.0 ) ); // With Frequency=4 and Basis=2
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100;1;2)", Value(1.408788601 / 100.0));   // With Frequency=1 and Basis=2
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;4;2)", Value(1.408379719 / 100.0));   // With Frequency=2 and Basis=2
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;2;2)", Value(1.408325114 / 100.0));   // With Frequency=4 and Basis=2
 
     // Basis 3
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;1;3)", Value( 4.987800402/100.0 ) ); // With Frequency=1 and Basis=3
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;1;3)", Value(4.987800402 / 100.0));   // With Frequency=1 and Basis=3
     QEXPECT_FAIL("", "Wrong?", Continue);
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;2;3)", Value( 4.990550494/100.0 ) ); // With Frequency=2 and Basis=3
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;4;3)", Value( 4.990918451/100.0 ) ); // With Frequency=4 and Basis=3
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;2;3)", Value(4.990550494 / 100.0));   // With Frequency=2 and Basis=3
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;4;3)", Value(4.990918451 / 100.0));   // With Frequency=4 and Basis=3
 
     // Basis 4
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;1;4)", Value( 1.499836493/100.0 ) ); // With Frequency=1 and Basis=4
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;2;4)", Value( 1.499836493/100.0 ) ); // With Frequency=2 and Basis=4
-    CHECK_EVAL_SHORT( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;4;4)", Value( 1.499836493/100.0 ) ); // With Frequency=4 and Basis=4
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;1;4)", Value(1.499836493 / 100.0));   // With Frequency=1 and Basis=4
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;2;4)", Value(1.499836493 / 100.0));   // With Frequency=2 and Basis=4
+    CHECK_EVAL_SHORT("ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;4;4)", Value(1.499836493 / 100.0));   // With Frequency=4 and Basis=4
 }
 
 // PDURATION
 void TestFinancialFunctions::testPDURATION()
 {
     // is DURATION in kspread
-    CHECK_EVAL_SHORT("PDURATION( 0.1; 10; 100 )" , Value(24.158858));      // simple use case
-    CHECK_EVAL_SHORT("PDURATION( 0.1; 100; 10 )" , Value(-24.158858));     // curentValue > desiredValue
-    CHECK_EVAL_SHORT("PDURATION(   0; 10;  11 )" , Value::errorVALUE());   // rate > 0
-    CHECK_EVAL_SHORT("PDURATION( 0.1;  0;  11 )" , Value::errorVALUE());   // currentValue > 0
-    CHECK_EVAL_SHORT("PDURATION( 0.1; 10;   0 )" , Value::errorVALUE());   // desiredValue > 0
+    CHECK_EVAL_SHORT("PDURATION( 0.1; 10; 100 )", Value(24.158858));      // simple use case
+    CHECK_EVAL_SHORT("PDURATION( 0.1; 100; 10 )", Value(-24.158858));     // curentValue > desiredValue
+    CHECK_EVAL_SHORT("PDURATION(   0; 10;  11 )", Value::errorVALUE());   // rate > 0
+    CHECK_EVAL_SHORT("PDURATION( 0.1;  0;  11 )", Value::errorVALUE());   // currentValue > 0
+    CHECK_EVAL_SHORT("PDURATION( 0.1; 10;   0 )", Value::errorVALUE());   // desiredValue > 0
 }
 
 // PMT
@@ -998,18 +1002,18 @@ void TestFinancialFunctions::testRATE()
 void TestFinancialFunctions::testRECEIVED()
 {
     // ODF
-    CHECK_EVAL_SHORT("RECEIVED(DATE(1990;6;1);DATE(1990;12;31);10000;5%)" , Value(10300.4291845494));     // Without Basis parameter
+    CHECK_EVAL_SHORT("RECEIVED(DATE(1990;6;1);DATE(1990;12;31);10000;5%)", Value(10300.4291845494));     // Without Basis parameter
     // alternate function name
-    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRECEIVED(DATE(1990;6;1);DATE(1990;12;31);10000;5%)" , Value(10300.4291845494));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRECEIVED(DATE(1990;6;1);DATE(1990;12;31);10000;5%)", Value(10300.4291845494));
 }
 
 // RRI
 void TestFinancialFunctions::testRRI()
 {
-    CHECK_EVAL_SHORT("RRI(1;100;200)" ,     Value(1));                       // A trivial example of RRI.
-    CHECK_EVAL_SHORT("RRI(12;5000;10000)" , Value(0.05946309436));           // RRI, practical example
-    CHECK_EVAL_SHORT("RRI(12;10000;5000)" , Value(-0.056125687));            // If future value is less than present value, resultant rate is negative
-    CHECK_EVAL_SHORT("RRI(0;100;200)" ,     Value(Value::errorVALUE()));     // N must be greater than 0.
+    CHECK_EVAL_SHORT("RRI(1;100;200)",     Value(1));                       // A trivial example of RRI.
+    CHECK_EVAL_SHORT("RRI(12;5000;10000)", Value(0.05946309436));           // RRI, practical example
+    CHECK_EVAL_SHORT("RRI(12;10000;5000)", Value(-0.056125687));            // If future value is less than present value, resultant rate is negative
+    CHECK_EVAL_SHORT("RRI(0;100;200)",     Value(Value::errorVALUE()));     // N must be greater than 0.
 }
 
 // Straight-line depreciation
@@ -1134,7 +1138,7 @@ void TestFinancialFunctions::testXIRR()
 void TestFinancialFunctions::testXNPV()
 {
     // bettersolution.com
-    CHECK_EVAL("XNPV(0.1;  {-1000;2000;3000};       {date(2005;01;01); date(2005;01;10); date(2005;01;15)})" , Value(3984.3581140636));         //
+    CHECK_EVAL("XNPV(0.1;  {-1000;2000;3000};       {date(2005;01;01); date(2005;01;10); date(2005;01;15)})", Value(3984.3581140636));         //
 
     // with dates {date(2005;01;01); date(2005;03;01); date(2005;10;30); date(2006;02;15)}
     CHECK_EVAL("XNPV(0.09; {-10000;2750;4250;3250}; {38353;38412;38655;38763})",                               Value(-380.3891178530));         //
@@ -1144,7 +1148,7 @@ void TestFinancialFunctions::testXNPV()
     CHECK_EVAL("XNPV(0.1;  {-1000;2000;3000};       {\"fail\"; date(2005;01;10); date(2005;01;15)})",          Value(Value::errorVALUE()));     //
 
     // alternate function name
-    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETXNPV(0.09; {-10000;2750;4250;3250}; {38353;38412;38655;38763})",Value(-380.3891178530));
+    CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETXNPV(0.09; {-10000;2750;4250;3250}; {38353;38412;38655;38763})", Value(-380.3891178530));
 }
 
 // YIELDDISC
@@ -1187,7 +1191,6 @@ void TestFinancialFunctions::testZEROCOUPON()
     CHECK_EVAL("ZERO_COUPON(1000;.15/12;10)", Value(883.1809261539680165));
     CHECK_EVAL("ZERO_COUPON(1000;.25;1)",     Value(800));
 }
-
 
 QTEST_KDEMAIN(TestFinancialFunctions, GUI)
 

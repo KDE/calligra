@@ -28,7 +28,6 @@ class QKeyEvent;
 class KisCanvas2;
 class KisSelectionOptions;
 
-
 class KRITAUI_EXPORT KisSelectionToolConfigWidgetHelper : public QObject
 {
     Q_OBJECT
@@ -37,11 +36,14 @@ public:
     KisSelectionToolConfigWidgetHelper(const QString &windowTitle);
 
     void createOptionWidget(KisCanvas2 *canvas, const QString &toolId);
-    KisSelectionOptions* optionWidget() const;
+    KisSelectionOptions *optionWidget() const;
 
     SelectionMode selectionMode() const;
     SelectionAction selectionAction() const;
-    int action() const { return selectionAction(); };
+    int action() const
+    {
+        return selectionAction();
+    };
 
     bool processKeyPressEvent(QKeyEvent *event);
 
@@ -53,7 +55,7 @@ public Q_SLOTS:
     void slotSetSelectionMode(int mode);
 
 private:
-    KisSelectionOptions* m_optionsWidget;
+    KisSelectionOptions *m_optionsWidget;
     SelectionAction m_selectionAction;
     SelectionMode m_selectionMode;
 

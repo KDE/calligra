@@ -33,7 +33,6 @@
 K_PLUGIN_FACTORY(DynaPaintOpPluginFactory, registerPlugin<DynaPaintOpPlugin>();)
 K_EXPORT_PLUGIN(DynaPaintOpPluginFactory("krita"))
 
-
 DynaPaintOpPlugin::DynaPaintOpPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {

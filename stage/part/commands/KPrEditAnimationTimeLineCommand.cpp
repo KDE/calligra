@@ -17,14 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include "KPrEditAnimationTimeLineCommand.h"
 
 #include "animations/KPrShapeAnimation.h"
 #include <klocale.h>
 
 KPrEditAnimationTimeLineCommand::KPrEditAnimationTimeLineCommand(KPrShapeAnimation *animation,
-                                                                 const int begin, const int duration, KUndo2Command *parent)
+        const int begin, const int duration, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_animation(animation)
     , m_newBegin(begin)

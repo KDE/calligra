@@ -31,35 +31,40 @@
 #include "workbook.h"
 
 #ifndef __GNUC__
-  #define __PRETTY_FUNCTION__ __FUNCTION__
+#define __PRETTY_FUNCTION__ __FUNCTION__
 #endif /* __PRETTY_FUNCTION__ only exists in gnu c++ */
 
-ODrawClient::ODrawClient(Swinder::Sheet* sheet)
+ODrawClient::ODrawClient(Swinder::Sheet *sheet)
     : m_sheet(sheet), m_zIndex(0), m_styleManager(0)
 {
 }
 
-static qreal offset( unsigned long dimension, unsigned long offset, qreal factor ) {
+static qreal offset(unsigned long dimension, unsigned long offset, qreal factor)
+{
     return (float)dimension * (float)offset / factor;
 }
 
-static qreal columnWidth(Swinder::Sheet* sheet, unsigned long col) {
-    if( sheet->column(col, false) )
+static qreal columnWidth(Swinder::Sheet *sheet, unsigned long col)
+{
+    if (sheet->column(col, false)) {
         return sheet->column(col)->width();
+    }
 
     return sheet->defaultColWidth();
 }
 
-static qreal rowHeight(Swinder::Sheet* sheet, unsigned long row) {
-    if( sheet->row(row, false) )
+static qreal rowHeight(Swinder::Sheet *sheet, unsigned long row)
+{
+    if (sheet->row(row, false)) {
         return sheet->row(row)->height();
+    }
 
     return sheet->defaultRowHeight();
 }
 
-QRectF ODrawClient::getRect(const MSO::OfficeArtClientAnchor& clientAnchor)
+QRectF ODrawClient::getRect(const MSO::OfficeArtClientAnchor &clientAnchor)
 {
-    const MSO::XlsOfficeArtClientAnchor* anchor = clientAnchor.anon.get<MSO::XlsOfficeArtClientAnchor>();
+    const MSO::XlsOfficeArtClientAnchor *anchor = clientAnchor.anon.get<MSO::XlsOfficeArtClientAnchor>();
     if (anchor) {
         QRectF r;
         qreal colWidth = columnWidth(m_sheet, anchor->colL);
@@ -101,8 +106,10 @@ QRectF ODrawClient::getReserveRect(void)
 
 QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor)
 {
-    const MSO::XlsOfficeArtClientAnchor* anchor = clientAnchor.anon.get<MSO::XlsOfficeArtClientAnchor>();
-    if (!anchor) return QRectF();
+    const MSO::XlsOfficeArtClientAnchor *anchor = clientAnchor.anon.get<MSO::XlsOfficeArtClientAnchor>();
+    if (!anchor) {
+        return QRectF();
+    }
     QRectF r = getRect(clientAnchor);
     qreal x = 0, y = 0;
     for (int row = 0; row < anchor->rwT; row++) {
@@ -113,7 +120,6 @@ QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor
     }
     return r.adjusted(x, y, x, y);
 }
-
 
 QString ODrawClient::getPicturePath(const quint32 pib)
 {
@@ -127,17 +133,17 @@ QString ODrawClient::getPicturePath(const quint32 pib)
     QString fileName;
     if (rgbUid.isEmpty()) {
         qDebug() << "Object in blipStore with pib: " << pib << "was not found.";
-    }else {
+    } else {
         fileName = m_sheet->workbook()->pictureName(rgbUid);
     }
 
-    if (!fileName.isEmpty()){
+    if (!fileName.isEmpty()) {
         return "Pictures/" + fileName;
     }
     return QString();
 }
 
-bool ODrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData& cd)
+bool ODrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData &cd)
 {
     Q_UNUSED(cd);
     return false;
@@ -169,12 +175,14 @@ void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
         doc.setStyleManager(0);
     } else { // plain-text
         QStringList lines = m_shapeText.text().split(QRegExp("[\n\r]"));
-        foreach (const QString& line, lines) {
+        foreach (const QString &line, lines) {
             out.xml.startElement("text:p", false);
             int pos = 0;
             while (pos < line.length()) {
                 int idx = line.indexOf(QRegExp("[^ ]"), pos);
-                if (idx == -1) idx = line.length();
+                if (idx == -1) {
+                    idx = line.length();
+                }
                 int cnt = idx - pos;
                 if (cnt > 1) {
                     out.xml.startElement("text:s");
@@ -182,7 +190,7 @@ void ODrawClient::processClientData(const MSO::OfficeArtClientTextBox *ct,
                     out.xml.endElement();
                     pos += cnt; cnt = 0;
                 }
-                int endPos = qMax(line.length()-1, line.indexOf(' ', pos+cnt));
+                int endPos = qMax(line.length() - 1, line.indexOf(' ', pos + cnt));
                 out.xml.addTextNode(line.mid(pos, endPos - pos + 1));
                 pos = endPos + 1;
             }
@@ -201,9 +209,9 @@ void ODrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox &ct,
 }
 
 KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct,
-                                           const MSO::OfficeArtClientData *cd,
-                                           const DrawStyle& ds,
-                                           Writer &out)
+        const MSO::OfficeArtClientData *cd,
+        const DrawStyle &ds,
+        Writer &out)
 {
     Q_UNUSED(ct);
     Q_UNUSED(cd);
@@ -271,16 +279,16 @@ QString ODrawClient::formatPos(qreal v)
     return QString::number(v, 'f', 11) + "pt";
 }
 
-const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
+const MSO::OfficeArtDggContainer *ODrawClient::getOfficeArtDggContainer()
 {
     return m_sheet->workbook()->officeArtDggContainer();
 }
 
-const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 spid)
+const MSO::OfficeArtSpContainer *ODrawClient::getMasterShapeContainer(quint32 spid)
 {
     Q_UNUSED(spid);
     //TODO: locate the OfficeArtSpContainer with shapeProp/spid == spid
-    MSO::OfficeArtSpContainer* sp = NULL;
+    MSO::OfficeArtSpContainer *sp = NULL;
     return sp;
 }
 
@@ -289,18 +297,18 @@ void ODrawClient::setShapeText(const Swinder::TxORecord &text)
     m_shapeText = text;
 }
 
-void ODrawClient::setZIndexAttribute(Writer& out)
+void ODrawClient::setZIndexAttribute(Writer &out)
 {
     out.xml.addAttribute("draw:z-index", m_zIndex);
     m_zIndex++;
 }
 
-void ODrawClient::setStyleManager(KoStyleManager* styleManager)
+void ODrawClient::setStyleManager(KoStyleManager *styleManager)
 {
     m_styleManager = styleManager;
 }
 
-KoStyleManager* ODrawClient::styleManager() const
+KoStyleManager *ODrawClient::styleManager() const
 {
     return m_styleManager;
 }

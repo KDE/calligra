@@ -50,16 +50,15 @@ class KoColorDisplayRendererInterface;
 class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
 {
     Q_OBJECT
-    Q_ENUMS( Selection )
-    Q_PROPERTY( KoColor foregroundColor READ foregroundColor WRITE setForegroundColor )
-    Q_PROPERTY( KoColor backgroundColor READ backgroundColor WRITE setBackgroundColor )
-    Q_PROPERTY( bool popDialog READ popDialog WRITE setPopDialog )
+    Q_ENUMS(Selection)
+    Q_PROPERTY(KoColor foregroundColor READ foregroundColor WRITE setForegroundColor)
+    Q_PROPERTY(KoColor backgroundColor READ backgroundColor WRITE setBackgroundColor)
+    Q_PROPERTY(bool popDialog READ popDialog WRITE setPopDialog)
 
-
-  public:
+public:
     enum Selection {
-      Foreground,
-      Background
+        Foreground,
+        Background
     };
 
     /**
@@ -70,11 +69,11 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      * @param dialogParent The parent widget of the color selection dialog.
      */
     KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor,
-                      QWidget *parent = 0, QWidget* dialogParent = 0 );
+                      QWidget *parent = 0, QWidget *dialogParent = 0);
 
     KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor,
                       const KoColorDisplayRendererInterface *displayRenderer,
-                      QWidget *parent = 0, QWidget* dialogParent = 0 );
+                      QWidget *parent = 0, QWidget *dialogParent = 0);
 
     /**
      * Destroys the KoDualColorButton.
@@ -104,43 +103,43 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      */
     virtual QSize sizeHint() const;
 
-  public Q_SLOTS:
+public Q_SLOTS:
     /**
      * Sets the foreground color.
      */
-    void setForegroundColor( const KoColor &color );
+    void setForegroundColor(const KoColor &color);
 
     /**
      * Sets the background color.
      */
-    void setBackgroundColor( const KoColor &color );
+    void setBackgroundColor(const KoColor &color);
 
     /**
      * Sets if a dialog with a color chooser should be popped up when clicking
      * If you set this to false then you could connect to the pleasePopDialog signal
      * and pop your own dialog. Just set the current color afterwards.
      */
-    void setPopDialog( bool popDialog );
+    void setPopDialog(bool popDialog);
 
-  Q_SIGNALS:
+Q_SIGNALS:
     /**
      * Emitted when the foreground color is changed.
      */
-    void foregroundColorChanged( const KoColor &color );
+    void foregroundColorChanged(const KoColor &color);
 
     /**
      * Emitted when the background color is changed.
      */
-    void backgroundColorChanged( const KoColor &color );
+    void backgroundColorChanged(const KoColor &color);
 
     /**
      * Emitted when the user clicks one of the two color patches.
      * You should/could pop you own color chooser dialog in response.
      * Also see the popDialog attribute.
      */
-    void pleasePopDialog( const KoColor &color );
+    void pleasePopDialog(const KoColor &color);
 
-  protected:
+protected:
     /**
      * Sets the supplied rectangles to the proper size and position for the
      * current widget size. You can reimplement this to change the layout
@@ -148,16 +147,16 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      * be at the top right, the reset control will always be at the bottom
      * left, and you must leave at least a 14x14 space in those corners.
      */
-    virtual void metrics( QRect &foregroundRect, QRect &backgroundRect );
+    virtual void metrics(QRect &foregroundRect, QRect &backgroundRect);
 
-    virtual void paintEvent( QPaintEvent *event );
-    virtual void mousePressEvent( QMouseEvent *event );
-    virtual void mouseMoveEvent( QMouseEvent *event );
-    virtual void mouseReleaseEvent( QMouseEvent *event );
-    virtual void dragEnterEvent( QDragEnterEvent *event );
-    virtual void dropEvent( QDropEvent *event );
+    virtual void paintEvent(QPaintEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent *event);
 
-  private:
+private:
     class Private;
     Private *const d;
 };

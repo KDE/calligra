@@ -29,7 +29,8 @@
 
 #define GAP 0
 
-class KoPositionSelector::Private {
+class KoPositionSelector::Private
+{
 public:
     Private()
         : position(KoFlake::TopLeftCorner)
@@ -42,7 +43,8 @@ public:
         bottomLeft = createButton(KoFlake::BottomLeftCorner);
     }
 
-    QRadioButton *createButton(int id) {
+    QRadioButton *createButton(int id)
+    {
         QRadioButton *b = new QRadioButton();
         buttonGroup.addButton(b, id);
         return b;
@@ -53,7 +55,8 @@ public:
     KoFlake::Position position;
 };
 
-class RadioLayout : public QLayout {
+class RadioLayout : public QLayout
+{
 public:
     RadioLayout(QWidget *parent)
         : QLayout(parent)
@@ -62,92 +65,107 @@ public:
 
     ~RadioLayout()
     {
-        foreach( const Item & item, items )
+        foreach (const Item &item, items) {
             delete item.child;
+        }
         items.clear();
     }
 
-    void setGeometry (const QRect &geom) {
+    void setGeometry(const QRect &geom)
+    {
         QSize prefSize = calcSizes();
 
         qreal columnWidth, rowHeight;
-        if (geom.width() <= minimum.width())
+        if (geom.width() <= minimum.width()) {
             columnWidth = geom.width() / (qreal) maxCol;
-        else
+        } else {
             columnWidth = prefSize.width() + GAP;
-        if (geom.height() <= minimum.height())
+        }
+        if (geom.height() <= minimum.height()) {
             rowHeight = geom.height() / (qreal) maxRow;
-        else
+        } else {
             rowHeight = prefSize.height() + GAP;
+        }
         // padding inside row and column so that radio button is centered
-        QPoint padding( qRound(0.5 * (columnWidth - prefSize.width())), qRound(0.5 * (rowHeight - prefSize.height())));
+        QPoint padding(qRound(0.5 * (columnWidth - prefSize.width())), qRound(0.5 * (rowHeight - prefSize.height())));
         // offset so that all the radio button are centered within the widget
-        qreal offsetX = 0.5 * (geom.width()- static_cast<qreal>(maxCol) * columnWidth);
+        qreal offsetX = 0.5 * (geom.width() - static_cast<qreal>(maxCol) * columnWidth);
         qreal offsetY = 0.5 * (geom.height() - static_cast<qreal>(maxRow) * rowHeight);
-        QPoint offset( qRound(offsetX), qRound(offsetY));
-        foreach(const Item & item, items) {
-            QPoint point( qRound(item.column * columnWidth), qRound(item.row * rowHeight) );
+        QPoint offset(qRound(offsetX), qRound(offsetY));
+        foreach (const Item &item, items) {
+            QPoint point(qRound(item.column * columnWidth), qRound(item.row * rowHeight));
             QRect rect(point + offset + padding + geom.topLeft(), prefSize);
             item.child->setGeometry(rect);
         }
     }
 
-    QSize calcSizes() {
+    QSize calcSizes()
+    {
         QSize prefSize;
         maxRow = 0;
         maxCol = 0;
-        foreach(const Item & item, items) {
-            if(prefSize.isEmpty()) {
-                QAbstractButton *but = dynamic_cast<QAbstractButton*> (item.child->widget());
+        foreach (const Item &item, items) {
+            if (prefSize.isEmpty()) {
+                QAbstractButton *but = dynamic_cast<QAbstractButton *>(item.child->widget());
                 Q_ASSERT(but);
                 QStyleOptionButton opt;
                 opt.initFrom(but);
                 prefSize = QSize(but->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth, &opt, but),
-                        but->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight, &opt, but));
+                                 but->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight, &opt, but));
             }
             maxRow = qMax(maxRow, item.row);
             maxCol = qMax(maxCol, item.column);
         }
         maxCol++; maxRow++; // due to being zero-based.
-        preferred = QSize(maxCol * prefSize.width() + (maxCol-1) * GAP, maxRow * prefSize.height() + (maxRow-1) * GAP);
+        preferred = QSize(maxCol * prefSize.width() + (maxCol - 1) * GAP, maxRow * prefSize.height() + (maxRow - 1) * GAP);
         minimum = QSize(maxCol * prefSize.width(), maxRow * prefSize.height());
         return prefSize;
     }
 
-    QLayoutItem *itemAt (int index) const {
-        if( index < count() )
+    QLayoutItem *itemAt(int index) const
+    {
+        if (index < count()) {
             return items.at(index).child;
-        else
+        } else {
             return 0;
+        }
     }
 
-    QLayoutItem *takeAt (int index) {
+    QLayoutItem *takeAt(int index)
+    {
         Q_ASSERT(index < count());
         Item item = items.takeAt(index);
         return item.child;
     }
 
-    int count () const {
+    int count() const
+    {
         return items.count();
     }
 
-    void addItem(QLayoutItem *) {
+    void addItem(QLayoutItem *)
+    {
         Q_ASSERT(0);
     }
 
-    QSize sizeHint() const {
-        if(preferred.isEmpty())
-            const_cast<RadioLayout*> (this)->calcSizes();
+    QSize sizeHint() const
+    {
+        if (preferred.isEmpty()) {
+            const_cast<RadioLayout *>(this)->calcSizes();
+        }
         return preferred;
     }
 
-    QSize minimumSize() const {
-        if(minimum.isEmpty())
-            const_cast<RadioLayout*> (this)->calcSizes();
+    QSize minimumSize() const
+    {
+        if (minimum.isEmpty()) {
+            const_cast<RadioLayout *>(this)->calcSizes();
+        }
         return minimum;
     }
 
-    void addWidget(QRadioButton *widget, int row, int column) {
+    void addWidget(QRadioButton *widget, int row, int column)
+    {
         addChildWidget(widget);
         Item newItem;
         newItem.child = new QWidgetItem(widget);
@@ -169,7 +187,7 @@ private:
 
 KoPositionSelector::KoPositionSelector(QWidget *parent)
     : QWidget(parent),
-    d(new Private())
+      d(new Private())
 {
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     RadioLayout *lay = new RadioLayout(this);
@@ -183,50 +201,56 @@ KoPositionSelector::KoPositionSelector(QWidget *parent)
     connect(&d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(positionChanged(int)));
 }
 
-KoPositionSelector::~KoPositionSelector() {
+KoPositionSelector::~KoPositionSelector()
+{
     delete d;
 }
 
-KoFlake::Position KoPositionSelector::position() const {
+KoFlake::Position KoPositionSelector::position() const
+{
     return d->position;
 }
 
-void KoPositionSelector::setPosition(KoFlake::Position position) {
+void KoPositionSelector::setPosition(KoFlake::Position position)
+{
     d->position = position;
-    switch(d->position) {
-        case KoFlake::TopLeftCorner:
-            d->topLeft->setChecked(true);
-            break;
-        case KoFlake::TopRightCorner:
-            d->topRight->setChecked(true);
-            break;
-        case KoFlake::CenteredPosition:
-            d->center->setChecked(true);
-            break;
-        case KoFlake::BottomLeftCorner:
-            d->bottomLeft->setChecked(true);
-            break;
-        case KoFlake::BottomRightCorner:
-            d->bottomRight->setChecked(true);
-            break;
+    switch (d->position) {
+    case KoFlake::TopLeftCorner:
+        d->topLeft->setChecked(true);
+        break;
+    case KoFlake::TopRightCorner:
+        d->topRight->setChecked(true);
+        break;
+    case KoFlake::CenteredPosition:
+        d->center->setChecked(true);
+        break;
+    case KoFlake::BottomLeftCorner:
+        d->bottomLeft->setChecked(true);
+        break;
+    case KoFlake::BottomRightCorner:
+        d->bottomRight->setChecked(true);
+        break;
     }
 }
 
-void KoPositionSelector::positionChanged(int position) {
-    d->position = static_cast<KoFlake::Position> (position);
+void KoPositionSelector::positionChanged(int position)
+{
+    d->position = static_cast<KoFlake::Position>(position);
     emit positionSelected(d->position);
 }
 
-void KoPositionSelector::paintEvent (QPaintEvent *) {
-    QPainter painter( this );
+void KoPositionSelector::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
     QPen pen(Qt::black);
     int width;
-    if (d->topLeft->width() %2 == 0)
+    if (d->topLeft->width() % 2 == 0) {
         width = 2;
-    else
+    } else {
         width = 3;
+    }
     pen.setWidth(width);
     painter.setPen(pen);
-    painter.drawRect( QRect( d->topLeft->geometry().center(), d->bottomRight->geometry().center() ) );
+    painter.drawRect(QRect(d->topLeft->geometry().center(), d->bottomRight->geometry().center()));
     painter.end();
 }

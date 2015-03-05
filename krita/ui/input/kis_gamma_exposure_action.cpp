@@ -29,7 +29,6 @@
 #include "krita_utils.h"
 #include "kis_exposure_gamma_correction_interface.h"
 
-
 class KisGammaExposureAction::Private
 {
 public:
@@ -45,13 +44,14 @@ public:
     void addGamma(qreal diff);
 };
 
-
 void KisGammaExposureAction::Private::addExposure(qreal diff)
 {
     KisExposureGammaCorrectionInterface *interface =
         q->inputManager()->canvas()->exposureGammaCorrectionInterface();
 
-    if (!interface->canChangeExposureAndGamma()) return;
+    if (!interface->canChangeExposureAndGamma()) {
+        return;
+    }
 
     interface->setCurrentExposure(interface->currentExposure() + diff);
 }
@@ -61,7 +61,9 @@ void KisGammaExposureAction::Private::addGamma(qreal diff)
     KisExposureGammaCorrectionInterface *interface =
         q->inputManager()->canvas()->exposureGammaCorrectionInterface();
 
-    if (!interface->canChangeExposureAndGamma()) return;
+    if (!interface->canChangeExposureAndGamma()) {
+        return;
+    }
 
     interface->setCurrentGamma(interface->currentGamma() + diff);
 }
@@ -105,7 +107,7 @@ void KisGammaExposureAction::activate(int shortcut)
 {
     if (shortcut == ExposureShortcut) {
         QApplication::setOverrideCursor(KisCursor::changeExposureCursor());
-    } else /* if (shortcut == GammaShortcut) */ {
+    } else { /* if (shortcut == GammaShortcut) */
         QApplication::setOverrideCursor(KisCursor::changeGammaCursor());
     }
 }
@@ -123,7 +125,7 @@ void KisGammaExposureAction::begin(int shortcut, QEvent *event)
     KisExposureGammaCorrectionInterface *interface =
         inputManager()->canvas()->exposureGammaCorrectionInterface();
 
-    switch(shortcut) {
+    switch (shortcut) {
     case ExposureShortcut:
         d->baseExposure = interface->currentExposure();
         d->mode = (Shortcuts)shortcut;
@@ -162,7 +164,9 @@ void KisGammaExposureAction::begin(int shortcut, QEvent *event)
     case ResetExposureAndGammaShortcut: {
         KisExposureGammaCorrectionInterface *interface =
             inputManager()->canvas()->exposureGammaCorrectionInterface();
-        if (!interface->canChangeExposureAndGamma()) break;
+        if (!interface->canChangeExposureAndGamma()) {
+            break;
+        }
 
         interface->setCurrentGamma(1.0);
         interface->setCurrentExposure(0.0);
@@ -180,8 +184,9 @@ void KisGammaExposureAction::mouseMoved(const QPointF &lastPos, const QPointF &p
     KisExposureGammaCorrectionInterface *interface =
         inputManager()->canvas()->exposureGammaCorrectionInterface();
 
-    if (!interface->canChangeExposureAndGamma()) return;
-
+    if (!interface->canChangeExposureAndGamma()) {
+        return;
+    }
 
     if (d->mode == ExposureShortcut) {
         d->baseExposure += qreal(diff.y()) / step;

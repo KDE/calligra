@@ -28,13 +28,13 @@ void initUtility(long dizeSize);
 
 void exitUtility();
 
-bool isRichText(const QString& str);
+bool isRichText(const QString &str);
 
-bool setTimezone(const char* tz);
+bool setTimezone(const char *tz);
 
-const QString& getUtilityError();
+const QString &getUtilityError();
 
-const char* timezone2tz(const char* tzone);
+const char *timezone2tz(const char *tzone);
 
 QString monthAndYear(time_t d);
 
@@ -146,7 +146,7 @@ QString time2ISO(time_t t);
 
 QString time2tjp(time_t t);
 
-QString time2user(time_t t, const QString& timeFormat, bool localtime = true);
+QString time2user(time_t t, const QString &timeFormat, bool localtime = true);
 
 QString time2time(time_t t);
 
@@ -154,7 +154,7 @@ QString time2date(time_t t);
 
 QString time2weekday(time_t t);
 
-time_t date2time( const QString& );
+time_t date2time(const QString &);
 
 time_t addTimeToDate(time_t day, time_t t);
 
@@ -162,8 +162,7 @@ QString formatTime(time_t t);
 
 QDate time2qdate(time_t t);
 
-time_t qdate2time(const QDate& d);
-
+time_t qdate2time(const QDate &d);
 
 } // namespace TJ
 

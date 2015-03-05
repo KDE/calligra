@@ -46,54 +46,79 @@ public:
     void scheduleSizeUpdate();
 
     /// Returns the current maximunt size hint of all widgets inside the size group.
-    const QSize getMaxSizeHint() const { return m_maxSizeHint; }
-
+    const QSize getMaxSizeHint() const
+    {
+        return m_maxSizeHint;
+    }
 
 private Q_SLOTS:
     void updateSize();
 
 public:
-    KoSizeGroup* q;
+    KoSizeGroup *q;
     KoSizeGroup::mode m_mode;
     bool m_ignoreHidden;
 
 private:
-    QTimer* m_updateTimer; // used to filter multiple calls to scheduleSizeUpdate() into one single updateSize()
-    QList<GroupItem*> m_groupItems;
+    QTimer *m_updateTimer; // used to filter multiple calls to scheduleSizeUpdate() into one single updateSize()
+    QList<GroupItem *> m_groupItems;
     QSize m_maxSizeHint;
 };
-
 
 class GroupItem : public QObject, public QWidgetItem
 {
     Q_OBJECT
 
 public:
-    explicit GroupItem(QWidget* widget);
+    explicit GroupItem(QWidget *widget);
     ~GroupItem() {}
 
-    void setSize(const QSize &size) { m_size = size; }
+    void setSize(const QSize &size)
+    {
+        m_size = size;
+    }
 
-    int getWidth() const { return m_size.width(); }
-    void setWidth(int width) { m_size.setWidth(width); }
+    int getWidth() const
+    {
+        return m_size.width();
+    }
+    void setWidth(int width)
+    {
+        m_size.setWidth(width);
+    }
 
-    int getHeight() const { return m_size.height(); }
-    void setHeight(int height) { m_size.setHeight(height); }
+    int getHeight() const
+    {
+        return m_size.height();
+    }
+    void setHeight(int height)
+    {
+        m_size.setHeight(height);
+    }
 
-    bool hidden() const { return m_hidden; }
+    bool hidden() const
+    {
+        return m_hidden;
+    }
 
-    KoSizeGroupPrivate* getGroup() { return m_group; }
-    void setGroup(KoSizeGroupPrivate* group) { m_group = group; }
+    KoSizeGroupPrivate *getGroup()
+    {
+        return m_group;
+    }
+    void setGroup(KoSizeGroupPrivate *group)
+    {
+        m_group = group;
+    }
 
     QSize sizeHint() const;
     QSize minimumSize() const;
 
-    bool eventFilter(QObject*, QEvent *event);
+    bool eventFilter(QObject *, QEvent *event);
 
 private:
     bool m_hidden;
     QSize m_size;
-    KoSizeGroupPrivate* m_group;
+    KoSizeGroupPrivate *m_group;
 };
 
 #endif // KOSIZEGROUPPRIVATE_H

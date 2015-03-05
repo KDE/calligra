@@ -19,16 +19,13 @@
 #ifndef KOCHART_INTERFACE
 #define KOCHART_INTERFACE
 
-
 #include <QtPlugin>
 #include <Qt>
-
 
 #define ChartShapeId "ChartShape"
 
 class QAbstractItemModel;
 class QString;
-
 
 namespace KoChart
 {
@@ -47,7 +44,7 @@ public:
      *
      * See kspread/SheetAccessModel.h for details.
      */
-    virtual void setSheetAccessModel(QAbstractItemModel* model) = 0;
+    virtual void setSheetAccessModel(QAbstractItemModel *model) = 0;
 
     /**
      * Re-initializes the chart with data from an arbitrary region.
@@ -58,7 +55,7 @@ public:
      * @param dataDirection      orientation of a data set. Qt::Horizontal means a row is
      *                           to be interpreted as one data set, columns with Qt::Vertical.
      */
-    virtual void reset(const QString& region,
+    virtual void reset(const QString &region,
                        bool firstRowIsLabel,
                        bool firstColumnIsLabel,
                        Qt::Orientation dataDirection) = 0;

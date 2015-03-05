@@ -42,8 +42,8 @@ private:
     void cleanupTimezone();
     void removeDir(const QString &dir);
     QStringList data();
-    void testProject(const QString &fname, const KoXmlDocument &doc );
-    void compare( const QString &fname, Node *n, long id1, long id2 );
+    void testProject(const QString &fname, const KoXmlDocument &doc);
+    void compare(const QString &fname, Node *n, long id1, long id2);
 };
 
 } //namespace KPlato

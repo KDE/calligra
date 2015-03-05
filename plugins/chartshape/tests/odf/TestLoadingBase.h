@@ -35,7 +35,8 @@
 
 class KoShape;
 
-namespace KChart {
+namespace KChart
+{
 
 class ChartShape;
 class Table;
@@ -93,17 +94,18 @@ protected:
     // 5) Axes
     void testAxisTitle(Axis *axis, const QString &text);
 
-    Table* internalTable();
-    TableSource* tableSource();
+    Table *internalTable();
+    TableSource *tableSource();
 
     ChartShape *m_chart;
 };
 
 } // namespace KChart
 
-namespace QTest {
-    template<>
-    char *toString(const KChart::CellRegion &region);
+namespace QTest
+{
+template<>
+char *toString(const KChart::CellRegion &region);
 }
 
 #endif // KCHART_TESTLOADING_BASE

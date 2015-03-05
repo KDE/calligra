@@ -55,13 +55,14 @@ public:
     StyleManager();
     ~StyleManager();
 
-    QDomElement save(QDomDocument & doc);
-    bool loadXML(KoXmlElement const & styles);
+    QDomElement save(QDomDocument &doc);
+    bool loadXML(KoXmlElement const &styles);
 
     void saveOdf(KoGenStyles &mainStyles);
-    void loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* map = 0);
+    void loadOdfStyleTemplate(KoOdfStylesReader &stylesReader, Map *map = 0);
 
-    CustomStyle * defaultStyle() const {
+    CustomStyle *defaultStyle() const
+    {
         return m_defaultStyle;
     }
 
@@ -71,21 +72,22 @@ public:
      * by the OpenDocument internal name .
      * \return the custom style named \p name
      */
-    CustomStyle * style(QString const & name) const;
+    CustomStyle *style(QString const &name) const;
 
     void resetDefaultStyle();
 
-    bool checkCircle(QString const & name, QString const & parent);
-    bool validateStyleName(QString const & name, CustomStyle * style);
-    void changeName(QString const & oldName, QString const & newName);
+    bool checkCircle(QString const &name, QString const &parent);
+    bool validateStyleName(QString const &name, CustomStyle *style);
+    void changeName(QString const &oldName, QString const &newName);
 
     void insertStyle(CustomStyle *style);
 
-    void takeStyle(CustomStyle * style);
+    void takeStyle(CustomStyle *style);
     void createBuiltinStyles();
 
     QStringList styleNames() const;
-    int count() const {
+    int count() const
+    {
         return m_styles.count();
     }
 
@@ -98,8 +100,8 @@ public:
      * @param stylesReader repository of styles
      * @return a hash of styles with the OpenDocument internal name as key
      */
-    Styles loadOdfAutoStyles(KoOdfStylesReader& stylesReader,
-                             QHash<QString, Conditions>& conditionalStyles,
+    Styles loadOdfAutoStyles(KoOdfStylesReader &stylesReader,
+                             QHash<QString, Conditions> &conditionalStyles,
                              const ValueParser *parser);
 
     /**
@@ -114,12 +116,12 @@ public:
     void releaseUnusedAutoStyles(Styles autoStyles);
 
     /// OpenDocument name to internal name (on loading) or vice versa (on saving)
-    QString openDocumentName(const QString&) const;
+    QString openDocumentName(const QString &) const;
 
 private:
     void dump() const;
 
-    CustomStyle * m_defaultStyle;
+    CustomStyle *m_defaultStyle;
     CustomStyles  m_styles; // builtin and custom made styles
 
     // OpenDocument name to internal name (on loading) or vice versa (on saving)

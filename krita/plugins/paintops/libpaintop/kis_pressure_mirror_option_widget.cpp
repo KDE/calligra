@@ -31,7 +31,7 @@
 KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
     : KisCurveOptionWidget(new KisPressureMirrorOption())
 {
-    QWidget* w = new QWidget;
+    QWidget *w = new QWidget;
     m_horizontalMirror = new QCheckBox(i18n("Horizontally"));
     m_horizontalMirror->setChecked(false);
     m_verticalMirror = new QCheckBox(i18n("Vertically"));
@@ -40,11 +40,11 @@ KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
     connect(m_horizontalMirror, SIGNAL(toggled(bool)), SLOT(horizontalMirrorChanged(bool)));
     connect(m_verticalMirror, SIGNAL(toggled(bool)), SLOT(verticalMirrorChanged(bool)));
 
-    QHBoxLayout* hl = new QHBoxLayout;
+    QHBoxLayout *hl = new QHBoxLayout;
     hl->addWidget(m_horizontalMirror);
     hl->addWidget(m_verticalMirror);
 
-    QVBoxLayout* vl = new QVBoxLayout;
+    QVBoxLayout *vl = new QVBoxLayout;
     vl->setMargin(0);
     vl->addLayout(hl);
     vl->addWidget(curveWidget());
@@ -55,25 +55,22 @@ KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
     verticalMirrorChanged(m_verticalMirror->isChecked());
 }
 
-void KisPressureMirrorOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureMirrorOptionWidget::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
-    m_verticalMirror->setChecked(static_cast<KisPressureMirrorOption*>(curveOption())->isVerticalMirrorEnabled());
-    m_horizontalMirror->setChecked(static_cast<KisPressureMirrorOption*>(curveOption())->isHorizontalMirrorEnabled());
+    m_verticalMirror->setChecked(static_cast<KisPressureMirrorOption *>(curveOption())->isVerticalMirrorEnabled());
+    m_horizontalMirror->setChecked(static_cast<KisPressureMirrorOption *>(curveOption())->isHorizontalMirrorEnabled());
 }
-
 
 void KisPressureMirrorOptionWidget::horizontalMirrorChanged(bool mirror)
 {
-    static_cast<KisPressureMirrorOption*>(curveOption())->enableHorizontalMirror(mirror);
+    static_cast<KisPressureMirrorOption *>(curveOption())->enableHorizontalMirror(mirror);
     emitSettingChanged();
 }
 
 void KisPressureMirrorOptionWidget::verticalMirrorChanged(bool mirror)
 {
-    static_cast<KisPressureMirrorOption*>(curveOption())->enableVerticalMirror(mirror);
+    static_cast<KisPressureMirrorOption *>(curveOption())->enableVerticalMirror(mirror);
     emitSettingChanged();
 }
-
-
 

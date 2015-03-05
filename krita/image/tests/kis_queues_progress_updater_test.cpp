@@ -23,7 +23,6 @@
 #include "kis_queues_progress_updater.h"
 #include "testutil.h"
 
-
 void KisQueuesProgressUpdaterTest::testSlowProgress()
 {
     TestUtil::TestProgressBar progressProxy;

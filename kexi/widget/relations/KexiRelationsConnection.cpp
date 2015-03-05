@@ -41,7 +41,8 @@
 class KexiRelationsConnection::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
     QPointer<KexiRelationsTableContainer> masterTable;
     QPointer<KexiRelationsTableContainer> detailsTable;
@@ -57,7 +58,7 @@ public:
 KexiRelationsConnection::KexiRelationsConnection(
     KexiRelationsTableContainer *masterTbl, KexiRelationsTableContainer *detailsTbl,
     SourceConnection &c, KexiRelationsScrollArea *scrollArea)
-        : d(new Private)
+    : d(new Private)
 {
     d->scrollArea = scrollArea;
 // kDebug();
@@ -123,9 +124,9 @@ KexiRelationsConnection::drawConnection(QPainter *p)
         p->setPen(pen);
         QPolygon polygon;
         polygon
-            << QPoint(rx - 4, ry - 3)
-            << QPoint(rx - 4, ry + 3)
-            << QPoint(rx - 1, ry);
+                << QPoint(rx - 4, ry - 3)
+                << QPoint(rx - 4, ry + 3)
+                << QPoint(rx - 1, ry);
         p->drawPolygon(polygon);
         pen.setWidth(1);
         p->setPen(pen);
@@ -157,9 +158,9 @@ KexiRelationsConnection::drawConnection(QPainter *p)
         p->setPen(pen);
         QPolygon polygon;
         polygon
-            << QPoint(lx + 3, ry - 3)
-            << QPoint(lx + 3, ry + 3)
-            << QPoint(lx, ry);
+                << QPoint(lx + 3, ry - 3)
+                << QPoint(lx + 3, ry + 3)
+                << QPoint(lx, ry);
         p->drawPolygon(polygon);
         pen.setWidth(1);
         p->setPen(pen);
@@ -227,8 +228,9 @@ KexiRelationsConnection::matchesPoint(const QPoint &p, int tolerance)
 {
     QRect we = connectionRect();
 
-    if (!we.contains(p))
+    if (!we.contains(p)) {
         return false;
+    }
 
     /** get our coordinats
      *  you know what i mean the x1, y1 is the top point
@@ -281,8 +283,9 @@ KexiRelationsConnection::matchesPoint(const QPoint &p, int tolerance)
     float distance = sqrt(dX * dX + dY * dY);
     kDebug() << "distance: " << distance;
 
-    if (distance <= tolerance)
+    if (distance <= tolerance) {
         return true;
+    }
 
     return false;
 }
@@ -317,12 +320,12 @@ QRect KexiRelationsConnection::oldRect() const
     return d->oldRect;
 }
 
-KexiRelationsTableContainer* KexiRelationsConnection::masterTable() const
+KexiRelationsTableContainer *KexiRelationsConnection::masterTable() const
 {
     return d->masterTable;
 }
 
-KexiRelationsTableContainer* KexiRelationsConnection::detailsTable() const
+KexiRelationsTableContainer *KexiRelationsConnection::detailsTable() const
 {
     return d->detailsTable;
 }

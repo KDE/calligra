@@ -28,12 +28,11 @@ KisProcessingVisitor::ProgressHelper::ProgressHelper(const KisNode *node)
 {
     KisNodeProgressProxy *progressProxy = node->nodeProgressProxy();
 
-    if(progressProxy) {
+    if (progressProxy) {
         m_progressUpdater = new KoProgressUpdater(progressProxy);
         m_progressUpdater->start(100, i18n("Processing"));
         m_progressUpdater->moveToThread(node->thread());
-    }
-    else {
+    } else {
         m_progressUpdater = 0;
     }
 }
@@ -45,12 +44,11 @@ KisProcessingVisitor::ProgressHelper::~ProgressHelper()
     }
 }
 
-KoUpdater* KisProcessingVisitor::ProgressHelper::updater() const
+KoUpdater *KisProcessingVisitor::ProgressHelper::updater() const
 {
     QMutexLocker l(&m_progressMutex);
     return m_progressUpdater ? m_progressUpdater->startSubtask() : 0;
 }
-
 
 KisProcessingVisitor::~KisProcessingVisitor()
 {

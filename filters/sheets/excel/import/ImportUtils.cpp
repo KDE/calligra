@@ -24,7 +24,8 @@
 
 #include <NumberFormatParser.h>
 
-namespace XlsUtils {
+namespace XlsUtils
+{
 
 QString removeEscaped(const QString &text, bool removeOnlyEscapeChar)
 {
@@ -32,8 +33,9 @@ QString removeEscaped(const QString &text, bool removeOnlyEscapeChar)
     int pos = 0;
     while (true) {
         pos = s.indexOf('\\', pos);
-        if (pos < 0)
+        if (pos < 0) {
             break;
+        }
         if (removeOnlyEscapeChar) {
             s = s.left(pos) + s.mid(pos + 1);
             pos++;
@@ -61,14 +63,16 @@ QString extractLocale(QString &time)
     return locale;
 }
 
-bool isPercentageFormat(const QString& valueFormat)
+bool isPercentageFormat(const QString &valueFormat)
 {
     int length = valueFormat.length();
-    if (length < 1) return false;
+    if (length < 1) {
+        return false;
+    }
     return valueFormat[length - 1] == QChar('%');
 }
 
-bool isTimeFormat(const QString& valueFormat)
+bool isTimeFormat(const QString &valueFormat)
 {
     QString vf = valueFormat;
     QString locale = extractLocale(vf);
@@ -81,26 +85,24 @@ bool isTimeFormat(const QString& valueFormat)
     return ex.indexIn(vf) >= 0;
 }
 
-bool isFractionFormat(const QString& valueFormat)
+bool isFractionFormat(const QString &valueFormat)
 {
     QRegExp ex("^#[?]+/[0-9?]+$");
     QString vf = removeEscaped(valueFormat);
     return ex.indexIn(vf) >= 0;
 }
 
-bool isDateFormat(const QString& valueFormat)
+bool isDateFormat(const QString &valueFormat)
 {
     return NumberFormatParser::isDateFormat(valueFormat);
 }
 
-
-
-CellFormatKey::CellFormatKey(const Swinder::Format* format, const QString& formula)
+CellFormatKey::CellFormatKey(const Swinder::Format *format, const QString &formula)
     : format(format), isGeneral(format->valueFormat() == "General"), decimalCount(-1)
 {
     if (!isGeneral) {
         if (formula.startsWith(QLatin1String("msoxl:="))) { // special cases
-            QRegExp roundRegExp( "^msoxl:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
+            QRegExp roundRegExp("^msoxl:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$");
             if (roundRegExp.indexIn(formula) >= 0) {
                 bool ok = false;
                 int decimals = roundRegExp.cap(1).trimmed().toInt(&ok);
@@ -114,7 +116,8 @@ CellFormatKey::CellFormatKey(const Swinder::Format* format, const QString& formu
     }
 }
 
-bool CellFormatKey::operator==(const CellFormatKey& b) const {
+bool CellFormatKey::operator==(const CellFormatKey &b) const
+{
     return format == b.format && isGeneral == b.isGeneral && decimalCount == b.decimalCount;
 }
 

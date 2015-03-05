@@ -41,17 +41,19 @@ KisTIFFImport::~KisTIFFImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisTIFFImport::convert(const QByteArray &, const QByteArray &to)
 {
     dbgFile << "Importing using TIFFImport!";
 
-    if (to != "application/x-krita")
+    if (to != "application/x-krita") {
         return KisImportExportFilter::BadMimeType;
+    }
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
 
-    if (!doc)
+    if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     QString filename = m_chain->inputFile();
 
@@ -62,8 +64,9 @@ KisImportExportFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&
         KUrl url;
         url.setPath(filename);
 
-        if (url.isEmpty())
+        if (url.isEmpty()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
         KisTIFFConverter ib(doc);
 

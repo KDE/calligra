@@ -44,16 +44,15 @@ public:
 
 public Q_SLOTS:
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private Q_SLOTS:
 
-    void resetGUI(KoResource*); /// called when a new pattern is selected
+    void resetGUI(KoResource *); /// called when a new pattern is selected
 
 private:
     KisTextureOptionWidget *m_optionWidget;
-
 
 };
 
@@ -76,7 +75,7 @@ public:
      * @param dab the colored, final representation of the dab, after mirroring and everything.
      * @param offset the position of the dab on the image. used to calculate the position of the mask pattern
      */
-    void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
+    void apply(KisFixedPaintDeviceSP dab, const QPoint &offset, const KisPaintInformation &info);
     void fillProperties(const KisPropertiesConfiguration *setting);
 
 private:

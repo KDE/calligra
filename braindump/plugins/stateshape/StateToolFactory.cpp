@@ -38,7 +38,7 @@ StateToolFactory::~StateToolFactory()
 {
 }
 
-KoToolBase* StateToolFactory::createTool(KoCanvasBase * canvas)
+KoToolBase *StateToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new StateTool(canvas);
 }

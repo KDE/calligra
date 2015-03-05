@@ -35,8 +35,8 @@ public:
 
 AutoFillStrategy::AutoFillStrategy(CellToolBase *cellTool,
                                    const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-        : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
-        , d(new Private)
+    : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
+    , d(new Private)
 {
     d->autoFillSource = selection()->lastRange();
 }
@@ -46,12 +46,12 @@ AutoFillStrategy::~AutoFillStrategy()
     delete d;
 }
 
-KUndo2Command* AutoFillStrategy::createCommand()
+KUndo2Command *AutoFillStrategy::createCommand()
 {
     if (d->autoFillSource == selection()->lastRange()) {
         return 0;
     }
-    AutoFillCommand* command = new AutoFillCommand();
+    AutoFillCommand *command = new AutoFillCommand();
     command->setSheet(selection()->activeSheet());
     command->setSourceRange(d->autoFillSource);
     command->setTargetRange(selection()->lastRange());

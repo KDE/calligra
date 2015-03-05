@@ -31,7 +31,6 @@
 #include <QString>
 #include <QTimer>
 
-
 #include <KoCanvasBase.h>
 
 #include <kdebug.h>
@@ -49,22 +48,23 @@
 
 using namespace Calligra::Sheets;
 
-CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
-        : KoCsvImportDialog(parent),
-        m_selection(selection),
-        m_canceled(false),
-        m_mode(mode)
+CSVDialog::CSVDialog(QWidget *parent, Selection *selection, Mode mode)
+    : KoCsvImportDialog(parent),
+      m_selection(selection),
+      m_canceled(false),
+      m_mode(mode)
 {
     // Limit the range
     int column = m_selection->lastRange().left();
     Cell lastCell = m_selection->activeSheet()->cellStorage()->lastInColumn(column);
     if (!lastCell.isNull())
-        if (m_selection->lastRange().bottom() > lastCell.row())
+        if (m_selection->lastRange().bottom() > lastCell.row()) {
             m_selection->lastRange().setBottom(lastCell.row());
+        }
 
     if (m_mode == Clipboard) {
         setWindowTitle(i18n("Inserting From Clipboard"));
-        const QMimeData* mime = QApplication::clipboard()->mimeData();
+        const QMimeData *mime = QApplication::clipboard()->mimeData();
         if (!mime) {
             KMessageBox::information(this, i18n("There is no data in the clipboard."));
             m_canceled = true;
@@ -89,8 +89,9 @@ CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
         setDataWidgetEnabled(false);
     }
 
-    if (! m_canceled)
+    if (! m_canceled) {
         QTimer::singleShot(0, this, SLOT(init()));
+    }
 }
 
 CSVDialog::~CSVDialog()
@@ -100,11 +101,12 @@ CSVDialog::~CSVDialog()
 
 void CSVDialog::init()
 {
-    if (m_canceled)
+    if (m_canceled) {
         return;
+    }
 
     if (m_mode == Clipboard) {
-        const QMimeData* mime = QApplication::clipboard()->mimeData();
+        const QMimeData *mime = QApplication::clipboard()->mimeData();
         Q_ASSERT(mime);
         Q_ASSERT(mime->hasText());
         setData(QByteArray(mime->text().toUtf8()));
@@ -123,7 +125,7 @@ void CSVDialog::init()
     } else { // if ( m_mode == Column )
         setData(QByteArray());
         Cell cell;
-        Sheet * sheet = m_selection->activeSheet();
+        Sheet *sheet = m_selection->activeSheet();
         QByteArray data;
         int col = m_selection->lastRange().left();
         for (int i = m_selection->lastRange().top(); i <= m_selection->lastRange().bottom(); ++i) {
@@ -144,59 +146,64 @@ bool CSVDialog::canceled()
 
 void CSVDialog::accept()
 {
-    Sheet * sheet  = m_selection->activeSheet();
+    Sheet *sheet  = m_selection->activeSheet();
 
     int numRows = rows();
     int numCols = cols();
 
-    if ((numRows == 0) || (numCols == 0))
-        return;  // nothing to do here
+    if ((numRows == 0) || (numCols == 0)) {
+        return;    // nothing to do here
+    }
 
     QRect range = m_selection->lastRange();
     if ((numCols > range.width()) && (range.width() > 1)) {
         numCols = range.width();
-    } else
+    } else {
         range.setRight(range.left() + numCols - 1);
+    }
 
-    if ((numRows > range.height()) && (range.height() > 1))
+    if ((numRows > range.height()) && (range.height() > 1)) {
         numRows = range.height();
-    else
+    } else {
         range.setBottom(range.top() + numRows - 1);
+    }
 
     QList<KoCsvImportDialog::DataType> dataTypes;
     Value value(Value::Array);
     for (int row = 0; row < numRows; ++row) {
         for (int col = 0; col < numCols; ++col) {
             value.setElement(col, row, Value(text(row, col)));
-            if (row == 0)
+            if (row == 0) {
                 dataTypes.insert(col, dataType(col));
+            }
         }
     }
 
-    CSVDataCommand* command = new CSVDataCommand();
-    if (m_mode == Clipboard)
+    CSVDataCommand *command = new CSVDataCommand();
+    if (m_mode == Clipboard) {
         command->setText(kundo2_i18n("Inserting From Clipboard"));
-    else if (m_mode == File)
+    } else if (m_mode == File) {
         command->setText(kundo2_i18n("Inserting Text File"));
-    else
+    } else {
         command->setText(kundo2_i18n("Text to Columns"));
+    }
     command->setSheet(sheet);
     command->setValue(value);
     command->setColumnDataTypes(dataTypes);
     command->setDecimalSymbol(decimalSymbol());
     command->setThousandsSeparator(thousandsSeparator());
 
-    const QMimeData* mimedata = QApplication::clipboard()->mimeData();
+    const QMimeData *mimedata = QApplication::clipboard()->mimeData();
     if (m_mode == Clipboard &&
-        !mimedata->hasFormat("application/x-kspread-snippet") &&
-        !mimedata->hasHtml() && mimedata->hasText() &&
-        mimedata->text().split('\n').count() >= 2 )
-    {
+            !mimedata->hasFormat("application/x-kspread-snippet") &&
+            !mimedata->hasHtml() && mimedata->hasText() &&
+            mimedata->text().split('\n').count() >= 2) {
         range.setSize(QSize(numCols, numRows));
     }
     command->add(range);
-    if (!command->execute(m_selection->canvas()))
+    if (!command->execute(m_selection->canvas())) {
         delete command;
+    }
 
     const CellDamage::Changes changes = CellDamage::Appearance | CellDamage::Value | CellDamage::Formula;
     sheet->map()->addDamage(new CellDamage(sheet, Region(range, sheet), changes));

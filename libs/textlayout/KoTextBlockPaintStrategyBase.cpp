@@ -37,6 +37,7 @@ void KoTextBlockPaintStrategyBase::applyStrategy(QPainter *)
 {
 }
 
-bool KoTextBlockPaintStrategyBase::isVisible() const {
+bool KoTextBlockPaintStrategyBase::isVisible() const
+{
     return true;
 }

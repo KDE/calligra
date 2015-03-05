@@ -35,7 +35,7 @@ class KoGenericRegistryModel : public QAbstractListModel
 
 public:
 
-    KoGenericRegistryModel(KoGenericRegistry<T>* registry);
+    KoGenericRegistryModel(KoGenericRegistry<T> *registry);
 
     virtual ~KoGenericRegistryModel();
 
@@ -59,12 +59,12 @@ public:
 
 private:
 
-    KoGenericRegistry<T>* m_registry;
+    KoGenericRegistry<T> *m_registry;
 };
 
 // -- Implementation --
 template<typename T>
-KoGenericRegistryModel<T>::KoGenericRegistryModel(KoGenericRegistry<T>* registry) : m_registry(registry)
+KoGenericRegistryModel<T>::KoGenericRegistryModel(KoGenericRegistry<T> *registry) : m_registry(registry)
 {
 }
 

@@ -48,8 +48,8 @@ public:
 };
 
 KoTextLayoutNoteArea::KoTextLayoutNoteArea(KoInlineNote *note, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
-  : KoTextLayoutArea(parent, documentLayout)
-  , d(new Private)
+    : KoTextLayoutArea(parent, documentLayout)
+    , d(new Private)
 {
     Q_ASSERT(note);
     Q_ASSERT(parent);
@@ -94,7 +94,7 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
             label = notesConfig->footnoteContinuationBackward() + " " + d->note->label();
         }
         setReferenceRect(left(), right(), top() + OVERLAPPREVENTION
-                                    , maximumAllowedBottom() + OVERLAPPREVENTION);
+                         , maximumAllowedBottom() + OVERLAPPREVENTION);
     } else {
         label = d->note->label();
     }
@@ -154,7 +154,7 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
         contTextLine.setPosition(QPointF(right() - contTextLine.naturalTextWidth(), bottom() - contTextLine.height()));
 
         documentLayout()->setContinuationObstruction(new
-                                    KoTextLayoutObstruction(contTextLine.naturalTextRect(), false));
+                KoTextLayoutObstruction(contTextLine.naturalTextRect(), false));
     }
     return contNotNeeded;
 }
@@ -172,8 +172,7 @@ KoPointedAt KoTextLayoutNoteArea::hitTest(const QPointF &p, Qt::HitTestAccuracy 
 
     pointedAt = KoTextLayoutArea::hitTest(tmpP, accuracy);
 
-    if (tmpP.x() > left() && tmpP.x() < d->labelWidth && tmpP.y() < top() + d->labelHeight)
-    {
+    if (tmpP.x() > left() && tmpP.x() < d->labelWidth && tmpP.y() < top() + d->labelHeight) {
         pointedAt.noteReference = d->note->getPosInDocument();
         pointedAt.position = tmpP.x();
     }
@@ -184,6 +183,6 @@ KoPointedAt KoTextLayoutNoteArea::hitTest(const QPointF &p, Qt::HitTestAccuracy 
 QRectF KoTextLayoutNoteArea::selectionBoundingBox(QTextCursor &cursor) const
 {
     return KoTextLayoutArea::selectionBoundingBox(cursor).translated(0
-                                        , d->isContinuedArea ? -OVERLAPPREVENTION : 0);
+            , d->isContinuedArea ? -OVERLAPPREVENTION : 0);
 
 }

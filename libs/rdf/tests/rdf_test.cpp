@@ -44,14 +44,13 @@ const QString lorem(
     "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla"
     "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia"
     "deserunt mollit anim id est laborum.\n"
-    );
-
+);
 
 QString RdfTest::insertTableWithSemItem(KoTextEditor &editor,
-                               KoDocumentRdf &rdfDoc,
-                               const QString name)
+                                        KoDocumentRdf &rdfDoc,
+                                        const QString name)
 {
-    editor.insertTable(5,10);
+    editor.insertTable(5, 10);
 #define TABLESIZE (5*10)
     const QTextTable *table = editor.currentTable();
 
@@ -74,10 +73,10 @@ QString RdfTest::insertTableWithSemItem(KoTextEditor &editor,
     hTestSemanticItem testItem(new TestSemanticItem(0, &rdfDoc));
     testItem->setName(name);
     Soprano::Statement st(
-                testItem->linkingSubject(), // subject
-                Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")), // predicate
-                Soprano::Node::createLiteralNode(newId), // object
-                rdfDoc.manifestRdfNode()); // manifest datastore
+        testItem->linkingSubject(), // subject
+        Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")), // predicate
+        Soprano::Node::createLiteralNode(newId), // object
+        rdfDoc.manifestRdfNode()); // manifest datastore
     rdfDoc.model()->addStatement(st);
     rdfDoc.rememberNewInlineRdfObject(inlineRdf);
 
@@ -115,13 +114,13 @@ void RdfTest::testCreateMarkers()
     editor.insertText(lorem);
 
     // verify that the bookmark marks the table and only that
-    QPair<int,int> position = rdfDoc.findExtent(newId);
-    QCOMPARE(position.first, 2*(lorem.length()+1));
-    QCOMPARE(position.second, 2*(lorem.length()+1)+TABLESIZE-1);
+    QPair<int, int> position = rdfDoc.findExtent(newId);
+    QCOMPARE(position.first, 2 * (lorem.length() + 1));
+    QCOMPARE(position.second, 2 * (lorem.length() + 1) + TABLESIZE - 1);
 
     editor.setPosition(position.first + 1);
-    QPair<int,int> position2 = rdfDoc.findExtent(&editor);
-    qDebug()<<position<<position2;
+    QPair<int, int> position2 = rdfDoc.findExtent(&editor);
+    qDebug() << position << position2;
     QCOMPARE(position, position2);
 
     // check that the id is like we expext
@@ -159,11 +158,11 @@ void RdfTest::testFindMarkers()
     QList<hTestSemanticItem> semItems = TestSemanticItem::allObjects(&rdfDoc);
     Q_ASSERT(semItems.length() == 1);
 
-    foreach(hTestSemanticItem semItem, semItems) {
+    foreach (hTestSemanticItem semItem, semItems) {
         QStringList xmlidlist = semItem->xmlIdList();
 
         Q_ASSERT(xmlidlist.length() == 1);
-        foreach(const QString xmlid, xmlidlist) {
+        foreach (const QString xmlid, xmlidlist) {
             Q_ASSERT(idList.contains(xmlid));
             QPair<int, int> position = rdfDoc.findExtent(xmlid);
 
@@ -176,37 +175,38 @@ void RdfTest::testFindMarkers()
             Q_UNUSED(table);
         }
     }
-/*
-    // add an extra semitem
-    editor.insertText(lorem);
-    editor.movePosition(QTextCursor::End);
-    QString newId2 = insertTableWithSemItem(editor, rdfDoc, "test item2");
-    idList << newId2;
+    /*
+        // add an extra semitem
+        editor.insertText(lorem);
+        editor.movePosition(QTextCursor::End);
+        QString newId2 = insertTableWithSemItem(editor, rdfDoc, "test item2");
+        idList << newId2;
 
-    editor.insertText(lorem);
+        editor.insertText(lorem);
 
-    // get all semantic items and verify they are correct
-    semItems = TestSemanticItem::allObjects(&rdfDoc);
-    QCOMPARE(semItems.length(), 2);
+        // get all semantic items and verify they are correct
+        semItems = TestSemanticItem::allObjects(&rdfDoc);
+        QCOMPARE(semItems.length(), 2);
 
-    // find the extents from the xml-id's in the semantic items
-    QCOMPARE(semItems[0]->xmlIdList().length(), 1);
-    QPair<int, int> position = rdfDoc.findExtent(semItems[0]->xmlIdList()[0]);
-    QCOMPARE(position.first, 942);
-    QCOMPARE(position.second, 995);
-    editor.setPosition(position.first + 2);
-    const QTextTable *table = editor.currentTable();
-    Q_ASSERT(table);
-    Q_UNUSED(table);
+        // find the extents from the xml-id's in the semantic items
+        QCOMPARE(semItems[0]->xmlIdList().length(), 1);
+        QPair<int, int> position = rdfDoc.findExtent(semItems[0]->xmlIdList()[0]);
+        QCOMPARE(position.first, 942);
+        QCOMPARE(position.second, 995);
+        editor.setPosition(position.first + 2);
+        const QTextTable *table = editor.currentTable();
+        Q_ASSERT(table);
+        Q_UNUSED(table);
 
-    QCOMPARE(semItems[1]->xmlIdList().length(), 1);
-    position = rdfDoc.findExtent(semItems[1]->xmlIdList()[0]);
-    QCOMPARE(position.first, 444);
-    QCOMPARE(position.second, 497);
-    editor.setPosition(position.first + 2);
-    table = editor.currentTable();
-    Q_ASSERT(table);
-*/}
+        QCOMPARE(semItems[1]->xmlIdList().length(), 1);
+        position = rdfDoc.findExtent(semItems[1]->xmlIdList()[0]);
+        QCOMPARE(position.first, 444);
+        QCOMPARE(position.second, 497);
+        editor.setPosition(position.first + 2);
+        table = editor.currentTable();
+        Q_ASSERT(table);
+    */
+}
 
 void RdfTest::testFindByName()
 {
@@ -237,14 +237,13 @@ void RdfTest::testFindByName()
            << insertSemItem(editor, rdfDoc, parent, "test item3")
            << insertSemItem(editor, rdfDoc, parent, "test item4");
 
-
     QList<hTestSemanticItem> results = TestSemanticItem::findItemsByName("test item1",
                                                                          &rdfDoc);
     Q_ASSERT(results.size() == 1);
     QStringList xmlids = results[0]->xmlIdList();
     Q_ASSERT(xmlids.size() == 1);
     Q_ASSERT(xmlids[0] == newId);
-*/
+    */
 }
 
 void RdfTest::testEditAndFindMarkers()
@@ -272,7 +271,6 @@ void RdfTest::testEditAndFindMarkers()
     QStringList idList;
     QString newId = insertSemItem(editor, rdfDoc, parent, "test item1");
     idList << newId;
-
 
     // XXX: finish test!
     */

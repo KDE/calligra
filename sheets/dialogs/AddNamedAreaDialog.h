@@ -43,15 +43,15 @@ class AddNamedAreaDialog : public KDialog
     Q_OBJECT
 
 public:
-    AddNamedAreaDialog(QWidget* parent, Selection* selection);
+    AddNamedAreaDialog(QWidget *parent, Selection *selection);
 
 public Q_SLOTS:
     void slotOk();
-    void slotAreaNameChanged(const QString& name);
+    void slotAreaNameChanged(const QString &name);
 
 protected:
-    Selection*  m_selection;
-    KLineEdit*  m_areaName;
+    Selection  *m_selection;
+    KLineEdit  *m_areaName;
 };
 
 } // namespace Sheets

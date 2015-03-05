@@ -23,10 +23,10 @@
 #include "kis_pressure_mirror_option.h"
 #include "kis_paintop_settings.h"
 
-
 struct KisCurrentOutlineFetcher::Private {
     Private(Options optionsAvailable)
-        : isDirty(true) {
+        : isDirty(true)
+    {
         if (optionsAvailable & SIZE_OPTION) {
             sizeOption.reset(new KisPressureSizeOption());
         }
@@ -62,10 +62,10 @@ void KisCurrentOutlineFetcher::setDirty()
 }
 
 QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &info,
-                                                    const KisPaintOpSettings *settings,
-                                                    const QPainterPath &originalOutline,
-                                                    qreal additionalScale,
-                                                    qreal additionalRotation) const
+        const KisPaintOpSettings *settings,
+        const QPainterPath &originalOutline,
+        qreal additionalScale,
+        qreal additionalRotation) const
 {
     if (d->isDirty) {
         if (d->sizeOption) {

@@ -40,17 +40,19 @@ KAction *KoStandardAction::create(StandardAction id, const QObject *recvr, const
     Q_ASSERT(newAction);
     newAction->setObjectName(name(id));
 
-    if (recvr && slot)
+    if (recvr && slot) {
         QObject::connect(newAction, SIGNAL(triggered(bool)), recvr, slot);
+    }
 
     KActionCollection *collection = qobject_cast<KActionCollection *>(parent);
-    if (collection)
+    if (collection) {
         collection->addAction(newAction->objectName(), newAction);
+    }
 
     return newAction;
 }
 
-const char* KoStandardAction::name(StandardAction id)
+const char *KoStandardAction::name(StandardAction id)
 {
     switch (id) {
     case ShowGuides:
@@ -62,5 +64,5 @@ const char* KoStandardAction::name(StandardAction id)
 
 KToggleAction *KoStandardAction::showGuides(const QObject *receiver, const char *slot, QObject *parent)
 {
-    return static_cast<KToggleAction*>(create(ShowGuides, receiver, slot, parent));
+    return static_cast<KToggleAction *>(create(ShowGuides, receiver, slot, parent));
 }

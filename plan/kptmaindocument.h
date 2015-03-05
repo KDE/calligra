@@ -35,7 +35,6 @@
 
 #include <QFileInfo>
 
-
 #define PLAN_MIME_TYPE "application/x-vnd.kde.plan"
 
 /// The main namespace.
@@ -59,72 +58,107 @@ public:
     explicit MainDocument(KoPart *part);
     ~MainDocument();
 
-
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return PLAN_MIME_TYPE; }
+    virtual QByteArray nativeFormatMimeType() const
+    {
+        return PLAN_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const { return ""; }
+    virtual QByteArray nativeOasisMimeType() const
+    {
+        return "";
+    }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {
         return QStringList() << PLAN_MIME_TYPE;
     }
 
-    void setReadWrite( bool rw );
+    void setReadWrite(bool rw);
     void configChanged();
 
-    virtual void paintContent( QPainter& painter, const QRect& rect);
+    virtual void paintContent(QPainter &painter, const QRect &rect);
 
-    void setProject( Project *project );
-    Project &getProject() { return *m_project; }
-    const Project &getProject() const { return * m_project; }
+    void setProject(Project *project);
+    Project &getProject()
+    {
+        return *m_project;
+    }
+    const Project &getProject() const
+    {
+        return * m_project;
+    }
 
     /**
      * Return the set of SupportedSpecialFormats that the kplato wants to
      * offer in the "Save" file dialog.
      * Note: SaveEncrypted is not supported.
      */
-    virtual int supportedSpecialFormats() const { return SaveAsDirectoryStore; }
+    virtual int supportedSpecialFormats() const
+    {
+        return SaveAsDirectoryStore;
+    }
 
     // The load and save functions. Look in the file kplato.dtd for info
-    virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
+    virtual bool loadXML(const KoXmlDocument &document, KoStore *store);
     virtual QDomDocument saveXML();
     /// Save a workpackage file containing @p node with schedule identity @p id, owned by @p resource
-    QDomDocument saveWorkPackageXML( const Node *node, long id, Resource *resource = 0 );
+    QDomDocument saveWorkPackageXML(const Node *node, long id, Resource *resource = 0);
 
-    bool saveOdf( SavingContext &/*documentContext */) { return false; }
-    bool loadOdf( KoOdfReadStore & odfStore );
+    bool saveOdf(SavingContext &/*documentContext */)
+    {
+        return false;
+    }
+    bool loadOdf(KoOdfReadStore &odfStore);
 
-    Config &config() { return m_config; }
-    Context *context() const { return m_context; }
+    Config &config()
+    {
+        return m_config;
+    }
+    Context *context() const
+    {
+        return m_context;
+    }
 
-    WBSDefinition &wbsDefinition() { return m_project->wbsDefinition(); }
+    WBSDefinition &wbsDefinition()
+    {
+        return m_project->wbsDefinition();
+    }
 
-    const XMLLoaderObject &xmlLoader() const { return m_xmlLoader; }
+    const XMLLoaderObject &xmlLoader() const
+    {
+        return m_xmlLoader;
+    }
 
-    DocumentChild *createChild( KoDocument *doc, const QRect &geometry = QRect() );
+    DocumentChild *createChild(KoDocument *doc, const QRect &geometry = QRect());
 
-    bool saveWorkPackageToStream( QIODevice * dev, const Node *node, long id, Resource *resource = 0 );
-    bool saveWorkPackageFormat( const QString &file, const Node *node, long id, Resource *resource = 0 );
-    bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Resource *resource = 0  );
+    bool saveWorkPackageToStream(QIODevice *dev, const Node *node, long id, Resource *resource = 0);
+    bool saveWorkPackageFormat(const QString &file, const Node *node, long id, Resource *resource = 0);
+    bool saveWorkPackageUrl(const KUrl &_url, const Node *node, long id, Resource *resource = 0);
     void mergeWorkPackages();
-    void mergeWorkPackage( const Package *package );
-    void terminateWorkPackage( const Package *package );
+    void mergeWorkPackage(const Package *package);
+    void terminateWorkPackage(const Package *package);
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
-    bool loadWorkPackage( Project &project, const KUrl &url );
-    Package *loadWorkPackageXML( Project& project, QIODevice*, const KoXmlDocument& document, const KUrl& url );
-    QMap<KDateTime, Package*> workPackages() const { return m_workpackages; }
+    bool loadWorkPackage(Project &project, const KUrl &url);
+    Package *loadWorkPackageXML(Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &url);
+    QMap<KDateTime, Package *> workPackages() const
+    {
+        return m_workpackages;
+    }
 
-    void insertFile( const QString &filename, Node *parent, Node *after = 0 );
-    bool insertProject( Project &project, Node *parent, Node *after );
+    void insertFile(const QString &filename, Node *parent, Node *after = 0);
+    bool insertProject(Project &project, Node *parent, Node *after);
 
-    KPlatoAboutPage &aboutPage() { return m_aboutPage; }
+    KPlatoAboutPage &aboutPage()
+    {
+        return m_aboutPage;
+    }
 
-    bool extractFiles( KoStore *store, Package *package );
-    bool extractFile( KoStore *store, Package *package, const Document *doc );
+    bool extractFiles(KoStore *store, Package *package);
+    bool extractFile(KoStore *store, Package *package, const Document *doc);
 
-    void registerView( View *view );
+    void registerView(View *view);
 
     /// Create a new project from this project
     /// Generates new project id and task ids
@@ -133,34 +167,34 @@ public:
 
     using KoDocument::setModified;
 public Q_SLOTS:
-    void setModified( bool mod );
+    void setModified(bool mod);
 
     /// Inserts an item into all other views than @p view
-    void insertViewListItem( View *view, const ViewListItem *item, const ViewListItem *parent, int index );
+    void insertViewListItem(View *view, const ViewListItem *item, const ViewListItem *parent, int index);
     /// Removes the view list item from all other views than @p view
-    void removeViewListItem( View *view, const ViewListItem *item );
+    void removeViewListItem(View *view, const ViewListItem *item);
     /// View selector has been modified
     void viewlistModified();
     /// Check for workpackages
     /// If @p keep is true, packages that has been refused will not be checked for again
-    void checkForWorkPackages( bool keep = false );
+    void checkForWorkPackages(bool keep = false);
 
-    void setLoadingTemplate( bool );
+    void setLoadingTemplate(bool);
 
 Q_SIGNALS:
     void changed();
     void workPackageLoaded();
-    void viewlistModified( bool );
+    void viewlistModified(bool);
     void viewListItemAdded(const ViewListItem *item, const ViewListItem *parent, int index);
     void viewListItemRemoved(const ViewListItem *item);
 
 protected:
     /// Load kplato specific files
-    virtual bool completeLoading( KoStore* store );
+    virtual bool completeLoading(KoStore *store);
     /// Save kplato specific files
-    virtual bool completeSaving( KoStore* store );
+    virtual bool completeSaving(KoStore *store);
 
-    void mergeWorkPackage( Task *to, const Task *from, const Package *package );
+    void mergeWorkPackage(Task *to, const Task *from, const Package *package);
 
     // used by insert file
     struct InsertFileInfo {
@@ -169,27 +203,26 @@ protected:
         Node *after;
     } m_insertFileInfo;
 
-
 protected Q_SLOTS:
     void slotViewDestroyed();
-    void addSchedulerPlugin( const QString&, SchedulerPlugin *plugin );
+    void addSchedulerPlugin(const QString &, SchedulerPlugin *plugin);
 
     void autoCheckForWorkPackages();
     void checkForWorkPackage();
 
     void insertFileCompleted();
-    void insertFileCancelled( const QString& );
+    void insertFileCancelled(const QString &);
 
-    void workPackageMergeDialogFinished( int result );
+    void workPackageMergeDialogFinished(int result);
 
 private:
-    bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
+    bool loadAndParse(KoStore *store, const QString &filename, KoXmlDocument &doc);
 
     void loadSchedulerPlugins();
 
 private:
     Project *m_project;
-    QWidget* m_parentWidget;
+    QWidget *m_parentWidget;
 
     Config m_config;
     Context *m_context;
@@ -197,10 +230,10 @@ private:
     XMLLoaderObject m_xmlLoader;
     bool m_loadingTemplate;
 
-    QMap<QString, SchedulerPlugin*> m_schedulerPlugins;
-    QMap<KDateTime, Package*> m_workpackages;
+    QMap<QString, SchedulerPlugin *> m_schedulerPlugins;
+    QMap<KDateTime, Package *> m_workpackages;
     QFileInfoList m_infoList;
-    QMap<KDateTime, Project*> m_mergedPackages;
+    QMap<KDateTime, Project *> m_mergedPackages;
 
     KPlatoAboutPage m_aboutPage;
 
@@ -211,7 +244,6 @@ private:
 
     QList<QPointer<View> > m_views;
 };
-
 
 }  //KPlato namespace
 

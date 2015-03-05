@@ -19,7 +19,6 @@
 #include "kis_shared_ptr_test.h"
 #include <qtest_kde.h>
 
-
 #include "kis_shared_ptr.h"
 #include "kis_shared.h"
 
@@ -27,10 +26,10 @@ class TestClassWatcher
 {
 public:
 
-    TestClassWatcher() {
+    TestClassWatcher()
+    {
         deleted = false;
     }
-
 
     bool deleted;
 };
@@ -39,15 +38,17 @@ class TestClass : public KisShared
 {
 public:
 
-    TestClass(TestClassWatcher * tcw) {
+    TestClass(TestClassWatcher *tcw)
+    {
         m_tcw = tcw;
     }
 
-    ~TestClass() {
+    ~TestClass()
+    {
         m_tcw->deleted = true;
     }
 
-    TestClassWatcher * m_tcw;
+    TestClassWatcher *m_tcw;
 };
 
 typedef KisSharedPtr<TestClass> TestClassSP;
@@ -58,8 +59,8 @@ typedef vTestClassSP::const_iterator vTestClassSP_cit;
 
 void KisSharedPtrTest::testRefTwoSharedPointersOneInstance()
 {
-    TestClassWatcher * tcw = new TestClassWatcher();
-    TestClass * instance = new TestClass(tcw);
+    TestClassWatcher *tcw = new TestClassWatcher();
+    TestClass *instance = new TestClass(tcw);
 
     {
         TestClassSP instanceSP(instance);
@@ -80,8 +81,8 @@ void KisSharedPtrTest::testRefTwoSharedPointersOneInstance()
 void KisSharedPtrTest::testCopy()
 {
 
-    TestClassWatcher * tcw = new TestClassWatcher();
-    TestClass * instance = new TestClass(tcw);
+    TestClassWatcher *tcw = new TestClassWatcher();
+    TestClass *instance = new TestClass(tcw);
 
     {
         TestClassSP instanceSP(instance);
@@ -103,8 +104,8 @@ void KisSharedPtrTest::testCopy()
 void KisSharedPtrTest::testCopy2()
 {
 
-    TestClassWatcher * tcw = new TestClassWatcher();
-    TestClass * instance = new TestClass(tcw);
+    TestClassWatcher *tcw = new TestClassWatcher();
+    TestClass *instance = new TestClass(tcw);
 
     {
         TestClassSP instanceSP(instance);
@@ -137,7 +138,7 @@ void KisSharedPtrTest::testCopy0()
 
 void KisSharedPtrTest::testClear()
 {
-    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClassWatcher *tcw = new TestClassWatcher();
     TestClassSP instance = new TestClass(tcw);
     TestClassSP instance2 = instance;
     instance.clear();
@@ -148,8 +149,8 @@ void KisSharedPtrTest::testClear()
 void KisSharedPtrTest::testWeakSP()
 {
 
-    TestClassWatcher * tcw = new TestClassWatcher();
-    TestClass * instance = new TestClass(tcw);
+    TestClassWatcher *tcw = new TestClassWatcher();
+    TestClass *instance = new TestClass(tcw);
 
     {
         TestClassWSP instanceWSP(instance);
@@ -163,13 +164,12 @@ void KisSharedPtrTest::testWeakSP()
         QVERIFY(tcw->deleted = true);
     }
 
-
 }
 
 void KisSharedPtrTest::testBoolOnInvalidWeakPointer()
 {
-    TestClassWatcher * tcw = new TestClassWatcher();
-    TestClass * instance = new TestClass(tcw);
+    TestClassWatcher *tcw = new TestClassWatcher();
+    TestClass *instance = new TestClass(tcw);
 
     TestClassWSP instanceWSP(instance);
     {
@@ -189,7 +189,7 @@ void KisSharedPtrTest::testBoolOnInvalidWeakPointer()
 
 void KisSharedPtrTest::testInvalidWeakSPAssignToSP()
 {
-    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClassWatcher *tcw = new TestClassWatcher();
     TestClass *instance = new TestClass(tcw);
 
     TestClassWSP instanceWSP(instance);
@@ -207,7 +207,7 @@ void KisSharedPtrTest::testInvalidWeakSPAssignToSP()
 
 void KisSharedPtrTest::testInvalidWeakSPToSPCopy()
 {
-    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClassWatcher *tcw = new TestClassWatcher();
     TestClass *instance = new TestClass(tcw);
 
     TestClassWSP instanceWSP(instance);
@@ -223,7 +223,7 @@ void KisSharedPtrTest::testInvalidWeakSPToSPCopy()
 
 void KisSharedPtrTest::testWeakSPAssignToWeakSP()
 {
-    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClassWatcher *tcw = new TestClassWatcher();
     TestClass *instance = new TestClass(tcw);
 
     TestClassWSP instanceWSP(instance);
@@ -247,7 +247,7 @@ void KisSharedPtrTest::testWeakSPAssignToWeakSP()
 
 void KisSharedPtrTest::testWeakSPToWeakSPCopy()
 {
-    TestClassWatcher * tcw = new TestClassWatcher();
+    TestClassWatcher *tcw = new TestClassWatcher();
     TestClass *instance = new TestClass(tcw);
 
     TestClassWSP instanceWSP(instance);
@@ -267,8 +267,6 @@ void KisSharedPtrTest::testWeakSPToWeakSPCopy()
     QVERIFY(!newInvalidInstanceWSP.isValid());
 }
 
-
 QTEST_KDEMAIN(KisSharedPtrTest, NoGUI)
 #include "kis_shared_ptr_test.moc"
-
 

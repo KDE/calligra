@@ -24,7 +24,6 @@
 
 class KisSliderSpinBox;
 
-
 class PAINTOP_EXPORT KisPressureSharpnessOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT
@@ -36,7 +35,7 @@ private Q_SLOTS:
     void setThreshold(int threshold);
 
 private:
-    KisSliderSpinBox* m_threshold;
+    KisSliderSpinBox *m_threshold;
 };
 
 #endif // KIS_PRESSURE_SHARPNESS_OPTION_WIDGET_H

@@ -30,7 +30,7 @@ public:
     PalmDocCompression();
     ~PalmDocCompression();
 
-    void compressContent (QByteArray input, QByteArray &output, QList<qint32> &recordOffset);
+    void compressContent(QByteArray input, QByteArray &output, QList<qint32> &recordOffset);
 
 private:
     void startCompressing(QByteArray input, QDataStream &out, QList<qint32> &recordOffset);

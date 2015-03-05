@@ -34,8 +34,8 @@ namespace MSOOXML
 class MsooXmlRelationshipsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    MsooXmlRelationshipsReaderContext(const QString& _path, const QString& _file, QMap<QString, QString>& _rels,
-                                      QMap<QString, QString>& _targetsForTypes);
+    MsooXmlRelationshipsReaderContext(const QString &_path, const QString &_file, QMap<QString, QString> &_rels,
+                                      QMap<QString, QString> &_targetsForTypes);
     const QString path;
     const QString file;
     QMap<QString, QString> *rels;
@@ -52,15 +52,17 @@ public:
 
     //! Reads/parses the file of format *.xml.rels.
     //! The output goes to MsooXmlRelationships structure.
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
     //! @return key for use in MsooXmlRelationships::target()
-    static inline QString relKey(const QString& path, const QString& file, const QString& id) {
+    static inline QString relKey(const QString &path, const QString &file, const QString &id)
+    {
         return path + '\n' + file + '\n' + id;
     }
 
 //! @return key for use in MsooXmlRelationships::targetForType()
-        static inline QString targetKey(const QString& pathAndFile, const QString& relType) {
+    static inline QString targetKey(const QString &pathAndFile, const QString &relType)
+    {
         return pathAndFile + '\n' + relType;
     }
 
@@ -69,12 +71,12 @@ protected:
     KoFilter::ConversionStatus read_Relationships();
     KoFilter::ConversionStatus read_Relationship();
 
-    MsooXmlRelationshipsReaderContext* m_context;
+    MsooXmlRelationshipsReaderContext *m_context;
 private:
     void init();
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 }

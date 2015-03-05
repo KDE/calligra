@@ -15,28 +15,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef TASKSET_RESOURCE_H
 #define TASKSET_RESOURCE_H
 
 #include <KoResource.h>
 #include <QStringList>
 
-
 class TasksetResource : public KoResource
 {
 
 public:
-    TasksetResource(const QString& filename);
+    TasksetResource(const QString &filename);
     virtual ~TasksetResource();
-    
+
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
+    virtual bool saveToDevice(QIODevice *dev) const;
 
     virtual QString defaultFileExtension() const;
-    
+
     void setActionList(const QStringList actions);
     QStringList actionList();
 protected:

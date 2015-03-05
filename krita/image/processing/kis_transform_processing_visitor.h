@@ -21,14 +21,12 @@
 
 #include "kis_processing_visitor.h"
 
-
 #include <kis_types.h>
 
 #include <QPointF>
 #include <QTransform>
 
 class KisFilterStrategy;
-
 
 class KRITAIMAGE_EXPORT KisTransformProcessingVisitor : public KisProcessingVisitor
 {

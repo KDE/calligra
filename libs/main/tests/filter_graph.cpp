@@ -56,8 +56,9 @@ int main(int /*argc*/, char ** /*argv*/)
                 output += "    \"";
                 output += key.toLatin1();
                 output += "\" [shape=box, style=filled, fillcolor=lightblue];\n";
-                if (! vertices.contains(key))
+                if (! vertices.contains(key)) {
                     vertices.append(key);
+                }
             }
         }
         ++partIt;
@@ -100,10 +101,11 @@ int main(int /*argc*/, char ** /*argv*/)
                 output += (*importIt).toLatin1();
                 output += "\" -> \"";
                 output += (*exportIt).toLatin1();
-                if (KoFilterManager::filterAvailable(*it))
+                if (KoFilterManager::filterAvailable(*it)) {
                     output += "\";\n";
-                else
+                } else {
                     output += "\" [style=dotted];\n";
+                }
             }
         }
     }
@@ -111,8 +113,9 @@ int main(int /*argc*/, char ** /*argv*/)
     output += "}\n";
 
     QFile f("graph.dot");
-    if (f.open(QIODevice::WriteOnly))
+    if (f.open(QIODevice::WriteOnly)) {
         f.write(output);
+    }
     f.close();
     return 0;
 }

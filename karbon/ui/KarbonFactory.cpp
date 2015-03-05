@@ -45,11 +45,11 @@
 
 #include <KoPluginLoader.h>
 
-KComponentData* KarbonFactory::s_instance = 0L;
-KAboutData* KarbonFactory::s_aboutData = 0L;
+KComponentData *KarbonFactory::s_instance = 0L;
+KAboutData *KarbonFactory::s_aboutData = 0L;
 
-KarbonFactory::KarbonFactory(QObject* parent)
-        : KPluginFactory(*aboutData(), parent)
+KarbonFactory::KarbonFactory(QObject *parent)
+    : KPluginFactory(*aboutData(), parent)
 {
     componentData();
 }
@@ -62,21 +62,22 @@ KarbonFactory::~KarbonFactory()
     s_aboutData = 0L;
 }
 
-QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject *KarbonFactory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent, const QVariantList &args, const QString &keyword)
 {
     Q_UNUSED(args);
     Q_UNUSED(keyword);
 
     KarbonPart *part = new KarbonPart(parent);
-    KarbonDocument* doc = new KarbonDocument(part);
+    KarbonDocument *doc = new KarbonDocument(part);
     part->setDocument(doc);;
     return part;
 }
 
-KAboutData * KarbonFactory::aboutData()
+KAboutData *KarbonFactory::aboutData()
 {
-    if (!s_aboutData)
+    if (!s_aboutData) {
         s_aboutData = newKarbonAboutData();
+    }
     return s_aboutData;
 }
 

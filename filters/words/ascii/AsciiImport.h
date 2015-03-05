@@ -26,7 +26,6 @@
 
 class QByteArray;
 
-
 class AsciiImport : public KoFilter
 {
     Q_OBJECT
@@ -34,7 +33,7 @@ class AsciiImport : public KoFilter
 public:
     AsciiImport(QObject *parent, const QVariantList &);
     virtual ~AsciiImport();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif /* ASCIIIMPORT_H */

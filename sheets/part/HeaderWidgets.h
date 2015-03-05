@@ -25,7 +25,6 @@
 
 class QRubberBand;
 
-
 namespace Calligra
 {
 namespace Sheets
@@ -44,32 +43,47 @@ public:
     virtual ~ColumnHeaderWidget();
 
     virtual void updateColumns(int from, int to);
-    virtual QSizeF size() const { return QWidget::size(); }
-    virtual void setCursor(const QCursor& cursor) { QWidget::setCursor(cursor); }
-    virtual void scroll(qreal dx, qreal dy) { QWidget::scroll(dx, dy); }
-    virtual QPalette palette() const { return QWidget::palette(); }
-    virtual void update() { QWidget::update(); }
+    virtual QSizeF size() const
+    {
+        return QWidget::size();
+    }
+    virtual void setCursor(const QCursor &cursor)
+    {
+        QWidget::setCursor(cursor);
+    }
+    virtual void scroll(qreal dx, qreal dy)
+    {
+        QWidget::scroll(dx, dy);
+    }
+    virtual QPalette palette() const
+    {
+        return QWidget::palette();
+    }
+    virtual void update()
+    {
+        QWidget::update();
+    }
 private Q_SLOTS:
-    void slotAutoScroll(const QPoint& distance);
+    void slotAutoScroll(const QPoint &distance);
 
 protected:
-    virtual void paintEvent(QPaintEvent* _ev);
-    virtual void mousePressEvent(QMouseEvent* _ev);
-    virtual void mouseReleaseEvent(QMouseEvent* _ev);
-    virtual void mouseDoubleClickEvent(QMouseEvent* _ev);
-    virtual void mouseMoveEvent(QMouseEvent* _ev);
-    virtual void wheelEvent(QWheelEvent*);
-    virtual void focusOutEvent(QFocusEvent* ev);
-    virtual void resizeEvent(QResizeEvent * _ev);
+    virtual void paintEvent(QPaintEvent *_ev);
+    virtual void mousePressEvent(QMouseEvent *_ev);
+    virtual void mouseReleaseEvent(QMouseEvent *_ev);
+    virtual void mouseDoubleClickEvent(QMouseEvent *_ev);
+    virtual void mouseMoveEvent(QMouseEvent *_ev);
+    virtual void wheelEvent(QWheelEvent *);
+    virtual void focusOutEvent(QFocusEvent *ev);
+    virtual void resizeEvent(QResizeEvent *_ev);
 
     virtual void paintSizeIndicator(int mouseX);
     virtual void removeSizeIndicator();
-    
+
 private Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    void toolChanged(const QString &toolId);
 
 private:
-    QRubberBand* m_rubberband;
+    QRubberBand *m_rubberband;
 };
 
 /**
@@ -83,30 +97,45 @@ public:
     virtual ~RowHeaderWidget();
 
     void updateRows(int from, int to);
-    virtual QSizeF size() const { return QWidget::size(); }
-    virtual void setCursor(const QCursor& cursor) { QWidget::setCursor(cursor); }
-    virtual void scroll(qreal dx, qreal dy) { QWidget::scroll(dx, dy); }
-    virtual QPalette palette() const { return QWidget::palette(); }
-    virtual void update() { QWidget::update(); }
+    virtual QSizeF size() const
+    {
+        return QWidget::size();
+    }
+    virtual void setCursor(const QCursor &cursor)
+    {
+        QWidget::setCursor(cursor);
+    }
+    virtual void scroll(qreal dx, qreal dy)
+    {
+        QWidget::scroll(dx, dy);
+    }
+    virtual QPalette palette() const
+    {
+        return QWidget::palette();
+    }
+    virtual void update()
+    {
+        QWidget::update();
+    }
 private Q_SLOTS:
-    void slotAutoScroll(const QPoint& distance);
+    void slotAutoScroll(const QPoint &distance);
 
 protected:
-    virtual void paintEvent(QPaintEvent* _ev);
-    virtual void mousePressEvent(QMouseEvent* _ev);
-    virtual void mouseReleaseEvent(QMouseEvent* _ev);
-    virtual void mouseMoveEvent(QMouseEvent* _ev);
-    virtual void mouseDoubleClickEvent(QMouseEvent* _ev);
-    virtual void wheelEvent(QWheelEvent*);
-    virtual void focusOutEvent(QFocusEvent* ev);
-    
+    virtual void paintEvent(QPaintEvent *_ev);
+    virtual void mousePressEvent(QMouseEvent *_ev);
+    virtual void mouseReleaseEvent(QMouseEvent *_ev);
+    virtual void mouseMoveEvent(QMouseEvent *_ev);
+    virtual void mouseDoubleClickEvent(QMouseEvent *_ev);
+    virtual void wheelEvent(QWheelEvent *);
+    virtual void focusOutEvent(QFocusEvent *ev);
+
     virtual void paintSizeIndicator(int mouseY);
     virtual void removeSizeIndicator();
 private Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    void toolChanged(const QString &toolId);
 
 private:
-    QRubberBand* m_rubberband;
+    QRubberBand *m_rubberband;
 };
 
 /**
@@ -117,19 +146,25 @@ class SelectAllButtonWidget : public QWidget, public SelectAllButton
 {
     Q_OBJECT
 public:
-    explicit SelectAllButtonWidget(CanvasBase* canvasBase);
+    explicit SelectAllButtonWidget(CanvasBase *canvasBase);
     virtual ~SelectAllButtonWidget();
 
-    virtual QPalette palette() const { return QWidget::palette(); }
-    virtual void update() { QWidget::update(); }
+    virtual QPalette palette() const
+    {
+        return QWidget::palette();
+    }
+    virtual void update()
+    {
+        QWidget::update();
+    }
 protected:
-    virtual void paintEvent(QPaintEvent* event);
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void wheelEvent(QWheelEvent*);
+    virtual void paintEvent(QPaintEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void wheelEvent(QWheelEvent *);
 
 private Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    void toolChanged(const QString &toolId);
 };
 
 } // namespace Sheets

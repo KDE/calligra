@@ -62,12 +62,12 @@ class DeclarativeMimeData : public QMimeData
     /**
      * The graphical item on the scene that started the drag event. It may be null.
      */
-    Q_PROPERTY(QDeclarativeItem* source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QDeclarativeItem *source READ source WRITE setSource NOTIFY sourceChanged)
     //TODO: Image property
 
 public:
     DeclarativeMimeData() : QMimeData() {}
-    DeclarativeMimeData(const QMimeData* copy);
+    DeclarativeMimeData(const QMimeData *copy);
 
     QUrl url() const;
     void setUrl(const QUrl &url);
@@ -80,9 +80,8 @@ public:
 
     Q_INVOKABLE void setData(const QString &mimeType, const QString &data);
 
-    QDeclarativeItem* source() const;
-    void setSource(QDeclarativeItem* source);
-
+    QDeclarativeItem *source() const;
+    void setSource(QDeclarativeItem *source);
 
     /*
     QString text() const;                //TODO: Reimplement this to issue the onChanged signals
@@ -100,7 +99,7 @@ Q_SIGNALS:
     void sourceChanged();
 
 private:
-    QDeclarativeItem* m_source;
+    QDeclarativeItem *m_source;
 };
 
 #endif // DECLARATIVEMIMEDATA_H

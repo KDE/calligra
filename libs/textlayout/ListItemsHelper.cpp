@@ -55,10 +55,12 @@ QString Lists::intToAlpha(int n, Capitalisation caps, bool letterSynchronization
     QString answer;
     if (letterSynchronization) {
         int digits = 1;
-        for (; n > 26; n -= 26)
+        for (; n > 26; n -= 26) {
             digits += 1;
-        for (int i = 0; i < digits; i++)
+        }
+        for (int i = 0; i < digits; i++) {
             answer.prepend(QChar(offset + n - 1));
+        }
         return answer;
     } else {
         char bottomDigit;
@@ -133,15 +135,15 @@ QString Lists::intToScriptList(int n, KoListStyle::Style type)
 {
     // 1 time Sequences
     // note; the leading X is to make these 1 based.
-    static const char* const Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
-                                   "ن", "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ"
-                                 };
-    static const char* const Abjad2[] = { "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
-                                    "ﻥ", "ﺹ", "ﻉ", "ﻑ", "ﺽ", "ﻕ", "ﺭ", "ﺱ", "ﺕ", "ﺙ", "ﺥ", "ﺫ", "ﻅ", "ﻍ", "ﺵ"
-                                  };
-    static const char* const ArabicAlphabet[] = {"ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
-                                           "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"
-                                          };
+    static const char *const Abjad[] = { "أ", "ب", "ج", "د", "ﻫ", "و", "ز", "ح", "ط", "ي", "ك", "ل", "م",
+                                         "ن", "س", "ع", "ف", "ص", "ق", "ر", "ش", "ت", "ث", "خ", "ذ", "ض", "ظ", "غ"
+                                       };
+    static const char *const Abjad2[] = { "ﺃ", "ﺏ", "ﺝ", "ﺩ", "ﻫ", "ﻭ", "ﺯ", "ﺡ", "ﻁ", "ﻱ", "ﻙ", "ﻝ", "ﻡ",
+                                          "ﻥ", "ﺹ", "ﻉ", "ﻑ", "ﺽ", "ﻕ", "ﺭ", "ﺱ", "ﺕ", "ﺙ", "ﺥ", "ﺫ", "ﻅ", "ﻍ", "ﺵ"
+                                        };
+    static const char *const ArabicAlphabet[] = {"ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز",
+                                                 "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"
+                                                };
 
     /*
     // see this page for the 10, 100, 1000 etc http://en.wikipedia.org/wiki/Chinese_numerals
@@ -161,14 +163,20 @@ QString Lists::intToScriptList(int n, KoListStyle::Style type)
 
     switch (type) {
     case KoListStyle::Abjad:
-        if (n > 22) return "*";
-        return QString::fromUtf8(Abjad[n-1]);
+        if (n > 22) {
+            return "*";
+        }
+        return QString::fromUtf8(Abjad[n - 1]);
     case KoListStyle::AbjadMinor:
-        if (n > 22) return "*";
-        return QString::fromUtf8(Abjad2[n-1]);
+        if (n > 22) {
+            return "*";
+        }
+        return QString::fromUtf8(Abjad2[n - 1]);
     case KoListStyle::ArabicAlphabet:
-        if (n > 28) return "*";
-        return QString::fromUtf8(ArabicAlphabet[n-1]);
+        if (n > 28) {
+            return "*";
+        }
+        return QString::fromUtf8(ArabicAlphabet[n - 1]);
     default:
         return QString::number(n);
     }
@@ -177,7 +185,7 @@ QString Lists::intToScriptList(int n, KoListStyle::Style type)
 QString Lists::intToNumberingStyle(int index, KoListStyle::Style listStyle, bool letterSynchronization)
 {
     QString counterText;
-    switch(listStyle) {
+    switch (listStyle) {
     case KoListStyle::DecimalItem:
         counterText = QString::number(index);
         break;
@@ -261,8 +269,8 @@ QList<ListStyleItem> Lists::otherListStyleItems()
 // ------------------- ListItemsHelper ------------
 /// \internal helper class for calculating text-lists prefixes and indents
 ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font)
-        : m_textList(textList)
-        , m_fm(font, textList->document()->documentLayout()->paintDevice())
+    : m_textList(textList)
+    , m_fm(font, textList->document()->documentLayout()->paintDevice())
 {
 }
 
@@ -276,8 +284,9 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     const QString suffix = format.stringProperty(KoListStyle::ListItemSuffix);
     const int level = format.intProperty(KoListStyle::Level);
     int dp = format.intProperty(KoListStyle::DisplayLevel);
-    if (dp > level)
+    if (dp > level) {
         dp = level;
+    }
     const int displayLevel = dp ? dp : 1;
 
     QTextBlockFormat blockFormat = block.blockFormat();
@@ -287,8 +296,9 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     bool isOutline = blockFormat.intProperty(KoParagraphStyle::OutlineLevel) > 0;
 
     int startValue = 1;
-    if (format.hasProperty(KoListStyle::StartValue))
+    if (format.hasProperty(KoListStyle::StartValue)) {
         startValue = format.intProperty(KoListStyle::StartValue);
+    }
 
     int index = startValue;
     bool fixed = false;
@@ -326,7 +336,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     KoTextBlockData blockData(block);
 
     if (blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem)
-        || blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
+            || blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
         blockData.setCounterPlainText(QString());
         blockData.setCounterPrefix(QString());
         blockData.setCounterSuffix(QString());
@@ -347,13 +357,16 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         int tmpDisplayLevel = displayLevel;
         bool counterResetRequired = true;
         for (QTextBlock b = block.previous(); tmpDisplayLevel > 1 && b.isValid(); b = b.previous()) {
-            if (b.textList() == 0)
+            if (b.textList() == 0) {
                 continue;
+            }
             QTextListFormat lf = b.textList()->format();
-            if (lf.property(KoListStyle::StyleId) != format.property(KoListStyle::StyleId))
-               continue; // uninteresting for us
-            if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
-                continue; // also uninteresting cause the one is an outline-listitem while the other is not
+            if (lf.property(KoListStyle::StyleId) != format.property(KoListStyle::StyleId)) {
+                continue;    // uninteresting for us
+            }
+            if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel))) {
+                continue;    // also uninteresting cause the one is an outline-listitem while the other is not
+            }
 
             if (! KoListStyle::isNumberingStyle(static_cast<KoListStyle::Style>(lf.style()))) {
                 continue;
@@ -368,8 +381,9 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                 counterResetRequired = false;
             }
 
-            if (checkLevel <= otherLevel)
+            if (checkLevel <= otherLevel) {
                 continue;
+            }
 
             KoTextBlockData otherData(b);
             if (!otherData.hasCounterData()) {
@@ -404,7 +418,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         for (int i = 1; i < tmpDisplayLevel; i++)
             item = intToNumberingStyle(index, listStyle,
                                        m_textList->format().boolProperty(KoListStyle::LetterSynchronization))
-                    + "." + item; // add missing counters.
+                   + "." + item; // add missing counters.
     }
 
     if ((listStyle == KoListStyle::DecimalItem || listStyle == KoListStyle::AlphaLowerItem ||
@@ -418,7 +432,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     QString partialCounterText;
     if (KoListStyle::isNumberingStyle(listStyle)) {
         partialCounterText = intToNumberingStyle(index, listStyle,
-                                m_textList->format().boolProperty(KoListStyle::LetterSynchronization));
+                             m_textList->format().boolProperty(KoListStyle::LetterSynchronization));
     } else {
         switch (listStyle) {
         case KoListStyle::SquareItem:
@@ -433,18 +447,21 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         case KoListStyle::RhombusItem:
         case KoListStyle::BoxItem: {
             calcWidth = false;
-            if (format.intProperty(KoListStyle::BulletCharacter))
+            if (format.intProperty(KoListStyle::BulletCharacter)) {
                 item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
+            }
             width = m_fm.width(item);
             int percent = format.intProperty(KoListStyle::RelativeBulletSize);
-            if (percent > 0)
+            if (percent > 0) {
                 width = width * (percent / 100.0);
+            }
             break;
         }
         case KoListStyle::CustomCharItem:
             calcWidth = false;
-            if (format.intProperty(KoListStyle::BulletCharacter))
+            if (format.intProperty(KoListStyle::BulletCharacter)) {
                 item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
+            }
             width = m_fm.width(item);
             break;
         case KoListStyle::None:
@@ -467,8 +484,9 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     blockData.setCounterPlainText(item);
     blockData.setCounterPrefix(prefix);
     blockData.setCounterSuffix(suffix);
-    if (calcWidth)
+    if (calcWidth) {
         width = m_fm.width(item);
+    }
     index++;
 
     width += m_fm.width(prefix + suffix);

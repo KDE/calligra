@@ -30,16 +30,15 @@
 #define PREVIEW_WIDTH 64
 #define PREVIEW_HEIGHT 64
 
-
 struct KoAbstractGradient::Private {
-    const KoColorSpace* colorSpace;
+    const KoColorSpace *colorSpace;
     QGradient::Spread spread;
     QGradient::Type type;
 };
 
-KoAbstractGradient::KoAbstractGradient(const QString& filename)
-        : KoResource(filename)
-        , d(new Private)
+KoAbstractGradient::KoAbstractGradient(const QString &filename)
+    : KoResource(filename)
+    , d(new Private)
 {
     d->colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     d->spread = QGradient::PadSpread;
@@ -51,17 +50,17 @@ KoAbstractGradient::~KoAbstractGradient()
     delete d;
 }
 
-void KoAbstractGradient::colorAt(KoColor&, qreal t) const
+void KoAbstractGradient::colorAt(KoColor &, qreal t) const
 {
     Q_UNUSED(t);
 }
 
-void KoAbstractGradient::setColorSpace(KoColorSpace* colorSpace)
+void KoAbstractGradient::setColorSpace(KoColorSpace *colorSpace)
 {
     d->colorSpace = colorSpace;
 }
 
-const KoColorSpace* KoAbstractGradient::colorSpace() const
+const KoColorSpace *KoAbstractGradient::colorSpace() const
 {
     return d->colorSpace;
 }
@@ -95,8 +94,8 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
     const int darkBackground = 128;
     const int lightBackground = 128 + 63;
 
-    QRgb * lineA = reinterpret_cast<QRgb*>(image.scanLine(0));
-    QRgb * lineB = reinterpret_cast<QRgb*>(image.scanLine(checkerSize));
+    QRgb *lineA = reinterpret_cast<QRgb *>(image.scanLine(0));
+    QRgb *lineB = reinterpret_cast<QRgb *>(image.scanLine(checkerSize));
 
     KoColor c;
     QColor color;
@@ -118,10 +117,12 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
 
         bool defColor = (x % checkerSize_2) < checkerSize;
 
-        if (lineA)
+        if (lineA) {
             lineA[x] = defColor ? qRgb(darkR, darkG, darkB) : qRgb(lightR, lightG, lightB);
-        if (lineB)
+        }
+        if (lineB) {
             lineB[x] = defColor ? qRgb(lightR, lightG, lightB) : qRgb(darkR, darkG, darkB);
+        }
     }
 
     int bytesPerLine = image.bytesPerLine();
@@ -129,9 +130,10 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
     // now copy lines accordingly
     for (int y = 0; y < image.height(); ++y) {
         bool firstLine = (y % checkerSize_2) < checkerSize;
-        QRgb * line = reinterpret_cast<QRgb*>(image.scanLine(y));
-        if (line == lineA || line == lineB)
+        QRgb *line = reinterpret_cast<QRgb *>(image.scanLine(y));
+        if (line == lineA || line == lineB) {
             continue;
+        }
 
         memcpy(line, firstLine ? lineA : lineB, bytesPerLine);
     }

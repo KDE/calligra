@@ -19,7 +19,6 @@
     Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef KXQTS_TreeSortFilter_H
 #define KXQTS_TreeSortFilter_H
 

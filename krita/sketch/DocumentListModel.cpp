@@ -30,11 +30,11 @@
 class DocumentListModel::Private
 {
 public:
-    Private( DocumentListModel *qq) : q(qq), filter(DocumentListModel::UnknownType) { }
+    Private(DocumentListModel *qq) : q(qq), filter(DocumentListModel::UnknownType) { }
 
     void relayout();
 
-    DocumentListModel* q;
+    DocumentListModel *q;
 
     QList<DocumentInfo> allDocumentInfos;
     QList<DocumentInfo> currentDocumentInfos;
@@ -70,8 +70,7 @@ DocumentListModel::~DocumentListModel()
 
 void DocumentListModel::addDocument(const DocumentInfo &info)
 {
-    if (d->allDocumentInfos.contains(info))
-    {
+    if (d->allDocumentInfos.contains(info)) {
         return;
     }
 
@@ -100,22 +99,22 @@ QVariant DocumentListModel::data(const QModelIndex &index, int role) const
     const DocumentInfo &info = d->currentDocumentInfos[row];
 
     switch (role) {
-        case FileNameRole: // intentional fall through
-        case Qt::DisplayRole: return info.fileName;
-        case FilePathRole: return info.filePath;
-        case DocTypeRole: return info.docType;
-        case FileSizeRole: return info.fileSize;
-        case AuthorNameRole: return info.authorName;
-        case AccessedTimeRole: return prettyTime(info.accessedTime);
-        case ModifiedTimeRole: return prettyTime(info.modifiedTime);
-        case UUIDRole: return info.uuid;
-        default: return QVariant();
+    case FileNameRole: // intentional fall through
+    case Qt::DisplayRole: return info.fileName;
+    case FilePathRole: return info.filePath;
+    case DocTypeRole: return info.docType;
+    case FileSizeRole: return info.fileSize;
+    case AuthorNameRole: return info.authorName;
+    case AccessedTimeRole: return prettyTime(info.accessedTime);
+    case ModifiedTimeRole: return prettyTime(info.modifiedTime);
+    case UUIDRole: return info.uuid;
+    default: return QVariant();
     }
 }
 
-QString DocumentListModel::prettyTime( const QDateTime& theTime)
+QString DocumentListModel::prettyTime(const QDateTime &theTime)
 {
-    return KGlobal::locale()->formatDateTime( theTime, KLocale::FancyShortDate );
+    return KGlobal::locale()->formatDateTime(theTime, KLocale::FancyShortDate);
 }
 
 QVariant DocumentListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -131,15 +130,13 @@ DocumentListModel::DocumentType DocumentListModel::filter()
     return d->filter;
 }
 
-void DocumentListModel::setFilter( DocumentListModel::DocumentType newFilter)
+void DocumentListModel::setFilter(DocumentListModel::DocumentType newFilter)
 {
     d->filter = newFilter;
     d->relayout();
 }
 
-
-
-DocumentListModel::DocumentType DocumentListModel::typeForFile ( const QString& file )
+DocumentListModel::DocumentType DocumentListModel::typeForFile(const QString &file)
 {
     if (sm_extensions.isEmpty()) {
         sm_extensions["odt"] = TextDocumentType;
@@ -171,7 +168,7 @@ void DocumentListModel::Private::relayout()
     emit q->layoutAboutToBeChanged();
 
     QList<DocumentInfo> newList;
-    foreach(const DocumentInfo &docInfo, allDocumentInfos) {
+    foreach (const DocumentInfo &docInfo, allDocumentInfos) {
         if (filter == UnknownType || docInfo.docType == filter) {
             if (searchPattern.isEmpty() || docInfo.fileName.contains(searchPattern, Qt::CaseInsensitive)) {
                 newList.append(docInfo);

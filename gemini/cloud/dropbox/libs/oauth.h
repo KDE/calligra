@@ -39,7 +39,7 @@ public:
     QString m_token;
     QString m_secret;
 
-    void sign(QString method,QNetworkRequest *networkRequest);
+    void sign(QString method, QNetworkRequest *networkRequest);
 
 private:
     QString oauth_timestamp();
@@ -47,7 +47,7 @@ private:
     QString oauth_signature_method();
     QString oauth_token();
     QString oauth_version();
-    QString oauth_signature(QString method,QUrl *url,QString oAuthHeader);
+    QString oauth_signature(QString method, QUrl *url, QString oAuthHeader);
     QString SHA1(QString base, QString key);
 };
 

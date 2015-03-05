@@ -32,14 +32,14 @@
 #include <QLabel>
 
 InsertTextReferenceAction::InsertTextReferenceAction(KoCanvasBase *canvas, const KoInlineTextObjectManager *manager)
-        : InsertInlineObjectActionBase(canvas, i18n("Text Reference")),
-        m_manager(manager)
+    : InsertInlineObjectActionBase(canvas, i18n("Text Reference")),
+      m_manager(manager)
 {
 }
 
 KoInlineObject *InsertTextReferenceAction::createInlineObject()
 {
-    const QList<KoTextLocator*> textLocators = m_manager->textLocators();
+    const QList<KoTextLocator *> textLocators = m_manager->textLocators();
     if (textLocators.isEmpty()) {
         KMessageBox::information(m_canvas->canvasWidget(), i18n("Please create an index to reference first."));
         return 0;
@@ -53,8 +53,9 @@ KoInlineObject *InsertTextReferenceAction::createInlineObject()
     QLabel *label = new QLabel(i18n("Select the index you want to reference"), widget);
     lay->addWidget(label);
     QStringList selectionList;
-    foreach(KoTextLocator* locator, textLocators)
+    foreach (KoTextLocator *locator, textLocators) {
         selectionList << locator->word() + '(' + QString::number(locator->pageNumber()) + ')';
+    }
     QListWidget *list = new QListWidget(widget);
     lay->addWidget(list);
     list->addItems(selectionList);

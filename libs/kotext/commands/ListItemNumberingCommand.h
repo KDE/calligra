@@ -46,7 +46,8 @@ public:
     virtual void undo();
 
     /// reimplemnted from KUndo2Command
-    virtual int id() const {
+    virtual int id() const
+    {
         return 58450688;
     }
     /// reimplemnted from KUndo2Command

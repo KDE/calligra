@@ -26,8 +26,7 @@ KisOffsetScaleOption::KisOffsetScaleOption()
     setMaximumLabel(i18n("100%"));
 }
 
-
-double KisOffsetScaleOption::apply(const KisPaintInformation & info, double offsetScale) const
+double KisOffsetScaleOption::apply(const KisPaintInformation &info, double offsetScale) const
 {
     if (!isChecked()) {
         return offsetScale;

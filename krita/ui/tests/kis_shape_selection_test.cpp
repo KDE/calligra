@@ -34,7 +34,7 @@
 
 void KisShapeSelectionTest::testAddChild()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 300, 300, cs, "test");
 
     KisSelectionSP selection = new KisSelection();
@@ -52,7 +52,7 @@ void KisShapeSelectionTest::testAddChild()
     matrix.scale(1 / image->xRes(), 1 / image->yRes());
     rect = matrix.mapRect(rect);
 
-    KoPathShape* shape = new KoPathShape();
+    KoPathShape *shape = new KoPathShape();
     shape->setShapeId(KoPathShapeId);
     shape->moveTo(rect.topLeft());
     shape->lineTo(rect.topLeft() + QPointF(rect.width(), 0));
@@ -61,7 +61,7 @@ void KisShapeSelectionTest::testAddChild()
     shape->close();
     shape->normalize();
 
-    KisShapeSelection * shapeSelection = new KisShapeSelection(image, selection);
+    KisShapeSelection *shapeSelection = new KisShapeSelection(image, selection);
     selection->setShapeSelection(shapeSelection);
     shapeSelection->addShape(shape);
 
@@ -75,5 +75,4 @@ void KisShapeSelectionTest::testAddChild()
 
 QTEST_KDEMAIN(KisShapeSelectionTest, NoGUI)
 #include "kis_shape_selection_test.moc"
-
 

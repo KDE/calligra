@@ -29,7 +29,7 @@ public :
     explicit KPrPresentationHighlightStrategy(KPrPresentationTool *tool);
     ~KPrPresentationHighlightStrategy();
 
-    bool keyPressEvent( QKeyEvent * event );
+    bool keyPressEvent(QKeyEvent *event);
 };
 
 #endif /* KPRPRESENTATIONHIGHLIGHTSTRATEGY_H */

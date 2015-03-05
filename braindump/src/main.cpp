@@ -31,7 +31,7 @@
 
 int main(int argc, char **argv)
 {
-    KAboutData* about = newBrainDumpAboutData();
+    KAboutData *about = newBrainDumpAboutData();
     KCmdLineArgs::init(argc, argv, about);
 
     KUniqueApplication app;
@@ -39,11 +39,11 @@ int main(int argc, char **argv)
     KIconLoader::global()->addAppDir("calligra");
     KoGlobal::initialize();
 
-    KComponentData* m_documentData = new KComponentData(about);
+    KComponentData *m_documentData = new KComponentData(about);
 
-    RootSection* doc = new RootSection;
+    RootSection *doc = new RootSection;
 
-    MainWindow* window = new MainWindow(doc, *m_documentData);
+    MainWindow *window = new MainWindow(doc, *m_documentData);
     window->setVisible(true);
 
     app.exec();

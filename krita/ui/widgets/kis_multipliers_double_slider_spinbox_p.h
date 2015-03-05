@@ -29,7 +29,7 @@ struct KisMultipliersDoubleSliderSpinBox::Private {
     qreal currentMultiplier();
     /// Update the range of the slider depending on the currentMultiplier
     void updateRange();
-    
+
     Ui::WdgMultipliersDoubleSliderSpinBox form;
     qreal min, max;
     int decimals;

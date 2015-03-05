@@ -29,12 +29,11 @@ const QString AUTO_PRECISION_ENABLED = "KisPrecisionOption/AutoPrecisionEnabled"
 const QString STARTING_SIZE = "KisPrecisionOption/SizeToStartFrom";
 const QString DELTA_VALUE = "KisPrecisionOption/DeltaValue";
 
-
 class PAINTOP_EXPORT KisPrecisionOption
 {
 public:
-    void writeOptionSetting(KisPropertiesConfiguration* settings) const;
-    void readOptionSetting(const KisPropertiesConfiguration* settings);
+    void writeOptionSetting(KisPropertiesConfiguration *settings) const;
+    void readOptionSetting(const KisPropertiesConfiguration *settings);
 
     int precisionLevel() const;
     void setPrecisionLevel(int precisionLevel);

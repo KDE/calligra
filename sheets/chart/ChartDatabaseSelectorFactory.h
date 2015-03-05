@@ -43,19 +43,20 @@ public:
     ~ChartDatabaseSelectorFactory() {}
 
     /// reimplemented method from superclass
-    KoShapeConfigWidgetBase* createConfigWidget(KoShape* shape);
+    KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);
     /// reimplemented method from superclass
     QString name() const;
 
     /// reimplemented method from superclass
     bool showForShapeId(const QString &id) const;
     /// reimplemented method from superclass
-    int sortingOrder() const {
+    int sortingOrder() const
+    {
         return 1;
     }
 
 private:
-    Map* m_map;
+    Map *m_map;
 };
 
 } // namespace Sheets

@@ -36,8 +36,9 @@ class KoCompositeOpErase : public KoCompositeOp
 
 public:
 
-    KoCompositeOpErase(const KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_ERASE, i18n("Erase"), KoCompositeOp::categoryMix()) {
+    KoCompositeOpErase(const KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_ERASE, i18n("Erase"), KoCompositeOp::categoryMix())
+    {
     }
 
 public:
@@ -52,7 +53,8 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 U8_opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray &channelFlags) const
+    {
         // XXX: How to use channelflags here? It would be cool to
         // erase all green from an image, for example.
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
@@ -72,7 +74,7 @@ public:
 
                     if (U8_mask != OPACITY_TRANSPARENT_U8) {
                         srcAlpha = KoColorSpaceMaths<channels_type>::
-                            multiply(srcAlpha, KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_mask));
+                                   multiply(srcAlpha, KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_mask));
                     } else {
                         srcAlpha = 0;
                     }

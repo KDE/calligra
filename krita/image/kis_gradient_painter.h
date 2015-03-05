@@ -28,7 +28,6 @@
 
 #include <krita_export.h>
 
-
 /**
  *  XXX: Docs!
  */
@@ -66,8 +65,8 @@ public:
     /**
      * Paint a gradient in the rect between startx, starty, width and height.
      */
-    bool paintGradient(const QPointF& gradientVectorStart,
-                       const QPointF& gradientVectorEnd,
+    bool paintGradient(const QPointF &gradientVectorStart,
+                       const QPointF &gradientVectorEnd,
                        enumGradientRepeat repeat,
                        double antiAliasThreshold,
                        bool reverseGradient,

@@ -49,9 +49,9 @@
 #include "kis_slider_spin_box.h"
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
-        : KisToolSelectBase(canvas,
-                            KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
-                            i18n("Contiguous Area Selection"))
+    : KisToolSelectBase(canvas,
+                        KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
+                        i18n("Contiguous Area Selection"))
 {
     setObjectName("tool_select_contiguous");
     m_fuzziness = 20;
@@ -64,7 +64,7 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 {
 }
 
-void KisToolSelectContiguous::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolSelectContiguous::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
     m_configGroup = KGlobal::config()->group(toolId());
@@ -75,9 +75,9 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     KisPaintDeviceSP dev;
 
     if (!currentNode() ||
-        !(dev = currentNode()->projection()) ||
-        !currentNode()->visible() ||
-        !selectionEditable()) {
+            !(dev = currentNode()->projection()) ||
+            !currentNode()->visible() ||
+            !selectionEditable()) {
 
         event->ignore();
         return;
@@ -101,7 +101,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     KisSelectionSP selection = fillpainter.createFloodSelection(pos.x(), pos.y(), sourceDevice);
     image->unlock();
 
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     if (!kisCanvas || !selection->pixelSelection()) {
         QApplication::restoreOverrideCursor();
         return;
@@ -138,7 +138,7 @@ void KisToolSelectContiguous::slotSetFeather(int feather)
     m_configGroup.writeEntry("feather", feather);
 }
 
-QWidget* KisToolSelectContiguous::createOptionWidget()
+QWidget *KisToolSelectContiguous::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
@@ -146,14 +146,14 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     selectionWidget->disableAntiAliasSelectionOption();
     selectionWidget->disableSelectionModeOption();
 
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
+    QVBoxLayout *l = dynamic_cast<QVBoxLayout *>(selectionWidget->layout());
     Q_ASSERT(l);
     if (l) {
-        QHBoxLayout * hbox = new QHBoxLayout();
+        QHBoxLayout *hbox = new QHBoxLayout();
         Q_CHECK_PTR(hbox);
         l->insertLayout(1, hbox);
 
-        QLabel * lbl = new QLabel(i18n("Fuzziness: "), selectionWidget);
+        QLabel *lbl = new QLabel(i18n("Fuzziness: "), selectionWidget);
         hbox->addWidget(lbl);
 
         KisSliderSpinBox *input = new KisSliderSpinBox(selectionWidget);
@@ -162,50 +162,47 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         input->setRange(0, 200);
         input->setSingleStep(10);
         hbox->addWidget(input);
-        
+
         hbox = new QHBoxLayout();
         Q_CHECK_PTR(hbox);
         l->insertLayout(2, hbox);
-        
+
         lbl = new QLabel(i18n("Grow/shrink selection: "), selectionWidget);
         hbox->addWidget(lbl);
-        
+
         KisSliderSpinBox *sizemod = new KisSliderSpinBox(selectionWidget);
         Q_CHECK_PTR(sizemod);
         sizemod->setObjectName("sizemod"); //grow/shrink selection
         sizemod->setRange(-40, 40);
-        sizemod->setSingleStep(1);       
+        sizemod->setSingleStep(1);
         hbox->addWidget(sizemod);
-        
+
         hbox = new QHBoxLayout();
         Q_CHECK_PTR(hbox);
         l->insertLayout(3, hbox);
-        
+
         hbox->addWidget(new QLabel(i18n("Feathering radius: "), selectionWidget));
-        
+
         KisSliderSpinBox *feather = new KisSliderSpinBox(selectionWidget);
         Q_CHECK_PTR(feather);
         feather->setObjectName("feathering");
         feather->setRange(0, 40);
-        feather->setSingleStep(1);       
+        feather->setSingleStep(1);
         hbox->addWidget(feather);
-        
-        connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int) ));
-        connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)   ));
-        connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)   ));
 
-        QCheckBox* limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), selectionWidget);
-        l->insertWidget(4, limitToCurrentLayer);       
-        connect (limitToCurrentLayer, SIGNAL(stateChanged(int)), this, SLOT(slotLimitToCurrentLayer(int)));
+        connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
+        connect(sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
+        connect(feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
 
-
+        QCheckBox *limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), selectionWidget);
+        l->insertWidget(4, limitToCurrentLayer);
+        connect(limitToCurrentLayer, SIGNAL(stateChanged(int)), this, SLOT(slotLimitToCurrentLayer(int)));
 
         // load configuration settings into tool options
         input->setValue(m_configGroup.readEntry("fuzziness", 20)); // fuzziness
-        sizemod->setValue( m_configGroup.readEntry("sizemod", 0)); //grow/shrink
+        sizemod->setValue(m_configGroup.readEntry("sizemod", 0));  //grow/shrink
         feather->setValue(m_configGroup.readEntry("feather", 0));
         limitToCurrentLayer->setChecked(m_configGroup.readEntry("limitToCurrentLayer", false));
-
 
     }
     return selectionWidget;
@@ -213,8 +210,9 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
 void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
 {
-    if (state == Qt::PartiallyChecked)
+    if (state == Qt::PartiallyChecked) {
         return;
+    }
     m_limitToCurrentLayer = (state == Qt::Checked);
     m_configGroup.writeEntry("limitToCurrentLayer", state);
 }

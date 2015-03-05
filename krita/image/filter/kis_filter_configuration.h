@@ -50,13 +50,13 @@ public:
     /**
      * Create a new filter config.
      */
-    KisFilterConfiguration(const QString & name, qint32 version);
+    KisFilterConfiguration(const QString &name, qint32 version);
 
 protected:
     /**
      * Deep copy the filter configFile
      */
-    KisFilterConfiguration(const KisFilterConfiguration & rhs);
+    KisFilterConfiguration(const KisFilterConfiguration &rhs);
 public:
     virtual ~KisFilterConfiguration();
 
@@ -65,18 +65,18 @@ public:
     /**
      * This function is use to convert from legacy XML as used in .kra file.
      */
-    virtual void fromLegacyXML(const QDomElement&);
+    virtual void fromLegacyXML(const QDomElement &);
 
     using KisPropertiesConfiguration::fromXML;
     using KisPropertiesConfiguration::toXML;
 
-    virtual void fromXML(const QDomElement&);
-    virtual void toXML(QDomDocument&, QDomElement&) const;
+    virtual void fromXML(const QDomElement &);
+    virtual void toXML(QDomDocument &, QDomElement &) const;
 
     /**
      * Get the unique, language independent name of the filter.
      */
-    const QString & name() const;
+    const QString &name() const;
 
     /**
      * Get the version of the filter that has created this config
@@ -88,7 +88,6 @@ public:
      * The default implementation always return true.
      */
     virtual bool isCompatible(const KisPaintDeviceSP) const;
-
 
     /**
      * @return an array with each colorspace channel a true/false bit
@@ -112,9 +111,9 @@ public:
      * in Sketch requires this.
      */
     virtual void setCurve(const KisCubicCurve &curve);
-    virtual const KisCubicCurve& curve() const;
+    virtual const KisCubicCurve &curve() const;
     virtual void setCurves(QList<KisCubicCurve> &curves);
-    virtual const QList<KisCubicCurve>& curves() const;
+    virtual const QList<KisCubicCurve> &curves() const;
 
 #ifdef SANITY_CHECK_FILTER_CONFIGURATION_OWNER
 private:
@@ -128,7 +127,7 @@ protected:
     void setVersion(qint32 version);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // _KIS_FILTER_CONFIGURATION_H_

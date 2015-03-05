@@ -31,16 +31,15 @@
 
 class KisPainter;
 
-
 class KisSprayPaintOp : public KisPaintOp
 {
 
 public:
 
-    KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisSprayPaintOp();
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
 
 private:
     KisShapeProperties m_shapeProperties;

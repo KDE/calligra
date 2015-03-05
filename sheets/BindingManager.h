@@ -50,16 +50,16 @@ public:
     virtual ~BindingManager();
 
     // KoTable::SourceRangeManager interface
-    virtual const QAbstractItemModel* createModel(const QString& regionName);
-    virtual bool removeModel(const QAbstractItemModel* model);
-    virtual bool isCellRegionValid(const QString& regionName) const;
+    virtual const QAbstractItemModel *createModel(const QString &regionName);
+    virtual bool removeModel(const QAbstractItemModel *model);
+    virtual bool isCellRegionValid(const QString &regionName) const;
 
-    void regionChanged(const Region& region);
+    void regionChanged(const Region &region);
     void updateAllBindings();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

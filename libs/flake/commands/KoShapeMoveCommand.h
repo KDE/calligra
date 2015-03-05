@@ -42,7 +42,7 @@ public:
      *  this list naturally must have the same amount of items as the shapes set.
      * @param parent the parent command used for macro commands
      */
-    KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions,
+    KoShapeMoveCommand(const QList<KoShape *> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions,
                        KUndo2Command *parent = 0);
     ~KoShapeMoveCommand();
     /// redo the command
@@ -55,7 +55,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

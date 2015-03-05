@@ -44,23 +44,22 @@ class KisShapeSelectionMarker : public KoShapeUserData
 {
 };
 
-
 class KRITAUI_EXPORT KisShapeSelection : public KoShapeLayer, public KisSelectionComponent
 {
-    KisShapeSelection(const KisShapeSelection& rhs);
+    KisShapeSelection(const KisShapeSelection &rhs);
 public:
 
     KisShapeSelection(KisImageWSP image, KisSelectionWSP selection);
 
     virtual ~KisShapeSelection();
 
-    KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection);
+    KisShapeSelection(const KisShapeSelection &rhs, KisSelection *selection);
 
-    KisSelectionComponent* clone(KisSelection* selection);
+    KisSelectionComponent *clone(KisSelection *selection);
 
-    bool saveSelection(KoStore * store) const;
+    bool saveSelection(KoStore *store) const;
 
-    bool loadSelection(KoStore * store);
+    bool loadSelection(KoStore *store);
     /**
      * Renders the shapes to a selection. This method should only be called
      * by KisSelection to update it's projection.
@@ -68,9 +67,9 @@ public:
      * @param projection the target selection
      */
     virtual void renderToProjection(KisPaintDeviceSP projection);
-    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
+    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect &r);
 
-    KUndo2Command* resetToEmpty();
+    KUndo2Command *resetToEmpty();
     bool isEmpty() const;
 
     QPainterPath outlineCache() const;
@@ -82,10 +81,10 @@ public:
     void moveX(qint32 x);
     void moveY(qint32 y);
 
-    KUndo2Command* transform(const QTransform &transform);
+    KUndo2Command *transform(const QTransform &transform);
 protected:
 
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
 private:
     friend class KisTakeAllShapesCommand;
@@ -94,17 +93,16 @@ private:
 
 private:
 
-    void renderSelection(KisPaintDeviceSP projection, const QRect& r);
+    void renderSelection(KisPaintDeviceSP projection, const QRect &r);
 
     KisImageWSP m_image;
     QPainterPath m_outline;
-    KisImageViewConverter* m_converter;
-    KisShapeSelectionCanvas* m_canvas;
-    KisShapeSelectionModel* m_model;
+    KisImageViewConverter *m_converter;
+    KisShapeSelectionCanvas *m_canvas;
+    KisShapeSelectionModel *m_model;
 
     friend class KisShapeSelectionModel;
 };
-
 
 class KRITAUI_EXPORT KisShapeSelectionFactory : public KoShapeFactoryBase
 {
@@ -113,12 +111,14 @@ public:
     KisShapeSelectionFactory();
     ~KisShapeSelectionFactory() {}
 
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const {
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const
+    {
         Q_UNUSED(documentResources);
         return 0;
     }
 
-    virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const {
+    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
+    {
         Q_UNUSED(e);
         Q_UNUSED(context);
         return false;

@@ -24,18 +24,18 @@
 #include "krita_export.h"
 #include "kis_iterator_ng.h"
 
-class KRITAIMAGE_EXPORT KisVLineIterator2 : public KisVLineIteratorNG, KisBaseIterator {
-    KisVLineIterator2(const KisVLineIterator2&);
-    KisVLineIterator2& operator=(const KisVLineIterator2&);
+class KRITAIMAGE_EXPORT KisVLineIterator2 : public KisVLineIteratorNG, KisBaseIterator
+{
+    KisVLineIterator2(const KisVLineIterator2 &);
+    KisVLineIterator2 &operator=(const KisVLineIterator2 &);
 
 public:
     struct KisTileInfo {
         KisTileSP tile;
         KisTileSP oldtile;
-        quint8* data;
-        quint8* oldData;
+        quint8 *data;
+        quint8 *oldData;
     };
-
 
 public:
     KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 offsetX, qint32 offsetY, bool writable);
@@ -46,9 +46,9 @@ public:
 
     virtual bool nextPixel();
     virtual void nextColumn();
-    virtual const quint8* rawDataConst() const;
-    virtual const quint8* oldRawData() const;
-    virtual quint8* rawData();
+    virtual const quint8 *rawDataConst() const;
+    virtual const quint8 *oldRawData() const;
+    virtual quint8 *rawData();
     virtual qint32 nConseqPixels() const;
     virtual bool nextPixels(qint32 n);
     virtual qint32 x() const;
@@ -84,7 +84,7 @@ private:
 private:
 
     void switchToTile(qint32 xInTile);
-    void fetchTileDataForCache(KisTileInfo& kti, qint32 col, qint32 row);
+    void fetchTileDataForCache(KisTileInfo &kti, qint32 col, qint32 row);
     void preallocateTiles();
 };
 #endif

@@ -32,7 +32,7 @@
 
 #include "mainwindow.h"
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;
@@ -53,8 +53,8 @@ int main( int argc, char **argv )
                          "http://www.krita.org",
                          "submit@bugs.kde.org");
 
-    aboutData.addAuthor(ki18n("Boudewijn Rempt"), 
-                        ki18n("Maintainer"), 
+    aboutData.addAuthor(ki18n("Boudewijn Rempt"),
+                        ki18n("Maintainer"),
                         "boud@valdyas.org", "http://www.valdyas.org/fading/index.cgi");
 
     KCmdLineArgs::init(argc, argv, &aboutData);
@@ -62,7 +62,7 @@ int main( int argc, char **argv )
     KCmdLineOptions options;
     options.add("+[arg1]");
     options.add("+[arg2]");
-    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::addCmdLineOptions(options);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 

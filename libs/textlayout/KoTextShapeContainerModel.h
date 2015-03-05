@@ -49,7 +49,7 @@ public:
     /// reimplemented from KoShapeContainerModel
     virtual int count() const;
     /// reimplemented from KoShapeContainerModel
-    virtual QList<KoShape*> shapes() const;
+    virtual QList<KoShape *> shapes() const;
     /// reimplemented from KoShapeContainerModel
     virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
     /// reimplemented from KoShapeContainerModel
@@ -73,7 +73,7 @@ private:
     void relayoutInlineObject(KoShape *child);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

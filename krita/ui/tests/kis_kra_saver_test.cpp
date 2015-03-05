@@ -58,10 +58,9 @@ void KisKraSaverTest::initTestCase()
     KisGeneratorRegistry::instance();
 }
 
-
 void KisKraSaverTest::testRoundTrip()
 {
-    KisDocument* doc = createCompleteDocument();
+    KisDocument *doc = createCompleteDocument();
     KoColor bgColor(Qt::red, doc->image()->colorSpace());
     doc->image()->setDefaultProjectionColor(bgColor);
     doc->saveNativeFormat("roundtriptest.kra");
@@ -84,24 +83,21 @@ void KisKraSaverTest::testRoundTrip()
     KisNodeSP tnode =
         TestUtil::findNode(doc2->image()->rootLayer(), "testTransformMask");
     QVERIFY(tnode);
-    KisTransformMask *tmask = dynamic_cast<KisTransformMask*>(tnode.data());
+    KisTransformMask *tmask = dynamic_cast<KisTransformMask *>(tnode.data());
     QVERIFY(tmask);
-    KisDumbTransformMaskParams *params = dynamic_cast<KisDumbTransformMaskParams*>(tmask->transformParams().data());
+    KisDumbTransformMaskParams *params = dynamic_cast<KisDumbTransformMaskParams *>(tmask->transformParams().data());
     QVERIFY(params);
     QTransform t = params->testingGetTransform();
     QCOMPARE(t, createTestingTransform());
 
-
     delete doc2;
     delete doc;
-
-
 
 }
 
 void KisKraSaverTest::testSaveEmpty()
 {
-    KisDocument* doc = createEmptyDocument();
+    KisDocument *doc = createEmptyDocument();
     doc->saveNativeFormat("emptytest.kra");
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
@@ -126,7 +122,7 @@ void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfiguration 
 {
     TestUtil::ExternalImageChecker chk(testName, "fill_layer");
 
-    QRect refRect(0,0,512,512);
+    QRect refRect(0, 0, 512, 512);
     TestUtil::MaskParent p(refRect);
 
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
@@ -144,7 +140,6 @@ void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfiguration 
 
     doc->saveNativeFormat("roundtrip_fill_layer_test.kra");
 
-
     QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
     doc2->loadNativeFormat("roundtrip_fill_layer_test.kra");
 
@@ -156,7 +151,7 @@ void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfiguration 
 
 void KisKraSaverTest::testRoundTripFillLayerColor()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->get("color");
     Q_ASSERT(generator);

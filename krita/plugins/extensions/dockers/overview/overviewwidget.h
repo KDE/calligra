@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef OVERVIEWWIDGET_H
 #define OVERVIEWWIDGET_H
 
@@ -32,12 +31,15 @@ class OverviewWidget : public QWidget
     Q_OBJECT
 
 public:
-    OverviewWidget(QWidget * parent = 0);
+    OverviewWidget(QWidget *parent = 0);
 
     virtual ~OverviewWidget();
 
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; }   
+    virtual void unsetCanvas()
+    {
+        m_canvas = 0;
+    }
 
 public Q_SLOTS:
     void startUpdateCanvasProjection();
@@ -46,18 +48,18 @@ protected:
     void resizeEvent(QResizeEvent *event);
     void showEvent(QShowEvent *event);
     void paintEvent(QPaintEvent *event);
-    
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void wheelEvent(QWheelEvent* event);
-    
+
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void wheelEvent(QWheelEvent *event);
+
 private:
     QSize calculatePreviewSize();
     QPointF previewOrigin();
     QTransform imageToPreviewTransform();
     QPolygonF previewPolygon();
-    
+
     KisSignalCompressor *m_compressor;
     QPixmap m_pixmap;
     KisCanvas2 *m_canvas;
@@ -67,6 +69,5 @@ private:
 
     QColor m_outlineColor;
 };
-
 
 #endif /* OVERVIEWWIDGET_H */

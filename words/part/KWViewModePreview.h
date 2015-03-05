@@ -47,22 +47,26 @@ public:
      * You can set the preferred pages per row here.
      * @param num the new number of pages per row
      */
-    void setPagesPerRow(int num) {
+    void setPagesPerRow(int num)
+    {
         m_pagesPerRow = num;
     }
     /**
      * @return the number of pages we are showing per row
      */
-    int pagesPerRow() const {
+    int pagesPerRow() const
+    {
         return m_pagesPerRow;
     }
 
     /// return a string identification of this viewMode
-    static const QString viewMode() {
+    static const QString viewMode()
+    {
         return "ModePreview";
     }
     /// return a string identification of this viewMode
-    const QString type() const {
+    const QString type() const
+    {
         return KWViewModePreview::viewMode();
     }
     QList<ViewMap> mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const;

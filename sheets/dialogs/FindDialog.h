@@ -20,7 +20,6 @@
 #ifndef CALLIGRA_SHEETS_FIND_DIALOG
 #define CALLIGRA_SHEETS_FIND_DIALOG
 
-
 #include <kfinddialog.h>
 #include <QStringList>
 #include <kreplacedialog.h>
@@ -65,7 +64,6 @@ private:
     KComboBox *m_searchDirection;
 };
 
-
 /**
  * \ingroup UI
  * Dialog for finding cell values.
@@ -82,10 +80,12 @@ public:
                      bool hasSelection = false);
     ~FindDlg();
     bool searchInAllSheet() const;
-    FindOption::searchTypeValue searchType() const {
+    FindOption::searchTypeValue searchType() const
+    {
         return m_findOptions->searchType();
     }
-    FindOption::searchDirectionValue searchDirection() const {
+    FindOption::searchDirectionValue searchDirection() const
+    {
         return m_findOptions->searchDirection();
     }
 
@@ -94,7 +94,6 @@ private Q_SLOTS:
 private:
     FindOption *m_findOptions;
 };
-
 
 /**
  * \ingroup UI
@@ -113,7 +112,8 @@ public:
                        bool hasSelection = false);
     ~SearchDlg();
     bool searchInAllSheet() const;
-    FindOption::searchTypeValue searchType() const {
+    FindOption::searchTypeValue searchType() const
+    {
         return m_findOptions->searchType();
     }
 

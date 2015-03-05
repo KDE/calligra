@@ -21,7 +21,8 @@
 #include <kis_paint_device_writer.h>
 #include <KoStore.h>
 
-class KisStorePaintDeviceWriter : public KisPaintDeviceWriter {
+class KisStorePaintDeviceWriter : public KisPaintDeviceWriter
+{
 public:
     KisStorePaintDeviceWriter(KoStore *store)
         : m_store(store)
@@ -30,11 +31,13 @@ public:
 
     virtual ~KisStorePaintDeviceWriter() {}
 
-    qint64 write(const QByteArray &data) {
+    qint64 write(const QByteArray &data)
+    {
         return m_store->write(data);
     }
 
-    qint64 write(const char* data, qint64 length) {
+    qint64 write(const char *data, qint64 length)
+    {
         return m_store->write(data, length);
     }
 

@@ -45,11 +45,12 @@ QTextDocument *KoDocumentSectionToolTip::createDocument(const QModelIndex &index
     QString rows;
     const QString row = QString("<tr><td align=\"right\">%1:</td><td align=\"left\">%2</td></tr>");
     QString value;
-    for(int i = 0, n = properties.count(); i < n; ++i) {
-        if (properties[i].isMutable)
+    for (int i = 0, n = properties.count(); i < n; ++i) {
+        if (properties[i].isMutable) {
             value = properties[i].state.toBool() ? i18n("Yes") : i18n("No");
-        else
+        } else {
             value = properties[i].state.toString();
+        }
 
         rows.append(row.arg(properties[i].name).arg(value));
     }
@@ -58,7 +59,7 @@ QTextDocument *KoDocumentSectionToolTip::createDocument(const QModelIndex &index
 
     const QString image = QString("<table border=\"1\"><tr><td><img src=\"data:thumbnail\"></td></tr></table>");
     const QString body = QString("<h3 align=\"center\">%1</h3>").arg(name)
-                       + QString("<table><tr><td>%1</td><td>%2</td></tr></table>").arg(image).arg(rows);
+                         + QString("<table><tr><td>%1</td><td>%2</td></tr></table>").arg(image).arg(rows);
     const QString html = QString("<html><body>%1</body></html>").arg(body);
 
     doc->setHtml(html);

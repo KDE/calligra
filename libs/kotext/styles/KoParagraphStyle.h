@@ -255,7 +255,6 @@ public:
      */
     bool lineSpacingFromFont() const;
 
-
     /**
      * For paragraphs that are justified the last line alignment is specified here.
      * There are only 3 valid options, Left, Center and Justified. (where Left will
@@ -547,7 +546,6 @@ public:
     /// Set the name of the master-page.
     void setMasterPageName(const QString &name);
 
-
     /// Set the list start value
     void setListStartValue(int value);
     /// Returns the list start value
@@ -594,7 +592,6 @@ public:
      */
     void setDefaultOutlineLevel(int outline);
 
-
     /**
      * 15.5.30: The text:number-lines attribute controls whether or not lines are numbered
      */
@@ -620,7 +617,7 @@ public:
      * or a table cell.
      */
     KoShadowStyle shadow() const;
-    void setShadow (const KoShadowStyle &shadow);
+    void setShadow(const KoShadowStyle &shadow);
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoParagraphStyle *style);
@@ -639,14 +636,14 @@ public:
      * the character style (where relevant) to the target block formats.
      */
     void applyStyle(QTextBlock &block, bool applyListStyle = true) const;
-/*
-    /// return the character "properties" for this paragraph style, Note it does not inherit
-    KoCharacterStyle *characterStyle();
-    /// return the character "properties" for this paragraph style, Note it does not inherit
-    const KoCharacterStyle *characterStyle() const;
-    /// set the character "properties" for this paragraph style
-    void setCharacterStyle(KoCharacterStyle *style);
-*/
+    /*
+        /// return the character "properties" for this paragraph style, Note it does not inherit
+        KoCharacterStyle *characterStyle();
+        /// return the character "properties" for this paragraph style, Note it does not inherit
+        const KoCharacterStyle *characterStyle() const;
+        /// set the character "properties" for this paragraph style
+        void setCharacterStyle(KoCharacterStyle *style);
+    */
     /**
      * Returns the list style for this paragraph style.
      * @see KoListStyle::isValid()
@@ -679,7 +676,7 @@ public:
      * @param loadParents true = use the stylestack, false = use just the element
      */
     void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context,
-                bool loadParents = false);
+                 bool loadParents = false);
 
     void saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const;
 
@@ -719,10 +716,9 @@ public:
      */
     bool isApplied() const;
 
-
 Q_SIGNALS:
     void nameChanged(const QString &newName);
-    void styleApplied(const KoParagraphStyle*) const;
+    void styleApplied(const KoParagraphStyle *) const;
 
 private:
     /**
@@ -737,7 +733,7 @@ private:
     QColor propertyColor(int key) const;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 Q_DECLARE_METATYPE(KoParagraphStyle *)
 Q_DECLARE_METATYPE(const KoParagraphStyle *)

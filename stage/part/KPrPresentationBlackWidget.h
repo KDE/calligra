@@ -33,7 +33,7 @@ public:
     virtual ~KPrPresentationBlackWidget();
 
 protected:
-    void paintEvent( QPaintEvent * event );
+    void paintEvent(QPaintEvent *event);
 
 private:
     QSize m_size;

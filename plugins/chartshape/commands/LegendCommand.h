@@ -26,7 +26,6 @@
 // KChart
 #include "kchart_global.h"
 
-
 #if 0
 namespace KDChart
 {
@@ -35,7 +34,6 @@ class AbstractDiagram;
 class Chart;
 }
 #endif
-
 
 namespace KChart
 {

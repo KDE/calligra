@@ -27,27 +27,26 @@
 #include "KoPASavingContext.h"
 #include "KoPAMasterPage.h"
 
-KoPAOdfPageSaveHelper::KoPAOdfPageSaveHelper( KoPADocument * doc, QList<KoPAPageBase *> pages )
+KoPAOdfPageSaveHelper::KoPAOdfPageSaveHelper(KoPADocument *doc, QList<KoPAPageBase *> pages)
     : m_doc(doc),
-    m_context(0)
+      m_context(0)
 {
-    foreach( KoPAPageBase * page, pages ) {
-        if ( dynamic_cast<KoPAPage *>( page ) ) {
-            m_pages.append( page );
-        }
-        else {
-            m_masterPages.append( page );
+    foreach (KoPAPageBase *page, pages) {
+        if (dynamic_cast<KoPAPage *>(page)) {
+            m_pages.append(page);
+        } else {
+            m_masterPages.append(page);
         }
     }
 
-    if ( m_pages.size() > 0 ) {
+    if (m_pages.size() > 0) {
         m_masterPages.clear();
 
         // this might result in a different order of master pages when copying to a different document
         QSet<KoPAPageBase *> masterPages;
-        foreach( KoPAPageBase * page, m_pages ) {
-            KoPAPage * p = dynamic_cast<KoPAPage *>( page );
-            masterPages.insert( p->masterPage() );
+        foreach (KoPAPageBase *page, m_pages) {
+            KoPAPage *p = dynamic_cast<KoPAPage *>(page);
+            masterPages.insert(p->masterPage());
         }
         m_masterPages = masterPages.toList();
     }
@@ -58,22 +57,22 @@ KoPAOdfPageSaveHelper::~KoPAOdfPageSaveHelper()
     delete m_context;
 }
 
-KoShapeSavingContext * KoPAOdfPageSaveHelper::context( KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver )
+KoShapeSavingContext *KoPAOdfPageSaveHelper::context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles, KoEmbeddedDocumentSaver &embeddedSaver)
 {
-    m_context = new KoPASavingContext( *bodyWriter, mainStyles, embeddedSaver, 1 );
+    m_context = new KoPASavingContext(*bodyWriter, mainStyles, embeddedSaver, 1);
     return m_context;
 }
 
 bool KoPAOdfPageSaveHelper::writeBody()
 {
-    Q_ASSERT( m_context );
-    if ( m_context ) {
-        m_doc->saveOdfDocumentStyles( *( static_cast<KoPASavingContext*>( m_context ) ) );
-        KoXmlWriter & bodyWriter = static_cast<KoPASavingContext*>( m_context )->xmlWriter();
-        bodyWriter.startElement( "office:body" );
-        bodyWriter.startElement( m_doc->odfTagName( true ) );
+    Q_ASSERT(m_context);
+    if (m_context) {
+        m_doc->saveOdfDocumentStyles(*(static_cast<KoPASavingContext *>(m_context)));
+        KoXmlWriter &bodyWriter = static_cast<KoPASavingContext *>(m_context)->xmlWriter();
+        bodyWriter.startElement("office:body");
+        bodyWriter.startElement(m_doc->odfTagName(true));
 
-        if ( !m_doc->saveOdfPages( *( static_cast<KoPASavingContext*>( m_context ) ), m_pages, m_masterPages ) ) {
+        if (!m_doc->saveOdfPages(*(static_cast<KoPASavingContext *>(m_context)), m_pages, m_masterPages)) {
             return false;
         }
 

@@ -36,14 +36,14 @@ namespace KexiDB
 class pqxxPreparedStatement : public PreparedStatement
 {
 public:
-    pqxxPreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
+    pqxxPreparedStatement(StatementType type, ConnectionInternal &conn, FieldList &fields);
     virtual ~pqxxPreparedStatement();
 
     virtual bool execute();
     bool m_resetRequired;
 
 private:
-    Connection* m_conn;
+    Connection *m_conn;
 };
 }
 #endif

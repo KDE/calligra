@@ -31,7 +31,7 @@
 
 #include "ui_wdgblur.h"
 
-KisWdgBlur::KisWdgBlur(QWidget * parent) : KisConfigWidget(parent)
+KisWdgBlur::KisWdgBlur(QWidget *parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgBlur();
     m_widget->setupUi(this);
@@ -51,9 +51,9 @@ KisWdgBlur::~KisWdgBlur()
     delete m_widget;
 }
 
-KisPropertiesConfiguration* KisWdgBlur::configuration() const
+KisPropertiesConfiguration *KisWdgBlur::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("blur", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("blur", 1);
     config->setProperty("lockAspect", widget()->aspectButton->keepAspectRatio());
     config->setProperty("halfWidth", widget()->intHalfWidth->value());
     config->setProperty("halfHeight", widget()->intHalfHeight->value());
@@ -63,7 +63,7 @@ KisPropertiesConfiguration* KisWdgBlur::configuration() const
     return config;
 }
 
-void KisWdgBlur::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgBlur::setConfiguration(const KisPropertiesConfiguration *config)
 {
     QVariant value;
     if (config->getProperty("lockAspect", value)) {

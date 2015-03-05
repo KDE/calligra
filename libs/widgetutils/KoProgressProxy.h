@@ -42,5 +42,4 @@ public:
     virtual void setFormat(const QString &format) = 0;
 };
 
-
 #endif

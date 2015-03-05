@@ -36,29 +36,28 @@
 namespace KPlato
 {
 
-
-WorkPackageSendPanel::WorkPackageSendPanel( const QList<Node*> &tasks,  ScheduleManager *sm, QWidget *p )
+WorkPackageSendPanel::WorkPackageSendPanel(const QList<Node *> &tasks,  ScheduleManager *sm, QWidget *p)
     : QWidget(p)
 {
-    setupUi( this );
+    setupUi(this);
     long id = sm ? sm->scheduleId() : NOTSCHEDULED;
-    foreach ( Node *n, tasks ) {
-        Task *t = qobject_cast<Task*>( n );
-        if ( t == 0 ) {
+    foreach (Node *n, tasks) {
+        Task *t = qobject_cast<Task *>(n);
+        if (t == 0) {
             continue;
         }
-        foreach ( Resource *r, t->workPackage().fetchResources( id ) ) {
+        foreach (Resource *r, t->workPackage().fetchResources(id)) {
             m_resMap[ r ] << n;
         }
     }
-    QMap<Resource*, QList<Node*> >::const_iterator it;
-    for ( it = m_resMap.constBegin(); it != m_resMap.constEnd(); ++it ) {
+    QMap<Resource *, QList<Node *> >::const_iterator it;
+    for (it = m_resMap.constBegin(); it != m_resMap.constEnd(); ++it) {
         QPushButton *pb = new QPushButton(koIcon("mail-send"), i18n("Send To..."), scrollArea);
-        QLineEdit *le = new QLineEdit( it.key()->name(), scrollArea );
-        le->setReadOnly( true );
-        formLayout->addRow( pb, le );
+        QLineEdit *le = new QLineEdit(it.key()->name(), scrollArea);
+        le->setReadOnly(true);
+        formLayout->addRow(pb, le);
 
-        connect( pb, SIGNAL(clicked(bool)), SLOT(slotSendClicked()) );
+        connect(pb, SIGNAL(clicked(bool)), SLOT(slotSendClicked()));
         m_pbMap[ pb ] = it.key();
     }
 
@@ -66,10 +65,9 @@ WorkPackageSendPanel::WorkPackageSendPanel( const QList<Node*> &tasks,  Schedule
 
 void WorkPackageSendPanel::slotSendClicked()
 {
-    Resource *r = m_pbMap[ qobject_cast<QPushButton*>( sender() ) ];
-    emit sendWorkpackages( m_resMap[ r ], r );
+    Resource *r = m_pbMap[ qobject_cast<QPushButton *>(sender()) ];
+    emit sendWorkpackages(m_resMap[ r ], r);
 }
-
 
 }  //KPlato namespace
 

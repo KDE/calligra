@@ -26,7 +26,7 @@
 using namespace std;
 
 extern "C" int shell_main(const char *inFilename);
-    
+
 void usage()
 {
     cout << KEXI_SQLITE_DUMP_TOOL " version " KEXI_VERSION_STRING << endl

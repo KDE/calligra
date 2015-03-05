@@ -24,10 +24,11 @@
 #include <QPair>
 
 class MusicShape;
-namespace MusicCore {
-    class Bar;
-    class Staff;
-    class KeySignature;
+namespace MusicCore
+{
+class Bar;
+class Staff;
+class KeySignature;
 }
 
 class SetKeySignatureCommand : public KUndo2Command
@@ -37,14 +38,14 @@ public:
         EndOfPiece,
         NextChange
     };
-    SetKeySignatureCommand(MusicShape* shape, int bar, RegionType type, MusicCore::Staff* staff, int accidentals);
-    SetKeySignatureCommand(MusicShape* shape, int startBar, int endBar, MusicCore::Staff* staff, int accidentals);
+    SetKeySignatureCommand(MusicShape *shape, int bar, RegionType type, MusicCore::Staff *staff, int accidentals);
+    SetKeySignatureCommand(MusicShape *shape, int startBar, int endBar, MusicCore::Staff *staff, int accidentals);
     virtual void redo();
     virtual void undo();
 private:
-    MusicShape* m_shape;
-    MusicCore::Staff* m_staff;
-    QList<QPair<MusicCore::Bar*, MusicCore::KeySignature*> > m_newKeySignatures, m_oldKeySignatures;
+    MusicShape *m_shape;
+    MusicCore::Staff *m_staff;
+    QList<QPair<MusicCore::Bar *, MusicCore::KeySignature *> > m_newKeySignatures, m_oldKeySignatures;
 };
 
 #endif // SETKEYSIGNATURECOMMAND_H

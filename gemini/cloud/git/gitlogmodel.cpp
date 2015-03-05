@@ -47,10 +47,10 @@ public:
         qDeleteAll(entries);
     }
     QString repoDir;
-    QList<LogEntry*> entries;
+    QList<LogEntry *> entries;
 };
 
-GitLogModel::GitLogModel(QObject* parent)
+GitLogModel::GitLogModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
@@ -71,39 +71,39 @@ GitLogModel::~GitLogModel()
 
 int GitLogModel::rowCount(const QModelIndex &parent) const
 {
-    if ( parent.isValid() )
+    if (parent.isValid()) {
         return 0;
+    }
     return d->entries.count();
 }
 
 QVariant GitLogModel::data(const QModelIndex &index, int role) const
 {
     QVariant data;
-    if(index.isValid() && index.row() < d->entries.count()) {
-        LogEntry * entry = d->entries.at(index.row());
-        switch(role)
-        {
-            case AuthorNameRole:
-                data = entry->authorName;
-                break;
-            case AuthorEmailRole:
-                data = entry->authorEmail;
-                break;
-            case TimeRole:
-                data = entry->time;
-                break;
-            case OIDRole:
-                data = entry->oid;
-                break;
-            case ShortMessageRole:
-                data = entry->shortMessage;
-                break;
-            case MessageRole:
-                data = entry->message;
-                break;
-            default:
-                data = "Unknown Role";
-                break;
+    if (index.isValid() && index.row() < d->entries.count()) {
+        LogEntry *entry = d->entries.at(index.row());
+        switch (role) {
+        case AuthorNameRole:
+            data = entry->authorName;
+            break;
+        case AuthorEmailRole:
+            data = entry->authorEmail;
+            break;
+        case TimeRole:
+            data = entry->time;
+            break;
+        case OIDRole:
+            data = entry->oid;
+            break;
+        case ShortMessageRole:
+            data = entry->shortMessage;
+            break;
+        case MessageRole:
+            data = entry->message;
+            break;
+        default:
+            data = "Unknown Role";
+            break;
         }
     }
     return data;
@@ -114,9 +114,9 @@ QString GitLogModel::repoDir() const
     return d->repoDir;
 }
 
-void GitLogModel::setRepoDir(const QString& repoDir)
+void GitLogModel::setRepoDir(const QString &repoDir)
 {
-    if(d->repoDir != repoDir) {
+    if (d->repoDir != repoDir) {
         d->repoDir = repoDir;
         refreshLog();
         emit repoDirChanged();
@@ -141,14 +141,15 @@ void GitLogModel::refreshLog()
         LibQGit2::Commit commit;
         // loop control, limit the run to the hundred most recent commits
         int i = 100;
-        while(rw.next(commit)) {
-            if(--i < 0) {
+        while (rw.next(commit)) {
+            if (--i < 0) {
                 break;
             }
-            LogEntry* entry = new LogEntry();
+            LogEntry *entry = new LogEntry();
             entry->authorName = commit.author().name();
-            if(entry->authorName.isEmpty())
+            if (entry->authorName.isEmpty()) {
                 entry->authorName = "Unknown";
+            }
             entry->authorEmail = commit.author().email();
             entry->time = commit.dateTime();
             entry->oid = commit.oid().format();
@@ -157,7 +158,7 @@ void GitLogModel::refreshLog()
             d->entries.append(entry);
         }
 
-    } catch (const LibQGit2::Exception& ex) {
+    } catch (const LibQGit2::Exception &ex) {
         qDebug() << ex.what() << ex.category();
     }
     endResetModel();

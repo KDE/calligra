@@ -24,7 +24,6 @@
 #include <kexiutils/multivalidator.h>
 #include <db/validator.h>
 
-
 namespace KexiDB
 {
 class Field;
@@ -41,7 +40,7 @@ class KEXI_DB_EXPORT FieldValidator : public KexiUtils::MultiValidator
 {
 public:
     //! Setups the validator for \a field. Does not keep a pointer to \a field.
-    explicit FieldValidator(const Field &field, QObject* parent = 0);
+    explicit FieldValidator(const Field &field, QObject *parent = 0);
     ~FieldValidator();
 };
 

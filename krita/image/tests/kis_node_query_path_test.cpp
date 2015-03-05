@@ -53,7 +53,7 @@ KisNodeQueryPathTest::KisNodeQueryPathTest()
         QCOMPARE(nodes.size(), 1);                                              \
         QCOMPARE(nodes[0], node);                                               \
     }                                                                           \
-                                                                                \
+    \
     void KisNodeQueryPathTest::test##name##LayerFromAbsoluteString()            \
     {                                                                           \
         {                                                                       \
@@ -71,7 +71,7 @@ KisNodeQueryPathTest::KisNodeQueryPathTest()
             QCOMPARE(nodes[0], node);                                           \
         }                                                                       \
     }                                                                           \
-                                                                                \
+    \
     void KisNodeQueryPathTest::test##name##LayerFromAbsolutePath()              \
     {                                                                           \
         KisNodeQueryPath path = KisNodeQueryPath::absolutePath(node);           \

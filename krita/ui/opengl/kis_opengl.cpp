@@ -34,8 +34,8 @@
 
 namespace
 {
-    QGLWidget *SharedContextWidget = 0;
-    bool NeedsFenceWorkaround = false;
+QGLWidget *SharedContextWidget = 0;
+bool NeedsFenceWorkaround = false;
 }
 
 void KisOpenGL::createContext()
@@ -49,45 +49,63 @@ void KisOpenGL::createContext()
         return;
     }
 
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_None)
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_None) {
         qDebug() << "no OpenGL is present or if no OpenGL context is current.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_1)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_1) {
         qDebug() << "OpenGL version 1.1 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_2)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_2) {
         qDebug() << "OpenGL version 1.2 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_3)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_3) {
         qDebug() << "OpenGL version 1.3 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_4)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_4) {
         qDebug() << "OpenGL version 1.4 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_5)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_1_5) {
         qDebug() << "OpenGL version 1.5 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0) {
         qDebug() << "OpenGL version 2.0 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_1)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_1) {
         qDebug() << "OpenGL version 2.1 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_0)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_0) {
         qDebug() << "OpenGL version 3.0 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_1)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_1) {
         qDebug() << "OpenGL version 3.1 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_2) {
         qDebug() << "OpenGL version 3.2 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_3)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_3_3) {
         qDebug() << "OpenGL version 3.3 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_4_0)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_4_0) {
         qDebug() << "OpenGL version 4.0 or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_CommonLite_Version_1_0)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_CommonLite_Version_1_0) {
         qDebug() << "OpenGL ES version 1.0 Common Lite or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Common_Version_1_0)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Common_Version_1_0) {
         qDebug() << "OpenGL ES version 1.0 Common or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_CommonLite_Version_1_1)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_CommonLite_Version_1_1) {
         qDebug() << "OpenGL ES version 1.1 Common Lite or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Common_Version_1_1)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Common_Version_1_1) {
         qDebug() << "OpenGL ES version 1.1 Common or higher is present.";
-    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0)
+    }
+    if (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0) {
         qDebug() << "OpenGL ES version 2.0 or higher is present.";
+    }
 
     if (!((QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_Version_2_0) ||
-          (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0))) {
+            (QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0))) {
         QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Cannot use OpenGL: Krita needs at least OpenGL 2.0 or ES 2.0."));
         KisConfig cfg;
         cfg.setUseOpenGL(false);
@@ -96,18 +114,18 @@ void KisOpenGL::createContext()
 
     QGLFormat format(QGL::SampleBuffers);
 
-/* Profiles are broken in Qt 4.x: http://qt-project.org/forums/viewthread/4856
-#if QT_VERSION >= 0x040700
-    format.setVersion(3, 0);
-    format.setProfile(QGLFormat::CoreProfile);
-    if (format.profile() == 0)
-        qDebug() << "Using No Profile";
-    if (format.profile() == 1)
-        qDebug() << "Using the core profile";
-    if (format.profile() == 2)
-        qDebug() << "Using the compatibility profile";
-#endif
-*/
+    /* Profiles are broken in Qt 4.x: http://qt-project.org/forums/viewthread/4856
+    #if QT_VERSION >= 0x040700
+        format.setVersion(3, 0);
+        format.setProfile(QGLFormat::CoreProfile);
+        if (format.profile() == 0)
+            qDebug() << "Using No Profile";
+        if (format.profile() == 1)
+            qDebug() << "Using the core profile";
+        if (format.profile() == 2)
+            qDebug() << "Using the compatibility profile";
+    #endif
+    */
 
     KisConfig cfg;
     if (cfg.disableDoubleBuffering()) {
@@ -131,19 +149,19 @@ void KisOpenGL::createContext()
     {
         QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
         f.open(QFile::WriteOnly);
-        QString vendor((const char*)glGetString(GL_VENDOR));
+        QString vendor((const char *)glGetString(GL_VENDOR));
         f.write(vendor.toLatin1());
         f.write(", ");
-        QString renderer((const char*)glGetString(GL_RENDERER));
+        QString renderer((const char *)glGetString(GL_RENDERER));
         f.write(renderer.toLatin1());
         f.write(", ");
-        QString version((const char*)glGetString(GL_VERSION));
+        QString version((const char *)glGetString(GL_VERSION));
         f.write(version.toLatin1());
     }
 #endif
 
     // Check if we have a bugged driver that needs fence workaround
-    QString renderer((const char*)glGetString(GL_RENDERER));
+    QString renderer((const char *)glGetString(GL_RENDERER));
 
     bool isOnX11 = false;
 #ifdef Q_WS_X11

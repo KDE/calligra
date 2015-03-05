@@ -44,7 +44,7 @@ void PSDHeaderTest::testLoading()
     QVERIFY(header.signature == QString("8BPS"));
     QVERIFY(header.version == 1);
     QVERIFY(header.nChannels == 3);
-    QVERIFY(header.width == 100 );
+    QVERIFY(header.width == 100);
     QVERIFY(header.height == 100);
     QVERIFY(header.channelDepth == 8);
     QVERIFY(header.colormode == RGB);
@@ -83,8 +83,6 @@ void PSDHeaderTest::testRoundTripping()
     QVERIFY(header.channelDepth == header2.channelDepth);
     QVERIFY(header.colormode == header2.colormode);
 }
-
-
 
 QTEST_KDEMAIN(PSDHeaderTest, GUI)
 

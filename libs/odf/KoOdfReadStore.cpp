@@ -34,11 +34,11 @@ class KoOdfReadStore::Private
 {
 public:
     Private(KoStore *s)
-            : store(s)
+        : store(s)
     {
     }
 
-    KoStore * store;
+    KoStore *store;
     KoOdfStylesReader stylesReader;
     // it is needed to keep the stylesDoc around so that you can access the styles
     KoXmlDocument stylesDoc;
@@ -47,7 +47,7 @@ public:
 };
 
 KoOdfReadStore::KoOdfReadStore(KoStore *store)
-        : d(new Private(store))
+    : d(new Private(store))
 {
 }
 
@@ -56,7 +56,7 @@ KoOdfReadStore::~KoOdfReadStore()
     delete d;
 }
 
-KoStore * KoOdfReadStore::store() const
+KoStore *KoOdfReadStore::store() const
 {
     return d->store;
 }
@@ -134,10 +134,10 @@ bool KoOdfReadStore::loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QSt
     bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
         kError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg << endl;
+                      << " In line: " << errorLine << ", column: " << errorColumn << endl
+                      << " Error message: " << errorMsg << endl;
         errorMessage = i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
-                            , errorLine , errorColumn , errorMsg);
+                            , errorLine, errorColumn, errorMsg);
     } else {
         kDebug(30003) << "File" << fileName << " loaded and parsed";
     }

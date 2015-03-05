@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef _KIS_META_DATA_STORE_H_
 #define _KIS_META_DATA_STORE_H_
 
@@ -40,21 +39,20 @@ class KRITAIMAGE_EXPORT Store
     struct Private;
 public:
     Store();
-    Store(const Store&);
+    Store(const Store &);
     ~Store();
 public:
 
     /**
      * Copy the entries from store inside this store
      */
-    void copyFrom(const Store* store);
+    void copyFrom(const Store *store);
 
     /**
      * @return true if there is no metadata in this store.
      */
     bool empty() const;
     bool isEmpty() const;
-
 
     /**
      * Insert a new entry.
@@ -65,66 +63,66 @@ public:
      * @return false if the entry couldn't be included whether because the key already
      *  exists
      */
-    bool addEntry(const Entry& entry);
+    bool addEntry(const Entry &entry);
 
     /**
      * Give access to a metadata entry
      * @param entryKey the entryKey as the qualified name of the entry
      */
-    Entry& getEntry(const QString & entryKey);
+    Entry &getEntry(const QString &entryKey);
 
     /**
      * Give access to a metadata entry
      * @param uri the uri of the schema
      * @param entryName the name of the entry
      */
-    Entry& getEntry(const QString & uri, const QString & entryName);
+    Entry &getEntry(const QString &uri, const QString &entryName);
 
     /**
      * Give access to a metadata entry
      * @param schema the schema
      * @param entryName the name of the entry
      */
-    Entry& getEntry(const KisMetaData::Schema* schema, const QString & entryName);
+    Entry &getEntry(const KisMetaData::Schema *schema, const QString &entryName);
 
     /**
      * Give access to a metadata entry
      * @param entryKey the entryKey as the qualified name of the entry
      */
-    const Entry& getEntry(const QString & entryKey) const;
+    const Entry &getEntry(const QString &entryKey) const;
     /**
      * Give access to a metadata entry
      * @param uri the uri of the schema
      * @param entryName the name of the entry
      */
-    const Entry& getEntry(const QString & uri, const QString & entryName) const;
+    const Entry &getEntry(const QString &uri, const QString &entryName) const;
 
     /**
      * Give access to a metadata entry
      * @param schema the schema
      * @param entryName the name of the entry
      */
-    const Entry& getEntry(const KisMetaData::Schema* schema, const QString & entryName) const;
+    const Entry &getEntry(const KisMetaData::Schema *schema, const QString &entryName) const;
 
     /**
      * Remove an entry.
      * @param entryKey the entryKey as the qualified name of the entry
      */
-    void removeEntry(const QString & entryKey);
+    void removeEntry(const QString &entryKey);
 
     /**
      * Remove an entry.
      * @param uri the uri of the schema
      * @param entryName the name of the entry
      */
-    void removeEntry(const QString & uri, const QString & entryName);
+    void removeEntry(const QString &uri, const QString &entryName);
 
     /**
      * Remove an entry.
      * @param schema the schema
      * @param entryName the name of the entry
      */
-    void removeEntry(const KisMetaData::Schema* schema, const QString & entryName);
+    void removeEntry(const KisMetaData::Schema *schema, const QString &entryName);
 
     /**
      * Return the value associated with this entry name and uri.
@@ -132,7 +130,7 @@ public:
      * @param entryName
      * @return the value
      */
-    const Value& getValue(const QString & uri, const QString & entryName) const;
+    const Value &getValue(const QString &uri, const QString &entryName) const;
 
     QHash<QString, Entry>::const_iterator begin() const;
     QHash<QString, Entry>::const_iterator end() const;
@@ -141,19 +139,19 @@ public:
      * @param entryKey the entryKey as the qualified name of the entry
      * @return true if an entry with the given key exist in the store
      */
-    bool containsEntry(const QString & entryKey) const;
+    bool containsEntry(const QString &entryKey) const;
 
     /**
      * @return true if the store contains this entry
      */
-    bool containsEntry(const KisMetaData::Schema* schema, const QString & entryName) const;
+    bool containsEntry(const KisMetaData::Schema *schema, const QString &entryName) const;
 
     /**
      * @param uri
      * @param entryName
      * @return true if an entry with the given uri and entry name exist in the store
      */
-    bool containsEntry(const QString & uri, const QString & entryName) const;
+    bool containsEntry(const QString &uri, const QString &entryName) const;
 
     /**
      * Dump on kdDebug the metadata store.
@@ -163,7 +161,7 @@ public:
     /**
      * Apply a list of filters on a store
      */
-    void applyFilters(const QList<const Filter*> & filters);
+    void applyFilters(const QList<const Filter *> &filters);
 
     /**
      * @return the list of keys
@@ -175,7 +173,7 @@ public:
      */
     QList<Entry> entries() const;
 private:
-    Private* const d;
+    Private *const d;
 };
 }
 

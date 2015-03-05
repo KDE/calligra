@@ -76,7 +76,7 @@ public:
      * Create a copy of this node. The copy will not have a parent
      * node.
      */
-    KisNode(const KisNode & rhs);
+    KisNode(const KisNode &rhs);
 
     /**
      * Delete this node
@@ -108,7 +108,7 @@ public:
      * this percolates up to parent nodes all the way to the root
      * node.
      */
-    virtual void setDirty(const QRect & rect);
+    virtual void setDirty(const QRect &rect);
 
     /**
      * Add the given rects to the set of dirty rects for this node;
@@ -141,7 +141,6 @@ public:
      * See \ref accessRect
      */
     virtual QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
-
 
     /**
      * Shows the area of image, that may be accessed during accessing
@@ -176,13 +175,13 @@ public: // Graph methods
      * @return the graph listener this node belongs to. 0 if the node
      * does not belong to a grap listener.
      */
-    KisNodeGraphListener * graphListener() const;
+    KisNodeGraphListener *graphListener() const;
 
     /**
      * Set the graph listener for this node. The graphlistener will be
      * informed before and after the list of child nodes has changed.
      */
-    void setGraphListener(KisNodeGraphListener * graphListener);
+    void setGraphListener(KisNodeGraphListener *graphListener);
 
     /**
      * Returns the parent node of this node. This is 0 only for a root
@@ -239,7 +238,6 @@ public: // Graph methods
      */
     int index(const KisNodeSP node) const;
 
-
     /**
      * Return a list of child nodes of the current node that conform
      * to the specified constraints. There are no guarantees about the
@@ -250,7 +248,7 @@ public: // Graph methods
      * @param properties. if not empty, only nodes for which
      * KisNodeBase::check(properties) returns true will be returned.
      */
-    QList<KisNodeSP> childNodes(const QStringList & nodeTypes, const KoProperties & properties) const;
+    QList<KisNodeSP> childNodes(const QStringList &nodeTypes, const KoProperties &properties) const;
 
 public:
 
@@ -259,7 +257,7 @@ public:
      *         proxy, it will return the proxy of its parent, if the parent has no progress proxy
      *         it will return 0
      */
-    KisNodeProgressProxy* nodeProgressProxy() const;
+    KisNodeProgressProxy *nodeProgressProxy() const;
 
 private:
 
@@ -310,7 +308,7 @@ private:
 private:
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 
 };
 

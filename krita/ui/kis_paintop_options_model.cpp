@@ -26,7 +26,7 @@ KisPaintOpOptionListModel::KisPaintOpOptionListModel(QObject *parent)
 {
 }
 
-void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption* option, int widgetIndex)
+void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex)
 {
     DataItem *item = categoriesMapper()->addEntry(option->category(), KisOptionInfo(option, widgetIndex));
 
@@ -38,9 +38,11 @@ void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption* option, int w
     categoriesMapper()->expandAllCategories();
 }
 
-QVariant KisPaintOpOptionListModel::data(const QModelIndex& idx, int role) const
+QVariant KisPaintOpOptionListModel::data(const QModelIndex &idx, int role) const
 {
-    if (!idx.isValid()) return false;
+    if (!idx.isValid()) {
+        return false;
+    }
 
     DataItem *item = categoriesMapper()->itemFromRow(idx.row());
     Q_ASSERT(item);
@@ -59,9 +61,11 @@ QVariant KisPaintOpOptionListModel::data(const QModelIndex& idx, int role) const
     return BaseOptionCategorizedListModel::data(idx, role);
 }
 
-bool KisPaintOpOptionListModel::setData(const QModelIndex& idx, const QVariant& value, int role)
+bool KisPaintOpOptionListModel::setData(const QModelIndex &idx, const QVariant &value, int role)
 {
-    if (!idx.isValid()) return false;
+    if (!idx.isValid()) {
+        return false;
+    }
 
     DataItem *item = categoriesMapper()->itemFromRow(idx.row());
     Q_ASSERT(item);
@@ -73,16 +77,26 @@ bool KisPaintOpOptionListModel::setData(const QModelIndex& idx, const QVariant& 
     return BaseOptionCategorizedListModel::setData(idx, value, role);
 }
 
-bool operator==(const KisOptionInfo& a, const KisOptionInfo& b)
+bool operator==(const KisOptionInfo &a, const KisOptionInfo &b)
 {
-    if (a.index != b.index) return false;
-    if (a.option->label() != b.option->label()) return false;
-    if (a.option->category() != b.option->category()) return false;
-    if (a.option->isCheckable() != b.option->isCheckable()) return false;
-    if (a.option->isChecked() != b.option->isChecked()) return false;
+    if (a.index != b.index) {
+        return false;
+    }
+    if (a.option->label() != b.option->label()) {
+        return false;
+    }
+    if (a.option->category() != b.option->category()) {
+        return false;
+    }
+    if (a.option->isCheckable() != b.option->isCheckable()) {
+        return false;
+    }
+    if (a.option->isChecked() != b.option->isChecked()) {
+        return false;
+    }
     return true;
 }
-void KisPaintOpOptionListModel::signalDataChanged(const QModelIndex& index)
+void KisPaintOpOptionListModel::signalDataChanged(const QModelIndex &index)
 {
-    emit dataChanged(index,index);
+    emit dataChanged(index, index);
 }

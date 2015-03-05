@@ -47,7 +47,6 @@ int KisSprayPaintOpSettings::rate() const
     return getInt(AIRBRUSH_RATE);
 }
 
-
 QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
     QPainterPath path;

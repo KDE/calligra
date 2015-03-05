@@ -38,7 +38,7 @@ class DocxXmlCommentReader : public DocxXmlDocumentReader
 public:
     explicit DocxXmlCommentReader(KoOdfWriters *writers);
     virtual ~DocxXmlCommentReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
 protected:
     KoFilter::ConversionStatus read_comments();
@@ -47,7 +47,7 @@ protected:
 private:
     void init();
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif //DOCXXMLCOMMENTREADER_H

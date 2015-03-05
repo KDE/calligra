@@ -24,22 +24,22 @@ namespace KisMetaData
 class IntegerParser : public Parser
 {
 public:
-    virtual Value parse(const QString&) const;
+    virtual Value parse(const QString &) const;
 };
 class TextParser : public Parser
 {
 public:
-    virtual Value parse(const QString&) const;
+    virtual Value parse(const QString &) const;
 };
 class DateParser : public Parser
 {
 public:
-    virtual Value parse(const QString&) const;
+    virtual Value parse(const QString &) const;
 };
 class RationalParser : public Parser
 {
 public:
-    virtual Value parse(const QString&) const;
+    virtual Value parse(const QString &) const;
 };
 
 }

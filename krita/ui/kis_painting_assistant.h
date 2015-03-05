@@ -55,21 +55,21 @@ class KRITAUI_EXPORT KisPaintingAssistantHandle : public QPointF, public KisShar
 public:
     KisPaintingAssistantHandle(double x, double y);
     explicit KisPaintingAssistantHandle(QPointF p);
-    KisPaintingAssistantHandle(const KisPaintingAssistantHandle&);
+    KisPaintingAssistantHandle(const KisPaintingAssistantHandle &);
     ~KisPaintingAssistantHandle();
     void mergeWith(KisPaintingAssistantHandleSP);
     QList<KisPaintingAssistantHandleSP> split();
     void uncache();
-    KisPaintingAssistantHandle& operator=(const QPointF&);
+    KisPaintingAssistantHandle &operator=(const QPointF &);
     void setType(char type);
     char handleType();
 private:
-    void registerAssistant(KisPaintingAssistant*);
-    void unregisterAssistant(KisPaintingAssistant*);
-    bool containsAssistant(KisPaintingAssistant*);
+    void registerAssistant(KisPaintingAssistant *);
+    void unregisterAssistant(KisPaintingAssistant *);
+    bool containsAssistant(KisPaintingAssistant *);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 /**
@@ -79,10 +79,10 @@ private:
 class KRITAUI_EXPORT KisPaintingAssistant
 {
 public:
-    KisPaintingAssistant(const QString& id, const QString& name);
+    KisPaintingAssistant(const QString &id, const QString &name);
     virtual ~KisPaintingAssistant();
-    const QString& id() const;
-    const QString& name() const;
+    const QString &id() const;
+    const QString &name() const;
     bool snapping() const;//this returns whether or not the snapping is/should be active.
     void setSnapping(bool set);
     bool outline() const;//this returns whether or not the preview is/should be active.
@@ -92,22 +92,22 @@ public:
      * @param point the coordinates in point in the document reference
      * @param strokeBegin the coordinates of the beginning of the stroke
      */
-    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) = 0;
+    virtual QPointF adjustPosition(const QPointF &point, const QPointF &strokeBegin) = 0;
     virtual void endStroke() { }
     virtual QPointF buttonPosition() const = 0;
     virtual int numHandles() const = 0;
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle);
     void addSideHandle(KisPaintingAssistantHandleSP handle);
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
+    virtual void drawAssistant(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, bool cached = true, KisCanvas2 *canvas = 0, bool assistantVisible = true, bool previewVisible = true);
     void uncache();
-    const QList<KisPaintingAssistantHandleSP>& handles() const;
+    const QList<KisPaintingAssistantHandleSP> &handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
-    const QList<KisPaintingAssistantHandleSP>& sideHandles() const;
+    const QList<KisPaintingAssistantHandleSP> &sideHandles() const;
     QList<KisPaintingAssistantHandleSP> sideHandles();
-    QByteArray saveXml( QMap<KisPaintingAssistantHandleSP, int> &handleMap);
+    QByteArray saveXml(QMap<KisPaintingAssistantHandleSP, int> &handleMap);
     void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
-    void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
+    void saveXmlList(QDomDocument &doc, QDomElement &ssistantsElement, int count);
     void findHandleLocation();
     KisPaintingAssistantHandleSP oppHandleOne();
 
@@ -135,17 +135,17 @@ public:
     /**
      * This will paint a path using a white and black colors.
      */
-    static void drawPath(QPainter& painter, const QPainterPath& path, bool drawActive=true);
-    static void drawPreview(QPainter& painter, const QPainterPath& path);
+    static void drawPath(QPainter &painter, const QPainterPath &path, bool drawActive = true);
+    static void drawPreview(QPainter &painter, const QPainterPath &path);
 protected:
     virtual QRect boundingRect() const;
-    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible=true) = 0;
+    virtual void drawCache(QPainter &gc, const KisCoordinatesConverter *converter, bool assistantVisible = true) = 0;
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
     QList<KisPaintingAssistantHandleSP> m_handles;
 private:
     struct Private;
-    Private* const d;
-    
+    Private *const d;
+
 };
 
 /**
@@ -158,17 +158,17 @@ public:
     virtual ~KisPaintingAssistantFactory();
     virtual QString id() const = 0;
     virtual QString name() const = 0;
-    virtual KisPaintingAssistant* createPaintingAssistant() const = 0;
+    virtual KisPaintingAssistant *createPaintingAssistant() const = 0;
 
 };
 
-class KRITAUI_EXPORT KisPaintingAssistantFactoryRegistry : public KoGenericRegistry<KisPaintingAssistantFactory*>
+class KRITAUI_EXPORT KisPaintingAssistantFactoryRegistry : public KoGenericRegistry<KisPaintingAssistantFactory *>
 {
     KisPaintingAssistantFactoryRegistry();
     ~KisPaintingAssistantFactoryRegistry();
-  public:
-    static KisPaintingAssistantFactoryRegistry* instance();
-  
+public:
+    static KisPaintingAssistantFactoryRegistry *instance();
+
 };
 
 #endif

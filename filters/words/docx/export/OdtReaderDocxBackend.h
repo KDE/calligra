@@ -26,13 +26,11 @@
 #include <KoFilter.h>
 #include <OdtReaderBackend.h>
 
-
-
 class OdfReaderContext;
 
 class OdtReaderDocxBackend : public OdtReaderBackend
 {
- public:
+public:
     OdtReaderDocxBackend();
     virtual ~OdtReaderDocxBackend();
 
@@ -47,6 +45,5 @@ class OdtReaderDocxBackend : public OdtReaderBackend
     void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
     //void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
 };
-
 
 #endif // ODTREADERDOCXBACKEND_H

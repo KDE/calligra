@@ -27,7 +27,6 @@
 #include "kis_pressure_mirror_option.h"
 #include <kis_threaded_text_rendering_workaround.h>
 
-
 class KisPropertiesConfiguration;
 class KisPressureSpacingOption;
 
@@ -41,7 +40,7 @@ class PAINTOP_EXPORT KisBrushBasedPaintOp : public KisPaintOp
 
 public:
 
-    KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter);
+    KisBrushBasedPaintOp(const KisPropertiesConfiguration *settings, KisPainter *painter);
     ~KisBrushBasedPaintOp();
 
     bool checkSizeTooSmall(qreal scale);

@@ -26,7 +26,6 @@
 
 #include <KoColor.h>
 
-
 #include <kis_paintop_preset.h>
 #include <kis_types.h>
 #include <krita_export.h>
@@ -45,7 +44,6 @@ class KisPaintingInformationBuilder;
 class KisToolFreehandHelper;
 class KisNodeGraphListener;
 
-
 /**
  * A scratchpad is a painting canvas with only one zoomlevel and based on
  * a paint layer, not on a KisImage. It can have a blank, tiled background or
@@ -57,14 +55,14 @@ class KRITAUI_EXPORT KisScratchPad : public QWidget
     Q_OBJECT
 
 public:
-    void setupScratchPad(KisCanvasResourceProvider* resourceProvider,
+    void setupScratchPad(KisCanvasResourceProvider *resourceProvider,
                          const QColor &defaultColor);
 
     KisScratchPad(QWidget *parent = 0);
     virtual ~KisScratchPad();
 
     /// set the specified rect as the area taken for @see cutoutOverlay
-    void setCutoutOverlayRect(const QRect&rc);
+    void setCutoutOverlayRect(const QRect &rc);
 
     /// return the contents of the area under the cutoutOverlay rect
     QImage cutoutOverlay() const;
@@ -84,7 +82,7 @@ public Q_SLOTS:
     /**
      * Set the icon of the current preset
      */
-    void setPresetImage(const QImage& image);
+    void setPresetImage(const QImage &image);
 
     /**
      * Paint the icon of the current preset inside the
@@ -96,15 +94,15 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void setOnScreenResolution(qreal scaleX, qreal scaleY);
-    void setDisplayProfile(const KoColorProfile* colorProfile);
+    void setDisplayProfile(const KoColorProfile *colorProfile);
     void slotUpdateCanvas(const QRect &rect);
 
 Q_SIGNALS:
-    void colorSelected(const KoColor& color);
+    void colorSelected(const KoColor &color);
     void sigUpdateCanvas(const QRect &rect);
 
 protected:
-    virtual void paintEvent ( QPaintEvent * event );
+    virtual void paintEvent(QPaintEvent *event);
 
 public Q_SLOTS:
     void slotMousePress(KoPointerEvent *event);
@@ -138,11 +136,11 @@ private:
     KoColor m_defaultColor;
     Mode m_toolMode;
     KisPaintLayerSP m_paintLayer;
-    const KoColorProfile* m_displayProfile;
+    const KoColorProfile *m_displayProfile;
     QCursor m_cursor;
     QRect m_cutoutOverlay;
     QBrush m_checkBrush;
-    KisCanvasResourceProvider* m_resourceProvider;
+    KisCanvasResourceProvider *m_resourceProvider;
 
     KisUpdateScheduler *m_updateScheduler;
     KisUndoStore *m_undoStore;

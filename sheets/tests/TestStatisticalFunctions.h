@@ -76,13 +76,11 @@ private Q_SLOTS:
 //     void testKURTP(); // ???
     void testLARGE();
 
-
     void testLEGACYCHIDIST();
     void testLEGACYCHIINV();
     void testLEGACYFDIST();
     void testLEGACYFINV();
 //     void testLEGACYNORMSDIST(); // same as NORMDIST required for OpenFormula compliance
-
 
 //     void testLINEST(); // ???
 //     void testLOGEST(); // ???
@@ -140,11 +138,11 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    bool  TestArray(const QString& formula, const QString& Array, int accuracy, bool checkSize);
-    Value evaluate(const QString&);
-    Value TestDouble(const QString& formula, const Value& v2, int accuracy);
+    bool  TestArray(const QString &formula, const QString &Array, int accuracy, bool checkSize);
+    Value evaluate(const QString &);
+    Value TestDouble(const QString &formula, const Value &v2, int accuracy);
 
-    Map* m_map;
+    Map *m_map;
 };
 
 } // namespace Sheets

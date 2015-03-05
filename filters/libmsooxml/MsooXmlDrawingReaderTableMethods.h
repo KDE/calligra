@@ -18,32 +18,32 @@
  */
 
 protected:
-    KoFilter::ConversionStatus read_tbl();
-    KoFilter::ConversionStatus read_tblPr();
-    KoFilter::ConversionStatus read_tblGrid();
-    KoFilter::ConversionStatus read_tr();
-    KoFilter::ConversionStatus read_tableStyleId();
-    KoFilter::ConversionStatus read_gridCol();
-    KoFilter::ConversionStatus read_tc();
-    KoFilter::ConversionStatus read_tcPr();
-    KoFilter::ConversionStatus read_lnT();
-    KoFilter::ConversionStatus read_lnB();
-    KoFilter::ConversionStatus read_lnR();
-    KoFilter::ConversionStatus read_lnL();
+KoFilter::ConversionStatus read_tbl();
+KoFilter::ConversionStatus read_tblPr();
+KoFilter::ConversionStatus read_tblGrid();
+KoFilter::ConversionStatus read_tr();
+KoFilter::ConversionStatus read_tableStyleId();
+KoFilter::ConversionStatus read_gridCol();
+KoFilter::ConversionStatus read_tc();
+KoFilter::ConversionStatus read_tcPr();
+KoFilter::ConversionStatus read_lnT();
+KoFilter::ConversionStatus read_lnB();
+KoFilter::ConversionStatus read_lnR();
+KoFilter::ConversionStatus read_lnL();
 
-    void defineStyles();
+void defineStyles();
 
-    uint m_currentTableNumber; //!< table counter, from 0
-    uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()
-    uint m_currentTableColumnNumber; //!< column counter, from 0, initialized in read_tr()
+uint m_currentTableNumber; //!< table counter, from 0
+uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()
+uint m_currentTableColumnNumber; //!< column counter, from 0, initialized in read_tr()
 
-    KoTable* m_table;
-    QString m_currentTableName;
+KoTable *m_table;
+QString m_currentTableName;
 
-    MSOOXML::DrawingTableStyle* m_tableStyle;
-    MSOOXML::DrawingTableStyleConverterProperties::Roles m_activeRoles;
+MSOOXML::DrawingTableStyle *m_tableStyle;
+MSOOXML::DrawingTableStyleConverterProperties::Roles m_activeRoles;
 
-    MSOOXML::TableStyleProperties* m_currentLocalStyleProperties;
-    MSOOXML::LocalTableStyles m_localTableStyles;
+MSOOXML::TableStyleProperties *m_currentLocalStyleProperties;
+MSOOXML::LocalTableStyles m_localTableStyles;
 
-    #include "PresetDrawingMLTables.h"
+#include "PresetDrawingMLTables.h"

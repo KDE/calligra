@@ -66,31 +66,31 @@ using namespace Calligra::Sheets;
  *                 Database Assistant                   *
  ********************************************************/
 
-DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
-        : KAssistantDialog(parent),
-        m_currentPage(eDatabase),
-        m_selection(selection),
-        m_targetRect(selection->lastRange())
+DatabaseDialog::DatabaseDialog(QWidget *parent, Selection *selection)
+    : KAssistantDialog(parent),
+      m_currentPage(eDatabase),
+      m_selection(selection),
+      m_targetRect(selection->lastRange())
 {
     setObjectName(QLatin1String("DatabaseDialog"));
     setWindowTitle(i18n("Insert Data From Database"));
 
     // database page
 
-    QFrame * databaseFrame = new QFrame(this);
-    QGridLayout * databaseFrameLayout = new QGridLayout(databaseFrame);
+    QFrame *databaseFrame = new QFrame(this);
+    QGridLayout *databaseFrameLayout = new QGridLayout(databaseFrame);
 
     m_Type = new QLabel(databaseFrame);
     m_Type->setText(i18n("Type:"));
 
     databaseFrameLayout->addWidget(m_Type, 0, 0);
 
-    QLabel * TextLabel4 = new QLabel(databaseFrame);
+    QLabel *TextLabel4 = new QLabel(databaseFrame);
     TextLabel4->setText(i18n("User name:\n"
                              "(if necessary)"));
     databaseFrameLayout->addWidget(TextLabel4, 4, 0);
 
-    QLabel * TextLabel2 = new QLabel(databaseFrame);
+    QLabel *TextLabel2 = new QLabel(databaseFrame);
     TextLabel2->setText(i18n("Host:"));
     databaseFrameLayout->addWidget(TextLabel2, 2, 0);
 
@@ -104,7 +104,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_host->setText("localhost");
     databaseFrameLayout->addWidget(m_host, 2, 1);
 
-    QLabel * TextLabel3 = new QLabel(databaseFrame);
+    QLabel *TextLabel3 = new QLabel(databaseFrame);
     TextLabel3->setText(i18n("Port:\n(if necessary)"));
     databaseFrameLayout->addWidget(TextLabel3, 3, 0);
 
@@ -116,14 +116,14 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_port->setValidator(new KIntValidator(m_port));
     databaseFrameLayout->addWidget(m_port, 3, 1);
 
-    QLabel * dbName = new QLabel(databaseFrame);
+    QLabel *dbName = new QLabel(databaseFrame);
     dbName->setText(i18n("Database name: "));
     databaseFrameLayout->addWidget(dbName, 1, 0);
 
     m_databaseName = new KLineEdit(databaseFrame);
     databaseFrameLayout->addWidget(m_databaseName, 1, 1);
 
-    QLabel * TextLabel5 = new QLabel(databaseFrame);
+    QLabel *TextLabel5 = new QLabel(databaseFrame);
     TextLabel5->setText(i18n("Password:\n"
                              "(if necessary)"));
     databaseFrameLayout->addWidget(TextLabel5, 5, 0);
@@ -141,8 +141,8 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
 
     // tables page
 
-    QFrame * tablesFrame = new QFrame(this);
-    QGridLayout * tablesFrameLayout = new QGridLayout(tablesFrame);
+    QFrame *tablesFrame = new QFrame(this);
+    QGridLayout *tablesFrameLayout = new QGridLayout(tablesFrame);
 
 //   QHBoxLayout * Layout21 = new QHBoxLayout();
 //   Layout21->setMargin(0);
@@ -179,10 +179,10 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
 
     // columns page
 
-    QFrame * columnsFrame = new QFrame(this);
-    QGridLayout * columnsFrameLayout = new QGridLayout(columnsFrame);
+    QFrame *columnsFrame = new QFrame(this);
+    QGridLayout *columnsFrameLayout = new QGridLayout(columnsFrame);
 
-    QLabel * TextLabel11_2 = new QLabel(columnsFrame);
+    QLabel *TextLabel11_2 = new QLabel(columnsFrame);
     TextLabel11_2->setText(i18n("Select columns:"));
     columnsFrameLayout->addWidget(TextLabel11_2, 0, 0);
 
@@ -203,8 +203,8 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
 
     // options page
 
-    QFrame * optionsFrame = new QFrame(this);
-    QGridLayout * optionsFrameLayout = new QGridLayout(optionsFrame);
+    QFrame *optionsFrame = new QFrame(this);
+    QGridLayout *optionsFrameLayout = new QGridLayout(optionsFrame);
 
     m_andBox = new QRadioButton(optionsFrame);
     m_andBox->setText(i18n("Match all of the following (AND)"));
@@ -266,7 +266,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_operatorValue_3 = new KLineEdit(optionsFrame);
     optionsFrameLayout->addWidget(m_operatorValue_3, 4, 2);
 
-    QLabel * TextLabel19 = new QLabel(optionsFrame);
+    QLabel *TextLabel19 = new QLabel(optionsFrame);
     TextLabel19->setText(i18n("Sorted by"));
     optionsFrameLayout->addWidget(TextLabel19, 5, 0);
 
@@ -278,7 +278,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_sortMode_1->insertItem(1, i18n("Descending"));
     optionsFrameLayout->addWidget(m_sortMode_1, 5, 2);
 
-    QLabel * TextLabel19_2 = new QLabel(optionsFrame);
+    QLabel *TextLabel19_2 = new QLabel(optionsFrame);
     TextLabel19_2->setText(i18n("Sorted by"));
     optionsFrameLayout->addWidget(TextLabel19_2, 6, 0);
 
@@ -290,9 +290,9 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     m_sortMode_2->insertItem(1, i18n("Descending"));
     optionsFrameLayout->addWidget(m_sortMode_2, 6, 2);
 
-    QSpacerItem* spacer = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem *spacer = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     optionsFrameLayout->addItem(spacer, 7, 1);
-    QSpacerItem* spacer_2 = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem *spacer_2 = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     optionsFrameLayout->addItem(spacer_2, 7, 0);
 
     m_distinct = new QCheckBox(optionsFrame);
@@ -306,20 +306,20 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
 
     // result page
 
-    QFrame * resultFrame = new QFrame(this);
-    QGridLayout * resultFrameLayout = new QGridLayout(resultFrame);
+    QFrame *resultFrame = new QFrame(this);
+    QGridLayout *resultFrameLayout = new QGridLayout(resultFrame);
 
-    QLabel * TextLabel17 = new QLabel(resultFrame);
+    QLabel *TextLabel17 = new QLabel(resultFrame);
     TextLabel17->setText(i18n("SQL query:"));
     resultFrameLayout->addWidget(TextLabel17, 0, 0);
 
     m_sqlQuery = new KTextEdit(resultFrame);
     resultFrameLayout->addWidget(m_sqlQuery, 1, 0);
 
-    QFrame * Frame12 = new QFrame(resultFrame);
+    QFrame *Frame12 = new QFrame(resultFrame);
     Frame12->setFrameShape(QFrame::StyledPanel);
     Frame12->setFrameShadow(QFrame::Raised);
-    QGridLayout * Frame12Layout = new QGridLayout(Frame12);
+    QGridLayout *Frame12Layout = new QGridLayout(Frame12);
 
     m_startingRegion = new QRadioButton(Frame12);
     m_startingRegion->setText(i18n("Insert in region"));
@@ -373,16 +373,19 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
 DatabaseDialog::~DatabaseDialog()
 {
     // no need to delete child widgets, Qt does it all for us
-    if (m_dbConnection.isValid())
+    if (m_dbConnection.isValid()) {
         m_dbConnection.close();
+    }
 }
 
 void DatabaseDialog::switchPage(int id)
 {
-    if (id > eResult)
+    if (id > eResult) {
         --m_currentPage;
-    if (id < eDatabase)
+    }
+    if (id < eDatabase) {
         ++m_currentPage;
+    }
 
     switch (id) {
     case eDatabase:
@@ -414,23 +417,27 @@ void DatabaseDialog::next()
 {
     switch (m_currentPage) {
     case eDatabase:
-        if (!databaseDoNext())
+        if (!databaseDoNext()) {
             return;
+        }
         break;
 
     case eTables:
-        if (!tablesDoNext())
+        if (!tablesDoNext()) {
             return;
+        }
         break;
 
     case eColumns:
-        if (!columnsDoNext())
+        if (!columnsDoNext()) {
             return;
+        }
         break;
 
     case eOptions:
-        if (!optionsDoNext())
+        if (!optionsDoNext()) {
             return;
+        }
         break;
 
     case eResult:
@@ -455,7 +462,7 @@ void DatabaseDialog::back()
 
 void DatabaseDialog::accept()
 {
-    Sheet * sheet = m_selection->activeSheet();
+    Sheet *sheet = m_selection->activeSheet();
     int top;
     int left;
     int width  = -1;
@@ -503,10 +510,11 @@ void DatabaseDialog::accept()
     QString queryStr;
     QString tmp = m_sqlQuery->toPlainText();
     for (i = 0; i < (int) tmp.length(); ++i) {
-        if (tmp[i] != '\n')
+        if (tmp[i] != '\n') {
             queryStr += tmp[i];
-        else
+        } else {
             queryStr += ' ';
+        }
     }
 
     Cell cell;
@@ -542,28 +550,31 @@ void DatabaseDialog::accept()
     int y = 0;
     int count = m_columns_1->count();
     if (width != -1) {
-        if (count > width)
+        if (count > width) {
             count = width;
+        }
     }
 
     if (height == -1) {
         height = 0;
         if (query.first()) {
-            if (query.isValid())
+            if (query.isValid()) {
                 ++height;
+            }
         }
         while (query.next()) {
-            if (query.isValid())
+            if (query.isValid()) {
                 ++height;
+            }
         }
     }
 
-    KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Insert Data From Database"));
+    KUndo2Command *macroCommand = new KUndo2Command(kundo2_i18n("Insert Data From Database"));
 
     if (query.first()) {
         if (query.isValid()) {
             for (i = 0; i < count; ++i) {
-                DataManipulator* command = new DataManipulator(macroCommand);
+                DataManipulator *command = new DataManipulator(macroCommand);
                 command->setParsing(true);
                 command->setSheet(sheet);
                 command->setValue(Value(query.value(i).toString()));
@@ -575,11 +586,12 @@ void DatabaseDialog::accept()
 
     if (y != height) {
         while (query.next()) {
-            if (!query.isValid())
+            if (!query.isValid()) {
                 continue;
+            }
 
             for (i = 0; i < count; ++i) {
-                DataManipulator* command = new DataManipulator(macroCommand);
+                DataManipulator *command = new DataManipulator(macroCommand);
                 command->setParsing(true);
                 command->setSheet(sheet);
                 command->setValue(Value(query.value(i).toString()));
@@ -587,8 +599,9 @@ void DatabaseDialog::accept()
             }
             ++y;
 
-            if (y == height)
+            if (y == height) {
                 break;
+            }
         }
     }
     m_selection->canvas()->addCommand(macroCommand);
@@ -605,11 +618,13 @@ bool DatabaseDialog::databaseDoNext()
         m_dbConnection.setDatabaseName(m_databaseName->text());
         m_dbConnection.setHostName(m_host->text());
 
-        if (!m_username->text().isEmpty())
+        if (!m_username->text().isEmpty()) {
             m_dbConnection.setUserName(m_username->text());
+        }
 
-        if (!m_password->text().isEmpty())
+        if (!m_password->text().isEmpty()) {
             m_dbConnection.setPassword(m_password->text());
+        }
 
         if (!m_port->text().isEmpty()) {
             bool ok = false;
@@ -635,7 +650,7 @@ bool DatabaseDialog::databaseDoNext()
             m_tableView->clear();
 
             for (int i = 0; i < tableList.size(); ++i) {
-                QListWidgetItem * item = new QListWidgetItem(tableList[i]);
+                QListWidgetItem *item = new QListWidgetItem(tableList[i]);
                 item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
                 item->setCheckState(Qt::Unchecked);
                 m_tableView->addItem(item);
@@ -678,7 +693,7 @@ bool DatabaseDialog::tablesDoNext()
 
     {
         for (int i = 0; i < m_tableView->count(); ++i) {
-            QListWidgetItem* item = m_tableView->item(i);
+            QListWidgetItem *item = m_tableView->item(i);
             if (item->checkState() == Qt::Checked) {
                 tables.append(item->text());
             }
@@ -697,7 +712,7 @@ bool DatabaseDialog::tablesDoNext()
         for (int j = 0; j < (int) info.count(); ++j) {
             QString name = info.fieldName(j);
             QSqlField field = info.field(name);
-            QTreeWidgetItem * checkItem = new QTreeWidgetItem(QStringList() << name << tables[i] << QVariant::typeToName(field.type()));
+            QTreeWidgetItem *checkItem = new QTreeWidgetItem(QStringList() << name << tables[i] << QVariant::typeToName(field.type()));
 
             checkItem->setFlags(checkItem->flags() | Qt::ItemIsUserCheckable);
             checkItem->setCheckState(0, Qt::Unchecked);
@@ -715,7 +730,7 @@ bool DatabaseDialog::columnsDoNext()
 {
     QStringList columns;
     for (int row = 0; row < m_columnView->topLevelItemCount(); ++row) {
-        QTreeWidgetItem* item = m_columnView->topLevelItem(row);
+        QTreeWidgetItem *item = m_columnView->topLevelItem(row);
         if (item->checkState(0) == Qt::Checked) {
             columns.append(item->text(1) + '.' + item->text(0));
         }
@@ -744,9 +759,8 @@ bool DatabaseDialog::columnsDoNext()
     return true;
 }
 
-
-QString DatabaseDialog::getWhereCondition(QString const & column,
-        QString const & value,
+QString DatabaseDialog::getWhereCondition(QString const &column,
+        QString const &value,
         int op)
 {
     QString wherePart;
@@ -798,31 +812,36 @@ QString DatabaseDialog::getWhereCondition(QString const & column,
         value.toDouble(&ok);
 
         if (!ok) {
-            if (value[0] != '\'')
+            if (value[0] != '\'') {
                 val = '\'';
+            }
 
             val += value;
 
-            if (value[value.length() - 1] != '\'')
+            if (value[value.length() - 1] != '\'') {
                 val += '\'';
-        } else
+            }
+        } else {
             val = value;
+        }
 
         wherePart += val;
     } else { // "in" & "not in"
         QString val;
-        if (value[0] != '(')
+        if (value[0] != '(') {
             val = '(';
+        }
         val += value;
-        if (value[value.length() - 1] != ')')
+        if (value[value.length() - 1] != ')') {
             val += ')';
+        }
         wherePart += val;
     }
 
     return wherePart;
 }
 
-QString DatabaseDialog::exchangeWildcards(QString const & value)
+QString DatabaseDialog::exchangeWildcards(QString const &value)
 {
     QString str(value);
     int p = str.indexOf('*');
@@ -848,8 +867,9 @@ bool DatabaseDialog::optionsDoNext()
             int res = KMessageBox::warningYesNo(this, i18n("'*' or '?' are not valid wildcards in SQL. "
                                                 "The proper replacements are '%' or '_'. Do you want to replace them?"));
 
-            if (res == KMessageBox::Yes)
+            if (res == KMessageBox::Yes) {
                 m_operatorValue_1->setText(exchangeWildcards(m_operatorValue_1->text()));
+            }
         }
     }
 
@@ -860,8 +880,9 @@ bool DatabaseDialog::optionsDoNext()
             int res = KMessageBox::warningYesNo(this, i18n("'*' or '?' are not valid wildcards in SQL. "
                                                 "The proper replacements are '%' or '_'. Do you want to replace them?"));
 
-            if (res == KMessageBox::Yes)
+            if (res == KMessageBox::Yes) {
                 m_operatorValue_2->setText(exchangeWildcards(m_operatorValue_2->text()));
+            }
         }
     }
 
@@ -872,15 +893,17 @@ bool DatabaseDialog::optionsDoNext()
             int res = KMessageBox::warningYesNo(this, i18n("'*' or '?' are not valid wildcards in SQL. "
                                                 "The proper replacements are '%' or '_'. Do you want to replace them?"));
 
-            if (res == KMessageBox::Yes)
+            if (res == KMessageBox::Yes) {
                 m_operatorValue_3->setText(exchangeWildcards(m_operatorValue_3->text()));
+            }
         }
     }
 
     QString query("SELECT ");
 
-    if (m_distinct->isChecked())
+    if (m_distinct->isChecked()) {
         query += "DISTINCT ";
+    }
 
     int i;
     int l = m_columns_1->count() - 1;
@@ -894,10 +917,11 @@ bool DatabaseDialog::optionsDoNext()
 
     bool b = false;
     for (int i = 0; i < m_tableView->count(); ++i) {
-        QListWidgetItem* item = m_tableView->item(i);
+        QListWidgetItem *item = m_tableView->item(i);
         if (item->checkState() == Qt::Checked) {
-            if (b)
+            if (b) {
                 query += ", ";
+            }
             b = true;
             query += item->text();
         }
@@ -905,8 +929,9 @@ bool DatabaseDialog::optionsDoNext()
 
     if ((!m_operatorValue_1->text().isEmpty())
             || (!m_operatorValue_2->text().isEmpty())
-            || (!m_operatorValue_3->text().isEmpty()))
+            || (!m_operatorValue_3->text().isEmpty())) {
         query += "\nWHERE ";
+    }
 
     bool added = false;
     if (!m_operatorValue_1->text().isEmpty()) {
@@ -917,8 +942,9 @@ bool DatabaseDialog::optionsDoNext()
     }
 
     if (!m_operatorValue_2->text().isEmpty()) {
-        if (added)
+        if (added) {
             query += (m_andBox->isChecked() ? " AND " : " OR ");
+        }
 
         query += getWhereCondition(m_columns_2->currentText(),
                                    m_operatorValue_2->text(),
@@ -927,8 +953,9 @@ bool DatabaseDialog::optionsDoNext()
     }
 
     if (!m_operatorValue_3->text().isEmpty()) {
-        if (added)
+        if (added) {
             query += (m_andBox->isChecked() ? " AND " : " OR ");
+        }
 
         query += getWhereCondition(m_columns_3->currentText(),
                                    m_operatorValue_3->text(),
@@ -942,17 +969,20 @@ bool DatabaseDialog::optionsDoNext()
         if (m_columnsSort_1->currentIndex() != 0) {
             added = true;
             query += m_columnsSort_1->currentText();
-            if (m_sortMode_1->currentIndex() == 1)
+            if (m_sortMode_1->currentIndex() == 1) {
                 query += " DESC ";
+            }
         }
 
         if (m_columnsSort_2->currentIndex() != 0) {
-            if (added)
+            if (added) {
                 query += ", ";
+            }
 
             query += m_columnsSort_2->currentText();
-            if (m_sortMode_2->currentIndex() == 1)
+            if (m_sortMode_2->currentIndex() == 1) {
                 query += " DESC ";
+            }
         }
     }
 
@@ -994,32 +1024,35 @@ void DatabaseDialog::connectButton_clicked()
     qWarning("DatabaseDialog::connectButton_clicked(): Not implemented yet!");
 }
 
-void DatabaseDialog::databaseNameChanged(const QString & s)
+void DatabaseDialog::databaseNameChanged(const QString &s)
 {
     if (!m_driver->currentText().isEmpty() && !s.isEmpty()
-            && !m_host->text().isEmpty())
+            && !m_host->text().isEmpty()) {
         setValid(m_database, true);
-    else
+    } else {
         setValid(m_database, false);
+    }
 }
 
-void DatabaseDialog::databaseHostChanged(const QString & s)
+void DatabaseDialog::databaseHostChanged(const QString &s)
 {
     if (!m_driver->currentText().isEmpty() && !s.isEmpty()
-            && !m_databaseName->text().isEmpty())
+            && !m_databaseName->text().isEmpty()) {
         setValid(m_database, true);
-    else
+    } else {
         setValid(m_database, false);
+    }
 }
 
 void DatabaseDialog::databaseDriverChanged(int index)
 {
     Q_UNUSED(index)
     if (!m_host->text().isEmpty()
-            && !m_databaseName->text().isEmpty())
+            && !m_databaseName->text().isEmpty()) {
         setValid(m_database, true);
-    else
+    } else {
         setValid(m_database, false);
+    }
 }
 
 /*void DatabaseDialog::popupTableViewMenu( Q3ListViewItem *, const QPoint &, int )
@@ -1036,7 +1069,6 @@ void DatabaseDialog::tableViewClicked(QListWidgetItem *)
 //   }
 //   kDebug() <<"clicked";
 }
-
 
 #include "DatabaseDialog.moc"
 

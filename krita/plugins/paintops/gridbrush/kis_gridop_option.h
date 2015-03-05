@@ -31,7 +31,6 @@ const QString GRID_VERTICAL_BORDER = "Grid/verticalBorder";
 const QString GRID_HORIZONTAL_BORDER = "Grid/horizontalBorder";
 const QString GRID_RANDOM_BORDER = "Grid/randomBorder";
 
-
 class KisGridOpOptionsWidget;
 
 class KisGridOpOption : public KisPaintOpOption
@@ -50,16 +49,15 @@ public:
     bool pressureDivision() const;
     qreal scale() const;
 
-
     qreal vertBorder() const;
     qreal horizBorder() const;
     bool randomBorder() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
-    KisGridOpOptionsWidget * m_options;
+    KisGridOpOptionsWidget *m_options;
 
 };
 

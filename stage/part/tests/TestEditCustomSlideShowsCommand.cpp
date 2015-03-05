@@ -17,7 +17,6 @@
 * Boston, MA 02110-1301, USA.
 */
 
-
 #include "TestEditCustomSlideShowsCommand.h"
 #include "KPrDocument.h"
 #include "KoPAMasterPage.h"
@@ -39,7 +38,7 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
     doc.insertPage(page1, 0);
 
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
-    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
+    KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
     QVERIFY(p1 != 0);
     QVERIFY(m1 != 0);
@@ -50,7 +49,7 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
     KoPAPage *page3 = new KoPAPage(master1);
     doc.insertPage(page3, 0);
 
-    QList<KoPAPageBase*> slideList;
+    QList<KoPAPageBase *> slideList;
 
     slideList.append(page1);
     slideList.append(page2);
@@ -60,7 +59,7 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
 
     doc.customSlideShows()->insert(customShowName, slideList);
 
-    QList<KoPAPageBase*> initialSlideShow = doc.customSlideShows()->getByName(customShowName);
+    QList<KoPAPageBase *> initialSlideShow = doc.customSlideShows()->getByName(customShowName);
 
     QCOMPARE(initialSlideShow.count(), 3);
 
@@ -69,7 +68,7 @@ void TestEditCustomSlideShowsCommand::moveSingleSlide()
     KPrEditCustomSlideShowsCommand command(&doc, customShowName, initialSlideShow);
 
     command.redo();
-    QList<KoPAPageBase*> modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
+    QList<KoPAPageBase *> modifiedSlideShow = doc.customSlideShows()->getByName(customShowName);
     QCOMPARE(modifiedSlideShow, initialSlideShow);
 
     command.undo();

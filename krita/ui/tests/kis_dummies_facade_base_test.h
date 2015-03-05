@@ -34,7 +34,7 @@ public:
     virtual ~KisDummiesFacadeBaseTest();
 
 protected:
-    virtual KisDummiesFacadeBase* dummiesFacadeFactory() = 0;
+    virtual KisDummiesFacadeBase *dummiesFacadeFactory() = 0;
     virtual void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade) = 0;
 
 private Q_SLOTS:

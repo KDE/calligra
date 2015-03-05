@@ -50,21 +50,21 @@ using namespace Calligra::Sheets;
 class FunctionModuleRegistry::Private
 {
 public:
-    void registerFunctionModule(FunctionModule* module);
-    void removeFunctionModule(FunctionModule* module);
+    void registerFunctionModule(FunctionModule *module);
+    void removeFunctionModule(FunctionModule *module);
 
 public:
     bool repositoryInitialized;
 };
 
-void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* module)
+void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule *module)
 {
     const QList<QSharedPointer<Function> > functions = module->functions();
     for (int i = 0; i < functions.count(); ++i) {
         FunctionRepository::self()->add(functions[i]);
     }
     Q_ASSERT(!module->descriptionFileName().isEmpty());
-    const KStandardDirs* dirs = KGlobal::activeComponent().dirs();
+    const KStandardDirs *dirs = KGlobal::activeComponent().dirs();
     const QString fileName = dirs->findResource("functions", module->descriptionFileName());
     if (fileName.isEmpty()) {
         kDebug(36002) << module->descriptionFileName() << "not found.";
@@ -73,7 +73,7 @@ void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* mod
     FunctionRepository::self()->loadFunctionDescriptions(fileName);
 }
 
-void FunctionModuleRegistry::Private::removeFunctionModule(FunctionModule* module)
+void FunctionModuleRegistry::Private::removeFunctionModule(FunctionModule *module)
 {
     const QList<QSharedPointer<Function> > functions = module->functions();
     for (int i = 0; i < functions.count(); ++i) {
@@ -81,23 +81,22 @@ void FunctionModuleRegistry::Private::removeFunctionModule(FunctionModule* modul
     }
 }
 
-
 FunctionModuleRegistry::FunctionModuleRegistry()
-        : d(new Private)
+    : d(new Private)
 {
     d->repositoryInitialized = false;
 }
 
 FunctionModuleRegistry::~FunctionModuleRegistry()
 {
-    foreach(const QString &id, keys()) {
+    foreach (const QString &id, keys()) {
         get(id)->deleteLater();
     }
     qDeleteAll(doubleEntries());
     delete d;
 }
 
-FunctionModuleRegistry* FunctionModuleRegistry::instance()
+FunctionModuleRegistry *FunctionModuleRegistry::instance()
 {
     K_GLOBAL_STATIC(FunctionModuleRegistry, s_instance)
     return s_instance;
@@ -114,24 +113,24 @@ void FunctionModuleRegistry::loadFunctionModules()
     const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
     const KPluginInfo::List pluginInfos = KPluginInfo::fromServices(offers, moduleGroup);
     kDebug(36002) << pluginInfos.count() << "function modules found.";
-    foreach(KPluginInfo pluginInfo, pluginInfos) {
+    foreach (KPluginInfo pluginInfo, pluginInfos) {
         pluginInfo.load(); // load activation state
         KPluginLoader loader(*pluginInfo.service());
         // Let's be paranoid: do not believe the service type.
         if (loader.pluginVersion() < minKSpreadVersion) {
             kDebug(36002) << pluginInfo.name()
-            << "was built against Caligra Sheets" << loader.pluginVersion()
-            << "; required version >=" << minKSpreadVersion;
+                          << "was built against Caligra Sheets" << loader.pluginVersion()
+                          << "; required version >=" << minKSpreadVersion;
             continue;
         }
         if (pluginInfo.isPluginEnabled() && !contains(pluginInfo.pluginName())) {
             // Plugin enabled, but not registered. Add it.
-            KPluginFactory* const factory = loader.factory();
+            KPluginFactory *const factory = loader.factory();
             if (!factory) {
                 kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();
                 continue;
             }
-            FunctionModule* const module = factory->create<FunctionModule>();
+            FunctionModule *const module = factory->create<FunctionModule>();
             if (!module) {
                 kDebug(36002) << "Unable to create function module for" << pluginInfo.name();
                 continue;
@@ -144,7 +143,7 @@ void FunctionModuleRegistry::loadFunctionModules()
             }
         } else if (!pluginInfo.isPluginEnabled() && contains(pluginInfo.pluginName())) {
             // Plugin disabled, but registered. Remove it.
-            FunctionModule* const module = get(pluginInfo.pluginName());
+            FunctionModule *const module = get(pluginInfo.pluginName());
             // Delay the function registration until the user needs one.
             if (d->repositoryInitialized) {
                 d->removeFunctionModule(module);
@@ -165,7 +164,7 @@ void FunctionModuleRegistry::loadFunctionModules()
         }
     }
 #else
-    QList<FunctionModule*> modules;
+    QList<FunctionModule *> modules;
     QObject *parent = 0;
 
     modules << new BitOpsModule(parent);
@@ -182,7 +181,7 @@ void FunctionModuleRegistry::loadFunctionModules()
     modules << new TextModule(parent);
     modules << new TrigonometryModule(parent);
 
-    Q_FOREACH(FunctionModule* module, modules) {
+    Q_FOREACH (FunctionModule *module, modules) {
         add(module->id(), module);
         d->registerFunctionModule(module);
     }
@@ -192,7 +191,7 @@ void FunctionModuleRegistry::loadFunctionModules()
 void FunctionModuleRegistry::registerFunctions()
 {
     d->repositoryInitialized = true;
-    const QList<FunctionModule*> modules = values();
+    const QList<FunctionModule *> modules = values();
     for (int i = 0; i < modules.count(); ++i) {
         d->registerFunctionModule(modules[i]);
     }

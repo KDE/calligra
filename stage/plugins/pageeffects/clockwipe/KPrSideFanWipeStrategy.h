@@ -25,12 +25,12 @@
 class KPrSideFanWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    KPrSideFanWipeStrategy(int positionAngle, int fanCount, int subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrSideFanWipeStrategy(int positionAngle, int fanCount, int subType, const char *smilType, const char *smilSubType, bool reverse);
     virtual ~KPrSideFanWipeStrategy();
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
-    virtual void next( const KPrPageEffect::Data &data );
+    virtual void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine);
+    virtual void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data);
+    virtual void next(const KPrPageEffect::Data &data);
 
 private:
     double m_startAngle;

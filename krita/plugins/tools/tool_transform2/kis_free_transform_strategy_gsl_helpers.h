@@ -25,38 +25,38 @@ class ToolTransformArgs;
 namespace GSL
 {
 
-    struct ScaleResult1D {
-        ScaleResult1D() : scale(1.0) {}
+struct ScaleResult1D {
+    ScaleResult1D() : scale(1.0) {}
 
-        QPointF transformedCenter;
-        qreal scale;
-    };
+    QPointF transformedCenter;
+    qreal scale;
+};
 
-    ScaleResult1D calculateScaleX(const ToolTransformArgs &args,
-                                  const QPointF &staticPointSrc,
-                                  const QPointF &staticPointDst,
-                                  const QPointF &movingPointSrc,
-                                  qreal viewDistance);
+ScaleResult1D calculateScaleX(const ToolTransformArgs &args,
+                              const QPointF &staticPointSrc,
+                              const QPointF &staticPointDst,
+                              const QPointF &movingPointSrc,
+                              qreal viewDistance);
 
-    ScaleResult1D calculateScaleY(const ToolTransformArgs &args,
-                                  const QPointF &staticPointSrc,
-                                  const QPointF &staticPointDst,
-                                  const QPointF &movingPointSrc,
-                                  qreal viewDistance);
+ScaleResult1D calculateScaleY(const ToolTransformArgs &args,
+                              const QPointF &staticPointSrc,
+                              const QPointF &staticPointDst,
+                              const QPointF &movingPointSrc,
+                              qreal viewDistance);
 
-    struct ScaleResult2D {
-        ScaleResult2D() : scaleX(1.0), scaleY(1.0) {}
+struct ScaleResult2D {
+    ScaleResult2D() : scaleX(1.0), scaleY(1.0) {}
 
-        QPointF transformedCenter;
-        qreal scaleX;
-        qreal scaleY;
-    };
+    QPointF transformedCenter;
+    qreal scaleX;
+    qreal scaleY;
+};
 
-    ScaleResult2D calculateScale2D(const ToolTransformArgs &args,
-                                   const QPointF &staticPointSrc,
-                                   const QPointF &staticPointDst,
-                                   const QPointF &movingPointSrc,
-                                   const QPointF &movingPointDst);
+ScaleResult2D calculateScale2D(const ToolTransformArgs &args,
+                               const QPointF &staticPointSrc,
+                               const QPointF &staticPointDst,
+                               const QPointF &movingPointSrc,
+                               const QPointF &movingPointDst);
 
 }
 

@@ -18,7 +18,6 @@
 
 #include "kis_selection_tool_helper.h"
 
-
 #include <kundo2command.h>
 
 #include <KoShapeController.h>
@@ -39,10 +38,9 @@
 #include "kis_transaction_based_command.h"
 #include "kis_gui_context_command.h"
 
-
-KisSelectionToolHelper::KisSelectionToolHelper(KisCanvas2* canvas, const KUndo2MagicString& name)
-        : m_canvas(canvas)
-        , m_name(name)
+KisSelectionToolHelper::KisSelectionToolHelper(KisCanvas2 *canvas, const KUndo2MagicString &name)
+    : m_canvas(canvas)
+    , m_name(name)
 {
     m_image = m_canvas->viewManager()->image();
 }
@@ -55,15 +53,16 @@ struct LazyInitGlobalSelection : public KisTransactionBasedCommand {
     LazyInitGlobalSelection(KisViewManager *view) : m_view(view) {}
     KisViewManager *m_view;
 
-    KUndo2Command* paint() {
+    KUndo2Command *paint()
+    {
         return !m_view->selection() ?
-            new KisSetEmptyGlobalSelectionCommand(m_view->image()) : 0;
+               new KisSetEmptyGlobalSelectionCommand(m_view->image()) : 0;
     }
 };
 
 void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action)
 {
-    KisViewManager* view = m_canvas->viewManager();
+    KisViewManager *view = m_canvas->viewManager();
 
     if (selection->selectedExactRect().isEmpty()) {
         m_canvas->viewManager()->selectionManager()->deselect();
@@ -82,16 +81,19 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
         ApplyToPixelSelection(KisViewManager *view,
                               KisPixelSelectionSP selection,
                               SelectionAction action) : m_view(view),
-                                                        m_selection(selection),
-                                                        m_action(action) {}
+            m_selection(selection),
+            m_action(action) {}
         KisViewManager *m_view;
         KisPixelSelectionSP m_selection;
         SelectionAction m_action;
 
-        KUndo2Command* paint() {
+        KUndo2Command *paint()
+        {
 
             KisPixelSelectionSP pixelSelection = m_view->selection()->pixelSelection();
-            KIS_ASSERT_RECOVER(pixelSelection) { return 0; }
+            KIS_ASSERT_RECOVER(pixelSelection) {
+                return 0;
+            }
 
             bool hasSelection = !pixelSelection->isEmpty();
 
@@ -120,23 +122,23 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
     applicator.end();
 }
 
-void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
+void KisSelectionToolHelper::addSelectionShape(KoShape *shape)
 {
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
     shapes.append(shape);
     addSelectionShapes(shapes);
 }
 
-void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
+void KisSelectionToolHelper::addSelectionShapes(QList< KoShape * > shapes)
 {
-    KisViewManager* view = m_canvas->viewManager();
+    KisViewManager *view = m_canvas->viewManager();
 
     if (view->image()->wrapAroundModePermitted()) {
         view->showFloatingMessage(
             i18n("Shape selection does not fully "
                  "support wraparound mode. Please "
                  "use pixel selection instead"),
-                 koIcon("selection-info"));
+            koIcon("selection-info"));
     }
 
     KisProcessingApplicator applicator(view->image(),
@@ -151,10 +153,13 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
         ClearPixelSelection(KisViewManager *view) : m_view(view) {}
         KisViewManager *m_view;
 
-        KUndo2Command* paint() {
+        KUndo2Command *paint()
+        {
 
             KisPixelSelectionSP pixelSelection = m_view->selection()->pixelSelection();
-            KIS_ASSERT_RECOVER(pixelSelection) { return 0; }
+            KIS_ASSERT_RECOVER(pixelSelection) {
+                return 0;
+            }
 
             KisSelectionTransaction transaction(pixelSelection);
             pixelSelection->clear();
@@ -165,16 +170,17 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
     applicator.applyCommand(new ClearPixelSelection(view));
 
     struct AddSelectionShape : public KisTransactionBasedCommand {
-        AddSelectionShape(KisViewManager *view, KoShape* shape) : m_view(view),
-                                                            m_shape(shape) {}
+        AddSelectionShape(KisViewManager *view, KoShape *shape) : m_view(view),
+            m_shape(shape) {}
         KisViewManager *m_view;
-        KoShape* m_shape;
+        KoShape *m_shape;
 
-        KUndo2Command* paint() {
+        KUndo2Command *paint()
+        {
             /**
              * Mark a shape that it belongs to a shape selection
              */
-            if(!m_shape->userData()) {
+            if (!m_shape->userData()) {
                 m_shape->setUserData(new KisShapeSelectionMarker);
             }
 
@@ -182,13 +188,12 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
         }
     };
 
-    foreach(KoShape* shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         applicator.applyCommand(
             new KisGuiContextCommand(new AddSelectionShape(view, shape), view));
     }
     applicator.end();
 }
-
 
 void KisSelectionToolHelper::cropRectIfNeeded(QRect *rect)
 {

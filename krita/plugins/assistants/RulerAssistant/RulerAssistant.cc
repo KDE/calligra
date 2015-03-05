@@ -29,67 +29,71 @@
 #include <math.h>
 
 RulerAssistant::RulerAssistant()
-        : KisPaintingAssistant("ruler", i18n("Ruler assistant"))
+    : KisPaintingAssistant("ruler", i18n("Ruler assistant"))
 {
 }
 
-QPointF RulerAssistant::project(const QPointF& pt) const
+QPointF RulerAssistant::project(const QPointF &pt) const
 {
     Q_ASSERT(handles().size() == 2);
     QPointF pt1 = *handles()[0];
     QPointF pt2 = *handles()[1];
-    
+
     QPointF a = pt - pt1;
     QPointF u = pt2 - pt1;
-    
+
     qreal u_norm = sqrt(u.x() * u.x() + u.y() * u.y());
-    
-    if(u_norm == 0) return pt;
-    
+
+    if (u_norm == 0) {
+        return pt;
+    }
+
     u /= u_norm;
-    
+
     double t = a.x() * u.x() + a.y() * u.y();
-    
-    if(t < 0.0) return pt1;
-    if(t > u_norm) return pt2;
-    
+
+    if (t < 0.0) {
+        return pt1;
+    }
+    if (t > u_norm) {
+        return pt2;
+    }
+
     return t * u + pt1;
 }
 
-QPointF RulerAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/)
+QPointF RulerAssistant::adjustPosition(const QPointF &pt, const QPointF & /*strokeBegin*/)
 {
     return project(pt);
 }
 
-inline double angle(const QPointF& p1, const QPointF& p2)
+inline double angle(const QPointF &p1, const QPointF &p2)
 {
     return atan2(p2.y() - p1.y(), p2.x() - p1.x());
 }
 
-
-inline double norm2(const QPointF& p)
+inline double norm2(const QPointF &p)
 {
     return sqrt(p.x() * p.x() + p.y() * p.y());
 }
 
-void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
+void RulerAssistant::drawAssistant(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, bool cached, KisCanvas2 *canvas, bool assistantVisible, bool previewVisible)
 {
     gc.save();
     gc.resetTransform();
     QPointF mousePos;
-    
-    if (canvas){
+
+    if (canvas) {
         //simplest, cheapest way to get the mouse-position//
-        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-    }
-    else {
+        mousePos = canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
+    } else {
         //...of course, you need to have access to a canvas-widget for that.//
         mousePos = QCursor::pos();//this'll give an offset//
-        dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
+        dbgFile << "canvas does not exist in ruler, you may have passed arguments incorrectly:" << canvas;
     }
-    
+
     if (handles().size() > 1) {
-    //don't draw if invalid.
+        //don't draw if invalid.
         QTransform initialTransform = converter->documentToWidgetTransform();
 
         // first we find the path that our point create.
@@ -101,20 +105,24 @@ void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const
         path.moveTo(p1);
         path.lineTo(p2);
         //then we use this path to check the bounding rectangle//
-        if (outline()==true && path.boundingRect().contains(initialTransform.inverted().map(mousePos)) && previewVisible==true){
+        if (outline() == true && path.boundingRect().contains(initialTransform.inverted().map(mousePos)) && previewVisible == true) {
             drawPreview(gc, path);//and we draw the preview.
         }
     }
     gc.restore();
-    
+
     KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
 
 }
 
-void RulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
+void RulerAssistant::drawCache(QPainter &gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
-    if (assistantVisible==false){return;}
-    if (handles().size() < 2) return;
+    if (assistantVisible == false) {
+        return;
+    }
+    if (handles().size() < 2) {
+        return;
+    }
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 
@@ -152,7 +160,7 @@ QString RulerAssistantFactory::name() const
     return i18n("Ruler");
 }
 
-KisPaintingAssistant* RulerAssistantFactory::createPaintingAssistant() const
+KisPaintingAssistant *RulerAssistantFactory::createPaintingAssistant() const
 {
     return new RulerAssistant;
 }

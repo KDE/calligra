@@ -35,12 +35,15 @@ KoTextLayoutCellHelper::KoTextLayoutCellHelper(const KoTableCellStyle &cellStyle
 
 bool isSpeciallyDrawn(KoBorder::BorderStyle style)
 {
-    if (style == KoBorder::BorderWave)
+    if (style == KoBorder::BorderWave) {
         return true;
-    if (style == KoBorder::BorderDoubleWave)
+    }
+    if (style == KoBorder::BorderDoubleWave) {
         return true;
-    if (style == KoBorder::BorderSlash)
+    }
+    if (style == KoBorder::BorderSlash) {
         return true;
+    }
     return false;
 }
 
@@ -48,18 +51,18 @@ void KoTextLayoutCellHelper::drawHorizontalWave(KoBorder::BorderStyle style, QPa
 {
     QPen pen = painter.pen();
     const qreal linewidth = pen.widthF();
-    const qreal penwidth = linewidth/6;
+    const qreal penwidth = linewidth / 6;
     pen.setWidth(penwidth);
     painter.setPen(pen);
     if (style == KoBorder::BorderSlash) {
-        for (qreal sx=x; sx<x+w-linewidth; sx+=linewidth*0.5) {
-            painter.drawLine(QLineF(sx, t-penwidth*2, sx+linewidth, t+penwidth*2));
+        for (qreal sx = x; sx < x + w - linewidth; sx += linewidth * 0.5) {
+            painter.drawLine(QLineF(sx, t - penwidth * 2, sx + linewidth, t + penwidth * 2));
         }
     } else {
-        for (qreal sx=x; sx<x+w-2*linewidth; sx+=linewidth) {
-            painter.drawLine(QLineF(sx, t-penwidth*2, sx+linewidth, t+penwidth*2));
-            sx+=linewidth;
-            painter.drawLine(QLineF(sx, t+penwidth*2, sx+linewidth, t-penwidth*2));
+        for (qreal sx = x; sx < x + w - 2 * linewidth; sx += linewidth) {
+            painter.drawLine(QLineF(sx, t - penwidth * 2, sx + linewidth, t + penwidth * 2));
+            sx += linewidth;
+            painter.drawLine(QLineF(sx, t + penwidth * 2, sx + linewidth, t - penwidth * 2));
         }
     }
 }
@@ -68,22 +71,21 @@ void KoTextLayoutCellHelper::drawVerticalWave(KoBorder::BorderStyle style, QPain
 {
     QPen pen = painter.pen();
     const qreal linewidth = pen.width();
-    const qreal penwidth = linewidth/6;
+    const qreal penwidth = linewidth / 6;
     pen.setWidth(penwidth);
     painter.setPen(pen);
     if (style == KoBorder::BorderSlash) {
-        for (qreal sy=y; sy<y+h-linewidth; sy+=linewidth*0.5) {
-            painter.drawLine(QLineF(t-penwidth*2, sy, t+penwidth*2, sy+linewidth));
+        for (qreal sy = y; sy < y + h - linewidth; sy += linewidth * 0.5) {
+            painter.drawLine(QLineF(t - penwidth * 2, sy, t + penwidth * 2, sy + linewidth));
         }
     } else {
-        for (qreal sy=y; sy<y+h-2*linewidth; sy+=linewidth) {
-            painter.drawLine(QLineF(t-penwidth*2, sy, t+penwidth*2, sy+linewidth));
-            sy+=linewidth;
-            painter.drawLine(QLineF(t+penwidth*2, sy, t-penwidth*2, sy+linewidth));
+        for (qreal sy = y; sy < y + h - 2 * linewidth; sy += linewidth) {
+            painter.drawLine(QLineF(t - penwidth * 2, sy, t + penwidth * 2, sy + linewidth));
+            sy += linewidth;
+            painter.drawLine(QLineF(t + penwidth * 2, sy, t - penwidth * 2, sy + linewidth));
         }
     }
 }
-
 
 void KoTextLayoutCellHelper::paintBorders(QPainter &painter, const QRectF &bounds, QVector<QLineF> *accumulatedBlankBorders) const
 {
@@ -212,21 +214,21 @@ void KoTextLayoutCellHelper::paintDiagonalBorders(QPainter &painter, const QRect
 
 void KoTextLayoutCellHelper::drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *accumulatedBlankBorders) const
 {
-    qreal t=y;
+    qreal t = y;
     if (m_cellStyle.getEdge(KoBorder::TopBorder).outerPen.widthF() > 0) {
         QPen pen = m_cellStyle.getEdge(KoBorder::TopBorder).outerPen;
 
         painter.setPen(pen);
         t += pen.widthF() / 2.0;
-        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::TopBorder))) {
-            drawHorizontalWave(m_cellStyle.getBorderStyle(KoBorder::TopBorder), painter,x,w,t);
+        if (isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::TopBorder))) {
+            drawHorizontalWave(m_cellStyle.getBorderStyle(KoBorder::TopBorder), painter, x, w, t);
         } else {
-            painter.drawLine(QLineF(x, t, x+w, t));
+            painter.drawLine(QLineF(x, t, x + w, t));
         }
         t = y + m_cellStyle.getEdge(KoBorder::TopBorder).spacing + pen.widthF();
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(x, t, x+w, t));
+        accumulatedBlankBorders->append(QLineF(x, t, x + w, t));
     }
 
     // inner line
@@ -234,10 +236,10 @@ void KoTextLayoutCellHelper::drawTopHorizontalBorder(QPainter &painter, qreal x,
         QPen pen = m_cellStyle.getEdge(KoBorder::TopBorder).innerPen;
         painter.setPen(pen);
         t += pen.widthF() / 2.0;
-        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::TopBorder))) {
-            drawHorizontalWave(m_cellStyle.getBorderStyle(KoBorder::TopBorder), painter,x,w,t);
+        if (isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::TopBorder))) {
+            drawHorizontalWave(m_cellStyle.getBorderStyle(KoBorder::TopBorder), painter, x, w, t);
         } else {
-            painter.drawLine(QLineF(x, t, x+w, t));
+            painter.drawLine(QLineF(x, t, x + w, t));
         }
     }
 }
@@ -248,24 +250,23 @@ void KoTextLayoutCellHelper::drawSharedHorizontalBorder(QPainter &painter, const
     if (m_cellStyle.getBorderStyle(KoBorder::BottomBorder) == KoBorder::BorderNone) {
         if (styleBelow.getBorderStyle(KoBorder::TopBorder) == KoBorder::BorderNone) {
             if (accumulatedBlankBorders) {
-                accumulatedBlankBorders->append(QLineF(x, y, x+w, y));
+                accumulatedBlankBorders->append(QLineF(x, y, x + w, y));
             }
             return;
         }
         paintThis = false;
-    }
-    else {
+    } else {
         if (styleBelow.getBorderStyle(KoBorder::TopBorder) != KoBorder::BorderNone) {
             qreal thisWidth = m_cellStyle.getEdge(KoBorder::BottomBorder).outerPen.widthF() + m_cellStyle.getEdge(KoBorder::BottomBorder).spacing + m_cellStyle.getEdge(KoBorder::BottomBorder).innerPen.widthF();
             qreal thatWidth = styleBelow.getEdge(KoBorder::TopBorder).outerPen.widthF() + styleBelow.getEdge(KoBorder::TopBorder).spacing
-                            + styleBelow.getEdge(KoBorder::TopBorder).innerPen.widthF();
+                              + styleBelow.getEdge(KoBorder::TopBorder).innerPen.widthF();
             paintThis = thisWidth >= thatWidth;
         }
     }
 
     const KoBorder::BorderData &edge = paintThis ? m_cellStyle.getEdge(KoBorder::BottomBorder) : styleBelow.getEdge(KoBorder::TopBorder);
-    const KoBorder::BorderStyle borderStyle = paintThis ? m_cellStyle.getBorderStyle(KoBorder::BottomBorder): styleBelow.getBorderStyle(KoBorder::TopBorder);
-    qreal t=y;
+    const KoBorder::BorderStyle borderStyle = paintThis ? m_cellStyle.getBorderStyle(KoBorder::BottomBorder) : styleBelow.getBorderStyle(KoBorder::TopBorder);
+    qreal t = y;
 
     if (edge.outerPen.widthF() > 0) {
         QPen pen = edge.outerPen;
@@ -273,10 +274,10 @@ void KoTextLayoutCellHelper::drawSharedHorizontalBorder(QPainter &painter, const
 
         painter.setPen(pen);
         t += linewidth / 2.0;
-        if(isSpeciallyDrawn(borderStyle)) {
-            drawHorizontalWave(borderStyle, painter,x,w,t);
+        if (isSpeciallyDrawn(borderStyle)) {
+            drawHorizontalWave(borderStyle, painter, x, w, t);
         } else {
-            painter.drawLine(QLineF(x, t, x+w, t));
+            painter.drawLine(QLineF(x, t, x + w, t));
         }
         t = y + edge.spacing + linewidth;
     }
@@ -285,31 +286,31 @@ void KoTextLayoutCellHelper::drawSharedHorizontalBorder(QPainter &painter, const
         QPen pen = edge.innerPen;
         painter.setPen(pen);
         t += pen.widthF() / 2.0;
-        if(isSpeciallyDrawn(borderStyle)) {
-            drawHorizontalWave(borderStyle, painter,x,w,t);
+        if (isSpeciallyDrawn(borderStyle)) {
+            drawHorizontalWave(borderStyle, painter, x, w, t);
         } else {
-            painter.drawLine(QLineF(x, t, x+w, t));
+            painter.drawLine(QLineF(x, t, x + w, t));
         }
     }
 }
 
 void KoTextLayoutCellHelper::drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *accumulatedBlankBorders) const
 {
-    qreal t=y;
+    qreal t = y;
     if (m_cellStyle.getEdge(KoBorder::BottomBorder).outerPen.widthF() > 0) {
         QPen pen = m_cellStyle.getEdge(KoBorder::BottomBorder).outerPen;
 
         painter.setPen(pen);
         t += pen.widthF() / 2.0;
-        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::BottomBorder))) {
-            drawHorizontalWave(m_cellStyle.getBorderStyle(KoBorder::BottomBorder), painter,x,w,t);
+        if (isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::BottomBorder))) {
+            drawHorizontalWave(m_cellStyle.getBorderStyle(KoBorder::BottomBorder), painter, x, w, t);
         } else {
-            painter.drawLine(QLineF(x, t, x+w, t));
+            painter.drawLine(QLineF(x, t, x + w, t));
         }
         t = y + m_cellStyle.getEdge(KoBorder::BottomBorder).spacing + pen.widthF();
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(x, t, x+w, t));
+        accumulatedBlankBorders->append(QLineF(x, t, x + w, t));
 
     }
 
@@ -318,10 +319,10 @@ void KoTextLayoutCellHelper::drawBottomHorizontalBorder(QPainter &painter, qreal
         QPen pen = m_cellStyle.getEdge(KoBorder::BottomBorder).innerPen;
         painter.setPen(pen);
         t += pen.widthF() / 2.0;
-        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::BottomBorder))) {
-            drawHorizontalWave(m_cellStyle.getBorderStyle(KoBorder::BottomBorder), painter,x,w,t);
+        if (isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::BottomBorder))) {
+            drawHorizontalWave(m_cellStyle.getBorderStyle(KoBorder::BottomBorder), painter, x, w, t);
         } else {
-            painter.drawLine(QLineF(x, t, x+w, t));
+            painter.drawLine(QLineF(x, t, x + w, t));
         }
     }
 }
@@ -336,15 +337,15 @@ void KoTextLayoutCellHelper::drawLeftmostVerticalBorder(QPainter &painter, qreal
 
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::LeftBorder))) {
-            drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::LeftBorder), painter,y,h,l);
+        if (isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::LeftBorder))) {
+            drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::LeftBorder), painter, y, h, l);
         } else {
-            painter.drawLine(QLineF(l, y, l, y+h));
+            painter.drawLine(QLineF(l, y, l, y + h));
         }
         l += m_cellStyle.getEdge(KoBorder::LeftBorder).spacing + pen.widthF() / 2.0;
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(l, y, l, y+h));
+        accumulatedBlankBorders->append(QLineF(l, y, l, y + h));
 
     }
 
@@ -353,10 +354,10 @@ void KoTextLayoutCellHelper::drawLeftmostVerticalBorder(QPainter &painter, qreal
         QPen pen = m_cellStyle.getEdge(KoBorder::LeftBorder).innerPen;
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::LeftBorder))) {
-            drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::LeftBorder), painter,y,h,l);
+        if (isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::LeftBorder))) {
+            drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::LeftBorder), painter, y, h, l);
         } else {
-            painter.drawLine(QLineF(l, y, l, y+h));
+            painter.drawLine(QLineF(l, y, l, y + h));
         }
     }
 }
@@ -366,11 +367,11 @@ void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const K
     // First determine which style "wins" by comparing total width
     qreal thisWidth = m_cellStyle.getEdge(KoBorder::RightBorder).outerPen.widthF() + m_cellStyle.getEdge(KoBorder::RightBorder).spacing + m_cellStyle.getEdge(KoBorder::RightBorder).innerPen.widthF();
     qreal thatWidth = styleRight.getEdge(KoBorder::LeftBorder).outerPen.widthF() + styleRight.getEdge(KoBorder::LeftBorder).spacing
-                                    + styleRight.getEdge(KoBorder::LeftBorder).innerPen.widthF();
+                      + styleRight.getEdge(KoBorder::LeftBorder).innerPen.widthF();
 
-    qreal l=x;
+    qreal l = x;
 
-    if(thisWidth >= thatWidth) {
+    if (thisWidth >= thatWidth) {
         // left style wins
         l -= thisWidth / 2.0;
         if (m_cellStyle.getEdge(KoBorder::RightBorder).outerPen.widthF() > 0) {
@@ -378,15 +379,15 @@ void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const K
 
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::RightBorder))) {
-                drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::RightBorder), painter,y,h,l);
+            if (isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::RightBorder))) {
+                drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::RightBorder), painter, y, h, l);
             } else {
-                painter.drawLine(QLineF(l, y, l, y+h));
+                painter.drawLine(QLineF(l, y, l, y + h));
             }
             l += m_cellStyle.getEdge(KoBorder::RightBorder).spacing + pen.widthF() / 2.0;
         } else if (accumulatedBlankBorders) {
             // No border but we'd like to draw one for user convenience when on screen
-            accumulatedBlankBorders->append(QLineF(l, y, l, y+h));
+            accumulatedBlankBorders->append(QLineF(l, y, l, y + h));
 
         }
 
@@ -395,24 +396,24 @@ void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const K
             QPen pen = m_cellStyle.getEdge(KoBorder::RightBorder).innerPen;
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::RightBorder))) {
-                drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::RightBorder), painter,y,h,l);
+            if (isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::RightBorder))) {
+                drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::RightBorder), painter, y, h, l);
             } else {
-                painter.drawLine(QLineF(l, y, l, y+h));
+                painter.drawLine(QLineF(l, y, l, y + h));
             }
         }
     } else {
         // right style wins
-        l -= thatWidth/2.0;
+        l -= thatWidth / 2.0;
         if (styleRight.getEdge(KoBorder::LeftBorder).outerPen.widthF() > 0) {
             QPen pen = styleRight.getEdge(KoBorder::LeftBorder).outerPen;
 
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            if(isSpeciallyDrawn(styleRight.getBorderStyle(KoBorder::LeftBorder))) {
-                drawVerticalWave(styleRight.getBorderStyle(KoBorder::LeftBorder), painter,y,h,l);
+            if (isSpeciallyDrawn(styleRight.getBorderStyle(KoBorder::LeftBorder))) {
+                drawVerticalWave(styleRight.getBorderStyle(KoBorder::LeftBorder), painter, y, h, l);
             } else {
-                painter.drawLine(QLineF(l, y, l, y+h));
+                painter.drawLine(QLineF(l, y, l, y + h));
             }
             l += styleRight.getEdge(KoBorder::LeftBorder).spacing + pen.widthF() / 2.0;
         }
@@ -421,10 +422,10 @@ void KoTextLayoutCellHelper::drawSharedVerticalBorder(QPainter &painter, const K
             QPen pen = styleRight.getEdge(KoBorder::LeftBorder).innerPen;
             painter.setPen(pen);
             l += pen.widthF() / 2.0;
-            if(isSpeciallyDrawn(styleRight.getBorderStyle(KoBorder::LeftBorder))) {
-                drawVerticalWave(styleRight.getBorderStyle(KoBorder::LeftBorder), painter,y,h,l);
+            if (isSpeciallyDrawn(styleRight.getBorderStyle(KoBorder::LeftBorder))) {
+                drawVerticalWave(styleRight.getBorderStyle(KoBorder::LeftBorder), painter, y, h, l);
             } else {
-                painter.drawLine(QLineF(l, y, l, y+h));
+                painter.drawLine(QLineF(l, y, l, y + h));
             }
         }
     }
@@ -440,15 +441,15 @@ void KoTextLayoutCellHelper::drawRightmostVerticalBorder(QPainter &painter, qrea
 
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::RightBorder))) {
-            drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::RightBorder), painter,y,h,l);
+        if (isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::RightBorder))) {
+            drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::RightBorder), painter, y, h, l);
         } else {
-            painter.drawLine(QLineF(l, y, l, y+h));
+            painter.drawLine(QLineF(l, y, l, y + h));
         }
         l += m_cellStyle.getEdge(KoBorder::RightBorder).spacing + pen.widthF() / 2.0;
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->append(QLineF(l, y, l, y+h));
+        accumulatedBlankBorders->append(QLineF(l, y, l, y + h));
     }
 
     // inner line
@@ -456,10 +457,10 @@ void KoTextLayoutCellHelper::drawRightmostVerticalBorder(QPainter &painter, qrea
         QPen pen = m_cellStyle.getEdge(KoBorder::RightBorder).innerPen;
         painter.setPen(pen);
         l += pen.widthF() / 2.0;
-        if(isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::RightBorder))) {
-            drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::RightBorder), painter,y,h,l);
+        if (isSpeciallyDrawn(m_cellStyle.getBorderStyle(KoBorder::RightBorder))) {
+            drawVerticalWave(m_cellStyle.getBorderStyle(KoBorder::RightBorder), painter, y, h, l);
         } else {
-            painter.drawLine(QLineF(l, y, l, y+h));
+            painter.drawLine(QLineF(l, y, l, y + h));
         }
     }
 }

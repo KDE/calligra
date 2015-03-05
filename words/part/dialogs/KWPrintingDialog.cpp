@@ -45,8 +45,9 @@ KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeMa
 
     while (! m_document->layoutFinishedAtleastOnce()) {
         QCoreApplication::processEvents();
-        if (! QCoreApplication::hasPendingEvents())
+        if (! QCoreApplication::hasPendingEvents()) {
             break;
+        }
     }
     printer().setFromTo(documentFirstPage(), documentLastPage());
 }
@@ -59,8 +60,9 @@ QRectF KWPrintingDialog::preparePage(int pageNumber)
 {
     const int resolution = printer().resolution();
     KWPage page = m_document->pageManager()->page(pageNumber);
-    if (! page.isValid())
+    if (! page.isValid()) {
         return QRectF();
+    }
     printer().setPaperSize(page.rect().size(), QPrinter::Point);
 
     KoInsets bleed = m_document->pageManager()->padding();
@@ -79,7 +81,7 @@ QRectF KWPrintingDialog::preparePage(int pageNumber)
     return QRectF(offsetX, pageOffset - bleedOffsetY, clipWidth + bleedWidth, clipHeight + bleedHeight);
 }
 
-QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)
+QList<KoShape *> KWPrintingDialog::shapesOnPage(int pageNumber)
 {
     Q_ASSERT(pageNumber > 0);
     KWPage page = m_document->pageManager()->page(pageNumber);
@@ -91,9 +93,9 @@ void KWPrintingDialog::printingDone()
 {
 }
 
-QList<QWidget*> KWPrintingDialog::createOptionWidgets() const
+QList<QWidget *> KWPrintingDialog::createOptionWidgets() const
 {
-    return QList<QWidget*>();
+    return QList<QWidget *>();
 }
 
 int KWPrintingDialog::documentFirstPage() const

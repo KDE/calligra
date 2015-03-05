@@ -25,11 +25,11 @@
 #include <math.h>
 
 KoPathPointTypeCommand::KoPathPointTypeCommand(
-    const QList<KoPathPointData> & pointDataList,
+    const QList<KoPathPointData> &pointDataList,
     PointType pointType,
     KUndo2Command *parent)
-        : KoPathBaseCommand(parent)
-        , m_pointType(pointType)
+    : KoPathBaseCommand(parent)
+    , m_pointType(pointType)
 {
     QList<KoPathPointData>::const_iterator it(pointDataList.begin());
     for (; it != pointDataList.end(); ++it) {
@@ -73,37 +73,41 @@ void KoPathPointTypeCommand::redo()
             KoPathPointIndex pointIndex = it->m_pointData.pointIndex;
             KoPathPointIndex prevIndex;
             KoPathPointIndex nextIndex;
-            KoPathShape * path = it->m_pointData.pathShape;
+            KoPathShape *path = it->m_pointData.pathShape;
             // get previous path node
-            if (pointIndex.second > 0)
+            if (pointIndex.second > 0) {
                 prevIndex = KoPathPointIndex(pointIndex.first, pointIndex.second - 1);
-            else if (pointIndex.second == 0 && path->isClosedSubpath(pointIndex.first))
+            } else if (pointIndex.second == 0 && path->isClosedSubpath(pointIndex.first)) {
                 prevIndex = KoPathPointIndex(pointIndex.first, path->subpathPointCount(pointIndex.first) - 1);
+            }
             // get next node
-            if (pointIndex.second < path->subpathPointCount(pointIndex.first) - 1)
+            if (pointIndex.second < path->subpathPointCount(pointIndex.first) - 1) {
                 nextIndex = KoPathPointIndex(pointIndex.first, pointIndex.second + 1);
-            else if (pointIndex.second < path->subpathPointCount(pointIndex.first) - 1
-                     && path->isClosedSubpath(pointIndex.first))
+            } else if (pointIndex.second < path->subpathPointCount(pointIndex.first) - 1
+                       && path->isClosedSubpath(pointIndex.first)) {
                 nextIndex = KoPathPointIndex(pointIndex.first, 0);
+            }
 
-            KoPathPoint * prevPoint = path->pointByIndex(prevIndex);
-            KoPathPoint * nextPoint = path->pointByIndex(nextIndex);
+            KoPathPoint *prevPoint = path->pointByIndex(prevIndex);
+            KoPathPoint *nextPoint = path->pointByIndex(nextIndex);
 
             if (prevPoint && ! point->activeControlPoint1() && appendPointData(KoPathPointData(path, prevIndex))) {
                 KoPathSegment cubic = KoPathSegment(prevPoint, point).toCubic();
                 if (prevPoint->activeControlPoint2()) {
                     prevPoint->setControlPoint2(cubic.first()->controlPoint2());
                     point->setControlPoint1(cubic.second()->controlPoint1());
-                } else
+                } else {
                     point->setControlPoint1(cubic.second()->controlPoint1());
+                }
             }
             if (nextPoint && ! point->activeControlPoint2() && appendPointData(KoPathPointData(path, nextIndex))) {
                 KoPathSegment cubic = KoPathSegment(point, nextPoint).toCubic();
                 if (nextPoint->activeControlPoint1()) {
                     point->setControlPoint2(cubic.first()->controlPoint2());
                     nextPoint->setControlPoint1(cubic.second()->controlPoint1());
-                } else
+                } else {
                     point->setControlPoint2(cubic.first()->controlPoint2());
+                }
             }
             break;
         }
@@ -193,22 +197,25 @@ void KoPathPointTypeCommand::undoChanges(const QList<PointData> &data)
         KoPathPoint *point = pathShape->pointByIndex(it->m_pointData.pointIndex);
 
         point->setProperties(it->m_oldProperties);
-        if (it->m_hadControlPoint1)
+        if (it->m_hadControlPoint1) {
             point->setControlPoint1(pathShape->documentToShape(it->m_oldControlPoint1));
-        else
+        } else {
             point->removeControlPoint1();
-        if (it->m_hadControlPoint2)
+        }
+        if (it->m_hadControlPoint2) {
             point->setControlPoint2(pathShape->documentToShape(it->m_oldControlPoint2));
-        else
+        } else {
             point->removeControlPoint2();
+        }
     }
 }
 
 bool KoPathPointTypeCommand::appendPointData(KoPathPointData data)
 {
     KoPathPoint *point = data.pathShape->pointByIndex(data.pointIndex);
-    if (! point)
+    if (! point) {
         return false;
+    }
 
     PointData pointData(data);
     pointData.m_oldControlPoint1 = data.pathShape->shapeToDocument(point->controlPoint1());

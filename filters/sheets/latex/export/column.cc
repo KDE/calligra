@@ -50,7 +50,7 @@ void Column::analyze(const QDomNode node)
 /*******************************************/
 /* generate                                */
 /*******************************************/
-void Column::generate(QTextStream& out)
+void Column::generate(QTextStream &out)
 {
     //generateLeftBorder(out);
     if (getBrushStyle() >= 1) {
@@ -63,5 +63,4 @@ void Column::generate(QTextStream& out)
     out << "m{" << getWidth() << "pt}";
 
 }
-
 

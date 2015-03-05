@@ -17,7 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_auto_brush_widget.h"
 
 #include <math.h>
@@ -34,11 +33,10 @@
 #include <kis_mask_generator.h>
 #include <kis_slider_spin_box.h>
 
-
 #define showSlider(input, step) input->setRange(input->minimum(), input->maximum(), step)
 #include <kis_cubic_curve.h>
 
-KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
+KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char *name)
     : KisWdgAutobrush(parent, name)
     , m_autoBrush(0)
     , m_linkFade(false)
@@ -47,7 +45,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(linkFadeToggled(bool)));
     aspectButton->setKeepAspectRatio(m_linkFade);
 
-    connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
+    connect((QObject *)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 
     inputRadius->setRange(0, 1000, 2);
     inputRadius->setExponentRatio(3.0);
@@ -131,31 +129,26 @@ void KisAutoBrushWidget::activate()
 
 void KisAutoBrushWidget::paramChanged()
 {
-    KisMaskGenerator* kas;
+    KisMaskGenerator *kas;
 
     bool antialiasEdges = btnAntialiasing->isChecked();
 
     if (comboBoxMaskType->currentIndex() == 2) { // gaussian brush
         if (comboBoxShape->currentIndex() == 0) {
             kas = new KisGaussCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), antialiasEdges);
-        }
-        else {
+        } else {
             kas = new KisGaussRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), antialiasEdges);
         }
-    }
-    else if (comboBoxMaskType->currentIndex() == 1) { // soft brush
+    } else if (comboBoxMaskType->currentIndex() == 1) { // soft brush
         if (comboBoxShape->currentIndex() == 0) {
             kas = new KisCurveCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), softnessCurve->curve(), antialiasEdges);
-        }
-        else {
+        } else {
             kas = new KisCurveRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), softnessCurve->curve(), antialiasEdges);
         }
-    }
-    else {// default == 0 or any other
+    } else { // default == 0 or any other
         if (comboBoxShape->currentIndex() == 0) { // use index compare instead of comparing a translatable string
             kas = new KisCircleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), antialiasEdges);
-        }
-        else {
+        } else {
             kas = new KisRectangleMaskGenerator(inputRadius->value(),  inputRatio->value(), inputHFade->value(), inputVFade->value(), inputSpikes->value(), antialiasEdges);
         }
     }
@@ -177,7 +170,7 @@ void KisAutoBrushWidget::paramChanged()
         coeff = bPh / (double)pi.height();
     }
     if (coeff < 1.0) {
-        pi = pi.scaled((int)(coeff * pi.width()) , (int)(coeff * pi.height()),  Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        pi = pi.scaled((int)(coeff * pi.width()), (int)(coeff * pi.height()),  Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
     QPixmap p = QPixmap::fromImage(pi);
@@ -190,8 +183,7 @@ void KisAutoBrushWidget::setStackedWidget(int index)
 {
     if (index == 1) {
         stackedWidget->setCurrentIndex(1);
-    }
-    else {
+    } else {
         stackedWidget->setCurrentIndex(0);
     }
 }
@@ -281,8 +273,9 @@ void KisAutoBrushWidget::linkFadeToggled(bool b)
 {
     m_linkFade = b;
 
-    if (m_linkFade)
+    if (m_linkFade) {
         inputVFade->setValue(inputHFade->value());
+    }
 }
 
 KisBrushSP KisAutoBrushWidget::brush()
@@ -295,14 +288,12 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     m_autoBrush = brush;
     m_brush = brush->image();
     // XXX: lock, set and unlock the widgets.
-    KisAutoBrush* aBrush = dynamic_cast<KisAutoBrush*>(brush.data());
+    KisAutoBrush *aBrush = dynamic_cast<KisAutoBrush *>(brush.data());
     if (aBrush->maskGenerator()->type() == KisMaskGenerator::CIRCLE) {
         comboBoxShape->setCurrentIndex(0);
-    }
-    else if (aBrush->maskGenerator()->type() == KisMaskGenerator::RECTANGLE) {
+    } else if (aBrush->maskGenerator()->type() == KisMaskGenerator::RECTANGLE) {
         comboBoxShape->setCurrentIndex(1);
-    }
-    else {
+    } else {
         comboBoxShape->setCurrentIndex(2);
     }
 
@@ -329,7 +320,6 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     btnAntialiasing->setChecked(aBrush->maskGenerator()->antialiasEdges());
 }
 
-
 void KisAutoBrushWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 {
     Q_UNUSED(dyPixels);
@@ -344,6 +334,5 @@ QSizeF KisAutoBrushWidget::brushSize() const
 {
     return QSizeF(inputRadius->value(), inputRadius->value() * inputRatio->value());
 }
-
 
 #include "kis_auto_brush_widget.moc"

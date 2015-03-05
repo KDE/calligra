@@ -53,100 +53,124 @@ class KoColorSpaceAbstract : public KoColorSpace
 {
 public:
     KoColorSpaceAbstract(const QString &id, const QString &name) :
-        KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()) {
+        KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>())
+    {
     }
 
-    virtual quint32 colorChannelCount() const {
-        if (_CSTrait::alpha_pos == -1)
+    virtual quint32 colorChannelCount() const
+    {
+        if (_CSTrait::alpha_pos == -1) {
             return _CSTrait::channels_nb;
-        else
+        } else {
             return _CSTrait::channels_nb - 1;
+        }
     }
 
-    virtual quint32 channelCount() const {
+    virtual quint32 channelCount() const
+    {
         return _CSTrait::channels_nb;
     }
 
-    virtual quint32 pixelSize() const {
+    virtual quint32 pixelSize() const
+    {
         return _CSTrait::pixelSize;
     }
 
-    virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const {
+    virtual QString channelValueText(const quint8 *pixel, quint32 channelIndex) const
+    {
         return _CSTrait::channelValueText(pixel, channelIndex);
     }
 
-    virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const {
+    virtual QString normalisedChannelValueText(const quint8 *pixel, quint32 channelIndex) const
+    {
         return _CSTrait::normalisedChannelValueText(pixel, channelIndex);
     }
 
-    virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const {
+    virtual void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) const
+    {
         return _CSTrait::normalisedChannelsValue(pixel, channels);
     }
 
-    virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const {
+    virtual void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) const
+    {
         return _CSTrait::fromNormalisedChannelsValue(pixel, values);
     }
 
-    virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const {
+    virtual quint8 scaleToU8(const quint8 *srcPixel, qint32 channelIndex) const
+    {
         typename _CSTrait::channels_type c = _CSTrait::nativeArray(srcPixel)[channelIndex];
         return KoColorSpaceMaths<typename _CSTrait::channels_type, quint8>::scaleToA(c);
     }
 
-    virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const {
+    virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const
+    {
         _CSTrait::singleChannelPixel(dstPixel, srcPixel, channelIndex);
     }
 
-    virtual quint8 opacityU8(const quint8 * U8_pixel) const {
+    virtual quint8 opacityU8(const quint8 *U8_pixel) const
+    {
         return _CSTrait::opacityU8(U8_pixel);
     }
 
-    virtual qreal opacityF(const quint8 * U8_pixel) const {
+    virtual qreal opacityF(const quint8 *U8_pixel) const
+    {
         return _CSTrait::opacityF(U8_pixel);
     }
 
-    virtual void setOpacity(quint8 * pixels, quint8 alpha, qint32 nPixels) const {
+    virtual void setOpacity(quint8 *pixels, quint8 alpha, qint32 nPixels) const
+    {
         _CSTrait::setOpacity(pixels, alpha, nPixels);
     }
 
-    virtual void setOpacity(quint8 * pixels, qreal alpha, qint32 nPixels) const {
+    virtual void setOpacity(quint8 *pixels, qreal alpha, qint32 nPixels) const
+    {
         _CSTrait::setOpacity(pixels, alpha, nPixels);
     }
 
-    virtual void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) const {
+    virtual void multiplyAlpha(quint8 *pixels, quint8 alpha, qint32 nPixels) const
+    {
         _CSTrait::multiplyAlpha(pixels, alpha, nPixels);
     }
 
-    virtual void applyAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const {
+    virtual void applyAlphaU8Mask(quint8 *pixels, const quint8 *alpha, qint32 nPixels) const
+    {
         _CSTrait::applyAlphaU8Mask(pixels, alpha, nPixels);
     }
 
-    virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const {
+    virtual void applyInverseAlphaU8Mask(quint8 *pixels, const quint8 *alpha, qint32 nPixels) const
+    {
         _CSTrait::applyInverseAlphaU8Mask(pixels, alpha, nPixels);
     }
 
-    virtual void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const {
+    virtual void applyAlphaNormedFloatMask(quint8 *pixels, const float *alpha, qint32 nPixels) const
+    {
         _CSTrait::applyAlphaNormedFloatMask(pixels, alpha, nPixels);
     }
 
-    virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const {
+    virtual void applyInverseNormedFloatMask(quint8 *pixels, const float *alpha, qint32 nPixels) const
+    {
         _CSTrait::applyInverseAlphaNormedFloatMask(pixels, alpha, nPixels);
     }
 
-    virtual quint8 intensity8(const quint8 * src) const {
+    virtual quint8 intensity8(const quint8 *src) const
+    {
         QColor c;
         const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor(src, &c);
         return static_cast<quint8>((c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11) + 0.5);
     }
 
-    virtual KoColorTransformation* createInvertTransformation() const {
+    virtual KoColorTransformation *createInvertTransformation() const
+    {
         return new KoInvertColorTransformation(this);
     }
 
-    virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const {
+    virtual KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const
+    {
         return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(""), new KoLabDarkenColorTransformation<quint16>(shade, compensate, compensation, KoColorSpaceRegistry::instance()->lab16("")));
     }
 
-    virtual KoID mathToolboxId() const {
+    virtual KoID mathToolboxId() const
+    {
         return KoID("Basic");
     }
 
@@ -156,7 +180,7 @@ public:
                                  KoColorConversionTransformation::Intent renderingIntent,
                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const
     {
-        
+
         // check whether we have the same profile and color model, but only a different bit
         // depth; in that case we don't convert as such, but scale
         bool scaleOnly = false;
@@ -165,15 +189,14 @@ public:
         // we are sure there is a difference between the colorspaces
         if (!(*this == *dstColorSpace)) {
             scaleOnly = dstColorSpace->colorModelId().id() == colorModelId().id() &&
-                         dstColorSpace->colorDepthId().id() != colorDepthId().id() &&
-                         dstColorSpace->profile()->name()   == profile()->name();
+                        dstColorSpace->colorDepthId().id() != colorDepthId().id() &&
+                        dstColorSpace->profile()->name()   == profile()->name();
         }
-        
-        if (scaleOnly && dynamic_cast<const KoColorSpaceAbstract*>(dstColorSpace)) {
+
+        if (scaleOnly && dynamic_cast<const KoColorSpaceAbstract *>(dstColorSpace)) {
             typedef typename _CSTrait::channels_type channels_type;
-            
-            switch(dstColorSpace->channels()[0]->channelValueType())
-            {
+
+            switch (dstColorSpace->channels()[0]->channelValueType()) {
             case KoChannelInfo::UINT8:
                 scalePixels<_CSTrait::pixelSize, 1, channels_type, quint8>(src, dst, numPixels);
                 return true;
@@ -193,21 +216,23 @@ public:
                 break;
             }
         }
-        
+
         return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent, conversionFlags);
     }
-    
+
 private:
     template<int srcPixelSize, int dstChannelSize, class TSrcChannel, class TDstChannel>
-    void scalePixels(const quint8* src, quint8* dst, quint32 numPixels) const {
+    void scalePixels(const quint8 *src, quint8 *dst, quint32 numPixels) const
+    {
         qint32 dstPixelSize = dstChannelSize * _CSTrait::channels_nb;
-        
-        for(quint32 i=0; i<numPixels; ++i) {
-            const TSrcChannel* srcPixel = reinterpret_cast<const TSrcChannel*>(src + i * srcPixelSize);
-            TDstChannel*       dstPixel = reinterpret_cast<TDstChannel*>(dst + i * dstPixelSize);
-            
-            for(quint32 c=0; c<_CSTrait::channels_nb; ++c)
+
+        for (quint32 i = 0; i < numPixels; ++i) {
+            const TSrcChannel *srcPixel = reinterpret_cast<const TSrcChannel *>(src + i * srcPixelSize);
+            TDstChannel       *dstPixel = reinterpret_cast<TDstChannel *>(dst + i * dstPixelSize);
+
+            for (quint32 c = 0; c < _CSTrait::channels_nb; ++c) {
                 dstPixel[c] = Arithmetic::scale<TDstChannel>(srcPixel[c]);
+            }
         }
     }
 };

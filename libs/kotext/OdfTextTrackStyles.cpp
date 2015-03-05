@@ -26,14 +26,13 @@
 #include <QTextDocument>
 #include <kdebug.h>
 
-
 QMap<QObject *, OdfTextTrackStyles *> OdfTextTrackStyles::instances;
 
 OdfTextTrackStyles *OdfTextTrackStyles::instance(KoStyleManager *manager)
 {
     if (! instances.contains(manager)) {
         instances[manager] = new OdfTextTrackStyles(manager);
-        connect(manager,SIGNAL(destroyed(QObject *)),instances[manager], SLOT(styleManagerDied(QObject *)));
+        connect(manager, SIGNAL(destroyed(QObject*)), instances[manager], SLOT(styleManagerDied(QObject*)));
     }
 
     return instances[manager];
@@ -43,7 +42,7 @@ void OdfTextTrackStyles::registerDocument(QTextDocument *qDoc)
 {
     if (! m_documents.contains(qDoc)) {
         m_documents.append(qDoc);
-        connect(qDoc,SIGNAL(destroyed(QObject *)), this, SLOT(documentDied(QObject *)));
+        connect(qDoc, SIGNAL(destroyed(QObject*)), this, SLOT(documentDied(QObject*)));
     }
 }
 
@@ -55,14 +54,14 @@ void OdfTextTrackStyles::unregisterDocument(QTextDocument *qDoc)
 }
 
 OdfTextTrackStyles::OdfTextTrackStyles(KoStyleManager *manager)
-        : QObject(manager)
-        , m_styleManager(manager)
-        , m_changeCommand(0)
+    : QObject(manager)
+    , m_styleManager(manager)
+    , m_changeCommand(0)
 {
     connect(manager, SIGNAL(editHasBegun()), this, SLOT(beginEdit()));
     connect(manager, SIGNAL(editHasEnded()), this, SLOT(endEdit()));
-    connect(manager, SIGNAL(styleHasChanged(int, const KoCharacterStyle *, const KoCharacterStyle *)), this, SLOT(recordStyleChange(int, const KoCharacterStyle *, const KoCharacterStyle *)));
-    connect(manager, SIGNAL(styleHasChanged(int, const KoParagraphStyle *, const KoParagraphStyle *)), this, SLOT(recordStyleChange(int, const KoParagraphStyle *, const KoParagraphStyle *)));
+    connect(manager, SIGNAL(styleHasChanged(int,const KoCharacterStyle*,const KoCharacterStyle*)), this, SLOT(recordStyleChange(int,const KoCharacterStyle*,const KoCharacterStyle*)));
+    connect(manager, SIGNAL(styleHasChanged(int,const KoParagraphStyle*,const KoParagraphStyle*)), this, SLOT(recordStyleChange(int,const KoParagraphStyle*,const KoParagraphStyle*)));
 }
 
 OdfTextTrackStyles::~OdfTextTrackStyles()
@@ -78,12 +77,13 @@ void OdfTextTrackStyles::beginEdit()
 void OdfTextTrackStyles::endEdit()
 {
     if (m_documents.length() > 0) {
-        KUndo2Stack *undoStack= KoTextDocument(m_documents.first()).undoStack();
+        KUndo2Stack *undoStack = KoTextDocument(m_documents.first()).undoStack();
         if (undoStack) {
             undoStack->push(m_changeCommand);
         }
-    } else
+    } else {
         delete m_changeCommand;
+    }
 
     m_changeCommand = 0;
 }
@@ -100,7 +100,7 @@ void OdfTextTrackStyles::recordStyleChange(int id, const KoParagraphStyle *origS
 
 void OdfTextTrackStyles::recordStyleChange(int id, const KoCharacterStyle *origStyle, const KoCharacterStyle *newStyle)
 {
-   m_changeCommand->changedStyle(id);
+    m_changeCommand->changedStyle(id);
 
     if (origStyle != newStyle) {
         m_changeCommand->origStyle(origStyle->clone());

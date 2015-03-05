@@ -78,7 +78,7 @@ public:
       *
       * @return a list of KoPAPageBase pointers to the slides sorter selected slides.
       */
-    QList<KoPAPageBase*> extractSelectedSlides();
+    QList<KoPAPageBase *> extractSelectedSlides();
 
     /**
      * The icon size

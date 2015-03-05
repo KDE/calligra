@@ -24,11 +24,12 @@
 class KoAbstractGradient;
 class KoPattern;
 
-class KRITAIMAGE_EXPORT KisRecordedActionSaveContext {
-    public:
-        virtual ~KisRecordedActionSaveContext();
-        virtual void saveGradient(const KoAbstractGradient* gradient) = 0;
-        virtual void savePattern(const KoPattern* pattern) = 0;
+class KRITAIMAGE_EXPORT KisRecordedActionSaveContext
+{
+public:
+    virtual ~KisRecordedActionSaveContext();
+    virtual void saveGradient(const KoAbstractGradient *gradient) = 0;
+    virtual void savePattern(const KoPattern *pattern) = 0;
 };
 
 #endif

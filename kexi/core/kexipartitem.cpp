@@ -25,7 +25,8 @@ namespace KexiPart
 class Item::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
     int dummy;
     // unused for now
@@ -37,9 +38,9 @@ public:
 using namespace KexiPart;
 
 Item::Item()
-        : m_id(0) //- null
-        , m_neverSaved(false)
-        , d(new Private())
+    : m_id(0) //- null
+    , m_neverSaved(false)
+    , d(new Private())
 {
 }
 
@@ -51,7 +52,7 @@ Item::~Item()
 //-----------------------
 
 ItemDict::ItemDict()
-        : QHash<int, KexiPart::Item*>()
+    : QHash<int, KexiPart::Item * >()
 {
 }
 
@@ -62,11 +63,11 @@ ItemDict::~ItemDict()
 //-----------------------
 
 ItemList::ItemList()
-        : QList<KexiPart::Item*>()
+    : QList<KexiPart::Item * >()
 {
 }
 
-bool lessThan(KexiPart::Item* item1, KexiPart::Item* item2)
+bool lessThan(KexiPart::Item *item1, KexiPart::Item *item2)
 {
     return item1->name() < item2->name();
 }

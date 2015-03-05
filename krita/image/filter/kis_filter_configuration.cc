@@ -45,17 +45,17 @@ struct KisFilterConfiguration::Private {
 #endif /* SANITY_CHECK_FILTER_CONFIGURATION_OWNER */
 };
 
-KisFilterConfiguration::KisFilterConfiguration(const QString & name, qint32 version)
-        : d(new Private)
+KisFilterConfiguration::KisFilterConfiguration(const QString &name, qint32 version)
+    : d(new Private)
 {
     d->name = name;
     d->version = version;
     d->channelFlags = QBitArray();
 }
 
-KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration & rhs)
-        : KisPropertiesConfiguration(rhs)
-        , d(new Private)
+KisFilterConfiguration::KisFilterConfiguration(const KisFilterConfiguration &rhs)
+    : KisPropertiesConfiguration(rhs)
+    , d(new Private)
 {
     d->name = rhs.d->name;
     d->version = rhs.d->version;
@@ -66,14 +66,13 @@ KisFilterConfiguration::~KisFilterConfiguration()
     delete d;
 }
 
-void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
+void KisFilterConfiguration::fromLegacyXML(const QDomElement &e)
 {
     clearProperties();
     d->name = e.attribute("name");
     d->version = e.attribute("version").toInt();
 
     QDomNode n = e.firstChild();
-
 
     while (!n.isNull()) {
         // We don't nest elements in filter configuration. For now...
@@ -95,20 +94,19 @@ void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
     }
 }
 
-void KisFilterConfiguration::fromXML(const QDomElement& elt)
+void KisFilterConfiguration::fromXML(const QDomElement &elt)
 {
     d->version = elt.attribute("version").toInt();
     KisPropertiesConfiguration::fromXML(elt);
 }
 
-void KisFilterConfiguration::toXML(QDomDocument& doc, QDomElement& elt) const
+void KisFilterConfiguration::toXML(QDomDocument &doc, QDomElement &elt) const
 {
     elt.setAttribute("version", d->version);
     KisPropertiesConfiguration::toXML(doc, elt);
 }
 
-
-const QString & KisFilterConfiguration::name() const
+const QString &KisFilterConfiguration::name() const
 {
     return d->name;
 }
@@ -123,22 +121,22 @@ void KisFilterConfiguration::setVersion(qint32 version)
     d->version = version;
 }
 
-const KisCubicCurve& KisFilterConfiguration::curve() const
+const KisCubicCurve &KisFilterConfiguration::curve() const
 {
     return d->curve;
 }
 
-void KisFilterConfiguration::setCurve(const KisCubicCurve& curve)
+void KisFilterConfiguration::setCurve(const KisCubicCurve &curve)
 {
     d->curve = curve;
 }
 
-const QList< KisCubicCurve >& KisFilterConfiguration::curves() const
+const QList< KisCubicCurve > &KisFilterConfiguration::curves() const
 {
     return d->curves;
 }
 
-void KisFilterConfiguration::setCurves(QList< KisCubicCurve >& curves)
+void KisFilterConfiguration::setCurves(QList< KisCubicCurve > &curves)
 {
     d->curves = curves;
 }

@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef CALLIGRA_SHEETS_REGION_SELECTOR
 #define CALLIGRA_SHEETS_REGION_SELECTOR
 
@@ -54,14 +53,14 @@ public:
     ~RegionSelector();
 
     void setSelectionMode(SelectionMode mode);
-    void setSelection(Selection* selection);
-    void setDialog(QDialog* dialog);
-    void setLabel(const QString& text);
+    void setSelection(Selection *selection);
+    void setDialog(QDialog *dialog);
+    void setLabel(const QString &text);
 
-    KTextEdit* textEdit() const;
+    KTextEdit *textEdit() const;
 
 protected:
-    bool eventFilter(QObject* obj, QEvent* event);
+    bool eventFilter(QObject *obj, QEvent *event);
 
 protected Q_SLOTS:
     void switchDisplayMode(bool state);
@@ -71,7 +70,7 @@ private:
     Q_DISABLE_COPY(RegionSelector)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

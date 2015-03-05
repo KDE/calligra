@@ -53,9 +53,9 @@ public:
 
     EString();
 
-    EString(const EString&);
+    EString(const EString &);
 
-    EString& operator=(const EString&);
+    EString &operator=(const EString &);
 
     ~EString();
 
@@ -69,29 +69,28 @@ public:
 
     QString str() const;
 
-    void setStr(const QString& str);
+    void setStr(const QString &str);
 
     std::map<unsigned, unsigned> formatRuns() const;
 
-    void setFormatRuns(const std::map<unsigned, unsigned>& formatRuns);
+    void setFormatRuns(const std::map<unsigned, unsigned> &formatRuns);
 
     // space allocate for the string, not length (use string.length() for that)
     unsigned size() const;
     void setSize(unsigned size);   // HACKS
 
+    static EString fromUnicodeString(const void *p, bool longString, unsigned maxsize = 0, const unsigned *continuePositions = 0, unsigned continuePositionsOffset = 0);
 
-    static EString fromUnicodeString(const void* p, bool longString, unsigned maxsize = 0, const unsigned *continuePositions = 0, unsigned continuePositionsOffset = 0);
-
-    static EString fromSheetName(const void* p, unsigned maxsize = 0);
+    static EString fromSheetName(const void *p, unsigned maxsize = 0);
 
     // from the buffer
     // longstring means 16-bit string length, usually for label
     // longstring=false is normally for sheet name
-    static EString fromByteString(const void* p, bool longString, unsigned maxsize = 0);
+    static EString fromByteString(const void *p, bool longString, unsigned maxsize = 0);
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 /**
@@ -161,11 +160,11 @@ public:
 
 private:
     // no copy or assign
-    CellInfo(const CellInfo&);
-    CellInfo& operator=(const CellInfo&);
+    CellInfo(const CellInfo &);
+    CellInfo &operator=(const CellInfo &);
 
     class Private;
-    Private* info;
+    Private *info;
 };
 
 /**
@@ -221,11 +220,11 @@ public:
 
 private:
     // no copy or assign
-    ColumnSpanInfo(const ColumnSpanInfo&);
-    ColumnSpanInfo& operator=(const ColumnSpanInfo&);
+    ColumnSpanInfo(const ColumnSpanInfo &);
+    ColumnSpanInfo &operator=(const ColumnSpanInfo &);
 
     class Private;
-    Private* spaninfo;
+    Private *spaninfo;
 };
 
 /**
@@ -237,7 +236,8 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const
+    {
         return this->id;
     }
 
@@ -249,20 +249,19 @@ public:
 
     QString bookName() const;
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned int *continuePositions);
 
-
-
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "EXTERNBOOK";
     }
 
-    virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
 private:
     // no copy or assign
-    ExternBookRecord(const ExternBookRecord&);
-    ExternBookRecord& operator=(const ExternBookRecord&);
+    ExternBookRecord(const ExternBookRecord &);
+    ExternBookRecord &operator=(const ExternBookRecord &);
 
     class Private;
     Private *d;
@@ -274,7 +273,8 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const
+    {
         return this->id;
     }
 
@@ -290,22 +290,21 @@ public:
 
     QString externName() const;
 
-    void setExternName(const QString& name);
+    void setExternName(const QString &name);
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned int *continuePositions);
 
-
-
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "EXTERNNAME";
     }
 
-    virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
 private:
     // no copy or assign
-    ExternNameRecord(const ExternNameRecord&);
-    ExternNameRecord& operator=(const ExternNameRecord&);
+    ExternNameRecord(const ExternNameRecord &);
+    ExternNameRecord &operator=(const ExternNameRecord &);
 
     class Private;
     Private *d;
@@ -323,7 +322,8 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const
+    {
         return this->id;
     }
 
@@ -345,34 +345,34 @@ public:
     /**
      * Sets the result of the formula.
      */
-    void setResult(const Value& v);
+    void setResult(const Value &v);
 
     FormulaTokens tokens() const;
-    void addToken(const FormulaToken& token);
+    void addToken(const FormulaToken &token);
 
     /**
      * Returns true if this formula is a share formula.
      */
     bool isShared() const;
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned int *continuePositions);
     virtual void writeData(XlsRecordOutputStream &out) const;
 
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "FORMULA";
     }
 
-    virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
 private:
     // no copy or assign
-    FormulaRecord(const FormulaRecord&);
-    FormulaRecord& operator=(const FormulaRecord&);
+    FormulaRecord(const FormulaRecord &);
+    FormulaRecord &operator=(const FormulaRecord &);
 
     class Private;
-    Private* d;
+    Private *d;
 };
-
 
 /**
   \brief Shared Formula.
@@ -384,7 +384,8 @@ class SharedFormulaRecord : public Record
 public:
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const
+    {
         return this->id;
     }
 
@@ -400,21 +401,22 @@ public:
 
     FormulaTokens tokens() const;
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned int *continuePositions);
 
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "SHAREDFMLA";
     }
 
-    virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
 private:
     // no copy or assign
-    SharedFormulaRecord(const SharedFormulaRecord&);
-    SharedFormulaRecord& operator=(const SharedFormulaRecord&);
+    SharedFormulaRecord(const SharedFormulaRecord &);
+    SharedFormulaRecord &operator=(const SharedFormulaRecord &);
 
     class Private;
-    Private* d;
+    Private *d;
 };
 
 /**
@@ -430,7 +432,8 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const
+    {
         return this->id;
     }
 
@@ -444,7 +447,7 @@ public:
      */
     virtual ~MulRKRecord();
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned int *continuePositions);
 
     /**
      Returns XF index of ith column.
@@ -476,30 +479,32 @@ public:
 
     unsigned encodedRK(unsigned i) const;
 
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "MULRK";
     }
 
-    virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
 private:
     // no copy or assign
-    MulRKRecord(const MulRKRecord&);
-    MulRKRecord& operator=(const MulRKRecord&);
+    MulRKRecord(const MulRKRecord &);
+    MulRKRecord &operator=(const MulRKRecord &);
 
     class Private;
     Private *d;
 
     // from CellInfo, we don't need it
     // mark as private so nobody can call them
-    virtual unsigned column() const {
+    virtual unsigned column() const
+    {
         return CellInfo::column();
     }
-    virtual unsigned xfIndex() const {
+    virtual unsigned xfIndex() const
+    {
         return CellInfo::xfIndex();
     }
 };
-
 
 class NameRecord : public Record
 {
@@ -508,7 +513,8 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const
+    {
         return this->id;
     }
 
@@ -518,24 +524,25 @@ public:
 
     QString definedName() const;
 
-    void setDefinedName(const QString& name);
+    void setDefinedName(const QString &name);
 
     unsigned sheetIndex() const;
 
     bool isBuiltin() const;
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned int *continuePositions);
 
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "NAME";
     }
 
-    virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
 private:
     // no copy or assign
-    NameRecord(const NameRecord&);
-    NameRecord& operator=(const NameRecord&);
+    NameRecord(const NameRecord &);
+    NameRecord &operator=(const NameRecord &);
 
     class Private;
     Private *d;
@@ -552,7 +559,8 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const
+    {
         return this->id;
     }
 
@@ -566,7 +574,7 @@ public:
      */
     virtual ~RKRecord();
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned int *continuePositions);
 
     /**
      * Returns true if the record holds an integer value.
@@ -614,16 +622,17 @@ public:
 
     unsigned encodedRK() const;
 
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "RK";
     }
 
-    virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
 private:
     // no copy or assign
-    RKRecord(const RKRecord&);
-    RKRecord& operator=(const RKRecord&);
+    RKRecord(const RKRecord &);
+    RKRecord &operator=(const RKRecord &);
 
     class Private;
     Private *d;
@@ -645,7 +654,8 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const
+    {
         return this->id;
     }
 
@@ -671,25 +681,25 @@ public:
      *
      * \sa label
      */
-    void setLabel(const QString& l);
+    void setLabel(const QString &l);
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned int *continuePositions);
 
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "RSTRING";
     }
 
-    virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
 private:
     // no copy or assign
-    RStringRecord(const RStringRecord&);
-    RStringRecord& operator=(const RStringRecord&);
+    RStringRecord(const RStringRecord &);
+    RStringRecord &operator=(const RStringRecord &);
 
     class Private;
     Private *d;
 };
-
 
 /**
   Class SSTRecord represents SST record, which holds the shared string
@@ -704,7 +714,8 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const
+    {
         return this->id;
     }
 
@@ -718,8 +729,8 @@ public:
      */
     virtual ~SSTRecord();
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
-    virtual void writeData(XlsRecordOutputStream& out) const;
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned int *continuePositions);
+    virtual void writeData(XlsRecordOutputStream &out) const;
 
     /**
       Returns the number of available string in this string table.
@@ -729,7 +740,7 @@ public:
     unsigned useCount() const;
     void setUseCount(unsigned count);
 
-    void setExtSSTRecord(ExtSSTRecord* esst);
+    void setExtSSTRecord(ExtSSTRecord *esst);
 
     /**
       Returns the string at specified index.
@@ -744,18 +755,19 @@ public:
      */
     std::map<unsigned, unsigned> formatRunsAt(unsigned index) const;
 
-    unsigned addString(const QString& string);
+    unsigned addString(const QString &string);
 
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "SST";
     }
 
-    virtual void dump(std::ostream& out) const;
+    virtual void dump(std::ostream &out) const;
 
 private:
     // no copy or assign
-    SSTRecord(const SSTRecord&);
-    SSTRecord& operator=(const SSTRecord&);
+    SSTRecord(const SSTRecord &);
+    SSTRecord &operator=(const SSTRecord &);
 
     class Private;
     Private *d;
@@ -768,14 +780,16 @@ public:
     static const unsigned id;
     explicit ObjRecord(Workbook *book);
     virtual ~ObjRecord();
-    virtual unsigned rtti() const {
+    virtual unsigned rtti() const
+    {
         return this->id;
     }
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "Obj";
     }
-    virtual void dump(std::ostream&) const;
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+    virtual void dump(std::ostream &) const;
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned *continuePositions);
 };
 
 class TxORecord : public Record
@@ -797,19 +811,21 @@ public:
     };
 
     static const unsigned id;
-    explicit TxORecord(Workbook *book=0);
+    explicit TxORecord(Workbook *book = 0);
     // allowing copies for the hack for text support in shapes
-    TxORecord(const TxORecord&);
+    TxORecord(const TxORecord &);
     virtual ~TxORecord();
-    TxORecord& operator=(const TxORecord&);
-    virtual unsigned rtti() const {
+    TxORecord &operator=(const TxORecord &);
+    virtual unsigned rtti() const
+    {
         return this->id;
     }
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "TxO";
     }
-    virtual void dump(std::ostream&) const;
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+    virtual void dump(std::ostream &) const;
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned *continuePositions);
     const QString &text() const;
     TxORecord::HorizontalAlignment hAlign() const;
     TxORecord::VerticalAlignment vAlign() const;
@@ -826,25 +842,26 @@ public:
     explicit MsoDrawingRecord(Workbook *book);
     virtual ~MsoDrawingRecord();
 
-    virtual unsigned rtti() const {
+    virtual unsigned rtti() const
+    {
         return this->id;
     }
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "MsoDrawing";
     }
-    virtual void dump(std::ostream&) const;
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+    virtual void dump(std::ostream &) const;
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned *continuePositions);
 
-    const MSO::OfficeArtDgContainer& dgContainer() const;
+    const MSO::OfficeArtDgContainer &dgContainer() const;
 private:
     // no copy or assign
-    MsoDrawingRecord(const MsoDrawingRecord&);
-    MsoDrawingRecord& operator=(const MsoDrawingRecord&);
+    MsoDrawingRecord(const MsoDrawingRecord &);
+    MsoDrawingRecord &operator=(const MsoDrawingRecord &);
 
     class Private;
     Private *d;
 };
-
 
 class MsoDrawingGroupRecord : public Record
 {
@@ -852,21 +869,23 @@ public:
     static const unsigned id;
     explicit MsoDrawingGroupRecord(Workbook *book);
     virtual ~MsoDrawingGroupRecord();
-    virtual unsigned rtti() const {
+    virtual unsigned rtti() const
+    {
         return this->id;
     }
-    virtual const char* name() const {
+    virtual const char *name() const
+    {
         return "MsoDrawingGroup";
     }
-    virtual void dump(std::ostream&) const;
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+    virtual void dump(std::ostream &) const;
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned *continuePositions);
 
-    const QMap<QByteArray,QString> pictureNames() const;
-    const MSO::OfficeArtDggContainer& dggContainer() const;
+    const QMap<QByteArray, QString> pictureNames() const;
+    const MSO::OfficeArtDggContainer &dggContainer() const;
 private:
     // no copy or assign
-    MsoDrawingGroupRecord(const MsoDrawingGroupRecord&);
-    MsoDrawingGroupRecord& operator=(const MsoDrawingGroupRecord&);
+    MsoDrawingGroupRecord(const MsoDrawingGroupRecord &);
+    MsoDrawingGroupRecord &operator=(const MsoDrawingGroupRecord &);
 
     class Private;
     Private *d;
@@ -877,21 +896,21 @@ class ExcelReader
 public:
     ExcelReader();
     virtual ~ExcelReader();
-    bool load(Workbook* workbook, const char* filename);
+    bool load(Workbook *workbook, const char *filename);
 
 protected:
-    virtual void handleRecord(Record* record);
+    virtual void handleRecord(Record *record);
 
 private:
-    void handleBOF(BOFRecord* record);
-    void handleEOF(EOFRecord* record);
+    void handleBOF(BOFRecord *record);
+    void handleEOF(EOFRecord *record);
 
     // no copy or assign
-    ExcelReader(const ExcelReader&);
-    ExcelReader& operator=(const ExcelReader&);
+    ExcelReader(const ExcelReader &);
+    ExcelReader &operator=(const ExcelReader &);
 
     class Private;
-    Private* d;
+    Private *d;
 };
 
 class BkHimRecord : public Record
@@ -899,13 +918,16 @@ class BkHimRecord : public Record
 public:
     static const unsigned id;
 
-    virtual unsigned rtti() const { return this->id; }
+    virtual unsigned rtti() const
+    {
+        return this->id;
+    }
 
     explicit BkHimRecord(Workbook *book);
     virtual ~BkHimRecord();
 
-    BkHimRecord( const BkHimRecord& record );
-    BkHimRecord& operator=( const BkHimRecord& record );
+    BkHimRecord(const BkHimRecord &record);
+    BkHimRecord &operator=(const BkHimRecord &record);
 
     enum Format {
         WindowsBitMap = 0x0009,
@@ -915,27 +937,28 @@ public:
     static QString formatToString(Format format);
 
     Format format() const;
-    void setFormat( Format format );
+    void setFormat(Format format);
 
     QString imagePath() const;
-    void setImagePath( QString imagePath );
+    void setImagePath(QString imagePath);
 
     unsigned imageSize() const;
-    void setImageSize( unsigned imageSize );
+    void setImageSize(unsigned imageSize);
 
-    virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions );
+    virtual void setData(unsigned size, const unsigned char *data, const unsigned *continuePositions);
 
-    virtual const char* name() const { return "BkHim"; }
+    virtual const char *name() const
+    {
+        return "BkHim";
+    }
 
-    virtual void dump( std::ostream& out ) const;
+    virtual void dump(std::ostream &out) const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Swinder
-
-
 
 #endif // SWINDER_EXCEL_H

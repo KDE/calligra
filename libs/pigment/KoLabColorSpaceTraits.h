@@ -20,8 +20,7 @@
 #ifndef _KO_LAB_COLORSPACE_TRAITS_H_
 #define _KO_LAB_COLORSPACE_TRAITS_H_
 
-
-/** 
+/**
  * LAB traits, it provides some convenient functions to
  * access LAB channels through an explicit API.
  *
@@ -53,37 +52,42 @@ struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
     };
 
     /// @return the L component
-    inline static channels_type L(quint8* data) {
-        channels_type* d = parent::nativeArray(data);
+    inline static channels_type L(quint8 *data)
+    {
+        channels_type *d = parent::nativeArray(data);
         return d[L_pos];
     }
     /// Set the L component
-    inline static void setL(quint8* data, channels_type nv) {
-        channels_type* d = parent::nativeArray(data);
+    inline static void setL(quint8 *data, channels_type nv)
+    {
+        channels_type *d = parent::nativeArray(data);
         d[L_pos] = nv;
     }
     /// @return the a component
-    inline static channels_type a(quint8* data) {
-        channels_type* d = parent::nativeArray(data);
+    inline static channels_type a(quint8 *data)
+    {
+        channels_type *d = parent::nativeArray(data);
         return d[a_pos];
     }
     /// Set the a component
-    inline static void setA(quint8* data, channels_type nv) {
-        channels_type* d = parent::nativeArray(data);
+    inline static void setA(quint8 *data, channels_type nv)
+    {
+        channels_type *d = parent::nativeArray(data);
         d[a_pos] = nv;
     }
     /// @return the b component
-    inline static channels_type b(quint8* data) {
-        channels_type* d = parent::nativeArray(data);
+    inline static channels_type b(quint8 *data)
+    {
+        channels_type *d = parent::nativeArray(data);
         return d[b_pos];
     }
     /// Set the a component
-    inline static void setB(quint8* data, channels_type nv) {
-        channels_type* d = parent::nativeArray(data);
+    inline static void setB(quint8 *data, channels_type nv)
+    {
+        channels_type *d = parent::nativeArray(data);
         d[b_pos] = nv;
     }
 };
-
 
 struct KoLabU8Traits : public KoLabTraits<quint8> {
 };

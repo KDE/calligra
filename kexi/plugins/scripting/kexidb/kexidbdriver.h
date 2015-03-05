@@ -58,7 +58,7 @@ class KexiDBDriver : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBDriver(QObject* parent, ::KexiDB::Driver* driver);
+    KexiDBDriver(QObject *parent, ::KexiDB::Driver *driver);
     virtual ~KexiDBDriver();
 
 public Q_SLOTS:
@@ -67,7 +67,7 @@ public Q_SLOTS:
     bool isValid();
     /** Driver-specific SQL string escaping. For example the " or ' char may
     need to be escaped for values used within SQL-statements. */
-    QString escapeString(const QString& s);
+    QString escapeString(const QString &s);
     /** Returns true if this driver is file-based. */
     bool isFileDriver();
     /** Return a name of MIME type of files handled by this driver if it is a
@@ -75,30 +75,30 @@ public Q_SLOTS:
     QString fileDBDriverMimeType();
     /** Returns true if the passed string is a system object's name, eg. name
     of build-in system table that cannot be used or created by a user. */
-    bool isSystemObjectName(const QString& name);
+    bool isSystemObjectName(const QString &name);
     /** Returns true if the passed string is a system database's name, eg. name
     of build-in, system database that cannot be used or created by a user. */
-    bool isSystemDatabaseName(const QString& name);
+    bool isSystemDatabaseName(const QString &name);
     /** Returns true if the passed string is a system field's name, build-in
     system field that cannot be used or created by a user. */
-    bool isSystemFieldName(const QString& name);
+    bool isSystemFieldName(const QString &name);
     /** The as second argument passed string got escaped to be usable within
     a SQL-statement and those escaped string got returned by the method.
     The first argument defines the fieldtype to what we should escape the
     second argument to. */
-    QString valueToSQL(const QString& fieldtype, const QVariant& value);
+    QString valueToSQL(const QString &fieldtype, const QVariant &value);
 
     /** Create and return new \a KexiDBConnection object that uses the as
     argument passed \a KexiDBConnectionData object or NULL if the connection
     could not be created. */
-    QObject* createConnection(QObject* data);
+    QObject *createConnection(QObject *data);
     /** Returns the number of connections. */
     uint connectionCount();
     /** Return the \a KexiDBConnection specified by the index-number passed as an argument. */
     //! @todo QObject* connection(uint index);
 
 private:
-    ::KexiDB::Driver* m_driver;
+    ::KexiDB::Driver *m_driver;
 };
 
 }

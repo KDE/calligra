@@ -30,35 +30,35 @@
 namespace KPlato
 {
 
-TaskDescriptionPanel::TaskDescriptionPanel(Node &node, QWidget *p, bool readOnly )
-    : TaskDescriptionPanelImpl( node, p )
+TaskDescriptionPanel::TaskDescriptionPanel(Node &node, QWidget *p, bool readOnly)
+    : TaskDescriptionPanelImpl(node, p)
 {
-    initDescription( readOnly );
-    setStartValues( node );
+    initDescription(readOnly);
+    setStartValues(node);
 
     descriptionfield->setFocus();
 }
 
-void TaskDescriptionPanel::setStartValues( Node &node )
+void TaskDescriptionPanel::setStartValues(Node &node)
 {
     namefield->setText(node.name());
-    descriptionfield->setTextOrHtml( node.description() );
+    descriptionfield->setTextOrHtml(node.description());
 }
 
 MacroCommand *TaskDescriptionPanel::buildCommand()
 {
     KUndo2MagicString s = kundo2_i18n("Modify task description");
-    if ( m_node.type() == Node::Type_Milestone ) {
+    if (m_node.type() == Node::Type_Milestone) {
         s = kundo2_i18n("Modify milestone description");
-    } else if ( m_node.type() == Node::Type_Summarytask ) {
+    } else if (m_node.type() == Node::Type_Summarytask) {
         s = kundo2_i18n("Modify summary task description");
-    } else if ( m_node.type() == Node::Type_Project ) {
+    } else if (m_node.type() == Node::Type_Project) {
         s = kundo2_i18n("Modify project description");
     }
     MacroCommand *cmd = new MacroCommand(s);
     bool modified = false;
 
-    if ( m_node.description() != descriptionfield->textOrHtml() ) {
+    if (m_node.description() != descriptionfield->textOrHtml()) {
         cmd->addCommand(new NodeModifyDescriptionCmd(m_node, descriptionfield->textOrHtml()));
         modified = true;
     }
@@ -69,86 +69,87 @@ MacroCommand *TaskDescriptionPanel::buildCommand()
     return cmd;
 }
 
-bool TaskDescriptionPanel::ok() {
+bool TaskDescriptionPanel::ok()
+{
     return true;
 }
 
-void TaskDescriptionPanel::initDescription( bool readOnly )
+void TaskDescriptionPanel::initDescription(bool readOnly)
 {
-    toolbar->setVisible( ! readOnly );
-    toolbar->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    toolbar->setVisible(! readOnly);
+    toolbar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-    KActionCollection *collection = new KActionCollection( this ); //krazy:exclude=tipsandthis
-    descriptionfield->setRichTextSupport( KRichTextWidget::SupportBold |
-                                            KRichTextWidget::SupportItalic |
-                                            KRichTextWidget::SupportUnderline |
-                                            KRichTextWidget::SupportStrikeOut |
-                                            KRichTextWidget::SupportChangeListStyle |
-                                            KRichTextWidget::SupportAlignment |
-                                            KRichTextWidget::SupportFormatPainting );
+    KActionCollection *collection = new KActionCollection(this);   //krazy:exclude=tipsandthis
+    descriptionfield->setRichTextSupport(KRichTextWidget::SupportBold |
+                                         KRichTextWidget::SupportItalic |
+                                         KRichTextWidget::SupportUnderline |
+                                         KRichTextWidget::SupportStrikeOut |
+                                         KRichTextWidget::SupportChangeListStyle |
+                                         KRichTextWidget::SupportAlignment |
+                                         KRichTextWidget::SupportFormatPainting);
 
-    descriptionfield->createActions( collection );
+    descriptionfield->createActions(collection);
 
-    toolbar->addAction( collection->action( "format_text_bold" ) );
-    toolbar->addAction( collection->action( "format_text_italic" ) );
-    toolbar->addAction( collection->action( "format_text_underline" ) );
-    toolbar->addAction( collection->action( "format_text_strikeout" ) );
+    toolbar->addAction(collection->action("format_text_bold"));
+    toolbar->addAction(collection->action("format_text_italic"));
+    toolbar->addAction(collection->action("format_text_underline"));
+    toolbar->addAction(collection->action("format_text_strikeout"));
     toolbar->addSeparator();
 
-    toolbar->addAction( collection->action( "format_list_style" ) );
+    toolbar->addAction(collection->action("format_list_style"));
     toolbar->addSeparator();
 
-    toolbar->addAction( collection->action( "format_align_left" ) );
-    toolbar->addAction( collection->action( "format_align_center" ) );
-    toolbar->addAction( collection->action( "format_align_right" ) );
-    toolbar->addAction( collection->action( "format_align_justify" ) );
+    toolbar->addAction(collection->action("format_align_left"));
+    toolbar->addAction(collection->action("format_align_center"));
+    toolbar->addAction(collection->action("format_align_right"));
+    toolbar->addAction(collection->action("format_align_justify"));
     toolbar->addSeparator();
 
 //    toolbar->addAction( collection->action( "format_painter" ) );
 
-    descriptionfield->append( "" );
-    descriptionfield->setReadOnly( readOnly );
-    descriptionfield->setOverwriteMode( false );
-    descriptionfield->setLineWrapMode( KTextEdit::WidgetWidth );
-    descriptionfield->setTabChangesFocus( true );
+    descriptionfield->append("");
+    descriptionfield->setReadOnly(readOnly);
+    descriptionfield->setOverwriteMode(false);
+    descriptionfield->setLineWrapMode(KTextEdit::WidgetWidth);
+    descriptionfield->setTabChangesFocus(true);
 
 }
 
 //-----------------------------
-TaskDescriptionPanelImpl::TaskDescriptionPanelImpl( Node &node, QWidget *p )
+TaskDescriptionPanelImpl::TaskDescriptionPanelImpl(Node &node, QWidget *p)
     : QWidget(p),
       m_node(node)
 {
 
     setupUi(this);
 
-    connect( descriptionfield, SIGNAL(textChanged()), SLOT(slotChanged()) );
+    connect(descriptionfield, SIGNAL(textChanged()), SLOT(slotChanged()));
 }
 
 void TaskDescriptionPanelImpl::slotChanged()
 {
-    emit textChanged( descriptionfield->textOrHtml() != m_node.description() );
+    emit textChanged(descriptionfield->textOrHtml() != m_node.description());
 }
 
 //-----------------------------
-TaskDescriptionDialog::TaskDescriptionDialog( Task &task, QWidget *p, bool readOnly )
+TaskDescriptionDialog::TaskDescriptionDialog(Task &task, QWidget *p, bool readOnly)
     : KDialog(p)
 {
-    setCaption( i18n( "Task Description" ) );
-    if ( readOnly ) {
-        setButtons( Close );
+    setCaption(i18n("Task Description"));
+    if (readOnly) {
+        setButtons(Close);
     } else {
-        setButtons( Ok|Cancel );
-        setDefaultButton( Ok );
+        setButtons(Ok | Cancel);
+        setDefaultButton(Ok);
     }
-    showButtonSeparator( true );
+    showButtonSeparator(true);
 
-    m_descriptionTab = new TaskDescriptionPanel( task, this, readOnly );
+    m_descriptionTab = new TaskDescriptionPanel(task, this, readOnly);
     setMainWidget(m_descriptionTab);
 
     enableButtonOk(false);
 
-    connect( m_descriptionTab, SIGNAL(textChanged(bool)), this, SLOT(enableButtonOk(bool)) );
+    connect(m_descriptionTab, SIGNAL(textChanged(bool)), this, SLOT(enableButtonOk(bool)));
 }
 
 MacroCommand *TaskDescriptionDialog::buildCommand()
@@ -156,18 +157,17 @@ MacroCommand *TaskDescriptionDialog::buildCommand()
     return m_descriptionTab->buildCommand();
 }
 
-void TaskDescriptionDialog::slotButtonClicked( int button )
+void TaskDescriptionDialog::slotButtonClicked(int button)
 {
     if (button == KDialog::Ok) {
-        if ( ! m_descriptionTab->ok() ) {
+        if (! m_descriptionTab->ok()) {
             return;
         }
         accept();
     } else {
-        KDialog::slotButtonClicked( button );
+        KDialog::slotButtonClicked(button);
     }
 }
-
 
 }  //KPlato namespace
 

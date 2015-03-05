@@ -80,7 +80,6 @@ bool DynaFilter::applyFilter(qreal cursorX, qreal cursorY)
     return true;
 }
 
-
 void DynaFilter::initFilterPosition(qreal x, qreal y)
 {
     m_filterX = x;

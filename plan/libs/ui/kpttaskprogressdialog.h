@@ -24,7 +24,6 @@
 
 #include <kdialog.h>
 
-
 namespace KPlato
 {
 
@@ -35,16 +34,17 @@ class StandardWorktime;
 class ScheduleManager;
 class MacroCommand;
 
-class KPLATOUI_EXPORT TaskProgressDialog : public KDialog {
+class KPLATOUI_EXPORT TaskProgressDialog : public KDialog
+{
     Q_OBJECT
 public:
-    TaskProgressDialog(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *parent=0);
+    TaskProgressDialog(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *parent = 0);
 
     MacroCommand *buildCommand();
 
 protected Q_SLOTS:
     void slotChanged();
-    void slotNodeRemoved( Node *node );
+    void slotNodeRemoved(Node *node);
 
 private:
     Node *m_node;

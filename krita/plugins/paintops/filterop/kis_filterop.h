@@ -37,10 +37,10 @@ class KisFilterOp : public KisBrushBasedPaintOp
 
 public:
 
-    KisFilterOp(const KisFilterOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisFilterOp();
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
 
 private:
 
@@ -48,7 +48,7 @@ private:
     KisPressureSizeOption m_sizeOption;
     KisPressureRotationOption m_rotationOption;
     KisFilterSP m_filter;
-    KisFilterConfiguration* m_filterConfiguration;
+    KisFilterConfiguration *m_filterConfiguration;
     bool m_smudgeMode;
 };
 

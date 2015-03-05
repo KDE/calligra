@@ -38,13 +38,13 @@ public:
 
     virtual ~FormWidgetInterface();
 
-    //! @return true if this widget is in design mode 
+    //! @return true if this widget is in design mode
     virtual bool designMode() const;
 
     //! Sets design mode on or off. Sets the arrow mouse cursor for design mode.
     virtual void setDesignMode(bool design);
 
-    //! @return true if this widget is in inline editing mode 
+    //! @return true if this widget is in inline editing mode
     virtual bool editingMode() const;
 
     //! Sets inline editing mode on or off.

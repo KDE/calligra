@@ -39,14 +39,14 @@ public:
     ~KexiDBTextWidgetInterface();
 
     //! Called from KexiFormDataItemInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo) implementation.
-    void setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w);
+    void setColumnInfo(KexiDB::QueryColumnInfo *cinfo, QWidget *w);
 
     //! Called from paintEvent( QPaintEvent *pe ) method of the data aware widget.
     void paint(QWidget *w, QPainter *p, bool textIsEmpty, Qt::Alignment alignment,
                bool hasFocus);
 
     //! Called from event( QEvent * e ) method of the data aware widget.
-    void event(QEvent * e, QWidget *w, bool textIsEmpty);
+    void event(QEvent *e, QWidget *w, bool textIsEmpty);
 
 protected:
     //! parameters for displaying autonumber sign

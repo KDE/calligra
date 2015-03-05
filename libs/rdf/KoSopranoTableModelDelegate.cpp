@@ -30,7 +30,7 @@
 #include <QComboBox>
 
 KoSopranoTableModelDelegate::KoSopranoTableModelDelegate(QObject *parent)
-        : QStyledItemDelegate(parent)
+    : QStyledItemDelegate(parent)
 {
 }
 

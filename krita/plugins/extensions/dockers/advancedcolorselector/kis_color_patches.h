@@ -24,10 +24,9 @@
 
 class KoColor;
 
-
 class KisColorPatches : public KisColorSelectorBase
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit KisColorPatches(QString configPrefix, QWidget *parent = 0);
     enum Direction { Horizontal, Vertical };
@@ -37,7 +36,10 @@ public Q_SLOTS:
 
 protected:
     void setColors(QList<KoColor> colors);
-    QList<KoColor> colors() const {return m_colors;}
+    QList<KoColor> colors() const
+    {
+        return m_colors;
+    }
 
     void paintEvent(QPaintEvent *);
     void wheelEvent(QWheelEvent *);
@@ -52,7 +54,7 @@ public:
     /// set buttons, that should be drawn additionally to the patches
     /// this class takes ownership of them and will delete them
     /// they will be resized to the patchsize
-    void setAdditionalButtons(QList<QWidget*> buttonList);
+    void setAdditionalButtons(QList<QWidget *> buttonList);
 
 private:
     int m_patchWidth;
@@ -66,7 +68,7 @@ private:
     bool m_allowScrolling;
     int m_numCols;
     int m_numRows;
-    QList<QWidget*> m_buttonList;
+    QList<QWidget *> m_buttonList;
 
     /// returns width of the patchfield, if there are only m_numRows allowed
     int widthOfAllPatches();

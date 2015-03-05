@@ -63,7 +63,7 @@ public:
      */
     bool isNull() const;
 
-    KoFontFace& operator=(const KoFontFace &other);
+    KoFontFace &operator=(const KoFontFace &other);
 
     bool operator==(const KoFontFace &other) const;
 

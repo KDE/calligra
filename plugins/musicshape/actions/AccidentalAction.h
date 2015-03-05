@@ -24,17 +24,19 @@
 class AccidentalAction : public AbstractNoteMusicAction
 {
 public:
-    AccidentalAction(int accidentals, SimpleEntryTool* tool);
+    AccidentalAction(int accidentals, SimpleEntryTool *tool);
 
-    virtual void renderPreview(QPainter& painter, const QPointF& point);
-    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos);
+    virtual void renderPreview(QPainter &painter, const QPointF &point);
+    virtual void mousePress(MusicCore::Chord *chord, MusicCore::Note *note, qreal distance, const QPointF &pos);
 
     //! To avoid 'mousePress() was hidden' warning
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) {
+    virtual void mousePress(MusicCore::Staff *staff, int bar, const QPointF &pos)
+    {
         AbstractNoteMusicAction::mousePress(staff, bar, pos);
     }
     //! To avoid 'mousePress() was hidden' warning
-    virtual void mousePress(MusicCore::StaffElement* se, qreal distance, const QPointF& pos) {
+    virtual void mousePress(MusicCore::StaffElement *se, qreal distance, const QPointF &pos)
+    {
         AbstractNoteMusicAction::mousePress(se, distance, pos);
     }
 private:

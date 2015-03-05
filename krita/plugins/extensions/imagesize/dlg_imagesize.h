@@ -33,7 +33,8 @@ class WdgImageSize : public QWidget, public Ui::WdgImageSize
     Q_OBJECT
 
 public:
-    WdgImageSize(QWidget *parent) : QWidget(parent) {
+    WdgImageSize(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -44,7 +45,7 @@ class DlgImageSize: public KDialog
     Q_OBJECT
 
 public:
-    DlgImageSize(QWidget * parent, int width, int height, double resolution);
+    DlgImageSize(QWidget *parent, int width, int height, double resolution);
     ~DlgImageSize();
 
     qint32 width();

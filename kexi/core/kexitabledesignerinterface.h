@@ -71,13 +71,13 @@ public:
      Property set is also created.
      Existing field will be overwritten, so use insertEmptyRow()
      is you want to move subsequent fields down. */
-    virtual void insertField(int row, const QString& caption, bool addCommand = false) = 0;
+    virtual void insertField(int row, const QString &caption, bool addCommand = false) = 0;
 
     /*! Inserts a new \a field for \a row.
      Property set is also created. \a set will be deeply-copied into the new set.
      Existing field will be overwritten, so use insertEmptyRow()
      is you want to move subsequent fields down. */
-    virtual void insertField(int row, KoProperty::Set& set, bool addCommand = false) = 0;
+    virtual void insertField(int row, KoProperty::Set &set, bool addCommand = false) = 0;
 
     /*! Inserts a new empty row at position \a row. */
     virtual void insertEmptyRow(int row, bool addCommand = false) = 0;
@@ -89,13 +89,13 @@ public:
     /*! Changes property \a propertyName to \a newValue for a field pointed by \a fieldUID.
      If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
      If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
-    virtual void changeFieldPropertyForRow(int fieldUID, const QByteArray& propertyName,
-                                           const QVariant& newValue,
-                                           KoProperty::Property::ListData* const listData = 0,
+    virtual void changeFieldPropertyForRow(int fieldUID, const QByteArray &propertyName,
+                                           const QVariant &newValue,
+                                           KoProperty::Property::ListData *const listData = 0,
                                            bool addCommand = false) = 0;
 
     /*! Creates temporary table for the current design and returns debug string for it. */
-    virtual QString debugStringForCurrentTableSchema(tristate& result) = 0;
+    virtual QString debugStringForCurrentTableSchema(tristate &result) = 0;
 
     /*! Simulates execution of alter table, and puts debug into \a debugTarget.
      A case when debugTarget is not 0 is true for the alter table test suite. */

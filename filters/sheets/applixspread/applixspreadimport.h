@@ -39,24 +39,24 @@ class APPLIXSPREADImport : public KoFilter
     Q_OBJECT
 
 public:
-    APPLIXSPREADImport(QObject *parent, const QVariantList&);
+    APPLIXSPREADImport(QObject *parent, const QVariantList &);
     virtual ~APPLIXSPREADImport() {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 protected:
     QString nextLine(QTextStream &);
-    QChar   specCharfind(QChar , QChar);
+    QChar   specCharfind(QChar, QChar);
     void    writePen(QString &, int, int, QString);
     QString writeColor(t_mycolor *);
     void    readTypefaceTable(QTextStream &, QStringList &);
-    void    readColormap(QTextStream &, QList<t_mycolor*> &);
+    void    readColormap(QTextStream &, QList<t_mycolor *> &);
     void    readView(QTextStream &, QString, t_rc &);
     void    filterSHFGBG(QString, int *, int *, int *);
     void    transPenFormat(QString, int *, int *);
     int     readHeader(QTextStream &);
-    int     translateColumnNumber(const QString&);
-    QString convertFormula(const QString& input) const;
+    int     translateColumnNumber(const QString &);
+    QString convertFormula(const QString &input) const;
 
 private:
     int m_stepsize;

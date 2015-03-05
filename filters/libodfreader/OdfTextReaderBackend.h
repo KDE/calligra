@@ -29,9 +29,7 @@
 #include "koodfreader_export.h"
 #include "OdfTextReader.h"
 
-
 class OdfReaderContext;
-
 
 /** @brief A default backend for the OdfTextReader class.
  *
@@ -52,7 +50,7 @@ class OdfReaderContext;
  */
 class KOODFREADER_EXPORT OdfTextReaderBackend
 {
- public:
+public:
     explicit OdfTextReaderBackend();
     virtual ~OdfTextReaderBackend();
 
@@ -101,10 +99,9 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
     virtual void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void textVariable(const QString &name, const QString &value);
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif // ODFTEXTREADERBACKEND_H

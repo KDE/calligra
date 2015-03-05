@@ -25,11 +25,9 @@
 #include <kptviewbase.h>
 #include <kptresourcemodel.h>
 
-
 class KoDocument;
 
 class QPoint;
-
 
 namespace KPlato
 {
@@ -38,25 +36,33 @@ class Project;
 class Resource;
 class ResourceGroup;
 
-
 class KPLATOUI_EXPORT ResourceTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
     explicit ResourceTreeView(QWidget *parent);
 
-    ResourceItemModel *model() const { return static_cast<ResourceItemModel*>( DoubleTreeViewBase::model() ); }
+    ResourceItemModel *model() const
+    {
+        return static_cast<ResourceItemModel *>(DoubleTreeViewBase::model());
+    }
 
-    Project *project() const { return model()->project(); }
-    void setProject( Project *project ) { model()->setProject( project ); }
+    Project *project() const
+    {
+        return model()->project();
+    }
+    void setProject(Project *project)
+    {
+        model()->setProject(project);
+    }
 
     QObject *currentObject() const;
-    QList<QObject*> selectedObjects() const;
-    QList<ResourceGroup*> selectedGroups() const;
-    QList<Resource*> selectedResources() const;
+    QList<QObject *> selectedObjects() const;
+    QList<ResourceGroup *> selectedGroups() const;
+    QList<Resource *> selectedResources() const;
 
 protected Q_SLOTS:
-    void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
+    void slotDropAllowed(const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event);
 };
 
 class KPLATOUI_EXPORT ResourceEditor : public ViewBase
@@ -64,46 +70,52 @@ class KPLATOUI_EXPORT ResourceEditor : public ViewBase
     Q_OBJECT
 public:
     ResourceEditor(KoPart *part, KoDocument *dic, QWidget *parent);
-    
-    void setupGui();
-    Project *project() const { return m_view->project(); }
-    virtual void setProject( Project *project );
 
-    ResourceItemModel *model() const { return m_view->model(); }
-    
-    virtual void updateReadWrite( bool readwrite );
+    void setupGui();
+    Project *project() const
+    {
+        return m_view->project();
+    }
+    virtual void setProject(Project *project);
+
+    ResourceItemModel *model() const
+    {
+        return m_view->model();
+    }
+
+    virtual void updateReadWrite(bool readwrite);
 
     virtual Resource *currentResource() const;
     virtual ResourceGroup *currentResourceGroup() const;
-    
+
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
-    
+    virtual void saveContext(QDomElement &/*context*/) const;
+
     KoPrintJob *createPrintJob();
-    
+
 Q_SIGNALS:
-    void addResource( ResourceGroup* );
-    void deleteObjectList( const QObjectList& );
+    void addResource(ResourceGroup *);
+    void deleteObjectList(const QObjectList &);
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
 protected Q_SLOTS:
     virtual void slotOptions();
 
 protected:
-    void updateActionsEnabled(  bool on = true );
+    void updateActionsEnabled(bool on = true);
 
 private Q_SLOTS:
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
     void slotSplitView();
-    
-    void slotSelectionChanged( const QModelIndexList& );
-    void slotCurrentChanged( const QModelIndex& );
-    void slotEnableActions( bool on );
+
+    void slotSelectionChanged(const QModelIndexList &);
+    void slotCurrentChanged(const QModelIndex &);
+    void slotEnableActions(bool on);
 
     void slotAddResource();
     void slotAddGroup();

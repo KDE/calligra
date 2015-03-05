@@ -72,8 +72,8 @@
 //////////////////////////////////////////
 
 KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
-        : KexiDBFactoryBase(parent, "kexidb")
-        , m_assignAction(0)
+    : KexiDBFactoryBase(parent, "kexidb")
+    , m_assignAction(0)
 {
     {
         KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
@@ -82,13 +82,13 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setName(i18nc("Form widget", "Form"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of forms. Based on that, identifiers such as "
-                "form1, form2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "form"));
+                  "form1, form2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "form"));
         wi->setDescription(i18n("A form widget"));
         addClass(wi);
     }
@@ -112,7 +112,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 
     {
         // inherited
-        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("lineedit"));
         wi->setClassName("KexiDBLineEdit");
         wi->setParentFactoryName("stdwidgets");
@@ -123,13 +123,13 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setName(i18nc("Text Box widget", "Text Box"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of text box widgets. Based on that, identifiers such as "
-                "textBox1, textBox2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "textBox"));
+                  "textBox1, textBox2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "textBox"));
         wi->setDescription(i18n("A widget for entering and displaying line of text text"));
         wi->setInternalProperty("dontStartEditingOnInserting", true); // because we are most probably assign data source to this widget
         wi->setInlineEditingEnabledWhenDataSourceSet(false);
@@ -137,7 +137,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     }
     {
         // inherited
-        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("textedit"));
         wi->setClassName("KexiDBTextEdit");
         wi->setParentFactoryName("stdwidgets");
@@ -148,20 +148,20 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setName(i18nc("Text Editor widget", "Text Editor"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of text editor widgets. Based on that, identifiers such as "
-                "textEditor1, textEditor2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "textEditor"));
+                  "textEditor1, textEditor2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "textEditor"));
         wi->setDescription(i18n("A multiline text editor"));
         wi->setInternalProperty("dontStartEditingOnInserting", true); // because we are most probably assign data source to this widget
         wi->setInlineEditingEnabledWhenDataSourceSet(false);
         addClass(wi);
     }
     {
-        KFormDesigner::WidgetInfo* wi = new KFormDesigner::WidgetInfo(this);
+        KFormDesigner::WidgetInfo *wi = new KFormDesigner::WidgetInfo(this);
         wi->setIconName(koIconName("frame"));
         wi->setClassName("KexiFrame");
         wi->setParentFactoryName("containers");
@@ -171,18 +171,18 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setName(i18nc("Frame widget", "Frame"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of frame widgets. Based on that, identifiers such as "
-                "frame1, frame2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "frame"));
+                  "frame1, frame2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "frame"));
         wi->setDescription(i18n("A frame widget"));
         addClass(wi);
     }
     {
-        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("label"));
         wi->setClassName("KexiDBLabel");
         wi->setParentFactoryName("stdwidgets");
@@ -192,20 +192,20 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setName(i18nc("Text Label widget", "Label"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of label widgets. Based on that, identifiers such as "
-                "label1, label2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "label"));
+                  "label1, label2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "label"));
         wi->setDescription(i18n("A widget for displaying text"));
         wi->setInlineEditingEnabledWhenDataSourceSet(false);
         addClass(wi);
     }
 
     {
-        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("pixmaplabel"));
         wi->setClassName("KexiDBImageBox");
         wi->setParentFactoryName("stdwidgets");
@@ -215,22 +215,22 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setName(i18nc("Image Box widget", "Image Box"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of image box widgets. Based on that, identifiers such as "
-                "image1, image2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "image"));
+                  "image1, image2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "image"));
         wi->setDescription(i18n("A widget for displaying images"));
-    // wi->setCustomTypeForProperty("pixmapData", KexiCustomPropertyFactory::PixmapData);
+        // wi->setCustomTypeForProperty("pixmapData", KexiCustomPropertyFactory::PixmapData);
         wi->setCustomTypeForProperty("pixmapId", KexiCustomPropertyFactory::PixmapId);
         wi->setInternalProperty("dontStartEditingOnInserting", true);
         addClass(wi);
     }
 
     {
-        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("combo"));
         wi->setClassName("KexiDBComboBox");
         wi->setParentFactoryName("stdwidgets");
@@ -239,18 +239,18 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setName(i18nc("Combo Box widget", "Combo Box"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of combo box widgets. Based on that, identifiers such as "
-                "comboBox1, comboBox2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "comboBox"));
+                  "comboBox1, comboBox2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "comboBox"));
         wi->setDescription(i18n("A combo box widget"));
         addClass(wi);
     }
     {
-        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("check"));
         wi->setClassName("KexiDBCheckBox");
         wi->setParentFactoryName("stdwidgets");
@@ -259,13 +259,13 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setName(i18nc("Check Box widget", "Check Box"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of combo box widgets. Based on that, identifiers such as "
-                "checkBox1, checkBox2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "checkBox"));
+                  "checkBox1, checkBox2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "checkBox"));
         wi->setDescription(i18n("A check box with text label"));
         addClass(wi);
     }
@@ -288,89 +288,89 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 
     {
         // inherited
-        KFormDesigner::WidgetInfo* wi = new KFormDesigner::WidgetInfo(this);
+        KFormDesigner::WidgetInfo *wi = new KFormDesigner::WidgetInfo(this);
         wi->addAlternateClassName("KexiDBPushButton");
         wi->addAlternateClassName("KexiPushButton");
         wi->setName(i18nc("Button widget", "Button"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of button widgets. Based on that, identifiers such as "
-                "button1, button2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "button"));
+                  "button1, button2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "button"));
         wi->setDescription(i18n("A button for executing actions"));
         wi->setParentFactoryName("stdwidgets");
         wi->setInheritedClassName("KPushButton");
         addClass(wi);
     }
     {
-        KFormDesigner::WidgetInfo* wi = new KFormDesigner::WidgetInfo(this);
+        KFormDesigner::WidgetInfo *wi = new KFormDesigner::WidgetInfo(this);
         wi->setClassName("KexiDBCommandLinkButton");
         wi->setIconName(koIconName("button"));
         wi->setName(i18nc("Link Button widget", "Link Button"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of link button widgets. Based on that, identifiers such as "
-                "linkButton1, linkButton2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "linkButton"));
+                  "linkButton1, linkButton2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "linkButton"));
         wi->setDescription(i18n("A Link button for executing actions"));
         addClass(wi);
     }
     {
-        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("slider"));
         wi->setClassName("KexiDBSlider");
         wi->setName(i18nc("Slider widget", "Slider"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of slider widgets. Based on that, identifiers such as "
-                "slider1, slider2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "slider"));
+                  "slider1, slider2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "slider"));
         wi->setDescription(i18n("A Slider widget"));
         addClass(wi);
     }
     {
-        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("progress"));
         wi->setClassName("KexiDBProgressBar");
         wi->setName(i18nc("Progress Bar widget", "Progress Bar"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of progress bar widgets. Based on that, identifiers such as "
-                "progressBar1, progressBar2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "progressBar"));
+                  "progressBar1, progressBar2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "progressBar"));
         wi->setDescription(i18n("A Progress Bar widget"));
         addClass(wi);
     }
     {
-        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        KexiDataAwareWidgetInfo *wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("dateedit"));
         wi->setClassName("KexiDBDatePicker");
         wi->setName(i18nc("Date Picker widget", "Date Picker"));
         wi->setNamePrefix(
             i18nc("A prefix for identifiers of date picker widgets. Based on that, identifiers such as "
-                "datePicker1, datePicker2 are generated. "
-                "This string can be used to refer the widget object as variables in programming "
-                "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-                "should start with lower case letter and if there are subsequent words, these should "
-                "start with upper case letter. Example: smallCamelCase. "
-                "Moreover, try to make this prefix as short as possible.",
-                "datePicker"));
+                  "datePicker1, datePicker2 are generated. "
+                  "This string can be used to refer the widget object as variables in programming "
+                  "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+                  "should start with lower case letter and if there are subsequent words, these should "
+                  "start with upper case letter. Example: smallCamelCase. "
+                  "Moreover, try to make this prefix as short as possible.",
+                  "datePicker"));
         wi->setDescription(i18n("A Date Picker widget"));
         addClass(wi);
     }
@@ -447,8 +447,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 
     //used in labels, frames...
     setPropertyDescription("dropDownButtonVisible",
-        i18nc("Drop-Down Button for Image Box Visible (a property name, keep the text narrow!)",
-              "Drop-Down\nButton Visible"));
+                           i18nc("Drop-Down Button for Image Box Visible (a property name, keep the text narrow!)",
+                                 "Drop-Down\nButton Visible"));
 
     //for checkbox
     setValueDescription("TristateDefault", i18nc("Value of \"Tristate\" property in checkbox: default", "Default"));
@@ -459,7 +459,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     setPropertyDescription("editable", i18nc("Editable combobox", "Editable"));
 
     //for kexipushbutton
-    setPropertyDescription("hyperlink" , i18nc("Hyperlink address", "Hyperlink"));
+    setPropertyDescription("hyperlink", i18nc("Hyperlink address", "Hyperlink"));
     setPropertyDescription("hyperlinkType", i18nc("Type of hyperlink", "Hyperlink Type"));
     setPropertyDescription("hyperlinkTool", i18nc("Tool used for opening a hyperlink", "Hyperlink Tool"));
     setPropertyDescription("remoteHyperlink", i18nc("Allow to open remote hyperlinks", "Remote Hyperlink"));
@@ -478,7 +478,7 @@ KexiDBFactory::~KexiDBFactory()
 {
 }
 
-QWidget*
+QWidget *
 KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
                             KFormDesigner::Container *container,
                             CreateWidgetOptions options)
@@ -498,14 +498,12 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 #endif
     else if (c == "KexiDBTextEdit") {
         w = new KexiDBTextEdit(p);
-    }
-    else if (c == "Q3Frame" || c == "QFrame" || c == "KexiFrame") {
+    } else if (c == "Q3Frame" || c == "QFrame" || c == "KexiFrame") {
         w = new KexiFrame(p);
         createContainer = true;
     } else if (c == "KexiDBLabel") {
         w = new KexiDBLabel(text, p);
-    }
-    else if (c == "KexiDBImageBox") {
+    } else if (c == "KexiDBImageBox") {
         w = new KexiDBImageBox(designMode, p);
         connect(w, SIGNAL(idChanged(long)), this, SLOT(slotImageBoxIdChanged(long)));
     }
@@ -516,28 +514,26 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 #endif
     else if (c == "KexiDBCheckBox") {
         w = new KexiDBCheckBox(text, p);
-    }
-    else if (c == "KexiDBSlider") {
+    } else if (c == "KexiDBSlider") {
         w = new KexiDBSlider(p);
     } else if (c == "KexiDBProgressBar") {
         w = new KexiDBProgressBar(p);
     } else if (c == "KexiDBDatePicker") {
         w = new KexiDBDatePicker(p);
-    }
-    else if (c == "KexiDBComboBox") {
+    } else if (c == "KexiDBComboBox") {
         w = new KexiDBComboBox(p);
-    }
-    else if (c == "KPushButton" || c == "KexiDBPushButton" || c == "KexiPushButton") {
+    } else if (c == "KPushButton" || c == "KexiDBPushButton" || c == "KexiPushButton") {
         w = new KexiDBPushButton(text, p);
-    }
-    else if (c == "KexiDBCommandLinkButton" || c == "KexiCommandLinkButton") {
+    } else if (c == "KexiDBCommandLinkButton" || c == "KexiCommandLinkButton") {
         w = new KexiDBCommandLinkButton(text, QString(), p);
     }
 
-    if (w)
+    if (w) {
         w->setObjectName(n);
-    if (createContainer)
+    }
+    if (createContainer) {
         (void)new KFormDesigner::Container(container, w, container);
+    }
     return w;
 }
 
@@ -549,7 +545,7 @@ bool KexiDBFactory::createMenuActions(const QByteArray &classname, QWidget *w, Q
         menu->addAction(m_assignAction);
         return true;
     } else if (classname == "KexiDBImageBox") {
-        KexiDBImageBox *imageBox = static_cast<KexiDBImageBox*>(w);
+        KexiDBImageBox *imageBox = static_cast<KexiDBImageBox *>(w);
         imageBox->contextMenu()->updateActionsAvailability();
         KActionCollection *ac = imageBox->contextMenu()->actionCollection();
         QMenu *subMenu = menu->addMenu(i18n("&Image"));
@@ -570,7 +566,7 @@ bool KexiDBFactory::createMenuActions(const QByteArray &classname, QWidget *w, Q
 }
 
 void
-KexiDBFactory::createCustomActions(KActionCollection* col)
+KexiDBFactory::createCustomActions(KActionCollection *col)
 {
     //this will create shared instance action for design mode (special collection is provided)
     col->addAction("widget_assign_action",
@@ -578,12 +574,12 @@ KexiDBFactory::createCustomActions(KActionCollection* col)
 }
 
 bool
-KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
+KexiDBFactory::startInlineEditing(InlineEditorCreationArguments &args)
 {
-    const KFormDesigner::WidgetInfo* wclass = args.container->form()->library()->widgetInfoForClassName(args.classname);
-    const KexiDataAwareWidgetInfo* wDataAwareClass = dynamic_cast<const KexiDataAwareWidgetInfo*>(wclass);
+    const KFormDesigner::WidgetInfo *wclass = args.container->form()->library()->widgetInfoForClassName(args.classname);
+    const KexiDataAwareWidgetInfo *wDataAwareClass = dynamic_cast<const KexiDataAwareWidgetInfo *>(wclass);
     if (wDataAwareClass && !wDataAwareClass->inlineEditingEnabledWhenDataSourceSet()) {
-        KexiFormDataItemInterface* iface = dynamic_cast<KexiFormDataItemInterface*>(args.widget);
+        KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>(args.widget);
         if (iface && !iface->dataSource().isEmpty()) {
 //! @todo reimplement inline editing for KexiDBLineEdit using combobox with data sources
             return false;
@@ -594,23 +590,22 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::startInlineEditing() should be called
 
-        KLineEdit *lineedit = static_cast<KLineEdit*>(args.widget);
+        KLineEdit *lineedit = static_cast<KLineEdit *>(args.widget);
         args.text = lineedit->text();
         args.alignment = lineedit->alignment();
         args.useFrame = true;
         return true;
-    }
-    else if (args.classname == "KexiDBTextEdit") {
+    } else if (args.classname == "KexiDBTextEdit") {
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::startInlineEditing() should be called
-        KTextEdit *textedit = static_cast<KTextEdit*>(args.widget);
+        KTextEdit *textedit = static_cast<KTextEdit *>(args.widget);
 //! @todo rich text?
         args.text = textedit->toPlainText();
         args.alignment = textedit->alignment();
         args.useFrame = true;
         args.multiLine = true;
 //! @todo
-#if 0 
+#if 0
         //copy a few properties
         KTextEdit *ed = dynamic_cast<KTextEdit *>(editor(w));
         ed->setLineWrapMode(textedit->lineWrapMode());
@@ -624,21 +619,20 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         return true;
     }
     // KexiDBCommandLinkButton
-    else if (args.classname == "KexiDBCommandLinkButton" ){
-        KexiDBCommandLinkButton *linkButton=static_cast<KexiDBCommandLinkButton*>(args.widget);
+    else if (args.classname == "KexiDBCommandLinkButton") {
+        KexiDBCommandLinkButton *linkButton = static_cast<KexiDBCommandLinkButton *>(args.widget);
         QStyleOption option;
         option.initFrom(linkButton);
         args.text = linkButton->text();
         const QRect r(linkButton->style()->subElementRect(
-                        QStyle::SE_PushButtonContents, &option, linkButton));
+                          QStyle::SE_PushButtonContents, &option, linkButton));
 
         QFontMetrics fm(linkButton->font());
-        args.geometry = QRect(linkButton->x() + linkButton->iconSize().width() + 6, linkButton->y() + r.y(), r.width()  - 6, fm.height()+14);
+        args.geometry = QRect(linkButton->x() + linkButton->iconSize().width() + 6, linkButton->y() + r.y(), r.width()  - 6, fm.height() + 14);
 
         return true;
-    }
-    else if (args.classname == "KexiDBLabel") {
-        KexiDBLabel *label = static_cast<KexiDBLabel*>(args.widget);
+    } else if (args.classname == "KexiDBLabel") {
+        KexiDBLabel *label = static_cast<KexiDBLabel *>(args.widget);
         if (label->textFormat() == Qt::RichText) {
             args.execute = false;
             if (wclass && wclass->inheritedClass()) {
@@ -648,12 +642,10 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
                 const bool result = wclass->inheritedClass()->factory()->startInlineEditing(args);
                 args.classname = thisClassname;
                 return result;
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        else {
+        } else {
             args.text = label->text();
             args.alignment = label->alignment();
             args.multiLine = label->wordWrap();
@@ -664,7 +656,7 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
     else if (args.classname == "KexiDBSubForm") {
 //! @todo
         // open the form in design mode
-        KexiDBSubForm *subform = static_cast<KexiDBSubForm*>(args.widget);
+        KexiDBSubForm *subform = static_cast<KexiDBSubForm *>(args.widget);
         args.execute = false;
         if (KexiMainWindowIface::global()) {
             bool openingCancelled;
@@ -676,25 +668,24 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
     }
 #endif
 #if 0
-    else if (   args.classname == "KexiDBDateEdit" || args.classname == "KexiDBDateTimeEdit"
-             || args.classname == "KexiDBTimeEdit" /*|| classname == "KexiDBIntSpinBox" || classname == "KexiDBDoubleSpinBox"*/)
-    {
+    else if (args.classname == "KexiDBDateEdit" || args.classname == "KexiDBDateTimeEdit"
+             || args.classname == "KexiDBTimeEdit" /*|| classname == "KexiDBIntSpinBox" || classname == "KexiDBDoubleSpinBox"*/) {
         disableFilter(w, container);
         return true;
     }
 #endif
     else if (args.classname == "KexiDBAutoField") {
-        if (static_cast<KexiDBAutoField*>(args.widget)->hasAutoCaption())
-            return false; // caption is auto, abort editing
-        QLabel *label = static_cast<KexiDBAutoField*>(args.widget)->label();
+        if (static_cast<KexiDBAutoField *>(args.widget)->hasAutoCaption()) {
+            return false;    // caption is auto, abort editing
+        }
+        QLabel *label = static_cast<KexiDBAutoField *>(args.widget)->label();
         args.text = label->text();
         args.widget = label;
         args.geometry = label->geometry();
         args.alignment = label->alignment();
         return true;
-    }
-    else if (args.classname == "KexiDBCheckBox") {
-        KexiDBCheckBox *cb = static_cast<KexiDBCheckBox*>(args.widget);
+    } else if (args.classname == "KexiDBCheckBox") {
+        KexiDBCheckBox *cb = static_cast<KexiDBCheckBox *>(args.widget);
         QStyleOption option;
         option.initFrom(cb);
         QRect r(cb->geometry());
@@ -704,9 +695,8 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         args.text = cb->text();
         args.geometry = r;
         return true;
-    }
-    else if (args.classname == "KexiDBImageBox") {
-        KexiDBImageBox *image = static_cast<KexiDBImageBox*>(args.widget);
+    } else if (args.classname == "KexiDBImageBox") {
+        KexiDBImageBox *image = static_cast<KexiDBImageBox *>(args.widget);
         image->insertFromFile();
         args.execute = false;
         return true;
@@ -725,15 +715,16 @@ KexiDBFactory::clearWidgetContent(const QByteArray & /*classname*/, QWidget *w)
 {
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
-    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(w);
-    if (iface)
+    KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface *>(w);
+    if (iface) {
         iface->clear();
+    }
     return true;
 }
 
 bool
-KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w,
-        const QByteArray& property, bool isTopLevel)
+KexiDBFactory::isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,
+        const QByteArray &property, bool isTopLevel)
 {
     //general
     bool ok = true;
@@ -747,7 +738,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "stdItem" /*! @todo reenable stdItem */
 #endif
              ;
-     } else if (classname == "KexiDBCommandLinkButton") {
+    } else if (classname == "KexiDBCommandLinkButton") {
         ok = property != "isDragEnabled"
              && property != "default"
              && property != "checkable"
@@ -763,13 +754,13 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "stdItem" /*! @todo reenable stdItem */
 #endif
              ;
-     } else if (classname == "KexiDBSlider") {
+    } else if (classname == "KexiDBSlider") {
         ok = property != "sliderPosition"
              && property != "tracking";
-     } else if (classname == "KexiDBProgressBar") {
+    } else if (classname == "KexiDBProgressBar") {
         ok = property != "focusPolicy"
              && property != "value";
-     } else if (classname == "KexiDBLineEdit")
+    } else if (classname == "KexiDBLineEdit")
         ok = property != "urlDropsEnabled"
              && property != "vAlign"
              && property != "echoMode"
@@ -816,35 +807,34 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "textInteractionFlags";
 //! @todo support textInteractionFlags property of QLabel
     else if (classname == "KexiDBAutoField") {
-        if (!isTopLevel && property == "caption")
-            return true; //force
+        if (!isTopLevel && property == "caption") {
+            return true;    //force
+        }
         if (property == "fieldTypeInternal" || property == "fieldCaptionInternal"
 //! @todo unhide in 2.0
-                || property == "widgetType")
+                || property == "widgetType") {
             return false;
+        }
         ok = property != "text"; /* "text" is not needed as "caption" is used instead */
-    }
-    else if (classname == "KexiDBImageBox") {
+    } else if (classname == "KexiDBImageBox") {
         ok = property != "font" && property != "wordbreak" && property != "pixmapId";
-    }
-    else if (classname == "KexiDBCheckBox") {
+    } else if (classname == "KexiDBCheckBox") {
         //hide text property if the widget is a child of an autofield beause there's already "caption" for this purpose
-        if (property == "text" && w && dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(w->parentWidget()))
+        if (property == "text" && w && dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface *>(w->parentWidget())) {
             return false;
+        }
         ok = property != "autoRepeat";
-    }
-    else if (classname == "KexiDBDatePicker") {
+    } else if (classname == "KexiDBDatePicker") {
         ok = property != "closeButton"
              && property != "fontSize";
     }
-
 
     return ok && KexiDBFactoryBase::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
 bool
-KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& classname,
-        QWidget *w, const QByteArray& property)
+KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const QByteArray &classname,
+        QWidget *w, const QByteArray &property)
 {
     Q_UNUSED(classname);
     Q_UNUSED(w);
@@ -853,7 +843,7 @@ KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& 
 }
 
 bool KexiDBFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
-    const QString &text, QString &oldText)
+                                     const QString &text, QString &oldText)
 {
     const QByteArray n(widget->metaObject()->className());
     if (n == "KexiDBAutoField") {
@@ -873,14 +863,15 @@ bool KexiDBFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
 void
 KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const QByteArray &classname)
 {
-    if (classname == "KexiDBAutoField")
-        editor->setGeometry(static_cast<KexiDBAutoField*>(w)->label()->geometry());
+    if (classname == "KexiDBAutoField") {
+        editor->setGeometry(static_cast<KexiDBAutoField *>(w)->label()->geometry());
+    }
 }
 
 void
 KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
 {
-    KexiFormView *formView = KexiUtils::findParent<KexiFormView*>((QWidget*)sender());
+    KexiFormView *formView = KexiUtils::findParent<KexiFormView *>((QWidget *)sender());
     if (formView) {
         changeProperty(formView->form(), formView, "pixmapId", (uint)/*! @todo unsafe */id);
         formView->setUnsavedLocalBLOB(formView->form()->selectedWidget(), id);

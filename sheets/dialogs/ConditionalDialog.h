@@ -46,30 +46,29 @@ class ConditionalWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ConditionalWidget(QWidget * parent = 0, const char * name = 0, Qt::WFlags fl = 0);
+    explicit ConditionalWidget(QWidget *parent = 0, const char *name = 0, Qt::WFlags fl = 0);
     ~ConditionalWidget();
 
-    KComboBox * m_condition_1;
-    KComboBox * m_style_1;
-    KLineEdit * m_firstValue_1;
-    KLineEdit * m_secondValue_1;
+    KComboBox *m_condition_1;
+    KComboBox *m_style_1;
+    KLineEdit *m_firstValue_1;
+    KLineEdit *m_secondValue_1;
 
-    KComboBox * m_condition_2;
-    KComboBox * m_style_2;
-    KLineEdit * m_firstValue_2;
-    KLineEdit * m_secondValue_2;
+    KComboBox *m_condition_2;
+    KComboBox *m_style_2;
+    KLineEdit *m_firstValue_2;
+    KLineEdit *m_secondValue_2;
 
-    KComboBox * m_condition_3;
-    KComboBox * m_style_3;
-    KLineEdit * m_firstValue_3;
-    KLineEdit * m_secondValue_3;
+    KComboBox *m_condition_3;
+    KComboBox *m_style_3;
+    KLineEdit *m_firstValue_3;
+    KLineEdit *m_secondValue_3;
 
 public Q_SLOTS:
     void slotTextChanged1(const QString &);
     void slotTextChanged2(const QString &);
     void slotTextChanged3(const QString &);
 };
-
 
 /**
  * \ingroup UI
@@ -79,7 +78,7 @@ class ConditionalDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ConditionalDialog(QWidget* parent, Selection* selection);
+    ConditionalDialog(QWidget *parent, Selection *selection);
 
     void init();
 
@@ -87,20 +86,20 @@ public Q_SLOTS:
     void slotOk();
 
 protected:
-    Selection*          m_selection;
-    ConditionalWidget * m_dlg;
+    Selection          *m_selection;
+    ConditionalWidget *m_dlg;
     Conditional::Type   m_result;
 
 private:
-    void init(Conditional const & tmp, int numCondition);
-    Conditional::Type typeOfCondition(KComboBox const * const cb) const;
+    void init(Conditional const &tmp, int numCondition);
+    Conditional::Type typeOfCondition(KComboBox const *const cb) const;
 
-    bool checkInputData(KLineEdit const * const edit1,
-                        KLineEdit const * const edit2);
+    bool checkInputData(KLineEdit const *const edit1,
+                        KLineEdit const *const edit2);
     bool checkInputData();
-    bool getCondition(Conditional & newCondition, const KComboBox * cb,
-                      const KLineEdit * edit1, const KLineEdit * edit2,
-                      const KComboBox * sb);
+    bool getCondition(Conditional &newCondition, const KComboBox *cb,
+                      const KLineEdit *edit1, const KLineEdit *edit2,
+                      const KComboBox *sb);
 
 };
 

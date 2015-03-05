@@ -22,15 +22,18 @@
 #include <kpluginfactory.h>
 #include <QDebug>
 
-KPresenterSlideLoader::KPresenterSlideLoader(QObject* parent) :SlideLoader(parent) {
+KPresenterSlideLoader::KPresenterSlideLoader(QObject *parent) : SlideLoader(parent)
+{
     m_doc = 0;
     version = 0;
 }
 
-KPresenterSlideLoader::~KPresenterSlideLoader() {
+KPresenterSlideLoader::~KPresenterSlideLoader()
+{
     close();
 }
-void KPresenterSlideLoader::close() {
+void KPresenterSlideLoader::close()
+{
     delete m_doc;
     m_doc = 0;
     version++;
@@ -38,7 +41,7 @@ void KPresenterSlideLoader::close() {
 }
 
 void
-KPresenterSlideLoader::open(const QString& path)
+KPresenterSlideLoader::open(const QString &path)
 {
     close();
 
@@ -50,7 +53,7 @@ KPresenterSlideLoader::open(const QString& path)
         close();
         return;
     }
-    KoPADocument* doc = factory->create<KoPADocument>();
+    KoPADocument *doc = factory->create<KoPADocument>();
     m_doc = doc;
     KUrl url;
     url.setPath(path);
@@ -66,18 +69,29 @@ KPresenterSlideLoader::open(const QString& path)
     emit slidesChanged();
 }
 int
-KPresenterSlideLoader::numberOfSlides() {
-    return (m_doc) ?m_doc->pageCount() :0;
+KPresenterSlideLoader::numberOfSlides()
+{
+    return (m_doc) ? m_doc->pageCount() : 0;
 }
-QSize KPresenterSlideLoader::slideSize() {
-    if (!m_doc) return QSize();
-    KoPAPageBase* page = m_doc->pages().value(0);
-    if (!page) return QSize();
+QSize KPresenterSlideLoader::slideSize()
+{
+    if (!m_doc) {
+        return QSize();
+    }
+    KoPAPageBase *page = m_doc->pages().value(0);
+    if (!page) {
+        return QSize();
+    }
     return page->size().toSize();
 }
-QPixmap KPresenterSlideLoader::loadSlide(int number, const QSize& maxsize) {
-    if (!m_doc) return QPixmap();
-    KoPAPageBase* page = m_doc->pages().value(number);
-    if (!page) return QPixmap();
+QPixmap KPresenterSlideLoader::loadSlide(int number, const QSize &maxsize)
+{
+    if (!m_doc) {
+        return QPixmap();
+    }
+    KoPAPageBase *page = m_doc->pages().value(number);
+    if (!page) {
+        return QPixmap();
+    }
     return page->thumbnail(maxsize);
 }

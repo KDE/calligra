@@ -35,7 +35,6 @@
 #define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
 #endif
 
-
 KisPressureScatterOption::KisPressureScatterOption()
     : KisCurveOption(i18n("Scatter"), "Scatter", KisPaintOpOption::generalCategory(), false, 1.0, 0.0, 5.0)
 {
@@ -73,15 +72,14 @@ qreal KisPressureScatterOption::scatterAmount()
     return KisCurveOption::value();
 }
 
-
-void KisPressureScatterOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPressureScatterOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(SCATTER_X, m_axisX);
     setting->setProperty(SCATTER_Y, m_axisY);
 }
 
-void KisPressureScatterOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureScatterOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOption::readOptionSetting(setting);
     m_axisX = setting->getBool(SCATTER_X, true);
@@ -89,11 +87,12 @@ void KisPressureScatterOption::readOptionSetting(const KisPropertiesConfiguratio
 
     // backward compatibility: test for a "scatter amount" property
     //                         and use this value if it does exist
-    if (setting->hasProperty(SCATTER_AMOUNT) && !setting->hasProperty("ScatterValue"))
+    if (setting->hasProperty(SCATTER_AMOUNT) && !setting->hasProperty("ScatterValue")) {
         KisCurveOption::setValue(setting->getDouble(SCATTER_AMOUNT));
+    }
 }
 
-QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal width, qreal height) const
+QPointF KisPressureScatterOption::apply(const KisPaintInformation &info, qreal width, qreal height) const
 {
     if ((!m_axisX && !m_axisY) || (!isChecked())) {
         return info.pos();
@@ -117,8 +116,7 @@ QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal w
     if (m_axisX) {
         movement *= jitter;
         result = movement.toPointF();
-    }
-    else if (m_axisY) {
+    } else if (m_axisY) {
         QVector2D movementNormal(-movement.y(), movement.x());
         movementNormal *= jitter;
         result = movementNormal.toPointF();

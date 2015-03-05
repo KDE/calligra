@@ -28,7 +28,7 @@
 #include <KoTextRangeManager.h>
 #include <KoTextRange.h>
 
-AddTextRangeCommand::AddTextRangeCommand(KoTextRange * range, KUndo2Command *parent)
+AddTextRangeCommand::AddTextRangeCommand(KoTextRange *range, KUndo2Command *parent)
     : KUndo2Command(kundo2_noi18n("internal step"), parent)
     , m_range(range)
 {
@@ -45,7 +45,6 @@ void AddTextRangeCommand::redo()
     KUndo2Command::redo();
     m_range->manager()->insert(m_range);
 }
-
 
 AddTextRangeCommand::~AddTextRangeCommand()
 {

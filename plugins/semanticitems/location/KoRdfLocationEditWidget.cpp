@@ -28,16 +28,15 @@
 // KDE
 #include <kdebug.h>
 
-
 class KoRdfLocationEditWidgetPrivate
 {
 public:
 #ifdef CAN_USE_MARBLE
-    Marble::LatLonEdit* xlat;
-    Marble::LatLonEdit* xlong;
-    Marble::MarbleWidget* map;
+    Marble::LatLonEdit *xlat;
+    Marble::LatLonEdit *xlong;
+    Marble::MarbleWidget *map;
 #endif
-    };
+};
 
 KoRdfLocationEditWidget::KoRdfLocationEditWidget(QWidget *parent, Ui::KoRdfLocationEditWidget *ew)
     : QWidget(parent)
@@ -55,18 +54,17 @@ KoRdfLocationEditWidget::~KoRdfLocationEditWidget()
 void KoRdfLocationEditWidget::mouseMoveGeoPosition()
 {
     kDebug(30015) << "KoRdfLocationEditWidget::mouseMoveGeoPosition()";
-    if(d->map)
-    {
+    if (d->map) {
         kDebug(30015) << "lat:" << d->map->centerLatitude() << " long:" << d->map->centerLongitude();
 
-        d->xlat->setValue( d->map->centerLatitude());
+        d->xlat->setValue(d->map->centerLatitude());
         d->xlong->setValue(d->map->centerLongitude());
     }
 }
 
-void KoRdfLocationEditWidget::setupMap( Marble::MarbleWidget* _map,
-                                        Marble::LatLonEdit* _xlat,
-                                        Marble::LatLonEdit* _xlong)
+void KoRdfLocationEditWidget::setupMap(Marble::MarbleWidget *_map,
+                                       Marble::LatLonEdit *_xlat,
+                                       Marble::LatLonEdit *_xlong)
 {
     d->map   = _map;
     d->xlat  = _xlat;

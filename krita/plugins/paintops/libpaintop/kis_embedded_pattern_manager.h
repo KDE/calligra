@@ -24,12 +24,11 @@
 class KoPattern;
 class KisPropertiesConfiguration;
 
-
 class PAINTOP_EXPORT KisEmbeddedPatternManager
 {
 public:
-    static void saveEmbeddedPattern(KisPropertiesConfiguration* setting, const KoPattern *pattern);
-    static KoPattern* loadEmbeddedPattern(const KisPropertiesConfiguration* setting);
+    static void saveEmbeddedPattern(KisPropertiesConfiguration *setting, const KoPattern *pattern);
+    static KoPattern *loadEmbeddedPattern(const KisPropertiesConfiguration *setting);
 
 private:
     struct Private;

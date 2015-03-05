@@ -30,12 +30,12 @@ class KisConvolutionFilter : public KisFilter
 {
 
 public:
-    KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry);
+    KisConvolutionFilter(const KoID &id, const KoID &category, const QString &entry);
 public:
     void processImpl(KisPaintDeviceSP device,
-                     const QRect& applyRect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater) const;
+                     const QRect &applyRect,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater) const;
 protected:
     void setIgnoreAlpha(bool v);
 

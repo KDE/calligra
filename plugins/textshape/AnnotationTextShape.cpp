@@ -39,7 +39,7 @@
 #include <kdebug.h>
 
 AnnotationTextShape::AnnotationTextShape(KoInlineTextObjectManager *inlineTextObjectManager,
-                                         KoTextRangeManager *textRangeManager)
+        KoTextRangeManager *textRangeManager)
     : TextShape(inlineTextObjectManager, textRangeManager)
     , m_creator()
     , m_date()
@@ -64,14 +64,14 @@ void AnnotationTextShape::setAnnotaionTextData(KoTextShapeData *textShapeData)
 }
 
 void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,
-                                         KoShapePaintingContext &paintcontext)
+        KoShapePaintingContext &paintcontext)
 {
     if (paintcontext.showAnnotations) {
         TextShape::paintComponent(painter, converter, paintcontext);
         QRectF clipRect = outlineRect();
 
         // Paint creator and of creation of the annotation.
-        QPen peninfo (Qt::darkYellow);
+        QPen peninfo(Qt::darkYellow);
         QFont serifFont("Times", HeaderFontSize, QFont::Bold);
         painter.setPen(peninfo);
         painter.setFont(serifFont);
@@ -97,24 +97,21 @@ bool AnnotationTextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
 
         // Load the metadata (author, date) and contents here.
         KoXmlElement el;
-        forEachElement(el, element) {
+        forEachElement (el, element) {
             if (el.localName() == "creator" && el.namespaceURI() == KoXmlNS::dc) {
                 m_creator = el.text();
                 if (m_creator.isEmpty()) {
                     m_creator = "Unknown";
                 }
-            }
-            else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
+            } else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
                 m_date = el.text();
-            }
-            else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
+            } else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
                 m_dateString = el.text();
             }
         }
         textLoader.loadBody(element, cursor);
         //kDebug(31000) << "****** End Load ******";
-    }
-    else {
+    } else {
         // something pretty weird going on...
         return false;
     }

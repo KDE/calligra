@@ -65,7 +65,6 @@ protected:
 private:
     Q_DECLARE_PRIVATE(KoShapeBackground)
 
-
 };
 
 #endif // KOSHAPEBACKGROUND_H

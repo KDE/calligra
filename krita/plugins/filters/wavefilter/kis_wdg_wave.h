@@ -30,16 +30,17 @@ class KisWdgWave : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgWave(KisFilter* nfilter, QWidget* parent = 0);
+    KisWdgWave(KisFilter *nfilter, QWidget *parent = 0);
     ~KisWdgWave();
 public:
-    inline const Ui_WdgWaveOptions* widget() const {
+    inline const Ui_WdgWaveOptions *widget() const
+    {
         return m_widget;
     }
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration *);
+    virtual KisPropertiesConfiguration *configuration() const;
 private:
-    Ui_WdgWaveOptions* m_widget;
+    Ui_WdgWaveOptions *m_widget;
 };
 
 #endif

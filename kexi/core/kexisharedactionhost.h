@@ -55,20 +55,20 @@ class KEXICORE_EXPORT KexiSharedActionHost
 public:
 
     /*! Constructs host for main window \a mainWin. */
-    explicit KexiSharedActionHost(KexiMainWindowIface* mainWin);
+    explicit KexiSharedActionHost(KexiMainWindowIface *mainWin);
 
     virtual ~KexiSharedActionHost();
 
     /*! Performs lookup like in KexiSharedActionHost::focusWindow()
      but starting from \a w instead of a widget returned by QWidget::focusWidget().
      \return NULL if no widget matches acceptsSharedActions() or if \a w is NULL. */
-    virtual QWidget* findWindow(QWidget *w);
+    virtual QWidget *findWindow(QWidget *w);
 
     /*! \return window widget that is currently focused (using QWidget::focusWidget())
      and matches acceptsSharedActions(). If focused widget does not match,
      it's parent, grandparent, and so on is checked. If all this fails,
      or no widget has focus, 0 is returned. */
-    QWidget* focusWindow();
+    QWidget *focusWindow();
 
     /*! Sets this host as default shared actions host. */
     void setAsDefaultHost();
@@ -76,10 +76,10 @@ public:
     /*! \return default shared actions host, used when no host
      is explicitly specified for shared actions.
      There can be exactly one deault shared actions host. */
-    static KexiSharedActionHost* defaultHost();
+    static KexiSharedActionHost *defaultHost();
 
     /*! \return shared actions list. */
-    QList<KAction*> sharedActions() const;
+    QList<KAction *> sharedActions() const;
 
     /*! PROTOTYPE, DO NOT USE YET */
     void setActionVolatile(KAction *a, bool set);
@@ -98,17 +98,17 @@ protected:
      (e.g. when new window is activated). See how it is used in KexiMainWindow. */
     virtual void invalidateSharedActions(QObject *o);
 
-    void setActionAvailable(const QString& action_name, bool avail);
+    void setActionAvailable(const QString &action_name, bool avail);
 
     /*! Plugs shared actions proxy \a proxy for this host. */
     void plugActionProxy(KexiActionProxy *proxy);
 
     /*! Updates availability of action \a action_name for object \a obj.
      Object is mainly the window. */
-    void updateActionAvailable(const QString& action_name, bool avail, QObject *obj);
+    void updateActionAvailable(const QString &action_name, bool avail, QObject *obj);
 
     /*! \return main window for which this host is defined. */
-    KexiMainWindowIface* mainWindow() const;
+    KexiMainWindowIface *mainWindow() const;
 
     /*! Creates shared action using \a text, \a pix_name pixmap, shortcut \a cut,
      optional \a name. You can pass your own action collection as \a col.
@@ -116,32 +116,32 @@ protected:
      Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
      that subclass allocated instead just KAction (what is the default).
      Created action's data is owned by the main window. */
-    KAction* createSharedAction(const QString &text, const QString &iconName,
-                                const KShortcut &cut, const char *name, KActionCollection* col = 0,
+    KAction *createSharedAction(const QString &text, const QString &iconName,
+                                const KShortcut &cut, const char *name, KActionCollection *col = 0,
                                 const char *subclassName = 0);
 
     /*! Like above - creates shared action, but from standard action identified by \a id.
      Action's data is owned by the main window. */
-    KAction* createSharedAction(KStandardAction::StandardAction id, const char *name,
-                                KActionCollection* col = 0);
+    KAction *createSharedAction(KStandardAction::StandardAction id, const char *name,
+                                KActionCollection *col = 0);
 
     /*! Creates shared action with name \a name and shortcut \a cut
      by copying all properties of \a guiItem.
      If \a col action collection is null, main window's action will be used. */
-    KAction* createSharedAction(const KGuiItem& guiItem, const KShortcut &cut, const char *name,
-                                KActionCollection* col = 0);
+    KAction *createSharedAction(const KGuiItem &guiItem, const KShortcut &cut, const char *name,
+                                KActionCollection *col = 0);
 
     /*! \return action proxy for object \a o, or NULL if this object has
      no plugged shared actions. */
-    KexiActionProxy* actionProxyFor(QObject *o) const;
+    KexiActionProxy *actionProxyFor(QObject *o) const;
 
     /*! Like actionProxyFor(), but takes the proxy from the host completely.
      This is called by KExiActionProxy on its destruction. */
-    KexiActionProxy* takeActionProxyFor(QObject *o);
+    KexiActionProxy *takeActionProxyFor(QObject *o);
 
 private:
     /*! Helper function for createSharedAction(). */
-    KAction* createSharedActionInternal(KAction *action);
+    KAction *createSharedActionInternal(KAction *action);
 
     KexiSharedActionHostPrivate *d;
 

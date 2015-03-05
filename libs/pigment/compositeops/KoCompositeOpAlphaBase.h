@@ -32,7 +32,6 @@
 #define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::zeroValue
 #define NATIVE_ZERO_VALUE KoColorSpaceMathsTraits<channels_type>::zeroValue
 
-
 /**
  * A template base class for all composite op that compose color
  * channels values for colorspaces that have an alpha channel.
@@ -46,8 +45,9 @@ class KoCompositeOpAlphaBase : public KoCompositeOp
     typedef typename _CSTraits::channels_type channels_type;
 public:
 
-    KoCompositeOpAlphaBase(const KoColorSpace * cs, const QString& id, const QString& description, const QString& category)
-            : KoCompositeOp(cs, id, description, category) {
+    KoCompositeOpAlphaBase(const KoColorSpace *cs, const QString &id, const QString &description, const QString &category)
+        : KoCompositeOp(cs, id, description, category)
+    {
     }
 
 public:
@@ -63,7 +63,8 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 U8_opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray &channelFlags) const
+    {
 
         qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
 
@@ -89,7 +90,6 @@ public:
                 }
 
                 if (srcAlpha != NATIVE_OPACITY_TRANSPARENT) {
-
 
                     channels_type dstAlpha = _CSTraits::alpha_pos == -1 ? NATIVE_OPACITY_OPAQUE : dstN[_CSTraits::alpha_pos];
 
@@ -145,11 +145,10 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 U8_opacity,
-                   const QBitArray & channelFlags) const
+                   const QBitArray &channelFlags) const
     {
         bool allChannelFlags = channelFlags.isEmpty();
-        if(allChannelFlags)
-        {
+        if (allChannelFlags) {
             composite<alphaLocked, true>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
         } else {
             composite<alphaLocked, false>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
@@ -165,7 +164,7 @@ public:
                            qint32 rows,
                            qint32 cols,
                            quint8 U8_opacity,
-                           const QBitArray& channelFlags = QBitArray()) const
+                           const QBitArray &channelFlags = QBitArray()) const
     {
         bool alphaLocked = false;
         if (!channelFlags.isEmpty()) {
@@ -173,8 +172,7 @@ public:
                 alphaLocked = true;
             }
         }
-        if(alphaLocked)
-        {
+        if (alphaLocked) {
             composite<true>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
         } else {
             composite<false>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);

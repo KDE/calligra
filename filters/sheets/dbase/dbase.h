@@ -44,19 +44,22 @@ public:
     DBase();
     ~DBase();
 
-    QList<DBaseField*> fields;
+    QList<DBaseField *> fields;
 
-    bool load(const QString& filename);
+    bool load(const QString &filename);
     QStringList readRecord(unsigned recno);
     void close();
 
-    unsigned recordCount() {
+    unsigned recordCount()
+    {
         return m_recordCount;
     }
-    int version() {
+    int version()
+    {
         return m_version;
     }
-    QDate lastUpdate() {
+    QDate lastUpdate()
+    {
         return m_lastUpdate;
     }
 

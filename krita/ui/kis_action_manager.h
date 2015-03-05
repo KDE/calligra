@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_ACTION_MANAGER_H
 #define KIS_ACTION_MANAGER_H
 
@@ -42,24 +41,24 @@ class KRITAUI_EXPORT KisActionManager
 {
 
 public:
-    KisActionManager(KisViewManager* viewManager);
+    KisActionManager(KisViewManager *viewManager);
     virtual ~KisActionManager();
 
     void setView(QPointer<KisView> imageView);
-    
-    void addAction(const QString& name, KisAction* action);
-    void takeAction(KisAction* action);
+
+    void addAction(const QString &name, KisAction *action);
+    void takeAction(KisAction *action);
 
     KisAction *actionByName(const QString &name) const;
 
-    void registerOperationUIFactory(KisOperationUIFactory* factory);
+    void registerOperationUIFactory(KisOperationUIFactory *factory);
 
-    void registerOperation(KisOperation* operation);
+    void registerOperation(KisOperation *operation);
 
     void runOperation(const QString &id);
 
-    void runOperationFromConfiguration(KisOperationConfiguration* config);
-    
+    void runOperationFromConfiguration(KisOperationConfiguration *config);
+
     void updateGUI();
 
     /// Create a KisAction based on a KStandardAction. The KStandardAction is deleted.
@@ -70,7 +69,7 @@ private:
     void dumpActionFlags();
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KIS_ACTION_MANAGER_H

@@ -175,7 +175,7 @@ KoFilter::ConversionStatus read_blipFill(blipFillCaller caller);
 KoFilter::ConversionStatus read_txSp();
 
 //! Convert attributes of Text Run Properties to ODF equivalents.
-void handleRprAttributes(const QXmlStreamAttributes& attrs);
+void handleRprAttributes(const QXmlStreamAttributes &attrs);
 
 // ----------------------------------------
 // MSOOXML_CURRENT_NS == DRAWINGML_NS
@@ -195,7 +195,7 @@ KoFilter::ConversionStatus read_avLst();
 KoFilter::ConversionStatus read_gd();
 KoFilter::ConversionStatus read_effectLst();
 KoFilter::ConversionStatus read_outerShdw();
-KoFilter::ConversionStatus lvlHelper(const QString& level);
+KoFilter::ConversionStatus lvlHelper(const QString &level);
 KoFilter::ConversionStatus read_lvl1pPr();
 KoFilter::ConversionStatus read_lvl2pPr();
 KoFilter::ConversionStatus read_lvl3pPr();
@@ -228,10 +228,10 @@ KoFilter::ConversionStatus read_spAutoFit();
 //! Inherit default body properties
 void inheritDefaultBodyProperties();
 
-void algnToODF(const char *odfEl, const QString& emuValue);
+void algnToODF(const char *odfEl, const QString &emuValue);
 
 //! Sets the fo:margin-* attribute of graphic-properties for read_anchor().
-void distToODF(const char *odfEl, const QString& emuValue);
+void distToODF(const char *odfEl, const QString &emuValue);
 
 // ----------------------------------------
 // MSOOXML_CURRENT_NS == (DRAWINGML_NS || DRAWINGML_TXBODY_NS)

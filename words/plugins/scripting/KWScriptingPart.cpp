@@ -28,8 +28,8 @@
 K_PLUGIN_FACTORY(WordsScriptingFactory, registerPlugin<KWScriptingPart>();)
 K_EXPORT_PLUGIN(WordsScriptingFactory("krossmodulewords"))
 
-KWScriptingPart::KWScriptingPart(QObject* parent, const QVariantList& args)
-        : KoScriptingPart(new Scripting::Module(parent))
+KWScriptingPart::KWScriptingPart(QObject *parent, const QVariantList &args)
+    : KoScriptingPart(new Scripting::Module(parent))
 {
     Q_UNUSED(args);
     setComponentData(KWScriptingPart::componentData());

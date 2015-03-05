@@ -23,13 +23,11 @@
 #include "kis_color_selector_base.h"
 #include "kis_display_color_converter.h"
 
-
 /************* KisColorSelectorBaseProxy *******************************/
 
 KisColorSelectorBaseProxy::~KisColorSelectorBaseProxy()
 {
 }
-
 
 /************* KisColorSelectorBaseProxyNoop ***************************/
 
@@ -41,16 +39,15 @@ KisColorSelectorBaseProxyNoop::~KisColorSelectorBaseProxyNoop()
 {
 }
 
-const KoColorSpace* KisColorSelectorBaseProxyNoop::colorSpace() const
+const KoColorSpace *KisColorSelectorBaseProxyNoop::colorSpace() const
 {
     return KoColorSpaceRegistry::instance()->rgb8();
 }
 
-KisDisplayColorConverter* KisColorSelectorBaseProxyNoop::converter() const
+KisDisplayColorConverter *KisColorSelectorBaseProxyNoop::converter() const
 {
     return KisDisplayColorConverter::dumbConverterInstance();
 }
-
 
 /************* KisColorSelectorBaseProxyObject *************************/
 
@@ -59,7 +56,7 @@ KisColorSelectorBaseProxyObject::KisColorSelectorBaseProxyObject(KisColorSelecto
 {
 }
 
-const KoColorSpace* KisColorSelectorBaseProxyObject::colorSpace() const
+const KoColorSpace *KisColorSelectorBaseProxyObject::colorSpace() const
 {
     return m_parent->colorSpace();
 }
@@ -79,7 +76,7 @@ void KisColorSelectorBaseProxyObject::updateColor(const KoColor &color, Acs::Col
     m_parent->updateColor(color, role, needsExplicitColorReset);
 }
 
-KisDisplayColorConverter* KisColorSelectorBaseProxyObject::converter() const
+KisDisplayColorConverter *KisColorSelectorBaseProxyObject::converter() const
 {
     return m_parent->converter();
 }

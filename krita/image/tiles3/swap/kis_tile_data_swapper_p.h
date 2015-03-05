@@ -21,7 +21,6 @@
 #include "kis_image_config.h"
 #include "tiles3/kis_tile_data.h"
 
-
 /*
        Limits Diagram
   +------------------------+  <-- out of memory
@@ -55,11 +54,11 @@
 
  */
 
-
 class KisStoreLimits
 {
 public:
-    KisStoreLimits() {
+    KisStoreLimits()
+    {
         KisImageConfig config;
 
         m_emergencyThreshold = MiB_TO_METRIC(config.tilesHardLimit());
@@ -75,23 +74,28 @@ public:
      * These methods return the "metric" of the size
      */
 
-    inline qint32 emergencyThreshold() {
+    inline qint32 emergencyThreshold()
+    {
         return m_emergencyThreshold;
     }
 
-    inline qint32 hardLimitThreshold() {
+    inline qint32 hardLimitThreshold()
+    {
         return m_hardLimitThreshold;
     }
 
-    inline qint32 hardLimit() {
+    inline qint32 hardLimit()
+    {
         return m_hardLimit;
     }
 
-    inline qint32 softLimitThreshold() {
+    inline qint32 softLimitThreshold()
+    {
         return m_softLimitThreshold;
     }
 
-    inline qint32 softLimit() {
+    inline qint32 softLimit()
+    {
         return m_softLimit;
     }
 
@@ -102,9 +106,6 @@ private:
     qint32 m_softLimitThreshold;
     qint32 m_softLimit;
 };
-
-
-
 
 #endif /* KIS_TILE_DATA_SWAPPER_P_H_ */
 

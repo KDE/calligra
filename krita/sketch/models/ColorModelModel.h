@@ -31,18 +31,18 @@ public:
         TextRole = Qt::UserRole + 1,
     };
 
-    ColorModelModel(QObject* parent = 0);
+    ColorModelModel(QObject *parent = 0);
     ~ColorModelModel();
 
-    virtual int rowCount(const QModelIndex& parent) const;
-    virtual QVariant data(const QModelIndex& index, int role) const;
+    virtual int rowCount(const QModelIndex &parent) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
 
     Q_INVOKABLE QString id(int index);
-    Q_INVOKABLE int indexOf(const QString& id);
+    Q_INVOKABLE int indexOf(const QString &id);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // COLORMODELMODEL_H

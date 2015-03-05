@@ -22,22 +22,24 @@ template <class T, class R>
 class ResourceTreeIteratorT : public virtual T
 {
 public:
-    ResourceTreeIteratorT(R* r, IterationMode m = leavesOnly)
+    ResourceTreeIteratorT(R *r, IterationMode m = leavesOnly)
         : T(r, m) { }
     virtual ~ResourceTreeIteratorT() { }
 
-    R* operator*() { return static_cast<R*>(T::current); }
-    R* operator++()
+    R *operator*()
     {
-        return static_cast<R*>(T::operator++());
+        return static_cast<R *>(T::current);
     }
-} ;
+    R *operator++()
+    {
+        return static_cast<R *>(T::operator++());
+    }
+};
 
 typedef ResourceTreeIteratorT<CoreAttributesTreeIterator, Resource>
-    ResourceTreeIterator;
+ResourceTreeIterator;
 typedef ResourceTreeIteratorT<ConstCoreAttributesTreeIterator, const Resource>
-    ConstResourceTreeIterator;
-
+ConstResourceTreeIterator;
 
 } // namespace TJ
 

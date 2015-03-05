@@ -22,12 +22,11 @@
 
 #include "kis_dummies_facade.h"
 
-
 KisDummiesFacadeTest::~KisDummiesFacadeTest()
 {
 }
 
-KisDummiesFacadeBase* KisDummiesFacadeTest::dummiesFacadeFactory()
+KisDummiesFacadeBase *KisDummiesFacadeTest::dummiesFacadeFactory()
 {
     return new KisDummiesFacade();
 }

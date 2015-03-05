@@ -26,19 +26,19 @@
 
 #include "kis_bspline_p.h"
 
-namespace KisBSplines {
-
-struct KisBSpline2D::Private
+namespace KisBSplines
 {
+
+struct KisBSpline2D::Private {
     BorderCondition bcX;
     BorderCondition bcY;
 
-    UBspline_2d_s* spline;
+    UBspline_2d_s *spline;
 };
 
 KisBSpline2D::KisBSpline2D(float xStart, float xEnd, int numSamplesX, BorderCondition bcX,
                            float yStart, float yEnd, int numSamplesY, BorderCondition bcY)
-  : m_d(new Private)
+    : m_d(new Private)
 {
     m_xStart = xStart;
     m_xEnd = xEnd;
@@ -82,7 +82,7 @@ void KisBSpline2D::initializeSplineImpl(const QVector<float> &values)
     m_d->spline =
         create_UBspline_2d_s(xGrid, yGrid,
                              bctypeX, bctypeY,
-                             const_cast<float*>(values.constData()));
+                             const_cast<float *>(values.constData()));
 }
 
 float KisBSpline2D::value(float x, float y) const
@@ -104,7 +104,7 @@ float KisBSpline2D::value(float x, float y) const
     KIS_ASSERT_RECOVER_NOOP(y >= m_yStart && y < m_yEnd);
 
     float value;
-    eval_UBspline_2d_s (m_d->spline, x, y, &value);
+    eval_UBspline_2d_s(m_d->spline, x, y, &value);
 
     return value;
 }

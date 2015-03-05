@@ -27,8 +27,8 @@
 
 //! @short A db-aware check box
 class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox,
-                                            public KexiFormDataItemInterface,
-                                            public KFormDesigner::FormWidgetInterface
+    public KexiFormDataItemInterface,
+    public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
@@ -40,14 +40,16 @@ public:
     explicit KexiDBCheckBox(const QString &text, QWidget *parent = 0);
     virtual ~KexiDBCheckBox();
 
-    inline QString dataSource() const {
+    inline QString dataSource() const
+    {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePartClass() const
+    {
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
     virtual QVariant value();
-    virtual void setInvalidState(const QString& displayText);
+    virtual void setInvalidState(const QString &displayText);
 
     //! \return true if editor's value is null (not empty)
     //! Used for checking if a given constraint within table of form is met.
@@ -63,7 +65,7 @@ public:
     virtual bool isReadOnly() const;
 
     /*! \return the view widget of this item, e.g. line edit widget. */
-    virtual QWidget* widget();
+    virtual QWidget *widget();
 
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
@@ -77,13 +79,14 @@ public:
     Tristate isTristate() const;
 
     /*! Reimplemented after KexiFormDataItemInterface. */
-    virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+    virtual void setDisplayDefaultValue(QWidget *widget, bool displayDefaultValue);
 
-    virtual void paintEvent(QPaintEvent* e);
+    virtual void paintEvent(QPaintEvent *e);
 
 public Q_SLOTS:
     void setDataSource(const QString &ds);
-    inline void setDataSourcePartClass(const QString &ds) {
+    inline void setDataSourcePartClass(const QString &ds)
+    {
         KexiFormDataItemInterface::setDataSourcePartClass(ds);
     }
     void slotStateChanged(int state);
@@ -92,7 +95,7 @@ public Q_SLOTS:
     virtual void setReadOnly(bool readOnly);
 
 protected:
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
 
     //! \return true in isTristate() == TristateDefault and the widget has bound data source
     //! or if isTristate() == TristateOn, else false is returned.

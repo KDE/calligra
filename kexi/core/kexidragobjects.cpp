@@ -31,7 +31,7 @@ bool KexiFieldDrag::canDecode(QMimeSource *e)
     return e->provides("kexi/fields");
 }
 
-bool KexiFieldDrag::decode(QDropEvent* e, QString *sourceMimeType,
+bool KexiFieldDrag::decode(QDropEvent *e, QString *sourceMimeType,
                            QString *sourceName, QStringList *fields)
 {
     Q_ASSERT(sourceMimeType);
@@ -54,9 +54,9 @@ bool KexiFieldDrag::decode(QDropEvent* e, QString *sourceMimeType,
 
 // ----------
 
-KexiDataProviderDrag::KexiDataProviderDrag(const QString& sourceMimeType, const QString& sourceName,
+KexiDataProviderDrag::KexiDataProviderDrag(const QString &sourceMimeType, const QString &sourceName,
         QWidget *parent)
-        : QDrag(parent)
+    : QDrag(parent)
 {
     QMimeData *mimedata = new QMimeData();
     QByteArray data;
@@ -76,7 +76,7 @@ bool KexiDataProviderDrag::canDecode(QDragMoveEvent *e)
     return e->provides("kexi/dataprovider");
 }
 
-bool KexiDataProviderDrag::decode(QDropEvent* e, QString* sourceMimeType, QString *sourceName)
+bool KexiDataProviderDrag::decode(QDropEvent *e, QString *sourceMimeType, QString *sourceName)
 {
     Q_ASSERT(sourceMimeType);
     Q_ASSERT(sourceName);

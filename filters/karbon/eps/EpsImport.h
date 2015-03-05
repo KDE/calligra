@@ -30,10 +30,10 @@ class EpsImport : public KoFilter
     Q_OBJECT
 
 public:
-    EpsImport(QObject* parent, const QVariantList&);
+    EpsImport(QObject *parent, const QVariantList &);
     virtual ~EpsImport();
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif

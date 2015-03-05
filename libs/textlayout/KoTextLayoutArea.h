@@ -212,17 +212,17 @@ private:
 
     void drawUnderlines(QPainter *painter, const QTextCharFormat &currentCharFormat, const QString &text, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
 
-    int decorateTabsAndFormatting(QPainter *painter, const QTextFragment& currentFragment, const QTextLine &line, const int startOfFragmentInBlock, const QVariantList& tabList, int currentTabStop, bool showFormattingCharacter);
+    int decorateTabsAndFormatting(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, const int startOfFragmentInBlock, const QVariantList &tabList, int currentTabStop, bool showFormattingCharacter);
 
     void decorateListLabel(QPainter *painter, const KoTextBlockData &blockData, const QTextLine &listLabelLine, const QTextBlock &listItem);
 
     void handleBordersAndSpacing(KoTextBlockData &blockData, QTextBlock *block);
 
-    void decorateParagraphSections(QPainter* painter, QTextBlock& block);
+    void decorateParagraphSections(QPainter *painter, QTextBlock &block);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

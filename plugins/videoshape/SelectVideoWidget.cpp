@@ -58,7 +58,6 @@ void SelectVideoWidget::cancel()
     m_fileWidget->slotCancel();
 }
 
-
 KUrl SelectVideoWidget::selectedUrl() const
 {
     return m_fileWidget->selectedUrl();

@@ -44,7 +44,7 @@ KisMathToolbox::~KisMathToolbox()
 {
 }
 
-KisMathToolboxRegistry * KisMathToolboxRegistry::instance()
+KisMathToolboxRegistry *KisMathToolboxRegistry::instance()
 {
     K_GLOBAL_STATIC(KisMathToolboxRegistry, s_instance);
     return s_instance;
@@ -57,49 +57,51 @@ KisMathToolboxRegistry::KisMathToolboxRegistry()
 
 KisMathToolboxRegistry::~KisMathToolboxRegistry()
 {
-    foreach(const QString &id, keys()) {
+    foreach (const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "Deleting KisMathToolboxRegistry";
 }
 
 template<typename T>
-inline double toDouble(const quint8* data, int channelpos)
+inline double toDouble(const quint8 *data, int channelpos)
 {
-    return (double)(*((T*)(data + channelpos)));
+    return (double)(*((T *)(data + channelpos)));
 }
 
 template<typename T>
-void fromDouble(quint8* data, int channelpos, double v)
+void fromDouble(quint8 *data, int channelpos, double v)
 {
-    *((T*)(data + channelpos)) = (T)qRound(v);
+    *((T *)(data + channelpos)) = (T)qRound(v);
 }
 
 template<typename T>
-void fromDoubleF(quint8* data, int channelpos, double v)
+void fromDoubleF(quint8 *data, int channelpos, double v)
 {
-    *((T*)(data + channelpos)) = (T)v;
+    *((T *)(data + channelpos)) = (T)v;
 }
 
-void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation* fr, const QRect& rect)
+void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation *fr, const QRect &rect)
 {
     qint32 depth = src->colorSpace()->colorChannelCount();
     QList<KoChannelInfo *> cis = src->colorSpace()->channels();
     // remove non-color channels
     for (qint32 c = 0; c < cis.count(); ++c) {
-        if (cis[c]->channelType() != KoChannelInfo::COLOR)
+        if (cis[c]->channelType() != KoChannelInfo::COLOR) {
             cis.removeAt(c--);
+        }
     }
     QVector<PtrToDouble> f(depth);
-    if (!getToDoubleChannelPtr(cis, f))
+    if (!getToDoubleChannelPtr(cis, f)) {
         return;
+    }
 
     KisHLineConstIteratorSP srcIt = src->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
 
     for (int i = rect.y(); i < rect.height(); i++) {
         float *dstIt = fr->coeffs + (i - rect.y()) * fr->size * fr->depth;
         do {
-            const quint8* v1 = srcIt->oldRawData();
+            const quint8 *v1 = srcIt->oldRawData();
             for (int k = 0; k < depth; k++) {
                 *dstIt = f[k](v1, cis[k]->pos());
                 ++dstIt;
@@ -109,7 +111,7 @@ void KisMathToolbox::transformToFR(KisPaintDeviceSP src, KisFloatRepresentation*
     }
 }
 
-bool KisMathToolbox::getToDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrToDouble>& f)
+bool KisMathToolbox::getToDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrToDouble> &f)
 {
     qint32 channels = cis.count();
 
@@ -144,35 +146,37 @@ bool KisMathToolbox::getToDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<P
     return true;
 }
 
-void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentation* fr, const QRect& rect)
+void KisMathToolbox::transformFromFR(KisPaintDeviceSP dst, KisFloatRepresentation *fr, const QRect &rect)
 {
     qint32 depth = dst->colorSpace()->colorChannelCount();
     QList<KoChannelInfo *> cis = dst->colorSpace()->channels();
     // remove non-color channels
     for (qint32 c = 0; c < cis.count(); ++c) {
-        if (cis[c]->channelType() != KoChannelInfo::COLOR)
+        if (cis[c]->channelType() != KoChannelInfo::COLOR) {
             cis.removeAt(c--);
+        }
     }
 
     QVector<PtrFromDouble> f(depth);
-    if (!getFromDoubleChannelPtr(cis, f))
+    if (!getFromDoubleChannelPtr(cis, f)) {
         return;
+    }
 
     KisHLineIteratorSP dstIt = dst->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
     for (int i = rect.y(); i < rect.height(); i++) {
         float *srcIt = fr->coeffs + (i - rect.y()) * fr->size * fr->depth;
         do {
-            quint8* v1 = dstIt->rawData();
+            quint8 *v1 = dstIt->rawData();
             for (int k = 0; k < depth; k++) {
                 f[k](v1, cis[k]->pos(), *srcIt);
                 ++srcIt;
             }
-        } while(dstIt->nextPixel());
+        } while (dstIt->nextPixel());
         dstIt->nextRow();
     }
 }
 
-bool KisMathToolbox::getFromDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrFromDouble>& f)
+bool KisMathToolbox::getFromDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector<PtrFromDouble> &f)
 {
     qint32 channels = cis.count();
 
@@ -209,14 +213,13 @@ bool KisMathToolbox::getFromDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector
 
 double KisMathToolbox::minChannelValue(KoChannelInfo *c)
 {
-    switch (c->channelValueType())
-    {
+    switch (c->channelValueType()) {
     case KoChannelInfo::UINT8 : return KoColorSpaceMathsTraits<quint8>::min;
     case KoChannelInfo::UINT16 : return KoColorSpaceMathsTraits<quint16>::min;
     case KoChannelInfo::UINT32 : return KoColorSpaceMathsTraits<quint32>::min;
-    #ifdef HAVE_OPENEXR
+#ifdef HAVE_OPENEXR
     case KoChannelInfo::FLOAT16 : return KoColorSpaceMathsTraits<half>::min;
-    #endif
+#endif
     case KoChannelInfo::FLOAT32 : return KoColorSpaceMathsTraits<float>::min;
     case KoChannelInfo::FLOAT64 : return KoColorSpaceMathsTraits<double>::min;
     case KoChannelInfo::INT8 : return 127;
@@ -227,14 +230,13 @@ double KisMathToolbox::minChannelValue(KoChannelInfo *c)
 
 double KisMathToolbox::maxChannelValue(KoChannelInfo *c)
 {
-    switch (c->channelValueType())
-    {
+    switch (c->channelValueType()) {
     case KoChannelInfo::UINT8 : return KoColorSpaceMathsTraits<quint8>::max;
     case KoChannelInfo::UINT16 : return KoColorSpaceMathsTraits<quint16>::max;
     case KoChannelInfo::UINT32 : return KoColorSpaceMathsTraits<quint32>::max;
-    #ifdef HAVE_OPENEXR
+#ifdef HAVE_OPENEXR
     case KoChannelInfo::FLOAT16 : return KoColorSpaceMathsTraits<half>::max;
-    #endif
+#endif
     case KoChannelInfo::FLOAT32 : return KoColorSpaceMathsTraits<float>::max;
     case KoChannelInfo::FLOAT64 : return KoColorSpaceMathsTraits<double>::max;
     case KoChannelInfo::INT8 : return -128;

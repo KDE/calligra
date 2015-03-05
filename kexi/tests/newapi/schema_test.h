@@ -28,15 +28,17 @@ int schemaTest()
     }
 
     KexiDB::TableSchema *t = conn->tableSchema("persons");
-    if (t)
+    if (t) {
         t->debug();
-    else
+    } else {
         kDebug() << "!persons";
+    }
     t = conn->tableSchema("cars");
-    if (t)
+    if (t) {
         t->debug();
-    else
+    } else {
         kDebug() << "!cars";
+    }
     /*
     // some tests
       {

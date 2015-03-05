@@ -51,7 +51,6 @@ struct KoToolButton {
     QString visibilityCode; ///< This button should become visible when we emit this string in toolCodesSelected()
 };
 
-
 /**
  * This class manages the activation and deactivation of tools for
  * each input device.
@@ -112,7 +111,7 @@ class FLAKE_EXPORT KoToolManager : public QObject
 
 public:
     /// Return the toolmanager singleton
-    static KoToolManager* instance();
+    static KoToolManager *instance();
     ~KoToolManager();
 
     /**
@@ -183,7 +182,7 @@ public:
      * @returns the toolId for the shapes.
      * @param shapes a list of shapes, a selection for example, that is used to look for the tool.
      */
-    QString preferredToolForSelection(const QList<KoShape*> &shapes);
+    QString preferredToolForSelection(const QList<KoShape *> &shapes);
 
     /**
      * Create a list of buttons to represent all the tools.
@@ -213,7 +212,6 @@ public Q_SLOTS:
      * @param id the id of the tool
      */
     void switchToolRequested(const QString &id);
-
 
     /**
      * a new tool has become known to mankind
@@ -284,18 +282,18 @@ Q_SIGNALS:
 
 private:
     KoToolManager();
-    KoToolManager(const KoToolManager&);
-    KoToolManager operator=(const KoToolManager&);
+    KoToolManager(const KoToolManager &);
+    KoToolManager operator=(const KoToolManager &);
 
     Q_PRIVATE_SLOT(d, void toolActivated(ToolHelper *tool))
     Q_PRIVATE_SLOT(d, void detachCanvas(KoCanvasController *controller))
     Q_PRIVATE_SLOT(d, void attachCanvas(KoCanvasController *controller))
     Q_PRIVATE_SLOT(d, void movedFocus(QWidget *from, QWidget *to))
     Q_PRIVATE_SLOT(d, void updateCursor(const QCursor &cursor))
-    Q_PRIVATE_SLOT(d, void selectionChanged(QList<KoShape*> shapes))
+    Q_PRIVATE_SLOT(d, void selectionChanged(QList<KoShape *> shapes))
     Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))
 
-    QPair<QString, KoToolBase*> createTools(KoCanvasController *controller, ToolHelper *tool);
+    QPair<QString, KoToolBase *> createTools(KoCanvasController *controller, ToolHelper *tool);
 
     Private *const d;
 };

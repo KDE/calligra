@@ -26,52 +26,52 @@
 class KoColor;
 class KoColorDisplayRendererInterface;
 
-
-class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
+class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget
+{
     Q_OBJECT
-    public:
-        explicit KoTriangleColorSelector(QWidget *parent);
-        explicit KoTriangleColorSelector(const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent);
-        ~KoTriangleColorSelector();
-    protected: // events
-        void paintEvent( QPaintEvent * event );
-        void resizeEvent( QResizeEvent * event );
-        void mouseReleaseEvent( QMouseEvent * event );
-        void mousePressEvent( QMouseEvent * event );
-        void mouseMoveEvent( QMouseEvent * event );
-    public:
-        int hue() const;
-        int value() const;
-        int saturation() const;
-        KoColor realColor() const;
+public:
+    explicit KoTriangleColorSelector(QWidget *parent);
+    explicit KoTriangleColorSelector(const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent);
+    ~KoTriangleColorSelector();
+protected: // events
+    void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+public:
+    int hue() const;
+    int value() const;
+    int saturation() const;
+    KoColor realColor() const;
 
-        // please use realColor() instead!
-        KDE_DEPRECATED QColor color() const;
+    // please use realColor() instead!
+    KDE_DEPRECATED QColor color() const;
 
-    public Q_SLOTS:
-        void setHue(int h);
-        void setValue(int v);
-        void setSaturation(int s);
-        void setHSV(int h, int s, int v);
+public Q_SLOTS:
+    void setHue(int h);
+    void setValue(int v);
+    void setSaturation(int s);
+    void setHSV(int h, int s, int v);
 
-        // please use setRealColor() instead!
-        KDE_DEPRECATED void setQColor(const QColor& );
+    // please use setRealColor() instead!
+    KDE_DEPRECATED void setQColor(const QColor &);
 
-        void setRealColor(const KoColor& );
-    Q_SIGNALS:
-        void colorChanged(const QColor& );
-        void realColorChanged(const KoColor& );
-    private Q_SLOTS:
-        void configurationChanged();
-    private:
-        void tellColorChanged();
-        void generateTriangle();
-        void generateWheel();
-        void updateTriangleCircleParameters();
-        void selectColorAt(int x, int y, bool checkInWheel = true);
-    private:
-        struct Private;
-        Private* const d;
+    void setRealColor(const KoColor &);
+Q_SIGNALS:
+    void colorChanged(const QColor &);
+    void realColorChanged(const KoColor &);
+private Q_SLOTS:
+    void configurationChanged();
+private:
+    void tellColorChanged();
+    void generateTriangle();
+    void generateWheel();
+    void updateTriangleCircleParameters();
+    void selectColorAt(int x, int y, bool checkInWheel = true);
+private:
+    struct Private;
+    Private *const d;
 };
 
 #endif

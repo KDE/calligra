@@ -42,7 +42,7 @@ class KisImportCatcher : QObject
 
 public:
 
-    KisImportCatcher(const KUrl & url, KisViewManager* view, const QString &layerType);
+    KisImportCatcher(const KUrl &url, KisViewManager *view, const QString &layerType);
     ~KisImportCatcher();
 
 private Q_SLOTS:
@@ -54,7 +54,7 @@ private:
 private:
 
     struct Private;
-    Private* const m_d;
+    Private *const m_d;
 };
 
 #endif

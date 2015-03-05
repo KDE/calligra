@@ -65,7 +65,7 @@ public:
     KoTextEditor *q;
     QTextCursor caret;
     QTextDocument *document;
-    QStack<KUndo2Command*> commandStack;
+    QStack<KUndo2Command *> commandStack;
     bool addNewCommand;
     bool dummyMacroAdded;
     int customCommandCount;
@@ -110,9 +110,18 @@ public:
         }
     }
 
-    bool abortVisiting() { return m_abortVisiting;}
-    void setAbortVisiting(bool abort) {m_abortVisiting = abort;}
-    KoTextEditor * editor() const {return m_editor;}
+    bool abortVisiting()
+    {
+        return m_abortVisiting;
+    }
+    void setAbortVisiting(bool abort)
+    {
+        m_abortVisiting = abort;
+    }
+    KoTextEditor *editor() const
+    {
+        return m_editor;
+    }
 private:
     bool m_abortVisiting;
     KoTextEditor *m_editor;
@@ -126,13 +135,15 @@ public:
 
     virtual void visit(QTextBlock &block) const = 0;
 
-    static void visitSelection(KoTextEditor *editor, const BlockFormatVisitor &visitor, const KUndo2MagicString &title = kundo2_i18n("Format"), bool resetProperties = false, bool registerChange = true) {
+    static void visitSelection(KoTextEditor *editor, const BlockFormatVisitor &visitor, const KUndo2MagicString &title = kundo2_i18n("Format"), bool resetProperties = false, bool registerChange = true)
+    {
         int start = qMin(editor->position(), editor->anchor());
         int end = qMax(editor->position(), editor->anchor());
 
         QTextBlock block = editor->block();
-        if (block.position() > start)
+        if (block.position() > start) {
             block = block.document()->findBlock(start);
+        }
 
         // now loop over all blocks that the selection contains and alter the text fragments where applicable.
         while (block.isValid() && block.position() <= end) {
@@ -140,15 +151,17 @@ public:
             if (resetProperties) {
                 if (KoTextDocument(editor->document()).styleManager()) {
                     KoParagraphStyle *old = KoTextDocument(editor->document()).styleManager()->paragraphStyle(block.blockFormat().intProperty(KoParagraphStyle::StyleId));
-                    if (old)
+                    if (old) {
                         old->unapplyStyle(block);
+                    }
                 }
             }
             visitor.visit(block);
             QTextCursor cursor(block);
             QTextBlockFormat format = cursor.blockFormat();
-            if (registerChange)
+            if (registerChange) {
                 editor->registerTrackedChange(cursor, KoGenChange::FormatChange, title, format, prevFormat, true);
+            }
             block = block.next();
         }
     }
@@ -162,7 +175,8 @@ public:
 
     virtual void visit(QTextCharFormat &format) const = 0;
 
-    static void visitSelection(KoTextEditor *editor, const CharFormatVisitor &visitor, const KUndo2MagicString &title = kundo2_i18n("Format"), bool registerChange = true) {
+    static void visitSelection(KoTextEditor *editor, const CharFormatVisitor &visitor, const KUndo2MagicString &title = kundo2_i18n("Format"), bool registerChange = true)
+    {
         int start = qMin(editor->position(), editor->anchor());
         int end = qMax(editor->position(), editor->anchor());
         if (start == end) { // just set a new one.
@@ -172,7 +186,7 @@ public:
             if (registerChange && KoTextDocument(editor->document()).changeTracker() && KoTextDocument(editor->document()).changeTracker()->recordChanges()) {
                 QTextCharFormat prevFormat(editor->charFormat());
 
-                int changeId = KoTextDocument(editor->document()).changeTracker()->getFormatChangeId(title, format, prevFormat, editor->charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                int changeId = KoTextDocument(editor->document()).changeTracker()->getFormatChangeId(title, format, prevFormat, editor->charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt());
                 format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
             }
 
@@ -181,8 +195,9 @@ public:
         }
 
         QTextBlock block = editor->block();
-        if (block.position() > start)
+        if (block.position() > start) {
             block = block.document()->findBlock(start);
+        }
 
         QList<QTextCursor> cursors;
         QList<QTextCharFormat> formats;
@@ -191,8 +206,9 @@ public:
             QTextBlock::iterator iter = block.begin();
             while (! iter.atEnd()) {
                 QTextFragment fragment = iter.fragment();
-                if (fragment.position() > end)
+                if (fragment.position() > end) {
                     break;
+                }
                 if (fragment.position() + fragment.length() <= start) {
                     ++iter;
                     continue;
@@ -206,7 +222,7 @@ public:
                 if (registerChange && KoTextDocument(editor->document()).changeTracker() && KoTextDocument(editor->document()).changeTracker()->recordChanges()) {
                     QTextCharFormat prevFormat(cursor.charFormat());
 
-                    int changeId = KoTextDocument(editor->document()).changeTracker()->getFormatChangeId(title, format, prevFormat, cursor.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                    int changeId = KoTextDocument(editor->document()).changeTracker()->getFormatChangeId(title, format, prevFormat, cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt());
                     format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
                 }
 
@@ -217,15 +233,16 @@ public:
                 formats.append(format);
 
                 QTextCharFormat prevFormat(cursor.charFormat());
-                if (registerChange)
-                    editor->registerTrackedChange(cursor,KoGenChange::FormatChange,title, format, prevFormat, false); //this will lead to every fragment having a different change untill the change merging in registerTrackedChange checks also for formatChange or not?
+                if (registerChange) {
+                    editor->registerTrackedChange(cursor, KoGenChange::FormatChange, title, format, prevFormat, false);    //this will lead to every fragment having a different change untill the change merging in registerTrackedChange checks also for formatChange or not?
+                }
 
                 ++iter;
             }
             block = block.next();
         }
         QList<QTextCharFormat>::Iterator iter = formats.begin();
-        foreach(QTextCursor cursor, cursors) {
+        foreach (QTextCursor cursor, cursors) {
             cursor.setCharFormat(*iter);
             ++iter;
         }

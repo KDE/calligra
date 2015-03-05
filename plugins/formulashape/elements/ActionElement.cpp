@@ -19,7 +19,7 @@
 
 #include "ActionElement.h"
 
-ActionElement::ActionElement( BasicElement* parent ) : RowElement( parent )
+ActionElement::ActionElement(BasicElement *parent) : RowElement(parent)
 {
 }
 

@@ -18,20 +18,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KOUNAVAILSHAPE_H
 #define KOUNAVAILSHAPE_H
-
 
 // Calligra
 #include <KoFrameShape.h>
 #include <KoShapeContainer.h>
 
-
 class QPainter;
 
 #define KoUnavailShape_SHAPEID "UnavailShapeID"
-
 
 /**
  * The KoUnavailShape is a frame shape that takes care of all frame
@@ -49,7 +45,8 @@ class QPainter;
  * The KoUnavailShape always has to be present, and is the only shape
  * that is not implemented as a plugin.
  */
-class KoUnavailShape : public KoFrameShape, public KoShapeContainer {
+class KoUnavailShape : public KoFrameShape, public KoShapeContainer
+{
 public:
     KoUnavailShape();
     virtual ~KoUnavailShape();
@@ -61,16 +58,16 @@ public:
     /// reimplemented from KoShapeContainer
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
     /// reimplemented
-    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void saveOdf(KoShapeSavingContext &context) const;
     /// reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     /// Load the real contents of the frame shape.
-    virtual bool loadOdfFrameElement(const KoXmlElement& frameElement,
-                                     KoShapeLoadingContext& context);
+    virtual bool loadOdfFrameElement(const KoXmlElement &frameElement,
+                                     KoShapeLoadingContext &context);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

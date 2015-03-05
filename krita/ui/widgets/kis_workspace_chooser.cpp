@@ -43,22 +43,24 @@
 class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
 public:
-    KisWorkspaceDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
+    KisWorkspaceDelegate(QObject *parent = 0) : QAbstractItemDelegate(parent) {}
     virtual ~KisWorkspaceDelegate() {}
     /// reimplemented
     virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &) const
+    {
         return option.decorationSize;
     }
 };
 
-void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void KisWorkspaceDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return;
+    }
 
-    KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(index.internalPointer());
+    KisWorkspaceResource *workspace = static_cast<KisWorkspaceResource *>(index.internalPointer());
 
     QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled) ? QPalette::Active : QPalette::Disabled;
     QPalette::ColorRole cr = (option.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text;
@@ -66,19 +68,17 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
 
     if (option.state & QStyle::State_Selected) {
         painter->fillRect(option.rect, option.palette.highlight());
-    }
-    else {
+    } else {
         painter->fillRect(option.rect, option.palette.base());
     }
-
 
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, workspace->name());
 
 }
 
-KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent): QWidget(parent), m_view(view)
+KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager *view, QWidget *parent): QWidget(parent), m_view(view)
 {
-    KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer(false);
+    KoResourceServer<KisWorkspaceResource> *rserver = KisResourceServerProvider::instance()->workspaceServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
@@ -89,14 +89,14 @@ KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent)
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
 
-    QPushButton* saveButton = new QPushButton(i18n("Save"));
+    QPushButton *saveButton = new QPushButton(i18n("Save"));
     connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));
 
     m_nameEdit = new KLineEdit(this);
     m_nameEdit->setClickMessage(i18n("Insert name"));
     m_nameEdit->setClearButtonShown(true);
 
-    QGridLayout* layout = new QGridLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(m_itemChooser, 0, 0, 1, 2);
     layout->addWidget(m_nameEdit, 1, 0, 1, 1);
     layout->addWidget(saveButton, 1, 1, 1, 1);
@@ -112,9 +112,9 @@ void KisWorkspaceChooser::slotSave()
     if (!m_view->qtMainWindow()) {
         return;
     }
-    KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
+    KoResourceServer<KisWorkspaceResource> *rserver = KisResourceServerProvider::instance()->workspaceServer();
 
-    KisWorkspaceResource* workspace = new KisWorkspaceResource("");
+    KisWorkspaceResource *workspace = new KisWorkspaceResource("");
     workspace->setDockerState(m_view->qtMainWindow()->saveState());
     m_view->resourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);
@@ -122,7 +122,7 @@ void KisWorkspaceChooser::slotSave()
     QString name = m_nameEdit->text();
 
     bool newName = false;
-    if(name.isEmpty()) {
+    if (name.isEmpty()) {
         newName = true;
         name = i18n("Workspace");
     }
@@ -134,34 +134,33 @@ void KisWorkspaceChooser::slotSave()
         i++;
     }
     workspace->setFilename(fileInfo.filePath());
-    if(newName) {
+    if (newName) {
         name = i18n("Workspace %1", i);
     }
     workspace->setName(name);
     rserver->addResource(workspace);
 }
 
-void KisWorkspaceChooser::resourceSelected(KoResource* resource)
+void KisWorkspaceChooser::resourceSelected(KoResource *resource)
 {
     if (!m_view->qtMainWindow()) {
         return;
     }
-    KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
+    KisWorkspaceResource *workspace = static_cast<KisWorkspaceResource *>(resource);
 
     QMap<QDockWidget *, bool> dockWidgetMap;
-    foreach(QDockWidget *docker, m_view->mainWindow()->dockWidgets()) {
+    foreach (QDockWidget *docker, m_view->mainWindow()->dockWidgets()) {
         dockWidgetMap[docker] = docker->property("Locked").toBool();
     }
 
     m_view->qtMainWindow()->restoreState(workspace->dockerState());
     m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
 
-    foreach(QDockWidget *docker, dockWidgetMap.keys()) {
+    foreach (QDockWidget *docker, dockWidgetMap.keys()) {
         if (docker->isVisible()) {
             docker->setProperty("Locked", dockWidgetMap[docker]);
             docker->updateGeometry();
-        }
-        else {
+        } else {
             docker->setProperty("Locked", false); // Unlock invisible dockers
             docker->toggleViewAction()->setEnabled(true);
         }

@@ -50,14 +50,14 @@ public:
     void deactivate(int shortcut);
 
     void begin(int shortcut, QEvent *event = 0);
-    void inputEvent(QEvent* event);
+    void inputEvent(QEvent *event);
     void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 
     virtual bool isShortcutRequired(int shortcut) const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KIS_ZOOM_ACTION_H

@@ -41,9 +41,9 @@
 
 using namespace Calligra::Sheets;
 
-ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
-        , m_selection(selection)
+ShowDialog::ShowDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent)
+    , m_selection(selection)
 {
     setCaption(i18n("Show Sheet"));
     setModal(true);
@@ -66,8 +66,9 @@ ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
     QStringList::Iterator it;
     QStringList tabsList = m_selection->activeSheet()->map()->hiddenSheets();
     m_listWidget->addItems(tabsList);
-    if (!m_listWidget->count())
+    if (!m_listWidget->count()) {
         enableButtonOk(false);
+    }
     connect(m_listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
             this, SLOT(accept()));
     resize(200, 150);
@@ -84,11 +85,12 @@ void ShowDialog::accept()
 
     Map *const map = m_selection->activeSheet()->map();
     Sheet *sheet;
-    KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Show Sheet"));
+    KUndo2Command *macroCommand = new KUndo2Command(kundo2_i18n("Show Sheet"));
     for (int i = 0; i < items.count(); ++i) {
         sheet = map->findSheet(items[i]->text());
-        if (!sheet)
+        if (!sheet) {
             continue;
+        }
         new ShowSheetCommand(sheet, macroCommand);
     }
     map->addCommand(macroCommand);

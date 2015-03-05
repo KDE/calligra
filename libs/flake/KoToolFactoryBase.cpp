@@ -27,8 +27,8 @@ class KoToolFactoryBase::Private
 {
 public:
     Private(const QString &i)
-            : priority(100),
-            id(i)
+        : priority(100),
+          id(i)
     {
     }
     int priority;
@@ -40,9 +40,8 @@ public:
     KShortcut shortcut;
 };
 
-
 KoToolFactoryBase::KoToolFactoryBase(const QString &id)
-        : d(new Private(id))
+    : d(new Private(id))
 {
 }
 
@@ -91,12 +90,12 @@ void KoToolFactoryBase::setActivationShapeId(const QString &activationShapeId)
     d->activationId = activationShapeId;
 }
 
-void KoToolFactoryBase::setToolTip(const QString & tooltip)
+void KoToolFactoryBase::setToolTip(const QString &tooltip)
 {
     d->tooltip = tooltip;
 }
 
-void KoToolFactoryBase::setToolType(const QString & toolType)
+void KoToolFactoryBase::setToolType(const QString &toolType)
 {
     d->toolType = toolType;
 }
@@ -116,7 +115,7 @@ void KoToolFactoryBase::setPriority(int newPriority)
     d->priority = newPriority;
 }
 
-void KoToolFactoryBase::setShortcut(const KShortcut & shortcut)
+void KoToolFactoryBase::setShortcut(const KShortcut &shortcut)
 {
     d->shortcut = shortcut;
 }

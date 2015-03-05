@@ -28,28 +28,29 @@
 #include <qtest_kde.h>
 #include <kdebug.h>
 
-namespace KPlato {
+namespace KPlato
+{
 
 void CommandsTester::initTestCase()
 {
     m_project = new Project();
-    m_project->setId( m_project->uniqueNodeId() );
+    m_project->setId(m_project->uniqueNodeId());
     m_project->registerNodeId(m_project); //->rootTask());
     // standard worktime defines 8 hour day as default
-    QVERIFY( m_project->standardWorktime() );
-    QCOMPARE( m_project->standardWorktime()->day(), 8.0 );
-/*    m_calendar = new Calendar();
-    m_calendar->setDefault( true );
-    QTime t1( 9, 0, 0 );
-    QTime t2 ( 17, 0, 0 );
-    int length = t1.msecsTo( t2 );
-    for ( int i=1; i <= 7; ++i ) {
-        CalendarDay *d = m_calendar->weekday( i );
-        d->setState( CalendarDay::Working );
-        d->addInterval( t1, length );
-    }
-    m_project->addCalendar( m_calendar );
-*/
+    QVERIFY(m_project->standardWorktime());
+    QCOMPARE(m_project->standardWorktime()->day(), 8.0);
+    /*    m_calendar = new Calendar();
+        m_calendar->setDefault( true );
+        QTime t1( 9, 0, 0 );
+        QTime t2 ( 17, 0, 0 );
+        int length = t1.msecsTo( t2 );
+        for ( int i=1; i <= 7; ++i ) {
+            CalendarDay *d = m_calendar->weekday( i );
+            d->setState( CalendarDay::Working );
+            d->addInterval( t1, length );
+        }
+        m_project->addCalendar( m_calendar );
+    */
 }
 
 void CommandsTester::cleanupTestCase()
@@ -269,7 +270,7 @@ void CommandsTester::testCalendarAddDayCmd()
 void CommandsTester::testCalendarRemoveDayCmd()
 {
     Calendar *calendar1 = new Calendar();
-    CalendarDay *day1 = new CalendarDay(QDate(1974,12,19));
+    CalendarDay *day1 = new CalendarDay(QDate(1974, 12, 19));
     calendar1->addDay(day1);
     m_project->addCalendar(calendar1);
     QVERIFY(m_project->calendarCount() == 1);
@@ -298,8 +299,8 @@ void CommandsTester::testCalendarRemoveDayCmd()
 void CommandsTester::testCalendarModifyDayCmd()
 {
     Calendar *calendar1 = new Calendar();
-    CalendarDay *day1 = new CalendarDay(QDate(1974,12,19));
-    CalendarDay *day2 = new CalendarDay(QDate(2011,03,11));
+    CalendarDay *day1 = new CalendarDay(QDate(1974, 12, 19));
+    CalendarDay *day2 = new CalendarDay(QDate(2011, 03, 11));
     calendar1->addDay(day1);
     m_project->addCalendar(calendar1);
     QVERIFY(m_project->calendarCount() == 1);
@@ -322,11 +323,11 @@ void CommandsTester::testCalendarModifyDayCmd()
 void CommandsTester::testCalendarModifyStateCmd()
 {
     Calendar *calendar1 = new Calendar();
-    CalendarDay *day1 = new CalendarDay(QDate(1974,12,19));
+    CalendarDay *day1 = new CalendarDay(QDate(1974, 12, 19));
     day1->setState(CalendarDay::Working);
     calendar1->addDay(day1);
-    CalendarDay *day2 = new CalendarDay(QDate(2011,03,26));
-    TimeInterval *interval1 = new TimeInterval(QTime(8,0), 8);
+    CalendarDay *day2 = new CalendarDay(QDate(2011, 03, 26));
+    TimeInterval *interval1 = new TimeInterval(QTime(8, 0), 8);
     day2->addInterval(interval1);
     day2->setState(CalendarDay::Working);
     calendar1->addDay(day2);
@@ -366,24 +367,24 @@ void CommandsTester::testCalendarModifyStateCmd()
 void CommandsTester::testCalendarModifyTimeIntervalCmd()
 {
     Calendar *calendar1 = new Calendar();
-    CalendarDay *day1 = new CalendarDay(QDate(1974,12,19));
-    TimeInterval *interval1 = new TimeInterval(QTime(8,0), 3600000);
-    TimeInterval *interval2 = new TimeInterval(QTime(12,0),7200000);
+    CalendarDay *day1 = new CalendarDay(QDate(1974, 12, 19));
+    TimeInterval *interval1 = new TimeInterval(QTime(8, 0), 3600000);
+    TimeInterval *interval2 = new TimeInterval(QTime(12, 0), 7200000);
     day1->addInterval(interval1);
     calendar1->addDay(day1);
     m_project->addCalendar(calendar1);
     QVERIFY(m_project->calendarCount() == 1);
     QVERIFY(calendar1->days().contains(day1));
     QVERIFY(day1->timeIntervals().contains(interval1));
-    QVERIFY(interval1->startTime() == QTime(8,0));
+    QVERIFY(interval1->startTime() == QTime(8, 0));
     QVERIFY(interval1->hours() == 1);
 
     CalendarModifyTimeIntervalCmd *cmd1 = new CalendarModifyTimeIntervalCmd(calendar1, *interval2, interval1);
     cmd1->execute();
-    QVERIFY(interval1->startTime() == QTime(12,0));
+    QVERIFY(interval1->startTime() == QTime(12, 0));
     QVERIFY(interval1->hours() == 2);
     cmd1->unexecute();
-    QVERIFY(interval1->startTime() == QTime(8,0));
+    QVERIFY(interval1->startTime() == QTime(8, 0));
     QVERIFY(interval1->hours() == 1);
 
     day1->clearIntervals();
@@ -399,8 +400,8 @@ void CommandsTester::testCalendarModifyTimeIntervalCmd()
 void CommandsTester::testCalendarAddTimeIntervalCmd()
 {
     Calendar *calendar1 = new Calendar();
-    CalendarDay *day1 = new CalendarDay(QDate(1974,12,19));
-    TimeInterval *interval1 = new TimeInterval(QTime(8,0), 3600000);
+    CalendarDay *day1 = new CalendarDay(QDate(1974, 12, 19));
+    TimeInterval *interval1 = new TimeInterval(QTime(8, 0), 3600000);
     calendar1->addDay(day1);
     m_project->addCalendar(calendar1);
     QVERIFY(m_project->calendarCount() == 1);
@@ -422,8 +423,8 @@ void CommandsTester::testCalendarAddTimeIntervalCmd()
 void CommandsTester::testCalendarRemoveTimeIntervalCmd()
 {
     Calendar *calendar1 = new Calendar();
-    CalendarDay *day1 = new CalendarDay(QDate(1974,12,19));
-    TimeInterval *interval1 = new TimeInterval(QTime(8,0), 3600000);
+    CalendarDay *day1 = new CalendarDay(QDate(1974, 12, 19));
+    TimeInterval *interval1 = new TimeInterval(QTime(8, 0), 3600000);
     calendar1->addDay(day1);
     calendar1->addWorkInterval(day1, interval1);
     m_project->addCalendar(calendar1);
@@ -449,12 +450,12 @@ void CommandsTester::testCalendarRemoveTimeIntervalCmd()
 void CommandsTester::testCalendarModifyWeekdayCmd()
 {
     Calendar *calendar1 = new Calendar();
-    CalendarDay *day1 = new CalendarDay(QDate(1974,12,19));
-    TimeInterval *interval1 = new TimeInterval(QTime(8,0), 3600000);
+    CalendarDay *day1 = new CalendarDay(QDate(1974, 12, 19));
+    TimeInterval *interval1 = new TimeInterval(QTime(8, 0), 3600000);
     day1->setState(CalendarDay::Working);
     day1->addInterval(interval1);
-    CalendarDay *day2 = new CalendarDay(QDate(2011,3,26));
-    TimeInterval *interval2 = new TimeInterval(QTime(12,0), 7200000);
+    CalendarDay *day2 = new CalendarDay(QDate(2011, 3, 26));
+    TimeInterval *interval2 = new TimeInterval(QTime(12, 0), 7200000);
     day2->setState(CalendarDay::NonWorking);
     day2->addInterval(interval2);
     m_project->addCalendar(calendar1);
@@ -487,18 +488,18 @@ void CommandsTester::testCalendarModifyWeekdayCmd()
 void CommandsTester::testCalendarModifyDateCmd()
 {
     Calendar *calendar1 = new Calendar();
-    CalendarDay *day1 = new CalendarDay(QDate(1974,12,19));
+    CalendarDay *day1 = new CalendarDay(QDate(1974, 12, 19));
     calendar1->addDay(day1);
     m_project->addCalendar(calendar1);
     QVERIFY(m_project->calendarCount() == 1);
     QVERIFY(calendar1->days().contains(day1));
-    QVERIFY(day1->date() == QDate(1974,12,19));
+    QVERIFY(day1->date() == QDate(1974, 12, 19));
 
-    CalendarModifyDateCmd *cmd1 = new CalendarModifyDateCmd(calendar1, day1, QDate(2011,3,26));
+    CalendarModifyDateCmd *cmd1 = new CalendarModifyDateCmd(calendar1, day1, QDate(2011, 3, 26));
     cmd1->execute();
-    QVERIFY(day1->date() == QDate(2011,3,26));
+    QVERIFY(day1->date() == QDate(2011, 3, 26));
     cmd1->unexecute();
-    QVERIFY(day1->date() == QDate(1974,12,19));
+    QVERIFY(day1->date() == QDate(1974, 12, 19));
 
     calendar1->takeDay(day1);
     m_project->takeCalendar(calendar1);
@@ -532,7 +533,7 @@ void CommandsTester::testProjectModifyDefaultCalendarCmd()
 }
 } // namespace KPlato
 
-QTEST_KDEMAIN_CORE( KPlato::CommandsTester)
+QTEST_KDEMAIN_CORE(KPlato::CommandsTester)
 
 #include "CommandsTester.moc"
 

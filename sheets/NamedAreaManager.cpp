@@ -50,19 +50,19 @@ using namespace Calligra::Sheets;
 
 struct NamedArea {
     QString name;
-    Sheet* sheet;
+    Sheet *sheet;
     QRect range;
 };
 
 class NamedAreaManager::Private
 {
 public:
-    const Map* map;
+    const Map *map;
     QHash<QString, NamedArea> namedAreas;
 };
 
-NamedAreaManager::NamedAreaManager(const Map* map)
-        : d(new Private)
+NamedAreaManager::NamedAreaManager(const Map *map)
+    : d(new Private)
 {
     d->map = map;
     connect(this, SIGNAL(namedAreaAdded(QString)),
@@ -76,7 +76,7 @@ NamedAreaManager::~NamedAreaManager()
     delete d;
 }
 
-void NamedAreaManager::insert(const Region& region, const QString& name)
+void NamedAreaManager::insert(const Region &region, const QString &name)
 {
     // NOTE Stefan: Only contiguous regions are supported (OpenDocument compatibility).
     Q_ASSERT(!name.isEmpty());
@@ -89,18 +89,19 @@ void NamedAreaManager::insert(const Region& region, const QString& name)
     emit namedAreaAdded(name);
 }
 
-void NamedAreaManager::remove(const QString& name)
+void NamedAreaManager::remove(const QString &name)
 {
-    if (!d->namedAreas.contains(name))
+    if (!d->namedAreas.contains(name)) {
         return;
+    }
     NamedArea namedArea = d->namedAreas.value(name);
     namedArea.sheet->cellStorage()->removeNamedArea(Region(namedArea.range, namedArea.sheet), name);
     d->namedAreas.remove(name);
     emit namedAreaRemoved(name);
-    const QList<Sheet*> sheets = namedArea.sheet->map()->sheetList();
-    foreach(Sheet* sheet, sheets) {
+    const QList<Sheet *> sheets = namedArea.sheet->map()->sheetList();
+    foreach (Sheet *sheet, sheets) {
         const QString tmp = '\'' + name + '\'';
-        const FormulaStorage* const storage = sheet->formulaStorage();
+        const FormulaStorage *const storage = sheet->formulaStorage();
         for (int c = 0; c < storage->count(); ++c) {
             if (storage->data(c).expression().contains(tmp)) {
                 Cell(sheet, storage->col(c), storage->row(c)).makeFormula();
@@ -109,31 +110,34 @@ void NamedAreaManager::remove(const QString& name)
     }
 }
 
-void NamedAreaManager::remove(Sheet* sheet)
+void NamedAreaManager::remove(Sheet *sheet)
 {
     const QList<NamedArea> namedAreas = d->namedAreas.values();
     for (int i = 0; i < namedAreas.count(); ++i) {
-        if (namedAreas[i].sheet == sheet)
+        if (namedAreas[i].sheet == sheet) {
             remove(namedAreas[i].name);
+        }
     }
 }
 
-Calligra::Sheets::Region NamedAreaManager::namedArea(const QString& name) const
+Calligra::Sheets::Region NamedAreaManager::namedArea(const QString &name) const
 {
-    if (!d->namedAreas.contains(name))
+    if (!d->namedAreas.contains(name)) {
         return Region();
+    }
     const NamedArea namedArea = d->namedAreas.value(name);
     return Region(namedArea.range, namedArea.sheet);
 }
 
-Sheet* NamedAreaManager::sheet(const QString& name) const
+Sheet *NamedAreaManager::sheet(const QString &name) const
 {
-    if (!d->namedAreas.contains(name))
+    if (!d->namedAreas.contains(name)) {
         return 0;
+    }
     return d->namedAreas.value(name).sheet;
 }
 
-bool NamedAreaManager::contains(const QString& name) const
+bool NamedAreaManager::contains(const QString &name) const
 {
     return d->namedAreas.contains(name);
 }
@@ -143,9 +147,9 @@ QList<QString> NamedAreaManager::areaNames() const
     return d->namedAreas.keys();
 }
 
-void NamedAreaManager::regionChanged(const Region& region)
+void NamedAreaManager::regionChanged(const Region &region)
 {
-    Sheet* sheet;
+    Sheet *sheet;
     QList< QPair<QRectF, QString> > namedAreas;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
@@ -163,7 +167,7 @@ void NamedAreaManager::updateAllNamedAreas()
 {
     QList< QPair<QRectF, QString> > namedAreas;
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
-    const QList<Sheet*> sheets = d->map->sheetList();
+    const QList<Sheet *> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {
         namedAreas = sheets[i]->cellStorage()->namedAreas(Region(rect, sheets[i]));
         for (int j = 0; j < namedAreas.count(); ++j) {
@@ -174,32 +178,35 @@ void NamedAreaManager::updateAllNamedAreas()
     }
 }
 
-void NamedAreaManager::loadOdf(const KoXmlElement& body)
+void NamedAreaManager::loadOdf(const KoXmlElement &body)
 {
     KoXmlNode namedAreas = KoXml::namedItemNS(body, KoXmlNS::table, "named-expressions");
     if (!namedAreas.isNull()) {
         kDebug(36003) << "Loading named areas...";
         KoXmlElement element;
-        forEachElement(element, namedAreas) {
-            if (element.namespaceURI() != KoXmlNS::table)
+        forEachElement (element, namedAreas) {
+            if (element.namespaceURI() != KoXmlNS::table) {
                 continue;
+            }
             if (element.localName() == "named-range") {
-                if (!element.hasAttributeNS(KoXmlNS::table, "name"))
+                if (!element.hasAttributeNS(KoXmlNS::table, "name")) {
                     continue;
-                if (!element.hasAttributeNS(KoXmlNS::table, "cell-range-address"))
+                }
+                if (!element.hasAttributeNS(KoXmlNS::table, "cell-range-address")) {
                     continue;
+                }
 
                 // TODO: what is: table:base-cell-address
                 const QString base = element.attributeNS(KoXmlNS::table, "base-cell-address", QString());
 
                 // Handle the case where the table:base-cell-address does contain the referenced sheetname
                 // while it's missing in the table:cell-range-address. See bug #194386 for an example.
-                Sheet* fallbackSheet = 0;
+                Sheet *fallbackSheet = 0;
                 if (!base.isEmpty()) {
                     Region region(Region::loadOdf(base), d->map);
                     fallbackSheet = region.lastSheet();
                 }
-                
+
                 const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
                 const QString range = element.attributeNS(KoXmlNS::table, "cell-range-address", QString());
                 kDebug(36003) << "Named area found, name:" << name << ", area:" << range;
@@ -219,10 +226,11 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
     }
 }
 
-void NamedAreaManager::saveOdf(KoXmlWriter& xmlWriter) const
+void NamedAreaManager::saveOdf(KoXmlWriter &xmlWriter) const
 {
-    if (d->namedAreas.isEmpty())
+    if (d->namedAreas.isEmpty()) {
         return;
+    }
     Region region;
     xmlWriter.startElement("table:named-expressions");
     const QList<NamedArea> namedAreas = d->namedAreas.values();
@@ -237,12 +245,12 @@ void NamedAreaManager::saveOdf(KoXmlWriter& xmlWriter) const
     xmlWriter.endElement();
 }
 
-void NamedAreaManager::loadXML(const KoXmlElement& parent)
+void NamedAreaManager::loadXML(const KoXmlElement &parent)
 {
     KoXmlElement element;
-    forEachElement(element, parent) {
+    forEachElement (element, parent) {
         if (element.tagName() == "reference") {
-            Sheet* sheet = 0;
+            Sheet *sheet = 0;
             QString tabname;
             QString refname;
             int left = 0;
@@ -250,31 +258,38 @@ void NamedAreaManager::loadXML(const KoXmlElement& parent)
             int top = 0;
             int bottom = 0;
             KoXmlElement sheetName = element.namedItem("tabname").toElement();
-            if (!sheetName.isNull())
+            if (!sheetName.isNull()) {
                 sheet = d->map->findSheet(sheetName.text());
-            if (!sheet)
+            }
+            if (!sheet) {
                 continue;
+            }
             KoXmlElement referenceName = element.namedItem("refname").toElement();
-            if (!referenceName.isNull())
+            if (!referenceName.isNull()) {
                 refname = referenceName.text();
+            }
             KoXmlElement rect = element.namedItem("rect").toElement();
             if (!rect.isNull()) {
                 bool ok;
-                if (rect.hasAttribute("left-rect"))
+                if (rect.hasAttribute("left-rect")) {
                     left = rect.attribute("left-rect").toInt(&ok);
-                if (rect.hasAttribute("right-rect"))
+                }
+                if (rect.hasAttribute("right-rect")) {
                     right = rect.attribute("right-rect").toInt(&ok);
-                if (rect.hasAttribute("top-rect"))
+                }
+                if (rect.hasAttribute("top-rect")) {
                     top = rect.attribute("top-rect").toInt(&ok);
-                if (rect.hasAttribute("bottom-rect"))
+                }
+                if (rect.hasAttribute("bottom-rect")) {
                     bottom = rect.attribute("bottom-rect").toInt(&ok);
+                }
             }
             insert(Region(QRect(QPoint(left, top), QPoint(right, bottom)), sheet), refname);
         }
     }
 }
 
-QDomElement NamedAreaManager::saveXML(QDomDocument& doc) const
+QDomElement NamedAreaManager::saveXML(QDomDocument &doc) const
 {
     QDomElement element = doc.createElement("areaname");
     const QList<NamedArea> namedAreas = d->namedAreas.values();

@@ -27,8 +27,7 @@
 #include "kis_smudge_radius_option.h"
 #include <kis_curve_option_widget.h>
 
-
-KisSmudgeRadiusOptionWidget::KisSmudgeRadiusOptionWidget(const QString& label, const QString& /*sliderLabel*/, const QString& name, bool checked):
+KisSmudgeRadiusOptionWidget::KisSmudgeRadiusOptionWidget(const QString &label, const QString & /*sliderLabel*/, const QString &name, bool checked):
     KisCurveOptionWidget(new KisSmudgeRadiusOption(name, label, checked))
 {
     KisCurveOptionWidget::setConfigurationPage(curveWidget());

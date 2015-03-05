@@ -36,7 +36,7 @@ public:
 using namespace KexiPart;
 
 DataSource::DataSource(Part *part)
-        : d(new DataSourcePrivate())
+    : d(new DataSourcePrivate())
 {
     d->part = part;
 }
@@ -46,7 +46,7 @@ DataSource::~DataSource()
     delete d;
 }
 
-Part* DataSource::part() const
+Part *DataSource::part() const
 {
     return d->part;
 }

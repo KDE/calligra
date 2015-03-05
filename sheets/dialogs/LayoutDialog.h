@@ -102,32 +102,40 @@ class PatternSelect : public QFrame
 public:
     PatternSelect(QWidget *parent, const char *_name);
 
-    void setPenStyle(Qt::PenStyle _pat) {
+    void setPenStyle(Qt::PenStyle _pat)
+    {
         penStyle = _pat; repaint();
     }
-    Qt::PenStyle getPenStyle() {
+    Qt::PenStyle getPenStyle()
+    {
         return penStyle;
     }
-    void setColor(const QColor &_col) {
+    void setColor(const QColor &_col)
+    {
         penColor = _col; repaint();
     }
-    const QColor& getColor() {
+    const QColor &getColor()
+    {
         return penColor;
     }
-    void setPenWidth(int _w) {
+    void setPenWidth(int _w)
+    {
         penWidth = _w; repaint();
     }
-    int getPenWidth() {
+    int getPenWidth()
+    {
         return penWidth;
     }
 
     void setPattern(const QColor &_color, int _width, Qt::PenStyle _style);
     void setUndefined();
-    void setDefined() {
+    void setDefined()
+    {
         undefined = false; repaint();
     }
 
-    bool isDefined() {
+    bool isDefined()
+    {
         return !undefined;
     }
 
@@ -160,26 +168,26 @@ class GeneralTab : public QWidget
     Q_OBJECT
 
 public:
-    GeneralTab(QWidget * parent, CellFormatDialog * _dlg);
+    GeneralTab(QWidget *parent, CellFormatDialog *_dlg);
     ~GeneralTab();
 
-    bool apply(CustomStyle * style);
+    bool apply(CustomStyle *style);
 
 protected Q_SLOTS:
-    void parentChanged(const QString&);
-    void styleNameChanged(const QString&);
+    void parentChanged(const QString &);
+    void styleNameChanged(const QString &);
 
 private:
-    CellFormatDialog * m_dlg;
-    KComboBox     * m_parentBox;
-    KLineEdit     * m_nameEdit;
-    QLabel        * m_nameStatus;
-    QLabel        * m_parentStatus;
+    CellFormatDialog *m_dlg;
+    KComboBox      *m_parentBox;
+    KLineEdit      *m_nameEdit;
+    QLabel         *m_nameStatus;
+    QLabel         *m_parentStatus;
 
     QString m_name;
     QString m_parent;
 
-    bool checkParent(const QString & parentName);
+    bool checkParent(const QString &parentName);
     bool checkName();
 };
 
@@ -191,9 +199,9 @@ class CellFormatPageFont : public QWidget, public Ui::FontWidget
 {
     Q_OBJECT
 public:
-    CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg);
+    CellFormatPageFont(QWidget *parent, CellFormatDialog *_dlg);
 
-    void apply(CustomStyle * style);
+    void apply(CustomStyle *style);
     void apply(StyleCommand *_obj);
 
 Q_SIGNALS:
@@ -233,7 +241,7 @@ class CellFormatPageFloat : public QWidget
     Q_OBJECT
 public:
     CellFormatPageFloat(QWidget *parent, CellFormatDialog *_dlg);
-    void apply(CustomStyle * style);
+    void apply(CustomStyle *style);
     void apply(StyleCommand *_obj);
 
 public Q_SLOTS:
@@ -246,9 +254,9 @@ public Q_SLOTS:
     void formatChanged(int);
     void currencyChanged(const QString &);
 protected:
-    KLineEdit* postfix;
-    KIntNumInput* precision;
-    KLineEdit* prefix;
+    KLineEdit *postfix;
+    KIntNumInput *precision;
+    KLineEdit *prefix;
     KComboBox *format;
     KComboBox *currency;
     QLabel    *currencyLabel;
@@ -264,7 +272,7 @@ protected:
     QRadioButton *textFormat;
     QRadioButton *customFormat;
     QListWidget  *listFormat;
-    KLineEdit* customFormatEdit;
+    KLineEdit *customFormatEdit;
     QLabel *exampleLabel;
     CellFormatDialog *dlg;
     Format::Type cellFormatType, newFormatType;
@@ -283,7 +291,7 @@ class CellFormatPagePosition : public QWidget, public Ui::PositionWidget
 public:
     CellFormatPagePosition(QWidget *parent, CellFormatDialog *_dlg);
 
-    void apply(CustomStyle * style);
+    void apply(CustomStyle *style);
     void apply(StyleCommand *_obj);
 
     double getSizeHeight() const;
@@ -307,8 +315,6 @@ protected:
     bool m_bOptionText;
 };
 
-
-
 /**
  * \ingroup UI
  * The cell border preview.
@@ -320,10 +326,10 @@ public:
     Border(QWidget *parent, const char *_name, bool _oneCol, bool _oneRow);
 Q_SIGNALS:
     void redraw();
-    void choosearea(QMouseEvent * _ev);
+    void choosearea(QMouseEvent *_ev);
 protected:
     virtual void paintEvent(QPaintEvent *_ev);
-    virtual void mousePressEvent(QMouseEvent* _ev);
+    virtual void mousePressEvent(QMouseEvent *_ev);
     bool oneCol;
     bool oneRow;
 };
@@ -337,28 +343,36 @@ class BorderButton : public QPushButton
     Q_OBJECT
 public:
     BorderButton(QWidget *parent, const char *_name);
-    void setPenStyle(Qt::PenStyle _pat) {
+    void setPenStyle(Qt::PenStyle _pat)
+    {
         penStyle = _pat;
     }
-    Qt::PenStyle getPenStyle() {
+    Qt::PenStyle getPenStyle()
+    {
         return penStyle;
     }
-    void setColor(const QColor &_col) {
+    void setColor(const QColor &_col)
+    {
         penColor = _col;
     }
-    const QColor& getColor() {
+    const QColor &getColor()
+    {
         return penColor;
     }
-    void setPenWidth(int _w) {
+    void setPenWidth(int _w)
+    {
         penWidth = _w;
     }
-    int getPenWidth() {
+    int getPenWidth()
+    {
         return penWidth;
     }
-    bool isChanged() {
+    bool isChanged()
+    {
         return changed;
     }
-    void setChanged(bool _changed) {
+    void setChanged(bool _changed)
+    {
         changed = _changed;
     }
     void setUndefined();
@@ -384,7 +398,7 @@ class CellFormatPageBorder : public QWidget
 public:
     CellFormatPageBorder(QWidget *parent, CellFormatDialog *_dlg);
 
-    void apply(StyleCommand* obj);
+    void apply(StyleCommand *obj);
     void invertState(BorderButton *_button);
     QPixmap paintFormatPixmap(Qt::PenStyle _style);
 
@@ -402,20 +416,20 @@ public Q_SLOTS:
 
 protected:
 
-    Sheet* sheet;
-    BorderButton* borderButtons[BorderType_END];
-    BorderButton* shortcutButtons[BorderShortcutType_END];
+    Sheet *sheet;
+    BorderButton *borderButtons[BorderType_END];
+    BorderButton *shortcutButtons[BorderShortcutType_END];
 #define NUM_BORDER_PATTERNS 10
 
     /* the patterns to choose from */
-    PatternSelect* pattern[NUM_BORDER_PATTERNS];
+    PatternSelect *pattern[NUM_BORDER_PATTERNS];
 
     /* the pattern box that is the 'preview' of what is selected above. */
-    PatternSelect* preview;
-    KComboBox* size;
-    KComboBox* style;
-    KColorButton* color;
-    QCheckBox* customize;
+    PatternSelect *preview;
+    KComboBox *size;
+    KComboBox *style;
+    KColorButton *color;
+    QCheckBox *customize;
     QColor currentColor;
     Border *area;
     CellFormatDialog *dlg;
@@ -426,13 +440,13 @@ private:
     void InitializeBorderButtons();
     void InitializePatterns();
     void SetConnections();
-    void applyTopOutline(StyleCommand* obj);
-    void applyBottomOutline(StyleCommand* obj);
-    void applyLeftOutline(StyleCommand* obj);
-    void applyRightOutline(StyleCommand* obj);
-    void applyVerticalOutline(StyleCommand* obj);
-    void applyHorizontalOutline(StyleCommand* obj);
-    void applyDiagonalOutline(StyleCommand* obj);
+    void applyTopOutline(StyleCommand *obj);
+    void applyBottomOutline(StyleCommand *obj);
+    void applyLeftOutline(StyleCommand *obj);
+    void applyRightOutline(StyleCommand *obj);
+    void applyVerticalOutline(StyleCommand *obj);
+    void applyHorizontalOutline(StyleCommand *obj);
+    void applyDiagonalOutline(StyleCommand *obj);
 };
 
 /**
@@ -445,16 +459,20 @@ class BrushSelect : public QFrame
 public:
     BrushSelect(QWidget *parent, const char *_name);
 
-    void setBrushStyle(Qt::BrushStyle _pat) {
+    void setBrushStyle(Qt::BrushStyle _pat)
+    {
         brushStyle = _pat; repaint();
     }
-    Qt::BrushStyle getBrushStyle() const {
+    Qt::BrushStyle getBrushStyle() const
+    {
         return brushStyle;
     }
-    QColor getBrushColor() const {
+    QColor getBrushColor() const
+    {
         return brushColor;
     }
-    void setBrushColor(const QColor &_c) {
+    void setBrushColor(const QColor &_c)
+    {
         brushColor = _c;
     }
     void setPattern(const QColor &_color, Qt::BrushStyle _style);
@@ -475,7 +493,6 @@ protected:
     bool selected;
 };
 
-
 /**
  * \ingroup UI
  * Dialog page to set the cell background.
@@ -486,7 +503,7 @@ class CellFormatPagePattern : public QWidget
 public:
     CellFormatPagePattern(QWidget *parent, CellFormatDialog *_dlg);
 
-    void apply(CustomStyle * style);
+    void apply(CustomStyle *style);
     void apply(StyleCommand *_obj);
 
     void init();
@@ -513,8 +530,8 @@ protected:
     BrushSelect *brush14;
     BrushSelect *brush15;
     BrushSelect *current;
-    KColorButton* color;
-    QPushButton* notAnyColor;
+    KColorButton *color;
+    QPushButton *notAnyColor;
     QColor currentColor;
 
     QColor bgColor;
@@ -522,7 +539,6 @@ protected:
     bool b_notAnyColor;
     CellFormatDialog *dlg;
 };
-
 
 /**
  * \ingroup UI
@@ -533,14 +549,14 @@ class CellFormatPageProtection : public QWidget, public Ui::ProtectionWidget
     Q_OBJECT
 
 public:
-    CellFormatPageProtection(QWidget * parent, CellFormatDialog * _dlg);
+    CellFormatPageProtection(QWidget *parent, CellFormatDialog *_dlg);
     ~CellFormatPageProtection();
     ///when protection is set through Style Manager
-    void apply(CustomStyle * style);
-    void apply(StyleCommand * _obj);
+    void apply(CustomStyle *style);
+    void apply(StyleCommand *_obj);
 
 protected:
-    CellFormatDialog * m_dlg;
+    CellFormatDialog *m_dlg;
     bool            m_isProtected;
     bool            m_hideFormula;
     bool            m_hideAll;
@@ -558,8 +574,8 @@ public:
     /**
      * Create a format dlg for the rectangular area in '_sheet'.
      */
-    CellFormatDialog(QWidget* parent, Selection* selection);
-    CellFormatDialog(QWidget* parent, Selection* selection, CustomStyle* style, StyleManager* manager);
+    CellFormatDialog(QWidget *parent, Selection *selection);
+    CellFormatDialog(QWidget *parent, Selection *selection, CustomStyle *style, StyleManager *manager);
 
     ~CellFormatDialog();
 
@@ -567,34 +583,38 @@ public:
     void initGUI();
     void initMembers();
 
-    void initParameters(const Style& _obj);
-    void checkBorderRight(const Style& obj);
-    void checkBorderLeft(const Style& obj);
-    void checkBorderTop(const Style& obj);
-    void checkBorderBottom(const Style& obj);
-    void checkBorderVertical(const Style& obj);
-    void checkBorderHorizontal(const Style& obj);
+    void initParameters(const Style &_obj);
+    void checkBorderRight(const Style &obj);
+    void checkBorderLeft(const Style &obj);
+    void checkBorderTop(const Style &obj);
+    void checkBorderBottom(const Style &obj);
+    void checkBorderVertical(const Style &obj);
+    void checkBorderHorizontal(const Style &obj);
 
-    Sheet * getSheet() const {
+    Sheet *getSheet() const
+    {
         return m_sheet;
     }
-    Selection* selection() const {
+    Selection *selection() const
+    {
         return m_selection;
     }
-    CustomStyle * getStyle() const {
+    CustomStyle *getStyle() const
+    {
         return m_style;
     }
-    StyleManager * getStyleManager() const {
+    StyleManager *getStyleManager() const
+    {
         return m_styleManager;
     }
 
-    bool isSingleCell() {
+    bool isSingleCell()
+    {
         return (left == right && top == bottom);
     }
-    bool checkCircle(QString const & name, QString const & parent);
+    bool checkCircle(QString const &name, QString const &parent);
 
-    KLocale * locale() const;
-
+    KLocale *locale() const;
 
     struct CellBorderFormat {
         int width;
@@ -661,11 +681,11 @@ public:
 
     double indent;
 
-    QPixmap* formatOnlyNegSignedPixmap;
-    QPixmap* formatRedOnlyNegSignedPixmap;
-    QPixmap* formatRedNeverSignedPixmap;
-    QPixmap* formatAlwaysSignedPixmap;
-    QPixmap* formatRedAlwaysSignedPixmap;
+    QPixmap *formatOnlyNegSignedPixmap;
+    QPixmap *formatRedOnlyNegSignedPixmap;
+    QPixmap *formatRedNeverSignedPixmap;
+    QPixmap *formatAlwaysSignedPixmap;
+    QPixmap *formatRedAlwaysSignedPixmap;
 
     int textRotation;
     bool bTextRotation;
@@ -687,7 +707,6 @@ public:
     int top;
     int bottom;
 
-
 public Q_SLOTS:
     void slotApply();
 
@@ -697,10 +716,10 @@ protected:
      * Draws a pixmap showing a text consisting of two parts, @p _string1 and @p _string2 .
      * The parts' colors are given by @p _color1 and @p _color2 .
      */
-    QPixmap* paintFormatPixmap(const char *_string1, const QColor & _color1,
-                               const char *_string2, const QColor & _color2);
+    QPixmap *paintFormatPixmap(const char *_string1, const QColor &_color1,
+                               const char *_string2, const QColor &_color2);
 
-    GeneralTab * generalPage;
+    GeneralTab *generalPage;
     CellFormatPageFloat *floatPage;
     CellFormatPageBorder *borderPage;
     CellFormatPageFont *fontPage;
@@ -708,10 +727,10 @@ protected:
     CellFormatPagePattern *patternPage;
     CellFormatPageProtection *protectPage;
 
-    Sheet * m_sheet;
-    Selection  * m_selection;
-    CustomStyle * m_style;
-    StyleManager * m_styleManager;
+    Sheet *m_sheet;
+    Selection   *m_selection;
+    CustomStyle *m_style;
+    StyleManager *m_styleManager;
 
     void applyStyle();
 };

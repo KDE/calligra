@@ -30,8 +30,6 @@
 #include <kis_tool_ellipse_base.h>
 #include <KoIcon.h>
 
-
-
 class KoCanvasBase;
 
 class KisToolEllipse : public KisToolEllipseBase
@@ -39,19 +37,20 @@ class KisToolEllipse : public KisToolEllipseBase
     Q_OBJECT
 
 public:
-    KisToolEllipse(KoCanvasBase * canvas);
+    KisToolEllipse(KoCanvasBase *canvas);
     virtual ~KisToolEllipse();
 
 protected:
-    virtual void finishRect(const QRectF& rect);
+    virtual void finishRect(const QRectF &rect);
 };
 
 class KisToolEllipseFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolEllipseFactory(const QStringList&)
-            : KoToolFactoryBase("KritaShape/KisToolEllipse") {
+    KisToolEllipseFactory(const QStringList &)
+        : KoToolFactoryBase("KritaShape/KisToolEllipse")
+    {
         setToolTip(i18n("Ellipse Tool"));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -61,12 +60,12 @@ public:
 
     virtual ~KisToolEllipseFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return  new KisToolEllipse(canvas);
     }
 
 };
-
 
 #endif //__KIS_TOOL_ELLIPSE_H__
 

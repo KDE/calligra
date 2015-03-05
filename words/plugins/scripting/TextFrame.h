@@ -39,73 +39,89 @@ class TextFrame : public QObject
 {
     Q_OBJECT
 public:
-    TextFrame(QObject* parent, QTextFrame* frame)
-            : QObject(parent), m_frame(frame) {}
+    TextFrame(QObject *parent, QTextFrame *frame)
+        : QObject(parent), m_frame(frame) {}
     virtual ~TextFrame() {}
 
 public Q_SLOTS:
 
     /** Return the frame content as plain text. */
-    QString text() const {
+    QString text() const
+    {
         QTextFrame *frame = m_frame.data();
-        if (frame)
+        if (frame) {
             return QTextCursor(frame).block().text();
+        }
         return QString();
     }
 
     /** Return the \a TextCursor object for this frame. */
-    QObject* cursor() {
+    QObject *cursor()
+    {
         QTextFrame *frame = m_frame.data();
-        if (frame)
+        if (frame) {
             return new TextCursor(this, QTextCursor(frame));
+        }
         return 0;
     }
 
     /** Return the first position in the frame. */
-    int firstPosition() const {
+    int firstPosition() const
+    {
         QTextFrame *frame = m_frame.data();
-        if (frame)
+        if (frame) {
             return frame->firstPosition();
+        }
         return 0;
     }
 
     /** Return a \a TextCursor object for the first position in the frame. */
-    QObject* firstCursorPosition() {
+    QObject *firstCursorPosition()
+    {
         QTextFrame *frame = m_frame.data();
-        if (frame)
+        if (frame) {
             return new TextCursor(this, frame->firstCursorPosition());
+        }
         return 0;
     }
 
     /** Return the last position in the frame. */
-    int lastPosition() const {
+    int lastPosition() const
+    {
         QTextFrame *frame = m_frame.data();
-        if (frame)
+        if (frame) {
             return frame->lastPosition();
+        }
         return 0;
     }
 
     /** Return a \a TextCursor object for the last position in the frame. */
-    QObject* lastCursorPosition() {
+    QObject *lastCursorPosition()
+    {
         QTextFrame *frame = m_frame.data();
-        if (frame)
+        if (frame) {
             return new TextCursor(this, frame->lastCursorPosition());
+        }
         return 0;
     }
 
     /** Return a child \a TextFrame object with the defined \p index . */
-    QObject* childFrame(int index) {
+    QObject *childFrame(int index)
+    {
         QTextFrame *frame = m_frame.data();
-        if (frame)
+        if (frame) {
             return (index >= 0 && index < frame->childFrames().count()) ? frame->childFrames().at(index) : 0;
+        }
         return 0;
     }
 
     /** Return the number of \a TextCursor objects. */
-    int childFrameCount() const {
+    int childFrameCount() const
+    {
         QTextFrame *frame = m_frame.data();
-        if (frame)
+        if (frame) {
             return frame->childFrames().count();
+        }
         return 0;
     }
 

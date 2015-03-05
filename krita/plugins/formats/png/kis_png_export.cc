@@ -60,7 +60,7 @@ KisPNGExport::~KisPNGExport()
 bool hasVisibleWidgets()
 {
     QWidgetList wl = QApplication::allWidgets();
-    foreach(QWidget* w, wl) {
+    foreach (QWidget *w, wl) {
         if (w->isVisible() && strcmp(w->metaObject()->className(), "QDesktopWidget")) {
             dbgFile << "Widget " << w << " " << w->objectName() << " " << w->metaObject()->className() << " is visible";
             return true;
@@ -69,25 +69,26 @@ bool hasVisibleWidgets()
     return false;
 }
 
-KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "Png export! From:" << from << ", To:" << to << "";
-
 
     KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
-
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
-
-    KDialog* kdb = new KDialog(0);
+    KDialog *kdb = new KDialog(0);
     kdb->setCaption(i18n("PNG Export Options"));
     kdb->setModal(false);
 
@@ -114,9 +115,8 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         return KisImportExportFilter::UsageError;
     }
 
-
     KisSequentialConstIterator it(l->paintDevice(), image->bounds());
-    const KoColorSpace* cs = l->paintDevice()->colorSpace();
+    const KoColorSpace *cs = l->paintDevice()->colorSpace();
 
     KisPNGOptions options;
     bool isThereAlpha = false;
@@ -131,7 +131,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 
         bool sRGB = cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive);
 
-        KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
+        KisWdgOptionsPNG *wdg = new KisWdgOptionsPNG(kdb);
 
         QString filterConfig = KisConfig().exportConfiguration("PNG");
         KisPropertiesConfiguration cfg;
@@ -143,19 +143,15 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
             wdg->tryToSaveAsIndexed->setVisible(true);
             if (wdg->alpha->isChecked()) {
                 wdg->tryToSaveAsIndexed->setChecked(false);
-            }
-            else {
+            } else {
                 wdg->tryToSaveAsIndexed->setChecked(cfg.getBool("indexed", false));
             }
-        }
-        else {
+        } else {
             wdg->tryToSaveAsIndexed->setVisible(false);
         }
         wdg->interlacing->setChecked(cfg.getBool("interlaced", false));
         wdg->compressionLevel->setValue(cfg.getInt("compression", 9));
-        wdg->compressionLevel->setRange(1, 9 , 0);
-
-
+        wdg->compressionLevel->setRange(1, 9, 0);
 
         wdg->alpha->setVisible(isThereAlpha);
         wdg->tryToSaveAsIndexed->setVisible(!isThereAlpha);
@@ -207,13 +203,12 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
         options.saveSRGBProfile = saveSRGB;
         options.forceSRGB = forceSRGB;
 
-    }
-    else {
+    } else {
         options.alpha = isThereAlpha;
         options.interlace = false;
         options.compression = 9;
         options.tryToSaveAsIndexed = false;
-        options.transparencyFillColor = QColor(0,0,0);
+        options.transparencyFillColor = QColor(0, 0, 0);
         options.saveSRGBProfile = false;
         options.forceSRGB = false;
 
@@ -230,14 +225,14 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
     vKisAnnotationSP_it endIt = image->endAnnotations();
     KisImageBuilder_Result res;
 
-
     KisExifInfoVisitor eIV;
     eIV.visit(image->rootLayer().data());
-    KisMetaData::Store* eI = 0;
-    if (eIV.countPaintLayer() == 1)
+    KisMetaData::Store *eI = 0;
+    if (eIV.countPaintLayer() == 1) {
         eI = eIV.exifInfo();
+    }
     if (eI) {
-        KisMetaData::Store* copy = new KisMetaData::Store(*eI);
+        KisMetaData::Store *copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
     if ((res = kpc.buildFile(url, image, l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
@@ -251,7 +246,6 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(const QByteArray& 
 }
 
 #include "kis_png_export.moc"
-
 
 void KisWdgOptionsPNG::on_alpha_toggled(bool checked)
 {

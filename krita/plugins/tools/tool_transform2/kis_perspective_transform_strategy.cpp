@@ -33,7 +33,6 @@
 #include "kis_transform_utils.h"
 #include "kis_free_transform_strategy_gsl_helpers.h"
 
-
 enum StrokeFunction {
     DRAG_HANDLE = 0,
     DRAG_X_VANISHING_POINT,
@@ -42,8 +41,7 @@ enum StrokeFunction {
     NONE
 };
 
-struct KisPerspectiveTransformStrategy::Private
-{
+struct KisPerspectiveTransformStrategy::Private {
     Private(KisPerspectiveTransformStrategy *_q,
             const KisCoordinatesConverter *_converter,
             ToolTransformArgs &_currentArgs,
@@ -66,7 +64,6 @@ struct KisPerspectiveTransformStrategy::Private
     ToolTransformArgs &currentArgs;
     //////
     TransformTransactionProperties &transaction;
-
 
     QTransform thumbToImageTransform;
     QImage originalImage;
@@ -110,8 +107,8 @@ struct KisPerspectiveTransformStrategy::Private
 };
 
 KisPerspectiveTransformStrategy::KisPerspectiveTransformStrategy(const KisCoordinatesConverter *converter,
-                                                   ToolTransformArgs &currentArgs,
-                                                   TransformTransactionProperties &transaction)
+        ToolTransformArgs &currentArgs,
+        TransformTransactionProperties &transaction)
     : KisSimplifiedActionPolicyStrategy(converter),
       m_d(new Private(this, converter, currentArgs, transaction))
 {
@@ -155,7 +152,7 @@ void KisPerspectiveTransformStrategy::setTransformFunction(const QPointF &mouseP
     QPolygonF transformedPolygon = m_d->transform.map(QPolygonF(m_d->transaction.originalRect()));
     StrokeFunction defaultFunction = transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : NONE;
     KisTransformUtils::HandleChooser<StrokeFunction>
-        handleChooser(mousePos, defaultFunction);
+    handleChooser(mousePos, defaultFunction);
 
     qreal handleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
 
@@ -231,7 +228,6 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
     handles.addRect(handleRect.translated(m_d->transaction.originalBottomLeft()));
     handles.addRect(handleRect.translated(m_d->transaction.originalBottomRight()));
 
-
     gc.save();
 
     /**
@@ -260,7 +256,8 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
 
     gc.restore();
 
-    { // painting perspective handles
+    {
+        // painting perspective handles
         QPainterPath perspectiveHandles;
 
         if (m_d->transformedHandles.xVanishingExists) {
@@ -298,7 +295,9 @@ bool KisPerspectiveTransformStrategy::beginPrimaryAction(const QPointF &pt)
 {
     Q_UNUSED(pt);
 
-    if (m_d->function == NONE) return false;
+    if (m_d->function == NONE) {
+        return false;
+    }
 
     m_d->clickPos = pt;
     m_d->clickArgs = m_d->currentArgs;
@@ -311,11 +310,11 @@ Eigen::Matrix3f getTransitionMatrix(const QVector<QPointF> &sp)
     Eigen::Matrix3f A;
     Eigen::Vector3f v3;
 
-    A << sp[0].x() , sp[1].x() , sp[2].x()
-        ,sp[0].y() , sp[1].y() , sp[2].y()
-        ,      1   ,       1   ,       1;
+    A << sp[0].x(), sp[1].x(), sp[2].x()
+      , sp[0].y(), sp[1].y(), sp[2].y()
+      ,      1,       1,       1;
 
-    v3 << sp[3].x() , sp[3].y() , 1;
+    v3 << sp[3].x(), sp[3].y(), 1;
 
     Eigen::Vector3f coeffs = A.colPivHouseholderQr().solve(v3);
 
@@ -328,18 +327,18 @@ Eigen::Matrix3f getTransitionMatrix(const QVector<QPointF> &sp)
 
 QTransform toQTransform(const Eigen::Matrix3f &m)
 {
-    return QTransform(m(0,0), m(1,0), m(2,0),
-                      m(0,1), m(1,1), m(2,1),
-                      m(0,2), m(1,2), m(2,2));
+    return QTransform(m(0, 0), m(1, 0), m(2, 0),
+                      m(0, 1), m(1, 1), m(2, 1),
+                      m(0, 2), m(1, 2), m(2, 2));
 }
 
 Eigen::Matrix3f fromQTransform(const QTransform &t)
 {
     Eigen::Matrix3f m;
 
-    m << t.m11() , t.m21() , t.m31()
-        ,t.m12() , t.m22() , t.m32()
-        ,t.m13() , t.m23() , t.m33();
+    m << t.m11(), t.m21(), t.m31()
+      , t.m12(), t.m22(), t.m32()
+      , t.m13(), t.m23(), t.m33();
 
     return m;
 }
@@ -348,9 +347,9 @@ Eigen::Matrix3f fromTranslate(const QPointF &pt)
 {
     Eigen::Matrix3f m;
 
-    m << 1 , 0 , pt.x()
-        ,0 , 1 , pt.y()
-        ,0 , 0 , 1;
+    m << 1, 0, pt.x()
+      , 0, 1, pt.y()
+      , 0, 0, 1;
 
     return m;
 }
@@ -359,9 +358,9 @@ Eigen::Matrix3f fromScale(qreal sx, qreal sy)
 {
     Eigen::Matrix3f m;
 
-    m << sx , 0 , 0
-        ,0 , sy , 0
-        ,0 , 0 , 1;
+    m << sx, 0, 0
+      , 0, sy, 0
+      , 0, 0, 1;
 
     return m;
 }
@@ -370,9 +369,9 @@ Eigen::Matrix3f fromShear(qreal sx, qreal sy)
 {
     Eigen::Matrix3f m;
 
-    m << 1 , sx , 0
-        ,sy , sx*sy + 1, 0
-        ,0 , 0 , 1;
+    m << 1, sx, 0
+      , sy, sx *sy + 1, 0
+      , 0, 0, 1;
 
     return m;
 }
@@ -383,22 +382,22 @@ void KisPerspectiveTransformStrategy::Private::transformIntoArgs(const Eigen::Ma
 
     Eigen::Matrix3f m = t * TS.inverse();
 
-    qreal tX = m(0,2) / m(2,2);
-    qreal tY = m(1,2) / m(2,2);
+    qreal tX = m(0, 2) / m(2, 2);
+    qreal tY = m(1, 2) / m(2, 2);
 
     Eigen::Matrix3f T = fromTranslate(QPointF(tX, tY));
 
     m = T.inverse() * m;
 
-    const qreal factor = (m(1,1) / m(0,1) - m(1,0) / m(0,0));
+    const qreal factor = (m(1, 1) / m(0, 1) - m(1, 0) / m(0, 0));
 
-    qreal scaleX = m(0,0) / m(2,2);
-    qreal scaleY = m(0,1) / m(2,2) * factor;
+    qreal scaleX = m(0, 0) / m(2, 2);
+    qreal scaleY = m(0, 1) / m(2, 2) * factor;
 
     Eigen::Matrix3f SC = fromScale(scaleX, scaleY);
 
     qreal shearX = 1.0 / factor;
-    qreal shearY = m(1,0) / m(0,0);
+    qreal shearY = m(1, 0) / m(0, 0);
 
     Eigen::Matrix3f S = fromShear(shearX, shearY);
 
@@ -412,7 +411,7 @@ void KisPerspectiveTransformStrategy::Private::transformIntoArgs(const Eigen::Ma
 
     m = m * SC.inverse();
     m = m * S.inverse();
-    m /= m(2,2);
+    m /= m(2, 2);
     currentArgs.setFlattenedPerspectiveTransform(toQTransform(m));
 }
 
@@ -422,11 +421,13 @@ QTransform KisPerspectiveTransformStrategy::Private::transformFromArgs()
     return m.finalTransform();
 }
 
-QVector4D fromQPointF(const QPointF &pt) {
+QVector4D fromQPointF(const QPointF &pt)
+{
     return QVector4D(pt.x(), pt.y(), 0, 1.0);
 }
 
-QPointF toQPointF(const QVector4D &v) {
+QPointF toQPointF(const QVector4D &v)
+{
     return v.toVector2DAffine().toPointF();
 }
 
@@ -444,7 +445,7 @@ void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mouse
         break;
     }
     case DRAG_HANDLE: {
-        KIS_ASSERT_RECOVER_RETURN(m_d->currentDraggingCornerPoint >=0);
+        KIS_ASSERT_RECOVER_RETURN(m_d->currentDraggingCornerPoint >= 0);
         m_d->dstCornerPoints[m_d->currentDraggingCornerPoint] = mousePos;
 
         Eigen::Matrix3f A = getTransitionMatrix(m_d->srcCornerPoints);
@@ -465,15 +466,15 @@ void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mouse
         QPointF bl = m_d->transaction.originalBottomLeft();
         QPointF br = m_d->transaction.originalBottomRight();
 
-        QVector4D v(1,0,0,0);
-        QVector4D otherV(0,1,0,0);
+        QVector4D v(1, 0, 0, 0);
+        QVector4D otherV(0, 1, 0, 0);
 
         if (m_d->function == DRAG_X_VANISHING_POINT) {
-            v = QVector4D(1,0,0,0);
-            otherV = QVector4D(0,1,0,0);
+            v = QVector4D(1, 0, 0, 0);
+            otherV = QVector4D(0, 1, 0, 0);
         } else {
-            v = QVector4D(0,1,0,0);
-            otherV = QVector4D(1,0,0,0);
+            v = QVector4D(0, 1, 0, 0);
+            otherV = QVector4D(1, 0, 0, 0);
         }
 
         QPointF tl_dst = toQPointF(m * fromQPointF(tl));
@@ -523,7 +524,7 @@ void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mouse
                 near2_dst = bl_dst;
             }
 
-        } else /* if (m_d->function == DRAG_Y_VANISHING_POINT) */{
+        } else { /* if (m_d->function == DRAG_Y_VANISHING_POINT) */
             // topLeft (far) --- bottomLeft (near) --- vanishing
             if (kisSquareDistance(v_dst, tl_dst) > kisSquareDistance(v_dst, bl_dst)) {
                 far1_src = tl;
@@ -607,7 +608,7 @@ void KisPerspectiveTransformStrategy::Private::recalculateTransformations()
     imageTooBig = false;
 
     if (qAbs(currentArgs.scaleX()) > maxScale ||
-        qAbs(currentArgs.scaleY()) > maxScale) {
+            qAbs(currentArgs.scaleY()) > maxScale) {
 
         imageTooBig = true;
 
@@ -637,7 +638,7 @@ void KisPerspectiveTransformStrategy::Private::recalculateTransformations()
             qreal maxDistance = kisSquareDistance(pt, other);
 
             if (kisSquareDistance(pt, intersection) > maxDistance ||
-                kisSquareDistance(other, intersection) > maxDistance) {
+                    kisSquareDistance(other, intersection) > maxDistance) {
 
                 imageTooBig = true;
                 break;

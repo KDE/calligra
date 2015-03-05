@@ -24,7 +24,6 @@
 #include <kis_airbrush_option.h>
 #include "kis_current_outline_fetcher.h"
 
-
 KisSketchPaintOpSettings::KisSketchPaintOpSettings()
 {
 }
@@ -52,7 +51,7 @@ QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &i
         return KisBrushBasedPaintOpSettings::brushOutline(info, mode);
     }
 
-    KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
+    KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget *>(optionsWidget());
     QPainterPath path;
 
     if (widget && mode == CursorIsOutline) {

@@ -46,7 +46,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsTableContainer : public QFrame
 
 public:
     KexiRelationsTableContainer(
-        QWidget* parent,
+        QWidget *parent,
         KexiRelationsScrollArea *scrollArea,
         KexiDB::TableOrQuerySchema *schema);
 
@@ -54,13 +54,15 @@ public:
 
     int globalY(const QString &field);
 
-    KexiDB::TableOrQuerySchema* schema() const;
+    KexiDB::TableOrQuerySchema *schema() const;
 
-    int right() const {
+    int right() const
+    {
         return x() + width() - 1;
     }
 
-    int bottom() const {
+    int bottom() const
+    {
         return y() + height() - 1;
     }
 
@@ -71,8 +73,8 @@ Q_SIGNALS:
     void moved(KexiRelationsTableContainer *);
     void endDrag();
     void gotFocus();
-    void contextMenuRequest(const QPoint& pos);
-    void fieldsDoubleClicked(KexiDB::TableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
+    void contextMenuRequest(const QPoint &pos);
+    void fieldsDoubleClicked(KexiDB::TableOrQuerySchema &tableOrQuery, const QStringList &fieldNames);
 
 public Q_SLOTS:
     void setFocus();
@@ -80,18 +82,18 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void moved();
-    void slotContextMenu(const QPoint& p);
+    void slotContextMenu(const QPoint &p);
     void slotFieldsDoubleClicked(const QModelIndex &idx);
 
     friend class KexiRelationViewTableContainerHeader;
 
 protected:
-    virtual void focusInEvent(QFocusEvent* event);
-    virtual void focusOutEvent(QFocusEvent* event);
+    virtual void focusInEvent(QFocusEvent *event);
+    virtual void focusOutEvent(QFocusEvent *event);
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

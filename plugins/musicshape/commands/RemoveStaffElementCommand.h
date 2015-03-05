@@ -22,21 +22,22 @@
 #include <kundo2command.h>
 
 class MusicShape;
-namespace MusicCore {
-    class StaffElement;
-    class Bar;
+namespace MusicCore
+{
+class StaffElement;
+class Bar;
 }
 
 class RemoveStaffElementCommand : public KUndo2Command
 {
 public:
-    RemoveStaffElementCommand(MusicShape* shape, MusicCore::StaffElement* se, MusicCore::Bar* bar);
+    RemoveStaffElementCommand(MusicShape *shape, MusicCore::StaffElement *se, MusicCore::Bar *bar);
     virtual void redo();
     virtual void undo();
 private:
-    MusicShape* m_shape;
-    MusicCore::StaffElement* m_element;
-    MusicCore::Bar* m_bar;
+    MusicShape *m_shape;
+    MusicCore::StaffElement *m_element;
+    MusicCore::Bar *m_bar;
     int m_index;
 };
 

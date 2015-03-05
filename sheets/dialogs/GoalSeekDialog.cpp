@@ -52,7 +52,7 @@ using namespace Calligra::Sheets;
 class GoalSeekDialog::Private
 {
 public:
-    Selection   * selection;
+    Selection    *selection;
     Cell          sourceCell;
     Cell          targetCell;
     double        result;
@@ -63,10 +63,9 @@ public:
     Ui::GoalSeekWidget widget;
 };
 
-
-GoalSeekDialog::GoalSeekDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
-        , d(new Private)
+GoalSeekDialog::GoalSeekDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent)
+    , d(new Private)
 {
     d->selection = selection;
     d->result = 0.0;
@@ -82,7 +81,7 @@ GoalSeekDialog::GoalSeekDialog(QWidget* parent, Selection* selection)
 
     setWindowTitle(i18n("Goal Seek"));
 
-    QWidget* mainWidget = new QWidget(this);
+    QWidget *mainWidget = new QWidget(this);
     d->widget.setupUi(mainWidget);
     d->widget.selector1->setDialog(this);
     d->widget.selector1->setSelection(d->selection);
@@ -113,7 +112,7 @@ GoalSeekDialog::~GoalSeekDialog()
     delete d;
 }
 
-void GoalSeekDialog::closeEvent(QCloseEvent * e)
+void GoalSeekDialog::closeEvent(QCloseEvent *e)
 {
     d->selection->endReferenceSelection();
     e->accept();
@@ -132,7 +131,7 @@ void GoalSeekDialog::textChanged()
 void GoalSeekDialog::accept()
 {
     if (!d->widget.preview->isVisible()) {
-        Sheet * sheet = d->selection->activeSheet();
+        Sheet *sheet = d->selection->activeSheet();
 
         const Region source(d->widget.selector3->textEdit()->toPlainText(), sheet->map(), sheet);
         if (!source.isValid() || !source.isSingular()) {
@@ -268,7 +267,6 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
 //                  << ", ResultA: " << resultA << " (eps: " << eps << "), StartB: "
 //                  << startB << ", ResultB: " << resultB << endl;
 
-
         // find zero with secant method (rough implementation was provided by Franz-Xaver Meier):
         // if the function returns the same for two different
         // values we have something like a horizontal line
@@ -296,8 +294,9 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
 //         kDebug() <<"X:" << x <<", fabs (resultA):" << fabs(resultA) <<", Real start:" << startA <<", Real result:" << resultA <<", Iteration:" << iterations;
 
         --iterations;
-        if (iterations % 20 == 0)
+        if (iterations % 20 == 0) {
             d->widget.newValue->setText(QString::number(iterations));
+        }
     }
 
     d->widget.label5->setText(i18n("New value:"));

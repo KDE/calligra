@@ -20,7 +20,7 @@
 #include <QTouchEvent>
 #include <QApplication>
 
-SimpleTouchArea::SimpleTouchArea(QDeclarativeItem* parent)
+SimpleTouchArea::SimpleTouchArea(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
 {
     setAcceptTouchEvents(true);
@@ -30,24 +30,23 @@ SimpleTouchArea::~SimpleTouchArea()
 {
 }
 
-bool SimpleTouchArea::event(QEvent* event)
+bool SimpleTouchArea::event(QEvent *event)
 {
-    switch(static_cast<int>(event->type())) {
+    switch (static_cast<int>(event->type())) {
 //         case KisTabletEvent::TabletPressEx:
 //         case KisTabletEvent::TabletReleaseEx:
 //         case KisTabletEvent::TabletMoveEx:
 //             event->ignore();
 //             return true;
-        default:
-            break;
+    default:
+        break;
     }
     return QDeclarativeItem::event(event);
 }
 
-bool SimpleTouchArea::sceneEvent(QEvent* event)
+bool SimpleTouchArea::sceneEvent(QEvent *event)
 {
-    switch (event->type())
-    {
+    switch (event->type()) {
     case QEvent::TouchBegin:
     case QEvent::TouchUpdate:
     case QEvent::TouchEnd:

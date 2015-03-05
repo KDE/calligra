@@ -22,7 +22,6 @@
 #include "kis_types.h"
 #include "kis_spontaneous_job.h"
 
-
 class KRITAIMAGE_EXPORT KisRecalculateGeneratorLayerJob : public KisSpontaneousJob
 {
 public:

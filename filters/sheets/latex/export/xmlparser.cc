@@ -27,15 +27,16 @@
 #include <QFile>
 
 /* Init static data */
-FileHeader* XmlParser::_fileHeader = 0;
-Document* XmlParser::_root = 0;
-KoStore* XmlParser::_in = NULL;
+FileHeader *XmlParser::_fileHeader = 0;
+Document *XmlParser::_root = 0;
+KoStore *XmlParser::_in = NULL;
 
 XmlParser::XmlParser(const QString &filename): _filename(filename)
 {
     QFile f(filename);
-    if (!f.open(QIODevice::ReadOnly))
+    if (!f.open(QIODevice::ReadOnly)) {
         return;
+    }
     if (!_document.setContent(&f)) {
         f.close();
         return;
@@ -49,9 +50,9 @@ XmlParser::XmlParser(QByteArray in)
     _document.setContent(in);
 }
 
-XmlParser::XmlParser(const KoStore* in)
+XmlParser::XmlParser(const KoStore *in)
 {
-    _in = const_cast<KoStore*>(in);
+    _in = const_cast<KoStore *>(in);
     if (!_in->open("root")) {
         kError(30522) << "Unable to open input file!" << endl;
         return;
@@ -67,8 +68,9 @@ XmlParser::XmlParser()
 
 XmlParser::~XmlParser()
 {
-    if (_in != NULL)
+    if (_in != NULL) {
         _in->close();
+    }
 }
 
 QDomNode XmlParser::getChild(const QDomNode &node, QString name)
@@ -80,8 +82,9 @@ QDomNode XmlParser::getChild(const QDomNode &node, QString name)
 
 bool XmlParser::isChild(const QDomNode &node, QString name)
 {
-    if (node.isElement())
+    if (node.isElement()) {
         return node.toElement().elementsByTagName(name).count();
+    }
     return false;
 }
 
@@ -89,8 +92,9 @@ QDomNode XmlParser::getChild(const QDomNode &node, QString name, int index)
 {
     if (node.isElement()) {
         QDomNodeList children = node.toElement().elementsByTagName(name);
-        if (children.count())
+        if (children.count()) {
             return children.item(index);
+        }
     }
     return QDomNode();
 }
@@ -98,8 +102,9 @@ QDomNode XmlParser::getChild(const QDomNode &node, QString name, int index)
 QDomNode XmlParser::getChild(const QDomNode &node, int index)
 {
     QDomNodeList children = node.childNodes();
-    if (children.count())
+    if (children.count()) {
         return children.item(index);
+    }
     return QDomNode();
 }
 
@@ -120,8 +125,9 @@ int XmlParser::getNbChild(const QDomNode &node)
 
 int XmlParser::getNbChild(const QDomNode &node, QString name)
 {
-    if (node.isElement())
+    if (node.isElement()) {
         return node.toElement().elementsByTagName(name).count();
+    }
     return -1;
 }
 
@@ -132,7 +138,8 @@ QString  XmlParser::getChildName(const QDomNode &node, int index)
 
 QString  XmlParser::getAttr(const QDomNode &node, QString name) const
 {
-    if (node.isElement())
+    if (node.isElement()) {
         return node.toElement().attributeNode(name).value();
+    }
     return QString();
 }

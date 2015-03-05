@@ -35,9 +35,9 @@ class KexiFormScrollView;
 
 //! @short A DB-aware form widget, acting as form's toplevel widget
 class KEXIFORMUTILS_EXPORT KexiDBForm : public QWidget,
-                                        public KFormDesigner::FormWidget,
-                                        public KexiFormDataItemInterface,
-                                        public KFormDesigner::FormWidgetInterface
+    public KFormDesigner::FormWidget,
+    public KexiFormDataItemInterface,
+    public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
@@ -46,39 +46,42 @@ class KEXIFORMUTILS_EXPORT KexiDBForm : public QWidget,
     //original "size" property is not designable, so here's a custom (not storable) replacement
     Q_PROPERTY(QSize sizeInternal READ sizeInternal WRITE resizeInternal STORED false)
 public:
-    KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject);
+    KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface *dataAwareObject);
     virtual ~KexiDBForm();
 
-    KexiDataAwareObjectInterface* dataAwareObject() const;
+    KexiDataAwareObjectInterface *dataAwareObject() const;
 
-    inline QString dataSource() const {
+    inline QString dataSource() const
+    {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePartClass() const
+    {
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
 
     //! no effect
-    virtual QVariant value() {
+    virtual QVariant value()
+    {
         return QVariant();
     }
 
-    virtual void setInvalidState(const QString& displayText);
+    virtual void setInvalidState(const QString &displayText);
 
     bool autoTabStops() const;
 
-    QList<QWidget*>* orderedFocusWidgets() const;
+    QList<QWidget *> *orderedFocusWidgets() const;
 
-    QList<QWidget*>* orderedDataAwareWidgets() const;
+    QList<QWidget *> *orderedDataAwareWidgets() const;
 
-    void updateTabStopsOrder(KFormDesigner::Form* form);
+    void updateTabStopsOrder(KFormDesigner::Form *form);
 
     void updateTabStopsOrder();
 
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
     virtual bool isReadOnly() const;
-    virtual QWidget* widget();
+    virtual QWidget *widget();
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
     virtual void clear();
@@ -87,10 +90,12 @@ public:
 
 public Q_SLOTS:
     void setAutoTabStops(bool set);
-    inline void setDataSource(const QString &ds) {
+    inline void setDataSource(const QString &ds)
+    {
         KexiFormDataItemInterface::setDataSource(ds);
     }
-    inline void setDataSourcePartClass(const QString &partClass) {
+    inline void setDataSourcePartClass(const QString &partClass)
+    {
         KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     }
 
@@ -98,12 +103,14 @@ public Q_SLOTS:
     virtual void setReadOnly(bool readOnly);
 
     //! @internal for sizeInternal property
-    QSize sizeInternal() const {
+    QSize sizeInternal() const
+    {
         return QWidget::size();
     }
 
     //! @internal for sizeInternal property
-    void resizeInternal(const QSize& s) {
+    void resizeInternal(const QSize &s)
+    {
         QWidget::resize(s);
     }
 
@@ -112,12 +119,12 @@ Q_SIGNALS:
     void handleDropEvent(QDropEvent *e);
 
 protected:
-    virtual bool eventFilter(QObject * watched, QEvent * e);
+    virtual bool eventFilter(QObject *watched, QEvent *e);
 
     virtual void paintEvent(QPaintEvent *e);
 
     //! no effect
-    virtual void setValueInternal(const QVariant&, bool) {}
+    virtual void setValueInternal(const QVariant &, bool) {}
 
     //! Used to emit handleDragMoveEvent() signal needed to control dragging over the container's surface
     virtual void dragMoveEvent(QDragMoveEvent *e);
@@ -133,7 +140,7 @@ protected:
     KexiFormDataItemInterface *editedItem;
 
     class Private;
-    Private * const d;
+    Private *const d;
 
     friend class KexiFormScrollView;
 };

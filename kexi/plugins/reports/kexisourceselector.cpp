@@ -41,7 +41,7 @@ class KexiSourceSelector::Private
 {
 public:
     Private()
-      : kexiDBData(0)
+        : kexiDBData(0)
     {
     }
 
@@ -69,9 +69,9 @@ public:
 
 };
 
-KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn)
-        : QWidget(parent)
-        , d(new Private)
+KexiSourceSelector::KexiSourceSelector(QWidget *parent, KexiDB::Connection *conn)
+    : QWidget(parent)
+    , d(new Private)
 {
     d->conn = conn;
     d->kexiDBData = 0;
@@ -160,7 +160,7 @@ QDomElement KexiSourceSelector::connectionData()
     return conndata;
 }
 
-KoReportData* KexiSourceSelector::sourceData()
+KoReportData *KexiSourceSelector::sourceData()
 {
     if (d->kexiDBData) {
         delete d->kexiDBData;

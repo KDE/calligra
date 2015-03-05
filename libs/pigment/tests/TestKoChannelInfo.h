@@ -25,9 +25,9 @@
 class TestKoChannelInfo : public QObject
 {
     Q_OBJECT
-    
+
 private Q_SLOTS:
-    
+
     void testDisplayPositionToChannelIndex();
     void testdisplayOrderSorted();
 };

@@ -27,7 +27,6 @@
 
 #include "pigment_export.h"
 
-
 /**
  * This is the base class of all color transform that takes n pixels in input
  * and n pixels in output.
@@ -66,17 +65,20 @@ public:
     /**
      * Get the parameter id for a parameter name
      */
-    virtual int parameterId(const QString& name) const;
+    virtual int parameterId(const QString &name) const;
 
-    void setParameters(const QHash<QString, QVariant> & parameters);
+    void setParameters(const QHash<QString, QVariant> &parameters);
     /**
      * Update one parameter of a cached transformation object.
      *
      */
-    virtual void setParameter(int id, const QVariant& parameter);
+    virtual void setParameter(int id, const QVariant &parameter);
 
     /// @return true
-    virtual bool isValid() const { return true; }
+    virtual bool isValid() const
+    {
+        return true;
+    }
 };
 
 #endif

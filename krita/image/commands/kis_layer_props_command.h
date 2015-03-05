@@ -48,8 +48,8 @@ public:
      */
     KisLayerPropsCommand(KisLayerSP layer,
                          qint32 oldOpacity, qint32 newOpactiy,
-                         const QString&  oldCompositeOp, const QString& newCompositeOp,
-                         const QString& oldName, const QString& newName,
+                         const QString  &oldCompositeOp, const QString &newCompositeOp,
+                         const QString &oldName, const QString &newName,
                          const QBitArray oldChannelFlags, const QBitArray newChannelFlags,
                          bool undoChannelFlags = false);
 

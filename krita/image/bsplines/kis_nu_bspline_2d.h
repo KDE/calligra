@@ -28,8 +28,8 @@
 
 #include "kis_bspline.h"
 
-
-namespace KisBSplines {
+namespace KisBSplines
+{
 
 class KRITAIMAGE_EXPORT KisNUBSpline2D
 {
@@ -40,7 +40,8 @@ public:
     ~KisNUBSpline2D();
 
     template <class FunctionOp>
-        inline void initializeSpline(const FunctionOp &op) {
+    inline void initializeSpline(const FunctionOp &op)
+    {
 
         const int xSize = m_xSamples.size();
         const int ySize = m_ySamples.size();

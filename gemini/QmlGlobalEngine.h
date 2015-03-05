@@ -20,23 +20,22 @@
 #ifndef QMLGLOBALENGINE_H
 #define QMLGLOBALENGINE_H
 
-
 class QDeclarativeEngine;
 class QmlGlobalEngine
 {
 public:
-    QDeclarativeEngine* engine() const;
-    void setEngine(QDeclarativeEngine* engine);
+    QDeclarativeEngine *engine() const;
+    void setEngine(QDeclarativeEngine *engine);
 
-    static QmlGlobalEngine* instance();
+    static QmlGlobalEngine *instance();
 
 private:
     QmlGlobalEngine();
     ~QmlGlobalEngine();
 
-    QDeclarativeEngine* m_engine;
+    QDeclarativeEngine *m_engine;
 
-    static QmlGlobalEngine* sm_instance;
+    static QmlGlobalEngine *sm_instance;
 };
 
 #endif // QMLGLOBALENGINE_H

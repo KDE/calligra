@@ -1,4 +1,3 @@
-// vim: set tabstop=4 shiftwidth=4 noexpandtab:
 /* This file is part of the KDE project
 Copyright 2011 Aurélien Gâteau <agateau@kde.org>
 Copyright 2011 Paul Mendez <paulestebanms@gmail.com>
@@ -31,7 +30,8 @@ class QTimeLine;
 /**
  * A button with a special look, appears when hovering over thumbnails
  */
-class KoContextBarButton : public QToolButton {
+class KoContextBarButton : public QToolButton
+{
     Q_OBJECT
 public:
     explicit KoContextBarButton(const QString &iconName, QWidget *parent = 0);
@@ -41,12 +41,11 @@ public Q_SLOTS:
     void setFadingValue(int value);
 
 protected:
-    void paintEvent(QPaintEvent*);
+    void paintEvent(QPaintEvent *);
     virtual void enterEvent(QEvent *event);
     virtual void leaveEvent(QEvent *event);
     virtual void showEvent(QShowEvent *event);
     virtual void hideEvent(QHideEvent *event);
-
 
 private:
     /** Starts button fading animation */

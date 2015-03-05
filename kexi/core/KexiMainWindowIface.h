@@ -65,9 +65,9 @@ public:
     virtual ~KexiMainWindowIface();
 
     //! \return KexiMainWindowImpl global singleton (if it is instantiated)
-    static KexiMainWindowIface* global();
+    static KexiMainWindowIface *global();
 
-    QWidget* thisWidget();
+    QWidget *thisWidget();
 
     //! Project data of currently opened project or NULL if no project here yet.
     virtual KexiProject *project() = 0;
@@ -79,7 +79,7 @@ public:
 #pragma WARNING( TODO virtual KActionCollection* actionCollection() const = 0; )
 #endif
 #endif
-    virtual KActionCollection* actionCollection() const = 0;
+    virtual KActionCollection *actionCollection() const = 0;
 
 #ifdef KEXI_IMPL_WARNINGS
 #ifdef __GNUC__
@@ -88,7 +88,7 @@ public:
 #pragma WARNING( TODO virtual QWidget* focusWidget() const = 0; )
 #endif
 #endif
-    virtual QWidget* focusWidget() const = 0;
+    virtual QWidget *focusWidget() const = 0;
 
     /*! Registers window \a window for watching and adds it to the main window's stack. */
     virtual void registerChild(KexiWindow *window) = 0;
@@ -96,14 +96,14 @@ public:
     /*! \return a list of all actions defined by application.
      Not all of them are shared. Don't use plug these actions
      in your windows by hand but user methods from KexiView! */
-    virtual QList<QAction*> allActions() const = 0;
+    virtual QList<QAction *> allActions() const = 0;
 
     /*! \return currently active window or 0 if there is no active window. */
-    virtual KexiWindow* currentWindow() const = 0;
+    virtual KexiWindow *currentWindow() const = 0;
 
     /*! Switches \a window to view \a mode.
      Activates the window if it is not the current window. */
-    virtual tristate switchToViewMode(KexiWindow& window, Kexi::ViewMode viewMode) = 0;
+    virtual tristate switchToViewMode(KexiWindow &window, Kexi::ViewMode viewMode) = 0;
 
     /*! \return true if this window is in the User Mode. */
     virtual bool userMode() const = 0;
@@ -111,7 +111,7 @@ public:
 // Q_SIGNALS:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
-    virtual void acceptProjectClosingRequested(bool& cancel) = 0;
+    virtual void acceptProjectClosingRequested(bool &cancel) = 0;
 
     //! Emitted before closing the project (and destroying all it's data members).
     //! You can do you cleanup of your structures here.
@@ -124,22 +124,22 @@ public:
     /*! Creates new object of type defined by \a info part info.
      \a openingCancelled is set to true is opening has been cancelled.
      \return true on success. */
-    virtual bool newObject(KexiPart::Info *info, bool& openingCancelled) = 0;
+    virtual bool newObject(KexiPart::Info *info, bool &openingCancelled) = 0;
 
     //! Opens object pointed by \a item in a view \a viewMode
-    virtual KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
-                                   bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0,
-                                   QString* errorMessage = 0) = 0;
+    virtual KexiWindow *openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
+                                   bool &openingCancelled, QMap<QString, QVariant> *staticObjectArgs = 0,
+                                   QString *errorMessage = 0) = 0;
 
     //! For convenience
-    virtual KexiWindow* openObject(const QString& mime, const QString& name,
+    virtual KexiWindow *openObject(const QString &mime, const QString &name,
                                    Kexi::ViewMode viewMode, bool &openingCancelled,
-                                   QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
+                                   QMap<QString, QVariant> *staticObjectArgs = 0) = 0;
 
     /*! Closes the object for \a item.
      \return true on success (closing can be dealyed though), false on failure and cancelled
      if the object has "opening" job assigned. */
-    virtual tristate closeObject(KexiPart::Item* item) = 0;
+    virtual tristate closeObject(KexiPart::Item *item) = 0;
 
     /*! Called to accept property butter editing. */
     virtual void acceptPropertySetEditing() = 0;
@@ -154,11 +154,10 @@ public:
     virtual void propertySetSwitched(KexiWindow *window, bool force = false,
                                      bool preservePrevSelection = true,
                                      bool sortedProperties = false,
-                                     const QByteArray& propertyToSelect = QByteArray()) = 0;
+                                     const QByteArray &propertyToSelect = QByteArray()) = 0;
 
     //! Options used in saveObject()
-    enum SaveObjectOption
-    {
+    enum SaveObjectOption {
         DoNotAsk = 1,    //!< Do not ask for confirmation of overwriting
         SaveObjectAs = 2 //!< Saving object with a new name
     };
@@ -174,7 +173,7 @@ public:
      Saving object with a new name is also supported here, to do so
      SaveObjectOption::SaveObjectAs should be added to @a options. */
     virtual tristate saveObject(KexiWindow *window,
-                                const QString& messageWhenAskingForName = QString(),
+                                const QString &messageWhenAskingForName = QString(),
                                 SaveObjectOptions options = 0) = 0;
 
     /*! Closes window \a window. If window's data (see KexiWindow::isDirty()) is unsaved,
@@ -186,7 +185,7 @@ public:
 
     /*! Find window for a given \a item.
      \return 0 if no windows found. */
-    virtual KexiWindow *openedWindowFor(const KexiPart::Item* item) = 0;
+    virtual KexiWindow *openedWindowFor(const KexiPart::Item *item) = 0;
 
     /*! Parametrs for query with given id. */
     virtual QList<QVariant> currentParametersForQuery(int queryId) const = 0;
@@ -211,43 +210,43 @@ public:
                                       KexiPart::Part *part,
                                       bool allowOverwriting,
                                       bool *overwriteNeeded,
-                                      const QString& messageWhenAskingForName = QString()) = 0;
+                                      const QString &messageWhenAskingForName = QString()) = 0;
 
     /*! Highlights object of mime \a mime and name \a name.
      This can be done in the Project Navigator or so.
      If a window for the object is opened (in any mode), it should be raised. */
-    virtual void highlightObject(const QString& mime, const QString& name) = 0;
+    virtual void highlightObject(const QString &mime, const QString &name) = 0;
 
     //! Shows "print" dialog for \a item.
     //! \return true on success.
-    virtual tristate printItem(KexiPart::Item* item) = 0;
+    virtual tristate printItem(KexiPart::Item *item) = 0;
 
     //! Shows "print preview" window.
     //! \return true on success.
-    virtual tristate printPreviewForItem(KexiPart::Item* item) = 0;
+    virtual tristate printPreviewForItem(KexiPart::Item *item) = 0;
 
     //! Shows "page setup" window for \a item.
     //! \return true on success and cancelled when the action was cancelled.
-    virtual tristate showPageSetupForItem(KexiPart::Item* item) = 0;
+    virtual tristate showPageSetupForItem(KexiPart::Item *item) = 0;
 
     /*! Executes custom action for the main window, usually provided by a plugin.
      Also used by KexiFormEventAction. */
-    virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName) = 0;
+    virtual tristate executeCustomActionForObject(KexiPart::Item *item, const QString &actionName) = 0;
 
 //! @todo temporary solution before the tabbed toolbar framework emerges
     /*! Appends widget @a widget to tabbed toolbar declared as @a name.
      @a widget will be reparented but the ownership is not taken. */
-    virtual void appendWidgetToToolbar(const QString& name, QWidget* widget) = 0;
+    virtual void appendWidgetToToolbar(const QString &name, QWidget *widget) = 0;
 
 //! @todo temporary solution before the tabbed toolbar framework emerges
     /*! Shows or hides widget in the tabbed toolbar. */
-    virtual void setWidgetVisibleInToolbar(QWidget* widget, bool visible) = 0;
+    virtual void setWidgetVisibleInToolbar(QWidget *widget, bool visible) = 0;
 
 //! @todo replace with the final Actions API
-    virtual void addToolBarAction(const QString& toolBarName, QAction *action) = 0;
+    virtual void addToolBarAction(const QString &toolBarName, QAction *action) = 0;
 
 //! @todo replace with the final Actions API
-    virtual KToolBar *toolBar(const QString& name) const = 0;
+    virtual KToolBar *toolBar(const QString &name) const = 0;
 
     /*! Updates info label of the property editor by reusing properties provided
      by the current property set.
@@ -256,22 +255,22 @@ public:
      (without icon or any other additional part).
      If the current property is 0 and @a textToDisplayForNullSet string is empty, the info label widget becomes
      hidden. */
-    virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet = QString()) = 0;
+    virtual void updatePropertyEditorInfoLabel(const QString &textToDisplayForNullSet = QString()) = 0;
 
     /*! Add searchable model to the main window. This extends search to a new area.
      One example is Project Navigator. */
     virtual void addSearchableModel(KexiSearchableModel *model) = 0;
 
-    virtual KexiUserFeedbackAgent* userFeedbackAgent() const = 0;
+    virtual KexiUserFeedbackAgent *userFeedbackAgent() const = 0;
 
     //! Interface to the migrate manager
-    virtual KexiMigrateManagerInterface* migrateManager() = 0;
+    virtual KexiMigrateManagerInterface *migrateManager() = 0;
 
     //! Sets reasonable dialog size based on main window size, that is 80% of its size.
     virtual void setReasonableDialogSize(QDialog *dialog) = 0;
 
 protected: // Q_SLOTS:
-    virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
+    virtual void slotObjectRenamed(const KexiPart::Item &item, const QString &oldName) = 0;
 
 };
 

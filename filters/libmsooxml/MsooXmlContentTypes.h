@@ -30,7 +30,6 @@
 #include <KoFilterChain.h>
 #include <KoXmlReader.h>
 
-
 namespace MSOOXML
 {
 

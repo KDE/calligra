@@ -50,7 +50,7 @@ public:
         }
 
         QList<QTextCharFormat>::Iterator it = m_formats.begin();
-        foreach(QTextCursor cursor, m_cursors) {
+        foreach (QTextCursor cursor, m_cursors) {
             QTextFormat prevFormat(cursor.charFormat());
             cursor.setCharFormat(*it);
             editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, kundo2_i18n("Formatting"), *it, prevFormat, false);
@@ -77,16 +77,16 @@ public:
 };
 
 ParagraphFormattingCommand::ParagraphFormattingCommand(KoTextEditor *editor,
-                                                       const QTextCharFormat &characterFormat,
-                                                       const QTextBlockFormat &blockFormat,
-                                                       const KoListLevelProperties &llp,
-                                                       KUndo2Command *parent)
-      :KUndo2Command(parent),
-       m_first(true),
-       m_editor(editor),
-       m_charFormat(characterFormat),
-       m_blockFormat(blockFormat),
-       m_levelProperties(llp)
+        const QTextCharFormat &characterFormat,
+        const QTextBlockFormat &blockFormat,
+        const KoListLevelProperties &llp,
+        KUndo2Command *parent)
+    : KUndo2Command(parent),
+      m_first(true),
+      m_editor(editor),
+      m_charFormat(characterFormat),
+      m_blockFormat(blockFormat),
+      m_levelProperties(llp)
 {
     Q_ASSERT(editor);
 

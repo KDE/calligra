@@ -28,10 +28,10 @@ using namespace Calligra::Sheets;
 namespace Currency_LNS
 {
 typedef struct {
-    char const * code;
-    char const * country;
-    char const * name;
-    char const * display;
+    char const *code;
+    char const *country;
+    char const *name;
+    char const *display;
 } Money;
 
 // codes and names as defined in ISO 3166-1
@@ -350,72 +350,79 @@ static const Money lMoney[] = {
     { 0, 0, 0, 0}, // Last must be empty!
 };
 
-
 class CurrencyMap
 {
 public:
     CurrencyMap() : m_List(lMoney) {}
 
     // Those return the _untranslated_ strings from the above array
-    QString code(int t) const {
+    QString code(int t) const
+    {
         return QString::fromUtf8(m_List[t].code);
     }
 
-    QString country(int t) const {
+    QString country(int t) const
+    {
         return QString::fromUtf8(m_List[t].country);
     }
 
-    QString name(int t) const {
+    QString name(int t) const
+    {
         return QString::fromUtf8(m_List[t].name);
     }
 
-    QString symbol(int t) const {
+    QString symbol(int t) const
+    {
         return QString::fromUtf8(m_List[t].display);
     }
 
-    int index(const QString& code) const {
+    int index(const QString &code) const
+    {
         int index = 0;
-        while (m_List[index].code != 0 && m_List[index].code != code)
+        while (m_List[index].code != 0 && m_List[index].code != code) {
             ++index;
+        }
         return (m_List[index].code != 0) ? index : 1 /*undef*/;
     }
 
 private:
-    const Money * m_List;
+    const Money *m_List;
 };
 
 const CurrencyMap gCurrencyMap;
-const Money * gMoneyList(lMoney);
+const Money *gMoneyList(lMoney);
 }
 
 using namespace Currency_LNS;
 
 Currency::Currency(int index)
-        : m_index(index)
-        , m_code(gCurrencyMap.code(index))
+    : m_index(index)
+    , m_code(gCurrencyMap.code(index))
 {
 }
 
-Currency::Currency(QString const & code, Format format)
-        : m_index(1)   // unspecified first, searched at the end of this ctor
-        , m_code(code)
+Currency::Currency(QString const &code, Format format)
+    : m_index(1)   // unspecified first, searched at the end of this ctor
+    , m_code(code)
 {
     if (format == Gnumeric) {
         // I use QChar(c,r) here so that this file can be opened in any encoding...
-        if (code.indexOf(QChar(172, 32)) != -1)            // Euro sign
+        if (code.indexOf(QChar(172, 32)) != -1) {          // Euro sign
             m_code = QChar(172, 32);
-        else if (code.indexOf(QChar(163, 0)) != -1)        // Pound sign
+        } else if (code.indexOf(QChar(163, 0)) != -1) {    // Pound sign
             m_code = QChar(163, 0);
-        else if (code.indexOf(QChar(165, 0)) != -1)        // Yen sign
+        } else if (code.indexOf(QChar(165, 0)) != -1) {    // Yen sign
             m_code = QChar(165, 0);
-        else if (code[0] == '[' && code[1] == '$') {
+        } else if (code[0] == '[' && code[1] == '$') {
             int n = code.indexOf(']');
-            if (n != -1)
+            if (n != -1) {
                 m_code = code.mid(2, n - 2);
-            else
+            } else {
                 m_index = 0;
-        } else if (code.indexOf('$') != -1)
+            }
+        } else if (code.indexOf('$') != -1) {
             m_code = '$';
+        }
     } // end gnumeric
     // search the corresponding index
     m_index = gCurrencyMap.index(m_code);
@@ -425,20 +432,23 @@ Currency::~Currency()
 {
 }
 
-bool Currency::operator==(Currency const & cur) const
+bool Currency::operator==(Currency const &cur) const
 {
-    if (m_index != cur.m_index)
+    if (m_index != cur.m_index) {
         return false;
-    if (m_code != cur.m_code)
+    }
+    if (m_code != cur.m_code) {
         return false;
+    }
     return true;
 }
 
 QString Currency::code(Format format) const
 {
     if (format == Gnumeric) {
-        if (m_code.length() == 1)   // symbol
+        if (m_code.length() == 1) { // symbol
             return m_code;
+        }
         return QString("[$" + m_code + ']');
     }
     return m_code;
@@ -456,8 +466,9 @@ QString Currency::name() const
 
 QString Currency::symbol() const
 {
-    if (m_index == 1)   // undefined
+    if (m_index == 1) { // undefined
         return m_code;
+    }
     return gMoneyList[m_index].display;
 }
 
@@ -466,7 +477,7 @@ int Currency::index() const
     return m_index;
 }
 
-QString Currency::chooseString(int type, bool & ok)
+QString Currency::chooseString(int type, bool &ok)
 {
     if (!gMoneyList[type].country) {
         ok = false;

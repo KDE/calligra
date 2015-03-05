@@ -26,10 +26,9 @@
 #include "filter/kis_filter_registry.h"
 #include "testutil.h"
 
-
 void KisUnsharpMaskTest::testUnsharpWithTransparency()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
     QImage srcImage(TestUtil::fetchDataFileLazy("source_with_transparency.png"));
     QVERIFY(!srcImage.isNull());
@@ -42,7 +41,7 @@ void KisUnsharpMaskTest::testUnsharpWithTransparency()
     KisFilterSP f = KisFilterRegistry::instance()->value("unsharp");
     Q_ASSERT(f);
 
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
     kfc->setProperty("halfSize", 3);

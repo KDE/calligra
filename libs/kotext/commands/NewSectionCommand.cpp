@@ -30,7 +30,7 @@
 #include <kundo2command.h>
 
 NewSectionCommand::NewSectionCommand(QTextDocument *document)
-    : KUndo2Command ()
+    : KUndo2Command()
     , m_first(true)
     , m_document(document)
 {

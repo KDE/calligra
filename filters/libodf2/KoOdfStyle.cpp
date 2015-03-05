@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "KoOdfStyle.h"
 
@@ -39,7 +38,6 @@
 // ================================================================
 //                         class KoOdfStyle
 
-
 class KoOdfStyle::Private
 {
 public:
@@ -49,7 +47,7 @@ public:
     QString family;
     QString parent;
 
-    QHash<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties",
+    QHash<QString, KoOdfStyleProperties *> properties; // e.g. "text-properties",
 };
 
 KoOdfStyle::Private::Private()
@@ -61,9 +59,7 @@ KoOdfStyle::Private::~Private()
     qDeleteAll(properties);
 }
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfStyle::KoOdfStyle()
     : KoOdfStyleBase(StyleStyle)
@@ -75,7 +71,6 @@ KoOdfStyle::~KoOdfStyle()
 {
     delete d;
 }
-
 
 QString KoOdfStyle::family() const
 {
@@ -97,13 +92,12 @@ void KoOdfStyle::setParent(const QString &parent)
     d->parent = parent;
 }
 
-
-QHash<QString, KoOdfStyleProperties*> KoOdfStyle::properties() const
+QHash<QString, KoOdfStyleProperties *> KoOdfStyle::properties() const
 {
     return d->properties;
 }
 
-KoOdfStyleProperties *KoOdfStyle::properties(const QString& name) const
+KoOdfStyleProperties *KoOdfStyle::properties(const QString &name) const
 {
     return d->properties.value(name, 0);
 }
@@ -111,20 +105,21 @@ KoOdfStyleProperties *KoOdfStyle::properties(const QString& name) const
 QString KoOdfStyle::property(const QString &propertySet, const QString &property) const
 {
     KoOdfStyleProperties *props = d->properties.value(propertySet, 0);
-    if (props)
+    if (props) {
         return props->attribute(property);
-    else
+    } else {
         return QString();
+    }
 }
 
 void KoOdfStyle::setProperty(const QString &propertySet, const QString &property, const QString &value)
 {
     KoOdfStyleProperties *props = d->properties.value(propertySet);
-    if (!props)
+    if (!props) {
         props = new KoOdfStyleProperties();
+    }
     props->setAttribute(property, value);
 }
-
 
 bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
 {
@@ -169,8 +164,7 @@ bool KoOdfStyle::saveOdf(KoXmlWriter *writer)
 {
     if (isDefaultStyle()) {
         writer->startElement("style:default-style");
-    }
-    else {
+    } else {
         writer->startElement("style:style");
         writer->addAttribute("style:name", name());
     }
@@ -185,7 +179,7 @@ bool KoOdfStyle::saveOdf(KoXmlWriter *writer)
     }
 
     // Write properties
-    foreach(const QString &propertySet, d->properties.keys()) {
+    foreach (const QString &propertySet, d->properties.keys()) {
         d->properties.value(propertySet)->saveOdf(propertySet, writer);
     }
 

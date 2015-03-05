@@ -7,7 +7,6 @@
 ** place of a destructor.
 *****************************************************************************/
 
-
 /* This file is part of the KDE project
    Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
 

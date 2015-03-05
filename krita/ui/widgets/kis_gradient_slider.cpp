@@ -147,13 +147,14 @@ void KisGradientSlider::resizeEvent(QResizeEvent *)
     update();
 }
 
-void KisGradientSlider::mousePressEvent(QMouseEvent * e)
+void KisGradientSlider::mousePressEvent(QMouseEvent *e)
 {
     eCursor closest_cursor;
     int distance;
 
-    if (e->button() != Qt::LeftButton)
+    if (e->button() != Qt::LeftButton) {
         return;
+    }
 
     unsigned int x = e->pos().x();
     int xPlusMargin = x + MARGIN;
@@ -200,28 +201,30 @@ void KisGradientSlider::mousePressEvent(QMouseEvent * e)
         m_grabCursor = closest_cursor;
         m_leftmost = 0;
         m_rightmost = m_whiteCursor - ((MARGIN + 1) * m_scalingFactor);
-        if (m_gammaEnabled)
+        if (m_gammaEnabled) {
             m_gammaCursor = calculateGammaCursor();
+        }
         break;
     case WhiteCursor:
         m_whiteCursor = x + MARGIN;
         m_grabCursor = closest_cursor;
         m_leftmost = m_blackCursor + (MARGIN * m_scalingFactor);
-        m_rightmost = width() - MARGIN ;
-        if (m_gammaEnabled)
+        m_rightmost = width() - MARGIN;
+        if (m_gammaEnabled) {
             m_gammaCursor = calculateGammaCursor();
+        }
         break;
     case GammaCursor:
         m_gammaCursor = x;
         m_grabCursor = closest_cursor;
         m_leftmost = m_blackCursor + (MARGIN * m_scalingFactor);
         m_rightmost = m_whiteCursor - (MARGIN * m_scalingFactor);
-    {
-        double delta = (double)(m_whiteCursor - m_blackCursor) / 2.0;
-        double mid = (double)m_blackCursor + delta + MARGIN;
-        double tmp = (x - mid) / delta;
-        m_gamma = 1.0 / pow(10, tmp);
-    }
+        {
+            double delta = (double)(m_whiteCursor - m_blackCursor) / 2.0;
+            double mid = (double)m_blackCursor + delta + MARGIN;
+            double tmp = (x - mid) / delta;
+            m_gamma = 1.0 / pow(10, tmp);
+        }
         break;
     default:
         break;
@@ -229,21 +232,22 @@ void KisGradientSlider::mousePressEvent(QMouseEvent * e)
     update();
 }
 
-void KisGradientSlider::mouseReleaseEvent(QMouseEvent * e)
+void KisGradientSlider::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() != Qt::LeftButton)
+    if (e->button() != Qt::LeftButton) {
         return;
+    }
 
     update();
 
     switch (m_grabCursor) {
     case BlackCursor:
-        m_black = qRound( m_blackCursor / m_scalingFactor);
+        m_black = qRound(m_blackCursor / m_scalingFactor);
         m_feedback = true;
         emit sigModifiedBlack(m_black);
         break;
     case WhiteCursor:
-        m_white = qRound( (m_whiteCursor - MARGIN) / m_scalingFactor);
+        m_white = qRound((m_whiteCursor - MARGIN) / m_scalingFactor);
         m_feedback = true;
         emit sigModifiedWhite(m_white);
         break;
@@ -258,16 +262,18 @@ void KisGradientSlider::mouseReleaseEvent(QMouseEvent * e)
     m_feedback = false;
 }
 
-void KisGradientSlider::mouseMoveEvent(QMouseEvent * e)
+void KisGradientSlider::mouseMoveEvent(QMouseEvent *e)
 {
     int x = e->pos().x();
 
     if (m_grabCursor != None) { // Else, drag the selected point
-        if (x + MARGIN <= m_leftmost)
+        if (x + MARGIN <= m_leftmost) {
             x = m_leftmost;
+        }
 
-        if (x >= m_rightmost)
+        if (x >= m_rightmost) {
             x = m_rightmost;
+        }
 
         switch (m_grabCursor) {
         case BlackCursor:
@@ -318,7 +324,6 @@ unsigned int KisGradientSlider::calculateGammaCursor()
     double tmp   = log10(1.0 / m_gamma);
     return (unsigned int)qRound(mid + delta * tmp);
 }
-
 
 void KisGradientSlider::enableGamma(bool b)
 {

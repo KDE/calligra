@@ -48,7 +48,6 @@ class Cell: public Format
     QString _result;
     QString _resultDataType;
 
-
 public:
     /**
      * Constructors
@@ -60,7 +59,8 @@ public:
      */
     Cell();
 
-    Cell(long row, long col) {
+    Cell(long row, long col)
+    {
         _row = row;
         _col = col;
     }
@@ -75,42 +75,54 @@ public:
 
     /* ==== getters ==== */
 
-    long     getRow() const {
+    long     getRow() const
+    {
         return _row;
     }
-    long     getCol() const {
+    long     getCol() const
+    {
         return _col;
     }
-    QString  getText() const {
+    QString  getText() const
+    {
         return _text;
     }
-    QString  getTextDataType() const {
+    QString  getTextDataType() const
+    {
         return _textDataType;
     }
-    QString  getResult() const {
+    QString  getResult() const
+    {
         return _result;
     }
-    QString  getResultDataType() const {
+    QString  getResultDataType() const
+    {
         return _resultDataType;
     }
 
     /* ==== setters ==== */
-    void setRow(int r) {
+    void setRow(int r)
+    {
         _row = r;
     }
-    void setCol(int c) {
+    void setCol(int c)
+    {
         _col = c;
     }
-    void setText(QString text) {
+    void setText(QString text)
+    {
         _text = text;
     }
-    void setTextDataType(QString dt) {
+    void setTextDataType(QString dt)
+    {
         _textDataType = dt;
     }
-    void setResult(QString result) {
+    void setResult(QString result)
+    {
         _result = result;
     }
-    void setResultDataType(QString dt) {
+    void setResultDataType(QString dt)
+    {
         _resultDataType = dt;
     }
 
@@ -120,7 +132,7 @@ public:
     void     analyze(const QDomNode);
     void     analyzeText(const QDomNode);
     void     analyzeResult(const QDomNode);
-    void     generate(QTextStream&, Table*);
+    void     generate(QTextStream &, Table *);
 
 private:
 

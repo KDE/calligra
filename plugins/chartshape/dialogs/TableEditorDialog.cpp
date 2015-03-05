@@ -36,14 +36,13 @@
 #include "ChartProxyModel.h"
 #include "ChartTableView.h"
 
-
 using namespace KChart;
 
 TableEditorDialog::TableEditorDialog()
-    : QDialog( 0 )
-    , m_tableView( new ChartTableView )
+    : QDialog(0)
+    , m_tableView(new ChartTableView)
 {
-    setupUi( this );
+    setupUi(this);
 
     m_proxyModel = 0;
     init();
@@ -54,10 +53,9 @@ TableEditorDialog::~TableEditorDialog()
     delete m_tableView;
 }
 
-
 void TableEditorDialog::init()
 {
-    tableViewContainer->addWidget( m_tableView );
+    tableViewContainer->addWidget(m_tableView);
 
     const KIcon insertRowIcon(koIconName("edit-table-insert-row-above"));
     const KIcon deleteRowIcon(koIconName("edit-table-delete-row"));
@@ -65,205 +63,213 @@ void TableEditorDialog::init()
     const KIcon deleteColIcon(koIconName("edit-table-delete-column"));
 
     // Create actions.
-    m_insertRowsAction    = new QAction( insertRowIcon, i18n( "Insert Rows" ), m_tableView );
-    m_deleteRowsAction    = new QAction( deleteRowIcon, i18n( "Delete Rows" ), m_tableView );
-    m_insertColumnsAction = new QAction( insertColIcon, i18n( "Insert Columns" ), m_tableView );
-    m_deleteColumnsAction = new QAction( deleteColIcon, i18n( "Delete Columns" ), m_tableView );
+    m_insertRowsAction    = new QAction(insertRowIcon, i18n("Insert Rows"), m_tableView);
+    m_deleteRowsAction    = new QAction(deleteRowIcon, i18n("Delete Rows"), m_tableView);
+    m_insertColumnsAction = new QAction(insertColIcon, i18n("Insert Columns"), m_tableView);
+    m_deleteColumnsAction = new QAction(deleteColIcon, i18n("Delete Columns"), m_tableView);
 
     // Set icons on buttons(?).
-    insertRow->setIcon( insertRowIcon );
-    deleteRow->setIcon( deleteRowIcon );
-    insertColumn->setIcon( insertColIcon );
-    deleteColumn->setIcon( deleteColIcon );
+    insertRow->setIcon(insertRowIcon);
+    deleteRow->setIcon(deleteRowIcon);
+    insertColumn->setIcon(insertColIcon);
+    deleteColumn->setIcon(deleteColIcon);
 
     // Initially, no index is selected. Deletion only works with legal
     // selections.  They will automatically be enabled when an index
     // is selected.
-    deleteRow->setEnabled( false );
-    deleteColumn->setEnabled( false );
+    deleteRow->setEnabled(false);
+    deleteColumn->setEnabled(false);
 
     // Buttons
-    connect( insertRow,    SIGNAL(pressed()), this, SLOT(slotInsertRowPressed()) );
-    connect( insertColumn, SIGNAL(pressed()), this, SLOT(slotInsertColumnPressed()) );
-    connect( deleteRow,    SIGNAL(pressed()), this, SLOT(slotDeleteRowPressed()) );
-    connect( deleteColumn, SIGNAL(pressed()), this, SLOT(slotDeleteColumnPressed()) );
+    connect(insertRow,    SIGNAL(pressed()), this, SLOT(slotInsertRowPressed()));
+    connect(insertColumn, SIGNAL(pressed()), this, SLOT(slotInsertColumnPressed()));
+    connect(deleteRow,    SIGNAL(pressed()), this, SLOT(slotDeleteRowPressed()));
+    connect(deleteColumn, SIGNAL(pressed()), this, SLOT(slotDeleteColumnPressed()));
 
     // Context Menu Actions
-    connect( m_insertRowsAction,    SIGNAL(triggered()), this, SLOT(slotInsertRowPressed()) );
-    connect( m_insertColumnsAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnPressed()) );
-    connect( m_deleteRowsAction,    SIGNAL(triggered()), this, SLOT(slotDeleteRowPressed()) );
-    connect( m_deleteColumnsAction, SIGNAL(triggered()), this, SLOT(slotDeleteColumnPressed()) );
-    connect( m_tableView,  SIGNAL(currentIndexChanged(QModelIndex)),
-             this,         SLOT(slotCurrentIndexChanged(QModelIndex)) );
+    connect(m_insertRowsAction,    SIGNAL(triggered()), this, SLOT(slotInsertRowPressed()));
+    connect(m_insertColumnsAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnPressed()));
+    connect(m_deleteRowsAction,    SIGNAL(triggered()), this, SLOT(slotDeleteRowPressed()));
+    connect(m_deleteColumnsAction, SIGNAL(triggered()), this, SLOT(slotDeleteColumnPressed()));
+    connect(m_tableView,  SIGNAL(currentIndexChanged(QModelIndex)),
+            this,         SLOT(slotCurrentIndexChanged(QModelIndex)));
     // We only need to connect one of the data direction buttons, since
     // they are mutually exclusive.
-    connect( dataSetsInRows, SIGNAL(toggled(bool)),
-             this,           SLOT(slotDataSetsInRowsToggled(bool)) );
+    connect(dataSetsInRows, SIGNAL(toggled(bool)),
+            this,           SLOT(slotDataSetsInRowsToggled(bool)));
 
     // FIXME: QAction to create a separator??
-    QAction *separator = new QAction( m_tableView );
-    separator->setSeparator( true );
+    QAction *separator = new QAction(m_tableView);
+    separator->setSeparator(true);
 
     // Add all the actions to the view.
-    m_tableView->addAction( m_deleteRowsAction );
-    m_tableView->addAction( m_insertRowsAction );
-    m_tableView->addAction( separator );
-    m_tableView->addAction( m_deleteColumnsAction );
-    m_tableView->addAction( m_insertColumnsAction );
+    m_tableView->addAction(m_deleteRowsAction);
+    m_tableView->addAction(m_insertRowsAction);
+    m_tableView->addAction(separator);
+    m_tableView->addAction(m_deleteColumnsAction);
+    m_tableView->addAction(m_insertColumnsAction);
 
-    m_tableView->setContextMenuPolicy( Qt::ActionsContextMenu );
+    m_tableView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
     // Initialize the contents of the controls
     slotUpdateDialog();
 }
 
-void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
+void TableEditorDialog::setProxyModel(ChartProxyModel *proxyModel)
 {
-    if ( m_proxyModel == proxyModel )
+    if (m_proxyModel == proxyModel) {
         return;
+    }
 
     // Disconnect the old proxy model.
-    m_proxyModel->disconnect( this );
+    m_proxyModel->disconnect(this);
 
     m_proxyModel = proxyModel;
 
     // Connect the new proxy model.
-    if ( m_proxyModel ) {
-        connect( m_proxyModel,       SIGNAL(modelReset()),
-                 this,               SLOT(slotUpdateDialog()) );
+    if (m_proxyModel) {
+        connect(m_proxyModel,       SIGNAL(modelReset()),
+                this,               SLOT(slotUpdateDialog()));
     }
 
     slotUpdateDialog();
 }
 
-void TableEditorDialog::setModel( QAbstractItemModel *model )
+void TableEditorDialog::setModel(QAbstractItemModel *model)
 {
-    m_tableView->setModel( model );
+    m_tableView->setModel(model);
 }
 
 void TableEditorDialog::slotUpdateDialog()
 {
-    if ( !m_proxyModel )
+    if (!m_proxyModel) {
         return;
+    }
 
-    switch ( m_proxyModel->dataDirection() ) {
+    switch (m_proxyModel->dataDirection()) {
     case Qt::Horizontal:
-        dataSetsInRows->setChecked( true );
+        dataSetsInRows->setChecked(true);
         break;
     case Qt::Vertical:
-        dataSetsInColumns->setChecked( true );
+        dataSetsInColumns->setChecked(true);
         break;
     default:
         kWarning(35001) << "Unrecognized value for data direction: " << m_proxyModel->dataDirection();
     }
 }
 
-
 // ----------------------------------------------------------------
 //                             slots
 
-
 void TableEditorDialog::slotInsertRowPressed()
 {
-    Q_ASSERT( m_tableView->model() );
+    Q_ASSERT(m_tableView->model());
 
     QAbstractItemModel *model = m_tableView->model();
     QModelIndex         currIndex = m_tableView->currentIndex();
 
     int selectedRow;
-    if ( model->rowCount() == 0 )
+    if (model->rowCount() == 0)
         // +1 is added below.
+    {
         selectedRow = -1;
-    else if ( currIndex.isValid() )
+    } else if (currIndex.isValid()) {
         selectedRow = currIndex.row();
-    else
+    } else {
         selectedRow = m_tableView->model()->rowCount() - 1;
+    }
 
     // Insert the row *after* the selection, thus +1
-    model->insertRow( selectedRow + 1 );
+    model->insertRow(selectedRow + 1);
 }
 
 void TableEditorDialog::slotInsertColumnPressed()
 {
-    Q_ASSERT( m_tableView->model() );
-    
+    Q_ASSERT(m_tableView->model());
+
     QAbstractItemModel *model = m_tableView->model();
     QModelIndex         currIndex = m_tableView->currentIndex();
 
     int selectedColumn;
-    if ( model->columnCount() == 0 )
+    if (model->columnCount() == 0)
         // +1 is added below.
+    {
         selectedColumn = -1;
-    if ( currIndex.isValid() )
+    }
+    if (currIndex.isValid()) {
         selectedColumn = currIndex.column();
-    else
+    } else {
         selectedColumn = m_tableView->model()->columnCount() - 1;
+    }
 
     // Insert the column *after* the selection, thus +1
-    model->insertColumn( selectedColumn + 1 );
+    model->insertColumn(selectedColumn + 1);
 }
 
 void TableEditorDialog::slotDeleteRowPressed()
 {
-    deleteSelectedRowsOrColumns( Qt::Horizontal );
+    deleteSelectedRowsOrColumns(Qt::Horizontal);
 }
 
 void TableEditorDialog::slotDeleteColumnPressed()
 {
-    deleteSelectedRowsOrColumns( Qt::Vertical );
+    deleteSelectedRowsOrColumns(Qt::Vertical);
 }
 
-void TableEditorDialog::deleteSelectedRowsOrColumns( Qt::Orientation orientation )
+void TableEditorDialog::deleteSelectedRowsOrColumns(Qt::Orientation orientation)
 {
     // Note: In the following, both rows and columns will be referred to
     // as "row", for ease of reading this code.
-    Q_ASSERT( m_tableView->model() );
+    Q_ASSERT(m_tableView->model());
 
     const QModelIndexList selectedIndexes = m_tableView->selectionModel()->selectedIndexes();
-    if ( selectedIndexes.isEmpty() )
+    if (selectedIndexes.isEmpty()) {
         return;
+    }
 
     QList<int> rowsToBeRemoved;
     // Make sure we don't delete a row twice, as indexes can exist
     // multiple times for one row
-    foreach( const QModelIndex &index, selectedIndexes ) {
+    foreach (const QModelIndex &index, selectedIndexes) {
         const int row = orientation == Qt::Horizontal ? index.row() : index.column();
-        if ( !rowsToBeRemoved.contains( row ) )
-            rowsToBeRemoved.append( row );
+        if (!rowsToBeRemoved.contains(row)) {
+            rowsToBeRemoved.append(row);
+        }
     }
 
     // Use qGreater<int>() as comparator to remove rows in reversed order
     // to not change the indexes of the selected rows
-    qSort( rowsToBeRemoved.begin(), rowsToBeRemoved.end(), qGreater<int>() );
+    qSort(rowsToBeRemoved.begin(), rowsToBeRemoved.end(), qGreater<int>());
 
-    foreach( int row, rowsToBeRemoved ) {
-        Q_ASSERT( row >= 0 );
-        if ( orientation == Qt::Horizontal )
-            m_tableView->model()->removeRow( row );
-        else
-            m_tableView->model()->removeColumn( row );
+    foreach (int row, rowsToBeRemoved) {
+        Q_ASSERT(row >= 0);
+        if (orientation == Qt::Horizontal) {
+            m_tableView->model()->removeRow(row);
+        } else {
+            m_tableView->model()->removeColumn(row);
+        }
     }
     // Deselect the deleted rows
-    m_tableView->setCurrentIndex( QModelIndex() );
+    m_tableView->setCurrentIndex(QModelIndex());
 }
 
-void TableEditorDialog::slotCurrentIndexChanged( const QModelIndex &index )
+void TableEditorDialog::slotCurrentIndexChanged(const QModelIndex &index)
 {
     const bool isValid = index.isValid();
 
-    m_deleteRowsAction->setEnabled( isValid );
-    m_insertRowsAction->setEnabled( isValid );
-    deleteRow->setEnabled( isValid );
-    insertRow->setEnabled( isValid );
+    m_deleteRowsAction->setEnabled(isValid);
+    m_insertRowsAction->setEnabled(isValid);
+    deleteRow->setEnabled(isValid);
+    insertRow->setEnabled(isValid);
 
-    m_deleteColumnsAction->setEnabled( isValid );
-    m_insertColumnsAction->setEnabled( isValid );
-    deleteColumn->setEnabled( isValid );
-    insertColumn->setEnabled( isValid );
+    m_deleteColumnsAction->setEnabled(isValid);
+    m_insertColumnsAction->setEnabled(isValid);
+    deleteColumn->setEnabled(isValid);
+    insertColumn->setEnabled(isValid);
 }
 
-void TableEditorDialog::slotDataSetsInRowsToggled( bool enabled )
+void TableEditorDialog::slotDataSetsInRowsToggled(bool enabled)
 {
-    Q_ASSERT( m_proxyModel );
-    m_proxyModel->setDataDirection( enabled ? Qt::Horizontal : Qt::Vertical );
+    Q_ASSERT(m_proxyModel);
+    m_proxyModel->setDataDirection(enabled ? Qt::Horizontal : Qt::Vertical);
 }

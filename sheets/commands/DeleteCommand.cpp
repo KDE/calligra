@@ -31,8 +31,8 @@
 using namespace Calligra::Sheets;
 
 DeleteCommand::DeleteCommand(KUndo2Command *parent)
-        : AbstractDataManipulator(parent)
-        , m_mode(Everything)
+    : AbstractDataManipulator(parent)
+    , m_mode(Everything)
 {
     setText(kundo2_i18n("Delete"));
     m_checkLock = true;
@@ -49,13 +49,14 @@ void DeleteCommand::setMode(Mode mode)
     m_mode = mode;
 }
 
-bool DeleteCommand::process(Element* element)
+bool DeleteCommand::process(Element *element)
 {
     Q_ASSERT(!m_reverse);
 
     // The RecalcManager needs a valid sheet.
-    if (!element->sheet())
+    if (!element->sheet()) {
         element->setSheet(m_sheet);
+    }
 
     const QRect range = element->rect();
 
@@ -71,9 +72,9 @@ bool DeleteCommand::process(Element* element)
                 continue;
             }
 
-            const ColumnFormat* columnFormat = m_sheet->columnFormat(col);
+            const ColumnFormat *columnFormat = m_sheet->columnFormat(col);
             if (m_firstrun && !columnFormat->isDefault()) {
-                ColumnFormat* oldColumnFormat = new ColumnFormat(*columnFormat);
+                ColumnFormat *oldColumnFormat = new ColumnFormat(*columnFormat);
                 oldColumnFormat->setNext(0);
                 oldColumnFormat->setPrevious(0);
                 m_columnFormats.insert(oldColumnFormat);
@@ -101,11 +102,13 @@ bool DeleteCommand::process(Element* element)
         // row-wise processing
         for (int row = range.top(); row <= range.bottom(); ++row) {
             Cell cell = m_sheet->cellStorage()->firstInRow(row);
-            if (!cell.isNull() && cell.column() < range.left())
+            if (!cell.isNull() && cell.column() < range.left()) {
                 cell = m_sheet->cellStorage()->nextInRow(range.left() - 1, row);
+            }
             while (!cell.isNull()) {
-                if (cell.column() > range.right())
+                if (cell.column() > range.right()) {
                     break;
+                }
 
                 m_sheet->cellStorage()->take(cell.column(), row);
                 cell = m_sheet->cellStorage()->nextInRow(cell.column(), row);
@@ -126,10 +129,10 @@ bool DeleteCommand::process(Element* element)
 bool DeleteCommand::mainProcessing()
 {
     if (m_reverse) {
-        foreach(ColumnFormat* columnFormat, m_columnFormats) {
+        foreach (ColumnFormat *columnFormat, m_columnFormats) {
             m_sheet->insertColumnFormat(new ColumnFormat(*columnFormat));
         }
-        foreach(RowFormat* rowFormat, m_rowFormats) {
+        foreach (RowFormat *rowFormat, m_rowFormats) {
             m_sheet->insertRowFormat(new RowFormat(*rowFormat));
         }
     }

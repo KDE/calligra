@@ -37,17 +37,19 @@ OraImport::~OraImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus OraImport::convert(const QByteArray &, const QByteArray &to)
 {
     dbgFile << "Importing using ORAImport!";
 
-    if (to != "application/x-krita")
+    if (to != "application/x-krita") {
         return KisImportExportFilter::BadMimeType;
+    }
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
 
-    if (!doc)
+    if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     QString filename = m_chain->inputFile();
 
@@ -57,11 +59,11 @@ KisImportExportFilter::ConversionStatus OraImport::convert(const QByteArray&, co
 
         KUrl url(filename);
 
-        if (url.isEmpty())
+        if (url.isEmpty()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
         OraConverter ib(doc);
-
 
         switch (ib.buildImage(url)) {
         case KisImageBuilder_RESULT_UNSUPPORTED:

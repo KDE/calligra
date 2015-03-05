@@ -53,10 +53,10 @@ public:
     void undo();
 
     /// Returns list of inserted points
-    QList<KoPathPoint*> insertedPoints() const;
+    QList<KoPathPoint *> insertedPoints() const;
 
 private:
-    KoPathPointInsertCommandPrivate * const d;
+    KoPathPointInsertCommandPrivate *const d;
 };
 
 #endif // KOPATHPOINTINSERTCOMMAND_H

@@ -44,7 +44,7 @@ class XlsxXmlTableReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit XlsxXmlTableReader(KoOdfWriters *writers);
     virtual ~XlsxXmlTableReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
 protected:
     KoFilter::ConversionStatus read_table();

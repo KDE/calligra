@@ -23,7 +23,6 @@
 
 #include "kis_color_selector_ng_docker_widget.h"
 
-
 KisColorSelectorNgDock::KisColorSelectorNgDock()
     : QDockWidget()
 {
@@ -35,10 +34,10 @@ KisColorSelectorNgDock::KisColorSelectorNgDock()
     setWindowTitle(i18n("Advanced Color Selector"));
 }
 
-void KisColorSelectorNgDock::setCanvas(KoCanvasBase * canvas)
+void KisColorSelectorNgDock::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
-    m_colorSelectorNgWidget->setCanvas(dynamic_cast<KisCanvas2*>(canvas));
+    m_colorSelectorNgWidget->setCanvas(dynamic_cast<KisCanvas2 *>(canvas));
 }
 
 void KisColorSelectorNgDock::unsetCanvas()

@@ -39,7 +39,9 @@ void KisColorHistory::unsetCanvas()
 
 void KisColorHistory::setCanvas(KisCanvas2 *canvas)
 {
-    if (!canvas) return;
+    if (!canvas) {
+        return;
+    }
 
     KisColorPatches::setCanvas(canvas);
 
@@ -49,31 +51,33 @@ void KisColorHistory::setCanvas(KisCanvas2 *canvas)
 
     m_resourceProvider = canvas->imageView()->resourceProvider();
 
-
     connect(canvas->imageView()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
             this,                               SLOT(addColorToHistory(KoColor)), Qt::UniqueConnection);
 }
 
-KisColorSelectorBase* KisColorHistory::createPopup() const
+KisColorSelectorBase *KisColorHistory::createPopup() const
 {
-    KisColorHistory* ret = new KisColorHistory();
+    KisColorHistory *ret = new KisColorHistory();
     ret->setCanvas(m_canvas);
     ret->setColors(colors());
-    ret->m_colorHistory=m_colorHistory;
+    ret->m_colorHistory = m_colorHistory;
     return ret;
 }
 
-void KisColorHistory::addColorToHistory(const KoColor& color)
+void KisColorHistory::addColorToHistory(const KoColor &color)
 {
     // don't add color in erase mode. See https://bugs.kde.org/show_bug.cgi?id=298940
-    if (m_resourceProvider && m_resourceProvider->currentCompositeOp() == COMPOSITE_ERASE) return;
+    if (m_resourceProvider && m_resourceProvider->currentCompositeOp() == COMPOSITE_ERASE) {
+        return;
+    }
 
     m_colorHistory.removeAll(color);
     m_colorHistory.prepend(color);
 
     //the history holds 200 colors, but not all are displayed
-    if(m_colorHistory.size()>200)
+    if (m_colorHistory.size() > 200) {
         m_colorHistory.removeLast();
+    }
 
     setColors(m_colorHistory);
 }

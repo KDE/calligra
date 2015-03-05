@@ -55,7 +55,7 @@ public:
      * @param fh horizontal fade (fh \< w / 2 )
      * @param fv vertical fade (fv \< h / 2 )
      */
-    KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID& id = DefaultId);
+    KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID &id = DefaultId);
 
     virtual ~KisMaskGenerator();
 
@@ -73,14 +73,14 @@ public:
 
     virtual bool shouldVectorize() const;
 
-    virtual KisBrushMaskApplicatorBase* applicator();
+    virtual KisBrushMaskApplicatorBase *applicator();
 
-    virtual void toXML(QDomDocument& , QDomElement&) const;
+    virtual void toXML(QDomDocument &, QDomElement &) const;
 
     /**
      * Unserialise a \ref KisMaskGenerator
      */
-    static KisMaskGenerator* fromXML(const QDomElement&);
+    static KisMaskGenerator *fromXML(const QDomElement &);
 
     qreal width() const;
 
@@ -92,17 +92,23 @@ public:
     qreal verticalFade() const;
     int spikes() const;
     Type type() const;
-    
-    inline QString id() const { return m_id.id(); }
-    inline QString name() const { return m_id.name(); }
+
+    inline QString id() const
+    {
+        return m_id.id();
+    }
+    inline QString name() const
+    {
+        return m_id.name();
+    }
 
     static QList<KoID> maskGeneratorIds();
-    
+
     qreal softness() const;
     virtual void setSoftness(qreal softness);
-    
+
     QString curveString() const;
-    void setCurveString(const QString& curveString);
+    void setCurveString(const QString &curveString);
 
     bool antialiasEdges() const;
     virtual void setScale(qreal scaleX, qreal scaleY);
@@ -129,10 +135,10 @@ protected:
         KisBrushMaskApplicatorBase *defaultMaskProcessor;
     };
 
-    Private* const d;
-    
+    Private *const d;
+
 private:
-    const KoID& m_id;
+    const KoID &m_id;
 };
 
 #endif

@@ -29,7 +29,7 @@ class Cell;
 void ClusterBenchmark::testInsertionPerformance()
 {
     Cluster storage;
-    Cell* cell = 0;
+    Cell *cell = 0;
     qDebug() << "measuring loading-like insertion...";
     Time::tval start = 0;
     Time::tval ticks = 0;
@@ -87,11 +87,11 @@ void ClusterBenchmark::testLookupPerformance()
     };
 
     Cluster storage;
-    Cell* cell = 0;
+    Cell *cell = 0;
 
     for (uint sc = 0; sc < sizeof(scenarios) / sizeof(scenarios[0]) / 2; sc++) {
-        int maxrow = scenarios[sc*2];
-        int maxcol = scenarios[sc*2+1];
+        int maxrow = scenarios[sc * 2];
+        int maxcol = scenarios[sc * 2 + 1];
 
         storage.clear();
 #if 0
@@ -112,7 +112,7 @@ void ClusterBenchmark::testLookupPerformance()
 
         Time::tval start = 0;
         Time::tval ticks = 0;
-        Cell* v;
+        Cell *v;
         int col = 0;
         int row = 0;
         int cols = 0;
@@ -139,116 +139,130 @@ void ClusterBenchmark::testLookupPerformance()
 void ClusterBenchmark::testInsertColumnsPerformance()
 {
     Cluster storage;
-    Cell* cell = 0;
-    for (int c = 1; c <= KS_colMax; ++c)
+    Cell *cell = 0;
+    for (int c = 1; c <= KS_colMax; ++c) {
         storage.insert(cell, c, 1);
+    }
     qDebug() << "start measuring...";
 
     Time::tval start = Time::stamp();
-    for (int i = 1; i < 100; ++i)
-        storage.insertColumn(250);   // near a cluster border
+    for (int i = 1; i < 100; ++i) {
+        storage.insertColumn(250);    // near a cluster border
+    }
     qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 100));
 }
 
 void ClusterBenchmark::testDeleteColumnsPerformance()
 {
     Cluster storage;
-    Cell* cell = 0;
-    for (int c = 1; c <= KS_colMax; ++c)
+    Cell *cell = 0;
+    for (int c = 1; c <= KS_colMax; ++c) {
         storage.insert(cell, c, 1);
+    }
     qDebug() << "start measuring...";
 
     Time::tval start = Time::stamp();
-    for (int i = 1; i < 100; ++i)
-        storage.removeColumn(250);   // near a cluster border
+    for (int i = 1; i < 100; ++i) {
+        storage.removeColumn(250);    // near a cluster border
+    }
     qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 100));
 }
 
 void ClusterBenchmark::testInsertRowsPerformance()
 {
     Cluster storage;
-    Cell* cell = 0;
-    for (int r = 1; r <= KS_rowMax; ++r)
+    Cell *cell = 0;
+    for (int r = 1; r <= KS_rowMax; ++r) {
         storage.insert(cell, 1, r);
+    }
     qDebug() << "start measuring...";
 
     Time::tval start = Time::stamp();
-    for (int i = 1; i < 100; ++i)
-        storage.insertRow(250);   // near a cluster border
+    for (int i = 1; i < 100; ++i) {
+        storage.insertRow(250);    // near a cluster border
+    }
     qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 100));
 }
 
 void ClusterBenchmark::testDeleteRowsPerformance()
 {
     Cluster storage;
-    Cell* cell = 0;
-    for (int r = 1; r <= KS_rowMax; ++r)
+    Cell *cell = 0;
+    for (int r = 1; r <= KS_rowMax; ++r) {
         storage.insert(cell, 1, r);
+    }
     qDebug() << "start measuring...";
 
     Time::tval start = Time::stamp();
-    for (int i = 1; i < 100; ++i)
-        storage.removeRow(250);   // near a cluster border
+    for (int i = 1; i < 100; ++i) {
+        storage.removeRow(250);    // near a cluster border
+    }
     qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 100));
 }
 
 void ClusterBenchmark::testShiftLeftPerformance()
 {
     Cluster storage;
-    Cell* cell = 0;
-    for (int c = 1; c <= KS_colMax; ++c)
+    Cell *cell = 0;
+    for (int c = 1; c <= KS_colMax; ++c) {
         storage.insert(cell, c, 1);
+    }
     qDebug() << "start measuring...";
 
     Time::tval start = Time::stamp();
-    for (int i = 1; i < 1000; ++i)
+    for (int i = 1; i < 1000; ++i) {
         storage.removeShiftLeft(QPoint(42, 1));
+    }
     qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 1000));
 }
 
 void ClusterBenchmark::testShiftRightPerformance()
 {
     Cluster storage;
-    Cell* cell = 0;
-    for (int c = 1; c <= KS_colMax; ++c)
+    Cell *cell = 0;
+    for (int c = 1; c <= KS_colMax; ++c) {
         storage.insert(cell, c, 1);
+    }
     qDebug() << "start measuring...";
 
     Time::tval start = Time::stamp();
-    for (int i = 1; i < 1000; ++i)
+    for (int i = 1; i < 1000; ++i) {
         storage.insertShiftRight(QPoint(42, 1));
+    }
     qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 1000));
 }
 
 void ClusterBenchmark::testShiftUpPerformance()
 {
     Cluster storage;
-    Cell* cell = 0;
-    for (int r = 1; r <= KS_rowMax; ++r)
+    Cell *cell = 0;
+    for (int r = 1; r <= KS_rowMax; ++r) {
         storage.insert(cell, 1, r);
+    }
     qDebug() << "start measuring...";
 
     Time::tval start = Time::stamp();
-    for (int i = 1; i < 1000; ++i)
+    for (int i = 1; i < 1000; ++i) {
         storage.removeShiftUp(QPoint(1, 42));
+    }
     qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 1000));
 }
 
 void ClusterBenchmark::testShiftDownPerformance()
 {
     Cluster storage;
-    Cell* cell = 0;
-    for (int r = 1; r <= KS_rowMax; ++r)
+    Cell *cell = 0;
+    for (int r = 1; r <= KS_rowMax; ++r) {
         storage.insert(cell, 1, r);
+    }
     qDebug() << "start measuring...";
 
     Time::tval start = Time::stamp();
-    for (int i = 1; i < 1000; ++i)
+    for (int i = 1; i < 1000; ++i) {
         storage.insertShiftDown(QPoint(1, 42));
+    }
     qDebug() << qPrintable(Time::printAverage(Time::elapsed(start), 1000));
 }
-
-
 
 QTEST_MAIN(ClusterBenchmark)
 

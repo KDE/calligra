@@ -29,13 +29,11 @@
 #include "koodfreader_export.h"
 #include "OdfDrawReader.h"
 
-
 class QByteArray;
 class QSizeF;
 class QStringList;
 class KoStore;
 class OdfReaderContext;
-
 
 /** @brief A default backend for the OdfDrawReader class.
  *
@@ -56,7 +54,7 @@ class OdfReaderContext;
  */
 class KOODFREADER_EXPORT OdfDrawReaderBackend
 {
- public:
+public:
     explicit OdfDrawReaderBackend();
     virtual ~OdfDrawReaderBackend();
 
@@ -94,10 +92,9 @@ class KOODFREADER_EXPORT OdfDrawReaderBackend
     DECLARE_BACKEND_FUNCTION(DrawObject);
     DECLARE_BACKEND_FUNCTION(DrawObjectOle);
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif // ODFDRAWREADERBACKEND_H

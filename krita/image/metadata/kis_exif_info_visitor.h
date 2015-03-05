@@ -30,40 +30,49 @@ class KisExifInfoVisitor : public KisNodeVisitor
 public:
 
     KisExifInfoVisitor() :
-            m_exifInfo(0),
-            m_countPaintLayer(0) { }
+        m_exifInfo(0),
+        m_countPaintLayer(0) { }
 public:
 
+    bool visit(KisNode *)
+    {
+        return true;
+    }
+    bool visit(KisCloneLayer *)
+    {
+        return true;
+    }
+    bool visit(KisFilterMask *)
+    {
+        return true;
+    }
+    bool visit(KisTransformMask *)
+    {
+        return true;
+    }
+    bool visit(KisTransparencyMask *)
+    {
+        return true;
+    }
+    bool visit(KisSelectionMask *)
+    {
+        return true;
+    }
+    bool visit(KisExternalLayer *)
+    {
+        return true;
+    }
+    bool visit(KisGeneratorLayer *)
+    {
+        return true;
+    }
+    bool visit(KisAdjustmentLayer *)
+    {
+        return true;
+    }
 
-    bool visit(KisNode*) {
-        return true;
-    }
-    bool visit(KisCloneLayer*) {
-        return true;
-    }
-    bool visit(KisFilterMask*) {
-        return true;
-    }
-    bool visit(KisTransformMask*) {
-        return true;
-    }
-    bool visit(KisTransparencyMask*) {
-        return true;
-    }
-    bool visit(KisSelectionMask*) {
-        return true;
-    }
-    bool visit(KisExternalLayer*) {
-        return true;
-    }
-    bool visit(KisGeneratorLayer*) {
-        return true;
-    }
-    bool visit(KisAdjustmentLayer*) {
-        return true;
-    }
-
-    bool visit(KisPaintLayer* layer) {
+    bool visit(KisPaintLayer *layer)
+    {
         m_countPaintLayer++;
         if (!layer->metaData()->empty()) {
             m_exifInfo = layer->metaData();
@@ -71,22 +80,23 @@ public:
         return true;
     }
 
-
-    bool visit(KisGroupLayer* layer) {
+    bool visit(KisGroupLayer *layer)
+    {
         dbgFile << "Visiting on grouplayer" << layer->name() << "";
         return visitAll(layer, true);
     }
 
-
 public:
-    inline uint countPaintLayer() {
+    inline uint countPaintLayer()
+    {
         return m_countPaintLayer;
     }
-    inline KisMetaData::Store* exifInfo() {
+    inline KisMetaData::Store *exifInfo()
+    {
         return m_exifInfo;
     }
 private:
-    KisMetaData::Store* m_exifInfo;
+    KisMetaData::Store *m_exifInfo;
     uint m_countPaintLayer;
 };
 

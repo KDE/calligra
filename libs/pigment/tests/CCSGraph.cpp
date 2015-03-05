@@ -26,13 +26,12 @@
 #include <kapplication.h>
 #include <kdebug.h>
 
-
 #include "KoColorSpaceRegistry.h"
 #include "KoColorConversionSystem.h"
 
 #include <iostream>
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     KAboutData aboutData("CCSGraph",
                          0,
@@ -91,8 +90,9 @@ int main(int argc, char** argv)
 
     if (outputType == "dot") {
         QFile file(outputFileName);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             exit(EXIT_FAILURE);
+        }
         QTextStream out(&file);
         out << dot;
     } else if (outputType == "ps" || outputType == "svg") {

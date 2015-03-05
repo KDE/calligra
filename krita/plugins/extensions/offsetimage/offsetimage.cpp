@@ -43,7 +43,7 @@ K_PLUGIN_FACTORY(OffsetImageFactory, registerPlugin<OffsetImage>();)
 K_EXPORT_PLUGIN(OffsetImageFactory("krita"))
 
 OffsetImage::OffsetImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+    : KisViewPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("&Offset Image..."), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
@@ -57,18 +57,16 @@ OffsetImage::OffsetImage(QObject *parent, const QVariantList &)
     connect(action, SIGNAL(triggered()), this, SLOT(slotOffsetLayer()));
 }
 
-
 OffsetImage::~OffsetImage()
 {
 }
-
 
 void OffsetImage::slotOffsetImage()
 {
     KisImageWSP image = m_view->image();
     if (image) {
 
-        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view->mainWindow(), "OffsetImage", offsetWrapRect().size());
+        DlgOffsetImage *dlgOffsetImage = new DlgOffsetImage(m_view->mainWindow(), "OffsetImage", offsetWrapRect().size());
         Q_CHECK_PTR(dlgOffsetImage);
 
         KUndo2MagicString actionName = kundo2_i18n("Offset Image");
@@ -79,40 +77,35 @@ void OffsetImage::slotOffsetImage()
             offsetImpl(actionName, image->root(), offsetPoint);
         }
         delete dlgOffsetImage;
-    }
-    else
-    {
+    } else {
         kWarning() << "KisImage not available";
     }
 }
-
 
 void OffsetImage::slotOffsetLayer()
 {
     KisImageWSP image = m_view->image();
     if (image) {
 
-    DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view->mainWindow(), "OffsetLayer", offsetWrapRect().size());
-    Q_CHECK_PTR(dlgOffsetImage);
+        DlgOffsetImage *dlgOffsetImage = new DlgOffsetImage(m_view->mainWindow(), "OffsetLayer", offsetWrapRect().size());
+        Q_CHECK_PTR(dlgOffsetImage);
 
-    KUndo2MagicString actionName = kundo2_i18n("Offset Layer");
-    dlgOffsetImage->setCaption(i18nc("@title:window", "Offset Layer"));
+        KUndo2MagicString actionName = kundo2_i18n("Offset Layer");
+        dlgOffsetImage->setCaption(i18nc("@title:window", "Offset Layer"));
 
-    if (dlgOffsetImage->exec() == QDialog::Accepted) {
-        QPoint offsetPoint = QPoint(dlgOffsetImage->offsetX(), dlgOffsetImage->offsetY());
-        KisNodeSP activeNode = m_view->activeNode();
-        offsetImpl(actionName, activeNode, offsetPoint);
-    }
-    delete dlgOffsetImage;
+        if (dlgOffsetImage->exec() == QDialog::Accepted) {
+            QPoint offsetPoint = QPoint(dlgOffsetImage->offsetX(), dlgOffsetImage->offsetY());
+            KisNodeSP activeNode = m_view->activeNode();
+            offsetImpl(actionName, activeNode, offsetPoint);
+        }
+        delete dlgOffsetImage;
 
-    }
-    else
-    {
+    } else {
         kWarning() << "KisImage not available";
     }
 }
 
-void OffsetImage::offsetImpl(const KUndo2MagicString& actionName, KisNodeSP node, const QPoint& offsetPoint)
+void OffsetImage::offsetImpl(const KUndo2MagicString &actionName, KisNodeSP node, const QPoint &offsetPoint)
 {
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
@@ -127,21 +120,15 @@ void OffsetImage::offsetImpl(const KUndo2MagicString& actionName, KisNodeSP node
     applicator.end();
 }
 
-
 QRect OffsetImage::offsetWrapRect()
 {
     QRect offsetWrapRect;
-    if (m_view->selection())
-    {
+    if (m_view->selection()) {
         offsetWrapRect = m_view->selection()->selectedExactRect();
-    }
-    else
-    {
+    } else {
         offsetWrapRect = m_view->image()->bounds();
     }
     return offsetWrapRect;
 }
-
-
 
 #include "offsetimage.moc"

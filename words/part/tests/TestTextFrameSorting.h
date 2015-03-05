@@ -26,8 +26,8 @@ private Q_SLOTS:
     void testCopyAfterTextSorting();
 
 private:
-    KWTextFrame* createFrame(const QPointF &position, KWTextFrameSet &fs);
-    KWFrame* createCopyFrame(const QPointF &position, KoShape *orig, KWTextFrameSet &fs);
+    KWTextFrame *createFrame(const QPointF &position, KWTextFrameSet &fs);
+    KWFrame *createCopyFrame(const QPointF &position, KoShape *orig, KWTextFrameSet &fs);
 };
 
 #endif

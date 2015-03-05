@@ -17,7 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #include "kptconfigskeleton.h"
 
 #include "kptfactory.h"
@@ -25,11 +24,10 @@
 #include <kcomponentdata.h>
 
 KPlatoConfigSkeleton::KPlatoConfigSkeleton()
-    : KConfigSkeleton( KPlato::Factory::global().config() )
+    : KConfigSkeleton(KPlato::Factory::global().config())
 {}
 
 KPlatoConfigSkeleton::~KPlatoConfigSkeleton()
 {}
-
 
 #include "kptconfigskeleton.moc"

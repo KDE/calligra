@@ -29,9 +29,10 @@ KisPressureSizeOption::KisPressureSizeOption()
     setMaximumLabel(i18n("100%"));
 }
 
-
-double KisPressureSizeOption::apply(const KisPaintInformation & info) const
+double KisPressureSizeOption::apply(const KisPaintInformation &info) const
 {
-    if (!isChecked()) return 1.0;
+    if (!isChecked()) {
+        return 1.0;
+    }
     return computeValue(info);
 }

@@ -23,7 +23,6 @@
 #include "kis_types.h"
 #include "kis_image_command.h"
 
-
 class KRITAIMAGE_EXPORT KisImageLayerRemoveCommand : public KisImageCommand
 {
 public:

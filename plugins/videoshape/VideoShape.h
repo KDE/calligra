@@ -37,7 +37,6 @@ class VideoData;
 class VideoThumbnailer;
 #endif
 
-
 class VideoShape : public KoShape, public KoFrameShape
 {
 public:

@@ -76,13 +76,13 @@ using namespace Calligra::Sheets;
 class Map::Private
 {
 public:
-    DocBase* doc;
+    DocBase *doc;
 
     /**
      * List of all sheets in this map.
      */
-    QList<Sheet*> lstSheets;
-    QList<Sheet*> lstDeletedSheets;
+    QList<Sheet *> lstSheets;
+    QList<Sheet *> lstDeletedSheets;
 
     // used to give every Sheet a unique default name.
     int tableId;
@@ -91,29 +91,29 @@ public:
     int overallRowCount;
     int loadedRowsCounter;
 
-    LoadingInfo* loadingInfo;
+    LoadingInfo *loadingInfo;
     bool readwrite;
 
-    BindingManager* bindingManager;
-    DatabaseManager* databaseManager;
-    DependencyManager* dependencyManager;
-    NamedAreaManager* namedAreaManager;
-    RecalcManager* recalcManager;
-    StyleManager* styleManager;
-    KoStyleManager* textStyleManager;
+    BindingManager *bindingManager;
+    DatabaseManager *databaseManager;
+    DependencyManager *dependencyManager;
+    NamedAreaManager *namedAreaManager;
+    RecalcManager *recalcManager;
+    StyleManager *styleManager;
+    KoStyleManager *textStyleManager;
 
-    ApplicationSettings* applicationSettings;
-    CalculationSettings* calculationSettings;
-    ValueCalc* calc;
-    ValueConverter* converter;
-    ValueFormatter* formatter;
-    ValueParser* parser;
+    ApplicationSettings *applicationSettings;
+    CalculationSettings *calculationSettings;
+    ValueCalc *calc;
+    ValueConverter *converter;
+    ValueFormatter *formatter;
+    ValueParser *parser;
 
     // default objects
-    ColumnFormat* defaultColumnFormat;
-    RowFormat* defaultRowFormat;
+    ColumnFormat *defaultColumnFormat;
+    RowFormat *defaultRowFormat;
 
-    QList<Damage*> damages;
+    QList<Damage *> damages;
     bool isLoading;
 
     int syntaxVersion;
@@ -121,10 +121,9 @@ public:
     KCompletion listCompletion;
 };
 
-
-Map::Map(DocBase* doc, int syntaxVersion)
-        : QObject(doc),
-        d(new Private)
+Map::Map(DocBase *doc, int syntaxVersion)
+    : QObject(doc),
+      d(new Private)
 {
     setObjectName(QLatin1String("Map")); // necessary for D-Bus
     d->doc = doc;
@@ -183,8 +182,9 @@ Map::~Map()
 {
     // Because some of the shapes might be using a sheet in this map, delete
     // all shapes in each sheet before all sheets are deleted together.
-    foreach(Sheet *sheet, d->lstSheets)
+    foreach (Sheet *sheet, d->lstSheets) {
         sheet->deleteShapes();
+    }
     // we have to explicitly delete the Sheets, not let QObject take care of that
     // as the sheet in its destructor expects the Map to still exist
     qDeleteAll(d->lstSheets);
@@ -212,7 +212,7 @@ Map::~Map()
     delete d;
 }
 
-DocBase* Map::doc() const
+DocBase *Map::doc() const
 {
     return d->doc;
 }
@@ -246,7 +246,7 @@ bool Map::completeLoading(KoStore *store)
     return true;
 }
 
-bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context)
+bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context)
 {
     Q_UNUSED(store);
     Q_UNUSED(manifestWriter);
@@ -254,67 +254,67 @@ bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSav
     return true;
 }
 
-BindingManager* Map::bindingManager() const
+BindingManager *Map::bindingManager() const
 {
     return d->bindingManager;
 }
 
-DatabaseManager* Map::databaseManager() const
+DatabaseManager *Map::databaseManager() const
 {
     return d->databaseManager;
 }
 
-DependencyManager* Map::dependencyManager() const
+DependencyManager *Map::dependencyManager() const
 {
     return d->dependencyManager;
 }
 
-NamedAreaManager* Map::namedAreaManager() const
+NamedAreaManager *Map::namedAreaManager() const
 {
     return d->namedAreaManager;
 }
 
-RecalcManager* Map::recalcManager() const
+RecalcManager *Map::recalcManager() const
 {
     return d->recalcManager;
 }
 
-StyleManager* Map::styleManager() const
+StyleManager *Map::styleManager() const
 {
     return d->styleManager;
 }
 
-KoStyleManager* Map::textStyleManager() const
+KoStyleManager *Map::textStyleManager() const
 {
     return d->textStyleManager;
 }
 
-ValueParser* Map::parser() const
+ValueParser *Map::parser() const
 {
     return d->parser;
 }
 
-ValueFormatter* Map::formatter() const
+ValueFormatter *Map::formatter() const
 {
     return d->formatter;
 }
 
-ValueConverter* Map::converter() const
+ValueConverter *Map::converter() const
 {
     return d->converter;
 }
 
-ValueCalc* Map::calc() const
+ValueCalc *Map::calc() const
 {
     return d->calc;
 }
 
-const ColumnFormat* Map::defaultColumnFormat() const
+const ColumnFormat *Map::defaultColumnFormat() const
 {
     return d->defaultColumnFormat;
 }
 
-const RowFormat* Map::defaultRowFormat() const
+const RowFormat *Map::defaultRowFormat() const
 {
     return d->defaultRowFormat;
 }
@@ -329,22 +329,23 @@ void Map::setDefaultRowHeight(double height)
     d->defaultRowFormat->setHeight(height);
 }
 
-ApplicationSettings* Map::settings() const
+ApplicationSettings *Map::settings() const
 {
     return d->applicationSettings;
 }
 
-CalculationSettings* Map::calculationSettings() const
+CalculationSettings *Map::calculationSettings() const
 {
     return d->calculationSettings;
 }
 
-Sheet* Map::createSheet(const QString& name)
+Sheet *Map::createSheet(const QString &name)
 {
     QString sheetName(i18n("Sheet%1", d->tableId++));
-    if ( !name.isEmpty() )
+    if (!name.isEmpty()) {
         sheetName = name;
-    Sheet* sheet = new Sheet(this, sheetName);
+    }
+    Sheet *sheet = new Sheet(this, sheetName);
     connect(sheet, SIGNAL(statusMessage(QString,int)),
             this, SIGNAL(statusMessage(QString,int)));
     return sheet;
@@ -356,22 +357,23 @@ void Map::addSheet(Sheet *_sheet)
     emit sheetAdded(_sheet);
 }
 
-Sheet *Map::addNewSheet(const QString& name)
+Sheet *Map::addNewSheet(const QString &name)
 {
     Sheet *t = createSheet(name);
     addSheet(t);
     return t;
 }
 
-void Map::moveSheet(const QString & _from, const QString & _to, bool _before)
+void Map::moveSheet(const QString &_from, const QString &_to, bool _before)
 {
-    Sheet* sheetfrom = findSheet(_from);
-    Sheet* sheetto = findSheet(_to);
+    Sheet *sheetfrom = findSheet(_from);
+    Sheet *sheetto = findSheet(_to);
 
-    int from = d->lstSheets.indexOf(sheetfrom) ;
-    int to = d->lstSheets.indexOf(sheetto) ;
-    if (!_before)
+    int from = d->lstSheets.indexOf(sheetfrom);
+    int to = d->lstSheets.indexOf(sheetto);
+    if (!_before) {
         ++to;
+    }
 
     if (to > (int)d->lstSheets.count()) {
         d->lstSheets.append(sheetfrom);
@@ -394,7 +396,7 @@ void Map::loadOdfSettings(KoOasisSettings &settings)
     KoOasisSettings::NamedMap sheetsMap = firstView.namedMap("Tables");
     kDebug() << " loadOdfSettings( KoOasisSettings &settings ) exist :" << !sheetsMap.isNull();
     if (!sheetsMap.isNull()) {
-        foreach(Sheet* sheet, d->lstSheets) {
+        foreach (Sheet *sheet, d->lstSheets) {
             sheet->loadOdfSettings(sheetsMap);
         }
     }
@@ -408,7 +410,7 @@ void Map::loadOdfSettings(KoOasisSettings &settings)
     }
 }
 
-bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
+bool Map::saveOdf(KoXmlWriter &xmlWriter, KoShapeSavingContext &savingContext)
 {
     // Saving the custom cell styles including the default cell style.
     d->styleManager->saveOdf(savingContext.mainStyles());
@@ -438,7 +440,7 @@ bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
 
     OdfSavingContext tableContext(savingContext);
 
-    foreach(Sheet* sheet, d->lstSheets) {
+    foreach (Sheet *sheet, d->lstSheets) {
         sheet->saveOdf(tableContext);
     }
 
@@ -449,11 +451,11 @@ bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
     return true;
 }
 
-QDomElement Map::save(QDomDocument& doc)
+QDomElement Map::save(QDomDocument &doc)
 {
     QDomElement spread = doc.documentElement();
 
-    QDomElement locale = static_cast<Localization*>(d->calculationSettings->locale())->save(doc);
+    QDomElement locale = static_cast<Localization *>(d->calculationSettings->locale())->save(doc);
     spread.appendChild(locale);
 
     QDomElement areaname = d->namedAreaManager->saveXML(doc);
@@ -480,43 +482,44 @@ QDomElement Map::save(QDomDocument& doc)
         }
     }
 
-    foreach(Sheet* sheet, d->lstSheets) {
+    foreach (Sheet *sheet, d->lstSheets) {
         QDomElement e = sheet->saveXML(doc);
-        if (e.isNull())
+        if (e.isNull()) {
             return e;
+        }
         mymap.appendChild(e);
     }
     return mymap;
 }
 
-static void fixupStyle(KoCharacterStyle* style)
+static void fixupStyle(KoCharacterStyle *style)
 {
     style->removeHardCodedDefaults();
 
     QTextCharFormat format;
     style->applyStyle(format);
     switch (style->underlineStyle()) {
-        case KoCharacterStyle::NoLineStyle:
-            format.setUnderlineStyle(QTextCharFormat::NoUnderline); break;
-        case KoCharacterStyle::SolidLine:
-            format.setUnderlineStyle(QTextCharFormat::SingleUnderline); break;
-        case KoCharacterStyle::DottedLine:
-            format.setUnderlineStyle(QTextCharFormat::DotLine); break;
-        case KoCharacterStyle::DashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashUnderline); break;
-        case KoCharacterStyle::DotDashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashDotLine); break;
-        case KoCharacterStyle::DotDotDashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashDotDotLine); break;
-        case KoCharacterStyle::LongDashLine:
-            format.setUnderlineStyle(QTextCharFormat::DashUnderline); break;
-        case KoCharacterStyle::WaveLine:
-            format.setUnderlineStyle(QTextCharFormat::WaveUnderline); break;
+    case KoCharacterStyle::NoLineStyle:
+        format.setUnderlineStyle(QTextCharFormat::NoUnderline); break;
+    case KoCharacterStyle::SolidLine:
+        format.setUnderlineStyle(QTextCharFormat::SingleUnderline); break;
+    case KoCharacterStyle::DottedLine:
+        format.setUnderlineStyle(QTextCharFormat::DotLine); break;
+    case KoCharacterStyle::DashLine:
+        format.setUnderlineStyle(QTextCharFormat::DashUnderline); break;
+    case KoCharacterStyle::DotDashLine:
+        format.setUnderlineStyle(QTextCharFormat::DashDotLine); break;
+    case KoCharacterStyle::DotDotDashLine:
+        format.setUnderlineStyle(QTextCharFormat::DashDotDotLine); break;
+    case KoCharacterStyle::LongDashLine:
+        format.setUnderlineStyle(QTextCharFormat::DashUnderline); break;
+    case KoCharacterStyle::WaveLine:
+        format.setUnderlineStyle(QTextCharFormat::WaveUnderline); break;
     }
     style->copyProperties(format);
 }
 
-bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
+bool Map::loadOdf(const KoXmlElement &body, KoOdfLoadingContext &odfContext)
 {
     d->isLoading = true;
     loadingInfo()->setFileFormat(LoadingInfo::OpenDocument);
@@ -530,14 +533,14 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     // load text styles for rich-text content and TOS
     KoShapeLoadingContext shapeContext(tableContext.odfContext, resourceManager());
     tableContext.shapeContext = &shapeContext;
-    KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
+    KoTextSharedLoadingData *sharedData = new KoTextSharedLoadingData();
     sharedData->loadOdfStyles(shapeContext, textStyleManager());
 
-    fixupStyle((KoCharacterStyle*)textStyleManager()->defaultParagraphStyle());
-    foreach (KoCharacterStyle* style, sharedData->characterStyles(true)) {
+    fixupStyle((KoCharacterStyle *)textStyleManager()->defaultParagraphStyle());
+    foreach (KoCharacterStyle *style, sharedData->characterStyles(true)) {
         fixupStyle(style);
     }
-    foreach (KoCharacterStyle* style, sharedData->characterStyles(false)) {
+    foreach (KoCharacterStyle *style, sharedData->characterStyles(false)) {
         fixupStyle(style);
     }
     shapeContext.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
@@ -546,9 +549,8 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     variant.setValue(textStyleManager());
     resourceManager()->setResource(KoText::StyleManager, variant);
 
-
     // load default column style
-    const KoXmlElement* defaultColumnStyle = odfContext.stylesReader().defaultStyle("table-column");
+    const KoXmlElement *defaultColumnStyle = odfContext.stylesReader().defaultStyle("table-column");
     if (defaultColumnStyle) {
 //       kDebug() <<"style:default-style style:family=\"table-column\"";
         KoStyleStack styleStack;
@@ -564,7 +566,7 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     }
 
     // load default row style
-    const KoXmlElement* defaultRowStyle = odfContext.stylesReader().defaultStyle("table-row");
+    const KoXmlElement *defaultRowStyle = odfContext.stylesReader().defaultStyle("table-row");
     if (defaultRowStyle) {
 //       kDebug() <<"style:default-style style:family=\"table-row\"";
         KoStyleStack styleStack;
@@ -606,7 +608,7 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
             if (sheetElement.nodeName() == "table:table") {
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     const QString sheetName = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
-                    Sheet* sheet = addNewSheet(sheetName);
+                    Sheet *sheet = addNewSheet(sheetName);
                     sheet->setSheetName(sheetName, true);
                     d->overallRowCount += KoXml::childNodesCount(sheetElement);
                 }
@@ -635,7 +637,7 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
             if (sheetElement.nodeName() == "table:table") {
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     QString name = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
-                    Sheet* sheet = findSheet(name);
+                    Sheet *sheet = findSheet(name);
                     if (sheet) {
                         sheet->loadOdf(sheetElement, tableContext, autoStyles, conditionalStyles);
                     }
@@ -664,8 +666,7 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     return true;
 }
 
-
-bool Map::loadXML(const KoXmlElement& mymap)
+bool Map::loadXML(const KoXmlElement &mymap)
 {
     d->isLoading = true;
     loadingInfo()->setFileFormat(LoadingInfo::NativeFormat);
@@ -705,51 +706,57 @@ bool Map::loadXML(const KoXmlElement& mymap)
     return true;
 }
 
-Sheet* Map::findSheet(const QString & _name) const
+Sheet *Map::findSheet(const QString &_name) const
 {
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (_name.toLower() == sheet->sheetName().toLower())
+    foreach (Sheet *sheet, d->lstSheets) {
+        if (_name.toLower() == sheet->sheetName().toLower()) {
             return sheet;
+        }
     }
     return 0;
 }
 
-Sheet * Map::nextSheet(Sheet * currentSheet) const
+Sheet *Map::nextSheet(Sheet *currentSheet) const
 {
-    if (currentSheet == d->lstSheets.last())
+    if (currentSheet == d->lstSheets.last()) {
         return currentSheet;
+    }
     int index = 0;
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (sheet == currentSheet)
+    foreach (Sheet *sheet, d->lstSheets) {
+        if (sheet == currentSheet) {
             return d->lstSheets.value(++index);
+        }
         ++index;
     }
     return 0;
 }
 
-Sheet * Map::previousSheet(Sheet * currentSheet) const
+Sheet *Map::previousSheet(Sheet *currentSheet) const
 {
-    if (currentSheet == d->lstSheets.first())
+    if (currentSheet == d->lstSheets.first()) {
         return currentSheet;
+    }
     int index = 0;
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (sheet  == currentSheet)
+    foreach (Sheet *sheet, d->lstSheets) {
+        if (sheet  == currentSheet) {
             return d->lstSheets.value(--index);
+        }
         ++index;
     }
     return 0;
 }
 
-bool Map::loadChildren(KoStore * _store)
+bool Map::loadChildren(KoStore *_store)
 {
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (!sheet->loadChildren(_store))
+    foreach (Sheet *sheet, d->lstSheets) {
+        if (!sheet->loadChildren(_store)) {
             return false;
+        }
     }
     return true;
 }
 
-void Map::removeSheet(Sheet* sheet)
+void Map::removeSheet(Sheet *sheet)
 {
     d->lstSheets.removeAll(sheet);
     d->lstDeletedSheets.append(sheet);
@@ -757,7 +764,7 @@ void Map::removeSheet(Sheet* sheet)
     emit sheetRemoved(sheet);
 }
 
-void Map::reviveSheet(Sheet* sheet)
+void Map::reviveSheet(Sheet *sheet)
 {
     d->lstDeletedSheets.removeAll(sheet);
     d->lstSheets.append(sheet);
@@ -768,9 +775,10 @@ void Map::reviveSheet(Sheet* sheet)
 QStringList Map::visibleSheets() const
 {
     QStringList result;
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (!sheet->isHidden())
+    foreach (Sheet *sheet, d->lstSheets) {
+        if (!sheet->isHidden()) {
             result.append(sheet->sheetName());
+        }
     }
     return result;
 }
@@ -779,24 +787,25 @@ QStringList Map::visibleSheets() const
 QStringList Map::hiddenSheets() const
 {
     QStringList result;
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (sheet->isHidden())
+    foreach (Sheet *sheet, d->lstSheets) {
+        if (sheet->isHidden()) {
             result.append(sheet->sheetName());
+        }
     }
     return result;
 }
 
-Sheet* Map::sheet(int index) const
+Sheet *Map::sheet(int index) const
 {
     return d->lstSheets.value(index);
 }
 
-int Map::indexOf(Sheet* sheet) const
+int Map::indexOf(Sheet *sheet) const
 {
     return d->lstSheets.indexOf(sheet);
 }
 
-QList<Sheet*>& Map::sheetList() const
+QList<Sheet *> &Map::sheetList() const
 {
     return d->lstSheets;
 }
@@ -831,7 +840,7 @@ void Map::setSyntaxVersion(int version)
     d->syntaxVersion = version;
 }
 
-LoadingInfo* Map::loadingInfo() const
+LoadingInfo *Map::loadingInfo() const
 {
     if (!d->loadingInfo) {
         d->loadingInfo = new LoadingInfo();
@@ -845,7 +854,7 @@ void Map::deleteLoadingInfo()
     d->loadingInfo = 0;
 }
 
-KCompletion& Map::stringCompletion()
+KCompletion &Map::stringCompletion()
 {
     return d->listCompletion;
 }
@@ -857,7 +866,7 @@ void Map::addStringCompletion(const QString &stringCompletion)
     }
 }
 
-void Map::addDamage(Damage* damage)
+void Map::addDamage(Damage *damage)
 {
     // Do not create a new Damage, if we are in loading process. Check for it before
     // calling this function. This prevents unnecessary memory allocations (new).
@@ -867,11 +876,11 @@ void Map::addDamage(Damage* damage)
 
 #ifndef NDEBUG
     if (damage->type() == Damage::Cell) {
-        kDebug(36007) << "Adding\t" << *static_cast<CellDamage*>(damage);
+        kDebug(36007) << "Adding\t" << *static_cast<CellDamage *>(damage);
     } else if (damage->type() == Damage::Sheet) {
-        kDebug(36007) << "Adding\t" << *static_cast<SheetDamage*>(damage);
+        kDebug(36007) << "Adding\t" << *static_cast<SheetDamage *>(damage);
     } else if (damage->type() == Damage::Selection) {
-        kDebug(36007) << "Adding\t" << *static_cast<SelectionDamage*>(damage);
+        kDebug(36007) << "Adding\t" << *static_cast<SelectionDamage *>(damage);
     } else {
         kDebug(36007) << "Adding\t" << *damage;
     }
@@ -887,13 +896,13 @@ void Map::addDamage(Damage* damage)
 void Map::flushDamages()
 {
     // Copy the damages to process. This allows new damages while processing.
-    QList<Damage*> damages = d->damages;
+    QList<Damage *> damages = d->damages;
     d->damages.clear();
     emit damagesFlushed(damages);
     qDeleteAll(damages);
 }
 
-void Map::handleDamages(const QList<Damage*>& damages)
+void Map::handleDamages(const QList<Damage *> &damages)
 {
     Region bindingChangedRegion;
     Region formulaChangedRegion;
@@ -901,15 +910,15 @@ void Map::handleDamages(const QList<Damage*>& damages)
     Region valueChangedRegion;
     WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
 
-    QList<Damage*>::ConstIterator end(damages.end());
-    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
-        Damage* damage = *it;
+    QList<Damage *>::ConstIterator end(damages.end());
+    for (QList<Damage *>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage *damage = *it;
 
         if (damage->type() == Damage::Cell) {
-            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
+            CellDamage *cellDamage = static_cast<CellDamage *>(damage);
             kDebug(36007) << "Processing\t" << *cellDamage;
-            Sheet* const damagedSheet = cellDamage->sheet();
-            const Region& region = cellDamage->region();
+            Sheet *const damagedSheet = cellDamage->sheet();
+            const Region &region = cellDamage->region();
             const CellDamage::Changes changes = cellDamage->changes();
 
             // TODO Stefan: Detach the style cache from the CellView cache.
@@ -937,7 +946,7 @@ void Map::handleDamages(const QList<Damage*>& damages)
         }
 
         if (damage->type() == Damage::Sheet) {
-            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            SheetDamage *sheetDamage = static_cast<SheetDamage *>(damage);
             kDebug(36007) << "Processing\t" << *sheetDamage;
 //             Sheet* damagedSheet = sheetDamage->sheet();
 
@@ -947,7 +956,7 @@ void Map::handleDamages(const QList<Damage*>& damages)
         }
 
         if (damage->type() == Damage::Workbook) {
-            WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>(damage);
+            WorkbookDamage *workbookDamage = static_cast<WorkbookDamage *>(damage);
             kDebug(36007) << "Processing\t" << *damage;
 
             workbookChanges |= workbookDamage->changes();
@@ -993,9 +1002,11 @@ void Map::addCommand(KUndo2Command *command)
     emit commandAdded(command);
 }
 
-KoDocumentResourceManager* Map::resourceManager() const
+KoDocumentResourceManager *Map::resourceManager() const
 {
-    if (!doc()) return 0;
+    if (!doc()) {
+        return 0;
+    }
     return doc()->resourceManager();
 }
 

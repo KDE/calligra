@@ -40,7 +40,7 @@
 class FontSizeAction : public KSelectAction
 {
     Q_OBJECT
-    Q_PROPERTY( qreal fontSize READ fontSize WRITE setFontSize )
+    Q_PROPERTY(qreal fontSize READ fontSize WRITE setFontSize)
 
 public:
     explicit FontSizeAction(QObject *parent);
@@ -51,20 +51,20 @@ public:
 
     qreal fontSize() const;
 
-    void setFontSize( qreal size );
+    void setFontSize(qreal size);
 
 Q_SIGNALS:
-    void fontSizeChanged( qreal );
+    void fontSizeChanged(qreal);
 
 protected Q_SLOTS:
     /**
      * This function is called whenever an action from the selections is triggered.
      */
-    virtual void actionTriggered(QAction* action);
+    virtual void actionTriggered(QAction *action);
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

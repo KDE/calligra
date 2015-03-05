@@ -29,11 +29,11 @@
 K_PLUGIN_FACTORY(ArtisticTextShapePluginFactory, registerPlugin<ArtisticTextShapePlugin>();)
 K_EXPORT_PLUGIN(ArtisticTextShapePluginFactory("calligra_shape_artistictext"))
 
-ArtisticTextShapePlugin::ArtisticTextShapePlugin( QObject * parent, const QVariantList & )
+ArtisticTextShapePlugin::ArtisticTextShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new ArtisticTextShapeFactory() );
-    KoToolRegistry::instance()->add( new ArtisticTextToolFactory() );
+    KoShapeRegistry::instance()->add(new ArtisticTextShapeFactory());
+    KoToolRegistry::instance()->add(new ArtisticTextToolFactory());
 }
 
 ArtisticTextShapePlugin::~ArtisticTextShapePlugin()

@@ -27,11 +27,11 @@
 #include "googledocument.h"
 
 DocumentListWindow::DocumentListWindow(GoogleDocumentService *service, GoogleDocumentList *gList)
-        : m_docListDialog(new Ui_ListDialog),
-          m_gService(service)
+    : m_docListDialog(new Ui_ListDialog),
+      m_gService(service)
 {
     m_docListDialog->setupUi(this);
-    connect(m_docListDialog->listView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(getClickedDocument(const QModelIndex &)));
+    connect(m_docListDialog->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(getClickedDocument(QModelIndex)));
     connect(m_docListDialog->okButton, SIGNAL(clicked()), this, SLOT(fetchDocument()));
     connect(m_docListDialog->closeButton, SIGNAL(clicked()), this, SLOT(hideDialog()));
 
@@ -56,7 +56,7 @@ void DocumentListWindow::fetchDocument()
     m_docListDialog->okButton->setEnabled(false);
 }
 
-void DocumentListWindow::getClickedDocument( const QModelIndex & index)
+void DocumentListWindow::getClickedDocument(const QModelIndex &index)
 {
     Q_UNUSED(index);
 }
@@ -68,11 +68,11 @@ QString DocumentListWindow::currentDocument()
     QString type = m_docListDialog->listView->model()->index(selectedRow, 2).data().toString();
     QString ext;
 
-    if (QString::compare(type, "document", Qt::CaseInsensitive) == 0 ) {
-            ext = ".odt";
-    } else if (QString::compare(type, "spreadsheet", Qt::CaseInsensitive) == 0 ) {
+    if (QString::compare(type, "document", Qt::CaseInsensitive) == 0) {
+        ext = ".odt";
+    } else if (QString::compare(type, "spreadsheet", Qt::CaseInsensitive) == 0) {
         ext = ".ods";
-    } else if (QString::compare(type, "presentation", Qt::CaseInsensitive) == 0 ) {
+    } else if (QString::compare(type, "presentation", Qt::CaseInsensitive) == 0) {
         ext = ".ppt";
     }
 

@@ -164,7 +164,7 @@ protected:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // _KO_FILTER_EFFECT_H_

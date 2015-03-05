@@ -18,7 +18,6 @@
 
 #include "kis_merge_walker.h"
 
-
 KisMergeWalker::KisMergeWalker(QRect cropRect,  Flags flags)
     : m_flags(flags)
 {
@@ -36,7 +35,7 @@ KisBaseRectsWalker::UpdateType KisMergeWalker::type() const
 
 void KisMergeWalker::startTrip(KisNodeSP startWith)
 {
-    if(isMask(startWith)) {
+    if (isMask(startWith)) {
         startTripWithMask(startWith);
         return;
     }
@@ -45,8 +44,9 @@ void KisMergeWalker::startTrip(KisNodeSP startWith)
                     m_flags == DEFAULT ? N_FILTHY : N_ABOVE_FILTHY);
 
     KisNodeSP prevNode = startWith->prevSibling();
-    if(prevNode)
+    if (prevNode) {
         visitLowerNode(prevNode);
+    }
 }
 
 void KisMergeWalker::startTripWithMask(KisNodeSP filthyMask)
@@ -59,18 +59,20 @@ void KisMergeWalker::startTripWithMask(KisNodeSP filthyMask)
     KisNodeSP nextNode = parentLayer->nextSibling();
     KisNodeSP prevNode = parentLayer->prevSibling();
 
-    if (nextNode)
+    if (nextNode) {
         visitHigherNode(nextNode, N_ABOVE_FILTHY);
-    else if (parentLayer->parent())
+    } else if (parentLayer->parent()) {
         startTrip(parentLayer->parent());
+    }
 
     NodePosition positionToFilthy =
         (m_flags == DEFAULT ? N_FILTHY_PROJECTION : N_ABOVE_FILTHY) |
         calculateNodePosition(parentLayer);
     registerNeedRect(parentLayer, positionToFilthy);
 
-    if(prevNode)
+    if (prevNode) {
         visitLowerNode(prevNode);
+    }
 }
 
 void KisMergeWalker::visitHigherNode(KisNodeSP node, NodePosition positionToFilthy)
@@ -80,10 +82,11 @@ void KisMergeWalker::visitHigherNode(KisNodeSP node, NodePosition positionToFilt
     registerChangeRect(node, positionToFilthy);
 
     KisNodeSP nextNode = node->nextSibling();
-    if (nextNode)
+    if (nextNode) {
         visitHigherNode(nextNode, N_ABOVE_FILTHY);
-    else if (node->parent())
+    } else if (node->parent()) {
         startTrip(node->parent());
+    }
 
     registerNeedRect(node, positionToFilthy);
 }
@@ -95,6 +98,7 @@ void KisMergeWalker::visitLowerNode(KisNodeSP node)
     registerNeedRect(node, position);
 
     KisNodeSP prevNode = node->prevSibling();
-    if (prevNode)
+    if (prevNode) {
         visitLowerNode(prevNode);
+    }
 }

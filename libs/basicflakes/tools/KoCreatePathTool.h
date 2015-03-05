@@ -45,7 +45,7 @@ public:
      * Constructor for the tool that allows you to create new paths by hand.
      * @param canvas the canvas this tool will be working for.
      */
-    explicit KoCreatePathTool(KoCanvasBase * canvas);
+    explicit KoCreatePathTool(KoCanvasBase *canvas);
     virtual ~KoCreatePathTool();
 
     /// reimplemented
@@ -64,11 +64,11 @@ public:
 
 public Q_SLOTS:
     /// reimplemented
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     /// reimplemented
     virtual void deactivate();
     /// reimplemented
-    virtual void documentResourceChanged(int key, const QVariant & res);
+    virtual void documentResourceChanged(int key, const QVariant &res);
 
 protected:
     /**
@@ -76,13 +76,13 @@ protected:
      * This method can be overridden and change the behaviour of the tool. In that case the subclass takes ownership of pathShape.
      * It gets only called, if there are two or more points in the path.
      */
-    virtual void addPathShape(KoPathShape* pathShape);
+    virtual void addPathShape(KoPathShape *pathShape);
 
 protected:
     /**
       * This method is called to paint the path. Decorations are drawn by KoCreatePathTool afterwards.
       */
-    virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
+    virtual void paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter);
 
     void endPath();
     void endPathWithoutLastPoint();

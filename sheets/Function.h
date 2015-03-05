@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef CALLIGRA_SHEETS_FUNCTIONS
 #define CALLIGRA_SHEETS_FUNCTIONS
 
@@ -30,7 +29,6 @@
 #include "Value.h"
 
 #include "calligra_sheets_export.h"
-
 
 namespace Calligra
 {
@@ -44,16 +42,18 @@ typedef QVector<Value> valVector;
 
 struct rangeInfo {
     int col1, col2, row1, row2;
-    int columns() {
+    int columns()
+    {
         return col2 - col1 + 1;
     }
-    int rows() {
+    int rows()
+    {
         return row2 - row1 + 1;
     }
 };
 struct FuncExtra {
     // here we'll add all the extras a function may need
-    Function* function;
+    Function *function;
     QVector<rangeInfo> ranges;
     QVector<Region> regions;
     Sheet *sheet;
@@ -69,7 +69,7 @@ typedef Value(*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
 class CALLIGRA_SHEETS_ODF_EXPORT Function
 {
 public:
-    Function(const QString& name, FunctionPtr ptr);
+    Function(const QString &name, FunctionPtr ptr);
     virtual ~Function();
     /**
     setParamCount sets allowed parameter count for a function.
@@ -87,7 +87,7 @@ public:
     QString name() const;
     QString localizedName() const;
     QString helpText() const;
-    void setHelpText(const QString& text);
+    void setHelpText(const QString &text);
     Value exec(valVector args, ValueCalc *calc, FuncExtra *extra = 0);
 
     QString alternateName() const;
@@ -97,14 +97,15 @@ private:
     Q_DISABLE_COPY(Function)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 /**
  * \ingroup Value
  * A helper-class to call a function.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT FunctionCaller {
+class CALLIGRA_SHEETS_ODF_EXPORT FunctionCaller
+{
 public:
     FunctionPtr m_ptr;
     valVector m_args;

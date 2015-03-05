@@ -32,7 +32,6 @@
 #include <QGLBuffer>
 #endif
 
-
 struct KisGLTexturesInfo {
 
     // real width and height
@@ -71,29 +70,35 @@ public:
                    bool useBuffer, int numMipmapLevels);
     ~KisTextureTile();
 
-    void setUseBuffer(bool useBuffer) {
+    void setUseBuffer(bool useBuffer)
+    {
         m_useBuffer = useBuffer;
     }
 
-    void setNumMipmapLevels(int num) {
+    void setNumMipmapLevels(int num)
+    {
         m_numMipmapLevels = num;
     }
 
     void update(const KisTextureTileUpdateInfo &updateInfo);
 
-    inline QRect tileRectInImagePixels() {
+    inline QRect tileRectInImagePixels()
+    {
         return m_tileRectInImagePixels;
     }
 
-    inline GLuint textureId() {
+    inline GLuint textureId()
+    {
         return m_textureId;
     }
 
-    inline QRect textureRectInImagePixels() {
+    inline QRect textureRectInImagePixels()
+    {
         return m_textureRectInImagePixels;
     }
 
-    inline QRectF tileRectInTexturePixels() {
+    inline QRectF tileRectInTexturePixels()
+    {
         return m_tileRectInTexturePixels;
     }
 
@@ -110,7 +115,6 @@ public:
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     }
 
-
     void bindToActiveTexture();
 
 private:
@@ -119,7 +123,7 @@ private:
     GLuint m_textureId;
 
 #ifdef USE_PIXEL_BUFFERS
-    void createTextureBuffer(const char*data, int size);
+    void createTextureBuffer(const char *data, int size);
     QGLBuffer *m_glBuffer;
 #endif
 
@@ -133,7 +137,6 @@ private:
     int m_numMipmapLevels;
     Q_DISABLE_COPY(KisTextureTile)
 };
-
 
 #endif /* HAVE_OPENGL */
 

@@ -35,11 +35,10 @@
 K_PLUGIN_FACTORY(GridFactory, registerPlugin<GridPlugin>();)
 K_EXPORT_PLUGIN(GridFactory("krita"))
 
-
 GridPlugin::GridPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
+    KoToolRegistry *r = KoToolRegistry::instance();
     r->add(new KisToolGridFactory(QStringList()));
 }
 

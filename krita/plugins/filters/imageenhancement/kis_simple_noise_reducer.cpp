@@ -36,7 +36,7 @@
 #include <kis_iterator_ng.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
-        : KisFilter(id(), categoryEnhance(), i18n("&Gaussian Noise Reduction..."))
+    : KisFilter(id(), categoryEnhance(), i18n("&Gaussian Noise Reduction..."))
 {
     setSupportsPainting(false);
 }
@@ -45,7 +45,7 @@ KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 {
 }
 
-KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisSimpleNoiseReducer::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
     vKisIntegerWidgetParam param;
@@ -54,9 +54,9 @@ KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* pare
     return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
 }
 
-KisFilterConfiguration * KisSimpleNoiseReducer::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisSimpleNoiseReducer::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("threshold", 15);
     config->setProperty("windowsize", 1);
     return config;
@@ -64,15 +64,17 @@ KisFilterConfiguration * KisSimpleNoiseReducer::factoryConfiguration(const KisPa
 
 inline int ABS(int v)
 {
-    if (v < 0) return -v;
+    if (v < 0) {
+        return -v;
+    }
     return v;
 }
 
 void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
-                                        const QRect& applyRect,
-                                        const KisFilterConfiguration* config,
-                                        KoUpdater* progressUpdater
-                                        ) const
+                                        const QRect &applyRect,
+                                        const KisFilterConfiguration *config,
+                                        KoUpdater *progressUpdater
+                                       ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);
@@ -89,10 +91,10 @@ void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
     threshold = config->getInt("threshold", 15);
     windowsize = config->getInt("windowsize", 1);
 
-    const KoColorSpace* cs = device->colorSpace();
+    const KoColorSpace *cs = device->colorSpace();
 
     // Compute the blur mask
-    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(2*windowsize + 1, 1, windowsize, windowsize, 2, true);
+    KisCircleMaskGenerator *kas = new KisCircleMaskGenerator(2 * windowsize + 1, 1, windowsize, windowsize, 2, true);
 
     KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
     delete kas;
@@ -107,17 +109,18 @@ void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
         return;
     }
 
-
     KisHLineIteratorSP dstIt = device->createHLineIteratorNG(srcTopLeft.x(), srcTopLeft.y(), applyRect.width());
     KisHLineConstIteratorSP intermIt = interm->createHLineConstIteratorNG(srcTopLeft.x(), srcTopLeft.y(), applyRect.width());
 
     for (int j = 0; j < applyRect.height() && !(progressUpdater && progressUpdater->interrupted()); j++) {
         do {
-                quint8 diff = cs->difference(dstIt->oldRawData(), intermIt->oldRawData());
-                if (diff > threshold) {
-                    memcpy(dstIt->rawData(), intermIt->oldRawData(), cs->pixelSize());
-                }
-            if (progressUpdater) progressUpdater->setValue(++count);
+            quint8 diff = cs->difference(dstIt->oldRawData(), intermIt->oldRawData());
+            if (diff > threshold) {
+                memcpy(dstIt->rawData(), intermIt->oldRawData(), cs->pixelSize());
+            }
+            if (progressUpdater) {
+                progressUpdater->setValue(++count);
+            }
             intermIt->nextPixel();
         } while (dstIt->nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
         dstIt->nextRow();

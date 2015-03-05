@@ -31,7 +31,7 @@
 using namespace Calligra::Sheets;
 
 // era: encode references absolutely
-QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
+QDomDocument CopyCommand::saveAsXml(const Region &region, bool era)
 {
     QDomDocument xmlDoc("spreadsheet-snippet");
     xmlDoc.appendChild(xmlDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
@@ -107,7 +107,7 @@ QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
 
             // TODO Stefan: Inefficient, use the cluster functionality
             // Save the column formats if there are any
-            const ColumnFormat* format;
+            const ColumnFormat *format;
             for (int col = range.left(); col <= range.right(); ++col) {
                 format = sheet->columnFormat(col);
                 if (format && !format->isDefault()) {
@@ -139,7 +139,7 @@ QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
     return xmlDoc;
 }
 
-static QString cellAsText(const Cell& cell, bool addTab)
+static QString cellAsText(const Cell &cell, bool addTab)
 {
     QString result;
     if (!cell.isDefault()) {
@@ -162,17 +162,19 @@ QString CopyCommand::saveAsPlainText(const Region &region)
     QString result;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
-      if (result.length()) result += QLatin1Char('\n');
-      Region::Element *el = *it;
-      QRect used = el->sheet()->usedArea (true);
-      QRect rect = el->rect().intersected (used);
-      for (int row = rect.top(); row <= rect.bottom(); ++row) {
-        for (int col = rect.left(); col <= rect.right(); ++col) {
-          Cell cell (el->sheet(), col, row);
-          result += cellAsText (cell, col != rect.right());
+        if (result.length()) {
+            result += QLatin1Char('\n');
         }
-        result += QLatin1Char('\n');
-      }
+        Region::Element *el = *it;
+        QRect used = el->sheet()->usedArea(true);
+        QRect rect = el->rect().intersected(used);
+        for (int row = rect.top(); row <= rect.bottom(); ++row) {
+            for (int col = rect.left(); col <= rect.right(); ++col) {
+                Cell cell(el->sheet(), col, row);
+                result += cellAsText(cell, col != rect.right());
+            }
+            result += QLatin1Char('\n');
+        }
     }
     return result;
 }

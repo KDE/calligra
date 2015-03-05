@@ -23,7 +23,8 @@
 
 #include "../TestLoadingBase.h"
 
-namespace KChart {
+namespace KChart
+{
 
 class TestLoading : public TestLoadingBase
 {
@@ -33,7 +34,7 @@ public:
     TestLoading();
 
 private Q_SLOTS:
-	/// Tests title, subtitle and footer
+    /// Tests title, subtitle and footer
     void testLabels();
     void testInternalTable();
     void testDataSets();

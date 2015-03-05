@@ -29,36 +29,39 @@ class xBaseDriverPrivate;
 
 class xBaseDriver : public Driver
 {
-  Q_OBJECT
-  KEXIDB_DRIVER
+    Q_OBJECT
+    KEXIDB_DRIVER
 
-  public:
-    xBaseDriver( QObject *parent, const QVariantList &args = QVariantList() );
+public:
+    xBaseDriver(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~xBaseDriver();
 
-    /*! \return true if \a n is a system object name; 
+    /*! \return true if \a n is a system object name;
     */
-    virtual bool isSystemObjectName( const QString& n ) const;
+    virtual bool isSystemObjectName(const QString &n) const;
 
     /*! \return false for this driver. */
-    virtual bool isSystemDatabaseName( const QString& ) const { return false; }
+    virtual bool isSystemDatabaseName(const QString &) const
+    {
+        return false;
+    }
 
     //! Escape a string for use as a value
-    virtual QString escapeString(const QString& str) const;
-    virtual QByteArray escapeString(const QByteArray& str) const;
+    virtual QString escapeString(const QString &str) const;
+    virtual QByteArray escapeString(const QByteArray &str) const;
 
     //! Escape BLOB value \a array
-    virtual QString escapeBLOB(const QByteArray& array) const;
+    virtual QString escapeBLOB(const QByteArray &array) const;
 
-  protected:
-    virtual QString drv_escapeIdentifier( const QString& str) const;
-    virtual QByteArray drv_escapeIdentifier( const QByteArray& str) const;
-    virtual Connection *drv_createConnection( ConnectionData &conn_data );
-    virtual bool drv_isSystemFieldName( const QString& n ) const;
-  
-  private:
-    xBaseDriverPrivate* dp;
-    static const char * const keywords[];
+protected:
+    virtual QString drv_escapeIdentifier(const QString &str) const;
+    virtual QByteArray drv_escapeIdentifier(const QByteArray &str) const;
+    virtual Connection *drv_createConnection(ConnectionData &conn_data);
+    virtual bool drv_isSystemFieldName(const QString &n) const;
+
+private:
+    xBaseDriverPrivate *dp;
+    static const char *const keywords[];
 
 };
 

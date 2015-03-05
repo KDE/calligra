@@ -4,15 +4,15 @@
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either 
+  License as published by the Free Software Foundation; either
   version 2.1 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public 
+  You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -40,10 +40,9 @@ namespace Libemf
 
 class EmrTextObject;
 
-
 /*****************************************************************************/
 
-/** 
+/**
     Simple representation of an EMR_BITBLT record
 
     See MS-EMF Section 2.3.1.2 for details
@@ -56,37 +55,58 @@ public:
 
        \param stream the stream to read the record structure from
     */
-    BitBltRecord( QDataStream &stream, quint32 recordSize );
+    BitBltRecord(QDataStream &stream, quint32 recordSize);
     ~BitBltRecord();
 
-   /**
-       The X origin of the destination rectangle
-    */
-    qint32 xDest() const { return m_xDest; };
+    /**
+        The X origin of the destination rectangle
+     */
+    qint32 xDest() const
+    {
+        return m_xDest;
+    };
 
     /**
        The Y origin of the destination rectangle
     */
-    qint32 yDest() const { return m_yDest; };
+    qint32 yDest() const
+    {
+        return m_yDest;
+    };
 
     /**
        The width of the destination rectangle
     */
-    qint32 cxDest() const { return m_cxDest; };
+    qint32 cxDest() const
+    {
+        return m_cxDest;
+    };
 
     /**
        The height of the destination rectangle
     */
-    qint32 cyDest() const { return m_cyDest; };
+    qint32 cyDest() const
+    {
+        return m_cyDest;
+    };
 
-    quint32 rasterOperation() const { return m_BitBltRasterOperation; }
+    quint32 rasterOperation() const
+    {
+        return m_BitBltRasterOperation;
+    }
 
-    QColor bkColorSrc() const { return QColor(m_red, m_green, m_blue, m_reserved); }
+    QColor bkColorSrc() const
+    {
+        return QColor(m_red, m_green, m_blue, m_reserved);
+    }
 
     /**
        The destination rectangle
     */
-    QRect destinationRectangle() const { return QRect( xDest(), yDest(), cxDest(), cyDest() ); };
+    QRect destinationRectangle() const
+    {
+        return QRect(xDest(), yDest(), cxDest(), cyDest());
+    };
 
     /**
        The image to display
@@ -101,8 +121,8 @@ public:
 private:
     // No copying for now, because we will get into trouble with the pointers.
     // The remedy is to write a real operator=() and BitBltRecord(BitBltRecord&).
-    explicit BitBltRecord(BitBltRecord&);
-    BitBltRecord &operator=(BitBltRecord&);
+    explicit BitBltRecord(BitBltRecord &);
+    BitBltRecord &operator=(BitBltRecord &);
 
 private:
     QRect m_bounds;
@@ -138,7 +158,7 @@ private:
 
 /*****************************************************************************/
 
-/** 
+/**
     Simple representation of an EMR_STRETCHDIBITS record
 
     See MS-EMF Section 2.3.1.7 for details
@@ -151,7 +171,7 @@ public:
 
        \param stream the stream to read the record structure from
     */
-    StretchDiBitsRecord( QDataStream &stream, quint32 recordSize );
+    StretchDiBitsRecord(QDataStream &stream, quint32 recordSize);
     ~StretchDiBitsRecord();
 
     /**
@@ -162,59 +182,95 @@ public:
     /**
        The X origin of the destination rectangle
     */
-    qint32 xDest() const { return m_xDest; };
+    qint32 xDest() const
+    {
+        return m_xDest;
+    };
 
     /**
        The Y origin of the destination rectangle
     */
-    qint32 yDest() const { return m_yDest; };
+    qint32 yDest() const
+    {
+        return m_yDest;
+    };
 
     /**
        The width of the destination rectangle
     */
-    qint32 cxDest() const { return m_cxDest; };
+    qint32 cxDest() const
+    {
+        return m_cxDest;
+    };
 
     /**
        The height of the destination rectangle
     */
-    qint32 cyDest() const { return m_cyDest; };
+    qint32 cyDest() const
+    {
+        return m_cyDest;
+    };
 
     /**
        The destination rectangle
     */
-    QRect destinationRectangle() const { return QRect( xDest(), yDest(), cxDest(), cyDest() ); };
+    QRect destinationRectangle() const
+    {
+        return QRect(xDest(), yDest(), cxDest(), cyDest());
+    };
 
     /**
        The X origin of the source rectangle
     */
-    qint32 xSrc() const { return m_xSrc; };
+    qint32 xSrc() const
+    {
+        return m_xSrc;
+    };
 
     /**
        The Y origin of the source rectangle
     */
-    qint32 ySrc() const { return m_ySrc; };
+    qint32 ySrc() const
+    {
+        return m_ySrc;
+    };
 
     /**
        The width of the source rectangle
     */
-    qint32 cxSrc() const { return m_cxSrc; };
+    qint32 cxSrc() const
+    {
+        return m_cxSrc;
+    };
 
     /**
        The height of the source rectangle
     */
-    qint32 cySrc() const { return m_cySrc; };
+    qint32 cySrc() const
+    {
+        return m_cySrc;
+    };
 
     /**
        The source rectangle
     */
-    QRect sourceRectangle() const { return QRect( xSrc(), ySrc(), cxSrc(), cySrc() ); };
+    QRect sourceRectangle() const
+    {
+        return QRect(xSrc(), ySrc(), cxSrc(), cySrc());
+    };
 
     /**
        The raster operation
     */
-    qint32 rasterOperation() const { return m_BitBltRasterOperation; };
+    qint32 rasterOperation() const
+    {
+        return m_BitBltRasterOperation;
+    };
 
-    quint32 usageSrc() const { return m_UsageSrc; };
+    quint32 usageSrc() const
+    {
+        return m_UsageSrc;
+    };
 
     /**
        The image to display
@@ -228,8 +284,8 @@ public:
 private:
     // No copying for now, because we will get into trouble with the pointers.
     // The remedy is to write a real operator=() and StretchDiBitsRecord(StretchDiBitsRecord&).
-    explicit StretchDiBitsRecord(StretchDiBitsRecord&);
-    StretchDiBitsRecord &operator=(StretchDiBitsRecord&);
+    explicit StretchDiBitsRecord(StretchDiBitsRecord &);
+    StretchDiBitsRecord &operator=(StretchDiBitsRecord &);
 
 private:
     QRect m_Bounds;
@@ -247,13 +303,13 @@ private:
     quint32 m_BitBltRasterOperation;
     qint32 m_cxDest;
     qint32 m_cyDest;
-   
+
     Bitmap *m_bitmap; // The source bitmap
 };
 
 /*****************************************************************************/
 
-/** 
+/**
     Simple representation of an EMR_EXTCREATEFONTINDIRECTW record
 
     See MS-EMF Section 2.3.7.8 for details
@@ -267,39 +323,56 @@ public:
        \param stream the stream to read the record structure from
        \param size the number of bytes in this record
     */
-    ExtCreateFontIndirectWRecord( QDataStream &stream, quint32 size );
+    ExtCreateFontIndirectWRecord(QDataStream &stream, quint32 size);
     ~ExtCreateFontIndirectWRecord();
-
 
     /**
        The font handle index
     */
-    quint32 ihFonts() const { return m_ihFonts; };
+    quint32 ihFonts() const
+    {
+        return m_ihFonts;
+    };
 
     /**
        The height of the font
     */
-    qint32 height() const { return m_height; };
+    qint32 height() const
+    {
+        return m_height;
+    };
 
     /**
        Whether this is a italic font
     */
-    quint8 italic() const { return m_italic; };
+    quint8 italic() const
+    {
+        return m_italic;
+    };
 
     /**
        Whether this is a underlined font
     */
-    quint8 underline() const { return m_underline; };
+    quint8 underline() const
+    {
+        return m_underline;
+    };
 
     /**
        The weight of this font
     */
-    quint32 weight() const { return m_weight; };
+    quint32 weight() const
+    {
+        return m_weight;
+    };
 
     /**
        The name of the font face
     */
-    QString fontFace() const { return m_facename; };
+    QString fontFace() const
+    {
+        return m_facename;
+    };
 
 private:
     quint32 m_ihFonts;
@@ -323,7 +396,7 @@ private:
     QString m_script;
 
     // Routine to throw away a specific number of bytes
-    void soakBytes( QDataStream &stream, int numBytes );
+    void soakBytes(QDataStream &stream, int numBytes);
 };
 
 }

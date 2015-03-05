@@ -50,22 +50,21 @@ public:
      * is kept in this struct. It contains the old and new pixmap, the
      * widget on which the effect is painted and the time values.
      */
-    struct Data
-    {
-        Data( const QPixmap &oldPage, const QPixmap &newPage, QWidget *w )
-        : m_oldPage( oldPage )
-        , m_newPage( newPage )
-        , m_widget( w )
-        , m_scene( 0 )
-        , m_graphicsView( 0 )
-        , m_finished( false )
-        , m_currentTime( 0 )
-        , m_lastTime( 0 )
+    struct Data {
+        Data(const QPixmap &oldPage, const QPixmap &newPage, QWidget *w)
+            : m_oldPage(oldPage)
+            , m_newPage(newPage)
+            , m_widget(w)
+            , m_scene(0)
+            , m_graphicsView(0)
+            , m_finished(false)
+            , m_currentTime(0)
+            , m_lastTime(0)
         {}
 
         QPixmap m_oldPage;
         QPixmap m_newPage;
-        QWidget * m_widget;
+        QWidget *m_widget;
         QTimeLine m_timeLine;
         QGraphicsScene *m_scene;
         QGraphicsView *m_graphicsView;
@@ -82,10 +81,10 @@ public:
      * @param duration The duration in milliseconds
      * @param id The id of the page effect
      */
-    KPrPageEffect( int duration, const QString & id, KPrPageEffectStrategy * strategy );
+    KPrPageEffect(int duration, const QString &id, KPrPageEffectStrategy *strategy);
     virtual ~KPrPageEffect();
 
-    virtual void setup( const Data &data, QTimeLine &timeLine );
+    virtual void setup(const Data &data, QTimeLine &timeLine);
     virtual bool useGraphicsView();
     /**
      * Paint the page effect
@@ -99,7 +98,7 @@ public:
      *
      * @see next()
      */
-    virtual bool paint( QPainter &painter, const Data &data );
+    virtual bool paint(QPainter &painter, const Data &data);
 
     /**
      * Trigger the next paint paint event.
@@ -110,7 +109,7 @@ public:
      *
      * @param data The data used for the effect.
      */
-    virtual void next( const Data &data );
+    virtual void next(const Data &data);
 
     /**
      * Finish the page effect.
@@ -121,7 +120,7 @@ public:
      *
      * @param data The data used for the effect.
      */
-    virtual void finish( const Data &data );
+    virtual void finish(const Data &data);
 
     /**
      * Get the duration of the page effect.
@@ -135,7 +134,7 @@ public:
      *
      * @return id of the page effect
      */
-    const QString & id() const;
+    const QString &id() const;
 
     /**
      * Get the sub type of the page effect.
@@ -149,12 +148,12 @@ public:
      *
      * @param xmlWriter The xml writer used for saving
      */
-    void saveOdfSmilAttributes( KoXmlWriter & xmlWriter ) const;
+    void saveOdfSmilAttributes(KoXmlWriter &xmlWriter) const;
 
     /**
      * Save transition as part of the style
      */
-    void saveOdfSmilAttributes( KoGenStyle & style ) const;
+    void saveOdfSmilAttributes(KoGenStyle &style) const;
 
     /**
      * Load effect from odf.
@@ -162,12 +161,12 @@ public:
      * Only generic data is loaded here. e.g. the duration of the effect
      * is loaded here
      */
-    void loadOdf( const KoXmlElement & element );
+    void loadOdf(const KoXmlElement &element);
 
 protected:
     int m_duration;
     QString m_id;
-    KPrPageEffectStrategy * m_strategy;
+    KPrPageEffectStrategy *m_strategy;
 };
 
 #endif // KPRPAGEEFFECT2_H

@@ -37,7 +37,7 @@ public:
     * @param radius the effect radius
     * @param parent the parent command used for macro commands
      */
-    KarbonWhirlPinchCommand(KoPathShape * path, qreal angle, qreal pinch, qreal radius, KUndo2Command *parent = 0);
+    KarbonWhirlPinchCommand(KoPathShape *path, qreal angle, qreal pinch, qreal radius, KUndo2Command *parent = 0);
     virtual ~KarbonWhirlPinchCommand();
 
     /// redo the command
@@ -47,7 +47,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KARBONWHIRLPINCHCOMMAND_H

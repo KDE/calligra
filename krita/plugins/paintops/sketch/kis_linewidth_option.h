@@ -26,7 +26,7 @@ class KisLineWidthOption : public KisCurveOption
 {
 public:
     KisLineWidthOption();
-    double apply(const KisPaintInformation & info, double lineWidth) const;
+    double apply(const KisPaintInformation &info, double lineWidth) const;
 };
 
 #endif

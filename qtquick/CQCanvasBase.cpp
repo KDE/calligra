@@ -26,10 +26,10 @@ public:
 
     QString source;
     CQCanvasController *canvasController;
-    KoZoomController* zoomController;
+    KoZoomController *zoomController;
 };
 
-CQCanvasBase::CQCanvasBase(QDeclarativeItem* parent)
+CQCanvasBase::CQCanvasBase(QDeclarativeItem *parent)
     : QDeclarativeItem(parent), d(new Private)
 {
 }
@@ -39,12 +39,12 @@ CQCanvasBase::~CQCanvasBase()
     delete d;
 }
 
-CQCanvasController* CQCanvasBase::canvasController() const
+CQCanvasController *CQCanvasBase::canvasController() const
 {
     return d->canvasController;
 }
 
-KoZoomController* CQCanvasBase::zoomController() const
+KoZoomController *CQCanvasBase::zoomController() const
 {
     return d->zoomController;
 }
@@ -54,7 +54,7 @@ QString CQCanvasBase::source() const
     return d->source;
 }
 
-void CQCanvasBase::setSource(const QString& source)
+void CQCanvasBase::setSource(const QString &source)
 {
     if (source != d->source) {
         d->source = source;
@@ -74,7 +74,7 @@ void CQCanvasBase::setShapeTransparency(qreal newTransparency)
     emit shapeTransparencyChanged();
 }
 
-void CQCanvasBase::setCanvasController(CQCanvasController* controller)
+void CQCanvasBase::setCanvasController(CQCanvasController *controller)
 {
     if (d->canvasController != controller) {
         d->canvasController = controller;
@@ -82,7 +82,7 @@ void CQCanvasBase::setCanvasController(CQCanvasController* controller)
     }
 }
 
-void CQCanvasBase::setZoomController(KoZoomController* controller)
+void CQCanvasBase::setZoomController(KoZoomController *controller)
 {
     d->zoomController = controller;
 }

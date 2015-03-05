@@ -43,9 +43,9 @@ private Q_SLOTS:
     void testReferenceSaving();
 
 private:
-    Value evaluate(const QString&, Value&);
-    QString convertToOpenFormula(const QString& expr);
-    QString convertFromOpenFormula(const QString& expr);
+    Value evaluate(const QString &, Value &);
+    QString convertToOpenFormula(const QString &expr);
+    QString convertFromOpenFormula(const QString &expr);
 };
 
 } // namespace Sheets

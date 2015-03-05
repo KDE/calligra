@@ -29,8 +29,7 @@ class KUndo2MagicString;
 namespace KPlato
 {
 
-struct KPLATOMODELS_EXPORT ToolTip
-{
+struct KPLATOMODELS_EXPORT ToolTip {
     static QString nodeName();
     static QString nodeType();
     static QString nodeResponsible();
@@ -54,7 +53,7 @@ struct KPLATOMODELS_EXPORT ToolTip
     static QString nodeEarlyFinish();
     static QString nodeLateStart();
     static QString nodeLateFinish();
-    
+
     static QString nodeDuration();
     static QString nodeVarianceDuration();
     static QString nodeOptimisticDuration();
@@ -79,7 +78,7 @@ struct KPLATOMODELS_EXPORT ToolTip
     static QString completionFinishedTime();
     static QString completionFinished();
     static QString completionStatusNote();
-    
+
     static QString estimateExpected();
     static QString estimateVariance();
     static QString estimateOptimistic();
@@ -147,8 +146,7 @@ struct KPLATOMODELS_EXPORT ToolTip
 
 }; //namespace ToolTip
 
-struct KPLATOMODELS_EXPORT WhatsThis
-{
+struct KPLATOMODELS_EXPORT WhatsThis {
     static QString  nodeNegativeFloat();
     static QString  nodeFreeFloat();
     static QString  nodeStartFloat();
@@ -161,8 +159,7 @@ struct KPLATOMODELS_EXPORT WhatsThis
 
 }; //namespace WhatsThis
 
-struct KPLATOMODELS_EXPORT UndoText
-{
+struct KPLATOMODELS_EXPORT UndoText {
     static KUndo2MagicString removeDocument();
 }; //namespace Undo
 

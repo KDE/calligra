@@ -171,6 +171,5 @@ void KisImageTest::testLayerComposition()
     QVERIFY(!layer2->visible());
 }
 
-
 QTEST_KDEMAIN(KisImageTest, NoGUI)
 #include "kis_image_test.moc"

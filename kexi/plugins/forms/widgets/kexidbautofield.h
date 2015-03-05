@@ -35,11 +35,11 @@ class QLabel;
 //! Universal "Auto Field" widget for Kexi forms
 /*! It acts as a container for most data-aware widgets. */
 class KEXIFORMUTILS_EXPORT KexiDBAutoField :
-            public QWidget,
-            public KexiFormDataItemInterface,
-            public KFormDesigner::DesignTimeDynamicChildWidgetHandler,
-            public KFormDesigner::WidgetWithSubpropertiesInterface,
-            public KFormDesigner::FormWidgetInterface
+    public QWidget,
+    public KexiFormDataItemInterface,
+    public KFormDesigner::DesignTimeDynamicChildWidgetHandler,
+    public KFormDesigner::WidgetWithSubpropertiesInterface,
+    public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
 //'caption' is uncovered now Q_PROPERTY(QString labelCaption READ caption WRITE setCaption)
@@ -69,19 +69,22 @@ public:
 
     virtual ~KexiDBAutoField();
 
-    inline QString dataSource() const {
+    inline QString dataSource() const
+    {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePartClass() const
+    {
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
     virtual void setDataSource(const QString &ds);
-    virtual void setDataSourcePartClass(const QString &partClass) {
+    virtual void setDataSourcePartClass(const QString &partClass)
+    {
         KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     }
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KexiDB::QueryColumnInfo *cinfo);
 
-    virtual void setInvalidState(const QString& text);
+    virtual void setInvalidState(const QString &text);
     virtual bool isReadOnly() const;
     virtual void setReadOnly(bool readOnly);
 
@@ -93,7 +96,7 @@ public:
     virtual void clear();
 
     //! Reimplemented to also install \a listenter for internal editor
-    virtual void installListener(KexiDataItemChangesListener* listener);
+    virtual void installListener(KexiDataItemChangesListener *listener);
 
     WidgetType widgetType() const;
     void setWidgetType(WidgetType type);
@@ -111,10 +114,10 @@ public:
      is displayed in a special way. Used by KexiFormDataProvider::fillDataItems().
      \a widget is equal to 'this'.
      Reimplemented after KexiFormDataItemInterface. */
-    virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+    virtual void setDisplayDefaultValue(QWidget *widget, bool displayDefaultValue);
 
-    QWidget* editor() const;
-    QLabel* label() const;
+    QWidget *editor() const;
+    QLabel *label() const;
 
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
@@ -129,7 +132,7 @@ public:
     /*! On design time it is not possible to pass a reference to KexiDB::Field object
      so we're just providing field caption. Only used when widget type is Auto.
      @internal */
-    void setFieldCaptionInternal(const QString& text);
+    void setFieldCaptionInternal(const QString &text);
 
     /*! @internal */
     int fieldTypeInternal() const;
@@ -144,31 +147,31 @@ public:
     QColor paletteForegroundColor() const;
 
     //! Reimplemented to set internal editor's color.
-    void setPaletteForegroundColor(const QColor & color);
+    void setPaletteForegroundColor(const QColor &color);
 
     //! Reimplemented to return internal editor's color.
     QColor paletteBackgroundColor() const;
 
     //! Reimplemented to set internal editor's color.
-    virtual void setPaletteBackgroundColor(const QColor & color);
+    virtual void setPaletteBackgroundColor(const QColor &color);
 
     //! \return label's foreground color
     QColor foregroundLabelColor() const;
 
     //! Sets label's foreground color
-    virtual void setForegroundLabelColor(const QColor & color);
+    virtual void setForegroundLabelColor(const QColor &color);
 
     //! \return label's background color
     QColor backgroundLabelColor() const;
 
     //! Sets label's background color
-    virtual void setBackgroundLabelColor(const QColor & color);
+    virtual void setBackgroundLabelColor(const QColor &color);
 
     //! Reimplemented to accept subproperties. @see KFormDesigner::WidgetWithSubpropertiesInterface
-    virtual QVariant property(const char * name) const;
+    virtual QVariant property(const char *name) const;
 
     //! Reimplemented to accept subproperties. @see KFormDesigner::WidgetWithSubpropertiesInterface
-    virtual bool setProperty(const char * name, const QVariant & value);
+    virtual bool setProperty(const char *name, const QVariant &value);
 
     /*! Called by the top-level form on key press event to consume widget-specific shortcuts. */
     virtual bool keyPressed(QKeyEvent *ke);
@@ -177,7 +180,7 @@ public Q_SLOTS:
     virtual void unsetPalette();
 
 protected Q_SLOTS:
-    virtual void paletteChange(const QPalette& oldPal);
+    virtual void paletteChange(const QPalette &oldPal);
 
     //! Implemented for KexiDataItemInterface
     virtual void moveCursorToEnd();
@@ -189,7 +192,7 @@ protected Q_SLOTS:
     virtual void selectAll();
 
 protected:
-    virtual void setValueInternal(const QVariant&add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
     void init(const QString &text, WidgetType type, LabelPosition pos);
     virtual void createEditor();
     void changeText(const QString &text, bool beautify = true);
@@ -204,11 +207,11 @@ protected:
     void setLabelPositionInternal(LabelPosition position, bool noLabel);
 
     //! Used by KexiDBAutoField::setColumnInfo() and KexiDBComboBox::setColumnInfo()
-    void setColumnInfoInternal(KexiDB::QueryColumnInfo* cinfo, KexiDB::QueryColumnInfo* visibleColumnInfo);
+    void setColumnInfoInternal(KexiDB::QueryColumnInfo *cinfo, KexiDB::QueryColumnInfo *visibleColumnInfo);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

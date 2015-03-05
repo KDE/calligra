@@ -26,42 +26,44 @@
 #include<QListWidgetItem>
 
 #include <sheets/Sheet.h>
-namespace Calligra{
-  namespace Sheets{
+namespace Calligra
+{
+namespace Sheets
+{
 
 class Selection;
 class PivotMain : public KDialog
-    {
-	Q_OBJECT
+{
+    Q_OBJECT
 
-    public:
-      explicit PivotMain(QWidget* parent,Selection* selection);
-      QVector<QString> ValueData(QString str);
-      bool checkCondition(QString field,QString condition,QString value,int line);
-      Sheet* filter();
-      ~PivotMain();
+public:
+    explicit PivotMain(QWidget *parent, Selection *selection);
+    QVector<QString> ValueData(QString str);
+    bool checkCondition(QString field, QString condition, QString value, int line);
+    Sheet *filter();
+    ~PivotMain();
 
-    private Q_SLOTS:
-	  
-      //void on_Options_clicked();
-      void styling(Sheet* mySheet);
-      void labels_itemChanged(QListWidgetItem *item);
-      void values_itemChanged(QListWidgetItem *item);
-      void columns_itemChanged(QListWidgetItem *item);
-      void rows_itemChanged(QListWidgetItem *item);
+private Q_SLOTS:
 
-      void on_AddFilter_clicked();
-      void on_Ok_clicked();
-      void Summarize();
-      void Reset();
-      void clean(Sheet* sheet);
+    //void on_Options_clicked();
+    void styling(Sheet *mySheet);
+    void labels_itemChanged(QListWidgetItem *item);
+    void values_itemChanged(QListWidgetItem *item);
+    void columns_itemChanged(QListWidgetItem *item);
+    void rows_itemChanged(QListWidgetItem *item);
 
-    private:
-      void extractColumnNames();
-      PivotMain *ui;
-      class Private;
-      Private *const d;
-    };
-  }//Sheets
+    void on_AddFilter_clicked();
+    void on_Ok_clicked();
+    void Summarize();
+    void Reset();
+    void clean(Sheet *sheet);
+
+private:
+    void extractColumnNames();
+    PivotMain *ui;
+    class Private;
+    Private *const d;
+};
+}//Sheets
 }//Calligra
 #endif // PIVOTMAIN_H

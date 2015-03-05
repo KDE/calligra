@@ -36,14 +36,16 @@
 #include "kis_transaction.h"
 #include "kis_image.h"
 
-void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColorSpace * dstCs)
+void logFailure(const QString &reason, const KoColorSpace *srcCs, const KoColorSpace *dstCs)
 {
     QString profile1("no profile");
     QString profile2("no profile");
-    if (srcCs->profile())
+    if (srcCs->profile()) {
         profile1 = srcCs->profile()->name();
-    if (dstCs->profile())
+    }
+    if (dstCs->profile()) {
         profile2 = dstCs->profile()->name();
+    }
 
     QWARN(QString("Failed %1 %2 -> %3 %4 %5")
           .arg(srcCs->name())
@@ -59,13 +61,13 @@ void KisCsConversionTest::testColorSpaceConversion()
     QTime t;
     t.start();
 
-    QList<const KoColorSpace*> colorSpaces = TestUtil::allColorSpaces();
+    QList<const KoColorSpace *> colorSpaces = TestUtil::allColorSpaces();
     int failedColorSpaces = 0;
 
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
 
-    foreach(const KoColorSpace * srcCs, colorSpaces) {
-        foreach(const KoColorSpace * dstCs,  colorSpaces) {
+    foreach (const KoColorSpace *srcCs, colorSpaces) {
+        foreach (const KoColorSpace *dstCs,  colorSpaces) {
 
             KisPaintDeviceSP dev  = new KisPaintDevice(srcCs);
             dev->convertFromQImage(image, 0);
@@ -87,10 +89,10 @@ void KisCsConversionTest::testColorSpaceConversion()
         }
     }
     qDebug() << colorSpaces.size() * colorSpaces.size()
-    << "conversions"
-    << " done in "
-    << t.elapsed()
-    << "ms";
+             << "conversions"
+             << " done in "
+             << t.elapsed()
+             << "ms";
 
     if (failedColorSpaces > 0) {
         QFAIL(QString("Failed conversions %1, see log for details.").arg(failedColorSpaces).toLatin1());
@@ -99,5 +101,4 @@ void KisCsConversionTest::testColorSpaceConversion()
 
 QTEST_KDEMAIN(KisCsConversionTest, GUI)
 #include "kis_cs_conversion_test.moc"
-
 

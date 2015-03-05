@@ -36,9 +36,8 @@
 #include <recorder/kis_recorded_shape_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 
-
-KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
-        : KisToolEllipseBase(canvas, KisToolEllipseBase::PAINT, KisCursor::load("tool_ellipse_cursor.png", 6, 6))
+KisToolEllipse::KisToolEllipse(KoCanvasBase *canvas)
+    : KisToolEllipseBase(canvas, KisToolEllipseBase::PAINT, KisCursor::load("tool_ellipse_cursor.png", 6, 6))
 {
     setObjectName("tool_ellipse");
     setSupportOutline(true);
@@ -48,10 +47,11 @@ KisToolEllipse::~KisToolEllipse()
 {
 }
 
-void KisToolEllipse::finishRect(const QRectF& rect)
+void KisToolEllipse::finishRect(const QRectF &rect)
 {
-    if (rect.isEmpty())
+    if (rect.isEmpty()) {
         return;
+    }
 
     if (image()) {
         KisRecordedShapePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), KisRecordedShapePaintAction::Ellipse, rect);
@@ -70,8 +70,8 @@ void KisToolEllipse::finishRect(const QRectF& rect)
         helper.paintEllipse(rect);
     } else {
         QRectF r = convertToPt(rect);
-        KoShape* shape = KisShapeToolHelper::createEllipseShape(r);
-        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        KoShape *shape = KisShapeToolHelper::createEllipseShape(r);
+        KoShapeStroke *border = new KoShapeStroke(1.0, currentFgColor().toQColor());
         shape->setStroke(border);
         addShape(shape);
     }

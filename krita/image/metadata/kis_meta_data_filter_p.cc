@@ -56,16 +56,16 @@ QString AnonymizerFilter::description() const
     return i18n("Remove personal information: author, location...");
 }
 
-void AnonymizerFilter::filter(KisMetaData::Store* store) const
+void AnonymizerFilter::filter(KisMetaData::Store *store) const
 {
     dbgImage << "Anonymize a store";
-    const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
+    const KisMetaData::Schema *dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
     store->removeEntry(dcSchema, "contributor");
     store->removeEntry(dcSchema, "creator");
     store->removeEntry(dcSchema, "publisher");
     store->removeEntry(dcSchema, "rights");
 
-    const KisMetaData::Schema* psSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::PhotoshopSchemaUri);
+    const KisMetaData::Schema *psSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::PhotoshopSchemaUri);
     store->removeEntry(psSchema, "AuthorsPosition");
     store->removeEntry(psSchema, "CaptionWriter");
     store->removeEntry(psSchema, "Credit");
@@ -101,9 +101,9 @@ QString ToolInfoFilter::description() const
     return i18n("Add the name of the tool used for creation and the modification date");
 }
 
-void ToolInfoFilter::filter(KisMetaData::Store* store) const
+void ToolInfoFilter::filter(KisMetaData::Store *store) const
 {
-    const KisMetaData::Schema* xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
+    const KisMetaData::Schema *xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
     store->getEntry(xmpSchema, "ModifyDate").value() = Value(QDate::currentDate());
     store->getEntry(xmpSchema, "MetadataDate").value() = Value(QDate::currentDate());
     if (!store->containsEntry(xmpSchema, "CreatorTool")) {

@@ -39,14 +39,14 @@ public:
      *   <li>if the 8BPS signature is not found
      *   <li>if the version is not 1 or 2
      */
-    bool read(QIODevice* device);
+    bool read(QIODevice *device);
 
     /**
      * write the header data to the given device
      *
      * @return false if writing failed or if this is not a valid header
      */
-    bool write(QIODevice* device);
+    bool write(QIODevice *device);
 
     bool valid();
 
@@ -62,6 +62,6 @@ public:
 
 };
 
-QDebug operator<<(QDebug dbg, const PSDHeader& header);
+QDebug operator<<(QDebug dbg, const PSDHeader &header);
 
 #endif // PSD_HEADER_H

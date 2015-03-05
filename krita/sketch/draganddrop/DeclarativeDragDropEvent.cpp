@@ -23,7 +23,7 @@
 
 #include "DeclarativeDragDropEvent.h"
 
-DeclarativeDragDropEvent::DeclarativeDragDropEvent(QGraphicsSceneDragDropEvent* e, QObject* parent) :
+DeclarativeDragDropEvent::DeclarativeDragDropEvent(QGraphicsSceneDragDropEvent *e, QObject *parent) :
     QObject(parent),
     m_x(e->pos().x()),
     m_y(e->pos().y()),
@@ -37,7 +37,7 @@ DeclarativeDragDropEvent::DeclarativeDragDropEvent(QGraphicsSceneDragDropEvent* 
 
 void DeclarativeDragDropEvent::accept(int action)
 {
-    m_event->setDropAction( (Qt::DropAction) action );
+    m_event->setDropAction((Qt::DropAction) action);
     m_event->accept();
 }
 

@@ -2,7 +2,7 @@
  * Copyright (C) 2005, 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -48,7 +48,7 @@ class StatisticsPreferencesPopup;
  * FIXME: The pure statistics part should be separated from the
  *        widget, e.g. to a QAbstractListModel so that it could also
  *        be used from a QML based interface.
- */ 
+ */
 
 class KWStatisticsWidget : public QWidget
 {
@@ -68,10 +68,10 @@ public:
     friend class KWStatisticsDocker;
     friend class StatisticsPreferencesPopup;
 
-    void setCanvas(KWCanvas* canvas);
+    void setCanvas(KWCanvas *canvas);
 
     void unsetCanvas();
-    
+
 public Q_SLOTS:
     void wordsDisplayChanged(int);
     void sentencesDisplayChanged(int);

@@ -48,8 +48,8 @@ void KisFloodFillBenchmark::initTestCase()
     int tilew = 38;
     int tileh = 56;
 
-    m_color.fromQColor(QColor(0,0,0,0)); // default pixel
-    m_device->fill( 0,0,GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT,m_color.data() );
+    m_color.fromQColor(QColor(0, 0, 0, 0)); // default pixel
+    m_device->fill(0, 0, GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT, m_color.data());
 
     // fill the image with red ellipses (like some random dabs)
     m_color.fromQColor(Qt::red);
@@ -59,13 +59,12 @@ void KisFloodFillBenchmark::initTestCase()
 
     int x = 0;
     int y = 0;
-    for (int i = 0; i < 100;i++){
+    for (int i = 0; i < 100; i++) {
         x = rand() % GMP_IMAGE_WIDTH;
         y = rand() % GMP_IMAGE_HEIGHT;
         // plus 10 so that we don't fill the ellipse
-        painter.paintEllipse(x+ 10, y+ 10, tilew, tileh);
+        painter.paintEllipse(x + 10, y + 10, tilew, tileh);
     }
-
 
 }
 
@@ -76,12 +75,11 @@ void KisFloodFillBenchmark::benchmarkFlood()
     fg.fromQColor(Qt::blue);
     bg.fromQColor(Qt::black);
 
-    QBENCHMARK
-    {
+    QBENCHMARK {
         KisFillPainter fillPainter(m_device);
         //setupPainter(&fillPainter);
-        fillPainter.setPaintColor( fg );
-        fillPainter.setBackgroundColor( bg );
+        fillPainter.setPaintColor(fg);
+        fillPainter.setBackgroundColor(bg);
 
         fillPainter.beginTransaction(kundo2_noi18n("Flood Fill"));
 
@@ -104,7 +102,6 @@ void KisFloodFillBenchmark::benchmarkFlood()
     //QImage out = m_device->convertToQImage(m_colorSpace->profile(),0,0,GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT);
     //out.save("fill_output.png");
 }
-
 
 void KisFloodFillBenchmark::cleanupTestCase()
 {

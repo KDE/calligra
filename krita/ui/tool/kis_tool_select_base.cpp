@@ -23,9 +23,8 @@
 #include "kis_canvas2.h"
 #include "kis_selection_options.h"
 
-
 KisToolSelectBase::KisToolSelectBase(KoCanvasBase *canvas,
-                                     const QCursor& cursor,
+                                     const QCursor &cursor,
                                      const QString &windowTitle)
     : KisTool(canvas, cursor),
       m_widgetHelper(windowTitle),
@@ -46,10 +45,8 @@ SelectionAction KisToolSelectBase::selectionAction() const
 
 void KisToolSelectBase::setSelectionAction(int newSelectionAction)
 {
-    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
-    {
-        if(m_widgetHelper.optionWidget())
-        {
+    if (newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction) {
+        if (m_widgetHelper.optionWidget()) {
             m_widgetHelper.slotSetAction(newSelectionAction);
         }
         m_selectionAction = (SelectionAction)newSelectionAction;
@@ -57,16 +54,16 @@ void KisToolSelectBase::setSelectionAction(int newSelectionAction)
     }
 }
 
-QWidget* KisToolSelectBase::createOptionWidget()
+QWidget *KisToolSelectBase::createOptionWidget()
 {
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
     Q_ASSERT(canvas);
 
     m_widgetHelper.createOptionWidget(canvas, this->toolId());
     return m_widgetHelper.optionWidget();
 }
 
-KisSelectionOptions* KisToolSelectBase::selectionOptionWidget()
+KisSelectionOptions *KisToolSelectBase::selectionOptionWidget()
 {
     return m_widgetHelper.optionWidget();
 }

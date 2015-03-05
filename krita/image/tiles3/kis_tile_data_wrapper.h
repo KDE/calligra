@@ -19,7 +19,6 @@
 #ifndef __KIS_TILE_DATA_WRAPPER_H
 #define __KIS_TILE_DATA_WRAPPER_H
 
-
 /**
  * KisTileDataWrapper is a special object, that fetches the tile from
  * the data manager according to the position, locks it and returns
@@ -57,8 +56,7 @@ public:
 
         if (type == READ) {
             m_tile->lockForRead();
-        }
-        else {
+        } else {
             m_tile->lockForWrite();
         }
     }
@@ -81,7 +79,7 @@ public:
     /**
      * Returns the fetched tile
      */
-    inline KisTileSP& tile()
+    inline KisTileSP &tile()
     {
         return m_tile;
     }
@@ -93,7 +91,7 @@ public:
      * When (x,y) is the top-left corner of the tile, the pointer
      * will lead to the beginning of the tile's chunk of memory.
      */
-    inline quint8* data() const
+    inline quint8 *data() const
     {
         return m_tile->data() + m_offset;
     }

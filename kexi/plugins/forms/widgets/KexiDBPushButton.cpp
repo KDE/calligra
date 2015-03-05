@@ -34,9 +34,9 @@ public:
     KexiFormEventAction::ActionData onClickActionData;
 };
 
-KexiDBPushButton::KexiDBPushButton(const QString & text, QWidget * parent)
-        : KexiPushButton(text, parent)
-        , d(new KexiDBPushButtonPrivate)
+KexiDBPushButton::KexiDBPushButton(const QString &text, QWidget *parent)
+    : KexiPushButton(text, parent)
+    , d(new KexiDBPushButtonPrivate)
 {
     setLocalBasePath(KexiMainWindowIface::global()->project()->dbConnection()->data()->dbPath());
 }
@@ -46,7 +46,7 @@ KexiDBPushButton::~KexiDBPushButton()
     delete d;
 }
 
-void KexiDBPushButton::setValueInternal(const QVariant& add, bool removeOld)
+void KexiDBPushButton::setValueInternal(const QVariant &add, bool removeOld)
 {
     Q_UNUSED(add)
     Q_UNUSED(removeOld)
@@ -58,10 +58,10 @@ void KexiDBPushButton::setValueInternal(const QVariant& add, bool removeOld)
     QFontMetrics f(font());
     QString text;
     QString path = url.pathOrUrl();
-    if (url.isLocalFile()){
+    if (url.isLocalFile()) {
         QString fileName = url.fileName();
         text = f.elidedText(path.left(path.size() - fileName.size()),
-                               Qt::ElideMiddle, width()-f.width(fileName) - 10) + fileName;
+                            Qt::ElideMiddle, width() - f.width(fileName) - 10) + fileName;
     } else {
         text = f.elidedText(path, Qt::ElideMiddle, width() - 10);
 
@@ -133,18 +133,18 @@ QString KexiDBPushButton::onClickAction() const
     return d->onClickActionData.string;
 }
 
-void KexiDBPushButton::setOnClickAction(const QString& actionString)
+void KexiDBPushButton::setOnClickAction(const QString &actionString)
 {
     d->onClickActionData.string = actionString;
 }
 
 QString KexiDBPushButton::onClickActionOption() const
 {
-     return d->onClickActionData.option;
+    return d->onClickActionData.option;
 }
 
-void KexiDBPushButton::setOnClickActionOption(const QString& option)
+void KexiDBPushButton::setOnClickActionOption(const QString &option)
 {
-     d->onClickActionData.option = option;
+    d->onClickActionData.option = option;
 }
 #include "KexiDBPushButton.moc"

@@ -31,25 +31,28 @@ namespace KPlato
 class IntervalItem : public QTreeWidgetItem
 {
 public:
-    explicit IntervalItem(QTreeWidget * parent, QTime start, int length)
-    : QTreeWidgetItem(parent)
+    explicit IntervalItem(QTreeWidget *parent, QTime start, int length)
+        : QTreeWidgetItem(parent)
     {
-        setInterval( start, (double)(length) / (1000. * 60. * 60. ) ); // ms -> hours
+        setInterval(start, (double)(length) / (1000. * 60. * 60.));    // ms -> hours
     }
-    explicit IntervalItem(QTreeWidget * parent, QTime start, double length)
-    : QTreeWidgetItem(parent)
+    explicit IntervalItem(QTreeWidget *parent, QTime start, double length)
+        : QTreeWidgetItem(parent)
     {
-        setInterval( start, length );
+        setInterval(start, length);
     }
-      
-    TimeInterval interval() { return TimeInterval(m_start, (int)(m_length * (1000. * 60. * 60. ) ) ); }
 
-    void setInterval( const QTime &time, double length )
+    TimeInterval interval()
+    {
+        return TimeInterval(m_start, (int)(m_length * (1000. * 60. * 60.)));
+    }
+
+    void setInterval(const QTime &time, double length)
     {
         m_start = time;
         m_length = length;
-        setText( 0, KGlobal::locale()->formatTime( time ) );
-        setText( 1, KGlobal::locale()->formatNumber( length ) );
+        setText(0, KGlobal::locale()->formatTime(time));
+        setText(1, KGlobal::locale()->formatNumber(length));
     }
 
 private:

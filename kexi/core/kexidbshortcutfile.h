@@ -38,7 +38,7 @@ class KEXICORE_EXPORT KexiDBShortcutFile
 {
 public:
     /*! Creates a new object for \a fileName. */
-    explicit KexiDBShortcutFile(const QString& fileName);
+    explicit KexiDBShortcutFile(const QString &fileName);
 
     ~KexiDBShortcutFile();
 
@@ -47,7 +47,7 @@ public:
 
 protected:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 /*! Loads and saves information for a "shortcut" file containing
@@ -59,7 +59,7 @@ class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile
 {
 public:
     /*! Creates a new object for \a fileName. */
-    explicit KexiDBConnShortcutFile(const QString& fileName);
+    explicit KexiDBConnShortcutFile(const QString &fileName);
 
     ~KexiDBConnShortcutFile();
 
@@ -67,7 +67,7 @@ public:
      \a groupKey, if provided will be set to a group key,
      so you can later use it in saveConnectionData().
      \return true on success. */
-    bool loadConnectionData(KexiDB::ConnectionData& data, QString* groupKey = 0);
+    bool loadConnectionData(KexiDB::ConnectionData &data, QString *groupKey = 0);
 
     /*! Saves connection data \a data to a shortcut file.
      If \a storePassword is true, password will be saved in the file,
@@ -77,11 +77,12 @@ public:
      instead of creating of a new unique group. This mode is usable for updating .kexic files
      containing single connection data, what's used for storing connections repository.
      \return true on success. */
-    bool saveConnectionData(const KexiDB::ConnectionData& data,
-                            bool savePassword, QString* groupKey = 0, bool overwriteFirstGroup = true);
+    bool saveConnectionData(const KexiDB::ConnectionData &data,
+                            bool savePassword, QString *groupKey = 0, bool overwriteFirstGroup = true);
 
     //! \return filename provided on this object's construction. */
-    QString fileName() const {
+    QString fileName() const
+    {
         return KexiDBShortcutFile::fileName();
     }
 

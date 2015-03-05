@@ -43,7 +43,7 @@ class KRITAUI_EXPORT KisNodeModel : public KisDocumentSectionModel
 
 public: // from QAbstractItemModel
 
-    KisNodeModel(QObject * parent);
+    KisNodeModel(QObject *parent);
     ~KisNodeModel();
 
     void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController);
@@ -65,8 +65,8 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     QStringList mimeTypes() const;
-    QMimeData* mimeData(const QModelIndexList & indexes) const;
-    bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent);
+    QMimeData *mimeData(const QModelIndexList &indexes) const;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
     Qt::DropActions supportedDragActions() const;
     Qt::DropActions supportedDropActions() const;
 
@@ -101,8 +101,8 @@ private:
     void resetIndexConverter();
 
     bool correctNewNodeLocation(KisNodeSP node,
-                                KisNodeDummy* &parentDummy,
-                                KisNodeDummy* &aboveThisDummy);
+                                KisNodeDummy *&parentDummy,
+                                KisNodeDummy *&aboveThisDummy);
 
     void regenerateItems(KisNodeDummy *dummy);
     bool belongsToIsolatedGroup(KisNodeSP node) const;
@@ -110,7 +110,7 @@ private:
 private:
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif

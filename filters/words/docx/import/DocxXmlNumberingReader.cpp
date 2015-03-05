@@ -35,9 +35,11 @@
 class DocxXmlNumberingReader::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
 };
 
@@ -59,9 +61,9 @@ void DocxXmlNumberingReader::init()
     m_outputFrames = false;
 }
 
-KoFilter::ConversionStatus DocxXmlNumberingReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus DocxXmlNumberingReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = static_cast<DocxXmlDocumentReaderContext*>(context);
+    m_context = static_cast<DocxXmlDocumentReaderContext *>(context);
 
     readNext();
     if (!isStartDocument()) {
@@ -183,14 +185,12 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlOverride()
                     }
                     ++index;
                 }
-            }
-            else if (name() == "startOverride") {
+            } else if (name() == "startOverride") {
                 int index = 0;
                 while (index < m_currentBulletList.size()) {
-                    if (m_currentBulletList.at(index).m_level == level)
-                    {
+                    if (m_currentBulletList.at(index).m_level == level) {
                         const QXmlStreamAttributes attrs2(attributes());
-                        QString val( attrs2.value(QUALIFIED_NAME(val)).toString() );
+                        QString val(attrs2.value(QUALIFIED_NAME(val)).toString());
                         if (!val.isEmpty()) {
                             m_currentBulletList[index].setStartValue(val);
                         }
@@ -260,11 +260,9 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
             else if (name() == "lvlPicBulletId") {
                 TRY_READ(lvlPicBulletId)
                 pictureType = true;
-            }
-            else if (name() == "pPr") {
+            } else if (name() == "pPr") {
                 TRY_READ(pPr_numbering)
-            }
-            else if (name() == "rPr") {
+            } else if (name() == "rPr") {
                 TRY_READ(rPr)
             }
             SKIP_UNKNOWN
@@ -358,23 +356,17 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numFmt()
     if (!val.isEmpty()) {
         if (val == "lowerRoman") {
             m_currentBulletProperties.setNumFormat("i");
-        }
-        else if (val == "lowerLetter") {
+        } else if (val == "lowerLetter") {
             m_currentBulletProperties.setNumFormat("a");
-        }
-        else if (val == "decimal") {
+        } else if (val == "decimal") {
             m_currentBulletProperties.setNumFormat("1");
-        }
-        else if (val == "upperRoman") {
+        } else if (val == "upperRoman") {
             m_currentBulletProperties.setNumFormat("I");
-        }
-        else if (val == "upperLetter") {
+        } else if (val == "upperLetter") {
             m_currentBulletProperties.setNumFormat("A");
-        }
-        else if (val == "bullet") {
+        } else if (val == "bullet") {
             m_bulletStyle = true;
-        }
-        else if (val == "ordinal") {
+        } else if (val == "ordinal") {
             // in ooxml this means having 1st, 2nd etc. but currently there's no real support for it
             m_currentBulletProperties.setNumFormat("1");
             m_currentBulletProperties.setSuffix(".");
@@ -431,12 +423,10 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlText()
         if (!m_bulletStyle) {
             if (val.at(0) == '%' && val.length() == 2) {
                 m_currentBulletProperties.setSuffix("");
-            }
-            else {
+            } else {
                 m_currentBulletProperties.setSuffix(val.right(1));
             }
-        }
-        else {
+        } else {
             m_bulletCharacter = val;
         }
     }
@@ -472,9 +462,9 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (name() == "abstractNumId") {
-               TRY_READ(abstractNumId)
-               m_currentBulletList = m_abstractListStyles[m_currentAbstractId];
-               m_context->m_abstractNumIDs[numId] = m_currentAbstractId;
+                TRY_READ(abstractNumId)
+                m_currentBulletList = m_abstractListStyles[m_currentAbstractId];
+                m_context->m_abstractNumIDs[numId] = m_currentAbstractId;
             }
             // lvlOverride may modify the bulletlist which we get above
             ELSE_TRY_READ_IF(lvlOverride)
@@ -688,13 +678,12 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
     if (!hanging.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(hanging.toDouble(&ok)));
         if (ok) {
-           m_currentBulletProperties.setIndent(-firstInd);
+            m_currentBulletProperties.setIndent(-firstInd);
         }
-    }
-    else if (!firstLine.isEmpty()) {
+    } else if (!firstLine.isEmpty()) {
         const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
         if (ok) {
-           m_currentBulletProperties.setIndent(firstInd);
+            m_currentBulletProperties.setIndent(firstInd);
         }
     }
 

@@ -31,9 +31,7 @@
 #include "OdfReaderBackend.h"
 #include "OdfReaderInternals.h"
 
-
 class OdfReaderContext;
-
 
 /** @brief A default backend for the OdtReader class.
  *
@@ -67,7 +65,7 @@ class OdfReaderContext;
  */
 class KOODFREADER_EXPORT OdtReaderBackend : public OdfReaderBackend
 {
- public:
+public:
     explicit OdtReaderBackend();
     virtual ~OdtReaderBackend();
 
@@ -76,10 +74,9 @@ class KOODFREADER_EXPORT OdtReaderBackend : public OdfReaderBackend
 
     DECLARE_BACKEND_FUNCTION(OfficeText);
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif // ODTREADERBACKEND_H

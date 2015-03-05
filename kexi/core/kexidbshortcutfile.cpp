@@ -47,14 +47,15 @@ class KexiDBShortcutFile::Private
 {
 public:
     Private()
-            : isDatabaseShortcut(true) {
+        : isDatabaseShortcut(true)
+    {
     }
     QString fileName;
     bool isDatabaseShortcut;
 };
 
-KexiDBShortcutFile::KexiDBShortcutFile(const QString& fileName)
-        : d(new KexiDBShortcutFile::Private())
+KexiDBShortcutFile::KexiDBShortcutFile(const QString &fileName)
+    : d(new KexiDBShortcutFile::Private())
 {
     d->fileName = QDir(fileName).absolutePath();
 }
@@ -71,8 +72,8 @@ QString KexiDBShortcutFile::fileName() const
 
 //---------------------------------------------
 
-KexiDBConnShortcutFile::KexiDBConnShortcutFile(const QString& fileName)
-        : KexiDBShortcutFile(fileName)
+KexiDBConnShortcutFile::KexiDBConnShortcutFile(const QString &fileName)
+    : KexiDBShortcutFile(fileName)
 {
 }
 
@@ -80,17 +81,18 @@ KexiDBConnShortcutFile::~KexiDBConnShortcutFile()
 {
 }
 
-bool KexiDBConnShortcutFile::loadConnectionData(KexiDB::ConnectionData& data, QString* _groupKey)
+bool KexiDBConnShortcutFile::loadConnectionData(KexiDB::ConnectionData &data, QString *_groupKey)
 {
     KexiProjectData pdata(data);
-    if (!pdata.load(fileName(), _groupKey))
+    if (!pdata.load(fileName(), _groupKey)) {
         return false;
+    }
     data = *pdata.connectionData();
     return true;
 }
 
-bool KexiDBConnShortcutFile::saveConnectionData(const KexiDB::ConnectionData& data,
-        bool savePassword, QString* groupKey, bool overwriteFirstGroup)
+bool KexiDBConnShortcutFile::saveConnectionData(const KexiDB::ConnectionData &data,
+        bool savePassword, QString *groupKey, bool overwriteFirstGroup)
 {
     KexiProjectData pdata(data);
     return pdata.save(fileName(), savePassword, groupKey, overwriteFirstGroup);

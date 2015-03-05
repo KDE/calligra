@@ -37,7 +37,7 @@ public:
      * @param newLock list of new lock states the same length as @p shapes
      * @param parent the parent command used for macro commands
      */
-    KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock,
+    KoShapeLockCommand(const QList<KoShape *> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock,
                        KUndo2Command *parent = 0);
     ~KoShapeLockCommand();
 
@@ -47,7 +47,7 @@ public:
     virtual void undo();
 
 private:
-    QList<KoShape*> m_shapes;    /// the shapes to set background for
+    QList<KoShape *> m_shapes;   /// the shapes to set background for
     QList<bool> m_oldLock;       /// old lock states
     QList<bool> m_newLock;       /// new lock states
 };

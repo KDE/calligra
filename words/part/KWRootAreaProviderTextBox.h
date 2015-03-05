@@ -42,7 +42,7 @@ public:
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
     virtual QRectF suggestRect(KoTextLayoutRootArea *rootArea);
 private:
-    QList<KoTextLayoutRootArea*> m_rootAreaCache;
+    QList<KoTextLayoutRootArea *> m_rootAreaCache;
 };
 
 #endif

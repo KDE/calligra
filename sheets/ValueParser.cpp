@@ -29,17 +29,17 @@
 
 using namespace Calligra::Sheets;
 
-ValueParser::ValueParser(const CalculationSettings* settings)
-        : m_settings(settings)
+ValueParser::ValueParser(const CalculationSettings *settings)
+    : m_settings(settings)
 {
 }
 
-const CalculationSettings* ValueParser::settings() const
+const CalculationSettings *ValueParser::settings() const
 {
     return m_settings;
 }
 
-Value ValueParser::parse(const QString& str) const
+Value ValueParser::parse(const QString &str) const
 {
     Value val;
 
@@ -60,15 +60,17 @@ Value ValueParser::parse(const QString& str) const
     // First as number
     val = tryParseNumber(strStripped, &ok);
 
-    if (ok)
+    if (ok) {
         return val;
+    }
 
 // Then as bool
 // Note - I swapped the order of these two to try parsing as a number
 // first because that will probably be the most common case
     val = tryParseBool(strStripped, &ok);
-    if (ok)
+    if (ok) {
         return val;
+    }
 
     // Test for money number
     Number money = m_settings->locale()->readMoney(strStripped, &ok);
@@ -79,44 +81,53 @@ Value ValueParser::parse(const QString& str) const
     }
 
     val = tryParseDate(strStripped, &ok);
-    if (ok)
+    if (ok) {
         return val;
+    }
 
     val = tryParseTime(strStripped, &ok);
-    if (ok)
+    if (ok) {
         return val;
+    }
 
     // Nothing particular found, then this is simply a string
     val = Value(str);
     return val;
 }
 
-Value ValueParser::tryParseBool(const QString& str, bool *ok) const
+Value ValueParser::tryParseBool(const QString &str, bool *ok) const
 {
     Value val;
-    if (ok) *ok = false;
+    if (ok) {
+        *ok = false;
+    }
 
-    const QString& lowerStr = str.toLower();
+    const QString &lowerStr = str.toLower();
 
     if ((lowerStr == "true") ||
             (lowerStr == ki18n("true").toString(m_settings->locale()).toLower())) {
         val = Value(true);
-        if (ok) *ok = true;
+        if (ok) {
+            *ok = true;
+        }
     } else if ((lowerStr == "false") ||
                (lowerStr == ki18n("false").toString(m_settings->locale()).toLower())) {
         val = Value(false);
-        if (ok) *ok = true;
+        if (ok) {
+            *ok = true;
+        }
     }
     return val;
 }
 
-Value ValueParser::readNumber(const QString& _str, bool *ok) const
+Value ValueParser::readNumber(const QString &_str, bool *ok) const
 {
     bool isInt = false;
     QString str = _str.trimmed();
     bool neg = str.indexOf(m_settings->locale()->negativeSign()) == 0;
-    if (neg)
+    if (neg) {
         str.remove(0, m_settings->locale()->negativeSign().length());
+    }
 
     /* will hold the scientific notation portion of the number.
     Example, with 2.34E+23, exponentialPart == "E+23"
@@ -168,7 +179,9 @@ Value ValueParser::readNumber(const QString& _str, bool *ok) const
                 || pos - lastpos > 3 // More than 3 digits between two separators -> error
                 || pos == 0          // Can't start with a separator
                 || (lastpos > 0 && pos - lastpos != 3)) { // Must have exactly 3 digits between two separators
-            if (ok) *ok = false;
+            if (ok) {
+                *ok = false;
+            }
             return Value();
         }
 
@@ -176,51 +189,70 @@ Value ValueParser::readNumber(const QString& _str, bool *ok) const
         major.remove(pos, thlen);
     }
     if (lastpos > 0 && major.length() - lastpos != 3) { // Must have exactly 3 digits after the last separator
-        if (ok) *ok = false;
+        if (ok) {
+            *ok = false;
+        }
         return Value();
     }
 
     // log10(2^63) ~= 18
-    if (isInt && major.length() > 19) isInt = false;
+    if (isInt && major.length() > 19) {
+        isInt = false;
+    }
 
     QString tot;
-    if (neg) tot = '-';
+    if (neg) {
+        tot = '-';
+    }
     tot += major;
-    if (!isInt) tot += '.' + minor + exponentialPart;
+    if (!isInt) {
+        tot += '.' + minor + exponentialPart;
+    }
 
     return isInt ? Value(tot.toLongLong(ok)) : Value(tot.toDouble(ok));
 }
 
-Number ValueParser::readImaginary(const QString& str, bool* ok) const
+Number ValueParser::readImaginary(const QString &str, bool *ok) const
 {
     if (str.isEmpty()) {
-        if (ok) *ok = false;
+        if (ok) {
+            *ok = false;
+        }
         return 0.0;
     }
 
     Number imag = 0.0;
     if (str[0] == 'i' || str[0] == 'j') {
         if (str.length() == 1) {
-            if (ok) *ok = true;
+            if (ok) {
+                *ok = true;
+            }
             imag = 1.0;
-        } else
+        } else {
             imag = readNumber(str.mid(1), ok).asFloat();
-    } else if (str[str.length()-1] == 'i' || str[str.length()-1] == 'j') {
+        }
+    } else if (str[str.length() - 1] == 'i' || str[str.length() - 1] == 'j') {
         const QString minus(m_settings->locale()->negativeSign());
         if (str.length() == 2 && str[0] == '+') {
-            if (ok) *ok = true;
+            if (ok) {
+                *ok = true;
+            }
             imag = 1.0;
         } else if (str.length() == minus.length() + 1 && str.left(minus.length()) == minus) {
-            if (ok) *ok = true;
+            if (ok) {
+                *ok = true;
+            }
             imag = -1.0;
-        } else
+        } else {
             imag = readNumber(str.left(str.length() - 1), ok).asFloat();
-    } else
+        }
+    } else {
         *ok = false;
+    }
     return imag;
 }
 
-Value ValueParser::tryParseNumber(const QString& str, bool *ok) const
+Value ValueParser::tryParseNumber(const QString &str, bool *ok) const
 {
     Value value;
     if (str.endsWith('%')) {   // percentage
@@ -241,30 +273,36 @@ Value ValueParser::tryParseNumber(const QString& str, bool *ok) const
             // imaginary part
             imag = readImaginary(str.mid(sepPos + 1).trimmed(), ok);
             // real part
-            if (*ok)
+            if (*ok) {
                 real = readNumber(str.left(sepPos).trimmed(), ok).asFloat();
+            }
         } else if ((sepPos = str.indexOf(minus, minus.length())) != -1) {
             // imaginary part
             imag = -readImaginary(str.mid(sepPos + 1).trimmed(), ok);
             // real part
-            if (*ok)
+            if (*ok) {
                 real = readNumber(str.left(sepPos).trimmed(), ok).asFloat();
+            }
         } else {
             // imaginary part
-            if (str.trimmed().length() > 1)   // but don't parse a stand-alone 'i'
-              imag = readImaginary(str.trimmed(), ok);
+            if (str.trimmed().length() > 1) { // but don't parse a stand-alone 'i'
+                imag = readImaginary(str.trimmed(), ok);
+            }
             // real part
-            if (*ok)
+            if (*ok) {
                 real = 0.0;
+            }
         }
-        if (*ok)
+        if (*ok) {
             value = Value(complex<Number>(real, imag));
-    } else // real number
+        }
+    } else { // real number
         value = readNumber(str, ok);
+    }
     return value;
 }
 
-Value ValueParser::tryParseDate(const QString& str, bool *ok) const
+Value ValueParser::tryParseDate(const QString &str, bool *ok) const
 {
     bool valid = false;
     QDate tmpDate = m_settings->locale()->readDate(str, &valid);
@@ -279,12 +317,14 @@ Value ValueParser::tryParseDate(const QString& str, bool *ok) const
         if (yearPos > -1) {
             if (yearPos == 0) {
                 fmt.remove(0, 2);
-                while (fmt[0] != '%')
+                while (fmt[0] != '%') {
                     fmt.remove(0, 1);
+                }
             } else {
                 fmt.remove(yearPos, 2);
-                for (; yearPos > 0 && fmt[yearPos-1] != '%'; --yearPos)
+                for (; yearPos > 0 && fmt[yearPos - 1] != '%'; --yearPos) {
                     fmt.remove(yearPos, 1);
+                }
             }
             //kDebug(36001) <<"Cell::tryParseDate short format w/o date:" << fmt;
             tmpDate = m_settings->locale()->readDate(str, fmt, &valid);
@@ -299,8 +339,9 @@ Value ValueParser::tryParseDate(const QString& str, bool *ok) const
         // The following fixes the problem, 3/4/1955 will always be 1955
 
         QString fmt = m_settings->locale()->dateFormatShort();
-        if ((fmt.contains("%y") == 1) && (tmpDate.year() > 2999))
+        if ((fmt.contains("%y") == 1) && (tmpDate.year() > 2999)) {
             tmpDate = tmpDate.addYears(-1900);
+        }
 
         // this is another HACK !
         // with two digit years, 0-69 is treated as year 2000-2069 (see KLocale)
@@ -317,8 +358,9 @@ Value ValueParser::tryParseDate(const QString& str, bool *ok) const
             // if year is 2045, check to see if "2045" isn't there --> actual
             // input is "45"
             if ((str.count(yearTwoDigits) >= 1) &&
-                    (str.count(yearFourDigits) == 0))
+                    (str.count(yearFourDigits) == 0)) {
                 tmpDate = tmpDate.addYears(-100);
+            }
         }
     }
     if (!valid) {
@@ -329,19 +371,21 @@ Value ValueParser::tryParseDate(const QString& str, bool *ok) const
         }
     }
 
-    if (ok)
+    if (ok) {
         *ok = valid;
+    }
 
     return Value(tmpDate, m_settings);
 }
 
-Value ValueParser::tryParseTime(const QString& str, bool *ok) const
+Value ValueParser::tryParseTime(const QString &str, bool *ok) const
 {
     bool valid = false;
 
     QDateTime tmpTime = readTime(str, true, &valid);
-    if (!valid)
+    if (!valid) {
         tmpTime = readTime(str, false, &valid);
+    }
 
     if (!valid) {
         const QString stringPm = ki18n("pm").toString(m_settings->locale());
@@ -353,27 +397,32 @@ Value ValueParser::tryParseTime(const QString& str, bool *ok) const
             tmp = tmp.simplified();
             // try again
             tmpTime = readTime(tmp, true, &valid);
-            if (!valid)
+            if (!valid) {
                 tmpTime = readTime(tmp, false, &valid);
-            if (valid && tmpTime.time().hour() > 11)
+            }
+            if (valid && tmpTime.time().hour() > 11) {
                 valid = false;
-            else if (valid)
-                tmpTime = tmpTime.addSecs(43200); // add 12 hours
+            } else if (valid) {
+                tmpTime = tmpTime.addSecs(43200);    // add 12 hours
+            }
         } else if ((pos = str.indexOf(stringAm, 0, Qt::CaseInsensitive)) != -1) {
             // cut off 'AM'
             QString tmp = str.mid(0, str.length() - stringAm.length());
             tmp = tmp.simplified();
             // try again
             tmpTime = readTime(tmp, true, &valid);
-            if (!valid)
+            if (!valid) {
                 tmpTime = readTime(tmp, false, &valid);
-            if (valid && tmpTime.time().hour() > 11)
+            }
+            if (valid && tmpTime.time().hour() > 11) {
                 valid = false;
+            }
         }
     }
 
-    if (ok)
+    if (ok) {
         *ok = valid;
+    }
     Value value;
     if (valid) {
         value = Value(tmpTime, m_settings);
@@ -382,7 +431,7 @@ Value ValueParser::tryParseTime(const QString& str, bool *ok) const
     return value;
 }
 
-QDateTime ValueParser::readTime(const QString& intstr, bool withSeconds, bool* ok) const
+QDateTime ValueParser::readTime(const QString &intstr, bool withSeconds, bool *ok) const
 {
     QString str = intstr.simplified().toLower();
     QString format = m_settings->locale()->timeFormat().simplified();
@@ -406,22 +455,25 @@ QDateTime ValueParser::readTime(const QString& intstr, bool withSeconds, bool* o
     const uint sl = str.length();
 
     while (l > formatpos || sl > strpos) {
-        if (!(l > formatpos && sl > strpos))
+        if (!(l > formatpos && sl > strpos)) {
             goto error;
+        }
 
         QChar c(format.at(formatpos++));
 
         if (c != '%') {
-            if (c.isSpace())
+            if (c.isSpace()) {
                 ++strpos;
-            else if (c != str.at(strpos++))
+            } else if (c != str.at(strpos++)) {
                 goto error;
+            }
             continue;
         }
 
         // remove space at the beginning
-        if (sl > strpos && str.at(strpos).isSpace())
+        if (sl > strpos && str.at(strpos).isSpace()) {
             ++strpos;
+        }
 
         c = format.at(formatpos++);
         switch (c.toLatin1()) {
@@ -437,8 +489,9 @@ QDateTime ValueParser::readTime(const QString& intstr, bool withSeconds, bool* o
                 if (str.mid(strpos, len) == s) {
                     pm = false;
                     strpos += len;
-                } else
+                } else {
                     goto error;
+                }
             }
         }
         break;
@@ -448,12 +501,14 @@ QDateTime ValueParser::readTime(const QString& intstr, bool withSeconds, bool* o
             g_12h = false;
             if (str.at(strpos) == '-') {
                 negative = true;
-                if (sl <= ++strpos)
+                if (sl <= ++strpos) {
                     goto error;
+                }
             }
             hour = readInt(str, strpos);
-            if (hour < 0)
+            if (hour < 0) {
                 goto error;
+            }
 
             break;
 
@@ -462,33 +517,39 @@ QDateTime ValueParser::readTime(const QString& intstr, bool withSeconds, bool* o
             g_12h = true;
             if (str.at(strpos) == '-') {
                 negative = true;
-                if (sl <= ++strpos)
+                if (sl <= ++strpos) {
                     goto error;
+                }
             }
             hour = readInt(str, strpos);
-            if (hour < 1 || hour > 12)
+            if (hour < 1 || hour > 12) {
                 goto error;
+            }
 
             break;
 
         case 'M':
             minute = readInt(str, strpos);
-            if (minute < 0 || minute > 59)
+            if (minute < 0 || minute > 59) {
                 goto error;
+            }
 
             break;
 
         case 'S':
-            if (!withSeconds)
+            if (!withSeconds) {
                 break;
+            }
             second = readInt(str, strpos);
-            if (second < 0 || second > 59)
+            if (second < 0 || second > 59) {
                 goto error;
+            }
             if (strpos < sl && str.indexOf(m_settings->locale()->decimalSymbol()) == (int)strpos) {
                 strpos += m_settings->locale()->decimalSymbol().length();
                 msecs = readInt(str, strpos);
-                if (msecs < 0 || msecs > 999)
+                if (msecs < 0 || msecs > 999) {
                     goto error;
+                }
             }
 
             break;
@@ -497,19 +558,23 @@ QDateTime ValueParser::readTime(const QString& intstr, bool withSeconds, bool* o
 
     if (g_12h) {
         hour %= 12;
-        if (pm) hour += 12;
+        if (pm) {
+            hour += 12;
+        }
     }
 
-    if (ok)
+    if (ok) {
         *ok = true;
+    }
     result = QDateTime(m_settings->referenceDate(), QTime(0, 0), Qt::UTC);
     msecs += (((hour * 60 + minute) * 60 + second) * 1000);
     result = result.addMSecs(negative ? -msecs : msecs);
     return result;
 
 error:
-    if (ok)
+    if (ok) {
         *ok = false;
+    }
     // return invalid date if it didn't work
     return QDateTime(m_settings->referenceDate(), QTime(-1, -1, -1), Qt::UTC);
 }
@@ -520,10 +585,11 @@ error:
  * @param pos the position to start at. It will be updated when we parse it.
  * @return the integer read in the string, or -1 if no string
  */
-int ValueParser::readInt(const QString& str, uint& pos) const
+int ValueParser::readInt(const QString &str, uint &pos) const
 {
-    if (!str.at(pos).isDigit())
+    if (!str.at(pos).isDigit()) {
         return -1;
+    }
     int result = 0;
     for (; (uint) str.length() > pos && str.at(pos).isDigit(); pos++) {
         result *= 10;

@@ -27,25 +27,26 @@ class TestAction : public KisRecordedAction
 {
 public:
 
-    TestAction(const QString & id, const QString & name)
-            : KisRecordedAction(id, name) {
+    TestAction(const QString &id, const QString &name)
+        : KisRecordedAction(id, name)
+    {
     }
 
-    void play(const KisPlayInfo&, KoUpdater*) const {
+    void play(const KisPlayInfo &, KoUpdater *) const
+    {
     }
 
-    KisRecordedAction* clone() const {
+    KisRecordedAction *clone() const
+    {
         return new TestAction(id(), name());
     }
 
 };
 
-
 void KisRecordedActionTest::testCreation()
 {
     TestAction tc("bla", "bla");
 }
-
 
 QTEST_KDEMAIN(KisRecordedActionTest, GUI)
 #include "kis_recorded_action_test.moc"

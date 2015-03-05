@@ -28,15 +28,13 @@ namespace KexiMigration
 
 K_EXPORT_KEXIMIGRATE_DRIVER(TxtMigrate, tsv)
 
-
-TxtMigrate::TxtMigrate(QObject *parent, const QVariantList& args)
-        : KexiMigrate(parent, args)
+TxtMigrate::TxtMigrate(QObject *parent, const QVariantList &args)
+    : KexiMigrate(parent, args)
 {
-  m_DataFile = 0;
-  m_Row = -1;
-  m_FileRow = -1;
+    m_DataFile = 0;
+    m_Row = -1;
+    m_FileRow = -1;
 }
-
 
 TxtMigrate::~TxtMigrate()
 {
@@ -44,100 +42,96 @@ TxtMigrate::~TxtMigrate()
 
 bool TxtMigrate::drv_connect()
 {
-  QDir d;
+    QDir d;
 
-  m_Folder = data()->source->dbPath();
-  return d.exists(m_Folder);
+    m_Folder = data()->source->dbPath();
+    return d.exists(m_Folder);
 }
 
 bool TxtMigrate::drv_disconnect()
 {
-  if (m_DataFile) {
-    delete m_DataFile;
-    m_DataFile = 0;
-  }
-  
-  return true;
-}
-
-bool TxtMigrate::drv_tableNames(QStringList& tablenames)
-{
-  tablenames << data()->source->dbFileName();
-  return true;
-}
-
-bool TxtMigrate::drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema)
-{
-  if (drv_readFromTable(originalName))
-  {
-    for (uint i = 0; i < (uint)m_FieldNames.count(); ++i)
-    {
-      tableSchema.addField( new KexiDB::Field(m_FieldNames[i], KexiDB::Field::Text) );
+    if (m_DataFile) {
+        delete m_DataFile;
+        m_DataFile = 0;
     }
-    tableSchema.setName(originalName);
+
     return true;
-  }
-  return false;
 }
 
-bool TxtMigrate::drv_readFromTable(const QString & tableName)
+bool TxtMigrate::drv_tableNames(QStringList &tablenames)
 {
-  if (m_DataFile) {
-    delete m_DataFile;
-    m_DataFile = 0;
-  }
-  
-  m_DataFile = new QFile(m_Folder + '/' + tableName);
+    tablenames << data()->source->dbFileName();
+    return true;
+}
 
-  //kDebug() << m_DataFile->fileName();
-  m_Row = -1;
-  m_FileRow = -1;
+bool TxtMigrate::drv_readTableSchema(const QString &originalName, KexiDB::TableSchema &tableSchema)
+{
+    if (drv_readFromTable(originalName)) {
+        for (uint i = 0; i < (uint)m_FieldNames.count(); ++i) {
+            tableSchema.addField(new KexiDB::Field(m_FieldNames[i], KexiDB::Field::Text));
+        }
+        tableSchema.setName(originalName);
+        return true;
+    }
+    return false;
+}
 
-  if (!m_DataFile->open(QIODevice::ReadOnly | QIODevice::Text))
-         return false;
+bool TxtMigrate::drv_readFromTable(const QString &tableName)
+{
+    if (m_DataFile) {
+        delete m_DataFile;
+        m_DataFile = 0;
+    }
 
-  m_LastLine = m_DataFile->readLine();
-  m_FieldNames = m_LastLine.split('\t');
+    m_DataFile = new QFile(m_Folder + '/' + tableName);
 
-  return true;
+    //kDebug() << m_DataFile->fileName();
+    m_Row = -1;
+    m_FileRow = -1;
+
+    if (!m_DataFile->open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return false;
+    }
+
+    m_LastLine = m_DataFile->readLine();
+    m_FieldNames = m_LastLine.split('\t');
+
+    return true;
 }
 
 bool TxtMigrate::drv_moveNext()
 {
     //kDebug();
-  if (m_Row < m_FileRow)
-  {
-   m_Row++; 
-  }
-  else
-  {
-    if (m_DataFile->atEnd())
-      return false;
+    if (m_Row < m_FileRow) {
+        m_Row++;
+    } else {
+        if (m_DataFile->atEnd()) {
+            return false;
+        }
 
-    m_LastLine = m_DataFile->readLine();
-    m_FieldValues.push_back(m_LastLine.split('\t'));
-    m_Row++;
-    m_FileRow++;
-  }
-  return true;
+        m_LastLine = m_DataFile->readLine();
+        m_FieldValues.push_back(m_LastLine.split('\t'));
+        m_Row++;
+        m_FileRow++;
+    }
+    return true;
 }
 
 bool TxtMigrate::drv_movePrevious()
 {
     //kDebug();
-  if (m_Row > 0)
-  {
-    m_Row--;
-    return true;
-  }
-  return false;
+    if (m_Row > 0) {
+        m_Row--;
+        return true;
+    }
+    return false;
 }
 
 QVariant TxtMigrate::drv_value(uint i)
 {
     //kDebug() << m_Row;
     //kDebug() << m_LastLine;
-    
+
     if (m_Row >= 0)   {
         return QVariant(m_FieldValues[m_Row][i]);
     }
@@ -154,7 +148,7 @@ bool TxtMigrate::drv_moveFirst()
 bool TxtMigrate::drv_moveLast()
 {
     //kDebug();
-    while(drv_moveNext()) {}
+    while (drv_moveNext()) {}
     return true;
 }
 

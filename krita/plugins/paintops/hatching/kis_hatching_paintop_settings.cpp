@@ -35,7 +35,7 @@ KisHatchingPaintOpSettings::~KisHatchingPaintOpSettings()
 {
 }
 
-void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* convenienttwin) const
+void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings *convenienttwin) const
 {
     /*--------DO NOT REMOVE please, use this to review the XML config tree
     QMap<QString, QVariant> rofl = QMap<QString, QVariant>(getProperties());
@@ -71,20 +71,22 @@ void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* conv
     convenienttwin->opaquebackground = getBool("Hatching/bool_opaquebackground");
     convenienttwin->subpixelprecision = getBool("Hatching/bool_subpixelprecision");
 
-    if (getBool("Hatching/bool_nocrosshatching"))
+    if (getBool("Hatching/bool_nocrosshatching")) {
         convenienttwin->crosshatchingstyle = 0;
-    else if (getBool("Hatching/bool_perpendicular"))
+    } else if (getBool("Hatching/bool_perpendicular")) {
         convenienttwin->crosshatchingstyle = 1;
-    else if (getBool("Hatching/bool_minusthenplus"))
+    } else if (getBool("Hatching/bool_minusthenplus")) {
         convenienttwin->crosshatchingstyle = 2;
-    else if (getBool("Hatching/bool_plusthenminus"))
+    } else if (getBool("Hatching/bool_plusthenminus")) {
         convenienttwin->crosshatchingstyle = 3;
-    if (getBool("Hatching/bool_moirepattern"))
+    }
+    if (getBool("Hatching/bool_moirepattern")) {
         convenienttwin->crosshatchingstyle = 4;
+    }
 
 }
 
-void KisHatchingPaintOpSettings::fromXML(const QDomElement& elt)
+void KisHatchingPaintOpSettings::fromXML(const QDomElement &elt)
 {
     setProperty(HATCHING_VERSION, "1"); // This make sure that fromXML will override HAIRY_VERSION with 2, or will default to 1
     KisBrushBasedPaintOpSettings::fromXML(elt);

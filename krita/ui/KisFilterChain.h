@@ -34,13 +34,12 @@ class KTemporaryFile;
 class KisImportExportManager;
 class KisDocument;
 
-
 namespace CalligraFilter
 {
-    class Graph;
-    class ChainLink;
-    class Vertex;
-    class Edge;
+class Graph;
+class ChainLink;
+class Vertex;
+class Edge;
 }
 
 /**
@@ -67,7 +66,8 @@ public:
     /**
      * The filter manager returned may be 0!
      */
-    const KisImportExportManager* manager() const {
+    const KisImportExportManager *manager() const
+    {
         return m_manager;
     }
 
@@ -106,7 +106,7 @@ public:
      * @param mode Whether we want to read or write from/to the stream
      * @return The storage device to access the stream. May be 0!
      */
-    KoStoreDevice* storageFile(const QString& name = "root", KoStore::Mode mode = KoStore::Read);
+    KoStoreDevice *storageFile(const QString &name = "root", KoStore::Mode mode = KoStore::Read);
 
     /**
      * This method allows your filter to work directly on the
@@ -114,15 +114,14 @@ public:
      * This part of the API is for the filters in our chain.
      * @return The document containing the data. May return 0 on error.
      */
-    KisDocument* inputDocument();
+    KisDocument *inputDocument();
     /**
      * This method allows your filter to work directly on the
      * @ref KisDocument of the application.
      * This part of the API is for the filters in our chain.
      * @return The document you have to write to. May return 0 on error.
      */
-    KisDocument* outputDocument();
-
+    KisDocument *outputDocument();
 
     /// returns the amount of filters this chain contains representing the weight
     int weight() const;
@@ -137,20 +136,19 @@ private:
 
     friend class CalligraFilter::Graph;
 
-    explicit KisFilterChain(const KisImportExportManager* manager);
+    explicit KisFilterChain(const KisImportExportManager *manager);
 
-    void appendChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
-    void prependChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray& from, const QByteArray& to);
+    void appendChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray &from, const QByteArray &to);
+    void prependChainLink(KisFilterEntry::Ptr filterEntry, const QByteArray &from, const QByteArray &to);
 
     // These methods are friends of KisFilterManager and provide access
     // to a private part of its API. As I don't want to include
     // koFilterManager.h in this header the direction is "int" here.
     QString filterManagerImportFile() const;
     QString filterManagerExportFile() const;
-    KisDocument* filterManagerKisDocument() const;
+    KisDocument *filterManagerKisDocument() const;
     int filterManagerDirection() const;
-    KisFilterChain* filterManagerParentChain() const;
-
+    KisFilterChain *filterManagerParentChain() const;
 
     // Helper methods which keep track of all the temp files, documents,
     // storages,... and properly delete them as soon as they are not
@@ -158,29 +156,29 @@ private:
     void manageIO();
     void finalizeIO();
 
-    bool createTempFile(KTemporaryFile** tempFile, bool autoDelete = true);
+    bool createTempFile(KTemporaryFile **tempFile, bool autoDelete = true);
 
-    void inputFileHelper(KisDocument* document, const QString& alternativeFile);
+    void inputFileHelper(KisDocument *document, const QString &alternativeFile);
     void outputFileHelper(bool autoDelete);
-    KoStoreDevice* storageNewStreamHelper(KoStore** storage, KoStoreDevice** device, const QString& name);
-    KoStoreDevice* storageHelper(const QString& file, const QString& streamName,
-                                 KoStore::Mode mode, KoStore** storage, KoStoreDevice** device);
-    void storageInit(const QString& file, KoStore::Mode mode, KoStore** storage);
-    KoStoreDevice* storageCreateFirstStream(const QString& streamName, KoStore** storage, KoStoreDevice** device);
-    KoStoreDevice* storageCleanupHelper(KoStore** storage);
+    KoStoreDevice *storageNewStreamHelper(KoStore **storage, KoStoreDevice **device, const QString &name);
+    KoStoreDevice *storageHelper(const QString &file, const QString &streamName,
+                                 KoStore::Mode mode, KoStore **storage, KoStoreDevice **device);
+    void storageInit(const QString &file, KoStore::Mode mode, KoStore **storage);
+    KoStoreDevice *storageCreateFirstStream(const QString &streamName, KoStore **storage, KoStoreDevice **device);
+    KoStoreDevice *storageCleanupHelper(KoStore **storage);
 
-    KisDocument* createDocument(const QString& file);
-    KisDocument* createDocument(const QByteArray& mimeType);
+    KisDocument *createDocument(const QString &file);
+    KisDocument *createDocument(const QByteArray &mimeType);
 
     // "A whole is that which has beginning, middle, and end" - Aristotle
     // ...but we also need to signal "Done" state, Mr. Aristotle
     enum Whole { Beginning = 1, Middle = 2, End = 4, Done = 8 };
 
     // Don't copy or assign filter chains
-    KisFilterChain(const KisFilterChain& rhs);
-    KisFilterChain& operator=(const KisFilterChain& rhs);
+    KisFilterChain(const KisFilterChain &rhs);
+    KisFilterChain &operator=(const KisFilterChain &rhs);
 
-    const KisImportExportManager* const m_manager;
+    const KisImportExportManager *const m_manager;
 
     CalligraFilter::ChainLinkList m_chainLinks;
 
@@ -190,16 +188,16 @@ private:
     QString m_inputFile;              // Did we pass around plain files?
     QString m_outputFile;
 
-    KoStore* m_inputStorage;          // ...or was it a storage+device?
-    KoStoreDevice* m_inputStorageDevice;
-    KoStore* m_outputStorage;
-    KoStoreDevice* m_outputStorageDevice;
+    KoStore *m_inputStorage;          // ...or was it a storage+device?
+    KoStoreDevice *m_inputStorageDevice;
+    KoStore *m_outputStorage;
+    KoStoreDevice *m_outputStorageDevice;
 
-    KisDocument* m_inputDocument;      // ...or even documents?
-    KisDocument* m_outputDocument;
+    KisDocument *m_inputDocument;      // ...or even documents?
+    KisDocument *m_outputDocument;
 
-    KTemporaryFile* m_inputTempFile;
-    KTemporaryFile* m_outputTempFile;
+    KTemporaryFile *m_inputTempFile;
+    KTemporaryFile *m_outputTempFile;
 
     // These two flags keep track of the input/output the
     // filter (=user) asked for
@@ -207,7 +205,7 @@ private:
     IOState m_inputQueried, m_outputQueried;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // __KO_FILTER_CHAIN_H__

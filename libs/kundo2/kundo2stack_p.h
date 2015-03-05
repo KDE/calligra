@@ -65,7 +65,7 @@ class KUndo2CommandPrivate
 {
 public:
     KUndo2CommandPrivate() : id(-1) {}
-    QList<KUndo2Command*> child_list;
+    QList<KUndo2Command *> child_list;
     QString actionText;
     KUndo2MagicString text;
     int id;

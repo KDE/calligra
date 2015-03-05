@@ -45,20 +45,24 @@ KisTGAExport::~KisTGAExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "TGA export! From:" << from << ", To:" << to << "";
 
     KisDocument *input = m_chain->inputDocument();
     QString filename = m_chain->outputFile();
 
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
     KUrl url;
     url.setPath(filename);
@@ -77,10 +81,11 @@ KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray& 
     QDataStream s(&f);
     s.setByteOrder(QDataStream::LittleEndian);
 
-    const QImage& img = image;
+    const QImage &img = image;
     const bool hasAlpha = (img.format() == QImage::Format_ARGB32);
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < 12; i++) {
         s << targaMagic[i];
+    }
 
     // write header
     s << quint16(img.width());   // width
@@ -94,8 +99,9 @@ KisImportExportFilter::ConversionStatus KisTGAExport::convert(const QByteArray& 
             s << quint8(qBlue(color));
             s << quint8(qGreen(color));
             s << quint8(qRed(color));
-            if (hasAlpha)
+            if (hasAlpha) {
                 s << quint8(qAlpha(color));
+            }
         }
     }
 

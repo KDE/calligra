@@ -34,7 +34,7 @@ class ActionOptionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ActionOptionWidget(CellToolBase* cellTool, const QDomElement& e, QWidget *parent = 0);
+    explicit ActionOptionWidget(CellToolBase *cellTool, const QDomElement &e, QWidget *parent = 0);
 
 private:
 };

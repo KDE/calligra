@@ -23,11 +23,11 @@
 #include <kexiutils/utils.h>
 
 KexiFormDataItemInterface::KexiFormDataItemInterface()
-        : KexiDataItemInterface()
-        , m_columnInfo(0)
-        , m_displayParametersForEnteredValue(0)
-        , m_displayParametersForDefaultValue(0)
-        , m_displayDefaultValue(false)
+    : KexiDataItemInterface()
+    , m_columnInfo(0)
+    , m_displayParametersForEnteredValue(0)
+    , m_displayParametersForDefaultValue(0)
+    , m_displayDefaultValue(false)
 {
 }
 
@@ -44,12 +44,12 @@ void KexiFormDataItemInterface::undoChanges()
 // m_disable_signalValueChanged = false;
 }
 
-KexiDB::Field* KexiFormDataItemInterface::field() const
+KexiDB::Field *KexiFormDataItemInterface::field() const
 {
     return m_columnInfo ? m_columnInfo->field : 0;
 }
 
-void KexiFormDataItemInterface::setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue)
+void KexiFormDataItemInterface::setDisplayDefaultValue(QWidget *widget, bool displayDefaultValue)
 {
     m_displayDefaultValue = displayDefaultValue;
     if (!m_displayParametersForDefaultValue) {
@@ -62,19 +62,21 @@ void KexiFormDataItemInterface::setDisplayDefaultValue(QWidget* widget, bool dis
 #if 0
 void KexiFormDataItemInterface::cancelEditor()
 {
-    QWidget *parentWidget = dynamic_cast<QWidget*>(this)->parentWidget();
-    KexiFormScrollView* view = KexiUtils::findParent<KexiFormScrollView*>(parentWidget);
-    if (view)
+    QWidget *parentWidget = dynamic_cast<QWidget *>(this)->parentWidget();
+    KexiFormScrollView *view = KexiUtils::findParent<KexiFormScrollView *>(parentWidget);
+    if (view) {
         view->cancelEditor();
+    }
 }
 #endif
 
 void KexiFormDataItemInterface::cancelEditor()
 {
-    QWidget *parentWidget = dynamic_cast<QWidget*>(this)->parentWidget();
-    KexiDataAwareObjectInterface *dataAwareObject = KexiUtils::findParentByType<KexiDataAwareObjectInterface*>(parentWidget);
-    if (dataAwareObject)
+    QWidget *parentWidget = dynamic_cast<QWidget *>(this)->parentWidget();
+    KexiDataAwareObjectInterface *dataAwareObject = KexiUtils::findParentByType<KexiDataAwareObjectInterface *>(parentWidget);
+    if (dataAwareObject) {
         dataAwareObject->cancelEditor();
+    }
 }
 
 void KexiFormDataItemInterface::selectAllOnFocusIfNeeded()

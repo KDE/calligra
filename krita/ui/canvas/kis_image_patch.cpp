@@ -87,13 +87,15 @@ void KisImagePatch::setImage(QImage image)
 
 void KisImagePatch::preScale(const QRectF &dstRect)
 {
-    if (m_isScaled) return;
+    if (m_isScaled) {
+        return;
+    }
 
     qreal scaleX = dstRect.width() / m_interestRect.width();
     qreal scaleY = dstRect.height() / m_interestRect.height();
 
     QSize newImageSize = QSize(ceil(m_image.width() * scaleX),
-                                   ceil(m_image.height() * scaleY));
+                               ceil(m_image.height() * scaleY));
     // Calculating new _aligned_ scale
     scaleX = qreal(newImageSize.width()) / m_image.width();
     scaleY = qreal(newImageSize.height()) / m_image.height();

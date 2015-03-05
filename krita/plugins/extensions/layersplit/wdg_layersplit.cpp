@@ -24,16 +24,13 @@
 #include <QListWidgetItem>
 #include <QDebug>
 
-
-
 #include "kis_factory2.h"
 #include "kis_config.h"
 
-WdgLayerSplit::WdgLayerSplit(QWidget* parent)
+WdgLayerSplit::WdgLayerSplit(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
 }
-
 
 #include "wdg_layersplit.moc"

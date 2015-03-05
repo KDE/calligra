@@ -24,7 +24,8 @@
 
 #include <QString>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Note;
 
@@ -55,7 +56,7 @@ public:
      * @param duration the duration of the chord
      * @param dots the number of dots of the chord, each dot multiplies the length of the chord by 1.5
      */
-    Chord(Staff* staff, Duration duration, int dots = 0);
+    Chord(Staff *staff, Duration duration, int dots = 0);
 
     /**
      * Destructor.
@@ -82,7 +83,7 @@ public:
      *
      * @param index the index of the note to return
      */
-    Note* note(int index) const;
+    Note *note(int index) const;
 
     /**
      * Adds a new note to this chord. The note will be drawn on the given staff and will have the given pitch and
@@ -92,7 +93,7 @@ public:
      * @param pitch the pitch of the new note
      * @param accidentals the number of accidentals of the note
      */
-    Note* addNote(Staff* staff, int pitch, int accidentals = 0);
+    Note *addNote(Staff *staff, int pitch, int accidentals = 0);
 
     /**
      * Adds an existing note to this chord. This will transfer ownership of the note to the chord. When the chord is
@@ -100,7 +101,7 @@ public:
      *
      * @param note the note to add
      */
-    void addNote(Note* note);
+    void addNote(Note *note);
 
     /**
      * Removes a note from this chord. If deleteNote is true the note is not only removed, but also deleted.
@@ -116,14 +117,14 @@ public:
      * @param note the note to remove
      * @param deleteNote should the note also be deleted
      */
-    void removeNote(Note* note, bool deleteNote = true);
-    
+    void removeNote(Note *note, bool deleteNote = true);
+
     /**
      * This overrides the method in the VoiceElement class to return the correct y position based on pitch
      * of the notes this chord contains.
      */
     virtual qreal y() const;
-    
+
     /**
      * This overrides the method in the VoiceElement class to return the correct height based on the pitch of
      * the notes in this chord.
@@ -131,7 +132,7 @@ public:
     virtual qreal height() const;
     virtual qreal width() const;
     virtual qreal beatline() const;
-    
+
     qreal stemX() const;
     qreal centerX() const;
     qreal topNoteY() const;
@@ -142,21 +143,21 @@ public:
     StemDirection stemDirection() const;
     StemDirection desiredStemDirection() const;
     void setStemDirection(StemDirection direction);
-    
+
     /**
      * Length of the stem as it extends beyond the top-most or bottom-most note, measured in number of lines.
      */
     qreal stemLength() const;
     void setStemLength(qreal stemLength);
     qreal desiredStemLength() const;
-    
+
     int beamCount() const;
-    const Chord* beamStart(int index) const;
-    const Chord* beamEnd(int index) const;
-    Chord* beamStart(int index);
-    Chord* beamEnd(int index);
+    const Chord *beamStart(int index) const;
+    const Chord *beamEnd(int index) const;
+    Chord *beamStart(int index);
+    Chord *beamEnd(int index);
     BeamType beamType(int index) const;
-    void setBeam(int index, Chord* beamStart, Chord* beamEnd, BeamType type = BeamFlag);
+    void setBeam(int index, Chord *beamStart, Chord *beamEnd, BeamType type = BeamFlag);
 public Q_SLOTS:
     /**
      * Changes the duration of the chord.
@@ -171,19 +172,19 @@ public Q_SLOTS:
      * @param dots the new number of dots
      */
     void setDots(int dots);
-Q_SIGNALS:    
+Q_SIGNALS:
     /**
      * This signal is emitted when the duration of this chord changes.
      */
     void durationChanged(Duration duration);
-    
+
     /**
      * This signal is emitted when the number of dots of this chord changes.
      */
     void dotsChanged(int dots);
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

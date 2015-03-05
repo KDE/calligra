@@ -29,17 +29,21 @@ class PixmapIdCustomProperty : public CustomProperty
 {
 public:
     explicit PixmapIdCustomProperty(Property *parent)
-            : CustomProperty(parent) {
+        : CustomProperty(parent)
+    {
     }
     virtual ~PixmapIdCustomProperty() {}
-    virtual void setValue(const QVariant &value, bool rememberOldValue) {
+    virtual void setValue(const QVariant &value, bool rememberOldValue)
+    {
         Q_UNUSED(value);
         Q_UNUSED(rememberOldValue);
     }
-    virtual QVariant value() const {
+    virtual QVariant value() const
+    {
         return m_property->value();
     }
-    virtual bool handleValue() const {
+    virtual bool handleValue() const
+    {
         return false;
     }
 };
@@ -49,18 +53,23 @@ class IdentifierCustomProperty : public CustomProperty
 {
 public:
     explicit IdentifierCustomProperty(Property *parent)
-            : CustomProperty(parent) {
+        : CustomProperty(parent)
+    {
     }
     virtual ~IdentifierCustomProperty() {}
-    virtual void setValue(const QVariant &value, bool rememberOldValue) {
+    virtual void setValue(const QVariant &value, bool rememberOldValue)
+    {
         Q_UNUSED(rememberOldValue);
-        if (!value.toString().isEmpty())
+        if (!value.toString().isEmpty()) {
             m_value = KexiUtils::stringToIdentifier(value.toString()).toLower();
+        }
     }
-    virtual QVariant value() const {
+    virtual QVariant value() const
+    {
         return m_value;
     }
-    virtual bool handleValue() const {
+    virtual bool handleValue() const
+    {
         return true;
     }
     QString m_value;
@@ -69,15 +78,15 @@ public:
 
 //! @todo
 #if 0 //TODO
-class KexiImagePropertyEditorDelegate : public KoProperty::EditorCreatorInterface, 
-                                        public KoProperty::ValuePainterInterface
+class KexiImagePropertyEditorDelegate : public KoProperty::EditorCreatorInterface,
+    public KoProperty::ValuePainterInterface
 {
 public:
     KexiImagePropertyEditorDelegate() {}
-    virtual QWidget * createEditor( int type, QWidget *parent, 
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual void paint( QPainter * painter, 
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual QWidget *createEditor(int type, QWidget *parent,
+                                  const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    virtual void paint(QPainter *painter,
+                       const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 #endif
 
@@ -85,8 +94,8 @@ class KexiIdentifierPropertyEditorDelegate : public KoProperty::EditorCreatorInt
 {
 public:
     KexiIdentifierPropertyEditorDelegate() {}
-    virtual QWidget * createEditor( int type, QWidget *parent, 
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const
+    virtual QWidget *createEditor(int type, QWidget *parent,
+                                  const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
         Q_UNUSED(type);
         Q_UNUSED(option);
@@ -98,15 +107,16 @@ public:
 //---------------
 
 KexiCustomPropertyFactory::KexiCustomPropertyFactory()
-        : KoProperty::Factory()
+    : KoProperty::Factory()
 {
 //! @todo addEditor( KexiCustomPropertyFactory::PixmapId, new KexiImagePropertyEditorDelegate );
-    addEditor( KexiCustomPropertyFactory::Identifier, new KexiIdentifierPropertyEditorDelegate );
+    addEditor(KexiCustomPropertyFactory::Identifier, new KexiIdentifierPropertyEditorDelegate);
 }
 
 void KexiCustomPropertyFactory::init()
 {
-    if (KoProperty::FactoryManager::self()->isEditorForTypeAvailable(KexiCustomPropertyFactory::PixmapId))
-        return; //already registered
-    KoProperty::FactoryManager::self()->registerFactory( new KexiCustomPropertyFactory );
+    if (KoProperty::FactoryManager::self()->isEditorForTypeAvailable(KexiCustomPropertyFactory::PixmapId)) {
+        return;    //already registered
+    }
+    KoProperty::FactoryManager::self()->registerFactory(new KexiCustomPropertyFactory);
 }

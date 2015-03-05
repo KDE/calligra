@@ -35,13 +35,13 @@ namespace Sheets
 class CALLIGRA_SHEETS_COMMON_EXPORT CellToolFactory : public KoToolFactoryBase
 {
 public:
-    explicit CellToolFactory(const QString& id);
+    explicit CellToolFactory(const QString &id);
     ~CellToolFactory();
 
-    KoToolBase* createTool(KoCanvasBase* canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 
     void setPriority(int priority);
-    void setToolTip(const QString& toolTip);
+    void setToolTip(const QString &toolTip);
     void setIconName(const char *iconName);
     void setIconName(const QString &iconName);
 };

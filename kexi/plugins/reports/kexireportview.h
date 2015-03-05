@@ -50,7 +50,7 @@ public:
 
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
-    
+
     virtual void addNewRecordRequested();
     virtual void moveToFirstRecordRequested();
     virtual void moveToLastRecordRequested();
@@ -66,14 +66,14 @@ private:
     QGraphicsView *m_reportView;
     QGraphicsScene *m_reportScene;
     KoReportPage *m_reportPage;
-    
+
 #ifndef KEXI_MOBILE
     KexiRecordNavigator *m_pageSelector;
 #endif
     int m_currentPage;
     int m_pageCount;
-    KexiReportPart::TempData* tempData() const;
-    KoReportData* sourceData(QDomElement e);
+    KexiReportPart::TempData *tempData() const;
+    KoReportData *sourceData(QDomElement e);
 
     KexiScriptAdaptor *m_kexi;
     KRScriptFunctions *m_functions;
@@ -88,7 +88,7 @@ private Q_SLOTS:
     void slotExportAsSpreadsheet();
     void slotExportAsWebPage();
     void slotExportAsTextDocument();
-    void openExportedDocument(const KUrl& destination);
+    void openExportedDocument(const KUrl &destination);
 };
 
 #endif

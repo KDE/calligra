@@ -32,9 +32,7 @@
 // Shape
 #include "Object3D.h"
 
-
 #define THREEDSHAPEID "ThreedShape"
-
 
 class SceneObject : public Object3D //, public QObject
 #if IMPLEMENT_AS_SHAPECONTAINER
@@ -78,8 +76,7 @@ private:
     bool       m_topLevel;
     Ko3dScene *m_threeDParams;    // Camera and rendering parameters plus lightsources.
 
-    QList<Object3D*> m_objects;
+    QList<Object3D *> m_objects;
 };
-
 
 #endif

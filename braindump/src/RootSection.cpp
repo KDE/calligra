@@ -32,7 +32,7 @@ RootSection::RootSection() : SectionGroup(0), m_undoStack(new KUndo2Stack(this))
 {
     connect(m_undoStack, SIGNAL(indexChanged(int)), SIGNAL(commandExecuted()));
     connect(m_undoStack, SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));
-    if(sections().isEmpty()) {
+    if (sections().isEmpty()) {
         newSection(0);
     }
 }
@@ -41,40 +41,40 @@ RootSection::~RootSection()
 {
 }
 
-ViewManager* RootSection::viewManager()
+ViewManager *RootSection::viewManager()
 {
     return m_viewManager;
 }
 
-SectionsIO* RootSection::sectionsIO()
+SectionsIO *RootSection::sectionsIO()
 {
     return m_sectionsSaver;
 }
 
-void RootSection::addCommand(Section* _section, KUndo2Command* _command)
+void RootSection::addCommand(Section *_section, KUndo2Command *_command)
 {
     kDebug() << _command << " is added for section " << _section;
     m_commandsMap[_command] = _section;
     m_undoStack->push(_command);
 }
 
-void RootSection::createActions(KActionCollection* _actionCollection)
+void RootSection::createActions(KActionCollection *_actionCollection)
 {
     m_undoStack->createUndoAction(_actionCollection);
     m_undoStack->createRedoAction(_actionCollection);
 }
 
-KUndo2Stack* RootSection::undoStack()
+KUndo2Stack *RootSection::undoStack()
 {
     return m_undoStack;
 }
 
 void RootSection::undoIndexChanged(int idx)
 {
-    const KUndo2Command* command = m_undoStack->command(idx - 1);
+    const KUndo2Command *command = m_undoStack->command(idx - 1);
     kDebug() << idx << " " << command << " " << m_undoStack->count() << " " << m_undoStack->cleanIndex() << " " << m_undoStack->index();
-    Section* section = m_commandsMap[command];
-    if(!section && idx == m_undoStack->count()) {
+    Section *section = m_commandsMap[command];
+    if (!section && idx == m_undoStack->count()) {
         section = m_currentSection;
         m_commandsMap[command] = section;
     }
@@ -82,7 +82,7 @@ void RootSection::undoIndexChanged(int idx)
     kDebug() << "save section: " << section;
 }
 
-void RootSection::setCurrentSection(Section* _section)
+void RootSection::setCurrentSection(Section *_section)
 {
     m_currentSection = _section;
 }

@@ -42,24 +42,24 @@ public:
      * for the uri, but the prefix was already used, and it can be an already existing
      * schema if the uri was already included)
      */
-    const KisMetaData::Schema* create(const QString & uri, const QString & prefix);
+    const KisMetaData::Schema *create(const QString &uri, const QString &prefix);
     /**
      * @return the schema for this uri
      */
-    const Schema* schemaFromUri(const QString & uri) const;
+    const Schema *schemaFromUri(const QString &uri) const;
     /**
      * @return the schema for this prefix
      */
-    const Schema* schemaFromPrefix(const QString & prefix) const;
+    const Schema *schemaFromPrefix(const QString &prefix) const;
     /**
      * Return an instance of the SchemaRegistry.
      * Creates an instance if that has never happened before and returns
      * the singleton instance.
      * Initialize it with default schemas.
      */
-    static KisMetaData::SchemaRegistry* instance();
+    static KisMetaData::SchemaRegistry *instance();
 private:
-    Private* const d;
+    Private *const d;
 };
 }
 

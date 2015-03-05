@@ -70,11 +70,11 @@ public:
 public:
 
     explicit IccColorProfile(const QString &fileName = QString());
-    explicit IccColorProfile(const QByteArray& rawData);
-    IccColorProfile(const IccColorProfile& rhs);
+    explicit IccColorProfile(const QByteArray &rawData);
+    IccColorProfile(const IccColorProfile &rhs);
     virtual ~IccColorProfile();
 
-    virtual KoColorProfile* clone() const;
+    virtual KoColorProfile *clone() const;
 
     virtual bool load();
     virtual bool save();
@@ -87,8 +87,11 @@ public:
     virtual bool isSuitableForOutput() const;
     virtual bool isSuitableForPrinting() const;
     virtual bool isSuitableForDisplay() const;
-    virtual bool operator==(const KoColorProfile&) const;
-    virtual QString type() const { return "icc"; }
+    virtual bool operator==(const KoColorProfile &) const;
+    virtual QString type() const
+    {
+        return "icc";
+    }
 
     /**
      * Returns the set of min/maxes for each channel in this profile.
@@ -97,12 +100,12 @@ public:
      * Furthermore, then only apply to the floating point uses of this profile,
      * and not the integer variants.
      */
-    const QVector<KoChannelInfo::DoubleRange> & GetFloatUIMinMax(void) const;
+    const QVector<KoChannelInfo::DoubleRange> &GetFloatUIMinMax(void) const;
 
 protected:
-    void setRawData(const QByteArray& rawData);
+    void setRawData(const QByteArray &rawData);
 public:
-    LcmsColorProfileContainer* asLcms() const;
+    LcmsColorProfileContainer *asLcms() const;
 protected:
     virtual bool init();
     void CalculateFloatUIMinMax(void);

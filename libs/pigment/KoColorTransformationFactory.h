@@ -46,10 +46,10 @@ public:
      * @return an empty list if the factory support all type of colorspaces models.
      */
     virtual QList< QPair< KoID, KoID > > supportedModels() const = 0;
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const = 0;
+    virtual KoColorTransformation *createTransformation(const KoColorSpace *colorSpace, QHash<QString, QVariant> parameters) const = 0;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

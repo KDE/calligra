@@ -24,15 +24,17 @@ namespace KexiUtils
 class MultiValidator::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
         qDeleteAll(ownedSubValidators);
         ownedSubValidators.clear();
     }
 
-    QList<QValidator*> ownedSubValidators;
-    QList<QValidator*> subValidators;
+    QList<QValidator *> ownedSubValidators;
+    QList<QValidator *> subValidators;
 };
 }
 
@@ -42,15 +44,15 @@ using namespace KexiUtils;
 
 //-----------------------------------------------------------
 
-MultiValidator::MultiValidator(QObject* parent)
-        : KexiDB::Validator(parent)
-        , d(new Private)
+MultiValidator::MultiValidator(QObject *parent)
+    : KexiDB::Validator(parent)
+    , d(new Private)
 {
 }
 
-MultiValidator::MultiValidator(QValidator *validator, QObject * parent)
-        : KexiDB::Validator(parent)
-        , d(new Private)
+MultiValidator::MultiValidator(QValidator *validator, QObject *parent)
+    : KexiDB::Validator(parent)
+    , d(new Private)
 {
     addSubvalidator(validator);
 }
@@ -60,48 +62,53 @@ MultiValidator::~MultiValidator()
     delete d;
 }
 
-void MultiValidator::addSubvalidator(QValidator* validator, bool owned)
+void MultiValidator::addSubvalidator(QValidator *validator, bool owned)
 {
-    if (!validator)
+    if (!validator) {
         return;
+    }
     d->subValidators.append(validator);
-    if (owned && !validator->parent())
+    if (owned && !validator->parent()) {
         d->ownedSubValidators.append(validator);
+    }
 }
 
-QValidator::State MultiValidator::validate(QString & input, int & pos) const
+QValidator::State MultiValidator::validate(QString &input, int &pos) const
 {
     State s;
-    foreach(QValidator* validator, d->subValidators) {
+    foreach (QValidator *validator, d->subValidators) {
         s = validator->validate(input, pos);
-        if (s == Intermediate || s == Invalid)
+        if (s == Intermediate || s == Invalid) {
             return s;
+        }
     }
     return Acceptable;
 }
 
-void MultiValidator::fixup(QString & input) const
+void MultiValidator::fixup(QString &input) const
 {
-    foreach(QValidator* validator, d->subValidators) {
+    foreach (QValidator *validator, d->subValidators) {
         validator->fixup(input);
     }
 }
 
 KexiDB::Validator::Result MultiValidator::internalCheck(
-    const QString &valueName, const QVariant& v,
+    const QString &valueName, const QVariant &v,
     QString &message, QString &details)
 {
     Result r;
     bool warning = false;
-    foreach(QValidator* validator, d->subValidators) {
-        if (dynamic_cast<KexiDB::Validator*>(validator))
-            r = dynamic_cast<KexiDB::Validator*>(validator)->internalCheck(valueName, v, message, details);
-        else
-            r = Ok; //ignore
-        if (r == Error)
+    foreach (QValidator *validator, d->subValidators) {
+        if (dynamic_cast<KexiDB::Validator *>(validator)) {
+            r = dynamic_cast<KexiDB::Validator *>(validator)->internalCheck(valueName, v, message, details);
+        } else {
+            r = Ok;    //ignore
+        }
+        if (r == Error) {
             return Error;
-        else if (r == Warning)
+        } else if (r == Warning) {
             warning = true;
+        }
     }
     return warning ? Warning : Ok;
 }

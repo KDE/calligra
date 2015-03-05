@@ -105,7 +105,7 @@ public:
      *
      * \param event An event to process.
      */
-    virtual void inputEvent(QEvent* event);
+    virtual void inputEvent(QEvent *event);
 
     /**
      * Returns true if the action can handle HiRes flow of move events
@@ -196,7 +196,7 @@ private:
     static void setInputManager(KisInputManager *manager);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KIS_ABSTRACT_INPUT_ACTION_H

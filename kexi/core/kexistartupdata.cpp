@@ -45,8 +45,8 @@ public:
 };
 
 KexiStartupData::Private::Private()
-    :projectData(0), action(KexiStartupData::DoNothing), forcedUserMode(false)
-      ,forcedDesignMode(false), isProjectNavigatorVisible(false), forcedFullScreen(false)
+    : projectData(0), action(KexiStartupData::DoNothing), forcedUserMode(false)
+    , forcedDesignMode(false), isProjectNavigatorVisible(false), forcedFullScreen(false)
 {
 }
 
@@ -109,8 +109,9 @@ void KexiStartupData::setForcedDesignMode(bool set)
 
 bool KexiStartupData::isProjectNavigatorVisible() const
 {
-    if (d->forcedUserMode && !d->forcedDesignMode)
+    if (d->forcedUserMode && !d->forcedDesignMode) {
         return d->isProjectNavigatorVisible;
+    }
     return true;
 }
 

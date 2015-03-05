@@ -36,16 +36,15 @@
 #include "kis_processing_visitor.h"
 #include "kis_default_bounds.h"
 
-struct KisPaintLayer::Private
-{
+struct KisPaintLayer::Private {
 public:
     KisPaintDeviceSP paintDevice;
     QBitArray        paintChannelFlags;
 };
 
-KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
-        : KisLayer(image, name, opacity)
-        , m_d(new Private())
+KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString &name, quint8 opacity, KisPaintDeviceSP dev)
+    : KisLayer(image, name, opacity)
+    , m_d(new Private())
 {
     Q_ASSERT(dev);
     m_d->paintDevice = dev;
@@ -53,18 +52,17 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 }
 
-
-KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity)
-        : KisLayer(image, name, opacity)
-        , m_d(new Private())
+KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString &name, quint8 opacity)
+    : KisLayer(image, name, opacity)
+    , m_d(new Private())
 {
     Q_ASSERT(image);
     m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
 }
 
-KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
-        : KisLayer(image, name, opacity)
-        , m_d(new Private())
+KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString &name, quint8 opacity, const KoColorSpace *colorSpace)
+    : KisLayer(image, name, opacity)
+    , m_d(new Private())
 {
     if (!colorSpace) {
         Q_ASSERT(image);
@@ -74,10 +72,10 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
     m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image));
 }
 
-KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
-        : KisLayer(rhs)
-        , KisIndirectPaintingSupport()
-        , m_d(new Private)
+KisPaintLayer::KisPaintLayer(const KisPaintLayer &rhs)
+    : KisLayer(rhs)
+    , KisIndirectPaintingSupport()
+    , m_d(new Private)
 {
     m_d->paintChannelFlags = rhs.m_d->paintChannelFlags;
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
@@ -111,7 +109,7 @@ bool KisPaintLayer::needProjection() const
 
 void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         KisPaintDeviceSP projection,
-        const QRect& rect) const
+        const QRect &rect) const
 {
     lockTemporaryTarget();
 
@@ -127,7 +125,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     unlockTemporaryTarget();
 }
 
-void KisPaintLayer::setDirty(const QRect & rect)
+void KisPaintLayer::setDirty(const QRect &rect)
 {
     KisLayer::setDirty(rect);
 }
@@ -146,11 +144,11 @@ void KisPaintLayer::setImage(KisImageWSP image)
 KisDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    
+
     // XXX: get right icons
     l << KisDocumentSectionModel::Property(i18n("Alpha Locked"), koIcon("transparency-locked"), koIcon("transparency-unlocked"), alphaLocked());
     l << KisDocumentSectionModel::Property(i18n("Inherit Alpha"), koIcon("transparency-disabled"), koIcon("transparency-enabled"), alphaChannelDisabled());
-    
+
     return l;
 }
 
@@ -159,16 +157,15 @@ void KisPaintLayer::setSectionModelProperties(const KisDocumentSectionModel::Pro
     foreach (const KisDocumentSectionModel::Property &property, properties) {
         if (property.name == i18n("Alpha Locked")) {
             setAlphaLocked(property.state.toBool());
-        }
-        else if (property.name == i18n("Inherit Alpha")) {
+        } else if (property.name == i18n("Inherit Alpha")) {
             disableAlphaChannel(property.state.toBool());
         }
     }
-    
+
     KisLayer::setSectionModelProperties(properties);
 }
 
-const KoColorSpace * KisPaintLayer::colorSpace() const
+const KoColorSpace *KisPaintLayer::colorSpace() const
 {
     return m_d->paintDevice->colorSpace();
 }
@@ -183,13 +180,13 @@ void KisPaintLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAd
     return visitor.visit(this, undoAdapter);
 }
 
-void KisPaintLayer::setChannelLockFlags(const QBitArray& channelFlags)
+void KisPaintLayer::setChannelLockFlags(const QBitArray &channelFlags)
 {
     Q_ASSERT(((quint32)channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()));
     m_d->paintChannelFlags = channelFlags;
 }
 
-const QBitArray& KisPaintLayer::channelLockFlags() const
+const QBitArray &KisPaintLayer::channelLockFlags() const
 {
     return m_d->paintChannelFlags;
 }
@@ -214,14 +211,15 @@ bool KisPaintLayer::alphaLocked() const
 
 void KisPaintLayer::setAlphaLocked(bool lock)
 {
-    if(m_d->paintChannelFlags.isEmpty())
+    if (m_d->paintChannelFlags.isEmpty()) {
         m_d->paintChannelFlags = colorSpace()->channelFlags(true, true);
-    
-    if(lock)
-        m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false);
-    else
-        m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
-}
+    }
 
+    if (lock) {
+        m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false);
+    } else {
+        m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
+    }
+}
 
 #include "kis_paint_layer.moc"

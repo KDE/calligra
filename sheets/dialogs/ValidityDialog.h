@@ -49,7 +49,7 @@ class ValidityDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    ValidityDialog(QWidget* parent, Selection* selection);
+    ValidityDialog(QWidget *parent, Selection *selection);
     void init();
 
 public Q_SLOTS:
@@ -61,7 +61,7 @@ public Q_SLOTS:
 protected:
     void displayOrNotListOfValidity(bool _displayList);
 
-    Selection* m_selection;
+    Selection *m_selection;
 
     KLineEdit *val_max;
     KLineEdit *val_min;
@@ -71,7 +71,7 @@ protected:
     KComboBox *choose;
     KComboBox *chooseAction;
     KComboBox *chooseType;
-    KLineEdit * title;
+    KLineEdit *title;
     KTextEdit *message;
     QCheckBox *displayMessage;
     QCheckBox *allowEmptyCell;

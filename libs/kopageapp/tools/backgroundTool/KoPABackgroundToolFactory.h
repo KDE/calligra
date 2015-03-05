@@ -30,7 +30,7 @@ public:
     ///reimplemented from KoToolFactoryBase
     virtual ~KoPABackgroundToolFactory();
     ///reimplemented from KoToolFactoryBase
-    virtual KoToolBase * createTool( KoCanvasBase *canvas );
+    virtual KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 #endif //KOPABACKGROUNDTOOLFACTORY_H

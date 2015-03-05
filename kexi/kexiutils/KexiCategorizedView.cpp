@@ -18,7 +18,7 @@
  */
 
 #include "KexiCategorizedView.h"
- 
+
 KexiCategoryDrawer::KexiCategoryDrawer(KCategorizedView *view)
     : KexiCategoryDrawerBase(view)
 {
@@ -26,19 +26,18 @@ KexiCategoryDrawer::KexiCategoryDrawer(KCategorizedView *view)
 
 // ----
 
-KexiCategorySingleSelectionModel::KexiCategorySingleSelectionModel(QAbstractItemModel* model)
+KexiCategorySingleSelectionModel::KexiCategorySingleSelectionModel(QAbstractItemModel *model)
     : QItemSelectionModel(model)
 {
 }
 
-void KexiCategorySingleSelectionModel::select(const QItemSelection& selection,
-                                              QItemSelectionModel::SelectionFlags command)
+void KexiCategorySingleSelectionModel::select(const QItemSelection &selection,
+        QItemSelectionModel::SelectionFlags command)
 {
     // kDebug() << selection.indexes().count() << command;
-    if ((command & QItemSelectionModel::Select) && 
-        !(command & QItemSelectionModel::Clear) &&
-        (selection.indexes().count() > 1 || !this->selection().indexes().isEmpty()))
-    {
+    if ((command & QItemSelectionModel::Select) &&
+            !(command & QItemSelectionModel::Clear) &&
+            (selection.indexes().count() > 1 || !this->selection().indexes().isEmpty())) {
         return;
     }
     QItemSelectionModel::select(selection, command);
@@ -47,13 +46,13 @@ void KexiCategorySingleSelectionModel::select(const QItemSelection& selection,
 // ----
 
 KexiCategorizedView::KexiCategorizedView(QWidget *parent)
- : KCategorizedView(parent)
+    : KCategorizedView(parent)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
     setMouseTracking(true);
     setViewMode(QListView::IconMode);
     setResizeMode(QListView::Adjust);
-    KexiCategoryDrawer* categoryDrawer = new KexiCategoryDrawer(this);
+    KexiCategoryDrawer *categoryDrawer = new KexiCategoryDrawer(this);
     setCategoryDrawer(categoryDrawer);
 }
 

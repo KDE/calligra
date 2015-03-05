@@ -25,7 +25,6 @@ class KisDocument;
 class KisNameServer;
 class KisShapeController;
 
-
 class KisShapeControllerTest : public KisDummiesFacadeBaseTest
 {
     Q_OBJECT
@@ -34,7 +33,7 @@ public:
     ~KisShapeControllerTest();
 
 protected:
-    KisDummiesFacadeBase* dummiesFacadeFactory();
+    KisDummiesFacadeBase *dummiesFacadeFactory();
     void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade);
 
 private:

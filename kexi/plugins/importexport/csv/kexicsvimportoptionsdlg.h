@@ -41,8 +41,8 @@ public:
         MDY = 3  //!< month-day-year
     };
 
-    bool operator== (const KexiCSVImportOptions & opt) const;
-    bool operator!= (const KexiCSVImportOptions & opt) const;
+    bool operator== (const KexiCSVImportOptions &opt) const;
+    bool operator!= (const KexiCSVImportOptions &opt) const;
 
     QString encoding;
     DateFormat dateFormat;
@@ -56,7 +56,7 @@ class KexiCSVImportOptionsDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit KexiCSVImportOptionsDialog(const KexiCSVImportOptions& options, QWidget* parent = 0);
+    explicit KexiCSVImportOptionsDialog(const KexiCSVImportOptions &options, QWidget *parent = 0);
     virtual ~KexiCSVImportOptionsDialog();
 
     KexiCSVImportOptions options() const;

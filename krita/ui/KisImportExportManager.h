@@ -59,13 +59,13 @@ public:
      * Create a filter manager for a document
      */
     explicit KisImportExportManager(KisDocument *document,
-                             KoProgressUpdater *progressUpdater = 0);
+                                    KoProgressUpdater *progressUpdater = 0);
 
     /**
      * Create a filter manager for the Shape Collection docker.
      * @param mimeType the mimetype to import to.
      */
-    explicit KisImportExportManager(const QByteArray& mimeType);
+    explicit KisImportExportManager(const QByteArray &mimeType);
 
     /**
      * Create a filter manager for a filter which wants to embed something.
@@ -81,8 +81,8 @@ public:
      * @param parentChain The parent filter chain of this filter manager. Used
      *        to allow embedding for filters. Most likely you do not have to care.
      */
-    explicit KisImportExportManager(const QString& url, const QByteArray& mimetypeHint = QByteArray(),
-                             KisFilterChain * const parentChain = 0);
+    explicit KisImportExportManager(const QString &url, const QByteArray &mimetypeHint = QByteArray(),
+                                    KisFilterChain *const parentChain = 0);
 
     virtual ~KisImportExportManager();
 
@@ -95,9 +95,9 @@ public:
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
      */
-    QString importDocument(const QString& url,
-                           const QString& documentMimeType,
-                           KisImportExportFilter::ConversionStatus& status);
+    QString importDocument(const QString &url,
+                           const QString &documentMimeType,
+                           KisImportExportFilter::ConversionStatus &status);
 
     /**
      * @brief Exports the given file/document to the specified URL/mimetype.
@@ -106,7 +106,7 @@ public:
      * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
-    KisImportExportFilter::ConversionStatus exportDocument(const QString& url, QByteArray& mimeType);
+    KisImportExportFilter::ConversionStatus exportDocument(const QString &url, QByteArray &mimeType);
 
     ///@name Static API
     //@{
@@ -116,8 +116,8 @@ public:
      * information here.
      * Optionally, @p extraNativeMimeTypes are added after the native mimetype.
      */
-    static QStringList mimeFilter(const QByteArray& mimetype, Direction direction,
-                                  const QStringList& extraNativeMimeTypes = QStringList());
+    static QStringList mimeFilter(const QByteArray &mimetype, Direction direction,
+                                  const QStringList &extraNativeMimeTypes = QStringList());
 
     /**
      * The same method as KisFilterManager::mimeFilter but suited for KoShell.
@@ -159,31 +159,36 @@ private:
     // just forward calls to the methods here. Should be
     // pretty safe.
     friend QString KisFilterChain::filterManagerImportFile() const;
-    QString importFile() const {
+    QString importFile() const
+    {
         return m_importUrl;
     }
     friend QString KisFilterChain::filterManagerExportFile() const;
-    QString exportFile() const {
+    QString exportFile() const
+    {
         return m_exportUrl;
     }
     friend KisDocument *KisFilterChain::filterManagerKisDocument() const;
-    KisDocument *document() const {
+    KisDocument *document() const
+    {
         return m_document;
     }
     friend int KisFilterChain::filterManagerDirection() const;
-    int direction() const {
+    int direction() const
+    {
         return static_cast<int>(m_direction);
     }
     friend KisFilterChain *KisFilterChain::filterManagerParentChain() const;
-    KisFilterChain *parentChain() const {
+    KisFilterChain *parentChain() const
+    {
         return m_parentChain;
     }
 
     // Private API
-    KisImportExportManager(const KisImportExportManager& rhs);
-    KisImportExportManager &operator=(const KisImportExportManager& rhs);
+    KisImportExportManager(const KisImportExportManager &rhs);
+    KisImportExportManager &operator=(const KisImportExportManager &rhs);
 
-    void importErrorHelper(const QString& mimeType, const bool suppressDialog = false);
+    void importErrorHelper(const QString &mimeType, const bool suppressDialog = false);
 
     KisDocument *m_document;
     KisFilterChain *const m_parentChain;
@@ -196,7 +201,7 @@ private:
     static QMap<QString, bool> m_filterAvailable;
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif  // __KO_FILTER_MANAGER_H__

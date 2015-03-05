@@ -33,9 +33,9 @@
 
 namespace KoChart
 {
-    class Chart;
-    class Series;
-    class Obj;
+class Chart;
+class Series;
+class Obj;
 }
 
 namespace Swinder
@@ -50,24 +50,30 @@ class CrtMlFrtRecord;
 class ChartSubStreamHandler : public SubStreamHandler
 {
 public:
-    ChartSubStreamHandler(GlobalsSubStreamHandler* globals, SubStreamHandler* parentHandler);
+    ChartSubStreamHandler(GlobalsSubStreamHandler *globals, SubStreamHandler *parentHandler);
     virtual ~ChartSubStreamHandler();
     //Chart *chart() const { return m_chart; }
-    GlobalsSubStreamHandler *globals() const { return m_globals; }
-    SubStreamHandler *parentHandler() const { return m_parentHandler; }
-    virtual void handleRecord(Record* record);
+    GlobalsSubStreamHandler *globals() const
+    {
+        return m_globals;
+    }
+    SubStreamHandler *parentHandler() const
+    {
+        return m_parentHandler;
+    }
+    virtual void handleRecord(Record *record);
 
 private:
-    GlobalsSubStreamHandler* m_globals;
-    SubStreamHandler* m_parentHandler;
-    Sheet* m_sheet;
-    ChartObject* m_chartObject;
-    KoChart::Chart* m_chart;
+    GlobalsSubStreamHandler *m_globals;
+    SubStreamHandler *m_parentHandler;
+    Sheet *m_sheet;
+    ChartObject *m_chartObject;
+    KoChart::Chart *m_chart;
 
-    KoChart::Series* m_currentSeries;
-    KoChart::Obj* m_currentObj;
-    QStack<KoChart::Obj*> m_stack;
-    QStack<KoChart::Series*> m_seriesStack;
+    KoChart::Series *m_currentSeries;
+    KoChart::Obj *m_currentObj;
+    QStack<KoChart::Obj *> m_stack;
+    QStack<KoChart::Series *> m_seriesStack;
     std::vector<XFRecord> m_xfTable;
 
     class InternalDataCache;
@@ -77,10 +83,10 @@ private:
     //QMap<KoChart::Obj*, int> m_defaultObjects;
     int m_defaultTextId;
     int m_axisId;
-    
+
     bool m_disableAutoMarker;
-    
-    void handleBOF(BOFRecord*);
+
+    void handleBOF(BOFRecord *);
     void handleEOF(EOFRecord *);
     void handleFooter(FooterRecord *);
     void handleHeader(HeaderRecord *);
@@ -129,9 +135,9 @@ private:
     void handleRadar(RadarRecord *);
     void handleRadarArea(RadarAreaRecord *);
     void handleSurf(SurfRecord *);
-    void handleAxis(AxisRecord* record);
-    void handleAxisLine(AxisLineRecord* record);
-    void handleCatLab(CatLabRecord* record);
+    void handleAxis(AxisRecord *record);
+    void handleAxisLine(AxisLineRecord *record);
+    void handleCatLab(CatLabRecord *record);
     void handleSIIndex(SIIndexRecord *);
     void handleMsoDrawing(MsoDrawingRecord *);
     void handleShapePropsStream(ShapePropsStreamRecord *);

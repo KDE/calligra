@@ -27,7 +27,6 @@
 
 #include <QVector>
 
-
 DynaBrush::DynaBrush()
 {
     m_initialized = false;
@@ -41,9 +40,6 @@ DynaBrush::DynaBrush()
     m_odelx = 0.0;
     m_odely = 0.0;
 }
-
-
-
 
 void DynaBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color)
 {
@@ -94,14 +90,14 @@ void DynaBrush::drawSegment(KisPainter &painter)
     qreal nx = m_cursorFilter.x();
     qreal ny = m_cursorFilter.y();
 
-    QPointF prev(px , py);         // previous position
-    QPointF now(nx , ny);           // new position
+    QPointF prev(px, py);         // previous position
+    QPointF now(nx, ny);           // new position
 
-    QPointF prevr(px + m_odelx , py + m_odely);
-    QPointF prevl(px - m_odelx , py - m_odely);
+    QPointF prevr(px + m_odelx, py + m_odely);
+    QPointF prevl(px - m_odelx, py - m_odely);
 
-    QPointF nowl(nx - delx , ny - dely);
-    QPointF nowr(nx + delx , ny + dely);
+    QPointF nowl(nx - delx, ny - dely);
+    QPointF nowr(nx + delx, ny + dely);
 
     // transform coords from float points into image points
     prev.rx() *= m_canvasWidth;
@@ -126,28 +122,24 @@ void DynaBrush::drawSegment(KisPainter &painter)
         qreal screenX = m_cursorFilter.velocityX() * m_canvasWidth;
         qreal screenY = m_cursorFilter.velocityY() * m_canvasHeight;
         qreal speed = sqrt(screenX * screenX + screenY * screenY);
-        speed = qBound(qreal(0.0), speed , qreal(m_properties->diameter));
+        speed = qBound(qreal(0.0), speed, qreal(m_properties->diameter));
 
-        drawCircle(painter, prev.x(), prev.y() , m_properties->diameter * 0.5 + speed, m_properties->diameter + speed);
+        drawCircle(painter, prev.x(), prev.y(), m_properties->diameter * 0.5 + speed, m_properties->diameter + speed);
         if (m_properties->useTwoCircles) {
-            drawCircle(painter, now.x(), now.y() , m_properties->diameter * 0.5 + speed, m_properties->diameter + speed);
+            drawCircle(painter, now.x(), now.y(), m_properties->diameter * 0.5 + speed, m_properties->diameter + speed);
         }
 
-    }
-    else if (m_properties->action == 1) {
+    } else if (m_properties->action == 1) {
         drawQuad(painter, prevr, prevl, nowl, nowr);
-    }
-    else if (m_properties->action == 2) {
+    } else if (m_properties->action == 2) {
         drawWire(painter, prevr, prevl, nowl, nowr);
-    }
-    else if (m_properties->action == 3) {
+    } else if (m_properties->action == 3) {
         drawLines(painter, prev, now, m_properties->lineCount);
     }
 
     m_odelx = delx;
     m_odely = dely;
 }
-
 
 void DynaBrush::drawQuad(KisPainter &painter,
                          QPointF &topRight,

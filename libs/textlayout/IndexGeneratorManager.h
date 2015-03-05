@@ -19,7 +19,6 @@
 #ifndef INDEXGENERATORMANAGER_H
 #define INDEXGENERATORMANAGER_H
 
-
 #include <QObject>
 #include <QMetaType>
 #include <QHash>

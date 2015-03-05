@@ -59,7 +59,7 @@ public Q_SLOTS: // METHODS
      * Start drawing on presentation tool.
      * The parameters pointx and pointy specify a point in the path.
      */
-    Q_NOREPLY void drawOnPresentation(int pointx,int pointy);
+    Q_NOREPLY void drawOnPresentation(int pointx, int pointy);
 
     /**
      * Stop drawing path. The current path is stopped.

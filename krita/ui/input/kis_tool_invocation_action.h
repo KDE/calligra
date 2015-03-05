@@ -47,9 +47,9 @@ public:
 
     void begin(int shortcut, QEvent *event);
     void end(QEvent *event);
-    void inputEvent(QEvent* event);
+    void inputEvent(QEvent *event);
 
-    void processUnhandledEvent(QEvent* event);
+    void processUnhandledEvent(QEvent *event);
 
     bool supportsHiResInputEvents() const;
 
@@ -57,7 +57,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KISTOOLINVOCATIONACTION_H

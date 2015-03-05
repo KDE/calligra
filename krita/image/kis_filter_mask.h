@@ -47,20 +47,21 @@ public:
 
     QIcon icon() const;
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return KisNodeSP(new KisFilterMask(*this));
     }
 
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
-    KisFilterMask(const KisFilterMask& rhs);
+    KisFilterMask(const KisFilterMask &rhs);
 
     void setFilter(KisFilterConfiguration *filterConfig);
 
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,
-                       const QRect & rc,
+                       const QRect &rc,
                        PositionToFilthy maskPos) const;
 
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;

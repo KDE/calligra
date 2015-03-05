@@ -37,10 +37,10 @@
 #include <windows.h>
 #endif
 
-int main( int argc, char** argv )
+int main(int argc, char **argv)
 {
 #ifdef Q_OS_WIN
-    SetErrorMode(SEM_NOGPFAULTERRORBOX); 
+    SetErrorMode(SEM_NOGPFAULTERRORBOX);
 #endif
 
     QString calligraVersion(CALLIGRA_VERSION_STRING);
@@ -53,7 +53,6 @@ int main( int argc, char** argv )
     version = calligraVersion;
 #endif
 
-
     KAboutData aboutData("calligrageminithumbnailer",
                          "calligrawords",
                          ki18n("Calligra Gemini Thumbnailer"),
@@ -65,16 +64,16 @@ int main( int argc, char** argv )
                          "http://www.calligra.org",
                          "submit@bugs.kde.org");
 
-    KCmdLineArgs::init (argc, argv, &aboutData);
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
-    options.add( "in <local-url>", ki18n( "Document to thumbnail" ) );
-    options.add( "out <local-url>", ki18n( "The full path for the thumbnail file" ) );
-    options.add( "width <pixels>", ki18n( "The width in pixels of the thumbnail" ) );
-    options.add( "height <pixels>", ki18n( "The height in pixels of the thumbnail" ) );
-    KCmdLineArgs::addCmdLineOptions( options );
+    options.add("in <local-url>", ki18n("Document to thumbnail"));
+    options.add("out <local-url>", ki18n("The full path for the thumbnail file"));
+    options.add("width <pixels>", ki18n("The width in pixels of the thumbnail"));
+    options.add("height <pixels>", ki18n("The height in pixels of the thumbnail"));
+    KCmdLineArgs::addCmdLineOptions(options);
 
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     KApplication app;
     app.setApplicationName("calligrageminithumbnailer");
@@ -86,7 +85,7 @@ int main( int argc, char** argv )
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
     //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
-    if (!env.contains("KDEHOME") ) {
+    if (!env.contains("KDEHOME")) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }
     if (!env.contains("KDESYCOCA")) {
@@ -102,9 +101,9 @@ int main( int argc, char** argv )
         _putenv_s("KDEDIRS", appdir.absolutePath().toLocal8Bit());
     }
     _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
-              + appdir.absolutePath() + "/lib" + ";"
-              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
-              + appdir.absolutePath()).toLocal8Bit());
+                              + appdir.absolutePath() + "/lib" + ";"
+                              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+                              + appdir.absolutePath()).toLocal8Bit());
 
     app.addLibraryPath(appdir.absolutePath());
     app.addLibraryPath(appdir.absolutePath() + "/bin");
@@ -121,13 +120,11 @@ int main( int argc, char** argv )
     // Only create the thunbnail if:
     // 1) The infile exists and
     // 2) The outfile does /not/ exist
-    if(!QFile::exists(inFile)) {
+    if (!QFile::exists(inFile)) {
         qDebug() << "The document you are attempting to create a thumbnail of does not exist on disk:" << inFile;
-    }
-    else if(QFile::exists(outFile)) {
+    } else if (QFile::exists(outFile)) {
         qDebug() << "The thumbnail file you are asking to have used already exists on disk. We will refuse to overwrite it." << outFile;
-    }
-    else {
+    } else {
         ThumbnailHelperImpl helper;
         helper.convert(inFile, outFile, args->getOption("width").toInt(), args->getOption("height").toInt());
     }

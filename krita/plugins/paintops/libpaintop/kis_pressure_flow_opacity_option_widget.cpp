@@ -37,7 +37,7 @@
 KisFlowOpacityOptionWidget::KisFlowOpacityOptionWidget():
     KisCurveOptionWidget(new KisFlowOpacityOption(0), true)
 {
-    QWidget* widget = new QWidget();
+    QWidget *widget = new QWidget();
 
     Ui_wdgFlowOpacityOption ui;
     ui.setupUi(widget);
@@ -52,10 +52,10 @@ KisFlowOpacityOptionWidget::KisFlowOpacityOptionWidget():
     connect(m_opacitySlider, SIGNAL(valueChanged(qreal)), SLOT(slotSliderValueChanged()));
 }
 
-void KisFlowOpacityOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisFlowOpacityOptionWidget::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
-    KisFlowOpacityOption* option = static_cast<KisFlowOpacityOption*>(curveOption());
+    KisFlowOpacityOption *option = static_cast<KisFlowOpacityOption *>(curveOption());
 
     m_opacitySlider->blockSignals(true);
     m_opacitySlider->setValue(option->getStaticOpacity());
@@ -64,7 +64,7 @@ void KisFlowOpacityOptionWidget::readOptionSetting(const KisPropertiesConfigurat
 
 void KisFlowOpacityOptionWidget::slotSliderValueChanged()
 {
-    KisFlowOpacityOption* option = static_cast<KisFlowOpacityOption*>(curveOption());
+    KisFlowOpacityOption *option = static_cast<KisFlowOpacityOption *>(curveOption());
     option->setOpacity(m_opacitySlider->value());
     emitSettingChanged();
 }

@@ -24,7 +24,6 @@
 #include <Vc/IO>
 #endif
 
-
 #include "kis_mask_generator_benchmark.h"
 
 #include "kis_circle_mask_generator.h"
@@ -34,10 +33,9 @@ void KisMaskGeneratorBenchmark::benchmarkCircle()
 {
     KisCircleMaskGenerator gen(1000, 0.5, 0.5, 0.5, 3, true);
     QBENCHMARK{
-        for(int i = -600; i < 600; ++i)
+        for (int i = -600; i < 600; ++i)
         {
-            for(int j = -600; j < 600; ++j)
-            {
+            for (int j = -600; j < 600; ++j) {
                 gen.valueAt(i, j);
             }
         }
@@ -52,7 +50,7 @@ void KisMaskGeneratorBenchmark::benchmarkSIMD()
 
     KisCircleMaskGenerator gen(1000, 0.5, 0.5, 0.5, 2, true);
     QBENCHMARK{
-        for(int y = 0; y < 1000; ++y)
+        for (int y = 0; y < 1000; ++y)
         {
 //            gen.processRowFast(buffer, width, y, 0.0f, 1.0f, 500.0f, 500.0f, 0.5f, 0.5f);
         }
@@ -65,10 +63,9 @@ void KisMaskGeneratorBenchmark::benchmarkSquare()
 {
     KisRectangleMaskGenerator gen(1000, 0.5, 0.5, 0.5, 3, true);
     QBENCHMARK{
-        for(int i = -600; i < 600; ++i)
+        for (int i = -600; i < 600; ++i)
         {
-            for(int j = -600; j < 600; ++j)
-            {
+            for (int j = -600; j < 600; ++j) {
                 gen.valueAt(i, j);
             }
         }

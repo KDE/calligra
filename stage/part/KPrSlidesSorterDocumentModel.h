@@ -56,7 +56,7 @@ public:
 
     virtual QStringList mimeTypes() const;
 
-    virtual QMimeData* mimeData(const QModelIndexList &indexes) const;
+    virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
 
     virtual Qt::DropActions supportedDropActions() const;
 
@@ -64,7 +64,7 @@ public:
 
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    virtual bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
 
     /**
      * Drop selected slides (copy/move) if a modifier key is pressed
@@ -81,7 +81,7 @@ public:
      / @param index the index of the slide to be retrived
      * @return a Page in the document if it was found or a null pointer if not.
      */
-    KoPAPageBase* pageByIndex(const QModelIndex &index) const;
+    KoPAPageBase *pageByIndex(const QModelIndex &index) const;
 
     /**
      * @brief Deletes a given list of slides from the current document

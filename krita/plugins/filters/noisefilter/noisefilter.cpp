@@ -47,12 +47,11 @@
 #include "ui_wdgnoiseoptions.h"
 #include <kis_iterator_ng.h>
 
-
 K_PLUGIN_FACTORY(KritaNoiseFilterFactory, registerPlugin<KritaNoiseFilter>();)
 K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
 
 KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisFilterRegistry::instance()->add(new KisFilterNoise());
 
@@ -68,9 +67,9 @@ KisFilterNoise::KisFilterNoise() : KisFilter(id(), categoryOther(), i18n("&Rando
     setSupportsPainting(true);
 }
 
-KisFilterConfiguration* KisFilterNoise::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisFilterNoise::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("noise", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("noise", 1);
     config->setProperty("level", 50);
     config->setProperty("opacity", 100);
     config->setProperty("seedThreshold", rand());
@@ -80,17 +79,17 @@ KisFilterConfiguration* KisFilterNoise::factoryConfiguration(const KisPaintDevic
     return config;
 }
 
-KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisFilterNoise::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
-    return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);
+    return new KisWdgNoise((KisFilter *)this, (QWidget *)parent);
 }
 
 void KisFilterNoise::processImpl(KisPaintDeviceSP device,
-                                 const QRect& applyRect,
-                                 const KisFilterConfiguration* config,
-                                 KoUpdater* progressUpdater
-                                 ) const
+                                 const QRect &applyRect,
+                                 const KisFilterConfiguration *config,
+                                 KoUpdater *progressUpdater
+                                ) const
 {
     Q_ASSERT(!device.isNull());
 
@@ -99,7 +98,7 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
     }
     int count = 0;
 
-    const KoColorSpace * cs = device->colorSpace();
+    const KoColorSpace *cs = device->colorSpace();
 
     QVariant value;
     int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
@@ -107,16 +106,16 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
 
     KisSequentialIterator it(device, applyRect);
 
-    quint8* interm = new quint8[cs->pixelSize()];
+    quint8 *interm = new quint8[cs->pixelSize()];
     double threshold = (100.0 - level) * 0.01;
 
     qint16 weights[2];
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
 
-    const quint8* pixels[2];
+    const quint8 *pixels[2];
     pixels[0] = interm;
 
-    KoMixColorsOp * mixOp = cs->mixColorsOp();
+    KoMixColorsOp *mixOp = cs->mixColorsOp();
 
     int seedThreshold = rand();
     int seedRed = rand();
@@ -145,7 +144,9 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
             pixels[1] = it.oldRawData();
             mixOp->mixColors(pixels, weights, 2, it.rawData());
         }
-        if (progressUpdater) progressUpdater->setValue(++count);
+        if (progressUpdater) {
+            progressUpdater->setValue(++count);
+        }
     } while (it.nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
 
     delete [] interm;

@@ -28,23 +28,22 @@ class KAboutData;
 
 class FLOW_EXPORT FlowFactory : public KPluginFactory
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     explicit FlowFactory(QObject *parent = 0);
     ~FlowFactory();
 
-
-    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
+    virtual QObject *create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword);
 
     static const KComponentData &componentData();
 
     /// Creates a KAboutData but doesn't keep ownership
-    static KAboutData* aboutData();
+    static KAboutData *aboutData();
 
-  private:
-    static KComponentData* s_instance;
-    static KAboutData* s_aboutData;
+private:
+    static KComponentData *s_instance;
+    static KAboutData *s_aboutData;
 };
 
 #endif

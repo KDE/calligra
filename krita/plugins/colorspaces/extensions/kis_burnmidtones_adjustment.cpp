@@ -40,48 +40,48 @@ class KisBurnMidtonesAdjustment : public KoColorTransformation
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
-    KisBurnMidtonesAdjustment(){}
+    KisBurnMidtonesAdjustment() {}
 
- 	void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
- 	{
- 		const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
-        RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
+    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
+    {
+        const RGBPixel *src = reinterpret_cast<const RGBPixel *>(srcU8);
+        RGBPixel *dst = reinterpret_cast<RGBPixel *>(dstU8);
         float value_red, value_green, value_blue;
-        while(nPixels > 0) {
+        while (nPixels > 0) {
 
             value_red = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->red), (float)(1.0 + exposure * (0.333333)));
             value_green = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green), (float)(1.0 + exposure * (0.333333)));
             value_blue = pow((float)KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue), (float)(1.0 + exposure * (0.333333)));
-            
+
             dst->red = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(value_red);
             dst->green = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(value_green);
             dst->blue = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(value_blue);
             dst->alpha = src->alpha;
-            
+
             --nPixels;
             ++src;
             ++dst;
         }
     }
 
-	virtual QList<QString> parameters() const
-	{
+    virtual QList<QString> parameters() const
+    {
         QList<QString> list;
         list << "exposure";
         return list;
-	}
+    }
 
-	virtual int parameterId(const QString& name) const
-	{
-        if (name == "exposure")
-        return 0;
-        return -1;
-	}
-
-    virtual void setParameter(int id, const QVariant& parameter)
+    virtual int parameterId(const QString &name) const
     {
-        switch(id)
-        {
+        if (name == "exposure") {
+            return 0;
+        }
+        return -1;
+    }
+
+    virtual void setParameter(int id, const QVariant &parameter)
+    {
+        switch (id) {
         case 0:
             exposure = parameter.toDouble();
             break;
@@ -91,10 +91,10 @@ public:
     }
 private:
 
-	float exposure;
- };
+    float exposure;
+};
 
- KisBurnMidtonesAdjustmentFactory::KisBurnMidtonesAdjustmentFactory()
+KisBurnMidtonesAdjustmentFactory::KisBurnMidtonesAdjustmentFactory()
     : KoColorTransformationFactory("BurnMidtones")
 {
 }
@@ -102,16 +102,16 @@ private:
 QList< QPair< KoID, KoID > > KisBurnMidtonesAdjustmentFactory::supportedModels() const
 {
     QList< QPair< KoID, KoID > > l;
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer8BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer16BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float16BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float32BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Integer8BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Integer16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Float16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Float32BitsColorDepthID));
     return l;
 }
 
-KoColorTransformation* KisBurnMidtonesAdjustmentFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
+KoColorTransformation *KisBurnMidtonesAdjustmentFactory::createTransformation(const KoColorSpace *colorSpace, QHash<QString, QVariant> parameters) const
 {
-    KoColorTransformation * adj;
+    KoColorTransformation *adj;
     if (colorSpace->colorModelId() != RGBAColorModelID) {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisBurnMidtonesAdjustment::createTransformation";
         return 0;

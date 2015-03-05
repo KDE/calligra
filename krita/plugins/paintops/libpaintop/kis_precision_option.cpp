@@ -21,20 +21,20 @@
 
 #include "kis_properties_configuration.h"
 
-void KisPrecisionOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisPrecisionOption::writeOptionSetting(KisPropertiesConfiguration *settings) const
 {
     settings->setProperty(PRECISION_LEVEL, m_precisionLevel);
-    settings->setProperty(AUTO_PRECISION_ENABLED,m_autoPrecisionEnabled);
-    settings->setProperty(STARTING_SIZE,m_sizeToStartFrom);
-    settings->setProperty(DELTA_VALUE,m_deltaValue);
+    settings->setProperty(AUTO_PRECISION_ENABLED, m_autoPrecisionEnabled);
+    settings->setProperty(STARTING_SIZE, m_sizeToStartFrom);
+    settings->setProperty(DELTA_VALUE, m_deltaValue);
 }
 
-void KisPrecisionOption::readOptionSetting(const KisPropertiesConfiguration* settings)
+void KisPrecisionOption::readOptionSetting(const KisPropertiesConfiguration *settings)
 {
     m_precisionLevel = settings->getInt(PRECISION_LEVEL, 5);
-    m_autoPrecisionEnabled = settings->getBool(AUTO_PRECISION_ENABLED,false);
-    m_deltaValue = settings->getDouble(DELTA_VALUE,15.00);
-    m_sizeToStartFrom = settings ->getDouble(STARTING_SIZE,0);
+    m_autoPrecisionEnabled = settings->getBool(AUTO_PRECISION_ENABLED, false);
+    m_deltaValue = settings->getDouble(DELTA_VALUE, 15.00);
+    m_sizeToStartFrom = settings ->getDouble(STARTING_SIZE, 0);
 }
 
 int KisPrecisionOption::precisionLevel() const
@@ -78,24 +78,15 @@ void KisPrecisionOption::setAutoPrecision(double brushSize)
 {
     double deltaValue = this->deltaValue();
     double sizeToStartFrom = this ->sizeToStartFrom();
-    if (brushSize <= sizeToStartFrom + deltaValue)
-    {
+    if (brushSize <= sizeToStartFrom + deltaValue) {
         this->setPrecisionLevel(5);
-    }
-    else if (brushSize > sizeToStartFrom + deltaValue && brushSize <= sizeToStartFrom + deltaValue*3)
-    {
+    } else if (brushSize > sizeToStartFrom + deltaValue && brushSize <= sizeToStartFrom + deltaValue * 3) {
         this->setPrecisionLevel(4);
-    }
-    else if (brushSize > sizeToStartFrom + deltaValue*2 && brushSize <= sizeToStartFrom + deltaValue*4)
-    {
+    } else if (brushSize > sizeToStartFrom + deltaValue * 2 && brushSize <= sizeToStartFrom + deltaValue * 4) {
         this->setPrecisionLevel(3);
-    }
-    else if (brushSize > sizeToStartFrom + deltaValue*3 && brushSize <= sizeToStartFrom + deltaValue*5)
-    {
+    } else if (brushSize > sizeToStartFrom + deltaValue * 3 && brushSize <= sizeToStartFrom + deltaValue * 5) {
         this->setPrecisionLevel(2);
-    }
-    else if (brushSize > sizeToStartFrom + deltaValue*4)
-    {
+    } else if (brushSize > sizeToStartFrom + deltaValue * 4) {
         this->setPrecisionLevel(1);
     }
 }

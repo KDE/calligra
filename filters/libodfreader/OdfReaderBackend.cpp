@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdfReaderBackend.h"
 
@@ -28,20 +27,18 @@
 // Odftraverse library
 #include "OdfParser.h"
 
-
 // ================================================================
 //             class OdfReaderBackend::Private
 
-
 class OdfReaderBackend::Private
 {
- public:
+public:
     Private();
     ~Private();
 
     bool dummy;                 // We don't have any actual content in
-                                // this class yet but it's still
-                                // needed for forward binary compatibility.
+    // this class yet but it's still
+    // needed for forward binary compatibility.
 };
 
 OdfReaderBackend::Private::Private()
@@ -52,10 +49,8 @@ OdfReaderBackend::Private::~Private()
 {
 }
 
-
 // ================================================================
 //                 class OdfReaderBackend
-
 
 OdfReaderBackend::OdfReaderBackend()
     : d(new OdfReaderBackend::Private)
@@ -67,10 +62,8 @@ OdfReaderBackend::~OdfReaderBackend()
     delete d;
 }
 
-
 // ----------------------------------------------------------------
 //                 ODF document level functions
-
 
 IMPLEMENT_BACKEND_FUNCTION(OdfReader, OfficeDocumentcontent);
 IMPLEMENT_BACKEND_FUNCTION(OdfReader, OfficeBody);

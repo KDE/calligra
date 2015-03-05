@@ -22,7 +22,6 @@
 #include <QWidget>
 #include <QScopedPointer>
 
-
 class KisSpacingSelectionWidget : public QWidget
 {
     Q_OBJECT

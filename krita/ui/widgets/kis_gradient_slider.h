@@ -62,9 +62,9 @@ Q_SIGNALS:
 protected:
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
-    void mousePressEvent(QMouseEvent * e);
-    void mouseReleaseEvent(QMouseEvent * e);
-    void mouseMoveEvent(QMouseEvent * e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
 
 private:
     void calculateCursorPositions();
@@ -92,6 +92,5 @@ private:
 
     bool m_feedback;
 };
-
 
 #endif /* KIS_GRADIENT_SLIDER_H */

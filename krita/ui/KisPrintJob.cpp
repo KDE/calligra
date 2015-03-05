@@ -31,8 +31,8 @@
 #include "kis_canvas_resource_provider.h"
 
 KisPrintJob::KisPrintJob(KisImageWSP image)
-        : QObject(image.data())
-        , m_image(image)
+    : QObject(image.data())
+    , m_image(image)
 {
     m_printer.setFromTo(1, 1);
 }
@@ -68,7 +68,9 @@ void KisPrintJob::startPrinting(RemovePolicy removePolicy)
 {
     QPainter gc(&m_printer);
 
-    if (!m_image) return;
+    if (!m_image) {
+        return;
+    }
 
     gc.setClipping(false);
 
@@ -85,13 +87,14 @@ void KisPrintJob::startPrinting(RemovePolicy removePolicy)
 
     QImage image = m_image->convertToQImage(0, 0, r.width(), r.height(), printerProfile);
     gc.drawImage(r.x(), r.y(), image, 0, 0, r.width(), r.height());
-    if (removePolicy == DeleteWhenDone)
+    if (removePolicy == DeleteWhenDone) {
         deleteLater();
+    }
 }
 
-QList<QWidget*> KisPrintJob::createOptionWidgets() const
+QList<QWidget *> KisPrintJob::createOptionWidgets() const
 {
-    return QList<QWidget*>();
+    return QList<QWidget *>();
 }
 
 #include <KisPrintJob.moc>

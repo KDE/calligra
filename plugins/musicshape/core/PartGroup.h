@@ -22,7 +22,8 @@
 #include <QObject>
 #include <QString>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Sheet;
 
@@ -47,7 +48,7 @@ public:
      * Create a new partgroup in the given sheet. The part group contains all parts from firstPart up to and
      * including lastPart. Call Sheet::addPartGroup to actually add the part group to the sheet.
      */
-    PartGroup(Sheet* sheet, int firstPart, int lastPart);
+    PartGroup(Sheet *sheet, int firstPart, int lastPart);
 
     /**
      * Destructor.
@@ -57,13 +58,13 @@ public:
     /**
      * Returns the sheet this group is part of.
      */
-    Sheet* sheet();
+    Sheet *sheet();
 
     /**
      * Changes the sheet this group is part of. Do not call this method after the partgroup has been added to a
      * sheet by calling the addPartGroup method.
      */
-    void setSheet(Sheet* sheet);
+    void setSheet(Sheet *sheet);
 
     /**
      * Returns the index of the first part in this group.
@@ -121,8 +122,8 @@ public Q_SLOTS:
     /**
      * Changes the short name of this part group.
      */
-    void setShortName(const QString& shortName);
-    
+    void setShortName(const QString &shortName);
+
     /**
      * Changes the grouping symbol of this group.
      *
@@ -139,13 +140,13 @@ public Q_SLOTS:
 Q_SIGNALS:
     void firstPartChanged(int index);
     void lastPartChanged(int index);
-    void nameChanged(const QString& name);
-    void shortNameChanged(const QString& shortName);
+    void nameChanged(const QString &name);
+    void shortNameChanged(const QString &shortName);
     void symbolChanged(GroupSymbol symbol);
     void commonBarLinesChanged(bool commonBarLines);
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

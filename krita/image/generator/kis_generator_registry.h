@@ -40,10 +40,10 @@ class KRITAIMAGE_EXPORT KisGeneratorRegistry : public QObject, public KoGenericR
 public:
     virtual ~KisGeneratorRegistry();
 
-    static KisGeneratorRegistry* instance();
+    static KisGeneratorRegistry *instance();
     void add(KisGeneratorSP item);
     void add(const QString &id, KisGeneratorSP item);
-    KisFilterConfiguration* cloneConfiguration(KisFilterConfiguration* kfc);
+    KisFilterConfiguration *cloneConfiguration(KisFilterConfiguration *kfc);
 
 Q_SIGNALS:
 
@@ -52,8 +52,8 @@ Q_SIGNALS:
 private:
 
     KisGeneratorRegistry(QObject *parent);
-    KisGeneratorRegistry(const KisGeneratorRegistry&);
-    KisGeneratorRegistry operator=(const KisGeneratorRegistry&);
+    KisGeneratorRegistry(const KisGeneratorRegistry &);
+    KisGeneratorRegistry operator=(const KisGeneratorRegistry &);
 };
 
 #endif // KIS_GENERATOR_REGISTRY_H_

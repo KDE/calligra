@@ -163,7 +163,7 @@ public:
     /// Returns the shapeController
     KoShapeController *shapeController() const;
 
-    QTextFrame* auxillaryFrame();
+    QTextFrame *auxillaryFrame();
 
     /**
      * Specifies if tabs are relative to paragraph indent.

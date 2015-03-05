@@ -23,21 +23,21 @@
 class QIODevice;
 class QString;
 
-bool psdwrite(QIODevice* io, quint8 v);
-bool psdwrite(QIODevice* io, quint16 v);
-bool psdwrite(QIODevice* io, qint16 v);
-bool psdwrite(QIODevice* io, quint32 v);
-bool psdwrite(QIODevice* io, const QString &s);
-bool psdwrite_pascalstring(QIODevice* io, const QString &s);
-bool psdwrite_pascalstring(QIODevice* io, const QString &s, int padding);
-bool psdpad(QIODevice* io, quint32 padding);
+bool psdwrite(QIODevice *io, quint8 v);
+bool psdwrite(QIODevice *io, quint16 v);
+bool psdwrite(QIODevice *io, qint16 v);
+bool psdwrite(QIODevice *io, quint32 v);
+bool psdwrite(QIODevice *io, const QString &s);
+bool psdwrite_pascalstring(QIODevice *io, const QString &s);
+bool psdwrite_pascalstring(QIODevice *io, const QString &s, int padding);
+bool psdpad(QIODevice *io, quint32 padding);
 
-bool psdread(QIODevice* io, quint8* v);
-bool psdread(QIODevice* io, quint16* v);
-bool psdread(QIODevice* io, qint16* v);
-bool psdread(QIODevice* io, quint32* v);
-bool psdread(QIODevice* io, qint32* v);
-bool psdread(QIODevice* io, quint64* v);
-bool psdread_pascalstring(QIODevice* io, QString& s, int padding);
+bool psdread(QIODevice *io, quint8 *v);
+bool psdread(QIODevice *io, quint16 *v);
+bool psdread(QIODevice *io, qint16 *v);
+bool psdread(QIODevice *io, quint32 *v);
+bool psdread(QIODevice *io, qint32 *v);
+bool psdread(QIODevice *io, quint64 *v);
+bool psdread_pascalstring(QIODevice *io, QString &s, int padding);
 
 #endif // PSD_UTILS_H

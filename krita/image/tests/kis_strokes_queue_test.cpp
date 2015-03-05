@@ -25,7 +25,6 @@
 #include "kis_update_job_item.h"
 #include "kis_merge_walker.h"
 
-
 void KisStrokesQueueTest::testSequentialJobs()
 {
     KisStrokesQueue queue;
@@ -36,7 +35,7 @@ void KisStrokesQueueTest::testSequentialJobs()
     queue.endStroke(id);
 
     KisTestableUpdaterContext context(2);
-    QVector<KisUpdateJobItem*> jobs;
+    QVector<KisUpdateJobItem *> jobs;
 
     queue.processQueue(context, false);
 
@@ -76,7 +75,7 @@ void KisStrokesQueueTest::testConcurrentSequentialBarrier()
 
     // make the number of threads higher
     KisTestableUpdaterContext context(3);
-    QVector<KisUpdateJobItem*> jobs;
+    QVector<KisUpdateJobItem *> jobs;
 
     queue.processQueue(context, false);
 
@@ -112,7 +111,7 @@ void KisStrokesQueueTest::testExclusiveStrokes()
     KisBaseRectsWalkerSP walker = new KisMergeWalker(QRect());
 
     KisTestableUpdaterContext context(2);
-    QVector<KisUpdateJobItem*> jobs;
+    QVector<KisUpdateJobItem *> jobs;
 
     context.addMergeJob(walker);
     queue.processQueue(context, false);
@@ -182,7 +181,7 @@ void KisStrokesQueueTest::testBarrierStrokeJobs()
     bool externalJobsPending = false;
 
     KisTestableUpdaterContext context(3);
-    QVector<KisUpdateJobItem*> jobs;
+    QVector<KisUpdateJobItem *> jobs;
 
     queue.processQueue(context, externalJobsPending);
 
@@ -289,7 +288,7 @@ void KisStrokesQueueTest::testStrokesOverlapping()
     // queue.addJob(id, 0);
 
     KisTestableUpdaterContext context(2);
-    QVector<KisUpdateJobItem*> jobs;
+    QVector<KisUpdateJobItem *> jobs;
 
     queue.processQueue(context, false);
 
@@ -356,7 +355,7 @@ void KisStrokesQueueTest::testAsyncCancelWhileOpenedStroke()
     bool externalJobsPending = false;
 
     KisTestableUpdaterContext context(3);
-    QVector<KisUpdateJobItem*> jobs;
+    QVector<KisUpdateJobItem *> jobs;
 
     queue.processQueue(context, externalJobsPending);
 

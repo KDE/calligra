@@ -53,7 +53,7 @@ class KisFilterChooser : public KDialog
 
 public:
     KisFilterChooser(QWidget *parent, const QStringList &mimeTypes,
-                    const QString &nativeFormat = QString(), const KUrl &url = KUrl());
+                     const QString &nativeFormat = QString(), const KUrl &url = KUrl());
     ~KisFilterChooser();
 
     QString filterSelected();

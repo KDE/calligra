@@ -39,8 +39,8 @@ void KisCropProcessingVisitorTest::testUndo()
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP device = layer->paintDevice();
 
-    QRect fillRect(50,50,100,100);
-    QRect cropRect(25,25,100,100);
+    QRect fillRect(50, 50, 100, 100);
+    QRect cropRect(25, 25, 100, 100);
 
     KisFillPainter painter(device);
     painter.fillRect(fillRect, KoColor(Qt::white, cs));
@@ -68,13 +68,13 @@ void KisCropProcessingVisitorTest::testCropTransparencyMask()
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP device = layer->paintDevice();
 
-    QRect fillRect(50,50,100,100);
-    QRect cropRect(25,25,100,100);
+    QRect fillRect(50, 50, 100, 100);
+    QRect cropRect(25, 25, 100, 100);
 
     KisFillPainter painter(device);
     painter.fillRect(fillRect, KoColor(Qt::white, cs));
 
-    QRect selectionRect(40,40,100,100);
+    QRect selectionRect(40, 40, 100, 100);
     KisTransparencyMaskSP mask = new KisTransparencyMask();
     mask->testingInitSelection(selectionRect);
     KisPixelSelectionSP pixelSelection = mask->selection()->pixelSelection();
@@ -86,7 +86,7 @@ void KisCropProcessingVisitorTest::testCropTransparencyMask()
     mask->accept(visitor, &undoAdapter);
     undoAdapter.endMacro();
 
-    QCOMPARE(pixelSelection->selectedExactRect(), QRect(15,15,85,85));
+    QCOMPARE(pixelSelection->selectedExactRect(), QRect(15, 15, 85, 85));
 
     undoAdapter.undo();
 
@@ -101,13 +101,12 @@ void KisCropProcessingVisitorTest::testWrappedInCommand()
     KisPaintLayerSP layer = new KisPaintLayer(image, "testlayer", OPACITY_OPAQUE_U8);
     KisPaintDeviceSP device = layer->paintDevice();
 
-    QRect fillRect(50,50,100,100);
-    QRect cropRect(25,25,100,100);
+    QRect fillRect(50, 50, 100, 100);
+    QRect cropRect(25, 25, 100, 100);
 
     KisFillPainter painter(device);
     painter.fillRect(fillRect, KoColor(Qt::white, cs));
     QImage image1 = device->convertToQImage(0, 0, 0, 300, 300);
-
 
     KisProcessingVisitorSP visitor = new KisCropProcessingVisitor(cropRect, true, true);
 

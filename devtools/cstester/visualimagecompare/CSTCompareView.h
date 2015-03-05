@@ -41,7 +41,7 @@ public:
     bool open(const QString &inDir1, const QString &inDir2, const QString &pdfDir, const QString &resultFile);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent * event);
+    virtual void keyPressEvent(QKeyEvent *event);
 
 private:
     int updateResult(int index);

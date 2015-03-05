@@ -39,13 +39,14 @@ class KEXIEXTWIDGETS_EXPORT ConnectionDataLVItem : public QTreeWidgetItem
 {
 public:
     ConnectionDataLVItem(KexiDB::ConnectionData *data,
-                         const KexiDB::Driver::Info& info, QTreeWidget* list);
+                         const KexiDB::Driver::Info &info, QTreeWidget *list);
     ~ConnectionDataLVItem();
 
-    void update(const KexiDB::Driver::Info& info);
+    void update(const KexiDB::Driver::Info &info);
 
     using QTreeWidgetItem::data;
-    KexiDB::ConnectionData *data() const {
+    KexiDB::ConnectionData *data() const
+    {
         return m_data;
     }
 
@@ -72,9 +73,9 @@ public:
      to users. \a startDirOrVariable can be provided to specify a start dir for file browser
      (it can also contain a configuration variable name with "kfiledialog:///" prefix
      as described in KRecentDirs documentation). */
-    KexiConnectionSelectorWidget(KexiDBConnectionSet& conn_set,
-                           const QString& startDirOrVariable,
-                           KAbstractFileWidget::OperationMode fileAccessType, QWidget* parent = 0);
+    KexiConnectionSelectorWidget(KexiDBConnectionSet &conn_set,
+                                 const QString &startDirOrVariable,
+                                 KAbstractFileWidget::OperationMode fileAccessType, QWidget *parent = 0);
 
     virtual ~KexiConnectionSelectorWidget();
 
@@ -87,7 +88,7 @@ public:
      has been selected.
      @see selectedConnectionType()
     */
-    KexiDB::ConnectionData* selectedConnectionData() const;
+    KexiDB::ConnectionData *selectedConnectionData() const;
 
     /*! \return the name of database file, if file-based connection was selected.
      Returns null string if no selection has been made or server-based connection
@@ -98,9 +99,9 @@ public:
 
     /*! Sets selected filename to \a fileName.
      Only works when selectedConnectionType()==FileBased. */
-    void setSelectedFileName(const QString& fileName);
+    void setSelectedFileName(const QString &fileName);
 
-    QTreeWidget* connectionsList() const;
+    QTreeWidget *connectionsList() const;
 
     KexiFileWidget *fileWidget;
 
@@ -142,15 +143,15 @@ protected Q_SLOTS:
     void slotConnectionSelected();
 
 protected:
-    virtual bool eventFilter(QObject* watched, QEvent* event);
+    virtual bool eventFilter(QObject *watched, QEvent *event);
 
 private:
-    ConnectionDataLVItem* addConnectionData(KexiDB::ConnectionData* data);
-    ConnectionDataLVItem* selectedConnectionDataItem() const;
+    ConnectionDataLVItem *addConnectionData(KexiDB::ConnectionData *data);
+    ConnectionDataLVItem *selectedConnectionDataItem() const;
     QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
-    
+
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KEXICONNECTIONSELECTORWIDGET_H

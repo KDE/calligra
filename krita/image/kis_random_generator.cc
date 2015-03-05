@@ -76,8 +76,9 @@ quint64 KisRandomGenerator::randomAt(qint64 x, qint64 y)
 
     // Combine salts
     quint64 v = 0;
-    for (int p = 0; p < 8; ++p)
+    for (int p = 0; p < 8; ++p) {
         v |= part(n1, n2, p);
+    }
     return v;
 }
 

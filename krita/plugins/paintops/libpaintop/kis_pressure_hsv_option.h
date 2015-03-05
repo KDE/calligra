@@ -34,17 +34,17 @@ class KoColorTransformation;
 class PAINTOP_EXPORT KisPressureHSVOption : public KisCurveOption
 {
 public:
-    static KisPressureHSVOption* createHueOption();
-    static KisPressureHSVOption* createSaturationOption();
-    static KisPressureHSVOption* createValueOption();
+    static KisPressureHSVOption *createHueOption();
+    static KisPressureHSVOption *createSaturationOption();
+    static KisPressureHSVOption *createValueOption();
 public:
 
-    KisPressureHSVOption(const QString& name, const QString& parameterName, double min, double max);
+    KisPressureHSVOption(const QString &name, const QString &parameterName, double min, double max);
 
-    void apply(KoColorTransformation* hsvTransfo, const KisPaintInformation& info) const;
+    void apply(KoColorTransformation *hsvTransfo, const KisPaintInformation &info) const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

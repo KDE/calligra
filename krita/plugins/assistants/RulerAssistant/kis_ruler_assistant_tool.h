@@ -24,7 +24,6 @@
 #include "ui_AssistantsToolOptions.h"
 #include <KoIcon.h>
 
-
 class KisCanvas2;
 
 class KisRulerAssistantTool : public KisTool
@@ -37,10 +36,11 @@ class KisRulerAssistantTool : public KisTool
         MODE_DRAGGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
     };
 public:
-    KisRulerAssistantTool(KoCanvasBase * canvas);
+    KisRulerAssistantTool(KoCanvasBase *canvas);
     virtual ~KisRulerAssistantTool();
 
-    virtual quint32 priority() {
+    virtual quint32 priority()
+    {
         return 3;
     }
 
@@ -54,15 +54,15 @@ public:
 private:
     void addAssistant();
     void removeAssistant(KisPaintingAssistant *assistant);
-    void snappingOn(KisPaintingAssistant* assistant);
-    void snappingOff(KisPaintingAssistant* assistant);
-    void outlineOn(KisPaintingAssistant* assistant);
-    void outlineOff(KisPaintingAssistant* assistant);
-    bool mouseNear(const QPointF& mousep, const QPointF& point);
-    KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
+    void snappingOn(KisPaintingAssistant *assistant);
+    void snappingOff(KisPaintingAssistant *assistant);
+    void outlineOn(KisPaintingAssistant *assistant);
+    void outlineOff(KisPaintingAssistant *assistant);
+    bool mouseNear(const QPointF &mousep, const QPointF &point);
+    KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant *grid, QPointF point);
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     void deactivate();
 
 private Q_SLOTS:
@@ -72,18 +72,18 @@ private Q_SLOTS:
 
 protected:
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    virtual void paint(QPainter &gc, const KoViewConverter &converter);
 
 protected:
-    KisCanvas2* m_canvas;
+    KisCanvas2 *m_canvas;
     QList<KisPaintingAssistantHandleSP> m_handles, m_sideHandles;
     KisPaintingAssistantHandleSP m_handleDrag;
     KisPaintingAssistantHandleSP m_handleCombine;
-    KisPaintingAssistant* m_assistantDrag;
-    KisPaintingAssistant* m_newAssistant;
+    KisPaintingAssistant *m_assistantDrag;
+    KisPaintingAssistant *m_newAssistant;
     QPointF m_mousePosition;
     Ui::AssistantsToolOptions m_options;
-    QWidget* m_optionsWidget;
+    QWidget *m_optionsWidget;
     QPointF m_dragEnd;
 
 private:
@@ -92,12 +92,12 @@ private:
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
 };
 
-
 class KisRulerAssistantToolFactory : public KoToolFactoryBase
 {
 public:
     KisRulerAssistantToolFactory()
-            : KoToolFactoryBase("KisRulerAssistantTool") {
+        : KoToolFactoryBase("KisRulerAssistantTool")
+    {
         setToolTip(i18n("Ruler assistant editor tool"));
         setToolType(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_ruler_assistant"));
@@ -105,15 +105,14 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };
 
-
     virtual ~KisRulerAssistantToolFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase * canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisRulerAssistantTool(canvas);
     }
 
 };
-
 
 #endif
 

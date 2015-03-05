@@ -43,59 +43,59 @@
 #include "kptnode.h"
 #include "kptcommand.h"
 
-
 extern "C"
 {
-    KDE_EXPORT QObject* krossmodule()
+    KDE_EXPORT QObject *krossmodule()
     {
         return new Scripting::Module();
     }
 }
 
-namespace Scripting {
+namespace Scripting
+{
 
-    /// \internal d-pointer class.
-    class Module::Private
-    {
-        public:
-            QPointer<KPlato::MainDocument> doc;
-            Project *project;
-            QMap<QString, Module*> modules;
-            KPlato::MacroCommand *command; // used for beginCommand()/endCommand()
-    };
+/// \internal d-pointer class.
+class Module::Private
+{
+public:
+    QPointer<KPlato::MainDocument> doc;
+    Project *project;
+    QMap<QString, Module *> modules;
+    KPlato::MacroCommand *command; // used for beginCommand()/endCommand()
+};
 
-Module::Module(QObject* parent)
+Module::Module(QObject *parent)
     : KoScriptingModule(parent, "Plan")
-    , d( new Private() )
+    , d(new Private())
 {
     d->doc = 0;
     d->project = 0;
     d->command = 0;
 
     KLocale *locale = KGlobal::locale();
-    if ( locale ) {
-        locale->insertCatalog( "plan" );
-        locale->insertCatalog( "planlibs" );
-        locale->insertCatalog( "timezones4" );
-        locale->insertCatalog( "krossmoduleplan" );
+    if (locale) {
+        locale->insertCatalog("plan");
+        locale->insertCatalog("planlibs");
+        locale->insertCatalog("timezones4");
+        locale->insertCatalog("krossmoduleplan");
     }
 }
 
 Module::~Module()
 {
     endCommand();
-    qDeleteAll( d->modules );
+    qDeleteAll(d->modules);
     delete d->project;
     delete d;
 }
 
-KPlato::MainDocument* Module::part()
+KPlato::MainDocument *Module::part()
 {
-    if(! d->doc) {
-        if( KPlato::View* v = dynamic_cast< KPlato::View* >(view()) ) {
+    if (! d->doc) {
+        if (KPlato::View *v = dynamic_cast< KPlato::View * >(view())) {
             d->doc = v->getPart();
         }
-        if( ! d->doc ) {
+        if (! d->doc) {
             KPlato::Part *part = new KPlato::Part(this);
             d->doc = new KPlato::MainDocument(part);
             part->setDocument(d->doc);
@@ -104,40 +104,40 @@ KPlato::MainDocument* Module::part()
     return d->doc;
 }
 
-KoDocument* Module::doc()
+KoDocument *Module::doc()
 {
     return part();
 }
 
-void Module::openUrl( const QString &url )
+void Module::openUrl(const QString &url)
 {
-    doc()->openUrl( url );
+    doc()->openUrl(url);
 }
 
-QObject *Module::openDocument( const QString &tag, const QString &url )
+QObject *Module::openDocument(const QString &tag, const QString &url)
 {
     Module *m = d->modules[ tag ];
-    if ( m == 0 ) {
+    if (m == 0) {
         m = new Module();
         d->modules[ tag ] = m;
     }
-    m->part()->openUrl( url );
+    m->part()->openUrl(url);
     return m;
 }
 
-void Module::beginCommand( const KUndo2MagicString &name )
+void Module::beginCommand(const KUndo2MagicString &name)
 {
     endCommand();
-    d->command = new KPlato::MacroCommand( name );
+    d->command = new KPlato::MacroCommand(name);
 }
 
 void Module::endCommand()
 {
-    if ( d->command && ! d->command->isEmpty() ) {
-        KPlato::MacroCommand *c = new KPlato::MacroCommand( KUndo2MagicString() );
-        doc()->addCommand( c );
+    if (d->command && ! d->command->isEmpty()) {
+        KPlato::MacroCommand *c = new KPlato::MacroCommand(KUndo2MagicString());
+        doc()->addCommand(c);
         doc()->endMacro(); // executes c and enables undo/redo
-        c->addCommand( d->command ); // this command is already exectued
+        c->addCommand(d->command);   // this command is already exectued
         d->command = 0;
     } else {
         delete d->command;
@@ -147,8 +147,8 @@ void Module::endCommand()
 
 void Module::revertCommand()
 {
-    if ( d->command ) {
-        if ( ! d->command->isEmpty() ) {
+    if (d->command) {
+        if (! d->command->isEmpty()) {
             endCommand();
             doc()->undoStack()->undo();
         } else {
@@ -159,52 +159,51 @@ void Module::revertCommand()
 
 QObject *Module::project()
 {
-    if ( d->project != 0 && d->project->kplatoProject() != &( part()->getProject() ) ) {
+    if (d->project != 0 && d->project->kplatoProject() != &(part()->getProject())) {
         // need to replace the project, happens when new document is loaded
         delete d->project;
         d->project = 0;
     }
-    if ( d->project == 0 ) {
-        d->project = new Project( this, &(part()->getProject()) );
+    if (d->project == 0) {
+        d->project = new Project(this, &(part()->getProject()));
     }
     return d->project;
 }
 
-
-QWidget *Module::createScheduleListView( QWidget *parent )
+QWidget *Module::createScheduleListView(QWidget *parent)
 {
-    ScriptingScheduleListView *v = new ScriptingScheduleListView( this, parent );
-    if ( parent && parent->layout() ) {
-        parent->layout()->addWidget( v );
+    ScriptingScheduleListView *v = new ScriptingScheduleListView(this, parent);
+    if (parent && parent->layout()) {
+        parent->layout()->addWidget(v);
     }
     return v;
 }
 
-QWidget *Module::createDataQueryView( QWidget *parent )
+QWidget *Module::createDataQueryView(QWidget *parent)
 {
-    ScriptingDataQueryView *v = new ScriptingDataQueryView( this, parent );
-    if ( parent && parent->layout() ) {
-        parent->layout()->addWidget( v );
+    ScriptingDataQueryView *v = new ScriptingDataQueryView(this, parent);
+    if (parent && parent->layout()) {
+        parent->layout()->addWidget(v);
     }
     return v;
 }
 
-void Module::slotAddCommand( KUndo2Command *cmd )
+void Module::slotAddCommand(KUndo2Command *cmd)
 {
-    if ( d->command ) {
-        if ( d->command->isEmpty() ) {
-            doc()->beginMacro( d->command->text() ); // used to disable undo/redo
+    if (d->command) {
+        if (d->command->isEmpty()) {
+            doc()->beginMacro(d->command->text());   // used to disable undo/redo
         }
         cmd->redo();
-        d->command->addCommand( cmd );
+        d->command->addCommand(cmd);
     } else {
-        doc()->addCommand( cmd );
+        doc()->addCommand(cmd);
     }
 }
 
-void Module::addCommand( KUndo2Command *cmd )
+void Module::addCommand(KUndo2Command *cmd)
 {
-    slotAddCommand( cmd );
+    slotAddCommand(cmd);
 }
 
 } //namespace Scripting

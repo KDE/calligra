@@ -39,13 +39,14 @@ using namespace Calligra::Sheets;
 
 /* Generate a matrix LEVEL1 with the size LEVEL1*LEVEL1 */
 Cluster::Cluster()
-        : m_first(0), m_autoDelete(false), m_biggestX(0), m_biggestY(0)
+    : m_first(0), m_autoDelete(false), m_biggestX(0), m_biggestY(0)
 {
-    m_cluster = (Cell***)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL1 * CALLIGRA_SHEETS_CLUSTER_LEVEL1 * sizeof(Cell**));
+    m_cluster = (Cell ** *)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL1 * CALLIGRA_SHEETS_CLUSTER_LEVEL1 * sizeof(Cell **));
 
     for (int x = 0; x < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x)
-        for (int y = 0; y < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++y)
+        for (int y = 0; y < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++y) {
             m_cluster[ y * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + x ] = 0;
+        }
 }
 
 /* Delete the matrix LEVEL1 and all existing LEVEL2 matrizes */
@@ -54,7 +55,7 @@ Cluster::~Cluster()
 // Can't we use clear(), to remove double code - Philipp?
     for (int x = 0; x < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x)
         for (int y = 0; y < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++y) {
-            Cell** cl = m_cluster[ y * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + x ];
+            Cell **cl = m_cluster[ y * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + x ];
             if (cl) {
                 free(cl);
                 m_cluster[ y * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + x ] = 0;
@@ -62,9 +63,9 @@ Cluster::~Cluster()
         }
 
     if (m_autoDelete) {
-        Cell* cell = m_first;
+        Cell *cell = m_first;
         while (cell) {
-            Cell* n = cell->nextCell();
+            Cell *n = cell->nextCell();
             delete cell;
             cell = n;
         }
@@ -77,7 +78,7 @@ void Cluster::clear()
 {
     for (int x = 0; x < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x)
         for (int y = 0; y < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++y) {
-            Cell** cl = m_cluster[ y * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + x ];
+            Cell **cl = m_cluster[ y * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + x ];
             if (cl) {
                 free(cl);
                 m_cluster[ y * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + x ] = 0;
@@ -85,9 +86,9 @@ void Cluster::clear()
         }
 
     if (m_autoDelete) {
-        Cell* cell = m_first;
+        Cell *cell = m_first;
         while (cell) {
-            Cell* n = cell->nextCell();
+            Cell *n = cell->nextCell();
             delete cell;
             cell = n;
         }
@@ -97,11 +98,11 @@ void Cluster::clear()
     m_biggestX = m_biggestY = 0;
 }
 
-Cell* Cluster::lookup(int x, int y) const
+Cell *Cluster::lookup(int x, int y) const
 {
     if (x >= CALLIGRA_SHEETS_CLUSTER_MAX || x < 0 || y >= CALLIGRA_SHEETS_CLUSTER_MAX || y < 0) {
         kDebug(36001) << "Cluster::lookup: invalid column or row value (col:"
-        << x << "  | row: " << y << ")" << endl;
+                      << x << "  | row: " << y << ")" << endl;
         return 0;
     }
     int cx = x / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
@@ -109,19 +110,20 @@ Cell* Cluster::lookup(int x, int y) const
     int dx = x % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int dy = y % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
-    Cell** cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
-    if (!cl)
+    Cell **cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
+    if (!cl) {
         return 0;
+    }
 
     return cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ];
 }
 
 /* Paste a cell in LEVEL2 (it's more paste than insert) */
-void Cluster::insert(Cell* cell, int x, int y)
+void Cluster::insert(Cell *cell, int x, int y)
 {
     if (x >= CALLIGRA_SHEETS_CLUSTER_MAX || x < 0 || y >= CALLIGRA_SHEETS_CLUSTER_MAX || y < 0) {
         kDebug(36001) << "Cluster::insert: invalid column or row value (col:"
-        << x << "  | row: " << y << ")" << endl;
+                      << x << "  | row: " << y << ")" << endl;
         return;
     }
 
@@ -130,18 +132,20 @@ void Cluster::insert(Cell* cell, int x, int y)
     int dx = x % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int dy = y % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
-    Cell** cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
+    Cell **cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
     if (!cl) {
-        cl = (Cell**)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL2 * CALLIGRA_SHEETS_CLUSTER_LEVEL2 * sizeof(Cell*));
+        cl = (Cell **)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL2 * CALLIGRA_SHEETS_CLUSTER_LEVEL2 * sizeof(Cell *));
         m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ] = cl;
 
         for (int a = 0; a < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++a)
-            for (int b = 0; b < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++b)
+            for (int b = 0; b < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++b) {
                 cl[ b * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + a ] = 0;
+            }
     }
 
-    if (cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ])
+    if (cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ]) {
         remove(x, y);
+    }
 
     cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ] = cell;
 
@@ -151,8 +155,12 @@ void Cluster::insert(Cell* cell, int x, int y)
     }
     m_first = cell;
 
-    if (x > m_biggestX) m_biggestX = x;
-    if (y > m_biggestY) m_biggestY = y;
+    if (x > m_biggestX) {
+        m_biggestX = x;
+    }
+    if (y > m_biggestY) {
+        m_biggestY = y;
+    }
 }
 
 /* Removes the cell of a matrix, the matrix itself keeps unchanged */
@@ -160,7 +168,7 @@ void Cluster::remove(int x, int y)
 {
     if (x >= CALLIGRA_SHEETS_CLUSTER_MAX || x < 0 || y >= CALLIGRA_SHEETS_CLUSTER_MAX || y < 0) {
         kDebug(36001) << "Cluster::remove: invalid column or row value (col:"
-        << x << "  | row: " << y << ")" << endl;
+                      << x << "  | row: " << y << ")" << endl;
         return;
     }
 
@@ -169,54 +177,60 @@ void Cluster::remove(int x, int y)
     int dx = x % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int dy = y % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
-    Cell** cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
-    if (!cl)
+    Cell **cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
+    if (!cl) {
         return;
+    }
 
-    Cell* c = cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ];
-    if (!c)
+    Cell *c = cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ];
+    if (!c) {
         return;
+    }
 
     cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ] = 0;
 
     if (m_autoDelete) {
-        if (m_first == c)
+        if (m_first == c) {
             m_first = c->nextCell();
+        }
         if (c->doesMergeCells()) {
             c->mergeCells(c->column(), c->row(), 0, 0);
         }
         delete c;
     } else {
-        if (m_first == c)
+        if (m_first == c) {
             m_first = c->nextCell();
-        if (c->previousCell())
+        }
+        if (c->previousCell()) {
             c->previousCell()->setNextCell(c->nextCell());
-        if (c->nextCell())
+        }
+        if (c->nextCell()) {
             c->nextCell()->setPreviousCell(c->previousCell());
+        }
         c->setNextCell(0);
         c->setPreviousCell(0);
     }
 }
 
-bool Cluster::insertShiftRight(const QPoint& marker)
+bool Cluster::insertShiftRight(const QPoint &marker)
 {
     bool dummy;
     return insertShiftRight(marker, dummy);
 }
 
-bool Cluster::insertShiftDown(const QPoint& marker)
+bool Cluster::insertShiftDown(const QPoint &marker)
 {
     bool dummy;
     return insertShiftDown(marker, dummy);
 }
 
-void Cluster::removeShiftUp(const QPoint& marker)
+void Cluster::removeShiftUp(const QPoint &marker)
 {
     bool dummy;
     removeShiftUp(marker, dummy);
 }
 
-void Cluster::removeShiftLeft(const QPoint& marker)
+void Cluster::removeShiftLeft(const QPoint &marker)
 {
     bool dummy;
     removeShiftLeft(marker, dummy);
@@ -232,19 +246,19 @@ bool Cluster::autoDelete() const
     return m_autoDelete;
 }
 
-Cell* Cluster::firstCell() const
+Cell *Cluster::firstCell() const
 {
     return m_first;
 }
 
-bool Cluster::insertShiftRight(const QPoint& marker, bool& work)
+bool Cluster::insertShiftRight(const QPoint &marker, bool &work)
 {
     work = false;
 
     if (marker.x() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.x() < 0 ||
             marker.y() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.y() < 0) {
         kDebug(36001) << "Cluster::insertShiftRight: invalid column or row value (col:"
-        << marker.x() << "  | row: " << marker.y() << ")" << endl;
+                      << marker.x() << "  | row: " << marker.y() << ")" << endl;
         return false;
     }
 
@@ -255,26 +269,29 @@ bool Cluster::insertShiftRight(const QPoint& marker, bool& work)
 
     // Is there a cell at the bottom most position ?
     // In this case the shift is impossible.
-    Cell** cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1 ];
-    if (cl && cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1 ])
+    Cell **cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1 ];
+    if (cl && cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1 ]) {
         return false;
+    }
 
     bool a = autoDelete();
     setAutoDelete(false);
 
     // Move cells in this row one down.
-    for (int i = CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1; i >= cx ; --i) {
-        Cell** cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + i ];
+    for (int i = CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1; i >= cx; --i) {
+        Cell **cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + i ];
         if (cl) {
             work = true;
             int left = 0;
-            if (i == cx)
+            if (i == cx) {
                 left = dx;
+            }
             int right = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1;
-            if (i == CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1)
+            if (i == CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1) {
                 right = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 2;
+            }
             for (int k = right; k >= left; --k) {
-                Cell* c = cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + k ];
+                Cell *c = cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + k ];
                 if (c) {
                     remove(c->column(), c->row());
                     c->move(c->column() + 1, c->row());
@@ -289,14 +306,14 @@ bool Cluster::insertShiftRight(const QPoint& marker, bool& work)
     return true;
 }
 
-bool Cluster::insertShiftDown(const QPoint& marker, bool& work)
+bool Cluster::insertShiftDown(const QPoint &marker, bool &work)
 {
     work = false;
 
     if (marker.x() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.x() < 0 ||
             marker.y() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.y() < 0) {
         kDebug(36001) << "Cluster::insertShiftDown: invalid column or row value (col:"
-        << marker.x() << "  | row: " << marker.y() << ")" << endl;
+                      << marker.x() << "  | row: " << marker.y() << ")" << endl;
         return false;
     }
 
@@ -307,27 +324,30 @@ bool Cluster::insertShiftDown(const QPoint& marker, bool& work)
 
     // Is there a cell at the right most position ?
     // In this case the shift is impossible.
-    Cell** cl = m_cluster[ CALLIGRA_SHEETS_CLUSTER_LEVEL1 * (CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1) + cx ];
-    if (cl && cl[ CALLIGRA_SHEETS_CLUSTER_LEVEL2 *(CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1) + dx ])
+    Cell **cl = m_cluster[ CALLIGRA_SHEETS_CLUSTER_LEVEL1 * (CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1) + cx ];
+    if (cl && cl[ CALLIGRA_SHEETS_CLUSTER_LEVEL2 * (CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1) + dx ]) {
         return false;
+    }
 
     bool a = autoDelete();
     setAutoDelete(false);
 
     // Move cells in this column one right.
-    for (int i = CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1; i >= cy ; --i) {
-        Cell** cl = m_cluster[ i * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
+    for (int i = CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1; i >= cy; --i) {
+        Cell **cl = m_cluster[ i * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
         if (cl) {
             work = true;
 
             int top = 0;
-            if (i == cy)
+            if (i == cy) {
                 top = dy;
+            }
             int bottom = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1;
-            if (i == CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1)
+            if (i == CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1) {
                 bottom = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 2;
+            }
             for (int k = bottom; k >= top; --k) {
-                Cell* c = cl[ k * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ];
+                Cell *c = cl[ k * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ];
                 if (c) {
                     remove(c->column(), c->row());
                     c->move(c->column(), c->row() + 1);
@@ -346,24 +366,26 @@ bool Cluster::insertColumn(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
         kDebug(36001) << "Cluster::insertColumn: invalid column value (col:"
-        << col << ")" << endl;
+                      << col << ")" << endl;
         return false;
     }
 
     // Is there a cell at the right most position ?
     // In this case the shift is impossible.
     for (int t1 = 0; t1 < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++t1) {
-        Cell** cl = m_cluster[ t1 * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1 ];
+        Cell **cl = m_cluster[ t1 * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1 ];
         if (cl)
             for (int t2 = 0; t2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++t2)
-                if (cl[ t2 * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1 ])
+                if (cl[ t2 * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1 ]) {
                     return false;
+                }
     }
 
     for (int t1 = 0; t1 < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++t1) {
         bool work = true;
-        for (int t2 = 0; work && t2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++t2)
+        for (int t2 = 0; work && t2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++t2) {
             insertShiftRight(QPoint(col, t1 * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + t2), work);
+        }
     }
 
     return true;
@@ -373,37 +395,39 @@ bool Cluster::insertRow(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
         kDebug(36001) << "Cluster::insertRow: invalid row value (row:"
-        << row << ")" << endl;
+                      << row << ")" << endl;
         return false;
     }
 
     // Is there a cell at the bottom most position ?
     // In this case the shift is impossible.
     for (int t1 = 0; t1 < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++t1) {
-        Cell** cl = m_cluster[ CALLIGRA_SHEETS_CLUSTER_LEVEL1 * (CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1) + t1 ];
+        Cell **cl = m_cluster[ CALLIGRA_SHEETS_CLUSTER_LEVEL1 * (CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1) + t1 ];
         if (cl)
             for (int t2 = 0; t2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++t2)
-                if (cl[ CALLIGRA_SHEETS_CLUSTER_LEVEL2 *(CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1) + t2 ])
+                if (cl[ CALLIGRA_SHEETS_CLUSTER_LEVEL2 * (CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1) + t2 ]) {
                     return false;
+                }
     }
 
     for (int t1 = 0; t1 < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++t1) {
         bool work = true;
-        for (int t2 = 0; work && t2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++t2)
+        for (int t2 = 0; work && t2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++t2) {
             insertShiftDown(QPoint(t1 * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + t2, row), work);
+        }
     }
 
     return true;
 }
 
-void Cluster::removeShiftUp(const QPoint& marker, bool& work)
+void Cluster::removeShiftUp(const QPoint &marker, bool &work)
 {
     work = false;
 
     if (marker.x() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.x() < 0 ||
             marker.y() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.y() < 0) {
         kDebug(36001) << "Cluster::removeShiftUp: invalid column or row value (col:"
-        << marker.x() << "  | row: " << marker.y() << ")" << endl;
+                      << marker.x() << "  | row: " << marker.y() << ")" << endl;
         return;
     }
 
@@ -417,16 +441,17 @@ void Cluster::removeShiftUp(const QPoint& marker, bool& work)
 
     // Move cells in this column one column to the left.
     for (int i = cy; i < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++i) {
-        Cell** cl = m_cluster[ i * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
+        Cell **cl = m_cluster[ i * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
         if (cl) {
             work = true;
 
             int top = 0;
-            if (i == cy)
+            if (i == cy) {
                 top = dy + 1;
+            }
             int bottom = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1;
             for (int k = top; k <= bottom; ++k) {
-                Cell* c = cl[ k * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ];
+                Cell *c = cl[ k * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ];
                 if (c) {
                     remove(c->column(), c->row());
                     c->move(c->column(), c->row() - 1);
@@ -439,14 +464,14 @@ void Cluster::removeShiftUp(const QPoint& marker, bool& work)
     setAutoDelete(a);
 }
 
-void Cluster::removeShiftLeft(const QPoint& marker, bool& work)
+void Cluster::removeShiftLeft(const QPoint &marker, bool &work)
 {
     work = false;
 
     if (marker.x() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.x() < 0 ||
             marker.y() >= CALLIGRA_SHEETS_CLUSTER_MAX || marker.y() < 0) {
         kDebug(36001) << "Cluster::removeShiftLeft: invalid column or row value (col:"
-        << marker.x() << "  | row: " << marker.y() << ")" << endl;
+                      << marker.x() << "  | row: " << marker.y() << ")" << endl;
         return;
     }
 
@@ -460,16 +485,17 @@ void Cluster::removeShiftLeft(const QPoint& marker, bool& work)
 
     // Move cells in this row one row up.
     for (int i = cx; i < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++i) {
-        Cell** cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + i ];
+        Cell **cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + i ];
         if (cl) {
             work = true;
 
             int left = 0;
-            if (i == cx)
+            if (i == cx) {
                 left = dx + 1;
+            }
             int right = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1;
             for (int k = left; k <= right; ++k) {
-                Cell* c = cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + k ];
+                Cell *c = cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + k ];
                 if (c) {
                     remove(c->column(), c->row());
                     c->move(c->column() - 1, c->row());
@@ -486,7 +512,7 @@ void Cluster::removeColumn(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
         kDebug(36001) << "Cluster::removeColumn: invalid column value (col:"
-        << col << ")" << endl;
+                      << col << ")" << endl;
         return;
     }
 
@@ -494,17 +520,19 @@ void Cluster::removeColumn(int col)
     int dx = col % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
     for (int y1 = 0; y1 < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++y1) {
-        Cell** cl = m_cluster[ y1 * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
+        Cell **cl = m_cluster[ y1 * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
         if (cl)
             for (int y2 = 0; y2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++y2)
-                if (cl[ y2 * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ])
+                if (cl[ y2 * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ]) {
                     remove(col, y1 * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + y2);
+                }
     }
 
     for (int t1 = 0; t1 < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++t1) {
         bool work = true;
-        for (int t2 = 0; work && t2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++t2)
+        for (int t2 = 0; work && t2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++t2) {
             removeShiftLeft(QPoint(col, t1 * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + t2), work);
+        }
     }
 }
 
@@ -512,7 +540,7 @@ void Cluster::removeRow(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
         kDebug(36001) << "Cluster::removeRow: invalid row value (row:"
-        << row << ")" << endl;
+                      << row << ")" << endl;
         return;
     }
 
@@ -520,17 +548,19 @@ void Cluster::removeRow(int row)
     int dy = row % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
     for (int x1 = 0; x1 < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x1) {
-        Cell** cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + x1 ];
+        Cell **cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + x1 ];
         if (cl)
             for (int x2 = 0; x2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++x2)
-                if (cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + x2 ])
+                if (cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + x2 ]) {
                     remove(x1 * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + x2, row);
+                }
     }
 
     for (int t1 = 0; t1 < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++t1) {
         bool work = true;
-        for (int t2 = 0; work && t2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++t2)
+        for (int t2 = 0; work && t2 < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++t2) {
             removeShiftUp(QPoint(t1 * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + t2, row), work);
+        }
     }
 }
 
@@ -538,7 +568,7 @@ void Cluster::clearColumn(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
         kDebug(36001) << "Cluster::clearColumn: invalid column value (col:"
-        << col << ")" << endl;
+                      << col << ")" << endl;
         return;
     }
 
@@ -546,11 +576,11 @@ void Cluster::clearColumn(int col)
     int dx = col % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
     for (int cy = 0; cy < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++cy) {
-        Cell** cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
+        Cell **cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ];
         if (cl)
             for (int dy = 0; dy < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++dy)
                 if (cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ]) {
-                    int row = cy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dy ;
+                    int row = cy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dy;
                     remove(col, row);
                 }
     }
@@ -560,7 +590,7 @@ void Cluster::clearRow(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
         kDebug(36001) << "Cluster::clearRow: invalid row value (row:"
-        << row << ")" << endl;
+                      << row << ")" << endl;
         return;
     }
 
@@ -568,11 +598,11 @@ void Cluster::clearRow(int row)
     int dy = row % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
     for (int cx = 0; cx < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++cx) {
-        Cell** cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + cx ];
+        Cell **cl = m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + cx ];
         if (cl)
             for (int dx = 0; dx < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++dx)
                 if (cl[ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ]) {
-                    int column = cx * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx ;
+                    int column = cx * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx;
                     remove(column, row);
                 }
     }
@@ -591,13 +621,15 @@ Value Cluster::valueRange(int col1, int row1,
         int p = row1; row1 = col2; row2 = p;
     }
     if ((row1 < 0) || (col1 < 0) || (row2 > CALLIGRA_SHEETS_CLUSTER_MAX) ||
-            (col2 > CALLIGRA_SHEETS_CLUSTER_MAX))
+            (col2 > CALLIGRA_SHEETS_CLUSTER_MAX)) {
         return empty;
+    }
 
     // if we are out of range occupied by cells, we return an empty
     // array of the requested size
-    if ((row1 > m_biggestY) || (col1 > m_biggestX))
+    if ((row1 > m_biggestY) || (col1 > m_biggestX)) {
         return Value(Value::Array);
+    }
 
     return makeArray(col1, row1, col2, row2);
 }
@@ -607,18 +639,19 @@ Value Cluster::makeArray(int col1, int row1, int col2, int row2) const
     // this generates an array of values
     Value array(Value::Array);
     for (int row = row1; row <= row2; ++row) {
-        for (Cell* cell = getFirstCellRow(row); cell; cell = getNextCellRight(cell->column(), row)) {
-            if (cell->column() >= col1 && cell->column() <= col2)
+        for (Cell *cell = getFirstCellRow(row); cell; cell = getNextCellRight(cell->column(), row)) {
+            if (cell->column() >= col1 && cell->column() <= col2) {
                 array.setElement(cell->column() - col1, row - row1, cell->value());
+            }
         }
     }
     //return the result
     return array;
 }
 
-Cell* Cluster::getFirstCellColumn(int col) const
+Cell *Cluster::getFirstCellColumn(int col) const
 {
-    Cell* cell = lookup(col, 1);
+    Cell *cell = lookup(col, 1);
 
     if (cell == 0) {
         cell = getNextCellDown(col, 1);
@@ -626,9 +659,9 @@ Cell* Cluster::getFirstCellColumn(int col) const
     return cell;
 }
 
-Cell* Cluster::getLastCellColumn(int col) const
+Cell *Cluster::getLastCellColumn(int col) const
 {
-    Cell* cell = lookup(col, KS_rowMax);
+    Cell *cell = lookup(col, KS_rowMax);
 
     if (cell == 0) {
         cell = getNextCellUp(col, KS_rowMax);
@@ -636,9 +669,9 @@ Cell* Cluster::getLastCellColumn(int col) const
     return cell;
 }
 
-Cell* Cluster::getFirstCellRow(int row) const
+Cell *Cluster::getFirstCellRow(int row) const
 {
-    Cell* cell = lookup(1, row);
+    Cell *cell = lookup(1, row);
 
     if (cell == 0) {
         cell = getNextCellRight(1, row);
@@ -646,9 +679,9 @@ Cell* Cluster::getFirstCellRow(int row) const
     return cell;
 }
 
-Cell* Cluster::getLastCellRow(int row) const
+Cell *Cluster::getLastCellRow(int row) const
 {
-    Cell* cell = lookup(KS_colMax, row);
+    Cell *cell = lookup(KS_colMax, row);
 
     if (cell == 0) {
         cell = getNextCellLeft(KS_colMax, row);
@@ -656,7 +689,7 @@ Cell* Cluster::getLastCellRow(int row) const
     return cell;
 }
 
-Cell* Cluster::getNextCellUp(int col, int row) const
+Cell *Cluster::getNextCellUp(int col, int row) const
 {
     int cx = col / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int cy = (row - 1) / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
@@ -667,10 +700,10 @@ Cell* Cluster::getNextCellUp(int col, int row) const
         if (m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ] != 0) {
             while (dy >= 0) {
 
-                if (m_cluster[ cy*CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx]
-                        [ dy*CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx] != 0) {
-                    return m_cluster[ cy*CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ]
-                           [ dy*CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx];
+                if (m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx]
+                        [ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx] != 0) {
+                    return m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ]
+                           [ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx];
                 }
                 dy--;
             }
@@ -681,7 +714,7 @@ Cell* Cluster::getNextCellUp(int col, int row) const
     return 0;
 }
 
-Cell* Cluster::getNextCellDown(int col, int row) const
+Cell *Cluster::getNextCellDown(int col, int row) const
 {
     int cx = col / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int cy = (row + 1) / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
@@ -692,10 +725,10 @@ Cell* Cluster::getNextCellDown(int col, int row) const
         if (m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ] != 0) {
             while (dy < CALLIGRA_SHEETS_CLUSTER_LEVEL2) {
 
-                if (m_cluster[ cy*CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx]
-                        [ dy*CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx] != 0) {
-                    return m_cluster[ cy*CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ]
-                           [ dy*CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx];
+                if (m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx]
+                        [ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx] != 0) {
+                    return m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ]
+                           [ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx];
                 }
                 dy++;
             }
@@ -706,7 +739,7 @@ Cell* Cluster::getNextCellDown(int col, int row) const
     return 0;
 }
 
-Cell* Cluster::getNextCellLeft(int col, int row) const
+Cell *Cluster::getNextCellLeft(int col, int row) const
 {
     int cx = (col - 1) / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int cy = row / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
@@ -717,10 +750,10 @@ Cell* Cluster::getNextCellLeft(int col, int row) const
         if (m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ] != 0) {
             while (dx >= 0) {
 
-                if (m_cluster[ cy*CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx]
-                        [ dy*CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx] != 0) {
-                    return m_cluster[ cy*CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ]
-                           [ dy*CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx];
+                if (m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx]
+                        [ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx] != 0) {
+                    return m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ]
+                           [ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx];
                 }
                 dx--;
             }
@@ -731,7 +764,7 @@ Cell* Cluster::getNextCellLeft(int col, int row) const
     return 0;
 }
 
-Cell* Cluster::getNextCellRight(int col, int row) const
+Cell *Cluster::getNextCellRight(int col, int row) const
 {
     int cx = (col + 1) / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int cy = row / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
@@ -742,10 +775,10 @@ Cell* Cluster::getNextCellRight(int col, int row) const
         if (m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ] != 0) {
             while (dx < CALLIGRA_SHEETS_CLUSTER_LEVEL2) {
 
-                if (m_cluster[ cy*CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx]
-                        [ dy*CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx] != 0) {
-                    return m_cluster[ cy*CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ]
-                           [ dy*CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx];
+                if (m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx]
+                        [ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx] != 0) {
+                    return m_cluster[ cy * CALLIGRA_SHEETS_CLUSTER_LEVEL1 + cx ]
+                           [ dy * CALLIGRA_SHEETS_CLUSTER_LEVEL2 + dx];
                 }
                 dx++;
             }
@@ -764,18 +797,19 @@ Cell* Cluster::getNextCellRight(int col, int row) const
  ****************************************************/
 
 ColumnCluster::ColumnCluster()
-        : m_first(0), m_autoDelete(false)
+    : m_first(0), m_autoDelete(false)
 {
-    m_cluster = (ColumnFormat***)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL1 * sizeof(ColumnFormat**));
+    m_cluster = (ColumnFormat ** *)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL1 * sizeof(ColumnFormat **));
 
-    for (int x = 0; x < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x)
+    for (int x = 0; x < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x) {
         m_cluster[ x ] = 0;
+    }
 }
 
 ColumnCluster::~ColumnCluster()
 {
     for (int x = 0; x < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x) {
-        ColumnFormat** cl = m_cluster[ x ];
+        ColumnFormat **cl = m_cluster[ x ];
         if (cl) {
             free(cl);
             m_cluster[ x ] = 0;
@@ -783,50 +817,51 @@ ColumnCluster::~ColumnCluster()
     }
 
     if (m_autoDelete) {
-        ColumnFormat* cell = m_first;
+        ColumnFormat *cell = m_first;
         while (cell) {
-            ColumnFormat* n = cell->next();
+            ColumnFormat *n = cell->next();
             delete cell;
             cell = n;
         }
     }
 
-
     free(m_cluster);
 }
 
-ColumnFormat* ColumnCluster::lookup(int col)
+ColumnFormat *ColumnCluster::lookup(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
         kDebug(36001) << "ColumnCluster::lookup: invalid column value (col:"
-        << col << ")" << endl;
+                      << col << ")" << endl;
         return 0;
     }
 
     int cx = col / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int dx = col % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
-    ColumnFormat** cl = m_cluster[ cx ];
-    if (!cl)
+    ColumnFormat **cl = m_cluster[ cx ];
+    if (!cl) {
         return 0;
+    }
 
     return cl[ dx ];
 }
 
-const ColumnFormat* ColumnCluster::lookup(int col) const
+const ColumnFormat *ColumnCluster::lookup(int col) const
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
         kDebug(36001) << "ColumnCluster::lookup: invalid column value (col:"
-        << col << ")" << endl;
+                      << col << ")" << endl;
         return 0;
     }
 
     int cx = col / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int dx = col % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
-    ColumnFormat** cl = m_cluster[ cx ];
-    if (!cl)
+    ColumnFormat **cl = m_cluster[ cx ];
+    if (!cl) {
         return 0;
+    }
 
     return cl[ dx ];
 }
@@ -834,7 +869,7 @@ const ColumnFormat* ColumnCluster::lookup(int col) const
 void ColumnCluster::clear()
 {
     for (int x = 0; x < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x) {
-        ColumnFormat** cl = m_cluster[ x ];
+        ColumnFormat **cl = m_cluster[ x ];
         if (cl) {
             free(cl);
             m_cluster[ x ] = 0;
@@ -842,9 +877,9 @@ void ColumnCluster::clear()
     }
 
     if (m_autoDelete) {
-        ColumnFormat* cell = m_first;
+        ColumnFormat *cell = m_first;
         while (cell) {
-            ColumnFormat* n = cell->next();
+            ColumnFormat *n = cell->next();
             delete cell;
             cell = n;
         }
@@ -853,28 +888,30 @@ void ColumnCluster::clear()
     m_first = 0;
 }
 
-void ColumnCluster::insertElement(ColumnFormat* lay, int col)
+void ColumnCluster::insertElement(ColumnFormat *lay, int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
         kDebug(36001) << "ColumnCluster::insertElement: invalid column value (col:"
-        << col << ")" << endl;
+                      << col << ")" << endl;
         return;
     }
 
     int cx = col / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int dx = col % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
-    ColumnFormat** cl = m_cluster[ cx ];
+    ColumnFormat **cl = m_cluster[ cx ];
     if (!cl) {
-        cl = (ColumnFormat**)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL2 * sizeof(ColumnFormat*));
+        cl = (ColumnFormat **)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL2 * sizeof(ColumnFormat *));
         m_cluster[ cx ] = cl;
 
-        for (int a = 0; a < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++a)
+        for (int a = 0; a < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++a) {
             cl[ a ] = 0;
+        }
     }
 
-    if (cl[ dx ])
+    if (cl[ dx ]) {
         removeElement(col);
+    }
 
     cl[ dx ] = lay;
 
@@ -889,34 +926,40 @@ void ColumnCluster::removeElement(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
         kDebug(36001) << "ColumnCluster::removeElement: invalid column value (col:"
-        << col << ")" << endl;
+                      << col << ")" << endl;
         return;
     }
 
     int cx = col / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int dx = col % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
-    ColumnFormat** cl = m_cluster[ cx ];
-    if (!cl)
+    ColumnFormat **cl = m_cluster[ cx ];
+    if (!cl) {
         return;
+    }
 
-    ColumnFormat* c = cl[ dx ];
-    if (!c)
+    ColumnFormat *c = cl[ dx ];
+    if (!c) {
         return;
+    }
 
     cl[ dx ] = 0;
 
     if (m_autoDelete) {
-        if (m_first == c)
+        if (m_first == c) {
             m_first = c->next();
+        }
         delete c;
     } else {
-        if (m_first == c)
+        if (m_first == c) {
             m_first = c->next();
-        if (c->previous())
+        }
+        if (c->previous()) {
             c->previous()->setNext(c->next());
-        if (c->next())
+        }
+        if (c->next()) {
             c->next()->setPrevious(c->previous());
+        }
         c->setNext(0);
         c->setPrevious(0);
     }
@@ -926,7 +969,7 @@ bool ColumnCluster::insertColumn(int col)
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
         kDebug(36001) << "ColumnCluster::insertColumn: invalid column value (col:"
-        << col << ")" << endl;
+                      << col << ")" << endl;
         return false;
     }
 
@@ -935,24 +978,27 @@ bool ColumnCluster::insertColumn(int col)
 
     // Is there a column layout at the right most position ?
     // In this case the shift is impossible.
-    ColumnFormat** cl = m_cluster[ CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1 ];
-    if (cl && cl[ CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1 ])
+    ColumnFormat **cl = m_cluster[ CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1 ];
+    if (cl && cl[ CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1 ]) {
         return false;
+    }
 
     bool a = autoDelete();
     setAutoDelete(false);
 
-    for (int i = CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1; i >= cx ; --i) {
-        ColumnFormat** cl = m_cluster[ i ];
+    for (int i = CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1; i >= cx; --i) {
+        ColumnFormat **cl = m_cluster[ i ];
         if (cl) {
             int left = 0;
-            if (i == cx)
+            if (i == cx) {
                 left = dx;
+            }
             int right = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1;
-            if (i == CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1)
+            if (i == CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1) {
                 right = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 2;
+            }
             for (int k = right; k >= left; --k) {
-                ColumnFormat* c = cl[ k ];
+                ColumnFormat *c = cl[ k ];
                 if (c) {
                     removeElement(c->column());
                     c->setColumn(c->column() + 1);
@@ -971,7 +1017,7 @@ bool ColumnCluster::removeColumn(int column)
 {
     if (column >= CALLIGRA_SHEETS_CLUSTER_MAX || column < 0) {
         kDebug(36001) << "ColumnCluster::removeColumn: invalid column value (col:"
-        << column << ")" << endl;
+                      << column << ")" << endl;
         return false;
     }
 
@@ -984,14 +1030,15 @@ bool ColumnCluster::removeColumn(int column)
     setAutoDelete(false);
 
     for (int i = cx; i < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++i) {
-        ColumnFormat** cl = m_cluster[ i ];
+        ColumnFormat **cl = m_cluster[ i ];
         if (cl) {
             int left = 0;
-            if (i == cx)
+            if (i == cx) {
                 left = dx + 1;
+            }
             int right = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1;
             for (int k = left; k <= right; ++k) {
-                ColumnFormat* c = cl[ k ];
+                ColumnFormat *c = cl[ k ];
                 if (c) {
                     removeElement(c->column());
                     c->setColumn(c->column() - 1);
@@ -1016,11 +1063,11 @@ bool ColumnCluster::autoDelete() const
     return m_autoDelete;
 }
 
-ColumnFormat* ColumnCluster::next(int col) const
+ColumnFormat *ColumnCluster::next(int col) const
 {
     if (col >= CALLIGRA_SHEETS_CLUSTER_MAX || col < 0) {
         kDebug(36001) << "ColumnCluster::next: invalid column value (col:"
-        << col << ")" << endl;
+                      << col << ")" << endl;
         return 0;
     }
 
@@ -1043,26 +1090,27 @@ ColumnFormat* ColumnCluster::next(int col) const
     return 0;
 }
 
-void ColumnCluster::operator=(const ColumnCluster & other)
+void ColumnCluster::operator=(const ColumnCluster &other)
 {
     m_first = 0;
     m_autoDelete = other.m_autoDelete;
     // TODO Stefan: Optimize!
-    m_cluster = (ColumnFormat***)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL1 * sizeof(ColumnFormat**));
+    m_cluster = (ColumnFormat ** *)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL1 * sizeof(ColumnFormat **));
     for (int i = 0; i < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++i) {
         if (other.m_cluster[i]) {
-            m_cluster[i] = (ColumnFormat**)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL2 * sizeof(ColumnFormat*));
+            m_cluster[i] = (ColumnFormat **)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL2 * sizeof(ColumnFormat *));
             for (int j = 0; j < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++j) {
                 m_cluster[i][j] = 0;
                 if (other.m_cluster[i][j]) {
-                    ColumnFormat* columnFormat = new ColumnFormat(*other.m_cluster[i][j]);
+                    ColumnFormat *columnFormat = new ColumnFormat(*other.m_cluster[i][j]);
                     columnFormat->setNext(0);
                     columnFormat->setPrevious(0);
                     insertElement(columnFormat, columnFormat->column());
                 }
             }
-        } else
+        } else {
             m_cluster[i] = 0;
+        }
     }
 }
 
@@ -1073,18 +1121,19 @@ void ColumnCluster::operator=(const ColumnCluster & other)
  ****************************************************/
 
 RowCluster::RowCluster()
-        : m_first(0), m_autoDelete(false)
+    : m_first(0), m_autoDelete(false)
 {
-    m_cluster = (RowFormat***)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL1 * sizeof(RowFormat**));
+    m_cluster = (RowFormat ** *)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL1 * sizeof(RowFormat **));
 
-    for (int x = 0; x < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x)
+    for (int x = 0; x < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x) {
         m_cluster[ x ] = 0;
+    }
 }
 
 RowCluster::~RowCluster()
 {
     for (int x = 0; x < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x) {
-        RowFormat** cl = m_cluster[ x ];
+        RowFormat **cl = m_cluster[ x ];
         if (cl) {
             free(cl);
             m_cluster[ x ] = 0;
@@ -1092,9 +1141,9 @@ RowCluster::~RowCluster()
     }
 
     if (m_autoDelete) {
-        RowFormat* cell = m_first;
+        RowFormat *cell = m_first;
         while (cell) {
-            RowFormat* n = cell->next();
+            RowFormat *n = cell->next();
             delete cell;
             cell = n;
         }
@@ -1103,38 +1152,40 @@ RowCluster::~RowCluster()
     free(m_cluster);
 }
 
-const RowFormat* RowCluster::lookup(int row) const
+const RowFormat *RowCluster::lookup(int row) const
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
         kDebug(36001) << "RowCluster::lookup: invalid row value (row:"
-        << row << ")" << endl;
+                      << row << ")" << endl;
         return 0;
     }
 
     int cx = row / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int dx = row % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
-    RowFormat** cl = m_cluster[ cx ];
-    if (!cl)
+    RowFormat **cl = m_cluster[ cx ];
+    if (!cl) {
         return 0;
+    }
 
     return cl[ dx ];
 }
 
-RowFormat* RowCluster::lookup(int row)
+RowFormat *RowCluster::lookup(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
         kDebug(36001) << "RowCluster::lookup: invalid row value (row:"
-        << row << ")" << endl;
+                      << row << ")" << endl;
         return 0;
     }
 
     int cx = row / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int dx = row % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
-    RowFormat** cl = m_cluster[ cx ];
-    if (!cl)
+    RowFormat **cl = m_cluster[ cx ];
+    if (!cl) {
         return 0;
+    }
 
     return cl[ dx ];
 }
@@ -1142,7 +1193,7 @@ RowFormat* RowCluster::lookup(int row)
 void RowCluster::clear()
 {
     for (int x = 0; x < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++x) {
-        RowFormat** cl = m_cluster[ x ];
+        RowFormat **cl = m_cluster[ x ];
         if (cl) {
             free(cl);
             m_cluster[ x ] = 0;
@@ -1150,9 +1201,9 @@ void RowCluster::clear()
     }
 
     if (m_autoDelete) {
-        RowFormat* cell = m_first;
+        RowFormat *cell = m_first;
         while (cell) {
-            RowFormat* n = cell->next();
+            RowFormat *n = cell->next();
             delete cell;
             cell = n;
         }
@@ -1161,28 +1212,30 @@ void RowCluster::clear()
     m_first = 0;
 }
 
-void RowCluster::insertElement(RowFormat* lay, int row)
+void RowCluster::insertElement(RowFormat *lay, int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
         kDebug(36001) << "RowCluster::insertElement: invalid row value (row:"
-        << row << ")" << endl;
+                      << row << ")" << endl;
         return;
     }
 
     int cx = row / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int dx = row % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
-    RowFormat** cl = m_cluster[ cx ];
+    RowFormat **cl = m_cluster[ cx ];
     if (!cl) {
-        cl = (RowFormat**)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL2 * sizeof(RowFormat*));
+        cl = (RowFormat **)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL2 * sizeof(RowFormat *));
         m_cluster[ cx ] = cl;
 
-        for (int a = 0; a < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++a)
+        for (int a = 0; a < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++a) {
             cl[ a ] = 0;
+        }
     }
 
-    if (cl[ dx ])
+    if (cl[ dx ]) {
         removeElement(row);
+    }
 
     cl[ dx ] = lay;
 
@@ -1197,34 +1250,40 @@ void RowCluster::removeElement(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
         kDebug(36001) << "RowCluster::removeElement: invalid row value (row:"
-        << row << ")" << endl;
+                      << row << ")" << endl;
         return;
     }
 
     int cx = row / CALLIGRA_SHEETS_CLUSTER_LEVEL2;
     int dx = row % CALLIGRA_SHEETS_CLUSTER_LEVEL2;
 
-    RowFormat** cl = m_cluster[ cx ];
-    if (!cl)
+    RowFormat **cl = m_cluster[ cx ];
+    if (!cl) {
         return;
+    }
 
-    RowFormat* c = cl[ dx ];
-    if (!c)
+    RowFormat *c = cl[ dx ];
+    if (!c) {
         return;
+    }
 
     cl[ dx ] = 0;
 
     if (m_autoDelete) {
-        if (m_first == c)
+        if (m_first == c) {
             m_first = c->next();
+        }
         delete c;
     } else {
-        if (m_first == c)
+        if (m_first == c) {
             m_first = c->next();
-        if (c->previous())
+        }
+        if (c->previous()) {
             c->previous()->setNext(c->next());
-        if (c->next())
+        }
+        if (c->next()) {
             c->next()->setPrevious(c->previous());
+        }
         c->setNext(0);
         c->setPrevious(0);
     }
@@ -1234,7 +1293,7 @@ bool RowCluster::insertRow(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
         kDebug(36001) << "RowCluster::insertRow: invalid row value (row:"
-        << row << ")" << endl;
+                      << row << ")" << endl;
         return false;
     }
 
@@ -1243,24 +1302,27 @@ bool RowCluster::insertRow(int row)
 
     // Is there a row layout at the bottom most position ?
     // In this case the shift is impossible.
-    RowFormat** cl = m_cluster[ CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1 ];
-    if (cl && cl[ CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1 ])
+    RowFormat **cl = m_cluster[ CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1 ];
+    if (cl && cl[ CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1 ]) {
         return false;
+    }
 
     bool a = autoDelete();
     setAutoDelete(false);
 
-    for (int i = CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1; i >= cx ; --i) {
-        RowFormat** cl = m_cluster[ i ];
+    for (int i = CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1; i >= cx; --i) {
+        RowFormat **cl = m_cluster[ i ];
         if (cl) {
             int left = 0;
-            if (i == cx)
+            if (i == cx) {
                 left = dx;
+            }
             int right = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1;
-            if (i == CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1)
+            if (i == CALLIGRA_SHEETS_CLUSTER_LEVEL1 - 1) {
                 right = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 2;
+            }
             for (int k = right; k >= left; --k) {
-                RowFormat* c = cl[ k ];
+                RowFormat *c = cl[ k ];
                 if (c) {
                     removeElement(c->row());
                     c->setRow(c->row() + 1);
@@ -1279,7 +1341,7 @@ bool RowCluster::removeRow(int row)
 {
     if (row >= CALLIGRA_SHEETS_CLUSTER_MAX || row < 0) {
         kDebug(36001) << "RowCluster::removeRow: invalid row value (row:"
-        << row << ")" << endl;
+                      << row << ")" << endl;
         return false;
     }
 
@@ -1292,14 +1354,15 @@ bool RowCluster::removeRow(int row)
     setAutoDelete(false);
 
     for (int i = cx; i < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++i) {
-        RowFormat** cl = m_cluster[ i ];
+        RowFormat **cl = m_cluster[ i ];
         if (cl) {
             int left = 0;
-            if (i == cx)
+            if (i == cx) {
                 left = dx + 1;
+            }
             int right = CALLIGRA_SHEETS_CLUSTER_LEVEL2 - 1;
             for (int k = left; k <= right; ++k) {
-                RowFormat* c = cl[ k ];
+                RowFormat *c = cl[ k ];
                 if (c) {
                     removeElement(c->row());
                     c->setRow(c->row() - 1);
@@ -1324,25 +1387,26 @@ bool RowCluster::autoDelete() const
     return m_autoDelete;
 }
 
-void RowCluster::operator=(const RowCluster & other)
+void RowCluster::operator=(const RowCluster &other)
 {
     m_first = 0;
     m_autoDelete = other.m_autoDelete;
     // TODO Stefan: Optimize!
-    m_cluster = (RowFormat***)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL1 * sizeof(RowFormat**));
+    m_cluster = (RowFormat ** *)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL1 * sizeof(RowFormat **));
     for (int i = 0; i < CALLIGRA_SHEETS_CLUSTER_LEVEL1; ++i) {
         if (other.m_cluster[i]) {
-            m_cluster[i] = (RowFormat**)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL2 * sizeof(RowFormat*));
+            m_cluster[i] = (RowFormat **)malloc(CALLIGRA_SHEETS_CLUSTER_LEVEL2 * sizeof(RowFormat *));
             for (int j = 0; j < CALLIGRA_SHEETS_CLUSTER_LEVEL2; ++j) {
                 m_cluster[i][j] = 0;
                 if (other.m_cluster[i][j]) {
-                    RowFormat* rowFormat = new RowFormat(*other.m_cluster[i][j]);
+                    RowFormat *rowFormat = new RowFormat(*other.m_cluster[i][j]);
                     rowFormat->setNext(0);
                     rowFormat->setPrevious(0);
                     insertElement(rowFormat, rowFormat->row());
                 }
             }
-        } else
+        } else {
             m_cluster[i] = 0;
+        }
     }
 }

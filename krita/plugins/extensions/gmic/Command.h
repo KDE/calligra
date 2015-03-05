@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef COMMAND_H
 #define COMMAND_H
 
@@ -36,18 +35,21 @@ class Parameter;
 class Command : public Component
 {
 public:
-    Command(Component * parent = 0);
+    Command(Component *parent = 0);
     virtual ~Command();
 
     QString m_command;
     QString m_commandPreview;
     QString m_commandPreviewZoom;
-    QList<Parameter*> m_parameters;
+    QList<Parameter *> m_parameters;
 
-    virtual void add(Component* c);
-    virtual Component* child(int index) const;
-    virtual Component* parent();
-    void setParent(Component * parent) { m_parent = parent; }
+    virtual void add(Component *c);
+    virtual Component *child(int index) const;
+    virtual Component *parent();
+    void setParent(Component *parent)
+    {
+        m_parent = parent;
+    }
     virtual int row() const;
     virtual int childCount() const;
     virtual int columnCount() const;
@@ -65,15 +67,15 @@ public:
     bool processParameter(const QStringList &block);
 
     // QWidget * createSettingsWidget();
-    void writeConfiguration(KisGmicFilterSetting * setting);
+    void writeConfiguration(KisGmicFilterSetting *setting);
 
-    bool hasParameterName(const QString& paramName, const QString& paramType = QString());
+    bool hasParameterName(const QString &paramName, const QString &paramType = QString());
 
 private:
     QString mergeBlockToLine(const QStringList &block);
 
 private:
-    Component * m_parent;
+    Component *m_parent;
     /*
         param [in] line
         param [out] lastTokenEnclosed if the last token-parameter is not enclosed
@@ -93,6 +95,6 @@ private:
 
 };
 
-Q_DECLARE_METATYPE(Command*)
+Q_DECLARE_METATYPE(Command *)
 
 #endif

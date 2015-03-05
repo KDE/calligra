@@ -33,16 +33,16 @@
 
 enum { ACTION_RESET_EVERYTHING, ACTION_RESET_SELECTED_RING, ACTION_RESET_EVERY_RING, ACTION_RESET_LIGHT };
 
-struct ArtisticColorSelectorUI: public QWidget, public Ui_wdgArtisticColorSelector
-{
-    ArtisticColorSelectorUI() {
+struct ArtisticColorSelectorUI: public QWidget, public Ui_wdgArtisticColorSelector {
+    ArtisticColorSelectorUI()
+    {
         setupUi(this);
     }
 };
 
-struct ColorPreferencesPopupUI: public QWidget, public Ui_wdgColorPreferencesPopup
-{
-    ColorPreferencesPopupUI() {
+struct ColorPreferencesPopupUI: public QWidget, public Ui_wdgColorPreferencesPopup {
+    ColorPreferencesPopupUI()
+    {
         setupUi(this);
     }
 };
@@ -78,26 +78,33 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock():
     m_preferencesUI->numRingsSlider->setValue(m_selectorUI->colorSelector->getNumRings());
     m_preferencesUI->numLightPiecesSlider->setValue(m_selectorUI->colorSelector->getNumLightPieces());
     m_preferencesUI->bnInverseSat->setChecked(m_selectorUI->colorSelector->isSaturationInverted());
-    
-    switch(m_selectorUI->colorSelector->getColorSpace())
-    {
-        case KisColor::HSV: { m_preferencesUI->bnHsv->setChecked(true); } break;
-        case KisColor::HSI: { m_preferencesUI->bnHsi->setChecked(true); } break;
-        case KisColor::HSL: { m_preferencesUI->bnHsl->setChecked(true); } break;
-        case KisColor::HSY: { m_preferencesUI->bnHsy->setChecked(true); } break;
+
+    switch (m_selectorUI->colorSelector->getColorSpace()) {
+    case KisColor::HSV: {
+        m_preferencesUI->bnHsv->setChecked(true);
+    } break;
+    case KisColor::HSI: {
+        m_preferencesUI->bnHsi->setChecked(true);
+    } break;
+    case KisColor::HSL: {
+        m_preferencesUI->bnHsl->setChecked(true);
+    } break;
+    case KisColor::HSY: {
+        m_preferencesUI->bnHsy->setChecked(true);
+    } break;
     }
-    
-    connect(m_preferencesUI->numLightPiecesSlider, SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
-    connect(m_preferencesUI->numPiecesSlider     , SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
-    connect(m_preferencesUI->numRingsSlider      , SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
-    connect(m_preferencesUI->bnInverseSat        , SIGNAL(clicked(bool))                          , SLOT(slotPreferenceChanged()));
-    connect(m_selectorUI->colorSelector          , SIGNAL(sigFgColorChanged(const KisColor&))     , SLOT(slotFgColorChanged(const KisColor&)));
-    connect(m_selectorUI->colorSelector          , SIGNAL(sigBgColorChanged(const KisColor&))     , SLOT(slotBgColorChanged(const KisColor&)));
-    connect(m_hsxButtons                         , SIGNAL(buttonClicked(int))                     , SLOT(slotColorSpaceSelected(int)));
-    connect(m_preferencesUI->bnDefault           , SIGNAL(clicked(bool))                          , SLOT(slotResetDefaultSettings()));
-    connect(m_selectorUI->bnAbsLight             , SIGNAL(toggled(bool))                          , SLOT(slotLightModeChanged(bool)));
-    connect(m_resetMenu                          , SIGNAL(triggered(QAction*))                    , SLOT(slotMenuActionTriggered(QAction*)));
-    
+
+    connect(m_preferencesUI->numLightPiecesSlider, SIGNAL(valueChanged(int)), SLOT(slotPreferenceChanged()));
+    connect(m_preferencesUI->numPiecesSlider, SIGNAL(valueChanged(int)), SLOT(slotPreferenceChanged()));
+    connect(m_preferencesUI->numRingsSlider, SIGNAL(valueChanged(int)), SLOT(slotPreferenceChanged()));
+    connect(m_preferencesUI->bnInverseSat, SIGNAL(clicked(bool)), SLOT(slotPreferenceChanged()));
+    connect(m_selectorUI->colorSelector, SIGNAL(sigFgColorChanged(KisColor)), SLOT(slotFgColorChanged(KisColor)));
+    connect(m_selectorUI->colorSelector, SIGNAL(sigBgColorChanged(KisColor)), SLOT(slotBgColorChanged(KisColor)));
+    connect(m_hsxButtons, SIGNAL(buttonClicked(int)), SLOT(slotColorSpaceSelected(int)));
+    connect(m_preferencesUI->bnDefault, SIGNAL(clicked(bool)), SLOT(slotResetDefaultSettings()));
+    connect(m_selectorUI->bnAbsLight, SIGNAL(toggled(bool)), SLOT(slotLightModeChanged(bool)));
+    connect(m_resetMenu, SIGNAL(triggered(QAction*)), SLOT(slotMenuActionTriggered(QAction*)));
+
     setWidget(m_selectorUI);
 }
 
@@ -108,32 +115,34 @@ ArtisticColorSelectorDock::~ArtisticColorSelectorDock()
     delete m_resetMenu;
 }
 
-void ArtisticColorSelectorDock::setMainWindow(KisViewManager* kisview)
+void ArtisticColorSelectorDock::setMainWindow(KisViewManager *kisview)
 {
     m_resourceProvider = kisview->resourceProvider();
     m_selectorUI->colorSelector->setFgColor(m_resourceProvider->resourceManager()->foregroundColor().toQColor());
     m_selectorUI->colorSelector->setBgColor(m_resourceProvider->resourceManager()->backgroundColor().toQColor());
-    connect(m_resourceProvider->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            SLOT(slotCanvasResourceChanged(int, const QVariant&)));
+    connect(m_resourceProvider->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            SLOT(slotCanvasResourceChanged(int,QVariant)));
 }
 
-void ArtisticColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant& value)
+void ArtisticColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant &value)
 {
-    if(key == KoCanvasResourceManager::ForegroundColor)
+    if (key == KoCanvasResourceManager::ForegroundColor) {
         m_selectorUI->colorSelector->setFgColor(value.value<KoColor>().toQColor());
+    }
 
-    if(key == KoCanvasResourceManager::BackgroundColor)
+    if (key == KoCanvasResourceManager::BackgroundColor) {
         m_selectorUI->colorSelector->setBgColor(value.value<KoColor>().toQColor());
+    }
 }
 
-void ArtisticColorSelectorDock::slotFgColorChanged(const KisColor& color)
+void ArtisticColorSelectorDock::slotFgColorChanged(const KisColor &color)
 {
     m_resourceProvider->resourceManager()->setForegroundColor(
         KoColor(color.getQColor(), m_resourceProvider->resourceManager()->foregroundColor().colorSpace())
     );
 }
 
-void ArtisticColorSelectorDock::slotBgColorChanged(const KisColor& color)
+void ArtisticColorSelectorDock::slotBgColorChanged(const KisColor &color)
 {
     m_resourceProvider->resourceManager()->setBackgroundColor(
         KoColor(color.getQColor(), m_resourceProvider->resourceManager()->backgroundColor().colorSpace())
@@ -153,10 +162,9 @@ void ArtisticColorSelectorDock::slotPreferenceChanged()
     m_selectorUI->colorSelector->setInverseSaturation(m_preferencesUI->bnInverseSat->isChecked());
 }
 
-void ArtisticColorSelectorDock::slotMenuActionTriggered(QAction* action)
+void ArtisticColorSelectorDock::slotMenuActionTriggered(QAction *action)
 {
-    switch(action->data().toInt())
-    {
+    switch (action->data().toInt()) {
     case ACTION_RESET_SELECTED_RING:
         m_selectorUI->colorSelector->resetSelectedRing();
         break;
@@ -198,8 +206,6 @@ void ArtisticColorSelectorDock::slotLightModeChanged(bool setToAbsolute)
 {
     m_selectorUI->colorSelector->setLight(m_selectorUI->colorSelector->getLight(), !setToAbsolute);
 }
-
-
 
 void ArtisticColorSelectorDock::setCanvas(KoCanvasBase *canvas)
 {

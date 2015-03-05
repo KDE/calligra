@@ -40,19 +40,19 @@ class APPLIXWORDImport : public KoFilter
     Q_OBJECT
 
 public:
-    APPLIXWORDImport(QObject *parent, const QVariantList&);
+    APPLIXWORDImport(QObject *parent, const QVariantList &);
     virtual ~APPLIXWORDImport() {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 private:
-    QChar   specCharfind(QChar , QChar);
+    QChar   specCharfind(QChar, QChar);
     QString readTagLine(QTextStream &);
     void    replaceSpecial(QString &);
     QString nextLine(QTextStream &);
     int     readHeader(QTextStream &stream);
     bool createMeta(KoOdfWriteStore &store);
-    bool parseFontProperty(const QString& type, KoGenStyle& style) const;
+    bool parseFontProperty(const QString &type, KoGenStyle &style) const;
 
 private:
     int m_stepsize;

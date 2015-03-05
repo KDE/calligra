@@ -58,7 +58,6 @@ KisClipboard::KisClipboard()
     connect(QApplication::clipboard(), SIGNAL(dataChanged()),
             this, SLOT(clipboardDataChanged()));
 
-
 }
 
 KisClipboard::~KisClipboard()
@@ -66,28 +65,28 @@ KisClipboard::~KisClipboard()
     dbgRegistry << "deleting KisClipBoard";
 }
 
-KisClipboard* KisClipboard::instance()
+KisClipboard *KisClipboard::instance()
 {
     K_GLOBAL_STATIC(KisClipboard, s_instance);
     qAddPostRoutine(s_instance.destroy); // make sure we get destroyed first.
     return s_instance;
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
+void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint &topLeft)
 {
-    if (!dev)
+    if (!dev) {
         return;
+    }
 
     m_hasClip = true;
 
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
     QByteArray mimeType("application/x-krita-selection");
-    KoStore* store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
+    KoStore *store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
     KisStorePaintDeviceWriter writer(store);
     Q_ASSERT(store);
     Q_ASSERT(!store->bad());
-    
 
     // Layer data
     if (store->open("layerdata")) {
@@ -172,8 +171,8 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
     if (cbData && cbData->hasFormat(mimeType)) {
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
-        KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
-        
+        KoStore *store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
+
         const KoColorProfile *profile = 0;
 
         QString csDepth, csModel;
@@ -230,7 +229,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
                 QRect clipBounds = clip->exactBounds();
 
                 if (!imageBounds.contains(clipBounds) &&
-                    !imageBounds.intersects(clipBounds)) {
+                        !imageBounds.intersects(clipBounds)) {
 
                     QPoint diff = imageBounds.center() - clipBounds.center();
                     clip->setX(clip->x() + diff.x());
@@ -245,8 +244,9 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
     if (!clip) {
         QImage qimage = cb->image();
 
-        if (qimage.isNull())
+        if (qimage.isNull()) {
             return KisPaintDeviceSP(0);
+        }
 
         KisConfig cfg;
 
@@ -269,10 +269,11 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
 
         }
 
-        const KoColorSpace * cs;
+        const KoColorSpace *cs;
         const KoColorProfile *profile = 0;
-        if (behaviour == PASTE_ASSUME_MONITOR)
+        if (behaviour == PASTE_ASSUME_MONITOR) {
             profile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
+        }
 
         cs = KoColorSpaceRegistry::instance()->rgb8(profile);
         if (!cs) {
@@ -302,11 +303,13 @@ void KisClipboard::clipboardDataChanged()
         const QMimeData *cbData = cb->mimeData();
         QByteArray mimeType("application/x-krita-selection");
 
-        if (cbData && cbData->hasFormat(mimeType))
+        if (cbData && cbData->hasFormat(mimeType)) {
             m_hasClip = true;
+        }
 
-        if (!qimage.isNull())
+        if (!qimage.isNull()) {
             m_hasClip = true;
+        }
     }
     if (m_hasClip) {
         emit clipCreated();
@@ -314,7 +317,6 @@ void KisClipboard::clipboardDataChanged()
     m_pushedClipboard = false;
     emit clipChanged();
 }
-
 
 bool KisClipboard::hasClip() const
 {
@@ -333,7 +335,7 @@ QSize KisClipboard::clipSize() const
     if (cbData && cbData->hasFormat(mimeType)) {
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
-        KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
+        KoStore *store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
         const KoColorProfile *profile = 0;
         QString csDepth, csModel;
 

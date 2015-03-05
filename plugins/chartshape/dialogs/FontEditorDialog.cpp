@@ -18,14 +18,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #include "FontEditorDialog.h"
 
 #include <klocale.h>
 #include <kfontchooser.h>
 
 using namespace KChart;
-
 
 FontEditorDialog::FontEditorDialog(QWidget *parent)
     : KDialog(parent)

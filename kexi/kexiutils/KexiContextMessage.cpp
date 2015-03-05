@@ -36,30 +36,31 @@ class KexiContextMessage::Private
 {
 public:
     Private() : defaultAction(0), contentsWidget(0) {}
-    ~Private() {
+    ~Private()
+    {
     }
     QString text;
-    QList<QAction*> actions;
-    QSet<QAction*> leftButtonAlignment;
-    QAction* defaultAction;
+    QList<QAction *> actions;
+    QSet<QAction *> leftButtonAlignment;
+    QAction *defaultAction;
     QWidget *contentsWidget;
 };
 
 // ----
 
-KexiContextMessage::KexiContextMessage(const QString& text)
- : d(new Private)
+KexiContextMessage::KexiContextMessage(const QString &text)
+    : d(new Private)
 {
     setText(text);
 }
 
-KexiContextMessage::KexiContextMessage(const KexiContextMessage& other)
- : d(new Private(*other.d))
+KexiContextMessage::KexiContextMessage(const KexiContextMessage &other)
+    : d(new Private(*other.d))
 {
 }
 
 KexiContextMessage::KexiContextMessage(QWidget *contentsWidget)
- : d(new Private)
+    : d(new Private)
 {
     d->contentsWidget = contentsWidget;
 }
@@ -79,35 +80,35 @@ void KexiContextMessage::setText(const QString text)
     d->text = text;
 }
 
-void KexiContextMessage::addAction(QAction* action, ButtonAlignment alignment)
+void KexiContextMessage::addAction(QAction *action, ButtonAlignment alignment)
 {
     d->actions.append(action);
     if (alignment == AlignLeft) {
         d->leftButtonAlignment.insert(action);
     }
 }
-    
-QList<QAction*> KexiContextMessage::actions() const
+
+QList<QAction *> KexiContextMessage::actions() const
 {
     return d->actions;
 }
 
-KexiContextMessage::ButtonAlignment KexiContextMessage::buttonAlignment(QAction* action) const
+KexiContextMessage::ButtonAlignment KexiContextMessage::buttonAlignment(QAction *action) const
 {
     return d->leftButtonAlignment.contains(action) ? AlignLeft : AlignRight;
 }
 
-void KexiContextMessage::setDefaultAction(QAction* action)
+void KexiContextMessage::setDefaultAction(QAction *action)
 {
     d->defaultAction = action;
 }
 
-QAction* KexiContextMessage::defaultAction() const
+QAction *KexiContextMessage::defaultAction() const
 {
     return d->defaultAction;
 }
 
-QWidget* KexiContextMessage::contentsWidget() const
+QWidget *KexiContextMessage::contentsWidget() const
 {
     return d->contentsWidget;
 }
@@ -117,14 +118,15 @@ QWidget* KexiContextMessage::contentsWidget() const
 struct Palette {
     Palette() {}
     QPalette palette;
-    QSet<KexiContextMessageWidget*> set;
+    QSet<KexiContextMessageWidget *> set;
 };
 
-class PaletteForPages : public QHash<QWidget*, Palette*>
+class PaletteForPages : public QHash<QWidget *, Palette *>
 {
 public:
     PaletteForPages() {}
-    ~PaletteForPages() {
+    ~PaletteForPages()
+    {
         qDeleteAll(*this);
     }
 };
@@ -135,13 +137,14 @@ class KexiContextMessageWidget::Private
 {
 public:
     explicit Private(KexiContextMessageWidget *_q)
-     : q(_q)
-     , resizeTrackingPolicy(0)
-     , hasActions(false)
-     , eventBlocking(true)
+        : q(_q)
+        , resizeTrackingPolicy(0)
+        , hasActions(false)
+        , eventBlocking(true)
     {
     }
-    ~Private() {
+    ~Private()
+    {
     }
 
     void setDisabledColorsForPage()
@@ -157,9 +160,9 @@ public:
             QPalette pal(page->palette());
             for (int i = 0; i < QPalette::NColorRoles; i++) {
                 pal.setBrush(QPalette::Active, static_cast<QPalette::ColorRole>(i),
-                            pal.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
+                             pal.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
                 pal.setBrush(QPalette::Inactive, static_cast<QPalette::ColorRole>(i),
-                            pal.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
+                             pal.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
             }
             page->setPalette(pal);
         }
@@ -199,35 +202,35 @@ public:
 };
 
 KexiContextMessageWidget::KexiContextMessageWidget(
-    QWidget *page, QFormLayout* layout,
-    QWidget *context, const KexiContextMessage& message)
- : KMessageWidget(message.contentsWidget(), 0)
- , d(new Private(this))
+    QWidget *page, QFormLayout *layout,
+    QWidget *context, const KexiContextMessage &message)
+    : KMessageWidget(message.contentsWidget(), 0)
+    , d(new Private(this))
 {
     init(page, layout, context, message);
 }
 
 KexiContextMessageWidget::KexiContextMessageWidget(
-   QFormLayout* layout,
-   QWidget *context, const KexiContextMessage& message)
- : KMessageWidget()
- , d(new Private(this))
+    QFormLayout *layout,
+    QWidget *context, const KexiContextMessage &message)
+    : KMessageWidget()
+    , d(new Private(this))
 {
     init(0, layout, context, message);
 }
 
 KexiContextMessageWidget::KexiContextMessageWidget(
-    QFormLayout* layout, QWidget *context, const QString& message)
- : KMessageWidget()
- , d(new Private(this))
+    QFormLayout *layout, QWidget *context, const QString &message)
+    : KMessageWidget()
+    , d(new Private(this))
 {
     KexiContextMessage contextMessage(message);
     init(0, layout, context, contextMessage);
 }
 
 void KexiContextMessageWidget::init(
-    QWidget *page, QFormLayout* layout,
-    QWidget *context, const KexiContextMessage& message)
+    QWidget *page, QFormLayout *layout,
+    QWidget *context, const KexiContextMessage &message)
 {
     d->context = context;
     d->page = page;
@@ -242,7 +245,7 @@ void KexiContextMessageWidget::init(
     d->hasActions = !message.actions().isEmpty();
     if ((d->page && d->hasActions) || d->contentsWidget) {
         d->setDisabledColorsForPage();
-        foreach (KexiLinkWidget* w, d->page->findChildren<KexiLinkWidget*>()) {
+        foreach (KexiLinkWidget *w, d->page->findChildren<KexiLinkWidget *>()) {
             //kDebug() << w << w->isEnabled();
             if (w->isEnabled()) {
                 d->enabledLinks.append(w);
@@ -250,7 +253,7 @@ void KexiContextMessageWidget::init(
             }
         }
         KexiUtils::installRecursiveEventFilter(d->page, this); // before inserting,
-                                                               // so 'this' is not disabled
+        // so 'this' is not disabled
     }
 
     if (layout) {
@@ -258,15 +261,14 @@ void KexiContextMessageWidget::init(
         layout->getWidgetPosition(context, &row, 0);
         layout->insertRow(row, QString(), this);
         setCalloutPointerDirection(KMessageWidget::Down);
-    }
-    else {
+    } else {
         if (d->page) {
             setParent(page);
         }
     }
 
     if (d->hasActions) {
-        foreach(QAction* action, message.actions()) {
+        foreach (QAction *action, message.actions()) {
             KMessageWidget::addAction(action);
             if (KexiContextMessage::AlignLeft == message.buttonAlignment(action)) {
                 KMessageWidget::setButtonLeftAlignedForAction(action);
@@ -277,10 +279,10 @@ void KexiContextMessageWidget::init(
         if (message.defaultAction()) {
             setDefaultAction(message.defaultAction());
         }
-    }
-    else {
-        if (d->context)
+    } else {
+        if (d->context) {
             d->context->setFocus();
+        }
     }
     QTimer::singleShot(10, this, SLOT(animatedShow()));
 }
@@ -300,9 +302,9 @@ KexiContextMessageWidget::~KexiContextMessageWidget()
         // kDebug() << d->nextFocusWidget << d->nextFocusWidget->focusProxy();
         setFocus(); // a hack to force focus update
         d->nextFocusWidget->setFocus();
-    }
-    else if (d->context)
+    } else if (d->context) {
         d->context->setFocus();
+    }
     delete d;
 }
 
@@ -326,11 +328,11 @@ void KexiContextMessageWidget::actionTriggered()
     animatedHide();
 }
 
-bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
+bool KexiContextMessageWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (d->contentsWidget && event->type() == QEvent::MouseButtonRelease) {
         // hide the message when clicking outside when contents widget is present
-        QMouseEvent *me = static_cast<QMouseEvent*>(event);
+        QMouseEvent *me = static_cast<QMouseEvent *>(event);
         QWidget *w = QApplication::widgetAt(me->globalPos());
         //kDebug() << watched << w << w->parentWidget();
         if (!KexiUtils::hasParent(this, w)) {
@@ -338,7 +340,7 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
             return true;
         }
     }
-    
+
     if (watched == d->page && event->type() == QEvent::Resize) {
         //kDebug() << "RESIZE:" << watched;
         if (d->trackedWidget) {
@@ -377,7 +379,7 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
     case QEvent::Drop:
     case QEvent::EnabledChange:
     case QEvent::Enter:
-#ifdef QT_KEYPAD_NAVIGATION 
+#ifdef QT_KEYPAD_NAVIGATION
     case QEvent::EnterEditFocus:
     case QEvent::LeaveEditFocus:
 #endif
@@ -417,8 +419,9 @@ bool KexiContextMessageWidget::eventFilter(QObject* watched, QEvent* event)
 #ifndef QT_NO_GESTURES
     case QEvent::Gesture:
 #endif
-        if (d->eventBlocking)
+        if (d->eventBlocking) {
             return true;
+        }
     default:;
     }
     return KMessageWidget::eventFilter(watched, event);
@@ -429,8 +432,8 @@ void KexiContextMessageWidget::setNextFocusWidget(QWidget *widget)
     d->nextFocusWidget = widget;
 }
 
-void KexiContextMessageWidget::setCalloutPointerPosition(const QPoint& globalPos,
-                                                         QWidget *trackedWidget)
+void KexiContextMessageWidget::setCalloutPointerPosition(const QPoint &globalPos,
+        QWidget *trackedWidget)
 {
     KMessageWidget::setCalloutPointerPosition(globalPos);
     // save current position so delta can be easier computed in the future
@@ -459,7 +462,7 @@ void KexiContextMessageWidget::setPaletteInherited()
     if (d->contentsWidget) {
         // fix palette that gets messed after resize
         const QBrush bbrush(backgroundBrush());
-        foreach (QWidget* w, findChildren<QWidget*>()) {
+        foreach (QWidget *w, findChildren<QWidget *>()) {
             QPalette pal(w->palette());
             pal.setBrush(QPalette::Base, bbrush);
             pal.setBrush(QPalette::Window, bbrush);

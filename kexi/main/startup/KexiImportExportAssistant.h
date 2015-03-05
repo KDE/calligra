@@ -29,12 +29,12 @@ class KAction;
 class KexiImportExportAssistant;
 
 class KexiMainImportExportPage : public KexiAssistantPage,
-                                 public Ui::KexiMainImportExportPage
+    public Ui::KexiMainImportExportPage
 {
     Q_OBJECT
 public:
     explicit KexiMainImportExportPage(KexiImportExportAssistant *assistant,
-                                      QWidget* parent = 0);
+                                      QWidget *parent = 0);
     ~KexiMainImportExportPage();
 };
 
@@ -45,15 +45,15 @@ public:
     KexiImportExportAssistant(
         const KAction *action_project_import_export_send_,
         const KAction *action_import_project_,
-        QWidget* parent = 0);
+        QWidget *parent = 0);
     virtual ~KexiImportExportAssistant();
 
     const KAction *action_project_import_export_send;
     const KAction *action_import_project;
 
 public Q_SLOTS:
-    virtual void nextPageRequested(KexiAssistantPage* page);
-    virtual void cancelRequested(KexiAssistantPage* page);
+    virtual void nextPageRequested(KexiAssistantPage *page);
+    virtual void cancelRequested(KexiAssistantPage *page);
 
 Q_SIGNALS:
     void importProject();
@@ -61,7 +61,7 @@ Q_SIGNALS:
 private:
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

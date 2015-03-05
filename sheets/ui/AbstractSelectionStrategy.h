@@ -55,8 +55,8 @@ public:
      */
     virtual ~AbstractSelectionStrategy();
 
-    virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual KUndo2Command* createCommand();
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    virtual KUndo2Command *createCommand();
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
 
     /**
@@ -85,12 +85,12 @@ public:
 
 protected:
     CellToolBase *cellTool() const;
-    Selection* selection() const;
-    const QPointF& startPosition() const;
+    Selection *selection() const;
+    const QPointF &startPosition() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

@@ -17,7 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_SELECTION_FILTERS_H
 #define KIS_SELECTION_FILTERS_H
 
@@ -28,7 +27,6 @@
 #include <QString>
 
 class KUndo2MagicString;
-
 
 class KRITAIMAGE_EXPORT KisSelectionFilter
 {
@@ -46,7 +44,7 @@ protected:
 
     void rotatePointers(quint8  **p, quint32 n);
 
-    void computeTransition(quint8* transition, quint8** buf, qint32 width);
+    void computeTransition(quint8 *transition, quint8 **buf, qint32 width);
 };
 
 class KRITAIMAGE_EXPORT KisErodeSelectionFilter : public KisSelectionFilter

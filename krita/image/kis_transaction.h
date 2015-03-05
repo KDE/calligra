@@ -34,25 +34,30 @@
 class KisTransaction
 {
 public:
-    KisTransaction(KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1) {
+    KisTransaction(KisPaintDeviceSP device, KUndo2Command *parent = 0, int timedID = -1)
+    {
         m_transactionData = new KisTransactionData(KUndo2MagicString(), device, true, parent);
         m_transactionData->setTimedID(timedID);
     }
 
-    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1) {
+    KisTransaction(const KUndo2MagicString &name, KisPaintDeviceSP device, KUndo2Command *parent = 0, int timedID = -1)
+    {
         m_transactionData = new KisTransactionData(name, device, true, parent);
         m_transactionData->setTimedID(timedID);
     }
 
-    virtual ~KisTransaction() {
+    virtual ~KisTransaction()
+    {
         delete m_transactionData;
     }
 
-    KUndo2Command* undoCommand() {
+    KUndo2Command *undoCommand()
+    {
         return m_transactionData;
     }
 
-    void commit(KisUndoAdapter* undoAdapter) {
+    void commit(KisUndoAdapter *undoAdapter)
+    {
         Q_ASSERT_X(m_transactionData, "KisTransaction::commit()",
                    "the transaction has been tried to be committed twice");
 
@@ -61,7 +66,8 @@ public:
         m_transactionData = 0;
     }
 
-    void commit(KisPostExecutionUndoAdapter* undoAdapter) {
+    void commit(KisPostExecutionUndoAdapter *undoAdapter)
+    {
         Q_ASSERT_X(m_transactionData, "KisTransaction::commit()",
                    "the transaction has been tried to be committed twice");
 
@@ -71,7 +77,8 @@ public:
         m_transactionData = 0;
     }
 
-    KUndo2Command* endAndTake() {
+    KUndo2Command *endAndTake()
+    {
         Q_ASSERT_X(m_transactionData, "KisTransaction::endAndTake()",
                    "the transaction has been tried to be committed twice");
 
@@ -82,7 +89,8 @@ public:
         return transactionData;
     }
 
-    void end() {
+    void end()
+    {
         Q_ASSERT_X(m_transactionData, "KisTransaction::end()",
                    "nothing to end!");
         /**
@@ -94,7 +102,8 @@ public:
         m_transactionData = 0;
     }
 
-    void revert() {
+    void revert()
+    {
         Q_ASSERT_X(m_transactionData, "KisTransaction::reverted()",
                    "the transaction is tried to be reverted()"
                    "after it has already been added to undo adapter");
@@ -108,7 +117,8 @@ public:
         m_transactionData = 0;
     }
 
-    KUndo2MagicString text() const {
+    KUndo2MagicString text() const
+    {
         Q_ASSERT_X(m_transactionData, "KisTransaction::text()",
                    "the name has been requested after the transaction"
                    "has already been ended");
@@ -117,18 +127,18 @@ public:
 
 protected:
     KisTransaction() : m_transactionData(0) {}
-    KisTransactionData* m_transactionData;
+    KisTransactionData *m_transactionData;
 };
 
 class KisSelectionTransaction : public KisTransaction
 {
 public:
-    KisSelectionTransaction(KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
+    KisSelectionTransaction(KisPixelSelectionSP pixelSelection, KUndo2Command *parent = 0)
     {
         m_transactionData = new KisTransactionData(KUndo2MagicString(), pixelSelection, false, parent);
     }
 
-    KisSelectionTransaction(const KUndo2MagicString& name, KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
+    KisSelectionTransaction(const KUndo2MagicString &name, KisPixelSelectionSP pixelSelection, KUndo2Command *parent = 0)
     {
         m_transactionData = new KisTransactionData(name, pixelSelection, false, parent);
     }

@@ -24,7 +24,6 @@
 #include <kdialog.h>
 #include <kicon.h>
 
-
 #include "ui_wdg_canvassize.h"
 
 class WdgCanvasSize : public QWidget, public Ui::WdgCanvasSize
@@ -32,12 +31,11 @@ class WdgCanvasSize : public QWidget, public Ui::WdgCanvasSize
     Q_OBJECT
 
 public:
-    WdgCanvasSize(QWidget *parent) : QWidget(parent) {
+    WdgCanvasSize(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
-
-
 
 class DlgCanvasSize: public KDialog
 {
@@ -47,7 +45,7 @@ class DlgCanvasSize: public KDialog
 public:
     enum anchor { NORTH_WEST = 0, NORTH, NORTH_EAST, WEST, CENTER, EAST, SOUTH_WEST, SOUTH, SOUTH_EAST, NONE};
 
-    DlgCanvasSize(QWidget * parent, int width, int height, double resolution);
+    DlgCanvasSize(QWidget *parent, int width, int height, double resolution);
     ~DlgCanvasSize();
 
     qint32 width();
@@ -97,10 +95,9 @@ private:
     int m_newWidth, m_newHeight;
     int m_xOffset, m_yOffset;
 
-    WdgCanvasSize * m_page;
+    WdgCanvasSize *m_page;
     KIcon m_anchorIcons[9];
     QButtonGroup *m_group;
 };
-
 
 #endif // DLG_CANVASSIZE

@@ -31,27 +31,29 @@
 #include <kis_node.h>
 #include <kis_image.h>
 
-class PresetModel::Private {
+class PresetModel::Private
+{
 public:
     Private()
         : view(0)
     {
-         rserver = KisResourceServerProvider::instance()->paintOpPresetServer();;
+        rserver = KisResourceServerProvider::instance()->paintOpPresetServer();;
     }
 
-    KisPaintOpPresetResourceServer * rserver;
+    KisPaintOpPresetResourceServer *rserver;
     QString currentPreset;
-    KisViewManager* view;
+    KisViewManager *view;
 
-    KisPaintOpPresetSP defaultPreset(const KoID& paintOp)
+    KisPaintOpPresetSP defaultPreset(const KoID &paintOp)
     {
         QString defaultName = paintOp.id() + ".kpp";
         QString path = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
 
         KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 
-        if (!preset->load())
+        if (!preset->load()) {
             preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp);
+        }
 
         Q_ASSERT(preset);
         Q_ASSERT(preset->valid());
@@ -59,7 +61,7 @@ public:
         return preset;
     }
 
-    void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
+    void setCurrentPaintop(const KoID &paintop, KisPaintOpPresetSP preset)
     {
         preset = (!preset) ? defaultPreset(paintop) : preset;
 
@@ -70,7 +72,7 @@ public:
 #if 0
         preset->settings()->setNode(view->resourceProvider()->currentNode());
 #endif
-        KisPaintOpFactory* paintOp     = KisPaintOpRegistry::instance()->get(paintop.id());
+        KisPaintOpFactory *paintOp     = KisPaintOpRegistry::instance()->get(paintop.id());
         QString            pixFilename = KisFactory::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
 
         view->resourceProvider()->setPaintOpPreset(preset);
@@ -95,18 +97,17 @@ PresetModel::~PresetModel()
 
 int PresetModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
     return d->rserver->resources().count();
 }
 
 QVariant PresetModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
-    if (index.isValid())
-    {
-        switch(role)
-        {
+    if (index.isValid()) {
+        switch (role) {
         case ImageRole:
             result = QString("image://presetthumb/%1").arg(index.row());
             break;
@@ -128,10 +129,8 @@ QVariant PresetModel::headerData(int section, Qt::Orientation orientation, int r
 {
     Q_UNUSED(orientation);
     QVariant result;
-    if (section == 0)
-    {
-        switch(role)
-        {
+    if (section == 0) {
+        switch (role) {
         case ImageRole:
             result = QString("Thumbnail");
             break;
@@ -146,17 +145,17 @@ QVariant PresetModel::headerData(int section, Qt::Orientation orientation, int r
     return result;
 }
 
-QObject* PresetModel::view() const
+QObject *PresetModel::view() const
 {
     return d->view;
 }
 
-void PresetModel::setView(QObject* newView)
+void PresetModel::setView(QObject *newView)
 {
-    d->view = qobject_cast<KisViewManager*>( newView );
+    d->view = qobject_cast<KisViewManager *>(newView);
     if (d->view && d->view->canvasBase()) {
-        connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                this, SLOT(resourceChanged(int, const QVariant&)));
+        connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                this, SLOT(resourceChanged(int,QVariant)));
     }
     emit viewChanged();
 }
@@ -177,10 +176,8 @@ int PresetModel::nameToIndex(QString presetName) const
 {
     int index = 0;
     QList<KisPaintOpPresetSP> resources = d->rserver->resources();
-    for(int i = 0; i < resources.count(); ++i)
-    {
-        if (resources.at(i)->name() == presetName || resources.at(i)->name().replace(QLatin1String("_"), QLatin1String(" ")) == presetName)
-        {
+    for (int i = 0; i < resources.count(); ++i) {
+        if (resources.at(i)->name() == presetName || resources.at(i)->name().replace(QLatin1String("_"), QLatin1String(" ")) == presetName) {
             index = i;
             break;
         }
@@ -190,23 +187,22 @@ int PresetModel::nameToIndex(QString presetName) const
 
 void PresetModel::activatePreset(int index)
 {
-    if ( !d->view )
+    if (!d->view) {
         return;
+    }
 
     QList<KisPaintOpPresetSP> resources = d->rserver->resources();
     if (index >= 0 && index < resources.count())  {
-        KisPaintOpPresetSP preset = resources.at( index );
+        KisPaintOpPresetSP preset = resources.at(index);
         d->setCurrentPaintop(preset->paintOp(), preset);
     }
 }
 
-void PresetModel::resourceChanged(int /*key*/, const QVariant& /*v*/)
+void PresetModel::resourceChanged(int /*key*/, const QVariant & /*v*/)
 {
-    if (d->view)
-    {
+    if (d->view) {
         KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-        if (preset && d->currentPreset != preset->name())
-        {
+        if (preset && d->currentPreset != preset->name()) {
             d->currentPreset = preset->name();
             emit currentPresetChanged();
         }

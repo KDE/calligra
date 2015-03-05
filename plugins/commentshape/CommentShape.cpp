@@ -45,34 +45,34 @@
 
 #define TextShapeId "TextShapeID"
 
-CommentShape::CommentShape(KoDocumentResourceManager* resourceManager)
-: KoShapeContainer()
-, m_active(false)
+CommentShape::CommentShape(KoDocumentResourceManager *resourceManager)
+    : KoShapeContainer()
+    , m_active(false)
 {
     KoShapeContainer::setSize(initialsBoxSize);
 
     m_comment = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
-    if ( !m_comment ) {
+    if (!m_comment) {
 //         m_comment = new KoShape;
-        KMessageBox::error( 0, i18n("The plugin needed for displaying comments is not present."), i18n("Plugin Missing") );
+        KMessageBox::error(0, i18n("The plugin needed for displaying comments is not present."), i18n("Plugin Missing"));
     }
-    if ( dynamic_cast<KoTextShapeData*>( m_comment->userData() ) == 0 ) {
-        KMessageBox::error( 0, i18n("The plugin needed for displaying the comment is not compatible with the current version of the comment shape."),
-                            i18n("Plugin Incompatible") );
-        m_comment->setUserData( new KoTextShapeData );
+    if (dynamic_cast<KoTextShapeData *>(m_comment->userData()) == 0) {
+        KMessageBox::error(0, i18n("The plugin needed for displaying the comment is not compatible with the current version of the comment shape."),
+                           i18n("Plugin Incompatible"));
+        m_comment->setUserData(new KoTextShapeData);
     }
 
     m_comment->setSize(commentBoxSize);
     m_comment->setPosition(commentBoxPoint);
     m_comment->setVisible(false);
 
-    QLinearGradient* gradient= new QLinearGradient(commentBoxPoint, QPointF(commentBoxPoint.x(), commentBoxPoint.y() + commentBoxSize.height()));
+    QLinearGradient *gradient = new QLinearGradient(commentBoxPoint, QPointF(commentBoxPoint.x(), commentBoxPoint.y() + commentBoxSize.height()));
     gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
     gradient->setColorAt(0.0, Qt::yellow);
     gradient->setColorAt(1.0, QColor(254, 201, 7));
     m_comment->setBackground(new KoGradientBackground(gradient));
 
-    KoShapeStroke* stroke = new KoShapeStroke;
+    KoShapeStroke *stroke = new KoShapeStroke;
     stroke->setLineBrush(QBrush(Qt::black));
     stroke->setLineWidth(0.5);
     m_comment->setStroke(stroke);
@@ -80,7 +80,7 @@ CommentShape::CommentShape(KoDocumentResourceManager* resourceManager)
     addShape(m_comment);
 
     m_initials = new InitialsCommentShape();
-    m_initials->setSize(QSizeF(20,20));
+    m_initials->setSize(QSizeF(20, 20));
     m_initials->setSelectable(false);
     addShape(m_initials);
 }
@@ -91,35 +91,31 @@ CommentShape::~CommentShape()
     delete m_initials;
 }
 
-bool CommentShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& context)
+bool CommentShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     loadOdfAttributes(element, context, OdfPosition);
 
     KoXmlElement child;
-    forEachElement(child, element)
-    {
-        if(child.namespaceURI() == KoXmlNS::dc) {
-            if(child.localName() == "creator") {
+    forEachElement (child, element) {
+        if (child.namespaceURI() == KoXmlNS::dc) {
+            if (child.localName() == "creator") {
                 m_creator = child.text();
                 QStringList creatorNames = m_creator.split(' ');
                 QString initials;
-                if(KoApplication::isLeftToRight()) {
-                    foreach(const QString& name, creatorNames) {
+                if (KoApplication::isLeftToRight()) {
+                    foreach (const QString &name, creatorNames) {
                         initials += name.left(1);
                     }
-                }
-                else {
-                    foreach(const QString& name, creatorNames) {
+                } else {
+                    foreach (const QString &name, creatorNames) {
                         initials += name.right(1);
                     }
                 }
                 m_initials->setInitials(initials);
-            }
-            else if(child.localName() == "date") {
+            } else if (child.localName() == "date") {
                 m_date = QDate::fromString(child.text(), Qt::ISODate);
             }
-        }
-        else if(child.namespaceURI() == KoXmlNS::text && child.localName() == "p") {
+        } else if (child.namespaceURI() == KoXmlNS::text && child.localName() == "p") {
             commentData()->document()->setHtml(child.text().replace('\n', "<br>"));
         }
     }
@@ -127,9 +123,9 @@ bool CommentShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& c
     return true;
 }
 
-void CommentShape::saveOdf(KoShapeSavingContext& context) const
+void CommentShape::saveOdf(KoShapeSavingContext &context) const
 {
-    KoXmlWriter& writer = context.xmlWriter();
+    KoXmlWriter &writer = context.xmlWriter();
 
     writer.startElement("officeooo:annotation"); //TODO replace with standarized element name
     saveOdfAttributes(context, OdfPosition);
@@ -149,11 +145,11 @@ void CommentShape::saveOdf(KoShapeSavingContext& context) const
     writer.endElement();//officeooo:annotation
 }
 
-void CommentShape::paintComponent(QPainter& /*painter*/, const KoViewConverter& /*converter*/, KoShapePaintingContext &)
+void CommentShape::paintComponent(QPainter & /*painter*/, const KoViewConverter & /*converter*/, KoShapePaintingContext &)
 {
 }
 
-void CommentShape::setSize(const QSizeF& /*size*/)
+void CommentShape::setSize(const QSizeF & /*size*/)
 {
     KoShapeContainer::setSize(initialsBoxSize);
 }
@@ -171,10 +167,9 @@ bool CommentShape::isActive() const
 void CommentShape::setActive(bool active)
 {
     m_active = active;
-    if(!m_active) {
+    if (!m_active) {
         KoShapeContainer::setSize(initialsBoxSize);
-    }
-    else {
+    } else {
         KoShapeContainer::setSize(wholeSize);
     }
     m_initials->setActive(m_active);
@@ -182,8 +177,7 @@ void CommentShape::setActive(bool active)
     update();
 }
 
-
-KoTextShapeData* CommentShape::commentData() const
+KoTextShapeData *CommentShape::commentData() const
 {
-    return qobject_cast<KoTextShapeData*>( m_comment->userData() );
+    return qobject_cast<KoTextShapeData *>(m_comment->userData());
 }

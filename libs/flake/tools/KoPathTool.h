@@ -64,7 +64,7 @@ public:
     /// reimplemented
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     /// reimplemented
     virtual void deactivate();
 
@@ -72,17 +72,17 @@ public:
     virtual void deleteSelection();
 
     /// reimplemented
-    virtual KoToolSelection* selection();
+    virtual KoToolSelection *selection();
 
     /// repaints the specified rect
     void repaint(const QRectF &repaintRect);
 
 public Q_SLOTS:
-    void documentResourceChanged(int key, const QVariant & res);
+    void documentResourceChanged(int key, const QVariant &res);
 
 Q_SIGNALS:
     void typeChanged(int types);
-    void pathChanged(KoPathShape* path); // TODO this is unused, can we remove this one?
+    void pathChanged(KoPathShape *path); // TODO this is unused, can we remove this one?
 protected:
     /// reimplemented
     virtual QList<QPointer<QWidget> >  createOptionWidgets();
@@ -91,7 +91,7 @@ private:
     struct PathSegment;
 
     void updateOptionsWidget();
-    PathSegment* segmentAtPoint(const QPointF &point);
+    PathSegment *segmentAtPoint(const QPointF &point);
 
 private Q_SLOTS:
     void pointTypeChanged(QAction *type);
@@ -116,7 +116,7 @@ protected:
 
 private:
 
-    KoPathToolHandle * m_activeHandle;       ///< the currently active handle
+    KoPathToolHandle *m_activeHandle;        ///< the currently active handle
     int m_handleRadius;    ///< the radius of the control point handles
     uint m_grabSensitivity; ///< the grab sensitivity
     QPointF m_lastPoint; ///< needed for interaction strategy

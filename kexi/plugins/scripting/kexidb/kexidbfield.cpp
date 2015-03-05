@@ -17,23 +17,23 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-
 #include "kexidbfield.h"
 
 using namespace Scripting;
 
-KexiDBField::KexiDBField(QObject* parent, ::KexiDB::Field* field, bool owner)
-        : QObject(parent)
-        , m_field(field)
-        , m_owner(owner)
+KexiDBField::KexiDBField(QObject *parent, ::KexiDB::Field *field, bool owner)
+    : QObject(parent)
+    , m_field(field)
+    , m_owner(owner)
 {
     setObjectName("KexiDBField");
 }
 
 KexiDBField::~KexiDBField()
 {
-    if (m_owner)
+    if (m_owner) {
         delete m_field;
+    }
 }
 
 const QString KexiDBField::type()
@@ -49,7 +49,7 @@ const QString KexiDBField::subType()
 {
     return m_field->subType();
 }
-void KexiDBField::setSubType(const QString& subtype)
+void KexiDBField::setSubType(const QString &subtype)
 {
     m_field->setSubType(subtype);
 }
@@ -139,7 +139,7 @@ const QString KexiDBField::name()
 {
     return m_field->name();
 }
-void KexiDBField::setName(const QString& name)
+void KexiDBField::setName(const QString &name)
 {
     m_field->setName(name);
 }
@@ -148,7 +148,7 @@ const QString KexiDBField::caption()
 {
     return m_field->caption();
 }
-void KexiDBField::setCaption(const QString& caption)
+void KexiDBField::setCaption(const QString &caption)
 {
     m_field->setCaption(caption);
 }
@@ -157,7 +157,7 @@ const QString KexiDBField::description()
 {
     return m_field->description();
 }
-void KexiDBField::setDescription(const QString& desc)
+void KexiDBField::setDescription(const QString &desc)
 {
     m_field->setDescription(desc);
 }
@@ -185,7 +185,7 @@ QVariant KexiDBField::defaultValue()
 {
     return m_field->defaultValue();
 }
-void KexiDBField::setDefaultValue(const QVariant& defaultvalue)
+void KexiDBField::setDefaultValue(const QVariant &defaultvalue)
 {
     m_field->setDefaultValue(defaultvalue);
 }

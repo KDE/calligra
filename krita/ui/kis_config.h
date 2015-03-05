@@ -63,7 +63,6 @@ public:
     int stackN();
     void setStackN(int N);
 
-
     qint32 defImageWidth() const;
     void defImageWidth(qint32 width) const;
 
@@ -95,7 +94,7 @@ public:
     /**
      * set the id of the default color model used for creating new images.
      */
-    void defColorModel(const QString & model) const;
+    void defColorModel(const QString &model) const;
 
     /**
      * @return the id of the default color depth used for creating new images.
@@ -104,7 +103,7 @@ public:
     /**
      * set the id of the default color depth used for creating new images.
      */
-    void setDefaultColorDepth(const QString & depth) const;
+    void setDefaultColorDepth(const QString &depth) const;
 
     /**
      * @return the id of the default color profile used for creating new images.
@@ -113,7 +112,7 @@ public:
     /**
      * set the id of the default color profile used for creating new images.
      */
-    void defColorProfile(const QString & depth) const;
+    void defColorProfile(const QString &depth) const;
 
     enumCursorStyle cursorStyle() const;
     enumCursorStyle getDefaultCursorStyle() const;
@@ -121,10 +120,10 @@ public:
 
     /// get the profile the user has selected for the given screen
     QString monitorProfile(int screen) const;
-    void setMonitorProfile(int screen, const QString & monitorProfile, bool override) const;
+    void setMonitorProfile(int screen, const QString &monitorProfile, bool override) const;
 
     QString monitorForScreen(int screen, const QString &defaultMonitor) const;
-    void setMonitorForScreen(int screen, const QString& monitor);
+    void setMonitorForScreen(int screen, const QString &monitor);
 
     /// Get the actual profile to be used for the given screen, which is
     /// either the screen profile set by the color management system or
@@ -132,16 +131,16 @@ public:
     const KoColorProfile *displayProfile(int screen) const;
 
     QString workingColorSpace() const;
-    void setWorkingColorSpace(const QString & workingColorSpace) const;
+    void setWorkingColorSpace(const QString &workingColorSpace) const;
 
     QString importProfile() const;
-    void setImportProfile(const QString & importProfile) const;
+    void setImportProfile(const QString &importProfile) const;
 
     QString printerColorSpace() const;
-    void setPrinterColorSpace(const QString & printerColorSpace) const;
+    void setPrinterColorSpace(const QString &printerColorSpace) const;
 
     QString printerProfile() const;
-    void setPrinterProfile(const QString & printerProfile) const;
+    void setPrinterProfile(const QString &printerProfile) const;
 
     bool useBlackPointCompensation() const;
     void setUseBlackPointCompensation(bool useBlackPointCompensation) const;
@@ -195,10 +194,10 @@ public:
     void setGridSubdivisionStyle(quint32 v) const;
 
     QColor getGridMainColor() const;
-    void setGridMainColor(const QColor & v) const;
+    void setGridMainColor(const QColor &v) const;
 
     QColor getGridSubdivisionColor() const;
-    void setGridSubdivisionColor(const QColor & v) const;
+    void setGridSubdivisionColor(const QColor &v) const;
 
     quint32 getGridHSpacing() const;
     void setGridHSpacing(quint32 v) const;
@@ -228,10 +227,10 @@ public:
     void setScrollingCheckers(bool scollCheckers) const;
 
     QColor checkersColor1() const;
-    void setCheckersColor1(const QColor & v) const;
+    void setCheckersColor1(const QColor &v) const;
 
     QColor checkersColor2() const;
-    void setCheckersColor2(const QColor & v) const;
+    void setCheckersColor2(const QColor &v) const;
 
     QColor canvasBorderColor() const;
     void setCanvasBorderColor(const QColor &color) const;
@@ -276,20 +275,20 @@ public:
     void setShowFilterGalleryLayerMaskDialog(bool showFilterGallery) const;
 
     QString defaultPainterlyColorModelId() const;
-    void setDefaultPainterlyColorModelId(const QString& def) const;
+    void setDefaultPainterlyColorModelId(const QString &def) const;
 
     QString defaultPainterlyColorDepthId() const;
-    void setDefaultPainterlyColorDepthId(const QString& def) const;
+    void setDefaultPainterlyColorDepthId(const QString &def) const;
 
     // OPENGL_SUCCESS, TRY_OPENGL, OPENGL_NOT_TRIED, OPENGL_FAILED
     QString canvasState() const;
-    void setCanvasState(const QString& state) const;
+    void setCanvasState(const QString &state) const;
 
     bool paintopPopupDetached() const;
     void setPaintopPopupDetached(bool detached) const;
 
     QString pressureTabletCurve() const;
-    void setPressureTabletCurve(const QString& curveString) const;
+    void setPressureTabletCurve(const QString &curveString) const;
 
     qreal vastScrolling() const;
     void setVastScrolling(const qreal factor) const;
@@ -331,7 +330,7 @@ public:
     void setHideToolbarFullscreen(const int value) const;
 
     QStringList favoriteCompositeOps() const;
-    void setFavoriteCompositeOps(const QStringList& compositeOps) const;
+    void setFavoriteCompositeOps(const QStringList &compositeOps) const;
 
     QString exportConfiguration(const QString &filterId) const;
     void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties) const;
@@ -341,7 +340,6 @@ public:
 
     int favoritePresets() const;
     void setFavoritePresets(const int value);
-
 
     enum OcioColorManagementMode {
         INTERNAL = 0,
@@ -368,13 +366,13 @@ public:
     void setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const;
 
     QString defaultPalette() const;
-    void setDefaultPalette(const QString& name) const;
+    void setDefaultPalette(const QString &name) const;
 
     QString toolbarSlider(int sliderNumber);
     void setToolbarSlider(int sliderNumber, const QString &slider);
 
     QString currentInputProfile() const;
-    void setCurrentInputProfile(const QString& name);
+    void setCurrentInputProfile(const QString &name);
 
     bool presetStripVisible() const;
     void setPresetStripVisible(bool visible);
@@ -404,7 +402,7 @@ public:
 
     BackgroundStyle defaultBackgroundStyle() const;
     void setDefaultBackgroundStyle(BackgroundStyle value);
-    
+
     int lineSmoothingType() const;
     void setLineSmoothingType(int value);
 
@@ -444,20 +442,20 @@ public:
     bool testingCompressBrushEvents() const;
     void setTestingCompressBrushEvents(bool value);
 
-    const KoColorSpace* customColorSelectorColorSpace() const;
+    const KoColorSpace *customColorSelectorColorSpace() const;
     void setCustomColorSelectorColorSpace(const KoColorSpace *cs);
 
     bool useDirtyPresets() const;
     void setUseDirtyPresets(bool value);
 
     bool useEraserBrushSize() const;
-    void setUseEraserBrushSize(bool value);    
+    void setUseEraserBrushSize(bool value);
 
     QColor getMDIBackgroundColor() const;
-    void setMDIBackgroundColor(const QColor & v) const;
+    void setMDIBackgroundColor(const QColor &v) const;
 
     QString getMDIBackgroundImage() const;
-    void setMDIBackgroundImage(const QString & fileName) const;
+    void setMDIBackgroundImage(const QString &fileName) const;
 
     bool useVerboseOpenGLDebugOutput() const;
 
@@ -467,31 +465,35 @@ public:
     void setShowCanvasMessages(bool show);
 
     template<class T>
-    void writeEntry(const QString& name, const T& value) {
+    void writeEntry(const QString &name, const T &value)
+    {
         m_cfg.writeEntry(name, value);
     }
 
     template<class T>
-    void writeList(const QString& name, const QList<T>& value) {
+    void writeList(const QString &name, const QList<T> &value)
+    {
         m_cfg.writeEntry(name, value);
     }
 
     template<class T>
-    T readEntry(const QString& name, const T& defaultValue=T()) {
+    T readEntry(const QString &name, const T &defaultValue = T())
+    {
         return m_cfg.readEntry(name, defaultValue);
     }
 
     template<class T>
-    QList<T> readList(const QString& name, const QList<T>& defaultValue=QList<T>()) {
+    QList<T> readList(const QString &name, const QList<T> &defaultValue = QList<T>())
+    {
         return m_cfg.readEntry(name, defaultValue);
     }
 
 private:
-    KisConfig(const KisConfig&);
-    KisConfig& operator=(const KisConfig&) const;
+    KisConfig(const KisConfig &);
+    KisConfig &operator=(const KisConfig &) const;
 
     /// get the profile the color managment system has stored for the given screen
-    static const KoColorProfile* getScreenProfile(int screen);
+    static const KoColorProfile *getScreenProfile(int screen);
 
 private:
     mutable KConfigGroup m_cfg;

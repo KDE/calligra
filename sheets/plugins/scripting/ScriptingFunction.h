@@ -95,18 +95,18 @@ class ScriptingFunction : public QObject
     Q_PROPERTY(QVariant result READ result WRITE setResult)
 
 public:
-    explicit ScriptingFunction(QObject* parent);
+    explicit ScriptingFunction(QObject *parent);
     virtual ~ScriptingFunction();
 
     /// \return the name the function has.
     QString name() const;
     /// Set the name the function has.
-    void setName(const QString& name);
+    void setName(const QString &name);
 
     /// \return the name the function has.
     QString typeName() const;
     /// Set the name the function has.
-    void setTypeName(const QString& typeName);
+    void setTypeName(const QString &typeName);
 
     /// \return the minimum number of parameters the function expects.
     int minParam() const;
@@ -120,29 +120,29 @@ public:
     /// \return the comment that describes what the function does.
     QString comment() const;
     /// Set the comment that describes what the function does.
-    void setComment(const QString& comment);
+    void setComment(const QString &comment);
 
     /// \return the syntax string the function looks like.
     QString syntax() const;
     /// Set the syntax string the function looks like.
-    void setSyntax(const QString& syntax);
+    void setSyntax(const QString &syntax);
 
     /// \return the error-message if there was an error.
     QString error() const;
     /// Set the error-message.
-    void setError(const QString& error = QString());
+    void setError(const QString &error = QString());
 
     /// \return the result of the function call.
     QVariant result() const;
     /// Set the result of the function call.
-    void setResult(const QVariant& result);
+    void setResult(const QVariant &result);
 
 public Q_SLOTS:
 
     /**
     * Add an example to demonstrate the usage of the function.
     */
-    void addExample(const QString& example);
+    void addExample(const QString &example);
 
     /**
     * Add details about a parameter the function may expect.
@@ -151,7 +151,7 @@ public Q_SLOTS:
     * Boolean, Date, Range or Any while the \p comment is a
     * describing string.
     */
-    void addParameter(const QString& typeName, const QString& comment);
+    void addParameter(const QString &typeName, const QString &comment);
 
     /**
     * Register this function.
@@ -171,7 +171,7 @@ private:
     /// \internal d-pointer class.
     class Private;
     /// \internal d-pointer instance.
-    Private* const d;
+    Private *const d;
 };
 
 #endif

@@ -34,7 +34,7 @@
 #include <kis_paint_device.h>
 #include <KisView.h>
 
-ChannelDockerDock::ChannelDockerDock( ) : QDockWidget(i18n("Channels")), m_canvas(0)
+ChannelDockerDock::ChannelDockerDock() : QDockWidget(i18n("Channels")), m_canvas(0)
 {
     m_channelTable = new QTableView(this);
     m_model = new ChannelModel(this);
@@ -44,7 +44,7 @@ ChannelDockerDock::ChannelDockerDock( ) : QDockWidget(i18n("Channels")), m_canva
     setWidget(m_channelTable);
 }
 
-void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
+void ChannelDockerDock::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
 
@@ -52,7 +52,7 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
         m_canvas = 0;
         return;
     }
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    m_canvas = dynamic_cast<KisCanvas2 *>(canvas);
     if (m_canvas && m_canvas->imageView() && m_canvas->imageView()->image()) {
         QPointer<KisView> view = m_canvas->imageView();
         m_model->slotLayerActivated(view->image()->rootLayer());
@@ -63,7 +63,6 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 
     connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
 }
-
 
 #include "channeldocker_dock.moc"
 

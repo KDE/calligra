@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "KDChartConvertions.h"
 
@@ -26,8 +25,8 @@
 #include <KDChartEnums>
 #include <KDChartCartesianAxis>
 
-
-namespace KChart {
+namespace KChart
+{
 
 KDChart::CartesianAxis::Position PositionToKDChartAxisPosition(Position position)
 {
@@ -41,7 +40,7 @@ KDChart::CartesianAxis::Position PositionToKDChartAxisPosition(Position position
     case StartPosition:
         return KDChart::CartesianAxis::Left;
     }
-    
+
     Q_ASSERT("Unknown KDChart::CartesianAxis::Position!");
     return KDChart::CartesianAxis::Bottom;
 }
@@ -71,7 +70,7 @@ QString PositionToString(Position position)
     case FloatingPosition:
         return QString();
     }
-    
+
     Q_ASSERT("Unknown Position!");
     return QString();
 }
@@ -100,7 +99,7 @@ KDChartEnums::PositionValue PositionToKDChartPositionValue(Position position)
     case FloatingPosition:
         return KDChartEnums::PositionFloating;
     }
-    
+
     Q_ASSERT("Unknown Position!");
     return KDChartEnums::PositionEast;
 }
@@ -128,12 +127,12 @@ Position KDChartPositionValueToPosition(KDChartEnums::PositionValue position)
         return CenterPosition;
     case KDChartEnums::PositionFloating:
         return FloatingPosition;
-        
+
     // These are unsupported values
     case KDChartEnums::PositionUnknown:
         return FloatingPosition;
     }
-    
+
     Q_ASSERT("Unknown KDChartEnums::PositionValue!");
     return FloatingPosition;
 }
@@ -145,12 +144,12 @@ Qt::Orientation LegendExpansionToQtOrientation(LegendExpansion expansion)
         return Qt::Horizontal;
     case HighLegendExpansion:
         return Qt::Vertical;
-        
+
     // KDChart doesn't allow a balanced expansion
     case BalancedLegendExpansion:
         return Qt::Vertical;
     }
-    
+
     Q_ASSERT("Unknown Qt::Orientation!");
     return Qt::Vertical;
 }
@@ -163,7 +162,7 @@ LegendExpansion QtOrientationToLegendExpansion(Qt::Orientation orientation)
     case Qt::Vertical:
         return HighLegendExpansion;
     }
-    
+
     Q_ASSERT("Unknown LegendExpansion!");
     return HighLegendExpansion;
 }

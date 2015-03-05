@@ -17,7 +17,6 @@
 
 #include "smallcolorselector.h"
 
-
 #include <kpluginfactory.h>
 
 #include <KoDockFactoryBase.h>
@@ -31,32 +30,36 @@ K_EXPORT_PLUGIN(SmallColorSelectorPluginFactory("krita"))
 class SmallColorSelectorDockFactory : public KoDockFactoryBase
 {
 public:
-    SmallColorSelectorDockFactory() {
+    SmallColorSelectorDockFactory()
+    {
     }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return QString("SmallColorSelector");
     }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget() {
-        SmallColorSelectorDock * dockWidget = new SmallColorSelectorDock();
+    virtual QDockWidget *createDockWidget()
+    {
+        SmallColorSelectorDock *dockWidget = new SmallColorSelectorDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const
+    {
         return DockRight;
     }
 };
 
-
 SmallColorSelectorPlugin::SmallColorSelectorPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
 
     KoDockRegistry::instance()->add(new SmallColorSelectorDockFactory());

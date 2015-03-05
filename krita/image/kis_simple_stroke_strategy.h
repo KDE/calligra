@@ -22,7 +22,6 @@
 #include <QVector>
 #include "kis_stroke_strategy.h"
 
-
 class KRITAIMAGE_EXPORT KisSimpleStrokeStrategy : public KisStrokeStrategy
 {
 public:
@@ -36,14 +35,14 @@ public:
 public:
     KisSimpleStrokeStrategy(QString id = QString(), const KUndo2MagicString &name = KUndo2MagicString());
 
-    KisStrokeJobStrategy* createInitStrategy();
-    KisStrokeJobStrategy* createFinishStrategy();
-    KisStrokeJobStrategy* createCancelStrategy();
-    KisStrokeJobStrategy* createDabStrategy();
+    KisStrokeJobStrategy *createInitStrategy();
+    KisStrokeJobStrategy *createFinishStrategy();
+    KisStrokeJobStrategy *createCancelStrategy();
+    KisStrokeJobStrategy *createDabStrategy();
 
-    KisStrokeJobData* createInitData();
-    KisStrokeJobData* createFinishData();
-    KisStrokeJobData* createCancelData();
+    KisStrokeJobData *createInitData();
+    KisStrokeJobData *createFinishData();
+    KisStrokeJobData *createCancelData();
 
     virtual void initStrokeCallback();
     virtual void finishStrokeCallback();
@@ -56,8 +55,8 @@ protected:
                    KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
 
 private:
-    KisStrokeJobStrategy* createStrategy(JobType type);
-    KisStrokeJobData* createData(JobType type);
+    KisStrokeJobStrategy *createStrategy(JobType type);
+    KisStrokeJobData *createData(JobType type);
 
 private:
     QVector<bool> m_jobEnabled;

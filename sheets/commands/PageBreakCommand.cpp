@@ -29,8 +29,8 @@
 using namespace Calligra::Sheets;
 
 PageBreakCommand::PageBreakCommand(KUndo2Command *parent)
-        : AbstractRegionCommand(parent)
-        , m_mode(BreakBeforeColumn)
+    : AbstractRegionCommand(parent)
+    , m_mode(BreakBeforeColumn)
 {
 }
 

@@ -26,7 +26,6 @@
 #include "commands_new/kis_processing_command.h"
 #include "kis_stroke_strategy_undo_command_based.h"
 
-
 class DisableUIUpdatesCommand : public KUndo2Command
 {
 public:
@@ -37,21 +36,28 @@ public:
     {
     }
 
-    void redo() {
-        if(m_finalUpdate) m_image->enableUIUpdates();
-        else m_image->disableUIUpdates();
+    void redo()
+    {
+        if (m_finalUpdate) {
+            m_image->enableUIUpdates();
+        } else {
+            m_image->disableUIUpdates();
+        }
     }
 
-    void undo() {
-        if(!m_finalUpdate) m_image->enableUIUpdates();
-        else m_image->disableUIUpdates();
+    void undo()
+    {
+        if (!m_finalUpdate) {
+            m_image->enableUIUpdates();
+        } else {
+            m_image->disableUIUpdates();
+        }
     }
 
 private:
     KisImageWSP m_image;
     bool m_finalUpdate;
 };
-
 
 class UpdateCommand : public KUndo2Command
 {
@@ -66,18 +72,27 @@ public:
     {
     }
 
-    void redo() {
-        if(!m_finalUpdate) initialize();
-        else finalize();
+    void redo()
+    {
+        if (!m_finalUpdate) {
+            initialize();
+        } else {
+            finalize();
+        }
     }
 
-    void undo() {
-        if(m_finalUpdate) initialize();
-        else finalize();
+    void undo()
+    {
+        if (m_finalUpdate) {
+            initialize();
+        } else {
+            finalize();
+        }
     }
 
 private:
-    void initialize() {
+    void initialize()
+    {
         /**
          * We disable all non-centralized updates here. Everything
          * should be done by this command's explicit updates.
@@ -89,10 +104,11 @@ private:
         m_image->disableDirtyRequests();
     }
 
-    void finalize() {
+    void finalize()
+    {
         m_image->enableDirtyRequests();
 
-        if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
+        if (m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
             m_image->refreshGraphAsync(m_node);
         }
 
@@ -101,19 +117,22 @@ private:
         updateClones(m_node);
     }
 
-    void updateClones(KisNodeSP node) {
+    void updateClones(KisNodeSP node)
+    {
         // simple tail-recursive iteration
 
         KisNodeSP prevNode = node->lastChild();
-        while(prevNode) {
+        while (prevNode) {
             updateClones(prevNode);
             prevNode = prevNode->prevSibling();
         }
 
-        KisLayer *layer = dynamic_cast<KisLayer*>(m_node.data());
-        if(layer && layer->hasClones()) {
-            foreach(KisCloneLayerSP clone, layer->registeredClones()) {
-                if(!clone) continue;
+        KisLayer *layer = dynamic_cast<KisLayer *>(m_node.data());
+        if (layer && layer->hasClones()) {
+            foreach (KisCloneLayerSP clone, layer->registeredClones()) {
+                if (!clone) {
+                    continue;
+                }
 
                 QPoint offset(clone->x(), clone->y());
                 QRegion dirtyRegion(m_image->bounds());
@@ -143,12 +162,16 @@ public:
     {
     }
 
-    void redo() {
-        if(m_finalUpdate) doUpdate(m_emitSignals);
+    void redo()
+    {
+        if (m_finalUpdate) {
+            doUpdate(m_emitSignals);
+        }
     }
 
-    void undo() {
-        if(!m_finalUpdate) {
+    void undo()
+    {
+        if (!m_finalUpdate) {
 
             KisImageSignalVector reverseSignals;
 
@@ -163,8 +186,9 @@ public:
     }
 
 private:
-    void doUpdate(KisImageSignalVector emitSignals) {
-        foreach(KisImageSignalType type, emitSignals) {
+    void doUpdate(KisImageSignalVector emitSignals)
+    {
+        foreach (KisImageSignalType type, emitSignals) {
             m_image->signalRouter()->emitNotification(type);
         }
     }
@@ -175,12 +199,11 @@ private:
     bool m_finalUpdate;
 };
 
-
 KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
-                                                 KisNodeSP node,
-                                                 ProcessingFlags flags,
-                                                 KisImageSignalVector emitSignals,
-                                                 const KUndo2MagicString &name)
+        KisNodeSP node,
+        ProcessingFlags flags,
+        KisImageSignalVector emitSignals,
+        const KUndo2MagicString &name)
     : m_image(image),
       m_node(node),
       m_flags(flags),
@@ -188,19 +211,19 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
       m_finalSignalsEmitted(false)
 {
     KisStrokeStrategyUndoCommandBased *strategy =
-            new KisStrokeStrategyUndoCommandBased(name, false,
-                                                  m_image->postExecutionUndoAdapter());
+        new KisStrokeStrategyUndoCommandBased(name, false,
+                m_image->postExecutionUndoAdapter());
 
     if (m_flags.testFlag(SUPPORTS_WRAPAROUND_MODE)) {
         strategy->setSupportsWrapAroundMode(true);
     }
 
     m_strokeId = m_image->startStroke(strategy);
-    if(!m_emitSignals.isEmpty()) {
+    if (!m_emitSignals.isEmpty()) {
         applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, false), KisStrokeJobData::BARRIER);
     }
 
-    if(m_flags.testFlag(NO_UI_UPDATES)) {
+    if (m_flags.testFlag(NO_UI_UPDATES)) {
         applyCommand(new DisableUIUpdatesCommand(m_image, false), KisStrokeJobData::BARRIER);
     }
 
@@ -213,29 +236,27 @@ KisProcessingApplicator::~KisProcessingApplicator()
 {
 }
 
-
 void KisProcessingApplicator::applyVisitor(KisProcessingVisitorSP visitor,
-                                           KisStrokeJobData::Sequentiality sequentiality,
-                                           KisStrokeJobData::Exclusivity exclusivity)
+        KisStrokeJobData::Sequentiality sequentiality,
+        KisStrokeJobData::Exclusivity exclusivity)
 {
-    if(!m_flags.testFlag(RECURSIVE)) {
+    if (!m_flags.testFlag(RECURSIVE)) {
         applyCommand(new KisProcessingCommand(visitor, m_node),
                      sequentiality, exclusivity);
-    }
-    else {
+    } else {
         visitRecursively(m_node, visitor, sequentiality, exclusivity);
     }
 }
 
 void KisProcessingApplicator::visitRecursively(KisNodeSP node,
-                                               KisProcessingVisitorSP visitor,
-                                               KisStrokeJobData::Sequentiality sequentiality,
-                                               KisStrokeJobData::Exclusivity exclusivity)
+        KisProcessingVisitorSP visitor,
+        KisStrokeJobData::Sequentiality sequentiality,
+        KisStrokeJobData::Exclusivity exclusivity)
 {
     // simple tail-recursive iteration
 
     KisNodeSP prevNode = node->lastChild();
-    while(prevNode) {
+    while (prevNode) {
         visitRecursively(prevNode, visitor, sequentiality, exclusivity);
         prevNode = prevNode->prevSibling();
     }
@@ -245,8 +266,8 @@ void KisProcessingApplicator::visitRecursively(KisNodeSP node,
 }
 
 void KisProcessingApplicator::applyCommand(KUndo2Command *command,
-                                           KisStrokeJobData::Sequentiality sequentiality,
-                                           KisStrokeJobData::Exclusivity exclusivity)
+        KisStrokeJobData::Sequentiality sequentiality,
+        KisStrokeJobData::Exclusivity exclusivity)
 {
     /*
      * One should not add commands after the final signals have been
@@ -256,9 +277,9 @@ void KisProcessingApplicator::applyCommand(KUndo2Command *command,
 
     m_image->addJob(m_strokeId,
                     new KisStrokeStrategyUndoCommandBased::Data(KUndo2CommandSP(command),
-                                                                false,
-                                                                sequentiality,
-                                                                exclusivity));
+                            false,
+                            sequentiality,
+                            exclusivity));
 }
 
 void KisProcessingApplicator::explicitlyEmitFinalSignals()
@@ -269,11 +290,11 @@ void KisProcessingApplicator::explicitlyEmitFinalSignals()
         applyCommand(new UpdateCommand(m_image, m_node, m_flags, true));
     }
 
-    if(m_flags.testFlag(NO_UI_UPDATES)) {
+    if (m_flags.testFlag(NO_UI_UPDATES)) {
         applyCommand(new DisableUIUpdatesCommand(m_image, true), KisStrokeJobData::BARRIER);
     }
 
-    if(!m_emitSignals.isEmpty()) {
+    if (!m_emitSignals.isEmpty()) {
         applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, true), KisStrokeJobData::BARRIER);
     }
 

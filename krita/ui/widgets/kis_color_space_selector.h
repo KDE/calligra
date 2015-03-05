@@ -30,13 +30,13 @@ class KRITAUI_EXPORT KisColorSpaceSelector : public QWidget
 {
     Q_OBJECT
 public:
-    KisColorSpaceSelector(QWidget* parent);
+    KisColorSpaceSelector(QWidget *parent);
     ~KisColorSpaceSelector();
-    const KoColorSpace* currentColorSpace();
-    void setCurrentColorModel(const KoID& id);
-    void setCurrentColorDepth(const KoID& id);
-    void setCurrentProfile(const QString& name);
-    void setCurrentColorSpace(const KoColorSpace* colorSpace);
+    const KoColorSpace *currentColorSpace();
+    void setCurrentColorModel(const KoID &id);
+    void setCurrentColorDepth(const KoID &id);
+    void setCurrentProfile(const QString &name);
+    void setCurrentColorSpace(const KoColorSpace *colorSpace);
 Q_SIGNALS:
     /**
      * This signal is emitted when a new color space is selected.
@@ -44,9 +44,9 @@ Q_SIGNALS:
      */
     void selectionChanged(bool valid);
     /// This signal is emitted, when a new color space is selected, that can be used (eg is valid)
-    void colorSpaceChanged(const KoColorSpace*);
+    void colorSpaceChanged(const KoColorSpace *);
 private Q_SLOTS:
-    void fillCmbDepths(const KoID& idd);
+    void fillCmbDepths(const KoID &idd);
     void fillCmbProfiles();
     void colorSpaceChanged();
     void installProfile();
@@ -55,8 +55,7 @@ private Q_SLOTS:
     void buttonUpdate();
 private:
     struct Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

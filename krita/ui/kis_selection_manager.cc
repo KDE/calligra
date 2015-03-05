@@ -88,29 +88,28 @@
 #include "kis_action_manager.h"
 #include "operations/kis_operation_configuration.h"
 
-
-KisSelectionManager::KisSelectionManager(KisViewManager * view)
-        : m_view(view),
-          m_doc(0),
-          m_imageView(0),
-          m_adapter(new KisNodeCommandsAdapter(view)),
-          m_copy(0),
-          m_copyMerged(0),
-          m_cut(0),
-          m_paste(0),
-          m_pasteNew(0),
-          m_cutToNewLayer(0),
-          m_selectAll(0),
-          m_deselect(0),
-          m_clear(0),
-          m_reselect(0),
-          m_invert(0),
-          m_copyToNewLayer(0),
-          m_fillForegroundColor(0),
-          m_fillBackgroundColor(0),
-          m_fillPattern(0),
-          m_imageResizeToSelection(0),
-          m_selectionDecoration(0)
+KisSelectionManager::KisSelectionManager(KisViewManager *view)
+    : m_view(view),
+      m_doc(0),
+      m_imageView(0),
+      m_adapter(new KisNodeCommandsAdapter(view)),
+      m_copy(0),
+      m_copyMerged(0),
+      m_cut(0),
+      m_paste(0),
+      m_pasteNew(0),
+      m_cutToNewLayer(0),
+      m_selectAll(0),
+      m_deselect(0),
+      m_clear(0),
+      m_reselect(0),
+      m_invert(0),
+      m_copyToNewLayer(0),
+      m_fillForegroundColor(0),
+      m_fillBackgroundColor(0),
+      m_fillPattern(0),
+      m_imageResizeToSelection(0),
+      m_selectionDecoration(0)
 {
     m_clipboard = KisClipboard::instance();
 }
@@ -119,7 +118,7 @@ KisSelectionManager::~KisSelectionManager()
 {
 }
 
-void KisSelectionManager::setup(KisActionManager* actionManager)
+void KisSelectionManager::setup(KisActionManager *actionManager)
 {
     m_cut = actionManager->createStandardAction(KStandardAction::Cut, this, SLOT(cut()));
     m_copy = actionManager->createStandardAction(KStandardAction::Copy, this, SLOT(copy()));
@@ -180,7 +179,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_invert->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
 
     actionManager->registerOperation(new KisInvertSelectionOperaton);
-    
+
     m_copyToNewLayer  = new KisAction(i18n("Copy Selection to New Layer"), this);
     m_copyToNewLayer->setActivationFlags(KisAction::PIXELS_SELECTED);
     actionManager->addAction("copy_selection_to_new_layer", m_copyToNewLayer);
@@ -198,7 +197,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_fillForegroundColor->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_fillForegroundColor->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     actionManager->addAction("fill_selection_foreground_color", m_fillForegroundColor);
-    m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));  
+    m_fillForegroundColor->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Backspace));
     connect(m_fillForegroundColor, SIGNAL(triggered()), this, SLOT(fillForegroundColor()));
 
     m_fillBackgroundColor  = new KisAction(i18n("Fill with Background Color"), this);
@@ -253,15 +252,14 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
 
 }
 
-
 void KisSelectionManager::setView(QPointer<KisView>imageView)
 {
     if (m_imageView && m_imageView->canvasBase()) {
-        disconnect(m_imageView->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
+        disconnect(m_imageView->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString &)), this, SLOT(clipboardDataChanged()));
 
         KoSelection *selection = m_imageView->canvasBase()->globalShapeManager()->selection();
         selection->disconnect(this, SLOT(shapeSelectionChanged()));
-        KisSelectionDecoration *decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection"));
+        KisSelectionDecoration *decoration = qobject_cast<KisSelectionDecoration *>(m_imageView->canvasBase()->decoration("selection"));
         if (decoration) {
             disconnect(SIGNAL(currentSelectionChanged()), decoration);
         }
@@ -271,11 +269,11 @@ void KisSelectionManager::setView(QPointer<KisView>imageView)
 
     m_imageView = imageView;
     if (m_imageView) {
-        KoSelection * selection = m_imageView->canvasBase()->globalShapeManager()->selection();
+        KoSelection *selection = m_imageView->canvasBase()->globalShapeManager()->selection();
         Q_ASSERT(selection);
         connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
-        KisSelectionDecoration* decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection"));
+        KisSelectionDecoration *decoration = qobject_cast<KisSelectionDecoration *>(m_imageView->canvasBase()->decoration("selection"));
         if (!decoration) {
             decoration = new KisSelectionDecoration(m_imageView);
             decoration->setVisible(true);
@@ -284,11 +282,10 @@ void KisSelectionManager::setView(QPointer<KisView>imageView)
         m_selectionDecoration = decoration;
         connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
         connect(m_imageView->image()->undoAdapter(), SIGNAL(selectionChanged()), SLOT(selectionChanged()));
-        connect(m_imageView->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString&)), SLOT(clipboardDataChanged()));
+        connect(m_imageView->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString &)), SLOT(clipboardDataChanged()));
 
     }
 }
-
 
 void KisSelectionManager::clipboardDataChanged()
 {
@@ -317,13 +314,13 @@ bool KisSelectionManager::haveShapesSelected()
 bool KisSelectionManager::haveShapesInClipboard()
 {
     KisShapeLayer *shapeLayer =
-        dynamic_cast<KisShapeLayer*>(m_view->activeLayer().data());
+        dynamic_cast<KisShapeLayer *>(m_view->activeLayer().data());
 
     if (shapeLayer) {
-        const QMimeData* data = QApplication::clipboard()->mimeData();
+        const QMimeData *data = QApplication::clipboard()->mimeData();
         if (data) {
             QStringList mimeTypes = m_view->canvasBase()->toolProxy()->supportedPasteMimeTypes();
-            foreach(const QString & mimeType, mimeTypes) {
+            foreach (const QString &mimeType, mimeTypes) {
                 if (data->hasFormat(mimeType)) {
                     return true;
                 }
@@ -346,7 +343,9 @@ void KisSelectionManager::updateGUI()
 {
     Q_ASSERT(m_view);
     Q_ASSERT(m_clipboard);
-    if (!m_view || !m_clipboard) return;
+    if (!m_view || !m_clipboard) {
+        return;
+    }
 
     bool havePixelsSelected = this->havePixelsSelected();
     bool havePixelsInClipboard = this->havePixelsInClipboard();
@@ -452,8 +451,9 @@ void KisSelectionManager::deselect()
 
 void KisSelectionManager::invert()
 {
-    if(m_invert)
+    if (m_invert) {
         m_invert->trigger();
+    }
 }
 
 void KisSelectionManager::reselect()
@@ -529,18 +529,19 @@ bool KisSelectionManager::displaySelection()
 
 void KisSelectionManager::shapeSelectionChanged()
 {
-    KoShapeManager* shapeManager = m_view->canvasBase()->globalShapeManager();
+    KoShapeManager *shapeManager = m_view->canvasBase()->globalShapeManager();
 
-    KoSelection * selection = shapeManager->selection();
-    QList<KoShape*> selectedShapes = selection->selectedShapes();
+    KoSelection *selection = shapeManager->selection();
+    QList<KoShape *> selectedShapes = selection->selectedShapes();
 
-    KoShapeStroke* border = new KoShapeStroke(0, Qt::lightGray);
-    foreach(KoShape* shape, shapeManager->shapes()) {
-        if (dynamic_cast<KisShapeSelection*>(shape->parent())) {
-            if (selectedShapes.contains(shape))
+    KoShapeStroke *border = new KoShapeStroke(0, Qt::lightGray);
+    foreach (KoShape *shape, shapeManager->shapes()) {
+        if (dynamic_cast<KisShapeSelection *>(shape->parent())) {
+            if (selectedShapes.contains(shape)) {
                 shape->setStroke(border);
-            else
+            } else {
                 shape->setStroke(0);
+            }
         }
     }
     m_view->updateGUI();
@@ -555,12 +556,16 @@ void KisSelectionManager::imageResizeToSelection()
 void KisSelectionManager::paintSelectedShapes()
 {
     KisImageWSP image = m_view->image();
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
     KisLayerSP layer = m_view->activeLayer();
-    if (!layer) return;
+    if (!layer) {
+        return;
+    }
 
-    QList<KoShape*> shapes = m_view->canvasBase()->shapeManager()->selection()->selectedShapes();
+    QList<KoShape *> shapes = m_view->canvasBase()->shapeManager()->selection()->selectedShapes();
 
     KisPaintLayerSP paintLayer = new KisPaintLayer(image, i18n("Stroked Shapes"), OPACITY_OPAQUE_U8);
 
@@ -576,7 +581,7 @@ void KisSelectionManager::paintSelectedShapes()
                                        KisPainter::StrokeStyleBrush,
                                        KisPainter::FillStyleNone);
 
-    foreach(KoShape* shape, shapes) {
+    foreach (KoShape *shape, shapes) {
         QTransform matrix = shape->absoluteTransformation(0) * QTransform::fromScale(image->xRes(), image->yRes());
         QPainterPath mapedOutline = matrix.map(shape->outline());
         helper.paintPainterPath(mapedOutline);

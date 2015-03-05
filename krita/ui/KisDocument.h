@@ -25,8 +25,6 @@
 #include <QTransform>
 #include <QList>
 
-
-
 #include <KoUnit.h>
 #include <KoPageLayout.h>
 #include "KoGridData.h"
@@ -104,7 +102,7 @@ public:
      * Reimplemented from KisParts::ReadWritePart for internal reasons
      * (for the autosave functionality)
      */
-    virtual bool openUrl(const KUrl & url);
+    virtual bool openUrl(const KUrl &url);
 
     /**
      * Opens the document given by @p url, without storing the URL
@@ -145,7 +143,10 @@ public:
      * delivers.
      * This comes from the X-KDE-NativeMimeType key in the .desktop file.
      */
-    virtual QByteArray nativeFormatMimeType() const { return KIS_MIME_TYPE; }
+    virtual QByteArray nativeFormatMimeType() const
+    {
+        return KIS_MIME_TYPE;
+    }
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported
@@ -154,15 +155,20 @@ public:
      *
      * @return the oasis mimetype or, if it hasn't one, the nativeformatmimetype.
      */
-    virtual QByteArray nativeOasisMimeType() const  { return ""; }
+    virtual QByteArray nativeOasisMimeType() const
+    {
+        return "";
+    }
 
     /// Checks whether a given mimetype can be handled natively.
-    bool isNativeFormat(const QByteArray& mimetype) const;
+    bool isNativeFormat(const QByteArray &mimetype) const;
 
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KisDocument without a filter, in *addition* to the main one
-    virtual QStringList extraNativeMimeTypes() const { return QStringList() << KIS_MIME_TYPE; }
-
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << KIS_MIME_TYPE;
+    }
 
     /// Enum values used by specialOutputFlag - note that it's a bitfield for supportedSpecialFormats
     enum { /*SaveAsCalligra1dot1 = 1,*/ // old and removed
@@ -189,7 +195,7 @@ public:
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
-    void setMimeType(const QByteArray & mimeType);
+    void setMimeType(const QByteArray &mimeType);
 
     /**
      * @brief Set the format in which the document should be saved.
@@ -200,7 +206,7 @@ public:
      * @param mimeType the mime type (format) to use.
      * @param specialOutputFlag is for "save as older version" etc.
      */
-    void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0);
+    void setOutputMimeType(const QByteArray &mimeType, int specialOutputFlag = 0);
     QByteArray outputMimeType() const;
     int specialOutputFlag() const;
 
@@ -220,7 +226,6 @@ public:
     bool confirmNonNativeSave(const bool exporting) const;
     void setConfirmNonNativeSave(const bool exporting, const bool on);
 
-
     /**
      * @return true if saving/exporting should inhibit the option dialog
      */
@@ -237,14 +242,13 @@ public:
      * If you asked the user about something and they chose "Cancel",
      * set the message to the magic string "USER_CANCELED", to skip the error dialog.
      */
-    void setErrorMessage(const QString& errMsg);
+    void setErrorMessage(const QString &errMsg);
 
     /**
      * Return the last error message. Usually KisDocument takes care of
      * showing it; this method is mostly provided for non-interactive use.
      */
     QString errorMessage() const;
-
 
     /**
      * Show the last error message in a message box.
@@ -254,12 +258,11 @@ public:
      */
     void showLoadingErrorDialog();
 
-
     /**
      * @brief Generates a preview picture of the document
      * @note The preview is used in the File Dialog and also to create the Thumbnail
      */
-    virtual QPixmap generatePreview(const QSize& size);
+    virtual QPixmap generatePreview(const QSize &size);
 
     /**
      *  Tells the document that its title has been modified, either because
@@ -291,10 +294,10 @@ public:
      *  @param store The store to load from
      *  @param url An internal url, like tar:/1/2
      */
-    virtual bool loadFromStore(KoStore *store, const QString& url);
+    virtual bool loadFromStore(KoStore *store, const QString &url);
 
     /// Unused
-    virtual bool loadOdf(KoOdfReadStore & odfStore);
+    virtual bool loadOdf(KoOdfReadStore &odfStore);
     /// Unused
     virtual bool saveOdf(SavingContext &documentContext);
 
@@ -303,13 +306,13 @@ public:
      *
      *  You should not have to reimplement this.
      */
-    virtual bool saveToStore(KoStore *store, const QString& path);
+    virtual bool saveToStore(KoStore *store, const QString &path);
 
     /**
      *  Reimplement this method to load the contents of your Calligra document,
      *  from the XML document. This is for the pre-Oasis file format (maindoc.xml).
      */
-    virtual bool loadXML(const KoXmlDocument & doc, KoStore *store);
+    virtual bool loadXML(const KoXmlDocument &doc, KoStore *store);
 
     /**
      *  Reimplement this to save the contents of the %Calligra document into
@@ -323,7 +326,7 @@ public:
      *  @param tagName the name of the tag for the root element
      *  @param version the DTD version (usually the application's version).
      */
-    QDomDocument createDomDocument(const QString& tagName, const QString& version) const;
+    QDomDocument createDomDocument(const QString &tagName, const QString &version) const;
 
     /**
      *  Return a correctly created QDomDocument for an old (1.3-style) %Calligra document,
@@ -333,7 +336,7 @@ public:
      *  @param tagName the name of the tag for the root element, e.g. DOC for words/kpresenter.
      *  @param version the DTD version (usually the application's version).
      */
-    static QDomDocument createDomDocument(const QString& appName, const QString& tagName, const QString& version);
+    static QDomDocument createDomDocument(const QString &appName, const QString &tagName, const QString &version);
 
     /**
      *  The first thing to do in loadOasis is get hold of the office:body tag, then its child.
@@ -341,7 +344,7 @@ public:
      *  This method returns a translated name for the type of document,
      *  e.g. i18n("Word Processing") for office:text.
      */
-    static QString tagNameToDocumentType(const QString& localName);
+    static QString tagNameToDocumentType(const QString &localName);
 
     /**
      *  Loads a document in the native format from a given URL.
@@ -349,14 +352,14 @@ public:
      *
      *  @param file the file to load - usually KReadOnlyPart::m_file or the result of a filter
      */
-    virtual bool loadNativeFormat(const QString & file);
+    virtual bool loadNativeFormat(const QString &file);
 
     /**
      *  Saves the document in native format, to a given file
      *  You should never have to reimplement.
      *  Made public for writing templates.
      */
-    virtual bool saveNativeFormat(const QString & file);
+    virtual bool saveNativeFormat(const QString &file);
 
     /**
      * Saves the document in the native format to the given store.
@@ -418,7 +421,7 @@ public:
      * progress to.
      */
     void setProgressProxy(KoProgressProxy *progressProxy);
-    KoProgressProxy* progressProxy() const;
+    KoProgressProxy *progressProxy() const;
 
     /**
      * Return true if url() is a real filename, false if url() is
@@ -457,7 +460,7 @@ public:
     /**
      * Sets the backup path of the document
      */
-    void setBackupPath(const QString & _path);
+    void setBackupPath(const QString &_path);
 
     /**
      * @return path to the backup document
@@ -497,7 +500,7 @@ public:
     /**
      * @internal (public for KisMainWindow)
      */
-    void setMimeTypeAfterLoading(const QString& mimeType);
+    void setMimeTypeAfterLoading(const QString &mimeType);
 
     /**
      * @return returns the number of pages in the document.
@@ -531,7 +534,6 @@ public:
 
     void clearUndoHistory();
 
-
     /**
      *  Sets the modified flag on the document. This means that it has
      *  to be saved or not before deleting it.
@@ -548,7 +550,6 @@ public:
      */
     KUndo2Stack *undoStack();
 
-
     /**
      * Set the output stream to report profile information to.
      */
@@ -557,7 +558,7 @@ public:
     /**
      * Set the output stream to report profile information to.
      */
-    void setProfileReferenceTime(const QTime& referenceTime);
+    void setProfileReferenceTime(const QTime &referenceTime);
 
 public Q_SLOTS:
 
@@ -598,7 +599,7 @@ Q_SIGNALS:
      * Emitted e.g. at the beginning of a save operation
      * This is emitted by KisDocument and used by KisView to display a statusbar message
      */
-    void statusBarMessage(const QString& text);
+    void statusBarMessage(const QString &text);
 
     /**
      * Emitted e.g. at the end of a save operation
@@ -626,7 +627,7 @@ private:
      */
     QString newObjectName();
 
-    QString autoSaveFile(const QString & path) const;
+    QString autoSaveFile(const QString &path) const;
     void setDisregardAutosaveFailure(bool disregardFailure);
 
     /**
@@ -675,7 +676,6 @@ private:
      */
     virtual bool completeSaving(KoStore *store);
 
-
     /** @internal */
     virtual void setModified();
 
@@ -698,9 +698,9 @@ private:
 public:
 
     QString localFilePath() const;
-    void setLocalFilePath( const QString &localFilePath );
+    void setLocalFilePath(const QString &localFilePath);
 
-    virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
+    virtual KoDocumentInfoDlg *createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
     bool isReadWrite() const;
 
@@ -709,7 +709,7 @@ public:
 
     virtual bool closeUrl(bool promptToSave = true);
 
-    virtual bool saveAs( const KUrl &url );
+    virtual bool saveAs(const KUrl &url);
 
 public Q_SLOTS:
 
@@ -732,7 +732,7 @@ private Q_SLOTS:
 
 protected:
 
-    bool oldLoadAndParse(KoStore *store, const QString& filename, KoXmlDocument& doc);
+    bool oldLoadAndParse(KoStore *store, const QString &filename, KoXmlDocument &doc);
 
 public:
 
@@ -740,20 +740,20 @@ public:
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, const QString &imageDescription, const double imageResolution);
+    bool newImage(const QString &name, qint32 width, qint32 height, const KoColorSpace *cs, const KoColor &bgColor, const QString &imageDescription, const double imageResolution);
 
     /**
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, bool backgroundAsLayer,
+    bool newImage(const QString &name, qint32 width, qint32 height, const KoColorSpace *cs, const KoColor &bgColor, bool backgroundAsLayer,
                   int numberOfLayers, const QString &imageDescription, const double imageResolution);
 
     /**
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    KisImageWSP newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * colorspace);
+    KisImageWSP newImage(const QString &name, qint32 width, qint32 height, const KoColorSpace *colorspace);
 
     KisImageWSP image() const;
 
@@ -767,15 +767,15 @@ public:
      */
     void setCurrentImage(KisImageWSP image);
 
-    KisUndoStore* createUndoStore();
+    KisUndoStore *createUndoStore();
 
     /**
      * The shape controller matches internal krita image layers with
      * the flake shape hierarchy.
      */
-    KoShapeBasedDocumentBase * shapeController() const;
+    KoShapeBasedDocumentBase *shapeController() const;
 
-    KoShapeLayer* shapeForNode(KisNodeSP layer) const;
+    KoShapeLayer *shapeForNode(KisNodeSP layer) const;
 
     /**
      * @return a list of all layers that are active in all current views
@@ -802,14 +802,13 @@ public:
      */
     QList<KisPaintingAssistant *> preLoadedAssistants();
 
-
 private:
 
     void init();
 
     bool saveToStream(QIODevice *dev);
 
-    QString checkImageMimeTypes(const QString &mimeType, const KUrl& url) const;
+    QString checkImageMimeTypes(const QString &mimeType, const KUrl &url) const;
 
     bool loadNativeFormatFromStoreInternal(KoStore *store);
 
@@ -823,13 +822,13 @@ private:
     class Private;
     Private *const d;
 
-    Q_PRIVATE_SLOT(d, void _k_slotJobFinished( KJob * job ))
-    Q_PRIVATE_SLOT(d, void _k_slotStatJobFinished(KJob*))
+    Q_PRIVATE_SLOT(d, void _k_slotJobFinished(KJob *job))
+    Q_PRIVATE_SLOT(d, void _k_slotStatJobFinished(KJob *))
     Q_PRIVATE_SLOT(d, void _k_slotGotMimeType(KIO::Job *job, const QString &mime))
-    Q_PRIVATE_SLOT(d, void _k_slotUploadFinished( KJob * job ))
+    Q_PRIVATE_SLOT(d, void _k_slotUploadFinished(KJob *job))
 
 };
 
-Q_DECLARE_METATYPE(KisDocument*)
+Q_DECLARE_METATYPE(KisDocument *)
 
 #endif

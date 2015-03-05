@@ -33,14 +33,14 @@
 #include <KoOdfWorkaround.h>
 
 DateVariable::DateVariable(DateType type)
-        : KoVariable()
-        , m_type(type)
-        , m_displayType(Date)
-        , m_valueType(DateTime)
-        , m_daysOffset(0)
-        , m_monthsOffset(0)
-        , m_yearsOffset(0)
-        , m_secsOffset(0)
+    : KoVariable()
+    , m_type(type)
+    , m_displayType(Date)
+    , m_valueType(DateTime)
+    , m_daysOffset(0)
+    , m_monthsOffset(0)
+    , m_yearsOffset(0)
+    , m_secsOffset(0)
 {
     m_datetime = QDateTime::currentDateTime();
 }
@@ -49,7 +49,7 @@ DateVariable::~DateVariable()
 {
 }
 
-void DateVariable::saveOdf(KoShapeSavingContext & context)
+void DateVariable::saveOdf(KoShapeSavingContext &context)
 {
     // TODO support data-style-name
     KoXmlWriter *writer = &context.xmlWriter();
@@ -69,13 +69,13 @@ void DateVariable::saveOdf(KoShapeSavingContext & context)
         // only write as much information as we read: just date/time or datetime
         if (m_displayType == Time) {
             const QString timeValue = (m_valueType == DateTime) ?
-                m_datetime.toString(Qt::ISODate) :
-                m_datetime.time().toString(Qt::ISODate);
+                                      m_datetime.toString(Qt::ISODate) :
+                                      m_datetime.time().toString(Qt::ISODate);
             writer->addAttribute("text:time-value", timeValue);
         } else {
             const QString dateValue = (m_valueType == DateTime) ?
-                m_datetime.toString(Qt::ISODate) :
-                m_datetime.date().toString(Qt::ISODate);
+                                      m_datetime.toString(Qt::ISODate) :
+                                      m_datetime.date().toString(Qt::ISODate);
             writer->addAttribute("text:date-value", dateValue);
         }
     } else {
@@ -85,7 +85,7 @@ void DateVariable::saveOdf(KoShapeSavingContext & context)
     writer->endElement();
 }
 
-bool DateVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context)
+bool DateVariable::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     const QString localName(element.localName());
     QString dateFormat;
@@ -150,17 +150,18 @@ bool DateVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
 void DateVariable::readProperties(const KoProperties *props)
 {
     m_definition = props->stringProperty("definition");
-    if (!props->stringProperty("time").isEmpty())
+    if (!props->stringProperty("time").isEmpty()) {
         m_datetime = QDateTime::fromString(props->stringProperty("time"), Qt::ISODate);
-    if (props->intProperty("id") == Fixed)
+    }
+    if (props->intProperty("id") == Fixed) {
         m_type = Fixed;
-    else
+    } else {
         m_type = AutoUpdate;
+    }
     QString displayTypeProp = props->stringProperty("displayType", "date");
     if (displayTypeProp == "time") {
         m_displayType = Time;
-    }
-    else {
+    } else {
         m_displayType = Date;
     }
     m_valueType = DateTime;
@@ -227,23 +228,21 @@ void DateVariable::update()
     case Time:
         if (m_definition.isEmpty()) {
             setValue(target.time().toString(Qt::LocalDate));
-        }
-        else {
+        } else {
             setValue(target.time().toString(m_definition));
         }
         break;
     case Date:
         if (m_definition.isEmpty()) {
             setValue(target.date().toString(Qt::LocalDate));
-        }
-        else {
+        } else {
             setValue(target.toString(m_definition));
         }
         break;
     }
 }
 
-void DateVariable::adjustTime(const QString & value)
+void DateVariable::adjustTime(const QString &value)
 {
     if (!value.isEmpty()) {
         m_daysOffset = 0;

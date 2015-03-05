@@ -38,8 +38,8 @@ public:
     bool dummy;
 };
 
-KexiCloseButton::KexiCloseButton(QWidget* parent)
- : QToolButton(parent), d(new Private)
+KexiCloseButton::KexiCloseButton(QWidget *parent)
+    : QToolButton(parent), d(new Private)
 {
     init();
 }
@@ -65,7 +65,7 @@ void KexiCloseButton::setMarginEnabled(bool set)
     option.initFrom(this);
     int m = set ? style()->pixelMetric(QStyle::PM_ButtonMargin, &option, this) : 0;
     const int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, &option, this);
-    setFixedSize(QSize(iconSize, iconSize) + QSize(m*2, m*2));
+    setFixedSize(QSize(iconSize, iconSize) + QSize(m * 2, m * 2));
     update();
 }
 
@@ -88,11 +88,9 @@ void KexiCloseButton::paintEvent(QPaintEvent *e)
     QIcon::Mode mode;
     if (option.state & QStyle::State_MouseOver) {
         mode = QIcon::Active;
-    }
-    else if (enabled) {
+    } else if (enabled) {
         mode = QIcon::Normal;
-    }
-    else {
+    } else {
         mode = QIcon::Disabled;
     }
     const QIcon::State iconState((isDown() & Qt::LeftButton) ? QIcon::On : QIcon::Off);

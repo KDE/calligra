@@ -70,10 +70,9 @@ public:
     bool operator==(const Conditional &other) const;
 };
 
-
 class Conditions;
-uint qHash(const Conditions& conditions);
-uint qHash(const Conditional& condition);
+uint qHash(const Conditions &conditions);
+uint qHash(const Conditional &condition);
 
 /**
  * \class Conditions
@@ -91,7 +90,7 @@ public:
     /**
      * Copy Constructor.
      */
-    Conditions(const Conditions& other);
+    Conditions(const Conditions &other);
 
     /**
      * Destructor..
@@ -116,7 +115,7 @@ public:
     /**
      * Replace the current list of conditions with this new one
      */
-    void setConditionList(const QLinkedList<Conditional> & list);
+    void setConditionList(const QLinkedList<Conditional> &list);
 
     /**
      * Returns an optional default style, which is returned by testConditons if none of
@@ -128,7 +127,7 @@ public:
      * Set an optional default style. This style is returned by testConditions if none of
      * the conditions matches.
      */
-    void setDefaultStyle(const Style& style);
+    void setDefaultStyle(const Style &style);
 
     /**
      * \ingroup NativeFormat
@@ -155,7 +154,7 @@ public:
      * \ingroup OpenDocument
      * Loads the condtional formattings.
      */
-    void loadOdfConditions(const KoXmlElement &element, const ValueParser *parser, const StyleManager* styleManager);
+    void loadOdfConditions(const KoXmlElement &element, const ValueParser *parser, const StyleManager *styleManager);
 
     /**
      * \ingroup OpenDocument
@@ -164,12 +163,14 @@ public:
     void saveOdfConditions(KoGenStyle &currentCellStyle, ValueConverter *converter) const;
 
     /// \note implementation to make QMap happy (which is needed by RectStorage)
-    bool operator<(const Conditions& conditions) const {
+    bool operator<(const Conditions &conditions) const
+    {
         return qHash(*this) < qHash(conditions);
     }
-    void operator=(const Conditions& other);
-    bool operator==(const Conditions& other) const;
-    inline bool operator!=(const Conditions& other) const {
+    void operator=(const Conditions &other);
+    bool operator==(const Conditions &other) const;
+    inline bool operator!=(const Conditions &other) const
+    {
         return !operator==(other);
     }
 
@@ -184,9 +185,9 @@ private:
      *
      * \return true if one of the conditions is true, false if not.
      */
-    bool currentCondition(const Cell& cell, Conditional & condition) const;
+    bool currentCondition(const Cell &cell, Conditional &condition) const;
 
-    bool isTrueFormula(const Cell& cell, const QString& formula, const QString& baseCellAddress) const;
+    bool isTrueFormula(const Cell &cell, const QString &formula, const QString &baseCellAddress) const;
 
     /**
      * \ingroup OpenDocument

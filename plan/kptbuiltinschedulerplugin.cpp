@@ -37,32 +37,32 @@ namespace KPlato
 BuiltinSchedulerPlugin::BuiltinSchedulerPlugin(QObject *parent)
     : SchedulerPlugin(parent)
 {
-    setName( i18nc( "Network = task dependency network", "Network Scheduler" ) );
-    setComment( i18nc( "@info:tooltip", "Built-in network (PERT) based scheduler" ) );
+    setName(i18nc("Network = task dependency network", "Network Scheduler"));
+    setComment(i18nc("@info:tooltip", "Built-in network (PERT) based scheduler"));
 }
- 
+
 BuiltinSchedulerPlugin::~BuiltinSchedulerPlugin()
 {
 }
 
 QString BuiltinSchedulerPlugin::description() const
 {
-    return i18nc( "@info:whatsthis", "<title>Network (PERT) Scheduler</title>"
-                    "<para>The network scheduler generally schedules tasks according to their dependencies."
-                    " When a task is scheduled it is scheduled in full, booking the allocated resources if available."
-                    " If overbooking is not allowed, subsequent tasks that requests the same resource"
-                    " will be scheduled later in time.</para>"
-                    "<para>Tasks with time constraints will be scheduled first to minimize the problem"
-                    " with resource conflicts</para>"
-                    "<para><note>This scheduler does not handle resource conflicts well."
-                    "<nl/>You can try a different scheduler if available."
-                    " You may also change resource allocations or add dummy dependencies to avoid the conflicts.</note></para>"
+    return i18nc("@info:whatsthis", "<title>Network (PERT) Scheduler</title>"
+                 "<para>The network scheduler generally schedules tasks according to their dependencies."
+                 " When a task is scheduled it is scheduled in full, booking the allocated resources if available."
+                 " If overbooking is not allowed, subsequent tasks that requests the same resource"
+                 " will be scheduled later in time.</para>"
+                 "<para>Tasks with time constraints will be scheduled first to minimize the problem"
+                 " with resource conflicts</para>"
+                 "<para><note>This scheduler does not handle resource conflicts well."
+                 "<nl/>You can try a different scheduler if available."
+                 " You may also change resource allocations or add dummy dependencies to avoid the conflicts.</note></para>"
                 );
 }
 
-void BuiltinSchedulerPlugin::calculate( Project &project, ScheduleManager *sm, bool nothread )
+void BuiltinSchedulerPlugin::calculate(Project &project, ScheduleManager *sm, bool nothread)
 {
-    KPlatoScheduler *job = new KPlatoScheduler( &project, sm );
+    KPlatoScheduler *job = new KPlatoScheduler(&project, sm);
     m_jobs << job;
     connect(job, SIGNAL(jobStarted(SchedulerThread*)), SLOT(slotStarted(SchedulerThread*)));
     connect(job, SIGNAL(jobFinished(SchedulerThread*)), SLOT(slotFinished(SchedulerThread*)));
@@ -70,8 +70,8 @@ void BuiltinSchedulerPlugin::calculate( Project &project, ScheduleManager *sm, b
 //     connect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), &project, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
 //     connect(this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), &project, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)));
 
-    sm->setScheduling( true );
-    if ( nothread ) {
+    sm->setScheduling(true);
+    if (nothread) {
         connect(job, SIGNAL(maxProgressChanged(int)), sm, SLOT(setMaxProgress(int)));
         connect(job, SIGNAL(progressChanged(int)), sm, SLOT(setProgress(int)));
         job->doRun();
@@ -81,53 +81,52 @@ void BuiltinSchedulerPlugin::calculate( Project &project, ScheduleManager *sm, b
     m_synctimer.start();
 }
 
-void BuiltinSchedulerPlugin::slotStarted( SchedulerThread *job )
+void BuiltinSchedulerPlugin::slotStarted(SchedulerThread *job)
 {
-    qDebug()<<"BuiltinSchedulerPlugin::slotStarted:"<<job->mainProject()<<job->mainManager();
-    
-    emit sigCalculationStarted( job->mainProject(), job->mainManager() );
+    qDebug() << "BuiltinSchedulerPlugin::slotStarted:" << job->mainProject() << job->mainManager();
+
+    emit sigCalculationStarted(job->mainProject(), job->mainManager());
 }
 
-void BuiltinSchedulerPlugin::slotFinished( SchedulerThread *job )
+void BuiltinSchedulerPlugin::slotFinished(SchedulerThread *job)
 {
     ScheduleManager *sm = job->mainManager();
     Project *mp = job->mainProject();
-    qDebug()<<"BuiltinSchedulerPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
-    if ( job->isStopped() ) {
-        sm->setCalculationResult( ScheduleManager::CalculationCanceled );
+    qDebug() << "BuiltinSchedulerPlugin::slotFinished:" << mp << sm << job->isStopped();
+    if (job->isStopped()) {
+        sm->setCalculationResult(ScheduleManager::CalculationCanceled);
     } else {
-        updateLog( job );
-        Project *tp = static_cast<KPlatoScheduler*>( job )->project();
-        ScheduleManager *tm = static_cast<KPlatoScheduler*>( job )->manager();
-        updateProject( tp, tm, mp, sm );
-        sm->setCalculationResult( ScheduleManager::CalculationDone );
+        updateLog(job);
+        Project *tp = static_cast<KPlatoScheduler *>(job)->project();
+        ScheduleManager *tm = static_cast<KPlatoScheduler *>(job)->manager();
+        updateProject(tp, tm, mp, sm);
+        sm->setCalculationResult(ScheduleManager::CalculationDone);
     }
-    sm->setScheduling( false );
+    sm->setScheduling(false);
 
-    m_jobs.removeAt( m_jobs.indexOf( job ) );
-    if ( m_jobs.isEmpty() ) {
+    m_jobs.removeAt(m_jobs.indexOf(job));
+    if (m_jobs.isEmpty()) {
         m_synctimer.stop();
     }
-    emit sigCalculationFinished( mp, sm );
+    emit sigCalculationFinished(mp, sm);
 
     disconnect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), mp, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
     disconnect(this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), mp, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)));
 
     job->deleteLater();
-    qDebug()<<"BuiltinSchedulerPlugin::slotFinished: <<<";
+    qDebug() << "BuiltinSchedulerPlugin::slotFinished: <<<";
 }
 
-
 //--------------------
-KPlatoScheduler::KPlatoScheduler( Project *project, ScheduleManager *sm, QObject *parent )
-    : SchedulerThread( project, sm, parent)
+KPlatoScheduler::KPlatoScheduler(Project *project, ScheduleManager *sm, QObject *parent)
+    : SchedulerThread(project, sm, parent)
 {
-    qDebug()<<"KPlatoScheduler::KPlatoScheduler:"<<m_mainmanager<<m_mainmanager->name()<<m_mainmanagerId;
+    qDebug() << "KPlatoScheduler::KPlatoScheduler:" << m_mainmanager << m_mainmanager->name() << m_mainmanagerId;
 }
 
 KPlatoScheduler::~KPlatoScheduler()
 {
-    qDebug()<<"KPlatoScheduler::~KPlatoScheduler:"<<QThread::currentThreadId();
+    qDebug() << "KPlatoScheduler::~KPlatoScheduler:" << QThread::currentThreadId();
 }
 
 KLocale *KPlatoScheduler::locale() const
@@ -138,35 +137,36 @@ KLocale *KPlatoScheduler::locale() const
 void KPlatoScheduler::stopScheduling()
 {
     m_stopScheduling = true;
-    if ( m_project ) {
+    if (m_project) {
         m_project->stopcalculation = true;
     }
 }
 
 void KPlatoScheduler::run()
 {
-    if ( m_haltScheduling ) {
+    if (m_haltScheduling) {
         deleteLater();
         return;
     }
-    if ( m_stopScheduling ) {
+    if (m_stopScheduling) {
         return;
     }
-    { // mutex -->
+    {
+        // mutex -->
         m_projectMutex.lock();
         m_managerMutex.lock();
 
         m_project = new Project();
-        loadProject( m_project, m_pdoc );
-        m_project->setName( "Schedule: " + m_project->name() ); //Debug
+        loadProject(m_project, m_pdoc);
+        m_project->setName("Schedule: " + m_project->name());   //Debug
 
-        m_manager = m_project->scheduleManager( m_mainmanagerId );
-        Q_ASSERT( m_manager );
-        Q_ASSERT( m_manager->expected() );
-        Q_ASSERT( m_manager != m_mainmanager );
-        Q_ASSERT( m_manager->scheduleId() == m_mainmanager->scheduleId() );
-        Q_ASSERT( m_manager->expected() != m_mainmanager->expected() );
-        m_manager->setName( "Schedule: " + m_manager->name() ); //Debug
+        m_manager = m_project->scheduleManager(m_mainmanagerId);
+        Q_ASSERT(m_manager);
+        Q_ASSERT(m_manager->expected());
+        Q_ASSERT(m_manager != m_mainmanager);
+        Q_ASSERT(m_manager->scheduleId() == m_mainmanager->scheduleId());
+        Q_ASSERT(m_manager->expected() != m_mainmanager->expected());
+        m_manager->setName("Schedule: " + m_manager->name());   //Debug
 
         m_managerMutex.unlock();
         m_projectMutex.unlock();
@@ -176,13 +176,12 @@ void KPlatoScheduler::run()
     connect(m_project, SIGNAL(sigProgress(int)), this, SLOT(setProgress(int)));
 
     bool x = connect(m_manager, SIGNAL(sigLogAdded(Schedule::Log)), this, SLOT(slotAddLog(Schedule::Log)));
-    Q_ASSERT( x ); Q_UNUSED( x );
-    m_project->calculate( *m_manager );
-    if ( m_haltScheduling ) {
+    Q_ASSERT(x); Q_UNUSED(x);
+    m_project->calculate(*m_manager);
+    if (m_haltScheduling) {
         deleteLater();
     }
 }
-
 
 } //namespace KPlato
 

@@ -32,17 +32,15 @@
 #include <kis_types.h>
 #include <KoToolRegistry.h>
 
-
 #include "kis_tool_perspectivegrid.h"
 
 K_PLUGIN_FACTORY(ToolPerspectiveGridFactory, registerPlugin<ToolPerspectiveGrid>();)
 K_EXPORT_PLUGIN(ToolPerspectiveGridFactory("krita"))
 
-
 ToolPerspectiveGrid::ToolPerspectiveGrid(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
+    KoToolRegistry *r = KoToolRegistry::instance();
     r->add(new KisToolPerspectiveGridFactory(QStringList()));
 }
 

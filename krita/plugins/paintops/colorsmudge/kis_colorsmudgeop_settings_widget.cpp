@@ -35,8 +35,7 @@
 #include <kis_compositeop_option.h>
 #include <kis_pressure_spacing_option_widget.h>
 
-
-KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
+KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget *parent):
     KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
@@ -50,7 +49,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
 
     addPaintOpOption(new KisSmudgeOptionWidget(i18n("Smudge Length"), i18n("Length: "), "SmudgeRate", true));
     addPaintOpOption(new KisSmudgeRadiusOptionWidget(i18n("Smudge Radius"), i18n("Radius(%): "), "SmudgeRadius", true));
-    addPaintOpOption(new KisRateOptionWidget(i18n("Color Rate") , i18n("Rate: "), "ColorRate" , false));
+    addPaintOpOption(new KisRateOptionWidget(i18n("Color Rate"), i18n("Rate: "), "ColorRate", false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisPressureScatterOptionWidget());
     addPaintOpOption(new KisOverlayModeOptionWidget());
@@ -61,14 +60,13 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
 
 KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }
 
-KisPropertiesConfiguration* KisColorSmudgeOpSettingsWidget::configuration() const
+KisPropertiesConfiguration *KisColorSmudgeOpSettingsWidget::configuration() const
 {
     KisBrushBasedPaintOpSettings *config = new KisBrushBasedPaintOpSettings();
-    config->setOptionsWidget(const_cast<KisColorSmudgeOpSettingsWidget*>(this));
+    config->setOptionsWidget(const_cast<KisColorSmudgeOpSettingsWidget *>(this));
     config->setProperty("paintop", "colorsmudge");
     writeConfiguration(config);
     return config;
 }
-
 
 #include "kis_colorsmudgeop_settings_widget.moc"

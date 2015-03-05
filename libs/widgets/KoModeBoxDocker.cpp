@@ -25,7 +25,6 @@
 
 #include <kdebug.h>
 
-
 KoModeBoxDocker::KoModeBoxDocker(KoModeBox *modeBox)
     : m_modeBox(modeBox)
 {

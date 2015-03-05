@@ -54,7 +54,7 @@ public Q_SLOTS:
 class DebugWindow : public QWidget
 {
 public:
-    explicit DebugWindow(QWidget * parent = 0);
+    explicit DebugWindow(QWidget *parent = 0);
 };
 
 #endif

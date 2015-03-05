@@ -48,7 +48,7 @@ private Q_SLOTS:
     void testInlineArrays();
 
 private:
-    Value evaluate(const QString&, Value&);
+    Value evaluate(const QString &, Value &);
 };
 
 } // namespace Sheets

@@ -32,7 +32,6 @@
 #include "generator/kis_generator_registry.h"
 #include "generator/kis_generator.h"
 
-
 class KisNode;
 
 class KisChangeFilterCmd : public KUndo2Command
@@ -45,9 +44,10 @@ public:
                        const QString &filterNameAfter,
                        const QString &xmlAfter,
                        bool useGeneratorRegistry)
-            : KUndo2Command(kundo2_i18n("Change Filter")) {
+        : KUndo2Command(kundo2_i18n("Change Filter"))
+    {
         m_node = node;
-        m_filterInterface = dynamic_cast<KisNodeFilterInterface*>(node.data());
+        m_filterInterface = dynamic_cast<KisNodeFilterInterface *>(node.data());
         Q_ASSERT(m_filterInterface);
 
         m_useGeneratorRegistry = useGeneratorRegistry;
@@ -58,18 +58,20 @@ public:
         m_filterNameAfter = filterNameAfter;
     }
 public:
-    virtual void redo() {
+    virtual void redo()
+    {
         m_filterInterface->setFilter(createConfiguration(m_filterNameAfter, m_xmlAfter));
         m_node->setDirty();
     }
 
-    virtual void undo() {
+    virtual void undo()
+    {
         m_filterInterface->setFilter(createConfiguration(m_filterNameBefore, m_xmlBefore));
         m_node->setDirty();
     }
 
 private:
-    KisFilterConfiguration* createConfiguration(const QString &name, const QString &data)
+    KisFilterConfiguration *createConfiguration(const QString &name, const QString &data)
     {
         KisFilterConfiguration *config;
 
@@ -83,7 +85,7 @@ private:
 
         config->fromXML(data);
         return config;
-}
+    }
 
 private:
     KisNodeSP m_node;

@@ -20,7 +20,6 @@
 #ifndef CALLIGRA_SHEETS_INDENTATION_COMMAND
 #define CALLIGRA_SHEETS_INDENTATION_COMMAND
 
-
 #include "AbstractRegionCommand.h"
 #include "Style.h"
 

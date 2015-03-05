@@ -42,7 +42,7 @@ public:
 };
 
 KoListStyle::KoListStyle(QObject *parent)
-        : QObject(parent), d(new Private())
+    : QObject(parent), d(new Private())
 {
 }
 
@@ -53,15 +53,18 @@ KoListStyle::~KoListStyle()
 
 bool KoListStyle::operator==(const KoListStyle &other) const
 {
-    foreach(int level, d->levels.keys()) {
-        if (! other.hasLevelProperties(level))
+    foreach (int level, d->levels.keys()) {
+        if (! other.hasLevelProperties(level)) {
             return false;
-        if (!(other.levelProperties(level) == d->levels[level]))
+        }
+        if (!(other.levelProperties(level) == d->levels[level])) {
             return false;
+        }
     }
-    foreach(int level, other.d->levels.keys()) {
-        if (! hasLevelProperties(level))
+    foreach (int level, other.d->levels.keys()) {
+        if (! hasLevelProperties(level)) {
             return false;
+        }
     }
     return true;
 }
@@ -92,8 +95,9 @@ QString KoListStyle::name() const
 
 void KoListStyle::setName(const QString &name)
 {
-    if (d->name == name)
+    if (d->name == name) {
         return;
+    }
     d->name = name;
     emit nameChanged(d->name);
 }
@@ -106,15 +110,16 @@ int KoListStyle::styleId() const
 void KoListStyle::setStyleId(int id)
 {
     d->styleId = id;
-    foreach(int level, d->levels.keys()) {
+    foreach (int level, d->levels.keys()) {
         d->levels[level].setStyleId(id);
     }
 }
 
 KoListLevelProperties KoListStyle::levelProperties(int level) const
 {
-    if (d->levels.contains(level))
+    if (d->levels.contains(level)) {
         return d->levels.value(level);
+    }
 
     level = qMax(1, level);
     if (d->levels.count()) {
@@ -124,8 +129,9 @@ KoListLevelProperties KoListStyle::levelProperties(int level) const
     }
     KoListLevelProperties llp;
     llp.setLevel(level);
-    if (d->styleId)
+    if (d->styleId) {
         llp.setStyleId(d->styleId);
+    }
     return llp;
 }
 
@@ -170,7 +176,7 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level)
     KoList::applyStyle(block, this, level);
 }
 
-void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style)
+void KoListStyle::loadOdf(KoShapeLoadingContext &scontext, const KoXmlElement &style)
 {
     d->name = style.attributeNS(KoXmlNS::style, "display-name", QString());
     // if no style:display-name is given us the style:name
@@ -180,11 +186,12 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
     d->name = style.attributeNS(KoXmlNS::style, "name", QString());
 
     KoXmlElement styleElem;
-    forEachElement(styleElem, style) {
+    forEachElement (styleElem, style) {
         KoListLevelProperties properties;
         properties.loadOdf(scontext, styleElem);
-        if (d->styleId)
+        if (d->styleId) {
             properties.setStyleId(d->styleId);
+        }
         setLevelProperties(properties);
     }
 

@@ -26,7 +26,7 @@
 
 #include <QLineEdit>
 
-static int paddingBeforeGroupItem(const QFontMetrics& fm)
+static int paddingBeforeGroupItem(const QFontMetrics &fm)
 {
     return fm.lineSpacing() / 2;
 }
@@ -38,7 +38,7 @@ public:
 };
 
 KexiProjectItemDelegate::KexiProjectItemDelegate(QObject *parent)
-  : QStyledItemDelegate(parent), d(new Private)
+    : QStyledItemDelegate(parent), d(new Private)
 {
 }
 
@@ -50,19 +50,19 @@ KexiProjectItemDelegate::~KexiProjectItemDelegate()
 void KexiProjectItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                                     const QModelIndex &index) const
 {
-    const KexiProjectModel* model = qobject_cast<const KexiProjectModel*>(index.model());
+    const KexiProjectModel *model = qobject_cast<const KexiProjectModel *>(index.model());
     QPersistentModelIndex highlighted = model->itemWithSearchHighlight();
     QStyleOptionViewItem newOption(option);
     if (highlighted.isValid() && highlighted == index) {
         newOption.state |= QStyle::State_MouseOver;
     }
-    KexiProjectModelItem *item = static_cast<KexiProjectModelItem*>(index.internalPointer());
+    KexiProjectModelItem *item = static_cast<KexiProjectModelItem *>(index.internalPointer());
     if (!item->partItem()) { // this is a group item
         if (item->childCount() == 0) {
             return;
         }
         newOption.palette = KexiUtils::paletteWithDimmedColor(newOption.palette,
-                                                              QPalette::Active, QPalette::Text);
+                            QPalette::Active, QPalette::Text);
         newOption.palette.setColor(QPalette::Disabled, QPalette::Text,
                                    newOption.palette.color(QPalette::Active, QPalette::Text));
         newOption.displayAlignment = Qt::AlignLeft | Qt::AlignBottom;
@@ -72,14 +72,14 @@ void KexiProjectItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     QStyledItemDelegate::paint(painter, newOption, index);
 }
 
-QWidget* KexiProjectItemDelegate::createEditor(
+QWidget *KexiProjectItemDelegate::createEditor(
     QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QWidget *editor = QStyledItemDelegate::createEditor(parent, option, index);
-    if (qobject_cast<QLineEdit*>(editor)) { // sanity check
+    if (qobject_cast<QLineEdit *>(editor)) { // sanity check
         KexiUtils::IdentifierValidator *validator = new KexiUtils::IdentifierValidator(editor);
         validator->setLowerCaseForced(true);
-        qobject_cast<QLineEdit*>(editor)->setValidator(validator);
+        qobject_cast<QLineEdit *>(editor)->setValidator(validator);
     }
     return editor;
 }
@@ -88,7 +88,7 @@ QSize KexiProjectItemDelegate::sizeHint(const QStyleOptionViewItem &option,
                                         const QModelIndex &index) const
 {
     QSize s = QStyledItemDelegate::sizeHint(option, index);
-    KexiProjectModelItem *item = static_cast<KexiProjectModelItem*>(index.internalPointer());
+    KexiProjectModelItem *item = static_cast<KexiProjectModelItem *>(index.internalPointer());
     if (!item->partItem()) { // this is a group item: add padding before
         if (item->childCount() == 0) {
             return QSize(0, 0);

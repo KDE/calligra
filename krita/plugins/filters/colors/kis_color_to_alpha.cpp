@@ -42,14 +42,14 @@ KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), categoryColors(
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget *KisFilterColorToAlpha::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP) const
 {
     return new KisWdgColorToAlpha(parent);
 }
 
-KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisFilterColorToAlpha::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("colortoalpha", 1);
     config->setProperty("targetcolor", QColor(255, 255, 255));
     config->setProperty("threshold", 100);
     return config;
@@ -76,43 +76,45 @@ void applyToIterator(const int numChannels, const int *channelIndex,
 {
     qreal thresholdF = threshold;
     quint8 *baseColorData_uint8 = baseColor.data();
-    channel_type *baseColorData = reinterpret_cast<channel_type*>(baseColorData_uint8);
+    channel_type *baseColorData = reinterpret_cast<channel_type *>(baseColorData_uint8);
 
     do {
-        channel_type *dst = reinterpret_cast<channel_type*>(it.rawData());
+        channel_type *dst = reinterpret_cast<channel_type *>(it.rawData());
         quint8 *dst_uint8 = it.rawData();
 
         quint8 diff = cs->difference(baseColorData_uint8, dst_uint8);
 
         qreal newOpacity = diff >= threshold ? 1.0 : diff / thresholdF;
 
-        if(newOpacity < cs->opacityF(dst_uint8)) {
-          cs->setOpacity(dst_uint8, newOpacity, 1);
+        if (newOpacity < cs->opacityF(dst_uint8)) {
+            cs->setOpacity(dst_uint8, newOpacity, 1);
         }
 
         inverseOver<channel_type, composite_type>(numChannels, channelIndex,
-                                                    dst, baseColorData,
-                                                    newOpacity);
+                dst, baseColorData,
+                newOpacity);
 
         progressHelper.step();
-    } while(it.nextPixel());
+    } while (it.nextPixel());
 }
 
 void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
-                                        const QRect& rect,
-                                        const KisFilterConfiguration* config,
-                                        KoUpdater* progressUpdater
-                                        ) const
+                                        const QRect &rect,
+                                        const KisFilterConfiguration *config,
+                                        KoUpdater *progressUpdater
+                                       ) const
 {
     Q_ASSERT(device != 0);
 
-    if (config == 0) config = new KisFilterConfiguration("colortoalpha", 1);
+    if (config == 0) {
+        config = new KisFilterConfiguration("colortoalpha", 1);
+    }
 
     QVariant value;
     QColor cTA = (config->getProperty("targetcolor", value)) ? value.value<QColor>() : QColor(255, 255, 255);
     int threshold = (config->getProperty("threshold", value)) ? value.toInt() : 1;
 
-    const KoColorSpace * cs = device->colorSpace();
+    const KoColorSpace *cs = device->colorSpace();
 
     KisProgressUpdateHelper progressHelper(progressUpdater, 100, rect.width() * rect.height());
     KisSequentialIterator it(device, rect);
@@ -121,18 +123,20 @@ void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
     QVector<int> channelIndex;
     KoChannelInfo::enumChannelValueType valueType = KoChannelInfo::OTHER;
 
-    QList<KoChannelInfo*> channels = cs->channels();
+    QList<KoChannelInfo *> channels = cs->channels();
 
     for (int i = 0; i < channels.size(); i++) {
         const KoChannelInfo *info = channels[i];
 
-        if (info->channelType() != KoChannelInfo::COLOR) continue;
+        if (info->channelType() != KoChannelInfo::COLOR) {
+            continue;
+        }
 
         KoChannelInfo::enumChannelValueType currentValueType =
             info->channelValueType();
 
         if (valueType != KoChannelInfo::OTHER &&
-            valueType != currentValueType) {
+                valueType != currentValueType) {
 
             qWarning() << "Cannot apply a Color-to-Alpha filter to a heterogeneous colorspace";
             return;

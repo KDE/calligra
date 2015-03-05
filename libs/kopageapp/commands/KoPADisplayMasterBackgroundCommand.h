@@ -34,7 +34,7 @@ class KoPAPage;
 class KOPAGEAPP_EXPORT KoPADisplayMasterBackgroundCommand : public KUndo2Command
 {
 public:
-    KoPADisplayMasterBackgroundCommand( KoPAPage * page, bool display );
+    KoPADisplayMasterBackgroundCommand(KoPAPage *page, bool display);
     virtual ~KoPADisplayMasterBackgroundCommand();
 
     /// redo the command
@@ -43,7 +43,7 @@ public:
     void undo();
 
 private:
-    KoPAPage * m_page;
+    KoPAPage *m_page;
     bool m_display;
 };
 

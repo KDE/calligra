@@ -27,16 +27,14 @@
 #include "kis_simple_stroke_strategy.h"
 #include "commands_new/kis_saved_commands.h"
 
-
-
 class KisStrokeJob;
 class KisPostExecutionUndoAdapter;
-
 
 class KRITAIMAGE_EXPORT KisStrokeStrategyUndoCommandBased : public KisSimpleStrokeStrategy
 {
 public:
-    class Data : public KisStrokeJobData {
+    class Data : public KisStrokeJobData
+    {
     public:
         Data(KUndo2CommandSP _command,
              bool _undo = false,

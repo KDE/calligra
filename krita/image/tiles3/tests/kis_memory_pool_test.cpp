@@ -37,7 +37,6 @@ private:
 
 typedef KisMemoryPool<TestingClass, POOL_SIZE> TestingMemoryPool;
 
-
 class KisPoolStressJob : public QRunnable
 {
 public:
@@ -46,24 +45,25 @@ public:
     {
     }
 
-    void run() {
+    void run()
+    {
         qsrand(QTime::currentTime().msec());
-        for(qint32 i = 0; i < NUM_CYCLES; i++) {
+        for (qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = i % 2;
 
-            switch(type) {
+            switch (type) {
             case 0:
-                for(qint32 j = 0; j < NUM_OBJECTS; j++) {
+                for (qint32 j = 0; j < NUM_OBJECTS; j++) {
                     m_pointer[j] = m_pool.pop();
                     Q_ASSERT(m_pointer[j]);
                     // check for sigsegv ;)
-                    ((quint8*)m_pointer[j])[0] = i;
+                    ((quint8 *)m_pointer[j])[0] = i;
                 }
                 break;
             case 1:
-                for(qint32 j = 0; j < NUM_OBJECTS; j++) {
+                for (qint32 j = 0; j < NUM_OBJECTS; j++) {
                     // are we the only writers here?
-                    Q_ASSERT(((quint8*)m_pointer[j])[0] == (i-1) % 256);
+                    Q_ASSERT(((quint8 *)m_pointer[j])[0] == (i - 1) % 256);
                     m_pool.push(m_pointer[j]);
                 }
                 break;
@@ -72,7 +72,7 @@ public:
     }
 
 private:
-    void* m_pointer[NUM_OBJECTS];
+    void *m_pointer[NUM_OBJECTS];
     TestingMemoryPool &m_pool;
 };
 
@@ -84,7 +84,8 @@ void KisMemoryPoolTest::benchmarkMemoryPool()
     pool.setMaxThreadCount(NUM_THREADS);
 
     QBENCHMARK {
-        for(qint32 i = 0; i < NUM_THREADS; i++) {
+        for (qint32 i = 0; i < NUM_THREADS; i++)
+        {
             KisPoolStressJob *job = new KisPoolStressJob(memoryPool);
             pool.start(job);
         }
@@ -93,7 +94,6 @@ void KisMemoryPoolTest::benchmarkMemoryPool()
     }
 }
 
-
 class KisAllocStressJob : public QRunnable
 {
 public:
@@ -101,25 +101,26 @@ public:
     {
     }
 
-    void run() {
+    void run()
+    {
         qsrand(QTime::currentTime().msec());
-        for(qint32 i = 0; i < NUM_CYCLES; i++) {
+        for (qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = i % 2;
 
-            switch(type) {
+            switch (type) {
             case 0:
-                for(qint32 j = 0; j < NUM_OBJECTS; j++) {
+                for (qint32 j = 0; j < NUM_OBJECTS; j++) {
                     m_pointer[j] = new TestingClass;
                     Q_ASSERT(m_pointer[j]);
                     // check for sigsegv ;)
-                    ((quint8*)m_pointer[j])[0] = i;
+                    ((quint8 *)m_pointer[j])[0] = i;
                 }
                 break;
             case 1:
-                for(qint32 j = 0; j < NUM_OBJECTS; j++) {
+                for (qint32 j = 0; j < NUM_OBJECTS; j++) {
                     // are we the only writers here?
-                    Q_ASSERT(((quint8*)m_pointer[j])[0] == (i-1) % 256);
-                    delete (TestingClass*)m_pointer[j];
+                    Q_ASSERT(((quint8 *)m_pointer[j])[0] == (i - 1) % 256);
+                    delete(TestingClass *)m_pointer[j];
                 }
                 break;
             }
@@ -127,7 +128,7 @@ public:
     }
 
 private:
-    void* m_pointer[NUM_OBJECTS];
+    void *m_pointer[NUM_OBJECTS];
 };
 
 void KisMemoryPoolTest::benchmarkAlloc()
@@ -136,7 +137,8 @@ void KisMemoryPoolTest::benchmarkAlloc()
     pool.setMaxThreadCount(NUM_THREADS);
 
     QBENCHMARK {
-        for(qint32 i = 0; i < NUM_THREADS; i++) {
+        for (qint32 i = 0; i < NUM_THREADS; i++)
+        {
             KisAllocStressJob *job = new KisAllocStressJob();
             pool.start(job);
         }
@@ -144,7 +146,6 @@ void KisMemoryPoolTest::benchmarkAlloc()
         pool.waitForDone();
     }
 }
-
 
 QTEST_KDEMAIN(KisMemoryPoolTest, NoGUI)
 #include "kis_memory_pool_test.moc"

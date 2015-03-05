@@ -30,17 +30,17 @@ class KoShapeManager;
 class KPrAnimationData
 {
 public:
-    KPrAnimationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, QRectF boundingRect )
-    : m_canvas( canvas )
-    , m_shapeManager( shapeManager )
-    , m_boundingRect( boundingRect )
-    , m_finished( false )
+    KPrAnimationData(KoCanvasBase *canvas, KoShapeManager *shapeManager, QRectF boundingRect)
+        : m_canvas(canvas)
+        , m_shapeManager(shapeManager)
+        , m_boundingRect(boundingRect)
+        , m_finished(false)
     {}
 
     virtual ~KPrAnimationData() {}
 
-    KoCanvasBase * m_canvas;
-    KoShapeManager * m_shapeManager;
+    KoCanvasBase *m_canvas;
+    KoShapeManager *m_shapeManager;
     QTimeLine m_timeLine;
     QRectF m_boundingRect;
     bool m_finished;
@@ -49,8 +49,8 @@ public:
 class KPrAnimationDataTranslate : public KPrAnimationData
 {
 public:
-    KPrAnimationDataTranslate( KoCanvasBase * canvas, KoShapeManager * shapeManager, QRectF boundingRect )
-    : KPrAnimationData( canvas, shapeManager, boundingRect )
+    KPrAnimationDataTranslate(KoCanvasBase *canvas, KoShapeManager *shapeManager, QRectF boundingRect)
+        : KPrAnimationData(canvas, shapeManager, boundingRect)
     {}
 
     virtual ~KPrAnimationDataTranslate() {}

@@ -39,10 +39,8 @@
 // This filter
 #include "OpcRelSet.h"
 
-
 // ================================================================
 //                 class OpcRelSetManager
-
 
 class OpcRelSetManager::Private
 {
@@ -50,9 +48,9 @@ public:
     Private();
     ~Private();
 
-    QHash<QString, OpcRelSet*> relSets;         // path, relations
+    QHash<QString, OpcRelSet *> relSets;        // path, relations
     OpcRelSet                 *documentRelSet;  // The relations for the whole document
-                                                // Stored in _rels/.rels 
+    // Stored in _rels/.rels
 };
 
 OpcRelSetManager::Private::Private()
@@ -66,9 +64,7 @@ OpcRelSetManager::Private::~Private()
     delete documentRelSet;
 }
 
-
 // ----------------------------------------------------------------
-
 
 OpcRelSetManager::OpcRelSetManager()
     : d(new OpcRelSetManager::Private())
@@ -79,7 +75,6 @@ OpcRelSetManager::~OpcRelSetManager()
 {
     delete d;
 }
-
 
 OpcRelSet *OpcRelSetManager::relSet(const QString &path) const
 {
@@ -112,9 +107,7 @@ void OpcRelSetManager::clear()
     }
 }
 
-
 // ----------------------------------------------------------------
-
 
 bool OpcRelSetManager::loadRelSets(KoStore *odfStore)
 {
@@ -133,7 +126,6 @@ bool OpcRelSetManager::loadRelSets(KoStore *odfStore)
     return true;
 }
 
-
 bool OpcRelSetManager::saveRelSets(KoStore *odfStore)
 {
     Q_UNUSED(odfStore);
@@ -141,7 +133,7 @@ bool OpcRelSetManager::saveRelSets(KoStore *odfStore)
     // FIXME: save the document relset here
 
 //     foreach (const QString &path, d->relSets.keys()) {
-        // FIXME: save the .rels file for the file with path 'path' here.
+    // FIXME: save the .rels file for the file with path 'path' here.
 //     }
 
     // FIXME: Return actual return status.

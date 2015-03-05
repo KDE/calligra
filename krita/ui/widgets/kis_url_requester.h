@@ -26,9 +26,9 @@
 #include <kurl.h>
 #include <KoFileDialog.h>
 
-
-namespace Ui {
-    class WdgUrlRequester;
+namespace Ui
+{
+class WdgUrlRequester;
 }
 
 /**

@@ -35,7 +35,7 @@
 #define MARGIN_DEFAULT 18 // we consider it the default value
 
 ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, ChangeListLevelCommand::CommandType type,
-                                               int coef, KUndo2Command *parent)
+        int coef, KUndo2Command *parent)
     : KoTextCommandBase(parent),
       m_type(type),
       m_coefficient(coef),
@@ -91,17 +91,16 @@ void ChangeListLevelCommand::redo()
             KoTextBlockData userData(currentBlock);
             userData.setCounterWidth(-1.0);
         }
-    }
-    else {
+    } else {
         for (int i = 0; i < m_blocks.size() && m_lists.value(i); ++i) {
             if (!m_lists.value(i)->style()->hasLevelProperties(m_levels.value(i))) {
                 KoListLevelProperties llp = m_lists.value(i)->style()->levelProperties(m_levels.value(i));
                 if (llp.alignmentMode() == false) {
                     //old list mode, see KoListLevelProperties::alignmentMode() documentation
-                    llp.setIndent((m_levels.value(i)-1) * 20); //TODO make this configurable
+                    llp.setIndent((m_levels.value(i) - 1) * 20); //TODO make this configurable
                 } else {
-                    llp.setTabStopPosition(MARGIN_DEFAULT*(m_levels.value(i)+1));
-                    llp.setMargin(MARGIN_DEFAULT*(m_levels.value(i)+1));
+                    llp.setTabStopPosition(MARGIN_DEFAULT * (m_levels.value(i) + 1));
+                    llp.setMargin(MARGIN_DEFAULT * (m_levels.value(i) + 1));
                     llp.setTextIndent(- MARGIN_DEFAULT);
                 }
                 llp.setDisplayLevel(llp.displayLevel() + m_coefficient);
@@ -120,8 +119,9 @@ void ChangeListLevelCommand::undo()
     KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
     for (int i = 0; i < m_blocks.size(); ++i) {
-        if (m_blocks.at(i).textList())
+        if (m_blocks.at(i).textList()) {
             m_lists.value(i)->updateStoredList(m_blocks.at(i));
+        }
 
         QTextBlock currentBlock(m_blocks.at(i));
         KoTextBlockData userData(currentBlock);

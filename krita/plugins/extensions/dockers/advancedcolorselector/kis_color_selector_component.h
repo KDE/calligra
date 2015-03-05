@@ -26,7 +26,6 @@ class KoColorSpace;
 
 class QPainter;
 
-
 class KisColorSelectorComponent : public QObject
 {
     Q_OBJECT
@@ -34,9 +33,9 @@ public:
     typedef KisColorSelector::Parameters Parameter;
     typedef KisColorSelector::Type Type;
 
-    explicit KisColorSelectorComponent(KisColorSelector* parent);
+    explicit KisColorSelectorComponent(KisColorSelector *parent);
     void setGeometry(int x, int y, int width, int height);
-    void paintEvent(QPainter*);
+    void paintEvent(QPainter *);
 
     /// saves the mouse position, so that a blip can be created.
     void mouseEvent(int x, int y);
@@ -51,13 +50,16 @@ public:
     void setConfiguration(Parameter param, Type type);
 
     /// set the color, blibs etc
-    virtual void setColor(const KoColor& color) = 0;
+    virtual void setColor(const KoColor &color) = 0;
 
     /// force subsequent redraw of the component
     void setDirty();
 
     /// returns true, if this component wants to grab the mouse (normaly true, if containsPoint returns true)
-    bool wantsGrab(int x, int y) {return containsPointInComponentCoords(x-m_x, y-m_y);}
+    bool wantsGrab(int x, int y)
+    {
+        return containsPointInComponentCoords(x - m_x, y - m_y);
+    }
 
 public Q_SLOTS:
     /// set hue, saturation, value or/and lightness
@@ -69,7 +71,7 @@ Q_SIGNALS:
     /// -1, if unaffected
     void paramChanged(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness, qreal hsiSaturation, qreal intensity, qreal hsySaturation, qreal luma);
 protected:
-    const KoColorSpace* colorSpace() const;
+    const KoColorSpace *colorSpace() const;
     /// returns true, if ether the colour space, the size or the parameters have changed since the last paint event
     bool isDirty() const;
 
@@ -79,7 +81,7 @@ protected:
     /// paint component using given painter
     /// the component should respect width() and height() (eg. scale to width and height), but doesn't
     /// have to care about x/y coordinates (top left corner)
-    virtual void paint(QPainter*) = 0;
+    virtual void paint(QPainter *) = 0;
 
     /// a subclass can implement this method, the default returns true if the coordinates are in the component rect
     /// values for the subclasses are provided in component coordinates, eg (0,0) is top left of component
@@ -99,14 +101,14 @@ protected:
     qreal m_luma;
     Parameter m_parameter;
     Type m_type;
-    KisColorSelector* m_parent;
+    KisColorSelector *m_parent;
 private:
     int m_width;
     int m_height;
     int m_x;
     int m_y;
     bool m_dirty;
-    const KoColorSpace* m_lastColorSpace;
+    const KoColorSpace *m_lastColorSpace;
     qreal m_lastX;
     qreal m_lastY;
 };

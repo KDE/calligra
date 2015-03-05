@@ -9,7 +9,6 @@
 #include <Command.h>
 #include <kis_config_widget.h>
 
-
 /**
  * creates GUI for GMIC filter definition (Command)
  */
@@ -19,16 +18,23 @@ enum ROLE {
     LoadRole = 1
 };
 
-class KisGmicSettingsWidget : public KisConfigWidget {
+class KisGmicSettingsWidget : public KisConfigWidget
+{
     Q_OBJECT
 public:
-    KisGmicSettingsWidget(Command * command = 0);
+    KisGmicSettingsWidget(Command *command = 0);
     ~KisGmicSettingsWidget();
 
-    virtual KisPropertiesConfiguration* configuration() const { return 0; }
-    virtual void setConfiguration(const KisPropertiesConfiguration* config) { Q_UNUSED(config) }
+    virtual KisPropertiesConfiguration *configuration() const
+    {
+        return 0;
+    }
+    virtual void setConfiguration(const KisPropertiesConfiguration *config)
+    {
+        Q_UNUSED(config)
+    }
 
-    Command * currentCommandSettings();
+    Command *currentCommandSettings();
 
     void reload();
 
@@ -36,16 +42,15 @@ private:
     void createSettingsWidget(ROLE role);
 
 private:
-    Command * m_commandDefinition;
+    Command *m_commandDefinition;
     QHash<void *, int> m_widgetToParameterIndexMapper;
     QHash<Parameter *, QWidget *> m_parameterToWidgetMapper;
 
-    Parameter * parameter(QObject * widget);
-    QWidget * widget(Parameter * parameter);
+    Parameter *parameter(QObject *widget);
+    QWidget *widget(Parameter *parameter);
 
     // maps the parameter to widget in both directions, two hash tables are used for it
-    void mapParameterWidget(Parameter * parameter, QWidget * widget);
-
+    void mapParameterWidget(Parameter *parameter, QWidget *widget);
 
 private Q_SLOTS:
     void setIntValue(int value);
@@ -59,7 +64,7 @@ private Q_SLOTS:
 
 };
 
-Q_DECLARE_METATYPE(KisGmicSettingsWidget*)
+Q_DECLARE_METATYPE(KisGmicSettingsWidget *)
 
 #endif
 

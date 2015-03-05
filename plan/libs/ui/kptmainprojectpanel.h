@@ -27,7 +27,6 @@
 #include <QWidget>
 #include <QDateTime>
 
-
 namespace KPlato
 {
 
@@ -35,16 +34,17 @@ class Project;
 class MacroCommand;
 class TaskDescriptionPanel;
 
-class MainProjectPanel : public QWidget, public Ui_MainProjectPanelBase {
+class MainProjectPanel : public QWidget, public Ui_MainProjectPanelBase
+{
     Q_OBJECT
 public:
-    explicit MainProjectPanel(Project &project, QWidget *parent=0);
+    explicit MainProjectPanel(Project &project, QWidget *parent = 0);
 
     virtual QDateTime startDateTime();
     virtual QDateTime endDateTime();
 
     MacroCommand *buildCommand();
-    
+
     bool ok();
 
 public Q_SLOTS:
@@ -62,7 +62,6 @@ private:
     TaskDescriptionPanel *m_description;
     Project &project;
 };
-
 
 }  //KPlato namespace
 

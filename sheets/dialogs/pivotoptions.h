@@ -26,29 +26,31 @@
 #include<QListWidgetItem>
 #include<QObject>
 
-namespace Calligra{
-  namespace Sheets{
-    /**
- * \ingroup UI
- * Dialog to create PivotOptions.
- */
+namespace Calligra
+{
+namespace Sheets
+{
+/**
+* \ingroup UI
+* Dialog to create PivotOptions.
+*/
 class Selection;
 class PivotOptions : public KDialog
-   {
-   Q_OBJECT
+{
+    Q_OBJECT
 
-  public:
-      explicit PivotOptions(QWidget* parent, Selection* selection);
-      ~PivotOptions();
-      QString returnFunction();
-  public Q_SLOTS:
-      void on_Ok_clicked();
-  private:
-      
-  //     void selectBase();
-      class Private;
-      Private *const d;
-    };
-  }//Sheets
+public:
+    explicit PivotOptions(QWidget *parent, Selection *selection);
+    ~PivotOptions();
+    QString returnFunction();
+public Q_SLOTS:
+    void on_Ok_clicked();
+private:
+
+    //     void selectBase();
+    class Private;
+    Private *const d;
+};
+}//Sheets
 }//Calligra
 #endif // PIVOTOPTIONS_H

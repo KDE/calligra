@@ -26,35 +26,37 @@
 #include "kis_selection.h"
 #include "kis_types.h"
 
-
 class KisBaseProcessorConfigurationFactory : public KisSerializableConfigurationFactory
 {
 public:
-    KisBaseProcessorConfigurationFactory(KisBaseProcessor* _generator) : m_generator(_generator) {}
+    KisBaseProcessorConfigurationFactory(KisBaseProcessor *_generator) : m_generator(_generator) {}
     virtual ~KisBaseProcessorConfigurationFactory() {}
-    virtual KisSerializableConfiguration* createDefault() {
+    virtual KisSerializableConfiguration *createDefault()
+    {
         return m_generator->factoryConfiguration(0);
     }
-    virtual KisSerializableConfiguration* create(const QDomElement& e) {
-        KisSerializableConfiguration* config = m_generator->factoryConfiguration(0);
+    virtual KisSerializableConfiguration *create(const QDomElement &e)
+    {
+        KisSerializableConfiguration *config = m_generator->factoryConfiguration(0);
         config->fromXML(e);
         return config;
     }
 private:
-    KisBaseProcessor* m_generator;
+    KisBaseProcessor *m_generator;
 };
 
 struct KisBaseProcessor::Private {
     Private()
-            : bookmarkManager(0)
-            , supportsPainting(false)
-            , supportsAdjustmentLayers(true)
-            , supportsThreading(true)
-            , showConfigurationWidget(true)
-            , colorSpaceIndependence(FULLY_INDEPENDENT) {
+        : bookmarkManager(0)
+        , supportsPainting(false)
+        , supportsAdjustmentLayers(true)
+        , supportsThreading(true)
+        , showConfigurationWidget(true)
+        , colorSpaceIndependence(FULLY_INDEPENDENT)
+    {
     }
 
-    KisBookmarkedConfigurationManager* bookmarkManager;
+    KisBookmarkedConfigurationManager *bookmarkManager;
 
     KoID id;
     KoID category; // The category in the filter menu this filter fits
@@ -67,15 +69,15 @@ struct KisBaseProcessor::Private {
     ColorSpaceIndependence colorSpaceIndependence;
 };
 
-KisBaseProcessor::KisBaseProcessor(const KoID& id, const KoID & category, const QString & entry)
-        : d(new Private)
+KisBaseProcessor::KisBaseProcessor(const KoID &id, const KoID &category, const QString &entry)
+    : d(new Private)
 {
     d->id = id;
     d->category = category;
     d->entry = entry;
 }
 
-void KisBaseProcessor::init(const QString& configEntryGroup)
+void KisBaseProcessor::init(const QString &configEntryGroup)
 {
     d->bookmarkManager = new KisBookmarkedConfigurationManager(configEntryGroup, new KisBaseProcessorConfigurationFactory(this));
 }
@@ -86,14 +88,14 @@ KisBaseProcessor::~KisBaseProcessor()
     delete d;
 }
 
-KisFilterConfiguration * KisBaseProcessor::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisBaseProcessor::factoryConfiguration(const KisPaintDeviceSP) const
 {
     return new KisFilterConfiguration(id(), 0);
 }
 
-KisFilterConfiguration * KisBaseProcessor::defaultConfiguration(const KisPaintDeviceSP pd) const
+KisFilterConfiguration *KisBaseProcessor::defaultConfiguration(const KisPaintDeviceSP pd) const
 {
-    KisFilterConfiguration* fc = 0;
+    KisFilterConfiguration *fc = 0;
 //     if (bookmarkManager()) {
 //         fc = dynamic_cast<KisFilterConfiguration*>(bookmarkManager()->defaultConfiguration());
 //     }
@@ -103,17 +105,17 @@ KisFilterConfiguration * KisBaseProcessor::defaultConfiguration(const KisPaintDe
     return fc;
 }
 
-KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP) const
+KisConfigWidget *KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP) const
 {
     return 0;
 }
 
-KisBookmarkedConfigurationManager* KisBaseProcessor::bookmarkManager()
+KisBookmarkedConfigurationManager *KisBaseProcessor::bookmarkManager()
 {
     return d->bookmarkManager;
 }
 
-const KisBookmarkedConfigurationManager* KisBaseProcessor::bookmarkManager() const
+const KisBookmarkedConfigurationManager *KisBaseProcessor::bookmarkManager() const
 {
     return d->bookmarkManager;
 }
@@ -143,7 +145,7 @@ KShortcut KisBaseProcessor::shortcut() const
     return d->shortcut;
 }
 
-void KisBaseProcessor::setShortcut(const KShortcut & shortcut)
+void KisBaseProcessor::setShortcut(const KShortcut &shortcut)
 {
     d->shortcut = shortcut;
 }

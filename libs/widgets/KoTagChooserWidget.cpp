@@ -42,27 +42,26 @@
 class KoTagChooserWidget::Private
 {
 public:
-    QLabel* tagLabel;
-    KComboBox* comboBox;
-    KoTagToolButton* tagToolButton;
+    QLabel *tagLabel;
+    KComboBox *comboBox;
+    KoTagToolButton *tagToolButton;
     QList<QString> readOnlyTags;
     QList<QString> tags;
 };
 
-KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
-, d(new Private())
+KoTagChooserWidget::KoTagChooserWidget(QWidget *parent): QWidget(parent)
+    , d(new Private())
 {
     d->tagLabel = new QLabel(i18n("Tag:"));
     d->tagLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     d->comboBox = new KComboBox(this);
     d->comboBox->setInsertPolicy(KComboBox::InsertAlphabetically);
-    d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
+    d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 
+    QGridLayout *comboLayout = new QGridLayout(this);
 
-    QGridLayout* comboLayout = new QGridLayout(this);
-
-    comboLayout->addWidget(d->tagLabel,0, 0);
+    comboLayout->addWidget(d->tagLabel, 0, 0);
     comboLayout->addWidget(d->comboBox, 0, 1);
 
     d->tagToolButton = new KoTagToolButton(this);
@@ -78,7 +77,7 @@ KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
             this, SIGNAL(tagChosen(QString)));
 
     connect(d->tagToolButton, SIGNAL(popupMenuAboutToShow()),
-            this, SLOT (tagOptionsContextMenuAboutToShow()));
+            this, SLOT(tagOptionsContextMenuAboutToShow()));
     connect(d->tagToolButton, SIGNAL(newTagRequested(QString)),
             this, SIGNAL(newTagRequested(QString)));
     connect(d->tagToolButton, SIGNAL(deletionOfCurrentTagRequested()),
@@ -105,7 +104,7 @@ void KoTagChooserWidget::contextDeleteCurrentTag()
     emit tagDeletionRequested(currentlySelectedTag());
 }
 
-void KoTagChooserWidget::tagRenamingRequested(const QString& newName)
+void KoTagChooserWidget::tagRenamingRequested(const QString &newName)
 {
     if (newName.isEmpty() || selectedTagIsReadOnly()) {
         return;
@@ -113,7 +112,7 @@ void KoTagChooserWidget::tagRenamingRequested(const QString& newName)
     emit tagRenamingRequested(currentlySelectedTag(), newName);
 }
 
-void KoTagChooserWidget::setUndeletionCandidate(const QString& tag)
+void KoTagChooserWidget::setUndeletionCandidate(const QString &tag)
 {
     d->tagToolButton->setUndeletionCandidate(tag);
 }
@@ -152,7 +151,7 @@ void KoTagChooserWidget::insertItem(QString tagName)
 
 void KoTagChooserWidget::insertItemAt(int index, QString tag)
 {
-    d->comboBox->insertItem(index,tag);
+    d->comboBox->insertItem(index, tag);
 }
 
 QString KoTagChooserWidget::currentlySelectedTag()
@@ -167,7 +166,7 @@ QStringList KoTagChooserWidget::allTags()
 
 bool KoTagChooserWidget::selectedTagIsReadOnly()
 {
-    return d->readOnlyTags.contains(d->comboBox->currentText()) ;
+    return d->readOnlyTags.contains(d->comboBox->currentText());
 }
 
 void KoTagChooserWidget::addItems(QStringList tagNames)
@@ -175,7 +174,7 @@ void KoTagChooserWidget::addItems(QStringList tagNames)
     tagNames.sort();
     QStringList items;
 
-    foreach(const QString & readOnlyTag, d->readOnlyTags) {
+    foreach (const QString &readOnlyTag, d->readOnlyTags) {
         items.append(readOnlyTag);
     }
 

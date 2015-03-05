@@ -50,7 +50,7 @@
 // added because of lack of krecentdirs.h
 namespace KRecentDirs
 {
-    KDE_IMPORT void add(const QString &fileClass, const QString &directory);
+KDE_IMPORT void add(const QString &fileClass, const QString &directory);
 };
 
 //! @internal
@@ -58,8 +58,9 @@ class KexiFileWidget::Private
 {
 public:
     Private()
-            : confirmOverwrites(true)
-            , filtersUpdated(false) {
+        : confirmOverwrites(true)
+        , filtersUpdated(false)
+    {
     }
 
     /*! Adds file dialog-compatible filter to @a filter and patterns to @allfilters based on
@@ -89,8 +90,8 @@ public:
 
 KexiFileWidget::KexiFileWidget(
     const KUrl &startDirOrVariable, Mode mode, QWidget *parent)
-        :  KFileWidget(startDirOrVariable, parent)
-        , d(new Private())
+    :  KFileWidget(startDirOrVariable, parent)
+    , d(new Private())
 {
     kDebug() << startDirOrVariable.scheme();
     if (startDirOrVariable.protocol() == "kfiledialog") {
@@ -99,8 +100,9 @@ KexiFileWidget::KexiFileWidget(
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     setMode(mode);
     QAction *previewAction = actionCollection()->action("preview");
-    if (previewAction)
+    if (previewAction) {
         previewAction->setChecked(false);
+    }
     setFocusProxy(locationEdit());
     connect(this, SIGNAL(fileHighlighted(QString)),
             this, SLOT(slotExistingFileHighlighted(QString)));
@@ -114,21 +116,21 @@ KexiFileWidget::~KexiFileWidget()
         KUrl dir;
         if (hf.isEmpty()) {
             dir = baseUrl();
-        }
-        else {
+        } else {
             QFileInfo fi(hf);
             QString dirStr = fi.isDir() ? fi.absoluteFilePath() : fi.dir().absolutePath();
             dir = KUrl::fromPath(dirStr);
         }
         kDebug() << dir;
         kDebug() << highlightedFile();
-        if (!dir.isEmpty())
+        if (!dir.isEmpty()) {
             KRecentDirs::add(d->recentDirClass, dir.url());
+        }
     }
     delete d;
 }
 
-void KexiFileWidget::slotExistingFileHighlighted(const QString& fileName)
+void KexiFileWidget::slotExistingFileHighlighted(const QString &fileName)
 {
     kDebug() << fileName;
     d->highlightedUrl = KUrl(fileName);
@@ -170,15 +172,17 @@ void KexiFileWidget::setExcludedFilters(const QSet<QString> &mimeTypes)
     //delayed
     d->excludedMimeTypes.clear();
     //convert to lowercase
-    foreach(const QString& mimeType, mimeTypes)
-    d->excludedMimeTypes.insert(mimeType.toLower());
+    foreach (const QString &mimeType, mimeTypes) {
+        d->excludedMimeTypes.insert(mimeType.toLower());
+    }
     d->filtersUpdated = false;
 }
 
 void KexiFileWidget::updateFilters()
 {
-    if (d->filtersUpdated)
+    if (d->filtersUpdated) {
         return;
+    }
     d->filtersUpdated = true;
     d->lastFileName.clear();
     clearFilter();
@@ -203,14 +207,15 @@ void KexiFileWidget::updateFilters()
     if (normalOpeningMode) {
         const QList<QString> supportedFileMimeTypes = KexiMainWindowIface::global()->migrateManager()->supportedFileMimeTypes();
         kDebug() << supportedFileMimeTypes;
-        foreach (const QString& supportedFileMimeType, supportedFileMimeTypes) {
+        foreach (const QString &supportedFileMimeType, supportedFileMimeTypes) {
             d->addFilterForType(&filter, &allfilters, supportedFileMimeType);
         }
     }
 
-    foreach(const QString& mimeName, d->additionalMimeTypes) {
-        if (mimeName == "all/allfiles")
+    foreach (const QString &mimeName, d->additionalMimeTypes) {
+        if (mimeName == "all/allfiles") {
             continue;
+        }
         d->addFilterForType(&filter, &allfilters, mimeName);
     }
 
@@ -227,8 +232,9 @@ void KexiFileWidget::updateFilters()
                        + i18n("All Supported Files (%1)", allfiltersUnique.join(", ")) + "\n");
     }
 
-    if (filter.right(1) == "\n")
+    if (filter.right(1) == "\n") {
         filter.truncate(filter.length() - 1);
+    }
     setFilter(filter);
 
     if (d->mode & Opening) {
@@ -240,7 +246,7 @@ void KexiFileWidget::updateFilters()
     }
 }
 
-void KexiFileWidget::showEvent(QShowEvent * event)
+void KexiFileWidget::showEvent(QShowEvent *event)
 {
     d->filtersUpdated = false;
     updateFilters();
@@ -314,10 +320,11 @@ bool KexiFileWidget::checkSelectedFile()
 
         d->highlightedUrl = baseUrl();
         const QString firstUrl(locationEdit()->lineEdit()->text());   // FIXME: find first...
-        if (QDir::isAbsolutePath(firstUrl))
+        if (QDir::isAbsolutePath(firstUrl)) {
             d->highlightedUrl = KUrl::fromPath(firstUrl);
-        else
+        } else {
             d->highlightedUrl.addPath(firstUrl);
+        }
     }
 
     kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
@@ -328,26 +335,27 @@ bool KexiFileWidget::checkSelectedFile()
 
     if (!currentFilter().isEmpty()) {
         if (d->mode & SavingFileBasedDB) {
-            const QStringList filters( currentFilter().split(' ') );
+            const QStringList filters(currentFilter().split(' '));
             QString path = highlightedFile();
-            kDebug()<< "filter:" << filters << "path:" << path;
-            QString ext( QFileInfo(path).suffix() );
+            kDebug() << "filter:" << filters << "path:" << path;
+            QString ext(QFileInfo(path).suffix());
             bool hasExtension = false;
-            foreach (const QString& filter, filters) {
-                const QString f( filter.trimmed() );
-                hasExtension = !f.mid(2).isEmpty() && ext==f.mid(2);
-                if (hasExtension)
-                break;
+            foreach (const QString &filter, filters) {
+                const QString f(filter.trimmed());
+                hasExtension = !f.mid(2).isEmpty() && ext == f.mid(2);
+                if (hasExtension) {
+                    break;
+                }
             }
             if (!hasExtension) {
                 //no extension: add one
-                QString defaultExtension( d->defaultExtension );
+                QString defaultExtension(d->defaultExtension);
                 if (defaultExtension.isEmpty()) {
                     defaultExtension = filters.first().trimmed().mid(2); //first one
                 }
-                path += (QLatin1String(".")+defaultExtension);
+                path += (QLatin1String(".") + defaultExtension);
                 kDebug() << "appended extension" << path;
-                setSelection( path );
+                setSelection(path);
                 d->highlightedUrl = KUrl(path);
             }
         }
@@ -379,17 +387,19 @@ bool KexiFileWidget::checkSelectedFile()
 }
 
 //static
-bool KexiFileWidget::askForOverwriting(const QString& filePath, QWidget *parent)
+bool KexiFileWidget::askForOverwriting(const QString &filePath, QWidget *parent)
 {
     QFileInfo fi(filePath);
-    if (!fi.exists())
+    if (!fi.exists()) {
         return true;
+    }
     const int res = KMessageBox::warningYesNo(parent,
                     i18n("The file \"%1\" already exists.\n"
                          "Do you want to overwrite it?", QDir::convertSeparators(filePath)), QString(),
                     KGuiItem(i18n("Overwrite")), KStandardGuiItem::no());
-    if (res == KMessageBox::Yes)
+    if (res == KMessageBox::Yes) {
         return true;
+    }
     return false;
 }
 
@@ -433,7 +443,7 @@ void KexiFileWidget::reject()
     emit rejected();
 }
 
-void KexiFileWidget::setLocationText(const QString& fn)
+void KexiFileWidget::setLocationText(const QString &fn)
 {
     locationEdit()->setUrl(KUrl(fn));
     /*
@@ -465,7 +475,7 @@ void KexiFileWidget::focusInEvent(QFocusEvent *)
   return KexiFileWidgetBase::eventFilter(watched,e);
 } */
 
-void KexiFileWidget::setDefaultExtension(const QString& ext)
+void KexiFileWidget::setDefaultExtension(const QString &ext)
 {
     d->defaultExtension = ext;
 }

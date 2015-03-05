@@ -26,15 +26,13 @@
 #include "KoColor.h"
 #include "KoColorProfile.h"
 
-
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_group_layer.h"
 #include "kis_undo_adapter.h"
 
-
 KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP newParent, KisNodeSP newAbove)
-        : KisImageCommand(kundo2_i18n("Move Layer"), image)
+    : KisImageCommand(kundo2_i18n("Move Layer"), image)
 {
     m_layer = layer;
     m_newParent = newParent;
@@ -46,7 +44,7 @@ KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP 
 }
 
 KisImageLayerMoveCommand::KisImageLayerMoveCommand(KisImageWSP image, KisNodeSP node, KisNodeSP newParent, quint32 index)
-        : KisImageCommand(kundo2_i18n("Move Layer"), image)
+    : KisImageCommand(kundo2_i18n("Move Layer"), image)
 {
     m_layer = node;
     m_newParent = newParent;
@@ -67,8 +65,9 @@ void KisImageLayerMoveCommand::redo()
     }
 
     m_image->refreshGraphAsync(m_prevParent);
-    if (m_newParent != m_prevParent)
+    if (m_newParent != m_prevParent) {
         m_layer->setDirty(m_image->bounds());
+    }
 }
 
 void KisImageLayerMoveCommand::undo()
@@ -76,6 +75,7 @@ void KisImageLayerMoveCommand::undo()
     m_image->moveNode(m_layer, m_prevParent, m_prevAbove);
 
     m_image->refreshGraphAsync(m_newParent);
-    if (m_newParent != m_prevParent)
+    if (m_newParent != m_prevParent) {
         m_layer->setDirty(m_image->bounds());
+    }
 }

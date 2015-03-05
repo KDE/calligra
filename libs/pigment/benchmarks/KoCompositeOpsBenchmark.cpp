@@ -38,17 +38,16 @@ const quint8 OPACITY_HALF = 128;
 const int TILES_IN_WIDTH = IMG_WIDTH / TILE_WIDTH;
 const int TILES_IN_HEIGHT = IMG_HEIGHT / TILE_HEIGHT;
 
-
 #define COMPOSITE_BENCHMARK \
-        for (int y = 0; y < TILES_IN_HEIGHT; y++){                                              \
-            for (int x = 0; x < TILES_IN_WIDTH; x++){                                           \
-                compositeOp->composite(m_dstBuffer, TILE_WIDTH * KoBgrU16Traits::pixelSize,      \
-                                      m_srcBuffer, TILE_WIDTH * KoBgrU16Traits::pixelSize,      \
-                                      0, 0,                                                            \
-                                      TILE_WIDTH, TILE_HEIGHT,                                         \
-                                      OPACITY_HALF);                                                   \
-            }                                                                                   \
-        }
+    for (int y = 0; y < TILES_IN_HEIGHT; y++){                                              \
+        for (int x = 0; x < TILES_IN_WIDTH; x++){                                           \
+            compositeOp->composite(m_dstBuffer, TILE_WIDTH * KoBgrU16Traits::pixelSize,      \
+                                   m_srcBuffer, TILE_WIDTH * KoBgrU16Traits::pixelSize,      \
+                                   0, 0,                                                            \
+                                   TILE_WIDTH, TILE_HEIGHT,                                         \
+                                   OPACITY_HALF);                                                   \
+        }                                                                                   \
+    }
 
 void KoCompositeOpsBenchmark::initTestCase()
 {
@@ -59,10 +58,9 @@ void KoCompositeOpsBenchmark::initTestCase()
 // this is called before every benchmark
 void KoCompositeOpsBenchmark::init()
 {
-    memset(m_dstBuffer, 42 , TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize);
-    memset(m_srcBuffer, 42 , TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize);
+    memset(m_dstBuffer, 42, TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize);
+    memset(m_srcBuffer, 42, TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize);
 }
-
 
 void KoCompositeOpsBenchmark::cleanupTestCase()
 {
@@ -86,7 +84,6 @@ void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarken()
         COMPOSITE_BENCHMARK
     }
 }
-
 
 QTEST_KDEMAIN(KoCompositeOpsBenchmark, NoGUI)
 #include "KoCompositeOpsBenchmark.moc"

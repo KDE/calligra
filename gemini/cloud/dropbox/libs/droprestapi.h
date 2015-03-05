@@ -54,9 +54,9 @@ public:
     QNetworkRequest request_token();
     QNetworkRequest request_access_token();
 
-    QNetworkRequest root_dir(const QString&);
+    QNetworkRequest root_dir(const QString &);
 
-    void oauth_request_token_reply_process(QNetworkReply*);
+    void oauth_request_token_reply_process(QNetworkReply *);
 
     QNetworkRequest file_transfer(QString filename, QString dropbox_folder, QString boundaryStr);
     QNetworkRequest file_transfer_download(QString dropbox_filepath);

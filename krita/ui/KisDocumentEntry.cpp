@@ -31,12 +31,12 @@
 #include <limits.h> // UINT_MAX
 
 KisDocumentEntry::KisDocumentEntry()
-        : m_service(0)
+    : m_service(0)
 {
 }
 
-KisDocumentEntry::KisDocumentEntry(const KService::Ptr& service)
-        : m_service(service)
+KisDocumentEntry::KisDocumentEntry(const KService::Ptr &service)
+    : m_service(service)
 {
 }
 
@@ -54,40 +54,44 @@ QStringList KisDocumentEntry::extraNativeMimeTypes()
     return QStringList() << KIS_MIME_TYPE;
 }
 
-
-KService::Ptr KisDocumentEntry::service() const {
+KService::Ptr KisDocumentEntry::service() const
+{
     return m_service;
 }
 
 /**
  * @return TRUE if the service pointer is null
  */
-bool KisDocumentEntry::isEmpty() const {
+bool KisDocumentEntry::isEmpty() const
+{
     return m_service.isNull();
 }
 
 /**
  * @return name of the associated service
  */
-QString KisDocumentEntry::name() const {
+QString KisDocumentEntry::name() const
+{
     return m_service->name();
 }
 
 /**
  *  Mimetypes (and other service types) which this document can handle.
  */
-QStringList KisDocumentEntry::mimeTypes() const {
+QStringList KisDocumentEntry::mimeTypes() const
+{
     return m_service->serviceTypes();
 }
 
 /**
  *  @return TRUE if the document can handle the requested mimetype.
  */
-bool KisDocumentEntry::supportsMimeType(const QString & _mimetype) const {
+bool KisDocumentEntry::supportsMimeType(const QString &_mimetype) const
+{
     return mimeTypes().contains(_mimetype);
 }
 
-KisDocumentEntry KisDocumentEntry::queryByMimeType(const QString & mimetype)
+KisDocumentEntry KisDocumentEntry::queryByMimeType(const QString &mimetype)
 {
     QList<KisDocumentEntry> vec = query(mimetype);
 
@@ -118,7 +122,7 @@ KisDocumentEntry KisDocumentEntry::queryByMimeType(const QString & mimetype)
     return KisDocumentEntry(vec[0]);
 }
 
-QList<KisDocumentEntry> KisDocumentEntry::query(const QString & mimetype)
+QList<KisDocumentEntry> KisDocumentEntry::query(const QString &mimetype)
 {
 
     QList<KisDocumentEntry> lst;
@@ -126,7 +130,7 @@ QList<KisDocumentEntry> KisDocumentEntry::query(const QString & mimetype)
     // Query the trader
     const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Part");
 
-    foreach(KService::Ptr offer, offers) {
+    foreach (KService::Ptr offer, offers) {
 
         QStringList nativeMimeTypes = offer->property("X-KDE-NativeMimeType", QVariant::StringList).toStringList();
         QStringList extraNativeMimeTypes = offer->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
@@ -134,14 +138,15 @@ QList<KisDocumentEntry> KisDocumentEntry::query(const QString & mimetype)
 
         if (nativeMimeTypes.contains(mimetype) || extraNativeMimeTypes.contains(mimetype) || serviceTypes.contains(mimetype)) {
 
-            if (offer->noDisplay())
+            if (offer->noDisplay()) {
                 continue;
+            }
             KisDocumentEntry d(offer);
             // Append converted offer
             lst.append(d);
 
             // And if it's the part that belongs to the current application it's our own, so break off
-            if (offer->desktopEntryName() == (qAppName().replace("calligra","") + "part")) {
+            if (offer->desktopEntryName() == (qAppName().replace("calligra", "") + "part")) {
                 lst.clear();
                 lst.append(d);
                 break;
@@ -153,7 +158,7 @@ QList<KisDocumentEntry> KisDocumentEntry::query(const QString & mimetype)
 
     if (lst.count() > 1 && !mimetype.isEmpty()) {
         kWarning(30003) << "KisDocumentEntry::query " << mimetype << " got " << lst.count() << " offers!";
-        foreach(const KisDocumentEntry &entry, lst) {
+        foreach (const KisDocumentEntry &entry, lst) {
             qDebug() << entry.name();
         }
     }

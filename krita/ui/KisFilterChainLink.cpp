@@ -28,126 +28,133 @@ Boston, MA 02110-1301, USA.
 
 namespace
 {
-    const char *const SIGNAL_PREFIX = "commSignal";
-    const int SIGNAL_PREFIX_LEN = 10;
-    const char *const SLOT_PREFIX = "commSlot";
-    const int SLOT_PREFIX_LEN = 8;
+const char *const SIGNAL_PREFIX = "commSignal";
+const int SIGNAL_PREFIX_LEN = 10;
+const char *const SLOT_PREFIX = "commSlot";
+const int SLOT_PREFIX_LEN = 8;
 
-    KoUpdater *createUpdater(KisFilterChain *chain)
-    {
-        QPointer<KoUpdater> updater = 0;
-        Q_ASSERT(chain);
-        Q_ASSERT(chain->manager());
-        KoProgressUpdater *pu = chain->manager()->progressUpdater();
-        if (pu) {
-            updater = pu->startSubtask(1, "filter");
-            updater->setProgress(0);
-        }
-
-        return updater;
+KoUpdater *createUpdater(KisFilterChain *chain)
+{
+    QPointer<KoUpdater> updater = 0;
+    Q_ASSERT(chain);
+    Q_ASSERT(chain->manager());
+    KoProgressUpdater *pu = chain->manager()->progressUpdater();
+    if (pu) {
+        updater = pu->startSubtask(1, "filter");
+        updater->setProgress(0);
     }
+
+    return updater;
+}
 }
 
-namespace CalligraFilter {
+namespace CalligraFilter
+{
 
-    ChainLink::ChainLink(KisFilterChain *chain, KisFilterEntry::Ptr filterEntry,
-                         const QByteArray& from, const QByteArray& to)
-        : m_chain(chain)
-        , m_filterEntry(filterEntry)
-        , m_from(from)
-        , m_to(to)
-        , m_filter(0)
-        , m_updater(createUpdater(chain))
-    {
+ChainLink::ChainLink(KisFilterChain *chain, KisFilterEntry::Ptr filterEntry,
+                     const QByteArray &from, const QByteArray &to)
+    : m_chain(chain)
+    , m_filterEntry(filterEntry)
+    , m_from(from)
+    , m_to(to)
+    , m_filter(0)
+    , m_updater(createUpdater(chain))
+{
+}
+
+ChainLink::~ChainLink()
+{
+}
+
+KisImportExportFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink *const parentChainLink)
+{
+    if (!m_filterEntry) {
+        kError(30500) << "This filter entry is null. Strange stuff going on." << endl;
+        return KisImportExportFilter::FilterEntryNull;
     }
 
-    ChainLink::~ChainLink() {
+    m_filter = m_filterEntry->createFilter(m_chain);
+
+    if (!m_filter) {
+        kError(30500) << "Couldn't create the filter." << endl;
+        return KisImportExportFilter::FilterCreationError;
     }
 
-    KisImportExportFilter::ConversionStatus ChainLink::invokeFilter(const ChainLink *const parentChainLink)
-    {
-        if (!m_filterEntry) {
-            kError(30500) << "This filter entry is null. Strange stuff going on." << endl;
-            return KisImportExportFilter::FilterEntryNull;
-        }
-
-        m_filter = m_filterEntry->createFilter(m_chain);
-
-        if (!m_filter) {
-            kError(30500) << "Couldn't create the filter." << endl;
-            return KisImportExportFilter::FilterCreationError;
-        }
-
-        if (m_updater) {
-            // if there is an updater, use that for progress reporting
-            m_filter->setUpdater(m_updater);
-        }
-
-        if (parentChainLink) {
-            setupCommunication(parentChainLink->m_filter);
-        }
-
-        KisImportExportFilter::ConversionStatus status = m_filter->convert(m_from, m_to);
-        delete m_filter;
-        m_filter = 0;
-        if (m_updater) {
-            m_updater->setProgress(100);
-        }
-        return status;
+    if (m_updater) {
+        // if there is an updater, use that for progress reporting
+        m_filter->setUpdater(m_updater);
     }
 
-    void ChainLink::dump() const
-    {
-        kDebug(30500) << "   Link:" << m_filterEntry->service()->name();
+    if (parentChainLink) {
+        setupCommunication(parentChainLink->m_filter);
     }
 
-    void ChainLink::setupCommunication(const KisImportExportFilter *const parentFilter) const
-    {
-        if (!parentFilter)
-            return;
+    KisImportExportFilter::ConversionStatus status = m_filter->convert(m_from, m_to);
+    delete m_filter;
+    m_filter = 0;
+    if (m_updater) {
+        m_updater->setProgress(100);
+    }
+    return status;
+}
 
-        const QMetaObject *const parent = parentFilter->metaObject();
-        const QMetaObject *const child = m_filter->metaObject();
-        if (!parent || !child)
-            return;
+void ChainLink::dump() const
+{
+    kDebug(30500) << "   Link:" << m_filterEntry->service()->name();
+}
 
-        setupConnections(parentFilter, m_filter);
-        setupConnections(m_filter, parentFilter);
+void ChainLink::setupCommunication(const KisImportExportFilter *const parentFilter) const
+{
+    if (!parentFilter) {
+        return;
     }
 
-    void ChainLink::setupConnections(const KisImportExportFilter *sender, const KisImportExportFilter *receiver) const
-    {
-        const QMetaObject * const parent = sender->metaObject();
-        const QMetaObject * const child = receiver->metaObject();
-        if (!parent || !child)
-            return;
+    const QMetaObject *const parent = parentFilter->metaObject();
+    const QMetaObject *const child = m_filter->metaObject();
+    if (!parent || !child) {
+        return;
+    }
 
-        int senderMethodCount = parent->methodCount();
-        for (int i = 0; i < senderMethodCount; ++i) {
-            QMetaMethod signal = parent->method(i);
-            if (signal.methodType() != QMetaMethod::Signal)
-                continue;
-            // ### untested (QMetaMethod::signature())
-            if (strncmp(signal.signature(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN) == 0) {
-                int receiverMethodCount = child->methodCount();
-                for (int j = 0; j < receiverMethodCount; ++j) {
-                    QMetaMethod slot = child->method(j);
-                    if (slot.methodType() != QMetaMethod::Slot)
-                        continue;
-                    if (strncmp(slot.signature(), SLOT_PREFIX, SLOT_PREFIX_LEN) == 0) {
-                        if (strcmp(signal.signature() + SIGNAL_PREFIX_LEN, slot.signature() + SLOT_PREFIX_LEN) == 0) {
-                            QByteArray signalString;
-                            signalString.setNum(QSIGNAL_CODE);
-                            signalString += signal.signature();
-                            QByteArray slotString;
-                            slotString.setNum(QSLOT_CODE);
-                            slotString += slot.signature();
-                            QObject::connect(sender, signalString, receiver, slotString);
-                        }
+    setupConnections(parentFilter, m_filter);
+    setupConnections(m_filter, parentFilter);
+}
+
+void ChainLink::setupConnections(const KisImportExportFilter *sender, const KisImportExportFilter *receiver) const
+{
+    const QMetaObject *const parent = sender->metaObject();
+    const QMetaObject *const child = receiver->metaObject();
+    if (!parent || !child) {
+        return;
+    }
+
+    int senderMethodCount = parent->methodCount();
+    for (int i = 0; i < senderMethodCount; ++i) {
+        QMetaMethod signal = parent->method(i);
+        if (signal.methodType() != QMetaMethod::Signal) {
+            continue;
+        }
+        // ### untested (QMetaMethod::signature())
+        if (strncmp(signal.signature(), SIGNAL_PREFIX, SIGNAL_PREFIX_LEN) == 0) {
+            int receiverMethodCount = child->methodCount();
+            for (int j = 0; j < receiverMethodCount; ++j) {
+                QMetaMethod slot = child->method(j);
+                if (slot.methodType() != QMetaMethod::Slot) {
+                    continue;
+                }
+                if (strncmp(slot.signature(), SLOT_PREFIX, SLOT_PREFIX_LEN) == 0) {
+                    if (strcmp(signal.signature() + SIGNAL_PREFIX_LEN, slot.signature() + SLOT_PREFIX_LEN) == 0) {
+                        QByteArray signalString;
+                        signalString.setNum(QSIGNAL_CODE);
+                        signalString += signal.signature();
+                        QByteArray slotString;
+                        slotString.setNum(QSLOT_CODE);
+                        slotString += slot.signature();
+                        QObject::connect(sender, signalString, receiver, slotString);
                     }
                 }
             }
         }
     }
+}
 
 }

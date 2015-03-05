@@ -109,7 +109,7 @@ VideoData::VideoData(const VideoData &videoData)
 {
     Q_UNUSED(videoData);
 
-    if(d) {
+    if (d) {
         d->refCount.ref();
     }
 }
@@ -164,7 +164,10 @@ void VideoData::setVideo(const QString &url, KoStore *store, VideoCollection *co
     } else {
         if (store->open(url)) {
             struct Finalizer {
-                ~Finalizer() { store->close(); }
+                ~Finalizer()
+                {
+                    store->close();
+                }
                 KoStore *store;
             };
             Finalizer closer;
@@ -201,8 +204,9 @@ QUrl VideoData::playableUrl() const
 
 QString VideoData::tagForSaving(int &counter)
 {
-    if (!d->saveName.isEmpty())
+    if (!d->saveName.isEmpty()) {
         return d->saveName;
+    }
 
     if (!d->videoLocation.isEmpty()) {
         if (d->saveVideoInZip) {
@@ -223,7 +227,7 @@ QString VideoData::tagForSaving(int &counter)
 bool VideoData::isValid() const
 {
     return d->dataStoreState != VideoData::StateEmpty
-        && d->errorCode == Success;
+           && d->errorCode == Success;
 }
 
 bool VideoData::operator==(const VideoData &other) const
@@ -259,8 +263,9 @@ bool VideoData::saveData(QIODevice &device)
             while (true) {
                 d->temporaryFile->waitForReadyRead(-1);
                 qint64 bytes = d->temporaryFile->read(buf, sizeof(buf));
-                if (bytes <= 0)
-                    break; // done!
+                if (bytes <= 0) {
+                    break;    // done!
+                }
                 do {
                     qint64 nWritten = device.write(buf, bytes);
                     if (nWritten == -1) {
@@ -286,8 +291,9 @@ bool VideoData::saveData(QIODevice &device)
             while (true) {
                 file.waitForReadyRead(-1);
                 qint64 bytes = file.read(buf, sizeof(buf));
-                if (bytes <= 0)
-                    break; // done!
+                if (bytes <= 0) {
+                    break;    // done!
+                }
                 do {
                     qint64 nWritten = device.write(buf, bytes);
                     if (nWritten == -1) {
@@ -322,8 +328,9 @@ void VideoData::copyToTemporary(QIODevice &device)
     while (true) {
         device.waitForReadyRead(-1);
         qint64 bytes = device.read(buf, sizeof(buf));
-        if (bytes <= 0)
-            break; // done!
+        if (bytes <= 0) {
+            break;    // done!
+        }
         md5.addData(buf, bytes);
         do {
             bytes -= d->temporaryFile->write(buf, bytes);
@@ -340,8 +347,9 @@ qint64 VideoData::generateKey(const QByteArray &bytes)
 {
     qint64 answer = 1;
     const int max = qMin(8, bytes.count());
-    for (int x = 0; x < max; ++x)
+    for (int x = 0; x < max; ++x) {
         answer += bytes[x] << (8 * x);
+    }
     return answer;
 }
 

@@ -21,9 +21,8 @@
 #include "kis_node.h"
 #include "commands/kis_node_opacity_command.h"
 
-
 KisNodeOpacityCommand::KisNodeOpacityCommand(KisNodeSP node, quint8 oldOpacity, quint8 newOpacity) :
-        KisNodeCommand(kundo2_i18n("Opacity Change"), node)
+    KisNodeCommand(kundo2_i18n("Opacity Change"), node)
 {
     m_oldOpacity = oldOpacity;
     m_newOpacity = newOpacity;

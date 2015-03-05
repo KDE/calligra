@@ -21,16 +21,15 @@
 
 #include <kis_paintop_options_widget.h>
 
-
 class KisExperimentPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
     Q_OBJECT
 public:
-    KisExperimentPaintOpSettingsWidget(QWidget* parent = 0);
+    KisExperimentPaintOpSettingsWidget(QWidget *parent = 0);
     virtual ~KisExperimentPaintOpSettingsWidget();
     virtual void changePaintOpSize(qreal x, qreal y);
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 };
 
 #endif

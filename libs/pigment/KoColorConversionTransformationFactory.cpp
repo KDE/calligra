@@ -50,14 +50,14 @@ KoColorConversionTransformationFactory::~KoColorConversionTransformationFactory(
     delete d;
 }
 
-bool KoColorConversionTransformationFactory::canBeSource(const KoColorSpace* srcCS) const
+bool KoColorConversionTransformationFactory::canBeSource(const KoColorSpace *srcCS) const
 {
     return ((srcCS->colorModelId().id() == d->srcModelId)
             && (srcCS->colorDepthId().id() == d->srcDepthId)
             && (d->srcProfile == "" || srcCS->profile()->name() == d->srcProfile));
 }
 
-bool KoColorConversionTransformationFactory::canBeDestination(const KoColorSpace* dstCS) const
+bool KoColorConversionTransformationFactory::canBeDestination(const KoColorSpace *dstCS) const
 {
     dbgPigment << dstCS->colorModelId().id() << " " << d->dstModelId << " " << dstCS->colorDepthId().id() << " " <<  d->dstDepthId << " " << d->dstProfile << " " << (dstCS->profile() ? dstCS->profile()->name() : "noprofile")  << " " << d->dstProfile;
     return ((dstCS->colorModelId().id() == d->dstModelId)

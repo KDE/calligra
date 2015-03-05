@@ -29,21 +29,22 @@
 #include <QPainter>
 
 KoColorBackground::KoColorBackground()
-: KoShapeBackground(*(new KoColorBackgroundPrivate()))
+    : KoShapeBackground(*(new KoColorBackgroundPrivate()))
 {
 }
 
 KoColorBackground::KoColorBackground(KoShapeBackgroundPrivate &dd)
-: KoShapeBackground(dd)
+    : KoShapeBackground(dd)
 {
 }
 
 KoColorBackground::KoColorBackground(const QColor &color, Qt::BrushStyle style)
-: KoShapeBackground(*(new KoColorBackgroundPrivate()))
+    : KoShapeBackground(*(new KoColorBackgroundPrivate()))
 {
     Q_D(KoColorBackground);
-    if (style < Qt::SolidPattern || style >= Qt::LinearGradientPattern)
+    if (style < Qt::SolidPattern || style >= Qt::LinearGradientPattern) {
         style = Qt::SolidPattern;
+    }
     d->style = style;
     d->color = color;
 }
@@ -83,12 +84,13 @@ void KoColorBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &conte
     KoOdfGraphicStyles::saveOdfFillStyle(style, context.mainStyles(), QBrush(d->color, d->style));
 }
 
-bool KoColorBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF &)
+bool KoColorBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &)
 {
     Q_D(KoColorBackground);
     KoStyleStack &styleStack = context.styleStack();
-    if (! styleStack.hasProperty(KoXmlNS::draw, "fill"))
+    if (! styleStack.hasProperty(KoXmlNS::draw, "fill")) {
         return false;
+    }
 
     QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
     if (fillStyle == "solid" || fillStyle == "hatch") {

@@ -44,7 +44,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOTEXTLAYOUTNOTEAREA_H

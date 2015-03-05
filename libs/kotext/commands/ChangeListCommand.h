@@ -69,7 +69,8 @@ public:
     virtual void undo();
 
     /// reimplemnted from KUndo2Command
-    virtual int id() const {
+    virtual int id() const
+    {
         return 58450687;
     }
     /// reimplemnted from KUndo2Command
@@ -96,11 +97,9 @@ private:
     QHash<int, KoListLevelProperties> m_formerProperties;
     QHash<int, KoListLevelProperties> m_newProperties;
     QHash<int, int> m_levels;
-    QHash<int, KoList*> m_list;
-    QHash<int, KoList*> m_oldList;
+    QHash<int, KoList *> m_list;
+    QHash<int, KoList *> m_oldList;
     QHash<int, CommandAction> m_actions;
 };
-
-
 
 #endif

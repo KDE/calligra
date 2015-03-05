@@ -22,14 +22,10 @@
 #include <QLineF>
 #include <QPolygonF>
 
-
 #include "kis_debug.h"
 #include "kis_algebra_2d.h"
 
-
-
-struct KisSafeTransform::Private
-{
+struct KisSafeTransform::Private {
     QRect bounds;
     QTransform forwardTransform;
     QTransform backwardTransform;
@@ -37,7 +33,8 @@ struct KisSafeTransform::Private
     QPolygonF srcClipPolygon;
     QPolygonF dstClipPolygon;
 
-    bool getHorizon(const QTransform &t, QLineF *horizon) {
+    bool getHorizon(const QTransform &t, QLineF *horizon)
+    {
         static const qreal eps = 1e-10;
 
         QPointF vanishingX(t.m11() / t.m13(), t.m12() / t.m13());
@@ -58,15 +55,21 @@ struct KisSafeTransform::Private
         return true;
     }
 
-    qreal getCrossSign(const QLineF &horizon, const QRectF &rc) {
-        if (rc.isEmpty()) return 1.0;
+    qreal getCrossSign(const QLineF &horizon, const QRectF &rc)
+    {
+        if (rc.isEmpty()) {
+            return 1.0;
+        }
 
         QPointF diff = horizon.p2() - horizon.p1();
         return KisAlgebra2D::signPZ(KisAlgebra2D::crossProduct(diff, rc.center() - horizon.p1()));
     }
 
-    QPolygonF getCroppedPolygon(const QLineF &baseHorizon, const QRect &rc, const qreal crossCoeff) {
-        if (rc.isEmpty()) return QPolygonF();
+    QPolygonF getCroppedPolygon(const QLineF &baseHorizon, const QRect &rc, const qreal crossCoeff)
+    {
+        if (rc.isEmpty()) {
+            return QPolygonF();
+        }
 
         QRectF boundsRect(rc);
         QPolygonF polygon(boundsRect);
@@ -75,14 +78,13 @@ struct KisSafeTransform::Private
         // calculate new (offset) horizon to avoid infinity
         const qreal offsetLength = 10.0;
         const QPointF horizonOffset = offsetLength * crossCoeff *
-            KisAlgebra2D::rightUnitNormal(baseHorizon.p2() - baseHorizon.p1());
+                                      KisAlgebra2D::rightUnitNormal(baseHorizon.p2() - baseHorizon.p1());
 
         const QLineF horizon = baseHorizon.translated(horizonOffset);
 
         // base vectors to calculate the side of the horizon
         const QPointF &basePoint = horizon.p1();
         const QPointF horizonVec = horizon.p2() - basePoint;
-
 
         // iteration
         QPointF prevPoint = polygon[polygon.size() - 1];

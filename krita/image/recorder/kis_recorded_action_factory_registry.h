@@ -25,12 +25,12 @@ class KisRecordedActionFactory;
 
 #include <krita_export.h>
 
-class KRITAIMAGE_EXPORT KisRecordedActionFactoryRegistry : public KoGenericRegistry<KisRecordedActionFactory*>
+class KRITAIMAGE_EXPORT KisRecordedActionFactoryRegistry : public KoGenericRegistry<KisRecordedActionFactory *>
 {
 public:
     KisRecordedActionFactoryRegistry();
     ~KisRecordedActionFactoryRegistry();
-    static KisRecordedActionFactoryRegistry* instance();
+    static KisRecordedActionFactoryRegistry *instance();
 };
 
 #endif

@@ -46,7 +46,7 @@ class KoVariableManagerPrivate;
  */
 class KOTEXT_EXPORT KoVariableManager : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     /// constructor
     explicit KoVariableManager(KoInlineTextObjectManager *inlineObjectManager);
@@ -117,10 +117,10 @@ public:
     void saveOdf(KoXmlWriter *bodyWriter);
 
 Q_SIGNALS:
-	void valueChanged();
+    void valueChanged();
 
 private:
-    KoVariableManagerPrivate * const d;
+    KoVariableManagerPrivate *const d;
 };
 
 #endif

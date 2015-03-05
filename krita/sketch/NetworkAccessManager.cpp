@@ -48,7 +48,8 @@
    Common initialization, Calligra User Agent
  */
 
-namespace Utils {
+namespace Utils
+{
 
 static const QString getOsString()
 {
@@ -78,10 +79,11 @@ static const QString getOsString()
         break;
     }
 #elif defined (Q_OS_MAC)
-    if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+    if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
         osString += QLatin1String("PPC ");
-    else
+    } else {
         osString += QLatin1String("Intel ");
+    }
     osString += QLatin1String("Mac OS X ");
     switch (QSysInfo::MacintoshVersion) {
     case (QSysInfo::MV_10_3):
@@ -115,7 +117,6 @@ static const QString getOsString()
     return osString;
 }
 
-
 NetworkAccessManager::NetworkAccessManager(QObject *parent)
     : QNetworkAccessManager(parent)
 {
@@ -129,16 +130,15 @@ void NetworkAccessManager::getUrl(const QUrl &url)
     get(req);
 }
 
-QNetworkReply* NetworkAccessManager::createRequest(Operation op, const QNetworkRequest &request, QIODevice *outgoingData)
+QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkRequest &request, QIODevice *outgoingData)
 {
     QString agentStr = QString::fromLatin1("KritaSketch/%1 (QNetworkAccessManager %2; %3; %4; %5 bit)")
-                    .arg("XXX")
-                    .arg(getOsString()).arg(QLocale::system().name())
-                    .arg(QSysInfo::WordSize);
+                       .arg("XXX")
+                       .arg(getOsString()).arg(QLocale::system().name())
+                       .arg(QSysInfo::WordSize);
     QNetworkRequest req(request);
     req.setRawHeader("User-Agent", agentStr.toLatin1());
     return QNetworkAccessManager::createRequest(op, req, outgoingData);
 }
-
 
 } // namespace utils

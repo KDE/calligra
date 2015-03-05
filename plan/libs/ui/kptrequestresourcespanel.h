@@ -37,10 +37,10 @@ class RequestResourcesPanel : public QWidget
 {
     Q_OBJECT
 public:
-    RequestResourcesPanel(QWidget *parent, Project &project, Task &task, bool baseline=false);
+    RequestResourcesPanel(QWidget *parent, Project &project, Task &task, bool baseline = false);
 
     MacroCommand *buildCommand();
-    
+
     bool ok();
 
 Q_SIGNALS:

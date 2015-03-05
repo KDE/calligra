@@ -25,7 +25,7 @@
 
 using namespace MusicCore;
 
-RemoveBarCommand::RemoveBarCommand(MusicShape* shape, int barIdx)
+RemoveBarCommand::RemoveBarCommand(MusicShape *shape, int barIdx)
     : m_shape(shape), m_bar(m_shape->sheet()->bar(barIdx)), m_index(barIdx)
 {
     setText(kundo2_i18n("Remove bar"));

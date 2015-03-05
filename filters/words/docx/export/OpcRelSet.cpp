@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OpcRelSet.h"
 
@@ -30,7 +29,6 @@
 // KDE
 #include <kdebug.h>
 
-
 // ================================================================
 //                         class OpcRelSet
 
@@ -41,7 +39,6 @@ OpcRelSet::OpcRelSet()
 OpcRelSet::~OpcRelSet()
 {
 }
-
 
 QString OpcRelSet::addRelationship(const QString &type, const QString &target)
 {

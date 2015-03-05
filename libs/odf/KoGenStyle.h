@@ -52,53 +52,53 @@ public:
     enum Type {
         PageLayoutStyle,             ///< style:page-layout as in odf 14.3 Page Layout
         TextStyle,                   ///< style:style from family "text" as in odf 14.8.1 Text Styles
-                                     ///<  (office:styles)
+        ///<  (office:styles)
         TextAutoStyle,               ///< style:style from family "text" as in odf 14.8.1 Text Styles
-                                     ///<  (office:automatic-styles)
+        ///<  (office:automatic-styles)
         ParagraphStyle,              ///< style:style from family "paragraph" as in odf 14.1 Style Element
-                                     ///<  (office:styles)
+        ///<  (office:styles)
         ParagraphAutoStyle,          ///< style:style from family "paragraph" as in odf 14.1 Style Element
-                                     ///<  (office:automatic-styles)
+        ///<  (office:automatic-styles)
         SectionStyle,                ///< style:style from family "section" as in odf 14.8.3 Section Styles
-                                     ///<  (office:styles)
+        ///<  (office:styles)
         SectionAutoStyle,            ///< style:style from family "section" as in odf 14.8.3 Section Styles
-                                     ///<  (office:automatic-styles)
+        ///<  (office:automatic-styles)
         RubyStyle,                   ///< style:style from family "ruby" as in odf 14.8.4 Ruby Style
-                                     ///<  (office:styles)
+        ///<  (office:styles)
         RubyAutoStyle,               ///< style:style from family "ruby" as in odf 14.8.4 Ruby Style
-                                     ///<  (office:automatic-styles)
+        ///<  (office:automatic-styles)
         TableStyle,                  ///< style:style from family "table" as in odf 14.12 Table Formatting
-                                     ///<  Properties (office:styles)
+        ///<  Properties (office:styles)
         TableAutoStyle,              ///< style:style from family "table" as in odf 14.12 Table Formatting Properties
-                                     ///<  (office:automatic-styles)
+        ///<  (office:automatic-styles)
         TableColumnStyle,            ///< style:style from family "table-column" as in odf 15.9 Column Formatting
-                                     ///<  Properties (office:styles)
+        ///<  Properties (office:styles)
         TableColumnAutoStyle,        ///< style:style from family "table-column" as in odf 15.9 Column Formatting
-                                     ///<  Properties (office:automatic-styles)
+        ///<  Properties (office:automatic-styles)
         TableRowStyle,               ///< style:style from family "table-row" as in odf 15.10 Table Row Formatting
-                                     ///<  Properties (office:styles)
+        ///<  Properties (office:styles)
         TableRowAutoStyle,           ///< style:style from family "table-row" as in odf 15.10 Table Row Formatting
-                                     ///<  Properties (office:automatic-styles)
+        ///<  Properties (office:automatic-styles)
         TableCellStyle,              ///< style:style from family "table-cell" as in odf 15.11 Table Cell Formatting
-                                     ///<  Properties (office:styles)
+        ///<  Properties (office:styles)
         TableCellAutoStyle,          ///< style:style from family "table-cell" as in odf 15.11 Table Cell Formatting
-                                     ///<  Properties (office:automatic-styles)
+        ///<  Properties (office:automatic-styles)
         GraphicStyle,                ///< style:style from family "graphic" as in 14.13.1 Graphic and Presentation
-                                     ///<  Styles (office:automatic-styles)
+        ///<  Styles (office:automatic-styles)
         GraphicAutoStyle,            ///< style:style from family "graphic" as in 14.13.1 Graphic and Presentation
-                                     ///<  Styles (office:automatic-styles)
+        ///<  Styles (office:automatic-styles)
         PresentationStyle,           ///< style:style from family "presentation" as in 14.13.1 Graphic and
-                                     ///<  Presentation Styles (office:styles)
+        ///<  Presentation Styles (office:styles)
         PresentationAutoStyle,       ///< style:style from family "presentation" as in 14.13.1 Graphic and
-                                     ///<  Presentation Styles (office:automatic-styles)
+        ///<  Presentation Styles (office:automatic-styles)
         DrawingPageStyle,            ///< style:style from family "drawing-page" as in odf 14.13.2 Drawing Page Style
-                                     ///<  (office:styles)
+        ///<  (office:styles)
         DrawingPageAutoStyle,        ///< style:style from family "drawing-page" as in odf 14.13.2 Drawing Page Style
-                                     ///<  (office:automatic-styles)
+        ///<  (office:automatic-styles)
         ChartStyle,                  ///< style:style from family "chart" as in odf 14.16 Chart Styles
-                                     ///<  (office:styles)
+        ///<  (office:styles)
         ChartAutoStyle,              ///< style:style from family "chart" as in odf 14.16 Chart Styles
-                                     ///<  (office:automatic-styles)
+        ///<  (office:automatic-styles)
 
         ListStyle,                   ///< text:list-style as in odf 14.10 List Style (office:styles)
         ListAutoStyle,               ///< text:list-style as in odf 14.10 List Style (office:automatic-styles)
@@ -110,7 +110,7 @@ public:
         NumericScientificStyle,      ///< number:number-style as in odf 14.7.1 Number Style
         NumericCurrencyStyle,        ///< number:currency-style as in odf 14.7.2 Currency Style
         NumericTextStyle,            ///< number:text-style 14.7.7 Text Style
-                                     ///<  @note unused
+        ///<  @note unused
         HatchStyle,                  ///< draw:hatch as in odf 14.14.3 Hatch (office:styles)
         StrokeDashStyle,             ///< draw:stroke-dash as in odf 14.14.7 Stroke Dash (office:styles)
         GradientStyle,               ///< draw:gradient as in odf 14.14.1 Gradient (office:styles)
@@ -119,9 +119,9 @@ public:
         ConicalGradientStyle,        ///< calligra:conicalGradient calligra extension for conical gradients
         FillImageStyle,              ///< draw:fill-image as in odf 14.14.4 Fill Image (office:styles)
         NumericBooleanStyle,         ///< number:boolean 14.7.6 Boolean Style
-                                     ///<  @note unused
+        ///<  @note unused
         OpacityStyle,                ///< draw:opacity as in odf 14.14.5 Opacity Gradient
-                                     ///<  @note unused
+        ///<  @note unused
         MarkerStyle,                 ///< draw:marker as in odf 14.14.6 Marker
         PresentationPageLayoutStyle, ///< style:presentation-page-layout as in odf 14.15 Presentation Page Layouts
         OutlineLevelStyle,           ///< text:outline-style as in odf 1.2 section 16.34
@@ -157,11 +157,13 @@ public:
      * The application should use KoGenStyles::styles( type, true ) in order to retrieve
      * those styles and save them separately.
      */
-    void setAutoStyleInStylesDotXml(bool b) {
+    void setAutoStyleInStylesDotXml(bool b)
+    {
         m_autoStyleInStylesDotXml = b;
     }
     /// @return the value passed to setAutoStyleInStylesDotXml; false by default
-    bool autoStyleInStylesDotXml() const {
+    bool autoStyleInStylesDotXml() const
+    {
         return m_autoStyleInStylesDotXml;
     }
 
@@ -170,31 +172,37 @@ public:
      * This means we expect that you will call writeStyle( ...,"style:default-style"),
      * and its name will be ommitted in the output.
      */
-    void setDefaultStyle(bool b) {
+    void setDefaultStyle(bool b)
+    {
         m_defaultStyle = b;
     }
     /// @return the value passed to setDefaultStyle; false by default
-    bool isDefaultStyle() const {
+    bool isDefaultStyle() const
+    {
         return m_defaultStyle;
     }
 
     /// Return the type of this style, as set in the constructor
-    Type type() const {
+    Type type() const
+    {
         return m_type;
     }
 
     /// Return the family name
-    const char* familyName() const {
+    const char *familyName() const
+    {
         return m_familyName.data();
     }
 
     /// Sets the name of style's parent.
-    void setParentName(const QString &name) {
+    void setParentName(const QString &name)
+    {
         m_parentName = name;
     }
 
     /// Return the name of style's parent, if set
-    QString parentName() const {
+    QString parentName() const
+    {
         return m_parentName;
     }
 
@@ -255,28 +263,32 @@ public:
     };
 
     /// Add a property to the style. Passing DefaultType as property type uses a style-type specific property type.
-    void addProperty(const QString &propName, const QString &propValue, PropertyType type = DefaultType) {
+    void addProperty(const QString &propName, const QString &propValue, PropertyType type = DefaultType)
+    {
         if (type == DefaultType) {
             type = m_propertyType;
         }
         m_properties[type].insert(propName, propValue);
     }
     /// Overloaded version of addProperty that takes a char*, usually for "..."
-    void addProperty(const QString &propName, const char *propValue, PropertyType type = DefaultType) {
+    void addProperty(const QString &propName, const char *propValue, PropertyType type = DefaultType)
+    {
         if (type == DefaultType) {
             type = m_propertyType;
         }
         m_properties[type].insert(propName, QString::fromUtf8(propValue));
     }
     /// Overloaded version of addProperty that converts an int to a string
-    void addProperty(const QString &propName, int propValue, PropertyType type = DefaultType) {
+    void addProperty(const QString &propName, int propValue, PropertyType type = DefaultType)
+    {
         if (type == DefaultType) {
             type = m_propertyType;
         }
         m_properties[type].insert(propName, QString::number(propValue));
     }
     /// Overloaded version of addProperty that converts a bool to a string (false/true)
-    void addProperty(const QString &propName, bool propValue, PropertyType type = DefaultType) {
+    void addProperty(const QString &propName, bool propValue, PropertyType type = DefaultType)
+    {
         if (type == DefaultType) {
             type = m_propertyType;
         }
@@ -290,7 +302,7 @@ public:
      *  and the unit name ("pt") is appended to it.
      */
     void addPropertyPt(const QString &propName, qreal propValue, PropertyType type = DefaultType);
-    
+
     /**
      *  Add a property which represents a length, measured in pt, or in percent
      *  The number is written out with the highest possible precision
@@ -303,7 +315,8 @@ public:
      *  Remove a property from the style.  Passing DefaultType as property type
      *  uses a style-type specific property type.
      */
-    void removeProperty(const QString &propName, PropertyType type = DefaultType) {
+    void removeProperty(const QString &propName, PropertyType type = DefaultType)
+    {
         if (type == DefaultType) {
             type = m_propertyType;
         }
@@ -314,7 +327,8 @@ public:
      *  Remove properties of defined type from the style.  Passing DefaultType
      *  as property type uses a style-type specific property type.
      */
-    void removeAllProperties(PropertyType type = DefaultType) {
+    void removeAllProperties(PropertyType type = DefaultType)
+    {
         if (type == DefaultType) {
             type = m_propertyType;
         }
@@ -326,20 +340,24 @@ public:
      *  The difference between property and attributes is a bit oasis-format-specific:
      *  attributes are for the style element itself, and properties are in the style:properties child element
      */
-    void addAttribute(const QString &attrName, const QString& attrValue) {
+    void addAttribute(const QString &attrName, const QString &attrValue)
+    {
         m_attributes.insert(attrName, attrValue);
     }
     /// Overloaded version of addAttribute that takes a char*, usually for "..."
-    void addAttribute(const QString &attrName, const char* attrValue) {
+    void addAttribute(const QString &attrName, const char *attrValue)
+    {
         m_attributes.insert(attrName, QString::fromUtf8(attrValue));
     }
     /// Overloaded version of addAttribute that converts an int to a string
-    void addAttribute(const QString &attrName, int attrValue) {
+    void addAttribute(const QString &attrName, int attrValue)
+    {
         m_attributes.insert(attrName, QString::number(attrValue));
     }
 
     /// Overloaded version of addAttribute that converts a bool to a string
-    void addAttribute(const QString &attrName, bool attrValue) {
+    void addAttribute(const QString &attrName, bool attrValue)
+    {
         m_attributes.insert(attrName, attrValue ? "true" : "false");
     }
 
@@ -364,10 +382,10 @@ public:
     /**
      *  Remove an attribute from the style.
      */
-    void removeAttribute(const QString &attrName) {
+    void removeAttribute(const QString &attrName)
+    {
         m_attributes.remove(attrName);
     }
-
 
     /**
      * @brief Add a child element to the style properties.
@@ -388,7 +406,8 @@ public:
      *
      * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
-    void addChildElement(const QString &elementName, const QString& elementContents, PropertyType type = DefaultType) {
+    void addChildElement(const QString &elementName, const QString &elementContents, PropertyType type = DefaultType)
+    {
         if (type == DefaultType) {
             type = m_propertyType;
         }
@@ -399,7 +418,8 @@ public:
      * Same like \a addChildElement above but with QByteArray to explicit convert from QByteArray
      * to QString using utf8 to prevent a dirty pitfall.
      */
-    void addChildElement(const QString &elementName, const QByteArray& elementContents, PropertyType type = DefaultType) {
+    void addChildElement(const QString &elementName, const QByteArray &elementContents, PropertyType type = DefaultType)
+    {
         if (type == DefaultType) {
             type = m_propertyType;
         }
@@ -410,7 +430,8 @@ public:
      * Same like \a addChildElement above but adds a child style which is not child of any of the properties
      * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
-    void addStyleChildElement(const QString &elementName, const QString& elementContents) {
+    void addStyleChildElement(const QString &elementName, const QString &elementContents)
+    {
         m_properties[StyleChildElement].insertMulti(elementName, elementContents);
     }
 
@@ -419,7 +440,8 @@ public:
      * to QString using utf8 to prevent a dirty pitfall.
      * The value of @p elementName is only used to set the order on how the child elements are written out.
      */
-    void addStyleChildElement(const QString &elementName, const QByteArray& elementContents) {
+    void addStyleChildElement(const QString &elementName, const QByteArray &elementContents)
+    {
         m_properties[StyleChildElement].insertMulti(elementName, QString::fromUtf8(elementContents));
     }
 
@@ -478,13 +500,15 @@ public:
      * some exceptional cases having read-support as well is very useful.  Passing DefaultType
      * as property type uses a style-type specific property type.
      */
-    QString property(const QString &propName, PropertyType type = DefaultType) const {
+    QString property(const QString &propName, PropertyType type = DefaultType) const
+    {
         if (type == DefaultType) {
             type = m_propertyType;
         }
         const QMap<QString, QString>::const_iterator it = m_properties[type].constFind(propName);
-        if (it != m_properties[type].constEnd())
+        if (it != m_properties[type].constEnd()) {
             return it.value();
+        }
         return QString();
     }
 
@@ -493,21 +517,25 @@ public:
      * some exceptional cases having read-support as well is very useful.  Passing DefaultType
      * as property type uses a style-type specific property type.
      */
-    QString childProperty(const QString &propName, PropertyType type = DefaultType) const {
+    QString childProperty(const QString &propName, PropertyType type = DefaultType) const
+    {
         if (type == DefaultType) {
             type = m_propertyType;
         }
         const QMap<QString, QString>::const_iterator it = m_childProperties[type].constFind(propName);
-        if (it != m_childProperties[type].constEnd())
+        if (it != m_childProperties[type].constEnd()) {
             return it.value();
+        }
         return QString();
     }
 
     /// Returns an attribute of this style. In prinicpal this class is meant to be write-only, but some exceptional cases having read-support as well is very useful.
-    QString attribute(const QString &propName) const {
+    QString attribute(const QString &propName) const
+    {
         const QMap<QString, QString>::const_iterator it = m_attributes.constFind(propName);
-        if (it != m_attributes.constEnd())
+        if (it != m_attributes.constEnd()) {
             return it.value();
+        }
         return QString();
     }
 
@@ -533,8 +561,8 @@ private:
     QString m_parentName;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     typedef QMap<QString, QString> StyleMap;
-    StyleMap m_properties[LastPropertyType+1];
-    StyleMap m_childProperties[LastPropertyType+1];
+    StyleMap m_properties[LastPropertyType + 1];
+    StyleMap m_childProperties[LastPropertyType + 1];
     StyleMap m_attributes;
     QList<StyleMap> m_maps; // we can't really sort the maps between themselves...
 

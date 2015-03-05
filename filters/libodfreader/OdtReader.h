@@ -33,13 +33,10 @@
 #include "OdfReader.h"
 #include "OdfReaderInternals.h"
 
-
-
 class OdtReaderBackend;
 class OdfReaderContext;
 
 class OdfTextReader;
-
 
 /** @brief Read the XML tree of the content of an ODT file.
  *
@@ -64,15 +61,15 @@ class OdfTextReader;
  */
 class KOODFREADER_EXPORT OdtReader : public OdfReader
 {
- public:
+public:
     OdtReader();
     ~OdtReader();
 
- protected:
+protected:
     // ODT document level functions
     DECLARE_READER_FUNCTION(OfficeText);
 
- private:
+private:
     // Not much here. Most are already in OdfReader.
 };
 

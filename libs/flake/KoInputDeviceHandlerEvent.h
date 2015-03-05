@@ -44,7 +44,7 @@ public:
     virtual ~KoInputDeviceHandlerEvent();
 
     /// Creates and returns a KoPointerEvent for tools to consume
-    virtual KoPointerEvent * pointerEvent() = 0;
+    virtual KoPointerEvent *pointerEvent() = 0;
 
     /// The device button which caused the event, Qt::NoButton if it is a move event
     Qt::MouseButton button() const;
@@ -61,7 +61,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOINPUTDEVICEHANDLEREVENT_H

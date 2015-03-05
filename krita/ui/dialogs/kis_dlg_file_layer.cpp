@@ -35,13 +35,13 @@
 #include <kis_node.h>
 #include <kis_file_layer.h>
 
-KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, QWidget * parent)
+KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString &name, QWidget *parent)
     : KDialog(parent)
     , m_basePath(basePath)
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    QWidget * page = new QWidget(this);
+    QWidget *page = new QWidget(this);
     dlgWidget.setupUi(page);
     setMainWidget(page);
 
@@ -50,13 +50,13 @@ KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, 
 
     dlgWidget.txtLayerName->setText(name);
 
-    connect(dlgWidget.wdgUrlRequester, SIGNAL(textChanged(const QString &)),
-            SLOT(slotNameChanged(const QString &)));
+    connect(dlgWidget.wdgUrlRequester, SIGNAL(textChanged(QString)),
+            SLOT(slotNameChanged(QString)));
 
     enableButtonOk(false);
 }
 
-void KisDlgFileLayer::slotNameChanged(const QString & text)
+void KisDlgFileLayer::slotNameChanged(const QString &text)
 {
     enableButtonOk(!text.isEmpty());
 }
@@ -70,11 +70,9 @@ KisFileLayer::ScalingMethod KisDlgFileLayer::scaleToImageResolution() const
 {
     if (dlgWidget.radioDontScale->isChecked()) {
         return KisFileLayer::None;
-    }
-    else if (dlgWidget.radioScaleToImageSize->isChecked()) {
+    } else if (dlgWidget.radioScaleToImageSize->isChecked()) {
         return KisFileLayer::ToImageSize;
-    }
-    else {
+    } else {
         return KisFileLayer::ToImagePPI;
     }
 }

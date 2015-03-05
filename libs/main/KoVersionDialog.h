@@ -33,7 +33,7 @@ class KoVersionDialog : public KDialog
 {
     Q_OBJECT
 public:
-    KoVersionDialog(QWidget* parent, KoDocument *doc);
+    KoVersionDialog(QWidget *parent, KoDocument *doc);
     ~KoVersionDialog();
 
 public Q_SLOTS:
@@ -48,11 +48,11 @@ protected:
     void updateButton();
     void updateVersionList();
 
-    QTreeWidget * list;
-    QPushButton* m_pRemove;
-    QPushButton* m_pAdd;
-    QPushButton* m_pOpen;
-    QPushButton* m_pModify;
+    QTreeWidget *list;
+    QPushButton *m_pRemove;
+    QPushButton *m_pAdd;
+    QPushButton *m_pOpen;
+    QPushButton *m_pModify;
     KoDocument *m_doc;
 };
 
@@ -60,7 +60,7 @@ class KoVersionModifyDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit KoVersionModifyDialog(QWidget* parent, KoVersionInfo *info = 0);
+    explicit KoVersionModifyDialog(QWidget *parent, KoVersionInfo *info = 0);
 
     QString comment() const;
 

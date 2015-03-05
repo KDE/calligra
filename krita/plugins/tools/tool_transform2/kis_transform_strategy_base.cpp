@@ -22,13 +22,10 @@
 #include <QTransform>
 #include "KoPointerEvent.h"
 
-
-struct KisTransformStrategyBase::Private
-{
+struct KisTransformStrategyBase::Private {
     QTransform thumbToImageTransform;
     QImage originalImage;
 };
-
 
 KisTransformStrategyBase::KisTransformStrategyBase()
     : m_d(new Private())

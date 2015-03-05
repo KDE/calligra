@@ -32,7 +32,7 @@ class QWidget;
 class KRITAUI_EXPORT KisRecordedActionCreatorFactory
 {
 public:
-    KisRecordedActionCreatorFactory(const QString& _id, const QString& _name);
+    KisRecordedActionCreatorFactory(const QString &_id, const QString &_name);
     virtual ~KisRecordedActionCreatorFactory();
     QString id() const;
     QString name() const;
@@ -43,14 +43,14 @@ public:
     /**
      * Create an creator for the action.
      */
-    virtual KisRecordedActionCreator* createCreator(QWidget* parent) const;
+    virtual KisRecordedActionCreator *createCreator(QWidget *parent) const;
     /**
      * Create an action. If the action require a creator, it should return 0.
      */
-    virtual KisRecordedAction* createAction() const;
+    virtual KisRecordedAction *createAction() const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

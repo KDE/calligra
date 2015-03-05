@@ -49,7 +49,7 @@ void TestDependencies::testCircleRemoval()
     QApplication::processEvents(); // handle Damages
 
     QCOMPARE(m_storage->value(1, 1), Value::errorCIRCLE());
-    DependencyManager* manager = m_map->dependencyManager();
+    DependencyManager *manager = m_map->dependencyManager();
     QVERIFY(manager->d->consumers.count() == 1);
     QVERIFY(manager->d->providers.count() == 1);
     QList<Cell> consumers = manager->d->consumers.value(m_sheet)->contains(QRect(1, 1, 1, 1));
@@ -91,7 +91,7 @@ void TestDependencies::testDepths()
     Cell a4(m_sheet, 1, 4); a4.setUserInput("=A1 + A3");
 
     QApplication::processEvents(); // handle Damages
-    
+
     QMap<Cell, int> depths = m_map->dependencyManager()->depths();
     QCOMPARE(depths[a1], 0);
     QCOMPARE(depths[a2], 1);
@@ -100,7 +100,7 @@ void TestDependencies::testDepths()
 
     a2.setUserInput("");
     QApplication::processEvents(); // handle Damages
-    
+
     depths = m_map->dependencyManager()->depths();
     QCOMPARE(depths[a1], 0);
     QCOMPARE(depths[a2], 0);

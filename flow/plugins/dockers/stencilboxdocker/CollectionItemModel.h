@@ -32,8 +32,7 @@ class KoProperties;
 /**
  * Struct containing the information stored in CollectionItemModel item
  */
-struct KoCollectionItem
-{
+struct KoCollectionItem {
     KoCollectionItem()
     {
         properties = 0;
@@ -43,35 +42,38 @@ struct KoCollectionItem
     QString name;
     QString toolTip;
     QIcon icon;
-    KoProperties* properties;
+    KoProperties *properties;
 };
 
 class CollectionItemModel : public QAbstractListModel
 {
     Q_OBJECT
-    public:
-        explicit CollectionItemModel(QObject *parent = 0);
+public:
+    explicit CollectionItemModel(QObject *parent = 0);
 
-        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-        virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-        virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
-        virtual QStringList mimeTypes() const;
-        virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
+    virtual QStringList mimeTypes() const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-        /**
-         * Set the list of KoCollectionItem to be stored in the model
-         */
-        void setShapeTemplateList(const QList<KoCollectionItem>& newlist);
-        QList<KoCollectionItem> shapeTemplateList () { return m_shapeTemplateList; }
+    /**
+     * Set the list of KoCollectionItem to be stored in the model
+     */
+    void setShapeTemplateList(const QList<KoCollectionItem> &newlist);
+    QList<KoCollectionItem> shapeTemplateList()
+    {
+        return m_shapeTemplateList;
+    }
 
-        void setViewMode(QListView::ViewMode vm);
-        QListView::ViewMode viewMode() const;
-        KoProperties* properties(const QModelIndex& index) const;
+    void setViewMode(QListView::ViewMode vm);
+    QListView::ViewMode viewMode() const;
+    KoProperties *properties(const QModelIndex &index) const;
 
-    private:
-        QList<KoCollectionItem> m_shapeTemplateList;
-        QString m_family;
-        QListView::ViewMode m_viewMode;
+private:
+    QList<KoCollectionItem> m_shapeTemplateList;
+    QString m_family;
+    QListView::ViewMode m_viewMode;
 };
 
 #endif // COLLECTIONITEMMODEL_H

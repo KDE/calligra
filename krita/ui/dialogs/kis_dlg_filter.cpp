@@ -33,12 +33,11 @@
 #include "kis_filter_manager.h"
 #include "ui_wdgfilterdialog.h"
 
-
 struct KisDlgFilter::Private {
     Private()
-            : currentFilter(0)
-            , resizeCount(0)
-            , view(0)
+        : currentFilter(0)
+        , resizeCount(0)
+        , view(0)
     {
     }
 
@@ -51,8 +50,8 @@ struct KisDlgFilter::Private {
 };
 
 KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManager *filterManager, QWidget *parent) :
-        QDialog(parent),
-        d(new Private)
+    QDialog(parent),
+    d(new Private)
 {
     setModal(false);
 
@@ -107,10 +106,12 @@ void KisDlgFilter::setDialogTitle(KisFilterSP filter)
 
 void KisDlgFilter::startApplyingFilter(KisSafeFilterConfigurationSP config)
 {
-    if (!d->uiFilterDialog.filterSelection->configuration()) return;
+    if (!d->uiFilterDialog.filterSelection->configuration()) {
+        return;
+    }
 
     if (d->node->inherits("KisLayer")) {
-        config->setChannelFlags(qobject_cast<KisLayer*>(d->node.data())->channelFlags());
+        config->setChannelFlags(qobject_cast<KisLayer *>(d->node.data())->channelFlags());
     }
 
     d->filterManager->apply(config);
@@ -118,7 +119,9 @@ void KisDlgFilter::startApplyingFilter(KisSafeFilterConfigurationSP config)
 
 void KisDlgFilter::updatePreview()
 {
-    if (!d->uiFilterDialog.filterSelection->configuration()) return;
+    if (!d->uiFilterDialog.filterSelection->configuration()) {
+        return;
+    }
 
     if (d->uiFilterDialog.checkBoxPreview->isChecked()) {
         KisSafeFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
@@ -152,13 +155,15 @@ void KisDlgFilter::slotOnReject()
 
 void KisDlgFilter::createMask()
 {
-    if (d->node->inherits("KisMask")) return;
+    if (d->node->inherits("KisMask")) {
+        return;
+    }
 
     if (d->filterManager->isStrokeRunning()) {
         d->filterManager->cancel();
     }
 
-    KisLayer *layer = dynamic_cast<KisLayer*>(d->node.data());
+    KisLayer *layer = dynamic_cast<KisLayer *>(d->node.data());
     KisFilterMaskSP mask = new KisFilterMask();
     mask->initSelection(d->view->selection(), layer);
     mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
@@ -191,17 +196,16 @@ void KisDlgFilter::filterSelectionChanged()
     updatePreview();
 }
 
-
-void KisDlgFilter::resizeEvent(QResizeEvent* event)
+void KisDlgFilter::resizeEvent(QResizeEvent *event)
 {
     QDialog::resizeEvent(event);
 
     // Workaround, after the initalisation don't center the dialog anymore
-    if(d->resizeCount < 2) {
-        QWidget* canvas = d->view->canvas();
+    if (d->resizeCount < 2) {
+        QWidget *canvas = d->view->canvas();
         QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());
-        int deltaX = (canvas->geometry().width() - geometry().width())/2;
-        int deltaY = (canvas->geometry().height() - geometry().height())/2;
+        int deltaX = (canvas->geometry().width() - geometry().width()) / 2;
+        int deltaY = (canvas->geometry().height() - geometry().height()) / 2;
         rect.translate(deltaX, deltaY);
         setGeometry(rect);
 

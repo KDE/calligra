@@ -18,7 +18,6 @@
  */
 #include "kis_locked_properties.h"
 
-
 KisLockedProperties::KisLockedProperties()
 {
     m_lockedProperties = new KisPropertiesConfiguration();
@@ -67,5 +66,4 @@ KisPropertiesConfiguration *KisLockedProperties::lockedProperties()
 {
     return m_lockedProperties;
 }
-
 

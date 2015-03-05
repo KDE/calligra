@@ -51,18 +51,18 @@ public:
 
     virtual void clear();
 
-    virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
+    virtual void setupContents(QPainter *p, bool focused, const QVariant &val,
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
 
     virtual void clickedOnContents();
 
     /*! Handles action having standard name \a actionName.
      Action could be: "edit_cut", "edit_paste", etc. */
-    virtual void handleAction(const QString& actionName);
+    virtual void handleAction(const QString &actionName);
 
     /*! Handles copy action for value. Copies empty string for null, "1" for true, "0" for false.
      \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
-    virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
+    virtual void handleCopyAction(const QVariant &value, const QVariant &visibleValue);
 
     /*! \return width of \a value. Reimplemented  after KexiTableEdit. */
     virtual int widthForValue(const QVariant &val, const QFontMetrics &fm);
@@ -71,7 +71,7 @@ protected Q_SLOTS:
 
 protected:
     //! initializes this editor with \a add value
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
 
     void showHintButton();
 

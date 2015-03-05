@@ -1,4 +1,3 @@
-// kate: space-indent on; indent-width 4; replace-tabs off;
 /*
    This file is part of the KDE project
    Copyright (C) 2001 Ewald Snel <ewald@rambo.its.tudelft.nl>
@@ -28,12 +27,12 @@
 K_PLUGIN_FACTORY(RTFImportFactory, registerPlugin<RTFImport>();)
 K_EXPORT_PLUGIN(RTFImportFactory("calligrafilters"))
 
-RTFImport::RTFImport(QObject* parent, const QVariantList&)
+RTFImport::RTFImport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus RTFImport::convert(const QByteArray &from, const QByteArray &to)
 {
     // This filter only supports RTF to Words conversion
     if ((from != "application/rtf") || (to != "application/vnd.oasis.opendocument.text")) {
@@ -42,8 +41,9 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
 
     // Are we in batch mode, i.e. non-interactive
     bool batch = false;
-    if (m_chain->manager())
+    if (m_chain->manager()) {
         batch = m_chain->manager()->getBatchMode();
+    }
 
     // Open input file
     QString inFileName = m_chain->inputFile();
@@ -59,7 +59,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
     }
 
     QTextDocument doc;
-    RtfReader::TextDocumentRtfOutput *output = new RtfReader::TextDocumentRtfOutput( &doc );
+    RtfReader::TextDocumentRtfOutput *output = new RtfReader::TextDocumentRtfOutput(&doc);
     reader.parseTo(output);
 
     QFile saveFile(m_chain->outputFile());

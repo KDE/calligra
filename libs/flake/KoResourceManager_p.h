@@ -141,8 +141,8 @@ public:
     void clearResource(int key);
 
 private:
-    KoResourceManager(const KoResourceManager&);
-    KoResourceManager& operator=(const KoResourceManager&);
+    KoResourceManager(const KoResourceManager &);
+    KoResourceManager &operator=(const KoResourceManager &);
 
     QHash<int, QVariant> m_resources;
 };

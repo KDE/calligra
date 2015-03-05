@@ -29,16 +29,16 @@
 class KPrIrisWipeEffectStrategyBase : public KPrPageEffectStrategy
 {
 public:
-    KPrIrisWipeEffectStrategyBase(QPainterPath shape, int subType, const char * smilType, const char *smilSubType, bool reverse = false );
+    KPrIrisWipeEffectStrategyBase(QPainterPath shape, int subType, const char *smilType, const char *smilSubType, bool reverse = false);
     virtual ~KPrIrisWipeEffectStrategyBase();
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    virtual void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine);
 
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    virtual void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data);
 
-    virtual void next( const KPrPageEffect::Data &data );
+    virtual void next(const KPrPageEffect::Data &data);
 
-    int findMaxScaling( const KPrPageEffect::Data &data );
+    int findMaxScaling(const KPrPageEffect::Data &data);
 
 protected:
     QPainterPath m_shape;

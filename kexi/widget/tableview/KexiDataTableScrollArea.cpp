@@ -30,15 +30,14 @@
 #include "KexiDataTableScrollArea.h"
 #include "KexiDataTableView.h"
 
-
 KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent)
-        : KexiTableScrollArea(0, parent)
+    : KexiTableScrollArea(0, parent)
 {
     init();
 }
 
 KexiDataTableScrollArea::KexiDataTableScrollArea(QWidget *parent, KexiDB::Cursor *cursor)
-        : KexiTableScrollArea(0, parent)
+    : KexiTableScrollArea(0, parent)
 {
     init();
     setData(cursor);
@@ -86,14 +85,15 @@ bool KexiDataTableScrollArea::setData(KexiDB::Cursor *cursor)
     }
 
     KexiDB::TableViewData *tv_data = new KexiDB::TableViewData(m_cursor);
-    KexiDataTableView* dataTable = qobject_cast<KexiDataTableView*>(parentWidget());
+    KexiDataTableView *dataTable = qobject_cast<KexiDataTableView *>(parentWidget());
     if (dataTable) {
         dataTable->loadTableViewSettings(tv_data);
     }
 
     QString windowTitle(m_cursor->query()->caption());
-    if (windowTitle.isEmpty())
+    if (windowTitle.isEmpty()) {
         windowTitle = m_cursor->query()->name();
+    }
 
     setWindowTitle(windowTitle);
 

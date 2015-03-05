@@ -38,22 +38,22 @@ public:
         }
     }
 
-    KarbonDocument * targetPart;
-    QList<KoShapeLayer*> layers;
-    QList<KoShape*> shapes;
+    KarbonDocument *targetPart;
+    QList<KoShapeLayer *> layers;
+    QList<KoShape *> shapes;
     bool hasMerged;
 };
 
 KarbonDocumentMergeCommand::KarbonDocumentMergeCommand(KarbonDocument *targetPart, KarbonDocument *sourcePart)
-        : KUndo2Command(0), d(new Private())
+    : KUndo2Command(0), d(new Private())
 {
     d->targetPart = targetPart;
     d->layers = sourcePart->layers();
     d->shapes = sourcePart->shapes();
-    foreach(KoShapeLayer * layer, d->layers) {
+    foreach (KoShapeLayer *layer, d->layers) {
         sourcePart->removeShape(layer);
     }
-    foreach(KoShape * shape, d->shapes) {
+    foreach (KoShape *shape, d->shapes) {
         sourcePart->removeShape(shape);
     }
     setText(kundo2_i18n("Insert graphics"));
@@ -67,10 +67,10 @@ KarbonDocumentMergeCommand::~KarbonDocumentMergeCommand()
 void KarbonDocumentMergeCommand::redo()
 {
     if (!d->hasMerged) {
-        foreach(KoShapeLayer * layer, d->layers) {
+        foreach (KoShapeLayer *layer, d->layers) {
             d->targetPart->addShape(layer);
         }
-        foreach(KoShape * shape, d->shapes) {
+        foreach (KoShape *shape, d->shapes) {
             d->targetPart->addShape(shape);
         }
         d->hasMerged = true;
@@ -84,10 +84,10 @@ void KarbonDocumentMergeCommand::undo()
     KUndo2Command::undo();
 
     if (d->hasMerged) {
-        foreach(KoShapeLayer * layer, d->layers) {
+        foreach (KoShapeLayer *layer, d->layers) {
             d->targetPart->removeShape(layer);
         }
-        foreach(KoShape * shape, d->shapes) {
+        foreach (KoShape *shape, d->shapes) {
             d->targetPart->removeShape(shape);
         }
         d->hasMerged = false;

@@ -68,7 +68,6 @@ struct GimpBrushHeader {
 // Needed, or the GIMP won't open it!
 quint32 const GimpV2BrushMagic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' << 0);
 
-
 struct KisGbrBrush::Private {
 
     QByteArray data;
@@ -85,7 +84,7 @@ struct KisGbrBrush::Private {
 
 #define DEFAULT_SPACING 0.25
 
-KisGbrBrush::KisGbrBrush(const QString& filename)
+KisGbrBrush::KisGbrBrush(const QString &filename)
     : KisBrush(filename)
     , d(new Private)
 {
@@ -95,9 +94,9 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
     setSpacing(DEFAULT_SPACING);
 }
 
-KisGbrBrush::KisGbrBrush(const QString& filename,
-                         const QByteArray& data,
-                         qint32 & dataPos)
+KisGbrBrush::KisGbrBrush(const QString &filename,
+                         const QByteArray &data,
+                         qint32 &dataPos)
     : KisBrush(filename)
     , d(new Private)
 {
@@ -123,7 +122,7 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     initFromPaintDev(image, x, y, w, h);
 }
 
-KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
+KisGbrBrush::KisGbrBrush(const QImage &image, const QString &name)
     : KisBrush()
     , d(new Private)
 {
@@ -136,7 +135,7 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
     setName(name);
 }
 
-KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
+KisGbrBrush::KisGbrBrush(const KisGbrBrush &rhs)
     : KisBrush(rhs)
     , d(new Private)
 {
@@ -154,7 +153,9 @@ KisGbrBrush::~KisGbrBrush()
 bool KisGbrBrush::load()
 {
     QFile file(filename());
-    if (file.size() == 0) return false;
+    if (file.size() == 0) {
+        return false;
+    }
     file.open(QIODevice::ReadOnly);
     bool res = loadFromDevice(&file);
     file.close();
@@ -197,8 +198,7 @@ bool KisGbrBrush::init()
     if (bh.version == 1) {
         // No spacing in version 1 files so use Gimp default
         bh.spacing = static_cast<int>(DEFAULT_SPACING * 100);
-    }
-    else {
+    } else {
         bh.spacing = ntohl(bh.spacing);
 
         if (bh.spacing > 1000) {
@@ -219,8 +219,7 @@ bool KisGbrBrush::init()
         // is at a different offset. Character encoding is undefined.
         const char *text = d->data.constData() + sizeof(GimpBrushV1Header);
         name = QString::fromLatin1(text, bh.header_size - sizeof(GimpBrushV1Header) - 1);
-    }
-    else {
+    } else {
         // ### Version = 3->cinepaint; may be float16 data!
         // Version >=2: UTF-8 encoding is used
         name = QString::fromUtf8(d->data.constData() + sizeof(GimpBrushHeader),
@@ -251,7 +250,9 @@ bool KisGbrBrush::init()
 
     if (bh.bytes == 1) {
         QVector<QRgb> table;
-        for (int i = 0; i < 256; ++i) table.append(qRgb(i, i, i));
+        for (int i = 0; i < 256; ++i) {
+            table.append(qRgb(i, i, i));
+        }
         image.setColorTable(table);
         // Grayscale
 
@@ -285,8 +286,7 @@ bool KisGbrBrush::init()
                 ++pixel;
             }
         }
-    }
-    else {
+    } else {
         return false;
     }
 
@@ -321,11 +321,11 @@ bool KisGbrBrush::save()
     return ok;
 }
 
-bool KisGbrBrush::saveToDevice(QIODevice* dev) const
+bool KisGbrBrush::saveToDevice(QIODevice *dev) const
 {
     GimpBrushHeader bh;
     QByteArray utf8Name = name().toUtf8(); // Names in v2 brushes are in UTF-8
-    char const* name = utf8Name.data();
+    char const *name = utf8Name.data();
     int nameLength = qstrlen(name);
     int wrote;
 
@@ -336,15 +336,14 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
     // Hardcoded, 4 bytes RGBA or 1 byte GREY
     if (!hasColor()) {
         bh.bytes = htonl(1);
-    }
-    else {
+    } else {
         bh.bytes = htonl(4);
     }
     bh.magic_number = htonl(GimpV2BrushMagic);
     bh.spacing = htonl(static_cast<quint32>(spacing() * 100.0));
 
     // Write header: first bh, then the name
-    QByteArray bytes = QByteArray::fromRawData(reinterpret_cast<char*>(&bh), sizeof(GimpBrushHeader));
+    QByteArray bytes = QByteArray::fromRawData(reinterpret_cast<char *>(&bh), sizeof(GimpBrushHeader));
     wrote = dev->write(bytes);
     bytes.clear();
 
@@ -408,7 +407,6 @@ QImage KisGbrBrush::brushTipImage() const
     return image;
 }
 
-
 enumBrushType KisGbrBrush::brushType() const
 {
     return !hasColor() || useColorAsMask() ? MASK : IMAGE;
@@ -420,7 +418,7 @@ void KisGbrBrush::setBrushType(enumBrushType type)
     qFatal("FATAL: protected member setBrushType has no meaning for KisGbrBrush");
 }
 
-void KisGbrBrush::setBrushTipImage(const QImage& image)
+void KisGbrBrush::setBrushTipImage(const QImage &image)
 {
     KisBrush::setBrushTipImage(image);
     setValid(true);
@@ -459,7 +457,7 @@ void KisGbrBrush::makeMaskImage()
 
         for (int y = 0; y < imageHeight; y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(brushTip.scanLine(y));
-            uchar * dstPixel = image.scanLine(y);
+            uchar *dstPixel = image.scanLine(y);
             for (int x = 0; x < imageWidth; x++) {
                 QRgb c = pixel[x];
                 float alpha = qAlpha(c) / 255.0f;
@@ -479,12 +477,12 @@ void KisGbrBrush::makeMaskImage()
     clearBrushPyramid();
 }
 
-KisGbrBrush* KisGbrBrush::clone() const
+KisGbrBrush *KisGbrBrush::clone() const
 {
     return new KisGbrBrush(*this);
 }
 
-void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
+void KisGbrBrush::toXML(QDomDocument &d, QDomElement &e) const
 {
     predefinedBrushToXML("gbr_brush", e);
     e.setAttribute("ColorAsMask", QString::number((int)useColorAsMask()));

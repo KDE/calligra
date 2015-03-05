@@ -23,20 +23,19 @@
 #include "kptconfigbehaviorpanelbase.h"
 #include "kptconfig.h"
 
-
 namespace KPlato
 {
 
-
-class ConfigBehaviorPanel : public ConfigBehaviorPanelBase {
+class ConfigBehaviorPanel : public ConfigBehaviorPanelBase
+{
     Q_OBJECT
 public:
-    explicit ConfigBehaviorPanel(Behavior &behavior, QWidget *parent=0, const char *name=0);
+    explicit ConfigBehaviorPanel(Behavior &behavior, QWidget *parent = 0, const char *name = 0);
 
     void setStartValues();
     bool ok();
     bool apply();
-    
+
 private:
     Behavior m_oldvalues;
     Behavior &m_behavior;

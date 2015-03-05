@@ -21,7 +21,6 @@
 
 #include "canvas/kis_perspective_grid_manager.h"
 
-
 #include <kaction.h>
 #include <klocale.h>
 #include <ktoggleaction.h>
@@ -35,16 +34,14 @@
 #include "kis_perspective_grid_decoration.h"
 #include "KisView.h"
 
-
 /***************************************************************/
 /*                 KisPerspectiveGridManager                   */
 /***************************************************************/
 
-KisPerspectiveGridManager::KisPerspectiveGridManager(KisViewManager * parent) : QObject(parent)
+KisPerspectiveGridManager::KisPerspectiveGridManager(KisViewManager *parent) : QObject(parent)
     , m_imageView(0)
 {
 }
-
 
 KisPerspectiveGridManager::~KisPerspectiveGridManager()
 {
@@ -56,7 +53,7 @@ void KisPerspectiveGridManager::updateGUI()
         KisImageWSP image = m_imageView->image();
 
         if (image) {
-            KisPerspectiveGrid* pGrid = image->perspectiveGrid();
+            KisPerspectiveGrid *pGrid = image->perspectiveGrid();
             m_toggleGrid->setEnabled(pGrid->hasSubGrids());
             m_toggleGrid->setChecked(decoration()->visible());
             m_gridClear->setEnabled(pGrid->hasSubGrids());
@@ -67,7 +64,7 @@ void KisPerspectiveGridManager::updateGUI()
     }
 }
 
-void KisPerspectiveGridManager::setup(KActionCollection * collection)
+void KisPerspectiveGridManager::setup(KActionCollection *collection)
 {
     m_toggleGrid  = new KToggleAction(i18n("Show Perspective Grid"), this);
     collection->addAction("view_toggle_perspective_grid", m_toggleGrid);
@@ -108,7 +105,7 @@ void KisPerspectiveGridManager::setView(QPointer<KisView> imageView)
 
     m_imageView = imageView;
     if (m_imageView && !decoration()) {
-        KisPerspectiveGridDecoration* newDecoration = new KisPerspectiveGridDecoration(m_imageView);
+        KisPerspectiveGridDecoration *newDecoration = new KisPerspectiveGridDecoration(m_imageView);
         newDecoration->setVisible(true);
         m_imageView->canvasBase()->addDecoration(newDecoration);
     }
@@ -116,13 +113,12 @@ void KisPerspectiveGridManager::setView(QPointer<KisView> imageView)
     updateGUI();
 }
 
-KisPerspectiveGridDecoration* KisPerspectiveGridManager::decoration()
+KisPerspectiveGridDecoration *KisPerspectiveGridManager::decoration()
 {
     if (m_imageView && m_imageView->canvasBase()) {
-        return qobject_cast<KisPerspectiveGridDecoration*>(m_imageView->canvasBase()->decoration("perspectiveGrid"));
+        return qobject_cast<KisPerspectiveGridDecoration *>(m_imageView->canvasBase()->decoration("perspectiveGrid"));
     }
     return 0;
 }
-
 
 #include "kis_perspective_grid_manager.moc"

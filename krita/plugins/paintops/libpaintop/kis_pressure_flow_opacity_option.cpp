@@ -41,16 +41,16 @@ KisFlowOpacityOption::KisFlowOpacityOption(KisNodeSP currentNode)
 
     m_nodeHasIndirectPaintingSupport =
         currentNode &&
-        dynamic_cast<KisIndirectPaintingSupport*>(currentNode.data());
+        dynamic_cast<KisIndirectPaintingSupport *>(currentNode.data());
 }
 
-void KisFlowOpacityOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisFlowOpacityOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty("FlowValue", m_flow);
 }
 
-void KisFlowOpacityOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisFlowOpacityOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOption::readOptionSetting(setting);
     setFlow(setting->getDouble("FlowValue", 1.0));
@@ -67,7 +67,7 @@ qreal KisFlowOpacityOption::getStaticOpacity() const
     return value();
 }
 
-qreal KisFlowOpacityOption::getDynamicOpacity(const KisPaintInformation& info) const
+qreal KisFlowOpacityOption::getDynamicOpacity(const KisPaintInformation &info) const
 {
     return computeValue(info);
 }
@@ -82,12 +82,13 @@ void KisFlowOpacityOption::setOpacity(qreal opacity)
     setValue(opacity);
 }
 
-void KisFlowOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info)
+void KisFlowOpacityOption::apply(KisPainter *painter, const KisPaintInformation &info)
 {
-    if (m_paintActionType == WASH && m_nodeHasIndirectPaintingSupport)
+    if (m_paintActionType == WASH && m_nodeHasIndirectPaintingSupport) {
         painter->setOpacityUpdateAverage(quint8(getDynamicOpacity(info) * 255.0));
-    else
+    } else {
         painter->setOpacityUpdateAverage(quint8(getStaticOpacity() * getDynamicOpacity(info) * 255.0));
+    }
 
     painter->setFlow(quint8(getFlow() * 255.0));
 }

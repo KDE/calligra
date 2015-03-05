@@ -17,72 +17,76 @@
 namespace TJ
 {
 
-Shift::Shift(Project* prj, const QString& i, const QString& n, Shift* p,
-             const QString& df, uint dl) :
+Shift::Shift(Project *prj, const QString &i, const QString &n, Shift *p,
+             const QString &df, uint dl) :
     CoreAttributes(prj, i, n, p, df, dl),
     workingHours()
 {
     prj->addShift(this);
 
-    for (int i = 0; i < 7; i++)
-    {
-        workingHours[i] = new QList<Interval*>();
+    for (int i = 0; i < 7; i++) {
+        workingHours[i] = new QList<Interval *>();
 //         workingHours[i]->setAutoDelete(true);
     }
 }
 
 Shift::~Shift()
 {
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < 7; i++) {
         delete workingHours[i];
+    }
     project->deleteShift(this);
 }
 
 void
 Shift::inheritValues()
 {
-    Shift* p = (Shift*) parent;
+    Shift *p = (Shift *) parent;
 
-    if (p)
-    {
+    if (p) {
         // Inherit start values from parent resource.
-        for (int i = 0; i < 7; i++)
-        {
-            while (!workingHours[i]->isEmpty()) delete workingHours[i]->takeFirst();
+        for (int i = 0; i < 7; i++) {
+            while (!workingHours[i]->isEmpty()) {
+                delete workingHours[i]->takeFirst();
+            }
             delete workingHours[i];
-            workingHours[i] = new QList<Interval*>();
+            workingHours[i] = new QList<Interval *>();
 //             workingHours[i]->setAutoDelete(true);
-            for (QListIterator<Interval*> ivi(*(p->workingHours[i])); ivi.hasNext();)
+            for (QListIterator<Interval *> ivi(*(p->workingHours[i])); ivi.hasNext();) {
                 workingHours[i]->append(new Interval(*ivi.next()));
+            }
         }
-    }
-    else
-    {
+    } else {
         // Inherit start values from project defaults.
-        for (int i = 0; i < 7; i++)
-        {
-            while (!workingHours[i]->isEmpty()) delete workingHours[i]->takeFirst();
+        for (int i = 0; i < 7; i++) {
+            while (!workingHours[i]->isEmpty()) {
+                delete workingHours[i]->takeFirst();
+            }
             delete workingHours[i];
-            workingHours[i] = new QList<Interval*>();
+            workingHours[i] = new QList<Interval *>();
 //             workingHours[i]->setAutoDelete(true);
-            for (QListIterator<Interval*>
-                 ivi(project->getWorkingHoursIterator(i)); ivi.hasNext();)
+            for (QListIterator<Interval *>
+                    ivi(project->getWorkingHoursIterator(i)); ivi.hasNext();) {
                 workingHours[i]->append(new Interval(*ivi.next()));
+            }
         }
     }
 }
 
 void
-Shift::setWorkingHours(int day, const QList<Interval*>& l)
+Shift::setWorkingHours(int day, const QList<Interval *> &l)
 {
-    while (!workingHours[day]->isEmpty()) delete workingHours[day]->takeFirst();
+    while (!workingHours[day]->isEmpty()) {
+        delete workingHours[day]->takeFirst();
+    }
     delete workingHours[day];
 
     // Create a deep copy of the interval list.
-    workingHours[day] = new QList<Interval*>;
+    workingHours[day] = new QList<Interval *>;
 //     workingHours[day]->setAutoDelete(true);
-    for (QListIterator<Interval*> pli(l); pli.hasNext();)
+    for (QListIterator<Interval *> pli(l); pli.hasNext();) {
         workingHours[day]->append(new Interval(*(pli.next())));
+    }
 }
 
 ShiftListIterator
@@ -92,15 +96,16 @@ Shift::getSubListIterator() const
 }
 
 bool
-Shift::isOnShift(const Interval& iv) const
+Shift::isOnShift(const Interval &iv) const
 {
     int dow = dayOfWeek(iv.getStart(), false);
     int ivStart = secondsOfDay(iv.getStart());
     int ivEnd = secondsOfDay(iv.getEnd());
     Interval dayIv(ivStart, ivEnd);
-    for (QListIterator<Interval*> ili(*(workingHours[dow])); ili.hasNext();)
-        if (ili.next()->contains(dayIv))
+    for (QListIterator<Interval *> ili(*(workingHours[dow])); ili.hasNext();)
+        if (ili.next()->contains(dayIv)) {
             return true;
+        }
 
     return false;
 }

@@ -38,19 +38,19 @@ public:
         globalEndnoteConfiguration.setNoteClass(KoOdfNotesConfiguration::Endnote);
     }
 
-    QHash < QString /*family*/, QHash < QString /*name*/, KoXmlElement* > > customStyles;
+    QHash < QString /*family*/, QHash < QString /*name*/, KoXmlElement * > > customStyles;
     // auto-styles in content.xml
-    QHash < QString /*family*/, QHash < QString /*name*/, KoXmlElement* > > contentAutoStyles;
+    QHash < QString /*family*/, QHash < QString /*name*/, KoXmlElement * > > contentAutoStyles;
     // auto-styles in styles.xml
-    QHash < QString /*family*/, QHash < QString /*name*/, KoXmlElement* > > stylesAutoStyles;
-    QHash < QString /*family*/, KoXmlElement* > defaultStyles;
+    QHash < QString /*family*/, QHash < QString /*name*/, KoXmlElement * > > stylesAutoStyles;
+    QHash < QString /*family*/, KoXmlElement * > defaultStyles;
 
-    QHash < QString /*name*/, KoXmlElement* > styles; // page-layout, font-face etc.
-    QHash < QString /*name*/, KoXmlElement* > masterPages;
-    QHash < QString /*name*/, KoXmlElement* > presentationPageLayouts;
-    QHash < QString /*drawType*/, QHash< QString /*name*/, KoXmlElement* > > drawStyles;
+    QHash < QString /*name*/, KoXmlElement * > styles; // page-layout, font-face etc.
+    QHash < QString /*name*/, KoXmlElement * > masterPages;
+    QHash < QString /*name*/, KoXmlElement * > presentationPageLayouts;
+    QHash < QString /*drawType*/, QHash< QString /*name*/, KoXmlElement * > > drawStyles;
 
-    QList <KoXmlElement* > tableTemplates;
+    QList <KoXmlElement * > tableTemplates;
 
     KoXmlElement           officeStyle;
     KoXmlElement           layerSet;
@@ -75,27 +75,31 @@ KoOdfStylesReader::KoOdfStylesReader()
 
 KoOdfStylesReader::~KoOdfStylesReader()
 {
-    typedef QHash<QString, KoXmlElement*> AutoStylesMap;
-    foreach(const AutoStylesMap& map, d->customStyles)
+    typedef QHash<QString, KoXmlElement *> AutoStylesMap;
+    foreach (const AutoStylesMap &map, d->customStyles) {
         qDeleteAll(map);
-    foreach(const AutoStylesMap& map, d->contentAutoStyles)
+    }
+    foreach (const AutoStylesMap &map, d->contentAutoStyles) {
         qDeleteAll(map);
-    foreach(const AutoStylesMap& map, d->stylesAutoStyles)
+    }
+    foreach (const AutoStylesMap &map, d->stylesAutoStyles) {
         qDeleteAll(map);
-    foreach(const DataFormatsMap::mapped_type& dataFormat, d->dataFormats)
+    }
+    foreach (const DataFormatsMap::mapped_type &dataFormat, d->dataFormats) {
         delete dataFormat.second;
+    }
     qDeleteAll(d->defaultStyles);
     qDeleteAll(d->styles);
     qDeleteAll(d->masterPages);
     qDeleteAll(d->presentationPageLayouts);
     qDeleteAll(d->tableTemplates);
-    foreach(const AutoStylesMap& map, d->drawStyles) {
+    foreach (const AutoStylesMap &map, d->drawStyles) {
         qDeleteAll(map);
     }
     delete d;
 }
 
-void KoOdfStylesReader::createStyleMap(const KoXmlDocument& doc, bool stylesDotXml)
+void KoOdfStylesReader::createStyleMap(const KoXmlDocument &doc, bool stylesDotXml)
 {
     const KoXmlElement docElement  = doc.documentElement();
     // We used to have the office:version check here, but better let the apps do that
@@ -115,15 +119,14 @@ void KoOdfStylesReader::createStyleMap(const KoXmlDocument& doc, bool stylesDotX
     }// else
     //    kDebug(30003) <<"No items found";
 
-
     //kDebug(30003) <<"Reading in master styles";
 
     KoXmlNode masterStyles = KoXml::namedItemNS(docElement, KoXmlNS::office, "master-styles");
     if (!masterStyles.isNull()) {
         KoXmlElement master;
-        forEachElement(master, masterStyles) {
+        forEachElement (master, masterStyles) {
             if (master.localName() == "master-page" &&
-                master.namespaceURI() == KoXmlNS::style) {
+                    master.namespaceURI() == KoXmlNS::style) {
                 const QString name = master.attributeNS(KoXmlNS::style, "name", QString());
                 kDebug(30003) << "Master style: '" << name << "' loaded";
                 d->masterPages.insert(name, new KoXmlElement(master));
@@ -132,10 +135,11 @@ void KoOdfStylesReader::createStyleMap(const KoXmlDocument& doc, bool stylesDotX
                 d->layerSet = master;
             } else
                 // OASIS docu mentions style:handout-master and draw:layer-set here
+            {
                 kWarning(30003) << "Unknown tag " << master.tagName() << " in office:master-styles";
+            }
         }
     }
-
 
     kDebug(30003) << "Starting reading in office:styles";
 
@@ -149,17 +153,19 @@ void KoOdfStylesReader::createStyleMap(const KoXmlDocument& doc, bool stylesDotX
     //kDebug(30003) <<"Styles read in.";
 }
 
-QHash<QString, KoXmlElement*> KoOdfStylesReader::customStyles(const QString& family) const
+QHash<QString, KoXmlElement *> KoOdfStylesReader::customStyles(const QString &family) const
 {
-    if (family.isNull())
-        return QHash<QString, KoXmlElement*>();
+    if (family.isNull()) {
+        return QHash<QString, KoXmlElement *>();
+    }
     return d->customStyles.value(family);
 }
 
-QHash<QString, KoXmlElement*> KoOdfStylesReader::autoStyles(const QString& family, bool stylesDotXml) const
+QHash<QString, KoXmlElement *> KoOdfStylesReader::autoStyles(const QString &family, bool stylesDotXml) const
 {
-    if (family.isNull())
-        return QHash<QString, KoXmlElement*>();
+    if (family.isNull()) {
+        return QHash<QString, KoXmlElement *>();
+    }
     return stylesDotXml ? d->stylesAutoStyles.value(family) : d->contentAutoStyles.value(family);
 }
 
@@ -191,35 +197,34 @@ KoOdfLineNumberingConfiguration KoOdfStylesReader::lineNumberingConfiguration() 
     return d->lineNumberingConfiguration;
 }
 
-
-void KoOdfStylesReader::insertOfficeStyles(const KoXmlElement& styles)
+void KoOdfStylesReader::insertOfficeStyles(const KoXmlElement &styles)
 {
     KoXmlElement e;
-    forEachElement(e, styles) {
+    forEachElement (e, styles) {
         const QString localName = e.localName();
         const QString ns = e.namespaceURI();
         if ((ns == KoXmlNS::svg && (
-                localName == "linearGradient"
-                || localName == "radialGradient"))
-            || (ns == KoXmlNS::draw && (
-                    localName == "gradient"
-                    || localName == "hatch"
-                    || localName == "fill-image"
-                    || localName == "marker"
-                    || localName == "stroke-dash"
-                    || localName == "opacity"))
-            || (ns == KoXmlNS::calligra && (
-                    localName == "conicalGradient"))
-            ) {
+                    localName == "linearGradient"
+                    || localName == "radialGradient"))
+                || (ns == KoXmlNS::draw && (
+                        localName == "gradient"
+                        || localName == "hatch"
+                        || localName == "fill-image"
+                        || localName == "marker"
+                        || localName == "stroke-dash"
+                        || localName == "opacity"))
+                || (ns == KoXmlNS::calligra && (
+                        localName == "conicalGradient"))
+           ) {
             QString drawType = localName;
             if (drawType.endsWith("Gradient")) {
                 drawType = "gradient";
             }
             const QString name = e.attributeNS(KoXmlNS::draw, "name", QString());
             Q_ASSERT(!name.isEmpty());
-            KoXmlElement* ep = new KoXmlElement(e);
+            KoXmlElement *ep = new KoXmlElement(e);
             d->drawStyles[drawType].insert(name, ep);
-        }else if(ns == KoXmlNS::table && localName == "table-template") {
+        } else if (ns == KoXmlNS::table && localName == "table-template") {
             d->tableTemplates.append(new KoXmlElement(e));
         } else {
             insertStyle(e, CustomInStyles);
@@ -227,26 +232,27 @@ void KoOdfStylesReader::insertOfficeStyles(const KoXmlElement& styles)
     }
 }
 
-void KoOdfStylesReader::insertStyles(const KoXmlElement& styles, TypeAndLocation typeAndLocation)
+void KoOdfStylesReader::insertStyles(const KoXmlElement &styles, TypeAndLocation typeAndLocation)
 {
     //kDebug(30003) <<"Inserting styles from" << styles.tagName();
     KoXmlElement e;
-    forEachElement(e, styles)
-            insertStyle(e, typeAndLocation);
+    forEachElement (e, styles) {
+        insertStyle(e, typeAndLocation);
+    }
 }
 
-void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeAndLocation)
+void KoOdfStylesReader::insertStyle(const KoXmlElement &e, TypeAndLocation typeAndLocation)
 {
     const QString localName = e.localName();
     const QString ns = e.namespaceURI();
     const QString name = e.attributeNS(KoXmlNS::style, "name", QString());
 
     if ((ns == KoXmlNS::style && localName == "style")
-        || (ns == KoXmlNS::text && localName == "list-style")) {
+            || (ns == KoXmlNS::text && localName == "list-style")) {
         const QString family = localName == "list-style" ? "list" : e.attributeNS(KoXmlNS::style, "family", QString());
 
         if (typeAndLocation == AutomaticInContent) {
-            QHash<QString, KoXmlElement*>& dict = d->contentAutoStyles[ family ];
+            QHash<QString, KoXmlElement *> &dict = d->contentAutoStyles[ family ];
             if (dict.contains(name)) {
                 kDebug(30003) << "Auto-style: '" << name << "' already exists";
                 delete dict.take(name);
@@ -254,7 +260,7 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
             dict.insert(name, new KoXmlElement(e));
             //kDebug(30003) <<"Style: '" << name <<"' loaded as a style auto style";
         } else if (typeAndLocation == AutomaticInStyles) {
-            QHash<QString, KoXmlElement*>& dict = d->stylesAutoStyles[ family ];
+            QHash<QString, KoXmlElement *> &dict = d->stylesAutoStyles[ family ];
             if (dict.contains(name)) {
                 kDebug(30003) << "Auto-style: '" << name << "' already exists";
                 delete dict.take(name);
@@ -262,7 +268,7 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
             dict.insert(name, new KoXmlElement(e));
             //kDebug(30003) <<"Style: '" << name <<"' loaded as a style auto style";
         } else {
-            QHash<QString, KoXmlElement*>& dict = d->customStyles[ family ];
+            QHash<QString, KoXmlElement *> &dict = d->customStyles[ family ];
             if (dict.contains(name)) {
                 kDebug(30003) << "Style: '" << name << "' already exists";
                 delete dict.take(name);
@@ -271,8 +277,8 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
             //kDebug(30003) <<"Style: '" << name <<"' loaded";
         }
     } else if (ns == KoXmlNS::style && (
-            localName == "page-layout"
-            || localName == "font-face")) {
+                   localName == "page-layout"
+                   || localName == "font-face")) {
         if (d->styles.contains(name)) {
             kDebug(30003) << "Style: '" << name << "' already exists";
             delete d->styles.take(name);
@@ -286,8 +292,9 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
         d->presentationPageLayouts.insert(name, new KoXmlElement(e));
     } else if (localName == "default-style" && ns == KoXmlNS::style) {
         const QString family = e.attributeNS(KoXmlNS::style, "family", QString());
-        if (!family.isEmpty())
+        if (!family.isEmpty()) {
             d->defaultStyles.insert(family, new KoXmlElement(e));
+        }
     } else if (ns == KoXmlNS::number && (
                    localName == "number-style"
                    || localName == "currency-style"
@@ -310,8 +317,7 @@ void KoOdfStylesReader::insertStyle(const KoXmlElement& e, TypeAndLocation typeA
                 d->globalFootnoteConfiguration.setStartValue(1);
             }
 
-        }
-        else if (notesConfiguration.noteClass() == KoOdfNotesConfiguration::Endnote) {
+        } else if (notesConfiguration.noteClass() == KoOdfNotesConfiguration::Endnote) {
             d->globalEndnoteConfiguration = notesConfiguration;
             if (d->globalEndnoteConfiguration.numberFormat().formatSpecification() == KoOdfNumberDefinition::RomanLowerCase) {
                 KoOdfNumberDefinition numFormat;
@@ -345,39 +351,41 @@ KoXmlElement KoOdfStylesReader::layerSet() const
     return d->layerSet;
 }
 
-QHash<QString, KoXmlElement*> KoOdfStylesReader::masterPages() const
+QHash<QString, KoXmlElement *> KoOdfStylesReader::masterPages() const
 {
     return d->masterPages;
 }
 
-QHash<QString, KoXmlElement*> KoOdfStylesReader::presentationPageLayouts() const
+QHash<QString, KoXmlElement *> KoOdfStylesReader::presentationPageLayouts() const
 {
     return d->presentationPageLayouts;
 }
 
-QHash<QString, KoXmlElement*> KoOdfStylesReader::drawStyles(const QString &drawType) const
+QHash<QString, KoXmlElement *> KoOdfStylesReader::drawStyles(const QString &drawType) const
 {
     return d->drawStyles.value(drawType);
 }
 
-const KoXmlElement* KoOdfStylesReader::findStyle(const QString& name) const
+const KoXmlElement *KoOdfStylesReader::findStyle(const QString &name) const
 {
     return d->styles[ name ];
 }
 
-const KoXmlElement* KoOdfStylesReader::findStyle(const QString& styleName, const QString& family) const
+const KoXmlElement *KoOdfStylesReader::findStyle(const QString &styleName, const QString &family) const
 {
-    const KoXmlElement* style = findStyleCustomStyle(styleName, family);
-    if (!style)
+    const KoXmlElement *style = findStyleCustomStyle(styleName, family);
+    if (!style) {
         style = findAutoStyleStyle(styleName, family);
-    if (!style)
+    }
+    if (!style) {
         style = findContentAutoStyle(styleName, family);
+    }
     return style;
 }
 
-const KoXmlElement* KoOdfStylesReader::findStyle(const QString& styleName, const QString& family, bool stylesDotXml) const
+const KoXmlElement *KoOdfStylesReader::findStyle(const QString &styleName, const QString &family, bool stylesDotXml) const
 {
-    const KoXmlElement* style = findStyleCustomStyle(styleName, family);
+    const KoXmlElement *style = findStyleCustomStyle(styleName, family);
     if (!style && !stylesDotXml) {
         style = findContentAutoStyle(styleName, family);
     }
@@ -388,46 +396,46 @@ const KoXmlElement* KoOdfStylesReader::findStyle(const QString& styleName, const
 
 }
 
-const KoXmlElement* KoOdfStylesReader::findStyleCustomStyle(const QString& styleName, const QString& family) const
+const KoXmlElement *KoOdfStylesReader::findStyleCustomStyle(const QString &styleName, const QString &family) const
 {
-    const KoXmlElement* style = d->customStyles.value(family).value(styleName);
+    const KoXmlElement *style = d->customStyles.value(family).value(styleName);
     if (style && !family.isEmpty()) {
         const QString styleFamily = style->attributeNS(KoXmlNS::style, "family", QString());
         if (styleFamily != family) {
             kWarning() << "KoOdfStylesReader: was looking for style " << styleName
-                    << " in family " << family << " but got " << styleFamily << endl;
+                       << " in family " << family << " but got " << styleFamily << endl;
         }
     }
     return style;
 }
 
-const KoXmlElement* KoOdfStylesReader::findAutoStyleStyle(const QString& styleName, const QString& family) const
+const KoXmlElement *KoOdfStylesReader::findAutoStyleStyle(const QString &styleName, const QString &family) const
 {
-    const KoXmlElement* style = d->stylesAutoStyles.value(family).value(styleName);
+    const KoXmlElement *style = d->stylesAutoStyles.value(family).value(styleName);
     if (style) {
         const QString styleFamily = style->attributeNS(KoXmlNS::style, "family", QString());
         if (styleFamily != family) {
             kWarning() << "KoOdfStylesReader: was looking for style " << styleName
-                    << " in family " << family << " but got " << styleFamily << endl;
+                       << " in family " << family << " but got " << styleFamily << endl;
         }
     }
     return style;
 }
 
-const KoXmlElement* KoOdfStylesReader::findContentAutoStyle(const QString& styleName, const QString& family) const
+const KoXmlElement *KoOdfStylesReader::findContentAutoStyle(const QString &styleName, const QString &family) const
 {
-    const KoXmlElement* style = d->contentAutoStyles.value(family).value(styleName);
+    const KoXmlElement *style = d->contentAutoStyles.value(family).value(styleName);
     if (style) {
         const QString styleFamily = style->attributeNS(KoXmlNS::style, "family", QString());
         if (styleFamily != family) {
             kWarning() << "KoOdfStylesReader: was looking for style " << styleName
-                    << " in family " << family << " but got " << styleFamily << endl;
+                       << " in family " << family << " but got " << styleFamily << endl;
         }
     }
     return style;
 }
 
-QList<KoXmlElement*> KoOdfStylesReader::tableTemplates() const
+QList<KoXmlElement *> KoOdfStylesReader::tableTemplates() const
 {
     return d->tableTemplates;
 }

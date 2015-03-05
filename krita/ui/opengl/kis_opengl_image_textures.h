@@ -52,8 +52,8 @@ public:
      * @param monitorProfile The profile of the display device
      */
     static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image,
-                                                     const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent,
-                                                     KoColorConversionTransformation::ConversionFlags conversionFlags);
+            const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent,
+            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Default constructor.
@@ -88,43 +88,49 @@ public:
      * Generate a background texture from the given QImage. This is used for the checker
      * pattern on which the image is rendered.
      */
-    void generateCheckerTexture(const QImage & checkImage);
+    void generateCheckerTexture(const QImage &checkImage);
     GLuint checkerTexture() const;
 
     void updateConfig(bool useBuffer, int NumMipmapLevels);
 
 public:
-    inline QRect storedImageBounds() {
+    inline QRect storedImageBounds()
+    {
         return m_storedImageBounds;
     }
 
-    inline int xToCol(int x) {
+    inline int xToCol(int x)
+    {
         return x / m_texturesInfo.effectiveWidth;
     }
 
-    inline int yToRow(int y) {
+    inline int yToRow(int y)
+    {
         return y / m_texturesInfo.effectiveHeight;
     }
 
-    inline KisTextureTile* getTextureTileCR(int col, int row) {
+    inline KisTextureTile *getTextureTileCR(int col, int row)
+    {
         int tile = row * m_numCols + col;
         KIS_ASSERT_RECOVER_RETURN_VALUE(m_textureTiles.size() > tile, 0);
 
         return m_textureTiles[tile];
     }
 
-    inline KisTextureTile* getTextureTile(int x, int y) {
+    inline KisTextureTile *getTextureTile(int x, int y)
+    {
         return getTextureTileCR(xToCol(x), yToRow(y));;
     }
 
-    inline qreal texelSize() const {
+    inline qreal texelSize() const
+    {
         Q_ASSERT(m_texturesInfo.width == m_texturesInfo.height);
         return 1.0 / m_texturesInfo.width;
     }
 
 public Q_SLOTS:
 
-    KisOpenGLUpdateInfoSP updateCache(const QRect& rect);
+    KisOpenGLUpdateInfoSP updateCache(const QRect &rect);
 
     void recalculateCache(KisUpdateInfoSP info);
 
@@ -162,7 +168,7 @@ private:
      * then effectively, there is no conversion happens. That is used
      * for working with OCIO.
      */
-    const KoColorSpace* m_tilesDestinationColorSpace;
+    const KoColorSpace *m_tilesDestinationColorSpace;
 
     /**
      * Shows whether the internal color management should be enabled or not.
@@ -176,7 +182,7 @@ private:
 
     KisGLTexturesInfo m_texturesInfo;
     int m_numCols;
-    QVector<KisTextureTile*> m_textureTiles;
+    QVector<KisTextureTile *> m_textureTiles;
 
     QBitArray m_channelFlags;
     bool m_allChannelsSelected;
@@ -186,7 +192,7 @@ private:
     bool m_useOcio;
 
 private:
-    typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;
+    typedef QMap<KisImageWSP, KisOpenGLImageTextures *> ImageTexturesMap;
     static ImageTexturesMap imageTexturesMap;
 };
 

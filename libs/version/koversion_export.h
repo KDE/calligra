@@ -58,5 +58,4 @@
 #   define KOVERSION_TEST_EXPORT
 #endif
 
-
 #endif

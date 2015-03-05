@@ -27,7 +27,7 @@
 #include <QPainter>
 
 SvgPatternHelper::SvgPatternHelper()
-        : m_patternUnits(ObjectBoundingBox), m_patternContentUnits(UserSpaceOnUse)
+    : m_patternUnits(ObjectBoundingBox), m_patternContentUnits(UserSpaceOnUse)
 {
 }
 
@@ -65,12 +65,12 @@ QTransform SvgPatternHelper::transform() const
     return m_transform;
 }
 
-void SvgPatternHelper::setPosition(const QPointF & position)
+void SvgPatternHelper::setPosition(const QPointF &position)
 {
     m_position = position;
 }
 
-QPointF SvgPatternHelper::position(const QRectF & objectBound) const
+QPointF SvgPatternHelper::position(const QRectF &objectBound) const
 {
     if (m_patternUnits == UserSpaceOnUse) {
         return m_position;
@@ -79,12 +79,12 @@ QPointF SvgPatternHelper::position(const QRectF & objectBound) const
     }
 }
 
-void SvgPatternHelper::setSize(const QSizeF & size)
+void SvgPatternHelper::setSize(const QSizeF &size)
 {
     m_size = size;
 }
 
-QSizeF SvgPatternHelper::size(const QRectF & objectBound) const
+QSizeF SvgPatternHelper::size(const QRectF &objectBound) const
 {
     if (m_patternUnits == UserSpaceOnUse) {
         return m_size;
@@ -113,17 +113,19 @@ void SvgPatternHelper::setPatternContentViewbox(const QRectF &viewBox)
     m_patternContentViewbox = viewBox;
 }
 
-QImage SvgPatternHelper::generateImage(const QRectF &objectBound, const QList<KoShape*> content)
+QImage SvgPatternHelper::generateImage(const QRectF &objectBound, const QList<KoShape *> content)
 {
     KoViewConverter zoomHandler;
 
     QSizeF patternSize = size(objectBound);
-    if (patternSize.isEmpty())
+    if (patternSize.isEmpty()) {
         return QImage();
+    }
 
     QSizeF tileSize = zoomHandler.documentToView(patternSize);
-    if (tileSize.isEmpty())
+    if (tileSize.isEmpty()) {
         return QImage();
+    }
 
     QTransform viewMatrix;
 

@@ -28,8 +28,6 @@
 #include <kis_composite_ops_model.h>
 #include "kis_signals_blocker.h"
 
-
-
 KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
     KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::generalCategory(), true),
     m_createConfigWidget(createConfigWidget)
@@ -39,7 +37,7 @@ KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
     m_currCompositeOpID = m_prevCompositeOpID;
 
     if (createConfigWidget) {
-        QWidget* widget = new QWidget();
+        QWidget *widget = new QWidget();
 
         Ui_wdgCompositeOpOption ui;
         ui.setupUi(widget);
@@ -51,8 +49,8 @@ KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
 
         setConfigurationPage(widget);
 
-        connect(ui.list    , SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
-        connect(ui.bnEraser, SIGNAL(toggled(bool))                , this, SLOT(slotEraserToggled(bool)));
+        connect(ui.list, SIGNAL(clicked(QModelIndex)), this, SLOT(slotCompositeOpChanged(QModelIndex)));
+        connect(ui.bnEraser, SIGNAL(toggled(bool)), this, SLOT(slotEraserToggled(bool)));
     }
 }
 
@@ -60,22 +58,23 @@ KisCompositeOpOption::~KisCompositeOpOption()
 {
 }
 
-void KisCompositeOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisCompositeOpOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty("CompositeOp", m_currCompositeOpID);
 }
 
-void KisCompositeOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisCompositeOpOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     QString ompositeOpID = setting->getString("CompositeOp", KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
     KoID    compositeOp = KoCompositeOpRegistry::instance().getKoID(ompositeOpID);
     changeCompositeOp(compositeOp);
 }
 
-void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
+void KisCompositeOpOption::changeCompositeOp(const KoID &compositeOp)
 {
-    if (compositeOp.id() == m_currCompositeOpID)
+    if (compositeOp.id() == m_currCompositeOpID) {
         return;
+    }
 
     m_prevCompositeOpID = m_currCompositeOpID;
     m_currCompositeOpID = compositeOp.id();
@@ -90,8 +89,7 @@ void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
     emitSettingChanged();
 }
 
-
-void KisCompositeOpOption::slotCompositeOpChanged(const QModelIndex& index)
+void KisCompositeOpOption::slotCompositeOpChanged(const QModelIndex &index)
 {
     Q_UNUSED(index);
 
@@ -101,8 +99,9 @@ void KisCompositeOpOption::slotCompositeOpChanged(const QModelIndex& index)
 
 void KisCompositeOpOption::slotEraserToggled(bool toggled)
 {
-    if (toggled)
+    if (toggled) {
         changeCompositeOp(KoCompositeOpRegistry::instance().getKoID("erase"));
-    else
+    } else {
         changeCompositeOp(KoCompositeOpRegistry::instance().getKoID(m_prevCompositeOpID));
+    }
 }

@@ -29,12 +29,12 @@ public:
     QpTableNames();
     ~QpTableNames();
 
-    void        name(unsigned pIdx, const char* pName);
-    const char* name(unsigned pIdx);
+    void        name(unsigned pIdx, const char *pName);
+    const char *name(unsigned pIdx);
 
     int         allocated(unsigned pIdx);
 protected:
-    char* cName[cNameCnt];
+    char *cName[cNameCnt];
 };
 
 #endif // QPRO_TABLENAMES_H

@@ -47,15 +47,15 @@ public:
     bool cloneFromProjection() const;
     void setCloneFromProjection(bool cloneFromProjection);
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
     void setImage(KisImageWSP image);
 
 private:
 
-    KisDuplicateOpOptionsWidget * m_optionWidget;
+    KisDuplicateOpOptionsWidget *m_optionWidget;
 
 };
 

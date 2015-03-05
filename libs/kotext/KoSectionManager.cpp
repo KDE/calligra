@@ -73,7 +73,7 @@ private:
     QHash<QString, KoSection *> m_sectionNames; //< stores name -> pointer reference, for sections that are visible in document now
 };
 
-KoSectionManager::KoSectionManager(QTextDocument* doc)
+KoSectionManager::KoSectionManager(QTextDocument *doc)
     : d_ptr(new KoSectionManagerPrivate(this, doc))
 {
     KoTextDocument(doc).setSectionManager(this); //FIXME: setting it back from here looks bad
@@ -132,14 +132,14 @@ QString KoSectionManager::possibleNewName()
     return newName;
 }
 
-void KoSectionManager::registerSection(KoSection* section)
+void KoSectionManager::registerSection(KoSection *section)
 {
     Q_D(KoSectionManager);
     d->registeredSections.insert(section);
     invalidate();
 }
 
-void KoSectionManager::unregisterSection(KoSection* section)
+void KoSectionManager::unregisterSection(KoSection *section)
 {
     Q_D(KoSectionManager);
     d->registeredSections.remove(section);

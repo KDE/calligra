@@ -27,14 +27,12 @@
 #include <KoFilter.h>
 #include <OdfTextReaderBackend.h>
 
-
 class OdfReaderContext;
 class OdfReaderWikiContext;
 
-
 class OdtReaderWikiBackend : public OdfTextReaderBackend
 {
- public:
+public:
     explicit OdtReaderWikiBackend();
     virtual ~OdtReaderWikiBackend();
 
@@ -59,6 +57,5 @@ private:
     void outputTextStyle(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
     void outputHeadingLevel(OdfReaderWikiContext *wikiContext);
 };
-
 
 #endif // ODTREADERWIKIBACKEND_H

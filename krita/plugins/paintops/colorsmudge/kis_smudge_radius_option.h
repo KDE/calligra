@@ -27,18 +27,15 @@ class KisPainter;
 class KisSmudgeRadiusOption: public KisRateOption
 {
 public:
-    KisSmudgeRadiusOption(const QString& name, const QString& label = "", bool checked = true, const QString& category = KisPaintOpOption::generalCategory());
-
+    KisSmudgeRadiusOption(const QString &name, const QString &label = "", bool checked = true, const QString &category = KisPaintOpOption::generalCategory());
 
     /**
      * Set the opacity of the painter based on the rate
      * and the curve (if checked)
      */
-    void apply(KisPainter& painter, const KisPaintInformation& info, qreal scale,qreal posx,qreal posy,KisPaintDeviceSP dev) const;
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
-
-
+    void apply(KisPainter &painter, const KisPaintInformation &info, qreal scale, qreal posx, qreal posy, KisPaintDeviceSP dev) const;
+    virtual void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 };
 #endif // KIS_SMUDGE_RADIUS_OPTION_H

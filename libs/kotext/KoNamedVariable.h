@@ -30,7 +30,8 @@ class KoNamedVariable : public KoVariable
 {
 public:
     /// return the name of this named variable
-    QString name() const {
+    QString name() const
+    {
         return m_name;
     }
 

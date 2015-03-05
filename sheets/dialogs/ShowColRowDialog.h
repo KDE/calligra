@@ -45,15 +45,15 @@ class ShowColRow: public KDialog
     Q_OBJECT
 public:
     enum Type { Column, Row };
-    ShowColRow(QWidget* parent, Selection* selection, Type _type);
+    ShowColRow(QWidget *parent, Selection *selection, Type _type);
 
 public Q_SLOTS:
     void slotOk();
     void slotDoubleClicked(QListWidgetItem *);
 
 protected:
-    Selection* m_selection;
-    QListWidget * list;
+    Selection *m_selection;
+    QListWidget *list;
     Type typeShow;
     QList<int> listInt;
 };

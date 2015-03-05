@@ -23,9 +23,9 @@
 void ClassName::drawFrame(QPainter *p)
 {
     if (frameShape() == QFrame::Box) {
-        if (frameShadow() == Plain)
+        if (frameShadow() == Plain) {
             qDrawPlainRect(p, frameRect(), d->frameColor, lineWidth());
-        else
+        } else
             qDrawShadeRect(p, frameRect(), palette(), frameShadow() == QFrame::Sunken,
                            lineWidth(), midLineWidth());
     } else {
@@ -53,7 +53,7 @@ QColor ClassName::frameColor() const
     return d->frameColor;
 }
 
-void ClassName::setFrameColor(const QColor& color)
+void ClassName::setFrameColor(const QColor &color)
 {
     d->frameColor = color;
     //update light and dark colors

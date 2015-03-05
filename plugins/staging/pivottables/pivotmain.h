@@ -25,36 +25,38 @@
 #include <kdialog.h>
 
 #include <sheets/Sheet.h>
-namespace Calligra{
-  namespace Sheets{
+namespace Calligra
+{
+namespace Sheets
+{
 
 class Selection;
 class PivotMain : public KDialog
-    {
-	Q_OBJECT
+{
+    Q_OBJECT
 
-    public:
-      explicit PivotMain(QWidget* parent,Selection* selection);
-      QVector<QString> ValueData(QString str);
-      bool checkCondition(QString field,QString condition,QString value,int line);
-      Sheet* filter();
-      ~PivotMain();
+public:
+    explicit PivotMain(QWidget *parent, Selection *selection);
+    QVector<QString> ValueData(QString str);
+    bool checkCondition(QString field, QString condition, QString value, int line);
+    Sheet *filter();
+    ~PivotMain();
 
-    private Q_SLOTS:
-	  
-      //void on_Options_clicked();
+private Q_SLOTS:
 
-      void on_AddFilter_clicked();
-      void on_Ok_clicked();
-      void Summarize();
-      void Reset();
+    //void on_Options_clicked();
 
-    private:
-      void extractColumnNames();
-      PivotMain *ui;
-      class Private;
-      Private *const d;
-    };
-  }//Sheets
+    void on_AddFilter_clicked();
+    void on_Ok_clicked();
+    void Summarize();
+    void Reset();
+
+private:
+    void extractColumnNames();
+    PivotMain *ui;
+    class Private;
+    Private *const d;
+};
+}//Sheets
 }//Calligra
 #endif // PIVOTMAIN_H

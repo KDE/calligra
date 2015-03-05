@@ -37,17 +37,20 @@ class KoCanvasControllerWidget;
 class KOWIDGETS_EXPORT KoModeBoxFactory : public KoDockFactoryBase
 {
 public:
-    explicit KoModeBoxFactory(KoCanvasControllerWidget *canvas, const QString &applicationName, const QString& appName);
+    explicit KoModeBoxFactory(KoCanvasControllerWidget *canvas, const QString &applicationName, const QString &appName);
     ~KoModeBoxFactory();
 
     virtual QString id() const;
     KoDockFactoryBase::DockPosition defaultDockPosition() const;
-    QDockWidget* createDockWidget();
-    virtual bool isCollapsable() const { return false; }
+    QDockWidget *createDockWidget();
+    virtual bool isCollapsable() const
+    {
+        return false;
+    }
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

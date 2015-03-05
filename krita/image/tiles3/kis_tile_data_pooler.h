@@ -25,7 +25,6 @@
 class KisTileDataStore;
 class KisTileData;
 
-
 class KisTileDataPooler : public QThread
 {
     Q_OBJECT
@@ -57,14 +56,14 @@ protected:
     inline void tryFreeOrphanedClones(KisTileData *td);
     inline qint32 needMemory(KisTileData *td);
     inline qint32 canDonorMemory(KisTileData *td);
-    qint32 tryGetMemory(QList<KisTileData*> &donors, qint32 memoryMetric);
+    qint32 tryGetMemory(QList<KisTileData *> &donors, qint32 memoryMetric);
 
     template<class Iter>
-        void getLists(Iter *iter, QList<KisTileData*> &beggers,
-                      QList<KisTileData*> &donors, qint32 &memoryOccupied);
+    void getLists(Iter *iter, QList<KisTileData *> &beggers,
+                  QList<KisTileData *> &donors, qint32 &memoryOccupied);
 
-    bool processLists(QList<KisTileData*> &beggers,
-                      QList<KisTileData*> &donors,
+    bool processLists(QList<KisTileData *> &beggers,
+                      QList<KisTileData *> &donors,
                       qint32 memoryOccupied);
 
 private:
@@ -77,8 +76,6 @@ protected:
     bool m_lastCycleHadWork;
     qint32 m_memoryLimit;
 };
-
-
 
 #endif /* KIS_TILE_DATA_POOLER_H_ */
 

@@ -45,19 +45,19 @@ public:
      */
     HyperlinkStrategy(CellToolBase *cellTool,
                       const QPointF position, Qt::KeyboardModifiers modifiers,
-                      const QString& url, const QRectF& textRect);
+                      const QString &url, const QRectF &textRect);
 
     /**
      * Destructor.
      */
     virtual ~HyperlinkStrategy();
 
-    virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

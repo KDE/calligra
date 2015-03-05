@@ -24,7 +24,6 @@
 #include "kis_dummies_facade.h"
 #include "node_shapes_utils.h"
 
-
 KisDummiesFacadeBaseTest::~KisDummiesFacadeBaseTest()
 {
 

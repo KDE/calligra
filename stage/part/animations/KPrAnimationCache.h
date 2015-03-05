@@ -177,5 +177,4 @@ private:
     qreal m_zoom;
 };
 
-
 #endif /* KPRANIMATIONCACHE_H */

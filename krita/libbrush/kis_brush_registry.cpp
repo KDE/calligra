@@ -32,7 +32,6 @@
 #include "kis_text_brush_factory.h"
 #include "kis_predefined_brush_factory.h"
 
-
 KisBrushRegistry::KisBrushRegistry()
 {
     KisBrushServer::instance();
@@ -40,13 +39,13 @@ KisBrushRegistry::KisBrushRegistry()
 
 KisBrushRegistry::~KisBrushRegistry()
 {
-    foreach(const QString & id, keys()) {
+    foreach (const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "deleting KisBrushRegistry";
 }
 
-KisBrushRegistry* KisBrushRegistry::instance()
+KisBrushRegistry *KisBrushRegistry::instance()
 {
     K_GLOBAL_STATIC(KisBrushRegistry, s_instance);
     if (!s_instance.exists()) {
@@ -61,15 +60,18 @@ KisBrushRegistry* KisBrushRegistry::instance()
     return s_instance;
 }
 
-
-KisBrushSP KisBrushRegistry::getOrCreateBrush(const QDomElement& element)
+KisBrushSP KisBrushRegistry::getOrCreateBrush(const QDomElement &element)
 {
     QString brushType = element.attribute("type");
 
-    if (brushType.isEmpty()) return 0;
+    if (brushType.isEmpty()) {
+        return 0;
+    }
 
-    KisBrushFactory* factory = get(brushType);
-    if (!factory) return 0;
+    KisBrushFactory *factory = get(brushType);
+    if (!factory) {
+        return 0;
+    }
 
     KisBrushSP brush = factory->getOrCreateBrush(element);
     return brush;

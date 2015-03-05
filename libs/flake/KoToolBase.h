@@ -119,7 +119,7 @@ public:
     /**
      * Retrieves the entire collection of actions for the tool.
      */
-    QHash<QString, KAction*> actions() const;
+    QHash<QString, KAction *> actions() const;
 
     /**
      * Retrieve an action by name.
@@ -325,7 +325,7 @@ public:
     /**
      * @return A list of actions to be used for a popup.
      */
-    QList<QAction*> popupActionList() const;
+    QList<QAction *> popupActionList() const;
 
     /// Returns the canvas the tool is working on
     KoCanvasBase *canvas() const;
@@ -359,7 +359,7 @@ public Q_SLOTS:
      *                  and should emit done when it is done.
      * @see deactivate()
      */
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) = 0;
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes) = 0;
 
     /**
      * This method is called whenever this tool is no longer the
@@ -465,7 +465,7 @@ protected:
      * @param list the list of actions.
      * @see popupActionList
      */
-    void setPopupActionList(const QList<QAction*> &list);
+    void setPopupActionList(const QList<QAction *> &list);
 
     /// Convenience function to get the current handle radius
     uint handleRadius() const;
@@ -504,11 +504,10 @@ protected:
 
     KoToolBasePrivate *d_ptr;
 
-
 private:
     KoToolBase();
-    KoToolBase(const KoToolBase&);
-    KoToolBase& operator=(const KoToolBase&);
+    KoToolBase(const KoToolBase &);
+    KoToolBase &operator=(const KoToolBase &);
 
     Q_DECLARE_PRIVATE(KoToolBase)
 };

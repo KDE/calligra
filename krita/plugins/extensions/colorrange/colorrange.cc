@@ -44,9 +44,9 @@ K_PLUGIN_FACTORY(ColorRangeFactory, registerPlugin<ColorRange>();)
 K_EXPORT_PLUGIN(ColorRangeFactory("krita"))
 
 ColorRange::ColorRange(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+    : KisViewPlugin(parent)
 {
-    KisAction* action = new KisAction(i18n("Select from Color Range..."), this);
+    KisAction *action = new KisAction(i18n("Select from Color Range..."), this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
     action->setActivationConditions(KisAction::SELECTION_EDITABLE);
     addAction("colorrange", action);
@@ -75,19 +75,25 @@ void ColorRange::selectOpaque()
 {
     KisCanvas2 *canvas = m_view->canvasBase();
     KisPaintDeviceSP device = m_view->activeNode()->projection();
-    if (!device) device = m_view->activeNode()->paintDevice();
-    if (!device) device = m_view->activeNode()->original();
+    if (!device) {
+        device = m_view->activeNode()->paintDevice();
+    }
+    if (!device) {
+        device = m_view->activeNode()->original();
+    }
     KIS_ASSERT_RECOVER_RETURN(canvas && device);
 
     QRect rc = device->exactBounds();
-    if (rc.isEmpty()) return;
+    if (rc.isEmpty()) {
+        return;
+    }
 
     KisSelectionToolHelper helper(canvas, kundo2_i18n("Select Opaque"));
 
     qint32 x, y, w, h;
     rc.getRect(&x, &y, &w, &h);
 
-    const KoColorSpace * cs = device->colorSpace();
+    const KoColorSpace *cs = device->colorSpace();
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
     KisHLineConstIteratorSP deviter = device->createHLineConstIteratorNG(x, y, w);

@@ -64,41 +64,48 @@ public:
     public:
 
         Calculations() : m_max(0.0), m_min(0.0), m_mean(0.0), m_total(0.0), m_median(0.0),
-                m_stddev(0.0), m_high(0), m_low(0), m_count(0) {}
+            m_stddev(0.0), m_high(0), m_low(0), m_count(0) {}
         /**
          * This function return the maximum bound of the histogram
          * (values at greater position than the maximum are null)
          */
-        inline double getMax() {
+        inline double getMax()
+        {
             return m_max;
         }
         /**
          * This function return the minimum bound of the histogram
          * (values at smaller position than the minimum are null)
          */
-        inline double getMin() {
+        inline double getMin()
+        {
             return m_min;
         }
         /// This function return the highest value of the histogram
-        inline quint32 getHighest() {
+        inline quint32 getHighest()
+        {
             return m_high;
         }
         /// This function return the lowest value of the histogram
-        inline quint32 getLowest() {
+        inline quint32 getLowest()
+        {
             return m_low;
         }
         /// This function return the mean of value of the histogram
-        inline double getMean() {
+        inline double getMean()
+        {
             return m_mean;
         }
         //double getMedian() { return m_median; }
         //double getStandardDeviation() { return m_stddev; }
         /// This function return the number of pixels used by the histogram
-        inline quint32 getCount() {
+        inline quint32 getCount()
+        {
             return m_count;
         }
         /** The sum of (the contents of every bin * the double value of that bin)*/
-        inline double getTotal() {
+        inline double getTotal()
+        {
             return m_total;
         }
         //quint8 getPercentile() { return m_percentile; } // What is this exactly? XXX
@@ -129,48 +136,59 @@ public:
     /** The information on the current selection for the current channel */
     Calculations selectionCalculations();
 
-    inline quint32 getValue(quint8 i) {
+    inline quint32 getValue(quint8 i)
+    {
         return m_producer->getBinAt(m_channel, i);
     }
 
-    inline enumHistogramType getHistogramType() {
+    inline enumHistogramType getHistogramType()
+    {
         return m_type;
     }
-    inline void setHistogramType(enumHistogramType type) {
+    inline void setHistogramType(enumHistogramType type)
+    {
         m_type = type;
     }
-    inline void setProducer(KoHistogramProducerSP producer) {
+    inline void setProducer(KoHistogramProducerSP producer)
+    {
         m_channel = 0;
         m_producer = producer;
     }
-    inline void setChannel(qint32 channel) {
+    inline void setChannel(qint32 channel)
+    {
         Q_ASSERT(m_channel < m_completeCalculations.size());
         m_channel = channel;
     }
-    inline KoHistogramProducerSP producer() {
+    inline KoHistogramProducerSP producer()
+    {
         return m_producer;
     }
-    inline qint32 channel() {
+    inline qint32 channel()
+    {
         return m_channel;
     }
 
-    inline bool hasSelection() {
+    inline bool hasSelection()
+    {
         return m_selection;
     }
-    inline double selectionFrom() {
+    inline double selectionFrom()
+    {
         return m_selFrom;
     }
-    inline double selectionTo() {
+    inline double selectionTo()
+    {
         return m_selTo;
     }
-    inline void setNoSelection() {
+    inline void setNoSelection()
+    {
         m_selection = false;
     }
     /** Sets the current selection */
-    inline void setSelection(double from, double to) {
+    inline void setSelection(double from, double to)
+    {
         m_selection = true; m_selFrom = from; m_selTo = to;
     }
-
 
 private:
     // Dump the histogram to debug.
@@ -189,6 +207,5 @@ private:
 
     QVector<Calculations> m_completeCalculations, m_selectionCalculations;
 };
-
 
 #endif // KIS_HISTOGRAM_WIDGET_

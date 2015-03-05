@@ -40,7 +40,6 @@
 #include "TemplateShape.h"
 //#include "TemplateShapeConfigWidget.h"
 
-
 TemplateShapeFactory::TemplateShapeFactory()
     : KoShapeFactoryBase(TEMPLATESHAPEID, i18n("Template shape")) // Template: Change to your own description
 {
@@ -76,16 +75,16 @@ KoShape *TemplateShapeFactory::createDefaultShape(KoDocumentResourceManager *doc
 }
 
 KoShape *TemplateShapeFactory::createShape(const KoProperties *params,
-                                           KoDocumentResourceManager *documentResources) const
+        KoDocumentResourceManager *documentResources) const
 {
-    TemplateShape *shape = static_cast<TemplateShape*>(createDefaultShape(documentResources));
+    TemplateShape *shape = static_cast<TemplateShape *>(createDefaultShape(documentResources));
 
     return shape;
 }
 
-QList<KoShapeConfigWidgetBase*> TemplateShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> TemplateShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> result;
+    QList<KoShapeConfigWidgetBase *> result;
 
     return result;
 }

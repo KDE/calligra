@@ -59,5 +59,4 @@
 #   define KOMAIN_TEST_EXPORT
 #endif
 
-
 #endif

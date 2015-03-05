@@ -32,14 +32,13 @@
 #include <QList>
 #include <QGridLayout>
 
-
 DockerManager::DockerManager(MainWindow *mainWindow)
     : QObject(mainWindow), d(new Private(mainWindow))
 {
     ToolDockerFactory toolDockerFactory;
     ToolBarsDockerFactory toolBarsDockerFactory;
     d->toolOptionsDocker =
-        qobject_cast<ToolDocker*>(mainWindow->createDockWidget(&toolDockerFactory));
+        qobject_cast<ToolDocker *>(mainWindow->createDockWidget(&toolDockerFactory));
     Q_ASSERT(d->toolOptionsDocker);
     d->toolOptionsDocker->setVisible(false);
 

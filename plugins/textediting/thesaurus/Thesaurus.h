@@ -53,7 +53,7 @@ public:
     void finishedParagraph(QTextDocument *document, int cursorPosition);
     void startingSimpleEdit(QTextDocument *document, int cursorPosition);
 
-     void checkSection(QTextDocument *document, int startPosition, int endPosition);
+    void checkSection(QTextDocument *document, int startPosition, int endPosition);
 
 private Q_SLOTS:
     void process();

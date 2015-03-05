@@ -103,8 +103,8 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     QMenu *menu = new QMenu(d->optionsButton);
 
     QList<KoFindOption *> options = finder->options()->options();
-    foreach(KoFindOption * option, options) {
-        if(option->value().type() == QVariant::Bool) {
+    foreach (KoFindOption *option, options) {
+        if (option->value().type() == QVariant::Bool) {
             KAction *action = new KAction(option->title(), menu);
             action->setHelpText(option->description());
             action->setObjectName(option->name());
@@ -117,7 +117,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
 
     d->optionsButton->setMenu(menu);
     d->optionsButton->setPopupMode(QToolButton::InstantPopup);
-    if(menu->actions().count() == 0) {
+    if (menu->actions().count() == 0) {
         d->optionsButton->setEnabled(false);
     }
     layout->addWidget(d->optionsButton, 0, 5);
@@ -176,19 +176,19 @@ void KoFindToolbar::activateSearch()
     d->replaceButton->setVisible(false);
     d->replaceAllButton->setVisible(false);
 
-    if(!isVisible()) {
+    if (!isVisible()) {
         show();
     }
     d->searchLine->setFocus();
 
-    if(d->finder->matches().size() == 0) {
+    if (d->finder->matches().size() == 0) {
         d->textTimeout->start();
     }
 }
 
 void KoFindToolbar::activateReplace()
 {
-    if(!isVisible()) {
+    if (!isVisible()) {
         show();
     }
     d->searchLine->setFocus();
@@ -198,7 +198,7 @@ void KoFindToolbar::activateReplace()
     d->replaceButton->setVisible(true);
     d->replaceAllButton->setVisible(true);
 
-    if(d->finder->matches().size() == 0) {
+    if (d->finder->matches().size() == 0) {
         d->textTimeout->start();
     }
 }
@@ -225,7 +225,7 @@ void KoFindToolbar::Private::noMatchFound()
 
 void KoFindToolbar::Private::searchWrapped(bool direction)
 {
-    if(direction) {
+    if (direction) {
         information->setText(i18n("Search hit bottom, continuing from top."));
     } else {
         information->setText(i18n("Search hit top, continuing from bottom."));
@@ -241,7 +241,7 @@ void KoFindToolbar::Private::find(const QString &pattern)
 {
     textTimeout->stop();
 
-    if(pattern.length() > 0) {
+    if (pattern.length() > 0) {
         finder->find(pattern);
     } else {
         finder->finished();
@@ -254,7 +254,7 @@ void KoFindToolbar::Private::find(const QString &pattern)
 void KoFindToolbar::Private::optionChanged()
 {
     QAction *action = qobject_cast<QAction *>(q->sender());
-    if(action) {
+    if (action) {
         finder->options()->setOptionValue(action->objectName(), action->isChecked());
         find(searchLine->currentText());
     }

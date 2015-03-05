@@ -36,27 +36,30 @@
 #define CHECK_EVAL_SHORT(x,y) QCOMPARE(TestDouble(x,y,10),y)
 #define ROUND(x) (roundf(1e10 * x) / 1e10)
 
-Value TestMathFunctions::TestDouble(const QString& formula, const Value& v2, int accuracy)
+Value TestMathFunctions::TestDouble(const QString &formula, const Value &v2, int accuracy)
 {
     double epsilon = DBL_EPSILON * pow(10.0, (double)(accuracy));
 
     Formula f(m_map->sheet(0));
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
     bool res = fabs(v2.asFloat() - result.asFloat()) < epsilon;
 
-    if (!res)
+    if (!res) {
         kDebug(36002) << "check failed -->" << "Epsilon =" << epsilon << "" << (double) v2.asFloat() << " to" << (double)result.asFloat() << "  diff =" << (double)(v2.asFloat() - result.asFloat());
+    }
     /*  else
         kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();*/
-    if (res)
+    if (res) {
         return v2;
-    else
+    } else {
         return result;
+    }
 }
 
 // round to get at most 10-digits number
@@ -66,23 +69,26 @@ inline static Value RoundNumber(double f)
 }
 
 // round to get at most 10-digits number
-inline static Value RoundNumber(const Value& v)
+inline static Value RoundNumber(const Value &v)
 {
     if (v.isNumber()) {
         double d = numToDouble(v.asFloat());
-        if (fabs(d) < DBL_EPSILON)
+        if (fabs(d) < DBL_EPSILON) {
             d = 0.0;
+        }
         return Value(ROUND(d));
-    } else
+    } else {
         return v;
+    }
 }
 
-Value TestMathFunctions::evaluate(const QString& formula)
+Value TestMathFunctions::evaluate(const QString &formula)
 {
     Formula f(m_map->sheet(0));
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
@@ -102,8 +108,8 @@ void TestMathFunctions::initTestCase()
     m_map->addNewSheet("Sheet1");
     m_map->addNewSheet("Sheet2");
 
-    Sheet* sheet1 = m_map->sheet(0);
-    CellStorage* storage1 = sheet1->cellStorage();
+    Sheet *sheet1 = m_map->sheet(0);
+    CellStorage *storage1 = sheet1->cellStorage();
 
     // Sheet1!B3:B7
     storage1->setValue(2, 3, Value("7"));
@@ -114,8 +120,8 @@ void TestMathFunctions::initTestCase()
     // Sheet1!B9
     storage1->setValue(2, 9, Value::errorDIV0());
 
-    Sheet* sheet2 = m_map->sheet(1);
-    CellStorage* storage2 = sheet2->cellStorage();
+    Sheet *sheet2 = m_map->sheet(1);
+    CellStorage *storage2 = sheet2->cellStorage();
 
     // Sheet2!A1:B13
     storage2->setValue(1, 1, Value("test"));
@@ -316,7 +322,6 @@ void TestMathFunctions::testCEIL()
     CHECK_EVAL("CEIL(-0.000001)", Value(0));
     CHECK_EVAL("CEIL(-0.0000001)", Value(0));
 
-
     CHECK_EVAL("CEIL(-1.1)", Value(-1));
     CHECK_EVAL("CEIL(-1.01)", Value(-1));
     CHECK_EVAL("CEIL(-1.001)", Value(-1));
@@ -446,7 +451,7 @@ void TestMathFunctions::testDELTA()
     // ODF-tests
     CHECK_EVAL("DELTA(2;3)", Value(0));      // Different numbers are not equal
     CHECK_EVAL("DELTA(2;2)", Value(1));      // Same numbers are equal
-    CHECK_EVAL("DELTA(0)"  , Value(1));      // 0 equal to default 0
+    CHECK_EVAL("DELTA(0)", Value(1));      // 0 equal to default 0
 }
 
 void TestMathFunctions::testEVEN()
@@ -734,13 +739,13 @@ void TestMathFunctions::testODD()
 void TestMathFunctions::testPOWER()
 {
     CHECK_EVAL("POWER(10;0)", Value(1));       // Anything raised to the 0 power is 1
-    CHECK_EVAL("POWER(2;8)" , Value(256));     // 2^8 is 256
+    CHECK_EVAL("POWER(2;8)", Value(256));     // 2^8 is 256
 }
 
 void TestMathFunctions::testPRODUCT()
 {
     CHECK_EVAL("PRODUCT(2;3;4)",       Value(24));     // Anything raised to the 0 power is 1
-    CHECK_EVAL("PRODUCT(TRUE();2;3)" , Value(6));      // TRUE() is 1 if inline
+    CHECK_EVAL("PRODUCT(TRUE();2;3)", Value(6));      // TRUE() is 1 if inline
     CHECK_EVAL("PRODUCT()",            Value(0));      // Product with no parameters returns 0
 //TODO
 // check inline-values e.g. product(2;3;"2")
@@ -749,13 +754,13 @@ void TestMathFunctions::testPRODUCT()
 void TestMathFunctions::testQUOTIENT()
 {
     CHECK_EVAL("QUOTIENT(10;5)",     Value(2));      //
-    CHECK_EVAL("QUOTIENT(14;5)" ,    Value(2));      //
+    CHECK_EVAL("QUOTIENT(14;5)",    Value(2));      //
     CHECK_EVAL("QUOTIENT(-204;-23)", Value(8));      //
     CHECK_EVAL("QUOTIENT(-45;8)",    Value(-5));     //
-    CHECK_EVAL("QUOTIENT(24;-5)" ,   Value(-4));     //
+    CHECK_EVAL("QUOTIENT(24;-5)",   Value(-4));     //
     CHECK_EVAL("QUOTIENT(21;-5)",    Value(-4));     //
     CHECK_EVAL("QUOTIENT(-14;5)",    Value(-2));     //
-    CHECK_EVAL("QUOTIENT(5;0)" ,     Value::errorDIV0());   //
+    CHECK_EVAL("QUOTIENT(5;0)",     Value::errorDIV0());   //
     CHECK_EVAL("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETQUOTIENT(14;5)", Value(2)); // alternate function name
 }
 

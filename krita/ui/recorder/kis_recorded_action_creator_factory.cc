@@ -21,14 +21,14 @@
 #include <QString>
 
 struct KisRecordedActionCreatorFactory::Private {
-  QString id;
-  QString name;
+    QString id;
+    QString name;
 };
 
-KisRecordedActionCreatorFactory::KisRecordedActionCreatorFactory(const QString& _id, const QString& _name) : d(new Private)
+KisRecordedActionCreatorFactory::KisRecordedActionCreatorFactory(const QString &_id, const QString &_name) : d(new Private)
 {
-  d->id = _id;
-  d->name = _name;
+    d->id = _id;
+    d->name = _name;
 }
 
 KisRecordedActionCreatorFactory::~KisRecordedActionCreatorFactory()
@@ -46,14 +46,14 @@ QString KisRecordedActionCreatorFactory::name() const
     return d->name;
 }
 
-KisRecordedActionCreator* KisRecordedActionCreatorFactory::createCreator(QWidget* /*parent*/) const
+KisRecordedActionCreator *KisRecordedActionCreatorFactory::createCreator(QWidget * /*parent*/) const
 {
-  Q_ASSERT(requireCreator() == false);
-  return 0;
+    Q_ASSERT(requireCreator() == false);
+    return 0;
 }
 
-KisRecordedAction* KisRecordedActionCreatorFactory::createAction() const
+KisRecordedAction *KisRecordedActionCreatorFactory::createAction() const
 {
-  Q_ASSERT(requireCreator() == true);
-  return 0;
+    Q_ASSERT(requireCreator() == true);
+    return 0;
 }

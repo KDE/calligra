@@ -26,10 +26,9 @@ typedef QList<KisBaseRectsWalkerSP> KisWalkersList;
 typedef QListIterator<KisBaseRectsWalkerSP> KisWalkersListIterator;
 typedef QMutableListIterator<KisBaseRectsWalkerSP> KisMutableWalkersListIterator;
 
-typedef QList<KisSpontaneousJob*> KisSpontaneousJobsList;
-typedef QListIterator<KisSpontaneousJob*> KisSpontaneousJobsListIterator;
-typedef QMutableListIterator<KisSpontaneousJob*> KisMutableSpontaneousJobsListIterator;
-
+typedef QList<KisSpontaneousJob *> KisSpontaneousJobsList;
+typedef QListIterator<KisSpontaneousJob *> KisSpontaneousJobsListIterator;
+typedef QMutableListIterator<KisSpontaneousJob *> KisMutableSpontaneousJobsListIterator;
 
 class KRITAIMAGE_EXPORT KisSimpleUpdateQueue
 {
@@ -39,11 +38,10 @@ public:
 
     void processQueue(KisUpdaterContext &updaterContext);
 
-    void addUpdateJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
-    void addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
-    void addFullRefreshJob(KisNodeSP node, const QRect& rc, const QRect& cropRect);
+    void addUpdateJob(KisNodeSP node, const QRect &rc, const QRect &cropRect);
+    void addUpdateNoFilthyJob(KisNodeSP node, const QRect &rc, const QRect &cropRect);
+    void addFullRefreshJob(KisNodeSP node, const QRect &rc, const QRect &cropRect);
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
-
 
     void optimize();
 
@@ -53,16 +51,16 @@ public:
     void updateSettings();
 
 protected:
-    void addJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
+    void addJob(KisNodeSP node, const QRect &rc, const QRect &cropRect, KisBaseRectsWalker::UpdateType type);
 
     bool processOneJob(KisUpdaterContext &updaterContext);
 
-    bool trySplitJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
-    bool tryMergeJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, KisBaseRectsWalker::UpdateType type);
+    bool trySplitJob(KisNodeSP node, const QRect &rc, const QRect &cropRect, KisBaseRectsWalker::UpdateType type);
+    bool tryMergeJob(KisNodeSP node, const QRect &rc, const QRect &cropRect, KisBaseRectsWalker::UpdateType type);
 
     void collectJobs(KisBaseRectsWalkerSP &baseWalker, QRect baseRect,
                      const KisNodeSP &baseNode, const qreal maxAlpha);
-    bool joinRects(QRect& baseRect, const QRect& newRect, qreal maxAlpha);
+    bool joinRects(QRect &baseRect, const QRect &newRect, qreal maxAlpha);
 
 protected:
 
@@ -103,8 +101,8 @@ protected:
 class KRITAIMAGE_EXPORT KisTestableSimpleUpdateQueue : public KisSimpleUpdateQueue
 {
 public:
-    KisWalkersList& getWalkersList();
-    KisSpontaneousJobsList& getSpontaneousJobsList();
+    KisWalkersList &getWalkersList();
+    KisSpontaneousJobsList &getSpontaneousJobsList();
 };
 
 #endif /* __KIS_SIMPLE_UPDATE_QUEUE_H */

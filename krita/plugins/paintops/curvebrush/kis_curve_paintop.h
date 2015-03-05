@@ -34,10 +34,10 @@ class KisCurvePaintOp : public KisPaintOp
 {
 
 public:
-    KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     virtual ~KisCurvePaintOp();
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
 
 private:
@@ -53,7 +53,7 @@ private:
     KisCurvesOpacityOption m_curvesOpacityOption;
 
     QList<QPointF> m_points;
-    KisPainter * m_painter;
+    KisPainter *m_painter;
 
 };
 

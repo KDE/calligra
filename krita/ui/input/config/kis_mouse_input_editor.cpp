@@ -93,6 +93,6 @@ void KisMouseInputEditor::setButtons(Qt::MouseButtons newButtons)
 void KisMouseInputEditor::updateLabel()
 {
     setText(KisShortcutConfiguration::buttonsInputToText(
-        d->ui->modifiersButton->keys(),
-        d->ui->mouseButton->buttons()));
+                d->ui->modifiersButton->keys(),
+                d->ui->mouseButton->buttons()));
 }

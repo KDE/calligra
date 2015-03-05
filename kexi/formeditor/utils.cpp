@@ -41,18 +41,18 @@ using namespace KFormDesigner;
 void
 KFormDesigner::removeChildrenFromList(QWidgetList &list)
 {
-    QSet<QWidget*> toRemove;
+    QSet<QWidget *> toRemove;
     foreach (QWidget *w, list) {
         // If any widget in the list is a child of this widget, we remove it from the list
         foreach (QWidget *widg, list) {
-            if ((w != widg) && (w->findChild<QWidget*>(widg->objectName()))) {
+            if ((w != widg) && (w->findChild<QWidget *>(widg->objectName()))) {
                 kDebug() << "Removing the widget " << widg->objectName()
-                    << "which is a child of " << w->objectName();
+                         << "which is a child of " << w->objectName();
                 toRemove.insert(widg);
             }
         }
     }
-    QSet<QWidget*> all(list.toSet());
+    QSet<QWidget *> all(list.toSet());
     all.subtract(toRemove);
     list = all.toList();
 }
@@ -62,16 +62,15 @@ KFormDesigner::setRecursiveCursor(QWidget *w, Form *form)
 {
     ObjectTreeItem *tree = form->objectTree()->lookup(w->objectName());
     if (tree && ((tree->modifiedProperties()->contains("cursor")) || !tree->children()->isEmpty())
-            && !w->inherits("QLineEdit") && !w->inherits("QTextEdit"))
-    {
+            && !w->inherits("QLineEdit") && !w->inherits("QTextEdit")) {
         //fix weird behaviour
         return; // if the user has set a cursor for this widget or this is a container, don't change it
     }
 
     w->setCursor(Qt::ArrowCursor);
 
-    const QList<QWidget*> list(w->findChildren<QWidget*>());
-    foreach(QWidget *widget, list) {
+    const QList<QWidget *> list(w->findChildren<QWidget *>());
+    foreach (QWidget *widget, list) {
         widget->setCursor(Qt::ArrowCursor);
     }
 }
@@ -80,8 +79,8 @@ QSize
 KFormDesigner::getSizeFromChildren(QWidget *w, const char *inheritClass)
 {
     int tmpw = 0, tmph = 0;
-    const QList<QWidget*> list(w->findChildren<QWidget*>());
-    foreach(QWidget *widget, list) {
+    const QList<QWidget *> list(w->findChildren<QWidget *>());
+    foreach (QWidget *widget, list) {
         if (widget->inherits(inheritClass)) {
             tmpw = qMax(tmpw, widget->geometry().right());
             tmph = qMax(tmph, widget->geometry().bottom());
@@ -96,28 +95,28 @@ class HorizontalWidgetList::LessThan
 {
 public:
     explicit LessThan(QWidget *topLevelWidget)
-     : m_topLevelWidget(topLevelWidget)
+        : m_topLevelWidget(topLevelWidget)
     {
     }
-    bool operator()(QWidget *w1, QWidget *w2) {
+    bool operator()(QWidget *w1, QWidget *w2)
+    {
         return w1->mapTo(m_topLevelWidget, QPoint(0, 0)).x()
-             - w2->mapTo(m_topLevelWidget, QPoint(0, 0)).x();
+               - w2->mapTo(m_topLevelWidget, QPoint(0, 0)).x();
     }
     QWidget *m_topLevelWidget;
 };
 
 HorizontalWidgetList::HorizontalWidgetList(QWidget *topLevelWidget)
-        : CustomSortableWidgetList()
-        , m_lessThan(new LessThan(topLevelWidget))
+    : CustomSortableWidgetList()
+    , m_lessThan(new LessThan(topLevelWidget))
 {
 }
 
-HorizontalWidgetList::HorizontalWidgetList(const HorizontalWidgetList& list)
+HorizontalWidgetList::HorizontalWidgetList(const HorizontalWidgetList &list)
     : CustomSortableWidgetList(list)
     , m_lessThan(new LessThan(list.m_lessThan->m_topLevelWidget))
 {
 }
-
 
 HorizontalWidgetList::~HorizontalWidgetList()
 {
@@ -135,7 +134,7 @@ class VerticalWidgetList::LessThan
 {
 public:
     explicit LessThan(QWidget *topLevelWidget)
-     : m_topLevelWidget(topLevelWidget)
+        : m_topLevelWidget(topLevelWidget)
     {
     }
     bool operator()(QWidget *w1, QWidget *w2)
@@ -143,28 +142,29 @@ public:
         int y1, y2;
         QObject *page1 = 0;
         TabWidget *tw1 = KFormDesigner::findParent<KFormDesigner::TabWidget>(
-            w1, "KFormDesigner::TabWidget", page1);
-        if (tw1) // special case
+                             w1, "KFormDesigner::TabWidget", page1);
+        if (tw1) { // special case
             y1 = w1->mapTo(m_topLevelWidget, QPoint(0, 0)).y() + tw1->tabBarHeight() - 2 - 2;
-        else
+        } else {
             y1 = w1->mapTo(m_topLevelWidget, QPoint(0, 0)).y();
+        }
 
         QObject *page2 = 0;
         TabWidget *tw2 = KFormDesigner::findParent<KFormDesigner::TabWidget>(
-            w2, "KFormDesigner::TabWidget", page2);
+                             w2, "KFormDesigner::TabWidget", page2);
         if (tw1 && tw2 && tw1 == tw2 && page1 != page2) {
             // this sorts widgets by tabs there're put in
-            return tw1->indexOf(static_cast<QWidget*>(page1)) < tw2->indexOf(static_cast<QWidget*>(page2));
+            return tw1->indexOf(static_cast<QWidget *>(page1)) < tw2->indexOf(static_cast<QWidget *>(page2));
         }
 
-        if (tw2) // special case
+        if (tw2) { // special case
             y2 = w2->mapTo(m_topLevelWidget, QPoint(0, 0)).y() + tw2->tabBarHeight() - 2 - 2;
-        else
+        } else {
             y2 = w2->mapTo(m_topLevelWidget, QPoint(0, 0)).y();
+        }
 
         kDebug() << w1->objectName() << ": " << y1 << " "
-            << " | " << w2->objectName() << ": " << y2;
-
+                 << " | " << w2->objectName() << ": " << y2;
 
         //kDebug() << w1->name() << ": " << w1->mapTo(m_topLevelWidget, QPoint(0,0)) << " " << w1->y()
         //<< " | " << w2->name() << ":" /*<< w2->mapFrom(m_topLevelWidget, QPoint(0,w2->y()))*/ << " " << w2->y();
@@ -174,12 +174,12 @@ public:
 };
 
 VerticalWidgetList::VerticalWidgetList(QWidget *topLevelWidget)
-        : CustomSortableWidgetList()
-        , m_lessThan(new LessThan(topLevelWidget))
+    : CustomSortableWidgetList()
+    , m_lessThan(new LessThan(topLevelWidget))
 {
 }
 
-VerticalWidgetList::VerticalWidgetList(const VerticalWidgetList& list)
+VerticalWidgetList::VerticalWidgetList(const VerticalWidgetList &list)
     : CustomSortableWidgetList(list)
     , m_lessThan(new LessThan(list.m_lessThan->m_topLevelWidget))
 {
@@ -201,13 +201,13 @@ QMimeData *KFormDesigner::deepCopyOfClipboardData()
 {
     //QClipboard *cb = QApplication::clipboard();
     QMimeData *data = new QMimeData();
-    foreach(const QString& format, data->formats()) {
+    foreach (const QString &format, data->formats()) {
         data->setData(format, data->data(format));
     }
     return data;
 }
 
-void KFormDesigner::copyToClipboard(const QString& xml)
+void KFormDesigner::copyToClipboard(const QString &xml)
 {
     kDebug() << xml;
     QMimeData *data = new QMimeData();
@@ -217,10 +217,10 @@ void KFormDesigner::copyToClipboard(const QString& xml)
     cb->setMimeData(data);
 }
 
-void KFormDesigner::widgetsToXML(QDomDocument& doc, 
-    QHash<QByteArray, QByteArray>& containers,
-    QHash<QByteArray, QByteArray>& parents,
-    const Form& form, const QWidgetList &list)
+void KFormDesigner::widgetsToXML(QDomDocument &doc,
+                                 QHash<QByteArray, QByteArray> &containers,
+                                 QHash<QByteArray, QByteArray> &parents,
+                                 const Form &form, const QWidgetList &list)
 {
     containers.clear();
     parents.clear();
@@ -233,11 +233,13 @@ void KFormDesigner::widgetsToXML(QDomDocument& doc,
 
     foreach (QWidget *w, topLevelList) {
         ObjectTreeItem *item = form.objectTree()->lookup(w->objectName());
-        if (!item)
+        if (!item) {
             return;
+        }
         Container *c = form.parentContainer(item->widget());
-        if (!c)
+        if (!c) {
             return;
+        }
 
         // We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
         containers.insert(
@@ -260,15 +262,16 @@ void KFormDesigner::widgetsToXML(QDomDocument& doc,
 
 //-----------------------------
 
-class ActionGroup::Private {
-    public:
-        Private() {}
-        QHash<QString, QAction*> actions;
+class ActionGroup::Private
+{
+public:
+    Private() {}
+    QHash<QString, QAction *> actions;
 };
 
-ActionGroup::ActionGroup( QObject * parent )
+ActionGroup::ActionGroup(QObject *parent)
     : QActionGroup(parent)
-    , d( new Private )
+    , d(new Private)
 {
 }
 
@@ -277,13 +280,13 @@ ActionGroup::~ActionGroup()
     delete d;
 }
 
-void ActionGroup::addAction(QAction* action)
+void ActionGroup::addAction(QAction *action)
 {
     QActionGroup::addAction(action);
     d->actions.insert(action->objectName(), action);
 }
 
-QAction *ActionGroup::action(const QString& name) const
+QAction *ActionGroup::action(const QString &name) const
 {
     return d->actions.value(name);
 }
@@ -292,22 +295,23 @@ QAction *ActionGroup::action(const QString& name) const
 
 int KFormDesigner::alignValueToGrid(int value, int gridSize)
 {
-    if ((value % gridSize * 2) < gridSize)
+    if ((value % gridSize * 2) < gridSize) {
         return value / gridSize * gridSize;
+    }
     return (value / gridSize + 1) * gridSize;
 }
 
 //-----------------------------
 
-void KFormDesigner::paintWidgetFrame(QPainter& p, const QRect& geometry)
+void KFormDesigner::paintWidgetFrame(QPainter &p, const QRect &geometry)
 {
     QColor c1(Qt::white);
     c1.setAlpha(100);
     QColor c2(Qt::black);
     c2.setAlpha(100);
     QRect r(geometry);
-    r.setWidth(r.width()-1);
-    r.setHeight(r.height()-1);
+    r.setWidth(r.width() - 1);
+    r.setHeight(r.height() - 1);
     QPen pen1(c1, 1, Qt::DashLine);
     QPen pen2(c2, 1, Qt::DashLine);
     p.setPen(pen1);

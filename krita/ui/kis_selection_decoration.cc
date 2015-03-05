@@ -81,8 +81,8 @@ bool KisSelectionDecoration::selectionIsActive()
 
     KisSelectionSP selection = view()->selection();
     return visible() && selection &&
-        (selection->hasPixelSelection() || selection->hasShapeSelection()) &&
-        selection->isVisible();
+           (selection->hasPixelSelection() || selection->hasShapeSelection()) &&
+           selection->isVisible();
 }
 
 void KisSelectionDecoration::selectionChanged()
@@ -91,7 +91,7 @@ void KisSelectionDecoration::selectionChanged()
 
     if (selection && selectionIsActive()) {
         if ((m_mode == Ants && selection->outlineCacheValid()) ||
-            (m_mode == Mask && selection->thumbnailImageValid())) {
+                (m_mode == Mask && selection->thumbnailImageValid())) {
 
             m_signalCompressor.stop();
 
@@ -122,7 +122,9 @@ void KisSelectionDecoration::selectionChanged()
 void KisSelectionDecoration::slotStartUpdateSelection()
 {
     KisSelectionSP selection = view()->selection();
-    if (!selection) return;
+    if (!selection) {
+        return;
+    }
 
     KisConfig cfg;
     QColor maskColor = cfg.selectionOverlayMaskColor();
@@ -133,7 +135,9 @@ void KisSelectionDecoration::slotStartUpdateSelection()
 void KisSelectionDecoration::antsAttackEvent()
 {
     KisSelectionSP selection = view()->selection();
-    if (!selection) return;
+    if (!selection) {
+        return;
+    }
 
     if (selectionIsActive()) {
         m_offset = (m_offset + 1) % ANT_ADVANCE_WIDTH;
@@ -142,14 +146,18 @@ void KisSelectionDecoration::antsAttackEvent()
     }
 }
 
-void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
+void KisSelectionDecoration::drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
     Q_UNUSED(updateRect);
     Q_UNUSED(canvas);
 
-    if (!selectionIsActive()) return;
+    if (!selectionIsActive()) {
+        return;
+    }
     if ((m_mode == Ants && m_outlinePath.isEmpty()) ||
-        (m_mode == Mask && m_thumbnailImage.isNull())) return;
+            (m_mode == Mask && m_thumbnailImage.isNull())) {
+        return;
+    }
 
     KisConfig cfg;
     QTransform transform = converter->imageToWidgetTransform();
@@ -179,7 +187,7 @@ void KisSelectionDecoration::drawDecoration(QPainter& gc, const QRectF& updateRe
         gc.setPen(Qt::NoPen);
         gc.drawPath(p1 - p2);
 
-    } else /* if (m_mode == Ants) */ {
+    } else { /* if (m_mode == Ants) */
         gc.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing, cfg.antialiasSelectionOutline());
 
         // render selection outline in white

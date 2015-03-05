@@ -26,7 +26,7 @@
 #include <klocale.h>
 
 KoSopranoTableModel::KoSopranoTableModel(KoDocumentRdf *rdf)
-        : m_rdf(rdf)
+    : m_rdf(rdf)
 {
     Soprano::StatementIterator siter = model()->listStatements();
     while (siter.next()) {
@@ -73,8 +73,9 @@ QVariant KoSopranoTableModel::data(const QModelIndex &index, int role) const
     case ColPred:
         return URItoPrefexedLocalname(st.predicate().toString());
     case ColObj:
-        if (st.object().type() == Soprano::Node::ResourceNode)
+        if (st.object().type() == Soprano::Node::ResourceNode) {
             return URItoPrefexedLocalname(st.object().toString());
+        }
         return st.object().toString();
     case ColObjType:
         switch (st.object().type()) {
@@ -231,8 +232,9 @@ bool KoSopranoTableModel::setData(const QModelIndex &index, const QVariant &valu
             QString InternalContext = m_rdf->rdfInternalMetadataWithoutSubjectURI();
             n.setContext(Soprano::Node(QUrl(InternalContext)));
         } else {
-            if (!v.endsWith(".rdf"))
+            if (!v.endsWith(".rdf")) {
                 v = v + ".rdf";
+            }
             n.setContext(Soprano::Node(QUrl(m_rdf->RDF_PATH_CONTEXT_PREFIX + v)));
         }
         return setDataUpdateTriple(index, st, n);

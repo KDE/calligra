@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #include "sybasecursor.h"
 #include "sybaseconnection.h"
 #include "sybaseconnection_p.h"
@@ -35,24 +34,24 @@
 
 using namespace KexiDB;
 
-SybaseCursor::SybaseCursor(KexiDB::Connection* conn, const QString& statement, uint cursor_options)
-        : Cursor(conn, statement, cursor_options)
-        , d(new SybaseCursorData(conn))
+SybaseCursor::SybaseCursor(KexiDB::Connection *conn, const QString &statement, uint cursor_options)
+    : Cursor(conn, statement, cursor_options)
+    , d(new SybaseCursorData(conn))
 {
 
     //m_options |= Buffered;
 
-    d->dbProcess = static_cast<SybaseConnection*>(conn)->d->dbProcess;
+    d->dbProcess = static_cast<SybaseConnection *>(conn)->d->dbProcess;
 // KexiDBDrvDbg << "SybaseCursor: constructor for query statement";
 }
 
-SybaseCursor::SybaseCursor(Connection* conn, QuerySchema& query, uint options)
-        : Cursor(conn, query, options)
-        , d(new SybaseCursorData(conn))
+SybaseCursor::SybaseCursor(Connection *conn, QuerySchema &query, uint options)
+    : Cursor(conn, query, options)
+    , d(new SybaseCursorData(conn))
 {
     //  m_options |= Buffered;
 
-    d->dbProcess = static_cast<SybaseConnection*>(conn)->d->dbProcess;
+    d->dbProcess = static_cast<SybaseConnection *>(conn)->d->dbProcess;
 // KexiDBDrvDbg << "SybaseCursor: constructor for query statement";
 }
 
@@ -82,8 +81,9 @@ bool SybaseCursor::drv_open()
      */
 
     // clear all previous results ( if remaining )
-    if (dbcancel(d->dbProcess) == FAIL)
+    if (dbcancel(d->dbProcess) == FAIL) {
         KexiDBDrvDbg << "drv_open" << "dead DBPROCESS ?";
+    }
 
     // insert into command buffer
     dbcmd(d->dbProcess, m_sql.toUtf8());
@@ -109,10 +109,9 @@ bool SybaseCursor::drv_open()
         return true;
     }
 
-    setError(ERR_DB_SPECIFIC, static_cast<SybaseConnection*>(connection())->d->errmsg);
+    setError(ERR_DB_SPECIFIC, static_cast<SybaseConnection *>(connection())->d->errmsg);
     return false;
 }
-
 
 bool SybaseCursor::drv_close()
 {
@@ -133,19 +132,19 @@ void SybaseCursor::drv_getNextRecord()
 
     // no buffering , and we don't know how many rows are there in result set
 
-    if (dbnextrow(d->dbProcess) != NO_MORE_ROWS)
+    if (dbnextrow(d->dbProcess) != NO_MORE_ROWS) {
         m_result = FetchOK;
-    else {
+    } else {
         m_result = FetchEnd;
     }
 
 }
 
-
 QVariant SybaseCursor::value(uint pos)
 {
-    if (!d->dbProcess || pos >= m_fieldCount)
+    if (!d->dbProcess || pos >= m_fieldCount) {
         return QVariant();
+    }
 
     KexiDB::Field *f = (m_fieldsExpanded && pos < uint(m_fieldsExpanded->count()))
                        ? m_fieldsExpanded->at(pos)->field : 0;
@@ -158,25 +157,24 @@ QVariant SybaseCursor::value(uint pos)
     // 512 is
     // 1. the length used internally in dblib for allocating data to each column in function dbprrow()
     // 2. it's greater than all the values returned in the dblib internal function _get_printable_size
-    long int pointerLength = qMax(columnDataLength , (long int)512);
+    long int pointerLength = qMax(columnDataLength, (long int)512);
 
-    BYTE* columnValue = new unsigned char[pointerLength + 1] ;
+    BYTE *columnValue = new unsigned char[pointerLength + 1];
 
     // convert to string representation. All values are convertible to string
-    dbconvert(d->dbProcess , dbcoltype(d->dbProcess , pos), dbdata(d->dbProcess , pos), columnDataLength , (SYBCHAR), columnValue, -2);
+    dbconvert(d->dbProcess, dbcoltype(d->dbProcess, pos), dbdata(d->dbProcess, pos), columnDataLength, (SYBCHAR), columnValue, -2);
 
-    QVariant returnValue = KexiDB::cstringToVariant((const char*)columnValue , f, strlen((const char*)columnValue));
+    QVariant returnValue = KexiDB::cstringToVariant((const char *)columnValue, f, strlen((const char *)columnValue));
 
     delete[] columnValue;
 
     return returnValue;
 }
 
-
 /* As with sqlite, the DB library returns all values (including numbers) as
    strings. So just put that string in a QVariant and let KexiDB deal with it.
  */
-bool SybaseCursor::drv_storeCurrentRow(RecordData& data) const
+bool SybaseCursor::drv_storeCurrentRow(RecordData &data) const
 {
 // KexiDBDrvDbg << "SybaseCursor::storeCurrentRow: Position is " << (long)m_at;
 // if (d->numRows<=0)
@@ -186,22 +184,23 @@ bool SybaseCursor::drv_storeCurrentRow(RecordData& data) const
     const uint realCount = qMin(fieldsExpandedCount, m_fieldsToStoreInRow);
     for (uint i = 0; i < realCount; i++) {
         Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
-        if (m_fieldsExpanded && !f)
+        if (m_fieldsExpanded && !f) {
             continue;
+        }
 
         long int columnDataLength = dbdatlen(d->dbProcess, i + 1);
 
         // 512 is
         // 1. the length used internally in dblib for allocating data to each column in function dbprrow()
         // 2. it's greater than all the values returned in the dblib internal function _get_printable_size
-        long int pointerLength = qMax(columnDataLength , (long int)512);
+        long int pointerLength = qMax(columnDataLength, (long int)512);
 
-        BYTE* columnValue = new unsigned char[pointerLength + 1] ;
+        BYTE *columnValue = new unsigned char[pointerLength + 1];
 
         // convert to string representation. All values are convertible to string
-        dbconvert(d->dbProcess , dbcoltype(d->dbProcess , i + 1), dbdata(d->dbProcess , i + 1), columnDataLength , (SYBCHAR), columnValue, -2);
+        dbconvert(d->dbProcess, dbcoltype(d->dbProcess, i + 1), dbdata(d->dbProcess, i + 1), columnDataLength, (SYBCHAR), columnValue, -2);
 
-        data[i] =  KexiDB::cstringToVariant((const char*)columnValue , f,  strlen((const char*)columnValue));
+        data[i] =  KexiDB::cstringToVariant((const char *)columnValue, f,  strlen((const char *)columnValue));
 
         delete[] columnValue;
     }
@@ -211,7 +210,6 @@ bool SybaseCursor::drv_storeCurrentRow(RecordData& data) const
 void SybaseCursor::drv_appendCurrentRecordToBuffer()
 {
 }
-
 
 void SybaseCursor::drv_bufferMovePointerNext()
 {
@@ -223,14 +221,13 @@ void SybaseCursor::drv_bufferMovePointerPrev()
     //dbgetrow( d->dbProcess, m_at - 1 );
 }
 
-
 void SybaseCursor::drv_bufferMovePointerTo(qint64 to)
 {
     Q_UNUSED(to);
     //dbgetrow( d->dbProcess, to );
 }
 
-const char** SybaseCursor::rowData() const
+const char **SybaseCursor::rowData() const
 {
     //! @todo
     return 0;
@@ -248,8 +245,9 @@ QString SybaseCursor::serverResultName()
 
 void SybaseCursor::drv_clearServerResult()
 {
-    if (!d)
+    if (!d) {
         return;
+    }
     d->res = 0;
 }
 

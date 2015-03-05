@@ -26,7 +26,7 @@
 #include <QGraphicsView>
 
 KPrSpaceRotationFromRightStrategy::KPrSpaceRotationFromRightStrategy()
-: KPrPageEffectStrategy(KPrSpaceRotationEffectFactory::FromRight, "spaceRotation", "rightToLeft", false, true)
+    : KPrPageEffectStrategy(KPrSpaceRotationEffectFactory::FromRight, "spaceRotation", "rightToLeft", false, true)
 {
 }
 
@@ -52,14 +52,12 @@ void KPrSpaceRotationFromRightStrategy::next(const KPrPageEffect::Data &data)
     int frame = data.m_timeLine.frameForTime(data.m_currentTime);
     if (frame >= data.m_timeLine.endFrame()) {
         finish(data);
-    }
-    else {
+    } else {
         data.m_oldPageItem->hide();
         data.m_newPageItem->hide();
         if (frame <= 90) {
             data.m_oldPageItem->show();
-        }
-        else {
+        } else {
             data.m_newPageItem->show();
         }
 
@@ -70,8 +68,7 @@ void KPrSpaceRotationFromRightStrategy::next(const KPrPageEffect::Data &data)
         m_transform.translate(w, h).rotate(degree, Qt::YAxis).translate(-w, -h);
         if (frame <= 90) {
             data.m_oldPageItem->setTransform(m_transform);
-        }
-        else {
+        } else {
             data.m_newPageItem->setTransform(m_transform);
         }
     }

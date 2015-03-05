@@ -38,13 +38,13 @@
 #include <QModelIndex>
 
 StylesWidget::StylesWidget(QWidget *parent, bool paragraphMode, Qt::WindowFlags f)
-        : QFrame(parent, f),
-        m_styleManager(0),
-        m_styleThumbnailer(0),
-        m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle)),
-        m_stylesDelegate(new StylesDelegate()),
-        m_blockSignals(false),
-        m_isHovered(false)
+    : QFrame(parent, f),
+      m_styleManager(0),
+      m_styleThumbnailer(0),
+      m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle)),
+      m_stylesDelegate(new StylesDelegate()),
+      m_blockSignals(false),
+      m_isHovered(false)
 {
     m_styleThumbnailer = new KoStyleThumbnailer();
     m_styleThumbnailer->setThumbnailSize(QSize(250, 48));
@@ -54,9 +54,9 @@ StylesWidget::StylesWidget(QWidget *parent, bool paragraphMode, Qt::WindowFlags 
 //    widget.stylesView->setItemDelegate(m_stylesDelegate);
 
     if (paragraphMode) {
-        connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyParagraphStyle()));
+        connect(widget.stylesView, SIGNAL(clicked(QModelIndex)), this, SLOT(applyParagraphStyle()));
     } else {
-        connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyCharacterStyle()));
+        connect(widget.stylesView, SIGNAL(clicked(QModelIndex)), this, SLOT(applyCharacterStyle()));
     }
 }
 
@@ -81,20 +81,24 @@ void StylesWidget::setStyleManager(KoStyleManager *sm)
 
 void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
 {
-    if (format == m_currentBlockFormat)
+    if (format == m_currentBlockFormat) {
         return;
+    }
     m_currentBlockFormat = format;
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
     // bool unchanged = true;
     KoParagraphStyle *usedStyle = 0;
-    if (m_styleManager)
+    if (m_styleManager) {
         usedStyle = m_styleManager->paragraphStyle(id);
+    }
     if (usedStyle) {
-        foreach(int property, m_currentBlockFormat.properties().keys()) {
-            if (property == QTextFormat::ObjectIndex)
+        foreach (int property, m_currentBlockFormat.properties().keys()) {
+            if (property == QTextFormat::ObjectIndex) {
                 continue;
-            if (property == KoParagraphStyle::ListStyleId)
+            }
+            if (property == KoParagraphStyle::ListStyleId) {
                 continue;
+            }
             if (m_currentBlockFormat.property(property) != usedStyle->value(property)) {
                 // unchanged = false;
                 break;
@@ -110,24 +114,27 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
 
 void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
 {
-    if (format == m_currentCharFormat)
+    if (format == m_currentCharFormat) {
         return;
+    }
     m_currentCharFormat = format;
 
     int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
     //bool unchanged = true;
     KoCharacterStyle *usedStyle = 0;
-    if (m_styleManager)
+    if (m_styleManager) {
         usedStyle = m_styleManager->characterStyle(id);
+    }
     if (usedStyle) {
         QTextCharFormat defaultFormat;
         usedStyle->unapplyStyle(defaultFormat); // sets the default properties.
-        foreach(int property, m_currentCharFormat.properties().keys()) {
-            if (property == QTextFormat::ObjectIndex)
+        foreach (int property, m_currentCharFormat.properties().keys()) {
+            if (property == QTextFormat::ObjectIndex) {
                 continue;
+            }
             if (m_currentCharFormat.property(property) != usedStyle->value(property)
                     && m_currentCharFormat.property(property) != defaultFormat.property(property)) {
-      //          unchanged = false;
+                //          unchanged = false;
                 break;
             }
         }

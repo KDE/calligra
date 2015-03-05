@@ -27,12 +27,12 @@
 class ActionsListViewBase : public QTreeWidget
 {
 public:
-    explicit ActionsListViewBase(QWidget* parent);
+    explicit ActionsListViewBase(QWidget *parent);
     virtual ~ActionsListViewBase();
 
     //! \return item for action \a actionName
-    virtual QTreeWidgetItem *itemForAction(const QString& actionName, QTreeWidgetItem *parent = 0);
-    void selectAction(const QString& actionName);
+    virtual QTreeWidgetItem *itemForAction(const QString &actionName, QTreeWidgetItem *parent = 0);
+    void selectAction(const QString &actionName);
 };
 
 //! @internal Used by KActionsListView and CurrentFormActionsListView (in column 2)
@@ -40,10 +40,10 @@ class KActionsListViewBase : public ActionsListViewBase
 {
     Q_OBJECT
 public:
-    explicit KActionsListViewBase(QWidget* parent);
+    explicit KActionsListViewBase(QWidget *parent);
     virtual ~KActionsListViewBase();
     void init();
-    virtual bool isActionVisible(const char* actionName, int actionCategories) const = 0;
+    virtual bool isActionVisible(const char *actionName, int actionCategories) const = 0;
 
 protected:
 };

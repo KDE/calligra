@@ -144,19 +144,19 @@ public:
 
     class ActionBase;
     //! For collecting actions related to a single field
-    typedef KexiDB::AutodeletedHash<QByteArray, ActionBase*> ActionDict;
-    typedef KexiDB::AutodeletedHash<int, ActionDict*> ActionDictDict; //!< for collecting groups of actions by field UID
-    typedef QHash<QByteArray, ActionBase*>::Iterator ActionDictIterator;
-    typedef QHash<QByteArray, ActionBase*>::ConstIterator ActionDictConstIterator;
-    typedef QHash<int, ActionDict*>::Iterator ActionDictDictIterator;
-    typedef QHash<int, ActionDict*>::ConstIterator ActionDictDictConstIterator;
-    typedef QVector<ActionBase*> ActionsVector; //!< for collecting actions related to a single field
+    typedef KexiDB::AutodeletedHash<QByteArray, ActionBase *> ActionDict;
+    typedef KexiDB::AutodeletedHash<int, ActionDict *> ActionDictDict; //!< for collecting groups of actions by field UID
+    typedef QHash<QByteArray, ActionBase *>::Iterator ActionDictIterator;
+    typedef QHash<QByteArray, ActionBase *>::ConstIterator ActionDictConstIterator;
+    typedef QHash<int, ActionDict *>::Iterator ActionDictDictIterator;
+    typedef QHash<int, ActionDict *>::ConstIterator ActionDictDictConstIterator;
+    typedef QVector<ActionBase *> ActionsVector; //!< for collecting actions related to a single field
 
     //! Defines a type for action list.
-    typedef QList<ActionBase*> ActionList;
+    typedef QList<ActionBase *> ActionList;
 
     //! Defines a type for action list's iterator.
-    typedef QList<ActionBase*>::ConstIterator ActionListIterator;
+    typedef QList<ActionBase *>::ConstIterator ActionListIterator;
 
     //! Abstract base class used for implementing all the AlterTable actions.
     class KEXI_DB_EXPORT ActionBase
@@ -165,14 +165,15 @@ public:
         ActionBase(bool null = false);
         virtual ~ActionBase();
 
-        ChangeFieldPropertyAction& toChangeFieldPropertyAction();
-        RemoveFieldAction& toRemoveFieldAction();
-        InsertFieldAction& toInsertFieldAction();
-        MoveFieldPositionAction& toMoveFieldPositionAction();
+        ChangeFieldPropertyAction &toChangeFieldPropertyAction();
+        RemoveFieldAction &toRemoveFieldAction();
+        InsertFieldAction &toInsertFieldAction();
+        MoveFieldPositionAction &toMoveFieldPositionAction();
 
         //! \return true if the action is NULL; used in the Table Designer
         //! for temporarily collecting actions that have no effect at all.
-        bool isNull() const {
+        bool isNull() const
+        {
             return m_null;
         }
 
@@ -190,21 +191,25 @@ public:
             bool showFieldDebug;
         };
 
-        virtual QString debugString(const DebugOptions& debugOptions = DebugOptions()) {
+        virtual QString debugString(const DebugOptions &debugOptions = DebugOptions())
+        {
             Q_UNUSED(debugOptions); return "ActionBase";
         }
-        void debug(const DebugOptions& debugOptions = DebugOptions()) {
+        void debug(const DebugOptions &debugOptions = DebugOptions())
+        {
             KexiDBDbg << debugString(debugOptions)
-            << " (req = " << alteringRequirements() << ")";
+                      << " (req = " << alteringRequirements() << ")";
         }
 
     protected:
         //! Sets requirements for altering; used internally by AlterTableHandler object
-        void setAlteringRequirements(int alteringRequirements) {
+        void setAlteringRequirements(int alteringRequirements)
+        {
             m_alteringRequirements = alteringRequirements;
         }
 
-        int alteringRequirements() const {
+        int alteringRequirements() const
+        {
             return m_alteringRequirements;
         }
 
@@ -213,7 +218,8 @@ public:
         /*! Simplifies \a fieldActions dictionary. If this action has to be inserted
          Into the dictionary, an ActionDict is created first and then a copy of this action
          is inserted into it. */
-        virtual void simplifyActions(ActionDictDict &fieldActions) {
+        virtual void simplifyActions(ActionDictDict &fieldActions)
+        {
             Q_UNUSED(fieldActions);
         }
 
@@ -221,18 +227,21 @@ public:
          shouldBeRemoved() is called for them as an additional step.
          This is used for ChangeFieldPropertyAction items so actions
          that do not change property values are removed. */
-        virtual bool shouldBeRemoved(ActionDictDict &fieldActions) {
+        virtual bool shouldBeRemoved(ActionDictDict &fieldActions)
+        {
             Q_UNUSED(fieldActions); return false;
         }
 
-        virtual tristate updateTableSchema(TableSchema &table, Field* field,
-                                           QHash<QString, QString>& fieldHash) {
+        virtual tristate updateTableSchema(TableSchema &table, Field *field,
+                                           QHash<QString, QString> &fieldHash)
+        {
             Q_UNUSED(table); Q_UNUSED(field); Q_UNUSED(fieldHash); return true;
         }
 
     private:
         //! Performs physical execution of this action.
-        virtual tristate execute(Connection& /*conn*/, TableSchema& /*table*/) {
+        virtual tristate execute(Connection & /*conn*/, TableSchema & /*table*/)
+        {
             return true;
         }
 
@@ -251,12 +260,13 @@ public:
     class KEXI_DB_EXPORT FieldActionBase : public ActionBase
     {
     public:
-        FieldActionBase(const QString& fieldName, int uid);
+        FieldActionBase(const QString &fieldName, int uid);
         FieldActionBase(bool);
         virtual ~FieldActionBase();
 
         //! \return field name for this action
-        QString fieldName() const {
+        QString fieldName() const
+        {
             return m_fieldName;
         }
 
@@ -269,12 +279,14 @@ public:
          1. At the beginning: [field A], [field B]
          2. Rename the 1st field to B: [field B], [field B]
          3. Rename the 2nd field to A: [field B], [field A] */
-        int uid() const {
+        int uid() const
+        {
             return m_fieldUID;
         }
 
         //! Sets field name for this action
-        void setFieldName(const QString& fieldName) {
+        void setFieldName(const QString &fieldName)
+        {
             m_fieldName = fieldName;
         }
 
@@ -297,26 +309,28 @@ public:
     class KEXI_DB_EXPORT ChangeFieldPropertyAction : public FieldActionBase
     {
     public:
-        ChangeFieldPropertyAction(const QString& fieldName,
-                                  const QString& propertyName, const QVariant& newValue, int uid);
+        ChangeFieldPropertyAction(const QString &fieldName,
+                                  const QString &propertyName, const QVariant &newValue, int uid);
         //! @internal, used for constructing null action
         ChangeFieldPropertyAction(bool null);
         virtual ~ChangeFieldPropertyAction();
 
-        QString propertyName() const {
+        QString propertyName() const
+        {
             return m_propertyName;
         }
-        QVariant newValue() const {
+        QVariant newValue() const
+        {
             return m_newValue;
         }
-        virtual QString debugString(const DebugOptions& debugOptions = DebugOptions());
+        virtual QString debugString(const DebugOptions &debugOptions = DebugOptions());
 
         virtual void simplifyActions(ActionDictDict &fieldActions);
 
         virtual bool shouldBeRemoved(ActionDictDict &fieldActions);
 
-        virtual tristate updateTableSchema(TableSchema &table, Field* field,
-                                           QHash<QString, QString>& fieldHash);
+        virtual tristate updateTableSchema(TableSchema &table, Field *field,
+                                           QHash<QString, QString> &fieldHash);
 
     protected:
         virtual void updateAlteringRequirements();
@@ -332,16 +346,16 @@ public:
     class KEXI_DB_EXPORT RemoveFieldAction : public FieldActionBase
     {
     public:
-        RemoveFieldAction(const QString& fieldName, int uid);
+        RemoveFieldAction(const QString &fieldName, int uid);
         RemoveFieldAction(bool);
         virtual ~RemoveFieldAction();
 
-        virtual QString debugString(const DebugOptions& debugOptions = DebugOptions());
+        virtual QString debugString(const DebugOptions &debugOptions = DebugOptions());
 
         virtual void simplifyActions(ActionDictDict &fieldActions);
 
-        virtual tristate updateTableSchema(TableSchema &table, Field* field,
-                                           QHash<QString, QString>& fieldHash);
+        virtual tristate updateTableSchema(TableSchema &table, Field *field,
+                                           QHash<QString, QString> &fieldHash);
 
     protected:
         virtual void updateAlteringRequirements();
@@ -356,26 +370,29 @@ public:
     public:
         InsertFieldAction(int fieldIndex, KexiDB::Field *newField, int uid);
         //copy ctor
-        InsertFieldAction(const InsertFieldAction& action);
+        InsertFieldAction(const InsertFieldAction &action);
         InsertFieldAction(bool);
         virtual ~InsertFieldAction();
 
-        int index() const {
+        int index() const
+        {
             return m_index;
         }
-        void setIndex(int index) {
+        void setIndex(int index)
+        {
             m_index = index;
         }
-        const KexiDB::Field* field() const {
+        const KexiDB::Field *field() const
+        {
             return m_field;
         }
-        void setField(KexiDB::Field* field);
-        virtual QString debugString(const DebugOptions& debugOptions = DebugOptions());
+        void setField(KexiDB::Field *field);
+        virtual QString debugString(const DebugOptions &debugOptions = DebugOptions());
 
         virtual void simplifyActions(ActionDictDict &fieldActions);
 
-        virtual tristate updateTableSchema(TableSchema &table, Field* field,
-                                           QHash<QString, QString>& fieldHash);
+        virtual tristate updateTableSchema(TableSchema &table, Field *field,
+                                           QHash<QString, QString> &fieldHash);
 
     protected:
         virtual void updateAlteringRequirements();
@@ -394,14 +411,15 @@ public:
     class KEXI_DB_EXPORT MoveFieldPositionAction : public FieldActionBase
     {
     public:
-        MoveFieldPositionAction(int fieldIndex, const QString& fieldName, int uid);
+        MoveFieldPositionAction(int fieldIndex, const QString &fieldName, int uid);
         MoveFieldPositionAction(bool);
         virtual ~MoveFieldPositionAction();
 
-        int index() const {
+        int index() const
+        {
             return m_index;
         }
-        virtual QString debugString(const DebugOptions& debugOptions = DebugOptions());
+        virtual QString debugString(const DebugOptions &debugOptions = DebugOptions());
 
         virtual void simplifyActions(ActionDictDict &fieldActions);
 
@@ -419,10 +437,10 @@ public:
     virtual ~AlterTableHandler();
 
     /*! Appends \a action for the alter table tool. */
-    void addAction(ActionBase* action);
+    void addAction(ActionBase *action);
 
     /*! Provided for convenience, @see addAction(const ActionBase& action). */
-    AlterTableHandler& operator<< (ActionBase* action);
+    AlterTableHandler &operator<< (ActionBase *action);
 
     /*! Removes an action from the alter table tool at index \a index. */
     void removeAction(int index);
@@ -432,25 +450,26 @@ public:
 
     /*! Sets \a actions for the alter table tool. Previous actions are cleared.
      \a actions will be owned by the AlterTableHandler object. */
-    void setActions(const ActionList& actions);
+    void setActions(const ActionList &actions);
 
     /*! \return a list of actions for this AlterTable object.
      Use ActionBase::ListIterator to iterate over the list items. */
-    const ActionList& actions() const;
+    const ActionList &actions() const;
 
     //! Arguments for AlterTableHandler::execute().
     class ExecutionArguments
     {
     public:
         ExecutionArguments()
-                : debugString(0)
-                , requirements(0)
-                , result(false)
-                , simulate(false)
-                , onlyComputeRequirements(false) {
+            : debugString(0)
+            , requirements(0)
+            , result(false)
+            , simulate(false)
+            , onlyComputeRequirements(false)
+        {
         }
         /*! If not 0, debug is directed here. Used only in the alter table test suite. */
-        QString* debugString;
+        QString *debugString;
         /*! Requrements computed, a combination of AlteringRequirements values. */
         int requirements;
         /*! Set to true on success, to false on failure. */
@@ -481,7 +500,7 @@ public:
      \return the new table schema object created as a result of schema altering.
      The old table is returned if recreating table schema was not necessary or args.simulate is true.
      0 is returned if args.result is not true. */
-    TableSchema* execute(const QString& tableName, ExecutionArguments & args);
+    TableSchema *execute(const QString &tableName, ExecutionArguments &args);
 
     //! Displays debug information about all actions collected by the handler.
     void debug();
@@ -496,14 +515,14 @@ public:
      as a temporary replacement before AlterTableHandler is fully implemented.
      Thus, it is possible to identify properties that have no PhysicalAlteringRequired flag set
      (e.g. caption or extended properties like visibleDecimalPlaces. */
-    static int alteringTypeForProperty(const QByteArray& propertyName);
+    static int alteringTypeForProperty(const QByteArray &propertyName);
 
 protected:
 //  TableSchema* executeInternal(const QString& tableName, tristate& result, bool simulate = false,
 //   QString* debugString = 0);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 }
 

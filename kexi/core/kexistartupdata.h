@@ -55,7 +55,8 @@ public:
     KexiStartupData();
     virtual ~KexiStartupData();
 
-    virtual bool init() {
+    virtual bool init()
+    {
         return true;
     }
 
@@ -107,7 +108,7 @@ protected:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

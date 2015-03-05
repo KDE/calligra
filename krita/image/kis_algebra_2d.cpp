@@ -21,10 +21,10 @@
 #include <QPainterPath>
 #include <kis_debug.h>
 
-
 #define SANITY_CHECKS
 
-namespace KisAlgebra2D {
+namespace KisAlgebra2D
+{
 
 void adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPointF *pt)
 {
@@ -41,11 +41,11 @@ void adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPoi
         QPointF edge = p1 - p0;
 
         qreal cross = crossProduct(edge, *pt - p0)
-            / (0.5 * edge.manhattanLength());
+                      / (0.5 * edge.manhattanLength());
 
         if (cross < 1.0 &&
-            isInRange(pt->x(), p0.x(), p1.x()) &&
-            isInRange(pt->y(), p0.y(), p1.y())) {
+                isInRange(pt->x(), p0.x(), p1.x()) &&
+                isInRange(pt->y(), p0.y(), p1.y())) {
 
             QPointF salt = 1.0e-3 * inwardUnitNormal(edge, polygonDirection);
 
@@ -78,14 +78,19 @@ void adjustIfOnPolygonBoundary(const QPolygonF &poly, int polygonDirection, QPoi
     }
 }
 
-QPointF transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2) {
+QPointF transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2)
+{
     qreal len1 = norm(base1);
-    if (len1 < 1e-5) return pt;
+    if (len1 < 1e-5) {
+        return pt;
+    }
     qreal sin1 = base1.y() / len1;
     qreal cos1 = base1.x() / len1;
 
     qreal len2 = norm(base2);
-    if (len2 < 1e-5) return QPointF();
+    if (len2 < 1e-5) {
+        return QPointF();
+    }
     qreal sin2 = base2.y() / len2;
     qreal cos2 = base2.x() / len2;
 
@@ -115,10 +120,10 @@ QPainterPath smallArrow()
     p.moveTo(5, 2);
     p.lineTo(-3, 8);
     p.lineTo(-5, 5);
-    p.lineTo( 2, 0);
-    p.lineTo(-5,-5);
-    p.lineTo(-3,-8);
-    p.lineTo( 5,-2);
+    p.lineTo(2, 0);
+    p.lineTo(-5, -5);
+    p.lineTo(-3, -8);
+    p.lineTo(5, -2);
     p.arcTo(QRectF(3, -2, 4, 4), 90, -180);
 
     return p;
@@ -173,24 +178,35 @@ bool intersectLineRect(QLineF &line, const QRect rect)
 
     if (line.intersect(QLineF(rect.topRight(), rect.bottomRight()), &tmp) != QLineF::NoIntersection) {
         if (tmp.y() >= rect.top() && tmp.y() <= rect.bottom()) {
-            if (pt1.isNull()) pt1 = tmp;
-            else pt2 = tmp;
+            if (pt1.isNull()) {
+                pt1 = tmp;
+            } else {
+                pt2 = tmp;
+            }
         }
     }
     if (line.intersect(QLineF(rect.bottomRight(), rect.bottomLeft()), &tmp) != QLineF::NoIntersection) {
         if (tmp.x() >= rect.left() && tmp.x() <= rect.right()) {
-            if (pt1.isNull()) pt1 = tmp;
-            else pt2 = tmp;
+            if (pt1.isNull()) {
+                pt1 = tmp;
+            } else {
+                pt2 = tmp;
+            }
         }
     }
     if (line.intersect(QLineF(rect.bottomLeft(), rect.topLeft()), &tmp) != QLineF::NoIntersection) {
         if (tmp.y() >= rect.top() && tmp.y() <= rect.bottom()) {
-            if (pt1.isNull()) pt1 = tmp;
-            else pt2 = tmp;
+            if (pt1.isNull()) {
+                pt1 = tmp;
+            } else {
+                pt2 = tmp;
+            }
         }
     }
 
-    if (pt1.isNull() || pt2.isNull()) return false;
+    if (pt1.isNull() || pt2.isNull()) {
+        return false;
+    }
 
     // Attempt to retain polarity of end points
     if ((line.x1() < line.x2()) != (pt1.x() > pt2.x()) || (line.y1() < line.y2()) != (pt1.y() > pt2.y())) {

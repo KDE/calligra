@@ -23,14 +23,16 @@
 #include "kis_node.h"
 
 struct KisNodeProgressProxy::Private {
-    Private() : minimum(0), maximum(100), value(100), percentage(-1) {
+    Private() : minimum(0), maximum(100), value(100), percentage(-1)
+    {
     };
     KisNodeWSP node;
     int minimum;
     int maximum;
     int value;
     int percentage;
-    bool computePercentage() {
+    bool computePercentage()
+    {
         int old_percentage = percentage;
         if (value == maximum) {
             percentage = -1;
@@ -42,7 +44,7 @@ struct KisNodeProgressProxy::Private {
     }
 };
 
-KisNodeProgressProxy::KisNodeProgressProxy(KisNode* _node) : d(new Private)
+KisNodeProgressProxy::KisNodeProgressProxy(KisNode *_node) : d(new Private)
 {
     d->node = _node;
 }
@@ -85,7 +87,7 @@ void KisNodeProgressProxy::setRange(int _minimum, int _maximum)
     }
 }
 
-void KisNodeProgressProxy::setFormat(const QString & _format)
+void KisNodeProgressProxy::setFormat(const QString &_format)
 {
     Q_UNUSED(_format);
 }

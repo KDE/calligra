@@ -32,7 +32,6 @@ const QString TEMPORARY_FILENAME = "/tmp/temporaryKritaBrush.gbr";
 const QString TEMPORARY_BRUSH_NAME = "Temporary custom brush";
 const double DEFAULT_SPACING = 0.25;
 
-
 class KoResource;
 
 class KisWdgCustomBrush : public QWidget, public Ui::KisWdgCustomBrush
@@ -40,7 +39,8 @@ class KisWdgCustomBrush : public QWidget, public Ui::KisWdgCustomBrush
     Q_OBJECT
 
 public:
-    KisWdgCustomBrush(QWidget *parent) : QWidget(parent) {
+    KisWdgCustomBrush(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -49,7 +49,7 @@ class KisCustomBrushWidget : public KisWdgCustomBrush
 {
     Q_OBJECT
 public:
-    KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image);
+    KisCustomBrushWidget(QWidget *parent, const QString &caption, KisImageWSP image);
     virtual ~KisCustomBrushWidget();
     KisBrushSP brush();
 
@@ -76,6 +76,5 @@ private:
     KisBrushSP m_brush;
     QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
 };
-
 
 #endif // KIS_CUSTOM_BRUSH_H_

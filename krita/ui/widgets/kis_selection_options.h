@@ -33,7 +33,8 @@ class WdgSelectionOptions : public QWidget, public Ui::WdgSelectionOptions
     Q_OBJECT
 
 public:
-    WdgSelectionOptions(QWidget *parent) : QWidget(parent) {
+    WdgSelectionOptions(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -46,7 +47,7 @@ class KRITAUI_EXPORT KisSelectionOptions : public QWidget
     Q_OBJECT
 
 public:
-    KisSelectionOptions(KisCanvas2 * subject);
+    KisSelectionOptions(KisCanvas2 *subject);
     virtual ~KisSelectionOptions();
 
     int action();
@@ -61,9 +62,9 @@ Q_SIGNALS:
     void modeChanged(int);
 
 private:
-    WdgSelectionOptions * m_page;
-    QButtonGroup* m_mode;
-    QButtonGroup* m_action;
+    WdgSelectionOptions *m_page;
+    QButtonGroup *m_mode;
+    QButtonGroup *m_action;
 };
 
 #endif

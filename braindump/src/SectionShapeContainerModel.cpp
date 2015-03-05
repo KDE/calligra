@@ -22,7 +22,7 @@
 #include <KoShapeContainer.h>
 #include "Layout.h"
 
-SectionShapeContainerModel::SectionShapeContainerModel(Section* _section) : m_section(_section), m_updateLayout(true)
+SectionShapeContainerModel::SectionShapeContainerModel(Section *_section) : m_section(_section), m_updateLayout(true)
 {
 }
 
@@ -32,10 +32,11 @@ SectionShapeContainerModel::~SectionShapeContainerModel()
 
 void SectionShapeContainerModel::add(KoShape *child)
 {
-    if(m_members.contains(child))
+    if (m_members.contains(child)) {
         return;
+    }
     m_members.append(child);
-    if(m_updateLayout) {
+    if (m_updateLayout) {
         m_section->layout()->addShape(child);
     }
 }
@@ -61,7 +62,7 @@ bool SectionShapeContainerModel::inheritsTransform(const KoShape *) const
 void SectionShapeContainerModel::remove(KoShape *child)
 {
     m_members.removeAll(child);
-    if(m_updateLayout) {
+    if (m_updateLayout) {
         m_section->layout()->removeShape(child);
     }
 }
@@ -71,9 +72,9 @@ int SectionShapeContainerModel::count() const
     return m_members.count();
 }
 
-QList<KoShape*> SectionShapeContainerModel::shapes() const
+QList<KoShape *> SectionShapeContainerModel::shapes() const
 {
-    return QList<KoShape*>(m_members);
+    return QList<KoShape *>(m_members);
 }
 
 void SectionShapeContainerModel::containerChanged(KoShapeContainer *, KoShape::ChangeType)

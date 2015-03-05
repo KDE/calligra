@@ -4,15 +4,15 @@
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either 
+  License as published by the Free Software Foundation; either
   version 2.1 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public 
+  You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -27,11 +27,9 @@
 namespace Libemf
 {
 
-
 /*****************************************************************************/
 
-
-BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
+BitBltRecord::BitBltRecord(QDataStream &stream, quint32 recordSize)
     : m_bitmap(0)
 {
     //kDebug(31000) << "stream position at the start: " << stream.device()->pos();
@@ -61,7 +59,7 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     stream >> M22;
     stream >> Dx;
     stream >> Dy;
-    m_XFormSrc = QTransform( M11, M12, M21, M22, Dx, Dy );
+    m_XFormSrc = QTransform(M11, M12, M21, M22, Dx, Dy);
     //kDebug(31000) << "Matrix" << m_XFormSrc;
     //kDebug(31000) << "position after the matrix: " << stream.device()->pos();
 
@@ -85,9 +83,9 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
 
     //kDebug(31000) << "stream position before the image: " << stream.device()->pos();
     if (m_cbBmiSrc > 0) {
-        m_bitmap = new Bitmap( stream, recordSize, 8 + 23 * 4, // header + 23 ints
-                               m_offBmiSrc, m_cbBmiSrc,
-                               m_offBitsSrc, m_cbBitsSrc );
+        m_bitmap = new Bitmap(stream, recordSize, 8 + 23 * 4,  // header + 23 ints
+                              m_offBmiSrc, m_cbBmiSrc,
+                              m_offBitsSrc, m_cbBitsSrc);
     }
 
     //kDebug(31000) << "stream position at the end: " << stream.device()->pos();
@@ -104,42 +102,42 @@ bool BitBltRecord::hasImage() const
     //return ( ( m_cbBmiSrc != 0 ) && ( m_cbBitsSrc != 0 ) );
 }
 
-QImage BitBltRecord::image() 
+QImage BitBltRecord::image()
 {
     return m_bitmap->image();
 #if 0
-    if ( ! hasImage() ) {
+    if (! hasImage()) {
         return 0;
     }
 
-    if ( m_image != 0 ) {
+    if (m_image != 0) {
         return m_image;
     }
 
     QImage::Format format = QImage::Format_Invalid;
-    if ( m_BmiSrc->bitCount() == BI_BITCOUNT_4 ) {
-        if ( m_BmiSrc->compression() == 0x00 ) {
+    if (m_BmiSrc->bitCount() == BI_BITCOUNT_4) {
+        if (m_BmiSrc->compression() == 0x00) {
             format = QImage::Format_RGB555;
         } else {
             kDebug(33100) << "Unexpected compression format for BI_BITCOUNT_4:"
-                     << m_BmiSrc->compression();
-            Q_ASSERT( 0 );
+                          << m_BmiSrc->compression();
+            Q_ASSERT(0);
         }
-    } else if ( m_BmiSrc->bitCount() == BI_BITCOUNT_5 ) {
+    } else if (m_BmiSrc->bitCount() == BI_BITCOUNT_5) {
         format = QImage::Format_RGB888;
     } else {
         kDebug(33100) << "Unexpected format:" << m_BmiSrc->bitCount();
-        Q_ASSERT( 0 );
+        Q_ASSERT(0);
     }
-    m_image = new QImage( (const uchar*)m_imageData.constData(),
-                          m_BmiSrc->width(), m_BmiSrc->height(), format );
+    m_image = new QImage((const uchar *)m_imageData.constData(),
+                         m_BmiSrc->width(), m_BmiSrc->height(), format);
 
     return m_image;
 #endif
 }
 
 /*****************************************************************************/
-StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSize )
+StretchDiBitsRecord::StretchDiBitsRecord(QDataStream &stream, quint32 recordSize)
     : m_bitmap(0)
 {
     //kDebug(31000) << "stream position at the start: " << stream.device()->pos();
@@ -176,9 +174,9 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSiz
 
     //kDebug(31000) << "stream position before the image: " << stream.device()->pos();
     if (m_cbBmiSrc > 0) {
-        m_bitmap = new Bitmap( stream, recordSize, 8 + 18 * 4, // header + 18 ints
-                               m_offBmiSrc, m_cbBmiSrc,
-                               m_offBitsSrc, m_cbBitsSrc );
+        m_bitmap = new Bitmap(stream, recordSize, 8 + 18 * 4,  // header + 18 ints
+                              m_offBmiSrc, m_cbBmiSrc,
+                              m_offBitsSrc, m_cbBitsSrc);
     }
 
     //kDebug(31000) << "stream position at the end: " << stream.device()->pos();
@@ -191,15 +189,15 @@ StretchDiBitsRecord::StretchDiBitsRecord( QDataStream &stream, quint32 recordSiz
         stream >> dummy;
         padding += 4;
     }
-    m_BmiSrc = new BitmapHeader( stream, m_cbBmiSrc );
+    m_BmiSrc = new BitmapHeader(stream, m_cbBmiSrc);
 
     // 40 is the size of the header record.
     while (m_offBitsSrc - padding > 80 + 40) {
         stream >> dummy;
         padding += 4;
     }
-    m_imageData.resize( m_cbBitsSrc );
-    stream.readRawData( m_imageData.data(), m_cbBitsSrc );
+    m_imageData.resize(m_cbBitsSrc);
+    stream.readRawData(m_imageData.data(), m_cbBitsSrc);
 #endif
 }
 
@@ -218,11 +216,11 @@ bool StretchDiBitsRecord::hasImage() const
     return m_bitmap && m_bitmap->hasImage();
 }
 
-QImage StretchDiBitsRecord::image() 
+QImage StretchDiBitsRecord::image()
 {
     return m_bitmap->image();
 #if 0
-    if ( m_image != 0 ) {
+    if (m_image != 0) {
         return m_image;
     }
 
@@ -231,15 +229,15 @@ QImage StretchDiBitsRecord::image()
     // Start by determining which QImage format we are going to use.
     if (m_BmiSrc->bitCount() == BI_BITCOUNT_1) {
         format = QImage::Format_Mono;
-    } else if ( m_BmiSrc->bitCount() == BI_BITCOUNT_4 ) {
-        if ( m_BmiSrc->compression() == BI_RGB ) {
+    } else if (m_BmiSrc->bitCount() == BI_BITCOUNT_4) {
+        if (m_BmiSrc->compression() == BI_RGB) {
             format = QImage::Format_RGB555;
         } else {
             kDebug(33100) << "Unexpected compression format for BI_BITCOUNT_4:"
                           << m_BmiSrc->compression();
-            Q_ASSERT( 0 );
+            Q_ASSERT(0);
         }
-    } else if ( m_BmiSrc->bitCount() == BI_BITCOUNT_5 ) {
+    } else if (m_BmiSrc->bitCount() == BI_BITCOUNT_5) {
         format = QImage::Format_RGB888;
     } else {
         kDebug(31000) << "Unexpected format:" << m_BmiSrc->bitCount();
@@ -250,12 +248,13 @@ QImage StretchDiBitsRecord::image()
     // this is a compressed bitmap or not.
     if (m_BmiSrc->height() > 0) {
         // This bitmap is a top-down bitmap without compression.
-        m_image = new QImage( (const uchar*)m_imageData.constData(),
-                              m_BmiSrc->width(), m_BmiSrc->height(), format );
+        m_image = new QImage((const uchar *)m_imageData.constData(),
+                             m_BmiSrc->width(), m_BmiSrc->height(), format);
 
         // The WMF images are in the BGR color order.
-        if (format == QImage::Format_RGB888)
+        if (format == QImage::Format_RGB888) {
             *m_image = m_image->rgbSwapped();
+        }
 
         // We have to mirror this bitmap in the X axis since WMF images are stored bottom-up.
         *m_image = m_image->mirrored(false, true);
@@ -263,8 +262,8 @@ QImage StretchDiBitsRecord::image()
         // This bitmap is a bottom-up bitmap which uses compression.
         switch (m_BmiSrc->compression()) {
         case BI_RGB:
-            m_image = new QImage( (const uchar*)m_imageData.constData(),
-                                  m_BmiSrc->width(), -m_BmiSrc->height(), format );
+            m_image = new QImage((const uchar *)m_imageData.constData(),
+                                 m_BmiSrc->width(), -m_BmiSrc->height(), format);
             // The WMF images are in the BGR color order.
             *m_image = m_image->rgbSwapped();
             break;
@@ -289,7 +288,7 @@ QImage StretchDiBitsRecord::image()
 }
 
 /*****************************************************************************/
-ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord( QDataStream &stream, quint32 size )
+ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord(QDataStream &stream, quint32 size)
 {
     stream >> m_ihFonts;
     size -= 12;
@@ -321,63 +320,63 @@ ExtCreateFontIndirectWRecord::ExtCreateFontIndirectWRecord( QDataStream &stream,
     size -= 4;
 
     QChar myChar[64];
-    for ( int i = 0; i < 32; ++i ) {
-	stream >> myChar[i];
+    for (int i = 0; i < 32; ++i) {
+        stream >> myChar[i];
     }
     size -= 64;
 
-    for ( int i = 0; i < 32; ++i ) {
-	if ( ! myChar[i].isNull() ) {
-	    m_facename.append( myChar[i] );
-	}
+    for (int i = 0; i < 32; ++i) {
+        if (! myChar[i].isNull()) {
+            m_facename.append(myChar[i]);
+        }
     }
 
 #if 0
-    for ( int i = 0; i < 64; ++i ) {
-	stream >> myChar[i];
+    for (int i = 0; i < 64; ++i) {
+        stream >> myChar[i];
     }
     size -= 128;
 
-    for ( int i = 0; i < 64; ++i ) {
-	if ( ! myChar[i].isNull() ) {
-	    m_fullName.append( myChar[i] );
-	}
+    for (int i = 0; i < 64; ++i) {
+        if (! myChar[i].isNull()) {
+            m_fullName.append(myChar[i]);
+        }
     }
     kDebug(33100) << "fullName:" << m_fullName;
 
-    for ( int i = 0; i < 32; ++i ) {
-	stream >> myChar[i];
+    for (int i = 0; i < 32; ++i) {
+        stream >> myChar[i];
     }
     size -= 64;
-    for ( int i = 0; i < 32; ++i ) {
-	if ( ! myChar[i].isNull() ) {
-	    m_style.append( myChar[i] );
-	}
+    for (int i = 0; i < 32; ++i) {
+        if (! myChar[i].isNull()) {
+            m_style.append(myChar[i]);
+        }
     }
     kDebug(33100) << "style:" << m_style;
 
-    for ( int i = 0; i < 32; ++i ) {
-	stream >> myChar[i];
+    for (int i = 0; i < 32; ++i) {
+        stream >> myChar[i];
     }
     size -= 64;
-    for ( int i = 0; i < 32; ++i ) {
-	if ( ! myChar[i].isNull() ) {
-	    m_script.append( myChar[i] );
-	}
+    for (int i = 0; i < 32; ++i) {
+        if (! myChar[i].isNull()) {
+            m_script.append(myChar[i]);
+        }
     }
     kDebug(33100) << "script:" << m_script;
 #endif
-    soakBytes( stream, size ); // rest of the record.
+    soakBytes(stream, size);   // rest of the record.
 }
 
 ExtCreateFontIndirectWRecord::~ExtCreateFontIndirectWRecord()
 {
 }
 
-void ExtCreateFontIndirectWRecord::soakBytes( QDataStream &stream, int numBytes )
+void ExtCreateFontIndirectWRecord::soakBytes(QDataStream &stream, int numBytes)
 {
     quint8 scratch;
-    for ( int i = 0; i < numBytes; ++i ) {
+    for (int i = 0; i < numBytes; ++i) {
         stream >> scratch;
     }
 }

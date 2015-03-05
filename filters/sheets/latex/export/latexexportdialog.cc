@@ -44,9 +44,9 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  true to construct a modal dialog.
  */
-LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
-  : KDialog(parent)
-  , m_inputStore(inputStore)
+LatexExportDialog::LatexExportDialog(KoStore *inputStore, QWidget *parent)
+    : KDialog(parent)
+    , m_inputStore(inputStore)
 {
     QWidget *mainWidget = new QWidget();
     m_ui.setupUi(mainWidget);
@@ -75,20 +75,19 @@ LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
     new LatexExportAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/filter/latex", this);
 
-
     /* All these items inserted must not be translated so they are inserted here
      * without i18n() method. */
     /*qualityComboBox->addItem("final");
      qualityComboBox->addItem("draft");*/
 
-    KComboBox* classComboBox = m_ui.classComboBox;
+    KComboBox *classComboBox = m_ui.classComboBox;
     classComboBox->addItem("article");
     classComboBox->addItem("book");
     classComboBox->addItem("letter");
     classComboBox->addItem("report");
     classComboBox->addItem("slides");
 
-    KComboBox* encodingComboBox = m_ui.encodingComboBox;
+    KComboBox *encodingComboBox = m_ui.encodingComboBox;
     encodingComboBox->addItem("unicode");
     encodingComboBox->addItem("ansinew");
     encodingComboBox->addItem("applemac");
@@ -107,7 +106,7 @@ LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
     encodingComboBox->addItem("decmulti");
     encodingComboBox->addItem("next");
 
-    KListWidget* languagesList = m_ui.languagesList;
+    KListWidget *languagesList = m_ui.languagesList;
     languagesList->addItem("american");
     languagesList->addItem("austrian");
     languagesList->addItem("bahasa");
@@ -178,39 +177,43 @@ void LatexExportDialog::accept()
 {
     hide();
     kDebug(30522) << "KSPREAD LATEX EXPORT FILTER --> BEGIN";
-    Config* config = Config::instance();
+    Config *config = Config::instance();
 
     /* Document tab */
     config->setEmbeded(m_ui.embededButton->isChecked());
-    if (m_ui.wordsStyleButton->isChecked())
+    if (m_ui.wordsStyleButton->isChecked()) {
         config->useWordsStyle();
-    else
+    } else {
         config-> useLatexStyle();
+    }
     /* class names are not translated */
     config->setClass(m_ui.classComboBox->currentText());
 
-    if (m_ui.qualityComboBox->currentIndex() == 0)
+    if (m_ui.qualityComboBox->currentIndex() == 0) {
         config->setQuality("final");
-    else
+    } else {
         config->setQuality("draft");
+    }
     config->setDefaultFontSize(m_ui.defaultFontSize->value());
 
     /* Pictures tab */
-    if (m_ui.pictureCheckBox->isChecked())
+    if (m_ui.pictureCheckBox->isChecked()) {
         config->convertPictures();
+    }
     config->setPicturesDir(m_ui.pathPictures->url().path());
 
     /* Language tab */
     config->setEncoding(m_ui.encodingComboBox->currentText());
-    KListWidget* langUsedList = m_ui.langUsedList;
+    KListWidget *langUsedList = m_ui.langUsedList;
     for (int index = 0; index < langUsedList->count(); ++index) {
         kDebug(30522) << "lang. :" << langUsedList->item(index)->text();
         config->addLanguage(langUsedList->item(index)->text());
     }
 
     /* The default language is the first language in the list */
-    if (langUsedList->item(0) != NULL)
+    if (langUsedList->item(0) != NULL) {
         config->setDefaultLanguage(langUsedList->item(0)->text());
+    }
     if (langUsedList->currentItem() != NULL) {
         const QString currentLanguage = langUsedList->currentItem()->text();
         kDebug(30522) << "default lang. :" << currentLanguage;
@@ -227,7 +230,7 @@ void LatexExportDialog::accept()
 
 void LatexExportDialog::addLanguage()
 {
-    QListWidgetItem* currentItem = m_ui.languagesList->takeItem(m_ui.languagesList->currentRow());
+    QListWidgetItem *currentItem = m_ui.languagesList->takeItem(m_ui.languagesList->currentRow());
     if (! currentItem) {
         return;
     }
@@ -239,7 +242,7 @@ void LatexExportDialog::addLanguage()
 
 void LatexExportDialog::removeLanguage()
 {
-    QListWidgetItem* currentItem = m_ui.langUsedList->takeItem(m_ui.langUsedList->currentRow());
+    QListWidgetItem *currentItem = m_ui.langUsedList->takeItem(m_ui.langUsedList->currentRow());
     if (! currentItem) {
         return;
     }

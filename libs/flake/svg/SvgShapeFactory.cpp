@@ -36,7 +36,7 @@ SvgShapeFactory::SvgShapeFactory()
 {
     setLoadingPriority(4);
     setXmlElementNames(QString(KoXmlNS::draw), QStringList("image"));
-    // hide from add shapes docker as the shape is not able to be dragged onto 
+    // hide from add shapes docker as the shape is not able to be dragged onto
     // the canvas as createDefaultShape returns 0.
     setHidden(true);
 }
@@ -58,12 +58,13 @@ bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContex
 {
     if (element.localName() == "image" && element.namespaceURI() == KoXmlNS::draw) {
         QString href = element.attribute("href");
-        if (href.isEmpty())
+        if (href.isEmpty()) {
             return false;
+        }
 
         // check the mimetype
         if (href.startsWith(QLatin1String("./"))) {
-            href.remove(0,2);
+            href.remove(0, 2);
         }
 
         QString mimetype = context.odfLoadingContext().mimeTypeForPath(href, true);
@@ -75,7 +76,7 @@ bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContex
 
 KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    const KoXmlElement & imageElement(KoXml::namedItemNS(element, KoXmlNS::draw, "image"));
+    const KoXmlElement &imageElement(KoXml::namedItemNS(element, KoXmlNS::draw, "image"));
     if (imageElement.isNull()) {
         kError(30006) << "svg image element not found";
         return 0;
@@ -84,20 +85,23 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
     if (imageElement.tagName() == "image") {
         kDebug(30006) << "trying to create shapes form svg image";
         QString href = imageElement.attribute("href");
-        if (href.isEmpty())
+        if (href.isEmpty()) {
             return 0;
+        }
 
         // check the mimetype
         if (href.startsWith(QLatin1String("./"))) {
-            href.remove(0,2);
+            href.remove(0, 2);
         }
         QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
         kDebug(30006) << mimetype;
-        if (mimetype != "image/svg+xml")
+        if (mimetype != "image/svg+xml") {
             return 0;
+        }
 
-        if (!context.odfLoadingContext().store()->open(href))
+        if (!context.odfLoadingContext().store()->open(href)) {
             return 0;
+        }
 
         KoStoreDevice dev(context.odfLoadingContext().store());
         KoXmlDocument xmlDoc;
@@ -111,18 +115,20 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
 
         if (! parsed) {
             kError(30006) << "Error while parsing file: "
-            << "at line " << line << " column: " << col
-            << " message: " << errormessage << endl;
+                          << "at line " << line << " column: " << col
+                          << " message: " << errormessage << endl;
             return 0;
         }
 
         SvgParser parser(context.documentResourceManager());
 
-        QList<KoShape*> shapes = parser.parseSvg(xmlDoc.documentElement());
-        if (shapes.isEmpty())
+        QList<KoShape *> shapes = parser.parseSvg(xmlDoc.documentElement());
+        if (shapes.isEmpty()) {
             return 0;
-        if (shapes.count() == 1)
+        }
+        if (shapes.count() == 1) {
             return shapes.first();
+        }
 
         KoShapeGroup *svgGroup = new KoShapeGroup;
         KoShapeGroupCommand cmd(svgGroup, shapes);

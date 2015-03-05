@@ -24,13 +24,13 @@
 
 #include "ui_wdg_offsetimage.h"
 
-
 class WdgOffsetImage : public QWidget, public Ui::WdgOffsetImage
 {
     Q_OBJECT
 
 public:
-    WdgOffsetImage(QWidget *parent) : QWidget(parent) {
+    WdgOffsetImage(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -41,12 +41,17 @@ class DlgOffsetImage: public KDialog
     Q_OBJECT
 
 public:
-    DlgOffsetImage(QWidget * parent = 0, const char* name = 0, QSize imageSize = QSize());
+    DlgOffsetImage(QWidget *parent = 0, const char *name = 0, QSize imageSize = QSize());
     ~DlgOffsetImage();
 
-    int offsetX() const { return m_offsetX;}
-    int offsetY() const { return m_offsetY;}
-
+    int offsetX() const
+    {
+        return m_offsetX;
+    }
+    int offsetY() const
+    {
+        return m_offsetY;
+    }
 
 private Q_SLOTS:
     void okClicked();
@@ -55,7 +60,7 @@ private Q_SLOTS:
     void slotMiddleOffset();
 
 private:
-    WdgOffsetImage * m_page;
+    WdgOffsetImage *m_page;
     int m_offsetX;
     int m_offsetY;
     bool m_lock;

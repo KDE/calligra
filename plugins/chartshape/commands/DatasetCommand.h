@@ -26,7 +26,6 @@
 // KChart
 #include "kchart_global.h"
 
-
 #if 0
 namespace KDChart
 {
@@ -35,7 +34,6 @@ class AbstractDiagram;
 class Chart;
 }
 #endif
-
 
 namespace KChart
 {
@@ -50,7 +48,7 @@ public:
     /**
      * Constructor.
      */
-    DatasetCommand(DataSet* dataSet, ChartShape* chart);
+    DatasetCommand(DataSet *dataSet, ChartShape *chart);
 
     /**
      * Destructor.
@@ -74,8 +72,8 @@ public:
     void setDataSetShowPercent(bool show);
     void setDataSetShowSymbol(bool show);
 
-    void setDataSetPen(const QColor& color);
-    void setDataSetBrush(const QColor& color);
+    void setDataSetPen(const QColor &color);
+    void setDataSetBrush(const QColor &color);
     void setDataSetMarker(OdfMarkerStyle style);
     void setDataSetAxis(Axis *axis);
 

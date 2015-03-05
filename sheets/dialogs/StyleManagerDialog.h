@@ -46,7 +46,7 @@ class StyleManagerDialog : public KDialog
     Q_OBJECT
 
 public:
-    StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager);
+    StyleManagerDialog(QWidget *parent, Selection *selection, StyleManager *manager);
     ~StyleManagerDialog();
 
 protected Q_SLOTS:
@@ -55,19 +55,19 @@ protected Q_SLOTS:
     void slotEdit();
     void slotRemove();
     void slotDisplayMode(int mode);
-    void selectionChanged(QTreeWidgetItem*);
+    void selectionChanged(QTreeWidgetItem *);
 
 private:
     void fillComboBox();
 
 private:
-    Selection*      m_selection;
-    StyleManager*   m_styleManager;
-    QTreeWidget*    m_styleList;
-    KComboBox*      m_displayBox;
-    KPushButton*    m_newButton;
-    KPushButton*    m_modifyButton;
-    KPushButton*    m_deleteButton;
+    Selection      *m_selection;
+    StyleManager   *m_styleManager;
+    QTreeWidget    *m_styleList;
+    KComboBox      *m_displayBox;
+    KPushButton    *m_newButton;
+    KPushButton    *m_modifyButton;
+    KPushButton    *m_deleteButton;
 };
 
 } // namespace Sheets

@@ -25,20 +25,20 @@
 #include <klocale.h>
 
 KoFormulaToolFactory::KoFormulaToolFactory()
-           : KoToolFactoryBase("KoFormulaToolFactoryId")
+    : KoToolFactoryBase("KoFormulaToolFactoryId")
 {
-    setToolTip( i18n( "Formula editing" ) );
-    setToolType( dynamicToolType() );
+    setToolTip(i18n("Formula editing"));
+    setToolType(dynamicToolType());
     setIconName(koIconNameCStr("edittext"));
-    setPriority( 1 );
-    setActivationShapeId( KoFormulaShapeId );
+    setPriority(1);
+    setActivationShapeId(KoFormulaShapeId);
 }
 
 KoFormulaToolFactory::~KoFormulaToolFactory()
 {}
 
-KoToolBase* KoFormulaToolFactory::createTool( KoCanvasBase* canvas )
+KoToolBase *KoFormulaToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new KoFormulaTool( canvas );
+    return new KoFormulaTool(canvas);
 }
 

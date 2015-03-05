@@ -76,13 +76,13 @@ K_EXPORT_PLUGIN(OpenCalcExportFactory("kspreadopencalcexport", "calligrafilters"
         return false; \
     } while(0)
 
-OpenCalcExport::OpenCalcExport(QObject* parent, const QVariantList &)
-        : KoFilter(parent), m_locale(0)
+OpenCalcExport::OpenCalcExport(QObject *parent, const QVariantList &)
+    : KoFilter(parent), m_locale(0)
 {
 }
 
-KoFilter::ConversionStatus OpenCalcExport::convert(const QByteArray & from,
-        const QByteArray & to)
+KoFilter::ConversionStatus OpenCalcExport::convert(const QByteArray &from,
+        const QByteArray &to)
 {
     /* later...
        KSpreadLeader  * leader = new KSpreadLeader( m_chain );
@@ -97,14 +97,15 @@ KoFilter::ConversionStatus OpenCalcExport::convert(const QByteArray & from,
        return status;
     */
 
-    KoDocument * document = m_chain->inputDocument();
+    KoDocument *document = m_chain->inputDocument();
 
-    if (!document)
+    if (!document) {
         return KoFilter::StupidError;
+    }
 
     if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {
         kWarning(30518) << "document isn't a Calligra::Sheets::Doc but a "
-        << document->metaObject()->className() << endl;
+                        << document->metaObject()->className() << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -113,54 +114,61 @@ KoFilter::ConversionStatus OpenCalcExport::convert(const QByteArray & from,
         return KoFilter::NotImplemented;
     }
 
-    const Doc * ksdoc = static_cast<const Doc *>(document);
+    const Doc *ksdoc = static_cast<const Doc *>(document);
 
     if (ksdoc->mimeType() != "application/x-kspread") {
         kWarning(30518) << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 
-    m_locale = static_cast<Doc*>(document)->map()->calculationSettings()->locale();
-    if (!writeFile(ksdoc))
+    m_locale = static_cast<Doc *>(document)->map()->calculationSettings()->locale();
+    if (!writeFile(ksdoc)) {
         return KoFilter::CreationError;
+    }
 
     emit sigProgress(100);
 
     return KoFilter::OK;
 }
 
-bool OpenCalcExport::writeFile(const Doc * ksdoc)
+bool OpenCalcExport::writeFile(const Doc *ksdoc)
 {
-    KoStore * store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, "", KoStore::Zip);
+    KoStore *store = KoStore::createStore(m_chain->outputFile(), KoStore::Write, "", KoStore::Zip);
 
-    if (!store)
+    if (!store) {
         return false;
+    }
 
     uint filesWritten = 0;
 
-    if (!exportContent(store, ksdoc))
+    if (!exportContent(store, ksdoc)) {
         STOPEXPORT;
-    else
+    } else {
         filesWritten |= contentXML;
+    }
 
     // TODO: pass sheet number and cell number
-    if (!exportDocInfo(store, ksdoc))
+    if (!exportDocInfo(store, ksdoc)) {
         STOPEXPORT;
-    else
+    } else {
         filesWritten |= metaXML;
+    }
 
-    if (!exportStyles(store, ksdoc))
+    if (!exportStyles(store, ksdoc)) {
         STOPEXPORT;
-    else
+    } else {
         filesWritten |= stylesXML;
+    }
 
-    if (!exportSettings(store, ksdoc))
+    if (!exportSettings(store, ksdoc)) {
         STOPEXPORT;
-    else
+    } else {
         filesWritten |= settingsXML;
+    }
 
-    if (!writeMetaFile(store, filesWritten))
+    if (!writeMetaFile(store, filesWritten)) {
         STOPEXPORT;
+    }
 
     // writes zip file to disc
     delete store;
@@ -169,12 +177,13 @@ bool OpenCalcExport::writeFile(const Doc * ksdoc)
     return true;
 }
 
-bool OpenCalcExport::exportDocInfo(KoStore * store, const Doc* ksdoc)
+bool OpenCalcExport::exportDocInfo(KoStore *store, const Doc *ksdoc)
 {
-    if (!store->open("meta.xml"))
+    if (!store->open("meta.xml")) {
         return false;
+    }
 
-    KoDocumentInfo       * docInfo    = ksdoc->documentInfo();
+    KoDocumentInfo        *docInfo    = ksdoc->documentInfo();
 
     QDomDocument meta;
     meta.appendChild(meta.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
@@ -249,16 +258,18 @@ bool OpenCalcExport::exportDocInfo(KoStore * store, const Doc* ksdoc)
 
     store->write(doc, doc.length());
 
-    if (!store->close())
+    if (!store->close()) {
         return false;
+    }
 
     return true;
 }
 
-bool OpenCalcExport::exportSettings(KoStore * store, const Doc * ksdoc)
+bool OpenCalcExport::exportSettings(KoStore *store, const Doc *ksdoc)
 {
-    if (!store->open("settings.xml"))
+    if (!store->open("settings.xml")) {
         return false;
+    }
 
     QDomDocument doc;
     doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
@@ -284,10 +295,10 @@ bool OpenCalcExport::exportSettings(KoStore * store, const Doc * ksdoc)
     attribute.setAttribute("config:name", "ActiveTable");
     attribute.setAttribute("config:type", "string");
 
-    View *view = const_cast<Doc*>(ksdoc)->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(const_cast<Doc*>(ksdoc)->documentPart()->views().first());
+    View *view = const_cast<Doc *>(ksdoc)->documentPart()->views().isEmpty() ? 0 : static_cast<View *>(const_cast<Doc *>(ksdoc)->documentPart()->views().first());
     QString activeTable;
     if (view) { // no view if embedded document
-        Canvas * canvas = view->canvasWidget();
+        Canvas *canvas = view->canvasWidget();
         activeTable = canvas->activeSheet()->sheetName();
         // save current sheet selection before to save marker, otherwise current pos is not saved
         view->saveCurrentSheetSelection();
@@ -298,7 +309,7 @@ bool OpenCalcExport::exportSettings(KoStore * store, const Doc * ksdoc)
     QDomElement configmaped = doc.createElement("config:config-item-map-named");
     configmaped.setAttribute("config:name", "Tables");
 
-    foreach(Sheet* sheet, ksdoc->map()->sheetList()) {
+    foreach (Sheet *sheet, ksdoc->map()->sheetList()) {
         QPoint marker;
         if (view) {
             marker = view->markerFromSheet(sheet);
@@ -322,8 +333,6 @@ bool OpenCalcExport::exportSettings(KoStore * store, const Doc * ksdoc)
     }
     mapItem.appendChild(configmaped);
 
-
-
     mapIndexed.appendChild(mapItem);
 
     begin.appendChild(configItem);
@@ -337,16 +346,18 @@ bool OpenCalcExport::exportSettings(KoStore * store, const Doc * ksdoc)
 
     store->write(f, f.length());
 
-    if (!store->close())
+    if (!store->close()) {
         return false;
+    }
 
     return true;
 }
 
-bool OpenCalcExport::exportContent(KoStore * store, const Doc * ksdoc)
+bool OpenCalcExport::exportContent(KoStore *store, const Doc *ksdoc)
 {
-    if (!store->open("content.xml"))
+    if (!store->open("content.xml")) {
         return false;
+    }
 
     createDefaultStyles();
 
@@ -374,8 +385,9 @@ bool OpenCalcExport::exportContent(KoStore * store, const Doc * ksdoc)
     QDomElement data = doc.createElement("office:script");
     content.appendChild(data);
 
-    if (!exportBody(doc, content, ksdoc))
+    if (!exportBody(doc, content, ksdoc)) {
         return false;
+    }
 
     doc.appendChild(content);
 
@@ -384,23 +396,25 @@ bool OpenCalcExport::exportContent(KoStore * store, const Doc * ksdoc)
 
     store->write(f, f.length());
 
-    if (!store->close())
+    if (!store->close()) {
         return false;
+    }
 
     return true;
 }
 
-void exportNamedExpr(Doc* kspreadDoc, QDomDocument & doc, QDomElement & parent,
-                     AreaList const & namedAreas)
+void exportNamedExpr(Doc *kspreadDoc, QDomDocument &doc, QDomElement &parent,
+                     AreaList const &namedAreas)
 {
-    Sheet* sheet = 0;
+    Sheet *sheet = 0;
     QRect range;
     for (int i = 0; i < namedAreas.count(); ++i) {
         QDomElement namedRange = doc.createElement("table:named-range");
 
         sheet = kspreadDoc->map()->namedAreaManager()->sheet(namedAreas[i]);
-        if (!sheet)
+        if (!sheet) {
             continue;
+        }
         range = kspreadDoc->map()->namedAreaManager()->namedArea(namedAreas[i]).firstRange();
 
         namedRange.setAttribute("table:name", namedAreas[i]);
@@ -411,7 +425,7 @@ void exportNamedExpr(Doc* kspreadDoc, QDomDocument & doc, QDomElement & parent,
     }
 }
 
-bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const Doc * ksdoc)
+bool OpenCalcExport::exportBody(QDomDocument &doc, QDomElement &content, const Doc *ksdoc)
 {
     QDomElement fontDecls  = doc.createElement("office:font-decls");
     QDomElement autoStyles = doc.createElement("office:automatic-styles");
@@ -428,7 +442,7 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
         }
     }
 
-    foreach(Sheet* sheet, ksdoc->map()->sheetList()) {
+    foreach (Sheet *sheet, ksdoc->map()->sheetList()) {
         SheetStyle ts;
         //int maxCols         = 1;
         //int maxRows         = 1;
@@ -454,7 +468,7 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
         int n = name.indexOf(' ');
         if (n > -1) {
             kDebug(30518) << "Sheet name converting:" << name;
-            name.replace(' ','_');
+            name.replace(' ', '_');
             kDebug(30518) << "Sheet name converted:" << name;
         }
 
@@ -465,7 +479,6 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
             tabElem.setAttribute("table:print-ranges", range);
         }
 
-
         tabElem.setAttribute("table:name", name);
 
         const QRect usedArea = sheet->usedArea();
@@ -475,8 +488,8 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
         body.appendChild(tabElem);
     }
 
-    KoDocument * document   = m_chain->inputDocument();
-    Doc * kspreadDoc = static_cast<Doc *>(document);
+    KoDocument *document   = m_chain->inputDocument();
+    Doc *kspreadDoc = static_cast<Doc *>(document);
 
     AreaList namedAreas = kspreadDoc->map()->namedAreaManager()->areaNames();
     if (namedAreas.count() > 0) {
@@ -496,14 +509,14 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
     return true;
 }
 
-void OpenCalcExport::exportSheet(QDomDocument & doc, QDomElement & tabElem,
-                                 const Sheet * sheet, int maxCols, int maxRows)
+void OpenCalcExport::exportSheet(QDomDocument &doc, QDomElement &tabElem,
+                                 const Sheet *sheet, int maxCols, int maxRows)
 {
     kDebug(30518) << "exportSheet:" << sheet->sheetName();
     int i = 1;
 
     while (i <= maxCols) {
-        const ColumnFormat * column = sheet->columnFormat(i);
+        const ColumnFormat *column = sheet->columnFormat(i);
         ColumnStyle cs;
         cs.breakB = ::Style::automatic;
         cs.size   = POINT_TO_MM(column->width()) / 10;
@@ -517,21 +530,24 @@ void OpenCalcExport::exportSheet(QDomDocument & doc, QDomElement & tabElem,
             cs1.breakB = ::Style::automatic;
             cs1.size   = POINT_TO_MM(c->width()) / 10;
 
-            if (ColumnStyle::isEqual(&cs, cs1) && (hide == c->isHidden()))
+            if (ColumnStyle::isEqual(&cs, cs1) && (hide == c->isHidden())) {
                 ++repeated;
-            else
+            } else {
                 break;
+            }
             ++j;
         }
 
         QDomElement colElem = doc.createElement("table:table-column");
         colElem.setAttribute("table:style-name", m_styles.columnStyle(cs));
         colElem.setAttribute("table:default-cell-style-name", "Default");  //todo fixme create style from cell
-        if (hide)
+        if (hide) {
             colElem.setAttribute("table:visibility", "collapse");
+        }
 
-        if (repeated > 1)
+        if (repeated > 1) {
             colElem.setAttribute("table:number-columns-repeated", QString::number(repeated));
+        }
 
         tabElem.appendChild(colElem);
         i += repeated;
@@ -544,8 +560,9 @@ void OpenCalcExport::exportSheet(QDomDocument & doc, QDomElement & tabElem,
 
         QDomElement rowElem = doc.createElement("table:table-row");
         rowElem.setAttribute("table:style-name", m_styles.rowStyle(rs));
-        if (sheet->rowFormats()->isHidden(i))
+        if (sheet->rowFormats()->isHidden(i)) {
             rowElem.setAttribute("table:visibility", "collapse");
+        }
 
         exportCells(doc, rowElem, sheet, i, maxCols);
 
@@ -553,7 +570,7 @@ void OpenCalcExport::exportSheet(QDomDocument & doc, QDomElement & tabElem,
     }
 }
 
-void OpenCalcExport::exportCells(QDomDocument & doc, QDomElement & rowElem,
+void OpenCalcExport::exportCells(QDomDocument &doc, QDomElement &rowElem,
                                  const Sheet *sheet, int row, int maxCols)
 {
     int i = 1;
@@ -563,10 +580,11 @@ void OpenCalcExport::exportCells(QDomDocument & doc, QDomElement & rowElem,
         const Calligra::Sheets::Style style = cell.style();
         QDomElement cellElem;
 
-        if (!cell.isPartOfMerged())
+        if (!cell.isPartOfMerged()) {
             cellElem = doc.createElement("table:table-cell");
-        else
+        } else {
             cellElem = doc.createElement("table:covered-table-cell");
+        }
 
         QFont font;
         Value const value(cell.value());
@@ -589,14 +607,16 @@ void OpenCalcExport::exportCells(QDomDocument & doc, QDomElement & rowElem,
                 CellStyle::loadData(c1, cell1);   // TODO: number style
 
                 if (cell1.isEmpty() && !comment.isEmpty()
-                        && CellStyle::isEqual(&c, c1) && !cell.isPartOfMerged() && !cell.doesMergeCells())
+                        && CellStyle::isEqual(&c, c1) && !cell.isPartOfMerged() && !cell.doesMergeCells()) {
                     ++repeated;
-                else
+                } else {
                     break;
+                }
                 ++j;
             }
-            if (repeated > 1)
+            if (repeated > 1) {
                 cellElem.setAttribute("table:number-columns-repeated", QString::number(repeated));
+            }
         }
 
         if (value.isBoolean()) {
@@ -607,10 +627,11 @@ void OpenCalcExport::exportCells(QDomDocument & doc, QDomElement & rowElem,
             kDebug(30518) << "Type: Number";
             Format::Type type = style.formatType();
 
-            if (type == Format::Percentage)
+            if (type == Format::Percentage) {
                 cellElem.setAttribute("table:value-type", "percentage");
-            else
+            } else {
                 cellElem.setAttribute("table:value-type", "float");
+            }
 
             cellElem.setAttribute("table:value", QString::number((double)numToDouble(value.asFloat())));
         } else {
@@ -627,10 +648,11 @@ void OpenCalcExport::exportCells(QDomDocument & doc, QDomElement & rowElem,
             QDomElement linkref = doc.createElement("text:a");
 
             QString tmp = cell.link();
-            if (Util::localReferenceAnchor(tmp))
+            if (Util::localReferenceAnchor(tmp)) {
                 linkref.setAttribute("xlink:href", ('#' + tmp));
-            else
+            } else {
                 linkref.setAttribute("xlink:href", tmp);
+            }
 
             linkref.appendChild(doc.createTextNode(cell.userInput()));
 
@@ -648,11 +670,13 @@ void OpenCalcExport::exportCells(QDomDocument & doc, QDomElement & rowElem,
             int colSpan = cell.mergedXCells() + 1;
             int rowSpan = cell.mergedYCells() + 1;
 
-            if (colSpan > 1)
+            if (colSpan > 1) {
                 cellElem.setAttribute("table:number-columns-spanned", QString::number(colSpan));
+            }
 
-            if (rowSpan > 1)
+            if (rowSpan > 1) {
                 cellElem.setAttribute("table:number-rows-spanned", QString::number(rowSpan));
+            }
         }
 
         if (!comment.isEmpty()) {
@@ -670,10 +694,11 @@ void OpenCalcExport::exportCells(QDomDocument & doc, QDomElement & rowElem,
     }
 }
 
-bool OpenCalcExport::exportStyles(KoStore * store, const Doc *ksdoc)
+bool OpenCalcExport::exportStyles(KoStore *store, const Doc *ksdoc)
 {
-    if (!store->open("styles.xml"))
+    if (!store->open("styles.xml")) {
         return false;
+    }
 
     QDomDocument doc;
     doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
@@ -728,19 +753,20 @@ bool OpenCalcExport::exportStyles(KoStore * store, const Doc *ksdoc)
 
     store->write(f, f.length());
 
-    if (!store->close())
+    if (!store->close()) {
         return false;
+    }
 
     return true;
 }
 
-void OpenCalcExport::exportDefaultCellStyle(QDomDocument & doc, QDomElement & officeStyles)
+void OpenCalcExport::exportDefaultCellStyle(QDomDocument &doc, QDomElement &officeStyles)
 {
     QDomElement defStyle = doc.createElement("style:default-style");
     defStyle.setAttribute("style:family", "table-cell");
 
-    KoDocument * document = m_chain->inputDocument();
-    Doc * ksdoc    = static_cast<Doc *>(document);
+    KoDocument *document = m_chain->inputDocument();
+    Doc *ksdoc    = static_cast<Doc *>(document);
 
     const KLocale *locale = ksdoc->map()->calculationSettings()->locale();
     QString language;
@@ -776,10 +802,10 @@ void OpenCalcExport::createDefaultStyles()
     // TODO: default number styles, currency styles,...
 }
 
-void OpenCalcExport::exportPageAutoStyles(QDomDocument & doc, QDomElement & autoStyles,
+void OpenCalcExport::exportPageAutoStyles(QDomDocument &doc, QDomElement &autoStyles,
         const Doc *ksdoc)
 {
-    const Sheet * sheet = ksdoc->map()->sheetList().first();
+    const Sheet *sheet = ksdoc->map()->sheetList().first();
 
     float width  = 20.999f;
     float height = 29.699f;
@@ -828,14 +854,14 @@ void OpenCalcExport::exportPageAutoStyles(QDomDocument & doc, QDomElement & auto
     autoStyles.appendChild(pageMaster);
 }
 
-void OpenCalcExport::exportMasterStyles(QDomDocument & doc, QDomElement & masterStyles,
-                                        const Doc * ksdoc)
+void OpenCalcExport::exportMasterStyles(QDomDocument &doc, QDomElement &masterStyles,
+                                        const Doc *ksdoc)
 {
     QDomElement masterPage = doc.createElement("style:master-page");
     masterPage.setAttribute("style:name", "Default");
     masterPage.setAttribute("style:page-master-name", "pm1");
 
-    const Sheet * sheet = ksdoc->map()->sheetList().first();
+    const Sheet *sheet = ksdoc->map()->sheetList().first();
 
     QString headerLeft;
     QString headerCenter;
@@ -926,15 +952,16 @@ void OpenCalcExport::exportMasterStyles(QDomDocument & doc, QDomElement & master
     masterStyles.appendChild(masterPage);
 }
 
-void OpenCalcExport::addText(QString const & text, QDomDocument & doc,
-                             QDomElement & parent)
+void OpenCalcExport::addText(QString const &text, QDomDocument &doc,
+                             QDomElement &parent)
 {
-    if (text.length() > 0)
+    if (text.length() > 0) {
         parent.appendChild(doc.createTextNode(text));
+    }
 }
 
-void OpenCalcExport::convertPart(QString const & part, QDomDocument & doc,
-                                 QDomElement & parent, const Doc * ksdoc)
+void OpenCalcExport::convertPart(QString const &part, QDomDocument &doc,
+                                 QDomElement &parent, const Doc *ksdoc)
 {
     QString text;
     QString var;
@@ -988,19 +1015,19 @@ void OpenCalcExport::convertPart(QString const & part, QDomDocument & doc,
                     t.appendChild(doc.createTextNode("???"));
                     parent.appendChild(t);
                 } else if (var == "<author>") {
-                    KoDocumentInfo       * docInfo    = ksdoc->documentInfo();
+                    KoDocumentInfo        *docInfo    = ksdoc->documentInfo();
 
                     text += docInfo->authorInfo("creator");
 
                     addText(text, doc, parent);
                 } else if (var == "<email>") {
-                    KoDocumentInfo       * docInfo    = ksdoc->documentInfo();
+                    KoDocumentInfo        *docInfo    = ksdoc->documentInfo();
 
                     text += docInfo->authorInfo("email");
 
                     addText(text, doc, parent);
                 } else if (var == "<org>") {
-                    KoDocumentInfo       * docInfo    = ksdoc->documentInfo();
+                    KoDocumentInfo        *docInfo    = ksdoc->documentInfo();
 
                     text += docInfo->authorInfo("company");
 
@@ -1031,7 +1058,7 @@ void OpenCalcExport::convertPart(QString const & part, QDomDocument & doc,
     }
 }
 
-QString OpenCalcExport::convertFormula(QString const & formula) const
+QString OpenCalcExport::convertFormula(QString const &formula) const
 {
     // TODO Stefan: Check if Oasis::encodeFormula could be used instead
     QChar decimalSymbol('.');
@@ -1046,14 +1073,15 @@ QString OpenCalcExport::convertFormula(QString const & formula) const
     QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
     int n = exp.indexIn(formula, 0);
     kDebug(30518) << "Exp:" << formula << ", n:" << n << ", Length:" << formula.length()
-    << ", Matched length: " << exp.matchedLength() << endl;
+                  << ", Matched length: " << exp.matchedLength() << endl;
 
     bool inQuote1 = false;
     bool inQuote2 = false;
     int i = 0;
     int l = (int) formula.length();
-    if (l <= 0)
+    if (l <= 0) {
         return formula;
+    }
     while (i < l) {
         if ((n != -1) && (n < i)) {
             n = exp.indexIn(formula, i);
@@ -1087,8 +1115,9 @@ QString OpenCalcExport::convertFormula(QString const & formula) const
 
             while (j >= 0) {
                 c = s[j];
-                if (c == ' ')
+                if (c == ' ') {
                     s[j] = '_';
+                }
                 if (!(c.isLetterOrNumber() || c == ' ' || c == '.'
                         || c == '_')) {
                     s.insert(j + 1, '[');
@@ -1112,8 +1141,9 @@ QString OpenCalcExport::convertFormula(QString const & formula) const
                 ++i;
                 continue;
             }
-            if ((i > 0) && (formula[i - 1] != '!'))
+            if ((i > 0) && (formula[i - 1] != '!')) {
                 s += "[.";
+            }
             for (int j = 0; j < ml; ++j) {
                 s += formula[i];
                 ++i;
@@ -1129,11 +1159,12 @@ QString OpenCalcExport::convertFormula(QString const & formula) const
     return s;
 }
 
-bool OpenCalcExport::writeMetaFile(KoStore * store, uint filesWritten)
+bool OpenCalcExport::writeMetaFile(KoStore *store, uint filesWritten)
 {
     store->enterDirectory("META-INF");
-    if (!store->open("manifest.xml"))
+    if (!store->open("manifest.xml")) {
         return false;
+    }
 
     QDomImplementation impl;
     QDomDocumentType type(impl.createDocumentType("manifest:manifest", "-//OpenOffice.org//DTD Manifest 1.0//EN", "Manifest.dtd"));
@@ -1187,8 +1218,9 @@ bool OpenCalcExport::writeMetaFile(KoStore * store, uint filesWritten)
 
     store->write(doc, doc.length());
 
-    if (!store->close())
+    if (!store->close()) {
         return false;
+    }
 
     return true;
 }

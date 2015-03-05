@@ -32,7 +32,8 @@ class QPixmap;
 struct KoColorSetEntry {
     KoColor color;
     QString name;
-    bool operator==(const KoColorSetEntry& rhs) const {
+    bool operator==(const KoColorSetEntry &rhs) const
+    {
         //FIXME return color == rhs.color && name == rhs.name;
         return name == rhs.name;
     }
@@ -56,7 +57,6 @@ public:
         ACO                 // Photoshop Swatches
     };
 
-
     /**
      * Load a color set from a file. This can be a Gimp
      * palette, a RIFF palette or a Photoshop palette.
@@ -67,14 +67,14 @@ public:
     KoColorSet();
 
     /// Explicit copy constructor (KoResource copy constructor is private)
-    KoColorSet(const KoColorSet& rhs);
+    KoColorSet(const KoColorSet &rhs);
 
     virtual ~KoColorSet();
 
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
+    virtual bool saveToDevice(QIODevice *dev) const;
 
     virtual QString defaultFileExtension() const;
 
@@ -93,7 +93,6 @@ protected:
     virtual QByteArray generateMD5() const;
 
 private:
-
 
     bool init();
 

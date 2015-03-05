@@ -42,16 +42,17 @@ StateTool::~StateTool()
 {
 }
 
-void StateTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape*> &/*shapes*/)
+void StateTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape *> &/*shapes*/)
 {
     KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach(KoShape * shape, selection->selectedShapes()) {
-        m_currentShape = dynamic_cast<StateShape*>(shape);
-        if(m_currentShape)
+    foreach (KoShape *shape, selection->selectedShapes()) {
+        m_currentShape = dynamic_cast<StateShape *>(shape);
+        if (m_currentShape) {
             break;
+        }
     }
     emit(shapeChanged(m_currentShape));
-    if(m_currentShape == 0) {
+    if (m_currentShape == 0) {
         // none found
         emit done();
         return;
@@ -68,15 +69,15 @@ void StateTool::mousePressEvent(KoPointerEvent *event)
 {
     StateShape *hit = 0;
     QRectF roi(event->point, QSizeF(1, 1));
-    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(roi);
+    QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(roi);
     KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach(KoShape * shape, shapes) {
-        hit = dynamic_cast<StateShape*>(shape);
-        if(hit) {
-            if(hit == m_currentShape) {
-                const State* state = StatesRegistry::instance()->state(m_currentShape->categoryId(), m_currentShape->stateId());
-                const State* newState = StatesRegistry::instance()->nextState(state);
-                if(newState) {
+    foreach (KoShape *shape, shapes) {
+        hit = dynamic_cast<StateShape *>(shape);
+        if (hit) {
+            if (hit == m_currentShape) {
+                const State *state = StatesRegistry::instance()->state(m_currentShape->categoryId(), m_currentShape->stateId());
+                const State *newState = StatesRegistry::instance()->nextState(state);
+                if (newState) {
                     canvas()->addCommand(new StateShapeChangeStateCommand(m_currentShape, newState->category()->id(), newState->id()));
                 }
             } else {
@@ -102,7 +103,7 @@ void StateTool::mouseReleaseEvent(KoPointerEvent *event)
 QList<QPointer<QWidget> > StateTool::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets;
-    StateToolWidget* widget = new StateToolWidget(this);
+    StateToolWidget *widget = new StateToolWidget(this);
     widget->open(m_currentShape);
     widget->setWindowTitle(i18n("State tool options"));
     widgets.append(widget);

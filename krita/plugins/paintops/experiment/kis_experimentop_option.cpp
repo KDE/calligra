@@ -24,7 +24,8 @@ class KisExperimentOpOptionsWidget: public QWidget, public Ui::WdgExperimentOpti
 {
 public:
     KisExperimentOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
 
         speed->setRange(0.0, 100.0, 0);
@@ -71,7 +72,7 @@ KisExperimentOpOption::~KisExperimentOpOption()
     delete m_options;
 }
 
-void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(EXPERIMENT_DISPLACEMENT_ENABLED, m_options->displaceCHBox->isChecked());
     setting->setProperty(EXPERIMENT_DISPLACEMENT_VALUE, m_options->displaceStrength->value());
@@ -83,7 +84,7 @@ void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setti
     setting->setProperty(EXPERIMENT_HARD_EDGE, m_options->hardEdgeCHBox->isChecked());
 }
 
-void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     ExperimentOption op;
     op.readOptionSetting(setting);

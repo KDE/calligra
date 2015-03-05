@@ -38,62 +38,68 @@
 #include <kdebug.h>
 #include <ksavefile.h>
 
-
 using namespace KexiCSVExport;
 
 Options::Options()
-        : mode(File), itemId(0), addColumnNames(true)
+    : mode(File), itemId(0), addColumnNames(true)
 {
 }
 
-bool Options::assign(QMap<QString, QString>& args)
+bool Options::assign(QMap<QString, QString> &args)
 {
     mode = (args["destinationType"] == "file")
            ? KexiCSVExport::File : KexiCSVExport::Clipboard;
 
-    if (args.contains("delimiter"))
+    if (args.contains("delimiter")) {
         delimiter = args["delimiter"];
-    else
+    } else {
         delimiter = (mode == File) ? KEXICSV_DEFAULT_FILE_DELIMITER : KEXICSV_DEFAULT_CLIPBOARD_DELIMITER;
+    }
 
-    if (args.contains("textQuote"))
+    if (args.contains("textQuote")) {
         textQuote = args["textQuote"];
-    else
+    } else {
         textQuote = (mode == File) ? KEXICSV_DEFAULT_FILE_TEXT_QUOTE : KEXICSV_DEFAULT_CLIPBOARD_TEXT_QUOTE;
+    }
 
     bool ok;
     itemId = args["itemId"].toInt(&ok);
-    if (!ok || itemId <= 0)
+    if (!ok || itemId <= 0) {
         return false;
-    if (args.contains("forceDelimiter"))
+    }
+    if (args.contains("forceDelimiter")) {
         forceDelimiter = args["forceDelimiter"];
-    if (args.contains("addColumnNames"))
+    }
+    if (args.contains("addColumnNames")) {
         addColumnNames = (args["addColumnNames"] == "1");
+    }
     return true;
 }
 
 //------------------------------------
 
-bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
-                               const Options& options, int rowCount, QTextStream *predefinedTextStream)
+bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema &tableOrQuery,
+                               const Options &options, int rowCount, QTextStream *predefinedTextStream)
 {
-    KexiDB::Connection* conn = tableOrQuery.connection();
-    if (!conn)
+    KexiDB::Connection *conn = tableOrQuery.connection();
+    if (!conn) {
         return false;
+    }
 
-    KexiDB::QuerySchema* query = tableOrQuery.query();
+    KexiDB::QuerySchema *query = tableOrQuery.query();
     QList<QVariant> queryParams;
     if (!query) {
         query = tableOrQuery.table()->query();
-    }
-    else {
+    } else {
         queryParams = KexiMainWindowIface::global()->currentParametersForQuery(query->id());
     }
 
-    if (rowCount == -1)
+    if (rowCount == -1) {
         rowCount = KexiDB::rowCount(tableOrQuery, queryParams);
-    if (rowCount == -1)
+    }
+    if (rowCount == -1) {
         return false;
+    }
 
 //! @todo move this to non-GUI location so it can be also used via command line
 //! @todo add a "finish" page with a progressbar.
@@ -117,7 +123,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
         buffer.reserve(bufSize);
         if ((uint)buffer.capacity() < bufSize) {
             kWarning() << "Cannot allocate memory for " << bufSize
-            << " characters";
+                       << " characters";
             return false;
         }
     } else {
@@ -174,7 +180,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 // bool isInteger[fieldsCount]; //cache for faster checks
 // bool isFloatingPoint[fieldsCount]; //cache for faster checks
     for (uint i = 0; i < fieldsCount; i++) {
-        KexiDB::QueryColumnInfo* ci;
+        KexiDB::QueryColumnInfo *ci;
         const int indexForVisibleLookupValue = fields[i]->indexForVisibleLookupValue();
         if (-1 != indexForVisibleLookupValue) {
             ci = query->expandedOrInternalField(indexForVisibleLookupValue);
@@ -193,7 +199,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 //  isFloatingPoint[i] = fields[i]->field->isFPNumericType();
     }
 
-kDebug() << 1;
+    kDebug() << 1;
     // 1. Output column names
     if (options.addColumnNames) {
         for (uint i = 0; i < fieldsCount; i++) {
@@ -231,10 +237,11 @@ kDebug() << 1;
             }
 
             if (isText[real_i]) {
-                if (hasTextQuote)
+                if (hasTextQuote) {
                     APPEND(textQuote + QString(cursor->value(real_i).toString()).replace(textQuote, escapedTextQuote) + textQuote);
-                else
+                } else {
                     APPEND(cursor->value(real_i).toString());
+                }
             } else if (isDateTime[real_i]) { //avoid "T" in ISO DateTime
                 APPEND(cursor->value(real_i).toDateTime().date().toString(Qt::ISODate) + " "
                        + cursor->value(real_i).toDateTime().time().toString(Qt::ISODate));
@@ -243,9 +250,11 @@ kDebug() << 1;
             } else if (isBLOB[real_i]) { //BLOB is escaped in a special way
                 if (hasTextQuote)
 //! @todo add options to suppport other types from KexiDB::BLOBEscapingType enum...
+                {
                     APPEND(textQuote + KexiDB::escapeBLOB(cursor->value(real_i).toByteArray(), KexiDB::BLOBEscapeHex) + textQuote);
-                else
+                } else {
                     APPEND(KexiDB::escapeBLOB(cursor->value(real_i).toByteArray(), KexiDB::BLOBEscapeHex));
+                }
             } else {//other types
                 APPEND(cursor->value(real_i).toString());
             }
@@ -253,23 +262,25 @@ kDebug() << 1;
         APPEND_EOLN
     }
 
-    if (copyToClipboard)
+    if (copyToClipboard) {
         buffer.squeeze();
+    }
 
     if (!conn->deleteCursor(cursor)) {
         handler.showErrorMessage(conn);
         _ERR;
     }
 
-    if (copyToClipboard)
+    if (copyToClipboard) {
         kapp->clipboard()->setText(buffer, QClipboard::Clipboard);
+    }
 
     kDebug() << "Done";
 
     if (kSaveFile) {
         stream->flush();
         if (!kSaveFile->finalize()) {
-                kDebug() << "Error finalizing stream!";
+            kDebug() << "Error finalizing stream!";
         }
     }
     return true;

@@ -52,7 +52,7 @@ public:
     /**
      * Constructs a storage with name filename.
      **/
-    explicit Storage(const char* filename);
+    explicit Storage(const char *filename);
 
     /**
      * Destroys the storage.
@@ -77,19 +77,19 @@ public:
     /**
      * Finds all stream and directories in given path.
      **/
-    std::list<std::string> entries(const std::string& path = "/");
+    std::list<std::string> entries(const std::string &path = "/");
 
     /**
      * Returns true if specified entry name is a directory.
      */
-    bool isDirectory(const std::string& name);
+    bool isDirectory(const std::string &name);
 
 private:
-    StorageIO* io;
+    StorageIO *io;
 
     // no copy or assign
-    Storage(const Storage&);
-    Storage& operator=(const Storage&);
+    Storage(const Storage &);
+    Storage &operator=(const Storage &);
 
 };
 
@@ -104,7 +104,7 @@ public:
      * Creates a new stream.
      */
     // name must be absolute, e.g "/Workbook"
-    Stream(Storage* storage, const std::string& name);
+    Stream(Storage *storage, const std::string &name);
 
     /**
      * Destroys the stream.
@@ -139,7 +139,7 @@ public:
     /**
      * Reads a block of data.
      **/
-    unsigned long read(unsigned char* data, unsigned long maxlen);
+    unsigned long read(unsigned char *data, unsigned long maxlen);
 
     /**
      * Returns true if the read/write position is past the file.
@@ -152,11 +152,11 @@ public:
     bool fail();
 
 private:
-    StreamIO* io;
+    StreamIO *io;
 
     // no copy or assign
-    Stream(const Stream&);
-    Stream& operator=(const Stream&);
+    Stream(const Stream &);
+    Stream &operator=(const Stream &);
 };
 
 }

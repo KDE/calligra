@@ -31,20 +31,20 @@ class MouseTracker : public QObject
 {
     Q_OBJECT
 public:
-    explicit MouseTracker(QObject* parent = 0);
+    explicit MouseTracker(QObject *parent = 0);
     virtual ~MouseTracker();
 
 public Q_SLOTS:
-    void addItem(QDeclarativeItem* item, const QPointF& offset = QPointF());
-    void removeItem(QDeclarativeItem* item);
+    void addItem(QDeclarativeItem *item, const QPointF &offset = QPointF());
+    void removeItem(QDeclarativeItem *item);
 
 protected:
-    virtual bool eventFilter(QObject* target, QEvent* event);
+    virtual bool eventFilter(QObject *target, QEvent *event);
 
 private:
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // MOUSETRACKER_H

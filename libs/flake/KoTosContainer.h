@@ -29,7 +29,6 @@
 class KoTosContainerPrivate;
 class KoDocumentResourceManager;
 
-
 /**
  * Container that is used to wrap a shape with a text on top.
  * Path shapes inherit from this class to make it possible to have text associated

@@ -119,12 +119,10 @@ public:
      */
     void invalidate();
 
-
 private:
 
     QSharedDataPointer<KoElementReferenceData> d;
 };
-
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoElementReference::SaveOptions)
 

@@ -24,7 +24,7 @@ KisLockedPropertiesProxy ::KisLockedPropertiesProxy()
 {
 }
 
-KisLockedPropertiesProxy::KisLockedPropertiesProxy(KisLockedProperties* p)
+KisLockedPropertiesProxy::KisLockedPropertiesProxy(KisLockedProperties *p)
 {
     m_lockedProperties = p;
 }
@@ -37,8 +37,8 @@ KisLockedPropertiesProxy::KisLockedPropertiesProxy(const KisPropertiesConfigurat
 
 QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
 {
-    KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
-    KisPaintOpSettings* t = dynamic_cast<KisPaintOpSettings*>(temp);
+    KisPropertiesConfiguration *temp = const_cast<KisPropertiesConfiguration *>(m_parent);
+    KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings *>(temp);
 
     if (t->preset()) {
         // restores the dirty state on returns automagically
@@ -55,7 +55,7 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
                 return m_lockedProperties->lockedProperties()->getProperty(name);
             } else {
                 if (m_parent->hasProperty(name + "_previous")) {
-                    KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
+                    KisPropertiesConfiguration *temp = const_cast<KisPropertiesConfiguration *>(m_parent);
                     temp->setProperty(name, m_parent->getProperty(name + "_previous"));
                     temp->removeProperty(name + "_previous");
                 }
@@ -65,10 +65,10 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
     return m_parent->getProperty(name);
 }
 
-void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant & value)
+void KisLockedPropertiesProxy::setProperty(const QString &name, const QVariant &value)
 {
-    KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
-    KisPaintOpSettings* t = dynamic_cast<KisPaintOpSettings*>(temp);
+    KisPropertiesConfiguration *temp = const_cast<KisPropertiesConfiguration *>(m_parent);
+    KisPaintOpSettings *t = dynamic_cast<KisPaintOpSettings *>(temp);
     if (t->preset()) {
         // restores the dirty state on returns automagically
         KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset().data());
@@ -86,8 +86,4 @@ void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant 
     }
     t->setProperty(name, value);
 }
-
-
-
-
 

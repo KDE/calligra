@@ -35,25 +35,27 @@ using namespace Calligra::Sheets;
 class Binding::Private : public QSharedData
 {
 public:
-    BindingModel* model;
+    BindingModel *model;
     Private(Binding *q) : model(new BindingModel(q)) {}
-    ~Private() { delete model; }
+    ~Private()
+    {
+        delete model;
+    }
 };
-
 
 Binding::Binding()
     : d(new Private(this))
 {
 }
 
-Binding::Binding(const Region& region)
+Binding::Binding(const Region &region)
     : d(new Private(this))
 {
     Q_ASSERT(region.isValid());
     d->model->setRegion(region);
 }
 
-Binding::Binding(const Binding& other)
+Binding::Binding(const Binding &other)
     : d(other.d)
 {
 }
@@ -67,32 +69,33 @@ bool Binding::isEmpty() const
     return d->model->region().isEmpty();
 }
 
-QAbstractItemModel* Binding::model() const
+QAbstractItemModel *Binding::model() const
 {
     return d->model;
 }
 
-const Calligra::Sheets::Region& Binding::region() const
+const Calligra::Sheets::Region &Binding::region() const
 {
     return d->model->region();
 }
 
-void Binding::setRegion(const Region& region)
+void Binding::setRegion(const Region &region)
 {
     d->model->setRegion(region);
 }
 
-void Binding::update(const Region& region)
+void Binding::update(const Region &region)
 {
     QRect rect;
     Region changedRegion;
     const QPoint offset = d->model->region().firstRange().topLeft();
     const QRect range = d->model->region().firstRange();
-    const Sheet* sheet = d->model->region().firstSheet();
+    const Sheet *sheet = d->model->region().firstSheet();
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
-        if (sheet != (*it)->sheet())
+        if (sheet != (*it)->sheet()) {
             continue;
+        }
         rect = range & (*it)->rect();
         rect.translate(-offset.x(), -offset.y());
         if (rect.isValid()) {
@@ -103,17 +106,17 @@ void Binding::update(const Region& region)
     d->model->emitChanged(changedRegion);
 }
 
-void Binding::operator=(const Binding & other)
+void Binding::operator=(const Binding &other)
 {
     d = other.d;
 }
 
-bool Binding::operator==(const Binding& other) const
+bool Binding::operator==(const Binding &other) const
 {
     return d == other.d;
 }
 
-bool Binding::operator<(const Binding& other) const
+bool Binding::operator<(const Binding &other) const
 {
     return d < other.d;
 }
@@ -131,11 +134,11 @@ QHash<QString, QVector<QRect> > BindingModel::cellRegion() const
     return answer;
 }
 
-bool BindingModel::setCellRegion(const QString& regionName)
+bool BindingModel::setCellRegion(const QString &regionName)
 {
     Q_ASSERT(m_region.isValid());
     Q_ASSERT(m_region.firstSheet());
-    const Map* const map = m_region.firstSheet()->map();
+    const Map *const map = m_region.firstSheet()->map();
     const Region region = Region(regionName, map);
     if (!region.isValid()) {
         kDebug() << qPrintable(regionName) << "is not a valid region.";
@@ -162,28 +165,27 @@ bool BindingModel::setCellRegion(const QString& regionName)
     return true;
 }
 
-
 /////// BindingModel
 
-BindingModel::BindingModel(Binding* binding, QObject *parent)
-        : QAbstractTableModel(parent)
-        , m_binding(binding)
+BindingModel::BindingModel(Binding *binding, QObject *parent)
+    : QAbstractTableModel(parent)
+    , m_binding(binding)
 {
 }
 
-bool BindingModel::isCellRegionValid(const QString& regionName) const
+bool BindingModel::isCellRegionValid(const QString &regionName) const
 {
     Q_CHECK_PTR(m_region.firstSheet());
     Q_CHECK_PTR(m_region.firstSheet()->map());
     return Region(regionName, m_region.firstSheet()->map()).isValid();
 }
 
-void BindingModel::emitChanged(const Region& region)
+void BindingModel::emitChanged(const Region &region)
 {
     emit changed(region);
 }
 
-void BindingModel::emitDataChanged(const QRect& rect)
+void BindingModel::emitDataChanged(const QRect &rect)
 {
     const QPoint tl = rect.topLeft();
     const QPoint br = rect.bottomRight();
@@ -191,91 +193,93 @@ void BindingModel::emitDataChanged(const QRect& rect)
     emit dataChanged(index(tl.y(), tl.x()), index(br.y(), br.x()));
 }
 
-QVariant BindingModel::data(const QModelIndex& index, int role) const
+QVariant BindingModel::data(const QModelIndex &index, int role) const
 {
-    if ((m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
+    if ((m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole)) {
         return QVariant();
+    }
     const QPoint offset = m_region.firstRange().topLeft();
-    const Sheet* sheet = m_region.firstSheet();
+    const Sheet *sheet = m_region.firstSheet();
     int row = offset.y() + index.row();
     int column = offset.x() + index.column();
     Value value = sheet->cellStorage()->value(column, row);
 
     switch (role) {
-        case Qt::DisplayRole: {
-            // return the in the cell displayed test
-            Cell c(sheet, column, row);
-            bool showFormula = false;
-            return c.displayText(Style(), &value, &showFormula);
+    case Qt::DisplayRole: {
+        // return the in the cell displayed test
+        Cell c(sheet, column, row);
+        bool showFormula = false;
+        return c.displayText(Style(), &value, &showFormula);
+    }
+    case Qt::EditRole: {
+        // return the actual cell value
+        // KoChart::Value is either:
+        //  - a double (interpreted as a value)
+        //  - a QString (interpreted as a label)
+        //  - a QDateTime (interpreted as a date/time value)
+        //  - Invalid (interpreted as empty)
+        QVariant variant;
+        switch (value.type()) {
+        case Value::Float:
+        case Value::Integer:
+            if (value.format() == Value::fmt_DateTime ||
+                    value.format() == Value::fmt_Date ||
+                    value.format() == Value::fmt_Time) {
+                variant.setValue<QDateTime>(value.asDateTime(sheet->map()->calculationSettings()));
+                break;
+            } // fall through
+        case Value::Boolean:
+        case Value::Complex:
+        case Value::Array:
+            variant.setValue<double>(numToDouble(value.asFloat()));
+            break;
+        case Value::String:
+        case Value::Error:
+            variant.setValue<QString>(value.asString());
+            break;
+        case Value::Empty:
+        case Value::CellRange:
+        default:
+            break;
         }
-        case Qt::EditRole: {
-            // return the actual cell value
-            // KoChart::Value is either:
-            //  - a double (interpreted as a value)
-            //  - a QString (interpreted as a label)
-            //  - a QDateTime (interpreted as a date/time value)
-            //  - Invalid (interpreted as empty)
-            QVariant variant;
-            switch (value.type()) {
-                case Value::Float:
-                case Value::Integer:
-                    if (value.format() == Value::fmt_DateTime ||
-                            value.format() == Value::fmt_Date ||
-                            value.format() == Value::fmt_Time) {
-                        variant.setValue<QDateTime>(value.asDateTime(sheet->map()->calculationSettings()));
-                        break;
-                    } // fall through
-                case Value::Boolean:
-                case Value::Complex:
-                case Value::Array:
-                    variant.setValue<double>(numToDouble(value.asFloat()));
-                    break;
-                case Value::String:
-                case Value::Error:
-                    variant.setValue<QString>(value.asString());
-                    break;
-                case Value::Empty:
-                case Value::CellRange:
-                default:
-                    break;
-            }
-            return variant;
-        }
+        return variant;
+    }
     }
     //kDebug() << index.column() <<"," << index.row() <<"," << variant;
     return QVariant();
 }
 
-const Calligra::Sheets::Region& BindingModel::region() const
+const Calligra::Sheets::Region &BindingModel::region() const
 {
     return m_region;
 }
 
 QVariant BindingModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if ((m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
+    if ((m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole)) {
         return QVariant();
+    }
     const QPoint offset = m_region.firstRange().topLeft();
     const int col = (orientation == Qt::Vertical) ? offset.x() : offset.x() + section;
     const int row = (orientation == Qt::Vertical) ? offset.y() + section : offset.y();
-    const Sheet* sheet = m_region.firstSheet();
+    const Sheet *sheet = m_region.firstSheet();
     const Value value = sheet->cellStorage()->value(col, row);
     return value.asVariant();
 }
 
-int BindingModel::rowCount(const QModelIndex& parent) const
+int BindingModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_region.isEmpty() ? 0 : m_region.firstRange().height();
 }
 
-int BindingModel::columnCount(const QModelIndex& parent) const
+int BindingModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_region.isEmpty() ? 0 : m_region.firstRange().width();
 }
 
-void BindingModel::setRegion(const Region& region)
+void BindingModel::setRegion(const Region &region)
 {
     m_region = region;
 }

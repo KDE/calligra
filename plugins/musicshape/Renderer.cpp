@@ -38,33 +38,35 @@
 
 using namespace MusicCore;
 
-MusicRenderer::MusicRenderer(MusicStyle* style) : m_style(style), m_debug(false)
+MusicRenderer::MusicRenderer(MusicStyle *style) : m_style(style), m_debug(false)
 {
 }
 
-void MusicRenderer::renderSheet(QPainter& painter, Sheet* sheet, int firstSystem, int lastSystem)
+void MusicRenderer::renderSheet(QPainter &painter, Sheet *sheet, int firstSystem, int lastSystem)
 {
     int firstBar = sheet->staffSystem(firstSystem)->firstBar();
     int lastBar = INT_MAX;
-    if (lastSystem < sheet->staffSystemCount()-1) {
-        lastBar = sheet->staffSystem(lastSystem+1)->firstBar()-1;
+    if (lastSystem < sheet->staffSystemCount() - 1) {
+        lastBar = sheet->staffSystem(lastSystem + 1)->firstBar() - 1;
     }
 
     for (int i = 0; i < sheet->partCount(); i++) {
         renderPart(painter, sheet->part(i), firstBar, lastBar);
     }
     for (int i = firstSystem; i <= lastSystem && i < sheet->staffSystemCount(); i++) {
-        StaffSystem* ss = sheet->staffSystem(i);
-        if (ss->indent() == 0) continue;
+        StaffSystem *ss = sheet->staffSystem(i);
+        if (ss->indent() == 0) {
+            continue;
+        }
         int b = ss->firstBar();
-        Bar* bar = sheet->bar(b);
+        Bar *bar = sheet->bar(b);
         qreal by = bar->position().y();
         qreal ind = ss->indent();
 
         for (int p = 0; p < sheet->partCount(); p++) {
-            Part* part = sheet->part(p);
+            Part *part = sheet->part(p);
             for (int s = 0; s < part->staffCount(); s++) {
-                Staff* staff = part->staff(s);
+                Staff *staff = part->staff(s);
                 qreal y = staff->top();
                 qreal dy = staff->lineSpacing();
 
@@ -73,14 +75,14 @@ void MusicRenderer::renderSheet(QPainter& painter, Sheet* sheet, int firstSystem
                     painter.drawLine(QPointF(0, by + y + l * dy), QPointF(ind, by + y + l * dy));
                 }
 
-                Clef* clef = ss->clef(staff);
+                Clef *clef = ss->clef(staff);
                 RenderState foo;
                 qreal x = 15;
                 if (clef) {
                     renderClef(painter, clef, QPointF(x, by), foo, Qt::black, true);
                     x += clef->width() + 15;
                 }
-                KeySignature* ks = staff->lastKeySignatureChange(b);
+                KeySignature *ks = staff->lastKeySignatureChange(b);
                 if (ks) {
                     renderKeySignature(painter, ks, QPointF(x, by), foo, Qt::black, true);
                 }
@@ -89,18 +91,20 @@ void MusicRenderer::renderSheet(QPainter& painter, Sheet* sheet, int firstSystem
     }
 }
 
-void MusicRenderer::renderPart(QPainter& painter, Part* part, int firstBar, int lastBar, const QColor& color)
+void MusicRenderer::renderPart(QPainter &painter, Part *part, int firstBar, int lastBar, const QColor &color)
 {
-    if (lastBar < firstBar) return;
+    if (lastBar < firstBar) {
+        return;
+    }
 
     for (int i = 0; i < part->staffCount(); i++) {
         renderStaff(painter, part->staff(i), firstBar, lastBar, color);
     }
     qreal firstStaff = part->staff(0)->top();
-    int c = part->staffCount()-1;
+    int c = part->staffCount() - 1;
     qreal lastStaff = part->staff(c)->bottom();
     for (int b = firstBar; b <= lastBar && b < part->sheet()->barCount(); b++) {
-        Bar* bar = part->sheet()->bar(b);
+        Bar *bar = part->sheet()->bar(b);
         QPointF p = bar->position();
         painter.drawLine(QPointF(p.x() + bar->size(), p.y() + firstStaff), QPointF(p.x() + bar->size(), p.y() + lastStaff));
         if (m_debug) {
@@ -122,8 +126,8 @@ void MusicRenderer::renderPart(QPainter& painter, Part* part, int firstBar, int 
             QPointF pos = bar->position();
             qreal w = bar->size();
             for (int sid = 0; sid < part->staffCount(); sid++) {
-                Staff* s = part->staff(sid);
-                renderRest(painter, WholeNote, pos + QPointF(w/2, s->top() + s->lineSpacing()), color);
+                Staff *s = part->staff(sid);
+                renderRest(painter, WholeNote, pos + QPointF(w / 2, s->top() + s->lineSpacing()), color);
             }
         }
     }
@@ -132,12 +136,12 @@ void MusicRenderer::renderPart(QPainter& painter, Part* part, int firstBar, int 
     }
 }
 
-void MusicRenderer::renderStaff(QPainter& painter, Staff *staff, int firstBar, int lastBar, const QColor& color)
+void MusicRenderer::renderStaff(QPainter &painter, Staff *staff, int firstBar, int lastBar, const QColor &color)
 {
     qreal dy = staff->lineSpacing();
     qreal y = staff->top();
     for (int b = firstBar; b <= lastBar && b < staff->part()->sheet()->barCount(); b++) {
-        Bar* bar = staff->part()->sheet()->bar(b);
+        Bar *bar = staff->part()->sheet()->bar(b);
         QPointF p = bar->position();
         QPointF prep = bar->prefixPosition() + QPointF(bar->prefix(), 0);
         painter.setPen(m_style->staffLinePen(color));
@@ -152,7 +156,7 @@ void MusicRenderer::renderStaff(QPainter& painter, Staff *staff, int firstBar, i
         }
         RenderState state;
         for (int e = 0; e < bar->staffElementCount(staff); e++) {
-            StaffElement* se = bar->staffElement(staff, e);
+            StaffElement *se = bar->staffElement(staff, e);
             if (se->startTime() == 0) {
                 renderStaffElement(painter, bar->staffElement(staff, e), prep, state, color);
             } else {
@@ -162,14 +166,14 @@ void MusicRenderer::renderStaff(QPainter& painter, Staff *staff, int firstBar, i
     }
 }
 
-void MusicRenderer::renderVoice(QPainter& painter, Voice *voice, int firstBar, int lastBar, const QColor& color)
+void MusicRenderer::renderVoice(QPainter &painter, Voice *voice, int firstBar, int lastBar, const QColor &color)
 {
     RenderState state;
     state.clef = 0;
     for (int b = firstBar; b <= lastBar && b < voice->part()->sheet()->barCount(); b++) {
-        Bar* bar = voice->part()->sheet()->bar(b);
+        Bar *bar = voice->part()->sheet()->bar(b);
         QPointF p = bar->position();
-        VoiceBar* vb = voice->bar(bar);
+        VoiceBar *vb = voice->bar(bar);
         for (int e = 0; e < vb->elementCount(); e++) {
             if (vb->element(e)->staff()) {
                 state.clef = vb->element(e)->staff()->lastClefChange(b, 0);
@@ -179,12 +183,14 @@ void MusicRenderer::renderVoice(QPainter& painter, Voice *voice, int firstBar, i
     }
 }
 
-void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, Voice* voice, const QPointF& pos, RenderState& state, const QColor& color)
+void MusicRenderer::renderElement(QPainter &painter, VoiceElement *me, Voice *voice, const QPointF &pos, RenderState &state, const QColor &color)
 {
-    Q_UNUSED( state ); // unused for now, but will probably be used again in the future
+    Q_UNUSED(state);   // unused for now, but will probably be used again in the future
 
     qreal top = 0;
-    if (me->staff()) top += me->staff()->top();
+    if (me->staff()) {
+        top += me->staff()->top();
+    }
     if (m_debug) {
         painter.setPen(QPen(Qt::blue));
         painter.drawLine(pos + QPointF(me->x(), top + me->y() - 4), pos + QPointF(me->x(), top + me->y() + me->height() + 4));
@@ -198,11 +204,13 @@ void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, Voice* vo
     }
 
     // TODO: make this less hacky
-    Chord *c = dynamic_cast<Chord*>(me);
-    if (c) renderChord(painter, c, voice, pos, color);
+    Chord *c = dynamic_cast<Chord *>(me);
+    if (c) {
+        renderChord(painter, c, voice, pos, color);
+    }
 }
 
-void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, const QPointF& pos, RenderState& state, const QColor& color)
+void MusicRenderer::renderStaffElement(QPainter &painter, MusicCore::StaffElement *se, const QPointF &pos, RenderState &state, const QColor &color)
 {
     qreal top = 0;
     top += se->staff()->top();
@@ -215,38 +223,49 @@ void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElemen
         painter.drawLine(pos + QPointF(se->x() - 10, top + se->y() + se->height()), pos + QPointF(se->x() + se->width() + 10, top + se->y() + se->height()));
     }
 
-    Clef *cl = dynamic_cast<Clef*>(se);
-    if (cl) renderClef(painter, cl, pos, state, color);
-    KeySignature *ks = dynamic_cast<KeySignature*>(se);
-    if (ks) renderKeySignature(painter, ks, pos, state, color);
-    TimeSignature* ts = dynamic_cast<TimeSignature*>(se);
-    if (ts) renderTimeSignature(painter, ts, pos, color);
+    Clef *cl = dynamic_cast<Clef *>(se);
+    if (cl) {
+        renderClef(painter, cl, pos, state, color);
+    }
+    KeySignature *ks = dynamic_cast<KeySignature *>(se);
+    if (ks) {
+        renderKeySignature(painter, ks, pos, state, color);
+    }
+    TimeSignature *ts = dynamic_cast<TimeSignature *>(se);
+    if (ts) {
+        renderTimeSignature(painter, ts, pos, color);
+    }
 }
 
-
-void MusicRenderer::renderClef(QPainter& painter, Clef *c, const QPointF& pos, RenderState& state, const QColor& color, bool ignoreOwnPos)
+void MusicRenderer::renderClef(QPainter &painter, Clef *c, const QPointF &pos, RenderState &state, const QColor &color, bool ignoreOwnPos)
 {
     Q_UNUSED(color);
     state.clef = c;
-    Staff* s = c->staff();
+    Staff *s = c->staff();
     m_style->renderClef(painter, pos.x() + (ignoreOwnPos ? 0 : c->x()), pos.y() + s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
 }
 
-void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, const QPointF& pos, RenderState& state, const QColor& color, bool ignoreOwnPos)
+void MusicRenderer::renderKeySignature(QPainter &painter, KeySignature *ks, const QPointF &pos, RenderState &state, const QColor &color, bool ignoreOwnPos)
 {
     Q_UNUSED(color);
-    Staff * s = ks->staff();
+    Staff *s = ks->staff();
     qreal curx = pos.x() + (ignoreOwnPos ? 0 : ks->x());
     // draw naturals for sharps
     int idx = 3;
     for (int i = 0; i < 7; i++) {
         if (ks->cancel(idx) > 0) {
             int line = 10;
-            if (state.clef) line = state.clef->pitchToLine(idx);
+            if (state.clef) {
+                line = state.clef->pitchToLine(idx);
+            }
 
-            while (line < 0) line += 7;
-            while (line >= 6) line -= 7;
-            m_style->renderAccidental( painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, 0 );
+            while (line < 0) {
+                line += 7;
+            }
+            while (line >= 6) {
+                line -= 7;
+            }
+            m_style->renderAccidental(painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, 0);
 
             curx += 6;
         }
@@ -258,12 +277,18 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, cons
     for (int i = 0; i < 7; i++) {
         if (ks->cancel(idx) < 0) {
             int line = 10;
-            if (state.clef) line = state.clef->pitchToLine(idx);
+            if (state.clef) {
+                line = state.clef->pitchToLine(idx);
+            }
 
-            while (line < 0) line += 7;
-            while (line >= 6) line -= 7;
+            while (line < 0) {
+                line += 7;
+            }
+            while (line >= 6) {
+                line -= 7;
+            }
 
-            m_style->renderAccidental( painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, 0 );
+            m_style->renderAccidental(painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, 0);
 
             curx += 6;
         }
@@ -275,11 +300,17 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, cons
     for (int i = 0; i < 7; i++) {
         if (ks->accidentals(idx) > 0) {
             int line = 10;
-            if (state.clef) line = state.clef->pitchToLine(idx);
+            if (state.clef) {
+                line = state.clef->pitchToLine(idx);
+            }
 
-            while (line < 0) line += 7;
-            while (line >= 6) line -= 7;
-            m_style->renderAccidental( painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, 1 );
+            while (line < 0) {
+                line += 7;
+            }
+            while (line >= 6) {
+                line -= 7;
+            }
+            m_style->renderAccidental(painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, 1);
 
             curx += 6;
         }
@@ -291,12 +322,18 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, cons
     for (int i = 0; i < 7; i++) {
         if (ks->accidentals(idx) < 0) {
             int line = 10;
-            if (state.clef) line = state.clef->pitchToLine(idx);
+            if (state.clef) {
+                line = state.clef->pitchToLine(idx);
+            }
 
-            while (line < 0) line += 7;
-            while (line >= 6) line -= 7;
+            while (line < 0) {
+                line += 7;
+            }
+            while (line >= 6) {
+                line -= 7;
+            }
 
-            m_style->renderAccidental( painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, -1 );
+            m_style->renderAccidental(painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, -1);
 
             curx += 6;
         }
@@ -304,21 +341,21 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, cons
     }
 }
 
-void MusicRenderer::renderTimeSignature(QPainter& painter, TimeSignature* ts, const QPointF& pos, const QColor& color)
+void MusicRenderer::renderTimeSignature(QPainter &painter, TimeSignature *ts, const QPointF &pos, const QColor &color)
 {
     Q_UNUSED(color);
-    Staff* s = ts->staff();
+    Staff *s = ts->staff();
     qreal hh = 0.5 * (s->lineCount() - 1) * s->lineSpacing();
-    m_style->renderTimeSignatureNumber( painter, pos.x() + ts->x(), pos.y() + s->top() + hh, ts->width(), ts->beats());
-    m_style->renderTimeSignatureNumber( painter, pos.x() + ts->x(), pos.y() + s->top() + 2*hh, ts->width(), ts->beat());
+    m_style->renderTimeSignatureNumber(painter, pos.x() + ts->x(), pos.y() + s->top() + hh, ts->width(), ts->beats());
+    m_style->renderTimeSignatureNumber(painter, pos.x() + ts->x(), pos.y() + s->top() + 2 * hh, ts->width(), ts->beat());
 }
 
-void MusicRenderer::renderRest(QPainter& painter, Duration duration, const QPointF& pos, const QColor& color)
+void MusicRenderer::renderRest(QPainter &painter, Duration duration, const QPointF &pos, const QColor &color)
 {
     m_style->renderRest(painter, pos.x(), pos.y(), duration, color);
 }
 
-void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, const QPointF& ref, const QColor& color)
+void MusicRenderer::renderChord(QPainter &painter, Chord *chord, Voice *voice, const QPointF &ref, const QColor &color)
 {
     qreal x = chord->x();
     if (chord->noteCount() == 0) { // a rest
@@ -327,55 +364,59 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
         return;
     }
     int topLine = 0, bottomLine = 0;
-    VoiceBar* vb = chord->voiceBar();
-    Bar* bar = vb->bar();
-    Sheet* sheet = voice->part()->sheet();
+    VoiceBar *vb = chord->voiceBar();
+    Bar *bar = vb->bar();
+    Sheet *sheet = voice->part()->sheet();
     int barIdx = bar->sheet()->indexOfBar(bar);
     qreal topy = 1e9, bottomy = -1e9;
-    Staff* topStaff = 0, *bottomStaff = 0;
+    Staff *topStaff = 0, *bottomStaff = 0;
 
     qreal mainNoteX = (chord->stemDirection() == StemUp ? chord->stemX() - 6 : chord->stemX());
     qreal alternateNoteX = mainNoteX + (chord->stemDirection() == StemUp ? 6 : -6);
     bool prevAlternate = false;
     qreal maxNoteX = 0;
 
-    QMultiMap<Staff*, int> dots;
+    QMultiMap<Staff *, int> dots;
 
-    Chord* nextChord = 0;
+    Chord *nextChord = 0;
 
     for (int i = 0; i < chord->noteCount(); i++) {
         Note *n = chord->note(i);
-        Staff * s = n->staff();
-        Clef* clef = s->lastClefChange(barIdx);
+        Staff *s = n->staff();
+        Clef *clef = s->lastClefChange(barIdx);
         int line = 10;
-        if (clef) line = clef->pitchToLine(n->pitch());
+        if (clef) {
+            line = clef->pitchToLine(n->pitch());
+        }
 
         qreal noteX = mainNoteX;
         if (i > 0) {
-            int prevPitch = chord->note(i-1)->pitch();
+            int prevPitch = chord->note(i - 1)->pitch();
             if (abs(prevPitch - n->pitch()) <= 1 && !prevAlternate) {
                 noteX = alternateNoteX;
             }
         }
-        if (i < chord->noteCount()-1 && chord->stemDirection() == StemDown) {
+        if (i < chord->noteCount() - 1 && chord->stemDirection() == StemDown) {
             int pitch = n->pitch();
-            int nPitch = chord->note(i+1)->pitch();
+            int nPitch = chord->note(i + 1)->pitch();
             if (abs(pitch - nPitch) <= 1 && !prevAlternate) {
                 noteX = alternateNoteX;
             }
         }
         prevAlternate = noteX != mainNoteX;
-        if (noteX > maxNoteX) maxNoteX = noteX;
+        if (noteX > maxNoteX) {
+            maxNoteX = noteX;
+        }
 
         if (line > 9) { // lines under the bar
             painter.setPen(m_style->staffLinePen(color));
-            for (int i = 10; i <= line; i+= 2) {
+            for (int i = 10; i <= line; i += 2) {
                 qreal y = s->top() + i * s->lineSpacing() / 2;
                 painter.drawLine(ref + QPointF(noteX - 4, y), ref + QPointF(noteX + 10, y));
             }
         } else if (line < -1) { // lines above the bar
             painter.setPen(m_style->staffLinePen(color));
-            for (int i = -2; i >= line; i-= 2) {
+            for (int i = -2; i >= line; i -= 2) {
                 qreal y = s->top() + i * s->lineSpacing() / 2;
                 painter.drawLine(ref + QPointF(noteX - 4, y), ref + QPointF(noteX + 10, y));
             }
@@ -393,11 +434,11 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
             bottomStaff = s;
         }
 
-        m_style->renderNoteHead( painter, ref.x() + noteX, ref.y() + s->top() + line * s->lineSpacing() / 2, chord->duration(), color );
+        m_style->renderNoteHead(painter, ref.x() + noteX, ref.y() + s->top() + line * s->lineSpacing() / 2, chord->duration(), color);
 
         // render accidentals
         if (n->drawAccidentals()) {
-            m_style->renderAccidental( painter, ref.x() + x, ref.y() + /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2, n->accidentals(), color );
+            m_style->renderAccidental(painter, ref.x() + x, ref.y() + /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2, n->accidentals(), color);
         }
 
         dots.insert(s, line);
@@ -409,8 +450,10 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
                 bool afterCurrent = false;
                 for (int e = 0; e < vb->elementCount(); e++) {
                     if (afterCurrent) {
-                        nextChord = dynamic_cast<Chord*>(vb->element(e));
-                        if (nextChord) break;
+                        nextChord = dynamic_cast<Chord *>(vb->element(e));
+                        if (nextChord) {
+                            break;
+                        }
                     } else {
                         if (vb->element(e) == chord) {
                             afterCurrent = true;
@@ -419,12 +462,14 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
                 }
                 if (!nextChord) {
                     // check the next bar
-                    int nextBar = sheet->indexOfBar(bar)+1;
+                    int nextBar = sheet->indexOfBar(bar) + 1;
                     if (nextBar < sheet->barCount()) {
-                        VoiceBar* nextVB = voice->bar(nextBar);
+                        VoiceBar *nextVB = voice->bar(nextBar);
                         for (int e = 0; e < nextVB->elementCount(); e++) {
-                            nextChord = dynamic_cast<Chord*>(nextVB->element(e));
-                            if (nextChord) break;
+                            nextChord = dynamic_cast<Chord *>(nextVB->element(e));
+                            if (nextChord) {
+                                break;
+                            }
                         }
                     }
                 }
@@ -458,7 +503,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
     // calculate correct positioning of dots
     // render dots of notes
     painter.setPen(m_style->noteDotPen(color));
-    foreach (Staff* s, dots.keys()) {
+    foreach (Staff *s, dots.keys()) {
         QList<int> lines = dots.values(s);
         qSort(lines);
 
@@ -471,9 +516,9 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
             }
             if (line == lastLine) {
                 if (moveGroupDown) {
-                    lines[i-1] += 2;
-                    for (int j = i-2; j >= 0; j--) {
-                        if (lines[j] == lines[j+1]) {
+                    lines[i - 1] += 2;
+                    for (int j = i - 2; j >= 0; j--) {
+                        if (lines[j] == lines[j + 1]) {
                             lines[j] += 2;
                         } else {
                             break;
@@ -507,13 +552,13 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
             painter.drawLine(ref + QPointF(stemX, chord->stemEndY()),
                              ref + QPointF(stemX, bottomStaff->top() + bottomLine * bottomStaff->lineSpacing() / 2));
             if (chord->beamType(0) == BeamFlag) {
-                m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + chord->stemEndY(), chord->duration(), stemsUp, color );
+                m_style->renderNoteFlags(painter, ref.x() + stemX, ref.y() + chord->stemEndY(), chord->duration(), stemsUp, color);
             }
         } else {
             painter.drawLine(ref + QPointF(stemX, topStaff->top() + topLine * topStaff->lineSpacing() / 2),
                              ref + QPointF(stemX, chord->stemEndY()));
             if (chord->beamType(0) == BeamFlag) {
-                m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + chord->stemEndY(), chord->duration(), stemsUp, color );
+                m_style->renderNoteFlags(painter, ref.x() + stemX, ref.y() + chord->stemEndY(), chord->duration(), stemsUp, color);
             }
         }
 
@@ -521,7 +566,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
         painter.setBrush(QBrush(color));
         for (int i = 0; i < chord->beamCount(); i++) {
             if (chord->beamType(i) == BeamStart) {
-                const Chord* endChord = chord->beamEnd(i);
+                const Chord *endChord = chord->beamEnd(i);
 
                 QPointF beamStart(chord->stemX(), chord->stemEndY());
                 QPointF beamEnd(endChord->stemX(), endChord->stemEndY());
@@ -533,7 +578,6 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
                     beamEnd -= QPointF(0, bottomStaff->lineSpacing() * i);
                 }
 
-
                 QPointF dir(0, (stemsUp ? 1 : -1) * m_style->beamLineWidth());
                 QPointF p[4];
                 p[0] = ref + beamStart;
@@ -544,7 +588,9 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
             } else if (chord->beamType(i) == BeamForwardHook || chord->beamType(i) == BeamBackwardHook) {
                 QPointF beamStart(chord->stemX(), chord->stemEndY());
                 qreal dir = 6;
-                if (chord->beamType(i) == BeamBackwardHook) dir = -dir;
+                if (chord->beamType(i) == BeamBackwardHook) {
+                    dir = -dir;
+                }
                 if (stemsUp) {
                     beamStart += QPointF(0, topStaff->lineSpacing() * i);
                 } else {
@@ -566,7 +612,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
     }
 }
 
-void MusicRenderer::renderNote(QPainter& painter, Duration duration, const QPointF& pos, qreal stemLength, const QColor& color)
+void MusicRenderer::renderNote(QPainter &painter, Duration duration, const QPointF &pos, qreal stemLength, const QColor &color)
 {
     m_style->renderNoteHead(painter, pos.x(), pos.y(), duration, color);
 
@@ -575,11 +621,11 @@ void MusicRenderer::renderNote(QPainter& painter, Duration duration, const QPoin
         painter.drawLine(pos + QPointF(6, -stemLength), pos + QPointF(6, 0));
     }
     if (duration <= EighthNote) {
-        m_style->renderNoteFlags(painter, pos.x()+6, pos.y() - stemLength, duration, true, color);
+        m_style->renderNoteFlags(painter, pos.x() + 6, pos.y() - stemLength, duration, true, color);
     }
 }
 
-void MusicRenderer::renderAccidental(QPainter& painter, int accidentals, const QPointF& pos, const QColor& color)
+void MusicRenderer::renderAccidental(QPainter &painter, int accidentals, const QPointF &pos, const QColor &color)
 {
-    m_style->renderAccidental( painter, pos.x(), pos.y(), accidentals, color );
+    m_style->renderAccidental(painter, pos.x(), pos.y(), accidentals, color);
 }

@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #include "FileSystemModel.h"
 #include <kdirlister.h>
 #include <kdirmodel.h>
@@ -35,7 +33,7 @@ public:
 
 const QString FileSystemModel::Private::drivesPath("special://drives");
 
-FileSystemModel::FileSystemModel(QObject* parent)
+FileSystemModel::FileSystemModel(QObject *parent)
     : QAbstractListModel(parent), d(new Private)
 {
     d->dir.setFilter(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
@@ -55,33 +53,33 @@ FileSystemModel::~FileSystemModel()
     delete d;
 }
 
-QVariant FileSystemModel::data(const QModelIndex& index, int role) const
+QVariant FileSystemModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid()) {
         KFileItem item(KFileItem::Unknown, KFileItem::Unknown, d->list.at(index.row()).absoluteFilePath(), false);
         if (!item.isNull()) {
-            switch(role) {
-                case FileNameRole:
-                    return item.name();
-                    break;
-                case FilePathRole:
-                    return item.mostLocalUrl().toLocalFile();
-                    break;
-                case FileIconRole:
-                     return item.mimetype() == "inode/directory" ? "image://icon/inode-directory" : QString("image://recentimage/%1").arg(item.url().toLocalFile());
-                    break;
-                case FileTypeRole:
-                    return item.mimetype();
-                    break;
-                case FileDateRole:
-                    return item.time(KFileItem::ModificationTime).dateTime().toString(Qt::SystemLocaleShortDate);
+            switch (role) {
+            case FileNameRole:
+                return item.name();
+                break;
+            case FilePathRole:
+                return item.mostLocalUrl().toLocalFile();
+                break;
+            case FileIconRole:
+                return item.mimetype() == "inode/directory" ? "image://icon/inode-directory" : QString("image://recentimage/%1").arg(item.url().toLocalFile());
+                break;
+            case FileTypeRole:
+                return item.mimetype();
+                break;
+            case FileDateRole:
+                return item.time(KFileItem::ModificationTime).dateTime().toString(Qt::SystemLocaleShortDate);
             }
         }
     }
     return QVariant();
 }
 
-int FileSystemModel::rowCount(const QModelIndex&) const
+int FileSystemModel::rowCount(const QModelIndex &) const
 {
     return d->list.count();
 }
@@ -106,7 +104,7 @@ QString FileSystemModel::path()
     }
 }
 
-void FileSystemModel::setPath(const QString& path)
+void FileSystemModel::setPath(const QString &path)
 {
     if (path != d->dir.path()) {
         if (d->list.count() > 0) {
@@ -154,7 +152,7 @@ QString FileSystemModel::filter()
     return d->dir.nameFilters().join(" ");
 }
 
-void FileSystemModel::setFilter(const QString& filter)
+void FileSystemModel::setFilter(const QString &filter)
 {
     d->dir.setNameFilters(filter.split(" "));
 }

@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include "WebBrowserFactory.h"
 #include <formeditor/WidgetInfo.h>
 #include <formeditor/formIO.h>
@@ -32,23 +31,23 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
-  : KexiDBFactoryBase(parent, "webbrowser")
+WebBrowserFactory::WebBrowserFactory(QObject *parent, const QVariantList &args)
+    : KexiDBFactoryBase(parent, "webbrowser")
 {
     Q_UNUSED(args);
-    KexiDataAwareWidgetInfo* webBrowser = new KexiDataAwareWidgetInfo(this);
+    KexiDataAwareWidgetInfo *webBrowser = new KexiDataAwareWidgetInfo(this);
     webBrowser->setIconName(koIconName("web_browser"));
     webBrowser->setClassName("WebBrowserWidget");
     webBrowser->setName(i18n("Web Browser"));
     webBrowser->setNamePrefix(
         i18nc("A prefix for identifiers of web browser widgets. Based on that, identifiers such as "
-            "webBrowser1, webBrowser2 are generated. "
-            "This string can be used to refer the widget object as variables in programming "
-            "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
-            "should start with lower case letter and if there are subsequent words, these should "
-            "start with upper case letter. Example: smallCamelCase. "
-            "Moreover, try to make this prefix as short as possible.",
-            "webBrowser"));
+              "webBrowser1, webBrowser2 are generated. "
+              "This string can be used to refer the widget object as variables in programming "
+              "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+              "should start with lower case letter and if there are subsequent words, these should "
+              "start with upper case letter. Example: smallCamelCase. "
+              "Moreover, try to make this prefix as short as possible.",
+              "webBrowser"));
     webBrowser->setDescription(i18n("Web widget with browsing features."));
     webBrowser->setInlineEditingEnabledWhenDataSourceSet(false);
     addClass(webBrowser);
@@ -62,20 +61,21 @@ WebBrowserFactory::~WebBrowserFactory()
 
 }
 
-QWidget* WebBrowserFactory::createWidget(const QByteArray& classname,
-                            QWidget* parent,
-                            const char* name,
-                            KFormDesigner::Container* container,
-                            KFormDesigner::WidgetFactory::CreateWidgetOptions options)
+QWidget *WebBrowserFactory::createWidget(const QByteArray &classname,
+        QWidget *parent,
+        const char *name,
+        KFormDesigner::Container *container,
+        KFormDesigner::WidgetFactory::CreateWidgetOptions options)
 {
     Q_UNUSED(options);
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(name, classname));
 
-    if (classname == "WebBrowserWidget")
+    if (classname == "WebBrowserWidget") {
         w = new WebBrowserWidget(parent);
+    }
 
-    if (w){
+    if (w) {
         w->setObjectName(name);
         kDebug() << w << w->objectName() << "created";
         return w;
@@ -85,7 +85,7 @@ QWidget* WebBrowserFactory::createWidget(const QByteArray& classname,
 }
 
 bool WebBrowserFactory::createMenuActions(const QByteArray &classname, QWidget *w,
-                                    QMenu *menu, KFormDesigner::Container *container)
+        QMenu *menu, KFormDesigner::Container *container)
 {
     Q_UNUSED(classname);
     Q_UNUSED(w);
@@ -94,20 +94,20 @@ bool WebBrowserFactory::createMenuActions(const QByteArray &classname, QWidget *
     return false;
 }
 
-bool WebBrowserFactory::startInlineEditing(InlineEditorCreationArguments& args)
+bool WebBrowserFactory::startInlineEditing(InlineEditorCreationArguments &args)
 {
     Q_UNUSED(args);
     return false;
 }
 
 bool WebBrowserFactory::previewWidget(const QByteArray &classname,
-                                QWidget *widget, KFormDesigner::Container *)
+                                      QWidget *widget, KFormDesigner::Container *)
 {
     Q_UNUSED(classname);
     Q_UNUSED(widget);
     return true;
 }
-     
+
 K_EXPORT_KEXIFORMWIDGETS_PLUGIN(WebBrowserFactory, webbrowser)
 
 #include "WebBrowserFactory.moc"

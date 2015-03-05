@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                  Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
    Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
@@ -31,12 +31,13 @@
 class FormulaCursor;
 
 /**
- * @short Implementation of an unknown element. 
+ * @short Implementation of an unknown element.
  *
  * Used when we see a tag that we do not recognise. This element draws nothing, takes up
- * no space, and ignores any calls to insert children etc. 
+ * no space, and ignores any calls to insert children etc.
  */
-class KOFORMULA_EXPORT UnknownElement : public BasicElement {
+class KOFORMULA_EXPORT UnknownElement : public BasicElement
+{
 public:
     /// The standard constructor
     explicit UnknownElement(BasicElement *parent = 0);
@@ -48,44 +49,44 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList< BasicElement* > childElements() const;
-    
+    virtual const QList< BasicElement * > childElements() const;
+
     /**
      * Remove a child element
      * @param element The BasicElement to remove
-     */ 
+     */
     //void removeChild( BasicElement* element );
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint(QPainter &painter, AttributeManager *am);
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout(const AttributeManager *am);
 
     /// inherited from BasicElement
-    virtual bool acceptCursor ( const FormulaCursor& cursor );
-    
+    virtual bool acceptCursor(const FormulaCursor &cursor);
+
     /// @return The element's ElementType
     ElementType elementType() const;
 
 protected:
     /// Read all attributes - reimplemented from BasicElement
-    bool readMathMLAttributes( const KoXmlElement& element );
+    bool readMathMLAttributes(const KoXmlElement &element);
 
     /// Read root contents - reimplemented from BasicElement
-    bool readMathMLContent( const KoXmlElement& element );
+    bool readMathMLContent(const KoXmlElement &element);
 
     /// Write element attributes - reimplemented from BasicElement
-    void writeMathMLAttributes( KoXmlWriter* writer ) const;
+    void writeMathMLAttributes(KoXmlWriter *writer) const;
 
     /// Write root contents - reimplemented from BasicElement
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    void writeMathMLContent(KoXmlWriter *writer, const QString &ns) const;
 
 private:
 };

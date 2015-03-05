@@ -32,15 +32,15 @@ public:
     virtual ~KPrAnimate();
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual bool saveOdf(KoPASavingContext & paContext) const;
+    virtual bool saveOdf(KoPASavingContext &paContext) const;
     virtual void init(KPrAnimationCache *animationCache, int step);
     virtual bool saveAttribute(KoPASavingContext &paContext) const;
 protected:
     virtual void next(int currentTime);
 
 private:
-    KPrAnimationAttribute * m_attribute;
-    KPrAnimationValue * m_values;
+    KPrAnimationAttribute *m_attribute;
+    KPrAnimationValue *m_values;
 };
 
 #endif /* KPRANIMATE_H */

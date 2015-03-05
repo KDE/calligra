@@ -25,7 +25,7 @@
 #include <QDomDocument>
 #include <QImage>
 
-QImage createQImageFromMask(const KisMaskGenerator& generator)
+QImage createQImageFromMask(const KisMaskGenerator &generator)
 {
     QImage image(10, 10, QImage::Format_ARGB32);
     for (int i = 0; i < 10; ++i) {
@@ -44,7 +44,7 @@ void KisMaskGeneratorTest::testCircleSerialisation()
     QDomElement root = doc.createElement("cmg");
     doc.appendChild(root);
     cmg.toXML(doc, root);
-    KisMaskGenerator* cmg2 = KisMaskGenerator::fromXML(root);
+    KisMaskGenerator *cmg2 = KisMaskGenerator::fromXML(root);
     createQImageFromMask(cmg).save("circle1.png");
     createQImageFromMask(*cmg2).save("circle2.png");
 
@@ -84,7 +84,7 @@ void KisMaskGeneratorTest::testSquareSerialisation()
         }
     }
 
-    KisMaskGenerator* cmg2 = KisMaskGenerator::fromXML(root);
+    KisMaskGenerator *cmg2 = KisMaskGenerator::fromXML(root);
     QDomDocument doc2 = QDomDocument("cmg");
     QDomElement root2 = doc2.createElement("cmg");
     doc2.appendChild(root2);

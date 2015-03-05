@@ -43,18 +43,18 @@ public:
     ~ReadOnlyRegionModel();
 
     // QAbstractTableModel interface
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex& index) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex parent(const QModelIndex &index) const;
 
     // QAbstractProxyModel interface
-    virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
-    virtual QModelIndex mapToSource(const QModelIndex& proxyIndex) const;
+    virtual QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
+    virtual QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace KSpread

@@ -23,7 +23,6 @@
 #include <QVector>
 #include <krita_export.h>
 
-
 class BRUSH_EXPORT KisQImagePyramid
 {
 public:

@@ -37,33 +37,33 @@
 
 #include <kdebug.h>
 
-class KexiAssistantPage::Private {
-public:    
-    explicit Private(KexiAssistantPage* q_) : q(q_), backButton(0), nextButton(0)
+class KexiAssistantPage::Private
+{
+public:
+    explicit Private(KexiAssistantPage *q_) : q(q_), backButton(0), nextButton(0)
     {
     }
-    void setButtonVisible(KexiLinkWidget** button, bool back, bool set,
+    void setButtonVisible(KexiLinkWidget **button, bool back, bool set,
                           int x, int y);
     QColor linkColor() const;
-    KexiAssistantPage * const q;
-    QGridLayout* mainLyr;
-    KexiTitleLabel* titleLabel;
-    QLabel* descriptionLabel;
-    KexiLinkWidget* backButton;
-    KexiLinkWidget* nextButton;
-    KexiCloseButton* cancelButton;
+    KexiAssistantPage *const q;
+    QGridLayout *mainLyr;
+    KexiTitleLabel *titleLabel;
+    QLabel *descriptionLabel;
+    KexiLinkWidget *backButton;
+    KexiLinkWidget *nextButton;
+    KexiCloseButton *cancelButton;
     QPointer<QWidget> focusWidget;
 };
 
-void KexiAssistantPage::Private::setButtonVisible(KexiLinkWidget** button,
-                                                  bool back, /* or next */
-                                                  bool set, int x, int y)
+void KexiAssistantPage::Private::setButtonVisible(KexiLinkWidget **button,
+        bool back, /* or next */
+        bool set, int x, int y)
 {
     if (set) {
         if (*button) {
             (*button)->show();
-        }
-        else {
+        } else {
             QString text;
             if (back) {
                 *button = new KexiLinkWidget(
@@ -71,8 +71,7 @@ void KexiAssistantPage::Private::setButtonVisible(KexiLinkWidget** button,
                     KStandardGuiItem::back().plainText(), q);
                 (*button)->setFormat(
                     i18nc("Back button arrow: back button in assistant (wizard)", "‹ %L"));
-            }
-            else {
+            } else {
                 *button = new KexiLinkWidget(
                     QLatin1String("KexiAssistantPage:next"),
                     i18nc("Button text: Next page in assistant (wizard)", "Next"), q);
@@ -84,8 +83,7 @@ void KexiAssistantPage::Private::setButtonVisible(KexiLinkWidget** button,
             if (back) {
                 (*button)->setContentsMargins(0, 0, space, 0);
                 align = Qt::AlignTop | Qt::AlignLeft;
-            }
-            else {
+            } else {
                 (*button)->setContentsMargins(space, 0, 0, 0);
                 align = Qt::AlignTop | Qt::AlignRight;
             }
@@ -94,22 +92,22 @@ void KexiAssistantPage::Private::setButtonVisible(KexiLinkWidget** button,
             connect(*button, SIGNAL(linkActivated(QString)),
                     q, SLOT(slotLinkActivated(QString)));
         }
-    }
-    else {
-        if (*button)
+    } else {
+        if (*button) {
             (*button)->hide();
+        }
     }
 }
 
 // ----
 
-KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& description, QWidget* parent)
- : QWidget(parent)
- , d(new Private(this))
+KexiAssistantPage::KexiAssistantPage(const QString &title, const QString &description, QWidget *parent)
+    : QWidget(parent)
+    , d(new Private(this))
 {
-/*0         [titleLabel]       [cancel]
-  1  [back] [descriptionLabel]   [next]
-  2         [contents]                 */
+    /*0         [titleLabel]       [cancel]
+      1  [back] [descriptionLabel]   [next]
+      2         [contents]                 */
     d->mainLyr = new QGridLayout(this);
     d->mainLyr->setContentsMargins(0, 0, 0, 0);
     d->mainLyr->setColumnStretch(1, 1);
@@ -121,10 +119,10 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
     d->descriptionLabel->setContentsMargins(2, 0, 0, space);
     d->descriptionLabel->setWordWrap(true);
     d->mainLyr->addWidget(d->descriptionLabel, 1, 1, Qt::AlignTop);
-    
+
     d->cancelButton = new KexiCloseButton;
     connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(slotCancel()));
-    d->mainLyr->addWidget(d->cancelButton, 0, 2, Qt::AlignTop|Qt::AlignRight);
+    d->mainLyr->addWidget(d->cancelButton, 0, 2, Qt::AlignTop | Qt::AlignRight);
 }
 
 KexiAssistantPage::~KexiAssistantPage()
@@ -132,7 +130,7 @@ KexiAssistantPage::~KexiAssistantPage()
     delete d;
 }
 
-void KexiAssistantPage::setDescription(const QString& text)
+void KexiAssistantPage::setDescription(const QString &text)
 {
     d->descriptionLabel->setText(text);
 }
@@ -147,24 +145,23 @@ void KexiAssistantPage::setNextButtonVisible(bool set)
     d->setButtonVisible(&d->nextButton, false/*next*/, set, 1, 2);
 }
 
-void KexiAssistantPage::setContents(QWidget* widget)
+void KexiAssistantPage::setContents(QWidget *widget)
 {
     widget->setContentsMargins(0, 0, 0, 0);
     d->mainLyr->addWidget(widget, 2, 1, 2, 2);
 }
 
-void KexiAssistantPage::setContents(QLayout* layout)
+void KexiAssistantPage::setContents(QLayout *layout)
 {
     layout->setContentsMargins(0, 0, 0, 0);
     d->mainLyr->addLayout(layout, 2, 1);
 }
 
-void KexiAssistantPage::slotLinkActivated(const QString& link)
+void KexiAssistantPage::slotLinkActivated(const QString &link)
 {
     if (d->backButton && link == d->backButton->link()) {
         back();
-    }
-    else if (d->nextButton && link == d->nextButton->link()) {
+    } else if (d->nextButton && link == d->nextButton->link()) {
         next();
     }
 }
@@ -177,7 +174,7 @@ void KexiAssistantPage::slotCancel()
     }
 }
 
-KexiLinkWidget* KexiAssistantPage::backButton()
+KexiLinkWidget *KexiAssistantPage::backButton()
 {
     if (!d->backButton) {
         setBackButtonVisible(true);
@@ -186,7 +183,7 @@ KexiLinkWidget* KexiAssistantPage::backButton()
     return d->backButton;
 }
 
-KexiLinkWidget* KexiAssistantPage::nextButton()
+KexiLinkWidget *KexiAssistantPage::nextButton()
 {
     if (!d->nextButton) {
         setNextButtonVisible(true);
@@ -205,12 +202,12 @@ void KexiAssistantPage::next()
     emit next(this);
 }
 
-QWidget* KexiAssistantPage::focusWidget() const
+QWidget *KexiAssistantPage::focusWidget() const
 {
     return d->focusWidget;
 }
 
-void KexiAssistantPage::setFocusWidget(QWidget* widget)
+void KexiAssistantPage::setFocusWidget(QWidget *widget)
 {
     d->focusWidget = widget;
 }

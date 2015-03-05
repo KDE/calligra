@@ -22,13 +22,13 @@
 #include <iostream>
 #include <KoChannelInfo.h>
 
-PhongPixelProcessor::PhongPixelProcessor(quint32 pixelArea, const KisPropertiesConfiguration* config)
+PhongPixelProcessor::PhongPixelProcessor(quint32 pixelArea, const KisPropertiesConfiguration *config)
 {
     m_pixelArea = pixelArea;
     initialize(config);
 }
 
-void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
+void PhongPixelProcessor::initialize(const KisPropertiesConfiguration *config)
 {
     // Basic, fundamental
     normal_vector = QVector3D(0, 0, 1);
@@ -60,14 +60,14 @@ void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
 
             azimuth = config->getInt(PHONG_ILLUMINANT_AZIMUTH[i]) - 90;
             inclination = config->getInt(PHONG_ILLUMINANT_INCLINATION[i]);
-            
+
             qreal m; //2D vector magnitude
-            light[i].lightVector.setZ( sin( inclination * M_PI / 180 ) );
-            m = cos( inclination * M_PI / 180);
-            
-            light[i].lightVector.setX( cos( azimuth * M_PI / 180 ) * m  );
-            light[i].lightVector.setY( sin( azimuth * M_PI / 180 ) * m  );
-            
+            light[i].lightVector.setZ(sin(inclination * M_PI / 180));
+            m = cos(inclination * M_PI / 180);
+
+            light[i].lightVector.setX(cos(azimuth * M_PI / 180) * m);
+            light[i].lightVector.setY(sin(azimuth * M_PI / 180) * m);
+
             //Pay close attention to this, indexes will move in this line
             lightSources.append(light[i]);
         }
@@ -91,16 +91,14 @@ void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
 
     diffuseLightIsEnabled = config->getBool(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED);
     specularLightIsEnabled = config->getBool(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED);
-    
+
     realheightmap = QVector<double>(m_pixelArea, 0);
 }
-
 
 PhongPixelProcessor::~PhongPixelProcessor()
 {
 
 }
-
 
 void PhongPixelProcessor::setLightVector(QVector3D lightVector)
 {
@@ -108,15 +106,16 @@ void PhongPixelProcessor::setLightVector(QVector3D lightVector)
     light_vector = lightVector;
 }
 
-void PhongPixelProcessor::prepareHeightmap(const quint32 pixelArea, const quint32 channelIndex, quint8* data, const KoColorSpace* colorSpace)
-{        
+void PhongPixelProcessor::prepareHeightmap(const quint32 pixelArea, const quint32 channelIndex, quint8 *data, const KoColorSpace *colorSpace)
+{
     // fill in function
     QVector<PtrToDouble> toDoubleFuncPtr(colorSpace->channels().count());
-    
+
     //Testing if the ID really matters  TODO LOOK FOR BUG HERE
-    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(colorSpace->mathToolboxId().id());
-    if (!mathToolbox->getToDoubleChannelPtr(colorSpace->channels(), toDoubleFuncPtr))
+    KisMathToolbox *mathToolbox = KisMathToolboxRegistry::instance()->value(colorSpace->mathToolboxId().id());
+    if (!mathToolbox->getToDoubleChannelPtr(colorSpace->channels(), toDoubleFuncPtr)) {
         return;
+    }
     //toDoubleFunctionPointers has been filled
 
     for (quint32 i = 0; i < pixelArea; ++i) {
@@ -134,8 +133,9 @@ QVector<quint16> PhongPixelProcessor::testingHeightmapIlluminatePixel(quint32 po
     //QColor pixelColor(0, 0, 0);
     QVector<quint16> finalPixel(4, 0xFFFF);
 
-    if (lightSources.size() == 0)
+    if (lightSources.size() == 0) {
         return finalPixel;
+    }
 
     // Algorithm begins, Phong Illumination Model
     normal_vector.setX(- realheightmap[posright] + realheightmap[posleft]);
@@ -168,8 +168,12 @@ QVector<quint16> PhongPixelProcessor::testingHeightmapIlluminatePixel(quint32 po
             temp = Kd * QVector3D::dotProduct(normal_vector, light_vector);
             for (channel = 0; channel < totalChannels; channel++) {
                 Id = lightSources.at(i).RGBvalue.at(channel) * temp;
-                if (Id < 0)     Id = 0;
-                if (Id > 1)     Id = 1;
+                if (Id < 0) {
+                    Id = 0;
+                }
+                if (Id > 1) {
+                    Id = 1;
+                }
                 computation[channel] += Id;
             }
         }
@@ -179,25 +183,31 @@ QVector<quint16> PhongPixelProcessor::testingHeightmapIlluminatePixel(quint32 po
             temp = Ks * QVector3D::dotProduct(vision_vector, reflection_vector);
             for (channel = 0; channel < totalChannels; channel++) {
                 Is = lightSources.at(i).RGBvalue.at(channel) * temp;
-                if (Is < 0)     Is = 0;
-                if (Is > 1)     Is = 1;
+                if (Is < 0) {
+                    Is = 0;
+                }
+                if (Is > 1) {
+                    Is = 1;
+                }
                 computation[channel] += Is;
             }
         }
     }
 
     for (channel = 0; channel < totalChannels; channel++) {
-        if (computation[channel] > 1)
+        if (computation[channel] > 1) {
             computation[channel] = 1;
-        if (computation[channel] < 0)
+        }
+        if (computation[channel] < 0) {
             computation[channel] = 0;
+        }
     }
 
     //RGBA actually uses the BGRA order of channels, hence the disorder
     finalPixel[2] = quint16(computation[0] * 0xFFFF);
     finalPixel[1] = quint16(computation[1] * 0xFFFF);
     finalPixel[0] = quint16(computation[2] * 0xFFFF);
-    
+
     return finalPixel;
     /*
     pixelColor.setRedF(computation[0]);
@@ -208,7 +218,6 @@ QVector<quint16> PhongPixelProcessor::testingHeightmapIlluminatePixel(quint32 po
     */
 }
 
-
 QRgb PhongPixelProcessor::testingSpeedIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright)
 {
     qreal temp;
@@ -217,8 +226,9 @@ QRgb PhongPixelProcessor::testingSpeedIlluminatePixel(quint32 posup, quint32 pos
     qreal computation[] = {0, 0, 0};
     QColor pixelColor(0, 0, 0);
 
-    if (lightSources.size() == 0)
+    if (lightSources.size() == 0) {
         return pixelColor.rgb();
+    }
 
     // Algorithm begins, Phong Illumination Model
     normal_vector.setX(- heightmap[posright] + heightmap[posleft]);
@@ -251,8 +261,12 @@ QRgb PhongPixelProcessor::testingSpeedIlluminatePixel(quint32 posup, quint32 pos
             temp = Kd * QVector3D::dotProduct(normal_vector, light_vector);
             for (channel = 0; channel < totalChannels; channel++) {
                 Id = lightSources.at(i).RGBvalue.at(channel) * temp;
-                if (Id < 0)     Id = 0;
-                if (Id > 1)     Id = 1;
+                if (Id < 0) {
+                    Id = 0;
+                }
+                if (Id > 1) {
+                    Id = 1;
+                }
                 computation[channel] += Id;
             }
         }
@@ -262,18 +276,24 @@ QRgb PhongPixelProcessor::testingSpeedIlluminatePixel(quint32 posup, quint32 pos
             temp = Ks * QVector3D::dotProduct(vision_vector, reflection_vector);
             for (channel = 0; channel < totalChannels; channel++) {
                 Is = lightSources.at(i).RGBvalue.at(channel) * temp;
-                if (Is < 0)     Is = 0;
-                if (Is > 1)     Is = 1;
+                if (Is < 0) {
+                    Is = 0;
+                }
+                if (Is > 1) {
+                    Is = 1;
+                }
                 computation[channel] += Is;
             }
         }
     }
 
     for (channel = 0; channel < totalChannels; channel++) {
-        if (computation[channel] > 1)
+        if (computation[channel] > 1) {
             computation[channel] = 1;
-        if (computation[channel] < 0)
+        }
+        if (computation[channel] < 0) {
             computation[channel] = 0;
+        }
     }
 
     pixelColor.setRedF(computation[0]);
@@ -282,7 +302,6 @@ QRgb PhongPixelProcessor::testingSpeedIlluminatePixel(quint32 posup, quint32 pos
 
     return pixelColor.rgb();
 }
-
 
 QRgb PhongPixelProcessor::reallyFastIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright)
 {
@@ -313,8 +332,12 @@ QRgb PhongPixelProcessor::reallyFastIlluminatePixel(quint32 posup, quint32 posdo
     for (int channel = 0; channel < totalChannels; channel++) {
         //I = each RGB value
         Id = fastLight.RGBvalue[channel] * temp;
-        if (Id < 0)     Id = 0;
-        if (Id > 1)     Id = 1;
+        if (Id < 0) {
+            Id = 0;
+        }
+        if (Id > 1) {
+            Id = 1;
+        }
         computation[channel] += Id;
     }
 
@@ -322,14 +345,19 @@ QRgb PhongPixelProcessor::reallyFastIlluminatePixel(quint32 posup, quint32 posdo
     for (int channel = 0; channel < totalChannels; channel++) {
         //I = each RGB value
         Id = fastLight2.RGBvalue[channel] * temp;
-        if (Id < 0)     Id = 0;
-        if (Id > 1)     Id = 1;
+        if (Id < 0) {
+            Id = 0;
+        }
+        if (Id > 1) {
+            Id = 1;
+        }
         computation[channel] += Id;
     }
 
     for (int i = 0; i < 3; i++)
-        if (computation[i] > 1)
+        if (computation[i] > 1) {
             computation[i] = 1;
+        }
 
     pixelColor.setRedF(computation[0]);
     pixelColor.setGreenF(computation[1]);
@@ -403,20 +431,28 @@ QColor PhongPixelProcessor::illuminatePixel(quint32 posup, quint32 posdown, quin
             Il = illuminant.RGBvalue[channel];
             Ia = Ka * Il;
             Id = Kd * Il * QVector3D::dotProduct(normal_vector, illuminant.lightVector);
-            if (Id < 0)     Id = 0;
+            if (Id < 0) {
+                Id = 0;
+            }
             Is = Ks * Il * QVector3D::dotProduct(vision_vector, reflection_vector);
-            if (Is < 0)     Is = 0;
+            if (Is < 0) {
+                Is = 0;
+            }
             I = Ia + Id + Is;
-            if (I  > 1)     I  = 1;
+            if (I  > 1) {
+                I  = 1;
+            }
             computation[channel] += I;
         }
     }
 
     for (int channel = 0; channel < totalChannels; channel++) {
-        if (computation[channel] > 1)
+        if (computation[channel] > 1) {
             computation[channel] = 1;
-        if (computation[channel] < 0)
+        }
+        if (computation[channel] < 0) {
             computation[channel] = 0;
+        }
     }
 
     pixelColor.setRedF(computation[0]);

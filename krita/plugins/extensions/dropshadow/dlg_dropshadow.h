@@ -33,7 +33,8 @@ class WdgDropshadow : public QWidget, public Ui::WdgDropshadow
     Q_OBJECT
 
 public:
-    WdgDropshadow(QWidget *parent, const char *name) : QWidget(parent) {
+    WdgDropshadow(QWidget *parent, const char *name) : QWidget(parent)
+    {
         setObjectName(name); setupUi(this);
     }
 };
@@ -49,8 +50,8 @@ class DlgDropshadow: public KDialog
 
 public:
 
-    DlgDropshadow(const QString & imageCS, const QString & layerCS, QWidget * parent = 0,
-                  const char* name = 0);
+    DlgDropshadow(const QString &imageCS, const QString &layerCS, QWidget *parent = 0,
+                  const char *name = 0);
     ~DlgDropshadow();
 
 public:
@@ -65,7 +66,7 @@ private Q_SLOTS:
     void okClicked();
 
 private:
-    WdgDropshadow * m_page;
+    WdgDropshadow *m_page;
 };
 
 #endif // DLG_DROPSHADOW

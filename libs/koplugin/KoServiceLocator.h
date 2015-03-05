@@ -23,7 +23,6 @@
 
 #include "koplugin_export.h"
 
-
 class KOPLUGIN_EXPORT KoServiceLocator
 {
 

@@ -24,7 +24,6 @@
 
 #include <QScopedPointer>
 
-
 class QTransform;
 class QDomElement;
 
@@ -45,7 +44,6 @@ public:
     virtual void translate(const QPointF &offset) = 0;
 };
 
-
 class QDomElement;
 
 class KRITAIMAGE_EXPORT KisDumbTransformMaskParams : public KisTransformMaskParamsInterface
@@ -55,7 +53,6 @@ public:
     KisDumbTransformMaskParams(const QTransform &transform);
     KisDumbTransformMaskParams(bool isHidden);
     ~KisDumbTransformMaskParams();
-
 
     QTransform finalAffineTransform() const;
     bool isAffine() const;

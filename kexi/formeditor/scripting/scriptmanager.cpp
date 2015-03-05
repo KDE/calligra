@@ -28,9 +28,9 @@
 using KFormDesigner::Form;
 
 ScriptManager::ScriptManager(QObject *parent, const char *name)
-        : QObject(parent, name)
-        , m_manager(Kross::Api::Manager::scriptManager())
-        , m_formManager(0)
+    : QObject(parent, name)
+    , m_manager(Kross::Api::Manager::scriptManager())
+    , m_formManager(0)
 {
 }
 
@@ -38,7 +38,7 @@ ScriptManager::~ScriptManager()
 {
 }
 
-FormScript*
+FormScript *
 ScriptManager::newFormScript(Form *form)
 {
     FormScript *script = new FormScript(form, this);
@@ -46,7 +46,7 @@ ScriptManager::newFormScript(Form *form)
     return script;
 }
 
-FormScript*
+FormScript *
 ScriptManager::scriptForForm(Form *form)
 {
     return m_hash.value(form);

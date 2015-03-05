@@ -37,8 +37,8 @@ VideoThumbnailer::VideoThumbnailer()
     m_vdata.setRunning(true);
     Phonon::createPath(&m_media, &m_vdata);
     connect(&m_media, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this,
-        SLOT(stateChanged(Phonon::State,Phonon::State)));
-    connect(this,SIGNAL(signalCreateThumbnail(VideoData*,QSize)),
+            SLOT(stateChanged(Phonon::State,Phonon::State)));
+    connect(this, SIGNAL(signalCreateThumbnail(VideoData*,QSize)),
             this, SLOT(slotCreateThumbnail(VideoData*,QSize)), Qt::QueuedConnection);
 }
 
@@ -53,29 +53,28 @@ void VideoThumbnailer::createThumbnail(VideoData *videoData, const QSize &size)
 
 void VideoThumbnailer::slotCreateThumbnail(VideoData *videoData, const QSize &size)
 {
-        m_media.setCurrentSource(videoData->playableUrl());
-        m_media.play();
+    m_media.setCurrentSource(videoData->playableUrl());
+    m_media.play();
 
-        m_thumbnailSize = size;
+    m_thumbnailSize = size;
 
-
-        int retcode = 0;
-        for (int i = 0; i < 50; i++) {
-            retcode = m_eventLoop.exec();
-            if (retcode == 0) {
-                break;
-            }
-            kDebug() << "Seeking to " << (i * 3);
-            m_media.seek(i * 3);
+    int retcode = 0;
+    for (int i = 0; i < 50; i++) {
+        retcode = m_eventLoop.exec();
+        if (retcode == 0) {
+            break;
         }
-        if (retcode) {
-               kWarning() << "Unable to generate thumbnail for ";
-               m_media.stop();
-               return;
-        }
+        kDebug() << "Seeking to " << (i * 3);
+        m_media.seek(i * 3);
+    }
+    if (retcode) {
+        kWarning() << "Unable to generate thumbnail for ";
         m_media.stop();
+        return;
+    }
+    m_media.stop();
 
-        emit thumbnailReady();
+    emit thumbnailReady();
 }
 
 void VideoThumbnailer::frameReady(const Phonon::Experimental::VideoFrame2 &frame)
@@ -84,7 +83,7 @@ void VideoThumbnailer::frameReady(const Phonon::Experimental::VideoFrame2 &frame
     if (isFrameInteresting(thumb)) {
         m_thumbnailImage = thumb;
         m_vdata.disconnect(SIGNAL(frameReadySignal(Phonon::Experimental::VideoFrame2)),
-            this, SLOT(frameReady(Phonon::Experimental::VideoFrame2)));
+                           this, SLOT(frameReady(Phonon::Experimental::VideoFrame2)));
         m_eventLoop.quit();
         return;
     }
@@ -96,7 +95,7 @@ void VideoThumbnailer::stateChanged(Phonon::State newState, Phonon::State oldSta
     Q_UNUSED(oldState);
     if (newState == Phonon::PlayingState) {
         connect(&m_vdata, SIGNAL(frameReadySignal(Phonon::Experimental::VideoFrame2)),
-            this, SLOT(frameReady(Phonon::Experimental::VideoFrame2)));
+                this, SLOT(frameReady(Phonon::Experimental::VideoFrame2)));
         m_eventLoop.exit(1);
     }
 }
@@ -110,28 +109,26 @@ bool VideoThumbnailer::isFrameInteresting(const QImage &frame)
 {
     float variance = 0;
     //taken from mplayerthumbs
-    uint delta=0;
-    uint avg=0;
-    uint bytes=frame.numBytes();
-    uint STEPS=bytes/2;
+    uint delta = 0;
+    uint avg = 0;
+    uint bytes = frame.numBytes();
+    uint STEPS = bytes / 2;
     QVarLengthArray<uchar> pivot(STEPS);
 
-    const uchar *bits=frame.bits();
+    const uchar *bits = frame.bits();
     // First pass: get pivots and taking average
-    for( uint i=0; i<STEPS ; i++ ){
-        pivot[i]=bits[i*(bytes/STEPS)];
-        avg+=pivot[i];
+    for (uint i = 0; i < STEPS; i++) {
+        pivot[i] = bits[i * (bytes / STEPS)];
+        avg += pivot[i];
     }
-    avg=avg/STEPS;
+    avg = avg / STEPS;
     // Second Step: calculate delta (average?)
-    for (uint i=0; i<STEPS; i++)
-    {
-        int curdelta=abs(int(avg-pivot[i]));
-        delta+=curdelta;
+    for (uint i = 0; i < STEPS; i++) {
+        int curdelta = abs(int(avg - pivot[i]));
+        delta += curdelta;
     }
-    variance= delta/STEPS;
+    variance = delta / STEPS;
 
     return variance > THRESHOLD_FRAME_VARIANCE;
 }
-
 

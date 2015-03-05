@@ -19,7 +19,6 @@
 #ifndef __KIS_MODEL_INDEX_CONVERTER_BASE_H
 #define __KIS_MODEL_INDEX_CONVERTER_BASE_H
 
-
 #include <QModelIndex>
 #include "krita_export.h"
 class KisNodeDummy;
@@ -42,14 +41,14 @@ public:
      * Returns the dummy staying in the specified \p row of a \p parent
      * May return null in case of incosistency
      */
-    virtual KisNodeDummy* dummyFromRow(int row, QModelIndex parent) = 0;
+    virtual KisNodeDummy *dummyFromRow(int row, QModelIndex parent) = 0;
 
     /**
      * Returns the dummy associated with the \p index
      * WARNING: \p index must be valid
      * NOTE: cannot return null
      */
-    virtual KisNodeDummy* dummyFromIndex(QModelIndex index) = 0;
+    virtual KisNodeDummy *dummyFromIndex(QModelIndex index) = 0;
 
     /**
      * Returns the index corresponding to the position of the \p dummy

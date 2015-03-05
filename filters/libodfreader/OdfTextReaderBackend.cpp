@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdfTextReaderBackend.h"
 
@@ -28,20 +27,18 @@
 // Odftraverse library
 #include "OdfParser.h"
 
-
 // ================================================================
 //             class OdfTextReaderBackend::Private
 
-
 class OdfTextReaderBackend::Private
 {
- public:
+public:
     Private();
     ~Private();
 
     bool dummy;                 // We don't have any actual content in
-                                // this class yet but it's still
-                                // needed for forward binary compatibility.
+    // this class yet but it's still
+    // needed for forward binary compatibility.
 };
 
 OdfTextReaderBackend::Private::Private()
@@ -52,10 +49,8 @@ OdfTextReaderBackend::Private::~Private()
 {
 }
 
-
 // ================================================================
 //                 class OdfTextReaderBackend
-
 
 OdfTextReaderBackend::OdfTextReaderBackend()
     : d(new OdfTextReaderBackend::Private)
@@ -67,10 +62,8 @@ OdfTextReaderBackend::~OdfTextReaderBackend()
     delete d;
 }
 
-
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
-
 
 IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, OfficeAnnotation)
 IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, OfficeAnnotationEnd)
@@ -93,10 +86,8 @@ IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, TableTableHeaderRows)
 IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, TableTableCell)
 IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, TableCoveredTableCell)
 
-
 // ----------------------------------------------------------------
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
-
 
 IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, TextA)
 IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, TextLineBreak)
@@ -104,18 +95,14 @@ IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, TextSpan)
 IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, TextS)
 IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, TextSoftPageBreak)
 
-
 // ----------------------------------------------------------------
 // List level functions: lit-header and list-item.
-
 
 IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, TextListHeader)
 IMPLEMENT_BACKEND_FUNCTION(OdfTextReader, TextListItem)
 
-
 // ----------------------------------------------------------------
 // Some special functions
-
 
 void OdfTextReaderBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
 {

@@ -19,7 +19,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef CALLIGRA_SHEETS_SUBTOTAL_DIALOG
 #define CALLIGRA_SHEETS_SUBTOTAL_DIALOG
 
@@ -40,7 +39,7 @@ class SubtotalDialog : public KDialog
     Q_OBJECT
 
 public:
-    SubtotalDialog(QWidget* parent, Selection* selection);
+    SubtotalDialog(QWidget *parent, Selection *selection);
     ~SubtotalDialog();
 
 public Q_SLOTS: // reimplemented
@@ -55,7 +54,7 @@ private:
     void fillFunctionBox();
     void removeSubtotalLines();
     bool addSubtotal(int mainCol, int column, int row, int topRow,
-                     bool addRow, QString const & text);
+                     bool addRow, QString const &text);
 
     class Private;
     Private *const d;

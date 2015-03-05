@@ -34,27 +34,29 @@
 using namespace MSOOXML;
 
 MsooXmlRelationshipsReaderContext::MsooXmlRelationshipsReaderContext(
-    const QString& _path, const QString& _file, QMap<QString, QString>& _rels,
-    QMap<QString, QString>& _targetsForTypes)
-        : path(_path), file(_file)
-        , rels(&_rels), targetsForTypes(&_targetsForTypes)
+    const QString &_path, const QString &_file, QMap<QString, QString> &_rels,
+    QMap<QString, QString> &_targetsForTypes)
+    : path(_path), file(_file)
+    , rels(&_rels), targetsForTypes(&_targetsForTypes)
 {
 }
 
 class MsooXmlRelationshipsReader::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
     QString pathAndFile;
 };
 
 MsooXmlRelationshipsReader::MsooXmlRelationshipsReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(writers)
-        , m_context(0)
-        , d(new Private)
+    : MSOOXML::MsooXmlReader(writers)
+    , m_context(0)
+    , d(new Private)
 {
     init();
 }
@@ -68,13 +70,14 @@ void MsooXmlRelationshipsReader::init()
 {
 }
 
-KoFilter::ConversionStatus MsooXmlRelationshipsReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus MsooXmlRelationshipsReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<MsooXmlRelationshipsReaderContext*>(context);
+    m_context = dynamic_cast<MsooXmlRelationshipsReaderContext *>(context);
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
-    if (result == KoFilter::OK)
+    if (result == KoFilter::OK) {
         return KoFilter::OK;
+    }
     return result;
 }
 

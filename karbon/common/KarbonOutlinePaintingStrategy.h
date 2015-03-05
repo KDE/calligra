@@ -32,7 +32,7 @@ public:
     explicit KarbonOutlinePaintingStrategy(KoShapeManager *shapeManager);
     ~KarbonOutlinePaintingStrategy();
     /// reimplemented from KoShapeManagerPaintingStrategy
-    virtual void paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
 private:
     KoShapeStroke *m_stroke;
 };

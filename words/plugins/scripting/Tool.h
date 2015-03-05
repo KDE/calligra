@@ -35,7 +35,6 @@
 #include "Module.h"
 #include "TextCursor.h"
 
-
 namespace Scripting
 {
 
@@ -60,102 +59,114 @@ class Tool : public QObject
 {
     Q_OBJECT
 public:
-    explicit Tool(Module* module) : QObject(module), m_module(module) {
-        KWView* v = dynamic_cast< KWView* >(m_module->view());
-        KoCanvasBase* c = v ? v->canvasBase() : 0;
+    explicit Tool(Module *module) : QObject(module), m_module(module)
+    {
+        KWView *v = dynamic_cast< KWView * >(m_module->view());
+        KoCanvasBase *c = v ? v->canvasBase() : 0;
         m_toolproxy = c ? c->toolProxy() : 0;
 
         m_signalMapper = new QSignalMapper(this);
-        QHash<QString, KAction*> actionhash = actions();
-        for (QHash<QString, KAction*>::const_iterator it = actionhash.constBegin(); it != actionhash.constEnd(); ++it) {
+        QHash<QString, KAction *> actionhash = actions();
+        for (QHash<QString, KAction *>::const_iterator it = actionhash.constBegin(); it != actionhash.constEnd(); ++it) {
             connect(it.value(), SIGNAL(triggered()), m_signalMapper, SLOT(map()));
-            m_signalMapper->setMapping(it.value() , it.key());
+            m_signalMapper->setMapping(it.value(), it.key());
         }
-        connect(m_signalMapper, SIGNAL(mapped(const QString&)), this, SIGNAL(actionTriggered(const QString&)));
+        connect(m_signalMapper, SIGNAL(mapped(const QString &)), this, SIGNAL(actionTriggered(const QString &)));
 
-        connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)), this, SIGNAL(changedTool()));
+        connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController *, int)), this, SIGNAL(changedTool()));
     }
     virtual ~Tool() {}
 
-    KoToolSelection* toolSelection() const {
+    KoToolSelection *toolSelection() const
+    {
         return m_toolproxy ? m_toolproxy->selection() : 0;
     }
-    KoTextEditor* textSelection() const {
-        return dynamic_cast< KoTextEditor* >(toolSelection());
+    KoTextEditor *textSelection() const
+    {
+        return dynamic_cast< KoTextEditor * >(toolSelection());
     }
-    QHash<QString, KAction*> actions() const {
-        return m_toolproxy ? m_toolproxy->actions() : QHash<QString, KAction*>();
+    QHash<QString, KAction *> actions() const
+    {
+        return m_toolproxy ? m_toolproxy->actions() : QHash<QString, KAction *>();
     }
 
 public Q_SLOTS:
 
     /** Return true if there is actualy a selection. */
-    bool hasSelection() const {
+    bool hasSelection() const
+    {
         return toolSelection() != 0;
     }
 
     /** Return true if the selected object is a text object. */
-    bool hasTextSelection() const {
+    bool hasTextSelection() const
+    {
         return textSelection() != 0;
     }
 
     /** Return the selected text. */
-    QString selectedText() const {
-        KoTextEditor* h = textSelection();
+    QString selectedText() const
+    {
+        KoTextEditor *h = textSelection();
         return h ? h->selectedText() : QString();
     }
 //TODO return the textEditor
     /** Return the active/current \a TextCursor object. */
-/*    QObject* cursor() {
-        KoTextEditor* h = textSelection();
-        return h ? new TextCursor(this, h->caret()) : 0;
-    }
-*/
+    /*    QObject* cursor() {
+            KoTextEditor* h = textSelection();
+            return h ? new TextCursor(this, h->caret()) : 0;
+        }
+    */
     /** Set the active/current \a TextCursor object. */
-/*    bool setCursor(QObject* cursor) {
-        kDebug(32010) << "Scripting::Selection::setCursor";
-        TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
-        if (! textcursor) return false;
-        KWView* v = dynamic_cast< KWView* >(m_module->view());
-        KoCanvasBase* c = v ? v->KoCanvasBase() : 0;
-        KoCanvasResourceManager* r = c ? c->resourceManager() : 0;
-        if (! r) return false;
-        QVariant variant;
-        variant.setValue((QObject*) &textcursor->cursor());
-//TODO store TextEditor?
-// the above can't work;  storing a pointer to a value based object (QTextCursor).
-// I don't even think its possible to store a QTextCursor in any form in a QVarient. (TZ)
-        //r->setResource(Words::CurrentTextCursor, variant);
-        return true;
-    }
-*/
+    /*    bool setCursor(QObject* cursor) {
+            kDebug(32010) << "Scripting::Selection::setCursor";
+            TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
+            if (! textcursor) return false;
+            KWView* v = dynamic_cast< KWView* >(m_module->view());
+            KoCanvasBase* c = v ? v->KoCanvasBase() : 0;
+            KoCanvasResourceManager* r = c ? c->resourceManager() : 0;
+            if (! r) return false;
+            QVariant variant;
+            variant.setValue((QObject*) &textcursor->cursor());
+    //TODO store TextEditor?
+    // the above can't work;  storing a pointer to a value based object (QTextCursor).
+    // I don't even think its possible to store a QTextCursor in any form in a QVarient. (TZ)
+            //r->setResource(Words::CurrentTextCursor, variant);
+            return true;
+        }
+    */
     /** Return a list of the action names. */
-    QStringList actionNames() {
+    QStringList actionNames()
+    {
         return QStringList(actions().keys());
     }
     /** Return the text the action with \p actionname has. */
-    QString actionText(const QString& actionname) {
-        QAction* a = actions()[ actionname ];
+    QString actionText(const QString &actionname)
+    {
+        QAction *a = actions()[ actionname ];
         return a ? a->text() : QString();
     }
     /** Trigger the action with \p actionname . */
-    void triggerAction(const QString& actionname) {
-        QAction* a = actions()[ actionname ];
-        if (a) a->trigger();
+    void triggerAction(const QString &actionname)
+    {
+        QAction *a = actions()[ actionname ];
+        if (a) {
+            a->trigger();
+        }
     }
 
 Q_SIGNALS:
 
     /** This signal got emitted if an action was triggered. */
-    void actionTriggered(const QString& actionname);
+    void actionTriggered(const QString &actionname);
 
     /** This signal got emitted if the tool changed. */
     void changedTool();
 
 private:
-    Module* m_module;
-    KoToolProxy* m_toolproxy;
-    QSignalMapper* m_signalMapper;
+    Module *m_module;
+    KoToolProxy *m_toolproxy;
+    QSignalMapper *m_signalMapper;
 };
 
 }

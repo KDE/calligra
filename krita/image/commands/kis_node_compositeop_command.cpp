@@ -22,10 +22,9 @@
 #include "kis_node.h"
 #include "commands/kis_node_commands.h"
 
-
-KisNodeCompositeOpCommand::KisNodeCompositeOpCommand(KisNodeSP node, const QString& oldCompositeOp,
-        const QString& newCompositeOp) :
-        KisNodeCommand(kundo2_i18n("Composition Mode Change"), node)
+KisNodeCompositeOpCommand::KisNodeCompositeOpCommand(KisNodeSP node, const QString &oldCompositeOp,
+        const QString &newCompositeOp) :
+    KisNodeCommand(kundo2_i18n("Composition Mode Change"), node)
 {
     m_oldCompositeOp = oldCompositeOp;
     m_newCompositeOp = newCompositeOp;

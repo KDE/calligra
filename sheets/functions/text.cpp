@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // built-in text functions
 #include "TextModule.h"
 
@@ -78,12 +77,10 @@ Value func_upper(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_value(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *);
 
-
 CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE("text", TextModule)
 
-
-TextModule::TextModule(QObject* parent, const QVariantList&)
-        : FunctionModule(parent)
+TextModule::TextModule(QObject *parent, const QVariantList &)
+    : FunctionModule(parent)
 {
     Function *f;
 
@@ -195,7 +192,6 @@ QString TextModule::descriptionFileName() const
     return QString("text.xml");
 }
 
-
 // Function: ASC
 Value func_asc(valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -207,10 +203,11 @@ Value func_asc(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_char(valVector args, ValueCalc *calc, FuncExtra *)
 {
     int val = calc->conv()->asInteger(args[0]).asInteger();
-    if (val >= 0)
+    if (val >= 0) {
         return Value(QString(QChar(val)));
-    else
+    } else {
         return Value::errorNUM();
+    }
 }
 
 // Function: CLEAN
@@ -224,8 +221,9 @@ Value func_clean(valVector args, ValueCalc *calc, FuncExtra *)
 
     for (i = 0; i < l; ++i) {
         c = str[i];
-        if (c.isPrint())
+        if (c.isPrint()) {
             result += c;
+        }
     }
 
     return Value(result);
@@ -235,8 +233,9 @@ Value func_clean(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_code(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str(calc->conv()->asString(args[0]).asString());
-    if (str.length() <= 0)
+    if (str.length() <= 0) {
         return Value::errorVALUE();
+    }
 
     return Value(str[0].unicode());
 }
@@ -250,36 +249,41 @@ Value func_compare(valVector args, ValueCalc *calc, FuncExtra *)
     QString s1 = calc->conv()->asString(args[0]).asString();
     QString s2 = calc->conv()->asString(args[1]).asString();
 
-    if (!exact)
+    if (!exact) {
         result = s1.toLower().localeAwareCompare(s2.toLower());
-    else
+    } else {
         result = s1.localeAwareCompare(s2);
+    }
 
-    if (result < 0)
+    if (result < 0) {
         result = -1;
-    else if (result > 0)
+    } else if (result > 0) {
         result = 1;
+    }
 
     return Value(result);
 }
 
 void func_concatenate_helper(Value val, ValueCalc *calc,
-                             QString& tmp)
+                             QString &tmp)
 {
     if (val.isArray()) {
         for (unsigned int row = 0; row < val.rows(); ++row)
-            for (unsigned int col = 0; col < val.columns(); ++col)
+            for (unsigned int col = 0; col < val.columns(); ++col) {
                 func_concatenate_helper(val.element(col, row), calc, tmp);
-    } else
+            }
+    } else {
         tmp += calc->conv()->asString(val).asString();
+    }
 }
 
 // Function: CONCATENATE
 Value func_concatenate(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString tmp;
-    for (int i = 0; i < args.count(); ++i)
+    for (int i = 0; i < args.count(); ++i) {
         func_concatenate_helper(args[i], calc, tmp);
+    }
 
     return Value(tmp);
 }
@@ -296,8 +300,9 @@ Value func_dollar(valVector args, ValueCalc *calc, FuncExtra *)
 
     double value = numToDouble(calc->conv()->toFloat(args[0]));
     int precision = 2;
-    if (args.count() == 2)
+    if (args.count() == 2) {
         precision = calc->conv()->asInteger(args[1]).asInteger();
+    }
 
     // do round, because formatMoney doesn't
     value = floor(value * pow(10.0, precision) + 0.5) / pow(10.0, precision);
@@ -325,15 +330,22 @@ Value func_find(valVector args, ValueCalc *calc, FuncExtra *)
 
     find_text = calc->conv()->asString(args[0]).asString();
     within_text = calc->conv()->asString(args[1]).asString();
-    if (args.count() == 3)
+    if (args.count() == 3) {
         start_num = calc->conv()->asInteger(args[2]).asInteger();
+    }
 
     // conforms to Excel behaviour
-    if (start_num <= 0) return Value::errorVALUE();
-    if (start_num > (int)within_text.length()) return Value::errorVALUE();
+    if (start_num <= 0) {
+        return Value::errorVALUE();
+    }
+    if (start_num > (int)within_text.length()) {
+        return Value::errorVALUE();
+    }
 
     int pos = within_text.indexOf(find_text, start_num - 1);
-    if (pos < 0) return Value::errorVALUE();
+    if (pos < 0) {
+        return Value::errorVALUE();
+    }
 
     return Value(pos + 1);
 }
@@ -356,8 +368,9 @@ Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *)
             decimals = calc->conv()->asInteger(args[1]).asInteger();
         }
     }
-    if (args.count() == 3)
+    if (args.count() == 3) {
         no_commas = calc->conv()->asBoolean(args[2]).asBoolean();
+    }
 
     QString result;
     const KLocale *locale = calc->settings()->locale();
@@ -375,11 +388,15 @@ Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *)
     result = QString::number(neg ? -number : number, 'f', decimals);
 
     int pos = result.indexOf('.');
-    if (pos == -1) pos = result.length();
-    else result.replace(pos, 1, locale->decimalSymbol());
+    if (pos == -1) {
+        pos = result.length();
+    } else {
+        result.replace(pos, 1, locale->decimalSymbol());
+    }
     if (!no_commas)
-        while (0 < (pos -= 3))
+        while (0 < (pos -= 3)) {
             result.insert(pos, locale->thousandsSeparator());
+        }
 
     result.prepend(neg ? locale->negativeSign() :
                    locale->positiveSign());
@@ -400,10 +417,12 @@ Value func_left(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str = calc->conv()->asString(args[0]).asString();
     int nb = 1;
-    if (args.count() == 2)
+    if (args.count() == 2) {
         nb = calc->conv()->asInteger(args[1]).asInteger();
-    if (nb < 0)
+    }
+    if (nb < 0) {
         return Value::errorVALUE();
+    }
 
     return Value(str.left(nb));
 }
@@ -435,15 +454,18 @@ Value func_mid(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() == 3) {
         len = (uint) calc->conv()->asInteger(args[2]).asInteger();
         // the length cannot be less than zero
-        if (len < 0)
+        if (len < 0) {
             return Value::errorVALUE();
+        }
     }
 
     // Excel compatible
     pos--;
 
     // workaround for Qt bug
-    if (len > 0x7fffffff - pos) len = 0x7fffffff - pos;
+    if (len > 0x7fffffff - pos) {
+        len = 0x7fffffff - pos;
+    }
 
     return Value(str.mid(pos, len));
 }
@@ -456,12 +478,13 @@ Value func_numbervalue(valVector args, ValueCalc *calc, FuncExtra *)
     QString decimalPoint = calc->conv()->asString(args[1]).asString();
 
     QString thousandsSeparator;
-    if (args.count() >= 3)
+    if (args.count() >= 3) {
         thousandsSeparator = calc->conv()->asString(args[2]).asString();
-    else if (decimalPoint == ".")
+    } else if (decimalPoint == ".") {
         thousandsSeparator = ',';
-    else if (decimalPoint == ",")
+    } else if (decimalPoint == ",") {
         thousandsSeparator = '.';
+    }
 
     KLocale l(*KGlobal::locale());
     l.setDecimalSymbol(decimalPoint);
@@ -485,8 +508,9 @@ Value func_proper(valVector args, ValueCalc *calc, FuncExtra *)
     for (int i = 0; i < str.length(); ++i) {
         if (first) {
             f = str[i];
-            if (f.isNumber())
+            if (f.isNumber()) {
                 continue;
+            }
 
             f = f.toUpper();
 
@@ -496,8 +520,9 @@ Value func_proper(valVector args, ValueCalc *calc, FuncExtra *)
             continue;
         }
 
-        if (str[i].isSpace() || str[i].isPunct())
+        if (str[i].isSpace() || str[i].isPunct()) {
             first = true;
+        }
     }
 
     return Value(str);
@@ -508,26 +533,31 @@ Value func_regexp(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // ensure that we got a valid regular expression
     QRegExp exp(calc->conv()->asString(args[1]).asString());
-    if (!exp.isValid())
+    if (!exp.isValid()) {
         return Value::errorVALUE();
+    }
 
     QString s = calc->conv()->asString(args[0]).asString();
     QString defText;
-    if (args.count() > 2)
+    if (args.count() > 2) {
         defText = calc->conv()->asString(args[2]).asString();
+    }
     int bkref = 0;
-    if (args.count() == 4)
+    if (args.count() == 4) {
         bkref = calc->conv()->asInteger(args[3]).asInteger();
-    if (bkref < 0)   // strange back-reference
+    }
+    if (bkref < 0) { // strange back-reference
         return Value::errorVALUE();
+    }
 
     QString returnValue;
 
     int pos = exp.indexIn(s);
-    if (pos == -1)
+    if (pos == -1) {
         returnValue = defText;
-    else
+    } else {
         returnValue = exp.cap(bkref);
+    }
 
     return Value(returnValue);
 }
@@ -537,8 +567,9 @@ Value func_regexpre(valVector args, ValueCalc *calc, FuncExtra *)
 {
     // ensure that we got a valid regular expression
     QRegExp exp(calc->conv()->asString(args[1]).asString());
-    if (!exp.isValid())
+    if (!exp.isValid()) {
         return Value::errorVALUE();
+    }
 
     QString s = calc->conv()->asString(args[0]).asString();
     QString str = calc->conv()->asString(args[2]).asString();
@@ -561,7 +592,9 @@ Value func_replace(valVector args, ValueCalc *calc, FuncExtra *)
     int len = calc->conv()->asInteger(args[2]).asInteger();
     QString new_text = calc->conv()->asString(args[3]).asString();
 
-    if (pos < 0) pos = 0;
+    if (pos < 0) {
+        pos = 0;
+    }
 
     QString result = text.replace(pos - 1, len, new_text);
     return Value(result);
@@ -573,11 +606,14 @@ Value func_rept(valVector args, ValueCalc *calc, FuncExtra *)
     QString s = calc->conv()->asString(args[0]).asString();
     int nb = calc->conv()->asInteger(args[1]).asInteger();
 
-    if (nb < 0)
+    if (nb < 0) {
         return Value::errorVALUE();
+    }
 
     QString result;
-    for (int i = 0; i < nb; i++) result += s;
+    for (int i = 0; i < nb; i++) {
+        result += s;
+    }
     return Value(result);
 }
 
@@ -586,11 +622,13 @@ Value func_right(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str = calc->conv()->asString(args[0]).asString();
     int nb = 1;
-    if (args.count() == 2)
+    if (args.count() == 2) {
         nb = calc->conv()->asInteger(args[1]).asInteger();
+    }
 
-    if (nb < 0)
+    if (nb < 0) {
         return Value::errorVALUE();
+    }
 
     return Value(str.right(nb));
 }
@@ -602,10 +640,12 @@ Value func_rot13(valVector args, ValueCalc *calc, FuncExtra *)
 
     for (int i = 0; i < text.length(); i++) {
         unsigned c = text[i].toUpper().unicode();
-        if ((c >= 'A') && (c <= 'M'))
+        if ((c >= 'A') && (c <= 'M')) {
             text[i] = QChar(text[i].unicode() + 13);
-        if ((c >= 'N') && (c <= 'Z'))
+        }
+        if ((c >= 'N') && (c <= 'Z')) {
             text[i] = QChar(text[i].unicode() - 13);
+        }
     }
 
     return Value(text);
@@ -617,17 +657,24 @@ Value func_search(valVector args, ValueCalc *calc, FuncExtra *)
     QString find_text = calc->conv()->asString(args[0]).asString();
     QString within_text = calc->conv()->asString(args[1]).asString();
     int start_num = 1;
-    if (args.count() == 3)
+    if (args.count() == 3) {
         start_num = calc->conv()->asInteger(args[2]).asInteger();
+    }
 
     // conforms to Excel behaviour
-    if (start_num <= 0) return Value::errorVALUE();
-    if (start_num > (int)within_text.length()) return Value::errorVALUE();
+    if (start_num <= 0) {
+        return Value::errorVALUE();
+    }
+    if (start_num > (int)within_text.length()) {
+        return Value::errorVALUE();
+    }
 
     // use globbing feature of QRegExp
     QRegExp regex(find_text, Qt::CaseInsensitive, QRegExp::Wildcard);
     int pos = within_text.indexOf(regex, start_num - 1);
-    if (pos < 0) return Value::errorNA();
+    if (pos < 0) {
+        return Value::errorNA();
+    }
 
     return Value(pos + 1);
 }
@@ -643,8 +690,9 @@ Value func_sleek(valVector args, ValueCalc *calc, FuncExtra *)
 
     for (i = 0; i < l; ++i) {
         c = str[i];
-        if (!c.isSpace())
+        if (!c.isSpace()) {
             result += c;
+        }
     }
 
     return Value(result);
@@ -665,8 +713,12 @@ Value func_substitute(valVector args, ValueCalc *calc, FuncExtra *)
     QString old_text = calc->conv()->asString(args[1]).asString();
     QString new_text = calc->conv()->asString(args[2]).asString();
 
-    if (occurrence <= 0) return Value::errorVALUE();
-    if (old_text.length() == 0) return Value(text);
+    if (occurrence <= 0) {
+        return Value::errorVALUE();
+    }
+    if (old_text.length() == 0) {
+        return Value(text);
+    }
 
     QString result = text;
 
@@ -687,10 +739,11 @@ Value func_substitute(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: T
 Value func_t (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args[0].isString())
+    if (args[0].isString()) {
         return calc->conv()->asString(args[0]);
-    else
+    } else {
         return Value("");
+    }
 }
 
 // Function: TEXT
@@ -699,8 +752,8 @@ Value func_text(valVector args, ValueCalc *calc, FuncExtra *)
     ValueFormatter fmt(calc->conv());
 
     return Value(fmt.formatText(args[0], Format::Generic, -1, Style::OnlyNegSigned,
-                            QString(), QString(), QString(),
-                            calc->conv()->asString(args[1]).asString()));
+                                QString(), QString(), QString(),
+                                calc->conv()->asString(args[1]).asString()));
 }
 
 // Function: TOGGLE
@@ -715,10 +768,11 @@ Value func_toggle(valVector args, ValueCalc *calc, FuncExtra *)
         QChar lc = c.toLower();
         QChar uc = c.toUpper();
 
-        if (c == lc) // it is in lowercase
+        if (c == lc) { // it is in lowercase
             str[i] = c.toUpper();
-        else if (c == uc) // it is in uppercase
+        } else if (c == uc) { // it is in uppercase
             str[i] = c.toLower();
+        }
     }
 
     return Value(str);
@@ -739,16 +793,18 @@ Value func_unichar(valVector args, ValueCalc *calc, FuncExtra *)
         QString str;
         str.setUtf16(&val, 1);
         return Value(str);
-    } else
+    } else {
         return Value::errorNUM();
+    }
 }
 
 // Function: UNICODE
 Value func_unicode(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString str(calc->conv()->asString(args[0]).asString());
-    if (str.length() <= 0)
+    if (str.length() <= 0) {
         return Value::errorVALUE();
+    }
 
     return Value((int)str.toUcs4().at(0));
 }
@@ -789,13 +845,13 @@ Value func_value(valVector args, ValueCalc *calc, FuncExtra *)
 #define UTF8_TH_SATANG  "\340\270\252\340\270\225\340\270\262\340\270\207\340\270\204\340\271\214"
 #define UTF8_TH_MINUS   "\340\270\245\340\270\232"
 
-inline void lclSplitBlock(double& rfInt, qint32& rnBlock, double fValue, double fSize)
+inline void lclSplitBlock(double &rfInt, qint32 &rnBlock, double fValue, double fSize)
 {
     rnBlock = static_cast< qint32 >(modf((fValue + 0.1) / fSize, &rfInt) * fSize + 0.1);
 }
 
 /** Appends a digit (0 to 9) to the passed string. */
-void lclAppendDigit(QString& rText, qint32 nDigit)
+void lclAppendDigit(QString &rText, qint32 nDigit)
 {
     switch (nDigit) {
     case 0: rText += QString::fromUtf8(UTF8_TH_0); break;
@@ -816,7 +872,7 @@ void lclAppendDigit(QString& rText, qint32 nDigit)
     @param nDigit  A digit in the range from 1 to 9.
     @param nPow10  A value in the range from 2 to 5.
  */
-void lclAppendPow10(QString& rText, qint32 nDigit, qint32 nPow10)
+void lclAppendPow10(QString &rText, qint32 nDigit, qint32 nPow10)
 {
     Q_ASSERT((1 <= nDigit) && (nDigit <= 9));   // illegal digit?
     lclAppendDigit(rText, nDigit);
@@ -830,7 +886,7 @@ void lclAppendPow10(QString& rText, qint32 nDigit, qint32 nPow10)
 }
 
 /** Appends a block of 6 digits (value from 1 to 999,999) to the passed string. */
-void lclAppendBlock(QString& rText, qint32 nValue)
+void lclAppendBlock(QString &rText, qint32 nValue)
 {
     Q_ASSERT((1 <= nValue) && (nValue <= 999999));   // illegal value?
     if (nValue >= 100000) {
@@ -853,16 +909,18 @@ void lclAppendBlock(QString& rText, qint32 nValue)
         qint32 nTen = nValue / 10;
         qint32 nOne = nValue % 10;
         if (nTen >= 1) {
-            if (nTen >= 3)
+            if (nTen >= 3) {
                 lclAppendDigit(rText, nTen);
-            else if (nTen == 2)
+            } else if (nTen == 2) {
                 rText += QString::fromUtf8(UTF8_TH_20);
+            }
             rText += QString::fromUtf8(UTF8_TH_10);
         }
-        if ((nTen > 0) && (nOne == 1))
+        if ((nTen > 0) && (nOne == 1)) {
             rText += QString::fromUtf8(UTF8_TH_11);
-        else if (nOne > 0)
+        } else if (nOne > 0) {
             lclAppendDigit(rText, nOne);
+        }
     }
 }
 
@@ -887,21 +945,25 @@ Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *)
 
     // generate text for Baht value
     if (fBaht == 0.0) {
-        if (nSatang == 0)
+        if (nSatang == 0) {
             aText += QString::fromUtf8(UTF8_TH_0);
+        }
     } else while (fBaht > 0.0) {
             QString aBlock;
             qint32 nBlock = 0;
             lclSplitBlock(fBaht, nBlock, fBaht, 1.0e6);
-            if (nBlock > 0)
+            if (nBlock > 0) {
                 lclAppendBlock(aBlock, nBlock);
+            }
             // add leading "million", if there will come more blocks
-            if (fBaht > 0.0)
+            if (fBaht > 0.0) {
                 aBlock = QString::fromUtf8(UTF8_TH_1E6) + aBlock;
+            }
             aText.insert(0, aBlock);
         }
-    if (aText.length() > 0)
+    if (aText.length() > 0) {
         aText += QString::fromUtf8(UTF8_TH_BAHT);
+    }
 
     // generate text for Satang value
     if (nSatang == 0) {
@@ -912,8 +974,9 @@ Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *)
     }
 
     // add the minus sign
-    if (bMinus)
+    if (bMinus) {
         aText = QString::fromUtf8(UTF8_TH_MINUS) + aText;
+    }
 
     return Value(aText);
 }

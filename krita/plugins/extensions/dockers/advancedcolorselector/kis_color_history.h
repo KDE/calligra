@@ -20,7 +20,6 @@
 
 #include "kis_color_patches.h"
 
-
 class KisCanvasResourceProvider;
 
 class KisColorHistory : public KisColorPatches
@@ -32,10 +31,10 @@ public:
     void unsetCanvas();
 
 protected:
-    KisColorSelectorBase* createPopup() const;
+    KisColorSelectorBase *createPopup() const;
 
 public Q_SLOTS:
-    void addColorToHistory(const KoColor& color);
+    void addColorToHistory(const KoColor &color);
 
 private:
     QList<KoColor> m_colorHistory;

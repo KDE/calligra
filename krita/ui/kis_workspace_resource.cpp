@@ -24,10 +24,9 @@
 #include <QTextStream>
 #include <QCryptographicHash>
 
-
 #define WORKSPACE_VERSION 1
 
-KisWorkspaceResource::KisWorkspaceResource(const QString& filename): KoResource(filename)
+KisWorkspaceResource::KisWorkspaceResource(const QString &filename): KoResource(filename)
 {
 }
 
@@ -37,8 +36,9 @@ KisWorkspaceResource::~KisWorkspaceResource()
 
 bool KisWorkspaceResource::save()
 {
-    if (filename().isEmpty())
-         return false;
+    if (filename().isEmpty()) {
+        return false;
+    }
 
     QFile file(filename());
     file.open(QIODevice::WriteOnly);
@@ -51,7 +51,7 @@ bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
 {
     QDomDocument doc;
     QDomElement root = doc.createElement("Workspace");
-    root.setAttribute("name", name() );
+    root.setAttribute("name", name());
     root.setAttribute("version", WORKSPACE_VERSION);
     QDomElement state = doc.createElement("state");
     state.appendChild(doc.createCDATASection(m_dockerState.toBase64()));
@@ -72,11 +72,14 @@ bool KisWorkspaceResource::saveToDevice(QIODevice *dev) const
 
 bool KisWorkspaceResource::load()
 {
-    if (filename().isEmpty())
-         return false;
- 
+    if (filename().isEmpty()) {
+        return false;
+    }
+
     QFile file(filename());
-    if (file.size() == 0) return false;
+    if (file.size() == 0) {
+        return false;
+    }
     if (!file.open(QIODevice::ReadOnly)) {
         warnKrita << "Can't open file " << filename();
         return false;
@@ -117,7 +120,7 @@ QString KisWorkspaceResource::defaultFileExtension() const
     return QString(".kws");
 }
 
-void KisWorkspaceResource::setDockerState(const QByteArray& state)
+void KisWorkspaceResource::setDockerState(const QByteArray &state)
 {
     m_dockerState = state;
 }

@@ -21,26 +21,28 @@
 
 #include "einspline/bspline_base.h"
 
-namespace KisBSplines {
+namespace KisBSplines
+{
 
-    inline bc_code convertBorderType(BorderCondition v) {
-        switch (v) {
-        case Periodic:
-            return PERIODIC;
-        case Deriv1:
-            return DERIV1;
-        case Deriv2:
-            return DERIV2;
-        case Flat:
-            return FLAT;
-        case Natural:
-            return NATURAL;
-        case Antiperiodic:
-            return ANTIPERIODIC;
-        }
-
+inline bc_code convertBorderType(BorderCondition v)
+{
+    switch (v) {
+    case Periodic:
+        return PERIODIC;
+    case Deriv1:
+        return DERIV1;
+    case Deriv2:
+        return DERIV2;
+    case Flat:
+        return FLAT;
+    case Natural:
         return NATURAL;
+    case Antiperiodic:
+        return ANTIPERIODIC;
     }
+
+    return NATURAL;
+}
 
 }
 

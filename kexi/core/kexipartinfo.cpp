@@ -28,15 +28,15 @@
 
 using namespace KexiPart;
 
-Info::Private::Private(const KService::Ptr& aPtr)
-        : ptr(aPtr)
-        , instanceCaption(aPtr->name())
-        , groupName(aPtr->genericName())
-        , itemIconName(aPtr->property("X-Kexi-ItemIcon", QVariant::String).toString())
-        , objectName(aPtr->property("X-Kexi-TypeName", QVariant::String).toString())
-        , partClass(aPtr->property("X-Kexi-Class", QVariant::String).toString())
-        , broken(false)
-        , idStoredInPartDatabase(false)
+Info::Private::Private(const KService::Ptr &aPtr)
+    : ptr(aPtr)
+    , instanceCaption(aPtr->name())
+    , groupName(aPtr->genericName())
+    , itemIconName(aPtr->property("X-Kexi-ItemIcon", QVariant::String).toString())
+    , objectName(aPtr->property("X-Kexi-TypeName", QVariant::String).toString())
+    , partClass(aPtr->property("X-Kexi-Class", QVariant::String).toString())
+    , broken(false)
+    , idStoredInPartDatabase(false)
 {
     bool dataView = true;
     getBooleanProperty(aPtr, "X-Kexi-SupportsDataView", &dataView);
@@ -68,7 +68,7 @@ Info::Private::Private(const KService::Ptr& aPtr)
     if (textView) {
         supportedUserViewModes |= Kexi::TextViewMode;
     }
-    
+
     isVisibleInNavigator = false;
     getBooleanProperty(aPtr, "X-Kexi-NoObject", &isVisibleInNavigator);
     isVisibleInNavigator = !isVisibleInNavigator;
@@ -79,10 +79,10 @@ Info::Private::Private(const KService::Ptr& aPtr)
 }
 
 Info::Private::Private()
-        : broken(false)
-        , isVisibleInNavigator(false)
-        , idStoredInPartDatabase(false)
-        , isPropertyEditorAlwaysVisibleInDesignMode(false)
+    : broken(false)
+    , isVisibleInNavigator(false)
+    , idStoredInPartDatabase(false)
+    , isPropertyEditorAlwaysVisibleInDesignMode(false)
 {
 }
 
@@ -90,23 +90,23 @@ Info::Private::Private()
 
 /*! \return "create" KAction's name for part defined by \a info.
  The result is like "tablepart_create". */
-static QString nameForCreateAction(const Info& info)
+static QString nameForCreateAction(const Info &info)
 {
     return info.objectName() + "part_create";
 }
 
 //------------------------------
 
-KexiNewObjectAction::KexiNewObjectAction(Info* info, QObject *parent)
+KexiNewObjectAction::KexiNewObjectAction(Info *info, QObject *parent)
     : KAction(KIcon(info->createItemIconName()), info->instanceCaption() + "...", parent)
     , m_info(info)
 {
     setObjectName(nameForCreateAction(*m_info));
     // default tooltip and what's this
     setToolTip(i18n("Create new object of type \"%1\"",
-                m_info->instanceCaption().toLower()));
-    setWhatsThis(i18n("Creates new object of type \"%1\"",
                     m_info->instanceCaption().toLower()));
+    setWhatsThis(i18n("Creates new object of type \"%1\"",
+                      m_info->instanceCaption().toLower()));
     connect(this, SIGNAL(triggered()), this, SLOT(slotTriggered()));
     connect(this, SIGNAL(newObjectRequested(KexiPart::Info*)),
             &Kexi::partManager(), SIGNAL(newObjectRequested(KexiPart::Info*)));
@@ -120,20 +120,20 @@ void KexiNewObjectAction::slotTriggered()
 //------------------------------
 
 Info::Info(KService::Ptr ptr)
-        : d(new Private(ptr))
+    : d(new Private(ptr))
 {
 
 }
 
 Info::Info(const QString &partClass, const QString &itemIconName,
            const QString &objectName)
-        : d(new Private)
-{                       
+    : d(new Private)
+{
     d->partClass = partClass;
     d->itemIconName = itemIconName;
     d->objectName = objectName;
-}                       
-                       
+}
+
 Info::~Info()
 {
     delete d;
@@ -194,7 +194,7 @@ bool Info::isVisibleInNavigator() const
     return d->isVisibleInNavigator;
 }
 
-void Info::setBroken(bool broken, const QString& errorMessage)
+void Info::setBroken(bool broken, const QString &errorMessage)
 {
     d->broken = broken;
     d->errorMessage = errorMessage;
@@ -238,11 +238,10 @@ bool Info::isPropertyEditorAlwaysVisibleInDesignMode() const
     return d->isPropertyEditorAlwaysVisibleInDesignMode;
 }
 
-QAction* Info::newObjectAction()
+QAction *Info::newObjectAction()
 {
     if (!KexiMainWindowIface::global() || !KexiMainWindowIface::global()->actionCollection()
-        || !isVisibleInNavigator())
-    {
+            || !isVisibleInNavigator()) {
         kWarning();
         return 0;
     }

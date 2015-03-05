@@ -29,12 +29,13 @@
 
 DeclarativeDropArea::DeclarativeDropArea(QDeclarativeItem *parent)
     : QDeclarativeItem(parent),
-    m_enabled(true)
+      m_enabled(true)
 {
     setAcceptDrops(m_enabled);
 }
 
-void DeclarativeDropArea::dragEnterEvent(QGraphicsSceneDragDropEvent *event) {
+void DeclarativeDropArea::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
     DeclarativeDragDropEvent dde(event, this);
     emit dragEnter(&dde);
 }

@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
@@ -26,22 +25,35 @@
 class Component
 {
 public:
-    Component(){};
-    virtual ~Component(){};
+    Component() {};
+    virtual ~Component() {};
     virtual void add(Component *c) = 0;
-    virtual Component * child(int index) const = 0;
-    virtual Component * parent() = 0;
+    virtual Component *child(int index) const = 0;
+    virtual Component *parent() = 0;
     virtual int row() const = 0;
 
     virtual int childCount() const = 0;
     virtual int columnCount() const = 0;
 
-    virtual int indexOf(Component *c) const { Q_UNUSED(c); return 0; }
+    virtual int indexOf(Component *c) const
+    {
+        Q_UNUSED(c);
+        return 0;
+    }
 
-    virtual void setName(const QString &name) {  m_name = name; }
-    virtual QString name() const { return m_name; }
+    virtual void setName(const QString &name)
+    {
+        m_name = name;
+    }
+    virtual QString name() const
+    {
+        return m_name;
+    }
 
-    virtual void print(int level = 0) { Q_UNUSED(level); }
+    virtual void print(int level = 0)
+    {
+        Q_UNUSED(level);
+    }
 
     virtual QVariant data(int column)
     {

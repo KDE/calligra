@@ -23,15 +23,17 @@
 #include <db/cursor.h>
 #include <db/connection.h>
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 class xBaseCursorData;
 
-class xBaseCursor: public Cursor {
-  public:
-        	xBaseCursor(Connection* conn, Cursor* internalCursor, const QString& statement = QString(), 
-      uint cursor_options = NoOptions );
-    xBaseCursor(Connection* conn, Cursor* internalCursor, QuerySchema& query, uint options = 	NoOptions );
+class xBaseCursor: public Cursor
+{
+public:
+    xBaseCursor(Connection *conn, Cursor *internalCursor, const QString &statement = QString(),
+                uint cursor_options = NoOptions);
+    xBaseCursor(Connection *conn, Cursor *internalCursor, QuerySchema &query, uint options =    NoOptions);
     virtual ~xBaseCursor();
 
     virtual bool drv_open();
@@ -44,19 +46,18 @@ class xBaseCursor: public Cursor {
     virtual void drv_bufferMovePointerNext();
     virtual void drv_bufferMovePointerPrev();
     virtual void drv_bufferMovePointerTo(qint64 to);
-    virtual const char** rowData() const;
+    virtual const char **rowData() const;
     virtual bool drv_storeCurrentRow(RecordData &data) const;
-    
+
     virtual int serverResult();
     virtual QString serverResultName();
     virtual QString serverErrorMsg();
 
-  protected:
+protected:
     xBaseCursorData *d;
-  
-  private:
-    void init();
 
+private:
+    void init();
 
 };
 

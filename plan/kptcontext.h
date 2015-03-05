@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef KPTCONTEXT_H
 #define KPTCONTEXT_H
 
@@ -32,17 +31,21 @@ namespace KPlato
 
 class View;
 
-class Context {
+class Context
+{
 public:
     Context();
     virtual ~Context();
-    
-    virtual bool load( const KoXmlDocument &doc );
-    virtual QDomDocument save( const View *view ) const;
-    const KoXmlElement &context() const;
-    bool isLoaded() const { return m_contextLoaded; }
 
-    bool setContent( const QString &str );
+    virtual bool load(const KoXmlDocument &doc);
+    virtual QDomDocument save(const View *view) const;
+    const KoXmlElement &context() const;
+    bool isLoaded() const
+    {
+        return m_contextLoaded;
+    }
+
+    bool setContent(const QString &str);
 
     // View
     QString currentView;
@@ -65,14 +68,14 @@ public:
         bool showCriticalPath;
         bool showNoInformation;
         QStringList closedNodes;
-    } ganttview;    
-    
+    } ganttview;
+
     struct Pertview {
     } pertview;
-    
+
     struct Resourceview {
     } resourceview;
-    
+
     struct Accountsview {
         int accountsviewsize;
         int periodviewsize;
@@ -81,7 +84,7 @@ public:
         bool cumulative;
         QStringList closedItems;
     } accountsview;
-    
+
     struct Reportview {
     } reportview;
 

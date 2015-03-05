@@ -50,7 +50,7 @@ public:
     bool    isDefaultStyle;
     bool    inUse;
     //
-    QHash<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties",
+    QHash<QString, KoOdfStyleProperties *> properties; // e.g. "text-properties",
 };
 
 KoOdfListStyle::Private::Private()
@@ -65,7 +65,7 @@ KoOdfListStyle::Private::~Private()
 }
 
 KoOdfListStyle::KoOdfListStyle()
-    :d(new KoOdfListStyle::Private())
+    : d(new KoOdfListStyle::Private())
 {
 }
 
@@ -114,7 +114,7 @@ void KoOdfListStyle::setInUse(bool inUse)
     d->inUse = inUse;
 }
 
-QHash<QString, KoOdfStyleProperties*> KoOdfListStyle::properties()
+QHash<QString, KoOdfStyleProperties *> KoOdfListStyle::properties()
 {
     return d->properties;
 }
@@ -127,17 +127,19 @@ KoOdfStyleProperties *KoOdfListStyle::properties(QString &name) const
 QString KoOdfListStyle::property(QString &propertySet, QString &property) const
 {
     KoOdfStyleProperties *props = d->properties.value(propertySet, 0);
-    if (props)
+    if (props) {
         return props->attribute(property);
-    else
+    } else {
         return QString();
+    }
 }
 
 void KoOdfListStyle::setProperty(QString &propertySet, QString &property, QString &value)
 {
     KoOdfStyleProperties *props = d->properties.value(propertySet);
-    if (!props)
+    if (!props) {
         props = new KoOdfStyleProperties();
+    }
     props->setAttribute(property, value);
 }
 
@@ -154,8 +156,7 @@ bool KoOdfListStyle::readProperties(KoXmlStreamReader &reader)
         KoOdfStyleProperties *properties;
         if (propertiesType == "style:text-properties") {
             properties = new KoOdfTextProperties();
-        }
-        else if (propertiesType == "style:list-level-properties") {
+        } else if (propertiesType == "style:list-level-properties") {
             properties = new KoOdfListLevelProperties();
         } else {
             // FIXME: support office:binary-data
@@ -195,8 +196,7 @@ bool KoOdfListStyle::readOdf(KoXmlStreamReader &reader)
         setListLevelStyleType(listLevelType);
         if (listLevelType == "text:list-level-style-bullet"
                 || listLevelType == "text:list-level-style-number"
-                || listLevelType == "text:list-level-style-image")
-        {
+                || listLevelType == "text:list-level-style-image") {
             kDebug() << "List Level style type" << listLevelType;
             if (!readProperties(reader)) {
                 return false;
@@ -209,7 +209,7 @@ bool KoOdfListStyle::readOdf(KoXmlStreamReader &reader)
 
 bool KoOdfListStyle::saveOdf(KoXmlWriter *writer)
 {
-     writer->startElement("text:list-style");
+    writer->startElement("text:list-style");
     // Write style attributes
     if (!d->displayName.isEmpty()) {
         writer->addAttribute("style:display-name", d->displayName);
@@ -218,7 +218,7 @@ bool KoOdfListStyle::saveOdf(KoXmlWriter *writer)
     // Write child element
     writer->startElement(listLevelStyleType().toUtf8());
     // Write properties
-    foreach(const QString &propertySet, d->properties.keys()) {
+    foreach (const QString &propertySet, d->properties.keys()) {
         d->properties.value(propertySet)->saveOdf(propertySet, writer);
     }
     writer->endElement();

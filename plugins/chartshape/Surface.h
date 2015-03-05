@@ -29,12 +29,12 @@ class KoStyleStack;
 class KoOdfLoadingContext;
 class QSizeF;
 
-namespace KChart {
-
+namespace KChart
+{
 
 /**
  * @brief The Surface class represents either a chart wall, or chart floor.
- * 
+ *
  * Currently only the wall can be visualized, though support for a
  * chart floor is needed to load and save in ODF without loss of data.
  */
@@ -60,7 +60,7 @@ public:
     void setWidth(int);
     void setBrush(const QBrush &brush);
     void setFramePen(const QPen &pen);
-    
+
     bool loadOdf(const KoXmlElement &surfaceElement, KoShapeLoadingContext &context);
     void saveOdf(KoShapeSavingContext &context, const char *elementName);
 

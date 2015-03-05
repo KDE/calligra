@@ -24,8 +24,7 @@
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
 
-
-KisBrushBasedPaintopOptionWidget::KisBrushBasedPaintopOptionWidget(QWidget* parent)
+KisBrushBasedPaintopOptionWidget::KisBrushBasedPaintopOptionWidget(QWidget *parent)
     : KisPaintOpOptionsWidget(parent)
 {
     m_brushOption = new KisBrushOptionWidget();
@@ -66,7 +65,6 @@ QSizeF KisBrushBasedPaintopOptionWidget::paintOpSize() const
 {
     return m_brushOption->brushSize();
 }
-
 
 bool KisBrushBasedPaintopOptionWidget::presetIsValid()
 {

@@ -37,13 +37,14 @@ public:
      * @param fileName file name to load or save that profile
      */
     explicit KoColorProfile(const QString &fileName = QString());
-    KoColorProfile(const KoColorProfile& profile);
+    KoColorProfile(const KoColorProfile &profile);
     virtual ~KoColorProfile();
 
     /**
      * @return the type of this profile (icc, ctlcs etc)
      */
-    virtual QString type() const {
+    virtual QString type() const
+    {
         return QString();
     }
 
@@ -55,7 +56,7 @@ public:
      * Data that shall be changed like a palette or hdr information such as exposure
      * must be duplicated while cloning.
      */
-    virtual KoColorProfile* clone() const = 0;
+    virtual KoColorProfile *clone() const = 0;
 
     /**
      * Load the profile in memory.
@@ -107,12 +108,13 @@ public:
      */
     virtual bool isSuitableForDisplay() const = 0;
 
-    virtual bool operator==(const KoColorProfile&) const = 0;
+    virtual bool operator==(const KoColorProfile &) const = 0;
 
     /**
      * @return an array with the raw data of the profile
      */
-    virtual QByteArray rawData() const {
+    virtual QByteArray rawData() const
+    {
         return QByteArray();
     }
 
@@ -128,7 +130,7 @@ protected:
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

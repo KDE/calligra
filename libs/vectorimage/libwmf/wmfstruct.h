@@ -21,7 +21,7 @@
 typedef short WORD;
 typedef int DWORD;
 typedef qint32 LONG;
-typedef void* _HANDLE;
+typedef void *_HANDLE;
 
 typedef struct _RECT {
     WORD left;
@@ -47,7 +47,6 @@ typedef struct _SIZEL {
     LONG height;
 } SIZEL;
 
-
 struct WmfEnhMetaHeader {
     DWORD   iType;              // Record type EMR_HEADER
     DWORD   nSize;              // Record size in bytes.  This may be greater
@@ -72,7 +71,6 @@ struct WmfEnhMetaHeader {
 };
 #define ENHMETA_SIGNATURE       0x464D4520
 
-
 struct WmfMetaHeader {
     WORD        mtType;
     WORD        mtHeaderSize;
@@ -82,7 +80,6 @@ struct WmfMetaHeader {
     DWORD       mtMaxRecord;
     WORD        mtNoParameters;
 };
-
 
 struct WmfPlaceableHeader {
     DWORD key;
@@ -94,19 +91,16 @@ struct WmfPlaceableHeader {
 };
 #define APMHEADER_KEY 0x9AC6CDD7
 
-
 struct WmfMetaRecord {
     DWORD rdSize;       // Record size ( in words ) of the function
     WORD  rdFunction;   // Record function number
     WORD  rdParm[ 1 ];  // WORD array of parameters
 };
 
-
 struct WmfEnhMetaRecord {
     DWORD iType;        // Record type EMR_xxx
     DWORD nSize;        // Record size in bytes
     DWORD dParm[ 1 ];   // DWORD array of parameters
 };
-
 
 #endif /*wmfstruct_h*/

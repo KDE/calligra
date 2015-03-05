@@ -20,12 +20,13 @@
 #include <KoPAViewBase.h>
 #include <KoZoomHandler.h>
 
-class KoPAViewBase::Private {
+class KoPAViewBase::Private
+{
 
 public:
 
     KoZoomHandler zoomHandler;
-    KoPAViewMode * viewMode;
+    KoPAViewMode *viewMode;
 };
 
 KoPAViewBase::KoPAViewBase()
@@ -41,52 +42,49 @@ KoPAViewBase::~KoPAViewBase()
     delete proxyObject;
 }
 
-KoViewConverter* KoPAViewBase::viewConverter( KoPACanvasBase * canvas )
+KoViewConverter *KoPAViewBase::viewConverter(KoPACanvasBase *canvas)
 {
-    Q_UNUSED( canvas );
+    Q_UNUSED(canvas);
 
     return &d->zoomHandler;
 }
 
-KoZoomHandler* KoPAViewBase::zoomHandler()
+KoZoomHandler *KoPAViewBase::zoomHandler()
 {
     return &d->zoomHandler;
 }
 
-KoViewConverter* KoPAViewBase::viewConverter() const
+KoViewConverter *KoPAViewBase::viewConverter() const
 {
     return &d->zoomHandler;
 }
 
-KoZoomHandler* KoPAViewBase::zoomHandler() const
+KoZoomHandler *KoPAViewBase::zoomHandler() const
 {
     return &d->zoomHandler;
 }
 
-void KoPAViewBase::setViewMode( KoPAViewMode* mode )
+void KoPAViewBase::setViewMode(KoPAViewMode *mode)
 {
-    Q_ASSERT( mode );
-    if ( !d->viewMode ) {
+    Q_ASSERT(mode);
+    if (!d->viewMode) {
         d->viewMode = mode;
-    }
-    else if ( mode != d->viewMode ) {
-        KoPAViewMode * previousViewMode = d->viewMode;
+    } else if (mode != d->viewMode) {
+        KoPAViewMode *previousViewMode = d->viewMode;
         d->viewMode->deactivate();
         d->viewMode = mode;
-        d->viewMode->activate( previousViewMode );
+        d->viewMode->activate(previousViewMode);
     }
 }
 
-KoPAViewMode* KoPAViewBase::viewMode() const
+KoPAViewMode *KoPAViewBase::viewMode() const
 {
     return d->viewMode;
 }
-
 
 KoPAViewProxyObject::KoPAViewProxyObject(KoPAViewBase *parent)
 {
     m_view = parent;
 }
-
 
 #include <KoPAViewBase.moc>

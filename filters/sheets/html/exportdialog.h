@@ -27,11 +27,11 @@
 class ExportWidget : public QWidget, public Ui::ExportWidget
 {
 public:
-    explicit ExportWidget(QWidget *parent) : QWidget(parent) {
+    explicit ExportWidget(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
-
 
 class ExportDialog : public KDialog
 {

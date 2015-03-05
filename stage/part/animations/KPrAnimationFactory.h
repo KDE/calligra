@@ -31,7 +31,7 @@ class STAGE_EXPORT KPrAnimationFactory
 {
 public:
     static KPrAnimationBase *createAnimationFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context,
-                                                    KPrShapeAnimation *shapeAnimation);
+            KPrShapeAnimation *shapeAnimation);
 };
 
 #endif /* KPRANIMATIONFACTORY_H */

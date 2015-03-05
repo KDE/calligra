@@ -113,10 +113,10 @@ private Q_SLOTS:
     void testTRUNC();
 
 private:
-    Value TestDouble(const QString& formula, const Value& v2, int accuracy);
-    Value evaluate(const QString&);
+    Value TestDouble(const QString &formula, const Value &v2, int accuracy);
+    Value evaluate(const QString &);
 
-    Map* m_map;
+    Map *m_map;
 };
 
 } // namespace Sheets

@@ -36,7 +36,8 @@ class WdgRotateImage : public QWidget, public Ui::WdgRotateImage
     Q_OBJECT
 
 public:
-    WdgRotateImage(QWidget *parent) : QWidget(parent) {
+    WdgRotateImage(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -48,8 +49,8 @@ class DlgRotateImage: public KDialog
 
 public:
 
-    DlgRotateImage(QWidget * parent = 0,
-                   const char* name = 0);
+    DlgRotateImage(QWidget *parent = 0,
+                   const char *name = 0);
     ~DlgRotateImage();
 
     void setAngle(quint32 w);
@@ -66,7 +67,7 @@ private Q_SLOTS:
 
 private:
 
-    WdgRotateImage * m_page;
+    WdgRotateImage *m_page;
     double m_oldAngle;
     bool m_lock;
 

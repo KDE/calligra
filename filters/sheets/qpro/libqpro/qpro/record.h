@@ -82,8 +82,8 @@ public:
     QP_INT16    attributes();
 
 //   const char* cellRef();
-    void        cellRef(char* pText, QpTableNames& pTable, QP_INT16 pNoteBook, QP_UINT8 pPage, QP_UINT8 pColumn, QP_INT16 pRow);
-    void        cellRef(char* pText, QpTableNames& pTable, QpIStream& pFormulaRef);
+    void        cellRef(char *pText, QpTableNames &pTable, QP_INT16 pNoteBook, QP_UINT8 pPage, QP_UINT8 pColumn, QP_INT16 pRow);
+    void        cellRef(char *pText, QpTableNames &pTable, QpIStream &pFormulaRef);
 
     void        column(QP_UINT8 pColumn);
     QP_UINT8    column();
@@ -92,13 +92,13 @@ public:
     QP_INT16    row();
 
 protected:
-    int         loadCellInfo(QpIStream& pIn);
+    int         loadCellInfo(QpIStream &pIn);
 
     QP_INT16 cAttributes;
     QP_UINT8 cColumn;
     QP_UINT8 cPage;
     QP_INT16 cRow;
-    char*    cCellRef;
+    char    *cCellRef;
 };
 
 // -----------------------------------------------------------------------
@@ -106,7 +106,7 @@ protected:
 class QpRecBof : public QpRec
 {
 public:
-    QpRecBof(QP_INT16 pLen, QpIStream& pIn);
+    QpRecBof(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecBof();
 
     void     fileFormat(QP_INT16 pFileFormat);
@@ -121,10 +121,9 @@ protected:
 class QpRecEof : public QpRec
 {
 public:
-    QpRecEof(QP_INT16 pLen, QpIStream& pIn);
+    QpRecEof(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecEof();
 };
-
 
 // -----------------------------------------------------------------------
 
@@ -133,7 +132,7 @@ class QpRecRecalcMode : public QpRec
 public:
     enum MODE {Manual = 0, Background = 1, Automatic = 255};
 
-    QpRecRecalcMode(QP_INT16 pLen, QpIStream& pIn);
+    QpRecRecalcMode(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecRecalcMode();
 
     void mode(MODE pMode);
@@ -143,7 +142,6 @@ protected:
     MODE cMode;
 };
 
-
 // -----------------------------------------------------------------------
 
 class QpRecRecalcOrder : public QpRec
@@ -151,7 +149,7 @@ class QpRecRecalcOrder : public QpRec
 public:
     enum ORDER { Natural = 0, Column = 1, Row = 255 };
 
-    QpRecRecalcOrder(QP_INT16 pLen, QpIStream& pIn);
+    QpRecRecalcOrder(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecRecalcOrder();
 
     void  order(ORDER pOrder);
@@ -160,7 +158,6 @@ public:
 protected:
     ORDER cOrder;
 };
-
 
 // -----------------------------------------------------------------------
 
@@ -174,19 +171,17 @@ protected:
 class QpRecEmptyCell : public QpRecCell
 {
 public:
-    QpRecEmptyCell(QP_INT16 pLen, QpIStream& pIn);
+    QpRecEmptyCell(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecEmptyCell();
 };
-
 
 // -----------------------------------------------------------------------
 
 class QpRecIntegerCell : public QpRecCell
 {
 public:
-    QpRecIntegerCell(QP_INT16 pLen, QpIStream& pIn);
+    QpRecIntegerCell(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecIntegerCell();
-
 
     QP_INT16 integer();
 protected:
@@ -198,7 +193,7 @@ protected:
 class QpRecFloatingPointCell : public QpRecCell
 {
 public:
-    QpRecFloatingPointCell(QP_INT16 pLen, QpIStream& pIn);
+    QpRecFloatingPointCell(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecFloatingPointCell();
 
     QP_INT64 value();
@@ -211,16 +206,16 @@ protected:
 class QpRecFormulaCell : public QpRecCell
 {
 public:
-    QpRecFormulaCell(QP_INT16 pLen, QpIStream& pIn);
+    QpRecFormulaCell(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecFormulaCell();
 
-    const char* formula();
+    const char *formula();
     QP_INT16    formulaReferences();
     QP_INT16    formulaLen();
 
 protected:
     QP_INT16    cCellRef;
-    char*       cFormula;
+    char       *cFormula;
     QP_INT64    cLastValue;
     QP_INT16    cLen;
     QP_INT16    cState;
@@ -231,15 +226,15 @@ protected:
 class QpRecLabelCell : public QpRecCell
 {
 public:
-    QpRecLabelCell(QP_INT16 pLen, QpIStream& pIn);
+    QpRecLabelCell(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecLabelCell();
 
     char        labelPrefix();
-    const char* label();
+    const char *label();
 
 protected:
     char  cLabelPrefix;
-    char* cLabel;
+    char *cLabel;
 };
 
 // -----------------------------------------------------------------------
@@ -247,7 +242,7 @@ protected:
 class QpRecUnknown : public QpRec
 {
 public:
-    QpRecUnknown(QP_INT16 pType, QP_INT16 pLen, QpIStream& pIn);
+    QpRecUnknown(QP_INT16 pType, QP_INT16 pLen, QpIStream &pIn);
     ~QpRecUnknown();
 };
 
@@ -256,7 +251,7 @@ public:
 class QpRecBop : public QpRec
 {
 public:
-    QpRecBop(QP_INT16 pLen, QpIStream& pIn);
+    QpRecBop(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecBop();
 
     QP_UINT8 pageIndex();
@@ -270,13 +265,13 @@ protected:
 class QpRecPageName : public QpRec
 {
 public:
-    QpRecPageName(QP_INT16 pLen, QpIStream& pIn);
+    QpRecPageName(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecPageName();
 
-    const char* pageName();
+    const char *pageName();
 
 protected:
-    char* cPageName;
+    char *cPageName;
 };
 
 // -----------------------------------------------------------------------
@@ -284,13 +279,13 @@ protected:
 class QpRecPassword : public QpRec
 {
 public:
-    QpRecPassword(QP_INT16 pLen, QpIStream& pIn);
+    QpRecPassword(QP_INT16 pLen, QpIStream &pIn);
     ~QpRecPassword();
 
-    const QP_UINT8* password();
+    const QP_UINT8 *password();
 
 protected:
-    QP_UINT8* cPassword;
+    QP_UINT8 *cPassword;
 };
 
 #endif // QPRO_RECORD_H

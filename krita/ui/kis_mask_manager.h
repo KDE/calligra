@@ -43,19 +43,18 @@ class KisMaskManager : public QObject
 
 public:
 
-
-    KisMaskManager(KisViewManager * view);
+    KisMaskManager(KisViewManager *view);
     ~KisMaskManager() {}
     void setView(QPointer<KisView>view);
 
 private:
-    
+
     friend class KisNodeManager;
-    
-    void setup(KActionCollection * actionCollection, KisActionManager *actionManager);
+
+    void setup(KActionCollection *actionCollection, KisActionManager *actionManager);
 
     void updateGUI();
-    
+
     /**
      * @return the paint device associated with the currently
      *         active mask, if there is one.
@@ -127,9 +126,9 @@ private:
     void createTransformMask(KisNodeSP activeNode);
     void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode);
 
-    KisViewManager * m_view;
+    KisViewManager *m_view;
     QPointer<KisView>m_imageView;
-    KisNodeCommandsAdapter* m_commandsAdapter;
+    KisNodeCommandsAdapter *m_commandsAdapter;
 
 };
 

@@ -36,34 +36,34 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 class KoConfigDocumentPage::Private
 {
 public:
-    Private(KoDocument* doc)
-    : doc(doc)
+    Private(KoDocument *doc)
+        : doc(doc)
     {}
 
-    KoDocument* doc;
+    KoDocument *doc;
     KSharedConfigPtr config;
 
-    KIntNumInput* autoSave;
+    KIntNumInput *autoSave;
     int oldAutoSave;
     QCheckBox *createBackupFile;
     bool oldBackupFile;
 };
 
-KoConfigDocumentPage::KoConfigDocumentPage(KoDocument* doc, char* name)
-: d(new Private(doc))
+KoConfigDocumentPage::KoConfigDocumentPage(KoDocument *doc, char *name)
+    : d(new Private(doc))
 {
     setObjectName(name);
 
     d->config = d->doc->documentPart()->componentData().config();
 
-    QGroupBox* gbDocumentSettings = new QGroupBox(i18n("Document Settings"), this);
+    QGroupBox *gbDocumentSettings = new QGroupBox(i18n("Document Settings"), this);
     QFormLayout *layout = new QFormLayout(gbDocumentSettings);
 
     d->oldAutoSave = doc->defaultAutoSave() / 60;
 
     d->oldBackupFile = true;
 
-    if(d->config->hasGroup("Interface")) {
+    if (d->config->hasGroup("Interface")) {
         KConfigGroup interfaceGroup = d->config->group("Interface");
         d->oldAutoSave = interfaceGroup.readEntry("AutoSave", d->oldAutoSave);
         d->oldBackupFile = interfaceGroup.readEntry("BackupFile", d->oldBackupFile);

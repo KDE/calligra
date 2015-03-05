@@ -63,7 +63,7 @@ public:
     Part *part() const;
 
 private:
-    DataSourcePrivate * const d;
+    DataSourcePrivate *const d;
 };
 
 }

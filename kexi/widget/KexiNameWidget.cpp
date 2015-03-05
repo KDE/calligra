@@ -37,12 +37,12 @@ public:
 
     Private() {}
 
-    QLabel* lbl_message;
-    QLabel* lbl_caption;
-    QLabel* lbl_name;
-    KLineEdit* le_caption;
-    KLineEdit* le_name;
-    QGridLayout* lyr;
+    QLabel *lbl_message;
+    QLabel *lbl_caption;
+    QLabel *lbl_name;
+    KLineEdit *le_caption;
+    KLineEdit *le_name;
+    QGridLayout *lyr;
     KexiUtils::MultiValidator *validator;
     QString nameWarning, captionWarning;
     QString originalNameText;
@@ -52,27 +52,27 @@ public:
     bool caption_required;
 };
 
-KexiNameWidget::KexiNameWidget(const QString& message, QWidget* parent)
-        : QWidget(parent)
-        , d(new Private)
+KexiNameWidget::KexiNameWidget(const QString &message, QWidget *parent)
+    : QWidget(parent)
+    , d(new Private)
 {
     init(message, QString(), QString(), QString(), QString());
 }
 
-KexiNameWidget::KexiNameWidget(const QString& message,
-                               const QString& nameLabel, const QString& nameText,
-                               const QString& captionLabel, const QString& captionText,
-                               QWidget * parent)
-        : QWidget(parent)
-        , d(new Private)
+KexiNameWidget::KexiNameWidget(const QString &message,
+                               const QString &nameLabel, const QString &nameText,
+                               const QString &captionLabel, const QString &captionText,
+                               QWidget *parent)
+    : QWidget(parent)
+    , d(new Private)
 {
     init(message, nameLabel, nameText, captionLabel, captionText);
 }
 
 void KexiNameWidget::init(
-    const QString& message,
-    const QString& nameLabel, const QString& nameText,
-    const QString& captionLabel, const QString& captionText)
+    const QString &message,
+    const QString &nameLabel, const QString &nameText,
+    const QString &captionLabel, const QString &captionText)
 {
     Q_UNUSED(captionText);
     setObjectName("KexiNameWidget");
@@ -86,19 +86,19 @@ void KexiNameWidget::init(
     d->lbl_message = new QLabel(this);
     setMessageText(message);
     d->lbl_message->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    d->lbl_message->setAlignment(Qt::AlignTop|Qt::AlignLeft);
+    d->lbl_message->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     d->lbl_message->setWordWrap(true);
     d->lbl_message->setTextInteractionFlags(Qt::TextBrowserInteraction);
     d->lyr->addWidget(d->lbl_message, 0, 0, 1, 2);
 
     d->lbl_caption = new QLabel(captionLabel.isEmpty() ? i18n("Caption:") : captionLabel,
-                             this);
-    d->lbl_caption->setAlignment(Qt::AlignVCenter|Qt::AlignRight);
+                                this);
+    d->lbl_caption->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->lyr->addWidget(d->lbl_caption, 1, 0);
 
     d->lbl_name = new QLabel(nameLabel.isEmpty() ? i18n("Name:") : nameLabel,
-                          this);
-    d->lbl_name->setAlignment(Qt::AlignVCenter|Qt::AlignRight);
+                             this);
+    d->lbl_name->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     d->lyr->addWidget(d->lbl_name, 2, 0);
 
     d->le_caption = new KLineEdit(this);
@@ -141,27 +141,27 @@ KexiNameWidget::~KexiNameWidget()
     delete d;
 }
 
-QLabel* KexiNameWidget::captionLabel() const
+QLabel *KexiNameWidget::captionLabel() const
 {
     return d->lbl_caption;
 }
 
-QLabel* KexiNameWidget::nameLabel() const
+QLabel *KexiNameWidget::nameLabel() const
 {
     return d->lbl_name;
 }
 
-KLineEdit* KexiNameWidget::captionLineEdit() const
+KLineEdit *KexiNameWidget::captionLineEdit() const
 {
     return d->le_caption;
 }
 
-KLineEdit* KexiNameWidget::nameLineEdit() const
+KLineEdit *KexiNameWidget::nameLineEdit() const
 {
     return d->le_name;
 }
 
-QLabel* KexiNameWidget::messageLabel() const
+QLabel *KexiNameWidget::messageLabel() const
 {
     return d->lbl_message;
 }
@@ -171,13 +171,12 @@ QString KexiNameWidget::messageText() const
     return d->lbl_message->text();
 }
 
-
-
 void KexiNameWidget::slotCaptionTextChanged(const QString &capt)
 {
     emit textChanged();
-    if (d->le_name->text().isEmpty())
+    if (d->le_name->text().isEmpty()) {
         d->le_name_autofill = true;
+    }
     if (d->le_name_autofill) {
         d->le_name_txtchanged_disable = true;
         d->le_name->setText(KexiUtils::stringToIdentifier(capt).toLower());
@@ -188,8 +187,9 @@ void KexiNameWidget::slotCaptionTextChanged(const QString &capt)
 void KexiNameWidget::slotNameTextChanged(const QString &)
 {
     emit textChanged();
-    if (d->le_name_txtchanged_disable)
+    if (d->le_name_txtchanged_disable) {
         return;
+    }
     d->le_name_autofill = false;
 }
 
@@ -209,45 +209,45 @@ void KexiNameWidget::setNameRequired(bool set)
     d->validator->setAcceptsEmptyValue(!set);
 }
 
-bool KexiNameWidget::isCaptionRequired() const {
+bool KexiNameWidget::isCaptionRequired() const
+{
     return d->caption_required;
 }
 
-void KexiNameWidget::setCaptionRequired(bool set) {
+void KexiNameWidget::setCaptionRequired(bool set)
+{
     d->caption_required = set;
 }
-
 
 bool KexiNameWidget::isNameRequired() const
 {
     return !d->validator->acceptsEmptyValue();
 }
 
-void KexiNameWidget::setCaptionText(const QString& capt)
+void KexiNameWidget::setCaptionText(const QString &capt)
 {
     d->le_caption->setText(capt);
     d->le_name_autofill = true;
 }
 
-void KexiNameWidget::setNameText(const QString& name)
+void KexiNameWidget::setNameText(const QString &name)
 {
     d->le_name->setText(name);
     d->originalNameText = name;
     d->le_name_autofill = true;
 }
 
-void KexiNameWidget::setWarningForName(const QString& txt)
+void KexiNameWidget::setWarningForName(const QString &txt)
 {
     d->nameWarning = txt;
 }
 
-void KexiNameWidget::setWarningForCaption(const QString& txt)
+void KexiNameWidget::setWarningForCaption(const QString &txt)
 {
     d->captionWarning = txt;
 }
 
-
-void KexiNameWidget::setMessageText(const QString& msg)
+void KexiNameWidget::setMessageText(const QString &msg)
 {
     if (msg.trimmed().isEmpty()) {
         d->lbl_message->setText(QString());
@@ -274,7 +274,6 @@ QString KexiNameWidget::originalNameText() const
     return d->originalNameText;
 }
 
-
 bool KexiNameWidget::checkValidity()
 {
     if (isNameRequired() && d->le_name->text().trimmed().isEmpty()) {
@@ -289,8 +288,7 @@ bool KexiNameWidget::checkValidity()
     }
     QString dummy, message, details;
     if (d->validator->check(dummy, d->le_name->text(), message, details)
-            == KexiDB::Validator::Error)
-    {
+            == KexiDB::Validator::Error) {
         KMessageBox::detailedSorry(0, message, details);
         d->le_name->setFocus();
         return false;
@@ -303,7 +301,7 @@ KexiDB::Validator *KexiNameWidget::nameValidator() const
     return d->validator;
 }
 
-void KexiNameWidget::addNameSubvalidator(KexiDB::Validator* validator, bool owned)
+void KexiNameWidget::addNameSubvalidator(KexiDB::Validator *validator, bool owned)
 {
     d->validator->addSubvalidator(validator, owned);
 }

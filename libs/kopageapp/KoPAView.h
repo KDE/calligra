@@ -51,8 +51,7 @@ class KOPAGEAPP_EXPORT KoPAView : public KoView, public KoPAViewBase
 {
     Q_OBJECT
 public:
-    enum KoPAAction
-    {
+    enum KoPAAction {
         ActionInsertPage = 1,
         ActionCopyPage   = 2,
         ActionDeletePage = 4,
@@ -61,9 +60,8 @@ public:
         AllActions       = 0xFF
     };
 
-    enum KoPAFlags
-    {
-        NormalMode =1,
+    enum KoPAFlags {
+        NormalMode = 1,
         ModeBox = 2
     };
 
@@ -80,36 +78,36 @@ public:
 
     void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
 
-    KoZoomController* zoomController() const;
+    KoZoomController *zoomController() const;
 
-    KoCopyController* copyController() const;
+    KoCopyController *copyController() const;
 
-    KoCutController* cutController() const;
+    KoCutController *cutController() const;
 
-    KAction* deleteSelectionAction() const;
+    KAction *deleteSelectionAction() const;
 
-    void updateReadWrite( bool readwrite );
+    void updateReadWrite(bool readwrite);
 
     KoRuler *horizontalRuler();
     KoRuler *verticalRuler();
 
     /// @return the canvas for the application
-    KoPACanvasBase * kopaCanvas() const;
+    KoPACanvasBase *kopaCanvas() const;
     /// @return the document for the application
-    KoPADocument * kopaDocument() const;
+    KoPADocument *kopaDocument() const;
     /// @return Page that is shown in the canvas
-    KoPAPageBase* activePage() const;
+    KoPAPageBase *activePage() const;
 
     /// Set page shown in the canvas to @p page
-    void setActivePage( KoPAPageBase * page );
+    void setActivePage(KoPAPageBase *page);
 
-    void navigatePage( KoPageApp::PageNavigation pageNavigation );
+    void navigatePage(KoPageApp::PageNavigation pageNavigation);
 
     /// @return the shape manager used for this view
-    KoShapeManager* shapeManager() const;
+    KoShapeManager *shapeManager() const;
 
     /// @return the master shape manager used for this view
-    KoShapeManager* masterShapeManager() const;
+    KoShapeManager *masterShapeManager() const;
 
     /**
      * @brief Enables/Disables the given actions
@@ -119,19 +117,19 @@ public:
      * @param actions which should be enabled/disabled
      * @param enable new state of the actions
      */
-    void setActionEnabled( int actions, bool enable );
+    void setActionEnabled(int actions, bool enable);
 
     /**
      * @brief Set the view mode
      *
      * @param mode the new view mode
      */
-    void setViewMode( KoPAViewMode* mode );
+    void setViewMode(KoPAViewMode *mode);
 
     /**
      * Set the active page and updates the UI
      */
-    void doUpdateActivePage( KoPAPageBase * page );
+    void doUpdateActivePage(KoPAPageBase *page);
 
     /**
      * Paste the page if everything is ok
@@ -139,14 +137,14 @@ public:
     void pagePaste();
 
     /// reimplemented
-    virtual KoPrintJob * createPrintJob();
+    virtual KoPrintJob *createPrintJob();
 
     /**
      * Get the thumbnail for the page.
      *
      * Us this method instead the on in the pages directly
      */
-    QPixmap pageThumbnail(KoPAPageBase* page, const QSize& size);
+    QPixmap pageThumbnail(KoPAPageBase *page, const QSize &size);
 
     /**
      * Save thumbnail to an image file.
@@ -162,8 +160,8 @@ public:
      *
      * @returns whether the image was successfully saved
      */
-    bool exportPageThumbnail( KoPAPageBase * page, const KUrl& url, const QSize& size = QSize( 512, 512 ),
-                              const char * format = 0, int quality = -1 );
+    bool exportPageThumbnail(KoPAPageBase *page, const KUrl &url, const QSize &size = QSize(512, 512),
+                             const char *format = 0, int quality = -1);
 
     /// Update page navigation actions
     void updatePageNavigationActions();
@@ -202,9 +200,9 @@ protected:
     void initActions();
 
     /// Returns the document structure docker
-    KoPADocumentStructureDocker* documentStructureDocker() const;
+    KoPADocumentStructureDocker *documentStructureDocker() const;
 
-    bool isMasterUsed( KoPAPageBase * page );
+    bool isMasterUsed(KoPAPageBase *page);
     void editPaste();
 
     void hideCustomCentralWidget();
@@ -224,7 +222,7 @@ protected Q_SLOTS:
 
     void viewSnapToGrid(bool snap);
     void viewGuides(bool show);
-    void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
+    void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
 
     void editDeleteSelection();
     void editSelectAll();
@@ -235,13 +233,13 @@ protected Q_SLOTS:
     void formatPageLayout();
 
     /// Change the current view mode to work on master pages
-    void setMasterMode( bool master );
+    void setMasterMode(bool master);
 
     // update the rulers
     void pageOffsetChanged();
 
     /// Called when the mouse position changes on the canvas
-    virtual void updateMousePosition(const QPoint& position);
+    virtual void updateMousePosition(const QPoint &position);
 
     /// Called when the selection changed
     virtual void selectionChanged();
@@ -263,14 +261,14 @@ protected Q_SLOTS:
      *
      * @param document The current document
      */
-    void findDocumentSetNext( QTextDocument * document );
+    void findDocumentSetNext(QTextDocument *document);
 
     /**
      * Set the previous document that should be used in find
      *
      * @param document The current document
      */
-    void findDocumentSetPrevious( QTextDocument * document );
+    void findDocumentSetPrevious(QTextDocument *document);
 
     /**
      * Re-initialize the document structure docker after active document in this
@@ -295,7 +293,7 @@ protected Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOPAVIEW_H */

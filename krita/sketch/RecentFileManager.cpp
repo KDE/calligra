@@ -29,7 +29,8 @@
 
 // Much of this is a gui-less clone of KRecentFilesAction, so the format of
 // storing recent files is compatible.
-class RecentFileManager::Private {
+class RecentFileManager::Private
+{
 public:
     Private()
     {
@@ -50,46 +51,51 @@ public:
 
         KConfigGroup cg = grp;
 
-        if ( cg.name().isEmpty()) {
-            cg = KConfigGroup(cg.config(),"RecentFiles");
+        if (cg.name().isEmpty()) {
+            cg = KConfigGroup(cg.config(), "RecentFiles");
         }
 
         // read file list
         for (int i = 1; i <= maxItems; i++) {
 
             value = cg.readPathEntry(QString("File%1").arg(i), QString());
-            if (value.isEmpty()) continue;
+            if (value.isEmpty()) {
+                continue;
+            }
             url = KUrl(value);
 
             // krita sketch only handles local files
-            if (!url.isLocalFile())
+            if (!url.isLocalFile()) {
                 continue;
+            }
 
             // Don't restore if file doesn't exist anymore
-            if (!QFile::exists(url.toLocalFile()))
+            if (!QFile::exists(url.toLocalFile())) {
                 continue;
+            }
 
-            value = QDir::toNativeSeparators( value );
+            value = QDir::toNativeSeparators(value);
 
             // Don't restore where the url is already known (eg. broken config)
-            if (recentFiles.contains(value))
+            if (recentFiles.contains(value)) {
                 continue;
+            }
 
             nameValue = cg.readPathEntry(QString("Name%1").arg(i), url.fileName());
 
             if (!value.isNull())  {
                 recentFilesIndex << nameValue;
                 recentFiles << value;
-           }
+            }
         }
     }
 
-    void saveEntries( const KConfigGroup &grp)
+    void saveEntries(const KConfigGroup &grp)
     {
         KConfigGroup cg = grp;
 
         if (cg.name().isEmpty()) {
-            cg = KConfigGroup(cg.config(),"RecentFiles");
+            cg = KConfigGroup(cg.config(), "RecentFiles");
         }
         cg.deleteGroup();
 
@@ -106,9 +112,6 @@ public:
     QStringList recentFiles;
 };
 
-
-
-
 RecentFileManager::RecentFileManager(QObject *parent)
     : QObject(parent)
     , d(new Private())
@@ -121,7 +124,6 @@ RecentFileManager::~RecentFileManager()
     grp.writeEntry("maxRecentFileItems", d->maxItems);
     delete d;
 }
-
 
 QStringList RecentFileManager::recentFileNames() const
 {

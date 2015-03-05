@@ -19,8 +19,7 @@
 #include <QString>
 #include <kis_gmic_filter_settings.h>
 
-
-KisGmicFilterSetting::KisGmicFilterSetting():m_gmicCommand(),m_previewGmicCommand(),m_inputLayerMode(ACTIVE_LAYER),m_outputMode(IN_PLACE),m_isBlacklisted(false)
+KisGmicFilterSetting::KisGmicFilterSetting(): m_gmicCommand(), m_previewGmicCommand(), m_inputLayerMode(ACTIVE_LAYER), m_outputMode(IN_PLACE), m_isBlacklisted(false)
 {
 
 }
@@ -30,7 +29,7 @@ KisGmicFilterSetting::~KisGmicFilterSetting()
 
 }
 
-const QString& KisGmicFilterSetting::gmicCommand() const
+const QString &KisGmicFilterSetting::gmicCommand() const
 {
     return m_gmicCommand;
 }
@@ -40,7 +39,7 @@ void KisGmicFilterSetting::setGmicCommand(QString cmd)
     m_gmicCommand = cmd;
 }
 
-const QString& KisGmicFilterSetting::previewGmicCommand() const
+const QString &KisGmicFilterSetting::previewGmicCommand() const
 {
     return m_previewGmicCommand;
 }
@@ -52,7 +51,7 @@ void KisGmicFilterSetting::setPreviewGmicCommand(QString cmd)
 
 InputLayerMode KisGmicFilterSetting::inputLayerMode() const
 {
-     return m_inputLayerMode;
+    return m_inputLayerMode;
 }
 
 void KisGmicFilterSetting::setInputLayerMode(InputLayerMode mode)
@@ -62,7 +61,7 @@ void KisGmicFilterSetting::setInputLayerMode(InputLayerMode mode)
 
 OutputMode KisGmicFilterSetting::outputMode() const
 {
-     return m_outputMode;
+    return m_outputMode;
 }
 
 void KisGmicFilterSetting::setOutputMode(OutputMode mode)

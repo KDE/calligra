@@ -40,7 +40,7 @@ class KPLATOWORK_EXPORT PackageSettingsDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit PackageSettingsDialog( WorkPackage &p, QWidget *parent=0 );
+    explicit PackageSettingsDialog(WorkPackage &p, QWidget *parent = 0);
 
     KUndo2Command *buildCommand();
 
@@ -52,14 +52,14 @@ class PackageSettingsPanel : public QWidget, public Ui_PackageSettings
 {
     Q_OBJECT
 public:
-    explicit PackageSettingsPanel( WorkPackage &p, QWidget *parent=0 );
+    explicit PackageSettingsPanel(WorkPackage &p, QWidget *parent = 0);
 
     KUndo2Command *buildCommand();
     WorkPackageSettings settings() const;
-    void setSettings( const WorkPackageSettings &settings );
+    void setSettings(const WorkPackageSettings &settings);
 
 Q_SIGNALS:
-    void changed( bool );
+    void changed(bool);
 
 public Q_SLOTS:
     void slotChanged();
@@ -69,6 +69,5 @@ protected:
 };
 
 }  //KPlatoWork namespace
-
 
 #endif

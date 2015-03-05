@@ -21,7 +21,7 @@
 #include "KPrSnakeWipeEffectFactory.h"
 
 KPrSnakeWipeTopLeftHorizontalStrategy::KPrSnakeWipeTopLeftHorizontalStrategy()
-    : KPrMatrixWipeStrategy( KPrSnakeWipeEffectFactory::FromTop, "snakeWipe", "topLeftHorizontal", false, true )
+    : KPrMatrixWipeStrategy(KPrSnakeWipeEffectFactory::FromTop, "snakeWipe", "topLeftHorizontal", false, true)
 {
 }
 
@@ -34,7 +34,9 @@ int KPrSnakeWipeTopLeftHorizontalStrategy::squareIndex(int x, int y, int columns
     Q_UNUSED(rows);
 
     int X = x;
-    if (y & 1) X = columns - x - 1;
+    if (y & 1) {
+        X = columns - x - 1;
+    }
     return X + y * columns;
 }
 
@@ -43,8 +45,11 @@ KPrMatrixWipeStrategy::Direction KPrSnakeWipeTopLeftHorizontalStrategy::squareDi
     Q_UNUSED(x);
     Q_UNUSED(columns);
     Q_UNUSED(rows);
-    if (y & 1) return RightToLeft;
-    else return LeftToRight;
+    if (y & 1) {
+        return RightToLeft;
+    } else {
+        return LeftToRight;
+    }
 }
 
 int KPrSnakeWipeTopLeftHorizontalStrategy::maxIndex(int columns, int rows)

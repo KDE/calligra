@@ -31,14 +31,13 @@ class ToolTransformArgs;
 class TransformTransactionProperties;
 class QCursor;
 
-
 class KisLiquifyTransformStrategy : public KisTransformStrategyBase
 {
     Q_OBJECT
 public:
     KisLiquifyTransformStrategy(const KisCoordinatesConverter *converter,
-                             ToolTransformArgs &currentArgs,
-                             TransformTransactionProperties &transaction);
+                                ToolTransformArgs &currentArgs,
+                                TransformTransactionProperties &transaction);
     ~KisLiquifyTransformStrategy();
 
     void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive);

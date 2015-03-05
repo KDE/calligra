@@ -37,10 +37,11 @@ struct TemplateEntry {
 
     QString title;
     QString description;
-    TemplateVariantsModel* variants;
+    TemplateVariantsModel *variants;
 };
 
-class TemplatesModel::Private {
+class TemplatesModel::Private
+{
 public:
     Private()
         : showWide(false)
@@ -48,40 +49,42 @@ public:
 
     QString templateType;
     bool showWide;
-    QList<TemplateEntry*> entries;
+    QList<TemplateEntry *> entries;
 
     void refresh()
     {
         qDeleteAll(entries);
         entries.clear();
 
-        KoTemplateTree* tree(0);
-        if(templateType == WORDS_MIME_TYPE)
+        KoTemplateTree *tree(0);
+        if (templateType == WORDS_MIME_TYPE) {
             tree = new KoTemplateTree("words_template", KWFactory::componentData(), true);
-        else if(templateType == STAGE_MIME_TYPE)
+        } else if (templateType == STAGE_MIME_TYPE) {
             tree = new KoTemplateTree("stage_template", KPrFactory::componentData(), true);
-        if(!tree)
+        }
+        if (!tree) {
             return;
+        }
 
-        Q_FOREACH(const KoTemplateGroup* group , tree->groups()) {
-            Q_FOREACH(const KoTemplate* tmplate, group->templates()) {
-                if(tmplate->wide() != showWide)
+        Q_FOREACH (const KoTemplateGroup *group, tree->groups()) {
+            Q_FOREACH (const KoTemplate *tmplate, group->templates()) {
+                if (tmplate->wide() != showWide) {
                     continue;
+                }
 
                 QString title = tmplate->name();
 
-                TemplateEntry* found(0);
-                Q_FOREACH(TemplateEntry* otherEntry, entries) {
-                    if(otherEntry->title == title) {
+                TemplateEntry *found(0);
+                Q_FOREACH (TemplateEntry *otherEntry, entries) {
+                    if (otherEntry->title == title) {
                         found = otherEntry;
                         break;
                     }
                 }
-                TemplateEntry* entry(0);
-                if(found) {
+                TemplateEntry *entry(0);
+                if (found) {
                     entry = found;
-                }
-                else {
+                } else {
                     entry = new TemplateEntry();
                     entry->title = title;
                     entry->description = tmplate->description();
@@ -98,7 +101,7 @@ public:
     }
 };
 
-TemplatesModel::TemplatesModel(QObject* parent)
+TemplatesModel::TemplatesModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private())
 {
@@ -118,48 +121,47 @@ TemplatesModel::~TemplatesModel()
     delete d;
 }
 
-QVariant TemplatesModel::data(const QModelIndex& index, int role) const
+QVariant TemplatesModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
 
-    if(index.isValid() && index.row() > -1 && index.row() < d->entries.count())
-    {
-        TemplateEntry* entry = d->entries.at(index.row());
-        switch(role)
-        {
-            case TitleRole:
-                result = entry->title;
-                break;
-            case DescriptionRole:
-                result = entry->description;
-                break;
-            case ColorRole:
-                result = entry->variants->data(entry->variants->firstIndex(), TemplateVariantsModel::ColorRole);
-                break;
-            case ThumbnailRole:
-                result = entry->variants->data(entry->variants->firstIndex(), TemplateVariantsModel::ThumbnailRole);
-                break;
-            case UrlRole:
-                result = entry->variants->data(entry->variants->firstIndex(), TemplateVariantsModel::UrlRole);
-                break;
-            case VariantCountRole:
-                result = entry->variants->rowCount();
-                break;
-            case VariantsRole:
-                result = QVariant::fromValue<QObject*>(entry->variants);
-                break;
-            default:
-                break;
+    if (index.isValid() && index.row() > -1 && index.row() < d->entries.count()) {
+        TemplateEntry *entry = d->entries.at(index.row());
+        switch (role) {
+        case TitleRole:
+            result = entry->title;
+            break;
+        case DescriptionRole:
+            result = entry->description;
+            break;
+        case ColorRole:
+            result = entry->variants->data(entry->variants->firstIndex(), TemplateVariantsModel::ColorRole);
+            break;
+        case ThumbnailRole:
+            result = entry->variants->data(entry->variants->firstIndex(), TemplateVariantsModel::ThumbnailRole);
+            break;
+        case UrlRole:
+            result = entry->variants->data(entry->variants->firstIndex(), TemplateVariantsModel::UrlRole);
+            break;
+        case VariantCountRole:
+            result = entry->variants->rowCount();
+            break;
+        case VariantsRole:
+            result = QVariant::fromValue<QObject *>(entry->variants);
+            break;
+        default:
+            break;
         }
     }
 
     return result;
 }
 
-int TemplatesModel::rowCount(const QModelIndex& parent) const
+int TemplatesModel::rowCount(const QModelIndex &parent) const
 {
-    if(parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
     return d->entries.count();
 }
 
@@ -168,7 +170,7 @@ QString TemplatesModel::templateType() const
     return d->templateType;
 }
 
-void TemplatesModel::setTemplateType(const QString& newType)
+void TemplatesModel::setTemplateType(const QString &newType)
 {
     d->templateType = newType;
     emit templateTypeChanged();
@@ -183,7 +185,7 @@ bool TemplatesModel::showWide() const
     return d->showWide;
 }
 
-void TemplatesModel::setShowWide(const bool& newValue)
+void TemplatesModel::setShowWide(const bool &newValue)
 {
     d->showWide = newValue;
     emit showWideChanged();

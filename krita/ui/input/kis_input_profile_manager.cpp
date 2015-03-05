@@ -44,7 +44,6 @@
 
 #define PROFILE_VERSION 3
 
-
 class KisInputProfileManager::Private
 {
 public:
@@ -166,7 +165,7 @@ void KisInputProfileManager::duplicateProfile(const QString &name, const QString
 
     KisInputProfile *profile = d->profiles.value(name);
     QList<KisShortcutConfiguration *> shortcuts = profile->allShortcuts();
-    Q_FOREACH(KisShortcutConfiguration * shortcut, shortcuts) {
+    Q_FOREACH (KisShortcutConfiguration *shortcut, shortcuts) {
         newProfile->addShortcut(new KisShortcutConfiguration(*shortcut));
     }
 
@@ -177,7 +176,6 @@ QList< KisAbstractInputAction * > KisInputProfileManager::actions()
 {
     return d->actions;
 }
-
 
 struct ProfileEntry {
     QString name;
@@ -195,11 +193,10 @@ void KisInputProfileManager::loadProfiles()
     //Look up all profiles (this includes those installed to $prefix as well as the user's local data dir)
     QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
 
-
     QMap<QString, QList<ProfileEntry> > profileEntries;
 
     // Get only valid entries...
-    Q_FOREACH(const QString & p, profiles) {
+    Q_FOREACH (const QString &p, profiles) {
 
         ProfileEntry entry;
         entry.fullpath = p;
@@ -226,13 +223,12 @@ void KisInputProfileManager::loadProfiles()
             profileEntries[entry.name].clear();
             profileEntries[entry.name].append(entry);
             break;
-        }
-        else {
+        } else {
             profileEntries[entry.name].append(entry);
         }
     }
 
-    Q_FOREACH(const QString & profileName, profileEntries.keys()) {
+    Q_FOREACH (const QString &profileName, profileEntries.keys()) {
 
         if (profileEntries[profileName].isEmpty()) {
             continue;
@@ -245,21 +241,20 @@ void KisInputProfileManager::loadProfiles()
         KConfig config(entry.fullpath, KConfig::SimpleConfig);
 
         KisInputProfile *newProfile = addProfile(entry.name);
-        Q_FOREACH(KisAbstractInputAction * action, d->actions) {
+        Q_FOREACH (KisAbstractInputAction *action, d->actions) {
             if (!config.hasGroup(action->id())) {
                 continue;
             }
 
             KConfigGroup grp = config.group(action->id());
             //Read the settings for the action and create the appropriate shortcuts.
-            Q_FOREACH(const QString & entry, grp.entryMap()) {
+            Q_FOREACH (const QString &entry, grp.entryMap()) {
                 KisShortcutConfiguration *shortcut = new KisShortcutConfiguration;
                 shortcut->setAction(action);
 
                 if (shortcut->unserialize(entry)) {
                     newProfile->addShortcut(shortcut);
-                }
-                else {
+                } else {
                     delete shortcut;
                 }
             }
@@ -271,8 +266,7 @@ void KisInputProfileManager::loadProfiles()
     if (d->profiles.size() > 0) {
         if (currentProfile.isEmpty() || !d->profiles.contains(currentProfile)) {
             d->currentProfile = d->profiles.begin().value();
-        }
-        else {
+        } else {
             d->currentProfile = d->profiles.value(currentProfile);
         }
     }
@@ -284,20 +278,20 @@ void KisInputProfileManager::loadProfiles()
 void KisInputProfileManager::saveProfiles()
 {
     QString storagePath = KGlobal::dirs()->saveLocation("appdata", "input/");
-    Q_FOREACH(KisInputProfile * p, d->profiles) {
+    Q_FOREACH (KisInputProfile *p, d->profiles) {
         QString fileName = d->profileFileName(p->name());
         KConfig config(storagePath + fileName, KConfig::SimpleConfig);
 
         config.group("General").writeEntry("name", p->name());
         config.group("General").writeEntry("version", PROFILE_VERSION);
 
-        Q_FOREACH(KisAbstractInputAction * action, d->actions) {
+        Q_FOREACH (KisAbstractInputAction *action, d->actions) {
             KConfigGroup grp = config.group(action->id());
             grp.deleteGroup(); //Clear the group of any existing shortcuts.
 
             int index = 0;
             QList<KisShortcutConfiguration *> shortcuts = p->shortcutsForAction(action);
-            Q_FOREACH(KisShortcutConfiguration * shortcut, shortcuts) {
+            Q_FOREACH (KisShortcutConfiguration *shortcut, shortcuts) {
                 grp.writeEntry(QString("%1").arg(index++), shortcut->serialize());
             }
         }
@@ -317,8 +311,8 @@ void KisInputProfileManager::resetAll()
     QString kdeHome = KGlobal::mainComponent().dirs()->localkdedir();
     QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
 
-    foreach(const QString &profile, profiles) {
-        if(profile.contains(kdeHome)) {
+    foreach (const QString &profile, profiles) {
+        if (profile.contains(kdeHome)) {
             //This is a local file, remove it.
             QFile::remove(profile);
         }

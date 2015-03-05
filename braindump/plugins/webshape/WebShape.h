@@ -37,18 +37,18 @@ public:
     // absolutly necessary:
     void paint(QPainter &painter,
                const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    const KUrl& url();
-    void setUrl(const KUrl& _url);
+    virtual void saveOdf(KoShapeSavingContext &context) const;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    const KUrl &url();
+    void setUrl(const KUrl &_url);
     bool isCached() const;
     void setCached(bool _cache);
-    void setCache(const QString&);
-    const QString& cache() const;
-    void scrollOf(const QPointF& _scroll);
+    void setCache(const QString &);
+    const QString &cache() const;
+    void scrollOf(const QPointF &_scroll);
     void zoomOf(qreal z);
     QPointF scroll() const;
-    void setScroll(const QPointF& point);
+    void setScroll(const QPointF &point);
     qreal zoom() const;
     void setZoom(qreal _zoom);
 private:
@@ -57,7 +57,7 @@ private Q_SLOTS:
     void loadFinished(bool);
 private:
     KUrl m_url;
-    QWebPage* m_webPage;
+    QWebPage *m_webPage;
     bool m_cached;
     QString m_cache;
     bool m_cacheLocked;
@@ -66,6 +66,5 @@ private:
     qreal m_zoom;
     QPointF m_scrollPosition;
 };
-
 
 #endif

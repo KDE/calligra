@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -43,33 +42,37 @@ K_EXPORT_PLUGIN(ColorSliderPluginFactory("krita"))
 class ColorSliderDockFactory : public KoDockFactoryBase
 {
 public:
-    ColorSliderDockFactory() {
+    ColorSliderDockFactory()
+    {
     }
 
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return QString("ColorSlider");
     }
 
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const {
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const
+    {
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget() {
-        ColorSliderDock * dockWidget = new ColorSliderDock();
+    virtual QDockWidget *createDockWidget()
+    {
+        ColorSliderDock *dockWidget = new ColorSliderDock();
 
         dockWidget->setObjectName(id());
 
         return dockWidget;
     }
 
-    KoDockFactoryBase::DockPosition defaultDockPosition() const {
+    KoDockFactoryBase::DockPosition defaultDockPosition() const
+    {
         return DockMinimized;
     }
 };
 
-
 ColorSliderPlugin::ColorSliderPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     dbgPlugins << "ColorSliderPlugin";
 

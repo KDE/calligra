@@ -46,7 +46,7 @@ protected:
         QPainter p(this);
         int leftMargin, topMargin, rightMargin, bottomMargin;
         getContentsMargins(&leftMargin, &topMargin, &rightMargin, &bottomMargin);
-        QRect r( rect() );
+        QRect r(rect());
         r.setX(r.x() + leftMargin);
         r.setY(r.y() + topMargin);
         r.setRight(r.right() - rightMargin);
@@ -56,8 +56,7 @@ protected:
         if (layoutDirection() == Qt::LeftToRight) {
             dataSourceTagIcon = KexiFormUtils::dataSourceTagIcon();
             x = r.left() - 1;
-        }
-        else {
+        } else {
             dataSourceTagIcon = KexiFormUtils::dataSourceRTLTagIcon();
             x = r.right() - dataSourceTagIcon.width() - 5;
         }
@@ -71,14 +70,14 @@ protected:
 // --------------
 
 KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
-        : KTextEdit(parent)
-        , KexiDBTextWidgetInterface()
-        , KexiFormDataItemInterface()
-        , m_menuExtender(this, this)
-        , m_slotTextChanged_enabled(true)
-        , m_dataSourceLabel(0)
-        , m_length(0)
-        , m_paletteChangeEvent_enabled(true)
+    : KTextEdit(parent)
+    , KexiDBTextWidgetInterface()
+    , KexiFormDataItemInterface()
+    , m_menuExtender(this, this)
+    , m_slotTextChanged_enabled(true)
+    , m_dataSourceLabel(0)
+    , m_length(0)
+    , m_paletteChangeEvent_enabled(true)
 {
     QFont tmpFont;
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
@@ -95,16 +94,17 @@ KexiDBTextEdit::~KexiDBTextEdit()
 {
 }
 
-void KexiDBTextEdit::setInvalidState(const QString& displayText)
+void KexiDBTextEdit::setInvalidState(const QString &displayText)
 {
     setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-    if (focusPolicy() & Qt::TabFocus)
+    if (focusPolicy() & Qt::TabFocus) {
         setFocusPolicy(Qt::ClickFocus);
+    }
     KTextEdit::setPlainText(displayText);
 }
 
-void KexiDBTextEdit::setValueInternal(const QVariant& add, bool removeOld)
+void KexiDBTextEdit::setValueInternal(const QVariant &add, bool removeOld)
 {
 //! @todo how about rich text?
     if (m_columnInfo && m_columnInfo->field->type() == KexiDB::Field::Boolean) {
@@ -114,15 +114,13 @@ void KexiDBTextEdit::setValueInternal(const QVariant& add, bool removeOld)
         QString t;
         if (removeOld) {
             t = add.toString();
-        }
-        else {
+        } else {
             t = KexiDataItemInterface::originalValue().toString() + add.toString();
         }
 
         if (acceptRichText()) {
             KTextEdit::setHtml(t);
-        }
-        else {
+        } else {
             KTextEdit::setPlainText(t);
         }
     }
@@ -135,15 +133,15 @@ QVariant KexiDBTextEdit::value()
 
 void KexiDBTextEdit::slotTextChanged()
 {
-    if (!m_slotTextChanged_enabled)
+    if (!m_slotTextChanged_enabled) {
         return;
+    }
 
     if (m_length > 0) {
         QString t;
         if (acceptRichText()) {
             t = toHtml();
-        }
-        else {
+        } else {
             t = toPlainText();
         }
         if (t.length() > (int)m_length) {
@@ -154,8 +152,7 @@ void KexiDBTextEdit::slotTextChanged()
 #else
 #pragma WARNING(todo setHtml(t.left(m_length));
 #endif
-            }
-            else {
+            } else {
                 setPlainText(t.left(m_length));
             }
             m_slotTextChanged_enabled = true;
@@ -201,7 +198,7 @@ void KexiDBTextEdit::setReadOnly(bool readOnly)
 #endif
 }
 
-QWidget* KexiDBTextEdit::widget()
+QWidget *KexiDBTextEdit::widget()
 {
     return this;
 }
@@ -221,7 +218,7 @@ void KexiDBTextEdit::clear()
     document()->clear();
 }
 
-void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo *cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     if (!cinfo) {
@@ -260,11 +257,11 @@ void KexiDBTextEdit::undo()
     cancelEditor();
 }
 
-void KexiDBTextEdit::setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue)
+void KexiDBTextEdit::setDisplayDefaultValue(QWidget *widget, bool displayDefaultValue)
 {
     KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
     // initialize display parameters for default / entered value
-    KexiDisplayUtils::DisplayParameters * const params
+    KexiDisplayUtils::DisplayParameters *const params
         = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
     QPalette pal(palette());
     pal.setColor(QPalette::Active, QPalette::Text, params->textColor);
@@ -313,11 +310,10 @@ bool KexiDBTextEdit::event(QEvent *e)
 
     if (e->type() == QEvent::LayoutDirectionChange) {
         if (m_dataSourceLabel) {
-            m_dataSourceLabel->setLayoutDirection( layoutDirection() );
+            m_dataSourceLabel->setLayoutDirection(layoutDirection());
         }
         updateTextForDataSource();
-    }
-    else if (e->type() == QEvent::Resize) {
+    } else if (e->type() == QEvent::Resize) {
         if (m_dataSourceLabel) {
             m_dataSourceLabel->setFixedWidth(width());
         }
@@ -339,8 +335,8 @@ void KexiDBTextEdit::updateTextForDataSource()
     }
     if (m_dataSourceLabel) {
         m_dataSourceLabel->setText(dataSource());
-        m_dataSourceLabel->setIndent( KexiFormUtils::dataSourceTagIcon().width()
-            + (layoutDirection() == Qt::LeftToRight ? 0 : 7) );
+        m_dataSourceLabel->setIndent(KexiFormUtils::dataSourceTagIcon().width()
+                                     + (layoutDirection() == Qt::LeftToRight ? 0 : 7));
         m_dataSourceLabel->setVisible(!dataSource().isEmpty());
     }
 }
@@ -359,8 +355,9 @@ void KexiDBTextEdit::setDataSourcePartClass(const QString &partClass)
 
 void KexiDBTextEdit::createDataSourceLabel()
 {
-    if (m_dataSourceLabel)
+    if (m_dataSourceLabel) {
         return;
+    }
     m_dataSourceLabel = new DataSourceLabel(viewport());
     m_dataSourceLabel->hide();
     m_dataSourceLabel->move(0, 0);
@@ -386,7 +383,7 @@ void KexiDBTextEdit::updatePalette()
     m_paletteChangeEvent_enabled = false;
     setPalette(isReadOnly() ?
                KexiUtils::paletteForReadOnly(m_originalPalette)
-              : m_originalPalette);
+               : m_originalPalette);
     m_paletteChangeEvent_enabled = true;
 }
 

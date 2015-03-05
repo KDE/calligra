@@ -99,8 +99,8 @@ public:
         Borders,                    ///< KoBorder, the borders of this cell
         Shadow,                     ///< KoShadowStyle, the shadow of this cell
         CellIsProtected             ///< boolean, if true, the cell is protected against edits
-                                        /// It's not really a property of KoTableCellStyle but defined here for convenience
-        ,LastCellStyleProperty
+        /// It's not really a property of KoTableCellStyle but defined here for convenience
+        , LastCellStyleProperty
     };
 
     /// Constructor
@@ -108,7 +108,7 @@ public:
     /// Creates a KoTableCellStyle with the given table cell format, and \a parent
     explicit KoTableCellStyle(const QTextTableCellFormat &tableCellFormat, QObject *parent = 0);
     KoTableCellStyle(const KoTableCellStyle &other);
-    KoTableCellStyle& operator=(const KoTableCellStyle &other);
+    KoTableCellStyle &operator=(const KoTableCellStyle &other);
 
     /// Destructor
     ~KoTableCellStyle();
@@ -179,13 +179,13 @@ public:
     Qt::Alignment alignment() const;
 
     KoText::Direction textDirection() const;
-    void setTextDirection (KoText::Direction value);
+    void setTextDirection(KoText::Direction value);
 
     void setWrap(bool state);
     bool wrap() const;
 
     CellProtectionFlag cellProtection() const;
-    void setCellProtection (CellProtectionFlag protection);
+    void setCellProtection(CellProtectionFlag protection);
 
     void setPrintContent(bool state);
     bool printContent() const;
@@ -203,7 +203,7 @@ public:
     CellTextDirection direction() const;
 
     void setRotationAlignment(RotationAlignment align);
-    RotationAlignment rotationAlignment () const;
+    RotationAlignment rotationAlignment() const;
 
     void setVerticalGlyphOrientation(bool state);
     bool verticalGlyphOrientation() const;
@@ -211,7 +211,7 @@ public:
     void setBorders(const KoBorder &borders);
     KoBorder borders() const;
 
-    void setShadow (const KoShadowStyle &shadow);
+    void setShadow(const KoShadowStyle &shadow);
     KoShadowStyle shadow() const;
 
     /// set the parent style this one inherits its unset properties from.
@@ -236,7 +236,6 @@ public:
     QString masterPageName() const;
     /// Set the name of the master-page.
     void setMasterPageName(const QString &name);
-
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(const KoTableCellStyle *style);
@@ -291,7 +290,6 @@ public:
      */
     QVariant value(int key) const;
 
-
     /**
      * Set the properties of an edge.
      *
@@ -343,7 +341,7 @@ Q_SIGNALS:
     void nameChanged(const QString &newName);
 
 protected:
-    KoTableCellStylePrivate * const d_ptr;
+    KoTableCellStylePrivate *const d_ptr;
 
 private:
     /**
@@ -356,7 +354,6 @@ private:
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;
-
 
     /**
      * Set the format properties from an Edge structure

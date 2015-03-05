@@ -41,12 +41,13 @@
 #include <KisTemplates.h>
 
 KisTemplateTree::KisTemplateTree(const QByteArray &templateType,
-                               const KComponentData &componentData, bool readTree) :
-        m_templateType(templateType), m_componentData(componentData), m_defaultGroup(0),
-        m_defaultTemplate(0)
+                                 const KComponentData &componentData, bool readTree) :
+    m_templateType(templateType), m_componentData(componentData), m_defaultGroup(0),
+    m_defaultTemplate(0)
 {
-    if (readTree)
+    if (readTree) {
         readTemplateTree();
+    }
 }
 
 KisTemplateTree::~KisTemplateTree()
@@ -70,10 +71,11 @@ void KisTemplateTree::writeTemplateTree()
         //kDebug( 30003 ) <<"group:" << group->name();
 
         bool touched = false;
-        QList<KisTemplate*> templates = group->templates();
-        QList<KisTemplate*>::iterator it = templates.begin();
-        for (; it != templates.end() && !touched && !group->touched(); ++it)
+        QList<KisTemplate *> templates = group->templates();
+        QList<KisTemplate *>::iterator it = templates.begin();
+        for (; it != templates.end() && !touched && !group->touched(); ++it) {
             touched = (*it)->touched();
+        }
 
         if (group->touched() || touched) {
             //kDebug( 30003 ) <<"touched";
@@ -111,9 +113,9 @@ void KisTemplateTree::add(KisTemplateGroup *g)
 {
 
     KisTemplateGroup *group = find(g->name());
-    if (group == NULL)
+    if (group == NULL) {
         m_groups.append(g);
-    else {
+    } else {
         group->addDir(g->dirs().first()); // "...there can be only one..." (Queen)
         delete g;
         g = NULL;
@@ -122,8 +124,8 @@ void KisTemplateTree::add(KisTemplateGroup *g)
 
 KisTemplateGroup *KisTemplateTree::find(const QString &name) const
 {
-    QList<KisTemplateGroup*>::const_iterator it = m_groups.begin();
-    KisTemplateGroup* ret = NULL;
+    QList<KisTemplateGroup *>::const_iterator it = m_groups.begin();
+    KisTemplateGroup *ret = NULL;
 
     while (it != m_groups.end()) {
         if ((*it)->name() == name) {
@@ -141,14 +143,15 @@ void KisTemplateTree::readGroups()
 {
 
     QStringList dirs = m_componentData.dirs()->resourceDirs(m_templateType);
-    foreach(const QString & dirName, dirs) {
+    foreach (const QString &dirName, dirs) {
         //kDebug( 30003 ) <<"dir:" << *it;
         QDir dir(dirName);
         // avoid the annoying warning
-        if (!dir.exists())
+        if (!dir.exists()) {
             continue;
+        }
         QStringList templateDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        foreach(const QString & templateDirName, templateDirs) {
+        foreach (const QString &templateDirName, templateDirs) {
             QDir templateDir(dirName + templateDirName);
             QString name = templateDirName;
             QString defaultTab;
@@ -163,8 +166,9 @@ void KisTemplateTree::readGroups()
             }
             KisTemplateGroup *g = new KisTemplateGroup(name, templateDir.absolutePath() + QDir::separator(), sortingWeight);
             add(g);
-            if (defaultTab == "true")
+            if (defaultTab == "true") {
                 m_defaultGroup = g;
+            }
         }
     }
 }
@@ -177,12 +181,13 @@ void KisTemplateTree::readTemplates()
         dontShow = "metric";
     }
 
-    foreach (KisTemplateGroup* group, m_groups) {
+    foreach (KisTemplateGroup *group, m_groups) {
         QStringList dirs = group->dirs();
         for (QStringList::ConstIterator it = dirs.constBegin(); it != dirs.constEnd(); ++it) {
             QDir d(*it);
-            if (!d.exists())
+            if (!d.exists()) {
                 continue;
+            }
             QStringList files = d.entryList(QDir::Files | QDir::Readable, QDir::Name);
             for (int i = 0; i < files.count(); ++i) {
                 QString filePath = *it + files[i];
@@ -208,36 +213,41 @@ void KisTemplateTree::readTemplates()
                         //kDebug( 30003 ) <<"name:" << text;
                         icon = config.readEntry("Icon");
                         if (icon[0] != '/' && // allow absolute paths for icons
-                                QFile::exists(*it + icon)) // allow icons from icontheme
+                                QFile::exists(*it + icon)) { // allow icons from icontheme
                             icon = *it + icon;
+                        }
                         //kDebug( 30003 ) <<"icon2:" << icon;
                         hidden = config.readEntry("X-KDE-Hidden", false);
                         defaultTemplate = config.readEntry("X-KDE-DefaultTemplate", false);
                         measureSystem = config.readEntry("X-KDE-MeasureSystem").toLower();
 
                         // Don't add a template that is for the wrong measure system
-                        if (measureSystem == dontShow)
+                        if (measureSystem == dontShow) {
                             continue;
+                        }
 
                         //kDebug( 30003 ) <<"hidden:" << hidden_str;
                         templatePath = config.readPathEntry("URL", QString());
                         //kDebug( 30003 ) <<"Link to :" << templatePath;
                         if (templatePath[0] != '/') {
-                            if (templatePath.left(6) == "file:/") // I doubt this will happen
+                            if (templatePath.left(6) == "file:/") { // I doubt this will happen
                                 templatePath = templatePath.right(templatePath.length() - 6);
+                            }
                             //else
                             //  kDebug( 30003 ) <<"dirname=" << *it;
                             templatePath = *it + templatePath;
                             //kDebug( 30003 ) <<"templatePath:" << templatePath;
                         }
-                    } else
-                        continue; // Invalid
+                    } else {
+                        continue;    // Invalid
+                    }
                 }
                 // The else if and the else branch are here for compat. with the old system
                 else if (files[i].right(4) != ".png")
                     // Ignore everything that is not a PNG file
+                {
                     continue;
-                else {
+                } else {
                     // Found a PNG file - the template must be here in the same dir.
                     icon = filePath;
                     QFileInfo fi(filePath);
@@ -246,19 +256,20 @@ void KisTemplateTree::readTemplates()
                     // That's the way it's always been done. Then the app replaces the extension...
                 }
                 KisTemplate *t = new KisTemplate(text, description, templatePath, icon, fileName,
-                                               measureSystem, hidden);
+                                                 measureSystem, hidden);
                 group->add(t, false, false); // false -> we aren't a "user", false -> don't
                 // "touch" the group to avoid useless
                 // creation of dirs in .kde/blah/...
-                if (defaultTemplate)
+                if (defaultTemplate) {
                     m_defaultTemplate = t;
+                }
             }
         }
     }
 }
 
 void KisTemplateTree::writeTemplate(KisTemplate *t, KisTemplateGroup *group,
-                                   const QString &localDir)
+                                    const QString &localDir)
 {
     QString fileName;
     if (t->isHidden()) {
@@ -274,8 +285,9 @@ void KisTemplateTree::writeTemplate(KisTemplate *t, KisTemplateGroup *group,
     QString const path = localDir + group->name() + '/';
     QString const name = KisTemplates::trimmed(t->name());
     fileName = path + name + ".desktop";
-    if (t->isHidden() && QFile::exists(fileName))
+    if (t->isHidden() && QFile::exists(fileName)) {
         return;
+    }
     QString fill;
     while (KIO::NetAccess::exists(fileName, KIO::NetAccess::SourceSide, 0)) {
         fill += '_';

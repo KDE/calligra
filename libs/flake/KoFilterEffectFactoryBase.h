@@ -64,7 +64,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFILTEREFFECTFACTORY_H

@@ -37,23 +37,23 @@ class KisRecordedPaintActionEditor : public QWidget
 {
     Q_OBJECT
 public:
-    KisRecordedPaintActionEditor(QWidget* parent, KisRecordedAction* action);
+    KisRecordedPaintActionEditor(QWidget *parent, KisRecordedAction *action);
     ~KisRecordedPaintActionEditor();
 private Q_SLOTS:
     void configurationUpdated();
     void paintOpChanged(int index);
-    void resourceSelected(KoResource* resource);
+    void resourceSelected(KoResource *resource);
     void nodeQueryPathChanged();
 Q_SIGNALS:
     void actionEdited();
 private:
     void setPaintOpPreset();
-    KisRecordedPaintAction* m_action;
-    Ui_WdgPaintActionEditor* m_actionEditor;
-    KisPaintOpSettingsWidget* m_configWidget;
-    KoColorPopupAction* m_paintColorPopup;
-    KoColorPopupAction* m_backgroundColorPopup;
-    QGridLayout* m_gridLayout;
+    KisRecordedPaintAction *m_action;
+    Ui_WdgPaintActionEditor *m_actionEditor;
+    KisPaintOpSettingsWidget *m_configWidget;
+    KoColorPopupAction *m_paintColorPopup;
+    KoColorPopupAction *m_backgroundColorPopup;
+    QGridLayout *m_gridLayout;
     QList<QString> m_paintops;
     QMap<QString, KisPaintOpPresetSP> m_paintOpsToPreset;
 };
@@ -63,8 +63,8 @@ class KisRecordedPaintActionEditorFactory : public KisRecordedActionEditorFactor
 public:
     KisRecordedPaintActionEditorFactory();
     virtual ~KisRecordedPaintActionEditorFactory();
-    virtual QWidget* createEditor(QWidget* parent, KisRecordedAction* action) const;
-    virtual bool canEdit(const KisRecordedAction* action) const;
+    virtual QWidget *createEditor(QWidget *parent, KisRecordedAction *action) const;
+    virtual bool canEdit(const KisRecordedAction *action) const;
 };
 
 #endif

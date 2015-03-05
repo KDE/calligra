@@ -27,8 +27,8 @@
 
 namespace KexiPart
 {
-    class Item;
-    class Part;
+class Item;
+class Part;
 }
 class KexiProjectModel;
 

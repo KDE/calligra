@@ -101,7 +101,7 @@ private Q_SLOTS:
 
 private:
     QTextCursor setupTest();
-    void setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle = 0);
+    void setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle *tableStyle = 0);
 
 private:
     QTextDocument *m_doc;

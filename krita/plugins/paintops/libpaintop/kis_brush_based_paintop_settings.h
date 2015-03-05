@@ -23,7 +23,6 @@
 #include <krita_export.h>
 #include <kis_outline_generation_policy.h>
 
-
 class PAINTOP_EXPORT KisBrushBasedPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
 {
 public:

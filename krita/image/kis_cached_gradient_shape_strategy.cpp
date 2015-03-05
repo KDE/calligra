@@ -29,11 +29,9 @@
 #include "kis_algebra_2d.h"
 #include "kis_debug.h"
 
-
 using namespace KisBSplines;
 
-struct KisCachedGradientShapeStrategy::Private
-{
+struct KisCachedGradientShapeStrategy::Private {
     QRect rc;
     qreal xStep;
     qreal yStep;
@@ -42,9 +40,9 @@ struct KisCachedGradientShapeStrategy::Private
 };
 
 KisCachedGradientShapeStrategy::KisCachedGradientShapeStrategy(const QRect &rc,
-                                                               qreal xStep,
-                                                               qreal yStep,
-                                                               KisGradientShapeStrategy *baseStrategy)
+        qreal xStep,
+        qreal yStep,
+        KisGradientShapeStrategy *baseStrategy)
     : KisGradientShapeStrategy(),
       m_d(new Private())
 {
@@ -80,7 +78,6 @@ KisCachedGradientShapeStrategy::KisCachedGradientShapeStrategy(const QRect &rc,
 
     m_d->spline.reset(new KisBSpline2D(xStart, xEnd, numSamplesX, Natural,
                                        yStart, yEnd, numSamplesY, Natural));
-
 
     boost::function<qreal(qreal, qreal)> valueOp =
         boost::bind(&KisGradientShapeStrategy::valueAt, m_d->baseStrategy.data(), _1, _2);

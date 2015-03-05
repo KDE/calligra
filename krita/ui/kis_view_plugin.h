@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_VIEW_PLUGIN_H
 #define KIS_VIEW_PLUGIN_H
 
@@ -34,7 +33,7 @@ class KRITAUI_EXPORT KisViewPlugin : public QObject
 {
     Q_OBJECT
 public:
-    KisViewPlugin(QObject* parent = 0);
+    KisViewPlugin(QObject *parent = 0);
     virtual ~KisViewPlugin();
 
 protected:
@@ -43,13 +42,13 @@ protected:
     *  @param name name of the action in the krita.rc file
     *  @param action the action that should be added
     */
-    void addAction(const QString& name, KisAction* action);
+    void addAction(const QString &name, KisAction *action);
 
-    void addUIFactory(KisOperationUIFactory* factory);
+    void addUIFactory(KisOperationUIFactory *factory);
 
-    void addOperation(KisOperation* operation);
-    
-    KisViewManager* m_view;
+    void addOperation(KisOperation *operation);
+
+    KisViewManager *m_view;
 };
 
 #endif // KIS_VIEW_PLUGIN_H

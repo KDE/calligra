@@ -24,7 +24,6 @@
 // Local
 #include "SpecialPasteDialog.h"
 
-
 #include <klocale.h>
 
 #include "commands/PasteCommand.h"
@@ -34,13 +33,13 @@
 
 using namespace Calligra::Sheets;
 
-SpecialPasteDialog::SpecialPasteDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent),
-        m_selection(selection)
+SpecialPasteDialog::SpecialPasteDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent),
+      m_selection(selection)
 {
     setButtons(Ok | Cancel);
     setCaption(i18n("Special Paste"));
-    QWidget* widget = new QWidget(this);
+    QWidget *widget = new QWidget(this);
     setupUi(widget);
     setMainWidget(widget);
 
@@ -66,29 +65,35 @@ void SpecialPasteDialog::slotOk()
     else if( noBorderButton->isChecked() )
     sp = cb->isChecked() ? NoBorderAndTranspose : NoBorder; */
 
-    if (everythingButton->isChecked())
+    if (everythingButton->isChecked()) {
         sp = Paste::Normal;
-    else if (textButton->isChecked())
+    } else if (textButton->isChecked()) {
         sp = Paste::Text;
-    else if (formatButton->isChecked())
+    } else if (formatButton->isChecked()) {
         sp = Paste::Format;
-    else if (noBorderButton->isChecked())
+    } else if (noBorderButton->isChecked()) {
         sp = Paste::NoBorder;
-    else if (commentButton->isChecked())
+    } else if (commentButton->isChecked()) {
         sp = Paste::Comment;
-    else if (resultButton->isChecked())
+    } else if (resultButton->isChecked()) {
         sp = Paste::Result;
+    }
 
-    if (overwriteButton->isChecked())
+    if (overwriteButton->isChecked()) {
         op = Paste::OverWrite;
-    if (additionButton->isChecked())
+    }
+    if (additionButton->isChecked()) {
         op = Paste::Add;
-    if (subtractionButton->isChecked())
+    }
+    if (subtractionButton->isChecked()) {
         op = Paste::Sub;
-    if (multiplicationButton->isChecked())
+    }
+    if (multiplicationButton->isChecked()) {
         op = Paste::Mul;
-    if (divisionButton->isChecked())
+    }
+    if (divisionButton->isChecked()) {
         op = Paste::Div;
+    }
 
     PasteCommand *const command = new PasteCommand();
     command->setSheet(m_selection->activeSheet());

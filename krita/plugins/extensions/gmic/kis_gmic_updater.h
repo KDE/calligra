@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_GMIC_UPDATER
 #define KIS_GMIC_UPDATER
 
@@ -39,7 +38,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void finishedDownload(QNetworkReply *);
-    void reportProgress(qint64 arrived,qint64 total);
+    void reportProgress(qint64 arrived, qint64 total);
     void slotError(QNetworkReply::NetworkError error);
 
 private:

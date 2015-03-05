@@ -35,14 +35,14 @@ private Q_SLOTS:
     void testPageBackground();
 
     // helper
-    void addFS(KWFrameSet*);
+    void addFS(KWFrameSet *);
 
 private:
     void removeAllFrames();
     KWTextFrame *createFrame(const QPointF &position, KWTextFrameSet &fs);
     KWFrame *createCopyFrame(const QPointF &position, KoShape *orig, KWTextFrameSet &fs);
 
-    QList<KWFrameSet*> m_frames;
+    QList<KWFrameSet *> m_frames;
 };
 
 #endif

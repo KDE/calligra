@@ -28,7 +28,6 @@
 #include <QStringList>
 #include <QList>
 
-
 /**
  * Wrapper around QFileDialog providing native file dialogs
  * on KDE/Gnome/Windows/OSX/etc.
@@ -142,12 +141,10 @@ private:
     void saveUsedDir(const QString &fileName, const QString &dialogName);
 
     const QStringList getFilterStringListFromMime(const QStringList &mimeList,
-                                                  bool withAllSupportedEntry = false);
-
-
+            bool withAllSupportedEntry = false);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOFILEDIALOG_H */

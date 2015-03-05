@@ -28,7 +28,6 @@
 
 class QByteArray;
 
-
 class WikiExport : public KoFilter
 {
     Q_OBJECT
@@ -36,7 +35,7 @@ class WikiExport : public KoFilter
 public:
     WikiExport(QObject *parent, const QVariantList &);
     virtual ~WikiExport();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 private:
 };

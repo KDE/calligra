@@ -73,9 +73,9 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(KoMarker*)
+Q_DECLARE_METATYPE(KoMarker *)
 
 #endif /* KOMARKER_H */

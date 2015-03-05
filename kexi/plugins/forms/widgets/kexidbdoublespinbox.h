@@ -27,7 +27,7 @@
 
 //! @short A db-aware int spin box
 class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox,
-                                                 public KexiFormDataItemInterface
+    public KexiFormDataItemInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
@@ -38,14 +38,16 @@ public:
     explicit KexiDBDoubleSpinBox(QWidget *parent);
     virtual ~KexiDBDoubleSpinBox();
 
-    inline QString dataSource() const {
+    inline QString dataSource() const
+    {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePartClass() const
+    {
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
     virtual QVariant value();
-    virtual void setInvalidState(const QString& displayText);
+    virtual void setInvalidState(const QString &displayText);
 
     //! \return true if editor's value is null (not empty)
     //! Used for checking if a given constraint within table of form is met.
@@ -61,7 +63,7 @@ public:
     virtual bool isReadOnly() const;
 
     /*! \return the view widget of this item, e.g. line edit widget. */
-    virtual QWidget* widget();
+    virtual QWidget *widget();
 
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
@@ -69,17 +71,19 @@ public:
 
 public Q_SLOTS:
     virtual void setEnabled(bool enabled);
-    inline void setDataSource(const QString &ds) {
+    inline void setDataSource(const QString &ds)
+    {
         KexiFormDataItemInterface::setDataSource(ds);
     }
-    inline void setDataSourcePartClass(const QString &partClass) {
+    inline void setDataSourcePartClass(const QString &partClass)
+    {
         KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     }
     void slotValueChanged();
     virtual void setReadOnly(bool set);
 
 protected:
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
 
 private:
     bool m_invalidState;

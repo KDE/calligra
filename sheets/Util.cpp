@@ -23,7 +23,6 @@
 
 #include <ctype.h>
 
-
 #include <kdebug.h>
 
 #include "Formula.h"
@@ -39,7 +38,6 @@
 
 using namespace Calligra::Sheets;
 
-
 //used in Cell::encodeFormula and
 //  dialogs/kspread_dlg_paperlayout.cc
 int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
@@ -49,12 +47,14 @@ int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
     int counterColumn = 0;
     const uint totalLength = labelText.length();
     uint labelTextLength = 0;
-    for ( ; labelTextLength < totalLength; labelTextLength++) {
+    for (; labelTextLength < totalLength; labelTextLength++) {
         const char c = labelText[labelTextLength].toLatin1();
-        if (labelTextLength == 0 && c == '$')
-            continue; // eat an absolute reference char that could be at the beginning only
-        if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')))
+        if (labelTextLength == 0 && c == '$') {
+            continue;    // eat an absolute reference char that could be at the beginning only
+        }
+        if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))) {
             break;
+        }
     }
     if (labelTextLength == 0) {
         kWarning(36001) << "No column label text found for col:" << labelText;
@@ -62,11 +62,12 @@ int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
     }
     for (uint i = 0; i < labelTextLength; i++) {
         const char c = labelText[i].toLatin1();
-        counterColumn = (int) ::pow(26.0 , static_cast<int>(labelTextLength - i - 1));
-        if (c >= 'A' && c <= 'Z')
-            col += counterColumn * (c - 'A' + 1);  // okay here (Werner)
-        else if (c >= 'a' && c <= 'z')
+        counterColumn = (int) ::pow(26.0, static_cast<int>(labelTextLength - i - 1));
+        if (c >= 'A' && c <= 'Z') {
+            col += counterColumn * (c - 'A' + 1);    // okay here (Werner)
+        } else if (c >= 'a' && c <= 'z') {
             col += counterColumn * (c - 'A' - offset + 1);
+        }
     }
     return col;
 }
@@ -74,8 +75,9 @@ int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
 int Calligra::Sheets::Util::decodeRowLabelText(const QString &labelText)
 {
     QRegExp rx("(|\\$)([A-Za-z]+)(|\\$)([0-9]+)");
-    if(rx.exactMatch(labelText))
+    if (rx.exactMatch(labelText)) {
         return rx.cap(4).toInt();
+    }
     return 0;
 }
 
@@ -87,8 +89,9 @@ QString Calligra::Sheets::Util::encodeColumnLabelText(int column)
 bool Calligra::Sheets::Util::isCellReference(const QString &text, int startPos)
 {
     int length = text.length();
-    if (length < 1 || startPos >= length)
+    if (length < 1 || startPos >= length) {
         return false;
+    }
 
     const QChar *data = text.constData();
 
@@ -107,8 +110,9 @@ bool Calligra::Sheets::Util::isCellReference(const QString &text, int startPos)
         }
 
         ushort c = data->unicode();
-        if ((c < 'A' || c > 'Z') && (c < 'a' || c > 'z'))
+        if ((c < 'A' || c > 'Z') && (c < 'a' || c > 'z')) {
             break;
+        }
 
         letterFound = true;
         ++data;
@@ -125,8 +129,9 @@ bool Calligra::Sheets::Util::isCellReference(const QString &text, int startPos)
     bool numberFound = false;
     while (!data->isNull()) {
         ushort c = data->unicode();
-        if (c < '0' || c > '9')
+        if (c < '0' || c > '9') {
             break;
+        }
         numberFound = true;
         ++data;
     }
@@ -134,27 +139,31 @@ bool Calligra::Sheets::Util::isCellReference(const QString &text, int startPos)
     return numberFound && data->isNull(); // we found the number and reached end
 }
 
-QDomElement Calligra::Sheets::NativeFormat::createElement(const QString & tagName, const QFont & font, QDomDocument & doc)
+QDomElement Calligra::Sheets::NativeFormat::createElement(const QString &tagName, const QFont &font, QDomDocument &doc)
 {
     QDomElement e(doc.createElement(tagName));
 
     e.setAttribute("family", font.family());
     e.setAttribute("size", font.pointSize());
     e.setAttribute("weight", font.weight());
-    if (font.bold())
+    if (font.bold()) {
         e.setAttribute("bold", "yes");
-    if (font.italic())
+    }
+    if (font.italic()) {
         e.setAttribute("italic", "yes");
-    if (font.underline())
+    }
+    if (font.underline()) {
         e.setAttribute("underline", "yes");
-    if (font.strikeOut())
+    }
+    if (font.strikeOut()) {
         e.setAttribute("strikeout", "yes");
+    }
     //e.setAttribute( "charset", KGlobal::charsets()->name( font ) );
 
     return e;
 }
 
-QDomElement Calligra::Sheets::NativeFormat::createElement(const QString & tagname, const QPen & pen, QDomDocument & doc)
+QDomElement Calligra::Sheets::NativeFormat::createElement(const QString &tagname, const QPen &pen, QDomDocument &doc)
 {
     QDomElement e(doc.createElement(tagname));
     e.setAttribute("color", pen.color().name());
@@ -163,31 +172,37 @@ QDomElement Calligra::Sheets::NativeFormat::createElement(const QString & tagnam
     return e;
 }
 
-QFont Calligra::Sheets::NativeFormat::toFont(KoXmlElement & element)
+QFont Calligra::Sheets::NativeFormat::toFont(KoXmlElement &element)
 {
     QFont f;
     f.setFamily(element.attribute("family"));
 
     bool ok;
     const int size = element.attribute("size").toInt(&ok);
-    if (ok)
+    if (ok) {
         f.setPointSize(size);
+    }
 
     const int weight = element.attribute("weight").toInt(&ok);
-    if (!ok)
+    if (!ok) {
         f.setWeight(weight);
+    }
 
-    if (element.hasAttribute("italic") && element.attribute("italic") == "yes")
+    if (element.hasAttribute("italic") && element.attribute("italic") == "yes") {
         f.setItalic(true);
+    }
 
-    if (element.hasAttribute("bold") && element.attribute("bold") == "yes")
+    if (element.hasAttribute("bold") && element.attribute("bold") == "yes") {
         f.setBold(true);
+    }
 
-    if (element.hasAttribute("underline") && element.attribute("underline") == "yes")
+    if (element.hasAttribute("underline") && element.attribute("underline") == "yes") {
         f.setUnderline(true);
+    }
 
-    if (element.hasAttribute("strikeout") && element.attribute("strikeout") == "yes")
+    if (element.hasAttribute("strikeout") && element.attribute("strikeout") == "yes") {
         f.setStrikeOut(true);
+    }
 
     /* Uncomment when charset is added to kspread_dlg_layout
        + save a document-global charset
@@ -201,125 +216,137 @@ QFont Calligra::Sheets::NativeFormat::toFont(KoXmlElement & element)
     return f;
 }
 
-QPen Calligra::Sheets::NativeFormat::toPen(KoXmlElement & element)
+QPen Calligra::Sheets::NativeFormat::toPen(KoXmlElement &element)
 {
     bool ok;
     QPen p;
 
     p.setStyle((Qt::PenStyle)element.attribute("style").toInt(&ok));
-    if (!ok)
+    if (!ok) {
         return QPen();
+    }
 
     p.setWidth(element.attribute("width").toInt(&ok));
-    if (!ok)
+    if (!ok) {
         return QPen();
+    }
 
     p.setColor(QColor(element.attribute("color")));
 
     return p;
 }
 
-bool util_isPointValid(const QPoint& point)
+bool util_isPointValid(const QPoint &point)
 {
     if (point.x() >= 0
             &&  point.y() >= 0
             &&  point.x() <= KS_colMax
             &&  point.y() <= KS_rowMax
-       )
+       ) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
-bool util_isRectValid(const QRect& rect)
+bool util_isRectValid(const QRect &rect)
 {
     if (util_isPointValid(rect.topLeft())
             &&  util_isPointValid(rect.bottomRight())
-       )
+       ) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
-
 //not used anywhere
-int Calligra::Sheets::Util::penCompare(QPen const & pen1, QPen const & pen2)
+int Calligra::Sheets::Util::penCompare(QPen const &pen1, QPen const &pen2)
 {
-    if (pen1.style() == Qt::NoPen && pen2.style() == Qt::NoPen)
+    if (pen1.style() == Qt::NoPen && pen2.style() == Qt::NoPen) {
         return 0;
+    }
 
-    if (pen1.style() == Qt::NoPen)
+    if (pen1.style() == Qt::NoPen) {
         return -1;
+    }
 
-    if (pen2.style() == Qt::NoPen)
+    if (pen2.style() == Qt::NoPen) {
         return 1;
+    }
 
-    if (pen1.width() < pen2.width())
+    if (pen1.width() < pen2.width()) {
         return -1;
+    }
 
-    if (pen1.width() > pen2.width())
+    if (pen1.width() > pen2.width()) {
         return 1;
+    }
 
-    if (pen1.style() < pen2.style())
+    if (pen1.style() < pen2.style()) {
         return -1;
+    }
 
-    if (pen1.style() > pen2.style())
+    if (pen1.style() > pen2.style()) {
         return 1;
+    }
 
-    if (pen1.color().name() < pen2.color().name())
+    if (pen1.color().name() < pen2.color().name()) {
         return -1;
+    }
 
-    if (pen1.color().name() > pen2.color().name())
+    if (pen1.color().name() > pen2.color().name()) {
         return 1;
+    }
 
     return 0;
 }
 
-
-QString Calligra::Sheets::Odf::convertRefToBase(const QString & sheet, const QRect & rect)
+QString Calligra::Sheets::Odf::convertRefToBase(const QString &sheet, const QRect &rect)
 {
     QPoint bottomRight(rect.bottomRight());
 
     QString s = '$' +
-        sheet +
-        ".$" +
-        Cell::columnName(bottomRight.x()) +
-        '$' +
-        QString::number(bottomRight.y());
+                sheet +
+                ".$" +
+                Cell::columnName(bottomRight.x()) +
+                '$' +
+                QString::number(bottomRight.y());
 
     return s;
 }
 
-QString Calligra::Sheets::Odf::convertRefToRange(const QString & sheet, const QRect & rect)
+QString Calligra::Sheets::Odf::convertRefToRange(const QString &sheet, const QRect &rect)
 {
     QPoint topLeft(rect.topLeft());
     QPoint bottomRight(rect.bottomRight());
 
-    if (topLeft == bottomRight)
+    if (topLeft == bottomRight) {
         return Odf::convertRefToBase(sheet, rect);
+    }
 
     QString s = '$' +
-        sheet +
-        ".$" +
-        /*Util::encodeColumnLabelText*/Cell::columnName(topLeft.x()) +
-        '$' +
-        QString::number(topLeft.y()) +
-        ":.$" +
-        /*Util::encodeColumnLabelText*/Cell::columnName(bottomRight.x()) +
-        '$' +
-        QString::number(bottomRight.y());
+                sheet +
+                ".$" +
+                /*Util::encodeColumnLabelText*/Cell::columnName(topLeft.x()) +
+                '$' +
+                QString::number(topLeft.y()) +
+                ":.$" +
+                /*Util::encodeColumnLabelText*/Cell::columnName(bottomRight.x()) +
+                '$' +
+                QString::number(bottomRight.y());
 
     return s;
 }
 
 // e.g.: Sheet4.A1:Sheet4.E28
 //used in Sheet::saveOdf
-QString Calligra::Sheets::Odf::convertRangeToRef(const QString & sheetName, const QRect & _area)
+QString Calligra::Sheets::Odf::convertRangeToRef(const QString &sheetName, const QRect &_area)
 {
     return sheetName + '.' + Cell::name(_area.left(), _area.top()) + ':' + sheetName + '.' + Cell::name(_area.right(), _area.bottom());
 }
 
-QString Calligra::Sheets::Odf::encodePen(const QPen & pen)
+QString Calligra::Sheets::Odf::encodePen(const QPen &pen)
 {
 //     kDebug()<<"encodePen( const QPen & pen ) :"<<pen;
     // NOTE Stefan: QPen api docs:
@@ -370,25 +397,27 @@ QPen Calligra::Sheets::Odf::decodePen(const QString &border)
 
     pen.setWidth((int)(KoUnit::parseValue(_width, 1.0)));
 
-    if (_style == "none")
+    if (_style == "none") {
         pen.setStyle(Qt::NoPen);
-    else if (_style == "solid")
+    } else if (_style == "solid") {
         pen.setStyle(Qt::SolidLine);
-    else if (_style == "dashed")
+    } else if (_style == "dashed") {
         pen.setStyle(Qt::DashLine);
-    else if (_style == "dotted")
+    } else if (_style == "dotted") {
         pen.setStyle(Qt::DotLine);
-    else if (_style == "dot-dash")
+    } else if (_style == "dot-dash") {
         pen.setStyle(Qt::DashDotLine);
-    else if (_style == "dot-dot-dash")
+    } else if (_style == "dot-dot-dash") {
         pen.setStyle(Qt::DashDotDotLine);
-    else
+    } else {
         kDebug() << " style undefined :" << _style;
+    }
 
-    if (_color.isEmpty())
+    if (_color.isEmpty()) {
         pen.setColor(QColor());
-    else
+    } else {
         pen.setColor(QColor(_color));
+    }
 
     return pen;
 }
@@ -404,8 +433,7 @@ bool Calligra::Sheets::Util::localReferenceAnchor(const QString &_ref)
     return isLocalRef;
 }
 
-
-QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const KLocale *locale, const QString &namespacePrefix)
+QString Calligra::Sheets::Odf::decodeFormula(const QString &expression_, const KLocale *locale, const QString &namespacePrefix)
 {
     // parsing state
     enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state = Start;
@@ -428,8 +456,8 @@ QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const K
     int length = expression.length() * 2;
     QString result(length, QChar());
     result.reserve(length);
-    QChar * out = result.data();
-    QChar * outStart = result.data();
+    QChar *out = result.data();
+    QChar *outStart = result.data();
 
     if (*data == QChar('=', 0)) {
         *out = *data;
@@ -444,14 +472,12 @@ QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const K
             if (data->isDigit()) { // check for number
                 state = InNumber;
                 *out++ = *data++;
-            }
-            else if (*data == QChar('.', 0)) {
+            } else if (*data == QChar('.', 0)) {
                 state = InNumber;
                 *out = decimal[0];
                 ++out;
                 ++data;
-            }
-            else if (isIdentifier(*data)) {
+            } else if (isIdentifier(*data)) {
                 // beginning with alphanumeric ?
                 // could be identifier, cell, range, or function...
                 state = InIdentifier;
@@ -460,42 +486,37 @@ QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const K
                 const static QString legacyNormsdistReplacement("LEGACYNORMSDIST");
                 const static QString legacyNormsinvReplacement("LEGACYNORMSINV");
                 const static QString multipleOperations("MULTIPLE.OPERATIONS");
-                if (expression.midRef(i,10).compare(QLatin1String("ERROR.TYPE")) == 0) {
+                if (expression.midRef(i, 10).compare(QLatin1String("ERROR.TYPE")) == 0) {
                     // replace it
                     int outPos = out - outStart;
                     result.replace(outPos, 9, errorTypeReplacement);
                     data += 10; // number of characters in "ERROR.TYPE"
                     out += 9;
-                }
-                else if (expression.midRef(i, 12).compare(QLatin1String("LEGACY.NORMS")) == 0) {
+                } else if (expression.midRef(i, 12).compare(QLatin1String("LEGACY.NORMS")) == 0) {
                     if (expression.midRef(i + 12, 4).compare(QLatin1String("DIST")) == 0) {
                         // replace it
                         int outPos = out - outStart;
                         result.replace(outPos, 15, legacyNormsdistReplacement);
                         data += 16; // number of characters in "LEGACY.NORMSDIST"
                         out += 15;
-                    }
-                    else if (expression.midRef(i + 12, 3).compare(QLatin1String("INV")) == 0) {
+                    } else if (expression.midRef(i + 12, 3).compare(QLatin1String("INV")) == 0) {
                         // replace it
                         int outPos = out - outStart;
                         result.replace(outPos, 14, legacyNormsinvReplacement);
                         data += 15; // number of characters in "LEGACY.NORMSINV"
                         out += 14;
                     }
-                }
-                else if (namespacePrefix == "oooc:" && expression.midRef(i, 5).compare(QLatin1String("TABLE")) == 0 && !isIdentifier(expression[i+5])) {
+                } else if (namespacePrefix == "oooc:" && expression.midRef(i, 5).compare(QLatin1String("TABLE")) == 0 && !isIdentifier(expression[i + 5])) {
                     int outPos = out - outStart;
                     result.replace(outPos, 19, multipleOperations);
                     data += 5;
                     out += 19;
-                }
-                else if (expression.midRef(i, 3).compare(QLatin1String("NEG")) == 0) {
+                } else if (expression.midRef(i, 3).compare(QLatin1String("NEG")) == 0) {
                     *out = QChar('-', 0);
                     data += 3;
                     ++out;
                 }
-            }
-            else {
+            } else {
                 switch (data->unicode()) {
                 case '"': // a string ?
                     state = InString;
@@ -514,8 +535,7 @@ QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const K
                     const QChar *operatorStart = data;
                     if (!parseOperator(data, out)) {
                         *out++ = *data++;
-                    }
-                    else if (*operatorStart == QChar('=', 0) && data - operatorStart == 1) { // only one =
+                    } else if (*operatorStart == QChar('=', 0) && data - operatorStart == 1) { // only one =
                         *out++ = QChar('=', 0);
                     }
                     break;
@@ -525,19 +545,16 @@ QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const K
         case InNumber:
             if (data->isDigit()) {
                 *out++ = *data++;
-            }
-            else if (*data == QChar('.', 0)) {
+            } else if (*data == QChar('.', 0)) {
                 const QChar *decimalChar = decimal.constData();
                 while (!decimalChar->isNull()) {
                     *out++ = *decimalChar++;
                 }
                 ++data;
-            }
-            else if (*data == QChar('E', 0) || *data == QChar('e', 0)) {
+            } else if (*data == QChar('E', 0) || *data == QChar('e', 0)) {
                 *out++ = QChar('E', 0);
                 ++data;
-            }
-            else {
+            } else {
                 state = Start;
             }
 
@@ -551,8 +568,7 @@ QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const K
         case InIdentifier: {
             if (isIdentifier(*data) || data->isDigit()) {
                 *out++ = *data++;
-            }
-            else {
+            } else {
                 state = Start;
             }
         }   break;
@@ -576,12 +592,10 @@ QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const K
                 ++data;
                 if (!data->isNull() && *data == QChar('\'', 0)) {
                     ++data;
-                }
-                else {
+                } else {
                     state = InReference;
                 }
-            }
-            else {
+            } else {
                 ++data;
             }
             break;
@@ -591,7 +605,7 @@ QString Calligra::Sheets::Odf::decodeFormula(const QString& expression_, const K
     return result;
 }
 
-QString Calligra::Sheets::Odf::encodeFormula(const QString& expr, const KLocale* locale)
+QString Calligra::Sheets::Odf::encodeFormula(const QString &expr, const KLocale *locale)
 {
     // use locale settings
     const QString decimal = locale ? locale->decimalSymbol() : ".";
@@ -601,8 +615,9 @@ QString Calligra::Sheets::Odf::encodeFormula(const QString& expr, const KLocale*
     Formula formula;
     Tokens tokens = formula.scan(expr, locale);
 
-    if (!tokens.valid() || tokens.count() == 0)
-        return expr; // no altering on error
+    if (!tokens.valid() || tokens.count() == 0) {
+        return expr;    // no altering on error
+    }
 
     for (int i = 0; i < tokens.count(); ++i) {
         const QString tokenText = tokens[i].text();
@@ -614,10 +629,11 @@ QString Calligra::Sheets::Odf::encodeFormula(const QString& expr, const KLocale*
             result.append('[');
             // FIXME Stefan: Hack to get the apostrophes right. Fix and remove!
             const int pos = tokenText.lastIndexOf('!');
-            if (pos != -1 && tokenText.left(pos).contains(' '))
+            if (pos != -1 && tokenText.left(pos).contains(' ')) {
                 result.append(Region::saveOdf('\'' + tokenText.left(pos) + '\'' + tokenText.mid(pos)));
-            else
+            } else {
                 result.append(Region::saveOdf(tokenText));
+            }
             result.append(']');
             break;
         }
@@ -627,10 +643,11 @@ QString Calligra::Sheets::Odf::encodeFormula(const QString& expr, const KLocale*
             break;
         }
         case Token::Operator: {
-            if (tokens[i].asOperator() == Token::Equal)
+            if (tokens[i].asOperator() == Token::Equal) {
                 result.append('=');
-            else
+            } else {
                 result.append(tokenText);
+            }
             break;
         }
         case Token::Identifier: {
@@ -671,52 +688,57 @@ static void replaceFormulaReference(int referencedRow, int referencedColumn, int
     if (rx.exactMatch(ref)) {
         int c = Calligra::Sheets::Util::decodeColumnLabelText(ref);
         int r = Calligra::Sheets::Util::decodeRowLabelText(ref);
-        if (rx.cap(1) != "$") // absolute or relative column?
+        if (rx.cap(1) != "$") { // absolute or relative column?
             c += thisColumn - referencedColumn;
-        if (rx.cap(2) != "$") // absolute or relative row?
+        }
+        if (rx.cap(2) != "$") { // absolute or relative row?
             r += thisRow - referencedRow;
+        }
         result.replace(cellReferenceStart,
                        cellReferenceLength,
                        rx.cap(1) + Calligra::Sheets::Util::encodeColumnLabelText(c) +
-                       rx.cap(2) + QString::number(r) );
+                       rx.cap(2) + QString::number(r));
     }
 }
 
-QString Calligra::Sheets::Util::adjustFormulaReference(const QString& formula, int referencedRow, int referencedColumn, int thisRow, int thisColumn)
+QString Calligra::Sheets::Util::adjustFormulaReference(const QString &formula, int referencedRow, int referencedColumn, int thisRow, int thisColumn)
 {
     QString result = formula;
-    if (result.isEmpty())
+    if (result.isEmpty()) {
         return QString();
+    }
     enum { InStart, InCellReference, InString, InSheetOrAreaName } state;
     state = InStart;
     int cellReferenceStart = 0;
-    for(int i = 1; i < result.length(); ++i) {
+    for (int i = 1; i < result.length(); ++i) {
         QChar ch = result[i];
         switch (state) {
         case InStart:
-            if (ch == '"')
+            if (ch == '"') {
                 state = InString;
-            else if (ch.unicode() == '\'')
+            } else if (ch.unicode() == '\'') {
                 state = InSheetOrAreaName;
-            else if (isCellnameCharacter(ch)) {
+            } else if (isCellnameCharacter(ch)) {
                 state = InCellReference;
                 cellReferenceStart = i;
             }
             break;
         case InString:
-            if (ch == '"')
+            if (ch == '"') {
                 state = InStart;
+            }
             break;
         case InSheetOrAreaName:
-            if (ch == '\'')
+            if (ch == '\'') {
                 state = InStart;
+            }
             break;
         case InCellReference:
             if (!isCellnameCharacter(ch)) {
                 // We need to update cell-references according to the position of the referenced cell and this
                 // cell. This means that if the referenced cell is for example at C5 and contains the formula
                 // "=SUM(K22)" and if thisCell is at E6 then thisCell will get the formula "=SUM(L23)".
-                if (ch != '(') /* skip formula-names */ {
+                if (ch != '(') { /* skip formula-names */
                     replaceFormulaReference(referencedRow, referencedColumn, thisRow, thisColumn, result, cellReferenceStart, i - cellReferenceStart);
                 }
                 state = InStart;
@@ -725,88 +747,96 @@ QString Calligra::Sheets::Util::adjustFormulaReference(const QString& formula, i
             break;
         };
     }
-    if(state == InCellReference) {
+    if (state == InCellReference) {
         replaceFormulaReference(referencedRow, referencedColumn, thisRow, thisColumn, result, cellReferenceStart, result.length() - cellReferenceStart);
     }
     return result;
 }
 
-QString Calligra::Sheets::MSOOXML::convertFormula(const QString& formula)
+QString Calligra::Sheets::MSOOXML::convertFormula(const QString &formula)
 {
-    if (formula.isEmpty())
+    if (formula.isEmpty()) {
         return QString();
+    }
     enum { InStart, InArguments, InParenthesizedArgument, InString, InSheetOrAreaName, InCellReference } state;
     state = InStart;
     int cellReferenceStart = 0;
     int sheetOrAreaNameDelimiterCount = 0;
     QString result = formula.startsWith('=') ? formula : '=' + formula;
-    for(int i = 1; i < result.length(); ++i) {
+    for (int i = 1; i < result.length(); ++i) {
         QChar ch = result[i];
         switch (state) {
         case InStart:
-            if(ch == '(')
+            if (ch == '(') {
                 state = InArguments;
+            }
             break;
         case InArguments:
-            if (ch == '"')
+            if (ch == '"') {
                 state = InString;
-            else if (ch.unicode() == '\'') {
+            } else if (ch.unicode() == '\'') {
                 sheetOrAreaNameDelimiterCount = 1;
-                for(int j = i + 1; j < result.length(); ++j) {
-                    if (result[j].unicode() != '\'')
+                for (int j = i + 1; j < result.length(); ++j) {
+                    if (result[j].unicode() != '\'') {
                         break;
+                    }
                     ++sheetOrAreaNameDelimiterCount;
                 }
-                if (sheetOrAreaNameDelimiterCount >= 2)
+                if (sheetOrAreaNameDelimiterCount >= 2) {
                     result.remove(i + 1, sheetOrAreaNameDelimiterCount - 1);
+                }
                 state = InSheetOrAreaName;
             } else if (isCellnameCharacter(ch)) {
                 state = InCellReference;
                 cellReferenceStart = i;
-            } else if (ch == ',')
-                result[i] = ';'; // replace argument delimiter
-            else if (ch == '(' && !result[i-1].isLetterOrNumber())
+            } else if (ch == ',') {
+                result[i] = ';';    // replace argument delimiter
+            } else if (ch == '(' && !result[i - 1].isLetterOrNumber()) {
                 state = InParenthesizedArgument;
-            else if (ch == ' ') {
+            } else if (ch == ' ') {
                 // check if it might be an intersection operator
                 // for it to be an intersection operator the next non-space char must be a cell-name-character or '
                 // and previous converted char cannot be ';'
-                int firstNonSpace = i+1;
+                int firstNonSpace = i + 1;
                 while (firstNonSpace < result.length() && result[firstNonSpace] == ' ') {
                     firstNonSpace++;
                 }
-                bool wasDelimeter = (i-1 > 0) && (result[i-1] == ';');
+                bool wasDelimeter = (i - 1 > 0) && (result[i - 1] == ';');
                 bool isIntersection = !wasDelimeter && firstNonSpace < result.length() && (result[firstNonSpace].isLetter() || result[firstNonSpace] == '$' || result[firstNonSpace] == '\'');
                 if (isIntersection) {
                     result[i] = '!';
-                    i = firstNonSpace-1;
+                    i = firstNonSpace - 1;
                 }
             }
             break;
         case InParenthesizedArgument:
-            if (ch == ',')
-                result[i] = '~'; // union operator
-            else if (ch == ' ')
-                result[i] = '!'; // intersection operator
-            else if (ch == ')')
+            if (ch == ',') {
+                result[i] = '~';    // union operator
+            } else if (ch == ' ') {
+                result[i] = '!';    // intersection operator
+            } else if (ch == ')') {
                 state = InArguments;
+            }
             break;
         case InString:
-            if (ch == '"')
+            if (ch == '"') {
                 state = InArguments;
+            }
             break;
         case InSheetOrAreaName:
-            Q_ASSERT( i >= 1 );
+            Q_ASSERT(i >= 1);
             if (ch == '\'' && result[i - 1].unicode() != '\\') {
                 int count = 1;
-                for(int j = i + 1; count < sheetOrAreaNameDelimiterCount && j < result.length(); ++j) {
-                    if (result[j].unicode() != '\'')
+                for (int j = i + 1; count < sheetOrAreaNameDelimiterCount && j < result.length(); ++j) {
+                    if (result[j].unicode() != '\'') {
                         break;
+                    }
                     ++count;
                 }
                 if (count == sheetOrAreaNameDelimiterCount) {
-                    if (sheetOrAreaNameDelimiterCount >= 2)
+                    if (sheetOrAreaNameDelimiterCount >= 2) {
                         result.remove(i + 1, sheetOrAreaNameDelimiterCount - 1);
+                    }
                     state = InArguments;
                 } else {
                     result.insert(i, '\'');
@@ -816,7 +846,7 @@ QString Calligra::Sheets::MSOOXML::convertFormula(const QString& formula)
             break;
         case InCellReference:
             if (!isCellnameCharacter(ch)) {
-                if (ch != '(') /* skip formula-names */ {
+                if (ch != '(') { /* skip formula-names */
                     // Excel is able to use only the column-name to define a column
                     // where all rows are selected. Since that is not supproted in
                     // ODF we add to such definitions the minimum/maximum row-number.

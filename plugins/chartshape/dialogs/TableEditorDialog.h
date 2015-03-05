@@ -30,8 +30,8 @@ class QAbstractItemModel;
 class QModelIndex;
 class QAction;
 
-
-namespace KChart {
+namespace KChart
+{
 
 class ChartTableView;
 class ChartProxyModel;

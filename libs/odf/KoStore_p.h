@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2004 Nicolas GOUTTE <goutte@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -20,7 +20,6 @@
 #ifndef __koStore_p_h_
 #define __koStore_p_h_
 
-
 #include "KoStore.h"
 
 #include <QStringList>
@@ -35,15 +34,15 @@ class KoStorePrivate
 public:
     explicit KoStorePrivate(KoStore *qq, KoStore::Mode _mode, bool _writeMimetype)
         : q(qq),
-        fileMode(Local),
-        window(0),
-        mode(_mode),
-        size(0),
-        stream(0),
-        isOpen(false),
-        good(false),
-        finalized(false),
-        writeMimetype(_writeMimetype)
+          fileMode(Local),
+          window(0),
+          mode(_mode),
+          size(0),
+          stream(0),
+          isOpen(false),
+          good(false),
+          finalized(false),
+          writeMimetype(_writeMimetype)
     {
     }
 

@@ -25,24 +25,27 @@
 #include "kis_paint_device.h"
 #include "kis_iterator_ng.h"
 
-
 struct ReadOnlyIteratorPolicy {
     typedef KisHLineConstIteratorSP IteratorTypeSP;
 
-    ReadOnlyIteratorPolicy(KisPaintDeviceSP dev, const QRect &rect) {
+    ReadOnlyIteratorPolicy(KisPaintDeviceSP dev, const QRect &rect)
+    {
         m_iter = dev->createHLineConstIteratorNG(rect.x(), rect.y(), rect.width());
     }
 
-    ALWAYS_INLINE void updatePointersCache() {
+    ALWAYS_INLINE void updatePointersCache()
+    {
         m_rawDataConst = m_iter->rawDataConst();
         m_oldRawData = m_iter->oldRawData();
     }
 
-    ALWAYS_INLINE const quint8* rawDataConst() const {
+    ALWAYS_INLINE const quint8 *rawDataConst() const
+    {
         return m_rawDataConst;
     }
 
-    ALWAYS_INLINE const quint8* oldRawData() const {
+    ALWAYS_INLINE const quint8 *oldRawData() const
+    {
         return m_oldRawData;
     }
 
@@ -56,24 +59,29 @@ private:
 struct WritableIteratorPolicy {
     typedef KisHLineIteratorSP IteratorTypeSP;
 
-    WritableIteratorPolicy(KisPaintDeviceSP dev, const QRect &rect) {
+    WritableIteratorPolicy(KisPaintDeviceSP dev, const QRect &rect)
+    {
         m_iter = dev->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
     }
 
-    ALWAYS_INLINE void updatePointersCache() {
+    ALWAYS_INLINE void updatePointersCache()
+    {
         m_rawData = m_iter->rawData();
         m_oldRawData = m_iter->oldRawData();
     }
 
-    ALWAYS_INLINE quint8* rawData() {
+    ALWAYS_INLINE quint8 *rawData()
+    {
         return m_rawData;
     }
 
-    ALWAYS_INLINE const quint8* rawDataConst() const {
+    ALWAYS_INLINE const quint8 *rawDataConst() const
+    {
         return m_rawData;
     }
 
-    ALWAYS_INLINE const quint8* oldRawData() const {
+    ALWAYS_INLINE const quint8 *oldRawData() const
+    {
         return m_oldRawData;
     }
 
@@ -118,11 +126,13 @@ public:
         m_policy.updatePointersCache();
     }
 
-    inline int nConseqPixels() const {
+    inline int nConseqPixels() const
+    {
         return m_columnsLeft;
     }
 
-    inline bool nextPixels(int numPixels) {
+    inline bool nextPixels(int numPixels)
+    {
         // leave one step for the nextPixel() call
         numPixels--;
 
@@ -132,7 +142,8 @@ public:
         return nextPixel();
     }
 
-    inline bool nextPixel() {
+    inline bool nextPixel()
+    {
         m_columnsLeft--;
 
         if (m_columnsLeft) {
@@ -156,26 +167,30 @@ public:
         return m_columnsLeft > 0;
     }
 
-
-    ALWAYS_INLINE int x() const {
+    ALWAYS_INLINE int x() const
+    {
         return m_policy.m_iter->x() + m_numConseqPixels - m_columnsLeft;
     }
 
-    ALWAYS_INLINE int y() const {
+    ALWAYS_INLINE int y() const
+    {
         return m_policy.m_iter->y();
     }
 
     // SFINAE: This method becomes undefined for const version of the
     //         iterator automatically
-    ALWAYS_INLINE quint8* rawData() {
+    ALWAYS_INLINE quint8 *rawData()
+    {
         return m_policy.rawData() + m_columnOffset;
     }
 
-    ALWAYS_INLINE const quint8* rawDataConst() const {
+    ALWAYS_INLINE const quint8 *rawDataConst() const
+    {
         return m_policy.rawDataConst() + m_columnOffset;
     }
 
-    ALWAYS_INLINE const quint8* oldRawData() const {
+    ALWAYS_INLINE const quint8 *oldRawData() const
+    {
         return m_policy.oldRawData() + m_columnOffset;
     }
 

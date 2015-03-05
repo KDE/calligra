@@ -30,7 +30,8 @@
 #include <KoColumns.h>
 
 /// A widget to preview the KoPageLayout and KoColumns data structures.
-class KOWIDGETS_EXPORT KoPagePreviewWidget : public QWidget {
+class KOWIDGETS_EXPORT KoPagePreviewWidget : public QWidget
+{
     Q_OBJECT
 public:
     explicit KoPagePreviewWidget(QWidget *parent = 0);
@@ -48,7 +49,7 @@ private:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

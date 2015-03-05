@@ -26,7 +26,7 @@
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
 K_EXPORT_PLUGIN(PluginFactory("calligrastage-animationtool"))
 
-Plugin::Plugin(QObject * parent, const QVariantList &)
+Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new KPrAnimationToolFactory());

@@ -33,14 +33,15 @@
 class KexiPropertyEditorView::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
     KoProperty::EditorView *editor;
 };
 
-KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
-        : KexiPropertyPaneViewBase(parent)
-        , d(new Private())
+KexiPropertyEditorView::KexiPropertyEditorView(QWidget *parent)
+    : KexiPropertyPaneViewBase(parent)
+    , d(new Private())
 {
     setObjectName("KexiPropertyEditorView");
     setWindowTitle(i18nc("@title:window", "Properties"));
@@ -79,7 +80,7 @@ KoProperty::EditorView *KexiPropertyEditorView::editor() const
     return d->editor;
 }
 
-void KexiPropertyEditorView::slotPropertySetChanged(KoProperty::Set* set)
+void KexiPropertyEditorView::slotPropertySetChanged(KoProperty::Set *set)
 {
     //update information about selected object
     updateInfoLabelForPropertySet(set);

@@ -30,7 +30,7 @@
 #include "InfoVariable.h"
 
 InfoVariableFactory::InfoVariableFactory()
-        : KoInlineObjectFactoryBase("info", TextVariable)
+    : KoInlineObjectFactoryBase("info", TextVariable)
 {
     KoInlineObjectTemplate var1;
     var1.id = "author";
@@ -87,7 +87,8 @@ InfoVariableFactory::InfoVariableFactory()
 KoInlineObject *InfoVariableFactory::createInlineObject(const KoProperties *properties) const
 {
     InfoVariable *var = new InfoVariable();
-    if (properties)
+    if (properties) {
         var->readProperties(properties);
+    }
     return var;
 }

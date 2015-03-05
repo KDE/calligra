@@ -38,7 +38,10 @@ public:
     /// reimplemented
     virtual void setUnit(KoUnit unit);
     /// reimplemented
-    virtual bool showOnShapeCreate() { return false; }
+    virtual bool showOnShapeCreate()
+    {
+        return false;
+    }
     /// reimplemented
     virtual KUndo2Command *createCommand();
 

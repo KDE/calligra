@@ -27,10 +27,9 @@
 #include "input/kis_abstract_input_action.h"
 #include "input/kis_shortcut_matcher.h"
 
-
 void KisInputManagerTest::testSingleActionShortcut()
 {
-    KisSingleActionShortcut s(0,0);
+    KisSingleActionShortcut s(0, 0);
     s.setKey(QList<Qt::Key>() << Qt::Key_Shift, Qt::Key_Space);
 
     QVERIFY(s.match(QList<Qt::Key>() << Qt::Key_Shift, Qt::Key_Space));
@@ -50,7 +49,7 @@ void KisInputManagerTest::testSingleActionShortcut()
 
 void KisInputManagerTest::testStrokeShortcut()
 {
-    KisStrokeShortcut s(0,0);
+    KisStrokeShortcut s(0, 0);
     s.setButtons(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
                  QList<Qt::MouseButton>() << Qt::LeftButton);
 
@@ -61,25 +60,40 @@ void KisInputManagerTest::testStrokeShortcut()
                          QList<Qt::MouseButton>()));
 
     QVERIFY(!s.matchReady(QList<Qt::Key>() << Qt::Key_Control << Qt::Key_Alt,
-                         QList<Qt::MouseButton>()));
+                          QList<Qt::MouseButton>()));
 
     QVERIFY(!s.matchReady(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
-                         QList<Qt::MouseButton>() << Qt::RightButton));
+                          QList<Qt::MouseButton>() << Qt::RightButton));
 
     QVERIFY(s.matchBegin(Qt::LeftButton));
     QVERIFY(!s.matchBegin(Qt::RightButton));
 }
 
-struct TestingAction : public KisAbstractInputAction
-{
-    TestingAction() : KisAbstractInputAction("TestingAction"), m_isHighResolution(false) { reset(); }
+struct TestingAction : public KisAbstractInputAction {
+    TestingAction() : KisAbstractInputAction("TestingAction"), m_isHighResolution(false)
+    {
+        reset();
+    }
     ~TestingAction() {}
 
-    void begin(int shortcut, QEvent *event) { m_beginIndex = shortcut; m_beginNonNull = event;}
-    void end(QEvent *event) { m_ended = true; m_endNonNull = event; }
-    void inputEvent(QEvent* event) { Q_UNUSED(event); m_gotInput = true; }
+    void begin(int shortcut, QEvent *event)
+    {
+        m_beginIndex = shortcut;
+        m_beginNonNull = event;
+    }
+    void end(QEvent *event)
+    {
+        m_ended = true;
+        m_endNonNull = event;
+    }
+    void inputEvent(QEvent *event)
+    {
+        Q_UNUSED(event);
+        m_gotInput = true;
+    }
 
-    void reset() {
+    void reset()
+    {
         m_beginIndex = -1;
         m_ended = false;
         m_gotInput = false;
@@ -87,11 +101,13 @@ struct TestingAction : public KisAbstractInputAction
         m_endNonNull = false;
     }
 
-    bool supportsHiResInputEvents() const {
+    bool supportsHiResInputEvents() const
+    {
         return m_isHighResolution;
     }
 
-    void setHighResInputEvents(bool value) {
+    void setHighResInputEvents(bool value)
+    {
         m_isHighResolution = value;
     }
 
@@ -104,20 +120,20 @@ struct TestingAction : public KisAbstractInputAction
     bool m_isHighResolution;
 };
 
-KisSingleActionShortcut* createKeyShortcut(KisAbstractInputAction *action,
-                                  int shortcutIndex,
-                                  const QList<Qt::Key> &modifiers,
-                                  Qt::Key key)
+KisSingleActionShortcut *createKeyShortcut(KisAbstractInputAction *action,
+        int shortcutIndex,
+        const QList<Qt::Key> &modifiers,
+        Qt::Key key)
 {
     KisSingleActionShortcut *s = new KisSingleActionShortcut(action, shortcutIndex);
     s->setKey(modifiers, key);
     return s;
 }
 
-KisStrokeShortcut* createStrokeShortcut(KisAbstractInputAction *action,
-                                     int shortcutIndex,
-                                     const QList<Qt::Key> &modifiers,
-                                     Qt::MouseButton button)
+KisStrokeShortcut *createStrokeShortcut(KisAbstractInputAction *action,
+                                        int shortcutIndex,
+                                        const QList<Qt::Key> &modifiers,
+                                        Qt::MouseButton button)
 {
     KisStrokeShortcut *s = new KisStrokeShortcut(action, shortcutIndex);
     s->setButtons(modifiers, QList<Qt::MouseButton>() << button);
@@ -129,7 +145,6 @@ void KisInputManagerTest::testKeyEvents()
     KisShortcutMatcher m;
 
     TestingAction *a = new TestingAction();
-
 
     m.addShortcut(
         createKeyShortcut(a, 10,
@@ -164,7 +179,6 @@ void KisInputManagerTest::testKeyEvents()
     QVERIFY(!m.keyPressed(Qt::Key_Control));
     QCOMPARE(a->m_beginIndex, -1);
 
-
     // Complete Ctrl+Shift+Enter shortcut
     QVERIFY(m.keyPressed(Qt::Key_Enter));
     QCOMPARE(a->m_beginIndex, 11);
@@ -173,18 +187,15 @@ void KisInputManagerTest::testKeyEvents()
     QCOMPARE(a->m_endNonNull, false);
     a->reset();
 
-
     // Pressing mouse buttons is disabled since Enter is pressed
     QVERIFY(!m.buttonPressed(Qt::LeftButton, &mouseEvent));
     QCOMPARE(a->m_beginIndex, -1);
     QVERIFY(!m.buttonReleased(Qt::LeftButton, &mouseEvent));
     QCOMPARE(a->m_beginIndex, -1);
 
-
     // Release Enter, so the system should be ready for new shortcuts
     QVERIFY(!m.keyReleased(Qt::Key_Enter));
     QCOMPARE(a->m_beginIndex, -1);
-
 
     // Complete Ctrl+Shift+LB shortcut
     QVERIFY(m.buttonPressed(Qt::LeftButton, &mouseEvent));
@@ -201,14 +212,12 @@ void KisInputManagerTest::testKeyEvents()
     QCOMPARE(a->m_endNonNull, true);
     a->reset();
 
-
     // There is no Ctrl+Shift+RB shortcut
     QVERIFY(!m.buttonPressed(Qt::RightButton, &mouseEvent));
     QCOMPARE(a->m_beginIndex, -1);
 
     QVERIFY(!m.buttonReleased(Qt::RightButton, &mouseEvent));
     QCOMPARE(a->m_beginIndex, -1);
-
 
     // Check that Ctrl+Shift+Enter is still enabled
     QVERIFY(m.keyPressed(Qt::Key_Enter));
@@ -229,11 +238,9 @@ void KisInputManagerTest::testKeyEvents()
     QVERIFY(!m.keyReleased(Qt::Key_Enter));
     QCOMPARE(a->m_beginIndex, -1);
 
-
     // Release Ctrl
     QVERIFY(!m.keyReleased(Qt::Key_Control));
     QCOMPARE(a->m_beginIndex, -1);
-
 
     // There is no Shift+LB shortcut
     QVERIFY(!m.buttonPressed(Qt::LeftButton, &mouseEvent));
@@ -241,7 +248,6 @@ void KisInputManagerTest::testKeyEvents()
 
     QVERIFY(!m.buttonReleased(Qt::LeftButton, &mouseEvent));
     QCOMPARE(a->m_beginIndex, -1);
-
 
     // But there *is* Shift+RB shortcut
     QVERIFY(m.buttonPressed(Qt::RightButton, &mouseEvent));
@@ -257,7 +263,6 @@ void KisInputManagerTest::testKeyEvents()
     QCOMPARE(a->m_beginNonNull, false);
     QCOMPARE(a->m_endNonNull, true);
     a->reset();
-
 
     // Check that Shift+Enter still works
     QVERIFY(m.keyPressed(Qt::Key_Enter));
@@ -327,7 +332,6 @@ void KisInputManagerTest::testMouseMoves()
     // Test event with random values
     QMouseEvent mouseEvent(QEvent::MouseMove, QPoint(),
                            Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
-
 
     // Press Ctrl+Shift
     QVERIFY(!m.keyPressed(Qt::Key_Shift));

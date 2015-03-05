@@ -34,8 +34,8 @@ InsertSemanticObjectCreateAction::InsertSemanticObjectCreateAction(
     KoCanvasBase *canvas,
     KoDocumentRdf *rdf,
     const QString &name)
-        : InsertSemanticObjectActionBase(canvas, rdf, name),
-        m_semanticClass(name)
+    : InsertSemanticObjectActionBase(canvas, rdf, name),
+      m_semanticClass(name)
 {
 }
 

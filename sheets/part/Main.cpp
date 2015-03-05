@@ -28,7 +28,7 @@ using namespace Calligra::Sheets;
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-    KAboutData * aboutData = newAboutData();
+    KAboutData *aboutData = newAboutData();
 
     KCmdLineArgs::init(argc, argv, aboutData);
 
@@ -39,8 +39,9 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 
     KoApplication app(SHEETS_MIME_TYPE);
 
-    if (!app.start())
+    if (!app.start()) {
         return 1;
+    }
     app.exec();
 
     delete(aboutData);

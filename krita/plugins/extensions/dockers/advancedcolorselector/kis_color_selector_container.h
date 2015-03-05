@@ -30,13 +30,13 @@ class KAction;
 
 class KisColorSelectorContainer : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit KisColorSelectorContainer(QWidget *parent = 0);
-    void setCanvas(KisCanvas2* canvas);
+    void setCanvas(KisCanvas2 *canvas);
     void unsetCanvas();
 
-    enum ShadeSelectorType{MyPaintSelector, MinimalSelector, NoSelector};
+    enum ShadeSelectorType {MyPaintSelector, MinimalSelector, NoSelector};
 
 Q_SIGNALS:
     void openSettings();
@@ -50,20 +50,20 @@ protected:
     void resizeEvent(QResizeEvent *);
 
 private:
-    KisColorSelector* m_colorSelector;
-    KisMyPaintShadeSelector* m_myPaintShadeSelector;
-    KisMinimalShadeSelector* m_minimalShadeSelector;
-    QWidget* m_shadeSelector;
+    KisColorSelector *m_colorSelector;
+    KisMyPaintShadeSelector *m_myPaintShadeSelector;
+    KisMinimalShadeSelector *m_minimalShadeSelector;
+    QWidget *m_shadeSelector;
 
     bool m_shadeSelectorHideable;
     bool m_hideColorSelector;
     bool m_allowHorizontalLayout;
 
-    QBoxLayout* m_widgetLayout;
+    QBoxLayout *m_widgetLayout;
 
-    KAction* m_colorSelAction;
-    KAction* m_mypaintAction;
-    KAction* m_minimalAction;
+    KAction *m_colorSelAction;
+    KAction *m_mypaintAction;
+    KAction *m_minimalAction;
 
     QPointer<KisCanvas2> m_canvas;
 };

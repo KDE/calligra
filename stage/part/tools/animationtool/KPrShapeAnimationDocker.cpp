@@ -59,13 +59,13 @@
 //This class is needed so that the menu returns a sizehint based on the layout and not on the number (0) of menu items
 class DialogMenu : public QMenu
 {
-    public:
-        DialogMenu(QWidget *parent = 0);
-        virtual QSize sizeHint() const;
+public:
+    DialogMenu(QWidget *parent = 0);
+    virtual QSize sizeHint() const;
 };
 
-DialogMenu::DialogMenu(QWidget * parent)
- : QMenu(parent)
+DialogMenu::DialogMenu(QWidget *parent)
+    : QMenu(parent)
 {
 }
 QSize DialogMenu::sizeHint() const
@@ -103,7 +103,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_editMenu = new DialogMenu(this);
     m_editAnimationsPanel = new KPrEditAnimationsWidget(this);
     QGridLayout *containerLayout = new QGridLayout(m_editMenu);
-    containerLayout->addWidget(m_editAnimationsPanel,0,0);
+    containerLayout->addWidget(m_editAnimationsPanel, 0, 0);
     m_editAnimation->setMenu(m_editMenu);
     m_editAnimation->setPopupMode(QToolButton::InstantPopup);
 
@@ -114,10 +114,9 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_addMenu = new DialogMenu(this);
     m_addDialog = new KPrAnimationSelectorWidget(this, m_animationsData);
     QGridLayout *addMenuLayout = new QGridLayout(m_addMenu);
-    addMenuLayout->addWidget(m_addDialog,0,0);
+    addMenuLayout->addWidget(m_addDialog, 0, 0);
     m_buttonAddAnimation->setMenu(m_addMenu);
     m_buttonAddAnimation->setPopupMode(QToolButton::InstantPopup);
-
 
     m_buttonRemoveAnimation = new QToolButton();
     m_buttonRemoveAnimation->setIcon(koIcon("list-remove"));
@@ -154,7 +153,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_animationsView->setContextMenuPolicy(Qt::CustomContextMenu);
     m_animationsView->installEventFilter(this);
 
-    QVBoxLayout* layout = new QVBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
     layout->addLayout(hlayout);
     layout->addWidget(m_animationsView);
     layout->addLayout(hlayout2);
@@ -205,8 +204,7 @@ void KPrShapeAnimationDocker::checkAnimationSelected()
     // If a shape is selected enable add animation button
     if (selection->selectedShapes().isEmpty() || !(selection->selectedShapes().first()->isPrintable())) {
         m_buttonAddAnimation->setEnabled(false);
-    }
-    else {
+    } else {
         m_buttonAddAnimation->setEnabled(true);
     }
 
@@ -268,15 +266,14 @@ void KPrShapeAnimationDocker::verifyMotionPathChanged(const QModelIndex &index, 
 
 KPrShapeAnimations *KPrShapeAnimationDocker::animationsByPage(KoPAPageBase *page)
 {
-    KPrPageData * pageData = dynamic_cast<KPrPageData *>(page);
+    KPrPageData *pageData = dynamic_cast<KPrPageData *>(page);
     Q_ASSERT(pageData);
     return &pageData->animations();
 }
 
-
 void KPrShapeAnimationDocker::slotActivePageChanged()
 {
-    Q_ASSERT( m_view );
+    Q_ASSERT(m_view);
     if (m_view->activePage()) {
         m_animationsModel = animationsByPage(m_view->activePage());
         m_animationsView->setModel(m_animationsModel);
@@ -300,7 +297,7 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
         m_animationsView->setColumnWidth(1, KIconLoader::SizeMedium + 6);
         m_animationsView->setColumnWidth(2, KIconLoader::SizeSmall + 6);
     }
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(syncWithCanvasSelectedShape()));
     connect(m_animationsModel, SIGNAL(onClickEventChanged()), this, SLOT(testEditPanelRoot()));
@@ -338,14 +335,14 @@ void KPrShapeAnimationDocker::syncCanvasWithIndex(const QModelIndex &index)
         return;
     }
 
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     // Don't update if shape is already selected
     if (selection->selectedShapes().contains(shape)) {
         return;
     }
 
-    foreach (KoShape* shape, selection->selectedShapes()) {
+    foreach (KoShape *shape, selection->selectedShapes()) {
         shape->update();
     }
 
@@ -367,7 +364,7 @@ void KPrShapeAnimationDocker::updateEditDialogIndex(const QModelIndex &index)
 void KPrShapeAnimationDocker::syncWithCanvasSelectedShape()
 {
     //Update View with selected shape on canvas
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     if (!selection->selectedShapes().isEmpty()) {
         if (selection->selectedShapes().first()) {
@@ -462,7 +459,7 @@ KPrPredefinedAnimationsLoader *KPrShapeAnimationDocker::animationsLoader()
 
 KoShape *KPrShapeAnimationDocker::getSelectedShape()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     // Sync canvas with main view
     if (m_animationsView->currentIndex().isValid()) {
@@ -475,7 +472,7 @@ KoShape *KPrShapeAnimationDocker::getSelectedShape()
     }
     // Restore last selected shape after an animation preview
     else if (m_lastSelectedShape) {
-        foreach (KoShape* shape, selection->selectedShapes()) {
+        foreach (KoShape *shape, selection->selectedShapes()) {
             shape->update();
         }
         selection->deselectAll();
@@ -488,9 +485,8 @@ KoShape *KPrShapeAnimationDocker::getSelectedShape()
             }
         }
         m_lastSelectedShape = 0;
-    }
-    else if (!(canvasController->canvas()->shapeManager()->shapes().isEmpty())){
-        foreach (KoShape* shape, selection->selectedShapes()) {
+    } else if (!(canvasController->canvas()->shapeManager()->shapes().isEmpty())) {
+        foreach (KoShape *shape, selection->selectedShapes()) {
             shape->update();
         }
         selection->deselectAll();
@@ -551,11 +547,9 @@ void KPrShapeAnimationDocker::showAnimationsCustomContextMenu(const QPoint &pos)
         KPrShapeAnimation::NodeType currentNodeType = m_animationsModel->triggerEventByIndex(m_animationsView->currentIndex());
         if (currentNodeType == KPrShapeAnimation::OnClick) {
             onClickAction->setChecked(true);
-        }
-        else if (currentNodeType == KPrShapeAnimation::AfterPrevious) {
+        } else if (currentNodeType == KPrShapeAnimation::AfterPrevious) {
             afterAction->setChecked(true);
-        }
-        else {
+        } else {
             withAction->setChecked(true);
         }
 
@@ -569,17 +563,22 @@ void KPrShapeAnimationDocker::showAnimationsCustomContextMenu(const QPoint &pos)
 
 void KPrShapeAnimationDocker::setTriggerEvent(QAction *action)
 {
-    if (!m_animationsView->currentIndex().isValid())
+    if (!m_animationsView->currentIndex().isValid()) {
         return;
+    }
 
     int row = action->data().toInt();
     QModelIndex triggerIndex = m_animationsModel->index(m_animationsView->currentIndex().row(),
-                                                        KPrShapeAnimations::NodeType);
+                               KPrShapeAnimations::NodeType);
     if (row != m_animationsModel->data(triggerIndex).toInt()) {
         KPrShapeAnimation::NodeType newType;
-        if (row == 0) newType = KPrShapeAnimation::OnClick;
-        else if (row == 1) newType = KPrShapeAnimation::AfterPrevious;
-        else newType = KPrShapeAnimation::WithPrevious;
+        if (row == 0) {
+            newType = KPrShapeAnimation::OnClick;
+        } else if (row == 1) {
+            newType = KPrShapeAnimation::AfterPrevious;
+        } else {
+            newType = KPrShapeAnimation::WithPrevious;
+        }
         m_animationsModel->setTriggerEvent(m_animationsView->currentIndex(), newType);
     }
 }
@@ -592,7 +591,7 @@ void KPrShapeAnimationDocker::initializeView()
 bool KPrShapeAnimationDocker::eventFilter(QObject *ob, QEvent *ev)
 {
     if (ob == m_animationsView && ev->type() == QEvent::KeyPress) {
-        if (QKeyEvent *keyEvent = static_cast<QKeyEvent*>(ev)) {
+        if (QKeyEvent *keyEvent = static_cast<QKeyEvent *>(ev)) {
             if (keyEvent->key() == Qt::Key_Delete) {
                 slotRemoveAnimations();
             }

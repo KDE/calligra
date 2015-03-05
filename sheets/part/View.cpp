@@ -162,43 +162,43 @@ class ViewActions;
 class View::Private
 {
 public:
-    View* view;
-    Doc* doc;
+    View *view;
+    Doc *doc;
 
     // the active sheet, may be 0
     // this is the sheet which has the input focus
-    Sheet* activeSheet;
-    MapViewModel* mapViewModel;
-    QHash<const Sheet*, QPointer<SheetView> > sheetViews;
+    Sheet *activeSheet;
+    MapViewModel *mapViewModel;
+    QHash<const Sheet *, QPointer<SheetView> > sheetViews;
 
     // GUI elements
     QWidget *frame;
     Canvas *canvas;
-    KoCanvasController* canvasController;
-    KoZoomController* zoomController;
-    KoZoomHandler* zoomHandler;
+    KoCanvasController *canvasController;
+    KoZoomController *zoomController;
+    KoZoomHandler *zoomHandler;
     RowHeaderWidget *rowHeader;
     ColumnHeaderWidget *columnHeader;
-    SelectAllButtonWidget* selectAllButton;
+    SelectAllButtonWidget *selectAllButton;
     QScrollBar *horzScrollBar;
     QScrollBar *vertScrollBar;
     TabBar *tabBar;
-    QLabel* calcLabel;
-    QGridLayout* viewLayout;
-    QGridLayout* tabScrollBarLayout;
+    QLabel *calcLabel;
+    QGridLayout *viewLayout;
+    QGridLayout *tabScrollBarLayout;
 
     // all UI actions
-    ViewActions* actions;
+    ViewActions *actions;
 
     // if true, kspread is still loading the document
     // don't try to refresh the view
     bool loading;
 
     // selection/marker
-    Selection* selection;
-    QMap<Sheet*, QPoint> savedAnchors;
-    QMap<Sheet*, QPoint> savedMarkers;
-    QMap<Sheet*, QPointF> savedOffsets;
+    Selection *selection;
+    QMap<Sheet *, QPoint> savedAnchors;
+    QMap<Sheet *, QPoint> savedMarkers;
+    QMap<Sheet *, QPointF> savedOffsets;
 
     void initActions();
     void adjustActions(bool mode);
@@ -214,65 +214,64 @@ class ViewActions
 {
 public:
     // sheet/workbook operations
-    QAction * sheetProperties;
-    QAction * insertSheet;
-    QAction * duplicateSheet;
-    QAction * deleteSheet;
-    QAction * renameSheet;
-    QAction * hideSheet;
-    QAction * showSheet;
+    QAction *sheetProperties;
+    QAction *insertSheet;
+    QAction *duplicateSheet;
+    QAction *deleteSheet;
+    QAction *renameSheet;
+    QAction *hideSheet;
+    QAction *showSheet;
 
     //Shape manipulation
-    KAction * deleteShape;
+    KAction *deleteShape;
 
     // page layout
-    QAction * paperLayout;
-    QAction * resetPrintRange;
-    KToggleAction* showPageOutline;
+    QAction *paperLayout;
+    QAction *resetPrintRange;
+    KToggleAction *showPageOutline;
 
     // recalculation
-    KAction * recalcWorksheet;
-    KAction * recalcWorkbook;
+    KAction *recalcWorksheet;
+    KAction *recalcWorkbook;
 
     // protection
-    KToggleAction* protectSheet;
-    KToggleAction* protectDoc;
+    KToggleAction *protectSheet;
+    KToggleAction *protectDoc;
 
     // navigation
-    KAction * nextSheet;
-    KAction * prevSheet;
-    QAction * firstSheet;
-    QAction * lastSheet;
+    KAction *nextSheet;
+    KAction *prevSheet;
+    QAction *firstSheet;
+    QAction *lastSheet;
 
     // misc
-    QAction * createTemplate;
-    KSelectAction* shapeAnchor;
+    QAction *createTemplate;
+    KSelectAction *shapeAnchor;
 
     // settings
-    KToggleAction* showColumnHeader;
-    KToggleAction* showRowHeader;
-    KToggleAction* showHorizontalScrollBar;
-    KToggleAction* showVerticalScrollBar;
-    KToggleAction* showStatusBar;
-    KToggleAction* showTabBar;
-    QAction * preference;
+    KToggleAction *showColumnHeader;
+    KToggleAction *showRowHeader;
+    KToggleAction *showHorizontalScrollBar;
+    KToggleAction *showVerticalScrollBar;
+    KToggleAction *showStatusBar;
+    KToggleAction *showTabBar;
+    QAction *preference;
 
     // running calculation
-    KToggleAction* calcNone;
-    KToggleAction* calcMin;
-    KToggleAction* calcMax;
-    KToggleAction* calcAverage;
-    KToggleAction* calcCount;
-    KToggleAction* calcSum;
-    KToggleAction* calcCountA;
+    KToggleAction *calcNone;
+    KToggleAction *calcMin;
+    KToggleAction *calcMax;
+    KToggleAction *calcAverage;
+    KToggleAction *calcCount;
+    KToggleAction *calcSum;
+    KToggleAction *calcCountA;
 };
-
 
 void View::Private::initActions()
 {
     actions = new ViewActions;
 
-    KActionCollection* ac = view->actionCollection();
+    KActionCollection *ac = view->actionCollection();
 
     // -- sheet/workbook actions --
     actions->sheetProperties  = new KAction(i18n("Sheet Properties..."), view);
@@ -444,7 +443,7 @@ void View::Private::initActions()
 
     // -- calculation actions --
     //
-    QActionGroup* groupCalc = new QActionGroup(view);
+    QActionGroup *groupCalc = new QActionGroup(view);
     actions->calcNone  = new KToggleAction(i18n("None"), view);
     ac->addAction("menu_none", actions->calcNone);
     connect(actions->calcNone, SIGNAL(toggled(bool)),
@@ -505,7 +504,7 @@ void View::Private::initActions()
     //
 
     ac->addAssociatedWidget(view->canvasWidget());
-    foreach(QAction* action, ac->actions()) {
+    foreach (QAction *action, ac->actions()) {
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     }
 }
@@ -525,10 +524,11 @@ void View::Private::adjustActions(bool mode)
     actions->calcSum->setEnabled(mode);
     actions->calcNone->setEnabled(mode);
 
-    if (mode && !view->doc()->map()->isProtected())
+    if (mode && !view->doc()->map()->isProtected()) {
         actions->renameSheet->setEnabled(true);
-    else
+    } else {
         actions->renameSheet->setEnabled(false);
+    }
 
     actions->showColumnHeader->setChecked(view->doc()->map()->settings()->showColumnHeader());
     actions->showRowHeader->setChecked(view->doc()->map()->settings()->showRowHeader());
@@ -537,10 +537,10 @@ void View::Private::adjustActions(bool mode)
     actions->showStatusBar->setChecked(view->doc()->map()->settings()->showStatusBar());
     actions->showTabBar->setChecked(view->doc()->map()->settings()->showTabBar());
 
-    if (activeSheet)
+    if (activeSheet) {
         selection->update();
+    }
 }
-
 
 /*****************************************************************************
  *
@@ -549,8 +549,8 @@ void View::Private::adjustActions(bool mode)
  *****************************************************************************/
 
 View::View(KoPart *part, QWidget *_parent, Doc *_doc)
-        : KoView(part, _doc, _parent)
-        , d(new Private)
+    : KoView(part, _doc, _parent)
+    , d(new Private)
 {
     ElapsedTime et("View constructor");
 
@@ -570,26 +570,25 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     d->initActions();
 
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Sheets/ViewPlugin"),
-                                                              QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Sheets-Version] == 28)"));
+                            QString::fromLatin1("(Type == 'Service') and "
+                                    "([X-Sheets-Version] == 28)"));
 
     KService::List::ConstIterator iter;
-    for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
+    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 
         KService::Ptr service = *iter;
 
         QString error;
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
-        if(plugin) {
+        KXMLGUIClient *plugin =
+            dynamic_cast<KXMLGUIClient *>(service->createInstance<QObject>(this, QVariantList(), &error));
+        if (plugin) {
             insertChildClient(plugin);
         } else {
-            if(!error.isEmpty()) {
+            if (!error.isEmpty()) {
                 kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
             }
         }
     }
-
 
     // Connect updateView() signal to View::update() in order to repaint its
     // child widgets: the column/row headers and the select all button.
@@ -675,7 +674,7 @@ View::~View()
     delete d;
 }
 
-Doc* View::doc() const
+Doc *View::doc() const
 {
     return d->doc;
 }
@@ -727,21 +726,20 @@ void View::initView()
 
     // Let the selection pointer become a canvas resource.
     QVariant variant;
-    variant.setValue<void*>(d->selection);
+    variant.setValue<void *>(d->selection);
     d->canvas->resourceManager()->setResource(CanvasResource::Selection, variant);
-    variant.setValue<QObject*>(doc()->map()->bindingManager());
+    variant.setValue<QObject *>(doc()->map()->bindingManager());
 
     // Load the KSpread Tools
     ToolRegistry::instance()->loadTools();
 
-    if (mainWindow())
-    {
+    if (mainWindow()) {
         KoToolManager::instance()->addController(d->canvasController);
         KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
         KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
-        QDockWidget* modeBox = mainWindow()->createDockWidget(&modeBoxFactory);
+        QDockWidget *modeBox = mainWindow()->createDockWidget(&modeBoxFactory);
         mainWindow()->dockerManager()->removeToolOptionsDocker();
-        dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
+        dynamic_cast<KoCanvasObserverBase *>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
         //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)),
@@ -756,7 +754,7 @@ void View::initView()
             this, SLOT(viewZoom(KoZoomMode::Mode,qreal)));
 
     d->columnHeader = new ColumnHeaderWidget(this, d->canvas, this);
-    d->rowHeader = new RowHeaderWidget(this, d->canvas , this);
+    d->rowHeader = new RowHeaderWidget(this, d->canvas, this);
     d->columnHeader->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     d->rowHeader->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
     d->selectAllButton = new SelectAllButtonWidget(d->canvas);
@@ -775,7 +773,7 @@ void View::initView()
     d->vertScrollBar->setSingleStep(60);  //just random guess based on what feels okay
     d->vertScrollBar->setPageStep(60);  //This should be controlled dynamically, depending on how many rows are shown
 
-    QWidget* bottomPart = new QWidget(this);
+    QWidget *bottomPart = new QWidget(this);
     d->tabScrollBarLayout = new QGridLayout(bottomPart);
     d->tabScrollBarLayout->setMargin(0);
     d->tabScrollBarLayout->setSpacing(0);
@@ -791,8 +789,8 @@ void View::initView()
     d->horzScrollBar->setPageStep(60);
 
     connect(d->tabBar, SIGNAL(tabChanged(QString)), this, SLOT(changeSheet(QString)));
-    connect(d->tabBar, SIGNAL(tabMoved(unsigned,unsigned)),
-            this, SLOT(moveSheet(unsigned,unsigned)));
+    connect(d->tabBar, SIGNAL(tabMoved(uint,uint)),
+            this, SLOT(moveSheet(uint,uint)));
     connect(d->tabBar, SIGNAL(contextMenu(QPoint)),
             this, SLOT(popupTabBarMenu(QPoint)));
     connect(d->tabBar, SIGNAL(doubleClicked()),
@@ -814,12 +812,12 @@ void View::initView()
     d->viewLayout->setColumnMinimumWidth(2, extent);
     d->viewLayout->setRowMinimumHeight(3, extent);
 
-    KStatusBar * sb = statusBar();
+    KStatusBar *sb = statusBar();
     d->calcLabel = sb ? new QLabel(sb) : 0;
     if (d->calcLabel) {
         d->calcLabel->setContextMenuPolicy(Qt::CustomContextMenu);
         addStatusBarItem(d->calcLabel, 0);
-        connect(d->calcLabel , SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(statusBarClicked(QPoint)));
+        connect(d->calcLabel, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(statusBarClicked(QPoint)));
     }
 
     // signal slot
@@ -831,7 +829,7 @@ void View::initView()
             this, SLOT(shapeSelectionChanged()));
 }
 
-Canvas* View::canvasWidget() const
+Canvas *View::canvasWidget() const
 {
     return d->canvas;
 }
@@ -841,37 +839,37 @@ KoZoomController *View::zoomController() const
     return d->zoomController;
 }
 
-KoCanvasController* View::canvasController() const
+KoCanvasController *View::canvasController() const
 {
     return d->canvasController;
 }
 
-ColumnHeaderWidget* View::columnHeader()const
+ColumnHeaderWidget *View::columnHeader()const
 {
     return d->columnHeader;
 }
 
-RowHeaderWidget* View::rowHeader()const
+RowHeaderWidget *View::rowHeader()const
 {
     return d->rowHeader;
 }
 
-QScrollBar* View::horzScrollBar()const
+QScrollBar *View::horzScrollBar()const
 {
     return d->horzScrollBar;
 }
 
-QScrollBar* View::vertScrollBar()const
+QScrollBar *View::vertScrollBar()const
 {
     return d->vertScrollBar;
 }
 
-TabBar* View::tabBar() const
+TabBar *View::tabBar() const
 {
     return d->tabBar;
 }
 
-KoZoomHandler* View::zoomHandler() const
+KoZoomHandler *View::zoomHandler() const
 {
     return d->zoomHandler;
 }
@@ -881,26 +879,26 @@ bool View::isLoading() const
     return d->loading;
 }
 
-Selection* View::selection() const
+Selection *View::selection() const
 {
     return d->selection;
 }
 
-Sheet* View::activeSheet() const
+Sheet *View::activeSheet() const
 {
     return d->activeSheet;
 }
 
-void View::sheetDestroyed(QObject* obj)
+void View::sheetDestroyed(QObject *obj)
 {
-    if (Sheet *sheet = dynamic_cast<Sheet*>(obj)) {
+    if (Sheet *sheet = dynamic_cast<Sheet *>(obj)) {
         Q_ASSERT(d->sheetViews.contains(sheet));
         d->sheetViews.remove(sheet);
         // The SheetView will be proper destroyed already cause it's a QObject-child of the sheet.
     }
 }
 
-SheetView* View::sheetView(const Sheet* sheet) const
+SheetView *View::sheetView(const Sheet *sheet) const
 {
     SheetView *sheetView = d->sheetViews.value(sheet);
     if (!sheetView) {
@@ -922,10 +920,10 @@ SheetView* View::sheetView(const Sheet* sheet) const
 
 void View::refreshSheetViews()
 {
-    QList<const Sheet*> sheets = d->sheetViews.keys();
+    QList<const Sheet *> sheets = d->sheetViews.keys();
     QList< QPointer<SheetView> > sheetViews = d->sheetViews.values();
 
-    foreach(const Sheet *sheet, d->sheetViews.keys()) {
+    foreach (const Sheet *sheet, d->sheetViews.keys()) {
         disconnect(sheet, SIGNAL(destroyed(QObject*)), this, SLOT(sheetDestroyed(QObject*)));
     }
 
@@ -941,17 +939,17 @@ void View::refreshSheetViews()
     qDeleteAll(sheetViews);
     d->sheetViews.clear();
 
-    foreach(const Sheet *sheet, d->doc->map()->sheetList()) {
+    foreach (const Sheet *sheet, d->doc->map()->sheetList()) {
         sheet->cellStorage()->invalidateStyleCache();
     }
 }
 
-void View::refreshSelection(const Region& region)
+void View::refreshSelection(const Region &region)
 {
     doc()->map()->addDamage(new CellDamage(activeSheet(), region, CellDamage::Appearance));
 }
 
-void View::aboutToModify(const Region& region)
+void View::aboutToModify(const Region &region)
 {
     Q_UNUSED(region);
     selection()->emitCloseEditor(true); // save changes
@@ -968,20 +966,22 @@ void View::initConfig()
     }
     doc()->map()->settings()->setShowColumnHeader(parameterGroup.readEntry("Column Header", true));
     doc()->map()->settings()->setShowRowHeader(parameterGroup.readEntry("Row Header", true));
-    if (!configFromDoc)
+    if (!configFromDoc) {
         doc()->map()->settings()->setCompletionMode((KGlobalSettings::Completion)parameterGroup.readEntry("Completion Mode", (int)(KGlobalSettings::CompletionAuto)));
+    }
     doc()->map()->settings()->setMoveToValue((Calligra::Sheets::MoveTo)parameterGroup.readEntry("Move", (int)(Bottom)));
     doc()->map()->settings()->setIndentValue(parameterGroup.readEntry("Indent", 10.0));
     doc()->map()->settings()->setTypeOfCalc((MethodOfCalc)parameterGroup.readEntry("Method of Calc", (int)(SumOfNumber)));
-    if (!configFromDoc)
+    if (!configFromDoc) {
         doc()->map()->settings()->setShowTabBar(parameterGroup.readEntry("Tabbar", true));
+    }
 
     doc()->map()->settings()->setShowStatusBar(parameterGroup.readEntry("Status bar", true));
 
     changeNbOfRecentFiles(parameterGroup.readEntry("NbRecentFile", 10));
     //autosave value is stored as a minute.
     //but default value is stored as seconde.
-    doc()->setAutoSave(parameterGroup.readEntry("AutoSave", KoDocument::defaultAutoSave() / 60)*60);
+    doc()->setAutoSave(parameterGroup.readEntry("AutoSave", KoDocument::defaultAutoSave() / 60) * 60);
     doc()->setBackupFile(parameterGroup.readEntry("BackupFile", true));
 
     const KConfigGroup colorGroup = config->group("KSpread Color");
@@ -995,8 +995,9 @@ void View::initConfig()
 
 void View::changeNbOfRecentFiles(int _nb)
 {
-    if (mainWindow())
+    if (mainWindow()) {
         mainWindow()->setMaxRecentItems(_nb);
+    }
 }
 
 void View::initCalcMenu()
@@ -1030,7 +1031,6 @@ void View::initCalcMenu()
 
 }
 
-
 void View::recalcWorkBook()
 {
     doc()->map()->recalcManager()->recalcMap();
@@ -1038,15 +1038,16 @@ void View::recalcWorkBook()
 
 void View::recalcWorkSheet()
 {
-    if (!activeSheet())
+    if (!activeSheet()) {
         return;
+    }
     doc()->map()->recalcManager()->recalcSheet(activeSheet());
 }
 
 void View::shapeSelectionChanged()
 {
-    const KoSelection* selection = d->canvas->shapeManager()->selection();
-    const QList<KoShape*> shapes = selection->selectedShapes(KoFlake::StrippedSelection);
+    const KoSelection *selection = d->canvas->shapeManager()->selection();
+    const QList<KoShape *> shapes = selection->selectedShapes(KoFlake::StrippedSelection);
 
     if (shapes.isEmpty()) {
         d->actions->shapeAnchor->setEnabled(false);
@@ -1055,8 +1056,8 @@ void View::shapeSelectionChanged()
     d->actions->shapeAnchor->setEnabled(true);
 
     // start with the first shape
-    const KoShape* shape = shapes[0];
-    const ShapeApplicationData* data = dynamic_cast<ShapeApplicationData*>(shape->applicationData());
+    const KoShape *shape = shapes[0];
+    const ShapeApplicationData *data = dynamic_cast<ShapeApplicationData *>(shape->applicationData());
     if (!data) {
         // Container children do not have the application data set, deselect the anchoring action.
         d->actions->shapeAnchor->setCurrentAction(0);
@@ -1068,7 +1069,7 @@ void View::shapeSelectionChanged()
     // go on with the remaining shapes
     for (int i = 1; i < shapes.count(); ++i) {
         shape = shapes[i];
-        data = dynamic_cast<ShapeApplicationData*>(shape->applicationData());
+        data = dynamic_cast<ShapeApplicationData *>(shape->applicationData());
         Q_ASSERT(data);
         if (anchoredToCell != data->isAnchoredToCell()) {
             // If the anchoring differs between shapes, deselect the anchoring action and stop here.
@@ -1078,7 +1079,6 @@ void View::shapeSelectionChanged()
     }
 }
 
-
 void View::editDeleteSelection()
 {
     d->canvas->toolProxy()->deleteSelection();
@@ -1087,19 +1087,19 @@ void View::editDeleteSelection()
 void View::initialPosition()
 {
     // Loading completed, pick initial worksheet
-    foreach(Sheet* sheet, doc()->map()->sheetList()) {
+    foreach (Sheet *sheet, doc()->map()->sheetList()) {
         addSheet(sheet);
     }
 
     // Set the initial X and Y offsets for the view (OpenDocument loading)
-    const LoadingInfo* loadingInfo = doc()->map()->loadingInfo();
+    const LoadingInfo *loadingInfo = doc()->map()->loadingInfo();
     if (loadingInfo->fileFormat() == LoadingInfo::OpenDocument) {
         d->savedAnchors = loadingInfo->cursorPositions();
         d->savedMarkers = loadingInfo->cursorPositions();
         d->savedOffsets = loadingInfo->scrollingOffsets();
     }
 
-    Sheet* sheet = loadingInfo->initialActiveSheet();
+    Sheet *sheet = loadingInfo->initialActiveSheet();
     if (!sheet) {
         //activate first table which is not hiding
         sheet = doc()->map()->visibleSheets().isEmpty() ? 0 : doc()->map()->findSheet(doc()->map()->visibleSheets().first());
@@ -1148,8 +1148,9 @@ void View::finishLoading()
     setHeaderMinima();
 
     // Activate the cell tool.
-    if (mainWindow())
+    if (mainWindow()) {
         KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
+    }
 }
 
 void View::updateReadWrite(bool readwrite)
@@ -1157,11 +1158,12 @@ void View::updateReadWrite(bool readwrite)
     // inform the cell tool
     emit documentReadWriteToggled(readwrite);
 
-    const QList<QAction*> actions = actionCollection()->actions();
+    const QList<QAction *> actions = actionCollection()->actions();
     for (int i = 0; i < actions.count(); ++i) {
         // The action collection contains also the flake tool actions. Skip them.
-        if (actions[i]->parent() == this)
+        if (actions[i]->parent() == this) {
             actions[i]->setEnabled(readwrite);
+        }
     }
 
     if (!doc() || !doc()->map() || doc()->map()->isProtected()) {
@@ -1181,20 +1183,21 @@ void View::createTemplate()
                                         Factory::global(), doc(), this);
 }
 
-void View::setActiveSheet(Sheet* sheet, bool updateSheet)
+void View::setActiveSheet(Sheet *sheet, bool updateSheet)
 {
     // It can happen that our tabBar->activeTab() is not in sync with our activeSheet() if
     // setActiveSheet() was previously called before the delayed View::initialPosition()
     // was called and had a change to proper TabBar::setTabs().
-    if (sheet == d->activeSheet && (!sheet || d->tabBar->activeTab() == sheet->sheetName()))
+    if (sheet == d->activeSheet && (!sheet || d->tabBar->activeTab() == sheet->sheetName())) {
         return;
+    }
 
     if (d->activeSheet != 0 && !d->selection->referenceSelectionMode()) {
         selection()->emitCloseEditor(true); // save changes
         saveCurrentSheetSelection();
     }
 
-    const Sheet* oldSheet = d->activeSheet;
+    const Sheet *oldSheet = d->activeSheet;
     d->activeSheet = sheet;
 
     if (d->activeSheet == 0) {
@@ -1234,7 +1237,7 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     }
 
     // Restore the old scrolling offset.
-    QMap<Sheet*, QPointF>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
+    QMap<Sheet *, QPointF>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
     if (it3 != d->savedOffsets.end()) {
         const QPoint offset = zoomHandler()->documentToView(*it3).toPoint();
         d->canvas->setDocumentOffset(offset);
@@ -1262,8 +1265,8 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     }
 
     /* see if there was a previous selection on this other sheet */
-    QMap<Sheet*, QPoint>::Iterator it = d->savedAnchors.find(d->activeSheet);
-    QMap<Sheet*, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
+    QMap<Sheet *, QPoint>::Iterator it = d->savedAnchors.find(d->activeSheet);
+    QMap<Sheet *, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
 
     // restore the old anchor and marker
     const QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1, 1) : *it;
@@ -1297,10 +1300,11 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     calcStatusBarOp();
 }
 
-void View::changeSheet(const QString& _name)
+void View::changeSheet(const QString &_name)
 {
-    if (activeSheet()->sheetName() == _name)
+    if (activeSheet()->sheetName() == _name) {
         return;
+    }
 
     Sheet *t = doc()->map()->findSheet(_name);
     if (!t) {
@@ -1313,14 +1317,17 @@ void View::changeSheet(const QString& _name)
 
 void View::moveSheet(unsigned sheet, unsigned target)
 {
-    if (doc()->map()->isProtected()) return;
+    if (doc()->map()->isProtected()) {
+        return;
+    }
 
     QStringList vs = doc()->map()->visibleSheets();
 
-    if (target >= (uint) vs.count())
-        doc()->map()->moveSheet(vs[ sheet ], vs[ vs.count()-1 ], false);
-    else
+    if (target >= (uint) vs.count()) {
+        doc()->map()->moveSheet(vs[ sheet ], vs[ vs.count() - 1 ], false);
+    } else {
         doc()->map()->moveSheet(vs[ sheet ], vs[ target ], true);
+    }
 
     d->tabBar->moveTab(sheet, target);
 }
@@ -1328,8 +1335,12 @@ void View::moveSheet(unsigned sheet, unsigned target)
 void View::sheetProperties()
 {
     // sanity check, shouldn't happen
-    if (doc()->map()->isProtected()) return;
-    if (d->activeSheet->isProtected()) return;
+    if (doc()->map()->isProtected()) {
+        return;
+    }
+    if (d->activeSheet->isProtected()) {
+        return;
+    }
 
     bool directionChanged = false;
     bool formulaVisibilityChanged = false;
@@ -1348,10 +1359,11 @@ void View::sheetProperties()
     dlg->setCapitalizeFirstLetter(d->activeSheet->getFirstLetterUpper());
 
     if (dlg->exec()) {
-        SheetPropertiesCommand* command = new SheetPropertiesCommand(d->activeSheet);
+        SheetPropertiesCommand *command = new SheetPropertiesCommand(d->activeSheet);
 
-        if (d->activeSheet->layoutDirection() != dlg->layoutDirection())
+        if (d->activeSheet->layoutDirection() != dlg->layoutDirection()) {
             directionChanged = true;
+        }
         if (d->activeSheet->getShowFormula() != dlg->showFormula()) {
             formulaVisibilityChanged = true;
         }
@@ -1403,8 +1415,8 @@ void View::insertSheet()
     }
 
     selection()->emitCloseEditor(true); // save changes
-    Sheet * t = doc()->map()->createSheet();
-    KUndo2Command* command = new AddSheetCommand(t);
+    Sheet *t = doc()->map()->createSheet();
+    KUndo2Command *command = new AddSheetCommand(t);
     doc()->addCommand(command);
     setActiveSheet(t);
 
@@ -1421,7 +1433,7 @@ void View::duplicateSheet()
         return;
     }
 
-    DuplicateSheetCommand* command = new DuplicateSheetCommand();
+    DuplicateSheetCommand *command = new DuplicateSheetCommand();
     command->setSheet(activeSheet());
     doc()->addCommand(command);
 
@@ -1433,8 +1445,9 @@ void View::duplicateSheet()
 
 void View::hideSheet()
 {
-    if (!d->activeSheet)
+    if (!d->activeSheet) {
         return;
+    }
 
     if (doc()->map()->visibleSheets().count() ==  1) {
         KMessageBox::error(this, i18n("You cannot hide the last visible sheet."));
@@ -1443,10 +1456,12 @@ void View::hideSheet()
 
     QStringList vs = doc()->map()->visibleSheets();
     int i = vs.indexOf(d->activeSheet->sheetName()) - 1;
-    if (i < 0) i = 1;
+    if (i < 0) {
+        i = 1;
+    }
     QString sn = vs[i];
 
-    KUndo2Command* command = new HideSheetCommand(activeSheet());
+    KUndo2Command *command = new HideSheetCommand(activeSheet());
     doc()->addCommand(command);
 
     d->tabBar->removeTab(d->activeSheet->sheetName());
@@ -1455,8 +1470,9 @@ void View::hideSheet()
 
 void View::showSheet()
 {
-    if (!d->activeSheet)
+    if (!d->activeSheet) {
         return;
+    }
 
     ShowDialog dialog(this, d->selection);
     dialog.exec();
@@ -1464,22 +1480,22 @@ void View::showSheet()
 
 void View::copyAsText()
 {
-    if (!d->activeSheet)
+    if (!d->activeSheet) {
         return;
-    QMimeData* mimeData = new QMimeData();
+    }
+    QMimeData *mimeData = new QMimeData();
     mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
 
     QApplication::clipboard()->setMimeData(mimeData);
 }
 
-
-void View::setShapeAnchoring(const QString& mode)
+void View::setShapeAnchoring(const QString &mode)
 {
-    const KoSelection* selection = d->canvas->shapeManager()->selection();
-    const QList<KoShape*> shapes = selection->selectedShapes(KoFlake::StrippedSelection);
+    const KoSelection *selection = d->canvas->shapeManager()->selection();
+    const QList<KoShape *> shapes = selection->selectedShapes(KoFlake::StrippedSelection);
     for (int i = 0; i < shapes.count(); ++i) {
-        const KoShape* shape = shapes[i];
-        ShapeApplicationData* data = dynamic_cast<ShapeApplicationData*>(shape->applicationData());
+        const KoShape *shape = shapes[i];
+        ShapeApplicationData *data = dynamic_cast<ShapeApplicationData *>(shape->applicationData());
         Q_ASSERT(data);
         data->setAnchoredToCell(mode == i18n("Cell"));
     }
@@ -1487,8 +1503,9 @@ void View::setShapeAnchoring(const QString& mode)
 
 void View::toggleProtectDoc(bool mode)
 {
-    if (!doc() || !doc()->map())
+    if (!doc() || !doc()->map()) {
         return;
+    }
 
     bool success;
     if (mode) {
@@ -1510,8 +1527,9 @@ void View::toggleProtectDoc(bool mode)
 
 void View::toggleProtectSheet(bool mode)
 {
-    if (!d->activeSheet)
+    if (!d->activeSheet) {
         return;
+    }
 
     bool success;
     if (mode) {
@@ -1540,8 +1558,9 @@ void View::toggleProtectSheet(bool mode)
 
 void View::togglePageOutline(bool mode)
 {
-    if (!d->activeSheet)
+    if (!d->activeSheet) {
         return;
+    }
 
     d->activeSheet->setShowPageOutline(mode);
 }
@@ -1602,7 +1621,7 @@ void View::showTabBar(bool enable)
 }
 
 void View::optionsNotifications()
-{  
+{
 #ifndef QT_NO_DBUS
     KNotifyConfigWidget::configure(this);
 #endif
@@ -1616,7 +1635,7 @@ void View::preference()
 
 void View::nextSheet()
 {
-    Sheet * t = doc()->map()->nextSheet(activeSheet());
+    Sheet *t = doc()->map()->nextSheet(activeSheet());
     if (!t) {
         kDebug(36001) << "Unknown sheet";
         return;
@@ -1629,7 +1648,7 @@ void View::nextSheet()
 
 void View::previousSheet()
 {
-    Sheet * t = doc()->map()->previousSheet(activeSheet());
+    Sheet *t = doc()->map()->previousSheet(activeSheet());
     if (!t) {
         kDebug(36001) << "Unknown sheet";
         return;
@@ -1680,7 +1699,7 @@ void View::keyPressEvent(QKeyEvent *event)
 
 int View::leftBorder() const
 {
-    return (int)(((RowHeader*)d->rowHeader)->width());
+    return (int)(((RowHeader *)d->rowHeader)->width());
 }
 
 int View::rightBorder() const
@@ -1690,7 +1709,7 @@ int View::rightBorder() const
 
 int View::topBorder() const
 {
-    return (int)(((ColumnHeader*)d->columnHeader)->height());
+    return (int)(((ColumnHeader *)d->columnHeader)->height());
 }
 
 int View::bottomBorder() const
@@ -1700,8 +1719,9 @@ int View::bottomBorder() const
 
 void View::setHeaderMinima()
 {
-    if (d->loading)   // "View Loading" not finished yet
+    if (d->loading) { // "View Loading" not finished yet
         return;
+    }
     QFont font(KoGlobal::defaultFont());
     QFontMetricsF fm(font, 0);
     qreal h = fm.height() + 3;
@@ -1715,28 +1735,27 @@ void View::setHeaderMinima()
 void View::paperLayoutDlg()
 {
     selection()->emitCloseEditor(true); // save changes
-    SheetPrint* print = d->activeSheet->print();
+    SheetPrint *print = d->activeSheet->print();
 
     KoPageLayout pl = print->settings()->pageLayout();
 
-
-/*
-    const HeaderFooter *const headerFooter = print->headerFooter();
-    HeadFoot hf;
-    hf.headLeft  = headerFooter->localizeHeadFootLine(headerFooter->headLeft());
-    hf.headRight = headerFooter->localizeHeadFootLine(headerFooter->headRight());
-    hf.headMid   = headerFooter->localizeHeadFootLine(headerFooter->headMid());
-    hf.footLeft  = headerFooter->localizeHeadFootLine(headerFooter->footLeft());
-    hf.footRight = headerFooter->localizeHeadFootLine(headerFooter->footRight());
-    hf.footMid   = headerFooter->localizeHeadFootLine(headerFooter->footMid());
-*/
+    /*
+        const HeaderFooter *const headerFooter = print->headerFooter();
+        HeadFoot hf;
+        hf.headLeft  = headerFooter->localizeHeadFootLine(headerFooter->headLeft());
+        hf.headRight = headerFooter->localizeHeadFootLine(headerFooter->headRight());
+        hf.headMid   = headerFooter->localizeHeadFootLine(headerFooter->headMid());
+        hf.footLeft  = headerFooter->localizeHeadFootLine(headerFooter->footLeft());
+        hf.footRight = headerFooter->localizeHeadFootLine(headerFooter->footRight());
+        hf.footMid   = headerFooter->localizeHeadFootLine(headerFooter->footMid());
+    */
     PageLayoutDialog dialog(this, d->activeSheet);
     dialog.exec();
 }
 
 void View::resetPrintRange()
 {
-    DefinePrintRangeCommand* command = new DefinePrintRangeCommand();
+    DefinePrintRangeCommand *command = new DefinePrintRangeCommand();
     command->setText(kundo2_i18n("Reset Print Range"));
     command->setSheet(activeSheet());
     command->add(Region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)), activeSheet()));
@@ -1755,17 +1774,16 @@ void View::deleteSheet()
     if (ret == KMessageBox::Continue) {
         selection()->emitCloseEditor(false); // discard changes
         doc()->setModified(true);
-        Sheet * tbl = activeSheet();
-        KUndo2Command* command = new RemoveSheetCommand(tbl);
+        Sheet *tbl = activeSheet();
+        KUndo2Command *command = new RemoveSheetCommand(tbl);
         doc()->addCommand(command);
     }
 }
 
-
 void View::slotRename()
 {
 
-    Sheet * sheet = activeSheet();
+    Sheet *sheet = activeSheet();
 
     if (sheet->isProtected()) {
         KMessageBox::error(0, i18n("You cannot change a protected sheet."));
@@ -1776,7 +1794,9 @@ void View::slotRename()
     QString activeName = sheet->sheetName();
     QString newName = KInputDialog::getText(i18n("Rename Sheet"), i18n("Enter name:"), activeName, &ok, this);
 
-    if (!ok) return;
+    if (!ok) {
+        return;
+    }
 
     if ((newName.trimmed()).isEmpty()) { // Sheet name is empty.
         KMessageBox::information(this, i18n("Sheet name cannot be empty."), i18n("Change Sheet Name"));
@@ -1791,7 +1811,7 @@ void View::slotRename()
             return;
         }
 
-        KUndo2Command* command = new RenameSheetCommand(sheet, newName);
+        KUndo2Command *command = new RenameSheetCommand(sheet, newName);
         doc()->addCommand(command);
 
         doc()->setModified(true);
@@ -1804,10 +1824,11 @@ void View::slotRename()
 //
 //------------------------------------------------
 
-void View::slotChangeSelection(const Calligra::Sheets::Region& changedRegion)
+void View::slotChangeSelection(const Calligra::Sheets::Region &changedRegion)
 {
-    if (!changedRegion.isValid())
+    if (!changedRegion.isValid()) {
         return;
+    }
 
     if (d->selection->referenceSelectionMode()) {
         doc()->map()->addDamage(new SelectionDamage(changedRegion));
@@ -1833,7 +1854,7 @@ void View::slotChangeSelection(const Calligra::Sheets::Region& changedRegion)
     d->canvas->validateSelection();
 }
 
-void View::slotScrollChoice(const Calligra::Sheets::Region& changedRegion)
+void View::slotScrollChoice(const Calligra::Sheets::Region &changedRegion)
 {
     if (!selection()->referenceSelectionMode() || !changedRegion.isValid()) {
         return;
@@ -1842,8 +1863,8 @@ void View::slotScrollChoice(const Calligra::Sheets::Region& changedRegion)
 
 void View::calcStatusBarOp()
 {
-    Sheet * sheet = activeSheet();
-    ValueCalc* calc = doc()->map()->calc();
+    Sheet *sheet = activeSheet();
+    ValueCalc *calc = doc()->map()->calc();
     Value val;
     QString prefix = "";
 
@@ -1887,18 +1908,22 @@ void View::calcStatusBarOp()
 
     QString res = doc()->map()->converter()->asString(val).asString();
     QString tmp;
-    if (res.length()) tmp = prefix + res;
+    if (res.length()) {
+        tmp = prefix + res;
+    }
 
-    if (d->calcLabel)
+    if (d->calcLabel) {
         d->calcLabel->setText(QString(' ') + tmp + ' ');
+    }
 }
 
-void View::statusBarClicked(const QPoint&)
+void View::statusBarClicked(const QPoint &)
 {
     QPoint mousepos = QCursor::pos();
     if (factory())
-        if (QMenu* menu = dynamic_cast<QMenu*>(factory()->container("calc_popup" , this)))
+        if (QMenu *menu = dynamic_cast<QMenu *>(factory()->container("calc_popup", this))) {
             menu->popup(mousepos);
+        }
 }
 
 void View::menuCalc(bool)
@@ -1915,32 +1940,35 @@ void View::menuCalc(bool)
         doc()->map()->settings()->setTypeOfCalc(SumOfNumber);
     } else if (d->actions->calcCountA->isChecked()) {
         doc()->map()->settings()->setTypeOfCalc(CountA);
-    } else if (d->actions->calcNone->isChecked())
+    } else if (d->actions->calcNone->isChecked()) {
         doc()->map()->settings()->setTypeOfCalc(NoneCalc);
+    }
 
     calcStatusBarOp();
 }
 
-QWidget* View::canvas() const
+QWidget *View::canvas() const
 {
     return d->canvas;
 }
 
-void View::popupTabBarMenu(const QPoint & _point)
+void View::popupTabBarMenu(const QPoint &_point)
 {
-    if (!factory())
+    if (!factory()) {
         return;
+    }
     if (d->tabBar) {
-        QMenu* const menu = static_cast<QMenu*>(factory()->container("menupage_popup", this));
-        if (!menu)
+        QMenu *const menu = static_cast<QMenu *>(factory()->container("menupage_popup", this));
+        if (!menu) {
             return;
+        }
 
-        QAction* insertSheet = new KAction(koIcon("insert-table"), i18n("Insert Sheet"), this);
+        QAction *insertSheet = new KAction(koIcon("insert-table"), i18n("Insert Sheet"), this);
         insertSheet->setToolTip(i18n("Remove the active sheet"));
         connect(insertSheet, SIGNAL(triggered(bool)), this, SLOT(insertSheet()));
         menu->insertAction(d->actions->duplicateSheet, insertSheet);
 
-        QAction* deleteSheet = new KAction(koIcon("delete_table"), i18n("Remove Sheet"), this);
+        QAction *deleteSheet = new KAction(koIcon("delete_table"), i18n("Remove Sheet"), this);
         deleteSheet->setToolTip(i18n("Remove the active sheet"));
         connect(deleteSheet, SIGNAL(triggered(bool)), this, SLOT(deleteSheet()));
         menu->insertAction(d->actions->hideSheet, deleteSheet);
@@ -1972,8 +2000,9 @@ void View::popupTabBarMenu(const QPoint & _point)
 
 void View::updateBorderButton()
 {
-    if (d->activeSheet)
+    if (d->activeSheet) {
         d->actions->showPageOutline->setChecked(d->activeSheet->isShowPageOutline());
+    }
 }
 
 void View::addSheet(Sheet *sheet)
@@ -2013,23 +2042,24 @@ QColor View::borderColor() const
 void View::updateShowSheetMenu()
 {
     if (d->activeSheet) {
-        if (d->activeSheet->map()->isProtected())
+        if (d->activeSheet->map()->isProtected()) {
             d->actions->showSheet->setEnabled(false);
-        else
+        } else {
             d->actions->showSheet->setEnabled(doc()->map()->hiddenSheets().count() > 0);
+        }
     }
 }
 
-QPoint View::markerFromSheet(Sheet* sheet) const
+QPoint View::markerFromSheet(Sheet *sheet) const
 {
-    QMap<Sheet*, QPoint>::Iterator it = d->savedMarkers.find(sheet);
+    QMap<Sheet *, QPoint>::Iterator it = d->savedMarkers.find(sheet);
     QPoint newMarker = (it == d->savedMarkers.end()) ? QPoint(1, 1) : *it;
     return newMarker;
 }
 
-QPointF View::offsetFromSheet(Sheet* sheet) const
+QPointF View::offsetFromSheet(Sheet *sheet) const
 {
-    QMap<Sheet*, QPointF>::Iterator it = d->savedOffsets.find(sheet);
+    QMap<Sheet *, QPointF>::Iterator it = d->savedOffsets.find(sheet);
     QPointF offset = (it == d->savedOffsets.end()) ? QPointF() : *it;
     return offset;
 }
@@ -2050,23 +2080,25 @@ void View::saveCurrentSheetSelection()
     }
 }
 
-void View::handleDamages(const QList<Damage*>& damages)
+void View::handleDamages(const QList<Damage *> &damages)
 {
     QRegion paintRegion;
     enum { Nothing, Everything, Clipped } paintMode = Nothing;
 
-    QList<Damage*>::ConstIterator end(damages.end());
-    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
-        Damage* damage = *it;
-        if (!damage) continue;
+    QList<Damage *>::ConstIterator end(damages.end());
+    for (QList<Damage *>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage *damage = *it;
+        if (!damage) {
+            continue;
+        }
 
         if (damage->type() == Damage::Cell) {
-            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
+            CellDamage *cellDamage = static_cast<CellDamage *>(damage);
             kDebug(36007) << "Processing\t" << *cellDamage;
-            Sheet* const damagedSheet = cellDamage->sheet();
+            Sheet *const damagedSheet = cellDamage->sheet();
 
             if (cellDamage->changes() & CellDamage::Appearance) {
-                const Region& region = cellDamage->region();
+                const Region &region = cellDamage->region();
                 sheetView(damagedSheet)->invalidateRegion(region);
                 paintMode = Everything;
             }
@@ -2074,7 +2106,7 @@ void View::handleDamages(const QList<Damage*>& damages)
         }
 
         if (damage->type() == Damage::Sheet) {
-            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            SheetDamage *sheetDamage = static_cast<SheetDamage *>(damage);
             kDebug(36007) << *sheetDamage;
             const SheetDamage::Changes changes = sheetDamage->changes();
             if (changes & (SheetDamage::Name | SheetDamage::Shown)) {
@@ -2097,15 +2129,17 @@ void View::handleDamages(const QList<Damage*>& damages)
                 sheetView(d->activeSheet)->invalidate();
                 paintMode = Everything;
             }
-            if (sheetDamage->changes() & SheetDamage::ColumnsChanged)
+            if (sheetDamage->changes() & SheetDamage::ColumnsChanged) {
                 columnHeader()->update();
-            if (sheetDamage->changes() & SheetDamage::RowsChanged)
+            }
+            if (sheetDamage->changes() & SheetDamage::RowsChanged) {
                 rowHeader()->update();
+            }
             continue;
         }
 
         if (damage->type() == Damage::Selection) {
-            SelectionDamage* selectionDamage = static_cast<SelectionDamage*>(damage);
+            SelectionDamage *selectionDamage = static_cast<SelectionDamage *>(damage);
             kDebug(36007) << "Processing\t" << *selectionDamage;
             const Region region = selectionDamage->region();
 
@@ -2129,16 +2163,17 @@ void View::handleDamages(const QList<Damage*>& damages)
     }
 }
 
-KoPrintJob * View::createPrintJob()
+KoPrintJob *View::createPrintJob()
 {
-    if (!activeSheet())
+    if (!activeSheet()) {
         return 0;
+    }
     // About to print; close the editor.
     selection()->emitCloseEditor(true); // save changes
     return new PrintJob(this);
 }
 
-void View::updateAccessedCellRange(Sheet* sheet, const QPoint &location)
+void View::updateAccessedCellRange(Sheet *sheet, const QPoint &location)
 {
     sheetView(sheet)->updateAccessedCellRange(location);
 }
@@ -2155,10 +2190,11 @@ void View::disableAutoScroll()
 
 int View::autoScrollAcceleration(int offset) const
 {
-    if (offset < 40)
+    if (offset < 40) {
         return offset;
-    else
-        return offset*offset / 40;
+    } else {
+        return offset * offset / 40;
+    }
 }
 
 void View::slotAutoScroll()
@@ -2186,14 +2222,12 @@ void View::slotAutoScroll()
 
     if (actuallyDoScroll) {
         pos = canvas()->mapFrom(this, pos);
-        QMouseEvent* event = new QMouseEvent(QEvent::MouseMove, pos, Qt::NoButton, Qt::NoButton,
+        QMouseEvent *event = new QMouseEvent(QEvent::MouseMove, pos, Qt::NoButton, Qt::NoButton,
                                              QApplication::keyboardModifiers());
 
         QApplication::postEvent(canvas(), event);
         emit autoScroll(scrollDistance);
     }
 }
-
-
 
 #include "View.moc"

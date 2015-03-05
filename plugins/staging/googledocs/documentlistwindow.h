@@ -40,7 +40,7 @@ public Q_SLOTS:
     void hideDialog();
 
 private Q_SLOTS:
-    void getClickedDocument(const QModelIndex & index);
+    void getClickedDocument(const QModelIndex &index);
     void fetchDocument();
 
 private:

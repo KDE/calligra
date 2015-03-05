@@ -33,15 +33,18 @@ class InfiniteRulerAssistant : public KisPaintingAssistant
 {
 public:
     InfiniteRulerAssistant();
-    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    virtual QPointF adjustPosition(const QPointF &point, const QPointF &strokeBegin);
     //virtual void endStroke();
     virtual QPointF buttonPosition() const;
-    virtual int numHandles() const { return 2; }
+    virtual int numHandles() const
+    {
+        return 2;
+    }
 protected:
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true);
-    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true);
+    virtual void drawAssistant(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, bool  cached = true, KisCanvas2 *canvas = 0, bool assistantVisible = true, bool previewVisible = true);
+    virtual void drawCache(QPainter &gc, const KisCoordinatesConverter *converter,  bool assistantVisible = true);
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin);
+    QPointF project(const QPointF &pt, const QPointF &strokeBegin);
 };
 
 class InfiniteRulerAssistantFactory : public KisPaintingAssistantFactory
@@ -51,7 +54,7 @@ public:
     virtual ~InfiniteRulerAssistantFactory();
     virtual QString id() const;
     virtual QString name() const;
-    virtual KisPaintingAssistant* createPaintingAssistant() const;
+    virtual KisPaintingAssistant *createPaintingAssistant() const;
 };
 
 #endif

@@ -27,11 +27,9 @@
 #include "kis_types.h"
 #include "krita_export.h"
 
-
 class QDomElement;
 
-
-typedef boost::function<KisTransformMaskParamsInterfaceSP (const QDomElement &)> KisTransformMaskParamsFactory;
+typedef boost::function<KisTransformMaskParamsInterfaceSP(const QDomElement &)> KisTransformMaskParamsFactory;
 typedef QMap<QString, KisTransformMaskParamsFactory> KisTransformMaskParamsFactoryMap;
 
 class KRITAIMAGE_EXPORT KisTransformMaskParamsFactoryRegistry
@@ -44,7 +42,7 @@ public:
     void addFactory(const QString &id, const KisTransformMaskParamsFactory &factory);
     KisTransformMaskParamsInterfaceSP createParams(const QString &id, const QDomElement &e);
 
-    static KisTransformMaskParamsFactoryRegistry* instance();
+    static KisTransformMaskParamsFactoryRegistry *instance();
 
 private:
     KisTransformMaskParamsFactoryMap m_map;

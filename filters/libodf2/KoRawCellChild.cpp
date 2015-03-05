@@ -21,8 +21,8 @@
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
-KoRawCellChild::KoRawCellChild(const QByteArray& content)
-: m_content(content)
+KoRawCellChild::KoRawCellChild(const QByteArray &content)
+    : m_content(content)
 {
 }
 
@@ -30,7 +30,7 @@ KoRawCellChild::~KoRawCellChild()
 {
 }
 
-void KoRawCellChild::saveOdf(KoXmlWriter& writer, KoGenStyles& styles) const
+void KoRawCellChild::saveOdf(KoXmlWriter &writer, KoGenStyles &styles) const
 {
     Q_UNUSED(styles)
 

@@ -40,8 +40,8 @@
 K_PLUGIN_FACTORY(PdfImportFactory, registerPlugin<PdfImport>();)
 K_EXPORT_PLUGIN(PdfImportFactory("calligrafilters"))
 
-PdfImport::PdfImport(QObject*parent, const QVariantList&)
-        : KoFilter(parent)
+PdfImport::PdfImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
     kDebug(30516) << "PDF Import Filter";
 }
@@ -50,7 +50,7 @@ PdfImport::~PdfImport()
 {
 }
 
-KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus PdfImport::convert(const QByteArray &from, const QByteArray &to)
 {
     kDebug(30516) << "to:" << to << " from:" << from;
 
@@ -60,11 +60,12 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
 
     // read config file
     globalParams = new GlobalParams();
-    if (! globalParams)
+    if (! globalParams) {
         return KoFilter::NotImplemented;
+    }
 
-    GooString * fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
-    PDFDoc * pdfDoc = new PDFDoc(fname, 0, 0, 0);
+    GooString *fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
+    PDFDoc *pdfDoc = new PDFDoc(fname, 0, 0, 0);
     if (! pdfDoc) {
         delete globalParams;
         return KoFilter::StupidError;
@@ -84,7 +85,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
 
     kDebug(30516) << "converting pages" << firstPage << "-" << lastPage;
 
-    SvgOutputDev * dev = new SvgOutputDev(m_chain->outputFile());
+    SvgOutputDev *dev = new SvgOutputDev(m_chain->outputFile());
     if (dev->isOk()) {
         int rotate = 0;
         GBool useMediaBox = gTrue;

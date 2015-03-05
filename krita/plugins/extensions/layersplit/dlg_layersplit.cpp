@@ -44,7 +44,6 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->intFuzziness->setRange(0, 200);
     m_page->intFuzziness->setSingleStep(1);
 
-
     KisConfig cfg;
     m_page->intFuzziness->setValue(cfg.readEntry<int>("layersplit/fuzziness", 20));
     m_page->chkCreateGroupLayer->setChecked(cfg.readEntry<bool>("layerspit/createmastergroup", true));
@@ -112,7 +111,5 @@ int DlgLayerSplit::fuzziness() const
     return m_page->intFuzziness->value();
 
 }
-
-
 
 #include "dlg_layersplit.moc"

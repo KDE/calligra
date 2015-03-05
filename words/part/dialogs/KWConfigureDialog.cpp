@@ -32,8 +32,8 @@
 
 #include <klocale.h>
 
-KWConfigureDialog::KWConfigureDialog(KWView* parent)
-: KPageDialog(parent)
+KWConfigureDialog::KWConfigureDialog(KWView *parent)
+    : KPageDialog(parent)
 {
     setFaceType(List);
     setCaption(i18n("Configure"));
@@ -64,7 +64,7 @@ KWConfigureDialog::KWConfigureDialog(KWView* parent)
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
-    connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()) );
+    connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(changed()), parent, SLOT(slotUpdateAuthorProfileActions()));
 }
 
@@ -80,12 +80,11 @@ void KWConfigureDialog::slotApply()
 
 void KWConfigureDialog::slotDefault()
 {
-    QWidget* curr = currentPage()->widget();
+    QWidget *curr = currentPage()->widget();
 
     if (curr == m_gridPage) {
         m_gridPage->slotDefault();
-    }
-    else if (curr == m_docPage) {
+    } else if (curr == m_docPage) {
         m_docPage->slotDefault();
     }
 }

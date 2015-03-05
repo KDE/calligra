@@ -19,7 +19,6 @@
 #include "kis_projection_test.h"
 #include <qtest_kde.h>
 
-
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
@@ -58,5 +57,4 @@ void KisProjectionTest::testDirty()
 
 QTEST_KDEMAIN(KisProjectionTest, NoGUI)
 #include "kis_projection_test.moc"
-
 

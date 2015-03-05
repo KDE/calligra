@@ -29,7 +29,7 @@
 K_PLUGIN_FACTORY(ImportFactory, registerPlugin<psdImport>();)
 K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
 
-        psdImport::psdImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+psdImport::psdImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
@@ -37,17 +37,19 @@ psdImport::~psdImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus psdImport::convert(const QByteArray &, const QByteArray &to)
 {
-    dbgFile <<"Importing using PSDImport!";
+    dbgFile << "Importing using PSDImport!";
 
-    if (to != "application/x-krita")
+    if (to != "application/x-krita") {
         return KisImportExportFilter::BadMimeType;
+    }
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
 
-    if (!doc)
+    if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     QString filename = m_chain->inputFile();
 
@@ -57,8 +59,9 @@ KisImportExportFilter::ConversionStatus psdImport::convert(const QByteArray&, co
 
         KUrl url(filename);
 
-        if (url.isEmpty())
+        if (url.isEmpty()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
         PSDLoader ib(doc);
 
@@ -79,7 +82,7 @@ KisImportExportFilter::ConversionStatus psdImport::convert(const QByteArray&, co
         case KisImageBuilder_RESULT_FAILURE:
             return KisImportExportFilter::InternalError;
         case KisImageBuilder_RESULT_OK:
-            doc -> setCurrentImage( ib.image());
+            doc -> setCurrentImage(ib.image());
             return KisImportExportFilter::OK;
         default:
             return KisImportExportFilter::StorageCreationError;

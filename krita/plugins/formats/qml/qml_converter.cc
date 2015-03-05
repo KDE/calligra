@@ -35,18 +35,20 @@ QMLConverter::~QMLConverter()
 {
 }
 
-KisImageBuilder_Result QMLConverter::buildFile(const KUrl& uri, KisImageWSP image)
+KisImageBuilder_Result QMLConverter::buildFile(const KUrl &uri, KisImageWSP image)
 {
 
-    if (uri.isEmpty())
+    if (uri.isEmpty()) {
         return KisImageBuilder_RESULT_NO_URI;
+    }
 
-    if (!uri.isLocalFile())
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_LOCAL;
+    }
 
     QFile file(uri.path());
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-         return KisImageBuilder_RESULT_FAILURE;
+        return KisImageBuilder_RESULT_FAILURE;
     }
 
     QTextStream out(&file);
@@ -65,13 +67,13 @@ KisImageBuilder_Result QMLConverter::buildFile(const KUrl& uri, KisImageWSP imag
         dir.mkpath(imagePath);
     }
     dbgFile << "Saving images to " << imagePath;
-    while(node) {
+    while (node) {
         KisPaintDeviceSP projection = node->projection();
         QRect rect = projection->exactBounds();
         QImage qmlImage = projection->convertToQImage(0, rect.x(), rect.y(), rect.width(), rect.height());
         QString name = node->name().replace(' ', '_').toLower();
         QString fileName = name + ".png";
-        qmlImage.save(imagePath +'/'+ fileName);
+        qmlImage.save(imagePath + '/' + fileName);
 
         out << SPACE << "Image {\n";
         writeString(out, 2, "id", name);
@@ -79,27 +81,28 @@ KisImageBuilder_Result QMLConverter::buildFile(const KUrl& uri, KisImageWSP imag
         writeInt(out, 2, "y", rect.y());
         writeInt(out, 2, "width", rect.width());
         writeInt(out, 2, "height", rect.height());
-        writeString(out, 2, "source", "\"" + imageDir + '/' + fileName + "\"" );
-        writeString(out, 2, "opacity", QString().setNum(node->opacity()/255.0));
+        writeString(out, 2, "source", "\"" + imageDir + '/' + fileName + "\"");
+        writeString(out, 2, "opacity", QString().setNum(node->opacity() / 255.0));
         out << SPACE << "}\n";
         node = node->nextSibling();
     }
     out << "}\n";
-
 
     file.close();
 
     return KisImageBuilder_RESULT_OK;
 }
 
-void QMLConverter::writeString(QTextStream&  out, int spacing, const QString& setting, const QString& value) {
+void QMLConverter::writeString(QTextStream  &out, int spacing, const QString &setting, const QString &value)
+{
     for (int space = 0; space < spacing; space++) {
         out << SPACE;
     }
     out << setting << ": " << value << "\n";
 }
 
-void QMLConverter::writeInt(QTextStream&  out, int spacing, const QString& setting, int value) {
+void QMLConverter::writeInt(QTextStream  &out, int spacing, const QString &setting, int value)
+{
     writeString(out, spacing, setting, QString::number(value));
 }
 

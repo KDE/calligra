@@ -45,7 +45,7 @@ class GoalSeekDialog : public KDialog
     Q_OBJECT
 
 public:
-    GoalSeekDialog(QWidget* parent, Selection* selection);
+    GoalSeekDialog(QWidget *parent, Selection *selection);
     ~GoalSeekDialog();
 
 protected:

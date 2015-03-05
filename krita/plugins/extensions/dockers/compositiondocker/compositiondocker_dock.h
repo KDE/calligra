@@ -27,21 +27,25 @@ class CompositionModel;
 class KisCanvas2;
 class KisAction;
 
-class CompositionDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgCompositionDocker {
+class CompositionDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgCompositionDocker
+{
     Q_OBJECT
 public:
     CompositionDockerDock();
     ~CompositionDockerDock();
-    QString observerName() { return "CompositionDockerDock"; }
+    QString observerName()
+    {
+        return "CompositionDockerDock";
+    }
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
-    
+
     void updateModel();
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
-    
+
 private Q_SLOTS:
-    void activated (const QModelIndex& index);
+    void activated(const QModelIndex &index);
     void deleteClicked();
     void saveClicked();
     void exportClicked();
@@ -54,11 +58,10 @@ private:
     KisCanvas2 *m_canvas;
     CompositionModel *m_model;
 
-    QVector<KisAction*> m_actions;
-    KisAction* updateAction;
-    KisAction* renameAction;
+    QVector<KisAction *> m_actions;
+    KisAction *updateAction;
+    KisAction *renameAction;
 };
-
 
 #endif
 

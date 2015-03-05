@@ -121,10 +121,10 @@ public:
     QList<KoPathPointData> selectedSegmentsData() const;
 
     /// Returns list of selected shapes
-    QList<KoPathShape*> selectedShapes() const;
+    QList<KoPathShape *> selectedShapes() const;
 
     /// Sets list of selected shapes
-    void setSelectedShapes(const QList<KoPathShape*> shapes);
+    void setSelectedShapes(const QList<KoPathShape *> shapes);
 
     /**
     * @brief trigger a repaint
@@ -154,7 +154,7 @@ private:
     QSet<KoPathPoint *> m_selectedPoints;
     PathShapePointMap m_shapePointMap;
     KoPathTool *m_tool;
-    QList<KoPathShape*> m_selectedShapes;
+    QList<KoPathShape *> m_selectedShapes;
 };
 
 #endif // PATHTOOLSELECTION_H

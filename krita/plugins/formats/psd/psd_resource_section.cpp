@@ -35,7 +35,7 @@ PSDResourceSection::~PSDResourceSection()
     resources.clear();
 }
 
-bool PSDResourceSection::read(QIODevice* io)
+bool PSDResourceSection::read(QIODevice *io)
 {
     quint32 resourceSectionLength = 0;
     if (!psdread(io, &resourceSectionLength)) {
@@ -56,7 +56,7 @@ bool PSDResourceSection::read(QIODevice* io)
     buf.open(QBuffer::ReadOnly);
 
     while (!buf.atEnd()) {
-        PSDResourceBlock* block = new PSDResourceBlock();
+        PSDResourceBlock *block = new PSDResourceBlock();
         if (!block->read(&buf)) {
             error = "Error reading block: " + block->error;
             dbgFile << error << ", skipping.";
@@ -75,7 +75,7 @@ bool PSDResourceSection::read(QIODevice* io)
     return valid();
 }
 
-bool PSDResourceSection::write(QIODevice* io)
+bool PSDResourceSection::write(QIODevice *io)
 {
     Q_UNUSED(io);
 
@@ -89,7 +89,7 @@ bool PSDResourceSection::write(QIODevice* io)
     buf.setBuffer(&ba);
     buf.open(QBuffer::WriteOnly);
 
-    foreach(PSDResourceBlock* block, resources) {
+    foreach (PSDResourceBlock *block, resources) {
         if (!block->write(&buf)) {
             error = block->error;
             return false;
@@ -115,7 +115,7 @@ bool PSDResourceSection::valid()
 
 QString PSDResourceSection::idToString(PSDResourceSection::PSDResourceID id)
 {
-    switch(id) {
+    switch (id) {
     case UNKNOWN: return "Unknown";
 
     case PS2_IMAGE_INFO    : return "0x03e8 - Obsolete - ps 2.0 image info";
@@ -222,8 +222,12 @@ QString PSDResourceSection::idToString(PSDResourceSection::PSDResourceID id)
 
     case PRINT_FLAGS_2     : return "0x2710 - Print flags";
     default: {
-        if (id > PATH_INFO_FIRST && id < PATH_INFO_LAST) return "Path Info Block";
-        if (id > PLUGIN_RESOURCE_START && id < PLUGIN_RESOURCE_END) return "Plug-In Resource";
+        if (id > PATH_INFO_FIRST && id < PATH_INFO_LAST) {
+            return "Path Info Block";
+        }
+        if (id > PLUGIN_RESOURCE_START && id < PLUGIN_RESOURCE_END) {
+            return "Plug-In Resource";
+        }
     }
     };
     return QString("Unknown Resource Block: %1").arg(id);

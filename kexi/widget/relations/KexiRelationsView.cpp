@@ -50,7 +50,8 @@ class KexiRelationsView::Private
 {
 public:
     Private()
-            : conn(KexiMainWindowIface::global()->project()->dbConnection()) {
+        : conn(KexiMainWindowIface::global()->project()->dbConnection())
+    {
     }
 
     KComboBox *tableCombo;
@@ -62,14 +63,14 @@ public:
     , *connectionPopup //!< over connection
     , *areaPopup; //!< over outer area
     KAction *openSelectedTableAction, *designSelectedTableAction,
-    *appendSelectedFieldAction, *appendSelectedFieldsAction, *hideTableAction;
+            *appendSelectedFieldAction, *appendSelectedFieldsAction, *hideTableAction;
 };
 
 //---------------
 
 KexiRelationsView::KexiRelationsView(QWidget *parent)
-        : KexiView(parent)
-        , d(new Private)
+    : KexiView(parent)
+    , d(new Private)
 {
     QWidget *mainWidget = new QWidget(this);
     QGridLayout *g = new QGridLayout(mainWidget);
@@ -83,7 +84,7 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
 
     d->tableCombo = new KComboBox(horWidget);
     d->tableCombo->setObjectName("tables_combo");
-    d->tableCombo->setMinimumWidth(QFontMetrics(font()).width("w")*20);
+    d->tableCombo->setMinimumWidth(QFontMetrics(font()).width("w") * 20);
     d->tableCombo->setInsertPolicy(QComboBox::NoInsert);
     d->tableCombo->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
     QLabel *lbl = new QLabel(i18n("Table:"), horWidget);
@@ -110,8 +111,9 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     connect(d->tableQueryPopup, SIGNAL(aboutToShow()), this, SLOT(aboutToShowPopupMenu()));
 
     d->hideTableAction = plugSharedAction("edit_delete", i18n("&Hide Table"), d->tableQueryPopup);
-    if (d->hideTableAction)
+    if (d->hideTableAction) {
         d->hideTableAction->setIcon(KIcon());
+    }
 
     d->connectionPopup = new KMenu(this);
     d->connectionPopup->setObjectName("connectionPopup");
@@ -169,8 +171,9 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
 #endif
 
 #ifdef TESTING_KexiRelationWidget
-    for (int i = 0;i < (int)d->db->tableNames().count();i++)
+    for (int i = 0; i < (int)d->db->tableNames().count(); i++) {
         QTimer::singleShot(100, this, SLOT(slotAddTable()));
+    }
 #endif
 
     invalidateActions();
@@ -181,17 +184,17 @@ KexiRelationsView::~KexiRelationsView()
     delete d;
 }
 
-TablesHash* KexiRelationsView::tables() const
+TablesHash *KexiRelationsView::tables() const
 {
     return d->scrollArea->tables();
 }
 
-KexiRelationsTableContainer* KexiRelationsView::table(const QString& name) const
+KexiRelationsTableContainer *KexiRelationsView::table(const QString &name) const
 {
     return d->scrollArea->tables()->value(name);
 }
 
-const ConnectionSet* KexiRelationsView::connections() const
+const ConnectionSet *KexiRelationsView::connections() const
 {
     return d->scrollArea->connections();
 }
@@ -199,8 +202,9 @@ const ConnectionSet* KexiRelationsView::connections() const
 void
 KexiRelationsView::slotAddTable()
 {
-    if (d->tableCombo->currentIndex() == -1)
+    if (d->tableCombo->currentIndex() == -1) {
         return;
+    }
     const QString tname = d->tableCombo->itemText(d->tableCombo->currentIndex());
     KexiDB::TableSchema *t = d->conn->tableSchema(tname);
     addTable(t);
@@ -209,13 +213,15 @@ KexiRelationsView::slotAddTable()
 void
 KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 {
-    if (!t)
+    if (!t) {
         return;
+    }
     if (!d->scrollArea->tableContainer(t)) {
         KexiRelationsTableContainer *c = d->scrollArea->addTableContainer(t, rect);
         kDebug() << "adding table" << t->name();
-        if (!c)
+        if (!c) {
             return;
+        }
         connect(c, SIGNAL(fieldsDoubleClicked(KexiDB::TableOrQuerySchema&,QStringList)),
                 this, SIGNAL(appendFields(KexiDB::TableOrQuerySchema&,QStringList)));
     }
@@ -224,8 +230,9 @@ KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
     const int count = d->tableCombo->count();
     int i = 0;
     for (; i < count; i++) {
-        if (d->tableCombo->itemText(i).toLower() == tname)
+        if (d->tableCombo->itemText(i).toLower() == tname) {
             break;
+        }
     }
     if (i < count) {
         int oi = d->tableCombo->currentIndex();
@@ -245,13 +252,13 @@ KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 }
 
 void
-KexiRelationsView::addConnection(const SourceConnection& conn)
+KexiRelationsView::addConnection(const SourceConnection &conn)
 {
     d->scrollArea->addConnection(conn);
 }
 
 void
-KexiRelationsView::addTable(const QString& t)
+KexiRelationsView::addTable(const QString &t)
 {
     for (int i = 0; i < d->tableCombo->count(); i++) {
         if (d->tableCombo->itemText(i) == t) {
@@ -276,19 +283,19 @@ void KexiRelationsView::emptyAreaGotFocus()
     invalidateActions();
 }
 
-void KexiRelationsView::tableContextMenuRequest(const QPoint& pos)
+void KexiRelationsView::tableContextMenuRequest(const QPoint &pos)
 {
     invalidateActions();
     executePopup(pos);
 }
 
-void KexiRelationsView::connectionContextMenuRequest(const QPoint& pos)
+void KexiRelationsView::connectionContextMenuRequest(const QPoint &pos)
 {
     invalidateActions();
     executePopup(pos);
 }
 
-void KexiRelationsView::emptyAreaContextMenuRequest(const QPoint& /*pos*/)
+void KexiRelationsView::emptyAreaContextMenuRequest(const QPoint & /*pos*/)
 {
     invalidateActions();
     //! @todo
@@ -305,10 +312,11 @@ void KexiRelationsView::executePopup(QPoint pos)
         pos = mapToGlobal(
                   d->scrollArea->focusedTableContainer() ? d->scrollArea->focusedTableContainer()->pos() + d->scrollArea->focusedTableContainer()->rect().center() : rect().center());
     }
-    if (d->scrollArea->focusedTableContainer())
+    if (d->scrollArea->focusedTableContainer()) {
         d->tableQueryPopup->exec(pos);
-    else if (d->scrollArea->selectedConnection())
+    } else if (d->scrollArea->selectedConnection()) {
         d->connectionPopup->exec(pos);
+    }
 }
 
 void KexiRelationsView::removeSelectedObject()
@@ -318,17 +326,19 @@ void KexiRelationsView::removeSelectedObject()
 
 void KexiRelationsView::appendSelectedFields()
 {
-    KexiRelationsTableContainer* currentTableContainer = d->scrollArea->focusedTableContainer();
-    if (!currentTableContainer)
+    KexiRelationsTableContainer *currentTableContainer = d->scrollArea->focusedTableContainer();
+    if (!currentTableContainer) {
         return;
+    }
     emit appendFields(*currentTableContainer->schema(), currentTableContainer->selectedFieldNames());
 }
 
 void KexiRelationsView::openSelectedTable()
 {
     /*! @todo what about query? */
-    if (!d->scrollArea->focusedTableContainer() || !d->scrollArea->focusedTableContainer()->schema()->table())
+    if (!d->scrollArea->focusedTableContainer() || !d->scrollArea->focusedTableContainer()->schema()->table()) {
         return;
+    }
     bool openingCancelled;
     KexiMainWindowIface::global()->openObject(
         "kexi/table", d->scrollArea->focusedTableContainer()->schema()->name(),
@@ -338,8 +348,9 @@ void KexiRelationsView::openSelectedTable()
 void KexiRelationsView::designSelectedTable()
 {
     /*! @todo what about query? */
-    if (!d->scrollArea->focusedTableContainer() || !d->scrollArea->focusedTableContainer()->schema()->table())
+    if (!d->scrollArea->focusedTableContainer() || !d->scrollArea->focusedTableContainer()->schema()->table()) {
         return;
+    }
     bool openingCancelled;
     KexiMainWindowIface::global()->openObject(
         "kexi/table", d->scrollArea->focusedTableContainer()->schema()->name(),
@@ -369,7 +380,7 @@ void KexiRelationsView::slotTableHidden(KexiDB::TableSchema &table)
 
 void KexiRelationsView::aboutToShowPopupMenu()
 {
-    KexiRelationsTableContainer* currentTableContainer = d->scrollArea->focusedTableContainer();
+    KexiRelationsTableContainer *currentTableContainer = d->scrollArea->focusedTableContainer();
     if (currentTableContainer /*&& currentTableContainer->schema()->table()*/) {
         /*! @todo what about query? */
         d->tableQueryPopup->clear();
@@ -377,10 +388,11 @@ void KexiRelationsView::aboutToShowPopupMenu()
                                      QString(d->scrollArea->focusedTableContainer()->schema()->name()) + " : " + i18n("Table"));
         QStringList selectedFieldNames(currentTableContainer->selectedFieldNames());
         if (currentTableContainer && !selectedFieldNames.isEmpty()) {
-            if (selectedFieldNames.count() > 1 || selectedFieldNames.first() == "*") //multiple
+            if (selectedFieldNames.count() > 1 || selectedFieldNames.first() == "*") { //multiple
                 d->tableQueryPopup->addAction(d->appendSelectedFieldsAction);
-            else
+            } else {
                 d->tableQueryPopup->addAction(d->appendSelectedFieldAction);
+            }
             d->tableQueryPopup->addSeparator();
         }
         d->tableQueryPopup->addAction(d->openSelectedTableAction);
@@ -419,7 +431,7 @@ KexiRelationsView::fillTablesCombo()
 }
 
 void
-KexiRelationsView::objectCreated(const QString &mime, const QString& name)
+KexiRelationsView::objectCreated(const QString &mime, const QString &name)
 {
     if (mime == "kexi/table" || mime == "kexi/query") {
 //! @todo query?
@@ -433,7 +445,7 @@ KexiRelationsView::objectCreated(const QString &mime, const QString& name)
 }
 
 void
-KexiRelationsView::objectDeleted(const QString &mime, const QString& name)
+KexiRelationsView::objectDeleted(const QString &mime, const QString &name)
 {
     if (mime == "kexi/table" || mime == "kexi/query") {
         for (int i = 0; i < d->tableCombo->count(); i++) {
@@ -441,10 +453,11 @@ KexiRelationsView::objectDeleted(const QString &mime, const QString& name)
             if (d->tableCombo->itemText(i) == name) {
                 d->tableCombo->removeItem(i);
                 if (d->tableCombo->currentIndex() == i) {
-                    if (i == (d->tableCombo->count() - 1))
+                    if (i == (d->tableCombo->count() - 1)) {
                         d->tableCombo->setCurrentIndex(i - 1);
-                    else
+                    } else {
                         d->tableCombo->setCurrentIndex(i);
+                    }
                 }
                 break;
             }
@@ -453,8 +466,8 @@ KexiRelationsView::objectDeleted(const QString &mime, const QString& name)
 }
 
 void
-KexiRelationsView::objectRenamed(const QString &mime, const QString& name,
-                                 const QString& newName)
+KexiRelationsView::objectRenamed(const QString &mime, const QString &name,
+                                 const QString &newName)
 {
     if (mime == "kexi/table" || mime == "kexi/query") {
         const int count = d->tableCombo->count();
@@ -473,7 +486,7 @@ KexiRelationsView::objectRenamed(const QString &mime, const QString& name,
 }
 
 void
-KexiRelationsView::hideAllTablesExcept(KexiDB::TableSchema::List* tables)
+KexiRelationsView::hideAllTablesExcept(KexiDB::TableSchema::List *tables)
 {
     d->scrollArea->hideAllTablesExcept(tables);
 }

@@ -28,7 +28,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-
 /**
  * The 'magic wand' selection tool -- in fact just
  * a floodfill that only creates a selection.
@@ -42,13 +41,13 @@ public:
     KisToolSelectContiguous(KoCanvasBase *canvas);
     virtual ~KisToolSelectContiguous();
 
-    virtual QWidget* createOptionWidget();
+    virtual QWidget *createOptionWidget();
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     void beginPrimaryAction(KoPointerEvent *event);
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     virtual void slotSetFuzziness(int);
     virtual void slotSetSizemod(int);
     virtual void slotSetFeather(int);
@@ -66,8 +65,9 @@ class KisToolSelectContiguousFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectContiguousFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolSelectContiguous") {
+    KisToolSelectContiguousFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolSelectContiguous")
+    {
         setToolTip(i18n("Contiguous Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setIconName(koIconNameCStr("tool_contiguous_selection"));
@@ -77,7 +77,8 @@ public:
 
     virtual ~KisToolSelectContiguousFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolSelectContiguous(canvas);
     }
 

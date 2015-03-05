@@ -74,11 +74,11 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter* coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView> viewManager, KoShapeBasedDocumentBase* sc);
+    KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, QPointer<KisView> viewManager, KoShapeBasedDocumentBase *sc);
 
     virtual ~KisCanvas2();
 
-    void setCanvasWidget(QWidget * widget);
+    void setCanvasWidget(QWidget *widget);
 
     void notifyZoomChanged();
 
@@ -106,29 +106,29 @@ public: // KoCanvasBase implementation
      * layer's canvas' shapemanager, else the shapemanager associated
      * with the global krita canvas.
      */
-    KoShapeManager * shapeManager() const;
+    KoShapeManager *shapeManager() const;
 
     /**
      * Return the shape manager associated with this canvas
      */
-    KoShapeManager * globalShapeManager() const;
+    KoShapeManager *globalShapeManager() const;
 
-    void updateCanvas(const QRectF& rc);
+    void updateCanvas(const QRectF &rc);
 
     virtual void updateInputMethodInfo();
 
-    const KisCoordinatesConverter* coordinatesConverter() const;
+    const KisCoordinatesConverter *coordinatesConverter() const;
     virtual KoViewConverter *viewConverter() const;
 
-    virtual QWidget* canvasWidget();
+    virtual QWidget *canvasWidget();
 
-    virtual const QWidget* canvasWidget() const;
+    virtual const QWidget *canvasWidget() const;
 
     virtual KoUnit unit() const;
 
-    virtual KoToolProxy* toolProxy() const;
+    virtual KoToolProxy *toolProxy() const;
 
-    const KoColorProfile* monitorProfile();
+    const KoColorProfile *monitorProfile();
 
     /**
      * Prescale the canvas represention of the image (if necessary, it
@@ -148,26 +148,25 @@ public: // KoCanvasBase implementation
      *
      * NOTE: May be null while initialization!
      */
-    KisInputManager* globalInputManager() const;
+    KisInputManager *globalInputManager() const;
 
-    KisPaintingAssistantsDecoration* paintingAssistantsDecoration();
-
+    KisPaintingAssistantsDecoration *paintingAssistantsDecoration();
 
 public: // KisCanvas2 methods
 
     KisImageWSP image() const;
-    KisViewManager* viewManager() const;
+    KisViewManager *viewManager() const;
     QPointer<KisView> imageView() const;
 
     /// @return true if the canvas image should be displayed in vertically mirrored mode
-    void addDecoration(KisCanvasDecoration* deco);
-    KisCanvasDecoration* decoration(const QString& id) const;
+    void addDecoration(KisCanvasDecoration *deco);
+    KisCanvasDecoration *decoration(const QString &id) const;
 
     void setDisplayFilter(KisDisplayFilter *displayFilter);
     KisDisplayFilter *displayFilter() const;
 
-    KisDisplayColorConverter* displayColorConverter() const;
-    KisExposureGammaCorrectionInterface* exposureGammaCorrectionInterface() const;
+    KisDisplayColorConverter *displayColorConverter() const;
+    KisExposureGammaCorrectionInterface *exposureGammaCorrectionInterface() const;
 
     void setCursor(const QCursor &cursor);
 
@@ -199,7 +198,7 @@ private Q_SLOTS:
 
     /// The image projection has changed, now start an update
     /// of the canvas representation.
-    void startUpdateCanvasProjection(const QRect & rc);
+    void startUpdateCanvasProjection(const QRect &rc);
     void updateCanvasProjection();
 
     void startUpdateInPatches(QRect imageRect);
@@ -220,8 +219,7 @@ private Q_SLOTS:
     /**
      * Called whenever the display monitor profile resource changes
      */
-    void slotSetDisplayProfile(const KoColorProfile * profile);
-
+    void slotSetDisplayProfile(const KoColorProfile *profile);
 
     void slotSelectionChanged();
 
@@ -230,7 +228,7 @@ private Q_SLOTS:
 public:
 
     bool isPopupPaletteVisible();
-    void slotShowPopupPalette(const QPoint& = QPoint(0,0));
+    void slotShowPopupPalette(const QPoint & = QPoint(0, 0));
 
     // interafce for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
@@ -238,7 +236,7 @@ public:
     // interface for KisViewManager only
     void resetCanvas(bool useOpenGL);
 
-    void setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager);
+    void setFavoriteResourceManager(KisFavoriteResourceManager *favoriteResourceManager);
 
 private:
     Q_DISABLE_COPY(KisCanvas2)
@@ -254,7 +252,7 @@ private:
 private:
 
     class KisCanvas2Private;
-    KisCanvas2Private * const m_d;
+    KisCanvas2Private *const m_d;
 };
 
 #endif

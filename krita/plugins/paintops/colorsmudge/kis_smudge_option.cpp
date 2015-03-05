@@ -27,14 +27,14 @@
 
 #include <KoColor.h>
 
-KisSmudgeOption::KisSmudgeOption(const QString& name, const QString& label, bool checked, const QString& category):
+KisSmudgeOption::KisSmudgeOption(const QString &name, const QString &label, bool checked, const QString &category):
     KisRateOption(name, label, checked, category),
     m_mode(SMEARING_MODE)
 {
     setValueRange(0.01, 1.0);
 }
 
-void KisSmudgeOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax, qreal multiplicator) const
+void KisSmudgeOption::apply(KisPainter &painter, const KisPaintInformation &info, qreal scaleMin, qreal scaleMax, qreal multiplicator) const
 {
     if (!isChecked()) {
         painter.setOpacity((quint8)(scaleMax * 255.0));
@@ -47,13 +47,13 @@ void KisSmudgeOption::apply(KisPainter& painter, const KisPaintInformation& info
     painter.setOpacity(opacity);
 }
 
-void KisSmudgeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisSmudgeOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     KisRateOption::writeOptionSetting(setting);
     setting->setProperty(name() + "Mode", m_mode);
 }
 
-void KisSmudgeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisSmudgeOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisRateOption::readOptionSetting(setting);
 

@@ -69,7 +69,6 @@ TableIterator::TableIterator(TableIterator *other)
     headerRowPositions[headerRows] = other->headerRowPositions[headerRows];
 }
 
-
 TableIterator::~TableIterator()
 {
     for (int col = 0; col < frameIterators.size(); ++col) {
@@ -79,27 +78,32 @@ TableIterator::~TableIterator()
 
 bool TableIterator::operator ==(const TableIterator &other) const
 {
-    if (table != other.table)
+    if (table != other.table) {
         return false;
+    }
 
-    if (row != other.row)
+    if (row != other.row) {
         return false;
+    }
 
-    if (headerRows != other.headerRows)
+    if (headerRows != other.headerRows) {
         return false;
+    }
 
     for (int row = 0; row < headerRows; ++row) {
         for (int col = 0; col < table->columns(); ++col) {
-            if (headerCellAreas[row][col] != other.headerCellAreas[row][col])
+            if (headerCellAreas[row][col] != other.headerCellAreas[row][col]) {
                 return false;
+            }
         }
     }
 
     for (int col = 0; col < table->columns(); ++col) {
         if (frameIterators[col] && other.frameIterators[col]) {
             if (!(*frameIterators[col] ==
-                            *(other.frameIterators[col])))
+                    *(other.frameIterators[col]))) {
                 return false;
+            }
         }
     }
 

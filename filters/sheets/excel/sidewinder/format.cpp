@@ -28,7 +28,7 @@ public:
     QColor color;
     QString fontFamily;
     double fontSize;
-    bool null : 1 ;
+    bool null : 1;
     bool bold  : 1;
     bool italic : 1;
     bool underline : 1;
@@ -57,18 +57,18 @@ FormatFont::~FormatFont()
     delete d;
 }
 
-FormatFont::FormatFont(const FormatFont& f)
+FormatFont::FormatFont(const FormatFont &f)
 {
     d = new FormatFont::Private();
     assign(f);
 }
 
-FormatFont& FormatFont::operator=(const FormatFont & f)
+FormatFont &FormatFont::operator=(const FormatFont &f)
 {
     return assign(f);
 }
 
-FormatFont& FormatFont::assign(const FormatFont& f)
+FormatFont &FormatFont::assign(const FormatFont &f)
 {
     d->null        = f.isNull();
     d->fontFamily  = f.fontFamily();
@@ -94,7 +94,7 @@ QString FormatFont::fontFamily() const
     return d->fontFamily;
 }
 
-void FormatFont::setFontFamily(const QString& fontFamily)
+void FormatFont::setFontFamily(const QString &fontFamily)
 {
     d->fontFamily = fontFamily;
     d->null = false;
@@ -116,7 +116,7 @@ QColor FormatFont::color() const
     return d->color;
 }
 
-void FormatFont::setColor(const QColor& c)
+void FormatFont::setColor(const QColor &c)
 {
     d->color = c;
     d->null = false;
@@ -177,8 +177,9 @@ void FormatFont::setSubscript(bool s)
     d->null = false;
 
     // mutually exclusive
-    if (d->subscript && d->superscript)
+    if (d->subscript && d->superscript) {
         d->superscript = false;
+    }
 }
 
 bool FormatFont::superscript() const
@@ -192,11 +193,12 @@ void FormatFont::setSuperscript(bool s)
     d->null = false;
 
     // mutually exclusive
-    if (d->superscript && d->subscript)
+    if (d->superscript && d->subscript) {
         d->subscript = false;
+    }
 }
 
-bool FormatFont::operator==(const FormatFont& font) const
+bool FormatFont::operator==(const FormatFont &font) const
 {
     return
         d->bold == font.d->bold &&
@@ -210,7 +212,7 @@ bool FormatFont::operator==(const FormatFont& font) const
         d->color == font.d->color;
 }
 
-bool FormatFont::operator!=(const FormatFont& font) const
+bool FormatFont::operator!=(const FormatFont &font) const
 {
     return
         d->bold != font.d->bold ||
@@ -257,20 +259,20 @@ FormatAlignment::~FormatAlignment()
 }
 
 // copy constructor
-FormatAlignment::FormatAlignment(const FormatAlignment& align)
+FormatAlignment::FormatAlignment(const FormatAlignment &align)
 {
     d = new FormatAlignment::Private;
     assign(align);
 }
 
 // assignment operator
-FormatAlignment& FormatAlignment::operator=(const FormatAlignment & align)
+FormatAlignment &FormatAlignment::operator=(const FormatAlignment &align)
 {
     return assign(align);
 }
 
 // assign from another alignment
-FormatAlignment& FormatAlignment::assign(const FormatAlignment& align)
+FormatAlignment &FormatAlignment::assign(const FormatAlignment &align)
 {
     d->null          = align.isNull();
     d->alignX        = align.alignX();
@@ -360,7 +362,7 @@ void FormatAlignment::setShrinkToFit(bool b)
     d->null = false;
 }
 
-bool FormatAlignment::operator==(const FormatAlignment& font) const
+bool FormatAlignment::operator==(const FormatAlignment &font) const
 {
     return
         d->alignX == font.d->alignX &&
@@ -372,7 +374,7 @@ bool FormatAlignment::operator==(const FormatAlignment& font) const
         d->shrinkToFit == font.d->shrinkToFit;
 }
 
-bool FormatAlignment::operator!=(const FormatAlignment& font) const
+bool FormatAlignment::operator!=(const FormatAlignment &font) const
 {
     return
         d->alignX != font.d->alignX ||
@@ -408,20 +410,20 @@ FormatBackground::~FormatBackground()
 }
 
 // copy constructor
-FormatBackground::FormatBackground(const FormatBackground& background)
+FormatBackground::FormatBackground(const FormatBackground &background)
 {
     d = new FormatBackground::Private;
     assign(background);
 }
 
 // assignment operator
-FormatBackground& FormatBackground::operator=(const FormatBackground & background)
+FormatBackground &FormatBackground::operator=(const FormatBackground &background)
 {
     return assign(background);
 }
 
 // assign from another alignment
-FormatBackground& FormatBackground::assign(const FormatBackground& background)
+FormatBackground &FormatBackground::assign(const FormatBackground &background)
 {
     d->null         = background.isNull();
     d->pattern      = background.pattern();
@@ -451,7 +453,7 @@ QColor FormatBackground::backgroundColor() const
     return d->background;
 }
 
-void FormatBackground::setBackgroundColor(const QColor& color)
+void FormatBackground::setBackgroundColor(const QColor &color)
 {
     d->background = color;
     d->null = false;
@@ -462,13 +464,13 @@ QColor FormatBackground::foregroundColor() const
     return d->foreground;
 }
 
-void FormatBackground::setForegroundColor(const QColor& color)
+void FormatBackground::setForegroundColor(const QColor &color)
 {
     d->foreground = color;
     d->null = false;
 }
 
-bool FormatBackground::operator==(const FormatBackground& font) const
+bool FormatBackground::operator==(const FormatBackground &font) const
 {
     return
         d->pattern == font.d->pattern &&
@@ -476,7 +478,7 @@ bool FormatBackground::operator==(const FormatBackground& font) const
         d->foreground == font.d->foreground;
 }
 
-bool FormatBackground::operator!=(const FormatBackground& font) const
+bool FormatBackground::operator!=(const FormatBackground &font) const
 {
     return
         d->pattern != font.d->pattern ||
@@ -510,20 +512,20 @@ FormatBorders::~FormatBorders()
 }
 
 // copy constructor
-FormatBorders::FormatBorders(const FormatBorders& border)
+FormatBorders::FormatBorders(const FormatBorders &border)
 {
     d = new FormatBorders::Private;
     assign(border);
 }
 
 // assignment operator
-FormatBorders& FormatBorders::operator=(const FormatBorders & border)
+FormatBorders &FormatBorders::operator=(const FormatBorders &border)
 {
     return assign(border);
 }
 
 // assign from another alignment
-FormatBorders& FormatBorders::assign(const FormatBorders& border)
+FormatBorders &FormatBorders::assign(const FormatBorders &border)
 {
     d->null         = border.isNull();
     d->leftBorder   = border.leftBorder();
@@ -540,73 +542,73 @@ bool FormatBorders::isNull() const
     return d->null;
 }
 
-const Pen& FormatBorders::leftBorder() const
+const Pen &FormatBorders::leftBorder() const
 {
     return d->leftBorder;
 }
 
-void FormatBorders::setLeftBorder(const Pen& pen)
+void FormatBorders::setLeftBorder(const Pen &pen)
 {
     d->leftBorder = pen;
     d->null = false;
 }
 
-const Pen& FormatBorders::rightBorder() const
+const Pen &FormatBorders::rightBorder() const
 {
     return d->rightBorder;
 }
 
-void FormatBorders::setRightBorder(const Pen& pen)
+void FormatBorders::setRightBorder(const Pen &pen)
 {
     d->rightBorder = pen;
     d->null = false;
 }
 
-const Pen& FormatBorders::topBorder() const
+const Pen &FormatBorders::topBorder() const
 {
     return d->topBorder;
 }
 
-void FormatBorders::setTopBorder(const Pen& pen)
+void FormatBorders::setTopBorder(const Pen &pen)
 {
     d->topBorder = pen;
     d->null = false;
 }
 
-const Pen& FormatBorders::bottomBorder() const
+const Pen &FormatBorders::bottomBorder() const
 {
     return d->bottomBorder;
 }
 
-void FormatBorders::setBottomBorder(const Pen& pen)
+void FormatBorders::setBottomBorder(const Pen &pen)
 {
     d->bottomBorder = pen;
     d->null = false;
 }
 
-const Pen& FormatBorders::topLeftBorder() const
+const Pen &FormatBorders::topLeftBorder() const
 {
     return d->topLeftBorder;
 }
 
-void FormatBorders::setTopLeftBorder(const Pen& pen)
+void FormatBorders::setTopLeftBorder(const Pen &pen)
 {
     d->topLeftBorder = pen;
     d->null = false;
 }
 
-const Pen& FormatBorders::bottomLeftBorder() const
+const Pen &FormatBorders::bottomLeftBorder() const
 {
     return d->bottomLeftBorder;
 }
 
-void FormatBorders::setBottomLeftBorder(const Pen& pen)
+void FormatBorders::setBottomLeftBorder(const Pen &pen)
 {
     d->bottomLeftBorder = pen;
     d->null = false;
 }
 
-bool FormatBorders::operator==(const FormatBorders& font) const
+bool FormatBorders::operator==(const FormatBorders &font) const
 {
     return
         d->leftBorder == font.d->leftBorder &&
@@ -617,7 +619,7 @@ bool FormatBorders::operator==(const FormatBorders& font) const
         d->bottomLeftBorder == font.d->bottomLeftBorder;
 }
 
-bool FormatBorders::operator!=(const FormatBorders& font) const
+bool FormatBorders::operator!=(const FormatBorders &font) const
 {
     return
         d->leftBorder != font.d->leftBorder ||
@@ -654,20 +656,20 @@ Format::~Format()
 }
 
 // copy constructor
-Format::Format(const Format& f)
+Format::Format(const Format &f)
 {
     d = new Format::Private;
     assign(f);
 }
 
 // assignment operator
-Format& Format::operator=(const Format & f)
+Format &Format::operator=(const Format &f)
 {
     return assign(f);
 }
 
 // assign from another format
-Format& Format::assign(const Format& f)
+Format &Format::assign(const Format &f)
 {
     d->font = f.font();
     d->alignment = f.alignment();
@@ -687,42 +689,42 @@ bool Format::isNull() const
     return d->font.isNull() && d->alignment.isNull() && d->borders.isNull();
 }
 
-FormatFont& Format::font() const
+FormatFont &Format::font() const
 {
     return d->font;
 }
 
-void Format::setFont(const FormatFont& font)
+void Format::setFont(const FormatFont &font)
 {
     d->font = font;
 }
 
-FormatAlignment& Format::alignment() const
+FormatAlignment &Format::alignment() const
 {
     return d->alignment;
 }
 
-void Format::setAlignment(const FormatAlignment& alignment)
+void Format::setAlignment(const FormatAlignment &alignment)
 {
     d->alignment = alignment;
 }
 
-FormatBorders& Format::borders() const
+FormatBorders &Format::borders() const
 {
     return d->borders;
 }
 
-void Format::setBorders(const FormatBorders& borders)
+void Format::setBorders(const FormatBorders &borders)
 {
     d->borders = borders;
 }
 
-FormatBackground& Format::background() const
+FormatBackground &Format::background() const
 {
     return d->background;
 }
 
-void Format::setBackground(const FormatBackground& background)
+void Format::setBackground(const FormatBackground &background)
 {
     d->background = background;
 }
@@ -732,29 +734,34 @@ QString Format::valueFormat() const
     return d->valueFormat;
 }
 
-void Format::setValueFormat(const QString& valueFormat)
+void Format::setValueFormat(const QString &valueFormat)
 {
     d->valueFormat = valueFormat;
 }
 
 // merge f into current format
-Format& Format::apply(const Format& f)
+Format &Format::apply(const Format &f)
 {
-    if (!f.alignment().isNull())
+    if (!f.alignment().isNull()) {
         alignment() = f.alignment();
-    if (!f.font().isNull())
+    }
+    if (!f.font().isNull()) {
         font() = f.font();
-    if (!f.borders().isNull())
+    }
+    if (!f.borders().isNull()) {
         borders() = f.borders();
-    if (f.valueFormat().isEmpty() || f.valueFormat() == "General")
+    }
+    if (f.valueFormat().isEmpty() || f.valueFormat() == "General") {
         setValueFormat(f.valueFormat());
-    if (!f.background().isNull())
+    }
+    if (!f.background().isNull()) {
         background() = f.background();
+    }
 
     return *this;
 }
 
-bool Format::operator==(const Format& format) const
+bool Format::operator==(const Format &format) const
 {
     return
         d->font == format.d->font &&
@@ -764,7 +771,7 @@ bool Format::operator==(const Format& format) const
         d->valueFormat == format.d->valueFormat;
 }
 
-bool Format::operator!=(const Format& format) const
+bool Format::operator!=(const Format &format) const
 {
     return
         d->font != format.d->font ||

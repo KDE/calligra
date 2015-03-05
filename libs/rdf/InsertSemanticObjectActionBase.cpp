@@ -25,9 +25,9 @@
 InsertSemanticObjectActionBase::InsertSemanticObjectActionBase(KoCanvasBase *canvas,
         KoDocumentRdf *rdf,
         const QString &name)
-        : KAction(name, canvas->canvasWidget()),
-        m_canvas(canvas),
-        m_rdf(rdf)
+    : KAction(name, canvas->canvasWidget()),
+      m_canvas(canvas),
+      m_rdf(rdf)
 {
     connect(this, SIGNAL(triggered(bool)), this, SLOT(activated()));
 }

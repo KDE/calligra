@@ -74,13 +74,13 @@ public:
     PSCommentLexer();
     virtual ~PSCommentLexer();
 
-    virtual bool parse(QIODevice& fin);
+    virtual bool parse(QIODevice &fin);
 private:
     State m_curState;
     StringBuffer m_buffer;
     StringBuffer m_temp;
 
-    void nextStep(char c, State* newState, Action* newAction);
+    void nextStep(char c, State *newState, Action *newAction);
 
     void doOutput();
     uchar decode();
@@ -99,21 +99,25 @@ public:
     BoundingBoxExtractor();
     virtual ~BoundingBoxExtractor();
 
-    int llx() const {
+    int llx() const
+    {
         return m_llx;
     }
-    int lly() const {
+    int lly() const
+    {
         return m_lly;
     }
-    int urx() const {
+    int urx() const
+    {
         return m_urx;
     }
-    int ury() const {
+    int ury() const
+    {
         return m_ury;
     }
 private:
     int m_llx, m_lly, m_urx, m_ury;
-    bool getRectangle(const char* input, int &llx, int &lly, int &urx, int &ury);
+    bool getRectangle(const char *input, int &llx, int &lly, int &urx, int &ury);
 
 protected:
     void gotComment(const char *value);

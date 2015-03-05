@@ -49,52 +49,52 @@ public:
     class KRITAIMAGE_EXPORT Choice
     {
     public:
-        Choice(const Value&, const QString& hint);
-        Choice(const Choice&);
-        Choice& operator=(const Choice&);
+        Choice(const Value &, const QString &hint);
+        Choice(const Choice &);
+        Choice &operator=(const Choice &);
         ~Choice();
     public:
-        const Value& value() const;
-        const QString& hint() const;
+        const Value &value() const;
+        const QString &hint() const;
     private:
         struct Private;
-        Private* const d;
+        Private *const d;
     };
 private:
     TypeInfo(PropertyType _propertiesType);
     /**
      * Create a \ref TypeInfo for a
      */
-    TypeInfo(PropertyType _propertiesType, const TypeInfo* _embedded);
+    TypeInfo(PropertyType _propertiesType, const TypeInfo *_embedded);
     /**
      * Create a \ref TypeInfo for a choice (either open or closed).
      * @param _propertiesType either OpenedChoice or ClosedChoice
      */
-    TypeInfo(PropertyType _propertiesType, const TypeInfo* _embedded, const QList< Choice >&);
+    TypeInfo(PropertyType _propertiesType, const TypeInfo *_embedded, const QList< Choice > &);
     /**
      * Create a \ref TypeInfo for a structure.
      */
-    TypeInfo(Schema* _structureSchema, const QString& name);
+    TypeInfo(Schema *_structureSchema, const QString &name);
     ~TypeInfo();
 public:
     PropertyType propertyType() const;
-    const TypeInfo* embeddedPropertyType() const;
-    const QList< Choice >& choices() const;
-    Schema* structureSchema() const;
-    const QString& structureName() const;
-    const Parser* parser() const;
+    const TypeInfo *embeddedPropertyType() const;
+    const QList< Choice > &choices() const;
+    Schema *structureSchema() const;
+    const QString &structureName() const;
+    const Parser *parser() const;
     /**
      * @return true if @p value has a type that is correct for this \ref TypeInfo
      */
-    bool hasCorrectType(const Value& value) const;
+    bool hasCorrectType(const Value &value) const;
     /**
      * @return true if @p value has a value acceptable for this \ref TypeInfo
      */
-    bool hasCorrectValue(const Value& value) const;
+    bool hasCorrectValue(const Value &value) const;
 public:
     struct Private;
 private:
-    Private* const d;
+    Private *const d;
 };
 }
 

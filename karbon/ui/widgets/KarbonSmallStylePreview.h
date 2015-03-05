@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef KARBONSMALLSTYLEPREVIEW_H
 #define KARBONSMALLSTYLEPREVIEW_H
 
@@ -33,7 +32,7 @@ class KarbonSmallStylePreview : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KarbonSmallStylePreview(QWidget* parent = 0L);
+    explicit KarbonSmallStylePreview(QWidget *parent = 0L);
     virtual ~KarbonSmallStylePreview();
 
 Q_SIGNALS:
@@ -45,8 +44,8 @@ private Q_SLOTS:
     void canvasChanged(const KoCanvasBase *canvas);
 
 private:
-    KarbonFillStyleWidget * m_fillFrame;
-    KarbonStrokeStyleWidget * m_strokeFrame;
+    KarbonFillStyleWidget *m_fillFrame;
+    KarbonStrokeStyleWidget *m_strokeFrame;
 };
 
 #endif // KARBONSMALLSTYLEPREVIEW_H

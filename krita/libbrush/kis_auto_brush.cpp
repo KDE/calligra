@@ -51,13 +51,13 @@ inline double drand48()
 #endif
 
 struct KisAutoBrush::Private {
-    KisMaskGenerator* shape;
+    KisMaskGenerator *shape;
     qreal randomness;
     qreal density;
     int idealThreadCountCached;
 };
 
-KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density)
+KisAutoBrush::KisAutoBrush(KisMaskGenerator *as, qreal angle, qreal randomness, qreal density)
     : KisBrush()
     , d(new Private)
 {
@@ -97,8 +97,8 @@ inline void fillPixelOptimized_4bytes(quint8 *color, quint8 *buf, int size)
     int block1 = size / 8;
     int block2 = size % 8;
 
-    quint32 *src = reinterpret_cast<quint32*>(color);
-    quint32 *dst = reinterpret_cast<quint32*>(buf);
+    quint32 *src = reinterpret_cast<quint32 *>(color);
+    quint32 *dst = reinterpret_cast<quint32 *>(buf);
 
     // check whether all buffers are 4 bytes aligned
     // (uncomment if experience some problems)
@@ -167,15 +167,15 @@ inline void fillPixelOptimized_general(quint8 *color, quint8 *buf, int size, int
 }
 
 void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-        KisBrush::ColoringInformation* coloringInformation,
+        KisBrush::ColoringInformation *coloringInformation,
         double scaleX, double scaleY, double angle,
-        const KisPaintInformation& info,
-        double subPixelX , double subPixelY, qreal softnessFactor) const
+        const KisPaintInformation &info,
+        double subPixelX, double subPixelY, qreal softnessFactor) const
 {
     Q_UNUSED(info);
 
     // Generate the paint device from the mask
-    const KoColorSpace* cs = dst->colorSpace();
+    const KoColorSpace *cs = dst->colorSpace();
     quint32 pixelSize = cs->pixelSize();
 
     // mask dimension methods already includes KisBrush::angle()
@@ -199,13 +199,11 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         if (dstWidth * dstHeight <= oldBounds.width() * oldBounds.height()) {
             // just clear the data in dst,
             memset(dst->data(), OPACITY_TRANSPARENT_U8, dstWidth * dstHeight * dst->pixelSize());
-        }
-        else {
+        } else {
             // enlarge the data
             dst->initialize();
         }
-    }
-    else {
+    } else {
         if (dst->data() == 0 || dst->bounds().isEmpty()) {
             qWarning() << "Creating a default black dab: no coloring info and no initialized paint device to mask";
             dst->clear(QRect(0, 0, dstWidth, dstHeight));
@@ -213,12 +211,12 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         Q_ASSERT(dst->bounds().width() >= dstWidth && dst->bounds().height() >= dstHeight);
     }
 
-    quint8* dabPointer = dst->data();
+    quint8 *dabPointer = dst->data();
 
-    quint8* color = 0;
+    quint8 *color = 0;
     if (coloringInformation) {
-        if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
-            color = const_cast<quint8*>(coloringInformation->color());
+        if (dynamic_cast<PlainColoringInformation *>(coloringInformation)) {
+            color = const_cast<quint8 *>(coloringInformation->color());
         }
     }
 
@@ -231,11 +229,9 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     if (coloringInformation) {
         if (color && pixelSize == 4) {
             fillPixelOptimized_4bytes(color, dabPointer, dstWidth * dstHeight);
-        }
-        else if (color) {
+        } else if (color) {
             fillPixelOptimized_general(color, dabPointer, dstWidth * dstHeight, pixelSize);
-        }
-        else {
+        } else {
             for (int y = 0; y < dstHeight; y++) {
                 for (int x = 0; x < dstWidth; x++) {
                     memcpy(dabPointer, coloringInformation->color(), pixelSize);
@@ -264,15 +260,13 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         rects << QRect(0, (jobs - 1)*splitter, dstWidth, dstHeight - (jobs - 1)*splitter);
         OperatorWrapper wrapper(applicator);
         QtConcurrent::blockingMap(rects, wrapper);
-    }
-    else {
+    } else {
         QRect rect(0, 0, dstWidth, dstHeight);
         applicator->process(rect);
     }
 }
 
-
-void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
+void KisAutoBrush::toXML(QDomDocument &doc, QDomElement &e) const
 {
     QDomElement shapeElt = doc.createElement("MaskGenerator");
     d->shape->toXML(doc, shapeElt);
@@ -304,8 +298,7 @@ QImage KisAutoBrush::createBrushPreview()
     return fdev->convertToQImage(0);
 }
 
-
-const KisMaskGenerator* KisAutoBrush::maskGenerator() const
+const KisMaskGenerator *KisAutoBrush::maskGenerator() const
 {
     return d->shape;
 }
@@ -320,9 +313,9 @@ QByteArray KisAutoBrush::generateMD5() const
     QByteArray ba;
     if (!brushTipImage().isNull()) {
 #if QT_VERSION >= 0x040700
-        ba = QByteArray::fromRawData((const char*)brushTipImage().constBits(), brushTipImage().byteCount());
+        ba = QByteArray::fromRawData((const char *)brushTipImage().constBits(), brushTipImage().byteCount());
 #else
-        ba = QByteArray::fromRawData((const char*)brushTipImage().bits(), brushTipImage().byteCount());
+        ba = QByteArray::fromRawData((const char *)brushTipImage().bits(), brushTipImage().byteCount());
 #endif
     }
     QCryptographicHash md5(QCryptographicHash::Md5);
@@ -351,8 +344,7 @@ QPainterPath KisAutoBrush::outline() const
         QRectF brushBoundingbox(0, 0, width(), height());
         if (maskGenerator()->type() == KisMaskGenerator::CIRCLE) {
             path.addEllipse(brushBoundingbox);
-        }
-        else { // if (maskGenerator()->type() == KisMaskGenerator::RECTANGLE)
+        } else { // if (maskGenerator()->type() == KisMaskGenerator::RECTANGLE)
             path.addRect(brushBoundingbox);
         }
 

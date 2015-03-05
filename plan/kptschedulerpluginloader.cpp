@@ -17,56 +17,52 @@
   Boston, MA 02110-1301, USA.
 */
 
-
 #include "kptschedulerpluginloader.h"
- 
+
 #include "kptschedulerplugin.h"
 #include "kptdebug.h"
 
 #include <kservicetypetrader.h>
 #include <kdebug.h>
 
-
 namespace KPlato
 {
 
-SchedulerPluginLoader::SchedulerPluginLoader(QObject * parent)
-  : QObject(parent)
+SchedulerPluginLoader::SchedulerPluginLoader(QObject *parent)
+    : QObject(parent)
 {
 }
- 
+
 SchedulerPluginLoader::~SchedulerPluginLoader()
 {
 }
- 
+
 void SchedulerPluginLoader::loadAllPlugins()
 {
     kDebug(planDbg()) << "Load all plugins";
     KService::List offers = KServiceTypeTrader::self()->query("Plan/SchedulerPlugin");
- 
+
     KService::List::const_iterator iter;
-    for(iter = offers.constBegin(); iter < offers.constEnd(); ++iter)
-    {
+    for (iter = offers.constBegin(); iter < offers.constEnd(); ++iter) {
         QString error;
         KService::Ptr service = *iter;
- 
+
         KPluginFactory *factory = KPluginLoader(service->library()).factory();
- 
-        if (!factory)
-        {
+
+        if (!factory) {
             kError() << "KPluginFactory could not load the plugin:" << service->library();
             continue;
         }
- 
+
         SchedulerPlugin *plugin = factory->create<SchedulerPlugin>(this);
- 
+
         if (plugin) {
-            kDebug(planDbg()) << "Load plugin:" << service->name()<<", "<<service->comment();
-            plugin->setName( service->name() );
-            plugin->setComment( service->comment() );
-            emit pluginLoaded( service->library(), plugin);
+            kDebug(planDbg()) << "Load plugin:" << service->name() << ", " << service->comment();
+            plugin->setName(service->name());
+            plugin->setComment(service->comment());
+            emit pluginLoaded(service->library(), plugin);
         } else {
-           kDebug(planDbg()) << error;
+            kDebug(planDbg()) << error;
         }
     }
 }

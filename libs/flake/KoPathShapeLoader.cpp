@@ -25,7 +25,8 @@
 class KoPathShapeLoaderPrivate
 {
 public:
-    KoPathShapeLoaderPrivate(KoPathShape * p) : path(p) {
+    KoPathShapeLoaderPrivate(KoPathShape *p) : path(p)
+    {
         Q_ASSERT(path);
         path->clear();
     }
@@ -46,7 +47,7 @@ public:
     const char *getCoord(const char *, qreal &);
     void calculateArc(bool relative, qreal &curx, qreal &cury, qreal angle, qreal x, qreal y, qreal r1, qreal r2, bool largeArcFlag, bool sweepFlag);
 
-    KoPathShape * path; ///< the path shape to work on
+    KoPathShape *path;  ///< the path shape to work on
     QPointF lastPoint;
 };
 
@@ -70,8 +71,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
 
         subpathx = subpathy = curx = cury = contrlx = contrly = 0.0;
         while (ptr < end) {
-            if (*ptr == ' ')
+            if (*ptr == ' ') {
                 ++ptr;
+            }
 
             relative = false;
 
@@ -87,8 +89,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                     subpathy = cury = relative ? cury + toy : toy;
 
                     svgMoveTo(curx, cury);
-                } else
+                } else {
                     svgMoveTo(tox, toy, !relative);
+                }
                 break;
             }
             case 'l':
@@ -102,8 +105,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                     cury = relative ? cury + toy : toy;
 
                     svgLineTo(curx, cury);
-                } else
+                } else {
                     svgLineTo(tox, toy, !relative);
+                }
                 break;
             }
             case 'h': {
@@ -111,8 +115,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                 if (process) {
                     curx = curx + tox;
                     svgLineTo(curx, cury);
-                } else
+                } else {
                     svgLineToHorizontal(tox, false);
+                }
                 break;
             }
             case 'H': {
@@ -120,8 +125,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                 if (process) {
                     curx = tox;
                     svgLineTo(curx, cury);
-                } else
+                } else {
                     svgLineToHorizontal(tox);
+                }
                 break;
             }
             case 'v': {
@@ -129,8 +135,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                 if (process) {
                     cury = cury + toy;
                     svgLineTo(curx, cury);
-                } else
+                } else {
                     svgLineToVertical(toy, false);
+                }
                 break;
             }
             case 'V': {
@@ -138,8 +145,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                 if (process) {
                     cury = toy;
                     svgLineTo(curx, cury);
-                } else
+                } else {
                     svgLineToVertical(toy);
+                }
                 break;
             }
             case 'z':
@@ -176,8 +184,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                     contrly = relative ? cury + y2 : y2;
                     curx = relative ? curx + tox : tox;
                     cury = relative ? cury + toy : toy;
-                } else
+                } else {
                     svgCurveToCubic(x1, y1, x2, y2, tox, toy, !relative);
+                }
 
                 break;
             }
@@ -208,8 +217,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                     contrly = relative ? cury + y2 : y2;
                     curx = relative ? curx + tox : tox;
                     cury = relative ? cury + toy : toy;
-                } else
+                } else {
                     svgCurveToCubicSmooth(x2, y2, tox, toy, !relative);
+                }
                 break;
             }
             case 'q':
@@ -234,8 +244,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                     contrly = relative ? cury + y1 : y1;
                     curx = relative ? curx + tox : tox;
                     cury = relative ? cury + toy : toy;
-                } else
+                } else {
                     svgCurveToQuadratic(x1, y1, tox, toy, !relative);
+                }
                 break;
             }
             case 't':
@@ -266,8 +277,9 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                     contrly = yc;
                     curx = relative ? curx + tox : tox;
                     cury = relative ? cury + toy : toy;
-                } else
+                } else {
                     svgCurveToQuadraticSmooth(tox, toy, !relative);
+                }
                 break;
             }
             case 'a':
@@ -289,10 +301,11 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                 rx = fabs(rx);
                 ry = fabs(ry);
 
-                if (process)
+                if (process) {
                     calculateArc(relative, curx, cury, angle, tox, toy, rx, ry, largeArc, sweep);
-                else
+                } else {
                     svgArcTo(tox, toy, rx, ry, angle, largeArc, sweep, !relative);
+                }
                 break;
             }
             default: {
@@ -307,12 +320,14 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
 
             if (*ptr == '+' || *ptr == '-' || (*ptr >= '0' && *ptr <= '9')) {
                 // there are still coords in this command
-                if (command == 'M')
+                if (command == 'M') {
                     command = 'L';
-                else if (command == 'm')
+                } else if (command == 'm') {
                     command = 'l';
-            } else
+                }
+            } else {
                 command = *(ptr++);
+            }
 
             if (lastCommand != 'C' && lastCommand != 'c' &&
                     lastCommand != 'S' && lastCommand != 's' &&
@@ -326,7 +341,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
 }
 
 // parses the coord into number and forwards to the next token
-const char * KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
+const char *KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
 {
     int integer, exponent;
     qreal decimal, frac;
@@ -340,29 +355,31 @@ const char * KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
     expsign = 1;
 
     // read the sign
-    if (*ptr == '+')
+    if (*ptr == '+') {
         ++ptr;
-    else if (*ptr == '-') {
+    } else if (*ptr == '-') {
         ++ptr;
         sign = -1;
     }
 
     // read the integer part
-    while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+    while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9') {
         integer = (integer * 10) + *(ptr++) - '0';
+    }
     if (*ptr == '.') { // read the decimals
         ++ptr;
-        while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+        while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9') {
             decimal += (*(ptr++) - '0') * (frac *= 0.1);
+        }
     }
 
     if (*ptr == 'e' || *ptr == 'E') { // read the exponent part
         ++ptr;
 
         // read the sign of the exponent
-        if (*ptr == '+')
+        if (*ptr == '+') {
             ++ptr;
-        else if (*ptr == '-') {
+        } else if (*ptr == '-') {
             ++ptr;
             expsign = -1;
         }
@@ -378,8 +395,9 @@ const char * KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
     number *= sign * pow((qreal)10, qreal(expsign * exponent));
 
     // skip the following space
-    if (*ptr == ' ')
+    if (*ptr == ' ') {
         ++ptr;
+    }
 
     return ptr;
 }
@@ -402,17 +420,19 @@ void KoPathShapeLoaderPrivate::calculateArc(bool relative, qreal &curx, qreal &c
 
     qreal dx;
 
-    if (!relative)
+    if (!relative) {
         dx = (curx - x) / 2.0;
-    else
+    } else {
         dx = -x / 2.0;
+    }
 
     qreal dy;
 
-    if (!relative)
+    if (!relative) {
         dy = (cury - y) / 2.0;
-    else
+    } else {
         dy = -y / 2.0;
+    }
 
     qreal _x1 =  cos_th * dx + sin_th * dy;
     qreal _y1 = -sin_th * dx + cos_th * dy;
@@ -436,15 +456,17 @@ void KoPathShapeLoaderPrivate::calculateArc(bool relative, qreal &curx, qreal &c
     x0 = a00 * curx + a01 * cury;
     y0 = a10 * curx + a11 * cury;
 
-    if (!relative)
+    if (!relative) {
         x1 = a00 * x + a01 * y;
-    else
+    } else {
         x1 = a00 * (curx + x) + a01 * (cury + y);
+    }
 
-    if (!relative)
+    if (!relative) {
         y1 = a10 * x + a11 * y;
-    else
+    } else {
         y1 = a10 * (curx + x) + a11 * (cury + y);
+    }
 
     /* (x0, y0) is current point in transformed coordinate space.
         (x1, y1) is new point in transformed coordinate space.
@@ -456,13 +478,15 @@ void KoPathShapeLoaderPrivate::calculateArc(bool relative, qreal &curx, qreal &c
 
     sfactor_sq = 1.0 / d - 0.25;
 
-    if (sfactor_sq < 0)
+    if (sfactor_sq < 0) {
         sfactor_sq = 0;
+    }
 
     sfactor = sqrt(sfactor_sq);
 
-    if (sweepFlag == largeArcFlag)
+    if (sweepFlag == largeArcFlag) {
         sfactor = -sfactor;
+    }
 
     xc = 0.5 * (x0 + x1) - sfactor * (y1 - y0);
     yc = 0.5 * (y0 + y1) + sfactor * (x1 - x0);
@@ -472,10 +496,11 @@ void KoPathShapeLoaderPrivate::calculateArc(bool relative, qreal &curx, qreal &c
     th1 = atan2(y1 - yc, x1 - xc);
 
     th_arc = th1 - th0;
-    if (th_arc < 0 && sweepFlag)
+    if (th_arc < 0 && sweepFlag) {
         th_arc += 2 * M_PI;
-    else if (th_arc > 0 && !sweepFlag)
+    } else if (th_arc > 0 && !sweepFlag) {
         th_arc -= 2 * M_PI;
+    }
 
     n_segs = (int)(int) ceil(fabs(th_arc / (M_PI * 0.5 + 0.001)));
 
@@ -512,52 +537,58 @@ void KoPathShapeLoaderPrivate::calculateArc(bool relative, qreal &curx, qreal &c
         }
     }
 
-    if (!relative)
+    if (!relative) {
         curx = x;
-    else
+    } else {
         curx += x;
+    }
 
-    if (!relative)
+    if (!relative) {
         cury = y;
-    else
+    } else {
         cury += y;
+    }
 }
 
 void KoPathShapeLoaderPrivate::svgMoveTo(qreal x1, qreal y1, bool abs)
 {
-    if (abs)
+    if (abs) {
         lastPoint = QPointF(x1, y1);
-    else
+    } else {
         lastPoint += QPointF(x1, y1);
+    }
     path->moveTo(lastPoint);
 }
 
 void KoPathShapeLoaderPrivate::svgLineTo(qreal x1, qreal y1, bool abs)
 {
-    if (abs)
+    if (abs) {
         lastPoint = QPointF(x1, y1);
-    else
+    } else {
         lastPoint += QPointF(x1, y1);
+    }
 
     path->lineTo(lastPoint);
 }
 
 void KoPathShapeLoaderPrivate::svgLineToHorizontal(qreal x, bool abs)
 {
-    if (abs)
+    if (abs) {
         lastPoint.setX(x);
-    else
+    } else {
         lastPoint.rx() += x;
+    }
 
     path->lineTo(lastPoint);
 }
 
 void KoPathShapeLoaderPrivate::svgLineToVertical(qreal y, bool abs)
 {
-    if (abs)
+    if (abs) {
         lastPoint.setY(y);
-    else
+    } else {
         lastPoint.ry() += y;
+    }
 
     path->lineTo(lastPoint);
 }

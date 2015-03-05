@@ -19,7 +19,6 @@
 
 #include "kis_qpainter_canvas.h"
 
-
 #include <QPaintEvent>
 #include <QPoint>
 #include <QRect>
@@ -66,10 +65,10 @@ public:
     QBrush checkBrush;
 };
 
-KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent)
-        : QWidget(parent)
-        , KisCanvasWidgetBase(canvas, coordinatesConverter)
-        , m_d(new Private())
+KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent)
+    : QWidget(parent)
+    , KisCanvasWidgetBase(canvas, coordinatesConverter)
+    , m_d(new Private())
 {
     setAutoFillBackground(true);
     setAcceptDrops(true);
@@ -92,17 +91,18 @@ void KisQPainterCanvas::setPrescaledProjection(KisPrescaledProjectionSP prescale
     m_d->prescaledProjection = prescaledProjection;
 }
 
-void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
+void KisQPainterCanvas::paintEvent(QPaintEvent *ev)
 {
     KisImageWSP image = canvas()->image();
-    if (image == 0) return;
+    if (image == 0) {
+        return;
+    }
 
     setAutoFillBackground(false);
 
     if (m_buffer.size() != size()) {
         m_buffer = QImage(size(), QImage::Format_ARGB32_Premultiplied);
     }
-
 
     QPainter gc(&m_buffer);
 
@@ -140,7 +140,6 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
                  viewportRect);
 
     gc.restore();
-
 
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random() % 255, random() % 255, random() % 255, 150);

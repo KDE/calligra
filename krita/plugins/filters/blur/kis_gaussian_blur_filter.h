@@ -17,7 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_GAUSSIAN_BLUR_FILTER_H
 #define KIS_GAUSSIAN_BLUR_FILTER_H
 
@@ -34,19 +33,20 @@ public:
     KisGaussianBlurFilter();
 public:
     void processImpl(KisPaintDeviceSP device,
-                     const QRect& rect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater
-                     ) const;
-    static inline KoID id() {
+                     const QRect &rect,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater
+                    ) const;
+    static inline KoID id()
+    {
         return KoID("gaussian blur", i18n("Gaussian Blur"));
     }
 
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 public:
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    QRect neededRect(const QRect & rect, const KisFilterConfiguration*) const;
-    QRect changedRect(const QRect & rect, const KisFilterConfiguration*) const;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
+    QRect neededRect(const QRect &rect, const KisFilterConfiguration *) const;
+    QRect changedRect(const QRect &rect, const KisFilterConfiguration *) const;
 };
 
 #endif

@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdfReaderAsciiContext.h"
 
@@ -26,12 +25,8 @@
 #include <KoXmlReader.h>
 #include <KoOdfStyleManager.h>
 
-
-
-
 // ----------------------------------------------------------------
 //                     class OdfReaderAsciiContext
-
 
 OdfReaderAsciiContext::OdfReaderAsciiContext(KoStore *store, QFile &file)
     : OdfReaderContext(store)

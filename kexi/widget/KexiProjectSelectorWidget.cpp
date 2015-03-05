@@ -41,7 +41,7 @@ class KexiProjectSelectorWidget::Private
 {
 public:
     explicit Private(KexiProjectSet *prj_set_)
-         : prj_set(prj_set_)
+        : prj_set(prj_set_)
     {
         selectable = true;
     }
@@ -57,8 +57,8 @@ public:
 class KexiProjectSelectorDialog::Private
 {
 public:
-  Private() {}
-  KexiProjectSelectorWidget* sel;
+    Private() {}
+    KexiProjectSelectorWidget *sel;
 };
 
 /*================================================================*/
@@ -68,14 +68,15 @@ class ProjectDataLVItem : public QTreeWidgetItem
 {
 public:
     ProjectDataLVItem(KexiProjectData *d,
-                      const KexiDB::Driver::Info& info, KexiProjectSelectorWidget *selector)
-            : QTreeWidgetItem(selector->list())
-            , data(d)
+                      const KexiDB::Driver::Info &info, KexiProjectSelectorWidget *selector)
+        : QTreeWidgetItem(selector->list())
+        , data(d)
     {
         int colnum = 0;
         const KexiDB::ConnectionData *cdata = data->constConnectionData();
-        if (selector->d->showProjectNameColumn)
+        if (selector->d->showProjectNameColumn) {
             setText(colnum++, data->caption() + "  ");
+        }
 
         setText(colnum++, data->databaseName() + "  ");
 
@@ -90,8 +91,7 @@ public:
             QString conn;
             if (cdata->caption.isEmpty()) {
                 conn = cdata->serverInfoString();
-            }
-            else {
+            } else {
                 conn = i18nc("caption: server_info", "%1: %2",
                              cdata->caption, cdata->serverInfoString());
             }
@@ -109,10 +109,10 @@ public:
  *  Constructs a KexiProjectSelector which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'
  */
-KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget* parent,
-        KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
-        : QWidget(parent)
-        , d(new Private(prj_set))
+KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget *parent,
+        KexiProjectSet *prj_set, bool showProjectNameColumn, bool showConnectionColumns)
+    : QWidget(parent)
+    , d(new Private(prj_set))
 {
     setupUi(this);
     setObjectName("KexiProjectSelectorWidget");
@@ -154,55 +154,63 @@ KexiProjectSelectorWidget::~KexiProjectSelectorWidget()
     delete d;
 }
 
-KexiProjectData* KexiProjectSelectorWidget::selectedProjectData() const
+KexiProjectData *KexiProjectSelectorWidget::selectedProjectData() const
 {
     QList<QTreeWidgetItem *> items = list()->selectedItems();
-    if (items.isEmpty())
+    if (items.isEmpty()) {
         return 0;
-    ProjectDataLVItem *item = static_cast<ProjectDataLVItem*>(items.first());
-    if (item)
+    }
+    ProjectDataLVItem *item = static_cast<ProjectDataLVItem *>(items.first());
+    if (item) {
         return item->data;
+    }
     return 0;
 }
 
 void KexiProjectSelectorWidget::slotItemExecuted(QTreeWidgetItem *item)
 {
-    if (!d->selectable)
+    if (!d->selectable) {
         return;
-    ProjectDataLVItem *ditem = static_cast<ProjectDataLVItem*>(item);
-    if (ditem)
+    }
+    ProjectDataLVItem *ditem = static_cast<ProjectDataLVItem *>(item);
+    if (ditem) {
         emit projectExecuted(ditem->data);
+    }
 }
 
 void KexiProjectSelectorWidget::slotItemExecuted()
 {
     kDebug();
-    if (!d->selectable)
+    if (!d->selectable) {
         return;
+    }
     QList<QTreeWidgetItem *> items = list()->selectedItems();
-    if (items.isEmpty())
+    if (items.isEmpty()) {
         return;
+    }
     slotItemExecuted(items.first());
 }
 
 void KexiProjectSelectorWidget::slotItemSelected()
 {
-    if (!d->selectable)
+    if (!d->selectable) {
         return;
+    }
     QList<QTreeWidgetItem *> items = list()->selectedItems();
-    ProjectDataLVItem *ditem = static_cast<ProjectDataLVItem*>(items.isEmpty() ? 0 : items.first());
+    ProjectDataLVItem *ditem = static_cast<ProjectDataLVItem *>(items.isEmpty() ? 0 : items.first());
     emit selectionChanged(ditem ? ditem->data : 0);
 }
 
-void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
+void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet *prj_set)
 {
     if (prj_set) {
         //old list
         list()->clear();
     }
     d->prj_set = prj_set;
-    if (!d->prj_set)
+    if (!d->prj_set) {
         return;
+    }
 //! @todo what with project set's ownership?
     if (d->prj_set->error()) {
         kDebug() << "d->prj_set->error() !";
@@ -210,7 +218,7 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
     }
     KexiDB::DriverManager manager;
     KexiProjectData::List prjlist = d->prj_set->list();
-    foreach(KexiProjectData* data, prjlist) {
+    foreach (KexiProjectData *data, prjlist) {
         KexiDB::Driver::Info info = manager.driverInfo(data->constConnectionData()->driverName);
         if (!info.name.isEmpty()) {
             ProjectDataLVItem *item = new ProjectDataLVItem(data, info, this);
@@ -219,12 +227,12 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
                 (flags |= Qt::ItemIsSelectable) ^= Qt::ItemIsSelectable;
                 item->setFlags(flags);
             }
-            if (info.fileBased)
+            if (info.fileBased) {
                 item->setIcon(0, d->fileicon);
-            else
+            } else {
                 item->setIcon(0, d->dbicon);
-        }
-        else {
+            }
+        } else {
             kWarning() << "no driver found for" << data->constConnectionData()->driverName;
         }
     }
@@ -236,22 +244,25 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
     }
 }
 
-KexiProjectSet *KexiProjectSelectorWidget::projectSet() {
+KexiProjectSet *KexiProjectSelectorWidget::projectSet()
+{
     return d->prj_set;
 }
 
 void KexiProjectSelectorWidget::setSelectable(bool set)
 {
-    if (d->selectable == set)
+    if (d->selectable == set) {
         return;
+    }
     d->selectable = set;
     //update items' state
     QTreeWidgetItemIterator it(list());
     while (*it) {
         Qt::ItemFlags flags = (*it)->flags();
         flags |= Qt::ItemIsSelectable;
-        if (!d->selectable)
+        if (!d->selectable) {
             flags ^= Qt::ItemIsSelectable;
+        }
         (*it)->setFlags(flags);
     }
 }
@@ -266,18 +277,17 @@ QLabel *KexiProjectSelectorWidget::label() const
     return Ui_KexiProjectSelector::label;
 }
 
-QTreeWidget* KexiProjectSelectorWidget::list() const
+QTreeWidget *KexiProjectSelectorWidget::list() const
 {
     return Ui_KexiProjectSelector::list;
 }
 
-bool KexiProjectSelectorWidget::eventFilter(QObject* watched, QEvent* event)
+bool KexiProjectSelectorWidget::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress) {
-        QKeyEvent *ke = static_cast<QKeyEvent*>(event);
+        QKeyEvent *ke = static_cast<QKeyEvent *>(event);
         if ((ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return)
-            && ke->modifiers() == Qt::NoModifier)
-        {
+                && ke->modifiers() == Qt::NoModifier) {
             slotItemExecuted();
             return true;
         }
@@ -288,10 +298,10 @@ bool KexiProjectSelectorWidget::eventFilter(QObject* watched, QEvent* event)
 /*================================================================*/
 
 KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
-        const KexiDB::ConnectionData& cdata,
+        const KexiDB::ConnectionData &cdata,
         bool showProjectNameColumn, bool showConnectionColumns)
-        : KPageDialog(parent)
-        , d(new Private)
+    : KPageDialog(parent)
+    , d(new Private)
 {
     setWindowTitle(i18nc("@title:window", "Open Project"));
     KexiDB::ConnectionData _cdata(cdata);
@@ -301,7 +311,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
                                   i18n("Open Database Connection")));
 
     d->sel->label()->setText(i18n("Select a project on <b>%1</b> database server to open:",
-                                 _cdata.serverInfoString(false)));
+                                  _cdata.serverInfoString(false)));
 }
 
 KexiProjectSelectorDialog::~KexiProjectSelectorDialog()
@@ -309,7 +319,7 @@ KexiProjectSelectorDialog::~KexiProjectSelectorDialog()
     delete d;
 }
 
-void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNameColumn,
+void KexiProjectSelectorDialog::init(KexiProjectSet *prj_set, bool showProjectNameColumn,
                                      bool showConnectionColumns)
 {
     setObjectName("KexiProjectSelectorDialog");
@@ -326,7 +336,7 @@ void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNa
     setSizeGripEnabled(true);
 
     d->sel = new KexiProjectSelectorWidget(this, prj_set,
-                                          showProjectNameColumn, showConnectionColumns);
+                                           showProjectNameColumn, showConnectionColumns);
     setMainWidget(d->sel);
     setWindowIcon(d->sel->windowIcon());
     d->sel->setFocus();
@@ -337,28 +347,28 @@ void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNa
             this, SLOT(slotProjectSelectionChanged(KexiProjectData*)));
 }
 
-KexiProjectData* KexiProjectSelectorDialog::selectedProjectData() const
+KexiProjectData *KexiProjectSelectorDialog::selectedProjectData() const
 {
     return d->sel->selectedProjectData();
 }
 
-void KexiProjectSelectorDialog::slotProjectExecuted(KexiProjectData*)
+void KexiProjectSelectorDialog::slotProjectExecuted(KexiProjectData *)
 {
     accept();
 }
 
-void KexiProjectSelectorDialog::slotProjectSelectionChanged(KexiProjectData* pdata)
+void KexiProjectSelectorDialog::slotProjectSelectionChanged(KexiProjectData *pdata)
 {
     enableButtonOk(pdata);
 }
 
-void KexiProjectSelectorDialog::showEvent(QShowEvent * event)
+void KexiProjectSelectorDialog::showEvent(QShowEvent *event)
 {
     KPageDialog::showEvent(event);
     KPageDialog::centerOnScreen(this);
 }
 
-KexiProjectSet* KexiProjectSelectorDialog::projectSet() const
+KexiProjectSet *KexiProjectSelectorDialog::projectSet() const
 {
     return d->sel->projectSet();
 }

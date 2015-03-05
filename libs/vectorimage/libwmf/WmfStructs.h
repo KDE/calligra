@@ -30,7 +30,6 @@
 namespace Libwmf
 {
 
-
 #define APMHEADER_KEY 0x9AC6CDD7
 #define ENHMETA_SIGNATURE       0x464D4520
 
@@ -44,7 +43,6 @@ struct WmfMetaHeader {
     quint16  numOfParameters; // not used (always 0)
 };
 
-
 struct WmfPlaceableHeader {
     quint32  key;        // Magic number (always 9AC6CDD7h)
     quint16  handle;     // Metafile HANDLE number (always 0)
@@ -56,7 +54,6 @@ struct WmfPlaceableHeader {
     quint32  reserved;
     quint16  checksum;   // Checksum value for previous 10 WORDs
 };
-
 
 struct WmfEnhMetaHeader {
     quint32  recordType;       // Record type (is always 00000001h)
@@ -88,13 +85,11 @@ struct WmfEnhMetaHeader {
     qint32   heightDeviceMM;
 };
 
-
 struct WmfMetaRecord {
     quint32  size;         // Total size of the record in WORDs
     quint16  function;     // Record function number
     quint16  param[ 1 ];   // quint16 array of parameters
 };
-
 
 struct WmfEnhMetaRecord {
     quint32  function;     // Record function number
@@ -188,7 +183,6 @@ static const Qt::PenJoinStyle koWmfJoinStylePen[] = {
     Qt::BevelJoin,
     Qt::MiterJoin
 };
-
 
 }
 

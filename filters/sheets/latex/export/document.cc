@@ -25,8 +25,8 @@
 
 #include <kdebug.h>
 
-Document::Document(const KoStore* in, QString fileOut):
-        XmlParser(in), _file(fileOut), _in(in)
+Document::Document(const KoStore *in, QString fileOut):
+    XmlParser(in), _file(fileOut), _in(in)
 {
     //kDebug(30522) << fileIn;
     kDebug(30522) << fileOut;
@@ -59,6 +59,7 @@ void Document::generate()
         _document.generate(_out, !isEmbeded());
         //_out << getDocument();
         _file.close();
-    } else
+    } else {
         kDebug(30522) << "Can't use the file ...";
+    }
 }

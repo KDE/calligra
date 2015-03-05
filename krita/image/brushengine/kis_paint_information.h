@@ -77,7 +77,7 @@ public:
      * Create a new KisPaintInformation object.
 
      */
-    KisPaintInformation(const QPointF & pos = QPointF(),
+    KisPaintInformation(const QPointF &pos = QPointF(),
                         qreal pressure = PRESSURE_DEFAULT,
                         qreal xTilt = 0.0,
                         qreal yTilt = 0.0,
@@ -86,14 +86,15 @@ public:
                         qreal perspective = 1.0,
                         qreal time = 0.0);
 
-    KisPaintInformation(const KisPaintInformation& rhs);
+    KisPaintInformation(const KisPaintInformation &rhs);
 
-    void operator=(const KisPaintInformation& rhs);
+    void operator=(const KisPaintInformation &rhs);
 
     ~KisPaintInformation();
 
     template <class PaintOp>
-    void paintAt(PaintOp &op, KisDistanceInformation *distanceInfo) {
+    void paintAt(PaintOp &op, KisDistanceInformation *distanceInfo)
+    {
         KisSpacingInformation spacingInfo;
 
         {
@@ -104,8 +105,8 @@ public:
         distanceInfo->registerPaintedDab(*this, spacingInfo);
     }
 
-    const QPointF& pos() const;
-    void setPos(const QPointF& p);
+    const QPointF &pos() const;
+    void setPos(const QPointF &p);
 
     /// The pressure of the value (from 0.0 to 1.0)
     qreal pressure() const;
@@ -197,23 +198,22 @@ public:
             qreal tangentialPressure = 0.0,
             qreal perspective = 1.0);
 
-    void toXML(QDomDocument&, QDomElement&) const;
+    void toXML(QDomDocument &, QDomElement &) const;
 
-    static KisPaintInformation fromXML(const QDomElement&);
+    static KisPaintInformation fromXML(const QDomElement &);
 
     /// (1-t) * p1 + t * p2
-    static KisPaintInformation mixOnlyPosition(qreal t, const KisPaintInformation& mixedPi, const KisPaintInformation& basePi);
-    static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2);
-    static KisPaintInformation mix(qreal t, const KisPaintInformation& pi1, const KisPaintInformation& pi2);
-    static qreal tiltDirection(const KisPaintInformation& info, bool normalize = true);
-    static qreal tiltElevation(const KisPaintInformation& info, qreal maxTiltX = 60.0, qreal maxTiltY = 60.0, bool normalize = true);
+    static KisPaintInformation mixOnlyPosition(qreal t, const KisPaintInformation &mixedPi, const KisPaintInformation &basePi);
+    static KisPaintInformation mix(const QPointF &p, qreal t, const KisPaintInformation &p1, const KisPaintInformation &p2);
+    static KisPaintInformation mix(qreal t, const KisPaintInformation &pi1, const KisPaintInformation &pi2);
+    static qreal tiltDirection(const KisPaintInformation &info, bool normalize = true);
+    static qreal tiltElevation(const KisPaintInformation &info, qreal maxTiltX = 60.0, qreal maxTiltY = 60.0, bool normalize = true);
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
-KRITAIMAGE_EXPORT QDebug operator<<(QDebug debug, const KisPaintInformation& info);
-
+KRITAIMAGE_EXPORT QDebug operator<<(QDebug debug, const KisPaintInformation &info);
 
 #endif

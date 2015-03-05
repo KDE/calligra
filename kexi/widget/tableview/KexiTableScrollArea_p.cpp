@@ -29,8 +29,8 @@
 
 #include <QScrollBar>
 
-KexiTableScrollArea::Private::Private(KexiTableScrollArea* t)
-        : appearance(t)
+KexiTableScrollArea::Private::Private(KexiTableScrollArea *t)
+    : appearance(t)
 {
     clearVariables();
     tv = t;

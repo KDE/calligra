@@ -38,7 +38,8 @@ class KexiImageContextMenu::Private
 {
 public:
     explicit Private(QWidget *parent)
-            : actionCollection(parent) {
+        : actionCollection(parent)
+    {
     }
 
     KActionCollection actionCollection;
@@ -48,9 +49,9 @@ public:
 
 //------------
 
-KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
-        : KMenu(parent)
-        , d(new Private(this))
+KexiImageContextMenu::KexiImageContextMenu(QWidget *parent)
+    : KMenu(parent)
+    , d(new Private(this))
 {
     addTitle(QString());
 
@@ -127,8 +128,9 @@ void KexiImageContextMenu::saveAs()
         kWarning() << "no data!";
         return;
     }
-    if (!origFilename.isEmpty())
+    if (!origFilename.isEmpty()) {
         origFilename = QString("/") + origFilename;
+    }
 
     if (fileExtension.isEmpty()) {
         // PNG data is the default
@@ -139,11 +141,13 @@ void KexiImageContextMenu::saveAs()
     QString fileName = KFileDialog::getSaveFileName(
                            KUrl("kfiledialog:///LastVisitedImagePath"),
                            KImageIO::pattern(KImageIO::Writing), this, i18n("Save Image to File"));
-    if (fileName.isEmpty())
+    if (fileName.isEmpty()) {
         return;
+    }
 
-    if (QFileInfo(fileName).completeSuffix().isEmpty())
+    if (QFileInfo(fileName).completeSuffix().isEmpty()) {
         fileName += (QString(".") + fileExtension);
+    }
     kDebug() << fileName;
     KUrl url;
     url.setPath(fileName);
@@ -199,19 +203,20 @@ void KexiImageContextMenu::updateActionsAvailability()
     d->pasteAction->setEnabled(!valueIsReadOnly);
     d->deleteAction->setEnabled(!valueIsNull && !valueIsReadOnly);
 #ifndef KEXI_SHOW_UNFINISHED
-    if (d->propertiesAction)
+    if (d->propertiesAction) {
         d->propertiesAction->setEnabled(!valueIsNull);
+    }
 #endif
 }
 
-KActionCollection* KexiImageContextMenu::actionCollection() const
+KActionCollection *KexiImageContextMenu::actionCollection() const
 {
     return &d->actionCollection;
 }
 
 //static
-bool KexiImageContextMenu::updateTitle(KMenu *menu, const QString& title,
-                                       const QString& iconName)
+bool KexiImageContextMenu::updateTitle(KMenu *menu, const QString &title,
+                                       const QString &iconName)
 {
     return KexiContextMenuUtils::updateTitle(menu, title, i18n("Image"), iconName);
 }
@@ -219,16 +224,18 @@ bool KexiImageContextMenu::updateTitle(KMenu *menu, const QString& title,
 // -------------------------------------------
 
 //static
-bool KexiContextMenuUtils::updateTitle(KMenu *menu, const QString& objectName,
-                                       const QString& objectTypeName, const QString& iconName)
+bool KexiContextMenuUtils::updateTitle(KMenu *menu, const QString &objectName,
+                                       const QString &objectTypeName, const QString &iconName)
 {
-    if (!menu || objectName.isEmpty() || objectTypeName.isEmpty())
+    if (!menu || objectName.isEmpty() || objectTypeName.isEmpty()) {
         return false;
+    }
     //try to find title action
     QList<QAction *> actions = menu->actions();
-    if (actions.isEmpty())
+    if (actions.isEmpty()) {
         return false;
-    QAction * action = actions.first();
+    }
+    QAction *action = actions.first();
 
     /*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
      (see doc/dev/settings.txt) */
@@ -237,9 +244,8 @@ bool KexiContextMenuUtils::updateTitle(KMenu *menu, const QString& objectName,
                             objectTypeName));
 
     menu->addTitle(KIcon(iconName), realTitle, action /*before old*/);
-    if (dynamic_cast<QWidgetAction*>(action)
-        && dynamic_cast<QWidgetAction*>(action)->defaultWidget())
-    {
+    if (dynamic_cast<QWidgetAction *>(action)
+            && dynamic_cast<QWidgetAction *>(action)->defaultWidget()) {
         menu->removeAction(action);
     }
     return true;

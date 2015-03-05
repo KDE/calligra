@@ -25,43 +25,70 @@ namespace TJ
 class Booking : public SbBooking
 {
 public:
-    Booking(const Interval& iv, Task* t) :
+    Booking(const Interval &iv, Task *t) :
         SbBooking(t),
         interval(new Interval(iv))
     { }
 
-    Booking(Interval* iv, Task* t) :
+    Booking(Interval *iv, Task *t) :
         SbBooking(t),
         interval(iv)
     { }
 
-    Booking(const Interval& iv, SbBooking* sb) :
+    Booking(const Interval &iv, SbBooking *sb) :
         SbBooking(*sb),
         interval(new Interval(iv))
     { }
 
-    virtual ~Booking() { delete interval; }
+    virtual ~Booking()
+    {
+        delete interval;
+    }
 
-    time_t getStart() const { return interval->getStart(); }
-    time_t getEnd() const { return interval->getEnd(); }
-    time_t getDuration() const { return interval->getDuration(); }
-    Interval& getInterval() { return *interval; }
+    time_t getStart() const
+    {
+        return interval->getStart();
+    }
+    time_t getEnd() const
+    {
+        return interval->getEnd();
+    }
+    time_t getDuration() const
+    {
+        return interval->getDuration();
+    }
+    Interval &getInterval()
+    {
+        return *interval;
+    }
 
-    void setLockTS( const QString& ts ) { lockTS = ts; }
-    const QString& getLockTS() const { return lockTS; }
+    void setLockTS(const QString &ts)
+    {
+        lockTS = ts;
+    }
+    const QString &getLockTS() const
+    {
+        return lockTS;
+    }
 
-    void setLockerId( const QString& id ) { lockerId = id; }
-    const QString& getLockerId() const { return lockerId; }
+    void setLockerId(const QString &id)
+    {
+        lockerId = id;
+    }
+    const QString &getLockerId() const
+    {
+        return lockerId;
+    }
 
 private:
     /// The booked time period.
-    Interval* interval;
+    Interval *interval;
     /// The database lock timestamp
     QString lockTS;
 
     /// the lockers ID
     QString lockerId;
-} ;
+};
 
 } // namespace TJ
 

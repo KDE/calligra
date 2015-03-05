@@ -77,8 +77,7 @@ namespace
 const GLuint NO_PROGRAM = 0;
 }
 
-struct KisOpenGLCanvas2::Private
-{
+struct KisOpenGLCanvas2::Private {
 public:
     Private()
         : displayShader(0)
@@ -90,7 +89,8 @@ public:
         texCoords = new QVector2D[6];
     }
 
-    ~Private() {
+    ~Private()
+    {
         delete displayShader;
         delete checkerShader;
 
@@ -117,7 +117,7 @@ public:
     int checkerUniformLocationModelViewProjection;
     int checkerUniformLocationTextureMatrix;
 
-    KisDisplayFilter* displayFilter;
+    KisDisplayFilter *displayFilter;
     KisTextureTile::FilterMode filterMode;
 
     GLsync glSyncObject;
@@ -127,7 +127,8 @@ public:
 
     bool wrapAroundMode;
 
-    int xToColWithWrapCompensation(int x, const QRect &imageRect) {
+    int xToColWithWrapCompensation(int x, const QRect &imageRect)
+    {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
         int lastImageColumn = openGLImageTextures->xToCol(imageRect.right());
 
@@ -138,7 +139,8 @@ public:
         return colsPerImage * numWraps + openGLImageTextures->xToCol(remainder);
     }
 
-    int yToRowWithWrapCompensation(int y, const QRect &imageRect) {
+    int yToRowWithWrapCompensation(int y, const QRect &imageRect)
+    {
         int firstImageRow = openGLImageTextures->yToRow(imageRect.top());
         int lastImageRow = openGLImageTextures->yToRow(imageRect.bottom());
 
@@ -178,7 +180,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
 
-
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
     cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
@@ -190,7 +191,7 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
     delete d;
 }
 
-void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter* displayFilter)
+void KisOpenGLCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     d->displayFilter = displayFilter;
     initializeDisplayShader();
@@ -270,17 +271,17 @@ bool KisOpenGLCanvas2::isBusy() const
     return Sync::syncStatus(d->glSyncObject) == Sync::Unsignaled;
 }
 
-inline void rectToVertices(QVector3D* vertices, const QRectF &rc)
+inline void rectToVertices(QVector3D *vertices, const QRectF &rc)
 {
-     vertices[0] = QVector3D(rc.left(),  rc.bottom(), 0.f);
-     vertices[1] = QVector3D(rc.left(),  rc.top(),    0.f);
-     vertices[2] = QVector3D(rc.right(), rc.bottom(), 0.f);
-     vertices[3] = QVector3D(rc.left(),  rc.top(), 0.f);
-     vertices[4] = QVector3D(rc.right(), rc.top(), 0.f);
-     vertices[5] = QVector3D(rc.right(), rc.bottom(),    0.f);
+    vertices[0] = QVector3D(rc.left(),  rc.bottom(), 0.f);
+    vertices[1] = QVector3D(rc.left(),  rc.top(),    0.f);
+    vertices[2] = QVector3D(rc.right(), rc.bottom(), 0.f);
+    vertices[3] = QVector3D(rc.left(),  rc.top(), 0.f);
+    vertices[4] = QVector3D(rc.right(), rc.top(), 0.f);
+    vertices[5] = QVector3D(rc.right(), rc.bottom(),    0.f);
 }
 
-inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
+inline void rectToTexCoords(QVector2D *texCoords, const QRectF &rc)
 {
     texCoords[0] = QVector2D(rc.left(), rc.bottom());
     texCoords[1] = QVector2D(rc.left(), rc.top());
@@ -292,8 +293,9 @@ inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
 
 void KisOpenGLCanvas2::drawCheckers() const
 {
-    if(!d->checkerShader)
+    if (!d->checkerShader) {
         return;
+    }
 
     KisCoordinatesConverter *converter = coordinatesConverter();
     QTransform textureTransform;
@@ -302,8 +304,8 @@ void KisOpenGLCanvas2::drawCheckers() const
     QRectF modelRect;
 
     QRectF viewportRect = !d->wrapAroundMode ?
-        converter->imageRectInViewportPixels() :
-        converter->widgetToViewport(this->rect());
+                          converter->imageRectInViewportPixels() :
+                          converter->widgetToViewport(this->rect());
 
     converter->getOpenGLCheckersInfo(viewportRect,
                                      &textureTransform, &modelTransform, &textureRect, &modelRect);
@@ -313,7 +315,7 @@ void KisOpenGLCanvas2::drawCheckers() const
     GLfloat checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
 
     textureTransform *= QTransform::fromScale(checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE,
-                                              checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
+                        checkSizeScale / KisOpenGLImageTextures::BACKGROUND_TEXTURE_SIZE);
 
     d->checkerShader->bind();
 
@@ -339,7 +341,7 @@ void KisOpenGLCanvas2::drawCheckers() const
     d->checkerShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
     d->checkerShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, d->texCoords);
 
-     // render checkers
+    // render checkers
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, d->openGLImageTextures->checkerTexture());
 
@@ -351,8 +353,9 @@ void KisOpenGLCanvas2::drawCheckers() const
 
 void KisOpenGLCanvas2::drawImage() const
 {
-    if(!d->displayShader)
+    if (!d->displayShader) {
         return;
+    }
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -375,7 +378,7 @@ void KisOpenGLCanvas2::drawImage() const
     textureMatrix.setToIdentity();
     d->displayShader->setUniformValue(d->displayUniformLocationTextureMatrix, textureMatrix);
 
-    QRectF widgetRect(0,0, width(), height());
+    QRectF widgetRect(0, 0, width(), height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
     qreal scaleX, scaleY;
@@ -427,7 +430,7 @@ void KisOpenGLCanvas2::drawImage() const
             }
 
             KisTextureTile *tile =
-                    d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
+                d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
 
             KIS_ASSERT_RECOVER_BREAK(tile);
 
@@ -463,7 +466,7 @@ void KisOpenGLCanvas2::drawImage() const
             } else {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-                switch(d->filterMode) {
+                switch (d->filterMode) {
                 case KisTextureTile::NearestFilterMode:
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                     break;
@@ -499,7 +502,9 @@ void KisOpenGLCanvas2::reportShaderLinkFailedAndExit(bool result, const QString 
         qDebug() << "GL-log:" << context << log;
     }
 
-    if (result) return;
+    if (result) {
+        return;
+    }
 
     QMessageBox::critical(this, i18nc("@title:window", "Krita"),
                           QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n%2\n\n Krita will disable OpenGL and close now.")).arg(context).arg(log),
@@ -556,19 +561,19 @@ QByteArray KisOpenGLCanvas2::buildFragmentShader() const
     bool haveGLSL13 = KisOpenGL::supportsGLSL13();
 
     QString filename = haveGLSL13 && useHiQualityFiltering ?
-        "highq_downscale" : "simple_texture";
+                       "highq_downscale" : "simple_texture";
 
     QString legacyPostfix = !haveGLSL13 ? "_legacy" : "";
     QString filterPostfix = haveDisplayFilter ? "_ocio" : "";
 
     QString prefaceKey = QString("krita/shaders/%1%2_preface.frag.inc")
-        .arg(filename)
-        .arg(legacyPostfix);
+                         .arg(filename)
+                         .arg(legacyPostfix);
 
     QString mainKey = QString("krita/shaders/%1%2_main%3.frag.inc")
-        .arg(filename)
-        .arg(legacyPostfix)
-        .arg(filterPostfix);
+                      .arg(filename)
+                      .arg(legacyPostfix)
+                      .arg(filterPostfix);
 
     {
         QFile prefaceFile(KGlobal::dirs()->findResource("data", prefaceKey));
@@ -663,7 +668,7 @@ bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
     return focusNextPrevChild(next);
 }
 
-void KisOpenGLCanvas2::paintEvent(QPaintEvent* event)
+void KisOpenGLCanvas2::paintEvent(QPaintEvent *event)
 {
     // Workaround for bug 322808, paint events with only a partial rect cause flickering
     // Drop those event and trigger a new full update
@@ -673,7 +678,6 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent* event)
         update();
     }
 }
-
 
 #include "kis_opengl_canvas2.moc"
 #endif // HAVE_OPENGL

@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #ifndef CALLIGRAMOBILE_FILESYSTEMMODEL_H
 #define CALLIGRAMOBILE_FILESYSTEMMODEL_H
 
@@ -46,29 +44,29 @@ public:
         FileDateRole,
     };
 
-    explicit FileSystemModel(QObject* parent = 0);
+    explicit FileSystemModel(QObject *parent = 0);
     virtual ~FileSystemModel();
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
     virtual void classBegin();
     virtual void componentComplete();
 
     virtual QString path();
-    virtual void setPath(const QString& path);
+    virtual void setPath(const QString &path);
 
     virtual QString parentFolder();
 
     virtual QString filter();
-    virtual void setFilter(const QString& filter);
+    virtual void setFilter(const QString &filter);
 
 Q_SIGNALS:
     void pathChanged();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // CALLIGRAMOBILE_FILESYSTEMMODEL_H

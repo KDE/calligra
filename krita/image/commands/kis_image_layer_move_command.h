@@ -31,7 +31,6 @@
 class KRITAIMAGE_EXPORT KisImageLayerMoveCommand : public KisImageCommand
 {
 
-
 public:
     /**
      * Command for layer moves inside the layer stack

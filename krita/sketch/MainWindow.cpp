@@ -60,25 +60,25 @@
 class MainWindow::Private
 {
 public:
-    Private(MainWindow* qq)
+    Private(MainWindow *qq)
         : q(qq)
         , allowClose(true)
         , viewManager(0)
-	{
+    {
         centerer = new QTimer(q);
         centerer->setInterval(10);
         centerer->setSingleShot(true);
         connect(centerer, SIGNAL(timeout()), q, SLOT(adjustZoomOnDocumentChangedAndStuff()));
-	}
-	MainWindow* q;
+    }
+    MainWindow *q;
     bool allowClose;
-    KisViewManager* viewManager;
+    KisViewManager *viewManager;
     QString currentSketchPage;
-	QTimer *centerer;
+    QTimer *centerer;
 };
 
-MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags)
-    : QMainWindow(parent, flags ), d( new Private(this))
+MainWindow::MainWindow(QStringList fileNames, QWidget *parent, Qt::WindowFlags flags)
+    : QMainWindow(parent, flags), d(new Private(this))
 {
     qApp->setActiveWindow(this);
 
@@ -93,13 +93,13 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
     cfg.setUseOpenGL(true);
 
-    foreach(QString fileName, fileNames) {
+    foreach (QString fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent(fileName);
     }
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
     connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
 
-    QDeclarativeView* view = new SketchDeclarativeView();
+    QDeclarativeView *view = new SketchDeclarativeView();
     QmlGlobalEngine::instance()->setEngine(view->engine());
     view->engine()->rootContext()->setContextProperty("mainWindow", this);
 
@@ -109,7 +109,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     // Corrects for mismatched case errors in path (qtdeclarative fails to load)
     wchar_t buffer[1024];
     QString absolute = appdir.absolutePath();
-    DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+    DWORD rv = ::GetShortPathName((wchar_t *)absolute.utf16(), buffer, 1024);
     rv = ::GetLongPathName(buffer, buffer, 1024);
     QString correctedPath((QChar *)buffer);
     appdir.setPath(correctedPath);
@@ -132,10 +132,10 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     QFileInfo fi(mainqml);
 
     view->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
-    view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
+    view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
     if (view->errors().count() > 0) {
-        foreach(const QDeclarativeError &error, view->errors()) {
+        foreach (const QDeclarativeError &error, view->errors()) {
             kDebug() << error.toString();
         }
     }
@@ -147,16 +147,17 @@ void MainWindow::resetWindowTitle()
 {
     KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
     QString fileName = url.fileName();
-    if(url.protocol() == "temp")
+    if (url.protocol() == "temp") {
         fileName = i18n("Untitled");
+    }
 
     KDialog::CaptionFlags flags = KDialog::HIGCompliantCaption;
-    KisDocument* document = DocumentManager::instance()->document();
-    if (document && document->isModified() ) {
+    KisDocument *document = DocumentManager::instance()->document();
+    if (document && document->isModified()) {
         flags |= KDialog::ModifiedCaption;
     }
 
-    setWindowTitle( KDialog::makeStandardCaption(fileName, this, flags) );
+    setWindowTitle(KDialog::makeStandardCaption(fileName, this, flags));
 }
 
 bool MainWindow::allowClose() const
@@ -186,23 +187,23 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         d->viewManager->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
         qApp->processEvents();
         QPoint center = d->viewManager->canvas()->rect().center();
-        static_cast<KoCanvasControllerWidget*>(d->viewManager->canvasBase()->canvasController())->zoomRelativeToPoint(center, 0.9);
+        static_cast<KoCanvasControllerWidget *>(d->viewManager->canvasBase()->canvasController())->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
     }
 }
 
-QObject* MainWindow::sketchKisView() const
+QObject *MainWindow::sketchKisView() const
 {
     return d->viewManager;
 }
 
-void MainWindow::setSketchKisView(QObject* newView)
+void MainWindow::setSketchKisView(QObject *newView)
 {
-    if (d->viewManager)
+    if (d->viewManager) {
         d->viewManager->disconnect(this);
-    if (d->viewManager != newView)
-    {
-        d->viewManager = qobject_cast<KisViewManager*>(newView);
+    }
+    if (d->viewManager != newView) {
+        d->viewManager = qobject_cast<KisViewManager *>(newView);
         connect(d->viewManager, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
         d->centerer->start();
         emit sketchKisViewChanged();
@@ -221,7 +222,7 @@ void MainWindow::closeWindow()
     QApplication::exit();
 }
 
-void MainWindow::resizeEvent(QResizeEvent* event)
+void MainWindow::resizeEvent(QResizeEvent *event)
 {
     // TODO this needs setting somewhere...
 //     d->constants->setGridWidth( event->size().width() / d->constants->gridColumns() );
@@ -229,7 +230,7 @@ void MainWindow::resizeEvent(QResizeEvent* event)
     QWidget::resizeEvent(event);
 }
 
-void MainWindow::closeEvent(QCloseEvent* event)
+void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (!d->allowClose) {
         event->ignore();

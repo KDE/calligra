@@ -52,8 +52,8 @@ public:
 
     void setPrecisionEnabled(bool value);
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
     void setBrushSize(qreal dxPixels, qreal dyPixels);
     QSizeF brushSize() const;
@@ -65,7 +65,7 @@ private Q_SLOTS:
 
 private:
 
-    KisBrushSelectionWidget * m_brushSelectionWidget;
+    KisBrushSelectionWidget *m_brushSelectionWidget;
     KisBrushOption m_brushOption;
 
 };

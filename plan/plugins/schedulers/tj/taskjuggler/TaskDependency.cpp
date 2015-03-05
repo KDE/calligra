@@ -28,8 +28,9 @@ TaskDependency::TaskDependency(QString tri, int maxScenarios) :
     gapDuration(new long[maxScenarios]),
     gapLength(new long[maxScenarios])
 {
-    for (int sc = 0; sc < maxScenarios; ++sc)
+    for (int sc = 0; sc < maxScenarios; ++sc) {
         gapDuration[sc] = gapLength[sc] = (sc == 0 ? 0 : -1);
+    }
 }
 
 TaskDependency::~TaskDependency()
@@ -41,12 +42,12 @@ TaskDependency::~TaskDependency()
 long
 TaskDependency::getGapDuration(int sc) const
 {
-    for ( ; ; )
-    {
-        if (gapDuration[sc] >= 0)
+    for (;;) {
+        if (gapDuration[sc] >= 0) {
             return gapDuration[sc];
-        Project* p = taskRef->getProject();
-        Scenario* parent = p->getScenario(sc)->getParent();
+        }
+        Project *p = taskRef->getProject();
+        Scenario *parent = p->getScenario(sc)->getParent();
         assert(parent);
         sc = p->getScenarioIndex(parent->getId()) - 1;
     }
@@ -55,12 +56,12 @@ TaskDependency::getGapDuration(int sc) const
 long
 TaskDependency::getGapLength(int sc) const
 {
-    for ( ; ; )
-    {
-        if (gapLength[sc] >= 0)
+    for (;;) {
+        if (gapLength[sc] >= 0) {
             return gapLength[sc];
-        Project* p = taskRef->getProject();
-        Scenario* parent = p->getScenario(sc)->getParent();
+        }
+        Project *p = taskRef->getProject();
+        Scenario *parent = p->getScenario(sc)->getParent();
         assert(parent);
         sc = p->getScenarioIndex(parent->getId()) - 1;
     }
@@ -68,17 +69,17 @@ TaskDependency::getGapLength(int sc) const
 
 } // namespace TJ
 
-QDebug operator<<( QDebug dbg, const TJ::TaskDependency *dep )
+QDebug operator<<(QDebug dbg, const TJ::TaskDependency *dep)
 {
-    return dep == 0 ? (dbg<<0x000000) : operator<<( dbg, *dep );
+    return dep == 0 ? (dbg << 0x000000) : operator<<(dbg, *dep);
 }
-QDebug operator<<( QDebug dbg, const TJ::TaskDependency &dep )
+QDebug operator<<(QDebug dbg, const TJ::TaskDependency &dep)
 {
-    dbg<<"TaskDependency[";
-    if ( dep.getTaskRef() ) {
-        dbg.nospace()<<"ref="<<dep.getTaskRef()->getId();
+    dbg << "TaskDependency[";
+    if (dep.getTaskRef()) {
+        dbg.nospace() << "ref=" << dep.getTaskRef()->getId();
     } else {
-        dbg.nospace()<<"id="<<dep.getTaskRefId();
+        dbg.nospace() << "id=" << dep.getTaskRefId();
     }
     dbg << ']';
     return dbg;

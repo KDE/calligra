@@ -35,7 +35,8 @@ public:
     ~KexiDBSubForm() {}
 
     //! \return the name of the subform to display inside this widget
-    QString formName() const {
+    QString formName() const
+    {
         return m_formName;
     }
 

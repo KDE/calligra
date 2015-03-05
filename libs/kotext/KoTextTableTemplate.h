@@ -107,12 +107,10 @@ public:
      */
     void saveOdf(KoXmlWriter *writer, KoTextSharedSavingData *savingData) const;
 
-
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
 };
-
 
 #endif //KOTEXTTABLETEMPLATE_H

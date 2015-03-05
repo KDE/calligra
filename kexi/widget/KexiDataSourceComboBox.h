@@ -42,7 +42,7 @@ public:
     virtual ~KexiDataSourceComboBox();
 
     //! \return global project that is used to retrieve schema informationm for this combo box.
-    KexiProject* project() const;
+    KexiProject *project() const;
 
     //! \return name of selected table or query. Can return null string.
     //! You should use isSelectionValid() to check validity of the input.
@@ -57,7 +57,7 @@ public:
 
     /*! \return index of item of part class \a partClass and name \a name.
      Returs -1 of no such item exists. */
-    int findItem(const QString& partClass, const QString& name);
+    int findItem(const QString &partClass, const QString &name);
 
 public Q_SLOTS:
     //! Sets global project that is used to retrieve schema informationm for this combo box.
@@ -66,7 +66,7 @@ public Q_SLOTS:
 
     /*! Sets item for data source described by \a partClass and \a name.
      If \a partClass is empty, either "org.kexi-project.table" and "org.kexi-project.query" are tried. */
-    void setDataSource(const QString& partClass, const QString& name);
+    void setDataSource(const QString &partClass, const QString &name);
 
 Q_SIGNALS:
     //! Emitted whenever data source changes.
@@ -74,18 +74,18 @@ Q_SIGNALS:
     void dataSourceChanged();
 
 protected Q_SLOTS:
-    void slotNewItemStored(KexiPart::Item& item);
-    void slotItemRemoved(const KexiPart::Item& item);
-    void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
+    void slotNewItemStored(KexiPart::Item &item);
+    void slotItemRemoved(const KexiPart::Item &item);
+    void slotItemRenamed(const KexiPart::Item &item, const QString &oldName);
     void slotActivated(int index);
-    void slotReturnPressed(const QString & text);
+    void slotReturnPressed(const QString &text);
     void slotClearButtonClicked();
 
 protected:
     virtual void focusOutEvent(QFocusEvent *e);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

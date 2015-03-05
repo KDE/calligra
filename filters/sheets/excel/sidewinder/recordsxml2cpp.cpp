@@ -46,7 +46,8 @@ struct Field {
 
     Field(QString name = QString(), QString type = QString()) : name(name), type(type), isArray(false), isArrayLength(false), isStringLength(false), isEnum(false) {}
 
-    QString getterName() const {
+    QString getterName() const
+    {
         if (type == "bool" && !(name.startsWith("has") || name.startsWith("is"))) {
             return "is" + ucFirst(name);
         } else {
@@ -54,35 +55,49 @@ struct Field {
         }
     }
 
-    QString setterName() const {
+    QString setterName() const
+    {
         return "set" + ucFirst(name);
     }
 };
 
-static QString getFieldType(QString xmlType, unsigned bits, QString otherType, const QMap<QString, QString>& extraTypes)
+static QString getFieldType(QString xmlType, unsigned bits, QString otherType, const QMap<QString, QString> &extraTypes)
 {
     Q_UNUSED(bits);
     Q_UNUSED(otherType);
-    if (xmlType == "unsigned") return "unsigned";
-    else if (xmlType == "signed") return "int";
-    else if (xmlType == "float" || xmlType == "fixed") return "double";
-    else if (xmlType == "bool") return "bool";
-    else if (xmlType == "bytestring" || xmlType == "unicodestring" || xmlType == "unicodechars") return "QString";
-    else if (xmlType == "blob") return "QByteArray";
-    else if (xmlType == "uuid") return "QUuid";
-    else if (extraTypes.contains(xmlType)) return getFieldType(extraTypes[xmlType], bits, otherType, extraTypes);
+    if (xmlType == "unsigned") {
+        return "unsigned";
+    } else if (xmlType == "signed") {
+        return "int";
+    } else if (xmlType == "float" || xmlType == "fixed") {
+        return "double";
+    } else if (xmlType == "bool") {
+        return "bool";
+    } else if (xmlType == "bytestring" || xmlType == "unicodestring" || xmlType == "unicodechars") {
+        return "QString";
+    } else if (xmlType == "blob") {
+        return "QByteArray";
+    } else if (xmlType == "uuid") {
+        return "QUuid";
+    } else if (extraTypes.contains(xmlType)) {
+        return getFieldType(extraTypes[xmlType], bits, otherType, extraTypes);
+    }
     return "ERROR";
 }
 
-bool hasParentNode(const QDomNode& n, const QString& name)
+bool hasParentNode(const QDomNode &n, const QString &name)
 {
     QDomNode p = n.parentNode();
-    if (p.isNull()) return false;
-    if (p.nodeName() == name) return true;
+    if (p.isNull()) {
+        return false;
+    }
+    if (p.nodeName() == name) {
+        return true;
+    }
     return hasParentNode(p, name);
 }
 
-static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0)
+static QMap<QString, Field> getFields(QDomElement record, bool *foundStrings = 0)
 {
     QDomNodeList types = record.elementsByTagName("type");
     QMap<QString, QString> extraTypes;
@@ -90,8 +105,9 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
     for (int i = 0; i < types.size(); i++) {
         QDomElement e = types.at(i).toElement();
         extraTypes[e.attribute("name")] = e.attribute("type");
-        if (e.elementsByTagName("enum").size() > 0)
+        if (e.elementsByTagName("enum").size() > 0) {
             extraTypesDefaults[e.attribute("name")] = e.elementsByTagName("enum").at(0).toElement().attribute("name");
+        }
     }
 
     QDomNodeList fields = record.elementsByTagName("field");
@@ -101,7 +117,9 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
         QString name = e.attribute("name");
         if (!name.startsWith("reserved")) {
             map[name] = Field(name, getFieldType(e.attribute("type"), e.attribute("size").toUInt(), map[name].type, extraTypes));
-            if (foundStrings && map[name].type == "QString") *foundStrings = true;
+            if (foundStrings && map[name].type == "QString") {
+                *foundStrings = true;
+            }
             if (hasParentNode(e, "array")) {
                 map[name].isArray = true;
             }
@@ -115,8 +133,9 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
                 map[name].type = e.attribute("type");
                 map[name].defaultValue = extraTypesDefaults[e.attribute("type")];
             }
-            if (e.hasAttribute("default"))
+            if (e.hasAttribute("default")) {
                 map[name].defaultValue = e.attribute("default");
+            }
         }
     }
     for (int i = 0; i < fields.size(); i++) {
@@ -134,21 +153,22 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
         QDomElement e = arrays.at(i).toElement();
         QString name = e.attribute("length");
         if (map.contains(name)) {
-            Field& field = map[name];
+            Field &field = map[name];
             field.isArrayLength = true;
             QDomNodeList afields = e.elementsByTagName("field");
             for (int j = 0; j < afields.size(); j++) {
                 QDomElement af = afields.at(j).toElement();
                 QString fname = af.attribute("name");
-                if (!fname.startsWith("reserved"))
+                if (!fname.startsWith("reserved")) {
                     field.arrayFields.append(map[fname]);
+                }
             }
         }
     }
     return map;
 }
 
-void processEnumsForHeader(QDomNodeList fieldList, QTextStream& out)
+void processEnumsForHeader(QDomNodeList fieldList, QTextStream &out)
 {
     for (int i = 0; i < fieldList.size(); i++) {
         QDomElement f = fieldList.at(i).toElement();
@@ -159,18 +179,21 @@ void processEnumsForHeader(QDomNodeList fieldList, QTextStream& out)
             for (int j = 0; j < enumNodes.size(); j++) {
                 QDomElement en = enumNodes.at(j).toElement();
                 out << "        " << en.attribute("name");
-                if (en.hasAttribute("value"))
+                if (en.hasAttribute("value")) {
                     out << " = " << en.attribute("value");
-                if (j != enumNodes.size() - 1) out << ",";
+                }
+                if (j != enumNodes.size() - 1) {
+                    out << ",";
+                }
                 out << "\n";
             }
             out << "    };\n\n"
-            << "    static QString " << lcFirst(f.attribute("name")) << "ToString(" << name << " " << f.attribute("name") << ");\n\n";
+                << "    static QString " << lcFirst(f.attribute("name")) << "ToString(" << name << " " << f.attribute("name") << ");\n\n";
         }
     }
 }
 
-void processRecordForHeader(QDomElement e, QTextStream& out)
+void processRecordForHeader(QDomElement e, QTextStream &out)
 {
     QString className = e.attribute("name") + "Record";
     QList<Field> fields = getFields(e).values();
@@ -179,14 +202,14 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
 
     // add id field and rtti method
     out << "    static const unsigned id;\n\n"
-    << "    virtual unsigned rtti() const { return this->id; }\n\n";
+        << "    virtual unsigned rtti() const { return this->id; }\n\n";
 
     // constructor and destructor
     out << "    " << className << "(Swinder::Workbook *book);\n    virtual ~" << className << "();\n\n";
 
     // copy and assignment
     out << "    " << className << "( const " << className << "& record );\n"
-    << "    " << className << "& operator=( const " << className << "& record );\n\n";
+        << "    " << className << "& operator=( const " << className << "& record );\n\n";
 
     // enums
     QDomNodeList fieldNodes = e.elementsByTagName("field");
@@ -197,12 +220,16 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
     processEnumsForHeader(typeNodes, out);
 
     // getters and setters
-    foreach(const Field& f, fields) {
+    foreach (const Field &f, fields) {
         out << "    " << f.type << " " << f.getterName() << "(";
-        if (f.isArray) out << " unsigned index ";
+        if (f.isArray) {
+            out << " unsigned index ";
+        }
         out << ") const;\n"
-        << "    void " << f.setterName() << "(";
-        if (f.isArray) out << " unsigned index,";
+            << "    void " << f.setterName() << "(";
+        if (f.isArray) {
+            out << " unsigned index,";
+        }
         out << " " << f.type << " " << f.name << " );\n\n";
     }
 
@@ -210,7 +237,9 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
     for (int i = 0; i < cfieldNodes.size(); i++) {
         QDomElement f = cfieldNodes.at(i).toElement();
         QString type = f.attribute("ctype");
-        if (type.isEmpty()) type = ucFirst(f.attribute("name"));
+        if (type.isEmpty()) {
+            type = ucFirst(f.attribute("name"));
+        }
         out << "    " << type << " " << f.attribute("name") << "() const;\n\n";
     }
 
@@ -249,7 +278,7 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
     out << "private:\n    class Private;\n    Private * const d;\n};\n\n";
 }
 
-static void invalidFound(QString indent, QTextStream& out, QString currentOptional)
+static void invalidFound(QString indent, QTextStream &out, QString currentOptional)
 {
     if (currentOptional.isEmpty()) {
         out << indent << "setIsValid(false);\n";
@@ -260,35 +289,45 @@ static void invalidFound(QString indent, QTextStream& out, QString currentOption
     }
 }
 
-static void sizeCheck(QString indent, QTextStream& out, QDomElement firstField, unsigned offset, bool dynamicOffset, QString currentOptional)
+static void sizeCheck(QString indent, QTextStream &out, QDomElement firstField, unsigned offset, bool dynamicOffset, QString currentOptional)
 {
     // find size of all fields until first unsized field or first if/array
     unsigned size = 0;
     for (QDomElement e = firstField; !e.isNull(); e = e.nextSiblingElement()) {
-        if (e.tagName() != "field") break;
+        if (e.tagName() != "field") {
+            break;
+        }
         unsigned bits = e.attribute("size", "0").toUInt();
         if (bits == 0 && e.attribute("type") == "uuid") {
             bits = 128;
             e.setAttribute("size", "128");
         }
-        if (bits == 0) break;
+        if (bits == 0) {
+            break;
+        }
         size += bits;
     }
-    if (size % 8 != 0)
+    if (size % 8 != 0) {
         qFatal("Invalid non-byte-sized chunk of fields found");
-    if (offset % 8 != 0)
+    }
+    if (offset % 8 != 0) {
         qFatal("Invalid non-byte-aligned chunk of fields found");
+    }
     if (size != 0) {
         out << indent << "if (size < ";
-        if (dynamicOffset) out << "curOffset + ";
-        if (offset) out << (offset / 8) << " + ";
+        if (dynamicOffset) {
+            out << "curOffset + ";
+        }
+        if (offset) {
+            out << (offset / 8) << " + ";
+        }
         out << (size / 8) << ") {\n";
         invalidFound(indent + "    ", out, currentOptional);
         out << indent << "}\n";
     }
 }
 
-static void processFieldElement(QString indent, QTextStream& out, QDomElement field, unsigned& offset, bool& dynamicOffset, QMap<QString, Field>& fieldsMap, QString setterArgs = QString(), QString currentOptional = QString())
+static void processFieldElement(QString indent, QTextStream &out, QDomElement field, unsigned &offset, bool &dynamicOffset, QMap<QString, Field> &fieldsMap, QString setterArgs = QString(), QString currentOptional = QString())
 {
     if (field.tagName() == "fail") {
         invalidFound(indent, out, currentOptional);
@@ -298,47 +337,58 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         if (!name.startsWith("reserved")) {
             //if (bits >= 8 && offset % 8 != 0)
             //    qFatal("Unaligned byte-or-larger field");
-            if (bits >= 16 && bits % 8 != 0)
+            if (bits >= 16 && bits % 8 != 0) {
                 qFatal("Fields of 16 bits and larger must always be an exact number of bytes");
+            }
 
-            Field& f = fieldsMap[name];
+            Field &f = fieldsMap[name];
             if (f.type == "QString") {
-                if (offset % 8 != 0)
+                if (offset % 8 != 0) {
                     qFatal("Unaligned string");
+                }
 
-                if (!dynamicOffset)
+                if (!dynamicOffset) {
                     out << indent << "curOffset = " << (offset / 8) << ";\n";
-                else if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
+                } else if (offset) {
+                    out << indent << "curOffset += " << (offset / 8) << ";\n";
+                }
                 out << indent << f.setterName() << "(" << setterArgs;
                 dynamicOffset = true; offset = 0;
 
-                if (field.attribute("type") == "unicodestring")
+                if (field.attribute("type") == "unicodestring") {
                     out << "readUnicodeString(";
-                else if (field.attribute("type") == "unicodechars")
+                } else if (field.attribute("type") == "unicodechars") {
                     out << "readUnicodeCharArray(";
-                else
+                } else {
                     out << "readByteString(";
+                }
 
                 out << "data + curOffset, ";
-                if (field.hasAttribute("length") || field.attribute("type") != "unicodechars")
+                if (field.hasAttribute("length") || field.attribute("type") != "unicodechars") {
                     out << field.attribute("length");
-                else
+                } else {
                     out << "-1";
+                }
                 out << ", size - curOffset"
-                << ", &stringLengthError, &stringSize));\n";
+                    << ", &stringLengthError, &stringSize));\n";
                 out << indent << "if (stringLengthError) {\n";
                 invalidFound(indent + "    ", out, currentOptional);
                 out << indent << "}\n";
                 out << indent << "curOffset += stringSize;\n";
                 sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
             } else if (f.type == "QByteArray") {
-                if (offset % 8 != 0)
+                if (offset % 8 != 0) {
                     qFatal("Unaligned string");
+                }
 
                 if (field.hasAttribute("length")) {
                     out << indent << "if (";
-                    if (dynamicOffset) out << "curOffset + ";
-                    if (offset) out << (offset / 8) << " + ";
+                    if (dynamicOffset) {
+                        out << "curOffset + ";
+                    }
+                    if (offset) {
+                        out << (offset / 8) << " + ";
+                    }
                     out << "(" << field.attribute("length") << ") > size) {\n";
                     invalidFound(indent + "    ", out, currentOptional);
                     out << indent << "}\n";
@@ -346,18 +396,25 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 out << indent << f.setterName() << "(" << setterArgs;
                 out << "QByteArray(reinterpret_cast<const char*>(";
                 out << "data";
-                if (dynamicOffset) out << " + curOffset";
-                if (offset) out << " + " << (offset / 8);
+                if (dynamicOffset) {
+                    out << " + curOffset";
+                }
+                if (offset) {
+                    out << " + " << (offset / 8);
+                }
                 out << "), ";
-                if (field.hasAttribute("length"))
+                if (field.hasAttribute("length")) {
                     out << field.attribute("length");
-                else
+                } else {
                     out << (bits / 8);
+                }
                 out << "));\n";
                 if (field.hasAttribute("length")) {
-                    if (!dynamicOffset)
+                    if (!dynamicOffset) {
                         out << indent << "curOffset = " << (offset / 8);
-                    else out << indent << "curOffset += " << (offset / 8);
+                    } else {
+                        out << indent << "curOffset += " << (offset / 8);
+                    }
                     out << " + " << field.attribute("length") << ";\n";
                     dynamicOffset = true; offset = 0;
                     sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
@@ -365,44 +422,63 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
             } else if (f.type == "QUuid") {
                 out << indent << f.setterName() << "(" << setterArgs;
                 out << "readUuid(data";
-                if (dynamicOffset) out << " + curOffset";
-                if (offset) out << " + " << (offset / 8);
+                if (dynamicOffset) {
+                    out << " + curOffset";
+                }
+                if (offset) {
+                    out << " + " << (offset / 8);
+                }
                 out << "));\n";
             } else if (bits % 8 == 0) {
-                if (f.isStringLength)
+                if (f.isStringLength) {
                     out << indent << "unsigned " << name << " = ";
-                else
+                } else {
                     out << indent << f.setterName() << "(" << setterArgs;
+                }
 
-                if (f.isEnum)
+                if (f.isEnum) {
                     out << "static_cast<" << f.type << ">(";
+                }
 
-                if (field.attribute("type") == "unsigned" || field.attribute("type") == "bool")
+                if (field.attribute("type") == "unsigned" || field.attribute("type") == "bool") {
                     out << "readU" << bits;
-                else if (field.attribute("type") == "signed")
+                } else if (field.attribute("type") == "signed") {
                     out << "readS" << bits;
-                else if (field.attribute("type") == "float")
+                } else if (field.attribute("type") == "float") {
                     out << "readFloat" << bits;
-                else if (field.attribute("type") == "fixed")
+                } else if (field.attribute("type") == "fixed") {
                     out << "readFixed" << bits;
-                else
+                } else {
                     qFatal("Unsupported type %s", qPrintable(field.attribute("type")));
+                }
 
                 out << "(data";
-                if (dynamicOffset) out << " + curOffset";
-                if (offset) out << " + " << (offset / 8);
+                if (dynamicOffset) {
+                    out << " + curOffset";
+                }
+                if (offset) {
+                    out << " + " << (offset / 8);
+                }
                 out << ")";
-                if (field.attribute("type") == "bool") out << " != 0";
-                if (f.isEnum) out << ")";
-                if (!f.isStringLength) out << ")";
+                if (field.attribute("type") == "bool") {
+                    out << " != 0";
+                }
+                if (f.isEnum) {
+                    out << ")";
+                }
+                if (!f.isStringLength) {
+                    out << ")";
+                }
                 out << ";\n";
             } else {
-                if (f.isStringLength)
+                if (f.isStringLength) {
                     out << indent << "unsigned " << name << " = ";
-                else
+                } else {
                     out << indent << f.setterName() << "(" << setterArgs;
-                if (f.isEnum)
+                }
+                if (f.isEnum) {
                     out << "static_cast<" << f.type << ">(";
+                }
                 unsigned firstByte = offset / 8;
                 unsigned lastByte = (offset + bits - 1) / 8;
                 unsigned bitOffset = offset % 8;
@@ -412,14 +488,26 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 } else {
                     out << "((readU16(data";
                 }
-                if (dynamicOffset) out << " + curOffset";
-                if (firstByte) out << " + " << firstByte;
+                if (dynamicOffset) {
+                    out << " + curOffset";
+                }
+                if (firstByte) {
+                    out << " + " << firstByte;
+                }
                 out << ")";
-                if (bitOffset) out << " >> " << bitOffset;
+                if (bitOffset) {
+                    out << " >> " << bitOffset;
+                }
                 out << ") & 0x" << hex << mask << dec << ")";
-                if (field.attribute("type") == "bool") out << " != 0";
-                if (f.isEnum) out << ")";
-                if (!f.isStringLength) out << ")";
+                if (field.attribute("type") == "bool") {
+                    out << " != 0";
+                }
+                if (f.isEnum) {
+                    out << ")";
+                }
+                if (!f.isStringLength) {
+                    out << ")";
+                }
                 out << ";\n";
             }
             // evaluate constraints
@@ -433,11 +521,14 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         }
         offset += bits;
     } else if (field.tagName() == "if") {
-        if (offset % 8 != 0)
+        if (offset % 8 != 0) {
             qFatal("Ifs should always be byte-aligned");
-        if (!dynamicOffset)
+        }
+        if (!dynamicOffset) {
             out << indent << "curOffset = " << (offset / 8) << ";\n";
-        else if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
+        } else if (offset) {
+            out << indent << "curOffset += " << (offset / 8) << ";\n";
+        }
 
         out << indent << "if (" << field.attribute("predicate") << ") {\n";
 
@@ -448,19 +539,25 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
             processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap, setterArgs, currentOptional);
         }
 
-        if (offset % 8 != 0)
+        if (offset % 8 != 0) {
             qFatal("Ifs should contain an integer number of bytes");
+        }
 
-        if (offset) out << indent << "    curOffset += " << (offset / 8) << ";\n";
+        if (offset) {
+            out << indent << "    curOffset += " << (offset / 8) << ";\n";
+        }
         out << indent << "}\n";
         offset = 0;
         sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
     } else if (field.tagName() == "optional") {
-        if (offset % 8 != 0)
+        if (offset % 8 != 0) {
             qFatal("Optionals should always be byte-aligned");
-        if (!dynamicOffset)
+        }
+        if (!dynamicOffset) {
             out << indent << "curOffset = " << (offset / 8) << ";\n";
-        else if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
+        } else if (offset) {
+            out << indent << "curOffset += " << (offset / 8) << ";\n";
+        }
         offset = 0; dynamicOffset = true;
 
         QString name = ucFirst(field.attribute("name"));
@@ -474,10 +571,13 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
             processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap, setterArgs, name);
         }
 
-        if (offset % 8 != 0)
+        if (offset % 8 != 0) {
             qFatal("Optionals should contain an integer number of bytes");
+        }
 
-        if (offset) out << indent << "    curOffset += " << (offset / 8) << ";\n";
+        if (offset) {
+            out << indent << "    curOffset += " << (offset / 8) << ";\n";
+        }
 
         out << indent << "}\n";
         out << label << ":\n";
@@ -487,12 +587,14 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         offset = 0;
         sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
     } else if (field.tagName() == "choose") {
-        if (offset % 8 != 0)
+        if (offset % 8 != 0) {
             qFatal("Choose tags should always be byte-aligned");
-        if (!dynamicOffset)
+        }
+        if (!dynamicOffset) {
             out << indent << "curOffset = " << (offset / 8) << ";\n";
-        else
-            if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
+        } else if (offset) {
+            out << indent << "curOffset += " << (offset / 8) << ";\n";
+        }
         offset = 0; dynamicOffset = true;
 
         bool isFirst = true;
@@ -502,11 +604,18 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 qFatal("only option tags are allowed inside a choose tag");
             }
 
-            if (isFirst) out << indent; else out << " ";
-            if (!isFirst) out << "else ";
+            if (isFirst) {
+                out << indent;
+            } else {
+                out << " ";
+            }
+            if (!isFirst) {
+                out << "else ";
+            }
             isFirst = false;
-            if (childField.hasAttribute("predicate"))
+            if (childField.hasAttribute("predicate")) {
                 out << "if (" << childField.attribute("predicate") << ") ";
+            }
             out << "{\n";
 
             sizeCheck(indent + "    ", out, childField.firstChildElement(), offset, dynamicOffset, currentOptional);
@@ -515,27 +624,33 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap, setterArgs, currentOptional);
             }
 
-            if (offset % 8 != 0)
+            if (offset % 8 != 0) {
                 qFatal("options should contain an integer number of bytes");
+            }
 
-            if (offset) out << indent << "    curOffset += " << (offset / 8) << ";\n";
+            if (offset) {
+                out << indent << "    curOffset += " << (offset / 8) << ";\n";
+            }
             out << indent << "}";
             offset = 0;
         }
         out << "\n";
         sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
     } else if (field.tagName() == "array") {
-        if (offset % 8 != 0)
+        if (offset % 8 != 0) {
             qFatal("Arrays should always be byte-aligned");
+        }
 
-        if (!dynamicOffset)
+        if (!dynamicOffset) {
             out << indent << "curOffset = " << (offset / 8) << ";\n";
-        else if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
+        } else if (offset) {
+            out << indent << "curOffset += " << (offset / 8) << ";\n";
+        }
 
         QString length = field.attribute("length");
-        if (fieldsMap.contains(length))
+        if (fieldsMap.contains(length)) {
             length = fieldsMap[length].getterName() + "()";
-        else {
+        } else {
             QDomNodeList fields = field.elementsByTagName("field");
             for (int i = 0; i < fields.size(); i++) {
                 QDomElement e = fields.at(i).toElement();
@@ -554,23 +669,26 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
             processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap, setterArgs + "i, ", currentOptional);
         }
 
-        if (offset % 8 != 0)
+        if (offset % 8 != 0) {
             qFatal("Arrays should contain an integer number of bytes");
+        }
 
-        if (offset) out << indent << "    curOffset += " << (offset / 8) << ";\n";
+        if (offset) {
+            out << indent << "    curOffset += " << (offset / 8) << ";\n";
+        }
         out << indent << "}\n";
         offset = 0;
         sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
     }
 }
 
-static void processFieldElementForWrite(QString indent, QTextStream& out, QDomElement field, const QMap<QString, Field>& fieldsMap, QString getterArgs = QString())
+static void processFieldElementForWrite(QString indent, QTextStream &out, QDomElement field, const QMap<QString, Field> &fieldsMap, QString getterArgs = QString())
 {
     if (field.tagName() == "field") {
         QString name = field.attribute("name");
         unsigned bits = field.attribute("size").toUInt();
         if (!name.startsWith("reserved")) {
-            const Field& f = fieldsMap[name];
+            const Field &f = fieldsMap[name];
             if (field.attribute("type") == "bytestring") {
                 out << indent << "out.writeByteString(";
             } else if (field.attribute("type") == "unicodestring") {
@@ -594,7 +712,7 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
             }
             if (f.isStringLength) {
                 // TODO: figure out length from string
-                const Field& f2 = fieldsMap[f.lengthFor];
+                const Field &f2 = fieldsMap[f.lengthFor];
                 out << f2.getterName() << "(" << getterArgs << ").length()";
             } else {
                 out << f.getterName() << "(" << getterArgs << ")";
@@ -611,17 +729,25 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
         }
     } else if (field.tagName() == "if") {
         out << indent << "if (" << field.attribute("predicate") << ") {\n";
-        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             processFieldElementForWrite(indent + "    ", out, e, fieldsMap, getterArgs);
+        }
         out << indent << "}\n";
     } else if (field.tagName() == "choose") {
         bool isFirst = true;
         for (QDomElement childField = field.firstChildElement(); !childField.isNull(); childField = childField.nextSiblingElement()) {
-            if (isFirst) out << indent; else out << " ";
-            if (!isFirst) out << "else ";
+            if (isFirst) {
+                out << indent;
+            } else {
+                out << " ";
+            }
+            if (!isFirst) {
+                out << "else ";
+            }
             isFirst = false;
-            if (childField.hasAttribute("predicate"))
+            if (childField.hasAttribute("predicate")) {
                 out << "if (" << childField.attribute("predicate") << ") ";
+            }
             out << "{\n";
 
             for (QDomElement child = childField.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
@@ -633,29 +759,32 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
         out << "\n";
     } else if (field.tagName() == "array") {
         QString length = field.attribute("length");
-        if (fieldsMap.contains(length))
+        if (fieldsMap.contains(length)) {
             length = fieldsMap[length].getterName() + "()";
-        else if (field.firstChildElement().hasAttribute("name"))
+        } else if (field.firstChildElement().hasAttribute("name")) {
             length = "d->" + field.firstChildElement().attribute("name") + ".size()";
+        }
 
         out << indent << "for (unsigned i = 0, endi = " << length << "; i < endi; ++i) {\n";
-        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             processFieldElementForWrite(indent + "    ", out, e, fieldsMap, "i");
+        }
         out << indent << "}\n";
     } else if (field.tagName() == "optional") {
         out << indent << "if (has" << ucFirst(field.attribute("name")) << "()) {\n";
-        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             processFieldElementForWrite(indent + "    ", out, e, fieldsMap, getterArgs);
+        }
         out << indent << "}\n";
     }
 }
 
-static void processFieldElementForDump(QString indent, QTextStream& out, QDomElement field, const QMap<QString, Field>& fieldsMap, QString getterArgs = QString())
+static void processFieldElementForDump(QString indent, QTextStream &out, QDomElement field, const QMap<QString, Field> &fieldsMap, QString getterArgs = QString())
 {
     if (field.tagName() == "field") {
         QString name = field.attribute("name");
         if (!name.startsWith("reserved")) {
-            const Field& f = fieldsMap[name];
+            const Field &f = fieldsMap[name];
             if (!f.isStringLength) {
                 out << indent << "out << \"";
                 if (getterArgs.length() == 0) {
@@ -666,26 +795,35 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
                     out << ucFirst(name);
                     out << " \" << std::setw(3) << " << getterArgs << " <<\" : \" << ";
                 }
-                if (f.isEnum)
+                if (f.isEnum) {
                     out << lcFirst(f.type) << "ToString(" << f.getterName() << "(" << getterArgs << "))";
-                else
+                } else {
                     out << f.getterName() << "(" << getterArgs << ")";
+                }
                 out << " << std::endl;\n";
             }
         }
     } else if (field.tagName() == "if") {
         out << indent << "if (" << field.attribute("predicate") << ") {\n";
-        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             processFieldElementForDump(indent + "    ", out, e, fieldsMap, getterArgs);
+        }
         out << indent << "}\n";
     } else if (field.tagName() == "choose") {
         bool isFirst = true;
         for (QDomElement childField = field.firstChildElement(); !childField.isNull(); childField = childField.nextSiblingElement()) {
-            if (isFirst) out << indent; else out << " ";
-            if (!isFirst) out << "else ";
+            if (isFirst) {
+                out << indent;
+            } else {
+                out << " ";
+            }
+            if (!isFirst) {
+                out << "else ";
+            }
             isFirst = false;
-            if (childField.hasAttribute("predicate"))
+            if (childField.hasAttribute("predicate")) {
                 out << "if (" << childField.attribute("predicate") << ") ";
+            }
             out << "{\n";
 
             for (QDomElement child = childField.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
@@ -697,24 +835,27 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
         out << "\n";
     } else if (field.tagName() == "array") {
         QString length = field.attribute("length");
-        if (fieldsMap.contains(length))
+        if (fieldsMap.contains(length)) {
             length = fieldsMap[length].getterName() + "()";
-        else if (field.firstChildElement().hasAttribute("name"))
+        } else if (field.firstChildElement().hasAttribute("name")) {
             length = "d->" + field.firstChildElement().attribute("name") + ".size()";
+        }
 
         out << indent << "for (unsigned i = 0, endi = " << length << "; i < endi; ++i) {\n";
-        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             processFieldElementForDump(indent + "    ", out, e, fieldsMap, "i");
+        }
         out << indent << "}\n";
     } else if (field.tagName() == "optional") {
         out << indent << "if (has" << ucFirst(field.attribute("name")) << "()) {\n";
-        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
             processFieldElementForDump(indent + "    ", out, e, fieldsMap, getterArgs);
+        }
         out << indent << "}\n";
     }
 }
 
-void processEnumsForImplementation(QDomNodeList fieldList, QString className, QTextStream& out)
+void processEnumsForImplementation(QDomNodeList fieldList, QString className, QTextStream &out)
 {
     for (int i = 0; i < fieldList.size(); i++) {
         QDomElement f = fieldList.at(i).toElement();
@@ -722,7 +863,7 @@ void processEnumsForImplementation(QDomNodeList fieldList, QString className, QT
         if (enumNodes.size()) {
             QString name = ucFirst(f.attribute("name"));
             out << "QString " << className << "::" << lcFirst(f.attribute("name")) << "ToString(" << name << " " << f.attribute("name") << ")\n{\n"
-            << "    switch (" << f.attribute("name") << ") {\n";
+                << "    switch (" << f.attribute("name") << ") {\n";
             for (int j = 0; j < enumNodes.size(); j++) {
                 QDomElement en = enumNodes.at(j).toElement();
                 out << "        case " << en.attribute("name") << ": return QString(\"" << en.attribute("name") << "\");\n";
@@ -732,7 +873,7 @@ void processEnumsForImplementation(QDomNodeList fieldList, QString className, QT
     }
 }
 
-void processRecordForImplementation(QDomElement e, QTextStream& out)
+void processRecordForImplementation(QDomElement e, QTextStream &out)
 {
     QString className = e.attribute("name") + "Record";
     bool containsStrings = false;
@@ -746,12 +887,13 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
 
     // private class
     out << "class " << className << "::Private\n{\n"
-    << "public:\n";
-    foreach(const Field& f, fields) {
-        if (f.isArray)
+        << "public:\n";
+    foreach (const Field &f, fields) {
+        if (f.isArray) {
             out << "    std::vector<" << f.type << "> " << f.name << ";\n";
-        else if (!f.isStringLength)
+        } else if (!f.isStringLength) {
             out << "    " << f.type << " " << f.name << ";\n";
+        }
     }
     // optional groups
     QDomNodeList optionalNodes = e.elementsByTagName("optional");
@@ -764,8 +906,10 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     // constructor
     out << className << "::" << className << "(Swinder::Workbook *book)\n";
     out << "    : Record(book), d(new Private)\n{\n";
-    foreach(const Field& f, fields) {
-        if (f.isArray || f.isStringLength) continue;
+    foreach (const Field &f, fields) {
+        if (f.isArray || f.isStringLength) {
+            continue;
+        }
         QString val;
         if (!f.defaultValue.isEmpty()) {
             val = f.defaultValue;
@@ -774,8 +918,9 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         } else if (f.type == "bool") {
             val = "false";
         }
-        if (!val.isEmpty())
+        if (!val.isEmpty()) {
             out << "    " << f.setterName() << "(" << val << ");\n";
+        }
     }
     for (int i = 0; i < optionalNodes.size(); i++) {
         QDomElement f = optionalNodes.at(i).toElement();
@@ -788,13 +933,13 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
 
     // copy constructor
     out << className << "::" << className << "( const " << className << "& record )\n"
-    << "    : Record(record), d(new Private)\n{\n"
-    << "    *this = record;\n}\n\n";
+        << "    : Record(record), d(new Private)\n{\n"
+        << "    *this = record;\n}\n\n";
 
     // assignment operator
     out << className << "& " << className << "::operator=( const " << className << "& record )\n{\n"
-    << "    *d = *record.d;\n"
-    << "    return *this;\n}\n\n";
+        << "    *d = *record.d;\n"
+        << "    return *this;\n}\n\n";
 
     // enums
     QDomNodeList fieldNodes = e.elementsByTagName("field");
@@ -805,24 +950,36 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     processEnumsForImplementation(typeNodes, className, out);
 
     // getters and setters
-    foreach(const Field& f, fields) {
-        if (f.isStringLength) continue;
+    foreach (const Field &f, fields) {
+        if (f.isStringLength) {
+            continue;
+        }
 
-        if (f.isEnum) out << className << "::";
+        if (f.isEnum) {
+            out << className << "::";
+        }
         out << f.type << " " << className << "::" << f.getterName() << "(";
-        if (f.isArray) out << " unsigned index ";
+        if (f.isArray) {
+            out << " unsigned index ";
+        }
         out << ") const\n{\n    return d->" << f.name;
-        if (f.isArray) out << "[index]";
+        if (f.isArray) {
+            out << "[index]";
+        }
         out << ";\n}\n\n";
 
         out << "void " << className << "::" << f.setterName() << "(";
-        if (f.isArray) out << " unsigned index, ";
+        if (f.isArray) {
+            out << " unsigned index, ";
+        }
         out << f.type << " " << f.name << " )\n{\n    d->" << f.name;
-        if (f.isArray) out << "[index]";
+        if (f.isArray) {
+            out << "[index]";
+        }
         out << " = " << f.name << ";\n";
 
         if (f.isArrayLength) {
-            foreach(const Field& af, f.arrayFields) {
+            foreach (const Field &af, f.arrayFields) {
                 out << "    d->" << af.name << ".resize(" << f.name << ");\n";
             }
         }
@@ -834,9 +991,11 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     for (int i = 0; i < cfieldNodes.size(); i++) {
         QDomElement f = cfieldNodes.at(i).toElement();
         QString type = f.attribute("ctype");
-        if (type.isEmpty()) type = className + "::" + ucFirst(f.attribute("name"));
+        if (type.isEmpty()) {
+            type = className + "::" + ucFirst(f.attribute("name"));
+        }
         out << type << " " << className << "::" << f.attribute("name") << "() const\n{\n"
-        << "    return " << f.attribute("value") << ";\n}\n\n";
+            << "    return " << f.attribute("value") << ";\n}\n\n";
     }
 
     // array lengths
@@ -854,7 +1013,9 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
             out << "void " << className << "::set" << ucFirst(name) << "( unsigned " << name << " )\n{\n";
             for (int j = 0; j < afields.size(); j++) {
                 QDomElement af = afields.at(j).toElement();
-                if (af.attribute("name").startsWith("reserved")) continue;
+                if (af.attribute("name").startsWith("reserved")) {
+                    continue;
+                }
                 out << "    d->" << af.attribute("name") << ".resize(" << name << ");\n";
             }
             out << "}\n\n";
@@ -878,17 +1039,19 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         out << "void " << className << "::setData( unsigned size, const unsigned char*, const unsigned int* )\n{\n";
     }
     out << "    setRecordSize(size);\n\n";
-    if (e.elementsByTagName("if").size() > 0 || e.elementsByTagName("array").size() > 0 || containsStrings || e.elementsByTagName("optional").size() > 0)
+    if (e.elementsByTagName("if").size() > 0 || e.elementsByTagName("array").size() > 0 || containsStrings || e.elementsByTagName("optional").size() > 0) {
         out << "    unsigned curOffset;\n";
+    }
     if (containsStrings) {
         out << "    bool stringLengthError = false;\n"
-        << "    unsigned stringSize;\n";
+            << "    unsigned stringSize;\n";
     }
     unsigned offset = 0;
     bool dynamicOffset = false;
     sizeCheck("    ", out, e.firstChildElement(), offset, dynamicOffset, "");
-    for (QDomElement child = e.firstChildElement(); !child.isNull(); child = child.nextSiblingElement())
+    for (QDomElement child = e.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         processFieldElement("    ", out, child, offset, dynamicOffset, fieldsMap);
+    }
     out << "}\n\n";
 
     // writeData method
@@ -897,23 +1060,24 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     } else {
         out << "void " << className << "::writeData( XlsRecordOutputStream& ) const\n{\n";
     }
-    for (QDomElement child = e.firstChildElement(); !child.isNull(); child = child.nextSiblingElement())
+    for (QDomElement child = e.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         processFieldElementForWrite("    ", out, child, fieldsMap);
+    }
     out << "}\n\n";
 
     // dump method
     out << "void " << className << "::dump( std::ostream& out ) const\n{\n"
-    << "    out << \"" << e.attribute("name") << "\" << std::endl;\n";
-    for (QDomElement child = e.firstChildElement(); !child.isNull(); child = child.nextSiblingElement())
+        << "    out << \"" << e.attribute("name") << "\" << std::endl;\n";
+    for (QDomElement child = e.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         processFieldElementForDump("    ", out, child, fieldsMap);
+    }
     out << "}\n\n";
 
     // creator function
     out << "static Record* create" << className << "(Swinder::Workbook *book)\n{\n    return new " << className << "(book);\n}\n\n";
 }
 
-
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
 
@@ -924,8 +1088,9 @@ int main(int argc, char** argv)
     } else {
         f.setFileName(argv[1]);
     }
-    if (!f.open(QIODevice::ReadOnly))
+    if (!f.open(QIODevice::ReadOnly)) {
         qFatal("Error opening file");
+    }
     QString errorMsg;
     int errorLine;
     int errorCol;
@@ -947,18 +1112,18 @@ int main(int argc, char** argv)
     QTextStream cppOut(&cppFile);
 
     hOut << "// This file was automatically generated from records.xml\n"
-    << "#ifndef SWINDER_RECORDS_H\n"
-    << "#define SWINDER_RECORDS_H\n\n"
-    << "#include \"utils.h\"\n\n"
-    << "namespace Swinder {\n\n"
-    << "void registerRecordClasses();\n\n";
+         << "#ifndef SWINDER_RECORDS_H\n"
+         << "#define SWINDER_RECORDS_H\n\n"
+         << "#include \"utils.h\"\n\n"
+         << "namespace Swinder {\n\n"
+         << "void registerRecordClasses();\n\n";
 
     cppOut << "// This file was automatically generated from records.xml\n"
-    << "#include \"records.h\"\n"
-    << "#include <vector>\n"
-    << "#include <iomanip>\n"
-    << "#include \"XlsRecordOutputStream.h\"\n\n"
-    << "namespace Swinder {\n\n";
+           << "#include \"records.h\"\n"
+           << "#include <vector>\n"
+           << "#include <iomanip>\n"
+           << "#include \"XlsRecordOutputStream.h\"\n\n"
+           << "namespace Swinder {\n\n";
 
     QDomNodeList records = doc.elementsByTagName("record");
     for (int i = 0; i < records.size(); i++) {

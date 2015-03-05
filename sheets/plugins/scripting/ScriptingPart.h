@@ -42,7 +42,7 @@ public:
     * possible that multiple instances of this plugin exist the same time.
     * \param args The optional list of arguments.
     */
-    ScriptingPart(QObject* parent, const QVariantList& args);
+    ScriptingPart(QObject *parent, const QVariantList &args);
 
     /**
     * Destructor.
@@ -55,7 +55,7 @@ private:
     /// \internal d-pointer class.
     class Private;
     /// \internal d-pointer instance.
-    Private* const d;
+    Private *const d;
 };
 
 #endif

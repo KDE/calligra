@@ -44,7 +44,7 @@ void KisExiv2Test::testExifLoader()
 {
     KisExiv2::initialize();
 
-    IOBackend* exifIO = IOBackendRegistry::instance()->get("exif");
+    IOBackend *exifIO = IOBackendRegistry::instance()->get("exif");
     QVERIFY(exifIO);
     QFile exifFile(QString(FILES_DATA_DIR) + "/metadata/hpim3238.exv");
     exifFile.open(QIODevice::ReadOnly);
@@ -52,7 +52,7 @@ void KisExiv2Test::testExifLoader()
     QByteArray exifBytes = exifFile.readAll();
     QBuffer exifBuffer(&exifBytes);
 
-    Store* store = new Store;
+    Store *store = new Store;
     bool loadSuccess = exifIO->loadFrom(store, &exifBuffer);
     QVERIFY(loadSuccess);
     Validator validator(store);
@@ -65,7 +65,7 @@ void KisExiv2Test::testExifLoader()
     QCOMPARE(validator.countInvalidEntries(), 0);
     QCOMPARE(validator.countValidEntries(), 51);
 
-    const KisMetaData::Schema* tiffSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
+    const KisMetaData::Schema *tiffSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
 
     QCOMPARE(store->getEntry(tiffSchema, "Make").value(), Value("Hewlett-Packard"));
     QCOMPARE(store->getEntry(tiffSchema, "Model").value(), Value("HP PhotoSmart R707 (V01.00) "));
@@ -75,7 +75,7 @@ void KisExiv2Test::testExifLoader()
     QCOMPARE(store->getEntry(tiffSchema, "ResolutionUnit").value(), Value(2));
     QCOMPARE(store->getEntry(tiffSchema, "YCbCrPositioning").value(), Value(1));
 
-    const KisMetaData::Schema* exifSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::EXIFSchemaUri);
+    const KisMetaData::Schema *exifSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::EXIFSchemaUri);
 
     QCOMPARE(store->getEntry(exifSchema, "ExposureTime").value(), Value(Rational(35355, 100000)));
     QCOMPARE(store->getEntry(exifSchema, "FNumber").value(), Value(Rational(280, 100)));
@@ -93,15 +93,14 @@ void KisExiv2Test::testExifLoader()
     QCOMPARE(store->getEntry(exifSchema, "MaxApertureValue").value(), Value(Rational(280, 100)));
     QCOMPARE(store->getEntry(exifSchema, "SubjectDistance").value(), Value(Rational(65535, 1000)));
 
-
-    const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
+    const KisMetaData::Schema *dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
     Q_UNUSED(dcSchema);
 
-    const KisMetaData::Schema* xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
+    const KisMetaData::Schema *xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
     QCOMPARE(store->getEntry(xmpSchema, "CreatorTool").value(), Value("digiKam-0.9.1"));
     QCOMPARE(store->getEntry(xmpSchema, "ModifyDate").value(), Value(QDateTime(QDate(2007, 5, 8), QTime(0, 19, 18))));
 
-    const KisMetaData::Schema* mknSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::MakerNoteSchemaUri);
+    const KisMetaData::Schema *mknSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::MakerNoteSchemaUri);
     QCOMPARE(store->getEntry(mknSchema, "RawData").value(), Value("SFBNZXQ="));
 }
 

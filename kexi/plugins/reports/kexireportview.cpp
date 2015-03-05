@@ -55,7 +55,7 @@
 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
 
 KexiReportView::KexiReportView(QWidget *parent)
-        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)
+    : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_currentPage(0), m_pageCount(0), m_kexi(0), m_functions(0)
 {
     setObjectName("KexiReportDesigner_DataView");
 
@@ -65,7 +65,7 @@ KexiReportView::KexiReportView(QWidget *parent)
     layout()->addWidget(m_reportView);
 
     m_reportScene = new QGraphicsScene(this);
-    m_reportScene->setSceneRect(0,0,1000,2000);
+    m_reportScene->setSceneRect(0, 0, 1000, 2000);
     m_reportView->setScene(m_reportScene);
 
     m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
@@ -88,8 +88,8 @@ KexiReportView::KexiReportView(QWidget *parent)
 #endif
 
     // -- setup local actions
-    QList<QAction*> viewActions;
-    QAction* a;
+    QList<QAction *> viewActions;
+    QAction *a;
 
 #ifndef KEXI_MOBILE
     viewActions << (a = new KAction(koIcon("document-print"), i18n("Print"), this));
@@ -98,7 +98,7 @@ KexiReportView::KexiReportView(QWidget *parent)
     a->setWhatsThis(i18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
 
-    KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), i18nc("@title:menu","E&xport As"), this);
+    KActionMenu *exportMenu = new KActionMenu(koIcon("document-export"), i18nc("@title:menu", "E&xport As"), this);
     exportMenu->setObjectName("report_export_as");
     exportMenu->setDelayed(false);
 #endif
@@ -158,7 +158,7 @@ KexiReportView::KexiReportView(QWidget *parent)
 
 #ifndef KEXI_MOBILE
     // setup main menu actions
-    QList<QAction*> mainMenuActions;
+    QList<QAction *> mainMenuActions;
 
     mainMenuActions << exportMenu;
 
@@ -230,7 +230,7 @@ void KexiReportView::slotExportAsPdf()
         } else {
             openExportedDocument(cxt.destinationUrl);
         }
-   }
+    }
 }
 
 KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &caption,
@@ -251,8 +251,8 @@ KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
         if (result.isValid()) {
             if (KIO::NetAccess::exists(result, KIO::NetAccess::DestinationSide, this)) {
                 const int answer = KMessageBox::warningContinueCancel(this,
-                    i18n("The file %1 exists.\nDo you want to overwrite it?", result.path()),
-                    caption, KGuiItem(i18n("Overwrite")));
+                                   i18n("The file %1 exists.\nDo you want to overwrite it?", result.path()),
+                                   caption, KGuiItem(i18n("Overwrite")));
 
                 // if overwriting not wanted, let select another url
                 if (answer == KMessageBox::Cancel) {
@@ -268,7 +268,7 @@ KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
     return result;
 }
 
-void KexiReportView::openExportedDocument(const KUrl& destination)
+void KexiReportView::openExportedDocument(const KUrl &destination)
 {
     const int answer =
         KMessageBox::questionYesNo(
@@ -361,8 +361,7 @@ void KexiReportView::slotExportAsWebPage()
 
     if (answer == KMessageBox::Yes) {
         renderer = m_factory.createInstance("htmlcss");
-    }
-    else {
+    } else {
         renderer = m_factory.createInstance("htmltable");
     }
 
@@ -398,18 +397,18 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         if (m_preRenderer->isValid()) {
             KoReportData *reportData = 0;
             if (!tempData()->connectionDefinition.isNull())  {
-                reportData = sourceData(tempData()->connectionDefinition);    
+                reportData = sourceData(tempData()->connectionDefinition);
             }
             if (!reportData) {
                 reportData = new KexiDBReportData(QString(), KexiMainWindowIface::global()->project()->dbConnection());
             }
             m_preRenderer->setSourceData(reportData);
-            
+
             m_preRenderer->setName(tempData()->name);
             m_currentPage = 1;
 
             //Add a kexi object to provide kexidb and extra functionality
-            if(!m_kexi) {
+            if (!m_kexi) {
                 m_kexi = new KexiScriptAdaptor();
             }
             m_preRenderer->registerScriptObject(m_kexi, "Kexi");
@@ -420,7 +419,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 if (m_functions) {
                     delete m_functions;
                 }
-                
+
                 m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
                 m_preRenderer->registerScriptObject(m_functions, "field");
             }
@@ -429,7 +428,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 kDebug() << "=======================================Deleting old document";
                 delete m_reportDocument;
             }
-            
+
             m_reportDocument = m_preRenderer->generate();
             if (m_reportDocument) {
                 m_pageCount = m_reportDocument->pages();
@@ -442,22 +441,21 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
             m_reportPage = new KoReportPage(this, m_reportDocument);
             m_reportPage->setObjectName("KexiReportPage");
 
-            m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
+            m_reportScene->setSceneRect(0, 0, m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
             m_reportScene->addItem(m_reportPage);
-            m_reportPage->setPos(20,20);
-            m_reportView->centerOn(0,0);
+            m_reportPage->setPos(20, 20);
+            m_reportView->centerOn(0, 0);
 
         } else {
             KMessageBox::error(this, i18n("Report schema appears to be invalid or corrupt"), i18n("Opening failed"));
         }
-
 
         tempData()->reportSchemaChangedInPreviousView = false;
     }
     return true;
 }
 
-KoReportData* KexiReportView::sourceData(QDomElement e)
+KoReportData *KexiReportView::sourceData(QDomElement e)
 {
     KoReportData *kodata = 0;
 
@@ -472,9 +470,9 @@ KoReportData* KexiReportView::sourceData(QDomElement e)
     return kodata;
 }
 
-KexiReportPart::TempData* KexiReportView::tempData() const
+KexiReportPart::TempData *KexiReportView::tempData() const
 {
-    return static_cast<KexiReportPart::TempData*>(window()->data());
+    return static_cast<KexiReportPart::TempData *>(window()->data());
 }
 
 void KexiReportView::addNewRecordRequested()
@@ -484,46 +482,46 @@ void KexiReportView::addNewRecordRequested()
 
 void KexiReportView::moveToFirstRecordRequested()
 {
-        if (m_currentPage != 1) {
-                m_currentPage = 1;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+    if (m_currentPage != 1) {
+        m_currentPage = 1;
+        m_reportPage->renderPage(m_currentPage);
+#ifndef KEXI_MOBILE
+        m_pageSelector->setCurrentRecordNumber(m_currentPage);
+#endif
+    }
 }
 
 void KexiReportView::moveToLastRecordRequested()
 {
-        if (m_currentPage != m_pageCount) {
-                m_currentPage = m_pageCount;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+    if (m_currentPage != m_pageCount) {
+        m_currentPage = m_pageCount;
+        m_reportPage->renderPage(m_currentPage);
+#ifndef KEXI_MOBILE
+        m_pageSelector->setCurrentRecordNumber(m_currentPage);
+#endif
+    }
 }
 
 void KexiReportView::moveToNextRecordRequested()
 {
-        if (m_currentPage < m_pageCount) {
-                m_currentPage++;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+    if (m_currentPage < m_pageCount) {
+        m_currentPage++;
+        m_reportPage->renderPage(m_currentPage);
+#ifndef KEXI_MOBILE
+        m_pageSelector->setCurrentRecordNumber(m_currentPage);
+#endif
+    }
 }
 
 void KexiReportView::moveToPreviousRecordRequested()
 {
-        if (m_currentPage > 1) {
-                m_currentPage--;
-                m_reportPage->renderPage(m_currentPage);
-                #ifndef KEXI_MOBILE
-                m_pageSelector->setCurrentRecordNumber(m_currentPage);
-                #endif
-        }
+    if (m_currentPage > 1) {
+        m_currentPage--;
+        m_reportPage->renderPage(m_currentPage);
+#ifndef KEXI_MOBILE
+        m_pageSelector->setCurrentRecordNumber(m_currentPage);
+#endif
+    }
 }
 
 void KexiReportView::moveToRecordRequested(uint r)

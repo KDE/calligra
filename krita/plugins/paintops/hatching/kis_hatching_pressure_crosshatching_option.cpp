@@ -23,14 +23,15 @@
 #include <kis_painter.h>
 #include <KoColor.h>
 
-
 KisHatchingPressureCrosshatchingOption::KisHatchingPressureCrosshatchingOption()
     : KisCurveOption(i18n("Crosshatching"), "Crosshatching", KisPaintOpOption::generalCategory(), false)
 {
 }
 
-double KisHatchingPressureCrosshatchingOption::apply(const KisPaintInformation & info) const
+double KisHatchingPressureCrosshatchingOption::apply(const KisPaintInformation &info) const
 {
-    if (!isChecked()) return 0.5;
+    if (!isChecked()) {
+        return 0.5;
+    }
     return computeValue(info);
 }

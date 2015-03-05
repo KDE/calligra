@@ -32,7 +32,7 @@ public:
     /**
      * Constructor.
      */
-    explicit ReadOnlyTableModel(Sheet* sheet, int columns = 0, int rows = 0);
+    explicit ReadOnlyTableModel(Sheet *sheet, int columns = 0, int rows = 0);
 
     /**
      * Destructor.
@@ -40,19 +40,19 @@ public:
     ~ReadOnlyTableModel();
 
     // QAbstractTableModel interface
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
 
 protected:
-    Sheet* sheet() const;
-    const QSize& size() const;
+    Sheet *sheet() const;
+    const QSize &size() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace KSpread

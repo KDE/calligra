@@ -38,10 +38,10 @@ public:
     void propertyChanged(Property property, const QVariant &value);
 
     ///reimplemented
-    void saveOdf(KoShapeSavingContext & context);
+    void saveOdf(KoShapeSavingContext &context);
 
     ///reimplemented
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// get the list of tags supported by this variable
     static QStringList tags();

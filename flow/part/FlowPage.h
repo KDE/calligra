@@ -23,5 +23,4 @@
 
 #include <KoPAPage.h>
 
-
 #endif

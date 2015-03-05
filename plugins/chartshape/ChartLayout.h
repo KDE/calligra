@@ -31,11 +31,10 @@
 // KChart
 #include "kchart_global.h"
 
-
 class QSizeF;
 
-
-namespace KChart {
+namespace KChart
+{
 
 /**
  * A generic chart-style layout with 10 possible positions:
@@ -114,7 +113,7 @@ public:
     /**
      * Returns a list of shapes in this layout.
      */
-    QList<KoShape*> shapes() const;
+    QList<KoShape *> shapes() const;
 
     /**
      * Called whenever a property of the container (i.e. the ChartShape) is changed.
@@ -159,32 +158,32 @@ public:
     /**
      * Sets the horizontal and vertical margin that will be applied during layout
      */
-    void setMargins (qreal hMargin, qreal vMargin);
+    void setMargins(qreal hMargin, qreal vMargin);
 
 private:
     /**
      * Lays out all items in TopPosition, and returns the y value of
      * the bottom-most item's bottom.
      */
-    qreal layoutTop(const QMap<int, KoShape*>& shapes);
+    qreal layoutTop(const QMap<int, KoShape *> &shapes);
 
     /**
      * Lays out all items in BottomPosition, and returns the y value of
      * the top-most item's top.
      */
-    qreal layoutBottom(const QMap<int, KoShape*>& shapes);
+    qreal layoutBottom(const QMap<int, KoShape *> &shapes);
 
     /**
      * Lays out all items in StartPosition, and returns the x value of
      * the right-most item's right.
      */
-    qreal layoutStart(const QMap<int, KoShape*>& shapes);
+    qreal layoutStart(const QMap<int, KoShape *> &shapes);
 
     /**
      * Lays out all items in EndPosition, and returns the x value of
      * the left-most item's left.
      */
-    qreal layoutEnd(const QMap<int, KoShape*>& shapes);
+    qreal layoutEnd(const QMap<int, KoShape *> &shapes);
 
     void layoutTopStart(KoShape *shape);
     void layoutBottomStart(KoShape *shape);
@@ -197,7 +196,7 @@ private:
     QSizeF m_containerSize;
     qreal m_hMargin;
     qreal m_vMargin;
-    QMap<KoShape*, LayoutData*> m_layoutItems;
+    QMap<KoShape *, LayoutData *> m_layoutItems;
 };
 
 } // namespace KChart

@@ -69,11 +69,11 @@ public:
     void setFormatChangeInformation(int formatChangeId, KoFormatChangeInformation *formatInformation);
     KoFormatChangeInformation *formatChangeInformation(int formatChangeId) const;
 
-    KoChangeTrackerElement* elementById(int id) const;
+    KoChangeTrackerElement *elementById(int id) const;
     bool removeById(int id, bool freeMemory = true);
 
     //Returns all the deleted changes
-    int getDeletedChanges(QVector<KoChangeTrackerElement *>& deleteVector) const;
+    int getDeletedChanges(QVector<KoChangeTrackerElement *> &deleteVector) const;
 
     bool containsInlineChanges(const QTextFormat &format) const;
     int mergeableId(KoGenChange::Type type, const KUndo2MagicString &title, int existingId) const;
@@ -82,9 +82,9 @@ public:
     QColor getDeletionBgColor() const;
     QColor getFormatChangeBgColor() const;
 
-    void setInsertionBgColor(const QColor& bgColor);
-    void setDeletionBgColor(const QColor& color);
-    void setFormatChangeBgColor(const QColor& color);
+    void setInsertionBgColor(const QColor &bgColor);
+    void setDeletionBgColor(const QColor &color);
+    void setFormatChangeBgColor(const QColor &color);
 
     /// Splits a changeElement. This creates a duplicate changeElement with a different changeId. This is used because we do not support overlapping change regions. The function returns the new changeId
     int split(int changeId);
@@ -109,10 +109,10 @@ public:
      */
     QMap<int, QString> saveInlineChanges(QMap<int, QString> changeTransTable, KoGenChanges &genChanges);
 
-    void loadOdfChanges(const KoXmlElement& element);
+    void loadOdfChanges(const KoXmlElement &element);
     int getLoadedChangeId(const QString &odfId) const;
 
-    static QTextDocumentFragment generateDeleteFragment(const QTextCursor& cursor);
+    static QTextDocumentFragment generateDeleteFragment(const QTextCursor &cursor);
     static void insertDeleteFragment(QTextCursor &cursor);
     static int fragmentLength(const QTextDocumentFragment &fragment);
 
@@ -126,9 +126,9 @@ private:
 
     static bool checkListDeletion(const QTextList &list, const QTextCursor &cursor);
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(KoChangeTracker*)
+Q_DECLARE_METATYPE(KoChangeTracker *)
 
 #endif

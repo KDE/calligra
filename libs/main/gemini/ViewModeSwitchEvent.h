@@ -44,14 +44,14 @@ struct ViewModeSynchronisationObject {
     float exposure;
     float gamma;
     QString compositeOp;
-    KoPattern* pattern;
-    KoAbstractGradient* gradient;
+    KoPattern *pattern;
+    KoAbstractGradient *gradient;
     float opacity;
     bool globalAlphaLock;
     QString activeToolId;
 
-    KoGridData* gridData;
-    QList< KoShape* > shapes;
+    KoGridData *gridData;
+    QList< KoShape * > shapes;
 };
 
 class ViewModeSwitchEvent : public QEvent
@@ -63,29 +63,33 @@ public:
         SwitchedToTouchModeEvent,
     };
 
-    inline ViewModeSwitchEvent(ViewModeEventType type, QObject* fromView, QObject* toView, ViewModeSynchronisationObject* syncObject)
-            : QEvent(static_cast<QEvent::Type>(type))
-            , m_fromView(fromView)
-            , m_toView(toView)
-            , m_syncObject(syncObject) {
+    inline ViewModeSwitchEvent(ViewModeEventType type, QObject *fromView, QObject *toView, ViewModeSynchronisationObject *syncObject)
+        : QEvent(static_cast<QEvent::Type>(type))
+        , m_fromView(fromView)
+        , m_toView(toView)
+        , m_syncObject(syncObject)
+    {
 
     }
 
-    inline QObject* fromView() const {
+    inline QObject *fromView() const
+    {
         return m_fromView;
     }
-    inline QObject* toView() const {
+    inline QObject *toView() const
+    {
         return m_toView;
     }
 
-    inline ViewModeSynchronisationObject* synchronisationObject() const {
+    inline ViewModeSynchronisationObject *synchronisationObject() const
+    {
         return m_syncObject;
     }
 
 private:
-    QObject* m_fromView;
-    QObject* m_toView;
-    ViewModeSynchronisationObject* m_syncObject;
+    QObject *m_fromView;
+    QObject *m_toView;
+    ViewModeSynchronisationObject *m_syncObject;
 };
 
 #endif // VIEWMODESWITCHEVENT_H

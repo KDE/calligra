@@ -43,11 +43,11 @@ public:
 
     static QString colorSpaceId();
 
-    virtual KoColorSpace* clone() const;
+    virtual KoColorSpace *clone() const;
 
-    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const;
+    virtual void fromQColor(const QColor &color, quint8 *dst, const KoColorProfile *profile = 0) const;
 
-    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const;
+    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile *profile = 0) const;
 
 private:
 
@@ -59,7 +59,6 @@ private:
     static const quint32 MAX_CHANNEL_AB = 0xffff;
     static const quint32 CHANNEL_AB_ZERO_OFFSET = 0x8000;
 
-
 };
 
 class KoLabColorSpaceFactory : public KoSimpleColorSpaceFactory
@@ -68,15 +67,17 @@ class KoLabColorSpaceFactory : public KoSimpleColorSpaceFactory
 public:
 
     KoLabColorSpaceFactory()
-            : KoSimpleColorSpaceFactory("LABA",
-                                        i18n("L*a*b* (16-bit integer/channel, unmanaged)"),
-                                        true,
-                                        LABAColorModelID,
-                                        Integer16BitsColorDepthID,
-                                        16) {
+        : KoSimpleColorSpaceFactory("LABA",
+                                    i18n("L*a*b* (16-bit integer/channel, unmanaged)"),
+                                    true,
+                                    LABAColorModelID,
+                                    Integer16BitsColorDepthID,
+                                    16)
+    {
     }
 
-    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const {
+    virtual KoColorSpace *createColorSpace(const KoColorProfile *) const
+    {
         return new KoLabColorSpace();
     }
 

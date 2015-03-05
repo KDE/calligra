@@ -24,13 +24,12 @@
 #include "RdfSemanticTreeWidgetAction.h"
 #include "KoRdfSemanticItem.h"
 
-
 class KORDF_EXPORT RdfSemanticTreeWidgetSelectAction : public RdfSemanticTreeWidgetAction
 {
     hKoRdfSemanticItem si;
 public:
     RdfSemanticTreeWidgetSelectAction(QWidget *parent, KoCanvasBase *canvas,
-            hKoRdfSemanticItem si, const QString &name = QString("Select"));
+                                      hKoRdfSemanticItem si, const QString &name = QString("Select"));
 
     virtual ~RdfSemanticTreeWidgetSelectAction();
     virtual void activated();

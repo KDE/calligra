@@ -46,8 +46,9 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
     KoListStyle listStyle;
 
     // If the style is already completely set, we unset it instead
-    if (styleCompletelySetAlready && !(m_flags & KoTextEditor::DontUnsetIfSame))
+    if (styleCompletelySetAlready && !(m_flags & KoTextEditor::DontUnsetIfSame)) {
         style = KoListStyle::None;
+    }
 
     foreach (int lev, levels) {
         KoListLevelProperties llp;
@@ -62,8 +63,7 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
             if (llp.listItemSuffix().isEmpty()) {
                 llp.setListItemSuffix(".");
             }
-        }
-        else if (style == KoListStyle::CustomCharItem) {
+        } else if (style == KoListStyle::CustomCharItem) {
             llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
             llp.setBulletCharacter(levelProperties.bulletCharacter());
         } else if (style == KoListStyle::ImageItem) {
@@ -76,8 +76,8 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, const KoListLeve
         llp.setLabelFollowedBy(KoListStyle::ListTab);
         llp.setDisplayLevel(levelProperties.displayLevel());
 
-        llp.setTabStopPosition(MARGIN_DEFAULT*(lev+2));
-        llp.setMargin(MARGIN_DEFAULT*(lev+2));
+        llp.setTabStopPosition(MARGIN_DEFAULT * (lev + 2));
+        llp.setMargin(MARGIN_DEFAULT * (lev + 2));
         llp.setTextIndent(- MARGIN_DEFAULT);
 
         listStyle.setLevelProperties(llp);
@@ -119,17 +119,17 @@ bool ChangeListCommand::extractTextBlocks(const QTextCursor &cursor, int level, 
         m_blocks.append(block);
         if (block.textList()) {
             KoListLevelProperties prop = KoListLevelProperties::fromTextList(block.textList());
-            m_alignmentMode=prop.alignmentMode();
+            m_alignmentMode = prop.alignmentMode();
             m_formerProperties.insert((m_blocks.size() - 1), prop);
             m_levels.insert((m_blocks.size() - 1), detectLevel(block, level));
-            if (prop.style() != newStyle)
+            if (prop.style() != newStyle) {
                 styleCompletelySetAlready = false;
-        }
-        else {
+            }
+        } else {
             KoListLevelProperties prop;
             prop.setStyle(KoListStyle::None);
             prop.setAlignmentMode(true);
-            m_alignmentMode=prop.alignmentMode();
+            m_alignmentMode = prop.alignmentMode();
             m_formerProperties.insert((m_blocks.size() - 1), prop);
             m_levels.insert((m_blocks.size() - 1), level);
             styleCompletelySetAlready = false;
@@ -142,13 +142,15 @@ bool ChangeListCommand::extractTextBlocks(const QTextCursor &cursor, int level, 
 
 int ChangeListCommand::detectLevel(const QTextBlock &block, int givenLevel)
 {
-    if (givenLevel != 0)
+    if (givenLevel != 0) {
         return givenLevel;
+    }
     if (block.textList()) {
-        if (block.blockFormat().hasProperty(KoParagraphStyle::ListLevel))
+        if (block.blockFormat().hasProperty(KoParagraphStyle::ListLevel)) {
             return block.blockFormat().intProperty(KoParagraphStyle::ListLevel);
-        else
+        } else {
             return block.textList()->format().intProperty(KoListStyle::Level);
+        }
     }
     return 1;
 }
@@ -181,19 +183,21 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
             // checks format compatibility
             isMergeable = (isMergeable && prev.isValid() && prev.textList() && (formatsEqual(llp, prev.textList()->format())));
         }
-        if (isMergeable)
+        if (isMergeable) {
             mergeableList = document.list(prev);
+        }
 
         if (!mergeableList) {
             // attempt to merge with next block if previous failed
             isMergeable = true;
-            QTextBlock next = m_blocks.value(m_blocks.size()-1).next();
+            QTextBlock next = m_blocks.value(m_blocks.size() - 1).next();
             foreach (int lev, levels) {
                 KoListLevelProperties llp = listStyle->levelProperties(lev);
                 isMergeable = (isMergeable && next.isValid() && next.textList() && (formatsEqual(llp, next.textList()->format())));
             }
-            if (isMergeable)
+            if (isMergeable) {
                 mergeableList = document.list(next);
+            }
         }
     }
     // Now iterates over the blocks and set-up the various lists
@@ -223,8 +227,9 @@ void ChangeListCommand::initList(KoListStyle *listStyle)
         }
         // All else failing, we need to create a new list.
         KoList::Type type = m_flags & KoTextEditor::CreateNumberedParagraph ? KoList::NumberedParagraph : KoList::TextList;
-        if (!newList)
+        if (!newList) {
             newList = new KoList(m_blocks.at(i).document(), listStyle, type);
+        }
         m_list.insert(i, newList);
         m_actions.insert(i, ChangeListCommand::CreateNew);
     }
@@ -270,8 +275,7 @@ void ChangeListCommand::redo()
             KoTextBlockData userData(currentBlock);
             userData.setCounterWidth(-1.0);
         }
-    }
-    else {
+    } else {
         for (int i = 0; i < m_blocks.size(); ++i) {
             if (m_actions.value(i) == ChangeListCommand::RemoveList) {
                 //if the block is not part of a list continue
@@ -279,16 +283,14 @@ void ChangeListCommand::redo()
                     continue;
                 }
                 KoList::remove(m_blocks.at(i));
-            }
-            else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
+            } else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
                 KoListStyle *listStyle = m_list.value(i)->style();
                 listStyle->setLevelProperties(m_newProperties.value(i));
                 QTextCursor cursor(m_blocks.at(i));
                 QTextBlockFormat format = m_blocks.at(i).blockFormat();
                 format.clearProperty(KoParagraphStyle::UnnumberedListItem);
                 cursor.setBlockFormat(format);
-            }
-            else {
+            } else {
                 //(ChangeListCommand::CreateNew)
                 //(ChangeListCommand::MergeList)
                 m_list.value(i)->add(m_blocks.at(i), m_newProperties.value(i).level());
@@ -327,8 +329,7 @@ void ChangeListCommand::undo()
                     break;
                 }
             }
-        }
-        else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
+        } else if (m_actions.value(i) == ChangeListCommand::ModifyExisting) {
             m_list.value(i)->updateStoredList(m_blocks.at(i));
             if ((m_flags & KoTextEditor::ModifyExistingList) && (m_formerProperties.value(i).style() != KoListStyle::None)) {
                 KoListStyle *listStyle = m_oldList.value(i)->style();
@@ -342,8 +343,7 @@ void ChangeListCommand::undo()
                     break;
                 }
             }
-        }
-        else {
+        } else {
             //(ChangeListCommand::CreateNew)
             //(ChangeListCommand::MergeList)
 

@@ -38,11 +38,11 @@ class KisCustomGradientDialog : public KDialog
 
 public:
 
-    KisCustomGradientDialog(KoSegmentGradient* gradient, QWidget * parent, const char *name);
+    KisCustomGradientDialog(KoSegmentGradient *gradient, QWidget *parent, const char *name);
 
 private:
 
-    KisAutogradient * m_page;
+    KisAutogradient *m_page;
 
 };
 
@@ -58,23 +58,23 @@ public:
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource * currentResource();
+    KoResource *currentResource();
 
     void setCurrentItem(int row, int column);
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
-    void resourceSelected(KoResource * resource);
+    void resourceSelected(KoResource *resource);
 
 private Q_SLOTS:
-    virtual void update(KoResource * resource);
+    virtual void update(KoResource *resource);
     void addGradient();
     void editGradient();
 
 private:
     QLabel *m_lbName;
-    KoResourceItemChooser * m_itemChooser;
-    QPushButton* m_editGradient;
+    KoResourceItemChooser *m_itemChooser;
+    QPushButton *m_editGradient;
 };
 
 #endif // KIS_GRADIENT_CHOOSER_H_

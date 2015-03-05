@@ -24,7 +24,7 @@
 namespace KPlato
 {
 
-void EffortCost::add(const Duration &effort, double cost, double bcwpEffort, double bcwpCost )
+void EffortCost::add(const Duration &effort, double cost, double bcwpEffort, double bcwpCost)
 {
     m_effort += effort;
     m_cost += cost;
@@ -33,24 +33,25 @@ void EffortCost::add(const Duration &effort, double cost, double bcwpEffort, dou
 }
 
 //-----------------------
-EffortCostMap::EffortCostMap( const EffortCostMap &map )
+EffortCostMap::EffortCostMap(const EffortCostMap &map)
 {
     m_days = map.m_days;
 }
 
-void EffortCostMap::insert(const QDate &date, const EffortCost &ec )
+void EffortCostMap::insert(const QDate &date, const EffortCost &ec)
 {
-    Q_ASSERT( date.isValid() );
+    Q_ASSERT(date.isValid());
     m_days[ date ] = ec;
 }
 
-EffortCostMap &EffortCostMap::operator=( const EffortCostMap &ec )
+EffortCostMap &EffortCostMap::operator=(const EffortCostMap &ec)
 {
     m_days = ec.m_days;
     return *this;
 }
 
-EffortCostMap &EffortCostMap::operator+=(const EffortCostMap &ec) {
+EffortCostMap &EffortCostMap::operator+=(const EffortCostMap &ec)
+{
     //kDebug(planDbg())<<"me="<<m_days.count()<<" ec="<<ec.days().count();
     if (ec.isEmpty()) {
         return *this;
@@ -64,42 +65,42 @@ EffortCostMap &EffortCostMap::operator+=(const EffortCostMap &ec) {
     QDate ed = endDate();
     // get bcwp of the last entries
     EffortCost last_oec = other.m_days[oed];
-    last_oec.setEffort( Duration::zeroDuration );
-    last_oec.setCost( 0.0 );
+    last_oec.setEffort(Duration::zeroDuration);
+    last_oec.setCost(0.0);
     EffortCost last_ec = m_days[ed];
-    last_ec.setEffort( Duration::zeroDuration );
-    last_ec.setCost( 0.0 );
-    if ( oed > ed ) {
+    last_ec.setEffort(Duration::zeroDuration);
+    last_ec.setCost(0.0);
+    if (oed > ed) {
         // expand my last entry to match other
-        for ( QDate d = ed.addDays( 1 ); d <= oed; d = d.addDays( 1 ) ) {
-            m_days[ d ] = last_ec ;
+        for (QDate d = ed.addDays(1); d <= oed; d = d.addDays(1)) {
+            m_days[ d ] = last_ec;
         }
     }
     EffortCostDayMap::const_iterator it;
-    for(it = ec.days().constBegin(); it != ec.days().constEnd(); ++it) {
+    for (it = ec.days().constBegin(); it != ec.days().constEnd(); ++it) {
         add(it.key(), it.value());
     }
-    if ( oed < ed ) {
+    if (oed < ed) {
         // add others last entry to my trailing entries
-        for ( QDate d = oed.addDays( 1 ); d <= ed; d = d.addDays( 1 ) ) {
+        for (QDate d = oed.addDays(1); d <= ed; d = d.addDays(1)) {
             m_days[ d ] += last_oec;
         }
     }
     return *this;
 }
 
-void EffortCostMap::addBcwpCost( const QDate &date, double cost )
+void EffortCostMap::addBcwpCost(const QDate &date, double cost)
 {
     EffortCost ec = m_days[ date ];
-    ec.setBcwpCost( ec.bcwpCost() + cost );
+    ec.setBcwpCost(ec.bcwpCost() + cost);
     m_days[ date ] = ec;
 }
 
-double EffortCostMap::bcwpCost( const QDate &date ) const
+double EffortCostMap::bcwpCost(const QDate &date) const
 {
     double v = 0.0;
-    for ( EffortCostDayMap::const_iterator it = m_days.constBegin(); it != m_days.constEnd(); ++it ) {
-        if ( it.key() > date ) {
+    for (EffortCostDayMap::const_iterator it = m_days.constBegin(); it != m_days.constEnd(); ++it) {
+        if (it.key() > date) {
             break;
         }
         v = it.value().bcwpCost();
@@ -107,11 +108,11 @@ double EffortCostMap::bcwpCost( const QDate &date ) const
     return v;
 }
 
-double EffortCostMap::bcwpEffort( const QDate &date ) const
+double EffortCostMap::bcwpEffort(const QDate &date) const
 {
     double v = 0.0;
-    for ( EffortCostDayMap::const_iterator it = m_days.constBegin(); it != m_days.constEnd(); ++it ) {
-        if ( it.key() > date ) {
+    for (EffortCostDayMap::const_iterator it = m_days.constBegin(); it != m_days.constEnd(); ++it) {
+        if (it.key() > date) {
             break;
         }
         v = it.value().bcwpEffort();
@@ -120,21 +121,21 @@ double EffortCostMap::bcwpEffort( const QDate &date ) const
 }
 
 #ifndef QT_NO_DEBUG_STREAM
-QDebug EffortCostMap::debug( QDebug dbg ) const
+QDebug EffortCostMap::debug(QDebug dbg) const
 {
-    dbg.nospace()<<"EffortCostMap[";
-    if ( ! m_days.isEmpty() ) {
-        dbg<<startDate().toString(Qt::ISODate)<<" "<<endDate().toString(Qt::ISODate)
-            <<" total bcws="<<totalEffort().toDouble( Duration::Unit_h )<<", "<<totalCost()<<" bcwp="<<bcwpTotalEffort()<<" "<<bcwpTotalCost();
+    dbg.nospace() << "EffortCostMap[";
+    if (! m_days.isEmpty()) {
+        dbg << startDate().toString(Qt::ISODate) << " " << endDate().toString(Qt::ISODate)
+            << " total bcws=" << totalEffort().toDouble(Duration::Unit_h) << ", " << totalCost() << " bcwp=" << bcwpTotalEffort() << " " << bcwpTotalCost();
     }
-    dbg.nospace()<<']';
-    if ( ! m_days.isEmpty() ) {
+    dbg.nospace() << ']';
+    if (! m_days.isEmpty()) {
         QMap<QDate, KPlato::EffortCost>::ConstIterator it = days().constBegin();
-        for ( ; it != days().constEnd(); ++it ) {
-            dbg<<endl;
-            dbg<<"     "<<it.key().toString(Qt::ISODate)<<" "<<it.value();
+        for (; it != days().constEnd(); ++it) {
+            dbg << endl;
+            dbg << "     " << it.key().toString(Qt::ISODate) << " " << it.value();
         }
-        dbg<<endl;
+        dbg << endl;
     }
     return dbg;
 }
@@ -143,18 +144,18 @@ QDebug EffortCostMap::debug( QDebug dbg ) const
 } //namespace KPlato
 
 #ifndef QT_NO_DEBUG_STREAM
-QDebug operator<<( QDebug dbg, const KPlato::EffortCost &ec )
+QDebug operator<<(QDebug dbg, const KPlato::EffortCost &ec)
 {
-    dbg.nospace()<<"EffortCost[ bcws effort="<<ec.hours()<<" cost="<<ec.cost()<<" : bcwp effort="<<ec.bcwpEffort()<<" cost="<<ec.bcwpCost()<<"]";
+    dbg.nospace() << "EffortCost[ bcws effort=" << ec.hours() << " cost=" << ec.cost() << " : bcwp effort=" << ec.bcwpEffort() << " cost=" << ec.bcwpCost() << "]";
     return dbg;
 }
-QDebug operator<<( QDebug dbg, const KPlato::EffortCost *ec )
+QDebug operator<<(QDebug dbg, const KPlato::EffortCost *ec)
 {
-    return operator<<( dbg, *ec );
+    return operator<<(dbg, *ec);
 }
 
-QDebug operator<<( QDebug dbg, const KPlato::EffortCostMap &i )
+QDebug operator<<(QDebug dbg, const KPlato::EffortCostMap &i)
 {
-    return i.debug( dbg );
+    return i.debug(dbg);
 }
 #endif

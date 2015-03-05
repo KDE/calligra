@@ -28,14 +28,15 @@
 
 #include "kis_bspline.h"
 
-
-namespace KisBSplines {
+namespace KisBSplines
+{
 
 template <class Spline>
 struct ConvertSplineOp {
     ConvertSplineOp(const Spline &spline) : m_spline(spline) {}
 
-    float operator() (float x, float y) const {
+    float operator()(float x, float y) const
+    {
         return m_spline.value(x, y);
     }
 
@@ -51,7 +52,8 @@ public:
     ~KisBSpline2D();
 
     template <class Spline>
-        static inline KisBSpline2D* createResampledSpline(const Spline &other, int xSamples, int ySamples) {
+    static inline KisBSpline2D *createResampledSpline(const Spline &other, int xSamples, int ySamples)
+    {
         QPointF tl = other.topLeft();
         QPointF br = other.bottomRight();
 
@@ -66,7 +68,8 @@ public:
     }
 
     template <class FunctionOp>
-    inline void initializeSpline(const FunctionOp &op) {
+    inline void initializeSpline(const FunctionOp &op)
+    {
 
         float xStep = (m_xEnd - m_xStart) / (m_numSamplesX - 1);
         float yStep = (m_yEnd - m_yStart) / (m_numSamplesY - 1);
@@ -88,11 +91,13 @@ public:
 
     float value(float x, float y) const;
 
-    inline QPointF topLeft() const {
+    inline QPointF topLeft() const
+    {
         return QPointF(m_xStart, m_yStart);
     }
 
-    inline QPointF bottomRight() const {
+    inline QPointF bottomRight() const
+    {
         return QPointF(m_xEnd, m_yEnd);
     }
 

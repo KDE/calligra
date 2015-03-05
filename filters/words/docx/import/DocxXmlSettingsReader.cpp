@@ -30,7 +30,7 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlReader_p.h>
 
-DocxXmlSettingsReaderContext::DocxXmlSettingsReaderContext(QMap<QString, QVariant>& _documentSettings)
+DocxXmlSettingsReaderContext::DocxXmlSettingsReaderContext(QMap<QString, QVariant> &_documentSettings)
     : documentSettings(_documentSettings)
 {
 }
@@ -38,9 +38,11 @@ DocxXmlSettingsReaderContext::DocxXmlSettingsReaderContext(QMap<QString, QVarian
 class DocxXmlSettingsReader::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
 };
 
@@ -60,9 +62,9 @@ void DocxXmlSettingsReader::init()
 {
 }
 
-KoFilter::ConversionStatus DocxXmlSettingsReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus DocxXmlSettingsReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = static_cast<DocxXmlSettingsReaderContext*>(context);
+    m_context = static_cast<DocxXmlSettingsReaderContext *>(context);
 
     kDebug() << "=============================";
     readNext();
@@ -296,33 +298,25 @@ KoFilter::ConversionStatus DocxXmlSettingsReader::read_clrSchemeMapping()
         // that they match.
         if (handledAttr == "t1") {
             handledAttr = "tx1";
-        }
-        else if (handledAttr == "t2") {
+        } else if (handledAttr == "t2") {
             handledAttr = "tx2";
-        }
-        else if (handledAttr == "hyperlink") {
+        } else if (handledAttr == "hyperlink") {
             handledAttr = "hlink";
-        }
-        else if (handledAttr == "followedHyperlink") {
+        } else if (handledAttr == "followedHyperlink") {
             handledAttr = "folHlink";
         }
         QString attrValue = attrs.value(handledAttr).toString();
         if (attrValue == "light1") {
             attrValue = "lt1";
-        }
-        else if (attrValue == "light2") {
+        } else if (attrValue == "light2") {
             attrValue = "lt2";
-        }
-        else if (attrValue == "dark1") {
+        } else if (attrValue == "dark1") {
             attrValue = "dk1";
-        }
-        else if (attrValue == "dark2") {
+        } else if (attrValue == "dark2") {
             attrValue = "dk2";
-        }
-        else if (attrValue == "hyperlink") {
+        } else if (attrValue == "hyperlink") {
             attrValue = "hlink";
-        }
-        else if (attrValue == "followedHyperlink") {
+        } else if (attrValue == "followedHyperlink") {
             attrValue = "folHlink";
         }
         m_context->colorMap[handledAttr] = attrValue;

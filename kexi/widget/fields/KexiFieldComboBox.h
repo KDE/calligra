@@ -41,15 +41,15 @@ public:
 
 public Q_SLOTS:
     //! \return global project that is used to retrieve schema informationm for this combo box.
-    KexiProject* project() const;
+    KexiProject *project() const;
 
     //! Sets global project that is used to retrieve schema informationm for this combo box.
     void setProject(KexiProject *prj);
 
-    void setTableOrQuery(const QString& name, bool table);
+    void setTableOrQuery(const QString &name, bool table);
     QString tableOrQueryName() const;
     bool isTableAssigned() const;
-    void setFieldOrExpression(const QString& string);
+    void setFieldOrExpression(const QString &string);
     void setFieldOrExpression(int index);
     QString fieldOrExpression() const;
     QString fieldOrExpressionCaption() const;
@@ -64,13 +64,13 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void slotActivated(int);
-    void slotReturnPressed(const QString & text);
+    void slotReturnPressed(const QString &text);
 
 protected:
     virtual void focusOutEvent(QFocusEvent *e);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

@@ -48,12 +48,10 @@
 #include <ui/input/wintab/kis_tablet_support_x11.h>
 #endif
 
-
-int main( int argc, char** argv )
+int main(int argc, char **argv)
 {
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;
-
 
 #ifdef CALLIGRA_GIT_SHA1_STRING
     QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
@@ -61,7 +59,6 @@ int main( int argc, char** argv )
 #else
     version = calligraVersion;
 #endif
-
 
     KAboutData aboutData("kritagemini",
                          "krita",
@@ -74,16 +71,16 @@ int main( int argc, char** argv )
                          "http://www.kritastudio.com",
                          "submit@bugs.kde.org");
 
-    KCmdLineArgs::init (argc, argv, &aboutData);
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
-    options.add( "+[files]", ki18n( "Images to open" ) );
-    options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
-    options.add( "fullscreen", ki18n( "Use full-screen display" ) );
-    options.add( "sketch", ki18n( "Start with the Sketch interface" ) );
-    KCmdLineArgs::addCmdLineOptions( options );
+    options.add("+[files]", ki18n("Images to open"));
+    options.add("vkb", ki18n("Use the virtual keyboard"));
+    options.add("fullscreen", ki18n("Use full-screen display"));
+    options.add("sketch", ki18n("Start with the Sketch interface"));
+    KCmdLineArgs::addCmdLineOptions(options);
 
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QStringList fileNames;
     if (args->count() > 0) {
         for (int i = 0; i < args->count(); ++i) {
@@ -105,7 +102,7 @@ int main( int argc, char** argv )
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
-    if (!env.contains("KDEHOME") ) {
+    if (!env.contains("KDEHOME")) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }
     if (!env.contains("KDESYCOCA")) {
@@ -121,9 +118,9 @@ int main( int argc, char** argv )
         _putenv_s("KDEDIRS", appdir.absolutePath().toLocal8Bit());
     }
     _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
-              + appdir.absolutePath() + "/lib" + ";"
-              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
-              + appdir.absolutePath()).toLocal8Bit());
+                              + appdir.absolutePath() + "/lib" + ";"
+                              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+                              + appdir.absolutePath()).toLocal8Bit());
 
     app.addLibraryPath(appdir.absolutePath());
     app.addLibraryPath(appdir.absolutePath() + "/bin");
@@ -138,11 +135,11 @@ int main( int argc, char** argv )
     KisTabletSupportX11::init();
     app.setEventFilter(&KisTabletSupportX11::eventFilter);
 #endif
-	
-	if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
+
+    if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
-        qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
-		qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
+        qobject_cast<QApplication *>(QApplication::instance())->setStyle("Plastique");
+        qobject_cast<QApplication *>(QApplication::instance())->setStyle("Oxygen");
     }
 
     // Prepare to show window fullscreen if required
@@ -159,7 +156,7 @@ int main( int argc, char** argv )
         showFullscreen = true;
     }
 
-	if (args->isSet("fullscreen")) {
+    if (args->isSet("fullscreen")) {
         showFullscreen = true;
     }
 
@@ -193,11 +190,11 @@ int main( int argc, char** argv )
         window.showFullScreen();
     } else {
 #ifdef Q_OS_WIN
-		window.showMaximized();
+        window.showMaximized();
 #else
-		window.show();
+        window.show();
 #endif
-	}
+    }
     splash.finish(&window);
 
     return app.exec();

@@ -20,7 +20,6 @@
 
 #include <qtest_kde.h>
 
-
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -37,11 +36,11 @@
 
 void KisAdjustmentLayerTest::testCreation()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
     KisAdjustmentLayerSP test = new KisAdjustmentLayer(image, "test", kfc, 0);
@@ -50,11 +49,11 @@ void KisAdjustmentLayerTest::testCreation()
 void KisAdjustmentLayerTest::testSetSelection()
 {
     KisSelectionSP sel = new KisSelection();
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
     sel->pixelSelection()->select(QRect(10, 10, 200, 200), 128);
     KisAdjustmentLayerSP l1 = new KisAdjustmentLayer(image, "bla", kfc, sel);
@@ -63,11 +62,11 @@ void KisAdjustmentLayerTest::testSetSelection()
 
 void KisAdjustmentLayerTest::testInverted()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);
-    KisFilterConfiguration * kfc = f->defaultConfiguration(0);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
     KisSelectionSP sel2 = new KisSelection();
@@ -83,7 +82,7 @@ void KisAdjustmentLayerTest::testInverted()
 
 void KisAdjustmentLayerTest::testSelectionParent()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
     KisFilterSP f = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(f);

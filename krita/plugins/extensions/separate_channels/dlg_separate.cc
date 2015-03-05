@@ -27,13 +27,13 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-DlgSeparate::DlgSeparate(const QString & imageCS,
-                         const QString & layerCS,
-                         QWidget *  parent,
-                         const char * name)
-        : KDialog(parent)
-        , m_imageCS(imageCS)
-        , m_layerCS(layerCS)
+DlgSeparate::DlgSeparate(const QString &imageCS,
+                         const QString &layerCS,
+                         QWidget   *parent,
+                         const char *name)
+    : KDialog(parent)
+    , m_imageCS(imageCS)
+    , m_layerCS(layerCS)
 {
     setObjectName(name);
     setCaption(i18n("Separate Image"));
@@ -61,17 +61,27 @@ DlgSeparate::~DlgSeparate()
 }
 enumSepAlphaOptions DlgSeparate::getAlphaOptions()
 {
-    if (m_page->radioCopyAlpha->isChecked()) return COPY_ALPHA_TO_SEPARATIONS;
-    if (m_page->radioDiscardAlpha->isChecked()) return DISCARD_ALPHA;
-    if (m_page->radioSeparateAlpha->isChecked()) return CREATE_ALPHA_SEPARATION;
+    if (m_page->radioCopyAlpha->isChecked()) {
+        return COPY_ALPHA_TO_SEPARATIONS;
+    }
+    if (m_page->radioDiscardAlpha->isChecked()) {
+        return DISCARD_ALPHA;
+    }
+    if (m_page->radioSeparateAlpha->isChecked()) {
+        return CREATE_ALPHA_SEPARATION;
+    }
 
     return COPY_ALPHA_TO_SEPARATIONS;
 }
 
 enumSepSource DlgSeparate::getSource()
 {
-    if (m_page->radioCurrentLayer->isChecked()) return CURRENT_LAYER;
-    if (m_page->radioAllLayers->isChecked()) return ALL_LAYERS;
+    if (m_page->radioCurrentLayer->isChecked()) {
+        return CURRENT_LAYER;
+    }
+    if (m_page->radioAllLayers->isChecked()) {
+        return ALL_LAYERS;
+    }
     //if (XXX) return VISIBLE_LAYERS;
 
     return CURRENT_LAYER;
@@ -79,12 +89,15 @@ enumSepSource DlgSeparate::getSource()
 
 enumSepOutput DlgSeparate::getOutput()
 {
-    if (m_page->radioLayers->isChecked()) return TO_LAYERS;
-    if (m_page->radioImages->isChecked()) return TO_IMAGES;
+    if (m_page->radioLayers->isChecked()) {
+        return TO_LAYERS;
+    }
+    if (m_page->radioImages->isChecked()) {
+        return TO_IMAGES;
+    }
 
     return TO_LAYERS;
 }
-
 
 bool DlgSeparate::getDownscale()
 {

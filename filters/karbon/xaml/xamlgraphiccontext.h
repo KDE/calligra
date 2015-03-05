@@ -27,7 +27,8 @@
 class XAMLGraphicsContext
 {
 public:
-    XAMLGraphicsContext() {
+    XAMLGraphicsContext()
+    {
         stroke.setType(VStroke::none);   // default is no stroke
         stroke.setLineWidth(1.0);
         stroke.setLineCap(VStroke::capButt);

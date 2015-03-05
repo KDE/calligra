@@ -34,15 +34,13 @@
 #include <QMap>
 #include <QMetaType>
 
-
-#define CD_PROFILE_METADATA_DATA_SOURCE_EDID	 "edid"
-#define CD_PROFILE_METADATA_DATA_SOURCE_CALIB	 "calib"
+#define CD_PROFILE_METADATA_DATA_SOURCE_EDID     "edid"
+#define CD_PROFILE_METADATA_DATA_SOURCE_CALIB    "calib"
 #define CD_PROFILE_METADATA_DATA_SOURCE_STANDARD "standard"
 #define CD_PROFILE_METADATA_DATA_SOURCE_TEST     "test"
 
 class CdInterface;
 struct Device;
-
 
 #include "kritacolord_export.h"
 
@@ -59,8 +57,7 @@ public:
 
 Q_SIGNALS:
     void changed();
-    void changed(const QString& device);
-
+    void changed(const QString &device);
 
 private Q_SLOTS:
 
@@ -75,7 +72,7 @@ private:
 
     void addProfilesToDevice(Device *dev, QList<QDBusObjectPath> profiles) const;
 
-    QMap<QDBusObjectPath, Device*> m_devices;
+    QMap<QDBusObjectPath, Device *> m_devices;
 
     CdInterface *m_cdInterface;
 };

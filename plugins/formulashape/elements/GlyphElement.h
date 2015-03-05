@@ -30,7 +30,8 @@
  * GlyphElement uses the Qt font database classes to load the additional fonts to
  * display its contents.
  */
-class KOFORMULA_EXPORT GlyphElement : public TokenElement {
+class KOFORMULA_EXPORT GlyphElement : public TokenElement
+{
 public:
     /// The standart constructor
     explicit GlyphElement(BasicElement *parent = 0);
@@ -39,16 +40,15 @@ public:
     ElementType elementType() const;
 
     /// Process @p raw and render it to @p path
-    QRectF renderToPath( const QString& raw, QPainterPath& path ) const;
+    QRectF renderToPath(const QString &raw, QPainterPath &path) const;
 
     /// get width of character, for layouting
     qreal getWidth(const AttributeManager *am);
 
-
 private:
-    bool readMathMLAttributes( const KoXmlElement& element );
-    void writeMathMLAttributes( KoXmlWriter* writer ) const;
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    bool readMathMLAttributes(const KoXmlElement &element);
+    void writeMathMLAttributes(KoXmlWriter *writer) const;
+    void writeMathMLContent(KoXmlWriter *writer, const QString &ns) const;
 
     QChar m_char;         // Char to be shown
     QString m_fontFamily; // Font family to use

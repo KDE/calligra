@@ -117,7 +117,7 @@ void KoPropertiesTest::testProperties()
 
 }
 
-bool checkProps(const KoProperties & props)
+bool checkProps(const KoProperties &props)
 {
     return (props.value("bla") == 1);
 }

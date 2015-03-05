@@ -25,8 +25,8 @@
 static QString lastBookMarkItem;
 
 KWSelectBookmark::KWSelectBookmark(QList<QString> nameList, QWidget *parent)
-        : QWidget(parent),
-        parentWidget(parent)
+    : QWidget(parent),
+      parentWidget(parent)
 {
     widget.setupUi(this);
     widget.bookmarkList->addItems(nameList);
@@ -37,8 +37,9 @@ KWSelectBookmark::KWSelectBookmark(QList<QString> nameList, QWidget *parent)
         int row = 0;
         if (! lastBookMarkItem.isNull()) {
             QList<QListWidgetItem *> items = widget.bookmarkList->findItems(lastBookMarkItem, Qt::MatchExactly);
-            if (items.count() > 0)
+            if (items.count() > 0) {
                 row = widget.bookmarkList->row(items[0]);
+            }
         }
         widget.bookmarkList->setCurrentRow(row);
     }
@@ -46,8 +47,8 @@ KWSelectBookmark::KWSelectBookmark(QList<QString> nameList, QWidget *parent)
     connect(widget.bookmarkList, SIGNAL(currentRowChanged(int)), this, SLOT(selectionChanged(int)));
     connect(widget.buttonRename, SIGNAL(clicked()), this, SLOT(slotBookmarkRename()));
     connect(widget.buttonDelete, SIGNAL(clicked()), this, SLOT(slotBookmarkDelete()));
-    connect(widget.bookmarkList, SIGNAL(itemActivated(QListWidgetItem *)),
-            this, SLOT(slotBookmarkItemActivated(QListWidgetItem *)));
+    connect(widget.bookmarkList, SIGNAL(itemActivated(QListWidgetItem*)),
+            this, SLOT(slotBookmarkItemActivated(QListWidgetItem*)));
     selectionChanged(bookmarkRow());
 }
 
@@ -82,8 +83,9 @@ void KWSelectBookmark::slotBookmarkRename()
                                         0,
                                         parentWidget);
         if (curName != newName && ! newName.isNull()) {
-            if (newName.isEmpty())
+            if (newName.isEmpty()) {
                 continue;
+            }
             QList<QListWidgetItem *> items = widget.bookmarkList->findItems(newName, Qt::MatchExactly);
             if (items.count() > 0) {
                 KMessageBox::error(parentWidget, i18n("A bookmark with the name \"%1\" already exists.", newName));
@@ -114,7 +116,7 @@ void KWSelectBookmark::slotBookmarkItemActivated(QListWidgetItem *item)
 }
 
 KWSelectBookmarkDialog::KWSelectBookmarkDialog(QList<QString> nameList, QWidget *parent)
-        : KDialog(parent)
+    : KDialog(parent)
 {
     ui = new KWSelectBookmark(nameList, this);
     setMainWidget(ui);
@@ -124,12 +126,12 @@ KWSelectBookmarkDialog::KWSelectBookmarkDialog(QList<QString> nameList, QWidget 
     setDefaultButton(Ok);
     showButtonSeparator(true);
     connect(ui, SIGNAL(bookmarkSelectionChanged(int)), this, SLOT(selectionChanged(int)));
-    connect(ui, SIGNAL(bookmarkNameChanged(const QString &, const QString &)),
-            this, SIGNAL(nameChanged(const QString &, const QString &)));
-    connect(ui, SIGNAL(bookmarkItemDeleted(const QString &)),
-            this, SIGNAL(bookmarkDeleted(const QString &)));
-    connect(ui, SIGNAL(bookmarkItemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(bookmarkDoubleClicked(QListWidgetItem *)));
+    connect(ui, SIGNAL(bookmarkNameChanged(QString,QString)),
+            this, SIGNAL(nameChanged(QString,QString)));
+    connect(ui, SIGNAL(bookmarkItemDeleted(QString)),
+            this, SIGNAL(bookmarkDeleted(QString)));
+    connect(ui, SIGNAL(bookmarkItemDoubleClicked(QListWidgetItem*)),
+            this, SLOT(bookmarkDoubleClicked(QListWidgetItem*)));
     selectionChanged(ui->bookmarkRow());
 }
 

@@ -59,8 +59,9 @@ void KoPointedAt::fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManag
     externalHRef.clear();
     note = 0;
 
-    if (!inlineManager)
+    if (!inlineManager) {
         return;
+    }
 
     // Is there an href here ?
     if (cursor.charFormat().isAnchor()) {
@@ -79,6 +80,6 @@ void KoPointedAt::fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManag
             externalHRef = href;
         }
     } else {
-        note = dynamic_cast<KoInlineNote*>(inlineManager->inlineTextObject(cursor));
+        note = dynamic_cast<KoInlineNote *>(inlineManager->inlineTextObject(cursor));
     }
 }

@@ -47,12 +47,12 @@ public:
      Also find widgets having action assigned and connects them
      to appropriate actions.
      For now, all of them must be KexiPushButton). */
-    void setMainWidgetForEventHandling(QWidget* mainWidget);
+    void setMainWidgetForEventHandling(QWidget *mainWidget);
 
 private:
     class Private;
 
-    Private* const d;
+    Private *const d;
 };
 
 //! @internal form-level action for handling "on click" actions
@@ -75,7 +75,7 @@ public:
          \a ok is set to true on success and to false on failure. On failure no other
          values are passed.
          \return part info if action type is "table", "query", etc., or 0 for "kaction" type. */
-        KexiPart::Info* decodeString(QString& actionType, QString& actionArg, bool& ok) const;
+        KexiPart::Info *decodeString(QString &actionType, QString &actionArg, bool &ok) const;
 
         //! \return true if the action is empty
         bool isEmpty() const;
@@ -87,8 +87,8 @@ public:
         //!< @see ActionToExecuteListView::showActionsForPartClass()
     };
 
-    KexiFormEventAction(QObject* parent, const QString& actionName,
-                        const QString& objectName, const QString& actionOption);
+    KexiFormEventAction(QObject *parent, const QString &actionName,
+                        const QString &objectName, const QString &actionOption);
     virtual ~KexiFormEventAction();
 
 public Q_SLOTS:
@@ -99,7 +99,7 @@ public Q_SLOTS:
 private:
     class Private;
 
-    Private* const d;
+    Private *const d;
 };
 
 #endif

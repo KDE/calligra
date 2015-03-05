@@ -33,7 +33,7 @@ PSDResourceBlock::PSDResourceBlock()
 {
 }
 
-bool PSDResourceBlock::read(QIODevice* io)
+bool PSDResourceBlock::read(QIODevice *io)
 {
     dbgFile << "Reading resource block";
     if (io->atEnd()) {
@@ -43,7 +43,7 @@ bool PSDResourceBlock::read(QIODevice* io)
 
     QByteArray b;
     b = io->read(4);
-    if(b.size() != 4 || QString(b) != "8BIM") {
+    if (b.size() != 4 || QString(b) != "8BIM") {
         error = QString("Could not read resource block signature. Got %1.")
                 .arg(QString(b));
         return false;
@@ -57,7 +57,6 @@ bool PSDResourceBlock::read(QIODevice* io)
     dbgFile << "\tresource block identifier" << PSDResourceSection::idToString((PSDResourceSection::PSDResourceID)identifier) << identifier;
 
     m_type = QString("PSD Resource Block: %1").arg(identifier);
-
 
     if (!psdread_pascalstring(io, name, 2)) {
         error = "Could not read name of resource block";
@@ -258,7 +257,7 @@ bool PSDResourceBlock::read(QIODevice* io)
     return valid();
 }
 
-bool PSDResourceBlock::write(QIODevice* io)
+bool PSDResourceBlock::write(QIODevice *io)
 {
 
     dbgFile << "Writing Resource Block" << PSDResourceSection::idToString((PSDResourceSection::PSDResourceID)identifier) << identifier;
@@ -274,8 +273,7 @@ bool PSDResourceBlock::write(QIODevice* io)
     if (resource && !resource->createBlock(ba)) {
         error = resource->error;
         return false;
-    }
-    else if (!resource) {
+    } else if (!resource) {
         // reconstruct from the data
         QBuffer buf(&ba);
         buf.open(QBuffer::WriteOnly);
@@ -330,7 +328,7 @@ bool RESN_INFO_1005::interpretBlock(QByteArray data)
     return ds.atEnd();
 }
 
-bool RESN_INFO_1005::createBlock(QByteArray & data)
+bool RESN_INFO_1005::createBlock(QByteArray &data)
 {
     dbgFile << "Writing RESN_INFO_1005";
     QBuffer buf(&data);
@@ -387,7 +385,6 @@ bool ICC_PROFILE_1039::createBlock(QByteArray &data)
 
     buf.write(icc.constData(), icc.size());
     buf.close();
-
 
     return true;
 }

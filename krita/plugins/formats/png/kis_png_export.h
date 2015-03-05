@@ -29,7 +29,8 @@ class KisWdgOptionsPNG : public QWidget, public Ui::KisWdgOptionsPNG
     Q_OBJECT
 
 public:
-    KisWdgOptionsPNG(QWidget *parent) : QWidget(parent) {
+    KisWdgOptionsPNG(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 private Q_SLOTS:
@@ -43,7 +44,7 @@ public:
     KisPNGExport(QObject *parent, const QVariantList &);
     virtual ~KisPNGExport();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif

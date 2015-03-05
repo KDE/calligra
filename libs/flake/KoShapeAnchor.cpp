@@ -42,19 +42,18 @@ class KoShapeAnchor::Private
 {
 public:
     Private(KoShape *s)
-            : shape(s)
-            , verticalPos(KoShapeAnchor::VTop)
-            , verticalRel(KoShapeAnchor::VLine)
-            , horizontalPos(KoShapeAnchor::HLeft)
-            , horizontalRel(KoShapeAnchor::HChar)
-            , flowWithText(true)
-            , anchorType(KoShapeAnchor::AnchorToCharacter)
-            , placementStrategy(0)
-            , pageNumber(-1)
-            , textLocation(0)
+        : shape(s)
+        , verticalPos(KoShapeAnchor::VTop)
+        , verticalRel(KoShapeAnchor::VLine)
+        , horizontalPos(KoShapeAnchor::HLeft)
+        , horizontalRel(KoShapeAnchor::HChar)
+        , flowWithText(true)
+        , anchorType(KoShapeAnchor::AnchorToCharacter)
+        , placementStrategy(0)
+        , pageNumber(-1)
+        , textLocation(0)
     {
     }
-
 
     QDebug printDebug(QDebug dbg) const
     {
@@ -66,7 +65,7 @@ public:
         return dbg.space();
     }
 
-    KoShape * const shape;
+    KoShape *const shape;
     QPointF offset;
     KoShapeAnchor::VerticalPos verticalPos;
     KoShapeAnchor::VerticalRel verticalRel;
@@ -330,13 +329,13 @@ void KoShapeAnchor::saveOdf(KoShapeSavingContext &context) const
         QTransform parentMatrix = shape()->parent()->absoluteTransformation(0).inverted();
         QTransform shapeMatrix = shape()->absoluteTransformation(0);;
 
-        qreal dx = d->offset.x() - shapeMatrix.dx()*parentMatrix.m11()
-                                   - shapeMatrix.dy()*parentMatrix.m21();
-        qreal dy = d->offset.y() - shapeMatrix.dx()*parentMatrix.m12()
-                                   - shapeMatrix.dy()*parentMatrix.m22();
-        context.addShapeOffset(shape(), QTransform(parentMatrix.m11(),parentMatrix.m12(),
-                                                parentMatrix.m21(),parentMatrix.m22(),
-                                                dx,dy));
+        qreal dx = d->offset.x() - shapeMatrix.dx() * parentMatrix.m11()
+                   - shapeMatrix.dy() * parentMatrix.m21();
+        qreal dy = d->offset.y() - shapeMatrix.dx() * parentMatrix.m12()
+                   - shapeMatrix.dy() * parentMatrix.m22();
+        context.addShapeOffset(shape(), QTransform(parentMatrix.m11(), parentMatrix.m12(),
+                               parentMatrix.m21(), parentMatrix.m22(),
+                               dx, dy));
     }
 
     shape()->saveOdf(context);
@@ -410,38 +409,39 @@ bool KoShapeAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &
         d->verticalPos = VFromTop;
     } else if (verticalPos == "middle") {//svg:y attribute is ignored
         d->verticalPos = VMiddle;
-        d->offset.setY(-(shape()->size().height()/2));
+        d->offset.setY(-(shape()->size().height() / 2));
     } else if (verticalPos == "top") {//svg:y attribute is ignored
         d->verticalPos = VTop;
         d->offset.setY(0);
     }
 
     // vertical-rel
-    if (verticalRel == "baseline")
+    if (verticalRel == "baseline") {
         d->verticalRel = VBaseline;
-    else if (verticalRel == "char")
+    } else if (verticalRel == "char") {
         d->verticalRel = VChar;
-    else if (verticalRel == "frame")
+    } else if (verticalRel == "frame") {
         d->verticalRel = VFrame;
-    else if (verticalRel == "frame-content")
+    } else if (verticalRel == "frame-content") {
         d->verticalRel = VFrameContent;
-    else if (verticalRel == "line")
+    } else if (verticalRel == "line") {
         d->verticalRel = VLine;
-    else if (verticalRel == "page")
+    } else if (verticalRel == "page") {
         d->verticalRel = VPage;
-    else if (verticalRel == "page-content")
+    } else if (verticalRel == "page-content") {
         d->verticalRel = VPageContent;
-    else if (verticalRel == "paragraph")
+    } else if (verticalRel == "paragraph") {
         d->verticalRel = VParagraph;
-    else if (verticalRel == "paragraph-content")
+    } else if (verticalRel == "paragraph-content") {
         d->verticalRel = VParagraphContent;
-    else if (verticalRel == "text")
+    } else if (verticalRel == "text") {
         d->verticalRel = VText;
+    }
 
     // horizontal-pos
     if (horizontalPos == "center") {//svg:x attribute is ignored
         d->horizontalPos = HCenter;
-        d->offset.setX(-(shape()->size().width()/2));
+        d->offset.setX(-(shape()->size().width() / 2));
     } else if (horizontalPos == "from-inside") {
         d->horizontalPos = HFromInside;
     } else if (horizontalPos == "from-left") {
@@ -452,41 +452,42 @@ bool KoShapeAnchor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &
     } else if (horizontalPos == "left") {//svg:x attribute is ignored
         d->horizontalPos = HLeft;
         d->offset.setX(0);
-    }else if (horizontalPos == "outside") {//svg:x attribute is ignored
+    } else if (horizontalPos == "outside") {//svg:x attribute is ignored
         d->horizontalPos = HOutside;
         d->offset.setX(-shape()->size().width());
-    }else if (horizontalPos == "right") {//svg:x attribute is ignored
+    } else if (horizontalPos == "right") {//svg:x attribute is ignored
         d->horizontalPos = HRight;
         d->offset.setX(-shape()->size().width());
     }
 
     // horizontal-rel
-    if (horizontalRel == "char")
+    if (horizontalRel == "char") {
         d->horizontalRel = HChar;
-    else if (horizontalRel == "page")
+    } else if (horizontalRel == "page") {
         d->horizontalRel = HPage;
-    else if (horizontalRel == "page-content")
+    } else if (horizontalRel == "page-content") {
         d->horizontalRel = HPageContent;
-    else if (horizontalRel == "page-start-margin")
+    } else if (horizontalRel == "page-start-margin") {
         d->horizontalRel = HPageStartMargin;
-    else if (horizontalRel == "page-end-margin")
+    } else if (horizontalRel == "page-end-margin") {
         d->horizontalRel = HPageEndMargin;
-    else if (horizontalRel == "frame")
+    } else if (horizontalRel == "frame") {
         d->horizontalRel = HFrame;
-    else if (horizontalRel == "frame-content")
+    } else if (horizontalRel == "frame-content") {
         d->horizontalRel = HFrameContent;
-    else if (horizontalRel == "frame-end-margin")
+    } else if (horizontalRel == "frame-end-margin") {
         d->horizontalRel = HFrameEndMargin;
-    else if (horizontalRel == "frame-start-margin")
+    } else if (horizontalRel == "frame-start-margin") {
         d->horizontalRel = HFrameStartMargin;
-    else if (horizontalRel == "paragraph")
+    } else if (horizontalRel == "paragraph") {
         d->horizontalRel = HParagraph;
-    else if (horizontalRel == "paragraph-content")
+    } else if (horizontalRel == "paragraph-content") {
         d->horizontalRel = HParagraphContent;
-    else if (horizontalRel == "paragraph-end-margin")
+    } else if (horizontalRel == "paragraph-end-margin") {
         d->horizontalRel = HParagraphEndMargin;
-    else if (horizontalRel == "paragraph-start-margin")
+    } else if (horizontalRel == "paragraph-start-margin") {
         d->horizontalRel = HParagraphStartMargin;
+    }
 
     // if svg:x or svg:y should be ignored set new position
     shape()->setPosition(d->offset);

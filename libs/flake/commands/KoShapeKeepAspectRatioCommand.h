@@ -38,7 +38,7 @@ public:
      * @param newKeepAspectRatio the new settings
      * @param parent the parent command
      */
-    KoShapeKeepAspectRatioCommand(const QList<KoShape*> &shapes, const QList<bool> &oldKeepAspectRatio, const QList<bool> &newKeepAspectRatio, KUndo2Command* parent = 0);
+    KoShapeKeepAspectRatioCommand(const QList<KoShape *> &shapes, const QList<bool> &oldKeepAspectRatio, const QList<bool> &newKeepAspectRatio, KUndo2Command *parent = 0);
     ~KoShapeKeepAspectRatioCommand();
 
     /// Execute the command
@@ -47,7 +47,7 @@ public:
     virtual void undo();
 
 private:
-    QList<KoShape*> m_shapes;
+    QList<KoShape *> m_shapes;
     QList<bool> m_oldKeepAspectRatio;
     QList<bool> m_newKeepAspectRatio;
 };

@@ -25,8 +25,8 @@
 #include "kpteffortcostmap.h"
 #include "kptduration.h"
 
-Scripting::Node::Node( Scripting::Project *project, KPlato::Node *node, QObject *parent )
-    : QObject( parent ), m_project( project ), m_node( node )
+Scripting::Node::Node(Scripting::Project *project, KPlato::Node *node, QObject *parent)
+    : QObject(parent), m_project(project), m_node(node)
 {
 }
 
@@ -65,65 +65,65 @@ int Scripting::Node::childCount() const
     return m_node->numChildren();
 }
 
-QObject *Scripting::Node::childAt( int index )
+QObject *Scripting::Node::childAt(int index)
 {
-    return m_project->node( m_node->childNode( index ) );
+    return m_project->node(m_node->childNode(index));
 }
 
 QObject *Scripting::Node::parentNode()
 {
-    return m_project->node( m_node->parentNode() );
+    return m_project->node(m_node->parentNode());
 }
 
-QVariant Scripting::Node::plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule )
+QVariant Scripting::Node::plannedEffortCostPrDay(const QVariant &start, const QVariant &end, const QVariant &schedule)
 {
     //kDebug(planDbg())<<start<<end<<schedule;
     QVariantMap map;
     QDate s = start.toDate();
     QDate e = end.toDate();
-    if ( ! s.isValid() ) {
+    if (! s.isValid()) {
         s = QDate::currentDate();
     }
-    if ( ! e.isValid() ) {
+    if (! e.isValid()) {
         e = QDate::currentDate();
     }
-    KPlato::EffortCostMap ec = m_node->plannedEffortCostPrDay( s, e, schedule.toLongLong() );
+    KPlato::EffortCostMap ec = m_node->plannedEffortCostPrDay(s, e, schedule.toLongLong());
     KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
-    for (; it != ec.days().constEnd(); ++it ) {
-        map.insert( it.key().toString( Qt::ISODate ), QVariantList() << it.value().effort().toDouble( KPlato::Duration::Unit_h ) << it.value().cost() );
+    for (; it != ec.days().constEnd(); ++it) {
+        map.insert(it.key().toString(Qt::ISODate), QVariantList() << it.value().effort().toDouble(KPlato::Duration::Unit_h) << it.value().cost());
     }
     return map;
 }
 
-QVariant Scripting::Node::bcwsPrDay( const QVariant &schedule ) const
+QVariant Scripting::Node::bcwsPrDay(const QVariant &schedule) const
 {
     QVariantMap map;
-    KPlato::EffortCostMap ec = m_node->bcwsPrDay( schedule.toLongLong() );
+    KPlato::EffortCostMap ec = m_node->bcwsPrDay(schedule.toLongLong());
     KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
-    for (; it != ec.days().constEnd(); ++it ) {
-        map.insert( it.key().toString( Qt::ISODate ), QVariantList() << it.value().effort().toDouble( KPlato::Duration::Unit_h ) << it.value().cost() );
+    for (; it != ec.days().constEnd(); ++it) {
+        map.insert(it.key().toString(Qt::ISODate), QVariantList() << it.value().effort().toDouble(KPlato::Duration::Unit_h) << it.value().cost());
     }
     return map;
 }
 
-QVariant Scripting::Node::bcwpPrDay( const QVariant &schedule ) const
+QVariant Scripting::Node::bcwpPrDay(const QVariant &schedule) const
 {
     QVariantMap map;
-    KPlato::EffortCostMap ec = m_node->bcwpPrDay( schedule.toLongLong() );
+    KPlato::EffortCostMap ec = m_node->bcwpPrDay(schedule.toLongLong());
     KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
-    for (; it != ec.days().constEnd(); ++it ) {
-        map.insert( it.key().toString( Qt::ISODate ), QVariantList() << it.value().effort().toDouble( KPlato::Duration::Unit_h ) << it.value().cost() );
+    for (; it != ec.days().constEnd(); ++it) {
+        map.insert(it.key().toString(Qt::ISODate), QVariantList() << it.value().effort().toDouble(KPlato::Duration::Unit_h) << it.value().cost());
     }
     return map;
 }
 
-QVariant Scripting::Node::acwpPrDay( const QVariant &schedule ) const
+QVariant Scripting::Node::acwpPrDay(const QVariant &schedule) const
 {
     QVariantMap map;
-    KPlato::EffortCostMap ec = m_node->acwp( schedule.toLongLong() );
+    KPlato::EffortCostMap ec = m_node->acwp(schedule.toLongLong());
     KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
-    for (; it != ec.days().constEnd(); ++it ) {
-        map.insert( it.key().toString( Qt::ISODate ), QVariantList() << it.value().effort().toDouble( KPlato::Duration::Unit_h ) << it.value().cost() );
+    for (; it != ec.days().constEnd(); ++it) {
+        map.insert(it.key().toString(Qt::ISODate), QVariantList() << it.value().effort().toDouble(KPlato::Duration::Unit_h) << it.value().cost());
     }
     return map;
 }

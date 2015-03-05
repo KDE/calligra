@@ -20,7 +20,6 @@
 #include <kis_image_signal_router.h>
 #include <kis_processing_applicator.h>
 
-
 #include "kis_gmic_command.h"
 #include "kis_import_gmic_processing_visitor.h"
 #include "kis_image.h"
@@ -31,7 +30,7 @@
 #include "kis_gmic_synchronize_layers_command.h"
 #include "kis_export_gmic_processing_visitor.h"
 
-KisGmicApplicator::KisGmicApplicator():m_applicator(0),m_applicatorStrokeEnded(false),m_progress(0),m_cancel(0)
+KisGmicApplicator::KisGmicApplicator(): m_applicator(0), m_applicatorStrokeEnded(false), m_progress(0), m_cancel(0)
 {
 }
 
@@ -50,7 +49,6 @@ void KisGmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, const K
     m_gmicCommand = gmicCommand;
     m_customCommands = customCommands;
 }
-
 
 void KisGmicApplicator::preview()
 {
@@ -73,13 +71,10 @@ void KisGmicApplicator::preview()
     QRect layerSize;
     KisSelectionSP selection = m_image->globalSelection();
 
-    if (selection)
-    {
+    if (selection) {
         layerSize = selection->selectedExactRect();
-    }
-    else
-    {
-        layerSize = QRect(0,0,m_image->width(), m_image->height());
+    } else {
+        layerSize = QRect(0, 0, m_image->width(), m_image->height());
     }
 
     // convert krita layers to gmic layers
@@ -87,9 +82,9 @@ void KisGmicApplicator::preview()
     m_applicator->applyVisitor(exportVisitor, KisStrokeJobData::CONCURRENT);
 
     // apply gmic filters to provided layers
-    const char * customCommands = m_customCommands.isNull() ? 0 : m_customCommands.constData();
-    KisGmicCommand * gmicCommand = new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands);
-    connect(gmicCommand, SIGNAL(gmicFinished(bool, int, QString)), this, SIGNAL(gmicFinished(bool,int,QString)));
+    const char *customCommands = m_customCommands.isNull() ? 0 : m_customCommands.constData();
+    KisGmicCommand *gmicCommand = new KisGmicCommand(m_gmicCommand, gmicLayers, customCommands);
+    connect(gmicCommand, SIGNAL(gmicFinished(bool,int,QString)), this, SIGNAL(gmicFinished(bool,int,QString)));
 
     m_progress = gmicCommand->progressPtr();
     m_cancel = gmicCommand->cancelPtr();
@@ -105,48 +100,37 @@ void KisGmicApplicator::preview()
 
 void KisGmicApplicator::cancel()
 {
-    if (m_cancel)
-    {
+    if (m_cancel) {
         dbgPlugins << "Cancel gmic script";
         *m_cancel = true;
     }
 
-    if (m_applicator)
-    {
+    if (m_applicator) {
 
-        if (!m_applicatorStrokeEnded)
-        {
+        if (!m_applicatorStrokeEnded) {
             dbgPlugins << "Cancelling applicator: Yes!";
             m_applicator->cancel();
-        }
-        else
-        {
+        } else {
             dbgPlugins << "Cancelling applicator: No! Reason: Already finished!";
         }
-
 
         dbgPlugins << "deleting applicator: " << m_applicator;
         delete m_applicator;
         m_applicator = 0;
 
-
         m_applicatorStrokeEnded = false;
         dbgPlugins << ppVar(m_applicatorStrokeEnded);
 
-    }
-    else
-    {
+    } else {
         dbgPlugins << "Cancelling applicator: No! Reason: Null applicator!";
     }
-
 
 }
 
 void KisGmicApplicator::finish()
 {
     dbgPlugins << "aplicator " << m_applicator << " finished";
-    if (m_applicator)
-    {
+    if (m_applicator) {
         m_applicator->end();
         m_applicatorStrokeEnded = true;
     }
@@ -155,8 +139,7 @@ void KisGmicApplicator::finish()
 
 float KisGmicApplicator::getProgress() const
 {
-    if (m_progress)
-    {
+    if (m_progress) {
         return *m_progress;
     }
 

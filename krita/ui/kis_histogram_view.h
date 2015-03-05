@@ -31,7 +31,6 @@
 
 #include <krita_export.h>
 
-
 class KoChannelInfo;
 
 /**
@@ -79,7 +78,7 @@ public:
     QList<QString> producers();
 
     /** Sets the currently displayed channels to channels of the producer with producerID as ID*/
-    void setCurrentChannels(const KoID& producerID, QList<KoChannelInfo *> channels);
+    void setCurrentChannels(const KoID &producerID, QList<KoChannelInfo *> channels);
 
     /** Be careful, producer will be modified */
     void setCurrentChannels(KoHistogramProducerSP producer, QList<KoChannelInfo *> channels);
@@ -98,11 +97,11 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void rightClicked(const QPoint& pos);
+    void rightClicked(const QPoint &pos);
 
 protected:
 
-    virtual void mousePressEvent(QMouseEvent * e);
+    virtual void mousePressEvent(QMouseEvent *e);
 
 private:
 
@@ -113,13 +112,13 @@ private:
     typedef struct {
         bool isProducer;
         KoHistogramProducerSP producer;
-        KoChannelInfo * channel;
+        KoChannelInfo *channel;
     } ComboboxInfo;
 
     QVector<ComboboxInfo> m_comboInfo;
     QPixmap m_pix;
     KisHistogramSP m_histogram;
-    const KoColorSpace* m_cs;
+    const KoColorSpace *m_cs;
     KoHistogramProducerSP m_currentProducer;
     QList<KoChannelInfo *> m_channels;
     // Maps the channels in m_channels to a real channel offset in the producer->channels()

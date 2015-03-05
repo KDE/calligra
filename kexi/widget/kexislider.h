@@ -27,7 +27,6 @@
 
 class Slider;
 
-
 /**
  * @brief KexiSlider widget provides slider with spinbox and labels for tickmarks
  *
@@ -80,6 +79,6 @@ private:
     void init(Qt::Orientation);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 #endif // KEXISLIDER_H

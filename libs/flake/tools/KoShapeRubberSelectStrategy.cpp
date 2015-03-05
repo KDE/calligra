@@ -52,8 +52,9 @@ void KoShapeRubberSelectStrategy::paint(QPainter &painter, const KoViewConverter
     QRectF paintRect = converter.documentToView(d->selectedRect());
     paintRect = paintRect.normalized();
     paintRect.adjust(0., -0.5, 0.5, 0.);
-    if (painter.hasClipping())
+    if (painter.hasClipping()) {
         paintRect = paintRect.intersect(painter.clipRegion().boundingRect());
+    }
     painter.drawRect(paintRect);
 }
 
@@ -102,11 +103,12 @@ void KoShapeRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifi
 {
     Q_D(KoShapeRubberSelectStrategy);
     Q_UNUSED(modifiers);
-    KoSelection * selection = d->tool->canvas()->shapeManager()->selection();
+    KoSelection *selection = d->tool->canvas()->shapeManager()->selection();
     QList<KoShape *> shapes(d->tool->canvas()->shapeManager()->shapesAt(d->selectRect));
-    foreach(KoShape * shape, shapes) {
-        if (!(shape->isSelectable() && shape->isVisible()))
+    foreach (KoShape *shape, shapes) {
+        if (!(shape->isSelectable() && shape->isVisible())) {
             continue;
+        }
         selection->select(shape);
     }
     d->tool->repaintDecorations();

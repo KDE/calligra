@@ -57,7 +57,7 @@ public:
                                   const QVector<QPointF> &origPoint,
                                   const QVector<QPointF> &transfPoint,
                                   qreal alpha,
-                                  const QImage& srcImage,
+                                  const QImage &srcImage,
                                   const QPointF &srcQImageOffset,
                                   QPointF *newOffset);
 
@@ -69,7 +69,7 @@ public:
 
 private:
     struct FunctionTransformOp;
-    typedef QPointF (*WarpMathFunction)(QPointF, QVector<QPointF>, QVector<QPointF>, qreal);
+    typedef QPointF(*WarpMathFunction)(QPointF, QVector<QPointF>, QVector<QPointF>, qreal);
 
 private:
     WarpMathFunction m_warpMathFunction;

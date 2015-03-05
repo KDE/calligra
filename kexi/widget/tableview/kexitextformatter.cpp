@@ -28,21 +28,23 @@
 class KexiTextFormatter::Private
 {
 public:
-    Private() : field(0), dateFormatter(0), timeFormatter(0) {
+    Private() : field(0), dateFormatter(0), timeFormatter(0)
+    {
     }
 
-    ~Private() {
+    ~Private()
+    {
         delete dateFormatter;
         delete timeFormatter;
     }
 
-    KexiDB::Field* field;
+    KexiDB::Field *field;
     KexiDateFormatter *dateFormatter;
     KexiTimeFormatter *timeFormatter;
 };
 
 KexiTextFormatter::KexiTextFormatter()
-        : d(new Private)
+    : d(new Private)
 {
 }
 
@@ -51,11 +53,12 @@ KexiTextFormatter::~KexiTextFormatter()
     delete d;
 }
 
-void KexiTextFormatter::setField(KexiDB::Field* field)
+void KexiTextFormatter::setField(KexiDB::Field *field)
 {
     d->field = field;
-    if (!d->field)
+    if (!d->field) {
         return;
+    }
     const KexiDB::Field::Type t = d->field->type();
     switch (t) {
     case KexiDB::Field::Date:
@@ -80,7 +83,7 @@ void KexiTextFormatter::setField(KexiDB::Field* field)
 }
 
 //! toString() implementation for Text type
-static QString toStringForTextType(const QVariant& value, const QString& add,
+static QString toStringForTextType(const QVariant &value, const QString &add,
                                    KexiDB::Field *field,
                                    bool *lengthExceeded)
 {
@@ -88,15 +91,14 @@ static QString toStringForTextType(const QVariant& value, const QString& add,
     if (lengthExceeded) {
         if (field && field->maxLength() > 0) {
             *lengthExceeded = uint(str.length() + add.length()) > field->maxLength();
-        }
-        else {
+        } else {
             *lengthExceeded = false;
         }
     }
     return str + add;
 }
 
-QString KexiTextFormatter::toString(const QVariant& value, const QString& add,
+QString KexiTextFormatter::toString(const QVariant &value, const QString &add,
                                     bool *lengthExceeded) const
 {
     //cases, in order of expected frequency
@@ -108,21 +110,22 @@ QString KexiTextFormatter::toString(const QVariant& value, const QString& add,
         *lengthExceeded = false;
     }
     if (d->field->isIntegerType()) {
-        if (value.toInt() == 0)
-            return add; //eat 0
-    }
-    else if (d->field->isFPNumericType()) {
+        if (value.toInt() == 0) {
+            return add;    //eat 0
+        }
+    } else if (d->field->isFPNumericType()) {
 //! @todo precision!
 //! @todo support 'g' format
-        if (value.toDouble() == 0.0)
-            return add.isEmpty() ? "0" : add; //eat 0
+        if (value.toDouble() == 0.0) {
+            return add.isEmpty() ? "0" : add;    //eat 0
+        }
         return KexiDB::formatNumberForVisibleDecimalPlaces(
-            value.toDouble(), d->field->visibleDecimalPlaces()) + add;
+                   value.toDouble(), d->field->visibleDecimalPlaces()) + add;
     }
 
     switch (d->field->type()) {
     case KexiDB::Field::Boolean: {
-    //! @todo temporary solution for booleans!
+        //! @todo temporary solution for booleans!
         const bool boolValue = value.isNull() ? QVariant(add).toBool() : value.toBool();
         return boolValue ? "1" : "0";
     }
@@ -135,13 +138,15 @@ QString KexiTextFormatter::toString(const QVariant& value, const QString& add,
                    ? QTime(99, 0, 0) //hack to avoid converting null variant to valid QTime(0,0,0)
                    : value.toTime());
     case KexiDB::Field::DateTime:
-        if (value.toString().isEmpty())
+        if (value.toString().isEmpty()) {
             return add;
+        }
         return KexiDateTimeFormatter::toString(
                    *d->dateFormatter, *d->timeFormatter, value.toDateTime());
     case KexiDB::Field::BigInteger:
-        if (value.toLongLong() == 0)
-            return add; //eat 0
+        if (value.toLongLong() == 0) {
+            return add;    //eat 0
+        }
         break;
     default:
         break;
@@ -150,10 +155,11 @@ QString KexiTextFormatter::toString(const QVariant& value, const QString& add,
     return toStringForTextType(value, add, d->field, lengthExceeded);
 }
 
-QVariant KexiTextFormatter::fromString(const QString& text) const
+QVariant KexiTextFormatter::fromString(const QString &text) const
 {
-    if (!d->field)
+    if (!d->field) {
         return QVariant();
+    }
 
     switch (d->field->type()) {
     case KexiDB::Field::Text:
@@ -182,8 +188,9 @@ QVariant KexiTextFormatter::fromString(const QString& text) const
         // replace custom decimal symbol with '.' as required by to{Float|Double}()
         QString fixedText(text);
         fixedText.replace(KGlobal::locale()->decimalSymbol(), ".");
-        if (d->field->type() == KexiDB::Field::Double)
+        if (d->field->type() == KexiDB::Field::Double) {
             return fixedText.toDouble();
+        }
         return fixedText.toFloat();
     }
     default:
@@ -193,10 +200,11 @@ QVariant KexiTextFormatter::fromString(const QString& text) const
 //! @todo more data types!
 }
 
-bool KexiTextFormatter::valueIsEmpty(const QString& text) const
+bool KexiTextFormatter::valueIsEmpty(const QString &text) const
 {
-    if (text.isEmpty())
+    if (text.isEmpty()) {
         return true;
+    }
 
     if (d->field) {
         switch (d->field->type()) {
@@ -215,13 +223,15 @@ bool KexiTextFormatter::valueIsEmpty(const QString& text) const
     return text.isEmpty();
 }
 
-bool KexiTextFormatter::valueIsValid(const QString& text) const
+bool KexiTextFormatter::valueIsValid(const QString &text) const
 {
-    if (!d->field)
+    if (!d->field) {
         return true;
+    }
 //! @todo fix for fields with "required" property = true
-    if (valueIsEmpty(text)/*ok?*/)
+    if (valueIsEmpty(text)/*ok?*/) {
         return true;
+    }
 
     switch (d->field->type()) {
     case KexiDB::Field::Date:
@@ -256,8 +266,8 @@ QString KexiTextFormatter::inputMask() const
     return QString();
 }
 
-bool KexiTextFormatter::lengthExceeded(const QString& text) const
+bool KexiTextFormatter::lengthExceeded(const QString &text) const
 {
     return d->field && d->field->type() == KexiDB::Field::Text && d->field->maxLength() > 0
-            && uint(text.length()) > d->field->maxLength();
+           && uint(text.length()) > d->field->maxLength();
 }

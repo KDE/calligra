@@ -43,26 +43,26 @@ class KPrPresentationTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    explicit KPrPresentationTool( KPrViewModePresentation &viewMode );
+    explicit KPrPresentationTool(KPrViewModePresentation &viewMode);
     ~KPrPresentationTool();
 
     bool wantsAutoScroll() const;
 
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint(QPainter &painter, const KoViewConverter &converter);
 
-    void mousePressEvent( KoPointerEvent *event );
-    void mouseDoubleClickEvent( KoPointerEvent *event );
-    void mouseMoveEvent( KoPointerEvent *event );
-    void mouseReleaseEvent( KoPointerEvent *event );
-    void keyPressEvent( QKeyEvent *event );
-    void keyReleaseEvent( QKeyEvent *event );
-    void wheelEvent( KoPointerEvent * event );
+    void mousePressEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+    void wheelEvent(KoPointerEvent *event);
 
     KPrPresentationStrategyBase *strategy();
-    KPrViewModePresentation & viewModePresentation();
+    KPrViewModePresentation &viewModePresentation();
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     void deactivate();
     void highlightPresentation();
     void drawOnPresentation();
@@ -71,8 +71,8 @@ public Q_SLOTS:
 
 private:
     void finishEventActions();
-    void switchStrategy( KPrPresentationStrategyBase * strategy );
-    bool eventFilter( QObject * obj, QEvent * event );
+    void switchStrategy(KPrPresentationStrategyBase *strategy);
+    bool eventFilter(QObject *obj, QEvent *event);
 
     /**
      * Returns true if shape is a TextShape and event->point is over hyperlink
@@ -80,7 +80,7 @@ private:
      * @param shape the shape fhich is searched for hyperlink
      * @param hyperLink the string which is filled with hyperlink url
      */
-    bool checkHyperlink(KoPointerEvent *event, KoShape * shape, QString & hyperLink);
+    bool checkHyperlink(KoPointerEvent *event, KoShape *shape, QString &hyperLink);
 
     /**
      * Runs url string defined inside hyperlink
@@ -88,12 +88,12 @@ private:
      */
     void runHyperlink(QString hyperLink);
 
-    KPrViewModePresentation & m_viewMode;
+    KPrViewModePresentation &m_viewMode;
     QSet<KoEventAction *> m_eventActions;
 
-    KPrPresentationToolWidget * m_presentationToolWidget;
-    QFrame * m_frame;
-    KPrPresentationStrategyBase * m_strategy;
+    KPrPresentationToolWidget *m_presentationToolWidget;
+    QFrame *m_frame;
+    KPrPresentationStrategyBase *m_strategy;
 
 #ifndef QT_NO_DBUS
     KPrPresentationToolAdaptor *m_bus;

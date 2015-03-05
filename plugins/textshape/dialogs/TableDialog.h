@@ -24,7 +24,6 @@
 
 #include <kdialog.h>
 
-
 class TableDialog : public KDialog
 {
     Q_OBJECT
@@ -35,7 +34,6 @@ public:
     int rows();
 
 Q_SIGNALS:
-
 
 private:
     Ui::TableForm widget;

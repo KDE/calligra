@@ -25,7 +25,6 @@
 #include <kpluginfactory.h>
 #include <kdebug.h>
 
-
 #include <QString>
 #include <QFile>
 
@@ -40,8 +39,8 @@
 K_PLUGIN_FACTORY(WPGImportFactory, registerPlugin<WPGImport>();)
 K_EXPORT_PLUGIN(WPGImportFactory("calligrafilters"))
 
-WPGImport::WPGImport(QObject* parent, const QVariantList&)
-        : KoFilter(parent)
+WPGImport::WPGImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
@@ -49,31 +48,32 @@ WPGImport::~WPGImport()
 {
 }
 
-
-KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus WPGImport::convert(const QByteArray &from, const QByteArray &to)
 {
-    if (from != "application/x-wpg")
+    if (from != "application/x-wpg") {
         return KoFilter::NotImplemented;
+    }
 
-    if (to != "image/svg+xml")
+    if (to != "image/svg+xml") {
         return KoFilter::NotImplemented;
+    }
 
-    librevenge::RVNGInputStream* input = new librevenge::RVNGFileStream(m_chain->inputFile().toLocal8Bit());
+    librevenge::RVNGInputStream *input = new librevenge::RVNGFileStream(m_chain->inputFile().toLocal8Bit());
     if (input->isStructured()) {
-        librevenge::RVNGInputStream* olestream = input->getSubStreamByName("Anything");
+        librevenge::RVNGInputStream *olestream = input->getSubStreamByName("Anything");
         if (olestream) {
             delete input;
             input = olestream;
         }
-     }
+    }
     if (!libwpg::WPGraphics::isSupported(input)) {
         kWarning() << "ERROR: Unsupported file format (unsupported version) or file is encrypted!";
         delete input;
         return KoFilter::NotImplemented;
     }
 
-     ::librevenge::RVNGStringVector output;
-     librevenge::RVNGSVGDrawingGenerator generator(output, "");
+    ::librevenge::RVNGStringVector output;
+    librevenge::RVNGSVGDrawingGenerator generator(output, "");
 
     if (!libwpg::WPGraphics::parse(input, &generator)) {
         kWarning() << "ERROR: SVG Generation failed!";
@@ -85,7 +85,7 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
     delete input;
 
     QFile outputFile(m_chain->outputFile());
-    if(!outputFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    if (!outputFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
         kWarning() << "ERROR: Could not open output file" << m_chain->outputFile();
         return KoFilter::InternalError;
     }

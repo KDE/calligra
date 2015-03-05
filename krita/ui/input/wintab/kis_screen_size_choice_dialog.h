@@ -23,7 +23,8 @@
 
 class QButtonGroup;
 
-namespace Ui {
+namespace Ui
+{
 class KisScreenSizeChoiceDialog;
 }
 
@@ -37,7 +38,6 @@ public:
                                        const QRect &qtRect);
 
     ~KisScreenSizeChoiceDialog();
-
 
     QRect screenRect() const;
     bool canUseDefaultSettings() const;

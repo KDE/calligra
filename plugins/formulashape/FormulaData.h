@@ -30,34 +30,35 @@
 class FormulaCommand;
 
 /**
- * This is a QObject wrapper around a formulaElement, which allows to communicate 
+ * This is a QObject wrapper around a formulaElement, which allows to communicate
  * between tool, cursor and shape
  */
-class KOFORMULA_EXPORT FormulaData : public QObject {
-Q_OBJECT
+class KOFORMULA_EXPORT FormulaData : public QObject
+{
+    Q_OBJECT
 public:
     explicit FormulaData(FormulaElement *element);
-    
+
     ~FormulaData();
 
     /// @return formulaElement that represents the data
-    FormulaElement* formulaElement() const;
-    
+    FormulaElement *formulaElement() const;
+
     ///emit a dataChanged signal
-    void notifyDataChange(FormulaCommand* command, bool undo);
-    void setFormulaElement ( FormulaElement* element);
-    
+    void notifyDataChange(FormulaCommand *command, bool undo);
+    void setFormulaElement(FormulaElement *element);
+
 Q_SIGNALS:
-    void dataChanged(FormulaCommand* element, bool undo);
-    
+    void dataChanged(FormulaCommand *element, bool undo);
+
 public Q_SLOTS:
     ///only for debugging
     void writeElementTree();
 
-    void saveMathML( KoShapeSavingContext& context);
-    
+    void saveMathML(KoShapeSavingContext &context);
+
 private:
-    FormulaElement* m_element;
+    FormulaElement *m_element;
 };
 
 #endif // FORMULADATA_H

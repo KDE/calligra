@@ -38,8 +38,8 @@ public:
     {
     }
 
-    QAction* messageWidgetActionNo;
-    QAction* messageWidgetActionTryAgain;
+    QAction *messageWidgetActionNo;
+    QAction *messageWidgetActionTryAgain;
     QPointer<KexiContextMessageWidget> messageWidget;
 };
 
@@ -61,14 +61,14 @@ void KexiAssistantMessageHandler::showErrorMessageInternal(const QString &msg, c
     //! @todo hide details by default
     if (!d->messageWidgetActionTryAgain) {
         d->messageWidgetActionTryAgain = new QAction(
-            koIcon("view-refresh"), i18n("Try Again"), dynamic_cast<QWidget*>(this));
+            koIcon("view-refresh"), i18n("Try Again"), dynamic_cast<QWidget *>(this));
         QObject::connect(d->messageWidgetActionTryAgain, SIGNAL(triggered()),
-                         dynamic_cast<QWidget*>(this), SLOT(tryAgainActionTriggered()));
+                         dynamic_cast<QWidget *>(this), SLOT(tryAgainActionTriggered()));
     }
     if (!d->messageWidgetActionNo) {
-        d->messageWidgetActionNo = new QAction(KStandardGuiItem::no().text(), dynamic_cast<QWidget*>(this));
+        d->messageWidgetActionNo = new QAction(KStandardGuiItem::no().text(), dynamic_cast<QWidget *>(this));
         QObject::connect(d->messageWidgetActionNo, SIGNAL(triggered()),
-                         dynamic_cast<QWidget*>(this), SLOT(cancelActionTriggered()));
+                         dynamic_cast<QWidget *>(this), SLOT(cancelActionTriggered()));
     }
     d->messageWidgetActionNo->setText(KStandardGuiItem::cancel().text());
     message.addAction(d->messageWidgetActionTryAgain);
@@ -76,14 +76,13 @@ void KexiAssistantMessageHandler::showErrorMessageInternal(const QString &msg, c
     message.addAction(d->messageWidgetActionNo);
     // (delete not needed here because KexiContextMessageWidget deletes itself)
     d->messageWidget = new KexiContextMessageWidget(
-        dynamic_cast<QWidget*>(this), 0 /*contents->formLayout*/,
+        dynamic_cast<QWidget *>(this), 0 /*contents->formLayout*/,
         0/*contents->le_dbname*/, message);
-    KexiAssistantWidget *assistant = dynamic_cast<KexiAssistantWidget*>(this);
+    KexiAssistantWidget *assistant = dynamic_cast<KexiAssistantWidget *>(this);
     if (assistant && assistant->currentPage()) {
         if (assistant->currentPage()->focusWidget()) {
             d->messageWidget->setNextFocusWidget(assistant->currentPage()->focusWidget());
-        }
-        else {
+        } else {
             d->messageWidget->setNextFocusWidget(assistant->currentPage());
         }
     }
@@ -93,7 +92,7 @@ void KexiAssistantMessageHandler::showErrorMessageInternal(const QString &msg, c
         b->mapToGlobal(QPoint(0, b->height() / 2)));
 }
 
-void KexiAssistantMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, const QString& msg)
+void KexiAssistantMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, const QString &msg)
 {
     if (!obj) {
         showErrorMessage(msg);
@@ -105,7 +104,7 @@ void KexiAssistantMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, 
     showErrorMessage(_msg, _details);
 }
 
-KexiContextMessageWidget* KexiAssistantMessageHandler::messageWidget()
+KexiContextMessageWidget *KexiAssistantMessageHandler::messageWidget()
 {
     return d->messageWidget;
 }

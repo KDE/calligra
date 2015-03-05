@@ -24,7 +24,6 @@
 class KUndo2Stack;
 class KUndo2MagicString;
 
-
 /**
  * KisSurrogateUndoAdapter -- saves commands directly to the
  * internal stack. Used for wrapping around legacy code into
@@ -36,10 +35,10 @@ public:
     KisSurrogateUndoStore();
     ~KisSurrogateUndoStore();
 
-    const KUndo2Command* presentCommand();
+    const KUndo2Command *presentCommand();
     void undoLastCommand();
     void addCommand(KUndo2Command *cmd);
-    void beginMacro(const KUndo2MagicString& macroName);
+    void beginMacro(const KUndo2MagicString &macroName);
     void endMacro();
 
     void undo();
@@ -59,10 +58,10 @@ private:
 class KRITAIMAGE_EXPORT KisDumbUndoStore : public KisUndoStore
 {
 public:
-    const KUndo2Command* presentCommand();
+    const KUndo2Command *presentCommand();
     void undoLastCommand();
     void addCommand(KUndo2Command *cmd);
-    void beginMacro(const KUndo2MagicString& macroName);
+    void beginMacro(const KUndo2MagicString &macroName);
     void endMacro();
 };
 

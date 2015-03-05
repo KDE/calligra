@@ -28,21 +28,21 @@
 #if defined(_WIN32) || defined(_WIN64)
 #include <stdlib.h>
 #define srand48 srand
-inline double drand48() {
+inline double drand48()
+{
     return double(rand()) / RAND_MAX;
 }
 #endif
 
-
 template<class MaskGenerator, Vc::Implementation _impl>
-struct KisBrushMaskScalarApplicator : public KisBrushMaskApplicatorBase
-{
+struct KisBrushMaskScalarApplicator : public KisBrushMaskApplicatorBase {
     KisBrushMaskScalarApplicator(MaskGenerator *maskGenerator)
         : m_maskGenerator(maskGenerator)
     {
     }
 
-    void process(const QRect &rect) {
+    void process(const QRect &rect)
+    {
         processScalar(rect);
     }
 
@@ -56,14 +56,14 @@ protected:
 #if defined HAVE_VC
 
 template<class MaskGenerator, Vc::Implementation _impl>
-struct KisBrushMaskVectorApplicator : public KisBrushMaskScalarApplicator<MaskGenerator, _impl>
-{
+struct KisBrushMaskVectorApplicator : public KisBrushMaskScalarApplicator<MaskGenerator, _impl> {
     KisBrushMaskVectorApplicator(MaskGenerator *maskGenerator)
         : KisBrushMaskScalarApplicator<MaskGenerator, _impl>(maskGenerator)
     {
     }
 
-    void process(const QRect &rect) {
+    void process(const QRect &rect)
+    {
         startProcessing(rect, TypeHelper<MaskGenerator, _impl>());
     }
 
@@ -76,13 +76,15 @@ private:
 private:
 #if QT_VERSION >= 0x040700
     template<class U>
-    inline void startProcessing(const QRect &rect, TypeHelper<U, Vc::ScalarImpl>) {
+    inline void startProcessing(const QRect &rect, TypeHelper<U, Vc::ScalarImpl>)
+    {
         KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(rect);
     }
 #endif
 
     template<class U, Vc::Implementation V>
-    inline void startProcessing(const QRect &rect, TypeHelper<U, V>) {
+    inline void startProcessing(const QRect &rect, TypeHelper<U, V>)
+    {
         MaskGenerator *m_maskGenerator = KisBrushMaskScalarApplicator<MaskGenerator, _impl>::m_maskGenerator;
 
         if (m_maskGenerator->shouldVectorize()) {
@@ -100,7 +102,7 @@ void KisBrushMaskVectorApplicator<MaskGenerator, _impl>::processVector(const QRe
     MaskGenerator *m_maskGenerator = KisBrushMaskScalarApplicator<MaskGenerator, _impl>::m_maskGenerator;
 
     qreal random = 1.0;
-    quint8* dabPointer = m_d->device->data() + rect.y() * rect.width() * m_d->pixelSize;
+    quint8 *dabPointer = m_d->device->data() + rect.y() * rect.width() * m_d->pixelSize;
     quint8 alphaValue = OPACITY_TRANSPARENT_U8;
     // this offset is needed when brush size is smaller then fixed device size
     int offset = (m_d->device->bounds().width() - rect.width()) * m_d->pixelSize;
@@ -125,17 +127,17 @@ void KisBrushMaskVectorApplicator<MaskGenerator, _impl>::processVector(const QRe
         if (m_d->randomness != 0.0 || m_d->density != 1.0) {
             for (int x = 0; x < width; x++) {
 
-                if (m_d->randomness!= 0.0){
+                if (m_d->randomness != 0.0) {
                     random = (1.0 - m_d->randomness) + m_d->randomness * float(rand()) / RAND_MAX;
                 }
 
-                alphaValue = quint8( (OPACITY_OPAQUE_U8 - buffer[x]*255) * random);
+                alphaValue = quint8((OPACITY_OPAQUE_U8 - buffer[x] * 255) * random);
 
                 // avoid computation of random numbers if density is full
-                if (m_d->density != 1.0){
+                if (m_d->density != 1.0) {
                     // compute density only for visible pixels of the mask
-                    if (alphaValue != OPACITY_TRANSPARENT_U8){
-                        if ( !(m_d->density >= drand48()) ){
+                    if (alphaValue != OPACITY_TRANSPARENT_U8) {
+                        if (!(m_d->density >= drand48())) {
                             alphaValue = OPACITY_TRANSPARENT_U8;
                         }
                     }
@@ -162,7 +164,7 @@ void KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(const QRe
     MaskGenerator *m_maskGenerator = KisBrushMaskScalarApplicator<MaskGenerator, _impl>::m_maskGenerator;
 
     qreal random = 1.0;
-    quint8* dabPointer = m_d->device->data() + rect.y() * rect.width() * m_d->pixelSize;
+    quint8 *dabPointer = m_d->device->data() + rect.y() * rect.width() * m_d->pixelSize;
     quint8 alphaValue = OPACITY_TRANSPARENT_U8;
     // this offset is needed when brush size is smaller then fixed device size
     int offset = (m_d->device->bounds().width() - rect.width()) * m_d->pixelSize;
@@ -181,19 +183,21 @@ void KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(const QRe
                     value += m_maskGenerator->valueAt(maskX, maskY);
                 }
             }
-            if (supersample != 1) value /= samplearea;
+            if (supersample != 1) {
+                value /= samplearea;
+            }
 
-            if (m_d->randomness!= 0.0){
+            if (m_d->randomness != 0.0) {
                 random = (1.0 - m_d->randomness) + m_d->randomness * float(rand()) / RAND_MAX;
             }
 
-            alphaValue = quint8( (OPACITY_OPAQUE_U8 - value) * random);
+            alphaValue = quint8((OPACITY_OPAQUE_U8 - value) * random);
 
             // avoid computation of random numbers if density is full
-            if (m_d->density != 1.0){
+            if (m_d->density != 1.0) {
                 // compute density only for visible pixels of the mask
-                if (alphaValue != OPACITY_TRANSPARENT_U8){
-                    if ( !(m_d->density >= drand48()) ){
+                if (alphaValue != OPACITY_TRANSPARENT_U8) {
+                    if (!(m_d->density >= drand48())) {
                         alphaValue = OPACITY_TRANSPARENT_U8;
                     }
                 }

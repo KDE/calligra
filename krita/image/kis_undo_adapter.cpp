@@ -18,7 +18,6 @@
 
 #include "kis_undo_adapter.h"
 
-
 KisUndoAdapter::KisUndoAdapter(KisUndoStore *undoStore)
     : m_undoStore(undoStore)
 {
@@ -34,5 +33,4 @@ void KisUndoAdapter::emitSelectionChanged()
 }
 
 #include "kis_undo_adapter.moc"
-
 

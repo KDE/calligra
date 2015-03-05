@@ -27,7 +27,7 @@ struct FilterRegistryModel::Private {
 };
 
 FilterRegistryModel::FilterRegistryModel()
-        : KoGenericRegistryModel<const Filter*>(FilterRegistry::instance()), d(new Private)
+    : KoGenericRegistryModel<const Filter * >(FilterRegistry::instance()), d(new Private)
 {
     QList<QString> keys = FilterRegistry::instance()->keys();
     for (int i = 0; i < keys.size(); i++) {
@@ -44,23 +44,26 @@ QVariant FilterRegistryModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid()) {
         if (role == Qt::CheckStateRole) {
-            if (d->enabled[index.row()]) return Qt::Checked;
-            else return Qt::Unchecked;
+            if (d->enabled[index.row()]) {
+                return Qt::Checked;
+            } else {
+                return Qt::Unchecked;
+            }
         } else if (role == Qt::ToolTipRole) {
             return get(index)->description();
         }
     }
-    return KoGenericRegistryModel<const Filter*>::data(index, role);
+    return KoGenericRegistryModel<const Filter *>::data(index, role);
 }
 
-bool FilterRegistryModel::setData(const QModelIndex & index, const QVariant & value, int role)
+bool FilterRegistryModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (index.isValid()) {
         if (role == Qt::CheckStateRole) {
             d->enabled[index.row()] = value.toBool();
         }
     }
-    return KoGenericRegistryModel<const Filter*>::setData(index, value, role);
+    return KoGenericRegistryModel<const Filter *>::setData(index, value, role);
 }
 
 Qt::ItemFlags FilterRegistryModel::flags(const QModelIndex &) const
@@ -68,9 +71,9 @@ Qt::ItemFlags FilterRegistryModel::flags(const QModelIndex &) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
 }
 
-QList<const Filter*> FilterRegistryModel::enabledFilters() const
+QList<const Filter *> FilterRegistryModel::enabledFilters() const
 {
-    QList<const Filter*> enabledFilters;
+    QList<const Filter *> enabledFilters;
     QList<QString> keys = FilterRegistry::instance()->keys();
     for (int i = 0; i < keys.size(); i++) {
         if (d->enabled[i]) {

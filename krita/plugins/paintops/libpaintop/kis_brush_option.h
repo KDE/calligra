@@ -29,15 +29,15 @@ class KisPropertiesConfiguration;
 class PAINTOP_EXPORT KisBrushOption
 {
 public:
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
     KisBrushSP brush() const;
     void setBrush(KisBrushSP brush);
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
-    static bool isTextBrush(const KisPropertiesConfiguration* setting);
+    static bool isTextBrush(const KisPropertiesConfiguration *setting);
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
 private:

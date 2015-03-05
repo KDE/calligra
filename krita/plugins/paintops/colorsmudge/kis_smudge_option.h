@@ -33,7 +33,7 @@ class KisPainter;
 class KisSmudgeOption: public KisRateOption
 {
 public:
-    KisSmudgeOption(const QString& name, const QString& label = "", bool checked = true, const QString& category = KisPaintOpOption::generalCategory());
+    KisSmudgeOption(const QString &name, const QString &label = "", bool checked = true, const QString &category = KisPaintOpOption::generalCategory());
 
     enum Mode { SMEARING_MODE, DULLING_MODE };
 
@@ -41,17 +41,19 @@ public:
      * Set the opacity of the painter based on the rate
      * and the curve (if checked)
      */
-    void apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin = 0.0, qreal scaleMax = 1.0, qreal multiplicator = 1.0) const;
+    void apply(KisPainter &painter, const KisPaintInformation &info, qreal scaleMin = 0.0, qreal scaleMax = 1.0, qreal multiplicator = 1.0) const;
 
-    Mode getMode()          {
+    Mode getMode()
+    {
         return m_mode;
     }
-    void setMode(Mode mode) {
+    void setMode(Mode mode)
+    {
         m_mode = mode;
     }
 
-    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
     Mode m_mode;

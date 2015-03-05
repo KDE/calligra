@@ -34,7 +34,7 @@ class KOWIDGETS_EXPORT KoTagChooserWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit KoTagChooserWidget(QWidget* parent);
+    explicit KoTagChooserWidget(QWidget *parent);
     virtual ~KoTagChooserWidget();
     void setCurrentIndex(int index);
     int findIndexOf(QString tagName);
@@ -66,7 +66,7 @@ private Q_SLOTS:
 private:
     /// pimpl because chooser will most likely get upgraded at some point
     class Private;
-    Private* const d;
+    Private *const d;
 
 };
 ;

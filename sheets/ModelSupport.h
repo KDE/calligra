@@ -44,7 +44,6 @@ enum SheetDataRole {
     ActivityRole                        ///< active sheet; bool
 };
 
-
 /**
  * Item roles representing cell data.
  * \ingroup Model
@@ -72,7 +71,6 @@ enum CellDataRole {
 };
 Q_DECLARE_FLAGS(CellDataRoles, CellDataRole)
 
-
 /**
  * Converts a model index into a Cell.
  * \ingroup Model
@@ -81,7 +79,7 @@ static inline Cell toCell(const QModelIndex &index)
 {
     const int column = index.column() + 1;
     const int row = index.row() + 1;
-    Sheet *const sheet = static_cast<Sheet*>(index.internalPointer());
+    Sheet *const sheet = static_cast<Sheet *>(index.internalPointer());
     return Cell(sheet, column, row);
 }
 
@@ -114,7 +112,7 @@ static inline Region toRegion(const QItemSelection &selection)
     Region region;
     for (int i = 0; i < selection.count(); ++i) {
         const QItemSelectionRange range = selection[i];
-        Sheet *const sheet = static_cast<Sheet*>(range.topLeft().internalPointer());
+        Sheet *const sheet = static_cast<Sheet *>(range.topLeft().internalPointer());
         region.add(toRange(range), sheet);
     }
     return region;

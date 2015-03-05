@@ -50,24 +50,23 @@ public:
     static QString categoryMix();
     static QString categoryMisc();
 
-    struct PIGMENTCMS_EXPORT ParameterInfo
-    {
+    struct PIGMENTCMS_EXPORT ParameterInfo {
         ParameterInfo();
         ParameterInfo(const ParameterInfo &rhs);
-        ParameterInfo& operator=(const ParameterInfo &rhs);
+        ParameterInfo &operator=(const ParameterInfo &rhs);
 
-        quint8*       dstRowStart;
+        quint8       *dstRowStart;
         qint32        dstRowStride;
-        const quint8* srcRowStart;
+        const quint8 *srcRowStart;
         qint32        srcRowStride;
-        const quint8* maskRowStart;
+        const quint8 *maskRowStart;
         qint32        maskRowStride;
         qint32        rows;
         qint32        cols;
         float         opacity;
         float         flow;
         float         _lastOpacityData;
-        float*        lastOpacity;
+        float        *lastOpacity;
         QBitArray     channelFlags;
 
         void updateOpacityAndAverage(float value);
@@ -85,7 +84,7 @@ public:
      * @param userVisible define whether or not that composite op should be visible in a user
      *                    interface
      */
-    KoCompositeOp(const KoColorSpace * cs, const QString& id, const QString& description, const QString & category = KoCompositeOp::categoryMisc());
+    KoCompositeOp(const KoColorSpace *cs, const QString &id, const QString &description, const QString &category = KoCompositeOp::categoryMisc());
     virtual ~KoCompositeOp();
 
     /**
@@ -99,7 +98,7 @@ public:
     /**
      * @return the color space that can use and own this composite op
      */
-    const KoColorSpace * colorSpace() const;
+    const KoColorSpace *colorSpace() const;
     /**
      * @return the category associated with the composite op
      */
@@ -125,20 +124,20 @@ public:
      * @param channelFlags a bit array that determines which channels should be processed (channels are in the order of the channels in the colorspace)
      */
     virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                            const quint8 *srcRowStart, qint32 srcRowStride,
-                            const quint8 *maskRowStart, qint32 maskRowStride,
-                            qint32 rows, qint32 numColumns,
-                            quint8 opacity, const QBitArray& channelFlags=QBitArray()) const;
+                           const quint8 *srcRowStart, qint32 srcRowStride,
+                           const quint8 *maskRowStart, qint32 maskRowStride,
+                           qint32 rows, qint32 numColumns,
+                           quint8 opacity, const QBitArray &channelFlags = QBitArray()) const;
 
     /**
     * Same as previous, but uses a parameter structure
     */
-    virtual void composite(const ParameterInfo& params) const;
+    virtual void composite(const ParameterInfo &params) const;
 
 private:
     KoCompositeOp();
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KOCOMPOSITEOP_H

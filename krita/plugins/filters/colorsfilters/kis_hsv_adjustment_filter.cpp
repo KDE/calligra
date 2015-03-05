@@ -25,26 +25,25 @@
 #include <kis_processing_information.h>
 
 KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
-        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&HSV Adjustment..."))
+    : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&HSV Adjustment..."))
 {
     setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_U)));
     setSupportsPainting(true);
 }
 
-KisConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisHSVAdjustmentFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
     return new KisHSVConfigWidget(parent);
 }
 
-KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation *KisHSVAdjustmentFilter::createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const
 {
     QHash<QString, QVariant> params;
     if (config) {
         if (config->getBool("colorize")) {
-               params["h"] = config->getDouble("h", 0.5) / 360.0;
-        }
-        else {
+            params["h"] = config->getDouble("h", 0.5) / 360.0;
+        } else {
             params["h"] = config->getDouble("h", 0) / 180.0;
 
         }
@@ -57,9 +56,9 @@ KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColo
     return cs->createColorTransformation("hsv_adjustment", params);
 }
 
-KisFilterConfiguration* KisHSVAdjustmentFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisHSVAdjustmentFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("h", 0);
     config->setProperty("s", 0);
     config->setProperty("v", 0);
@@ -68,7 +67,7 @@ KisFilterConfiguration* KisHSVAdjustmentFilter::factoryConfiguration(const KisPa
     return config;
 }
 
-KisHSVConfigWidget::KisHSVConfigWidget(QWidget * parent, Qt::WFlags f) : KisConfigWidget(parent, f)
+KisHSVConfigWidget::KisHSVConfigWidget(QWidget *parent, Qt::WFlags f) : KisConfigWidget(parent, f)
 {
     m_page = new Ui_WdgHSVAdjustment();
     m_page->setupUi(this);
@@ -94,9 +93,9 @@ KisHSVConfigWidget::~KisHSVConfigWidget()
     delete m_page;
 }
 
-KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
+KisPropertiesConfiguration *KisHSVConfigWidget::configuration() const
 {
-    KisFilterConfiguration* c = new KisFilterConfiguration(KisHSVAdjustmentFilter::id().id(), 0);
+    KisFilterConfiguration *c = new KisFilterConfiguration(KisHSVAdjustmentFilter::id().id(), 0);
     c->setProperty("h", m_page->hue->value());
     c->setProperty("s", m_page->saturation->value());
     c->setProperty("v", m_page->value->value());
@@ -105,7 +104,7 @@ KisPropertiesConfiguration * KisHSVConfigWidget::configuration() const
     return c;
 }
 
-void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration *config)
 {
     m_page->cmbType->setCurrentIndex(config->getInt("type", 1));
     m_page->hue->setValue(config->getInt("h", 0));
@@ -118,7 +117,7 @@ void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfiguration * con
 void KisHSVConfigWidget::switchType(int index)
 {
     emit sigConfigurationItemChanged();
-    switch(index) {
+    switch (index) {
     case 0:
         m_page->label_3->setText(i18n("Value:"));
         return;
@@ -140,8 +139,7 @@ void KisHSVConfigWidget::switchColorize(bool toggle)
             m_page->saturation->setValue(50);
         }
         switchType(1);
-    }
-    else {
+    } else {
         m_page->hue->setMinimum(-180);
         m_page->hue->setMaximum(180);
         m_page->saturation->setMinimum(-100);

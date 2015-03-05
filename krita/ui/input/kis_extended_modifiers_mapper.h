@@ -23,7 +23,6 @@
 #include <QVector>
 #include <QScopedPointer>
 
-
 class KisExtendedModifiersMapper
 {
 public:

@@ -28,8 +28,8 @@
 #include <QVBoxLayout>
 
 SmallColorSelectorDock::SmallColorSelectorDock()
-        : QDockWidget()
-        , m_canvas(0)
+    : QDockWidget()
+    , m_canvas(0)
 {
     QWidget *page = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(page);
@@ -38,13 +38,13 @@ SmallColorSelectorDock::SmallColorSelectorDock()
     layout->addStretch(1);
     setWidget(page);
     m_smallColorWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-    connect(m_smallColorWidget, SIGNAL(colorChanged(const QColor&)),
-            this, SLOT(colorChangedProxy(const QColor&)));
+    connect(m_smallColorWidget, SIGNAL(colorChanged(const QColor &)),
+            this, SLOT(colorChangedProxy(const QColor &)));
 
     setWindowTitle(i18n("Small Color Selector"));
 }
 
-void SmallColorSelectorDock::setCanvas(KoCanvasBase * canvas)
+void SmallColorSelectorDock::setCanvas(KoCanvasBase *canvas)
 {
     setEnabled(canvas != 0);
 
@@ -54,19 +54,20 @@ void SmallColorSelectorDock::setCanvas(KoCanvasBase * canvas)
     }
     m_canvas = canvas;
     if (m_canvas && m_canvas->resourceManager()) {
-        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                this, SLOT(canvasResourceChanged(int, const QVariant&)));
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant &)),
+                this, SLOT(canvasResourceChanged(int, const QVariant &)));
         m_smallColorWidget->setQColor(m_canvas->resourceManager()->foregroundColor().toQColor());
     }
 }
 
-void SmallColorSelectorDock::colorChangedProxy(const QColor& c)
+void SmallColorSelectorDock::colorChangedProxy(const QColor &c)
 {
-    if (m_canvas)
-        m_canvas->resourceManager()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
+    if (m_canvas) {
+        m_canvas->resourceManager()->setForegroundColor(KoColor(c, KoColorSpaceRegistry::instance()->rgb8()));
+    }
 }
 
-void SmallColorSelectorDock::canvasResourceChanged(int key, const QVariant& v)
+void SmallColorSelectorDock::canvasResourceChanged(int key, const QVariant &v)
 {
     if (key == KoCanvasResourceManager::ForegroundColor) {
         m_smallColorWidget->setQColor(v.value<KoColor>().toQColor());

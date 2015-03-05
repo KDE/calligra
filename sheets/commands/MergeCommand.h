@@ -42,21 +42,25 @@ public:
 
     virtual bool preProcessing();
 
-    virtual void setReverse(bool reverse) {
+    virtual void setReverse(bool reverse)
+    {
         m_merge = !reverse;
     }
-    void setHorizontalMerge(bool state) {
+    void setHorizontalMerge(bool state)
+    {
         m_mergeHorizontal = state;
     }
-    void setVerticalMerge(bool state) {
+    void setVerticalMerge(bool state)
+    {
         m_mergeVertical = state;
     }
 
-    void setSelection(Selection *selection) {
+    void setSelection(Selection *selection)
+    {
         m_selection = selection;
     }
 protected:
-    virtual bool process(Element*);
+    virtual bool process(Element *);
 
     virtual bool postProcessing();
 
@@ -66,7 +70,7 @@ protected:
 private:
     bool m_mergeHorizontal : 1;
     bool m_mergeVertical   : 1;
-    AbstractRegionCommand* m_unmerger; // to restore old merging
+    AbstractRegionCommand *m_unmerger; // to restore old merging
     Selection *m_selection;
 };
 

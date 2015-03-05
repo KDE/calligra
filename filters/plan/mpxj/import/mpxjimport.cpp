@@ -39,15 +39,16 @@
 #define CLASSPATH_SEPARATOR ":"
 #endif
 
-int planMpxjDbg() {
-    static int s_area = KDebug::registerArea( "plan(MPXJ import)" );
+int planMpxjDbg()
+{
+    static int s_area = KDebug::registerArea("plan(MPXJ import)");
     return s_area;
 }
 
 K_PLUGIN_FACTORY(MpxjImportFactory, registerPlugin<MpxjImport>();)
 K_EXPORT_PLUGIN(MpxjImportFactory("calligrafilters"))
 
-MpxjImport::MpxjImport(QObject* parent, const QVariantList &)
+MpxjImport::MpxjImport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
@@ -55,20 +56,20 @@ MpxjImport::MpxjImport(QObject* parent, const QVariantList &)
 QStringList MpxjImport::mimeTypes()
 {
     return QStringList()
-        << QLatin1String("application/vnd.ms-project")
-        << QLatin1String("application/x-project")
-        << QLatin1String("application/x-planner");
+           << QLatin1String("application/vnd.ms-project")
+           << QLatin1String("application/x-project")
+           << QLatin1String("application/x-planner");
 }
 
-KoFilter::ConversionStatus MpxjImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus MpxjImport::convert(const QByteArray &from, const QByteArray &to)
 {
     kDebug(planMpxjDbg()) << from << to;
-    if ( to != "application/x-vnd.kde.plan" || ! mimeTypes().contains( from ) ) {
-        kDebug(planMpxjDbg())<<"Bad mime types:"<<from<<"->"<<to;
+    if (to != "application/x-vnd.kde.plan" || ! mimeTypes().contains(from)) {
+        kDebug(planMpxjDbg()) << "Bad mime types:" << from << "->" << to;
         return KoFilter::BadMimeType;
     }
     bool batch = false;
-    if ( m_chain->manager() ) {
+    if (m_chain->manager()) {
         batch = m_chain->manager()->getBatchMode();
     }
     if (batch) {
@@ -77,24 +78,24 @@ KoFilter::ConversionStatus MpxjImport::convert(const QByteArray& from, const QBy
         return KoFilter::NotImplemented;
     }
     KoDocument *part = m_chain->outputDocument();
-    if ( ! part ) {
+    if (! part) {
         kDebug(planMpxjDbg()) << "could not open document";
         return KoFilter::InternalError;
     }
     QString inputFile = m_chain->inputFile();
-    kDebug(planMpxjDbg())<<"Import from:"<<inputFile;
+    kDebug(planMpxjDbg()) << "Import from:" << inputFile;
     KTempDir *tmp = new KTempDir();
-    QString outFile( tmp->name() + "maindoc.xml" );
-    kDebug(planMpxjDbg())<<"Temp file:"<<outFile;
-    KoFilter::ConversionStatus sts = doImport( inputFile.toUtf8(), outFile.toUtf8() );
-    kDebug(planMpxjDbg())<<"doImport returned:"<<(sts == KoFilter::OK);
-    if ( sts == KoFilter::OK ) {
-        QFile file( outFile );
+    QString outFile(tmp->name() + "maindoc.xml");
+    kDebug(planMpxjDbg()) << "Temp file:" << outFile;
+    KoFilter::ConversionStatus sts = doImport(inputFile.toUtf8(), outFile.toUtf8());
+    kDebug(planMpxjDbg()) << "doImport returned:" << (sts == KoFilter::OK);
+    if (sts == KoFilter::OK) {
+        QFile file(outFile);
         KoXmlDocument doc;
-        if ( ! doc.setContent( &file ) ) {
+        if (! doc.setContent(&file)) {
             kDebug(planMpxjDbg()) << "could not read maindoc.xml";
             sts = KoFilter::InternalError;
-        } else if ( ! part->loadXML( doc, 0 ) ) {
+        } else if (! part->loadXML(doc, 0)) {
             kDebug(planMpxjDbg()) << "failed to load maindoc.xml";
             sts = KoFilter::InternalError;
         }
@@ -115,7 +116,7 @@ use the filter once for each plan process.
 We work around this by running java in a separate process until a better solution is found.
 ---------------------*/
 
-KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray outFile )
+KoFilter::ConversionStatus MpxjImport::doImport(QByteArray inFile, QByteArray outFile)
 {
     QString normalizedInFile;
     QString normalizedOutFile;
@@ -126,10 +127,10 @@ KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray o
 
     kDebug(planMpxjDbg()) << normalizedInFile << normalizedOutFile;
 #if 1
-    QString cp = qgetenv( "PLAN_CLASSPATH" );
+    QString cp = qgetenv("PLAN_CLASSPATH");
     QString x = QDir::toNativeSeparators(PLANCONVERT_JAR_FILE);
-    if ( ! x.isEmpty() ) {
-        if ( ! cp.isEmpty() ) {
+    if (! x.isEmpty()) {
+        if (! cp.isEmpty()) {
             cp += CLASSPATH_SEPARATOR;
         }
         cp += x;
@@ -140,72 +141,72 @@ KoFilter::ConversionStatus MpxjImport::doImport( QByteArray inFile, QByteArray o
     args << cp;
     args << "plan.PlanConvert";
     args << normalizedInFile << normalizedOutFile;
-    int res = KProcess::execute( exe, args );
-    kDebug(planMpxjDbg())<<res;
+    int res = KProcess::execute(exe, args);
+    kDebug(planMpxjDbg()) << res;
     return res == 0 ? KoFilter::OK : KoFilter::InternalError;
 
 #else
     JavaVM *jvm = 0;       /* denotes a Java VM */
     JNIEnv *env = 0;       /* pointer to native method interface */
     JavaVMInitArgs vm_args; /* JDK/JRE 6 VM initialization arguments */
-    JavaVMOption* options = new JavaVMOption[1];
-    QByteArray cp = qgetenv( "PLAN_CLASSPATH" );
-    if ( ! cp.isEmpty() ) {
-        cp = QByteArray( "-Djava.class.path=" ) + cp;
+    JavaVMOption *options = new JavaVMOption[1];
+    QByteArray cp = qgetenv("PLAN_CLASSPATH");
+    if (! cp.isEmpty()) {
+        cp = QByteArray("-Djava.class.path=") + cp;
     }
     QByteArray x = PLANCONVERT_JAR_FILE;
-    if ( ! x.isEmpty() ) {
-        if ( ! cp.isEmpty() ) {
+    if (! x.isEmpty()) {
+        if (! cp.isEmpty()) {
             cp += CLASSPATH_SEPARATOR;
         }
         cp += x;
     }
     options[0].optionString = cp.data();
-    kDebug(planMpxjDbg())<<"env:"<<cp;
+    kDebug(planMpxjDbg()) << "env:" << cp;
     vm_args.version = JNI_VERSION_1_6;
     vm_args.nOptions = 1;
     vm_args.options = options;
     vm_args.ignoreUnrecognized = false;
     /* load and initialize a Java VM, return a JNI interface pointer in env */
-    JNI_CreateJavaVM(&jvm, (void**)&env, &vm_args);
-    if ( ! env ) {
-        kDebug(planMpxjDbg())<<"Failed to create jvm environment";
+    JNI_CreateJavaVM(&jvm, (void **)&env, &vm_args);
+    if (! env) {
+        kDebug(planMpxjDbg()) << "Failed to create jvm environment";
         // TODO: proper message, and restore cursor (or enhance filter manager error handling)
-        KMessageBox::error( 0, "Failed to create JavaVM, check your installation" );
+        KMessageBox::error(0, "Failed to create JavaVM, check your installation");
         return KoFilter::UserCancelled;
     }
     delete options;
 
     jclass cls = env->FindClass("plan/PlanConvert");
-    if ( cls == 0 ) {
-        kDebug(planMpxjDbg())<<"Failed to find class";
+    if (cls == 0) {
+        kDebug(planMpxjDbg()) << "Failed to find class";
         return KoFilter::InternalError;
     }
-    kDebug(planMpxjDbg())<<"Found class";
-    jstring in = env->NewStringUTF( normalizedInFile );
-    jstring out = env->NewStringUTF( normalizedOutFile );
-    jobjectArray args = env->NewObjectArray( 2, env->FindClass("java/lang/String"), in );
+    kDebug(planMpxjDbg()) << "Found class";
+    jstring in = env->NewStringUTF(normalizedInFile);
+    jstring out = env->NewStringUTF(normalizedOutFile);
+    jobjectArray args = env->NewObjectArray(2, env->FindClass("java/lang/String"), in);
 //     env->setObjectArrayElement( args, 0, in );
-    env->SetObjectArrayElement( args, 1, out );
+    env->SetObjectArrayElement(args, 1, out);
     if (args == 0) {
-        kDebug(planMpxjDbg())<<"Out of memory";
+        kDebug(planMpxjDbg()) << "Out of memory";
         return KoFilter::OutOfMemory;
     }
-    jmethodID mid = env->GetStaticMethodID(cls, "main", "([Ljava/lang/String;)V" );
-    if ( mid == 0 ) {
-        kDebug(planMpxjDbg())<<"Failed to find main method";
+    jmethodID mid = env->GetStaticMethodID(cls, "main", "([Ljava/lang/String;)V");
+    if (mid == 0) {
+        kDebug(planMpxjDbg()) << "Failed to find main method";
         return KoFilter::InternalError;
     }
-    env->CallStaticVoidMethod( cls, mid, args );
-    if ( env->ExceptionCheck() ) {
-        kError()<<"Exception:";
+    env->CallStaticVoidMethod(cls, mid, args);
+    if (env->ExceptionCheck()) {
+        kError() << "Exception:";
         env->ExceptionDescribe();
         return KoFilter::InternalError;
     }
     /* We are done. */
     jvm->DestroyJavaVM();
-    if ( ! QFile::exists( normalizedOutFile ) ) {
-        kDebug(planMpxjDbg())<<"No output file created:"<<outFile;
+    if (! QFile::exists(normalizedOutFile)) {
+        kDebug(planMpxjDbg()) << "No output file created:" << outFile;
         return KoFilter::StorageCreationError;
     }
     return KoFilter::OK;

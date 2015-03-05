@@ -24,8 +24,7 @@
  * P slide- Presentation Slide
  * PS - Placeholder Shape
  */
-enum SlideLayoutType
-{
+enum SlideLayoutType {
     SL_TitleSlide = 0x0,    //0x00  1 title and 1 subtitle PSs.
     SL_TitleBody = 0x1,     //0x01  PSlide or main master slide layout w 1 title and 1 body PS.
     SL_MasterTitle = 0x2,   //0x02  Title master slide layout with 1 title and 1 subtitle PS.
@@ -48,8 +47,7 @@ enum SlideLayoutType
  * record.  This enumeration is also used to define a slide layout as described
  * in the SlideAtom record.  [MS-PPT] — v20101219
  */
-enum PlaceholderEnum
-{
+enum PlaceholderEnum {
     PT_None,                 //0x00  No placeholder shape.
     PT_MasterTitle,          //0x01  Master title text placeholder shape.
     PT_MasterBody,           //0x02  Master body text placeholder shape.
@@ -86,16 +84,15 @@ enum PlaceholderEnum
  * An enumeration that specifies the character sequence and delimiters
  * to use for automatic numbering.
  */
-enum TextAutoNumberSchemeEnum
-{
+enum TextAutoNumberSchemeEnum {
     ANM_AlphaLcPeriod,     //0x0000  Example: a., b., c., ...Lowercase Latin character followed by a period.
-    ANM_AlphaUcPeriod ,    //0x0001  Example: A., B., C., ...Uppercase Latin character followed by a period.
+    ANM_AlphaUcPeriod,    //0x0001  Example: A., B., C., ...Uppercase Latin character followed by a period.
     ANM_ArabicParenRight,  //0x0002  Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
     ANM_ArabicPeriod,      //0x0003  Example: 1., 2., 3., ...Arabic numeral followed by a period.
     ANM_RomanLcParenBoth,  //0x0004  Example: (i), (ii), (iii), ...Lowercase Roman numeral in parentheses.
     ANM_RomanLcParenRight, //0x0005  Example: i), ii), iii), ...Lowercase Roman numeral and a closing parenthesis.
     ANM_RomanLcPeriod,     //0x0006  Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
-    ANM_RomanUcPeriod ,    //0x0007  Example: I., II., III., ...Uppercase Roman numeral followed by a period.
+    ANM_RomanUcPeriod,    //0x0007  Example: I., II., III., ...Uppercase Roman numeral followed by a period.
     ANM_AlphaLcParenBoth,  //0x0008  Example: (a), (b), (c), ...Lowercase alphabetic character in parentheses.
     ANM_AlphaLcParenRight, //0x0009  Example: a), b), c), ...Lowercase alphabetic character followed by a closing
     ANM_AlphaUcParenBoth,  //0x000A  Example: (A), (B), (C), ...Uppercase alphabetic character in parentheses.
@@ -113,8 +110,7 @@ enum TextAutoNumberSchemeEnum
  * An enumeration that specifies an action that can be performed when
  * interacting with an object during a slide show.
  */
-enum InteractiveInfoActionEnum
-{
+enum InteractiveInfoActionEnum {
     II_NoAction,
     II_MacroAction,
     II_RunProgramAction,
@@ -132,8 +128,7 @@ enum InteractiveInfoActionEnum
  * interpreted. All locations are relative to the currently-displayed
  * presentation slide in the slide show.
  */
-enum LinkToEnum
-{
+enum LinkToEnum {
     LT_NextSlide,
     LT_PreviousSlide,
     LT_FirstSlide,

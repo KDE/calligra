@@ -37,7 +37,7 @@ class DlgBundleManager : public KDialog
 {
     Q_OBJECT
 public:
-    explicit DlgBundleManager(KisActionManager* actionMgr, QWidget *parent = 0);
+    explicit DlgBundleManager(KisActionManager *actionMgr, QWidget *parent = 0);
 
 private Q_SLOTS:
 
@@ -46,9 +46,9 @@ private Q_SLOTS:
     void removeSelected();
     void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
     void itemSelected(QListWidgetItem *current);
-    void editBundle();    
-    void slotImportResource() ;
-    void slotCreateBundle() ;
+    void editBundle();
+    void slotImportResource();
+    void slotCreateBundle();
     void slotDeleteBackupFiles();
     void slotOpenResourceFolder();
 
@@ -57,13 +57,13 @@ private:
     QWidget *m_page;
     Ui::WdgDlgBundleManager *m_ui;
 
-    void fillListWidget(QList<ResourceBundle*> bundles, QListWidget *w);
+    void fillListWidget(QList<ResourceBundle *> bundles, QListWidget *w);
 
-    QMap<QString, ResourceBundle*> m_blacklistedBundles;
-    QMap<QString, ResourceBundle*> m_activeBundles;
+    QMap<QString, ResourceBundle *> m_blacklistedBundles;
+    QMap<QString, ResourceBundle *> m_activeBundles;
 
     ResourceBundle *m_currentBundle;
-    KisActionManager* m_actionManager;
+    KisActionManager *m_actionManager;
 };
 
 #endif // DLG_BUNDLE_MANAGER_H

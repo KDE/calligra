@@ -39,8 +39,8 @@ public:
     explicit SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spellCheck);
     ~SpellCheckMenu();
 
-    QPair<QString, KAction*> menuAction();
-    void setMisspelled(const QString word, int position,int length);
+    QPair<QString, KAction *> menuAction();
+    void setMisspelled(const QString word, int position, int length);
     void setEnabled(bool b);
     void setVisible(bool b);
     void setCurrentLanguage(const QString &language);

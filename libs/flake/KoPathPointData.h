@@ -30,12 +30,13 @@ class KoPathPointData
 {
 public:
     /// contructor
-    KoPathPointData(KoPathShape * path, const KoPathPointIndex & pointIndex)
-            : pathShape(path)
-            , pointIndex(pointIndex) {}
+    KoPathPointData(KoPathShape *path, const KoPathPointIndex &pointIndex)
+        : pathShape(path)
+        , pointIndex(pointIndex) {}
 
     /// operator used for sorting
-    bool operator<(const KoPathPointData & other) const {
+    bool operator<(const KoPathPointData &other) const
+    {
         return pathShape < other.pathShape ||
                (pathShape == other.pathShape &&
                 (pointIndex.first < other.pointIndex.first ||
@@ -43,7 +44,8 @@ public:
                   pointIndex.second < other.pointIndex.second)));
 
     }
-    bool operator==(const KoPathPointData & other) const {
+    bool operator==(const KoPathPointData &other) const
+    {
         return pathShape == other.pathShape &&
                pointIndex.first == other.pointIndex.first &&
                pointIndex.second == other.pointIndex.second;

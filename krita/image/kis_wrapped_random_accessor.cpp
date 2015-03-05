@@ -20,12 +20,11 @@
 
 #include "kis_wrapped_rect.h"
 
-
 KisWrappedRandomAccessor::KisWrappedRandomAccessor(KisTiledDataManager *ktm,
-                                                   qint32 x, qint32 y,
-                                                   qint32 offsetX, qint32 offsetY,
-                                                   bool writable,
-                                                   const QRect &wrapRect)
+        qint32 x, qint32 y,
+        qint32 offsetX, qint32 offsetY,
+        bool writable,
+        const QRect &wrapRect)
     : KisRandomAccessor2(ktm, x, y, offsetX, offsetY, writable),
       m_wrapRect(wrapRect),
       m_currentPos(x, y)

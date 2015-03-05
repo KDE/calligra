@@ -32,7 +32,7 @@ class KPrConfigureSlideShowDialog : public KDialog
     Q_OBJECT
 
 public:
-    explicit KPrConfigureSlideShowDialog( KPrDocument *document, KPrView *parent=0 );
+    explicit KPrConfigureSlideShowDialog(KPrDocument *document, KPrView *parent = 0);
 
     QString activeCustomSlideShow() const;
 

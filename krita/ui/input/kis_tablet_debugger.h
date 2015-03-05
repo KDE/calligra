@@ -23,11 +23,10 @@
 #include <QTabletEvent>
 #include <input/kis_tablet_event.h>
 
-
 class KisTabletDebugger
 {
 public:
-    static KisTabletDebugger* instance();
+    static KisTabletDebugger *instance();
 
     void toggleDebugging();
     bool debugEnabled() const;

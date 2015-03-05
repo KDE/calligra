@@ -22,8 +22,8 @@
 
 #include <KoIcon.h>
 
-SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * parent)
-        : QWidget(parent), m_snapGuide(snapGuide)
+SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide *snapGuide, QWidget *parent)
+    : QWidget(parent), m_snapGuide(snapGuide)
 {
     widget.setupUi(this);
 
@@ -68,18 +68,24 @@ void SnapGuideConfigWidget::snappingEnabled(bool isEnabled)
 void SnapGuideConfigWidget::strategyChanged()
 {
     KoSnapGuide::Strategies strategies;
-    if (widget.orthogonalSnapGuide->isChecked())
+    if (widget.orthogonalSnapGuide->isChecked()) {
         strategies |= KoSnapGuide::OrthogonalSnapping;
-    if (widget.nodeSnapGuide->isChecked())
+    }
+    if (widget.nodeSnapGuide->isChecked()) {
         strategies |= KoSnapGuide::NodeSnapping;
-    if (widget.extensionSnapGuide->isChecked())
+    }
+    if (widget.extensionSnapGuide->isChecked()) {
         strategies |= KoSnapGuide::ExtensionSnapping;
-    if (widget.intersectionSnapGuide->isChecked())
+    }
+    if (widget.intersectionSnapGuide->isChecked()) {
         strategies |= KoSnapGuide::IntersectionSnapping;
-    if (widget.boundingBoxSnapGuide->isChecked())
+    }
+    if (widget.boundingBoxSnapGuide->isChecked()) {
         strategies |= KoSnapGuide::BoundingBoxSnapping;
-    if (widget.lineGuideSnapGuide->isChecked())
+    }
+    if (widget.lineGuideSnapGuide->isChecked()) {
         strategies |= KoSnapGuide::GuideLineSnapping;
+    }
 
     m_snapGuide->enableSnapStrategies(strategies);
 }
@@ -103,7 +109,7 @@ void SnapGuideConfigWidget::updateControls()
     widget.snapDistance->setValue(m_snapGuide->snapDistance());
 }
 
-void SnapGuideConfigWidget::showEvent(QShowEvent * event)
+void SnapGuideConfigWidget::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
     updateControls();

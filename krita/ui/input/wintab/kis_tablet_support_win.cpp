@@ -50,13 +50,12 @@
 #endif
 #include "pktdef.h"
 
-
 /**
  * Pointers to the API functions resolved manually
  */
-typedef UINT (API *PtrWTInfo)(UINT, UINT, LPVOID);
-typedef int  (API *PtrWTPacketsGet)(HCTX, int, LPVOID);
-typedef int  (API *PtrWTPacketsPeek)(HCTX, int, LPVOID);
+typedef UINT(API *PtrWTInfo)(UINT, UINT, LPVOID);
+typedef int (API *PtrWTPacketsGet)(HCTX, int, LPVOID);
+typedef int (API *PtrWTPacketsPeek)(HCTX, int, LPVOID);
 typedef BOOL (API *PtrWTGet)(HCTX, LPLOGCONTEXT);
 typedef BOOL (API *PtrWTOverlap)(HCTX, BOOL);
 
@@ -101,11 +100,11 @@ QTabletDeviceData currentTabletPointer;
  * WinTab value of the buttons pressed to the Qt buttons. This class
  * may be substituted from the UI.
  */
-struct DefaultButtonsConverter : public KisTabletSupportWin::ButtonsConverter
-{
+struct DefaultButtonsConverter : public KisTabletSupportWin::ButtonsConverter {
     void convert(DWORD btnOld, DWORD btnNew,
                  Qt::MouseButton *button,
-                 Qt::MouseButtons *buttons) {
+                 Qt::MouseButtons *buttons)
+    {
 
         int pressedButtonValue = btnNew ^ btnOld;
 
@@ -139,7 +138,8 @@ struct DefaultButtonsConverter : public KisTabletSupportWin::ButtonsConverter
     }
 
 private:
-    Qt::MouseButton buttonValueToEnum(DWORD button) {
+    Qt::MouseButton buttonValueToEnum(DWORD button)
+    {
         const int leftButtonValue = 0x1;
         const int middleButtonValue = 0x2;
         const int rightButtonValue = 0x4;
@@ -148,11 +148,11 @@ private:
         button = currentTabletPointer.buttonsMap.value(button);
 
         return button == leftButtonValue ? Qt::LeftButton :
-            button == rightButtonValue ? Qt::RightButton :
-            button == doubleClickButtonValue ? Qt::MiddleButton :
-            button == middleButtonValue ? Qt::MiddleButton :
-            button ? Qt::LeftButton /* fallback item */ :
-            Qt::NoButton;
+               button == rightButtonValue ? Qt::RightButton :
+               button == doubleClickButtonValue ? Qt::MiddleButton :
+               button == middleButtonValue ? Qt::MiddleButton :
+               button ? Qt::LeftButton /* fallback item */ :
+               Qt::NoButton;
     }
 };
 
@@ -246,7 +246,6 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     tdd.minZ = int(lc.lcOutOrgZ);
     tdd.maxZ = int(qAbs(lc.lcOutExtZ)) + int(lc.lcOutOrgZ);
 
-
     QRect qtDesktopRect = QApplication::desktop()->geometry();
     QRect wintabDesktopRect(lc.lcSysOrgX, lc.lcSysOrgY,
                             lc.lcSysExtX, lc.lcSysExtY);
@@ -266,8 +265,8 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
             mapper.queryExtendedModifiers();
 
         if (modifiers.contains(Qt::Key_Shift) ||
-            (!dlg.canUseDefaultSettings() &&
-             qtDesktopRect != wintabDesktopRect)) {
+                (!dlg.canUseDefaultSettings() &&
+                 qtDesktopRect != wintabDesktopRect)) {
 
             dlg.exec();
         }
@@ -308,23 +307,23 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
         tdd.currentDevice = QTabletEvent::Stylus;
     } else {
         switch (csr_type & cursorTypeBitMask) {
-            case 0x0802:
-                tdd.currentDevice = QTabletEvent::Stylus;
-                break;
-            case 0x0902:
-                tdd.currentDevice = QTabletEvent::Airbrush;
-                break;
-            case 0x0004:
-                tdd.currentDevice = QTabletEvent::FourDMouse;
-                break;
-            case 0x0006:
-                tdd.currentDevice = QTabletEvent::Puck;
-                break;
-            case 0x0804:
-                tdd.currentDevice = QTabletEvent::RotationStylus;
-                break;
-            default:
-                tdd.currentDevice = QTabletEvent::NoDevice;
+        case 0x0802:
+            tdd.currentDevice = QTabletEvent::Stylus;
+            break;
+        case 0x0902:
+            tdd.currentDevice = QTabletEvent::Airbrush;
+            break;
+        case 0x0004:
+            tdd.currentDevice = QTabletEvent::FourDMouse;
+            break;
+        case 0x0006:
+            tdd.currentDevice = QTabletEvent::Puck;
+            break;
+        case 0x0804:
+            tdd.currentDevice = QTabletEvent::RotationStylus;
+            break;
+        default:
+            tdd.currentDevice = QTabletEvent::NoDevice;
         }
     }
     tCursorInfo()->insert(uniqueId, tdd);
@@ -350,11 +349,13 @@ static void tabletUpdateCursor(QTabletDeviceData &tdd, const UINT currentCursor)
     }
 }
 
-class EventEater : public QObject {
+class EventEater : public QObject
+{
 public:
     EventEater(QObject *p) : QObject(p), m_eventType(QEvent::None) {}
 
-    bool eventFilter(QObject* object, QEvent* event ) {
+    bool eventFilter(QObject *object, QEvent *event)
+    {
         if (event->type() == m_eventType) {
             m_eventType = QEvent::None;
             return true;
@@ -363,7 +364,8 @@ public:
         return QObject::eventFilter(object, event);
     }
 
-    void pleaseEatNextEvent(QEvent::Type eventType) {
+    void pleaseEatNextEvent(QEvent::Type eventType)
+    {
         m_eventType = eventType;
     }
 
@@ -374,7 +376,7 @@ private:
 static EventEater *globalEventEater = 0;
 
 bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
-                                      int numPackets)
+                          int numPackets)
 {
     Q_UNUSED(msg);
     POINT ptNew;
@@ -415,9 +417,8 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         prsNew = 0.0;
 
         QPointF hiResGlobal = currentTabletPointer.scaleCoord(ptNew.x, ptNew.y,
-                                                              currentTabletPointer.sysOrgX, currentTabletPointer.sysExtX,
-                                                              currentTabletPointer.sysOrgY, currentTabletPointer.sysExtY);
-
+                              currentTabletPointer.sysOrgX, currentTabletPointer.sysExtX,
+                              currentTabletPointer.sysOrgY, currentTabletPointer.sysExtY);
 
         if (KisTabletDebugger::instance()->debugRawTabletValues()) {
             qDebug() << "WinTab (RC):"
@@ -431,7 +432,6 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                      << "diff:" << (btnOld ^ btnNew)
                      << (buttonPressed ? "P" : buttonReleased ? "R" : ".");
         }
-
 
         Qt::MouseButton button = Qt::NoButton;
         Qt::MouseButtons buttons;
@@ -448,10 +448,11 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         if (anyButtonsStillPressed) {
             if (currentTabletPointer.currentPointerType == QTabletEvent::Pen || currentTabletPointer.currentPointerType == QTabletEvent::Eraser)
                 prsNew = localPacketBuf[i].pkNormalPressure
-                            / qreal(currentTabletPointer.maxPressure
-                                    - currentTabletPointer.minPressure);
-            else
+                         / qreal(currentTabletPointer.maxPressure
+                                 - currentTabletPointer.minPressure);
+            else {
                 prsNew = 0;
+            }
         }
 
         QPoint globalPos(qRound(hiResGlobal.x()), qRound(hiResGlobal.y()));
@@ -463,13 +464,21 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
          * Find the appropriate window in an order of preference
          */
 
-        if (!w) w = qApp->widgetAt(globalPos);
-        if (!w) w = QWidget::find(msg.hwnd);
+        if (!w) {
+            w = qApp->widgetAt(globalPos);
+        }
+        if (!w) {
+            w = QWidget::find(msg.hwnd);
+        }
 
         QWidget *parentOverride = 0;
 
-        if (!parentOverride) parentOverride = qApp->activePopupWidget();
-        if (!parentOverride) parentOverride = qApp->activeModalWidget();
+        if (!parentOverride) {
+            parentOverride = qApp->activePopupWidget();
+        }
+        if (!parentOverride) {
+            parentOverride = qApp->activeModalWidget();
+        }
 
         if (!w || (parentOverride && !parentOverride->isAncestorOf(w))) {
             w = parentOverride;
@@ -490,8 +499,8 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         QPoint localPos = w->mapFromGlobal(globalPos);
         if (currentTabletPointer.currentDevice == QTabletEvent::Airbrush) {
             tangentialPressure = localPacketBuf[i].pkTangentPressure
-                                / qreal(currentTabletPointer.maxTanPressure
-                                        - currentTabletPointer.minTanPressure);
+                                 / qreal(currentTabletPointer.maxTanPressure
+                                         - currentTabletPointer.minTanPressure);
         } else {
             tangentialPressure = 0.0;
         }
@@ -540,8 +549,8 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                          button, buttons);
 
         if (button == Qt::NoButton &&
-            (t == KisTabletEvent::TabletPressEx ||
-             t == KisTabletEvent::TabletReleaseEx)) {
+                (t == KisTabletEvent::TabletPressEx ||
+                 t == KisTabletEvent::TabletReleaseEx)) {
 
             /**
              * Eat events which do not correcpond to any mouse
@@ -579,12 +588,12 @@ void KisTabletSupportWin::setButtonsConverter(ButtonsConverter *buttonsConverter
 
 bool KisTabletSupportWin::eventFilter(void *message, long *result)
 {
-    MSG *msg = static_cast<MSG*>(message);
+    MSG *msg = static_cast<MSG *>(message);
     Q_UNUSED(result);
 
     static bool mouseEnteredFlag = false;
 
-    switch(msg->message){
+    switch (msg->message) {
     case WT_CTXOPEN:
         qt_tablet_context = reinterpret_cast<HCTX>(msg->wParam);
         break;
@@ -621,49 +630,50 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
         }
         break;
     case WT_PROXIMITY:
-            if (ptrWTPacketsPeek && ptrWTInfo) {
-                const bool enteredProximity = LOWORD(msg->lParam) != 0;
-                PACKET proximityBuffer[1]; // we are only interested in the first packet in this case
-                const int totalPacks = ptrWTPacketsPeek(qt_tablet_context, 1, proximityBuffer);
-                if (totalPacks > 0) {
-                    const UINT currentCursor = proximityBuffer[0].pkCursor;
+        if (ptrWTPacketsPeek && ptrWTInfo) {
+            const bool enteredProximity = LOWORD(msg->lParam) != 0;
+            PACKET proximityBuffer[1]; // we are only interested in the first packet in this case
+            const int totalPacks = ptrWTPacketsPeek(qt_tablet_context, 1, proximityBuffer);
+            if (totalPacks > 0) {
+                const UINT currentCursor = proximityBuffer[0].pkCursor;
 
-                    UINT csr_physid;
-                    ptrWTInfo(WTI_CURSORS + currentCursor, CSR_PHYSID, &csr_physid);
-                    UINT csr_type;
-                    ptrWTInfo(WTI_CURSORS + currentCursor, CSR_TYPE, &csr_type);
-                    const UINT deviceIdMask = 0xFF6; // device type mask && device color mask
-                    quint64 uniqueId = (csr_type & deviceIdMask);
-                    uniqueId = (uniqueId << 32) | csr_physid;
+                UINT csr_physid;
+                ptrWTInfo(WTI_CURSORS + currentCursor, CSR_PHYSID, &csr_physid);
+                UINT csr_type;
+                ptrWTInfo(WTI_CURSORS + currentCursor, CSR_TYPE, &csr_type);
+                const UINT deviceIdMask = 0xFF6; // device type mask && device color mask
+                quint64 uniqueId = (csr_type & deviceIdMask);
+                uniqueId = (uniqueId << 32) | csr_physid;
 
-                    // initialising and updating the cursor should be done in response to
-                    // WT_CSRCHANGE. We do it in WT_PROXIMITY because some wintab never send
-                    // the event WT_CSRCHANGE even if asked with CXO_CSRMESSAGES
-                    const QTabletCursorInfo *const globalCursorInfo = tCursorInfo();
-                    if (!globalCursorInfo->contains(uniqueId))
-                        tabletInit(uniqueId, csr_type, qt_tablet_context);
+                // initialising and updating the cursor should be done in response to
+                // WT_CSRCHANGE. We do it in WT_PROXIMITY because some wintab never send
+                // the event WT_CSRCHANGE even if asked with CXO_CSRMESSAGES
+                const QTabletCursorInfo *const globalCursorInfo = tCursorInfo();
+                if (!globalCursorInfo->contains(uniqueId)) {
+                    tabletInit(uniqueId, csr_type, qt_tablet_context);
+                }
 
-                    currentTabletPointer = globalCursorInfo->value(uniqueId);
-                    tabletUpdateCursor(currentTabletPointer, currentCursor);
+                currentTabletPointer = globalCursorInfo->value(uniqueId);
+                tabletUpdateCursor(currentTabletPointer, currentCursor);
 
-                    BYTE logicalButtons[32];
-                    memset(logicalButtons, 0, 32);
-                    ptrWTInfo(WTI_CURSORS + currentCursor, CSR_SYSBTNMAP, &logicalButtons);
+                BYTE logicalButtons[32];
+                memset(logicalButtons, 0, 32);
+                ptrWTInfo(WTI_CURSORS + currentCursor, CSR_SYSBTNMAP, &logicalButtons);
 
-                    currentTabletPointer.buttonsMap[0x1] = logicalButtons[0];
-                    currentTabletPointer.buttonsMap[0x2] = logicalButtons[1];
-                    currentTabletPointer.buttonsMap[0x4] = logicalButtons[2];
+                currentTabletPointer.buttonsMap[0x1] = logicalButtons[0];
+                currentTabletPointer.buttonsMap[0x2] = logicalButtons[1];
+                currentTabletPointer.buttonsMap[0x4] = logicalButtons[2];
 
-                    if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
-                        qDebug() << "--------------------------";
-                        qDebug() << "--- Tablet buttons map ---";
-                        for (int i = 0; i < 32; i++) {
-                            qDebug() << "( 1 <<" << i << ")" << "->" << logicalButtons[i];
-                        }
-                        qDebug() << "--------------------------";
+                if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+                    qDebug() << "--------------------------";
+                    qDebug() << "--- Tablet buttons map ---";
+                    for (int i = 0; i < 32; i++) {
+                        qDebug() << "( 1 <<" << i << ")" << "->" << logicalButtons[i];
                     }
+                    qDebug() << "--------------------------";
                 }
             }
+        }
         break;
     case WT_PACKET: {
         Q_ASSERT(qt_tablet_context);

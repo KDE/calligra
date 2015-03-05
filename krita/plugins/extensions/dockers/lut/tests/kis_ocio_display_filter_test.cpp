@@ -34,7 +34,6 @@
 
 #include <KoChannelInfo.h>
 
-
 void KisOcioDisplayFilterTest::test()
 {
     KisExposureGammaCorrectionInterface *egInterface =
@@ -73,13 +72,13 @@ void KisOcioDisplayFilterTest::test()
     qDebug() << ppVar(filter.exposure);
 
     const KoColorSpace *paintingCS =
-                KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
+        KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
 
     KisImageSP image = utils::createImage(0, QSize(100, 100));
     image->convertImageColorSpace(paintingCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     image->waitForDone();
 
-qDebug() << ppVar(paintingCS) << ppVar(image->root()->firstChild()->colorSpace());
+    qDebug() << ppVar(paintingCS) << ppVar(image->root()->firstChild()->colorSpace());
 
     KoCanvasResourceManager *resourceManager =
         utils::createResourceManager(image,

@@ -37,12 +37,11 @@ class KisDeformPaintOp : public KisPaintOp
 {
 
 public:
-    KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisDeformPaintOp(const KisDeformPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     virtual ~KisDeformPaintOp();
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
     qreal spacing(qreal pressure) const;
-
 
 private:
 

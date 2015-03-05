@@ -56,12 +56,11 @@ public:
     int lineCount() const;
     qreal lineSpacing() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
-    KisDynaOpOptionsWidget * m_options;
-
+    KisDynaOpOptionsWidget *m_options;
 
 };
 

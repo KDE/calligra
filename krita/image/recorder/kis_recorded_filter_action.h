@@ -35,22 +35,22 @@ public:
     /**
      * @param config the filter configuration, the ownership of config remains in the caller.
      */
-    KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfiguration* config);
-    KisRecordedFilterAction(const KisRecordedFilterAction&);
+    KisRecordedFilterAction(QString name, const KisNodeQueryPath &path, const KisFilter *filter, const KisFilterConfiguration *config);
+    KisRecordedFilterAction(const KisRecordedFilterAction &);
     virtual ~KisRecordedFilterAction();
     using KisRecordedNodeAction::play;
-    virtual void play(KisNodeSP node, const KisPlayInfo& _info, KoUpdater* _updater = 0) const;
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
-    virtual KisRecordedAction* clone() const;
-    const KisFilter* filter() const;
-    const KisFilterConfiguration* filterConfiguration() const;
+    virtual void play(KisNodeSP node, const KisPlayInfo &_info, KoUpdater *_updater = 0) const;
+    virtual void toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *) const;
+    virtual KisRecordedAction *clone() const;
+    const KisFilter *filter() const;
+    const KisFilterConfiguration *filterConfiguration() const;
     /**
      * Set the configuration, and takes the ownership of the config object.
      */
-    void setFilterConfiguration(KisFilterConfiguration* config);
+    void setFilterConfiguration(KisFilterConfiguration *config);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 class KisRecordedFilterActionFactory : public KisRecordedActionFactory
@@ -58,7 +58,7 @@ class KisRecordedFilterActionFactory : public KisRecordedActionFactory
 public:
     KisRecordedFilterActionFactory();
     virtual ~KisRecordedFilterActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
+    virtual KisRecordedAction *fromXML(const QDomElement &elt, const KisRecordedActionLoadContext *);
 };
 
 #endif

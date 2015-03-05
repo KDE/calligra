@@ -56,7 +56,8 @@ UserVariableFactory::UserVariableFactory()
 KoInlineObject *UserVariableFactory::createInlineObject(const KoProperties *properties) const
 {
     UserVariable *var = new UserVariable();
-    if (properties)
+    if (properties) {
         var->readProperties(properties);
+    }
     return var;
 }

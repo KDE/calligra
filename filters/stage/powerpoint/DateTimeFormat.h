@@ -45,13 +45,13 @@ public:
     * @brief addMasterDateTimeSection(KoXmlWriter& xmlWriter) - Add DateTime section Master styles in styles.xml
     * @param KoXmlWriter - Content Writer
     */
-    void addMasterDateTimeSection(KoXmlWriter& xmlWriter, QString tStyle);
+    void addMasterDateTimeSection(KoXmlWriter &xmlWriter, QString tStyle);
 
     /**
     * @brief addDateTimeAutoStyles - Add DateTime styles in styles.xml
     * @param KoGenStyles - Styles generator handle
     */
-    void addDateTimeAutoStyles(KoGenStyles& styles,
+    void addDateTimeAutoStyles(KoGenStyles &styles,
                                bool hasTodayDate,
                                bool hasUserDate);
 
@@ -65,7 +65,7 @@ public:
         fHasSlideNumber = 0x08,  //(1 bit): A bit that specifies whether the slide number is displayed in the footer.
         fHasHeader = 0x10,      //(1 bit): A bit that specifies whether the header text specified by HeaderAtom record is displayed.
         fHasFooter = 0x20,    //(1 bit): A bit that specifies whether the footer text specified by FooterAtom
-    }eHeaderFooterAtom;
+    } eHeaderFooterAtom;
 
 private:
 
@@ -78,7 +78,7 @@ private:
      * @param bool longyear  - Long year format
      * @param QString separator="/" - Separator b/w date.
      */
-    void addDateStyle(KoGenStyles& styles,
+    void addDateStyle(KoGenStyles &styles,
                       bool dayofweek, bool longMonth, bool textualmonth, bool longyear,
                       QString separator = "/");
 
@@ -89,7 +89,7 @@ private:
      * @param bool second - Second is required in time or not.
      * @param QString separator=":" - Separator b/w time.
      */
-    void addTimeStyle(KoGenStyles& styles, bool hr12Format, bool second, QString separator = ":");
+    void addTimeStyle(KoGenStyles &styles, bool hr12Format, bool second, QString separator = ":");
 
     /**
      * @brief setDateStyleName - set the date style name for further usage.
@@ -133,7 +133,7 @@ private:
         XMLSchemaDate,                      //11
         XMLSchemaDateTime,                  //12
         FixedUserDateFormat,                //13
-    }eDateTimeFormat;
+    } eDateTimeFormat;
 
     //Slide *master;
     /**

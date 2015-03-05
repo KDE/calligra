@@ -32,18 +32,18 @@ class KRITAIMAGE_EXPORT KisActionRecorder : public QObject
 {
     Q_OBJECT
 public:
-    KisActionRecorder(QObject* parent = 0);
+    KisActionRecorder(QObject *parent = 0);
     ~KisActionRecorder();
 
 public Q_SLOTS:
 
-    void addAction(const KisRecordedAction& action, const KisRecordedAction* before = 0);
+    void addAction(const KisRecordedAction &action, const KisRecordedAction *before = 0);
 
 Q_SIGNALS:
     /**
      * This signal is emitted each time an action is added to this recorder.
      */
-    void addedAction(const KisRecordedAction& action);
+    void addedAction(const KisRecordedAction &action);
 };
 
 #endif

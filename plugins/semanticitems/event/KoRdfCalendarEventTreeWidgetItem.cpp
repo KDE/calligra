@@ -25,10 +25,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-KoRdfCalendarEventTreeWidgetItem::KoRdfCalendarEventTreeWidgetItem(QTreeWidgetItem* parent,
-                                                                   hKoRdfCalendarEvent ev)
-        : KoRdfSemanticTreeWidgetItem(parent)
-        , m_semanticObject(ev)
+KoRdfCalendarEventTreeWidgetItem::KoRdfCalendarEventTreeWidgetItem(QTreeWidgetItem *parent,
+        hKoRdfCalendarEvent ev)
+    : KoRdfSemanticTreeWidgetItem(parent)
+    , m_semanticObject(ev)
 {
     setText(ColName, m_semanticObject->name());
 }
@@ -43,10 +43,10 @@ QString KoRdfCalendarEventTreeWidgetItem::uIObjectName() const
     return i18n("Calendar Event");
 }
 
-QList<KAction *> KoRdfCalendarEventTreeWidgetItem::actions(QWidget *parent, KoCanvasBase* host)
+QList<KAction *> KoRdfCalendarEventTreeWidgetItem::actions(QWidget *parent, KoCanvasBase *host)
 {
     QList<KAction *> m_actions;
-    KAction* action = 0;
+    KAction *action = 0;
     action = createAction(parent, host, i18n("Edit..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
     m_actions.append(action);
@@ -77,13 +77,13 @@ void KoRdfCalendarEventTreeWidgetItem::insert(KoCanvasBase *host)
 void KoRdfCalendarEventTreeWidgetItem::saveToKCal()
 {
     kDebug(30015) << "import a calendar event from the document... "
-        << " name:" << m_semanticObject->name();
+                  << " name:" << m_semanticObject->name();
     semanticObject()->saveToKCal();
 }
 
 void KoRdfCalendarEventTreeWidgetItem::exportToFile()
 {
     kDebug(30015) << "exporting to an iCal file..."
-        << " name:" << m_semanticObject->name();
+                  << " name:" << m_semanticObject->name();
     semanticObject()->exportToFile();
 }

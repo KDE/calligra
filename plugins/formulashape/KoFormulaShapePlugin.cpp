@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net> 
+ * Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,14 +32,14 @@
 K_PLUGIN_FACTORY(KoFormulaShapePluginFactory, registerPlugin<KoFormulaShapePlugin>();)
 K_EXPORT_PLUGIN(KoFormulaShapePluginFactory("calligra_shape_formular"))
 
-KoFormulaShapePlugin::KoFormulaShapePlugin( QObject* parent, const QVariantList& )
-                    : QObject( parent )
+KoFormulaShapePlugin::KoFormulaShapePlugin(QObject *parent, const QVariantList &)
+    : QObject(parent)
 {
-    KoToolRegistry::instance()->add( new KoFormulaToolFactory() );
+    KoToolRegistry::instance()->add(new KoFormulaToolFactory());
 #ifndef _MSC_VER
-    KoToolRegistry::instance()->add( new KoM2MMLFormulaToolFactory());
+    KoToolRegistry::instance()->add(new KoM2MMLFormulaToolFactory());
 #endif
-    KoShapeRegistry::instance()->add( new KoFormulaShapeFactory() );
+    KoShapeRegistry::instance()->add(new KoFormulaShapeFactory());
 }
 
 KoFormulaShapePlugin::~KoFormulaShapePlugin()

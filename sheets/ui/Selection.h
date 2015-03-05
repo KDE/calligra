@@ -64,14 +64,14 @@ public:
      * Creates a new selection with (1,1) as initial location.
      * @param canvasBase the canvas interface
      */
-    explicit Selection(KoCanvasBase* canvasBase);
+    explicit Selection(KoCanvasBase *canvasBase);
 
     /**
      * Copy Constructor.
      * Creates a copy of @p selection
      * @param selection the Selection to copy
      */
-    Selection(const Selection& selection);
+    Selection(const Selection &selection);
 
     /**
      * Destructor.
@@ -81,28 +81,28 @@ public:
     /**
      * \return the canvas this selection works for.
      */
-    KoCanvasBase* canvas() const;
+    KoCanvasBase *canvas() const;
 
     /**
      * Sets the selection to @p point
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    void initialize(const QPoint& point, Sheet* sheet = 0);
+    void initialize(const QPoint &point, Sheet *sheet = 0);
 
     /**
      * Sets the selection to @p range
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    void initialize(const QRect& range, Sheet* sheet = 0);
+    void initialize(const QRect &range, Sheet *sheet = 0);
 
     /**
      * Sets the selection to @p region
      * @param region the region's locations
      * @param sheet the sheet the region belongs to
      */
-    void initialize(const Region& region, Sheet* sheet = 0);
+    void initialize(const Region &region, Sheet *sheet = 0);
 
     /**
      * Emits signal changed(const Region&)
@@ -114,48 +114,48 @@ public:
      * Uses the anchor as starting point
      * @p point the new marker location
      */
-    void update(const QPoint& point);
+    void update(const QPoint &point);
 
     /**
      * Extends the current selection with the Point @p point
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    void extend(const QPoint& point, Sheet* sheet = 0);
+    void extend(const QPoint &point, Sheet *sheet = 0);
 
     /**
      * Extends the current selection with the Range @p range
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    void extend(const QRect& range, Sheet* sheet = 0);
+    void extend(const QRect &range, Sheet *sheet = 0);
 
     /**
      * Extends the current selection with the Region @p region
      * @param region the region's locations
      */
-    void extend(const Region& region);
+    void extend(const Region &region);
 
     /**
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    virtual Element* eor(const QPoint& point, Sheet* sheet = 0);
+    virtual Element *eor(const QPoint &point, Sheet *sheet = 0);
 
     /**
      * The anchor is the starting point of a range. For points marker and anchor are the same
      */
-    const QPoint& anchor() const;
+    const QPoint &anchor() const;
 
     /**
      * The cursor represents the cursor position. This is needed for merged cells
      */
-    const QPoint& cursor() const;
+    const QPoint &cursor() const;
 
     /**
      * The marker is the end point of a range. For points marker and anchor are the same
      */
-    const QPoint& marker() const;
+    const QPoint &marker() const;
 
     /**
      * Checks whether the region consists only of one point
@@ -165,7 +165,7 @@ public:
     /**
      * @return the name of the region (e.g. "A1:A2")
      */
-    QString name(Sheet* originSheet = 0) const;
+    QString name(Sheet *originSheet = 0) const;
 
     /**
      * Sets the selection's active sheet.
@@ -173,23 +173,23 @@ public:
      * but for cell choices used for formulaes it may differ.
      * @param sheet the sheet which is currently active
      */
-    void setActiveSheet(Sheet* sheet);
+    void setActiveSheet(Sheet *sheet);
 
     /**
      * @return the selection's active sheet
      */
-    Sheet* activeSheet() const;
+    Sheet *activeSheet() const;
 
     /**
      * Sets the selection's origin sheet.
      * @param sheet the sheet from which the selection starts
      */
-    void setOriginSheet(Sheet* sheet);
+    void setOriginSheet(Sheet *sheet);
 
     /**
      * @return the selection's origin sheet
      */
-    Sheet* originSheet() const;
+    Sheet *originSheet() const;
 
     /**
      * Activates the cell location/range, that has \p cell as bottom left or
@@ -201,7 +201,7 @@ public:
     /**
      * @return the active element
      */
-    Element* activeElement() const;
+    Element *activeElement() const;
 
     /**
      * Sets the starting position and the length of a sub-region.
@@ -239,7 +239,6 @@ public:
      */
     virtual void clear();
 
-
     /**
      * \param mode single cell or multiple cell selection
      */
@@ -250,9 +249,9 @@ public:
      * completely.
      * \return the extended area
      */
-    QRect extendToMergedAreas(const QRect& area) const;
+    QRect extendToMergedAreas(const QRect &area) const;
 
-    const QList<QColor>& colors() const;
+    const QList<QColor> &colors() const;
 
     void selectAll();
 
@@ -270,7 +269,7 @@ public:
     void emitAboutToModify();
     void emitModified();
     void emitRefreshSheetViews();
-    void emitVisibleSheetRequested(Sheet* sheet);
+    void emitVisibleSheetRequested(Sheet *sheet);
     void emitCloseEditor(bool saveChanges, bool expandMatrix = false);
     void emitRequestFocusEditor();
 
@@ -280,28 +279,28 @@ Q_SIGNALS:
      * Emitted when the Selection was changed.
      * @param region the changed part of the Selection
      */
-    void changed(const Region& region);
+    void changed(const Region &region);
 
     /**
      * An operation on the selection is about to happen.
      */
-    void aboutToModify(const Region& region);
+    void aboutToModify(const Region &region);
 
     /**
      * Emitted when the content was modified.
      */
-    void modified(const Region& region);
+    void modified(const Region &region);
 
     void refreshSheetViews();
-    void visibleSheetRequested(Sheet* sheet);
+    void visibleSheetRequested(Sheet *sheet);
     void closeEditor(bool saveChanges, bool expandMatrix);
-    void activeSheetChanged(Sheet* sheet);
+    void activeSheetChanged(Sheet *sheet);
     void requestFocusEditor();
 
     void documentReadWriteToggled(bool readWrite);
     void sheetProtectionToggled(bool protect);
 
-    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
+    void updateAccessedCellRange(Sheet *sheet, const QPoint &location);
 
 protected:
     class Point;
@@ -310,43 +309,43 @@ protected:
     /**
      * @internal used to create derived Points
      */
-    virtual Region::Point* createPoint(const QPoint&) const;
+    virtual Region::Point *createPoint(const QPoint &) const;
 
     /**
      * @internal used to create derived Points
      */
-    virtual Region::Point* createPoint(const QString&) const;
+    virtual Region::Point *createPoint(const QString &) const;
 
     /**
      * @internal used to create derived Points
      */
-    virtual Region::Point* createPoint(const Region::Point&) const;
+    virtual Region::Point *createPoint(const Region::Point &) const;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Region::Range* createRange(const QRect&) const;
+    virtual Region::Range *createRange(const QRect &) const;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Region::Range* createRange(const Region::Point&, const Region::Point&) const;
+    virtual Region::Range *createRange(const Region::Point &, const Region::Point &) const;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Region::Range* createRange(const QString&) const;
+    virtual Region::Range *createRange(const QString &) const;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Region::Range* createRange(const Region::Range&) const;
+    virtual Region::Range *createRange(const Region::Range &) const;
 
     /**
      * Dilates the region and emits the changed() signal.
      * \internal
      */
-    void emitChanged(const Region& changedRegion);
+    void emitChanged(const Region &changedRegion);
 
     /**
      * @internal
@@ -355,10 +354,10 @@ protected:
 
 private:
     // do not allow assignment
-    Selection& operator=(const Selection&);
+    Selection &operator=(const Selection &);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 /***************************************************************************
@@ -371,14 +370,16 @@ private:
 class Selection::Point : public Region::Point
 {
 public:
-    Point(const QPoint& point);
-    Point(const QString& string);
-    Point(const Region::Point& point);
+    Point(const QPoint &point);
+    Point(const QString &string);
+    Point(const Region::Point &point);
 
-    void setColor(const QColor& color) {
+    void setColor(const QColor &color)
+    {
         m_color = color;
     }
-    virtual const QColor& color() const {
+    virtual const QColor &color() const
+    {
         return m_color;
     }
 
@@ -396,15 +397,17 @@ private:
 class Selection::Range : public Region::Range
 {
 public:
-    Range(const QRect& rect);
-    Range(const Calligra::Sheets::Region::Point& tl, const Calligra::Sheets::Region::Point& br);
-    Range(const QString& string);
-    Range(const Region::Range& range);
+    Range(const QRect &rect);
+    Range(const Calligra::Sheets::Region::Point &tl, const Calligra::Sheets::Region::Point &br);
+    Range(const QString &string);
+    Range(const Region::Range &range);
 
-    void setColor(const QColor& color) {
+    void setColor(const QColor &color)
+    {
         m_color = color;
     }
-    const QColor& color() const {
+    const QColor &color() const
+    {
         return m_color;
     }
 

@@ -27,8 +27,8 @@
 
 KoPAPageThumbnailModel::KoPAPageThumbnailModel(const QList<KoPAPageBase *> &pages, QObject *parent)
     : QAbstractListModel(parent),
-    m_pages(pages),
-    m_iconSize(512, 512)
+      m_pages(pages),
+      m_iconSize(512, 512)
 {
 }
 
@@ -38,8 +38,9 @@ KoPAPageThumbnailModel::~KoPAPageThumbnailModel()
 
 int KoPAPageThumbnailModel::rowCount(const QModelIndex &parent) const
 {
-    if (!parent.isValid())
+    if (!parent.isValid()) {
         return m_pages.size();
+    }
 
     return 0;
 }
@@ -47,8 +48,9 @@ int KoPAPageThumbnailModel::rowCount(const QModelIndex &parent) const
 QModelIndex KoPAPageThumbnailModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (!parent.isValid()) {
-        if (row >= 0 && row < m_pages.size())
+        if (row >= 0 && row < m_pages.size()) {
             return createIndex(row, column, m_pages.at(row));
+        }
     }
 
     return QModelIndex();
@@ -61,18 +63,17 @@ QVariant KoPAPageThumbnailModel::data(const QModelIndex &index, int role) const
     }
 
     if (role == Qt::DisplayRole) {
-        QString name = m_pages.at( index.row() )->name();
-        if ( name.isEmpty() ) {
-            if(m_pages.at(index.row() )->pageType() == KoPageApp::Slide ) {
-                name = i18n( "Slide %1", index.row() + 1 );
+        QString name = m_pages.at(index.row())->name();
+        if (name.isEmpty()) {
+            if (m_pages.at(index.row())->pageType() == KoPageApp::Slide) {
+                name = i18n("Slide %1", index.row() + 1);
             } else {
-                name = i18n( "Page %1", index.row() + 1 );
+                name = i18n("Page %1", index.row() + 1);
             }
         }
         return name;
-    }
-    else if (role == Qt::DecorationRole) {
-        return QIcon( m_pages.at(index.row())->thumbnail( m_iconSize ) );
+    } else if (role == Qt::DecorationRole) {
+        return QIcon(m_pages.at(index.row())->thumbnail(m_iconSize));
     }
 
     return QVariant();

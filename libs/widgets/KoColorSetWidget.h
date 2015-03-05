@@ -47,7 +47,7 @@ public:
      *
      * @param parent parent QWidget
      */
-    explicit KoColorSetWidget(QWidget *parent=0);
+    explicit KoColorSetWidget(QWidget *parent = 0);
 
     /**
      * Destructor
@@ -59,12 +59,12 @@ public:
      * @param colorSet pointer to the color set
      */
     void setColorSet(KoColorSet *colorSet);
-    
+
     /**
      * Gets the current color set
      * @returns current color set,, 0 if none set
      */
-    KoColorSet* colorSet();
+    KoColorSet *colorSet();
 
 protected:
     virtual void resizeEvent(QResizeEvent *event); ///< reimplemented from QFrame
@@ -92,7 +92,7 @@ private:
     Q_PRIVATE_SLOT(d, void addRemoveColors())
 
     class KoColorSetWidgetPrivate;
-    KoColorSetWidgetPrivate * const d;
+    KoColorSetWidgetPrivate *const d;
 };
 
 #endif

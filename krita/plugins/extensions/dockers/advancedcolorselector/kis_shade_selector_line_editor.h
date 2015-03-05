@@ -29,11 +29,11 @@
 
 #include "kis_shade_selector_line.h"
 
-
-class KisShadeSelectorLineEditor : public KisShadeSelectorLineBase {
+class KisShadeSelectorLineEditor : public KisShadeSelectorLineBase
+{
     Q_OBJECT
 public:
-    KisShadeSelectorLineEditor(QWidget* parent);
+    KisShadeSelectorLineEditor(QWidget *parent);
 
     QString toString() const;
     void fromString(const QString &string);
@@ -45,12 +45,12 @@ Q_SIGNALS:
     void requestActivateLine(QWidget *widget);
 
 private:
-    QDoubleSpinBox* m_hueDelta;
-    QDoubleSpinBox* m_saturationDelta;
-    QDoubleSpinBox* m_valueDelta;
-    QDoubleSpinBox* m_hueShift;
-    QDoubleSpinBox* m_saturationShift;
-    QDoubleSpinBox* m_valueShift;
+    QDoubleSpinBox *m_hueDelta;
+    QDoubleSpinBox *m_saturationDelta;
+    QDoubleSpinBox *m_valueDelta;
+    QDoubleSpinBox *m_hueShift;
+    QDoubleSpinBox *m_saturationShift;
+    QDoubleSpinBox *m_valueShift;
 };
 
 #endif /* __KIS_SHADE_SELECTOR_LINE_EDITOR_H */

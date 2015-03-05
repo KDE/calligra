@@ -27,8 +27,9 @@ class KWNavigationDockerFactory : public KoDockFactoryBase
 public:
     KWNavigationDockerFactory();
     virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-    DockPosition defaultDockPosition() const {
+    virtual QDockWidget *createDockWidget();
+    DockPosition defaultDockPosition() const
+    {
         return DockMinimized;
     }
 };

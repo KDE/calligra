@@ -37,18 +37,17 @@ class KRITAIMAGE_EXPORT KisLockedPropertiesServer: public QObject
 {
 public:
     KisLockedPropertiesServer();
-    static KisLockedPropertiesServer* instance();
-    KisLockedProperties* lockedProperties();
+    static KisLockedPropertiesServer *instance();
+    KisLockedProperties *lockedProperties();
     void addToLockedProperties(KisPropertiesConfiguration *p);
     void removeFromLockedProperties(KisPropertiesConfiguration *p);
     void setPropertiesFromLocked(bool value);
     bool propertiesFromLocked();
-    KisLockedPropertiesProxy* createLockedPropertiesProxy(const KisPropertiesConfiguration*);
+    KisLockedPropertiesProxy *createLockedPropertiesProxy(const KisPropertiesConfiguration *);
     bool hasProperty(const QString &p);
 
-
 private:
-    KisLockedProperties* m_lockedProperties;
+    KisLockedProperties *m_lockedProperties;
     bool m_propertiesFromLocked;
 };
 

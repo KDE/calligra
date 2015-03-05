@@ -72,7 +72,8 @@ class KexiNameWidget;
 class KexiProjectNavigator;
 class KexiFieldListModel;
 
-namespace KexiPart {
+namespace KexiPart
+{
 class Item;
 }
 
@@ -113,27 +114,27 @@ protected:
 
 private:
     //! Used in emergency by accept()
-    void dropDestinationTable(KexiProject* project, KexiPart::Item* partItemForSavedTable);
+    void dropDestinationTable(KexiProject *project, KexiPart::Item *partItemForSavedTable);
 
     //! Used in emergency by accept()
-    void raiseErrorInAccept(KexiProject* project, KexiPart::Item* partItemForSavedTable);
+    void raiseErrorInAccept(KexiProject *project, KexiPart::Item *partItemForSavedTable);
 
-    QGridLayout* MyDialogLayout;
-    QHBoxLayout* Layout1;
+    QGridLayout *MyDialogLayout;
+    QHBoxLayout *Layout1;
     KexiCSVImportDialogModel *m_table;
     QTableView *m_tableView;
-    KexiCSVDelimiterWidget* m_delimiterWidget;
+    KexiCSVDelimiterWidget *m_delimiterWidget;
     bool m_detectDelimiter; //!< true if delimiter should be detected
-                            //!< (true by default, set to false if user sets delimiter)
-    QLabel* m_formatLabel;
-    KComboBox* m_formatCombo;
+    //!< (true by default, set to false if user sets delimiter)
+    QLabel *m_formatLabel;
+    KComboBox *m_formatCombo;
     KIntSpinBox *m_startAtLineSpinBox;
-    KexiCSVTextQuoteComboBox* m_comboQuote;
-    QLabel* m_startAtLineLabel;
-    QLabel* TextLabel2;
-    QCheckBox* m_ignoreDuplicates;
-    QCheckBox* m_1stRowForFieldNames;
-    QCheckBox* m_primaryKeyField;
+    KexiCSVTextQuoteComboBox *m_comboQuote;
+    QLabel *m_startAtLineLabel;
+    QLabel *TextLabel2;
+    QCheckBox *m_ignoreDuplicates;
+    QCheckBox *m_1stRowForFieldNames;
+    QCheckBox *m_primaryKeyField;
     KexiFileWidget *m_openFileWidget;
     QWidget *m_optionsWidget;
     QWidget *m_saveMethodWidget;
@@ -160,22 +161,22 @@ private:
     KexiCSVInfoLabel *m_toLabel;
     QLabel *m_importProgressLabel;
 
-    void detectTypeAndUniqueness(int row, int col, const QString& text);
-    void setText(int row, int col, const QString& text, bool inGUI);
+    void detectTypeAndUniqueness(int row, int col, const QString &text);
+    void setText(int row, int col, const QString &text, bool inGUI);
 
     /*! Parses date from \a text and stores into \a date.
      m_dateRegExp is used for clever detection;
      if '/' separated is found, it's assumed the format is american mm/dd/yyyy.
      This function supports omitted zeros, so 1/2/2006 is parsed properly too.
      \return true on success. */
-    bool parseDate(const QString& text, QDate& date);
+    bool parseDate(const QString &text, QDate &date);
 
     /*! Parses time from \a text and stores into \a date.
      m_timeRegExp1 and m_timeRegExp2 are used for clever detection;
      both hh:mm:ss and hh:mm are supported.
      This function supports omitted zeros, so 1:2:3 is parsed properly too.
      \return true on success. */
-    bool parseTime(const QString& text, QTime& time);
+    bool parseTime(const QString &text, QTime &time);
 
     /*! Called after the first fillTable() when number of rows is unknown. */
     void adjustRows(int iRows);
@@ -207,7 +208,7 @@ private:
       3b. The same algorithm as in 3. is performed for comma character.
     4. If the step 3. did not return a delimiter, a character found in step 1. with
       the highest priority is retured as delimiter. */
-    QString detectDelimiterByLookingAtFirstBytesOfFile(QTextStream& inputStream);
+    QString detectDelimiterByLookingAtFirstBytesOfFile(QTextStream &inputStream);
 
     /*! Callback, called whenever row is loaded in loadRows(). When inGUI is true,
     nothing is performed, else database buffer is written back to the database. */
@@ -244,7 +245,7 @@ private:
 
     QPixmap m_pkIcon;
     QString m_fname;
-    QFile* m_file;
+    QFile *m_file;
     QTextStream *m_inputStream; //!< used in loadData()
     KexiCSVImportOptions m_options;
     KProgressDialog *m_loadingProgressDlg;
@@ -261,8 +262,8 @@ private:
     bool m_stoppedAt_MAX_BYTES_TO_PREVIEW; //!< used to compute m_allRowsLoadedInPreview
     const QString m_stringNo, m_stringI18nNo, m_stringFalse, m_stringI18nFalse; //!< used for importing boolean values
     int m_prevColumnForSetText; //!< used for non-gui tracking of skipped clolumns,
-                                //!< so can be saved to the database,
-                                //!< e.g. first three columns are saved for ,,,"abc" line in the CSV data
+    //!< so can be saved to the database,
+    //!< e.g. first three columns are saved for ,,,"abc" line in the CSV data
 #if QT_VERSION >= 0x040700
     QElapsedTimer m_elapsedTimer; //!< Used to update progress
 #else
@@ -278,11 +279,11 @@ private:
 
     bool m_newTable;
     QList<QVariant> m_tmpValues;
-    KexiPart::Item* m_partItemForSavedTable;
+    KexiPart::Item *m_partItemForSavedTable;
     bool m_importInProgress;
     bool m_importCancelled;
     class Private;
-    Private * const d;
+    Private *const d;
 
 public Q_SLOTS:
     virtual void next();
@@ -292,7 +293,7 @@ private Q_SLOTS:
     void fillTableLater();
     void initLater();
     void formatChanged(int id);
-    void delimiterChanged(const QString& delimiter);
+    void delimiterChanged(const QString &delimiter);
     void startlineSelected(int line);
     void textquoteSelected(int);
     void currentCellChanged(const QModelIndex &cur, const QModelIndex &prev);

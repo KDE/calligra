@@ -30,14 +30,16 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
 
-
 class KOODF2_EXPORT KoOdfChartWriter
 {
 public:
-    explicit KoOdfChartWriter(KoChart::Chart* chart);
+    explicit KoOdfChartWriter(KoChart::Chart *chart);
     virtual ~KoOdfChartWriter();
 
-    KoChart::Chart* chart() const { return m_chart; }
+    KoChart::Chart *chart() const
+    {
+        return m_chart;
+    }
 
     void setSheetReplacement(bool val);
 
@@ -59,17 +61,17 @@ public:
     qreal m_end_x, m_end_y; //in pt
 
     // Saving of content
-            bool saveIndex(KoXmlWriter* xmlWriter);
-    virtual bool saveContent(KoStore* store, KoXmlWriter* manifestWriter);
-    virtual bool saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles, KoXmlWriter* bodyWriter,
-			    int maxExplode);
+    bool saveIndex(KoXmlWriter *xmlWriter);
+    virtual bool saveContent(KoStore *store, KoXmlWriter *manifestWriter);
+    virtual bool saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles, KoXmlWriter *bodyWriter,
+                            int maxExplode);
 
     // helper functions
     qreal calculateFade(int index, int maxIndex);
-    QColor shadeColor(const QColor& col, qreal factor);
+    QColor shadeColor(const QColor &col, qreal factor);
 
 protected:
-    KoChart::Chart* m_chart;
+    KoChart::Chart *m_chart;
 
     QString normalizeCellRange(QString range);
     QString toPtString(int number);
@@ -78,28 +80,28 @@ protected:
         horizontal
     };
     float sprcToPt(int sprc, Orientation orientation);
-    QColor tintColor(const QColor & color, qreal tintfactor);
+    QColor tintColor(const QColor &color, qreal tintfactor);
     QString replaceSheet(const QString &originalString, const QString &replacementSheet);
     bool sheetReplacement;
 
     // Style generation
-            QString genChartAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyles);
-    virtual QString genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles,
-				      KoGenStyles& mainStyles);
-            QString genPlotAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyles);
-    virtual QString genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles,
-				     KoGenStyles& mainStyles);
-            void addShapePropertyStyle(/*const*/ KoChart::Series* series,
-				       KoGenStyle& style, KoGenStyles& mainStyles);
-    virtual void addDataThemeToStyle(KoGenStyle& style,
-				     int dataNumber, int maxNumData = 1, bool strokes = true);
+    QString genChartAreaStyle(KoGenStyles &styles, KoGenStyles &mainStyles);
+    virtual QString genChartAreaStyle(KoGenStyle &style, KoGenStyles &styles,
+                                      KoGenStyles &mainStyles);
+    QString genPlotAreaStyle(KoGenStyles &styles, KoGenStyles &mainStyles);
+    virtual QString genPlotAreaStyle(KoGenStyle &style, KoGenStyles &styles,
+                                     KoGenStyles &mainStyles);
+    void addShapePropertyStyle(/*const*/ KoChart::Series *series,
+                                         KoGenStyle &style, KoGenStyles &mainStyles);
+    virtual void addDataThemeToStyle(KoGenStyle &style,
+                                     int dataNumber, int maxNumData = 1, bool strokes = true);
 
-    QString generateGradientStyle(KoGenStyles& mainStyles, const KoChart::Gradient* grad);
+    QString generateGradientStyle(KoGenStyles &mainStyles, const KoChart::Gradient *grad);
 
     // Color functions
-    virtual QColor calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad);
+    virtual QColor calculateColorFromGradientStop(const KoChart::Gradient::GradientStop &grad);
     virtual QColor labelFontColor() const;
-    void writeInternalTable(KoXmlWriter* bodyWriter);
+    void writeInternalTable(KoXmlWriter *bodyWriter);
 
     // MS Office related stuff
     QList<QColor> m_palette;

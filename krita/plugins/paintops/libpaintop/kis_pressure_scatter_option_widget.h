@@ -22,7 +22,6 @@
 
 #include "kis_curve_option_widget.h"
 
-
 class QCheckBox;
 
 class PAINTOP_EXPORT KisPressureScatterOptionWidget: public KisCurveOptionWidget
@@ -32,15 +31,15 @@ class PAINTOP_EXPORT KisPressureScatterOptionWidget: public KisCurveOptionWidget
 public:
     KisPressureScatterOptionWidget();
 
-    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private Q_SLOTS:
     void xAxisEnabled(bool enable);
     void yAxisEnabled(bool enable);
 
 private:
-    QCheckBox* m_axisX;
-    QCheckBox* m_axisY;
+    QCheckBox *m_axisX;
+    QCheckBox *m_axisY;
 };
 
 #endif // KIS_PRESSURE_RATE_OPTION_WIDGET_H

@@ -19,7 +19,6 @@
 #ifndef KIS_ABR_TRANSLATOR_H
 #define KIS_ABR_TRANSLATOR_H
 
-
 #include <QString>
 #include <QDomDocument>
 const QString ABR_PRESET_START = "START";
@@ -75,11 +74,10 @@ const QString BRUSH_TYPE_SAMPLED = "sampledBrush";
 
 enum enumAbrControllers { OFF, FADE, PEN_PRESSURE, PEN_TILT, STYLUS_WHEEL, ROTATION, INITIAL_DIRECTION, DIRECTION};
 
-
 class AbrBrushProperties
 {
 public:
-    void toXML(QDomDocument& , QDomElement&) const;
+    void toXML(QDomDocument &, QDomElement &) const;
     void setupProperty(const QString &attributeName, const QString &type, const  QString &value);
     void reset();
 private:
@@ -94,7 +92,6 @@ private:
 
     QString m_brushType;
 };
-
 
 class AbrGroupProperties
 {
@@ -112,9 +109,10 @@ class AbrTipDynamicsProperties
 {
 public:
     AbrTipDynamicsProperties();
-    void toXML(QDomDocument& , QDomElement&) const;
+    void toXML(QDomDocument &, QDomElement &) const;
     void setupProperty(const QString &attributeName, const QString &type, const  QString &value);
-    void reset() {
+    void reset()
+    {
         m_groupType.clear();
     }
 private:
@@ -131,15 +129,14 @@ private:
 
     QString m_groupType;
 
-    QHash<QString, AbrGroupProperties*> m_groups;
+    QHash<QString, AbrGroupProperties *> m_groups;
 };
-
 
 class AbrDualBrushProperties
 {
 public:
     bool useDualBrush;
-    void toXML(QDomDocument& , QDomElement&) const;
+    void toXML(QDomDocument &, QDomElement &) const;
 };
 
 class AbrBrushGroupProperties
@@ -152,7 +149,7 @@ public:
     bool wetEdges;
     bool noise;
     bool repeat;
-    void toXML(QDomDocument& , QDomElement&) const;
+    void toXML(QDomDocument &, QDomElement &) const;
 };
 
 class KisAbrTranslator
@@ -160,7 +157,6 @@ class KisAbrTranslator
 public:
     KisAbrTranslator();
     ~KisAbrTranslator();
-
 
     void addEntry(const QString &attributeName, const QString &type, const  QString &value);
 

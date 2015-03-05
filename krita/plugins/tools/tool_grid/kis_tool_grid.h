@@ -32,9 +32,8 @@ class KisToolGrid : public KisTool
         SCALE
     };
 public:
-    KisToolGrid(KoCanvasBase * canvas);
+    KisToolGrid(KoCanvasBase *canvas);
     virtual ~KisToolGrid();
-
 
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
@@ -44,30 +43,30 @@ public:
     void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
     void endAlternateAction(KoPointerEvent *event, AlternateAction action);
 
-    virtual void keyPressEvent(QKeyEvent* event);
+    virtual void keyPressEvent(QKeyEvent *event);
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
 
 protected:
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    virtual void paint(QPainter &gc, const KoViewConverter &converter);
 
 private:
-    KisCanvas2* m_canvas;
+    KisCanvas2 *m_canvas;
     QPointF m_dragStart;
     QPointF m_dragEnd;
     QPoint m_initialOffset;
     QPoint m_initialSpacing;
 };
 
-
 class KisToolGridFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolGridFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolGrid") {
+    KisToolGridFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolGrid")
+    {
         setToolTip(i18n("Edit the grid"));
         setToolType(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_grid"));
@@ -75,15 +74,14 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };
 
-
     virtual ~KisToolGridFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase * canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolGrid(canvas);
     }
 
 };
-
 
 #endif
 

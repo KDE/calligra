@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include "TableOfContentsStyleConfigure.h"
 #include "ui_TableOfContentsStyleConfigure.h"
 
@@ -49,7 +48,6 @@ TableOfContentsStyleConfigure::~TableOfContentsStyleConfigure()
     delete ui;
 }
 
-
 void TableOfContentsStyleConfigure::initializeUi(KoTableOfContentsGeneratorInfo *info)
 {
     Q_ASSERT(info);
@@ -76,7 +74,7 @@ void TableOfContentsStyleConfigure::initializeUi(KoTableOfContentsGeneratorInfo 
 
 void TableOfContentsStyleConfigure::save()
 {
-    if(m_stylesModel) {
+    if (m_stylesModel) {
         m_stylesModel->saveData();
         delete m_stylesModel;
         m_stylesModel = 0;
@@ -88,7 +86,7 @@ void TableOfContentsStyleConfigure::save()
 
 void TableOfContentsStyleConfigure::discardChanges()
 {
-    if(m_stylesModel) {
+    if (m_stylesModel) {
         delete m_stylesModel;
         m_stylesModel = 0;
     }

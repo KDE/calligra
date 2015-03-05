@@ -33,13 +33,11 @@
 // Qt
 #include <QFile>
 
-
 K_PLUGIN_FACTORY(CdrImportFactory, registerPlugin<XFigImportFilter>();)
 K_EXPORT_PLUGIN(CdrImportFactory("calligrafilters"))
 
-
-XFigImportFilter::XFigImportFilter( QObject* parent, const QVariantList& )
-  : KoFilter(parent)
+XFigImportFilter::XFigImportFilter(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
@@ -48,32 +46,31 @@ XFigImportFilter::~XFigImportFilter()
 }
 
 KoFilter::ConversionStatus
-XFigImportFilter::convert( const QByteArray& from, const QByteArray& to )
+XFigImportFilter::convert(const QByteArray &from, const QByteArray &to)
 {
     if ((from != "image/x-xfig") ||
-        (to   != "application/vnd.oasis.opendocument.graphics")) {
+            (to   != "application/vnd.oasis.opendocument.graphics")) {
         return KoFilter::NotImplemented;
     }
 
     // prepare input
-    QFile inputFile( m_chain->inputFile() );
-    if( ! inputFile.open(QIODevice::ReadOnly) )
-    {
+    QFile inputFile(m_chain->inputFile());
+    if (! inputFile.open(QIODevice::ReadOnly)) {
         return KoFilter::FileNotFound;
     }
 
     // prepare output
-    KoStore* outputStore = KoStore::createStore( m_chain->outputFile(), KoStore::Write,
-                                                 KoOdf::mimeType(KoOdf::Graphics), KoStore::Zip );
-    if( ! outputStore ) {
+    KoStore *outputStore = KoStore::createStore(m_chain->outputFile(), KoStore::Write,
+                           KoOdf::mimeType(KoOdf::Graphics), KoStore::Zip);
+    if (! outputStore) {
         return KoFilter::StorageCreationError;
     }
 
-    XFigOdgWriter odgWriter( outputStore );
+    XFigOdgWriter odgWriter(outputStore);
 
     // translate!
-    XFigDocument* document = XFigParser::parse( &inputFile );
-    if( ! document ) {
+    XFigDocument *document = XFigParser::parse(&inputFile);
+    if (! document) {
         return KoFilter::CreationError;
     }
 

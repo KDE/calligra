@@ -31,52 +31,64 @@ class KoStoreDevice : public QIODevice
 {
 public:
     /// Note: KoStore::open() should be called before calling this.
-    explicit KoStoreDevice(KoStore * store) : m_store(store) {
+    explicit KoStoreDevice(KoStore *store) : m_store(store)
+    {
         // calligra-1.x behavior compat: a KoStoreDevice is automatically open
         setOpenMode(m_store->mode() == KoStore::Read ? QIODevice::ReadOnly : QIODevice::WriteOnly);
     }
     ~KoStoreDevice() {}
 
-    virtual bool isSequential() const {
+    virtual bool isSequential() const
+    {
         return true;
     }
 
-    virtual bool open(OpenMode m) {
+    virtual bool open(OpenMode m)
+    {
         setOpenMode(m);
-        if (m & QIODevice::ReadOnly)
+        if (m & QIODevice::ReadOnly) {
             return (m_store->mode() == KoStore::Read);
-        if (m & QIODevice::WriteOnly)
+        }
+        if (m & QIODevice::WriteOnly) {
             return (m_store->mode() == KoStore::Write);
+        }
         return false;
     }
     virtual void close() {}
 
-    qint64 size() const {
-        if (m_store->mode() == KoStore::Read)
+    qint64 size() const
+    {
+        if (m_store->mode() == KoStore::Read) {
             return m_store->size();
-        else
+        } else {
             return 0xffffffff;
+        }
     }
 
     // See QIODevice
-    virtual qint64 pos() const {
+    virtual qint64 pos() const
+    {
         return m_store->pos();
     }
-    virtual bool seek(qint64 pos) {
+    virtual bool seek(qint64 pos)
+    {
         return m_store->seek(pos);
     }
-    virtual bool atEnd() const {
+    virtual bool atEnd() const
+    {
         return m_store->atEnd();
     }
 
 protected:
     KoStore *m_store;
 
-    virtual qint64 readData(char *data, qint64 maxlen) {
+    virtual qint64 readData(char *data, qint64 maxlen)
+    {
         return m_store->read(data, maxlen);
     }
 
-    virtual qint64 writeData(const char *data, qint64 len) {
+    virtual qint64 writeData(const char *data, qint64 len)
+    {
         return m_store->write(data, len);
     }
 

@@ -38,18 +38,21 @@ public:
     QWidget *widget(const QString &name) const;
 
     template <class W>
-    W widget(const QString &name) const { return qobject_cast<W>(widget(name)); }
+    W widget(const QString &name) const
+    {
+        return qobject_cast<W>(widget(name));
+    }
 
 private:
     KexiTester();
-    static KexiTester* self();
+    static KexiTester *self();
 
     Q_DISABLE_COPY(KexiTester)
-    friend KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester&, const KexiTestObject &);
-    friend KexiTester& kexiTester();
+    friend KEXIUTILS_EXPORT KexiTester &operator<<(KexiTester &, const KexiTestObject &);
+    friend KexiTester &kexiTester();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 //! KexiTestObject is a container for object added for tests
@@ -61,14 +64,17 @@ private:
     QPointer<QObject> m_object;
     QString m_name;
 
-    friend KexiTester& operator<<(KexiTester&, const KexiTestObject &);
+    friend KexiTester &operator<<(KexiTester &, const KexiTestObject &);
 };
 
 //! @return global KexiTester object.
-inline KexiTester& kexiTester() { return *KexiTester::self(); }
+inline KexiTester &kexiTester()
+{
+    return *KexiTester::self();
+}
 
 //! Adds test object @a object to the tester.
-KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject &object);
+KEXIUTILS_EXPORT KexiTester &operator<<(KexiTester &tester, const KexiTestObject &object);
 
 #ifndef COMPILING_TESTS
 #define kexiTester while (false) kexiTester // Completely skip tester for final code

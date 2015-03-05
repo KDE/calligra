@@ -49,7 +49,6 @@ public:
     KoShadowStyle(const KoShadowStyle &other);
     ~KoShadowStyle();
 
-
     // Holds data about one of the shadow this shadow contains
     struct KOODF_EXPORT ShadowData {
         ShadowData();
@@ -58,7 +57,6 @@ public:
         QPointF offset;
         qreal radius;
     };
-
 
     bool operator==(const KoShadowStyle &other) const;
     bool operator!=(const KoShadowStyle &other) const;
@@ -81,7 +79,6 @@ public:
      * Returns the number of shadows that are contained in this shadow
      */
     int shadowCount() const;
-
 
 private:
     QSharedDataPointer<KoShadowStylePrivate> d;

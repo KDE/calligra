@@ -31,7 +31,7 @@
 
 KisPaintDeviceSP createDevice()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisFillPainter gc(dev);
     KoColor c(Qt::red, dev->colorSpace());
@@ -49,12 +49,12 @@ void KisTransparencyMaskTest::testCreation()
 }
 
 #define initImage(image, layer, device, mask) do {                      \
-    image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
-    device = createDevice();                                            \
-    layer = new KisPaintLayer(image, "paint1", 100, device);                  \
-    mask = new KisTransparencyMask();                                   \
-    image->addNode(layer);                                              \
-    image->addNode(mask, layer);                                        \
+        image = new KisImage(0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, "tests");     \
+        device = createDevice();                                            \
+        layer = new KisPaintLayer(image, "paint1", 100, device);                  \
+        mask = new KisTransparencyMask();                                   \
+        image->addNode(layer);                                              \
+        image->addNode(mask, layer);                                        \
     } while(0)
 
 void KisTransparencyMaskTest::testApply()
@@ -65,7 +65,6 @@ void KisTransparencyMaskTest::testApply()
     KisPaintLayerSP layer;
     KisPaintDeviceSP dev;
     KisTransparencyMaskSP mask;
-
 
     QRect applyRect(0, 0, 200, 100);
 
@@ -133,10 +132,9 @@ void KisTransparencyMaskTest::testMoveParentLayer()
 
     // image->projection()->convertToQImage(0, 0,0,300,300).save("proj_before.png");
 
-    QRect initialRect(0,0,200,100);
+    QRect initialRect(0, 0, 200, 100);
     QCOMPARE(layer->exactBounds(), initialRect);
-    QCOMPARE(image->projection()->exactBounds(), QRect(50,50,100,50));
-
+    QCOMPARE(image->projection()->exactBounds(), QRect(50, 50, 100, 50));
 
     layer->setX(100);
     layer->setY(100);
@@ -148,14 +146,14 @@ void KisTransparencyMaskTest::testMoveParentLayer()
 
     qDebug() << "Sel. rect after:" << mask->selection()->selectedRect();
 
-    QRect finalRect(100,100,200,100);
+    QRect finalRect(100, 100, 200, 100);
     QCOMPARE(layer->exactBounds(), finalRect);
 
     walker.collectRects(layer, initialRect | finalRect);
     merger.startMerge(walker);
 
     // image->projection()->convertToQImage(0, 0,0,300,300).save("proj_after.png");
-    QCOMPARE(image->projection()->exactBounds(), QRect(150,150,100,50));
+    QCOMPARE(image->projection()->exactBounds(), QRect(150, 150, 100, 50));
 }
 
 QTEST_KDEMAIN(KisTransparencyMaskTest, GUI)

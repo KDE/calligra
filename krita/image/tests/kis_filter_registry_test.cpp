@@ -24,10 +24,9 @@
 
 void KisFilterRegistryTest::testCreation()
 {
-    KisFilterRegistry * test = KisFilterRegistry::instance();
+    KisFilterRegistry *test = KisFilterRegistry::instance();
     Q_UNUSED(test);
 }
-
 
 QTEST_KDEMAIN(KisFilterRegistryTest, GUI)
 #include "kis_filter_registry_test.moc"

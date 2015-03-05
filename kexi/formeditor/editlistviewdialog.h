@@ -61,15 +61,15 @@ public:
 
 public Q_SLOTS:
     // Columns page
-    void updateItemProperties(QListBoxItem*);
+    void updateItemProperties(QListBoxItem *);
     void newItem();
     void removeItem();
     void MoveItemUp();
     void MoveItemDown();
-    void changeProperty(KoProperty::Set& set, KoProperty::Property& property);
+    void changeProperty(KoProperty::Set &set, KoProperty::Property &property);
 
     // Contents page
-    void updateButtons(QListViewItem*);
+    void updateButtons(QListViewItem *);
     void newRow();
     void newChildRow();
     void removeRow();
@@ -82,13 +82,13 @@ protected:
     void loadChildNodes(QListView *listview, QListViewItem *item, QListViewItem *parent);
 
 protected:
-    enum Buttons { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
+    enum Buttons { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown, BColAdd = 20, BColRem, BColUp, BColDown };
     KoProperty::EditorView  *m_editor;
     KoProperty::Set  *m_propSet;
     KPageWidgetItem *m_columnsPageItem, *m_contentsPageItem;
     KListBox  *m_listbox;
     KListView  *m_listview;
-    QHash<Buttons, QToolButton*>  m_buttons;
+    QHash<Buttons, QToolButton *>  m_buttons;
 };
 
 }

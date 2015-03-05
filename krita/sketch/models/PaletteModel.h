@@ -24,7 +24,7 @@
 class PaletteModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* colorSet READ colorSet NOTIFY colorSetChanged)
+    Q_PROPERTY(QObject *colorSet READ colorSet NOTIFY colorSetChanged)
 public:
     enum PaletteRoles {
         ImageRole = Qt::UserRole + 1,
@@ -37,7 +37,7 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
-    QObject* colorSet() const;
+    QObject *colorSet() const;
 
 public Q_SLOTS:
     void itemActivated(int index);
@@ -47,7 +47,7 @@ Q_SIGNALS:
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // PALETTEMODEL_H

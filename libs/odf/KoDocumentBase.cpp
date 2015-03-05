@@ -20,18 +20,17 @@
   Boston, MA 02110-1301, USA.
 */
 
-
 #include "KoDocumentBase.h"
 
-class KoDocumentBase::Private {
+class KoDocumentBase::Private
+{
 public:
 };
 
 KoDocumentBase::KoDocumentBase()
-    : d( new Private )
+    : d(new Private)
 {
 }
-
 
 KoDocumentBase::~KoDocumentBase()
 {

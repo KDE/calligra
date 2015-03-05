@@ -27,8 +27,6 @@
 
 #include <kio/job.h>
 
-
-
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"
@@ -72,16 +70,16 @@ public:
     KisTIFFConverter(KisDocument *doc);
     virtual ~KisTIFFConverter();
 public:
-    KisImageBuilder_Result buildImage(const KUrl& uri);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP layer, KisTIFFOptions);
+    KisImageBuilder_Result buildImage(const KUrl &uri);
+    KisImageBuilder_Result buildFile(const KUrl &uri, KisImageWSP layer, KisTIFFOptions);
     /** Retrieve the constructed image
     */
     KisImageWSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
-    KisImageBuilder_Result decode(const KUrl& uri);
-    KisImageBuilder_Result readTIFFDirectory(TIFF* image);
+    KisImageBuilder_Result decode(const KUrl &uri);
+    KisImageBuilder_Result readTIFFDirectory(TIFF *image);
 private:
     KisImageWSP m_image;
     KisDocument *m_doc;

@@ -65,20 +65,24 @@ public:
      * getters
      */
 
-    long   getCol() const {
+    long   getCol() const
+    {
         return _col;
     }
-    double getWidth() const {
+    double getWidth() const
+    {
         return _width;
     }
 
     /**
      * setters
      */
-    void setCol(int c) {
+    void setCol(int c)
+    {
         _col = c;
     }
-    void setWidth(double w) {
+    void setWidth(double w)
+    {
         _width = w;
     }
 
@@ -86,7 +90,7 @@ public:
      * Helpful functions
      */
     void     analyze(const QDomNode);
-    void     generate(QTextStream&);
+    void     generate(QTextStream &);
 
 private:
 

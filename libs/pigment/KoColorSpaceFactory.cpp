@@ -28,12 +28,12 @@
 #include "KoColorSpaceRegistry.h"
 
 struct KoColorSpaceFactory::Private {
-    QList<KoColorProfile*> colorprofiles;
-    QList<KoColorSpace*> colorspaces;
-    QHash<QString, KoColorSpace* > availableColorspaces;
+    QList<KoColorProfile *> colorprofiles;
+    QList<KoColorSpace *> colorspaces;
+    QHash<QString, KoColorSpace * > availableColorspaces;
     QMutex mutex;
 #ifndef NDEBUG
-    QHash<KoColorSpace*, QString> stackInformation;
+    QHash<KoColorSpace *, QString> stackInformation;
 #endif
 };
 
@@ -48,34 +48,32 @@ KoColorSpaceFactory::~KoColorSpaceFactory()
     int count = 0;
     count += d->availableColorspaces.size();
 
-    for(QHash<KoColorSpace*, QString>::const_iterator it = d->stackInformation.constBegin();
-        it != d->stackInformation.constEnd(); ++it)
-    {
+    for (QHash<KoColorSpace *, QString>::const_iterator it = d->stackInformation.constBegin();
+            it != d->stackInformation.constEnd(); ++it) {
         errorPigment << "*******************************************";
         errorPigment << it.key()->id() << " still in used, and grabed in: ";
         errorPigment << it.value();
     }
-    if( count != d->colorspaces.size())
-    {
+    if (count != d->colorspaces.size()) {
         errorPigment << (d->colorspaces.size() - count) << " colorspaces are still used";
     }
     Q_ASSERT(count == d->colorspaces.size());
 #endif
-    foreach(KoColorSpace* cs, d->colorspaces) {
+    foreach (KoColorSpace *cs, d->colorspaces) {
         delete cs;
     }
-    foreach(KoColorProfile* profile, d->colorprofiles) {
+    foreach (KoColorProfile *profile, d->colorprofiles) {
         KoColorSpaceRegistry::instance()->removeProfile(profile);
         delete profile;
     }
     delete d;
 }
 
-const KoColorProfile* KoColorSpaceFactory::colorProfile(const QByteArray& rawData) const
+const KoColorProfile *KoColorSpaceFactory::colorProfile(const QByteArray &rawData) const
 {
-    KoColorProfile* colorProfile = createColorProfile(rawData);
+    KoColorProfile *colorProfile = createColorProfile(rawData);
     if (colorProfile && colorProfile->valid()) {
-        if (const KoColorProfile* existingProfile = KoColorSpaceRegistry::instance()->profileByName(colorProfile->name())) {
+        if (const KoColorProfile *existingProfile = KoColorSpaceRegistry::instance()->profileByName(colorProfile->name())) {
             delete colorProfile;
             return existingProfile;
         }
@@ -85,11 +83,11 @@ const KoColorProfile* KoColorSpaceFactory::colorProfile(const QByteArray& rawDat
     return colorProfile;
 }
 
-const KoColorSpace *KoColorSpaceFactory::grabColorSpace(const KoColorProfile * profile)
+const KoColorSpace *KoColorSpaceFactory::grabColorSpace(const KoColorProfile *profile)
 {
     QMutexLocker l(&d->mutex);
     Q_ASSERT(profile);
-    KoColorSpace* cs = 0;
+    KoColorSpace *cs = 0;
     if (!d->availableColorspaces.contains(profile->name())) {
         cs = createColorSpace(profile);
         if (cs) {

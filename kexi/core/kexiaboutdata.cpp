@@ -30,18 +30,18 @@ static const char description[] =
     I18N_NOOP("Visual database applications creator");
 
 KexiAboutData::KexiAboutData()
- : KAboutData(
-        "kexi", 0,
-        ki18n(KEXI_APP_NAME),
-        Kexi::fullVersionString(),
-        ki18n(description),
-        KAboutData::License_LGPL_V2,
-        ki18n("© 2002-%1, The Kexi Team").subs(CALLIGRA_YEAR),
-        ki18n("This software is developed by Kexi Team - an international group "
-              "of independent developers. They form a part of the Calligra Project."),
-        "http://www.calligra.org/kexi",
-        "submit@bugs.kde.org"
-    )
+    : KAboutData(
+          "kexi", 0,
+          ki18n(KEXI_APP_NAME),
+          Kexi::fullVersionString(),
+          ki18n(description),
+          KAboutData::License_LGPL_V2,
+          ki18n("© 2002-%1, The Kexi Team").subs(CALLIGRA_YEAR),
+          ki18n("This software is developed by Kexi Team - an international group "
+                "of independent developers. They form a part of the Calligra Project."),
+          "http://www.calligra.org/kexi",
+          "submit@bugs.kde.org"
+      )
 {
     setProgramIconName(koIconName("calligrakexi"));
     // authors sorted by last nontrivial contribution date * size

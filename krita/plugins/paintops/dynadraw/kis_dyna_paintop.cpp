@@ -40,15 +40,14 @@
 
 #include "filter.h"
 
-KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(node);
 
     if (image) {
         m_dynaBrush.setCanvasSize(image->width(), image->height());
-    }
-    else {
+    } else {
         // some dummy values for scratchpad
         m_dynaBrush.setCanvasSize(1000, 1000);
     }
@@ -81,12 +80,13 @@ void KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInf
 {
     Q_UNUSED(currentDistance);
     Q_UNUSED(pi2);
-    if (!painter()) return;
+    if (!painter()) {
+        return;
+    }
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
-    }
-    else {
+    } else {
         m_dab->clear();
     }
 
@@ -104,7 +104,7 @@ void KisDynaPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInf
     painter()->renderMirrorMask(rc, m_dab);
 }
 
-KisSpacingInformation KisDynaPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisDynaPaintOp::paintAt(const KisPaintInformation &info)
 {
     KisDistanceInformation di;
     paintLine(info, info, &di);

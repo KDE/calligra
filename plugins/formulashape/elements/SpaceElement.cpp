@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                  Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
    Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
@@ -25,29 +25,30 @@
 #include <QPainter>
 #include <QBrush>
 
-SpaceElement::SpaceElement( BasicElement* parent ) : BasicElement( parent )
+SpaceElement::SpaceElement(BasicElement *parent) : BasicElement(parent)
 {}
 
-void SpaceElement::paint( QPainter& painter, AttributeManager* )
+void SpaceElement::paint(QPainter &painter, AttributeManager *)
 {
-    painter.setBrush( QBrush( Qt::lightGray, Qt::DiagCrossPattern ) );
-    painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
+    painter.setBrush(QBrush(Qt::lightGray, Qt::DiagCrossPattern));
+    painter.drawRect(QRectF(0.0, 0.0, width(), height()));
 }
 
-void SpaceElement::layout( const AttributeManager* am )
+void SpaceElement::layout(const AttributeManager *am)
 {
-    qreal height =  am->doubleOf( "height", this ); 
-    setHeight( height + am->doubleOf( "depth", this ) );
-    setWidth( am->doubleOf( "width", this ) );
-    setBaseLine( height );
+    qreal height =  am->doubleOf("height", this);
+    setHeight(height + am->doubleOf("depth", this));
+    setWidth(am->doubleOf("width", this));
+    setBaseLine(height);
 }
 
-QString SpaceElement::attributesDefaultValue( const QString& attribute ) const
+QString SpaceElement::attributesDefaultValue(const QString &attribute) const
 {
-    if( attribute == "width" || attribute == "height" || attribute == "depth" )
+    if (attribute == "width" || attribute == "height" || attribute == "depth") {
         return "0.0";
-    else
+    } else {
         return "auto";
+    }
 }
 
 ElementType SpaceElement::elementType() const

@@ -34,18 +34,21 @@
 class KoSimpleColorConversionTransformation : public KoColorConversionTransformation
 {
 public:
-    KoSimpleColorConversionTransformation(const KoColorSpace* srcCs, const KoColorSpace* dstCs)
+    KoSimpleColorConversionTransformation(const KoColorSpace *srcCs, const KoColorSpace *dstCs)
         : KoColorConversionTransformation(srcCs, dstCs,
                                           KoColorConversionTransformation::InternalRenderingIntent,
-                                          KoColorConversionTransformation::InternalConversionFlags) {
+                                          KoColorConversionTransformation::InternalConversionFlags)
+    {
     }
 
-    ~KoSimpleColorConversionTransformation() {
+    ~KoSimpleColorConversionTransformation()
+    {
     }
 
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const {
-        const KoColorSpace* srcCs = srcColorSpace();
-        const KoColorSpace* dstCs = dstColorSpace();
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
+    {
+        const KoColorSpace *srcCs = srcColorSpace();
+        const KoColorSpace *dstCs = dstColorSpace();
 
         quint32 srcPixelsize = srcCs->pixelSize();
         quint32 dstPixelsize = dstCs->pixelSize();
@@ -65,8 +68,6 @@ public:
 
 };
 
-
-
 KoSimpleColorSpaceEngine::KoSimpleColorSpaceEngine()
     : KoColorSpaceEngine("simple", i18n("Simple Color Conversion Engine"))
 {
@@ -76,10 +77,10 @@ KoSimpleColorSpaceEngine::~KoSimpleColorSpaceEngine()
 {
 }
 
-KoColorConversionTransformation* KoSimpleColorSpaceEngine::createColorTransformation(const KoColorSpace* srcColorSpace,
-                                                                                     const KoColorSpace* dstColorSpace,
-                                                                                     KoColorConversionTransformation::Intent renderingIntent,
-                                                                                     KoColorConversionTransformation::ConversionFlags conversionFlags) const
+KoColorConversionTransformation *KoSimpleColorSpaceEngine::createColorTransformation(const KoColorSpace *srcColorSpace,
+        const KoColorSpace *dstColorSpace,
+        KoColorConversionTransformation::Intent renderingIntent,
+        KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
     Q_UNUSED(renderingIntent);
     Q_UNUSED(conversionFlags);

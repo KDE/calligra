@@ -47,7 +47,8 @@ class KoDocumentResourceManager;
  * and an icon for use in the user interface.
  */
 struct FLAKE_EXPORT KoShapeTemplate {
-    KoShapeTemplate() {
+    KoShapeTemplate()
+    {
         properties = 0;
     }
     QString id;         ///< The id of the shape
@@ -107,8 +108,9 @@ public:
      * behind all app specific panels.
      * This is a separate list as set by setOptionPanels() and fetched by panelFactories()
      */
-    virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() {
-        return QList<KoShapeConfigWidgetBase*>();
+    virtual QList<KoShapeConfigWidgetBase *> createShapeOptionPanels()
+    {
+        return QList<KoShapeConfigWidgetBase *>();
     }
 
     /**
@@ -126,13 +128,13 @@ public:
      *  @endcode
      * @see panelFactories()
      */
-    void setOptionPanels(const QList<KoShapeConfigFactoryBase*> &panelFactories);
+    void setOptionPanels(const QList<KoShapeConfigFactoryBase *> &panelFactories);
 
     /**
      * Return the app-specific panels.
      * @see setOptionPanels()
      */
-    QList<KoShapeConfigFactoryBase*> panelFactories();
+    QList<KoShapeConfigFactoryBase *> panelFactories();
 
     /**
      * return the id for the shape this factory creates.
@@ -194,7 +196,7 @@ public:
      *
      * FIXME: this method is only used by Tables. We should refactor so
      * it is no longer necessary.
-     * 
+     *
      * NOTE: this actually is also used somehow to create the imagecollection
      *        for the picture shape?
      *
@@ -323,7 +325,7 @@ private Q_SLOTS:
 private:
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

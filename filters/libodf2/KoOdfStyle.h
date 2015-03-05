@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KOODF_STYLE_H
 #define KOODF_STYLE_H
 
@@ -32,10 +31,9 @@ class KoXmlStreamReader;
 class KoOdfStyleProperties;
 class KoXmlWriter;
 
-
 class KOODF2_EXPORT KoOdfStyle : public KoOdfStyleBase
 {
- public:
+public:
     KoOdfStyle();
     ~KoOdfStyle();
 
@@ -47,7 +45,7 @@ class KOODF2_EXPORT KoOdfStyle : public KoOdfStyleBase
     /**
      * @brief Return all property sets in the style.
      */
-    QHash<QString, KoOdfStyleProperties*> properties() const;
+    QHash<QString, KoOdfStyleProperties *> properties() const;
 
     /**
      * @brief Return the list of properties in the selected property set.
@@ -62,10 +60,9 @@ class KOODF2_EXPORT KoOdfStyle : public KoOdfStyleBase
     bool readOdf(KoXmlStreamReader &reader);
     bool saveOdf(KoXmlWriter *writer);
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

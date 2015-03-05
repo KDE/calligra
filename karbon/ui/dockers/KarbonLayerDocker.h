@@ -39,8 +39,9 @@ public:
     KarbonLayerDockerFactory();
 
     virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-    DockPosition defaultDockPosition() const {
+    virtual QDockWidget *createDockWidget();
+    DockPosition defaultDockPosition() const
+    {
         return DockRight;
     }
 };
@@ -52,11 +53,14 @@ class KarbonLayerDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     KarbonLayerDocker();
     virtual ~KarbonLayerDocker();
-    QString observerName() { return "KarbonLayerDocker"; }
+    QString observerName()
+    {
+        return "KarbonLayerDocker";
+    }
 
 public Q_SLOTS:
     void updateView();
-    virtual void setCanvas(KoCanvasBase* canvas);
+    virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 private Q_SLOTS:
     void slotButtonClicked(int buttonId);
@@ -69,22 +73,21 @@ private Q_SLOTS:
     void detailedView();
     void thumbnailView();
 private:
-    void extractSelectedLayersAndShapes(QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes, bool addChilds = false);
-    void addChildsRecursive(KoShapeGroup * parent, QList<KoShape*> &shapes);
+    void extractSelectedLayersAndShapes(QList<KoShapeLayer *> &layers, QList<KoShape *> &shapes, bool addChilds = false);
+    void addChildsRecursive(KoShapeGroup *parent, QList<KoShape *> &shapes);
 
-    KoShape * shapeFromIndex(const QModelIndex &index);
+    KoShape *shapeFromIndex(const QModelIndex &index);
 
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
-    void selectLayers(QList<KoShapeLayer*> layers);
+    void selectLayers(QList<KoShapeLayer *> layers);
 
-    KarbonDocument * m_doc;
-    KarbonLayerModel * m_model;
-    KarbonLayerSortingModel * m_sortModel;
-    KoDocumentSectionView * m_layerView;
+    KarbonDocument *m_doc;
+    KarbonLayerModel *m_model;
+    KarbonLayerSortingModel *m_sortModel;
+    KoDocumentSectionView *m_layerView;
     QTimer m_updateTimer;
-    QHash<KoDocumentSectionView::DisplayMode, QAction*> m_viewModeActions;
+    QHash<KoDocumentSectionView::DisplayMode, QAction *> m_viewModeActions;
 };
 
 #endif // KARBONLAYERDOCKER_H
 
-// kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

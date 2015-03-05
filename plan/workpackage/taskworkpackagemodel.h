@@ -28,7 +28,6 @@
 
 #include <QMetaEnum>
 
-
 class QModelIndex;
 class QAbstractItemDelegate;
 
@@ -60,9 +59,9 @@ class WorkPackage;
 class KPLATOWORK_EXPORT TaskWorkPackageModel : public ItemModelBase
 {
     Q_OBJECT
-    Q_ENUMS( Properties )
+    Q_ENUMS(Properties)
 public:
-    explicit TaskWorkPackageModel( Part *part, QObject *parent = 0 );
+    explicit TaskWorkPackageModel(Part *part, QObject *parent = 0);
     ~TaskWorkPackageModel() {}
 
     enum Properties {
@@ -93,83 +92,82 @@ public:
     };
     const QMetaEnum columnMap() const
     {
-        return metaObject()->enumerator( metaObject()->indexOfEnumerator("Properties") );
+        return metaObject()->enumerator(metaObject()->indexOfEnumerator("Properties"));
     }
 
-    WorkPackage *workPackage( int index ) const;
+    WorkPackage *workPackage(int index) const;
 
-    virtual Qt::ItemFlags flags( const QModelIndex &index ) const;
-    virtual QModelIndex parent( const QModelIndex &index ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
-    virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const; 
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
-    
-    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    virtual QModelIndex parent(const QModelIndex &index) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-    virtual int rowCount( const QModelIndex &parent = QModelIndex() ) const;
-    virtual int columnCount( const QModelIndex &index = QModelIndex() ) const;
-    
-    Node *nodeForIndex( const QModelIndex &index ) const;
-    QModelIndex indexForNode( Node *node ) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &index = QModelIndex()) const;
 
-    Document *documentForIndex( const QModelIndex &idx ) const;
+    Node *nodeForIndex(const QModelIndex &index) const;
+    QModelIndex indexForNode(Node *node) const;
 
-    WorkPackage *ptrToWorkPackage( const QModelIndex &idx ) const;
-    Node *ptrToNode( const QModelIndex &idx ) const;
+    QAbstractItemDelegate *createDelegate(int column, QWidget *parent) const;
 
-    bool isNode( const QModelIndex &idx ) const;
-    bool isDocument( const QModelIndex &idx ) const;
+    Document *documentForIndex(const QModelIndex &idx) const;
+
+    WorkPackage *ptrToWorkPackage(const QModelIndex &idx) const;
+    Node *ptrToNode(const QModelIndex &idx) const;
+
+    bool isNode(const QModelIndex &idx) const;
+    bool isDocument(const QModelIndex &idx) const;
 
 public Q_SLOTS:
-    void addWorkPackage( WorkPackage *package, int row );
-    void removeWorkPackage( WorkPackage *package, int row );
+    void addWorkPackage(WorkPackage *package, int row);
+    void removeWorkPackage(WorkPackage *package, int row);
 
 protected Q_SLOTS:
-    void slotNodeChanged( Node* );
-    void slotNodeToBeInserted( Node *node, int row );
-    void slotNodeInserted( Node *node );
-    void slotNodeToBeRemoved( Node *node );
-    void slotNodeRemoved( Node *node );
+    void slotNodeChanged(Node *);
+    void slotNodeToBeInserted(Node *node, int row);
+    void slotNodeInserted(Node *node);
+    void slotNodeToBeRemoved(Node *node);
+    void slotNodeRemoved(Node *node);
 
-    void slotDocumentAdded( Node *node, Document *doc, int index );
-    void slotDocumentRemoved( Node *node, Document *doc, int index );
-    void slotDocumentChanged( Node *node, Document *doc, int index );
+    void slotDocumentAdded(Node *node, Document *doc, int index);
+    void slotDocumentRemoved(Node *node, Document *doc, int index);
+    void slotDocumentChanged(Node *node, Document *doc, int index);
 
 protected:
-    QVariant nodeData( Node *node, int column, int role ) const; 
-    QVariant documentData( Document *doc, int column, int role ) const; 
+    QVariant nodeData(Node *node, int column, int role) const;
+    QVariant documentData(Document *doc, int column, int role) const;
 
-    QVariant name( const Resource *r, int role ) const;
-    QVariant email( const Resource *r, int role ) const;
-    QVariant sendStatus( const Resource *r, int role ) const;
-    QVariant sendTime( const Resource *r, int role ) const;
-    QVariant responseType( const Resource *r, int role ) const;
-    QVariant requiredTime( const Resource *r, int role ) const;
-    QVariant responseStatus( const Resource *r, int role ) const;
-    QVariant responseTime( const Resource *r, int role ) const;
-    QVariant lastAction( const Resource *r, int role ) const;
-    QVariant projectName( const Node *n, int role ) const;
-    QVariant projectManager( const Node *n, int role ) const;
-    
-    bool setCompletion( Node *node, const QVariant &value, int role );
-    bool setRemainingEffort( Node *node, const QVariant &value, int role );
-    bool setActualEffort( Node *node, const QVariant &value, int role );
-    bool setStartedTime( Node *node, const QVariant &value, int role );
-    bool setFinishedTime( Node *node, const QVariant &value, int role );
+    QVariant name(const Resource *r, int role) const;
+    QVariant email(const Resource *r, int role) const;
+    QVariant sendStatus(const Resource *r, int role) const;
+    QVariant sendTime(const Resource *r, int role) const;
+    QVariant responseType(const Resource *r, int role) const;
+    QVariant requiredTime(const Resource *r, int role) const;
+    QVariant responseStatus(const Resource *r, int role) const;
+    QVariant responseTime(const Resource *r, int role) const;
+    QVariant lastAction(const Resource *r, int role) const;
+    QVariant projectName(const Node *n, int role) const;
+    QVariant projectManager(const Node *n, int role) const;
 
-    QVariant actualStart( Node *n, int role ) const;
-    QVariant actualFinish( Node *n, int role ) const;
-    QVariant plannedEffort( Node *n, int role ) const;
+    bool setCompletion(Node *node, const QVariant &value, int role);
+    bool setRemainingEffort(Node *node, const QVariant &value, int role);
+    bool setActualEffort(Node *node, const QVariant &value, int role);
+    bool setStartedTime(Node *node, const QVariant &value, int role);
+    bool setFinishedTime(Node *node, const QVariant &value, int role);
 
-    QVariant status( Node *n, int role ) const;
+    QVariant actualStart(Node *n, int role) const;
+    QVariant actualFinish(Node *n, int role) const;
+    QVariant plannedEffort(Node *n, int role) const;
+
+    QVariant status(Node *n, int role) const;
 
 private:
     NodeModel m_nodemodel;
     Part *m_part;
 };
-
 
 } //namespace KPlato
 

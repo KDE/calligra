@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -38,9 +37,10 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(ChannelDockerPluginFactory, registerPlugin<ChannelDockerPlugin>();)
-K_EXPORT_PLUGIN(ChannelDockerPluginFactory( "krita" ) )
+K_EXPORT_PLUGIN(ChannelDockerPluginFactory("krita"))
 
-class ChannelDockerDockFactory : public KoDockFactoryBase {
+class ChannelDockerDockFactory : public KoDockFactoryBase
+{
 public:
     ChannelDockerDockFactory()
     {
@@ -48,7 +48,7 @@ public:
 
     virtual QString id() const
     {
-        return QString( "ChannelDocker" );
+        return QString("ChannelDocker");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
@@ -56,10 +56,10 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    virtual QDockWidget *createDockWidget()
     {
-        ChannelDockerDock * dockWidget = new ChannelDockerDock();
-        
+        ChannelDockerDock *dockWidget = new ChannelDockerDock();
+
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -71,9 +71,7 @@ public:
     }
 private:
 
-
 };
-
 
 ChannelDockerPlugin::ChannelDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

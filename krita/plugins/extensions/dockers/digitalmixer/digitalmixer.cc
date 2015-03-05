@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -38,9 +37,10 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(DigitalMixerPluginFactory, registerPlugin<DigitalMixerPlugin>();)
-K_EXPORT_PLUGIN(DigitalMixerPluginFactory( "krita" ) )
+K_EXPORT_PLUGIN(DigitalMixerPluginFactory("krita"))
 
-class DigitalMixerDockFactory : public KoDockFactoryBase {
+class DigitalMixerDockFactory : public KoDockFactoryBase
+{
 public:
     DigitalMixerDockFactory()
     {
@@ -48,7 +48,7 @@ public:
 
     virtual QString id() const
     {
-        return QString( "DigitalMixer" );
+        return QString("DigitalMixer");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
@@ -56,10 +56,10 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    virtual QDockWidget *createDockWidget()
     {
-        DigitalMixerDock * dockWidget = new DigitalMixerDock();
-        
+        DigitalMixerDock *dockWidget = new DigitalMixerDock();
+
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -71,9 +71,7 @@ public:
     }
 private:
 
-
 };
-
 
 DigitalMixerPlugin::DigitalMixerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

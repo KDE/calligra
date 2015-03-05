@@ -17,14 +17,12 @@
  */
 #include "chalk_paintop_plugin.h"
 
-
 #include <klocale.h>
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
 #include <kis_paintop_registry.h>
-
 
 #include "kis_chalk_paintop.h"
 #include "kis_simple_paintop_factory.h"
@@ -33,7 +31,6 @@
 
 K_PLUGIN_FACTORY(ChalkPaintOpPluginFactory, registerPlugin<ChalkPaintOpPlugin>();)
 K_EXPORT_PLUGIN(ChalkPaintOpPluginFactory("krita"))
-
 
 ChalkPaintOpPlugin::ChalkPaintOpPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

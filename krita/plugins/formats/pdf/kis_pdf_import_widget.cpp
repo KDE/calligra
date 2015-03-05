@@ -35,12 +35,10 @@
 // For KoAspectButton
 #include <klocale.h>
 
-
-
-KisPDFImportWidget::KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * parent)
-        : QWidget(parent)
-        , m_pdfDoc(pdfDoc)
-        , m_keepAspect(true)
+KisPDFImportWidget::KisPDFImportWidget(Poppler::Document *pdfDoc, QWidget *parent)
+    : QWidget(parent)
+    , m_pdfDoc(pdfDoc)
+    , m_keepAspect(true)
 {
     setupUi(this);
     m_pages.push_back(0); // The first page is selected
@@ -64,7 +62,6 @@ KisPDFImportWidget::KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * pare
 
 }
 
-
 KisPDFImportWidget::~KisPDFImportWidget()
 {
 }
@@ -72,7 +69,7 @@ KisPDFImportWidget::~KisPDFImportWidget()
 void KisPDFImportWidget::selectAllPages(bool v)
 {
     if (v) {
-        if (listPages->selectedItems().count() != 0){
+        if (listPages->selectedItems().count() != 0) {
             listPages->clearSelection();
             boolAllPages->toggle();
         }
@@ -86,7 +83,7 @@ void KisPDFImportWidget::selectAllPages(bool v)
 void KisPDFImportWidget::selectFirstPage(bool v)
 {
     if (v) {
-        if (listPages->selectedItems().count() != 0){
+        if (listPages->selectedItems().count() != 0) {
             listPages->clearSelection();
             boolFirstPage->toggle();
         }
@@ -106,14 +103,17 @@ void KisPDFImportWidget::selectSelectionOfPages(bool v)
 
 void KisPDFImportWidget::updateSelectionOfPages()
 {
-    if (! boolSelectionPage->isChecked()) boolSelectionPage->toggle();
+    if (! boolSelectionPage->isChecked()) {
+        boolSelectionPage->toggle();
+    }
     m_pages.clear();
     for (int i = 0; i < m_pdfDoc->numPages(); i++) {
-        if (listPages->item(i)->isSelected()) m_pages.push_back(i);
+        if (listPages->item(i)->isSelected()) {
+            m_pages.push_back(i);
+        }
     }
     updateMaxCanvasSize();
 }
-
 
 void KisPDFImportWidget::updateMaxCanvasSize()
 {
@@ -162,8 +162,7 @@ void KisPDFImportWidget::updateHVer()
 void KisPDFImportWidget::heightAspectRatio()
 {
     intWidth->blockSignals(true);
-    if(m_keepAspect)
-    {
+    if (m_keepAspect) {
         intWidth->setValue((int) ceil(((intHeight->value() * m_maxWidthInch * 1.) / m_maxHeightInch * 1.) + 0.5));
     }
     intWidth->blockSignals(false);
@@ -171,8 +170,7 @@ void KisPDFImportWidget::heightAspectRatio()
 void KisPDFImportWidget::widthAspectRatio()
 {
     intHeight->blockSignals(true);
-    if(m_keepAspect)
-    {
+    if (m_keepAspect) {
         intHeight->setValue((int) ceil(((intWidth->value() * m_maxHeightInch * 1.) / m_maxWidthInch * 1.) + 0.5));
     }
     intHeight->blockSignals(false);
@@ -185,8 +183,7 @@ void KisPDFImportWidget::slotAspectChanged(bool keep)
 
     m_keepAspect = keep;
 
-    if (keep)
-    {
+    if (keep) {
         heightAspectRatio();
     }
 }

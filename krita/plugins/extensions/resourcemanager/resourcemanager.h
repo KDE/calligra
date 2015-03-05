@@ -27,7 +27,8 @@
 
 #include "resourcebundle.h"
 
-class ResourceBundleServerProvider {
+class ResourceBundleServerProvider
+{
 public:
     static ResourceBundleServerProvider *instance();
     ~ResourceBundleServerProvider();

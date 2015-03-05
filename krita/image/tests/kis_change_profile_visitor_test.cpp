@@ -26,11 +26,10 @@
 
 void KisChangeProfileVisitorTest::testCreation()
 {
-    const KoColorSpace * a = KoColorSpaceRegistry::instance()->rgb8();
-    const KoColorSpace * b = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *a = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *b = KoColorSpaceRegistry::instance()->rgb8();
     KisChangeProfileVisitor test(a, b);
 }
-
 
 QTEST_KDEMAIN(KisChangeProfileVisitorTest, GUI)
 #include "kis_change_profile_visitor_test.moc"

@@ -31,14 +31,14 @@ class ExcelImport : public KoFilter
 
 public:
 
-    ExcelImport(QObject *parent, const QVariantList&);
+    ExcelImport(QObject *parent, const QVariantList &);
     virtual ~ExcelImport();
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 
 };
 

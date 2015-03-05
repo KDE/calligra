@@ -38,8 +38,8 @@ public Q_SLOTS:
     void flattenToggled(bool);
     KisTIFFOptions options();
 public:
-    QWidget* wdg;
-    Ui_KisWdgOptionsTIFF* optionswdg;
+    QWidget *wdg;
+    Ui_KisWdgOptionsTIFF *optionswdg;
 };
 
 #endif

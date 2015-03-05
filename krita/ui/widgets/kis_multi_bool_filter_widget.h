@@ -30,7 +30,7 @@
 class KisPropertiesConfiguration;
 
 struct KisBoolWidgetParam {
-    KRITAUI_EXPORT KisBoolWidgetParam(bool ninitvalue, const QString & label, const QString & name);
+    KRITAUI_EXPORT KisBoolWidgetParam(bool ninitvalue, const QString &label, const QString &name);
     bool initvalue;
     QString label;
     QString name;
@@ -45,25 +45,27 @@ class KRITAUI_EXPORT KisMultiBoolFilterWidget : public KisConfigWidget
 
 public:
 
-    KisMultiBoolFilterWidget(const QString & filterid, QWidget * parent,  const QString & caption, vKisBoolWidgetParam iwparam);
+    KisMultiBoolFilterWidget(const QString &filterid, QWidget *parent,  const QString &caption, vKisBoolWidgetParam iwparam);
 
-    virtual void setConfiguration(const KisPropertiesConfiguration* cfg);
+    virtual void setConfiguration(const KisPropertiesConfiguration *cfg);
 
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual KisPropertiesConfiguration *configuration() const;
 
 public:
 
-    inline qint32 nbValues() const {
+    inline qint32 nbValues() const
+    {
         return m_boolWidgets.count();
     }
 
-    inline bool valueAt(qint32 i) const {
+    inline bool valueAt(qint32 i) const
+    {
         return m_boolWidgets[i]->isChecked();
     }
 
 private:
 
-    QVector<QCheckBox*> m_boolWidgets;
+    QVector<QCheckBox *> m_boolWidgets;
     QString m_filterid;
 };
 

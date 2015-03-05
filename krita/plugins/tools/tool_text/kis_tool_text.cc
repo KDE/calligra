@@ -33,11 +33,10 @@
 
 #include "kis_cursor.h"
 
-
-KisToolText::KisToolText(KoCanvasBase * canvas)
+KisToolText::KisToolText(KoCanvasBase *canvas)
     : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
-    setObjectName("tool_text");  
+    setObjectName("tool_text");
 }
 
 KisToolText::~KisToolText()
@@ -99,14 +98,15 @@ void KisToolText::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolText::finishRect(const QRectF &rect)
 {
-    if (rect.isNull())
+    if (rect.isNull()) {
         return;
+    }
 
     QRectF r = convertToPt(rect);
     QString shapeString = (m_optionsWidget->mode() == KisTextToolOptionWidget::MODE_ARTISTIC) ? "ArtisticText" : "TextShapeID";
-    KoShapeFactoryBase* textFactory = KoShapeRegistry::instance()->value(shapeString);
+    KoShapeFactoryBase *textFactory = KoShapeRegistry::instance()->value(shapeString);
     if (textFactory) {
-        KoShape* shape = textFactory->createDefaultShape(canvas()->shapeController()->resourceManager());
+        KoShape *shape = textFactory->createDefaultShape(canvas()->shapeController()->resourceManager());
         shape->setPosition(r.topLeft());
         // If the shape is an artistic shape we keep the aspect ratio so the text isn't stretched
         if (shapeString == "ArtisticText") {
@@ -116,7 +116,7 @@ void KisToolText::finishRect(const QRectF &rect)
         shape->setSize(r.size());
         addShape(shape);
 
-        KisCanvas2* kiscanvas = dynamic_cast<KisCanvas2 *>(canvas());
+        KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2 *>(canvas());
         kiscanvas->shapeManager()->selection()->deselectAll();
         kiscanvas->shapeManager()->selection()->select(shape);
 
@@ -149,8 +149,9 @@ QList<QPointer<QWidget> > KisToolText::createOptionWidgets()
 
 KisPainter::FillStyle KisToolText::fillStyle()
 {
-    if(m_optionsWidget->mode() == KisTextToolOptionWidget::MODE_MULTILINE)
+    if (m_optionsWidget->mode() == KisTextToolOptionWidget::MODE_MULTILINE) {
         return KisPainter::FillStyleNone;
+    }
     return m_optionsWidget->style();
 }
 
@@ -159,7 +160,6 @@ void KisToolText::textTypeIndexChanged(int index)
     configGroup.writeEntry("textType", index);
 }
 
-
 void KisToolText::styleIndexChanged(int index)
 {
     configGroup.writeEntry("styleType", index);
@@ -167,7 +167,7 @@ void KisToolText::styleIndexChanged(int index)
 
 void KisToolText::slotActivateTextTool()
 {
-    KisCanvas2* kiscanvas = dynamic_cast<KisCanvas2 *>(canvas());
+    KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2 *>(canvas());
     QString tool = KoToolManager::instance()->preferredToolForSelection(kiscanvas->shapeManager()->selection()->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
 
@@ -176,6 +176,5 @@ void KisToolText::slotActivateTextTool()
     styleIndexChanged(configGroup.readEntry("styleType", 0));
 
 }
-
 
 #include "kis_tool_text.moc"

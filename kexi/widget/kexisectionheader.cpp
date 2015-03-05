@@ -33,7 +33,8 @@
 class KexiSectionHeader::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
 
     Qt::Orientation orientation;
@@ -45,9 +46,9 @@ public:
 //==========================
 
 KexiSectionHeader::KexiSectionHeader(const QString &caption,
-                                     Qt::Orientation o, QWidget* parent)
-        : QWidget(parent)
-        , d(new Private())
+                                     Qt::Orientation o, QWidget *parent)
+    : QWidget(parent)
+    , d(new Private())
 {
     d->orientation = o;
     d->lyr = new QBoxLayout(
@@ -72,40 +73,44 @@ KexiSectionHeader::~KexiSectionHeader()
     delete d;
 }
 
-void KexiSectionHeader::setWidget(QWidget * widget)
+void KexiSectionHeader::setWidget(QWidget *widget)
 {
     QLayoutItem *item = d->lyr->itemAt(1); //for sanity
-    if (!widget || (item && widget == item->widget()))
+    if (!widget || (item && widget == item->widget())) {
         return;
-    if (item)
+    }
+    if (item) {
         d->lyr->removeItem(item);
+    }
 //! @todo disconnect
     d->lyr->addWidget(widget);
     widget->installEventFilter(this);
-    KexiView* view = dynamic_cast<KexiView*>(widget);
+    KexiView *view = dynamic_cast<KexiView *>(widget);
     if (view) {
         connect(view, SIGNAL(focus(bool)), this, SLOT(slotFocus(bool)));
         d->lbl->setBuddy(view);
     }
 }
 
-void KexiSectionHeader::addButton(const KIcon& icon, const QString& toolTip,
-                                  const QObject * receiver, const char * member)
+void KexiSectionHeader::addButton(const KIcon &icon, const QString &toolTip,
+                                  const QObject *receiver, const char *member)
 {
     KexiSmallToolButton *btn = new KexiSmallToolButton(icon, QString(), d->lbl_b);
     if (receiver && member) {
         connect(btn, SIGNAL(clicked()), receiver, member);
     }
-    if (!toolTip.isEmpty())
+    if (!toolTip.isEmpty()) {
         btn->setToolTip(toolTip);
+    }
 }
 
 bool KexiSectionHeader::eventFilter(QObject *o, QEvent *e)
 {
     if (o == d->lbl && e->type() == QEvent::MouseButtonRelease) {
         QLayoutItem *item = d->lyr->itemAt(1);
-        if (item && item->widget())
+        if (item && item->widget()) {
             item->widget()->setFocus();
+        }
     }
     return QWidget::eventFilter(o, e);
 }
@@ -125,13 +130,14 @@ void KexiSectionHeader::slotFocus(bool in)
 QSize KexiSectionHeader::sizeHint() const
 {
     QLayoutItem *item = d->lyr->itemAt(1);
-    if (!item || !item->widget())
+    if (!item || !item->widget()) {
         return QWidget::sizeHint();
+    }
     QSize s(item->widget()->sizeHint());
     return QSize(s.width(), d->lbl->sizeHint().height() + s.height());
 }
 
-void KexiSectionHeader::setCaption(const QString& caption)
+void KexiSectionHeader::setCaption(const QString &caption)
 {
     d->lbl->setText(caption);
 }

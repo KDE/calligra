@@ -62,7 +62,8 @@ PageVariableFactory::PageVariableFactory()
 KoInlineObject *PageVariableFactory::createInlineObject(const KoProperties *properties) const
 {
     PageVariable *var = new PageVariable();
-    if (properties)
+    if (properties) {
         var->readProperties(properties);
+    }
     return var;
 }

@@ -63,9 +63,9 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
         transfPoints << 0.5 * (bounds.topLeft() + bounds.topRight());
         transfPoints << 0.5 * (bounds.bottomLeft() + bounds.bottomRight());
         transfPoints << 0.5 * (bounds.bottomLeft() + bounds.bottomRight()) +
-            (bounds.bottomLeft() - bounds.topLeft());
+                     (bounds.bottomLeft() - bounds.topLeft());
         transfPoints << bounds.bottomLeft() +
-            (bounds.bottomLeft() - bounds.topLeft());
+                     (bounds.bottomLeft() - bounds.topLeft());
         transfPoints << bounds.bottomLeft();
 
         if (!clockwise) {
@@ -83,7 +83,8 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
     QPointF dstQImageOffset;
 
     QBENCHMARK_ONCE {
-        if (!testQImage) {
+        if (!testQImage)
+        {
             worker.prepareTransform();
             if (!benchmarkPrepareOnly) {
                 worker.setTransformedCage(transfPoints);
@@ -99,10 +100,10 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
             image = image.convertToFormat(QImage::Format_ARGB32);
 
             KisCageTransformWorker qimageWorker(image,
-                                                srcQImageOffset,
-                                                origPoints,
-                                                updater,
-                                                pixelPrecision);
+            srcQImageOffset,
+            origPoints,
+            updater,
+            pixelPrecision);
             qimageWorker.prepareTransform();
             qimageWorker.setTransformedCage(transfPoints);
             result = qimageWorker.runOnQImage(&dstQImageOffset);
@@ -110,8 +111,8 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
     }
 
     QString testName = QString("%1_%2")
-        .arg(clockwise ? "clk" : "cclk")
-        .arg(unityTransform ? "unity" : "normal");
+                       .arg(clockwise ? "clk" : "cclk")
+                       .arg(unityTransform ? "unity" : "normal");
 
     if (testQImage) {
         QVERIFY(TestUtil::checkQImage(result, "cage_transform_test", "cage_qimage", testName));
@@ -159,7 +160,6 @@ void KisCageTransformWorkerTest::testCageCounterclockwiseUnity()
 
 #include <QtGlobal>
 
-
 QPointF generatePoint(const QRectF &rc)
 {
     qreal cx = qreal(qrand()) / RAND_MAX;
@@ -188,7 +188,7 @@ void KisCageTransformWorkerTest::stressTestRandomCages()
 
     qsrand(1);
 
-    for (int numPoints = 4; numPoints < 15; numPoints+=5) {
+    for (int numPoints = 4; numPoints < 15; numPoints += 5) {
         for (int j = 0; j < 200; j++) {
             QVector<QPointF> origPoints;
             QVector<QPointF> transfPoints;
@@ -219,7 +219,7 @@ void KisCageTransformWorkerTest::testUnityGreenCoordinates()
     QVector<QPointF> origPoints;
     QVector<QPointF> transfPoints;
 
-    QRectF bounds(0,0,300,300);
+    QRectF bounds(0, 0, 300, 300);
 
     origPoints << bounds.topLeft();
     origPoints << 0.5 * (bounds.topLeft() + bounds.topRight());
@@ -231,20 +231,20 @@ void KisCageTransformWorkerTest::testUnityGreenCoordinates()
     transfPoints = origPoints;
 
     QVector<QPointF> points;
-    points << QPointF(10,10);
-    points << QPointF(140,10);
-    points << QPointF(140,140);
-    points << QPointF(10,140);
+    points << QPointF(10, 10);
+    points << QPointF(140, 10);
+    points << QPointF(140, 140);
+    points << QPointF(10, 140);
 
-    points << QPointF(10,160);
-    points << QPointF(140,160);
-    points << QPointF(140,290);
-    points << QPointF(10,290);
+    points << QPointF(10, 160);
+    points << QPointF(140, 160);
+    points << QPointF(140, 290);
+    points << QPointF(10, 290);
 
-    points << QPointF(160,160);
-    points << QPointF(290,160);
-    points << QPointF(290,290);
-    points << QPointF(160,290);
+    points << QPointF(160, 160);
+    points << QPointF(290, 160);
+    points << QPointF(290, 290);
+    points << QPointF(160, 290);
 
     KisGreenCoordinatesMath cage;
 
@@ -267,7 +267,6 @@ void KisCageTransformWorkerTest::testTransformAsBase()
     QPointF b1(1.0, 0.0);
     QPointF b2(2.0, 0.0);
     QPointF result;
-
 
     t = QPointF(1.0, 0.0);
     b1 = QPointF(1.0, 0.0);

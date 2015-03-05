@@ -76,13 +76,13 @@
 
 //#else // Q_WS_WIN
 
-void doRestart(MainWindow* mainWindow, bool resetConfig)
+void doRestart(MainWindow *mainWindow, bool resetConfig)
 {
     if (resetConfig) {
         {
             QString appdata = qgetenv("APPDATA");
             QDir inputDir(appdata + "/krita/share/apps/krita/input/");
-            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+            foreach (QString entry, inputDir.entryList(QStringList("*.profile"))) {
                 inputDir.remove(entry);
             }
             QDir configDir(appdata + "/krita/share/config/");
@@ -91,7 +91,7 @@ void doRestart(MainWindow* mainWindow, bool resetConfig)
         {
             QString appdata = qgetenv("LOCALAPPDATA");
             QDir inputDir(appdata + "/krita/share/apps/krita/input/");
-            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+            foreach (QString entry, inputDir.entryList(QStringList("*.profile"))) {
                 inputDir.remove(entry);
             }
             QDir configDir(appdata + "/krita/share/config/");
@@ -99,7 +99,7 @@ void doRestart(MainWindow* mainWindow, bool resetConfig)
         }
         {
             QDir inputDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
-            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+            foreach (QString entry, inputDir.entryList(QStringList("*.profile"))) {
                 inputDir.remove(entry);
             }
             QDir configDir(KGlobal::dirs()->saveLocation("config"));
@@ -139,7 +139,7 @@ void doRestart(MainWindow* mainWindow, bool resetConfig)
 #ifdef Q_WS_MAC
 QString platformToStringMac(QSysInfo::MacVersion version)
 {
-    switch(version) {
+    switch (version) {
     case QSysInfo::MV_9:
         return "MacOS 9";
     case QSysInfo::MV_10_0:
@@ -170,7 +170,7 @@ QString platformToStringMac(QSysInfo::MacVersion version)
 #ifdef Q_WS_WIN
 QString platformToStringWin(QSysInfo::WinVersion version)
 {
-    switch(version) {
+    switch (version) {
     case QSysInfo::WV_32s:
         return "Windows 3.1 with win32s";
     case QSysInfo::WV_95:
@@ -214,10 +214,10 @@ struct MainWindow::Private {
 
     Private() :
         doRestart(true),
-        uploadStarted(false) {
+        uploadStarted(false)
+    {
     }
 };
-
 
 MainWindow::MainWindow(const QString &dumpPath, const QString &id, QWidget *parent)
     : QWidget(parent)
@@ -231,7 +231,7 @@ MainWindow::MainWindow(const QString &dumpPath, const QString &id, QWidget *pare
     setWindowFlags(Qt::WindowStaysOnTopHint | windowFlags());
 
     m_d->networkAccessManager = new QNetworkAccessManager(this);
-    connect(m_d->networkAccessManager, SIGNAL(finished(QNetworkReply *)), SLOT(uploadDone(QNetworkReply *)));
+    connect(m_d->networkAccessManager, SIGNAL(finished(QNetworkReply*)), SLOT(uploadDone(QNetworkReply*)));
 
     connect(bnRestart, SIGNAL(clicked()), this, SLOT(restart()));
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
@@ -250,8 +250,7 @@ void MainWindow::restart()
     m_d->doRestart = true;
     if (chkAllowUpload->isChecked()) {
         startUpload();
-    }
-    else {
+    } else {
         doRestart(this, chkRemoveSettings->isChecked());
         qApp->quit();
     }
@@ -262,8 +261,7 @@ void MainWindow::close()
     m_d->doRestart = false;
     if (!m_d->uploadStarted && chkAllowUpload->isChecked()) {
         startUpload();
-    }
-    else {
+    } else {
         qApp->quit();
     }
 }
@@ -287,7 +285,6 @@ void MainWindow::startUpload()
 
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;
-
 
 #ifdef CALLIGRA_GIT_SHA1_STRING
     QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
@@ -331,7 +328,7 @@ void MainWindow::startUpload()
     }
 
     QString body;
-    foreach(Field const field, fields) {
+    foreach (Field const field, fields) {
         body += boundary + "\r\n";
         body += "Content-Disposition: form-data; name=\"" + field.first + "\"\r\n\r\n";
         body += field.second + "\r\n";
@@ -357,7 +354,7 @@ void MainWindow::startUpload()
     body += boundary + "\r\n";
     body += "Content-Disposition: form-data; name=\"description\"\r\n";
     body += "\r\n";
-    body +=	txtDescription->toPlainText();
+    body += txtDescription->toPlainText();
 
     body += "\r\n";
     body += boundary + "--" + "\r\n";
@@ -369,7 +366,7 @@ void MainWindow::startUpload()
 
     QNetworkReply *reply = m_d->networkAccessManager->post(request, body.toLatin1());
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(uploadError(QNetworkReply::NetworkError)));
-    connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64,qint64)));
+    connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(uploadProgress(qint64,qint64)));
 }
 
 void MainWindow::uploadDone(QNetworkReply *reply)

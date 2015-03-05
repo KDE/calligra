@@ -55,10 +55,10 @@ public:
     void setVisibility(Visibility visibility);
 
 private:
-    void saveOdf(KoXmlWriter& writer, KoGenStyles& styles);
+    void saveOdf(KoXmlWriter &writer, KoGenStyles &styles);
 
-    KoColumn(const KoColumn&);
-    KoColumn& operator=(const KoColumn&);
+    KoColumn(const KoColumn &);
+    KoColumn &operator=(const KoColumn &);
 
     KoCellStyle::Ptr m_defaultCellStyle;
     KoColumnStyle::Ptr m_style;

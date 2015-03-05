@@ -26,11 +26,9 @@
 
 #include "FileCollector.h"
 
-
 class QString;
 
 class KoStore;
-
 
 class HtmlFile : public FileCollector
 {

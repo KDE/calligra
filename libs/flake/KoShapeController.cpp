@@ -54,15 +54,17 @@ public:
     KoCanvasBase *canvas;
     KoShapeBasedDocumentBase *shapeBasedDocument;
 
-    KUndo2Command* addShape(KoShape *shape, bool showDialog, KUndo2Command *parent) {
+    KUndo2Command *addShape(KoShape *shape, bool showDialog, KUndo2Command *parent)
+    {
 
         if (canvas) {
             if (showDialog) {
                 KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shape->shapeId());
                 Q_ASSERT(factory);
                 int z = 0;
-                foreach(KoShape *sh, canvas->shapeManager()->shapes())
+                foreach (KoShape *sh, canvas->shapeManager()->shapes()) {
                     z = qMax(z, sh->zIndex());
+                }
                 shape->setZIndex(z + 1);
 
                 // show config dialog.
@@ -70,15 +72,17 @@ public:
                 dialog->setCaption(i18n("%1 Options", factory->name()));
 
                 int pageCount = 0;
-                QList<KoShapeConfigFactoryBase*> panels = factory->panelFactories();
+                QList<KoShapeConfigFactoryBase *> panels = factory->panelFactories();
                 qSort(panels.begin(), panels.end(), KoShapeConfigFactoryBase::compare);
-                QList<KoShapeConfigWidgetBase*> widgets;
-                foreach(KoShapeConfigFactoryBase *panelFactory, panels) {
-                    if (! panelFactory->showForShapeId(shape->shapeId()))
+                QList<KoShapeConfigWidgetBase *> widgets;
+                foreach (KoShapeConfigFactoryBase *panelFactory, panels) {
+                    if (! panelFactory->showForShapeId(shape->shapeId())) {
                         continue;
+                    }
                     KoShapeConfigWidgetBase *widget = panelFactory->createConfigWidget(shape);
-                    if (widget == 0)
+                    if (widget == 0) {
                         continue;
+                    }
                     if (! widget->showOnShapeCreate()) {
                         delete widget;
                         continue;
@@ -90,9 +94,10 @@ public:
                     dialog->addPage(widget, panelFactory->name());
                     pageCount ++;
                 }
-                foreach(KoShapeConfigWidgetBase* panel, factory->createShapeOptionPanels()) {
-                    if (! panel->showOnShapeCreate())
+                foreach (KoShapeConfigWidgetBase *panel, factory->createShapeOptionPanels()) {
+                    if (! panel->showOnShapeCreate()) {
                         continue;
+                    }
                     panel->open(shape);
                     panel->connect(panel, SIGNAL(accept()), dialog, SLOT(accept()));
                     widgets.append(panel);
@@ -104,14 +109,16 @@ public:
                 }
 
                 if (pageCount > 0) {
-                    if (pageCount > 1)
+                    if (pageCount > 1) {
                         dialog->setFaceType(KPageDialog::Tabbed);
+                    }
                     if (dialog->exec() != KPageDialog::Accepted) {
                         delete dialog;
                         return 0;
                     }
-                    foreach(KoShapeConfigWidgetBase *widget, widgets)
+                    foreach (KoShapeConfigWidgetBase *widget, widgets) {
                         widget->save();
+                    }
                 }
                 delete dialog;
             }
@@ -124,9 +131,10 @@ public:
         return new KoShapeCreateCommand(shapeBasedDocument, shape, parent);
     }
 
-    void handleAttachedConnections(KoShape *shape, KUndo2Command *parentCmd) {
+    void handleAttachedConnections(KoShape *shape, KUndo2Command *parentCmd)
+    {
         foreach (KoShape *dependee, shape->dependees()) {
-            KoConnectionShape *connection = dynamic_cast<KoConnectionShape*>(dependee);
+            KoConnectionShape *connection = dynamic_cast<KoConnectionShape *>(dependee);
             if (connection) {
                 if (shape == connection->firstShape()) {
                     new KoShapeConnectionChangeCommand(connection, KoConnectionShape::StartHandle,
@@ -155,20 +163,20 @@ KoShapeController::~KoShapeController()
     delete d;
 }
 
-KUndo2Command* KoShapeController::addShape(KoShape *shape, KUndo2Command *parent)
+KUndo2Command *KoShapeController::addShape(KoShape *shape, KUndo2Command *parent)
 {
     return d->addShape(shape, true, parent);
 }
 
-KUndo2Command* KoShapeController::addShapeDirect(KoShape *shape, KUndo2Command *parent)
+KUndo2Command *KoShapeController::addShapeDirect(KoShape *shape, KUndo2Command *parent)
 {
     return d->addShape(shape, false, parent);
 }
 
-KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *parent)
+KUndo2Command *KoShapeController::removeShape(KoShape *shape, KUndo2Command *parent)
 {
     KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeBasedDocument, shape, parent);
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
     shapes.append(shape);
     d->shapeBasedDocument->shapesRemoved(shapes, cmd);
     // detach shape from any attached connection shapes
@@ -176,7 +184,7 @@ KUndo2Command* KoShapeController::removeShape(KoShape *shape, KUndo2Command *par
     return cmd;
 }
 
-KUndo2Command* KoShapeController::removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent)
+KUndo2Command *KoShapeController::removeShapes(const QList<KoShape *> &shapes, KUndo2Command *parent)
 {
     KUndo2Command *cmd = new KoShapeDeleteCommand(d->shapeBasedDocument, shapes, parent);
     d->shapeBasedDocument->shapesRemoved(shapes, cmd);
@@ -193,8 +201,9 @@ void KoShapeController::setShapeControllerBase(KoShapeBasedDocumentBase *shapeBa
 
 KoDocumentResourceManager *KoShapeController::resourceManager() const
 {
-    if (!d->shapeBasedDocument)
+    if (!d->shapeBasedDocument) {
         return 0;
+    }
     return d->shapeBasedDocument->resourceManager();
 }
 

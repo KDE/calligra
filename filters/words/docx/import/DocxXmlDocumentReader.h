@@ -60,7 +60,7 @@ public:
 
     //! Reads/parses the file of format document.xml.
     //! The output goes mainly to KoXmlWriter* KoOdfWriters::body
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
 #include <MsooXmlVmlReaderMethods.h> // separated as it is not a part of OOXML
 
@@ -120,8 +120,8 @@ protected:
     KoFilter::ConversionStatus read_u();
     KoFilter::ConversionStatus read_sz();
     enum jcCaller {
-       jc_tblPr,
-       jc_pPr
+        jc_tblPr,
+        jc_pPr
     };
     KoFilter::ConversionStatus read_jc(jcCaller caller);
     KoFilter::ConversionStatus read_spacing();
@@ -219,7 +219,7 @@ protected:
     KoGenStyle m_currentPageStyle;
     KoGenStyle m_masterPageStyle;
 
-    DocxXmlDocumentReaderContext* m_context;
+    DocxXmlDocumentReaderContext *m_context;
 
     KoOdfWriters *m_writers; // Needed to create new relationship for header/footer
 
@@ -256,14 +256,14 @@ protected:
     // ! Used for setting up properties for border padding
     QMap<BorderSide, qreal> m_textBorderPaddings;
 
-    KoTable* m_table;
+    KoTable *m_table;
     QString m_currentTableStyleName;
     KoTblStyle::Ptr m_tableMainStyle;
 
-    MSOOXML::LocalTableStyles* m_currentLocalTableStyles;
+    MSOOXML::LocalTableStyles *m_currentLocalTableStyles;
 
-    MSOOXML::TableStyleProperties* m_currentTableStyleProperties;
-    MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
+    MSOOXML::TableStyleProperties *m_currentTableStyleProperties;
+    MSOOXML::TableStyleProperties *m_currentDefaultCellStyle;
 
     //! Name of the KoGenStyle style of type GraphicAutoStyle prepared for the
     //! parent <draw:frame> element containing the <table:table> element
@@ -292,15 +292,15 @@ private:
 
     //! Reads CT_Border complex type (p.392), used by children of pgBorders and children of pBdr
     KoFilter::ConversionStatus readBorderElement(BorderSide borderSide, const char *borderSideName,
-                                         QMap<BorderSide, QString> &sourceBorder, QMap<BorderSide, qreal> &sourcePadding);
+            QMap<BorderSide, QString> &sourceBorder, QMap<BorderSide, qreal> &sourcePadding);
 
     ///reads the border in a table style
     KoBorder::BorderData getBorderData();
 
     //! Creates border style for readBorderElement().
     //! Result is added to m_borderStyles and m_borderPaddings
-    void createBorderStyle(const QString& size, const QString& color,
-                           const QString& lineStyle, BorderSide borderSide, QMap<BorderSide, QString> &sourceBorder);
+    void createBorderStyle(const QString &size, const QString &color,
+                           const QString &lineStyle, BorderSide borderSide, QMap<BorderSide, QString> &sourceBorder);
 
     //! Used by read_strike() and read_dstrike()
     void readStrikeElement(KoCharacterStyle::LineType type);
@@ -310,14 +310,14 @@ private:
     void applyBorders(KoGenStyle *style, QMap<BorderSide, QString> sourceBorder, QMap<BorderSide, qreal> sourcePadding);
 
     //! Applies border styles and paddings for page
-    void applyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins, QMap<BorderSide,QString> &pageBorder,
-                         QMap<BorderSide, qreal> &pagePadding, QString & offsetFrom);
+    void applyPageBorders(KoGenStyle &style, QMap<PageMargin, qreal> &pageMargins, QMap<BorderSide, QString> &pageBorder,
+                          QMap<BorderSide, qreal> &pagePadding, QString &offsetFrom);
     void defineTableStyles();
 
     enum ComplexFieldCharType {
-       NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,
-       ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType,
-       MacroButtonFieldCharType
+        NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,
+        ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType,
+        MacroButtonFieldCharType
     };
     //! Type of complex field characters we have
     ComplexFieldCharType m_complexCharType;
@@ -340,8 +340,8 @@ private:
     DropCapStatus m_dropCapStatus;
 
     //! Buffer where first letters of drop cap are read
-    QBuffer* m_dropCapBuffer;
-    KoXmlWriter* m_dropCapWriter;
+    QBuffer *m_dropCapBuffer;
+    KoXmlWriter *m_dropCapWriter;
     QString m_dropCapLines;
     qreal   m_dropCapDistance;
 
@@ -389,9 +389,9 @@ private:
         explicit DocumentReaderState(const QMap<QString, QString> &usedListStyles,
                                      const QMap <QString, QPair<int, bool> > &continueListNum,
                                      const QMap <QString, QPair<int, QString> > &numIdXmlId)
-        : usedListStyles(usedListStyles),
-          continueListNum(continueListNum),
-          numIdXmlId(numIdXmlId) {}
+            : usedListStyles(usedListStyles),
+              continueListNum(continueListNum),
+              numIdXmlId(numIdXmlId) {}
 
         DocumentReaderState() {}
 
@@ -408,7 +408,7 @@ private:
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 //! Context for DocxXmlDocumentReader
@@ -417,23 +417,23 @@ class DocxXmlDocumentReaderContext : public MSOOXML::MsooXmlReaderContext
 public:
     //! Creates the context object.
     DocxXmlDocumentReaderContext(
-        DocxImport& _import,
-        const QString& _path, const QString& _file,
-        MSOOXML::MsooXmlRelationships& _relationships,
-        MSOOXML::DrawingMLTheme* _themes
+        DocxImport &_import,
+        const QString &_path, const QString &_file,
+        MSOOXML::MsooXmlRelationships &_relationships,
+        MSOOXML::DrawingMLTheme *_themes
     );
-    DocxImport* import;
+    DocxImport *import;
     const QString path;
     const QString file;
 
-    MSOOXML::DrawingMLTheme* themes;
+    MSOOXML::DrawingMLTheme *themes;
 
     // Contains footnotes when read
     QMap<QString, QString> m_footnotes;
 
     QMap<QString, QString> m_endnotes;
     QMap<QString, QString> m_comments;
-    QMap<QString, MSOOXML::DrawingTableStyle*> m_tableStyles;
+    QMap<QString, MSOOXML::DrawingTableStyle *> m_tableStyles;
     QMap<QString, QList<MSOOXML::Utils::ParagraphBulletProperties> > m_bulletStyles;
 
     // The map contains names of default styles applied to objects that do not

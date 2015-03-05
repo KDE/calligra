@@ -55,10 +55,10 @@ public:
     int saturation() const;
     int value() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 private:
-    KisColorOptionsWidget * m_options;
+    KisColorOptionsWidget *m_options;
 };
 
 class PAINTOP_EXPORT KisColorProperties
@@ -77,7 +77,7 @@ public:
     int value;
 public:
     /// fill the class members with related properties
-    void fillProperties(const KisPropertiesConfiguration* setting);
+    void fillProperties(const KisPropertiesConfiguration *setting);
 };
 
 #endif // KIS_COLOR_OPTION_H

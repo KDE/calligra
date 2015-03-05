@@ -61,12 +61,15 @@ public:
 
 private:
     QList<KWRootAreaPage *> m_pages;
-    QHash<KoTextLayoutRootArea*, KWRootAreaPage *> m_pageHash;
-    QList<KoTextLayoutRootArea*> m_rootAreaCache;
+    QHash<KoTextLayoutRootArea *, KWRootAreaPage *> m_pageHash;
+    QList<KoTextLayoutRootArea *> m_rootAreaCache;
     QList<QPair<KWRootAreaProviderBase *, int> > m_dependentProviders;
 
-    QList<KWRootAreaPage *> pages() const { return m_pages; }
-    KoTextLayoutRootArea* provideNext(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints);
+    QList<KWRootAreaPage *> pages() const
+    {
+        return m_pages;
+    }
+    KoTextLayoutRootArea *provideNext(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints);
     void handleDependentProviders(int pageNumber);
 };
 

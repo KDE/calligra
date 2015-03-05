@@ -39,13 +39,13 @@ public:
         Parameters mainTypeParameter;
         Parameters subTypeParameter;
         Configuration(Type mainT = Triangle,
-                              Type subT = Ring,
-                              Parameters mainTP = SL,
-                              Parameters subTP = H)
-                                  : mainType(mainT),
-                                  subType(subT),
-                                  mainTypeParameter(mainTP),
-                                  subTypeParameter(subTP)
+                      Type subT = Ring,
+                      Parameters mainTP = SL,
+                      Parameters subTP = H)
+            : mainType(mainT),
+              subType(subT),
+              mainTypeParameter(mainTP),
+              subTypeParameter(subTP)
         {}
         Configuration(QString string)
         {
@@ -59,15 +59,18 @@ public:
         void readString(QString string)
         {
             QStringList strili = string.split('|');
-            if(strili.length()!=4) return;
-
-            int imt=strili.at(0).toInt();
-            int ist=strili.at(1).toInt();
-            int imtp=strili.at(2).toInt();
-            int istp=strili.at(3).toInt();
-
-            if(imt>Slider || ist>Slider || imtp>hsyS || istp>hsyS)//this was LH before
+            if (strili.length() != 4) {
                 return;
+            }
+
+            int imt = strili.at(0).toInt();
+            int ist = strili.at(1).toInt();
+            int imtp = strili.at(2).toInt();
+            int istp = strili.at(3).toInt();
+
+            if (imt > Slider || ist > Slider || imtp > hsyS || istp > hsyS) { //this was LH before
+                return;
+            }
 
             mainType = Type(imt);
             subType = Type(ist);
@@ -87,9 +90,9 @@ public:
 //    enum MainTypeParameter {SL, SV, SH, VH, LH, VSV/*experimental*/, SI, SY, YH, IH};
 //    enum SubTypeParameter {H, S, V, L, I, Y, hsiS, hsyS};
 
-    KisColorSelector(Configuration conf, QWidget* parent = 0);
-    KisColorSelector(QWidget* parent=0);
-    KisColorSelectorBase* createPopup() const;
+    KisColorSelector(Configuration conf, QWidget *parent = 0);
+    KisColorSelector(QWidget *parent = 0);
+    KisColorSelectorBase *createPopup() const;
 
     void setConfiguration(Configuration conf);
     Configuration configuration() const;
@@ -103,27 +106,26 @@ Q_SIGNALS:
     void settingsButtonClicked();
 
 protected:
-    void paintEvent(QPaintEvent*);
-    void resizeEvent(QResizeEvent*);
-    void mousePressEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
-    void mouseReleaseEvent(QMouseEvent*);
+    void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
     bool displaySettingsButton();
 
-
 private:
-    void mouseEvent(QMouseEvent* e);
+    void mouseEvent(QMouseEvent *e);
     void init();
 
-    KisColorSelectorRing* m_ring;
-    KisColorSelectorComponent* m_triangle;
-    KisColorSelectorSimple* m_slider;
-    KisColorSelectorSimple* m_square;
-    KisColorSelectorWheel* m_wheel;
-    QPushButton* m_button;
-    KisColorSelectorComponent* m_mainComponent;
-    KisColorSelectorComponent* m_subComponent;
-    KisColorSelectorComponent* m_grabbingComponent;
+    KisColorSelectorRing *m_ring;
+    KisColorSelectorComponent *m_triangle;
+    KisColorSelectorSimple *m_slider;
+    KisColorSelectorSimple *m_square;
+    KisColorSelectorWheel *m_wheel;
+    QPushButton *m_button;
+    KisColorSelectorComponent *m_mainComponent;
+    KisColorSelectorComponent *m_subComponent;
+    KisColorSelectorComponent *m_grabbingComponent;
 
     KisSignalCompressor *m_signalCompressor;
 
@@ -134,10 +136,15 @@ private:
     bool m_blipDisplay;
     Acs::ColorRole m_lastColorRole;
 
-
 public:
-    void setDisplayBlip(bool disp) {m_blipDisplay = disp;}
-    bool displayBlip() const {return m_blipDisplay;}
+    void setDisplayBlip(bool disp)
+    {
+        m_blipDisplay = disp;
+    }
+    bool displayBlip() const
+    {
+        return m_blipDisplay;
+    }
 };
 
 #endif // KIS_COLSELNG_COLOR_SELECTOR_H

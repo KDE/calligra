@@ -33,7 +33,7 @@ class KEXIUTILS_EXPORT KexiAnimatedLayout : public QStackedLayout
 {
     Q_OBJECT
 public:
-    explicit KexiAnimatedLayout(QWidget* parent = 0);
+    explicit KexiAnimatedLayout(QWidget *parent = 0);
 
     ~KexiAnimatedLayout();
 
@@ -42,23 +42,23 @@ public Q_SLOTS:
     /*! Animation is performed while switching the widgets
         (assuming animations are enabled in KGlobalSettings (see the explanation
         for @ref KexiAnimatedStackedLayout).
-        The new current widget must already be contained in this stacked layout. 
+        The new current widget must already be contained in this stacked layout.
         Because of the animation, changing current widget is asynchronous, i.e.
-        after this methods returns, current widget is not changed. 
+        after this methods returns, current widget is not changed.
         Connect to signal QStackedLayout::currentChanged(int index) to be notified
         about actual change of the current widget when animation finishes.
         @note this method is not virtual, so when calling it, make sure
               the pointer is KexiAnimatedStackedLayout, not parent class QStackedLayout.
         @see setCurrentIndex() currentWidget() */
-    void setCurrentWidget(QWidget* widget);
+    void setCurrentWidget(QWidget *widget);
 
     //! Sets the current widget to be the specified index.
     /*! Animation is performed as for setCurrentWidget(). */
     void setCurrentIndex(int index);
-    
+
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

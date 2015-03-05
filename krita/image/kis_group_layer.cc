@@ -25,7 +25,6 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 
-
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
@@ -36,13 +35,13 @@
 #include "kis_clone_layer.h"
 #include "kis_selection_mask.h"
 
-struct KisGroupLayer::Private
-{
+struct KisGroupLayer::Private {
 public:
     Private()
         : paintDevice(0)
         , x(0)
-        , y(0) {
+        , y(0)
+    {
     }
 
     KisPaintDeviceSP paintDevice;
@@ -64,7 +63,7 @@ KisGroupLayer::KisGroupLayer(const KisGroupLayer &rhs) :
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
     m_d->x = rhs.m_d->x;
     m_d->y = rhs.m_d->y;
-    m_d->paintDevice->setDefaultPixel(const_cast<KisGroupLayer*>(&rhs)->m_d->paintDevice->defaultPixel());
+    m_d->paintDevice->setDefaultPixel(const_cast<KisGroupLayer *>(&rhs)->m_d->paintDevice->defaultPixel());
 }
 
 KisGroupLayer::~KisGroupLayer()
@@ -76,10 +75,12 @@ bool KisGroupLayer::checkCloneLayer(KisCloneLayerSP clone) const
 {
     KisNodeSP source = clone->copyFrom();
     if (source) {
-        if(!allowAsChild(source)) return false;
+        if (!allowAsChild(source)) {
+            return false;
+        }
 
         if (source->inherits("KisGroupLayer")) {
-            KisNodeSP newParent = const_cast<KisGroupLayer*>(this);
+            KisNodeSP newParent = const_cast<KisGroupLayer *>(this);
             while (newParent) {
                 if (newParent == source) {
                     return false;
@@ -94,11 +95,10 @@ bool KisGroupLayer::checkCloneLayer(KisCloneLayerSP clone) const
 
 bool KisGroupLayer::checkNodeRecursively(KisNodeSP node) const
 {
-    KisCloneLayerSP cloneLayer = dynamic_cast<KisCloneLayer*>(node.data());
-    if(cloneLayer) {
+    KisCloneLayerSP cloneLayer = dynamic_cast<KisCloneLayer *>(node.data());
+    if (cloneLayer) {
         return checkCloneLayer(cloneLayer);
-    }
-    else if (node->inherits("KisGroupLayer")) {
+    } else if (node->inherits("KisGroupLayer")) {
         KisNodeSP child = node->firstChild();
         while (child) {
             if (!checkNodeRecursively(child)) {
@@ -114,12 +114,12 @@ bool KisGroupLayer::checkNodeRecursively(KisNodeSP node) const
 bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 {
     return checkNodeRecursively(node) &&
-            (parent() ||
-             (node->inherits("KisSelectionMask") && !selectionMask()) ||
-             !node->inherits("KisMask"));
+           (parent() ||
+            (node->inherits("KisSelectionMask") && !selectionMask()) ||
+            !node->inherits("KisMask"));
 }
 
-const KoColorSpace * KisGroupLayer::colorSpace() const
+const KoColorSpace *KisGroupLayer::colorSpace() const
 {
     return m_d->paintDevice->colorSpace();
 }
@@ -137,7 +137,7 @@ void KisGroupLayer::setImage(KisImageWSP image)
 
 KisLayerSP KisGroupLayer::createMergedLayer(KisLayerSP prevLayer)
 {
-    KisGroupLayer *prevGroup = dynamic_cast<KisGroupLayer*>(prevLayer.data());
+    KisGroupLayer *prevGroup = dynamic_cast<KisGroupLayer *>(prevLayer.data());
 
     if (prevGroup) {
         KisSharedPtr<KisGroupLayer> merged(new KisGroupLayer(*prevGroup));
@@ -152,14 +152,16 @@ KisLayerSP KisGroupLayer::createMergedLayer(KisLayerSP prevLayer)
         image()->refreshGraphAsync(merged);
 
         return merged;
-    } else
+    } else {
         return KisLayer::createMergedLayer(prevLayer);
+    }
 }
 
 void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 {
-    if (!colorSpace)
+    if (!colorSpace) {
         colorSpace = image()->colorSpace();
+    }
 
     Q_ASSERT(colorSpace);
 
@@ -168,18 +170,17 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
         m_d->paintDevice->setX(m_d->x);
         m_d->paintDevice->setY(m_d->y);
-    }
-    else if(!(*m_d->paintDevice->colorSpace() == *colorSpace)) {
+    } else if (!(*m_d->paintDevice->colorSpace() == *colorSpace)) {
 
         KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
         dev->setX(m_d->x);
         dev->setY(m_d->y);
-        quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
+        quint8 *defaultPixel = new quint8[colorSpace->pixelSize()];
 
         m_d->paintDevice->colorSpace()->
-            convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
-                            KoColorConversionTransformation::InternalRenderingIntent,
-                            KoColorConversionTransformation::InternalConversionFlags);
+        convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
+                        KoColorConversionTransformation::InternalRenderingIntent,
+                        KoColorConversionTransformation::InternalConversionFlags);
         dev->setDefaultPixel(defaultPixel);
         delete[] defaultPixel;
         m_d->paintDevice = dev;
@@ -189,15 +190,17 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
     }
 }
 
-KisLayer* KisGroupLayer::onlyMeaningfulChild() const
+KisLayer *KisGroupLayer::onlyMeaningfulChild() const
 {
     KisNode *child = firstChild().data();
     KisLayer *onlyLayer = 0;
 
     while (child) {
-        KisLayer *layer = dynamic_cast<KisLayer*>(child);
+        KisLayer *layer = dynamic_cast<KisLayer *>(child);
         if (layer) {
-            if (onlyLayer) return 0;
+            if (onlyLayer) {
+                return 0;
+            }
             onlyLayer = layer;
         }
         child = child->nextSibling().data();
@@ -211,20 +214,20 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
     const KisLayer *child = onlyMeaningfulChild();
 
     if (child &&
-        child->channelFlags().isEmpty() &&
-        child->projection() &&
-        child->visible() &&
-        (child->compositeOpId() == COMPOSITE_OVER ||
-         child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
-         child->compositeOpId() == COMPOSITE_COPY) &&
-        child->opacity() == OPACITY_OPAQUE_U8 &&
-        *child->projection()->colorSpace() == *colorSpace()) {
+            child->channelFlags().isEmpty() &&
+            child->projection() &&
+            child->visible() &&
+            (child->compositeOpId() == COMPOSITE_OVER ||
+             child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
+             child->compositeOpId() == COMPOSITE_COPY) &&
+            child->opacity() == OPACITY_OPAQUE_U8 &&
+            *child->projection()->colorSpace() == *colorSpace()) {
 
         quint8 defaultOpacity =
             m_d->paintDevice->colorSpace()->opacityU8(
                 m_d->paintDevice->defaultPixel());
 
-        if(defaultOpacity == OPACITY_TRANSPARENT_U8) {
+        if (defaultOpacity == OPACITY_TRANSPARENT_U8) {
             return child->projection();
         }
     }
@@ -287,7 +290,7 @@ void KisGroupLayer::setX(qint32 x)
 {
     qint32 delta = x - m_d->x;
     m_d->x = x;
-    if(m_d->paintDevice) {
+    if (m_d->paintDevice) {
         m_d->paintDevice->setX(m_d->paintDevice->x() + delta);
         Q_ASSERT(m_d->paintDevice->x() == m_d->x);
     }
@@ -297,7 +300,7 @@ void KisGroupLayer::setY(qint32 y)
 {
     qint32 delta = y - m_d->y;
     m_d->y = y;
-    if(m_d->paintDevice) {
+    if (m_d->paintDevice) {
         m_d->paintDevice->setY(m_d->paintDevice->y() + delta);
         Q_ASSERT(m_d->paintDevice->y() == m_d->y);
     }

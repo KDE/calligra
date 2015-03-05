@@ -29,16 +29,17 @@
  * The mi element represents an identifier and is defined in the section 3.2.3
  * of the MathMl spec.
  */
-class KOFORMULA_EXPORT IdentifierElement : public TokenElement {
+class KOFORMULA_EXPORT IdentifierElement : public TokenElement
+{
 public:
     /// The standart constructor
     explicit IdentifierElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType
     ElementType elementType() const;
-    
+
     /// Process @p raw and render it to @p path
-    QRectF renderToPath( const QString& raw, QPainterPath& path ) const;
+    QRectF renderToPath(const QString &raw, QPainterPath &path) const;
 
 };
 

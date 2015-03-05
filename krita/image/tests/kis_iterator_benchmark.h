@@ -28,13 +28,12 @@ class KisIteratorBenchmark : public QObject
     Q_OBJECT
 
 private:
-    void allCsApplicator(void (KisIteratorBenchmark::* funcPtr)(const KoColorSpace*cs));
+    void allCsApplicator(void (KisIteratorBenchmark::* funcPtr)(const KoColorSpace *cs));
 
-    void vLineIterNG(const KoColorSpace * cs);
-    void sequentialIter(const KoColorSpace * colorSpace);
-    void hLineIterNG(const KoColorSpace * cs);
-    void randomAccessor(const KoColorSpace * cs);
-
+    void vLineIterNG(const KoColorSpace *cs);
+    void sequentialIter(const KoColorSpace *colorSpace);
+    void hLineIterNG(const KoColorSpace *cs);
+    void randomAccessor(const KoColorSpace *cs);
 
 private Q_SLOTS:
 

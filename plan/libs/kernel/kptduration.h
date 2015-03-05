@@ -58,58 +58,128 @@ public:
     /// Create a duration of @p value, the value is in @p unit (default is hours)
     explicit Duration(double value, Unit unit = Unit_h);
     /// Create a duration of @p d days, @p h hours, @p m minutes, @p s seconds and @p ms milliseconds
-    Duration(unsigned d, unsigned h, unsigned m, unsigned s=0, unsigned ms=0);
+    Duration(unsigned d, unsigned h, unsigned m, unsigned s = 0, unsigned ms = 0);
 
     /// Return duration in milliseconds
-    qint64 milliseconds() const { return m_ms; }
+    qint64 milliseconds() const
+    {
+        return m_ms;
+    }
     /// Return duration in whole seconds
-    qint64 seconds() const { return m_ms / 1000; }
+    qint64 seconds() const
+    {
+        return m_ms / 1000;
+    }
     /// Return duration in whole minutes
-    qint64 minutes() const { return seconds() / 60; }
+    qint64 minutes() const
+    {
+        return seconds() / 60;
+    }
     /// Return duration in whole hours
-    unsigned hours() const { return minutes() / 60; }
+    unsigned hours() const
+    {
+        return minutes() / 60;
+    }
     /// Return duration in whole days
-    unsigned days() const { return hours() / 24; }
+    unsigned days() const
+    {
+        return hours() / 24;
+    }
 
     /**
      * Adds @p delta to *this. If @p delta > *this, *this is set to zeroDuration.
      */
-    void addMilliseconds(qint64 delta)  { add(delta); }
+    void addMilliseconds(qint64 delta)
+    {
+        add(delta);
+    }
 
     /**
      * Adds @p delta to *this. If @p delta > *this, *this is set to zeroDuration.
      */
-    void addSeconds(qint64 delta) { addMilliseconds(delta * 1000); }
+    void addSeconds(qint64 delta)
+    {
+        addMilliseconds(delta * 1000);
+    }
 
     /**
      * Adds @p delta to *this. If @p delta > *this, *this is set to zeroDuration.
      */
-    void addMinutes(qint64 delta) { addSeconds(delta * 60); }
+    void addMinutes(qint64 delta)
+    {
+        addSeconds(delta * 60);
+    }
 
     /**
      * Adds @p delta to *this. If @p delta > *this, *this is set to zeroDuration.
      */
-    void addHours(qint64 delta) { addMinutes(delta * 60); }
+    void addHours(qint64 delta)
+    {
+        addMinutes(delta * 60);
+    }
 
     /**
      * Adds @p delta to *this. If @p delta > *this, *this is set to zeroDuration.
      */
-    void addDays(qint64 delta) { addHours(delta * 24); }
+    void addDays(qint64 delta)
+    {
+        addHours(delta * 24);
+    }
 
-    bool   operator==( const Duration &d ) const { return m_ms == d.m_ms; }
-    bool   operator==( qint64 d ) const { return m_ms == d; }
-    bool   operator!=( const Duration &d ) const { return m_ms != d.m_ms; }
-    bool   operator!=( qint64 d ) const { return m_ms != d; }
-    bool   operator<( const Duration &d ) const { return m_ms < d.m_ms; }
-    bool   operator<( qint64 d ) const { return m_ms < d; }
-    bool   operator<=( const Duration &d ) const { return m_ms <= d.m_ms; }
-    bool   operator<=( qint64 d ) const { return m_ms <= d; }
-    bool   operator>( const Duration &d ) const { return m_ms > d.m_ms; }
-    bool   operator>( qint64 d ) const { return m_ms > d; }
-    bool   operator>=( const Duration &d ) const { return m_ms >= d.m_ms; }
-    bool   operator>=( qint64 d ) const { return m_ms >= d; }
-    Duration &operator=(const Duration &d ) { m_ms = d.m_ms; return *this;}
-    Duration operator*(int value) const; 
+    bool   operator==(const Duration &d) const
+    {
+        return m_ms == d.m_ms;
+    }
+    bool   operator==(qint64 d) const
+    {
+        return m_ms == d;
+    }
+    bool   operator!=(const Duration &d) const
+    {
+        return m_ms != d.m_ms;
+    }
+    bool   operator!=(qint64 d) const
+    {
+        return m_ms != d;
+    }
+    bool   operator<(const Duration &d) const
+    {
+        return m_ms < d.m_ms;
+    }
+    bool   operator<(qint64 d) const
+    {
+        return m_ms < d;
+    }
+    bool   operator<=(const Duration &d) const
+    {
+        return m_ms <= d.m_ms;
+    }
+    bool   operator<=(qint64 d) const
+    {
+        return m_ms <= d;
+    }
+    bool   operator>(const Duration &d) const
+    {
+        return m_ms > d.m_ms;
+    }
+    bool   operator>(qint64 d) const
+    {
+        return m_ms > d;
+    }
+    bool   operator>=(const Duration &d) const
+    {
+        return m_ms >= d.m_ms;
+    }
+    bool   operator>=(qint64 d) const
+    {
+        return m_ms >= d;
+    }
+    Duration &operator=(const Duration &d)
+    {
+        m_ms = d.m_ms;
+        return *this;
+    }
+    Duration operator*(int value) const;
     Duration operator*(const double value) const;
     Duration operator*(const Duration value) const;
     /// Divide duration with the integer @p value
@@ -118,37 +188,53 @@ public:
     double operator/(const Duration &d) const;
     /// Add duration with duration @p d
     Duration operator+(const Duration &d) const
-        {Duration dur(*this); dur.add(d); return dur; }
+    {
+        Duration dur(*this);
+        dur.add(d);
+        return dur;
+    }
     /// Add duration with duration @p d
-    Duration &operator+=(const Duration &d) {add(d); return *this; }
+    Duration &operator+=(const Duration &d)
+    {
+        add(d);
+        return *this;
+    }
     /// Subtract duration with duration @p d
     Duration operator-(const Duration &d) const
-        {Duration dur(*this); dur.subtract(d); return dur; }
+    {
+        Duration dur(*this);
+        dur.subtract(d);
+        return dur;
+    }
     /// Subtract duration with duration @p d
-    Duration &operator-=(const Duration &d) {subtract(d); return *this; }
+    Duration &operator-=(const Duration &d)
+    {
+        subtract(d);
+        return *this;
+    }
 
     /// Format duration into a string with @p unit and @p presition using @p locale. If @p locale == 0, uses KGLobal::locale.
-    QString format( Unit unit = Unit_h, int presition = 1, const KLocale *locale = 0 ) const;
+    QString format(Unit unit = Unit_h, int presition = 1, const KLocale *locale = 0) const;
     /// Convert duration to a string with @p format
     QString toString(Format format = Format_DayTime) const;
     /// Create a duration from string @p s with @p format
-    static Duration fromString(const QString &s, Format format = Format_DayTime, bool *ok=0);
+    static Duration fromString(const QString &s, Format format = Format_DayTime, bool *ok = 0);
 
     /// Return the duration scaled to hours
     double toHours() const;
     /**
      * Converts Duration into a double and scales it to unit @p u (default unit is hours)
      */
-    double toDouble( Unit u = Unit_h ) const;
+    double toDouble(Unit u = Unit_h) const;
 
     /// Return the list of units. Translated if @p trans is true.
-    static QStringList unitList( bool trans = false );
+    static QStringList unitList(bool trans = false);
     /// Return @p unit in human readable form. Translated if @p trans is true.
-    static QString unitToString( Duration::Unit unit, bool trans = false );
+    static QString unitToString(Duration::Unit unit, bool trans = false);
     /// Convert @p unit name into Unit
-    static Unit unitFromString( const QString &unit );
+    static Unit unitFromString(const QString &unit);
     /// Returns value and unit from a <value><unit> coded string in @p rv and @p unit.
-    static bool valueFromString( const QString &value, double &rv, Unit &unit );
+    static bool valueFromString(const QString &value, double &rv, Unit &unit);
     /**
      * This is useful for occasions where we need a zero duration.
      */
@@ -161,7 +247,7 @@ private:
      * might go negative for intermediate results.
      */
     qint64 m_ms;
-    
+
 private:
     void add(qint64 delta);
     void add(const Duration &delta);

@@ -16,7 +16,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #ifndef LAYERTHUMBPROVIDER_H
 #define LAYERTHUMBPROVIDER_H
 
@@ -30,14 +29,14 @@ class LayerThumbProvider : public QDeclarativeImageProvider
 public:
     LayerThumbProvider();
     virtual ~LayerThumbProvider();
-    virtual QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize);
+    virtual QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
 
-    void setLayerModel(LayerModel* model);
+    void setLayerModel(LayerModel *model);
     void setLayerID(int id);
     int layerID() const;
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // LAYERTHUMBPROVIDER_H

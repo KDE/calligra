@@ -45,7 +45,7 @@
 
 using namespace KexiPart;
 
-typedef QHash<QString, KexiInternalPart*> KexiInternalPartDict;
+typedef QHash<QString, KexiInternalPart *> KexiInternalPartDict;
 
 class Manager::Private
 {
@@ -54,7 +54,7 @@ public:
     ~Private();
 
     template <typename PartClass>
-    PartClass* part(Info *i, QHash<QString, PartClass*> &partDict);
+    PartClass *part(Info *i, QHash<QString, PartClass *> &partDict);
 
     Manager *manager;
     PartDict parts;
@@ -69,7 +69,7 @@ Manager::Private::Private(Manager *manager_)
     : manager(manager_)
     , lookupDone(false)
     , lookupResult(false)
-{  
+{
 }
 
 Manager::Private::~Private()
@@ -79,13 +79,15 @@ Manager::Private::~Private()
 }
 
 template <typename PartClass>
-PartClass* Manager::Private::part(Info *i, QHash<QString, PartClass*> &partDict)
+PartClass *Manager::Private::part(Info *i, QHash<QString, PartClass *> &partDict)
 {
     manager->clearError();
-    if (!i)
+    if (!i) {
         return 0;
-    if (!manager->lookup())
+    }
+    if (!manager->lookup()) {
         return 0;
+    }
 
     if (i->isBroken()) {
         manager->setError(i->errorMessage());
@@ -97,11 +99,11 @@ PartClass* Manager::Private::part(Info *i, QHash<QString, PartClass*> &partDict)
         KexiPluginLoader loader(i->ptr(), "X-Kexi-Class");
         if (loader.majorVersion() != KEXI_PART_VERSION) {
             i->setBroken(true,
-                i18nc("@info", "Incompatible plugin <resource>%1</resource> version: "
-                      "found version %2, expected version %3.",
-                      i->objectName(),
-                      loader.majorVersion(),
-                      KEXI_PART_VERSION));
+                         i18nc("@info", "Incompatible plugin <resource>%1</resource> version: "
+                               "found version %2, expected version %3.",
+                               i->objectName(),
+                               loader.majorVersion(),
+                               KEXI_PART_VERSION));
             manager->setError(i->errorMessage());
             return 0;
         }
@@ -141,8 +143,9 @@ static QString appIncorrectlyInstalledMessage()
 bool Manager::lookup()
 {
 //! @todo Allow refreshing!!!! (will need calling removeClient() by Part objects)
-    if (d->lookupDone)
+    if (d->lookupDone) {
         return d->lookupResult;
+    }
     d->lookupDone = true;
     d->lookupResult = false;
     d->partlist.clear();
@@ -170,7 +173,7 @@ bool Manager::lookup()
 
     //compute order
     const KService::List tlist = KoServiceLocator::instance()->entries("Kexi/Handler");
-    foreach(KService::Ptr ptr, tlist) {
+    foreach (KService::Ptr ptr, tlist) {
         // check type name (class is optional)
         QString partClass = ptr->property("X-Kexi-Class", QVariant::String).toString();
         //QString partName = ptr->property("X-Kexi-TypeName", QVariant::String).toString();
@@ -179,10 +182,9 @@ bool Manager::lookup()
             kWarning() << "No class name (X-Kexi-Class) specified for Kexi Part" << ptr->desktopEntryName() << ptr->entryPath() << "-- skipping!";
             continue;
         }
-        if (   (!Kexi::tempShowMacros() && partClass == "org.kexi-project.macro")
-            || (!Kexi::tempShowScripts() && partClass == "org.kexi-project.script")
-           )
-        {
+        if ((!Kexi::tempShowMacros() && partClass == "org.kexi-project.macro")
+                || (!Kexi::tempShowScripts() && partClass == "org.kexi-project.script")
+           ) {
             continue;
         }
         // check version
@@ -200,8 +202,7 @@ bool Manager::lookup()
         const int idx = sl_order.indexOf(partClass);
         if (idx != -1) {
             ordered[idx] = ptr;
-        }
-        else {
+        } else {
             ordered.append(ptr);
         }
     }
@@ -222,7 +223,7 @@ bool Manager::lookup()
     return true;
 }
 
-Part* Manager::part(Info *i)
+Part *Manager::part(Info *i)
 {
     Part *p = d->part<Part>(i, d->parts);
     if (p) {
@@ -235,51 +236,55 @@ static QString realPartClass(const QString &className)
 {
     if (className.contains('.')) {
         return className;
-    }
-    else {
+    } else {
         // not like "org.kexi-project.table" - construct
         return QString::fromLatin1("org.kexi-project.")
-            + QString(className).remove("kexi/");
+               + QString(className).remove("kexi/");
     }
 }
 
-Part* Manager::partForClass(const QString &className)
+Part *Manager::partForClass(const QString &className)
 {
-    Info* info = infoForClass(className);
+    Info *info = infoForClass(className);
     return part(info);
 }
 
-Info* Manager::infoForClass(const QString &className)
+Info *Manager::infoForClass(const QString &className)
 {
-    if (!lookup())
+    if (!lookup()) {
         return 0;
+    }
     const QString realClass = realPartClass(className);
     Info *i = realClass.isEmpty() ? 0 : d->partsByClass.value(realClass);
-    if (i)
+    if (i) {
         return i;
+    }
     setError(i18nc("@info", "No plugin for class <resource>%1</resource>", realClass));
     return 0;
 }
 
-void Manager::insertStaticPart(StaticPart* part)
+void Manager::insertStaticPart(StaticPart *part)
 {
-    if (!part)
+    if (!part) {
         return;
-    if (!lookup())
+    }
+    if (!lookup()) {
         return;
+    }
     d->partlist.append(part->info());
-    if (!part->info()->partClass().isEmpty())
+    if (!part->info()->partClass().isEmpty()) {
         d->partsByClass.insert(part->info()->partClass(), part->info());
+    }
     d->parts.insert(part->info()->partClass(), part);
 }
 
-KexiInternalPart* Manager::internalPartForClass(const QString& className)
+KexiInternalPart *Manager::internalPartForClass(const QString &className)
 {
-    Info* info = infoForClass(className);
+    Info *info = infoForClass(className);
     return d->part<KexiInternalPart>(info, d->internalParts);
 }
 
-PartInfoList* Manager::infoList()
+PartInfoList *Manager::infoList()
 {
     if (!lookup()) {
         return 0;

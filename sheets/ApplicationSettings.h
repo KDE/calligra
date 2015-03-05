@@ -107,7 +107,7 @@ public:
     /**
      * Sets the color of the grid.
      */
-    void setGridColor(const QColor& color);
+    void setGridColor(const QColor &color);
 
     /**
      * Returns the color of the grid.
@@ -167,14 +167,14 @@ public:
     MethodOfCalc getTypeOfCalc() const;
 
     QColor pageOutlineColor() const;
-    void changePageOutlineColor(const QColor& color);
+    void changePageOutlineColor(const QColor &color);
 
     void setCaptureAllArrowKeys(bool capture);
     bool captureAllArrowKeys() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

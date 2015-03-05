@@ -64,7 +64,7 @@ class Frame : public QObject
     Q_ENUMS(FrameBehavior)
 
 public:
-    Frame(QObject* parentFrameSet, KWFrame* frame) : QObject(parentFrameSet), m_frame(frame) {}
+    Frame(QObject *parentFrameSet, KWFrame *frame) : QObject(parentFrameSet), m_frame(frame) {}
     virtual ~Frame() {}
 
     /**
@@ -92,11 +92,13 @@ public:
 public Q_SLOTS:
 
     /** Return the Id of this shape, identifying the type of shape by the id of the factory. */
-    QString shapeId() const {
+    QString shapeId() const
+    {
         return m_frame->shape()->shapeId();
     }
     /** Return the parent \a FrameSet object this \a Frame object is child of. */
-    QObject* frameSet() {
+    QObject *frameSet()
+    {
         return parent();
     }
 
@@ -116,7 +118,8 @@ public Q_SLOTS:
     */
 
     /** This property defines what should happen when the frame is full.*/
-    int frameBehavior() const {
+    int frameBehavior() const
+    {
         return m_frame->frameBehavior();
     }
     /**
@@ -133,13 +136,15 @@ public Q_SLOTS:
     * myframe.setFrameBehavior(myframe.AutoExtendFrameBehavior)
     * \endcode
     */
-    void setFrameBehavior(int framebehavior) {
+    void setFrameBehavior(int framebehavior)
+    {
         m_frame->setFrameBehavior((Words::FrameBehavior) framebehavior);
     }
 
     /** Return the text runaround property for this frame. This property specifies
     how text from another textframe will behave when this frame intersects with it. */
-    int textWrap() const {
+    int textWrap() const
+    {
         return m_frame->shape()->textRunAroundSide();
     }
     /**
@@ -157,58 +162,70 @@ public Q_SLOTS:
     * myframe2.setTextWrap(myframe.RunThrough)
     * \endcode
     */
-    void setTextWrap(int runaround) {
+    void setTextWrap(int runaround)
+    {
         return m_frame->shape()->setTextRunAroundSide((KoShape::TextRunAroundSide) runaround);
     }
 
     /** Return the space between this frames edge and the text when that text runs around this frame. */
-    qreal runAroundDistance() const {
+    qreal runAroundDistance() const
+    {
         return m_frame->shape()->textRunAroundDistance();
     }
     /** Set the space between this frames edge and the text when that text runs around this frame. */
-    void setRunAroundDistance(qreal runarounddistance) {
+    void setRunAroundDistance(qreal runarounddistance)
+    {
         m_frame->shape()->setTextRunAroundDistance(runarounddistance);
     }
 
     /** Request a repaint to be queued. */
-    void update() const {
+    void update() const
+    {
         m_frame->shape()->update();
     }
 
     /** Returns current visibility state of this shape. */
-    bool isVisible() const {
+    bool isVisible() const
+    {
         return m_frame->shape()->isVisible();
     }
     /** Changes the Shape to be visible or invisible. */
-    void setVisible(bool on) {
+    void setVisible(bool on)
+    {
         m_frame->shape()->setVisible(on);
     }
 
     /** Scale the shape using the zero-point which is the top-left corner. */
-    void scale(qreal sx, qreal sy) {
+    void scale(qreal sx, qreal sy)
+    {
         m_frame->shape()->scale(sx, sy);
     }
 
     /** Return the current rotation in degrees, or NAN if its been transformed too much to extract that info. */
-    qreal rotation() const {
+    qreal rotation() const
+    {
         return m_frame->shape()->rotation();
     }
     /** The shape will have the rotation added, using the center of the shape using the size(). */
-    void rotate(qreal angle) {
+    void rotate(qreal angle)
+    {
         m_frame->shape()->rotate(angle);
     }
 
     /** The shape will be sheared using the zero-point which is the top-left corner. */
-    void shear(qreal sx, qreal sy) {
+    void shear(qreal sx, qreal sy)
+    {
         m_frame->shape()->shear(sx, sy);
     }
 
     /** Get the width of the shape in pt. */
-    qreal width() const {
+    qreal width() const
+    {
         return m_frame->shape()->size().width();
     }
     /** Get the width of the shape in pt. */
-    qreal height() const {
+    qreal height() const
+    {
         return m_frame->shape()->size().height();
     }
     /**
@@ -222,16 +239,19 @@ public Q_SLOTS:
     * myshape.setSize(w/2.0, h/2.0)
     * \endcode
     */
-    void setSize(qreal width, qreal height) {
+    void setSize(qreal width, qreal height)
+    {
         m_frame->shape()->setSize(QSizeF(width, height));
     }
 
     /** Get the X-position of the shape in pt. */
-    qreal positionX() const {
+    qreal positionX() const
+    {
         return m_frame->shape()->position().x();
     }
     /** Get the Y-position of the shape in pt. */
-    qreal positionY() const {
+    qreal positionY() const
+    {
         return m_frame->shape()->position().y();
     }
     /**
@@ -245,26 +265,31 @@ public Q_SLOTS:
     * myshape.setPosition(x+10,y+50)
     * \endcode
     */
-    void setPosition(qreal x, qreal y) {
+    void setPosition(qreal x, qreal y)
+    {
         m_frame->shape()->setPosition(QPointF(x, y));
     }
 
     /** Retrieve the z-coordinate of this shape. */
-    int zIndex() const {
+    int zIndex() const
+    {
         return m_frame->shape()->zIndex();
     }
     /** Set the z-coordinate of this shape. */
-    void setZIndex(int zIndex) {
+    void setZIndex(int zIndex)
+    {
         m_frame->shape()->setZIndex(zIndex);
     }
 
     /** Return the background color of the shape. */
-    QColor backgroundColor() const {
-        KoColorBackground * fill = dynamic_cast<KoColorBackground*>(m_frame->shape()->background());
-        if (fill)
+    QColor backgroundColor() const
+    {
+        KoColorBackground *fill = dynamic_cast<KoColorBackground *>(m_frame->shape()->background());
+        if (fill) {
             return fill->color();
-        else
+        } else {
             return QColor();
+        }
     }
     /**
     * Set the background color of the shape.
@@ -275,13 +300,14 @@ public Q_SLOTS:
     * myshape.setBackgroundColor("#ff0000")
     * \endcode
     */
-    void setBackgroundColor(const QColor& color) {
-        KoColorBackground * newFill = new KoColorBackground(color);
+    void setBackgroundColor(const QColor &color)
+    {
+        KoColorBackground *newFill = new KoColorBackground(color);
         m_frame->shape()->setBackground(newFill);
     }
 
 private:
-    KWFrame* m_frame;
+    KWFrame *m_frame;
 };
 }
 

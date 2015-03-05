@@ -59,7 +59,7 @@ struct Condition {
 typedef void (*arrayWalkFunc)(ValueCalc *, Value &result,
                               Value val, Value param);
 // A function that can map an array element-wise
-typedef Value (ValueCalc::*arrayMapFunc)(const Value &val, const Value &param);
+typedef Value(ValueCalc::*arrayMapFunc)(const Value &val, const Value &param);
 
 /**
  * \ingroup Value
@@ -73,13 +73,14 @@ of more complicated and ranged functions.
 class CALLIGRA_SHEETS_ODF_EXPORT ValueCalc
 {
 public:
-    explicit ValueCalc(ValueConverter* c);
+    explicit ValueCalc(ValueConverter *c);
 
-    ValueConverter *conv() {
+    ValueConverter *conv()
+    {
         return converter;
     }
 
-    const CalculationSettings* settings() const;
+    const CalculationSettings *settings() const;
 
     /** basic arithmetic operations */
     Value add(const Value &a, const Value &b);
@@ -132,41 +133,51 @@ public:
     int sign(const Value &a);
 
     // just a quick workaround
-    Value add(Number a, const Value& b) {
+    Value add(Number a, const Value &b)
+    {
         return add(Value(a), b);
     }
-    Value sub(Number a, const Value& b) {
+    Value sub(Number a, const Value &b)
+    {
         return sub(Value(a), b);
     }
-    Value mul(Number a, const Value& b) {
+    Value mul(Number a, const Value &b)
+    {
         return mul(Value(a), b);
     }
-    Value div(Number a, const Value& b) {
+    Value div(Number a, const Value &b)
+    {
         return div(Value(a), b);
     }
-    Value pow(Number a, const Value& b) {
+    Value pow(Number a, const Value &b)
+    {
         return pow(Value(a), b);
     }
 
-    bool equal(const Value &a, Number b)   {
+    bool equal(const Value &a, Number b)
+    {
         return equal(a, Value(b));
     }
-    bool greater(const Value &a, Number b) {
+    bool greater(const Value &a, Number b)
+    {
         return greater(a, Value(b));
     }
-    bool lower(const Value &a, Number b)   {
+    bool lower(const Value &a, Number b)
+    {
         return lower(a, Value(b));
     }
-    bool equal(Number a, const Value &b)   {
+    bool equal(Number a, const Value &b)
+    {
         return equal(Value(a), b);
     }
-    bool greater(Number a, const Value &b) {
+    bool greater(Number a, const Value &b)
+    {
         return greater(Value(a), b);
     }
-    bool lower(Number a, const Value &b)   {
+    bool lower(Number a, const Value &b)
+    {
         return lower(Value(a), b);
     }
-
 
     /** rounding */
     Value roundDown(const Value &a, const Value &digits);
@@ -280,9 +291,9 @@ public:
                  QList<Value> c_Range, QList<Condition> cond, const float limit);
     Value averageIf(const Value &range, const Condition &cond);
     Value averageIf(const Cell &avgRangeStart,
-                const Value &checkRange, const Condition &cond);
+                    const Value &checkRange, const Condition &cond);
     Value averageIfs(const Cell &avgRangeStart,
-                 QList<Value> c_Range, QList<Condition> cond, const float limit);
+                     QList<Value> c_Range, QList<Condition> cond, const float limit);
     int count(const Value &range, bool full = true);
     int countIf(const Value &range, const Condition &cond);
     Value countIfs(const Cell &cntRangeStart, QList<Value> c_range, QList<Condition> cond, const float limit);
@@ -329,7 +340,7 @@ public:
     Value::Format format(Value a, Value b);
 
 protected:
-    ValueConverter* converter;
+    ValueConverter *converter;
 
     /** registered array-walk functions */
     std::map<QString, arrayWalkFunc> awFuncs;
@@ -337,11 +348,12 @@ protected:
 
 inline bool approxEqual(double a, double b)
 {
-    if (a == b)
+    if (a == b) {
         return true;
+    }
     double x = a - b;
     return (x < 0.0 ? -x : x)
-           < ((a < 0.0 ? -a : a) *(1.0 / (16777216.0 * 16777216.0)));
+           < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 * 16777216.0)));
 }
 
 inline double approxFloor(double a)
@@ -349,14 +361,14 @@ inline double approxFloor(double a)
     double b = floor(a);
     // The second approxEqual() is necessary for values that are near the limit
     // of numbers representable with 4 bits stripped off. (#i12446#)
-    if (approxEqual(a - 1.0, b) && !approxEqual(a, b))
+    if (approxEqual(a - 1.0, b) && !approxEqual(a, b)) {
         return b + 1.0;
+    }
     return b;
 }
 
 } // namespace Sheets
 } // namespace Calligra
-
 
 #endif // CALLIGRA_SHEETS_VALUECALC
 

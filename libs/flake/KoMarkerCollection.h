@@ -42,7 +42,7 @@ public:
     // For now we only save the used markers and that is done with a KoSharedSavingData when a marker usage is encountered.
     //void saveOdf(KoShapeSavingContext &context) const;
 
-    QList<KoMarker*> markers();
+    QList<KoMarker *> markers();
 
     /**
      * Add marker to collection
@@ -55,15 +55,15 @@ public:
      * @param marker Marker to add
      * @return pointer to marker that should be used. This might be different to the marker passed
      */
-    KoMarker * addMarker(KoMarker *marker);
+    KoMarker *addMarker(KoMarker *marker);
 
 private:
     /// load the markers that are available per default.
     void loadDefaultMarkers();
-    void loadOdfMarkers(const QHash<QString, KoXmlElement*> &markers, KoShapeLoadingContext &context, QHash<QString, KoMarker*> &lookupTable);
+    void loadOdfMarkers(const QHash<QString, KoXmlElement *> &markers, KoShapeLoadingContext &context, QHash<QString, KoMarker *> &lookupTable);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_METATYPE(KoMarkerCollection *)

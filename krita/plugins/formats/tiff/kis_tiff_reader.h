@@ -40,11 +40,12 @@ public:
     KisTIFFPostProcessor(uint8 nbcolorssamples) : m_nbcolorssamples(nbcolorssamples) { }
     virtual ~KisTIFFPostProcessor() {}
 public:
-    virtual void postProcess8bit(quint8*) { }
-    virtual void postProcess16bit(quint16*) { }
-    virtual void postProcess32bit(quint32*) { }
+    virtual void postProcess8bit(quint8 *) { }
+    virtual void postProcess16bit(quint16 *) { }
+    virtual void postProcess32bit(quint32 *) { }
 protected:
-    inline uint8 nbColorsSamples() {
+    inline uint8 nbColorsSamples()
+    {
         return m_nbcolorssamples;
     }
 private:
@@ -57,19 +58,22 @@ public:
     KisTIFFPostProcessorInvert(uint8 nbcolorssamples) : KisTIFFPostProcessor(nbcolorssamples) {}
     virtual ~KisTIFFPostProcessorInvert() {}
 public:
-    virtual void postProcess8bit(quint8* data) {
+    virtual void postProcess8bit(quint8 *data)
+    {
         for (int i = 0; i < nbColorsSamples(); i++) {
             data[i] = quint8_MAX - data[i];
         }
     }
-    virtual void postProcess16bit(quint16* data) {
-        quint16* d = (quint16*) data;
+    virtual void postProcess16bit(quint16 *data)
+    {
+        quint16 *d = (quint16 *) data;
         for (int i = 0; i < nbColorsSamples(); i++) {
             d[i] = quint16_MAX - d[i];
         }
     }
-    virtual void postProcess32bit(quint32* data) {
-        quint32* d = (quint32*) data;
+    virtual void postProcess32bit(quint32 *data)
+    {
+        quint32 *d = (quint32 *) data;
         for (int i = 0; i < nbColorsSamples(); i++) {
             d[i] = quint32_MAX - d[i];
         }
@@ -82,35 +86,37 @@ public:
     KisTIFFPostProcessorICCLABtoCIELAB(uint8 nbcolorssamples) : KisTIFFPostProcessor(nbcolorssamples) {}
     virtual ~KisTIFFPostProcessorICCLABtoCIELAB() {}
 public:
-    void postProcess8bit(quint8* data) {
-        qint8* ds = (qint8*) data;
+    void postProcess8bit(quint8 *data)
+    {
+        qint8 *ds = (qint8 *) data;
         for (int i = 1; i < nbColorsSamples(); i++) {
             ds[i] = data[i] - quint8_MAX / 2;
         }
     }
-    void postProcess16bit(quint16* data) {
-        quint16* d = (quint16*) data;
-        qint16* ds = (qint16*) data;
+    void postProcess16bit(quint16 *data)
+    {
+        quint16 *d = (quint16 *) data;
+        qint16 *ds = (qint16 *) data;
         for (int i = 1; i < nbColorsSamples(); i++) {
             ds[i] = d[i] - quint16_MAX / 2;
         }
     }
-    void postProcess32bit(quint32* data) {
-        quint32* d = (quint32*) data;
-        qint32* ds = (qint32*) data;
+    void postProcess32bit(quint32 *data)
+    {
+        quint32 *d = (quint32 *) data;
+        qint32 *ds = (qint32 *) data;
         for (int i = 1; i < nbColorsSamples(); i++) {
             ds[i] = d[i] - quint32_MAX / 2;
         }
     }
 };
 
-
 class KisTIFFReaderBase
 {
 public:
-    KisTIFFReaderBase(KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth,
+    KisTIFFReaderBase(KisPaintDeviceSP device, quint8 *poses, int8 alphapos, uint8 sourceDepth,
                       uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount,
-                      KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor)
+                      KoColorTransformation *transformProfile, KisTIFFPostProcessor *postprocessor)
         : m_device(device)
         , m_alphapos(alphapos)
         , m_sourceDepth(sourceDepth)
@@ -134,45 +140,54 @@ public:
      *
      * @return the number of line which were copied
      */
-    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) = 0;
+    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream) = 0;
     /**
      * This function is called when all data has been read and should be used for any postprocessing.
      */
     virtual void finalize() { }
 protected:
 
-    inline KisPaintDeviceSP paintDevice() {
+    inline KisPaintDeviceSP paintDevice()
+    {
         return m_device;
     }
 
-    inline quint8 alphaPos() {
+    inline quint8 alphaPos()
+    {
         return m_alphapos;
     }
 
-    inline quint8 sourceDepth() {
+    inline quint8 sourceDepth()
+    {
         return m_sourceDepth;
     }
-    inline uint16 sampleFormat() {
+    inline uint16 sampleFormat()
+    {
         return m_sample_format;
     }
 
-    inline quint8 nbColorsSamples() {
+    inline quint8 nbColorsSamples()
+    {
         return m_nbcolorssamples;
     }
 
-    inline quint8 nbExtraSamples() {
+    inline quint8 nbExtraSamples()
+    {
         return m_nbextrasamples;
     }
 
-    inline quint8* poses() {
+    inline quint8 *poses()
+    {
         return m_poses;
     }
 
-    inline KoColorTransformation* transform() {
+    inline KoColorTransformation *transform()
+    {
         return m_transformProfile;
     }
 
-    inline KisTIFFPostProcessor* postProcessor() {
+    inline KisTIFFPostProcessor *postProcessor()
+    {
         return m_postprocess;
     }
 
@@ -183,55 +198,54 @@ private:
     uint16 m_sample_format;
     quint8 m_nbcolorssamples;
     quint8 m_nbextrasamples;
-    quint8* m_poses;
-    KoColorTransformation* m_transformProfile;
-    KisTIFFPostProcessor* m_postprocess;
+    quint8 *m_poses;
+    KoColorTransformation *m_transformProfile;
+    KisTIFFPostProcessor *m_postprocess;
     quint32 m_tiffDataWidth;
 };
 
 class KisTIFFReaderTarget8bit : public KisTIFFReaderBase
 {
 public:
-    KisTIFFReaderTarget8bit(KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor)
+    KisTIFFReaderTarget8bit(KisPaintDeviceSP device, quint8 *poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation *transformProfile, KisTIFFPostProcessor *postprocessor)
         : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, transformProfile, postprocessor)
     {
     }
 public:
-    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream);
+    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream);
 };
-
 
 class KisTIFFReaderTarget16bit : public KisTIFFReaderBase
 {
 public:
-    KisTIFFReaderTarget16bit(KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor)
+    KisTIFFReaderTarget16bit(KisPaintDeviceSP device, quint8 *poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation *transformProfile, KisTIFFPostProcessor *postprocessor)
         : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, transformProfile, postprocessor)
     {
     }
 public:
-    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) ;
+    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream);
 };
 
 class KisTIFFReaderTarget32bit : public KisTIFFReaderBase
 {
 public:
-    KisTIFFReaderTarget32bit(KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor)
+    KisTIFFReaderTarget32bit(KisPaintDeviceSP device, quint8 *poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation *transformProfile, KisTIFFPostProcessor *postprocessor)
         : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, transformProfile, postprocessor)
     {
     }
 public:
-    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) ;
+    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream);
 };
 
 class KisTIFFReaderFromPalette : public  KisTIFFReaderBase
 {
 public:
-    KisTIFFReaderFromPalette(KisPaintDeviceSP device, uint16 *red, uint16 *green, uint16 *blue, quint8* poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor)
+    KisTIFFReaderFromPalette(KisPaintDeviceSP device, uint16 *red, uint16 *green, uint16 *blue, quint8 *poses, int8 alphapos, uint8 sourceDepth, uint16 sample_format, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation *transformProfile, KisTIFFPostProcessor *postprocessor)
         : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, transformProfile, postprocessor), m_red(red), m_green(green), m_blue(blue)
     {
     }
 public:
-    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) ;
+    virtual uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream);
 private:
     uint16 *m_red, *m_green, *m_blue;
 };

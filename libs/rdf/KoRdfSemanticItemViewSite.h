@@ -30,7 +30,6 @@ class KoCanvasResourceManager;
 
 class KoRdfSemanticItemViewSitePrivate;
 
-
 /**
  * @short Handling a specific reference to a semantic item in the document text.
  * @author Ben Martin <ben.martin@kogmbh.com>
@@ -50,7 +49,7 @@ class KoRdfSemanticItemViewSitePrivate;
  */
 class KORDF_EXPORT KoRdfSemanticItemViewSite
 {
-    KoRdfSemanticItemViewSitePrivate * const d;
+    KoRdfSemanticItemViewSitePrivate *const d;
 public:
     /**
      * Performing actions on a specific reference to a semantic item in the document.

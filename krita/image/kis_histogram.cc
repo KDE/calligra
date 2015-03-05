@@ -83,7 +83,7 @@ void KisHistogram::updateHistogram()
     }
 
     KisSequentialConstIterator srcIt(m_paintDevice, m_bounds);
-    const KoColorSpace* cs = m_paintDevice->colorSpace();
+    const KoColorSpace *cs = m_paintDevice->colorSpace();
 
     // Let the producer do it's work
     m_producer->clear();
@@ -104,7 +104,9 @@ void KisHistogram::updateHistogram()
 
 void KisHistogram::computeHistogram()
 {
-    if (!m_producer) return;
+    if (!m_producer) {
+        return;
+    }
 
     m_completeCalculations = calculateForRange(m_producer->viewFrom(),
                              m_producer->viewFrom() + m_producer->viewWidth());
@@ -171,15 +173,19 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
     for (qint32 i = fromBin; i < toBin; i++) {
         current = m_producer->getBinAt(channel, i);
         double pos = static_cast<double>(i) / factor + from;
-        if (current > high)
+        if (current > high) {
             high = current;
-        if (current < low)
+        }
+        if (current < low) {
             low = current;
+        }
         if (current > 0) {
-            if (pos < min)
+            if (pos < min) {
                 min = pos;
-            if (pos > max)
+            }
+            if (pos > max) {
                 max = pos;
+            }
         }
         // We do the count here as well.
         // we can't use m_producer->count() for this, because of the range
@@ -187,8 +193,9 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
         total += current * pos;
     }
 
-    if (count > 0)
+    if (count > 0) {
         mean = total / count;
+    }
 
     c.m_high = high;
     c.m_low = low;
@@ -200,7 +207,6 @@ KisHistogram::Calculations KisHistogram::calculateSingleRange(int channel, doubl
 
     return c;
 }
-
 
 void KisHistogram::dump()
 {

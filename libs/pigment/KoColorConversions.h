@@ -37,14 +37,14 @@ PIGMENTCMS_EXPORT void HSVToRGB(float h, float s, float v, float *r, float *g, f
 PIGMENTCMS_EXPORT void RGBToHSL(float r, float g, float b, float *h, float *s, float *l);
 PIGMENTCMS_EXPORT void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b);
 
-PIGMENTCMS_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, float * h, float * l, float * s);
+PIGMENTCMS_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, float *h, float *l, float *s);
 
 PIGMENTCMS_EXPORT float hue_value(float n1, float n2, float hue);
 
-PIGMENTCMS_EXPORT void hls_to_rgb(float h, float l, float s, quint8 * r, quint8 * g, quint8 * b);
+PIGMENTCMS_EXPORT void hls_to_rgb(float h, float l, float s, quint8 *r, quint8 *g, quint8 *b);
 
-PIGMENTCMS_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, int * h, int * l, int * s);
-PIGMENTCMS_EXPORT void hls_to_rgb(int h, int l, int s, quint8 * r, quint8 * g, quint8 * b);
+PIGMENTCMS_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, int *h, int *l, int *s);
+PIGMENTCMS_EXPORT void hls_to_rgb(int h, int l, int s, quint8 *r, quint8 *g, quint8 *b);
 
 //HSI and HSY' functions.
 //These are modified to calculate a cylliner, this is good for colour selectors sliders.
@@ -55,9 +55,8 @@ PIGMENTCMS_EXPORT void RGBToHSI(qreal r, qreal g, qreal b, qreal *h, qreal *s, q
 
 //HSY' measures the tone, Luma, by weighting the r, g, and b components before adding them up.
 //The R, G, B reffers to the weights, and defaults to the 601 rec for luma.
-PIGMENTCMS_EXPORT void RGBToHSY( qreal r, qreal g, qreal b, qreal *h, qreal *s, qreal *y, qreal R=0.299, qreal G=0.587, qreal B=0.114);
-PIGMENTCMS_EXPORT void HSYToRGB(const qreal h, const qreal s, const qreal y, qreal *red, qreal *green, qreal *blue, qreal R=0.299, qreal G=0.587, qreal B=0.114);
-
+PIGMENTCMS_EXPORT void RGBToHSY(qreal r, qreal g, qreal b, qreal *h, qreal *s, qreal *y, qreal R = 0.299, qreal G = 0.587, qreal B = 0.114);
+PIGMENTCMS_EXPORT void HSYToRGB(const qreal h, const qreal s, const qreal y, qreal *red, qreal *green, qreal *blue, qreal R = 0.299, qreal G = 0.587, qreal B = 0.114);
 
 //HCI and HCY' functions.
 //These are the original conversion functions, producing cones. Put in for completion.
@@ -65,9 +64,8 @@ PIGMENTCMS_EXPORT void HSYToRGB(const qreal h, const qreal s, const qreal y, qre
 PIGMENTCMS_EXPORT void HCIToRGB(const qreal h, const qreal s, const qreal i, qreal *red, qreal *green, qreal *blue);
 PIGMENTCMS_EXPORT void RGBToHCI(const qreal r, const qreal g, const qreal b, qreal *h, qreal *c, qreal *i);
 
-PIGMENTCMS_EXPORT void HCYToRGB(const qreal h, const qreal s, const qreal y, qreal *red, qreal *green, qreal *blue,  qreal R=0.299, qreal G=0.587, qreal B=0.114);
-PIGMENTCMS_EXPORT void RGBToHCY(const qreal r, const qreal g, const qreal b, qreal *h, qreal *c, qreal *y,  qreal R=0.299, qreal G=0.587, qreal B=0.114);
-
+PIGMENTCMS_EXPORT void HCYToRGB(const qreal h, const qreal s, const qreal y, qreal *red, qreal *green, qreal *blue,  qreal R = 0.299, qreal G = 0.587, qreal B = 0.114);
+PIGMENTCMS_EXPORT void RGBToHCY(const qreal r, const qreal g, const qreal b, qreal *h, qreal *c, qreal *y,  qreal R = 0.299, qreal G = 0.587, qreal B = 0.114);
 
 #endif // _KO_COLORCONVERSIONS_H_
 

@@ -31,8 +31,7 @@
 #include <kis_image.h>
 #include <krita_utils.h>
 
-
-KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
@@ -60,8 +59,7 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
         m_originalPainter->setCompositeOp(COMPOSITE_COPY);
         m_originalPainter->setPaintColor(painter->paintColor());
         m_originalPainter->setFillStyle(KisPainter::FillStyleForegroundColor);
-    }
-    else {
+    } else {
         m_originalPainter = 0;
     }
 }
@@ -80,31 +78,32 @@ void KisExperimentPaintOp::paintRegion(const QRegion &changedRegion)
     if (m_useMirroring) {
         m_originalPainter->setAntiAliasPolygonFill(!m_hardEdge);
 
-        foreach(const QRect & rect, changedRegion.rects()) {
+        foreach (const QRect &rect, changedRegion.rects()) {
             m_originalPainter->fillPainterPath(m_path, rect);
             painter()->renderDabWithMirroringNonIncremental(rect, m_originalDevice);
         }
-    }
-    else {
+    } else {
         painter()->setFillStyle(KisPainter::FillStyleForegroundColor);
         painter()->setCompositeOp(COMPOSITE_COPY);
         painter()->setAntiAliasPolygonFill(!m_hardEdge);
 
-        foreach(const QRect & rect, changedRegion.rects()) {
+        foreach (const QRect &rect, changedRegion.rects()) {
             painter()->fillPainterPath(m_path, rect);
         }
     }
 }
 
-QPointF KisExperimentPaintOp::speedCorrectedPosition(const KisPaintInformation& pi1,
-        const KisPaintInformation& pi2)
+QPointF KisExperimentPaintOp::speedCorrectedPosition(const KisPaintInformation &pi1,
+        const KisPaintInformation &pi2)
 {
     const qreal fadeFactor = 0.6;
 
     QPointF diff = pi2.pos() - pi1.pos();
     qreal realLength = sqrt(diff.x() * diff.x() + diff.y() * diff.y());
 
-    if (realLength < 0.1) return pi2.pos();
+    if (realLength < 0.1) {
+        return pi2.pos();
+    }
 
     qreal coeff = 0.5 * realLength * m_speedMultiplier;
     m_savedSpeedCoeff = fadeFactor * m_savedSpeedCoeff + (1 - fadeFactor) * coeff;
@@ -117,7 +116,9 @@ QPointF KisExperimentPaintOp::speedCorrectedPosition(const KisPaintInformation& 
 void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
     Q_UNUSED(currentDistance);
-    if (!painter()) return;
+    if (!painter()) {
+        return;
+    }
 
     if (m_firstRun) {
         m_firstRun = false;
@@ -136,8 +137,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
         m_savedSmoothingDistance = 0;
         m_savedSmoothingPoint = m_center;
 
-    }
-    else {
+    } else {
 
         const QPointF pos1 = pi1.pos();
         QPointF pos2 = pi2.pos();
@@ -166,8 +166,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
 
                 m_savedSmoothingDistance = 0;
             }
-        }
-        else {
+        } else {
             m_path.lineTo(pos2);
             m_savedPoints << pos1;
             m_savedPoints << pos2;
@@ -181,8 +180,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
 
                 qreal threshold = simplifyThreshold(bounds);
                 m_path = trySimplifyPath(m_path, threshold);
-            }
-            else {
+            } else {
                 m_path = applyDisplace(m_path, m_displaceCoeff - length);
             }
         }
@@ -219,8 +217,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
                     changedRect.adjust(-1, -1, 1, 1);
 
                     changedRegion = changedRect.toRect();
-                }
-                else {
+                } else {
                     QPainterPath diff1 = m_path - m_lastPaintedPath;
                     QPainterPath diff2 = m_lastPaintedPath - m_path;
 
@@ -229,8 +226,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
 
                 paintRegion(changedRegion);
                 m_lastPaintedPath = m_path;
-            }
-            else if (!m_savedPoints.isEmpty()) {
+            } else if (!m_savedPoints.isEmpty()) {
                 QRegion changedRegion = KritaUtils::splitTriangles(m_center, m_savedPoints);
                 paintRegion(changedRegion);
             }
@@ -242,8 +238,7 @@ void KisExperimentPaintOp::paintLine(const KisPaintInformation &pi1, const KisPa
     }
 }
 
-
-KisSpacingInformation KisExperimentPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisExperimentPaintOp::paintAt(const KisPaintInformation &info)
 {
     Q_UNUSED(info);
     return 1.0;
@@ -330,14 +325,14 @@ QPainterPath KisExperimentPaintOp::trySimplifyPath(const QPainterPath &path, qre
     return newPath;
 }
 
-QPointF KisExperimentPaintOp::getAngle(const QPointF& p1, const QPointF& p2, qreal distance)
+QPointF KisExperimentPaintOp::getAngle(const QPointF &p1, const QPointF &p2, qreal distance)
 {
     QPointF diff = p1 - p2;
     qreal realLength = sqrt(diff.x() * diff.x() + diff.y() * diff.y());
     return realLength > 0.5 ? p1 + diff * distance / realLength : p1;
 }
 
-QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath& path, int speed)
+QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath &path, int speed)
 {
     QPointF lastPoint = path.currentPosition();
 
@@ -368,8 +363,7 @@ QPainterPath KisExperimentPaintOp::applyDisplace(const QPainterPath& path, int s
 
             if (curveElementCounter == 1) {
                 ctrl1 = getAngle(QPointF(e.x, e.y), lastPoint, speed);
-            }
-            else if (curveElementCounter == 2) {
+            } else if (curveElementCounter == 2) {
                 ctrl2 = getAngle(QPointF(e.x, e.y), lastPoint, speed);
                 newPath.cubicTo(ctrl1, ctrl2, endPoint);
             }

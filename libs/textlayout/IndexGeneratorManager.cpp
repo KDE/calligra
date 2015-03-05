@@ -147,7 +147,6 @@ bool IndexGeneratorManager::generate()
         block = block.next();
     }
 
-
     if (m_state == FirstRun) {
         m_state = FirstRunLayouting;
     }
@@ -166,17 +165,16 @@ bool IndexGeneratorManager::generate()
 void IndexGeneratorManager::layoutDone()
 {
     switch (m_state) {
-        case FirstRunLayouting:
-            m_state = SecondRunNeeded;
-            m_documentLayout->scheduleLayout();
-            break;
-        case SecondRunLayouting:
-            m_state = Resting;
-            break;
-        default:
-            break;
+    case FirstRunLayouting:
+        m_state = SecondRunNeeded;
+        m_documentLayout->scheduleLayout();
+        break;
+    case SecondRunLayouting:
+        m_state = Resting;
+        break;
+    default:
+        break;
     }
 }
-
 
 #include <IndexGeneratorManager.moc>

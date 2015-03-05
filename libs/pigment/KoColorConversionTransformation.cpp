@@ -27,18 +27,17 @@ KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation
 KoColorConversionTransformation::Intent KoColorConversionTransformation::AdjustmentRenderingIntent = IntentPerceptual;
 KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation::AdjustmentConversionFlags = BlackpointCompensation | NoWhiteOnWhiteFixup;
 
-
 struct KoColorConversionTransformation::Private {
-    const KoColorSpace* srcColorSpace;
-    const KoColorSpace* dstColorSpace;
+    const KoColorSpace *srcColorSpace;
+    const KoColorSpace *dstColorSpace;
     Intent renderingIntent;
     ConversionFlags conversionFlags;
 };
 
-KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSpace* srcCs,
-                                                                 const KoColorSpace* dstCs,
-                                                                 Intent renderingIntent,
-                                                                 ConversionFlags conversionFlags)
+KoColorConversionTransformation::KoColorConversionTransformation(const KoColorSpace *srcCs,
+        const KoColorSpace *dstCs,
+        Intent renderingIntent,
+        ConversionFlags conversionFlags)
     : d(new Private)
 {
     Q_ASSERT(srcCs);
@@ -55,12 +54,12 @@ KoColorConversionTransformation::~KoColorConversionTransformation()
     delete d;
 }
 
-const KoColorSpace* KoColorConversionTransformation::srcColorSpace() const
+const KoColorSpace *KoColorConversionTransformation::srcColorSpace() const
 {
     return d->srcColorSpace;
 }
 
-const KoColorSpace* KoColorConversionTransformation::dstColorSpace() const
+const KoColorSpace *KoColorConversionTransformation::dstColorSpace() const
 {
     return d->dstColorSpace;
 }
@@ -75,13 +74,13 @@ KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation
     return d->conversionFlags;
 }
 
-void KoColorConversionTransformation::setSrcColorSpace(const KoColorSpace* cs) const
+void KoColorConversionTransformation::setSrcColorSpace(const KoColorSpace *cs) const
 {
     Q_ASSERT(*d->srcColorSpace == *cs);
     d->srcColorSpace = cs;
 }
 
-void KoColorConversionTransformation::setDstColorSpace(const KoColorSpace* cs) const
+void KoColorConversionTransformation::setDstColorSpace(const KoColorSpace *cs) const
 {
     Q_ASSERT(*d->dstColorSpace == *cs);
     d->dstColorSpace = cs;

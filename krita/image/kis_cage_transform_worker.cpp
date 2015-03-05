@@ -32,8 +32,7 @@
 #define isnan _isnan
 #endif
 
-struct KisCageTransformWorker::Private
-{
+struct KisCageTransformWorker::Private {
     Private(KisPaintDeviceSP _dev,
             const QVector<QPointF> &_origCage,
             KoUpdater *_progress,
@@ -68,15 +67,15 @@ struct KisCageTransformWorker::Private
 
     QSize gridSize;
 
-    bool isGridEmpty() const {
+    bool isGridEmpty() const
+    {
         return allSrcPoints.isEmpty();
     }
-
 
     QVector<QPointF> calculateTransformedPoints();
 
     inline QVector<int> calculateMappedIndexes(int col, int row,
-                                               int *numExistingPoints);
+            int *numExistingPoints);
 
     int tryGetValidIndex(const QPoint &cellPt);
 
@@ -84,18 +83,18 @@ struct KisCageTransformWorker::Private
 };
 
 KisCageTransformWorker::KisCageTransformWorker(KisPaintDeviceSP dev,
-                                               const QVector<QPointF> &origCage,
-                                               KoUpdater *progress,
-                                               int pixelPrecision)
+        const QVector<QPointF> &origCage,
+        KoUpdater *progress,
+        int pixelPrecision)
     : m_d(new Private(dev, origCage, progress, pixelPrecision))
 {
 }
 
 KisCageTransformWorker::KisCageTransformWorker(const QImage &srcImage,
-                                               const QPointF &srcImageOffset,
-                                               const QVector<QPointF> &origCage,
-                                               KoUpdater *progress,
-                                               int pixelPrecision)
+        const QPointF &srcImageOffset,
+        const QVector<QPointF> &origCage,
+        KoUpdater *progress,
+        int pixelPrecision)
     : m_d(new Private(0, origCage, progress, pixelPrecision))
 {
     m_d->srcImage = srcImage;
@@ -111,8 +110,7 @@ void KisCageTransformWorker::setTransformedCage(const QVector<QPointF> &transfor
     m_d->transfCage = transformedCage;
 }
 
-struct PointsFetcherOp
-{
+struct PointsFetcherOp {
     PointsFetcherOp(const QPolygonF &cagePolygon)
         : m_cagePolygon(cagePolygon),
           m_numValidPoints(0)
@@ -122,7 +120,8 @@ struct PointsFetcherOp
 
     inline void processPoint(int col, int row,
                              int prevCol, int prevRow,
-                             int colIndex, int rowIndex) {
+                             int colIndex, int rowIndex)
+    {
 
         Q_UNUSED(prevCol);
         Q_UNUSED(prevRow);
@@ -143,7 +142,8 @@ struct PointsFetcherOp
         }
     }
 
-    inline void nextLine() {
+    inline void nextLine()
+    {
     }
 
     QVector<bool> m_pointValid;
@@ -155,16 +155,20 @@ struct PointsFetcherOp
 
 void KisCageTransformWorker::prepareTransform()
 {
-    if (m_d->origCage.size() < 3) return;
+    if (m_d->origCage.size() < 3) {
+        return;
+    }
 
     const QPolygonF srcPolygon(m_d->origCage);
 
     QRect srcBounds = m_d->dev ? m_d->dev->region().boundingRect() :
-        QRectF(m_d->srcImageOffset, m_d->srcImage.size()).toAlignedRect();
+                      QRectF(m_d->srcImageOffset, m_d->srcImage.size()).toAlignedRect();
     srcBounds &= srcPolygon.boundingRect().toAlignedRect();
 
     // no need to process empty devices
-    if (srcBounds.isEmpty()) return;
+    if (srcBounds.isEmpty()) {
+        return;
+    }
 
     m_d->gridSize =
         GridIterationTools::calcGridSize(srcBounds, m_d->pixelPrecision);
@@ -212,10 +216,10 @@ QVector<QPointF> KisCageTransformWorker::Private::calculateTransformedPoints()
 
 #ifdef Q_CC_MSVC
         if (isnan(transformedPoints[i].x()) ||
-            isnan(transformedPoints[i].y())) {
+                isnan(transformedPoints[i].y())) {
 #else
         if (std::isnan(transformedPoints[i].x()) ||
-            std::isnan(transformedPoints[i].y())) {
+                std::isnan(transformedPoints[i].y())) {
 #endif
 
             qWarning() << "WARNING:     One grid point has been removed from a consideration" << validPoints[i];
@@ -243,8 +247,6 @@ calculateMappedIndexes(int col, int row,
     return cellIndexes;
 }
 
-
-
 int KisCageTransformWorker::Private::
 tryGetValidIndex(const QPoint &cellPt)
 {
@@ -258,7 +260,6 @@ tryGetValidIndex(const QPoint &cellPt)
         (index = allToValidPointsMap[GridIterationTools::pointToIndex(cellPt, gridSize)]) >= 0, index;
 }
 
-
 struct KisCageTransformWorker::Private::MapIndexesOp {
 
     MapIndexesOp(KisCageTransformWorker::Private *d)
@@ -268,20 +269,24 @@ struct KisCageTransformWorker::Private::MapIndexesOp {
     }
 
     inline QVector<int> calculateMappedIndexes(int col, int row,
-                                               int *numExistingPoints) const {
+            int *numExistingPoints) const
+    {
 
         return m_d->calculateMappedIndexes(col, row, numExistingPoints);
     }
 
-    inline int tryGetValidIndex(const QPoint &cellPt) const {
+    inline int tryGetValidIndex(const QPoint &cellPt) const
+    {
         return m_d->tryGetValidIndex(cellPt);
     }
 
-    inline QPointF getSrcPointForce(const QPoint &cellPt) const {
+    inline QPointF getSrcPointForce(const QPoint &cellPt) const
+    {
         return m_d->allSrcPoints[GridIterationTools::pointToIndex(cellPt, m_d->gridSize)];
     }
 
-    inline const QPolygonF srcCropPolygon() const {
+    inline const QPolygonF srcCropPolygon() const
+    {
         return m_srcCagePolygon;
     }
 
@@ -291,7 +296,9 @@ struct KisCageTransformWorker::Private::MapIndexesOp {
 
 void KisCageTransformWorker::run()
 {
-    if (m_d->isGridEmpty()) return;
+    if (m_d->isGridEmpty()) {
+        return;
+    }
 
     KIS_ASSERT_RECOVER_RETURN(m_d->origCage.size() >= 3);
     KIS_ASSERT_RECOVER_RETURN(m_d->origCage.size() == m_d->transfCage.size());
@@ -318,10 +325,10 @@ void KisCageTransformWorker::run()
     GridIterationTools::PaintDevicePolygonOp polygonOp(srcDev, tempDevice);
     Private::MapIndexesOp indexesOp(m_d.data());
     GridIterationTools::iterateThroughGrid
-        <GridIterationTools::IncompletePolygonPolicy>(polygonOp, indexesOp,
-                                                      m_d->gridSize,
-                                                      m_d->validPoints,
-                                                      transformedPoints);
+    <GridIterationTools::IncompletePolygonPolicy>(polygonOp, indexesOp,
+            m_d->gridSize,
+            m_d->validPoints,
+            transformedPoints);
 
     QRect rect = tempDevice->extent();
     KisPainter gc(m_d->dev);
@@ -330,7 +337,9 @@ void KisCageTransformWorker::run()
 
 QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
 {
-    if (m_d->isGridEmpty()) QImage();
+    if (m_d->isGridEmpty()) {
+        QImage();
+    }
 
     KIS_ASSERT_RECOVER(m_d->origCage.size() >= 3 &&
                        m_d->origCage.size() == m_d->transfCage.size()) {
@@ -360,7 +369,6 @@ QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
 
     QRect dstBoundsI = dstBounds.toAlignedRect();
 
-
     QImage dstImage(dstBoundsI.size(), m_d->srcImage.format());
     dstImage.fill(0);
 
@@ -380,10 +388,10 @@ QImage KisCageTransformWorker::runOnQImage(QPointF *newOffset)
     GridIterationTools::QImagePolygonOp polygonOp(m_d->srcImage, tempImage, m_d->srcImageOffset, dstQImageOffset);
     Private::MapIndexesOp indexesOp(m_d.data());
     GridIterationTools::iterateThroughGrid
-        <GridIterationTools::IncompletePolygonPolicy>(polygonOp, indexesOp,
-                                                      m_d->gridSize,
-                                                      m_d->validPoints,
-                                                      transformedPoints);
+    <GridIterationTools::IncompletePolygonPolicy>(polygonOp, indexesOp,
+            m_d->gridSize,
+            m_d->validPoints,
+            transformedPoints);
 
     {
         QPainter gc(&dstImage);

@@ -19,14 +19,12 @@
 #ifndef __KIS_NODE_SHAPES_GRAPH_H
 #define __KIS_NODE_SHAPES_GRAPH_H
 
-
 #include "kis_node.h"
 #include "kis_types.h"
 #include "kis_node_dummies_graph.h"
 
 class KisNodeShape;
 class KisNodeDummy;
-
 
 /**
  * KisNodeShapesGraph is a highlevel simplified representation
@@ -48,7 +46,7 @@ public:
      * because the shapes graph has no right to access the hierarchy
      * information from the UI thread, so you should do it manually.
      */
-    KisNodeShape* addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    KisNodeShape *addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
 
     /**
      * Moves a node inside the graph. It is supposed that the node has
@@ -68,9 +66,9 @@ public:
      */
     void removeNode(KisNodeSP node);
 
-    KisNodeShape* nodeToShape(KisNodeSP node);
-    KisNodeDummy* nodeToDummy(KisNodeSP node);
-    KisNodeDummy* rootDummy() const;
+    KisNodeShape *nodeToShape(KisNodeSP node);
+    KisNodeDummy *nodeToDummy(KisNodeSP node);
+    KisNodeDummy *rootDummy() const;
 
     bool containsNode(KisNodeSP node) const;
     int shapesCount() const;

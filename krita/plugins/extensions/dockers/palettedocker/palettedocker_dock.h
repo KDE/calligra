@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef PALETTEDOCKER_DOCK_H
 #define PALETTEDOCKER_DOCK_H
 
@@ -36,13 +35,17 @@ class ColorSetChooser;
 class PaletteModel;
 class Ui_WdgPaletteDock;
 
-class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoColorSet> {
+class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoColorSet>
+{
     Q_OBJECT
 public:
     PaletteDockerDock();
     virtual ~PaletteDockerDock();
-    QString observerName() { return "PaletteDockerDock"; }
-    virtual void setMainWindow(KisViewManager* kisview);
+    QString observerName()
+    {
+        return "PaletteDockerDock";
+    }
+    virtual void setMainWindow(KisViewManager *kisview);
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
@@ -53,29 +56,28 @@ public: // KoResourceServerObserver
     virtual void removingResource(KoColorSet *resource);
     virtual void resourceChanged(KoColorSet *resource);
     virtual void syncTaggedResourceView() {}
-    virtual void syncTagAddition(const QString&) {}
-    virtual void syncTagRemoval(const QString&) {}
+    virtual void syncTagAddition(const QString &) {}
+    virtual void syncTagRemoval(const QString &) {}
 
 private Q_SLOTS:
     void addColorForeground();
     void addColor();
     void removeColor();
     void entrySelected(QModelIndex index);
-    void setColorSet(KoColorSet* colorSet);
+    void setColorSet(KoColorSet *colorSet);
 
-    void saveToWorkspace(KisWorkspaceResource* workspace);
-    void loadFromWorkspace(KisWorkspaceResource* workspace);
+    void saveToWorkspace(KisWorkspaceResource *workspace);
+    void loadFromWorkspace(KisWorkspaceResource *workspace);
 
-    virtual bool eventFilter(QObject*, QEvent*);
+    virtual bool eventFilter(QObject *, QEvent *);
 
-private:    
-    Ui_WdgPaletteDock* m_wdgPaletteDock;
+private:
+    Ui_WdgPaletteDock *m_wdgPaletteDock;
     PaletteModel *m_model;
     QSharedPointer<KoAbstractResourceServerAdapter> m_serverAdapter;
-    KoColorSet* m_currentColorSet;
-    ColorSetChooser* m_colorSetChooser;
-    KisCanvasResourceProvider* m_resourceProvider;
+    KoColorSet *m_currentColorSet;
+    ColorSetChooser *m_colorSetChooser;
+    KisCanvasResourceProvider *m_resourceProvider;
 };
-
 
 #endif

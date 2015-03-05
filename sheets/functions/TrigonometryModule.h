@@ -33,7 +33,7 @@ class TrigonometryModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    explicit TrigonometryModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit TrigonometryModule(QObject *parent, const QVariantList &args = QVariantList());
 
     QString descriptionFileName() const;
 };

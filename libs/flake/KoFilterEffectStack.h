@@ -44,7 +44,7 @@ public:
     *
     * @return the list of filter effects applied on the shape when rendering.
     */
-    QList<KoFilterEffect*> filterEffects() const;
+    QList<KoFilterEffect *> filterEffects() const;
 
     /**
     * Returns if the filter effect stack is empty.
@@ -85,7 +85,7 @@ public:
      * @param index the index of the filter to take
      * @return the filter effect, of 0 if no filter effect with the given index exists
      */
-    KoFilterEffect* takeFilterEffect(int index);
+    KoFilterEffect *takeFilterEffect(int index);
 
     /// Sets the clipping rectangle used for this filter in bounding box units
     void setClipRect(const QRectF &clipRect);
@@ -122,7 +122,7 @@ public:
     QSet<QString> requiredStandarsInputs() const;
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFILTEREFFECTSTACK

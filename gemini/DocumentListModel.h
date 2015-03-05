@@ -54,9 +54,8 @@ public:
     };
 
     enum GroupBy { GroupByName, GroupByDocType };
-   
-    enum DocumentType
-    {
+
+    enum DocumentType {
         UnknownType,
         TextDocumentType,
         PresentationType,
@@ -64,7 +63,10 @@ public:
     };
 
     struct DocumentInfo {
-        bool operator==(const DocumentInfo &other) const { return filePath == other.filePath; }
+        bool operator==(const DocumentInfo &other) const
+        {
+            return filePath == other.filePath;
+        }
         QString filePath;
         QString fileName;
         DocumentType docType;
@@ -128,8 +130,11 @@ public:
     ~SearchThread();
 
     void run();
-    
-    void abort() { m_abort = true; }
+
+    void abort()
+    {
+        m_abort = true;
+    }
 
 Q_SIGNALS:
     void documentFound(const DocumentListModel::DocumentInfo &);

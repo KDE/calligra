@@ -17,7 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_filter_selection_operation.h"
 #include <kis_transaction_based_command.h>
 #include <KisViewManager.h>
@@ -29,20 +28,26 @@
 #include <kis_transaction.h>
 #include <kis_selection_manager.h>
 
-void KisFilterSelectionOperation::runFilter(KisSelectionFilter* filter, KisViewManager* view, const KisOperationConfiguration& config)
+void KisFilterSelectionOperation::runFilter(KisSelectionFilter *filter, KisViewManager *view, const KisOperationConfiguration &config)
 {
     KisSelectionSP selection = view->selection();
-    if (!selection) return;
+    if (!selection) {
+        return;
+    }
 
     struct FilterSelection : public KisTransactionBasedCommand {
         FilterSelection(KisImageSP image, KisSelectionSP sel, KisSelectionFilter *filter)
             : m_image(image), m_sel(sel), m_filter(filter) {}
-        ~FilterSelection() { delete m_filter;}
+        ~FilterSelection()
+        {
+            delete m_filter;
+        }
         KisImageSP m_image;
         KisSelectionSP m_sel;
         KisSelectionFilter *m_filter;
 
-        KUndo2Command* paint() {
+        KUndo2Command *paint()
+        {
             KisPixelSelectionSP mergedSelection = m_sel->pixelSelection();
             KisTransaction transaction(mergedSelection);
             QRect processingRect = m_filter->changeRect(mergedSelection->selectedExactRect());

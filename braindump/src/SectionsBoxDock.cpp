@@ -35,7 +35,7 @@
 
 SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSortFilter(this))
 {
-    QWidget* mainWidget = new QWidget(this);
+    QWidget *mainWidget = new QWidget(this);
     setWidget(mainWidget);
     setWindowTitle(i18n("Whiteboards"));
 
@@ -46,9 +46,9 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
     m_wdgSectionsBox.listSections->setModel(m_proxy);
 
     // Setup the view mode button
-    KMenu* m_viewModeMenu = new KMenu(this);
+    KMenu *m_viewModeMenu = new KMenu(this);
     QActionGroup *group = new QActionGroup(this);
-    QList<QAction*> actions;
+    QList<QAction *> actions;
 
     actions << m_viewModeMenu->addAction(koIcon("view-list-text"),
                                          i18n("Minimal View"), this, SLOT(slotMinimalView()));
@@ -57,7 +57,7 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
     actions << m_viewModeMenu->addAction(koIcon("view-preview"),
                                          i18n("Thumbnail View"), this, SLOT(slotThumbnailView()));
 
-    for(int i = 0, n = actions.count(); i < n; ++i) {
+    for (int i = 0, n = actions.count(); i < n; ++i) {
         actions[i]->setCheckable(true);
         actions[i]->setActionGroup(group);
     }
@@ -74,7 +74,7 @@ SectionsBoxDock::SectionsBoxDock() : m_view(0), m_model(0), m_proxy(new TreeSort
     // Setup the add button
     m_wdgSectionsBox.bnAdd->setIcon(koIcon("list-add"));
 
-    KMenu* newSectionMenu = new KMenu(this);
+    KMenu *newSectionMenu = new KMenu(this);
     m_wdgSectionsBox.bnAdd->setMenu(newSectionMenu);
     m_wdgSectionsBox.bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
     connect(m_wdgSectionsBox.bnAdd, SIGNAL(clicked()), SLOT(slotNewSectionBellowCurrent()));
@@ -112,10 +112,10 @@ void SectionsBoxDock::updateGUI()
     m_newSectionAsChild->setEnabled(m_view->activeSection());
 }
 
-void SectionsBoxDock::setup(RootSection* document, View* view)
+void SectionsBoxDock::setup(RootSection *document, View *view)
 {
     m_view = view;
-    DocumentModel* model = new DocumentModel(this, document);
+    DocumentModel *model = new DocumentModel(this, document);
     m_proxy->setSourceModel(model);
     delete m_model;
     m_model = model;
@@ -127,13 +127,13 @@ void SectionsBoxDock::setup(RootSection* document, View* view)
     updateGUI();
 }
 
-void SectionsBoxDock::slotSectionActivated(const QModelIndex& index)
+void SectionsBoxDock::slotSectionActivated(const QModelIndex &index)
 {
-    Section* section = qVariantValue<Section*>(m_proxy->data(index, DocumentModel::SectionPtr));
+    Section *section = qVariantValue<Section *>(m_proxy->data(index, DocumentModel::SectionPtr));
     m_view->setActiveSection(section);
 }
 
-void SectionsBoxDock::slotSectionActivated(Section* section)
+void SectionsBoxDock::slotSectionActivated(Section *section)
 {
     m_view->setActiveSection(section);
 }
@@ -171,8 +171,8 @@ void SectionsBoxDock::slotLowerClicked()
 
 void SectionsBoxDock::slotDuplicateClicked()
 {
-    if(m_view->activeSection()) {
-        Section* section = new Section(*m_view->activeSection());
+    if (m_view->activeSection()) {
+        Section *section = new Section(*m_view->activeSection());
         m_view->rootSection()->addCommand(section,
                                           new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, m_view->activeSection()->sectionParent(), m_model,
                                                   m_view->activeSection()->sectionParent()->nextSection(m_view->activeSection())));
@@ -182,29 +182,29 @@ void SectionsBoxDock::slotDuplicateClicked()
 void SectionsBoxDock::slotNewSectionAsChildOfCurrent()
 {
     Q_ASSERT(m_view->activeSection());
-    Section* section = new Section(m_view->rootSection());
+    Section *section = new Section(m_view->rootSection());
     section->setName(SectionGroup::nextName());
     m_view->rootSection()->addCommand(section, new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, m_view->activeSection(), m_model, 0));
 }
 
 void SectionsBoxDock::slotNewSectionAboveCurrent()
 {
-    SectionGroup* parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
-    Section* section = new Section(m_view->rootSection());
+    SectionGroup *parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
+    Section *section = new Section(m_view->rootSection());
     section->setName(SectionGroup::nextName());
     m_view->rootSection()->addCommand(section, new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, parentSection, m_model, m_view->activeSection()));
 }
 
 void SectionsBoxDock::slotNewSectionBellowCurrent()
 {
-    SectionGroup* parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
-    Section* above = parentSection->nextSection(m_view->activeSection());
-    Section* section = new Section(m_view->rootSection());
+    SectionGroup *parentSection = m_view->activeSection() ? m_view->activeSection()->sectionParent() : m_view->rootSection();
+    Section *above = parentSection->nextSection(m_view->activeSection());
+    Section *section = new Section(m_view->rootSection());
     section->setName(SectionGroup::nextName());
     m_view->rootSection()->addCommand(section, new InsertSectionCommand(m_view->rootSection()->sectionsIO(), section, parentSection, m_model, above));
 }
 
-void SectionsBoxDock::selectSection(Section* section)
+void SectionsBoxDock::selectSection(Section *section)
 {
     QModelIndex index = m_proxy->mapFromSource(m_model->index(section));
     m_wdgSectionsBox.listSections->setExpanded(index, true);
@@ -214,14 +214,14 @@ void SectionsBoxDock::selectSection(Section* section)
 
 void SectionsBoxDock::removedSection()
 {
-    if(m_model->rowCount() == 0) {
+    if (m_model->rowCount() == 0) {
         m_view->setActiveSection(0);
     } else {
         slotSectionActivated(m_wdgSectionsBox.listSections->currentIndex());
     }
 }
 
-void SectionsBoxDock::insertedSection(const QModelIndex& parent, int idx)
+void SectionsBoxDock::insertedSection(const QModelIndex &parent, int idx)
 {
     QModelIndex index = m_proxy->mapFromSource(m_model->index(idx, 0, parent));
     m_wdgSectionsBox.listSections->setExpanded(index, true);

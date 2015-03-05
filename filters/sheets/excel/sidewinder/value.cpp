@@ -49,7 +49,8 @@ public:
     };
 
     // create empty data
-    ValueData() {
+    ValueData()
+    {
         count = 0;
         b = false;
         i = 0;
@@ -61,36 +62,49 @@ public:
     }
 
     // destroys data
-    ~ValueData() {
-        if (this == s_null) s_null = 0;
-        switch(type) {
-            case Value::RichText:
-                delete r;
-                break;
-            case Value::Error:
-            case Value::String:
-                delete s;
-                break;
-            default: break;
+    ~ValueData()
+    {
+        if (this == s_null) {
+            s_null = 0;
+        }
+        switch (type) {
+        case Value::RichText:
+            delete r;
+            break;
+        case Value::Error:
+        case Value::String:
+            delete s;
+            break;
+        default: break;
         }
     }
 
-    void ref() {
+    void ref()
+    {
         count++;
     }
 
     // static empty data to be shared
-    static ValueData* null() {
-        if (!s_null) s_null = new ValueData; else s_null->ref(); return s_null;
+    static ValueData *null()
+    {
+        if (!s_null) {
+            s_null = new ValueData;
+        } else {
+            s_null->ref();
+        } return s_null;
     }
 
     // decrease reference count
-    void unref() {
-        --count; if (!count) delete this;
+    void unref()
+    {
+        --count; if (!count) {
+            delete this;
+        }
     }
 
     // true if it's null (which is shared)
-    bool isNull() const {
+    bool isNull() const
+    {
         return this == s_null;
     }
 
@@ -98,7 +112,7 @@ public:
 
 private:
 
-    static ValueData* s_null;
+    static ValueData *s_null;
 
 };
 
@@ -107,7 +121,7 @@ private:
 using namespace Swinder;
 
 // to be shared between all empty value
-ValueData* ValueData::s_null = 0;
+ValueData *ValueData::s_null = 0;
 
 // static things
 Value ks_value_empty;
@@ -139,14 +153,14 @@ Value::Value(Value::Type _type)
 }
 
 // copy constructor
-Value::Value(const Value& _value)
+Value::Value(const Value &_value)
 {
     d = ValueData::null();
     assign(_value);
 }
 
 // assignment operator
-Value& Value::operator=(const Value & _value)
+Value &Value::operator=(const Value &_value)
 {
     return assign(_value);
 }
@@ -154,20 +168,23 @@ Value& Value::operator=(const Value & _value)
 bool Value::operator==(const Value &other) const
 {
     Value::Type t = type();
-    if (t != other.type())
+    if (t != other.type()) {
         return false;
-    if (asString() != other.asString())
+    }
+    if (asString() != other.asString()) {
         return false;
-    if (t == RichText && formatRuns() != other.formatRuns())
+    }
+    if (t == RichText && formatRuns() != other.formatRuns()) {
         return false;
+    }
     return true;
 }
 
 bool Value::operator!=(const Value &other) const
 {
-    return ! (*this == other);
+    return !(*this == other);
 }
-    
+
 // create a boolean value
 Value::Value(bool b)
 {
@@ -190,14 +207,14 @@ Value::Value(double f)
 }
 
 // create a string value
-Value::Value(const QString& s)
+Value::Value(const QString &s)
 {
     d = ValueData::null();
     setValue(s);
 }
 
 // create a richtext value
-Value::Value(const QString& s, const std::map<unsigned, FormatFont>& formatRuns)
+Value::Value(const QString &s, const std::map<unsigned, FormatFont> &formatRuns)
 {
     d = ValueData::null();
     setValue(s, formatRuns);
@@ -205,7 +222,7 @@ Value::Value(const QString& s, const std::map<unsigned, FormatFont>& formatRuns)
 
 // assign value from other
 // shallow copy: only copy the data pointer
-Value& Value::assign(const Value& _value)
+Value &Value::assign(const Value &_value)
 {
     d->unref();
     d = _value.d;
@@ -232,8 +249,9 @@ bool Value::asBoolean() const
 {
     bool result = false;
 
-    if (type() == Value::Boolean)
+    if (type() == Value::Boolean) {
         result = d->b;
+    }
 
     return result;
 }
@@ -251,16 +269,18 @@ int Value::asInteger() const
 {
     int result = 0;
 
-    if (type() == Value::Integer)
+    if (type() == Value::Integer) {
         result = d->i;
+    }
 
-    if (type() == Value::Float)
+    if (type() == Value::Float) {
         result = static_cast<int>(d->f);
+    }
 
     return result;
 }
 
-void Value::setValue(const Value& v)
+void Value::setValue(const Value &v)
 {
     assign(v);
 }
@@ -278,30 +298,32 @@ double Value::asFloat() const
 {
     double result = 0.0;
 
-    if (type() == Value::Float)
+    if (type() == Value::Float) {
         result = d->f;
+    }
 
-    if (type() == Value::Integer)
+    if (type() == Value::Integer) {
         result = static_cast<double>(d->i);
+    }
 
     return result;
 }
 
 // set the value as string
-void Value::setValue(const QString& s)
+void Value::setValue(const QString &s)
 {
     detach();
-    switch(type()) {
-        case RichText:
-            delete d->r;
-            d->r = 0;
-            break;
-        case Error:
-        case String:
-            delete d->s;
-            d->s = 0;
-            break;
-        default: break;
+    switch (type()) {
+    case RichText:
+        delete d->r;
+        d->r = 0;
+        break;
+    case Error:
+    case String:
+        delete d->s;
+        d->s = 0;
+        break;
+    default: break;
     }
     d->type = String;
     d->s = new QString(s);
@@ -312,53 +334,55 @@ QString Value::asString() const
 {
     QString result;
 
-    switch(type()) {
-        case RichText:
-            if (d->r)
-                result = d->r->s;
-            break;
-        case Error:
-        case String:
-            if (d->s)
-                result = *d->s;
-            break;
-        case Value::Boolean:
-            result = (asBoolean() ? "True" : "False");
-            break;
-        case Value::Integer: {
-            std::stringstream out;
-            out << asInteger();
-            result = out.str().c_str();
-        } break;
-        case Value::Float: {
-            std::stringstream out;
-            out << asFloat();
-            result = out.str().c_str();
-        } break;
-        case Value::CellRange: // not used yet
-        case Value::Array: // not used yet
-        case Value::Empty:
-            break;
+    switch (type()) {
+    case RichText:
+        if (d->r) {
+            result = d->r->s;
+        }
+        break;
+    case Error:
+    case String:
+        if (d->s) {
+            result = *d->s;
+        }
+        break;
+    case Value::Boolean:
+        result = (asBoolean() ? "True" : "False");
+        break;
+    case Value::Integer: {
+        std::stringstream out;
+        out << asInteger();
+        result = out.str().c_str();
+    } break;
+    case Value::Float: {
+        std::stringstream out;
+        out << asFloat();
+        result = out.str().c_str();
+    } break;
+    case Value::CellRange: // not used yet
+    case Value::Array: // not used yet
+    case Value::Empty:
+        break;
     }
-    
+
     return result;
 }
 
 // set the value as rich text
-void Value::setValue(const QString& s, const std::map<unsigned, FormatFont>& formatRuns)
+void Value::setValue(const QString &s, const std::map<unsigned, FormatFont> &formatRuns)
 {
     detach();
-    switch(type()) {
-        case RichText:
-            delete d->r;
-            d->r = 0;
-            break;
-        case Error:
-        case String:
-            delete d->s;
-            d->s = 0;
-            break;
-        default: break;
+    switch (type()) {
+    case RichText:
+        delete d->r;
+        d->r = 0;
+        break;
+    case Error:
+    case String:
+        delete d->s;
+        d->s = 0;
+        break;
+    default: break;
     }
     d->type = RichText;
     d->r = new ValueData::RichTextContainer(s, formatRuns);
@@ -370,27 +394,28 @@ std::map<unsigned, FormatFont> Value::formatRuns() const
     std::map<unsigned, FormatFont> result;
 
     if (type() == RichText)
-        if (d->r)
+        if (d->r) {
             result = d->r->formatRuns;
+        }
 
     return result;
 }
 
 // set error message
-void Value::setError(const QString& msg)
+void Value::setError(const QString &msg)
 {
     detach();
-    switch(type()) {
-        case RichText:
-            delete d->r;
-            d->r = 0;
-            break;
-        case Error:
-        case String:
-            delete d->s;
-            d->s = 0;
-            break;
-        default: break;
+    switch (type()) {
+    case RichText:
+        delete d->r;
+        d->r = 0;
+        break;
+    case Error:
+    case String:
+        delete d->s;
+        d->s = 0;
+        break;
+    default: break;
     }
     d->type = Error;
     d->s = new QString(msg);;
@@ -402,71 +427,79 @@ QString Value::errorMessage() const
     QString result;
 
     if (type() == Value::Error)
-        if (d->s)
+        if (d->s) {
             result = *d->s;
+        }
 
     return result;
 }
 
 // reference to empty value
-const Value& Value::empty()
+const Value &Value::empty()
 {
     return ks_value_empty;
 }
 
 // reference to #DIV/0! error
-const Value& Value::errorDIV0()
+const Value &Value::errorDIV0()
 {
-    if (!ks_error_div0.isError())
+    if (!ks_error_div0.isError()) {
         ks_error_div0.setError(QString("#DIV/0!"));
+    }
     return ks_error_div0;
 }
 
 // reference to #N/A error
-const Value& Value::errorNA()
+const Value &Value::errorNA()
 {
-    if (!ks_error_na.isError())
+    if (!ks_error_na.isError()) {
         ks_error_na.setError(QString("#N/A"));
+    }
     return ks_error_na;
 }
 
 // reference to #NAME? error
-const Value& Value::errorNAME()
+const Value &Value::errorNAME()
 {
-    if (!ks_error_name.isError())
+    if (!ks_error_name.isError()) {
         ks_error_name.setError(QString("#NAME?"));
+    }
     return ks_error_name;
 }
 
 // reference to #NUM! error
-const Value& Value::errorNUM()
+const Value &Value::errorNUM()
 {
-    if (!ks_error_num.isError())
+    if (!ks_error_num.isError()) {
         ks_error_num.setError(QString("#NUM!"));
+    }
     return ks_error_num;
 }
 
 // reference to #NULL! error
-const Value& Value::errorNULL()
+const Value &Value::errorNULL()
 {
-    if (!ks_error_null.isError())
+    if (!ks_error_null.isError()) {
         ks_error_null.setError(QString("#NULL!"));
+    }
     return ks_error_null;
 }
 
 // reference to #REF! error
-const Value& Value::errorREF()
+const Value &Value::errorREF()
 {
-    if (!ks_error_ref.isError())
+    if (!ks_error_ref.isError()) {
         ks_error_ref.setError(QString("#REF!"));
+    }
     return ks_error_ref;
 }
 
 // reference to #VALUE! error
-const Value& Value::errorVALUE()
+const Value &Value::errorVALUE()
 {
-    if (!ks_error_value.isError())
+    if (!ks_error_value.isError()) {
         ks_error_value.setError(QString("#VALUE!"));
+    }
     return ks_error_value;
 }
 
@@ -474,7 +507,7 @@ const Value& Value::errorVALUE()
 void Value::detach()
 {
     if (d->isNull() || (d->count > 1)) {
-        ValueData* n;
+        ValueData *n;
         n = new ValueData;
         n->type = d->type;
         switch (n->type) {
@@ -483,13 +516,15 @@ void Value::detach()
         case Integer: n->i = d->i; break;
         case Float:   n->f = d->f; break;
         case RichText:
-            if (d->r)
+            if (d->r) {
                 n->r = new ValueData::RichTextContainer(d->r->s, d->r->formatRuns);
+            }
             break;
         case String:
         case Error:
-            if (d->s)
+            if (d->s) {
                 n->s = new QString(*d->s);
+            }
             break;
         default: break;
         }
@@ -499,7 +534,7 @@ void Value::detach()
     }
 }
 
-std::ostream& Swinder::operator<<(std::ostream& s, Swinder::Value value)
+std::ostream &Swinder::operator<<(std::ostream &s, Swinder::Value value)
 {
     switch (value.type()) {
     case Value::Empty:

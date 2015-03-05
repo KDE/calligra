@@ -43,71 +43,90 @@ public:
 
     using KisNodeVisitor::visit;
 
-    KisChangeProfileVisitor(const KoColorSpace * oldColorSpace,
+    KisChangeProfileVisitor(const KoColorSpace *oldColorSpace,
                             const KoColorSpace *dstColorSpace)
-            : KisNodeVisitor()
-            , m_oldColorSpace(oldColorSpace)
-            , m_dstColorSpace(dstColorSpace) {
+        : KisNodeVisitor()
+        , m_oldColorSpace(oldColorSpace)
+        , m_dstColorSpace(dstColorSpace)
+    {
     }
 
-    ~KisChangeProfileVisitor() {
+    ~KisChangeProfileVisitor()
+    {
     }
 
-    bool visit(KisExternalLayer *) {
+    bool visit(KisExternalLayer *)
+    {
         return true;
     }
 
-    bool visit(KisGroupLayer * layer) {
+    bool visit(KisGroupLayer *layer)
+    {
         // Clear the projection, we will have to re-render everything.
         layer->resetCache();
 
-        KisLayerSP child = dynamic_cast<KisLayer*>(layer->firstChild().data());
+        KisLayerSP child = dynamic_cast<KisLayer *>(layer->firstChild().data());
         while (child) {
             child->accept(*this);
-            child = dynamic_cast<KisLayer*>(child->nextSibling().data());
+            child = dynamic_cast<KisLayer *>(child->nextSibling().data());
         }
         return true;
     }
 
-
-    bool visit(KisPaintLayer *layer) {
+    bool visit(KisPaintLayer *layer)
+    {
         return updatePaintDevice(layer);
     }
 
-    bool visit(KisGeneratorLayer *layer) {
+    bool visit(KisGeneratorLayer *layer)
+    {
         return updatePaintDevice(layer);
     }
 
-    bool visit(KisAdjustmentLayer * layer) {
+    bool visit(KisAdjustmentLayer *layer)
+    {
         layer->resetCache();
         return true;
     }
 
-    bool visit(KisNode*) {
+    bool visit(KisNode *)
+    {
         return true;
     }
-    bool visit(KisCloneLayer*) {
+    bool visit(KisCloneLayer *)
+    {
         return true;
     }
-    bool visit(KisFilterMask*) {
+    bool visit(KisFilterMask *)
+    {
         return true;
     }
-    bool visit(KisTransformMask*) {
+    bool visit(KisTransformMask *)
+    {
         return true;
     }
-    bool visit(KisTransparencyMask*) {
+    bool visit(KisTransparencyMask *)
+    {
         return true;
     }
-    bool visit(KisSelectionMask*) {
+    bool visit(KisSelectionMask *)
+    {
         return true;
     }
 
 private:
 
-    bool updatePaintDevice(KisLayer *layer) {
-        if (!layer) return false;
-        if (!layer->paintDevice()) return false;
-        if (!layer->paintDevice()->colorSpace()) return false;
+    bool updatePaintDevice(KisLayer *layer)
+    {
+        if (!layer) {
+            return false;
+        }
+        if (!layer->paintDevice()) {
+            return false;
+        }
+        if (!layer->paintDevice()->colorSpace()) {
+            return false;
+        }
 
         const KoColorSpace *cs = layer->paintDevice()->colorSpace();
 
@@ -117,7 +136,6 @@ private:
                 layer->projection()->setProfile(m_dstColorSpace->profile());
             }
         }
-
 
         return true;
     }

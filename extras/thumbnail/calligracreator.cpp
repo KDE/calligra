@@ -58,18 +58,18 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     KoStore *store = KoStore::createStore(path, KoStore::Read);
 
     if (store &&
-         // ODF thumbnail?
-        (store->open(QLatin1String("Thumbnails/thumbnail.png")) ||
-         // old KOffice/Calligra thumbnail?
-         store->open(QLatin1String("preview.png")) ||
-         // OOXML?
-         store->open(QLatin1String("docProps/thumbnail.jpeg")))) {
+            // ODF thumbnail?
+            (store->open(QLatin1String("Thumbnails/thumbnail.png")) ||
+             // old KOffice/Calligra thumbnail?
+             store->open(QLatin1String("preview.png")) ||
+             // OOXML?
+             store->open(QLatin1String("docProps/thumbnail.jpeg")))) {
         // Hooray! No long delay for the user...
         const QByteArray thumbnailData = store->read(store->size());
 
         QImage thumbnail;
         if (thumbnail.loadFromData(thumbnailData) &&
-            thumbnail.width() >= width && thumbnail.height() >= height) {
+                thumbnail.width() >= width && thumbnail.height() >= height) {
             // put a white background behind the thumbnail
             // as lots of old(?) OOo files have thumbnails with transparent background
             image = QImage(thumbnail.size(), QImage::Format_RGB32);
@@ -88,8 +88,9 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
     m_part = documentEntry.createKoPart(&error);
 
-
-    if (!m_part) return false;
+    if (!m_part) {
+        return false;
+    }
 
     m_doc = m_part->document();
 

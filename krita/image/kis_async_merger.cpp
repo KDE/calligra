@@ -18,7 +18,6 @@
 
 #include "kis_async_merger.h"
 
-
 #include <QDebug>
 #include <QBitArray>
 
@@ -44,10 +43,8 @@
 #include "kis_processing_information.h"
 #include "kis_node_progress_proxy.h"
 
-
 #include "kis_merge_walker.h"
 #include "kis_refresh_subtree_walker.h"
-
 
 //#define DEBUG_MERGER
 
@@ -58,7 +55,6 @@
 #define DEBUG_NODE_ACTION(message, type, node, rect)
 #endif
 
-
 class KisUpdateOriginalVisitor : public KisNodeVisitor
 {
 public:
@@ -66,21 +62,25 @@ public:
         : m_updateRect(updateRect),
           m_cropRect(cropRect),
           m_projection(projection)
-        {
-        }
+    {
+    }
 
-    ~KisUpdateOriginalVisitor() {
+    ~KisUpdateOriginalVisitor()
+    {
     }
 
 public:
     using KisNodeVisitor::visit;
 
-    bool visit(KisAdjustmentLayer* layer) {
-        if (!layer->visible()) return true;
+    bool visit(KisAdjustmentLayer *layer)
+    {
+        if (!layer->visible()) {
+            return true;
+        }
 
         if (!m_projection) {
             warnImage << "ObligeChild mechanism has been activated for "
-                "an adjustment layer! Do nothing...";
+                      "an adjustment layer! Do nothing...";
             layer->original()->clear();
             return true;
         }
@@ -92,7 +92,9 @@ public:
 
         // If the intersection of the updaterect and the projection extent is
         //      null, we are finish here.
-        if(applyRect.isNull()) return true;
+        if (applyRect.isNull()) {
+            return true;
+        }
 
         KisSafeFilterConfigurationSP filterConfig = layer->filter();
         if (!filterConfig) {
@@ -108,7 +110,9 @@ public:
         }
 
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
-        if (!filter) return false;
+        if (!filter) {
+            return false;
+        }
 
         Q_ASSERT(layer->nodeProgressProxy());
 
@@ -124,23 +128,28 @@ public:
         return true;
     }
 
-    bool visit(KisExternalLayer*) {
+    bool visit(KisExternalLayer *)
+    {
         return true;
     }
 
-    bool visit(KisGeneratorLayer*) {
+    bool visit(KisGeneratorLayer *)
+    {
         return true;
     }
 
-    bool visit(KisPaintLayer*) {
+    bool visit(KisPaintLayer *)
+    {
         return true;
     }
 
-    bool visit(KisGroupLayer*) {
+    bool visit(KisGroupLayer *)
+    {
         return true;
     }
 
-    bool visit(KisCloneLayer *layer) {
+    bool visit(KisCloneLayer *layer)
+    {
         QRect emptyRect;
         KisRefreshSubtreeWalker walker(emptyRect);
         KisAsyncMerger merger;
@@ -162,7 +171,7 @@ public:
             prepareRegion += needRectOnSource;
         }
 
-        foreach(const QRect &rect, prepareRegion.rects()) {
+        foreach (const QRect &rect, prepareRegion.rects()) {
             walker.collectRects(srcLayer, rect);
             merger.startMerge(walker, false);
         }
@@ -170,19 +179,24 @@ public:
         return true;
     }
 
-    bool visit(KisNode*) {
+    bool visit(KisNode *)
+    {
         return true;
     }
-    bool visit(KisFilterMask*) {
+    bool visit(KisFilterMask *)
+    {
         return true;
     }
-    bool visit(KisTransformMask*) {
+    bool visit(KisTransformMask *)
+    {
         return true;
     }
-    bool visit(KisTransparencyMask*) {
+    bool visit(KisTransparencyMask *)
+    {
         return true;
     }
-    bool visit(KisSelectionMask*) {
+    bool visit(KisSelectionMask *)
+    {
         return true;
     }
 
@@ -192,7 +206,6 @@ private:
     KisPaintDeviceSP m_projection;
 };
 
-
 /*********************************************************************/
 /*                     KisAsyncMerger                                */
 /*********************************************************************/
@@ -200,76 +213,76 @@ private:
 /**
  * FIXME: Check node<->layer transitions
  */
-void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
+void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones)
+{
     KisMergeWalker::NodeStack &nodeStack = walker.nodeStack();
 
     const bool useTempProjections = walker.needRectVaries();
 
-    while(!nodeStack.isEmpty()) {
+    while (!nodeStack.isEmpty()) {
         KisMergeWalker::JobItem item = nodeStack.pop();
-        if(isRootNode(item.m_node)) continue;
+        if (isRootNode(item.m_node)) {
+            continue;
+        }
 
-        KisLayerSP currentNode = dynamic_cast<KisLayer*>(item.m_node.data());
+        KisLayerSP currentNode = dynamic_cast<KisLayer *>(item.m_node.data());
         // All the masks should be filtered by the walkers
         Q_ASSERT(currentNode);
 
         QRect applyRect = item.m_applyRect;
 
-        if(item.m_position & KisMergeWalker::N_EXTRA) {
+        if (item.m_position & KisMergeWalker::N_EXTRA) {
             // The type of layers that will not go to projection.
 
             DEBUG_NODE_ACTION("Updating", "N_EXTRA", currentNode, applyRect);
             KisUpdateOriginalVisitor originalVisitor(applyRect,
-                                                     m_currentProjection,
-                                                     walker.cropRect());
+                    m_currentProjection,
+                    walker.cropRect());
             currentNode->accept(originalVisitor);
             currentNode->updateProjection(applyRect, currentNode);
 
             continue;
         }
 
-
-        if(!m_currentProjection)
+        if (!m_currentProjection) {
             setupProjection(currentNode, applyRect, useTempProjections);
+        }
 
         KisUpdateOriginalVisitor originalVisitor(applyRect,
-                                                 m_currentProjection,
-                                                 walker.cropRect());
+                m_currentProjection,
+                walker.cropRect());
 
-        if(item.m_position & KisMergeWalker::N_FILTHY) {
+        if (item.m_position & KisMergeWalker::N_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentNode, applyRect);
             currentNode->accept(originalVisitor);
             currentNode->updateProjection(applyRect, walker.startNode());
-        }
-        else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
+        } else if (item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_ABOVE_FILTHY", currentNode, applyRect);
-            if(dependOnLowerNodes(currentNode)) {
+            if (dependOnLowerNodes(currentNode)) {
                 currentNode->accept(originalVisitor);
                 currentNode->updateProjection(applyRect, currentNode);
             }
-        }
-        else if(item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
+        } else if (item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY_PROJECTION", currentNode, applyRect);
             currentNode->updateProjection(applyRect, walker.startNode());
-        }
-        else /*if(item.m_position & KisMergeWalker::N_BELOW_FILTHY)*/ {
+        } else { /*if(item.m_position & KisMergeWalker::N_BELOW_FILTHY)*/
             DEBUG_NODE_ACTION("Updating", "N_BELOW_FILTHY", currentNode, applyRect);
             /* nothing to do */
         }
 
         compositeWithProjection(currentNode, applyRect);
 
-        if(item.m_position & KisMergeWalker::N_TOPMOST) {
+        if (item.m_position & KisMergeWalker::N_TOPMOST) {
             writeProjection(currentNode, useTempProjections, applyRect);
             resetProjection();
         }
     }
 
-    if(notifyClones) {
+    if (notifyClones) {
         doNotifyClones(walker);
     }
 
-    if(m_currentProjection) {
+    if (m_currentProjection) {
         warnImage << "BUG: The walker hasn't reached the root layer!";
         warnImage << "     Start node:" << walker.startNode() << "Requested rect:" << walker.requestedRect();
         warnImage << "     There must be an inconsistency in the walkers happened!";
@@ -279,36 +292,39 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
     }
 }
 
-bool KisAsyncMerger::isRootNode(KisNodeSP node) {
+bool KisAsyncMerger::isRootNode(KisNodeSP node)
+{
     return !node->parent();
 }
 
-bool KisAsyncMerger::dependOnLowerNodes(KisNodeSP node) {
-    return qobject_cast<KisAdjustmentLayer*>(node.data());
+bool KisAsyncMerger::dependOnLowerNodes(KisNodeSP node)
+{
+    return qobject_cast<KisAdjustmentLayer *>(node.data());
 }
 
-void KisAsyncMerger::resetProjection() {
+void KisAsyncMerger::resetProjection()
+{
     m_currentProjection = 0;
     m_finalProjection = 0;
 }
 
-void KisAsyncMerger::setupProjection(KisNodeSP currentNode, const QRect& rect, bool useTempProjection) {
+void KisAsyncMerger::setupProjection(KisNodeSP currentNode, const QRect &rect, bool useTempProjection)
+{
     KisPaintDeviceSP parentOriginal = currentNode->parent()->original();
 
     if (parentOriginal != currentNode->projection()) {
         if (useTempProjection) {
-            if(!m_cachedPaintDevice)
+            if (!m_cachedPaintDevice) {
                 m_cachedPaintDevice = new KisPaintDevice(parentOriginal->colorSpace());
+            }
             m_currentProjection = m_cachedPaintDevice;
             m_currentProjection->prepareClone(parentOriginal);
             m_finalProjection = parentOriginal;
-        }
-        else {
+        } else {
             parentOriginal->clear(rect);
             m_finalProjection = m_currentProjection = parentOriginal;
         }
-    }
-    else {
+    } else {
         /**
          * It happened so that our parent uses our own projection as
          * its original. It means obligeChild mechanism works.
@@ -320,12 +336,15 @@ void KisAsyncMerger::setupProjection(KisNodeSP currentNode, const QRect& rect, b
     }
 }
 
-void KisAsyncMerger::writeProjection(KisNodeSP topmostNode, bool useTempProjection, QRect rect) {
+void KisAsyncMerger::writeProjection(KisNodeSP topmostNode, bool useTempProjection, QRect rect)
+{
     Q_UNUSED(useTempProjection);
     Q_UNUSED(topmostNode);
-    if (!m_currentProjection) return;
+    if (!m_currentProjection) {
+        return;
+    }
 
-    if(m_currentProjection != m_finalProjection) {
+    if (m_currentProjection != m_finalProjection) {
         KisPainter gc(m_finalProjection);
         gc.setCompositeOp(m_finalProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
         gc.bitBlt(rect.topLeft(), m_currentProjection, rect);
@@ -333,42 +352,48 @@ void KisAsyncMerger::writeProjection(KisNodeSP topmostNode, bool useTempProjecti
     DEBUG_NODE_ACTION("Writing projection", "", topmostNode->parent(), rect);
 }
 
-bool KisAsyncMerger::compositeWithProjection(KisLayerSP layer, const QRect &rect) {
+bool KisAsyncMerger::compositeWithProjection(KisLayerSP layer, const QRect &rect)
+{
 
-    if (!m_currentProjection) return true;
-    if (!layer->visible()) return true;
+    if (!m_currentProjection) {
+        return true;
+    }
+    if (!layer->visible()) {
+        return true;
+    }
 
     KisPaintDeviceSP device = layer->projection();
-    if (!device) return true;
+    if (!device) {
+        return true;
+    }
 
     QRect needRect = rect & device->extent();
-    if(needRect.isEmpty()) return true;
+    if (needRect.isEmpty()) {
+        return true;
+    }
 
     QBitArray channelFlags = layer->channelFlags();
-
 
     // if the color spaces don't match we will have a problem with the channel flags
     // because the channel flags from the source layer doesn't match with the colorspace of the projection device
     // this leads to the situation that the wrong channels will be enabled/disabled
-    if(!channelFlags.isEmpty() && m_currentProjection->colorSpace() != device->colorSpace()) {
-        const KoColorSpace* src = device->colorSpace();
-        const KoColorSpace* dst = m_currentProjection->colorSpace();
+    if (!channelFlags.isEmpty() && m_currentProjection->colorSpace() != device->colorSpace()) {
+        const KoColorSpace *src = device->colorSpace();
+        const KoColorSpace *dst = m_currentProjection->colorSpace();
 
-        bool alphaFlagIsSet        = (src->channelFlags(false,true) & channelFlags) == src->channelFlags(false,true);
-        bool allColorFlagsAreSet   = (src->channelFlags(true,false) & channelFlags) == src->channelFlags(true,false);
-        bool allColorFlagsAreUnset = (src->channelFlags(true,false) & channelFlags).count(true) == 0;
+        bool alphaFlagIsSet        = (src->channelFlags(false, true) & channelFlags) == src->channelFlags(false, true);
+        bool allColorFlagsAreSet   = (src->channelFlags(true, false) & channelFlags) == src->channelFlags(true, false);
+        bool allColorFlagsAreUnset = (src->channelFlags(true, false) & channelFlags).count(true) == 0;
 
-        if(allColorFlagsAreSet) {
+        if (allColorFlagsAreSet) {
             channelFlags = dst->channelFlags(true, alphaFlagIsSet);
-        }
-        else if(allColorFlagsAreUnset) {
+        } else if (allColorFlagsAreUnset) {
             channelFlags = dst->channelFlags(false, alphaFlagIsSet);
-        }
-        else {
+        } else {
             //TODO: convert the cannel flags properly
             //      for now just the alpha channel bit is copied and the other channels are left alone
-            for(quint32 i=0; i<dst->channelCount(); ++i) {
-                if(dst->channels()[i]->channelType() == KoChannelInfo::ALPHA) {
+            for (quint32 i = 0; i < dst->channelCount(); ++i) {
+                if (dst->channels()[i]->channelType() == KoChannelInfo::ALPHA) {
                     channelFlags.setBit(i, alphaFlagIsSet);
                     break;
                 }
@@ -386,13 +411,14 @@ bool KisAsyncMerger::compositeWithProjection(KisLayerSP layer, const QRect &rect
     return true;
 }
 
-void KisAsyncMerger::doNotifyClones(KisBaseRectsWalker &walker) {
+void KisAsyncMerger::doNotifyClones(KisBaseRectsWalker &walker)
+{
     KisBaseRectsWalker::CloneNotificationsVector &vector =
         walker.cloneNotifications();
 
     KisBaseRectsWalker::CloneNotificationsVector::iterator it;
 
-    for(it = vector.begin(); it != vector.end(); ++it) {
+    for (it = vector.begin(); it != vector.end(); ++it) {
         (*it).notify();
     }
 }

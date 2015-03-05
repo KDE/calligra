@@ -27,12 +27,12 @@ class QPushButton;
 
 class KisCommonColors : public KisColorPatches
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit KisCommonColors(QWidget *parent = 0);
     void setCanvas(KisCanvas2 *canvas);
     void unsetCanvas() {}
-    KisColorSelectorBase* createPopup() const;
+    KisColorSelectorBase *createPopup() const;
 
 public Q_SLOTS:
     void setColors(QList<KoColor> colors);
@@ -42,7 +42,7 @@ public Q_SLOTS:
 private:
     QMutex m_mutex;
     QTimer m_recalculationTimer;
-    QPushButton* m_reloadButton;
+    QPushButton *m_reloadButton;
     QList<KoColor> m_calculatedColors;
     KisImageWSP m_image;
 };

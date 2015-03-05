@@ -22,16 +22,13 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <kdebug.h>
 
-
 KSpreadBaseWorker::KSpreadBaseWorker()
 {
 }
 
-
 KSpreadBaseWorker::~KSpreadBaseWorker()
 {
 }
-
 
 KoFilter::ConversionStatus KSpreadBaseWorker::startDocument(KSpreadFilterProperty property)
 {
@@ -42,7 +39,6 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startDocument(KSpreadFilterPropert
     return KoFilter::OK;
 }
 
-
 KoFilter::ConversionStatus KSpreadBaseWorker::startInfoLog(KSpreadFilterProperty property)
 {
     KSpreadFilterProperty::Iterator it;
@@ -51,7 +47,6 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startInfoLog(KSpreadFilterProperty
     }
     return KoFilter::OK;
 }
-
 
 KoFilter::ConversionStatus KSpreadBaseWorker::startInfoAuthor(KSpreadFilterProperty property)
 {
@@ -62,7 +57,6 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startInfoAuthor(KSpreadFilterPrope
     return KoFilter::OK;
 }
 
-
 KoFilter::ConversionStatus KSpreadBaseWorker::startInfoAbout(KSpreadFilterProperty property)
 {
     KSpreadFilterProperty::Iterator it;
@@ -71,7 +65,6 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startInfoAbout(KSpreadFilterProper
     }
     return KoFilter::OK;
 }
-
 
 KoFilter::ConversionStatus KSpreadBaseWorker::startSpreadBook(KSpreadFilterProperty property)
 {
@@ -82,7 +75,6 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startSpreadBook(KSpreadFilterPrope
     return KoFilter::OK;
 }
 
-
 KoFilter::ConversionStatus KSpreadBaseWorker::startSpreadSheet(KSpreadFilterProperty property)
 {
     KSpreadFilterProperty::Iterator it;
@@ -91,7 +83,6 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startSpreadSheet(KSpreadFilterProp
     }
     return KoFilter::OK;
 }
-
 
 KoFilter::ConversionStatus KSpreadBaseWorker::startSpreadCell(KSpreadFilterProperty property)
 {

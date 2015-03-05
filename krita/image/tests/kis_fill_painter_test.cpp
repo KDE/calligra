@@ -34,7 +34,7 @@ void KisFillPainterTest::testCreation()
 
 void KisFillPainterTest::benchmarkFillPainter(const QPoint &startPoint, bool useCompositioning)
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     QImage srcImage(TestUtil::fetchDataFileLazy("heavy_labyrinth.png"));
@@ -43,7 +43,6 @@ void KisFillPainterTest::benchmarkFillPainter(const QPoint &startPoint, bool use
     QRect imageRect = srcImage.rect();
 
     dev->convertFromQImage(srcImage, 0, 0, 0);
-
 
     QBENCHMARK_ONCE {
         KisFillPainter gc(dev);
@@ -61,10 +60,9 @@ void KisFillPainterTest::benchmarkFillPainter(const QPoint &startPoint, bool use
                              imageRect.width(), imageRect.height());
 
     QString testName = QString("heavy_labyrinth_%1_%2_%3")
-        .arg(startPoint.x())
-        .arg(startPoint.y())
-        .arg(useCompositioning ? "composed" : "direct");
-
+                       .arg(startPoint.x())
+                       .arg(startPoint.y())
+                       .arg(useCompositioning ? "composed" : "direct");
 
     QVERIFY(TestUtil::checkQImage(resultImage,
                                   "fill_painter",
@@ -79,17 +77,17 @@ void KisFillPainterTest::benchmarkFillPainter()
 
 void KisFillPainterTest::benchmarkFillPainterOffset()
 {
-    benchmarkFillPainter(QPoint(5,5), false);
+    benchmarkFillPainter(QPoint(5, 5), false);
 }
 
 void KisFillPainterTest::benchmarkFillPainterOffsetCompositioning()
 {
-    benchmarkFillPainter(QPoint(5,5), true);
+    benchmarkFillPainter(QPoint(5, 5), true);
 }
 
 void KisFillPainterTest::benchmarkFillingScanlineColor()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     QImage srcImage(TestUtil::fetchDataFileLazy("heavy_labyrinth.png"));
@@ -98,7 +96,6 @@ void KisFillPainterTest::benchmarkFillingScanlineColor()
     QRect imageRect = srcImage.rect();
 
     dev->convertFromQImage(srcImage, 0, 0, 0);
-
 
     QBENCHMARK_ONCE {
         KisScanlineFill gc(dev, QPoint(), imageRect);
@@ -119,7 +116,7 @@ void KisFillPainterTest::benchmarkFillingScanlineColor()
 
 void KisFillPainterTest::benchmarkFillingScanlineSelection()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
     QImage srcImage(TestUtil::fetchDataFileLazy("heavy_labyrinth.png"));
@@ -128,7 +125,6 @@ void KisFillPainterTest::benchmarkFillingScanlineSelection()
     QRect imageRect = srcImage.rect();
 
     dev->convertFromQImage(srcImage, 0, 0, 0);
-
 
     KisPixelSelectionSP pixelSelection = new KisPixelSelection();
 
@@ -148,7 +144,6 @@ void KisFillPainterTest::benchmarkFillingScanlineSelection()
                                   "scanline_",
                                   "heavy_labyrinth_top_left_selection"));
 }
-
 
 QTEST_KDEMAIN(KisFillPainterTest, GUI)
 #include "kis_fill_painter_test.moc"

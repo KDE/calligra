@@ -29,23 +29,26 @@
 #define KDESRCDIR
 #endif
 
-namespace {
+namespace
+{
 
-class TestRun {
+class TestRun
+{
 public:
     QString inputFilePath;
     QString referenceDirPath;
-    void convert(QBuffer& buffer, KoStore::Backend backend);
-    void compareFiles(KoStore* created, const QString& path);
-    QByteArray readFile(const QString& path);
+    void convert(QBuffer &buffer, KoStore::Backend backend);
+    void compareFiles(KoStore *created, const QString &path);
+    QByteArray readFile(const QString &path);
     void test();
 };
 
 }
 
 void
-TestRun::convert(QBuffer& buffer, KoStore::Backend backend) {
-    KoStore* output = KoStore::createStore(&buffer, KoStore::Write,
+TestRun::convert(QBuffer &buffer, KoStore::Backend backend)
+{
+    KoStore *output = KoStore::createStore(&buffer, KoStore::Write,
                                            KoOdf::mimeType(KoOdf::Presentation),
                                            backend);
     POLE::Storage storage(inputFilePath.toLatin1());
@@ -56,7 +59,8 @@ TestRun::convert(QBuffer& buffer, KoStore::Backend backend) {
 }
 
 QByteArray
-TestRun::readFile(const QString& path) {
+TestRun::readFile(const QString &path)
+{
     QFile f(referenceDirPath + path);
     f.open(QIODevice::ReadOnly);
     QByteArray data = f.readAll();
@@ -65,7 +69,8 @@ TestRun::readFile(const QString& path) {
 }
 
 void
-TestRun::compareFiles(KoStore* input, const QString& path) {
+TestRun::compareFiles(KoStore *input, const QString &path)
+{
     QVERIFY(input->hasFile(path));
     QVERIFY(input->open(path));
     const QByteArray created = input->read(input->size());
@@ -91,7 +96,8 @@ TestRun::compareFiles(KoStore* input, const QString& path) {
 }
 
 void
-TestRun::test() {
+TestRun::test()
+{
     inputFilePath = KDESRCDIR "data/diagram.ppt";
     referenceDirPath = KDESRCDIR "data/diagram_odp/";
     const KoStore::Backend backend = KoStore::Tar;
@@ -100,7 +106,7 @@ TestRun::test() {
     qDebug() << buffer.isOpen();
     buffer.close();
     qDebug() << buffer.size();
-    KoStore* input = KoStore::createStore(&buffer, KoStore::Read,
+    KoStore *input = KoStore::createStore(&buffer, KoStore::Read,
                                           KoOdf::mimeType(KoOdf::Presentation),
                                           backend);
     compareFiles(input, "content.xml");
@@ -111,7 +117,8 @@ TestRun::test() {
 }
 
 void
-TestPPT::testPPT() {
+TestPPT::testPPT()
+{
     TestRun test;
     test.test();
     QVERIFY(true);

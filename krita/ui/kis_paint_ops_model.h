@@ -2,7 +2,7 @@
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -29,16 +29,16 @@
 
 class KisPaintOpFactory;
 
-struct KRITAUI_EXPORT KisPaintOpInfo
-{
+struct KRITAUI_EXPORT KisPaintOpInfo {
     KisPaintOpInfo() { }
-    KisPaintOpInfo(const QString& _id, const QString& _name, const QString& _category, const QPixmap& _icon, qint32 _priority):
+    KisPaintOpInfo(const QString &_id, const QString &_name, const QString &_category, const QPixmap &_icon, qint32 _priority):
         id(_id),  name(_name), category(_category), icon(_icon), priority(_priority) { }
 
-    KisPaintOpInfo(const QString& _id):
+    KisPaintOpInfo(const QString &_id):
         id(_id) { }
 
-    bool operator==(const KisPaintOpInfo info) const{
+    bool operator==(const KisPaintOpInfo info) const
+    {
         return (info.id == id);
     }
 
@@ -50,7 +50,8 @@ struct KRITAUI_EXPORT KisPaintOpInfo
 };
 
 struct PaintOpInfoToQStringConverter {
-    QString operator() (const KisPaintOpInfo &info) {
+    QString operator()(const KisPaintOpInfo &info)
+    {
         return info.name;
     }
 };
@@ -61,8 +62,8 @@ class KRITAUI_EXPORT KisPaintOpListModel : public BasePaintOpCategorizedListMode
 {
 public:
     KisPaintOpListModel(QObject *parent);
-    virtual QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const;
-    void fill(const QList<KisPaintOpFactory*>& list);
+    virtual QVariant data(const QModelIndex &idx, int role = Qt::DisplayRole) const;
+    void fill(const QList<KisPaintOpFactory *> &list);
 };
 
 class KRITAUI_EXPORT KisSortedPaintOpListModel : public KisSortedCategorizedListModel<KisPaintOpListModel>
@@ -75,12 +76,14 @@ public:
         initializeModel(m_model);
     }
 
-    void fill(const QList<KisPaintOpFactory*> &list) {
+    void fill(const QList<KisPaintOpFactory *> &list)
+    {
         m_model->fill(list);
     }
 
 protected:
-    bool lessThan(const QModelIndex &left, const QModelIndex &right) const {
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const
+    {
         return lessThanPriority(left, right, KisPaintOpFactory::categoryStable());
     }
 

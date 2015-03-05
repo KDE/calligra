@@ -36,11 +36,11 @@ public:
     }
     virtual ~ShiftList() { }
 
-    Shift* getShift(const QString& id) const;
+    Shift *getShift(const QString &id) const;
 
-    virtual int compareItemsLevel(CoreAttributes* c1, CoreAttributes* c2,
+    virtual int compareItemsLevel(CoreAttributes *c1, CoreAttributes *c2,
                                   int level);
-} ;
+};
 
 /**
  * @short Iterator class for ShiftList objects.
@@ -50,11 +50,11 @@ public:
 class ShiftListIterator : public virtual CoreAttributesListIterator
 {
 public:
-    explicit ShiftListIterator(const CoreAttributesList& l) :
+    explicit ShiftListIterator(const CoreAttributesList &l) :
         CoreAttributesListIterator(l) { }
     virtual ~ShiftListIterator() { }
-    Shift* operator*();
-} ;
+    Shift *operator*();
+};
 
 } // namespace TJ
 

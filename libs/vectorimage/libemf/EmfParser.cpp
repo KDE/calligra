@@ -31,22 +31,18 @@
 #include "EmfRecords.h"
 #include "EmfObjects.h"
 
-
 // 0 - No debug
 // 1 - Print a lot of debug info
 // 2 - Just print all the records instead of parsing them
 #define DEBUG_EMFPARSER 0
 
-
 namespace Libemf
 {
 
-
 // ================================================================
 
-
 Parser::Parser()
-    : mOutput( 0 )
+    : mOutput(0)
 {
 }
 
@@ -54,32 +50,31 @@ Parser::~Parser()
 {
 }
 
-
-bool Parser::load( const QString &fileName )
+bool Parser::load(const QString &fileName)
 {
-    QFile *file = new QFile( fileName );
+    QFile *file = new QFile(fileName);
 
-    if ( ! file->exists() ) {
-        qWarning( "Request to load file (%s) that does not exist",
-		  qPrintable(file->fileName()) );
-	delete file;
+    if (! file->exists()) {
+        qWarning("Request to load file (%s) that does not exist",
+                 qPrintable(file->fileName()));
+        delete file;
         return false;
     }
 
-    if ( ! file->open( QIODevice::ReadOnly ) ) {
+    if (! file->open(QIODevice::ReadOnly)) {
         qWarning() << "Request to load file (" << file->fileName()
-		   << ") that cannot be opened";
+                   << ") that cannot be opened";
         delete file;
         return false;
     }
 
     // Use version 11, which makes floats always be 32 bits without
     // the need to call setFloatingPointPrecision().
-    QDataStream stream( file );
+    QDataStream stream(file);
     stream.setVersion(QDataStream::Qt_4_6);
     stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
 
-    bool result = loadFromStream( stream );
+    bool result = loadFromStream(stream);
 
     delete file;
 
@@ -100,57 +95,57 @@ bool Parser::load(const QByteArray &contents)
     return loadFromStream(emfStream);
 }
 
-bool Parser::loadFromStream( QDataStream &stream ) 
+bool Parser::loadFromStream(QDataStream &stream)
 {
-    stream.setByteOrder( QDataStream::LittleEndian );
+    stream.setByteOrder(QDataStream::LittleEndian);
 
-    Header *header = new Header( stream );
-    if ( ! header->isValid() ) {
+    Header *header = new Header(stream);
+    if (! header->isValid()) {
         kWarning() << "Failed to parse header, perhaps not an EMF file";
         delete header;
         return false;
     }
 
-    mOutput->init( header );
+    mOutput->init(header);
 
 #if DEBUG_EMFPARSER
     kDebug(31000) << "========================================================== Starting EMF";
 #endif
 
     int numRecords = header->recordCount();
-    for ( int i = 1; i < numRecords; ++i ) {
+    for (int i = 1; i < numRecords; ++i) {
         // kDebug(33100) << "Record" << i << "of" << numRecords;
-        if ( ! readRecord( stream ) ) {
+        if (! readRecord(stream)) {
             break;
         }
     }
 
-    mOutput->cleanup( header );
+    mOutput->cleanup(header);
 
     delete header;
 
     return true;
 }
 
-void Parser::setOutput( AbstractOutput *output )
+void Parser::setOutput(AbstractOutput *output)
 {
     mOutput = output;
 }
 
-void Parser::soakBytes( QDataStream &stream, int numBytes )
+void Parser::soakBytes(QDataStream &stream, int numBytes)
 {
     quint8 scratch;
-    for ( int i = 0; i < numBytes; ++i ) {
+    for (int i = 0; i < numBytes; ++i) {
         stream >> scratch;
     }
 }
 
-void Parser::outputBytes( QDataStream &stream, int numBytes )
+void Parser::outputBytes(QDataStream &stream, int numBytes)
 {
     quint8 scratch;
-    for ( int i = 0; i < numBytes; ++i ) {
+    for (int i = 0; i < numBytes; ++i) {
         stream >> scratch;
-	//qDebug("byte(%i):%c", i, scratch);
+        //qDebug("byte(%i):%c", i, scratch);
     }
 }
 
@@ -358,9 +353,9 @@ static const struct {
     { 0x0000007A, "EMR_CREATECOLORSPACEW" }
 };
 
-bool Parser::readRecord( QDataStream &stream )
+bool Parser::readRecord(QDataStream &stream)
 {
-    if ( ! mOutput ) {
+    if (! mOutput) {
         qWarning() << "Output device not set";
         return false;
     }
@@ -372,10 +367,11 @@ bool Parser::readRecord( QDataStream &stream )
 
     {
         QString name;
-        if (0 < type && type <= EMR_LASTRECORD)
+        if (0 < type && type <= EMR_LASTRECORD) {
             name = EmfRecords[type].name;
-        else
+        } else {
             name = "(out of bounds)";
+        }
 #if DEBUG_EMFPARSER
         kDebug(31000) << "Record length" << size << "type " << hex << type << "(" << dec << type << ")" << name;
 #endif
@@ -384,302 +380,269 @@ bool Parser::readRecord( QDataStream &stream )
 #if DEBUG_EMFPARSER == 2
     soakBytes(stream, size - 8);
 #else
-    switch ( type ) {
-        case EMR_POLYLINE:
-        {
-            QRect bounds;
-            stream >> bounds;
-            quint32 count;
-            stream >> count;
-            QList<QPoint> aPoints;
-            for (quint32 i = 0; i < count; ++i) {
-                QPoint point;
-                stream >> point;
-                aPoints.append( point );
-            }
-            mOutput->polyLine( bounds, aPoints );
-        }
-        break;
-        case EMR_SETWINDOWEXTEX:
-        {
-            QSize size;
-            //stream >> size;
-            qint32 width, height;
-            stream >> width >> height;
-            //kDebug(31000) << "SETWINDOWEXTEX" << width << height;
-            size = QSize(width, height);
-            mOutput->setWindowExtEx( size );
-        }
-        break;
-        case EMR_SETWINDOWORGEX:
-        {
-            QPoint origin;
-            stream >> origin;
-            mOutput->setWindowOrgEx( origin );
-        }
-        break;
-        case EMR_SETVIEWPORTEXTEX:
-        {
-            QSize size;
-            stream >> size;
-            mOutput->setViewportExtEx( size );
-        }
-        break;
-        case EMR_SETVIEWPORTORGEX:
-        {
-            QPoint origin;
-            stream >> origin;
-            mOutput->setViewportOrgEx( origin );
-        }
-        break;
-        case EMR_SETBRUSHORGEX:
-        {
-            QPoint origin;
-            stream >> origin;
-#if DEBUG_EMFPARSER
-            kDebug(33100) << "EMR_SETBRUSHORGEX" << origin;
-#endif
-        }
-        break;
-        case EMR_EOF:
-        {
-            mOutput->eof();
-            soakBytes( stream, size-8 ); // because we already took 8.
-            return false;
-        }
-        break;
-        case EMR_SETPIXELV:
-        {
+    switch (type) {
+    case EMR_POLYLINE: {
+        QRect bounds;
+        stream >> bounds;
+        quint32 count;
+        stream >> count;
+        QList<QPoint> aPoints;
+        for (quint32 i = 0; i < count; ++i) {
             QPoint point;
-            quint8 red, green, blue, reserved;
             stream >> point;
-            stream >> red >> green >> blue >> reserved;
-            mOutput->setPixelV( point, red, green, blue, reserved );
+            aPoints.append(point);
         }
-        break;
-    case EMR_SETMAPMODE:
-	{
-	    quint32 mapMode;
-	    stream >> mapMode;
-	    mOutput->setMapMode( mapMode );
-	}
-        break;
-    case EMR_SETBKMODE:
-	{
-	    quint32 backgroundMode;
-	    stream >> backgroundMode;
-            mOutput->setBkMode( backgroundMode );
-	}
-        break;
-    case EMR_SETPOLYFILLMODE:
-	{
-	    quint32 PolygonFillMode;
-	    stream >> PolygonFillMode;
-	    mOutput->setPolyFillMode( PolygonFillMode );
-	}
-	break;
-        case EMR_SETROP2:
-        {
-            quint32 ROP2Mode;
-            stream >> ROP2Mode;
-            //kDebug(33100) << "EMR_SETROP2" << ROP2Mode;
-        }
-        break;
-        case EMR_SETSTRETCHBLTMODE:
-        {
-            quint32 stretchMode;
-            stream >> stretchMode;
-            mOutput->setStretchBltMode( stretchMode );
+        mOutput->polyLine(bounds, aPoints);
+    }
+    break;
+    case EMR_SETWINDOWEXTEX: {
+        QSize size;
+        //stream >> size;
+        qint32 width, height;
+        stream >> width >> height;
+        //kDebug(31000) << "SETWINDOWEXTEX" << width << height;
+        size = QSize(width, height);
+        mOutput->setWindowExtEx(size);
+    }
+    break;
+    case EMR_SETWINDOWORGEX: {
+        QPoint origin;
+        stream >> origin;
+        mOutput->setWindowOrgEx(origin);
+    }
+    break;
+    case EMR_SETVIEWPORTEXTEX: {
+        QSize size;
+        stream >> size;
+        mOutput->setViewportExtEx(size);
+    }
+    break;
+    case EMR_SETVIEWPORTORGEX: {
+        QPoint origin;
+        stream >> origin;
+        mOutput->setViewportOrgEx(origin);
+    }
+    break;
+    case EMR_SETBRUSHORGEX: {
+        QPoint origin;
+        stream >> origin;
+#if DEBUG_EMFPARSER
+        kDebug(33100) << "EMR_SETBRUSHORGEX" << origin;
+#endif
+    }
+    break;
+    case EMR_EOF: {
+        mOutput->eof();
+        soakBytes(stream, size - 8); // because we already took 8.
+        return false;
+    }
+    break;
+    case EMR_SETPIXELV: {
+        QPoint point;
+        quint8 red, green, blue, reserved;
+        stream >> point;
+        stream >> red >> green >> blue >> reserved;
+        mOutput->setPixelV(point, red, green, blue, reserved);
+    }
+    break;
+    case EMR_SETMAPMODE: {
+        quint32 mapMode;
+        stream >> mapMode;
+        mOutput->setMapMode(mapMode);
+    }
+    break;
+    case EMR_SETBKMODE: {
+        quint32 backgroundMode;
+        stream >> backgroundMode;
+        mOutput->setBkMode(backgroundMode);
+    }
+    break;
+    case EMR_SETPOLYFILLMODE: {
+        quint32 PolygonFillMode;
+        stream >> PolygonFillMode;
+        mOutput->setPolyFillMode(PolygonFillMode);
+    }
+    break;
+    case EMR_SETROP2: {
+        quint32 ROP2Mode;
+        stream >> ROP2Mode;
+        //kDebug(33100) << "EMR_SETROP2" << ROP2Mode;
+    }
+    break;
+    case EMR_SETSTRETCHBLTMODE: {
+        quint32 stretchMode;
+        stream >> stretchMode;
+        mOutput->setStretchBltMode(stretchMode);
 
-        }
-        break;
-        case EMR_SETTEXTALIGN:
-        {
-            quint32 textAlignMode;
-            stream >> textAlignMode;
-            mOutput->setTextAlign( textAlignMode );
-        }
-        break;
-    case EMR_SETTEXTCOLOR:
-	{
-	    quint8 red, green, blue, reserved;
-	    stream >> red >> green >> blue >> reserved;
-	    mOutput->setTextColor( red, green, blue, reserved );
-	}
-	break;
-    case EMR_SETBKCOLOR:
-	{
-	    quint8 red, green, blue, reserved;
-	    stream >> red >> green >> blue >> reserved;
-            mOutput->setBkColor( red, green, blue, reserved );
-	}
-        break;
-    case EMR_MOVETOEX:
-	{
-	    qint32 x, y;
-	    stream >> x >> y;
-	    mOutput->moveToEx( x, y );
-            //kDebug(33100) << "xx EMR_MOVETOEX" << x << y;
-	}
-	break;
-        case EMR_SETMETARGN:
-        {
-            // Takes no arguments
-            mOutput->setMetaRgn();
-        }
-        break;
-    case EMR_EXCLUDECLIPRECT:
-    {
+    }
+    break;
+    case EMR_SETTEXTALIGN: {
+        quint32 textAlignMode;
+        stream >> textAlignMode;
+        mOutput->setTextAlign(textAlignMode);
+    }
+    break;
+    case EMR_SETTEXTCOLOR: {
+        quint8 red, green, blue, reserved;
+        stream >> red >> green >> blue >> reserved;
+        mOutput->setTextColor(red, green, blue, reserved);
+    }
+    break;
+    case EMR_SETBKCOLOR: {
+        quint8 red, green, blue, reserved;
+        stream >> red >> green >> blue >> reserved;
+        mOutput->setBkColor(red, green, blue, reserved);
+    }
+    break;
+    case EMR_MOVETOEX: {
+        qint32 x, y;
+        stream >> x >> y;
+        mOutput->moveToEx(x, y);
+        //kDebug(33100) << "xx EMR_MOVETOEX" << x << y;
+    }
+    break;
+    case EMR_SETMETARGN: {
+        // Takes no arguments
+        mOutput->setMetaRgn();
+    }
+    break;
+    case EMR_EXCLUDECLIPRECT: {
         QRect clip;
         stream >> clip;
         //kDebug(33100) << "EMR_EXCLUDECLIPRECT" << clip;
     }
     break;
-    case EMR_INTERSECTCLIPRECT:
-    {
+    case EMR_INTERSECTCLIPRECT: {
         QRect clip;
         stream >> clip;
         //kDebug(33100) << "EMR_INTERSECTCLIPRECT" << clip;
     }
     break;
-    case EMR_SAVEDC:
-    {
+    case EMR_SAVEDC: {
         mOutput->saveDC();
     }
     break;
-    case EMR_RESTOREDC:
-    {
+    case EMR_RESTOREDC: {
         qint32 savedDC;
         stream >> savedDC;
-        mOutput->restoreDC( savedDC );
+        mOutput->restoreDC(savedDC);
     }
     break;
-    case EMR_SETWORLDTRANSFORM:
-	{
-            stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
-	    float M11, M12, M21, M22, Dx, Dy;
-	    stream >> M11;
-	    stream >> M12;
-	    stream >> M21;
-	    stream >> M22;
-	    stream >> Dx;
-	    stream >> Dy;
-            //kDebug(31000) << "Set world transform" << M11 << M12 << M21 << M22 << Dx << Dy;
-	    mOutput->setWorldTransform( M11, M12, M21, M22, Dx, Dy );
-	}
-	break;
-    case EMR_MODIFYWORLDTRANSFORM:
-	{
-            stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
-	    float M11, M12, M21, M22, Dx, Dy;
-	    stream >> M11;
-	    stream >> M12;
-	    stream >> M21;
-	    stream >> M22;
-	    stream >> Dx;
-	    stream >> Dy;
-            //kDebug(31000) << "stream position after the matrix: " << stream.device()->pos();
-	    quint32 ModifyWorldTransformMode;
-	    stream >> ModifyWorldTransformMode;
-	    mOutput->modifyWorldTransform( ModifyWorldTransformMode, M11, M12,
-					   M21, M22, Dx, Dy );
-	}
-	break;
+    case EMR_SETWORLDTRANSFORM: {
+        stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
+        float M11, M12, M21, M22, Dx, Dy;
+        stream >> M11;
+        stream >> M12;
+        stream >> M21;
+        stream >> M22;
+        stream >> Dx;
+        stream >> Dy;
+        //kDebug(31000) << "Set world transform" << M11 << M12 << M21 << M22 << Dx << Dy;
+        mOutput->setWorldTransform(M11, M12, M21, M22, Dx, Dy);
+    }
+    break;
+    case EMR_MODIFYWORLDTRANSFORM: {
+        stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
+        float M11, M12, M21, M22, Dx, Dy;
+        stream >> M11;
+        stream >> M12;
+        stream >> M21;
+        stream >> M22;
+        stream >> Dx;
+        stream >> Dy;
+        //kDebug(31000) << "stream position after the matrix: " << stream.device()->pos();
+        quint32 ModifyWorldTransformMode;
+        stream >> ModifyWorldTransformMode;
+        mOutput->modifyWorldTransform(ModifyWorldTransformMode, M11, M12,
+                                      M21, M22, Dx, Dy);
+    }
+    break;
     case EMR_SELECTOBJECT:
-	quint32 ihObject;
-	stream >> ihObject;
-	mOutput->selectObject( ihObject );
+        quint32 ihObject;
+        stream >> ihObject;
+        mOutput->selectObject(ihObject);
         break;
-    case EMR_CREATEPEN:
-	{
-	    quint32 ihPen;
-	    stream >> ihPen;
+    case EMR_CREATEPEN: {
+        quint32 ihPen;
+        stream >> ihPen;
 
-	    quint32 penStyle;
-	    stream >> penStyle;
+        quint32 penStyle;
+        stream >> penStyle;
 
-	    quint32 x, y;
-	    stream >> x;
-	    stream >> y; // unused
+        quint32 x, y;
+        stream >> x;
+        stream >> y; // unused
 
-	    quint8 red, green, blue, reserved;
-	    stream >> red >> green >> blue;
-	    stream >> reserved; // unused;
+        quint8 red, green, blue, reserved;
+        stream >> red >> green >> blue;
+        stream >> reserved; // unused;
 
-	    mOutput->createPen( ihPen, penStyle, x, y, red, green, blue, reserved );
+        mOutput->createPen(ihPen, penStyle, x, y, red, green, blue, reserved);
 
-	    break;
-	}
-    case EMR_CREATEBRUSHINDIRECT:
-	{
-	    quint32 ihBrush;
-	    stream >> ihBrush;
-
-	    quint32 BrushStyle;
-	    stream >> BrushStyle;
-
-	    quint8 red, green, blue, reserved;
-	    stream >> red >> green >> blue;
-	    stream >> reserved; // unused;
-
-	    quint32 BrushHatch;
-	    stream >> BrushHatch;
-
-	    mOutput->createBrushIndirect( ihBrush, BrushStyle, red, green, blue, reserved, BrushHatch );
-
-	    break;
-	}
-    case EMR_DELETEOBJECT:
-	{
-	    quint32 ihObject;
-	    stream >> ihObject;
-	    mOutput->deleteObject( ihObject );
-	}
         break;
-    case EMR_ELLIPSE:
-        {
-            QRect box;
-            stream >> box;
-            mOutput->ellipse( box );
-        }
+    }
+    case EMR_CREATEBRUSHINDIRECT: {
+        quint32 ihBrush;
+        stream >> ihBrush;
+
+        quint32 BrushStyle;
+        stream >> BrushStyle;
+
+        quint8 red, green, blue, reserved;
+        stream >> red >> green >> blue;
+        stream >> reserved; // unused;
+
+        quint32 BrushHatch;
+        stream >> BrushHatch;
+
+        mOutput->createBrushIndirect(ihBrush, BrushStyle, red, green, blue, reserved, BrushHatch);
+
         break;
-    case EMR_RECTANGLE:
-        {
-            QRect box;
-            stream >> box;
-            mOutput->rectangle( box );
-            //kDebug(33100) << "xx EMR_RECTANGLE" << box;
-        }
-        break;
-    case EMR_ARC:
-        {
-            QRect box;
-            QPoint start, end;
-            stream >> box;
-            stream >> start >> end;
-            mOutput->arc( box, start, end );
-        }
-        break;
-    case EMR_CHORD:
-        {
-            QRect box;
-            QPoint start, end;
-            stream >> box;
-            stream >> start >> end;
-            mOutput->chord( box, start, end );
-        }
-        break;
-     case EMR_PIE:
-        {
-            QRect box;
-            QPoint start, end;
-            stream >> box;
-            stream >> start >> end;
-            mOutput->pie( box, start, end );
-        }
-        break;
-    case EMR_SELECTPALLETTE:
-    {
+    }
+    case EMR_DELETEOBJECT: {
+        quint32 ihObject;
+        stream >> ihObject;
+        mOutput->deleteObject(ihObject);
+    }
+    break;
+    case EMR_ELLIPSE: {
+        QRect box;
+        stream >> box;
+        mOutput->ellipse(box);
+    }
+    break;
+    case EMR_RECTANGLE: {
+        QRect box;
+        stream >> box;
+        mOutput->rectangle(box);
+        //kDebug(33100) << "xx EMR_RECTANGLE" << box;
+    }
+    break;
+    case EMR_ARC: {
+        QRect box;
+        QPoint start, end;
+        stream >> box;
+        stream >> start >> end;
+        mOutput->arc(box, start, end);
+    }
+    break;
+    case EMR_CHORD: {
+        QRect box;
+        QPoint start, end;
+        stream >> box;
+        stream >> start >> end;
+        mOutput->chord(box, start, end);
+    }
+    break;
+    case EMR_PIE: {
+        QRect box;
+        QPoint start, end;
+        stream >> box;
+        stream >> start >> end;
+        mOutput->pie(box, start, end);
+    }
+    break;
+    case EMR_SELECTPALLETTE: {
         quint32 ihPal;
         stream >> ihPal;
 #if DEBUG_EMFPARSER
@@ -687,401 +650,379 @@ bool Parser::readRecord( QDataStream &stream )
 #endif
     }
     break;
-    case EMR_SETMITERLIMIT:
-        {
-            stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
-            float miterLimit;
-            stream >> miterLimit;
+    case EMR_SETMITERLIMIT: {
+        stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
+        float miterLimit;
+        stream >> miterLimit;
 #if DEBUG_EMFPARSER
-            kDebug(33100) << "EMR_SETMITERLIMIT" << miterLimit;
+        kDebug(33100) << "EMR_SETMITERLIMIT" << miterLimit;
 #endif
-        }
-	break;
+    }
+    break;
     case EMR_BEGINPATH:
-	mOutput->beginPath();
-	break;
+        mOutput->beginPath();
+        break;
     case EMR_ENDPATH:
-	mOutput->endPath();
-	break;
+        mOutput->endPath();
+        break;
     case EMR_CLOSEFIGURE:
-	mOutput->closeFigure();
-	break;
-    case EMR_FILLPATH:
-	{
-	    QRect bounds;
-            // NOTE: The spec says that there should always be a
-            // bound, i.e. the size should be 24.  But the file
-            // http://www.eventlink.org.uk/uploads/DOCS2/53-Cartledge_Energy_Efficient_IT_Sheffield_Sep10.ppt
-            // has an EMF with a FILLPATH record without this
-            // bound. So let's allow without it too.
-            if (size >= 24) {
-                stream >> bounds;
-            }
-            else if (size > 8)
-                soakBytes(stream, size - 8);
-
-	    mOutput->fillPath( bounds );
-            //kDebug(33100) << "xx EMR_FILLPATH" << bounds;
-	}
-	break;
-    case EMR_STROKEANDFILLPATH:
-        {
-            QRect bounds;
+        mOutput->closeFigure();
+        break;
+    case EMR_FILLPATH: {
+        QRect bounds;
+        // NOTE: The spec says that there should always be a
+        // bound, i.e. the size should be 24.  But the file
+        // http://www.eventlink.org.uk/uploads/DOCS2/53-Cartledge_Energy_Efficient_IT_Sheffield_Sep10.ppt
+        // has an EMF with a FILLPATH record without this
+        // bound. So let's allow without it too.
+        if (size >= 24) {
             stream >> bounds;
-            mOutput->strokeAndFillPath( bounds );
-            //kDebug(33100) << "xx EMR_STROKEANDFILLPATHPATH" << bounds;
+        } else if (size > 8) {
+            soakBytes(stream, size - 8);
         }
-        break;
-    case EMR_STROKEPATH:
-	{
-	    QRect bounds;
-	    stream >> bounds;
-	    mOutput->strokePath( bounds );
-            //kDebug(33100) << "xx EMR_STROKEPATH" << bounds;
-	}
-	break;
-    case EMR_SETCLIPPATH:
-        {
-            quint32 regionMode;
-            stream >> regionMode;
-            mOutput->setClipPath( regionMode );
-        }
-        break;
-    case EMR_LINETO:
-	{
-	    quint32 x, y;
-	    stream >> x >> y;
-	    QPoint finishPoint( x, y );
-	    mOutput->lineTo( finishPoint );
-            //kDebug(33100) << "xx EMR_LINETO" << x << y;
-	}
-	break;
-    case EMR_ARCTO:
-        {
-            QRect box;
-            stream >> box;
-            QPoint start;
-            stream >> start;
-            QPoint end;
-            stream >> end;
-            mOutput->arcTo( box, start, end );
-        }
-        break;
-        case EMR_COMMENT:
-        {
-            quint32 dataSize;
-            quint32 commentIdentifier;
 
-            stream >> dataSize;
-            stream >> commentIdentifier;
+        mOutput->fillPath(bounds);
+        //kDebug(33100) << "xx EMR_FILLPATH" << bounds;
+    }
+    break;
+    case EMR_STROKEANDFILLPATH: {
+        QRect bounds;
+        stream >> bounds;
+        mOutput->strokeAndFillPath(bounds);
+        //kDebug(33100) << "xx EMR_STROKEANDFILLPATHPATH" << bounds;
+    }
+    break;
+    case EMR_STROKEPATH: {
+        QRect bounds;
+        stream >> bounds;
+        mOutput->strokePath(bounds);
+        //kDebug(33100) << "xx EMR_STROKEPATH" << bounds;
+    }
+    break;
+    case EMR_SETCLIPPATH: {
+        quint32 regionMode;
+        stream >> regionMode;
+        mOutput->setClipPath(regionMode);
+    }
+    break;
+    case EMR_LINETO: {
+        quint32 x, y;
+        stream >> x >> y;
+        QPoint finishPoint(x, y);
+        mOutput->lineTo(finishPoint);
+        //kDebug(33100) << "xx EMR_LINETO" << x << y;
+    }
+    break;
+    case EMR_ARCTO: {
+        QRect box;
+        stream >> box;
+        QPoint start;
+        stream >> start;
+        QPoint end;
+        stream >> end;
+        mOutput->arcTo(box, start, end);
+    }
+    break;
+    case EMR_COMMENT: {
+        quint32 dataSize;
+        quint32 commentIdentifier;
 
-            switch (commentIdentifier) {
-            case EMR_COMMENT_EMFSPOOL:
-                kDebug(31000) << "EMR_COMMENT_EMFSPOOL";
-                soakBytes( stream, size-16 ); // because we already took 16.
-                break;
-            case EMR_COMMENT_EMFPLUS:
-                kDebug(31000) << "EMR_COMMENT_EMFPLUS";
-                soakBytes( stream, size-16 ); // because we already took 16.
-                break;
-            case EMR_COMMENT_PUBLIC:
-                quint32 commentType;
-                stream >> commentType;
-                kDebug(31000) << "EMR_COMMENT_PUBLIC type" << commentType;
-                soakBytes( stream, size-20 ); // because we already took 20.
-                break;
-            case EMR_COMMENT_MSGR:
-                kDebug(31000) << "EMR_COMMENT_MSGR";
-                soakBytes( stream, size-16 ); // because we already took 16.
-                break;
-            default:
-                kDebug(31000) << "EMR_COMMENT unknown type" << hex << commentIdentifier << dec
-                              << "datasize =" << dataSize;
-                soakBytes( stream, size-16 ); // because we already took 16.
-            }
+        stream >> dataSize;
+        stream >> commentIdentifier;
+
+        switch (commentIdentifier) {
+        case EMR_COMMENT_EMFSPOOL:
+            kDebug(31000) << "EMR_COMMENT_EMFSPOOL";
+            soakBytes(stream, size - 16); // because we already took 16.
+            break;
+        case EMR_COMMENT_EMFPLUS:
+            kDebug(31000) << "EMR_COMMENT_EMFPLUS";
+            soakBytes(stream, size - 16); // because we already took 16.
+            break;
+        case EMR_COMMENT_PUBLIC:
+            quint32 commentType;
+            stream >> commentType;
+            kDebug(31000) << "EMR_COMMENT_PUBLIC type" << commentType;
+            soakBytes(stream, size - 20); // because we already took 20.
+            break;
+        case EMR_COMMENT_MSGR:
+            kDebug(31000) << "EMR_COMMENT_MSGR";
+            soakBytes(stream, size - 16); // because we already took 16.
+            break;
+        default:
+            kDebug(31000) << "EMR_COMMENT unknown type" << hex << commentIdentifier << dec
+                          << "datasize =" << dataSize;
+            soakBytes(stream, size - 16); // because we already took 16.
         }
-	break;
+    }
+    break;
     case EMR_EXTSELECTCLIPRGN:
-	kDebug(33100) << "EMR_EXTSELECTCLIPRGN";
-	soakBytes( stream, size-8 ); // because we already took 8.
-	break;
-    case EMR_BITBLT:
-	{
-            //kDebug(31000) << "Found BitBlt record";
-	    BitBltRecord bitBltRecord( stream, size );
-	    mOutput->bitBlt( bitBltRecord );
-	}
-	break;
-    case EMR_STRETCHDIBITS:
-	{
-	    StretchDiBitsRecord stretchDiBitsRecord( stream, size );
+        kDebug(33100) << "EMR_EXTSELECTCLIPRGN";
+        soakBytes(stream, size - 8); // because we already took 8.
+        break;
+    case EMR_BITBLT: {
+        //kDebug(31000) << "Found BitBlt record";
+        BitBltRecord bitBltRecord(stream, size);
+        mOutput->bitBlt(bitBltRecord);
+    }
+    break;
+    case EMR_STRETCHDIBITS: {
+        StretchDiBitsRecord stretchDiBitsRecord(stream, size);
         if (stretchDiBitsRecord.hasImage()) {
-            mOutput->stretchDiBits( stretchDiBitsRecord );
+            mOutput->stretchDiBits(stretchDiBitsRecord);
         }
-	}
-	break;
-    case EMR_EXTCREATEFONTINDIRECTW:
-	{
-	    ExtCreateFontIndirectWRecord extCreateFontIndirectWRecord( stream, size );
-	    mOutput->extCreateFontIndirectW( extCreateFontIndirectWRecord );
-	}
-	break;
+    }
+    break;
+    case EMR_EXTCREATEFONTINDIRECTW: {
+        ExtCreateFontIndirectWRecord extCreateFontIndirectWRecord(stream, size);
+        mOutput->extCreateFontIndirectW(extCreateFontIndirectWRecord);
+    }
+    break;
     case EMR_EXTTEXTOUTA:
-    case EMR_EXTTEXTOUTW:
-	{
-            QRect bounds;
-            quint32 iGraphicsMode;
-            // FIXME: These should really be floats, but that crashes
-            // for a test file where eyScale contains NaN. 
-            // Unfortunately this file contains secret data and
-            // can't be committed into the test suite.  Let's just
-            // work around the problem until we support scaling anyway.
-	    quint32 exScale;
-	    quint32 eyScale;
+    case EMR_EXTTEXTOUTW: {
+        QRect bounds;
+        quint32 iGraphicsMode;
+        // FIXME: These should really be floats, but that crashes
+        // for a test file where eyScale contains NaN.
+        // Unfortunately this file contains secret data and
+        // can't be committed into the test suite.  Let's just
+        // work around the problem until we support scaling anyway.
+        quint32 exScale;
+        quint32 eyScale;
 
-	    //kDebug(33100) << "size:" << size;
-	    size -= 8;
+        //kDebug(33100) << "size:" << size;
+        size -= 8;
 
-            stream >> bounds;
-	    //kDebug(31000) << "bounds:" << bounds;
-	    size -= 16;
+        stream >> bounds;
+        //kDebug(31000) << "bounds:" << bounds;
+        size -= 16;
 
-            stream >> iGraphicsMode;
-	    //kDebug(31000) << "graphics mode:" << iGraphicsMode;
-	    size -= 4;
+        stream >> iGraphicsMode;
+        //kDebug(31000) << "graphics mode:" << iGraphicsMode;
+        size -= 4;
 
-	    stream >> exScale;
-	    stream >> eyScale;
+        stream >> exScale;
+        stream >> eyScale;
 #if DEBUG_EMFPARSER
-            if (iGraphicsMode == GM_COMPATIBLE) {
-                kDebug(31000) << "exScale:" << exScale;
-                kDebug(31000) << "eyScale:" << eyScale;
-            }
+        if (iGraphicsMode == GM_COMPATIBLE) {
+            kDebug(31000) << "exScale:" << exScale;
+            kDebug(31000) << "eyScale:" << eyScale;
+        }
 #endif
-	    size -= 8;
+        size -= 8;
 
-            // The only difference between ExtTextOutA and ...W is
-            // that A uses 8 bit chars and W uses 16 bit chars.
-            EmrTextObject emrText(stream, size,
-                                  (type == EMR_EXTTEXTOUTA) ? EmrTextObject::EightBitChars
-                                                            : EmrTextObject::SixteenBitChars);
-            mOutput->extTextOut( bounds, emrText );
-	}
-	break;
-        case EMR_SETLAYOUT:
-        {
-            quint32 layoutMode;
-            stream >> layoutMode;
-            mOutput->setLayout( layoutMode );
+        // The only difference between ExtTextOutA and ...W is
+        // that A uses 8 bit chars and W uses 16 bit chars.
+        EmrTextObject emrText(stream, size,
+                              (type == EMR_EXTTEXTOUTA) ? EmrTextObject::EightBitChars
+                              : EmrTextObject::SixteenBitChars);
+        mOutput->extTextOut(bounds, emrText);
+    }
+    break;
+    case EMR_SETLAYOUT: {
+        quint32 layoutMode;
+        stream >> layoutMode;
+        mOutput->setLayout(layoutMode);
+    }
+    break;
+    case EMR_POLYBEZIER16: {
+        QRect bounds;
+        stream >> bounds;
+        quint32 count;
+        stream >> count;
+        QList<QPoint> aPoints;
+        for (quint32 i = 0; i < count; ++i) {
+            qint16 x, y;
+            stream >> x;
+            stream >> y;
+            aPoints.append(QPoint(x, y));
         }
-        break;
-    case EMR_POLYBEZIER16:
-	{
-	    QRect bounds;
-	    stream >> bounds;
-	    quint32 count;
-	    stream >> count;
-	    QList<QPoint> aPoints;
-	    for (quint32 i = 0; i < count; ++i) {
-		qint16 x, y;
-		stream >> x;
-		stream >> y;
-		aPoints.append( QPoint( x, y ) );
-	    }
-	    mOutput->polyBezier16( bounds, aPoints );
-	}
-        break;
-    case EMR_POLYGON16:
-	{
-	    QRect bounds;
-	    stream >> bounds;
-	    quint32 count;
-	    stream >> count;
-	    QList<QPoint> aPoints;
-	    for (quint32 i = 0; i < count; ++i) {
-		qint16 x, y;
-		stream >> x;
-		stream >> y;
-		aPoints.append( QPoint( x, y ) );
-	    }
-	    mOutput->polygon16( bounds, aPoints );
-	}
-	break;
-    case EMR_POLYLINE16:
-	{
-	    QRect bounds;
-	    stream >> bounds;
-	    quint32 count;
-	    stream >> count;
-	    QList<QPoint> aPoints;
-	    for (quint32 i = 0; i < count; ++i) {
-		qint16 x, y;
-		stream >> x;
-		stream >> y;
-		aPoints.append( QPoint( x, y ) );
-	    }
-	    mOutput->polyLine16( bounds, aPoints );
-	}
-        break;
-    case EMR_POLYBEZIERTO16:
-	{
-	    QRect bounds;
-	    stream >> bounds;
-	    quint32 count;
-	    stream >> count;
-	    QList<QPoint> aPoints;
-	    for (quint32 i = 0; i < count; ++i) {
-		qint16 x, y;
-		stream >> x;
-		stream >> y;
-		aPoints.append( QPoint( x, y ) );
-	    }
-	    mOutput->polyBezierTo16( bounds, aPoints );
-	}
-        break;
-    case EMR_POLYLINETO16:
-	{
-	    QRect bounds;
-	    stream >> bounds;
-	    quint32 count;
-	    stream >> count;
-	    QList<QPoint> aPoints;
-	    for (quint32 i = 0; i < count; ++i) {
-		qint16 x, y;
-		stream >> x;
-		stream >> y;
-		aPoints.append( QPoint( x, y ) );
-	    }
-	    mOutput->polyLineTo16( bounds, aPoints );
-	}
-        break;
-    case EMR_POLYPOLYLINE16:
-        {
-            QRect bounds;
-            stream >> bounds;
-            quint32 numberOfPolylines;
-            stream >> numberOfPolylines;
-            quint32 count; // number of points in all polylines
-            stream >> count;
-            QList< QVector< QPoint > > aPoints;
-            for ( quint32 i = 0; i < numberOfPolylines; ++i ) {
-                quint32 polylinePointCount;
-                stream >> polylinePointCount;
-                QVector<QPoint> polylinePoints( polylinePointCount );
-                aPoints.append( polylinePoints );
-            }
-            for ( quint32 i = 0; i < numberOfPolylines; ++i ) {
-                for ( int j = 0; j < aPoints[i].size(); ++j ) {
-                    qint16 x, y;
-                    stream >> x >> y;
-                    aPoints[i].replace( j,  QPoint( x, y ) );
-                }
-            }
-            mOutput->polyPolyLine16( bounds, aPoints );
+        mOutput->polyBezier16(bounds, aPoints);
+    }
+    break;
+    case EMR_POLYGON16: {
+        QRect bounds;
+        stream >> bounds;
+        quint32 count;
+        stream >> count;
+        QList<QPoint> aPoints;
+        for (quint32 i = 0; i < count; ++i) {
+            qint16 x, y;
+            stream >> x;
+            stream >> y;
+            aPoints.append(QPoint(x, y));
         }
-        break;
-    case EMR_POLYPOLYGON16:
-        {
-            QRect bounds;
-            stream >> bounds;
-            quint32 numberOfPolygons;
-            stream >> numberOfPolygons;
-            quint32 count; // number of points in all polygons
-            stream >> count;
-            QList< QVector< QPoint > > aPoints;
-            for ( quint32 i = 0; i < numberOfPolygons; ++i ) {
-                quint32 polygonPointCount;
-                stream >> polygonPointCount;
-                QVector<QPoint> polygonPoints( polygonPointCount );
-                aPoints.append( polygonPoints );
-            }
-            for ( quint32 i = 0; i < numberOfPolygons; ++i ) {
-                for ( int j = 0; j < aPoints[i].size(); ++j ) {
-                    qint16 x, y;
-                    stream >> x >> y;
-                    aPoints[i].replace( j,  QPoint( x, y ) );
-                }
-            }
-            mOutput->polyPolygon16( bounds, aPoints );
+        mOutput->polygon16(bounds, aPoints);
+    }
+    break;
+    case EMR_POLYLINE16: {
+        QRect bounds;
+        stream >> bounds;
+        quint32 count;
+        stream >> count;
+        QList<QPoint> aPoints;
+        for (quint32 i = 0; i < count; ++i) {
+            qint16 x, y;
+            stream >> x;
+            stream >> y;
+            aPoints.append(QPoint(x, y));
         }
-        break;
+        mOutput->polyLine16(bounds, aPoints);
+    }
+    break;
+    case EMR_POLYBEZIERTO16: {
+        QRect bounds;
+        stream >> bounds;
+        quint32 count;
+        stream >> count;
+        QList<QPoint> aPoints;
+        for (quint32 i = 0; i < count; ++i) {
+            qint16 x, y;
+            stream >> x;
+            stream >> y;
+            aPoints.append(QPoint(x, y));
+        }
+        mOutput->polyBezierTo16(bounds, aPoints);
+    }
+    break;
+    case EMR_POLYLINETO16: {
+        QRect bounds;
+        stream >> bounds;
+        quint32 count;
+        stream >> count;
+        QList<QPoint> aPoints;
+        for (quint32 i = 0; i < count; ++i) {
+            qint16 x, y;
+            stream >> x;
+            stream >> y;
+            aPoints.append(QPoint(x, y));
+        }
+        mOutput->polyLineTo16(bounds, aPoints);
+    }
+    break;
+    case EMR_POLYPOLYLINE16: {
+        QRect bounds;
+        stream >> bounds;
+        quint32 numberOfPolylines;
+        stream >> numberOfPolylines;
+        quint32 count; // number of points in all polylines
+        stream >> count;
+        QList< QVector< QPoint > > aPoints;
+        for (quint32 i = 0; i < numberOfPolylines; ++i) {
+            quint32 polylinePointCount;
+            stream >> polylinePointCount;
+            QVector<QPoint> polylinePoints(polylinePointCount);
+            aPoints.append(polylinePoints);
+        }
+        for (quint32 i = 0; i < numberOfPolylines; ++i) {
+            for (int j = 0; j < aPoints[i].size(); ++j) {
+                qint16 x, y;
+                stream >> x >> y;
+                aPoints[i].replace(j,  QPoint(x, y));
+            }
+        }
+        mOutput->polyPolyLine16(bounds, aPoints);
+    }
+    break;
+    case EMR_POLYPOLYGON16: {
+        QRect bounds;
+        stream >> bounds;
+        quint32 numberOfPolygons;
+        stream >> numberOfPolygons;
+        quint32 count; // number of points in all polygons
+        stream >> count;
+        QList< QVector< QPoint > > aPoints;
+        for (quint32 i = 0; i < numberOfPolygons; ++i) {
+            quint32 polygonPointCount;
+            stream >> polygonPointCount;
+            QVector<QPoint> polygonPoints(polygonPointCount);
+            aPoints.append(polygonPoints);
+        }
+        for (quint32 i = 0; i < numberOfPolygons; ++i) {
+            for (int j = 0; j < aPoints[i].size(); ++j) {
+                qint16 x, y;
+                stream >> x >> y;
+                aPoints[i].replace(j,  QPoint(x, y));
+            }
+        }
+        mOutput->polyPolygon16(bounds, aPoints);
+    }
+    break;
     case EMR_CREATEMONOBRUSH:
         // MS-EMF 2.3.7.5: EMR_CREATEMONOBRUSH Record
-        {
+    {
 #if DEBUG_EMFPARSER
-            kDebug(31000) << "EMR_CREATEMONOBRUSH ============================";
+        kDebug(31000) << "EMR_CREATEMONOBRUSH ============================";
 #endif
 
-            quint32 ihBrush;    // Index in the EMF Object Table
-            stream >> ihBrush;
-            quint32 usage;      // DIBColors enumeration
-            stream >> usage;
-            quint32 offBmi;     // Offset of the DIB header
-            stream >> offBmi;
-            quint32 cbBmi;      // Size of the DIB header
-            stream >> cbBmi;
-            quint32 offBits;    // Offset of the bitmap
-            stream >> offBits;
-            quint32 cbBits;     // Size of the bitmap
-            stream >> cbBits;
+        quint32 ihBrush;    // Index in the EMF Object Table
+        stream >> ihBrush;
+        quint32 usage;      // DIBColors enumeration
+        stream >> usage;
+        quint32 offBmi;     // Offset of the DIB header
+        stream >> offBmi;
+        quint32 cbBmi;      // Size of the DIB header
+        stream >> cbBmi;
+        quint32 offBits;    // Offset of the bitmap
+        stream >> offBits;
+        quint32 cbBits;     // Size of the bitmap
+        stream >> cbBits;
 
 #if DEBUG_EMFPARSER
-            kDebug(31000) << "index:" << ihBrush;
-            kDebug(31000) << "DIBColors enum:" << usage;
-            kDebug(31000) << "header offset:" << offBmi;
-            kDebug(31000) << "header size:  " << cbBmi;
-            kDebug(31000) << "bitmap offset:" << offBits;
-            kDebug(31000) << "bitmap size:  " << cbBits;
+        kDebug(31000) << "index:" << ihBrush;
+        kDebug(31000) << "DIBColors enum:" << usage;
+        kDebug(31000) << "header offset:" << offBmi;
+        kDebug(31000) << "header size:  " << cbBmi;
+        kDebug(31000) << "bitmap offset:" << offBits;
+        kDebug(31000) << "bitmap size:  " << cbBits;
 #endif
 
-            // FIXME: Handle the usage DIBColors info.
-            Bitmap bitmap(stream, size, 8 + 6 * 4, // header + 6 ints
-                          offBmi, cbBmi, offBits, cbBits);
+        // FIXME: Handle the usage DIBColors info.
+        Bitmap bitmap(stream, size, 8 + 6 * 4, // header + 6 ints
+                      offBmi, cbBmi, offBits, cbBits);
 
-	    mOutput->createMonoBrush(ihBrush, &bitmap);
+        mOutput->createMonoBrush(ihBrush, &bitmap);
 
-        }
-        break;
-    case EMR_EXTCREATEPEN:
-	{
-	    quint32 ihPen;
-	    stream >> ihPen;
+    }
+    break;
+    case EMR_EXTCREATEPEN: {
+        quint32 ihPen;
+        stream >> ihPen;
 
-	    quint32 offBmi, cbBmi, offBits, cbBits;
-	    stream >> offBmi >> cbBmi >> offBits >> cbBits;
+        quint32 offBmi, cbBmi, offBits, cbBits;
+        stream >> offBmi >> cbBmi >> offBits >> cbBits;
 
-	    quint32 penStyle;
-	    stream >> penStyle;
+        quint32 penStyle;
+        stream >> penStyle;
 
-	    quint32 width;
-	    stream >> width;
+        quint32 width;
+        stream >> width;
 
-	    quint32 brushStyle;
-	    stream >> brushStyle;
+        quint32 brushStyle;
+        stream >> brushStyle;
 
-	    quint8 red, green, blue, reserved;
-	    stream >> red >> green >> blue;
-	    stream >> reserved; // unused;
+        quint8 red, green, blue, reserved;
+        stream >> red >> green >> blue;
+        stream >> reserved; // unused;
 
-	    // TODO: There is more stuff to parse here
+        // TODO: There is more stuff to parse here
 
-	    // TODO: this needs to go to an extCreatePen() output method
-	    mOutput->createPen( ihPen, penStyle, width, 0, red, green, blue, reserved );
-	    soakBytes( stream, size-44 );
-	}
-        break;
-        case EMR_SETICMMODE:
-        {
-            quint32 icmMode;
-            stream >> icmMode;
-            //kDebug(33100) << "EMR_SETICMMODE:" << icmMode;
-        }
-        break;
+        // TODO: this needs to go to an extCreatePen() output method
+        mOutput->createPen(ihPen, penStyle, width, 0, red, green, blue, reserved);
+        soakBytes(stream, size - 44);
+    }
+    break;
+    case EMR_SETICMMODE: {
+        quint32 icmMode;
+        stream >> icmMode;
+        //kDebug(33100) << "EMR_SETICMMODE:" << icmMode;
+    }
+    break;
     default:
 #if DEBUG_EMFPARSER
         kDebug(31000) << "unknown record type:" << type;
 #endif
-	soakBytes(stream, size - 8); // because we already took 8.
+        soakBytes(stream, size - 8); // because we already took 8.
     }
 #endif
 

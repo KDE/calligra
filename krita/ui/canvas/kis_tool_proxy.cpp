@@ -21,7 +21,6 @@
 
 #include <KoToolProxy_p.h>
 
-
 KisToolProxy::KisToolProxy(KoCanvasBase *canvas, QObject *parent)
     : KoToolProxy(canvas, parent),
       m_isActionActivated(false),
@@ -37,7 +36,7 @@ QPointF KisToolProxy::tabletToDocument(const QPointF &globalPos)
 
 QPointF KisToolProxy::widgetToDocument(const QPointF &widgetPoint) const
 {
-    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     Q_ASSERT(kritaCanvas);
 
     return kritaCanvas->coordinatesConverter()->widgetToDocument(widgetPoint);
@@ -48,10 +47,9 @@ KoPointerEvent KisToolProxy::convertEventToPointerEvent(QEvent *event, const QPo
     switch (event->type()) {
     case QEvent::TabletPress:
     case QEvent::TabletRelease:
-    case QEvent::TabletMove:
-    {
+    case QEvent::TabletMove: {
         *result = true;
-        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent *>(event);
         KoPointerEvent ev(tabletEvent, docPoint);
         ev.setTabletButton(Qt::LeftButton);
         return ev;
@@ -59,10 +57,9 @@ KoPointerEvent KisToolProxy::convertEventToPointerEvent(QEvent *event, const QPo
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick:
     case QEvent::MouseButtonRelease:
-    case QEvent::MouseMove:
-    {
+    case QEvent::MouseMove: {
         *result = true;
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         return KoPointerEvent(mouseEvent, docPoint);
     }
     default:
@@ -93,9 +90,9 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
 {
     bool retval = true;
 
-    QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event);
-    QTouchEvent *touchEvent = dynamic_cast<QTouchEvent*>(event);
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent *>(event);
+    QTouchEvent *touchEvent = dynamic_cast<QTouchEvent *>(event);
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
 
     if (tabletEvent) {
         QPointF docPoint = tabletToDocument(tabletEvent->hiResGlobalPos());
@@ -133,11 +130,11 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
             forwardToTool(state, action, originalEvent, docPoint);
             retval = mouseEvent->isAccepted();
         }
-    } else if(event->type() == QEvent::KeyPress) {
-        QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
+    } else if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *kevent = static_cast<QKeyEvent *>(event);
         keyPressEvent(kevent);
-    } else if(event->type() == QEvent::KeyRelease) {
-        QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
+    } else if (event->type() == QEvent::KeyRelease) {
+        QKeyEvent *kevent = static_cast<QKeyEvent *>(event);
         keyReleaseEvent(kevent);
     }
 
@@ -148,9 +145,11 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
 {
     bool eventValid = false;
     KoPointerEvent ev = convertEventToPointerEvent(event, docPoint, &eventValid);
-    KisTool *activeTool = dynamic_cast<KisTool*>(priv()->activeTool);
+    KisTool *activeTool = dynamic_cast<KisTool *>(priv()->activeTool);
 
-    if (!eventValid || !activeTool) return;
+    if (!eventValid || !activeTool) {
+        return;
+    }
 
     switch (state) {
     case BEGIN:
@@ -187,13 +186,15 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
 
 bool KisToolProxy::primaryActionSupportsHiResEvents() const
 {
-    KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
+    KisTool *activeTool = dynamic_cast<KisTool *>(const_cast<KisToolProxy *>(this)->priv()->activeTool);
     return activeTool && activeTool->primaryActionSupportsHiResEvents();
 }
 
 void KisToolProxy::setActiveTool(KoToolBase *tool)
 {
-    if (!tool) return;
+    if (!tool) {
+        return;
+    }
 
     if (m_isActionActivated) {
         deactivateToolAction(m_lastAction);
@@ -206,7 +207,7 @@ void KisToolProxy::setActiveTool(KoToolBase *tool)
 
 void KisToolProxy::activateToolAction(KisTool::ToolAction action)
 {
-    KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
+    KisTool *activeTool = dynamic_cast<KisTool *>(const_cast<KisToolProxy *>(this)->priv()->activeTool);
 
     if (activeTool) {
         if (action == KisTool::Primary) {
@@ -222,7 +223,7 @@ void KisToolProxy::activateToolAction(KisTool::ToolAction action)
 
 void KisToolProxy::deactivateToolAction(KisTool::ToolAction action)
 {
-    KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
+    KisTool *activeTool = dynamic_cast<KisTool *>(const_cast<KisToolProxy *>(this)->priv()->activeTool);
 
     if (activeTool) {
         if (action == KisTool::Primary) {

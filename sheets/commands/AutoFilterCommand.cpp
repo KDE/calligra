@@ -32,7 +32,7 @@
 using namespace Calligra::Sheets;
 
 AutoFilterCommand::AutoFilterCommand()
-        : AbstractRegionCommand()
+    : AbstractRegionCommand()
 {
     setText(kundo2_i18n("Auto-Filter"));
 }

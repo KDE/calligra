@@ -29,17 +29,18 @@
 #include <QPainter>
 
 KarbonPrintJob::KarbonPrintJob(KarbonView *view, PrintMode printMode)
-        : KoPrintingDialog(view),
-        m_view(view)
+    : KoPrintingDialog(view),
+      m_view(view)
 {
     setShapeManager(m_view->canvasWidget()->shapeManager());
     printer().setFromTo(1, 1);
 
     QSizeF pageSize = m_view->part()->pageSize();
-    if (pageSize.width() > pageSize.height())
+    if (pageSize.width() > pageSize.height()) {
         printer().setOrientation(QPrinter::Landscape);
-    else
+    } else {
         printer().setOrientation(QPrinter::Portrait);
+    }
 
     if (printMode == PrintToPdf) {
         printer().setPaperSize(pageSize, QPrinter::Point);
@@ -69,12 +70,12 @@ QRectF KarbonPrintJob::preparePage(int)
     return QRectF(QPointF(), scale * contentSize);
 }
 
-QList<KoShape*> KarbonPrintJob::shapesOnPage(int)
+QList<KoShape *> KarbonPrintJob::shapesOnPage(int)
 {
     return shapeManager()->shapes();
 }
 
-QList<QWidget*> KarbonPrintJob::createOptionWidgets() const
+QList<QWidget *> KarbonPrintJob::createOptionWidgets() const
 {
-    return QList<QWidget*>();
+    return QList<QWidget *>();
 }

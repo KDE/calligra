@@ -33,11 +33,11 @@
 
 using namespace Calligra::Sheets;
 
-KComponentData* Factory::s_global = 0;
-KAboutData* Factory::s_aboutData = 0;
+KComponentData *Factory::s_global = 0;
+KAboutData *Factory::s_aboutData = 0;
 
-Factory::Factory(QObject* parent)
-        : KPluginFactory(*aboutData(), parent)
+Factory::Factory(QObject *parent)
+    : KPluginFactory(*aboutData(), parent)
 {
     //kDebug(36001) <<"Factory::Factory()";
     // Create our instance, so that it becomes KGlobal::instance if the
@@ -54,7 +54,7 @@ Factory::~Factory()
     s_global = 0;
 }
 
-QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject *Factory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent, const QVariantList &args, const QString &keyword)
 {
     Q_UNUSED(args);
     Q_UNUSED(keyword);
@@ -64,10 +64,11 @@ QObject* Factory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObje
     return part;
 }
 
-KAboutData* Factory::aboutData()
+KAboutData *Factory::aboutData()
 {
-    if (!s_aboutData)
+    if (!s_aboutData) {
         s_aboutData = newAboutData();
+    }
     return s_aboutData;
 }
 

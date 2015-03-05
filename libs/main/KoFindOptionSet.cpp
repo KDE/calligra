@@ -45,7 +45,7 @@ KoFindOptionSet::~KoFindOptionSet()
 
 KoFindOption *KoFindOptionSet::option(const QString &name) const
 {
-    if(d->options.contains(name)) {
+    if (d->options.contains(name)) {
         return d->options.value(name);
     }
     return 0;
@@ -75,14 +75,14 @@ KoFindOption *KoFindOptionSet::addOption(const QString &name, const QString &tit
 
 void KoFindOptionSet::removeOption(const QString &name)
 {
-    if(d->options.contains(name)) {
+    if (d->options.contains(name)) {
         d->options.remove(name);
     }
 }
 
 void KoFindOptionSet::setOptionValue(const QString &name, const QVariant &value)
 {
-    if(d->options.contains(name)) {
+    if (d->options.contains(name)) {
         d->options.value(name)->setValue(value);
     }
 }
@@ -90,7 +90,7 @@ void KoFindOptionSet::setOptionValue(const QString &name, const QVariant &value)
 void KoFindOptionSet::replaceOption(const QString &name, KoFindOption *newOption)
 {
     Q_ASSERT(newOption);
-    if(d->options.contains(name)) {
+    if (d->options.contains(name)) {
         d->options.insert(name, newOption);
     }
 }

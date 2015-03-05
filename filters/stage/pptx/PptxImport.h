@@ -34,18 +34,18 @@ class PptxImport : public MSOOXML::MsooXmlImport
 {
     Q_OBJECT
 public:
-    PptxImport(QObject * parent, const QVariantList &);
+    PptxImport(QObject *parent, const QVariantList &);
     virtual ~PptxImport();
 
 protected:
-    virtual bool acceptsSourceMimeType(const QByteArray& mime) const;
+    virtual bool acceptsSourceMimeType(const QByteArray &mime) const;
 
-    virtual bool acceptsDestinationMimeType(const QByteArray& mime) const;
+    virtual bool acceptsDestinationMimeType(const QByteArray &mime) const;
 
     virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers, MSOOXML::MsooXmlRelationships *relationships,
-            QString& errorMessage);
+            QString &errorMessage);
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

@@ -49,42 +49,42 @@ public:
     void setRows(int rows);
 
     // KoShape interface
-    virtual void paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext &context) const;
     virtual void setSize(const QSizeF &size);
 
     /**
      * \return the map containing the data for this shape
      */
-    Map* map() const;
+    Map *map() const;
     void setMap(Map *map);
 
     /**
      * \return the sheet containing the data for this shape
      */
-    Sheet* sheet() const;
+    Sheet *sheet() const;
 
-    SheetView* sheetView() const;
+    SheetView *sheetView() const;
 
     /**
      * Set the current sheet to the sheet with name \p sheetName .
      */
-    void setSheet(const QString& sheetName);
+    void setSheet(const QString &sheetName);
 
-    void setVisibleCellRange(const QRect& cellRange);
+    void setVisibleCellRange(const QRect &cellRange);
 
 protected:
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 
 private Q_SLOTS:
-    void handleDamages(const QList<Damage*>& damages);
+    void handleDamages(const QList<Damage *> &damages);
 
 private:
     Q_DISABLE_COPY(TableShape)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

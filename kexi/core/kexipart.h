@@ -88,7 +88,8 @@ public:
     the actual widget (e.g. the button that was pressed).
     \return true if execution was successfully else false.
                 */
-    virtual bool execute(KexiPart::Item* item, QObject* sender = 0) {
+    virtual bool execute(KexiPart::Item *item, QObject *sender = 0)
+    {
         Q_UNUSED(item);
         Q_UNUSED(sender);
         return false;
@@ -99,8 +100,8 @@ public:
      \a viewMode is one of Kexi::ViewMode enum.
      \a staticObjectArgs can be passed for static Kexi Parts.
      The new widget will be a child of \a parent. */
-    KexiWindow* openInstance(QWidget* parent, KexiPart::Item &item,
-                             Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
+    KexiWindow *openInstance(QWidget *parent, KexiPart::Item &item,
+                             Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant> *staticObjectArgs = 0);
 
 //! @todo make it protected, outside world should use KexiProject
     /*! Removes any stored data pointed by \a item (example: table is dropped for table part).
@@ -117,7 +118,7 @@ public:
 
      Default implementation just removes object from kexi__* system structures
      at the database backend using KexiDB::Connection::removeObject(). */
-    virtual tristate remove(KexiPart::Item & item);
+    virtual tristate remove(KexiPart::Item &item);
 
     /*! Renames stored data pointed by \a item to \a newName
      (example: table name is altered in the database).
@@ -130,23 +131,23 @@ public:
      You shouldn't use by hand transactions here.
 
      Default implementation does nothing and returns true. */
-    virtual tristate rename(KexiPart::Item &item, const QString& newName);
+    virtual tristate rename(KexiPart::Item &item, const QString &newName);
 
     /*! Creates and returns a new temporary data for a window  \a window.
      This method is called on openInstance() once per dialog.
      Reimplement this to return KexiWindowData subclass instance.
      Default implemention just returns empty KexiWindowData object. */
-    virtual KexiWindowData* createWindowData(KexiWindow *window);
+    virtual KexiWindowData *createWindowData(KexiWindow *window);
 
     /*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be
      used inside \a dialog. */
-    virtual KexiView* createView(QWidget *parent, KexiWindow *window,
-                                 KexiPart::Item &item, 
-                                 Kexi::ViewMode viewMode = Kexi::DataViewMode, 
-                                 QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
-    
+    virtual KexiView *createView(QWidget *parent, KexiWindow *window,
+                                 KexiPart::Item &item,
+                                 Kexi::ViewMode viewMode = Kexi::DataViewMode,
+                                 QMap<QString, QVariant> *staticObjectArgs = 0) = 0;
+
     //virtual void initTabs();
-    
+
     /*! @return i18n'd instance name usable for displaying in gui as object's name,
      e.g. "table".
      The name is valid identifier - contains latin-1 lowercase characters only. */
@@ -168,9 +169,9 @@ public:
     GUIClient *instanceGuiClient(Kexi::ViewMode mode = Kexi::AllViewModes) const;
 
     /*! \return action collection for mode \a viewMode. */
-    KActionCollection* actionCollectionForMode(Kexi::ViewMode viewMode) const;
+    KActionCollection *actionCollectionForMode(Kexi::ViewMode viewMode) const;
 
-    const Kexi::ObjectStatus& lastOperationStatus() const;
+    const Kexi::ObjectStatus &lastOperationStatus() const;
 
     /*! @internal
      Creates GUIClients for this part, attached to the main window.
@@ -194,14 +195,14 @@ protected:
      @param whatsThis i18n'd "what's this" string. Example: "Creates new table."
      @param list extra arguments passed to the plugin
     */
-    Part(QObject *parent, 
-        const QString& instanceName,
-        const QString& toolTip,
-        const QString& whatsThis,
-        const QVariantList& list);
+    Part(QObject *parent,
+         const QString &instanceName,
+         const QString &toolTip,
+         const QString &whatsThis,
+         const QVariantList &list);
 
     //! Used by StaticPart
-    Part(QObject* parent, StaticPartInfo *info);
+    Part(QObject *parent, StaticPartInfo *info);
 
     virtual void initPartActions();
     virtual void initInstanceActions();
@@ -211,22 +212,22 @@ protected:
      where object of KexiDB::SchemaData subclass is returned.
      In this case value pointed by @a ownedByWindow is set to false.
      Default implemenatation owned (value pointed by @a ownedByWindow is set to true). */
-    virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window,
-            const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);
+    virtual KexiDB::SchemaData *loadSchemaData(KexiWindow *window,
+            const KexiDB::SchemaData &sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);
 
-    bool loadDataBlock(KexiWindow *window, QString &dataString, const QString& dataID = QString());
+    bool loadDataBlock(KexiWindow *window, QString &dataString, const QString &dataID = QString());
 
     /*! Creates shared action for action collection declared
      for 'instance actions' of this part.
      See KexiSharedActionHost::createSharedAction() for details.
      Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
      that subclass allocated instead just KAction (what is the default). */
-    KAction* createSharedAction(Kexi::ViewMode mode, const QString &text,
+    KAction *createSharedAction(Kexi::ViewMode mode, const QString &text,
                                 const QString &pix_name, const KShortcut &cut, const char *name,
                                 const char *subclassName = 0);
 
     /*! Convenience version of above method - creates shared toggle action. */
-    KAction* createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
+    KAction *createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
                                       const QString &pix_name, const KShortcut &cut, const char *name);
 
     /*! Creates shared action for action collection declared
@@ -234,13 +235,13 @@ protected:
      See KexiSharedActionHost::createSharedAction() for details.
      Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
      that subclass allocated instead just KAction (what is the default). */
-    KAction* createSharedPartAction(const QString &text,
+    KAction *createSharedPartAction(const QString &text,
                                     const QString &pix_name, const KShortcut &cut, const char *name,
                                     const char *subclassName = 0);
 
     /*! Convenience version of above method - creates shared toggle action
      for 'part actions' of this part. */
-    KAction* createSharedPartToggleAction(const QString &text,
+    KAction *createSharedPartToggleAction(const QString &text,
                                           const QString &pix_name, const KShortcut &cut, const char *name);
 
     void setActionAvailable(const char *action_name, bool avail);
@@ -248,13 +249,13 @@ protected:
 private:
     //! Calls loadSchemaData() (virtual), updates ownership of schema data for @a window
     //! and assigns the created data to @a window.
-    void loadAndSetSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
+    void loadAndSetSchemaData(KexiWindow *window, const KexiDB::SchemaData &sdata,
                               Kexi::ViewMode viewMode);
 
     Q_DISABLE_COPY(Part)
 
     class Private;
-    Private * const d;
+    Private *const d;
 
     friend class Manager;
     friend class ::KexiWindow;

@@ -36,16 +36,16 @@ static QString getText(int beats, int beat)
     return QString("%1/%2").arg(beats).arg(beat);
 }
 
-TimeSignatureAction::TimeSignatureAction(SimpleEntryTool* tool, int beats, int beat)
+TimeSignatureAction::TimeSignatureAction(SimpleEntryTool *tool, int beats, int beat)
     : AbstractMusicAction(getText(beats, beat), tool), m_beats(beats), m_beat(beat)
 {
     setCheckable(false);
 }
 
-void TimeSignatureAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
+void TimeSignatureAction::mousePress(Staff *staff, int barIdx, const QPointF &pos)
 {
-    Q_UNUSED( pos );
-    
-    Bar* bar = staff->part()->sheet()->bar(barIdx);
+    Q_UNUSED(pos);
+
+    Bar *bar = staff->part()->sheet()->bar(barIdx);
     m_tool->addCommand(new SetTimeSignatureCommand(m_tool->shape(), bar, m_beats, m_beat));
 }

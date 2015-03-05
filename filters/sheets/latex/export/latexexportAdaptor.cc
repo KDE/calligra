@@ -22,8 +22,8 @@
 #include <latexexportAdaptor.h>
 #include "latexexportdialog.h"
 
-LatexExportAdaptor::LatexExportAdaptor(LatexExportDialog* dia)
-        : QDBusAbstractAdaptor(dia)
+LatexExportAdaptor::LatexExportAdaptor(LatexExportDialog *dia)
+    : QDBusAbstractAdaptor(dia)
 {
     // constructor
     setAutoRelaySignals(true);

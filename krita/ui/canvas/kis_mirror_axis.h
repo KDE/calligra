@@ -31,7 +31,7 @@ class KisMirrorAxis : public KisCanvasDecoration
     Q_PROPERTY(float handleSize READ handleSize WRITE setHandleSize NOTIFY handleSizeChanged)
 
 public:
-    KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisView> parent);
+    KisMirrorAxis(KisCanvasResourceProvider *provider, QPointer<KisView> parent);
     ~KisMirrorAxis();
 
     float handleSize() const;
@@ -41,12 +41,12 @@ Q_SIGNALS:
     void handleSizeChanged();
 
 protected:
-    virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas);
-    virtual bool eventFilter(QObject* target, QEvent* event);
+    virtual void drawDecoration(QPainter &gc, const QRectF &updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
+    virtual bool eventFilter(QObject *target, QEvent *event);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
 private Q_SLOTS:
     void mirrorModeChanged();

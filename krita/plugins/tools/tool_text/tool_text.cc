@@ -38,13 +38,11 @@
 K_PLUGIN_FACTORY(ToolTextFactory, registerPlugin<ToolText>();)
 K_EXPORT_PLUGIN(ToolTextFactory("krita"))
 
-
 ToolText::ToolText(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
+    KoToolRegistry *r = KoToolRegistry::instance();
     r->add(new KisToolTextFactory(QStringList()));
-
 
 }
 

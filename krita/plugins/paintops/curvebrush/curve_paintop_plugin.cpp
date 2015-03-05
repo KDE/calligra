@@ -34,7 +34,6 @@
 K_PLUGIN_FACTORY(CurvePaintOpPluginFactory, registerPlugin<CurvePaintOpPlugin>();)
 K_EXPORT_PLUGIN(CurvePaintOpPluginFactory("krita"))
 
-
 CurvePaintOpPlugin::CurvePaintOpPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {

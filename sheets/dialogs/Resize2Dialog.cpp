@@ -51,8 +51,8 @@
 
 using namespace Calligra::Sheets;
 
-ResizeRow::ResizeRow(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+ResizeRow::ResizeRow(QWidget *parent, Selection *selection)
+    : KDialog(parent)
 {
     setCaption(i18n("Resize Row"));
     setModal(true);
@@ -64,10 +64,10 @@ ResizeRow::ResizeRow(QWidget* parent, Selection* selection)
     QWidget *page = new QWidget();
     setMainWidget(page);
 
-    QGridLayout* gridLayout = new QGridLayout(page);
+    QGridLayout *gridLayout = new QGridLayout(page);
     gridLayout->setColumnStretch(1, 1);
 
-    QLabel * label1 = new QLabel(page);
+    QLabel *label1 = new QLabel(page);
     label1->setText(i18n("Height:"));
     gridLayout->addWidget(label1, 0, 0);
 
@@ -90,7 +90,7 @@ void ResizeRow::slotOk()
 
     //Don't generate a resize, when there isn't a change or the change is only a rounding issue
     if (fabs(height - rowHeight) > DBL_EPSILON) {
-        ResizeRowManipulator* manipulator = new ResizeRowManipulator();
+        ResizeRowManipulator *manipulator = new ResizeRowManipulator();
         manipulator->setSheet(m_selection->activeSheet());
         manipulator->setSize(height);
         manipulator->add(*m_selection);
@@ -101,31 +101,32 @@ void ResizeRow::slotOk()
 
 void ResizeRow::slotDefault()
 {
-    Sheet* sheet = m_selection->activeSheet();
-    if (!sheet)
+    Sheet *sheet = m_selection->activeSheet();
+    if (!sheet) {
         return;
+    }
     double points = sheet->map()->defaultRowFormat()->height();
     m_pHeight->setValue(m_selection->canvas()->unit().toUserValue(points));
 }
 
-ResizeColumn::ResizeColumn(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+ResizeColumn::ResizeColumn(QWidget *parent, Selection *selection)
+    : KDialog(parent)
 {
     setCaption(i18n("Resize Column"));
     setModal(true);
     setButtons(Ok | Cancel | Default);
     m_selection = selection;
 
-    const ColumnFormat* cl = m_selection->activeSheet()->columnFormat(selection->lastRange().left());
+    const ColumnFormat *cl = m_selection->activeSheet()->columnFormat(selection->lastRange().left());
     columnWidth = cl->width();
 
     QWidget *page = new QWidget();
     setMainWidget(page);
 
-    QGridLayout* gridLayout = new QGridLayout(page);
+    QGridLayout *gridLayout = new QGridLayout(page);
     gridLayout->setColumnStretch(1, 1);
 
-    QLabel * label1 = new QLabel(page);
+    QLabel *label1 = new QLabel(page);
     label1->setText(i18n("Width:"));
     gridLayout->addWidget(label1, 0, 0);
 
@@ -149,7 +150,7 @@ void ResizeColumn::slotOk()
 
     //Don't generate a resize, when there isn't a change or the change is only a rounding issue
     if (fabs(width - columnWidth) > DBL_EPSILON) {
-        ResizeColumnManipulator* manipulator = new ResizeColumnManipulator();
+        ResizeColumnManipulator *manipulator = new ResizeColumnManipulator();
         manipulator->setSheet(m_selection->activeSheet());
         manipulator->setSize(width);
         manipulator->add(*m_selection);
@@ -160,12 +161,12 @@ void ResizeColumn::slotOk()
 
 void ResizeColumn::slotDefault()
 {
-    Sheet* sheet = m_selection->activeSheet();
-    if (!sheet)
+    Sheet *sheet = m_selection->activeSheet();
+    if (!sheet) {
         return;
+    }
     double points = sheet->map()->defaultColumnFormat()->width();
     m_pWidth->setValue(m_selection->canvas()->unit().toUserValue(points));
 }
-
 
 #include "Resize2Dialog.moc"

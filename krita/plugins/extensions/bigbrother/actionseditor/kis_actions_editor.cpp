@@ -36,23 +36,21 @@
 #include <QMenu>
 #include <QSignalMapper>
 
-KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_currentEditor(0), m_form(new Ui::ActionsEditor), m_macro(0), m_model(0), m_widgetLayout(0)
+KisActionsEditor::KisActionsEditor(QWidget *parent) : QWidget(parent), m_currentEditor(0), m_form(new Ui::ActionsEditor), m_macro(0), m_model(0), m_widgetLayout(0)
 
 {
     m_form->setupUi(this);
 
     // Setup buttons
     m_form->bnAdd->setIcon(koIcon("list-add"));
-    QSignalMapper* mapper = new QSignalMapper(this);
+    QSignalMapper *mapper = new QSignalMapper(this);
     connect(mapper, SIGNAL(mapped(QString)), SLOT(slotCreateAction(QString)));
-    QMenu* addMenu = new QMenu;
-    foreach(const KoID& id, KisRecordedActionCreatorFactoryRegistry::instance()->creators())
-    {
-        QAction* action = addMenu->addAction(id.name(), mapper, SLOT(map()));
+    QMenu *addMenu = new QMenu;
+    foreach (const KoID &id, KisRecordedActionCreatorFactoryRegistry::instance()->creators()) {
+        QAction *action = addMenu->addAction(id.name(), mapper, SLOT(map()));
         mapper->setMapping(action, id.id());
     }
     m_form->bnAdd->setMenu(addMenu);
-    
 
     m_form->bnDelete->setIcon(koIcon("list-remove"));
     connect(m_form->bnDelete, SIGNAL(released()), SLOT(slotBtnDelete()));
@@ -67,8 +65,8 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
     connect(m_form->bnDuplicate, SIGNAL(released()), SLOT(slotBtnDuplicate()));
 
     // Setup actions list
-    connect(m_form->actionsList, SIGNAL(clicked(const QModelIndex&)), SLOT(slotActionActivated(const QModelIndex&)));
-    connect(m_form->actionsList, SIGNAL(activated(QModelIndex)), SLOT(slotActionActivated(const QModelIndex&)));
+    connect(m_form->actionsList, SIGNAL(clicked(QModelIndex)), SLOT(slotActionActivated(QModelIndex)));
+    connect(m_form->actionsList, SIGNAL(activated(QModelIndex)), SLOT(slotActionActivated(QModelIndex)));
 
     // Editor
     m_widgetLayout = new QGridLayout(m_form->editorWidget);
@@ -80,49 +78,47 @@ KisActionsEditor::~KisActionsEditor()
     delete m_form;
 }
 
-void KisActionsEditor::setMacro(KisMacro* _macro)
+void KisActionsEditor::setMacro(KisMacro *_macro)
 {
     m_macro = _macro;
-    KisMacroModel* oldModel = m_model;
+    KisMacroModel *oldModel = m_model;
     m_model = new KisMacroModel(m_macro);
     m_form->actionsList->setModel(m_model);
     delete oldModel;
 }
 
-void KisActionsEditor::slotCreateAction(const QString& _id)
+void KisActionsEditor::slotCreateAction(const QString &_id)
 {
-    KisRecordedActionCreatorFactory* f = KisRecordedActionCreatorFactoryRegistry::instance()->get(_id);
+    KisRecordedActionCreatorFactory *f = KisRecordedActionCreatorFactoryRegistry::instance()->get(_id);
     Q_ASSERT(f);
-    if(!f) return;
-    KisRecordedAction* action = 0;
-    if(f->requireCreator())
-    {
+    if (!f) {
+        return;
+    }
+    KisRecordedAction *action = 0;
+    if (f->requireCreator()) {
         KDialog d;
         d.setButtons(KDialog::Ok | KDialog::Cancel);
-        KisRecordedActionCreator* creator = f->createCreator(&d);
+        KisRecordedActionCreator *creator = f->createCreator(&d);
         d.setMainWidget(creator);
-        if(d.exec() == KDialog::Accepted)
-        {
+        if (d.exec() == KDialog::Accepted) {
             action = creator->createAction();
-            if(!action) {
+            if (!action) {
                 QMessageBox::critical(this, i18nc("@title:window", "Krita"), i18n("Failed to create an action."));
                 return;
             }
-        }
-        else {
+        } else {
             return;
         }
-    }
-    else {
+    } else {
         action = f->createAction();
     }
     Q_ASSERT(action);
-    
+
     m_model->addAction(m_form->actionsList->currentIndex(), *action);
     delete action;
 }
 
-void KisActionsEditor::slotActionActivated(const QModelIndex& item)
+void KisActionsEditor::slotActionActivated(const QModelIndex &item)
 {
     if (item.isValid() && m_macro) {
         setCurrentAction(m_macro->actions()[item.row()]);
@@ -131,7 +127,7 @@ void KisActionsEditor::slotActionActivated(const QModelIndex& item)
     }
 }
 
-void KisActionsEditor::setCurrentAction(KisRecordedAction* _action)
+void KisActionsEditor::setCurrentAction(KisRecordedAction *_action)
 {
     // First change, the editor
     delete m_currentEditor;
@@ -144,7 +140,7 @@ void KisActionsEditor::setCurrentAction(KisRecordedAction* _action)
     if (!m_currentEditor) {
         m_currentEditor = new QLabel(i18n("No editor for current action."), this);
     }
-    m_widgetLayout->addWidget(m_currentEditor, 0 , 0);
+    m_widgetLayout->addWidget(m_currentEditor, 0, 0);
 
     // Then disable/enalbed button
     m_form->bnDuplicate->setEnabled(_action);

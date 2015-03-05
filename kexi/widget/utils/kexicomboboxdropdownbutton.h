@@ -40,7 +40,7 @@ private:
     void styleChanged();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

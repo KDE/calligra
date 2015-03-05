@@ -44,8 +44,8 @@
 
 using namespace Calligra::Sheets;
 
-ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
-        : KDialog(parent)
+ShowColRow::ShowColRow(QWidget *parent, Selection *selection, Type _type)
+    : KDialog(parent)
 {
     setModal(true);
     setButtons(Ok | Cancel);
@@ -78,16 +78,18 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
         QString text;
         QStringList listCol;
         for (; col; col = col->next()) {
-            if (col->isHidden())
+            if (col->isHidden()) {
                 listInt.append(col->column());
+            }
         }
         qSort(listInt);
         QList<int>::Iterator it;
         for (it = listInt.begin(); it != listInt.end(); ++it) {
-            if (!showColNumber)
+            if (!showColNumber) {
                 listCol += i18n("Column: %1", Cell::columnName(*it));
-            else
+            } else {
                 listCol += i18n("Column: %1", text.setNum(*it));
+            }
         }
         list->addItems(listCol);
     } else if (_type == Row) {
@@ -96,20 +98,23 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
         int lastRow, row = 1;
         while (row <= KS_rowMax) {
             if (m_selection->activeSheet()->rowFormats()->isHidden(row, &lastRow)) {
-                for (int i = row; i <= lastRow; ++i)
+                for (int i = row; i <= lastRow; ++i) {
                     listInt.append(i);
+                }
             }
-            row = lastRow+1;
+            row = lastRow + 1;
         }
         QList<int>::Iterator it;
-        for (it = listInt.begin(); it != listInt.end(); ++it)
+        for (it = listInt.begin(); it != listInt.end(); ++it) {
             listRow += i18n("Row: %1", text.setNum(*it));
+        }
 
         list->addItems(listRow);
     }
 
-    if (!list->count())
+    if (!list->count()) {
         enableButtonOk(false);
+    }
 
     //selection multiple
     list->setSelectionMode(QAbstractItemView::MultiSelection);
@@ -138,7 +143,7 @@ void ShowColRow::slotOk()
         }
     }
 
-    HideShowManipulator* manipulator = new HideShowManipulator();
+    HideShowManipulator *manipulator = new HideShowManipulator();
     manipulator->setSheet(m_selection->activeSheet());
     if (typeShow == Column) {
         manipulator->setManipulateColumns(true);

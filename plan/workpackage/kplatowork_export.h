@@ -28,10 +28,10 @@
 
 #ifndef KPLATOWORK_EXPORT
 # if defined(MAKE_PLANWORKFACTORY_LIB)
-   /* We are building this library */ 
+/* We are building this library */
 #  define KPLATOWORK_EXPORT KDE_EXPORT
 # else
-   /* We are using this library */ 
+/* We are using this library */
 #  define KPLATOWORK_EXPORT KDE_IMPORT
 # endif
 #endif
@@ -47,10 +47,10 @@
 
 #ifndef KPLATOWORKAPP_EXPORT
 # if defined(MAKE_PLANWORKAPP_LIB)
-   /* We are building this library */ 
+/* We are building this library */
 #  define KPLATOWORKAPP_EXPORT KDE_EXPORT
 # else
-   /* We are using this library */ 
+/* We are using this library */
 #  define KPLATOWORKAPP_EXPORT KDE_IMPORT
 # endif
 #endif
@@ -75,6 +75,5 @@
 #else /* not compiling tests */
 #   define KPLATOWORK_TEST_EXPORT
 #endif
-
 
 #endif

@@ -32,24 +32,24 @@ class KisKraSaver
 {
 public:
 
-    KisKraSaver(KisDocument* document);
+    KisKraSaver(KisDocument *document);
 
     ~KisKraSaver();
 
-    QDomElement saveXML(QDomDocument& doc,  KisImageWSP image);
+    QDomElement saveXML(QDomDocument &doc,  KisImageWSP image);
 
-    bool saveBinaryData(KoStore* store, KisImageWSP image, const QString & uri, bool external, bool includeMerge);
+    bool saveBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external, bool includeMerge);
 
     /// @return a list with everthing that went wrong while saving
     QStringList errorMessages() const;
 
 private:
-    void saveBackgroundColor(QDomDocument& doc, QDomElement& element, KisImageWSP image);
-    void saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image);
-    bool saveAssistants(KoStore *store,QString uri, bool external);
-    bool saveAssistantsList(QDomDocument& doc, QDomElement& element);
+    void saveBackgroundColor(QDomDocument &doc, QDomElement &element, KisImageWSP image);
+    void saveCompositions(QDomDocument &doc, QDomElement &element, KisImageWSP image);
+    bool saveAssistants(KoStore *store, QString uri, bool external);
+    bool saveAssistantsList(QDomDocument &doc, QDomElement &element);
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif

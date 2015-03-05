@@ -56,7 +56,7 @@ class KOMSOOXML_EXPORT KoOdfExporter : public KoFilter
 public:
     virtual ~KoOdfExporter();
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 protected:
     /**
@@ -67,19 +67,19 @@ protected:
      *                           office:text element will be created within office:body, etc.
      * @param parent parent object.
      */
-    KoOdfExporter(const QString& bodyContentElement, QObject* parent = 0);
+    KoOdfExporter(const QString &bodyContentElement, QObject *parent = 0);
 
     /**
      * @return true if @a mime is accepted source mime type.
      * Implement it for your filter.
      */
-    virtual bool acceptsSourceMimeType(const QByteArray& mime) const = 0;
+    virtual bool acceptsSourceMimeType(const QByteArray &mime) const = 0;
 
     /**
      * @return true if @a mime is accepted destination mime type.
      * Implement it for your filter.
      */
-    virtual bool acceptsDestinationMimeType(const QByteArray& mime) const = 0;
+    virtual bool acceptsDestinationMimeType(const QByteArray &mime) const = 0;
 
     /**
      * This method is called in convert() after creating @a outputStore, @a writers and @a mainStyles.
@@ -91,11 +91,11 @@ protected:
     /**
      * This method is called when writing the xml-settings to the ODF document.
      */
-    virtual void writeConfigurationSettings(KoXmlWriter* settings) const = 0;
+    virtual void writeConfigurationSettings(KoXmlWriter *settings) const = 0;
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif /* KOODFEXPORTER_H */

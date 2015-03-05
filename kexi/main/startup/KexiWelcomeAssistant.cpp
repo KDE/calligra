@@ -45,37 +45,37 @@
 #include <QPainter>
 #include <QProgressBar>
 #include <QTimer>
- 
+
 KexiMainWelcomePage::KexiMainWelcomePage(
-   KexiWelcomeAssistant* assistant, QWidget* parent)
- : KexiAssistantPage(i18nc("@title:window", "Welcome to Kexi"),
-                  i18nc("@info", "Select one of the recently used projects to open."),
-                  parent)
- , m_assistant(assistant)
+    KexiWelcomeAssistant *assistant, QWidget *parent)
+    : KexiAssistantPage(i18nc("@title:window", "Welcome to Kexi"),
+                        i18nc("@info", "Select one of the recently used projects to open."),
+                        parent)
+    , m_assistant(assistant)
 {
-    QWidget* contents = new QWidget;
-    QHBoxLayout* contentsLyr = new QHBoxLayout(contents);
-    
+    QWidget *contents = new QWidget;
+    QHBoxLayout *contentsLyr = new QHBoxLayout(contents);
+
     m_recentProjects = new KexiCategorizedView;
     // do not alter background palette
     QPalette pal(m_recentProjects->palette());
     pal.setColor(QPalette::Disabled, QPalette::Base,
-                    pal.color(QPalette::Normal, QPalette::Base));
+                 pal.color(QPalette::Normal, QPalette::Base));
     m_recentProjects->setPalette(pal);
     contentsLyr->addWidget(m_recentProjects, 1);
     setFocusWidget(m_recentProjects);
     m_recentProjects->setFrameShape(QFrame::NoFrame);
     m_recentProjects->setContentsMargins(0, 0, 0, 0);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
-        + KDialog::marginHint();
+                 + KDialog::marginHint();
     //not needed in grid:
     m_recentProjects->setSpacing(margin);
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     connect(m_recentProjects, SIGNAL(clicked(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
-    
+
     m_statusBar = new KexiWelcomeStatusBar;
     contentsLyr->addWidget(m_statusBar);
-    
+
     setContents(contents);
 
     QTimer::singleShot(100, this, SLOT(loadProjects()));
@@ -84,18 +84,19 @@ KexiMainWelcomePage::KexiMainWelcomePage(
 void KexiMainWelcomePage::loadProjects()
 {
     m_recentProjectsProxyModel = new KexiRecentProjectsProxyModel(m_recentProjects);
-    KexiRecentProjectsModel* model = new KexiRecentProjectsModel(*m_assistant->projects(), this);
+    KexiRecentProjectsModel *model = new KexiRecentProjectsModel(*m_assistant->projects(), this);
     m_recentProjectsProxyModel->setSourceModel(model);
     m_recentProjects->setModel(m_recentProjectsProxyModel);
     m_recentProjectsProxyModel->sort(0, Qt::DescendingOrder);
 }
 
-void KexiMainWelcomePage::slotItemClicked(const QModelIndex& index)
+void KexiMainWelcomePage::slotItemClicked(const QModelIndex &index)
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return;
+    }
     QModelIndex sourceIndex = m_recentProjectsProxyModel->mapToSource(index);
-    KexiProjectData *pdata = static_cast<KexiProjectData*>(sourceIndex.internalPointer());
+    KexiProjectData *pdata = static_cast<KexiProjectData *>(sourceIndex.internalPointer());
     //kDebug() << *pdata;
     if (pdata) {
         m_assistant->openProjectOrShowPasswordPage(pdata);
@@ -113,24 +114,27 @@ class KexiWelcomeAssistant::Private
 {
 public:
     explicit Private(KexiWelcomeAssistant *qq)
-     : q(qq)
+        : q(qq)
     {
     }
-    
+
     ~Private()
     {
         mainWindow->redirectMessagesTo(0);
     }
-    
-    KexiMainWelcomePage* mainWelcomePage() {
+
+    KexiMainWelcomePage *mainWelcomePage()
+    {
         return page<KexiMainWelcomePage>(&m_mainWelcomePage, q);
     }
-    KexiPasswordPage* passwordPage() {
+    KexiPasswordPage *passwordPage()
+    {
         return page<KexiPasswordPage>(&m_passwordPage, q);
     }
 
     template <class C>
-    C* page(QPointer<C>* p, KexiWelcomeAssistant *parent = 0) {
+    C *page(QPointer<C> *p, KexiWelcomeAssistant *parent = 0)
+    {
         if (p->isNull()) {
             *p = new C(parent);
             q->addPage(*p);
@@ -141,11 +145,11 @@ public:
     QPointer<KexiMainWelcomePage> m_mainWelcomePage;
     QPointer<KexiPasswordPage> m_passwordPage;
 
-    QAction* messageWidgetActionNo;
-    QAction* messageWidgetActionTryAgain;
+    QAction *messageWidgetActionNo;
+    QAction *messageWidgetActionTryAgain;
     QPointer<KexiContextMessageWidget> messageWidget;
 
-    KexiRecentProjects* projects;
+    KexiRecentProjects *projects;
     QPointer<KexiProjectData> projectData;
 
     KexiMainWindow *mainWindow;
@@ -156,9 +160,9 @@ public:
 // ----
 
 KexiWelcomeAssistant::KexiWelcomeAssistant(
-    KexiRecentProjects* projects, KexiMainWindow* parent)
- : KexiAssistantWidget(parent)
- , d(new Private(this))
+    KexiRecentProjects *projects, KexiMainWindow *parent)
+    : KexiAssistantWidget(parent)
+    , d(new Private(this))
 {
     d->mainWindow = parent;
     d->mainWindow->redirectMessagesTo(this);
@@ -174,26 +178,25 @@ KexiWelcomeAssistant::~KexiWelcomeAssistant()
     delete d;
 }
 
-void KexiWelcomeAssistant::nextPageRequested(KexiAssistantPage* page)
+void KexiWelcomeAssistant::nextPageRequested(KexiAssistantPage *page)
 {
     if (page == d->m_passwordPage) {
         if (d->projectData) {
             d->passwordPage()->updateConnectionData(d->projectData->connectionData());
             emitOpenProject(d->projectData);
         }
-    }
-    else {
+    } else {
         d->projectData = 0;
     }
 }
 
-void KexiWelcomeAssistant::cancelRequested(KexiAssistantPage* page)
+void KexiWelcomeAssistant::cancelRequested(KexiAssistantPage *page)
 {
     Q_UNUSED(page);
     //! @todo
 }
 
-KexiRecentProjects* KexiWelcomeAssistant::projects()
+KexiRecentProjects *KexiWelcomeAssistant::projects()
 {
     return d->projects;
 }
@@ -220,8 +223,7 @@ void KexiWelcomeAssistant::openProjectOrShowPasswordPage(KexiProjectData *data)
             d->passwordPage()->setDatabaseName(data->databaseName());
             setCurrentPage(d->passwordPage());
             return;
-        }
-        else {
+        } else {
             d->projectData = 0;
             emitOpenProject(data);
         }
@@ -242,7 +244,7 @@ void KexiWelcomeAssistant::cancelActionTriggered()
     }
 }
 
-QWidget* KexiWelcomeAssistant::calloutWidget() const
+QWidget *KexiWelcomeAssistant::calloutWidget() const
 {
     return currentPage()->nextButton();
 }

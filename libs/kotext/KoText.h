@@ -120,10 +120,10 @@ enum KoTextBreakProperty {
 /// convert the string version of text break (as specified in ODF) to the KoTextBreakProperty enum
 KOTEXT_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBreak);
 /// convert the KoTextBreakProperty enum to the string version of text break (as specified in ODF)
-KOTEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
+KOTEXT_EXPORT QString textBreakToString(KoTextBreakProperty textBreak);
 
 ///@TODO: move to KoUnit ?
-KOTEXT_EXPORT QTextLength parseLength (const QString &length);
+KOTEXT_EXPORT QTextLength parseLength(const QString &length);
 }
 
 Q_DECLARE_METATYPE(KoText::Tab)

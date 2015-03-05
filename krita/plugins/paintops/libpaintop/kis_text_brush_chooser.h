@@ -29,9 +29,10 @@ class KisTextBrushChooser : public QWidget, public Ui::KisWdgTextBrush
 
 public:
 
-    KisTextBrushChooser(QWidget *parent, const char* name, const QString& caption);
+    KisTextBrushChooser(QWidget *parent, const char *name, const QString &caption);
 
-    KisBrushSP brush() {
+    KisBrushSP brush()
+    {
         return m_textBrush;
     }
 

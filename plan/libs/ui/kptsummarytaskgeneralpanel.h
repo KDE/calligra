@@ -32,10 +32,11 @@ class TaskDescriptionPanel;
 class Task;
 class MacroCommand;
 
-class SummaryTaskGeneralPanel : public QWidget, public Ui_SummaryTaskGeneralPanelBase {
+class SummaryTaskGeneralPanel : public QWidget, public Ui_SummaryTaskGeneralPanelBase
+{
     Q_OBJECT
 public:
-    explicit SummaryTaskGeneralPanel(Task &task, QWidget *parent=0, const char *name=0);
+    explicit SummaryTaskGeneralPanel(Task &task, QWidget *parent = 0, const char *name = 0);
 
     MacroCommand *buildCommand();
 
@@ -49,7 +50,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotObligatedFieldsFilled();
     void slotChooseResponsible();
-    
+
 private:
     Task &m_task;
     TaskDescriptionPanel *m_description;

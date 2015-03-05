@@ -123,19 +123,19 @@ using namespace Calligra::Sheets;
 class CanvasItem::Private
 {
 public:
-    Selection* selection;
-    KoZoomHandler* zoomHandler;
-    QHash<const Sheet*, SheetView*> sheetViews;
-    Sheet* activeSheet;
-    ColumnHeaderItem* columnHeader;
-    RowHeaderItem* rowHeader;
+    Selection *selection;
+    KoZoomHandler *zoomHandler;
+    QHash<const Sheet *, SheetView *> sheetViews;
+    Sheet *activeSheet;
+    ColumnHeaderItem *columnHeader;
+    RowHeaderItem *rowHeader;
     Doc *doc;
 };
 
 CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
-        : QGraphicsWidget(parent)
-        , CanvasBase(doc)
-        , d(new Private)
+    : QGraphicsWidget(parent)
+    , CanvasBase(doc)
+    , d(new Private)
 {
     setAttribute(Qt::WA_OpaquePaintEvent);
     setAttribute(Qt::WA_StaticContents);
@@ -170,8 +170,9 @@ CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
 
 CanvasItem::~CanvasItem()
 {
-    if (d->doc->isReadWrite())
+    if (d->doc->isReadWrite()) {
         selection()->emitCloseEditor(true);
+    }
     d->selection->emitCloseEditor(false);
     d->selection->endReferenceSelection(false);
 
@@ -182,44 +183,44 @@ CanvasItem::~CanvasItem()
     delete d;
 }
 
-void CanvasItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void CanvasItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     KoPointerEvent pev(event, QPointF());
     mousePressed(&pev);
 }
 
-void CanvasItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void CanvasItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     KoPointerEvent pev(event, QPointF());
     mouseReleased(&pev);
 }
 
-void CanvasItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+void CanvasItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     KoPointerEvent pev(event, QPointF());
     mouseMoved(&pev);
 }
 
-void CanvasItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
+void CanvasItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     KoPointerEvent pev(event, QPointF());
     mouseDoubleClicked(&pev);
 }
 
-void CanvasItem::paint(QPainter* painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void CanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(widget);
     CanvasBase::paint(painter, option->exposedRect);
 }
 
-void CanvasItem::dragEnterEvent(QGraphicsSceneDragDropEvent* event)
+void CanvasItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
     if (CanvasBase::dragEnter(event->mimeData())) {
         event->acceptProposedAction();
     }
 }
 
-void CanvasItem::dragMoveEvent(QGraphicsSceneDragDropEvent* event)
+void CanvasItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     if (CanvasBase::dragMove(event->mimeData(), event->pos(), event->source())) {
         event->acceptProposedAction();
@@ -242,22 +243,22 @@ void CanvasItem::dropEvent(QGraphicsSceneDragDropEvent *event)
     }
 }
 
-Selection* CanvasItem::selection() const
+Selection *CanvasItem::selection() const
 {
     return d->selection;
 }
 
-Sheet* CanvasItem::activeSheet() const
+Sheet *CanvasItem::activeSheet() const
 {
     return d->activeSheet;
 }
 
-KoZoomHandler* CanvasItem::zoomHandler() const
+KoZoomHandler *CanvasItem::zoomHandler() const
 {
     return d->zoomHandler;
 }
 
-SheetView* CanvasItem::sheetView(const Sheet* sheet) const
+SheetView *CanvasItem::sheetView(const Sheet *sheet) const
 {
     if (!d->sheetViews.contains(sheet)) {
         kDebug(36004) << "Creating SheetView for" << sheet->sheetName();
@@ -268,7 +269,7 @@ SheetView* CanvasItem::sheetView(const Sheet* sheet) const
         connect(d->sheetViews[ sheet ], SIGNAL(obscuredRangeChanged(QSize)),
                 this, SLOT(setObscuredRange(QSize)));
         //connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(QSizeF)),
-                //d->zoomController, SLOT(setDocumentSize(QSizeF)));
+        //d->zoomController, SLOT(setDocumentSize(QSizeF)));
         connect(sheet, SIGNAL(visibleSizeChanged()),
                 d->sheetViews[ sheet ], SLOT(updateAccessedCellRange()));
     }
@@ -277,35 +278,37 @@ SheetView* CanvasItem::sheetView(const Sheet* sheet) const
 
 void CanvasItem::refreshSheetViews()
 {
-    const QList<SheetView*> sheetViews = d->sheetViews.values();
+    const QList<SheetView *> sheetViews = d->sheetViews.values();
     for (int i = 0; i < sheetViews.count(); ++i) {
         disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(QSizeF)),
                    this, SLOT(setDocumentSize(QSizeF)));
         disconnect(sheetViews[i], SIGNAL(obscuredRangeChanged(QSize)),
-                this, SLOT(setObscuredRange(QSize)));
+                   this, SLOT(setObscuredRange(QSize)));
         //disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(QSizeF)),
-                   //d->zoomController, SLOT(setDocumentSize(QSizeF)));
+        //d->zoomController, SLOT(setDocumentSize(QSizeF)));
         disconnect(sheetViews[i]->sheet(), SIGNAL(visibleSizeChanged()),
                    sheetViews[i], SLOT(updateAccessedCellRange()));
     }
     qDeleteAll(d->sheetViews);
     d->sheetViews.clear();
-    const QList<Sheet*> sheets = doc()->map()->sheetList();
-    for (int i = 0; i < sheets.count(); ++i)
+    const QList<Sheet *> sheets = doc()->map()->sheetList();
+    for (int i = 0; i < sheets.count(); ++i) {
         sheets[i]->cellStorage()->invalidateStyleCache();
+    }
 }
 
-void CanvasItem::setActiveSheet(Sheet* sheet)
+void CanvasItem::setActiveSheet(Sheet *sheet)
 {
-    if (sheet == d->activeSheet)
+    if (sheet == d->activeSheet) {
         return;
+    }
 
     if (d->activeSheet != 0 && !d->selection->referenceSelectionMode()) {
         selection()->emitCloseEditor(true);
         //saveCurrentSheetSelection();
     }
 
-    const Sheet* oldSheet = d->activeSheet;
+    const Sheet *oldSheet = d->activeSheet;
     d->activeSheet = sheet;
 
     if (d->activeSheet == 0) {
@@ -354,8 +357,12 @@ void CanvasItem::setActiveSheet(Sheet* sheet)
 
     // Always repaint the visible cells.
     update();
-    if (d->rowHeader) d->rowHeader->update();
-    if (d->columnHeader) d->columnHeader->update();
+    if (d->rowHeader) {
+        d->rowHeader->update();
+    }
+    if (d->columnHeader) {
+        d->columnHeader->update();
+    }
     //d->selectAllButton->update();
 
     if (d->selection->referenceSelectionMode()) {
@@ -365,8 +372,8 @@ void CanvasItem::setActiveSheet(Sheet* sheet)
 
 #if 0
     /* see if there was a previous selection on this other sheet */
-    QMap<Sheet*, QPoint>::Iterator it = d->savedAnchors.find(d->activeSheet);
-    QMap<Sheet*, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
+    QMap<Sheet *, QPoint>::Iterator it = d->savedAnchors.find(d->activeSheet);
+    QMap<Sheet *, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
 
     // restore the old anchor and marker
     const QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1, 1) : *it;
@@ -383,17 +390,19 @@ void CanvasItem::setActiveSheet(Sheet* sheet)
     doc()->map()->calculationSettings()->setAutoCalculationEnabled(autoCalc);
 }
 
-ColumnHeader* CanvasItem::columnHeader() const
+ColumnHeader *CanvasItem::columnHeader() const
 {
-    if (!d->columnHeader)
-        d->columnHeader = new ColumnHeaderItem(0, const_cast<CanvasItem*>(this));
+    if (!d->columnHeader) {
+        d->columnHeader = new ColumnHeaderItem(0, const_cast<CanvasItem *>(this));
+    }
     return d->columnHeader;
 }
 
-RowHeader* CanvasItem::rowHeader() const
+RowHeader *CanvasItem::rowHeader() const
 {
-    if (!d->rowHeader)
-        d->rowHeader = new RowHeaderItem(0, const_cast<CanvasItem*>(this));
+    if (!d->rowHeader) {
+        d->rowHeader = new RowHeaderItem(0, const_cast<CanvasItem *>(this));
+    }
     return d->rowHeader;
 }
 
@@ -402,23 +411,25 @@ void CanvasItem::setCursor(const QCursor &cursor)
     QGraphicsWidget::setCursor(cursor);
 }
 
-void CanvasItem::handleDamages(const QList<Damage*>& damages)
+void CanvasItem::handleDamages(const QList<Damage *> &damages)
 {
     QRegion paintRegion;
     enum { Nothing, Everything, Clipped } paintMode = Nothing;
 
-    QList<Damage*>::ConstIterator end(damages.end());
-    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
-        Damage* damage = *it;
-        if (!damage) continue;
+    QList<Damage *>::ConstIterator end(damages.end());
+    for (QList<Damage *>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage *damage = *it;
+        if (!damage) {
+            continue;
+        }
 
         if (damage->type() == Damage::Cell) {
-            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
+            CellDamage *cellDamage = static_cast<CellDamage *>(damage);
             kDebug(36007) << "Processing\t" << *cellDamage;
-            Sheet* const damagedSheet = cellDamage->sheet();
+            Sheet *const damagedSheet = cellDamage->sheet();
 
             if (cellDamage->changes() & CellDamage::Appearance) {
-                const Region& region = cellDamage->region();
+                const Region &region = cellDamage->region();
                 sheetView(damagedSheet)->invalidateRegion(region);
                 paintMode = Everything;
             }
@@ -426,7 +437,7 @@ void CanvasItem::handleDamages(const QList<Damage*>& damages)
         }
 
         if (damage->type() == Damage::Sheet) {
-            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            SheetDamage *sheetDamage = static_cast<SheetDamage *>(damage);
             kDebug(36007) << *sheetDamage;
             const SheetDamage::Changes changes = sheetDamage->changes();
             if (changes & (SheetDamage::Name | SheetDamage::Shown)) {
@@ -449,15 +460,17 @@ void CanvasItem::handleDamages(const QList<Damage*>& damages)
                 sheetView(d->activeSheet)->invalidate();
                 paintMode = Everything;
             }
-            if (sheetDamage->changes() & SheetDamage::ColumnsChanged)
+            if (sheetDamage->changes() & SheetDamage::ColumnsChanged) {
                 columnHeader()->update();
-            if (sheetDamage->changes() & SheetDamage::RowsChanged)
+            }
+            if (sheetDamage->changes() & SheetDamage::RowsChanged) {
                 rowHeader()->update();
+            }
             continue;
         }
 
         if (damage->type() == Damage::Selection) {
-            SelectionDamage* selectionDamage = static_cast<SelectionDamage*>(damage);
+            SelectionDamage *selectionDamage = static_cast<SelectionDamage *>(damage);
             kDebug(36007) << "Processing\t" << *selectionDamage;
             const Region region = selectionDamage->region();
 
@@ -483,13 +496,15 @@ void CanvasItem::handleDamages(const QList<Damage*>& damages)
 
 void CanvasItem::setObscuredRange(const QSize &size)
 {
-    SheetView* sheetView = qobject_cast<SheetView*>(sender());
-    if (!sheetView) return;
+    SheetView *sheetView = qobject_cast<SheetView *>(sender());
+    if (!sheetView) {
+        return;
+    }
 
     emit obscuredRangeChanged(sheetView->sheet(), size);
 }
 
-void CanvasItem::updateAccessedCellRange(Sheet* sheet, const QPoint &location)
+void CanvasItem::updateAccessedCellRange(Sheet *sheet, const QPoint &location)
 {
     sheetView(sheet)->updateAccessedCellRange(location);
 }

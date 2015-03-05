@@ -143,7 +143,6 @@ public:
         EmphasisBelow
     };
 
-
     /// list of possible line style.
     enum LineStyle {
         NoLineStyle = Qt::NoPen,
@@ -262,7 +261,6 @@ public:
     void setFontYStretch(qreal stretch);
     /// Return font Y stretch (value relevant for MS compatibility)
     qreal fontYStretch() const;
-
 
     /// See similar named method on QTextCharFormat
     void setFontStyleHint(QFont::StyleHint styleHint);
@@ -386,7 +384,6 @@ public:
     QChar textCombineEndChar() const;
     void setTextCombineEndChar(const QChar &character);
 
-
     ReliefType fontRelief() const;
     void setFontRelief(ReliefType relief);
 
@@ -474,7 +471,7 @@ public:
      * @param loadParents true = use the stylestack, false = use just the element
      */
     void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context,
-                bool loadParents = false);
+                 bool loadParents = false);
 
     /// return true if this style has a non-default value set for the Property
     bool hasProperty(int key) const;
@@ -535,7 +532,7 @@ public:
 
 Q_SIGNALS:
     void nameChanged(const QString &newName);
-    void styleApplied(const KoCharacterStyle*) const;
+    void styleApplied(const KoCharacterStyle *) const;
 
 protected:
     /**
@@ -546,7 +543,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_METATYPE(KoCharacterStyle *)

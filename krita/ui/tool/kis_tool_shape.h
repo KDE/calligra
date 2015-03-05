@@ -19,7 +19,6 @@
 #ifndef KIS_TOOL_SHAPE_H_
 #define KIS_TOOL_SHAPE_H_
 
-
 #include <krita_export.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -28,18 +27,16 @@
 #include "kis_painter.h"
 #include "ui_wdggeometryoptions.h"
 
-
-
 class KoCanvasBase;
 class KoPathShape;
-
 
 class WdgGeometryOptions : public QWidget, public Ui::WdgGeometryOptions
 {
     Q_OBJECT
 
 public:
-    WdgGeometryOptions(QWidget *parent) : QWidget(parent) {
+    WdgGeometryOptions(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -53,30 +50,29 @@ class KRITAUI_EXPORT KisToolShape : public KisToolPaint
     Q_OBJECT
 
 public:
-    KisToolShape(KoCanvasBase * canvas, const QCursor & cursor);
+    KisToolShape(KoCanvasBase *canvas, const QCursor &cursor);
     virtual ~KisToolShape();
     virtual int flags() const;
     WdgGeometryOptions *m_shapeOptionsWidget;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     virtual void outlineSettingChanged(int value);
     virtual void fillSettingChanged(int value);
 
 protected:
-    QWidget* createOptionWidget();
+    QWidget *createOptionWidget();
 
     virtual KisPainter::FillStyle fillStyle();
     KisPainter::StrokeStyle strokeStyle();
 
-    virtual void setupPaintAction(KisRecordedPaintAction* action);
+    virtual void setupPaintAction(KisRecordedPaintAction *action);
 
-    void addShape(KoShape* shape);
+    void addShape(KoShape *shape);
 
-    void addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name);
+    void addPathShape(KoPathShape *pathShape, const KUndo2MagicString &name);
 
     KConfigGroup configGroup;
-
 
 };
 

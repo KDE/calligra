@@ -27,7 +27,6 @@ class KisDummiesFacadeBase;
 class KisNodeModel;
 class KisModelIndexConverterBase;
 
-
 class KisModelIndexConverterTest : public QObject, public TestUtil::EmptyNodesTest
 {
     Q_OBJECT

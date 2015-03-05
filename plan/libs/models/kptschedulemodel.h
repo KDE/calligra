@@ -40,11 +40,11 @@ class Schedule;
 class KPLATOMODELS_EXPORT ScheduleModel : public QObject
 {
     Q_OBJECT
-    Q_ENUMS( Properties )
+    Q_ENUMS(Properties)
 public:
-    explicit ScheduleModel( QObject *parent = 0 );
+    explicit ScheduleModel(QObject *parent = 0);
     ~ScheduleModel();
-    
+
     enum Properties {
         ScheduleName = 0,
         ScheduleState,
@@ -58,7 +58,7 @@ public:
         ScheduleScheduled
     };
     const QMetaEnum columnMap() const;
-    
+
     int propertyCount() const;
 };
 
@@ -66,95 +66,98 @@ class KPLATOMODELS_EXPORT ScheduleItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit ScheduleItemModel( QObject *parent = 0 );
+    explicit ScheduleItemModel(QObject *parent = 0);
     ~ScheduleItemModel();
 
-    const QMetaEnum columnMap() const { return m_model.columnMap(); }
-    
-    virtual void setProject( Project *project );
+    const QMetaEnum columnMap() const
+    {
+        return m_model.columnMap();
+    }
 
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+    virtual void setProject(Project *project);
 
-    virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    QModelIndex index( const ScheduleManager *manager ) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
-    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
+    virtual QModelIndex parent(const QModelIndex &index) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex index(const ScheduleManager *manager) const;
 
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
-    
-    virtual void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
-    virtual QStringList mimeTypes () const;
+    QAbstractItemDelegate *createDelegate(int column, QWidget *parent) const;
 
-    ScheduleManager *manager( const QModelIndex &index ) const;
-    
-    void setFlat( bool flat );
+    virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+
+    virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
+    virtual QStringList mimeTypes() const;
+
+    ScheduleManager *manager(const QModelIndex &index) const;
+
+    void setFlat(bool flat);
 
 Q_SIGNALS:
-    void scheduleManagerAdded( ScheduleManager* );
+    void scheduleManagerAdded(ScheduleManager *);
 
 protected Q_SLOTS:
-    void slotManagerChanged( ScheduleManager *sch );
-    void slotScheduleChanged( MainSchedule *sch );
+    void slotManagerChanged(ScheduleManager *sch);
+    void slotScheduleChanged(MainSchedule *sch);
 
-    void slotScheduleManagerToBeInserted( const ScheduleManager *manager, int row );
-    void slotScheduleManagerInserted( const ScheduleManager *manager );
-    void slotScheduleManagerToBeRemoved( const ScheduleManager *manager );
-    void slotScheduleManagerRemoved( const ScheduleManager *manager );
-    void slotScheduleManagerToBeMoved( const ScheduleManager *manager );
-    void slotScheduleManagerMoved( const ScheduleManager *manager, int index );
-    void slotScheduleToBeInserted( const ScheduleManager *manager, int row );
-    void slotScheduleInserted( const MainSchedule *schedule );
-    void slotScheduleToBeRemoved( const MainSchedule *schedule );
-    void slotScheduleRemoved( const MainSchedule *schedule );
+    void slotScheduleManagerToBeInserted(const ScheduleManager *manager, int row);
+    void slotScheduleManagerInserted(const ScheduleManager *manager);
+    void slotScheduleManagerToBeRemoved(const ScheduleManager *manager);
+    void slotScheduleManagerRemoved(const ScheduleManager *manager);
+    void slotScheduleManagerToBeMoved(const ScheduleManager *manager);
+    void slotScheduleManagerMoved(const ScheduleManager *manager, int index);
+    void slotScheduleToBeInserted(const ScheduleManager *manager, int row);
+    void slotScheduleInserted(const MainSchedule *schedule);
+    void slotScheduleToBeRemoved(const MainSchedule *schedule);
+    void slotScheduleRemoved(const MainSchedule *schedule);
 
 protected:
-    int row( const Schedule *sch ) const;
-    
-    QVariant name( const QModelIndex &index, int role ) const;
-    bool setName( const QModelIndex &index, const QVariant &value, int role );
-    
-    QVariant state( const QModelIndex &index, int role ) const;
-    bool setState( const QModelIndex &index, const QVariant &value, int role );
+    int row(const Schedule *sch) const;
 
-    QVariant allowOverbooking( const QModelIndex &index, int role ) const;
-    bool setAllowOverbooking( const QModelIndex &index, const QVariant &value, int role );
-    
-    QVariant usePert( const QModelIndex &index, int role ) const;
-    bool setUsePert( const QModelIndex &index, const QVariant &value, int role );
+    QVariant name(const QModelIndex &index, int role) const;
+    bool setName(const QModelIndex &index, const QVariant &value, int role);
 
-    QVariant projectStart( const QModelIndex &index, int role ) const;
-    QVariant projectEnd( const QModelIndex &index, int role ) const;
+    QVariant state(const QModelIndex &index, int role) const;
+    bool setState(const QModelIndex &index, const QVariant &value, int role);
 
-    QVariant schedulingDirection( const QModelIndex &index, int role ) const;
-    bool setSchedulingDirection( const QModelIndex &index, const QVariant &value, int role );
+    QVariant allowOverbooking(const QModelIndex &index, int role) const;
+    bool setAllowOverbooking(const QModelIndex &index, const QVariant &value, int role);
 
-    QVariant schedulingStartTime( const QModelIndex &index, int role ) const;
-    bool setSchedulingStartTime( const QModelIndex &index, const QVariant &value, int role );
+    QVariant usePert(const QModelIndex &index, int role) const;
+    bool setUsePert(const QModelIndex &index, const QVariant &value, int role);
 
-    QVariant scheduler( const QModelIndex &index, int role ) const;
-    bool setScheduler( const QModelIndex &index, const QVariant &value, int role );
+    QVariant projectStart(const QModelIndex &index, int role) const;
+    QVariant projectEnd(const QModelIndex &index, int role) const;
 
-    QVariant isScheduled( const QModelIndex &index, int role ) const;
+    QVariant schedulingDirection(const QModelIndex &index, int role) const;
+    bool setSchedulingDirection(const QModelIndex &index, const QVariant &value, int role);
 
-    QVariant granularity( const QModelIndex &index, int role ) const;
-    bool setGranularity( const QModelIndex &index, const QVariant &value, int role );
+    QVariant schedulingStartTime(const QModelIndex &index, int role) const;
+    bool setSchedulingStartTime(const QModelIndex &index, const QVariant &value, int role);
+
+    QVariant scheduler(const QModelIndex &index, int role) const;
+    bool setScheduler(const QModelIndex &index, const QVariant &value, int role);
+
+    QVariant isScheduled(const QModelIndex &index, int role) const;
+
+    QVariant granularity(const QModelIndex &index, int role) const;
+    bool setGranularity(const QModelIndex &index, const QVariant &value, int role);
 
 private:
     ScheduleManager *m_manager; // for sanety check
     bool m_flat;
     ScheduleModel m_model;
 
-    QList<ScheduleManager*> m_managerlist;
-    
+    QList<ScheduleManager *> m_managerlist;
+
 };
 
 //----------------------------------------
@@ -162,10 +165,10 @@ class KPLATOMODELS_EXPORT ScheduleSortFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit ScheduleSortFilterModel( QObject *parent = 0 );
+    explicit ScheduleSortFilterModel(QObject *parent = 0);
     ~ScheduleSortFilterModel();
 
-    ScheduleManager *manager( const QModelIndex &index ) const;
+    ScheduleManager *manager(const QModelIndex &index) const;
 
 };
 
@@ -176,35 +179,41 @@ class KPLATOMODELS_EXPORT ScheduleLogItemModel : public QStandardItemModel
 public:
     enum DataRoles { SeverityRole = Qt::UserRole + 1, IdentityRole };
 
-    explicit ScheduleLogItemModel( QObject *parent = 0 );
+    explicit ScheduleLogItemModel(QObject *parent = 0);
     ~ScheduleLogItemModel();
 
-    void setProject( Project *project );
-    Project *project() const { return m_project; }
-    void setManager( ScheduleManager *manager );
-    ScheduleManager *manager() const { return m_manager; }
+    void setProject(Project *project);
+    Project *project() const
+    {
+        return m_project;
+    }
+    void setManager(ScheduleManager *manager);
+    ScheduleManager *manager() const
+    {
+        return m_manager;
+    }
 
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
     void refresh();
-    
-    QString identity( const QModelIndex &idx ) const;
+
+    QString identity(const QModelIndex &idx) const;
 
 protected Q_SLOTS:
-    void slotManagerChanged( ScheduleManager *sch );
-    void slotScheduleChanged( MainSchedule *sch );
+    void slotManagerChanged(ScheduleManager *sch);
+    void slotScheduleChanged(MainSchedule *sch);
 
-    void slotScheduleManagerToBeRemoved( const ScheduleManager *manager );
-    void slotScheduleManagerRemoved( const ScheduleManager *manager );
-    void slotScheduleToBeInserted( const ScheduleManager *manager, int row );
-    void slotScheduleInserted( const MainSchedule *schedule );
-    void slotScheduleToBeRemoved( const MainSchedule *schedule );
-    void slotScheduleRemoved( const MainSchedule *schedule );
+    void slotScheduleManagerToBeRemoved(const ScheduleManager *manager);
+    void slotScheduleManagerRemoved(const ScheduleManager *manager);
+    void slotScheduleToBeInserted(const ScheduleManager *manager, int row);
+    void slotScheduleInserted(const MainSchedule *schedule);
+    void slotScheduleToBeRemoved(const MainSchedule *schedule);
+    void slotScheduleRemoved(const MainSchedule *schedule);
 
-    void slotLogInserted( MainSchedule*, int firstrow, int lastrow );
+    void slotLogInserted(MainSchedule *, int firstrow, int lastrow);
 
 protected:
-    void addLogEntry( const Schedule::Log &log, int row );
+    void addLogEntry(const Schedule::Log &log, int row);
 
 private:
     Project *m_project;
@@ -212,7 +221,6 @@ private:
     MainSchedule *m_schedule;
 
 };
-
 
 }  //KPlato namespace
 

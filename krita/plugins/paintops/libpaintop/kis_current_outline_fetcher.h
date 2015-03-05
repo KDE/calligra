@@ -28,7 +28,6 @@
 class KisPaintInformation;
 class KisPaintOpSettings;
 
-
 class PAINTOP_EXPORT KisCurrentOutlineFetcher
 {
 public:

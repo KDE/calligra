@@ -62,7 +62,8 @@
 
 using namespace KChart;
 
-class Legend::Private {
+class Legend::Private
+{
 public:
     Private();
     ~Private();
@@ -92,7 +93,6 @@ public:
     QPointF lastZoomLevel;
 };
 
-
 Legend::Private::Private()
 {
     lineBorder = new KoShapeStroke(0.5, Qt::black);
@@ -109,7 +109,6 @@ Legend::Private::~Private()
 {
     delete lineBorder;
 }
-
 
 Legend::Legend(ChartShape *parent)
     : QObject(parent)
@@ -132,10 +131,10 @@ Legend::Legend(ChartShape *parent)
 
     parent->addShape(this);
 
-    connect (d->kdLegend, SIGNAL(propertiesChanged()),
-             this,        SLOT(slotKdLegendChanged()));
-    connect (parent, SIGNAL(chartTypeChanged(ChartType)),
-             this,   SLOT(slotChartTypeChanged(ChartType)));
+    connect(d->kdLegend, SIGNAL(propertiesChanged()),
+            this,        SLOT(slotKdLegendChanged()));
+    connect(parent, SIGNAL(chartTypeChanged(ChartType)),
+            this,   SLOT(slotChartTypeChanged(ChartType)));
 }
 
 Legend::~Legend()
@@ -143,7 +142,6 @@ Legend::~Legend()
     delete d->kdLegend;
     delete d;
 }
-
 
 QString Legend::title() const
 {
@@ -382,7 +380,6 @@ void Legend::setSize(const QSizeF &newSize)
     KoShape::setSize(newSize);
 }
 
-
 void Legend::paintPixmap(QPainter &painter, const KoViewConverter &converter)
 {
     // Adjust the size of the painting area to the current zoom level
@@ -449,17 +446,15 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
     //painter.drawImage(0, 0, d->image);
 }
 
-
 // ----------------------------------------------------------------
 //                     loading and saving
-
 
 bool Legend::loadOdf(const KoXmlElement &legendElement,
                      KoShapeLoadingContext &context)
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.clear();
-    
+
     // FIXME: If the style isn't present we shouldn't care about it at all
     // and move everything related to the legend style in this if clause
     if (legendElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
@@ -479,10 +474,9 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
         //
         // FIXME also width and height are not supported at this place
         if (legendElement.hasAttributeNS(KoXmlNS::svg, "x") ||
-            legendElement.hasAttributeNS(KoXmlNS::svg, "y") ||
-            legendElement.hasAttributeNS(KoXmlNS::svg, "width") ||
-            legendElement.hasAttributeNS(KoXmlNS::svg, "height"))
-        {
+                legendElement.hasAttributeNS(KoXmlNS::svg, "y") ||
+                legendElement.hasAttributeNS(KoXmlNS::svg, "width") ||
+                legendElement.hasAttributeNS(KoXmlNS::svg, "height")) {
             d->shape->layout()->setPosition(this, FloatingPosition);
         }
 
@@ -492,46 +486,38 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
 
         if (legendElement.hasAttributeNS(KoXmlNS::style, "legend-expansion")) {
             QString lexpansion = legendElement.attributeNS(KoXmlNS::style, "legend-expansion", QString());
-            if (lexpansion == "wide")
+            if (lexpansion == "wide") {
                 setExpansion(WideLegendExpansion);
-            else if (lexpansion == "high")
+            } else if (lexpansion == "high") {
                 setExpansion(HighLegendExpansion);
-            else
+            } else {
                 setExpansion(BalancedLegendExpansion);
+            }
         }
 
         if (lalign == "start") {
             setAlignment(Qt::AlignLeft);
-        }
-        else if (lalign == "end") {
+        } else if (lalign == "end") {
             setAlignment(Qt::AlignRight);
-        }
-        else {
+        } else {
             setAlignment(Qt::AlignCenter);
         }
 
         if (lp == "start") {
             setLegendPosition(StartPosition);
-        }
-        else if (lp == "top") {
+        } else if (lp == "top") {
             setLegendPosition(TopPosition);
-        }
-        else if (lp == "bottom") {
+        } else if (lp == "bottom") {
             setLegendPosition(BottomPosition);
-        }
-        else if (lp == "top-start") {
+        } else if (lp == "top-start") {
             setLegendPosition(TopStartPosition);
-        }
-        else if (lp == "bottom-start") {
+        } else if (lp == "bottom-start") {
             setLegendPosition(BottomStartPosition);
-        }
-        else if (lp == "top-end") {
+        } else if (lp == "top-end") {
             setLegendPosition(TopEndPosition);
-        }
-        else if (lp == "bottom-end") {
+        } else if (lp == "bottom-end") {
             setLegendPosition(BottomEndPosition);
-        }
-        else {
+        } else {
             setLegendPosition(EndPosition);
         }
 
@@ -557,8 +543,7 @@ bool Legend::loadOdf(const KoXmlElement &legendElement,
                 setFontColor(color);
             }
         }
-    }
-    else {
+    } else {
         // No legend element, use default legend.
         // FIXME: North??  Isn't that a bit strange as default? /IW
         setLegendPosition(TopPosition);
@@ -600,8 +585,9 @@ void Legend::saveOdf(KoShapeSavingContext &context) const
     };
     bodyWriter.addAttribute("style:legend-expansion", lexpansion);
 
-    if (!title().isEmpty())
+    if (!title().isEmpty()) {
         bodyWriter.addAttribute("office:title", title());
+    }
 
     bodyWriter.endElement(); // chart:legend
 }

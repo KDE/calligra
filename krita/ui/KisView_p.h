@@ -27,26 +27,25 @@
 #include <QActionGroup>
 #include <QAction>
 
-
 // Action group which keeps the actions in sync with the document's unit property
 class UnitActionGroup : public QActionGroup
 {
     Q_OBJECT
 public:
-    explicit UnitActionGroup(KisDocument *document, bool addPixelUnit, QObject* parent = 0)
-            : QActionGroup(parent)
-            , m_document(document)
-            , m_listOptions(addPixelUnit ? KoUnit::ListAll : KoUnit::HidePixel)
+    explicit UnitActionGroup(KisDocument *document, bool addPixelUnit, QObject *parent = 0)
+        : QActionGroup(parent)
+        , m_document(document)
+        , m_listOptions(addPixelUnit ? KoUnit::ListAll : KoUnit::HidePixel)
     {
         setExclusive(true);
-        connect(this, SIGNAL(triggered(QAction*)), SLOT(onTriggered(QAction*)));
+        connect(this, SIGNAL(triggered(QAction *)), SLOT(onTriggered(QAction *)));
         connect(document, SIGNAL(unitChanged(KoUnit)), SLOT(onUnitChanged(KoUnit)));
 
         const QStringList unitNames = KoUnit::listOfUnitNameForUi(m_listOptions);
         const int currentUnitIndex = m_document->unit().indexInListForUi(m_listOptions);
 
         for (int i = 0; i < unitNames.count(); ++i) {
-            QAction* action = new QAction(unitNames.at(i), this);
+            QAction *action = new QAction(unitNames.at(i), this);
             action->setData(i);
             action->setCheckable(true);
 

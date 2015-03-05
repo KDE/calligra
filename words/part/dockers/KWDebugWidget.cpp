@@ -107,7 +107,7 @@ void KWDebugWidget::updateData()
     m_label->setText(willShow);
 }
 
-void KWDebugWidget::setCanvas(KWCanvas* canvas)
+void KWDebugWidget::setCanvas(KWCanvas *canvas)
 {
     m_canvas = canvas;
 }
@@ -153,10 +153,10 @@ void KWDebugWidget::doSetMagic()
     rdf->prefixMapping()->insert("cau", "http://www.caligra.org/author#");
 
     qDebug() << rdf->model()->addStatement(
-        sectionNode,
-        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("rdf:type")),
-        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("cau:Section")),
-        rdf->manifestRdfNode());
+                 sectionNode,
+                 Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("rdf:type")),
+                 Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("cau:Section")),
+                 rdf->manifestRdfNode());
 
 //     qDebug() << rdf->model()->addStatement(
 //         sectionNode,
@@ -167,23 +167,23 @@ void KWDebugWidget::doSetMagic()
     Soprano::Node authorContext = Soprano::Node::createResourceNode(QUrl(rdf->RDF_PATH_CONTEXT_PREFIX + "author.rdf"));
 
     qDebug() << rdf->model()->addStatement(
-        sectionNode,
-        Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/section#descr")),
-        Soprano::Node::createLiteralNode("Some TEST descr"),
-        authorContext);
+                 sectionNode,
+                 Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/section#descr")),
+                 Soprano::Node::createLiteralNode("Some TEST descr"),
+                 authorContext);
 
     Soprano::Node authorRdfFileNode = Soprano::Node::createBlankNode("CAU_META_DATA_FILE");
     qDebug() << rdf->model()->addStatement(
-        authorRdfFileNode,
-        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("rdf:type")),
-        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("odf:MetaDataFile")),
-        rdf->manifestRdfNode());
+                 authorRdfFileNode,
+                 Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("rdf:type")),
+                 Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("odf:MetaDataFile")),
+                 rdf->manifestRdfNode());
 
     qDebug() << rdf->model()->addStatement(
-        authorRdfFileNode,
-        Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("pkg:path")),
-        Soprano::Node::createLiteralNode("author.rdf"),
-        rdf->manifestRdfNode());
+                 authorRdfFileNode,
+                 Soprano::Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("pkg:path")),
+                 Soprano::Node::createLiteralNode("author.rdf"),
+                 rdf->manifestRdfNode());
 }
 
 void KWDebugWidget::doGetMagic()
@@ -219,10 +219,10 @@ void KWDebugWidget::doGetMagic()
     Soprano::Node authorContext = Soprano::Node::createResourceNode(QUrl(rdf->RDF_PATH_CONTEXT_PREFIX + "author.rdf"));
 
     Soprano::StatementIterator it = rdf->model()->listStatements(
-        Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/sections/UID_HERE")),
-        Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/section#descr")),
-        Soprano::Node::createEmptyNode(),
-        authorContext);
+                                        Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/sections/UID_HERE")),
+                                        Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/section#descr")),
+                                        Soprano::Node::createEmptyNode(),
+                                        authorContext);
 
     m_buttonGet->setText(it.current().object().toString());
 }

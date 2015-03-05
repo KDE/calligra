@@ -26,15 +26,14 @@
 
 #include "XlsxXmlCommonReader.h"
 
-
 class XlsxXmlSharedStringsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    explicit XlsxXmlSharedStringsReaderContext(QVector<QString>& _strings, MSOOXML::DrawingMLTheme* _themes,
-        QVector<QString>& _colorIndices);
-    QVector<QString>* strings;
-    MSOOXML::DrawingMLTheme* themes;
-    QVector<QString>& colorIndices;
+    explicit XlsxXmlSharedStringsReaderContext(QVector<QString> &_strings, MSOOXML::DrawingMLTheme *_themes,
+            QVector<QString> &_colorIndices);
+    QVector<QString> *strings;
+    MSOOXML::DrawingMLTheme *themes;
+    QVector<QString> &colorIndices;
 };
 
 //! A class reading MSOOXML XLSX markup - sharedStrings.xml part.
@@ -48,7 +47,7 @@ public:
 
     //! Reads/parses the file of format document.xml.
     //! The output goes mainly to KoXmlWriter* KoOdfWriters::body
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
 protected:
     KoFilter::ConversionStatus readInternal();
@@ -57,12 +56,12 @@ protected:
 
     uint m_index;
 
-    XlsxXmlSharedStringsReaderContext* m_context;
+    XlsxXmlSharedStringsReaderContext *m_context;
 private:
     void init();
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif //XLSXXMLSHAREDSTRINGSREADER_H

@@ -36,9 +36,9 @@
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shiped with Calligra are expected to have a good path, but better warn the user in case
 
-DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
-        const char * name)
-        : KDialog(parent)
+DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget   *parent,
+        const char *name)
+    : KDialog(parent)
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
@@ -58,12 +58,9 @@ DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
     connect(this, SIGNAL(okClicked()),
             this, SLOT(okClicked()));
 
-
     connect(m_page->colorSpaceSelector, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
 
 }
-
-
 
 DlgColorSpaceConversion::~DlgColorSpaceConversion()
 {

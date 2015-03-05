@@ -36,7 +36,8 @@
 /**
  * KoResourceLoaderThread allows threaded loading of the resources of a resource server
  */
-class KOWIDGETS_EXPORT KoResourceLoaderThread : public QThread {
+class KOWIDGETS_EXPORT KoResourceLoaderThread : public QThread
+{
 
     Q_OBJECT
 public:
@@ -62,10 +63,9 @@ protected:
 
 private:
 
-    KoResourceServerBase * m_server;
+    KoResourceServerBase *m_server;
     QStringList m_fileNames;
 };
-
 
 /**
  * Provides default resource servers for gradients, patterns and palettes
@@ -77,20 +77,20 @@ class KOWIDGETS_EXPORT KoResourceServerProvider : public QObject
 public:
     virtual ~KoResourceServerProvider();
 
-    static KoResourceServerProvider* instance();
+    static KoResourceServerProvider *instance();
 
-    KoResourceServer<KoPattern>* patternServer(bool block = true);
-    KoResourceServer<KoAbstractGradient>* gradientServer(bool block = true);
-    KoResourceServer<KoColorSet>* paletteServer(bool block = true);
+    KoResourceServer<KoPattern> *patternServer(bool block = true);
+    KoResourceServer<KoAbstractGradient> *gradientServer(bool block = true);
+    KoResourceServer<KoColorSet> *paletteServer(bool block = true);
 
 private:
     KoResourceServerProvider();
-    KoResourceServerProvider(const KoResourceServerProvider&);
-    KoResourceServerProvider operator=(const KoResourceServerProvider&);
+    KoResourceServerProvider(const KoResourceServerProvider &);
+    KoResourceServerProvider operator=(const KoResourceServerProvider &);
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KORESOURCESERVERPROVIDER_H

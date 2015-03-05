@@ -52,11 +52,10 @@
 #include <calligraversion.h>
 #include <calligragitversion.h>
 
-int main( int argc, char** argv )
+int main(int argc, char **argv)
 {
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;
-
 
 #ifdef CALLIGRA_GIT_SHA1_STRING
     QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
@@ -76,15 +75,15 @@ int main( int argc, char** argv )
                          "http://www.krita.org",
                          "submit@bugs.kde.org");
 
-    KCmdLineArgs::init (argc, argv, &aboutData);
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
-    options.add( "+[files]", ki18n( "Images to open" ) );
-    options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
-    options.add( "windowed", ki18n( "Open sketch in a window, otherwise defaults to full-screen" ) );
-    KCmdLineArgs::addCmdLineOptions( options );
+    options.add("+[files]", ki18n("Images to open"));
+    options.add("vkb", ki18n("Use the virtual keyboard"));
+    options.add("windowed", ki18n("Open sketch in a window, otherwise defaults to full-screen"));
+    KCmdLineArgs::addCmdLineOptions(options);
 
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QStringList fileNames;
     if (args->count() > 0) {
         for (int i = 0; i < args->count(); ++i) {
@@ -105,7 +104,7 @@ int main( int argc, char** argv )
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
     //QMessageBox::information(0, i18nc("@title:window", "Krita sketch", "KDEHOME: " + env.value("KDEHOME"));
-    if (!env.contains("KDEHOME") ) {
+    if (!env.contains("KDEHOME")) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }
     if (!env.contains("KDESYCOCA")) {
@@ -121,9 +120,9 @@ int main( int argc, char** argv )
         _putenv_s("KDEDIRS", appdir.absolutePath().toLocal8Bit());
     }
     _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
-              + appdir.absolutePath() + "/lib" + ";"
-              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
-              + appdir.absolutePath()).toLocal8Bit());
+                              + appdir.absolutePath() + "/lib" + ";"
+                              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+                              + appdir.absolutePath()).toLocal8Bit());
 
     app.addLibraryPath(appdir.absolutePath());
     app.addLibraryPath(appdir.absolutePath() + "/bin");

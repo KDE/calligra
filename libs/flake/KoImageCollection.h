@@ -118,7 +118,7 @@ private:
     KoImageData *cacheImage(KoImageData *data);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOIMAGECOLLECTION_H

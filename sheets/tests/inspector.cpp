@@ -46,12 +46,12 @@ class Inspector::Private
 public:
     Cell cell;
     Style style;
-    Sheet* sheet;
+    Sheet *sheet;
 
     QTreeWidget *cellView;
     QTreeWidget *sheetView;
     QTreeWidget *styleView;
-    QTreeWidget* depView;
+    QTreeWidget *depView;
 
     void handleCell();
     void handleSheet();
@@ -66,8 +66,11 @@ using namespace Calligra::Sheets;
 
 static QString boolAsString(bool b)
 {
-    if (b) return QString("True");
-    else return QString("False");
+    if (b) {
+        return QString("True");
+    } else {
+        return QString("False");
+    }
 }
 
 #if 0
@@ -133,7 +136,7 @@ void Inspector::Private::handleStyle() // direct style access
     new QTreeWidgetItem(styleView, QStringList() << "Currency symbol" << style.currency().symbol());
     new QTreeWidgetItem(styleView, QStringList() << "Currency code" << style.currency().code());
 
-    QTreeWidgetItem* flags = new QTreeWidgetItem(styleView, QStringList("Flags"));
+    QTreeWidgetItem *flags = new QTreeWidgetItem(styleView, QStringList("Flags"));
     new QTreeWidgetItem(flags, QStringList() << "Border (left)" <<
                         boolAsString(style.hasAttribute(Style::LeftPen)));
     new QTreeWidgetItem(flags, QStringList() << "Border (right)" <<
@@ -151,13 +154,13 @@ void Inspector::Private::handleSheet()
 {
     sheetView->clear();
 
-    new QTreeWidgetItem(sheetView, QStringList() << "Name" << sheet->sheetName()) ;
+    new QTreeWidgetItem(sheetView, QStringList() << "Name" << sheet->sheetName());
     new QTreeWidgetItem(sheetView, QStringList() << "Layout Direction" << dirAsString(sheet->layoutDirection()));
 }
 
 void Inspector::Private::handleDep()
 {
-    DependencyManager* manager = sheet->map()->dependencyManager();
+    DependencyManager *manager = sheet->map()->dependencyManager();
     Region deps = manager->consumingRegion(cell);
 
     depView->clear();
@@ -176,9 +179,9 @@ void Inspector::Private::handleDep()
 
 }
 
-Inspector::Inspector(const Cell& cell)
-        : KPageDialog()
-        , d(new Private)
+Inspector::Inspector(const Cell &cell)
+    : KPageDialog()
+    , d(new Private)
 {
     setFaceType(Tabbed);
     setCaption("Inspector");
@@ -189,30 +192,30 @@ Inspector::Inspector(const Cell& cell)
     d->style = cell.style();
     d->sheet = cell.sheet();
 
-    QFrame* cellPage = new QFrame();
+    QFrame *cellPage = new QFrame();
     addPage(cellPage, QString("Cell"));
-    QVBoxLayout* cellLayout = new QVBoxLayout(cellPage);
+    QVBoxLayout *cellLayout = new QVBoxLayout(cellPage);
     d->cellView = new QTreeWidget(cellPage);
     cellLayout->addWidget(d->cellView);
     d->cellView->setHeaderLabels(QStringList() << "Key" << "Value");
 
-    QFrame* stylePage = new QFrame();
+    QFrame *stylePage = new QFrame();
     addPage(stylePage, QString("Style"));
-    QVBoxLayout* styleLayout = new QVBoxLayout(stylePage);
+    QVBoxLayout *styleLayout = new QVBoxLayout(stylePage);
     d->styleView = new QTreeWidget(stylePage);
     styleLayout->addWidget(d->styleView);
     d->styleView->setHeaderLabels(QStringList() << "Key" << "Value");
 
-    QFrame* sheetPage = new QFrame();
+    QFrame *sheetPage = new QFrame();
     addPage(sheetPage,  QString("Sheet"));
-    QVBoxLayout* sheetLayout = new QVBoxLayout(sheetPage);
+    QVBoxLayout *sheetLayout = new QVBoxLayout(sheetPage);
     d->sheetView = new QTreeWidget(sheetPage);
     sheetLayout->addWidget(d->sheetView);
     d->sheetView->setHeaderLabels(QStringList() << "Key" << "Value");
 
-    QFrame* depPage = new QFrame();
+    QFrame *depPage = new QFrame();
     addPage(depPage,  QString("Dependencies"));
-    QVBoxLayout* depLayout = new QVBoxLayout(depPage);
+    QVBoxLayout *depLayout = new QVBoxLayout(depPage);
     d->depView = new QTreeWidget(depPage);
     depLayout->addWidget(d->depView);
     d->depView->setHeaderLabels(QStringList() << "Cell" << "Content");
@@ -231,5 +234,4 @@ Inspector::~Inspector()
 }
 
 #include "inspector.moc"
-
 

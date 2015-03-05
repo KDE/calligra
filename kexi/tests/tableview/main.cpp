@@ -28,7 +28,7 @@
 #include <db/connection.h>
 #include <db/cursor.h>*/
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     KApplication app(argc, argv, "tv_test");
     KGlobal::iconLoader()->addAppDir("kexi");
@@ -37,8 +37,8 @@ int main(int argc, char* argv[])
 
     KexiDB::TableViewData data;
     KexiDB::Field f1("id", KexiDB::Field::Integer),
-    f2("name", KexiDB::Field::Text),
-    f3("age", KexiDB::Field::Integer);
+           f2("name", KexiDB::Field::Text),
+           f3("age", KexiDB::Field::Integer);
     data.addColumn(new KexiDB::TableViewColumn(f1));
     data.addColumn(new KexiDB::TableViewColumn(f2));
     data.addColumn(new KexiDB::TableViewColumn(f3));

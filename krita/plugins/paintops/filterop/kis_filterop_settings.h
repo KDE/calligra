@@ -40,15 +40,14 @@ public:
     virtual ~KisFilterOpSettings();
     bool paintIncremental();
 
-    KisFilterConfiguration* filterConfig() const;
+    KisFilterConfiguration *filterConfig() const;
 
     using KisPaintOpSettings::toXML;
-    void toXML(QDomDocument& doc, QDomElement& root) const;
+    void toXML(QDomDocument &doc, QDomElement &root) const;
 
     using KisPaintOpSettings::fromXML;
-    void fromXML(const QDomElement& e);
+    void fromXML(const QDomElement &e);
 
 };
-
 
 #endif // KIS_FILTEROP_SETTINGS_H_

@@ -24,7 +24,6 @@
 #include <KoDockWidgetTitleBar.h>
 #include <klocale.h>
 
-
 KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     : m_toolBox(toolBox)
 {
@@ -35,7 +34,7 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
     connect(this, SIGNAL(topLevelChanged(bool)),
             this, SLOT(updateFloating(bool)));
-    KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
+    KoDockWidgetTitleBar *titleBar = new KoDockWidgetTitleBar(this);
     titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
     titleBar->setToolTip(i18n("Tools"));
     setTitleBarWidget(titleBar);

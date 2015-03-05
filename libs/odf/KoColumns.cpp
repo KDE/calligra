@@ -34,11 +34,9 @@ static const  Qt::GlobalColor defaultSeparatorColor = Qt::black;
 static const KoColumns::SeparatorVerticalAlignment defaultSeparatorVerticalAlignment = KoColumns::AlignTop;
 static const int defaultColumnGapWidth = 17; // in pt, ~ 6mm
 
-
-
-const char * KoColumns::separatorStyleString(KoColumns::SeparatorStyle separatorStyle)
+const char *KoColumns::separatorStyleString(KoColumns::SeparatorStyle separatorStyle)
 {
-    const char * result;
+    const char *result;
 
     //  skip KoColumns::None, is default
     if (separatorStyle == Solid) {
@@ -56,9 +54,9 @@ const char * KoColumns::separatorStyleString(KoColumns::SeparatorStyle separator
     return result;
 }
 
-const char * KoColumns::separatorVerticalAlignmentString(KoColumns::SeparatorVerticalAlignment separatorVerticalAlignment)
+const char *KoColumns::separatorVerticalAlignmentString(KoColumns::SeparatorVerticalAlignment separatorVerticalAlignment)
 {
-    const char * result;
+    const char *result;
 
     //  skip KoColumns::AlignTop, is default
     if (separatorVerticalAlignment == AlignVCenter) {
@@ -95,7 +93,9 @@ QColor KoColumns::parseSeparatorColor(const QString &value)
 
     if (! result.isValid())
         // default is black, cmp. ODF 1.2 §19.467
+    {
         result = QColor(defaultSeparatorColor);
+    }
 
     return result;
 }
@@ -109,7 +109,7 @@ int KoColumns::parseSeparatorHeight(const QString &value)
     if (value.endsWith(QLatin1Char('%'))) {
         bool ok = false;
         // try to convert
-        result = value.left(value.length()-1).toInt(&ok);
+        result = value.left(value.length() - 1).toInt(&ok);
         // reset to 100% if conversion failed (which sets result to 0)
         if (! ok) {
             result = defaultSeparatorHeight;
@@ -146,7 +146,7 @@ int KoColumns::parseRelativeWidth(const QString &value)
     if (value.endsWith(QLatin1Char('*'))) {
         bool ok = false;
         // try to convert
-        result = value.left(value.length()-1).toInt(&ok);
+        result = value.left(value.length() - 1).toInt(&ok);
         if (! ok) {
             result = 0;
         }
@@ -156,12 +156,12 @@ int KoColumns::parseRelativeWidth(const QString &value)
 }
 
 KoColumns::KoColumns()
-  : count(defaultColumnCount)
-  , gapWidth(defaultColumnGapWidth)
-  , separatorStyle(defaultSeparatorStyle)
-  , separatorColor(defaultSeparatorColor)
-  , separatorVerticalAlignment(defaultSeparatorVerticalAlignment)
-  , separatorHeight(defaultSeparatorHeight)
+    : count(defaultColumnCount)
+    , gapWidth(defaultColumnGapWidth)
+    , separatorStyle(defaultSeparatorStyle)
+    , separatorColor(defaultSeparatorColor)
+    , separatorVerticalAlignment(defaultSeparatorVerticalAlignment)
+    , separatorHeight(defaultSeparatorHeight)
 {
 }
 
@@ -175,20 +175,22 @@ void KoColumns::reset()
     separatorHeight = defaultSeparatorHeight;
 }
 
-bool KoColumns::operator==(const KoColumns& rhs) const {
+bool KoColumns::operator==(const KoColumns &rhs) const
+{
     return
         count == rhs.count &&
         (columnData.isEmpty() && rhs.columnData.isEmpty() ?
-             (qAbs(gapWidth - rhs.gapWidth) <= 1E-10) :
-             (columnData == rhs.columnData));
+         (qAbs(gapWidth - rhs.gapWidth) <= 1E-10) :
+         (columnData == rhs.columnData));
 }
 
-bool KoColumns::operator!=(const KoColumns& rhs) const {
+bool KoColumns::operator!=(const KoColumns &rhs) const
+{
     return
         count != rhs.count ||
         (columnData.isEmpty() && rhs.columnData.isEmpty() ?
-             qAbs(gapWidth - rhs.gapWidth) > 1E-10 :
-             ! (columnData == rhs.columnData));
+         qAbs(gapWidth - rhs.gapWidth) > 1E-10 :
+         !(columnData == rhs.columnData));
 }
 
 void KoColumns::loadOdf(const KoXmlElement &style)
@@ -196,8 +198,9 @@ void KoColumns::loadOdf(const KoXmlElement &style)
     KoXmlElement columnsElement = KoXml::namedItemNS(style, KoXmlNS::style, "columns");
     if (!columnsElement.isNull()) {
         count = columnsElement.attributeNS(KoXmlNS::fo, "column-count").toInt();
-        if (count < 1)
+        if (count < 1) {
             count = 1;
+        }
         gapWidth = KoUnit::parseValue(columnsElement.attributeNS(KoXmlNS::fo, "column-gap"));
 
         KoXmlElement columnSep = KoXml::namedItemNS(columnsElement, KoXmlNS::style, "column-sep");
@@ -211,10 +214,11 @@ void KoColumns::loadOdf(const KoXmlElement &style)
         }
 
         KoXmlElement columnElement;
-        forEachElement(columnElement, columnsElement) {
-            if(columnElement.localName() != QLatin1String("column") ||
-               columnElement.namespaceURI() != KoXmlNS::style)
+        forEachElement (columnElement, columnsElement) {
+            if (columnElement.localName() != QLatin1String("column") ||
+                    columnElement.namespaceURI() != KoXmlNS::style) {
                 continue;
+            }
 
             ColumnDatum datum;
             datum.leftMargin = KoUnit::parseValue(columnElement.attributeNS(KoXmlNS::fo, "start-indent"), 0.0);
@@ -232,7 +236,7 @@ void KoColumns::loadOdf(const KoXmlElement &style)
         }
 
         if (! columnData.isEmpty() && count != columnData.count()) {
-            kWarning() << "Found not as many <style:column> elements as attribut fo:column-count has set:"<< count;
+            kWarning() << "Found not as many <style:column> elements as attribut fo:column-count has set:" << count;
             columnData.clear();
         }
     } else {
@@ -257,19 +261,19 @@ void KoColumns::saveOdf(KoGenStyle &style) const
             writer.startElement("style:column-sep");
             writer.addAttribute("style:style", separatorStyleString(separatorStyle));
             writer.addAttributePt("style:width", separatorWidth);
-            writer.addAttribute("style:height", QString::number(separatorHeight)+QLatin1Char('%'));
+            writer.addAttribute("style:height", QString::number(separatorHeight) + QLatin1Char('%'));
             writer.addAttribute("style:color", separatorColor.name());
             writer.addAttribute("style:vertical-align", separatorVerticalAlignmentString(separatorVerticalAlignment));
             writer.endElement(); // style:column-sep
         }
 
-        foreach(const ColumnDatum &cd, columnData) {
+        foreach (const ColumnDatum &cd, columnData) {
             writer.startElement("style:column");
             writer.addAttributePt("fo:start-indent", cd.leftMargin);
             writer.addAttributePt("fo:end-indent", cd.rightMargin);
             writer.addAttributePt("fo:space-before", cd.topMargin);
             writer.addAttributePt("fo:space-after", cd.bottomMargin);
-            writer.addAttribute("style:rel-width", QString::number(cd.relativeWidth)+QLatin1Char('*'));
+            writer.addAttribute("style:rel-width", QString::number(cd.relativeWidth) + QLatin1Char('*'));
             writer.endElement(); // style:column
         }
 

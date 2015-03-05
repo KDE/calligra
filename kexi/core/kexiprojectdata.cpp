@@ -58,8 +58,8 @@ class KexiProjectDataPrivate
 {
 public:
     KexiProjectDataPrivate()
-            : userMode(false)
-            , readOnly(false) {}
+        : userMode(false)
+        , readOnly(false) {}
 
     KexiDB::ConnectionData connData;
     QDateTime lastOpened;
@@ -70,12 +70,12 @@ public:
 //---------------------------------------
 
 KexiProjectData::AutoOpenObjects::AutoOpenObjects()
-        : QList<ObjectInfo*>()
+    : QList<ObjectInfo * >()
 {
 }
 
-KexiProjectData::AutoOpenObjects::AutoOpenObjects(const KexiProjectData::AutoOpenObjects& other)
-        : QList<ObjectInfo*>()
+KexiProjectData::AutoOpenObjects::AutoOpenObjects(const KexiProjectData::AutoOpenObjects &other)
+    : QList<ObjectInfo * >()
 {
     *this = other;
 }
@@ -85,32 +85,33 @@ KexiProjectData::AutoOpenObjects::~AutoOpenObjects()
     qDeleteAll(*this);
 }
 
-KexiProjectData::AutoOpenObjects& KexiProjectData::AutoOpenObjects::operator=(
-    const KexiProjectData::AutoOpenObjects & other)
+KexiProjectData::AutoOpenObjects &KexiProjectData::AutoOpenObjects::operator=(
+    const KexiProjectData::AutoOpenObjects &other)
 {
     clear();
-    for (QListIterator<ObjectInfo*> it(other);it.hasNext();) //deep copy
+    for (QListIterator<ObjectInfo *> it(other); it.hasNext();) { //deep copy
         append(new ObjectInfo(*it.next()));
+    }
     return *this;
 }
 
 //---------------------------------------
 
 KexiProjectData::KexiProjectData()
-        : QObject(0)
-        , KexiDB::SchemaData()
-        , formatVersion(0)
-        , d(new KexiProjectDataPrivate())
+    : QObject(0)
+    , KexiDB::SchemaData()
+    , formatVersion(0)
+    , d(new KexiProjectDataPrivate())
 {
     setObjectName("KexiProjectData");
 }
 
 KexiProjectData::KexiProjectData(
-    const KexiDB::ConnectionData &cdata, const QString& dbname, const QString& caption)
-        : QObject(0)
-        , KexiDB::SchemaData()
-        , formatVersion(0)
-        , d(new KexiProjectDataPrivate())
+    const KexiDB::ConnectionData &cdata, const QString &dbname, const QString &caption)
+    : QObject(0)
+    , KexiDB::SchemaData()
+    , formatVersion(0)
+    , d(new KexiProjectDataPrivate())
 {
     setObjectName("KexiProjectData");
     d->connData = cdata;
@@ -118,10 +119,10 @@ KexiProjectData::KexiProjectData(
     setCaption(caption);
 }
 
-KexiProjectData::KexiProjectData(const KexiProjectData& pdata)
-        : QObject(0)
-        , KexiDB::SchemaData()
-        , d(new KexiProjectDataPrivate())
+KexiProjectData::KexiProjectData(const KexiProjectData &pdata)
+    : QObject(0)
+    , KexiDB::SchemaData()
+    , d(new KexiProjectDataPrivate())
 {
     setObjectName("KexiProjectData");
     *this = pdata;
@@ -133,9 +134,9 @@ KexiProjectData::~KexiProjectData()
     delete d;
 }
 
-KexiProjectData& KexiProjectData::operator=(const KexiProjectData & pdata)
+KexiProjectData &KexiProjectData::operator=(const KexiProjectData &pdata)
 {
-    static_cast<KexiDB::SchemaData&>(*this) = static_cast<const KexiDB::SchemaData&>(pdata);
+    static_cast<KexiDB::SchemaData &>(*this) = static_cast<const KexiDB::SchemaData &>(pdata);
     //deep copy
     autoopenObjects = pdata.autoopenObjects;
     formatVersion = pdata.formatVersion;
@@ -143,12 +144,12 @@ KexiProjectData& KexiProjectData::operator=(const KexiProjectData & pdata)
     return *this;
 }
 
-KexiDB::ConnectionData* KexiProjectData::connectionData()
+KexiDB::ConnectionData *KexiProjectData::connectionData()
 {
     return &d->connData;
 }
 
-const KexiDB::ConnectionData* KexiProjectData::constConnectionData() const
+const KexiDB::ConnectionData *KexiProjectData::constConnectionData() const
 {
     return &d->connData;
 }
@@ -158,7 +159,7 @@ QString KexiProjectData::databaseName() const
     return KexiDB::SchemaData::name();
 }
 
-void KexiProjectData::setDatabaseName(const QString& dbName)
+void KexiProjectData::setDatabaseName(const QString &dbName)
 {
     //kDebug() << dbName;
     //kDebug() << *this;
@@ -175,7 +176,7 @@ QDateTime KexiProjectData::lastOpened() const
     return d->lastOpened;
 }
 
-void KexiProjectData::setLastOpened(const QDateTime& lastOpened)
+void KexiProjectData::setLastOpened(const QDateTime &lastOpened)
 {
     d->lastOpened = lastOpened;
 
@@ -185,7 +186,7 @@ QString KexiProjectData::description() const
     return KexiDB::SchemaData::description();
 }
 
-void KexiProjectData::setDescription(const QString& desc)
+void KexiProjectData::setDescription(const QString &desc)
 {
     return KexiDB::SchemaData::setDescription(desc);
 }
@@ -196,7 +197,7 @@ QString KexiProjectData::infoString(bool nobr) const
         //server-based
         return QString(nobr ? "<nobr>" : "") + QString("\"%1\"").arg(databaseName()) + (nobr ? "</nobr>" : "")
                + (nobr ? " <nobr>" : " ") + i18nc("database connection", "(connection %1)",
-                                                  d->connData.serverInfoString()) + (nobr ? "</nobr>" : "");
+                       d->connData.serverInfoString()) + (nobr ? "</nobr>" : "");
     }
     //file-based
     return QString(nobr ? "<nobr>" : "")
@@ -213,7 +214,7 @@ bool KexiProjectData::isReadOnly() const
     return d->readOnly;
 }
 
-bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
+bool KexiProjectData::load(const QString &fileName, QString *_groupKey)
 {
     //! @todo how about readOnly arg?
     KConfig config(fileName, KConfig::SimpleConfig);
@@ -223,7 +224,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     QString groupKey;
     if (!_groupKey || _groupKey->isEmpty()) {
         QStringList groups(config.groupList());
-        foreach(const QString &s, groups) {
+        foreach (const QString &s, groups) {
             if (s.toLower() != "file information") {
                 groupKey = s;
                 break;
@@ -233,11 +234,13 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
             //! @todo ERR: "File %1 contains no connection information"
             return false;
         }
-        if (_groupKey)
+        if (_groupKey) {
             *_groupKey = groupKey;
+        }
     } else {
-        if (!config.hasGroup(*_groupKey))
+        if (!config.hasGroup(*_groupKey)) {
             return false;
+        }
         groupKey = *_groupKey;
     }
 
@@ -259,7 +262,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
         //! @todo ERR: "No valid "engine" field specified for %1 section" group
         return false;
     }
-    
+
     // verification OK, now applying the values:
     d->connData.driverName = driverName;
     formatVersion = _formatVersion;
@@ -272,7 +275,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
             return false;
         }
         const bool fileBased = dinfo.fileBased
-                && QString::compare(dinfo.name, d->connData.driverName, Qt::CaseInsensitive) == 0;
+                               && QString::compare(dinfo.name, d->connData.driverName, Qt::CaseInsensitive) == 0;
         setCaption(cg.readEntry("caption"));
         setDescription(cg.readEntry("comment"));
         d->connData.description.clear();
@@ -291,8 +294,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
                 d->connData.setFileName(fn);
                 setDatabaseName(d->connData.dbFileName());
             }
-        }
-        else {
+        } else {
             setDatabaseName(cg.readEntry("name"));
         }
     } else { // connection
@@ -328,16 +330,17 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     return true;
 }
 
-bool KexiProjectData::save(const QString& fileName, bool savePassword,
-                           QString* _groupKey, bool overwriteFirstGroup)
+bool KexiProjectData::save(const QString &fileName, bool savePassword,
+                           QString *_groupKey, bool overwriteFirstGroup)
 {
     //! @todo how about readOnly arg?
     KConfig config(fileName, KConfig::SimpleConfig);
     KConfigGroup cg = config.group("File Information");
 
     uint realFormatVersion = formatVersion;
-    if (realFormatVersion == 0) /* 0 means "default version"*/
+    if (realFormatVersion == 0) { /* 0 means "default version"*/
         realFormatVersion = KEXIPROJECTDATA_FORMAT;
+    }
     cg.writeEntry("version", realFormatVersion);
 
     const bool thisIsConnectionData = databaseName().isEmpty();
@@ -350,7 +353,7 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
         QString groupPrefix;
         const QStringList groups(config.groupList());
         if (overwriteFirstGroup && !groups.isEmpty()) {
-            foreach(const QString &s, groups) {
+            foreach (const QString &s, groups) {
                 if (s.toLower() != "file information") {
                     groupKey = s;
                     break;
@@ -360,18 +363,21 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
 
         if (groupKey.isEmpty()) {
             //find a new unique name
-            if (thisIsConnectionData)
-                groupPrefix = "Connection%1"; //do not i18n!
-            else
-                groupPrefix = "Database%1"; //do not i18n!
+            if (thisIsConnectionData) {
+                groupPrefix = "Connection%1";    //do not i18n!
+            } else {
+                groupPrefix = "Database%1";    //do not i18n!
+            }
 
             int number = 1;
-            while (config.hasGroup(groupPrefix.arg(number))) //a new group key couldn't exist
+            while (config.hasGroup(groupPrefix.arg(number))) { //a new group key couldn't exist
                 number++;
+            }
             groupKey = groupPrefix.arg(number);
         }
-        if (_groupKey) //return this one (generated or found)
+        if (_groupKey) { //return this one (generated or found)
             *_groupKey = groupKey;
+        }
     }
 
     config.group(groupKey).deleteGroup();
@@ -379,44 +385,52 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
     const bool fileBased = !d->connData.fileName().isEmpty();
     if (thisIsConnectionData) {
         cg.writeEntry("type", "connection");
-        if (!d->connData.caption.isEmpty())
+        if (!d->connData.caption.isEmpty()) {
             cg.writeEntry("caption", d->connData.caption);
-        if (!d->connData.description.isEmpty())
+        }
+        if (!d->connData.description.isEmpty()) {
             cg.writeEntry("comment", d->connData.description);
+        }
     } else { //database
         cg.writeEntry("type", "database");
-        if (!caption().isEmpty())
+        if (!caption().isEmpty()) {
             cg.writeEntry("caption", caption());
+        }
         if (fileBased) {
             QString fn(d->connData.fileName());
             if (!QDir::homePath().isEmpty() && fn.startsWith(QDir::homePath())) {
                 // replace prefix if == $HOME
                 fn = fn.mid(QDir::homePath().length());
-                if (!fn.startsWith('/'))
+                if (!fn.startsWith('/')) {
                     fn.prepend('/');
+                }
                 fn.prepend(QLatin1String("$HOME"));
             }
             cg.writeEntry("name", fn);
-        }
-        else { // server-based
+        } else { // server-based
             cg.writeEntry("name", databaseName());
         }
-        if (!description().isEmpty())
+        if (!description().isEmpty()) {
             cg.writeEntry("comment", description());
+        }
     }
 
     cg.writeEntry("engine", d->connData.driverName.toLower());
     if (!fileBased) {
-        if (!d->connData.hostName.isEmpty())
+        if (!d->connData.hostName.isEmpty()) {
             cg.writeEntry("server", d->connData.hostName);
+        }
 
-        if (d->connData.port != 0)
+        if (d->connData.port != 0) {
             cg.writeEntry("port", int(d->connData.port));
+        }
         cg.writeEntry("useLocalSocketFile", d->connData.useLocalSocketFile);
-        if (!d->connData.localSocketFileName.isEmpty())
+        if (!d->connData.localSocketFileName.isEmpty()) {
             cg.writeEntry("localSocketFile", d->connData.localSocketFileName);
-        if (!d->connData.userName.isEmpty())
+        }
+        if (!d->connData.userName.isEmpty()) {
             cg.writeEntry("user", d->connData.userName);
+        }
     }
 
     if (savePassword || d->connData.savePassword) {
@@ -444,11 +458,11 @@ QString KexiProjectData::name() const
     return KexiDB::SchemaData::name();
 }
 
-KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& d)
+KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData &d)
 {
     dbg.space() << "KexiProjectData" << "databaseName=" << d.databaseName()
-        << "lastOpened=" << d.lastOpened() << "description=" << d.description()
-        << "driverName=" << d.constConnectionData()->driverName
-        << "filename=" << d.constConnectionData()->fileName();
+                << "lastOpened=" << d.lastOpened() << "description=" << d.description()
+                << "driverName=" << d.constConnectionData()->driverName
+                << "filename=" << d.constConnectionData()->fileName();
     return dbg.space();
 }

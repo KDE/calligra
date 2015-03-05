@@ -19,18 +19,20 @@
 #include "Note.h"
 #include "Chord.h"
 
-namespace MusicCore {
+namespace MusicCore
+{
 
-class Note::Private {
+class Note::Private
+{
 public:
-    Staff* staff;
+    Staff *staff;
     int pitch;
     int accidentals;
     bool tied;
     bool drawAccidentals;
 };
 
-Note::Note(Chord* chord, Staff* staff, int pitch, int accidentals) : QObject(chord), d(new Private)
+Note::Note(Chord *chord, Staff *staff, int pitch, int accidentals) : QObject(chord), d(new Private)
 {
     d->staff = staff;
     d->pitch = pitch;
@@ -44,17 +46,17 @@ Note::~Note()
     delete d;
 }
 
-Staff* Note::staff()
+Staff *Note::staff()
 {
     return d->staff;
 }
 
-Chord* Note::chord()
+Chord *Note::chord()
 {
-    return qobject_cast<Chord*>(parent());
+    return qobject_cast<Chord *>(parent());
 }
 
-void Note::setStaff(Staff* staff)
+void Note::setStaff(Staff *staff)
 {
     d->staff = staff;
 }

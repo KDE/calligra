@@ -25,12 +25,12 @@
 class QpRecFactory
 {
 public:
-    explicit QpRecFactory(QpIStream& pIn);
+    explicit QpRecFactory(QpIStream &pIn);
     ~QpRecFactory();
 
-    QpRec* nextRecord();
+    QpRec *nextRecord();
 protected:
-    QpIStream& cIn;
+    QpIStream &cIn;
 };
 
 #endif // QPRO_RECORD_FACTORY_H

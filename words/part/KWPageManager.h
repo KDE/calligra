@@ -34,7 +34,6 @@ class KWPage;
 class KoShape;
 class KWPageManagerPrivate;
 
-
 /**
  * The Page Manager manages all the pages a document contains and separates all the frames
  * the document contains into actual printed pages.
@@ -216,13 +215,16 @@ public:
      */
     KWPage last();
 
-    KWPageManagerPrivate *priv() { return d; }
+    KWPageManagerPrivate *priv()
+    {
+        return d;
+    }
 
 private:
     /// disable copy constructor and assignment operator
     Q_DISABLE_COPY(KWPageManager)
 
-    KWPageManagerPrivate * const d;
+    KWPageManagerPrivate *const d;
 };
 
 #endif

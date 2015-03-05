@@ -69,8 +69,9 @@ Autocorrect::Autocorrect()
     readConfig();
 
     KLocale *locale = KGlobal::locale();
-    for (int i = 1; i <=7; i++)
+    for (int i = 1; i <= 7; i++) {
         m_cacheNameOfDays.append(locale->calendar()->weekDayName(i).toLower());
+    }
 }
 
 Autocorrect::~Autocorrect()
@@ -80,36 +81,65 @@ Autocorrect::~Autocorrect()
 
 void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition)
 {
-    if (!m_enabled->isChecked()) return;
+    if (!m_enabled->isChecked()) {
+        return;
+    }
 
     m_cursor = QTextCursor(document);
     selectWord(m_cursor, cursorPosition);
     m_word = m_cursor.selectedText();
-    if (m_word.isEmpty()) return;
+    if (m_word.isEmpty()) {
+        return;
+    }
 
     emit startMacro(i18n("Autocorrection"));
     bool done = autoFormatURLs();
-    if (!done) done = singleSpaces();
-    if (!done) done = autoBoldUnderline();
-    if (!done) done = autoFractions();
-    if (!done) advancedAutocorrect();
-    if (!done) uppercaseFirstCharOfSentence();
-    if (!done) fixTwoUppercaseChars();
-    if (!done) autoNumbering();
-    if (!done) superscriptAppendix();
-    if (!done) capitalizeWeekDays();
-    if (!done) autoFormatBulletList();
-    if (!done) replaceTypographicQuotes();
+    if (!done) {
+        done = singleSpaces();
+    }
+    if (!done) {
+        done = autoBoldUnderline();
+    }
+    if (!done) {
+        done = autoFractions();
+    }
+    if (!done) {
+        advancedAutocorrect();
+    }
+    if (!done) {
+        uppercaseFirstCharOfSentence();
+    }
+    if (!done) {
+        fixTwoUppercaseChars();
+    }
+    if (!done) {
+        autoNumbering();
+    }
+    if (!done) {
+        superscriptAppendix();
+    }
+    if (!done) {
+        capitalizeWeekDays();
+    }
+    if (!done) {
+        autoFormatBulletList();
+    }
+    if (!done) {
+        replaceTypographicQuotes();
+    }
 
-    if (m_cursor.selectedText() != m_word)
+    if (m_cursor.selectedText() != m_word) {
         m_cursor.insertText(m_word);
+    }
 
     emit stopMacro();
 }
 
-void Autocorrect::finishedParagraph(QTextDocument * /*document*/, int /*cursorPosition*/ )
+void Autocorrect::finishedParagraph(QTextDocument * /*document*/, int /*cursorPosition*/)
 {
-    if (! m_trimParagraphs) return;
+    if (! m_trimParagraphs) {
+        return;
+    }
     // TODO
 }
 
@@ -119,10 +149,18 @@ void Autocorrect::startingSimpleEdit(QTextDocument *document, int cursorPosition
     Q_UNUSED(cursorPosition);
 }
 
-
-void Autocorrect::setUpperCaseExceptions(const QSet<QString> &exceptions) { m_upperCaseExceptions = exceptions; }
-void Autocorrect::setTwoUpperLetterExceptions(const QSet<QString> &exceptions) { m_twoUpperLetterExceptions = exceptions; }
-void Autocorrect::setAutocorrectEntries(const QHash<QString, QString> &entries) { m_autocorrectEntries = entries; }
+void Autocorrect::setUpperCaseExceptions(const QSet<QString> &exceptions)
+{
+    m_upperCaseExceptions = exceptions;
+}
+void Autocorrect::setTwoUpperLetterExceptions(const QSet<QString> &exceptions)
+{
+    m_twoUpperLetterExceptions = exceptions;
+}
+void Autocorrect::setAutocorrectEntries(const QHash<QString, QString> &entries)
+{
+    m_autocorrectEntries = entries;
+}
 
 Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultSingleQuotes() const
 {
@@ -140,9 +178,18 @@ Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultDoubleQuotes() 
     return quote;
 }
 
-QSet<QString> Autocorrect::getUpperCaseExceptions() const { return m_upperCaseExceptions; }
-QSet<QString> Autocorrect::getTwoUpperLetterExceptions() const { return m_twoUpperLetterExceptions; }
-QHash<QString, QString> Autocorrect::getAutocorrectEntries() const { return m_autocorrectEntries; }
+QSet<QString> Autocorrect::getUpperCaseExceptions() const
+{
+    return m_upperCaseExceptions;
+}
+QSet<QString> Autocorrect::getTwoUpperLetterExceptions() const
+{
+    return m_twoUpperLetterExceptions;
+}
+QHash<QString, QString> Autocorrect::getAutocorrectEntries() const
+{
+    return m_autocorrectEntries;
+}
 
 void Autocorrect::configureAutocorrect()
 {
@@ -157,7 +204,9 @@ void Autocorrect::configureAutocorrect()
 
 void Autocorrect::uppercaseFirstCharOfSentence()
 {
-    if (! m_uppercaseFirstCharOfSentence) return;
+    if (! m_uppercaseFirstCharOfSentence) {
+        return;
+    }
 
     int startPos = m_cursor.selectionStart();
     QTextBlock block = m_cursor.block();
@@ -169,9 +218,9 @@ void Autocorrect::uppercaseFirstCharOfSentence()
 
     QString text = m_cursor.selectedText();
 
-    if (text.isEmpty()) // start of a paragraph
+    if (text.isEmpty()) { // start of a paragraph
         m_word.replace(0, 1, m_word.at(0).toUpper());
-    else {
+    } else {
         QString::ConstIterator constIter = text.constEnd();
         constIter--;
 
@@ -192,15 +241,17 @@ void Autocorrect::uppercaseFirstCharOfSentence()
                 QString prevWord = m_cursor.selectedText();
 
                 // search for exception
-                if (m_upperCaseExceptions.contains(prevWord.trimmed()))
+                if (m_upperCaseExceptions.contains(prevWord.trimmed())) {
                     replace = false;
+                }
 
-                if (replace)
+                if (replace) {
                     m_word.replace(0, 1, m_word.at(0).toUpper());
+                }
+                break;
+            } else {
                 break;
             }
-            else
-                break;
         }
     }
 
@@ -210,11 +261,16 @@ void Autocorrect::uppercaseFirstCharOfSentence()
 
 void Autocorrect::fixTwoUppercaseChars()
 {
-    if (! m_fixTwoUppercaseChars) return;
-    if (m_word.length() <= 2) return;
-
-    if (m_twoUpperLetterExceptions.contains(m_word.trimmed()))
+    if (! m_fixTwoUppercaseChars) {
         return;
+    }
+    if (m_word.length() <= 2) {
+        return;
+    }
+
+    if (m_twoUpperLetterExceptions.contains(m_word.trimmed())) {
+        return;
+    }
 
     QChar firstChar = m_word.at(0);
     QChar secondChar = m_word.at(1);
@@ -222,17 +278,22 @@ void Autocorrect::fixTwoUppercaseChars()
     if (secondChar.isUpper()) {
         QChar thirdChar = m_word.at(2);
 
-        if (firstChar.isUpper() && thirdChar.isLower())
+        if (firstChar.isUpper() && thirdChar.isLower()) {
             m_word.replace(1, 1, secondChar.toLower());
+        }
     }
 }
 
 bool Autocorrect::autoFormatURLs()
 {
-    if (! m_autoFormatURLs) return false;
+    if (! m_autoFormatURLs) {
+        return false;
+    }
 
     QString link = autoDetectURL(m_word);
-    if (link.isNull()) return false;
+    if (link.isNull()) {
+        return false;
+    }
 
     QString trimmed = m_word.trimmed();
     int startPos = m_cursor.selectionStart();
@@ -251,12 +312,14 @@ bool Autocorrect::autoFormatURLs()
 
 bool Autocorrect::singleSpaces()
 {
-    if (! m_singleSpaces) return false;
+    if (! m_singleSpaces) {
+        return false;
+    }
     if (!m_cursor.atBlockStart() && m_word.length() == 1 && m_word.at(0) == ' ') {
         // then when the prev char is also a space, don't insert one.
         QTextBlock block = m_cursor.block();
         QString text = block.text();
-        if (text.at(m_cursor.position() -1 - block.position()) == ' ') {
+        if (text.at(m_cursor.position() - 1 - block.position()) == ' ') {
             m_word.clear();
             return true;
         }
@@ -266,11 +329,15 @@ bool Autocorrect::singleSpaces()
 
 bool Autocorrect::autoBoldUnderline()
 {
-    if (! m_autoBoldUnderline) return false;
+    if (! m_autoBoldUnderline) {
+        return false;
+    }
 
     QString trimmed = m_word.trimmed();
 
-    if (trimmed.length() < 3) return false;
+    if (trimmed.length() < 3) {
+        return false;
+    }
 
     bool underline = (trimmed.at(0) == '_' && trimmed.at(trimmed.length() - 1) == '_');
     bool bold = (trimmed.at(0) == '*' && trimmed.at(trimmed.length() - 1) == '*');
@@ -290,8 +357,9 @@ bool Autocorrect::autoBoldUnderline()
         }
 
         // if no letter/number found, don't apply autocorrection like in OOo 2.x
-        if (!foundLetterNumber)
+        if (!foundLetterNumber) {
             return false;
+        }
 
         m_cursor.setPosition(startPos);
         m_cursor.setPosition(startPos + trimmed.length(), QTextCursor::KeepAnchor);
@@ -308,54 +376,62 @@ bool Autocorrect::autoBoldUnderline()
         m_word = m_cursor.selectedText();
 
         // don't do this again if the text is already underlined and bold
-        if(m_cursor.charFormat().fontUnderline()
-            && m_cursor.charFormat().fontWeight() == QFont::Bold) {
+        if (m_cursor.charFormat().fontUnderline()
+                && m_cursor.charFormat().fontWeight() == QFont::Bold) {
             return true;
         } else {
             return autoBoldUnderline();
         }
-    }
-    else
+    } else {
         return false;
+    }
 
     return true;
 }
 
 bool Autocorrect::autoFractions()
 {
-    if (! m_autoFractions) return false;
+    if (! m_autoFractions) {
+        return false;
+    }
 
     QString trimmed = m_word.trimmed();
     if (trimmed.length() > 3) {
         QChar x = trimmed.at(3);
         if (!(x.unicode() == '.' || x.unicode() == ',' || x.unicode() == '?' || x.unicode() == '!'
-                || x.unicode() == ':' || x.unicode() == ';'))
+                || x.unicode() == ':' || x.unicode() == ';')) {
             return false;
+        }
     } else if (trimmed.length() < 3) {
         return false;
     }
 
-    if (trimmed.startsWith("1/2"))
+    if (trimmed.startsWith("1/2")) {
         m_word.replace(0, 3, QString::fromUtf8("½"));
-    else if (trimmed.startsWith("1/4"))
+    } else if (trimmed.startsWith("1/4")) {
         m_word.replace(0, 3, QString::fromUtf8("¼"));
-    else if (trimmed.startsWith("3/4"))
+    } else if (trimmed.startsWith("3/4")) {
         m_word.replace(0, 3, QString::fromUtf8("¾"));
-    else
+    } else {
         return false;
+    }
 
     return true;
 }
 
 void Autocorrect::autoNumbering()
 {
-    if (! m_autoNumbering) return;
+    if (! m_autoNumbering) {
+        return;
+    }
     // TODO
 }
 
 void Autocorrect::superscriptAppendix()
 {
-    if (! m_superscriptAppendix) return;
+    if (! m_superscriptAppendix) {
+        return;
+    }
 
     QString trimmed = m_word.trimmed();
     int startPos = -1;
@@ -367,8 +443,7 @@ void Autocorrect::superscriptAppendix()
             startPos = m_cursor.selectionStart() + 1;
             endPos = startPos - 1 + trimmed.length();
             break;
-        }
-        else if (i.key() == "othernb") {
+        } else if (i.key() == "othernb") {
             int pos = trimmed.indexOf(i.value());
             if (pos > 0) {
                 QString number = trimmed.left(pos);
@@ -376,8 +451,9 @@ void Autocorrect::superscriptAppendix()
                 bool found = true;
                 // don't apply superscript to 1th, 2th and 3th
                 if (number.length() == 1 &&
-                        (*constIter == QChar('1') || *constIter == QChar('2') || *constIter == QChar('3')))
+                        (*constIter == QChar('1') || *constIter == QChar('2') || *constIter == QChar('3'))) {
                     found = false;
+                }
                 if (found) {
                     while (constIter != number.constEnd()) {
                         if (!constIter->isNumber()) {
@@ -410,10 +486,12 @@ void Autocorrect::superscriptAppendix()
 
 void Autocorrect::capitalizeWeekDays()
 {
-    if (! m_capitalizeWeekDays) return;
+    if (! m_capitalizeWeekDays) {
+        return;
+    }
 
     QString trimmed = m_word.trimmed();
-    foreach (const QString & name, m_cacheNameOfDays) {
+    foreach (const QString &name, m_cacheNameOfDays) {
         if (trimmed == name) {
             int pos = m_word.indexOf(name);
             m_word.replace(pos, 1, name.at(0).toUpper());
@@ -424,7 +502,9 @@ void Autocorrect::capitalizeWeekDays()
 
 void Autocorrect::autoFormatBulletList()
 {
-    if (! m_autoFormatBulletList) return;
+    if (! m_autoFormatBulletList) {
+        return;
+    }
     // TODO
 }
 
@@ -434,7 +514,9 @@ void Autocorrect::replaceTypographicQuotes()
      * from Calligra 1.x branch */
 
     if (!(m_replaceDoubleQuotes && m_word.contains('"')) &&
-            !(m_replaceSingleQuotes && m_word.contains('\''))) return;
+            !(m_replaceSingleQuotes && m_word.contains('\''))) {
+        return;
+    }
 
     // Need to determine if we want a starting or ending quote.
     // we use a starting quote in three cases:
@@ -460,57 +542,63 @@ void Autocorrect::replaceTypographicQuotes()
 
                 // case 1 and 2
                 if (c1 == QChar::Separator_Space || c1 == QChar::Separator_Line || c1 == QChar::Separator_Paragraph ||
-                        c1 == QChar::Punctuation_Open || c1 == QChar::Other_Control)
+                        c1 == QChar::Punctuation_Open || c1 == QChar::Other_Control) {
                     ending = false;
+                }
 
                 // case 3
                 if (c1 == QChar::Punctuation_InitialQuote) {
                     QChar openingQuote;
 
-                    if (doubleQuotes)
+                    if (doubleQuotes) {
                         openingQuote = m_typographicDoubleQuotes.begin;
-                    else
+                    } else {
                         openingQuote = m_typographicSingleQuotes.begin;
+                    }
 
                     // case 3b
-                    if (*(iter - 1) != openingQuote)
+                    if (*(iter - 1) != openingQuote) {
                         ending = false;
+                    }
                 }
             }
 
             // case 2a and 3a
-            if ((iter - 2) != m_word.constBegin() && !ending)
-            {
-                 QChar::Category c2 = (*(iter - 2)).category();
-                 ending = (c2 == QChar::Punctuation_InitialQuote);
+            if ((iter - 2) != m_word.constBegin() && !ending) {
+                QChar::Category c2 = (*(iter - 2)).category();
+                ending = (c2 == QChar::Punctuation_InitialQuote);
             }
 
             if (doubleQuotes && m_replaceDoubleQuotes) {
-                if (!ending)
+                if (!ending) {
                     *iter = m_typographicDoubleQuotes.begin;
-                else
+                } else {
                     *iter = m_typographicDoubleQuotes.end;
-            }
-            else if (m_replaceSingleQuotes) {
-                if (!ending)
+                }
+            } else if (m_replaceSingleQuotes) {
+                if (!ending) {
                     *iter = m_typographicSingleQuotes.begin;
-                else
+                } else {
                     *iter = m_typographicSingleQuotes.end;
+                }
             }
         }
         iter--;
     }
 
     // first character
-    if (*iter == QChar('"') && m_replaceDoubleQuotes)
+    if (*iter == QChar('"') && m_replaceDoubleQuotes) {
         *iter = m_typographicDoubleQuotes.begin;
-    else if (*iter == QChar('\'') && m_replaceSingleQuotes)
+    } else if (*iter == QChar('\'') && m_replaceSingleQuotes) {
         *iter = m_typographicSingleQuotes.begin;
+    }
 }
 
 void Autocorrect::advancedAutocorrect()
 {
-    if (!m_advancedAutocorrect) return;
+    if (!m_advancedAutocorrect) {
+        return;
+    }
 
     int startPos = m_cursor.selectionStart();
     int length = m_word.length();
@@ -518,13 +606,15 @@ void Autocorrect::advancedAutocorrect()
     QString trimmedWord = m_word.toLower().trimmed();
     QString actualWord = trimmedWord;
 
-    if (actualWord.isEmpty()) return;
+    if (actualWord.isEmpty()) {
+        return;
+    }
 
     // If the last char is punctuation, drop it for now
     bool hasPunctuation = false;
     QChar lastChar = actualWord.at(actualWord.length() - 1);
     if (lastChar.unicode() == '.' || lastChar.unicode() == ',' || lastChar.unicode() == '?' ||
-          lastChar.unicode() == '!' || lastChar.unicode() == ':' || lastChar.unicode() == ';') {
+            lastChar.unicode() == '!' || lastChar.unicode() == ':' || lastChar.unicode() == ';') {
         hasPunctuation = true;
         actualWord.chop(1);
     }
@@ -569,29 +659,28 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
 
     // list of the schemes, starting with http:// as most probable
     const QStringList schemes = QStringList()
-        << "http://"
-        << "https://"
-        << "mailto:/"
-        << "ftp://"
-        << "file://"
-        << "git://"
-        << "sftp://"
-        << "magnet:?"
-        << "smb://"
-        << "nfs://"
-        << "fish://"
-        << "ssh://"
-        << "telnet://"
-        << "irc://"
-        << "sip:"
-        << "news:"
-        << "gopher://"
-        << "nntp://"
-        << "geo:"
-        << "udp://"
-        << "rsync://"
-        << "dns://";
-
+                                << "http://"
+                                << "https://"
+                                << "mailto:/"
+                                << "ftp://"
+                                << "file://"
+                                << "git://"
+                                << "sftp://"
+                                << "magnet:?"
+                                << "smb://"
+                                << "nfs://"
+                                << "fish://"
+                                << "ssh://"
+                                << "telnet://"
+                                << "irc://"
+                                << "sip:"
+                                << "news:"
+                                << "gopher://"
+                                << "nntp://"
+                                << "geo:"
+                                << "udp://"
+                                << "rsync://"
+                                << "dns://";
 
     enum LinkType  { UNCLASSIFIED, SCHEME, MAILTO, WWW, FTP };
     LinkType linkType = UNCLASSIFIED;
@@ -610,17 +699,16 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
         }
     }
 
-
     if (linkType == UNCLASSIFIED) {
         pos = word.indexOf(QLatin1String("www."), 0, Qt::CaseInsensitive);
-        if (pos != -1 && word.indexOf('.', pos+4) != -1) {
+        if (pos != -1 && word.indexOf('.', pos + 4) != -1) {
             linkType = WWW;
             contentPos = pos + 4;
         }
     }
     if (linkType == UNCLASSIFIED) {
         pos = word.indexOf(QLatin1String("ftp."), 0, Qt::CaseInsensitive);
-        if (pos != -1 && word.indexOf('.', pos+4) != -1) {
+        if (pos != -1 && word.indexOf('.', pos + 4) != -1) {
             linkType = FTP;
             contentPos = pos + 4;
         }
@@ -650,7 +738,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
     if (linkType != UNCLASSIFIED) {
         // A URL inside e.g. quotes (like "http://www.calligra.org" with the quotes)
         // shouldn't include the quote in the URL.
-        int lastPos = word.length()-1;
+        int lastPos = word.length() - 1;
         while (!word.at(lastPos).isLetter() &&  !word.at(lastPos).isDigit() && word.at(lastPos) != '/') {
             --lastPos;
         }
@@ -658,7 +746,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
         if (lastPos < contentPos) {
             return QString();
         }
-        word.truncate(lastPos+1);
+        word.truncate(lastPos + 1);
         word.remove(0, pos);
         if (linkType == MAILTO) {
             word.prepend(QLatin1String("mailto:"));
@@ -740,30 +828,32 @@ void Autocorrect::readAutocorrectXmlEntries()
     QStringList folders;
     folders << QLatin1String("") << QLatin1String("calligra/");
     QString fname;
-    Q_FOREACH(const QString& path, folders)
-    {
-        if (!m_autocorrectLang.isEmpty())
+    Q_FOREACH (const QString &path, folders) {
+        if (!m_autocorrectLang.isEmpty()) {
             fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + m_autocorrectLang + ".xml");
+        }
         if (m_autocorrectLang != "all_languages") {
-            if (fname.isEmpty() && !kdelang.isEmpty())
+            if (fname.isEmpty() && !kdelang.isEmpty()) {
                 fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
+            }
             if (fname.isEmpty() && kdelang.contains('_')) {
-                kdelang.remove( QRegExp( "_.*" ) );
+                kdelang.remove(QRegExp("_.*"));
                 fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
             }
         }
 
-        if(!fname.isEmpty()) {
+        if (!fname.isEmpty()) {
             readAutocorrectXmlEntry(fname, false);
             break;
         }
     }
 
-    if (m_autocorrectLang.isEmpty())
+    if (m_autocorrectLang.isEmpty()) {
         m_autocorrectLang = kdelang;
+    }
 
     fname = KGlobal::dirs()->findResource("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
-    if(!fname.isEmpty()) {
+    if (!fname.isEmpty()) {
         readAutocorrectXmlEntry(fname, true);
     }
 }
@@ -771,15 +861,18 @@ void Autocorrect::readAutocorrectXmlEntries()
 void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomization)
 {
     QFile xmlFile(fname);
-    if (!xmlFile.open(QIODevice::ReadOnly))
+    if (!xmlFile.open(QIODevice::ReadOnly)) {
         return;
+    }
 
     QDomDocument doc;
-    if (!doc.setContent(&xmlFile))
+    if (!doc.setContent(&xmlFile)) {
         return;
+    }
 
-    if (doc.doctype().name() != "autocorrection")
+    if (doc.doctype().name() != "autocorrection") {
         return;
+    }
 
     QDomElement de = doc.documentElement();
 
@@ -789,8 +882,9 @@ void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomi
             m_upperCaseExceptions.clear();
         }
         QDomNodeList nl = upper.childNodes();
-        for (int i = 0; i < nl.count(); i++)
+        for (int i = 0; i < nl.count(); i++) {
             m_upperCaseExceptions += nl.item(i).toElement().attribute("exception");
+        }
     }
 
     QDomElement twoUpper = de.namedItem("TwoUpperLetterExceptions").toElement();
@@ -799,14 +893,14 @@ void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomi
             m_twoUpperLetterExceptions.clear();
         }
         QDomNodeList nl = twoUpper.childNodes();
-        for(int i = 0; i < nl.count(); i++)
+        for (int i = 0; i < nl.count(); i++) {
             m_twoUpperLetterExceptions += nl.item(i).toElement().attribute("exception");
+        }
     }
 
     /* Load advanced autocorrect entry, including the format */
     QDomElement item = de.namedItem("items").toElement();
-    if (!item.isNull())
-    {
+    if (!item.isNull()) {
         if (onlyCustomization) {
             m_autocorrectEntries.clear();
         }
@@ -841,23 +935,23 @@ void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomi
     }
 
     QDomElement doubleQuote = de.namedItem(QLatin1String("DoubleQuote")).toElement();
-    if(!doubleQuote.isNull()) {
-      QDomNodeList nl = doubleQuote.childNodes();
-      if(nl.count()==1) {
-        QDomElement element = nl.item(0).toElement();
-        m_typographicDoubleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
-        m_typographicDoubleQuotes.end = element.attribute(QLatin1String("end")).at(0);
-      }
+    if (!doubleQuote.isNull()) {
+        QDomNodeList nl = doubleQuote.childNodes();
+        if (nl.count() == 1) {
+            QDomElement element = nl.item(0).toElement();
+            m_typographicDoubleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
+            m_typographicDoubleQuotes.end = element.attribute(QLatin1String("end")).at(0);
+        }
     }
 
     QDomElement singleQuote = de.namedItem(QLatin1String("SimpleQuote")).toElement();
-    if(!singleQuote.isNull()) {
-      QDomNodeList nl = singleQuote.childNodes();
-      if(nl.count()==1) {
-        QDomElement element = nl.item(0).toElement();
-        m_typographicSingleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
-        m_typographicSingleQuotes.end = element.attribute(QLatin1String("end")).at(0);
-      }
+    if (!singleQuote.isNull()) {
+        QDomNodeList nl = singleQuote.childNodes();
+        if (nl.count() == 1) {
+            QDomElement element = nl.item(0).toElement();
+            m_typographicSingleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
+            m_typographicSingleQuotes.end = element.attribute(QLatin1String("end")).at(0);
+        }
     }
 
     if (onlyCustomization) {
@@ -867,74 +961,72 @@ void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomi
     QDomElement superScript = de.namedItem("SuperScript").toElement();
     if (!superScript.isNull()) {
         QDomNodeList nl = superScript.childNodes();
-        for(int i = 0; i < nl.count() ; i++) {
+        for (int i = 0; i < nl.count(); i++) {
             m_superScriptEntries.insert(nl.item(i).toElement().attribute("find"), nl.item(i).toElement().attribute("super"));
         }
     }
 
 }
 
-
 void Autocorrect::writeAutocorrectXmlEntry()
 {
     const QString fname = KGlobal::dirs()->locateLocal("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
     QFile file(fname);
-    if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
-        qDebug()<<"We can't save in file :"<<fname;
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "We can't save in file :" << fname;
         return;
     }
     QDomDocument root(QLatin1String("autocorrection"));
 
-    QDomElement word = root.createElement(QLatin1String( "Word" ));
+    QDomElement word = root.createElement(QLatin1String("Word"));
     root.appendChild(word);
-    QDomElement items = root.createElement(QLatin1String( "items" ));
+    QDomElement items = root.createElement(QLatin1String("items"));
 
     QHashIterator<QString, QString> i(m_autocorrectEntries);
     while (i.hasNext()) {
         i.next();
-        QDomElement item = root.createElement(QLatin1String( "item" ));
-        item.setAttribute(QLatin1String("find"),i.key());
-        item.setAttribute(QLatin1String("replace"),i.value());
+        QDomElement item = root.createElement(QLatin1String("item"));
+        item.setAttribute(QLatin1String("find"), i.key());
+        item.setAttribute(QLatin1String("replace"), i.value());
         items.appendChild(item);
     }
     word.appendChild(items);
 
-
-    QDomElement upperCaseExceptions = root.createElement(QLatin1String( "UpperCaseExceptions" ));
+    QDomElement upperCaseExceptions = root.createElement(QLatin1String("UpperCaseExceptions"));
     QSet<QString>::const_iterator upper = m_upperCaseExceptions.constBegin();
     while (upper != m_upperCaseExceptions.constEnd()) {
-        QDomElement item = root.createElement(QLatin1String( "word" ));
-        item.setAttribute(QLatin1String("exception"),*upper);
+        QDomElement item = root.createElement(QLatin1String("word"));
+        item.setAttribute(QLatin1String("exception"), *upper);
         upperCaseExceptions.appendChild(item);
         ++upper;
     }
     word.appendChild(upperCaseExceptions);
 
-    QDomElement twoUpperLetterExceptions = root.createElement(QLatin1String( "TwoUpperLetterExceptions" ));
+    QDomElement twoUpperLetterExceptions = root.createElement(QLatin1String("TwoUpperLetterExceptions"));
     QSet<QString>::const_iterator twoUpper = m_twoUpperLetterExceptions.constBegin();
     while (twoUpper != m_twoUpperLetterExceptions.constEnd()) {
-        QDomElement item = root.createElement(QLatin1String( "word" ));
-        item.setAttribute(QLatin1String("exception"),*twoUpper);
+        QDomElement item = root.createElement(QLatin1String("word"));
+        item.setAttribute(QLatin1String("exception"), *twoUpper);
         twoUpperLetterExceptions.appendChild(item);
         ++twoUpper;
     }
     word.appendChild(twoUpperLetterExceptions);
 
-    QDomElement doubleQuote = root.createElement(QLatin1String( "DoubleQuote" ));
-    QDomElement item = root.createElement(QLatin1String( "doublequote" ));
-    item.setAttribute(QLatin1String("begin"),m_typographicDoubleQuotes.begin);
-    item.setAttribute(QLatin1String("end"),m_typographicDoubleQuotes.end);
+    QDomElement doubleQuote = root.createElement(QLatin1String("DoubleQuote"));
+    QDomElement item = root.createElement(QLatin1String("doublequote"));
+    item.setAttribute(QLatin1String("begin"), m_typographicDoubleQuotes.begin);
+    item.setAttribute(QLatin1String("end"), m_typographicDoubleQuotes.end);
     doubleQuote.appendChild(item);
     word.appendChild(doubleQuote);
 
-    QDomElement singleQuote = root.createElement(QLatin1String( "SimpleQuote" ));
-    item = root.createElement(QLatin1String( "simplequote" ));
-    item.setAttribute(QLatin1String("begin"),m_typographicSingleQuotes.begin);
-    item.setAttribute(QLatin1String("end"),m_typographicSingleQuotes.end);
+    QDomElement singleQuote = root.createElement(QLatin1String("SimpleQuote"));
+    item = root.createElement(QLatin1String("simplequote"));
+    item.setAttribute(QLatin1String("begin"), m_typographicSingleQuotes.begin);
+    item.setAttribute(QLatin1String("end"), m_typographicSingleQuotes.end);
     singleQuote.appendChild(item);
     word.appendChild(singleQuote);
 
-    QTextStream ts( &file );
+    QTextStream ts(&file);
     ts << root.toString();
     file.close();
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -23,28 +23,28 @@
 #include "krita_export.h"
 #include "kis_iterator_ng.h"
 
-class KRITAIMAGE_EXPORT KisHLineIterator2 : public KisHLineIteratorNG, public KisBaseIterator {
-    KisHLineIterator2(const KisHLineIterator2&);
-    KisHLineIterator2& operator=(const KisHLineIterator2&);
+class KRITAIMAGE_EXPORT KisHLineIterator2 : public KisHLineIteratorNG, public KisBaseIterator
+{
+    KisHLineIterator2(const KisHLineIterator2 &);
+    KisHLineIterator2 &operator=(const KisHLineIterator2 &);
 
 public:
     struct KisTileInfo {
         KisTileSP tile;
         KisTileSP oldtile;
-        quint8* data;
-        quint8* oldData;
+        quint8 *data;
+        quint8 *oldData;
     };
 
-
-public:    
+public:
     KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable);
     ~KisHLineIterator2();
-    
+
     virtual bool nextPixel();
     virtual void nextRow();
-    virtual const quint8* oldRawData() const;
-    virtual const quint8* rawDataConst() const;
-    virtual quint8* rawData();
+    virtual const quint8 *oldRawData() const;
+    virtual const quint8 *rawDataConst() const;
+    virtual quint8 *rawData();
     virtual qint32 nConseqPixels() const;
     virtual bool nextPixels(qint32 n);
     virtual qint32 x() const;
@@ -65,7 +65,7 @@ private:
     quint8 *m_data;
     quint8 *m_oldData;
     bool m_havePixels;
-    
+
     qint32 m_right;
     qint32 m_left;
     qint32 m_top;
@@ -79,11 +79,11 @@ private:
 
     QVector<KisTileInfo> m_tilesCache;
     quint32 m_tilesCacheSize;
-    
+
 private:
 
     void switchToTile(qint32 xInTile);
-    void fetchTileDataForCache(KisTileInfo& kti, qint32 col, qint32 row);
+    void fetchTileDataForCache(KisTileInfo &kti, qint32 col, qint32 row);
     void preallocateTiles();
 };
 #endif

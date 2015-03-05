@@ -31,8 +31,9 @@
 class KoHyphenatorException
 {
 public:
-    explicit KoHyphenatorException(const QString& MessageText): messageText(MessageText) {}
-    QString message() const {
+    explicit KoHyphenatorException(const QString &MessageText): messageText(MessageText) {}
+    QString message() const
+    {
         return messageText;
     }
 private:
@@ -66,7 +67,7 @@ public:
      * Beware that this might throw an exception in case of an installation problem!
      * Catch KoHyphenatorExceptions!
      */
-    static KoHyphenator* self();
+    static KoHyphenator *self();
 
     ~KoHyphenator();
 
@@ -76,7 +77,7 @@ public:
      * Can be used to check if the line break at given position
      * should be forced and automatic hyphen added.
      */
-    bool checkHyphenPos(const QString& str, int pos, const QString& lang) const;
+    bool checkHyphenPos(const QString &str, int pos, const QString &lang) const;
 
     /**
      * Returns the pointer to the string in hnj_hyphen_hyphenate() format
@@ -94,7 +95,7 @@ public:
      * Language: two chars containing the ISO 639-1 code
      * (for example "en", "uk", etc.) (could be lang_COUNTRY as well).
     */
-    char *hyphens(const QString& str, const QString& lang) const;
+    char *hyphens(const QString &str, const QString &lang) const;
 
     /**
      * Hyphenates the string str and returns the string with
@@ -106,25 +107,25 @@ public:
      * Language: two chars containing the ISO 639-1 code
      * (for example "en", "uk", etc.) (could be lang_COUNTRY as well).
      */
-    QString hyphenate(const QString& str, const QString& lang) const;
+    QString hyphenate(const QString &str, const QString &lang) const;
 
 private:
     /**
      * @return the encoding of dictionary for the language @p lang.
      */
-    QTextCodec* codecForLang(const QString& lang) const;
+    QTextCodec *codecForLang(const QString &lang) const;
 
     KoHyphenator();
     HyphenDict *dict(const QString &lang) const;
 
-    QMap<QString, HyphenDict*> dicts;
+    QMap<QString, HyphenDict *> dicts;
     struct EncodingStruct {
         EncodingStruct() // for QMap
-                : encoding(), codec(0) {}
-        EncodingStruct(const QByteArray& _encoding)
-                : encoding(_encoding), codec(0) {}
+            : encoding(), codec(0) {}
+        EncodingStruct(const QByteArray &_encoding)
+            : encoding(_encoding), codec(0) {}
         QByteArray encoding;
-        QTextCodec* codec;
+        QTextCodec *codec;
     };
     typedef QMap<QString, EncodingStruct> EncodingMap;
     mutable EncodingMap encodings; // key is the language code

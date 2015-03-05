@@ -29,7 +29,6 @@ public:
     WheelAction wheelAction;
 };
 
-
 KisSingleActionShortcut::KisSingleActionShortcut(KisAbstractInputAction *action, int index)
     : KisAbstractShortcut(action, index),
       m_d(new Private)
@@ -63,11 +62,11 @@ void KisSingleActionShortcut::setWheel(const QList<Qt::Key> &modifiers, WheelAct
 bool KisSingleActionShortcut::match(const QList<Qt::Key> &modifiers, Qt::Key key)
 {
     return !m_d->useWheel && key == m_d->key &&
-        compareKeys(modifiers, m_d->modifiers);
+           compareKeys(modifiers, m_d->modifiers);
 }
 
 bool KisSingleActionShortcut::match(const QList<Qt::Key> &modifiers, WheelAction wheelAction)
 {
     return m_d->useWheel && wheelAction == m_d->wheelAction &&
-        compareKeys(modifiers, m_d->modifiers);
+           compareKeys(modifiers, m_d->modifiers);
 }

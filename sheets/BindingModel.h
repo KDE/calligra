@@ -41,31 +41,31 @@ class BindingModel : public QAbstractTableModel, public KoChart::ChartModel
     Q_OBJECT
     Q_INTERFACES(KoChart::ChartModel)
 public:
-    explicit BindingModel(Binding* binding, QObject *parent = 0);
+    explicit BindingModel(Binding *binding, QObject *parent = 0);
 
     // QAbstractTableModel interface
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
     // KoChart::ChartModel interface
     virtual QHash<QString, QVector<QRect> > cellRegion() const;
-    virtual bool setCellRegion(const QString& regionName);
-    virtual bool isCellRegionValid(const QString& regionName) const;
+    virtual bool setCellRegion(const QString &regionName);
+    virtual bool isCellRegionValid(const QString &regionName) const;
 
-    const Region& region() const;
-    void setRegion(const Region& region);
+    const Region &region() const;
+    void setRegion(const Region &region);
 
-    void emitDataChanged(const QRect& range);
-    void emitChanged(const Region& region);
+    void emitDataChanged(const QRect &range);
+    void emitChanged(const Region &region);
 
 Q_SIGNALS:
-    void changed(const Region& region);
+    void changed(const Region &region);
 
 private:
     Region m_region;
-    Binding* m_binding;
+    Binding *m_binding;
 };
 
 } // namespace Sheets

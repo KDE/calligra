@@ -31,9 +31,9 @@ class SybaseCursorData;
 class SybaseCursor: public Cursor
 {
 public:
-    explicit SybaseCursor(Connection* conn, const QString& statement = QString(),
+    explicit SybaseCursor(Connection *conn, const QString &statement = QString(),
                           uint cursor_options = NoOptions);
-    SybaseCursor(Connection* conn, QuerySchema& query, uint options = NoOptions);
+    SybaseCursor(Connection *conn, QuerySchema &query, uint options = NoOptions);
     virtual ~SybaseCursor();
     virtual bool drv_open();
     virtual bool drv_close();
@@ -47,7 +47,7 @@ public:
     virtual void drv_bufferMovePointerNext();
     virtual void drv_bufferMovePointerPrev();
     virtual void drv_bufferMovePointerTo(qint64 to);
-    virtual const char** rowData() const;
+    virtual const char **rowData() const;
     virtual bool drv_storeCurrentRow(RecordData &data) const;
 //   virtual bool save(RecordData& data, RowEditBuffer& buf);
 

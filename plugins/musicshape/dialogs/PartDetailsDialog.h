@@ -24,16 +24,18 @@
 #include <kdialog.h>
 
 class MusicTool;
-namespace MusicCore {
-    class Part;
+namespace MusicCore
+{
+class Part;
 }
 
-class PartDetailsDialog : public KDialog {
+class PartDetailsDialog : public KDialog
+{
     Q_OBJECT
 public:
-    explicit PartDetailsDialog(MusicCore::Part* part, QWidget *parent = 0);
-    
-    static void showDialog(MusicTool *tool, MusicCore::Part* part, QWidget *parent = 0);
+    explicit PartDetailsDialog(MusicCore::Part *part, QWidget *parent = 0);
+
+    static void showDialog(MusicTool *tool, MusicCore::Part *part, QWidget *parent = 0);
 private:
     Ui::PartDetailsDialog widget;
 };

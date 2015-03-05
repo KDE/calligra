@@ -22,17 +22,22 @@
 #include <QVector>
 #include <QRect>
 
-
 struct KisWrappedRect : public QVector<QRect> {
-    static inline int xToWrappedX(int x, const QRect &wrapRect) {
+    static inline int xToWrappedX(int x, const QRect &wrapRect)
+    {
         x = (x - wrapRect.x()) % wrapRect.width();
-        if (x < 0) x += wrapRect.width();
+        if (x < 0) {
+            x += wrapRect.width();
+        }
         return x;
     }
 
-    static inline int yToWrappedY(int y, const QRect &wrapRect) {
+    static inline int yToWrappedY(int y, const QRect &wrapRect)
+    {
         y = (y - wrapRect.y()) % wrapRect.height();
-        if (y < 0) y += wrapRect.height();
+        if (y < 0) {
+            y += wrapRect.height();
+        }
         return y;
     }
 
@@ -69,7 +74,8 @@ struct KisWrappedRect : public QVector<QRect> {
         }
     }
 
-    bool isSplit() const {
+    bool isSplit() const
+    {
         int size = this->size();
 
         // we can either split or not split only
@@ -78,27 +84,33 @@ struct KisWrappedRect : public QVector<QRect> {
         return size > 1;
     }
 
-    QRect topLeft() const {
+    QRect topLeft() const
+    {
         return this->at(TOPLEFT);
     }
 
-    QRect topRight() const {
+    QRect topRight() const
+    {
         return this->at(TOPRIGHT);
     }
 
-    QRect bottomLeft() const {
+    QRect bottomLeft() const
+    {
         return this->at(BOTTOMLEFT);
     }
 
-    QRect bottomRight() const {
+    QRect bottomRight() const
+    {
         return this->at(BOTTOMRIGHT);
     }
 
-    QRect wrapRect() const {
+    QRect wrapRect() const
+    {
         return m_wrapRect;
     }
 
-    QRect originalRect() const {
+    QRect originalRect() const
+    {
         return m_originalRect;
     }
 

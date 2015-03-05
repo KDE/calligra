@@ -20,7 +20,6 @@
 
 #include "colorsfilters.h"
 
-
 #include <math.h>
 
 #include <stdlib.h>
@@ -55,7 +54,6 @@
 #include <KoCompositeOp.h>
 #include <kis_iterator_ng.h>
 
-
 #include "kis_hsv_adjustment_filter.h"
 #include "kis_brightness_contrast_filter.h"
 #include "kis_perchannel_filter.h"
@@ -66,9 +64,9 @@ K_PLUGIN_FACTORY(ColorsFiltersFactory, registerPlugin<ColorsFilters>();)
 K_EXPORT_PLUGIN(ColorsFiltersFactory("krita"))
 
 ColorsFilters::ColorsFilters(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
-    KisFilterRegistry * manager = KisFilterRegistry::instance();
+    KisFilterRegistry *manager = KisFilterRegistry::instance();
     manager->add(new KisBrightnessContrastFilter());
     manager->add(new KisAutoContrast());
     manager->add(new KisPerChannelFilter());
@@ -82,9 +80,7 @@ ColorsFilters::~ColorsFilters()
 {
 }
 
-
 //==================================================================
-
 
 KisAutoContrast::KisAutoContrast() : KisFilter(id(), categoryAdjust(), i18n("&Auto Contrast"))
 {
@@ -96,9 +92,9 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), categoryAdjust(), i18n("&Au
 }
 
 void KisAutoContrast::processImpl(KisPaintDeviceSP device,
-                                  const QRect& applyRect,
-                                  const KisFilterConfiguration* config,
-                                  KoUpdater* progressUpdater) const
+                                  const QRect &applyRect,
+                                  const KisFilterConfiguration *config,
+                                  KoUpdater *progressUpdater) const
 {
     Q_ASSERT(device != 0);
     Q_UNUSED(config);
@@ -108,8 +104,9 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
     int minvalue = int(255 * histogram.calculations().getMin() + 0.5);
     int maxvalue = int(255 * histogram.calculations().getMax() + 0.5);
 
-    if (maxvalue > 255)
+    if (maxvalue > 255) {
         maxvalue = 255;
+    }
 
     histogram.setChannel(0);
     int twoPercent = int(0.005 * histogram.calculations().getCount());
@@ -137,26 +134,31 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
     // build the transferfunction
     int diff = maxvalue - minvalue;
 
-    quint16* transfer = new quint16[256];
-    for (int i = 0; i < 255; i++)
+    quint16 *transfer = new quint16[256];
+    for (int i = 0; i < 255; i++) {
         transfer[i] = 0xFFFF;
+    }
 
     if (diff != 0) {
-        for (int i = 0; i < minvalue; i++)
+        for (int i = 0; i < minvalue; i++) {
             transfer[i] = 0x0;
+        }
         for (int i = minvalue; i < maxvalue; i++) {
             qint32 val = (i - minvalue) / diff;
 
             val = int((0xFFFF * (i - minvalue)) / diff);
-            if (val > 0xFFFF)
+            if (val > 0xFFFF) {
                 val = 0xFFFF;
-            if (val < 0)
+            }
+            if (val < 0) {
                 val = 0;
+            }
 
             transfer[i] = val;
         }
-        for (int i = maxvalue; i < 256; i++)
+        for (int i = maxvalue; i < 256; i++) {
             transfer[i] = 0xFFFF;
+        }
     }
     // apply
     KoColorTransformation *adj = device->colorSpace()->createBrightnessContrastAdjustment(transfer);
@@ -164,7 +166,9 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
     KisSequentialIterator it(device, applyRect);
 
     qint32 totalCost = (applyRect.width() * applyRect.height()) / 100;
-    if (totalCost == 0) totalCost = 1;
+    if (totalCost == 0) {
+        totalCost = 1;
+    }
     qint32 pixelsProcessed = 0;
 
     quint32 npix;
@@ -173,8 +177,10 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
         // adjust
         adj->transform(it.oldRawData(), it.rawData(), npix);
         pixelsProcessed += npix;
-        if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
-    } while(it.nextPixels(npix)  && !(progressUpdater && progressUpdater->interrupted()));
+        if (progressUpdater) {
+            progressUpdater->setProgress(pixelsProcessed / totalCost);
+        }
+    } while (it.nextPixels(npix)  && !(progressUpdater && progressUpdater->interrupted()));
     delete[] transfer;
     delete adj;
 }

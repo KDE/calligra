@@ -47,7 +47,6 @@
 
 #include "widgets/kis_multi_bool_filter_widget.h"
 
-
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
 // void KisSobelFilterConfiguration::fromXML(const QString & s)
@@ -77,10 +76,11 @@ KisSobelFilter::KisSobelFilter() : KisFilter(id(), categoryEdgeDetection(), i18n
     setSupportsAdjustmentLayers(false);
 }
 
-
-void KisSobelFilter::prepareRow(KisPaintDeviceSP src, quint8* data, quint32 x, quint32 y, quint32 w, quint32 h) const
+void KisSobelFilter::prepareRow(KisPaintDeviceSP src, quint8 *data, quint32 x, quint32 y, quint32 w, quint32 h) const
 {
-    if (y > h - 1) y = h - 1;
+    if (y > h - 1) {
+        y = h - 1;
+    }
     quint32 pixelSize = src->pixelSize();
 
     src->readBytes(data, x, y, w, 1);
@@ -96,10 +96,10 @@ void KisSobelFilter::prepareRow(KisPaintDeviceSP src, quint8* data, quint32 x, q
 #define ROUND(x) ((int) ((x) + 0.5))
 
 void KisSobelFilter::processImpl(KisPaintDeviceSP device,
-                                 const QRect& applyRect,
-                                 const KisFilterConfiguration* configuration,
-                                 KoUpdater* progressUpdater
-                                 ) const
+                                 const QRect &applyRect,
+                                 const KisFilterConfiguration *configuration,
+                                 KoUpdater *progressUpdater
+                                ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());
@@ -117,25 +117,25 @@ void KisSobelFilter::processImpl(KisPaintDeviceSP device,
     int cost = applyRect.height();
 
     /*  allocate row buffers  */
-    quint8* prevRow = new quint8[(width + 2) * pixelSize];
+    quint8 *prevRow = new quint8[(width + 2) * pixelSize];
     Q_CHECK_PTR(prevRow);
-    quint8* curRow = new quint8[(width + 2) * pixelSize];
+    quint8 *curRow = new quint8[(width + 2) * pixelSize];
     Q_CHECK_PTR(curRow);
-    quint8* nextRow = new quint8[(width + 2) * pixelSize];
+    quint8 *nextRow = new quint8[(width + 2) * pixelSize];
     Q_CHECK_PTR(nextRow);
-    quint8* dest = new quint8[width  * pixelSize];
+    quint8 *dest = new quint8[width  * pixelSize];
     Q_CHECK_PTR(dest);
 
-    quint8* pr = prevRow + pixelSize;
-    quint8* cr = curRow + pixelSize;
-    quint8* nr = nextRow + pixelSize;
+    quint8 *pr = prevRow + pixelSize;
+    quint8 *cr = curRow + pixelSize;
+    quint8 *nr = nextRow + pixelSize;
 
     prepareRow(device, pr, srcTopLeft.x(), srcTopLeft.y() - 1, width, height);
     prepareRow(device, cr, srcTopLeft.x(), srcTopLeft.y(), width, height);
 
     quint32 counter = 0;
-    quint8* d;
-    quint8* tmp;
+    quint8 *d;
+    quint8 *tmp;
     qint32 gradient, horGradient, verGradient;
     // loop through the rows, applying the sobel convolution
 
@@ -165,7 +165,9 @@ void KisSobelFilter::processImpl(KisPaintDeviceSP device,
                                    : (ROUND(qAbs(horGradient + verGradient) / 4.0))));
 
             *d++ = gradient;
-            if (gradient > 10) counter ++;
+            if (gradient > 10) {
+                counter ++;
+            }
         }
 
         //  shuffle the row pointers
@@ -180,10 +182,12 @@ void KisSobelFilter::processImpl(KisPaintDeviceSP device,
         if (makeOpaque) {
             do {
                 device->colorSpace()->setOpacity(dstIt->rawData(), OPACITY_OPAQUE_U8, 1);
-            } while(dstIt->nextPixel());
+            } while (dstIt->nextPixel());
             dstIt->nextRow();
         }
-        if (progressUpdater) progressUpdater->setProgress(row / cost);
+        if (progressUpdater) {
+            progressUpdater->setProgress(row / cost);
+        }
     }
 
     delete[] prevRow;
@@ -192,8 +196,7 @@ void KisSobelFilter::processImpl(KisPaintDeviceSP device,
     delete[] dest;
 }
 
-
-KisConfigWidget * KisSobelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget *KisSobelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP) const
 {
     vKisBoolWidgetParam param;
     param.push_back(KisBoolWidgetParam(true, i18n("Sobel horizontally"), "doHorizontally"));

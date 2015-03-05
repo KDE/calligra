@@ -61,9 +61,8 @@ protected:
     virtual void next(int currentTime) = 0;
     void updateCache(const QString &id, const QVariant &value);
 
-
     KPrShapeAnimation *m_shapeAnimation; // we could also use the group() but that would mean we need to cast all the time
-    KPrAnimationCache * m_animationCache;
+    KPrAnimationCache *m_animationCache;
     int m_begin; // in milliseconds
     int m_duration; // in milliseconds
     FillType m_fill;

@@ -31,7 +31,7 @@
 #include <klocale.h>
 
 ExportDialog::ExportDialog(QWidget *parent)
-        : KDialog(parent), m_mainwidget(new ExportWidget(this))
+    : KDialog(parent), m_mainwidget(new ExportWidget(this))
 {
     setCaption(i18n("Export Sheet to HTML"));
     setButtons(Ok | Cancel);
@@ -60,7 +60,7 @@ void ExportDialog::selectAll()
     QModelIndex topLeft = model->index(0, 0);
     QModelIndex bottomRight = model->index(model->rowCount() - 1, model->columnCount() - 1);
     QItemSelection selection(topLeft, bottomRight);
-    view->selectionModel()->select(selection , QItemSelectionModel::QItemSelectionModel::Select);
+    view->selectionModel()->select(selection, QItemSelectionModel::QItemSelectionModel::Select);
 }
 
 ExportDialog::~ExportDialog()
@@ -70,8 +70,9 @@ ExportDialog::~ExportDialog()
 
 QTextCodec *ExportDialog::encoding() const
 {
-    if (m_mainwidget->mEncodingBox->currentIndex() == 1)  // locale selected
+    if (m_mainwidget->mEncodingBox->currentIndex() == 1) { // locale selected
         return KGlobal::locale()->codecForEncoding();
+    }
 
     return QTextCodec::codecForName("utf8");   // utf8 is default
 }
@@ -89,8 +90,9 @@ bool ExportDialog::separateFiles() const
 KUrl ExportDialog::customStyleURL() const
 {
     KUrl url = m_mainwidget->mCustomURL->url();
-    if (m_mainwidget->mCustomButton->isChecked() && url.isValid())
+    if (m_mainwidget->mCustomButton->isChecked() && url.isValid()) {
         return url;
+    }
 
     return KUrl();
 }
@@ -103,10 +105,10 @@ void ExportDialog::setSheets(const QStringList &list)
 
 QStringList ExportDialog::sheets() const
 {
-    QListWidget* view = m_mainwidget->mSheets;
+    QListWidget *view = m_mainwidget->mSheets;
     QStringList list;
-    for (uint i = 0; i < (uint)view->count() ; i++) {
-        QListWidgetItem* item = view->item(i);
+    for (uint i = 0; i < (uint)view->count(); i++) {
+        QListWidgetItem *item = view->item(i);
         if (item->isSelected()) {
             list.append(item->text());
         }

@@ -17,8 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-
 #include <kis_transaction.h>
 #include <kis_paint_device.h>
 #include <kis_debug.h>
@@ -33,12 +31,10 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 
-
-
 #include "kis_import_gmic_processing_visitor.h"
 #include <gmic.h>
 
-KisImportGmicProcessingVisitor::KisImportGmicProcessingVisitor(const KisNodeListSP nodes,QSharedPointer<gmic_list<float> > images, const QRect &dstRect, KisSelectionSP selection)
+KisImportGmicProcessingVisitor::KisImportGmicProcessingVisitor(const KisNodeListSP nodes, QSharedPointer<gmic_list<float> > images, const QRect &dstRect, KisSelectionSP selection)
     : m_nodes(nodes),
       m_images(images),
       m_dstRect(dstRect),
@@ -49,39 +45,33 @@ KisImportGmicProcessingVisitor::KisImportGmicProcessingVisitor(const KisNodeList
 void KisImportGmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     int index = m_nodes->indexOf(node);
-    if (index >= 0)
-    {
+    if (index >= 0) {
         gmic_image<float> &gimg = m_images->_data[index];
-        dbgPlugins << "Importing layer index" << index << "Size: "<< gimg._width << "x" << gimg._height << "colorchannels: " << gimg._spectrum;
+        dbgPlugins << "Importing layer index" << index << "Size: " << gimg._width << "x" << gimg._height << "colorchannels: " << gimg._spectrum;
 
         KisPaintDeviceSP dst = node->paintDevice();
         KisTransaction transaction(dst);
         KisImportGmicProcessingVisitor::gmicImageToPaintDevice(gimg, dst, m_selection, m_dstRect);
-        if (undoAdapter)
-        {
+        if (undoAdapter) {
             transaction.commit(undoAdapter);
             node->setDirty(m_dstRect);
         }
     }
 }
 
-void KisImportGmicProcessingVisitor::gmicImageToPaintDevice(cimg_library::CImg< float >& srcGmicImage,
-                                                            KisPaintDeviceSP dst, KisSelectionSP selection, const QRect &dstRect)
+void KisImportGmicProcessingVisitor::gmicImageToPaintDevice(cimg_library::CImg< float > &srcGmicImage,
+        KisPaintDeviceSP dst, KisSelectionSP selection, const QRect &dstRect)
 {
-        if (selection)
-        {
-            KisPaintDeviceSP src = new KisPaintDevice(dst->colorSpace());
-            KisGmicSimpleConvertor::convertFromGmicFast(srcGmicImage, src, 255.0f);
+    if (selection) {
+        KisPaintDeviceSP src = new KisPaintDevice(dst->colorSpace());
+        KisGmicSimpleConvertor::convertFromGmicFast(srcGmicImage, src, 255.0f);
 
-            KisPainter painter(dst, selection);
-            painter.bitBlt(dstRect.topLeft(), src, QRect(QPoint(0,0),dstRect.size()));
-        }
-        else
-        {
-            KisGmicSimpleConvertor::convertFromGmicFast(srcGmicImage, dst, 255.0f);
-        }
+        KisPainter painter(dst, selection);
+        painter.bitBlt(dstRect.topLeft(), src, QRect(QPoint(0, 0), dstRect.size()));
+    } else {
+        KisGmicSimpleConvertor::convertFromGmicFast(srcGmicImage, dst, 255.0f);
+    }
 }
-
 
 void KisImportGmicProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
 {

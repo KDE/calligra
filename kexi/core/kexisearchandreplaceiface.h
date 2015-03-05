@@ -84,16 +84,16 @@ public:
      \a columnNames should contain column name, \a columnCaptions should contain column captions,
      and \a currentColumnName should beset to current column's name.
      Implementation should set up values and return true if find/replace dialog should be filled. */
-    virtual bool setupFindAndReplace(QStringList& columnNames, QStringList& columnCaptions,
-                                     QString& currentColumnName) = 0;
+    virtual bool setupFindAndReplace(QStringList &columnNames, QStringList &columnCaptions,
+                                     QString &currentColumnName) = 0;
 
     /*! Finds \a valueToFind within the view.
      \a options are used to control the process. Selection is moved to found value.
      \return true if value has been found, false if value has not been found,
      and cancelled if there is nothing to find or there is no data to search in.
      If \a next is true, "find next" is performed, else "find previous" is performed. */
-    virtual tristate find(const QVariant& valueToFind,
-                          const KexiSearchAndReplaceViewInterface::Options& options, bool next) = 0;
+    virtual tristate find(const QVariant &valueToFind,
+                          const KexiSearchAndReplaceViewInterface::Options &options, bool next) = 0;
 
     /*! Finds \a valueToFind within the view and replaces with \a replacement
      \a options are used to control the process.
@@ -101,8 +101,8 @@ public:
      has not been found and replaced, and cancelled if there is nothing
      to find or there is no data to search in or the data is read only.
      If \a replaceAll is true, all found values are replaced. */
-    virtual tristate findNextAndReplace(const QVariant& valueToFind, const QVariant& replacement,
-                                        const KexiSearchAndReplaceViewInterface::Options& options,
+    virtual tristate findNextAndReplace(const QVariant &valueToFind, const QVariant &replacement,
+                                        const KexiSearchAndReplaceViewInterface::Options &options,
                                         bool replaceAll) = 0;
 };
 

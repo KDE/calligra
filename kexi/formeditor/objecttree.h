@@ -42,10 +42,10 @@ namespace KFormDesigner
 class ObjectTreeItem;
 
 //! @short An list of ObjectTreeItem pointers.
-typedef QList<ObjectTreeItem*> ObjectTreeList;
+typedef QList<ObjectTreeItem *> ObjectTreeList;
 
 //! @short A QString-based disctionary of ObjectTreeItem pointers.
-typedef QHash<QString, ObjectTreeItem*> ObjectTreeHash;
+typedef QHash<QString, ObjectTreeItem *> ObjectTreeHash;
 
 /*!
  @short An item representing a widget
@@ -60,17 +60,17 @@ public:
 
     QString name() const;
     QString className() const;
-    QWidget* widget() const;
-    EventEater* eventEater() const;
-    ObjectTreeItem* parent() const;
-    ObjectTreeList* children();
+    QWidget *widget() const;
+    EventEater *eventEater() const;
+    ObjectTreeItem *parent() const;
+    ObjectTreeList *children();
 
     /*! \return a QHash<QString, QVariant> of all modified properties for this widget.
       The QVariant is the old value (ie first value) of the property whose name is the QString. */
-    const QHash<QString, QVariant>* modifiedProperties() const;
+    const QHash<QString, QVariant> *modifiedProperties() const;
 
     //! \return the widget's Container, or 0 if the widget is not a Container.
-    Container* container() const;
+    Container *container() const;
 
     void setWidget(QWidget *w);
     void setParent(ObjectTreeItem *parent);
@@ -90,11 +90,11 @@ public:
     /*! Adds subproperty \a property value \a value (a property of subwidget).
      Remembering it for delayed setting is needed because on loading
      the subwidget could be not created yet (true e.g. for KexiDBAutoField). */
-    void addSubproperty(const QByteArray &property, const QVariant& value);
+    void addSubproperty(const QByteArray &property, const QVariant &value);
 
     /*! \return subproperties for this item, added by addSubproperty()
      or 0 is there are no subproperties. */
-    QHash<QString, QVariant>* subproperties() const;
+    QHash<QString, QVariant> *subproperties() const;
 
     void setPixmapName(const QByteArray &property, const QString &name);
     QString pixmapName(const QByteArray &property);
@@ -109,11 +109,11 @@ public:
     bool spanMultipleCells() const;
     void setGridPos(int row, int col, int rowspan, int colspan);
     QString unknownProperties();
-    void setUnknownProperties(const QString& set);
+    void setUnknownProperties(const QString &set);
 private:
     class Private;
 
-    Private* const d;
+    Private *const d;
     friend class ObjectTree;
     friend class FormIO;
 };
@@ -134,10 +134,10 @@ public:
     bool reparent(const QString &name, const QString &newparent);
 
     /*! \return the ObjectTreeItem named \a name, or 0 if doesn't exist. */
-    ObjectTreeItem* lookup(const QString &name);
+    ObjectTreeItem *lookup(const QString &name);
 
     /*! \return a hash containing all ObjectTreeItem in this ObjectTree. */
-    ObjectTreeHash* hash();
+    ObjectTreeHash *hash();
 
     void addItem(ObjectTreeItem *parent, ObjectTreeItem *c);
     void removeItem(const QString &name);
@@ -155,7 +155,7 @@ public:
 private:
     class Private;
 
-    Private* const d;
+    Private *const d;
 };
 
 }

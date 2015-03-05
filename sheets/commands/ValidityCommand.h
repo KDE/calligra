@@ -41,7 +41,7 @@ public:
     void setValidity(Validity validity);
 
 protected:
-    virtual bool process(Element* element);
+    virtual bool process(Element *element);
     virtual bool mainProcessing();
 
 private:

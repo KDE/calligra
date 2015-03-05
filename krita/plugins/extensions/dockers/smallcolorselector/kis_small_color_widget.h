@@ -24,14 +24,14 @@ class KisSmallColorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisSmallColorWidget(QWidget* parent);
+    KisSmallColorWidget(QWidget *parent);
     ~KisSmallColorWidget();
 public:
-    void paintEvent(QPaintEvent * event);
-    void resizeEvent(QResizeEvent * event);
-    void mouseReleaseEvent(QMouseEvent * event);
-    void mousePressEvent(QMouseEvent * event);
-    void mouseMoveEvent(QMouseEvent * event);
+    void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 public:
     int hue() const;
     int value() const;
@@ -40,9 +40,9 @@ public:
 public Q_SLOTS:
     void setHue(int h);
     void setHSV(int h, int s, int v);
-    void setQColor(const QColor&);
+    void setQColor(const QColor &);
 Q_SIGNALS:
-    void colorChanged(const QColor&);
+    void colorChanged(const QColor &);
 private:
     void tellColorChanged();
     void updateParameters();
@@ -51,7 +51,7 @@ private:
     void selectColorAt(int _x, int _y);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

@@ -64,8 +64,8 @@ static const unsigned char colorStop_bits[] = {
     0x7c, 0x00, 0xfe, 0x00, 0xfe, 0x00, 0xff, 0x01
 };
 
-KarbonGradientWidget::KarbonGradientWidget(QWidget* parent)
-        : QWidget(parent), m_currentStop(-1), m_checkerPainter(4)
+KarbonGradientWidget::KarbonGradientWidget(QWidget *parent)
+    : QWidget(parent), m_currentStop(-1), m_checkerPainter(4)
 {
     // initialize the gradient with some sane values
     m_stops.append(QGradientStop(0.0, Qt::white));
@@ -81,7 +81,7 @@ KarbonGradientWidget::~KarbonGradientWidget()
 {
 }
 
-void KarbonGradientWidget::setStops(const QGradientStops & stops)
+void KarbonGradientWidget::setStops(const QGradientStops &stops)
 {
     m_stops = stops;
     update();
@@ -92,7 +92,7 @@ QGradientStops KarbonGradientWidget::stops() const
     return m_stops;
 }
 
-void KarbonGradientWidget::paintColorStop(QPainter& p, int x, const QColor& color)
+void KarbonGradientWidget::paintColorStop(QPainter &p, int x, const QColor &color)
 {
     QBitmap bitmap = QBitmap::fromData(QSize(colorStop_width, colorStop_height), colorStop_bits);
     bitmap.setMask(bitmap);
@@ -105,7 +105,7 @@ void KarbonGradientWidget::paintColorStop(QPainter& p, int x, const QColor& colo
     p.drawPixmap(x - 5, 1, bitmap);
 }
 
-void KarbonGradientWidget::paintMidPoint(QPainter& p, int x)
+void KarbonGradientWidget::paintMidPoint(QPainter &p, int x)
 {
     QBitmap bitmap = QBitmap::fromData(QSize(midPoint_width, midPoint_height), midPoint_bits);
     bitmap.setMask(bitmap);
@@ -113,7 +113,7 @@ void KarbonGradientWidget::paintMidPoint(QPainter& p, int x)
     p.drawPixmap(x - 3, 1, bitmap);
 }
 
-void KarbonGradientWidget::paintEvent(QPaintEvent*)
+void KarbonGradientWidget::paintEvent(QPaintEvent *)
 {
     int w = width() - 4;  // available width for gradient and points
     int h = height() - 7; // available height for gradient and points
@@ -164,17 +164,18 @@ void KarbonGradientWidget::paintEvent(QPaintEvent*)
     painter.setClipRect(m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height());
     painter.translate(m_pntArea.x(), m_pntArea.y());
 
-    foreach(const QGradientStop & stop, m_stops)
-    paintColorStop(painter, (int)(stop.first * m_pntArea.width()), stop.second);
+    foreach (const QGradientStop &stop, m_stops) {
+        paintColorStop(painter, (int)(stop.first * m_pntArea.width()), stop.second);
+    }
 }
 
-void KarbonGradientWidget::mousePressEvent(QMouseEvent* e)
+void KarbonGradientWidget::mousePressEvent(QMouseEvent *e)
 {
     m_currentStop = colorStopFromPosition(QPoint(e->x(), e->y()));
     setCursor(m_currentStop == -1 ? QCursor(Qt::ArrowCursor) : KarbonCursor::horzMove());
 }
 
-void KarbonGradientWidget::mouseReleaseEvent(QMouseEvent* e)
+void KarbonGradientWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::RightButton && m_currentStop >= 0) {
         if (m_pntArea.contains(e->x(), e->y())) {
@@ -191,13 +192,15 @@ void KarbonGradientWidget::mouseReleaseEvent(QMouseEvent* e)
     setCursor(QCursor(Qt::ArrowCursor));
 }
 
-void KarbonGradientWidget::mouseDoubleClickEvent(QMouseEvent* e)
+void KarbonGradientWidget::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    if (! m_pntArea.contains(e->x(), e->y()))
+    if (! m_pntArea.contains(e->x(), e->y())) {
         return;
+    }
 
-    if (e->button() != Qt::LeftButton)
+    if (e->button() != Qt::LeftButton) {
         return;
+    }
 
     if (m_currentStop >= 0) {
         // color stop hit -> change color
@@ -219,18 +222,20 @@ void KarbonGradientWidget::mouseDoubleClickEvent(QMouseEvent* e)
     }
 }
 
-void KarbonGradientWidget::mouseMoveEvent(QMouseEvent* e)
+void KarbonGradientWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    if (e->buttons() & Qt::RightButton)
+    if (e->buttons() & Qt::RightButton) {
         return;
+    }
 
     // do we have a current color stop?
     if (m_currentStop >= 0 && m_currentStop < m_stops.count()) {
         int newPixelPos = e->x() - m_pntArea.left();
         int oldPixelPos = static_cast<int>(m_stops[m_currentStop].first * m_pntArea.width());
         // check if we really have changed the pixel based position
-        if (newPixelPos == oldPixelPos)
+        if (newPixelPos == oldPixelPos) {
             return;
+        }
 
         qreal newPosition = static_cast<qreal>(newPixelPos) / static_cast<qreal>(m_pntArea.width());
         m_currentStop = moveColorStop(m_currentStop, newPosition);
@@ -262,8 +267,9 @@ int KarbonGradientWidget::moveColorStop(int stopIndex, qreal newPosition)
             if (newPosition <= prevStopPos && prevStopPos > 0.0) {
                 qSwap(m_stops[i], m_stops[newStopIndex]);
                 newStopIndex = i;
-            } else
+            } else {
                 break;
+            }
         }
     }
     // we move to the right, so we swap color stops as long as our new position
@@ -274,27 +280,30 @@ int KarbonGradientWidget::moveColorStop(int stopIndex, qreal newPosition)
             if (newPosition >= nextStopPos && nextStopPos < 1.0) {
                 qSwap(m_stops[i], m_stops[newStopIndex]);
                 newStopIndex = i;
-            } else
+            } else {
                 break;
+            }
         }
     }
 
     // work around qt bug: make sure we do not have color stops with same position
-    if (newStopIndex < stopIndex && newPosition == m_stops[newStopIndex+1].first) {
+    if (newStopIndex < stopIndex && newPosition == m_stops[newStopIndex + 1].first) {
         // if we have decreased the stop index and the new position is equal to the
         // position of the next stop we move the new position a tiny bit to the left
         newPosition -= std::numeric_limits<qreal>::epsilon();
-    } else if (newStopIndex > stopIndex && newPosition == m_stops[newStopIndex-1].first) {
+    } else if (newStopIndex > stopIndex && newPosition == m_stops[newStopIndex - 1].first) {
         // if we have increased the stop index and the new position is equal to the
         // position of the previous stop we move the new position a tiny bit to the right
         newPosition += std::numeric_limits<qreal>::epsilon();
     } else {
         // we have not changed the stop index, but we have to check if we our new
         // stop position is not equal to the stop at 0.0 or 1.0
-        if (newStopIndex == 1 && newPosition == 0.0)
+        if (newStopIndex == 1 && newPosition == 0.0) {
             newPosition += std::numeric_limits<qreal>::epsilon();
-        if (newStopIndex == m_stops.count() - 2 && newPosition == 1.0)
+        }
+        if (newStopIndex == m_stops.count() - 2 && newPosition == 1.0) {
             newPosition -= std::numeric_limits<qreal>::epsilon();
+        }
     }
 
     // finally set the new stop position
@@ -305,8 +314,9 @@ int KarbonGradientWidget::moveColorStop(int stopIndex, qreal newPosition)
 
 int KarbonGradientWidget::colorStopFromPosition(const QPoint &mousePos)
 {
-    if (! m_pntArea.contains(mousePos))
+    if (! m_pntArea.contains(mousePos)) {
         return -1;
+    }
 
     int x = mousePos.x() - m_pntArea.left();
 

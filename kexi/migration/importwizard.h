@@ -56,7 +56,7 @@ public:
      \a args contains arguments that can be parsed by parseArguments().
      \a *arg will be also set to imported project's filename on success
      and to null value on failure or cancellation. */
-    explicit ImportWizard(QWidget *parent = 0, QMap<QString, QString>* args = 0);
+    explicit ImportWizard(QWidget *parent = 0, QMap<QString, QString> *args = 0);
     virtual ~ImportWizard();
 
 public Q_SLOTS:
@@ -65,16 +65,16 @@ public Q_SLOTS:
 protected Q_SLOTS:
     virtual void next();
     virtual void back();
-    void slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*);
+    void slot_currentPageChanged(KPageWidgetItem *, KPageWidgetItem *);
     virtual void accept();
     virtual void reject();
     void helpClicked();
     void slotOptionsButtonClicked();
-    void destinationTitleTextChanged(const QString & text);
+    void destinationTitleTextChanged(const QString &text);
 
 private:
     void parseArguments();
-    
+
     void setupIntro();
     void setupSrcConn();
     void setupSrcDB();
@@ -86,7 +86,7 @@ private:
     void setupImporting();
     bool checkUserInput();
 
-    KexiMigrate* prepareImport(Kexi::ObjectStatus& result);
+    KexiMigrate *prepareImport(Kexi::ObjectStatus &result);
 
     /*! Performs import. \return true/false on success/faulure
      or cancelled when user cancelled importing (mainly
@@ -110,7 +110,7 @@ private:
     void updateDestinationDBFileName();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 }

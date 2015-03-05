@@ -20,11 +20,9 @@
 #ifndef KPLATO_REPORTEXPORTPANEL_H
 #define KPLATO_REPORTEXPORTPANEL_H
 
-
 #include "ui_reportexportpanel.h"
 
 #include <QWidget>
-
 
 namespace KPlato
 {

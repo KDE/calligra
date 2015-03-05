@@ -32,8 +32,8 @@
 #include "KoView.h"
 
 KoApplicationAdaptor::KoApplicationAdaptor(KoApplication *parent)
-        : QDBusAbstractAdaptor(parent)
-        , m_application(parent)
+    : QDBusAbstractAdaptor(parent)
+    , m_application(parent)
 {
     // constructor
     setAutoRelaySignals(true);
@@ -64,8 +64,8 @@ KoApplicationAdaptor::~KoApplicationAdaptor()
 QStringList KoApplicationAdaptor::getDocuments()
 {
     QStringList lst;
-    QList<KoPart*> parts = m_application->partList();
-    foreach(KoPart *part, parts) {
+    QList<KoPart *> parts = m_application->partList();
+    foreach (KoPart *part, parts) {
         lst.append('/' + part->document()->objectName());
     }
     return lst;
@@ -74,9 +74,9 @@ QStringList KoApplicationAdaptor::getDocuments()
 QStringList KoApplicationAdaptor::getViews()
 {
     QStringList lst;
-    QList<KoPart*> parts = m_application->partList();
-    foreach(KoPart *part, parts) {
-        foreach(KoView* view, part->views()) {
+    QList<KoPart *> parts = m_application->partList();
+    foreach (KoPart *part, parts) {
+        foreach (KoView *view, part->views()) {
             lst.append('/' + view->objectName());
         }
     }
@@ -87,10 +87,10 @@ QStringList KoApplicationAdaptor::getViews()
 QStringList KoApplicationAdaptor::getWindows()
 {
     QStringList lst;
-    QList<KMainWindow*> mainWindows = KMainWindow::memberList();
+    QList<KMainWindow *> mainWindows = KMainWindow::memberList();
     if (!mainWindows.isEmpty()) {
-        foreach(KMainWindow* mainWindow, mainWindows) {
-            lst.append(static_cast<KoMainWindow*>(mainWindow)->objectName());
+        foreach (KMainWindow *mainWindow, mainWindows) {
+            lst.append(static_cast<KoMainWindow *>(mainWindow)->objectName());
         }
     }
     return lst;

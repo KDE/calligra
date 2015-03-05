@@ -25,7 +25,6 @@
 #include "kis_group_layer.h"
 #include "kis_base_rects_walker.h"
 
-
 class KRITAIMAGE_EXPORT KisRefreshSubtreeWalker : public virtual KisBaseRectsWalker
 {
 
@@ -35,7 +34,8 @@ public:
         setCropRect(cropRect);
     }
 
-    UpdateType type() const {
+    UpdateType type() const
+    {
         return UNSUPPORTED;
     }
 
@@ -44,22 +44,25 @@ public:
     }
 
 private:
-    inline bool canHaveChildLayers(KisNodeSP node) {
-        return qobject_cast<KisGroupLayer*>(node.data());
+    inline bool canHaveChildLayers(KisNodeSP node)
+    {
+        return qobject_cast<KisGroupLayer *>(node.data());
     }
-    static inline bool isRootNode(KisNodeSP node) {
+    static inline bool isRootNode(KisNodeSP node)
+    {
         return !node->parent();
     }
 
 protected:
     KisRefreshSubtreeWalker() {}
 
-
     QRect calculateChangeRect(KisNodeSP startWith,
-                              const QRect &requestedRect) {
+                              const QRect &requestedRect)
+    {
 
-        if(!isLayer(startWith))
+        if (!isLayer(startWith)) {
             return requestedRect;
+        }
 
         QRect childrenRect;
         QRect tempRect = requestedRect;
@@ -69,14 +72,15 @@ protected:
         KisNodeSP prevNode;
         KisNodeSP nextNode;
 
-        while(currentNode) {
+        while (currentNode) {
             nextNode = currentNode->nextSibling();
 
-            if(isLayer(currentNode)) {
+            if (isLayer(currentNode)) {
                 tempRect = calculateChangeRect(currentNode, tempRect);
 
-                if(!changeRectVaries)
+                if (!changeRectVaries) {
                     changeRectVaries = tempRect != requestedRect;
+                }
 
                 childrenRect = tempRect;
                 prevNode = currentNode;
@@ -87,40 +91,40 @@ protected:
 
         tempRect |= startWith->changeRect(requestedRect | childrenRect);
 
-        if(!changeRectVaries)
+        if (!changeRectVaries) {
             changeRectVaries = tempRect != requestedRect;
+        }
 
         setExplicitChangeRect(startWith, tempRect, changeRectVaries);
 
         return tempRect;
     }
 
-    void startTrip(KisNodeSP startWith) {
+    void startTrip(KisNodeSP startWith)
+    {
         calculateChangeRect(startWith, requestedRect());
 
-        if(startWith == startNode()) {
+        if (startWith == startNode()) {
             NodePosition pos = N_EXTRA | calculateNodePosition(startWith);
             registerNeedRect(startWith, pos);
         }
 
-
         KisNodeSP currentNode = startWith->lastChild();
-        while(currentNode) {
+        while (currentNode) {
             NodePosition pos = N_FILTHY | calculateNodePosition(currentNode);
             registerNeedRect(currentNode, pos);
             currentNode = currentNode->prevSibling();
         }
 
         currentNode = startWith->lastChild();
-        while(currentNode) {
-            if(canHaveChildLayers(currentNode)) {
+        while (currentNode) {
+            if (canHaveChildLayers(currentNode)) {
                 startTrip(currentNode);
             }
             currentNode = currentNode->prevSibling();
         }
     }
 };
-
 
 #endif /* __KIS_REFRESH_SUBTREE_WALKER_H */
 

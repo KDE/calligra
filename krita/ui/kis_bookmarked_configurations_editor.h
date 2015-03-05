@@ -39,15 +39,15 @@ public:
      * @param currentConfig is used if the user choose to create a new configuration
      *                      entry or to replace an existing entry
      */
-    KisBookmarkedConfigurationsEditor(QWidget* parent, KisBookmarkedConfigurationsModel* manager, const KisSerializableConfiguration* currentConfig);
+    KisBookmarkedConfigurationsEditor(QWidget *parent, KisBookmarkedConfigurationsModel *manager, const KisSerializableConfiguration *currentConfig);
     ~KisBookmarkedConfigurationsEditor();
 private Q_SLOTS:
-    void currentConfigChanged(const QItemSelection& selected, const QItemSelection&);
+    void currentConfigChanged(const QItemSelection &selected, const QItemSelection &);
     void addCurrentConfiguration();
     void deleteConfiguration();
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

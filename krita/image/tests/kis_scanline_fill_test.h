@@ -24,7 +24,6 @@
 class QColor;
 class KisFillInterval;
 
-
 class KisScanlineFillTest : public QObject
 {
     Q_OBJECT

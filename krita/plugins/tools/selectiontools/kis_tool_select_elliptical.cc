@@ -40,9 +40,9 @@ KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas)
 {
 }
 
-QWidget* KisToolSelectElliptical::createOptionWidget()
+QWidget *KisToolSelectElliptical::createOptionWidget()
 {
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
     Q_ASSERT(canvas);
 
     m_widgetHelper.createOptionWidget(canvas, this->toolId());
@@ -58,7 +58,7 @@ void KisToolSelectElliptical::keyPressEvent(QKeyEvent *event)
 
 void KisToolSelectElliptical::finishRect(const QRectF &rect)
 {
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     Q_ASSERT(kisCanvas);
 
     // If the user just clicks on the canvas deselect
@@ -89,7 +89,7 @@ void KisToolSelectElliptical::finishRect(const QRectF &rect)
         helper.selectPixelSelection(tmpSel, m_widgetHelper.selectionAction());
     } else {
         QRectF ptRect = convertToPt(rect);
-        KoShape* shape = KisShapeToolHelper::createEllipseShape(ptRect);
+        KoShape *shape = KisShapeToolHelper::createEllipseShape(ptRect);
 
         helper.addSelectionShape(shape);
     }

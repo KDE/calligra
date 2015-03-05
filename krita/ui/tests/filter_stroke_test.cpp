@@ -27,7 +27,6 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
 
-
 class FilterStrokeTester : public utils::StrokeTester
 {
 public:
@@ -42,17 +41,19 @@ protected:
     using utils::StrokeTester::initImage;
     using utils::StrokeTester::addPaintingJobs;
 
-    void initImage(KisImageWSP image, KisNodeSP activeNode) {
+    void initImage(KisImageWSP image, KisNodeSP activeNode)
+    {
         QImage src(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
         activeNode->original()->convertFromQImage(src, 0);
 
         image->refreshGraph();
     }
 
-    KisStrokeStrategy* createStroke(bool indirectPainting,
+    KisStrokeStrategy *createStroke(bool indirectPainting,
                                     KisResourcesSnapshotSP resources,
                                     KisPainter *painter,
-                                    KisImageWSP image) {
+                                    KisImageWSP image)
+    {
         Q_UNUSED(image);
         Q_UNUSED(indirectPainting);
         Q_UNUSED(painter);
@@ -65,22 +66,23 @@ protected:
         return new KisFilterStrokeStrategy(filter, KisSafeFilterConfigurationSP(filterConfig), resources);
     }
 
-    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter) {
+    void addPaintingJobs(KisImageWSP image, KisResourcesSnapshotSP resources, KisPainter *painter)
+    {
 
         Q_UNUSED(resources);
         Q_UNUSED(painter);
 
         image->addJob(strokeId(),
                       new KisFilterStrokeStrategy::
-                      Data(QRect(100,100,100,100), true));
+                      Data(QRect(100, 100, 100, 100), true));
 
         image->addJob(strokeId(),
                       new KisFilterStrokeStrategy::
-                      Data(QRect(200,100,100,100), true));
+                      Data(QRect(200, 100, 100, 100), true));
 
         image->addJob(strokeId(),
                       new KisFilterStrokeStrategy::
-                      Data(QRect(100,200,100,100), true));
+                      Data(QRect(100, 200, 100, 100), true));
     }
 
 private:

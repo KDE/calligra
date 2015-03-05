@@ -32,30 +32,34 @@
 /*                 Auxiliary line structures                   */
 /***************************************************************/
 
-class KisPerspectiveGridDecoration::LineWrapper {
+class KisPerspectiveGridDecoration::LineWrapper
+{
 public:
-    LineWrapper(const QPointF &p0, const QPointF &p1) {
+    LineWrapper(const QPointF &p0, const QPointF &p1)
+    {
         init(toKisVector2D(p0), toKisVector2D(p1));
     }
 
-    LineWrapper(const KisVector2D &p0, const KisVector2D &p1) {
+    LineWrapper(const KisVector2D &p0, const KisVector2D &p1)
+    {
         init(p0, p1);
     }
 
-    QPointF intersects(const LineWrapper &other)/* const */{
+    QPointF intersects(const LineWrapper &other)/* const */
+    {
         KisVector2D n0 = m_lineEquation.normal();
         KisVector2D n1 = other.m_lineEquation.normal();
 
         // Ensure vectors have the same direction
-        if((n0(0) > 0) != (n1(0) > 0)) {
+        if ((n0(0) > 0) != (n1(0) > 0)) {
             n1 = -n1;
         }
 
-        if(qFuzzyCompare(n0(0), n1(0)) &&
-           qFuzzyCompare(n0(1), n1(1))) {
+        if (qFuzzyCompare(n0(0), n1(0)) &&
+                qFuzzyCompare(n0(1), n1(1))) {
 
-            const KisVector2D nearPoint(0,0);
-            const KisVector2D farPoint(1e10,1e10);
+            const KisVector2D nearPoint(0, 0);
+            const KisVector2D farPoint(1e10, 1e10);
 
             KisVector2D otherPt = other.m_lineEquation.projection(nearPoint);
             KisVector2D otherPtProj = m_lineEquation.projection(otherPt);
@@ -69,34 +73,40 @@ public:
         return toQPointF(m_lineEquation.intersection(other.m_lineEquation));
     }
 
-    qreal distance(const QPointF &pt) const {
+    qreal distance(const QPointF &pt) const
+    {
         return m_lineEquation.absDistance(toKisVector2D(pt));
     }
 
-    QPointF p0() const {
+    QPointF p0() const
+    {
         return m_p0;
     }
 
-    QPointF p1() const {
+    QPointF p1() const
+    {
         return m_p1;
     }
 
-    bool contains(const QPointF &pt) const {
+    bool contains(const QPointF &pt) const
+    {
         bool coincide = pt == m_p0 || pt == m_p1;
         bool verticalSide = (pt.x() > m_p0.x()) == (pt.x() > m_p1.x());
-        bool horizontalSide = (pt.y() > m_p0.y()) ==  (pt.y() > m_p1.y());
+        bool horizontalSide = (pt.y() > m_p0.y()) == (pt.y() > m_p1.y());
 
         return coincide || !(verticalSide && horizontalSide);
     }
 
-    bool isNull(qreal precision) {
+    bool isNull(qreal precision)
+    {
         qreal dx = m_p1.x() - m_p0.x();
         qreal dy = m_p1.y() - m_p0.y();
         return dx * dx + dy * dy <= precision * precision;
     }
 
 private:
-    void init(const KisVector2D &p0, const KisVector2D &p1) {
+    void init(const KisVector2D &p0, const KisVector2D &p1)
+    {
         m_lineEquation =
             LineEquation::Through(p0, p1);
 
@@ -131,14 +141,14 @@ KisPerspectiveGridDecoration::~KisPerspectiveGridDecoration()
 
 KisPerspectiveGridDecoration::SubdivisionLinesInfo
 KisPerspectiveGridDecoration::getSubdivisionsInfo(const LineWrapper &l0,
-                                               const LineWrapper &l1,
-                                               const QPointF &focusPoint,
-                                               int numSubdivisions)
+        const LineWrapper &l1,
+        const QPointF &focusPoint,
+        int numSubdivisions)
 {
     const LineWrapper *nearest;
     const LineWrapper *farthest;
 
-    if(l0.distance(focusPoint) < l1.distance(focusPoint)) {
+    if (l0.distance(focusPoint) < l1.distance(focusPoint)) {
         nearest = &l0;
         farthest = &l1;
     } else {
@@ -156,11 +166,11 @@ KisPerspectiveGridDecoration::getSubdivisionsInfo(const LineWrapper &l0,
     return info;
 }
 
-void KisPerspectiveGridDecoration::drawSubdivisions(QPainter& gc, const SubdivisionLinesInfo &info)
+void KisPerspectiveGridDecoration::drawSubdivisions(QPainter &gc, const SubdivisionLinesInfo &info)
 {
     kDebug() << " subdivs " << info.numSubdivisions;
-    for(int i = info.numSubdivisions - 1; i > 0; i--) {
-        QPointF start = info.startPoint + i*info.shift;
+    for (int i = info.numSubdivisions - 1; i > 0; i--) {
+        QPointF start = info.startPoint + i * info.shift;
         QPointF end =
             LineWrapper(start, info.intersection).intersects(*info.clipLine);
         gc.drawLine(start, end);
@@ -169,30 +179,33 @@ void KisPerspectiveGridDecoration::drawSubdivisions(QPainter& gc, const Subdivis
 
 #define SMALLEST_LINE 1e-10
 
-void KisPerspectiveGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas)
+void KisPerspectiveGridDecoration::drawDecoration(QPainter &gc, const QRectF &updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
     Q_UNUSED(updateArea);
     Q_UNUSED(canvas);
 
-    if (!view()) return;
+    if (!view()) {
+        return;
+    }
 
     KisImageWSP image = view()->image();
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
-    KisPerspectiveGrid* pGrid = image->perspectiveGrid();
+    KisPerspectiveGrid *pGrid = image->perspectiveGrid();
 
     QPen mainPen = KisGridPainterConfiguration::mainPen();
     QPen subdivisionPen = KisGridPainterConfiguration::subdivisionPen();
     QPen errorPen = mainPen;
     errorPen.setColor(Qt::red);
 
-
     QTransform transform = converter->imageToWidgetTransform();
     gc.save();
     gc.setTransform(transform);
 
-    for (QList<KisSubPerspectiveGrid*>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it) {
-        const KisSubPerspectiveGrid* grid = *it;
+    for (QList<KisSubPerspectiveGrid *>::const_iterator it = pGrid->begin(); it != pGrid->end(); ++it) {
+        const KisSubPerspectiveGrid *grid = *it;
 
         /**
          * Note that the notion of top-bottom-right-left
@@ -209,34 +222,34 @@ void KisPerspectiveGridDecoration::drawDecoration(QPainter& gc, const QRectF& up
         bool linesNotNull = true;
         bool polygonIsConvex = true;
 
-        if(lineTop.isNull(SMALLEST_LINE) ||
-           lineBottom.isNull(SMALLEST_LINE) ||
-           lineLeft.isNull(SMALLEST_LINE) ||
-           lineRight.isNull(SMALLEST_LINE)) {
+        if (lineTop.isNull(SMALLEST_LINE) ||
+                lineBottom.isNull(SMALLEST_LINE) ||
+                lineLeft.isNull(SMALLEST_LINE) ||
+                lineRight.isNull(SMALLEST_LINE)) {
 
             linesNotNull = false;
         }
 
-        if(linesNotNull) {
+        if (linesNotNull) {
             horizIntersection = lineTop.intersects(lineBottom);
             vertIntersection = lineLeft.intersects(lineRight);
 
-            if(lineTop.contains(horizIntersection) ||
-               lineBottom.contains(horizIntersection) ||
-               lineLeft.contains(vertIntersection) ||
-               lineRight.contains(vertIntersection)) {
+            if (lineTop.contains(horizIntersection) ||
+                    lineBottom.contains(horizIntersection) ||
+                    lineLeft.contains(vertIntersection) ||
+                    lineRight.contains(vertIntersection)) {
 
                 polygonIsConvex = false;
             }
         }
 
-        if(polygonIsConvex && linesNotNull) {
+        if (polygonIsConvex && linesNotNull) {
             gc.setPen(subdivisionPen);
 
             SubdivisionLinesInfo info;
             info = getSubdivisionsInfo(lineTop, lineBottom, vertIntersection,
                                        grid->subdivisions());
-             drawSubdivisions(gc, info);
+            drawSubdivisions(gc, info);
 
             info = getSubdivisionsInfo(lineLeft, lineRight, horizIntersection,
                                        grid->subdivisions());

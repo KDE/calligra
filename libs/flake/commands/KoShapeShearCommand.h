@@ -45,7 +45,7 @@ public:
      * @param newShearYs a list with the same amount of items as shapes with the new values.
      * @param parent the parent command used for macro commands
      */
-    KoShapeShearCommand(const QList<KoShape*> &shapes, const QList<qreal> &previousShearXs, const QList<qreal> &previousShearYs, const QList<qreal> &newShearXs, const QList<qreal> &newShearYs, KUndo2Command *parent = 0);
+    KoShapeShearCommand(const QList<KoShape *> &shapes, const QList<qreal> &previousShearXs, const QList<qreal> &previousShearYs, const QList<qreal> &newShearXs, const QList<qreal> &newShearYs, KUndo2Command *parent = 0);
 
     ~KoShapeShearCommand();
     /// redo the command
@@ -54,7 +54,7 @@ public:
     void undo();
 
 private:
-    KoShapeShearCommandPrivate * const d;
+    KoShapeShearCommandPrivate *const d;
 };
 
 #endif

@@ -63,7 +63,6 @@ public:
     KoOdfLineNumberingConfiguration(const KoOdfLineNumberingConfiguration &other);
     KoOdfLineNumberingConfiguration &operator=(const KoOdfLineNumberingConfiguration &other);
 
-
     /**
      * load the line numbering configuration element
      */
@@ -72,7 +71,7 @@ public:
     /**
      * save the line number configuration element
      */
-    void saveOdf(KoXmlWriter * writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
     /**
      * The text:number-lines attribute controls whether or not lines are numbered.
@@ -170,10 +169,10 @@ public:
 private:
 
     class Private;
-    Private * const d;
+    Private *const d;
 
 };
 
-Q_DECLARE_METATYPE(KoOdfLineNumberingConfiguration*)
+Q_DECLARE_METATYPE(KoOdfLineNumberingConfiguration *)
 
 #endif // KOODFLINENUMBERINGCONFIGURATION_H

@@ -22,7 +22,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "KDChartModel.h"
 
@@ -40,7 +39,8 @@
 
 using namespace KChart;
 
-class KDChartModel::Private {
+class KDChartModel::Private
+{
 public:
     Private(KDChartModel *parent, PlotArea *plotArea);
     ~Private();
@@ -63,7 +63,7 @@ public:
     /**
      * Calculates the maximum size of all data sets in the passed list.
      */
-    int  calcMaxDataSetSize(QList<DataSet*> list) const;
+    int  calcMaxDataSetSize(QList<DataSet *> list) const;
 
     /**
      * Only calculates the new size for the current data set list,
@@ -90,11 +90,10 @@ public:
 
     int             dataDimensions;
     int             biggestDataSetSize;
-    QList<DataSet*> dataSets;
+    QList<DataSet *> dataSets;
 
     Qt::Orientation dataDirection;
 };
-
 
 KDChartModel::Private::Private(KDChartModel *parent, PlotArea *_plotArea)
     : q(parent)
@@ -114,11 +113,12 @@ int KDChartModel::Private::maxDataSetSize() const
     return biggestDataSetSize;
 }
 
-int KDChartModel::Private::calcMaxDataSetSize(QList<DataSet*> list) const
+int KDChartModel::Private::calcMaxDataSetSize(QList<DataSet *> list) const
 {
     int maxSize = 0;
-    foreach (DataSet *dataSet, list)
+    foreach (DataSet *dataSet, list) {
         maxSize = qMax(maxSize, dataSet->size());
+    }
     return maxSize;
 }
 
@@ -132,8 +132,9 @@ int KDChartModel::Private::dataSetIndex(DataSet *dataSet) const
     // If data set is not in our list yet, find out where to insert it
     if (!dataSets.contains(dataSet)) {
         for (int i = 0; i < dataSets.size(); i++) {
-            if (dataSet->number() < dataSets[i]->number())
+            if (dataSet->number() < dataSets[i]->number()) {
                 return i;
+            }
         }
 
         return dataSets.size();
@@ -148,8 +149,9 @@ QModelIndex KDChartModel::Private::dataPointFirstModelIndex(int dataSetNumber, i
     // Use the first row or column this data set occupies, assuming the data
     // direction is horizontal or vertical, respectively.
     int dataSetRowOrCol = dataSetNumber * dataDimensions;
-    if (dataDirection == Qt::Vertical)
+    if (dataDirection == Qt::Vertical) {
         return q->index(index, dataSetRowOrCol);
+    }
     return q->index(dataSetRowOrCol, index);
 }
 
@@ -158,15 +160,14 @@ QModelIndex KDChartModel::Private::dataPointLastModelIndex(int dataSetNumber, in
     // Use the last row or column this data set occupies, assuming the data
     // direction is horizontal or vertical, respectively.
     int dataSetRowOrCol = (dataSetNumber + 1) * dataDimensions - 1;
-    if (dataDirection == Qt::Vertical)
+    if (dataDirection == Qt::Vertical) {
         return q->index(index, dataSetRowOrCol);
+    }
     return q->index(dataSetRowOrCol, index);
 }
 
-
 // ================================================================
 //                     class KDChartModel
-
 
 KDChartModel::KDChartModel(PlotArea *plotArea, QObject *parent)
     : QAbstractItemModel(parent),
@@ -178,7 +179,6 @@ KDChartModel::~KDChartModel()
 {
     delete d;
 }
-
 
 void KDChartModel::setDataDirection(Qt::Orientation direction)
 {
@@ -199,7 +199,7 @@ QVariant KDChartModel::data(const QModelIndex &index,
                             int role /* = Qt::DisplayRole */) const
 {
     if (!index.isValid() ||
-         !d->isKnownDataRole(role)) {
+            !d->isKnownDataRole(role)) {
         return QVariant();
     }
 
@@ -224,19 +224,21 @@ QVariant KDChartModel::data(const QModelIndex &index,
         section = index.row();
     }
 
-    if (dataSetNumber >= d->dataSets.size())
+    if (dataSetNumber >= d->dataSets.size()) {
         return QVariant();
+    }
 
     DataSet  *dataSet       = d->dataSets[ dataSetNumber ];
 
     switch (role) {
     case Qt::DisplayRole:
-        if (d->dataDimensions > 1 && dataSection == 0)
+        if (d->dataDimensions > 1 && dataSection == 0) {
             return dataSet->xData(section);
-        else if (d->dataDimensions > 2 && dataSection == 2)
+        } else if (d->dataDimensions > 2 && dataSection == 2) {
             return dataSet->customData(section);
-        else
+        } else {
             return dataSet->yData(section);
+        }
     case KDChart::DatasetBrushRole:
         return dataSet->brush(section);
     case KDChart::DatasetPenRole:
@@ -254,12 +256,12 @@ QVariant KDChartModel::data(const QModelIndex &index,
     return QVariant();
 }
 
-
 void KDChartModel::dataSetChanged(DataSet *dataSet)
 {
     Q_ASSERT(d->dataSets.contains(dataSet));
-    if (!d->dataSets.contains(dataSet))
+    if (!d->dataSets.contains(dataSet)) {
         return;
+    }
 
     int dataSetNumber = d->dataSetIndex(dataSet);
 
@@ -273,8 +275,9 @@ void KDChartModel::dataSetChanged(DataSet *dataSet, DataRole /*role*/,
                                   int first /* = -1 */, int last /* = -1 */)
 {
     Q_ASSERT(d->dataSets.contains(dataSet));
-    if (!d->dataSets.contains(dataSet))
+    if (!d->dataSets.contains(dataSet)) {
         return;
+    }
 
     const int lastIndex = d->biggestDataSetSize - 1;
     // be sure the 'first' and 'last' referenced rows are within our boundaries
@@ -286,17 +289,20 @@ void KDChartModel::dataSetChanged(DataSet *dataSet, DataRole /*role*/,
         last = lastIndex;
     }
     // 'last' defaults to -1, which means only one column was changed.
-    else if (last == -1)
+    else if (last == -1) {
         last = first;
+    }
     // 'first' can be negative either cause rowCount()==0 or cause it
     // still contains the default value of -1. In both cases we abort
     // and don't progress the update-request future. Same is true for
     // last which should at this point contain a valid row index too.
-    if (first < 0 || last < 0)
+    if (first < 0 || last < 0) {
         return;
+    }
     // be sure we are not dealing with inverse order
-    if (last < first)
+    if (last < first) {
         qSwap(first, last);
+    }
 
     int dataSetNumber = d->dataSetIndex(dataSet);
     emit dataChanged(d->dataPointFirstModelIndex(dataSetNumber, first),
@@ -320,34 +326,38 @@ void KDChartModel::dataSetSizeChanged(DataSet *dataSet, int newSize)
 
     // Columns/rows have been added
     if (newMaxSize > oldMaxSize) {
-        if (d->dataDirection == Qt::Horizontal)
+        if (d->dataDirection == Qt::Horizontal) {
             beginInsertColumns(QModelIndex(), oldMaxSize, newMaxSize - 1);
-        else
+        } else {
             beginInsertRows(QModelIndex(), oldMaxSize, newMaxSize - 1);
+        }
 
         d->biggestDataSetSize = d->calcMaxDataSetSize();
 
-        if (d->dataDirection == Qt::Horizontal)
+        if (d->dataDirection == Qt::Horizontal) {
             endInsertColumns();
-        else
+        } else {
             endInsertRows();
+        }
         // Columns/rows have been removed
     } else if (newMaxSize < oldMaxSize) {
-        if (d->dataDirection == Qt::Horizontal)
+        if (d->dataDirection == Qt::Horizontal) {
             beginRemoveColumns(QModelIndex(), newMaxSize, oldMaxSize - 1);
-        else
+        } else {
             beginRemoveRows(QModelIndex(), newMaxSize, oldMaxSize - 1);
+        }
 
         d->biggestDataSetSize = d->calcMaxDataSetSize();
 
-        if (d->dataDirection == Qt::Horizontal)
+        if (d->dataDirection == Qt::Horizontal) {
             endRemoveColumns();
-        else
+        } else {
             endRemoveRows();
+        }
     }
 }
 
-void KDChartModel::slotColumnsInserted(const QModelIndex& parent, int start, int end)
+void KDChartModel::slotColumnsInserted(const QModelIndex &parent, int start, int end)
 {
     if (d->dataDirection == Qt::Horizontal) {
         beginInsertColumns(parent, start, end);
@@ -447,12 +457,12 @@ QVariant KDChartModel::headerData(int section,
 }
 
 QModelIndex KDChartModel::index(int row, int column,
-                                 const QModelIndex &parent) const
+                                const QModelIndex &parent) const
 {
     // Seems following can happen in which case we shouldn't return a
     // QModelIndex with an invalid position cause else other things
     // may go wrong.
-    if(row >= rowCount(parent) || column >= columnCount(parent)) {
+    if (row >= rowCount(parent) || column >= columnCount(parent)) {
         return QModelIndex();
     }
 
@@ -471,10 +481,11 @@ int KDChartModel::rowCount(const QModelIndex &parent /* = QModelIndex() */) cons
     Q_UNUSED(parent);
 
     int rows;
-    if (d->dataDirection == Qt::Vertical)
+    if (d->dataDirection == Qt::Vertical) {
         rows = d->maxDataSetSize();
-    else
+    } else {
         rows = d->dataSets.size() * d->dataDimensions;
+    }
     return rows;
 }
 
@@ -485,9 +496,9 @@ int KDChartModel::columnCount(const QModelIndex &parent /* = QModelIndex() */) c
     int columns;
     if (d->dataDirection == Qt::Vertical) {
         columns = d->dataSets.size() * d->dataDimensions;
-    }
-    else
+    } else {
         columns = d->maxDataSetSize();
+    }
 
     return columns;
 }
@@ -516,34 +527,34 @@ void KDChartModel::addDataSet(DataSet *dataSet)
         const int columnAboutToBeInserted = dataSetIndex * d->dataDimensions;
         if (d->dataDirection == Qt::Vertical) {
             beginInsertColumns(QModelIndex(), columnAboutToBeInserted,
-                                columnAboutToBeInserted + d->dataDimensions - 1);
-        }
-        else
+                               columnAboutToBeInserted + d->dataDimensions - 1);
+        } else
             beginInsertRows(QModelIndex(), columnAboutToBeInserted,
-                             columnAboutToBeInserted + d->dataDimensions - 1);
+                            columnAboutToBeInserted + d->dataDimensions - 1);
         d->dataSets.insert(dataSetIndex, dataSet);
 
-        if (d->dataDirection == Qt::Vertical)
+        if (d->dataDirection == Qt::Vertical) {
             endInsertColumns();
-        else
+        } else {
             endInsertRows();
+        }
 
         const int dataSetSize = dataSet->size();
         if (dataSetSize > d->maxDataSetSize()) {
             if (d->dataDirection == Qt::Vertical)
                 beginInsertRows(QModelIndex(),
-                                 d->maxDataSetSize(), dataSetSize - 1);
+                                d->maxDataSetSize(), dataSetSize - 1);
             else
                 beginInsertColumns(QModelIndex(),
-                                    d->maxDataSetSize(), dataSetSize - 1);
+                                   d->maxDataSetSize(), dataSetSize - 1);
             d->biggestDataSetSize = d->calcMaxDataSetSize();
-            if (d->dataDirection == Qt::Vertical)
+            if (d->dataDirection == Qt::Vertical) {
                 endInsertRows();
-            else
+            } else {
                 endInsertColumns();
+            }
         }
-    }
-    else {
+    } else {
         // If we had no datasets before, we haven't had a valid
         // structure yet.  Thus, emit the modelReset() signal.
         beginResetModel();
@@ -556,17 +567,17 @@ void KDChartModel::addDataSet(DataSet *dataSet)
 void KDChartModel::removeDataSet(DataSet *dataSet, bool silent)
 {
     const int dataSetIndex = d->dataSets.indexOf(dataSet);
-    if (dataSetIndex < 0)
+    if (dataSetIndex < 0) {
         return;
+    }
 
     if (silent) {
         d->dataSets.removeAt(dataSetIndex);
         d->biggestDataSetSize = d->calcMaxDataSetSize();
-    }
-    else {
+    } else {
         // Simulate removing this dataSet without actually doing so
         // in order to calculate new max data set size
-        QList<DataSet*> _dataSets(d->dataSets);
+        QList<DataSet *> _dataSets(d->dataSets);
         _dataSets.removeAll(dataSet);
         // Cached size
         int oldMaxDataSetSize = d->maxDataSetSize();
@@ -574,34 +585,37 @@ void KDChartModel::removeDataSet(DataSet *dataSet, bool silent)
         int newMaxDataSetSize = d->calcMaxDataSetSize(_dataSets);
 
         if (newMaxDataSetSize < oldMaxDataSetSize) {
-            if (d->dataDirection == Qt::Horizontal)
+            if (d->dataDirection == Qt::Horizontal) {
                 beginRemoveColumns(QModelIndex(), newMaxDataSetSize, oldMaxDataSetSize - 1);
-            else
+            } else {
                 beginRemoveRows(QModelIndex(), newMaxDataSetSize, oldMaxDataSetSize - 1);
+            }
             d->dataSets = _dataSets;
             d->biggestDataSetSize = newMaxDataSetSize;
-            if (d->dataDirection == Qt::Horizontal)
+            if (d->dataDirection == Qt::Horizontal) {
                 endRemoveColumns();
-            else
+            } else {
                 endRemoveRows();
+            }
         }
 
         int columnAboutToBeRemoved = dataSetIndex * d->dataDimensions;
         if (d->dataDirection == Qt::Horizontal)
             beginRemoveRows(QModelIndex(), columnAboutToBeRemoved,
-                             columnAboutToBeRemoved + d->dataDimensions - 1);
+                            columnAboutToBeRemoved + d->dataDimensions - 1);
         else
             beginRemoveColumns(QModelIndex(), columnAboutToBeRemoved,
-                                columnAboutToBeRemoved + d->dataDimensions - 1);
+                               columnAboutToBeRemoved + d->dataDimensions - 1);
         d->dataSets.removeAt(dataSetIndex);
-        if (d->dataDirection == Qt::Horizontal)
+        if (d->dataDirection == Qt::Horizontal) {
             endRemoveRows();
-        else
+        } else {
             endRemoveColumns();
+        }
     }
 }
 
-QList<DataSet*> KDChartModel::dataSets() const
+QList<DataSet *> KDChartModel::dataSets() const
 {
     return d->dataSets;
 }

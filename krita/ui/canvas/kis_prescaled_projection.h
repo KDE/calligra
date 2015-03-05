@@ -38,8 +38,6 @@ class KisDisplayFilter;
 #include <kis_types.h>
 #include "kis_ui_types.h"
 
-
-
 /**
  * KisPrescaledProjection is responsible for keeping around a
  * prescaled QImage representation that is always suitable for
@@ -176,7 +174,7 @@ private:
     void drawUsingBackend(QPainter &gc, KisPPUpdateInfoSP info);
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif

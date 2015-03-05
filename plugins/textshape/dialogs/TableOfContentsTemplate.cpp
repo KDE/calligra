@@ -42,7 +42,7 @@ QList<KoTableOfContentsGeneratorInfo *> TableOfContentsTemplate::templates()
     firstTemplate->m_indexTitleTemplate.styleId = m_manager->defaultTableOfcontentsTitleStyle()->styleId();
     firstTemplate->m_indexTitleTemplate.styleName = m_manager->defaultTableOfcontentsTitleStyle()->name();
 
-    for (int level=1; level <= firstTemplate->m_outlineLevel; ++level) {
+    for (int level = 1; level <= firstTemplate->m_outlineLevel; ++level) {
         firstTemplate->m_entryTemplate[level - 1].styleId = m_manager->defaultTableOfContentsEntryStyle(level)->styleId();
         firstTemplate->m_entryTemplate[level - 1].styleName = m_manager->defaultTableOfContentsEntryStyle(level)->name();
     }

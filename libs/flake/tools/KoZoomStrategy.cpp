@@ -28,9 +28,9 @@
 #include <kdebug.h>
 
 KoZoomStrategy::KoZoomStrategy(KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked)
-        : KoShapeRubberSelectStrategy(tool, clicked, false),
-        m_controller(controller),
-        m_forceZoomOut(false)
+    : KoShapeRubberSelectStrategy(tool, clicked, false),
+      m_controller(controller),
+      m_forceZoomOut(false)
 {
 }
 

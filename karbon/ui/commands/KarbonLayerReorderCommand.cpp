@@ -28,24 +28,26 @@
 #include <KoShapeLayer.h>
 #include <klocale.h>
 
-KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, KUndo2Command* parent)
-        : KUndo2Command(parent), m_document(document), m_cmdType(commandType)
+KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument *document, KoShapeLayer *layer, ReorderType commandType, KUndo2Command *parent)
+    : KUndo2Command(parent), m_document(document), m_cmdType(commandType)
 {
     m_layers.append(layer);
 
-    if (m_cmdType == RaiseLayer)
+    if (m_cmdType == RaiseLayer) {
         setText(kundo2_i18n("Raise Layer"));
-    else
+    } else {
         setText(kundo2_i18n("Lower Layer"));
+    }
 }
 
-KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, KUndo2Command* parent)
-        : KUndo2Command(parent), m_document(document), m_layers(layers), m_cmdType(commandType)
+KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument *document, QList<KoShapeLayer *> layers, ReorderType commandType, KUndo2Command *parent)
+    : KUndo2Command(parent), m_document(document), m_layers(layers), m_cmdType(commandType)
 {
-    if (m_cmdType == RaiseLayer)
+    if (m_cmdType == RaiseLayer) {
         setText(kundo2_i18n("Raise Layer"));
-    else
+    } else {
         setText(kundo2_i18n("Lower Layer"));
+    }
 }
 
 KarbonLayerReorderCommand::~KarbonLayerReorderCommand()
@@ -54,20 +56,22 @@ KarbonLayerReorderCommand::~KarbonLayerReorderCommand()
 
 void KarbonLayerReorderCommand::redo()
 {
-    foreach(KoShapeLayer* layer, m_layers) {
-        if (m_cmdType == RaiseLayer)
+    foreach (KoShapeLayer *layer, m_layers) {
+        if (m_cmdType == RaiseLayer) {
             m_document->raiseLayer(layer);
-        else
+        } else {
             m_document->lowerLayer(layer);
+        }
     }
 }
 
 void KarbonLayerReorderCommand::undo()
 {
-    foreach(KoShapeLayer* layer, m_layers) {
-        if (m_cmdType == RaiseLayer)
+    foreach (KoShapeLayer *layer, m_layers) {
+        if (m_cmdType == RaiseLayer) {
             m_document->lowerLayer(layer);
-        else
+        } else {
             m_document->raiseLayer(layer);
+        }
     }
 }

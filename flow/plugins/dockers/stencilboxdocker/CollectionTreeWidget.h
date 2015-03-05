@@ -34,13 +34,13 @@ class SheetDelegate: public QItemDelegate
 {
     Q_OBJECT
 public:
-    SheetDelegate(QTreeView* view, QWidget* parent);
+    SheetDelegate(QTreeView *view, QWidget *parent);
 
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem& opt, const QModelIndex& index) const;
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &opt, const QModelIndex &index) const;
 
 private:
-    QTreeView* m_view;
+    QTreeView *m_view;
 };
 
 class CollectionTreeWidget : public QTreeWidget
@@ -48,29 +48,29 @@ class CollectionTreeWidget : public QTreeWidget
     Q_OBJECT
 
 public:
-    explicit CollectionTreeWidget(QWidget* parent);
+    explicit CollectionTreeWidget(QWidget *parent);
     ~CollectionTreeWidget();
-    void setFamilyMap(QMap<QString, CollectionItemModel*> map);
+    void setFamilyMap(QMap<QString, CollectionItemModel *> map);
     void regenerateFilteredMap();
     void setFilter(QRegExp regExp);
 
 protected:
-    void contextMenuEvent(QContextMenuEvent* e);
-    void resizeEvent(QResizeEvent* e);
+    void contextMenuEvent(QContextMenuEvent *e);
+    void resizeEvent(QResizeEvent *e);
 
 private:
     QListView::ViewMode m_viewMode;
-    QMap<QString, CollectionItemModel*> m_familyMap;
-    QMap<QString, QSortFilterProxyModel*> m_filteredMap;
-    StencilListView* stencilListViewAt(int idx) const;
-    void addStencilListView(QTreeWidgetItem* parent, QListView::ViewMode viewMode, QSortFilterProxyModel* model);
-    void adjustStencilListSize(QTreeWidgetItem* cat_item);
+    QMap<QString, CollectionItemModel *> m_familyMap;
+    QMap<QString, QSortFilterProxyModel *> m_filteredMap;
+    StencilListView *stencilListViewAt(int idx) const;
+    void addStencilListView(QTreeWidgetItem *parent, QListView::ViewMode viewMode, QSortFilterProxyModel *model);
+    void adjustStencilListSize(QTreeWidgetItem *cat_item);
     void updateViewMode();
     void saveOptions();
     void loadOptions();
 
 private Q_SLOTS:
-    void handleMousePress(QTreeWidgetItem* item);
+    void handleMousePress(QTreeWidgetItem *item);
     void slotListMode();
     void slotIconMode();
 };

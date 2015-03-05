@@ -23,13 +23,12 @@
 #include <KoGenericRegistry.h>
 #include "kis_operation.h"
 
-
-class KRITAUI_EXPORT KisOperationRegistry : public KoGenericRegistry<KisOperation*>
+class KRITAUI_EXPORT KisOperationRegistry : public KoGenericRegistry<KisOperation *>
 {
 public:
     KisOperationRegistry();
     ~KisOperationRegistry();
-    static KisOperationRegistry* instance();
+    static KisOperationRegistry *instance();
 };
 
 #endif /* __KIS_OPERATION_REGISTRY_H */

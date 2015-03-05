@@ -25,7 +25,6 @@
 #include "krita_export.h"
 #include "kis_fill_interval.h"
 
-
 class KRITAIMAGE_EXPORT KisFillIntervalMap
 {
 public:

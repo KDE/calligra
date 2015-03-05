@@ -58,13 +58,13 @@ public:
     int nextZIndex();
 
     /// Returns the image collection used for managing images
-    KoImageCollection* imageCollection();
+    KoImageCollection *imageCollection();
 
     /// Registers a shape so it can be referenced later
     void registerShape(const QString &id, KoShape *shape);
 
     /// Returns shape with specified id
-    KoShape* shapeById(const QString &id);
+    KoShape *shapeById(const QString &id);
 
     /// Adds a definition for later use
     void addDefinition(const KoXmlElement &element);
@@ -86,7 +86,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // SVGLOADINGCONTEXT_H

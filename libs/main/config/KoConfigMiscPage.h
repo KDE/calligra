@@ -35,7 +35,7 @@ class KOMAIN_EXPORT KoConfigMiscPage : public KVBox
     Q_OBJECT
 
 public:
-    explicit KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *documentResources, char* name = 0L);
+    explicit KoConfigMiscPage(KoDocument *doc, KoDocumentResourceManager *documentResources, char *name = 0L);
     ~KoConfigMiscPage();
 
     void apply();
@@ -49,7 +49,7 @@ public Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOCONFIGMISCPAGE_H

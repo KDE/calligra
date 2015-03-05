@@ -29,8 +29,9 @@
 
 #include <xbasedriver.h>
 
-namespace KexiDB {
-  const char* const xBaseDriver::keywords[] = {
+namespace KexiDB
+{
+const char *const xBaseDriver::keywords[] = {
     "ABORT",
     "ATTACH",
     "CLUSTER",
@@ -57,5 +58,5 @@ namespace KexiDB {
     "VACUUM",
     "VIEW",
     0
-  };
+};
 }

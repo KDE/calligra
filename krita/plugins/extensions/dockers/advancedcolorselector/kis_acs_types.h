@@ -22,48 +22,52 @@
 #include <QPoint>
 #include <KoColor.h>
 
+namespace Acs
+{
+enum ColorRole {Foreground, Background};
 
-namespace Acs {
-    enum ColorRole {Foreground, Background};
-
-    inline ColorRole buttonToRole(Qt::MouseButton button) {
-        return button == Qt::LeftButton ? Acs::Foreground : Acs::Background;
-    }
-
-    inline ColorRole buttonsToRole(Qt::MouseButton button, Qt::MouseButtons buttons) {
-        return button == Qt::LeftButton || buttons & Qt::LeftButton ? Acs::Foreground : Acs::Background;
-    }
-
-    template <class ResourceProvider>
-    void setCurrentColor(ResourceProvider *provider, ColorRole role, const KoColor &color) {
-        if (role == Acs::Foreground) {
-            provider->setFGColor(color);
-        } else {
-            provider->setBGColor(color);
-        }
-    }
-
-    template <class ResourceProvider>
-    KoColor currentColor(ResourceProvider *provider, ColorRole role) {
-        return role == Acs::Foreground ? provider->fgColor() : provider->bgColor();
-    }
-
-    template <class PaintDeviceSP>
-    KoColor pickColor(PaintDeviceSP device, const QPoint &pt) {
-        KoColor color;
-        if (device) {
-            (void) device->pixel(pt.x(), pt.y(), &color);
-        }
-        return color;
-    }
-
-    template <class PaintDeviceSP>
-    void setColor(PaintDeviceSP device, const QPoint &pt, const KoColor &color) {
-        (void) device->setPixel(pt.x(), pt.y(), color);
-    }
-
+inline ColorRole buttonToRole(Qt::MouseButton button)
+{
+    return button == Qt::LeftButton ? Acs::Foreground : Acs::Background;
 }
 
+inline ColorRole buttonsToRole(Qt::MouseButton button, Qt::MouseButtons buttons)
+{
+    return button == Qt::LeftButton || buttons & Qt::LeftButton ? Acs::Foreground : Acs::Background;
+}
 
+template <class ResourceProvider>
+void setCurrentColor(ResourceProvider *provider, ColorRole role, const KoColor &color)
+{
+    if (role == Acs::Foreground) {
+        provider->setFGColor(color);
+    } else {
+        provider->setBGColor(color);
+    }
+}
+
+template <class ResourceProvider>
+KoColor currentColor(ResourceProvider *provider, ColorRole role)
+{
+    return role == Acs::Foreground ? provider->fgColor() : provider->bgColor();
+}
+
+template <class PaintDeviceSP>
+KoColor pickColor(PaintDeviceSP device, const QPoint &pt)
+{
+    KoColor color;
+    if (device) {
+        (void) device->pixel(pt.x(), pt.y(), &color);
+    }
+    return color;
+}
+
+template <class PaintDeviceSP>
+void setColor(PaintDeviceSP device, const QPoint &pt, const KoColor &color)
+{
+    (void) device->setPixel(pt.x(), pt.y(), color);
+}
+
+}
 
 #endif /* __KIS_ACS_TYPES_H */

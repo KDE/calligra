@@ -31,8 +31,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
-KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
-        : KoShapeFactoryBase(KoPathShapeId, i18n("Simple path shape"))
+KoPathShapeFactory::KoPathShapeFactory(const QStringList &)
+    : KoShapeFactoryBase(KoPathShapeId, i18n("Simple path shape"))
 {
     setToolTip(i18n("A simple path shape"));
     setIconName(koIconNameCStr("pathshape"));
@@ -44,7 +44,7 @@ KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
 
 KoShape *KoPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
-    KoPathShape* path = new KoPathShape();
+    KoPathShape *path = new KoPathShape();
     path->moveTo(QPointF(0, 50));
     path->curveTo(QPointF(0, 120), QPointF(50, 120), QPointF(50, 50));
     path->curveTo(QPointF(50, -20), QPointF(100, -20), QPointF(100, 50));
@@ -53,18 +53,22 @@ KoShape *KoPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) con
     return path;
 }
 
-bool KoPathShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool KoPathShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(context);
     if (e.namespaceURI() == KoXmlNS::draw) {
-        if (e.localName() == "path")
+        if (e.localName() == "path") {
             return true;
-        if (e.localName() == "line")
+        }
+        if (e.localName() == "line") {
             return true;
-        if (e.localName() == "polyline")
+        }
+        if (e.localName() == "polyline") {
             return true;
-        if (e.localName() == "polygon")
+        }
+        if (e.localName() == "polygon") {
             return true;
+        }
     }
 
     return false;

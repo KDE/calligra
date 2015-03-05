@@ -33,16 +33,17 @@
 #include <kguiitem.h>
 #include <kdebug.h>
 
-static DebugWindow* debugWindow = 0;
-static KTabWidget* debugWindowTab = 0;
-static KexiDBDebugTreeWidget* kexiDBDebugPage = 0;
-static QTreeWidget* kexiAlterTableActionDebugPage = 0;
+static DebugWindow *debugWindow = 0;
+static KTabWidget *debugWindowTab = 0;
+static KexiDBDebugTreeWidget *kexiDBDebugPage = 0;
+static QTreeWidget *kexiAlterTableActionDebugPage = 0;
 
-static void addKexiDBDebug(const QString& text)
+static void addKexiDBDebug(const QString &text)
 {
     // (this is internal code - do not use i18n() here)
-    if (!debugWindowTab)
+    if (!debugWindowTab) {
         return;
+    }
     if (QThread::currentThread() != debugWindowTab->thread()) {
 //! @todo send debug using async. signal
         kWarning() << "Debugging from different thread not supported.";
@@ -80,13 +81,12 @@ static void addKexiDBDebug(const QString& text)
         kexiDBDebugPage->show();
     }
     //add \n after (about) every 30 characters
-    QTreeWidgetItem * lastItem = kexiDBDebugPage->invisibleRootItem()->child(
-        kexiDBDebugPage->invisibleRootItem()->childCount()-1);
-    QTreeWidgetItem* li;
+    QTreeWidgetItem *lastItem = kexiDBDebugPage->invisibleRootItem()->child(
+                                    kexiDBDebugPage->invisibleRootItem()->childCount() - 1);
+    QTreeWidgetItem *li;
     if (lastItem) {
         li = new QTreeWidgetItem(kexiDBDebugPage, lastItem);
-    }
-    else {
+    } else {
         li = new QTreeWidgetItem(kexiDBDebugPage->invisibleRootItem());
     }
     li->setText(0, text);
@@ -94,11 +94,12 @@ static void addKexiDBDebug(const QString& text)
     li->setExpanded(true);
 }
 
-static void addAlterTableActionDebug(const QString& text, int nestingLevel)
+static void addAlterTableActionDebug(const QString &text, int nestingLevel)
 {
     // (this is internal code - do not use i18n() here)
-    if (!debugWindowTab)
+    if (!debugWindowTab) {
         return;
+    }
     if (!kexiAlterTableActionDebugPage) {
         QWidget *page = new QWidget(debugWindowTab);
         QVBoxLayout *vbox = new QVBoxLayout(page);
@@ -129,13 +130,14 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
         debugWindowTab->setCurrentWidget(page);
         page->show();
     }
-    if (text.isEmpty()) //don't move up!
+    if (text.isEmpty()) { //don't move up!
         return;
-    QTreeWidgetItem * li;
+    }
+    QTreeWidgetItem *li;
     int availableNestingLevels = 0;
     // compute availableNestingLevels
-    QTreeWidgetItem * lastItem = kexiAlterTableActionDebugPage->invisibleRootItem()->child(
-        kexiAlterTableActionDebugPage->invisibleRootItem()->childCount()-1);
+    QTreeWidgetItem *lastItem = kexiAlterTableActionDebugPage->invisibleRootItem()->child(
+                                    kexiAlterTableActionDebugPage->invisibleRootItem()->childCount() - 1);
     //kDebug() << "lastItem: " << (lastItem ? lastItem->text(0) : QString());
     while (lastItem) {
         lastItem = lastItem->parent();
@@ -144,7 +146,7 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
     //kDebug() << "availableNestingLevels: " << availableNestingLevels;
     //go up (availableNestingLevels-levelsToGoUp) levels
     lastItem = kexiAlterTableActionDebugPage->invisibleRootItem()->child(
-        kexiAlterTableActionDebugPage->invisibleRootItem()->childCount()-1);
+                   kexiAlterTableActionDebugPage->invisibleRootItem()->childCount() - 1);
     int levelsToGoUp = availableNestingLevels - nestingLevel;
     while (levelsToGoUp > 0 && lastItem) {
         lastItem = lastItem->parent();
@@ -153,27 +155,27 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
     //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
     if (lastItem) {
         if (lastItem->childCount() > 0) {
-               li = new QTreeWidgetItem(lastItem, lastItem->child(lastItem->childCount()-1));   //child, after
-        }
-        else {
-               li = new QTreeWidgetItem(lastItem);   //1st child
+            li = new QTreeWidgetItem(lastItem, lastItem->child(lastItem->childCount() - 1)); //child, after
+        } else {
+            li = new QTreeWidgetItem(lastItem);   //1st child
         }
     } else {
         lastItem = kexiAlterTableActionDebugPage->invisibleRootItem()->child(
-            kexiAlterTableActionDebugPage->invisibleRootItem()->childCount()-1);
+                       kexiAlterTableActionDebugPage->invisibleRootItem()->childCount() - 1);
         while (lastItem && lastItem->parent()) {
             lastItem = lastItem->parent();
         }
         //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
-        if (lastItem && lastItem->parent())
-             li = new QTreeWidgetItem(lastItem->parent(), lastItem);   //after
-        else if (!lastItem)
-             li = new QTreeWidgetItem(kexiAlterTableActionDebugPage->invisibleRootItem());
-        else if (!lastItem->parent())
-             li = new QTreeWidgetItem(kexiAlterTableActionDebugPage->invisibleRootItem(), lastItem);
+        if (lastItem && lastItem->parent()) {
+            li = new QTreeWidgetItem(lastItem->parent(), lastItem);    //after
+        } else if (!lastItem) {
+            li = new QTreeWidgetItem(kexiAlterTableActionDebugPage->invisibleRootItem());
+        } else if (!lastItem->parent()) {
+            li = new QTreeWidgetItem(kexiAlterTableActionDebugPage->invisibleRootItem(), lastItem);
+        }
     }
-        li->setText(0, text);
-        li->setExpanded(true);
+    li->setText(0, text);
+    li->setExpanded(true);
 }
 
 QWidget *KexiUtils::createDebugWindow(QWidget *parent)
@@ -195,13 +197,14 @@ QWidget *KexiUtils::createDebugWindow(QWidget *parent)
     return debugWindow;
 }
 
-void KexiUtils::connectPushButtonActionForDebugWindow(const char* actionName,
-        const QObject *receiver, const char* slot)
+void KexiUtils::connectPushButtonActionForDebugWindow(const char *actionName,
+        const QObject *receiver, const char *slot)
 {
     if (debugWindow) {
-        KPushButton* btn = KexiUtils::findFirstChild<KPushButton*>(
+        KPushButton *btn = KexiUtils::findFirstChild<KPushButton *>(
                                debugWindow, "KPushButton", actionName);
-        if (btn)
+        if (btn) {
             QObject::connect(btn, SIGNAL(clicked()), receiver, slot);
+        }
     }
 }

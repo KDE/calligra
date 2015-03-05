@@ -80,21 +80,25 @@ public:
     virtual QSizeF contentsSize() const = 0;
 
     /** Should selected text be drawn as such? */
-    virtual bool drawSelections() {
+    virtual bool drawSelections()
+    {
         return true;
     }
 
     /** Should we see frame borders? This setting doesn't always come from KWView... */
-    bool drawFrameBorders() const {
+    bool drawFrameBorders() const
+    {
         return m_drawFrameBorders;
     }
     /** Should we see frame borders? This setting doesn't always come from KWView... */
-    void setDrawFrameBorders(bool b)  {
+    void setDrawFrameBorders(bool b)
+    {
         m_drawFrameBorders = b;
     }
 
     /** Does this viewmode know anything about pages? */
-    virtual bool hasPages() {
+    virtual bool hasPages()
+    {
         return true;
     }
 
@@ -112,7 +116,7 @@ public:
      * @param document
      * @param viewConverter used to calculate the document->view and vv conversions
      */
-    static KWViewMode *create(const QString& viewModeType, KWDocument *document);
+    static KWViewMode *create(const QString &viewModeType, KWDocument *document);
 
     /**
      * This method converts a clip-rect of the view to a set of cliprects as they are
@@ -139,7 +143,11 @@ public Q_SLOTS:
      * added or removed or just resized.
      */
     void pageSetupChanged();
-    void setPageManager(KWPageManager *pageManager) { m_pageManager = pageManager; updatePageCache(); }
+    void setPageManager(KWPageManager *pageManager)
+    {
+        m_pageManager = pageManager;
+        updatePageCache();
+    }
 
 protected:
     /**

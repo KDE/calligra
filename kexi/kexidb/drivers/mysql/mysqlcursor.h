@@ -31,9 +31,9 @@ class MySqlCursorData;
 class MySqlCursor: public Cursor
 {
 public:
-    explicit MySqlCursor(Connection* conn, const QString& statement = QString(),
+    explicit MySqlCursor(Connection *conn, const QString &statement = QString(),
                          uint cursor_options = NoOptions);
-    MySqlCursor(Connection* conn, QuerySchema& query, uint options = NoOptions);
+    MySqlCursor(Connection *conn, QuerySchema &query, uint options = NoOptions);
     virtual ~MySqlCursor();
     virtual bool drv_open();
     virtual bool drv_close();
@@ -45,7 +45,7 @@ public:
     virtual void drv_bufferMovePointerNext();
     virtual void drv_bufferMovePointerPrev();
     virtual void drv_bufferMovePointerTo(qint64 to);
-    virtual const char** rowData() const;
+    virtual const char **rowData() const;
     virtual bool drv_storeCurrentRow(RecordData &data) const;
 
     virtual int serverResult();

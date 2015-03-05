@@ -29,13 +29,12 @@
 #include <cmath>
 #include <time.h>
 
-
 void inline myround(double *x)
 {
     *x = ((*x - floor(*x)) >= 0.5) ? ceil(*x) : floor(*x);
 }
 
-HatchingBrush::HatchingBrush(const KisHatchingPaintOpSettings* settings)
+HatchingBrush::HatchingBrush(const KisHatchingPaintOpSettings *settings)
 {
     m_settings = settings;
 
@@ -51,7 +50,6 @@ HatchingBrush::HatchingBrush(const KisHatchingPaintOpSettings* settings)
     dx = 0;
     dy = 0;
 }
-
 
 HatchingBrush::~HatchingBrush()
 {
@@ -71,12 +69,14 @@ void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, 
 
     angle = givenangle;
     double tempthickness = m_settings->thickness * m_settings->thicknesssensorvalue;
-    if (tempthickness >= 1)
+    if (tempthickness >= 1) {
         thickness = qRound(tempthickness);
-    else
+    } else {
         thickness = 1;
-    if (m_settings->enabledcurveseparation)
+    }
+    if (m_settings->enabledcurveseparation) {
         separation = separationAsFunctionOfParameter(m_settings->separationsensorvalue, m_settings->separation, m_settings->separationintervals);
+    }
     height_ = height;
     width_ = width;
 
@@ -87,8 +87,9 @@ void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, 
     dy = fabs(separation / cos(angle * M_PI / 180)); // sec = 1/cos(angle)
     // I took the absolute value to avoid confusions with negative numbers
 
-    if (!m_settings->subpixelprecision)
+    if (!m_settings->subpixelprecision) {
         modf(dy, &dy);
+    }
 
     // Exception for vertical lines, for which a tangent does not exist
     if ((angle == 90) || (angle == -90)) {
@@ -97,8 +98,7 @@ void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, 
         iterateVerticalLines(true, 1, false);    // Forward
         iterateVerticalLines(true, 0, true);     // In Between both
         iterateVerticalLines(false, 1, false);   // Backward
-    }
-    else {
+    } else {
         // Turn Angle + Point into Slope + Intercept
         slope = tan(angle * M_PI / 180);                // Angle into slope
         baseLineIntercept = origin_y - slope * origin_x; // Slope and Point of the Base Line into Intercept
@@ -130,10 +130,11 @@ void HatchingBrush::iterateLines(bool forward, int lineindex, bool oneline)
 
         append_index = 0;
         remaininginnerlines = false; // We assume there's no more lines unless proven contrary
-        if (forward)
-            scanIntercept = hotIntercept + dy * lineindex; // scanIntercept will represent the Intercept of the current line
-        else
-            scanIntercept = hotIntercept - dy * lineindex;  // scanIntercept will represent the Intercept of the current line
+        if (forward) {
+            scanIntercept = hotIntercept + dy * lineindex;    // scanIntercept will represent the Intercept of the current line
+        } else {
+            scanIntercept = hotIntercept - dy * lineindex;    // scanIntercept will represent the Intercept of the current line
+        }
 
         lineindex++; // We are descending vertically out of convenience, see blog entry at pentalis.org/kritablog
 
@@ -176,8 +177,9 @@ void HatchingBrush::iterateLines(bool forward, int lineindex, bool oneline)
         }
         //--------END INTERSECTION POINT VERIFICATION---------
 
-        if (!remaininginnerlines)
+        if (!remaininginnerlines) {
             break;
+        }
 
         if (!m_settings->subpixelprecision) {
             myround(&xdraw[0]);
@@ -194,15 +196,16 @@ void HatchingBrush::iterateLines(bool forward, int lineindex, bool oneline)
             B.setX(xdraw[1]);
             B.setY(ydraw[1]);
 
-            if (m_settings->antialias)
+            if (m_settings->antialias) {
                 m_painter.drawThickLine(A, B, thickness, thickness);
-            else
+            } else {
                 m_painter.drawLine(A, B, thickness, false);    //testing no subpixel;
+            }
 
-            if (oneline)
+            if (oneline) {
                 break;
-        }
-        else {
+            }
+        } else {
             continue;
             /*Drawing points at the vertices causes incosistent results due to
             floating point calculations not being quite in sync with algebra,
@@ -226,10 +229,11 @@ void HatchingBrush::iterateVerticalLines(bool forward, int lineindex, bool oneli
 
         //---------START INTERSECTION POINT VERIFICATION--------
         remaininginnerlines = false;     // We assume there's no more lines unless proven contrary
-        if (forward)
+        if (forward) {
             verticalScanX = verticalHotX + separation * lineindex;
-        else
+        } else {
             verticalScanX = verticalHotX - separation * lineindex;
+        }
 
         lineindex++;
 
@@ -241,8 +245,9 @@ void HatchingBrush::iterateVerticalLines(bool forward, int lineindex, bool oneli
         }
         //--------END INTERSECTION POINT VERIFICATION---------
 
-        if (!remaininginnerlines)
+        if (!remaininginnerlines) {
             break;
+        }
 
         if (!m_settings->subpixelprecision) {
             myround(&xdraw);
@@ -254,22 +259,24 @@ void HatchingBrush::iterateVerticalLines(bool forward, int lineindex, bool oneli
         B.setX(xdraw);
         B.setY(ydraw[1]);
 
-        if (m_settings->antialias)
+        if (m_settings->antialias) {
             m_painter.drawThickLine(A, B, thickness, thickness);
-        else
+        } else {
             m_painter.drawLine(A, B, thickness, false);    //testing no subpixel;
+        }
 
-        if (oneline)
+        if (oneline) {
             break;
-        else
+        } else {
             continue;
+        }
     }
 }
 
 double HatchingBrush::separationAsFunctionOfParameter(double parameter, double separation, int numintervals)
 {
     if ((numintervals < 2) || (numintervals > 7)) {
-        qDebug() << "Fix your function" << numintervals << "<> 2-7" ;
+        qDebug() << "Fix your function" << numintervals << "<> 2-7";
         return separation;
     }
 
@@ -280,14 +287,16 @@ double HatchingBrush::separationAsFunctionOfParameter(double parameter, double s
 
     int basefactor = numintervals / 2;
     // Make the base separation factor tend to greater instead of lesser numbers when numintervals is even
-    if ((numintervals % 2) == 0)
+    if ((numintervals % 2) == 0) {
         basefactor--;
+    }
 
     for (quint8 currentinterval = 0; currentinterval < numintervals; currentinterval++) {
         lowerlimit = upperlimit;
         upperlimit += sizeinterval;
-        if (currentinterval == (numintervals - 1))
+        if (currentinterval == (numintervals - 1)) {
             upperlimit = 1;
+        }
         if ((parameter >= lowerlimit) && (parameter <= upperlimit)) {
             factor = pow(2.0, (basefactor - currentinterval));
             //qDebug() << factor;
@@ -295,6 +304,6 @@ double HatchingBrush::separationAsFunctionOfParameter(double parameter, double s
         }
     }
 
-    qDebug() << "Fix your function" << parameter << ">" << upperlimit ;
+    qDebug() << "Fix your function" << parameter << ">" << upperlimit;
     return separation;
 }

@@ -45,16 +45,16 @@ public:
     bool snapToGrid() const;
     void addCommand(KUndo2Command *command);
     KoShapeManager *shapeManager() const;
-    void updateCanvas(const QRectF& rc);
-    KoToolProxy * toolProxy() const;
+    void updateCanvas(const QRectF &rc);
+    KoToolProxy *toolProxy() const;
     KoViewConverter *viewConverter() const;
-    QWidget* canvasWidget();
-    const QWidget* canvasWidget() const;
+    QWidget *canvasWidget();
+    const QWidget *canvasWidget() const;
     KoUnit unit() const;
     virtual void updateInputMethodInfo() {}
     virtual void setCursor(const QCursor &) {}
 private:
-    KoShapeManager * m_shapeManager;
+    KoShapeManager *m_shapeManager;
 };
 
 #endif

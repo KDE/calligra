@@ -26,38 +26,38 @@
 
 using namespace Calligra::Sheets;
 
-class PivotSubTotals::Private{
+class PivotSubTotals::Private
+{
 public:
     Selection *selection;
     Ui::PivotSubTotals mainWidget;
 };
 
-
-PivotSubTotals::PivotSubTotals(QWidget* parent,Selection* selection):
+PivotSubTotals::PivotSubTotals(QWidget *parent, Selection *selection):
     KDialog(parent),
     d(new Private)
-    {
-  
-    QWidget* widget = new QWidget(this);
-    d->mainWidget.setupUi(widget);    
+{
+
+    QWidget *widget = new QWidget(this);
+    d->mainWidget.setupUi(widget);
     setMainWidget(widget);
-    d->selection=selection;
+    d->selection = selection;
     d->mainWidget.None->setChecked(true);
     d->mainWidget.SortBy->setChecked(true);
     selectLabels();
 
 }
 public:
-    explicit PivotOptions(QWidget* parent, Selection* selection);
-    ~PivotOptions();
-    QString returnFunction();
+explicit PivotOptions(QWidget *parent, Selection *selection);
+~PivotOptions();
+QString returnFunction();
 public slots:
-    void on_Ok_clicked();
+void on_Ok_clicked();
 private:
-    
+
 //     void selectBase();
-    class Private;
-    Private *const d;
+class Private;
+Private *const d;
 
 void PivotFilters::selectLabels()
 {
@@ -68,18 +68,17 @@ void PivotFilters::selectLabels()
     int row = range.top();
 
     Cell cell;
-    
+
     QString text;
 
     int index = 0;
     for (int i = range.left(); i <= r; ++i) {
         cell = Cell(sheet, i, row);
         text = cell.displayText();
-	
-	if(text.length() >0)
-	{
-	  d->mainWidget.LabelSelect->addItem(text);
-	}
+
+        if (text.length() > 0) {
+            d->mainWidget.LabelSelect->addItem(text);
+        }
     }
 }
 

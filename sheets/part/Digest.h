@@ -49,7 +49,7 @@
 class SHA1
 {
 public:
-    static bool getHash(QString const & text, QByteArray & hash);
+    static bool getHash(QString const &text, QByteArray &hash);
 };
 
 #endif

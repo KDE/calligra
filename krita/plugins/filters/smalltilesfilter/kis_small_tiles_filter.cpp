@@ -60,10 +60,10 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::category
 }
 
 void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
-                                      const QRect& /*applyRect*/,
-                                      const KisFilterConfiguration* config,
-                                      KoUpdater* progressUpdater
-                                      ) const
+                                      const QRect & /*applyRect*/,
+                                      const KisFilterConfiguration *config,
+                                      KoUpdater *progressUpdater
+                                     ) const
 {
     Q_ASSERT(!device.isNull());
 
@@ -76,7 +76,9 @@ void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
     int h = static_cast<int>(srcRect.height() / numberOfTiles);
 
     KisPaintDeviceSP tile = device->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
-    if (tile.isNull()) return;
+    if (tile.isNull()) {
+        return;
+    }
 
     KisPainter gc(device);
     gc.setCompositeOp(COMPOSITE_COPY);
@@ -89,12 +91,14 @@ void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
         for (uint x = 0; x < numberOfTiles; ++x) {
             gc.bitBlt(w * x, h * y, tile, 0, 0, w, h);
         }
-        if (progressUpdater) progressUpdater->setValue(y);
+        if (progressUpdater) {
+            progressUpdater->setValue(y);
+        }
     }
     gc.end();
 }
 
-KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget *KisSmallTilesFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(2, 5, 1, i18n("Number of tiles"), "numberOfTiles"));
@@ -102,11 +106,10 @@ KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent
 
 }
 
-KisFilterConfiguration* KisSmallTilesFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisSmallTilesFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("smalltiles", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("smalltiles", 1);
     config->setProperty("numberOfTiles", 2);
     return config;
 }
-
 

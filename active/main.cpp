@@ -48,13 +48,12 @@ int main(int argc, char *argv[])
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions(options);
 
-
     KApplication app;
     MainWindow mw;
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args->count()) {
-       mw.openFile(args->arg(0));
+        mw.openFile(args->arg(0));
     }
     args->clear();
 

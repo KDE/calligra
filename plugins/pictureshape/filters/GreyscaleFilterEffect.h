@@ -29,9 +29,9 @@ class GreyscaleFilterEffect : public KoFilterEffect
 public:
     GreyscaleFilterEffect();
     virtual ~GreyscaleFilterEffect();
-    virtual void save(KoXmlWriter& writer);
-    virtual bool load(const KoXmlElement& element, const KoFilterEffectLoadingContext& context);
-    virtual QImage processImage(const QImage& image, const KoFilterEffectRenderContext& context) const;
+    virtual void save(KoXmlWriter &writer);
+    virtual bool load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context);
+    virtual QImage processImage(const QImage &image, const KoFilterEffectRenderContext &context) const;
 };
 
 #endif // GRAYSCALEFILTEREFFECT_H

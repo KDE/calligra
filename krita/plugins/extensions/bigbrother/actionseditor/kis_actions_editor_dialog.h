@@ -27,11 +27,11 @@ class KisActionsEditor;
 class KisActionsEditorDialog : public KDialog
 {
 public:
-    KisActionsEditorDialog(QWidget* parent);
+    KisActionsEditorDialog(QWidget *parent);
     ~KisActionsEditorDialog();
-    KisActionsEditor* actionsEditor();
+    KisActionsEditor *actionsEditor();
 private:
-    KisActionsEditor* m_actionsEditor;
+    KisActionsEditor *m_actionsEditor;
 };
 
 #endif

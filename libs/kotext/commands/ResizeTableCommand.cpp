@@ -31,7 +31,7 @@
 #include <kdebug.h>
 
 ResizeTableCommand::ResizeTableCommand(QTextTable *t, bool horizontal, int band, qreal size, KUndo2Command *parent) :
-    KUndo2Command (parent)
+    KUndo2Command(parent)
     , m_first(true)
     , m_tablePosition(t->firstPosition())
     , m_document(t->document())
@@ -73,7 +73,7 @@ void ResizeTableCommand::undo()
         carsManager.setRowStyle(m_band, style);
     }
     KUndo2Command::undo();
-    m_document->markContentsDirty(m_tablePosition, table->lastPosition()-table->firstPosition());
+    m_document->markContentsDirty(m_tablePosition, table->lastPosition() - table->firstPosition());
 }
 
 void ResizeTableCommand::redo()
@@ -120,5 +120,5 @@ void ResizeTableCommand::redo()
             m_newRowStyle = carsManager.rowStyle(m_band).clone();
         }
     }
-    m_document->markContentsDirty(m_tablePosition, table->lastPosition()-table->firstPosition());
+    m_document->markContentsDirty(m_tablePosition, table->lastPosition() - table->firstPosition());
 }

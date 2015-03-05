@@ -33,7 +33,6 @@
 #include <kis_shared_ptr.h>
 #include <kis_shared.h>
 
-
 class QWidget;
 class KisPaintInformation;
 
@@ -64,7 +63,6 @@ const KoID SensorsListId("sensorslist", "SHOULD NOT APPEAR IN THE UI !"); ///< t
 class KisDynamicSensor;
 typedef KisSharedPtr<KisDynamicSensor> KisDynamicSensorSP;
 
-
 /**
  * Sensors are used to extract from KisPaintInformation a single
  * double value which can be used to control the parameters of
@@ -80,7 +78,7 @@ public:
     };
 
 protected:
-    KisDynamicSensor(const KoID& id);
+    KisDynamicSensor(const KoID &id);
 
 public:
 
@@ -89,7 +87,7 @@ public:
     /**
      * @return the value of this sensor for the given KisPaintInformation
      */
-    qreal parameter(const KisPaintInformation& info);
+    qreal parameter(const KisPaintInformation &info);
 
     /**
      * This function is call before beginning a stroke to reset the sensor.
@@ -100,18 +98,19 @@ public:
     /**
      * @param selector is a \ref QWidget that countains a signal called "parametersChanged()"
      */
-    virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget* selector);
+    virtual QWidget *createConfigurationWidget(QWidget *parent, QWidget *selector);
 
     /**
      * Creates a sensor from its identifiant.
      */
-    static KisDynamicSensorSP id2Sensor(const KoID&);
-    static KisDynamicSensorSP id2Sensor(const QString& s) {
+    static KisDynamicSensorSP id2Sensor(const KoID &);
+    static KisDynamicSensorSP id2Sensor(const QString &s)
+    {
         return id2Sensor(KoID(s));
     }
 
-    static KisDynamicSensorSP createFromXML(const QString&);
-    static KisDynamicSensorSP createFromXML(const QDomElement&);
+    static KisDynamicSensorSP createFromXML(const QString &);
+    static KisDynamicSensorSP createFromXML(const QDomElement &);
 
     /**
      * @return the list of sensors
@@ -121,25 +120,27 @@ public:
     /**
      * @return the identifiant of this sensor
      */
-    inline QString id() const {
+    inline QString id() const
+    {
         return m_id.id();
     }
 
-    inline QString name() const {
+    inline QString name() const
+    {
         return m_id.name();
     }
 
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
 
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-    virtual void fromXML(const QDomElement&);
+    virtual void toXML(QDomDocument &, QDomElement &) const;
+    virtual void fromXML(const QDomElement &);
 
-    const QString& minimumLabel() const;
-    const QString& maximumLabel() const;
+    const QString &minimumLabel() const;
+    const QString &maximumLabel() const;
 
-    void setCurve(const KisCubicCurve& curve);
-    const KisCubicCurve& curve() const;
+    void setCurve(const KisCubicCurve &curve);
+    const KisCubicCurve &curve() const;
     void removeCurve();
     bool hasCustomCurve() const;
 
@@ -150,16 +151,16 @@ public:
 
 protected:
 
-    virtual qreal value(const KisPaintInformation& info) = 0;
+    virtual qreal value(const KisPaintInformation &info) = 0;
 
-    void setMinimumLabel(const QString& _label);
+    void setMinimumLabel(const QString &_label);
     void setMaximumLabel(const QString &_label);
 
 private:
 
     Q_DISABLE_COPY(KisDynamicSensor)
 
-    const KoID& m_id;
+    const KoID &m_id;
     QString m_minimumLabel;
     QString m_maximumLabel;
     bool m_customCurve;

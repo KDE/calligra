@@ -31,14 +31,13 @@ class KisToolPolyline : public KisToolPolylineBase
     Q_OBJECT
 
 public:
-    KisToolPolyline(KoCanvasBase * canvas);
+    KisToolPolyline(KoCanvasBase *canvas);
     virtual ~KisToolPolyline();
 
 protected:
-    QWidget* createOptionWidget();
-    void finishPolyline(const QVector<QPointF>& points);
+    QWidget *createOptionWidget();
+    void finishPolyline(const QVector<QPointF> &points);
 };
-
 
 #include "KoToolFactoryBase.h"
 
@@ -46,8 +45,9 @@ class KisToolPolylineFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPolylineFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolPolyline") {
+    KisToolPolylineFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolPolyline")
+    {
         setToolTip(i18n("Polyline Tool. Shift-mouseclick ends the polyline."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -57,11 +57,11 @@ public:
 
     virtual ~KisToolPolylineFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolPolyline(canvas);
     }
 
 };
-
 
 #endif //__KIS_TOOL_POLYLINE_H__

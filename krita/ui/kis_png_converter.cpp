@@ -62,8 +62,7 @@
 namespace
 {
 
-
-int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
+int getColorTypeforColorSpace(const KoColorSpace *cs, bool alpha)
 {
 
     QString id = cs->id();
@@ -78,7 +77,6 @@ int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
     return -1;
 
 }
-
 
 QPair<QString, QString> getColorSpaceForColorType(int color_type, int color_nb_bits)
 {
@@ -102,12 +100,11 @@ QPair<QString, QString> getColorSpaceForColorType(int color_type, int color_nb_b
     return r;
 }
 
-
-void fillText(png_text* p_text, const char* key, QString& text)
+void fillText(png_text *p_text, const char *key, QString &text)
 {
     p_text->compression = PNG_TEXT_COMPRESSION_zTXt;
     p_text->key = const_cast<char *>(key);
-    char* textc = new char[text.length()+1];
+    char *textc = new char[text.length() + 1];
     strcpy(textc, text.toLatin1());
     p_text->text = textc;
     p_text->text_length = text.length() + 1;
@@ -117,10 +114,11 @@ long formatStringList(char *string, const size_t length, const char *format, va_
 {
     int n = vsnprintf(string, length, format, operands);
 
-    if (n < 0)
-        string[length-1] = '\0';
+    if (n < 0) {
+        string[length - 1] = '\0';
+    }
 
-    return((long) n);
+    return ((long) n);
 }
 
 long formatString(char *string, const size_t length, const char *format, ...)
@@ -132,7 +130,7 @@ long formatString(char *string, const size_t length, const char *format, ...)
     va_start(operands, format);
     n = (long) formatStringList(string, length, format, operands);
     va_end(operands);
-    return(n);
+    return (n);
 }
 
 void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type, QByteArray profile_data)
@@ -156,7 +154,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     QByteArray keyData = key.toLatin1();
     text[0].key = keyData.data();
 
-    uchar* sp = (uchar*)profile_data.data();
+    uchar *sp = (uchar *)profile_data.data();
     png_charp dp = text[0].text;
     *dp++ = '\n';
 
@@ -170,8 +168,9 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     dp += 8;
 
     for (long i = 0; i < (long) profile_data.length(); i++) {
-        if (i % 36 == 0)
+        if (i % 36 == 0) {
             *dp++ = '\n';
+        }
 
         *(dp++) = (char) hex[((*sp >> 4) & 0x0f)];
         *(dp++) = (char) hex[((*sp++) & 0x0f)];
@@ -182,8 +181,9 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     text[0].text_length = (png_size_t)(dp - text[0].text);
     text[0].compression = -1;
 
-    if (text[0].text_length <= allocated_length)
+    if (text[0].text_length <= allocated_length) {
         png_set_text(ping, ping_info, text, 1);
+    }
 
     png_free(ping, text[0].text);
     png_free(ping, text);
@@ -204,20 +204,23 @@ QByteArray png_read_raw_profile(png_textp text)
 
     png_charp sp = text[0].text + 1;
     /* look for newline */
-    while (*sp != '\n')
+    while (*sp != '\n') {
         sp++;
+    }
     /* look for length */
-    while (*sp == '\0' || *sp == ' ' || *sp == '\n')
+    while (*sp == '\0' || *sp == ' ' || *sp == '\n') {
         sp++;
+    }
     png_uint_32 length = (png_uint_32) atol(sp);
-    while (*sp != ' ' && *sp != '\n')
+    while (*sp != ' ' && *sp != '\n') {
         sp++;
+    }
     if (length == 0) {
         return profile;
     }
     profile.resize(length);
     /* copy profile, skipping white space and column 1 "=" signs */
-    unsigned char *dp = (unsigned char*)profile.data();
+    unsigned char *dp = (unsigned char *)profile.data();
     png_uint_32 nibbles = length * 2;
     for (png_uint_32 i = 0; i < nibbles; i++) {
         while (*sp < '0' || (*sp > '9' && *sp < 'a') || *sp > 'f') {
@@ -226,18 +229,19 @@ QByteArray png_read_raw_profile(png_textp text)
             }
             sp++;
         }
-        if (i % 2 == 0)
-            *dp = (unsigned char)(16 * unhex[(int) *sp++]);
-        else
-            (*dp++) += unhex[(int) *sp++];
+        if (i % 2 == 0) {
+            *dp = (unsigned char)(16 * unhex[(int) * sp++]);
+        } else {
+            (*dp++) += unhex[(int) * sp++];
+        }
     }
     return profile;
 }
 
-void decode_meta_data(png_textp text, KisMetaData::Store* store, QString type, int headerSize)
+void decode_meta_data(png_textp text, KisMetaData::Store *store, QString type, int headerSize)
 {
     dbgFile << "Decoding " << type << " " << text[0].key;
-    KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value(type);
+    KisMetaData::IOBackend *exifIO = KisMetaData::IOBackendRegistry::instance()->value(type);
     Q_ASSERT(exifIO);
 
     QByteArray rawProfile = png_read_raw_profile(text);
@@ -272,9 +276,11 @@ KisPNGConverter::~KisPNGConverter()
 class KisPNGReadStream
 {
 public:
-    KisPNGReadStream(quint8* buf,  quint32 depth) : m_posinc(8), m_depth(depth), m_buf(buf) {
+    KisPNGReadStream(quint8 *buf,  quint32 depth) : m_posinc(8), m_depth(depth), m_buf(buf)
+    {
     }
-    int nextValue() {
+    int nextValue()
+    {
         if (m_posinc == 0) {
             m_posinc = 8;
             m_buf++;
@@ -284,16 +290,18 @@ public:
     }
 private:
     quint32 m_posinc, m_depth;
-    quint8* m_buf;
+    quint8 *m_buf;
 };
 
 class KisPNGWriteStream
 {
 public:
-    KisPNGWriteStream(quint8* buf,  quint32 depth) : m_posinc(8), m_depth(depth), m_buf(buf) {
+    KisPNGWriteStream(quint8 *buf,  quint32 depth) : m_posinc(8), m_depth(depth), m_buf(buf)
+    {
         *m_buf = 0;
     }
-    void setNextValue(int v) {
+    void setNextValue(int v)
+    {
         if (m_posinc == 0) {
             m_posinc = 8;
             m_buf++;
@@ -304,7 +312,7 @@ public:
     }
 private:
     quint32 m_posinc, m_depth;
-    quint8* m_buf;
+    quint8 *m_buf;
 };
 
 class KisPNGReaderAbstract
@@ -321,14 +329,17 @@ protected:
 class KisPNGReaderLineByLine : public KisPNGReaderAbstract
 {
 public:
-    KisPNGReaderLineByLine(png_structp _png_ptr, png_infop info_ptr, int _width, int _height) : KisPNGReaderAbstract(_png_ptr, _width, _height) {
+    KisPNGReaderLineByLine(png_structp _png_ptr, png_infop info_ptr, int _width, int _height) : KisPNGReaderAbstract(_png_ptr, _width, _height)
+    {
         png_uint_32 rowbytes = png_get_rowbytes(png_ptr, info_ptr);
         row_pointer = new png_byte[rowbytes];
     }
-    virtual ~KisPNGReaderLineByLine() {
+    virtual ~KisPNGReaderLineByLine()
+    {
         delete[] row_pointer;
     }
-    virtual png_bytep readLine() {
+    virtual png_bytep readLine()
+    {
         png_read_row(png_ptr, row_pointer, NULL);
         return row_pointer;
     }
@@ -339,7 +350,8 @@ private:
 class KisPNGReaderFullImage : public KisPNGReaderAbstract
 {
 public:
-    KisPNGReaderFullImage(png_structp _png_ptr, png_infop info_ptr, int _width, int _height) : KisPNGReaderAbstract(_png_ptr, _width, _height), y(0) {
+    KisPNGReaderFullImage(png_structp _png_ptr, png_infop info_ptr, int _width, int _height) : KisPNGReaderAbstract(_png_ptr, _width, _height), y(0)
+    {
         row_pointers = new png_bytep[height];
         png_uint_32 rowbytes = png_get_rowbytes(png_ptr, info_ptr);
         for (int i = 0; i < height; i++) {
@@ -347,13 +359,15 @@ public:
         }
         png_read_image(png_ptr, row_pointers);
     }
-    virtual ~KisPNGReaderFullImage() {
+    virtual ~KisPNGReaderFullImage()
+    {
         for (int i = 0; i < height; i++) {
             delete[] row_pointers[i];
         }
         delete[] row_pointers;
     }
-    virtual png_bytep readLine() {
+    virtual png_bytep readLine()
+    {
         return row_pointers[y++];
     }
 private:
@@ -361,14 +375,13 @@ private:
     int y;
 };
 
-
 static
 void _read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
 {
     QIODevice *in = (QIODevice *)png_get_io_ptr(png_ptr);
 
     while (length) {
-        int nr = in->read((char*)data, length);
+        int nr = in->read((char *)data, length);
         if (nr <= 0) {
             png_error(png_ptr, "Read Error");
             return;
@@ -380,9 +393,9 @@ void _read_fn(png_structp png_ptr, png_bytep data, png_size_t length)
 static
 void _write_fn(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-    QIODevice* out = (QIODevice*)png_get_io_ptr(png_ptr);
+    QIODevice *out = (QIODevice *)png_get_io_ptr(png_ptr);
 
-    uint nr = out->write((char*)data, length);
+    uint nr = out->write((char *)data, length);
     if (nr != length) {
         png_error(png_ptr, "Write Error");
         return;
@@ -395,8 +408,7 @@ void _flush_fn(png_structp png_ptr)
     Q_UNUSED(png_ptr);
 }
 
-
-KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
+KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice *iod)
 {
     dbgFile << "Start decoding PNG File";
     if (!iod->open(QIODevice::ReadOnly)) {
@@ -405,7 +417,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     png_byte signature[8];
-    iod->peek((char*)signature, 8);
+    iod->peek((char *)signature, 8);
 
 #if PNG_LIBPNG_VER < 10400
     if (!png_check_sig(signature, 8)) {
@@ -447,12 +459,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_set_read_fn(png_ptr, iod, _read_fn);
 
 #if defined(PNG_SKIP_sRGB_CHECK_PROFILE) && defined(PNG_SET_OPTION_SUPPORTED)
-   png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
+    png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
 #endif
 
     // read all PNG info up to image data
     png_read_info(png_ptr, info_ptr);
-
 
     if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_GRAY && png_get_bit_depth(png_ptr, info_ptr) < 8) {
         png_set_expand(png_ptr);
@@ -461,7 +472,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_PALETTE && png_get_bit_depth(png_ptr, info_ptr) < 8) {
         png_set_packing(png_ptr);
     }
-
 
     if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_PALETTE &&
             (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))) {
@@ -476,8 +486,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     dbgFile << "width = " << width << " height = " << height << " color_nb_bits = " << color_nb_bits << " color_type = " << color_type << " interlace_type = " << interlace_type << endl;
     // swap byteorder on little endian machines.
 #ifndef WORDS_BIGENDIAN
-    if (color_nb_bits > 8)
+    if (color_nb_bits > 8) {
         png_set_swap(png_ptr);
+    }
 #endif
 
     // Determine the colorspace
@@ -499,8 +510,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     int compression_type;
     png_uint_32 proflen;
 
-
-    const KoColorProfile* profile = 0;
+    const KoColorProfile *profile = 0;
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
         QByteArray profile_rawdata;
         // XXX: Hardcoded for icc type -- is that correct for us?
@@ -520,19 +530,20 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     // Check that the profile is used by the color space
     if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(
-        KoColorSpaceRegistry::instance()->colorSpaceId(
-      csName.first, csName.second))->profileIsCompatible(profile)) {
+                KoColorSpaceRegistry::instance()->colorSpaceId(
+                    csName.first, csName.second))->profileIsCompatible(profile)) {
         warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << csName.first << " " << csName.second;
         profile = 0;
     }
 
     // Retrieve a pointer to the colorspace
-    const KoColorSpace* cs;
+    const KoColorSpace *cs;
     if (profile && profile->isSuitableForOutput()) {
         dbgFile << "image has embedded profile: " << profile -> name() << "\n";
         cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile);
-    } else
+    } else {
         cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, 0);
+    }
 
     if (cs == 0) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
@@ -540,7 +551,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
     //TODO: two fixes : one tell the user about the problem and ask for a solution, and two once the kocolorspace include KoColorTransformation, use that instead of hacking a lcms transformation
     // Create the cmsTransform if needed
-    KoColorTransformation* transform = 0;
+    KoColorTransformation *transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
         transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     }
@@ -564,11 +575,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     KisPaintLayerSP layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), UCHAR_MAX);
 
     // Read comments/texts...
-    png_text* text_ptr;
+    png_text *text_ptr;
     int num_comments;
     png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
     if (m_doc) {
-        KoDocumentInfo * info = m_doc->documentInfo();
+        KoDocumentInfo *info = m_doc->documentInfo();
         dbgFile << "There are " << num_comments << " comments in the text";
         for (int i = 0; i < num_comments; i++) {
             QString key = text_ptr[i].key;
@@ -594,14 +605,14 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     // Read image data
-    KisPNGReaderAbstract* reader = 0;
+    KisPNGReaderAbstract *reader = 0;
     try {
         if (interlace_type == PNG_INTERLACE_ADAM7) {
             reader = new KisPNGReaderFullImage(png_ptr, info_ptr, width, height);
         } else {
             reader = new KisPNGReaderLineByLine(png_ptr, info_ptr, width, height);
         }
-    } catch (std::bad_alloc& e) {
+    } catch (std::bad_alloc &e) {
         // new png_byte[] may raise such an exception if the image
         // is invalid / to large.
         dbgFile << "bad alloc: " << e.what();
@@ -611,7 +622,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     // Read the palette if the file is indexed
-    png_colorp palette ;
+    png_colorp palette;
     int num_palette;
     if (color_type == PNG_COLOR_TYPE_PALETTE) {
         png_get_PLTE(png_ptr, info_ptr, &palette, &num_palette);
@@ -644,7 +655,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 do {
                     quint16 *d = reinterpret_cast<quint16 *>(it->rawData());
                     d[0] = *(src++);
-                    if (transform) transform->transform(reinterpret_cast<quint8*>(d), reinterpret_cast<quint8*>(d), 1);
+                    if (transform) {
+                        transform->transform(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8 *>(d), 1);
+                    }
                     if (hasalpha) {
                         d[1] = *(src++);
                     } else {
@@ -656,7 +669,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 do {
                     quint8 *d = it->rawData();
                     d[0] = (quint8)(stream.nextValue() * coeff);
-                    if (transform) transform->transform(d, d, 1);
+                    if (transform) {
+                        transform->transform(d, d, 1);
+                    }
                     if (hasalpha) {
                         d[1] = (quint8)(stream.nextValue() * coeff);
                     } else {
@@ -675,9 +690,14 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     d[2] = *(src++);
                     d[1] = *(src++);
                     d[0] = *(src++);
-                    if (transform) transform->transform(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
-                    if (hasalpha) d[3] = *(src++);
-                    else d[3] = quint16_MAX;
+                    if (transform) {
+                        transform->transform(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8 *>(d), 1);
+                    }
+                    if (hasalpha) {
+                        d[3] = *(src++);
+                    } else {
+                        d[3] = quint16_MAX;
+                    }
                 } while (it->nextPixel());
             } else {
                 KisPNGReadStream stream(row_pointer, color_nb_bits);
@@ -686,9 +706,14 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     d[2] = (quint8)(stream.nextValue() * coeff);
                     d[1] = (quint8)(stream.nextValue() * coeff);
                     d[0] = (quint8)(stream.nextValue() * coeff);
-                    if (transform) transform->transform(d, d, 1);
-                    if (hasalpha) d[3] = (quint8)(stream.nextValue() * coeff);
-                    else d[3] = UCHAR_MAX;
+                    if (transform) {
+                        transform->transform(d, d, 1);
+                    }
+                    if (hasalpha) {
+                        d[3] = (quint8)(stream.nextValue() * coeff);
+                    } else {
+                        d[3] = UCHAR_MAX;
+                    }
                 } while (it->nextPixel());
             }
             break;
@@ -727,11 +752,12 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
+KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl &uri)
 {
     dbgFile << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri;
-    if (uri.isEmpty())
+    if (uri.isEmpty()) {
         return KisImageBuilder_RESULT_NO_URI;
+    }
 
     if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
@@ -762,21 +788,21 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
     return result;
 }
 
-
 KisImageWSP KisPNGConverter::image()
 {
     return m_image;
 }
 
-
-KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl &uri, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store *metaData)
 {
     dbgFile << "Start writing PNG File " << uri;
-    if (uri.isEmpty())
+    if (uri.isEmpty()) {
         return KisImageBuilder_RESULT_NO_URI;
+    }
 
-    if (!uri.isLocalFile())
+    if (!uri.isLocalFile()) {
         return KisImageBuilder_RESULT_NOT_LOCAL;
+    }
     // Open a QIODevice for writing
     QFile *fp = new QFile(uri.toLocalFile());
     KisImageBuilder_Result result = buildFile(fp, image, device, annotationsStart, annotationsEnd, options, metaData);
@@ -786,20 +812,21 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisImageWSP i
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice *iodevice, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store *metaData)
 {
-
 
     if (!iodevice->open(QIODevice::WriteOnly)) {
         dbgFile << "Failed to open PNG File for writing";
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
-    if (!device)
+    if (!device) {
         return KisImageBuilder_RESULT_INVALID_ARG;
+    }
 
-    if (!image)
+    if (!image) {
         return KisImageBuilder_RESULT_EMPTY;
+    }
 
     // Setup the writing callback of libpng
     int height = image->height();
@@ -816,7 +843,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     }
 
     if (options.forceSRGB) {
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
         device = new KisPaintDevice(*device);
         device->convertTo(cs);
     }
@@ -828,9 +855,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     }
 
 #if defined(PNG_SKIP_sRGB_CHECK_PROFILE) && defined(PNG_SET_OPTION_SUPPORTED)
-   png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
+    png_set_option(png_ptr, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
 #endif
-
 
 #ifdef PNG_READ_CHECK_FOR_INVALID_INDEX_SUPPORTED
     png_set_check_for_invalid_index(png_ptr, 0);
@@ -856,7 +882,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     /* set the zlib compression level */
     png_set_compression_level(png_ptr, options.compression);
 
-    png_set_write_fn(png_ptr, (void*)iodevice, _write_fn, _flush_fn);
+    png_set_write_fn(png_ptr, (void *)iodevice, _write_fn, _flush_fn);
 
     /* set other zlib parameters */
     png_set_compression_mem_level(png_ptr, 8);
@@ -880,7 +906,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
 
         bool toomuchcolor = false;
         do {
-            const quint8* c = it.oldRawData();
+            const quint8 *c = it.oldRawData();
             bool findit = false;
             for (int i = 0; i < num_palette; i++) {
                 if (palette[i].red == c[2] &&
@@ -953,13 +979,13 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
             // Attribute
             // XXX: it should be possible to save krita_attributes in the \"CHUNKs\""
             dbgFile << "cannot save this annotation : " << (*it) -> type();
-        } else if ((*it)->type() == "kpp_version" || (*it)->type() == "kpp_preset" ) {
+        } else if ((*it)->type() == "kpp_version" || (*it)->type() == "kpp_preset") {
             dbgFile << "Saving preset information " << (*it)->description();
             png_textp      text = (png_textp) png_malloc(png_ptr, (png_uint_32) sizeof(png_text));
 
             QByteArray keyData = (*it)->description().toLatin1();
             text[0].key = keyData.data();
-            text[0].text = (char*)(*it)->annotation().data();
+            text[0].text = (char *)(*it)->annotation().data();
             text[0].text_length = (*it)->annotation().size();
             text[0].compression = -1;
 
@@ -970,13 +996,13 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     }
 
     // Save the color profile
-    const KoColorProfile* colorProfile = device->colorSpace()->profile();
+    const KoColorProfile *colorProfile = device->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
     if (!sRGB || options.saveSRGBProfile) {
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, (char *)"icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
-        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.constData(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, (char *)"icc", PNG_COMPRESSION_TYPE_BASE, (char *)colorProfileData.constData(), colorProfileData . size());
 #endif
     }
 
@@ -984,7 +1010,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     if (m_doc) {
         png_text texts[3];
         int nbtexts = 0;
-        KoDocumentInfo * info = m_doc->documentInfo();
+        KoDocumentInfo *info = m_doc->documentInfo();
         QString title = info->aboutInfo("creator");
         if (!title.isEmpty()) {
             fillText(texts + nbtexts, "title", title);
@@ -1011,7 +1037,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         if (options.exif) {
             dbgFile << "Trying to save exif information";
 
-            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+            KisMetaData::IOBackend *exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
             Q_ASSERT(exifIO);
 
             QBuffer buffer;
@@ -1021,7 +1047,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         // Save IPTC
         if (options.iptc) {
             dbgFile << "Trying to save exif information";
-            KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+            KisMetaData::IOBackend *iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
             Q_ASSERT(iptcIO);
 
             QBuffer buffer;
@@ -1033,7 +1059,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         // Save XMP
         if (options.xmp) {
             dbgFile << "Trying to save XMP information";
-            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+            KisMetaData::IOBackend *xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
             Q_ASSERT(xmpIO);
 
             QBuffer buffer;
@@ -1056,20 +1082,21 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
 
     // swap byteorder on little endian machines.
 #ifndef WORDS_BIGENDIAN
-    if (color_nb_bits > 8)
+    if (color_nb_bits > 8) {
         png_set_swap(png_ptr);
+    }
 #endif
 
     // Write the PNG
 //     png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 
     // Fill the data structure
-    png_byte** row_pointers = new png_byte*[height];
+    png_byte **row_pointers = new png_byte*[height];
     for (int y = 0; y < height; y++) {
 
         KisHLineConstIteratorSP it = device->createHLineConstIteratorNG(0, y, width);
 
-        row_pointers[y] = new png_byte[width*device->pixelSize()];
+        row_pointers[y] = new png_byte[width * device->pixelSize()];
 
         switch (color_type) {
         case PNG_COLOR_TYPE_GRAY:
@@ -1079,14 +1106,18 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
                 do {
                     const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
                     *(dst++) = d[0];
-                    if (options.alpha) *(dst++) = d[1];
+                    if (options.alpha) {
+                        *(dst++) = d[1];
+                    }
                 } while (it->nextPixel());
             } else {
                 quint8 *dst = row_pointers[y];
                 do {
                     const quint8 *d = it->oldRawData();
                     *(dst++) = d[0];
-                    if (options.alpha) *(dst++) = d[1];
+                    if (options.alpha) {
+                        *(dst++) = d[1];
+                    }
                 } while (it->nextPixel());
             }
             break;
@@ -1099,7 +1130,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
                     *(dst++) = d[2];
                     *(dst++) = d[1];
                     *(dst++) = d[0];
-                    if (options.alpha) *(dst++) = d[3];
+                    if (options.alpha) {
+                        *(dst++) = d[3];
+                    }
                 } while (it->nextPixel());
             } else {
                 quint8 *dst = row_pointers[y];
@@ -1108,7 +1141,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
                     *(dst++) = d[2];
                     *(dst++) = d[1];
                     *(dst++) = d[0];
-                    if (options.alpha) *(dst++) = d[3];
+                    if (options.alpha) {
+                        *(dst++) = d[3];
+                    }
                 } while (it->nextPixel());
             }
             break;
@@ -1154,7 +1189,6 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     return KisImageBuilder_RESULT_OK;
 }
 
-
 void KisPNGConverter::cancel()
 {
     m_stop = true;
@@ -1162,10 +1196,11 @@ void KisPNGConverter::cancel()
 
 void KisPNGConverter::progress(png_structp png_ptr, png_uint_32 row_number, int pass)
 {
-    if (png_ptr == NULL || row_number > PNG_MAX_UINT || pass > 7) return;
+    if (png_ptr == NULL || row_number > PNG_MAX_UINT || pass > 7) {
+        return;
+    }
 //     setProgress(row_number);
 }
-
 
 #include "kis_png_converter.moc"
 

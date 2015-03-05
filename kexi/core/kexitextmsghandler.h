@@ -37,10 +37,10 @@ protected:
 
     virtual void showErrorMessageInternal(const QString &title, const QString &details = QString());
     virtual void showMessageInternal(MessageType type, const QString &title, const QString &details,
-                                     const QString& dontShowAgainName = QString());
+                                     const QString &dontShowAgainName = QString());
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

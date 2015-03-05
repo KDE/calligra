@@ -36,7 +36,7 @@ ChangeImageCommand::ChangeImageCommand(PictureShape *shape, KoImageData *newImag
     setText(kundo2_i18n("Change image"));
 
     // we need new here as setUserData deletes the old data
-    m_oldImageData = m_shape->imageData() ? new KoImageData(*m_shape->imageData()): 0;
+    m_oldImageData = m_shape->imageData() ? new KoImageData(*m_shape->imageData()) : 0;
 }
 
 ChangeImageCommand::ChangeImageCommand(PictureShape *shape, const QRectF &croppingRect, KUndo2Command *parent):
@@ -77,7 +77,7 @@ void ChangeImageCommand::redo()
 {
     if (m_imageChanged) {
         // we need new here as setUserData deletes the old data
-        m_shape->setUserData(m_newImageData ? new KoImageData(*m_newImageData): 0);
+        m_shape->setUserData(m_newImageData ? new KoImageData(*m_newImageData) : 0);
     }
 
     m_shape->setColorMode(m_newColorMode);
@@ -89,7 +89,7 @@ void ChangeImageCommand::undo()
 {
     if (m_imageChanged) {
         // we need new here as setUserData deletes the old data
-        m_shape->setUserData(m_oldImageData ? new KoImageData(*m_oldImageData): 0);
+        m_shape->setUserData(m_oldImageData ? new KoImageData(*m_oldImageData) : 0);
     }
 
     m_shape->setColorMode(m_oldColorMode);

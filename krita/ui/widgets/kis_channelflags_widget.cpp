@@ -31,18 +31,18 @@
 
 #include <kis_debug.h>
 
-KisChannelFlagsWidget::KisChannelFlagsWidget(const KoColorSpace * colorSpace, QWidget * parent)
-        : QScrollArea(parent)
+KisChannelFlagsWidget::KisChannelFlagsWidget(const KoColorSpace *colorSpace, QWidget *parent)
+    : QScrollArea(parent)
 {
     setObjectName("KisChannelFlagsWidget");
     setToolTip(i18n("Check the active channels in this layer. Only these channels will be affected by any operation."));
-    QWidget * w = new QWidget();
+    QWidget *w = new QWidget();
     setBackgroundRole(QPalette::Window);
-    QVBoxLayout * vbl = new QVBoxLayout();
+    QVBoxLayout *vbl = new QVBoxLayout();
 
     for (int i = 0; i < colorSpace->channels().size(); ++i) {
-        KoChannelInfo * channel = colorSpace->channels().at(i);
-        QCheckBox * bx = new QCheckBox(channel->name(), w);
+        KoChannelInfo *channel = colorSpace->channels().at(i);
+        QCheckBox *bx = new QCheckBox(channel->name(), w);
         connect(bx, SIGNAL(toggled(bool)), SIGNAL(channelSelectionChanced()));
         bx->setCheckState(Qt::Checked);
         vbl->addWidget(bx);
@@ -58,10 +58,12 @@ KisChannelFlagsWidget::~KisChannelFlagsWidget()
 {
 }
 
-void KisChannelFlagsWidget::setChannelFlags(const QBitArray & cf)
+void KisChannelFlagsWidget::setChannelFlags(const QBitArray &cf)
 {
     dbgUI << "KisChannelFlagsWidget::setChannelFlags " << cf.isEmpty();
-    if (cf.isEmpty()) return;
+    if (cf.isEmpty()) {
+        return;
+    }
 
     for (int i = 0; i < qMin(m_channelChecks.size(), cf.size()); ++i) {
         m_channelChecks.at(i)->setChecked(cf.testBit(i));
@@ -75,14 +77,16 @@ QBitArray KisChannelFlagsWidget::channelFlags() const
 
     for (int i = 0; i < m_channelChecks.size(); ++i) {
         bool flag = m_channelChecks.at(i)->isChecked();
-        if (!flag) allTrue = false;
+        if (!flag) {
+            allTrue = false;
+        }
         qint32 idx = i;
         ba.setBit(idx, flag);
         dbgUI << " channel " << i << " is " << flag << ", allTrue = " << allTrue << ", so ba.testBit(" << i << ")" << " is " << ba.testBit(idx) << " at " << idx;
     }
-    if (allTrue)
+    if (allTrue) {
         return QBitArray();
-    else {
+    } else {
         return ba;
     }
 }

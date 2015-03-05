@@ -25,12 +25,12 @@
 using namespace Calligra::Sheets;
 
 Localization::Localization()
-        : KLocale("calligra")
+    : KLocale("calligra")
 {
     insertCatalog("calligra");
 }
 
-void Localization::load(const KoXmlElement& element)
+void Localization::load(const KoXmlElement &element)
 {
     if (element.hasAttribute("weekStartsMonday")) {
         QString c = element.attribute("weekStartsMonday");
@@ -38,22 +38,30 @@ void Localization::load(const KoXmlElement& element)
             setWeekStartDay(1 /*Monday*/);
         }
     }
-    if (element.hasAttribute("decimalSymbol"))
+    if (element.hasAttribute("decimalSymbol")) {
         setDecimalSymbol(element.attribute("decimalSymbol"));
-    if (element.hasAttribute("thousandsSeparator"))
+    }
+    if (element.hasAttribute("thousandsSeparator")) {
         setThousandsSeparator(element.attribute("thousandsSeparator"));
-    if (element.hasAttribute("currencySymbol"))
+    }
+    if (element.hasAttribute("currencySymbol")) {
         setCurrencySymbol(element.attribute("currencySymbol"));
-    if (element.hasAttribute("monetaryDecimalSymbol"))
+    }
+    if (element.hasAttribute("monetaryDecimalSymbol")) {
         setMonetaryDecimalSymbol(element.attribute("monetaryDecimalSymbol"));
-    if (element.hasAttribute("monetaryThousandsSeparator"))
+    }
+    if (element.hasAttribute("monetaryThousandsSeparator")) {
         setMonetaryThousandsSeparator(element.attribute("monetaryThousandsSeparator"));
-    if (element.hasAttribute("positiveSign"))
+    }
+    if (element.hasAttribute("positiveSign")) {
         setPositiveSign(element.attribute("positiveSign"));
-    if (element.hasAttribute("negativeSign"))
+    }
+    if (element.hasAttribute("negativeSign")) {
         setNegativeSign(element.attribute("negativeSign"));
-    if (element.hasAttribute("fracDigits"))
+    }
+    if (element.hasAttribute("fracDigits")) {
         setMonetaryDecimalPlaces(element.attribute("fracDigits").toInt());
+    }
     if (element.hasAttribute("positivePrefixCurrencySymbol")) {
         QString c = element.attribute("positivePrefixCurrencySymbol");
         setPositivePrefixCurrencySymbol(c == "True");
@@ -62,19 +70,24 @@ void Localization::load(const KoXmlElement& element)
         QString c = element.attribute("negativePrefixCurrencySymbol");
         setNegativePrefixCurrencySymbol(c == "True");
     }
-    if (element.hasAttribute("positiveMonetarySignPosition"))
+    if (element.hasAttribute("positiveMonetarySignPosition")) {
         setPositiveMonetarySignPosition((SignPosition)element.attribute("positiveMonetarySignPosition").toInt());
-    if (element.hasAttribute("negativeMonetarySignPosition"))
+    }
+    if (element.hasAttribute("negativeMonetarySignPosition")) {
         setNegativeMonetarySignPosition((SignPosition)element.attribute("negativeMonetarySignPosition").toInt());
-    if (element.hasAttribute("timeFormat"))
+    }
+    if (element.hasAttribute("timeFormat")) {
         setTimeFormat(element.attribute("timeFormat"));
-    if (element.hasAttribute("dateFormat"))
+    }
+    if (element.hasAttribute("dateFormat")) {
         setDateFormat(element.attribute("dateFormat"));
-    if (element.hasAttribute("dateFormatShort"))
+    }
+    if (element.hasAttribute("dateFormatShort")) {
         setDateFormatShort(element.attribute("dateFormatShort"));
+    }
 }
 
-QDomElement Localization::save(QDomDocument& doc) const
+QDomElement Localization::save(QDomDocument &doc) const
 {
     QDomElement element = doc.createElement("locale");
 

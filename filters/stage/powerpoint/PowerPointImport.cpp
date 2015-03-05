@@ -26,13 +26,15 @@
 K_PLUGIN_FACTORY(PowerPointImportFactory, registerPlugin<PowerPointImport>();)
 K_EXPORT_PLUGIN(PowerPointImportFactory("calligrafilters"))
 
-KoFilter::ConversionStatus PowerPointImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus PowerPointImport::convert(const QByteArray &from, const QByteArray &to)
 {
-    if (from != "application/vnd.ms-powerpoint")
+    if (from != "application/vnd.ms-powerpoint") {
         return KoFilter::NotImplemented;
+    }
 
-    if (to != KoOdf::mimeType(KoOdf::Presentation))
+    if (to != KoOdf::mimeType(KoOdf::Presentation)) {
         return KoFilter::NotImplemented;
+    }
 
     PptToOdp ppttoodp(this, &PowerPointImport::setProgress);
     return ppttoodp.convert(m_chain->inputFile(), m_chain->outputFile(),

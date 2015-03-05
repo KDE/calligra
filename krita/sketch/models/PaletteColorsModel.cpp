@@ -22,15 +22,16 @@
 
 #include <KoColorSet.h>
 
-class PaletteColorsModel::Private {
+class PaletteColorsModel::Private
+{
 public:
     Private()
         : colorSet(0)
         , view(0)
     {}
 
-    KoColorSet* colorSet;
-    KisViewManager* view;
+    KoColorSet *colorSet;
+    KisViewManager *view;
 };
 
 PaletteColorsModel::PaletteColorsModel(QObject *parent)
@@ -50,10 +51,12 @@ PaletteColorsModel::~PaletteColorsModel()
 
 int PaletteColorsModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
+    if (parent.isValid()) {
         return 0;
-    if (!d->colorSet)
+    }
+    if (!d->colorSet) {
         return 0;
+    }
     return d->colorSet->nColors();
 }
 
@@ -61,10 +64,8 @@ QVariant PaletteColorsModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
     QColor color;
-    if (index.isValid() && d->colorSet)
-    {
-        switch(role)
-        {
+    if (index.isValid() && d->colorSet) {
+        switch (role) {
         case ImageRole:
             color = d->colorSet->getColor(index.row()).color.toQColor();
             result = QString("image://color/%1,%2,%3,%4").arg(color.redF()).arg(color.greenF()).arg(color.blueF()).arg(color.alphaF());
@@ -83,10 +84,8 @@ QVariant PaletteColorsModel::headerData(int section, Qt::Orientation orientation
 {
     Q_UNUSED(orientation);
     QVariant result;
-    if (section == 0)
-    {
-        switch(role)
-        {
+    if (section == 0) {
+        switch (role) {
         case ImageRole:
             result = QString("Thumbnail");
             break;
@@ -102,40 +101,40 @@ QVariant PaletteColorsModel::headerData(int section, Qt::Orientation orientation
 
 void PaletteColorsModel::setColorSet(QObject *newColorSet)
 {
-    d->colorSet = qobject_cast<KoColorSet*>(newColorSet);
+    d->colorSet = qobject_cast<KoColorSet *>(newColorSet);
     reset();
     emit colorSetChanged();
 }
 
-QObject* PaletteColorsModel::colorSet() const
+QObject *PaletteColorsModel::colorSet() const
 {
     return d->colorSet;
 }
 
-
-QObject* PaletteColorsModel::view() const
+QObject *PaletteColorsModel::view() const
 {
     return d->view;
 }
 
-void PaletteColorsModel::setView(QObject* newView)
+void PaletteColorsModel::setView(QObject *newView)
 {
-    d->view = qobject_cast<KisViewManager*>( newView );
+    d->view = qobject_cast<KisViewManager *>(newView);
     emit viewChanged();
 }
 
 void PaletteColorsModel::activateColor(int index, bool setBackgroundColor)
 {
-    if ( !d->view )
+    if (!d->view) {
         return;
+    }
 
-    if (index >= 0 && index < d->colorSet->nColors())
-    {
-        if (setBackgroundColor)
-            d->view->resourceProvider()->setBGColor( d->colorSet->getColor( index ).color );
-        else
-            d->view->resourceProvider()->setFGColor( d->colorSet->getColor( index ).color );
-        emit colorChanged(d->colorSet->getColor( index ).color.toQColor(), setBackgroundColor);
+    if (index >= 0 && index < d->colorSet->nColors()) {
+        if (setBackgroundColor) {
+            d->view->resourceProvider()->setBGColor(d->colorSet->getColor(index).color);
+        } else {
+            d->view->resourceProvider()->setFGColor(d->colorSet->getColor(index).color);
+        }
+        emit colorChanged(d->colorSet->getColor(index).color.toQColor(), setBackgroundColor);
     }
 }
 

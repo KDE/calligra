@@ -52,9 +52,9 @@ class ValueParser;
 // used for preloading OASIS auto styles
 typedef QHash<QString, Style>       Styles;
 // needs to be ordered (QMap) for the style dialog
-typedef QMap<QString, CustomStyle*> CustomStyles;
+typedef QMap<QString, CustomStyle *> CustomStyles;
 
-CALLIGRA_SHEETS_ODF_EXPORT uint qHash(const Style& style);
+CALLIGRA_SHEETS_ODF_EXPORT uint qHash(const Style &style);
 
 /**
  * \ingroup Style
@@ -161,22 +161,21 @@ public:
     };
 
     Style();
-    Style(const Style& style);
+    Style(const Style &style);
     virtual ~Style();
 
     virtual StyleType type() const;
 
     QString parentName() const;
-    void setParentName(const QString& name);
+    void setParentName(const QString &name);
 
-
-    bool loadXML(KoXmlElement& format, Paste::Mode pm = Paste::Normal);
-    void saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const;
-    void loadOdfStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element,
-                      Conditions& conditions, const StyleManager* styleManager,
+    bool loadXML(KoXmlElement &format, Paste::Mode pm = Paste::Normal);
+    void saveXML(QDomDocument &doc, QDomElement &format, const StyleManager *styleManager) const;
+    void loadOdfStyle(KoOdfStylesReader &stylesReader, const KoXmlElement &element,
+                      Conditions &conditions, const StyleManager *styleManager,
                       const ValueParser *parser);
-    void loadOdfDataStyle(KoOdfStylesReader& stylesReader, const QString& dataStyleName,
-                          Conditions& conditions, const StyleManager* styleManager,
+    void loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &dataStyleName,
+                          Conditions &conditions, const StyleManager *styleManager,
                           const ValueParser *parser);
 
     /**
@@ -184,14 +183,12 @@ public:
      * Reimplemented by CustomStyle for OASIS user styles.
      * \return the OASIS style's name
      */
-    virtual QString saveOdf(KoGenStyle& style, KoGenStyles& mainStyles,
-                            const StyleManager* manager) const;
-
+    virtual QString saveOdf(KoGenStyle &style, KoGenStyles &mainStyles,
+                            const StyleManager *manager) const;
 
     void clearAttribute(Key key);
     bool hasAttribute(Key key) const;
-    void loadAttributes(const QList<SharedSubStyle>& subStyles);
-
+    void loadAttributes(const QList<SharedSubStyle> &subStyles);
 
     uint bottomPenValue() const;
     uint rightPenValue() const;
@@ -246,45 +243,45 @@ protected:
      * Helper function for saveOdf
      * Does the real work by determining the used attributes.
      */
-    void saveOdfStyle(const QSet<Key>& subStyles, KoGenStyle &style,
-                      KoGenStyles &mainStyles, const StyleManager* manager) const;
+    void saveOdfStyle(const QSet<Key> &subStyles, KoGenStyle &style,
+                      KoGenStyles &mainStyles, const StyleManager *manager) const;
 
-    void loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element,
-                          Conditions& conditions, const StyleManager* styleManager,
+    void loadOdfDataStyle(KoOdfStylesReader &stylesReader, const KoXmlElement &element,
+                          Conditions &conditions, const StyleManager *styleManager,
                           const ValueParser *parser);
-    void loadOdfParagraphProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& element);
-    void loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& element);
-    void loadOdfTextProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& element);
+    void loadOdfParagraphProperties(KoOdfStylesReader &stylesReader, const KoStyleStack &element);
+    void loadOdfTableCellProperties(KoOdfStylesReader &stylesReader, const KoStyleStack &element);
+    void loadOdfTextProperties(KoOdfStylesReader &stylesReader, const KoStyleStack &element);
 
 public:
     void setHAlign(HAlign align);
     void setVAlign(VAlign align);
-    void setFont(QFont const & font);
-    void setFontFamily(QString const & fam);
+    void setFont(QFont const &font);
+    void setFontFamily(QString const &fam);
     void setFontBold(bool enable);
     void setFontItalic(bool enable);
     void setFontUnderline(bool enable);
     void setFontStrikeOut(bool enable);
     void setFontSize(int size);
-    void setFontColor(QColor const & color);
-    void setRightBorderPen(QPen const & pen);
-    void setBottomBorderPen(QPen const & pen);
-    void setLeftBorderPen(QPen const & pen);
-    void setTopBorderPen(QPen const & pen);
-    void setFallDiagonalPen(QPen const & pen);
-    void setGoUpDiagonalPen(QPen const & pen);
+    void setFontColor(QColor const &color);
+    void setRightBorderPen(QPen const &pen);
+    void setBottomBorderPen(QPen const &pen);
+    void setLeftBorderPen(QPen const &pen);
+    void setTopBorderPen(QPen const &pen);
+    void setFallDiagonalPen(QPen const &pen);
+    void setGoUpDiagonalPen(QPen const &pen);
     void setAngle(int angle);
     void setIndentation(double indent);
-    void setBackgroundBrush(QBrush const & brush);
+    void setBackgroundBrush(QBrush const &brush);
     void setFloatFormat(FloatFormat format);
     void setFloatColor(FloatColor color);
     void setFormatType(Format::Type format);
-    void setCustomFormat(QString const & strFormat);
+    void setCustomFormat(QString const &strFormat);
     void setPrecision(int precision);
     void setThousandsSep(bool thousandsSep);
-    void setPrefix(QString const & prefix);
-    void setPostfix(QString const & postfix);
-    void setCurrency(Currency const & currency);
+    void setPrefix(QString const &prefix);
+    void setPostfix(QString const &postfix);
+    void setCurrency(Currency const &currency);
     void setWrapText(bool enable);
     void setHideAll(bool enable);
     void setHideFormula(bool enable);
@@ -292,44 +289,43 @@ public:
     void setDontPrintText(bool enable);
     void setVerticalText(bool enable);
     void setShrinkToFit(bool enable);
-    void setBackgroundColor(QColor const & color);
+    void setBackgroundColor(QColor const &color);
     void setDefault();
     void clear();
 
-
     // static functions
     //
-    static Format::Type dateType(const QString&);
-    static Format::Type timeType(const QString&);
-    static Format::Type fractionType(const QString&);
-    static Format::Type numberType(const QString&);
-    static Currency numberCurrency(const QString&);
+    static Format::Type dateType(const QString &);
+    static Format::Type timeType(const QString &);
+    static Format::Type fractionType(const QString &);
+    static Format::Type numberType(const QString &);
+    static Currency numberCurrency(const QString &);
 
     /**
      * @return the name of the data style (number, currency, percentage, date,
      * boolean, text)
      */
     static QString saveOdfStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles, Format::Type _style,
-                                       const QString &_prefix, const QString &_postfix, int _precision, const QString& symbol,
+                                       const QString &_prefix, const QString &_postfix, int _precision, const QString &symbol,
                                        bool thousandsSep);
     static QString saveOdfStyleNumericDate(KoGenStyles &mainStyles, Format::Type _style,
                                            const QString &_prefix, const QString &_suffix);
     static QString saveOdfStyleNumericFraction(KoGenStyles &mainStyles, Format::Type _style,
             const QString &_prefix, const QString &_suffix);
-    static QString saveOdfStyleNumericTime(KoGenStyles& mainStyles, Format::Type _style,
+    static QString saveOdfStyleNumericTime(KoGenStyles &mainStyles, Format::Type _style,
                                            const QString &_prefix, const QString &_suffix);
-    static QString saveOdfStyleNumericCustom(KoGenStyles&mainStyles, Format::Type _style,
+    static QString saveOdfStyleNumericCustom(KoGenStyles &mainStyles, Format::Type _style,
             const QString &_prefix, const QString &_suffix);
-    static QString saveOdfStyleNumericScientific(KoGenStyles&mainStyles, Format::Type _style,
+    static QString saveOdfStyleNumericScientific(KoGenStyles &mainStyles, Format::Type _style,
             const QString &_prefix, const QString &_suffix, int _precision, bool thousandsSep);
-    static QString saveOdfStyleNumericPercentage(KoGenStyles&mainStyles, Format::Type _style, int _precision,
+    static QString saveOdfStyleNumericPercentage(KoGenStyles &mainStyles, Format::Type _style, int _precision,
             const QString &_prefix, const QString &_suffix);
-    static QString saveOdfStyleNumericMoney(KoGenStyles&mainStyles, Format::Type _style,
-                                            const QString& symbol, int _precision,
+    static QString saveOdfStyleNumericMoney(KoGenStyles &mainStyles, Format::Type _style,
+                                            const QString &symbol, int _precision,
                                             const QString &_prefix, const QString &_suffix);
-    static QString saveOdfStyleNumericText(KoGenStyles&mainStyles, Format::Type _style, int _precision,
+    static QString saveOdfStyleNumericText(KoGenStyles &mainStyles, Format::Type _style, int _precision,
                                            const QString &_prefix, const QString &_suffix);
-    static QString saveOdfStyleNumericNumber(KoGenStyles&mainStyles, Format::Type _style, int _precision,
+    static QString saveOdfStyleNumericNumber(KoGenStyles &mainStyles, Format::Type _style, int _precision,
             const QString &_prefix, const QString &_suffix, bool thousandsSep);
     static QString saveOdfBackgroundStyle(KoGenStyles &mainStyles, const QBrush &brush);
 
@@ -337,27 +333,27 @@ public:
      * Returns the name of a color.  This is the same as returned by QColor::name, but an internal cache
      * is used to reduce the overhead when asking for the name of the same color.
      */
-    static QString colorName(const QColor& color);
+    static QString colorName(const QColor &color);
 
-    static bool compare(const SubStyle* one, const SubStyle* two);
-
+    static bool compare(const SubStyle *one, const SubStyle *two);
 
     /** Returns true if both styles have the same properties */
-    bool operator== (const Style& style) const;
-    inline bool operator!=(const Style& other) const {
+    bool operator== (const Style &style) const;
+    inline bool operator!=(const Style &other) const
+    {
         return !operator==(other);
     }
-    friend CALLIGRA_SHEETS_ODF_EXPORT uint qHash(const Style& style);
-    void operator=(const Style& style);
-    Style operator-(const Style& style) const;
-    void merge(const Style& style);
+    friend CALLIGRA_SHEETS_ODF_EXPORT uint qHash(const Style &style);
+    void operator=(const Style &style);
+    Style operator-(const Style &style) const;
+    void merge(const Style &style);
 
     /**
      * The keys, that are contained in this style, but not in \p other and
      * the keys, that are contained in both but differ in value.
      * \return a set of keys, in which this style and \p other differ.
      */
-    QSet<Key> difference(const Style& other) const;
+    QSet<Key> difference(const Style &other) const;
 
     void dump() const;
 
@@ -368,9 +364,9 @@ public:
 protected:
     QList<SharedSubStyle> subStyles() const;
 
-    SharedSubStyle createSubStyle(Key key, const QVariant& value);
-    virtual void insertSubStyle(Key key, const QVariant& value);
-    void insertSubStyle(const SharedSubStyle& subStyle);
+    SharedSubStyle createSubStyle(Key key, const QVariant &value);
+    virtual void insertSubStyle(Key key, const QVariant &value);
+    void insertSubStyle(const SharedSubStyle &subStyle);
     bool releaseSubStyle(Key key);
 
 private:
@@ -381,8 +377,6 @@ private:
     class Private;
     QSharedDataPointer<Private> d;
 };
-
-
 
 /**
  * \ingroup Style
@@ -397,19 +391,19 @@ public:
      * \param name The name of this style.
      * \param parent The style whose attributes are inherited - the parent style.
      */
-    explicit CustomStyle(const QString& name, CustomStyle* parent = 0);
-	CustomStyle(const CustomStyle& style);
+    explicit CustomStyle(const QString &name, CustomStyle *parent = 0);
+    CustomStyle(const CustomStyle &style);
     virtual ~CustomStyle();
-    CustomStyle& operator=(const CustomStyle& other);
+    CustomStyle &operator=(const CustomStyle &other);
 
     virtual StyleType type() const;
     void setType(StyleType type);
 
-    void setName(QString const & name);
-    QString const & name() const;
+    void setName(QString const &name);
+    QString const &name() const;
 
-    bool loadXML(KoXmlElement const & style, QString const & name);
-    void save(QDomDocument & doc, QDomElement & styles, const StyleManager* styleManager);
+    bool loadXML(KoXmlElement const &style, QString const &name);
+    void save(QDomDocument &doc, QDomElement &styles, const StyleManager *styleManager);
 
     /**
      * Loads the style properties from @p style .
@@ -418,18 +412,17 @@ public:
      * @param style the DOM element defining the style
      * @param name the style's new name
      */
-    void loadOdf(KoOdfStylesReader& stylesReader, const KoXmlElement& style,
-                 const QString& name, Conditions& conditions,
-                 const StyleManager* styleManager, const ValueParser *parser);
+    void loadOdf(KoOdfStylesReader &stylesReader, const KoXmlElement &style,
+                 const QString &name, Conditions &conditions,
+                 const StyleManager *styleManager, const ValueParser *parser);
 
     /**
      * @reimp
      * Stores an OASIS user style.
      * @return the OASIS style's name
      */
-    virtual QString saveOdf(KoGenStyle& style, KoGenStyles &mainStyles,
-                            const StyleManager* manager) const;
-
+    virtual QString saveOdf(KoGenStyle &style, KoGenStyles &mainStyles,
+                            const StyleManager *manager) const;
 
     //bool operator==(const CustomStyle& other) const;
     //inline bool operator!=(const CustomStyle& other) const {
@@ -454,7 +447,6 @@ private:
     QSharedDataPointer<Private> d;
 };
 
-
 /**
  * \ingroup Style
  * A single style attribute.
@@ -464,16 +456,24 @@ class CALLIGRA_SHEETS_ODF_TEST_EXPORT SubStyle : public QSharedData
 public:
     SubStyle() {}
     virtual ~SubStyle() {}
-    virtual Style::Key type() const {
+    virtual Style::Key type() const
+    {
         return Style::DefaultStyleKey;
     }
-    virtual void dump() const {
+    virtual void dump() const
+    {
         kDebug() << debugData();
     }
-    virtual QString debugData(bool withName = true) const {
-        QString out; if (withName) out = name(Style::DefaultStyleKey); return out;
+    virtual QString debugData(bool withName = true) const
+    {
+        QString out; if (withName) {
+            out = name(Style::DefaultStyleKey);
+        } return out;
     }
-    virtual uint koHash() const { return uint(type()); }
+    virtual uint koHash() const
+    {
+        return uint(type());
+    }
     static QString name(Style::Key key);
 };
 
@@ -485,21 +485,26 @@ public:
 class SharedSubStyle
 {
 public:
-    inline SharedSubStyle() : d(s_defaultStyle.d){}
-    inline SharedSubStyle(SubStyle* subStyle) : d(subStyle) {}
-    inline const SubStyle *operator->() const {
+    inline SharedSubStyle() : d(s_defaultStyle.d) {}
+    inline SharedSubStyle(SubStyle *subStyle) : d(subStyle) {}
+    inline const SubStyle *operator->() const
+    {
         return d.data();
     }
-    inline const SubStyle *data() const {
+    inline const SubStyle *data() const
+    {
         return d.data();
     }
-    inline bool operator<(const SharedSubStyle& o) const {
+    inline bool operator<(const SharedSubStyle &o) const
+    {
         return d.data() < o.d.data();
     }
-    inline bool operator==(const SharedSubStyle& o) const {
+    inline bool operator==(const SharedSubStyle &o) const
+    {
         return d.data() == o.d.data();
     }
-    inline bool operator!() const {
+    inline bool operator!() const
+    {
         return !d;
     }
 
@@ -511,45 +516,66 @@ private:
 class NamedStyle : public SubStyle
 {
 public:
-    NamedStyle(const QString& n) : SubStyle(), name(n) {}
-    virtual Style::Key type() const {
+    NamedStyle(const QString &n) : SubStyle(), name(n) {}
+    virtual Style::Key type() const
+    {
         return Style::NamedStyleKey;
     }
-    virtual void dump() const {
+    virtual void dump() const
+    {
         kDebug() << debugData();
     }
-    virtual QString debugData(bool withName = true) const {
-        QString out; if (withName) out = SubStyle::name(Style::NamedStyleKey) + ' '; out += name; return out;
+    virtual QString debugData(bool withName = true) const
+    {
+        QString out; if (withName) {
+            out = SubStyle::name(Style::NamedStyleKey) + ' ';
+        } out += name; return out;
     }
-    virtual uint koHash() const { return uint(type()) ^ qHash(name); }
+    virtual uint koHash() const
+    {
+        return uint(type()) ^ qHash(name);
+    }
     QString name;
 };
 
+static inline uint qHash(const QColor &color)
+{
+    return uint(color.rgb());
+}
 
-static inline uint qHash(const QColor& color)
-{ return uint(color.rgb()); }
+static inline uint qHash(const QPen &pen)
+{
+    return qHash(pen.color()) ^ 37 * uint(pen.style());
+}
 
-static inline uint qHash(const QPen& pen)
-{ return qHash(pen.color()) ^ 37 * uint(pen.style()); }
-
-static inline uint qHash(const QBrush& brush)
-{ return qHash(brush.color()) ^ 91 * uint(brush.style()); }
+static inline uint qHash(const QBrush &brush)
+{
+    return qHash(brush.color()) ^ 91 * uint(brush.style());
+}
 
 template<Style::Key key, class Value1>
 class SubStyleOne : public SubStyle
 {
 public:
-    SubStyleOne(const Value1& v = Value1()) : SubStyle(), value1(v) {}
-    virtual Style::Key type() const {
+    SubStyleOne(const Value1 &v = Value1()) : SubStyle(), value1(v) {}
+    virtual Style::Key type() const
+    {
         return key;
     }
-    virtual void dump() const {
+    virtual void dump() const
+    {
         kDebug(36006) << debugData();
     }
-    virtual QString debugData(bool withName = true) const {
-        QString out; if (withName) out = name(key) + ' '; QDebug qdbg(&out); qdbg << value1; return out;
+    virtual QString debugData(bool withName = true) const
+    {
+        QString out; if (withName) {
+            out = name(key) + ' ';
+        } QDebug qdbg(&out); qdbg << value1; return out;
     }
-    virtual uint koHash() const { return uint(type()) ^ qHash(value1); }
+    virtual uint koHash() const
+    {
+        return uint(type()) ^ qHash(value1);
+    }
     Value1 value1;
 };
 

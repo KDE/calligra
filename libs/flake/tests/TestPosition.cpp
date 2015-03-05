@@ -23,12 +23,12 @@
 #include <QPointF>
 
 TestPosition::TestPosition()
-        : shape1(0),
-        shape2(0),
-        childShape1(0),
-        childShape2(0),
-        container(0),
-        container2(0)
+    : shape1(0),
+      shape2(0),
+      childShape1(0),
+      childShape2(0),
+      container(0),
+      container2(0)
 {
 }
 

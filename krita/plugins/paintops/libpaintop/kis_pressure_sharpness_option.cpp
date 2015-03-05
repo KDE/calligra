@@ -34,21 +34,22 @@ KisPressureSharpnessOption::KisPressureSharpnessOption()
     m_threshold = 40;
 }
 
-void KisPressureSharpnessOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPressureSharpnessOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(SHARPNESS_THRESHOLD, m_threshold);
 }
 
-void KisPressureSharpnessOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureSharpnessOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOption::readOptionSetting(setting);
     m_threshold = setting->getInt(SHARPNESS_THRESHOLD, 4);
 
     // backward compatibility: test for a "sharpness factor" property
     //                         and use this value if it does exist
-    if (setting->hasProperty(SHARPNESS_FACTOR) && !setting->hasProperty("SharpnessValue"))
+    if (setting->hasProperty(SHARPNESS_FACTOR) && !setting->hasProperty("SharpnessValue")) {
         KisCurveOption::setValue(setting->getDouble(SHARPNESS_FACTOR));
+    }
 }
 
 void KisPressureSharpnessOption::apply(const KisPaintInformation &info, const QPointF &pt, qint32 &x, qint32 &y, qreal &xFraction, qreal &yFraction) const
@@ -57,8 +58,7 @@ void KisPressureSharpnessOption::apply(const KisPaintInformation &info, const QP
         // brush
         KisPaintOp::splitCoordinate(pt.x(), &x, &xFraction);
         KisPaintOp::splitCoordinate(pt.y(), &y, &yFraction);
-    }
-    else {
+    } else {
         qreal processedSharpnes = computeValue(info); //qBound<qreal>(0.0, (computeValue(info) * 2), 1.0);
 
         if (processedSharpnes == 1.0) {
@@ -67,8 +67,7 @@ void KisPressureSharpnessOption::apply(const KisPaintInformation &info, const QP
             yFraction = 0.0;
             x = qRound(pt.x());
             y = qRound(pt.y());
-        }
-        else {
+        } else {
             // something in between
             qint32 xi = qRound(pt.x());
             qint32 yi = qRound(pt.y());
@@ -84,12 +83,14 @@ void KisPressureSharpnessOption::apply(const KisPaintInformation &info, const QP
 
 void KisPressureSharpnessOption::applyThreshold(KisFixedPaintDeviceSP dab)
 {
-    if (!isChecked()) return;
-    const KoColorSpace * cs = dab->colorSpace();
+    if (!isChecked()) {
+        return;
+    }
+    const KoColorSpace *cs = dab->colorSpace();
 
     // Set all alpha > opaque/2 to opaque, the rest to transparent.
     // XXX: Using 4/10 as the 1x1 circle brush paints nothing with 0.5.
-    quint8* dabPointer = dab->data();
+    quint8 *dabPointer = dab->data();
     QRect rc = dab->bounds();
 
     int pixelSize = dab->pixelSize();
@@ -100,8 +101,7 @@ void KisPressureSharpnessOption::applyThreshold(KisFixedPaintDeviceSP dab)
 
         if (alpha < (m_threshold * OPACITY_OPAQUE_U8) / 100) {
             cs->setOpacity(dabPointer, OPACITY_TRANSPARENT_U8, 1);
-        }
-        else {
+        } else {
             cs->setOpacity(dabPointer, OPACITY_OPAQUE_U8, 1);
         }
 

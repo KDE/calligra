@@ -43,7 +43,7 @@ public:
     QTransform matrix;
 };
 
-KoGradientBackground::KoGradientBackground(QGradient * gradient, const QTransform &matrix)
+KoGradientBackground::KoGradientBackground(QGradient *gradient, const QTransform &matrix)
     : KoShapeBackground(*(new KoGradientBackgroundPrivate()))
 {
     Q_D(KoGradientBackground);
@@ -53,7 +53,7 @@ KoGradientBackground::KoGradientBackground(QGradient * gradient, const QTransfor
     Q_ASSERT(d->gradient->coordinateMode() == QGradient::ObjectBoundingMode);
 }
 
-KoGradientBackground::KoGradientBackground(const QGradient & gradient, const QTransform &matrix)
+KoGradientBackground::KoGradientBackground(const QGradient &gradient, const QTransform &matrix)
     : KoShapeBackground(*(new KoGradientBackgroundPrivate()))
 {
     Q_D(KoGradientBackground);
@@ -89,7 +89,7 @@ void KoGradientBackground::setGradient(const QGradient &gradient)
     Q_ASSERT(d->gradient->coordinateMode() == QGradient::ObjectBoundingMode);
 }
 
-const QGradient * KoGradientBackground::gradient() const
+const QGradient *KoGradientBackground::gradient() const
 {
     Q_D(const KoGradientBackground);
     return d->gradient;
@@ -98,7 +98,9 @@ const QGradient * KoGradientBackground::gradient() const
 void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
     Q_D(const KoGradientBackground);
-    if (!d->gradient) return;
+    if (!d->gradient) {
+        return;
+    }
     QBrush brush(*d->gradient);
     brush.setTransform(d->matrix);
 
@@ -109,7 +111,9 @@ void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*con
 void KoGradientBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
     Q_D(KoGradientBackground);
-    if (!d->gradient) return;
+    if (!d->gradient) {
+        return;
+    }
     QBrush brush(*d->gradient);
     brush.setTransform(d->matrix);
     KoOdfGraphicStyles::saveOdfFillStyle(style, context.mainStyles(), brush);
@@ -119,13 +123,14 @@ bool KoGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF 
 {
     Q_D(KoGradientBackground);
     KoStyleStack &styleStack = context.styleStack();
-    if (! styleStack.hasProperty(KoXmlNS::draw, "fill"))
+    if (! styleStack.hasProperty(KoXmlNS::draw, "fill")) {
         return false;
+    }
 
     QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
     if (fillStyle == "gradient") {
         QBrush brush = KoOdfGraphicStyles::loadOdfGradientStyle(styleStack, context.stylesReader(), shapeSize);
-        const QGradient * gradient = brush.gradient();
+        const QGradient *gradient = brush.gradient();
         if (gradient) {
             d->gradient = KoFlake::cloneGradient(gradient);
             d->matrix = brush.transform();
@@ -137,7 +142,7 @@ bool KoGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF 
                 if (! opacityPercent.isEmpty() && opacityPercent.right(1) == "%") {
                     float opacity = qMin(opacityPercent.left(opacityPercent.length() - 1).toDouble(), 100.0) / 100;
                     QGradientStops stops;
-                    foreach(QGradientStop stop, d->gradient->stops()) {
+                    foreach (QGradientStop stop, d->gradient->stops()) {
                         stop.second.setAlphaF(opacity);
                         stops << stop;
                     }

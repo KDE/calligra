@@ -20,9 +20,8 @@
 
 #include <QTransform>
 
-
 KisImageViewConverter::KisImageViewConverter(const KisImageWSP image)
-        : m_image(image)
+    : m_image(image)
 {
     Q_ASSERT(image);
     setZoom(0.1); // set the superclass to not hit the optimization of zoom=100%
@@ -49,22 +48,26 @@ void KisImageViewConverter::zoom(qreal *zoomX, qreal *zoomY) const
 }
 
 /// convert from flake to krita units
-qreal KisImageViewConverter::documentToViewX(qreal documentX) const {
+qreal KisImageViewConverter::documentToViewX(qreal documentX) const
+{
     return documentX * m_image->xRes();
 }
 
 /// convert from flake to krita units
-qreal KisImageViewConverter::documentToViewY(qreal documentY) const {
+qreal KisImageViewConverter::documentToViewY(qreal documentY) const
+{
     return documentY * m_image->yRes();
 }
 
 /// convert from krita to flake units
-qreal KisImageViewConverter::viewToDocumentX(qreal viewX) const {
+qreal KisImageViewConverter::viewToDocumentX(qreal viewX) const
+{
     return viewX / m_image->xRes();
 }
 
 /// convert from krita to flake units
-qreal KisImageViewConverter::viewToDocumentY(qreal viewY) const {
+qreal KisImageViewConverter::viewToDocumentY(qreal viewY) const
+{
     return viewY / m_image->yRes();
 }
 

@@ -45,7 +45,6 @@
 #include "kis_spacing_selection_widget.h"
 #include "kis_signals_blocker.h"
 
-
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
 #include "kis_debug.h"
@@ -54,28 +53,30 @@
 class KisBrushDelegate : public QAbstractItemDelegate
 {
 public:
-    KisBrushDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
+    KisBrushDelegate(QObject *parent = 0) : QAbstractItemDelegate(parent) {}
     virtual ~KisBrushDelegate() {}
     /// reimplemented
     virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &) const
+    {
         return option.decorationSize;
     }
 };
 
-void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void KisBrushDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (! index.isValid())
+    if (! index.isValid()) {
         return;
+    }
 
-    KisBrush *brush = static_cast<KisBrush*>(index.internalPointer());
+    KisBrush *brush = static_cast<KisBrush *>(index.internalPointer());
 
     QRect itemRect = option.rect;
     QImage thumbnail = brush->image();
 
     if (thumbnail.height() > itemRect.height() || thumbnail.width() > itemRect.width()) {
-        thumbnail = thumbnail.scaled(itemRect.size() , Qt::KeepAspectRatio);
+        thumbnail = thumbnail.scaled(itemRect.size(), Qt::KeepAspectRatio);
     }
 
     painter->save();
@@ -94,7 +95,6 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     painter->restore();
 }
 
-
 KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     : QWidget(parent)
 {
@@ -107,10 +107,8 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_slSize->setExponentRatio(3.0);
     m_slSize->setSuffix(" px");
 
-
     m_slSize->setExponentRatio(3.0);
     QObject::connect(m_slSize, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
-
 
     m_lbRotation = new QLabel(i18n("Rotation:"), this);
     m_slRotation = new KisDoubleSliderSpinBox(this);
@@ -129,7 +127,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     m_lbName = new QLabel(this);
 
-    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
+    KisBrushResourceServer *rServer = KisBrushServer::instance()->brushServer();
     QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     QString knsrcFile = "kritabrushes.knsrc";
@@ -141,7 +139,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
     m_itemChooser->setCurrentItem(0, 0);
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)), this, SLOT(update(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)), this, SLOT(update(KoResource*)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
@@ -245,9 +243,9 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
     }
 }
 
-void KisBrushChooser::update(KoResource * resource)
+void KisBrushChooser::update(KoResource *resource)
 {
-    KisBrush* brush = dynamic_cast<KisBrush*>(resource);
+    KisBrush *brush = dynamic_cast<KisBrush *>(resource);
 
     if (brush) {
         QString text = QString("%1 (%2 x %3)")
@@ -265,7 +263,7 @@ void KisBrushChooser::update(KoResource * resource)
         m_slSize->setValue(brush->width() * brush->scale());
 
         // useColorAsMask support is only in gimp brush so far
-        KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(resource);
+        KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush *>(resource);
         if (gimpBrush) {
             m_chkColorMask->setChecked(gimpBrush->useColorAsMask());
         }
@@ -276,12 +274,12 @@ void KisBrushChooser::update(KoResource * resource)
     }
 }
 
-void KisBrushChooser::slotActivatedBrush(KoResource * resource)
+void KisBrushChooser::slotActivatedBrush(KoResource *resource)
 {
     if (m_brush) {
         m_brush->clearBrushPyramid();
     }
-    KisBrush* brush = dynamic_cast<KisBrush*>(resource);
+    KisBrush *brush = dynamic_cast<KisBrush *>(resource);
     if (brush) {
         m_brush = brush;
         m_brush->prepareBrushPyramid();
@@ -298,6 +296,5 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
 
     m_slSize->setValue(newWidth);
 }
-
 
 #include "kis_brush_chooser.moc"

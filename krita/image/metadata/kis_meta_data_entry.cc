@@ -28,27 +28,26 @@ using namespace KisMetaData;
 
 struct Entry::Private {
     QString name;
-    const Schema* schema;
+    const Schema *schema;
     Value value;
     bool valid;
 };
 
 Entry::Entry() :
-        d(new Private)
+    d(new Private)
 {
     d->schema = 0;
     d->valid = false;
 }
 
-Entry::Entry(const Schema* schema, QString name, const Value& value) :
-        d(new Private)
+Entry::Entry(const Schema *schema, QString name, const Value &value) :
+    d(new Private)
 {
     Q_ASSERT(!name.isEmpty());
     if (!isValidName(name)) {
         errKrita << "Invalid metadata name:" << name;
         d->name = QString("INVALID: %s").arg(name);
-    }
-    else {
+    } else {
         d->name = name;
     }
     d->schema = schema;
@@ -56,7 +55,7 @@ Entry::Entry(const Schema* schema, QString name, const Value& value) :
     d->valid = true;
 }
 
-Entry::Entry(const Entry& e) : d(new Private())
+Entry::Entry(const Entry &e) : d(new Private())
 {
     d->valid = false;
     *this = e;
@@ -72,13 +71,13 @@ QString Entry::name() const
     return d->name;
 }
 
-const Schema* Entry::schema() const
+const Schema *Entry::schema() const
 {
     Q_ASSERT(d->schema);
     return d->schema;
 }
 
-void Entry::setSchema(const KisMetaData::Schema* schema)
+void Entry::setSchema(const KisMetaData::Schema *schema)
 {
     d->schema = schema;
 }
@@ -88,12 +87,12 @@ QString Entry::qualifiedName() const
     return d->schema->generateQualifiedName(d->name);
 }
 
-const Value& Entry::value() const
+const Value &Entry::value() const
 {
     return d->value;
 }
 
-Value& Entry::value()
+Value &Entry::value()
 {
     return d->value;
 }
@@ -103,7 +102,7 @@ bool Entry::isValid() const
     return d->valid;
 }
 
-bool Entry::isValidName(const QString& _name)
+bool Entry::isValidName(const QString &_name)
 {
     if (_name.length() < 1) {
         dbgImage << "Too small";
@@ -123,13 +122,12 @@ bool Entry::isValidName(const QString& _name)
     return true;
 }
 
-
-bool Entry::operator==(const Entry& e) const
+bool Entry::operator==(const Entry &e) const
 {
     return qualifiedName() == e.qualifiedName();
 }
 
-Entry& Entry::operator=(const Entry & e)
+Entry &Entry::operator=(const Entry &e)
 {
     if (e.isValid()) {
         Q_ASSERT(!isValid() || *this == e);

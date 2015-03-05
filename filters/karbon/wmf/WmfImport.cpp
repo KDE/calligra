@@ -33,9 +33,8 @@ DESCRIPTION
 K_PLUGIN_FACTORY(WMFImportFactory, registerPlugin<WMFImport>();)
 K_EXPORT_PLUGIN(WMFImportFactory("calligrafilters"))
 
-
-WMFImport::WMFImport(QObject *parent, const QVariantList&) :
-        KoFilter(parent)
+WMFImport::WMFImport(QObject *parent, const QVariantList &) :
+    KoFilter(parent)
 {
 }
 
@@ -43,10 +42,11 @@ WMFImport::~WMFImport()
 {
 }
 
-KoFilter::ConversionStatus WMFImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus WMFImport::convert(const QByteArray &from, const QByteArray &to)
 {
-    if (to != "image/svg+xml" || from != "image/x-wmf")
+    if (to != "image/svg+xml" || from != "image/x-wmf") {
         return KoFilter::NotImplemented;
+    }
 
     QFile svgFile(m_chain->outputFile());
     if (!svgFile.open(QIODevice::WriteOnly)) {

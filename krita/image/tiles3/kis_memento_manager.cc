@@ -20,7 +20,6 @@
 #include "kis_memento_manager.h"
 #include "kis_memento.h"
 
-
 //#define DEBUG_MM
 
 #ifdef DEBUG_MM
@@ -44,7 +43,6 @@
 #define DEBUG_LOG_SIMPLE_ACTION(action)
 #define DEBUG_DUMP_MESSAGE(action)
 #endif
-
 
 /**
  * The class is supposed to store the changes of the paint device
@@ -84,13 +82,13 @@ KisMementoManager::KisMementoManager()
      */
 }
 
-KisMementoManager::KisMementoManager(const KisMementoManager& rhs)
+KisMementoManager::KisMementoManager(const KisMementoManager &rhs)
     : m_index(rhs.m_index, 0),
-        m_revisions(rhs.m_revisions),
-        m_cancelledRevisions(rhs.m_cancelledRevisions),
-        m_headsHashTable(rhs.m_headsHashTable, 0),
-        m_currentMemento(rhs.m_currentMemento),
-        m_registrationBlocked(rhs.m_registrationBlocked)
+      m_revisions(rhs.m_revisions),
+      m_cancelledRevisions(rhs.m_cancelledRevisions),
+      m_headsHashTable(rhs.m_headsHashTable, 0),
+      m_currentMemento(rhs.m_currentMemento),
+      m_registrationBlocked(rhs.m_registrationBlocked)
 {
     Q_ASSERT_X(!m_registrationBlocked,
                "KisMementoManager", "(impossible happened) "
@@ -124,21 +122,23 @@ KisMementoManager::~KisMementoManager()
 
 void KisMementoManager::registerTileChange(KisTile *tile)
 {
-    if (registrationBlocked()) return;
+    if (registrationBlocked()) {
+        return;
+    }
 
     DEBUG_LOG_TILE_ACTION("reg. [C]", tile, tile->col(), tile->row());
 
     KisMementoItemSP mi = m_index.getExistedTile(tile->col(), tile->row());
 
-    if(!mi) {
+    if (!mi) {
         mi = new KisMementoItem();
         mi->changeTile(tile);
         m_index.addTile(mi);
 
-        if(namedTransactionInProgress())
+        if (namedTransactionInProgress()) {
             m_currentMemento->updateExtent(mi->col(), mi->row());
-    }
-    else {
+        }
+    } else {
         mi->reset();
         mi->changeTile(tile);
     }
@@ -146,21 +146,23 @@ void KisMementoManager::registerTileChange(KisTile *tile)
 
 void KisMementoManager::registerTileDeleted(KisTile *tile)
 {
-    if (registrationBlocked()) return;
+    if (registrationBlocked()) {
+        return;
+    }
 
     DEBUG_LOG_TILE_ACTION("reg. [D]", tile, tile->col(), tile->row());
 
     KisMementoItemSP mi = m_index.getExistedTile(tile->col(), tile->row());
 
-    if(!mi) {
+    if (!mi) {
         mi = new KisMementoItem();
         mi->deleteTile(tile, m_headsHashTable.defaultTileData());
         m_index.addTile(mi);
 
-        if(namedTransactionInProgress())
+        if (namedTransactionInProgress()) {
             m_currentMemento->updateExtent(mi->col(), mi->row());
-    }
-    else {
+        }
+    } else {
         mi->reset();
         mi->deleteTile(tile, m_headsHashTable.defaultTileData());
     }
@@ -169,14 +171,13 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 void KisMementoManager::commit()
 {
     if (m_index.isEmpty()) {
-        if(namedTransactionInProgress()) {
+        if (namedTransactionInProgress()) {
             //warnTiles << "Named Transaction is empty";
             /**
              * We still need to continue commit, because
              * a named transaction may be reverted by the user
              */
-        }
-        else {
+        } else {
             m_currentMemento = 0;
             return;
         }
@@ -222,8 +223,9 @@ KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row)
      * tile, if the history is disabled. So we return zero if
      * no named transaction is in progress.
      */
-    if(!namedTransactionInProgress())
+    if (!namedTransactionInProgress()) {
         return 0;
+    }
 
     KisMementoItemSP mi = m_headsHashTable.getReadOnlyTileLazy(col, row);
     Q_ASSERT(mi);
@@ -248,19 +250,21 @@ KisMementoSP KisMementoManager::getMemento()
     return m_currentMemento;
 }
 
-KisMementoSP KisMementoManager::currentMemento() {
+KisMementoSP KisMementoManager::currentMemento()
+{
     return m_currentMemento;
 }
 
 #define forEachReversed(iter, list) \
-        for(iter=list.end(); iter-- != list.begin();)
-
+    for(iter=list.end(); iter-- != list.begin();)
 
 void KisMementoManager::rollback(KisTileHashTable *ht)
 {
     commit();
 
-    if (! m_revisions.size()) return;
+    if (! m_revisions.size()) {
+        return;
+    }
 
     KisHistoryItem changeList = m_revisions.takeLast();
 
@@ -270,13 +274,15 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
 
     blockRegistration();
     forEachReversed(iter, changeList.itemList) {
-        mi=*iter;
+        mi = *iter;
         parentMI = mi->parent();
 
-        if (mi->type() == KisMementoItem::CHANGED)
+        if (mi->type() == KisMementoItem::CHANGED) {
             ht->deleteTile(mi->col(), mi->row());
-        if (parentMI->type() == KisMementoItem::CHANGED)
+        }
+        if (parentMI->type() == KisMementoItem::CHANGED) {
             ht->addTile(parentMI->tile(this));
+        }
 
         m_headsHashTable.deleteTile(parentMI->col(), parentMI->row());
         m_headsHashTable.addTile(parentMI);
@@ -310,18 +316,22 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
 {
     Q_ASSERT(m_index.isEmpty());
 
-    if (!m_cancelledRevisions.size()) return;
+    if (!m_cancelledRevisions.size()) {
+        return;
+    }
 
     KisHistoryItem changeList = m_cancelledRevisions.takeFirst();
 
     KisMementoItemSP mi;
 
     blockRegistration();
-    foreach(mi, changeList.itemList) {
-        if (mi->parent()->type() == KisMementoItem::CHANGED)
+    foreach (mi, changeList.itemList) {
+        if (mi->parent()->type() == KisMementoItem::CHANGED) {
             ht->deleteTile(mi->col(), mi->row());
-        if (mi->type() == KisMementoItem::CHANGED)
+        }
+        if (mi->type() == KisMementoItem::CHANGED) {
             ht->addTile(mi->tile(this));
+        }
 
         m_index.addTile(mi);
     }
@@ -340,9 +350,11 @@ void KisMementoManager::purgeHistory(KisMementoSP oldestMemento)
     }
 
     qint32 revisionIndex = findRevisionByMemento(oldestMemento);
-    if (revisionIndex < 0) return;
+    if (revisionIndex < 0) {
+        return;
+    }
 
-    for(; revisionIndex > 0; revisionIndex--) {
+    for (; revisionIndex > 0; revisionIndex--) {
         resetRevisionHistory(m_revisions.first().itemList);
         m_revisions.removeFirst();
     }
@@ -356,7 +368,7 @@ void KisMementoManager::purgeHistory(KisMementoSP oldestMemento)
 qint32 KisMementoManager::findRevisionByMemento(KisMementoSP memento) const
 {
     qint32 index = -1;
-    for(qint32 i = 0; i < m_revisions.size(); i++) {
+    for (qint32 i = 0; i < m_revisions.size(); i++) {
         if (m_revisions[i].memento == memento) {
             index = i;
             break;
@@ -370,9 +382,11 @@ void KisMementoManager::resetRevisionHistory(KisMementoItemList list)
     KisMementoItemSP parentMI;
     KisMementoItemSP mi;
 
-    foreach(mi, list) {
+    foreach (mi, list) {
         parentMI = mi->parent();
-        if(!parentMI) continue;
+        if (!parentMI) {
+            continue;
+        }
 
         while (parentMI->parent()) {
             parentMI = parentMI->parent();
@@ -401,18 +415,18 @@ void KisMementoManager::debugPrintInfo()
 
     printf("Revisions list:\n");
     qint32 i = 0;
-    foreach(const KisHistoryItem &changeList, m_revisions) {
+    foreach (const KisHistoryItem &changeList, m_revisions) {
         printf("--- revision #%d ---\n", i++);
-        foreach(mi, changeList.itemList) {
+        foreach (mi, changeList.itemList) {
             mi->debugPrintInfo();
         }
     }
 
     printf("\nCancelled revisions list:\n");
     i = 0;
-    foreach(const KisHistoryItem &changeList, m_cancelledRevisions) {
+    foreach (const KisHistoryItem &changeList, m_cancelledRevisions) {
         printf("--- revision #%d ---\n", m_revisions.size() + i++);
-        foreach(mi, changeList.itemList) {
+        foreach (mi, changeList.itemList) {
             mi->debugPrintInfo();
         }
     }

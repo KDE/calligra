@@ -26,9 +26,9 @@
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
 K_EXPORT_PLUGIN(PluginFactory("KPrEventActions"))
 
-Plugin::Plugin( QObject * parent,  const QVariantList & )
-: QObject( parent )
+Plugin::Plugin(QObject *parent,  const QVariantList &)
+    : QObject(parent)
 {
-    KoEventActionRegistry::instance()->addPresentationEventAction( new KPrSoundEventActionFactory() );
+    KoEventActionRegistry::instance()->addPresentationEventAction(new KPrSoundEventActionFactory());
 }
 

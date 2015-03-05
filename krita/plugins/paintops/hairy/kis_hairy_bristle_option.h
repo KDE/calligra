@@ -48,10 +48,10 @@ public:
     double shearFactor() const;
     double randomFactor() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* config) const;
-    void readOptionSetting(const KisPropertiesConfiguration* config);
+    void writeOptionSetting(KisPropertiesConfiguration *config) const;
+    void readOptionSetting(const KisPropertiesConfiguration *config);
 private:
-    KisBristleOptionsWidget * m_options;
+    KisBristleOptionsWidget *m_options;
 };
 
 #endif // KIS_HAIRY_BRISTLE_OPTION_H

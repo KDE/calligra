@@ -26,7 +26,6 @@
 #include <QVector>
 #include <QTextDocument>
 
-
 InsertDeleteChangesCommand::InsertDeleteChangesCommand(QTextDocument *document, KUndo2Command *parent)
     : KUndo2Command("Insert Delete Changes", parent)
     , m_document(document)
@@ -38,13 +37,11 @@ void InsertDeleteChangesCommand::redo()
     insertDeleteChanges();
 }
 
-
 void InsertDeleteChangesCommand::insertDeleteChanges()
 {
     int numAddedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
     KoTextDocument(m_document).changeTracker()->getDeletedChanges(elementVector);
     qSort(elementVector.begin(), elementVector.end());
-
 
 }

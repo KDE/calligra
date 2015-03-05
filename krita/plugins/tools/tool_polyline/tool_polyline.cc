@@ -33,17 +33,15 @@
 #include <kis_types.h>
 #include <KoToolRegistry.h>
 
-
 #include "kis_tool_polyline.h"
 
 K_PLUGIN_FACTORY(ToolPolylineFactory, registerPlugin<ToolPolyline>();)
 K_EXPORT_PLUGIN(ToolPolylineFactory("krita"))
 
-
 ToolPolyline::ToolPolyline(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
+    KoToolRegistry *r = KoToolRegistry::instance();
     r->add(new KisToolPolylineFactory(QStringList()));
 
 }

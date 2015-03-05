@@ -27,13 +27,11 @@
 
 #define QPAINTER_WORKAROUND_BORDER 1
 
-
 KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
 {
     Q_ASSERT(!baseImage.isNull());
 
     m_originalSize = baseImage.size();
-
 
     qreal scale = MAX_MIPMAP_SCALE;
 
@@ -63,7 +61,9 @@ KisQImagePyramid::KisQImagePyramid(const QImage &baseImage)
         QSize scaledSize = m_originalSize * scale;
 
         if (scaledSize.width() == 0 ||
-                scaledSize.height() == 0) break;
+                scaledSize.height() == 0) {
+            break;
+        }
 
         appendPyramidLevel(baseImage.scaled(scaledSize,  Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
@@ -82,7 +82,6 @@ int KisQImagePyramid::findNearestLevel(qreal scale, qreal *baseScale)
     qreal levelScale = m_baseScale;
     int level = 0;
     int lastLevel = m_levels.size() - 1;
-
 
     while ((0.5 * levelScale > scale ||
             qAbs(0.5 * levelScale - scale) < scale_epsilon) &&
@@ -224,13 +223,13 @@ QSize KisQImagePyramid::imageSize(const QSize &originalSize,
 }
 
 QSizeF KisQImagePyramid::characteristicSize(const QSize &originalSize,
-                                            qreal scale, qreal rotation)
+        qreal scale, qreal rotation)
 {
     QRectF originalRect(QPointF(), originalSize);
     QTransform transform = baseBrushTransform(scale, scale,
-                                              rotation,
-                                              0.0, 0.0,
-                                              originalRect);
+                           rotation,
+                           0.0, 0.0,
+                           originalRect);
 
     return transform.mapRect(originalRect).size();
 }
@@ -282,7 +281,6 @@ QImage KisQImagePyramid::createImage(qreal scale, qreal rotation,
 
     QImage dstImage(dstSize, QImage::Format_ARGB32);
     dstImage.fill(0);
-
 
     /**
      * QPainter has one more bug: when a QTransform is TxTranslate, it

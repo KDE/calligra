@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #ifndef TEST_KO_INLINE_TEXT_OBJECT_MANAGER_H
 #define TEST_KO_INLINE_TEXT_OBJECT_MANAGER_H
 
@@ -54,7 +52,7 @@ public:
         // dummy impl
     }
 
-    virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
     {
         // dummy impl
         return false;

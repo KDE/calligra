@@ -41,28 +41,31 @@ static Value RoundNumber(double f)
 }
 
 // round to get at most 10-digits number
-static Value RoundNumber(const Value& v)
+static Value RoundNumber(const Value &v)
 {
     if (v.isComplex()) {
         const double imag = numToDouble(v.asComplex().imag());
         QString complex = QString::number(ROUND(numToDouble(v.asComplex().real())), 'g', 10);
-        if (imag >= 0.0)
+        if (imag >= 0.0) {
             complex += '+';
+        }
         complex += QString::number(ROUND(imag), 'g', 10);
         complex += 'i';
         return Value(complex);
-    } else if (v.isNumber())
+    } else if (v.isNumber()) {
         return Value(ROUND(numToDouble(v.asFloat())));
-    else
+    } else {
         return v;
+    }
 }
 
-Value TestEngineeringFunctions::evaluate(const QString& formula)
+Value TestEngineeringFunctions::evaluate(const QString &formula)
 {
     Formula f;
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
@@ -105,7 +108,7 @@ void TestEngineeringFunctions::testCOMPLEX()
 {
     CHECK_EVAL("=IMREAL(COMPLEX(1;-3))", 1.0);
     CHECK_EVAL("=IMAGINARY(COMPLEX(0;-2))", -2.0);
-    CHECK_EVAL("=IMAGINARY(COMPLEX(0;-2;\"i\"))", -2.0 );
+    CHECK_EVAL("=IMAGINARY(COMPLEX(0;-2;\"i\"))", -2.0);
     CHECK_EVAL("=IMREAL(COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOMPLEX(1;-3))", 1.0);
 }
 
@@ -192,7 +195,7 @@ void TestEngineeringFunctions::testHEX2OCT()
     CHECK_EVAL("=HEX2OCT(37)", Value("67"));
     CHECK_EVAL("=COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETHEX2OCT(\"a\")", Value("12"));
 }
-    
+
 void TestEngineeringFunctions::testIMABS()
 {
     CHECK_EVAL("=IMABS(COMPLEX(4;3))", 5.0);
@@ -392,7 +395,7 @@ void TestEngineeringFunctions::testOCT2HEX()
     CHECK_EVAL("=OCT2HEX(\"55\")", Value("2D"));
     CHECK_EVAL("=COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETOCT2HEX(\"12\")", Value("A"));
 }
-    
+
 QTEST_KDEMAIN(TestEngineeringFunctions, GUI)
 
 #include "TestEngineeringFunctions.moc"

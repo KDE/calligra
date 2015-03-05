@@ -33,13 +33,13 @@ using namespace Calligra::Sheets;
 class MapModel::Private
 {
 public:
-    Map* map;
+    Map *map;
 
 public:
-    bool isSheetIndex(const QModelIndex& index, const MapModel* mapModel) const;
+    bool isSheetIndex(const QModelIndex &index, const MapModel *mapModel) const;
 };
 
-bool MapModel::Private::isSheetIndex(const QModelIndex& index, const MapModel* mapModel) const
+bool MapModel::Private::isSheetIndex(const QModelIndex &index, const MapModel *mapModel) const
 {
     if (!index.parent().isValid()) {
         return false;
@@ -63,10 +63,9 @@ bool MapModel::Private::isSheetIndex(const QModelIndex& index, const MapModel* m
     return true;
 }
 
-
-MapModel::MapModel(Map* map)
-        : QAbstractListModel(map)
-        , d(new Private)
+MapModel::MapModel(Map *map)
+    : QAbstractListModel(map)
+    , d(new Private)
 {
     d->map = map;
     connect(d->map, SIGNAL(sheetAdded(Sheet*)),
@@ -93,7 +92,7 @@ QVariant MapModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
     //
-    const Sheet* const sheet = d->map->sheet(index.row());
+    const Sheet *const sheet = d->map->sheet(index.row());
     switch (role) {
     case Qt::DisplayRole:
     case Qt::EditRole:
@@ -126,7 +125,7 @@ Qt::ItemFlags MapModel::flags(const QModelIndex &index) const
     Qt::ItemFlags flags = Qt::ItemIsEnabled;
     if (!d->map->isProtected()) {
         flags |= Qt::ItemIsSelectable;
-        const Sheet* const sheet = d->map->sheet(index.row());
+        const Sheet *const sheet = d->map->sheet(index.row());
         if (!sheet->isProtected()) {
             flags |= Qt::ItemIsEditable;
         }
@@ -159,7 +158,7 @@ QModelIndex MapModel::index(int row, int column, const QModelIndex &parent) cons
         if (parent.row() >= d->map->count()) {
             return QModelIndex();
         }
-        Sheet* const sheet = d->map->sheet(index.parent().row());
+        Sheet *const sheet = d->map->sheet(index.parent().row());
         index = sheet->model()->index(row, column, parent);
     } else {
         index = createIndex(row, column, d->map);
@@ -183,12 +182,12 @@ bool MapModel::setData(const QModelIndex &index, const QVariant &value, int role
     }
 
     if (index.isValid() && index.row() < d->map->count()) {
-        Sheet* const sheet(d->map->sheet(index.row()));
+        Sheet *const sheet(d->map->sheet(index.row()));
         switch (role) {
         case Qt::EditRole: {
             const QString name(value.toString());
             if (!name.isEmpty()) {
-                KUndo2Command* const command = new RenameSheetCommand(sheet, name);
+                KUndo2Command *const command = new RenameSheetCommand(sheet, name);
                 emit addCommandRequested(command);
                 emit dataChanged(index, index);
                 return true;
@@ -207,9 +206,9 @@ bool MapModel::setData(const QModelIndex &index, const QVariant &value, int role
     return false;
 }
 
-bool MapModel::setHidden(Sheet* sheet, bool hidden)
+bool MapModel::setHidden(Sheet *sheet, bool hidden)
 {
-    KUndo2Command* command;
+    KUndo2Command *command;
     if (hidden && !sheet->isHidden()) {
         command = new HideSheetCommand(sheet);
     } else if (!hidden && sheet->isHidden()) {
@@ -221,12 +220,12 @@ bool MapModel::setHidden(Sheet* sheet, bool hidden)
     return true;
 }
 
-Map* MapModel::map() const
+Map *MapModel::map() const
 {
     return d->map;
 }
 
-void MapModel::addSheet(Sheet* sheet)
+void MapModel::addSheet(Sheet *sheet)
 {
     kDebug() << "Added sheet:" << sheet->sheetName();
     emit layoutChanged();

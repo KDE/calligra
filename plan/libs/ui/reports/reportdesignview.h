@@ -43,7 +43,7 @@ class ReportDesignView : public View
 {
     Q_OBJECT
 public:
-    ReportDesignView(QWidget *parent, ReportEntitySelector*, SourceSelector*);
+    ReportDesignView(QWidget *parent, ReportEntitySelector *, SourceSelector *);
 
     ~ReportDesignView();
     virtual tristate afterSwitchFrom(::ViewMode mode);
@@ -51,8 +51,8 @@ public:
 private:
     ReportDesigner *_rd;
     KoProperty::Set *_set;
-    ReportPart::TempData* tempData() const;
-    QScrollArea * scr;
+    ReportPart::TempData *tempData() const;
+    QScrollArea *scr;
 
     //Actions
     KAction *editCutAction;
@@ -64,27 +64,50 @@ private:
     KAction *itemRaiseAction;
     KAction *itemLowerAction;
 
-    ReportEntitySelector* res;
+    ReportEntitySelector *res;
     SourceSelector *srcsel;
 protected:
     virtual KoProperty::Set *propertySet();
     virtual tristate storeData(bool dontAsk = false);
-    virtual DB::SchemaData* storeNewData(const DB::SchemaData& sdata, bool &cancel);
+    virtual DB::SchemaData *storeNewData(const DB::SchemaData &sdata, bool &cancel);
 
 private Q_SLOTS:
     void slotDesignerPropertySetChanged();
-    void slotLabel(){_rd->slotItem(KRObjectData::EntityLabel);};
-    void slotField(){_rd->slotItem(KRObjectData::EntityField);};
-    void slotText(){_rd->slotItem(KRObjectData::EntityText);};
-    void slotChart(){_rd->slotItem(KRObjectData::EntityChart);};
-    void slotBarcode(){_rd->slotItem(KRObjectData::EntityBarcode);};
-    void slotImage(){_rd->slotItem(KRObjectData::EntityImage);};
-    void slotLine(){_rd->slotItem(KRObjectData::EntityLine);};
-    void slotCheck(){_rd->slotItem(KRObjectData::EntityCheck);};
+    void slotLabel()
+    {
+        _rd->slotItem(KRObjectData::EntityLabel);
+    };
+    void slotField()
+    {
+        _rd->slotItem(KRObjectData::EntityField);
+    };
+    void slotText()
+    {
+        _rd->slotItem(KRObjectData::EntityText);
+    };
+    void slotChart()
+    {
+        _rd->slotItem(KRObjectData::EntityChart);
+    };
+    void slotBarcode()
+    {
+        _rd->slotItem(KRObjectData::EntityBarcode);
+    };
+    void slotImage()
+    {
+        _rd->slotItem(KRObjectData::EntityImage);
+    };
+    void slotLine()
+    {
+        _rd->slotItem(KRObjectData::EntityLine);
+    };
+    void slotCheck()
+    {
+        _rd->slotItem(KRObjectData::EntityCheck);
+    };
 
-    public Q_SLOTS:
-    void slotSetData(KoReportData*);
-
+public Q_SLOTS:
+    void slotSetData(KoReportData *);
 
 };
 

@@ -32,10 +32,9 @@ class PAINTOP_EXPORT KisPressureFlowOption : public KisCurveOption
 {
 public:
     KisPressureFlowOption();
-    double apply(const KisPaintInformation & info) const;
-
+    double apply(const KisPaintInformation &info) const;
 
 };
 
 #endif
- 
+

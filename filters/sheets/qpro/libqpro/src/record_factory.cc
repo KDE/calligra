@@ -40,9 +40,8 @@ NEWFUNC(QpRecRecalcOrder)
 struct Record {
     QP_INT16  Type;
     QP_INT16  Len;
-    QpRec*(*Func)(QP_INT16, QpIStream&);
+    QpRec *(*Func)(QP_INT16, QpIStream &);
 };
-
 
 // The functions in the Record table below (NEW_QpRecBof etc.)
 // come from the NEWFUNC #define above
@@ -63,8 +62,8 @@ static Record gRecord[] = {
     {0,                    0,  0}
 };
 
-QpRecFactory::QpRecFactory(QpIStream& pIn)
-        : cIn(pIn)
+QpRecFactory::QpRecFactory(QpIStream &pIn)
+    : cIn(pIn)
 {
 }
 
@@ -72,16 +71,16 @@ QpRecFactory::~QpRecFactory()
 {
 }
 
-QpRec*
+QpRec *
 QpRecFactory::nextRecord()
 {
     QP_INT16  lType;
     QP_INT16  lLen;
-    QpRec* lResult = 0;
+    QpRec *lResult = 0;
 
     cIn >> lType >> lLen;
 
-    for (Record* lRecord = gRecord; lResult == 0 ; ++lRecord) {
+    for (Record *lRecord = gRecord; lResult == 0; ++lRecord) {
         if (lRecord->Func == 0) {
             lResult = new QpRecUnknown(lType, lLen, cIn);
         } else if (lRecord->Type == lType) {

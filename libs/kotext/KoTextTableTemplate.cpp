@@ -29,7 +29,6 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
-
 #include "Styles_p.h"
 
 #include <kdebug.h>
@@ -59,20 +58,22 @@ public:
 
     ~Private() { }
 
-    void setProperty(int key, const QVariant &value) {
+    void setProperty(int key, const QVariant &value)
+    {
         stylesPrivate.add(key, value);
     }
-    int propertyInt(int key) const {
+    int propertyInt(int key) const
+    {
         QVariant variant = stylesPrivate.value(key);
-        if (variant.isNull())
+        if (variant.isNull()) {
             return 0;
+        }
         return variant.toInt();
     }
 
     StylePrivate stylesPrivate;
     QString name;
 };
-
 
 KoTextTableTemplate::KoTextTableTemplate(QObject *parent)
     : QObject(parent),
@@ -93,8 +94,9 @@ QString KoTextTableTemplate::name() const
 
 void KoTextTableTemplate::setName(const QString &name)
 {
-    if (name == d->name)
+    if (name == d->name) {
         return;
+    }
     d->name = name;
 }
 
@@ -226,7 +228,7 @@ void KoTextTableTemplate::loadOdf(const KoXmlElement *element, KoShapeLoadingCon
 
     if (textSharedData) {
         KoXmlElement styleElem;
-        forEachElement(styleElem, (*element)) {
+        forEachElement (styleElem, (*element)) {
             if (styleElem.namespaceURI() == KoXmlNS::table) {
                 for (uint index = 0; index < numTemplateStyles; ++index) {
                     if (templateStyles[index].m_element == styleElem.localName()) {
@@ -241,8 +243,7 @@ void KoTextTableTemplate::loadOdf(const KoXmlElement *element, KoShapeLoadingCon
                             cs = textSharedData->tableCellStyle(styleName, true);
                             if (!cs) {
                                 kWarning(32500) << "Missing KoTableCellStyle!";
-                            }
-                            else {
+                            } else {
                                 //                kDebug(32500) << "==> cs.name:" << cs->name();
                                 //                kDebug(32500) << "==> cs.styleId:" << cs->styleId();
                                 d->stylesPrivate.add(templateStyles[index].m_property, cs->styleId());
@@ -260,8 +261,9 @@ void KoTextTableTemplate::saveOdf(KoXmlWriter *writer, KoTextSharedSavingData *s
     writer->startElement("table:table-template");
 
     QString styleName(QString(QUrl::toPercentEncoding(name(), "", " ")).replace('%', '_'));
-    if (styleName.isEmpty())
+    if (styleName.isEmpty()) {
         styleName = "TT";
+    }
 
     QString generatedName = styleName;
     int num = 1;

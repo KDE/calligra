@@ -25,7 +25,6 @@
 #include "KoColorDisplayRendererInterface.h"
 #include "kis_canvas2.h"
 
-
 class KoColor;
 class KisDisplayColorConverter;
 
@@ -34,25 +33,25 @@ class KisHSVSlider : public KSelector
     Q_OBJECT
 public:
     explicit KisHSVSlider(QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
-    explicit KisHSVSlider(Qt::Orientation orientation, QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), KisCanvas2* canvas = 0);
+    explicit KisHSVSlider(Qt::Orientation orientation, QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), KisCanvas2 *canvas = 0);
     virtual ~KisHSVSlider();
 
 public:
-    void setColors( const KoColor& currentcolor, const int type, qreal hue_backup, qreal l_R=0.2126, qreal l_G=0.7152, qreal l_B=0.0722);
+    void setColors(const KoColor &currentcolor, const int type, qreal hue_backup, qreal l_R = 0.2126, qreal l_G = 0.7152, qreal l_B = 0.0722);
     /**
      * Return the current color
      */
     KoColor currentColor() const;
     KoColor HSXcolor(int type, qreal t) const;
-    KisDisplayColorConverter* converter() const;
+    KisDisplayColorConverter *converter() const;
 protected:
-    virtual void drawContents( QPainter* );
+    virtual void drawContents(QPainter *);
     struct Private;
-    Private* const d;
+    Private *const d;
 private:
     qreal R, G, B;
     KoColorDisplayRendererInterface *m_displayRenderer;
-    KisCanvas2* m_canvas;
+    KisCanvas2 *m_canvas;
 };
 
 #endif

@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef MAPBROWSERWIDGET_H
 #define MAPBROWSERWIDGET_H
 
@@ -28,9 +27,9 @@
 #include "FormWidgetInterface.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
-class MapBrowserWidget : public Marble::MarbleWidget, 
-                         public KFormDesigner::FormWidgetInterface,
-                         public KexiFormDataItemInterface
+class MapBrowserWidget : public Marble::MarbleWidget,
+    public KFormDesigner::FormWidgetInterface,
+    public KexiFormDataItemInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
@@ -40,39 +39,43 @@ public:
     explicit MapBrowserWidget(QWidget *parent = 0);
     virtual ~MapBrowserWidget();
 
-    inline QString dataSource() const {
+    inline QString dataSource() const
+    {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePartClass() const
+    {
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
-    
+
     virtual QVariant value();
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
     virtual void clear();
-    
-    virtual void setInvalidState(const QString&);
-    
+
+    virtual void setInvalidState(const QString &);
+
     virtual bool isReadOnly() const;
 
 public Q_SLOTS:
     //! Sets the datasource to \a ds
-    inline void setDataSource(const QString &ds) {
+    inline void setDataSource(const QString &ds)
+    {
         KexiFormDataItemInterface::setDataSource(ds);
     }
-    inline void setDataSourcePartClass(const QString &partClass) {
+    inline void setDataSourcePartClass(const QString &partClass)
+    {
         KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     }
     void slotMapChanged();
     virtual void setReadOnly(bool);
-    
+
 protected:
     QVariant serializeData(qreal lat, qreal lon, int zoomLevel);
-    void deserializeData(const QVariant& serialized);
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    void deserializeData(const QVariant &serialized);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
 
 private:
     //! Used in slotTextChanged()

@@ -28,7 +28,6 @@
 typedef unsigned long DWORD;
 #endif
 
-
 class KRITAUI_EXPORT KisTabletSupportWin
 {
 public:

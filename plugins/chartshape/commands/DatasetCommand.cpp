@@ -29,8 +29,7 @@
 using namespace KChart;
 using namespace KDChart;
 
-
-DatasetCommand::DatasetCommand(DataSet* dataSet, ChartShape* chart)
+DatasetCommand::DatasetCommand(DataSet *dataSet, ChartShape *chart)
     : m_dataSet(dataSet)
     , m_chart(chart)
 {
@@ -66,8 +65,9 @@ void DatasetCommand::redo()
 
     if (m_oldShowCategory == m_newShowCategory && m_oldShowNumber == m_newShowNumber
             && m_oldShowPercent == m_newShowPercent && m_oldShowSymbol == m_newShowSymbol
-            && m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle)
+            && m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle) {
         return;
+    }
 
     // Actually do the work
     DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType();
@@ -88,8 +88,9 @@ void DatasetCommand::undo()
 {
     if (m_oldShowCategory == m_newShowCategory && m_oldShowNumber == m_newShowNumber
             && m_oldShowPercent == m_newShowPercent && m_oldShowSymbol == m_newShowSymbol
-            && m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle)
+            && m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle) {
         return;
+    }
 
     DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType();
     valueLabelType.category = m_oldShowCategory;

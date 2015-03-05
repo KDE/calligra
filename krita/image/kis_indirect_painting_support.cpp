@@ -30,18 +30,16 @@
 #include "kis_selection.h"
 #include "kis_painter.h"
 
-
 struct KisIndirectPaintingSupport::Private {
     // To simulate the indirect painting
     KisPaintDeviceSP temporaryTarget;
-    const KoCompositeOp* compositeOp;
+    const KoCompositeOp *compositeOp;
     quint8 compositeOpacity;
     QBitArray channelFlags;
     KisSelectionSP selection;
 
     QReadWriteLock lock;
 };
-
 
 KisIndirectPaintingSupport::KisIndirectPaintingSupport()
     : d(new Private)
@@ -59,7 +57,7 @@ void KisIndirectPaintingSupport::setTemporaryTarget(KisPaintDeviceSP t)
     d->temporaryTarget = t;
 }
 
-void KisIndirectPaintingSupport::setTemporaryCompositeOp(const KoCompositeOp* c)
+void KisIndirectPaintingSupport::setTemporaryCompositeOp(const KoCompositeOp *c)
 {
     d->compositeOp = c;
 }
@@ -69,7 +67,7 @@ void KisIndirectPaintingSupport::setTemporaryOpacity(quint8 o)
     d->compositeOpacity = o;
 }
 
-void KisIndirectPaintingSupport::setTemporaryChannelFlags(const QBitArray& channelFlags)
+void KisIndirectPaintingSupport::setTemporaryChannelFlags(const QBitArray &channelFlags)
 {
     d->channelFlags = channelFlags;
 }
@@ -117,20 +115,20 @@ void KisIndirectPaintingSupport::setupTemporaryPainter(KisPainter *painter) cons
     painter->setSelection(d->selection);
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
+void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID)
 {
-    mergeToLayerImpl(layer, undoAdapter, transactionText,timedID);
+    mergeToLayerImpl(layer, undoAdapter, transactionText, timedID);
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID)
+void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID)
 {
-    mergeToLayerImpl(layer, undoAdapter, transactionText,timedID);
+    mergeToLayerImpl(layer, undoAdapter, transactionText, timedID);
 }
 
 template<class UndoAdapter>
 void KisIndirectPaintingSupport::mergeToLayerImpl(KisNodeSP layer,
-                                                  UndoAdapter *undoAdapter,
-                                                  const KUndo2MagicString &transactionText,int timedID)
+        UndoAdapter *undoAdapter,
+        const KUndo2MagicString &transactionText, int timedID)
 {
     /**
      * We do not apply selection here, because it has already
@@ -144,15 +142,15 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisNodeSP layer,
     /**
      * Scratchpad may not have an undo adapter
      */
-    if(undoAdapter) {
-        gc.beginTransaction(transactionText,timedID);
+    if (undoAdapter) {
+        gc.beginTransaction(transactionText, timedID);
     }
     foreach (const QRect &rc, d->temporaryTarget->region().rects()) {
         gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);
     }
     releaseResources();
 
-    if(undoAdapter) {
+    if (undoAdapter) {
         gc.endTransaction(undoAdapter);
     }
 

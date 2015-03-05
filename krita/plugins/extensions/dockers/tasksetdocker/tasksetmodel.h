@@ -27,23 +27,23 @@ class TasksetModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    TasksetModel(QObject* parent = 0);
+    TasksetModel(QObject *parent = 0);
     virtual ~TasksetModel();
-    
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
-    void addAction(QAction* action);
-    QAction* actionFromIndex(const QModelIndex& index);
-    QVector<QAction*> actions();
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    void addAction(QAction *action);
+    QAction *actionFromIndex(const QModelIndex &index);
+    QVector<QAction *> actions();
 
 public Q_SLOTS:
     void clear();
 private:
-    QVector<QAction*> m_actions;
+    QVector<QAction *> m_actions;
 };
 
 #endif // TASKSETMODEL_H

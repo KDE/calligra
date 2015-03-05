@@ -47,24 +47,24 @@ public:
     ~KPrView();
 
     using KoPAViewBase::viewConverter;
-    virtual KoViewConverter * viewConverter( KoPACanvasBase * canvas);
+    virtual KoViewConverter *viewConverter(KoPACanvasBase *canvas);
 
     /**
      * Get the document object the view was initialised with
      */
-    KPrDocument * kprDocument() const;
+    KPrDocument *kprDocument() const;
 
 #ifndef QT_NO_DBUS
     /**
      * Get the view's dbus adaptor
      */
-    virtual KPrViewAdaptor * dbusObject() const;
+    virtual KPrViewAdaptor *dbusObject() const;
 #endif
 
     /**
      * Get the presentation view mode
      */
-    Q_INVOKABLE KPrViewModePresentation * presentationMode() const;
+    Q_INVOKABLE KPrViewModePresentation *presentationMode() const;
 
     /**
      * Get the slides sorter view mode
@@ -139,7 +139,7 @@ public Q_SLOTS:
 protected:
     void initGUI();
     void initActions();
-    virtual bool event(QEvent* event);
+    virtual bool event(QEvent *event);
 
 protected Q_SLOTS:
     void createAnimation();

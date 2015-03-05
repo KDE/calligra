@@ -74,7 +74,7 @@ TabStopDialog::TabStopDialog(QWidget *parent)    : KDialog(parent), d(new Privat
     setMainWidget(frame);
     QGridLayout *l = new QGridLayout(frame);
     d->widgetTree = new WidgetTreeWidget(frame,
-        WidgetTreeWidget::DisableSelection | WidgetTreeWidget::DisableContextMenu);
+                                         WidgetTreeWidget::DisableSelection | WidgetTreeWidget::DisableContextMenu);
     d->widgetTree->setObjectName("tabstops:widgetTree");
     d->widgetTree->setDragEnabled(true);
     d->widgetTree->setDropIndicatorShown(true);
@@ -122,13 +122,14 @@ int TabStopDialog::exec(Form *form)
     d->widgetTree->clear();
     d->widgetTree->setForm(form);
 
-    if (form->autoTabStops())
+    if (form->autoTabStops()) {
         form->autoAssignTabStops();
+    }
     form->updateTabStopsOrder();
     if (!form->tabStops()->isEmpty()) {
         ObjectTreeList::ConstIterator it(form->tabStops()->constBegin());
-        it+=(form->tabStops()->count()-1);
-        for (;it!=form->tabStops()->constEnd(); --it) {
+        it += (form->tabStops()->count() - 1);
+        for (; it != form->tabStops()->constEnd(); --it) {
             new WidgetTreeWidgetItem(d->widgetTree, *it);
         }
     }
@@ -140,8 +141,9 @@ int TabStopDialog::exec(Form *form)
         firstItem->setSelected(true);
     }
 
-    if (QDialog::Rejected == KDialog::exec())
+    if (QDialog::Rejected == KDialog::exec()) {
         return QDialog::Rejected;
+    }
 
     //accepted
     form->setAutoTabStops(d->check->isChecked());
@@ -154,9 +156,10 @@ int TabStopDialog::exec(Form *form)
     form->tabStops()->clear();
     QTreeWidgetItemIterator it(d->widgetTree);
     while (*it) {
-        ObjectTreeItem *tree = static_cast<WidgetTreeWidgetItem*>(*it)->data();
-        if (tree)
+        ObjectTreeItem *tree = static_cast<WidgetTreeWidgetItem *>(*it)->data();
+        if (tree) {
             form->tabStops()->append(tree);
+        }
     }
     return QDialog::Accepted;
 }
@@ -164,13 +167,15 @@ int TabStopDialog::exec(Form *form)
 void TabStopDialog::moveItemUp()
 {
     QTreeWidgetItem *selected = d->widgetTree->selectedItem();
-    if (!selected)
+    if (!selected) {
         return;
+    }
     // we assume there is flat list
     QTreeWidgetItem *root = d->widgetTree->invisibleRootItem();
     const int selectedIndex = root->indexOfChild(selected);
-    if (selectedIndex < 1)
-        return; // no place to move
+    if (selectedIndex < 1) {
+        return;    // no place to move
+    }
     root->takeChild(selectedIndex);
     root->insertChild(selectedIndex - 1, selected);
     updateButtons(selected);
@@ -179,13 +184,15 @@ void TabStopDialog::moveItemUp()
 void TabStopDialog::moveItemDown()
 {
     QTreeWidgetItem *selected = d->widgetTree->selectedItem();
-    if (!selected)
+    if (!selected) {
         return;
+    }
     // we assume there is flat list
     QTreeWidgetItem *root = d->widgetTree->invisibleRootItem();
     const int selectedIndex = root->indexOfChild(selected);
-    if (selectedIndex >= (root->childCount() - 1))
-        return; // no place to move
+    if (selectedIndex >= (root->childCount() - 1)) {
+        return;    // no place to move
+    }
     root->takeChild(selectedIndex);
     root->insertChild(selectedIndex + 1, selected);
     updateButtons(selected);
@@ -195,7 +202,7 @@ void TabStopDialog::updateButtons(QTreeWidgetItem *item)
 {
     QTreeWidgetItem *root = d->widgetTree->invisibleRootItem();
     d->btnUp->setEnabled(item && (root->indexOfChild(item) > 0 && d->widgetTree->isEnabled()
-                                 /*&& (item->itemAbove()->parent() == item->parent()))*/));
+                                  /*&& (item->itemAbove()->parent() == item->parent()))*/));
     d->btnDown->setEnabled(item && root->indexOfChild(item) < (root->childCount() - 1) && d->widgetTree->isEnabled());
 }
 

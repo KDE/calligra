@@ -4,21 +4,20 @@
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either 
+  License as published by the Free Software Foundation; either
   version 2.1 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public 
+  You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef EMFBITMAPHEADER_H
 #define EMFBITMAPHEADER_H
-
 
 #include <Qt>                   // For qint, etc.
 
@@ -29,8 +28,6 @@ class QDataStream;
  *
  * definitions for Device Independent Bitmaps, as used in both WMF and EMF files.
 */
-
-
 
 /// Namespace for Enhanced Metafile (EMF) classes
 
@@ -45,7 +42,7 @@ namespace Libemf
  *  - BitmapV4Header   [MS-WMF].pdf 2.2.2.4
  *  - BitmapV5Header   [MS-WMF].pdf 2.2.2.5
  */
-class BitmapHeader 
+class BitmapHeader
 {
 public:
     typedef enum {
@@ -63,32 +60,44 @@ public:
      * \param stream the data stream to read from.
      * \param size the size of the header. This decides what type it is.
      */
-    BitmapHeader( QDataStream &stream, int size );
+    BitmapHeader(QDataStream &stream, int size);
     ~BitmapHeader();
 
     /**
        The width of the bitmap, in pixels
     */
-    qint32 width() const { return m_width; };
+    qint32 width() const
+    {
+        return m_width;
+    };
 
     /**
        The height of the bitmap, in pixels
     */
-    qint32 height() const { return m_height; };
+    qint32 height() const
+    {
+        return m_height;
+    };
 
     /**
        The number of bits that make up a pixel
 
        This is an enumerated type - see the BitCount enum
     */
-    quint16 bitCount() const { return m_bitCount; };
+    quint16 bitCount() const
+    {
+        return m_bitCount;
+    };
 
     /**
        The type of compression used in the image
 
        This is an enumerated type
     */
-    quint32 compression() const { return m_compression; };
+    quint32 compression() const
+    {
+        return m_compression;
+    };
 
 //private:
     Type  m_headerType;         /// Which header type that is represented.
@@ -123,8 +132,6 @@ public:
     quint32 m_profileSize;
     quint32 m_reserved;
 };
- 
-
 
 } // namespace Libemf
 

@@ -40,8 +40,7 @@
 #define erf(x) boost::math::erf(x)
 #endif
 
-struct KisGaussRectangleMaskGenerator::Private
-{
+struct KisGaussRectangleMaskGenerator::Private {
     Private(bool enableAntialiasing)
         : fadeMaker(*this, enableAntialiasing)
     {
@@ -87,8 +86,8 @@ KisGaussRectangleMaskGenerator::~KisGaussRectangleMaskGenerator()
 
 inline quint8 KisGaussRectangleMaskGenerator::Private::value(qreal xr, qreal yr) const
 {
-    return (quint8) 255 - (quint8) (alphafactor * (erf((halfWidth + xr) * xfade) + erf((halfWidth - xr) * xfade))
-                                    * (erf((halfHeight + yr) * yfade) + erf((halfHeight - yr) * yfade)));
+    return (quint8) 255 - (quint8)(alphafactor * (erf((halfWidth + xr) * xfade) + erf((halfWidth - xr) * xfade))
+                                   * (erf((halfHeight + yr) * yfade) + erf((halfHeight - yr) * yfade)));
 }
 
 quint8 KisGaussRectangleMaskGenerator::valueAt(qreal x, qreal y) const

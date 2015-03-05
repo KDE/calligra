@@ -58,12 +58,12 @@ public:
 
     virtual ~KexiDataTableView();
 
-    KexiTableScrollArea* tableView() const;
+    KexiTableScrollArea *tableView() const;
 
     //! Loads settings for table into @a data model.
     //! Used after loading data model in KexiDataTableView::setData(KexiDB::Cursor*), before calling KexiTableView::setData().
     //! @return true on success
-    bool loadTableViewSettings(KexiDB::TableViewData* data);
+    bool loadTableViewSettings(KexiDB::TableViewData *data);
 
 public Q_SLOTS:
     /*! Sets data. Only works for db-aware table. */
@@ -80,7 +80,7 @@ protected:
     void init();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

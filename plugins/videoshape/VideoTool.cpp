@@ -47,7 +47,6 @@ public:
     }
 };
 
-
 VideoTool::VideoTool(KoCanvasBase *canvas)
     : KoToolBase(canvas),
       m_videoToolUI(0),
@@ -66,8 +65,9 @@ void VideoTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &s
     Q_UNUSED(toolActivation);
 
     foreach (KoShape *shape, shapes) {
-        if ((m_videoShape = dynamic_cast<VideoShape*>(shape)))
+        if ((m_videoShape = dynamic_cast<VideoShape *>(shape))) {
             break;
+        }
     }
 
     if (!m_videoShape) {
@@ -90,7 +90,7 @@ void VideoTool::mouseMoveEvent(KoPointerEvent *event)
 
 void VideoTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-        Q_UNUSED(event);
+    Q_UNUSED(event);
 }
 
 void VideoTool::paint(QPainter &painter, const KoViewConverter &converter)
@@ -135,7 +135,7 @@ void VideoTool::changeUrlPressed()
 
 void VideoTool::play()
 {
-    VideoData *videoData = qobject_cast<VideoData*>(m_videoShape->userData());
+    VideoData *videoData = qobject_cast<VideoData *>(m_videoShape->userData());
     Q_ASSERT(videoData);
     new FullScreenPlayer(videoData->playableUrl());
 }

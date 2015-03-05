@@ -33,7 +33,7 @@ class MathModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    explicit MathModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit MathModule(QObject *parent, const QVariantList &args = QVariantList());
 
     QString descriptionFileName() const;
 };

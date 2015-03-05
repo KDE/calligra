@@ -28,7 +28,7 @@ class PartBase::Private
 {
 public:
     Private()
-    : info(0)
+        : info(0)
     {
     }
     Info *info;
@@ -38,7 +38,7 @@ public:
 using namespace KexiPart;
 
 PartBase::PartBase(QObject *parent,
-                   const QVariantList& list)
+                   const QVariantList &list)
     : QObject(parent)
     , d(new Private)
 {
@@ -55,16 +55,17 @@ void PartBase::setInfo(Info *info)
     d->info = info;
 }
 
-Info* PartBase::info() const
+Info *PartBase::info() const
 {
     return d->info;
 }
 
-KLocalizedString PartBase::i18nMessage(const QString& englishMessage, KexiWindow* window) const
+KLocalizedString PartBase::i18nMessage(const QString &englishMessage, KexiWindow *window) const
 {
     Q_UNUSED(window);
-    if (QString(englishMessage).startsWith(':'))
+    if (QString(englishMessage).startsWith(':')) {
         return KLocalizedString();
+    }
     return ki18n(englishMessage.toLatin1());
 }
 

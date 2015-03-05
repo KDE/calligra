@@ -43,11 +43,9 @@
 #include <QGraphicsSceneWheelEvent>
 #include <QStyleOptionGraphicsItem>
 
-
-
 KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
-        : QGraphicsWidget(0),
-        KWCanvasBase(document, this)
+    : QGraphicsWidget(0),
+      KWCanvasBase(document, this)
 {
     setAttribute(Qt::WA_OpaquePaintEvent, true);
     setAttribute(Qt::WA_InputMethodEnabled, true);
@@ -122,10 +120,11 @@ void KWCanvasItem::keyPressEvent(QKeyEvent *e)
     m_toolProxy->keyPressEvent(e);
     if (! e->isAccepted()) {
         if (e->key() == Qt::Key_Backtab
-                || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier)))
+                || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier))) {
             focusNextPrevChild(false);
-        else if (e->key() == Qt::Key_Tab)
+        } else if (e->key() == Qt::Key_Tab) {
             focusNextPrevChild(true);
+        }
     }
 }
 

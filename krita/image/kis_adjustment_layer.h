@@ -35,7 +35,6 @@
 #include <krita_export.h>
 #include "kis_selection_based_layer.h"
 
-
 class KisFilterConfiguration;
 
 /**
@@ -61,8 +60,8 @@ public:
      * @param selection is a mask used by the adjustment layer to
      * know where to apply the filter.
      */
-    KisAdjustmentLayer(KisImageWSP image, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
-    KisAdjustmentLayer(const KisAdjustmentLayer& rhs);
+    KisAdjustmentLayer(KisImageWSP image, const QString &name, KisFilterConfiguration *kfc, KisSelectionSP selection);
+    KisAdjustmentLayer(const KisAdjustmentLayer &rhs);
     virtual ~KisAdjustmentLayer();
 
     bool accept(KisNodeVisitor &);
@@ -72,7 +71,8 @@ public:
      * clones this AdjustmentLayer into a KisNodeSP type.
      * @return the KisNodeSP returned
      */
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return KisNodeSP(new KisAdjustmentLayer(*this));
     }
 
@@ -103,15 +103,16 @@ public:
     QRect incomingChangeRect(const QRect &rect) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
-    void setChannelFlags(const QBitArray & channelFlags);
-    
+    void setChannelFlags(const QBitArray &channelFlags);
+
 public Q_SLOTS:
     /**
      * gets this AdjustmentLayer. Overrides function in
      * KisIndirectPaintingSupport
      * @return this AdjustmentLayer
      */
-    KisLayer* layer() {
+    KisLayer *layer()
+    {
         return this;
     }
 };

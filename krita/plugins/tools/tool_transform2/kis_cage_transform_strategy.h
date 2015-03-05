@@ -31,7 +31,6 @@ class ToolTransformArgs;
 class TransformTransactionProperties;
 class QImage;
 
-
 class KisCageTransformStrategy : public KisWarpTransformStrategy
 {
     Q_OBJECT

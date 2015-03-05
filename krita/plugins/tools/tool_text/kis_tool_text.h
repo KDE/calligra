@@ -35,9 +35,8 @@ class KisToolText : public KisToolRectangleBase
     Q_OBJECT
 
 public:
-    KisToolText(KoCanvasBase * canvas);
+    KisToolText(KoCanvasBase *canvas);
     virtual ~KisToolText();
-
 
     virtual void beginPrimaryAction(KoPointerEvent *event);
     virtual void continuePrimaryAction(KoPointerEvent *event);
@@ -56,16 +55,17 @@ private Q_SLOTS:
     void textTypeIndexChanged(int index);
 
 protected:
-    virtual void finishRect(const QRectF& rect);
-    KisTextToolOptionWidget* m_optionsWidget;
+    virtual void finishRect(const QRectF &rect);
+    KisTextToolOptionWidget *m_optionsWidget;
 };
 
 class KisToolTextFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolTextFactory(const QStringList&)
-            : KoToolFactoryBase("KritaShape/KisToolText") {
+    KisToolTextFactory(const QStringList &)
+        : KoToolFactoryBase("KritaShape/KisToolText")
+    {
         setToolTip(i18n("Text tool"));
 
         setToolType(mainToolType());
@@ -76,12 +76,12 @@ public:
 
     virtual ~KisToolTextFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return  new KisToolText(canvas);
     }
 
 };
-
 
 #endif // __KIS_TOOL_TEXT_H__
 

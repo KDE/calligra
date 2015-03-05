@@ -31,37 +31,41 @@ namespace KPlato
 {
 
 MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char */*name*/)
-    : KDialog( parent),
+    : KDialog(parent),
       project(p)
 {
-    setWindowTitle( i18n("Project Settings") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
+    setWindowTitle(i18n("Project Settings"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    showButtonSeparator(true);
     panel = new MainProjectPanel(project, this);
 
     setMainWidget(panel);
     enableButtonOk(false);
-    resize( QSize(500, 410).expandedTo(minimumSizeHint()));
+    resize(QSize(500, 410).expandedTo(minimumSizeHint()));
 
     connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
     connect(panel, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
 }
 
-
-void MainProjectDialog::slotOk() {
-    if (!panel->ok())
+void MainProjectDialog::slotOk()
+{
+    if (!panel->ok()) {
         return;
+    }
 
     accept();
 }
 
-MacroCommand *MainProjectDialog::buildCommand() {
+MacroCommand *MainProjectDialog::buildCommand()
+{
     MacroCommand *m = 0;
     KUndo2MagicString c = kundo2_i18n("Modify main project");
     MacroCommand *cmd = panel->buildCommand();
     if (cmd) {
-        if (!m) m = new MacroCommand(c);
+        if (!m) {
+            m = new MacroCommand(c);
+        }
         m->addCommand(cmd);
     }
     return m;

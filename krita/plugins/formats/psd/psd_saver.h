@@ -45,9 +45,10 @@ enum KisImageBuilder_Result {
     KisImageBuilder_RESULT_INTR = 400,
     KisImageBuilder_RESULT_PATH = 500,
     KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE = 600
-                                                };
+};
 
-class PSDSaver : public QObject {
+class PSDSaver : public QObject
+{
 
     Q_OBJECT
 
@@ -58,7 +59,7 @@ public:
 
 public:
 
-    KisImageBuilder_Result buildFile(const KUrl& uri);
+    KisImageBuilder_Result buildFile(const KUrl &uri);
 
     KisImageWSP image();
 

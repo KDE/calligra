@@ -45,15 +45,16 @@ class Part::Private
 {
 public:
     Private()
-    : guiClient(0)
-    , newObjectsAreDirty(false)
-    , instanceActionsInitialized(false)
+        : guiClient(0)
+        , newObjectsAreDirty(false)
+        , instanceActionsInitialized(false)
     {
     }
 
     //! Helper, used in Part::openInstance()
     tristate askForOpeningInTextMode(KexiWindow *window, KexiPart::Item &item,
-                                     Kexi::ViewModes supportedViewModes, Kexi::ViewMode viewMode) {
+                                     Kexi::ViewModes supportedViewModes, Kexi::ViewMode viewMode)
+    {
         if (viewMode != Kexi::TextViewMode
                 && supportedViewModes & Kexi::TextViewMode
                 && window->data()->proposeOpeningInTextViewModeBecauseOfProblems) {
@@ -61,8 +62,9 @@ public:
             KexiUtils::WaitCursorRemover remover;
             //! @todo use message handler for this to enable non-gui apps
             QString singleStatusString(window->singleStatusString());
-            if (!singleStatusString.isEmpty())
+            if (!singleStatusString.isEmpty()) {
                 singleStatusString.prepend(QString("\n\n") + i18n("Details:") + " ");
+            }
             if (KMessageBox::No == KMessageBox::questionYesNo(0,
                     ((viewMode == Kexi::DesignViewMode)
                      ? i18n("Object \"%1\" could not be opened in Design View.", item.name())
@@ -81,7 +83,7 @@ public:
     QString instanceName;
 
     GUIClient *guiClient;
-    QMap<int, GUIClient*> instanceGuiClients;
+    QMap<int, GUIClient *> instanceGuiClients;
     Kexi::ObjectStatus status;
 
     bool newObjectsAreDirty;
@@ -93,28 +95,28 @@ public:
 
 using namespace KexiPart;
 
-Part::Part(QObject *parent, 
-           const QString& instanceName,
-           const QString& toolTip,
-           const QString& whatsThis,
-           const QVariantList& list)
+Part::Part(QObject *parent,
+           const QString &instanceName,
+           const QString &toolTip,
+           const QString &whatsThis,
+           const QVariantList &list)
     : PartBase(parent, list)
     , d(new Private())
 {
     d->instanceName = KexiUtils::stringToIdentifier(
-        instanceName.isEmpty()
-        ? i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-                "Use '_' character instead of spaces. First character should be a..z character. "
-                "If you cannot use latin characters in your language, use english word.",
-                "object").toLower()
-        : instanceName);
+                          instanceName.isEmpty()
+                          ? i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+                                  "Use '_' character instead of spaces. First character should be a..z character. "
+                                  "If you cannot use latin characters in your language, use english word.",
+                                  "object").toLower()
+                          : instanceName);
     d->toolTip = toolTip;
     d->whatsThis = whatsThis;
 }
 
-Part::Part(QObject* parent, StaticPartInfo *info)
+Part::Part(QObject *parent, StaticPartInfo *info)
     : PartBase(parent, QVariantList())
-        , d(new Private())
+    , d(new Private())
 {
     setObjectName("StaticPart");
     setInfo(info);
@@ -132,7 +134,7 @@ void Part::createGUIClients()//KexiMainWindow *win)
         d->guiClient = new GUIClient(this, false, "part");
 
         //default actions for part's gui client:
-        QAction* act = info()->newObjectAction();
+        QAction *act = info()->newObjectAction();
         // - update action's tooltip and "what's this"
         QString tip(toolTip());
         if (!tip.isEmpty()) {
@@ -161,13 +163,13 @@ void Part::createGUIClients()//KexiMainWindow *win)
     }
 }
 
-KActionCollection* Part::actionCollectionForMode(Kexi::ViewMode viewMode) const
+KActionCollection *Part::actionCollectionForMode(Kexi::ViewMode viewMode) const
 {
     GUIClient *cli = d->instanceGuiClients.value((int)viewMode);
     return cli ? cli->actionCollection() : 0;
 }
 
-KAction* Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
+KAction *Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
                                   const QString &pix_name, const KShortcut &cut, const char *name,
                                   const char *subclassName)
 {
@@ -180,23 +182,24 @@ KAction* Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
             instanceGuiClient->actionCollection(), subclassName);
 }
 
-KAction* Part::createSharedPartAction(const QString &text,
+KAction *Part::createSharedPartAction(const QString &text,
                                       const QString &pix_name, const KShortcut &cut, const char *name,
                                       const char *subclassName)
 {
-    if (!d->guiClient)
+    if (!d->guiClient) {
         return 0;
+    }
     return KexiMainWindowIface::global()->createSharedAction(text, pix_name, cut, name,
             d->guiClient->actionCollection(), subclassName);
 }
 
-KAction* Part::createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
+KAction *Part::createSharedToggleAction(Kexi::ViewMode mode, const QString &text,
                                         const QString &pix_name, const KShortcut &cut, const char *name)
 {
     return createSharedAction(mode, text, pix_name, cut, name, "KToggleAction");
 }
 
-KAction* Part::createSharedPartToggleAction(const QString &text,
+KAction *Part::createSharedPartToggleAction(const QString &text,
         const QString &pix_name, const KShortcut &cut, const char *name)
 {
     return createSharedPartAction(text, pix_name, cut, name, "KToggleAction");
@@ -204,7 +207,7 @@ KAction* Part::createSharedPartToggleAction(const QString &text,
 
 void Part::setActionAvailable(const char *action_name, bool avail)
 {
-    for (QMap<int, GUIClient*>::Iterator it = d->instanceGuiClients.begin(); it != d->instanceGuiClients.end(); ++it) {
+    for (QMap<int, GUIClient *>::Iterator it = d->instanceGuiClients.begin(); it != d->instanceGuiClients.end(); ++it) {
         QAction *act = it.value()->actionCollection()->action(action_name);
         if (act) {
             act->setEnabled(avail);
@@ -214,8 +217,8 @@ void Part::setActionAvailable(const char *action_name, bool avail)
     KexiMainWindowIface::global()->setActionAvailable(action_name, avail);
 }
 
-KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::ViewMode viewMode,
-                               QMap<QString, QVariant>* staticObjectArgs)
+KexiWindow *Part::openInstance(QWidget *parent, KexiPart::Item &item, Kexi::ViewMode viewMode,
+                               QMap<QString, QVariant> *staticObjectArgs)
 {
     //now it's the time for creating instance actions
     if (!d->instanceActionsInitialized) {
@@ -279,7 +282,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
     tristate res = window->switchToViewMode(viewMode, staticObjectArgs, dummy);
     if (!res) {
         tristate askForOpeningInTextModeRes
-        = d->askForOpeningInTextMode(window, item, window->supportedViewModes(), viewMode);
+            = d->askForOpeningInTextMode(window, item, window->supportedViewModes(), viewMode);
         if (true == askForOpeningInTextModeRes) {
             delete window->schemaData(); //old one
             window->close();
@@ -291,21 +294,22 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
             window->close();
             delete window;
             kWarning() << "!window, cannot switch to a view mode" <<
-                Kexi::nameForViewMode(viewMode);
+                       Kexi::nameForViewMode(viewMode);
             return 0;
         }
         //the window has an error info
         switchingFailed = true;
     }
-    if (~res)
+    if (~res) {
         switchingFailed = true;
+    }
 
     if (switchingFailed) {
         d->status = window->status();
         window->close();
         delete window;
         kWarning() << "!window, switching to view mode failed, " <<
-            Kexi::nameForViewMode(viewMode);
+                   Kexi::nameForViewMode(viewMode);
         return 0;
     }
     window->registerWindow(); //ok?
@@ -321,28 +325,29 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
     return window;
 }
 
-KexiDB::SchemaData* Part::loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
+KexiDB::SchemaData *Part::loadSchemaData(KexiWindow *window, const KexiDB::SchemaData &sdata,
         Kexi::ViewMode viewMode, bool *ownedByWindow)
 {
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
     KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
     *new_schema = sdata;
-    if (ownedByWindow)
+    if (ownedByWindow) {
         *ownedByWindow = true;
+    }
     return new_schema;
 }
 
-void Part::loadAndSetSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
-    Kexi::ViewMode viewMode)
+void Part::loadAndSetSchemaData(KexiWindow *window, const KexiDB::SchemaData &sdata,
+                                Kexi::ViewMode viewMode)
 {
     bool schemaDataOwned = true;
-    KexiDB::SchemaData* sd = loadSchemaData(window, sdata, viewMode, &schemaDataOwned);
+    KexiDB::SchemaData *sd = loadSchemaData(window, sdata, viewMode, &schemaDataOwned);
     window->setSchemaData(sd);
     window->setSchemaDataOwned(schemaDataOwned);
 }
 
-bool Part::loadDataBlock(KexiWindow *window, QString &dataString, const QString& dataID)
+bool Part::loadDataBlock(KexiWindow *window, QString &dataString, const QString &dataID)
 {
     if (!KexiMainWindowIface::global()->project()->dbConnection()->loadDataBlock(
                 window->id(), dataString, dataID)) {
@@ -365,12 +370,13 @@ void Part::initInstanceActions()
 tristate Part::remove(KexiPart::Item &item)
 {
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-    if (!conn)
+    if (!conn) {
         return false;
+    }
     return conn->removeObject(item.identifier());
 }
 
-KexiWindowData* Part::createWindowData(KexiWindow* window)
+KexiWindowData *Part::createWindowData(KexiWindow *window)
 {
     return new KexiWindowData(window);
 }
@@ -390,24 +396,24 @@ QString Part::whatsThis() const
     return d->whatsThis;
 }
 
-tristate Part::rename(KexiPart::Item &item, const QString& newName)
+tristate Part::rename(KexiPart::Item &item, const QString &newName)
 {
     Q_UNUSED(item);
     Q_UNUSED(newName);
     return true;
 }
 
-GUIClient* Part::instanceGuiClient(Kexi::ViewMode mode) const
+GUIClient *Part::instanceGuiClient(Kexi::ViewMode mode) const
 {
     return d->instanceGuiClients.value((int)mode);
 }
 
-GUIClient* Part::guiClient() const
+GUIClient *Part::guiClient() const
 {
     return d->guiClient;
 }
 
-const Kexi::ObjectStatus& Part::lastOperationStatus() const
+const Kexi::ObjectStatus &Part::lastOperationStatus() const
 {
     return d->status;
 }
@@ -416,8 +422,9 @@ KEXICORE_EXPORT QString KexiPart::fullCaptionForItem(KexiPart::Item *item, KexiP
 {
     Q_ASSERT(item);
     Q_ASSERT(part);
-    if (part)
+    if (part) {
         return item->name() + " : " + part->info()->instanceCaption();
+    }
     return item->name();
 }
 
@@ -426,15 +433,13 @@ KEXICORE_EXPORT QString KexiPart::fullCaptionForItem(KexiPart::Item *item, KexiP
 class GUIClient::Private
 {
 public:
-    Private() : actionCollection(static_cast<QObject*>(0)) {}
+    Private() : actionCollection(static_cast<QObject *>(0)) {}
     KActionCollection actionCollection;
 };
 
-
-
-GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix)
-        : QObject(part)
-        , d(new Private)
+GUIClient::GUIClient(Part *part, bool partInstanceClient, const char *nameSuffix)
+    : QObject(part)
+    , d(new Private)
 {
     Q_UNUSED(partInstanceClient);
     setObjectName(
@@ -447,7 +452,7 @@ GUIClient::~GUIClient()
     delete d;
 }
 
-KActionCollection* GUIClient::actionCollection() const
+KActionCollection *GUIClient::actionCollection() const
 {
     return &d->actionCollection;
 }

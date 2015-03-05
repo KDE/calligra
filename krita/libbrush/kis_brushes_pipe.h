@@ -25,119 +25,143 @@ template<class BrushType>
 class KisBrushesPipe
 {
 public:
-    KisBrushesPipe() {
+    KisBrushesPipe()
+    {
     }
 
-    KisBrushesPipe(const KisBrushesPipe &rhs) {
+    KisBrushesPipe(const KisBrushesPipe &rhs)
+    {
         qDeleteAll(m_brushes);
         m_brushes.clear();
-        foreach(BrushType * brush, rhs.m_brushes) {
+        foreach (BrushType *brush, rhs.m_brushes) {
             m_brushes.append(brush->clone());
         }
     }
 
-    virtual ~KisBrushesPipe() {
+    virtual ~KisBrushesPipe()
+    {
         qDeleteAll(m_brushes);
     }
 
-    virtual void clear() {
+    virtual void clear()
+    {
         qDeleteAll(m_brushes);
         m_brushes.clear();
     }
 
-    BrushType* firstBrush() const {
+    BrushType *firstBrush() const
+    {
         return m_brushes.first();
     }
 
-    BrushType* lastBrush() const {
+    BrushType *lastBrush() const
+    {
         return m_brushes.last();
     }
 
-    BrushType* currentBrush(const KisPaintInformation& info) const {
+    BrushType *currentBrush(const KisPaintInformation &info) const
+    {
         return !m_brushes.isEmpty() ? m_brushes.at(chooseNextBrush(info)) : 0;
     }
 
-    int brushIndex(const KisPaintInformation& info) const {
+    int brushIndex(const KisPaintInformation &info) const
+    {
         return chooseNextBrush(info);
     }
 
-    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const {
+    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation &info) const
+    {
         BrushType *brush = currentBrush(info);
         return brush ? brush->maskWidth(scale, angle, subPixelX, subPixelY, info) : 0;
     }
 
-    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const {
+    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation &info) const
+    {
         BrushType *brush = currentBrush(info);
         return brush ? brush->maskHeight(scale, angle, subPixelX, subPixelY, info) : 0;
     }
 
-    void setAngle(qreal angle) {
-        foreach(BrushType * brush, m_brushes) {
+    void setAngle(qreal angle)
+    {
+        foreach (BrushType *brush, m_brushes) {
             brush->setAngle(angle);
         }
     }
 
-    void setScale(qreal scale) {
-        foreach(BrushType * brush, m_brushes) {
+    void setScale(qreal scale)
+    {
+        foreach (BrushType *brush, m_brushes) {
             brush->setScale(scale);
         }
     }
 
-    void setSpacing(double spacing) {
-        foreach(BrushType * brush, m_brushes) {
+    void setSpacing(double spacing)
+    {
+        foreach (BrushType *brush, m_brushes) {
             brush->setSpacing(spacing);
         }
     }
 
-    bool hasColor() const {
-        foreach(BrushType * brush, m_brushes) {
-            if (brush->hasColor()) return true;
+    bool hasColor() const
+    {
+        foreach (BrushType *brush, m_brushes) {
+            if (brush->hasColor()) {
+                return true;
+            }
         }
         return false;
     }
 
-    void notifyCachedDabPainted() {
+    void notifyCachedDabPainted()
+    {
         updateBrushIndexes();
     }
 
-    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
-            double scaleX, double scaleY, double angle, const KisPaintInformation& info,
-            double subPixelX , double subPixelY,
-            qreal softnessFactor) {
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation *coloringInformation,
+            double scaleX, double scaleY, double angle, const KisPaintInformation &info,
+            double subPixelX, double subPixelY,
+            qreal softnessFactor)
+    {
 
         BrushType *brush = currentBrush(info);
-        if (!brush) return;
-
+        if (!brush) {
+            return;
+        }
 
         brush->generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
         updateBrushIndexes();
     }
 
-    KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
+    KisFixedPaintDeviceSP paintDevice(const KoColorSpace *colorSpace,
                                       double scale, double angle,
-                                      const KisPaintInformation& info,
-                                      double subPixelX, double subPixelY) {
+                                      const KisPaintInformation &info,
+                                      double subPixelX, double subPixelY)
+    {
 
         BrushType *brush = currentBrush(info);
-        if (!brush) return 0;
-
+        if (!brush) {
+            return 0;
+        }
 
         KisFixedPaintDeviceSP device = brush->paintDevice(colorSpace, scale, angle, info, subPixelX, subPixelY);
         updateBrushIndexes();
         return device;
     }
 
-    QVector<BrushType*> testingGetBrushes() {
+    QVector<BrushType *> testingGetBrushes()
+    {
         return m_brushes;
     }
 
-    void testingSelectNextBrush(const KisPaintInformation& info) {
+    void testingSelectNextBrush(const KisPaintInformation &info)
+    {
         (void) chooseNextBrush(info);
         updateBrushIndexes();
     }
 
 protected:
-    void addBrush(BrushType *brush) {
+    void addBrush(BrushType *brush)
+    {
         m_brushes.append(brush);
     }
 
@@ -149,7 +173,7 @@ protected:
      * The method is const, so no internal counters of the brush should
      * change during its execution
      */
-    virtual int chooseNextBrush(const KisPaintInformation& info) const = 0;
+    virtual int chooseNextBrush(const KisPaintInformation &info) const = 0;
 
     /**
      * Updates internal counters of the brush *after* a dab has been
@@ -159,7 +183,7 @@ protected:
     virtual void updateBrushIndexes() = 0;
 
 protected:
-    QVector<BrushType*> m_brushes;
+    QVector<BrushType *> m_brushes;
 };
 
 #endif /* __KIS_BRUSHES_PIPE_H */

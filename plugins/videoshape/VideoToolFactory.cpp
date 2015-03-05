@@ -26,7 +26,7 @@
 #include <klocale.h>
 
 VideoToolFactory::VideoToolFactory()
-    :KoToolFactoryBase("VideoToolFactoryId")
+    : KoToolFactoryBase("VideoToolFactoryId")
 {
     setToolTip(i18n("Video handling"));
     setIconName(koIconNameCStr("video-x-generic"));
@@ -40,7 +40,7 @@ VideoToolFactory::~VideoToolFactory()
 
 }
 
-KoToolBase* VideoToolFactory::createTool(KoCanvasBase* canvas)
+KoToolBase *VideoToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new VideoTool(canvas);
 }

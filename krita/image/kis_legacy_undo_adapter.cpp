@@ -20,16 +20,15 @@
 
 #include "kis_image.h"
 
-
 KisLegacyUndoAdapter::KisLegacyUndoAdapter(KisUndoStore *undoStore,
-                                           KisImageWSP image)
+        KisImageWSP image)
     : KisUndoAdapter(undoStore),
       m_image(image),
       m_macroCounter(0)
 {
 }
 
-const KUndo2Command* KisLegacyUndoAdapter::presentCommand()
+const KUndo2Command *KisLegacyUndoAdapter::presentCommand()
 {
     return undoStore()->presentCommand();
 }
@@ -41,21 +40,22 @@ void KisLegacyUndoAdapter::undoLastCommand()
 
 void KisLegacyUndoAdapter::addCommand(KUndo2Command *command)
 {
-    if(!command) return;
-
-    if(m_macroCounter) {
-        undoStore()->addCommand(command);
+    if (!command) {
+        return;
     }
-    else {
+
+    if (m_macroCounter) {
+        undoStore()->addCommand(command);
+    } else {
         m_image->barrierLock();
         undoStore()->addCommand(command);
         m_image->unlock();
     }
 }
 
-void KisLegacyUndoAdapter::beginMacro(const KUndo2MagicString& macroName)
+void KisLegacyUndoAdapter::beginMacro(const KUndo2MagicString &macroName)
 {
-    if(!m_macroCounter) {
+    if (!m_macroCounter) {
         m_image->barrierLock();
     }
 
@@ -67,7 +67,7 @@ void KisLegacyUndoAdapter::endMacro()
 {
     m_macroCounter--;
 
-    if(!m_macroCounter) {
+    if (!m_macroCounter) {
         m_image->unlock();
     }
     undoStore()->endMacro();

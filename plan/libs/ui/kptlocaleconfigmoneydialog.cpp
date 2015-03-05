@@ -29,13 +29,13 @@
 namespace KPlato
 {
 
-LocaleConfigMoneyDialog::LocaleConfigMoneyDialog( KLocale *locale, QWidget *p)
-    : KDialog( p)
+LocaleConfigMoneyDialog::LocaleConfigMoneyDialog(KLocale *locale, QWidget *p)
+    : KDialog(p)
 {
-    setCaption( i18n("Currency Settings") );
-    setButtons( Ok|Cancel );
-    showButtonSeparator( true );
-    m_panel = new LocaleConfigMoney( locale, this);
+    setCaption(i18n("Currency Settings"));
+    setButtons(Ok | Cancel);
+    showButtonSeparator(true);
+    m_panel = new LocaleConfigMoney(locale, this);
 
     setMainWidget(m_panel);
 
@@ -44,23 +44,24 @@ LocaleConfigMoneyDialog::LocaleConfigMoneyDialog( KLocale *locale, QWidget *p)
     connect(m_panel, SIGNAL(localeChanged()), SLOT(slotChanged()));
 }
 
-void LocaleConfigMoneyDialog::slotChanged() {
+void LocaleConfigMoneyDialog::slotChanged()
+{
     enableButtonOk(true);
 }
 
-KUndo2Command *LocaleConfigMoneyDialog::buildCommand( Project &project ) {
-    MacroCommand *m = new ModifyProjectLocaleCmd( project, kundo2_i18n( "Modify currency settings" ) );
+KUndo2Command *LocaleConfigMoneyDialog::buildCommand(Project &project)
+{
+    MacroCommand *m = new ModifyProjectLocaleCmd(project, kundo2_i18n("Modify currency settings"));
     MacroCommand *cmd = m_panel->buildCommand();
     if (cmd) {
         m->addCommand(cmd);
     }
-    if ( m->isEmpty() ) {
+    if (m->isEmpty()) {
         delete m;
         return 0;
     }
     return m;
 }
-
 
 }  //KPlato namespace
 

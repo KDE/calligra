@@ -22,11 +22,11 @@
 
 using namespace MusicCore;
 
-KeySignatureDialog::KeySignatureDialog(QWidget* parent)
+KeySignatureDialog::KeySignatureDialog(QWidget *parent)
     : KDialog(parent)
 {
     setCaption(i18n("Set key signature"));
-    QWidget* w = new QWidget(this);
+    QWidget *w = new QWidget(this);
     widget.setupUi(w);
     setMainWidget(w);
     m_ks = new KeySignature(widget.preview->staff(), 0, 0);
@@ -36,10 +36,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget* parent)
 
 void KeySignatureDialog::setBar(int bar)
 {
-    widget.startBar1->setValue(bar+1);
-    widget.startBar2->setValue(bar+1);
-    widget.startBar3->setValue(bar+1);
-    widget.endBar->setValue(bar+1);
+    widget.startBar1->setValue(bar + 1);
+    widget.startBar2->setValue(bar + 1);
+    widget.startBar3->setValue(bar + 1);
+    widget.endBar->setValue(bar + 1);
 }
 
 int KeySignatureDialog::accidentals()
@@ -59,7 +59,7 @@ void KeySignatureDialog::accidentalsChanged(int accidentals)
     widget.preview->update();
 }
 
-void KeySignatureDialog::setMusicStyle(MusicStyle* style)
+void KeySignatureDialog::setMusicStyle(MusicStyle *style)
 {
     widget.preview->setMusicStyle(style);
 }

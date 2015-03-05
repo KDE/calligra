@@ -58,35 +58,35 @@ class KEXIUTILS_EXPORT MultiValidator : public KexiDB::Validator
 public:
     /*! Constructs multivalidator with no subvalidators defined.
      You can add more validators with addSubvalidator(). */
-    explicit MultiValidator(QObject * parent = 0);
+    explicit MultiValidator(QObject *parent = 0);
 
     /*! Constructs multivalidator with one validator \a validator.
      It will be owned if has no parent defined.
      You can add more validators with addSubvalidator(). */
-    explicit MultiValidator(QValidator *validator, QObject * parent = 0);
+    explicit MultiValidator(QValidator *validator, QObject *parent = 0);
 
     ~MultiValidator();
 
     /*! Adds validator \a validator as another subvalidator.
      Subvalidator will be owned by this multivalidator if \a owned is true
      and its parent is NULL. */
-    void addSubvalidator(QValidator* validator, bool owned = true);
+    void addSubvalidator(QValidator *validator, bool owned = true);
 
     /*! Reimplemented to call validate() on subvalidators. */
-    virtual QValidator::State validate(QString & input, int & pos) const;
+    virtual QValidator::State validate(QString &input, int &pos) const;
 
     /*! Calls QValidator::fixup() on every subvalidator.
      This may be senseless to use this methog in certain cases
      (can return weir results), so think twice before.. */
-    virtual void fixup(QString & input) const;
+    virtual void fixup(QString &input) const;
 
 private:
     virtual Validator::Result internalCheck(
-        const QString &valueName, const QVariant& v,
+        const QString &valueName, const QVariant &v,
         QString &message, QString &details);
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 }

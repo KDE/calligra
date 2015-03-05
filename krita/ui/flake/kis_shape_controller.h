@@ -23,7 +23,6 @@
 #include "kis_dummies_facade_base.h"
 #include <KoShapeBasedDocumentBase.h>
 
-
 class KisNodeDummy;
 class KoShapeLayer;
 
@@ -47,13 +46,12 @@ public:
     ~KisShapeController();
 
     bool hasDummyForNode(KisNodeSP node) const;
-    KisNodeDummy* dummyForNode(KisNodeSP layer) const;
-    KisNodeDummy* rootDummy() const;
+    KisNodeDummy *dummyForNode(KisNodeSP layer) const;
+    KisNodeDummy *rootDummy() const;
     int dummiesCount() const;
 
-    KoShapeLayer* shapeForNode(KisNodeSP layer) const;
+    KoShapeLayer *shapeForNode(KisNodeSP layer) const;
     void setInitialShapeForCanvas(KisCanvas2 *canvas);
-
 
 private:
     void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
@@ -70,15 +68,15 @@ Q_SIGNALS:
      */
     void selectionChanged();
     void selectionContentChanged();
-    void currentLayerChanged(const KoShapeLayer*);
+    void currentLayerChanged(const KoShapeLayer *);
 
 protected:
-    void addShape(KoShape* shape);
-    void removeShape(KoShape* shape);
+    void addShape(KoShape *shape);
+    void removeShape(KoShape *shape);
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif

@@ -41,22 +41,22 @@ class NodeItemModel;
 class KPLATOMODELS_EXPORT WorkPackageModel : public QObject
 {
     Q_OBJECT
-    Q_ENUMS( Properties )
+    Q_ENUMS(Properties)
 public:
-    explicit WorkPackageModel( QObject *parent = 0 )
-        : QObject( parent )
-     {}
+    explicit WorkPackageModel(QObject *parent = 0)
+        : QObject(parent)
+    {}
     ~WorkPackageModel() {}
-    
-    QVariant data( const WorkPackage *wp, int column, int role = Qt::DisplayRole ) const;
+
+    QVariant data(const WorkPackage *wp, int column, int role = Qt::DisplayRole) const;
 
 protected:
-    QVariant nodeName(const WorkPackage *wp, int role ) const;
-    QVariant ownerName(const WorkPackage *wp, int role ) const;
-    QVariant transmitionStatus(const WorkPackage *wp, int role ) const;
-    QVariant transmitionTime(const WorkPackage *wp, int role ) const;
+    QVariant nodeName(const WorkPackage *wp, int role) const;
+    QVariant ownerName(const WorkPackage *wp, int role) const;
+    QVariant transmitionStatus(const WorkPackage *wp, int role) const;
+    QVariant transmitionTime(const WorkPackage *wp, int role) const;
 
-    QVariant completion( const WorkPackage *wp, int role ) const;
+    QVariant completion(const WorkPackage *wp, int role) const;
 };
 
 /**
@@ -66,7 +66,7 @@ class WPSortFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit WPSortFilterProxyModel(QObject *parent = 0) : QSortFilterProxyModel( parent ) {}
+    explicit WPSortFilterProxyModel(QObject *parent = 0) : QSortFilterProxyModel(parent) {}
 protected:
     /// Only accept scheduled tasks
     bool filterAcceptsRow(int source_row, const QModelIndex &sourceParent) const;
@@ -88,57 +88,59 @@ public:
     explicit WorkPackageProxyModel(QObject *parent = 0);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
-    void setSourceModel( QAbstractItemModel *sourceModel );
+    void setSourceModel(QAbstractItemModel *sourceModel);
     bool hasChildren(const QModelIndex &parent) const;
-    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
-    int columnCount( const QModelIndex &parent = QModelIndex() ) const;
-    QModelIndex parent( const QModelIndex &child ) const;
-    QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
-    QVariant data( const QModelIndex &idx, int role = Qt::DisplayRole ) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex parent(const QModelIndex &child) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &idx, int role = Qt::DisplayRole) const;
 
     NodeItemModel *baseModel() const;
 
     QModelIndex mapToSource(const QModelIndex &proxyIndex) const;
     QModelIndex mapFromSource(const QModelIndex &sourceIndex) const;
 
-    Task *taskFromIndex( const QModelIndex &idx ) const;
-    QModelIndex indexFromTask( const Node *node ) const;
+    Task *taskFromIndex(const QModelIndex &idx) const;
+    QModelIndex indexFromTask(const Node *node) const;
 
 public Q_SLOTS:
-    void setProject( Project *project );
-    void setScheduleManager( ScheduleManager *sm );
+    void setProject(Project *project);
+    void setScheduleManager(ScheduleManager *sm);
 
 protected Q_SLOTS:
-    void sourceDataChanged(const QModelIndex& start, const QModelIndex& end);
+    void sourceDataChanged(const QModelIndex &start, const QModelIndex &end);
     void sourceModelAboutToBeReset();
     void sourceModelReset();
-    void sourceRowsAboutToBeInserted(const QModelIndex&, int, int );
-    void sourceRowsInserted(const QModelIndex&, int, int end);
-    void sourceRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
-    void sourceRowsRemoved(const QModelIndex& parent, int start, int);
-    void sourceRowsAboutToBeMoved( const QModelIndex&, int sourceStart, int sourceEnd, const QModelIndex&, int destStart );
-    void sourceRowsMoved( const QModelIndex&, int , int , const QModelIndex&, int );
-    void workPackageToBeAdded(Node*, int);
-    void workPackageAdded(Node*);
-    void workPackageToBeRemoved(Node*, int);
-    void workPackageRemoved(Node*);
+    void sourceRowsAboutToBeInserted(const QModelIndex &, int, int);
+    void sourceRowsInserted(const QModelIndex &, int, int end);
+    void sourceRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
+    void sourceRowsRemoved(const QModelIndex &parent, int start, int);
+    void sourceRowsAboutToBeMoved(const QModelIndex &, int sourceStart, int sourceEnd, const QModelIndex &, int destStart);
+    void sourceRowsMoved(const QModelIndex &, int, int, const QModelIndex &, int);
+    void workPackageToBeAdded(Node *, int);
+    void workPackageAdded(Node *);
+    void workPackageToBeRemoved(Node *, int);
+    void workPackageRemoved(Node *);
 
 protected:
-    QModelIndex mapFromBaseModel( const QModelIndex &idx ) const;
-    void detachTasks( Task *task = 0 );
-    void attachTasks( Task *task = 0 );
+    QModelIndex mapFromBaseModel(const QModelIndex &idx) const;
+    void detachTasks(Task *task = 0);
+    void attachTasks(Task *task = 0);
 
-    inline bool isTaskIndex( const QModelIndex &idx ) const {
+    inline bool isTaskIndex(const QModelIndex &idx) const
+    {
         return idx.isValid() && ! idx.internalPointer();
     }
-    inline bool isWorkPackageIndex( const QModelIndex &idx ) const {
+    inline bool isWorkPackageIndex(const QModelIndex &idx) const
+    {
         return idx.isValid() && idx.internalPointer();
     }
 
 private:
     WorkPackageModel m_model;
     NodeItemModel *m_nodemodel;
-    QList<QAbstractProxyModel*> m_proxies;
+    QList<QAbstractProxyModel *> m_proxies;
 };
 
 } //namespace KPlato

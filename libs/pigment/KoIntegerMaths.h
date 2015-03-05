@@ -57,10 +57,11 @@
 template<typename _T_, typename _T2_, typename _T3_>
 inline _T_ CLAMP(_T_ x, _T2_ l, _T3_ u)
 {
-    if (x < l)
+    if (x < l) {
         return _T_(l);
-    else if (x > u)
+    } else if (x > u) {
         return _T_(u);
+    }
     return x;
 }
 
@@ -89,8 +90,8 @@ inline uint UINT8_DIVIDE(uint a, uint b)
 /// Approximation of (a * b * c + 32512) / 65025.0
 inline uint UINT8_MULT3(uint a, uint b, uint c)
 {
-  uint t = a * b * c + 0x7F5B;
-  return ((t >> 7) + t) >> 16;
+    uint t = a * b * c + 0x7F5B;
+    return ((t >> 7) + t) >> 16;
 }
 
 /// Blending of two scale values as described by the alpha scale value
@@ -113,7 +114,7 @@ inline uint UINT16_MULT(uint a, uint b)
 
 inline int INT16_MULT(int a, int b)
 {
-    return (a*b) / INT16_MAX;
+    return (a * b) / INT16_MAX;
 }
 
 inline uint UINT16_DIVIDE(uint a, uint b)

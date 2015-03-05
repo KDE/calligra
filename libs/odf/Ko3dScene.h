@@ -28,7 +28,6 @@
 class KoXmlWriter;
 class KoXmlElement;
 
-
 /** A scene in which to show 3d objects.
  *
  * The scene parameters include camera parameters (origin, direction
@@ -44,9 +43,7 @@ class KoXmlElement;
  * chart:plot-area if the chart also has 3D mode set.
  */
 
-
 #include "koodf_export.h"
-
 
 class KOODF_EXPORT Ko3dScene
 {
@@ -126,14 +123,12 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 /** Try to load a 3d scene from an element and return a pointer to a
  * Ko3dScene if it succeeded.
  */
 KOODF_EXPORT Ko3dScene *load3dScene(const KoXmlElement &element);
-
 
 #endif

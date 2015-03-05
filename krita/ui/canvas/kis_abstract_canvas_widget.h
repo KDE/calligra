@@ -31,7 +31,6 @@ class KisDisplayFilter;
 
 #include "kis_types.h"
 
-
 class KisAbstractCanvasWidget
 {
 
@@ -41,20 +40,20 @@ public:
 
     virtual ~KisAbstractCanvasWidget() {}
 
-    virtual QWidget * widget() = 0;
+    virtual QWidget *widget() = 0;
 
-    virtual KoToolProxy * toolProxy() const = 0;
+    virtual KoToolProxy *toolProxy() const = 0;
 
     /**
      * Draw the specified decorations on the view.
      */
-    virtual void drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const = 0;
+    virtual void drawDecorations(QPainter &gc, const QRect &updateWidgetRect) const = 0;
 
-    virtual void addDecoration(KisCanvasDecoration* deco) = 0;
-    virtual KisCanvasDecoration* decoration(const QString& id) const = 0;
+    virtual void addDecoration(KisCanvasDecoration *deco) = 0;
+    virtual KisCanvasDecoration *decoration(const QString &id) const = 0;
 
-    virtual void setDecorations(const QList<KisCanvasDecoration*> &) = 0;
-    virtual QList<KisCanvasDecoration*> decorations() const = 0;
+    virtual void setDecorations(const QList<KisCanvasDecoration *> &) = 0;
+    virtual QList<KisCanvasDecoration *> decorations() const = 0;
 
     /// set the specified display filter on the canvas
     virtual void setDisplayFilter(KisDisplayFilter *displayFilter) = 0;

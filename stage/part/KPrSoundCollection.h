@@ -32,7 +32,8 @@ class KoStore;
 /**
  * An collection of KPrSoundData objects to allow loading and saving them all together to the KoStore.
  */
-class STAGE_EXPORT KPrSoundCollection : public QObject, public KoDataCenterBase {
+class STAGE_EXPORT KPrSoundCollection : public QObject, public KoDataCenterBase
+{
 public:
     /// constructor
     explicit KPrSoundCollection(QObject *parent = 0);
@@ -49,7 +50,7 @@ public:
      * and have a recognized KPrSoundData::storeHref().
      * @return returns true if save was successful (no sounds failed).
      */
-    bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context );
+    bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
 
     KPrSoundData *findSound(QString title);
 
@@ -60,11 +61,10 @@ protected:
     void addSound(KPrSoundData *image);
     void removeSound(KPrSoundData *image);
 
-
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(KPrSoundCollection*)
+Q_DECLARE_METATYPE(KPrSoundCollection *)
 #endif

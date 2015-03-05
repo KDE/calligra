@@ -46,13 +46,13 @@ class DriverManager;
 
 namespace Kexi
 {
-KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData);
+KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KAboutData &aboutData);
 
 /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 enum ViewMode {
     AllViewModes = 0, //!< Usable primarily in KexiPart::initInstanceActions()
     NoViewMode = 0,   //!< In KexiView::afterSwitchFrom() and KexiView::beforeSwitchTo()
-                      //!< means that parent dialog of the view has not been defined yet.
+    //!< means that parent dialog of the view has not been defined yet.
     DataViewMode = 1,
     DesignViewMode = 2,
     TextViewMode = 4  //!< Also known as SQL View Mode
@@ -67,16 +67,16 @@ KEXICORE_EXPORT QString nameForViewMode(ViewMode mode, bool withAmpersand = fals
 KEXICORE_EXPORT QString iconNameForViewMode(ViewMode mode);
 
 //! A set of known connections
-KEXICORE_EXPORT KexiDBConnectionSet& connset();
+KEXICORE_EXPORT KexiDBConnectionSet &connset();
 
 //! A set available of project information
-KEXICORE_EXPORT KexiRecentProjects* recentProjects();
+KEXICORE_EXPORT KexiRecentProjects *recentProjects();
 
 //! shared driver manager
-KEXICORE_EXPORT KexiDB::DriverManager& driverManager();
+KEXICORE_EXPORT KexiDB::DriverManager &driverManager();
 
 //! shared part manager
-KEXICORE_EXPORT KexiPart::Manager& partManager();
+KEXICORE_EXPORT KexiPart::Manager &partManager();
 
 //! can be called to delete global objects like driverManager and partManager
 //! (and thus, all loaded factories/plugins)
@@ -86,13 +86,13 @@ KEXICORE_EXPORT void deleteGlobalObjects();
 //some temporary flags
 
 //! false by default, flag loaded on main window startup
-KEXICORE_EXPORT bool& tempShowMacros();
+KEXICORE_EXPORT bool &tempShowMacros();
 
 //! false by default, flag loaded on main window startup
-KEXICORE_EXPORT bool& tempShowScripts();
+KEXICORE_EXPORT bool &tempShowScripts();
 
 //! false by default, flag loaded on main window startup
-KEXICORE_EXPORT bool& tempShowScripts();
+KEXICORE_EXPORT bool &tempShowScripts();
 
 /*! Helper class for storing object status. */
 class KEXICORE_EXPORT ObjectStatus
@@ -100,47 +100,48 @@ class KEXICORE_EXPORT ObjectStatus
 public:
     ObjectStatus();
 
-    ObjectStatus(const QString& message, const QString& description);
+    ObjectStatus(const QString &message, const QString &description);
 
-    ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description);
+    ObjectStatus(KexiDB::Object *dbObject, const QString &message, const QString &description);
 
     ~ObjectStatus();
 
-    const ObjectStatus& status() const;
+    const ObjectStatus &status() const;
 
     bool error() const;
 
-    void setStatus(const QString& message, const QString& description);
+    void setStatus(const QString &message, const QString &description);
 
     //! Note: for safety, \a dbObject needs to be derived from QObject,
     //! otherwise it won't be assigned
-    void setStatus(KexiDB::Object* dbObject,
-                   const QString& message = QString(), const QString& description = QString());
+    void setStatus(KexiDB::Object *dbObject,
+                   const QString &message = QString(), const QString &description = QString());
 
-    void setStatus(KexiDB::ResultInfo* result,
-                   const QString& message = QString(), const QString& description = QString());
+    void setStatus(KexiDB::ResultInfo *result,
+                   const QString &message = QString(), const QString &description = QString());
 
-    void setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result,
-                   const QString& message = QString(), const QString& description = QString());
+    void setStatus(KexiDB::Object *dbObject, KexiDB::ResultInfo *result,
+                   const QString &message = QString(), const QString &description = QString());
 
     void clearStatus();
 
     QString singleStatusString() const;
 
-    void append(const ObjectStatus& otherStatus);
+    void append(const ObjectStatus &otherStatus);
 
-    KexiDB::Object *dbObject() const {
-        return dynamic_cast<KexiDB::Object*>((QObject*)dbObj);
+    KexiDB::Object *dbObject() const
+    {
+        return dynamic_cast<KexiDB::Object *>((QObject *)dbObj);
     }
 
     //! Helper returning pseudo handler that just updates this ObjectStatus object
     //! by receiving a message
-    operator KexiDB::MessageHandler*();
+    operator KexiDB::MessageHandler *();
 
     QString message, description;
 protected:
     QPointer<QObject> dbObj; //! This is in fact KexiDB::Object
-    KexiDB::MessageHandler* msgHandler;
+    KexiDB::MessageHandler *msgHandler;
 };
 
 /*! \return icon name for default file-based driver
@@ -169,16 +170,15 @@ KEXICORE_EXPORT QString KexiIconName(const QString &baseName);
 //! @return icon as understood by Kexi. Icon theme support is improved this way.
 KEXICORE_EXPORT KIcon KexiIcon(const QString &baseName);
 
-
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 
 //! Displays information that feature "feature_name" is not availabe in the current application version
 KEXICORE_EXPORT void KEXI_UNFINISHED(
-    const QString& feature_name, const QString& extra_text = QString());
+    const QString &feature_name, const QString &extra_text = QString());
 
 //! Like KEXI_UNFINISHED but returns new label instance with expected text
 KEXICORE_EXPORT QLabel *KEXI_UNFINISHED_LABEL(
-    const QString& feature_name, const QString& extra_text = QString());
+    const QString &feature_name, const QString &extra_text = QString());
 
 //! Like above - for use inside KexiActionProxy subclass - reuses feature name from shared action's text
 #define KEXI_UNFINISHED_SHARED_ACTION(action_name) \

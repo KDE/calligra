@@ -25,14 +25,14 @@ class BRUSH_EXPORT KisSvgBrush : public KisBrush
 {
 public:
     /// Construct brush to load filename later as brush
-    KisSvgBrush(const QString& filename);
+    KisSvgBrush(const QString &filename);
     virtual bool load();
     virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
     virtual bool saveToDevice(QIODevice *dev) const;
 
     virtual QString defaultFileExtension() const;
-    void toXML(QDomDocument& d, QDomElement& e) const;
+    void toXML(QDomDocument &d, QDomElement &e) const;
 private:
     QByteArray m_svg;
 };

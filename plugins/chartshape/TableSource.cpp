@@ -63,15 +63,15 @@ public:
     QList<int> samEmptyColumns;
 
     /// All tables, with name as unique identifier
-    QMap<QString, Table*> tablesByName;
+    QMap<QString, Table *> tablesByName;
     /// Redundant (but complete!) list of tables, now with model as UID
-    QMap<const QAbstractItemModel*, Table*> tablesByModel;
+    QMap<const QAbstractItemModel *, Table *> tablesByModel;
 
     /// Set of Table instances owned by this TableSource.
     /// This isn't equivalent to Tables in tablesByName or tablesByModel
     /// as a Table isn't deleted when it is removed from this source (the
     /// model pointer is just set to null).
-    QSet<Table*> tables;
+    QSet<Table *> tables;
 };
 
 TableSource::Private::Private(TableSource *parent)
@@ -103,8 +103,9 @@ void TableSource::Private::updateEmptySamColumn(int col)
 
     QString tableName = sheetAccessModel->headerData(col, Qt::Horizontal).toString();
     QAbstractItemModel *model = getModel(sheetAccessModel, col);
-    if (tableName.isEmpty() || model == 0)
+    if (tableName.isEmpty() || model == 0) {
         return;
+    }
 
     // Ok. Column is valid now. Add table in this column.
     samEmptyColumns.removeAll(col);
@@ -123,15 +124,17 @@ TableSource::~TableSource()
 
 Table *TableSource::get(const QString &tableName) const
 {
-    if(!d->tablesByName.contains(tableName))
+    if (!d->tablesByName.contains(tableName)) {
         return 0;
+    }
     return d->tablesByName[tableName];
 }
 
 Table *TableSource::get(const QAbstractItemModel *model) const
 {
-    if(!d->tablesByModel.contains(model))
+    if (!d->tablesByModel.contains(model)) {
         return 0;
+    }
     return d->tablesByModel[model];
 }
 
@@ -143,8 +146,9 @@ TableMap TableSource::tableMap() const
 void TableSource::setSheetAccessModel(QAbstractItemModel *model)
 {
     // Disconnect slots from signals in old sheetAccessModel
-    if (d->sheetAccessModel)
+    if (d->sheetAccessModel) {
         d->sheetAccessModel->disconnect(this);
+    }
 
     d->sheetAccessModel = model;
 
@@ -217,10 +221,11 @@ void TableSource::samColumnsInserted(QModelIndex, int first, int last)
     for (int col = first; col <= last; col++) {
         QString tableName = d->sheetAccessModel->headerData(col, Qt::Horizontal).toString();
         QAbstractItemModel *model = getModel(d->sheetAccessModel, col);
-        if (tableName.isEmpty() || model == 0)
+        if (tableName.isEmpty() || model == 0) {
             d->samEmptyColumns.append(col);
-        else
+        } else {
             add(tableName, getModel(d->sheetAccessModel, col));
+        }
     }
 }
 
@@ -237,23 +242,26 @@ void TableSource::samColumnsRemoved(QModelIndex, int first, int last)
 void TableSource::samDataChanged(const QModelIndex &first, const QModelIndex &last)
 {
     // Only the first row contains useful information for us
-    if (first.row() != 0)
+    if (first.row() != 0) {
         return;
+    }
 
     for (int col = first.column(); col <= last.column(); col++) {
         // If this column wasn't valid before check if it is now and update
-        if (d->samEmptyColumns.contains(col))
+        if (d->samEmptyColumns.contains(col)) {
             d->updateEmptySamColumn(col);
-        else
+        } else {
             Q_ASSERT("Changing the model of an existing table is not supported!");
+        }
     }
 }
 
 void TableSource::samHeaderDataChanged(Qt::Orientation orientation, int first, int last)
 {
     // There's no useful information for us in vertical headers
-    if (orientation == Qt::Vertical)
+    if (orientation == Qt::Vertical) {
         return;
+    }
 
     for (int col = first; col <= last; col++) {
         // If this column wasn't valid before check if it is now and update
@@ -270,5 +278,4 @@ void TableSource::samHeaderDataChanged(Qt::Orientation orientation, int first, i
         rename(table->m_name, newName);
     }
 }
-
 

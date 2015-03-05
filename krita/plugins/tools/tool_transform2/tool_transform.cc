@@ -29,17 +29,15 @@
 #include <kis_types.h>
 #include <KoToolRegistry.h>
 
-
 #include "kis_tool_transform.h"
 
 K_PLUGIN_FACTORY(ToolTransformFactory, registerPlugin<ToolTransform>();)
 K_EXPORT_PLUGIN(ToolTransformFactory("krita"))
 
-
 ToolTransform::ToolTransform(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
-    KoToolRegistry * r = KoToolRegistry::instance();
+    KoToolRegistry *r = KoToolRegistry::instance();
     r->add(new KisToolTransformFactory(QStringList()));
 }
 

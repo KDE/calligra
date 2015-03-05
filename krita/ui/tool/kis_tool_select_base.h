@@ -25,18 +25,17 @@
 
 class KisSelectionOptions;
 
-
 class KRITAUI_EXPORT KisToolSelectBase : public KisTool
 {
     Q_OBJECT
     Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged);
 public:
     KisToolSelectBase(KoCanvasBase *canvas,
-                      const QCursor& cursor,
+                      const QCursor &cursor,
                       const QString &windowTitle);
 
-    QWidget* createOptionWidget();
-    KisSelectionOptions* selectionOptionWidget();
+    QWidget *createOptionWidget();
+    KisSelectionOptions *selectionOptionWidget();
 
     SelectionMode selectionMode() const;
     SelectionAction selectionAction() const;

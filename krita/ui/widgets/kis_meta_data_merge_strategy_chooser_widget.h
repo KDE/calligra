@@ -38,16 +38,16 @@ public:
     /**
      * Creates a widget to select a merge strategy.
      */
-    KisMetaDataMergeStrategyChooserWidget(QWidget* parent);
+    KisMetaDataMergeStrategyChooserWidget(QWidget *parent);
     ~KisMetaDataMergeStrategyChooserWidget();
 
-    const KisMetaData::MergeStrategy* currentStrategy();
+    const KisMetaData::MergeStrategy *currentStrategy();
 
     /**
      * Show a dialog which embed that widget, and have an Ok and Cancel button.
      * @return 0 if no merge strategy was selected, or the selected merge strategy
      */
-    static const KisMetaData::MergeStrategy* showDialog(QWidget* parent);
+    static const KisMetaData::MergeStrategy *showDialog(QWidget *parent);
 
 private Q_SLOTS:
 
@@ -55,10 +55,10 @@ private Q_SLOTS:
 
 private:
 
-    const KisMetaData::MergeStrategy* mergeStrategy(int index);
+    const KisMetaData::MergeStrategy *mergeStrategy(int index);
 
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

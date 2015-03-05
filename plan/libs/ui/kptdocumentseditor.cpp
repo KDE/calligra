@@ -36,7 +36,6 @@
 #include <QList>
 #include <QVBoxLayout>
 
-
 #include <kaction.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -45,38 +44,36 @@
 
 #include <KoDocument.h>
 
-
 namespace KPlato
 {
 
-
 //--------------------
-DocumentTreeView::DocumentTreeView( QWidget *parent )
-    : TreeViewBase( parent )
+DocumentTreeView::DocumentTreeView(QWidget *parent)
+    : TreeViewBase(parent)
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    setStretchLastSection( true );
-    
+    setStretchLastSection(true);
+
     DocumentItemModel *m = new DocumentItemModel();
-    setModel( m );
-    
-    setRootIsDecorated ( false );
-    setSelectionBehavior( QAbstractItemView::SelectRows );
-    setSelectionMode( QAbstractItemView::SingleSelection );
+    setModel(m);
 
-    createItemDelegates( m );
+    setRootIsDecorated(false);
+    setSelectionBehavior(QAbstractItemView::SelectRows);
+    setSelectionMode(QAbstractItemView::SingleSelection);
 
-    setAcceptDrops( true );
-    setDropIndicatorShown( true );
-    
-    connect( selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged(QItemSelection)) );
+    createItemDelegates(m);
 
-    setColumnHidden( DocumentModel::Property_Status, true ); // not used atm
+    setAcceptDrops(true);
+    setDropIndicatorShown(true);
+
+    connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged(QItemSelection)));
+
+    setColumnHidden(DocumentModel::Property_Status, true);   // not used atm
 }
 
 Document *DocumentTreeView::currentDocument() const
 {
-    return model()->document( selectionModel()->currentIndex() );
+    return model()->document(selectionModel()->currentIndex());
 }
 
 QModelIndexList DocumentTreeView::selectedRows() const
@@ -84,17 +81,17 @@ QModelIndexList DocumentTreeView::selectedRows() const
     return selectionModel()->selectedRows();
 }
 
-void DocumentTreeView::slotSelectionChanged( const QItemSelection &selected )
+void DocumentTreeView::slotSelectionChanged(const QItemSelection &selected)
 {
-    emit selectionChanged( selected.indexes() );
+    emit selectionChanged(selected.indexes());
 }
 
-QList<Document*> DocumentTreeView::selectedDocuments() const
+QList<Document *> DocumentTreeView::selectedDocuments() const
 {
-    QList<Document*> lst;
-    foreach ( const QModelIndex &i, selectionModel()->selectedRows() ) {
-        Document *doc = model()->document( i );
-        if ( doc ) {
+    QList<Document *> lst;
+    foreach (const QModelIndex &i, selectionModel()->selectedRows()) {
+        Document *doc = model()->document(i);
+        if (doc) {
             lst << doc;
         }
     }
@@ -106,72 +103,72 @@ DocumentsEditor::DocumentsEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     : ViewBase(part, doc, parent)
 {
     setupGui();
-    
-    QVBoxLayout * l = new QVBoxLayout( this );
-    l->setMargin( 0 );
-    m_view = new DocumentTreeView( this );
-    l->addWidget( m_view );
-    
-    m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
+    QVBoxLayout *l = new QVBoxLayout(this);
+    l->setMargin(0);
+    m_view = new DocumentTreeView(this);
+    l->addWidget(m_view);
 
-    connect( m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex)) );
+    m_view->setEditTriggers(m_view->editTriggers() | QAbstractItemView::EditKeyPressed);
 
-    connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
+    connect(model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)));
 
-    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
-    
-    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
+    connect(m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex)));
+
+    connect(m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)));
+
+    connect(m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)));
+
+    connect(m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)));
 
 }
 
-void DocumentsEditor::updateReadWrite( bool readwrite )
+void DocumentsEditor::updateReadWrite(bool readwrite)
 {
-    kDebug(planDbg())<<isReadWrite()<<"->"<<readwrite;
-    ViewBase::updateReadWrite( readwrite );
-    m_view->setReadWrite( readwrite );
-    updateActionsEnabled( readwrite );
+    kDebug(planDbg()) << isReadWrite() << "->" << readwrite;
+    ViewBase::updateReadWrite(readwrite);
+    m_view->setReadWrite(readwrite);
+    updateActionsEnabled(readwrite);
 }
 
-void DocumentsEditor::draw( Documents &docs )
+void DocumentsEditor::draw(Documents &docs)
 {
-    m_view->setDocuments( &docs );
+    m_view->setDocuments(&docs);
 }
 
 void DocumentsEditor::draw()
 {
 }
 
-void DocumentsEditor::setGuiActive( bool activate )
+void DocumentsEditor::setGuiActive(bool activate)
 {
-    kDebug(planDbg())<<activate;
-    updateActionsEnabled( true );
-    ViewBase::setGuiActive( activate );
-    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
-        m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
+    kDebug(planDbg()) << activate;
+    updateActionsEnabled(true);
+    ViewBase::setGuiActive(activate);
+    if (activate && !m_view->selectionModel()->currentIndex().isValid()) {
+        m_view->selectionModel()->setCurrentIndex(m_view->model()->index(0, 0), QItemSelectionModel::NoUpdate);
     }
 }
 
-void DocumentsEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
+void DocumentsEditor::slotContextMenuRequested(const QModelIndex &index, const QPoint &pos)
 {
     //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
-    if ( index.isValid() ) {
-        Document *obj = m_view->model()->document( index );
-        if ( obj ) {
+    if (index.isValid()) {
+        Document *obj = m_view->model()->document(index);
+        if (obj) {
             name = "documentseditor_popup";
         }
     }
-    emit requestPopupMenu( name, pos );
+    emit requestPopupMenu(name, pos);
 }
 
-void DocumentsEditor::slotHeaderContextMenuRequested( const QPoint &pos )
+void DocumentsEditor::slotHeaderContextMenuRequested(const QPoint &pos)
 {
     kDebug(planDbg());
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
+    QList<QAction *> lst = contextActionList();
+    if (! lst.isEmpty()) {
+        QMenu::exec(lst, pos,  lst.first());
     }
 }
 
@@ -180,58 +177,57 @@ Document *DocumentsEditor::currentDocument() const
     return m_view->currentDocument();
 }
 
-void DocumentsEditor::slotCurrentChanged(  const QModelIndex & )
+void DocumentsEditor::slotCurrentChanged(const QModelIndex &)
 {
     //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 //    slotEnableActions();
 }
 
-void DocumentsEditor::slotSelectionChanged( const QModelIndexList &list )
+void DocumentsEditor::slotSelectionChanged(const QModelIndexList &list)
 {
-    kDebug(planDbg())<<list.count();
-    updateActionsEnabled( true );
+    kDebug(planDbg()) << list.count();
+    updateActionsEnabled(true);
 }
 
-void DocumentsEditor::slotEnableActions( bool on )
+void DocumentsEditor::slotEnableActions(bool on)
 {
-    updateActionsEnabled( on );
+    updateActionsEnabled(on);
 }
 
-void DocumentsEditor::updateActionsEnabled(  bool on )
+void DocumentsEditor::updateActionsEnabled(bool on)
 {
-    QList<Document*> lst = m_view->selectedDocuments();
-    if ( lst.isEmpty() || lst.count() > 1 ) {
-        actionEditDocument->setEnabled( false );
-        actionViewDocument->setEnabled( false );
+    QList<Document *> lst = m_view->selectedDocuments();
+    if (lst.isEmpty() || lst.count() > 1) {
+        actionEditDocument->setEnabled(false);
+        actionViewDocument->setEnabled(false);
         return;
     }
     Document *doc = lst.first();
-    actionViewDocument->setEnabled( on );
-    actionEditDocument->setEnabled( on && doc->type() == Document::Type_Product && isReadWrite() );
+    actionViewDocument->setEnabled(on);
+    actionEditDocument->setEnabled(on && doc->type() == Document::Type_Product && isReadWrite());
 }
 
 void DocumentsEditor::setupGui()
 {
     QString name = "documentseditor_edit_list";
     actionEditDocument  = new KAction(koIcon("document-properties"), i18n("Edit..."), this);
-    actionCollection()->addAction("edit_documents", actionEditDocument );
+    actionCollection()->addAction("edit_documents", actionEditDocument);
 //    actionEditDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
-    connect( actionEditDocument, SIGNAL(triggered(bool)), SLOT(slotEditDocument()) );
-    addAction( name, actionEditDocument );
+    connect(actionEditDocument, SIGNAL(triggered(bool)), SLOT(slotEditDocument()));
+    addAction(name, actionEditDocument);
 
     actionViewDocument  = new KAction(koIcon("document-preview"), i18nc("@action View a document", "View..."), this);
-    actionCollection()->addAction("view_documents", actionViewDocument );
+    actionCollection()->addAction("view_documents", actionViewDocument);
 //    actionViewDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
-    connect( actionViewDocument, SIGNAL(triggered(bool)), SLOT(slotViewDocument()) );
-    addAction( name, actionViewDocument );
+    connect(actionViewDocument, SIGNAL(triggered(bool)), SLOT(slotViewDocument()));
+    addAction(name, actionViewDocument);
 
-    
-/*    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
-    actionCollection()->addAction("delete_selection", actionDeleteSelection );
-    actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
-    connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteSelection()) );
-    addAction( name, actionDeleteSelection );*/
-    
+    /*    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
+        actionCollection()->addAction("delete_selection", actionDeleteSelection );
+        actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
+        connect( actionDeleteSelection, SIGNAL(triggered(bool)), SLOT(slotDeleteSelection()) );
+        addAction( name, actionDeleteSelection );*/
+
     // Add the context menu actions for the view options
     createOptionAction();
 }
@@ -239,65 +235,64 @@ void DocumentsEditor::setupGui()
 void DocumentsEditor::slotOptions()
 {
     kDebug(planDbg());
-    ItemViewSettupDialog dlg( this, m_view/*->masterView()*/ );
+    ItemViewSettupDialog dlg(this, m_view/*->masterView()*/);
     dlg.exec();
 }
 
 void DocumentsEditor::slotEditDocument()
 {
-    QList<Document*> dl = m_view->selectedDocuments();
-    if ( dl.isEmpty() ) {
+    QList<Document *> dl = m_view->selectedDocuments();
+    if (dl.isEmpty()) {
         return;
     }
-    kDebug(planDbg())<<dl;
-    emit editDocument( dl.first() );
+    kDebug(planDbg()) << dl;
+    emit editDocument(dl.first());
 }
 
 void DocumentsEditor::slotViewDocument()
 {
-    QList<Document*> dl = m_view->selectedDocuments();
-    if ( dl.isEmpty() ) {
+    QList<Document *> dl = m_view->selectedDocuments();
+    if (dl.isEmpty()) {
         return;
     }
-    kDebug(planDbg())<<dl;
-    emit viewDocument( dl.first() );
+    kDebug(planDbg()) << dl;
+    emit viewDocument(dl.first());
 }
 
 void DocumentsEditor::slotAddDocument()
 {
     //kDebug(planDbg());
-    QList<Document*> dl = m_view->selectedDocuments();
+    QList<Document *> dl = m_view->selectedDocuments();
     Document *after = 0;
-    if ( dl.count() > 0 ) {
+    if (dl.count() > 0) {
         after = dl.last();
     }
     Document *doc = new Document();
-    QModelIndex i = m_view->model()->insertDocument( doc, after );
-    if ( i.isValid() ) {
-        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
-        m_view->edit( i );
+    QModelIndex i = m_view->model()->insertDocument(doc, after);
+    if (i.isValid()) {
+        m_view->selectionModel()->setCurrentIndex(i, QItemSelectionModel::NoUpdate);
+        m_view->edit(i);
     }
 }
 
 void DocumentsEditor::slotDeleteSelection()
 {
-    QList<Document*> lst = m_view->selectedDocuments();
+    QList<Document *> lst = m_view->selectedDocuments();
     //kDebug(planDbg())<<lst.count()<<" objects";
-    if ( ! lst.isEmpty() ) {
-        emit deleteDocumentList( lst );
+    if (! lst.isEmpty()) {
+        emit deleteDocumentList(lst);
     }
 }
 
-bool DocumentsEditor::loadContext( const KoXmlElement &context )
+bool DocumentsEditor::loadContext(const KoXmlElement &context)
 {
-    return m_view->loadContext( m_view->model()->columnMap(), context );
+    return m_view->loadContext(m_view->model()->columnMap(), context);
 }
 
-void DocumentsEditor::saveContext( QDomElement &context ) const
+void DocumentsEditor::saveContext(QDomElement &context) const
 {
-    m_view->saveContext( m_view->model()->columnMap(), context );
+    m_view->saveContext(m_view->model()->columnMap(), context);
 }
-
 
 } // namespace KPlato
 

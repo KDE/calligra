@@ -24,7 +24,7 @@
 #include <QImageReader>
 #include <QSvgRenderer>
 
-KisSvgBrush::KisSvgBrush(const QString& filename)
+KisSvgBrush::KisSvgBrush(const QString &filename)
     : KisBrush(filename)
 {
     setBrushType(INVALID);
@@ -36,8 +36,12 @@ KisSvgBrush::KisSvgBrush(const QString& filename)
 bool KisSvgBrush::load()
 {
     QFile f(filename());
-    if (f.size() == 0) return false;
-    if (!f.exists()) return false;
+    if (f.size() == 0) {
+        return false;
+    }
+    if (!f.exists()) {
+        return false;
+    }
     if (!f.open(QIODevice::ReadOnly)) {
         warnKrita << "Can't open file " << filename();
         return false;
@@ -56,7 +60,9 @@ bool KisSvgBrush::loadFromDevice(QIODevice *dev)
     QSvgRenderer renderer(m_svg);
 
     QRect box = renderer.viewBox();
-    if (box.isEmpty()) return false;
+    if (box.isEmpty()) {
+        return false;
+    }
 
     QImage image_(1000, (1000 * box.height()) / box.width(), QImage::Format_ARGB32);
     {
@@ -66,7 +72,9 @@ bool KisSvgBrush::loadFromDevice(QIODevice *dev)
     }
 
     QVector<QRgb> table;
-    for (int i = 0; i < 256; ++i) table.push_back(qRgb(i, i, i));
+    for (int i = 0; i < 256; ++i) {
+        table.push_back(qRgb(i, i, i));
+    }
     image_ = image_.convertToFormat(QImage::Format_Indexed8, table);
 
     setBrushTipImage(image_);
@@ -77,8 +85,7 @@ bool KisSvgBrush::loadFromDevice(QIODevice *dev)
     if (brushTipImage().isGrayscale()) {
         setBrushType(MASK);
         setHasColor(false);
-    }
-    else {
+    } else {
         setBrushType(IMAGE);
         setHasColor(true);
     }
@@ -90,7 +97,9 @@ bool KisSvgBrush::loadFromDevice(QIODevice *dev)
 bool KisSvgBrush::save()
 {
     QFile f(filename());
-    if (!f.open(QFile::WriteOnly)) return false;
+    if (!f.open(QFile::WriteOnly)) {
+        return false;
+    }
     bool res = saveToDevice(&f);
     f.close();
     return res;
@@ -106,7 +115,7 @@ QString KisSvgBrush::defaultFileExtension() const
     return QString(".svg");
 }
 
-void KisSvgBrush::toXML(QDomDocument& d, QDomElement& e) const
+void KisSvgBrush::toXML(QDomDocument &d, QDomElement &e) const
 {
     predefinedBrushToXML("svg_brush", e);
     KisBrush::toXML(d, e);

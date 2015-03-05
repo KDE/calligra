@@ -39,23 +39,23 @@
 class PIGMENTCMS_EXPORT KoColorSpaceEngine : public KoColorConversionTransformationAbstractFactory
 {
 public:
-    KoColorSpaceEngine(const QString& id, const QString& name);
+    KoColorSpaceEngine(const QString &id, const QString &name);
     virtual ~KoColorSpaceEngine();
-    const QString& id() const;
-    const QString& name() const;
+    const QString &id() const;
+    const QString &name() const;
     virtual void addProfile(const QString &filename) = 0;
     virtual void removeProfile(const QString &filename) = 0;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
-class PIGMENTCMS_EXPORT KoColorSpaceEngineRegistry : public KoGenericRegistry< KoColorSpaceEngine* >
+class PIGMENTCMS_EXPORT KoColorSpaceEngineRegistry : public KoGenericRegistry< KoColorSpaceEngine * >
 {
 public:
     KoColorSpaceEngineRegistry();
     ~KoColorSpaceEngineRegistry();
-    static KoColorSpaceEngineRegistry* instance();
+    static KoColorSpaceEngineRegistry *instance();
 };
 
 #endif

@@ -50,30 +50,30 @@
 using namespace KexiTableDesignerCommands;
 
 KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
-    KexiTableDesignerView* aDesignerView)
-        : designerView(aDesignerView)
-        , sets(0)
-        , uniqueIdCounter(0)
-        , dontAskOnStoreData(false)
-        , slotTogglePrimaryKeyCalled(false)
-        , primaryKeyExists(false)
-        , slotPropertyChanged_primaryKey_enabled(true)
-        , slotPropertyChanged_subType_enabled(true)
-        , addHistoryCommand_in_slotPropertyChanged_enabled(true)
-        , addHistoryCommand_in_slotRowUpdated_enabled(true)
-        , addHistoryCommand_in_slotAboutToDeleteRow_enabled(true)
-        , addHistoryCommand_in_slotRowInserted_enabled(true)
-        , slotBeforeCellChanged_enabled(true)
-        , tempStoreDataUsingRealAlterTable(false)
+    KexiTableDesignerView *aDesignerView)
+    : designerView(aDesignerView)
+    , sets(0)
+    , uniqueIdCounter(0)
+    , dontAskOnStoreData(false)
+    , slotTogglePrimaryKeyCalled(false)
+    , primaryKeyExists(false)
+    , slotPropertyChanged_primaryKey_enabled(true)
+    , slotPropertyChanged_subType_enabled(true)
+    , addHistoryCommand_in_slotPropertyChanged_enabled(true)
+    , addHistoryCommand_in_slotRowUpdated_enabled(true)
+    , addHistoryCommand_in_slotAboutToDeleteRow_enabled(true)
+    , addHistoryCommand_in_slotRowInserted_enabled(true)
+    , slotBeforeCellChanged_enabled(true)
+    , tempStoreDataUsingRealAlterTable(false)
 {
-    historyActionCollection = new KActionCollection((QWidget*)0);
+    historyActionCollection = new KActionCollection((QWidget *)0);
     history = new KUndo2Stack();
     historyActionCollection->addAction("edit_undo", history->createUndoAction(historyActionCollection, "edit_undo"));
     historyActionCollection->addAction("edit_redo", history->createRedoAction(historyActionCollection, "edit_redo"));
-    
+
     internalPropertyNames
-        << "subType" << "uid" << "newrecord" << "rowSource" << "rowSourceType"
-        << "boundColumn" << "visibleColumn";
+            << "subType" << "uid" << "newrecord" << "rowSource" << "rowSourceType"
+            << "boundColumn" << "visibleColumn";
 }
 
 KexiTableDesignerViewPrivate::~KexiTableDesignerViewPrivate()
@@ -89,12 +89,12 @@ int KexiTableDesignerViewPrivate::generateUniqueId()
 }
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
-    const KoProperty::Set& set, const QByteArray& propertyName,
-    const QVariant& newValue, const QVariant& oldValue, Command* commandGroup,
+    const KoProperty::Set &set, const QByteArray &propertyName,
+    const QVariant &newValue, const QVariant &oldValue, Command *commandGroup,
     bool forceAddCommand, bool rememberOldValue,
-    QStringList* const slist, QStringList* const nlist)
+    QStringList *const slist, QStringList *const nlist)
 {
-    KoProperty::Property& property = set[propertyName];
+    KoProperty::Property &property = set[propertyName];
 
     //remember because we'll change list data soon
     KoProperty::Property::ListData *oldListData = property.listData() ?
@@ -115,11 +115,12 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     const bool prev_addHistoryCommand_in_slotPropertyChanged_enabled
         = addHistoryCommand_in_slotPropertyChanged_enabled; //remember
     addHistoryCommand_in_slotPropertyChanged_enabled = false;
-    if (property.value() != newValue)
+    if (property.value() != newValue) {
         property.setValue(newValue, rememberOldValue);
+    }
     if (commandGroup) {
-            new ChangeFieldPropertyCommand(commandGroup, designerView, set, propertyName, oldValue, newValue,
-                                           oldListData, property.listData());
+        new ChangeFieldPropertyCommand(commandGroup, designerView, set, propertyName, oldValue, newValue,
+                                       oldListData, property.listData());
     }
     delete oldListData;
     addHistoryCommand_in_slotPropertyChanged_enabled
@@ -127,23 +128,23 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 }
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
-    const KoProperty::Set& set, const QByteArray& propertyName,
-    const QVariant& newValue, Command* commandGroup,
+    const KoProperty::Set &set, const QByteArray &propertyName,
+    const QVariant &newValue, Command *commandGroup,
     bool forceAddCommand, bool rememberOldValue,
-    QStringList* const slist, QStringList* const nlist)
+    QStringList *const slist, QStringList *const nlist)
 {
-    KoProperty::Property& property = set[propertyName];
+    KoProperty::Property &property = set[propertyName];
     QVariant oldValue(property.value());
     setPropertyValueIfNeeded(set, propertyName, newValue, property.value(),
                              commandGroup, forceAddCommand, rememberOldValue, slist, nlist);
 }
 
-void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KoProperty::Set& set, KoProperty::Property* prop,
+void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KoProperty::Set &set, KoProperty::Property *prop,
         bool visible, bool &changed, Command *commandGroup)
 {
     if (prop->isVisible() != visible) {
         if (commandGroup) {
-                new ChangePropertyVisibilityCommand(commandGroup, designerView, set, prop->name(), visible);
+            new ChangePropertyVisibilityCommand(commandGroup, designerView, set, prop->name(), visible);
         }
         prop->setVisible(visible);
         changed = true;
@@ -159,7 +160,7 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
 
     prop = &set["subType"];
     kDebug() << "subType=" << prop->value().toInt()
-        << " type=" << set["type"].value().toInt();
+             << " type=" << set["type"].value().toInt();
 
     //if there is no more than 1 subType name or it's a PK: hide the property
     visible =
@@ -236,7 +237,7 @@ QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool &emptyTable, 
                       designerView->window()).toString()));
 }
 
-void KexiTableDesignerViewPrivate::updateIconForRecord(KexiDB::RecordData &record, KoProperty::Set& set)
+void KexiTableDesignerViewPrivate::updateIconForRecord(KexiDB::RecordData &record, KoProperty::Set &set)
 {
     QVariant icon;
     if (!set["rowSource"].value().toString().isEmpty()

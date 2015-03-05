@@ -29,7 +29,7 @@
 #include <klocale.h>
 
 KoPABackgroundFillWidget::KoPABackgroundFillWidget(QWidget *parent)
-: KoFillConfigWidget(parent)
+    : KoFillConfigWidget(parent)
 {
     setWindowTitle(i18n("Background"));
 }
@@ -38,19 +38,19 @@ void KoPABackgroundFillWidget::setView(KoPAViewBase *view)
 {
     Q_ASSERT(view);
     connect(view->proxyObject, SIGNAL(activePageChanged()),
-             this, SLOT(shapeChanged()));
+            this, SLOT(shapeChanged()));
 }
 
-KoShape* KoPABackgroundFillWidget::currentShape()
+KoShape *KoPABackgroundFillWidget::currentShape()
 {
     KoShape *slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
     return slide;
 }
 
-QList<KoShape*> KoPABackgroundFillWidget::currentShapes()
+QList<KoShape *> KoPABackgroundFillWidget::currentShapes()
 {
     KoShape *slide = canvas()->resourceManager()->koShapeResource(KoPageApp::CurrentPage);
-    QList<KoShape*> list;
+    QList<KoShape *> list;
     list.append(slide);
     return list;
 }

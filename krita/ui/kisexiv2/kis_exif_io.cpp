@@ -48,12 +48,11 @@ struct KisExifIO::Private {
 // convert ExifVersion and FlashpixVersion to a KisMetaData value
 KisMetaData::Value exifVersionToKMDValue(const Exiv2::Value::AutoPtr value)
 {
-    const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
-    if(dvalue)
-    {
+    const Exiv2::DataValue *dvalue = dynamic_cast<const Exiv2::DataValue *>(&*value);
+    if (dvalue) {
         Q_ASSERT(dvalue);
         QByteArray array(dvalue->count(), 0);
-        dvalue->copy((Exiv2::byte*)array.data());
+        dvalue->copy((Exiv2::byte *)array.data());
         return KisMetaData::Value(QString(array));
     } else {
         Q_ASSERT(value->typeId() == Exiv2::asciiString);
@@ -62,11 +61,11 @@ KisMetaData::Value exifVersionToKMDValue(const Exiv2::Value::AutoPtr value)
 }
 
 // convert from KisMetaData value to ExifVersion and FlashpixVersion
-Exiv2::Value* kmdValueToExifVersion(const KisMetaData::Value& value)
+Exiv2::Value *kmdValueToExifVersion(const KisMetaData::Value &value)
 {
-    Exiv2::DataValue* dvalue = new Exiv2::DataValue;
+    Exiv2::DataValue *dvalue = new Exiv2::DataValue;
     QString ver = value.asVariant().toString();
-    dvalue->read((const Exiv2::byte*)ver.toLatin1().constData(), ver.size());
+    dvalue->read((const Exiv2::byte *)ver.toLatin1().constData(), ver.size());
     return dvalue;
 }
 
@@ -74,11 +73,10 @@ Exiv2::Value* kmdValueToExifVersion(const KisMetaData::Value& value)
 KisMetaData::Value exifArrayToKMDIntOrderedArray(const Exiv2::Value::AutoPtr value)
 {
     QList<KisMetaData::Value> v;
-    const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
-    if(dvalue)
-    {
+    const Exiv2::DataValue *dvalue = dynamic_cast<const Exiv2::DataValue *>(&*value);
+    if (dvalue) {
         QByteArray array(dvalue->count(), 0);
-        dvalue->copy((Exiv2::byte*)array.data());
+        dvalue->copy((Exiv2::byte *)array.data());
         for (int i = 0; i < array.size(); i++) {
             QChar c((char)array[i]);
             v.push_back(KisMetaData::Value(QString(c).toInt(0)));
@@ -92,7 +90,7 @@ KisMetaData::Value exifArrayToKMDIntOrderedArray(const Exiv2::Value::AutoPtr val
 }
 
 // Convert a KisMetaData array of integer to an exif array of integer string
-Exiv2::Value* kmdIntOrderedArrayToExifArray(const KisMetaData::Value& value)
+Exiv2::Value *kmdIntOrderedArrayToExifArray(const KisMetaData::Value &value)
 {
     QList<KisMetaData::Value> v = value.asArray();
     QByteArray s;
@@ -101,7 +99,7 @@ Exiv2::Value* kmdIntOrderedArrayToExifArray(const KisMetaData::Value& value)
         int val = it->asVariant().toInt(0);
         s += QByteArray::number(val);
     }
-    return new Exiv2::DataValue((const Exiv2::byte*)s.data(), s.size());
+    return new Exiv2::DataValue((const Exiv2::byte *)s.data(), s.size());
 }
 
 QDateTime exivValueToDateTime(const Exiv2::Value::AutoPtr value)
@@ -137,21 +135,20 @@ Exiv2::ByteOrder invertByteOrder(Exiv2::ByteOrder order)
     return Exiv2::invalidByteOrder;
 }
 
-
 KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value, Exiv2::ByteOrder order)
 {
     QMap<QString, KisMetaData::Value> oecfStructure;
-    const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
+    const Exiv2::DataValue *dvalue = dynamic_cast<const Exiv2::DataValue *>(&*value);
     Q_ASSERT(dvalue);
     QByteArray array(dvalue->count(), 0);
-    dvalue->copy((Exiv2::byte*)array.data());
-    int columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
-    int rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
+    dvalue->copy((Exiv2::byte *)array.data());
+    int columns = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
+    int rows = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
 
     if ((columns * rows + 4) > dvalue->count()) { // Sometime byteOrder get messed up (especially if metadata got saved with kexiv2 library, or any library that doesn't save back with the same byte order as the camera)
         order = invertByteOrder(order);
-        columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
-        rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
+        columns = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
+        rows = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
         Q_ASSERT((columns * rows + 4) > dvalue->count());
     }
     oecfStructure["Columns"] = KisMetaData::Value(columns);
@@ -171,7 +168,7 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
     }
     oecfStructure["Names"] = KisMetaData::Value(names, KisMetaData::Value::OrderedArray);
     QList<KisMetaData::Value> values;
-    qint16* dataIt = reinterpret_cast<qint16*>(array.data() + index);
+    qint16 *dataIt = reinterpret_cast<qint16 *>(array.data() + index);
     for (int i = 0; i < columns; i++) {
         for (int j = 0; j < rows; j++) {
             values.append(KisMetaData::Value(KisMetaData::Rational(fixEndianess<qint32>(dataIt[0], order), fixEndianess<qint32>(dataIt[1], order))));
@@ -183,7 +180,7 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
     return KisMetaData::Value(oecfStructure);
 }
 
-Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
+Exiv2::Value *kmdOECFStructureToExifOECF(const KisMetaData::Value &value)
 {
     QMap<QString, KisMetaData::Value> oecfStructure = value.asStructure();
     quint16 columns = oecfStructure["Columns"].asVariant().toInt(0);
@@ -191,7 +188,7 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
 
     QList<KisMetaData::Value> names = oecfStructure["Names"].asArray();
     QList<KisMetaData::Value> values = oecfStructure["Values"].asArray();
-    Q_ASSERT(columns*rows == values.size());
+    Q_ASSERT(columns * rows == values.size());
     int length = 4 + rows * columns * 8; // The 4 byte for storing rows/columns and the rows*columns*sizeof(rational)
     bool saveNames = (!names.empty() && names[0].asVariant().toString().size() > 0);
     if (saveNames) {
@@ -200,8 +197,8 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
         }
     }
     QByteArray array(length, 0);
-    (reinterpret_cast<quint16*>(array.data()))[0] = columns;
-    (reinterpret_cast<quint16*>(array.data()))[1] = rows;
+    (reinterpret_cast<quint16 *>(array.data()))[0] = columns;
+    (reinterpret_cast<quint16 *>(array.data()))[1] = rows;
     int index = 4;
     if (saveNames) {
         for (int i = 0; i < columns; i++) {
@@ -211,14 +208,14 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
             index += name.size();
         }
     }
-    qint16* dataIt = reinterpret_cast<qint16*>(array.data() + index);
+    qint16 *dataIt = reinterpret_cast<qint16 *>(array.data() + index);
     for (QList<KisMetaData::Value>::iterator it = values.begin();
             it != values.end(); ++it) {
         dataIt[0] = it->asRational().numerator;
         dataIt[1] = it->asRational().denominator;
         dataIt += 2;
     }
-    return new Exiv2::DataValue((const Exiv2::byte*)array.data(), array.size());
+    return new Exiv2::DataValue((const Exiv2::byte *)array.data(), array.size());
 }
 
 KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr value)
@@ -226,27 +223,25 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
     QMap<QString, KisMetaData::Value> deviceSettingStructure;
     QByteArray array;
 
-    const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
-    if(dvalue)
-    {
+    const Exiv2::DataValue *dvalue = dynamic_cast<const Exiv2::DataValue *>(&*value);
+    if (dvalue) {
         array.resize(dvalue->count());
-        dvalue->copy((Exiv2::byte*)array.data());
+        dvalue->copy((Exiv2::byte *)array.data());
     } else {
         Q_ASSERT(value->typeId() == Exiv2::unsignedShort);
         array.resize(2 * value->count());
-        value->copy((Exiv2::byte*)array.data(), Exiv2::littleEndian);
+        value->copy((Exiv2::byte *)array.data(), Exiv2::littleEndian);
     }
-    int columns = (reinterpret_cast<quint16*>(array.data()))[0];
-    int rows = (reinterpret_cast<quint16*>(array.data()))[1];
+    int columns = (reinterpret_cast<quint16 *>(array.data()))[0];
+    int rows = (reinterpret_cast<quint16 *>(array.data()))[1];
     deviceSettingStructure["Columns"] = KisMetaData::Value(columns);
     deviceSettingStructure["Rows"] = KisMetaData::Value(rows);
     QList<KisMetaData::Value> settings;
     QByteArray null(2, 0);
 
-    for (int index = 4; index < array.size(); )
-    {
+    for (int index = 4; index < array.size();) {
         int lastIndex = array.indexOf(null, index);
-        QString setting = QString::fromUtf16((ushort*)(void*)( array.data() + index), lastIndex - index + 2);
+        QString setting = QString::fromUtf16((ushort *)(void *)(array.data() + index), lastIndex - index + 2);
         index = lastIndex + 2;
         dbgFile << "Setting << " << setting;
         settings.append(KisMetaData::Value(setting));
@@ -255,39 +250,39 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
     return KisMetaData::Value(deviceSettingStructure);
 }
 
-Exiv2::Value* deviceSettingDescriptionKMDToExif(const KisMetaData::Value& value)
+Exiv2::Value *deviceSettingDescriptionKMDToExif(const KisMetaData::Value &value)
 {
     QMap<QString, KisMetaData::Value> deviceSettingStructure = value.asStructure();
     quint16 columns = deviceSettingStructure["Columns"].asVariant().toInt(0);
     quint16 rows = deviceSettingStructure["Rows"].asVariant().toInt(0);
 
-    QTextCodec* codec = QTextCodec::codecForName("UTF-16");
+    QTextCodec *codec = QTextCodec::codecForName("UTF-16");
 
     QList<KisMetaData::Value> settings = deviceSettingStructure["Settings"].asArray();
     QByteArray array(4, 0);
-    (reinterpret_cast<quint16*>(array.data()))[0] = columns;
-    (reinterpret_cast<quint16*>(array.data()))[1] = rows;
+    (reinterpret_cast<quint16 *>(array.data()))[0] = columns;
+    (reinterpret_cast<quint16 *>(array.data()))[1] = rows;
     for (int i = 0; i < settings.count(); i++) {
         QString str = settings[i].asVariant().toString();
         QByteArray setting = codec->fromUnicode(str);
         array.append(setting);
     }
-    return new Exiv2::DataValue((const Exiv2::byte*)array.data(), array.size());
+    return new Exiv2::DataValue((const Exiv2::byte *)array.data(), array.size());
 }
 
 KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value, Exiv2::ByteOrder order)
 {
     QMap<QString, KisMetaData::Value> cfaPatternStructure;
-    const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
+    const Exiv2::DataValue *dvalue = dynamic_cast<const Exiv2::DataValue *>(&*value);
     Q_ASSERT(dvalue);
     QByteArray array(dvalue->count(), 0);
-    dvalue->copy((Exiv2::byte*)array.data());
-    int columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
-    int rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
+    dvalue->copy((Exiv2::byte *)array.data());
+    int columns = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
+    int rows = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
     if ((columns * rows + 4) != dvalue->count()) { // Sometime byteOrder get messed up (especially if metadata got saved with kexiv2 library, or any library that doesn't save back with the same byte order as the camera)
         order = invertByteOrder(order);
-        columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
-        rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
+        columns = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
+        rows = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
         Q_ASSERT((columns * rows + 4) == dvalue->count());
     }
     cfaPatternStructure["Columns"] = KisMetaData::Value(columns);
@@ -303,23 +298,23 @@ KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value, Exiv2:
     return KisMetaData::Value(cfaPatternStructure);
 }
 
-Exiv2::Value* cfaPatternKMDToExif(const KisMetaData::Value& value)
+Exiv2::Value *cfaPatternKMDToExif(const KisMetaData::Value &value)
 {
     QMap<QString, KisMetaData::Value> cfaStructure = value.asStructure();
     quint16 columns = cfaStructure["Columns"].asVariant().toInt(0);
     quint16 rows = cfaStructure["Rows"].asVariant().toInt(0);
 
     QList<KisMetaData::Value> values = cfaStructure["Values"].asArray();
-    Q_ASSERT(columns*rows == values.size());
-    QByteArray array(4 + columns*rows, 0);
-    (reinterpret_cast<quint16*>(array.data()))[0] = columns;
-    (reinterpret_cast<quint16*>(array.data()))[1] = rows;
+    Q_ASSERT(columns * rows == values.size());
+    QByteArray array(4 + columns * rows, 0);
+    (reinterpret_cast<quint16 *>(array.data()))[0] = columns;
+    (reinterpret_cast<quint16 *>(array.data()))[1] = rows;
     for (int i = 0; i < columns * rows; i++) {
         int val = values[i].asVariant().toInt();
         *(array.data() + 4 + i) = val;
     }
     dbgFile << "Cfa Array " << ppVar(columns) << ppVar(rows) << ppVar(array.size());
-    return new Exiv2::DataValue((const Exiv2::byte*)array.data(), array.size());
+    return new Exiv2::DataValue((const Exiv2::byte *)array.data(), array.size());
 }
 
 // Read and write Flash //
@@ -341,7 +336,7 @@ KisMetaData::Value flashExifToKMD(const Exiv2::Value::AutoPtr value)
     return KisMetaData::Value(flashStructure);
 }
 
-Exiv2::Value* flashKMDToExif(const KisMetaData::Value& value)
+Exiv2::Value *flashKMDToExif(const KisMetaData::Value &value)
 {
     uint16_t v = 0;
     QMap<QString, KisMetaData::Value> flashStructure = value.asStructure();
@@ -353,8 +348,6 @@ Exiv2::Value* flashKMDToExif(const KisMetaData::Value& value)
     return new Exiv2::ValueType<uint16_t>(v);
 }
 
-
-
 // ---- Implementation of KisExifIO ----//
 KisExifIO::KisExifIO() : d(new Private)
 {
@@ -365,8 +358,7 @@ KisExifIO::~KisExifIO()
     delete d;
 }
 
-
-bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType) const
+bool KisExifIO::saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType) const
 {
     ioDevice->open(QIODevice::WriteOnly);
     Exiv2::ExifData exifData;
@@ -384,7 +376,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
     for (QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin();
             it != store->end(); ++it) {
         try {
-            const KisMetaData::Entry& entry = *it;
+            const KisMetaData::Entry &entry = *it;
             dbgFile << "Trying to save: " << entry.name() << " of " << entry.schema()->prefix() << ":" << entry.schema()->uri();
             QString exivKey;
             if (entry.schema()->uri() == KisMetaData::Schema::TIFFSchemaUri) {
@@ -419,15 +411,15 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 dbgFile << entry.qualifiedName() << " is unsavable to EXIF";
             } else {
                 Exiv2::ExifKey exifKey(qPrintable(exivKey));
-                Exiv2::Value* v = 0;
+                Exiv2::Value *v = 0;
                 if (exivKey == "Exif.Photo.ExifVersion" || exivKey == "Exif.Photo.FlashpixVersion") {
                     v = kmdValueToExifVersion(entry.value());
                 } else if (exivKey == "Exif.Photo.FileSource") {
                     char s[] = { 0x03 };
-                    v = new Exiv2::DataValue((const Exiv2::byte*)s, 1);
+                    v = new Exiv2::DataValue((const Exiv2::byte *)s, 1);
                 } else if (exivKey == "Exif.Photo.SceneType") {
                     char s[] = { 0x01 };
-                    v = new Exiv2::DataValue((const Exiv2::byte*)s, 1);
+                    v = new Exiv2::DataValue((const Exiv2::byte *)s, 1);
                 } else if (exivKey == "Exif.Photo.ComponentsConfiguration") {
                     v = kmdIntOrderedArrayToExifArray(entry.value());
                 } else if (exivKey == "Exif.Image.Artist") { // load as dc:creator
@@ -476,29 +468,28 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                     dbgFile << "No exif value was created for" << entry.qualifiedName() << " as" << exivKey;// << " of KMD value" << entry.value();
                 }
             }
-        } catch (Exiv2::AnyError& e) {
+        } catch (Exiv2::AnyError &e) {
             dbgFile << "exiv error " << e.what();
         }
     }
 #if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
     Exiv2::DataBuf rawData = exifData.copy();
-    ioDevice->write((const char*) rawData.pData_, rawData.size_);
+    ioDevice->write((const char *) rawData.pData_, rawData.size_);
 #else
     Exiv2::Blob rawData;
     Exiv2::ExifParser::encode(rawData, Exiv2::littleEndian, exifData);
-    ioDevice->write((const char*) &*rawData.begin(), rawData.size());
+    ioDevice->write((const char *) &*rawData.begin(), rawData.size());
 #endif
     ioDevice->close();
     return true;
 }
 
-bool KisExifIO::canSaveAllEntries(KisMetaData::Store* /*store*/) const
+bool KisExifIO::canSaveAllEntries(KisMetaData::Store * /*store*/) const
 {
     return false; // It's a known fact that exif can't save all information, but TODO: write the check
 }
 
-
-bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
+bool KisExifIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
 {
     ioDevice->open(QIODevice::ReadOnly);
     if (!ioDevice->isOpen()) {
@@ -508,17 +499,15 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     Exiv2::ExifData exifData;
     Exiv2::ByteOrder byteOrder;
 #if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
-    exifData.load((const Exiv2::byte*)arr.data(), arr.size());
+    exifData.load((const Exiv2::byte *)arr.data(), arr.size());
     byteOrder = exifData.byteOrder();
 #else
     try {
-        byteOrder = Exiv2::ExifParser::decode(exifData, (const Exiv2::byte*)arr.data(), arr.size());
-    }
-    catch (const std::exception& ex) {
+        byteOrder = Exiv2::ExifParser::decode(exifData, (const Exiv2::byte *)arr.data(), arr.size());
+    } catch (const std::exception &ex) {
         qWarning() << "Received exception trying to parse exiv data" << ex.what();
         return false;
-    }
-    catch (...) {
+    } catch (...) {
         qDebug() << "Received unknown exception trying to parse exiv data";
         return false;
     }
@@ -526,13 +515,13 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 #endif
     dbgFile << "Byte order = " << byteOrder << ppVar(Exiv2::bigEndian) << ppVar(Exiv2::littleEndian);
     dbgFile << "There are" << exifData.count() << " entries in the exif section";
-    const KisMetaData::Schema* tiffSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
+    const KisMetaData::Schema *tiffSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
     Q_ASSERT(tiffSchema);
-    const KisMetaData::Schema* exifSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::EXIFSchemaUri);
+    const KisMetaData::Schema *exifSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::EXIFSchemaUri);
     Q_ASSERT(exifSchema);
-    const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
+    const KisMetaData::Schema *dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
     Q_ASSERT(dcSchema);
-    const KisMetaData::Schema* xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
+    const KisMetaData::Schema *xmpSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::XMPSchemaUri);
     Q_ASSERT(xmpSchema);
     for (Exiv2::ExifMetadata::const_iterator it = exifData.begin();
             it != exifData.end(); ++it) {
@@ -541,10 +530,10 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 || it->key() == "StripByteCounts"
                 || it->key() == "JPEGInterchangeFormat"
                 || it->key() == "JPEGInterchangeFormatLength"
-                || it->tagName() == "0x0000" ) {
+                || it->tagName() == "0x0000") {
             dbgFile << it->key().c_str() << " is ignored";
         } else if (it->key() == "Exif.Photo.MakerNote") {
-            const KisMetaData::Schema* makerNoteSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::MakerNoteSchemaUri);
+            const KisMetaData::Schema *makerNoteSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::MakerNoteSchemaUri);
             store->addEntry(KisMetaData::Entry(makerNoteSchema, "RawData", exivValueToKMDValue(it->getValue(), false)));
         } else if (it->key() == "Exif.Image.DateTime") { // load as xmp:ModifyDate
             store->addEntry(KisMetaData::Entry(xmpSchema, "ModifyDate", KisMetaData::Value(exivValueToDateTime(it->getValue()))));
@@ -564,7 +553,7 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             if (it->key() == "Exif.Image.ExifTag") {
                 dbgFile << "Ignoring " << it->key().c_str();
             } else if (KisMetaData::Entry::isValidName(fixedTN)) {
-                store->addEntry(KisMetaData::Entry(tiffSchema, fixedTN, exivValueToKMDValue(it->getValue(), false))) ;
+                store->addEntry(KisMetaData::Entry(tiffSchema, fixedTN, exivValueToKMDValue(it->getValue(), false)));
             } else {
                 dbgFile << "Invalid tag name: " << fixedTN;
             }

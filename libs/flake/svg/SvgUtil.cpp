@@ -60,18 +60,20 @@ QSizeF SvgUtil::toUserSpace(const QSizeF &size)
 
 double SvgUtil::toPercentage(QString s)
 {
-    if (s.endsWith('%'))
+    if (s.endsWith('%')) {
         return s.remove('%').toDouble();
-    else
+    } else {
         return s.toDouble() * 100.0;
+    }
 }
 
 double SvgUtil::fromPercentage(QString s)
 {
-    if (s.endsWith('%'))
+    if (s.endsWith('%')) {
         return s.remove('%').toDouble() / 100.0;
-    else
+    } else {
         return s.toDouble();
+    }
 }
 
 QPointF SvgUtil::objectToUserSpace(const QPointF &position, const QRectF &objectBound)
@@ -91,11 +93,13 @@ QSizeF SvgUtil::objectToUserSpace(const QSizeF &size, const QRectF &objectBound)
 QPointF SvgUtil::userSpaceToObject(const QPointF &position, const QRectF &objectBound)
 {
     qreal x = 0.0;
-    if (objectBound.width() != 0)
+    if (objectBound.width() != 0) {
         x = (position.x() - objectBound.x()) / objectBound.width();
+    }
     qreal y = 0.0;
-    if (objectBound.height() != 0)
+    if (objectBound.height() != 0) {
         y = (position.y() - objectBound.y()) / objectBound.height();
+    }
     return QPointF(x, y);
 }
 
@@ -116,16 +120,18 @@ QTransform SvgUtil::parseTransform(const QString &transform)
     QStringList::ConstIterator end = subtransforms.constEnd();
     for (; it != end; ++it) {
         QStringList subtransform = (*it).simplified().split('(', QString::SkipEmptyParts);
-        if (subtransform.count() < 2)
+        if (subtransform.count() < 2) {
             continue;
+        }
 
         subtransform[0] = subtransform[0].trimmed().toLower();
         subtransform[1] = subtransform[1].simplified();
         QRegExp reg("[,( ]");
         QStringList params = subtransform[1].split(reg, QString::SkipEmptyParts);
 
-        if (subtransform[0].startsWith(';') || subtransform[0].startsWith(','))
+        if (subtransform[0].startsWith(';') || subtransform[0].startsWith(',')) {
             subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
+        }
 
         if (subtransform[0] == "rotate") {
             if (params.count() == 3) {
@@ -143,7 +149,7 @@ QTransform SvgUtil::parseTransform(const QString &transform)
                 result.translate(SvgUtil::fromUserSpace(params[0].toDouble()),
                                  SvgUtil::fromUserSpace(params[1].toDouble()));
             } else {   // Spec : if only one param given, assume 2nd param to be 0
-                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()) , 0);
+                result.translate(SvgUtil::fromUserSpace(params[0].toDouble()), 0);
             }
         } else if (subtransform[0] == "scale") {
             if (params.count() == 2) {
@@ -170,19 +176,20 @@ QTransform SvgUtil::parseTransform(const QString &transform)
 
 QString SvgUtil::transformToString(const QTransform &transform)
 {
-    if (transform.isIdentity())
+    if (transform.isIdentity()) {
         return QString();
+    }
 
     if (transform.type() == QTransform::TxTranslate) {
         return QString("translate(%1, %2)")
-                     .arg(toUserSpace(transform.dx()))
-                     .arg(toUserSpace(transform.dy()));
+               .arg(toUserSpace(transform.dx()))
+               .arg(toUserSpace(transform.dy()));
     } else {
         return QString("matrix(%1 %2 %3 %4 %5 %6)")
-                     .arg(transform.m11()).arg(transform.m12())
-                     .arg(transform.m21()).arg(transform.m22())
-                     .arg(toUserSpace(transform.dx()))
-                     .arg(toUserSpace(transform.dy()));
+               .arg(transform.m11()).arg(transform.m12())
+               .arg(transform.m21()).arg(transform.m22())
+               .arg(toUserSpace(transform.dx()))
+               .arg(toUserSpace(transform.dy()));
     }
 }
 
@@ -207,8 +214,9 @@ QRectF SvgUtil::parseViewBox(QString viewbox)
 
 qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz, bool vert, const QRectF &bbox)
 {
-    if (unit.isEmpty())
+    if (unit.isEmpty()) {
         return 0.0;
+    }
     QByteArray unitLatin1 = unit.toLatin1();
     // TODO : percentage?
     const char *start = unitLatin1.data();
@@ -219,28 +227,29 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
     const char *end = parseNumber(start, value);
 
     if (int(end - start) < unit.length()) {
-        if (unit.right(2) == "px")
+        if (unit.right(2) == "px") {
             value = SvgUtil::fromUserSpace(value);
-        else if (unit.right(2) == "cm")
+        } else if (unit.right(2) == "cm") {
             value = CM_TO_POINT(value);
-        else if (unit.right(2) == "pc")
+        } else if (unit.right(2) == "pc") {
             value = PI_TO_POINT(value);
-        else if (unit.right(2) == "mm")
+        } else if (unit.right(2) == "mm") {
             value = MM_TO_POINT(value);
-        else if (unit.right(2) == "in")
+        } else if (unit.right(2) == "in") {
             value = INCH_TO_POINT(value);
-        else if (unit.right(2) == "em")
+        } else if (unit.right(2) == "em") {
             value = value * gc->font.pointSize();
-        else if (unit.right(2) == "ex") {
+        } else if (unit.right(2) == "ex") {
             QFontMetrics metrics(gc->font);
             value = value * metrics.xHeight();
         } else if (unit.right(1) == "%") {
-            if (horiz && vert)
+            if (horiz && vert) {
                 value = (value / 100.0) * (sqrt(pow(bbox.width(), 2) + pow(bbox.height(), 2)) / sqrt(2.0));
-            else if (horiz)
+            } else if (horiz) {
                 value = (value / 100.0) * bbox.width();
-            else if (vert)
+            } else if (vert) {
                 value = (value / 100.0) * bbox.height();
+            }
         }
     } else {
         value = SvgUtil::fromUserSpace(value);
@@ -290,7 +299,7 @@ qreal SvgUtil::parseUnitXY(SvgGraphicsContext *gc, const QString &unit)
     }
 }
 
-const char * SvgUtil::parseNumber(const char *ptr, qreal &number)
+const char *SvgUtil::parseNumber(const char *ptr, qreal &number)
 {
     int integer, exponent;
     qreal decimal, frac;
@@ -312,12 +321,14 @@ const char * SvgUtil::parseNumber(const char *ptr, qreal &number)
     }
 
     // read the integer part
-    while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+    while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9') {
         integer = (integer * 10) + *(ptr++) - '0';
+    }
     if (*ptr == '.') { // read the decimals
         ptr++;
-        while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9')
+        while (*ptr != '\0' && *ptr >= '0' && *ptr <= '9') {
             decimal += (*(ptr++) - '0') * (frac *= 0.1);
+        }
     }
 
     if (*ptr == 'e' || *ptr == 'E') { // read the exponent part

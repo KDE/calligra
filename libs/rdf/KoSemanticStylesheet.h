@@ -48,7 +48,7 @@ class KoSemanticStylesheetPrivate;
 class KORDF_EXPORT KoSemanticStylesheet : public QObject, public QSharedData
 {
     Q_OBJECT
-    KoSemanticStylesheetPrivate * const d;
+    KoSemanticStylesheetPrivate *const d;
 protected:
 
     // Restrict who can make us
@@ -63,7 +63,7 @@ protected:
      * applies the stylesheet to a specific reference to a semantic
      * item in the document.
      */
-    void format(hKoRdfSemanticItem obj, KoTextEditor *editor, const QString& xmlid = QString());
+    void format(hKoRdfSemanticItem obj, KoTextEditor *editor, const QString &xmlid = QString());
 
 public:
     ~KoSemanticStylesheet();
@@ -86,5 +86,5 @@ Q_SIGNALS:
 };
 
 #include <QMetaType>
-Q_DECLARE_METATYPE(KoSemanticStylesheet*)
+Q_DECLARE_METATYPE(KoSemanticStylesheet *)
 #endif

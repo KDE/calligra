@@ -46,7 +46,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KIS_SELECT_LAYER_ACTION_H

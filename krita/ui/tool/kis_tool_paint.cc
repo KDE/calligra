@@ -71,7 +71,7 @@
 #include <kis_paintop.h>
 #include <kis_paintop_preset.h>
 
-KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
+KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     : KisTool(canvas, cursor),
       m_isOutlineEnabled(false)
 {
@@ -97,7 +97,6 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
         m_standardBrushSizes.push_back(maxSize);
     }
 
-
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
     if (!collection->action("increase_brush_size")) {
@@ -112,15 +111,14 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
         collection->addAction("decrease_brush_size", decreaseBrushSize);
     }
 
-    addAction("increase_brush_size", dynamic_cast<KAction*>(collection->action("increase_brush_size")));
-    addAction("decrease_brush_size", dynamic_cast<KAction*>(collection->action("decrease_brush_size")));
+    addAction("increase_brush_size", dynamic_cast<KAction *>(collection->action("increase_brush_size")));
+    addAction("decrease_brush_size", dynamic_cast<KAction *>(collection->action("decrease_brush_size")));
 
-    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
+    KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2 *>(canvas);
     if (kiscanvas && kiscanvas->viewManager()) {
         connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->resourceProvider(), SLOT(slotPainting()));
     }
 }
-
 
 KisToolPaint::~KisToolPaint()
 {
@@ -131,12 +129,12 @@ int KisToolPaint::flags() const
     return KisTool::FLAG_USES_CUSTOM_COMPOSITEOP;
 }
 
-void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
+void KisToolPaint::canvasResourceChanged(int key, const QVariant &v)
 {
     KisTool::canvasResourceChanged(key, v);
 
-    switch(key){
-    case(KisCanvasResourceProvider::Opacity):
+    switch (key) {
+    case (KisCanvasResourceProvider::Opacity):
         setOpacity(v.toDouble());
         break;
     default: //nothing
@@ -148,8 +146,7 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 
 }
 
-
-void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
     connect(actions().value("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);
@@ -166,7 +163,9 @@ void KisToolPaint::deactivate()
 QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutline)
 {
     KisConfig cfg;
-    if (cfg.cursorStyle() != CURSOR_STYLE_OUTLINE) return originalOutline;
+    if (cfg.cursorStyle() != CURSOR_STYLE_OUTLINE) {
+        return originalOutline;
+    }
 
     const qreal minThresholdSize = cfg.outlineSizeMinimum();
 
@@ -211,7 +210,7 @@ void KisToolPaint::paint(QPainter &gc, const KoViewConverter &converter)
 
 void KisToolPaint::setMode(ToolMode mode)
 {
-    if(this->mode() == KisTool::PAINT_MODE &&
+    if (this->mode() == KisTool::PAINT_MODE &&
             mode != KisTool::PAINT_MODE) {
 
         // Let's add history information about recently used colors
@@ -244,9 +243,9 @@ void KisToolPaint::activateAlternateAction(AlternateAction action)
 void KisToolPaint::deactivateAlternateAction(AlternateAction action)
 {
     if (action != PickFgNode &&
-        action != PickBgNode &&
-        action != PickFgImage &&
-        action != PickBgImage) {
+            action != PickBgNode &&
+            action != PickFgImage &&
+            action != PickBgImage) {
 
         KisTool::deactivateAlternateAction(action);
         return;
@@ -287,9 +286,9 @@ bool KisToolPaint::pickColor(const QPointF &documentPixel,
                              AlternateAction action)
 {
     if (action != PickFgNode &&
-        action != PickBgNode &&
-        action != PickFgImage &&
-        action != PickBgImage) {
+            action != PickBgNode &&
+            action != PickFgImage &&
+            action != PickBgImage) {
 
         return false;
     }
@@ -298,10 +297,10 @@ bool KisToolPaint::pickColor(const QPointF &documentPixel,
     bool fromCurrentNode = action == PickFgNode || action == PickBgNode;
 
     int resource = toForegroundColor ?
-        KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
+                   KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
 
     KisPaintDeviceSP device = fromCurrentNode ?
-        currentNode()->projection() : image()->projection();
+                              currentNode()->projection() : image()->projection();
 
     QPoint imagePoint = image()->documentToIntPixel(documentPixel);
 
@@ -337,12 +336,12 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
     }
 }
 
-QWidget * KisToolPaint::createOptionWidget()
+QWidget *KisToolPaint::createOptionWidget()
 {
-    QWidget * optionWidget = new QWidget();
+    QWidget *optionWidget = new QWidget();
     optionWidget->setObjectName(toolId());
 
-    QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
+    QVBoxLayout *verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
     verticalLayout->setMargin(0);
     verticalLayout->setSpacing(1);
@@ -362,10 +361,10 @@ QWidget * KisToolPaint::createOptionWidget()
     m_optionsWidgetLayout->setMargin(0);
 
     if (!quickHelp().isEmpty()) {
-        QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);
+        QPushButton *push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
 
-        QHBoxLayout* hLayout = new QHBoxLayout(optionWidget);
+        QHBoxLayout *hLayout = new QHBoxLayout(optionWidget);
         hLayout->addWidget(push);
         hLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         verticalLayout->addLayout(hLayout);
@@ -374,7 +373,7 @@ QWidget * KisToolPaint::createOptionWidget()
     return optionWidget;
 }
 
-QWidget* findLabelWidget(QGridLayout *layout, QWidget *control)
+QWidget *findLabelWidget(QGridLayout *layout, QWidget *control)
 {
     QWidget *result = 0;
 
@@ -424,29 +423,26 @@ void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
     m_optionsWidgetLayout->addLayout(layout, rowCount, 0, 1, 2);
 }
 
-
 void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 {
     Q_ASSERT(m_optionsWidgetLayout != 0);
     if (label) {
-        if (QLabel *lbl = qobject_cast<QLabel*>(label)) {
+        if (QLabel *lbl = qobject_cast<QLabel *>(label)) {
             lbl->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
         }
         m_optionsWidgetLayout->addWidget(label, m_optionsWidgetLayout->rowCount(), 0);
         m_optionsWidgetLayout->addWidget(control, m_optionsWidgetLayout->rowCount() - 1, 1);
-    }
-    else {
+    } else {
         m_optionsWidgetLayout->addWidget(control, m_optionsWidgetLayout->rowCount(), 0, 1, 2);
     }
 }
-
 
 void KisToolPaint::setOpacity(qreal opacity)
 {
     m_opacity = quint8(opacity * OPACITY_OPAQUE_U8);
 }
 
-const KoCompositeOp* KisToolPaint::compositeOp()
+const KoCompositeOp *KisToolPaint::compositeOp()
 {
     if (currentNode()) {
         KisPaintDeviceSP device = currentNode()->paintDevice();
@@ -471,11 +467,11 @@ void KisToolPaint::updateTabletPressureSamples()
     m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
 }
 
-void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
+void KisToolPaint::setupPaintAction(KisRecordedPaintAction *action)
 {
     KisTool::setupPaintAction(action);
     action->setOpacity(m_opacity / qreal(255.0));
-    const KoCompositeOp* op = compositeOp();
+    const KoCompositeOp *op = compositeOp();
     if (op) {
         action->setCompositeOp(op->id());
     }
@@ -553,21 +549,23 @@ void KisToolPaint::decreaseBrushSize()
 
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
 {
-    if (!m_supportOutline) return;
+    if (!m_supportOutline) {
+        return;
+    }
 
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
     outlineMode = KisPaintOpSettings::CursorIsNotOutline;
 
     if (isOutlineEnabled() &&
-        (mode() == KisTool::GESTURE_MODE ||
-         ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED ||
-           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED)&&
-          ((mode() == HOVER_MODE) ||
-           (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
+            (mode() == KisTool::GESTURE_MODE ||
+             ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE ||
+               cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT ||
+               cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS ||
+               cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED ||
+               cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED) &&
+              ((mode() == HOVER_MODE) ||
+               (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
 
         outlineMode = KisPaintOpSettings::CursorIsOutline;
     }
@@ -584,9 +582,9 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     qreal zoomX;
     qreal zoomY;
     canvas()->viewConverter()->zoom(&zoomX, &zoomY);
-    qreal xoffset = 2.0/zoomX;
-    qreal yoffset = 2.0/zoomY;
-    QRectF newOutlineRect = outlineDocRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
+    qreal xoffset = 2.0 / zoomX;
+    qreal yoffset = 2.0 / zoomY;
+    QRectF newOutlineRect = outlineDocRect.adjusted(-xoffset, -yoffset, xoffset, yoffset);
 
     if (!m_oldOutlineRect.isEmpty()) {
         canvas()->updateCanvas(m_oldOutlineRect);
@@ -600,14 +598,14 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 }
 
 QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
-                                          const KoPointerEvent *event,
-                                          KisPaintOpSettings::OutlineMode outlineMode)
+        const KoPointerEvent *event,
+        KisPaintOpSettings::OutlineMode outlineMode)
 {
     Q_UNUSED(event);
 
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
     QPainterPath path = currentPaintOpPreset()->settings()->
-        brushOutline(KisPaintInformation(imagePos), outlineMode);
+                        brushOutline(KisPaintInformation(imagePos), outlineMode);
 
     return path;
 }

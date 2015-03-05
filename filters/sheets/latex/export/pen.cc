@@ -41,7 +41,7 @@ void Pen::analyze(const QDomNode node)
     setColor(getAttr(node, "color"));
 }
 
-void Pen::generate(QTextStream&)
+void Pen::generate(QTextStream &)
 {
 
 }

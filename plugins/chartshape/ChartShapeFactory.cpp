@@ -47,13 +47,12 @@
 #include "Legend.h"
 #include "TableSource.h"
 
-
 using namespace KChart;
 
 K_PLUGIN_FACTORY(ChartShapePluginFactory, registerPlugin<ChartShapePlugin>();)
 K_EXPORT_PLUGIN(ChartShapePluginFactory("calligra_shape_chart"))
 
-ChartShapePlugin::ChartShapePlugin(QObject * parent, const QVariantList&)
+ChartShapePlugin::ChartShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     // Register the chart shape factory.
@@ -62,7 +61,6 @@ ChartShapePlugin::ChartShapePlugin(QObject * parent, const QVariantList&)
     // Register all tools for the chart shape.
     KoToolRegistry::instance()->add(new ChartToolFactory());
 }
-
 
 ChartShapeFactory::ChartShapeFactory()
     : KoShapeFactoryBase(ChartShapeId, i18n("Chart"))
@@ -75,16 +73,15 @@ ChartShapeFactory::ChartShapeFactory()
 
     // Default 'app specific' config pages i.e. unless an app defines
     // other config pages, these are used.
-    QList<KoShapeConfigFactoryBase*> panelFactories;
+    QList<KoShapeConfigFactoryBase *> panelFactories;
     // panelFactories.append(new ChartDataConfigFactory());
     setOptionPanels(panelFactories);
 }
 
-
 bool ChartShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
     if (element.namespaceURI() == "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
-        && element.tagName() == "object") {
+            && element.tagName() == "object") {
 
         QString href = element.attribute("href");
         if (!href.isEmpty()) {
@@ -100,12 +97,13 @@ bool ChartShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingCont
 }
 
 KoShape *ChartShapeFactory::createShapeFromOdf(const KoXmlElement &element,
-                                               KoShapeLoadingContext &context)
+        KoShapeLoadingContext &context)
 {
-    ChartShape* shape = new ChartShape(context.documentResourceManager());
+    ChartShape *shape = new ChartShape(context.documentResourceManager());
 
-    if (shape->shapeId().isEmpty())
+    if (shape->shapeId().isEmpty()) {
         shape->setShapeId(id());
+    }
 
     context.odfLoadingContext().styleStack().save();
     bool loaded = shape->loadOdf(element, context);
@@ -121,7 +119,7 @@ KoShape *ChartShapeFactory::createShapeFromOdf(const KoXmlElement &element,
 
 KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    ChartShape* shape = new ChartShape(documentResources);
+    ChartShape *shape = new ChartShape(documentResources);
     ChartProxyModel *proxyModel = shape->proxyModel();
 
     // Fill cells with data.
@@ -207,14 +205,14 @@ KoShape *ChartShapeFactory::createDefaultShape(KoDocumentResourceManager *docume
     }
 
     shape->plotArea()->setPosition(plotAreaPos);
-    shape->plotArea()->setSize(plotAreaSize );
+    shape->plotArea()->setSize(plotAreaSize);
 
     return shape;
 }
 
-QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> ChartShapeFactory::createShapeOptionPanels()
 {
-    return QList<KoShapeConfigWidgetBase*>();
+    return QList<KoShapeConfigWidgetBase *>();
 }
 
 void ChartShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const

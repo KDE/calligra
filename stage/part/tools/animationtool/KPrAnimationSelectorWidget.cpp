@@ -51,7 +51,7 @@
 #include <KoViewItemContextBar.h>
 
 KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *docker, KPrPredefinedAnimationsLoader *animationsData,
-                                                       QWidget *parent)
+        QWidget *parent)
     : QWidget(parent)
     , m_docker(docker)
     , m_previewAnimation(0)
@@ -114,11 +114,10 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     connect(m_subTypeView, SIGNAL(clicked(QModelIndex)),
             this, SLOT(setAnimation(QModelIndex)));
 
-    containerLayout->addWidget(m_collectionChooser, 0, 0,2,1);
+    containerLayout->addWidget(m_collectionChooser, 0, 0, 2, 1);
     containerLayout->addWidget(m_collectionView, 0, 1, 1, 1);
     containerLayout->addWidget(m_subTypeView, 1, 1, 1, 1);
     containerLayout->addWidget(m_previewCheckBox, 2, 0, 1, 2);
-
 
     // set signals
     connect(m_collectionView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
@@ -159,12 +158,10 @@ void KPrAnimationSelectorWidget::automaticPreviewRequested(const QModelIndex &in
     // Parse xml context in a new animation
     KoXmlElement newAnimationContext;
     if (QObject::sender() == m_collectionView) {
-        newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
-    }
-    else if (QObject::sender() == m_subTypeView) {
-        newAnimationContext = static_cast<KPrCollectionItemModel*>(m_subTypeView->model())->animationContext(index);
-    }
-    else {
+        newAnimationContext = static_cast<KPrCollectionItemModel *>(m_collectionView->model())->animationContext(index);
+    } else if (QObject::sender() == m_subTypeView) {
+        newAnimationContext = static_cast<KPrCollectionItemModel *>(m_subTypeView->model())->animationContext(index);
+    } else {
         return;
     }
 
@@ -187,20 +184,18 @@ void KPrAnimationSelectorWidget::automaticPreviewRequested()
     QModelIndex index;
     KoXmlElement newAnimationContext;
     if (QObject::sender() == m_collectionPreviewButton) {
-       index = m_collectionContextBar->currentIndex();
-       if (!index.isValid()) {
-           return;
-       }
-       newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
-    }
-    else if (QObject::sender() == m_subTypePreviewButton) {
+        index = m_collectionContextBar->currentIndex();
+        if (!index.isValid()) {
+            return;
+        }
+        newAnimationContext = static_cast<KPrCollectionItemModel *>(m_collectionView->model())->animationContext(index);
+    } else if (QObject::sender() == m_subTypePreviewButton) {
         index = m_subTypeContextBar->currentIndex();
         if (!index.isValid()) {
             return;
         }
-        newAnimationContext = static_cast<KPrCollectionItemModel*>(m_subTypeView->model())->animationContext(index);
-    }
-    else {
+        newAnimationContext = static_cast<KPrCollectionItemModel *>(m_subTypeView->model())->animationContext(index);
+    } else {
         return;
     }
     KoOdfStylesReader stylesReader;
@@ -236,8 +231,8 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
     KoXmlElement newAnimationContext;
     if (QObject::sender() == m_collectionView) {
         m_subTypeView->hide();
-        QString id = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->data(index, Qt::UserRole).toString();
-        if (m_animationsData->subModelById(id)){
+        QString id = static_cast<KPrCollectionItemModel *>(m_collectionView->model())->data(index, Qt::UserRole).toString();
+        if (m_animationsData->subModelById(id)) {
             m_subTypeView->setModel(m_animationsData->subModelById(id));
             m_subTypeView->show();
             if (!m_showAutomaticPreview && !m_subTypeContextBar) {
@@ -245,12 +240,10 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
             }
             return;
         }
-        newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
-    }
-    else if (QObject::sender() == m_subTypeView) {
-        newAnimationContext = static_cast<KPrCollectionItemModel*>(m_subTypeView->model())->animationContext(index);
-    }
-    else {
+        newAnimationContext = static_cast<KPrCollectionItemModel *>(m_collectionView->model())->animationContext(index);
+    } else if (QObject::sender() == m_subTypeView) {
+        newAnimationContext = static_cast<KPrCollectionItemModel *>(m_subTypeView->model())->animationContext(index);
+    } else {
         return;
     }
 
@@ -284,8 +277,7 @@ void KPrAnimationSelectorWidget::setPreviewState(bool isEnable)
         if (!m_subTypeContextBar && m_subTypeView->model()) {
             createSubTypeContextBar();
         }
-    }
-    else {
+    } else {
         delete m_collectionContextBar;
         delete m_collectionPreviewButton;
         m_collectionContextBar = 0;
@@ -322,7 +314,7 @@ void KPrAnimationSelectorWidget::savePreviewConfig()
 void KPrAnimationSelectorWidget::createCollectionContextBar()
 {
     m_collectionContextBar = new KoViewItemContextBar(m_collectionView);
-    m_collectionPreviewButton = m_collectionContextBar->addContextButton(i18n("Preview animation"),QString("media-playback-start"));
+    m_collectionPreviewButton = m_collectionContextBar->addContextButton(i18n("Preview animation"), QString("media-playback-start"));
     m_collectionContextBar->setShowSelectionToggleButton(false);
     connect(m_collectionPreviewButton, SIGNAL(clicked()), this, SLOT(automaticPreviewRequested()));
 }
@@ -330,7 +322,7 @@ void KPrAnimationSelectorWidget::createCollectionContextBar()
 void KPrAnimationSelectorWidget::createSubTypeContextBar()
 {
     m_subTypeContextBar = new KoViewItemContextBar(m_subTypeView);
-    m_subTypePreviewButton = m_subTypeContextBar->addContextButton(i18n("Preview animation"),QString("media-playback-start"));
+    m_subTypePreviewButton = m_subTypeContextBar->addContextButton(i18n("Preview animation"), QString("media-playback-start"));
     m_subTypeContextBar->setShowSelectionToggleButton(false);
     connect(m_subTypePreviewButton, SIGNAL(clicked()), this, SLOT(automaticPreviewRequested()));
 }

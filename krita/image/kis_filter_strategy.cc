@@ -30,15 +30,21 @@
 qreal KisHermiteFilterStrategy::valueAt(qreal t) const
 {
     /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
-    if (t < 0.0) t = -t;
-    if (t < 1.0) return((2.0 * t - 3.0) * t * t + 1.0);
-    return(0.0);
+    if (t < 0.0) {
+        t = -t;
+    }
+    if (t < 1.0) {
+        return ((2.0 * t - 3.0) * t * t + 1.0);
+    }
+    return (0.0);
 }
 
 qint32 KisHermiteFilterStrategy::intValueAt(qint32 t) const
 {
     /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
-    if (t < 0) t = -t;
+    if (t < 0) {
+        t = -t;
+    }
     if (t < 256) {
         t = (2 * t - 3 * 256) * t * t + (256 << 16);
 
@@ -46,17 +52,20 @@ qint32 KisHermiteFilterStrategy::intValueAt(qint32 t) const
         t = (t + 0x8000) >> 16;
 
         // go from .8 fixed point to 8bitscale. ie t = (t*255)/256;
-        if (t >= 128)
+        if (t >= 128) {
             return t - 1;
+        }
         return t;
     }
-    return(0);
+    return (0);
 }
 
 qint32 KisBicubicFilterStrategy::intValueAt(qint32 t) const
 {
     /* f(t) = 1.5|t|^3 - 2.5|t|^2 + 1, -1 <= t <= 1 */
-    if (t < 0) t = -t;
+    if (t < 0) {
+        t = -t;
+    }
     if (t < 256) {
         t = (3 * t - 5 * 256) * t * t / 2 + (256 << 16);
 
@@ -64,8 +73,9 @@ qint32 KisBicubicFilterStrategy::intValueAt(qint32 t) const
         t = (t + 0x8000) >> 16;
 
         // go from .8 fixed point to 8bitscale. ie t = (t*255)/256;
-        if (t >= 128)
+        if (t >= 128) {
             return t - 1;
+        }
         return t;
     }
     if (t < 512) {
@@ -76,86 +86,109 @@ qint32 KisBicubicFilterStrategy::intValueAt(qint32 t) const
         t = (t + 0x8000) >> 16;
 
         // go from .8 fixed point to 8bitscale. ie t = (t*255)/256;
-        if (t >= 128)
+        if (t >= 128) {
             return t - 1;
+        }
         return t;
     }
-    return(0);
+    return (0);
 }
 
 qreal KisBoxFilterStrategy::valueAt(qreal t) const
 {
-    if ((t > -0.5) && (t <= 0.5)) return(1.0);
-    return(0.0);
+    if ((t > -0.5) && (t <= 0.5)) {
+        return (1.0);
+    }
+    return (0.0);
 }
 
 qint32 KisBoxFilterStrategy::intValueAt(qint32 t) const
 {
     /* f(t) = 1, -0.5 < t <= 0.5 */
-    if ((t > -128) && (t <= 128))
+    if ((t > -128) && (t <= 128)) {
         return 255;
+    }
     return 0;
 }
 
 qreal KisBilinearFilterStrategy::valueAt(qreal t) const
 {
-    if (t < 0.0) t = -t;
-    if (t < 1.0) return(1.0 - t);
-    return(0.0);
+    if (t < 0.0) {
+        t = -t;
+    }
+    if (t < 1.0) {
+        return (1.0 - t);
+    }
+    return (0.0);
 }
 
 qint32 KisBilinearFilterStrategy::intValueAt(qint32 t) const
 {
     /* f(t) = |t|, -1 <= t <= 1 */
-    if (t < 0) t = -t;
+    if (t < 0) {
+        t = -t;
+    }
     if (t < 256) {
         // calc 256-1 but also go from .8 fixed point to 8bitscale. ie t = (t*255)/256; ie: if(t>=128) return t-1;
-        if (t >= 128) return 256 - t;
+        if (t >= 128) {
+            return 256 - t;
+        }
         return 255 - t;
     }
-    return(0);
+    return (0);
 }
-
 
 qreal KisBellFilterStrategy::valueAt(qreal t) const
 {
-    if (t < 0) t = -t;
-    if (t < .5) return(.75 - (t * t));
+    if (t < 0) {
+        t = -t;
+    }
+    if (t < .5) {
+        return (.75 - (t * t));
+    }
     if (t < 1.5) {
         t = (t - 1.5);
-        return(.5 *(t * t));
+        return (.5 * (t * t));
     }
-    return(0.0);
+    return (0.0);
 }
 
 qreal KisBSplineFilterStrategy::valueAt(qreal t) const
 {
     qreal tt;
 
-    if (t < 0) t = -t;
+    if (t < 0) {
+        t = -t;
+    }
     if (t < 1) {
         tt = t * t;
-        return((.5 * tt * t) - tt + (2.0 / 3.0));
+        return ((.5 * tt * t) - tt + (2.0 / 3.0));
     } else if (t < 2) {
         t = 2 - t;
-        return((1.0 / 6.0) *(t * t * t));
+        return ((1.0 / 6.0) * (t * t * t));
     }
-    return(0.0);
+    return (0.0);
 }
 
 qreal KisLanczos3FilterStrategy::valueAt(qreal t) const
 {
-    if (t < 0) t = -t;
-    if (t < 3.0) return(sinc(t) * sinc(t / 3.0));
-    return(0.0);
+    if (t < 0) {
+        t = -t;
+    }
+    if (t < 3.0) {
+        return (sinc(t) * sinc(t / 3.0));
+    }
+    return (0.0);
 }
 
 qreal KisLanczos3FilterStrategy::sinc(qreal x) const
 {
     const qreal pi = 3.1415926535897932385;
     x *= pi;
-    if (x != 0) return(sin(x) / x);
-    return(1.0);
+    if (x != 0) {
+        return (sin(x) / x);
+    }
+    return (1.0);
 }
 
 qreal KisMitchellFilterStrategy::valueAt(qreal t) const
@@ -165,15 +198,17 @@ qreal KisMitchellFilterStrategy::valueAt(qreal t) const
     qreal tt;
 
     tt = t * t;
-    if (t < 0) t = -t;
+    if (t < 0) {
+        t = -t;
+    }
     if (t < 1.0) {
         t = (((12.0 - 9.0 * B - 6.0 * C) * (t * tt)) + ((-18.0 + 12.0 * B + 6.0 * C) * tt) + (6.0 - 2 * B));
-        return(t / 6.0);
+        return (t / 6.0);
     } else if (t < 2.0) {
         t = (((-1.0 * B - 6.0 * C) * (t * tt)) + ((6.0 * B + 30.0 * C) * tt) + ((-12.0 * B - 48.0 * C) * t) + (8.0 * B + 24 * C));
-        return(t / 6.0);
+        return (t / 6.0);
     }
-    return(0.0);
+    return (0.0);
 }
 
 KisFilterStrategyRegistry::KisFilterStrategyRegistry()
@@ -182,13 +217,13 @@ KisFilterStrategyRegistry::KisFilterStrategyRegistry()
 
 KisFilterStrategyRegistry::~KisFilterStrategyRegistry()
 {
-    foreach(const QString &id, keys()) {
+    foreach (const QString &id, keys()) {
         delete get(id);
-    }    
+    }
     dbgRegistry << "deleting KisFilterStrategyRegistry";
 }
 
-KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
+KisFilterStrategyRegistry *KisFilterStrategyRegistry::instance()
 {
     K_GLOBAL_STATIC(KisFilterStrategyRegistry, s_instance);
     if (!s_instance.exists()) {

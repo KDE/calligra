@@ -57,11 +57,11 @@ InternalPropertyHandlerInterface::~InternalPropertyHandlerInterface()
 ///// InlineEditorCreationArguments //////////////////////////
 
 WidgetFactory::InlineEditorCreationArguments::InlineEditorCreationArguments(
-    const QByteArray& _classname, QWidget *_widget, Container *_container)
-    : classname(_classname), widget(_widget), container(_container), 
+    const QByteArray &_classname, QWidget *_widget, Container *_container)
+    : classname(_classname), widget(_widget), container(_container),
       geometry(_widget ? _widget->geometry() : QRect()),
-      alignment( Qt::AlignLeft ),
-      useFrame( false ), multiLine( false ), execute( true ), transparentBackground( false )
+      alignment(Qt::AlignLeft),
+      useFrame(false), multiLine(false), execute(true), transparentBackground(false)
 {
 }
 
@@ -76,7 +76,7 @@ public:
     WidgetLibrary *library;
 
     WidgetInfoHash classesByName;
-    QSet<QByteArray>* hiddenClasses;
+    QSet<QByteArray> *hiddenClasses;
 
     //! i18n stuff
     QHash<QByteArray, QString> propDesc;
@@ -115,12 +115,13 @@ WidgetFactory::~WidgetFactory()
 void WidgetFactory::addClass(WidgetInfo *w)
 {
     WidgetInfo *oldw = d->classesByName.value(w->className());
-    if (oldw == w)
+    if (oldw == w) {
         return;
+    }
     if (oldw) {
         kWarning() << "class with name '"
-            << w->className()
-            << "' already exists for factory '" << objectName() << "'";
+                   << w->className()
+                   << "' already exists for factory '" << objectName() << "'";
         return;
     }
     d->classesByName.insert(w->className(), w);
@@ -128,12 +129,13 @@ void WidgetFactory::addClass(WidgetInfo *w)
 
 void WidgetFactory::hideClass(const char *classname)
 {
-    if (!d->hiddenClasses)
+    if (!d->hiddenClasses) {
         d->hiddenClasses = new QSet<QByteArray>;
+    }
     d->hiddenClasses->insert(QByteArray(classname).toLower());
 }
 
-const WidgetInfoHash& WidgetFactory::classes() const
+const WidgetInfoHash &WidgetFactory::classes() const
 {
     return d->classesByName;
 }
@@ -177,7 +179,7 @@ bool WidgetFactory::editRichText(QWidget *w, QString &text) const
 void
 WidgetFactory::editListWidget(QListWidget *listwidget) const
 {
-    EditListViewDialog dlg(((QWidget*)listwidget)->topLevelWidget());
+    EditListViewDialog dlg(((QWidget *)listwidget)->topLevelWidget());
 //! @todo
     //dlg.exec(listview);
 }
@@ -188,14 +190,12 @@ void WidgetFactory::changeProperty(Form *form, QWidget *widget, const char *name
     if (form->selectedWidget()) { // single selection
         form->propertySet().changePropertyIfExists(name, value);
         widget->setProperty(name, value);
-    }
-    else {
-        // If eg multiple labels are selected, 
+    } else {
+        // If eg multiple labels are selected,
         // we only want to change the text of one of them (the one the user cliked on)
         if (widget) {
             widget->setProperty(name, value);
-        }
-        else {
+        } else {
             form->selectedWidgets()->first()->setProperty(name, value);
         }
     }
@@ -207,7 +207,7 @@ WidgetFactory::isPropertyVisible(const QByteArray &classname, QWidget *w,
 {
     if (multiple) {
         return property == "font" || property == "paletteBackgroundColor" || property == "enabled"
-               || property == "paletteForegroundColor" || property == "cursor" 
+               || property == "paletteForegroundColor" || property == "cursor"
                || property == "paletteBackgroundPixmap";
     }
 
@@ -222,11 +222,13 @@ WidgetFactory::isPropertyVisibleInternal(const QByteArray &, QWidget *w,
 
 #ifdef KEXI_NO_CURSOR_PROPERTY
 //! @todo temporary unless cursor works properly in the Designer
-    if (property == "cursor")
+    if (property == "cursor") {
         return false;
+    }
 #endif
-    if (property == "acceptDrops" || property == "inputMethodHints")
+    if (property == "acceptDrops" || property == "inputMethodHints") {
         return false;
+    }
 
     if (!isTopLevel
             && (property == "windowTitle" || property == "windowIcon" || property == "sizeIncrement" || property == "windowIconText")) {
@@ -238,7 +240,7 @@ WidgetFactory::isPropertyVisibleInternal(const QByteArray &, QWidget *w,
 
 bool
 WidgetFactory::propertySetShouldBeReloadedAfterPropertyChange(
-    const QByteArray& classname, QWidget *w, const QByteArray& property)
+    const QByteArray &classname, QWidget *w, const QByteArray &property)
 {
     Q_UNUSED(classname)
     Q_UNUSED(w)
@@ -247,7 +249,7 @@ WidgetFactory::propertySetShouldBeReloadedAfterPropertyChange(
 }
 
 void
-WidgetFactory::resizeEditor(QWidget *, QWidget *, const QByteArray&)
+WidgetFactory::resizeEditor(QWidget *, QWidget *, const QByteArray &)
 {
 }
 
@@ -258,7 +260,7 @@ WidgetFactory::clearWidgetContent(const QByteArray &, QWidget *)
 }
 
 bool WidgetFactory::changeInlineText(Form *form, QWidget *widget,
-                                     const QString& text, QString &oldText)
+                                     const QString &text, QString &oldText)
 {
     oldText = widget->property("text").toString();
     changeProperty(form, widget, "text", text);
@@ -272,7 +274,7 @@ WidgetFactory::readSpecialProperty(const QByteArray &, QDomElement &, QWidget *,
 }
 
 bool
-WidgetFactory::saveSpecialProperty(const QByteArray &, const QString &, const QVariant&, QWidget *, QDomElement &,  QDomDocument &)
+WidgetFactory::saveSpecialProperty(const QByteArray &, const QString &, const QVariant &, QWidget *, QDomElement &,  QDomDocument &)
 {
     return false;
 }
@@ -280,13 +282,14 @@ WidgetFactory::saveSpecialProperty(const QByteArray &, const QString &, const QV
 bool WidgetFactory::inheritsFactories()
 {
     foreach (WidgetInfo *winfo, d->classesByName) {
-        if (!winfo->parentFactoryName().isEmpty())
+        if (!winfo->parentFactoryName().isEmpty()) {
             return true;
+        }
     }
     return false;
 }
 
-void WidgetFactory::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& info, QWidget *w)
+void WidgetFactory::setPropertyOptions(KoProperty::Set &set, const WidgetInfo &info, QWidget *w)
 {
     Q_UNUSED(set)
     Q_UNUSED(info)
@@ -294,7 +297,7 @@ void WidgetFactory::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& i
     //nothing
 }
 
-ObjectTreeItem* WidgetFactory::selectableItem(ObjectTreeItem* item)
+ObjectTreeItem *WidgetFactory::selectableItem(ObjectTreeItem *item)
 {
     return item;
 }
@@ -309,17 +312,17 @@ QVariant WidgetFactory::internalProperty(const QByteArray &classname, const QByt
     return d->internalProp.value(classname + ":" + property);
 }
 
-QString WidgetFactory::propertyDescription(const char* name) const
+QString WidgetFactory::propertyDescription(const char *name) const
 {
     return d->propDesc.value(name);
 }
 
-QString WidgetFactory::valueDescription(const char* name) const
+QString WidgetFactory::valueDescription(const char *name) const
 {
     return d->propValDesc.value(name);
 }
 
-WidgetInfo* WidgetFactory::widgetInfoForClassName(const char* classname)
+WidgetInfo *WidgetFactory::widgetInfoForClassName(const char *classname)
 {
     return d->classesByName.value(classname);
 }
@@ -329,7 +332,7 @@ const QSet<QByteArray> *WidgetFactory::hiddenClasses() const
     return d->hiddenClasses;
 }
 
-WidgetLibrary* WidgetFactory::library()
+WidgetLibrary *WidgetFactory::library()
 {
     return d->library;
 }
@@ -339,7 +342,7 @@ bool WidgetFactory::advancedPropertiesVisible() const
     return d->advancedPropertiesVisible;
 }
 
-void WidgetFactory::setLibrary(WidgetLibrary* library)
+void WidgetFactory::setLibrary(WidgetLibrary *library)
 {
     d->library = library;
 }
@@ -349,7 +352,7 @@ void WidgetFactory::setAdvancedPropertiesVisible(bool set)
     d->advancedPropertiesVisible = set;
 }
 
-void WidgetFactory::setPropertyDescription(const char* property, const QString &description)
+void WidgetFactory::setPropertyDescription(const char *property, const QString &description)
 {
     d->propDesc.insert(property, description);
 }

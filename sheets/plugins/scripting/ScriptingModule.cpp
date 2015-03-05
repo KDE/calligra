@@ -43,7 +43,8 @@
 #include <KoApplicationAdaptor.h>
 
 extern "C" {
-    KDE_EXPORT QObject* krossmodule() {
+    KDE_EXPORT QObject *krossmodule()
+    {
         return new ScriptingModule();
     }
 }
@@ -53,13 +54,13 @@ class ScriptingModule::Private
 {
 public:
     QPointer<Calligra::Sheets::Doc> doc;
-    QHash< QString, ScriptingFunction* > functions;
+    QHash< QString, ScriptingFunction * > functions;
     QStringList functionnames;
 };
 
-ScriptingModule::ScriptingModule(QObject* parent)
-        : KoScriptingModule(parent, "KSpread")
-        , d(new Private())
+ScriptingModule::ScriptingModule(QObject *parent)
+    : KoScriptingModule(parent, "KSpread")
+    , d(new Private())
 {
     d->doc = 0;
 }
@@ -70,16 +71,17 @@ ScriptingModule::~ScriptingModule()
     delete d;
 }
 
-Calligra::Sheets::View* ScriptingModule::kspreadView()
+Calligra::Sheets::View *ScriptingModule::kspreadView()
 {
-    return dynamic_cast< Calligra::Sheets::View* >(KoScriptingModule::view());
+    return dynamic_cast< Calligra::Sheets::View * >(KoScriptingModule::view());
 }
 
-Calligra::Sheets::Doc* ScriptingModule::kspreadDoc()
+Calligra::Sheets::Doc *ScriptingModule::kspreadDoc()
 {
     if (! d->doc) {
-        if (Calligra::Sheets::View* v = kspreadView())
+        if (Calligra::Sheets::View *v = kspreadView()) {
             d->doc = v->doc();
+        }
         if (! d->doc) {
             Calligra::Sheets::Part *part = new Calligra::Sheets::Part(this);
             d->doc = new Calligra::Sheets::Doc(part);
@@ -89,80 +91,84 @@ Calligra::Sheets::Doc* ScriptingModule::kspreadDoc()
     return d->doc;
 }
 
-KoDocument* ScriptingModule::doc()
+KoDocument *ScriptingModule::doc()
 {
     return kspreadDoc();
 }
 
-QObject* ScriptingModule::map()
+QObject *ScriptingModule::map()
 {
-    return kspreadDoc()->map()->findChild< Calligra::Sheets::MapAdaptor* >();
+    return kspreadDoc()->map()->findChild< Calligra::Sheets::MapAdaptor * >();
 }
 
-QObject* ScriptingModule::view()
+QObject *ScriptingModule::view()
 {
-    Calligra::Sheets::View* v = kspreadView();
-    return v ? v->findChild< Calligra::Sheets::ViewAdaptor* >() : 0;
+    Calligra::Sheets::View *v = kspreadView();
+    return v ? v->findChild< Calligra::Sheets::ViewAdaptor * >() : 0;
 }
 
-QObject* ScriptingModule::currentSheet()
+QObject *ScriptingModule::currentSheet()
 {
-    Calligra::Sheets::View* v = kspreadView();
-    Calligra::Sheets::Sheet* s = v ? v->activeSheet() : 0;
-    return s ? s->findChild< Calligra::Sheets::SheetAdaptor* >() : 0;
+    Calligra::Sheets::View *v = kspreadView();
+    Calligra::Sheets::Sheet *s = v ? v->activeSheet() : 0;
+    return s ? s->findChild< Calligra::Sheets::SheetAdaptor * >() : 0;
 }
 
-QObject* ScriptingModule::sheetByName(const QString& name)
+QObject *ScriptingModule::sheetByName(const QString &name)
 {
     if (kspreadDoc()->map())
-        foreach(Calligra::Sheets::Sheet* sheet, kspreadDoc()->map()->sheetList()) {
-        if (sheet->sheetName() == name) {
-            return sheet->findChild< Calligra::Sheets::SheetAdaptor* >(); {
+        foreach (Calligra::Sheets::Sheet *sheet, kspreadDoc()->map()->sheetList()) {
+            if (sheet->sheetName() == name) {
+                return sheet->findChild< Calligra::Sheets::SheetAdaptor * >(); {
+                }
             }
         }
-    }
     return 0;
 }
 
 QStringList ScriptingModule::sheetNames()
 {
     QStringList names;
-    foreach(Calligra::Sheets::Sheet* sheet, kspreadDoc()->map()->sheetList()) {
+    foreach (Calligra::Sheets::Sheet *sheet, kspreadDoc()->map()->sheetList()) {
         names.append(sheet->sheetName());
     }
     return names;
 }
 
-bool ScriptingModule::hasFunction(const QString& name)
+bool ScriptingModule::hasFunction(const QString &name)
 {
     return d->functions.contains(name);
 }
 
-QObject* ScriptingModule::function(const QString& name)
+QObject *ScriptingModule::function(const QString &name)
 {
-    if (d->functions.contains(name))
+    if (d->functions.contains(name)) {
         return d->functions[name];
-    ScriptingFunction* function = new ScriptingFunction(this);
+    }
+    ScriptingFunction *function = new ScriptingFunction(this);
     function->setName(name);
     d->functions.insert(name, function);
     d->functionnames.append(name);
     return function;
 }
 
-QObject* ScriptingModule::createListener(const QString& sheetname, const QString& range)
+QObject *ScriptingModule::createListener(const QString &sheetname, const QString &range)
 {
-    Calligra::Sheets::Sheet* sheet = kspreadDoc()->map()->findSheet(sheetname);
-    if (! sheet) return 0;
+    Calligra::Sheets::Sheet *sheet = kspreadDoc()->map()->findSheet(sheetname);
+    if (! sheet) {
+        return 0;
+    }
     Calligra::Sheets::Region region(range, kspreadDoc()->map(), sheet);
     QRect r = region.firstRange();
     return new Calligra::Sheets::ScriptingCellListener(sheet, r.isNull() ? sheet->usedArea() : r);
 }
 
-bool ScriptingModule::fromXML(const QString& xml)
+bool ScriptingModule::fromXML(const QString &xml)
 {
     KoXmlDocument xmldoc;
-    if (! xmldoc.setContent(xml, true))
+    if (! xmldoc.setContent(xml, true)) {
         return false;
+    }
     return kspreadDoc()->loadXML(xmldoc, 0);
 }
 
@@ -171,41 +177,42 @@ QString ScriptingModule::toXML()
     return kspreadDoc()->saveXML().toString(2);
 }
 
-bool ScriptingModule::openUrl(const QString& url)
+bool ScriptingModule::openUrl(const QString &url)
 {
     return kspreadDoc()->openUrl(url);
 }
 
-bool ScriptingModule::saveUrl(const QString& url)
+bool ScriptingModule::saveUrl(const QString &url)
 {
     return kspreadDoc()->saveAs(url);
 }
 
-bool ScriptingModule::importUrl(const QString& url)
+bool ScriptingModule::importUrl(const QString &url)
 {
     return kspreadDoc()->importDocument(url);
 }
 
-bool ScriptingModule::exportUrl(const QString& url)
+bool ScriptingModule::exportUrl(const QString &url)
 {
     return kspreadDoc()->exportDocument(url);
 }
 
-QObject* ScriptingModule::reader()
+QObject *ScriptingModule::reader()
 {
     return new ScriptingReader(this);
 }
 
-QObject* ScriptingModule::writer()
+QObject *ScriptingModule::writer()
 {
     return new ScriptingWriter(this);
 }
 
-QWidget* ScriptingModule::createSheetsListView(QWidget* parent)
+QWidget *ScriptingModule::createSheetsListView(QWidget *parent)
 {
-    ScriptingSheetsListView* listview = new ScriptingSheetsListView(this, parent);
-    if (parent && parent->layout())
+    ScriptingSheetsListView *listview = new ScriptingSheetsListView(this, parent);
+    if (parent && parent->layout()) {
         parent->layout()->addWidget(listview);
+    }
     return listview;
 }
 

@@ -37,9 +37,7 @@
 #include <QStack>
 #include <kis_effect_mask.h>
 
-
-struct KisCloneLayer::Private
-{
+struct KisCloneLayer::Private {
 public:
     KisLayerSP copyFrom;
     KisCloneInfo copyFromInfo;
@@ -49,8 +47,8 @@ public:
 };
 
 KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &name, quint8 opacity)
-        : KisLayer(image, name, opacity)
-        , m_d(new Private())
+    : KisLayer(image, name, opacity)
+    , m_d(new Private())
 {
     m_d->copyFrom = from;
     m_d->type = COPY_PROJECTION;
@@ -63,9 +61,9 @@ KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &
     }
 }
 
-KisCloneLayer::KisCloneLayer(const KisCloneLayer& rhs)
-        : KisLayer(rhs)
-        , m_d(new Private())
+KisCloneLayer::KisCloneLayer(const KisCloneLayer &rhs)
+    : KisLayer(rhs)
+    , m_d(new Private())
 {
     m_d->copyFrom = rhs.copyFrom();
     m_d->type = rhs.copyType();
@@ -131,7 +129,7 @@ bool KisCloneLayer::needProjection() const
 
 void KisCloneLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         KisPaintDeviceSP projection,
-        const QRect& rect) const
+        const QRect &rect) const
 {
     QRect copyRect = rect;
     copyRect.translate(-m_d->x, -m_d->y);
@@ -147,7 +145,9 @@ void KisCloneLayer::setDirtyOriginal(const QRect &rect)
      * The original will be updated when the clone becomes visible
      * again.
      */
-    if (!visible(true)) return;
+    if (!visible(true)) {
+        return;
+    }
 
     /**
      *  HINT: this method is present for historical reasons only.
@@ -170,7 +170,9 @@ QRect KisCloneLayer::needRectOnSourceForMasks(const QRect &rc) const
     bool rectVariesFlag;
 
     QList<KisEffectMaskSP> effectMasks = this->effectMasks();
-    if (effectMasks.isEmpty()) return QRect();
+    if (effectMasks.isEmpty()) {
+        return QRect();
+    }
 
     QRect needRect = this->masksNeedRect(effectMasks,
                                          rc,
@@ -178,7 +180,7 @@ QRect KisCloneLayer::needRectOnSourceForMasks(const QRect &rc) const
                                          rectVariesFlag);
 
     if (needRect.isEmpty() ||
-        (!rectVariesFlag && needRect == rc)) {
+            (!rectVariesFlag && needRect == rc)) {
 
         return QRect();
     }
@@ -223,7 +225,7 @@ QRect KisCloneLayer::accessRect(const QRect &rect, PositionToFilthy pos) const
 {
     QRect resultRect = rect;
 
-    if(pos & (N_FILTHY_PROJECTION | N_FILTHY)) {
+    if (pos & (N_FILTHY_PROJECTION | N_FILTHY)) {
         if (m_d->x || m_d->y) {
             resultRect |= rect.translated(-m_d->x, -m_d->y);
         }
@@ -244,7 +246,7 @@ QRect KisCloneLayer::outgoingChangeRect(const QRect &rect) const
     return rect.translated(m_d->x, m_d->y);
 }
 
-bool KisCloneLayer::accept(KisNodeVisitor & v)
+bool KisCloneLayer::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
 }
@@ -301,10 +303,10 @@ QIcon KisCloneLayer::icon() const
 KisDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const
 {
     KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
-    if (m_d->copyFrom)
+    if (m_d->copyFrom) {
         l << KisDocumentSectionModel::Property(i18n("Copy From"), m_d->copyFrom->name());
+    }
     return l;
 }
-
 
 #include "kis_clone_layer.moc"

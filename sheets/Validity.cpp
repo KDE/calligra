@@ -59,7 +59,7 @@ public:
 };
 
 Validity::Validity()
-        : d(new Private)
+    : d(new Private)
 {
     d->cond = Conditional::None;
     d->action = Stop;
@@ -69,8 +69,8 @@ Validity::Validity()
     d->displayValidationInformation = false;
 }
 
-Validity::Validity(const Validity& other)
-        : d(other.d)
+Validity::Validity(const Validity &other)
+    : d(other.d)
 {
 }
 
@@ -83,7 +83,7 @@ bool Validity::isEmpty() const
     return d->restriction == None;
 }
 
-bool Validity::loadXML(Cell* const cell, const KoXmlElement& validityElement)
+bool Validity::loadXML(Cell *const cell, const KoXmlElement &validityElement)
 {
     ValueParser *const parser = cell->sheet()->map()->parser();
     bool ok = false;
@@ -91,28 +91,33 @@ bool Validity::loadXML(Cell* const cell, const KoXmlElement& validityElement)
     if (!param.isNull()) {
         if (param.hasAttribute("cond")) {
             d->cond = (Conditional::Type) param.attribute("cond").toInt(&ok);
-            if (!ok)
+            if (!ok) {
                 return false;
+            }
         }
         if (param.hasAttribute("action")) {
             d->action = (Action) param.attribute("action").toInt(&ok);
-            if (!ok)
+            if (!ok) {
                 return false;
+            }
         }
         if (param.hasAttribute("allow")) {
             d->restriction = (Restriction) param.attribute("allow").toInt(&ok);
-            if (!ok)
+            if (!ok) {
                 return false;
+            }
         }
         if (param.hasAttribute("valmin")) {
             d->minValue = parser->tryParseNumber(param.attribute("valmin"), &ok);
-            if (!ok)
+            if (!ok) {
                 return false;
+            }
         }
         if (param.hasAttribute("valmax")) {
             d->maxValue = parser->tryParseNumber(param.attribute("valmax"), &ok);
-            if (!ok)
+            if (!ok) {
                 return false;
+            }
         }
         if (param.hasAttribute("displaymessage")) {
             d->displayMessage = (bool)param.attribute("displaymessage").toInt();
@@ -163,7 +168,7 @@ bool Validity::loadXML(Cell* const cell, const KoXmlElement& validityElement)
     return true;
 }
 
-QDomElement Validity::saveXML(QDomDocument& doc, const ValueConverter *converter) const
+QDomElement Validity::saveXML(QDomDocument &doc, const ValueConverter *converter) const
 {
     QDomElement validityElement = doc.createElement("validity");
 
@@ -176,8 +181,9 @@ QDomElement Validity::saveXML(QDomDocument& doc, const ValueConverter *converter
     param.setAttribute("displaymessage", d->displayMessage);
     param.setAttribute("displayvalidationinformation", d->displayValidationInformation);
     param.setAttribute("allowemptycell", d->allowEmptyCell);
-    if (!d->listValidity.isEmpty())
+    if (!d->listValidity.isEmpty()) {
         param.setAttribute("listvalidity", d->listValidity.join(";"));
+    }
     validityElement.appendChild(param);
     QDomElement titleElement = doc.createElement("title");
     titleElement.appendChild(doc.createTextNode(d->title));
@@ -193,8 +199,6 @@ QDomElement Validity::saveXML(QDomDocument& doc, const ValueConverter *converter
     QDomElement inputMessage = doc.createElement("inputmessage");
     inputMessage.appendChild(doc.createTextNode(d->messageInfo));
     validityElement.appendChild(inputMessage);
-
-
 
     QString tmp;
     if (d->restriction == Time) {
@@ -231,9 +235,8 @@ QDomElement Validity::saveXML(QDomDocument& doc, const ValueConverter *converter
     return validityElement;
 }
 
-
-void Validity::loadOdfValidation(Cell* const cell, const QString& validationName,
-                                 OdfLoadingContext& tableContext)
+void Validity::loadOdfValidation(Cell *const cell, const QString &validationName,
+                                 OdfLoadingContext &tableContext)
 {
     KoXmlElement element = tableContext.validities.value(validationName);
     Validity validity;
@@ -355,18 +358,20 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
 
     KoXmlElement error = KoXml::namedItemNS(element, KoXmlNS::table, "error-message");
     if (!error.isNull()) {
-        if (error.hasAttributeNS(KoXmlNS::table, "title"))
+        if (error.hasAttributeNS(KoXmlNS::table, "title")) {
             setTitle(error.attributeNS(KoXmlNS::table, "title", QString()));
+        }
         if (error.hasAttributeNS(KoXmlNS::table, "message-type")) {
             QString str = error.attributeNS(KoXmlNS::table, "message-type", QString());
-            if (str == "warning")
+            if (str == "warning") {
                 setAction(Validity::Warning);
-            else if (str == "information")
+            } else if (str == "information") {
                 setAction(Validity::Information);
-            else if (str == "stop")
+            } else if (str == "stop") {
                 setAction(Validity::Stop);
-            else
+            } else {
                 kDebug(36003) << "validation : message type unknown  :" << str;
+            }
         }
 
         if (error.hasAttributeNS(KoXmlNS::table, "display")) {
@@ -374,8 +379,9 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
             setDisplayMessage((error.attributeNS(KoXmlNS::table, "display", QString()) == "true"));
         }
         KoXmlElement attrText = KoXml::namedItemNS(error, KoXmlNS::text, "p");
-        if (!attrText.isNull())
+        if (!attrText.isNull()) {
             setMessage(attrText.text());
+        }
     }
     cell->setValidity(validity);
 }
@@ -395,24 +401,28 @@ void Validity::loadOdfValidationValue(const QStringList &listVal, const ValuePar
         setMinimumValue(Value(listVal[0].toDouble(&ok)));
         if (!ok) {
             setMinimumValue(Value(listVal[0].toInt(&ok)));
-            if (!ok)
+            if (!ok) {
                 kDebug(36003) << " Try to parse this value :" << listVal[0];
+            }
 
 #if 0
-            if (!ok)
+            if (!ok) {
                 setMinimumValue(listVal[0]);
+            }
 #endif
         }
         ok = false;
         setMaximumValue(Value(listVal[1].toDouble(&ok)));
         if (!ok) {
             setMaximumValue(Value(listVal[1].toInt(&ok)));
-            if (!ok)
+            if (!ok) {
                 kDebug(36003) << " Try to parse this value :" << listVal[1];
+            }
 
 #if 0
-            if (!ok)
+            if (!ok) {
                 setMaximumValue(listVal[1]);
+            }
 #endif
         }
     }
@@ -420,7 +430,9 @@ void Validity::loadOdfValidationValue(const QStringList &listVal, const ValuePar
 
 void Validity::loadOdfValidationCondition(QString &valExpression, const ValueParser *parser)
 {
-    if (isEmpty()) return;
+    if (isEmpty()) {
+        return;
+    }
     QString value;
     if (valExpression.indexOf("<=") == 0) {
         value = valExpression.remove(0, 2);
@@ -441,8 +453,9 @@ void Validity::loadOdfValidationCondition(QString &valExpression, const ValuePar
     } else if (valExpression.indexOf('=') == 0) {
         value = valExpression.remove(0, 1);
         setCondition(Conditional::Equal);
-    } else
+    } else {
         kDebug(36003) << " I don't know how to parse it :" << valExpression;
+    }
     if (restriction() == Validity::Date) {
         setMinimumValue(parser->tryParseDate(value));
     } else if (restriction() == Validity::Date) {
@@ -452,12 +465,14 @@ void Validity::loadOdfValidationCondition(QString &valExpression, const ValuePar
         setMinimumValue(Value(value.toDouble(&ok)));
         if (!ok) {
             setMinimumValue(Value(value.toInt(&ok)));
-            if (!ok)
+            if (!ok) {
                 kDebug(36003) << " Try to parse this value :" << value;
+            }
 
 #if 0
-            if (!ok)
+            if (!ok) {
                 setMinimumValue(value);
+            }
 #endif
         }
     }
@@ -488,7 +503,7 @@ bool Validity::displayValidationInformation() const
     return d->displayValidationInformation;
 }
 
-const QString& Validity::messageInfo() const
+const QString &Validity::messageInfo() const
 {
     return d->messageInfo;
 }
@@ -498,7 +513,7 @@ const Value &Validity::maximumValue() const
     return d->maxValue;
 }
 
-const QString& Validity::message() const
+const QString &Validity::message() const
 {
     return d->message;
 }
@@ -513,17 +528,17 @@ Validity::Restriction Validity::restriction() const
     return d->restriction;
 }
 
-const QString& Validity::title() const
+const QString &Validity::title() const
 {
     return d->title;
 }
 
-const QString& Validity::titleInfo() const
+const QString &Validity::titleInfo() const
 {
     return d->titleInfo;
 }
 
-const QStringList& Validity::validityList() const
+const QStringList &Validity::validityList() const
 {
     return d->listValidity;
 }
@@ -558,12 +573,12 @@ void Validity::setMaximumValue(const Value &value)
     d->maxValue = value;
 }
 
-void Validity::setMessage(const QString& msg)
+void Validity::setMessage(const QString &msg)
 {
     d->message = msg;
 }
 
-void Validity::setMessageInfo(const QString& info)
+void Validity::setMessageInfo(const QString &info)
 {
     d->messageInfo = info;
 }
@@ -578,28 +593,29 @@ void Validity::setRestriction(Restriction restriction)
     d->restriction = restriction;
 }
 
-void Validity::setTitle(const QString& t)
+void Validity::setTitle(const QString &t)
 {
     d->title = t;
 }
 
-void Validity::setTitleInfo(const QString& info)
+void Validity::setTitleInfo(const QString &info)
 {
     d->titleInfo = info;
 }
 
-void Validity::setValidityList(const QStringList& list)
+void Validity::setValidityList(const QStringList &list)
 {
     d->listValidity = list;
 }
 
-bool Validity::testValidity(const Cell* cell) const
+bool Validity::testValidity(const Cell *cell) const
 {
     bool valid = false;
     if (d->restriction != None) {
         //fixme
-        if (d->allowEmptyCell && cell->userInput().isEmpty())
+        if (d->allowEmptyCell && cell->userInput().isEmpty()) {
             return true;
+        }
 
         ValueCalc *const calc = cell->sheet()->map()->calc();
         const Qt::CaseSensitivity cs = calc->settings()->caseSensitiveComparisons();
@@ -608,8 +624,8 @@ bool Validity::testValidity(const Cell* cell) const
                 (d->restriction == Number ||
                  (d->restriction == Integer &&
                   numToDouble(cell->value().asFloat()) == ceil(numToDouble(cell->value().asFloat())))))
-            || (d->restriction == Time && cell->isTime())
-            || (d->restriction == Date && cell->isDate())) {
+                || (d->restriction == Time && cell->isTime())
+                || (d->restriction == Date && cell->isDate())) {
             switch (d->cond) {
             case Conditional::Equal:
                 valid = cell->value().equal(d->minValue, cs);
@@ -644,8 +660,9 @@ bool Validity::testValidity(const Cell* cell) const
             valid = cell->value().isString();
         } else if (d->restriction == List) {
             //test int value
-            if (cell->value().isString() && d->listValidity.contains(cell->value().asString()))
+            if (cell->value().isString() && d->listValidity.contains(cell->value().asString())) {
                 valid = true;
+            }
         } else if (d->restriction == TextLength) {
             if (cell->value().isString()) {
                 int len = cell->displayText().length();
@@ -653,36 +670,44 @@ bool Validity::testValidity(const Cell* cell) const
                 const int max = d->maxValue.asInteger();
                 switch (d->cond) {
                 case Conditional::Equal:
-                    if (len == min)
+                    if (len == min) {
                         valid = true;
+                    }
                     break;
                 case Conditional::DifferentTo:
-                    if (len != min)
+                    if (len != min) {
                         valid = true;
+                    }
                     break;
                 case Conditional::Superior:
-                    if (len > min)
+                    if (len > min) {
                         valid = true;
+                    }
                     break;
                 case Conditional::Inferior:
-                    if (len < min)
+                    if (len < min) {
                         valid = true;
+                    }
                     break;
                 case Conditional::SuperiorEqual:
-                    if (len >= min)
+                    if (len >= min) {
                         valid = true;
+                    }
                     break;
                 case Conditional::InferiorEqual:
-                    if (len <= min)
+                    if (len <= min) {
                         valid = true;
+                    }
                     break;
                 case Conditional::Between:
-                    if (len >= min && len <= max)
+                    if (len >= min && len <= max) {
                         valid = true;
+                    }
                     break;
                 case Conditional::Different:
-                    if (len < min || len > max)
+                    if (len < min || len > max) {
                         valid = true;
+                    }
                     break;
                 default :
                     break;
@@ -697,15 +722,15 @@ bool Validity::testValidity(const Cell* cell) const
         if (d->displayMessage) {
             switch (d->action) {
             case Stop:
-                KMessageBox::error((QWidget*)0, d->message, d->title);
+                KMessageBox::error((QWidget *)0, d->message, d->title);
                 break;
             case Warning:
-                if (KMessageBox::warningYesNo((QWidget*)0, d->message, d->title) == KMessageBox::Yes) {
+                if (KMessageBox::warningYesNo((QWidget *)0, d->message, d->title) == KMessageBox::Yes) {
                     valid = true;
                 }
                 break;
             case Information:
-                KMessageBox::information((QWidget*)0, d->message, d->title);
+                KMessageBox::information((QWidget *)0, d->message, d->title);
                 valid = true;
                 break;
             }
@@ -716,12 +741,12 @@ bool Validity::testValidity(const Cell* cell) const
     return valid;
 }
 
-void Validity::operator=(const Validity & other)
+void Validity::operator=(const Validity &other)
 {
     d = other.d;
 }
 
-bool Validity::operator==(const Validity& other) const
+bool Validity::operator==(const Validity &other) const
 {
     if (d->message == other.d->message &&
             d->title == other.d->title &&
@@ -742,14 +767,14 @@ bool Validity::operator==(const Validity& other) const
 }
 
 // static
-QHash<QString, KoXmlElement> Validity::preloadValidities(const KoXmlElement& body)
+QHash<QString, KoXmlElement> Validity::preloadValidities(const KoXmlElement &body)
 {
     QHash<QString, KoXmlElement> validities;
     KoXmlNode validation = KoXml::namedItemNS(body, KoXmlNS::table, "content-validations");
     kDebug() << "validation.isNull?" << validation.isNull();
     if (!validation.isNull()) {
         KoXmlElement element;
-        forEachElement(element, validation) {
+        forEachElement (element, validation) {
             if (element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table) {
                 const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
                 validities.insert(name, element);

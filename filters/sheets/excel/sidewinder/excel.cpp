@@ -60,7 +60,6 @@ using namespace Swinder;
 //          EString
 //=============================================
 
-
 class EString::Private
 {
 public:
@@ -79,13 +78,13 @@ EString::EString()
     d->size     = 0;
 }
 
-EString::EString(const EString& es)
+EString::EString(const EString &es)
 {
     d = new EString::Private();
     operator=(es);
 }
 
-EString& EString::operator=(const EString & es)
+EString &EString::operator=(const EString &es)
 {
     d->unicode  = es.d->unicode;
     d->richText = es.d->richText;
@@ -124,7 +123,7 @@ QString EString::str() const
     return d->str;
 }
 
-void EString::setStr(const QString& str)
+void EString::setStr(const QString &str)
 {
     d->str = str;
 }
@@ -134,7 +133,7 @@ std::map<unsigned, unsigned> EString::formatRuns() const
     return d->formatRuns;
 }
 
-void EString::setFormatRuns(const std::map<unsigned, unsigned>& formatRuns)
+void EString::setFormatRuns(const std::map<unsigned, unsigned> &formatRuns)
 {
     d->formatRuns = formatRuns;
 }
@@ -150,9 +149,9 @@ void EString::setSize(unsigned s)
 }
 
 // FIXME use maxsize for sanity check
-EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* maxsize */, const unsigned* continuePositions, unsigned continuePositionsOffset)
+EString EString::fromUnicodeString(const void *p, bool longString, unsigned /* maxsize */, const unsigned *continuePositions, unsigned continuePositionsOffset)
 {
-    const unsigned char* data = (const unsigned char*) p;
+    const unsigned char *data = (const unsigned char *) p;
     QString str;
 
     unsigned offset = longString ? 2 : 1;
@@ -178,8 +177,12 @@ EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* m
 
     // find out total bytes used in this string
     unsigned size = offset;
-    if (richText) size += (formatRuns * 4);
-    if (asianPhonetics) size += asianPhoneticsSize;
+    if (richText) {
+        size += (formatRuns * 4);
+    }
+    if (asianPhonetics) {
+        size += asianPhoneticsSize;
+    }
 
     str.clear();
     for (unsigned k = 0; k < len; ++k) {
@@ -206,8 +209,9 @@ EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* m
     for (unsigned k = 0; k < formatRuns; ++k) {
         unsigned index = readU16(data + offset);
         unsigned font = readU16(data + offset + 2);
-        if (index < len)
+        if (index < len) {
             formatRunsMap[index] = font;
+        }
         offset += 4;
     }
 
@@ -222,16 +226,16 @@ EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* m
 }
 
 // FIXME use maxsize for sanity check
-EString EString::fromByteString(const void* p, bool longString,
+EString EString::fromByteString(const void *p, bool longString,
                                 unsigned /* maxsize */)
 {
-    const unsigned char* data = (const unsigned char*) p;
+    const unsigned char *data = (const unsigned char *) p;
     QString str;
 
     unsigned offset = longString ? 2 : 1;
     unsigned len = longString ? readU16(data) : data[0];
 
-    char* buffer = new char[ len+1 ];
+    char *buffer = new char[ len + 1 ];
     memcpy(buffer, data + offset, len);
     buffer[ len ] = 0;
     str = QString(buffer);
@@ -248,12 +252,10 @@ EString EString::fromByteString(const void* p, bool longString,
     return result;
 }
 
-
-
 // why different ? see BoundSheetRecord
-EString EString::fromSheetName(const void* p, unsigned datasize)
+EString EString::fromSheetName(const void *p, unsigned datasize)
 {
-    const unsigned char* data = (const unsigned char*) p;
+    const unsigned char *data = (const unsigned char *) p;
     QString str;
 
     bool richText = false;
@@ -263,13 +265,17 @@ EString EString::fromSheetName(const void* p, unsigned datasize)
     unsigned flag = data[1];
     bool unicode = flag & 1;
 
-    if (len > datasize - 2) len = datasize - 2;
-    if (len == 0) return EString();
+    if (len > datasize - 2) {
+        len = datasize - 2;
+    }
+    if (len == 0) {
+        return EString();
+    }
 
     unsigned offset = 2;
 
     if (!unicode) {
-        char* buffer = new char[ len+1 ];
+        char *buffer = new char[ len + 1 ];
         memcpy(buffer, data + offset, len);
         buffer[ len ] = 0;
         str = QString(buffer);
@@ -399,7 +405,6 @@ public:
     QString name;
 };
 
-
 ExternBookRecord::ExternBookRecord(Workbook *book)
     : Record(book), d(new Private)
 {
@@ -416,9 +421,11 @@ QString ExternBookRecord::bookName() const
     return d->name;
 }
 
-void ExternBookRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
+void ExternBookRecord::setData(unsigned size, const unsigned char *data, const unsigned int *)
 {
-    if (size < 4) return;
+    if (size < 4) {
+        return;
+    }
 
     d->sheetCount = readU16(data);
     if (data[2] == 0x01 && data[3] == 0x04) { // self-referencing supporting link
@@ -445,7 +452,7 @@ void ExternBookRecord::setData(unsigned size, const unsigned char* data, const u
     }
 }
 
-void ExternBookRecord::dump(std::ostream& out) const
+void ExternBookRecord::dump(std::ostream &out) const
 {
     out << "EXTERNBOOK" << std::endl;
     out << "        Sheet count : " << d->sheetCount << std::endl;
@@ -463,7 +470,6 @@ public:
     unsigned sheetIndex;   // one-based, not zero-based
     QString externName;
 };
-
 
 ExternNameRecord::ExternNameRecord(Workbook *book)
     : Record(book), d(new Private)
@@ -487,7 +493,7 @@ unsigned ExternNameRecord::sheetIndex() const
     return d->sheetIndex;
 }
 
-void ExternNameRecord::setExternName(const QString& name)
+void ExternNameRecord::setExternName(const QString &name)
 {
     d->externName = name;
 }
@@ -497,9 +503,11 @@ QString ExternNameRecord::externName() const
     return d->externName;
 }
 
-void ExternNameRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
+void ExternNameRecord::setData(unsigned size, const unsigned char *data, const unsigned int *)
 {
-    if (size < 6) return;
+    if (size < 6) {
+        return;
+    }
 
     if (version() == Excel97) {
         d->optionFlags = readU16(data);
@@ -514,7 +522,7 @@ void ExternNameRecord::setData(unsigned size, const unsigned char* data, const u
     }
 }
 
-void ExternNameRecord::dump(std::ostream& /*out*/) const
+void ExternNameRecord::dump(std::ostream & /*out*/) const
 {
 }
 
@@ -531,7 +539,7 @@ public:
 };
 
 FormulaRecord::FormulaRecord(Workbook *book):
-        Record(book)
+    Record(book)
 {
     d = new FormulaRecord::Private();
     d->shared = false;
@@ -547,7 +555,7 @@ Value FormulaRecord::result() const
     return d->result;
 }
 
-void FormulaRecord::setResult(const Value& r)
+void FormulaRecord::setResult(const Value &r)
 {
     d->result = r;
 }
@@ -567,9 +575,11 @@ bool FormulaRecord::isShared() const
     return d->shared;
 }
 
-void FormulaRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
+void FormulaRecord::setData(unsigned size, const unsigned char *data, const unsigned int *)
 {
-    if (size < 20) return;
+    if (size < 20) {
+        return;
+    }
 
     // cell
     setRow(readU16(data));
@@ -679,11 +689,11 @@ void FormulaRecord::writeData(XlsRecordOutputStream &o) const
     for (unsigned i = 0; i < d->tokens.size(); ++i) {
         o.writeUnsigned(8, d->tokens[i].id()); // ptg
         std::vector<unsigned char> data = d->tokens[i].data();
-        o.writeBlob(QByteArray::fromRawData(reinterpret_cast<char*>(&data[0]), data.size()));
+        o.writeBlob(QByteArray::fromRawData(reinterpret_cast<char *>(&data[0]), data.size()));
     }
 }
 
-void FormulaRecord::dump(std::ostream& out) const
+void FormulaRecord::dump(std::ostream &out) const
 {
     out << "FORMULA" << std::endl;
     out << "                Row : " << row() << std::endl;
@@ -693,11 +703,11 @@ void FormulaRecord::dump(std::ostream& out) const
 
     FormulaTokens ts = tokens();
     out << "             Tokens : " << ts.size() << std::endl;
-    for (unsigned i = 0; i < ts.size(); ++i)
+    for (unsigned i = 0; i < ts.size(); ++i) {
         out << "                       " << ts[i]  << std::endl;
+    }
 
 }
-
 
 // SHAREDFMLA
 
@@ -712,7 +722,7 @@ public:
 };
 
 SharedFormulaRecord::SharedFormulaRecord(Workbook *book):
-        Record(book)
+    Record(book)
 {
     d = new SharedFormulaRecord::Private();
 }
@@ -727,9 +737,11 @@ FormulaTokens SharedFormulaRecord::tokens() const
     return d->tokens;
 }
 
-void SharedFormulaRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
+void SharedFormulaRecord::setData(unsigned size, const unsigned char *data, const unsigned int *)
 {
-    if (size < 8) return;
+    if (size < 8) {
+        return;
+    }
 
     // maybe read range
     d->numCells = data[7];
@@ -763,7 +775,7 @@ void SharedFormulaRecord::setData(unsigned size, const unsigned char* data, cons
     }
 }
 
-void SharedFormulaRecord::dump(std::ostream& out) const
+void SharedFormulaRecord::dump(std::ostream &out) const
 {
     out << "SHAREDFMLA" << std::endl;
     // range
@@ -771,8 +783,9 @@ void SharedFormulaRecord::dump(std::ostream& out) const
 
     FormulaTokens ts = tokens();
     out << "             Tokens : " << ts.size() << std::endl;
-    for (unsigned i = 0; i < ts.size(); ++i)
+    for (unsigned i = 0; i < ts.size(); ++i) {
         out << "                       " << ts[i]  << std::endl;
+    }
 
 }
 
@@ -791,7 +804,7 @@ public:
 };
 
 MulRKRecord::MulRKRecord(Workbook *book):
-        Record(book), CellInfo(), ColumnSpanInfo()
+    Record(book), CellInfo(), ColumnSpanInfo()
 {
     d = new MulRKRecord::Private();
 }
@@ -803,37 +816,49 @@ MulRKRecord::~MulRKRecord()
 
 unsigned MulRKRecord::xfIndex(unsigned i) const
 {
-    if (i >= d->xfIndexes.size()) return 0;
+    if (i >= d->xfIndexes.size()) {
+        return 0;
+    }
     return d->xfIndexes[ i ];
 }
 
 bool MulRKRecord::isInteger(unsigned i) const
 {
-    if (i >= d->isIntegers.size()) return true;
+    if (i >= d->isIntegers.size()) {
+        return true;
+    }
     return d->isIntegers[ i ];
 }
 
 int MulRKRecord::asInteger(unsigned i) const
 {
-    if (i >= d->intValues.size()) return 0;
+    if (i >= d->intValues.size()) {
+        return 0;
+    }
     return d->intValues[ i ];
 }
 
 double MulRKRecord::asFloat(unsigned i) const
 {
-    if (i >= d->floatValues.size()) return 0.0;
+    if (i >= d->floatValues.size()) {
+        return 0.0;
+    }
     return d->floatValues[ i ];
 }
 
 unsigned MulRKRecord::encodedRK(unsigned i) const
 {
-    if (i >= d->rkValues.size()) return 0;
+    if (i >= d->rkValues.size()) {
+        return 0;
+    }
     return d->rkValues[ i ];
 }
 
-void MulRKRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
+void MulRKRecord::setData(unsigned size, const unsigned char *data, const unsigned int *)
 {
-    if (size < 6) return;
+    if (size < 6) {
+        return;
+    }
 
     setRow(readU16(data));
 
@@ -859,7 +884,7 @@ void MulRKRecord::setData(unsigned size, const unsigned char* data, const unsign
     // FIXME sentinel !
 }
 
-void MulRKRecord::dump(std::ostream& out) const
+void MulRKRecord::dump(std::ostream &out) const
 {
     out << "MULRK" << std::endl;
     out << "                Row : " << row() << std::endl;
@@ -886,7 +911,6 @@ public:
     bool builtin;
 };
 
-
 NameRecord::NameRecord(Workbook *book)
     : Record(book)
 {
@@ -899,7 +923,7 @@ NameRecord::~NameRecord()
     delete d;
 }
 
-void NameRecord::setDefinedName(const QString& name)
+void NameRecord::setDefinedName(const QString &name)
 {
     d->definedName = name;
 }
@@ -919,7 +943,7 @@ bool NameRecord::isBuiltin() const
     return d->builtin;
 }
 
-void NameRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
+void NameRecord::setData(unsigned size, const unsigned char *data, const unsigned int *)
 {
     if (size < 14) {
         setIsValid(false);
@@ -946,7 +970,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
     // 4 bytes reserved
 
     if (version() == Excel95) {
-        char* buffer = new char[ len+1 ];
+        char *buffer = new char[ len + 1 ];
         memcpy(buffer, data + 14, len);
         buffer[ len ] = 0;
         d->definedName = QString(buffer);
@@ -955,23 +979,23 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
         if (d->builtin) { // field is for a build-in name
             const unsigned opts = readU8(data + 14);
             const bool fHighByte = opts & 0x01;
-            const unsigned id = fHighByte ? readU16(data + 15) : readU8(data + 15) + 0x0*256;
-            switch(id) {
-                case 0x00: d->definedName = "Consolidate_Area"; break;
-                case 0x01: d->definedName = "Auto_Open"; break;
-                case 0x02: d->definedName = "Auto_Close"; break;
-                case 0x03: d->definedName = "Extract"; break;
-                case 0x04: d->definedName = "Database"; break;
-                case 0x05: d->definedName = "Criteria"; break;
-                case 0x06: d->definedName = "Print_Area"; break;
-                case 0x07: d->definedName = "Print_Titles"; break;
-                case 0x08: d->definedName = "Recorder"; break;
-                case 0x09: d->definedName = "Data_Form"; break;
-                case 0x0A: d->definedName = "Auto_Activate"; break;
-                case 0x0B: d->definedName = "Auto_Deactivate"; break;
-                case 0x0C: d->definedName = "Sheet_Title"; break;
-                case 0x0D: d->definedName = "_FilterDatabase"; break;
-                default: break;
+            const unsigned id = fHighByte ? readU16(data + 15) : readU8(data + 15) + 0x0 * 256;
+            switch (id) {
+            case 0x00: d->definedName = "Consolidate_Area"; break;
+            case 0x01: d->definedName = "Auto_Open"; break;
+            case 0x02: d->definedName = "Auto_Close"; break;
+            case 0x03: d->definedName = "Extract"; break;
+            case 0x04: d->definedName = "Database"; break;
+            case 0x05: d->definedName = "Criteria"; break;
+            case 0x06: d->definedName = "Print_Area"; break;
+            case 0x07: d->definedName = "Print_Titles"; break;
+            case 0x08: d->definedName = "Recorder"; break;
+            case 0x09: d->definedName = "Data_Form"; break;
+            case 0x0A: d->definedName = "Auto_Activate"; break;
+            case 0x0B: d->definedName = "Auto_Deactivate"; break;
+            case 0x0C: d->definedName = "Sheet_Title"; break;
+            case 0x0D: d->definedName = "_FilterDatabase"; break;
+            default: break;
             }
         } else { // must satisfy same restrictions then name field on XLNameUnicodeString
             const unsigned opts = readU8(data + 14);
@@ -980,7 +1004,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
             // XLUnicodeStringNoCch
             QString str;
             if (fHighByte) {
-                for (unsigned k = 0; k < len*2; ++k) {
+                for (unsigned k = 0; k < len * 2; ++k) {
                     unsigned zc = readU16(data + 15 + k * 2);
                     str.append(QString(zc));
                 }
@@ -994,8 +1018,9 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
             // This is rather illogical and seems there is nothing in the specs about this,
             // but the string "_xlfn." may in front of the string we are looking for. So,
             // remove that one and ignore whatever it means...
-            if (str.startsWith("_xlfn."))
+            if (str.startsWith("_xlfn.")) {
                 str.remove(0, 6);
+            }
 
             d->definedName = str;
         }
@@ -1004,13 +1029,13 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
     }
 
     // rgce, NamedParsedFormula
-    if(cce >= 1) {
+    if (cce >= 1) {
         /*
         FormulaDecoder decoder;
         m_formula = decoder.decodeNamedFormula(cce, data + size - cce, version());
         std::cout << ">>" << m_formula.ascii() << std::endl;
         */
-        const unsigned char* startNamedParsedFormula = data + size - cce;
+        const unsigned char *startNamedParsedFormula = data + size - cce;
         unsigned ptg = readU8(startNamedParsedFormula);
         ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
         FormulaToken t(ptg);
@@ -1022,7 +1047,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
     std::cout << "NameRecord name=" << d->definedName << " iTab=" << d->sheetIndex << " fBuiltin=" << d->builtin << " formula=" << m_formula.id() << " (" << m_formula.idAsString() << ")" << std::endl;
 }
 
-void NameRecord::dump(std::ostream& /*out*/) const
+void NameRecord::dump(std::ostream & /*out*/) const
 {
 }
 
@@ -1040,7 +1065,7 @@ public:
 };
 
 RKRecord::RKRecord(Workbook *book):
-        Record(book), CellInfo()
+    Record(book), CellInfo()
 {
     d = new RKRecord::Private();
     d->integer = true;
@@ -1066,18 +1091,20 @@ bool RKRecord::isFloat() const
 
 int RKRecord::asInteger() const
 {
-    if (d->integer)
+    if (d->integer) {
         return d->i;
-    else
+    } else {
         return (int)d->f;
+    }
 }
 
 double RKRecord::asFloat() const
 {
-    if (!d->integer)
+    if (!d->integer) {
         return d->f;
-    else
+    } else {
         return (double)d->i;
+    }
 }
 
 void RKRecord::setInteger(int i)
@@ -1101,9 +1128,11 @@ unsigned RKRecord::encodedRK() const
 
 // FIXME check sizeof(int) is 32
 // big vs little endian problem
-void RKRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
+void RKRecord::setData(unsigned size, const unsigned char *data, const unsigned int *)
 {
-    if (size < 10) return;
+    if (size < 10) {
+        return;
+    }
 
     setRow(readU16(data));
     setColumn(readU16(data + 2));
@@ -1112,11 +1141,14 @@ void RKRecord::setData(unsigned size, const unsigned char* data, const unsigned 
     int i = 0; double f = 0.0;
     d->rk = readU32(data + 6);
     decodeRK(d->rk, d->integer, i, f);
-    if (d->integer) setInteger(i);
-    else setFloat(f);
+    if (d->integer) {
+        setInteger(i);
+    } else {
+        setFloat(f);
+    }
 }
 
-void RKRecord::dump(std::ostream& out) const
+void RKRecord::dump(std::ostream &out) const
 {
     out << "RK" << std::endl;
     out << "                Row : " << row() << std::endl;
@@ -1138,7 +1170,7 @@ public:
 };
 
 RStringRecord::RStringRecord(Workbook *book):
-        Record(book), CellInfo()
+    Record(book), CellInfo()
 {
     d = new RStringRecord::Private();
 }
@@ -1153,15 +1185,17 @@ QString RStringRecord::label() const
     return d->label;
 }
 
-void RStringRecord::setLabel(const QString& l)
+void RStringRecord::setLabel(const QString &l)
 {
     d->label = l;
 }
 
 // FIXME formatting runs ? in EString perhaps ?
-void RStringRecord::setData(unsigned size, const unsigned char* data, const unsigned int*)
+void RStringRecord::setData(unsigned size, const unsigned char *data, const unsigned int *)
 {
-    if (size < 6) return;
+    if (size < 6) {
+        return;
+    }
 
     setRow(readU16(data));
     setColumn(readU16(data + 2));
@@ -1174,7 +1208,7 @@ void RStringRecord::setData(unsigned size, const unsigned char* data, const unsi
     setLabel(label);
 }
 
-void RStringRecord::dump(std::ostream& out) const
+void RStringRecord::dump(std::ostream &out) const
 {
     out << "RSTRING" << std::endl;
     out << "                Row : " << row() << std::endl;
@@ -1193,11 +1227,11 @@ public:
     unsigned total;
     std::vector<QString> strings;
     std::vector<std::map<unsigned, unsigned> > formatRuns;
-    ExtSSTRecord* esst;
+    ExtSSTRecord *esst;
 };
 
 SSTRecord::SSTRecord(Workbook *book):
-        Record(book)
+    Record(book)
 {
     d = new SSTRecord::Private();
     d->total = 0;
@@ -1209,9 +1243,9 @@ SSTRecord::~SSTRecord()
     delete d;
 }
 
-QString sstrecord_get_plain_string(const unsigned char* data, unsigned length)
+QString sstrecord_get_plain_string(const unsigned char *data, unsigned length)
 {
-    char* buffer = new char[ length+1 ];
+    char *buffer = new char[ length + 1 ];
     memcpy(buffer, data, length);
     buffer[ length ] = 0;
     QString str = QString(buffer);
@@ -1219,9 +1253,11 @@ QString sstrecord_get_plain_string(const unsigned char* data, unsigned length)
     return str;
 }
 
-void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions)
+void SSTRecord::setData(unsigned size, const unsigned char *data, const unsigned int *continuePositions)
 {
-    if (size < 8) return;
+    if (size < 8) {
+        return;
+    }
 
     d->total = readU32(data);
     unsigned count = readU32(data + 4);
@@ -1242,9 +1278,10 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
         d->strings.push_back(es.str());
         d->formatRuns.push_back(es.formatRuns());
         offset += es.size();
-        while (nextContinuePos < offset) nextContinuePos = continuePositions[++nextContinuePosIdx];
+        while (nextContinuePos < offset) {
+            nextContinuePos = continuePositions[++nextContinuePosIdx];
+        }
     }
-
 
     // sanity check, adjust to safer condition
     if (count > d->strings.size()) {
@@ -1254,17 +1291,17 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
 void SSTRecord::writeData(XlsRecordOutputStream &out) const
 {
-    unsigned dsst = qMax<unsigned>(8, (count() / 128)+1);
+    unsigned dsst = qMax<unsigned>(8, (count() / 128) + 1);
     if (d->esst) {
         d->esst->setDsst(dsst);
-        d->esst->setGroupCount((count() + dsst-1) / dsst);
+        d->esst->setGroupCount((count() + dsst - 1) / dsst);
     }
     out.writeUnsigned(32, d->total);
     out.writeUnsigned(32, count());
     for (unsigned i = 0; i < count(); ++i) {
         if (i % dsst == 0 && d->esst) {
-            d->esst->setIb(i/dsst, out.pos());
-            d->esst->setCbOffset(i/dsst, out.recordPos() + 4);
+            d->esst->setIb(i / dsst, out.pos());
+            d->esst->setCbOffset(i / dsst, out.recordPos() + 4);
         }
         out.writeUnicodeStringWithFlagsAndLength(stringAt(i));
     }
@@ -1293,30 +1330,34 @@ void SSTRecord::setExtSSTRecord(ExtSSTRecord *esst)
 // why not just string() ? to avoid easy confusion with std::string
 QString SSTRecord::stringAt(unsigned index) const
 {
-    if (index >= count()) return QString();
+    if (index >= count()) {
+        return QString();
+    }
     return d->strings[ index ];
 }
 
 std::map<unsigned, unsigned> SSTRecord::formatRunsAt(unsigned index) const
 {
-    if (index >= count()) return std::map<unsigned, unsigned>();
+    if (index >= count()) {
+        return std::map<unsigned, unsigned>();
+    }
     return d->formatRuns[ index ];
 }
 
 unsigned SSTRecord::addString(const QString &string)
 {
     d->strings.push_back(string);
-    return d->strings.size()-1;
+    return d->strings.size() - 1;
 }
 
-void SSTRecord::dump(std::ostream& out) const
+void SSTRecord::dump(std::ostream &out) const
 {
     out << "SST" << std::endl;
     out << "         Occurrences : " << d->total << std::endl;
     out << "              Count : " << count() << std::endl;
     for (unsigned i = 0; i < count(); ++i)
         out << "         String #" << std::setw(2) << i << " : " <<
-        stringAt(i) << std::endl;
+            stringAt(i) << std::endl;
 }
 
 // ========== Obj ==========
@@ -1329,7 +1370,7 @@ ObjRecord::~ObjRecord()
     delete m_object;
 }
 
-void ObjRecord::dump(std::ostream& out) const
+void ObjRecord::dump(std::ostream &out) const
 {
     out << "Obj" << std::endl;
     if (m_object) {
@@ -1338,7 +1379,7 @@ void ObjRecord::dump(std::ostream& out) const
     }
 }
 
-void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
+void ObjRecord::setData(unsigned size, const unsigned char *data, const unsigned * /* continuePositions */)
 {
     if (size < 4) {
         setIsValid(false);
@@ -1346,7 +1387,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     }
 
     // FtCmo struct
-    const unsigned char* startFtCmo = data;
+    const unsigned char *startFtCmo = data;
     const unsigned long ftcmo = readU16(startFtCmo);
     const unsigned long cbcmo = readU16(startFtCmo + 2);
     if (ftcmo !=  0x15 || cbcmo !=  0x12) {
@@ -1383,7 +1424,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     bool fCtl = false; // ActiveX control?
     bool fPrstm = false; // false=embedded store or true=control stream
 
-    const unsigned char* startPict = data + 22;
+    const unsigned char *startPict = data + 22;
     switch (ot) {
     case Object::Group: // gmo
         printf("ObjRecord::setData group\n");
@@ -1611,7 +1652,9 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             const unsigned int cbKey = readU32(startPict);
             startPict += 4;
             for (uint i = 0; i < cbKey; ++i) {
-                if (key.size() > 0) key += ".";
+                if (key.size() > 0) {
+                    key += ".";
+                }
                 key = readU32(startPict);
                 startPict += 4;
             }
@@ -1641,17 +1684,16 @@ public:
     TxORecord::VerticalAlignment vAlign;
 };
 
-
 const unsigned TxORecord::id = 0x1B6;
 
 TxORecord::TxORecord(Workbook *book)
-  : Record(book)
+    : Record(book)
 {
     d = new TxORecord::Private();
 }
 
-TxORecord::TxORecord(const TxORecord& other)
- : Record(other)
+TxORecord::TxORecord(const TxORecord &other)
+    : Record(other)
 {
     d = new TxORecord::Private();
     operator=(other);
@@ -1662,7 +1704,7 @@ TxORecord::~TxORecord()
     delete d;
 }
 
-TxORecord& TxORecord::operator=(const TxORecord &other)
+TxORecord &TxORecord::operator=(const TxORecord &other)
 {
     d->text =     other.d->text;
     d->richText = other.d->richText;
@@ -1671,13 +1713,13 @@ TxORecord& TxORecord::operator=(const TxORecord &other)
     return *this;
 }
 
-void TxORecord::dump(std::ostream& out) const
+void TxORecord::dump(std::ostream &out) const
 {
     out << "TxO" << std::endl;
     out << "   " << d->text << " " << d->hAlign << " " << d->vAlign;
 }
 
-void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
+void TxORecord::setData(unsigned size, const unsigned char *data, const unsigned *continuePositions)
 {
     const unsigned long opts1 = readU16(data);
     //const bool reserved1 = opts1 & 0x01;
@@ -1691,9 +1733,9 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     // record is 0, 5, 7, 11, 12, or 14.
 
     const unsigned long cchText = readU16(data + 14);
-    const unsigned char* startPict = data + 16;
-    const unsigned char* endPict = data + size;
-    if(cchText > 0) {
+    const unsigned char *startPict = data + 16;
+    const unsigned char *endPict = data + size;
+    if (cchText > 0) {
         //const unsigned long cbRuns = readU16(startPict);
         const unsigned long cbFmla = readU16(startPict + 2); // fmla, ObjFmla structure
         startPict += 4 + cbFmla;
@@ -1701,7 +1743,9 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         //const unsigned long ifntEmpty = readU16(startPict); // FontIndex
         startPict += 2;
         const unsigned *endOffset = continuePositions;
-        while (data + *endOffset <= startPict && *endOffset < size) endOffset++;
+        while (data + *endOffset <= startPict && *endOffset < size) {
+            endOffset++;
+        }
         endPict = data + *endOffset;
     }
 
@@ -1714,10 +1758,12 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     // XLUnicodeStringNoCch
     d->text.clear();
     unsigned k = 1;
-    if(fHighByte) {
+    if (fHighByte) {
         for (; startPict + k + 1 < endPict; k += 2) {
             unsigned zc = readU16(startPict + k);
-            if (!zc) break;
+            if (!zc) {
+                break;
+            }
             if (!QChar(zc).isPrint() && zc != 10) {
                 d->text.clear();
                 break;
@@ -1726,8 +1772,10 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         }
     } else {
         for (; startPict + k < endPict; k += 1) {
-            unsigned char uc = readU8(startPict + k) + 0x0*256;
-            if (!uc) break;
+            unsigned char uc = readU8(startPict + k) + 0x0 * 256;
+            if (!uc) {
+                break;
+            }
             if (!QChar(uc).isPrint() && uc != 10) {
                 d->text.clear();
                 break;
@@ -1750,7 +1798,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
             break; // we have it
         }
         ++ToXRunsPositionIndex;
-    } while(true);
+    } while (true);
     if (ToXRunsPositionIndex > 0) {
         d->richText = QSharedPointer<QTextDocument>(new QTextDocument());
         // also add a textrangemanager, as KoTextWriter assumes one
@@ -1760,7 +1808,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         //cursor.setVisualNavigation(true);
         QTextCharFormat format;
         unsigned pos = continuePositions[ToXRunsPositionIndex];
-        for(;pos + 8 <= size; pos += 8) { // now walk through the array of Run records
+        for (; pos + 8 <= size; pos += 8) { // now walk through the array of Run records
             const unsigned ich = readU16(data + pos);
             const unsigned ifnt = readU16(data + pos + 2);
 
@@ -1791,7 +1839,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     std::cout << "TxORecord::setData size=" << size << " text=" << qPrintable(d->text) << std::endl;
 }
 
-const QString& TxORecord::text() const
+const QString &TxORecord::text() const
 {
     return d->text;
 }
@@ -1803,11 +1851,10 @@ TxORecord::VerticalAlignment TxORecord::vAlign() const
 {
     return d->vAlign;
 }
-const QTextDocument* TxORecord::richText() const
+const QTextDocument *TxORecord::richText() const
 {
     return d->richText.data();
 }
-
 
 // ========== MsoDrawing ==========
 
@@ -1830,20 +1877,20 @@ MsoDrawingRecord::~MsoDrawingRecord()
     delete d;
 }
 
-const MSO::OfficeArtDgContainer& MsoDrawingRecord::dgContainer() const
+const MSO::OfficeArtDgContainer &MsoDrawingRecord::dgContainer() const
 {
     return d->container;
 }
 
-void MsoDrawingRecord::dump(std::ostream& out) const
+void MsoDrawingRecord::dump(std::ostream &out) const
 {
     out << "MsoDrawingRecord" << std::endl;
 }
 
-void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
+void MsoDrawingRecord::setData(unsigned size, const unsigned char *data, const unsigned *continuePositions)
 {
     Q_UNUSED(continuePositions);
-    QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(data), size);
+    QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char *>(data), size);
     QBuffer buff(&byteArr);
     buff.open(QIODevice::ReadOnly);
     LEInputStream in(&buff);
@@ -1856,17 +1903,17 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
     LEInputStream::Mark _m = in.setMark();
     try {
         MSO::parseOfficeArtDgContainer(in, container);
-    } catch(const IOException&) {
+    } catch (const IOException &) {
         in.rewind(_m);
         container.groupShape = QSharedPointer<MSO::OfficeArtSpgrContainer>(new MSO::OfficeArtSpgrContainer(&container));
         container.groupShape->rgfb.append(MSO::OfficeArtSpgrContainerFileBlock(&container));
         try {
             parseOfficeArtSpgrContainerFileBlock(in, container.groupShape->rgfb.last());
-        } catch(const IOException& e) {
+        } catch (const IOException &e) {
             std::cerr << "Invalid MsoDrawingRecord record: " << qPrintable(e.msg) << std::endl;
             setIsValid(false);
             return;
-        } catch(...) {
+        } catch (...) {
             std::cerr << "Invalid MsoDrawingRecord record: Unexpected error" << std::endl;
             setIsValid(false);
             return;
@@ -1874,7 +1921,7 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
     }
 
     // Be sure we got at least something useful we can work with.
-    if(!container.groupShape) {
+    if (!container.groupShape) {
         std::cerr << "Invalid MsoDrawingRecord record: Expected groupShape missing in the container." << std::endl;
         setIsValid(false);
         return;
@@ -1892,7 +1939,7 @@ class MsoDrawingGroupRecord::Private
 {
 public:
     MSO::OfficeArtDggContainer container;
-    QMap<QByteArray,QString> pictureNames;
+    QMap<QByteArray, QString> pictureNames;
 };
 
 MsoDrawingGroupRecord::MsoDrawingGroupRecord(Workbook *book) : Record(book)
@@ -1905,7 +1952,7 @@ MsoDrawingGroupRecord::~MsoDrawingGroupRecord()
     delete d;
 }
 
-const MSO::OfficeArtDggContainer& MsoDrawingGroupRecord::dggContainer() const
+const MSO::OfficeArtDggContainer &MsoDrawingGroupRecord::dggContainer() const
 {
     return d->container;
 }
@@ -1915,34 +1962,33 @@ const QMap< QByteArray, QString > MsoDrawingGroupRecord::pictureNames() const
     return d->pictureNames;
 }
 
-
-void MsoDrawingGroupRecord::dump(std::ostream& out) const
+void MsoDrawingGroupRecord::dump(std::ostream &out) const
 {
     out << "MsoDrawingGroupRecord" << std::endl;
 }
 
-void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
+void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char *data, const unsigned *continuePositions)
 {
-    printf("MsoDrawingGroupRecord::setData size=%i data=%i continuePositions=%i\n",size,*data,*continuePositions);
-    if(size < 32) {
+    printf("MsoDrawingGroupRecord::setData size=%i data=%i continuePositions=%i\n", size, *data, *continuePositions);
+    if (size < 32) {
         setIsValid(false);
         return;
     }
 
-    QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(data), size);
+    QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char *>(data), size);
     QBuffer buff(&byteArr);
     buff.open(QIODevice::ReadOnly);
     LEInputStream lei(&buff);
 
     try {
         MSO::parseOfficeArtDggContainer(lei, d->container);
-    } catch (const IOException& e) {
+    } catch (const IOException &e) {
         std::cerr << "Invalid MsoDrawingGroup record:" << qPrintable(e.msg) << std::endl;
         setIsValid(false);
         return;
     }
 
-    if(d->container.blipStore.data() && m_workbook->store()) {
+    if (d->container.blipStore.data() && m_workbook->store()) {
         m_workbook->store()->enterDirectory("Pictures");
         d->pictureNames = createPictures(m_workbook->store(), 0, &d->container.blipStore->rgfb);
         m_workbook->store()->leaveDirectory();
@@ -1970,13 +2016,13 @@ BkHimRecord::~BkHimRecord()
     delete d;
 }
 
-BkHimRecord::BkHimRecord( const BkHimRecord& record )
+BkHimRecord::BkHimRecord(const BkHimRecord &record)
     : Record(record), d(new Private)
 {
     *this = record;
 }
 
-BkHimRecord& BkHimRecord::operator=( const BkHimRecord& record )
+BkHimRecord &BkHimRecord::operator=(const BkHimRecord &record)
 {
     *d = *record.d;
     return *this;
@@ -1985,9 +2031,9 @@ BkHimRecord& BkHimRecord::operator=( const BkHimRecord& record )
 QString BkHimRecord::formatToString(Format format)
 {
     switch (format) {
-        case WindowsBitMap: return QString("WindowsBitMap");
-        case NativeFormat: return QString("NativeFormat");
-        default: return QString("Unknown: %1").arg(format);
+    case WindowsBitMap: return QString("WindowsBitMap");
+    case NativeFormat: return QString("NativeFormat");
+    default: return QString("Unknown: %1").arg(format);
     }
 }
 
@@ -1996,7 +2042,7 @@ BkHimRecord::Format BkHimRecord::format() const
     return d->format;
 }
 
-void BkHimRecord::setFormat(Format format )
+void BkHimRecord::setFormat(Format format)
 {
     d->format = format;
 }
@@ -2006,12 +2052,12 @@ QString BkHimRecord::imagePath() const
     return d->imagePath;
 }
 
-void BkHimRecord::setImagePath(QString imagePath )
+void BkHimRecord::setImagePath(QString imagePath)
 {
     d->imagePath = imagePath;
 }
 
-void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
+void BkHimRecord::setData(unsigned size, const unsigned char *data, const unsigned int *)
 {
     unsigned curOffset = 0;
     if (size < 8) {
@@ -2029,14 +2075,14 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
 
     static int counter = 1; //we need unique file names
     QString filename = QString("Pictures/sheetBackground%1").arg(counter++);
-    if(format() == WindowsBitMap) {
+    if (format() == WindowsBitMap) {
         filename.append(QString(".bmp"));
     }
     setImagePath(filename);
 
     KoStore *store = m_workbook->store();
     Q_ASSERT(store);
-    if(store->open(filename)) {
+    if (store->open(filename)) {
         //Excel doesn't include the file header, only the pixmap header,
         //we need to convert it to a standard BMP header
         //see http://www.fileformat.info/format/bmp/egff.htm for details
@@ -2064,12 +2110,12 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
         newHeader[1] = 0x4d;
         currentHeaderOffset += 2;
 
-        char* newHeaderChar = newHeader.data();
+        char *newHeaderChar = newHeader.data();
 
         //size
         imageSize -= 12; //remove the header size
         const qint32 fileSize = qToLittleEndian(imageSize + 54);
-        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&fileSize), 4);
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char *>(&fileSize), 4);
         currentHeaderOffset += 4;
 
         //4 reserved bytes
@@ -2077,27 +2123,27 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
 
         //offset to the start of the image, the size of this new header: always 54 bytes
         const qint32 startImageData = qToLittleEndian(qint32(54));
-        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&startImageData), 4);
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char *>(&startImageData), 4);
         currentHeaderOffset += 4;
 
         const quint32 sizeOfBitmapInfoHeader = qToLittleEndian(qint32(40));
-        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&sizeOfBitmapInfoHeader), 4);
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char *>(&sizeOfBitmapInfoHeader), 4);
         currentHeaderOffset += 4;
 
         const quint32 imageWidth = qToLittleEndian(qint32(width));
-        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&imageWidth), 4);
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char *>(&imageWidth), 4);
         currentHeaderOffset += 4;
 
         const quint32 imageHeight = qToLittleEndian(qint32(height));
-        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&imageHeight), 4);
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char *>(&imageHeight), 4);
         currentHeaderOffset += 4;
 
         const quint32 planes = qToLittleEndian(quint16(1));
-        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&planes), 2);
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char *>(&planes), 2);
         currentHeaderOffset += 2;
 
         bitsPerPixel = qToLittleEndian(bitsPerPixel);
-        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&bitsPerPixel), 2);
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char *>(&bitsPerPixel), 2);
         currentHeaderOffset += 2;
 
         //compresion type, for this case always 0
@@ -2105,27 +2151,27 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
 
         //size of image bits
         const quint32 litEndimageSize = qToLittleEndian(imageSize);
-        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&litEndimageSize), 4);
+        memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char *>(&litEndimageSize), 4);
         currentHeaderOffset += 4;
 
         //we leave the remaining bits to zero
 
         store->write(newHeaderChar, 54);
-        store->write((const char*)(data + curOffset), imageSize);
+        store->write((const char *)(data + curOffset), imageSize);
         store->close();
     } else {
         std::cerr << "BkHimRecord: Failed to open file=" << filename << std::endl;
     }
 }
 
-void BkHimRecord::dump( std::ostream& out ) const
+void BkHimRecord::dump(std::ostream &out) const
 {
     out << "BkHim" << std::endl;
     out << "             Format : " << formatToString(format()) << std::endl;
     out << "          ImagePath : " << imagePath() << std::endl;
 }
 
-static Record* createBkHimRecord(Workbook *book)
+static Record *createBkHimRecord(Workbook *book)
 {
     return new BkHimRecord(book);
 }
@@ -2138,14 +2184,14 @@ class ExcelReader::Private
 {
 public:
     // the workbook
-    Workbook* workbook;
+    Workbook *workbook;
 
-    GlobalsSubStreamHandler* globals;
+    GlobalsSubStreamHandler *globals;
 
-    std::vector<SubStreamHandler*> handlerStack;
+    std::vector<SubStreamHandler *> handlerStack;
 
     // active sheet, all cell records will be stored here
-    Sheet* activeSheet;
+    Sheet *activeSheet;
 };
 
 ExcelReader::ExcelReader()
@@ -2161,62 +2207,62 @@ ExcelReader::~ExcelReader()
     delete d;
 }
 
-static Record* createBOFRecord(Workbook *book)
+static Record *createBOFRecord(Workbook *book)
 {
     return new BOFRecord(book);
 }
-static Record* createExternBookRecord(Workbook *book)
+static Record *createExternBookRecord(Workbook *book)
 {
     return new ExternBookRecord(book);
 }
-static Record* createExternNameRecord(Workbook *book)
+static Record *createExternNameRecord(Workbook *book)
 {
     return new ExternNameRecord(book);
 }
-static Record* createFormulaRecord(Workbook *book)
+static Record *createFormulaRecord(Workbook *book)
 {
     return new FormulaRecord(book);
 }
-static Record* createSharedFormulaRecord(Workbook *book)
+static Record *createSharedFormulaRecord(Workbook *book)
 {
     return new SharedFormulaRecord(book);
 }
-static Record* createMulRKRecord(Workbook *book)
+static Record *createMulRKRecord(Workbook *book)
 {
     return new MulRKRecord(book);
 }
-static Record* createNameRecord(Workbook *book)
+static Record *createNameRecord(Workbook *book)
 {
     return new NameRecord(book);
 }
-static Record* createRKRecord(Workbook *book)
+static Record *createRKRecord(Workbook *book)
 {
     return new RKRecord(book);
 }
-static Record* createRStringRecord(Workbook *book)
+static Record *createRStringRecord(Workbook *book)
 {
     return new RStringRecord(book);
 }
-static Record* createSSTRecord(Workbook *book)
+static Record *createSSTRecord(Workbook *book)
 {
     return new SSTRecord(book);
 }
-static Record* createObjRecord(Workbook *book)
+static Record *createObjRecord(Workbook *book)
 {
     return new ObjRecord(book);
 }
 
-static Record* createTxORecord(Workbook *book)
+static Record *createTxORecord(Workbook *book)
 {
     return new TxORecord(book);
 }
 
-static Record* createRecordMsoDrawingRecord(Workbook *book)
+static Record *createRecordMsoDrawingRecord(Workbook *book)
 {
     return new MsoDrawingRecord(book);
 }
 
-static Record* createMsoDrawingGroupRecord(Workbook *book)
+static Record *createMsoDrawingGroupRecord(Workbook *book)
 {
     return new MsoDrawingGroupRecord(book);
 }
@@ -2254,7 +2300,7 @@ void printEntries(POLE::Storage &storage, const std::string path = "/", int leve
     }
 }
 
-bool ExcelReader::load(Workbook* workbook, const char* filename)
+bool ExcelReader::load(Workbook *workbook, const char *filename)
 {
     registerAllRecordClasses();
 
@@ -2270,7 +2316,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 #endif
 
     unsigned streamVersion = Swinder::Excel97;
-    POLE::Stream* stream;
+    POLE::Stream *stream;
     stream = new POLE::Stream(&storage, "/Workbook");
     if (stream->fail()) {
         delete stream;
@@ -2288,7 +2334,8 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
     unsigned char *buffer = (unsigned char *) malloc(buffer_size);
     unsigned char small_buffer[128];  // small, fixed size buffer
 
-    { // read document meta information
+    {
+        // read document meta information
         POLE::Stream *summarystream = new POLE::Stream(&storage, "/SummaryInformation");
         const unsigned long streamStartPosition = summarystream->tell();
         unsigned bytes_read = summarystream->read(buffer, 8);
@@ -2296,7 +2343,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         //const unsigned long version = readU16( buffer + 2 ); // must be 0x0000 or 0x0001
         //const unsigned long systemId = readU32( buffer + 4 );
 
-        QTextCodec* codec = QTextCodec::codecForLocale();
+        QTextCodec *codec = QTextCodec::codecForLocale();
 
         summarystream->seek(summarystream->tell() + 16);   // skip CLSID
         bytes_read = summarystream->read(buffer, 4);
@@ -2304,7 +2351,9 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         for (uint i = 0; i < numPropertySets; ++ i) {
             summarystream->seek(summarystream->tell() + 16);   // skip FMTIDO
             bytes_read = summarystream->read(buffer, 4);
-            if (bytes_read != 4) break;
+            if (bytes_read != 4) {
+                break;
+            }
             const unsigned long firstPropertyOffset = readU32(buffer);
 
             const unsigned long p = summarystream->tell();
@@ -2312,12 +2361,16 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             summarystream->seek(propertysetStartPosition);
 
             bytes_read = summarystream->read(buffer, 8);
-            if (bytes_read != 8) break;
+            if (bytes_read != 8) {
+                break;
+            }
             //unsigned long size = readU32( buffer );
             unsigned long propertyCount = readU32(buffer + 4);
             for (uint i = 0; i < propertyCount; ++i) {
                 bytes_read = summarystream->read(buffer, 8);
-                if (bytes_read != 8) break;
+                if (bytes_read != 8) {
+                    break;
+                }
                 Workbook::PropertyType propertyId = Workbook::PropertyType(readU32(buffer));
 
                 // Offset (4 bytes): An unsigned integer representing the offset in bytes from the beginning of
@@ -2329,7 +2382,9 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
                 summarystream->seek(propertysetStartPosition + propertyOffset);
                 bytes_read = summarystream->read(buffer, 4);
-                if (bytes_read != 4) break;
+                if (bytes_read != 4) {
+                    break;
+                }
                 unsigned long type = readU16(buffer);
                 //unsigned long padding = readU16( buffer + 2 );
                 switch (propertyId) {
@@ -2349,16 +2404,22 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                     switch (type) {
                     case 0x001E: { //VT_LPSTR
                         bytes_read = summarystream->read(buffer, 4);
-                        if (bytes_read != 4) break;
+                        if (bytes_read != 4) {
+                            break;
+                        }
                         const unsigned long length = readU32(buffer);
                         bytes_read = summarystream->read(buffer, length);
-                        if (bytes_read != length) break;
-                        QString s = codec->toUnicode(reinterpret_cast<const char*>(buffer), static_cast<int>(length));
+                        if (bytes_read != length) {
+                            break;
+                        }
+                        QString s = codec->toUnicode(reinterpret_cast<const char *>(buffer), static_cast<int>(length));
                         workbook->setProperty(propertyId, s);
                     } break;
                     case 0x0040: { //VT_FILETIME
                         bytes_read = summarystream->read(buffer, 8);
-                        if (bytes_read != 8) break;
+                        if (bytes_read != 8) {
+                            break;
+                        }
                         const unsigned long dwLowDateTime = readU32(buffer);
                         const unsigned long dwHighDateTime = readU32(buffer + 4);
                         long long int time = dwHighDateTime;
@@ -2374,19 +2435,21 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                     }
                     break;
                 case Workbook::PIDSI_CODEPAGE: {
-                    if (type != 0x0002) break; // type should always be 2
+                    if (type != 0x0002) {
+                        break;    // type should always be 2
+                    }
                     bytes_read = summarystream->read(buffer, 4);
                     unsigned int codepage = readU32(buffer);
-                    QTextCodec* newCodec = QTextCodec::codecForName("CP" + QByteArray::number(codepage));
+                    QTextCodec *newCodec = QTextCodec::codecForName("CP" + QByteArray::number(codepage));
                     if (newCodec) {
                         codec = newCodec;
                     }
                     std::cout << "Codepage:" << codepage << std::endl;
-                    }
-                    break;
+                }
+                break;
                 default:
                     if (propertyId != 0x0013 /* GKPIDDSI_SHAREDDOC */) {
-                         std::cout << "Ignoring property with unknown id=" << propertyId << " and type=" << type << std::endl;
+                        std::cout << "Ignoring property with unknown id=" << propertyId << " and type=" << type << std::endl;
                     }
                     break;
                 }
@@ -2397,58 +2460,61 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         delete summarystream;
     }
 
-    { // read CompObj stream
+    {
+        // read CompObj stream
         POLE::Stream *combObjStream = new POLE::Stream(&storage, "/CompObj");
 
         // header
         unsigned bytes_read = combObjStream->read(buffer, 28);
-      unsigned long length = 0;
-      bool hasCombObjStream = bytes_read == 28;
-      if(hasCombObjStream) {
-          //const unsigned long version = readU32( buffer + 5 );
-          //printf(">>>> combObjStream->fullName=%s\n",combObjStream->fullName().c_str());
-          //printEntries(storage,"CompObj");
+        unsigned long length = 0;
+        bool hasCombObjStream = bytes_read == 28;
+        if (hasCombObjStream) {
+            //const unsigned long version = readU32( buffer + 5 );
+            //printf(">>>> combObjStream->fullName=%s\n",combObjStream->fullName().c_str());
+            //printEntries(storage,"CompObj");
 
-          // AnsiUserType
-          bytes_read = combObjStream->read( buffer, 4 );
-          length = readU32( buffer );
-          bytes_read = combObjStream->read( buffer, length );
-          if(bytes_read != length) hasCombObjStream = false;
-      }
-      if(hasCombObjStream) {
-          QString ansiUserType = readByteString(buffer, length);
-          printf( "length=%lu ansiUserType=%s\n",length, qPrintable(ansiUserType) );
+            // AnsiUserType
+            bytes_read = combObjStream->read(buffer, 4);
+            length = readU32(buffer);
+            bytes_read = combObjStream->read(buffer, length);
+            if (bytes_read != length) {
+                hasCombObjStream = false;
+            }
+        }
+        if (hasCombObjStream) {
+            QString ansiUserType = readByteString(buffer, length);
+            printf("length=%lu ansiUserType=%s\n", length, qPrintable(ansiUserType));
 
-          // AnsiClipboardFormat
-          bytes_read = combObjStream->read( buffer, 4 );
-          const unsigned long markerOrLength = readU32( buffer );
-          switch (markerOrLength) {
+            // AnsiClipboardFormat
+            bytes_read = combObjStream->read(buffer, 4);
+            const unsigned long markerOrLength = readU32(buffer);
+            switch (markerOrLength) {
             case 0x00000000: break; // Must not be present, do nothing...
             case 0xFFFFFFFF: // fall through
             case 0xFFFFFFFE: { // must be 4 bytes and contains a clipboard identifier
-              bytes_read = combObjStream->read( buffer, 4 );
-              //const unsigned long standardFormat = readU32( buffer );
-              // switch(standardFormat) {
-              //   case 0x00000002: standardFormat=CF_BITMAP;
-              //   case 0x00000003: standardFormat=CF_METAFILEPICT
-              //   case 0x00000008: standardFormat=CF_DIB
-              //   case 0x0000000E: standardFormat=CF_ENHMETAFILE
-              // }
-              //TODO...
+                bytes_read = combObjStream->read(buffer, 4);
+                //const unsigned long standardFormat = readU32( buffer );
+                // switch(standardFormat) {
+                //   case 0x00000002: standardFormat=CF_BITMAP;
+                //   case 0x00000003: standardFormat=CF_METAFILEPICT
+                //   case 0x00000008: standardFormat=CF_DIB
+                //   case 0x0000000E: standardFormat=CF_ENHMETAFILE
+                // }
+                //TODO...
             }
             break;
             default:
-              if (markerOrLength > 65535) {
-                printf("invalid length reading compobj stream: %lu\n", markerOrLength);
-              } else {
-                bytes_read = combObjStream->read( buffer, markerOrLength );
-                QString ansiString = readByteString(buffer, markerOrLength);
-                //TODO...
-                //printf( "markerOrLength=%i ansiString=%s\n",markerOrLength,ansiString.ascii() );
-              }
-          }
-          //TODO Reserved1, UnicodeMarker, UnicodeUserType, UnicodeClipboardFormat, Reserved2
-      }
+                if (markerOrLength > 65535) {
+                    printf("invalid length reading compobj stream: %lu\n", markerOrLength);
+                } else {
+                    bytes_read = combObjStream->read(buffer, markerOrLength);
+                    QString ansiString = readByteString(buffer, markerOrLength);
+                    //TODO...
+                    //printf( "markerOrLength=%i ansiString=%s\n",markerOrLength,ansiString.ascii() );
+                }
+            }
+            //TODO Reserved1, UnicodeMarker, UnicodeUserType, UnicodeClipboardFormat, Reserved2
+        }
         delete combObjStream;
     }
 
@@ -2477,7 +2543,9 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         // get record type and data size
         unsigned long pos = stream->tell();
         unsigned bytes_read = stream->read(buffer, 4);
-        if (bytes_read != 4) break;
+        if (bytes_read != 4) {
+            break;
+        }
 
         unsigned long type = readU16(buffer);
 
@@ -2500,7 +2568,9 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
         // load actual record data
         bytes_read = stream->read(buffer, size);
-        if (bytes_read != size) break;
+        if (bytes_read != size) {
+            break;
+        }
         d->globals->decryptRecord(type, size, buffer);
 
         // save current position in stream, to be able to restore the position later on
@@ -2511,14 +2581,17 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             saved_pos = stream->tell();
 
             bytes_read = stream->read(small_buffer, 4);
-            if (bytes_read != 4) break;
+            if (bytes_read != 4) {
+                break;
+            }
 
             next_type = readU16(small_buffer);
             unsigned long next_size = readU16(small_buffer + 2);
-            if(next_type == MsoDrawingGroupRecord::id) {
-                if (type != MsoDrawingGroupRecord::id)
+            if (next_type == MsoDrawingGroupRecord::id) {
+                if (type != MsoDrawingGroupRecord::id) {
                     break;
-            } else if(next_type == 0x3C) {
+                }
+            } else if (next_type == 0x3C) {
                 // 0x3C are continues records which are always just merged...
 
                 // if the previous record is an Obj record, than the Continue record
@@ -2531,7 +2604,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                     bool isMsoDrawingRecord = false;
                     bytes_read = stream->read(small_buffer, 8);
                     if (bytes_read == 8) {
-                        QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(small_buffer), 8);
+                        QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char *>(small_buffer), 8);
                         QBuffer buff(&byteArr);
                         buff.open(QIODevice::ReadOnly);
                         LEInputStream in(&buff);
@@ -2576,7 +2649,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                 break;
             }
             d->globals->decryptionSkipBytes(4);
-            d->globals->decryptRecord(next_type, next_size, buffer+size);
+            d->globals->decryptRecord(next_type, next_size, buffer + size);
 
             // and finally update size
             size += next_size;
@@ -2589,10 +2662,12 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         stream->seek(saved_pos);
 
         // skip record type 0, this is just for filler
-        if (type == 0) continue;
+        if (type == 0) {
+            continue;
+        }
 
         // create the record using the factory
-        Record* record = Record::create(type, workbook);
+        Record *record = Record::create(type, workbook);
 
         if (!record) {
 //#ifdef SWINDER_XLS2RAW
@@ -2610,7 +2685,9 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
 #ifdef SWINDER_XLS2RAW
             std::cout << std::setfill('0') << std::setw(8) << std::dec << record->position() << " ";
-            if (!record->isValid()) std::cout << "Invalid ";
+            if (!record->isValid()) {
+                std::cout << "Invalid ";
+            }
             std::cout << "Record 0x";
             std::cout << std::setfill('0') << std::setw(4) << std::hex << record->rtti();
             std::cout << " (";
@@ -2621,12 +2698,15 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 #endif
 
             if (record->isValid()) {
-                if (record->rtti() == BOFRecord::id)
+                if (record->rtti() == BOFRecord::id) {
                     handleRecord(record);
-                if (!d->handlerStack.empty() && d->handlerStack.back())
+                }
+                if (!d->handlerStack.empty() && d->handlerStack.back()) {
                     d->handlerStack.back()->handleRecord(record);
-                if (record->rtti() == EOFRecord::id)
+                }
+                if (record->rtti() == EOFRecord::id) {
                     handleRecord(record);
+                }
             }
 
             delete record;
@@ -2643,20 +2723,25 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
     return true;
 }
 
-void ExcelReader::handleRecord(Record* record)
+void ExcelReader::handleRecord(Record *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     unsigned type = record->rtti();
-    if (type == BOFRecord::id)
-        handleBOF(static_cast<BOFRecord*>(record));
-    else if (type == EOFRecord::id)
-        handleEOF(static_cast<EOFRecord*>(record));
+    if (type == BOFRecord::id) {
+        handleBOF(static_cast<BOFRecord *>(record));
+    } else if (type == EOFRecord::id) {
+        handleEOF(static_cast<EOFRecord *>(record));
+    }
 }
 
-void ExcelReader::handleBOF(BOFRecord* record)
+void ExcelReader::handleBOF(BOFRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     if (record->type() == BOFRecord::Workbook) {
         d->handlerStack.push_back(d->globals);
@@ -2698,33 +2783,40 @@ void ExcelReader::handleBOF(BOFRecord* record)
     } else if (record->type() == BOFRecord::Worksheet) {
         // find the sheet and make it active
         // which sheet ? look from from previous BoundSheet
-        Sheet* sheet = d->globals->sheetFromPosition(record->position());
-        if (sheet) d->activeSheet = sheet;
+        Sheet *sheet = d->globals->sheetFromPosition(record->position());
+        if (sheet) {
+            d->activeSheet = sheet;
+        }
         d->handlerStack.push_back(new WorksheetSubStreamHandler(sheet, d->globals));
     } else if (record->type() == BOFRecord::Chart) {
-        SubStreamHandler* parentHandler = d->handlerStack.empty() ? 0 : d->handlerStack.back();
+        SubStreamHandler *parentHandler = d->handlerStack.empty() ? 0 : d->handlerStack.back();
         d->handlerStack.push_back(new Swinder::ChartSubStreamHandler(d->globals, parentHandler));
     } else {
         std::cout << "ExcelReader::handleBOF Unhandled type=" << record->type() << std::endl;
     }
 }
 
-void ExcelReader::handleEOF(EOFRecord* record)
+void ExcelReader::handleEOF(EOFRecord *record)
 {
-    if (!record) return;
-    if (d->handlerStack.empty()) return;
+    if (!record) {
+        return;
+    }
+    if (d->handlerStack.empty()) {
+        return;
+    }
 
-    SubStreamHandler* handler = d->handlerStack.back();
+    SubStreamHandler *handler = d->handlerStack.back();
     d->handlerStack.pop_back();
-    if (handler != d->globals) delete handler;
+    if (handler != d->globals) {
+        delete handler;
+    }
 }
-
 
 #ifdef SWINDER_XLS2RAW
 
 #include <QApplication>
 
-int main(int argc, char ** argv)
+int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
 
@@ -2733,11 +2825,11 @@ int main(int argc, char ** argv)
         return 0;
     }
 
-    char* filename = argv[1];
+    char *filename = argv[1];
     std::cout << "Checking " << filename << std::endl;
 
-    Workbook* workbook = new Workbook();
-    ExcelReader* reader = new ExcelReader();
+    Workbook *workbook = new Workbook();
+    ExcelReader *reader = new ExcelReader();
     reader->load(workbook, filename);
     workbook->dumpStats();
     delete reader;

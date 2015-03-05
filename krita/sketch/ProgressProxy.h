@@ -30,12 +30,12 @@ class KRITA_SKETCH_EXPORT ProgressProxy : public QObject, public KoProgressProxy
     Q_PROPERTY(QString taskName READ taskName NOTIFY taskNameChanged)
 
 public:
-    ProgressProxy(QObject* parent = 0);
+    ProgressProxy(QObject *parent = 0);
     virtual ~ProgressProxy();
 
     QString taskName() const;
 
-    virtual void setFormat(const QString& format);
+    virtual void setFormat(const QString &format);
     virtual void setRange(int minimum, int maximum);
     virtual void setValue(int value);
     virtual int maximum() const;

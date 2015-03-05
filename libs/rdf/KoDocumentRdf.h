@@ -205,7 +205,7 @@ public:
     /**
      * Get the namespace to URI prefix mapping object.
      */
-    KoRdfPrefixMapping* prefixMapping() const;
+    KoRdfPrefixMapping *prefixMapping() const;
 
     /**
      * Get the Soprano::Model that contains all the Rdf
@@ -241,7 +241,6 @@ public:
      */
     QString findXmlId(KoTextEditor *cursor) const;
 
-
     /**
      * Find all of the statements which are
      * in context for a given cursor position.
@@ -274,7 +273,7 @@ public:
      * Find an inline Rdf object from the xml:id which
      * it has in the content.xml file
      */
-    KoTextInlineRdf* findInlineRdfByID(const QString &xmlid) const;
+    KoTextInlineRdf *findInlineRdfByID(const QString &xmlid) const;
 
     /**
      * Obtain a list of semantic objects of the given class, if any, for the Rdf
@@ -357,12 +356,12 @@ public:
     /**
      * FIXME? What does this do?
      */
-    KAction* createInsertSemanticObjectReferenceAction(KoCanvasBase *host);
+    KAction *createInsertSemanticObjectReferenceAction(KoCanvasBase *host);
 
     /**
      * FIXME? What does this do?
      */
-    QList<KAction*> createInsertSemanticObjectNewActions(KoCanvasBase *host);
+    QList<KAction *> createInsertSemanticObjectNewActions(KoCanvasBase *host);
 
     /**
      * Collect together the semantic item, stylehseet, xmlid of the
@@ -374,8 +373,7 @@ public:
      * @see insertReflow()
      * @see applyReflow()
      */
-    struct reflowItem
-    {
+    struct reflowItem {
         hKoRdfSemanticItem m_si;
         hKoSemanticStylesheet m_ss;
         QString m_xmlid;
@@ -443,9 +441,8 @@ public:
      * You should use the KoRdfSemanticItem::userStylesheets() method instead of this one.
      * This is mainly an internal method to allow user stylesheets to be managed per document.
      */
-    QList<hKoSemanticStylesheet> userStyleSheetList(const QString& className) const;
-    void setUserStyleSheetList(const QString& className,const QList<hKoSemanticStylesheet>& l);
-
+    QList<hKoSemanticStylesheet> userStyleSheetList(const QString &className) const;
+    void setUserStyleSheetList(const QString &className, const QList<hKoSemanticStylesheet> &l);
 
 private:
 
@@ -455,7 +452,6 @@ private:
     void expandStatementsToIncludeRdfListsRecurse(QSharedPointer<Soprano::Model> model,
             QList<Soprano::Statement> &addList,
             const Soprano::Node &n) const;
-
 
     /**
      * Soprano can give undesirable behaviour when loading two files
@@ -485,7 +481,6 @@ private:
      */
     bool saveRdf(KoStore *store, KoXmlWriter *manifestWriter, const Soprano::Node &context) const;
 
-
     /**
      * idrefList queries soprano after loading and creates a list of all rdfid's that
      * where found in the manifest.rdf document. This list is used to make sure we do not
@@ -510,7 +505,7 @@ private:
     /// reimplemented
     virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
 
-    KoDocumentRdfPrivate * const d;
+    KoDocumentRdfPrivate *const d;
 };
 
 #endif

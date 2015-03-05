@@ -24,7 +24,6 @@
 #include <ktemporaryfile.h>
 #include "kis_chunk_allocator.h"
 
-
 #define DEFAULT_WINDOW_SIZE (16*MiB)
 
 class KRITAIMAGE_EXPORT KisMemoryWindow
@@ -37,27 +36,30 @@ public:
     KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize = DEFAULT_WINDOW_SIZE);
     ~KisMemoryWindow();
 
-    inline quint8* getReadChunkPtr(KisChunk readChunk) {
+    inline quint8 *getReadChunkPtr(KisChunk readChunk)
+    {
         return getReadChunkPtr(readChunk.data());
     }
 
-    inline quint8* getWriteChunkPtr(KisChunk writeChunk) {
+    inline quint8 *getWriteChunkPtr(KisChunk writeChunk)
+    {
         return getWriteChunkPtr(writeChunk.data());
     }
 
-    quint8* getReadChunkPtr(const KisChunkData &readChunk);
-    quint8* getWriteChunkPtr(const KisChunkData &writeChunk);
+    quint8 *getReadChunkPtr(const KisChunkData &readChunk);
+    quint8 *getWriteChunkPtr(const KisChunkData &writeChunk);
 
 private:
     struct MappingWindow {
         MappingWindow(quint64 _defaultSize)
-            : chunk(0,0),
+            : chunk(0, 0),
               window(0),
               defaultSize(_defaultSize)
         {
         }
 
-        quint8* calculatePointer(const KisChunkData &other) const {
+        quint8 *calculatePointer(const KisChunkData &other) const
+        {
             return window + other.m_begin - chunk.m_begin;
         }
 
@@ -65,7 +67,6 @@ private:
         quint8 *window;
         const quint64 defaultSize;
     };
-
 
 private:
     void adjustWindow(const KisChunkData &requestedChunk,

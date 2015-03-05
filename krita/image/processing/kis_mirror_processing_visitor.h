@@ -22,7 +22,6 @@
 #include "kis_simple_processing_visitor.h"
 #include <QRect>
 
-
 class KRITAIMAGE_EXPORT KisMirrorProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:

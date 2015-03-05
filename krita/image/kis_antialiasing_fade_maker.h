@@ -19,7 +19,6 @@
 #ifndef __KIS_ANTIALIASING_FADE_MAKER_H
 #define __KIS_ANTIALIASING_FADE_MAKER_H
 
-
 template <class BaseFade>
 class KisAntialiasingFadeMaker1D
 {
@@ -34,7 +33,8 @@ public:
     {
     }
 
-    void setSquareNormCoeffs(qreal xcoeff, qreal ycoeff) {
+    void setSquareNormCoeffs(qreal xcoeff, qreal ycoeff)
+    {
         m_radius = 1.0;
 
         qreal xf = qMax(0.0, ((1.0 / xcoeff) - 1.0) * xcoeff);
@@ -46,7 +46,8 @@ public:
         m_antialiasingFadeCoeff = qMax(0.0, 255.0 - m_fadeStartValue) / (m_radius - m_antialiasingFadeStart);
     }
 
-    void setRadius(qreal radius) {
+    void setRadius(qreal radius)
+    {
         m_radius = radius;
         m_antialiasingFadeStart = qMax(0.0, m_radius - 1.0);
 
@@ -54,7 +55,8 @@ public:
         m_antialiasingFadeCoeff = qMax(0.0, 255.0 - m_fadeStartValue) / (m_radius - m_antialiasingFadeStart);
     }
 
-    inline bool needFade(qreal dist, quint8 *value) {
+    inline bool needFade(qreal dist, quint8 *value)
+    {
         if (dist > m_radius) {
             *value = 255;
             return true;
@@ -97,7 +99,8 @@ public:
     {
     }
 
-    void setLimits(qreal halfWidth, qreal halfHeight) {
+    void setLimits(qreal halfWidth, qreal halfHeight)
+    {
         m_xLimit = halfWidth;
         m_yLimit = halfHeight;
 
@@ -108,7 +111,8 @@ public:
         m_yFadeCoeff = 1.0 / (m_yLimit - m_yFadeLimitStart);
     }
 
-    inline bool needFade(qreal x, qreal y, quint8 *value) {
+    inline bool needFade(qreal x, qreal y, quint8 *value)
+    {
         x = qAbs(x);
         y = qAbs(y);
 

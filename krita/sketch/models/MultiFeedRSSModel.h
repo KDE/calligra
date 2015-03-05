@@ -46,7 +46,8 @@ QT_END_NAMESPACE
 namespace Welcome
 {
 
-namespace Internal {
+namespace Internal
+{
 
 struct RssItem {
     QString source;
@@ -75,18 +76,20 @@ class MultiFeedRssModel : public QAbstractListModel
 public:
     explicit MultiFeedRssModel(QObject *parent = 0);
     ~MultiFeedRssModel();
-    void addFeed(const QString& feed);
-    void removeFeed(const QString& feed);
+    void addFeed(const QString &feed);
+    void removeFeed(const QString &feed);
 
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-    int articleCount() const {
+    int articleCount() const
+    {
         return m_articleCount;
     }
 
 public Q_SLOTS:
-    void setArticleCount(int arg) {
+    void setArticleCount(int arg)
+    {
         if (m_articleCount != arg) {
             m_articleCount = arg;
             emit articleCountChanged(arg);
@@ -110,5 +113,4 @@ private:
 } // namespace Utils
 
 #endif // MULTIFEEDRSSMODEL_H
-
 

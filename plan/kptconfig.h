@@ -22,7 +22,6 @@
 
 #include "kptconfigbase.h"
 
-
 namespace KPlato
 {
 
@@ -36,7 +35,7 @@ public:
     void readConfig();
     void saveSettings();
 
-    virtual void setDefaultValues( Task &task );
+    virtual void setDefaultValues(Task &task);
 
     virtual bool checkForWorkPackages() const;
     virtual KUrl retrieveUrl() const;

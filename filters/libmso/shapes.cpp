@@ -42,7 +42,6 @@
 
 #include <cmath>
 
-
 using namespace MSO;
 using namespace writeodf;
 
@@ -63,7 +62,7 @@ QRectF
 ODrawToOdf::getRect(const OfficeArtSpContainer &o)
 {
     if (o.childAnchor) {
-        const OfficeArtChildAnchor& r = *o.childAnchor;
+        const OfficeArtChildAnchor &r = *o.childAnchor;
         return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
     } else if (o.clientAnchor && client) {
         return client->getRect(*o.clientAnchor);
@@ -84,9 +83,8 @@ ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &r
 
     switch (shapeType) {
     case msosptNotPrimitive:
-        if ( ((nrotation >= 45) && (nrotation < 135)) ||
-             ((nrotation >= 225) && (nrotation < 315)))
-        {
+        if (((nrotation >= 45) && (nrotation < 135)) ||
+                ((nrotation >= 225) && (nrotation < 315))) {
             transform_anchor = true;
         }
         break;
@@ -102,7 +100,7 @@ ODrawToOdf::processRect(const quint16 shapeType, const qreal rotation, QRectF &r
     return rect;
 }
 
-void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processRectangle(const OfficeArtSpContainer &o, Writer &out)
 {
     // TODO: Use client->isPlaceholder - might require an update of the
     // placeholderAllowed function in the PPT filter.  Trying to save as many
@@ -127,7 +125,7 @@ void ODrawToOdf::processRectangle(const OfficeArtSpContainer& o, Writer& out)
     }
 }
 
-void ODrawToOdf::processTextBox(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processTextBox(const OfficeArtSpContainer &o, Writer &out)
 {
     draw_frame frame(&out.xml);
     processStyle(o, out);
@@ -135,7 +133,7 @@ void ODrawToOdf::processTextBox(const OfficeArtSpContainer& o, Writer& out)
     processText(o, out);
 }
 
-void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processLine(const OfficeArtSpContainer &o, Writer &out)
 {
     const QRectF rect = getRect(o);
     qreal x1 = rect.x();
@@ -161,14 +159,14 @@ void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
     processText(o, out);
 }
 
-void ODrawToOdf::drawStraightConnector1(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
+void ODrawToOdf::drawStraightConnector1(qreal l, qreal t, qreal r, qreal b, Writer &out, QPainterPath &shapePath) const
 {
     out.xml.addAttribute("draw:type", "line");
     shapePath.moveTo(l, t);
     shapePath.lineTo(r, b);
 }
 
-void ODrawToOdf::drawPathBentConnector2(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathBentConnector2(qreal l, qreal t, qreal r, qreal b, Writer &out, QPainterPath &shapePath) const
 {
     Q_UNUSED(out);
     shapePath.moveTo(l, t);
@@ -176,7 +174,7 @@ void ODrawToOdf::drawPathBentConnector2(qreal l, qreal t, qreal r, qreal b, Writ
     shapePath.lineTo(r, b);
 }
 
-void ODrawToOdf::drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, Writer &out, QPainterPath &shapePath) const
 {
     Q_UNUSED(out);
     qreal w = qAbs(r - l);
@@ -189,7 +187,7 @@ void ODrawToOdf::drawPathBentConnector3(qreal l, qreal t, qreal r, qreal b, Writ
     shapePath.lineTo(r, b);
 }
 
-void ODrawToOdf::drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, Writer &out, QPainterPath &shapePath) const
 {
     Q_UNUSED(out);
     qreal w = qAbs(r - l);
@@ -208,7 +206,7 @@ void ODrawToOdf::drawPathBentConnector4(qreal l, qreal t, qreal r, qreal b, Writ
     shapePath.lineTo(r, b);
 }
 
-void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, Writer &out, QPainterPath &shapePath) const
 {
     Q_UNUSED(out);
     qreal w = qAbs(r - l);
@@ -231,7 +229,7 @@ void ODrawToOdf::drawPathBentConnector5(qreal l, qreal t, qreal r, qreal b, Writ
     shapePath.lineTo(r, b);
 }
 
-void ODrawToOdf::drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, Writer &out, QPainterPath &shapePath) const
 {
     Q_UNUSED(out);
     qreal w = qAbs(r - l);
@@ -241,7 +239,7 @@ void ODrawToOdf::drawPathCurvedConnector2(qreal l, qreal t, qreal r, qreal b, Wr
     shapePath.cubicTo(l + w / 2, t, r, h / 2, r, b);
 }
 
-void ODrawToOdf::drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, Writer &out, QPainterPath &shapePath) const
 {
     Q_UNUSED(out);
     qreal w = qAbs(r - l);
@@ -257,7 +255,7 @@ void ODrawToOdf::drawPathCurvedConnector3(qreal l, qreal t, qreal r, qreal b, Wr
     shapePath.cubicTo(l + x2, t + h / 2, l + x2, b, r, b);
 }
 
-void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Writer &out, QPainterPath &shapePath) const
 {
     Q_UNUSED(out);
     qreal w = qAbs(r - l);
@@ -281,7 +279,7 @@ void ODrawToOdf::drawPathCurvedConnector4(qreal l, qreal t, qreal r, qreal b, Wr
     shapePath.cubicTo(x5, y4, r, y5, r, b);
 }
 
-void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Writer& out, QPainterPath &shapePath) const
+void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Writer &out, QPainterPath &shapePath) const
 {
     Q_UNUSED(out);
     qreal w = qAbs(r - l);
@@ -314,16 +312,16 @@ void ODrawToOdf::drawPathCurvedConnector5(qreal l, qreal t, qreal r, qreal b, Wr
 /**
  * Common handler for Connectors.
  */
-void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, PathArtist drawPath)
+void ODrawToOdf::processConnector(const OfficeArtSpContainer &o, Writer &out, PathArtist drawPath)
 {
-    const OfficeArtDggContainer * drawingGroup = 0;
+    const OfficeArtDggContainer *drawingGroup = 0;
     if (client) {
         drawingGroup = client->getOfficeArtDggContainer();
     }
 
-    const OfficeArtSpContainer* master = 0;
+    const OfficeArtSpContainer *master = 0;
     const DrawStyle ds(drawingGroup, master, &o);
-    qreal rotation = toQReal( ds.rotation() );
+    qreal rotation = toQReal(ds.rotation());
 
     const QRectF rect = getRect(o);
     qreal x1 = rect.x();
@@ -340,7 +338,7 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
 
     if (rotation != 0.0) {
         QTransform m;
-        m.rotate( -rotation );
+        m.rotate(-rotation);
         shapeRect = m.mapRect(rect.translated(-rect.center())).translated(rect.center());
 
         sx1 = shapeRect.topLeft().x();
@@ -353,22 +351,22 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
     // and rotation.
     QTransform m;
     m.reset();
-    m.translate( -shapeRect.center().x(), -shapeRect.center().y() );
+    m.translate(-shapeRect.center().x(), -shapeRect.center().y());
 
     // Mirroring
-    if (o.shapeProp.fFlipH){
-        m.scale(-1,1);
+    if (o.shapeProp.fFlipH) {
+        m.scale(-1, 1);
     }
 
-    if (o.shapeProp.fFlipV){
-        m.scale(1,-1);
+    if (o.shapeProp.fFlipV) {
+        m.scale(1, -1);
     }
 
     if (rotation != 0) {
         m.rotate(rotation);
     }
 
-    m.translate( shapeRect.center().x(), shapeRect.center().y() );
+    m.translate(shapeRect.center().x(), shapeRect.center().y());
 
     // the viewbox should be set, where is this done for draw:connector?
     out.xml.startElement("draw:connector");
@@ -396,12 +394,14 @@ void ODrawToOdf::processConnector(const OfficeArtSpContainer& o, Writer& out, Pa
     out.xml.endElement();
 }
 
-void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer &o, Writer &out)
 {
     DrawStyle ds(0, &o);
 
     // A value of 0x00000000 MUST be ignored.  [MS-ODRAW] — v20101219
-    if (!ds.pib()) return;
+    if (!ds.pib()) {
+        return;
+    }
 
     draw_frame frame(&out.xml);
     processStyle(o, out);
@@ -424,7 +424,7 @@ void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     image.set_xlink_actuate("onLoad");
 }
 
-void ODrawToOdf::processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processNotPrimitive(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
     draw_custom_shape shape(&out.xml);
     processStyleAndText(o, out);
@@ -432,8 +432,7 @@ void ODrawToOdf::processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer&
     setEnhancedGeometry(o, out);
 }
 
-
-void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer &o, Writer &out)
 {
     if (!client) {
         kWarning() << "Warning: There's no Client!";
@@ -939,22 +938,22 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     }
 }
 
-void ODrawToOdf::processStyleAndText(const MSO::OfficeArtSpContainer& o,
-                                     Writer& out)
+void ODrawToOdf::processStyleAndText(const MSO::OfficeArtSpContainer &o,
+                                     Writer &out)
 {
     processStyle(o, out);
     processText(o, out);
 }
 
-void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
-                              Writer& out)
+void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer &o,
+                              Writer &out)
 {
     addGraphicStyleToDrawElement(out, o);
     set2dGeometry(o, out);
 }
 
-void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
-                             Writer& out)
+void ODrawToOdf::processText(const MSO::OfficeArtSpContainer &o,
+                             Writer &out)
 {
     if (!client) {
         kWarning() << "Warning: There's no Client!";
@@ -968,17 +967,19 @@ void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
     }
 }
 
-void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &out, const QList<int>& defaults)
+void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &out, const QList<int> &defaults)
 {
-    const AdjustValue* val1 = get<AdjustValue>(o);
-    if (!val1 && defaults.isEmpty()) return;
-    const Adjust2Value* val2 = get<Adjust2Value>(o);
-    const Adjust3Value* val3 = get<Adjust3Value>(o);
-    const Adjust4Value* val4 = get<Adjust4Value>(o);
-    const Adjust5Value* val5 = get<Adjust5Value>(o);
-    const Adjust6Value* val6 = get<Adjust6Value>(o);
-    const Adjust7Value* val7 = get<Adjust7Value>(o);
-    const Adjust8Value* val8 = get<Adjust8Value>(o);
+    const AdjustValue *val1 = get<AdjustValue>(o);
+    if (!val1 && defaults.isEmpty()) {
+        return;
+    }
+    const Adjust2Value *val2 = get<Adjust2Value>(o);
+    const Adjust3Value *val3 = get<Adjust3Value>(o);
+    const Adjust4Value *val4 = get<Adjust4Value>(o);
+    const Adjust5Value *val5 = get<Adjust5Value>(o);
+    const Adjust6Value *val6 = get<Adjust6Value>(o);
+    const Adjust7Value *val7 = get<Adjust7Value>(o);
+    const Adjust8Value *val8 = get<Adjust8Value>(o);
 
     QString modifiers = QString::number(val1 ? val1->adjustvalue : defaults[0]);
     if (val2 || defaults.size() > 1) {
@@ -1007,17 +1008,17 @@ void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &ou
 }
 
 // Position the shape into the slide or into a group shape
-void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer &o, Writer &out)
 {
-    const OfficeArtDggContainer* dgg = 0;
-    const OfficeArtSpContainer* master = 0;
+    const OfficeArtDggContainer *dgg = 0;
+    const OfficeArtSpContainer *master = 0;
     const DrawStyle ds(dgg, master, &o);
     const qreal rotation = toQReal(ds.rotation());
 
     //transform the rectangle into the coordinate system of the group shape
     QRectF rect = getRect(o);
-    QRectF trect (out.hOffset(rect.x()), out.vOffset(rect.y()),
-                  out.hLength(rect.width()), out.vLength(rect.height()));
+    QRectF trect(out.hOffset(rect.x()), out.vOffset(rect.y()),
+                 out.hLength(rect.width()), out.vLength(rect.height()));
 
     //draw:caption-id
     //draw:class-names
@@ -1043,7 +1044,7 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
         const qreal width = trect.width();
 
         out.xml.addAttribute("draw:transform",
-                             transform_str.arg(client->formatPos(-width/2)).arg(client->formatPos(-height/2)).arg(-angle).arg(client->formatPos(center.x())).arg(client->formatPos(center.y())));
+                             transform_str.arg(client->formatPos(-width / 2)).arg(client->formatPos(-height / 2)).arg(-angle).arg(client->formatPos(center.x())).arg(client->formatPos(center.y())));
     }
     //svg:x
     //svg:y
@@ -1068,10 +1069,10 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
     //xml:id
 }
 
-void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
-    const OfficeArtDggContainer* drawingGroup = 0;
-    const OfficeArtSpContainer* master = 0;
+    const OfficeArtDggContainer *drawingGroup = 0;
+    const OfficeArtSpContainer *master = 0;
     const DrawStyle ds(drawingGroup, master, &o);
 
     IMsoArray _v = ds.pVertices_complex();
@@ -1089,17 +1090,17 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
         }
 
         int maxX = 0, minX = INT_MAX, maxY = 0, minY = INT_MAX;
-        int x,y;
+        int x, y;
 
         //get vertice points
         for (int i = 0, offset = 0; i < _v.nElems; i++, offset += step) {
             // x coordinate of this point
-            xArray.replace(0, step/2, _v.data.mid(offset, step/2));
-            x = *(int*) xArray.data();
+            xArray.replace(0, step / 2, _v.data.mid(offset, step / 2));
+            x = *(int *) xArray.data();
 
             // y coordinate of this point
-            yArray.replace(0, step/2, _v.data.mid(offset + step/2, step/2));
-            y = *(int*) yArray.data();
+            yArray.replace(0, step / 2, _v.data.mid(offset + step / 2, step / 2));
+            y = *(int *) yArray.data();
 
             verticesPoints.append(QPoint(x, y));
 
@@ -1108,7 +1109,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
                 maxY = y;
             }
             if (minY > y) {
-                minY = y ;
+                minY = y;
             }
             if (maxX < x) {
                 maxX = x;
@@ -1132,8 +1133,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             msopathtype = (((*(ushort *)(segmentInfo.data.data() + i * 2)) >> 13) & 0x7);
 
             switch (msopathtype) {
-            case msopathLineTo:
-            {
+            case msopathLineTo: {
                 if (n >= verticesPoints.size()) {
                     qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
                     nOffRange = true;
@@ -1144,8 +1144,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
                 n++;
                 break;
             }
-            case msopathCurveTo:
-            {
+            case msopathCurveTo: {
                 if (n + 2 >= verticesPoints.size()) {
                     qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
                     nOffRange = true;
@@ -1156,17 +1155,16 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
                 QPoint pt3 = verticesPoints.at(n + 2);
 
                 enhancedPath = enhancedPath + "C " +
-                        QString::number(pt1.x()) + ' ' +
-                        QString::number(pt1.y()) + ' ' +
-                        QString::number(pt2.x()) + ' ' +
-                        QString::number(pt2.y()) + ' ' +
-                        QString::number(pt3.x()) + ' ' +
-                        QString::number(pt3.y()) + ' ';
+                               QString::number(pt1.x()) + ' ' +
+                               QString::number(pt1.y()) + ' ' +
+                               QString::number(pt2.x()) + ' ' +
+                               QString::number(pt2.y()) + ' ' +
+                               QString::number(pt3.x()) + ' ' +
+                               QString::number(pt3.y()) + ' ';
                 n = n + 3;
                 break;
             }
-            case msopathMoveTo:
-            {
+            case msopathMoveTo: {
                 if (n >= verticesPoints.size()) {
                     qDebug() << "EnhancedGeometry: index into verticesPoints out of range!";
                     nOffRange = true;
@@ -1185,7 +1183,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
                 break;
             case msopathEscape:
             case msopathClientEscape:
-                 break;
+                break;
             }
         }
         //dr3d:projection
@@ -1251,7 +1249,7 @@ QString ODrawToOdf::path2svg(const QPainterPath &path)
     for (int i = 0; i < count; i++) {
 
         QPainterPath::Element e = path.elementAt(i);
-        switch(e.type) {
+        switch (e.type) {
         case QPainterPath::MoveToElement:
             d.append(QString("M %1 %2").arg(e.x).arg(e.y));
             break;
@@ -1271,7 +1269,7 @@ QString ODrawToOdf::path2svg(const QPainterPath &path)
     return d;
 }
 
-void ODrawToOdf::setShapeMirroring(const MSO::OfficeArtSpContainer& o, Writer& out)
+void ODrawToOdf::setShapeMirroring(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
     if (o.shapeProp.fFlipV) {
         out.xml.addAttribute("draw:mirror-vertical", "true");

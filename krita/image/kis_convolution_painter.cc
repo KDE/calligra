@@ -59,25 +59,23 @@
 #include "kis_convolution_worker_fft.h"
 #endif
 
-
 template<class factory>
-KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConvolutionKernelSP kernel,
-                                                                   KisPainter *painter,
-                                                                   KoUpdater *progress)
+KisConvolutionWorker<factory> *KisConvolutionPainter::createWorker(const KisConvolutionKernelSP kernel,
+        KisPainter *painter,
+        KoUpdater *progress)
 {
     KisConvolutionWorker<factory> *worker;
 
 #ifdef HAVE_FFTW3
-    #define THRESHOLD_SIZE 5
+#define THRESHOLD_SIZE 5
 
-    if(m_enginePreference == SPATIAL ||
-       (m_enginePreference != FFTW &&
-        kernel->width() <= THRESHOLD_SIZE &&
-        kernel->height() <= THRESHOLD_SIZE)) {
+    if (m_enginePreference == SPATIAL ||
+            (m_enginePreference != FFTW &&
+             kernel->width() <= THRESHOLD_SIZE &&
+             kernel->height() <= THRESHOLD_SIZE)) {
 
         worker = new KisConvolutionWorkerSpatial<factory>(painter, progress);
-    }
-    else {
+    } else {
         worker = new KisConvolutionWorkerFFT<factory>(painter, progress);
     }
 #else
@@ -87,7 +85,6 @@ KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConv
 
     return worker;
 }
-
 
 KisConvolutionPainter::KisConvolutionPainter()
     : KisPainter(),
@@ -141,7 +138,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
          * o check other cases of the switch for the vulnerability
          */
 
-        if(dataRect.isValid()) {
+        if (dataRect.isValid()) {
             KisConvolutionWorker<RepeatIteratorFactory> *worker;
             worker = createWorker<RepeatIteratorFactory>(kernel, this, progressUpdater());
             worker->execute(kernel, src, srcPos, dstPos, areaSize, dataRect);

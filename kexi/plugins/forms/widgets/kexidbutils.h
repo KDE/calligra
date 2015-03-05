@@ -30,7 +30,7 @@ class KexiFormUtils
 {
 public:
     //! @return color blended from 33% of background color and 66% of base color
-    static QColor lighterGrayBackgroundColor(const QPalette& palette);
+    static QColor lighterGrayBackgroundColor(const QPalette &palette);
 
     //! @return pre-loaded data-source-tag icon pixmap of appropriate size
     static QPixmap dataSourceTagIcon();
@@ -46,7 +46,7 @@ class KexiDBWidgetContextMenuExtender : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBWidgetContextMenuExtender(QObject* parent, KexiDataItemInterface* iface);
+    KexiDBWidgetContextMenuExtender(QObject *parent, KexiDataItemInterface *iface);
     ~KexiDBWidgetContextMenuExtender();
 
     //! Perform context menu exec() for @a globalPos. KMenu is used
@@ -61,13 +61,13 @@ public:
     /*! Updates title for context menu based on data item \a iface caption or name
      Used in createTitle(QMenu *menu) and KexiDBImageBox.
      \return true is the title has been added. */
-    static bool updateContextMenuTitleForDataItem(QMenu *menu, KexiDataItemInterface* iface,
-    const QString& icon = QString());
+    static bool updateContextMenuTitleForDataItem(QMenu *menu, KexiDataItemInterface *iface,
+            const QString &icon = QString());
 
 protected:
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 class KexiDBAutoField;
@@ -79,14 +79,14 @@ public:
     KexiSubwidgetInterface();
     virtual ~KexiSubwidgetInterface();
 
-    virtual bool appendStretchRequired(KexiDBAutoField* autoField) const {
+    virtual bool appendStretchRequired(KexiDBAutoField *autoField) const
+    {
         Q_UNUSED(autoField); return false;
     }
-    virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const {
+    virtual bool subwidgetStretchRequired(KexiDBAutoField *autoField) const
+    {
         Q_UNUSED(autoField); return false;
     }
 };
-
-
 
 #endif

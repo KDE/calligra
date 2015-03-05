@@ -37,7 +37,8 @@
 #include "kis_filters_model.h"
 #include "kis_config.h"
 
-class ThumbnailBounds : public KisDefaultBounds {
+class ThumbnailBounds : public KisDefaultBounds
+{
 public:
     ThumbnailBounds() : KisDefaultBounds() {}
     virtual ~ThumbnailBounds() {}
@@ -50,21 +51,20 @@ private:
     Q_DISABLE_COPY(ThumbnailBounds)
 };
 
-
 struct KisFilterSelectorWidget::Private {
-    QWidget* currentCentralWidget;
-    KisConfigWidget* currentFilterConfigurationWidget;
+    QWidget *currentCentralWidget;
+    KisConfigWidget *currentFilterConfigurationWidget;
     KisFilterSP currentFilter;
     KisPaintDeviceSP paintDevice;
     Ui_FilterSelector uiFilterSelector;
     KisPaintDeviceSP thumb;
-    KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
-    KisFiltersModel* filtersModel;
+    KisBookmarkedFilterConfigurationsModel *currentBookmarkedFilterConfigurationsModel;
+    KisFiltersModel *filtersModel;
     QGridLayout *widgetLayout;
     KisViewManager *view;
 };
 
-KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Private)
+KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget *parent) : d(new Private)
 {
     Q_UNUSED(parent);
     setObjectName("KisFilterSelectorWidget");
@@ -77,11 +77,11 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     d->uiFilterSelector.setupUi(this);
 
     d->widgetLayout = new QGridLayout(d->uiFilterSelector.centralWidgetHolder);
-    d->widgetLayout->setContentsMargins(0,0,0,0);
+    d->widgetLayout->setContentsMargins(0, 0, 0, 0);
     d->widgetLayout->setHorizontalSpacing(0);
 
-    connect(d->uiFilterSelector.filtersSelector, SIGNAL(clicked(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
-    connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
+    connect(d->uiFilterSelector.filtersSelector, SIGNAL(clicked(const QModelIndex &)), SLOT(setFilterIndex(const QModelIndex &)));
+    connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(const QModelIndex &)), SLOT(setFilterIndex(const QModelIndex &)));
 
     connect(d->uiFilterSelector.comboBoxPresets, SIGNAL(activated(int)),
             SLOT(slotBookmarkedFilterConfigurationSelected(int)));
@@ -91,7 +91,6 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
 
     d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 0, 0, 1, 2);
     d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 2, 1);
-
 
 }
 
@@ -111,9 +110,13 @@ void KisFilterSelectorWidget::setView(KisViewManager *view)
 
 void KisFilterSelectorWidget::setPaintDevice(bool showAll, KisPaintDeviceSP _paintDevice)
 {
-    if (!_paintDevice) return;
+    if (!_paintDevice) {
+        return;
+    }
 
-    if (d->filtersModel) delete d->filtersModel;
+    if (d->filtersModel) {
+        delete d->filtersModel;
+    }
 
     d->paintDevice = _paintDevice;
     d->thumb = d->paintDevice->createThumbnailDevice(100, 100);
@@ -176,7 +179,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->uiFilterSelector.filtersSelector->blockSignals(v);
     }
 
-    KisConfigWidget* widget =
+    KisConfigWidget *widget =
         d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice);
 
     if (!widget) { // No widget, so display a label instead
@@ -189,7 +192,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->currentFilterConfigurationWidget->setView(d->view);
         d->currentFilterConfigurationWidget->blockSignals(true);
         d->currentFilterConfigurationWidget->setConfiguration(
-        d->currentFilter->defaultConfiguration(d->paintDevice));
+            d->currentFilter->defaultConfiguration(d->paintDevice));
         d->currentFilterConfigurationWidget->blockSignals(false);
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(configurationChanged()));
     }
@@ -201,20 +204,21 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
 
     // Add the widget to the layout
     d->currentCentralWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    d->widgetLayout->addWidget(d->currentCentralWidget, 0 , 0);
+    d->widgetLayout->addWidget(d->currentCentralWidget, 0, 0);
     showFilterGallery(isFilterGalleryVisible());
 }
 
-void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)
+void KisFilterSelectorWidget::setFilterIndex(const QModelIndex &idx)
 {
-    if (!idx.isValid()) return;
+    if (!idx.isValid()) {
+        return;
+    }
 
     Q_ASSERT(d->filtersModel);
-    KisFilter* filter = const_cast<KisFilter*>(d->filtersModel->indexToFilter(idx));
+    KisFilter *filter = const_cast<KisFilter *>(d->filtersModel->indexToFilter(idx));
     if (filter) {
         setFilter(filter);
-    }
-    else {
+    } else {
         if (d->currentFilter) {
             bool v = d->uiFilterSelector.filtersSelector->blockSignals(true);
             QModelIndex idx = d->filtersModel->indexForFilter(d->currentFilter->id());
@@ -233,24 +237,24 @@ void KisFilterSelectorWidget::slotBookmarkedFilterConfigurationSelected(int inde
 {
     if (d->currentFilterConfigurationWidget) {
         QModelIndex modelIndex = d->currentBookmarkedFilterConfigurationsModel->index(index, 0);
-        KisFilterConfiguration* config  = d->currentBookmarkedFilterConfigurationsModel->configuration(modelIndex);
+        KisFilterConfiguration *config  = d->currentBookmarkedFilterConfigurationsModel->configuration(modelIndex);
         d->currentFilterConfigurationWidget->setConfiguration(config);
     }
 }
 
 void KisFilterSelectorWidget::editConfigurations()
 {
-    KisSerializableConfiguration* config =
+    KisSerializableConfiguration *config =
         d->currentFilterConfigurationWidget ? d->currentFilterConfigurationWidget->configuration() : 0;
     KisBookmarkedConfigurationsEditor editor(this, d->currentBookmarkedFilterConfigurationsModel, config);
     editor.exec();
 }
 
-KisFilterConfiguration* KisFilterSelectorWidget::configuration()
+KisFilterConfiguration *KisFilterSelectorWidget::configuration()
 {
     if (d->currentFilterConfigurationWidget) {
-        KisFilterConfiguration * config
-        = dynamic_cast<KisFilterConfiguration*>(d->currentFilterConfigurationWidget->configuration());
+        KisFilterConfiguration *config
+            = dynamic_cast<KisFilterConfiguration *>(d->currentFilterConfigurationWidget->configuration());
         if (config) {
             return config;
         }

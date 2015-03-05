@@ -58,7 +58,7 @@ protected Q_SLOTS:
 protected:
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 }

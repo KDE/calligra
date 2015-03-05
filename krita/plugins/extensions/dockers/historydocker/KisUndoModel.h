@@ -72,7 +72,7 @@ public:
     KUndo2QStack *stack() const;
 
     virtual QModelIndex index(int row, int column,
-    const QModelIndex &parent = QModelIndex()) const;
+                              const QModelIndex &parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex &child) const;
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -87,7 +87,7 @@ public:
     void setCleanIcon(const QIcon &icon);
     QIcon cleanIcon() const;
 
-    void setCanvas(KisCanvas2* canvas);
+    void setCanvas(KisCanvas2 *canvas);
     bool checkMergedCommand(int index);
 
 public Q_SLOTS:
@@ -105,7 +105,7 @@ private:
     QItemSelectionModel *m_sel_model;
     QString m_empty_label;
     QIcon m_clean_icon;
-    KisCanvas2* m_canvas;
-    QMap<const KUndo2Command*, QImage> m_imageMap;
+    KisCanvas2 *m_canvas;
+    QMap<const KUndo2Command *, QImage> m_imageMap;
 };
 #endif

@@ -32,7 +32,7 @@ class KoPAPage;
 class KOPAGEAPP_EXPORT KoPADisplayMasterShapesCommand : public KUndo2Command
 {
 public:
-    KoPADisplayMasterShapesCommand( KoPAPage * page, bool display );
+    KoPADisplayMasterShapesCommand(KoPAPage *page, bool display);
     virtual ~KoPADisplayMasterShapesCommand();
 
     /// redo the command
@@ -41,7 +41,7 @@ public:
     void undo();
 
 private:
-    KoPAPage * m_page;
+    KoPAPage *m_page;
     bool m_display;
 };
 

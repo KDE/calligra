@@ -67,14 +67,14 @@ private:
     int m_vSpace;
 };
 
-ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement& e, QWidget *parent) :
+ActionOptionWidget::ActionOptionWidget(CellToolBase *cellTool, const QDomElement &e, QWidget *parent) :
     QWidget(parent)
 {
     QString name = e.attribute("name");
     setObjectName(name);
     setWindowTitle(i18n(name.toLatin1()));
 
-    QLayout* layout = new GroupFlowLayout(this);//QBoxLayout(QBoxLayout::TopToBottom, this);
+    QLayout *layout = new GroupFlowLayout(this);//QBoxLayout(QBoxLayout::TopToBottom, this);
 
     for (QDomElement group = e.firstChildElement("group"); !group.isNull(); group = group.nextSiblingElement("group")) {
         QHBoxLayout *groupLayout = new QHBoxLayout();
@@ -83,17 +83,17 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
         // In each group there are a number of actions that will be layouted together.
         for (QDomElement action = group.firstChildElement("action"); !action.isNull(); action = action.nextSiblingElement("action")) {
             QString actionName = action.attribute("name");
-            KAction* a = cellTool->action(actionName);
+            KAction *a = cellTool->action(actionName);
             if (!a) {
                 kWarning() << "unknown action" << actionName << "in CellToolOptionWidgets.xml";
                 continue;
             }
-            QWidget* w = a->requestWidget(this);
-            if (w && qobject_cast<KoFontComboBox*>(w)) {
+            QWidget *w = a->requestWidget(this);
+            if (w && qobject_cast<KoFontComboBox *>(w)) {
                 w->setMinimumWidth(w->minimumWidth() / 2);
             }
             if (!w) {
-                QToolButton* b = new QToolButton(this);
+                QToolButton *b = new QToolButton(this);
                 b->setFocusPolicy(Qt::NoFocus);
                 b->setDefaultAction(a);
                 w = b;
@@ -128,8 +128,9 @@ GroupFlowLayout::GroupFlowLayout(int margin, int hSpacing, int vSpacing)
 GroupFlowLayout::~GroupFlowLayout()
 {
     QLayoutItem *item;
-    while ((item = takeAt(0)))
+    while ((item = takeAt(0))) {
         delete item;
+    }
 }
 
 void GroupFlowLayout::addItem(QLayoutItem *item)
@@ -167,10 +168,11 @@ QLayoutItem *GroupFlowLayout::itemAt(int index) const
 
 QLayoutItem *GroupFlowLayout::takeAt(int index)
 {
-    if (index >= 0 && index < itemList.size())
+    if (index >= 0 && index < itemList.size()) {
         return itemList.takeAt(index);
-    else
+    } else {
         return 0;
+    }
 }
 
 Qt::Orientations GroupFlowLayout::expandingDirections() const
@@ -204,10 +206,11 @@ QSize GroupFlowLayout::minimumSize() const
 {
     QSize size;
     QLayoutItem *item;
-    foreach (item, itemList)
+    foreach (item, itemList) {
         size = size.expandedTo(item->minimumSize());
+    }
 
-    size += QSize(2*margin(), 2*margin());
+    size += QSize(2 * margin(), 2 * margin());
     return size;
 }
 
@@ -226,13 +229,17 @@ int GroupFlowLayout::doLayout(const QRect &rect, bool testOnly) const
         int spaceX = horizontalSpacing();
         if (wid && spaceX == -1)
             spaceX = wid->style()->layoutSpacing(
-                        QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Horizontal);
-        if (spaceX == -1) spaceX = 5;
+                         QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Horizontal);
+        if (spaceX == -1) {
+            spaceX = 5;
+        }
         int spaceY = verticalSpacing();
         if (wid && spaceY == -1)
             spaceY = wid->style()->layoutSpacing(
-                        QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Vertical);
-        if (spaceY == -1) spaceX = 5;
+                         QSizePolicy::PushButton, QSizePolicy::PushButton, Qt::Vertical);
+        if (spaceY == -1) {
+            spaceX = 5;
+        }
         int nextX = x + item->sizeHint().width() + spaceX;
         if (nextX - spaceX > effectiveRect.right() && lineHeight > 0) {
             x = effectiveRect.x();

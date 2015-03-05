@@ -32,9 +32,9 @@ KoPAPageContainerModel::~KoPAPageContainerModel()
 
 void KoPAPageContainerModel::childChanged(KoShape *child, KoShape::ChangeType type)
 {
-    Q_UNUSED( type );
+    Q_UNUSED(type);
     kDebug(30010) << "page changed" << child->parent();
-    if ( KoPAPageBase * page = dynamic_cast<KoPAPageBase*>( child->parent() ) ) {
+    if (KoPAPageBase *page = dynamic_cast<KoPAPageBase *>(child->parent())) {
         page->pageUpdated();
     }
 }

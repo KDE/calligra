@@ -32,14 +32,14 @@
 namespace KPlato
 {
 
-WorkPackageConfigPanel::WorkPackageConfigPanel(QWidget *p )
+WorkPackageConfigPanel::WorkPackageConfigPanel(QWidget *p)
     : QWidget(p)
 {
 
     setupUi(this);
 
-    kcfg_RetrieveUrl->setMode( KFile::Directory );
-    kcfg_SaveUrl->setMode( KFile::Directory );
+    kcfg_RetrieveUrl->setMode(KFile::Directory);
+    kcfg_SaveUrl->setMode(KFile::Directory);
 }
 
 }  //KPlato namespace

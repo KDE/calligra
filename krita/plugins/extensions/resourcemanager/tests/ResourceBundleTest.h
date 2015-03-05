@@ -32,7 +32,6 @@ private Q_SLOTS:
     void testLoadSave();
     void testInstallUninstall();
 
-
 };
 
 #endif // KORESOURCEBUNDLE_TEST_H

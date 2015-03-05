@@ -31,11 +31,10 @@
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
 
-
 #include "ui_kis_wdg_options_tiff.h"
 
 KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent)
-        : KDialog(parent), wdg(new QWidget)
+    : KDialog(parent), wdg(new QWidget)
 {
     setWindowTitle(i18n("TIFF Export Options"));
     setButtons(KDialog::Ok | KDialog::Cancel);
@@ -104,7 +103,6 @@ void KisDlgOptionsTIFF::flattenToggled(bool t)
         optionswdg->alpha->setChecked(true);
     }
 }
-
 
 KisTIFFOptions KisDlgOptionsTIFF::options()
 {

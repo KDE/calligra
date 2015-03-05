@@ -22,21 +22,16 @@
 
 #include <kis_brush_based_paintop_options_widget.h>
 
-
 class KisHairyPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 {
     Q_OBJECT
 
 public:
-    KisHairyPaintOpSettingsWidget(QWidget* parent = 0);
+    KisHairyPaintOpSettingsWidget(QWidget *parent = 0);
     virtual ~KisHairyPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 };
 
 #endif
-
-
-
-
 

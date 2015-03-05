@@ -30,8 +30,9 @@ int main(int argc, char *argv[])
 {
     KexiAboutData aboutData;
     int result = KexiMainWindow::create(argc, argv, aboutData);
-    if (!qApp)
+    if (!qApp) {
         return result;
+    }
 
     result = qApp->exec();
     delete qApp;

@@ -25,14 +25,15 @@
 #define ssize_t SSIZE_T
 
 #if 0
-static int gethostname(char *__name, size_t __len) {
-	DWORD len = __len;
-	if (0==GetComputerNameA(__name, &len))
-		return -1;
-	return 0;
+static int gethostname(char *__name, size_t __len)
+{
+    DWORD len = __len;
+    if (0 == GetComputerNameA(__name, &len)) {
+        return -1;
+    }
+    return 0;
 }
 #endif
-
 
 #define environ _environ
 
@@ -86,20 +87,19 @@ static int gethostname(char *__name, size_t __len) {
 #define S_ISFIFO(x) 0
 #define S_ISSOCK(x) 0
 #else
-#define	S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFFIFO)
-#define	S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
-#define	S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
-#define	S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
-#define	S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
-#define	S_ISCHR(mode)  (((mode) & S_IFMT) == S_IFCHR)
-#define	S_ISBLK(mode)  (((mode) & S_IFMT) == S_IFBLK)
+#define S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFFIFO)
+#define S_ISDIR(mode)  (((mode) & S_IFMT) == S_IFDIR)
+#define S_ISREG(mode)  (((mode) & S_IFMT) == S_IFREG)
+#define S_ISLNK(mode)  (((mode) & S_IFMT) == S_IFLNK)
+#define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
+#define S_ISCHR(mode)  (((mode) & S_IFMT) == S_IFCHR)
+#define S_ISBLK(mode)  (((mode) & S_IFMT) == S_IFBLK)
 #endif
 
-
-#define	F_OK	0
-#define	R_OK	4
-#define	W_OK	2
-#define	X_OK	1 
+#define F_OK    0
+#define R_OK    4
+#define W_OK    2
+#define X_OK    1
 
 #ifndef STDIN_FILENO
 #define STDIN_FILENO 0
@@ -128,54 +128,53 @@ typedef long long int pid_t;
 typedef           int pid_t;
 #endif
 
-
 #define getgroups(x,y) 0
 
-static uid_t geteuid() {
-	return -2;
+static uid_t geteuid()
+{
+    return -2;
 }
 
-static uid_t getuid() {
-	return -2;
+static uid_t getuid()
+{
+    return -2;
 }
 
 static int readlink(const char *__path, char *__buf, int __buflen)
 {
     if (!__path) {
-      errno = EINVAL;
-      return -1; 
-    }   
-    if ( (__buflen < 0) || ((int)strlen(__path)>(__buflen-1)) )
-    {   
-      errno = ENAMETOOLONG;
-      return -1; 
-    }   
+        errno = EINVAL;
+        return -1;
+    }
+    if ((__buflen < 0) || ((int)strlen(__path) > (__buflen - 1))) {
+        errno = ENAMETOOLONG;
+        return -1;
+    }
     if (access(__path, R_OK) == 0) {
-      /* ok, copy to buf */
-      strncpy(__buf,__path,__buflen);
-      errno = 0;
-      return 0;
-    }   
+        /* ok, copy to buf */
+        strncpy(__buf, __path, __buflen);
+        errno = 0;
+        return 0;
+    }
     errno = ENOENT;
-    return -1; 
+    return -1;
 }
-
 
 #ifdef __cplusplus
 extern "C" {
 
 #if 0
 int setenv(const char *name, const char *value, int overwrite);
-int unsetenv (const char *name);
+int unsetenv(const char *name);
 #endif
 
 }
 #endif  /* __cplusplus */
 
-
-static int sleep(unsigned int sec) {
-	Sleep(sec*1000);
-	return 0;
+static int sleep(unsigned int sec)
+{
+    Sleep(sec * 1000);
+    return 0;
 }
 
 #endif

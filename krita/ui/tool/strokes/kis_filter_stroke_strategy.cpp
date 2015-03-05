@@ -23,7 +23,6 @@
 #include <kis_transaction.h>
 #include <KoCompositeOpRegistry.h>
 
-
 struct KisFilterStrokeStrategy::Private {
     KisFilterSP filter;
     KisSafeFilterConfigurationSP filterConfig;
@@ -36,14 +35,13 @@ struct KisFilterStrokeStrategy::Private {
     KisTransaction *secondaryTransaction;
 };
 
-
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter,
-                                                 KisSafeFilterConfigurationSP filterConfig,
-                                                 KisResourcesSnapshotSP resources)
+        KisSafeFilterConfigurationSP filterConfig,
+        KisResourcesSnapshotSP resources)
     : KisPainterBasedStrokeStrategy("FILTER_STROKE",
                                     kundo2_i18n("Filter \"%1\"", filter->name()),
                                     resources,
-                                    QVector<PainterInfo*>(),false),
+                                    QVector<PainterInfo * >(), false),
       m_d(new Private())
 {
     m_d->filter = filter;
@@ -69,10 +67,9 @@ void KisFilterStrokeStrategy::initStrokeCallback()
     KisPaintDeviceSP dev = targetDevice();
     m_d->filterDeviceBounds = dev->extent();
 
-
     if (activeSelection() ||
-        (dev->colorSpace() != dev->compositionSourceColorSpace() &&
-         !(dev->colorSpace() == dev->compositionSourceColorSpace()))) {
+            (dev->colorSpace() != dev->compositionSourceColorSpace() &&
+             !(dev->colorSpace() == dev->compositionSourceColorSpace()))) {
 
         m_d->filterDevice = dev->createCompositionSourceDevice(dev);
         m_d->secondaryTransaction = new KisTransaction(m_d->filterDevice);
@@ -87,15 +84,15 @@ void KisFilterStrokeStrategy::initStrokeCallback()
 
 void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    Data *d = dynamic_cast<Data*>(data);
+    Data *d = dynamic_cast<Data *>(data);
     CancelSilentlyMarker *cancelJob =
-        dynamic_cast<CancelSilentlyMarker*>(data);
+        dynamic_cast<CancelSilentlyMarker *>(data);
 
     if (d) {
         QRect rc = d->processRect;
 
         if (!m_d->filterDeviceBounds.intersects(
-                m_d->filter->neededRect(rc, m_d->filterConfig.data()))) {
+                    m_d->filter->neededRect(rc, m_d->filterConfig.data()))) {
 
             return;
         }

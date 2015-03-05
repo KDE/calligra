@@ -29,7 +29,7 @@
 
 void KisHistogramTest::testCreation()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs);
     foreach (const QString &id, producers) {
@@ -43,7 +43,6 @@ void KisHistogramTest::testCreation()
         }
     }
 }
-
 
 QTEST_KDEMAIN(KisHistogramTest, GUI)
 #include "kis_histogram_test.moc"

@@ -25,17 +25,17 @@
 
 #include <klocale.h>
 
-KisBoolWidgetParam::KisBoolWidgetParam(bool ninitvalue, const QString & nlabel, const QString & nname) :
-        initvalue(ninitvalue),
-        label(nlabel),
-        name(nname)
+KisBoolWidgetParam::KisBoolWidgetParam(bool ninitvalue, const QString &nlabel, const QString &nname) :
+    initvalue(ninitvalue),
+    label(nlabel),
+    name(nname)
 {
 
 }
 
-KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisBoolWidgetParam iwparam)
-        : KisConfigWidget(parent)
-        , m_filterid(filterid)
+KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString &filterid, QWidget *parent, const QString &caption, vKisBoolWidgetParam iwparam)
+    : KisConfigWidget(parent)
+    , m_filterid(filterid)
 {
     qint32 nbboolWidgets = iwparam.size();
 
@@ -43,10 +43,10 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWi
 
     QVBoxLayout *widgetLayout = new QVBoxLayout(this);
     widgetLayout->setMargin(nbboolWidgets + 1);
-    widgetLayout->setContentsMargins(0,0,0,0);
+    widgetLayout->setContentsMargins(0, 0, 0, 0);
 
     for (qint32 i = 0; i < nbboolWidgets; ++i) {
-        QCheckBox * cb = new QCheckBox(this);
+        QCheckBox *cb = new QCheckBox(this);
         cb->setObjectName(iwparam[i].name);
         cb->setChecked(iwparam[i].initvalue);
         cb->setText(iwparam[i].label);
@@ -58,20 +58,20 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWi
     widgetLayout->addStretch();
 }
 
-
-void KisMultiBoolFilterWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisMultiBoolFilterWidget::setConfiguration(const KisPropertiesConfiguration *config)
 {
-    if (!config) return;
+    if (!config) {
+        return;
+    }
     for (int i = 0; i < nbValues(); ++i) {
         bool val = config->getBool(m_boolWidgets[i]->objectName(), true);
         m_boolWidgets[i]->setChecked(val);
     }
 }
 
-
-KisPropertiesConfiguration* KisMultiBoolFilterWidget::configuration() const
+KisPropertiesConfiguration *KisMultiBoolFilterWidget::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(m_filterid, 0);
+    KisFilterConfiguration *config = new KisFilterConfiguration(m_filterid, 0);
     for (int i = 0; i < nbValues(); ++i) {
         config->setProperty(m_boolWidgets[i]->objectName(), valueAt(i));
     }

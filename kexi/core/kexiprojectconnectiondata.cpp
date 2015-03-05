@@ -35,7 +35,7 @@
 class KexiProjectConnectionData::Private
 {
 public:
-    Private(const QString& drvName, const QString& dbName);
+    Private(const QString &drvName, const QString &dbName);
     Private();
     ~Private();
 
@@ -48,8 +48,8 @@ KexiProjectConnectionData::Private()
 
 }
 
-KexiProjectConnectionData::Private::Private(const QString& drvName, const QString& dbName) : driverName(drvName)
-                                                                                             ,databaseName(dbName)
+KexiProjectConnectionData::Private::Private(const QString &drvName, const QString &dbName) : driverName(drvName)
+    , databaseName(dbName)
 {
 
 }
@@ -63,8 +63,8 @@ KexiProjectConnectionData::KexiProjectConnectionData(): KexiDB::ConnectionData()
 {
 }
 
-KexiProjectConnectionData::KexiProjectConnectionData(const QString& driverName, const QString& databaseName, const QString &host,
-                                                     unsigned short int rport, const QString& user, const QString &pass, const QString& file)
+KexiProjectConnectionData::KexiProjectConnectionData(const QString &driverName, const QString &databaseName, const QString &host,
+        unsigned short int rport, const QString &user, const QString &pass, const QString &file)
     : KexiDB::ConnectionData(), d(new Private(driverName, databaseName))
 {
 
@@ -81,7 +81,6 @@ KexiProjectConnectionData::KexiProjectConnectionData(const QString &driverName, 
     setFileName(fileName);
 }
 
-
 KexiProjectConnectionData::~KexiProjectConnectionData()
 {
     delete d;
@@ -93,7 +92,7 @@ KexiProjectConnectionData::generateTmpName()
     return QString();
 }
 
-KexiProjectConnectionData*
+KexiProjectConnectionData *
 KexiProjectConnectionData::loadInfo(QDomElement &rootElement)
 {
     QDomElement engineElement = rootElement.namedItem("engine").toElement();
@@ -131,7 +130,6 @@ QString KexiProjectConnectionData::databaseName() const
 {
     return d->databaseName;
 }
-
 
 void
 KexiProjectConnectionData::writeInfo(QDomDocument &domDoc)

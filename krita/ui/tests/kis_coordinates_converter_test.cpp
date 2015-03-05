@@ -29,13 +29,12 @@
 
 #include "kis_coordinates_converter.h"
 
-
 void initImage(KisImageSP *image, KoZoomHandler *zoomHandler)
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     *image = new KisImage(0, 1000, 1000, cs, "projection test");
     (*image)->setResolution(100, 100);
-    
+
     zoomHandler->setResolution(100, 100);
 }
 
@@ -46,37 +45,37 @@ void KisCoordinatesConverterTest::testConversion()
     initImage(&image, &converter);
 
     converter.setImage(image);
-    converter.setDocumentOffset(QPoint(20,20));
-    converter.setCanvasWidgetSize(QSize(500,500));
+    converter.setDocumentOffset(QPoint(20, 20));
+    converter.setCanvasWidgetSize(QSize(500, 500));
     converter.setZoom(1.);
-    
-    QRectF testRect(100,100,100,100);
 
-    QCOMPARE(converter.imageToViewport(testRect), QRectF(80,80,100,100));
-    QCOMPARE(converter.viewportToImage(testRect), QRectF(120,120,100,100));
+    QRectF testRect(100, 100, 100, 100);
 
-    QCOMPARE(converter.widgetToViewport(testRect), QRectF(100,100,100,100));
-    QCOMPARE(converter.viewportToWidget(testRect), QRectF(100,100,100,100));
+    QCOMPARE(converter.imageToViewport(testRect), QRectF(80, 80, 100, 100));
+    QCOMPARE(converter.viewportToImage(testRect), QRectF(120, 120, 100, 100));
 
-    QCOMPARE(converter.widgetToDocument(testRect), QRectF(1.20,1.20,1,1));
-    QCOMPARE(converter.documentToWidget(testRect), QRectF(9980,9980,10000,10000));
+    QCOMPARE(converter.widgetToViewport(testRect), QRectF(100, 100, 100, 100));
+    QCOMPARE(converter.viewportToWidget(testRect), QRectF(100, 100, 100, 100));
 
-    QCOMPARE(converter.imageToDocument(testRect), QRectF(1,1,1,1));
-    QCOMPARE(converter.documentToImage(testRect), QRectF(10000,10000,10000,10000));
+    QCOMPARE(converter.widgetToDocument(testRect), QRectF(1.20, 1.20, 1, 1));
+    QCOMPARE(converter.documentToWidget(testRect), QRectF(9980, 9980, 10000, 10000));
+
+    QCOMPARE(converter.imageToDocument(testRect), QRectF(1, 1, 1, 1));
+    QCOMPARE(converter.documentToImage(testRect), QRectF(10000, 10000, 10000, 10000));
 
     converter.setZoom(0.5);
 
-    QCOMPARE(converter.imageToViewport(testRect), QRectF(30,30,50,50));
-    QCOMPARE(converter.viewportToImage(testRect), QRectF(240,240,200,200));
+    QCOMPARE(converter.imageToViewport(testRect), QRectF(30, 30, 50, 50));
+    QCOMPARE(converter.viewportToImage(testRect), QRectF(240, 240, 200, 200));
 
-    QCOMPARE(converter.widgetToViewport(testRect), QRectF(100,100,100,100));
-    QCOMPARE(converter.viewportToWidget(testRect), QRectF(100,100,100,100));
+    QCOMPARE(converter.widgetToViewport(testRect), QRectF(100, 100, 100, 100));
+    QCOMPARE(converter.viewportToWidget(testRect), QRectF(100, 100, 100, 100));
 
-    QCOMPARE(converter.widgetToDocument(testRect), QRectF(2.4,2.4,2,2));
-    QCOMPARE(converter.documentToWidget(testRect), QRectF(4980,4980,5000,5000));
+    QCOMPARE(converter.widgetToDocument(testRect), QRectF(2.4, 2.4, 2, 2));
+    QCOMPARE(converter.documentToWidget(testRect), QRectF(4980, 4980, 5000, 5000));
 
-    QCOMPARE(converter.imageToDocument(testRect), QRectF(1,1,1,1));
-    QCOMPARE(converter.documentToImage(testRect), QRectF(10000,10000,10000,10000));
+    QCOMPARE(converter.imageToDocument(testRect), QRectF(1, 1, 1, 1));
+    QCOMPARE(converter.documentToImage(testRect), QRectF(10000, 10000, 10000, 10000));
 }
 
 void KisCoordinatesConverterTest::testImageCropping()
@@ -86,14 +85,14 @@ void KisCoordinatesConverterTest::testImageCropping()
     initImage(&image, &converter);
 
     converter.setImage(image);
-    converter.setDocumentOffset(QPoint(0,0));
-    converter.setCanvasWidgetSize(QSize(500,500));
+    converter.setDocumentOffset(QPoint(0, 0));
+    converter.setCanvasWidgetSize(QSize(500, 500));
 
     converter.setZoom(1.);
 
     // we do NOT crop here
-    QCOMPARE(converter.viewportToImage(QRectF(900,900,200,200)),
-             QRectF(900,900,200,200));
+    QCOMPARE(converter.viewportToImage(QRectF(900, 900, 200, 200)),
+             QRectF(900, 900, 200, 200));
 }
 
 #define CHECK_TRANSFORM(trans,test,ref) QCOMPARE(trans.map(test).boundingRect(), ref)
@@ -106,10 +105,10 @@ void KisCoordinatesConverterTest::testTransformations()
     initImage(&image, &converter);
 
     converter.setImage(image);
-    converter.setDocumentOffset(QPoint(20,30));
-    converter.setCanvasWidgetSize(QSize(500,500));
+    converter.setDocumentOffset(QPoint(20, 30));
+    converter.setCanvasWidgetSize(QSize(500, 500));
 
-    QRectF testRect(100,100,100,100);
+    QRectF testRect(100, 100, 100, 100);
     QTransform imageToWidget;
     QTransform documentToWidget;
     QTransform flakeToWidget;
@@ -122,10 +121,10 @@ void KisCoordinatesConverterTest::testTransformations()
     flakeToWidget = converter.flakeToWidgetTransform();
     viewportToWidget = converter.viewportToWidgetTransform();
 
-    CHECK_TRANSFORM(imageToWidget, testRect, QRectF(80,70,100,100));
-    CHECK_TRANSFORM(documentToWidget, testRect, QRectF(9980,9970,10000,10000));
-    CHECK_TRANSFORM(flakeToWidget, testRect, QRectF(80,70,100,100));
-    CHECK_TRANSFORM(viewportToWidget, testRect, QRectF(100,100,100,100));
+    CHECK_TRANSFORM(imageToWidget, testRect, QRectF(80, 70, 100, 100));
+    CHECK_TRANSFORM(documentToWidget, testRect, QRectF(9980, 9970, 10000, 10000));
+    CHECK_TRANSFORM(flakeToWidget, testRect, QRectF(80, 70, 100, 100));
+    CHECK_TRANSFORM(viewportToWidget, testRect, QRectF(100, 100, 100, 100));
 
     converter.setZoom(0.5);
 
@@ -134,10 +133,10 @@ void KisCoordinatesConverterTest::testTransformations()
     flakeToWidget = converter.flakeToWidgetTransform();
     viewportToWidget = converter.viewportToWidgetTransform();
 
-    CHECK_TRANSFORM(imageToWidget, testRect, QRectF(30,20,50,50));
-    CHECK_TRANSFORM(documentToWidget, testRect, QRectF(4980,4970,5000,5000));
-    CHECK_TRANSFORM(flakeToWidget, testRect, QRectF(80,70,100,100));
-    CHECK_TRANSFORM(viewportToWidget, testRect, QRectF(100,100,100,100));
+    CHECK_TRANSFORM(imageToWidget, testRect, QRectF(30, 20, 50, 50));
+    CHECK_TRANSFORM(documentToWidget, testRect, QRectF(4980, 4970, 5000, 5000));
+    CHECK_TRANSFORM(flakeToWidget, testRect, QRectF(80, 70, 100, 100));
+    CHECK_TRANSFORM(viewportToWidget, testRect, QRectF(100, 100, 100, 100));
 }
 
 void KisCoordinatesConverterTest::testConsistency()
@@ -147,10 +146,10 @@ void KisCoordinatesConverterTest::testConsistency()
     initImage(&image, &converter);
 
     converter.setImage(image);
-    converter.setDocumentOffset(QPoint(20,30));
-    converter.setCanvasWidgetSize(QSize(500,500));
+    converter.setDocumentOffset(QPoint(20, 30));
+    converter.setCanvasWidgetSize(QSize(500, 500));
 
-    QRectF testRect(100,100,100,100);
+    QRectF testRect(100, 100, 100, 100);
     QTransform imageToWidget;
     QTransform documentToWidget;
     QTransform viewportToWidget;
@@ -176,11 +175,11 @@ void KisCoordinatesConverterTest::testRotation()
     KisCoordinatesConverter converter;
     initImage(&image, &converter);
 
-    QSize widgetSize(1000,500);
+    QSize widgetSize(1000, 500);
     QRectF testRect(800, 100, 300, 300);
 
     converter.setImage(image);
-    converter.setDocumentOffset(QPoint(0,0));
+    converter.setDocumentOffset(QPoint(0, 0));
     converter.setCanvasWidgetSize(widgetSize);
 
     converter.rotate(converter.widgetCenterPoint(), 30);
@@ -193,7 +192,7 @@ void KisCoordinatesConverterTest::testRotation()
 
     QCOMPARE(boundingRect, directRect);
 
-    QRectF referenceRect(QPointF(742.82,53.5898), QSizeF(409.808,409.808));
+    QRectF referenceRect(QPointF(742.82, 53.5898), QSizeF(409.808, 409.808));
 
 #define FUZZY(a,b) ((a)-(b) < 0.01)
 
@@ -209,12 +208,12 @@ void KisCoordinatesConverterTest::testMirroring()
     KisCoordinatesConverter converter;
     initImage(&image, &converter);
 
-    QSize widgetSize(500,400);
-    QSize flakeSize(1000,1000);
+    QSize widgetSize(500, 400);
+    QSize flakeSize(1000, 1000);
     QRectF testRect(300, 100, 200, 200);
 
     converter.setImage(image);
-    converter.setDocumentOffset(QPoint(200,100));
+    converter.setDocumentOffset(QPoint(200, 100));
     converter.setCanvasWidgetSize(widgetSize);
 
     QTransform imageToWidget;
@@ -230,8 +229,8 @@ void KisCoordinatesConverterTest::testMirroring()
     QRectF viewportRect = converter.imageToViewport(testRect);
     QRectF widgetRect = converter.viewportToWidget(viewportRect);
 
-    QCOMPARE(widgetRect, QRectF(300,0,200,200));
-    QCOMPARE(viewportRect, QRectF(0,0,200,200));
+    QCOMPARE(widgetRect, QRectF(300, 0, 200, 200));
+    QCOMPARE(viewportRect, QRectF(0, 0, 200, 200));
 
     QRectF roundTrip = converter.viewportToWidget(widgetRect);
     QCOMPARE(roundTrip, viewportRect);
@@ -243,12 +242,12 @@ void KisCoordinatesConverterTest::testMirroringCanvasBiggerThanImage()
     KisCoordinatesConverter converter;
     initImage(&image, &converter);
 
-    QSize widgetSize(2000,2000);
-    QSize flakeSize(1000,1000);
+    QSize widgetSize(2000, 2000);
+    QSize flakeSize(1000, 1000);
     QRectF testRect(300, 100, 200, 200);
 
     converter.setImage(image);
-    converter.setDocumentOffset(QPoint(-50,-50));
+    converter.setDocumentOffset(QPoint(-50, -50));
     converter.setCanvasWidgetSize(widgetSize);
 
     QTransform imageToWidget;
@@ -264,10 +263,9 @@ void KisCoordinatesConverterTest::testMirroringCanvasBiggerThanImage()
     QRectF viewportRect = converter.imageToViewport(testRect);
     QRectF widgetRect = converter.viewportToWidget(viewportRect);
 
-    QCOMPARE(widgetRect, QRectF(550,150,200,200));
-    QCOMPARE(viewportRect, QRectF(300,100,200,200));
+    QCOMPARE(widgetRect, QRectF(550, 150, 200, 200));
+    QCOMPARE(viewportRect, QRectF(300, 100, 200, 200));
 }
-
 
 QTEST_KDEMAIN(KisCoordinatesConverterTest, GUI)
 #include "kis_coordinates_converter_test.moc"

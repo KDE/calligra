@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2014 Wolthera van Hövell <griffinvalley@gmail.com>    
+ *  Copyright (c) 2014 Wolthera van Hövell <griffinvalley@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -23,44 +23,41 @@
 #include "KoColorDisplayRendererInterface.h"
 #include "kis_canvas2.h"
 
-
 class KoColor;
 class QWidget;
 class QDoubleSpinBox;
 class KisHSVSlider;
 class KisDisplayColorConverter;
 
-
-
 class KisColorSliderInput : public QWidget
 {
     Q_OBJECT
 public:
-    KisColorSliderInput(QWidget* parent, KoColor* color, const int type, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2* canvas);
+    KisColorSliderInput(QWidget *parent, KoColor *color, const int type, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2 *canvas);
 protected:
     void init();
-    virtual QWidget* createInput() = 0;
+    virtual QWidget *createInput() = 0;
 Q_SIGNALS:
     void updated();
-    
+
 protected:
     const int m_type;
-    KoColor* m_color;
+    KoColor *m_color;
     KoColorDisplayRendererInterface *m_displayRenderer;
-    KisCanvas2* m_canvas;
-    KisHSVSlider* m_hsvSlider;
+    KisCanvas2 *m_canvas;
+    KisHSVSlider *m_hsvSlider;
 };
 
 class KisHSXColorSliderInput : public KisColorSliderInput
 {
     Q_OBJECT
 public:
-    KisHSXColorSliderInput(QWidget* parent, const int type, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2* canvas);
-    
-    KisDisplayColorConverter* converter() const;
+    KisHSXColorSliderInput(QWidget *parent, const int type, KoColor *color, KoColorDisplayRendererInterface *displayRenderer, KisCanvas2 *canvas);
+
+    KisDisplayColorConverter *converter() const;
 protected:
-    virtual QWidget* createInput();
-    KisCanvas2* m_canvas;
+    virtual QWidget *createInput();
+    KisCanvas2 *m_canvas;
 public Q_SLOTS:
     void setValue(double);
     void update();
@@ -76,7 +73,7 @@ Q_SIGNALS:
     void satUpdated(int, int);
     void toneUpdated(int, int);
 private:
-    QDoubleSpinBox* m_NumInput;
+    QDoubleSpinBox *m_NumInput;
     qreal m_hue;
     qreal m_sat;
     qreal m_val;

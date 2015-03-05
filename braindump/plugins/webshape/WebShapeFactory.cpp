@@ -41,7 +41,7 @@ WebShapeFactory::WebShapeFactory()
 KoShape *WebShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(documentResources);
-    WebShape* fooShape = new WebShape();
+    WebShape *fooShape = new WebShape();
     fooShape->setShapeId(WEBSHAPEID);
     // set defaults
     return fooShape;
@@ -50,8 +50,8 @@ KoShape *WebShapeFactory::createDefaultShape(KoDocumentResourceManager *document
 KoShape *WebShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(documentResources);
-    WebShape* fooShape = new WebShape();
-    if(params->contains("url")) {
+    WebShape *fooShape = new WebShape();
+    if (params->contains("url")) {
         fooShape->setUrl(params->property("url").toUrl());
     }
     fooShape->setShapeId(WEBSHAPEID);
@@ -59,13 +59,13 @@ KoShape *WebShapeFactory::createShape(const KoProperties *params, KoDocumentReso
     return fooShape;
 }
 
-bool WebShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContext& /*context*/) const
+bool WebShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext & /*context*/) const
 {
     return (e.localName() == "web" && e.namespaceURI() == "http://kde.org/braindump");
 }
 
-QList<KoShapeConfigWidgetBase*> WebShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> WebShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> answer;
+    QList<KoShapeConfigWidgetBase *> answer;
     return answer;
 }

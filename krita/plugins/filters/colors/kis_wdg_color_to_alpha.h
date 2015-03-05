@@ -26,21 +26,21 @@
 class KoColor;
 class Ui_WdgColorToAlphaBase;
 
-
 class KisWdgColorToAlpha : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgColorToAlpha(QWidget * parent);
+    KisWdgColorToAlpha(QWidget *parent);
     virtual ~KisWdgColorToAlpha();
-    inline const Ui_WdgColorToAlphaBase* widget() const {
+    inline const Ui_WdgColorToAlphaBase *widget() const
+    {
         return m_widget;
     }
 
     void setView(KisViewManager *view);
 
-    virtual void setConfiguration(const KisPropertiesConfiguration*);
-    virtual KisPropertiesConfiguration* configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration *);
+    virtual KisPropertiesConfiguration *configuration() const;
 
 protected:
 
@@ -53,7 +53,7 @@ private Q_SLOTS:
     void slotCustomColorSelected(const QColor &color);
 
 private:
-    Ui_WdgColorToAlphaBase* m_widget;
+    Ui_WdgColorToAlphaBase *m_widget;
     KisViewManager *m_view;
 };
 

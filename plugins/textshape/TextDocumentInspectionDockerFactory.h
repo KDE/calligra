@@ -30,7 +30,7 @@ public:
 
     virtual QString id() const;
     virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
-    virtual QDockWidget* createDockWidget();
+    virtual QDockWidget *createDockWidget();
     virtual bool isCollapsable() const;
 };
 

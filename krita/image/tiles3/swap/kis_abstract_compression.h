@@ -41,7 +41,7 @@ public:
      *
      * \see outputBufferSize()
      */
-    virtual qint32 compress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength) = 0;
+    virtual qint32 compress(const quint8 *input, qint32 inputLength, quint8 *output, qint32 outputLength) = 0;
 
     /**
      * Decompresses \a input buffer into \a output buffer.
@@ -50,7 +50,7 @@ public:
      * \return number of bytes written to the output buffer
      * and 0 if error occurred.
      */
-    virtual qint32 decompress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength) = 0;
+    virtual qint32 decompress(const quint8 *input, qint32 inputLength, quint8 *output, qint32 outputLength) = 0;
 
     /**
      * Returns minimal allowed size of output buffer for compression

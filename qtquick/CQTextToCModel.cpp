@@ -35,7 +35,7 @@
 #include <QTextCursor>
 #include <QTimer>
 
-Q_DECLARE_METATYPE(QTextDocument*)
+Q_DECLARE_METATYPE(QTextDocument *)
 
 struct TextToCModelEntry {
     TextToCModelEntry()
@@ -47,7 +47,8 @@ struct TextToCModelEntry {
     int pageNumber;
 };
 
-class CQTextToCModel::Private {
+class CQTextToCModel::Private
+{
 public:
     Private()
         : canvas(0)
@@ -55,17 +56,18 @@ public:
         , documentLayout(0)
     {}
 
-    QList<TextToCModelEntry*> entries;
+    QList<TextToCModelEntry *> entries;
 
-    CQTextDocumentCanvas* canvas;
-    QTextDocument* document;
-    KoTextDocumentLayout* documentLayout;
+    CQTextDocumentCanvas *canvas;
+    QTextDocument *document;
+    KoTextDocumentLayout *documentLayout;
 
     QTimer updateTimer;
     QTimer doneTimer;
 
-    int resolvePageNumber(const QTextBlock &headingBlock) {
-        KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    int resolvePageNumber(const QTextBlock &headingBlock)
+    {
+        KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout *>(document->documentLayout());
         KoTextLayoutRootArea *rootArea = layout->rootAreaForPosition(headingBlock.position());
         if (rootArea) {
             if (rootArea->page()) {
@@ -78,7 +80,7 @@ public:
     }
 };
 
-CQTextToCModel::CQTextToCModel(QObject* parent)
+CQTextToCModel::CQTextToCModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
@@ -102,34 +104,34 @@ CQTextToCModel::~CQTextToCModel()
     delete d;
 }
 
-QVariant CQTextToCModel::data(const QModelIndex& index, int role) const
+QVariant CQTextToCModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
     if (index.isValid()) {
         int row = index.row();
         if (row > -1 && row < d->entries.count()) {
-            const TextToCModelEntry* entry = d->entries.at(row);
-            switch(role) {
-                case PageNumber:
-                    result.setValue<int>(entry->pageNumber);
-                    break;
-                case Level:
-                    result.setValue<int>(entry->level);
-                    break;
-                case Title:
-                default:
-                    // Allowing the fallthrough here (explicitly mentioning our own Title entry)
-                    // means that the predefined Qt Quick roles are also allowed to be filled
-                    // with useful data
-                    result.setValue<QString>(entry->title);
-                    break;
+            const TextToCModelEntry *entry = d->entries.at(row);
+            switch (role) {
+            case PageNumber:
+                result.setValue<int>(entry->pageNumber);
+                break;
+            case Level:
+                result.setValue<int>(entry->level);
+                break;
+            case Title:
+            default:
+                // Allowing the fallthrough here (explicitly mentioning our own Title entry)
+                // means that the predefined Qt Quick roles are also allowed to be filled
+                // with useful data
+                result.setValue<QString>(entry->title);
+                break;
             }
         }
     }
     return result;
 }
 
-int CQTextToCModel::rowCount(const QModelIndex& parent) const
+int CQTextToCModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid()) {
         return 0;
@@ -171,7 +173,7 @@ void CQTextToCModel::updateToC()
     while (block.isValid()) {
         QTextBlockFormat format = block.blockFormat();
         if (format.hasProperty(KoParagraphStyle::OutlineLevel)) {
-            TextToCModelEntry* entry = new TextToCModelEntry();
+            TextToCModelEntry *entry = new TextToCModelEntry();
             entry->title = block.text();
             entry->level = format.intProperty(KoParagraphStyle::OutlineLevel);
             entry->pageNumber = d->resolvePageNumber(block);
@@ -182,12 +184,12 @@ void CQTextToCModel::updateToC()
     endResetModel();
 }
 
-QObject* CQTextToCModel::canvas() const
+QObject *CQTextToCModel::canvas() const
 {
     return d->canvas;
 }
 
-void CQTextToCModel::setCanvas(QObject* newCanvas)
+void CQTextToCModel::setCanvas(QObject *newCanvas)
 {
     beginResetModel();
     if (d->documentLayout) {
@@ -196,7 +198,7 @@ void CQTextToCModel::setCanvas(QObject* newCanvas)
     d->canvas = 0;
     d->document = 0;
     d->documentLayout = 0;
-    CQTextDocumentCanvas* canvas = qobject_cast<CQTextDocumentCanvas*>(newCanvas);
+    CQTextDocumentCanvas *canvas = qobject_cast<CQTextDocumentCanvas *>(newCanvas);
     if (canvas) {
         d->canvas = canvas;
         d->document = canvas->document()->mainFrameSet()->document();
@@ -211,6 +213,5 @@ void CQTextToCModel::setCanvas(QObject* newCanvas)
     emit canvasChanged();
     endResetModel();
 }
-
 
 #include "CQTextToCModel.moc"

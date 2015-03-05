@@ -25,7 +25,8 @@
 
 #include <QStandardItemModel>
 
-namespace KChart {
+namespace KChart
+{
 
 class TestLoading : public TestLoadingBase
 {

@@ -27,11 +27,11 @@ class KisPaintActionWidget: public QWidget, public Ui::WdgIncremental
 {
 public:
     KisPaintActionWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
-
 
 KisPaintActionTypeOption::KisPaintActionTypeOption()
     : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::colorCategory(), false)
@@ -45,31 +45,27 @@ KisPaintActionTypeOption::KisPaintActionTypeOption()
     setConfigurationPage(m_optionWidget);
 }
 
-
 KisPaintActionTypeOption::~KisPaintActionTypeOption()
 {
 }
-
 
 enumPaintActionType KisPaintActionTypeOption::paintActionType() const
 {
     if (m_optionWidget->radioBuildup->isChecked()) {
         return BUILDUP;
-    }
-    else if (m_optionWidget->radioWash->isChecked()) {
+    } else if (m_optionWidget->radioWash->isChecked()) {
         return WASH;
-    }
-    else {
+    } else {
         return WASH;
     }
 }
 
-void KisPaintActionTypeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPaintActionTypeOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty("PaintOpAction", paintActionType());
 }
 
-void KisPaintActionTypeOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPaintActionTypeOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     enumPaintActionType type = (enumPaintActionType)setting->getInt("PaintOpAction", WASH);
     m_optionWidget->radioBuildup->setChecked(type == BUILDUP);

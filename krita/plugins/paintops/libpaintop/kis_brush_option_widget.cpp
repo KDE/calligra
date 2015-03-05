@@ -24,7 +24,6 @@
 #include "kis_brush_selection_widget.h"
 #include "kis_brush.h"
 
-
 KisBrushOptionWidget::KisBrushOptionWidget()
     : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::generalCategory(), true)
 {
@@ -72,25 +71,23 @@ void KisBrushOptionWidget::setPrecisionEnabled(bool value)
     m_brushSelectionWidget->setPrecisionEnabled(value);
 }
 
-void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfiguration *settings) const
 {
     m_brushSelectionWidget->writeOptionSetting(settings);
     m_brushOption.writeOptionSetting(settings);
 }
 
-void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     m_brushSelectionWidget->readOptionSetting(setting);
     m_brushOption.readOptionSetting(setting);
     m_brushSelectionWidget->setCurrentBrush(m_brushOption.brush());
 }
 
-
 void KisBrushOptionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 {
     m_brushSelectionWidget->setBrushSize(dxPixels, dyPixels);
 }
-
 
 QSizeF KisBrushOptionWidget::brushSize() const
 {

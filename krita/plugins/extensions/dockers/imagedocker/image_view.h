@@ -25,23 +25,23 @@
 class ImageViewport: public QWidget
 {
     Q_OBJECT
-    
+
 public:
     ImageViewport();
-    
+
     QRect  imageRect() const;
-    QColor imageColor(const QPoint& pos) const;
+    QColor imageColor(const QPoint &pos) const;
     QSize  imageSize() const;
-    
-    void setImage(const QPixmap& pixmap, qreal scale);
+
+    void setImage(const QPixmap &pixmap, qreal scale);
     void setScale(qreal scale);
-    
+
     virtual QSize sizeHint() const;
-    virtual void paintEvent(QPaintEvent* event);
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    
+    virtual void paintEvent(QPaintEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
+
 private:
     qreal       m_scale;
     QPixmap     m_pixmap;
@@ -49,46 +49,46 @@ private:
     bool        m_mousePressed;
     QRubberBand m_rubberBand;
     QRect       m_selection;
-    
+
 Q_SIGNALS:
-    void sigImageClicked(const QPoint& pos);
-    void sigRegionSelected(const QRect& rect);
+    void sigImageClicked(const QPoint &pos);
+    void sigRegionSelected(const QRect &rect);
 };
 
 class ImageView: public QScrollArea
 {
     Q_OBJECT
-    
+
 public:
-    enum { VIEW_MODE_FREE=0, VIEW_MODE_ADJUST=1, VIEW_MODE_FIT=2 };
-    
-    ImageView(QWidget* parent=0);
-    
-    void setPixmap(const QPixmap& pixmap, int viewMode=VIEW_MODE_FIT, qreal scale=1.0);
-    void setViewMode(int viewMode, qreal scale=1.0);
-    void setScrollPos(const QPoint& pos);
+    enum { VIEW_MODE_FREE = 0, VIEW_MODE_ADJUST = 1, VIEW_MODE_FIT = 2 };
+
+    ImageView(QWidget *parent = 0);
+
+    void setPixmap(const QPixmap &pixmap, int viewMode = VIEW_MODE_FIT, qreal scale = 1.0);
+    void setViewMode(int viewMode, qreal scale = 1.0);
+    void setScrollPos(const QPoint &pos);
     QPoint getScrollPos() const;
     qreal getScale() const;
-    
+
 Q_SIGNALS:
-    void sigColorSelected(const QColor& color);
+    void sigColorSelected(const QColor &color);
     void sigViewModeChanged(int viewMode, qreal scale);
-    
+
 private Q_SLOTS:
-    void slotImageClicked(const QPoint& pos);
-    void slotRegionSelected(const QRect& rect);
-    
+    void slotImageClicked(const QPoint &pos);
+    void slotRegionSelected(const QRect &rect);
+
 private:
-    qreal calcScale(qreal scale, int viewMode, const QSizeF& imgSize) const;
+    qreal calcScale(qreal scale, int viewMode, const QSizeF &imgSize) const;
     QSize viewportSize(bool withScrollbars) const;
-    virtual void resizeEvent(QResizeEvent* event);
-    
+    virtual void resizeEvent(QResizeEvent *event);
+
 private:
     qreal             m_scale;
     int               m_viewMode;
     qreal             m_minScale;
     qreal             m_maxScale;
-    ImageViewport* m_imgViewport;
+    ImageViewport *m_imgViewport;
 };
 
 #endif // H_KIS_IMAGE_VIEW_H

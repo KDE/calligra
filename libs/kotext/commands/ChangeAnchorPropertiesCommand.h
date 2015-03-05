@@ -28,7 +28,6 @@
 
 class KoShapeContainer;
 
-
 class KOTEXT_EXPORT ChangeAnchorPropertiesCommand : public KUndo2Command
 {
 public:

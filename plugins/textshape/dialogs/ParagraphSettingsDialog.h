@@ -33,7 +33,7 @@ class ParagraphSettingsDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget* parent = 0);
+    explicit ParagraphSettingsDialog(TextTool *tool, KoTextEditor *editor, QWidget *parent = 0);
     ~ParagraphSettingsDialog();
 
     void setUnit(const KoUnit &unit);

@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef CALLIGRA_SHEETS_FUNCTION_COMPLETION
 #define CALLIGRA_SHEETS_FUNCTION_COMPLETION
 
@@ -70,19 +69,19 @@ public Q_SLOTS:
     void doneCompletion();
 
 private Q_SLOTS:
-    void itemSelected(QListWidgetItem* item = 0);
+    void itemSelected(QListWidgetItem *item = 0);
 
 Q_SIGNALS:
     /**
     * Emitted, if the user selects a function name from the list.
     */
-    void selectedCompletion(const QString& item);
+    void selectedCompletion(const QString &item);
 
 private:
     class Private;
-    Private * const d;
-    FunctionCompletion(const FunctionCompletion&);
-    FunctionCompletion& operator=(const FunctionCompletion&);
+    Private *const d;
+    FunctionCompletion(const FunctionCompletion &);
+    FunctionCompletion &operator=(const FunctionCompletion &);
 };
 
 } // namespace Sheets

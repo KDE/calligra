@@ -115,7 +115,7 @@ Q_SIGNALS:
 //! Keeps context expressed using container and receiver widget
 class AddTabAction : public KAction
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     AddTabAction(KFormDesigner::Container *container,
                  TabWidgetBase *receiver, QObject *parent);
@@ -130,7 +130,7 @@ private:
 //! Keeps context expressed using container and receiver widget
 class RemoveTabAction : public KAction
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     RemoveTabAction(KFormDesigner::Container *container,
                     TabWidgetBase *receiver, QObject *parent);
@@ -145,7 +145,7 @@ private:
 //! Keeps context expressed using container and receiver widget
 class RenameTabAction : public KAction
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     RenameTabAction(KFormDesigner::Container *container,
                     TabWidgetBase *receiver, QObject *parent);
@@ -160,7 +160,7 @@ private:
 //! Keeps context expressed using container and receiver widget
 class AddStackPageAction : public KAction
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     AddStackPageAction(KFormDesigner::Container *container,
                        QWidget *receiver, QObject *parent);
@@ -175,7 +175,7 @@ private:
 //! Keeps context expressed using container and receiver widget
 class RemoveStackPageAction : public KAction
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     RemoveStackPageAction(KFormDesigner::Container *container,
                           QWidget *receiver, QObject *parent);
@@ -190,7 +190,7 @@ private:
 //! Keeps context expressed using container and receiver widget
 class GoToStackPageAction : public KAction
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     enum Direction {
         Previous,
@@ -225,8 +225,11 @@ public:
     //! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
     virtual void dropEvent(QDropEvent *e);
 
-    KFormDesigner::Container *container() const { return m_container; }
-    
+    KFormDesigner::Container *container() const
+    {
+        return m_container;
+    }
+
 Q_SIGNALS:
     //! Needed to control dragging over the container's surface
     void handleDragMoveEvent(QDragMoveEvent *e);
@@ -244,7 +247,7 @@ class GroupBox : public QGroupBox
     Q_OBJECT
 
 public:
-    GroupBox(const QString & title, QWidget *parent);
+    GroupBox(const QString &title, QWidget *parent);
     virtual ~GroupBox();
 
     //! Used to emit handleDragMoveEvent() signal needed to control dragging over the container's surface
@@ -276,7 +279,8 @@ public:
     ~SubForm();
 
     //! \return the name of the subform inside the db
-    QString   formName() const {
+    QString   formName() const
+    {
         return m_formName;
     }
     void      setFormName(const QString &name);
@@ -298,21 +302,21 @@ public:
     ContainerFactory(QObject *parent, const QVariantList &args);
     virtual ~ContainerFactory();
 
-    virtual QWidget* createWidget(const QByteArray &classname, QWidget *parent, const char *name,
+    virtual QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name,
                                   KFormDesigner::Container *container,
                                   CreateWidgetOptions options = DefaultOptions);
-    virtual bool createMenuActions(const QByteArray& classname, QWidget *w,
+    virtual bool createMenuActions(const QByteArray &classname, QWidget *w,
                                    QMenu *menu, KFormDesigner::Container *container);
-    virtual bool startInlineEditing(InlineEditorCreationArguments& args);
-    virtual bool previewWidget(const QByteArray& classname, QWidget *widget,
+    virtual bool startInlineEditing(InlineEditorCreationArguments &args);
+    virtual bool previewWidget(const QByteArray &classname, QWidget *widget,
                                KFormDesigner::Container *container);
-    virtual bool saveSpecialProperty(const QByteArray& classname, const QString &name,
+    virtual bool saveSpecialProperty(const QByteArray &classname, const QString &name,
                                      const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
-    virtual bool readSpecialProperty(const QByteArray& classname, QDomElement &node, QWidget *w,
+    virtual bool readSpecialProperty(const QByteArray &classname, QDomElement &node, QWidget *w,
                                      KFormDesigner::ObjectTreeItem *item);
 
     //! Reimplemented for pages of QTabWidget.
-    virtual KFormDesigner::ObjectTreeItem* selectableItem(KFormDesigner::ObjectTreeItem* item);
+    virtual KFormDesigner::ObjectTreeItem *selectableItem(KFormDesigner::ObjectTreeItem *item);
 
 protected:
     virtual bool isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,

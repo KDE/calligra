@@ -31,27 +31,25 @@
 
 #include <kdebug.h>
 
-KPrPreviewWidget::KPrPreviewWidget( QWidget* parent )
-: QWidget( parent ), m_pageEffect(0), m_pageEffectRunner(0), m_page(0)
+KPrPreviewWidget::KPrPreviewWidget(QWidget *parent)
+    : QWidget(parent), m_pageEffect(0), m_pageEffectRunner(0), m_page(0)
 {
-    connect( &m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()) );
+    connect(&m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()));
 }
 
 KPrPreviewWidget::~KPrPreviewWidget()
 {
 }
 
-void KPrPreviewWidget::paintEvent( QPaintEvent *event )
+void KPrPreviewWidget::paintEvent(QPaintEvent *event)
 {
     QPainter p(this);
 
-    if(m_pageEffectRunner && m_timeLine.state() == QTimeLine::Running) {
+    if (m_pageEffectRunner && m_timeLine.state() == QTimeLine::Running) {
         m_pageEffectRunner->paint(p);
-    }
-    else if(m_page && !m_newPage.isNull()) {
+    } else if (m_page && !m_newPage.isNull()) {
         p.drawPixmap(rect().topLeft(), m_newPage);
-    }
-    else {
+    } else {
         p.drawLine(rect().topLeft(), rect().bottomRight());
         p.drawLine(rect().topRight(), rect().bottomLeft());
     }
@@ -64,23 +62,24 @@ void KPrPreviewWidget::paintEvent( QPaintEvent *event )
     framerect.setHeight(framerect.height() - 1);
     p.drawRect(framerect);
 
-    QWidget::paintEvent( event );
+    QWidget::paintEvent(event);
 }
 
-void  KPrPreviewWidget::resizeEvent( QResizeEvent* event )
+void  KPrPreviewWidget::resizeEvent(QResizeEvent *event)
 {
-    if(m_page)
+    if (m_page) {
         updatePixmaps();
-
-    if(m_pageEffectRunner) {
-        m_pageEffectRunner->setOldPage( m_oldPage );
-        m_pageEffectRunner->setNewPage( m_newPage );
     }
 
-    QWidget::resizeEvent( event );
+    if (m_pageEffectRunner) {
+        m_pageEffectRunner->setOldPage(m_oldPage);
+        m_pageEffectRunner->setNewPage(m_newPage);
+    }
+
+    QWidget::resizeEvent(event);
 }
 
-void KPrPreviewWidget::setPageEffect( KPrPageEffect* pageEffect, KPrPage* page, KPrPage* prevpage )
+void KPrPreviewWidget::setPageEffect(KPrPageEffect *pageEffect, KPrPage *page, KPrPage *prevpage)
 {
     delete m_pageEffect;
     m_pageEffect = pageEffect;
@@ -90,11 +89,11 @@ void KPrPreviewWidget::setPageEffect( KPrPageEffect* pageEffect, KPrPage* page, 
     m_page = page;
     m_prevpage = prevpage;
 
-    if(m_page) {
+    if (m_page) {
         updatePixmaps();
 
-        if(m_pageEffect) {
-            m_pageEffectRunner = new KPrPageEffectRunner( m_oldPage, m_newPage, this, m_pageEffect );
+        if (m_pageEffect) {
+            m_pageEffectRunner = new KPrPageEffectRunner(m_oldPage, m_newPage, this, m_pageEffect);
         }
     }
 
@@ -103,43 +102,42 @@ void KPrPreviewWidget::setPageEffect( KPrPageEffect* pageEffect, KPrPage* page, 
 
 void KPrPreviewWidget::animate()
 {
-    if ( m_pageEffectRunner ) {
-        m_pageEffectRunner->next( m_timeLine.currentTime() );
+    if (m_pageEffectRunner) {
+        m_pageEffectRunner->next(m_timeLine.currentTime());
     }
 }
 
 void KPrPreviewWidget::runPreview()
 {
-    if(m_pageEffect) {
-        m_timeLine.setDuration( m_pageEffect->duration() );
-        m_timeLine.setCurrentTime( 0 );
+    if (m_pageEffect) {
+        m_timeLine.setDuration(m_pageEffect->duration());
+        m_timeLine.setCurrentTime(0);
         m_timeLine.start();
     }
 }
 
 void KPrPreviewWidget::updatePixmaps()
 {
-    if(!m_page || !isVisible())
+    if (!m_page || !isVisible()) {
         return;
-
-    m_newPage = m_page->thumbnail( size() );
-
-    if(m_newPage.isNull())
-        return;
-
-    if(m_prevpage && m_prevpage != m_page)
-    {
-        m_oldPage = m_prevpage->thumbnail( size() );
     }
-    else
-    {
-        QPixmap oldPage( size() );
-        oldPage.fill( QColor(Qt::black) );
+
+    m_newPage = m_page->thumbnail(size());
+
+    if (m_newPage.isNull()) {
+        return;
+    }
+
+    if (m_prevpage && m_prevpage != m_page) {
+        m_oldPage = m_prevpage->thumbnail(size());
+    } else {
+        QPixmap oldPage(size());
+        oldPage.fill(QColor(Qt::black));
         m_oldPage = oldPage;
     }
 }
 
-void KPrPreviewWidget::mousePressEvent( QMouseEvent* event )
+void KPrPreviewWidget::mousePressEvent(QMouseEvent *event)
 {
     event->accept();
     runPreview();

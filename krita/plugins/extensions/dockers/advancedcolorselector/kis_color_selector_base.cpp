@@ -40,13 +40,13 @@
 #include "kis_image.h"
 #include "kis_display_color_converter.h"
 
-
-class KisColorPreviewPopup : public QWidget {
+class KisColorPreviewPopup : public QWidget
+{
 public:
-    KisColorPreviewPopup(KisColorSelectorBase* parent) : QWidget(), m_parent(parent)
+    KisColorPreviewPopup(KisColorSelectorBase *parent) : QWidget(), m_parent(parent)
     {
         setWindowFlags(Qt::ToolTip);
-        setQColor(QColor(0,0,0));
+        setQColor(QColor(0, 0, 0));
         setMouseTracking(true);
     }
 
@@ -58,14 +58,14 @@ public:
 
     void updatePosition()
     {
-        QPoint parentPos = m_parent->mapToGlobal(QPoint(0,0));
+        QPoint parentPos = m_parent->mapToGlobal(QPoint(0, 0));
         QRect availRect = QApplication::desktop()->availableGeometry(this);
         QPoint targetPos;
-        if ( parentPos.x() - 100 > availRect.x() ) {
+        if (parentPos.x() - 100 > availRect.x()) {
             targetPos =  QPoint(parentPos.x() - 100, parentPos.y());
-        } else if ( parentPos.x() + m_parent->width() + 100 < availRect.right()) {
+        } else if (parentPos.x() + m_parent->width() + 100 < availRect.right()) {
             targetPos = m_parent->mapToGlobal(QPoint(m_parent->width(), 0));
-        } else if ( parentPos.y() - 100 > availRect.y() ) {
+        } else if (parentPos.y() - 100 > availRect.y()) {
             targetPos =  QPoint(parentPos.x(), parentPos.y() - 100);
         } else {
             targetPos =  QPoint(parentPos.x(), parentPos.y() + m_parent->height());
@@ -73,21 +73,22 @@ public:
         setGeometry(targetPos.x(), targetPos.y(), 100, 100);
     }
 
-    void setQColor(const QColor& color)
+    void setQColor(const QColor &color)
     {
         m_color = color;
         update();
     }
 
 protected:
-    void paintEvent(QPaintEvent *e) {
+    void paintEvent(QPaintEvent *e)
+    {
         Q_UNUSED(e);
         QPainter p(this);
-        p.fillRect(0,0, width(), width(), m_color);
+        p.fillRect(0, 0, width(), width(), m_color);
     }
 
 private:
-    KisColorSelectorBase* m_parent;
+    KisColorSelectorBase *m_parent;
     QColor m_color;
 };
 
@@ -119,11 +120,11 @@ void KisColorSelectorBase::setPopupBehaviour(bool onMouseOver, bool onMouseClick
 {
     m_popupOnMouseClick = onMouseClick;
     m_popupOnMouseOver = onMouseOver;
-    if(onMouseClick) {
+    if (onMouseClick) {
         m_popupOnMouseOver = false;
     }
 
-    if(m_popupOnMouseOver) {
+    if (m_popupOnMouseOver) {
         setMouseTracking(true);
     }
 }
@@ -140,8 +141,8 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
     }
     m_canvas = canvas;
     if (m_canvas) {
-        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                SLOT(canvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                SLOT(canvasResourceChanged(int,QVariant)), Qt::UniqueConnection);
 
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
                 SLOT(reset()));
@@ -165,38 +166,39 @@ void KisColorSelectorBase::unsetCanvas()
     m_canvas = 0;
 }
 
-
-
-void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
+void KisColorSelectorBase::mousePressEvent(QMouseEvent *event)
 {
     event->accept();
 
-
 //this boolean here is to check if the colour selector is updating the resource, so it won't update itself when the resource is updated//
-   if (m_colorUpdateSelf==false)
-   {m_colorUpdateSelf=true;}
+    if (m_colorUpdateSelf == false) {
+        m_colorUpdateSelf = true;
+    }
 
-    if(!m_isPopup && m_popupOnMouseClick &&
-       event->button() == Qt::MidButton) {
+    if (!m_isPopup && m_popupOnMouseClick &&
+            event->button() == Qt::MidButton) {
 
         lazyCreatePopup();
 
         int x = event->globalX();
         int y = event->globalY();
         int popupsize = m_popup->width();
-        x-=popupsize/2;
-        y-=popupsize/2;
+        x -= popupsize / 2;
+        y -= popupsize / 2;
 
         QRect availRect = QApplication::desktop()->availableGeometry(this);
-        if(x<availRect.x())
+        if (x < availRect.x()) {
             x = availRect.x();
-        if(y<availRect.y())
+        }
+        if (y < availRect.y()) {
             y = availRect.y();
-        if(x+m_popup->width()>availRect.x()+availRect.width())
-            x = availRect.x()+availRect.width()-m_popup->width();
-        if(y+m_popup->height()>availRect.y()+availRect.height())
-            y = availRect.y()+availRect.height()-m_popup->height();
-
+        }
+        if (x + m_popup->width() > availRect.x() + availRect.width()) {
+            x = availRect.x() + availRect.width() - m_popup->width();
+        }
+        if (y + m_popup->height() > availRect.y() + availRect.height()) {
+            y = availRect.y() + availRect.height() - m_popup->height();
+        }
 
         m_popup->move(x, y);
         m_popup->setHidingTime(200);
@@ -210,9 +212,10 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
+void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e)
+{
 
-   Q_UNUSED(e);
+    Q_UNUSED(e);
 
     if (e->button() == Qt::MidButton) {
         e->accept();
@@ -235,32 +238,30 @@ void KisColorSelectorBase::enterEvent(QEvent *e)
     // the configuration dialog (m_canvas == 0)
 
     if (m_canvas &&
-        !m_isPopup && m_popupOnMouseOver &&
-        (!m_popup || m_popup->isHidden())) {
+            !m_isPopup && m_popupOnMouseOver &&
+            (!m_popup || m_popup->isHidden())) {
 
         lazyCreatePopup();
 
         QRect availRect = QApplication::desktop()->availableGeometry(this);
-        QRect forbiddenRect = QRect(parentWidget()->mapToGlobal(QPoint(0,0)),
+        QRect forbiddenRect = QRect(parentWidget()->mapToGlobal(QPoint(0, 0)),
                                     QSize(parentWidget()->width(), parentWidget()->height()));
 
-        int x,y;
-        if(forbiddenRect.y()+forbiddenRect.height()/2 > availRect.height()/2) {
+        int x, y;
+        if (forbiddenRect.y() + forbiddenRect.height() / 2 > availRect.height() / 2) {
             //popup above forbiddenRect
-            y = forbiddenRect.y()-m_popup->height();
-        }
-        else {
+            y = forbiddenRect.y() - m_popup->height();
+        } else {
             //popup below forbiddenRect
-            y = forbiddenRect.y()+forbiddenRect.height();
+            y = forbiddenRect.y() + forbiddenRect.height();
         }
 
-        if(forbiddenRect.x()+forbiddenRect.width()/2 < availRect.width()/2) {
+        if (forbiddenRect.x() + forbiddenRect.width() / 2 < availRect.width() / 2) {
             //left edge of popup justified with left edge of popup
             x = forbiddenRect.x();
-        }
-        else {
+        } else {
             //the other way round
-            x = forbiddenRect.x()+forbiddenRect.width()-m_popup->width();
+            x = forbiddenRect.x() + forbiddenRect.width() - m_popup->width();
         }
 
         m_popup->move(x, y);
@@ -274,7 +275,7 @@ void KisColorSelectorBase::leaveEvent(QEvent *e)
     Q_UNUSED(e);
 
     if (m_colorPreviewPopup->isVisible()) {
-        m_colorUpdateSelf=false; //this is for allowing advanced selector to listen to outside colour-change events.
+        m_colorUpdateSelf = false; //this is for allowing advanced selector to listen to outside colour-change events.
         m_colorPreviewPopup->hide();
     }
 
@@ -296,25 +297,27 @@ void KisColorSelectorBase::keyPressEvent(QKeyEvent *)
 
 void KisColorSelectorBase::dragEnterEvent(QDragEnterEvent *e)
 {
-    if(e->mimeData()->hasColor())
+    if (e->mimeData()->hasColor()) {
         e->acceptProposedAction();
-    if(e->mimeData()->hasText() && QColor(e->mimeData()->text()).isValid())
+    }
+    if (e->mimeData()->hasText() && QColor(e->mimeData()->text()).isValid()) {
         e->acceptProposedAction();
+    }
 }
 
 void KisColorSelectorBase::dropEvent(QDropEvent *e)
 {
     QColor color;
-    if(e->mimeData()->hasColor()) {
+    if (e->mimeData()->hasColor()) {
         color = qvariant_cast<QColor>(e->mimeData()->colorData());
-    }
-    else if(e->mimeData()->hasText()) {
+    } else if (e->mimeData()->hasText()) {
         color.setNamedColor(e->mimeData()->text());
-        if(!color.isValid())
+        if (!color.isValid()) {
             return;
+        }
     }
 
-    KoColor kocolor(color , KoColorSpaceRegistry::instance()->rgb8());
+    KoColor kocolor(color, KoColorSpaceRegistry::instance()->rgb8());
     updateColor(kocolor, Acs::Foreground, true);
 }
 
@@ -327,7 +330,7 @@ void KisColorSelectorBase::updateColor(const KoColor &color, Acs::ColorRole role
     }
 }
 
-void KisColorSelectorBase::setColor(const KoColor& color)
+void KisColorSelectorBase::setColor(const KoColor &color)
 {
     Q_UNUSED(color);
 }
@@ -344,9 +347,9 @@ void KisColorSelectorBase::lazyCreatePopup()
     if (!m_popup) {
         m_popup = createPopup();
         Q_ASSERT(m_popup);
-        m_popup->setWindowFlags(Qt::FramelessWindowHint|Qt::SubWindow|Qt::X11BypassWindowManagerHint);
+        m_popup->setWindowFlags(Qt::FramelessWindowHint | Qt::SubWindow | Qt::X11BypassWindowManagerHint);
         m_popup->m_parent = this;
-        m_popup->m_isPopup=true;
+        m_popup->m_isPopup = true;
     }
     m_popup->setCanvas(m_canvas);
     m_popup->updateSettings();
@@ -361,10 +364,14 @@ void KisColorSelectorBase::showPopup(Move move)
     QPoint cursorPos = QCursor::pos();
 
     if (move == MoveToMousePosition) {
-        m_popup->move(cursorPos.x()-m_popup->width()/2, cursorPos.y()-m_popup->height()/2);
+        m_popup->move(cursorPos.x() - m_popup->width() / 2, cursorPos.y() - m_popup->height() / 2);
         QRect rc = m_popup->geometry();
-        if (rc.x() < 0) rc.setX(0);
-        if (rc.y() < 0) rc.setY(0);
+        if (rc.x() < 0) {
+            rc.setX(0);
+        }
+        if (rc.y() < 0) {
+            rc.setY(0);
+        }
         m_popup->setGeometry(rc);
 
     }
@@ -380,24 +387,26 @@ void KisColorSelectorBase::hidePopup()
     hide();
 }
 
-void KisColorSelectorBase::commitColor(const KoColor& color, Acs::ColorRole role)
+void KisColorSelectorBase::commitColor(const KoColor &color, Acs::ColorRole role)
 {
-    if (!m_canvas)
+    if (!m_canvas) {
         return;
+    }
 
-    m_colorUpdateAllowed=false;
+    m_colorUpdateAllowed = false;
 
-    if (role == Acs::Foreground)
+    if (role == Acs::Foreground) {
         m_canvas->resourceManager()->setForegroundColor(color);
-    else
+    } else {
         m_canvas->resourceManager()->setBackgroundColor(color);
+    }
 
-    m_colorUpdateAllowed=true;
+    m_colorUpdateAllowed = true;
 }
 
 void KisColorSelectorBase::showColorPreview()
 {
-    if(m_colorPreviewPopup->isHidden()) {
+    if (m_colorPreviewPopup->isHidden()) {
         m_colorPreviewPopup->show();
     }
 }
@@ -418,14 +427,14 @@ void KisColorSelectorBase::canvasResourceChanged(int key, const QVariant &v)
     }
 }
 
-const KoColorSpace* KisColorSelectorBase::colorSpace() const
+const KoColorSpace *KisColorSelectorBase::colorSpace() const
 {
     return converter()->paintingColorSpace();
 }
 
 void KisColorSelectorBase::updateSettings()
 {
-    if(m_popup) {
+    if (m_popup) {
         m_popup->updateSettings();
     }
 
@@ -435,7 +444,7 @@ void KisColorSelectorBase::updateSettings()
     bool onMouseClick = cfg.readEntry("popupOnMouseClick", true);
     setPopupBehaviour(onMouseOver, onMouseClick);
 
-    if(m_isPopup) {
+    if (m_isPopup) {
         resize(cfg.readEntry("zoomSize", 280), cfg.readEntry("zoomSize", 280));
     }
 
@@ -447,9 +456,9 @@ void KisColorSelectorBase::reset()
     update();
 }
 
-KisDisplayColorConverter* KisColorSelectorBase::converter() const
+KisDisplayColorConverter *KisColorSelectorBase::converter() const
 {
     return m_canvas ?
-        m_canvas->displayColorConverter() :
-        KisDisplayColorConverter::dumbConverterInstance();
+           m_canvas->displayColorConverter() :
+           KisDisplayColorConverter::dumbConverterInstance();
 }

@@ -40,20 +40,20 @@ public:
     virtual bool isSystemDatabaseName(const QString &n) const;
 
     //! Escape a string for use as a value
-    virtual QString escapeString(const QString& str) const;
-    virtual QByteArray escapeString(const QByteArray& str) const;
+    virtual QString escapeString(const QString &str) const;
+    virtual QByteArray escapeString(const QByteArray &str) const;
 
     //! Escape BLOB value \a array
-    virtual QString escapeBLOB(const QByteArray& array) const;
+    virtual QString escapeBLOB(const QByteArray &array) const;
 
 protected:
-    virtual QString drv_escapeIdentifier(const QString& str) const;
-    virtual QByteArray drv_escapeIdentifier(const QByteArray& str) const;
+    virtual QString drv_escapeIdentifier(const QString &str) const;
+    virtual QByteArray drv_escapeIdentifier(const QByteArray &str) const;
     virtual Connection *drv_createConnection(ConnectionData &conn_data);
-    virtual bool drv_isSystemFieldName(const QString& n) const;
+    virtual bool drv_isSystemFieldName(const QString &n) const;
 
 private:
-    static const char * const keywords[];
+    static const char *const keywords[];
 };
 }
 

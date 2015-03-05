@@ -65,7 +65,6 @@ struct TgaHeader {
     enum { SIZE = 18 }; // const static int SIZE = 18;
 };
 
-
 struct Color555 {
     ushort b : 5;
     ushort g : 5;
@@ -78,25 +77,26 @@ struct TgaHeaderInfo {
     bool rgb;
     bool grey;
 
-    TgaHeaderInfo(const TgaHeader & tga) : rle(false), pal(false), rgb(false), grey(false) {
+    TgaHeaderInfo(const TgaHeader &tga) : rle(false), pal(false), rgb(false), grey(false)
+    {
         switch (tga.image_type) {
         case TGA_TYPE_RLE_INDEXED:
             rle = true;
-            // no break is intended!
+        // no break is intended!
         case TGA_TYPE_INDEXED:
             pal = true;
             break;
 
         case TGA_TYPE_RLE_RGB:
             rle = true;
-            // no break is intended!
+        // no break is intended!
         case TGA_TYPE_RGB:
             rgb = true;
             break;
 
         case TGA_TYPE_RLE_GREY:
             rle = true;
-            // no break is intended!
+        // no break is intended!
         case TGA_TYPE_GREY:
             grey = true;
             break;
@@ -107,10 +107,5 @@ struct TgaHeaderInfo {
         }
     }
 };
-
-
-
-
-
 
 #endif // TGA_H

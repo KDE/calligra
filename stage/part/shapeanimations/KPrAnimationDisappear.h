@@ -28,14 +28,14 @@
 class KPrAnimationDisappear : public KPrShapeAnimationOld
 {
 public:
-    KPrAnimationDisappear( KoShape * shape, int step );
+    KPrAnimationDisappear(KoShape *shape, int step);
     virtual ~KPrAnimationDisappear();
 
-    virtual KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect );
-    virtual bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData );
-    virtual void animateRect( QRectF & rect, KPrAnimationData * animationData );
-    virtual void next( int currentTime, KPrAnimationData * animationData );
-    virtual void finish( KPrAnimationData * animationData );
+    virtual KPrAnimationData *animationData(KoCanvasBase *canvas, KoShapeManager *shapeManager, const QRectF &pageRect);
+    virtual bool animate(QPainter &painter, const KoViewConverter &converter, KPrAnimationData *animationData);
+    virtual void animateRect(QRectF &rect, KPrAnimationData *animationData);
+    virtual void next(int currentTime, KPrAnimationData *animationData);
+    virtual void finish(KPrAnimationData *animationData);
 };
 
 #endif /* KPRANIMATIONDISAPPEAR_H */

@@ -26,7 +26,8 @@
 class KoTextSharedLoadingData;
 class KoXmlWriter;
 
-class KOTEXT_EXPORT BibliographyGeneratorInterface {
+class KOTEXT_EXPORT BibliographyGeneratorInterface
+{
 public:
     BibliographyGeneratorInterface() {}
     virtual ~BibliographyGeneratorInterface() {}

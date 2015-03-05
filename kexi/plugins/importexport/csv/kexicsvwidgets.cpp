@@ -47,13 +47,14 @@ public:
     Private() {}
 
     QLabel *leftLabel, *iconLbl, *fnameLbl, *commentLbl;
-    QFrame* separator;
+    QFrame *separator;
 };
 
 class KexiCSVDelimiterWidget::Private
 {
 public:
-    Private() : availableDelimiters(KEXICSV_OTHER_DELIMITER_INDEX) {
+    Private() : availableDelimiters(KEXICSV_OTHER_DELIMITER_INDEX)
+    {
         availableDelimiters[0] = KEXICSV_DEFAULT_FILE_DELIMITER;
         availableDelimiters[1] = ";";
         availableDelimiters[2] = "\t";
@@ -61,13 +62,13 @@ public:
     }
     QString delimiter;
     QVector<QString> availableDelimiters;
-    KComboBox* combo;
-    KLineEdit* delimiterEdit;
+    KComboBox *combo;
+    KLineEdit *delimiterEdit;
 };
 
-KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * parent)
-        : QWidget(parent)
-        , d(new Private())
+KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget *parent)
+    : QWidget(parent)
+    , d(new Private())
 {
     QBoxLayout *lyr = new QBoxLayout(lineEditOnBottom ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight);
     setLayout(lyr);
@@ -89,8 +90,9 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * 
     d->delimiterEdit->setMaximumSize(QSize(30, 32767));
     d->delimiterEdit->setMaxLength(1);
     lyr->addWidget(d->delimiterEdit);
-    if (!lineEditOnBottom)
+    if (!lineEditOnBottom) {
         lyr->addStretch(2);
+    }
 
     slotDelimiterChangedInternal(KEXICSV_DEFAULT_FILE_DELIMITER_INDEX); //this will init d->delimiter
     connect(d->combo, SIGNAL(activated(int)),
@@ -109,16 +111,17 @@ KexiCSVDelimiterWidget::~KexiCSVDelimiterWidget()
 void KexiCSVDelimiterWidget::slotDelimiterChanged(int index)
 {
     slotDelimiterChangedInternal(index);
-    if (index == KEXICSV_OTHER_DELIMITER_INDEX)
+    if (index == KEXICSV_OTHER_DELIMITER_INDEX) {
         d->delimiterEdit->setFocus();
+    }
 }
 
 void KexiCSVDelimiterWidget::slotDelimiterChangedInternal(int index)
 {
     bool changed = false;
-    if (index > KEXICSV_OTHER_DELIMITER_INDEX)
+    if (index > KEXICSV_OTHER_DELIMITER_INDEX) {
         return;
-    else if (index == KEXICSV_OTHER_DELIMITER_INDEX) {
+    } else if (index == KEXICSV_OTHER_DELIMITER_INDEX) {
         changed = d->delimiter != d->delimiterEdit->text();
         d->delimiter = d->delimiterEdit->text();
     } else {
@@ -126,14 +129,16 @@ void KexiCSVDelimiterWidget::slotDelimiterChangedInternal(int index)
         d->delimiter = d->availableDelimiters[index];
     }
     d->delimiterEdit->setEnabled(index == KEXICSV_OTHER_DELIMITER_INDEX);
-    if (changed)
+    if (changed) {
         emit delimiterChanged(d->delimiter);
+    }
 }
 
 void KexiCSVDelimiterWidget::slotDelimiterLineEditReturnPressed()
 {
-    if (d->combo->currentIndex() != KEXICSV_OTHER_DELIMITER_INDEX)
+    if (d->combo->currentIndex() != KEXICSV_OTHER_DELIMITER_INDEX) {
         return;
+    }
     slotDelimiterChangedInternal(KEXICSV_OTHER_DELIMITER_INDEX);
 }
 
@@ -147,7 +152,7 @@ QString KexiCSVDelimiterWidget::delimiter() const
     return d->delimiter;
 }
 
-void KexiCSVDelimiterWidget::setDelimiter(const QString& delimiter)
+void KexiCSVDelimiterWidget::setDelimiter(const QString &delimiter)
 {
     QVector<QString>::ConstIterator it = d->availableDelimiters.constBegin();
     int index = 0;
@@ -166,8 +171,8 @@ void KexiCSVDelimiterWidget::setDelimiter(const QString& delimiter)
 
 //----------------------------------------------------
 
-KexiCSVTextQuoteComboBox::KexiCSVTextQuoteComboBox(QWidget * parent)
-        : KComboBox(parent)
+KexiCSVTextQuoteComboBox::KexiCSVTextQuoteComboBox(QWidget *parent)
+    : KComboBox(parent)
 {
     addItem("\"");
     addItem("'");
@@ -176,12 +181,13 @@ KexiCSVTextQuoteComboBox::KexiCSVTextQuoteComboBox(QWidget * parent)
 
 QString KexiCSVTextQuoteComboBox::textQuote() const
 {
-    if (currentIndex() == 2)
+    if (currentIndex() == 2) {
         return QString();
+    }
     return currentText();
 }
 
-void KexiCSVTextQuoteComboBox::setTextQuote(const QString& textQuote)
+void KexiCSVTextQuoteComboBox::setTextQuote(const QString &textQuote)
 {
     QString q(textQuote.isEmpty() ? i18n("None") : textQuote);
     setCurrentIndex(findText(q));
@@ -189,9 +195,9 @@ void KexiCSVTextQuoteComboBox::setTextQuote(const QString& textQuote)
 
 //----------------------------------------------------
 
-KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bool showFnameLine)
-        : QWidget(parent)
-        , d(new Private)
+KexiCSVInfoLabel::KexiCSVInfoLabel(const QString &labelText, QWidget *parent, bool showFnameLine)
+    : QWidget(parent)
+    , d(new Private)
 {
     QVBoxLayout *vbox = new QVBoxLayout;
     setLayout(vbox);
@@ -205,9 +211,9 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bo
     d->iconLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     topbox->addWidget(d->iconLbl, 0, 0, 2, 1);
     topbox->addItem(new QSpacerItem(
-        KDialog::spacingHint(), KDialog::spacingHint(), QSizePolicy::Fixed, QSizePolicy::Fixed),
-        0, 1, 2, 1
-    );
+                        KDialog::spacingHint(), KDialog::spacingHint(), QSizePolicy::Fixed, QSizePolicy::Fixed),
+                    0, 1, 2, 1
+                   );
 
     d->leftLabel = new QLabel(labelText, this);
     d->leftLabel->setMinimumWidth(130);
@@ -230,8 +236,7 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bo
         d->fnameLbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
         d->fnameLbl->setWordWrap(true);
         topbox->addWidget(d->fnameLbl, 1, 2); //Qt::AlignVCenter | Qt::AlignLeft);
-    }
-    else {
+    } else {
         d->fnameLbl = 0;
     }
 
@@ -256,10 +261,11 @@ KexiCSVInfoLabel::~KexiCSVInfoLabel()
     delete d;
 }
 
-void KexiCSVInfoLabel::setFileName(const QString& fileName)
+void KexiCSVInfoLabel::setFileName(const QString &fileName)
 {
-    if (!d->fnameLbl)
+    if (!d->fnameLbl) {
         return;
+    }
     d->fnameLbl->setText(QDir::convertSeparators(fileName));
     if (!fileName.isEmpty()) {
         d->iconLbl->setPixmap(
@@ -267,38 +273,37 @@ void KexiCSVInfoLabel::setFileName(const QString& fileName)
     }
 }
 
-void KexiCSVInfoLabel::setLabelText(const QString& text)
+void KexiCSVInfoLabel::setLabelText(const QString &text)
 {
     d->leftLabel->setText(text);
 }
 
-void KexiCSVInfoLabel::setIcon(const QString& iconName)
+void KexiCSVInfoLabel::setIcon(const QString &iconName)
 {
     d->iconLbl->setPixmap(DesktopIcon(iconName));
 }
 
-
-QLabel* KexiCSVInfoLabel::leftLabel() const
+QLabel *KexiCSVInfoLabel::leftLabel() const
 {
     return d->leftLabel;
 }
 
-QLabel* KexiCSVInfoLabel::fileNameLabel() const
+QLabel *KexiCSVInfoLabel::fileNameLabel() const
 {
     return d->fnameLbl;
 }
 
-QLabel* KexiCSVInfoLabel::commentLabel() const
+QLabel *KexiCSVInfoLabel::commentLabel() const
 {
     return d->commentLbl;
 }
 
-QFrame* KexiCSVInfoLabel::separator() const {
+QFrame *KexiCSVInfoLabel::separator() const
+{
     return d->separator;
 }
 
-
-void KexiCSVInfoLabel::setCommentText(const QString& text)
+void KexiCSVInfoLabel::setCommentText(const QString &text)
 {
     d->commentLbl->setText(text);
 }
@@ -309,7 +314,7 @@ QStringList csvMimeTypes()
 {
     QStringList mimetypes;
     mimetypes << "text/csv" << "text/plain"; // use application/octet-stream if you want
-                                             // all files, but then the others are not necessary
+    // all files, but then the others are not necessary
     return mimetypes;
 }
 

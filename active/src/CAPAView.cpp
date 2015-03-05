@@ -45,11 +45,11 @@
 #include <kdebug.h>
 
 //TODO: Cleanup code that is not called
-CAPAView::CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument)
-    : m_canvasController (canvasController), m_paCanvas (canvas), m_prDocument (prDocument), m_page (0)
+CAPAView::CAPAView(KoCanvasController *canvasController, KoPACanvasBase *canvas, KPrDocument *prDocument)
+    : m_canvasController(canvasController), m_paCanvas(canvas), m_prDocument(prDocument), m_page(0)
 {
-    KoPAViewModeNormal* mode = new KoPAViewModeNormal (this, m_paCanvas);
-    setViewMode (mode);
+    KoPAViewModeNormal *mode = new KoPAViewModeNormal(this, m_paCanvas);
+    setViewMode(mode);
 }
 
 CAPAView::~CAPAView()
@@ -57,7 +57,7 @@ CAPAView::~CAPAView()
 
 }
 
-void CAPAView::setShowRulers (bool show)
+void CAPAView::setShowRulers(bool show)
 {
     Q_UNUSED(show);
 }
@@ -82,122 +82,122 @@ void CAPAView::updatePageNavigationActions()
 
 }
 
-void CAPAView::setActionEnabled (int actions, bool enable)
+void CAPAView::setActionEnabled(int actions, bool enable)
 {
     Q_UNUSED(actions);
     Q_UNUSED(enable);
 
 }
 
-void CAPAView::navigatePage (KoPageApp::PageNavigation pageNavigation)
+void CAPAView::navigatePage(KoPageApp::PageNavigation pageNavigation)
 {
     Q_UNUSED(pageNavigation);
 }
 
-KoPAPageBase* CAPAView::activePage() const
+KoPAPageBase *CAPAView::activePage() const
 {
     return m_page;
 }
 
-void CAPAView::setActivePage (KoPAPageBase* page)
+void CAPAView::setActivePage(KoPAPageBase *page)
 {
-    KoShapeManager* shapeManager = m_paCanvas->shapeManager();
-    KoShapeManager* masterShapeManager = m_paCanvas->masterShapeManager();
-    shapeManager->removeAdditional (m_page);
+    KoShapeManager *shapeManager = m_paCanvas->shapeManager();
+    KoShapeManager *masterShapeManager = m_paCanvas->masterShapeManager();
+    shapeManager->removeAdditional(m_page);
     m_page = page;
-    shapeManager->addAdditional (page);
-    QList<KoShape*> shapes = page->shapes();
-    shapeManager->setShapes (shapes, KoShapeManager::AddWithoutRepaint);
+    shapeManager->addAdditional(page);
+    QList<KoShape *> shapes = page->shapes();
+    shapeManager->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
     //Make the top most layer active
     if (!shapes.isEmpty()) {
-        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*> (shapes.last());
-        shapeManager->selection()->setActiveLayer (layer);
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(shapes.last());
+        shapeManager->selection()->setActiveLayer(layer);
     }
 
     // if the page is not a master page itself set shapes of the master page
-    KoPAPage* paPage = dynamic_cast<KoPAPage*> (page);
+    KoPAPage *paPage = dynamic_cast<KoPAPage *>(page);
     if (paPage) {
-        KoPAMasterPage* masterPage = paPage->masterPage();
-        QList<KoShape*> masterShapes = masterPage->shapes();
-        masterShapeManager->setShapes (masterShapes, KoShapeManager::AddWithoutRepaint);
+        KoPAMasterPage *masterPage = paPage->masterPage();
+        QList<KoShape *> masterShapes = masterPage->shapes();
+        masterShapeManager->setShapes(masterShapes, KoShapeManager::AddWithoutRepaint);
         //Make the top most layer active
         if (!masterShapes.isEmpty()) {
-            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*> (masterShapes.last());
-            masterShapeManager->selection()->setActiveLayer (layer);
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(masterShapes.last());
+            masterShapeManager->selection()->setActiveLayer(layer);
         }
     } else {
         // if the page is a master page no shapes are in the masterShapeManager
-        masterShapeManager->setShapes (QList<KoShape*>());
+        masterShapeManager->setShapes(QList<KoShape *>());
     }
 
     // Set the current page number in the canvas resource provider
-    m_paCanvas->resourceManager()->setResource (KoCanvasResourceManager::CurrentPage, m_prDocument->pageIndex (page) + 1);
+    m_paCanvas->resourceManager()->setResource(KoCanvasResourceManager::CurrentPage, m_prDocument->pageIndex(page) + 1);
 }
 
-void CAPAView::doUpdateActivePage (KoPAPageBase* page)
+void CAPAView::doUpdateActivePage(KoPAPageBase *page)
 {
     // save the old offset into the page so we can use it also on the new page
-    setActivePage (page);
+    setActivePage(page);
 
     m_paCanvas->updateSize();
-    KoPageLayout& layout = page->pageLayout();
+    KoPageLayout &layout = page->pageLayout();
 
-    QSizeF pageSize (layout.width, layout.height);
+    QSizeF pageSize(layout.width, layout.height);
     //m_paCanvas->setDocumentOrigin(QPointF(layout.width, layout.height));
-    m_paCanvas->setDocumentOrigin (QPointF (0, 0));
+    m_paCanvas->setDocumentOrigin(QPointF(0, 0));
     // the page is in the center of the canvas
-    m_paCanvas->resourceManager()->setResource (KoCanvasResourceManager::PageSize, pageSize);
+    m_paCanvas->resourceManager()->setResource(KoCanvasResourceManager::PageSize, pageSize);
     zoomController()->setPageSize(pageSize);
     zoomController()->setDocumentSize(pageSize);
     zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1);
-    QGraphicsItem* item = dynamic_cast<QGraphicsItem*> (m_paCanvas);
+    QGraphicsItem *item = dynamic_cast<QGraphicsItem *>(m_paCanvas);
     item->update();
 
     proxyObject->emitActivePageChanged();
 }
 
-KoZoomController* CAPAView::zoomController() const
+KoZoomController *CAPAView::zoomController() const
 {
-    return static_cast<CACanvasController*>(m_canvasController)->zoomController();
+    return static_cast<CACanvasController *>(m_canvasController)->zoomController();
 }
 
-KoPADocument* CAPAView::kopaDocument() const
+KoPADocument *CAPAView::kopaDocument() const
 {
     return m_prDocument;
 }
 
-KoPACanvasBase* CAPAView::kopaCanvas() const
+KoPACanvasBase *CAPAView::kopaCanvas() const
 {
     return m_paCanvas;
 }
 
 void CAPAView::connectToZoomController()
 {
-    connect (zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)));
+    connect(zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)));
 }
 
-void CAPAView::slotZoomChanged (KoZoomMode::Mode mode, qreal zoom)
+void CAPAView::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 {
-    Q_UNUSED (zoom);
+    Q_UNUSED(zoom);
     if (m_page) {
         if (mode == KoZoomMode::ZOOM_PAGE) {
-            KoPageLayout& layout = m_page->pageLayout();
-            QRectF pageRect (0, 0, layout.width, layout.height);
-            m_canvasController->ensureVisible (m_paCanvas->viewConverter()->documentToView (pageRect));
+            KoPageLayout &layout = m_page->pageLayout();
+            QRectF pageRect(0, 0, layout.width, layout.height);
+            m_canvasController->ensureVisible(m_paCanvas->viewConverter()->documentToView(pageRect));
         } else if (mode == KoZoomMode::ZOOM_WIDTH) {
             // horizontally center the page
-            KoPageLayout& layout = m_page->pageLayout();
-            QRectF pageRect (0, 0, layout.width, layout.height);
-            QRect viewRect = m_paCanvas->viewConverter()->documentToView (pageRect).toRect();
-            viewRect.translate (m_paCanvas->documentOrigin());
-            QRect currentVisible (qMax (0, -m_canvasController->canvasOffsetX()),
-                                  qMax (0, -m_canvasController->canvasOffsetY()),
-                                  m_canvasController->visibleWidth(),
-                                  m_canvasController->visibleHeight());
+            KoPageLayout &layout = m_page->pageLayout();
+            QRectF pageRect(0, 0, layout.width, layout.height);
+            QRect viewRect = m_paCanvas->viewConverter()->documentToView(pageRect).toRect();
+            viewRect.translate(m_paCanvas->documentOrigin());
+            QRect currentVisible(qMax(0, -m_canvasController->canvasOffsetX()),
+                                 qMax(0, -m_canvasController->canvasOffsetY()),
+                                 m_canvasController->visibleWidth(),
+                                 m_canvasController->visibleHeight());
             int horizontalMove = viewRect.center().x() - currentVisible.center().x();
-            m_canvasController->pan (QPoint (horizontalMove, 0));
+            m_canvasController->pan(QPoint(horizontalMove, 0));
         }
-        dynamic_cast<KoPACanvasItem*> (m_paCanvas)->update();
+        dynamic_cast<KoPACanvasItem *>(m_paCanvas)->update();
     }
 }
 

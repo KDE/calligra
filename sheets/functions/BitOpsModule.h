@@ -33,7 +33,7 @@ class BitOpsModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    explicit BitOpsModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit BitOpsModule(QObject *parent, const QVariantList &args = QVariantList());
 
     QString descriptionFileName() const;
 };

@@ -73,13 +73,14 @@ public:
 
     static const Token null;
 
-    Token(const Token&);
-    Token &operator=(const Token&);
+    Token(const Token &);
+    Token &operator=(const Token &);
 
     /**
     * Returns type of the Token.
     */
-    Type type() const {
+    Type type() const
+    {
         return m_type;
     }
 
@@ -90,34 +91,39 @@ public:
     * text(), you might use asInteger(), asFloat(), asString(), sheetName(),
     * etc.
     */
-    QString text() const {
-            return m_text;
+    QString text() const
+    {
+        return m_text;
     }
 
-    int pos() const {
+    int pos() const
+    {
         return m_pos;
     }
 
     /**
     * Returns true if Token is either integer or floating-point Token.
     */
-    bool isNumber() const {
+    bool isNumber() const
+    {
         return (m_type == Number);
     }
 
     /**
     * Returns true if Token is a string Token.
     */
-    bool isIdentifierName() const {
+    bool isIdentifierName() const
+    {
         return m_type == IdentifierName;
     }
 
     /**
     * Returns true if Token is an operator Token.
     */
-    bool isOperator() const {
-       return m_type == Operator;
-   }
+    bool isOperator() const
+    {
+        return m_type == Operator;
+    }
 
     /**
     * Returns string value for a string Token.
@@ -153,10 +159,12 @@ class Tokens: public QVector<Token>
 {
 public:
     Tokens(): QVector<Token>(), m_valid(true) {}
-    bool valid() const {
+    bool valid() const
+    {
         return m_valid;
     }
-    void setValid(bool v) {
+    void setValid(bool v)
+    {
         m_valid = v;
     }
 protected:
@@ -169,10 +177,10 @@ public:
     TokenStack();
     bool isEmpty() const;
     unsigned itemCount() const;
-    void push(const Token& Token);
+    void push(const Token &Token);
     Token pop();
-    const Token& top();
-    const Token& top(unsigned index);
+    const Token &top();
+    const Token &top(unsigned index);
 private:
     void ensureSpace();
     unsigned topIndex;

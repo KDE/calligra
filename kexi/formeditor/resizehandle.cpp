@@ -39,7 +39,8 @@
 
 using namespace KFormDesigner;
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 /**
 * A single widget which represents a small rectangle for resizing a form widget.
 */
@@ -75,13 +76,13 @@ protected slots:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 class ResizeHandle::Private
 {
 public:
-    Private(ResizeHandleSet* set_, HandlePos pos_)
+    Private(ResizeHandleSet *set_, HandlePos pos_)
         : set(set_), pos(pos_), dragging(false)
     {}
     ~Private() {}
@@ -165,8 +166,9 @@ bool ResizeHandle::eventFilter(QObject *o, QEvent *ev)
 
 void ResizeHandle::mousePressEvent(QMouseEvent *ev)
 {
-    if (ev->button() != Qt::LeftButton)
+    if (ev->button() != Qt::LeftButton) {
         return;
+    }
 
     const bool startDragging = !d->dragging;
     d->dragging = true;
@@ -184,8 +186,9 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
     int gridX = d->set->form()->gridSize();
     int gridY = d->set->form()->gridSize();
 
-    if (!d->dragging)
+    if (!d->dragging) {
         return;
+    }
 
     int tmpx = d->set->widget()->x();
     int tmpy = d->set->widget()->y();
@@ -195,9 +198,8 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
     int dummyx = ev->x() - d->x;
     int dummyy = ev->y() - d->y;
 
-    if (   d->set->form()->isSnapToGridEnabled() && ev->buttons() == Qt::LeftButton
-        && ev->modifiers() != (Qt::ControlModifier | Qt::AltModifier))
-    {
+    if (d->set->form()->isSnapToGridEnabled() && ev->buttons() == Qt::LeftButton
+            && ev->modifiers() != (Qt::ControlModifier | Qt::AltModifier)) {
         dummyx = alignValueToGrid(dummyx, gridX);
         dummyy = alignValueToGrid(dummyy, gridY);
     }
@@ -325,20 +327,23 @@ ResizeHandleSet::ResizeHandleSet(QWidget *modify, Form *form)
 
 ResizeHandleSet::~ResizeHandleSet()
 {
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 8; i++) {
         delete d->handles[i];
+    }
     delete d;
 }
 
 void
 ResizeHandleSet::setWidget(QWidget *modify)
 {
-    if (modify == d->widget)
+    if (modify == d->widget) {
         return;
+    }
 
     if (d->widget) {
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++) {
             delete d->handles[i];
+        }
     }
 
     d->widget = modify;
@@ -356,14 +361,16 @@ ResizeHandleSet::setWidget(QWidget *modify)
 void
 ResizeHandleSet::raise()
 {
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 8; i++) {
         d->handles[i]->raise();
+    }
 }
 
 void ResizeHandleSet::setEditingMode(bool editing)
 {
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 8; i++) {
         d->handles[i]->setEditingMode(editing);
+    }
 }
 
 void ResizeHandleSet::resizeStarted()
@@ -378,12 +385,12 @@ void ResizeHandleSet::resizeFinished()
     }
 }
 
-QWidget* ResizeHandleSet::widget() const
+QWidget *ResizeHandleSet::widget() const
 {
     return d->widget;
 }
 
-Form* ResizeHandleSet::form() const
+Form *ResizeHandleSet::form() const
 {
     return d->form;
 }

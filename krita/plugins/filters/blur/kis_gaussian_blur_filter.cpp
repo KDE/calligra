@@ -18,7 +18,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "kis_gaussian_blur_filter.h"
 #include "kis_wdg_gaussian_blur.h"
 
@@ -37,7 +36,6 @@
 
 #include <math.h>
 
-
 KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Gaussian Blur..."))
 {
     setSupportsPainting(true);
@@ -45,14 +43,14 @@ KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), categoryBlur(),
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisGaussianBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget *KisGaussianBlurFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP) const
 {
     return new KisWdgGaussianBlur(parent);
 }
 
-KisFilterConfiguration* KisGaussianBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisGaussianBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("horizRadius", 5);
     config->setProperty("vertRadius", 5);
     config->setProperty("lockAspect", true);
@@ -61,16 +59,18 @@ KisFilterConfiguration* KisGaussianBlurFilter::factoryConfiguration(const KisPai
 }
 
 void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
-                                        const QRect& rect,
-                                        const KisFilterConfiguration* config,
-                                        KoUpdater* progressUpdater
-                                        ) const
+                                        const QRect &rect,
+                                        const KisFilterConfiguration *config,
+                                        KoUpdater *progressUpdater
+                                       ) const
 {
     Q_ASSERT(device != 0);
 
-    if (!config) config = new KisFilterConfiguration(id().id(), 1);
+    if (!config) {
+        config = new KisFilterConfiguration(id().id(), 1);
+    }
 
-    QVariant value; 
+    QVariant value;
     config->getProperty("horizRadius", value);
     float horizontalRadius = value.toFloat();
     config->getProperty("vertRadius", value);
@@ -79,7 +79,7 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
     QBitArray channelFlags;
     if (config) {
         channelFlags = config->channelFlags();
-    } 
+    }
     if (channelFlags.isEmpty() || !config) {
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
@@ -89,7 +89,7 @@ void KisGaussianBlurFilter::processImpl(KisPaintDeviceSP device,
                                      channelFlags, progressUpdater);
 }
 
-QRect KisGaussianBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisGaussianBlurFilter::neededRect(const QRect &rect, const KisFilterConfiguration *_config) const
 {
     QVariant value;
     /**
@@ -102,11 +102,11 @@ QRect KisGaussianBlurFilter::neededRect(const QRect & rect, const KisFilterConfi
     return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }
 
-QRect KisGaussianBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisGaussianBlurFilter::changedRect(const QRect &rect, const KisFilterConfiguration *_config) const
 {
     QVariant value;
     const int halfWidth = (_config->getProperty("horizRadius", value)) ? KisGaussianKernel::kernelSizeFromRadius(value.toFloat()) / 2 : 5;
     const int halfHeight = (_config->getProperty("vertRadius", value)) ? KisGaussianKernel::kernelSizeFromRadius(value.toFloat()) / 2 : 5;
 
-    return rect.adjusted( -halfWidth, -halfHeight, halfWidth, halfHeight);
+    return rect.adjusted(-halfWidth, -halfHeight, halfWidth, halfHeight);
 }

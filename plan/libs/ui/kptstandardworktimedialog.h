@@ -30,24 +30,39 @@
 
 #include <QWidget>
 
-
 namespace KPlato
 {
 
 class Project;
 class MacroCommand;
 
-class StandardWorktimeDialogImpl : public QWidget, public Ui::StandardWorktimeDialogBase {
+class StandardWorktimeDialogImpl : public QWidget, public Ui::StandardWorktimeDialogBase
+{
     Q_OBJECT
 public:
-    StandardWorktimeDialogImpl ( StandardWorktime *std, QWidget *parent);
+    StandardWorktimeDialogImpl(StandardWorktime *std, QWidget *parent);
 
-    StandardWorktime *standardWorktime() { return m_std; }
-    double inYear() const { return m_year; }
-    double inMonth() const { return m_month; }
-    double inWeek() const { return m_week; }
-    double inDay() const { return m_day; }
-    
+    StandardWorktime *standardWorktime()
+    {
+        return m_std;
+    }
+    double inYear() const
+    {
+        return m_year;
+    }
+    double inMonth() const
+    {
+        return m_month;
+    }
+    double inWeek() const
+    {
+        return m_week;
+    }
+    double inDay() const
+    {
+        return m_day;
+    }
+
 private Q_SLOTS:
     void slotCheckAllFieldsFilled();
     void slotEnableButtonOk(bool on);
@@ -69,16 +84,17 @@ private:
     double m_day;
 };
 
-class KPLATOUI_EXPORT StandardWorktimeDialog : public KDialog {
+class KPLATOUI_EXPORT StandardWorktimeDialog : public KDialog
+{
     Q_OBJECT
 public:
-    explicit StandardWorktimeDialog(Project &project, QWidget *parent=0);
-    
+    explicit StandardWorktimeDialog(Project &project, QWidget *parent = 0);
+
     MacroCommand *buildCommand();
 
 protected Q_SLOTS:
     void slotOk();
-    
+
 private:
     Project &project;
     StandardWorktimeDialogImpl *dia;

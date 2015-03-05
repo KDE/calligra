@@ -21,7 +21,8 @@
 
 #include "StaffElement.h"
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Staff;
 
@@ -29,7 +30,8 @@ class Staff;
  * This class represents a clef music element. This same class is used both for clef changes at the start of bars as for
  * mid-bar clef changes.
  */
-class Clef : public StaffElement {
+class Clef : public StaffElement
+{
     Q_OBJECT
 public:
     /**
@@ -54,8 +56,8 @@ public:
      * @param line the line at which to draw the clef
      * @param octaveChange the octaveChange to apply to notes following this clef
      */
-    Clef(Staff* staff, int startTime, ClefShape shape, int line, int octaveChange = 0);
-    
+    Clef(Staff *staff, int startTime, ClefShape shape, int line, int octaveChange = 0);
+
     /**
      * Destructor.
      */
@@ -65,27 +67,27 @@ public:
      * Returns the shape of the clef.
      */
     ClefShape shape() const;
-    
+
     /**
      * Returns the line the clef is displayed on.
      */
     int line() const;
-    
+
     /**
      * Returns the octave change of this clef.
      */
     int octaveChange() const;
-    
+
     /**
      * Returns the pitch for a given line.
      */
     int lineToPitch(int line) const;
-    
+
     /**
      * Returns the line for a given pitch.
      */
     int pitchToLine(int pitch) const;
-    
+
     /**
      * Returns the priority of this staff element with regard to order in which it should be sorted.
      */
@@ -104,7 +106,7 @@ public Q_SLOTS:
      * @param line the new line this clef is displayed on
      */
     void setLine(int line);
-    
+
     /**
      * Changes the octave change of this clef.
      *
@@ -116,19 +118,19 @@ Q_SIGNALS:
      * This signal is emitted whenever the shape of the clef changes.
      */
     void shapeChanged(ClefShape shape);
-    
+
     /**
      * This signal is emitted whenever the line of the clef changes.
      */
     void lineChanged(int line);
-    
+
     /**
      * This signal is emitted whenever the octaveChange of the clef changes.
      */
     void octaveChangeChanged(int octaveChange);
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

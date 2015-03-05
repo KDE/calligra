@@ -30,7 +30,7 @@ class KEXIUTILS_EXPORT KexiCloseButton : public QToolButton
 {
     Q_OBJECT
 public:
-    explicit KexiCloseButton(QWidget* parent = 0);
+    explicit KexiCloseButton(QWidget *parent = 0);
 
     virtual ~KexiCloseButton();
 
@@ -44,7 +44,7 @@ private:
     void init();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

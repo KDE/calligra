@@ -25,14 +25,13 @@
 #include "kis_brush_factory.h"
 #include "kis_brush.h"
 
-
 class KisPredefinedBrushFactory : public KisBrushFactory
 {
 public:
     KisPredefinedBrushFactory(const QString &brushType);
 
     QString id() const;
-    KisBrushSP getOrCreateBrush(const QDomElement& brushDefinition);
+    KisBrushSP getOrCreateBrush(const QDomElement &brushDefinition);
 
 private:
     const QString m_id;

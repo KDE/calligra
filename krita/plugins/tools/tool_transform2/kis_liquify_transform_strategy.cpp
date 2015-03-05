@@ -36,9 +36,7 @@
 #include "kis_liquify_paint_helper.h"
 #include "kis_liquify_transform_worker.h"
 
-
-struct KisLiquifyTransformStrategy::Private
-{
+struct KisLiquifyTransformStrategy::Private {
     Private(KisLiquifyTransformStrategy *_q,
             const KisCoordinatesConverter *_converter,
             ToolTransformArgs &_currentArgs,
@@ -52,7 +50,7 @@ struct KisLiquifyTransformStrategy::Private
     {
     }
 
-    KisLiquifyTransformStrategy * const q;
+    KisLiquifyTransformStrategy *const q;
 
     /// standard members ///
 
@@ -86,8 +84,8 @@ struct KisLiquifyTransformStrategy::Private
 };
 
 KisLiquifyTransformStrategy::KisLiquifyTransformStrategy(const KisCoordinatesConverter *converter,
-                                                         ToolTransformArgs &currentArgs,
-                                                         TransformTransactionProperties &transaction)
+        ToolTransformArgs &currentArgs,
+        TransformTransactionProperties &transaction)
 
     : m_d(new Private(this, converter, currentArgs, transaction))
 {
@@ -178,7 +176,7 @@ void KisLiquifyTransformStrategy::hoverActionCommon(KoPointerEvent *event)
 void KisLiquifyTransformStrategy::activateAlternateAction(KisTool::AlternateAction action)
 {
     if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
-        action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+            action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
 
         KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
         props->setReverseDirection(!props->reverseDirection());
@@ -189,7 +187,7 @@ void KisLiquifyTransformStrategy::activateAlternateAction(KisTool::AlternateActi
 void KisLiquifyTransformStrategy::deactivateAlternateAction(KisTool::AlternateAction action)
 {
     if (action == KisTool::PickFgNode || action == KisTool::PickBgNode ||
-        action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
+            action == KisTool::PickFgImage || action == KisTool::PickBgImage) {
 
         KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
         props->setReverseDirection(!props->reverseDirection());
@@ -210,7 +208,6 @@ bool KisLiquifyTransformStrategy::beginAlternateAction(KoPointerEvent *event, Ki
 
         return beginPrimaryAction(event);
     }
-
 
     return false;
 }
@@ -288,9 +285,9 @@ void KisLiquifyTransformStrategy::Private::recalculateTransformations()
 
         transformedImage =
             currentArgs.liquifyWorker()->runOnQImage(transformedImage,
-                                                     origTLInFlake,
-                                                     imageToRealThumbTransform,
-                                                     &paintingOffset);
+                    origTLInFlake,
+                    imageToRealThumbTransform,
+                    &paintingOffset);
     } else {
         transformedImage = q->originalImage();
         paintingOffset = imageToThumb(transaction.originalTopLeft(), false);

@@ -26,8 +26,8 @@
 class LayerModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
-    Q_PROPERTY(QObject* engine READ engine WRITE setEngine NOTIFY engineChanged)
+    Q_PROPERTY(QObject *view READ view WRITE setView NOTIFY viewChanged)
+    Q_PROPERTY(QObject *engine READ engine WRITE setEngine NOTIFY engineChanged)
     // This might seem a slightly odd position, but think of it as the thumbnail of all the currently visible layers merged down
     Q_PROPERTY(QString fullImageThumbUrl READ fullImageThumbUrl NOTIFY viewChanged);
 
@@ -47,7 +47,7 @@ class LayerModel : public QAbstractListModel
     Q_PROPERTY(bool activeGChannelLocked READ activeGChannelLocked WRITE setActiveGChannelLocked NOTIFY activeGChannelLockedChanged);
     Q_PROPERTY(bool activeBChannelLocked READ activeBChannelLocked WRITE setActiveBChannelLocked NOTIFY activeBChannelLockedChanged);
     Q_PROPERTY(bool activeAChannelLocked READ activeAChannelLocked WRITE setActiveAChannelLocked NOTIFY activeAChannelLockedChanged);
-    Q_PROPERTY(QObject* activeFilterConfig READ activeFilterConfig WRITE setActiveFilterConfig NOTIFY activeFilterConfigChanged);
+    Q_PROPERTY(QObject *activeFilterConfig READ activeFilterConfig WRITE setActiveFilterConfig NOTIFY activeFilterConfigChanged);
 public:
     enum LayerRoles {
         IconRole = Qt::UserRole + 1,
@@ -69,17 +69,17 @@ public:
         CanMoveUpRole,
         CanMoveDownRole
     };
-    explicit LayerModel(QObject* parent = 0);
+    explicit LayerModel(QObject *parent = 0);
     virtual ~LayerModel();
 
-    QObject* view() const;
-    void setView(QObject* newView);
-    QObject* engine() const;
-    void setEngine(QObject* newEngine);
+    QObject *view() const;
+    void setView(QObject *newView);
+    QObject *engine() const;
+    void setEngine(QObject *newEngine);
     QString fullImageThumbUrl() const;
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    Q_INVOKABLE virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    Q_INVOKABLE virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
     Q_INVOKABLE void setActive(int index);
@@ -126,8 +126,8 @@ public:
     void setActiveBChannelLocked(bool newLocked);
     bool activeAChannelLocked() const;
     void setActiveAChannelLocked(bool newLocked);
-    QObject* activeFilterConfig() const;
-    void setActiveFilterConfig(QObject* newConfig);
+    QObject *activeFilterConfig() const;
+    void setActiveFilterConfig(QObject *newConfig);
 Q_SIGNALS:
     void viewChanged();
     void engineChanged();
@@ -166,7 +166,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // LAYERMODEL_H

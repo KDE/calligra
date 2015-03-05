@@ -28,7 +28,7 @@ private Q_SLOTS:
     void benchmarkCircle();
     void benchmarkSIMD();
     void benchmarkSquare();
-    
+
 };
 
 #endif

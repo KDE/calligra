@@ -38,9 +38,8 @@ struct PopupWidgetUI;
 class ImageDockerDock: public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
-    
-    struct ImageInfo
-    {
+
+    struct ImageInfo {
         qint64  id;
         int     viewMode;
         QString path;
@@ -49,34 +48,38 @@ class ImageDockerDock: public QDockWidget, public KoCanvasObserverBase
         QPixmap pixmap;
         QPoint  scrollPos;
     };
-    
-    typedef QMap<qint64,ImageInfo>::iterator ImageInfoIter;
-    
+
+    typedef QMap<qint64, ImageInfo>::iterator ImageInfoIter;
+
 public:
     ImageDockerDock();
     virtual ~ImageDockerDock();
-    QString observerName() { return "ImageDockerDock"; }
-    virtual void setCanvas(KoCanvasBase* canvas);
-    virtual void unsetCanvas() {
+    QString observerName()
+    {
+        return "ImageDockerDock";
+    }
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas()
+    {
         m_canvas = 0; // Intentionally not disabled if there's no canvas
     }
-    
+
 private Q_SLOTS:
-    void slotItemDoubleClicked(const QModelIndex& index);
+    void slotItemDoubleClicked(const QModelIndex &index);
     void slotBackButtonClicked();
     void slotUpButtonClicked();
     void slotHomeButtonClicked();
     void slotCloseCurrentImage();
     void slotNextImage();
     void slotPrevImage();
-    void slotOpenImage(const QString& path);
+    void slotOpenImage(const QString &path);
     void slotImageChoosenFromComboBox(int index);
     void slotZoomChanged(int zoom);
-    void slotColorSelected(const QColor& color);
+    void slotColorSelected(const QColor &color);
     void slotViewModeChanged(int viewMode, qreal scale);
     void slotCloseZoomPopup();
-    void slotChangeRoot(const QString& path);
-    
+    void slotChangeRoot(const QString &path);
+
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
@@ -84,25 +87,28 @@ protected:
     void dropEvent(QDropEvent *event);
 private:
     void addCurrentPathToHistory();
-    void updatePath(const QString& path);
+    void updatePath(const QString &path);
     qint64 generateImageID() const;
     void setCurrentImage(qint64 imageID);
-    bool isImageLoaded() const { return m_currImageID != -1; }
-    void setZoom(const ImageInfo& info);
-    
+    bool isImageLoaded() const
+    {
+        return m_currImageID != -1;
+    }
+    void setZoom(const ImageInfo &info);
+
 private:
-    QFileSystemModel*      m_model;
-    QButtonGroup*          m_zoomButtons;
-    KoCanvasBase*          m_canvas;
-    ImageFilter*           m_proxyModel;
-    ImageListModel*        m_imgListModel;
+    QFileSystemModel      *m_model;
+    QButtonGroup          *m_zoomButtons;
+    KoCanvasBase          *m_canvas;
+    ImageFilter           *m_proxyModel;
+    ImageListModel        *m_imgListModel;
     QStringList            m_history;
-    ImageStripScene*       m_thumbModel;
-    ImageDockerUI*         m_ui;
-    PopupWidgetUI*         m_popupUi;
-    QMap<qint64,ImageInfo> m_imgInfoMap;
+    ImageStripScene       *m_thumbModel;
+    ImageDockerUI         *m_ui;
+    PopupWidgetUI         *m_popupUi;
+    QMap<qint64, ImageInfo> m_imgInfoMap;
     qint64                 m_currImageID;
-    QList<QTemporaryFile*> m_temporaryFiles;
+    QList<QTemporaryFile *> m_temporaryFiles;
 };
 
 #endif // H_IMAGEDOCKER_DOCK_H_

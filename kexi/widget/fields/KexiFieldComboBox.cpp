@@ -49,13 +49,15 @@ class KexiFieldComboBox::Private
 {
 public:
     Private()
-            : table(true) {
+        : table(true)
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
     QPointer<KexiProject> prj;
     QPointer<KexiFieldListModel> model;
-    
+
     QString tableOrQueryName;
     QString fieldOrExpression;
 
@@ -65,8 +67,8 @@ public:
 //------------------------
 
 KexiFieldComboBox::KexiFieldComboBox(QWidget *parent)
-        : KComboBox(true/*rw*/, parent)
-        , d(new Private())
+    : KComboBox(true/*rw*/, parent)
+    , d(new Private())
 {
     setInsertPolicy(NoInsert);
     setCompletionMode(KGlobalSettings::CompletionPopupAuto);
@@ -86,34 +88,37 @@ KexiFieldComboBox::~KexiFieldComboBox()
 
 void KexiFieldComboBox::setProject(KexiProject *prj)
 {
-    if ((KexiProject*)d->prj == prj)
+    if ((KexiProject *)d->prj == prj) {
         return;
+    }
     d->prj = prj;
     setTableOrQuery(QString(), true);
 }
 
-KexiProject* KexiFieldComboBox::project() const
+KexiProject *KexiFieldComboBox::project() const
 {
     return d->prj;
 }
 
-void KexiFieldComboBox::setTableOrQuery(const QString& name, bool table)
+void KexiFieldComboBox::setTableOrQuery(const QString &name, bool table)
 {
 
     d->tableOrQueryName = name;
     d->table = table;
     clear();
 
-    if (d->tableOrQueryName.isEmpty() || !d->prj)
+    if (d->tableOrQueryName.isEmpty() || !d->prj) {
         return;
+    }
 
     KexiDB::TableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.toLatin1(), d->table);
-    if (!tableOrQuery.table() && !tableOrQuery.query())
+    if (!tableOrQuery.table() && !tableOrQuery.query()) {
         return;
+    }
 
     delete d->model;
     d->model = new KexiFieldListModel(this, ShowEmptyItem);
-    
+
     d->model->setSchema(&tableOrQuery);
     setModel(d->model);
 
@@ -131,7 +136,7 @@ bool KexiFieldComboBox::isTableAssigned() const
     return d->table;
 }
 
-void KexiFieldComboBox::setFieldOrExpression(const QString& string)
+void KexiFieldComboBox::setFieldOrExpression(const QString &string)
 {
     kDebug() << string;
     const QString name(string);
@@ -158,7 +163,7 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 //! @todo show 'the item doesn't match' info?
         return;
     }
-    
+
     setCurrentIndex(index);
     lineEdit()->setText(d->fieldOrExpression);
     kDebug() << index << currentText() << currentIndex() << lineEdit()->text();
@@ -195,8 +200,9 @@ int KexiFieldComboBox::indexOfField() const
 {
     kDebug();
     KexiDB::TableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.toLatin1(), d->table);
-    if (!tableOrQuery.table() && !tableOrQuery.query())
+    if (!tableOrQuery.table() && !tableOrQuery.query()) {
         return -1;
+    }
 
     return currentIndex() > 0 ? (currentIndex() - 1) : -1;
 }
@@ -215,7 +221,7 @@ void KexiFieldComboBox::slotActivated(int i)
     emit selected();
 }
 
-void KexiFieldComboBox::slotReturnPressed(const QString & text)
+void KexiFieldComboBox::slotReturnPressed(const QString &text)
 {
     //text is available: select item for this text:
     int index;
@@ -223,8 +229,9 @@ void KexiFieldComboBox::slotReturnPressed(const QString & text)
         index = 0;
     } else {
         index = findText(text, Qt::MatchExactly);
-        if (index < 1)
+        if (index < 1) {
             return;
+        }
     }
     setCurrentIndex(index);
     slotActivated(index);

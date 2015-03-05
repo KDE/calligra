@@ -35,12 +35,12 @@ K_EXPORT_PLUGIN(PluginFactory("calligra_shape_picture"))
 Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    if(QPixmapCache::cacheLimit() < CACHE_SIZE) {
+    if (QPixmapCache::cacheLimit() < CACHE_SIZE) {
         QPixmapCache::setCacheLimit(CACHE_SIZE);
     }
 
-    KoShapeRegistry::instance()->add( new PictureShapeFactory() );
-    KoToolRegistry::instance()->add( new PictureToolFactory() );
+    KoShapeRegistry::instance()->add(new PictureShapeFactory());
+    KoToolRegistry::instance()->add(new PictureToolFactory());
 }
 
 #include <Plugin.moc>

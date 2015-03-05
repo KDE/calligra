@@ -82,7 +82,7 @@ public:
      in QScrollView::setHBarGeometry() implementations:
      see KexiTableView::setHBarGeometry() and KexiFormScrollView::setHBarGeometry()
      for usage examples. */
-    virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h);
+    virtual void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
 
     /*! \return true if "editing" indicator is visible for this navigator.
      @see showEditingIndicator() */
@@ -97,11 +97,11 @@ public:
     class KEXIGUIUTILS_EXPORT Actions
     {
     public:
-        static const KGuiItem& moveToFirstRecord();
-        static const KGuiItem& moveToPreviousRecord();
-        static const KGuiItem& moveToNextRecord();
-        static const KGuiItem& moveToLastRecord();
-        static const KGuiItem& moveToNewRecord();
+        static const KGuiItem &moveToFirstRecord();
+        static const KGuiItem &moveToPreviousRecord();
+        static const KGuiItem &moveToNextRecord();
+        static const KGuiItem &moveToLastRecord();
+        static const KGuiItem &moveToNewRecord();
     };
 
     /*! @return pixmap with a "pen" icon appropriate to indicate "editing" state for a row.
@@ -151,11 +151,11 @@ public Q_SLOTS:
 
     /*! Sets label text at the left of the for record navigator's button.
      By default this label contains translated "Record:" text. */
-    virtual void setLabelText(const QString& text);
+    virtual void setLabelText(const QString &text);
 
-    void setButtonToolTipText(KexiRecordNavigator::Button btn, const QString& tooltip);
-    void setButtonWhatsThisText(KexiRecordNavigator::Button btn, const QString& whatsThis);
-    void setNumberFieldToolTips(const QString& numberTooltip, const QString& countTooltip);
+    void setButtonToolTipText(KexiRecordNavigator::Button btn, const QString &tooltip);
+    void setButtonWhatsThisText(KexiRecordNavigator::Button btn, const QString &whatsThis);
+    void setNumberFieldToolTips(const QString &numberTooltip, const QString &countTooltip);
 
 Q_SIGNALS:
     void prevButtonClicked();
@@ -180,12 +180,12 @@ protected:
 
     virtual void resizeEvent(QResizeEvent *e);
 
-    QToolButton* createAction(const KGuiItem& item);
-    virtual void paintEvent(QPaintEvent* pe);
+    QToolButton *createAction(const KGuiItem &item);
+    virtual void paintEvent(QPaintEvent *pe);
     void updateButtons(uint recCnt);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

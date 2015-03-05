@@ -58,17 +58,17 @@ using std::cos;
 K_PLUGIN_FACTORY(Filterkpr2odfFactory, registerPlugin<Filterkpr2odf>();)
 K_EXPORT_PLUGIN(Filterkpr2odfFactory("calligrafilters"))
 
-Filterkpr2odf::Filterkpr2odf(QObject *parent, const QVariantList&)
-        : KoFilter(parent)
-        , m_mainDoc(true)
-        , m_documentInfo(true)
-        , m_currentPage(1)
-        , m_objectIndex(1)
-        , m_sticky(false)
+Filterkpr2odf::Filterkpr2odf(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
+    , m_mainDoc(true)
+    , m_documentInfo(true)
+    , m_currentPage(1)
+    , m_objectIndex(1)
+    , m_sticky(false)
 {
 }
 
-KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray &from, const QByteArray &to)
 {
     //Check that the type of files are right
     if (from != "application/x-kpresenter"
@@ -77,7 +77,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     }
 
     //open the input file file
-    KoStore* input = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
+    KoStore *input = KoStore::createStore(m_chain->inputFile(), KoStore::Read);
     if (!input) {
         return KoFilter::FileNotFound;
     }
@@ -85,7 +85,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     //Load the document
     //Load maindoc.xml
     if (!input->open("maindoc.xml")) {
-	delete input;
+        delete input;
         return KoFilter::WrongFormat;
     }
     m_mainDoc.setContent(input->device(), false);
@@ -93,7 +93,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
 
     //Load documentinfo.xml
     if (!input->open("documentinfo.xml")) {
-	delete input;
+        delete input;
         return KoFilter::WrongFormat;
     }
 
@@ -101,16 +101,16 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     input->close();
 
     //Load the preview picture
-    QByteArray* preview = new QByteArray();
+    QByteArray *preview = new QByteArray();
     if (!input->extractFile("preview.png", *preview)) {
-	delete input;
+        delete input;
         return KoFilter::WrongFormat;
     }
 
     //If we find everything let the saving begin
 
     //Create the output file
-    KoStore* output = KoStore::createStore(m_chain->outputFile(), KoStore::Write
+    KoStore *output = KoStore::createStore(m_chain->outputFile(), KoStore::Write
                                            , KoOdf::mimeType(KoOdf::Presentation), KoStore::Zip);
 
     if (!output) {
@@ -118,7 +118,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     }
 
     KoOdfWriteStore odfWriter(output);
-    KoXmlWriter* manifest = odfWriter.manifestWriter(to);
+    KoXmlWriter *manifest = odfWriter.manifestWriter(to);
     //Save the preview picture
     output->enterDirectory(QLatin1String("Thumbnails"));
     output->open(QLatin1String("thumbnail.png"));
@@ -183,7 +183,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
 }
 
 //TODO: improve createImageList and createSoundList so that only save the _used_ sounds and images
-void Filterkpr2odf::createImageList(KoStore* output, KoStore* input, KoXmlWriter* manifest)
+void Filterkpr2odf::createImageList(KoStore *output, KoStore *input, KoXmlWriter *manifest)
 {
     KoXmlElement key(m_mainDoc.namedItem("DOC").namedItem("PICTURES").firstChild().toElement());
     if (key.isNull()) {
@@ -205,7 +205,7 @@ void Filterkpr2odf::createImageList(KoStore* output, KoStore* input, KoXmlWriter
         m_pictures[ fullFilename ] = odfName;
 
         //Copy the picture
-        QByteArray* image = new QByteArray();
+        QByteArray *image = new QByteArray();
         input->extractFile(name, *image);
         output->open(odfName);
         output->write(*image);
@@ -226,11 +226,12 @@ void Filterkpr2odf::createImageList(KoStore* output, KoStore* input, KoXmlWriter
     output->leaveDirectory();
 }
 
-void Filterkpr2odf::createSoundList(KoStore* output, KoStore* input, KoXmlWriter* manifest)
+void Filterkpr2odf::createSoundList(KoStore *output, KoStore *input, KoXmlWriter *manifest)
 {
     KoXmlElement file(m_mainDoc.namedItem("DOC").namedItem("SOUNDS").firstChild().toElement());
-    if (file.isNull())
+    if (file.isNull()) {
         return;
+    }
 
     output->enterDirectory("Sounds");
     manifest->addManifestEntry("Sounds/", "");
@@ -246,7 +247,7 @@ void Filterkpr2odf::createSoundList(KoStore* output, KoStore* input, KoXmlWriter
         m_sounds[ filename ] = odfName;
 
         //Copy the sound
-        QByteArray* sound = new QByteArray();
+        QByteArray *sound = new QByteArray();
         input->extractFile(name, *sound);
         output->open(odfName);
         output->write(*sound);
@@ -265,7 +266,7 @@ void Filterkpr2odf::createSoundList(KoStore* output, KoStore* input, KoXmlWriter
     output->leaveDirectory();
 }
 
-void Filterkpr2odf::convertContent(KoXmlWriter* content)
+void Filterkpr2odf::convertContent(KoXmlWriter *content)
 {
     content->startElement("office:body");
     content->startElement(KoOdf::bodyContentElement(KoOdf::Presentation, true));
@@ -312,7 +313,7 @@ void Filterkpr2odf::convertContent(KoXmlWriter* content)
         content->startElement("draw:text-box");
         QStringList noteTextList = note.toElement().attribute("note").split('\n');
 
-        foreach(const QString & string, noteTextList) {
+        foreach (const QString &string, noteTextList) {
             content->startElement("text:p");
             content->addTextNode(string);
             content->endElement();
@@ -368,7 +369,7 @@ void Filterkpr2odf::convertContent(KoXmlWriter* content)
     content->endDocument();
 }
 
-void Filterkpr2odf::convertObjects(KoXmlWriter* content, const KoXmlNode& objects)
+void Filterkpr2odf::convertObjects(KoXmlWriter *content, const KoXmlNode &objects)
 {
     //We search through all the objects' nodes because
     //we are not sure if they are saved in order
@@ -377,8 +378,9 @@ void Filterkpr2odf::convertObjects(KoXmlWriter* content, const KoXmlNode& object
 
         //We check if the y is on the current page
         if (y < m_pageHeight * (m_currentPage - 1)
-                || y >= m_pageHeight * m_currentPage)
-            continue; // object not on current page
+                || y >= m_pageHeight * m_currentPage) {
+            continue;    // object not on current page
+        }
 
         //Now define what kind of object is
         KoXmlElement objectElement = object.toElement();
@@ -416,7 +418,7 @@ void Filterkpr2odf::convertObjects(KoXmlWriter* content, const KoXmlNode& object
             break;
         case 6: //clipart
             break;
-            //NOTE: 7 is undefined, never happens in a file (according to kpresenter.dtd)
+        //NOTE: 7 is undefined, never happens in a file (according to kpresenter.dtd)
         case 8: // pie, chord, arc
             appendPie(content, objectElement);
             exportAnimation(objectElement, content->indentLevel());
@@ -460,7 +462,7 @@ void Filterkpr2odf::convertObjects(KoXmlWriter* content, const KoXmlNode& object
     }//for
 }
 
-void Filterkpr2odf::appendPicture(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendPicture(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     content->startElement("draw:frame");
     set2DGeometry(content, objectElement);  //sizes mostly
@@ -477,7 +479,7 @@ void Filterkpr2odf::appendPicture(KoXmlWriter* content, const KoXmlElement& obje
     //NOTE: the effects seem to not be portable
 }
 
-void Filterkpr2odf::appendLine(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendLine(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     content->startElement("draw:line");
     content->addAttribute("draw:style-name", createGraphicStyle(objectElement));
@@ -560,7 +562,7 @@ void Filterkpr2odf::appendLine(KoXmlWriter* content, const KoXmlElement& objectE
     content->endElement();//draw:line
 }
 
-void Filterkpr2odf::appendRectangle(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendRectangle(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     content->startElement("draw:rect");
 
@@ -586,7 +588,7 @@ void Filterkpr2odf::appendRectangle(KoXmlWriter* content, const KoXmlElement& ob
     content->endElement();//draw:rect
 }
 
-void Filterkpr2odf::appendEllipse(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendEllipse(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     KoXmlElement size = objectElement.namedItem("SIZE").toElement();
     double width = size.attribute("width").toDouble();
@@ -599,7 +601,7 @@ void Filterkpr2odf::appendEllipse(KoXmlWriter* content, const KoXmlElement& obje
     content->endElement();//draw:circle or draw:ellipse
 }
 
-void Filterkpr2odf::appendTextBox(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendTextBox(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     content->startElement("draw:frame");
     set2DGeometry(content, objectElement);
@@ -617,7 +619,7 @@ void Filterkpr2odf::appendTextBox(KoXmlWriter* content, const KoXmlElement& obje
     content->endElement();//draw:frame
 }
 
-void Filterkpr2odf::appendParagraph(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendParagraph(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     KoXmlElement counter = objectElement.namedItem("COUNTER").toElement();
     if (!counter.isNull()) { //it's part of a list
@@ -641,7 +643,7 @@ void Filterkpr2odf::appendParagraph(KoXmlWriter* content, const KoXmlElement& ob
     }
 }
 
-void Filterkpr2odf::appendText(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendText(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     //Avoid the creation of so many unneded text:span
     static QString lastStyle;
@@ -676,7 +678,7 @@ void Filterkpr2odf::appendText(KoXmlWriter* content, const KoXmlElement& objectE
     }
 }
 
-void Filterkpr2odf::appendPie(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendPie(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     //NOTE: we cannot use set2dGeometry becuse we have to convert the
     //given size and origen into the real ones before saving them
@@ -747,12 +749,12 @@ void Filterkpr2odf::appendPie(KoXmlWriter* content, const KoXmlElement& objectEl
     content->endElement();//draw:circle or draw:ellipse
 }
 
-void Filterkpr2odf::setEndPoints(QPointF points[], const QSizeF& size, int startAngle, int endAngle)
+void Filterkpr2odf::setEndPoints(QPointF points[], const QSizeF &size, int startAngle, int endAngle)
 {
     //NOTE: this code is ported from the 1.6 series from the KPrPieObject.cpp file
 
     int angles[] = { startAngle, endAngle };
-    double anglesInRad[] = { angles[0] * M_PI / 180, angles[1] * M_PI / 180 };
+    double anglesInRad[] = { angles[0] *M_PI / 180, angles[1] *M_PI / 180 };
 
     double radius1 = 0.5 * size.width();
     double radius2 = 0.5 * size.height();
@@ -773,8 +775,9 @@ void Filterkpr2odf::setEndPoints(QPointF points[], const QSizeF& size, int start
             // otherwise it is arctan ( radius2 / radius1 tan ( angle ) )
             double tanalpha = tan(anglesInRad[i]) * prop;
             x = sqrt(1 / (pow(1 / radius1, 2) + pow(tanalpha / radius2, 2)));
-            if (angles[i] > 90 && angles[i] < 270)
+            if (angles[i] > 90 && angles[i] < 270) {
                 x = -x;
+            }
             y = tanalpha * x;
         }
         points[i].setX(x);
@@ -840,14 +843,14 @@ void Filterkpr2odf::getRealSizeAndOrig(QSizeF &size, QPointF &realOrig, int star
         double sinus = sin(angInRad);
         double cosinus = cos(angInRad);
 
-        double x = sqrt(pow(radius1 * cosinus , 2) + pow(radius2 * sinus, 2));
+        double x = sqrt(pow(radius1 * cosinus, 2) + pow(radius2 * sinus, 2));
         double y = (pow(radius2, 2) - pow(radius1, 2)) * sinus * cosinus / x;
         maxPoints[0].setX(x);
         maxPoints[0].setY(y);
         maxPoints[1].setX(-x);
         maxPoints[1].setY(-y);
 
-        y = sqrt(pow(radius1 * sinus , 2) + pow(radius2 * cosinus, 2));
+        y = sqrt(pow(radius1 * sinus, 2) + pow(radius2 * cosinus, 2));
         x = (pow(radius1, 2) - pow(radius2, 2)) * sinus * cosinus / y;
         maxPoints[2].setX(x);
         maxPoints[2].setY(y);
@@ -902,7 +905,7 @@ void Filterkpr2odf::getRealSizeAndOrig(QSizeF &size, QPointF &realOrig, int star
                 // x <= f.x() && y >= 0
                 // y < 0
                 // x >= s.x() && y >= 0
-                for (int i = 0; i < 4 ; ++i) {
+                for (int i = 0; i < 4; ++i) {
                     if (maxPoints[i].y() >= 0) {
                         if (maxPoints[i].x() <= firstPoint.x()
                                 || maxPoints[i].x() >= secondPoint.x()) {
@@ -917,7 +920,7 @@ void Filterkpr2odf::getRealSizeAndOrig(QSizeF &size, QPointF &realOrig, int star
             // 2 sections
             // x <= f.x() && y >= 0
             // x <= s.x() && y < 0
-            for (int i = 0; i < 4 ; ++i) {
+            for (int i = 0; i < 4; ++i) {
                 if (maxPoints[i].y() >= 0) {
                     if (maxPoints[i].x() <= firstPoint.x()) {
                         setMinMax(min_x, min_y, max_x, max_y, maxPoints[i]);
@@ -934,7 +937,7 @@ void Filterkpr2odf::getRealSizeAndOrig(QSizeF &size, QPointF &realOrig, int star
             // 2 sections
             // x >= f.x() && y < 0
             // x >= s.x() && y >= 0
-            for (int i = 0 ; i < 4 ; ++i) {
+            for (int i = 0; i < 4; ++i) {
                 if (maxPoints[i].y() < 0) {
                     if (maxPoints[i].x() >= firstPoint.x()) {
                         setMinMax(min_x, min_y, max_x, max_y, maxPoints[i]);
@@ -1005,7 +1008,7 @@ void Filterkpr2odf::setMinMax(double &min_x, double &min_y,
     }
 }
 
-void Filterkpr2odf::appendGroupObject(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendGroupObject(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     content->startElement("draw:g");
 
@@ -1018,7 +1021,7 @@ void Filterkpr2odf::appendGroupObject(KoXmlWriter* content, const KoXmlElement& 
     content->endElement();//draw:g
 }
 
-void Filterkpr2odf::appendPoly(KoXmlWriter* content, const KoXmlElement& objectElement, bool polygon)
+void Filterkpr2odf::appendPoly(KoXmlWriter *content, const KoXmlElement &objectElement, bool polygon)
 {
     //The function was written so to add polygon and polyline because it's basically the same,
     //only the name is changed and I didn't want to copy&paste
@@ -1069,7 +1072,7 @@ void Filterkpr2odf::appendPoly(KoXmlWriter* content, const KoXmlElement& objectE
     content->endElement();//draw:polygon or draw:polyline
 }
 
-void Filterkpr2odf::appendPolygon(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendPolygon(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     content->startElement("draw:regular-polygon");
 
@@ -1090,7 +1093,7 @@ void Filterkpr2odf::appendPolygon(KoXmlWriter* content, const KoXmlElement& obje
     content->endElement();//draw:regular-polygon
 }
 
-void Filterkpr2odf::appendAutoform(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendAutoform(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     QString fileName = objectElement.namedItem("FILENAME").toElement().attribute("value");
     if (fileName.contains("Arrow")) {
@@ -1133,12 +1136,12 @@ void Filterkpr2odf::appendAutoform(KoXmlWriter* content, const KoXmlElement& obj
              QString("M%1 %2").arg((int)(width * 0.50 * 100)).arg((int)(height * 0.50 * 100)) +
              QString("L%1 %2").arg((int)(width * 0.50 * 100)).arg((int)(height * 100));
     } else if (fileName.endsWith("Connection6.atf")) {
-             QString("M%1 %2").arg((int)(0)).arg((int)(height * 100)) +
-             QString("L%1 %2").arg((int)(0)).arg((int)(height * 0.50 * 100)) +
-             QString("L%1 %2").arg((int)(width * 100)).arg((int)(height * 0.50 * 100)) +
-             QString("L%1 %2").arg((int)(width * 100)).arg((int)(height * 100)) +
-             QString("M%1 %2").arg((int)(width * 0.50 * 100)).arg((int)(height * 0.50 * 100)) +
-             QString("L%1 %2").arg((int)(width * 0.50 * 100)).arg((int)(0));
+        QString("M%1 %2").arg((int)(0)).arg((int)(height * 100)) +
+        QString("L%1 %2").arg((int)(0)).arg((int)(height * 0.50 * 100)) +
+        QString("L%1 %2").arg((int)(width * 100)).arg((int)(height * 0.50 * 100)) +
+        QString("L%1 %2").arg((int)(width * 100)).arg((int)(height * 100)) +
+        QString("M%1 %2").arg((int)(width * 0.50 * 100)).arg((int)(height * 0.50 * 100)) +
+        QString("L%1 %2").arg((int)(width * 0.50 * 100)).arg((int)(0));
     } else if (fileName.endsWith("Connection7.atf")) {
         d += QString("M%1 %2").arg((int)(0)).arg((int)(0)) +
              QString("L%1 %2").arg((int)(width * 0.50 * 100)).arg((int)(0)) +
@@ -1181,14 +1184,14 @@ void Filterkpr2odf::appendAutoform(KoXmlWriter* content, const KoXmlElement& obj
     content->startElement("draw:path");
     set2DGeometry(content, objectElement);
     content->addAttribute("draw:style-name", createGraphicStyle(objectElement));
-    content->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg((int)(width*100)).arg((int)(height*100)));
+    content->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg((int)(width * 100)).arg((int)(height * 100)));
     content->addAttribute("svg:d", d);
 
     exportAnimation(objectElement, content->indentLevel());
     content->endElement();//draw:path
 }
 
-void Filterkpr2odf::appendArrow(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendArrow(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     //NOTE: we cannot use set2dGeometry neither here
 
@@ -1274,7 +1277,7 @@ void Filterkpr2odf::appendArrow(KoXmlWriter* content, const KoXmlElement& object
     content->endElement();//draw:custom-shape
 }
 
-void Filterkpr2odf::appendFreehand(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendFreehand(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     content->startElement("draw:path");
 
@@ -1311,7 +1314,7 @@ void Filterkpr2odf::appendFreehand(KoXmlWriter* content, const KoXmlElement& obj
     content->endElement();//draw:path
 }
 
-void Filterkpr2odf::appendBezier(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::appendBezier(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     content->startElement("draw:path");
 
@@ -1371,14 +1374,14 @@ void Filterkpr2odf::appendBezier(KoXmlWriter* content, const KoXmlElement& objec
     content->endElement();//draw:path
 }
 
-const QString Filterkpr2odf::getPictureNameFromKey(const KoXmlElement& key)
+const QString Filterkpr2odf::getPictureNameFromKey(const KoXmlElement &key)
 {
     return key.attribute("msec") + key.attribute("second") + key.attribute("minute")
            + key.attribute("hour") + key.attribute("day") + key.attribute("month")
            + key.attribute("year") + key.attribute("filename");
 }
 
-void Filterkpr2odf::set2DGeometry(KoXmlWriter* content, const KoXmlElement& objectElement)
+void Filterkpr2odf::set2DGeometry(KoXmlWriter *content, const KoXmlElement &objectElement)
 {
     //This function sets the needed geometry-related attributes
     //for any object that is passed to it
@@ -1438,7 +1441,7 @@ QString Filterkpr2odf::rotateValue(double val)
     return str;
 }
 
-void Filterkpr2odf::exportAnimation(const KoXmlElement& objectElement, int indentLevel)
+void Filterkpr2odf::exportAnimation(const KoXmlElement &objectElement, int indentLevel)
 {
     KoXmlElement effects = objectElement.namedItem("EFFECTS").toElement();
     if (!effects.isNull()) {
@@ -1685,16 +1688,16 @@ void Filterkpr2odf::exportAnimation(const KoXmlElement& objectElement, int inden
     }//if !disappear.isNull()
 }
 
-void Filterkpr2odf::saveAnimations(KoXmlWriter* content)
+void Filterkpr2odf::saveAnimations(KoXmlWriter *content)
 {
     content->startElement("presentation:animations");
     QList<int> keys = m_pageAnimations.keys();
     qSort(keys);  //we need to store the effects in the order of their keys
-    foreach(int key, keys) {
+    foreach (int key, keys) {
         QList<QString> effectList = m_pageAnimations.value(key);
         if (effectList.size() > 1) { //if it's just 1 effect we don't add the group tag
             content->startElement("presentation:animation-group");
-            foreach(const QString & effect, effectList) {
+            foreach (const QString &effect, effectList) {
                 content->addCompleteElement(effect.toLatin1().data());
             }
             content->endElement();//presentation:animation-group

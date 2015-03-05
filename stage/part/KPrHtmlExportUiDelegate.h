@@ -29,12 +29,12 @@ class KPrHtmlExportUiDelegate : public KIO::JobUiDelegate
 public:
     KPrHtmlExportUiDelegate();
 
-    virtual KIO::RenameDialog_Result askFileRename(KJob * job, const QString & caption, const QString& src, const QString & dest,
-                                              KIO::RenameDialog_Mode mode, QString& newDest,
-                                              KIO::filesize_t sizeSrc = (KIO::filesize_t) -1,
-                                              KIO::filesize_t sizeDest = (KIO::filesize_t) -1,
-                                              time_t ctimeSrc = (time_t) -1, time_t ctimeDest = (time_t) -1,
-                                              time_t mtimeSrc = (time_t) -1, time_t mtimeDest = (time_t) -1);
+    virtual KIO::RenameDialog_Result askFileRename(KJob *job, const QString &caption, const QString &src, const QString &dest,
+            KIO::RenameDialog_Mode mode, QString &newDest,
+            KIO::filesize_t sizeSrc = (KIO::filesize_t) - 1,
+            KIO::filesize_t sizeDest = (KIO::filesize_t) - 1,
+            time_t ctimeSrc = (time_t) - 1, time_t ctimeDest = (time_t) - 1,
+            time_t mtimeSrc = (time_t) - 1, time_t mtimeDest = (time_t) - 1);
 };
 
 #endif /* KPRHTMLEXPORTUIDELEGATE_H */

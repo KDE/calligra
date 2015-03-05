@@ -31,7 +31,7 @@ class KoPathPoint;
 class RoundCornersCommand : public KUndo2Command
 {
 public:
-    RoundCornersCommand(KoPathShape * path, qreal radius, KUndo2Command * parent = 0);
+    RoundCornersCommand(KoPathShape *path, qreal radius, KUndo2Command *parent = 0);
     virtual ~RoundCornersCommand();
 
     /// redo the command
@@ -41,14 +41,14 @@ public:
 
 private:
     void roundPath();
-    KoPathPoint * addSegment(KoPathShape * p, KoPathSegment & s);
-    void copyPath(KoPathShape * dst, KoPathShape * src);
+    KoPathPoint *addSegment(KoPathShape *p, KoPathSegment &s);
+    void copyPath(KoPathShape *dst, KoPathShape *src);
     QPointF tangentAtStart(const KoPathSegment &s);
     QPointF tangentAtEnd(const KoPathSegment &s);
 
     qreal m_radius;
-    KoPathShape * m_path;
-    KoPathShape * m_copy;
+    KoPathShape *m_path;
+    KoPathShape *m_copy;
 };
 
 #endif // ROUNDCORNERSCOMMAND_H

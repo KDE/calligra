@@ -23,7 +23,6 @@
 
 #include <QPoint>
 
-
 #include "kis_cursor.h"
 #include "kis_selection.h"
 #include "kis_canvas2.h"
@@ -36,9 +35,8 @@
 #include "strokes/move_selection_stroke_strategy.h"
 #include "kis_resources_snapshot.h"
 
-
-KisToolMove::KisToolMove(KoCanvasBase * canvas)
-        :  KisTool(canvas, KisCursor::moveCursor())
+KisToolMove::KisToolMove(KoCanvasBase *canvas)
+    :  KisTool(canvas, KisCursor::moveCursor())
 {
     setObjectName("tool_move");
     m_optionsWidget = 0;
@@ -51,15 +49,13 @@ KisToolMove::~KisToolMove()
     endStroke();
 }
 
-void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
     configGroup = KGlobal::config()->group(toolId());
 }
 
-
-
-void KisToolMove::paint(QPainter& gc, const KoViewConverter &converter)
+void KisToolMove::paint(QPainter &gc, const KoViewConverter &converter)
 {
     Q_UNUSED(gc);
     Q_UNUSED(converter);
@@ -175,10 +171,10 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
     KisStrokeStrategy *strategy;
 
     KisPaintLayerSP paintLayer =
-        dynamic_cast<KisPaintLayer*>(node.data());
+        dynamic_cast<KisPaintLayer *>(node.data());
 
     if (paintLayer && selection &&
-        !selection->isTotallyUnselected(image->bounds())) {
+            !selection->isTotallyUnselected(image->bounds())) {
 
         strategy =
             new MoveSelectionStrokeStrategy(paintLayer,
@@ -199,7 +195,9 @@ void KisToolMove::continueAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    if (!m_strokeId) return;
+    if (!m_strokeId) {
+        return;
+    }
 
     QPoint pos = convertToPixelCoord(event).toPoint();
     pos = applyModifiers(event->modifiers(), pos);
@@ -210,14 +208,16 @@ void KisToolMove::endAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
-    if (!m_strokeId) return;
+    if (!m_strokeId) {
+        return;
+    }
 
     QPoint pos = convertToPixelCoord(event).toPoint();
     pos = applyModifiers(event->modifiers(), pos);
     drag(pos);
 }
 
-void KisToolMove::drag(const QPoint& newPos)
+void KisToolMove::drag(const QPoint &newPos)
 {
     KisImageWSP image = currentImage();
 
@@ -230,7 +230,9 @@ void KisToolMove::drag(const QPoint& newPos)
 
 void KisToolMove::endStroke()
 {
-    if (!m_strokeId) return;
+    if (!m_strokeId) {
+        return;
+    }
 
     KisImageWSP image = currentImage();
     image->endStroke(m_strokeId);
@@ -242,7 +244,9 @@ void KisToolMove::endStroke()
 
 void KisToolMove::cancelStroke()
 {
-    if (!m_strokeId) return;
+    if (!m_strokeId) {
+        return;
+    }
 
     KisImageWSP image = currentImage();
     image->cancelStroke(m_strokeId);
@@ -252,7 +256,7 @@ void KisToolMove::cancelStroke()
     emit moveInProgressChanged();
 }
 
-QWidget* KisToolMove::createOptionWidget()
+QWidget *KisToolMove::createOptionWidget()
 {
     m_optionsWidget = new MoveToolOptionsWidget(0);
     // See https://bugs.kde.org/show_bug.cgi?id=316896
@@ -270,18 +274,17 @@ QWidget* KisToolMove::createOptionWidget()
     connect(m_optionsWidget->radioGroup, SIGNAL(toggled(bool)),
             this, SLOT(slotWidgetRadioToggled(bool)));
 
-
     // load config for correct radio button
     MoveToolMode newMode = static_cast<MoveToolMode>(configGroup.readEntry("moveToolMode", 0));
-    if(newMode == MoveSelectedLayer)
+    if (newMode == MoveSelectedLayer) {
         m_optionsWidget->radioSelectedLayer->setChecked(true);
-    else if (newMode == MoveFirstLayer)
+    } else if (newMode == MoveFirstLayer) {
         m_optionsWidget->radioFirstLayer->setChecked(true);
-    else
+    } else {
         m_optionsWidget->radioGroup->setChecked(true);
+    }
 
     m_moveToolMode = newMode; // set the internal variable for calculations
-
 
     return m_optionsWidget;
 }
@@ -305,13 +308,14 @@ bool KisToolMove::moveInProgress() const
 void KisToolMove::slotWidgetRadioToggled(bool checked)
 {
     Q_UNUSED(checked);
-    QObject* from = sender();
-    if(from == m_optionsWidget->radioSelectedLayer)
+    QObject *from = sender();
+    if (from == m_optionsWidget->radioSelectedLayer) {
         setMoveToolMode(MoveSelectedLayer);
-    else if(from == m_optionsWidget->radioFirstLayer)
+    } else if (from == m_optionsWidget->radioFirstLayer) {
         setMoveToolMode(MoveFirstLayer);
-    else if(from == m_optionsWidget->radioGroup)
+    } else if (from == m_optionsWidget->radioGroup) {
         setMoveToolMode(MoveGroup);
+    }
 }
 
 QPoint KisToolMove::applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos)
@@ -319,10 +323,11 @@ QPoint KisToolMove::applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos)
     QPoint adjustedPos = pos;
     if (modifiers & Qt::AltModifier || modifiers & Qt::ControlModifier) {
 
-        if (qAbs(pos.x() - m_dragStart.x()) > qAbs(pos.y() - m_dragStart.y()))
+        if (qAbs(pos.x() - m_dragStart.x()) > qAbs(pos.y() - m_dragStart.y())) {
             adjustedPos.setY(m_dragStart.y());
-        else
+        } else {
             adjustedPos.setX(m_dragStart.x());
+        }
     }
     return adjustedPos;
 }

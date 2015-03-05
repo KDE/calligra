@@ -16,7 +16,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #ifndef COMPOSITEOPMODEL_H
 #define COMPOSITEOPMODEL_H
 
@@ -28,7 +27,7 @@ class KoCanvasController;
 class CompositeOpModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged);
+    Q_PROPERTY(QObject *view READ view WRITE setView NOTIFY viewChanged);
     Q_PROPERTY(bool eraserMode READ eraserMode WRITE setEraserMode NOTIFY eraserModeChanged);
 
     Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity NOTIFY opacityChanged);
@@ -47,15 +46,15 @@ public:
         TextRole = Qt::UserRole + 1,
         IsCategoryRole
     };
-    explicit CompositeOpModel(QObject* parent = 0);
+    explicit CompositeOpModel(QObject *parent = 0);
     virtual ~CompositeOpModel();
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
     Q_INVOKABLE void activateItem(int index);
 
-    QObject* view() const;
-    void setView(QObject* newView);
+    QObject *view() const;
+    void setView(QObject *newView);
     bool eraserMode() const;
     void setEraserMode(bool newEraserMode);
 
@@ -101,13 +100,13 @@ Q_SIGNALS:
     void currentCompositeOpIDChanged();
 
 private Q_SLOTS:
-    void slotToolChanged(KoCanvasController* canvas, int toolId);
-    void resourceChanged(int key, const QVariant& v);
+    void slotToolChanged(KoCanvasController *canvas, int toolId);
+    void resourceChanged(int key, const QVariant &v);
     void currentNodeChanged(KisLayerSP newNode);
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // COMPOSITEOPMODEL_H

@@ -18,7 +18,6 @@
 
 #include <qpro/common.h>
 
-
 #include "qpro/stream.h"
 
 #ifdef __DECCXX
@@ -31,10 +30,10 @@
 
 #include <QBuffer>
 
-QpIStream::QpIStream(unsigned char* pBuffer, unsigned int pLen)
-        : cBuffer(pBuffer), cLen(pLen)
+QpIStream::QpIStream(unsigned char *pBuffer, unsigned int pLen)
+    : cBuffer(pBuffer), cLen(pLen)
 {
-    cByteArray.setRawData((char*)cBuffer, (int) cLen);
+    cByteArray.setRawData((char *)cBuffer, (int) cLen);
 
     cBuf.setBuffer(cByteArray);
     cBuf.open(QIODevice::ReadOnly);
@@ -45,7 +44,7 @@ QpIStream::QpIStream(unsigned char* pBuffer, unsigned int pLen)
 
 QpIStream::~QpIStream()
 {
-    cByteArray.resetRawData((char*)cBuffer, (int) cLen);
+    cByteArray.resetRawData((char *)cBuffer, (int) cLen);
 }
 
 #else
@@ -58,12 +57,12 @@ namespace std {}
 
 using namespace std;
 
-QpIStream::QpIStream(const char* pFileName)
-        : cIn(0)
-        , cOffset(0L)
-        , cStreamBuf(0)
+QpIStream::QpIStream(const char *pFileName)
+    : cIn(0)
+    , cOffset(0L)
+    , cStreamBuf(0)
 {
-    filebuf* lFileBuf = new filebuf;
+    filebuf *lFileBuf = new filebuf;
 
     cStreamBuf = lFileBuf;
 
@@ -74,10 +73,10 @@ QpIStream::QpIStream(const char* pFileName)
     }
 }
 
-QpIStream::QpIStream(unsigned char* pBuffer, unsigned int pLen)
-        : cIn(0)
-        , cOffset(0L)
-        , cStreamBuf(0)
+QpIStream::QpIStream(unsigned char *pBuffer, unsigned int pLen)
+    : cIn(0)
+    , cOffset(0L)
+    , cStreamBuf(0)
 {
     cStreamBuf = new std::strstreambuf(pBuffer, pLen);
 
@@ -110,8 +109,8 @@ QpIStream::get()
     return lResult;
 }
 
-QpIStream&
-QpIStream::read(char* pBuf, QP_INT16 pLen)
+QpIStream &
+QpIStream::read(char *pBuf, QP_INT16 pLen)
 {
     if (cIn) {
         cIn->read(pBuf, pLen);
@@ -120,12 +119,13 @@ QpIStream::read(char* pBuf, QP_INT16 pLen)
     return *this;
 }
 
-QpIStream::operator void*()
+QpIStream::operator void *()
 {
-    if (cIn == 0)
+    if (cIn == 0) {
         return 0;
-    else
-       return *cIn ? reinterpret_cast<void*>(&cIn) : 0;
+    } else {
+        return *cIn ? reinterpret_cast<void *>(&cIn) : 0;
+    }
 }
 
 int
@@ -134,8 +134,7 @@ QpIStream::operator !()
     return (cIn ? !*cIn : -1);
 }
 
-
-QpIStream&
+QpIStream &
 QpIStream::operator >> (QP_INT8 &pI8)
 {
     pI8 = get();
@@ -143,7 +142,7 @@ QpIStream::operator >> (QP_INT8 &pI8)
     return *this;
 }
 
-QpIStream&
+QpIStream &
 QpIStream::operator >> (QP_UINT8 &pI8)
 {
     pI8 = get();
@@ -151,7 +150,7 @@ QpIStream::operator >> (QP_UINT8 &pI8)
     return *this;
 }
 
-QpIStream&
+QpIStream &
 QpIStream::operator >> (QP_INT16 &pI16)
 {
     pI16 = get();
@@ -160,7 +159,7 @@ QpIStream::operator >> (QP_INT16 &pI16)
     return *this;
 }
 
-QpIStream&
+QpIStream &
 QpIStream::operator >> (QP_INT32 &pI32)
 {
     pI32 = get();
@@ -171,7 +170,7 @@ QpIStream::operator >> (QP_INT32 &pI32)
     return *this;
 }
 
-QpIStream&
+QpIStream &
 QpIStream::operator >> (QP_INT64 &pI64)
 {
 // ??? sort out this
@@ -206,18 +205,18 @@ QpIStream::operator >> (QP_INT64 &pI64)
     return *this;
 }
 
-QpIStream&
-QpIStream::operator >> (char*& pStr)
+QpIStream &
+QpIStream::operator >> (char *&pStr)
 {
     int lIdx = 0;
     int lMax = 10;
 
-    char* lStr = new char[lMax];
+    char *lStr = new char[lMax];
 
     while (cIn->get(lStr[lIdx]), lStr[lIdx] != '\0' && cIn->good()) {
         if (++lIdx == lMax) {
             lMax += 10;
-            char* lNew = new char[lMax];
+            char *lNew = new char[lMax];
 
             memcpy(lNew, lStr, lIdx);
             delete [] lStr;

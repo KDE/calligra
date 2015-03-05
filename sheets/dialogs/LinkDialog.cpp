@@ -50,25 +50,25 @@ class LinkDialog::Private
 {
 public:
     QString text;
-    QWidget* internetPage;
-    KLineEdit* internetText;
-    KLineEdit* internetLink;
-    QWidget* mailPage;
-    KLineEdit* mailText;
-    KLineEdit* mailLink;
-    KLineEdit* mailSubject;
-    QWidget* filePage;
-    KLineEdit* fileText;
-    KUrlRequester* fileLink;
-    QWidget* cellPage;
-    KLineEdit* cellText;
-    KComboBox* cellLink;
-    KPageWidgetItem* p1, *p2, *p3, *p4;
+    QWidget *internetPage;
+    KLineEdit *internetText;
+    KLineEdit *internetLink;
+    QWidget *mailPage;
+    KLineEdit *mailText;
+    KLineEdit *mailLink;
+    KLineEdit *mailSubject;
+    QWidget *filePage;
+    KLineEdit *fileText;
+    KUrlRequester *fileLink;
+    QWidget *cellPage;
+    KLineEdit *cellText;
+    KComboBox *cellLink;
+    KPageWidgetItem *p1, *p2, *p3, *p4;
 };
 
-LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
-        : KPageDialog(parent)
-        , d(new Private)
+LinkDialog::LinkDialog(QWidget *parent, Selection *selection)
+    : KPageDialog(parent)
+    , d(new Private)
 {
     setCaption(i18n("Insert Link"));
     setButtons(Ok | Cancel);
@@ -79,7 +79,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->p1 = addPage(d->internetPage, i18n("Internet"));
     d->p1->setHeader(i18n("Link to Internet Address"));
     d->p1->setIcon(koIcon("internet-web-browser"));
-    QVBoxLayout* iLayout = new QVBoxLayout(d->internetPage);
+    QVBoxLayout *iLayout = new QVBoxLayout(d->internetPage);
     iLayout->addWidget(new QLabel(i18n("Text to display:"), d->internetPage));
     d->internetText = new KLineEdit(d->internetPage);
     iLayout->addWidget(d->internetText);
@@ -95,7 +95,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->p2 = addPage(d->mailPage, i18n("Email"));
     d->p2->setHeader(i18n("Link to Email Address"));
     d->p2->setIcon(koIcon("internet-mail"));
-    QVBoxLayout* mLayout = new QVBoxLayout(d->mailPage);
+    QVBoxLayout *mLayout = new QVBoxLayout(d->mailPage);
     mLayout->addWidget(new QLabel(i18n("Text to display:"), d->mailPage));
     d->mailText = new KLineEdit(d->mailPage);
     mLayout->addWidget(d->mailText);
@@ -114,7 +114,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->p3 = addPage(d->filePage, i18n("File"));
     d->p3->setHeader(i18n("Link to File"));
     d->p3->setIcon(koIcon("system-file-manager"));
-    QVBoxLayout* fLayout = new QVBoxLayout(d->filePage);
+    QVBoxLayout *fLayout = new QVBoxLayout(d->filePage);
     fLayout->addWidget(new QLabel(i18n("Text to display:"), d->filePage));
     d->fileText = new KLineEdit(d->filePage);
     fLayout->addWidget(d->fileText);
@@ -124,7 +124,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->fileLink->completionObject()->setReplaceEnv(true);
     fLayout->addWidget(d->fileLink);
     fLayout->addWidget(new QLabel(i18n("Recent file:"), d->filePage));
-    KComboBox* recentFile = new KComboBox(d->filePage);
+    KComboBox *recentFile = new KComboBox(d->filePage);
     recentFile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     recentFile->setMinimumContentsLength(40);
     fLayout->addWidget(recentFile);
@@ -139,8 +139,9 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     const QStringList fileList = KRecentDocument::recentDocuments();
     for (QStringList::ConstIterator it = fileList.constBegin(); it != fileList.constEnd(); ++it) {
         KDesktopFile f(*it);
-        if (!f.readUrl().isEmpty())
+        if (!f.readUrl().isEmpty()) {
             recentFile->insertItem(index++, f.readUrl());
+        }
     }
     if (recentFile->count() == 0) {
         recentFile->insertItem(0, i18n("No Entries"));
@@ -152,7 +153,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->p4 = addPage(d->cellPage, i18n("Cell"));
     d->p4->setHeader(i18n("Link to Cell"));
     d->p4->setIcon(koIcon("table"));
-    QVBoxLayout* cLayout = new QVBoxLayout(d->cellPage);
+    QVBoxLayout *cLayout = new QVBoxLayout(d->cellPage);
     cLayout->addWidget(new QLabel(i18n("Text to display:"), d->cellPage));
     d->cellText = new KLineEdit(d->cellPage);
     cLayout->addWidget(d->cellText);
@@ -199,16 +200,19 @@ QString LinkDialog::link() const
         if (!str.isEmpty())
             if (str.indexOf("http://") == -1)
                 if (str.indexOf("https://") == -1)
-                    if (str.indexOf("ftp://") == -1)
+                    if (str.indexOf("ftp://") == -1) {
                         str.prepend("http://");
+                    }
     } else if (currentPage() == d->p2) {
         str = d->mailLink->text();
         if (!str.isEmpty())
-            if (str.indexOf("mailto:") == -1)
+            if (str.indexOf("mailto:") == -1) {
                 str.prepend("mailto:");
+            }
         const QString subject = d->mailSubject->text().trimmed();
-        if (! subject.isEmpty())
+        if (! subject.isEmpty()) {
             str.append(QString("?subject=%1").arg(QString(QUrl::toPercentEncoding(subject))));
+        }
     } else if (currentPage() == d->p3) {
         KUrl url = d->fileLink->url();
         if (url.isValid()) {
@@ -216,8 +220,9 @@ QString LinkDialog::link() const
         } else {
             str = d->fileText->text();
             if (!str.isEmpty())
-                if (! str.contains(QRegExp("^(file|mailto|http|https|ftp):")))
+                if (! str.contains(QRegExp("^(file|mailto|http|https|ftp):"))) {
                     str.prepend("file://");
+                }
         }
     } else if (currentPage() == d->p4) {
         str = d->cellLink->currentText();
@@ -226,7 +231,7 @@ QString LinkDialog::link() const
     return str;
 }
 
-void LinkDialog::setText(const QString& text)
+void LinkDialog::setText(const QString &text)
 {
     d->text = text;
 
@@ -249,7 +254,7 @@ void LinkDialog::setText(const QString& text)
 
 // link must be complete, e.g. "http://www.calligra.org" instead of
 // "www.calligra.org" only, since protocol is used to decide which page to show
-void LinkDialog::setLink(const QString& link)
+void LinkDialog::setLink(const QString &link)
 {
     if (link.startsWith(QLatin1String("https://"))) {
         d->internetLink->setText(link.mid(8));
@@ -283,7 +288,9 @@ void LinkDialog::setLink(const QString& link)
 
     if (link.startsWith(QLatin1String("file:/"))) {
         QString s = link.mid(6);
-        while (s.startsWith(QLatin1String("//"))) s.remove(0, 1);
+        while (s.startsWith(QLatin1String("//"))) {
+            s.remove(0, 1);
+        }
         d->fileLink->lineEdit()->setText(s);
         setCurrentPage(d->p3);
         return;
@@ -298,22 +305,24 @@ void LinkDialog::slotOk()
 {
     QString str;
 
-    if (currentPage() == d->p1)
+    if (currentPage() == d->p1) {
         str = i18n("Internet address is empty");
-    else if (currentPage() == d->p2)
+    } else if (currentPage() == d->p2) {
         str = i18n("Mail address is empty");
-    else if (currentPage() == d->p3)
+    } else if (currentPage() == d->p3) {
         str = i18n("File name is empty");
-    else if (currentPage() == d->p4)
+    } else if (currentPage() == d->p4) {
         i18n("Destination cell is empty");
+    }
 
     if (link().isEmpty()) {
         KMessageBox::error(this, str);
         return;
     }
 
-    if (d->text.isEmpty())
+    if (d->text.isEmpty()) {
         d->text = link();
+    }
 
     accept();
 }

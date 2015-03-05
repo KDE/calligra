@@ -28,11 +28,11 @@
 class PptxXmlCommentAuthorsReader::Private
 {
 public:
-    PptxXmlCommentAuthorsReaderContext* context;
+    PptxXmlCommentAuthorsReaderContext *context;
 };
 
-PptxXmlCommentAuthorsReader::PptxXmlCommentAuthorsReader(KoOdfWriters* writers)
-: MsooXmlCommonReader(writers), d(new Private)
+PptxXmlCommentAuthorsReader::PptxXmlCommentAuthorsReader(KoOdfWriters *writers)
+    : MsooXmlCommonReader(writers), d(new Private)
 {
 }
 
@@ -41,9 +41,9 @@ PptxXmlCommentAuthorsReader::~PptxXmlCommentAuthorsReader()
     delete d;
 }
 
-KoFilter::ConversionStatus PptxXmlCommentAuthorsReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus PptxXmlCommentAuthorsReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    d->context = dynamic_cast<PptxXmlCommentAuthorsReaderContext*>(context);
+    d->context = dynamic_cast<PptxXmlCommentAuthorsReaderContext *>(context);
     Q_ASSERT(d->context);
 
     readNext();
@@ -83,7 +83,7 @@ KoFilter::ConversionStatus PptxXmlCommentAuthorsReader::read_cmAuthor()
 {
     READ_PROLOGUE
 
-    QXmlStreamAttributes attrs( attributes() );
+    QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR_WITHOUT_NS(id)
     READ_ATTR_WITHOUT_NS(name)
@@ -103,7 +103,7 @@ KoFilter::ConversionStatus PptxXmlCommentAuthorsReader::read_cmAuthor()
 }
 
 PptxXmlCommentAuthorsReaderContext::PptxXmlCommentAuthorsReaderContext()
-: MsooXmlReaderContext()
+    : MsooXmlReaderContext()
 {
 
 }

@@ -32,7 +32,7 @@ public:
      * @param image the image
      * @param parent the parent command
      */
-    KisReselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent = 0);
+    KisReselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command *parent = 0);
     virtual ~KisReselectGlobalSelectionCommand();
 
     virtual void redo();
@@ -42,6 +42,5 @@ private:
     KisImageWSP m_image;
     bool m_canReselect;
 };
-
 
 #endif

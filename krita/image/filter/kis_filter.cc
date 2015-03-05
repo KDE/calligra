@@ -80,9 +80,8 @@ KoID KisFilter::categoryOther()
     return KoID("other_filters", i18n("Other"));
 }
 
-
-KisFilter::KisFilter(const KoID& _id, const KoID & category, const QString & entry)
-        : KisBaseProcessor(_id, category, entry)
+KisFilter::KisFilter(const KoID &_id, const KoID &category, const QString &entry)
+    : KisBaseProcessor(_id, category, entry)
 {
     init(id() + "_filter_bookmarks");
 }
@@ -92,9 +91,9 @@ KisFilter::~KisFilter()
 }
 
 void KisFilter::process(KisPaintDeviceSP device,
-                        const QRect& applyRect,
-                        const KisFilterConfiguration* config,
-                        KoUpdater* progressUpdater) const
+                        const QRect &applyRect,
+                        const KisFilterConfiguration *config,
+                        KoUpdater *progressUpdater) const
 {
     process(device, device, 0, applyRect, config, progressUpdater);
 }
@@ -102,11 +101,13 @@ void KisFilter::process(KisPaintDeviceSP device,
 void KisFilter::process(const KisPaintDeviceSP src,
                         KisPaintDeviceSP dst,
                         KisSelectionSP selection,
-                        const QRect& applyRect,
-                        const KisFilterConfiguration* config,
-                        KoUpdater* progressUpdater ) const
+                        const QRect &applyRect,
+                        const KisFilterConfiguration *config,
+                        KoUpdater *progressUpdater) const
 {
-    if (applyRect.isEmpty()) return;
+    if (applyRect.isEmpty()) {
+        return;
+    }
     QRect needRect = neededRect(applyRect, config);
 
     KisPaintDeviceSP temporary;
@@ -116,23 +117,20 @@ void KisFilter::process(const KisPaintDeviceSP src,
         dst->colorSpace() != dst->compositionSourceColorSpace() &&
         !(*dst->colorSpace() == *dst->compositionSourceColorSpace());
 
-    if(src == dst && !selection && !weirdDstColorSpace) {
+    if (src == dst && !selection && !weirdDstColorSpace) {
         temporary = src;
-    }
-    else {
+    } else {
         temporary = dst->createCompositionSourceDevice(src, needRect);
         transaction = new KisTransaction(temporary);
     }
 
     try {
         processImpl(temporary, applyRect, config, progressUpdater);
-    }
-    catch (std::bad_alloc) {
+    } catch (std::bad_alloc) {
         warnKrita << "Filter" << name() << "failed to allocate enough memory to run.";
     }
 
-
-    if(transaction) {
+    if (transaction) {
         delete transaction;
         KisPainter p(dst);
         p.setCompositeOp(COMPOSITE_COPY);
@@ -141,13 +139,13 @@ void KisFilter::process(const KisPaintDeviceSP src,
     }
 }
 
-QRect KisFilter::neededRect(const QRect & rect, const KisFilterConfiguration* c) const
+QRect KisFilter::neededRect(const QRect &rect, const KisFilterConfiguration *c) const
 {
     Q_UNUSED(c);
     return rect;
 }
 
-QRect KisFilter::changedRect(const QRect & rect, const KisFilterConfiguration* c) const
+QRect KisFilter::changedRect(const QRect &rect, const KisFilterConfiguration *c) const
 {
     Q_UNUSED(c);
     return rect;

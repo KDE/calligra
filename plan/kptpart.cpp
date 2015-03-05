@@ -28,8 +28,8 @@
 Part::Part(QObject *parent)
     : KoPart(parent)
 {
-    setComponentData( Factory::global()); // Do not load plugins now (the view will load them)
-    setTemplateType( "plan_template" );
+    setComponentData(Factory::global());  // Do not load plugins now (the view will load them)
+    setTemplateType("plan_template");
 }
 
 Part::~Part()
@@ -45,13 +45,13 @@ void Part::setDocument(KPlato::MainDocument *document)
 KoView *Part::createViewInstance(KoDocument *document, QWidget *parent)
 {
     // synchronize view selector
-    View *view = dynamic_cast<View*>(views().value(0));
+    View *view = dynamic_cast<View *>(views().value(0));
     /*FIXME
     if (view && m_context) {
         QDomDocument doc = m_context->save(view);
         m_context->setContent(doc.toString());
     }*/
-    view = new View(this, qobject_cast<MainDocument*>(document), parent);
+    view = new View(this, qobject_cast<MainDocument *>(document), parent);
 //    connect(view, SIGNAL(destroyed()), this, SLOT(slotViewDestroyed()));
 //    connect(document, SIGNAL(viewListItemAdded(const ViewListItem*,const ViewListItem*,int)), view, SLOT(addViewListItem(const ViewListItem*,const ViewListItem*,int)));
 //    connect(document, SIGNAL(viewListItemRemoved(const ViewListItem*)), view, SLOT(removeViewListItem(const ViewListItem*)));

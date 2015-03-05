@@ -27,7 +27,6 @@ class KisSpacingInformation;
 class KisLiquifyProperties;
 class QPainterPath;
 
-
 class KisLiquifyPaintop
 {
 public:

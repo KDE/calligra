@@ -46,8 +46,8 @@
 #include <KoFilterManager.h>
 #include <KoFileDialog.h>
 
-MainWindow::MainWindow (QWidget* parent)
-: QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
 {
     CAImageProvider::s_imageProvider = new CAImageProvider;
 
@@ -60,7 +60,7 @@ MainWindow::MainWindow (QWidget* parent)
     qmlRegisterInterface<KoCanvasController> ("KoCanvasController");
     qmlRegisterUncreatableType<CAAbstractDocumentHandler>("CalligraActive", 1, 0, "CAAbstractDocumentHandler", "Not allowed");
 
-    m_view = new QDeclarativeView (this);
+    m_view = new QDeclarativeView(this);
 
     kdeclarative.setDeclarativeEngine(m_view->engine());
     kdeclarative.initialize();
@@ -68,60 +68,60 @@ MainWindow::MainWindow (QWidget* parent)
     m_view->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
     m_view->engine()->addImportPath(KGlobal::dirs()->findDirs("data", "calligra/imports").value(0));
 
-    QList<QObject*> recentFiles;
-    QList<QObject*> recentTextDocs;
-    QList<QObject*> recentSpreadsheets;
-    QList<QObject*> recentPresentations;
+    QList<QObject *> recentFiles;
+    QList<QObject *> recentTextDocs;
+    QList<QObject *> recentSpreadsheets;
+    QList<QObject *> recentPresentations;
     QSettings settings;
-    foreach (const QString &string, settings.value ("recentFiles").toStringList()) {
-        CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (QLatin1Char(';')));
-        recentFiles.append (docInfo);
+    foreach (const QString &string, settings.value("recentFiles").toStringList()) {
+        CADocumentInfo *docInfo = CADocumentInfo::fromStringList(string.split(QLatin1Char(';')));
+        recentFiles.append(docInfo);
         switch (docInfo->type()) {
         case CADocumentInfo::TextDocument:
-            recentTextDocs.append (docInfo);
+            recentTextDocs.append(docInfo);
             break;
         case CADocumentInfo::Spreadsheet:
-            recentSpreadsheets.append (docInfo);
+            recentSpreadsheets.append(docInfo);
             break;
         case CADocumentInfo::Presentation:
-            recentPresentations.append (docInfo);
+            recentPresentations.append(docInfo);
             break;
         default:
             ;
         }
     }
 
-    foreach (const QString & importPath, KGlobal::dirs()->findDirs ("module", "imports")) {
-        m_view->engine()->addImportPath (importPath);
+    foreach (const QString &importPath, KGlobal::dirs()->findDirs("module", "imports")) {
+        m_view->engine()->addImportPath(importPath);
     }
 
     m_view->rootContext()->setContextProperty("mainwindow", this);
     m_view->rootContext()->setContextProperty("_calligra_version_string", CALLIGRA_VERSION_STRING);
     m_view->engine()->addImageProvider(CAImageProvider::identificationString, CAImageProvider::s_imageProvider);
 
-    m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
-                                            + "/share/calligraactive/qml/Doc.qml"));
-    m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
+    m_view->setSource(QUrl::fromLocalFile(CalligraActive::Global::installPrefix()
+                                          + "/share/calligraactive/qml/Doc.qml"));
+    m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
-    connect (m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
-    resize (1024, 768);
-    setCentralWidget (m_view);
+    connect(m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
+    resize(1024, 768);
+    setCentralWidget(m_view);
 
     QTimer::singleShot(0, this, SLOT(checkForAndOpenDocument()));
 }
 
-void MainWindow::openFile (const QString& path)
+void MainWindow::openFile(const QString &path)
 {
     documentPath = path;
-    QObject* object = m_view->rootObject();
+    QObject *object = m_view->rootObject();
     if (object) {
-        QMetaObject::invokeMethod (object, "hideOpenButton");
+        QMetaObject::invokeMethod(object, "hideOpenButton");
     }
 }
 
-void MainWindow::adjustWindowSize (QSize size)
+void MainWindow::adjustWindowSize(QSize size)
 {
-    resize (size);
+    resize(size);
 }
 
 void MainWindow::openFileDialog()
@@ -137,9 +137,9 @@ void MainWindow::openFileDialog()
     const QString path = dialog.url();
 
     if (!path.isEmpty()) {
-        QObject* object = m_view->rootObject();
-        Q_ASSERT (object);
-        QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (path)));
+        QObject *object = m_view->rootObject();
+        Q_ASSERT(object);
+        QMetaObject::invokeMethod(object, "openDocument", Q_ARG(QVariant, QVariant(path)));
     }
 
 }
@@ -152,8 +152,8 @@ MainWindow::~MainWindow()
 void MainWindow::checkForAndOpenDocument()
 {
     if (!documentPath.isEmpty()) {
-        QObject* object = m_view->rootObject();
-        QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (documentPath)));
+        QObject *object = m_view->rootObject();
+        QMetaObject::invokeMethod(object, "openDocument", Q_ARG(QVariant, QVariant(documentPath)));
     }
 }
 

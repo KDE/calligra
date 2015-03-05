@@ -27,7 +27,7 @@
 #include <kis_image.h>
 #include <operations/kis_operation_configuration.h>
 
-WdgFeatherSelection::WdgFeatherSelection(QWidget* parent, KisViewManager* view)
+WdgFeatherSelection::WdgFeatherSelection(QWidget *parent, KisViewManager *view)
     : KisOperationUIWidget(i18n("Feather Selection"), parent)
     , m_radius(5)
 {
@@ -97,7 +97,7 @@ void WdgFeatherSelection::updateRadiusUIValue(double value)
     }
 }
 
-void WdgFeatherSelection::getConfiguration(KisOperationConfiguration* config)
+void WdgFeatherSelection::getConfiguration(KisOperationConfiguration *config)
 {
     config->setProperty("radius", m_radius);
 }

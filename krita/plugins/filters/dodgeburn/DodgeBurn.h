@@ -21,21 +21,20 @@
 
 #include "kis_config_widget.h"
 
-
 class KisFilterDodgeBurn : public KisColorTransformationFilter
 {
 public:
     enum Type {
-      SHADOWS,
-      MIDTONES,
-      HIGHLIGHTS
+        SHADOWS,
+        MIDTONES,
+        HIGHLIGHTS
     };
 public:
-    KisFilterDodgeBurn(const QString& id, const QString& prefix, const QString& name );
+    KisFilterDodgeBurn(const QString &id, const QString &prefix, const QString &name);
 public:
 
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    virtual KoColorTransformation *createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 private:
     QString m_prefix;
 };
@@ -46,13 +45,13 @@ class KisDodgeBurnConfigWidget : public KisConfigWidget
 {
 
 public:
-    KisDodgeBurnConfigWidget(QWidget * parent, const QString& id);
+    KisDodgeBurnConfigWidget(QWidget *parent, const QString &id);
     virtual ~KisDodgeBurnConfigWidget();
 
-    virtual KisPropertiesConfiguration * configuration() const;
-    virtual void setConfiguration(const KisPropertiesConfiguration* config);
+    virtual KisPropertiesConfiguration *configuration() const;
+    virtual void setConfiguration(const KisPropertiesConfiguration *config);
     QString m_id;
-    Ui_DodgeBurnConfigurationBaseWidget * m_page;
+    Ui_DodgeBurnConfigurationBaseWidget *m_page;
 };
 
 #endif

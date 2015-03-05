@@ -21,19 +21,21 @@
 
 #include <kundo2command.h>
 
-namespace MusicCore {
-    class Note;
+namespace MusicCore
+{
+class Note;
 }
 class MusicShape;
 
-class SetAccidentalsCommand : public KUndo2Command {
+class SetAccidentalsCommand : public KUndo2Command
+{
 public:
-    SetAccidentalsCommand(MusicShape* shape, MusicCore::Note* note, int accidentals);
+    SetAccidentalsCommand(MusicShape *shape, MusicCore::Note *note, int accidentals);
     virtual void redo();
     virtual void undo();
 private:
-    MusicShape* m_shape;
-    MusicCore::Note* m_note;
+    MusicShape *m_shape;
+    MusicCore::Note *m_note;
     int m_oldAccidentals, m_newAccidentals;
 };
 

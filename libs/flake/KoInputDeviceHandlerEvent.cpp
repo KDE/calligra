@@ -25,7 +25,7 @@ class KoInputDeviceHandlerEvent::Private
 {
 public:
     Private()
-            : button(Qt::NoButton), buttons(Qt::NoButton) {}
+        : button(Qt::NoButton), buttons(Qt::NoButton) {}
 
     KoInputDeviceHandlerEvent::Type type;
     Qt::MouseButton button;
@@ -33,7 +33,7 @@ public:
 };
 
 KoInputDeviceHandlerEvent::KoInputDeviceHandlerEvent(Type type)
-        : QInputEvent(static_cast<QEvent::Type>(type)), m_event(0), d(new Private())
+    : QInputEvent(static_cast<QEvent::Type>(type)), m_event(0), d(new Private())
 {
     modState = QApplication::keyboardModifiers();
 }

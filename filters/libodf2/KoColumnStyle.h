@@ -24,7 +24,7 @@
 
 /**
  * A \class KoColumnStyle represents a style to be applied to one or more columns.
- * 
+ *
  * As all the styles it can be shared
  */
 
@@ -59,11 +59,11 @@ public:
     WidthType widthType() const;
 
 protected:
-    virtual void prepareStyle(KoGenStyle& style) const;
+    virtual void prepareStyle(KoGenStyle &style) const;
     virtual QString defaultPrefix() const;
     virtual KoGenStyle::Type styleType() const;
     virtual KoGenStyle::Type automaticstyleType() const;
-    virtual const char* styleFamilyName() const;
+    virtual const char *styleFamilyName() const;
 
 private:
     BreakType m_breakAfter;

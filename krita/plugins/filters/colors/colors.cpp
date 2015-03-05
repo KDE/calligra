@@ -29,9 +29,9 @@ K_PLUGIN_FACTORY(KritaExtensionsColorsFactory, registerPlugin<KritaExtensionsCol
 K_EXPORT_PLUGIN(KritaExtensionsColorsFactory("krita"))
 
 KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
-    KisFilterRegistry * manager = KisFilterRegistry::instance();
+    KisFilterRegistry *manager = KisFilterRegistry::instance();
     manager->add(new KisFilterMax());
     manager->add(new KisFilterMin());
     manager->add(new KisFilterColorToAlpha());

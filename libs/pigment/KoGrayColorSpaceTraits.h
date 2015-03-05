@@ -20,18 +20,18 @@
 #ifndef _KO_GRAY_COLORSPACE_TRAITS_H_
 #define _KO_GRAY_COLORSPACE_TRAITS_H_
 
-/** 
+/**
  * Base class for graya traits, it provides some convenient functions to
  * access gray channels through an explicit API.
  */
 template<typename _channels_type_>
 struct KoGrayTraits : public KoColorSpaceTrait<_channels_type_, 2, 1> {
-    
+
     typedef _channels_type_ channels_type;
     typedef KoColorSpaceTrait<_channels_type_, 2, 1> parent;
-    
+
     static const qint32 gray_pos = 0;
-    
+
     /**
      * An grayscale pixel
      */
@@ -41,18 +41,19 @@ struct KoGrayTraits : public KoColorSpaceTrait<_channels_type_, 2, 1> {
     };
 
     /// @return the gray component
-    inline static channels_type gray(quint8* data) {
-        channels_type* d = parent::nativeArray(data);
+    inline static channels_type gray(quint8 *data)
+    {
+        channels_type *d = parent::nativeArray(data);
         return d[gray_pos];
     }
-    
+
     /// Set the gray component
-    inline static void setGray(quint8* data, channels_type nv) {
-        channels_type* d = parent::nativeArray(data);
+    inline static void setGray(quint8 *data, channels_type nv)
+    {
+        channels_type *d = parent::nativeArray(data);
         d[gray_pos] = nv;
     }
 };
-
 
 struct KoGrayU8Traits : public KoGrayTraits<quint8> {
 };

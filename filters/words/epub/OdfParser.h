@@ -35,7 +35,6 @@
 
 class KoStore;
 
-
 class OdfParser
 {
 public:
@@ -51,7 +50,7 @@ public:
     virtual ~OdfParser();
 
     KoFilter::ConversionStatus parseMetadata(KoStore *odfStore,
-                                             QHash<QString, QString> &metadata);
+            QHash<QString, QString> &metadata);
     // Parse manifest
     //
     // Format is QHash<path, type>
@@ -60,7 +59,7 @@ public:
     //   type  is the mimetype of the file.
     //
     KoFilter::ConversionStatus parseManifest(KoStore *odfStore,
-                                             QHash<QString, QString> &manifest);
+            QHash<QString, QString> &manifest);
 
 private:
 };

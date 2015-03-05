@@ -33,7 +33,6 @@ class KisCurveWidget::Private
 
     KisCurveWidget *m_curveWidget;
 
-
 public:
     Private(KisCurveWidget *parent);
     virtual ~Private();
@@ -50,7 +49,6 @@ public:
     bool m_readOnlyMode;
     bool m_guideVisible;
     QColor m_colorGuide;
-
 
     /* The curve itself */
     bool    m_splineDirty;
@@ -78,8 +76,6 @@ public:
     inline void setState(enumState st);
     inline enumState state() const;
 
-
-
     /*** Internal routins ***/
 
     /**
@@ -88,7 +84,6 @@ public:
     void setCurveModified();
     void setCurveRepaint();
 
-
     /**
      * Convert working range of
      * In/Out controls to normalized
@@ -96,7 +91,6 @@ public:
      */
     double io2sp(int x);
     int sp2io(double x);
-
 
     /**
      * Check whether newly created/moved point @pt doesn't overlap
@@ -109,7 +103,6 @@ public:
      * without overlapping
      */
     bool jumpOverExistingPoints(QPointF &pt, int skipIndex);
-
 
     /**
      * Synchronize In/Out spinboxes with the curve
@@ -138,7 +131,6 @@ KisCurveWidget::Private::~Private()
 {
 }
 
-
 double KisCurveWidget::Private::io2sp(int x)
 {
     int rangeLen = m_inOutMax - m_inOutMin;
@@ -148,15 +140,15 @@ double KisCurveWidget::Private::io2sp(int x)
 int KisCurveWidget::Private::sp2io(double x)
 {
     int rangeLen = m_inOutMax - m_inOutMin;
-    return int(x*rangeLen + 0.5) + m_inOutMin;
+    return int(x * rangeLen + 0.5) + m_inOutMin;
 }
-
 
 bool KisCurveWidget::Private::jumpOverExistingPoints(QPointF &pt, int skipIndex)
 {
-    foreach(const QPointF &it, m_curve.points()) {
-        if (m_curve.points().indexOf(it) == skipIndex)
+    foreach (const QPointF &it, m_curve.points()) {
+        if (m_curve.points().indexOf(it) == skipIndex) {
             continue;
+        }
         if (fabs(it.x() - pt.x()) < POINT_AREA)
             pt.rx() = pt.x() >= it.x() ?
                       it.x() + POINT_AREA : it.x() - POINT_AREA;
@@ -170,7 +162,7 @@ int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHe
     int nearestIndex = -1;
     int i = 0;
 
-    foreach(const QPointF & point, m_curve.points()) {
+    foreach (const QPointF &point, m_curve.points()) {
         double distanceSquared = (pt.x() - point.x()) *
                                  (pt.x() - point.x()) +
                                  (pt.y() - point.y()) *
@@ -184,15 +176,14 @@ int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHe
     }
 
     if (nearestIndex >= 0) {
-        if (fabs(pt.x() - m_curve.points()[nearestIndex].x()) *(wWidth - 1) < 5 &&
-                fabs(pt.y() - m_curve.points()[nearestIndex].y()) *(wHeight - 1) < 5) {
+        if (fabs(pt.x() - m_curve.points()[nearestIndex].x()) * (wWidth - 1) < 5 &&
+                fabs(pt.y() - m_curve.points()[nearestIndex].y()) * (wHeight - 1) < 5) {
             return nearestIndex;
         }
     }
 
     return -1;
 }
-
 
 #define div2_round(x) (((x)+1)>>1)
 #define div4_round(x) (((x)+2)>>2)
@@ -211,18 +202,19 @@ void KisCurveWidget::Private::drawGrid(QPainter &p, int wWidth, int wHeight)
     p.setPen(QPen(Qt::gray, 1, Qt::SolidLine));
     p.drawLine(div4_round(wWidth), 0, div4_round(wWidth), wHeight);
     p.drawLine(div2_round(wWidth), 0, div2_round(wWidth), wHeight);
-    p.drawLine(div4_round(3*wWidth), 0, div4_round(3*wWidth), wHeight);
+    p.drawLine(div4_round(3 * wWidth), 0, div4_round(3 * wWidth), wHeight);
 
     p.drawLine(0, div4_round(wHeight), wWidth, div4_round(wHeight));
     p.drawLine(0, div2_round(wHeight), wWidth, div2_round(wHeight));
-    p.drawLine(0, div4_round(3*wHeight), wWidth, div4_round(3*wHeight));
+    p.drawLine(0, div4_round(3 * wHeight), wWidth, div4_round(3 * wHeight));
 
 }
 
 void KisCurveWidget::Private::syncIOControls()
 {
-    if (!m_intIn || !m_intOut)
+    if (!m_intIn || !m_intOut) {
         return;
+    }
 
     bool somethingSelected = (m_grab_point_index >= 0);
 
@@ -261,11 +253,9 @@ void KisCurveWidget::Private::setState(enumState st)
     m_state = st;
 }
 
-
 enumState KisCurveWidget::Private::state() const
 {
     return m_state;
 }
-
 
 #endif /* _KIS_CURVE_WIDGET_P_H_ */

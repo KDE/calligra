@@ -23,8 +23,8 @@
 
 #include "kptcalendar.h"
 
-Scripting::Calendar::Calendar( Scripting::Project *project, KPlato::Calendar *calendar, QObject *parent )
-    : QObject( parent ), m_project( project ), m_calendar( calendar )
+Scripting::Calendar::Calendar(Scripting::Project *project, KPlato::Calendar *calendar, QObject *parent)
+    : QObject(parent), m_project(project), m_calendar(calendar)
 {
 }
 
@@ -48,11 +48,10 @@ int Scripting::Calendar::childCount() const
     return m_calendar->childCount();
 }
 
-QObject *Scripting::Calendar::childAt( int index )
+QObject *Scripting::Calendar::childAt(int index)
 {
-    KPlato::Calendar *c = m_calendar->childAt( index );
-    return c == 0 ? 0 : m_project->calendar( c );
+    KPlato::Calendar *c = m_calendar->childAt(index);
+    return c == 0 ? 0 : m_project->calendar(c);
 }
-
 
 #include "Calendar.moc"

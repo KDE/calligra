@@ -92,7 +92,6 @@ void checkOneFilter(KisFilterStrategy *filter)
     checkForAsymmetricZeros = false;
 }
 
-
 void KisFilterWeightsBufferTest::testTriangle()
 {
     checkForAsymmetricZeros = true;
@@ -134,7 +133,5 @@ void KisFilterWeightsBufferTest::testMitchell()
     checkForAsymmetricZeros = true;
     checkOneFilter(new KisMitchellFilterStrategy());
 }
-
-
 
 QTEST_KDEMAIN(KisFilterWeightsBufferTest, GUI)

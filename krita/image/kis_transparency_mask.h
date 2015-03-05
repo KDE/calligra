@@ -41,15 +41,16 @@ class KRITAIMAGE_EXPORT KisTransparencyMask : public KisEffectMask
 public:
 
     KisTransparencyMask();
-    KisTransparencyMask(const KisTransparencyMask& rhs);
+    KisTransparencyMask(const KisTransparencyMask &rhs);
     virtual ~KisTransparencyMask();
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return KisNodeSP(new KisTransparencyMask(*this));
     }
 
     QRect decorateRect(KisPaintDeviceSP &src, KisPaintDeviceSP &dst,
-                       const QRect & rc,
+                       const QRect &rc,
                        PositionToFilthy maskPos) const;
     QIcon icon() const;
     bool accept(KisNodeVisitor &v);

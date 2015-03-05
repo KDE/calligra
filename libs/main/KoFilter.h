@@ -88,13 +88,13 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KoFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert(const QByteArray& from, const QByteArray& to) = 0;
+    virtual ConversionStatus convert(const QByteArray &from, const QByteArray &to) = 0;
 
     /**
      * Set the updater to which the filter will report progress.
      * Every emit of the sigProgress signal is reported to the updater.
      */
-    void setUpdater(const QPointer<KoUpdater>& updater);
+    void setUpdater(const QPointer<KoUpdater> &updater);
 
 Q_SIGNALS:
     /**
@@ -120,8 +120,8 @@ protected:
     KoFilterChain *m_chain;
 
 private:
-    KoFilter(const KoFilter& rhs);
-    KoFilter& operator=(const KoFilter& rhs);
+    KoFilter(const KoFilter &rhs);
+    KoFilter &operator=(const KoFilter &rhs);
 
     class Private;
     Private *const d;

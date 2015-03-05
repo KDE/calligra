@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdfChartReaderBackend.h"
 
@@ -28,20 +27,18 @@
 // Odftraverse library
 #include "OdfParser.h"
 
-
 // ================================================================
 //             class OdfChartReaderBackend::Private
 
-
 class OdfChartReaderBackend::Private
 {
- public:
+public:
     Private();
     ~Private();
 
     bool dummy;                 // We don't have any actual content in
-                                // this class yet but it's still
-                                // needed for forward binary compatibility.
+    // this class yet but it's still
+    // needed for forward binary compatibility.
 };
 
 OdfChartReaderBackend::Private::Private()
@@ -52,10 +49,8 @@ OdfChartReaderBackend::Private::~Private()
 {
 }
 
-
 // ================================================================
 //                 class OdfChartReaderBackend
-
 
 OdfChartReaderBackend::OdfChartReaderBackend()
     : d(new OdfChartReaderBackend::Private)
@@ -67,9 +62,7 @@ OdfChartReaderBackend::~OdfChartReaderBackend()
     delete d;
 }
 
-
 // ----------------------------------------------------------------
-
 
 IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, OfficeChart)
 

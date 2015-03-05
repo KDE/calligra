@@ -38,8 +38,8 @@ class KexiImageContextMenu;
 /*! Can also act as a normal static image box.
 */
 class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame,
-                                            public KexiFormDataItemInterface,
-                                            public KexiSubwidgetInterface
+    public KexiFormDataItemInterface,
+    public KexiSubwidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
@@ -64,10 +64,12 @@ public:
     KexiDBImageBox(bool designMode, QWidget *parent = 0);
     virtual ~KexiDBImageBox();
 
-    inline QString dataSource() const {
+    inline QString dataSource() const
+    {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePartClass() const
+    {
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
 
@@ -79,13 +81,13 @@ public:
 
     uint storedPixmapId() const;
 
-    virtual void setInvalidState(const QString& displayText);
+    virtual void setInvalidState(const QString &displayText);
 
     virtual bool valueIsNull();
 
     virtual bool valueIsEmpty();
 
-    virtual QWidget* widget();
+    virtual QWidget *widget();
 
     //! always true
     virtual bool cursorAtStart();
@@ -117,7 +119,7 @@ public:
     virtual void setPalette(const QPalette &pal);
 
     //! Reimplemented to override behaviour of "paletteBackgroundColor" property.
-    virtual void setPaletteBackgroundColor(const QColor & color);
+    virtual void setPaletteBackgroundColor(const QColor &color);
 
     //! \return true id drop down button should be visible (the default).
     bool dropDownButtonVisible() const;
@@ -150,7 +152,8 @@ public Q_SLOTS:
     //! Sets the datasource to \a ds
     virtual void setDataSource(const QString &ds);
 
-    inline void setDataSourcePartClass(const QString &partClass) {
+    inline void setDataSourcePartClass(const QString &partClass)
+    {
         KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     }
 
@@ -190,11 +193,11 @@ Q_SIGNALS:
     void idChanged(long id);
 
 protected Q_SLOTS:
-    void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+    void slotUpdateActionsAvailabilityRequested(bool &valueIsNull, bool &valueIsReadOnly);
 
-    void handleInsertFromFileAction(const KUrl& url);
-    void handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
-    void handleSaveAsAction(const QString& fileName);
+    void handleInsertFromFileAction(const KUrl &url);
+    void handleAboutToSaveAsAction(QString &origFilename, QString &fileExtension, bool &dataIsEmpty);
+    void handleSaveAsAction(const QString &fileName);
     void handleCutAction();
     void handleCopyAction();
     void handlePasteAction();
@@ -205,24 +208,24 @@ protected:
     //! \return data depending on the current mode (db-aware or static)
     QByteArray data() const;
 
-    virtual void contextMenuEvent(QContextMenuEvent * e);
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
-    virtual void paintEvent(QPaintEvent*);
-    virtual void resizeEvent(QResizeEvent* e);
-    virtual bool eventFilter(QObject * watched, QEvent * e);
+    virtual void contextMenuEvent(QContextMenuEvent *e);
+    virtual void setColumnInfo(KexiDB::QueryColumnInfo *cinfo);
+    virtual void paintEvent(QPaintEvent *);
+    virtual void resizeEvent(QResizeEvent *e);
+    virtual bool eventFilter(QObject *watched, QEvent *e);
 
     //! Sets value \a value for a widget.
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
 
     //! @internal, added \a loadPixmap option used by paste().
-    void setValueInternal(const QVariant& add, bool removeOld, bool loadPixmap);
+    void setValueInternal(const QVariant &add, bool removeOld, bool loadPixmap);
 
     //! Updates i18n'd action strings after datasource change
     void updateActionStrings();
     void updatePixmap();
 
     //! @internal
-    void setData(const KexiBLOBBuffer::Handle& handle);
+    void setData(const KexiBLOBBuffer::Handle &handle);
 
     bool popupMenuAvailable();
 
@@ -236,7 +239,7 @@ protected:
     int realLineWidth() const;
 
     //! Implemented for KexiSubwidgetInterface
-    virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const;
+    virtual bool subwidgetStretchRequired(KexiDBAutoField *autoField) const;
 
     QPixmap m_pixmap;
     QByteArray m_value; //!< for db-aware mode

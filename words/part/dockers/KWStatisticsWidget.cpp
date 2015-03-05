@@ -40,21 +40,21 @@
 #include <QTimer>
 
 KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
-        : QWidget(parent),
-          m_resourceManager(0),
-          m_selection(0),
-          m_document(0),
-          m_textDocument(0),
-          m_timer(0),
-          m_words(0),
-          m_sentences(0),
-          m_syllables(0),
-          m_cjkChars(0),
-          m_charsWithSpace(0),
-          m_charsWithoutSpace(0),
-          m_lines(0),
-          m_paragraphs(0),
-          m_running(false)
+    : QWidget(parent),
+      m_resourceManager(0),
+      m_selection(0),
+      m_document(0),
+      m_textDocument(0),
+      m_timer(0),
+      m_words(0),
+      m_sentences(0),
+      m_syllables(0),
+      m_cjkChars(0),
+      m_charsWithSpace(0),
+      m_charsWithoutSpace(0),
+      m_lines(0),
+      m_paragraphs(0),
+      m_running(false)
 {
     this->shortVersion = shortVersion;
     m_timer = new QTimer(this);
@@ -66,7 +66,7 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
     initUi();
     initLayout();
     //All kind of stuff related to the option menu, unnecessary stuff in short version
-    if(!shortVersion) {
+    if (!shortVersion) {
         m_menu = new StatisticsPreferencesPopup(m_preferencesButton);
         m_preferencesButton->setMenu(m_menu);
         m_preferencesButton->setPopupMode(QToolButton::InstantPopup);
@@ -161,7 +161,6 @@ KWStatisticsWidget::~KWStatisticsWidget()
 {
     m_timer->stop();
 }
-
 
 void KWStatisticsWidget::initUi()
 {
@@ -282,11 +281,13 @@ void KWStatisticsWidget::updateData()
     add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii";
     QStringList add_syl_regexp;
     add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$"
-    << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
+                   << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs == 0) continue;
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet *>(fs);
+        if (tfs == 0) {
+            continue;
+        }
 
         QTextDocument *doc = tfs->document();
         QTextBlock block = doc->begin();
@@ -375,7 +376,7 @@ void KWStatisticsWidget::updateData()
             s.replace(re, "0,0");
             re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
             s.replace(re, "*");
-            for (int i = 0 ; i < s.length(); ++i) {
+            for (int i = 0; i < s.length(); ++i) {
                 QChar ch = s[i];
                 if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!')) {
                     ++m_sentences;
@@ -396,7 +397,7 @@ void KWStatisticsWidget::setLayoutDirection(KWStatisticsWidget::LayoutDirection 
     }
 }
 
-void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
+void KWStatisticsWidget::setCanvas(KWCanvas *canvas)
 {
     if (!canvas) {
         return;
@@ -407,7 +408,7 @@ void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
     // It is apparently possible to have a document which lacks a main frameset...
     // so let's handle that and avoid crashes.
     if (m_document->mainFrameSet()) {
-        connect(static_cast<KoTextDocumentLayout*>(m_document->mainFrameSet()->document()->documentLayout()), SIGNAL(finishedLayout()), m_timer, SLOT(start()));
+        connect(static_cast<KoTextDocumentLayout *>(m_document->mainFrameSet()->document()->documentLayout()), SIGNAL(finishedLayout()), m_timer, SLOT(start()));
     }
     m_timer->start();
 }
@@ -454,7 +455,6 @@ void KWStatisticsWidget::updateDataUi()
     m_countFlesch->setText(newText[7]);
 }
 
-
 void KWStatisticsWidget::selectionChanged()
 {
     if (m_selection->count() != 1) {
@@ -462,8 +462,10 @@ void KWStatisticsWidget::selectionChanged()
     }
 
     KoShape *shape = m_selection->firstSelectedShape();
-    if (!shape) return;
-    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(KWFrameSet::from(shape));
+    if (!shape) {
+        return;
+    }
+    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *>(KWFrameSet::from(shape));
     if (fs) {
         if (m_textDocument) {
             disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));

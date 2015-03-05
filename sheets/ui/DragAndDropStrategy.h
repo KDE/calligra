@@ -47,14 +47,14 @@ public:
      */
     virtual ~DragAndDropStrategy();
 
-    virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual KUndo2Command* createCommand();
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    virtual KUndo2Command *createCommand();
 
     bool dragStarted() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

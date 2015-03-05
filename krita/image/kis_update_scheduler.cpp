@@ -37,20 +37,19 @@
 #ifdef DEBUG_BALANCING
 #define DEBUG_BALANCING_METRICS(decidedFirst, excl)                     \
     qDebug() << "Balance decision:" << decidedFirst                     \
-    << "(" << excl << ")"                                               \
-    << "updates:" << m_d->updatesQueue->sizeMetric()                    \
-    << "strokes:" << m_d->strokesQueue->sizeMetric()
+             << "(" << excl << ")"                                               \
+             << "updates:" << m_d->updatesQueue->sizeMetric()                    \
+             << "strokes:" << m_d->strokesQueue->sizeMetric()
 #else
 #define DEBUG_BALANCING_METRICS(decidedFirst, excl)
 #endif
 
-
 struct KisUpdateScheduler::Private {
     Private() : updatesQueue(0), strokesQueue(0),
-                updaterContext(0), processingBlocked(false),
-                balancingRatio(1.0),
-                projectionUpdateListener(0),
-                progressUpdater(0) {}
+        updaterContext(0), processingBlocked(false),
+        balancingRatio(1.0),
+        projectionUpdateListener(0),
+        progressUpdater(0) {}
 
     KisSimpleUpdateQueue *updatesQueue;
     KisStrokesQueue *strokesQueue;
@@ -94,8 +93,8 @@ KisUpdateScheduler::~KisUpdateScheduler()
 
 void KisUpdateScheduler::connectSignals()
 {
-    connect(m_d->updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
-            SLOT(continueUpdate(const QRect&)),
+    connect(m_d->updaterContext, SIGNAL(sigContinueUpdate(QRect)),
+            SLOT(continueUpdate(QRect)),
             Qt::DirectConnection);
 
     connect(m_d->updaterContext, SIGNAL(sigDoSomeUsefulWork()),
@@ -115,11 +114,13 @@ void KisUpdateScheduler::setProgressProxy(KoProgressProxy */*progressProxy*/)
 
 void KisUpdateScheduler::progressUpdate()
 {
-    if (!m_d->progressUpdater) return;
+    if (!m_d->progressUpdater) {
+        return;
+    }
 
-    if(!m_d->strokesQueue->hasOpenedStrokes()) {
+    if (!m_d->strokesQueue->hasOpenedStrokes()) {
         QString jobName = m_d->strokesQueue->currentStrokeName().toString();
-        if(jobName.isEmpty()) {
+        if (jobName.isEmpty()) {
             jobName = i18n("Updating...");
         }
 
@@ -129,45 +130,46 @@ void KisUpdateScheduler::progressUpdate()
         }
 
         m_d->progressUpdater->updateProgress(sizeMetric, jobName);
-    }
-    else {
+    } else {
         m_d->progressUpdater->hide();
     }
 }
 
-void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
+void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect &rc, const QRect &cropRect)
 {
     m_d->updatesQueue->addUpdateJob(node, rc, cropRect);
     processQueues();
 }
 
-void KisUpdateScheduler::updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect)
+void KisUpdateScheduler::updateProjectionNoFilthy(KisNodeSP node, const QRect &rc, const QRect &cropRect)
 {
     m_d->updatesQueue->addUpdateNoFilthyJob(node, rc, cropRect);
     processQueues();
 }
 
-void KisUpdateScheduler::fullRefreshAsync(KisNodeSP root, const QRect& rc, const QRect &cropRect)
+void KisUpdateScheduler::fullRefreshAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect)
 {
     m_d->updatesQueue->addFullRefreshJob(root, rc, cropRect);
     processQueues();
 }
 
-void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect)
+void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect &rc, const QRect &cropRect)
 {
     KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(cropRect);
     walker->collectRects(root, rc);
 
     bool needLock = true;
 
-    if(m_d->processingBlocked) {
+    if (m_d->processingBlocked) {
         warnImage << "WARNING: Calling synchronous fullRefresh under a scheduler lock held";
         warnImage << "We will not assert for now, but please port caller's to strokes";
         warnImage << "to avoid this warning";
         needLock = false;
     }
 
-    if(needLock) lock();
+    if (needLock) {
+        lock();
+    }
     m_d->updaterContext->lock();
 
     Q_ASSERT(m_d->updaterContext->isJobAllowed(walker));
@@ -175,7 +177,9 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     m_d->updaterContext->waitForDone();
 
     m_d->updaterContext->unlock();
-    if(needLock) unlock();
+    if (needLock) {
+        unlock();
+    }
 }
 
 void KisUpdateScheduler::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
@@ -222,7 +226,7 @@ bool KisUpdateScheduler::wrapAroundModeSupported() const
 
 void KisUpdateScheduler::updateSettings()
 {
-    if(m_d->updatesQueue) {
+    if (m_d->updatesQueue) {
         m_d->updatesQueue->updateSettings();
     }
 
@@ -247,17 +251,18 @@ void KisUpdateScheduler::waitForDone()
     do {
         processQueues();
         m_d->updaterContext->waitForDone();
-    } while(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty());
+    } while (!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty());
 }
 
 bool KisUpdateScheduler::tryBarrierLock()
 {
-    if(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty())
+    if (!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty()) {
         return false;
+    }
 
     m_d->processingBlocked = true;
     m_d->updaterContext->waitForDone();
-    if(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty()) {
+    if (!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty()) {
         m_d->processingBlocked = false;
         return false;
     }
@@ -272,31 +277,31 @@ void KisUpdateScheduler::barrierLock()
         processQueues();
         m_d->processingBlocked = true;
         m_d->updaterContext->waitForDone();
-    } while(!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty());
+    } while (!m_d->updatesQueue->isEmpty() || !m_d->strokesQueue->isEmpty());
 }
 
 void KisUpdateScheduler::processQueues()
 {
     wakeUpWaitingThreads();
 
-    if(m_d->processingBlocked) return;
+    if (m_d->processingBlocked) {
+        return;
+    }
 
-    if(m_d->strokesQueue->needsExclusiveAccess()) {
+    if (m_d->strokesQueue->needsExclusiveAccess()) {
         DEBUG_BALANCING_METRICS("STROKES", "X");
         m_d->strokesQueue->processQueue(*m_d->updaterContext,
                                         !m_d->updatesQueue->isEmpty());
 
-        if(!m_d->strokesQueue->needsExclusiveAccess()) {
+        if (!m_d->strokesQueue->needsExclusiveAccess()) {
             tryProcessUpdatesQueue();
         }
-    }
-    else if(m_d->balancingRatio * m_d->strokesQueue->sizeMetric() > m_d->updatesQueue->sizeMetric()) {
+    } else if (m_d->balancingRatio * m_d->strokesQueue->sizeMetric() > m_d->updatesQueue->sizeMetric()) {
         DEBUG_BALANCING_METRICS("STROKES", "N");
         m_d->strokesQueue->processQueue(*m_d->updaterContext,
                                         !m_d->updatesQueue->isEmpty());
         tryProcessUpdatesQueue();
-    }
-    else {
+    } else {
         DEBUG_BALANCING_METRICS("UPDATES", "N");
         tryProcessUpdatesQueue();
         m_d->strokesQueue->processQueue(*m_d->updaterContext,
@@ -312,7 +317,7 @@ void KisUpdateScheduler::blockUpdates()
     m_d->updatesFinishedCondition.initWaiting();
 
     m_d->updatesLockCounter.ref();
-    while(haveUpdatesRunning()) {
+    while (haveUpdatesRunning()) {
         m_d->updatesFinishedCondition.wait();
     }
 
@@ -327,7 +332,7 @@ void KisUpdateScheduler::unblockUpdates()
 
 void KisUpdateScheduler::wakeUpWaitingThreads()
 {
-    if(m_d->updatesLockCounter && !haveUpdatesRunning()) {
+    if (m_d->updatesLockCounter && !haveUpdatesRunning()) {
         m_d->updatesFinishedCondition.wakeAll();
     }
 }
@@ -335,7 +340,9 @@ void KisUpdateScheduler::wakeUpWaitingThreads()
 void KisUpdateScheduler::tryProcessUpdatesQueue()
 {
     QReadLocker locker(&m_d->updatesStartLock);
-    if(m_d->updatesLockCounter) return;
+    if (m_d->updatesLockCounter) {
+        return;
+    }
 
     m_d->updatesQueue->processQueue(*m_d->updaterContext);
 }
@@ -367,7 +374,7 @@ void KisUpdateScheduler::spareThreadAppeared()
 }
 
 KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener,
-                                                       qint32 threadCount)
+        qint32 threadCount)
 {
     updateSettings();
     m_d->projectionUpdateListener = projectionUpdateListener;
@@ -380,12 +387,12 @@ KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisProjectionUpdateListen
     connectSignals();
 }
 
-KisTestableUpdaterContext* KisTestableUpdateScheduler::updaterContext()
+KisTestableUpdaterContext *KisTestableUpdateScheduler::updaterContext()
 {
-    return dynamic_cast<KisTestableUpdaterContext*>(m_d->updaterContext);
+    return dynamic_cast<KisTestableUpdaterContext *>(m_d->updaterContext);
 }
 
-KisTestableSimpleUpdateQueue* KisTestableUpdateScheduler::updateQueue()
+KisTestableSimpleUpdateQueue *KisTestableUpdateScheduler::updateQueue()
 {
-    return dynamic_cast<KisTestableSimpleUpdateQueue*>(m_d->updatesQueue);
+    return dynamic_cast<KisTestableSimpleUpdateQueue *>(m_d->updatesQueue);
 }

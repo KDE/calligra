@@ -16,7 +16,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #ifndef KISTOOLCROPCONFIGWIDGET_H
 #define KISTOOLCROPCONFIGWIDGET_H
 
@@ -28,7 +27,7 @@ class KisToolCropConfigWidget : public QWidget, public Ui::WdgToolCrop
     Q_OBJECT
 
 public:
-    KisToolCropConfigWidget(QWidget *parent, KisToolCrop* cropTool);
+    KisToolCropConfigWidget(QWidget *parent, KisToolCrop *cropTool);
 
 Q_SIGNALS:
     void cropTypeChanged(int cropType);
@@ -48,7 +47,7 @@ public Q_SLOTS:
     void cropTypeSelectableChanged();
 
 private:
-    KisToolCrop* m_cropTool;
+    KisToolCrop *m_cropTool;
 };
 
 #endif // KISTOOLCROPCONFIGWIDGET_H

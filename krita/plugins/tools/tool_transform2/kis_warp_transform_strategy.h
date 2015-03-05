@@ -32,7 +32,6 @@ class TransformTransactionProperties;
 class QCursor;
 class QImage;
 
-
 class KisWarpTransformStrategy : public KisSimplifiedActionPolicyStrategy
 {
     Q_OBJECT
@@ -78,11 +77,11 @@ protected:
                                      bool isEditingPoints);
 
     virtual QImage calculateTransformedImage(ToolTransformArgs &currentArgs,
-                                             const QImage &srcImage,
-                                             const QVector<QPointF> &origPoints,
-                                             const QVector<QPointF> &transfPoints,
-                                             const QPointF &srcOffset,
-                                             QPointF *dstOffset);
+            const QImage &srcImage,
+            const QVector<QPointF> &origPoints,
+            const QVector<QPointF> &transfPoints,
+            const QPointF &srcOffset,
+            QPointF *dstOffset);
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

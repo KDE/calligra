@@ -31,7 +31,9 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
     Q_ASSERT(dataManager != 0);
 
     Q_ASSERT(h > 0); // for us, to warn us when abusing the iterators
-    if (h < 1) h = 1;  // for release mode, to make sure there's always at least one pixel read.
+    if (h < 1) {
+        h = 1;    // for release mode, to make sure there's always at least one pixel read.
+    }
 
     m_lineStride = m_pixelSize * KisTileData::WIDTH;
 
@@ -63,7 +65,7 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
     m_tileSize = m_lineStride * KisTileData::HEIGHT;
 
     // let's prealocate first row
-    for (int i = 0; i < m_tilesCacheSize; i++){
+    for (int i = 0; i < m_tilesCacheSize; i++) {
         fetchTileDataForCache(m_tilesCache[i], m_column, m_topRow + i);
     }
     m_index = 0;
@@ -100,9 +102,9 @@ bool KisVLineIterator2::nextPixel()
     } else {
         ++m_y;
         m_data += m_lineStride;
-        if (m_data < m_dataBottom)
+        if (m_data < m_dataBottom) {
             m_oldData += m_lineStride;
-        else {
+        } else {
             // Switching to the beginning of the next tile
             ++m_index;
             switchToTile(0);
@@ -111,7 +113,6 @@ bool KisVLineIterator2::nextPixel()
 
     return m_havePixels;
 }
-
 
 void KisVLineIterator2::nextColumn()
 {
@@ -130,7 +131,6 @@ void KisVLineIterator2::nextColumn()
 
     m_havePixels = true;
 }
-
 
 qint32 KisVLineIterator2::nConseqPixels() const
 {
@@ -159,8 +159,6 @@ bool KisVLineIterator2::nextPixels(qint32 n)
     return m_havePixels;
 }
 
-
-
 KisVLineIterator2::~KisVLineIterator2()
 {
     for (int i = 0; i < m_tilesCacheSize; i++) {
@@ -169,19 +167,17 @@ KisVLineIterator2::~KisVLineIterator2()
     }
 }
 
-
-quint8* KisVLineIterator2::rawData()
+quint8 *KisVLineIterator2::rawData()
 {
     return m_data;
 }
 
-
-const quint8* KisVLineIterator2::oldRawData() const
+const quint8 *KisVLineIterator2::oldRawData() const
 {
     return m_oldData;
 }
 
-const quint8* KisVLineIterator2::rawDataConst() const
+const quint8 *KisVLineIterator2::rawDataConst() const
 {
     return m_data;
 }
@@ -202,8 +198,7 @@ void KisVLineIterator2::switchToTile(qint32 yInTile)
     m_oldData += offset_row + offset_col;
 }
 
-
-void KisVLineIterator2::fetchTileDataForCache(KisTileInfo& kti, qint32 col, qint32 row)
+void KisVLineIterator2::fetchTileDataForCache(KisTileInfo &kti, qint32 col, qint32 row)
 {
     kti.tile = m_dataManager->getTile(col, row, m_writable);
     lockTile(kti.tile);
@@ -217,10 +212,10 @@ void KisVLineIterator2::fetchTileDataForCache(KisTileInfo& kti, qint32 col, qint
 
 void KisVLineIterator2::preallocateTiles()
 {
-    for (int i = 0; i < m_tilesCacheSize; ++i){
+    for (int i = 0; i < m_tilesCacheSize; ++i) {
         unlockTile(m_tilesCache[i].tile);
         unlockTile(m_tilesCache[i].oldtile);
-        fetchTileDataForCache(m_tilesCache[i], m_column, m_topRow + i );
+        fetchTileDataForCache(m_tilesCache[i], m_column, m_topRow + i);
     }
 }
 

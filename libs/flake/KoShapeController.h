@@ -65,7 +65,7 @@ public:
      * @return command which will insert the shape into the document or 0 if the
      *         insertion was cancelled. The command is not yet executed.
      */
-    KUndo2Command* addShape(KoShape *shape, KUndo2Command *parent = 0);
+    KUndo2Command *addShape(KoShape *shape, KUndo2Command *parent = 0);
 
     /**
      * @brief Add a shape to the document, skipping any dialogs or other user interaction.
@@ -75,7 +75,7 @@ public:
      *
      * @return command which will insert the shape into the document. The command is not yet executed.
      */
-    KUndo2Command* addShapeDirect(KoShape *shape, KUndo2Command *parent = 0);
+    KUndo2Command *addShapeDirect(KoShape *shape, KUndo2Command *parent = 0);
 
     /**
      * @brief Remove a shape from the document.
@@ -86,7 +86,7 @@ public:
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
      */
-    KUndo2Command* removeShape(KoShape *shape, KUndo2Command *parent = 0);
+    KUndo2Command *removeShape(KoShape *shape, KUndo2Command *parent = 0);
 
     /**
      * Remove a shape from the document.
@@ -97,7 +97,7 @@ public:
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
      */
-    KUndo2Command* removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent = 0);
+    KUndo2Command *removeShapes(const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
 
     /**
      * @brief Set the KoShapeBasedDocumentBase used to add/remove shapes.
@@ -127,7 +127,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_METATYPE(KoShapeController *)

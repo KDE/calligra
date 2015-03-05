@@ -28,7 +28,7 @@
 #include <QMimeData>
 
 CAuActorSemanticItemFactory::CAuActorSemanticItemFactory()
-: KoRdfSemanticItemFactoryBase("AuthorActor")
+    : KoRdfSemanticItemFactoryBase("AuthorActor")
 {
 }
 
@@ -51,9 +51,9 @@ void CAuActorSemanticItemFactory::updateSemanticItems(
     const QString sparqlQuery = CAuActorRdf::QUERY;
 
     Soprano::QueryResultIterator it = m->executeQuery(
-        sparqlQuery,
-        Soprano::Query::QueryLanguageSparql
-    );
+                                          sparqlQuery,
+                                          Soprano::Query::QueryLanguageSparql
+                                      );
 
     QList<hKoRdfBasicSemanticItem> oldSemanticItems = semanticItems;
 
@@ -89,7 +89,7 @@ void CAuActorSemanticItemFactory::updateSemanticItems(
     }
 }
 
-hKoRdfBasicSemanticItem CAuActorSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfBasicSemanticItem CAuActorSemanticItemFactory::createSemanticItem(const KoDocumentRdf *rdf, QObject *parent)
 {
     return hKoRdfBasicSemanticItem(new CAuActorRdf(parent, rdf));
 

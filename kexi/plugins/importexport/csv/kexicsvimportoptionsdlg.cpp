@@ -32,15 +32,18 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-KexiCSVImportOptions::DateFormat dateFormatFromString(const QString& s)
+KexiCSVImportOptions::DateFormat dateFormatFromString(const QString &s)
 {
     QString str(s.toLower().trimmed());
-    if (str == "dmy")
+    if (str == "dmy") {
         return KexiCSVImportOptions::DMY;
-    if (str == "ymd")
+    }
+    if (str == "ymd") {
         return KexiCSVImportOptions::YMD;
-    if (str == "mdy")
+    }
+    if (str == "mdy") {
         return KexiCSVImportOptions::MDY;
+    }
     return KexiCSVImportOptions::AutoDateFormat;
 }
 
@@ -62,8 +65,9 @@ KexiCSVImportOptions::KexiCSVImportOptions()
     if (encoding.isEmpty()) {
         encoding = QString::fromLatin1(KGlobal::locale()->encoding());
         defaultEncodingExplicitySet = false;
-    } else
+    } else {
         defaultEncodingExplicitySet = true;
+    }
 
     dateFormat = dateFormatFromString(importExportGroup.readEntry("DateFormatWhenImportingCSVFiles"));
 
@@ -76,7 +80,7 @@ KexiCSVImportOptions::~KexiCSVImportOptions()
 {
 }
 
-bool KexiCSVImportOptions::operator== (const KexiCSVImportOptions & opt) const
+bool KexiCSVImportOptions::operator== (const KexiCSVImportOptions &opt) const
 {
     return defaultEncodingExplicitySet == opt.defaultEncodingExplicitySet
            && trimmedInTextValuesChecked == opt.trimmedInTextValuesChecked
@@ -85,7 +89,7 @@ bool KexiCSVImportOptions::operator== (const KexiCSVImportOptions & opt) const
            && nullsImportedAsEmptyTextChecked == opt.nullsImportedAsEmptyTextChecked;
 }
 
-bool KexiCSVImportOptions::operator!= (const KexiCSVImportOptions & opt) const
+bool KexiCSVImportOptions::operator!= (const KexiCSVImportOptions &opt) const
 {
     return !(*this == opt);
 }
@@ -93,8 +97,8 @@ bool KexiCSVImportOptions::operator!= (const KexiCSVImportOptions & opt) const
 //----------------------------------
 
 KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
-    const KexiCSVImportOptions& options, QWidget* parent)
-        : KDialog(parent)
+    const KexiCSVImportOptions &options, QWidget *parent)
+    : KDialog(parent)
 {
     setWindowTitle(i18nc("@title:window", "CSV Import Options"));
     setButtons(Ok | Cancel);
@@ -106,9 +110,9 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
 
     QGridLayout *lyr = new QGridLayout(plainPage);
 
-    QGroupBox* textEncodingGroupBox = new QGroupBox(i18n("Text encoding"), plainPage);
+    QGroupBox *textEncodingGroupBox = new QGroupBox(i18n("Text encoding"), plainPage);
     lyr->addWidget(textEncodingGroupBox, 0, 0, 1, 2);
-    QVBoxLayout* textEncodingGroupBoxLyr = new QVBoxLayout;
+    QVBoxLayout *textEncodingGroupBoxLyr = new QVBoxLayout;
     KexiUtils::setStandardMarginsAndSpacing(textEncodingGroupBoxLyr);
     textEncodingGroupBox->setLayout(textEncodingGroupBoxLyr);
 
@@ -138,7 +142,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
         mask.subs(month).subs(day).subs(year).subs(12).subs(30).subs(2008).toString());
     lyr->addWidget(m_comboDateFormat, 1, 1);
 
-    QLabel* lblDateFormat = new QLabel(i18n("Date format:"), plainPage);
+    QLabel *lblDateFormat = new QLabel(i18n("Date format:"), plainPage);
     lblDateFormat->setBuddy(m_comboDateFormat);
     lyr->addWidget(lblDateFormat, 1, 0);
 
@@ -147,7 +151,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     lyr->addWidget(m_chkStripWhiteSpaceInTextValues, 2, 0, 1, 2);
 
     m_chkImportNULLsAsEmptyText = new QCheckBox(
-                i18n("Import missing text values as empty texts"), plainPage);
+        i18n("Import missing text values as empty texts"), plainPage);
     lyr->addWidget(m_chkImportNULLsAsEmptyText, 3, 0, 1, 2);
     lyr->addItem(new QSpacerItem(30, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding), 4, 0);
     //update widgets
@@ -182,15 +186,17 @@ void KexiCSVImportOptionsDialog::accept()
     if (m_chkAlwaysUseThisEncoding->isChecked())
         importExportGroup.writeEntry("DefaultEncodingForImportingCSVFiles",
                                      m_encodingComboBox->selectedEncoding());
-    else
+    else {
         importExportGroup.deleteEntry("DefaultEncodingForImportingCSVFiles");
+    }
 
     const KexiCSVImportOptions::DateFormat dateFormat
         = (KexiCSVImportOptions::DateFormat)m_comboDateFormat->currentIndex();
-    if (dateFormat == KexiCSVImportOptions::AutoDateFormat)
+    if (dateFormat == KexiCSVImportOptions::AutoDateFormat) {
         importExportGroup.deleteEntry("DateFormatWhenImportingCSVFiles");
-    else
+    } else {
         importExportGroup.writeEntry("DateFormatWhenImportingCSVFiles", dateFormatToString(dateFormat));
+    }
 
     importExportGroup.writeEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles",
                                  m_chkStripWhiteSpaceInTextValues->isChecked());

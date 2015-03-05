@@ -23,7 +23,8 @@ class KisCurveOpOptionsWidget: public QWidget, public Ui::WdgCurveOptions
 {
 
 public:
-    KisCurveOpOptionsWidget(QWidget *parent = 0) : QWidget(parent) {
+    KisCurveOpOptionsWidget(QWidget *parent = 0) : QWidget(parent)
+    {
         setupUi(this);
         historySizeSlider->setRange(2, 300);
         historySizeSlider->setValue(30);
@@ -56,7 +57,7 @@ KisCurveOpOption::~KisCurveOpOption()
 {
 }
 
-void KisCurveOpOption::writeOptionSetting(KisPropertiesConfiguration* config) const
+void KisCurveOpOption::writeOptionSetting(KisPropertiesConfiguration *config) const
 {
     config->setProperty(CURVE_PAINT_CONNECTION_LINE, m_options->connectionCHBox->isChecked());
     config->setProperty(CURVE_SMOOTHING, m_options->smoothingCHBox->isChecked());
@@ -65,7 +66,7 @@ void KisCurveOpOption::writeOptionSetting(KisPropertiesConfiguration* config) co
     config->setProperty(CURVE_CURVES_OPACITY, m_options->curvesOpacitySlider->value());
 }
 
-void KisCurveOpOption::readOptionSetting(const KisPropertiesConfiguration* config)
+void KisCurveOpOption::readOptionSetting(const KisPropertiesConfiguration *config)
 {
     m_options->connectionCHBox->setChecked(config->getBool(CURVE_PAINT_CONNECTION_LINE));
     m_options->smoothingCHBox->setChecked(config->getBool(CURVE_SMOOTHING));
@@ -73,5 +74,4 @@ void KisCurveOpOption::readOptionSetting(const KisPropertiesConfiguration* confi
     m_options->lineWidthSlider->setValue(config->getInt(CURVE_LINE_WIDTH));
     m_options->curvesOpacitySlider->setValue(config->getDouble(CURVE_CURVES_OPACITY));
 }
-
 

@@ -22,8 +22,9 @@
 
 #include <kexiutils/KexiAssistantPage.h>
 
-namespace KexiDB {
-    class ConnectionData;
+namespace KexiDB
+{
+class ConnectionData;
 }
 
 //! An assistant page with a form for entering a password
@@ -31,14 +32,14 @@ class KexiPasswordPage : public KexiAssistantPage
 {
     Q_OBJECT
 public:
-    explicit KexiPasswordPage(const QString &title, QWidget* parent = 0);
-    explicit KexiPasswordPage(QWidget* parent = 0);
+    explicit KexiPasswordPage(const QString &title, QWidget *parent = 0);
+    explicit KexiPasswordPage(QWidget *parent = 0);
     virtual ~KexiPasswordPage();
 
     /**
      * Set the password.
      */
-    void setPassword(const QString& password);
+    void setPassword(const QString &password);
 
     /**
      * @return the password entered by the user.
@@ -48,7 +49,7 @@ public:
     /**
      * Set the username.
      */
-    void setUserName(const QString& username);
+    void setUserName(const QString &username);
 
     /**
      * @return the username entered by the user.
@@ -58,7 +59,7 @@ public:
     /**
      * Set the server name. It includes port too.
      */
-    void setServer(const QString& server);
+    void setServer(const QString &server);
 
     /**
      * @return the server
@@ -80,7 +81,7 @@ public:
     /**
      * Set the database name.
      */
-    void setDatabaseName(const QString& databaseName);
+    void setDatabaseName(const QString &databaseName);
 
     /**
      * Set username, server and optionally the password based on the @a data connection data.
@@ -96,7 +97,7 @@ private:
     void init();
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

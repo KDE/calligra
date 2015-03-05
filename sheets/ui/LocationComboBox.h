@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef CALLIGRA_SHEETS_LOCATION_COMBOBOX
 #define CALLIGRA_SHEETS_LOCATION_COMBOBOX
 
@@ -49,7 +48,7 @@ class LocationComboBox : public KComboBox
 public:
     explicit LocationComboBox(QWidget *parent = 0);
 
-    void setSelection(Selection* selection);
+    void setSelection(Selection *selection);
 
     void addCompletionItem(const QString &_item);
     void removeCompletionItem(const QString &_item);
@@ -68,12 +67,12 @@ protected: // reimplementations
     virtual void keyPressEvent(QKeyEvent *event);
 
 Q_SIGNALS:
-    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
+    void updateAccessedCellRange(Sheet *sheet, const QPoint &location);
 
 private Q_SLOTS:
     void slotActivateItem();
     void slotSelectionChanged();
-    void slotActiveSheetChanged(Sheet* sheet);
+    void slotActiveSheetChanged(Sheet *sheet);
 
 private:
     bool activateItem();

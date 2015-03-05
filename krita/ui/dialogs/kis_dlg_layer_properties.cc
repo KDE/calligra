@@ -53,9 +53,7 @@
 #include "widgets/kis_channelflags_widget.h"
 #include <kis_composite_ops_model.h>
 
-
-struct KisDlgLayerProperties::Private
-{
+struct KisDlgLayerProperties::Private {
     QString deviceName;
     const KoColorSpace *colorSpace;
     const KoCompositeOp *compositeOp;
@@ -101,7 +99,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisViewManager *v
 
     d->page->lblColorSpace->setText(d->colorSpace->name());
 
-    if (const KoColorProfile* profile = d->colorSpace->profile()) {
+    if (const KoColorProfile *profile = d->colorSpace->profile()) {
         d->page->lblProfile->setText(profile->name());
     }
 
@@ -120,7 +118,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisViewManager *v
 
     slotNameChanged(d->page->editName->text());
 
-    QVBoxLayout * vbox = new QVBoxLayout;
+    QVBoxLayout *vbox = new QVBoxLayout;
     d->channelFlagsWidget = new KisChannelFlagsWidget(d->colorSpace);
     connect(d->channelFlagsWidget, SIGNAL(channelSelectionChanced()), SLOT(kickTimer()));
 
@@ -139,8 +137,7 @@ KisDlgLayerProperties::~KisDlgLayerProperties()
 {
     if (result() == QDialog::Accepted) {
         applyNewProperties();
-    }
-    else { // QDialog::Rejected
+    } else { // QDialog::Rejected
         cleanPreviewChanges();
         d->doc->setModified(true);
         d->layer->setDirty();
@@ -151,7 +148,9 @@ KisDlgLayerProperties::~KisDlgLayerProperties()
 
 void KisDlgLayerProperties::updatePreview()
 {
-    if (!d->layer) return;
+    if (!d->layer) {
+        return;
+    }
 
     if (d->page->checkBoxPreview->isChecked()) {
         d->layer->setOpacity(getOpacity());
@@ -163,32 +162,32 @@ void KisDlgLayerProperties::updatePreview()
     }
 }
 
-
 bool KisDlgLayerProperties::haveChanges() const
 {
     return d->layer->name() !=  getName()
-        || d->layer->opacity() !=  getOpacity()
-        || d->layer->channelFlags() !=  getChannelFlags()
-        || (d->compositeOp && d->layer->compositeOp() &&
-            d->layer->compositeOp()->id()!= getCompositeOp());
+           || d->layer->opacity() !=  getOpacity()
+           || d->layer->channelFlags() !=  getChannelFlags()
+           || (d->compositeOp && d->layer->compositeOp() &&
+               d->layer->compositeOp()->id() != getCompositeOp());
 
 }
 
-
 void KisDlgLayerProperties::applyNewProperties()
 {
-    if (!d->layer) return;
+    if (!d->layer) {
+        return;
+    }
 
     cleanPreviewChanges();
 
     if (haveChanges()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         KUndo2Command *change = new KisLayerPropsCommand(d->layer,
-                                                         d->layer->opacity(),       getOpacity(),
-                                                         d->layer->compositeOpId(), getCompositeOp(),
-                                                         d->layer->name(),          getName(),
-                                                         d->layer->channelFlags(),  getChannelFlags(),
-                                                         true);
+                d->layer->opacity(),       getOpacity(),
+                d->layer->compositeOpId(), getCompositeOp(),
+                d->layer->name(),          getName(),
+                d->layer->channelFlags(),  getChannelFlags(),
+                true);
         d->view->undoAdapter()->addCommand(change);
         QApplication::restoreOverrideCursor();
         d->doc->setModified(true);
@@ -225,7 +224,7 @@ QString KisDlgLayerProperties::getName() const
 int KisDlgLayerProperties::getOpacity() const
 {
     qint32 opacity = d->page->intOpacity->value();
-    if (opacity > 0 ) {
+    if (opacity > 0) {
         opacity = int((opacity * 255.0) / 100 + 0.5);
     }
     if (opacity > 255) {

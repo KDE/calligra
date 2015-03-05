@@ -25,7 +25,6 @@
 #include "kis_types.h"
 #include "kis_image_command.h"
 
-
 /// The command for adding a layer
 class KRITAIMAGE_EXPORT KisImageLayerAddCommand : public KisImageCommand
 {

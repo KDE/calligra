@@ -27,8 +27,8 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 
-FlowView::FlowView(FlowPart *part, FlowDocument* document, QWidget* parent)
-  : KoPAView(part, document, KoPAView::NormalMode, parent), m_document(document)
+FlowView::FlowView(FlowPart *part, FlowDocument *document, QWidget *parent)
+    : KoPAView(part, document, KoPAView::NormalMode, parent), m_document(document)
 {
     Q_ASSERT(m_document);
 
@@ -46,7 +46,7 @@ FlowView::~FlowView()
 {
 }
 
-FlowDocument* FlowView::document() const
+FlowDocument *FlowView::document() const
 {
     return m_document;
 }

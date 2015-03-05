@@ -42,7 +42,7 @@ public:
 
     /*! Implement this to react for change of \a item.
      Called by KexiDataItemInterface::valueChanged() */
-    virtual void valueChanged(KexiDataItemInterface* item) = 0;
+    virtual void valueChanged(KexiDataItemInterface *item) = 0;
 
     /*! Implement this to return information whether we're currently at new row or not.
      This can be used e.g. by data-aware widgets to determine if "(auto)"
@@ -75,20 +75,20 @@ public:
      (usually a text of image) differs from the value of the widget (a numeric index).
 
      This method is called by table view's and form's editors. */
-    void setValue(const QVariant& value, const QVariant& add = QVariant(), bool removeOld = false,
-                  const QVariant* visibleValue = 0);
+    void setValue(const QVariant &value, const QVariant &add = QVariant(), bool removeOld = false,
+                  const QVariant *visibleValue = 0);
 
     //! \return field information for this item
     virtual KexiDB::Field *field() const = 0;
 
     //! \return column information for this item
-    virtual KexiDB::QueryColumnInfo* columnInfo() const = 0;
+    virtual KexiDB::QueryColumnInfo *columnInfo() const = 0;
 
     //! Used internally to set column information.
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo) = 0;
+    virtual void setColumnInfo(KexiDB::QueryColumnInfo *cinfo) = 0;
 
     //! Sets listener. No need to reimplement this.
-    virtual void installListener(KexiDataItemChangesListener* listener);
+    virtual void installListener(KexiDataItemChangesListener *listener);
 
     //! \return value currently represented by this item.
     virtual QVariant value() = 0;
@@ -121,7 +121,7 @@ public:
     virtual bool isReadOnly() const;
 
     /*! \return the view widget of this item, e.g. line edit widget. */
-    virtual QWidget* widget() = 0;
+    virtual QWidget *widget() = 0;
 
     /*! Hides item's widget, if available. */
     virtual void hideWidget();
@@ -171,7 +171,7 @@ public:
      If \a readOnly is true, additional elements should be visually disabled,
      e.g. dropdown button of the combobox editor should be disabled.
      For reimplementation. By default does nothing. */
-    virtual void showFocus(const QRect& r, bool readOnly);
+    virtual void showFocus(const QRect &r, bool readOnly);
 
     /*! Hides additional elements that are needed for indicating that the current cell
      is selected.
@@ -200,20 +200,20 @@ public:
      It is the case for KexiDBFieldEdit widget (see KexiDBFieldEdit::createEditor()). Use with care.
      signalValueChanged() method will check this pointer, and if it's not 0,
      parentDataItemInterface()->signalValueChanged() is called, so a changes can be signalled at higher level. */
-    void setParentDataItemInterface(KexiDataItemInterface* parentDataItemInterface);
+    void setParentDataItemInterface(KexiDataItemInterface *parentDataItemInterface);
 
     /*! \return a pointer to a Parent Data Item Interface.
      @see setParentDataItemInterface() */
-    KexiDataItemInterface* parentDataItemInterface() const;
+    KexiDataItemInterface *parentDataItemInterface() const;
 
     /*! Handles action having standard name \a actionName.
      Action could be: "edit_cut", "edit_paste", etc.
      For reimplementation. */
-    virtual void handleAction(const QString& actionName);
+    virtual void handleAction(const QString &actionName);
 
     virtual bool isComboBox() const;
-    
-    virtual QWidget* internalEditor() const;
+
+    virtual QWidget *internalEditor() const;
 
     //! Called (e.g. by KexiDataItemInterface) to change invalid value so it is valid.
     //! @return true on successful fixing
@@ -230,7 +230,7 @@ protected:
      If \a removeOld is true, a value should be set to \a add, otherwise
      -it should be set to current \a originalValue() + \a add, if possible.
      Implement this. */
-    virtual void setValueInternal(const QVariant& add, bool removeOld) = 0;
+    virtual void setValueInternal(const QVariant &add, bool removeOld) = 0;
 
     QVariant originalValue() const;
 
@@ -238,7 +238,7 @@ protected:
      This is currently used only in case of the combo box form widget, where displayed content
      (usually a text of image) differs from the value of the widget (a numeric index).
      For implementation in the combo box widget, by default does nothing. */
-    virtual void setVisibleValueInternal(const QVariant& value);
+    virtual void setVisibleValueInternal(const QVariant &value);
 
     /*! Call this in your implementation when value changes,
      so installed listener can react on this change. If there is a parent data item defined
@@ -259,12 +259,12 @@ protected:
     /*! Emits request for showing or hiding the "Length exceeded" warning, if needed. */
     void emitLengthExceededIfNeeded(bool lengthExceeded);
 
-    KexiDataItemChangesListener* listener();
+    KexiDataItemChangesListener *listener();
 
     void setFocusableWidget(bool set);
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

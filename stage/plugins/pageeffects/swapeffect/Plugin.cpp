@@ -26,7 +26,7 @@ K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
 K_EXPORT_PLUGIN(PluginFactory("KPrPageEffect"))
 
 Plugin::Plugin(QObject *parent, const QVariantList &)
-: QObject(parent)
+    : QObject(parent)
 {
     KPrPageEffectRegistry::instance()->add(new KPrSwapEffectFactory());
 }

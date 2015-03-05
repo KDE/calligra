@@ -53,10 +53,10 @@ class KRITAUI_EXPORT KisSelectionManager : public QObject
     Q_PROPERTY(bool havePixelsSelected READ havePixelsSelected NOTIFY currentSelectionChanged);
 public:
 
-    KisSelectionManager(KisViewManager * view);
+    KisSelectionManager(KisViewManager *view);
     virtual ~KisSelectionManager();
 
-    void setup(KisActionManager* actionManager);
+    void setup(KisActionManager *actionManager);
 
     void setView(QPointer<KisView>imageView);
 
@@ -124,21 +124,21 @@ public:
     void erode();
     void dilate();
 
-    void paint(QPainter& gc, const KoViewConverter &converter);
+    void paint(QPainter &gc, const KoViewConverter &converter);
 
 private:
-    void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);
+    void fill(const KoColor &color, bool fillWithPattern, const QString &transactionText);
     void updateStatusBar();
 
     void copyFromDevice(KisPaintDeviceSP device);
     void applySelectionFilter(KisSelectionFilter *filter);
 
-    KisViewManager * m_view;
-    KisDocument * m_doc;
+    KisViewManager *m_view;
+    KisDocument *m_doc;
     QPointer<KisView>m_imageView;
-    KisClipboard * m_clipboard;
+    KisClipboard *m_clipboard;
 
-    KisNodeCommandsAdapter* m_adapter;
+    KisNodeCommandsAdapter *m_adapter;
 
     KisAction *m_copy;
     KisAction *m_copyMerged;
@@ -161,7 +161,7 @@ private:
     KisAction *m_toggleDisplaySelection;
     KisAction *m_toggleSelectionOverlayMode;
 
-    QList<QAction*> m_pluginActions;
+    QList<QAction *> m_pluginActions;
     KisSelectionDecoration *m_selectionDecoration;
 
 };

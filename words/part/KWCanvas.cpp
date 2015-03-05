@@ -44,9 +44,9 @@
 #include <QPainterPath>
 
 KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, KWGui *parent)
-        : QWidget(parent),
-        KWCanvasBase(document, this),
-        m_view(view)
+    : QWidget(parent),
+      KWCanvasBase(document, this),
+      m_view(view)
 {
     setAttribute(Qt::WA_OpaquePaintEvent, true);
     setAttribute(Qt::WA_InputMethodEnabled, true);
@@ -124,7 +124,7 @@ void KWCanvas::mouseDoubleClickEvent(QMouseEvent *e)
 
 bool KWCanvas::event(QEvent *e)
 {
-    if(toolProxy()) {
+    if (toolProxy()) {
         toolProxy()->processEvent(e);
     }
     return QWidget::event(e);
@@ -135,17 +135,19 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
     m_toolProxy->keyPressEvent(e);
     if (! e->isAccepted()) {
         if (e->key() == Qt::Key_Backtab
-                || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier)))
+                || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier))) {
             focusNextPrevChild(false);
-        else if (e->key() == Qt::Key_Tab)
+        } else if (e->key() == Qt::Key_Tab) {
             focusNextPrevChild(true);
-        else if (e->key() == Qt::Key_PageUp)
+        } else if (e->key() == Qt::Key_PageUp) {
             m_view->goToPreviousPage(e->modifiers());
-        else if (e->key() == Qt::Key_PageDown)
+        } else if (e->key() == Qt::Key_PageDown) {
             m_view->goToNextPage(e->modifiers());
-         }
-    if(e->key() == Qt::Key_Escape)
+        }
+    }
+    if (e->key() == Qt::Key_Escape) {
         m_view->exitDistractioFreeMode();
+    }
 
 }
 

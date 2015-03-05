@@ -39,13 +39,11 @@
 // Shape
 #include "utils.h"
 
-
 //#define OdfObjectAttributes (OdfAllAttributes & ~(OdfGeometry | OdfTransformation))
 #define OdfObjectAttributes (OdfAdditionalAttributes | OdfMandatories)
 
 // ================================================================
 //                             Object3D
-
 
 Object3D::Object3D(Object3D *parent)
     : m_parent(parent)
@@ -56,7 +54,6 @@ Object3D::~Object3D()
 {
 }
 
-
 QString Object3D::transform()
 {
     return m_transform3D;
@@ -66,7 +63,6 @@ Object3D *Object3D::parent()
 {
     return m_parent;
 }
-
 
 bool Object3D::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context)
 {

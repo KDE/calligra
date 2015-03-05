@@ -16,8 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-
 #ifndef KIS_OPERATION_UI_WIDGET_FACTORY_H
 #define KIS_OPERATION_UI_WIDGET_FACTORY_H
 
@@ -39,7 +37,7 @@ public:
     KisOperationUIWidgetFactory(const QString &id) : KisOperationUIFactory(id)
     {
     }
-    
+
     virtual ~KisOperationUIWidgetFactory()
     {
     }
@@ -50,11 +48,12 @@ public:
     *  @param configuration the configuration to the operation
     *  @returns true if the configuration could be constructed (not canceled)
     */
-    virtual bool fetchConfiguration(KisViewManager* view, KisOperationConfiguration* configuration) {
-        KDialog * dialog = new KDialog(view->mainWindow());
+    virtual bool fetchConfiguration(KisViewManager *view, KisOperationConfiguration *configuration)
+    {
+        KDialog *dialog = new KDialog(view->mainWindow());
         Q_CHECK_PTR(dialog);
 
-        T* configWidget = new T(dialog, view);
+        T *configWidget = new T(dialog, view);
         dialog->setCaption(configWidget->caption());
         dialog->setMainWidget(configWidget);
         bool success = false;

@@ -30,15 +30,14 @@ KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(
     setLength(3);
 }
 
-qreal KisDynamicSensorTime::value(const KisPaintInformation&  pi)
+qreal KisDynamicSensorTime::value(const KisPaintInformation  &pi)
 {
     m_time += pi.currentTime() - m_lastTime;
     m_lastTime = pi.currentTime();
     if (m_time > m_length) {
         if (m_periodic) {
             m_time = (int)fmod((float)m_time, (float)m_length);
-        }
-        else {
+        } else {
             m_time = m_length;
         }
     }
@@ -62,9 +61,9 @@ void KisDynamicSensorTime::setLength(int length)
     setMaximumLabel(i18n("%1 s", length));
 }
 
-QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, QWidget* ss)
+QWidget *KisDynamicSensorTime::createConfigurationWidget(QWidget *parent, QWidget *ss)
 {
-    QWidget* wdg = new QWidget(parent);
+    QWidget *wdg = new QWidget(parent);
     Ui_SensorTimeConfiguration stc;
     stc.setupUi(wdg);
     stc.checkBoxRepeat->setChecked(m_periodic);
@@ -76,14 +75,14 @@ QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, QWidge
     return wdg;
 }
 
-void KisDynamicSensorTime::toXML(QDomDocument& doc, QDomElement& e) const
+void KisDynamicSensorTime::toXML(QDomDocument &doc, QDomElement &e) const
 {
     KisDynamicSensor::toXML(doc, e);
     e.setAttribute("periodic", m_periodic);
     e.setAttribute("duration", m_length);
 }
 
-void KisDynamicSensorTime::fromXML(const QDomElement& e)
+void KisDynamicSensorTime::fromXML(const QDomElement &e)
 {
     KisDynamicSensor::fromXML(e);
     m_periodic = e.attribute("periodic", "0").toInt();

@@ -68,7 +68,7 @@ KPrAnimationTool::~KPrAnimationTool()
     delete m_pathShapeManager;
 }
 
-void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converter)
+void KPrAnimationTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     foreach (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
         painter.save();
@@ -99,8 +99,7 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
     KoPathTool::paint(painter, converter);
 }
 
-
-void KPrAnimationTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KPrAnimationTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
     Q_UNUSED(shapes);
@@ -116,14 +115,14 @@ void KPrAnimationTool::activate(ToolActivation toolActivation, const QSet<KoShap
                 this, SLOT(reloadMotionPaths()));
         if (m_shapeAnimationWidget) {
             connect((dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, SIGNAL(activePageChanged()),
-                     m_shapeAnimationWidget, SLOT(slotActivePageChanged()));
+                    m_shapeAnimationWidget, SLOT(slotActivePageChanged()));
         }
     }
 
     // Init parent tool if motion path shape is selected
-    QList<KoPathShape*> selectedShapes;
-    foreach(KoShape *shape, shapes) {
-        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+    QList<KoPathShape *> selectedShapes;
+    foreach (KoShape *shape, shapes) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (shape->isEditable() && pathShape && !shape->isPrintable()) {
             if (m_currentMotionPathSelected == pathShape) {
                 return;
@@ -143,14 +142,14 @@ void KPrAnimationTool::deactivate()
     disconnect((dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, SIGNAL(activePageChanged()),
                this, SLOT(reloadMotionPaths()));
     disconnect((dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, SIGNAL(activePageChanged()),
-             m_shapeAnimationWidget, SLOT(slotActivePageChanged()));
+               m_shapeAnimationWidget, SLOT(slotActivePageChanged()));
     m_initializeTool = true;
     delete m_pathShapeManager;
     m_pathShapeManager = 0;
     KoPathTool::deactivate();
 }
 
-void KPrAnimationTool::mousePressEvent( KoPointerEvent *event )
+void KPrAnimationTool::mousePressEvent(KoPointerEvent *event)
 {
     //If no shape was click deselect all
     KoSelection *selection = canvas()->shapeManager()->selection();
@@ -167,9 +166,9 @@ void KPrAnimationTool::mousePressEvent( KoPointerEvent *event )
     }
     // Init Path tool if motion shape is selected
     shape = m_pathShapeManager->shapeAt(event->point);
-    if (KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape)) {
+    if (KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape)) {
         if (!pathShape->isPrintable()) {
-            QSet<KoShape*> shapes;
+            QSet<KoShape *> shapes;
             shapes << pathShape;
             m_initializeTool = false;
             activate(DefaultActivation, shapes);
@@ -192,7 +191,9 @@ QRectF KPrAnimationTool::handlesSize()
     QRectF bound = canvas()->shapeManager()->selection()->boundingRect();
 
     // expansion Border
-    if (!canvas() || !canvas()->viewConverter()) return bound;
+    if (!canvas() || !canvas()->viewConverter()) {
+        return bound;
+    }
 
     QPointF border = canvas()->viewConverter()->viewToDocument(QPointF(HANDLE_DISTANCE, HANDLE_DISTANCE));
     bound.adjust(-border.x(), -border.y(), border.x(), border.y());
@@ -201,7 +202,7 @@ QRectF KPrAnimationTool::handlesSize()
 
 QList<QPointer<QWidget> > KPrAnimationTool::createOptionWidgets()
 {
-    KPrPageEffectDocker *effectWidget = new KPrPageEffectDocker( );
+    KPrPageEffectDocker *effectWidget = new KPrPageEffectDocker();
     effectWidget->setView((dynamic_cast<KoPACanvas *>(canvas()))->koPAView());
 
     KPrClickActionDocker *clickActionWidget = new KPrClickActionDocker();
@@ -212,7 +213,7 @@ QList<QPointer<QWidget> > KPrAnimationTool::createOptionWidgets()
     connect(m_shapeAnimationWidget, SIGNAL(shapeAnimationsChanged(KoShape*)), this, SLOT(verifyMotionPathChanged(KoShape*)));
     connect(m_shapeAnimationWidget, SIGNAL(motionPathAddedRemoved()), this, SLOT(reloadMotionPaths()));
     connect((dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, SIGNAL(activePageChanged()),
-             m_shapeAnimationWidget, SLOT(slotActivePageChanged()));
+            m_shapeAnimationWidget, SLOT(slotActivePageChanged()));
 
     QList<QPointer<QWidget> > widgets;
     effectWidget->setWindowTitle(i18n("Slide Transitions"));
@@ -277,7 +278,7 @@ void KPrAnimationTool::cleanMotionPathManager()
     if (!m_pathShapeManager) {
         return;
     }
-    foreach(KoShape *shape, m_pathShapeManager->shapes()) {
+    foreach (KoShape *shape, m_pathShapeManager->shapes()) {
         m_pathShapeManager->remove(shape);
     }
     m_animateMotionMap.clear();
@@ -289,7 +290,7 @@ void KPrAnimationTool::reloadMotionPaths()
 {
     // Remove handles
     m_pointSelection.clear();
-    m_pointSelection.setSelectedShapes(QList<KoPathShape*>());
+    m_pointSelection.setSelectedShapes(QList<KoPathShape *>());
     m_pointSelection.update();
     // Load motion paths
     initMotionPathShapes();

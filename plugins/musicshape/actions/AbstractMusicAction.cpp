@@ -21,7 +21,7 @@
 
 #include <QPainter>
 
-AbstractMusicAction::AbstractMusicAction(const KIcon& icon, const QString& text, SimpleEntryTool* tool)
+AbstractMusicAction::AbstractMusicAction(const KIcon &icon, const QString &text, SimpleEntryTool *tool)
     : KAction(icon, text, tool)
     , m_isVoiceAware(false)
     , m_tool(tool)
@@ -29,7 +29,7 @@ AbstractMusicAction::AbstractMusicAction(const KIcon& icon, const QString& text,
     setCheckable(true);
 }
 
-AbstractMusicAction::AbstractMusicAction(const QString& text, SimpleEntryTool* tool)
+AbstractMusicAction::AbstractMusicAction(const QString &text, SimpleEntryTool *tool)
     : KAction(text, tool)
     , m_isVoiceAware(false)
     , m_tool(tool)
@@ -37,11 +37,10 @@ AbstractMusicAction::AbstractMusicAction(const QString& text, SimpleEntryTool* t
     setCheckable(true);
 }
 
-
-void AbstractMusicAction::renderPreview(QPainter& painter, const QPointF& point)
+void AbstractMusicAction::renderPreview(QPainter &painter, const QPointF &point)
 {
-    Q_UNUSED( painter );
-    Q_UNUSED( point );
+    Q_UNUSED(painter);
+    Q_UNUSED(point);
 }
 
 bool AbstractMusicAction::isVoiceAware()
@@ -49,16 +48,16 @@ bool AbstractMusicAction::isVoiceAware()
     return m_isVoiceAware;
 }
 
-void AbstractMusicAction::mouseMove(MusicCore::Staff*, int, const QPointF&)
+void AbstractMusicAction::mouseMove(MusicCore::Staff *, int, const QPointF &)
 {
 }
 
-void AbstractMusicAction::renderKeyboardPreview(QPainter& painter, const MusicCursor& /*cursor*/)
+void AbstractMusicAction::renderKeyboardPreview(QPainter &painter, const MusicCursor & /*cursor*/)
 {
     Q_UNUSED(painter);
 }
 
-void AbstractMusicAction::keyPress(QKeyEvent* event, const MusicCursor& /*cursor*/)
+void AbstractMusicAction::keyPress(QKeyEvent *event, const MusicCursor & /*cursor*/)
 {
     Q_UNUSED(event);
 }

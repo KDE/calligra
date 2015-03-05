@@ -28,15 +28,14 @@ class KoColorSpace;
 class KisImageSetProjectionColorSpaceCommand : public KisImageCommand
 {
 public:
-    KisImageSetProjectionColorSpaceCommand(KisImageWSP image, const KoColorSpace * afterColorSpace);
+    KisImageSetProjectionColorSpaceCommand(KisImageWSP image, const KoColorSpace *afterColorSpace);
 
     virtual void redo();
     virtual void undo();
 
 private:
-    const KoColorSpace * m_beforeColorSpace;
-    const KoColorSpace * m_afterColorSpace;
+    const KoColorSpace *m_beforeColorSpace;
+    const KoColorSpace *m_afterColorSpace;
 };
-
 
 #endif /* KIS_IMAGE_SET_PROJECTION_COLOR_SPACE_COMMAND_H_ */

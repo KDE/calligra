@@ -30,9 +30,9 @@ class KPrShapeAnimationRegistry : public KoGenericRegistry<KPrShapeAnimationFact
 {
 public:
     class Singleton;
-    static KPrShapeAnimationRegistry * instance();
+    static KPrShapeAnimationRegistry *instance();
 
-    KPrShapeAnimationOld * createShapeAnimation( const KoXmlElement & element );
+    KPrShapeAnimationOld *createShapeAnimation(const KoXmlElement &element);
 
 private:
     friend class Singleton;

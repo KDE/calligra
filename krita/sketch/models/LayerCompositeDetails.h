@@ -21,12 +21,11 @@
 
 #include <QObject>
 
-
 class LayerCompositeDetails : public QObject
 {
     Q_OBJECT
 public:
-    explicit LayerCompositeDetails(QObject* parent = 0);
+    explicit LayerCompositeDetails(QObject *parent = 0);
     virtual ~LayerCompositeDetails();
 };
 

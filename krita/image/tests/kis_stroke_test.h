@@ -21,7 +21,6 @@
 
 #include <QtTest>
 
-
 class KisStrokeTest : public QObject
 {
     Q_OBJECT

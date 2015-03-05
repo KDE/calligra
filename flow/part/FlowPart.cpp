@@ -47,16 +47,16 @@ void FlowPart::setDocument(FlowDocument *document)
     m_document = document;
 }
 
-KoView * FlowPart::createViewInstance(KoDocument *document, QWidget *parent)
+KoView *FlowPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    FlowView *view = new FlowView(this, qobject_cast<FlowDocument*>(document), parent);
+    FlowView *view = new FlowView(this, qobject_cast<FlowDocument *>(document), parent);
     connect(document, SIGNAL(replaceActivePage(KoPAPageBase*,KoPAPageBase*)), view, SLOT(replaceActivePage(KoPAPageBase*,KoPAPageBase*)));
     return view;
 }
 
 QGraphicsItem *FlowPart::createCanvasItem(KoDocument *document)
 {
-    KoPACanvasItem *canvasItem = new KoPACanvasItem(qobject_cast<KoPADocument*>(document));
+    KoPACanvasItem *canvasItem = new KoPACanvasItem(qobject_cast<KoPADocument *>(document));
     return canvasItem;
 }
 
@@ -91,7 +91,7 @@ void FlowPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 
 void FlowPart::showErrorAndDie()
 {
-    KMessageBox::error(0, m_errorMessage, i18n( "Installation Error"));
+    KMessageBox::error(0, m_errorMessage, i18n("Installation Error"));
     // This means "the environment is incorrect" on Windows
     // FIXME: Is this uniform on all platforms?
     QCoreApplication::exit(10);

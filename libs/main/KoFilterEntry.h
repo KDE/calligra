@@ -40,10 +40,10 @@ public:
     typedef KSharedPtr<KoFilterEntry> Ptr;
 
     //KoFilterEntry() : weight( 0 ) { m_service = 0; } // for QList
-    explicit KoFilterEntry(const KService::Ptr& service);
+    explicit KoFilterEntry(const KService::Ptr &service);
     ~KoFilterEntry() { }
 
-    KoFilter* createFilter(KoFilterChain* chain, QObject* parent = 0);
+    KoFilter *createFilter(KoFilterChain *chain, QObject *parent = 0);
 
     /**
      *  The imported mimetype(s).
@@ -68,14 +68,16 @@ public:
     /**
      *  @return TRUE if the filter can import the requested mimetype.
      */
-    bool imports(const QString& _mimetype) const {
+    bool imports(const QString &_mimetype) const
+    {
         return (import.contains(_mimetype));
     }
 
     /**
      *  @return TRUE if the filter can export the requested mimetype.
      */
-    bool exports(const QString& _m) const {
+    bool exports(const QString &_m) const
+    {
         return (export_.contains(_m));
     }
 
@@ -84,7 +86,8 @@ public:
      */
     static QList<KoFilterEntry::Ptr> query();
 
-    KService::Ptr service() const {
+    KService::Ptr service() const
+    {
         return m_service;
     }
 

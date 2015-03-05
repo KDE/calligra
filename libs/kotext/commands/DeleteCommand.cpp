@@ -44,7 +44,7 @@ DeleteCommand::DeleteCommand(DeleteMode mode,
                              QTextDocument *document,
                              KoShapeController *shapeController,
                              KUndo2Command *parent)
-    : KoTextCommandBase (parent)
+    : KoTextCommandBase(parent)
     , m_document(document)
     , m_shapeController(shapeController)
     , m_first(true)
@@ -219,10 +219,10 @@ public:
 
                 //m_endBlockNum != -1 in this case.
                 QList<KoSectionEnd *> closeListEndBlock = KoSectionUtils::sectionEndings(
-                    cur->document()->findBlockByNumber(m_endBlockNum).blockFormat());
+                            cur->document()->findBlockByNumber(m_endBlockNum).blockFormat());
 
                 while (!openList.empty() && !closeListEndBlock.empty()
-                    && openList.last()->name() == closeListEndBlock.first()->name()) {
+                        && openList.last()->name() == closeListEndBlock.first()->name()) {
                     openList.pop_back();
                     closeListEndBlock.pop_front();
                 }
@@ -256,8 +256,7 @@ public:
         }
     }
 
-    enum SectionHandleAction
-    {
+    enum SectionHandleAction {
         SectionClose, // Denotes close of the section.
         SectionOpen // Denotes start or beginning of the section.
     };
@@ -333,7 +332,7 @@ void DeleteCommand::doDelete()
             // we should only delete the anchor if the selection is covering it... not if the selection is
             // just adjecent to the anchor. This is more in line with what other wordprocessors do
             if (anchorRange->position() != textEditor->selectionStart()
-            && anchorRange->position() != textEditor->selectionEnd()) {
+                    && anchorRange->position() != textEditor->selectionEnd()) {
                 KoShape *shape = anchorRange->anchor()->shape();
                 if (m_shapeController) {
                     KUndo2Command *shapeDeleteCommand = m_shapeController->removeShape(shape, this);
@@ -399,42 +398,50 @@ bool DeleteCommand::mergeWith(const KUndo2Command *command)
     {
     public:
         UndoTextCommand(QTextDocument *document, KUndo2Command *parent = 0)
-        : KUndo2Command(kundo2_i18n("Text"), parent),
-        m_document(document)
+            : KUndo2Command(kundo2_i18n("Text"), parent),
+              m_document(document)
         {}
 
-        void undo() {
+        void undo()
+        {
             QTextDocument *doc = m_document.data();
-            if (doc)
+            if (doc) {
                 doc->undo(KoTextDocument(doc).textEditor()->cursor());
+            }
         }
 
-        void redo() {
+        void redo()
+        {
             QTextDocument *doc = m_document.data();
-            if (doc)
+            if (doc) {
                 doc->redo(KoTextDocument(doc).textEditor()->cursor());
+            }
         }
 
         QWeakPointer<QTextDocument> m_document;
     };
 
     KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
-    if (textEditor == 0)
+    if (textEditor == 0) {
         return false;
+    }
 
-    if (command->id() != id())
+    if (command->id() != id()) {
         return false;
+    }
 
-    if (!checkMerge(command))
+    if (!checkMerge(command)) {
         return false;
+    }
 
     DeleteCommand *other = const_cast<DeleteCommand *>(static_cast<const DeleteCommand *>(command));
 
     m_invalidInlineObjects += other->m_invalidInlineObjects;
     other->m_invalidInlineObjects.clear();
 
-    for (int i=0; i < command->childCount(); i++)
-        new UndoTextCommand(const_cast<QTextDocument*>(textEditor->document()), this);
+    for (int i = 0; i < command->childCount(); i++) {
+        new UndoTextCommand(const_cast<QTextDocument *>(textEditor->document()), this);
+    }
 
     return true;
 }
@@ -443,8 +450,9 @@ bool DeleteCommand::checkMerge(const KUndo2Command *command)
 {
     DeleteCommand *other = const_cast<DeleteCommand *>(static_cast<const DeleteCommand *>(command));
 
-    if (!(m_mergePossible && other->m_mergePossible))
+    if (!(m_mergePossible && other->m_mergePossible)) {
         return false;
+    }
 
     if (m_position == other->m_position && m_format == other->m_format) {
         m_length += other->m_length;
@@ -463,14 +471,16 @@ bool DeleteCommand::checkMerge(const KUndo2Command *command)
 void DeleteCommand::updateListChanges()
 {
     KoTextEditor *textEditor = KoTextDocument(m_document).textEditor();
-    if (textEditor == 0)
+    if (textEditor == 0) {
         return;
-    QTextDocument *document = const_cast<QTextDocument*>(textEditor->document());
+    }
+    QTextDocument *document = const_cast<QTextDocument *>(textEditor->document());
     QTextCursor tempCursor(document);
     QTextBlock startBlock = document->findBlock(m_position);
     QTextBlock endBlock = document->findBlock(m_position + m_length);
-    if (endBlock != document->end())
+    if (endBlock != document->end()) {
         endBlock = endBlock.next();
+    }
     QTextList *currentList;
 
     for (QTextBlock currentBlock = startBlock; currentBlock != endBlock; currentBlock = currentBlock.next()) {
@@ -478,10 +488,11 @@ void DeleteCommand::updateListChanges()
         currentList = tempCursor.currentList();
         if (currentList) {
             KoListStyle::ListIdType listId;
-            if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
+            if (sizeof(KoListStyle::ListIdType) == sizeof(uint)) {
                 listId = currentList->format().property(KoListStyle::ListId).toUInt();
-            else
+            } else {
                 listId = currentList->format().property(KoListStyle::ListId).toULongLong();
+            }
 
             if (!KoTextDocument(document).list(currentBlock)) {
                 KoList *list = KoTextDocument(document).list(listId);

@@ -74,11 +74,11 @@ static const unsigned char needle_move_bits[] = {
 };
 
 // helper function to calculate the squared distance between two points
-qreal squaredDistance(const QPointF& p1, const QPointF &p2)
+qreal squaredDistance(const QPointF &p1, const QPointF &p2)
 {
-    qreal dx = p1.x()-p2.x();
-    qreal dy = p1.y()-p2.y();
-    return dx*dx + dy*dy;
+    qreal dx = p1.x() - p2.x();
+    qreal dy = p1.y() - p2.y();
+    return dx * dx + dy * dy;
 }
 
 struct KoPathTool::PathSegment {
@@ -87,7 +87,8 @@ struct KoPathTool::PathSegment {
     {
     }
 
-    bool isValid() {
+    bool isValid()
+    {
         return  path && segmentStart;
     }
 
@@ -97,12 +98,12 @@ struct KoPathTool::PathSegment {
 };
 
 KoPathTool::KoPathTool(KoCanvasBase *canvas)
-        : KoToolBase(canvas)
-        , m_pointSelection(this)
-        , m_activeHandle(0)
-        , m_handleRadius(3)
-        , m_activeSegment(0)
-        , m_currentStrategy(0)
+    : KoToolBase(canvas)
+    , m_pointSelection(this)
+    , m_activeHandle(0)
+    , m_handleRadius(3)
+    , m_activeSegment(0)
+    , m_currentStrategy(0)
 {
     QActionGroup *points = new QActionGroup(this);
     // m_pointTypeGroup->setExclusive(true);
@@ -196,7 +197,7 @@ QList<QPointer<QWidget> >  KoPathTool::createOptionWidgets()
 {
     QList<QPointer<QWidget> > list;
 
-    PathToolOptionWidget * toolOptions = new PathToolOptionWidget(this);
+    PathToolOptionWidget *toolOptions = new PathToolOptionWidget(this);
     connect(this, SIGNAL(typeChanged(int)), toolOptions, SLOT(setSelectionType(int)));
     updateOptionsWidget();
     toolOptions->setWindowTitle(i18n("Line/Curve"));
@@ -240,7 +241,7 @@ void KoPathTool::insertPoints()
             KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, 0.5);
             d->canvas->addCommand(cmd);
 
-            foreach (KoPathPoint * p, cmd->insertedPoints()) {
+            foreach (KoPathPoint *p, cmd->insertedPoints()) {
                 m_pointSelection.add(p, false);
             }
             updateActions();
@@ -254,7 +255,7 @@ void KoPathTool::removePoints()
     // TODO finish current action or should this not possible during actions???
     if (m_pointSelection.size() > 0) {
         KUndo2Command *cmd = KoPathPointRemoveCommand::createCommand(m_pointSelection.selectedPointsData(), d->canvas->shapeController());
-        PointHandle *pointHandle = dynamic_cast<PointHandle*>(m_activeHandle);
+        PointHandle *pointHandle = dynamic_cast<PointHandle *>(m_activeHandle);
         if (pointHandle && m_pointSelection.contains(pointHandle->activePoint())) {
             delete m_activeHandle;
             m_activeHandle = 0;
@@ -274,8 +275,9 @@ void KoPathTool::pointToLine()
         QList<KoPathPointData>::const_iterator it(selectedPoints.constBegin());
         for (; it != selectedPoints.constEnd(); ++it) {
             KoPathPoint *point = it->pathShape->pointByIndex(it->pointIndex);
-            if (point && (point->activeControlPoint1() || point->activeControlPoint2()))
+            if (point && (point->activeControlPoint1() || point->activeControlPoint2())) {
                 pointToChange.append(*it);
+            }
         }
 
         if (! pointToChange.isEmpty()) {
@@ -295,8 +297,9 @@ void KoPathTool::pointToCurve()
         QList<KoPathPointData>::const_iterator it(selectedPoints.constBegin());
         for (; it != selectedPoints.constEnd(); ++it) {
             KoPathPoint *point = it->pathShape->pointByIndex(it->pointIndex);
-            if (point && (! point->activeControlPoint1() || ! point->activeControlPoint2()))
+            if (point && (! point->activeControlPoint1() || ! point->activeControlPoint2())) {
                 pointToChange.append(*it);
+            }
         }
 
         if (! pointToChange.isEmpty()) {
@@ -333,14 +336,16 @@ void KoPathTool::segmentToCurve()
 void KoPathTool::convertToPath()
 {
     Q_D(KoToolBase);
-    QList<KoParameterShape*> shapesToConvert;
-    foreach(KoShape *shape, m_pointSelection.selectedShapes()) {
-        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
-        if (parameterShape && parameterShape->isParametricShape())
+    QList<KoParameterShape *> shapesToConvert;
+    foreach (KoShape *shape, m_pointSelection.selectedShapes()) {
+        KoParameterShape *parameterShape = dynamic_cast<KoParameterShape *>(shape);
+        if (parameterShape && parameterShape->isParametricShape()) {
             shapesToConvert.append(parameterShape);
+        }
     }
-    if (shapesToConvert.count())
+    if (shapesToConvert.count()) {
         d->canvas->addCommand(new KoParameterToPathCommand(shapesToConvert));
+    }
     updateOptionsWidget();
 }
 
@@ -349,9 +354,9 @@ void KoPathTool::joinPoints()
     Q_D(KoToolBase);
     if (m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2) {
         QList<KoPathPointData> pd(m_pointSelection.selectedPointsData());
-        const KoPathPointData & pd1 = pd.at(0);
-        const KoPathPointData & pd2 = pd.at(1);
-        KoPathShape * pathShape = pd1.pathShape;
+        const KoPathPointData &pd1 = pd.at(0);
+        const KoPathPointData &pd2 = pd.at(1);
+        KoPathShape *pathShape = pd1.pathShape;
         if (!pathShape->isClosedSubpath(pd1.pointIndex.first) &&
                 (pd1.pointIndex.second == 0 ||
                  pd1.pointIndex.second == pathShape->subpathPointCount(pd1.pointIndex.first) - 1) &&
@@ -368,26 +373,30 @@ void KoPathTool::joinPoints()
 void KoPathTool::mergePoints()
 {
     Q_D(KoToolBase);
-    if (m_pointSelection.objectCount() != 1 || m_pointSelection.size() != 2)
+    if (m_pointSelection.objectCount() != 1 || m_pointSelection.size() != 2) {
         return;
+    }
 
     QList<KoPathPointData> pointData = m_pointSelection.selectedPointsData();
-    const KoPathPointData & pd1 = pointData.at(0);
-    const KoPathPointData & pd2 = pointData.at(1);
-    const KoPathPointIndex & index1 = pd1.pointIndex;
-    const KoPathPointIndex & index2 = pd2.pointIndex;
+    const KoPathPointData &pd1 = pointData.at(0);
+    const KoPathPointData &pd2 = pointData.at(1);
+    const KoPathPointIndex &index1 = pd1.pointIndex;
+    const KoPathPointIndex &index2 = pd2.pointIndex;
 
-    KoPathShape * path = pd1.pathShape;
+    KoPathShape *path = pd1.pathShape;
 
     // check if subpaths are already closed
-    if (path->isClosedSubpath(index1.first) || path->isClosedSubpath(index2.first))
+    if (path->isClosedSubpath(index1.first) || path->isClosedSubpath(index2.first)) {
         return;
+    }
     // check if first point is an endpoint
-    if (index1.second != 0 && index1.second != path->subpathPointCount(index1.first)-1)
+    if (index1.second != 0 && index1.second != path->subpathPointCount(index1.first) - 1) {
         return;
+    }
     // check if second point is an endpoint
-    if (index2.second != 0 && index2.second != path->subpathPointCount(index2.first)-1)
+    if (index2.second != 0 && index2.second != path->subpathPointCount(index2.first) - 1) {
         return;
+    }
 
     // now we can start merging the endpoints
     KoPathPointMergeCommand *cmd = new KoPathPointMergeCommand(pd1, pd2);
@@ -425,11 +434,11 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
     painter.setBrush(Qt::white);   //TODO make configurable
     painter.setPen(Qt::blue);
 
-    foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
+    foreach (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         painter.save();
         painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
 
-        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
+        KoParameterShape *parameterShape = dynamic_cast<KoParameterShape *>(shape);
         if (parameterShape && parameterShape->isParametricShape()) {
             parameterShape->paintHandles(painter, converter, m_handleRadius);
         } else {
@@ -472,7 +481,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void KoPathTool::repaintDecorations()
 {
-    foreach(KoShape *shape, m_pointSelection.selectedShapes()) {
+    foreach (KoShape *shape, m_pointSelection.selectedShapes()) {
         repaint(shape->boundingRect());
     }
 
@@ -513,8 +522,9 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
 
 void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (event->button() & Qt::RightButton)
+    if (event->button() & Qt::RightButton) {
         return;
+    }
 
     if (m_currentStrategy) {
         m_lastPoint = event->point;
@@ -522,27 +532,29 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
 
         // repaint new handle positions
         m_pointSelection.repaint();
-        if (m_activeHandle)
+        if (m_activeHandle) {
             m_activeHandle->repaint();
+        }
         return;
     }
 
     delete m_activeSegment;
     m_activeSegment = 0;
 
-    foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
+    foreach (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         QRectF roi = handleGrabRect(shape->documentToShape(event->point));
-        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
+        KoParameterShape *parameterShape = dynamic_cast<KoParameterShape *>(shape);
         if (parameterShape && parameterShape->isParametricShape()) {
             int handleId = parameterShape->handleIdAt(roi);
             if (handleId != -1) {
                 useCursor(m_moveCursor);
                 emit statusTextChanged(i18n("Drag to move handle."));
-                if (m_activeHandle)
+                if (m_activeHandle) {
                     m_activeHandle->repaint();
+                }
                 delete m_activeHandle;
 
-                if (KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(parameterShape)) {
+                if (KoConnectionShape *connectionShape = dynamic_cast<KoConnectionShape *>(parameterShape)) {
                     //qDebug() << "handleId" << handleId;
                     m_activeHandle = new ConnectionHandle(this, connectionShape, handleId);
                     m_activeHandle->repaint();
@@ -556,16 +568,17 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
             }
 
         } else {
-            QList<KoPathPoint*> points = shape->pointsAt(roi);
+            QList<KoPathPoint *> points = shape->pointsAt(roi);
             if (! points.empty()) {
                 // find the nearest control point from all points within the roi
-                KoPathPoint * bestPoint = 0;
+                KoPathPoint *bestPoint = 0;
                 KoPathPoint::PointType bestPointType = KoPathPoint::Node;
                 qreal minDistance = HUGE_VAL;
-                foreach(KoPathPoint *p, points) {
+                foreach (KoPathPoint *p, points) {
                     // the node point must be hit if the point is not selected yet
-                    if (! m_pointSelection.contains(p) && ! roi.contains(p->point()))
+                    if (! m_pointSelection.contains(p) && ! roi.contains(p->point())) {
                         continue;
+                    }
 
                     // check for the control points first as otherwise it is no longer
                     // possible to change the control points when they are the same as the point
@@ -596,21 +609,25 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
                     }
                 }
 
-                if (! bestPoint)
+                if (! bestPoint) {
                     return;
+                }
 
                 useCursor(m_moveCursor);
-                if (bestPointType == KoPathPoint::Node)
+                if (bestPointType == KoPathPoint::Node) {
                     emit statusTextChanged(i18n("Drag to move point. Shift click to change point type."));
-                else
+                } else {
                     emit statusTextChanged(i18n("Drag to move control point."));
+                }
 
-                PointHandle *prev = dynamic_cast<PointHandle*>(m_activeHandle);
-                if (prev && prev->activePoint() == bestPoint && prev->activePointType() == bestPointType)
-                    return; // no change;
+                PointHandle *prev = dynamic_cast<PointHandle *>(m_activeHandle);
+                if (prev && prev->activePoint() == bestPoint && prev->activePointType() == bestPointType) {
+                    return;    // no change;
+                }
 
-                if (m_activeHandle)
+                if (m_activeHandle) {
                     m_activeHandle->repaint();
+                }
                 delete m_activeHandle;
                 m_activeHandle = new PointHandle(this, bestPoint, bestPointType);
                 m_activeHandle->repaint();
@@ -620,24 +637,26 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     }
 
     useCursor(m_selectCursor);
-    if (m_activeHandle)
+    if (m_activeHandle) {
         m_activeHandle->repaint();
+    }
     delete m_activeHandle;
     m_activeHandle = 0;
 
     PathSegment *hoveredSegment = segmentAtPoint(event->point);
-    if(hoveredSegment) {
+    if (hoveredSegment) {
         useCursor(Qt::PointingHandCursor);
         emit statusTextChanged(i18n("Drag to change curve directly. Double click to insert new path point."));
         m_activeSegment = hoveredSegment;
     } else {
         uint selectedPointCount = m_pointSelection.size();
-        if (selectedPointCount == 0)
+        if (selectedPointCount == 0) {
             emit statusTextChanged("");
-        else if (selectedPointCount == 1)
+        } else if (selectedPointCount == 1) {
             emit statusTextChanged(i18n("Press B to break path at selected point."));
-        else
+        } else {
             emit statusTextChanged(i18n("Press B to break path at selected segments."));
+        }
     }
 }
 
@@ -648,9 +667,10 @@ void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
         const bool hadNoSelection = !m_pointSelection.hasSelection();
         m_currentStrategy->finishInteraction(event->modifiers());
         KUndo2Command *command = m_currentStrategy->createCommand();
-        if (command)
+        if (command) {
             d->canvas->addCommand(command);
-        if (hadNoSelection && dynamic_cast<KoPathPointRubberSelectStrategy*>(m_currentStrategy)
+        }
+        if (hadNoSelection && dynamic_cast<KoPathPointRubberSelectStrategy *>(m_currentStrategy)
                 && !m_pointSelection.hasSelection()) {
             // the click didn't do anything at all. Allow it to be used by others.
             event->ignore();
@@ -658,10 +678,11 @@ void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
         delete m_currentStrategy;
         m_currentStrategy = 0;
 
-        if (m_pointSelection.selectedShapes().count() == 1)
+        if (m_pointSelection.selectedShapes().count() == 1) {
             emit pathChanged(m_pointSelection.selectedShapes().first());
-        else
+        } else {
             emit pathChanged(0);
+        }
     }
 }
 
@@ -693,10 +714,11 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_I: {
             KoDocumentResourceManager *rm = d->canvas->shapeController()->resourceManager();
             int handleRadius = rm->handleRadius();
-            if (event->modifiers() & Qt::ControlModifier)
+            if (event->modifiers() & Qt::ControlModifier) {
                 handleRadius--;
-            else
+            } else {
                 handleRadius++;
+            }
             rm->setHandleRadius(handleRadius);
             break;
         }
@@ -704,16 +726,17 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_D:
             if (m_pointSelection.objectCount() == 1) {
                 QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
-                KoPathShapePrivate *p = static_cast<KoPathShapePrivate*>(selectedPoints[0].pathShape->priv());
+                KoPathShapePrivate *p = static_cast<KoPathShapePrivate *>(selectedPoints[0].pathShape->priv());
                 p->debugPath();
             }
             break;
 #endif
         case Qt::Key_B:
-            if (m_pointSelection.size() == 1)
+            if (m_pointSelection.size() == 1) {
                 breakAtPoint();
-            else if (m_pointSelection.size() >= 2)
+            } else if (m_pointSelection.size() >= 2) {
                 breakAtSegment();
+            }
             break;
         default:
             event->ignore();
@@ -748,12 +771,14 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     event->ignore();
 
     // check if we are doing something else at the moment
-    if (m_currentStrategy)
+    if (m_currentStrategy) {
         return;
+    }
 
     PathSegment *s = segmentAtPoint(event->point);
-    if (!s)
+    if (!s) {
         return;
+    }
 
     if (s->isValid()) {
         QList<KoPathPointData> segments;
@@ -761,7 +786,7 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
         KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, s->positionOnSegment);
         d->canvas->addCommand(cmd);
 
-        foreach (KoPathPoint * p, cmd->insertedPoints()) {
+        foreach (KoPathPoint *p, cmd->insertedPoints()) {
             m_pointSelection.add(p, false);
         }
         updateActions();
@@ -770,7 +795,7 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     delete s;
 }
 
-KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
+KoPathTool::PathSegment *KoPathTool::segmentAtPoint(const QPointF &point)
 {
     Q_D(KoToolBase);
     // TODO: use global click proximity once added to the canvas resource provider
@@ -779,14 +804,15 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
     // convert click proximity to point using the current zoom level
     QPointF clickOffset = d->canvas->viewConverter()->viewToDocument(QPointF(clickProximity, clickProximity));
     // the max allowed distance from a segment
-    const qreal maxSquaredDistance = clickOffset.x()*clickOffset.x();
+    const qreal maxSquaredDistance = clickOffset.x() * clickOffset.x();
 
     PathSegment *segment = new PathSegment;
 
-    foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
-        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
-        if (parameterShape && parameterShape->isParametricShape())
+    foreach (KoPathShape *shape, m_pointSelection.selectedShapes()) {
+        KoParameterShape *parameterShape = dynamic_cast<KoParameterShape *>(shape);
+        if (parameterShape && parameterShape->isParametricShape()) {
             continue;
+        }
 
         // convert document point to shape coordinates
         QPointF p = shape->documentToShape(point);
@@ -800,10 +826,11 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
             qreal nearestPointParam = s.nearestPoint(p);
             QPointF nearestPoint = s.pointAt(nearestPointParam);
             QPointF diff = p - nearestPoint;
-            qreal squaredDistance = diff.x()*diff.x() + diff.y()*diff.y();
+            qreal squaredDistance = diff.x() * diff.x() + diff.y() * diff.y();
             // are we within the allowed distance ?
-            if (squaredDistance > maxSquaredDistance)
+            if (squaredDistance > maxSquaredDistance) {
                 continue;
+            }
             // are we closer to the last closest point ?
             if (squaredDistance < minSqaredDistance) {
                 segment->path = shape;
@@ -821,7 +848,7 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
     return segment;
 }
 
-void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_D(KoToolBase);
     Q_UNUSED(toolActivation);
@@ -830,9 +857,9 @@ void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
     d->canvas->snapGuide()->reset();
 
     repaintDecorations();
-    QList<KoPathShape*> selectedShapes;
-    foreach(KoShape *shape, shapes) {
-        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+    QList<KoPathShape *> selectedShapes;
+    foreach (KoShape *shape, shapes) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
 
         if (shape->isEditable() && pathShape) {
             // as the tool is just in activation repaintDecorations does not yet get called
@@ -856,9 +883,9 @@ void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
 void KoPathTool::activate()
 {
     Q_D(KoToolBase);
-    QSet<KoShape*> shapes;
-    foreach(KoShape *shape, d->canvas->shapeManager()->selection()->selectedShapes()) {
-        QSet<KoShape*> delegates = shape->toolDelegates();
+    QSet<KoShape *> shapes;
+    foreach (KoShape *shape, d->canvas->shapeManager()->selection()->selectedShapes()) {
+        QSet<KoShape *> delegates = shape->toolDelegates();
         if (delegates.isEmpty()) {
             shapes << shape;
         } else {
@@ -871,16 +898,17 @@ void KoPathTool::activate()
 void KoPathTool::updateOptionsWidget()
 {
     PathToolOptionWidget::Types type;
-    QList<KoPathShape*> selectedShapes = m_pointSelection.selectedShapes();
-    foreach(KoPathShape *shape, selectedShapes) {
-        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
+    QList<KoPathShape *> selectedShapes = m_pointSelection.selectedShapes();
+    foreach (KoPathShape *shape, selectedShapes) {
+        KoParameterShape *parameterShape = dynamic_cast<KoParameterShape *>(shape);
         type |= parameterShape && parameterShape->isParametricShape() ?
                 PathToolOptionWidget::ParametricShape : PathToolOptionWidget::PlainPath;
     }
-    if (selectedShapes.count() == 1)
+    if (selectedShapes.count() == 1) {
         emit pathChanged(selectedShapes.first());
-    else
+    } else {
         emit pathChanged(0);
+    }
     emit typeChanged(type);
 }
 
@@ -896,8 +924,9 @@ void KoPathTool::updateActions()
     m_actionLinePoint->setEnabled(hasPointsSelected);
 
     bool hasSegmentsSelected = false;
-    if (hasPointsSelected && m_pointSelection.size() > 1)
+    if (hasPointsSelected && m_pointSelection.size() > 1) {
         hasSegmentsSelected = !m_pointSelection.selectedSegmentsData().isEmpty();
+    }
     m_actionAddPoint->setEnabled(hasSegmentsSelected);
     m_actionLineSegment->setEnabled(hasSegmentsSelected);
     m_actionCurveSegment->setEnabled(hasSegmentsSelected);
@@ -914,7 +943,7 @@ void KoPathTool::deactivate()
     Q_D(KoToolBase);
     disconnect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(activate()));
     m_pointSelection.clear();
-    m_pointSelection.setSelectedShapes(QList<KoPathShape*>());
+    m_pointSelection.setSelectedShapes(QList<KoPathShape *>());
     delete m_activeHandle;
     m_activeHandle = 0;
     delete m_activeSegment;
@@ -924,7 +953,7 @@ void KoPathTool::deactivate()
     d->canvas->snapGuide()->reset();
 }
 
-void KoPathTool::documentResourceChanged(int key, const QVariant & res)
+void KoPathTool::documentResourceChanged(int key, const QVariant &res)
 {
     if (key == KoDocumentResourceManager::HandleRadius) {
         int oldHandleRadius = m_handleRadius;
@@ -933,7 +962,7 @@ void KoPathTool::documentResourceChanged(int key, const QVariant & res)
 
         // repaint with the bigger of old and new handle radius
         int maxRadius = qMax(m_handleRadius, oldHandleRadius);
-        foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
+        foreach (KoPathShape *shape, m_pointSelection.selectedShapes()) {
             QRectF controlPointRect = shape->absoluteTransformation(0).map(shape->outline()).controlPointRect();
             repaint(controlPointRect.adjusted(-maxRadius, -maxRadius, maxRadius, maxRadius));
         }
@@ -962,7 +991,7 @@ void KoPathTool::deleteSelection()
     removePoints();
 }
 
-KoToolSelection * KoPathTool::selection()
+KoToolSelection *KoPathTool::selection()
 {
     return &m_pointSelection;
 }

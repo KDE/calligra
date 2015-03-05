@@ -32,11 +32,11 @@ using namespace Calligra::Sheets;
 class BindingManager::Private
 {
 public:
-    const Map* map;
+    const Map *map;
 };
 
-BindingManager::BindingManager(const Map* map)
-        : d(new Private)
+BindingManager::BindingManager(const Map *map)
+    : d(new Private)
 {
     d->map = map;
 }
@@ -46,7 +46,7 @@ BindingManager::~BindingManager()
     delete d;
 }
 
-const QAbstractItemModel* BindingManager::createModel(const QString& regionName)
+const QAbstractItemModel *BindingManager::createModel(const QString &regionName)
 {
     const Region region(regionName, d->map);
     if (!region.isValid() || !region.isContiguous() || !region.firstSheet()) {
@@ -57,13 +57,13 @@ const QAbstractItemModel* BindingManager::createModel(const QString& regionName)
     return binding.model();
 }
 
-bool BindingManager::removeModel(const QAbstractItemModel* model)
+bool BindingManager::removeModel(const QAbstractItemModel *model)
 {
     QList< QPair<QRectF, Binding> > bindings;
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
-    const QList<Sheet*> sheets = d->map->sheetList();
+    const QList<Sheet *> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {
-        Sheet* const sheet = sheets[i];
+        Sheet *const sheet = sheets[i];
         bindings = sheet->cellStorage()->bindingStorage()->intersectingPairs(Region(rect, sheet));
         for (int j = 0; j < bindings.count(); ++j) {
             if (bindings[j].second.model() == model) {
@@ -76,23 +76,24 @@ bool BindingManager::removeModel(const QAbstractItemModel* model)
     return false;
 }
 
-bool BindingManager::isCellRegionValid(const QString& regionName) const
+bool BindingManager::isCellRegionValid(const QString &regionName) const
 {
     const Region region(regionName, d->map);
     return (region.isValid() && region.isContiguous() && region.firstSheet());
 }
 
-void BindingManager::regionChanged(const Region& region)
+void BindingManager::regionChanged(const Region &region)
 {
-    Sheet* sheet;
+    Sheet *sheet;
     QList< QPair<QRectF, Binding> > bindings;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         sheet = (*it)->sheet();
         const Region changedRegion((*it)->rect(), sheet);
         bindings = sheet->cellStorage()->bindingStorage()->intersectingPairs(changedRegion);
-        for (int j = 0; j < bindings.count(); ++j)
+        for (int j = 0; j < bindings.count(); ++j) {
             bindings[j].second.update(changedRegion);
+        }
     }
 }
 
@@ -100,11 +101,12 @@ void BindingManager::updateAllBindings()
 {
     QList< QPair<QRectF, Binding> > bindings;
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
-    const QList<Sheet*> sheets = d->map->sheetList();
+    const QList<Sheet *> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {
         bindings = sheets[i]->cellStorage()->bindingStorage()->intersectingPairs(Region(rect, sheets[i]));
-        for (int j = 0; j < bindings.count(); ++j)
+        for (int j = 0; j < bindings.count(); ++j) {
             bindings[j].second.update(Region(bindings[j].first.toRect(), sheets[i]));
+        }
     }
 }
 

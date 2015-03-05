@@ -33,7 +33,7 @@
 
 #include "ui_wdg_lens_blur.h"
 
-KisWdgLensBlur::KisWdgLensBlur(QWidget * parent) : KisConfigWidget(parent)
+KisWdgLensBlur::KisWdgLensBlur(QWidget *parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgLensBlur();
     m_widget->setupUi(this);
@@ -48,9 +48,9 @@ KisWdgLensBlur::~KisWdgLensBlur()
     delete m_widget;
 }
 
-KisPropertiesConfiguration* KisWdgLensBlur::configuration() const
+KisPropertiesConfiguration *KisWdgLensBlur::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("lens blur", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("lens blur", 1);
     config->setProperty("irisShape", m_widget->irisShapeCombo->currentText());
     config->setProperty("irisRadius", m_widget->irisRadiusSlider->value());
     config->setProperty("irisRotation", m_widget->irisRotationSlider->value());
@@ -62,7 +62,7 @@ KisPropertiesConfiguration* KisWdgLensBlur::configuration() const
     return config;
 }
 
-void KisWdgLensBlur::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgLensBlur::setConfiguration(const KisPropertiesConfiguration *config)
 {
     QVariant value;
     if (config->getProperty("irisShape", value)) {

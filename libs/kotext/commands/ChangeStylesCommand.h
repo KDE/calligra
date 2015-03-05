@@ -35,10 +35,10 @@ class ChangeStylesCommand : public KUndo2Command
 {
 public:
     ChangeStylesCommand(QTextDocument *qDoc
-        , const QList<KoCharacterStyle *> &origCharacterStyles
-        , const QList<KoParagraphStyle *> &origParagraphStyles
-        , const QSet<int> &changedStyles
-        , KUndo2Command *parent);
+                        , const QList<KoCharacterStyle *> &origCharacterStyles
+                        , const QList<KoParagraphStyle *> &origParagraphStyles
+                        , const QSet<int> &changedStyles
+                        , KUndo2Command *parent);
     virtual ~ChangeStylesCommand();
 
     /// redo the command
@@ -54,8 +54,7 @@ private:
     void clearCommonProperties(QTextFormat *firstFormat, const QTextFormat &secondFormat);
 
 private:
-    struct Memento // documents all change to the textdocument by a single style change
-    {
+    struct Memento { // documents all change to the textdocument by a single style change
         QTextDocument *document;
         int blockPosition;
         int paragraphStyleId;

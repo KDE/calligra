@@ -27,17 +27,18 @@
 // Interface
 #include <interfaces/KoChartModel.h>
 
-namespace KChart {
+namespace KChart
+{
 
 class CellRegionStringValidator : public QValidator
 {
- public:
+public:
     explicit CellRegionStringValidator(KoChart::ChartModel *model);
     ~CellRegionStringValidator();
-	
-    State validate(QString &string, int & pos) const;
-	
- private:
+
+    State validate(QString &string, int &pos) const;
+
+private:
     class Private;
     Private *const d;
 };

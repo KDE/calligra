@@ -44,8 +44,8 @@ static QpFormulaConv gOverride[] = {
     {0,   0,                        0}
 };
 
-Calligra::Sheets::QuattroPro::Formula::Formula(QpRecFormulaCell& pCell, QpTableNames& pTable)
-        : QpFormula(pCell, pTable)
+Calligra::Sheets::QuattroPro::Formula::Formula(QpRecFormulaCell &pCell, QpTableNames &pTable)
+    : QpFormula(pCell, pTable)
 {
     formulaStart("=");   // quattro pro starts formulas with "+"
     // kspread uses "="

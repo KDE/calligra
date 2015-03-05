@@ -37,7 +37,6 @@ class QRect;
 class KWGui;
 class KWView;
 
-
 /**
  * This class is responsible for the rendering of the frames to
  * the screen as well as the interaction with the user via mouse
@@ -70,15 +69,18 @@ public:
     virtual QPointF viewToDocument(const QPointF &viewPoint) const;
 
     /// reimplemented method from superclass
-    virtual QWidget *canvasWidget() {
+    virtual QWidget *canvasWidget()
+    {
         return this;
     }
     /// reimplemented method from superclass
-    virtual const QWidget *canvasWidget() const {
+    virtual const QWidget *canvasWidget() const
+    {
         return this;
     }
 
-    KWView *view() {
+    KWView *view()
+    {
         return m_view;
     }
 
@@ -117,7 +119,7 @@ protected: // QWidget
     /// reimplemented method from superclass
     virtual void keyReleaseEvent(QKeyEvent *e);
     /// reimplemented method from superclass
-    virtual void paintEvent(QPaintEvent * ev);
+    virtual void paintEvent(QPaintEvent *ev);
     /// reimplemented method from superclass
     virtual void tabletEvent(QTabletEvent *e);
     /// reimplemented method from superclass
@@ -129,7 +131,10 @@ protected: // QWidget
     /// reimplemented method from superclass
     virtual void updateInputMethodInfo();
     /// reimplemented method from superclass
-    virtual void updateCanvasInternal(const QRectF &clip) { update(clip.toRect()); }
+    virtual void updateCanvasInternal(const QRectF &clip)
+    {
+        update(clip.toRect());
+    }
 
 private Q_SLOTS:
     /// Called whenever there was a page added/removed or simply resized.

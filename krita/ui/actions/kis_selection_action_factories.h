@@ -27,7 +27,8 @@ class KRITAUI_EXPORT KisNoParameterActionFactory : public KisOperation
 {
 public:
     KisNoParameterActionFactory(const QString &id) : KisOperation(id) {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) {
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config)
+    {
         Q_UNUSED(config);
         run(view);
     }
@@ -49,10 +50,10 @@ struct KRITAUI_EXPORT KisReselectActionFactory : public KisNoParameterActionFact
     void run(KisViewManager *view);
 };
 
-struct KRITAUI_EXPORT KisFillActionFactory : public KisOperation
-{
+struct KRITAUI_EXPORT KisFillActionFactory : public KisOperation {
     KisFillActionFactory() : KisOperation("fill-ui-action") {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) {
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config)
+    {
         run(config.getString("fill-source", "fg"), view);
     }
     /**
@@ -76,7 +77,8 @@ struct KRITAUI_EXPORT KisImageResizeToSelectionActionFactory : public KisNoParam
 
 struct KRITAUI_EXPORT KisCutCopyActionFactory : public KisOperation {
     KisCutCopyActionFactory() : KisOperation("cut-copy-ui-action") {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) {
+    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config)
+    {
         run(config.getBool("will-cut", false), config.getBool("use-sharp-clip", false), view);
     }
 
@@ -112,6 +114,5 @@ struct KRITAUI_EXPORT KisShapesToVectorSelectionActionFactory : public KisNoPara
     KisShapesToVectorSelectionActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
     void run(KisViewManager *view);
 };
-
 
 #endif /* __KIS_SELECTION_ACTION_FACTORIES_H */

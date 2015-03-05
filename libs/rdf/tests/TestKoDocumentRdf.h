@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #ifndef TEST_KO_DOCUMENT_RDF_H
 #define TEST_KO_DOCUMENT_RDF_H
 
@@ -30,9 +28,9 @@ class KoDocumentRdf;
 class TestKoDocumentRdf : public QObject
 {
     Q_OBJECT
-    
+
 private Q_SLOTS:
-    
+
     void testCreate();
     void testRememberNewInlineRdfObject();
 

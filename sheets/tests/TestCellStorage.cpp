@@ -30,8 +30,8 @@ using namespace Calligra::Sheets;
 void CellStorageTest::testMergedCellsInsertRowBug()
 {
     Map map;
-    Sheet* sheet = map.addNewSheet();
-    CellStorage* storage = sheet->cellStorage();
+    Sheet *sheet = map.addNewSheet();
+    CellStorage *storage = sheet->cellStorage();
 
     // | 1 | 4 |
     // |-------|

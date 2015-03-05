@@ -39,10 +39,9 @@ class CalendarTool::Private
 public:
 };
 
-
-CalendarTool::CalendarTool(KoCanvasBase* canvas)
-        : CellTool(canvas)
-        , d(new Private)
+CalendarTool::CalendarTool(KoCanvasBase *canvas)
+    : CellTool(canvas)
+    , d(new Private)
 {
     setObjectName(QLatin1String("CalendarTool"));
     /*
@@ -57,7 +56,7 @@ CalendarTool::~CalendarTool()
     delete d;
 }
 
-void CalendarTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void CalendarTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     CellTool::activate(toolActivation, shapes);
 }
@@ -80,17 +79,19 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
     }
 
     if (start == end) {
-        if (KMessageBox::No == KMessageBox::warningYesNo(0, i18n("Start and end dates are equal! Only one day will be inserted, do you want to continue?"), i18n("Warning")))
+        if (KMessageBox::No == KMessageBox::warningYesNo(0, i18n("Start and end dates are equal! Only one day will be inserted, do you want to continue?"), i18n("Warning"))) {
             return;
+        }
     }
 
     if (start.daysTo(end) > 366) {
-        if (KMessageBox::No == KMessageBox::warningYesNo(0, i18n("Creating a calendar for a longer period than a year can take up a lot of space, do you want to continue?"), i18n("Warning")))
+        if (KMessageBox::No == KMessageBox::warningYesNo(0, i18n("Creating a calendar for a longer period than a year can take up a lot of space, do you want to continue?"), i18n("Warning"))) {
             return;
+        }
     }
 
     const QPoint marker = this->selection()->lastRange().topLeft();
-    Sheet* const sheet = this->selection()->activeSheet();
+    Sheet *const sheet = this->selection()->activeSheet();
 
     //now let's check if the area is really empty...
     //we use two columns per day and one column for the week number
@@ -193,19 +194,19 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
     kDebug() << "inserting calendar completed";
 }
 
-QWidget* CalendarTool::createOptionWidget()
+QWidget *CalendarTool::createOptionWidget()
 {
     // Create the main cell tool widget. It is not visible, but the CellTool makes heavy use
     // of it, and it refuses to work correctly if it does not exist
     CellTool::createOptionWidget();
 
-    CalendarToolWidget* widget =  new CalendarToolWidget(canvas()->canvasWidget());
+    CalendarToolWidget *widget =  new CalendarToolWidget(canvas()->canvasWidget());
     connect(widget, SIGNAL(insertCalendar(QDate,QDate)),
             this, SLOT(insertCalendar(QDate,QDate)));
     return widget;
 }
 
-void CalendarTool::setText(Sheet* sheet, int _row, int _column, const QString& _text, bool asString)
+void CalendarTool::setText(Sheet *sheet, int _row, int _column, const QString &_text, bool asString)
 {
     Cell cell(sheet, _column, _row);
     if (asString) {

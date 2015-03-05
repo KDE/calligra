@@ -33,11 +33,12 @@ class KisPDFImportWidget : public QWidget, public Ui_PDFImportWidgetBase
 {
     Q_OBJECT
 public:
-    KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * parent);
+    KisPDFImportWidget(Poppler::Document *pdfDoc, QWidget *parent);
 
     ~KisPDFImportWidget();
 public:
-    inline QList<int>  pages() {
+    inline QList<int>  pages()
+    {
         return m_pages;
     }
 private Q_SLOTS:
@@ -54,7 +55,7 @@ private Q_SLOTS:
     void slotAspectChanged(bool keep);
     void updateMaxCanvasSize();
 private:
-    Poppler::Document* m_pdfDoc;
+    Poppler::Document *m_pdfDoc;
     QList<int> m_pages;
     double m_maxWidthInch, m_maxHeightInch;
     bool m_keepAspect;

@@ -31,10 +31,9 @@ public:
     QList<QSharedPointer<Function> > functions;
 };
 
-
-FunctionModule::FunctionModule(QObject* parent)
-        : QObject(parent)
-        , d(new Private)
+FunctionModule::FunctionModule(QObject *parent)
+    : QObject(parent)
+    , d(new Private)
 {
 }
 
@@ -50,7 +49,7 @@ QList<QSharedPointer<Function> > FunctionModule::functions() const
 
 bool FunctionModule::isRemovable()
 {
-    QList<Function*> checkedFunctions;
+    QList<Function *> checkedFunctions;
     QWeakPointer<Function> weakPointer;
     while (d->functions.count() != 0) {
         weakPointer = d->functions.last().toWeakRef();
@@ -60,7 +59,7 @@ bool FunctionModule::isRemovable()
             d->functions.append(weakPointer.toStrongRef());
             // The failing on was used, so we do not put it in twice.
             checkedFunctions.removeLast();
-            foreach(Function* function, checkedFunctions) {
+            foreach (Function *function, checkedFunctions) {
                 // It is okay to recreate the shared pointers, as they were not used.
                 d->functions.append(QSharedPointer<Function>(function));
             }
@@ -75,7 +74,7 @@ QString FunctionModule::id() const
     return descriptionFileName();
 }
 
-void FunctionModule::add(Function* function)
+void FunctionModule::add(Function *function)
 {
     if (!function) {
         return;

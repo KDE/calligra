@@ -39,7 +39,7 @@ public:
 
 protected:
     virtual void paintEvent(QPaintEvent *e);
-    virtual void keyPressEvent(QKeyEvent * e);
+    virtual void keyPressEvent(QKeyEvent *e);
 };
 
 #endif

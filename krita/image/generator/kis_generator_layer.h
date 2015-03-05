@@ -45,11 +45,12 @@ public:
      * and selection. Note that the selection will be _copied_
      * (using COW, though).
      */
-    KisGeneratorLayer(KisImageWSP image, const QString &name, KisFilterConfiguration * kfc, KisSelectionSP selection);
-    KisGeneratorLayer(const KisGeneratorLayer& rhs);
+    KisGeneratorLayer(KisImageWSP image, const QString &name, KisFilterConfiguration *kfc, KisSelectionSP selection);
+    KisGeneratorLayer(const KisGeneratorLayer &rhs);
     virtual ~KisGeneratorLayer();
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return KisNodeSP(new KisGeneratorLayer(*this));
     }
 
@@ -68,7 +69,7 @@ public:
     void update();
 
     using KisSelectionBasedLayer::setDirty;
-    void setDirty(const QRect & rect);
+    void setDirty(const QRect &rect);
     void setX(qint32 x);
     void setY(qint32 y);
 
@@ -77,7 +78,8 @@ private Q_SLOTS:
 
 public:
     // KisIndirectPaintingSupport
-    KisLayer* layer() {
+    KisLayer *layer()
+    {
         return this;
     }
 

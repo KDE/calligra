@@ -30,9 +30,7 @@
 #include "kis_annotation.h"
 #include <krita_export.h>
 
-
 class KisDocument;
-
 
 namespace KisMetaData
 {
@@ -63,7 +61,7 @@ struct KisPNGOptions {
     bool tryToSaveAsIndexed;
     bool saveSRGBProfile;
     bool forceSRGB;
-    QList<const KisMetaData::Filter*> filters;
+    QList<const KisMetaData::Filter *> filters;
     QColor transparencyFillColor;
 
 };
@@ -109,12 +107,12 @@ public:
      * temporary location.
      * @param uri the url of the image
      */
-    KisImageBuilder_Result buildImage(const KUrl& uri);
+    KisImageBuilder_Result buildImage(const KUrl &uri);
     /**
      * Load an image from a QIODevice.
      * @param iod device to access the data
      */
-    KisImageBuilder_Result buildImage(QIODevice* iod);
+    KisImageBuilder_Result buildImage(QIODevice *iod);
     /**
      * Save a layer to a PNG
      * @param uri the url of the destination file
@@ -125,8 +123,8 @@ public:
      * @param interlace set to true if you want to generate an interlaced png
      * @param alpha set to true if you want to save the alpha channel
      */
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
-    KisImageBuilder_Result buildFile(QIODevice*, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
+    KisImageBuilder_Result buildFile(const KUrl &uri, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store *metaData);
+    KisImageBuilder_Result buildFile(QIODevice *, KisImageWSP image, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store *metaData);
     /**
      * Retrieve the constructed image
      */

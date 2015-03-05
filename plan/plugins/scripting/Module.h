@@ -35,65 +35,66 @@
 class QWidget;
 class KUndo2Command;
 
-namespace KPlato {
-    class MainDocument;
+namespace KPlato
+{
+class MainDocument;
 }
 
-namespace Scripting {
+namespace Scripting
+{
 
+/**
+* The Module class enables access to the KPlato functionality
+* from within the scripting backends.
+*
+* Python example that prints the documents Url and some other information;
+* \code
+* import Plan
+* print Plan.document().url()
+* print Plan.document().documentInfoTitle()
+* print Plan.document().documentInfoAuthorName()
+* print Plan.project().name()
+* \endcode
+*/
+class KPLATOSCRIPTING_EXPORT Module : public KoScriptingModule
+{
+    Q_OBJECT
+public:
+    explicit Module(QObject *parent = 0);
+    virtual ~Module();
 
-    /**
-    * The Module class enables access to the KPlato functionality
-    * from within the scripting backends.
-    *
-    * Python example that prints the documents Url and some other information;
-    * \code
-    * import Plan
-    * print Plan.document().url()
-    * print Plan.document().documentInfoTitle()
-    * print Plan.document().documentInfoAuthorName()
-    * print Plan.project().name()
-    * \endcode
-    */
-    class KPLATOSCRIPTING_EXPORT Module : public KoScriptingModule
-    {
-            Q_OBJECT
-        public:
-            explicit Module(QObject* parent = 0);
-            virtual ~Module();
+    KPlato::MainDocument *part();
+    virtual KoDocument *doc();
+    void addCommand(KUndo2Command *cmd);
 
-            KPlato::MainDocument* part();
-            virtual KoDocument* doc();
-            void addCommand( KUndo2Command *cmd );
+public Q_SLOTS:
 
-        public Q_SLOTS:
+    /// Open Plan document in this module
+    void openUrl(const QString &url);
+    /// Open another Plan document in a sub-module with name @p tag
+    QObject *openDocument(const QString &tag, const QString &url);
+    /// Start a command with @p name
+    void beginCommand(const KUndo2MagicString &name);
+    /// End a command started with beginCommand()
+    void endCommand();
+    /// Revert a command started with beginCommand(), bit not ended with endCommand()
+    void revertCommand();
+    /// Return the project
+    QObject *project();
+    /// Return a schedule list view
+    QWidget *createScheduleListView(QWidget *parent);
+    /// Return a node property list view
+    QWidget *createDataQueryView(QWidget *parent);
 
-            /// Open Plan document in this module
-            void openUrl( const QString &url );
-            /// Open another Plan document in a sub-module with name @p tag
-            QObject *openDocument( const QString &tag, const QString &url );
-            /// Start a command with @p name
-            void beginCommand( const KUndo2MagicString &name );
-            /// End a command started with beginCommand()
-            void endCommand();
-            /// Revert a command started with beginCommand(), bit not ended with endCommand()
-            void revertCommand();
-            /// Return the project
-            QObject *project();
-            /// Return a schedule list view
-            QWidget *createScheduleListView( QWidget *parent );
-            /// Return a node property list view
-            QWidget *createDataQueryView( QWidget *parent );
+private Q_SLOTS:
+    void slotAddCommand(KUndo2Command *cmd);
 
-        private Q_SLOTS:
-            void slotAddCommand( KUndo2Command *cmd );
-
-        private:
-            /// \internal d-pointer class.
-            class Private;
-            /// \internal d-pointer instance.
-            Private* const d;
-    };
+private:
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private *const d;
+};
 
 }
 

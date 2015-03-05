@@ -24,21 +24,24 @@
 #include <QList>
 #include <ctime>
 
-struct Node
-{
+struct Node {
     Node(unsigned int key) : m_key(key), m_index(0) {}
 
-    unsigned int key() const {
+    unsigned int key() const
+    {
         return m_key;
     }
-    void setKey(unsigned int key) {
+    void setKey(unsigned int key)
+    {
         m_key = key;
     }
 
-    int index() const {
+    int index() const
+    {
         return m_index;
     }
-    void setIndex(int i) {
+    void setIndex(int i)
+    {
         m_index = i;
     }
 private:
@@ -46,18 +49,16 @@ private:
     int m_index;
 };
 
-static const char* const keys[] =
-{
+static const char *const keys[] = {
     "one",  "two", "three",  "four", "five",
     "six", "seven", "eight", "nine", "ten",
     "eleven", "twelve", 0
 };
 
-
 void PriorityQueue_test::testQueue()
 {
-    QList<Node*> list;
-    QHash<QByteArray, Node*> dict;
+    QList<Node *> list;
+    QHash<QByteArray, Node *> dict;
 
     CalligraFilter::PriorityQueue<Node> queue;
 
@@ -75,7 +76,6 @@ void PriorityQueue_test::testQueue()
     QCOMPARE((int) queue.count(), list.count());
     QCOMPARE(queue.isEmpty(), false);
     QCOMPARE(queue.extractMinimum()->index(), 0);
-
 
     kDebug() << "##### Queue 2:";
     CalligraFilter::PriorityQueue<Node> queue2(dict);

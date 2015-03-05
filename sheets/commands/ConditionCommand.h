@@ -39,10 +39,10 @@ class CondtionCommand : public AbstractRegionCommand
 {
 public:
     CondtionCommand();
-    void setConditionList(const QLinkedList<Conditional>& list);
+    void setConditionList(const QLinkedList<Conditional> &list);
 
 protected:
-    virtual bool process(Element* element);
+    virtual bool process(Element *element);
     virtual bool mainProcessing();
 
 private:

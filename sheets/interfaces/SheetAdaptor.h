@@ -44,7 +44,7 @@ class CALLIGRA_SHEETS_COMMON_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.spreadsheet.sheet")
 public:
-    explicit SheetAdaptor(Sheet*);
+    explicit SheetAdaptor(Sheet *);
     ~SheetAdaptor();
 
 public Q_SLOTS: // METHODS
@@ -53,40 +53,40 @@ public Q_SLOTS: // METHODS
     example for x=5 and y=2 the string "B5" got returned. */
     virtual QString cellName(int x, int y);
     /** Return the x,y-point for the cellname. */
-    virtual QPoint cellLocation(const QString& cellname);
+    virtual QPoint cellLocation(const QString &cellname);
     /** Return the row-number for the cellname. For example for the cellname "B5"
     the integer 5 got returned. */
-    virtual int cellRow(const QString& cellname);
+    virtual int cellRow(const QString &cellname);
     /** Return the column-number for the cellname. For example for the cellname "B5"
     the integer 2 got returned. */
-    virtual int cellColumn(const QString& cellname);
+    virtual int cellColumn(const QString &cellname);
 
     /** Return the text for the row x and for the column y. */
     virtual QString text(int x, int y);
     /** Return the text for a cellname. */
-    virtual QString text(const QString& cellname);
+    virtual QString text(const QString &cellname);
     /** Set the text of the cell with row x and column y. If the parse argument is
     true, the passed text got parsed (e.g. a text like "123" will be recognised
     as numeric value. */
-    virtual bool setText(int x, int y, const QString& text, bool parse = true);
+    virtual bool setText(int x, int y, const QString &text, bool parse = true);
     /** Set the text of the cell defined with cellname. */
-    virtual bool setText(const QString& cellname, const QString& text, bool parse = true);
+    virtual bool setText(const QString &cellname, const QString &text, bool parse = true);
 
     /** Return the value the cell at row x and column y has. The returned value is
     a variant and could be e.g. a number, a bool or a text depending on the format
     and the content the cell has. */
     virtual QVariant value(int x, int y);
     /** Return the value for the cell defined with cellname. */
-    virtual QVariant value(const QString& cellname);
+    virtual QVariant value(const QString &cellname);
     /** Set the value in the cell at row x and column y. */
-    virtual bool setValue(int x, int y, const QVariant& value);
+    virtual bool setValue(int x, int y, const QVariant &value);
     /** Set the value in the cell defined with cellname. */
-    virtual bool setValue(const QString& cellname, const QVariant& value);
+    virtual bool setValue(const QString &cellname, const QVariant &value);
 
     /** Return the name of the sheet. */
     virtual QString sheetName() const;
     /** Set the name of the sheet. */
-    virtual bool setSheetName(const QString & name);
+    virtual bool setSheetName(const QString &name);
 
     //virtual QString column( int _col );
     //virtual QString row( int _row );
@@ -143,7 +143,7 @@ public Q_SLOTS: // METHODS
     virtual QString paperOrientation() const;
     /** Set the left, top, right and bottom border as well as the page format and
     orientation the paper of the printer has. */
-    virtual void setPaperLayout(float leftBorder, float topBorder, float rightBorder, float bottomBoder, const QString& format, const QString& orientation);
+    virtual void setPaperLayout(float leftBorder, float topBorder, float rightBorder, float bottomBoder, const QString &format, const QString &orientation);
 
     //QString printHeadLeft() const;
     //QString printHeadMid() const;
@@ -160,11 +160,11 @@ public Q_SLOTS: // METHODS
 
     //NOTE: don't publish "QByteArray password()" cause that may introduce insecure situations...
     /** Return true if passwd is the correct password. */
-    virtual bool checkPassword(const QByteArray& passwd) const;
+    virtual bool checkPassword(const QByteArray &passwd) const;
     /** Return true if the sheet/document is protected. */
     virtual bool isProtected() const;
     /** Protect the document with the password passwd. */
-    virtual void setProtected(const QByteArray& passwd);
+    virtual void setProtected(const QByteArray &passwd);
 
 Q_SIGNALS:
 
@@ -180,10 +180,10 @@ private Q_SLOTS:
      * \ingroup Damages
      * Handles changes of the sheet name and visibility.
      */
-    void handleDamages(const QList<Damage*>& damages);
+    void handleDamages(const QList<Damage *> &damages);
 
 private:
-    Sheet* m_sheet;
+    Sheet *m_sheet;
     QByteArray ident;
 };
 

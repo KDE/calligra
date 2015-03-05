@@ -30,14 +30,16 @@ class TextDocumentStructureModel;
 class KoCanvasBase;
 class QTreeView;
 
-
 class TextDocumentInspectionDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
     explicit TextDocumentInspectionDocker(QWidget *parent = 0);
     virtual ~TextDocumentInspectionDocker();
-    QString observerName() { return "TextDocumentInspectionDocker"; }
+    QString observerName()
+    {
+        return "TextDocumentInspectionDocker";
+    }
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();

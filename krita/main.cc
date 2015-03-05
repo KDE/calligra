@@ -50,7 +50,7 @@
 #include <stdlib.h>
 #include <ui/input/wintab/kis_tablet_support_win.h>
 #ifdef USE_BREAKPAD
-    #include "kis_crash_handler.h"
+#include "kis_crash_handler.h"
 #endif
 #elif defined Q_WS_X11
 #include <ui/input/wintab/kis_tablet_support_x11.h>
@@ -103,7 +103,7 @@ extern "C" int main(int argc, char **argv)
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita" +
                   QDesktopServices::storageLocation(QDesktopServices::HomeLocation).replace("/", "_");
-    key = key.replace(":", "_").replace("\\","_");
+    key = key.replace(":", "_").replace("\\", "_");
 
 #if defined Q_WS_X11
 #if QT_VERSION >= 0x040800
@@ -144,7 +144,6 @@ extern "C" int main(int argc, char **argv)
     app.setEventFilter(&KisTabletSupportX11::eventFilter);
 #endif
 
-
     if (!runningInKDE) {
         // Icons in menus are ugly and distracting
         app.setAttribute(Qt::AA_DontShowIconsInMenus);
@@ -157,9 +156,8 @@ extern "C" int main(int argc, char **argv)
     QWidget *splash = 0;
     if (currentDate > QDate(currentDate.year(), 12, 4) ||
             currentDate < QDate(currentDate.year(), 1, 9)) {
-         splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_holidays_xpm));
-    }
-    else {
+        splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_holidays_xpm));
+    } else {
         splash = new KisSplashScreen(aboutData->version(), QPixmap(splash_screen_xpm));
     }
     app.setSplashScreen(splash);
@@ -169,12 +167,11 @@ extern "C" int main(int argc, char **argv)
     }
 
     // Set up remote arguments.
-    QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
-                     &app, SLOT(remoteArguments(QByteArray,QObject*)));
+    QObject::connect(&app, SIGNAL(messageReceived(QByteArray, QObject *)),
+                     &app, SLOT(remoteArguments(QByteArray, QObject *)));
 
     QObject::connect(&app, SIGNAL(fileOpenRequest(QString)),
                      &app, SLOT(fileOpenRequested(QString)));
-
 
     state = app.exec();
 

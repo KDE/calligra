@@ -37,7 +37,7 @@ namespace Sheets
  * \ingroup Value
  * Registry for function modules.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModule*>
+class CALLIGRA_SHEETS_ODF_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModule *>
 {
 public:
     /**
@@ -49,7 +49,7 @@ public:
     /**
      * \return the singleton instance
      */
-    static FunctionModuleRegistry* instance();
+    static FunctionModuleRegistry *instance();
 
     /**
      * Loads the function modules.
@@ -66,7 +66,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

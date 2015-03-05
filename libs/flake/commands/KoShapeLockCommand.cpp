@@ -23,8 +23,8 @@
 
 #include <klocale.h>
 
-KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock, KUndo2Command *parent)
-        : KUndo2Command(parent)
+KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape *> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock, KUndo2Command *parent)
+    : KUndo2Command(parent)
 {
     m_shapes = shapes;
     m_oldLock = oldLock;

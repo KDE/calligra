@@ -24,7 +24,6 @@
 
 #include "kis_paint_device.h"
 
-
 void kis_debug_save_device_incremental(KisPaintDeviceSP device,
                                        int i,
                                        const QRect &rc,

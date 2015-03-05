@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -38,9 +37,10 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(TasksetDockerPluginFactory, registerPlugin<TasksetDockerPlugin>();)
-K_EXPORT_PLUGIN(TasksetDockerPluginFactory( "krita" ) )
+K_EXPORT_PLUGIN(TasksetDockerPluginFactory("krita"))
 
-class TasksetDockerDockFactory : public KoDockFactoryBase {
+class TasksetDockerDockFactory : public KoDockFactoryBase
+{
 public:
     TasksetDockerDockFactory()
     {
@@ -48,7 +48,7 @@ public:
 
     virtual QString id() const
     {
-        return QString( "TasksetDocker" );
+        return QString("TasksetDocker");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
@@ -56,10 +56,10 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    virtual QDockWidget *createDockWidget()
     {
-        TasksetDockerDock * dockWidget = new TasksetDockerDock();
-        
+        TasksetDockerDock *dockWidget = new TasksetDockerDock();
+
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -71,9 +71,7 @@ public:
     }
 private:
 
-
 };
-
 
 TasksetDockerPlugin::TasksetDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

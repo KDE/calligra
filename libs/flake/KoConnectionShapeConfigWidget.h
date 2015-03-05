@@ -36,7 +36,8 @@ public:
     /// reimplemented
     virtual void save();
     /// reimplemented
-    virtual bool showOnShapeCreate() {
+    virtual bool showOnShapeCreate()
+    {
         return false;
     }
     /// reimplemented

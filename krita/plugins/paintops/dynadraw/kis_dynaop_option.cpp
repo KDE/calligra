@@ -24,7 +24,8 @@ class KisDynaOpOptionsWidget: public QWidget, public Ui::WdgDynaOptions
 {
 public:
     KisDynaOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
         angleSlider->setRange(0, 360, 0);
         angleSlider->setValue(0);
@@ -92,26 +93,27 @@ bool KisDynaOpOption::useFixedAngle() const
     return m_options->fixedAngleChBox->isChecked();
 }
 
-
 qreal KisDynaOpOption::widthRange() const
 {
     return m_options->widthRangeSPBox->value();
 }
 
-
 int KisDynaOpOption::action() const
 {
-    if (m_options->circleRBox->isChecked())
+    if (m_options->circleRBox->isChecked()) {
         return 0;
-    if (m_options->polygonRBox->isChecked())
+    }
+    if (m_options->polygonRBox->isChecked()) {
         return 1;
-    if (m_options->wireRBox->isChecked())
+    }
+    if (m_options->wireRBox->isChecked()) {
         return 2;
-    if (m_options->linesRBox->isChecked())
+    }
+    if (m_options->linesRBox->isChecked()) {
         return 3;
+    }
     return 0;
 }
-
 
 bool KisDynaOpOption::enableLine() const
 {
@@ -133,24 +135,24 @@ qreal KisDynaOpOption::lineSpacing() const
     return m_options->lineSpacingSPBox->value();
 }
 
-void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisDynaOpOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(DYNA_WIDTH, initWidth());
-    setting->setProperty(DYNA_MASS , mass());
-    setting->setProperty(DYNA_DRAG , drag());
-    setting->setProperty(DYNA_USE_FIXED_ANGLE , useFixedAngle());
-    setting->setProperty(DYNA_ANGLE , m_options->angleSlider->value());
-    setting->setProperty(DYNA_WIDTH_RANGE , widthRange());
-    setting->setProperty(DYNA_ACTION , action());
-    setting->setProperty(DYNA_DIAMETER , m_options->diameterDSSB->value());
-    setting->setProperty(DYNA_ENABLE_LINE , enableLine());
-    setting->setProperty(DYNA_USE_TWO_CIRCLES , useTwoCircles());
-    setting->setProperty(DYNA_LINE_COUNT , lineCount());
-    setting->setProperty(DYNA_LINE_SPACING , lineSpacing());
+    setting->setProperty(DYNA_MASS, mass());
+    setting->setProperty(DYNA_DRAG, drag());
+    setting->setProperty(DYNA_USE_FIXED_ANGLE, useFixedAngle());
+    setting->setProperty(DYNA_ANGLE, m_options->angleSlider->value());
+    setting->setProperty(DYNA_WIDTH_RANGE, widthRange());
+    setting->setProperty(DYNA_ACTION, action());
+    setting->setProperty(DYNA_DIAMETER, m_options->diameterDSSB->value());
+    setting->setProperty(DYNA_ENABLE_LINE, enableLine());
+    setting->setProperty(DYNA_USE_TWO_CIRCLES, useTwoCircles());
+    setting->setProperty(DYNA_LINE_COUNT, lineCount());
+    setting->setProperty(DYNA_LINE_SPACING, lineSpacing());
 
 }
 
-void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisDynaOpOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     switch (setting->getInt(DYNA_ACTION)) {
     case 0: m_options->circleRBox->setChecked(true); break;

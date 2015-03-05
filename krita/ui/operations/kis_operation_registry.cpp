@@ -22,13 +22,11 @@
 #include <kglobal.h>
 #include "actions/kis_selection_action_factories.h"
 
-
-KisOperationRegistry* KisOperationRegistry::instance()
+KisOperationRegistry *KisOperationRegistry::instance()
 {
     K_GLOBAL_STATIC(KisOperationRegistry, s_instance);
     return s_instance;
 }
-
 
 KisOperationRegistry::KisOperationRegistry()
 {
@@ -46,7 +44,7 @@ KisOperationRegistry::KisOperationRegistry()
 
 KisOperationRegistry::~KisOperationRegistry()
 {
-    foreach(const QString &id, keys()) {
+    foreach (const QString &id, keys()) {
         delete get(id);
     }
 }

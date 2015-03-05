@@ -48,11 +48,10 @@
 #include "kexidbfactorybase.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
-
 //////////////////////////////////////////
 
 KexiDBFactoryBase::KexiDBFactoryBase(QObject *parent, const char *name)
-        : KFormDesigner::WidgetFactory(parent, name)
+    : KFormDesigner::WidgetFactory(parent, name)
 {
     setPropertyDescription("dataSource", i18n("Data Source"));
 
@@ -67,8 +66,8 @@ KexiDBFactoryBase::~KexiDBFactoryBase()
 }
 
 bool KexiDBFactoryBase::isPropertyVisibleInternal(
-    const QByteArray& classname, QWidget *w,
-    const QByteArray& property, bool isTopLevel)
+    const QByteArray &classname, QWidget *w,
+    const QByteArray &property, bool isTopLevel)
 {
     //general
     if (property == "dataSource" || property == "dataSourcePartClass") {

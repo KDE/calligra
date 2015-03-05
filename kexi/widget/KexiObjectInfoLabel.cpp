@@ -36,9 +36,9 @@ public:
     QLabel *objectNameLabel;
 };
 
-KexiObjectInfoLabel::KexiObjectInfoLabel(QWidget* parent)
-        : QWidget(parent)
-        , d( new Private )
+KexiObjectInfoLabel::KexiObjectInfoLabel(QWidget *parent)
+    : QWidget(parent)
+    , d(new Private)
 {
     QWidget::setObjectName("KexiObjectInfoLabel");
     QHBoxLayout *hlyr = new QHBoxLayout(this);
@@ -68,8 +68,7 @@ void KexiObjectInfoLabel::setObjectClassIconName(const QString &iconName)
     d->classIconName = iconName;
     if (d->classIconName.isEmpty()) {
         d->objectIconLabel->setFixedWidth(0);
-    }
-    else {
+    } else {
         d->objectIconLabel->setFixedWidth(IconSize(KIconLoader::Small) + 2 + 2);
     }
     d->objectIconLabel->setPixmap(SmallIcon(iconName));
@@ -80,7 +79,7 @@ QString KexiObjectInfoLabel::objectClassName() const
     return d->className;
 }
 
-void KexiObjectInfoLabel::setObjectClassName(const QString& name)
+void KexiObjectInfoLabel::setObjectClassName(const QString &name)
 {
     d->className = name;
     updateName();
@@ -91,7 +90,7 @@ QString KexiObjectInfoLabel::objectName() const
     return d->objectName;
 }
 
-void KexiObjectInfoLabel::setObjectName(const QString& name)
+void KexiObjectInfoLabel::setObjectName(const QString &name)
 {
     d->objectName = name;
     updateName();
@@ -102,15 +101,14 @@ void KexiObjectInfoLabel::updateName()
     QString txt(d->className);
     if (txt.isEmpty()) {
         txt = d->objectName;
-    }
-    else if (!d->objectName.isEmpty()) {
+    } else if (!d->objectName.isEmpty()) {
         txt = i18nc("Object class \"objectName\", e.g. Text editor \"text\"", "%1 <resource>%2</resource>",
-            txt, d->objectName);
+                    txt, d->objectName);
     }
     d->objectNameLabel->setText(txt);
 }
 
-void KexiObjectInfoLabel::setBuddy(QWidget * buddy)
+void KexiObjectInfoLabel::setBuddy(QWidget *buddy)
 {
     d->objectNameLabel->setBuddy(buddy);
 }

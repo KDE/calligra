@@ -21,7 +21,6 @@
 
 #include <krita_export.h>
 
-
 class KRITAUI_EXPORT KisTabletSupportX11
 {
 public:

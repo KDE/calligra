@@ -30,7 +30,7 @@
 
 #include "compression.h"
 
-PSDLayerSection::PSDLayerSection(const PSDHeader& header)
+PSDLayerSection::PSDLayerSection(const PSDHeader &header)
     : m_header(header)
 {
     hasTransparency = false;
@@ -44,7 +44,7 @@ PSDLayerSection::~PSDLayerSection()
     qDeleteAll(layers);
 }
 
-bool PSDLayerSection::read(QIODevice* io)
+bool PSDLayerSection::read(QIODevice *io)
 {
     dbgFile << "reading layer section. Pos:" << io->pos() <<  "bytes left:" << io->bytesAvailable();
 
@@ -57,8 +57,7 @@ bool PSDLayerSection::read(QIODevice* io)
             return false;
         }
         layerMaskBlockSize = _layerMaskBlockSize;
-    }
-    else if (m_header.version == 2) {
+    } else if (m_header.version == 2) {
         if (!psdread(io, &layerMaskBlockSize) || layerMaskBlockSize > (quint64)io->bytesAvailable()) {
             error = QString("Could not read layer + mask block size. Got %1. Bytes left %2")
                     .arg(layerMaskBlockSize).arg(io->bytesAvailable());
@@ -83,8 +82,7 @@ bool PSDLayerSection::read(QIODevice* io)
             return false;
         }
         layerInfoSize = _layerInfoSize;
-    }
-    else if (m_header.version == 2) {
+    } else if (m_header.version == 2) {
         if (!psdread(io, &layerInfoSize) || layerInfoSize > (quint64)io->bytesAvailable()) {
             error = "Could not read layer section size";
             return false;
@@ -92,8 +90,7 @@ bool PSDLayerSection::read(QIODevice* io)
     }
     dbgFile << "Layer info block size" << layerInfoSize;
 
-
-    if (layerInfoSize > 0 ) {
+    if (layerInfoSize > 0) {
 
         // rounded to a multiple of 2
         if ((layerInfoSize & 0x01) != 0) {
@@ -109,8 +106,7 @@ bool PSDLayerSection::read(QIODevice* io)
         if (nLayers < 0) {
             hasTransparency = true; // first alpha channel is the alpha channel of the projection.
             nLayers = -nLayers;
-        }
-        else {
+        } else {
             hasTransparency = false;
         }
         dbgFile << "transparency" << hasTransparency;
@@ -157,7 +153,7 @@ bool PSDLayerSection::read(QIODevice* io)
                 return false;
             }
 
-            ChannelInfo* channelInfo = layerRecord->channelInfoRecords.at(j);
+            ChannelInfo *channelInfo = layerRecord->channelInfoRecords.at(j);
 
             quint16 compressionType;
             if (!psdread(io, &compressionType)) {
@@ -169,7 +165,7 @@ bool PSDLayerSection::read(QIODevice* io)
 
             // read the rle row lengths;
             if (channelInfo->compressionType == Compression::RLE) {
-                for(qint64 row = 0; row < (layerRecord->bottom - layerRecord->top); ++row) {
+                for (qint64 row = 0; row < (layerRecord->bottom - layerRecord->top); ++row) {
 
                     //dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
 
@@ -181,8 +177,7 @@ bool PSDLayerSection::read(QIODevice* io)
                             return 0;
                         }
                         byteCount = _byteCount;
-                    }
-                    else {
+                    } else {
                         if (!psdread(io, &byteCount)) {
                             error = QString("Could not read byteCount for rle-encoded channel");
                             return 0;
@@ -267,7 +262,7 @@ void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
     dbgFile << layers.size();
 }
 
-bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
+bool PSDLayerSection::write(QIODevice *io, KisNodeSP rootLayer)
 {
     dbgFile << "Writing layer layer section";
 
@@ -291,10 +286,10 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
 
     // number of layers (negative, because krita always has alpha)
     dbgFile << "number of layers" << -nodes.size() << "at" << io->pos();
-    psdwrite(io, (qint16)-nodes.size());
+    psdwrite(io, (qint16) - nodes.size());
 
     // Layer records section
-    foreach(KisNodeSP node, nodes) {
+    foreach (KisNodeSP node, nodes) {
         PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
         layers.append(layerRecord);
 
@@ -304,8 +299,12 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
         Q_ASSERT(rc.height() >= 0);
 
         // keep to the max of photoshop's capabilities
-        if (rc.width() > 30000) rc.setWidth(30000);
-        if (rc.height() > 30000) rc.setHeight(30000);
+        if (rc.width() > 30000) {
+            rc.setWidth(30000);
+        }
+        if (rc.height() > 30000) {
+            rc.setHeight(30000);
+        }
         layerRecord->top = rc.y();
         layerRecord->left = rc.x();
         layerRecord->bottom = rc.y() + rc.height();
@@ -329,7 +328,7 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
         layerRecord->opacity = node->opacity();
         layerRecord->clipping = 0;
 
-        KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
+        KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer *>(node.data());
         layerRecord->transparencyProtected = (paintLayer && paintLayer->alphaLocked());
         layerRecord->visible = node->visible();
 
@@ -343,7 +342,7 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
 
     // Now save the pixel data
     dbgFile << "start writing layer pixel data" << io->pos();
-    foreach(PSDLayerRecord *layerRecord, layers) {
+    foreach (PSDLayerRecord *layerRecord, layers) {
         if (!layerRecord->writePixelData(io)) {
             error = layerRecord->error;
             return false;
@@ -386,9 +385,13 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
 bool PSDLayerSection::valid()
 {
     if (layerInfoSize > 0) {
-        if (nLayers <= 0) return false;
-        if (nLayers != layers.size()) return false;
-        foreach(PSDLayerRecord* layer, layers) {
+        if (nLayers <= 0) {
+            return false;
+        }
+        if (nLayers != layers.size()) {
+            return false;
+        }
+        foreach (PSDLayerRecord *layer, layers) {
             if (!layer->valid()) {
                 return false;
             }

@@ -27,7 +27,7 @@
 #include <QDir>
 #include <KoResourceServer.h>
 
-KoResourceTagStore::KoResourceTagStore(KoResourceServerBase *resourceServer, const QString& resourceType, const QString& extensions)
+KoResourceTagStore::KoResourceTagStore(KoResourceServerBase *resourceServer, const QString &resourceType, const QString &extensions)
     : m_serverExtensions(extensions)
     , m_resourceServer(resourceServer)
 {
@@ -39,7 +39,7 @@ KoResourceTagStore::~KoResourceTagStore()
     serializeTags();
 }
 
-QStringList KoResourceTagStore::assignedTagsList(KoResource* resource) const
+QStringList KoResourceTagStore::assignedTagsList(KoResource *resource) const
 {
     return m_resourceToTag.values(resource);
 }
@@ -54,7 +54,7 @@ QStringList KoResourceTagStore::tagNamesList() const
     return m_tagList.uniqueKeys();
 }
 
-void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
+void KoResourceTagStore::addTag(KoResource *resource, const QString &tag)
 {
     if (!resource) {
         m_tagList.insert(tag, 0);
@@ -71,7 +71,7 @@ void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
     }
 }
 
-void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
+void KoResourceTagStore::delTag(KoResource *resource, const QString &tag)
 {
     int res = m_resourceToTag.remove(resource, tag);
 
@@ -84,20 +84,20 @@ void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
     }
 }
 
-void KoResourceTagStore::delTag(const QString& tag)
+void KoResourceTagStore::delTag(const QString &tag)
 {
     Q_ASSERT(!m_resourceToTag.values().contains(tag));
     m_tagList.remove(tag);
 }
 
-QStringList KoResourceTagStore::searchTag(const QString& lineEditText)
+QStringList KoResourceTagStore::searchTag(const QString &lineEditText)
 {
     QStringList tagsList = lineEditText.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
     if (tagsList.isEmpty()) {
         return QStringList();
     }
 
-    QSet<const KoResource*> resources;
+    QSet<const KoResource *> resources;
 
     foreach (QString tag, tagsList) {
         foreach (const KoResource *res, m_resourceToTag.keys(tag)) {
@@ -133,7 +133,6 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
     root = doc.createElement("tags");
     doc.appendChild(root);
 
-
     foreach (const KoResource *res, m_resourceToTag.uniqueKeys()) {
         QDomElement resourceEl = doc.createElement("resource");
         resourceEl.setAttribute("identifier", res->filename().replace(QDir::homePath(), QString("~")));
@@ -156,7 +155,7 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
             QDomElement tagEl = doc.createElement("tag");
             tagEl.appendChild(doc.createTextNode(tag));
             resourceEl.appendChild(tagEl);
-             root.appendChild(resourceEl);
+            root.appendChild(resourceEl);
         }
     }
 
@@ -222,7 +221,7 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
 
                 QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
 
-                for (int j = 0; j < tagNodesList.count() ; j++) {
+                for (int j = 0; j < tagNodesList.count(); j++) {
 
                     QDomElement tagEl = tagNodesList.at(j).toElement();
 
@@ -234,8 +233,7 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
                         addTag(0, tagEl.text());
                     }
                 }
-            }
-            else {
+            } else {
                 if (!resByMd5 && !resByFileName) {
                     // no resource found, hopeless...
                     continue;
@@ -246,22 +244,19 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
                 if (resByMd5 && resByFileName && (resByMd5 != resByFileName)) {
                     kWarning() << "MD5sum and filename point to different resources -- was the resource renamed? We go with md5";
                     res = resByMd5;
-                }
-                else if (!resByMd5 && resByFileName) {
+                } else if (!resByMd5 && resByFileName) {
                     // We didn't find the resource by md5, but did find it by filename, so take that one
                     res = resByFileName;
-                }
-                else {
+                } else {
                     res = resByMd5;
                 }
                 if (res) {
                     QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
-                    for (int j = 0; j < tagNodesList.count() ; j++) {
+                    for (int j = 0; j < tagNodesList.count(); j++) {
                         QDomElement tagEl = tagNodesList.at(j).toElement();
                         addTag(res, tagEl.text());
                     }
-                }
-                else {
+                } else {
                     kWarning() << "Could not find resource for md5:" << resByMd5 << "or filename" << fileName;
                 }
             }
@@ -292,7 +287,7 @@ QString KoResourceTagStore::adjustedFileName(const QString &fileName) const
 
 QStringList KoResourceTagStore::removeAdjustedFileNames(QStringList fileNamesList)
 {
-    foreach (const QString & fileName, fileNamesList) {
+    foreach (const QString &fileName, fileNamesList) {
         if (fileName.contains("-krita")) {
             fileNamesList.append(fileName.split("-krita").takeFirst());
             fileNamesList.removeAll(fileName);

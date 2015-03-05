@@ -32,9 +32,8 @@ K_PLUGIN_FACTORY(CalendarToolPluginFactory,
                 )
 K_EXPORT_PLUGIN(CalendarToolPluginFactory("sheetscalendartool"))
 
-
-CalendarToolFactory::CalendarToolFactory(QObject *, const QVariantList&)
-        : CellToolFactory(CALLIGRA_SHEETS_CALENDAR_TOOL_ID)
+CalendarToolFactory::CalendarToolFactory(QObject *, const QVariantList &)
+    : CellToolFactory(CALLIGRA_SHEETS_CALENDAR_TOOL_ID)
 {
     setToolTip(i18n("Calendar"));
 }
@@ -43,7 +42,7 @@ CalendarToolFactory::~CalendarToolFactory()
 {
 }
 
-KoToolBase* CalendarToolFactory::createTool(KoCanvasBase* canvas)
+KoToolBase *CalendarToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new CalendarTool(canvas);
 }

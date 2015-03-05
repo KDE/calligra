@@ -31,7 +31,7 @@ class KisRecordedFilterActionEditor : public QWidget
 {
     Q_OBJECT
 public:
-    KisRecordedFilterActionEditor(QWidget* parent, KisRecordedAction* action);
+    KisRecordedFilterActionEditor(QWidget *parent, KisRecordedAction *action);
     ~KisRecordedFilterActionEditor();
 private Q_SLOTS:
     void configurationUpdated();
@@ -39,10 +39,10 @@ private Q_SLOTS:
 Q_SIGNALS:
     void actionEdited();
 private:
-    KisRecordedFilterAction* m_action;
-    QGridLayout* m_gridLayout;
-    KisConfigWidget* m_configWidget;
-    KisNodeQueryPathEditor* m_nodeQueryPathEditor;
+    KisRecordedFilterAction *m_action;
+    QGridLayout *m_gridLayout;
+    KisConfigWidget *m_configWidget;
+    KisNodeQueryPathEditor *m_nodeQueryPathEditor;
 };
 
 class KisRecordedFilterActionEditorFactory : public KisRecordedActionEditorFactory
@@ -50,8 +50,8 @@ class KisRecordedFilterActionEditorFactory : public KisRecordedActionEditorFacto
 public:
     KisRecordedFilterActionEditorFactory();
     virtual ~KisRecordedFilterActionEditorFactory();
-    virtual QWidget* createEditor(QWidget* parent, KisRecordedAction* action) const;
-    virtual bool canEdit(const KisRecordedAction* action) const;
+    virtual QWidget *createEditor(QWidget *parent, KisRecordedAction *action) const;
+    virtual bool canEdit(const KisRecordedAction *action) const;
 };
 
 #endif

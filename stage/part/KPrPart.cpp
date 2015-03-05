@@ -51,18 +51,18 @@ void KPrPart::setDocument(KPrDocument *document)
     m_document = document;
 }
 
-KoView * KPrPart::createViewInstance(KoDocument *document, QWidget *parent)
+KoView *KPrPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    KPrView *view = new KPrView(this, qobject_cast<KPrDocument*>(document), parent);
+    KPrView *view = new KPrView(this, qobject_cast<KPrDocument *>(document), parent);
     connect(document, SIGNAL(replaceActivePage(KoPAPageBase*,KoPAPageBase*)), view, SLOT(replaceActivePage(KoPAPageBase*,KoPAPageBase*)));
     return view;
 }
 
 QGraphicsItem *KPrPart::createCanvasItem(KoDocument *document)
 {
-    KoPACanvasItem *canvasItem = new KoPACanvasItem(qobject_cast<KoPADocument*>(document));
+    KoPACanvasItem *canvasItem = new KoPACanvasItem(qobject_cast<KoPADocument *>(document));
     canvasItem->masterShapeManager()->setPaintingStrategy(new KPrShapeManagerDisplayMasterStrategy(canvasItem->masterShapeManager(),
-                                                                                                   new KPrPageSelectStrategyActive(canvasItem)));
+            new KPrPageSelectStrategyActive(canvasItem)));
     return canvasItem;
 }
 
@@ -97,7 +97,7 @@ void KPrPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
 
 void KPrPart::showErrorAndDie()
 {
-    KMessageBox::error(0, m_errorMessage, i18n( "Installation Error"));
+    KMessageBox::error(0, m_errorMessage, i18n("Installation Error"));
     // This means "the environment is incorrect" on Windows
     // FIXME: Is this uniform on all platforms?
     QCoreApplication::exit(10);

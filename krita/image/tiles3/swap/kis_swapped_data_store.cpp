@@ -66,11 +66,12 @@ void KisSwappedDataStore::swapOutTileData(KisTileData *td)
      */
 
     const qint32 expectedBufferSize = m_compressor->tileDataBufferSize(td);
-    if(m_buffer.size() < expectedBufferSize)
+    if (m_buffer.size() < expectedBufferSize) {
         m_buffer.resize(expectedBufferSize);
+    }
 
     qint32 bytesWritten;
-    m_compressor->compressTileData(td, (quint8*) m_buffer.data(), m_buffer.size(), bytesWritten);
+    m_compressor->compressTileData(td, (quint8 *) m_buffer.data(), m_buffer.size(), bytesWritten);
 
     KisChunk chunk = m_allocator->getChunk(bytesWritten);
     quint8 *ptr = m_swapSpace->getWriteChunkPtr(chunk);

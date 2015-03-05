@@ -64,7 +64,7 @@ int UserVariable::property() const
     return m_property;
 }
 
-const QString& UserVariable::name() const
+const QString &UserVariable::name() const
 {
     return m_name;
 }
@@ -86,7 +86,7 @@ void UserVariable::setNumberStyle(KoOdfNumberStyles::NumericStyleFormat numberst
     valueChanged();
 }
 
-QWidget* UserVariable::createOptionsWidget()
+QWidget *UserVariable::createOptionsWidget()
 {
     UserVariableOptionsWidget *configWidget = new UserVariableOptionsWidget(this);
     return configWidget;
@@ -118,22 +118,26 @@ void UserVariable::propertyChanged(Property property, const QVariant &value)
 
 void UserVariable::saveOdf(KoShapeSavingContext &context)
 {
-    if (m_property == 0 && !variableManager()->userVariables().contains(m_name))
+    if (m_property == 0 && !variableManager()->userVariables().contains(m_name)) {
         return;
+    }
 
     KoXmlWriter *writer = &context.xmlWriter();
 
-    if (m_property == KoInlineObject::UserGet)
+    if (m_property == KoInlineObject::UserGet) {
         writer->startElement("text:user-field-get", false);
-    else
+    } else {
         writer->startElement("text:user-field-input", false);
+    }
 
-    if (!m_name.isEmpty())
+    if (!m_name.isEmpty()) {
         writer->addAttribute("text:name", m_name);
+    }
 
     QString styleName = KoOdfNumberStyles::saveOdfNumberStyle(context.mainStyles(), m_numberstyle);
-    if (!styleName.isEmpty())
+    if (!styleName.isEmpty()) {
         writer->addAttribute("style:data-style-name", styleName);
+    }
 
     writer->addTextNode(value());
     writer->endElement();

@@ -24,7 +24,6 @@
 class KisDummiesFacadeBase;
 class KisNodeModel;
 
-
 /**
  * The class for converting to/from QModelIndex and KisNodeDummy when
  * the root node is *shown* (ShowRootLayer == *true*). The selection
@@ -35,10 +34,10 @@ class KRITAUI_EXPORT KisModelIndexConverterShowAll : public KisModelIndexConvert
 {
 public:
     KisModelIndexConverterShowAll(KisDummiesFacadeBase *dummiesFacade,
-                           KisNodeModel *model);
+                                  KisNodeModel *model);
 
-    KisNodeDummy* dummyFromRow(int row, QModelIndex parent);
-    KisNodeDummy* dummyFromIndex(QModelIndex index);
+    KisNodeDummy *dummyFromRow(int row, QModelIndex parent);
+    KisNodeDummy *dummyFromIndex(QModelIndex index);
 
     QModelIndex indexFromDummy(KisNodeDummy *dummy);
     bool indexFromAddedDummy(KisNodeDummy *parentDummy, int index,

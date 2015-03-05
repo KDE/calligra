@@ -30,19 +30,23 @@ class TestNode : public KisBaseNode
 {
     using KisBaseNode::accept;
 
-    bool accept(KisNodeVisitor &) {
+    bool accept(KisNodeVisitor &)
+    {
         return false;
     }
 
-    KisPaintDeviceSP paintDevice() const {
+    KisPaintDeviceSP paintDevice() const
+    {
         return 0;
     }
 
-    const KoColorSpace * colorSpace() const {
+    const KoColorSpace *colorSpace() const
+    {
         return 0;
     }
 
-    virtual const KoCompositeOp * compositeOp() const {
+    virtual const KoCompositeOp *compositeOp() const
+    {
         return 0;
     }
 };
@@ -122,5 +126,4 @@ void KisBaseNodeTest::testProperties()
 
 QTEST_KDEMAIN(KisBaseNodeTest, GUI)
 #include "kis_base_node_test.moc"
-
 

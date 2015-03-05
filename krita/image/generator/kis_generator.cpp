@@ -27,9 +27,8 @@
 #include "kis_selection.h"
 #include "kis_types.h"
 
-
-KisGenerator::KisGenerator(const KoID& _id, const KoID & category, const QString & entry)
-        : KisBaseProcessor(_id, category, entry)
+KisGenerator::KisGenerator(const KoID &_id, const KoID &category, const QString &entry)
+    : KisBaseProcessor(_id, category, entry)
 {
     init(id() + "_generator_bookmarks");
 }
@@ -39,19 +38,19 @@ KisGenerator::~KisGenerator()
 }
 
 void KisGenerator::generate(KisProcessingInformation dst,
-                            const QSize& size,
-                            const KisFilterConfiguration* config
+                            const QSize &size,
+                            const KisFilterConfiguration *config
                            ) const
 {
     generate(dst, size, config, 0);
 }
 
-const KoColorSpace * KisGenerator::colorSpace()
+const KoColorSpace *KisGenerator::colorSpace()
 {
     return 0;
 }
 
-QRect KisGenerator::generatedRect(QRect _imageArea, const KisFilterConfiguration*) const
+QRect KisGenerator::generatedRect(QRect _imageArea, const KisFilterConfiguration *) const
 {
     return _imageArea;
 }

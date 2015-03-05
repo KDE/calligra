@@ -42,7 +42,8 @@ public:
 
     QIcon icon() const;
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return KisNodeSP(new KisTransformMask(*this));
     }
 
@@ -51,11 +52,11 @@ public:
     bool accept(KisNodeVisitor &v);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
-    KisTransformMask(const KisTransformMask& rhs);
+    KisTransformMask(const KisTransformMask &rhs);
 
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,
-                       const QRect & rc,
+                       const QRect &rc,
                        PositionToFilthy maskPos) const;
 
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;

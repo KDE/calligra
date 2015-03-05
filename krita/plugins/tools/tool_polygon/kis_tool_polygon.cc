@@ -37,9 +37,8 @@
 
 #include <kis_system_locker.h>
 
-
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
-        : KisToolPolylineBase(canvas,  KisToolPolylineBase::PAINT, KisCursor::load("tool_polygon_cursor.png", 6, 6))
+    : KisToolPolylineBase(canvas,  KisToolPolylineBase::PAINT, KisCursor::load("tool_polygon_cursor.png", 6, 6))
 {
     setObjectName("tool_polygon");
     setSupportOutline(true);
@@ -49,7 +48,7 @@ KisToolPolygon::~KisToolPolygon()
 {
 }
 
-void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
+void KisToolPolygon::finishPolyline(const QVector<QPointF> &points)
 {
     if (image()) {
         KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset());
@@ -68,18 +67,19 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
                                            fillStyle());
         helper.paintPolygon(points);
     } else {
-        KoPathShape* path = new KoPathShape();
+        KoPathShape *path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
 
         QTransform resolutionMatrix;
         resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
         path->moveTo(resolutionMatrix.map(points[0]));
-        for (int i = 1; i < points.count(); i++)
+        for (int i = 1; i < points.count(); i++) {
             path->lineTo(resolutionMatrix.map(points[i]));
+        }
         path->close();
         path->normalize();
 
-        KoShapeStroke* border = new KoShapeStroke(1.0, currentFgColor().toQColor());
+        KoShapeStroke *border = new KoShapeStroke(1.0, currentFgColor().toQColor());
         path->setStroke(border);
 
         addShape(path);

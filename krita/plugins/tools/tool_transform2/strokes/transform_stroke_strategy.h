@@ -26,15 +26,13 @@
 #include "tool_transform_args.h"
 #include <kis_processing_visitor.h>
 
-
-
 class KisPostExecutionUndoAdapter;
-
 
 class KDE_EXPORT TransformStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:
-    class KDE_EXPORT TransformData : public KisStrokeJobData {
+    class KDE_EXPORT TransformData : public KisStrokeJobData
+    {
     public:
         enum Destination {
             PAINT_DEVICE,
@@ -42,11 +40,11 @@ public:
         };
 
     public:
-    TransformData(Destination _destination, const ToolTransformArgs &_config, KisNodeSP _node)
+        TransformData(Destination _destination, const ToolTransformArgs &_config, KisNodeSP _node)
             : KisStrokeJobData(CONCURRENT, NORMAL),
-            destination(_destination),
-            config(_config),
-            node(_node)
+              destination(_destination),
+              config(_config),
+              node(_node)
         {
         }
 
@@ -55,7 +53,8 @@ public:
         KisNodeSP node;
     };
 
-    class KDE_EXPORT ClearSelectionData : public KisStrokeJobData {
+    class KDE_EXPORT ClearSelectionData : public KisStrokeJobData
+    {
     public:
         ClearSelectionData(KisNodeSP _node)
             : KisStrokeJobData(SEQUENTIAL, NORMAL),
@@ -74,7 +73,6 @@ public:
 
     KisPaintDeviceSP previewDevice() const;
     KisSelectionSP realSelection() const;
-
 
     void doStrokeCallback(KisStrokeJobData *data);
 
@@ -104,7 +102,7 @@ private:
     KisSelectionSP m_selection;
 
     QMutex m_devicesCacheMutex;
-    QHash<KisPaintDevice*, KisPaintDeviceSP> m_devicesCacheHash;
+    QHash<KisPaintDevice *, KisPaintDeviceSP> m_devicesCacheHash;
 
     KisPaintDeviceSP m_previewDevice;
     KisTransformMaskSP writeToTransformMask;

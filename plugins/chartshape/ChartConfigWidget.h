@@ -19,10 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef KCHART_CHART_CONFIG_WIDGET
 #define KCHART_CHART_CONFIG_WIDGET
-
 
 // Calligra
 #include <KoShapeConfigWidgetBase.h>
@@ -33,14 +31,13 @@
 #include "ChartShape.h"
 #include "ui_ChartConfigWidget.h"
 
-
 class KoShape;
 class KAction;
 
 namespace KDChart
 {
-    class Position;
-    class CartesianAxis;
+class Position;
+class CartesianAxis;
 }
 
 namespace KChart
@@ -58,12 +55,15 @@ public:
     ChartConfigWidget();
     ~ChartConfigWidget();
 
-    void open(KoShape* shape);
+    void open(KoShape *shape);
     void save();
-    KAction* createAction();
+    KAction *createAction();
 
-    /// reimplemented 
-    virtual bool showOnShapeCreate() { return true; }
+    /// reimplemented
+    virtual bool showOnShapeCreate()
+    {
+        return true;
+    }
 
     /// Delete all open dialogs.
     /// This is called when e.g. the tool is deactivated.
@@ -82,8 +82,8 @@ public Q_SLOTS:
 
     void dataSetChartTypeSelected(QAction *action);
     void datasetMarkerSelected(QAction *action);
-    void datasetBrushSelected(const QColor& color);
-    void datasetPenSelected(const QColor& color);
+    void datasetBrushSelected(const QColor &color);
+    void datasetPenSelected(const QColor &color);
     void ui_datasetShowCategoryChanged(bool b);
     void ui_datasetShowErrorBarChanged(bool b);
     void ui_dataSetShowNumberChanged(bool b);
@@ -109,9 +109,9 @@ public Q_SLOTS:
     void ui_legendEditFontButtonClicked();
     void ui_legendFontChanged();
     void updateFixedPosition(Position position);
-    
+
     void ui_axisSelectionChanged(int index);
-    void ui_axisTitleChanged(const QString& title);
+    void ui_axisTitleChanged(const QString &title);
     void ui_axisShowTitleChanged(bool b);
     void ui_axisShowGridLinesChanged(bool b);
     void ui_axisUseLogarithmicScalingChanged(bool b);
@@ -135,18 +135,18 @@ Q_SIGNALS:
     void showTitleChanged(bool);
     void showSubTitleChanged(bool);
     void showFooterChanged(bool);
-    
+
     void showVerticalLinesChanged(bool b);
     void showHorizontalLinesChanged(bool b);
-    
+
     void dataSetXDataRegionChanged(DataSet *dataSet, const CellRegion &region);
     void dataSetYDataRegionChanged(DataSet *dataSet, const CellRegion &region);
     void dataSetCustomDataRegionChanged(DataSet *dataSet, const CellRegion &region);
     void dataSetCategoryDataRegionChanged(DataSet *dataSet, const CellRegion &region);
     void dataSetLabelDataRegionChanged(DataSet *dataSet, const CellRegion &region);
-    
-    void datasetPenChanged(DataSet *dataSet, const QColor& color);
-    void datasetBrushChanged(DataSet *dataSet, const QColor& color);
+
+    void datasetPenChanged(DataSet *dataSet, const QColor &color);
+    void datasetBrushChanged(DataSet *dataSet, const QColor &color);
     void dataSetMarkerChanged(DataSet *dataSet, OdfMarkerStyle style);
     void datasetShowCategoryChanged(DataSet *dataSet, bool b);
     void dataSetShowNumberChanged(DataSet *dataSet, bool b);
@@ -156,46 +156,45 @@ Q_SIGNALS:
     void gapBetweenBarsChanged(int percent);
     void gapBetweenSetsChanged(int percent);
     void pieExplodeFactorChanged(DataSet *dataSet, int percent);
-    
+
     void showLegendChanged(bool b);
 
-    void axisAdded(AxisDimension, const QString& title);
+    void axisAdded(AxisDimension, const QString &title);
     void axisRemoved(Axis *axis);
     void axisShowTitleChanged(Axis *axis, bool b);
-    void axisTitleChanged(Axis *axis, const QString& title);
+    void axisTitleChanged(Axis *axis, const QString &title);
     void axisShowGridLinesChanged(Axis *axis, bool b);
     void axisUseLogarithmicScalingChanged(Axis *axis, bool b);
     void axisStepWidthChanged(Axis *axis, qreal width);
     void axisSubStepWidthChanged(Axis *axis, qreal width);
     void axisUseAutomaticStepWidthChanged(Axis *axis, bool automatic);
     void axisUseAutomaticSubStepWidthChanged(Axis *axis, bool automatic);
-    void axisLabelsFontChanged(Axis *axis, const QFont& font);
+    void axisLabelsFontChanged(Axis *axis, const QFont &font);
 
-    void legendTitleChanged(const QString&);
-    void legendFontChanged(const QFont& font);
-    void legendTitleFontChanged(const QFont& font);
+    void legendTitleChanged(const QString &);
+    void legendFontChanged(const QFont &font);
+    void legendTitleFontChanged(const QFont &font);
     void legendFontSizeChanged(int size);
     void legendSpacingChanged(int spacing);
     void legendShowLinesToggled(bool toggled);
     void legendOrientationChanged(Qt::Orientation orientation);
     void legendAlignmentChanged(Qt::Alignment alignment);
     void legendFixedPositionChanged(Position position);
-    void legendBackgroundColorChanged(const QColor& color);
-    void legendFrameColorChanged(const QColor& color);
+    void legendBackgroundColorChanged(const QColor &color);
+    void legendFrameColorChanged(const QColor &color);
     void legendShowFrameChanged(bool show);
 
 private:
     void setupDialogs();
     void createActions();
-    
+
     void setPolarChartTypesEnabled(bool enabled);
     void setCartesianChartTypesEnabled(bool enabled);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 }  // namespace KChart
-
 
 #endif // KCHART_CHART_TYPE_CONFIG_WIDGET

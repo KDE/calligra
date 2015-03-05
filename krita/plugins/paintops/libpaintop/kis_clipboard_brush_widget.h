@@ -43,7 +43,8 @@ class KisWdgClipboardBrush : public QWidget, public Ui::KisWdgClipboardBrush
     Q_OBJECT
 
 public:
-    KisWdgClipboardBrush(QWidget* parent) : QWidget(parent) {
+    KisWdgClipboardBrush(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -52,7 +53,7 @@ class KisClipboardBrushWidget : public KisWdgClipboardBrush
 {
     Q_OBJECT
 public:
-    KisClipboardBrushWidget(QWidget* parent, const QString& caption, KisImageWSP image);
+    KisClipboardBrushWidget(QWidget *parent, const QString &caption, KisImageWSP image);
     virtual ~KisClipboardBrushWidget();
     KisBrushSP brush();
 
@@ -69,7 +70,7 @@ Q_SIGNALS:
     void sigBrushChanged();
 
 private:
-    KisClipboard* m_clipboard;
+    KisClipboard *m_clipboard;
     KisPaintDeviceSP pd;
     KisImageWSP m_image;
     KisBrushSP m_brush;

@@ -21,8 +21,7 @@
 #include <qtest_kde.h>
 #include "testing_categories_mapper.h"
 
-
-void checkItemsList(const QList<TestingMapper::DataItem*> &list,
+void checkItemsList(const QList<TestingMapper::DataItem *> &list,
                     const QStringList &ref)
 {
     QCOMPARE(list.size(), ref.size());
@@ -146,7 +145,7 @@ void removeCategory(const QString &category, QStringList &categories, QStringLis
     QMutableStringListIterator catIt(categories);
     QMutableStringListIterator entIt(entries);
 
-    while(catIt.hasNext() && entIt.hasNext()) {
+    while (catIt.hasNext() && entIt.hasNext()) {
         QString cat = catIt.next();
         QString ent = entIt.next();
 
@@ -158,10 +157,12 @@ void removeCategory(const QString &category, QStringList &categories, QStringLis
 
     bool started = false;
     QMutableStringListIterator itemsIt(items);
-    while(itemsIt.hasNext()) {
+    while (itemsIt.hasNext()) {
         QString item = itemsIt.next();
 
-        if (started && item.startsWith("cat")) break;
+        if (started && item.startsWith("cat")) {
+            break;
+        }
 
         if (started || item == category) {
             itemsIt.remove();

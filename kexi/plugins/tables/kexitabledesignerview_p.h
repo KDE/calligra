@@ -42,7 +42,7 @@ class Command;
 class KexiTableDesignerViewPrivate
 {
 public:
-    explicit KexiTableDesignerViewPrivate(KexiTableDesignerView* aDesignerView);
+    explicit KexiTableDesignerViewPrivate(KexiTableDesignerView *aDesignerView);
     ~KexiTableDesignerViewPrivate();
 
     int generateUniqueId();
@@ -65,24 +65,24 @@ public:
 
      addHistoryCommand_in_slotPropertyChanged_enabled is then set back to the original state.
      */
-    void setPropertyValueIfNeeded(const KoProperty::Set& set, const QByteArray& propertyName,
-                                  const QVariant& newValue, KexiTableDesignerCommands::Command* commandGroup,
+    void setPropertyValueIfNeeded(const KoProperty::Set &set, const QByteArray &propertyName,
+                                  const QVariant &newValue, KexiTableDesignerCommands::Command *commandGroup,
                                   bool forceAddCommand = false, bool rememberOldValue = true,
-                                  QStringList* const slist = 0, QStringList* const nlist = 0);
+                                  QStringList *const slist = 0, QStringList *const nlist = 0);
 
     /*! Like above but allows to specify \a oldValue. */
     void setPropertyValueIfNeeded(
-        const KoProperty::Set& set, const QByteArray& propertyName,
-        const QVariant& newValue, const QVariant& oldValue, KexiTableDesignerCommands::Command* commandGroup,
+        const KoProperty::Set &set, const QByteArray &propertyName,
+        const QVariant &newValue, const QVariant &oldValue, KexiTableDesignerCommands::Command *commandGroup,
         bool forceAddCommand = false, bool rememberOldValue = true,
-        QStringList* const slist = 0, QStringList* const nlist = 0);
+        QStringList *const slist = 0, QStringList *const nlist = 0);
 
     /*! @internal
      Used in updatePropertiesVisibility().
      Does nothing if visibility should not be changed, i.e. when prop->isVisible()==visible,
      otherwise sets changed to true and sets visibility of property \a prop to \a visible.
     */
-    void setVisibilityIfNeeded(const KoProperty::Set& set, KoProperty::Property* prop,
+    void setVisibilityIfNeeded(const KoProperty::Set &set, KoProperty::Property *prop,
                                bool visible, bool &changed, KexiTableDesignerCommands::Command *commandGroup);
 
     bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
@@ -97,9 +97,9 @@ public:
     /*! Updates icon in the first column, depending on property set \a set.
      For example, when "rowSource" and "rowSourceType" propertiesa are not empty,
      "combo" icon appears. */
-    void updateIconForRecord(KexiDB::RecordData &record, KoProperty::Set& set);
+    void updateIconForRecord(KexiDB::RecordData &record, KoProperty::Set &set);
 
-    KexiTableDesignerView* designerView;
+    KexiTableDesignerView *designerView;
 
     KexiTableScrollArea *view; //!< helper
 
@@ -149,8 +149,8 @@ public:
      to know what return value should be. */
     tristate recentResultOfStoreData;
 
-    KActionCollection* historyActionCollection;
-    KUndo2Stack* history;
+    KActionCollection *historyActionCollection;
+    KUndo2Stack *history;
 
     //! A set used in KexiTableDesignerView::buildField() to quickly identify
     //! properties internal to the designer

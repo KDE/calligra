@@ -38,34 +38,35 @@
 class KoDockWidgetTitleBar::Private
 {
 public:
-    Private(KoDockWidgetTitleBar* thePublic)
+    Private(KoDockWidgetTitleBar *thePublic)
         : thePublic(thePublic),
-            openIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarShadeButton)),
-            closeIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton)),
-            lockIcon(koIcon("object-unlocked")),
-            collapsable(true),
-            collapsableSet(true),
-            lockable(true),
-            textVisibilityMode(KoDockWidgetTitleBar::FullTextAlwaysVisible),
-            preCollapsedWidth(-1),
-            locked(false)
+          openIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarShadeButton)),
+          closeIcon(thePublic->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton)),
+          lockIcon(koIcon("object-unlocked")),
+          collapsable(true),
+          collapsableSet(true),
+          lockable(true),
+          textVisibilityMode(KoDockWidgetTitleBar::FullTextAlwaysVisible),
+          preCollapsedWidth(-1),
+          locked(false)
     {
-        if (openIcon.isNull())
+        if (openIcon.isNull()) {
             openIcon = koIcon("arrow-down");
-        if (closeIcon.isNull())
+        }
+        if (closeIcon.isNull()) {
             closeIcon = koIcon("arrow-right");
-
+        }
 
     }
 
-    KoDockWidgetTitleBar* thePublic;
+    KoDockWidgetTitleBar *thePublic;
     KIcon openIcon, closeIcon, lockIcon, floatIcon, removeIcon; // close/open are for collapsing
-    QAbstractButton* closeButton;
-    QAbstractButton* floatButton;
-    QAbstractButton* collapseButton;
+    QAbstractButton *closeButton;
+    QAbstractButton *floatButton;
+    QAbstractButton *collapseButton;
     bool collapsable;
     bool collapsableSet;
-    QAbstractButton* lockButton;
+    QAbstractButton *lockButton;
     bool lockable;
     KoDockWidgetTitleBar::TextVisibilityMode textVisibilityMode;
     int preCollapsedWidth;

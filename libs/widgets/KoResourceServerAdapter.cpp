@@ -28,17 +28,17 @@ KoAbstractResourceServerAdapter::~KoAbstractResourceServerAdapter()
 {
 }
 
-void KoAbstractResourceServerAdapter::emitResourceAdded(KoResource* resource)
+void KoAbstractResourceServerAdapter::emitResourceAdded(KoResource *resource)
 {
     emit resourceAdded(resource);
 }
 
-void KoAbstractResourceServerAdapter::emitRemovingResource(KoResource* resource)
+void KoAbstractResourceServerAdapter::emitRemovingResource(KoResource *resource)
 {
     emit removingResource(resource);
 }
 
-void KoAbstractResourceServerAdapter::emitResourceChanged(KoResource* resource)
+void KoAbstractResourceServerAdapter::emitResourceChanged(KoResource *resource)
 {
     emit resourceChanged(resource);
 }
@@ -48,12 +48,12 @@ void KoAbstractResourceServerAdapter::emitTagsWereChanged()
     emit tagsWereChanged();
 }
 
-void KoAbstractResourceServerAdapter::emitTagCategoryWasAdded(const QString& tag)
+void KoAbstractResourceServerAdapter::emitTagCategoryWasAdded(const QString &tag)
 {
     emit tagCategoryWasAdded(tag);
 }
 
-void KoAbstractResourceServerAdapter::emitTagCategoryWasRemoved(const QString& tag)
+void KoAbstractResourceServerAdapter::emitTagCategoryWasRemoved(const QString &tag)
 {
     emit tagCategoryWasRemoved(tag);
 }

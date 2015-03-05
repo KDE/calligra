@@ -23,7 +23,6 @@
 #include <QObject>
 #include <QVariant>
 
-
 class LevelFilter : public QObject
 {
     Q_OBJECT

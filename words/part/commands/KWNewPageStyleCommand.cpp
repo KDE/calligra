@@ -25,8 +25,8 @@
 
 KWNewPageStyleCommand::KWNewPageStyleCommand(KWDocument *document, const KWPageStyle &newStyle, KUndo2Command *parent)
     : KUndo2Command(kundo2_i18n("Insert Page Style"), parent),
-    m_newStyle(newStyle),
-    m_document(document)
+      m_newStyle(newStyle),
+      m_document(document)
 {
     Q_ASSERT(document);
 }

@@ -31,9 +31,9 @@
 #include "commands/kis_node_commands.h"
 #include "KisViewManager.h"
 
-KisNodeCommandsAdapter::KisNodeCommandsAdapter(KisViewManager * view)
-        : QObject(view)
-        , m_view(view)
+KisNodeCommandsAdapter::KisNodeCommandsAdapter(KisViewManager *view)
+    : QObject(view)
+    , m_view(view)
 {
 
 }
@@ -42,7 +42,7 @@ KisNodeCommandsAdapter::~KisNodeCommandsAdapter()
 {
 }
 
-void KisNodeCommandsAdapter::beginMacro(const KUndo2MagicString& macroName)
+void KisNodeCommandsAdapter::beginMacro(const KUndo2MagicString &macroName)
 {
     Q_ASSERT(m_view->image()->undoAdapter());
     m_view->image()->undoAdapter()->beginMacro(macroName);
@@ -122,12 +122,12 @@ void KisNodeCommandsAdapter::setOpacity(KisNodeSP node, qint32 opacity)
 }
 
 void KisNodeCommandsAdapter::setCompositeOp(KisNodeSP node,
-                                            const KoCompositeOp* compositeOp)
+        const KoCompositeOp *compositeOp)
 {
     Q_ASSERT(m_view->image()->undoAdapter());
     m_view->image()->undoAdapter()->addCommand(
-      new KisNodeCompositeOpCommand(node, node->compositeOpId(),
-                                    compositeOp->id()));
+        new KisNodeCompositeOpCommand(node, node->compositeOpId(),
+                                      compositeOp->id()));
 }
 
 void KisNodeCommandsAdapter::undoLastCommand()

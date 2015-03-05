@@ -42,11 +42,12 @@ public:
     KisSelectionMask(KisImageWSP image);
 
     virtual ~KisSelectionMask();
-    KisSelectionMask(const KisSelectionMask& rhs);
+    KisSelectionMask(const KisSelectionMask &rhs);
 
     QIcon icon() const;
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return KisNodeSP(new KisSelectionMask(*this));
     }
 
@@ -76,7 +77,7 @@ private:
     KisImageWSP image() const;
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif //_KIS_SELECTION_MASK_

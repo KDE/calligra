@@ -35,17 +35,17 @@ public:
     virtual ~KoColorSlider();
 
 public:
-    void setColors( const KoColor& minColor, const KoColor& maxColor);
+    void setColors(const KoColor &minColor, const KoColor &maxColor);
     /**
      * Return the current color
      */
     KoColor currentColor() const;
 protected:
-    virtual void drawContents( QPainter* );
+    virtual void drawContents(QPainter *);
 
 protected:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

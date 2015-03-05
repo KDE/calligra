@@ -63,26 +63,29 @@ KWDocument *KWPart::document() const
 
 KoView *KWPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    KWView *view = new KWView(this, qobject_cast<KWDocument*>(document), parent);
+    KWView *view = new KWView(this, qobject_cast<KWDocument *>(document), parent);
     setupViewInstance(document, view);
     return view;
 }
 
 void KWPart::setupViewInstance(KoDocument *document, KWView *view)
 {
-    connect(document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *, KoShapeManager::Repaint)));
-    connect(document, SIGNAL(shapeRemoved(KoShape *)), view->canvasBase()->shapeManager(), SLOT(remove(KoShape *)));
-    connect(document, SIGNAL(resourceChanged(int, const QVariant &)), view->canvasBase()->resourceManager(), SLOT(setResource(int, const QVariant &)));
+    connect(document, SIGNAL(shapeAdded(KoShape*,KoShapeManager::Repaint)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape*,KoShapeManager::Repaint)));
+    connect(document, SIGNAL(shapeRemoved(KoShape*)), view->canvasBase()->shapeManager(), SLOT(remove(KoShape*)));
+    connect(document, SIGNAL(resourceChanged(int,QVariant)), view->canvasBase()->resourceManager(), SLOT(setResource(int,QVariant)));
 
     bool switchToolCalled = false;
-    foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {
-        if (fs->shapeCount() == 0)
+    foreach (KWFrameSet *fs, qobject_cast<KWDocument *>(document)->frameSets()) {
+        if (fs->shapeCount() == 0) {
             continue;
-        foreach (KoShape *shape, fs->shapes())
+        }
+        foreach (KoShape *shape, fs->shapes()) {
             view->canvasBase()->shapeManager()->addShape(shape, KoShapeManager::AddWithoutRepaint);
-        if (switchToolCalled)
+        }
+        if (switchToolCalled) {
             continue;
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        }
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet *>(fs);
         if (tfs && tfs->textFrameSetType() == Words::MainTextFrameSet) {
             KoSelection *selection = view->canvasBase()->shapeManager()->selection();
             selection->select(fs->shapes().first());
@@ -92,15 +95,16 @@ void KWPart::setupViewInstance(KoDocument *document, KWView *view)
             switchToolCalled = true;
         }
     }
-    if (!switchToolCalled)
+    if (!switchToolCalled) {
         KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+    }
 }
 
 QGraphicsItem *KWPart::createCanvasItem(KoDocument *document)
 {
     // caller owns the canvas item
-    KWCanvasItem *item = new KWCanvasItem(QString(), qobject_cast<KWDocument*>(document));
-    foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {
+    KWCanvasItem *item = new KWCanvasItem(QString(), qobject_cast<KWDocument *>(document));
+    foreach (KWFrameSet *fs, qobject_cast<KWDocument *>(document)->frameSets()) {
         if (fs->shapeCount() == 0) {
             continue;
         }
@@ -134,9 +138,11 @@ void KWPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
     // print error if kotext not available
     if (KoShapeRegistry::instance()->value(TextShape_SHAPEID) == 0)
         // need to wait 1 event since exiting here would not work.
+    {
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
-    else
+    } else {
         KoPart::showStartUpWidget(parent, alwaysShow);
+    }
 }
 
 void KWPart::showErrorAndDie()

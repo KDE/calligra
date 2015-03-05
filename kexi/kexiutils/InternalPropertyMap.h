@@ -43,16 +43,16 @@ public:
     /*! \returns property value for name \a name.
      If \a defaultValue is provided and there is no property with
      specified name, \a defaultValue is returned. */
-    QVariant internalPropertyValue(const QByteArray& name,
-                                   const QVariant& defaultValue = QVariant()) const;
+    QVariant internalPropertyValue(const QByteArray &name,
+                                   const QVariant &defaultValue = QVariant()) const;
 
     /*! Sets property value \a value for property \a name.
      If \a value is null, the property is deleted. */
-    void setInternalPropertyValue(const QByteArray& name, const QVariant& value);
+    void setInternalPropertyValue(const QByteArray &name, const QVariant &value);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 }

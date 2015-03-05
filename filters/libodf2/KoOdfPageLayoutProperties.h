@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KOODF_PAGE_LAYOUT_PROPERTIES_H
 #define KOODF_PAGE_LAYOUT_PROPERTIES_H
 
@@ -26,15 +25,13 @@
 
 #include "koodf2_export.h"
 
-
 class QString;
 class KoXmlStreamReader;
 class KoXmlWriter;
 
-
 class KOODF2_EXPORT KoOdfPageLayoutProperties : public KoOdfStyleProperties
 {
- public:
+public:
     KoOdfPageLayoutProperties();
     virtual ~KoOdfPageLayoutProperties();
 
@@ -44,10 +41,9 @@ class KOODF2_EXPORT KoOdfPageLayoutProperties : public KoOdfStyleProperties
     virtual bool readOdf(KoXmlStreamReader &reader);
     virtual bool saveOdf(const QString &propertySet, KoXmlWriter *writer);
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

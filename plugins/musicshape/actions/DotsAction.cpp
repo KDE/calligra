@@ -43,18 +43,22 @@
 
 using namespace MusicCore;
 
-DotsAction::DotsAction(SimpleEntryTool* tool)
+DotsAction::DotsAction(SimpleEntryTool *tool)
     : AbstractNoteMusicAction(koIcon("music-dottednote"), i18n("Dots"), tool)
 {
 }
 
-void DotsAction::mousePress(Chord* chord, Note* note, qreal distance, const QPointF& pos)
+void DotsAction::mousePress(Chord *chord, Note *note, qreal distance, const QPointF &pos)
 {
-    Q_UNUSED( note );
-    Q_UNUSED( pos );
+    Q_UNUSED(note);
+    Q_UNUSED(pos);
 
-    if (!chord) return;
-    if (distance > 10) return; // bah, magic numbers are ugly....
-    
+    if (!chord) {
+        return;
+    }
+    if (distance > 10) {
+        return;    // bah, magic numbers are ugly....
+    }
+
     m_tool->addCommand(new AddDotCommand(m_tool->shape(), chord));
 }

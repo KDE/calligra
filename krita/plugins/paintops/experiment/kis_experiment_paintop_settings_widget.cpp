@@ -29,7 +29,7 @@
 #include <kis_curve_option_widget.h>
 #include <kis_compositeop_option.h>
 
-KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget* parent)
+KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget *parent)
     : KisPaintOpOptionsWidget(parent)
 {
     addPaintOpOption(new KisExperimentOpOption());
@@ -41,10 +41,10 @@ KisExperimentPaintOpSettingsWidget::~ KisExperimentPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisExperimentPaintOpSettingsWidget::configuration() const
+KisPropertiesConfiguration  *KisExperimentPaintOpSettingsWidget::configuration() const
 {
-    KisExperimentPaintOpSettings* config = new KisExperimentPaintOpSettings();
-    config->setOptionsWidget(const_cast<KisExperimentPaintOpSettingsWidget*>(this));
+    KisExperimentPaintOpSettings *config = new KisExperimentPaintOpSettings();
+    config->setOptionsWidget(const_cast<KisExperimentPaintOpSettingsWidget *>(this));
     config->setProperty("paintop", "experimentbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

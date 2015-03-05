@@ -25,7 +25,7 @@
 #include <KoResourceServerAdapter.h>
 #include <math.h>
 
-KoResourceModel::KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject * parent)
+KoResourceModel::KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject *parent)
     : KoResourceModelBase(parent)
     , m_resourceAdapter(resourceAdapter)
     , m_columnCount(4)
@@ -50,88 +50,90 @@ KoResourceModel::~KoResourceModel()
 {
 }
 
-int KoResourceModel::rowCount( const QModelIndex &/*parent*/ ) const
+int KoResourceModel::rowCount(const QModelIndex &/*parent*/) const
 {
     int resourceCount = m_resourceAdapter->resources().count();
-    if (!resourceCount)
+    if (!resourceCount) {
         return 0;
+    }
 
     return static_cast<int>(ceil(static_cast<qreal>(resourceCount) / m_columnCount));
 }
 
-int KoResourceModel::columnCount ( const QModelIndex & ) const
+int KoResourceModel::columnCount(const QModelIndex &) const
 {
     return m_columnCount;
 }
 
-QVariant KoResourceModel::data( const QModelIndex &index, int role ) const
+QVariant KoResourceModel::data(const QModelIndex &index, int role) const
 {
-    if( ! index.isValid() )
-         return QVariant();
+    if (! index.isValid()) {
+        return QVariant();
+    }
 
-    switch( role )
-    {
-        case Qt::DisplayRole:
-        {
-            KoResource * resource = static_cast<KoResource*>(index.internalPointer());
-            if( ! resource )
-                return QVariant();
-            QString resName = i18n( resource->name().toUtf8().data());
-
-            if (m_resourceAdapter->assignedTagsList(resource).count()) {
-                QString taglist = m_resourceAdapter->assignedTagsList(resource).join("] , [");
-                QString tagListToolTip = QString(" - %1: [%2]").arg(i18n("Tags"), taglist);
-                return QVariant( resName + tagListToolTip );
-            }
-            return QVariant( resName );
-        }
-        case Qt::DecorationRole:
-        {
-            KoResource * resource = static_cast<KoResource*>(index.internalPointer());
-            if( ! resource )
-                return QVariant();
-
-            return QVariant( resource->image() );
-        }
-        case KoResourceModel::LargeThumbnailRole:
-        {
-            KoResource * resource = static_cast<KoResource*>(index.internalPointer());
-            if( ! resource )
-                return QVariant();
-
-            QSize imageSize = resource->image().size();
-            QSize thumbSize( 100, 100 );
-            if(imageSize.height() > thumbSize.height() || imageSize.width() > thumbSize.width()) {
-                qreal scaleW = static_cast<qreal>( thumbSize.width() ) / static_cast<qreal>( imageSize.width() );
-                qreal scaleH = static_cast<qreal>( thumbSize.height() ) / static_cast<qreal>( imageSize.height() );
-
-                qreal scale = qMin( scaleW, scaleH );
-
-                int thumbW = static_cast<int>( imageSize.width() * scale );
-                int thumbH = static_cast<int>( imageSize.height() * scale );
-
-                return QVariant(resource->image().scaled( thumbW, thumbH, Qt::IgnoreAspectRatio ));
-            }
-            else
-                return QVariant(resource->image());
-        }
-
-        default:
+    switch (role) {
+    case Qt::DisplayRole: {
+        KoResource *resource = static_cast<KoResource *>(index.internalPointer());
+        if (! resource) {
             return QVariant();
+        }
+        QString resName = i18n(resource->name().toUtf8().data());
+
+        if (m_resourceAdapter->assignedTagsList(resource).count()) {
+            QString taglist = m_resourceAdapter->assignedTagsList(resource).join("] , [");
+            QString tagListToolTip = QString(" - %1: [%2]").arg(i18n("Tags"), taglist);
+            return QVariant(resName + tagListToolTip);
+        }
+        return QVariant(resName);
+    }
+    case Qt::DecorationRole: {
+        KoResource *resource = static_cast<KoResource *>(index.internalPointer());
+        if (! resource) {
+            return QVariant();
+        }
+
+        return QVariant(resource->image());
+    }
+    case KoResourceModel::LargeThumbnailRole: {
+        KoResource *resource = static_cast<KoResource *>(index.internalPointer());
+        if (! resource) {
+            return QVariant();
+        }
+
+        QSize imageSize = resource->image().size();
+        QSize thumbSize(100, 100);
+        if (imageSize.height() > thumbSize.height() || imageSize.width() > thumbSize.width()) {
+            qreal scaleW = static_cast<qreal>(thumbSize.width()) / static_cast<qreal>(imageSize.width());
+            qreal scaleH = static_cast<qreal>(thumbSize.height()) / static_cast<qreal>(imageSize.height());
+
+            qreal scale = qMin(scaleW, scaleH);
+
+            int thumbW = static_cast<int>(imageSize.width() * scale);
+            int thumbH = static_cast<int>(imageSize.height() * scale);
+
+            return QVariant(resource->image().scaled(thumbW, thumbH, Qt::IgnoreAspectRatio));
+        } else {
+            return QVariant(resource->image());
+        }
+    }
+
+    default:
+        return QVariant();
     }
 }
 
-QModelIndex KoResourceModel::index ( int row, int column, const QModelIndex & ) const
+QModelIndex KoResourceModel::index(int row, int column, const QModelIndex &) const
 {
     int index = row * m_columnCount + column;
-    const QList<KoResource*> resources = m_resourceAdapter->resources();
-    if( index >= resources.count() || index < 0)
+    const QList<KoResource *> resources = m_resourceAdapter->resources();
+    if (index >= resources.count() || index < 0) {
         return QModelIndex();
+    }
 
-    return createIndex( row, column, resources[index] );
+    return createIndex(row, column, resources[index]);
 }
 
-void KoResourceModel::setColumnCount( int columnCount )
+void KoResourceModel::setColumnCount(int columnCount)
 {
     if (columnCount != m_columnCount) {
         m_columnCount = columnCount;
@@ -142,8 +144,9 @@ void KoResourceModel::setColumnCount( int columnCount )
 void KoResourceModel::resourceAdded(KoResource *resource)
 {
     int newIndex = m_resourceAdapter->resources().indexOf(resource);
-    if (newIndex < 0)
+    if (newIndex < 0) {
         return;
+    }
     reset();
 }
 
@@ -153,7 +156,7 @@ void KoResourceModel::resourceRemoved(KoResource *resource)
     reset();
 }
 
-void KoResourceModel::resourceChanged(KoResource* resource)
+void KoResourceModel::resourceChanged(KoResource *resource)
 {
     int resourceIndex = m_resourceAdapter->resources().indexOf(resource);
     int row = resourceIndex / columnCount();
@@ -173,17 +176,17 @@ void KoResourceModel::tagBoxEntryWasModified()
     emit tagBoxEntryModified();
 }
 
-void KoResourceModel::tagBoxEntryWasAdded(const QString& tag)
+void KoResourceModel::tagBoxEntryWasAdded(const QString &tag)
 {
     emit tagBoxEntryAdded(tag);
 }
 
-void KoResourceModel::tagBoxEntryWasRemoved(const QString& tag)
+void KoResourceModel::tagBoxEntryWasRemoved(const QString &tag)
 {
     emit tagBoxEntryRemoved(tag);
 }
 
-QModelIndex KoResourceModel::indexFromResource(KoResource* resource) const
+QModelIndex KoResourceModel::indexFromResource(KoResource *resource) const
 {
     int resourceIndex = m_resourceAdapter->resources().indexOf(resource);
     int row = resourceIndex / columnCount();
@@ -201,12 +204,12 @@ void KoResourceModel::importResourceFile(const QString &filename)
     m_resourceAdapter->importResourceFile(filename);
 }
 
-void KoResourceModel::importResourceFile(const QString & filename, bool fileCreation)
+void KoResourceModel::importResourceFile(const QString &filename, bool fileCreation)
 {
     m_resourceAdapter->importResourceFile(filename, fileCreation);
 }
 
-bool KoResourceModel::removeResource(KoResource* resource)
+bool KoResourceModel::removeResource(KoResource *resource)
 {
     return m_resourceAdapter->removeResource(resource);
 }
@@ -221,7 +224,7 @@ QStringList KoResourceModel::assignedTagsList(KoResource *resource) const
     return m_resourceAdapter->assignedTagsList(resource);
 }
 
-void KoResourceModel::addTag(KoResource* resource, const QString& tag)
+void KoResourceModel::addTag(KoResource *resource, const QString &tag)
 {
     m_resourceAdapter->addTag(resource, tag);
     emit tagBoxEntryAdded(tag);
@@ -237,12 +240,12 @@ QStringList KoResourceModel::tagNamesList() const
     return m_resourceAdapter->tagNamesList();
 }
 
-QStringList KoResourceModel::searchTag(const QString& lineEditText)
+QStringList KoResourceModel::searchTag(const QString &lineEditText)
 {
     return m_resourceAdapter->searchTag(lineEditText);
 }
 
-void KoResourceModel::searchTextChanged(const QString& searchString)
+void KoResourceModel::searchTextChanged(const QString &searchString)
 {
     m_resourceAdapter->searchTextChanged(searchString);
 }
@@ -252,7 +255,7 @@ void KoResourceModel::enableResourceFiltering(bool enable)
     m_resourceAdapter->enableResourceFiltering(enable);
 }
 
-void KoResourceModel::setCurrentTag(const QString& currentTag)
+void KoResourceModel::setCurrentTag(const QString &currentTag)
 {
     m_resourceAdapter->setCurrentTag(currentTag);
 }
@@ -269,7 +272,7 @@ int KoResourceModel::resourcesCount() const
 
 QList<KoResource *> KoResourceModel::currentlyVisibleResources() const
 {
-  return m_resourceAdapter->resources();
+    return m_resourceAdapter->resources();
 }
 
 void KoResourceModel::tagCategoryMembersChanged()
@@ -277,12 +280,12 @@ void KoResourceModel::tagCategoryMembersChanged()
     m_resourceAdapter->tagCategoryMembersChanged();
 }
 
-void KoResourceModel::tagCategoryAdded(const QString& tag)
+void KoResourceModel::tagCategoryAdded(const QString &tag)
 {
     m_resourceAdapter->tagCategoryAdded(tag);
 }
 
-void KoResourceModel::tagCategoryRemoved(const QString& tag)
+void KoResourceModel::tagCategoryRemoved(const QString &tag)
 {
     m_resourceAdapter->tagCategoryRemoved(tag);
 }
@@ -292,7 +295,7 @@ QString KoResourceModel::serverType() const
     return m_resourceAdapter->serverType();
 }
 
-QList< KoResource* > KoResourceModel::serverResources() const
+QList< KoResource * > KoResourceModel::serverResources() const
 {
     return m_resourceAdapter->serverResources();
 }

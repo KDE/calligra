@@ -42,22 +42,21 @@
 
     This method will try to cast the QMimeData to DeclarativeMimeData, and will clone our extensions to QMimeData as well
 */
-DeclarativeMimeData::DeclarativeMimeData(const QMimeData* copy)
+DeclarativeMimeData::DeclarativeMimeData(const QMimeData *copy)
     : QMimeData(),
-    m_source(0)
+      m_source(0)
 {
     // Copy the standard MIME data
-    foreach(QString format, copy->formats()) {
-            this->setData(format, copy->data(format));
+    foreach (QString format, copy->formats()) {
+        this->setData(format, copy->data(format));
     }
 
     // If the object we are copying actually is a DeclarativeMimeData, copy our extended properties as well
-    const DeclarativeMimeData* declarativeMimeData = qobject_cast<const DeclarativeMimeData*>(copy);
+    const DeclarativeMimeData *declarativeMimeData = qobject_cast<const DeclarativeMimeData *>(copy);
     if (declarativeMimeData) {
         this->setSource(declarativeMimeData->source());
     }
 }
-
 
 /*!
     \qmlproperty url MimeData::url
@@ -67,15 +66,16 @@ DeclarativeMimeData::DeclarativeMimeData(const QMimeData* copy)
 */
 QUrl DeclarativeMimeData::url() const
 {
-    if ( this->hasUrls() && !this->urls().isEmpty()) {
+    if (this->hasUrls() && !this->urls().isEmpty()) {
         return QMimeData::urls().first();
-     }
+    }
     return QUrl();
 }
 void DeclarativeMimeData::setUrl(const QUrl &url)
 {
-    if (this->url() == url)
+    if (this->url() == url) {
         return;
+    }
 
     QList<QUrl> urlList;
     urlList.append(url);
@@ -105,9 +105,9 @@ void DeclarativeMimeData::setUrls(const QVariantList &urls)
 // color
 QColor DeclarativeMimeData::color() const
 {
-    if ( this->hasColor()) {
-         return qvariant_cast<QColor>(this->colorData());
-     }
+    if (this->hasColor()) {
+        return qvariant_cast<QColor>(this->colorData());
+    }
     return QColor();
 }
 void DeclarativeMimeData::setColor(const QColor &color)
@@ -132,11 +132,11 @@ void DeclarativeMimeData::setData(const QString &mimeType, const QString &data)
   In the case of inter-application drag and drop operations, the source will not be available, and will be 0.
   Be sure to test it in your QML code, before using it, or it will generate errors in the console.
 */
-QDeclarativeItem* DeclarativeMimeData::source() const
+QDeclarativeItem *DeclarativeMimeData::source() const
 {
     return m_source;
 }
-void DeclarativeMimeData::setSource(QDeclarativeItem* source)
+void DeclarativeMimeData::setSource(QDeclarativeItem *source)
 {
     if (m_source != source) {
         m_source = source;

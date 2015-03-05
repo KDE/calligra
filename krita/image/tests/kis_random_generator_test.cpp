@@ -46,7 +46,6 @@ void KisRandomGeneratorTest::twoSeeds()
     twoSeeds(154349154349LL, 847895847895LL);
 }
 
-
 void KisRandomGeneratorTest::twoCalls(quint64 seed)
 {
     KisRandomGenerator rand1(seed);
@@ -80,7 +79,6 @@ void KisRandomGeneratorTest::testConstantness(quint64 seed)
         }
     }
 }
-
 
 void KisRandomGeneratorTest::testConstantness()
 {

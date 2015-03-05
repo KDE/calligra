@@ -28,15 +28,14 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-
 namespace KPlatoWork
 {
 
-KComponentData* Factory::s_global = 0L;
-KAboutData* Factory::s_aboutData = 0L;
+KComponentData *Factory::s_global = 0L;
+KAboutData *Factory::s_aboutData = 0L;
 
-Factory::Factory( QObject* parent )
-    : KPluginFactory( *aboutData(), parent )
+Factory::Factory(QObject *parent)
+    : KPluginFactory(*aboutData(), parent)
 {
     global();
 }
@@ -49,28 +48,28 @@ Factory::~Factory()
     s_global = 0L;
 }
 
-QObject* Factory::create( const char* iface, QWidget* parentWidget, QObject *parent,
-                             const QVariantList& args, const QString& keyword )
+QObject *Factory::create(const char *iface, QWidget *parentWidget, QObject *parent,
+                         const QVariantList &args, const QString &keyword)
 {
-    Q_UNUSED( args );
-    Q_UNUSED( keyword );
-    Q_UNUSED( iface );
-    Part *part = new Part( parentWidget, parent );
+    Q_UNUSED(args);
+    Q_UNUSED(keyword);
+    Q_UNUSED(iface);
+    Part *part = new Part(parentWidget, parent);
     return part;
 }
 
-KAboutData* Factory::aboutData()
+KAboutData *Factory::aboutData()
 {
-    if ( !s_aboutData )
+    if (!s_aboutData) {
         s_aboutData = newAboutData();
+    }
     return s_aboutData;
 }
 
 const KComponentData &Factory::global()
 {
-    if ( !s_global )
-    {
-        s_global = new KComponentData( aboutData() );
+    if (!s_global) {
+        s_global = new KComponentData(aboutData());
 
         // Add any application-specific resource directories here
         s_global->dirs()->addResourceType("planwork_template", "data", "planwork/templates/");

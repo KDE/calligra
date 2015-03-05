@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef __KIS_PROGRESS_MANAGER__
 #define __KIS_PROGRESS_MANAGER__
 
@@ -33,7 +32,7 @@ class KisGmicProgressManager : public QObject
 {
     Q_OBJECT
 public:
-    KisGmicProgressManager(KisViewManager * viewManager);
+    KisGmicProgressManager(KisViewManager *viewManager);
     virtual ~KisGmicProgressManager();
 
     void initProgress();
@@ -45,8 +44,8 @@ Q_SIGNALS:
     void sigProgress();
 
 private:
-    QTimer * m_progressTimer;
-    KoProgressUpdater * m_progressUpdater;
+    QTimer *m_progressTimer;
+    KoProgressUpdater *m_progressUpdater;
     KoUpdaterPtr m_updater;
     quint32 m_progressPulseRequest;
 };

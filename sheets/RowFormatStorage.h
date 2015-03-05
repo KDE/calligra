@@ -24,8 +24,10 @@
 
 #include "calligra_sheets_export.h"
 
-namespace Calligra {
-namespace Sheets {
+namespace Calligra
+{
+namespace Sheets
+{
 
 class Sheet;
 
@@ -36,35 +38,34 @@ public:
     explicit RowFormatStorage(Sheet *sheet);
     ~RowFormatStorage();
 
-    Sheet* sheet() const;
+    Sheet *sheet() const;
 
-    qreal rowHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
+    qreal rowHeight(int row, int *lastRow = 0, int *firstRow = 0) const;
     void setRowHeight(int firstRow, int lastRow, qreal height);
 
-    bool isHidden(int row, int* lastRow = 0, int* firstRow = 0) const;
+    bool isHidden(int row, int *lastRow = 0, int *firstRow = 0) const;
     void setHidden(int firstRow, int lastRow, bool hidden);
 
-    bool isFiltered(int row, int* lastRow = 0, int* firstRow = 0) const;
+    bool isFiltered(int row, int *lastRow = 0, int *firstRow = 0) const;
     void setFiltered(int firstRow, int lastRow, bool filtered);
 
-    bool isHiddenOrFiltered(int row, int* lastRow = 0, int* firstRow = 0) const;
+    bool isHiddenOrFiltered(int row, int *lastRow = 0, int *firstRow = 0) const;
 
-    qreal visibleHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
+    qreal visibleHeight(int row, int *lastRow = 0, int *firstRow = 0) const;
 
     qreal totalRowHeight(int firstRow, int lastRow) const;
     qreal totalVisibleRowHeight(int firstRow, int lastRow) const;
 
-    int rowForPosition(qreal ypos, qreal * topOfRow = 0) const;
+    int rowForPosition(qreal ypos, qreal *topOfRow = 0) const;
 
-    bool hasPageBreak(int row, int* lastRow = 0, int* firstRow = 0) const;
+    bool hasPageBreak(int row, int *lastRow = 0, int *firstRow = 0) const;
     void setPageBreak(int firstRow, int lastRow, bool pageBreak);
 
-    bool isDefaultRow(int row, int* lastRow = 0, int* firstRow = 0) const;
+    bool isDefaultRow(int row, int *lastRow = 0, int *firstRow = 0) const;
     void setDefault(int firstRow, int lastRow);
     int lastNonDefaultRow() const;
 
     bool rowsAreEqual(int row1, int row2) const;
-
 
     /**
      * Insert \p number of rows at position \p row.
@@ -78,13 +79,12 @@ public:
      */
     void removeRows(int row, int number);
 
-    RowFormatStorage& operator=(const RowFormatStorage& r);
+    RowFormatStorage &operator=(const RowFormatStorage &r);
 private:
-    RowFormatStorage(const RowFormatStorage&);
+    RowFormatStorage(const RowFormatStorage &);
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 } // namespace Sheets
 } // namespace Calligra

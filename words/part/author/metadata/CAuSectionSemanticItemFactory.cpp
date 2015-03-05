@@ -47,9 +47,9 @@ void CAuSectionSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanti
     const QString sparqlQuery = CAuSectionRdf::QUERY;
 
     Soprano::QueryResultIterator it = m->executeQuery(
-        sparqlQuery,
-        Soprano::Query::QueryLanguageSparql
-    );
+                                          sparqlQuery,
+                                          Soprano::Query::QueryLanguageSparql
+                                      );
 
     QList<hKoRdfBasicSemanticItem> oldSemanticItems = semanticItems;
 
@@ -85,7 +85,7 @@ void CAuSectionSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanti
     }
 }
 
-hKoRdfBasicSemanticItem CAuSectionSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfBasicSemanticItem CAuSectionSemanticItemFactory::createSemanticItem(const KoDocumentRdf *rdf, QObject *parent)
 {
     return hKoRdfBasicSemanticItem(new CAuSectionRdf(parent, rdf));
 

@@ -16,7 +16,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #ifndef TOOLMANAGER_H
 #define TOOLMANAGER_H
 
@@ -27,24 +26,24 @@ class KoCanvasController;
 class ToolManager : public QDeclarativeItem
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* currentTool READ currentTool NOTIFY currentToolChanged);
+    Q_PROPERTY(QObject *currentTool READ currentTool NOTIFY currentToolChanged);
 public:
-    explicit ToolManager(QDeclarativeItem* parent = 0);
+    explicit ToolManager(QDeclarativeItem *parent = 0);
     virtual ~ToolManager();
 
-    QObject* currentTool() const;
+    QObject *currentTool() const;
 
     Q_INVOKABLE void requestToolChange(QString toolID);
 
 public Q_SLOTS:
-    void slotToolChanged(KoCanvasController* canvas, int toolId);
+    void slotToolChanged(KoCanvasController *canvas, int toolId);
 
 Q_SIGNALS:
     void currentToolChanged();
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // TOOLMANAGER_H

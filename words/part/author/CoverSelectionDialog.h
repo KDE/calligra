@@ -25,7 +25,8 @@ Boston, MA 02110-1301, USA
 #include <QDialog>
 #include <QLabel>
 
-namespace Ui {
+namespace Ui
+{
 class CoverSelectionDialog;
 }
 
@@ -43,7 +44,7 @@ private Q_SLOTS:
     void ok();
 
 private:
-    void resizeEvent(QResizeEvent*);
+    void resizeEvent(QResizeEvent *);
     void createActions();
     //Fonction call manualy, responsible of QLabel's image display
     void refresh();

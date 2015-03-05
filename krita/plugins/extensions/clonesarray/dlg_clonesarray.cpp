@@ -31,7 +31,6 @@
 #include <kis_group_layer.h>
 #include <kis_clone_layer.h>
 
-
 DlgClonesArray::DlgClonesArray(KisViewManager *view, QWidget *parent)
     :   KDialog(parent),
         m_view(view),
@@ -237,11 +236,12 @@ void DlgClonesArray::reapplyClones()
 
     for (int row = endRow; row >= startRow; row--) {
         for (int col = endColumn; col >= startColumn; col--) {
-            if (!col && !row) continue;
+            if (!col && !row) {
+                continue;
+            }
 
             bool choosePositiveGroup = rowPreference ? row > 0 || (row == 0 && col > 0) : col > 0 || (col == 0 && row > 0);
             KisNodeSP parent = choosePositiveGroup ? positiveGroupLayer : negativeGroupLayer;
-
 
             QString cloneName = QString("Clone %1, %2").arg(col).arg(row);
             KisCloneLayerSP clone = new KisCloneLayer(m_baseLayer, image, cloneName, OPACITY_OPAQUE_U8);

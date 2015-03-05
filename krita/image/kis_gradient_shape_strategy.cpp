@@ -18,12 +18,11 @@
 
 #include "kis_gradient_shape_strategy.h"
 
-
 KisGradientShapeStrategy::KisGradientShapeStrategy()
 {
 }
 
-KisGradientShapeStrategy::KisGradientShapeStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
+KisGradientShapeStrategy::KisGradientShapeStrategy(const QPointF &gradientVectorStart, const QPointF &gradientVectorEnd)
     : m_gradientVectorStart(gradientVectorStart),
       m_gradientVectorEnd(gradientVectorEnd)
 {

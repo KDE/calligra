@@ -24,24 +24,21 @@
 
 #include "EmfObjects.h"
 
-
 #define DEBUG_EMFPAINT 0
 #define DEBUG_PAINTER_TRANSFORM 0
 
 namespace Libemf
 {
 
-
 static QPainter::CompositionMode  rasteropToQtComposition(long rop);
 
 // ================================================================
 //                         Class OutputPainterStrategy
 
-
 OutputPainterStrategy::OutputPainterStrategy()
-    : m_header( 0 )
-    , m_path( 0 )
-    , m_currentlyBuildingPath( false )
+    : m_header(0)
+    , m_path(0)
+    , m_currentlyBuildingPath(false)
     , m_fillRule(Qt::OddEvenFill)
     , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
@@ -54,10 +51,10 @@ OutputPainterStrategy::OutputPainterStrategy()
 }
 
 OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
-                                             bool keepAspectRatio)
-    : m_header( 0 )
-    , m_path( 0 )
-    , m_currentlyBuildingPath( false )
+        bool keepAspectRatio)
+    : m_header(0)
+    , m_path(0)
+    , m_currentlyBuildingPath(false)
     , m_windowExtIsSet(false)
     , m_viewportExtIsSet(false)
     , m_windowViewportIsSet(false)
@@ -93,7 +90,7 @@ void OutputPainterStrategy::paintBounds(const Header *header)
     m_painter->restore();
 }
 
-void OutputPainterStrategy::init( const Header *header )
+void OutputPainterStrategy::init(const Header *header)
 {
     // Save the header since we need the frame and bounds inside the drawing.
     m_header = new Header(*header);
@@ -123,15 +120,16 @@ void OutputPainterStrategy::init( const Header *header )
 
     // Calculate how much the painter should be resized to fill the
     // outputSize with output.
-    qreal  scaleX = qreal( m_outputSize.width() )  / headerBoundsSize.width();
-    qreal  scaleY = qreal( m_outputSize.height() ) / headerBoundsSize.height();
-    if ( m_keepAspectRatio ) {
+    qreal  scaleX = qreal(m_outputSize.width())  / headerBoundsSize.width();
+    qreal  scaleY = qreal(m_outputSize.height()) / headerBoundsSize.height();
+    if (m_keepAspectRatio) {
         // Use the smaller value so that we don't get an overflow in
         // any direction.
-        if ( scaleX > scaleY )
+        if (scaleX > scaleY) {
             scaleX = scaleY;
-        else
+        } else {
             scaleY = scaleX;
+        }
     }
 #if DEBUG_EMFPAINT
     kDebug(31000) << "scale = " << scaleX << ", " << scaleY;
@@ -139,7 +137,7 @@ void OutputPainterStrategy::init( const Header *header )
 
     // Transform the EMF object so that it fits in the shape.  The
     // topleft of the EMF will be the top left of the shape.
-    m_painter->scale( scaleX, scaleY );
+    m_painter->scale(scaleX, scaleY);
     m_painter->translate(-header->bounds().left(), -header->bounds().top());
 #if DEBUG_PAINTER_TRANSFORM
     printPainterTransform("after fitting into shape");
@@ -151,7 +149,7 @@ void OutputPainterStrategy::init( const Header *header )
     // Calculate translation if we should center the EMF in the
     // area and keep the aspect ratio.
 #if 0 // Should apparently be upper left.  See bug 265868
-    if ( m_keepAspectRatio ) {
+    if (m_keepAspectRatio) {
         m_painter->translate((m_outputSize.width() / scaleX - headerBoundsSize.width()) / 2,
                              (m_outputSize.height() / scaleY - headerBoundsSize.height()) / 2);
 #if DEBUG_PAINTER_TRANSFORM
@@ -175,33 +173,34 @@ void OutputPainterStrategy::init( const Header *header )
 #endif
 }
 
-void OutputPainterStrategy::cleanup( const Header *header )
+void OutputPainterStrategy::cleanup(const Header *header)
 {
-    Q_UNUSED( header );
+    Q_UNUSED(header);
 
 #if DEBUG_EMFPAINT
-    if (m_painterSaves > 0)
+    if (m_painterSaves > 0) {
         kDebug(33100) << "WARNING: UNRESTORED DC's:" << m_painterSaves;
+    }
 #endif
 
     // Restore all the save()s that were done during the processing.
-    for (int i = 0; i < m_painterSaves; ++i)
+    for (int i = 0; i < m_painterSaves; ++i) {
         m_painter->restore();
+    }
     m_painterSaves = 0;
 
     // Restore the painter to what it was before init() was called.
     m_painter->restore();
 }
 
-
 void OutputPainterStrategy::eof()
 {
 }
 
-void OutputPainterStrategy::setPixelV( QPoint &point, quint8 red, quint8 green, quint8 blue,
-                                       quint8 reserved )
+void OutputPainterStrategy::setPixelV(QPoint &point, quint8 red, quint8 green, quint8 blue,
+                                      quint8 reserved)
 {
-    Q_UNUSED( reserved );
+    Q_UNUSED(reserved);
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << point << red << green << blue;
@@ -210,13 +209,12 @@ void OutputPainterStrategy::setPixelV( QPoint &point, quint8 red, quint8 green, 
     m_painter->save();
 
     QPen pen;
-    pen.setColor( QColor( red, green, blue ) );
-    m_painter->setPen( pen );
-    m_painter->drawPoint( point );
+    pen.setColor(QColor(red, green, blue));
+    m_painter->setPen(pen);
+    m_painter->drawPoint(point);
 
     m_painter->restore();
 }
-
 
 void OutputPainterStrategy::beginPath()
 {
@@ -224,7 +222,7 @@ void OutputPainterStrategy::beginPath()
     kDebug(31000);
 #endif
 
-    delete( m_path );
+    delete(m_path);
     m_path = new QPainterPath;
     m_currentlyBuildingPath = true;
 }
@@ -244,7 +242,7 @@ void OutputPainterStrategy::endPath()
     kDebug(31000);
 #endif
 
-    m_path->setFillRule( m_fillRule );
+    m_path->setFillRule(m_fillRule);
     m_currentlyBuildingPath = false;
 }
 
@@ -269,7 +267,7 @@ void OutputPainterStrategy::saveDC()
     m_painter->setWorldTransform(savedTransform);
 }
 
-void OutputPainterStrategy::restoreDC( const qint32 savedDC )
+void OutputPainterStrategy::restoreDC(const qint32 savedDC)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << savedDC;
@@ -280,8 +278,7 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
         if (m_painterSaves > 0) {
             m_painter->restore();
             --m_painterSaves;
-        }
-        else {
+        } else {
             kDebug(33100) << "restoreDC(): try to restore painter without save" << savedDC - i;
             break;
         }
@@ -291,7 +288,7 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
     // the painter.  Now restore the full transformation.
     m_worldTransform = m_painter->worldTransform();
     QTransform newMatrix = m_worldTransform * m_outputTransform;
-    m_painter->setWorldTransform( newMatrix );
+    m_painter->setWorldTransform(newMatrix);
 }
 
 void OutputPainterStrategy::setMetaRgn()
@@ -299,10 +296,8 @@ void OutputPainterStrategy::setMetaRgn()
     kDebug(33100) << "EMR_SETMETARGN not yet implemented";
 }
 
-
 // ----------------------------------------------------------------
 //                 World Transform, Window and Viewport
-
 
 // General note about coordinate spaces and transforms:
 //
@@ -340,7 +335,7 @@ void OutputPainterStrategy::setMetaRgn()
 // transform was supposed to be recalculated. But in this file, it
 // destroys the world transform. The question is which of the
 // following alternatives is true:
-// 
+//
 // 1. The world transform should only be recalculated if the
 //    Set{Window,Viewport}{Org,Ext} record actually changes anything.
 //
@@ -353,7 +348,6 @@ void OutputPainterStrategy::setMetaRgn()
 // SetWindowOrg et al.
 //
 
-
 // Set Window and Viewport
 void OutputPainterStrategy::recalculateWorldTransform()
 {
@@ -361,8 +355,9 @@ void OutputPainterStrategy::recalculateWorldTransform()
 
     // If neither the window nor viewport extension is set, then there
     // is no way to perform the calculation.  Just give up.
-    if (!m_windowExtIsSet && !m_viewportExtIsSet)
+    if (!m_windowExtIsSet && !m_viewportExtIsSet) {
         return;
+    }
 
     // Negative window extensions mean flip the picture.  Handle this here.
     bool  flip = false;
@@ -406,11 +401,10 @@ void OutputPainterStrategy::recalculateWorldTransform()
 
     // Apply the output transform.
     QTransform newMatrix = m_worldTransform * m_outputTransform;
-    m_painter->setWorldTransform( newMatrix );
+    m_painter->setWorldTransform(newMatrix);
 }
 
-
-void OutputPainterStrategy::setWindowOrgEx( const QPoint &origin )
+void OutputPainterStrategy::setWindowOrgEx(const QPoint &origin)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << origin;
@@ -427,7 +421,7 @@ void OutputPainterStrategy::setWindowOrgEx( const QPoint &origin )
     recalculateWorldTransform();
 }
 
-void OutputPainterStrategy::setWindowExtEx( const QSize &size )
+void OutputPainterStrategy::setWindowExtEx(const QSize &size)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << size;
@@ -445,7 +439,7 @@ void OutputPainterStrategy::setWindowExtEx( const QSize &size )
     recalculateWorldTransform();
 }
 
-void OutputPainterStrategy::setViewportOrgEx( const QPoint &origin )
+void OutputPainterStrategy::setViewportOrgEx(const QPoint &origin)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << origin;
@@ -462,7 +456,7 @@ void OutputPainterStrategy::setViewportOrgEx( const QPoint &origin )
     recalculateWorldTransform();
 }
 
-void OutputPainterStrategy::setViewportExtEx( const QSize &size )
+void OutputPainterStrategy::setViewportExtEx(const QSize &size)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << size;
@@ -480,62 +474,59 @@ void OutputPainterStrategy::setViewportExtEx( const QSize &size )
     recalculateWorldTransform();
 }
 
-
-
-void OutputPainterStrategy::modifyWorldTransform( quint32 mode, float M11, float M12,
-                                                  float M21, float M22, float Dx, float Dy )
+void OutputPainterStrategy::modifyWorldTransform(quint32 mode, float M11, float M12,
+        float M21, float M22, float Dx, float Dy)
 {
 #if DEBUG_EMFPAINT
-    if (mode == MWT_IDENTITY)
+    if (mode == MWT_IDENTITY) {
         kDebug(31000) << "Identity matrix";
-    else
+    } else {
         kDebug(31000) << mode << M11 << M12 << M21 << M22 << Dx << Dy;
+    }
 #endif
 
-    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
+    QTransform matrix(M11, M12, M21, M22, Dx, Dy);
 
-    if ( mode == MWT_IDENTITY ) {
+    if (mode == MWT_IDENTITY) {
         m_worldTransform = QTransform();
-    } else if ( mode == MWT_LEFTMULTIPLY ) {
+    } else if (mode == MWT_LEFTMULTIPLY) {
         m_worldTransform = matrix * m_worldTransform;
-    } else if ( mode == MWT_RIGHTMULTIPLY ) {
+    } else if (mode == MWT_RIGHTMULTIPLY) {
         m_worldTransform = m_worldTransform * matrix;
-    } else if ( mode == MWT_SET ) {
+    } else if (mode == MWT_SET) {
         m_worldTransform = matrix;
     } else {
-	qWarning() << "Unimplemented transform mode" << mode;
+        qWarning() << "Unimplemented transform mode" << mode;
     }
 
     // Apply the output transform.
     QTransform newMatrix = m_worldTransform * m_outputTransform;
-    m_painter->setWorldTransform( newMatrix );
+    m_painter->setWorldTransform(newMatrix);
 }
 
-void OutputPainterStrategy::setWorldTransform( float M11, float M12, float M21,
-                                               float M22, float Dx, float Dy )
+void OutputPainterStrategy::setWorldTransform(float M11, float M12, float M21,
+        float M22, float Dx, float Dy)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << M11 << M12 << M21 << M22 << Dx << Dy;
 #endif
 
-    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
+    QTransform matrix(M11, M12, M21, M22, Dx, Dy);
 
     m_worldTransform = matrix;
 
     // Apply the output transform.
     QTransform newMatrix = m_worldTransform * m_outputTransform;
-    m_painter->setWorldTransform( newMatrix );
+    m_painter->setWorldTransform(newMatrix);
 }
-
 
 // ----------------------------------------------------------------
 
-
-void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
-                                       quint8 red, quint8 green, quint8 blue, quint8 reserved )
+void OutputPainterStrategy::createPen(quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
+                                      quint8 red, quint8 green, quint8 blue, quint8 reserved)
 {
-    Q_UNUSED( y );
-    Q_UNUSED( reserved );
+    Q_UNUSED(y);
+    Q_UNUSED(reserved);
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << ihPen << hex << penStyle << dec << x << y
@@ -543,76 +534,76 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
 #endif
 
     QPen pen;
-    pen.setColor( QColor( red, green, blue ) );
+    pen.setColor(QColor(red, green, blue));
 
-    if ( penStyle & PS_GEOMETRIC ) {
-	pen.setCosmetic( false );
+    if (penStyle & PS_GEOMETRIC) {
+        pen.setCosmetic(false);
     } else {
-	pen.setCosmetic( true );
+        pen.setCosmetic(true);
     }
 
-    switch ( penStyle & 0xF ) {
+    switch (penStyle & 0xF) {
     case PS_SOLID:
-        pen.setStyle( Qt::SolidLine );
+        pen.setStyle(Qt::SolidLine);
         break;
     case PS_DASH:
-        pen.setStyle( Qt::DashLine );
+        pen.setStyle(Qt::DashLine);
         break;
     case PS_DOT:
-        pen.setStyle( Qt::DotLine );
+        pen.setStyle(Qt::DotLine);
         break;
     case PS_DASHDOT:
-        pen.setStyle( Qt::DashDotLine );
+        pen.setStyle(Qt::DashDotLine);
         break;
     case PS_DASHDOTDOT:
-        pen.setStyle( Qt::DashDotDotLine );
+        pen.setStyle(Qt::DashDotDotLine);
         break;
     case PS_NULL:
-        pen.setStyle( Qt::NoPen );
+        pen.setStyle(Qt::NoPen);
         break;
     case PS_INSIDEFRAME:
         // FIXME: We don't properly support this
-        pen.setStyle( Qt::SolidLine );
+        pen.setStyle(Qt::SolidLine);
         break;
     case PS_USERSTYLE:
         kDebug(33100) << "UserStyle pen not yet supported, using SolidLine";
-        pen.setStyle( Qt::SolidLine );
+        pen.setStyle(Qt::SolidLine);
         break;
     case PS_ALTERNATE:
         kDebug(33100) << "Alternate pen not yet supported, using DashLine";
-        pen.setStyle( Qt::DashLine );
+        pen.setStyle(Qt::DashLine);
         break;
     default:
         kDebug(33100) << "unexpected pen type, using SolidLine" << (penStyle & 0xF);
-        pen.setStyle( Qt::SolidLine );
+        pen.setStyle(Qt::SolidLine);
     }
 
-    switch ( penStyle & PS_ENDCAP_FLAT ) {
+    switch (penStyle & PS_ENDCAP_FLAT) {
     case PS_ENDCAP_ROUND:
-        pen.setCapStyle( Qt::RoundCap );
+        pen.setCapStyle(Qt::RoundCap);
         break;
     case PS_ENDCAP_SQUARE:
-        pen.setCapStyle( Qt::SquareCap );
+        pen.setCapStyle(Qt::SquareCap);
         break;
     case PS_ENDCAP_FLAT:
-        pen.setCapStyle( Qt::FlatCap );
+        pen.setCapStyle(Qt::FlatCap);
         break;
     default:
         kDebug(33100) << "unexpected cap style, using SquareCap" << (penStyle & PS_ENDCAP_FLAT);
-        pen.setCapStyle( Qt::SquareCap );
+        pen.setCapStyle(Qt::SquareCap);
     }
     pen.setWidthF(x * m_outputScale);
 
-    m_objectTable.insert( ihPen,  pen );
+    m_objectTable.insert(ihPen,  pen);
 }
 
-void OutputPainterStrategy::createBrushIndirect( quint32 ihBrush, quint32 brushStyle,
-                                                 quint8 red, quint8 green, quint8 blue,
-                                                 quint8 reserved,
-                                                 quint32 brushHatch )
+void OutputPainterStrategy::createBrushIndirect(quint32 ihBrush, quint32 brushStyle,
+        quint8 red, quint8 green, quint8 blue,
+        quint8 reserved,
+        quint32 brushHatch)
 {
-    Q_UNUSED( reserved );
-    Q_UNUSED( brushHatch );
+    Q_UNUSED(reserved);
+    Q_UNUSED(brushHatch);
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << ihBrush << hex << brushStyle << dec
@@ -621,199 +612,181 @@ void OutputPainterStrategy::createBrushIndirect( quint32 ihBrush, quint32 brushS
 
     QBrush brush;
 
-    switch ( brushStyle ) {
+    switch (brushStyle) {
     case BS_SOLID:
-	brush.setStyle( Qt::SolidPattern );
-	break;
+        brush.setStyle(Qt::SolidPattern);
+        break;
     case BS_NULL:
-	brush.setStyle( Qt::NoBrush );
-	break;
+        brush.setStyle(Qt::NoBrush);
+        break;
     case BS_HATCHED:
-	brush.setStyle( Qt::CrossPattern );
-	break;
+        brush.setStyle(Qt::CrossPattern);
+        break;
     case BS_PATTERN:
-	Q_ASSERT( 0 );
-	break;
+        Q_ASSERT(0);
+        break;
     case BS_INDEXED:
-	Q_ASSERT( 0 );
-	break;
+        Q_ASSERT(0);
+        break;
     case BS_DIBPATTERN:
-	Q_ASSERT( 0 );
-	break;
+        Q_ASSERT(0);
+        break;
     case BS_DIBPATTERNPT:
-	Q_ASSERT( 0 );
-	break;
+        Q_ASSERT(0);
+        break;
     case BS_PATTERN8X8:
-	Q_ASSERT( 0 );
-	break;
+        Q_ASSERT(0);
+        break;
     case BS_DIBPATTERN8X8:
-	Q_ASSERT( 0 );
-	break;
+        Q_ASSERT(0);
+        break;
     case BS_MONOPATTERN:
-	Q_ASSERT( 0 );
-	break;
+        Q_ASSERT(0);
+        break;
     default:
-	Q_ASSERT( 0 );
+        Q_ASSERT(0);
     }
 
-    brush.setColor( QColor( red, green, blue ) );
+    brush.setColor(QColor(red, green, blue));
 
     // TODO: Handle the BrushHatch enum.
 
-    m_objectTable.insert( ihBrush, brush );
+    m_objectTable.insert(ihBrush, brush);
 }
 
-void OutputPainterStrategy::createMonoBrush( quint32 ihBrush, Bitmap *bitmap )
+void OutputPainterStrategy::createMonoBrush(quint32 ihBrush, Bitmap *bitmap)
 {
 
     QImage  pattern(bitmap->image());
     QBrush  brush(pattern);
 
-    m_objectTable.insert( ihBrush, brush );
+    m_objectTable.insert(ihBrush, brush);
 }
 
-
-void OutputPainterStrategy::extCreateFontIndirectW( const ExtCreateFontIndirectWRecord &extCreateFontIndirectW )
+void OutputPainterStrategy::extCreateFontIndirectW(const ExtCreateFontIndirectWRecord &extCreateFontIndirectW)
 {
-    QFont font( extCreateFontIndirectW.fontFace() );
+    QFont font(extCreateFontIndirectW.fontFace());
 
-    font.setWeight( convertFontWeight( extCreateFontIndirectW.weight() ) );
+    font.setWeight(convertFontWeight(extCreateFontIndirectW.weight()));
 
-    if ( extCreateFontIndirectW.height() < 0 ) {
-	font.setPixelSize( -1 * extCreateFontIndirectW.height() );
-    } else if ( extCreateFontIndirectW.height() > 0 ) {
-        font.setPixelSize( extCreateFontIndirectW.height() );
+    if (extCreateFontIndirectW.height() < 0) {
+        font.setPixelSize(-1 * extCreateFontIndirectW.height());
+    } else if (extCreateFontIndirectW.height() > 0) {
+        font.setPixelSize(extCreateFontIndirectW.height());
     } // zero is "use a default size" which is effectively no-op here.
 
     // .snp files don't always provide 0x01 for italics
-    if ( extCreateFontIndirectW.italic() != 0x00 ) {
-	font.setItalic( true );
+    if (extCreateFontIndirectW.italic() != 0x00) {
+        font.setItalic(true);
     }
 
-    if ( extCreateFontIndirectW.underline() != 0x00 ) {
-	font.setUnderline( true );
+    if (extCreateFontIndirectW.underline() != 0x00) {
+        font.setUnderline(true);
     }
 
-    m_objectTable.insert( extCreateFontIndirectW.ihFonts(), font );
+    m_objectTable.insert(extCreateFontIndirectW.ihFonts(), font);
 }
 
-void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
+void OutputPainterStrategy::selectStockObject(const quint32 ihObject)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << ihObject;
 #endif
 
-    switch ( ihObject ) {
+    switch (ihObject) {
     case WHITE_BRUSH:
-	m_painter->setBrush( QBrush( Qt::white ) );
-	break;
+        m_painter->setBrush(QBrush(Qt::white));
+        break;
     case LTGRAY_BRUSH:
-	m_painter->setBrush( QBrush( Qt::lightGray ) );
-	break;
+        m_painter->setBrush(QBrush(Qt::lightGray));
+        break;
     case GRAY_BRUSH:
-	m_painter->setBrush( QBrush( Qt::gray ) );
-	break;
+        m_painter->setBrush(QBrush(Qt::gray));
+        break;
     case DKGRAY_BRUSH:
-	m_painter->setBrush( QBrush( Qt::darkGray ) );
-	break;
+        m_painter->setBrush(QBrush(Qt::darkGray));
+        break;
     case BLACK_BRUSH:
-	m_painter->setBrush( QBrush( Qt::black ) );
-	break;
+        m_painter->setBrush(QBrush(Qt::black));
+        break;
     case NULL_BRUSH:
-	m_painter->setBrush( QBrush() );
-	break;
+        m_painter->setBrush(QBrush());
+        break;
     case WHITE_PEN:
-	m_painter->setPen( QPen( Qt::white ) );
-	break;
+        m_painter->setPen(QPen(Qt::white));
+        break;
     case BLACK_PEN:
-	m_painter->setPen( QPen( Qt::black ) );
-	break;
+        m_painter->setPen(QPen(Qt::black));
+        break;
     case NULL_PEN:
-	m_painter->setPen( QPen( Qt::NoPen ) );
-	break;
+        m_painter->setPen(QPen(Qt::NoPen));
+        break;
     case OEM_FIXED_FONT:
     case ANSI_FIXED_FONT:
-    case SYSTEM_FIXED_FONT:
-        {
-            QFont  font(QString("Fixed"));
-            m_painter->setFont(font);
-            break;
-        }
+    case SYSTEM_FIXED_FONT: {
+        QFont  font(QString("Fixed"));
+        m_painter->setFont(font);
+        break;
+    }
     case ANSI_VAR_FONT:
-    case DEFAULT_GUI_FONT:      // Not sure if this is true, but it should work well
-        {
-            QFont  font(QString("Helvetica")); // Could also be "System"
-            m_painter->setFont(font);
-            break;
-        }
-	break;
+    case DEFAULT_GUI_FONT: {    // Not sure if this is true, but it should work well
+        QFont  font(QString("Helvetica")); // Could also be "System"
+        m_painter->setFont(font);
+        break;
+    }
+    break;
     case SYSTEM_FONT:
-	// TODO: handle this
-	break;
+        // TODO: handle this
+        break;
     case DEVICE_DEFAULT_FONT:
-	// TODO: handle this
-	break;
+        // TODO: handle this
+        break;
     case DEFAULT_PALETTE:
-	break;
+        break;
     case DC_BRUSH:
         // FIXME
-	break;
+        break;
     case DC_PEN:
         // FIXME
-	break;
+        break;
     default:
-	qWarning() << "Unexpected stock object:" << ( ihObject & 0x8000000 );
+        qWarning() << "Unexpected stock object:" << (ihObject & 0x8000000);
     }
 }
 
-void OutputPainterStrategy::selectObject( const quint32 ihObject )
+void OutputPainterStrategy::selectObject(const quint32 ihObject)
 {
 #if DEBUG_EMFPAINT
     kDebug(33100) << hex << ihObject << dec;
 #endif
 
-    if ( ihObject & 0x80000000 ) {
-	selectStockObject( ihObject );
+    if (ihObject & 0x80000000) {
+        selectStockObject(ihObject);
     } else {
-	QVariant obj = m_objectTable.value( ihObject );
+        QVariant obj = m_objectTable.value(ihObject);
 
-	switch ( obj.type() ) {
-	case QVariant::Pen :
-	    m_painter->setPen( obj.value<QPen>() );
-	    break;
-	case QVariant::Brush :
-	    m_painter->setBrush( obj.value<QBrush>() );
-	    break;
-	case QVariant::Font :
-	    m_painter->setFont( obj.value<QFont>() );
-	    break;
-	default:
-	    kDebug(33100) << "Unexpected type:" << obj.typeName();
-	}
+        switch (obj.type()) {
+        case QVariant::Pen :
+            m_painter->setPen(obj.value<QPen>());
+            break;
+        case QVariant::Brush :
+            m_painter->setBrush(obj.value<QBrush>());
+            break;
+        case QVariant::Font :
+            m_painter->setFont(obj.value<QFont>());
+            break;
+        default:
+            kDebug(33100) << "Unexpected type:" << obj.typeName();
+        }
     }
 }
 
-void OutputPainterStrategy::deleteObject( const quint32 ihObject )
+void OutputPainterStrategy::deleteObject(const quint32 ihObject)
 {
-    m_objectTable.take( ihObject );
+    m_objectTable.take(ihObject);
 }
 
-void OutputPainterStrategy::arc( const QRect &box, const QPoint &start, const QPoint &end )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << box << start << end;
-#endif
-
-    QPoint centrePoint = box.center();
-
-    qreal startAngle = angleFromArc( centrePoint, start );
-    qreal endAngle   = angleFromArc( centrePoint, end );
-    qreal spanAngle  = angularSpan( startAngle, endAngle );
-
-    m_painter->drawArc( box, startAngle*16, spanAngle*16 );
-}
-
-void OutputPainterStrategy::chord( const QRect &box, const QPoint &start, const QPoint &end )
+void OutputPainterStrategy::arc(const QRect &box, const QPoint &start, const QPoint &end)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << box << start << end;
@@ -821,14 +794,14 @@ void OutputPainterStrategy::chord( const QRect &box, const QPoint &start, const 
 
     QPoint centrePoint = box.center();
 
-    qreal startAngle = angleFromArc( centrePoint, start );
-    qreal endAngle   = angleFromArc( centrePoint, end );
-    qreal spanAngle  = angularSpan( startAngle, endAngle );
+    qreal startAngle = angleFromArc(centrePoint, start);
+    qreal endAngle   = angleFromArc(centrePoint, end);
+    qreal spanAngle  = angularSpan(startAngle, endAngle);
 
-    m_painter->drawChord( box, startAngle*16, spanAngle*16 );
+    m_painter->drawArc(box, startAngle * 16, spanAngle * 16);
 }
 
-void OutputPainterStrategy::pie( const QRect &box, const QPoint &start, const QPoint &end )
+void OutputPainterStrategy::chord(const QRect &box, const QPoint &start, const QPoint &end)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << box << start << end;
@@ -836,32 +809,47 @@ void OutputPainterStrategy::pie( const QRect &box, const QPoint &start, const QP
 
     QPoint centrePoint = box.center();
 
-    qreal startAngle = angleFromArc( centrePoint, start );
-    qreal endAngle   = angleFromArc( centrePoint, end );
-    qreal spanAngle  = angularSpan( startAngle, endAngle );
+    qreal startAngle = angleFromArc(centrePoint, start);
+    qreal endAngle   = angleFromArc(centrePoint, end);
+    qreal spanAngle  = angularSpan(startAngle, endAngle);
 
-    m_painter->drawPie( box, startAngle*16, spanAngle*16 );
+    m_painter->drawChord(box, startAngle * 16, spanAngle * 16);
 }
 
-void OutputPainterStrategy::ellipse( const QRect &box )
+void OutputPainterStrategy::pie(const QRect &box, const QPoint &start, const QPoint &end)
+{
+#if DEBUG_EMFPAINT
+    kDebug(31000) << box << start << end;
+#endif
+
+    QPoint centrePoint = box.center();
+
+    qreal startAngle = angleFromArc(centrePoint, start);
+    qreal endAngle   = angleFromArc(centrePoint, end);
+    qreal spanAngle  = angularSpan(startAngle, endAngle);
+
+    m_painter->drawPie(box, startAngle * 16, spanAngle * 16);
+}
+
+void OutputPainterStrategy::ellipse(const QRect &box)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << box;
 #endif
 
-    m_painter->drawEllipse( box );
+    m_painter->drawEllipse(box);
 }
 
-void OutputPainterStrategy::rectangle( const QRect &box )
+void OutputPainterStrategy::rectangle(const QRect &box)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << box;
 #endif
 
-    m_painter->drawRect( box );
+    m_painter->drawRect(box);
 }
 
-void OutputPainterStrategy::setMapMode( const quint32 mapMode )
+void OutputPainterStrategy::setMapMode(const quint32 mapMode)
 {
 #if DEBUG_EMFPAINT
     kDebug(33100) << "Set map mode:" << mapMode;
@@ -870,55 +858,55 @@ void OutputPainterStrategy::setMapMode( const quint32 mapMode )
     m_mapMode = (MapMode)mapMode;
 }
 
-void OutputPainterStrategy::setBkMode( const quint32 backgroundMode )
+void OutputPainterStrategy::setBkMode(const quint32 backgroundMode)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << backgroundMode;
 #endif
 
-    if ( backgroundMode == TRANSPARENT ) {
-        m_painter->setBackgroundMode( Qt::TransparentMode );
-    } else if ( backgroundMode == OPAQUE ) {
-        m_painter->setBackgroundMode( Qt::OpaqueMode );
+    if (backgroundMode == TRANSPARENT) {
+        m_painter->setBackgroundMode(Qt::TransparentMode);
+    } else if (backgroundMode == OPAQUE) {
+        m_painter->setBackgroundMode(Qt::OpaqueMode);
     } else {
         kDebug(33100) << "EMR_SETBKMODE: Unexpected value -" << backgroundMode;
-        Q_ASSERT( 0 );
+        Q_ASSERT(0);
     }
 }
 
-void OutputPainterStrategy::setPolyFillMode( const quint32 polyFillMode )
+void OutputPainterStrategy::setPolyFillMode(const quint32 polyFillMode)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << polyFillMode;
 #endif
 
-    if ( polyFillMode == ALTERNATE ) {
-	m_fillRule = Qt::OddEvenFill;
-    } else if ( polyFillMode == WINDING ) {
-	m_fillRule = Qt::WindingFill;
+    if (polyFillMode == ALTERNATE) {
+        m_fillRule = Qt::OddEvenFill;
+    } else if (polyFillMode == WINDING) {
+        m_fillRule = Qt::WindingFill;
     } else {
-	kDebug(33100) << "EMR_SETPOLYFILLMODE: Unexpected value -" << polyFillMode;
-	Q_ASSERT( 0 );
+        kDebug(33100) << "EMR_SETPOLYFILLMODE: Unexpected value -" << polyFillMode;
+        Q_ASSERT(0);
     }
 }
 
-void OutputPainterStrategy::setLayout( const quint32 layoutMode )
+void OutputPainterStrategy::setLayout(const quint32 layoutMode)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << layoutMode;
 #endif
 
-    if ( layoutMode == LAYOUT_LTR ) {
-        m_painter->setLayoutDirection( Qt::LeftToRight );
-    } else if ( layoutMode == LAYOUT_RTL ) {
-        m_painter->setLayoutDirection( Qt::RightToLeft );
+    if (layoutMode == LAYOUT_LTR) {
+        m_painter->setLayoutDirection(Qt::LeftToRight);
+    } else if (layoutMode == LAYOUT_RTL) {
+        m_painter->setLayoutDirection(Qt::RightToLeft);
     } else {
         kDebug(33100) << "EMR_SETLAYOUT: Unexpected value -" << layoutMode;
-        Q_ASSERT( 0 );
+        Q_ASSERT(0);
     }
 }
 
-void OutputPainterStrategy::setTextAlign( const quint32 textAlignMode )
+void OutputPainterStrategy::setTextAlign(const quint32 textAlignMode)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << textAlignMode;
@@ -927,34 +915,33 @@ void OutputPainterStrategy::setTextAlign( const quint32 textAlignMode )
     m_textAlignMode = textAlignMode;
 }
 
-void OutputPainterStrategy::setTextColor( const quint8 red, const quint8 green, const quint8 blue,
-                                          const quint8 reserved )
+void OutputPainterStrategy::setTextColor(const quint8 red, const quint8 green, const quint8 blue,
+        const quint8 reserved)
 {
-    Q_UNUSED( reserved );
+    Q_UNUSED(reserved);
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << red << green << blue << reserved;
 #endif
 
-    m_textPen.setColor( QColor( red, green, blue ) );
+    m_textPen.setColor(QColor(red, green, blue));
 }
 
-void OutputPainterStrategy::setBkColor( const quint8 red, const quint8 green, const quint8 blue,
-                                        const quint8 reserved )
+void OutputPainterStrategy::setBkColor(const quint8 red, const quint8 green, const quint8 blue,
+                                       const quint8 reserved)
 {
-    Q_UNUSED( reserved );
+    Q_UNUSED(reserved);
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << red << green << blue << reserved;
 #endif
 
-    m_painter->setBackground( QBrush( QColor( red, green, blue ) ) );
+    m_painter->setBackground(QBrush(QColor(red, green, blue)));
 }
-
 
 #define DEBUG_TEXTOUT 0
 
-void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject &textObject )
+void OutputPainterStrategy::extTextOut(const QRect &bounds, const EmrTextObject &textObject)
 {
     const QPoint  &referencePoint = textObject.referencePoint();
     const QString &text = textObject.textString();
@@ -989,15 +976,16 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     // FIXME: Handle RTL text.
 
     // Horizontal align.  Default is TA_LEFT.
-    if ((m_textAlignMode & TA_HORZMASK) == TA_CENTER)
+    if ((m_textAlignMode & TA_HORZMASK) == TA_CENTER) {
         x -= (textWidth / 2);
-    else if ((m_textAlignMode & TA_HORZMASK) == TA_RIGHT)
+    } else if ((m_textAlignMode & TA_HORZMASK) == TA_RIGHT) {
         x -= textWidth;
+    }
 
     // Vertical align.  Default is TA_TOP
-    if ((m_textAlignMode & TA_VERTMASK) == TA_BASELINE)
+    if ((m_textAlignMode & TA_VERTMASK) == TA_BASELINE) {
         y -= (textHeight - fm.descent());
-    else if ((m_textAlignMode & TA_VERTMASK) == TA_BOTTOM) {
+    } else if ((m_textAlignMode & TA_VERTMASK) == TA_BOTTOM) {
         y -= textHeight;
     }
 
@@ -1032,10 +1020,12 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     //kDebug(31000) << "rects:" << QRect(x, y, textWidth, textHeight) << worldRect;
     qreal  scaleX = qreal(1.0);
     qreal  scaleY = qreal(1.0);
-    if (bounds.width() < worldRect.width())
+    if (bounds.width() < worldRect.width()) {
         scaleX = qreal(bounds.width()) / qreal(worldRect.width());
-    if (bounds.height() < worldRect.height())
+    }
+    if (bounds.height() < worldRect.height()) {
         scaleY = qreal(bounds.height()) / qreal(worldRect.height());
+    }
     //kDebug(31000) << "scale:" << scaleX << scaleY;
 
     if (scaleX < qreal(1.0) || scaleY < qreal(1.0)) {
@@ -1048,39 +1038,40 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     QPen  savePen = m_painter->pen();
     m_painter->setPen(m_textPen);
     m_painter->drawText(int(x / scaleX), int(y / scaleY), textWidth, textHeight,
-                        Qt::AlignLeft|Qt::AlignTop, text);
+                        Qt::AlignLeft | Qt::AlignTop, text);
     m_painter->setPen(savePen);
 
     m_painter->restore();
 }
 
-void OutputPainterStrategy::moveToEx( const qint32 x, const qint32 y )
+void OutputPainterStrategy::moveToEx(const qint32 x, const qint32 y)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << x << y;
 #endif
 
-    if ( m_currentlyBuildingPath )
-        m_path->moveTo( QPoint( x, y ) );
-    else
-        m_currentCoords = QPoint( x, y );
+    if (m_currentlyBuildingPath) {
+        m_path->moveTo(QPoint(x, y));
+    } else {
+        m_currentCoords = QPoint(x, y);
+    }
 }
 
-void OutputPainterStrategy::lineTo( const QPoint &finishPoint )
+void OutputPainterStrategy::lineTo(const QPoint &finishPoint)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << finishPoint;
 #endif
 
-    if ( m_currentlyBuildingPath )
-        m_path->lineTo( finishPoint );
-    else {
-        m_painter->drawLine( m_currentCoords, finishPoint );
+    if (m_currentlyBuildingPath) {
+        m_path->lineTo(finishPoint);
+    } else {
+        m_painter->drawLine(m_currentCoords, finishPoint);
         m_currentCoords = finishPoint;
     }
 }
 
-void OutputPainterStrategy::arcTo( const QRect &box, const QPoint &start, const QPoint &end )
+void OutputPainterStrategy::arcTo(const QRect &box, const QPoint &start, const QPoint &end)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << box << start << end;
@@ -1088,165 +1079,165 @@ void OutputPainterStrategy::arcTo( const QRect &box, const QPoint &start, const 
 
     QPoint centrePoint = box.center();
 
-    qreal startAngle = angleFromArc( centrePoint, start );
-    qreal endAngle   = angleFromArc( centrePoint, end );
-    qreal spanAngle  = angularSpan( startAngle, endAngle );
+    qreal startAngle = angleFromArc(centrePoint, start);
+    qreal endAngle   = angleFromArc(centrePoint, end);
+    qreal spanAngle  = angularSpan(startAngle, endAngle);
 
-    m_path->arcTo( box, startAngle, spanAngle );
+    m_path->arcTo(box, startAngle, spanAngle);
 }
 
-void OutputPainterStrategy::polygon16( const QRect &bounds, const QList<QPoint> points )
+void OutputPainterStrategy::polygon16(const QRect &bounds, const QList<QPoint> points)
 {
-    Q_UNUSED( bounds );
+    Q_UNUSED(bounds);
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
 
     QVector<QPoint> pointVector = points.toVector();
-    m_painter->drawPolygon( pointVector.constData(), pointVector.size(), m_fillRule );
+    m_painter->drawPolygon(pointVector.constData(), pointVector.size(), m_fillRule);
 }
 
-void OutputPainterStrategy::polyLine( const QRect &bounds, const QList<QPoint> points )
+void OutputPainterStrategy::polyLine(const QRect &bounds, const QList<QPoint> points)
 {
-    Q_UNUSED( bounds );
+    Q_UNUSED(bounds);
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
 
     QVector<QPoint> pointVector = points.toVector();
-    m_painter->drawPolyline( pointVector.constData(), pointVector.size() );
+    m_painter->drawPolyline(pointVector.constData(), pointVector.size());
 }
 
-void OutputPainterStrategy::polyLine16( const QRect &bounds, const QList<QPoint> points )
+void OutputPainterStrategy::polyLine16(const QRect &bounds, const QList<QPoint> points)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
 
-    polyLine( bounds, points );
+    polyLine(bounds, points);
 }
 
-void OutputPainterStrategy::polyPolygon16( const QRect &bounds, const QList< QVector< QPoint > > &points )
+void OutputPainterStrategy::polyPolygon16(const QRect &bounds, const QList< QVector< QPoint > > &points)
 {
-    Q_UNUSED( bounds );
+    Q_UNUSED(bounds);
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
 
-    for ( int i = 0; i < points.size(); ++i ) {
-        m_painter->drawPolygon( points[i].constData(), points[i].size(), m_fillRule );
+    for (int i = 0; i < points.size(); ++i) {
+        m_painter->drawPolygon(points[i].constData(), points[i].size(), m_fillRule);
     }
 }
 
-void OutputPainterStrategy::polyPolyLine16( const QRect &bounds, const QList< QVector< QPoint > > &points )
+void OutputPainterStrategy::polyPolyLine16(const QRect &bounds, const QList< QVector< QPoint > > &points)
 {
-    Q_UNUSED( bounds );
+    Q_UNUSED(bounds);
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
 
-    for ( int i = 0; i < points.size(); ++i ) {
-        m_painter->drawPolyline( points[i].constData(), points[i].size() );
+    for (int i = 0; i < points.size(); ++i) {
+        m_painter->drawPolyline(points[i].constData(), points[i].size());
     }
 }
 
-void OutputPainterStrategy::polyLineTo16( const QRect &bounds, const QList<QPoint> points )
+void OutputPainterStrategy::polyLineTo16(const QRect &bounds, const QList<QPoint> points)
 {
-    Q_UNUSED( bounds );
+    Q_UNUSED(bounds);
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
 
-    for ( int i = 0; i < points.count(); ++i ) {
-	m_path->lineTo( points[i] );
+    for (int i = 0; i < points.count(); ++i) {
+        m_path->lineTo(points[i]);
     }
 }
 
-void OutputPainterStrategy::polyBezier16( const QRect &bounds, const QList<QPoint> points )
+void OutputPainterStrategy::polyBezier16(const QRect &bounds, const QList<QPoint> points)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
 
-    Q_UNUSED( bounds );
+    Q_UNUSED(bounds);
     QPainterPath path;
-    path.moveTo( points[0] );
-    for ( int i = 1; i < points.count(); i+=3 ) {
-	path.cubicTo( points[i], points[i+1], points[i+2] );
+    path.moveTo(points[0]);
+    for (int i = 1; i < points.count(); i += 3) {
+        path.cubicTo(points[i], points[i + 1], points[i + 2]);
     }
-    m_painter->drawPath( path );
+    m_painter->drawPath(path);
 }
 
-void OutputPainterStrategy::polyBezierTo16( const QRect &bounds, const QList<QPoint> points )
+void OutputPainterStrategy::polyBezierTo16(const QRect &bounds, const QList<QPoint> points)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds << points;
 #endif
 
-    Q_UNUSED( bounds );
-    for ( int i = 0; i < points.count(); i+=3 ) {
-	m_path->cubicTo( points[i], points[i+1], points[i+2] );
+    Q_UNUSED(bounds);
+    for (int i = 0; i < points.count(); i += 3) {
+        m_path->cubicTo(points[i], points[i + 1], points[i + 2]);
     }
 }
 
-void OutputPainterStrategy::fillPath( const QRect &bounds )
+void OutputPainterStrategy::fillPath(const QRect &bounds)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds;
 #endif
 
-    Q_UNUSED( bounds );
-    m_painter->fillPath( *m_path, m_painter->brush() );
+    Q_UNUSED(bounds);
+    m_painter->fillPath(*m_path, m_painter->brush());
 }
 
-void OutputPainterStrategy::strokeAndFillPath( const QRect &bounds )
+void OutputPainterStrategy::strokeAndFillPath(const QRect &bounds)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds;
 #endif
 
-    Q_UNUSED( bounds );
-    m_painter->drawPath( *m_path );
+    Q_UNUSED(bounds);
+    m_painter->drawPath(*m_path);
 }
 
-void OutputPainterStrategy::strokePath( const QRect &bounds )
+void OutputPainterStrategy::strokePath(const QRect &bounds)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bounds;
 #endif
 
-    Q_UNUSED( bounds );
-    m_painter->strokePath( *m_path, m_painter->pen() );
+    Q_UNUSED(bounds);
+    m_painter->strokePath(*m_path, m_painter->pen());
 }
 
-void OutputPainterStrategy::setClipPath( const quint32 regionMode )
+void OutputPainterStrategy::setClipPath(const quint32 regionMode)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << hex << regionMode << dec;
 #endif
 
-    switch ( regionMode ) {
+    switch (regionMode) {
     case RGN_AND:
-        m_painter->setClipPath( *m_path, Qt::IntersectClip );
+        m_painter->setClipPath(*m_path, Qt::IntersectClip);
         break;
     case RGN_OR:
-        m_painter->setClipPath( *m_path, Qt::UniteClip );
+        m_painter->setClipPath(*m_path, Qt::UniteClip);
         break;
     case RGN_COPY:
-        m_painter->setClipPath( *m_path, Qt::ReplaceClip );
+        m_painter->setClipPath(*m_path, Qt::ReplaceClip);
         break;
     default:
         qWarning() <<  "Unexpected / unsupported clip region mode:" << regionMode;
-        Q_ASSERT( 0 );
+        Q_ASSERT(0);
     }
 }
 
-void OutputPainterStrategy::bitBlt( BitBltRecord &bitBltRecord )
+void OutputPainterStrategy::bitBlt(BitBltRecord &bitBltRecord)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << bitBltRecord.xDest() << bitBltRecord.yDest()
@@ -1255,8 +1246,8 @@ void OutputPainterStrategy::bitBlt( BitBltRecord &bitBltRecord )
                   << bitBltRecord.bkColorSrc();
 #endif
 
-    QRect target( bitBltRecord.xDest(), bitBltRecord.yDest(),
-                  bitBltRecord.cxDest(), bitBltRecord.cyDest() );
+    QRect target(bitBltRecord.xDest(), bitBltRecord.yDest(),
+                 bitBltRecord.cxDest(), bitBltRecord.cyDest());
     // 0x00f00021 is the PatCopy raster operation which just fills a rectangle with a brush.
     // This seems to be the most common one.
     //
@@ -1266,19 +1257,18 @@ void OutputPainterStrategy::bitBlt( BitBltRecord &bitBltRecord )
         // brush to use it with fillRect()...
         QBrush brush = m_painter->brush();
         m_painter->fillRect(target, brush);
-    }
-    else if ( bitBltRecord.hasImage() ) {
-        m_painter->drawImage( target, bitBltRecord.image() );
+    } else if (bitBltRecord.hasImage()) {
+        m_painter->drawImage(target, bitBltRecord.image());
     }
 }
 
-void OutputPainterStrategy::setStretchBltMode( const quint32 stretchMode )
+void OutputPainterStrategy::setStretchBltMode(const quint32 stretchMode)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << hex << stretchMode << dec;
 #endif
 
-    switch ( stretchMode ) {
+    switch (stretchMode) {
     case 0x01:
         kDebug(33100) << "EMR_STRETCHBLTMODE: STRETCH_ANDSCANS";
         break;
@@ -1296,7 +1286,7 @@ void OutputPainterStrategy::setStretchBltMode( const quint32 stretchMode )
     }
 }
 
-void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
+void OutputPainterStrategy::stretchDiBits(StretchDiBitsRecord &record)
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << "Bounds:    " << record.bounds();
@@ -1305,15 +1295,15 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
     kDebug(31000) << "Src rect:  "
                   << record.xSrc() << record.ySrc() << record.cxSrc() << record.cySrc();
     kDebug(31000) << "Raster op: " << hex << record.rasterOperation() << dec;
-                  //<< record.bkColorSrc();
+    //<< record.bkColorSrc();
     kDebug(31000) << "usageSrc: " << record.usageSrc();
 #endif
 
-    QPoint targetPosition( record.xDest(), record.yDest() );
-    QSize  targetSize( record.cxDest(), record.cyDest() );
+    QPoint targetPosition(record.xDest(), record.yDest());
+    QSize  targetSize(record.cxDest(), record.cyDest());
 
-    QPoint sourcePosition( record.xSrc(), record.ySrc() );
-    QSize  sourceSize( record.cxSrc(), record.cySrc() );
+    QPoint sourcePosition(record.xSrc(), record.ySrc());
+    QSize  sourceSize(record.cxSrc(), record.cySrc());
 
     // special cases, from [MS-EMF] Section 2.3.1.7:
     // "This record specifies a mirror-image copy of the source bitmap to the
@@ -1322,33 +1312,33 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
     // image of the source bitmap along the x-axis. If cySrc and cyDest have
     // different signs, this record specifies a mirror image of the source
     //  bitmap along the y-axis."
-    QRect target( targetPosition, targetSize );
-    QRect source( sourcePosition, sourceSize );
+    QRect target(targetPosition, targetSize);
+    QRect source(sourcePosition, sourceSize);
 #if DEBUG_EMFPAINT
     //kDebug(31000) << "image size" << record.image()->size();
     kDebug(31000) << "Before transformation:";
     kDebug(31000) << "    target" << target;
     kDebug(31000) << "    source" << source;
 #endif
-    if ( source.width() < 0 && target.width() > 0 ) {
+    if (source.width() < 0 && target.width() > 0) {
         sourceSize.rwidth() *= -1;
         sourcePosition.rx() -= sourceSize.width();
-        source = QRect( sourcePosition, sourceSize );
+        source = QRect(sourcePosition, sourceSize);
     }
-    if  ( source.width() > 0 && target.width() < 0 ) {
+    if (source.width() > 0 && target.width() < 0) {
         targetSize.rwidth() *= -1;
         targetPosition.rx() -= targetSize.width();
-        target = QRect( targetPosition, targetSize );
+        target = QRect(targetPosition, targetSize);
     }
-    if ( source.height() < 0 && target.height() > 0 ) {
+    if (source.height() < 0 && target.height() > 0) {
         sourceSize.rheight() *= -1;
         sourcePosition.ry() -= sourceSize.height();
-        source = QRect( sourcePosition, sourceSize );
+        source = QRect(sourcePosition, sourceSize);
     }
-    if  ( source.height() > 0 && target.height() < 0 ) {
+    if (source.height() > 0 && target.height() < 0) {
         targetSize.rheight() *= -1;
         targetPosition.ry() -= targetSize.height();
-        target = QRect( targetPosition, targetSize );
+        target = QRect(targetPosition, targetSize);
     }
 #if DEBUG_EMFPAINT
     kDebug(31000) << "After transformation:";
@@ -1368,10 +1358,8 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
     m_painter->setRenderHints(oldRenderHints);
 }
 
-
 // ----------------------------------------------------------------
 //                         Private functions
-
 
 void OutputPainterStrategy::printPainterTransform(const char *leadText)
 {
@@ -1383,39 +1371,38 @@ void OutputPainterStrategy::printPainterTransform(const char *leadText)
                   << "incl output transform: " << m_painter->transform();
 }
 
-
-qreal OutputPainterStrategy::angleFromArc( const QPoint &centrePoint, const QPoint &radialPoint )
+qreal OutputPainterStrategy::angleFromArc(const QPoint &centrePoint, const QPoint &radialPoint)
 {
     double dX = radialPoint.x() - centrePoint.x();
     double dY = centrePoint.y() - radialPoint.y();
     // Qt angles are in degrees. atan2 returns radians
-    return ( atan2( dY, dX ) * 180 / M_PI );
+    return (atan2(dY, dX) * 180 / M_PI);
 }
 
-qreal OutputPainterStrategy::angularSpan( const qreal startAngle, const qreal endAngle )
+qreal OutputPainterStrategy::angularSpan(const qreal startAngle, const qreal endAngle)
 {
     qreal spanAngle = endAngle - startAngle;
 
-    if ( spanAngle <= 0 ) {
+    if (spanAngle <= 0) {
         spanAngle += 360;
     }
 
     return spanAngle;
 }
 
-int OutputPainterStrategy::convertFontWeight( quint32 emfWeight )
+int OutputPainterStrategy::convertFontWeight(quint32 emfWeight)
 {
     // FIXME: See how it's done in the wmf library and check if this is suitable here.
 
-    if ( emfWeight == 0 ) {
+    if (emfWeight == 0) {
         return QFont::Normal;
-    } else if ( emfWeight <= 200 ) {
+    } else if (emfWeight <= 200) {
         return QFont::Light;
-    } else if ( emfWeight <= 450 ) {
+    } else if (emfWeight <= 450) {
         return QFont::Normal;
-    } else if ( emfWeight <= 650 ) {
+    } else if (emfWeight <= 650) {
         return QFont::DemiBold;
-    } else if ( emfWeight <= 850 ) {
+    } else if (emfWeight <= 850) {
         return QFont::Bold;
     } else {
         return QFont::Black;
@@ -1458,14 +1445,16 @@ static QPainter::CompositionMode  rasteropToQtComposition(long rop)
     };
 
     int i;
-    for (i = 0 ; i < 15 ; i++)
-        if (opTab[i].winRasterOp == rop)
+    for (i = 0; i < 15; i++)
+        if (opTab[i].winRasterOp == rop) {
             break;
+        }
 
-    if (i < 15)
+    if (i < 15) {
         return opTab[i].qtRasterOp;
-    else
+    } else {
         return QPainter::CompositionMode_Source;
+    }
 }
 
 } // xnamespace...

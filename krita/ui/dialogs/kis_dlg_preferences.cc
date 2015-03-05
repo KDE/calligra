@@ -60,7 +60,6 @@
 #include <kundo2stack.h>
 #include <kstandarddirs.h>
 
-
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
 #include "widgets/kis_cmb_idlist.h"
@@ -77,7 +76,6 @@
 #include <kis_cubic_curve.h>
 
 #include "input/config/kis_input_configuration_page.h"
-
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     : WdgGeneralSettings(_parent, _name)
@@ -153,7 +151,7 @@ bool GeneralTab::showRootLayer()
 int GeneralTab::autoSaveInterval()
 {
     //convert to seconds
-    return m_autosaveCheckBox->isChecked() ? m_autosaveSpinBox->value()*60 : 0;
+    return m_autosaveCheckBox->isChecked() ? m_autosaveSpinBox->value() * 60 : 0;
 }
 
 int GeneralTab::undoStackSize()
@@ -196,8 +194,7 @@ void GeneralTab::getBackgroundImage()
     QImage image(fn);
     if (image.isNull()) {
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("%1 is not a valid image file!", fn));
-    }
-    else {
+    } else {
         m_backgroundimage->setText(fn);
     }
 
@@ -217,7 +214,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     // XXX: Make sure only profiles that fit the specified color model
     // are shown in the profile combos
 
-    QGridLayout * l = new QGridLayout(this);
+    QGridLayout *l = new QGridLayout(this);
     l->setMargin(0);
     m_page = new WdgColorSettings(this);
     l->addWidget(m_page, 0, 0);
@@ -238,7 +235,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->cmbPrintingColorSpace->setCurrent(cfg.printerColorSpace());
 
     m_page->bnAddColorProfile->setIcon(koIcon("document-open"));
-    m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
+    m_page->bnAddColorProfile->setToolTip(i18n("Open Color Profile"));
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
     refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
@@ -247,7 +244,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->groupBox2->hide();
 
     QGridLayout *monitorProfileGrid = new QGridLayout(m_page->monitorprofileholder);
-    for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+    for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         QLabel *lbl = new QLabel(i18nc("The number of the screen", "Screen: %1", i + 1));
         monitorProfileGrid->addWidget(lbl, i, 0);
         m_monitorProfileLabels << lbl;
@@ -258,14 +255,15 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     refillMonitorProfiles(KoID("RGBA", ""));
 
-    for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+    for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
             m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
         }
     }
 
-    if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
+    if (m_page->cmbPrintProfile->contains(cfg.printerProfile())) {
         m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
+    }
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization());
@@ -318,15 +316,15 @@ void ColorSettingsTab::installProfile()
     refillMonitorProfiles(KoID("RGBA", ""));
     refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
 
-    for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+    for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
             m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
         }
     }
 
-    if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
+    if (m_page->cmbPrintProfile->contains(cfg.printerProfile())) {
         m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
-
+    }
 
 }
 
@@ -336,10 +334,10 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
         KisConfig cfg;
         QStringList devices = KisColorManager::instance()->devices();
         if (devices.size() == QApplication::desktop()->screenCount()) {
-            for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+            for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
                 m_monitorProfileWidgets[i]->clear();
                 QString monitorForScreen = cfg.monitorForScreen(i, devices[i]);
-                foreach(const QString &device, devices) {
+                foreach (const QString &device, devices) {
                     m_monitorProfileLabels[i]->setText(i18nc("The display/screen we got from Qt", "Screen %1:", i + 1));
                     m_monitorProfileWidgets[i]->addSqueezedItem(KisColorManager::instance()->deviceName(device), device);
                     if (devices[i] == monitorForScreen) {
@@ -348,8 +346,7 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
                 }
             }
         }
-    }
-    else {
+    } else {
         refillMonitorProfiles(KoID("RGBA", ""));
     }
 }
@@ -375,17 +372,17 @@ void ColorSettingsTab::setDefault()
     }
 }
 
-
-void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
+void ColorSettingsTab::refillMonitorProfiles(const KoID &s)
 {
-    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s.id());
+    const KoColorSpaceFactory *csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s.id());
 
     for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         m_monitorProfileWidgets[i]->clear();
     }
 
-    if (!csf)
+    if (!csf) {
         return;
+    }
 
     QList<const KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
@@ -403,20 +400,22 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & s)
     }
 }
 
-void ColorSettingsTab::refillPrintProfiles(const KoID & s)
+void ColorSettingsTab::refillPrintProfiles(const KoID &s)
 {
-    const KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s.id());
+    const KoColorSpaceFactory *csf = KoColorSpaceRegistry::instance()->colorSpaceFactory(s.id());
 
     m_page->cmbPrintProfile->clear();
 
-    if (!csf)
+    if (!csf) {
         return;
+    }
 
     QList<const KoColorProfile *> profileList = KoColorSpaceRegistry::instance()->profilesFor(csf);
 
-    foreach(const KoColorProfile *profile, profileList) {
-        if (profile->isSuitableForPrinting())
+    foreach (const KoColorProfile *profile, profileList) {
+        if (profile->isSuitableForPrinting()) {
             m_page->cmbPrintProfile->addSqueezedItem(profile->name());
+        }
     }
 
     m_page->cmbPrintProfile->setCurrent(csf->defaultProfile());
@@ -431,23 +430,22 @@ void TabletSettingsTab::setDefault()
     m_page->pressureCurve->setCurve(curve);
 }
 
-TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget(parent)
+TabletSettingsTab::TabletSettingsTab(QWidget *parent, const char *name): QWidget(parent)
 {
     setObjectName(name);
 
-    QGridLayout * l = new QGridLayout(this);
+    QGridLayout *l = new QGridLayout(this);
     l->setMargin(0);
     m_page = new WdgTabletSettings(this);
     l->addWidget(m_page, 0, 0);
 
     KisConfig cfg;
     KisCubicCurve curve;
-    curve.fromString( cfg.pressureTabletCurve() );
+    curve.fromString(cfg.pressureTabletCurve());
 
     m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
 }
-
 
 //---------------------------------------------------------------------------------------------------
 PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
@@ -477,7 +475,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     KisConfig cfg;
 
 #ifdef HAVE_OPENGL
-    if (!QGLFormat::hasOpenGL()) {       
+    if (!QGLFormat::hasOpenGL()) {
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
@@ -503,8 +501,8 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
     }
     if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
-       grpOpenGL->setVisible(false);
-       grpOpenGL->setMaximumHeight(0);
+        grpOpenGL->setVisible(false);
+        grpOpenGL->setMaximumHeight(0);
     }
 #else
     grpOpenGL->setEnabled(false);
@@ -518,7 +516,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     m_selectionOverlayColorAction->setIcon(koIcon("format-stroke-color"));
     m_selectionOverlayColorAction->setToolTip(i18n("Change the background color of the image"));
     btnSelectionOverlayColor->setDefaultAction(m_selectionOverlayColorAction);
-
 
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
@@ -570,7 +567,7 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 }
 
 //---------------------------------------------------------------------------------------------------
-GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
+GridSettingsTab::GridSettingsTab(QWidget *parent) : WdgGridSettingsBase(parent)
 {
     KisConfig cfg;
     selectMainStyle->setCurrentIndex(cfg.getGridMainStyle());
@@ -598,7 +595,6 @@ GridSettingsTab::GridSettingsTab(QWidget* parent) : WdgGridSettingsBase(parent)
     connect(intVSpacing, SIGNAL(valueChanged(int)), this, SLOT(spinBoxVSpacingChanged(int)));
     connect(intXOffset, SIGNAL(valueChanged(int)), this, SLOT(spinBoxXOffsetChanged(int)));
     connect(intYOffset, SIGNAL(valueChanged(int)), this, SLOT(spinBoxYOffsetChanged(int)));
-
 
 }
 
@@ -667,7 +663,7 @@ void GridSettingsTab::linkOffsetToggled(bool b)
 }
 
 //---------------------------------------------------------------------------------------------------
-FullscreenSettingsTab::FullscreenSettingsTab(QWidget* parent) : WdgFullscreenSettingsBase(parent)
+FullscreenSettingsTab::FullscreenSettingsTab(QWidget *parent) : WdgFullscreenSettingsBase(parent)
 {
     KisConfig cfg;
 
@@ -690,10 +686,9 @@ void FullscreenSettingsTab::setDefault()
     chkToolbar->setChecked(true);
 }
 
-
 //---------------------------------------------------------------------------------------------------
 
-KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
+KisDlgPreferences::KisDlgPreferences(QWidget *parent, const char *name)
     : KPageDialog(parent)
 {
     Q_UNUSED(name);
@@ -753,7 +748,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
 
-
     // full-screen mode
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Canvas-only settings"));
@@ -761,7 +755,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(koIcon("preferences-system-performance"));
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
-
 
     // input settings
     m_inputConfiguration = new KisInputConfigurationPage();
@@ -775,7 +768,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     foreach (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
-        KisPreferenceSet* preferenceSet = preferenceSetFactory->createPreferenceSet();
+        KisPreferenceSet *preferenceSet = preferenceSetFactory->createPreferenceSet();
         vbox = new KVBox();
         page = new KPageWidgetItem(vbox, preferenceSet->name());
         page->setHeader(preferenceSet->header());
@@ -813,7 +806,7 @@ void KisDlgPreferences::slotDefault()
 
 bool KisDlgPreferences::editPreferences()
 {
-    KisDlgPreferences* dialog;
+    KisDlgPreferences *dialog;
 
     dialog = new KisDlgPreferences();
     bool baccept = (dialog->exec() == Accepted);
@@ -832,7 +825,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
         KisPart *part = KisPart::instance();
         if (part) {
-            foreach(QPointer<KisDocument> doc, part->documents()) {
+            foreach (QPointer<KisDocument> doc, part->documents()) {
                 if (doc) {
                     doc->setAutoSave(dialog->m_general->autoSaveInterval());
                     doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
@@ -850,8 +843,7 @@ bool KisDlgPreferences::editPreferences()
                 int currentIndex = dialog->m_colorSettings->m_monitorProfileWidgets[i]->currentIndex();
                 QString monitorid = dialog->m_colorSettings->m_monitorProfileWidgets[i]->itemData(currentIndex).toString();
                 cfg.setMonitorForScreen(i, monitorid);
-            }
-            else {
+            } else {
                 cfg.setMonitorProfile(i,
                                       dialog->m_colorSettings->m_monitorProfileWidgets[i]->itemHighlighted(),
                                       dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
@@ -867,7 +859,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
 
         // Tablet settings
-        cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
+        cfg.setPressureTabletCurve(dialog->m_tabletSettings->m_page->pressureCurve->curve().toString());
 
 #if 0
         cfg.setMaxTilesInMem(dialog->m_performanceSettings->m_maxTiles->value());
@@ -876,8 +868,9 @@ bool KisDlgPreferences::editPreferences()
 #endif
 
 #ifdef HAVE_OPENGL
-        if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked())
+        if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked()) {
             cfg.setCanvasState("TRY_OPENGL");
+        }
         cfg.setUseOpenGL(dialog->m_displaySettings->grpOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());

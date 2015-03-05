@@ -34,13 +34,12 @@ public:
     explicit IndexEntry(const QString &_styleName, IndexEntryName _name = IndexEntry::UNKNOWN);
     virtual IndexEntry *clone();
     virtual ~IndexEntry();
-    virtual void addAttributes(KoXmlWriter * writer) const;
-    void saveOdf(KoXmlWriter * writer) const;
+    virtual void addAttributes(KoXmlWriter *writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
     QString styleName;
     IndexEntryName name;
 };
-
 
 class IndexEntryLinkStart : public IndexEntry
 {
@@ -49,29 +48,26 @@ public:
     IndexEntry *clone();
 };
 
-
 class IndexEntryChapter : public IndexEntry
 {
 public:
     explicit IndexEntryChapter(const QString &_styleName);
     IndexEntry *clone();
-    virtual void addAttributes(KoXmlWriter* writer) const;
+    virtual void addAttributes(KoXmlWriter *writer) const;
 
     QString display;
     int outlineLevel;
 };
-
 
 class  KOTEXT_EXPORT IndexEntrySpan : public IndexEntry
 {
 public:
     explicit IndexEntrySpan(const QString &_styleName);
     IndexEntry *clone();
-    virtual void addAttributes(KoXmlWriter* writer) const;
+    virtual void addAttributes(KoXmlWriter *writer) const;
 
     QString text;
 };
-
 
 class IndexEntryText : public IndexEntry
 {
@@ -80,13 +76,12 @@ public:
     IndexEntry *clone();
 };
 
-
 class KOTEXT_EXPORT IndexEntryTabStop : public IndexEntry
 {
 public:
     explicit IndexEntryTabStop(const QString &_styleName);
     IndexEntry *clone();
-    virtual void addAttributes(KoXmlWriter* writer) const;
+    virtual void addAttributes(KoXmlWriter *writer) const;
     // for saving let's save the original unit,
     // for KoText::Tab we need to convert to PostScript points
     void setPosition(const QString &position);
@@ -95,14 +90,12 @@ public:
     QString m_position;
 };
 
-
 class IndexEntryPageNumber : public IndexEntry
 {
 public:
     explicit IndexEntryPageNumber(const QString &_styleName);
     IndexEntry *clone();
 };
-
 
 class IndexEntryLinkEnd : public IndexEntry
 {
@@ -116,44 +109,41 @@ class KOTEXT_EXPORT TocEntryTemplate
 public:
     TocEntryTemplate();
     TocEntryTemplate(const TocEntryTemplate &entryTemplate);
-    void saveOdf(KoXmlWriter * writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
     int outlineLevel;
     QString styleName;
     int styleId;
-    QList<IndexEntry*> indexEntries;
+    QList<IndexEntry *> indexEntries;
 };
-
 
 class KOTEXT_EXPORT IndexTitleTemplate
 {
 public:
-    void saveOdf(KoXmlWriter * writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
     QString styleName;
     int styleId;
     QString text;
 };
 
-
 class KOTEXT_EXPORT IndexSourceStyle
 {
 public:
-    IndexSourceStyle(const IndexSourceStyle& indexSourceStyle);
+    IndexSourceStyle(const IndexSourceStyle &indexSourceStyle);
     IndexSourceStyle();
-    void saveOdf(KoXmlWriter * writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
     QString styleName;
     int styleId;
 };
-
 
 class KOTEXT_EXPORT IndexSourceStyles
 {
 public:
     IndexSourceStyles();
     IndexSourceStyles(const IndexSourceStyles &indexSourceStyles);
-    void saveOdf(KoXmlWriter * writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
     int outlineLevel;
     QList<IndexSourceStyle> styles;
@@ -164,7 +154,7 @@ class KOTEXT_EXPORT IndexEntryBibliography : public IndexEntry
 public:
     explicit IndexEntryBibliography(const QString &_styleName);
     IndexEntry *clone();
-    virtual void addAttributes(KoXmlWriter* writer) const;
+    virtual void addAttributes(KoXmlWriter *writer) const;
 
     QString dataField;
 };
@@ -172,11 +162,11 @@ public:
 class KOTEXT_EXPORT BibliographyEntryTemplate
 {
 public:
-    void saveOdf(KoXmlWriter * writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
     QString styleName;
     int styleId;
-    QList<IndexEntry*> indexEntries;
+    QList<IndexEntry *> indexEntries;
     QString bibliographyType;
 };
 

@@ -48,9 +48,9 @@ XlsxXmlTableReader::~XlsxXmlTableReader()
 {
 }
 
-KoFilter::ConversionStatus XlsxXmlTableReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus XlsxXmlTableReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<XlsxXmlTableReaderContext*>(context);
+    m_context = dynamic_cast<XlsxXmlTableReaderContext *>(context);
     Q_ASSERT(m_context);
 
     readNext();

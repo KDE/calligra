@@ -67,7 +67,7 @@ private:
 
 protected:
     friend class KoCopyControllerPrivate;
-    KoCopyControllerPrivate * const d;
+    KoCopyControllerPrivate *const d;
 };
 
 #endif

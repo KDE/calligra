@@ -45,16 +45,16 @@ class KPLATOUI_EXPORT TaskEditorItemModel : public NodeItemModel
 {
     Q_OBJECT
 public:
-    explicit TaskEditorItemModel( QObject *parent = 0 );
-    
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
-    virtual bool setData( const QModelIndex & index, const QVariant &value, int role = Qt::EditRole );
+    explicit TaskEditorItemModel(QObject *parent = 0);
+
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
 protected:
-    QVariant type( const Node *node, int role ) const;
-    virtual bool setType( Node *node, const QVariant &value, int role );
+    QVariant type(const Node *node, int role) const;
+    virtual bool setType(Node *node, const QVariant &value, int role);
 
 };
 
@@ -67,16 +67,25 @@ public:
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     NodeItemModel *baseModel() const;
-    NodeSortFilterProxyModel *proxyModel() const { return qobject_cast<NodeSortFilterProxyModel*>( model() ); }
+    NodeSortFilterProxyModel *proxyModel() const
+    {
+        return qobject_cast<NodeSortFilterProxyModel *>(model());
+    }
 
-    Project *project() const { return baseModel()->project(); }
-    void setProject( Project *project ) { baseModel()->setProject( project ); }
-    
+    Project *project() const
+    {
+        return baseModel()->project();
+    }
+    void setProject(Project *project)
+    {
+        baseModel()->setProject(project);
+    }
+
 Q_SIGNALS:
-    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+    void currentColumnChanged(const QModelIndex &, const QModelIndex &);
 
 protected Q_SLOTS:
-    void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
+    void slotDropAllowed(const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event);
 };
 
 class KPLATOUI_EXPORT NodeTreeView : public DoubleTreeViewBase
@@ -88,16 +97,25 @@ public:
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     NodeItemModel *baseModel() const;
-    NodeSortFilterProxyModel *proxyModel() const { return qobject_cast<NodeSortFilterProxyModel*>( model() ); }
+    NodeSortFilterProxyModel *proxyModel() const
+    {
+        return qobject_cast<NodeSortFilterProxyModel *>(model());
+    }
 
-    Project *project() const { return baseModel()->project(); }
-    void setProject( Project *project ) { baseModel()->setProject( project ); }
-    
+    Project *project() const
+    {
+        return baseModel()->project();
+    }
+    void setProject(Project *project)
+    {
+        baseModel()->setProject(project);
+    }
+
 Q_SIGNALS:
-    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+    void currentColumnChanged(const QModelIndex &, const QModelIndex &);
 
 protected Q_SLOTS:
-    void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
+    void slotDropAllowed(const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event);
 };
 
 class KPLATOUI_EXPORT TaskEditor : public ViewBase
@@ -105,56 +123,68 @@ class KPLATOUI_EXPORT TaskEditor : public ViewBase
     Q_OBJECT
 public:
     TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent);
-    
+
     void setupGui();
-    void setProject( Project *project );
-    Project *project() const { return m_view->project(); }
+    void setProject(Project *project);
+    Project *project() const
+    {
+        return m_view->project();
+    }
     virtual void createDockers();
 
     virtual Node *currentNode() const;
-    QList<Node*> selectedNodes() const ;
+    QList<Node *> selectedNodes() const;
     Node *selectedNode() const;
 
-    virtual void updateReadWrite( bool readwrite );
+    virtual void updateReadWrite(bool readwrite);
 
-    NodeItemModel *baseModel() const { return m_view->baseModel(); }
-    NodeSortFilterProxyModel *proxyModel() const { return m_view->proxyModel(); }
-    QAbstractItemModel *model() const { return m_view->model(); }
+    NodeItemModel *baseModel() const
+    {
+        return m_view->baseModel();
+    }
+    NodeSortFilterProxyModel *proxyModel() const
+    {
+        return m_view->proxyModel();
+    }
+    QAbstractItemModel *model() const
+    {
+        return m_view->model();
+    }
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext(QDomElement &/*context*/) const;
 
     virtual KoPrintJob *createPrintJob();
 
-    void setTaskModules( const QStringList &files );
+    void setTaskModules(const QStringList &files);
 
 Q_SIGNALS:
-    void taskSelected( Task *task );
+    void taskSelected(Task *task);
     void openNode();
     void addTask();
     void addMilestone();
     void addSubtask();
     void addSubMilestone();
-    void deleteTaskList( const QList<Node*>& );
+    void deleteTaskList(const QList<Node *> &);
     void moveTaskUp();
     void moveTaskDown();
     void indentTask();
     void unindentTask();
 
-    void loadTaskModules( const QStringList &files );
-    void saveTaskModule( const KUrl &url, Project *project );
-    void removeTaskModule( const KUrl &url );
+    void loadTaskModules(const QStringList &files);
+    void saveTaskModule(const KUrl &url, Project *project);
+    void removeTaskModule(const KUrl &url);
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
-    void setScheduleManager( ScheduleManager *sm );
-    
+    void setScheduleManager(ScheduleManager *sm);
+
 protected:
-    void updateActionsEnabled( bool on );
+    void updateActionsEnabled(bool on);
     int selectedRowCount() const;
     QModelIndexList selectedRows() const;
 
@@ -162,9 +192,9 @@ protected Q_SLOTS:
     virtual void slotOptions();
 
 private Q_SLOTS:
-    void slotSelectionChanged( const QModelIndexList& );
-    void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+    void slotSelectionChanged(const QModelIndexList &);
+    void slotCurrentChanged(const QModelIndex &, const QModelIndex &);
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
 
     void slotEnableActions();
 
@@ -179,10 +209,10 @@ private Q_SLOTS:
     void slotMoveTaskDown();
 
     void slotSplitView();
-    void slotProjectShown( bool );
+    void slotProjectShown(bool);
 
 private:
-    void edit( QModelIndex index );
+    void edit(QModelIndex index);
 
 private:
     TaskEditorTreeView *m_view;
@@ -209,46 +239,55 @@ public:
     TaskView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setupGui();
-    Project *project() const { return m_view->project(); }
-    virtual void draw( Project &project );
+    Project *project() const
+    {
+        return m_view->project();
+    }
+    virtual void draw(Project &project);
     virtual void draw();
 
-    NodeItemModel *baseModel() const { return m_view->baseModel(); }
-    NodeSortFilterProxyModel *proxyModel() const { return m_view->proxyModel(); }
+    NodeItemModel *baseModel() const
+    {
+        return m_view->baseModel();
+    }
+    NodeSortFilterProxyModel *proxyModel() const
+    {
+        return m_view->proxyModel();
+    }
 
     virtual Node *currentNode() const;
-    QList<Node*> selectedNodes() const ;
+    QList<Node *> selectedNodes() const;
     Node *selectedNode() const;
 
-    virtual void updateReadWrite( bool readwrite );
+    virtual void updateReadWrite(bool readwrite);
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext(QDomElement &/*context*/) const;
 
     KoPrintJob *createPrintJob();
-    
+
 Q_SIGNALS:
     void openNode();
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
-    void setScheduleManager( ScheduleManager *sm );
+    void setScheduleManager(ScheduleManager *sm);
 
 protected:
-    void updateActionsEnabled( bool on );
+    void updateActionsEnabled(bool on);
     int selectedNodeCount() const;
 
 protected Q_SLOTS:
     virtual void slotOptions();
 
 private Q_SLOTS:
-    void slotSelectionChanged( const QModelIndexList& );
-    void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+    void slotSelectionChanged(const QModelIndexList &);
+    void slotCurrentChanged(const QModelIndex &, const QModelIndex &);
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
 
     void slotEnableActions();
 
@@ -270,18 +309,30 @@ public:
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     NodeItemModel *baseModel() const;
-    WorkPackageProxyModel *proxyModel() const { return m; }
+    WorkPackageProxyModel *proxyModel() const
+    {
+        return m;
+    }
 
-    Project *project() const { return baseModel()->project(); }
-    void setProject( Project *project ) { m->setProject( project ); }
+    Project *project() const
+    {
+        return baseModel()->project();
+    }
+    void setProject(Project *project)
+    {
+        m->setProject(project);
+    }
 
-    ScheduleManager *scheduleManager() const { return baseModel()->manager(); }
+    ScheduleManager *scheduleManager() const
+    {
+        return baseModel()->manager();
+    }
 
 Q_SIGNALS:
-    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+    void currentColumnChanged(const QModelIndex &, const QModelIndex &);
 
 protected Q_SLOTS:
-    void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
+    void slotDropAllowed(const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event);
 protected:
     WorkPackageProxyModel *m;
 };
@@ -294,48 +345,51 @@ public:
 
     void setupGui();
     Project *project() const;
-    void setProject( Project *project );
-    ScheduleManager *scheduleManager() const { return m_view->scheduleManager(); }
+    void setProject(Project *project);
+    ScheduleManager *scheduleManager() const
+    {
+        return m_view->scheduleManager();
+    }
 
     WorkPackageProxyModel *proxyModel() const;
 
     virtual Node *currentNode() const;
-    QList<Node*> selectedNodes() const ;
+    QList<Node *> selectedNodes() const;
     Node *selectedNode() const;
 
-    virtual void updateReadWrite( bool readwrite );
+    virtual void updateReadWrite(bool readwrite);
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext(QDomElement &/*context*/) const;
 
     KoPrintJob *createPrintJob();
-    
+
 Q_SIGNALS:
-    void mailWorkpackage( Node *n, Resource *r = 0 );
-    void mailWorkpackages( const QList<Node*> &nodes, Resource *r );
+    void mailWorkpackage(Node *n, Resource *r = 0);
+    void mailWorkpackages(const QList<Node *> &nodes, Resource *r);
     void checkForWorkPackages();
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
     void slotRefreshView();
-    void setScheduleManager( ScheduleManager *sm );
+    void setScheduleManager(ScheduleManager *sm);
 
 protected:
-    void updateActionsEnabled( bool on );
+    void updateActionsEnabled(bool on);
     int selectedNodeCount() const;
 
 protected Q_SLOTS:
     virtual void slotOptions();
     void slotMailWorkpackage();
-    void slotWorkPackageSent( const QList<Node*> &nodes, Resource *resource );
+    void slotWorkPackageSent(const QList<Node *> &nodes, Resource *resource);
 
 private Q_SLOTS:
-    void slotSelectionChanged( const QModelIndexList& );
-    void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+    void slotSelectionChanged(const QModelIndexList &);
+    void slotCurrentChanged(const QModelIndex &, const QModelIndex &);
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
 
     void slotEnableActions();
 
@@ -350,6 +404,5 @@ private:
 };
 
 } //namespace KPlato
-
 
 #endif

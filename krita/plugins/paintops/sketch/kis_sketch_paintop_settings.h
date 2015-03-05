@@ -35,9 +35,6 @@
 #endif
 #include <kis_brush_based_paintop_settings.h>
 
-
-
-
 class KisSketchPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
 

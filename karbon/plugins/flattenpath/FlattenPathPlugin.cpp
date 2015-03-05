@@ -49,14 +49,12 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-
 K_PLUGIN_FACTORY(FlattenPathPluginFactory, registerPlugin<FlattenPathPlugin>();)
 K_EXPORT_PLUGIN(FlattenPathPluginFactory("karbonflattenpathplugin"))
 
 FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
 {
     setXMLFile(KStandardDirs::locate("data", "karbon/plugins/FlattenPathPlugin.rc"), true);
-
 
     KAction *actionFlattenPath  = new KAction(koIcon("effect_flatten"), i18n("&Flatten Path..."), this);
     actionCollection()->addAction("path_flatten", actionFlattenPath);
@@ -68,31 +66,35 @@ FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
 
 void FlattenPathPlugin::slotFlattenPath()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
-    if (! shape)
+    KoShape *shape = selection->firstSelectedShape();
+    if (! shape) {
         return;
+    }
 
     // check if we have a path based shape
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
-    if (! path)
+    KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
+    if (! path) {
         return;
+    }
 
     // check if it is no parametric shape
-    KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);
-    if (ps && ps->isParametricShape())
+    KoParameterShape *ps = dynamic_cast<KoParameterShape *>(shape);
+    if (ps && ps->isParametricShape()) {
         return;
+    }
 
-    if (QDialog::Rejected == m_flattenPathDlg->exec())
+    if (QDialog::Rejected == m_flattenPathDlg->exec()) {
         return;
+    }
 
     canvasController->canvas()->addCommand(
         new KarbonPathFlattenCommand(path, m_flattenPathDlg->flatness()));
 }
 
-FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
-        : KDialog(parent)
+FlattenDlg::FlattenDlg(QWidget *parent, const char *name)
+    : KDialog(parent)
 {
     setObjectName(name);
     setModal(true);
@@ -100,9 +102,9 @@ FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
     setButtons(Ok | Cancel);
 
     // add input fields on the left:
-    QGroupBox* group = new QGroupBox(i18n("Properties"), this);
+    QGroupBox *group = new QGroupBox(i18n("Properties"), this);
 
-    QHBoxLayout* layout = new QHBoxLayout;
+    QHBoxLayout *layout = new QHBoxLayout;
 
     layout->addWidget(new QLabel(i18n("Flatness:")));
     m_flatness = new KDoubleNumInput(group);

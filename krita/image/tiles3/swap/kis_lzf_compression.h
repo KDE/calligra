@@ -27,8 +27,8 @@ public:
     KisLzfCompression();
     virtual ~KisLzfCompression();
 
-    qint32 compress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength);
-    qint32 decompress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength);
+    qint32 compress(const quint8 *input, qint32 inputLength, quint8 *output, qint32 outputLength);
+    qint32 decompress(const quint8 *input, qint32 inputLength, quint8 *output, qint32 outputLength);
 
     qint32 outputBufferSize(qint32 dataSize);
 

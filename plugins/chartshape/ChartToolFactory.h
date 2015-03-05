@@ -32,10 +32,9 @@ public:
     ChartToolFactory();
     ~ChartToolFactory();
 
-    KoToolBase * createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 } // namespace KChart
-
 
 #endif

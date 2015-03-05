@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 // Own
 #include "KoOdfPageLayout.h"
 
@@ -35,10 +34,8 @@
 #include "KoOdfPageLayoutProperties.h"
 #include "KoOdfHeaderFooterProperties.h"
 
-
 // ================================================================
 //                         class KoOdfPageLayout
-
 
 class KoOdfPageLayout::Private
 {
@@ -67,9 +64,7 @@ KoOdfPageLayout::Private::~Private()
     delete footerProperties;
 }
 
-
 // ----------------------------------------------------------------
-
 
 KoOdfPageLayout::KoOdfPageLayout()
     : KoOdfStyleBase(PageLayout)
@@ -82,7 +77,6 @@ KoOdfPageLayout::~KoOdfPageLayout()
     delete d;
 }
 
-
 QString KoOdfPageLayout::pageUsage() const
 {
     return d->pageUsage;
@@ -92,7 +86,6 @@ void KoOdfPageLayout::setPageUsage(const QString &pageUsage)
 {
     d->pageUsage = pageUsage;
 }
-
 
 KoOdfPageLayoutProperties *KoOdfPageLayout::pageLayoutProperties() const
 {
@@ -121,7 +114,6 @@ KoOdfHeaderFooterProperties *KoOdfPageLayout::footerProperties() const
     return d->footerProperties;
 }
 
-
 bool KoOdfPageLayout::readOdf(KoXmlStreamReader &reader)
 {
     bool retval = true;
@@ -148,7 +140,7 @@ bool KoOdfPageLayout::readOdf(KoXmlStreamReader &reader)
                 retval = false;
                 break;
             }
-            d->pageLayoutProperties = dynamic_cast<KoOdfPageLayoutProperties*>(properties);
+            d->pageLayoutProperties = dynamic_cast<KoOdfPageLayoutProperties *>(properties);
         }
 
         else if (propertiesType == "style:header-style") {
@@ -166,7 +158,7 @@ bool KoOdfPageLayout::readOdf(KoXmlStreamReader &reader)
                 retval = false;
                 break;
             }
-            d->headerProperties = dynamic_cast<KoOdfHeaderFooterProperties*>(properties);
+            d->headerProperties = dynamic_cast<KoOdfHeaderFooterProperties *>(properties);
 
             // Read past the end element for the header style;
             reader.skipCurrentElement();
@@ -186,7 +178,7 @@ bool KoOdfPageLayout::readOdf(KoXmlStreamReader &reader)
                 delete properties;
                 return false;
             }
-            d->footerProperties = dynamic_cast<KoOdfHeaderFooterProperties*>(properties);
+            d->footerProperties = dynamic_cast<KoOdfHeaderFooterProperties *>(properties);
 
             // Read past the end element for the footer style;
             reader.skipCurrentElement();
@@ -203,8 +195,7 @@ bool KoOdfPageLayout::saveOdf(KoXmlWriter *writer)
 {
     if (isDefaultStyle()) {
         writer->startElement("style:default-page-layout");
-    }
-    else {
+    } else {
         writer->startElement("style:page-layout");
         writer->addAttribute("style:name", name());
     }

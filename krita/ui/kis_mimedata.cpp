@@ -51,13 +51,12 @@ KisMimeData::KisMimeData(QList<KisNodeSP> nodes)
     Q_ASSERT(m_nodes.size() > 0);
 }
 
-
 QList<KisNodeSP> KisMimeData::nodes() const
 {
     return m_nodes;
 }
 
-QStringList KisMimeData::formats () const
+QStringList KisMimeData::formats() const
 {
     QStringList f = QMimeData::formats();
     if (m_nodes.size() > 0) {
@@ -74,13 +73,13 @@ KisDocument *createDocument(QList<KisNodeSP> nodes)
 {
     KisDocument *doc = KisPart::instance()->createDocument();
     QRect rc;
-    foreach(KisNodeSP node, nodes) {
+    foreach (KisNodeSP node, nodes) {
         rc |= node->exactBounds();
     }
 
     KisImageSP image = new KisImage(0, rc.width(), rc.height(), nodes.first()->colorSpace(), nodes.first()->name(), false);
 
-    foreach(KisNodeSP node, nodes) {
+    foreach (KisNodeSP node, nodes) {
         image->addNode(node->clone());
     }
 
@@ -96,7 +95,7 @@ QByteArray serializeToByteArray(QList<KisNodeSP> nodes)
 
     KoStore *store = KoStore::createStore(&buffer, KoStore::Write);
     Q_ASSERT(!store->bad());
-    
+
     KisDocument *doc = createDocument(nodes);
     doc->saveNativeFormatCalligra(store);
     delete doc;
@@ -116,26 +115,23 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         doc->image()->waitForDone();
 
         return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow())),
-                                                           KoColorConversionTransformation::InternalRenderingIntent,
-                                                           KoColorConversionTransformation::InternalConversionFlags);
-    }
-    else if (mimetype == "application/x-krita-node" ||
-             mimetype == "application/zip") {
+                KoColorConversionTransformation::InternalRenderingIntent,
+                KoColorConversionTransformation::InternalConversionFlags);
+    } else if (mimetype == "application/x-krita-node" ||
+               mimetype == "application/zip") {
 
         QByteArray ba = serializeToByteArray(m_nodes);
         return ba;
 
-    }
-    else if (mimetype == "application/x-krita-node-url") {
+    } else if (mimetype == "application/x-krita-node-url") {
 
         QByteArray ba = serializeToByteArray(m_nodes);
 
         QString temporaryPath =
-                QDir::tempPath() + QDir::separator() +
-                QString("krita_tmp_dnd_layer_%1_%2.kra")
-                .arg(QApplication::applicationPid())
-                .arg(qrand());
-
+            QDir::tempPath() + QDir::separator() +
+            QString("krita_tmp_dnd_layer_%1_%2.kra")
+            .arg(QApplication::applicationPid())
+            .arg(qrand());
 
         QFile file(temporaryPath);
         file.open(QFile::WriteOnly);
@@ -144,15 +140,14 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         file.close();
 
         return QUrl(temporaryPath).toEncoded();
-    }
-    else if (mimetype == "application/x-krita-node-internal-pointer") {
+    } else if (mimetype == "application/x-krita-node-internal-pointer") {
 
         QDomDocument doc("krita_internal_node_pointer");
         QDomElement root = doc.createElement("pointer");
         root.setAttribute("application_pid", (qint64)QApplication::applicationPid());
         doc.appendChild(root);
 
-        foreach(KisNodeSP node, m_nodes) {
+        foreach (KisNodeSP node, m_nodes) {
             QDomElement element = doc.createElement("node");
             element.setAttribute("pointer_value", (qint64)node.data());
             root.appendChild(element);
@@ -160,27 +155,26 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
 
         return doc.toByteArray();
 
-    }
-    else {
+    } else {
         return QMimeData::retrieveData(mimetype, preferredType);
     }
 }
 
 void KisMimeData::initializeExternalNode(KisNodeSP &node,
-                                         KisImageWSP image,
-                                         KisShapeController *shapeController)
+        KisImageWSP image,
+        KisShapeController *shapeController)
 {
     // layers store a link to the image, so update it
-    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+    KisLayer *layer = dynamic_cast<KisLayer *>(node.data());
     if (layer) {
         layer->setImage(image);
     }
-    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+    KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer *>(node.data());
     if (shapeLayer) {
         KisShapeLayer *shapeLayer2 = new KisShapeLayer(shapeController, image, node->name(), node->opacity());
         QList<KoShape *> shapes = shapeLayer->shapes();
         shapeLayer->removeAllShapes();
-        foreach(KoShape *shape, shapes) {
+        foreach (KoShape *shape, shapes) {
             shapeLayer2->addShape(shape);
         }
         node = shapeLayer2;
@@ -188,13 +182,13 @@ void KisMimeData::initializeExternalNode(KisNodeSP &node,
 }
 
 QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
-                                                   KisImageWSP image,
-                                                   KisShapeController *shapeController,
-                                                   bool /* IN-OUT */ &copyNode)
+        KisImageWSP image,
+        KisShapeController *shapeController,
+        bool /* IN-OUT */ &copyNode)
 {
     QList<KisNodeSP> nodes;
     // Qt 4.7 way
-    const KisMimeData *mimedata = qobject_cast<const KisMimeData*>(data);
+    const KisMimeData *mimedata = qobject_cast<const KisMimeData *>(data);
     if (mimedata) {
         nodes = mimedata->nodes();
     }
@@ -217,7 +211,7 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
                 if (!e.isNull()) {
                     qint64 pointerValue = e.attribute("pointer_value").toLongLong();
                     if (pointerValue) {
-                        nodes << reinterpret_cast<KisNode*>(pointerValue);
+                        nodes << reinterpret_cast<KisNode *>(pointerValue);
                     }
                 }
                 n = n.nextSibling();
@@ -228,7 +222,7 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
     if (!nodes.isEmpty() && (copyNode || nodes.first()->graphListener() != image.data())) {
         QList<KisNodeSP> clones;
         copyNode = true;
-        foreach(KisNodeSP node, nodes) {
+        foreach (KisNodeSP node, nodes) {
             node = node->clone();
             initializeExternalNode(node, image, shapeController);
             clones << node;
@@ -255,7 +249,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
 
         if (result) {
             KisImageWSP tempImage = tempDoc->image();
-            foreach(KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
+            foreach (KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
                 nodes << node;
                 tempImage->removeNode(node);
                 initializeExternalNode(node, image, shapeController);
@@ -273,7 +267,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
 
         if (result) {
             KisImageWSP tempImage = tempDoc->image();
-            foreach(KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
+            foreach (KisNodeSP node, tempImage->root()->childNodes(QStringList(), KoProperties())) {
                 nodes << node;
                 tempImage->removeNode(node);
                 initializeExternalNode(node, image, shapeController);
@@ -295,7 +289,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
     }
 
     if (!nodes.isEmpty()) {
-        foreach(KisNodeSP node, nodes) {
+        foreach (KisNodeSP node, nodes) {
             QRect bounds = node->projection()->exactBounds();
             if (alwaysRecenter || forceRecenter ||
                     (!imageBounds.contains(bounds) &&

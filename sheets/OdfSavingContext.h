@@ -45,46 +45,56 @@ class OdfSavingContext
 {
 public:
     explicit OdfSavingContext(KoShapeSavingContext &shapeContext)
-            : shapeContext(shapeContext) {}
+        : shapeContext(shapeContext) {}
 
-    void insertCellAnchoredShape(const Sheet *sheet, int row, int column, KoShape* shape) {
+    void insertCellAnchoredShape(const Sheet *sheet, int row, int column, KoShape *shape)
+    {
         Q_ASSERT_X(1 <= column && column <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(column).toLocal8Bit());
         Q_ASSERT_X(1 <= row && row <= KS_rowMax, __FUNCTION__, QString("%1 out of bounds").arg(row).toLocal8Bit());
         m_cellAnchoredShapes[sheet][row].insert(column, shape);
     }
 
-    bool rowHasCellAnchoredShapes(const Sheet* sheet, int row) const {
+    bool rowHasCellAnchoredShapes(const Sheet *sheet, int row) const
+    {
         AnchoredShapes::const_iterator it = m_cellAnchoredShapes.constFind(sheet);
-        if (it == m_cellAnchoredShapes.constEnd())
+        if (it == m_cellAnchoredShapes.constEnd()) {
             return false;
+        }
         return (*it).contains(row);
     }
 
-    bool cellHasAnchoredShapes(const Sheet *sheet, int row, int column) const {
+    bool cellHasAnchoredShapes(const Sheet *sheet, int row, int column) const
+    {
         AnchoredShapes::const_iterator it = m_cellAnchoredShapes.constFind(sheet);
-        if (it == m_cellAnchoredShapes.constEnd())
+        if (it == m_cellAnchoredShapes.constEnd()) {
             return false;
+        }
         AnchoredShape::const_iterator rit = (*it).constFind(row);
-        if (rit == (*it).constEnd())
+        if (rit == (*it).constEnd()) {
             return false;
+        }
         return (*rit).contains(column);
     }
 
-    int nextAnchoredShape(const Sheet *sheet, int row, int column) const {
+    int nextAnchoredShape(const Sheet *sheet, int row, int column) const
+    {
         AnchoredShapes::const_iterator it = m_cellAnchoredShapes.constFind(sheet);
         if (it != m_cellAnchoredShapes.constEnd()) {
             AnchoredShape::const_iterator rit = (*it).constFind(row);
             if (rit != (*it).constEnd()) {
-                QMultiHash<int, KoShape*>::const_iterator cit((*rit).constBegin()), cend((*rit).constEnd());
+                QMultiHash<int, KoShape *>::const_iterator cit((*rit).constBegin()), cend((*rit).constEnd());
                 for (; cit != cend; ++cit)
-                    if (cit.key() > column) return cit.key();  // found one
+                    if (cit.key() > column) {
+                        return cit.key();    // found one
+                    }
 
             }
         }
         return 0;
     }
 
-    QList<KoShape*> cellAnchoredShapes(const Sheet *sheet, int row, int column) const {
+    QList<KoShape *> cellAnchoredShapes(const Sheet *sheet, int row, int column) const
+    {
         AnchoredShapes::const_iterator it = m_cellAnchoredShapes.constFind(sheet);
         if (it != m_cellAnchoredShapes.constEnd()) {
             AnchoredShape::const_iterator rit = (*it).constFind(row);
@@ -92,18 +102,18 @@ public:
                 return (*rit).values(column);
             }
         }
-        return QList<KoShape*>();
+        return QList<KoShape *>();
     }
 
 public:
-    KoShapeSavingContext& shapeContext;
+    KoShapeSavingContext &shapeContext;
     GenValidationStyles valStyle;
     QMap<int, Style> columnDefaultStyles;
     QMap<int, Style> rowDefaultStyles;
 
 private:
-    typedef QHash < int /*row*/, QMultiHash < int /*col*/, KoShape* > > AnchoredShape;
-    typedef QHash < const Sheet*, AnchoredShape > AnchoredShapes;
+    typedef QHash < int /*row*/, QMultiHash < int /*col*/, KoShape * > > AnchoredShape;
+    typedef QHash < const Sheet *, AnchoredShape > AnchoredShapes;
     AnchoredShapes m_cellAnchoredShapes;
 };
 

@@ -30,27 +30,22 @@
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 
-KPrAnimationBase * KPrAnimationFactory::createAnimationFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context,
-                                                               KPrShapeAnimation *shapeAnimation)
+KPrAnimationBase *KPrAnimationFactory::createAnimationFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context,
+        KPrShapeAnimation *shapeAnimation)
 {
-    KPrAnimationBase * animation = 0;
+    KPrAnimationBase *animation = 0;
     if (element.namespaceURI() == KoXmlNS::anim) {
         if (element.tagName() == "set") {
             animation = new KPrAnimSet(shapeAnimation);
-        }
-        else if (element.tagName() == "animate") {
+        } else if (element.tagName() == "animate") {
             animation = new KPrAnimate(shapeAnimation);
-        }
-        else if (element.tagName() == "animateMotion") {
+        } else if (element.tagName() == "animateMotion") {
             animation = new KPrAnimateMotion(shapeAnimation);
-        }
-        else if (element.tagName() == "animateColor") {
+        } else if (element.tagName() == "animateColor") {
             animation = new KPrAnimateColor(shapeAnimation);
-        }
-        else if (element.tagName() == "animationTransform") {
+        } else if (element.tagName() == "animationTransform") {
             animation = new KPrAnimateTransform(shapeAnimation);
-        }
-        else if (element.tagName() == "transitionFilter") {
+        } else if (element.tagName() == "transitionFilter") {
             animation = new KPrAnimTransitionFilter(shapeAnimation);
         }
 
@@ -58,11 +53,9 @@ KPrAnimationBase * KPrAnimationFactory::createAnimationFromOdf(const KoXmlElemen
             if (!animation->loadOdf(element, context)) {
                 delete animation;
                 animation = 0;
+            } else {
             }
-            else {
-            }
-        }
-        else {
+        } else {
         }
     }
     return animation;

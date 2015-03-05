@@ -44,7 +44,6 @@ class KoDockFactoryBase;
 class QDockWidget;
 class KisView;
 
-
 // Calligra class but not in main module
 class KisDockerManager;
 
@@ -79,7 +78,6 @@ public:
      */
     void updateCaption();
 
-
     // If noCleanup is set, KisMainWindow will not delete the root document
     // or part manager on destruction.
     void setNoCleanup(bool noCleanup);
@@ -109,7 +107,7 @@ public:
     /**
      * The document opened a URL -> store into recent documents list.
      */
-    void addRecentURL(const KUrl& url);
+    void addRecentURL(const KUrl &url);
 
     /**
      * Load the desired document and show it.
@@ -117,15 +115,14 @@ public:
      *
      * @return TRUE on success.
      */
-    bool openDocument(const KUrl & url);
+    bool openDocument(const KUrl &url);
 
     void setReadWrite(bool readwrite);
 
-
     /// Return the list of dock widgets belonging to this main window.
-    QList<QDockWidget*> dockWidgets();
+    QList<QDockWidget *> dockWidgets();
 
-    QList<KoCanvasObserverBase*> canvasObservers();
+    QList<KoCanvasObserverBase *> canvasObservers();
 
     /**
      * @return the KisDockerManager which is assigned
@@ -133,7 +130,7 @@ public:
       * and assign it.
      * @ref setDockerManager to assign it.
      */
-    KisDockerManager * dockerManager() const;
+    KisDockerManager *dockerManager() const;
 
     KoCanvasResourceManager *resourceManager() const;
 
@@ -205,7 +202,7 @@ public Q_SLOTS:
      */
     void slotFileSave();
 
-    KisPrintJob* exportToPdf(const QString &pdfFileName = QString());
+    KisPrintJob *exportToPdf(const QString &pdfFileName = QString());
 
     void slotProgress(int value);
 
@@ -224,12 +221,10 @@ public Q_SLOTS:
      */
     bool saveDocument(KisDocument *document, bool saveas = false, bool silent = false, int specialOutputFlag = 0);
 
-
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QList<QPointer<QWidget> > & optionWidgetList);
-
+    void newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList);
 
 private Q_SLOTS:
     /**
@@ -242,7 +237,6 @@ private Q_SLOTS:
     void slotSaveCompleted();
     void slotSaveCanceled(const QString &);
     void forceDockTabFonts();
-
 
     /**
      * @internal
@@ -261,7 +255,7 @@ private Q_SLOTS:
 
     void slotFilePrintPreview();
 
-    KisPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
+    KisPrintJob *exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     /**
      * Show a dialog with author and document information.
@@ -355,22 +349,21 @@ private Q_SLOTS:
 
 protected:
 
-    void closeEvent(QCloseEvent * e);
-    void resizeEvent(QResizeEvent * e);
+    void closeEvent(QCloseEvent *e);
+    void resizeEvent(QResizeEvent *e);
 
     /// Set the active view, this will update the undo/redo actions
     virtual void setActiveView(KisView *view);
 
     // QWidget overrides
-    virtual void dragEnterEvent(QDragEnterEvent * event);
-    virtual void dropEvent(QDropEvent * event);
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent *event);
 
-    void setToolbarList(QList<QAction*> toolbarList);
+    void setToolbarList(QList<QAction *> toolbarList);
 
 private:
 
     friend class KisApplication;
-
 
     /**
      * Returns the dockwidget specified by the @p factory. If the dock widget doesn't exist yet it's created.
@@ -378,7 +371,7 @@ private:
      * @param factory the factory used to create the dock widget if needed
      * @return the dock widget specified by @p factory (may be 0)
      */
-    QDockWidget* createDockWidget(KoDockFactoryBase* factory);
+    QDockWidget *createDockWidget(KoDockFactoryBase *factory);
 
     bool openDocumentInternal(const KUrl &url, KisDocument *newdoc = 0);
 
@@ -410,7 +403,7 @@ private:
     /**
      * Updates the window caption based on the document info and path.
      */
-    void updateCaption(const QString & caption, bool mod);
+    void updateCaption(const QString &caption, bool mod);
     void updateReloadFileAction(KisDocument *doc);
 
     void saveWindowSettings();
@@ -427,7 +420,7 @@ private:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     QString m_errorMessage;
     bool m_dieOnError;

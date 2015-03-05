@@ -21,7 +21,6 @@
 
 #include <QtTest>
 
-
 class FilterStrokeTest : public QObject
 {
     Q_OBJECT

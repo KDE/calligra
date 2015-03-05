@@ -27,7 +27,7 @@
 #include <kis_image.h>
 #include <operations/kis_operation_configuration.h>
 
-WdgShrinkSelection::WdgShrinkSelection(QWidget* parent, KisViewManager *view)
+WdgShrinkSelection::WdgShrinkSelection(QWidget *parent, KisViewManager *view)
     : KisOperationUIWidget(i18n("Shrink Selection"), parent)
     , m_shrinkValue(1)
 {
@@ -97,7 +97,7 @@ void WdgShrinkSelection::updateShrinkUIValue(double value)
     }
 }
 
-void WdgShrinkSelection::getConfiguration(KisOperationConfiguration* config)
+void WdgShrinkSelection::getConfiguration(KisOperationConfiguration *config)
 {
     config->setProperty("x-radius", m_shrinkValue);
     config->setProperty("y-radius", m_shrinkValue);

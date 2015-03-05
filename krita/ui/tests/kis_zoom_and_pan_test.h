@@ -23,7 +23,6 @@
 
 class ZoomAndPanTester;
 
-
 class KisZoomAndPanTest : public QObject
 {
     Q_OBJECT

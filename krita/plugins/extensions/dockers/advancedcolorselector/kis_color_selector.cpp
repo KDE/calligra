@@ -43,8 +43,7 @@
 #include "kis_canvas2.h"
 #include "kis_signal_compressor.h"
 
-
-KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
+KisColorSelector::KisColorSelector(Configuration conf, QWidget *parent)
     : KisColorSelectorBase(parent),
       m_ring(0),
       m_triangle(0),
@@ -61,7 +60,7 @@ KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
     setConfiguration(conf);
 }
 
-KisColorSelector::KisColorSelector(QWidget* parent)
+KisColorSelector::KisColorSelector(QWidget *parent)
     : KisColorSelectorBase(parent),
       m_ring(0),
       m_triangle(0),
@@ -78,9 +77,9 @@ KisColorSelector::KisColorSelector(QWidget* parent)
     updateSettings();
 }
 
-KisColorSelectorBase* KisColorSelector::createPopup() const
+KisColorSelectorBase *KisColorSelector::createPopup() const
 {
-    KisColorSelectorBase* popup = new KisColorSelector(0);
+    KisColorSelectorBase *popup = new KisColorSelector(0);
     popup->setColor(m_lastRealColor);
     return popup;
 }
@@ -89,8 +88,8 @@ void KisColorSelector::setConfiguration(Configuration conf)
 {
     m_configuration = conf;
 
-    if(m_mainComponent!=0) {
-        Q_ASSERT(m_subComponent!=0);
+    if (m_mainComponent != 0) {
+        Q_ASSERT(m_subComponent != 0);
         m_mainComponent->setGeometry(0, 0, 0, 0);
         m_subComponent->setGeometry(0, 0, 0, 0);
 
@@ -100,13 +99,13 @@ void KisColorSelector::setConfiguration(Configuration conf)
 
     switch (m_configuration.mainType) {
     case Square:
-        m_mainComponent=m_square;
+        m_mainComponent = m_square;
         break;
     case Wheel:
-        m_mainComponent=m_wheel;
+        m_mainComponent = m_wheel;
         break;
     case Triangle:
-        m_mainComponent=m_triangle;
+        m_mainComponent = m_triangle;
         break;
     default:
         Q_ASSERT(false);
@@ -114,10 +113,10 @@ void KisColorSelector::setConfiguration(Configuration conf)
 
     switch (m_configuration.subType) {
     case Ring:
-        m_subComponent=m_ring;
+        m_subComponent = m_ring;
         break;
     case Slider:
-        m_subComponent=m_slider;
+        m_subComponent = m_slider;
         break;
     default:
         Q_ASSERT(false);
@@ -126,11 +125,11 @@ void KisColorSelector::setConfiguration(Configuration conf)
     connect(m_mainComponent, SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)),
             m_subComponent,  SLOT(setParam(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)), Qt::UniqueConnection);
     connect(m_subComponent,  SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)),
-            m_mainComponent, SLOT(setParam(qreal,qreal,qreal,qreal, qreal, qreal, qreal, qreal, qreal)), Qt::UniqueConnection);
+            m_mainComponent, SLOT(setParam(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)), Qt::UniqueConnection);
 
     connect(m_mainComponent, SIGNAL(update()), m_signalCompressor, SLOT(start()), Qt::UniqueConnection);
     connect(m_subComponent,  SIGNAL(update()), m_signalCompressor, SLOT(start()), Qt::UniqueConnection);
-    
+
     m_mainComponent->setConfiguration(m_configuration.mainTypeParameter, m_configuration.mainType);
     m_subComponent->setConfiguration(m_configuration.subTypeParameter, m_configuration.subType);
 
@@ -163,77 +162,76 @@ void KisColorSelector::reset()
     }
 }
 
-void KisColorSelector::paintEvent(QPaintEvent* e)
+void KisColorSelector::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
     QPainter p(this);
-    p.fillRect(0,0,width(),height(),QColor(128,128,128));
+    p.fillRect(0, 0, width(), height(), QColor(128, 128, 128));
     p.setRenderHint(QPainter::Antialiasing);
 
     m_mainComponent->paintEvent(&p);
     m_subComponent->paintEvent(&p);
 }
 
-inline int iconSize(qreal width, qreal height) {
-    qreal radius = qMin(width, height)/2.;
-    qreal xm = width/2.;
-    qreal ym = height/2.;
-    if(xm>=2*ym || ym>=2*xm)
+inline int iconSize(qreal width, qreal height)
+{
+    qreal radius = qMin(width, height) / 2.;
+    qreal xm = width / 2.;
+    qreal ym = height / 2.;
+    if (xm >= 2 * ym || ym >= 2 * xm) {
         return qBound<qreal>(5., radius, 32.);
+    }
 
-    qreal a=-2;
-    qreal b=2.*(xm+ym);
-    qreal c=radius*radius-xm*xm-ym*ym;
-    return qBound<qreal>(5., ((-b+sqrt(b*b-4*a*c))/(2*a)), 32.);
+    qreal a = -2;
+    qreal b = 2.*(xm + ym);
+    qreal c = radius * radius - xm * xm - ym * ym;
+    return qBound<qreal>(5., ((-b + sqrt(b * b - 4 * a * c)) / (2 * a)), 32.);
 }
 
-void KisColorSelector::resizeEvent(QResizeEvent* e) {
-    if(m_configuration.subType==Ring) {
-        m_ring->setGeometry(0,0,width(), height());
-        if(displaySettingsButton()) {
+void KisColorSelector::resizeEvent(QResizeEvent *e)
+{
+    if (m_configuration.subType == Ring) {
+        m_ring->setGeometry(0, 0, width(), height());
+        if (displaySettingsButton()) {
             int size = iconSize(width(), height());
             m_button->setGeometry(0, 0, size, size);
         }
-        if(m_configuration.mainType==Triangle) {
-            m_triangle->setGeometry(width()/2-m_ring->innerRadius(),
-                                    height()/2-m_ring->innerRadius(),
-                                    m_ring->innerRadius()*2,
-                                    m_ring->innerRadius()*2);
-        }
-        else {
-            int size = m_ring->innerRadius()*2/sqrt(2.);
-            m_square->setGeometry(width()/2-size/2,
-                                  height()/2-size/2,
+        if (m_configuration.mainType == Triangle) {
+            m_triangle->setGeometry(width() / 2 - m_ring->innerRadius(),
+                                    height() / 2 - m_ring->innerRadius(),
+                                    m_ring->innerRadius() * 2,
+                                    m_ring->innerRadius() * 2);
+        } else {
+            int size = m_ring->innerRadius() * 2 / sqrt(2.);
+            m_square->setGeometry(width() / 2 - size / 2,
+                                  height() / 2 - size / 2,
                                   size,
                                   size);
         }
-    }
-    else {
+    } else {
         // type wheel and square
-        if(m_configuration.mainType==Wheel) {
-            if(displaySettingsButton()) {
-                int size = iconSize(width(), height()*0.9);
-                m_button->setGeometry(0, height()*0.1, size, size);
+        if (m_configuration.mainType == Wheel) {
+            if (displaySettingsButton()) {
+                int size = iconSize(width(), height() * 0.9);
+                m_button->setGeometry(0, height() * 0.1, size, size);
             }
-            m_mainComponent->setGeometry(0, height()*0.1, width(), height()*0.9);
-            m_subComponent->setGeometry( 0, 0,            width(), height()*0.1);
-        }
-        else {
+            m_mainComponent->setGeometry(0, height() * 0.1, width(), height() * 0.9);
+            m_subComponent->setGeometry(0, 0,            width(), height() * 0.1);
+        } else {
             int buttonSize = 0;
-            if(displaySettingsButton()) {
-                buttonSize = qBound(20, int(0.1*height()), 32);
+            if (displaySettingsButton()) {
+                buttonSize = qBound(20, int(0.1 * height()), 32);
                 m_button->setGeometry(0, 0, buttonSize, buttonSize);
             }
 
-            if(height()>width()) {
-                int selectorHeight=height()-buttonSize;
-                m_mainComponent->setGeometry(0, buttonSize+selectorHeight*0.1, width(), selectorHeight*0.9);
-                m_subComponent->setGeometry( 0, buttonSize,                    width(), selectorHeight*0.1);
-            }
-            else {
-                int selectorWidth=width()-buttonSize;
-                m_mainComponent->setGeometry(buttonSize, height()*0.1, selectorWidth, height()*0.9);
-                m_subComponent->setGeometry( buttonSize, 0,            selectorWidth, height()*0.1);
+            if (height() > width()) {
+                int selectorHeight = height() - buttonSize;
+                m_mainComponent->setGeometry(0, buttonSize + selectorHeight * 0.1, width(), selectorHeight * 0.9);
+                m_subComponent->setGeometry(0, buttonSize,                    width(), selectorHeight * 0.1);
+            } else {
+                int selectorWidth = width() - buttonSize;
+                m_mainComponent->setGeometry(buttonSize, height() * 0.1, selectorWidth, height() * 0.9);
+                m_subComponent->setGeometry(buttonSize, 0,            selectorWidth, height() * 0.1);
             }
         }
     }
@@ -244,23 +242,24 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
     KisColorSelectorBase::resizeEvent(e);
 }
 
-void KisColorSelector::mousePressEvent(QMouseEvent* e)
+void KisColorSelector::mousePressEvent(QMouseEvent *e)
 {
     e->setAccepted(false);
     KisColorSelectorBase::mousePressEvent(e);
 
-    if(!e->isAccepted()) {
-        if(m_mainComponent->wantsGrab(e->x(), e->y()))
-            m_grabbingComponent=m_mainComponent;
-        else if(m_subComponent->wantsGrab(e->x(), e->y()))
-            m_grabbingComponent=m_subComponent;
+    if (!e->isAccepted()) {
+        if (m_mainComponent->wantsGrab(e->x(), e->y())) {
+            m_grabbingComponent = m_mainComponent;
+        } else if (m_subComponent->wantsGrab(e->x(), e->y())) {
+            m_grabbingComponent = m_subComponent;
+        }
 
         mouseEvent(e);
         e->accept();
     }
 }
 
-void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
+void KisColorSelector::mouseMoveEvent(QMouseEvent *e)
 {
     KisColorSelectorBase::mouseMoveEvent(e);
 
@@ -268,13 +267,13 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
     e->accept();
 }
 
-void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
+void KisColorSelector::mouseReleaseEvent(QMouseEvent *e)
 {
     e->setAccepted(false);
     KisColorSelectorBase::mousePressEvent(e);
 
-    if(!e->isAccepted() &&
-       !(m_lastRealColor == m_currentRealColor)) {
+    if (!e->isAccepted() &&
+            !(m_lastRealColor == m_currentRealColor)) {
 
         m_lastRealColor = m_currentRealColor;
         m_lastColorRole = Acs::buttonToRole(e->button());
@@ -283,12 +282,12 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
         e->accept();
     }
 
-    m_grabbingComponent=0;
+    m_grabbingComponent = 0;
 }
 
 bool KisColorSelector::displaySettingsButton()
 {
-    return dynamic_cast<KisColorSelectorContainer*>(parent());
+    return dynamic_cast<KisColorSelectorContainer *>(parent());
 }
 
 void KisColorSelector::setColor(const KoColor &color)
@@ -326,7 +325,7 @@ void KisColorSelector::init()
     m_square = new KisColorSelectorSimple(this);
     m_wheel = new KisColorSelectorWheel(this);
 
-    if(displaySettingsButton()) {
+    if (displaySettingsButton()) {
         m_button = new QPushButton(this);
         m_button->setIcon(koIcon("configure"));
         connect(m_button, SIGNAL(clicked()), SIGNAL(settingsButtonClicked()));

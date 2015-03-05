@@ -37,36 +37,35 @@ public:
     };
 public:
 
-    KisRecordedShapePaintAction(const KisNodeQueryPath& path,
-                                      const KisPaintOpPresetSP paintOpPreset,
-                                      Shape shape,
-                                      const QRectF& rect);
+    KisRecordedShapePaintAction(const KisNodeQueryPath &path,
+                                const KisPaintOpPresetSP paintOpPreset,
+                                Shape shape,
+                                const QRectF &rect);
 
-    KisRecordedShapePaintAction(const KisRecordedShapePaintAction&);
+    KisRecordedShapePaintAction(const KisRecordedShapePaintAction &);
 
     ~KisRecordedShapePaintAction();
 
-    virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
+    virtual void toXML(QDomDocument &doc, QDomElement &elt, KisRecordedActionSaveContext *) const;
 
-    virtual KisRecordedAction* clone() const;
+    virtual KisRecordedAction *clone() const;
 
 protected:
 
-    virtual void playPaint(const KisPlayInfo& info, KisPainter* painter) const;
+    virtual void playPaint(const KisPlayInfo &info, KisPainter *painter) const;
 
 private:
 
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 class KisRecordedShapePaintActionFactory : public KisRecordedPaintActionFactory
 {
 public:
     KisRecordedShapePaintActionFactory();
     virtual ~KisRecordedShapePaintActionFactory();
-    virtual KisRecordedAction* fromXML(const QDomElement& elt, const KisRecordedActionLoadContext*);
+    virtual KisRecordedAction *fromXML(const QDomElement &elt, const KisRecordedActionLoadContext *);
 };
 
 #endif

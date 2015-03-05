@@ -36,7 +36,7 @@ class KoParagraphStyle;
 class KoListStyle;
 class KoTableStyle;
 class KoTableColumnStyle;
-    /// This signal is to allow listener to make an undo command out of it
+/// This signal is to allow listener to make an undo command out of it
 class KoTableRowStyle;
 class KoTableCellStyle;
 class KoSectionStyle;
@@ -334,22 +334,22 @@ public:
      */
     KoSectionStyle *sectionStyle(const QString &name) const;
 
-     /**
-     * Return the default character style that will always be present in each
-     * document. You can alter the style, but you can never delete it.
-     * The default is suppost to stay invisible to the user and its called
-     * i18n("Default") for that reason. Applications should not
-     * show this style in their document-level configure dialogs.
-     */
+    /**
+    * Return the default character style that will always be present in each
+    * document. You can alter the style, but you can never delete it.
+    * The default is suppost to stay invisible to the user and its called
+    * i18n("Default") for that reason. Applications should not
+    * show this style in their document-level configure dialogs.
+    */
     KoCharacterStyle *defaultCharacterStyle() const;
 
-     /**
-     * Return the default paragraph style that will always be present in each
-     * document. You can alter the style, but you can never delete it.
-     * The default is suppost to stay invisible to the user and its called
-     * i18n("Default") for that reason. Applications should not
-     * show this style in their document-level configure dialogs.
-     */
+    /**
+    * Return the default paragraph style that will always be present in each
+    * document. You can alter the style, but you can never delete it.
+    * The default is suppost to stay invisible to the user and its called
+    * i18n("Default") for that reason. Applications should not
+    * show this style in their document-level configure dialogs.
+    */
     KoParagraphStyle *defaultParagraphStyle() const;
 
     /**
@@ -385,28 +385,28 @@ public:
     KoListStyle *outlineStyle() const;
 
     /// return all the characterStyles registered.
-    QList<KoCharacterStyle*> characterStyles() const;
+    QList<KoCharacterStyle *> characterStyles() const;
 
     /// return all the paragraphStyles registered.
-    QList<KoParagraphStyle*> paragraphStyles() const;
+    QList<KoParagraphStyle *> paragraphStyles() const;
 
     /// return all the listStyles registered.
-    QList<KoListStyle*> listStyles() const;
+    QList<KoListStyle *> listStyles() const;
 
     /// return all the tableStyles registered.
-    QList<KoTableStyle*> tableStyles() const;
+    QList<KoTableStyle *> tableStyles() const;
 
     /// return all the tableColumnStyles registered.
-    QList<KoTableColumnStyle*> tableColumnStyles() const;
+    QList<KoTableColumnStyle *> tableColumnStyles() const;
 
     /// return all the tableRowStyles registered.
-    QList<KoTableRowStyle*> tableRowStyles() const;
+    QList<KoTableRowStyle *> tableRowStyles() const;
 
     /// return all the tableCellStyles registered.
-    QList<KoTableCellStyle*> tableCellStyles() const;
+    QList<KoTableCellStyle *> tableCellStyles() const;
 
     /// return all the sectionStyles registered.
-    QList<KoSectionStyle*> sectionStyles() const;
+    QList<KoSectionStyle *> sectionStyles() const;
 
     /// returns the default style for the ToC entries for the specified outline level
     KoParagraphStyle *defaultTableOfContentsEntryStyle(int outlineLevel) const;
@@ -432,30 +432,30 @@ public:
     QVector<int> usedParagraphStyles() const;
 
 Q_SIGNALS:
-    void styleAdded(KoParagraphStyle*);
-    void styleAdded(KoCharacterStyle*);
-    void styleAdded(KoListStyle*);
-    void styleAdded(KoTableStyle*);
-    void styleAdded(KoTableColumnStyle*);
-    void styleAdded(KoTableRowStyle*);
-    void styleAdded(KoTableCellStyle*);
-    void styleAdded(KoSectionStyle*);
-    void styleRemoved(KoParagraphStyle*);
-    void styleRemoved(KoCharacterStyle*);
-    void styleRemoved(KoListStyle*);
-    void styleRemoved(KoTableStyle*);
-    void styleRemoved(KoTableColumnStyle*);
-    void styleRemoved(KoTableRowStyle*);
-    void styleRemoved(KoTableCellStyle*);
-    void styleRemoved(KoSectionStyle*);
+    void styleAdded(KoParagraphStyle *);
+    void styleAdded(KoCharacterStyle *);
+    void styleAdded(KoListStyle *);
+    void styleAdded(KoTableStyle *);
+    void styleAdded(KoTableColumnStyle *);
+    void styleAdded(KoTableRowStyle *);
+    void styleAdded(KoTableCellStyle *);
+    void styleAdded(KoSectionStyle *);
+    void styleRemoved(KoParagraphStyle *);
+    void styleRemoved(KoCharacterStyle *);
+    void styleRemoved(KoListStyle *);
+    void styleRemoved(KoTableStyle *);
+    void styleRemoved(KoTableColumnStyle *);
+    void styleRemoved(KoTableRowStyle *);
+    void styleRemoved(KoTableCellStyle *);
+    void styleRemoved(KoSectionStyle *);
 
     /// This signal is emitted whenever the style has been applied to a qtextdocument
     /// This allows listeners to know which styles are in use
-    void styleApplied(const KoCharacterStyle*);
+    void styleApplied(const KoCharacterStyle *);
 
     /// This signal is emitted whenever the style has been applied to a qtextdocument
     /// This allows listeners to know which styles are in use
-    void styleApplied(const KoParagraphStyle*);
+    void styleApplied(const KoParagraphStyle *);
 
     /// This signal is to allow listener to start an undo command
     void editHasBegun();
@@ -469,11 +469,11 @@ Q_SIGNALS:
 
     /// This signal is to allow listener to record into an undo command and apply to text
     /// It's emitted when someone calls alteredStyle on a paragraph style
-    void styleHasChanged(int, const KoParagraphStyle*, const KoParagraphStyle*);
+    void styleHasChanged(int, const KoParagraphStyle *, const KoParagraphStyle *);
 
     /// This signal is to allow listener to record into an undo command and apply to text
     /// It's emitted when someone calls alteredStyle on a character style
-    void styleHasChanged(int, const KoCharacterStyle*, const KoCharacterStyle*);
+    void styleHasChanged(int, const KoCharacterStyle *, const KoCharacterStyle *);
 
 public Q_SLOTS:
     /**
@@ -510,29 +510,29 @@ public Q_SLOTS:
      */
     void alteredStyle(const KoTableColumnStyle *style);
 
-     /**
-     * Slot that should be called whenever a style is changed. This will update
-     * all documents with the style.
-     * Note that successive calls are aggregated.
-     */
+    /**
+    * Slot that should be called whenever a style is changed. This will update
+    * all documents with the style.
+    * Note that successive calls are aggregated.
+    */
     void alteredStyle(const KoTableRowStyle *style);
 
-   /**
-     * Slot that should be called whenever a style is changed. This will update
-     * all documents with the style.
-     * Note that successive calls are aggregated.
-     */
+    /**
+      * Slot that should be called whenever a style is changed. This will update
+      * all documents with the style.
+      * Note that successive calls are aggregated.
+      */
     void alteredStyle(const KoTableCellStyle *style);
 
-   /**
-     * Slot that should be called whenever a style is changed. This will update
-     * all documents with the style.
-     * Note that successive calls are aggregated.
-     */
+    /**
+      * Slot that should be called whenever a style is changed. This will update
+      * all documents with the style.
+      * Note that successive calls are aggregated.
+      */
     void alteredStyle(const KoSectionStyle *style);
 
-    void slotAppliedStyle(const KoCharacterStyle*);
-    void slotAppliedStyle(const KoParagraphStyle*);
+    void slotAppliedStyle(const KoCharacterStyle *);
+    void slotAppliedStyle(const KoParagraphStyle *);
 
 private:
     friend class KoTextSharedLoadingData;
@@ -543,9 +543,9 @@ private:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
-Q_DECLARE_METATYPE(KoStyleManager*)
+Q_DECLARE_METATYPE(KoStyleManager *)
 
 #endif

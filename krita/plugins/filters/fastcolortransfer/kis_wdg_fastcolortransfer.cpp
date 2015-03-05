@@ -36,20 +36,19 @@
 
 #include "ui_wdgfastcolortransfer.h"
 
-KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisConfigWidget(parent)
+KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget *parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgFastColorTransfer();
     m_widget->setupUi(this);
-    connect(m_widget->fileNameURLRequester, SIGNAL(textChanged(const QString&)), this, SIGNAL(sigConfigurationItemChanged()));
+    connect(m_widget->fileNameURLRequester, SIGNAL(textChanged(QString)), this, SIGNAL(sigConfigurationItemChanged()));
 }
-
 
 KisWdgFastColorTransfer::~KisWdgFastColorTransfer()
 {
     delete m_widget;
 }
 
-void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfiguration *config)
 {
     QVariant value;
     if (config->getProperty("filename", value)) {
@@ -58,12 +57,14 @@ void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfiguration*
 
 }
 
-KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
+KisPropertiesConfiguration *KisWdgFastColorTransfer::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("colortransfer", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("colortransfer", 1);
     QString fileName = this->widget()->fileNameURLRequester->url().url();
 
-    if (fileName.isEmpty()) return config;
+    if (fileName.isEmpty()) {
+        return config;
+    }
 
     KisPaintDeviceSP ref;
 
@@ -87,7 +88,7 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     }
 
     // Convert ref to LAB
-    const KoColorSpace* labCS = KoColorSpaceRegistry::instance()->lab16();
+    const KoColorSpace *labCS = KoColorSpaceRegistry::instance()->lab16();
     if (!labCS) {
         dbgPlugins << "The LAB colorspace is not available.";
         delete d;
@@ -95,7 +96,7 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     }
 
     dbgPlugins << "convert ref to lab";
-    KUndo2Command* cmd = ref->convertTo(labCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
+    KUndo2Command *cmd = ref->convertTo(labCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     delete cmd;
 
     // Compute the means and sigmas of ref
@@ -104,7 +105,7 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
 
     KisSequentialConstIterator refIt(ref, importedImage->bounds());
     do {
-        const quint16* data = reinterpret_cast<const quint16*>(refIt.oldRawData());
+        const quint16 *data = reinterpret_cast<const quint16 *>(refIt.oldRawData());
 
         quint32 L = data[0];
         quint32 A = data[1];

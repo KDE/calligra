@@ -28,7 +28,7 @@
 
 KoPasteController::KoPasteController(KoCanvasBase *canvas, QAction *pasteAction)
     : QObject(pasteAction),
-    d(new Private(this, canvas, pasteAction))
+      d(new Private(this, canvas, pasteAction))
 {
     //connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
     connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));

@@ -40,7 +40,8 @@ class KexiScriptAdaptor : public QObject
 {
     Q_OBJECT
 public:
-    explicit KexiScriptAdaptor() : m_kexidbmodule(0) {
+    explicit KexiScriptAdaptor() : m_kexidbmodule(0)
+    {
         setObjectName("Kexi");
     }
     virtual ~KexiScriptAdaptor() {}
@@ -49,14 +50,16 @@ public Q_SLOTS:
     /**
     * Returns the current KexiWindow widget.
     */
-    QWidget* windowWidget() const {
+    QWidget *windowWidget() const
+    {
         return currentWindow();
     }
 
     /**
     * Returns the current KexiView widget.
     */
-    QWidget* viewWidget() const {
+    QWidget *viewWidget() const
+    {
         return currentView();
     }
 
@@ -72,11 +75,12 @@ public Q_SLOTS:
     *     print "name=%s text=%s" % (a.objectName,a.text)
     * \endcode
     */
-    QVariantList actions() {
+    QVariantList actions()
+    {
         QVariantList list;
-        foreach(QAction* action, mainWindow()->allActions()) {
+        foreach (QAction *action, mainWindow()->allActions()) {
             QVariant v;
-            v.setValue((QObject*) action);
+            v.setValue((QObject *) action);
             list << v;
         }
         return list;
@@ -86,10 +90,12 @@ public Q_SLOTS:
     * Returns the QAction instance the Kexi main window provides that
     * has the objectName \p name or NULL if there is no such action.
     */
-    QObject* action(const QString& name) {
-        foreach(QAction* action, mainWindow()->allActions()) {
-            if (action->objectName() == name)
+    QObject *action(const QString &name)
+    {
+        foreach (QAction *action, mainWindow()->allActions()) {
+            if (action->objectName() == name) {
                 return action;
+            }
         }
         return 0;
     }
@@ -98,7 +104,8 @@ public Q_SLOTS:
     * Returns true if we are connected with a project else false
     * is returned.
     */
-    bool isConnected() {
+    bool isConnected()
+    {
         return project() ? project()->isConnected() : false;
     }
 
@@ -107,21 +114,24 @@ public Q_SLOTS:
     * project or return NULL if there was no project opened (no
     * connection established).
     */
-    QObject* getConnection() {
-        if (! m_kexidbmodule)
+    QObject *getConnection()
+    {
+        if (! m_kexidbmodule) {
             m_kexidbmodule = Kross::Manager::self().module("kexidb");
+        }
         ::KexiDB::Connection *connection = project() ? project()->dbConnection() : 0;
         if (m_kexidbmodule && connection) {
-            QObject* result = 0;
-            if (QMetaObject::invokeMethod(m_kexidbmodule, "connectionWrapper", Q_RETURN_ARG(QObject*, result), Q_ARG(QObject*, connection)))
+            QObject *result = 0;
+            if (QMetaObject::invokeMethod(m_kexidbmodule, "connectionWrapper", Q_RETURN_ARG(QObject *, result), Q_ARG(QObject *, connection))) {
                 return result;
+            }
         }
         return 0;
     }
 
     /**
     * Returns a list of names of all items the part class provides. Possible
-    * classes are for example "org.kexi-project.table", "org.kexi-project.query", 
+    * classes are for example "org.kexi-project.table", "org.kexi-project.query",
     * "org.kexi-project.form" or "org.kexi-project.script".
     *
     * Python sample that prints all tables within the current project.
@@ -130,13 +140,14 @@ public Q_SLOTS:
     * print Kexi.items("table")
     * \endcode
     */
-    QStringList items(const QString& className) {
+    QStringList items(const QString &className)
+    {
         QStringList list;
         if (project()) {
             KexiPart::ItemList l;
             project()->getSortedItemsForClass(l, partClass(className).toUtf8());
             l.sort();
-            foreach(KexiPart::Item* i, l) {
+            foreach (KexiPart::Item *i, l) {
                 list << i->name();
             }
         }
@@ -146,7 +157,8 @@ public Q_SLOTS:
     /**
     * Returns the caption for the item defined with \p className and \p name .
     */
-    QString itemCaption(const QString& className, const QString& name) const {
+    QString itemCaption(const QString &className, const QString &name) const
+    {
         KexiPart::Item *item = partItem(partClass(className), name);
         return item ? item->caption() : QString();
     }
@@ -154,15 +166,18 @@ public Q_SLOTS:
     /**
     * Set the caption for the item defined with \p className and \p name .
     */
-    void setItemCaption(const QString& className, const QString& name, const QString& caption) {
-        if (KexiPart::Item *item = partItem(partClass(className), name))
+    void setItemCaption(const QString &className, const QString &name, const QString &caption)
+    {
+        if (KexiPart::Item *item = partItem(partClass(className), name)) {
             item->setCaption(caption);
+        }
     }
 
     /**
     * Returns the description for the item defined with \p className and \p name .
     */
-    QString itemDescription(const QString& className, const QString& name) const {
+    QString itemDescription(const QString &className, const QString &name) const
+    {
         KexiPart::Item *item = partItem(partClass(className), name);
         return item ? item->description() : QString();
     }
@@ -170,9 +185,11 @@ public Q_SLOTS:
     /**
     * Set the description for the item defined with \p className and \p name .
     */
-    void setItemDescription(const QString& className, const QString& name, const QString& description) {
-        if (KexiPart::Item *item = partItem(partClass(className), name))
+    void setItemDescription(const QString &className, const QString &name, const QString &description)
+    {
+        if (KexiPart::Item *item = partItem(partClass(className), name)) {
             item->setDescription(description);
+        }
     }
 
     /**
@@ -189,17 +206,18 @@ public Q_SLOTS:
     * Kexi.windowWidget().setDirty(True)
     * \endcode
     */
-    bool openItem(const QString& className, const QString& name, const QString& viewmode = QString(), QVariantMap args = QVariantMap()) {
+    bool openItem(const QString &className, const QString &name, const QString &viewmode = QString(), QVariantMap args = QVariantMap())
+    {
         bool openingCancelled;
         KexiPart::Item *item = partItem(partClass(className), name);
-        KexiWindow* window = item 
-            ? mainWindow()->openObject(
-                item,
-                stringToViewMode(viewmode),
-                openingCancelled,
-                args.isEmpty() ? 0 : &args
-              )
-            : 0;
+        KexiWindow *window = item
+                             ? mainWindow()->openObject(
+                                 item,
+                                 stringToViewMode(viewmode),
+                                 openingCancelled,
+                                 args.isEmpty() ? 0 : &args
+                             )
+                             : 0;
         return (window && ! openingCancelled);
     }
 
@@ -215,52 +233,62 @@ public Q_SLOTS:
     * Kexi.closeItem("table","table1")
     * \endcode
     */
-    bool closeItem(const QString& className, const QString& name) {
-        if (KexiPart::Item *item = partItem(partClass(className), name))
+    bool closeItem(const QString &className, const QString &name)
+    {
+        if (KexiPart::Item *item = partItem(partClass(className), name)) {
             return mainWindow()->closeObject(item) == true;
+        }
         return false;
     }
 
     /**
     * Print the item defined with \p className and \p name .
     */
-    bool printItem(const QString& className, const QString& name, bool preview = false) {
-        if (KexiPart::Item *item = partItem(partClass(className), name))
+    bool printItem(const QString &className, const QString &name, bool preview = false)
+    {
+        if (KexiPart::Item *item = partItem(partClass(className), name)) {
             return (preview ? mainWindow()->printPreviewForItem(item) : mainWindow()->printItem(item)) == true;
+        }
         return false;
     }
 
     /**
     * Executes custom action for the item defined with \p className and \p name .
     */
-    bool executeItem(const QString& className, const QString& name, const QString& actionName) {
-        if (KexiPart::Item *item = partItem(partClass(className), name))
+    bool executeItem(const QString &className, const QString &name, const QString &actionName)
+    {
+        if (KexiPart::Item *item = partItem(partClass(className), name)) {
             return mainWindow()->executeCustomActionForObject(item, actionName) == true;
+        }
         return false;
     }
-
 
     /**
     * Returns the name of the current viewmode. This could be for example "data",
     * "design", "text" or just an empty string if there is no view at the moment.
     */
-    QString viewMode() const {
+    QString viewMode() const
+    {
         return currentView() ? viewModeToString(currentView()->viewMode()) : QString();
     }
 
     /**
     * Returns a list of names of all available viewmodes the view supports.
     */
-    QStringList viewModes() const {
+    QStringList viewModes() const
+    {
         QStringList list;
         if (currentWindow()) {
             Kexi::ViewModes modes = currentWindow()->supportedViewModes();
-            if (modes & Kexi::DataViewMode)
+            if (modes & Kexi::DataViewMode) {
                 list << "data";
-            if (modes & Kexi::DesignViewMode)
+            }
+            if (modes & Kexi::DesignViewMode) {
                 list << "design";
-            if (modes & Kexi::TextViewMode)
+            }
+            if (modes & Kexi::TextViewMode) {
                 list << "text";
+            }
         }
         return list;
     }
@@ -269,32 +297,40 @@ public Q_SLOTS:
     * Returns true if there is a current view and those current view is dirty aka
     * has the dirty-flag set that indicates that something changed.
     */
-    bool viewIsDirty() const {
+    bool viewIsDirty() const
+    {
         return currentView() ? currentView()->isDirty() : false;
     }
 
 private:
-    QObject* m_kexidbmodule;
+    QObject *m_kexidbmodule;
 
-    KexiMainWindowIface* mainWindow() const {
+    KexiMainWindowIface *mainWindow() const
+    {
         return KexiMainWindowIface::global();
     }
-    KexiProject* project() const {
+    KexiProject *project() const
+    {
         return mainWindow()->project();
     }
-    KexiWindow* currentWindow() const {
+    KexiWindow *currentWindow() const
+    {
         return mainWindow()->currentWindow();
     }
-    KexiView* currentView() const {
+    KexiView *currentView() const
+    {
         return currentWindow() ? currentWindow()->selectedView() : 0;
     }
-    KexiPart::Item* partItem(const QString& className, const QString& name) const {
+    KexiPart::Item *partItem(const QString &className, const QString &name) const
+    {
         return project() ? project()->itemForClass(partClass(className), name) : 0;
     }
-    QString partClass(const QString& partClass) const {
-        return partClass.contains('.') ? partClass : (QString::fromLatin1("org.kexi-project.")+partClass);
+    QString partClass(const QString &partClass) const
+    {
+        return partClass.contains('.') ? partClass : (QString::fromLatin1("org.kexi-project.") + partClass);
     }
-    QString viewModeToString(Kexi::ViewMode mode, const QString& defaultViewMode = QString()) const {
+    QString viewModeToString(Kexi::ViewMode mode, const QString &defaultViewMode = QString()) const
+    {
         switch (mode) {
         case Kexi::DataViewMode:
             return "data";
@@ -307,13 +343,17 @@ private:
         }
         return defaultViewMode;
     }
-    Kexi::ViewMode stringToViewMode(const QString& mode, Kexi::ViewMode defaultViewMode = Kexi::DataViewMode) const {
-        if (mode == "data")
+    Kexi::ViewMode stringToViewMode(const QString &mode, Kexi::ViewMode defaultViewMode = Kexi::DataViewMode) const
+    {
+        if (mode == "data") {
             return Kexi::DataViewMode;
-        if (mode == "design")
+        }
+        if (mode == "design") {
             return Kexi::DesignViewMode;
-        if (mode == "text")
+        }
+        if (mode == "text") {
             return Kexi::TextViewMode;
+        }
         return defaultViewMode;
     }
 };

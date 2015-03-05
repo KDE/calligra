@@ -68,28 +68,26 @@ void KisStrokeBenchmark::initTestCase()
     m_image = new KisImage(0, width, height, m_colorSpace, "stroke sample image", false);
     m_layer = new KisPaintLayer(m_image, "temporary for stroke sample", OPACITY_OPAQUE_U8, m_colorSpace);
 
-
     m_painter = new KisPainter(m_layer->paintDevice());
     m_painter->setPaintColor(KoColor(Qt::black, m_colorSpace));
 
     // for bezier curve test
     initCurvePoints(width, height);
     // for the lines test
-    initLines(width,height);
+    initLines(width, height);
 }
 
 void KisStrokeBenchmark::init()
 {
     KoColor white(m_colorSpace);
     white.fromQColor(Qt::white);
-    m_layer->paintDevice()->fill(0,0, m_image->width(), m_image->height(),white.data());
+    m_layer->paintDevice()->fill(0, 0, m_image->width(), m_image->height(), white.data());
 }
-
 
 void KisStrokeBenchmark::initCurvePoints(int width, int height)
 {
-    QPointF p1(0                , 7.0 / 12.0 * height);
-    QPointF p2(1.0 / 2.0 * width  , 7.0 / 12.0 * height);
+    QPointF p1(0, 7.0 / 12.0 * height);
+    QPointF p2(1.0 / 2.0 * width, 7.0 / 12.0 * height);
     QPointF p3(width - 4.0, height - 4.0);
 
     m_c1 = QPointF(1.0 / 4.0 * width, height - 2.0);
@@ -100,20 +98,18 @@ void KisStrokeBenchmark::initCurvePoints(int width, int height)
     m_pi3 = KisPaintInformation(p3, 0.0);
 }
 
-
 void KisStrokeBenchmark::initLines(int width, int height)
 {
     srand(12345678);
-    for (int i = 0; i < LINES; i++){
+    for (int i = 0; i < LINES; i++) {
         qreal sx = rand() / qreal(RAND_MAX - 1);
         qreal sy = rand() / qreal(RAND_MAX - 1);
-        m_startPoints.append(QPointF(sx * width,sy * height));
+        m_startPoints.append(QPointF(sx * width, sy * height));
         qreal ex = rand() / qreal(RAND_MAX - 1);
         qreal ey = rand() / qreal(RAND_MAX - 1);
-        m_endPoints.append(QPointF(ex * width,ey * height));
+        m_endPoints.append(QPointF(ex * width, ey * height));
     }
 }
-
 
 void KisStrokeBenchmark::cleanupTestCase()
 {
@@ -144,7 +140,6 @@ void KisStrokeBenchmark::pixelbrush300pxRL()
     benchmarkRandomLines(presetFileName);
 }
 
-
 void KisStrokeBenchmark::sprayPixels()
 {
     QString presetFileName = "spray_wu_pixels1.kpp";
@@ -157,20 +152,17 @@ void KisStrokeBenchmark::sprayPixelsRL()
     benchmarkRandomLines(presetFileName);
 }
 
-
 void KisStrokeBenchmark::sprayTexture()
 {
     QString presetFileName = "spray_21_textures1.kpp";
     benchmarkStroke(presetFileName);
 }
 
-
 void KisStrokeBenchmark::sprayTextureRL()
 {
     QString presetFileName = "spray_21_textures1.kpp";
     benchmarkRandomLines(presetFileName);
 }
-
 
 void KisStrokeBenchmark::spray30px21particles()
 {
@@ -202,26 +194,23 @@ void KisStrokeBenchmark::softbrushDefault30()
     benchmarkStroke(presetFileName);
 }
 
-
 void KisStrokeBenchmark::softbrushCircle30()
 {
     QString presetFileName = "softbrush_30px.kpp";
     benchmarkCircle(presetFileName);
 }
 
-
 void KisStrokeBenchmark::softbrushDefault30RL()
 {
     QString presetFileName = "softbrush_30px.kpp";
-    benchmarkRandomLines(presetFileName);}
-
+    benchmarkRandomLines(presetFileName);
+}
 
 void KisStrokeBenchmark::softbrushFullFeatures30()
 {
     QString presetFileName = "softbrush_30px_full.kpp";
     benchmarkStroke(presetFileName);
 }
-
 
 void KisStrokeBenchmark::softbrushFullFeatures30RL()
 {
@@ -277,7 +266,6 @@ void KisStrokeBenchmark::hairy30InkDepletionRL()
     QString presetFileName = "hairy30inkDepletion1.kpp";
     benchmarkRandomLines(presetFileName);
 }
-
 
 void KisStrokeBenchmark::softbrushOpacity()
 {
@@ -387,45 +375,46 @@ void KisStrokeBenchmark::benchmarkCircle(QString presetFileName)
     qDebug() << "(circle)preset : " << presetFileName;
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
-    if (!preset->load()){
+    if (!preset->load()) {
         qDebug() << "Preset was not loaded";
         return;
     }
 
     m_painter->setPaintOpPreset(preset, m_layer, m_image);
 
-QBENCHMARK{
+    QBENCHMARK{
 
-    qreal radius = 300;
-    qreal randomOffset = 300 * 0.4;
-    int rounds = 20;
-    int steps = 20;
-    qreal step = 1.0 / steps;
+        qreal radius = 300;
+        qreal randomOffset = 300 * 0.4;
+        int rounds = 20;
+        int steps = 20;
+        qreal step = 1.0 / steps;
 
-    QPointF center(m_image->width() * 0.5, m_image->height() * 0.5);
-    QPointF first(center.x()+radius,center.y());
+        QPointF center(m_image->width() * 0.5, m_image->height() * 0.5);
+        QPointF first(center.x() + radius, center.y());
 
-    srand48(0);
-    for (int k = 0; k < rounds; k++){
-        KisDistanceInformation currentDistance;
-        m_painter->paintLine(center, first, &currentDistance);
-        QPointF prev = first;
-        for (int i = 1; i < steps; i++) {
-            qreal cx = cos(i * step * 2 * M_PI);
-            qreal cy = sin(i * step * 2 * M_PI);
+        srand48(0);
+        for (int k = 0; k < rounds; k++)
+        {
+            KisDistanceInformation currentDistance;
+            m_painter->paintLine(center, first, &currentDistance);
+            QPointF prev = first;
+            for (int i = 1; i < steps; i++) {
+                qreal cx = cos(i * step * 2 * M_PI);
+                qreal cy = sin(i * step * 2 * M_PI);
 
-            cx *= (radius + drand48() * randomOffset);
-            cy *= (radius + drand48() * randomOffset);
+                cx *= (radius + drand48() * randomOffset);
+                cy *= (radius + drand48() * randomOffset);
 
-            cx += center.x();
-            cy += center.y();
+                cx += center.x();
+                cy += center.y();
 
-            m_painter->paintLine(prev, QPointF(cx,cy), &currentDistance);
-            prev = QPointF(cx,cy);
+                m_painter->paintLine(prev, QPointF(cx, cy), &currentDistance);
+                prev = QPointF(cx, cy);
+            }
+            m_painter->paintLine(prev, first, &currentDistance);
         }
-        m_painter->paintLine(prev, first, &currentDistance);
     }
-}
 
 #ifdef SAVE_OUTPUT
     m_layer->paintDevice()->convertToQImage(0).save(m_outputPath + presetFileName + "_circle" + OUTPUT_FORMAT);
@@ -433,16 +422,14 @@ QBENCHMARK{
 
 }
 
-
-
 void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
     bool loadedOk = preset->load();
-    if (!loadedOk){
+    if (!loadedOk) {
         qDebug() << "The preset was not loaded correctly. Done.";
         return;
-    }else{
+    } else {
         qDebug() << "preset : " << presetFileName;
     }
 
@@ -450,7 +437,8 @@ void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 
     QBENCHMARK{
         KisDistanceInformation currentDistance;
-        for (int i = 0; i < LINES; i++){
+        for (int i = 0; i < LINES; i++)
+        {
             KisPaintInformation pi1(m_startPoints[i], 0.0);
             KisPaintInformation pi2(m_endPoints[i], 1.0);
             m_painter->paintLine(pi1, pi2, &currentDistance);
@@ -466,7 +454,7 @@ void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
     bool loadedOk = preset->load();
-    if (!loadedOk){
+    if (!loadedOk) {
         qDebug() << "The preset was not loaded correctly. Done.";
         return;
     } else {
@@ -490,9 +478,9 @@ void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
 static const int COUNT = 1000000;
 void KisStrokeBenchmark::benchmarkRand48()
 {
-QBENCHMARK
-    {
-        for (int i = 0 ; i < COUNT; i++){
+    QBENCHMARK {
+        for (int i = 0; i < COUNT; i++)
+        {
             drand48();
         }
     }
@@ -502,13 +490,13 @@ void KisStrokeBenchmark::benchmarkRand()
 {
     float j;
     QBENCHMARK{
-        for (int i = 0 ; i < COUNT; i++){
+        for (int i = 0; i < COUNT; i++)
+        {
             j = rand() / (float)RAND_MAX;
         }
     }
     Q_UNUSED(j);
 }
-
 
 QTEST_KDEMAIN(KisStrokeBenchmark, GUI)
 #include "kis_stroke_benchmark.moc"

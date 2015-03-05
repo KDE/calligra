@@ -21,7 +21,6 @@
 #ifndef KOSHAPEDISTRIBUTECOMMAND_H
 #define KOSHAPEDISTRIBUTECOMMAND_H
 
-
 #include "flake_export.h"
 
 #include <kundo2command.h>
@@ -51,8 +50,8 @@ public:
      * @param boundingRect the rect the shapes will be distributed in
      * @param parent the parent command used for macro commands
      */
-    KoShapeDistributeCommand(const QList<KoShape*> &shapes, Distribute distribute,
-            const QRectF &boundingRect, KUndo2Command *parent = 0);
+    KoShapeDistributeCommand(const QList<KoShape *> &shapes, Distribute distribute,
+                             const QRectF &boundingRect, KUndo2Command *parent = 0);
     virtual ~KoShapeDistributeCommand();
     /// redo the command
     virtual void redo();
@@ -61,7 +60,7 @@ public:
 private:
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

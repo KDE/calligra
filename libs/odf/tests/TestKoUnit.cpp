@@ -22,10 +22,8 @@
 
 #include <KoUnit.h>
 
-
 Q_DECLARE_METATYPE(KoUnit::Type)
 Q_DECLARE_METATYPE(KoUnit::ListOptions)
-
 
 void TestKoUnit::testSimpleConstructor()
 {
@@ -35,7 +33,6 @@ void TestKoUnit::testSimpleConstructor()
     KoUnit otherUnit;
     QCOMPARE(unit, otherUnit);
 }
-
 
 void TestKoUnit::testConstructor_data()
 {
@@ -129,8 +126,8 @@ void TestKoUnit::testListForUi_data()
 
     const QVector<KoUnit::ListOptions> optionsList =
         QVector<KoUnit::ListOptions>() << KoUnit::HidePixel << KoUnit::ListAll;
-    static const char* const optionsName[2] = {"HidePixel", "ListDefault"};
-    static const char* const indexName[3] = {"-start", "-middle", "-end"};
+    static const char *const optionsName[2] = {"HidePixel", "ListDefault"};
+    static const char *const indexName[3] = {"-start", "-middle", "-end"};
 
     for (int o = 0; o < optionsList.count(); ++o) {
         const KoUnit::ListOptions options = optionsList.at(o);
@@ -138,8 +135,8 @@ void TestKoUnit::testListForUi_data()
         for (int i = 0; i < 3; ++i) {
             const int index =
                 (i == 0) ? 0 :
-                (i == 1) ? unitCount/2 :
-                /*i == 2*/ unitCount-1;
+                (i == 1) ? unitCount / 2 :
+                /*i == 2*/ unitCount - 1;
 
             const QString rowName = QLatin1String(optionsName[o]) + QLatin1String(indexName[i]);
 

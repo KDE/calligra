@@ -37,7 +37,6 @@ typedef KisSharedPtr<KisTile> KisTileSP;
 
 class KisMementoManager;
 
-
 /**
  * Provides abstraction to a tile.
  * + A tile contains a part of a PaintDevice,
@@ -50,10 +49,10 @@ class KRITAIMAGE_EXPORT KisTile : public KisShared
 {
 public:
     KisTile(qint32 col, qint32 row,
-            KisTileData *defaultTileData, KisMementoManager* mm);
-    KisTile(const KisTile& rhs, qint32 col, qint32 row, KisMementoManager* mm);
-    KisTile(const KisTile& rhs, KisMementoManager* mm);
-    KisTile(const KisTile& rhs);
+            KisTileData *defaultTileData, KisMementoManager *mm);
+    KisTile(const KisTile &rhs, qint32 col, qint32 row, KisMementoManager *mm);
+    KisTile(const KisTile &rhs, KisMementoManager *mm);
+    KisTile(const KisTile &rhs);
     ~KisTile();
 
     /**
@@ -76,46 +75,55 @@ public:
     void unlock() const;
 
     /* this allows us work directly on tile's data */
-    inline quint8 *data() const {
+    inline quint8 *data() const
+    {
         return m_tileData->data();
     }
-    inline void setData(const quint8 *data) {
+    inline void setData(const quint8 *data)
+    {
         m_tileData->setData(data);
     }
 
-    inline qint32 row() const {
+    inline qint32 row() const
+    {
         return m_row;
     }
-    inline qint32 col() const {
+    inline qint32 col() const
+    {
         return m_col;
     }
 
-    inline QRect extent() const {
+    inline QRect extent() const
+    {
         return m_extent;
 //QRect(m_col * KisTileData::WIDTH, m_row * KisTileData::HEIGHT,
 //                     KisTileData::WIDTH, KisTileData::HEIGHT);
     }
 
-    inline KisTileSP next() const {
+    inline KisTileSP next() const
+    {
         return m_nextTile;
     }
 
-    void setNext(KisTileSP next) {
+    void setNext(KisTileSP next)
+    {
         m_nextTile = next;
     }
 
-    inline qint32 pixelSize() const {
+    inline qint32 pixelSize() const
+    {
         /* don't lock here as pixelSize is constant */
         return m_tileData->pixelSize();
     }
 
-    inline KisTileData*  tileData() const {
+    inline KisTileData  *tileData() const
+    {
         return m_tileData;
     }
 
 private:
     void init(qint32 col, qint32 row,
-              KisTileData *defaultTileData, KisMementoManager* mm);
+              KisTileData *defaultTileData, KisMementoManager *mm);
 
     inline void blockSwapping() const;
     inline void unblockSwapping() const;
@@ -124,7 +132,7 @@ private:
 
 private:
     KisTileData *m_tileData;
-    mutable QStack<KisTileData*> m_oldTileData;
+    mutable QStack<KisTileData *> m_oldTileData;
     mutable volatile int m_lockCounter;
 
     qint32 m_col;
@@ -145,7 +153,6 @@ private:
 #else
     KisMementoManager *m_mementoManager;
 #endif
-
 
     /**
      * This is a special mutex for guarding copy-on-write

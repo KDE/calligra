@@ -33,7 +33,7 @@
  *
  * @see KoCanvasObserverBase
  */
-class FLAKE_EXPORT KoDockRegistry : public KoGenericRegistry<KoDockFactoryBase*>
+class FLAKE_EXPORT KoDockRegistry : public KoGenericRegistry<KoDockFactoryBase *>
 {
 public:
     ~KoDockRegistry();
@@ -46,12 +46,12 @@ public:
 
 private:
     KoDockRegistry();
-    KoDockRegistry(const KoDockRegistry&);
-    KoDockRegistry operator=(const KoDockRegistry&);
+    KoDockRegistry(const KoDockRegistry &);
+    KoDockRegistry operator=(const KoDockRegistry &);
     void init();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

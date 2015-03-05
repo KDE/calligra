@@ -72,7 +72,7 @@ public:
     QMimeData *mimeData();
 
 private:
-    KoDragPrivate * const d;
+    KoDragPrivate *const d;
 };
 
 #endif /* KODRAG_H */

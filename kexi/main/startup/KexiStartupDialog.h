@@ -77,7 +77,7 @@ public:
     KexiStartupDialog(
         int dialogType,
         int dialogOptions,
-        KexiDBConnectionSet& connSet,
+        KexiDBConnectionSet &connSet,
         QWidget *parent = 0);
 
     ~KexiStartupDialog();
@@ -89,7 +89,7 @@ public:
     /*! \return data of selected Kexi project.
       Returns NULL if no selection has been made or other tab was selected.
     */
-    KexiProjectData* selectedProjectData() const;
+    KexiProjectData *selectedProjectData() const;
 
     /*! \return name of selected Kexi project file
       (if result() == OpenExistingResult)
@@ -109,7 +109,7 @@ public:
       (if "Open Existing" tab was selected and this connection data was clicked).
       Returns NULL if no such selection has been made or other tab was selected.
     */
-    KexiDB::ConnectionData* selectedExistingConnection() const;
+    KexiDB::ConnectionData *selectedExistingConnection() const;
 
 public Q_SLOTS:
     virtual void done(int r);
@@ -119,14 +119,14 @@ protected Q_SLOTS:
     virtual void slotOk();
 
     //! slot activated when one of the top-level tabs is shown
-    void slotCurrentPageChanged(KPageWidgetItem* current,
-                                KPageWidgetItem* before);
+    void slotCurrentPageChanged(KPageWidgetItem *current,
+                                KPageWidgetItem *before);
 
     //! slot activated when one of the subpages within templates tab is shown
-    void slotCurrentTemplatesubpageChanged(KPageWidgetItem* current,
-                                           KPageWidgetItem* before);
+    void slotCurrentTemplatesubpageChanged(KPageWidgetItem *current,
+                                           KPageWidgetItem *before);
 
-    void templateSelected(const QString& fileName);
+    void templateSelected(const QString &fileName);
 
     //! helper
     void existingFileHighlighted();
@@ -147,7 +147,7 @@ private:
     void setupPageOpenExisting();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

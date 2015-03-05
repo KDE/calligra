@@ -28,7 +28,6 @@
 
 class KisTextBrushesPipe;
 
-
 class BRUSH_EXPORT KisTextBrush : public KisBrush
 {
 
@@ -39,49 +38,53 @@ public:
 
     void notifyCachedDabPainted();
 
-    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation *coloringInformation,
             double scaleX, double scaleY, double angle,
-            const KisPaintInformation& info,
+            const KisPaintInformation &info,
             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
-    KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace, double scale, double angle, const KisPaintInformation& info, double subPixelX, double subPixelY) const;
+    KisFixedPaintDeviceSP paintDevice(const KoColorSpace *colorSpace, double scale, double angle, const KisPaintInformation &info, double subPixelX, double subPixelY) const;
 
-    bool load() {
+    bool load()
+    {
         return false;
     }
 
-    virtual bool loadFromDevice(QIODevice *) {
+    virtual bool loadFromDevice(QIODevice *)
+    {
         return false;
     }
 
-    bool save()  {
+    bool save()
+    {
         return false;
     }
 
-    bool saveToDevice(QIODevice* ) const {
+    bool saveToDevice(QIODevice *) const
+    {
         return false;
     }
 
-    void setText(const QString& txt);
+    void setText(const QString &txt);
     QString text(void) const;
 
     QFont font();
-    void setFont(const QFont& font);
+    void setFont(const QFont &font);
 
     void setPipeMode(bool pipe);
     bool pipeMode() const;
 
     void updateBrush();
-    void toXML(QDomDocument& , QDomElement&) const;
+    void toXML(QDomDocument &, QDomElement &) const;
 
-    quint32 brushIndex(const KisPaintInformation& info) const;
-    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const;
-    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const;
+    quint32 brushIndex(const KisPaintInformation &info) const;
+    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation &info) const;
+    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation &info) const;
     void setAngle(qreal _angle);
     void setScale(qreal _scale);
     void setSpacing(double _spacing);
 
-    KisBrush* clone() const;
+    KisBrush *clone() const;
 
 private:
     QFont m_font;

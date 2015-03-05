@@ -34,9 +34,6 @@
 #endif
 #endif
 
-
-
-
 class KisChalkPaintOpSettings : public KisPaintOpSettings
 {
 

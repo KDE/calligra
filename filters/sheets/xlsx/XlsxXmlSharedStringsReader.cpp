@@ -36,26 +36,28 @@
 
 // -------------------------------------------------------------
 
-XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(QVector<QString>& _strings, MSOOXML::DrawingMLTheme* _themes,
-    QVector<QString>& _colorIndices)
-        : strings(&_strings), themes(_themes), colorIndices(_colorIndices)
+XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(QVector<QString> &_strings, MSOOXML::DrawingMLTheme *_themes,
+        QVector<QString> &_colorIndices)
+    : strings(&_strings), themes(_themes), colorIndices(_colorIndices)
 {
 }
 
 class XlsxXmlSharedStringsReader::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
 private:
 };
 
 XlsxXmlSharedStringsReader::XlsxXmlSharedStringsReader(KoOdfWriters *writers)
-        : XlsxXmlCommonReader(writers)
-        , m_context(0)
-        , d(new Private)
+    : XlsxXmlCommonReader(writers)
+    , m_context(0)
+    , d(new Private)
 {
     init();
 }
@@ -71,16 +73,17 @@ void XlsxXmlSharedStringsReader::init()
     m_index = 0;
 }
 
-KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<XlsxXmlSharedStringsReaderContext*>(context);
+    m_context = dynamic_cast<XlsxXmlSharedStringsReaderContext *>(context);
     Q_ASSERT(m_context);
     m_colorIndices = m_context->colorIndices;
     m_themes = m_context->themes;
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
-    if (result == KoFilter::OK)
+    if (result == KoFilter::OK) {
         return KoFilter::OK;
+    }
     return result;
 }
 

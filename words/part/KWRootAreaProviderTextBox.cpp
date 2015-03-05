@@ -50,9 +50,9 @@ KWRootAreaProviderTextBox::~KWRootAreaProviderTextBox()
 
 void KWRootAreaProviderTextBox::clearPages(int /*pageNumber*/)
 {
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(frameSet()->document()->documentLayout());
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout *>(frameSet()->document()->documentLayout());
     Q_ASSERT(lay);
-    foreach(KoTextLayoutRootArea *area, m_rootAreaCache) {
+    foreach (KoTextLayoutRootArea *area, m_rootAreaCache) {
         releaseAllAfter(area);
         lay->removeRootArea(area);
     }
@@ -60,11 +60,10 @@ void KWRootAreaProviderTextBox::clearPages(int /*pageNumber*/)
 
 void KWRootAreaProviderTextBox::setPageDirty(int /*pageNumber*/)
 {
-    foreach(KoTextLayoutRootArea *rootArea, m_rootAreaCache) {
+    foreach (KoTextLayoutRootArea *rootArea, m_rootAreaCache) {
         rootArea->setDirty(); // be sure the root-areas are relayouted
     }
 }
-
 
 KoTextLayoutRootArea *KWRootAreaProviderTextBox::provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &, int requestedPosition, bool *isNewArea)
 {
@@ -74,8 +73,7 @@ KoTextLayoutRootArea *KWRootAreaProviderTextBox::provide(KoTextDocumentLayout *d
         return 0;
     }
 
-    if (m_rootAreaCache.size() > requestedPosition)
-    {
+    if (m_rootAreaCache.size() > requestedPosition) {
         KoTextLayoutRootArea *rootArea = m_rootAreaCache[requestedPosition];
         Q_ASSERT(rootArea);
 
@@ -85,7 +83,7 @@ KoTextLayoutRootArea *KWRootAreaProviderTextBox::provide(KoTextDocumentLayout *d
     }
 
     if (!documentLayout->referencedLayout()) {
-        KoTextDocumentLayout *reflay = dynamic_cast<KoTextDocumentLayout*>(frameSet()->wordsDocument()->frameLayout()->mainFrameSet()->document()->documentLayout());
+        KoTextDocumentLayout *reflay = dynamic_cast<KoTextDocumentLayout *>(frameSet()->wordsDocument()->frameLayout()->mainFrameSet()->document()->documentLayout());
         documentLayout->setReferencedLayout(reflay);
     }
 
@@ -97,7 +95,7 @@ KoTextLayoutRootArea *KWRootAreaProviderTextBox::provide(KoTextDocumentLayout *d
         m_rootAreaCache.append(area);
         Q_ASSERT(m_rootAreaCache.size() > requestedPosition);
 
-        KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+        KoTextShapeData *data = qobject_cast<KoTextShapeData *>(shape->userData());
         if (data) {
             data->setRootArea(area);
             area->setAssociatedShape(shape);
@@ -109,7 +107,6 @@ KoTextLayoutRootArea *KWRootAreaProviderTextBox::provide(KoTextDocumentLayout *d
             KWPage *page = new KWPage(pageManager->page(shape));
             area->setPage(page);
         }
-
 
         area->setLayoutEnvironmentResctictions(true, true);
 
@@ -125,14 +122,14 @@ KoTextLayoutRootArea *KWRootAreaProviderTextBox::provide(KoTextDocumentLayout *d
 // afterThis==NULL means delete everything
 void KWRootAreaProviderTextBox::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
-    while (m_rootAreaCache.count() != 0 && m_rootAreaCache.back() != afterThis){
+    while (m_rootAreaCache.count() != 0 && m_rootAreaCache.back() != afterThis) {
         m_rootAreaCache.removeLast();
     }
 }
 
 void KWRootAreaProviderTextBox::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
 {
-    KWDocument *kwdoc = const_cast<KWDocument*>(frameSet()->wordsDocument());
+    KWDocument *kwdoc = const_cast<KWDocument *>(frameSet()->wordsDocument());
     KWPageManager *pageManager = kwdoc->pageManager();
     Q_ASSERT(pageManager);
 
@@ -144,14 +141,13 @@ void KWRootAreaProviderTextBox::doPostLayout(KoTextLayoutRootArea *rootArea, boo
     KWPage page = pageManager->page(shape);
     Q_ASSERT(page.isValid());
 
-    if (false){//FIXME m_pages.count() > pageManager->pageCount()) {
+    if (false) { //FIXME m_pages.count() > pageManager->pageCount()) {
         // we need to wait for the mainFrameSet to finish till we are able to continue
         KWRootAreaProvider *provider = (KWRootAreaProvider *)kwdoc->frameLayout()->mainFrameSet()->rootAreaProvider();
         provider->addDependentProvider(this, page.pageNumber());
     }
 
-
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+    KoTextShapeData *data = qobject_cast<KoTextShapeData *>(shape->userData());
     Q_ASSERT(data);
 
     kDebug(32001) << "pageNumber=" << page.pageNumber() << "frameSetType=" << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "isDirty=" << rootArea->isDirty();
@@ -159,8 +155,8 @@ void KWRootAreaProviderTextBox::doPostLayout(KoTextLayoutRootArea *rootArea, boo
     QRectF updateRect = shape->outlineRect();
 
     QSizeF newSize = shape->size()
-                    - QSizeF(data->leftPadding() + data->rightPadding(),
-                             data->topPadding() + data->bottomPadding());
+                     - QSizeF(data->leftPadding() + data->rightPadding(),
+                              data->topPadding() + data->bottomPadding());
 
     KoBorder *border = shape->border();
 
@@ -169,7 +165,7 @@ void KWRootAreaProviderTextBox::doPostLayout(KoTextLayoutRootArea *rootArea, boo
     }
 
     if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
-        ||data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
+            || data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
         newSize.setWidth(rootArea->right() - rootArea->left());
     }
 
@@ -183,7 +179,7 @@ void KWRootAreaProviderTextBox::doPostLayout(KoTextLayoutRootArea *rootArea, boo
         rootArea->associatedShape()->setSize(newSize);
 
         // transfer the new size to the copy-shapes
-        foreach(KWCopyShape *cs, frameSet()->copyShapes()) {
+        foreach (KWCopyShape *cs, frameSet()->copyShapes()) {
             cs->setSize(newSize);
         }
     }
@@ -196,7 +192,7 @@ QRectF KWRootAreaProviderTextBox::suggestRect(KoTextLayoutRootArea *rootArea)
 {
     KoShape *shape = rootArea->associatedShape();
     if (!shape) { // no shape => nothing to draw => no space needed
-        return QRectF(0., 0., 0.,0.);
+        return QRectF(0., 0., 0., 0.);
     }
 
     QRectF rect = KWRootAreaProviderBase::suggestRect(rootArea);

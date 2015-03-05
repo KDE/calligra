@@ -22,7 +22,7 @@
 class KexiTemplatesModel::Private
 {
 public:
-    Private(const KexiTemplateCategoryInfoList& templateCategories_);
+    Private(const KexiTemplateCategoryInfoList &templateCategories_);
     ~Private();
 
     KexiTemplateCategoryInfoList templateCategories;
@@ -30,12 +30,11 @@ public:
     QMap<QString, int> categoryNameIndex;
 };
 
-KexiTemplatesModel::Private::Private(const KexiTemplateCategoryInfoList& templateCategories_)
+KexiTemplatesModel::Private::Private(const KexiTemplateCategoryInfoList &templateCategories_)
     : templateCategories(templateCategories_)
 {
     int i = 0;
-    foreach(const KexiTemplateCategoryInfo& category, templateCategories)
-    {
+    foreach (const KexiTemplateCategoryInfo &category, templateCategories) {
         templates += category.templates();
         categoryNameIndex.insert(category.name, i);
         i++;
@@ -48,7 +47,7 @@ KexiTemplatesModel::Private::~Private()
 }
 
 KexiTemplatesModel::KexiTemplatesModel(
-    const KexiTemplateCategoryInfoList& templateCategories, QObject *parent)
+    const KexiTemplateCategoryInfoList &templateCategories, QObject *parent)
     : QAbstractListModel(parent), d(new Private(templateCategories))
 {
 
@@ -59,27 +58,28 @@ KexiTemplatesModel::~KexiTemplatesModel()
     delete d;
 }
 
-int KexiTemplatesModel::rowCount(const QModelIndex& parent) const
+int KexiTemplatesModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return d->templates.count();
 }
 
 QModelIndex KexiTemplatesModel::index(int row, int column,
-                                      const QModelIndex& parent) const
+                                      const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    if (row < 0 || row >= d->templates.count())
+    if (row < 0 || row >= d->templates.count()) {
         return QModelIndex();
-    return createIndex(row, column, (void*)&d->templates[row]);
+    }
+    return createIndex(row, column, (void *)&d->templates[row]);
 }
 
-QVariant KexiTemplatesModel::data(const QModelIndex& index, int role) const
+QVariant KexiTemplatesModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
     }
-    KexiTemplateInfo *info = static_cast<KexiTemplateInfo*>(index.internalPointer());
+    KexiTemplateInfo *info = static_cast<KexiTemplateInfo *>(index.internalPointer());
     switch (role) {
     case Qt::DisplayRole:
         return info->caption;
@@ -91,7 +91,7 @@ QVariant KexiTemplatesModel::data(const QModelIndex& index, int role) const
         int index = d->categoryNameIndex.value(info->category);
         if (index >= 0 && index < d->templateCategories.count()) {
             QVariantList list;
-            list << index << info->caption; 
+            list << index << info->caption;
             return list;
         }
         return QVariantList();
@@ -114,13 +114,14 @@ QVariant KexiTemplatesModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-Qt::ItemFlags KexiTemplatesModel::flags(const QModelIndex& index) const
+Qt::ItemFlags KexiTemplatesModel::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags f;
     if (index.isValid()) {
-        KexiTemplateInfo *info = static_cast<KexiTemplateInfo*>(index.internalPointer());
-        if (info->enabled)
+        KexiTemplateInfo *info = static_cast<KexiTemplateInfo *>(index.internalPointer());
+        if (info->enabled) {
             f |= (Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        }
     }
     return f;
 }
@@ -128,7 +129,7 @@ Qt::ItemFlags KexiTemplatesModel::flags(const QModelIndex& index) const
 // ----
 
 KexiTemplatesProxyModel::KexiTemplatesProxyModel(QObject *parent)
- : KCategorizedSortFilterProxyModel(parent)
+    : KCategorizedSortFilterProxyModel(parent)
 {
     setCategorizedModel(true);
 }

@@ -30,7 +30,7 @@
 K_PLUGIN_FACTORY(WebShapePluginFactory, registerPlugin<WebShapePlugin>();)
 K_EXPORT_PLUGIN(WebShapePluginFactory("WebShapePlugin"))
 
-WebShapePlugin::WebShapePlugin(QObject *parent, const QVariantList&)
+WebShapePlugin::WebShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KGlobal::locale()->insertCatalog("braindump");

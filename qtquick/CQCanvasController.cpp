@@ -38,7 +38,7 @@ public:
     KoCanvasBase *canvas;
 };
 
-CQCanvasController::CQCanvasController(KActionCollection* actionCollection)
+CQCanvasController::CQCanvasController(KActionCollection *actionCollection)
     : KoCanvasController(actionCollection), d(new Private)
 {
 }
@@ -58,14 +58,14 @@ void CQCanvasController::setZoomWithWheel(bool zoom)
     Q_UNUSED(zoom)
 }
 
-void CQCanvasController::updateDocumentSize(const QSize& sz, bool recalculateCenter)
+void CQCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCenter)
 {
     Q_UNUSED(recalculateCenter)
     setDocumentSize(sz);
     emit documentSizeChanged(sz);
 }
 
-void CQCanvasController::setScrollBarValue(const QPoint& value)
+void CQCanvasController::setScrollBarValue(const QPoint &value)
 {
     Q_UNUSED(value)
 }
@@ -75,7 +75,7 @@ QPoint CQCanvasController::scrollBarValue() const
     return QPoint();
 }
 
-void CQCanvasController::pan(const QPoint& distance)
+void CQCanvasController::pan(const QPoint &distance)
 {
     QPoint offset = documentOffset() + distance;
     setDocumentOffset(offset);
@@ -88,7 +88,7 @@ QPointF CQCanvasController::preferredCenter() const
     return QPointF();
 }
 
-void CQCanvasController::setPreferredCenter(const QPointF& viewPoint)
+void CQCanvasController::setPreferredCenter(const QPointF &viewPoint)
 {
     Q_UNUSED(viewPoint)
 }
@@ -97,33 +97,33 @@ void CQCanvasController::recenterPreferred()
 {
 }
 
-void CQCanvasController::zoomTo(const QRect& rect)
+void CQCanvasController::zoomTo(const QRect &rect)
 {
     Q_UNUSED(rect)
 }
 
-void CQCanvasController::zoomBy(const QPoint& center, qreal zoom)
+void CQCanvasController::zoomBy(const QPoint &center, qreal zoom)
 {
     Q_UNUSED(center)
     Q_UNUSED(zoom)
 }
 
-void CQCanvasController::zoomOut(const QPoint& center)
+void CQCanvasController::zoomOut(const QPoint &center)
 {
     Q_UNUSED(center)
 }
 
-void CQCanvasController::zoomIn(const QPoint& center)
+void CQCanvasController::zoomIn(const QPoint &center)
 {
     Q_UNUSED(center)
 }
 
-void CQCanvasController::ensureVisible(KoShape* shape)
+void CQCanvasController::ensureVisible(KoShape *shape)
 {
     Q_UNUSED(shape)
 }
 
-void CQCanvasController::ensureVisible(const QRectF& rect, bool smooth)
+void CQCanvasController::ensureVisible(const QRectF &rect, bool smooth)
 {
     Q_UNUSED(rect)
     Q_UNUSED(smooth)
@@ -149,12 +149,12 @@ int CQCanvasController::visibleHeight() const
     return 0;
 }
 
-KoCanvasBase* CQCanvasController::canvas() const
+KoCanvasBase *CQCanvasController::canvas() const
 {
     return d->canvas;
 }
 
-void CQCanvasController::setCanvas(KoCanvasBase* canvas)
+void CQCanvasController::setCanvas(KoCanvasBase *canvas)
 {
     d->canvas = canvas;
     canvas->setCanvasController(this);
@@ -168,7 +168,7 @@ void CQCanvasController::setDrawShadow(bool drawShadow)
 
 QSize CQCanvasController::viewportSize() const
 {
-    QGraphicsWidget *canvasWidget = dynamic_cast<QGraphicsWidget*>(d->canvas);
+    QGraphicsWidget *canvasWidget = dynamic_cast<QGraphicsWidget *>(d->canvas);
     return canvasWidget->size().toSize();
 }
 

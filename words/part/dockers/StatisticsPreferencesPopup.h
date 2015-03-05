@@ -26,9 +26,9 @@
 
 class QMenu;
 
-
-namespace Ui {
-    class StatisticsPreferencesPopup;
+namespace Ui
+{
+class StatisticsPreferencesPopup;
 }
 
 class StatisticsPreferencesPopup : public QMenu

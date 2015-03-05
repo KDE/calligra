@@ -43,11 +43,12 @@ class KisShapeLayerCanvas : public QObject, public KoCanvasBase
     Q_OBJECT
 public:
 
-    KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter * viewConverter);
+    KisShapeLayerCanvas(KisShapeLayer *parent, KoViewConverter *viewConverter);
     virtual ~KisShapeLayerCanvas();
 
     /// This canvas won't render onto a widget, but a projection
-    void setProjection(KisPaintDeviceSP projection) {
+    void setProjection(KisPaintDeviceSP projection)
+    {
         m_projection = projection;
     }
 
@@ -55,11 +56,11 @@ public:
     bool snapToGrid() const;
     void addCommand(KUndo2Command *command);
     KoShapeManager *shapeManager() const;
-    void updateCanvas(const QRectF& rc);
-    KoToolProxy * toolProxy() const;
+    void updateCanvas(const QRectF &rc);
+    KoToolProxy *toolProxy() const;
     KoViewConverter *viewConverter() const;
-    QWidget* canvasWidget();
-    const QWidget* canvasWidget() const;
+    QWidget *canvasWidget();
+    const QWidget *canvasWidget() const;
     KoUnit unit() const;
     virtual void updateInputMethodInfo() {}
     virtual void setCursor(const QCursor &) {}
@@ -70,8 +71,8 @@ Q_SIGNALS:
     void forwardRepaint();
 private:
 
-    KoViewConverter * m_viewConverter;
-    KoShapeManager * m_shapeManager;
+    KoViewConverter *m_viewConverter;
+    KoShapeManager *m_shapeManager;
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer;
 

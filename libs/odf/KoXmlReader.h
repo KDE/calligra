@@ -91,10 +91,10 @@ public:
     };
 
     KoXmlNode();
-    KoXmlNode(const KoXmlNode& node);
-    KoXmlNode& operator=(const KoXmlNode& node);
-    bool operator== (const KoXmlNode&) const;
-    bool operator!= (const KoXmlNode&) const;
+    KoXmlNode(const KoXmlNode &node);
+    KoXmlNode &operator=(const KoXmlNode &node);
+    bool operator== (const KoXmlNode &) const;
+    bool operator!= (const KoXmlNode &) const;
     virtual ~KoXmlNode();
 
     virtual KoXmlNode::NodeType nodeType() const;
@@ -134,9 +134,9 @@ public:
     QStringList attributeNames() const;
     QList< QPair<QString, QString> > attributeFullNames() const;
 
-    KoXmlNode namedItem(const QString& name) const;
-    KoXmlNode namedItemNS(const QString& nsURI, const QString& name) const;
-    KoXmlNode namedItemNS(const QString& nsURI, const QString& name, KoXmlNamedItemType type) const;
+    KoXmlNode namedItem(const QString &name) const;
+    KoXmlNode namedItemNS(const QString &nsURI, const QString &name) const;
+    KoXmlNode namedItemNS(const QString &nsURI, const QString &name, KoXmlNamedItemType type) const;
 
     /**
     * Loads all child nodes (if any) of this node. Normally you do not need
@@ -155,11 +155,11 @@ public:
      * @internal do not call directly
      * Use KoXml::asQDomDocument(), KoXml::asQDomElement() or KoXml::asQDomNode() instead
      */
-    void asQDomNode(QDomDocument& ownerDoc) const;
+    void asQDomNode(QDomDocument &ownerDoc) const;
 
 protected:
-    KoXmlNodeData* d;
-    explicit KoXmlNode(KoXmlNodeData*);
+    KoXmlNodeData *d;
+    explicit KoXmlNode(KoXmlNodeData *);
 };
 
 /**
@@ -174,26 +174,26 @@ class KOODF_EXPORT KoXmlElement: public KoXmlNode
 {
 public:
     KoXmlElement();
-    KoXmlElement(const KoXmlElement& element);
-    KoXmlElement& operator=(const KoXmlElement& element);
+    KoXmlElement(const KoXmlElement &element);
+    KoXmlElement &operator=(const KoXmlElement &element);
     virtual ~KoXmlElement();
-    bool operator== (const KoXmlElement&) const;
-    bool operator!= (const KoXmlElement&) const;
+    bool operator== (const KoXmlElement &) const;
+    bool operator!= (const KoXmlElement &) const;
 
     QString tagName() const;
     QString text() const;
 
-    QString attribute(const QString& name) const;
-    QString attribute(const QString& name, const QString& defaultValue) const;
-    QString attributeNS(const QString& namespaceURI, const QString& localName,
-                        const QString& defaultValue = QString()) const;
-    bool hasAttribute(const QString& name) const;
-    bool hasAttributeNS(const QString& namespaceURI, const QString& localName) const;
+    QString attribute(const QString &name) const;
+    QString attribute(const QString &name, const QString &defaultValue) const;
+    QString attributeNS(const QString &namespaceURI, const QString &localName,
+                        const QString &defaultValue = QString()) const;
+    bool hasAttribute(const QString &name) const;
+    bool hasAttributeNS(const QString &namespaceURI, const QString &localName) const;
 
 private:
     friend class KoXmlNode;
     friend class KoXmlDocument;
-    explicit KoXmlElement(KoXmlNodeData*);
+    explicit KoXmlElement(KoXmlNodeData *);
 };
 
 /**
@@ -204,19 +204,19 @@ class KOODF_EXPORT KoXmlText: public KoXmlNode
 {
 public:
     KoXmlText();
-    KoXmlText(const KoXmlText& text);
-    KoXmlText& operator=(const KoXmlText& text);
+    KoXmlText(const KoXmlText &text);
+    KoXmlText &operator=(const KoXmlText &text);
     virtual ~KoXmlText();
 
     QString data() const;
-    void setData(const QString& data);
+    void setData(const QString &data);
     virtual bool isText() const;
 
 private:
     friend class KoXmlNode;
     friend class KoXmlCDATASection;
     friend class KoXmlDocument;
-    explicit KoXmlText(KoXmlNodeData*);
+    explicit KoXmlText(KoXmlNodeData *);
 };
 
 /**
@@ -227,8 +227,8 @@ class KOODF_EXPORT KoXmlCDATASection: public KoXmlText
 {
 public:
     KoXmlCDATASection();
-    KoXmlCDATASection(const KoXmlCDATASection& cdata);
-    KoXmlCDATASection& operator=(const KoXmlCDATASection& cdata);
+    KoXmlCDATASection(const KoXmlCDATASection &cdata);
+    KoXmlCDATASection &operator=(const KoXmlCDATASection &cdata);
     virtual ~KoXmlCDATASection();
 
     virtual bool isCDATASection() const;
@@ -236,7 +236,7 @@ public:
 private:
     friend class KoXmlNode;
     friend class KoXmlDocument;
-    explicit KoXmlCDATASection(KoXmlNodeData*);
+    explicit KoXmlCDATASection(KoXmlNodeData *);
 };
 
 /**
@@ -251,8 +251,8 @@ class KOODF_EXPORT KoXmlDocumentType: public KoXmlNode
 {
 public:
     KoXmlDocumentType();
-    KoXmlDocumentType(const KoXmlDocumentType&);
-    KoXmlDocumentType& operator=(const KoXmlDocumentType&);
+    KoXmlDocumentType(const KoXmlDocumentType &);
+    KoXmlDocumentType &operator=(const KoXmlDocumentType &);
     virtual ~KoXmlDocumentType();
 
     QString name() const;
@@ -260,9 +260,8 @@ public:
 private:
     friend class KoXmlNode;
     friend class KoXmlDocument;
-    explicit KoXmlDocumentType(KoXmlNodeData*);
+    explicit KoXmlDocumentType(KoXmlNodeData *);
 };
-
 
 /**
 * KoXmlDocument represents an XML document, structured in a DOM tree.
@@ -280,10 +279,10 @@ class KOODF_EXPORT KoXmlDocument: public KoXmlNode
 {
 public:
     explicit KoXmlDocument(bool stripSpaces = false);
-    KoXmlDocument(const KoXmlDocument& node);
-    KoXmlDocument& operator=(const KoXmlDocument& node);
-    bool operator==(const KoXmlDocument&) const;
-    bool operator!=(const KoXmlDocument&) const;
+    KoXmlDocument(const KoXmlDocument &node);
+    KoXmlDocument &operator=(const KoXmlDocument &node);
+    bool operator==(const KoXmlDocument &) const;
+    bool operator!=(const KoXmlDocument &) const;
     virtual ~KoXmlDocument();
 
     KoXmlElement documentElement() const;
@@ -293,31 +292,31 @@ public:
     virtual QString nodeName() const;
     virtual void clear();
 
-    bool setContent(QIODevice* device, bool namespaceProcessing,
-                    QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
-    bool setContent(QIODevice* device,
-                    QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
-    bool setContent(QXmlStreamReader *reader,
-                    QString* errorMsg = 0, int* errorLine = 0, int* errorColumn = 0);
-    bool setContent(const QByteArray& text, bool namespaceProcessing,
+    bool setContent(QIODevice *device, bool namespaceProcessing,
                     QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-    bool setContent(const QString& text, bool namespaceProcessing,
+    bool setContent(QIODevice *device,
+                    QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    bool setContent(QXmlStreamReader *reader,
+                    QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    bool setContent(const QByteArray &text, bool namespaceProcessing,
+                    QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    bool setContent(const QString &text, bool namespaceProcessing,
                     QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
 
     // no namespace processing
-    bool setContent(const QString& text,
+    bool setContent(const QString &text,
                     QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
-     /**
-     * Change the way an XMLDocument will be read: <a> <b/> <a/>
-     * if stripSpaces = true then a will only have one child
-     * if stripSpaces = false then a will have 3 children.
-     */
+    /**
+    * Change the way an XMLDocument will be read: <a> <b/> <a/>
+    * if stripSpaces = true then a will only have one child
+    * if stripSpaces = false then a will have 3 children.
+    */
     void setWhitespaceStripping(bool stripSpaces);
 
 private:
     friend class KoXmlNode;
     KoXmlDocumentType dt;
-    explicit KoXmlDocument(KoXmlNodeData*);
+    explicit KoXmlDocument(KoXmlNodeData *);
 };
 
 #endif // KOXML_USE_QDOM
@@ -360,8 +359,8 @@ namespace KoXml
  *
  * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
  */
-KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
-                                        const QString& nsURI, const QString& localName);
+KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode &node,
+                                      const QString &nsURI, const QString &localName);
 
 /**
  * A namespace-aware version of QDomNode::namedItem().
@@ -374,31 +373,31 @@ KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
  * give fast access to certain sections of the document using
  * the office-text-content-prelude condition as @a KoXmlNamedItemType .
  */
-KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
-                                      const QString& nsURI, const QString& localName,
+KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode &node,
+                                      const QString &nsURI, const QString &localName,
                                       KoXmlNamedItemType type);
 
 /**
  * Explicitly load child nodes of specified node, up to given depth.
  * This function has no effect if QDom is used.
  */
-KOODF_EXPORT void load(KoXmlNode& node, int depth = 1);
+KOODF_EXPORT void load(KoXmlNode &node, int depth = 1);
 
 /**
  * Unload child nodes of specified node.
  * This function has no effect if QDom is used.
  */
-KOODF_EXPORT void unload(KoXmlNode& node);
+KOODF_EXPORT void unload(KoXmlNode &node);
 
 /**
  * Get the number of child nodes of specified node.
  */
-KOODF_EXPORT int childNodesCount(const KoXmlNode& node);
+KOODF_EXPORT int childNodesCount(const KoXmlNode &node);
 
 /**
  * Return the name of all attributes of specified node.
  */
-KOODF_EXPORT QStringList attributeNames(const KoXmlNode& node);
+KOODF_EXPORT QStringList attributeNames(const KoXmlNode &node);
 
 /**
  * Convert KoXmlNode classes to the corresponding QDom classes, which has
@@ -408,26 +407,26 @@ KOODF_EXPORT QStringList attributeNames(const KoXmlNode& node);
  * NOTE:
  * - If ownerDoc is not empty, this may fail, @see QDomDocument
  * - @p node must not be a KoXmlDocument, use asQDomDocument()
- * 
+ *
  * @see asQDomDocument, asQDomElement
  */
-KOODF_EXPORT void asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node);
+KOODF_EXPORT void asQDomNode(QDomDocument &ownerDoc, const KoXmlNode &node);
 
 /**
  * Convert KoXmlNode classes to the corresponding QDom classes, which has
  * @p ownerDoc as the owner document (QDomDocument instance).
  * The converted @p element (and its children) is added to ownerDoc.
- * 
+ *
  * NOTE: If ownerDoc is not empty, this may fail, @see QDomDocument
  *
  */
-KOODF_EXPORT void asQDomElement(QDomDocument& ownerDoc, const KoXmlElement& element);
+KOODF_EXPORT void asQDomElement(QDomDocument &ownerDoc, const KoXmlElement &element);
 
 /**
  * Converts the whole @p document into a QDomDocument
  * If KOXML_USE_QDOM is defined, just returns @p document
  */
-KOODF_EXPORT QDomDocument asQDomDocument(const KoXmlDocument& document);
+KOODF_EXPORT QDomDocument asQDomDocument(const KoXmlDocument &document);
 
 /*
  * Load an XML document from specified device to a document. You can of
@@ -438,9 +437,9 @@ KOODF_EXPORT QDomDocument asQDomDocument(const KoXmlDocument& document);
  *
  * Note: it is assumed that the XML uses UTF-8 encoding.
  */
-KOODF_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
-                                bool namespaceProcessing, QString* errorMsg = 0,
-                                int* errorLine = 0, int* errorColumn = 0);
+KOODF_EXPORT bool setDocument(KoXmlDocument &doc, QIODevice *device,
+                              bool namespaceProcessing, QString *errorMsg = 0,
+                              int *errorLine = 0, int *errorColumn = 0);
 }
 
 /**
@@ -458,8 +457,7 @@ KOODF_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
  * }
  */
 #define forEachElement( elem, parent ) \
-    for ( KoXmlNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
-        if ( ( elem = _node.toElement() ).isNull() ) {} else
-
+        for ( KoXmlNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
+            if ( ( elem = _node.toElement() ).isNull() ) {} else
 
 #endif // KO_XMLREADER_H

@@ -26,9 +26,7 @@
 #include "kra/kis_kra_savexml_visitor.h"
 #include "kis_paint_layer.h"
 
-
-struct KisExrLayersSorter::Private
-{
+struct KisExrLayersSorter::Private {
     Private(const QDomDocument &_extraData, KisImageWSP _image)
         : extraData(_extraData), image(_image) {}
 
@@ -45,13 +43,16 @@ struct KisExrLayersSorter::Private
     void sortLayers(KisNodeSP root);
 };
 
-QString getNodePath(KisNodeSP node) {
-    KIS_ASSERT_RECOVER(node) { return "UNDEFINED"; }
+QString getNodePath(KisNodeSP node)
+{
+    KIS_ASSERT_RECOVER(node) {
+        return "UNDEFINED";
+    }
 
     QString path;
 
     KisNodeSP parentNode = node->parent();
-    while(parentNode) {
+    while (parentNode) {
         if (!path.isEmpty()) {
             path.prepend(".");
         }
@@ -69,7 +70,6 @@ void KisExrLayersSorter::Private::createOrderingMap()
     int index = 0;
     QDomElement el = extraData.documentElement().firstChildElement();
 
-
     while (!el.isNull()) {
         QString path = el.attribute(EXR_NAME);
         pathToElementMap.insert(path, el);
@@ -83,8 +83,9 @@ void KisExrLayersSorter::Private::createOrderingMap()
 template <typename T>
 T fetchMapValueLazy(const QMap<QString, T> &map, QString path)
 {
-    if (map.contains(path)) return map[path];
-
+    if (map.contains(path)) {
+        return map[path];
+    }
 
     typename QMap<QString, T>::const_iterator it = map.constBegin();
     typename QMap<QString, T>::const_iterator end = map.constEnd();
@@ -105,7 +106,7 @@ void KisExrLayersSorter::Private::processLayers(KisNodeSP root)
 
         nodeToOrderingMap.insert(root, fetchMapValueLazy(pathToOrderingMap, path));
 
-        if (KisPaintLayer *paintLayer = dynamic_cast<KisPaintLayer*>(root.data())) {
+        if (KisPaintLayer *paintLayer = dynamic_cast<KisPaintLayer *>(root.data())) {
             KisSaveXmlVisitor::loadPaintLayerAttributes(pathToElementMap[path], paintLayer);
         }
     }
@@ -117,19 +118,18 @@ void KisExrLayersSorter::Private::processLayers(KisNodeSP root)
     }
 }
 
-struct CompareNodesFunctor
-{
+struct CompareNodesFunctor {
     CompareNodesFunctor(const QMap<KisNodeSP, int> &map)
         : m_nodeToOrderingMap(map) {}
 
-    bool operator() (KisNodeSP lhs, KisNodeSP rhs) {
+    bool operator()(KisNodeSP lhs, KisNodeSP rhs)
+    {
         return m_nodeToOrderingMap[lhs] < m_nodeToOrderingMap[rhs];
     }
 
 private:
     const QMap<KisNodeSP, int> &m_nodeToOrderingMap;
 };
-
 
 void KisExrLayersSorter::Private::sortLayers(KisNodeSP root)
 {

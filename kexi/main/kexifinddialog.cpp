@@ -40,26 +40,31 @@
 class KexiFindDialog::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
         qDeleteAll(shortcuts);
         shortcuts.clear();
     }
     //! Connects action \a action with appropriate signal \a member
     //! and optionally adds shortcut that will receive shortcut for \a action
     //! at global scope of the dialog \a parent.
-    void setActionAndShortcut(KAction *action, QWidget* parent, const char* member) {
+    void setActionAndShortcut(KAction *action, QWidget *parent, const char *member)
+    {
 #ifdef __GNUC__
 #warning not tested: setActionAndShortcut::setActionAndShortcut()
 #else
 #pragma WARNING( not tested: setActionAndShortcut::setActionAndShortcut() )
 #endif
-        if (!action)
+        if (!action) {
             return;
+        }
         QObject::connect(parent, member, action, SLOT(trigger()));
-        if (action->shortcut().isEmpty())
+        if (action->shortcut().isEmpty()) {
             return;
+        }
         // we want to handle dialog-wide shortcut as well
         if (!action->shortcut().primary().isEmpty()) {
             QShortcut *shortcut = new QShortcut(action->shortcut().primary(), parent, member);
@@ -78,16 +83,16 @@ public:
     QPointer<KAction> findprevAction;
     QPointer<KAction> replaceAction;
     QPointer<KAction> replaceallAction;
-    QList<QShortcut*> shortcuts;
+    QList<QShortcut *> shortcuts;
     bool replaceMode;
 };
 
 //------------------------------------------
 
-KexiFindDialog::KexiFindDialog(QWidget* parent)
-        : QDialog(parent,
-                  Qt::Dialog | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::Tool)
-        , d(new Private())
+KexiFindDialog::KexiFindDialog(QWidget *parent)
+    : QDialog(parent,
+              Qt::Dialog | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::Tool)
+    , d(new Private())
 {
     setObjectName("KexiFindDialog");
     setupUi(this);
@@ -152,10 +157,11 @@ QStringList KexiFindDialog::lookInColumnCaptions() const
 QString KexiFindDialog::currentLookInColumnName() const
 {
     int index = m_lookIn->currentIndex();
-    if (index <= 0 || index >= (int)d->lookInColumnNames.count())
+    if (index <= 0 || index >= (int)d->lookInColumnNames.count()) {
         return QString();
-    else if (index == 1)
+    } else if (index == 1) {
         return "(field)";
+    }
     return d->lookInColumnNames[index - 1/*"(All fields)"*/ - 1/*"(Current field)"*/];
 }
 
@@ -169,8 +175,8 @@ QVariant KexiFindDialog::valueToReplaceWith() const
     return m_textToReplace->currentText();
 }
 
-void KexiFindDialog::setLookInColumnList(const QStringList& columnNames,
-        const QStringList& columnCaptions)
+void KexiFindDialog::setLookInColumnList(const QStringList &columnNames,
+        const QStringList &columnCaptions)
 {
     d->lookInColumnNames = columnNames;
     d->lookInColumnCaptions = columnCaptions;
@@ -180,19 +186,19 @@ void KexiFindDialog::setLookInColumnList(const QStringList& columnNames,
     m_lookIn->addItems(d->lookInColumnCaptions);
 }
 
-void KexiFindDialog::setCurrentLookInColumnName(const QString& columnName)
+void KexiFindDialog::setCurrentLookInColumnName(const QString &columnName)
 {
     int index;
-    if (columnName.isEmpty())
+    if (columnName.isEmpty()) {
         index = 0;
-    else if (columnName == "(field)")
+    } else if (columnName == "(field)") {
         index = 1;
-    else {
+    } else {
         index = d->lookInColumnNames.indexOf(columnName);
         if (index == -1) {
             kWarning() << QString(
-                "KexiFindDialog::setCurrentLookInColumn(%1) column name not found on the list")
-            .arg(columnName);
+                           "KexiFindDialog::setCurrentLookInColumn(%1) column name not found on the list")
+                       .arg(columnName);
             return;
         }
         index = index + 1/*"(All fields)"*/ + 1/*"(Current field)"*/;
@@ -202,8 +208,9 @@ void KexiFindDialog::setCurrentLookInColumnName(const QString& columnName)
 
 void KexiFindDialog::setReplaceMode(bool set)
 {
-    if (d->replaceMode == set)
+    if (d->replaceMode == set) {
         return;
+    }
     d->replaceMode = set;
     if (d->replaceMode) {
         m_promptOnReplace->show();
@@ -223,19 +230,21 @@ void KexiFindDialog::setReplaceMode(bool set)
     updateGeometry();
 }
 
-void KexiFindDialog::setObjectNameForCaption(const QString& name)
+void KexiFindDialog::setObjectNameForCaption(const QString &name)
 {
     d->objectName = name;
     if (d->replaceMode) {
-        if (name.isEmpty())
+        if (name.isEmpty()) {
             setWindowTitle(i18nc("@title:window", "Replace"));
-        else
+        } else {
             setWindowTitle(i18nc("@title:window", "Replace in <resource>%1</resource>", name));
+        }
     } else {
-        if (name.isEmpty())
+        if (name.isEmpty()) {
             setWindowTitle(i18nc("@title:window", "Find"));
-        else
+        } else {
             setWindowTitle(i18nc("@title:window", "Find in <resource>%1</resource>", name));
+        }
     }
 }
 
@@ -244,21 +253,23 @@ void KexiFindDialog::setButtonsEnabled(bool enable)
     m_btnFind->setEnabled(enable);
     m_btnReplace->setEnabled(enable);
     m_btnReplaceAll->setEnabled(enable);
-    if (!enable)
+    if (!enable) {
         setObjectNameForCaption(QString());
+    }
 }
 
-void KexiFindDialog::setMessage(const QString& message)
+void KexiFindDialog::setMessage(const QString &message)
 {
     m_messageLabel->setText(message);
 }
 
 void KexiFindDialog::updateMessage(bool found)
 {
-    if (found)
+    if (found) {
         setMessage(QString());
-    else
+    } else {
         setMessage(i18n("The search item was not found"));
+    }
 }
 
 void KexiFindDialog::addToFindHistory()
@@ -270,7 +281,6 @@ void KexiFindDialog::addToReplaceHistory()
 {
     m_textToReplace->addToHistory(m_textToReplace->currentText());
 }
-
 
 void KexiFindDialog::slotCloseClicked()
 {
@@ -286,12 +296,13 @@ void KexiFindDialog::show()
 KexiSearchAndReplaceViewInterface::Options KexiFindDialog::options() const
 {
     KexiSearchAndReplaceViewInterface::Options options;
-    if (m_lookIn->currentIndex() <= 0) //"(All fields)"
+    if (m_lookIn->currentIndex() <= 0) { //"(All fields)"
         options.columnNumber = KexiSearchAndReplaceViewInterface::Options::AllColumns;
-    else if (m_lookIn->currentIndex() == 1) //"(Current field)"
+    } else if (m_lookIn->currentIndex() == 1) { //"(Current field)"
         options.columnNumber = KexiSearchAndReplaceViewInterface::Options::CurrentColumn;
-    else
+    } else {
         options.columnNumber = m_lookIn->currentIndex()  - 1/*"(All fields)"*/ - 1/*"(Current field)"*/;
+    }
     options.textMatching
         = (KexiSearchAndReplaceViewInterface::Options::TextMatching)m_match->currentIndex();
     options.searchDirection

@@ -48,7 +48,7 @@
 #include "LayoutFactoryRegistry.h"
 #include "Xml.h"
 
-SectionsIO::SectionsIO(RootSection* rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this)), m_nextNumber(0)
+SectionsIO::SectionsIO(RootSection *rootSection) : m_rootSection(rootSection), m_timer(new QTimer(this)), m_nextNumber(0)
 {
     m_timer->start(60 * 1000); // Every minute
     connect(m_timer, SIGNAL(timeout()), SLOT(save()));
@@ -63,13 +63,13 @@ SectionsIO::~SectionsIO()
 {
 }
 
-void SectionsIO::push(Section* _section, PushMode _pushMode)
+void SectionsIO::push(Section *_section, PushMode _pushMode)
 {
-    if(!m_sectionsToSave.contains(_section)) {
+    if (!m_sectionsToSave.contains(_section)) {
         m_sectionsToSave.push_back(_section);
     }
-    if(_pushMode == RecursivePush) {
-        foreach(Section * sec, _section->sections()) {
+    if (_pushMode == RecursivePush) {
+        foreach (Section *sec, _section->sections()) {
             push(sec, RecursivePush);
         }
     }
@@ -79,17 +79,18 @@ struct SectionsIO::SaveContext {
     enum Version {
         VERSION_1
     };
-    Section* section;
+    Section *section;
     QString filename;
-    bool saveSection(SectionsIO* sectionsIO);
-    bool loadSection(SectionsIO* sectionsIO, Version version);
+    bool saveSection(SectionsIO *sectionsIO);
+    bool loadSection(SectionsIO *sectionsIO, Version version);
 };
 
-bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
+bool SectionsIO::SaveContext::saveSection(SectionsIO *sectionsIO)
 {
     struct Finally {
         Finally(KoStore *s) : store(s) { }
-        ~Finally() {
+        ~Finally()
+        {
             delete store;
         }
         KoStore *store;
@@ -100,25 +101,25 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
     QString fullFileNameTmpOld = fullFileName + ".tmp_old";
     KIO::NetAccess::del(fullFileNameTmpNew, 0);
 
-    const char* mimeType = KoOdf::mimeType(KoOdf::Text);
+    const char *mimeType = KoOdf::mimeType(KoOdf::Text);
 
     QDir().mkdir(fullFileNameTmpNew);
-    KoStore* store = KoStore::createStore(fullFileNameTmpNew, KoStore::Write, mimeType, KoStore::Directory);
+    KoStore *store = KoStore::createStore(fullFileNameTmpNew, KoStore::Write, mimeType, KoStore::Directory);
     Finally finaly(store);
 
     KoOdfWriteStore odfStore(store);
     KoEmbeddedDocumentSaver embeddedSaver;
 
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
-    KoXmlWriter* contentWriter = odfStore.contentWriter();
-    KoXmlWriter* bodyWriter = odfStore.bodyWriter();
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
+    KoXmlWriter *bodyWriter = odfStore.bodyWriter();
 
-    if(!manifestWriter || !contentWriter || !bodyWriter) {
+    if (!manifestWriter || !contentWriter || !bodyWriter) {
         return false;
     }
 
     KoGenStyles mainStyles;
-    KoShapeSavingContext * context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
+    KoShapeSavingContext *context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
     context->addOption(KoShapeSavingContext::DrawId);
 
     bodyWriter->startElement("office:body");
@@ -141,25 +142,24 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
     //add manifest line for content.xml
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 
-
-    if(!mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
+    if (!mainStyles.saveOdfStylesDotXml(store, manifestWriter)) {
         return false;
     }
 
-    if(!context->saveDataCenter(store, manifestWriter)) {
+    if (!context->saveDataCenter(store, manifestWriter)) {
         kDebug() << "save data centers failed";
         return false;
     }
 
     // Save embedded objects
     KoDocumentBase::SavingContext documentContext(odfStore, embeddedSaver);
-    if(!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
+    if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug() << "save embedded documents failed";
         return false;
     }
 
     // Write out manifest file
-    if(!odfStore.closeManifestWriter()) {
+    if (!odfStore.closeManifestWriter()) {
         return false;
     }
 
@@ -176,18 +176,18 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
     return true;
 }
 
-bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::SaveContext::Version version)
+bool SectionsIO::SaveContext::loadSection(SectionsIO *sectionsIO, SectionsIO::SaveContext::Version version)
 {
     Q_UNUSED(version);
     // In case saving problem occurred, try to recover a directory either new or old
     QString fullFileName = sectionsIO->m_directory + filename;
     QString fullFileNameTmpNew = fullFileName + ".tmp_new/";
     QString fullFileNameTmpOld = fullFileName + ".tmp_old";
-    if(!QFileInfo(fullFileName).exists()) {
-        if(QFileInfo(fullFileNameTmpNew).exists()) {
+    if (!QFileInfo(fullFileName).exists()) {
+        if (QFileInfo(fullFileNameTmpNew).exists()) {
             KIO::CopyJob *mv = KIO::move(fullFileNameTmpNew, fullFileName);
             KIO::NetAccess::synchronousRun(mv, 0);
-        } else if(QFileInfo(fullFileNameTmpOld).exists()) {
+        } else if (QFileInfo(fullFileNameTmpOld).exists()) {
             KIO::CopyJob *mv = KIO::move(fullFileNameTmpOld, fullFileName);
             KIO::NetAccess::synchronousRun(mv, 0);
         } else {
@@ -196,12 +196,12 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
     }
     kDebug() << "Loading from " << fullFileName;
 
-    const char* mimeType = KoOdf::mimeType(KoOdf::Text);
-    KoStore* store = KoStore::createStore(fullFileName + '/', KoStore::Read, mimeType, KoStore::Directory);
+    const char *mimeType = KoOdf::mimeType(KoOdf::Text);
+    KoStore *store = KoStore::createStore(fullFileName + '/', KoStore::Read, mimeType, KoStore::Directory);
     KoOdfReadStore odfStore(store);
 
     QString errorMessage;
-    if(! odfStore.loadAndParse(errorMessage)) {
+    if (! odfStore.loadAndParse(errorMessage)) {
         kError() << "loading and parsing failed:" << errorMessage << endl;
         return false;
     }
@@ -215,16 +215,16 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
     KoShapeLoadingContext context(loadingContext, section->sectionContainer()->resourceManager());
 
     KoXmlElement element;
-    QList<KoShape*> shapes;
-    forEachElement(element, body) {
+    QList<KoShape *> shapes;
+    forEachElement (element, body) {
         kDebug() << "loading shape" << element.nodeName();
 
-        if(element.nodeName() == "braindump:section") {
+        if (element.nodeName() == "braindump:section") {
             section->sectionContainer()->loadOdf(element, context, shapes);
-        } else if(element.nodeName() == "braindump:layout") {
+        } else if (element.nodeName() == "braindump:layout") {
             QString type = element.attribute("type");
-            Layout* layout = LayoutFactoryRegistry::instance()->createLayout(type);
-            if(layout) {
+            Layout *layout = LayoutFactoryRegistry::instance()->createLayout(type);
+            if (layout) {
                 section->setLayout(layout);
             }
         }
@@ -233,11 +233,11 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
     return true;
 }
 
-void SectionsIO::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGroup* root, QList<SaveContext*>& contextToRemove)
+void SectionsIO::saveTheStructure(QDomDocument &doc, QDomElement &elt, SectionGroup *root, QList<SaveContext *> &contextToRemove)
 {
-    foreach(Section * section, root->sections()) {
-        SaveContext* context = m_contextes[section];
-        if(context) {
+    foreach (Section *section, root->sections()) {
+        SaveContext *context = m_contextes[section];
+        if (context) {
             contextToRemove.removeAll(context);
         } else {
             context = new SaveContext;
@@ -257,11 +257,11 @@ void SectionsIO::saveTheStructure(QDomDocument& doc, QDomElement& elt, SectionGr
 void SectionsIO::save()
 {
     kDebug() << "Start saving";
-    if(m_sectionsToSave.isEmpty()) {
+    if (m_sectionsToSave.isEmpty()) {
         kDebug() << "No section to save";
         return;
     }
-    QList<SaveContext*> contextToRemove = m_contextes.values();
+    QList<SaveContext *> contextToRemove = m_contextes.values();
     // First: save the structure
     QDomDocument doc;
     QDomElement root = doc.createElement("RootElement");
@@ -273,9 +273,9 @@ void SectionsIO::save()
     file.close();
 
     // Second: save each section
-    foreach(SaveContext * saveContext, m_contextes) {
-        if(m_sectionsToSave.contains(saveContext->section)) {
-            if(saveContext->saveSection(this)) {
+    foreach (SaveContext *saveContext, m_contextes) {
+        if (m_sectionsToSave.contains(saveContext->section)) {
+            if (saveContext->saveSection(this)) {
                 kDebug() << "Successfully loaded: " << saveContext->section->name();
             } else {
                 kDebug() << "Saving failed"; // TODO: Report it
@@ -285,27 +285,27 @@ void SectionsIO::save()
     m_sectionsToSave.clear();
 
     // Last remove unused sections
-    foreach(SaveContext * saveContext, contextToRemove) {
+    foreach (SaveContext *saveContext, contextToRemove) {
         KIO::NetAccess::del(KUrl(m_directory + saveContext->filename), 0);
         m_contextes.remove(saveContext->section);
         delete saveContext;
     }
 }
 
-void SectionsIO::loadTheStructure(QDomElement& elt, SectionGroup* parent, RootSection* _rootSection)
+void SectionsIO::loadTheStructure(QDomElement &elt, SectionGroup *parent, RootSection *_rootSection)
 {
     QDomNode n = elt.firstChild();
-    while(!n.isNull()) {
+    while (!n.isNull()) {
         QDomElement e = n.toElement(); // try to convert the node to an element.
-        if(!e.isNull() && e.nodeName() == "Section") {
-            Section* section = new Section(_rootSection);
+        if (!e.isNull() && e.nodeName() == "Section") {
+            Section *section = new Section(_rootSection);
             QString name = e.attribute("name", "");
-            if(name.isEmpty()) {
+            if (name.isEmpty()) {
                 name = SectionGroup::nextName();
             }
             section->setName(name);
             parent->insertSection(section);
-            SaveContext* context = new SaveContext;
+            SaveContext *context = new SaveContext;
             context->filename = e.attribute("filename", "");
             context->section = section;
             m_contextes[section] = context;
@@ -319,22 +319,25 @@ void SectionsIO::load()
 {
     QDomDocument doc;
     QFile file(structureFileName());
-    if(!file.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly)) {
         return;
-    if(!doc.setContent(&file)) {
+    }
+    if (!doc.setContent(&file)) {
         file.close();
         return;
     }
     file.close();
 
     QDomElement docElem = doc.documentElement();
-    if(docElem.nodeName() != "RootElement") return;
+    if (docElem.nodeName() != "RootElement") {
+        return;
+    }
 
     loadTheStructure(docElem, m_rootSection, m_rootSection);
 
     // Second: load each section
-    foreach(SaveContext * saveContext, m_contextes) {
-        if(!saveContext->loadSection(this, SaveContext::VERSION_1)) {
+    foreach (SaveContext *saveContext, m_contextes) {
+        if (!saveContext->loadSection(this, SaveContext::VERSION_1)) {
             kDebug() << "Loading failed"; // TODO: Report it
         }
     }
@@ -342,19 +345,20 @@ void SectionsIO::load()
 
 QString SectionsIO::generateFileName()
 {
-    for(; true; ++m_nextNumber) {
+    for (; true; ++m_nextNumber) {
         QString filename = "section" + QString::number(m_nextNumber);
-        if(!QFileInfo(m_directory + filename).exists() && !usedFileName(filename)) {
+        if (!QFileInfo(m_directory + filename).exists() && !usedFileName(filename)) {
             return filename;
         }
     }
 }
 
-bool SectionsIO::usedFileName(const QString& filename)
+bool SectionsIO::usedFileName(const QString &filename)
 {
-    foreach(SaveContext * context, m_contextes.values()) {
-        if(context->filename == filename)
+    foreach (SaveContext *context, m_contextes.values()) {
+        if (context->filename == filename) {
             return true;
+        }
     }
     return false;
 }

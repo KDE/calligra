@@ -59,8 +59,8 @@
 #include <KoDocumentRdfBase.h>
 
 KWOdfLoader::KWOdfLoader(KWDocument *document)
-        : QObject(document),
-        m_document(document)
+    : QObject(document),
+      m_document(document)
 {
     connect(this, SIGNAL(progressUpdate(int)), m_document, SIGNAL(sigProgress(int)));
 }
@@ -101,12 +101,14 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         kError(32001) << "No office:text found!" << endl;
         KoXmlElement childElem;
         QString localName;
-        forEachElement(childElem, realBody)
+        forEachElement (childElem, realBody) {
             localName = childElem.localName();
-        if (localName.isEmpty())
+        }
+        if (localName.isEmpty()) {
             m_document->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body."));
-        else
+        } else {
             m_document->setErrorMessage(i18n("This is not a word processing document, but %1. Please try opening it with the appropriate application.", KoDocument::tagNameToDocumentType(localName)));
+        }
         return false;
     }
 
@@ -118,7 +120,9 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     }
     // FIXME: text:use-soft-page-breaks
 
-    if (updater) updater->setProgress(20);
+    if (updater) {
+        updater->setProgress(20);
+    }
 
     KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), KGlobal::mainComponent());
     KoShapeLoadingContext sc(odfContext, m_document->resourceManager());
@@ -132,11 +136,13 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     // Load all styles before the corresponding paragraphs try to use them!
     KWOdfSharedLoadingData *sharedData = new KWOdfSharedLoadingData(this);
     sc.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
-    KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+    KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager *>();
     Q_ASSERT(styleManager);
     sharedData->loadOdfStyles(sc, styleManager);
 
-    if (updater) updater->setProgress(40);
+    if (updater) {
+        updater->setProgress(40);
+    }
 
     loadMasterPageStyles(sc);
 
@@ -156,14 +162,17 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         stack.push(*defaultParagStyle);
         stack.setTypeProperties("paragraph");
         QString tabStopVal = stack.property(KoXmlNS::style, "tab-stop-distance");
-        if (!tabStopVal.isEmpty()) m_tabStop = KoUnit::parseValue(tabStopVal);
+        if (!tabStopVal.isEmpty()) {
+            m_tabStop = KoUnit::parseValue(tabStopVal);
+        }
     }
     m_initialEditing = 0;
     // TODO MAILMERGE
     // Variable settings
     // By default display real variable value
-    if (!isReadWrite())
+    if (!isReadWrite()) {
         m_varColl->variableSetting()->setDisplayFieldCode(false);
+    }
 #endif
 
     // Load all styles before the corresponding paragraphs try to use them!
@@ -201,7 +210,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     if (! pageSequence.isNull()) {
         KWPageManager *pageManager = m_document->pageManager();
         KoXmlElement page;
-        forEachElement(page, pageSequence) {
+        forEachElement (page, pageSequence) {
             if (page.namespaceURI() == KoXmlNS::text && page.localName() == "page") {
                 QString master = page.attributeNS(KoXmlNS::text, "master-page-name", QString());
                 pageManager->appendPage(pageManager->pageStyle(master));
@@ -209,7 +218,9 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         }
     }
 
-    if (updater) updater->setProgress(50);
+    if (updater) {
+        updater->setProgress(50);
+    }
 
     KoTextShapeData textShapeData;
     KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, Words::MainTextFrameSet);
@@ -222,7 +233,9 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     // the app's undostack
     textShapeData.document()->setUndoRedoEnabled(false);
 
-    if (updater) updater->setProgress(60);
+    if (updater) {
+        updater->setProgress(60);
+    }
 
     // load the main text shape right here so we can use the progress information of the KoTextLoader
     KoTextLoader loader(sc);
@@ -244,29 +257,37 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     textShapeData.document()->setUndoRedoEnabled(true);
 
     KoTextEditor *editor = KoTextDocument(textShapeData.document()).textEditor();
-    if (editor) // at one point we have to get the position from the odf doc instead.
+    if (editor) { // at one point we have to get the position from the odf doc instead.
         editor->setPosition(0);
+    }
 
-    if (updater) updater->setProgress(90);
+    if (updater) {
+        updater->setProgress(90);
+    }
 
     // Grab weak references to all the Rdf stuff that was loaded
     if (KoDocumentRdfBase *rdf = m_document->documentRdf()) {
         rdf->updateInlineRdfStatements(textShapeData.document());
     }
 
-    if (updater) updater->setProgress(95);
+    if (updater) {
+        updater->setProgress(95);
+    }
 
     loadSettings(odfStore.settingsDoc(), textShapeData.document());
 
-    if (updater) updater->setProgress(100);
+    if (updater) {
+        updater->setProgress(100);
+    }
     return true;
 }
 
 void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *textDoc)
 {
     KoTextDocument(textDoc).setRelativeTabs(true);
-    if (settingsDoc.isNull())
+    if (settingsDoc.isNull()) {
         return;
+    }
 
     kDebug(32001) << "KWOdfLoader::loadSettings";
     KoOasisSettings settings(settingsDoc);
@@ -303,19 +324,22 @@ void KWOdfLoader::loadMasterPageStyles(KoShapeLoadingContext &context)
         Q_ASSERT(masterNode);
         QString displayName = masterNode->attributeNS(KoXmlNS::style, "display-name", QString());
         KWPageStyle masterPage = m_document->pageManager()->pageStyle(it.key());
-        if (!masterPage.isValid()) // use display-name as fall-back if there is no page-style with the defined name. See bug 281922 and 282082.
+        if (!masterPage.isValid()) { // use display-name as fall-back if there is no page-style with the defined name. See bug 281922 and 282082.
             masterPage = m_document->pageManager()->pageStyle(displayName);
+        }
         bool alreadyExists = masterPage.isValid();
-        if (!alreadyExists)
+        if (!alreadyExists) {
             masterPage = KWPageStyle(it.key(), displayName);
+        }
         const KoXmlElement *masterPageStyle = styles.findStyle(masterNode->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
         if (masterPageStyle) {
             masterPage.loadOdf(context.odfLoadingContext(), *masterNode, *masterPageStyle, m_document->resourceManager());
             loadHeaderFooter(context, masterPage, *masterNode, LoadHeader);
             loadHeaderFooter(context, masterPage, *masterNode, LoadFooter);
         }
-        if (!alreadyExists)
+        if (!alreadyExists) {
             m_document->pageManager()->addPageStyle(masterPage);
+        }
     }
 }
 
@@ -347,36 +371,36 @@ void KWOdfLoader::loadHeaderFooterFrame(KoShapeLoadingContext &context, const KW
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
 void KWOdfLoader::loadHeaderFooter(KoShapeLoadingContext &context, KWPageStyle &pageStyle,
-				   const KoXmlElement &masterPage, HFLoadType headerFooter)
+                                   const KoXmlElement &masterPage, HFLoadType headerFooter)
 {
     // The actual content of the header/footer.
     KoXmlElement elem = KoXml::namedItemNS(masterPage, KoXmlNS::style,
-					   headerFooter == LoadHeader ? "header" : "footer");
+                                           headerFooter == LoadHeader ? "header" : "footer");
 
     // The two additional elements <style:header-left> and <style:footer-left>
     // specifies if defined that even and odd pages should be displayed
     // different. If they are missing, the content of odd and even (aka left
     // and right) pages are the same.
     KoXmlElement leftElem = KoXml::namedItemNS(masterPage, KoXmlNS::style,
-					       headerFooter == LoadHeader ? "header-left" : "footer-left");
+                            headerFooter == LoadHeader ? "header-left" : "footer-left");
 
     // Used in KWPageStyle to determine if, and what kind of header/footer to use.
     Words::HeaderFooterType hfType = elem.isNull() ? Words::HFTypeNone
-                                                   : leftElem.isNull() ? Words::HFTypeUniform
-                                                                       : Words::HFTypeEvenOdd;
+                                     : leftElem.isNull() ? Words::HFTypeUniform
+                                     : Words::HFTypeEvenOdd;
 
     // header-left and footer-left
     if (! leftElem.isNull()) {
         loadHeaderFooterFrame(context, pageStyle, leftElem,
-			      headerFooter == LoadHeader ? Words::EvenPagesHeaderTextFrameSet
-			                                 : Words::EvenPagesFooterTextFrameSet);
+                              headerFooter == LoadHeader ? Words::EvenPagesHeaderTextFrameSet
+                              : Words::EvenPagesFooterTextFrameSet);
     }
 
     // header and footer
     if (! elem.isNull()) {
         loadHeaderFooterFrame(context, pageStyle, elem,
-			      headerFooter == LoadHeader ? Words::OddPagesHeaderTextFrameSet
-			                                 : Words::OddPagesFooterTextFrameSet);
+                              headerFooter == LoadHeader ? Words::OddPagesHeaderTextFrameSet
+                              : Words::OddPagesFooterTextFrameSet);
     }
 
     if (headerFooter == LoadHeader) {

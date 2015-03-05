@@ -71,8 +71,9 @@ void TestLoadingBase::initTestCase()
     bool hasDocDirInSrcDir = srcdir.cd("doc");
     QVERIFY(hasDocDirInSrcDir);
     // Go back up, we only used the cd as a test.
-    if (hasDocDirInSrcDir)
+    if (hasDocDirInSrcDir) {
         srcdir.cd("..");
+    }
 
     KoStore *store = KoStore::createStore(srcdir.absolutePath(), KoStore::Read);
     QVERIFY(store->enterDirectory("doc"));
@@ -80,8 +81,9 @@ void TestLoadingBase::initTestCase()
     QString errorMsg;
     KoOdfReadStore odfReadStore(store);
     bool success = odfReadStore.loadAndParse(errorMsg);
-    if (!success)
+    if (!success) {
         qDebug() << "Error in odfReadStore.loadAndParse(): " << errorMsg;
+    }
     QVERIFY(success);
     QVERIFY(document.loadOdf(odfReadStore));
 }
@@ -97,13 +99,13 @@ void TestLoadingBase::testLegendElements(QStringList labels)
     QVERIFY(m_chart->legend());
     QVERIFY(m_chart->legend()->kdLegend());
     QCOMPARE(m_chart->legend()->kdLegend()->datasetCount(),
-              (unsigned int)labels.count());
+             (unsigned int)labels.count());
 
-    QList<KDChart::AbstractDiagram*> diagrams = m_chart->legend()->kdLegend()->diagrams();
-    foreach(KDChart::AbstractDiagram *diagram, diagrams) {
+    QList<KDChart::AbstractDiagram *> diagrams = m_chart->legend()->kdLegend()->diagrams();
+    foreach (KDChart::AbstractDiagram *diagram, diagrams) {
         QVERIFY(diagram);
         QStringList diagramLabels = diagram->datasetLabels();
-        foreach(const QString &diagramLabel, diagramLabels) {
+        foreach (const QString &diagramLabel, diagramLabels) {
             QVERIFY(!labels.isEmpty());
             QCOMPARE(diagramLabel, labels.takeFirst());
         }
@@ -112,14 +114,14 @@ void TestLoadingBase::testLegendElements(QStringList labels)
 }
 
 void TestLoadingBase::testDataSetCellRegions(int dataSetNr,
-                                             CellRegion yDataRegion,
-                                             CellRegion labelDataRegion,
-                                             CellRegion categoryDataRegion,
-                                             CellRegion xDataRegion,
-                                             CellRegion customDataRegion)
+        CellRegion yDataRegion,
+        CellRegion labelDataRegion,
+        CellRegion categoryDataRegion,
+        CellRegion xDataRegion,
+        CellRegion customDataRegion)
 {
     QVERIFY(m_chart->proxyModel());
-    QList<DataSet*> dataSets = m_chart->proxyModel()->dataSets();
+    QList<DataSet *> dataSets = m_chart->proxyModel()->dataSets();
     QVERIFY(dataSetNr >= 0);
     QVERIFY(dataSets.count() > dataSetNr);
     DataSet *dataSet = dataSets[dataSetNr];
@@ -157,7 +159,7 @@ void TestLoadingBase::testInternalTableSize(int rowCount, int colCount)
 void TestLoadingBase::testTitleText(const QString &text)
 {
     QVERIFY(m_chart->title());
-    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>(m_chart->title()->userData());
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase *>(m_chart->title()->userData());
     QVERIFY(data);
     QVERIFY(data->document());
     QCOMPARE(data->document()->toPlainText(), text);
@@ -166,7 +168,7 @@ void TestLoadingBase::testTitleText(const QString &text)
 void TestLoadingBase::testSubTitleText(const QString &text)
 {
     QVERIFY(m_chart->subTitle());
-    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>(m_chart->subTitle()->userData());
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase *>(m_chart->subTitle()->userData());
     QVERIFY(data);
     QVERIFY(data->document());
     QCOMPARE(data->document()->toPlainText(), text);
@@ -175,7 +177,7 @@ void TestLoadingBase::testSubTitleText(const QString &text)
 void TestLoadingBase::testFooterText(const QString &text)
 {
     QVERIFY(m_chart->footer());
-    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>(m_chart->footer()->userData());
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase *>(m_chart->footer()->userData());
     QVERIFY(data);
     QVERIFY(data->document());
     QCOMPARE(data->document()->toPlainText(), text);
@@ -185,7 +187,7 @@ void TestLoadingBase::testAxisTitle(Axis *axis, const QString &text)
 {
     QVERIFY(axis);
     QVERIFY(axis->title());
-    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>(axis->title()->userData());
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase *>(axis->title()->userData());
     QVERIFY(data);
     QVERIFY(data->document());
     QCOMPARE(data->document()->toPlainText(), text);
@@ -194,8 +196,9 @@ void TestLoadingBase::testAxisTitle(Axis *axis, const QString &text)
 Table *TestLoadingBase::internalTable()
 {
     QAbstractItemModel *internalModel = m_chart->internalModel();
-    if (!internalModel)
+    if (!internalModel) {
         return 0;
+    }
     return m_chart->tableSource()->get(internalModel);
 }
 
@@ -204,9 +207,11 @@ TableSource *TestLoadingBase::tableSource()
     return m_chart->tableSource();
 }
 
-namespace QTest {
-    template<>
-    char *toString(const KChart::CellRegion &region) {
-        return qstrdup(region.toString().toLatin1());
-    }
+namespace QTest
+{
+template<>
+char *toString(const KChart::CellRegion &region)
+{
+    return qstrdup(region.toString().toLatin1());
+}
 }

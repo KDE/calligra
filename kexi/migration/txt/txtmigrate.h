@@ -37,7 +37,7 @@ public:
 
     virtual ~TxtMigrate();
 
-  protected:
+protected:
     //! Connect to source
     virtual bool drv_connect();
 
@@ -45,18 +45,18 @@ public:
     virtual bool drv_disconnect();
 
     //! Get table names in source
-    virtual bool drv_tableNames(QStringList& tablenames);
+    virtual bool drv_tableNames(QStringList &tablenames);
 
-    virtual bool drv_copyTable(const QString&, KexiDB::Connection*, KexiDB::TableSchema*)
+    virtual bool drv_copyTable(const QString &, KexiDB::Connection *, KexiDB::TableSchema *)
     {
         return false;
     }
 
     //! Read schema for a given table
-    virtual bool drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema);
+    virtual bool drv_readTableSchema(const QString &originalName, KexiDB::TableSchema &tableSchema);
 
     //! Position the source dataset at the start of a table
-    virtual bool drv_readFromTable(const QString & tableName);
+    virtual bool drv_readFromTable(const QString &tableName);
 
     //! Move to the next row
     virtual bool drv_moveNext();
@@ -66,12 +66,12 @@ public:
 
     //! Read the data at the given row/field
     virtual QVariant drv_value(uint i);
-    
+
     virtual bool drv_moveFirst();
-    
+
     virtual bool drv_moveLast();
 
-  private:
+private:
     QString m_Folder;
 
     QString m_FileName;
@@ -84,7 +84,7 @@ public:
     QVector<QStringList> m_FieldValues;
 
     long m_Row;
-    
+
     long m_FileRow;
 };
 

@@ -43,12 +43,12 @@ class PackageInfoWidget : public QFrame
 {
     Q_OBJECT
 public:
-    explicit PackageInfoWidget( Package *package, QWidget *parent = 0 );
+    explicit PackageInfoWidget(Package *package, QWidget *parent = 0);
 
 protected Q_SLOTS:
-    void slotUsedEffortChanged( int state );
-    void slotProgressChanged( int state );
-    void slotDocumentsChanged( int state );
+    void slotUsedEffortChanged(int state);
+    void slotProgressChanged(int state);
+    void slotDocumentsChanged(int state);
 
 protected:
     Package *m_package;
@@ -67,19 +67,19 @@ class KPLATOUI_EXPORT WorkPackageMergeDialog : public KDialog
 public:
     enum Columns { CheckColumn = 0, TaskNameColumn, OwnerNameColumn, DateTimeColumn };
 
-    WorkPackageMergeDialog( const QString &text, const QMap<KDateTime, Package*> &list, QWidget *parent = 0 );
+    WorkPackageMergeDialog(const QString &text, const QMap<KDateTime, Package *> &list, QWidget *parent = 0);
     ~WorkPackageMergeDialog();
 
     QList<int> checkedList() const;
 
 protected Q_SLOTS:
-    void slotActivated( const QModelIndex &idx );
+    void slotActivated(const QModelIndex &idx);
     void slotChanged();
 
 private:
     WorkPackageMergePanel panel;
     KExtendableItemDelegate *m_delegate;
-    QList<Package*> m_packages;
+    QList<Package *> m_packages;
     QStandardItemModel *m_model;
 };
 

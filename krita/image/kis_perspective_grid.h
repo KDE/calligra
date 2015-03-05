@@ -42,16 +42,16 @@ class KRITAIMAGE_EXPORT KisPerspectiveGridNode : public QPointF, public KisShare
 public:
     KisPerspectiveGridNode(double x, double y);
     KisPerspectiveGridNode(QPointF p);
-    KisPerspectiveGridNode(const KisPerspectiveGridNode&);
+    KisPerspectiveGridNode(const KisPerspectiveGridNode &);
     ~KisPerspectiveGridNode();
     void mergeWith(KisPerspectiveGridNodeSP);
 private:
-    void registerSubPerspectiveGrid(KisSubPerspectiveGrid*);
-    void unRegisterSubPerspectiveGrid(KisSubPerspectiveGrid*);
-    bool containsSubPerspectiveGrid(KisSubPerspectiveGrid*);
+    void registerSubPerspectiveGrid(KisSubPerspectiveGrid *);
+    void unRegisterSubPerspectiveGrid(KisSubPerspectiveGrid *);
+    bool containsSubPerspectiveGrid(KisSubPerspectiveGrid *);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 /**
@@ -102,7 +102,7 @@ private:
     inline QPointF computeVanishingPoint(KisPerspectiveGridNodeSP p11, KisPerspectiveGridNodeSP p12, KisPerspectiveGridNodeSP p21, KisPerspectiveGridNodeSP p22);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 /**
@@ -116,23 +116,23 @@ public:
     /**
      * @return false if the grid wasn't added, note that subgrids must be attached to an other grid, except if it's the first grid
      */
-    bool addNewSubGrid(KisSubPerspectiveGrid* ng);
-    QList<KisSubPerspectiveGrid*>::const_iterator begin() const;
-    QList<KisSubPerspectiveGrid*>::const_iterator end() const;
+    bool addNewSubGrid(KisSubPerspectiveGrid *ng);
+    QList<KisSubPerspectiveGrid *>::const_iterator begin() const;
+    QList<KisSubPerspectiveGrid *>::const_iterator end() const;
     bool hasSubGrids() const;
     void clearSubGrids();
     int countSubGrids() const;
     /**
      * Delete the grid given as argument and remove it from the list of grids.
      */
-    void deleteSubGrid(KisSubPerspectiveGrid* grid);
+    void deleteSubGrid(KisSubPerspectiveGrid *grid);
     /**
      * @return the first grid hit by the point p
      */
-    KisSubPerspectiveGrid* gridAt(QPointF p);
+    KisSubPerspectiveGrid *gridAt(QPointF p);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

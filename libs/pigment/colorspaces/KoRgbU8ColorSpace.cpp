@@ -31,15 +31,14 @@
 #include "KoIntegerMaths.h"
 #include "compositeops/KoCompositeOps.h"
 
-
 KoRgbU8ColorSpace::KoRgbU8ColorSpace() :
 
-        KoSimpleColorSpace<KoBgrU8Traits>(colorSpaceId(),
-                                          i18n("RGB (8-bit integer/channel, unmanaged)"),
-                                          RGBAColorModelID,
-                                          Integer8BitsColorDepthID)
+    KoSimpleColorSpace<KoBgrU8Traits>(colorSpaceId(),
+                                      i18n("RGB (8-bit integer/channel, unmanaged)"),
+                                      RGBAColorModelID,
+                                      Integer8BitsColorDepthID)
 {
-    
+
     addChannel(new KoChannelInfo(i18n("Blue"),  0, 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 0, 255)));
     addChannel(new KoChannelInfo(i18n("Green"), 1, 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 255, 0)));
     addChannel(new KoChannelInfo(i18n("Red"),   2, 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255, 0, 0)));
@@ -54,27 +53,24 @@ KoRgbU8ColorSpace::~KoRgbU8ColorSpace()
 {
 }
 
-
 QString KoRgbU8ColorSpace::colorSpaceId()
 {
     return QString("RGBA");
 }
 
-
-KoColorSpace* KoRgbU8ColorSpace::clone() const
+KoColorSpace *KoRgbU8ColorSpace::clone() const
 {
     return new KoRgbU8ColorSpace();
 }
 
-
-void KoRgbU8ColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
+void KoRgbU8ColorSpace::fromQColor(const QColor &c, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
     QVector<float> channelValues;
     channelValues << c.blueF() << c.greenF() << c.redF() << c.alphaF();
     fromNormalisedChannelsValue(dst, channelValues);
 }
 
-void KoRgbU8ColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
+void KoRgbU8ColorSpace::toQColor(const quint8 *src, QColor *c, const KoColorProfile * /*profile*/) const
 {
     QVector<float> channelValues(4);
     normalisedChannelsValue(src, channelValues);

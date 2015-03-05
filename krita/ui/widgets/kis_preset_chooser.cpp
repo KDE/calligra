@@ -45,26 +45,27 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 
-
-
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate
 {
 public:
-    KisPresetDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent), m_showText(false), m_useDirtyPresets(false) {}
+    KisPresetDelegate(QObject *parent = 0) : QAbstractItemDelegate(parent), m_showText(false), m_useDirtyPresets(false) {}
     virtual ~KisPresetDelegate() {}
     /// reimplemented
     virtual void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const;
     /// reimplemented
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const {
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &) const
+    {
         return option.decorationSize;
     }
 
-    void setShowText(bool showText) {
+    void setShowText(bool showText)
+    {
         m_showText = showText;
     }
 
-    void setUseDirtyPresets(bool value) {
+    void setUseDirtyPresets(bool value)
+    {
         m_useDirtyPresets = value;
     }
 
@@ -73,19 +74,20 @@ private:
     bool m_useDirtyPresets;
 };
 
-void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void KisPresetDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     painter->save();
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-    if (! index.isValid())
+    if (! index.isValid()) {
         return;
+    }
 
-    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
+    KisPaintOpPreset *preset = static_cast<KisPaintOpPreset *>(index.internalPointer());
 
     QImage preview = preset->image();
 
-    if(preview.isNull()) {
+    if (preview.isNull()) {
         return;
     }
 
@@ -102,7 +104,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
     if (m_useDirtyPresets && preset->isPresetDirty()) {
         const KIcon icon = koIcon(koIconName("addlayer"));
-        QPixmap pixmap = icon.pixmap(QSize(15,15));
+        QPixmap pixmap = icon.pixmap(QSize(15, 15));
         painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
     }
 
@@ -122,27 +124,28 @@ class KisPresetProxyAdapter : public KisPaintOpPresetResourceServerAdapter
 {
 
 public:
-    KisPresetProxyAdapter(KisPaintOpPresetResourceServer* resourceServer)
+    KisPresetProxyAdapter(KisPaintOpPresetResourceServer *resourceServer)
         : KisPaintOpPresetResourceServerAdapter(resourceServer)
     {
         setSortingEnabled(true);
     }
     virtual ~KisPresetProxyAdapter() {}
 
-    virtual QList< KoResource* > resources() {
+    virtual QList< KoResource * > resources()
+    {
 
-        QList<KoResource*> serverResources =
+        QList<KoResource *> serverResources =
             KisPaintOpPresetResourceServerAdapter::resources();
 
         if (m_paintopID.isEmpty()) {
             return serverResources;
         }
 
-        QList<KoResource*> resources;
+        QList<KoResource *> resources;
         foreach (KoResource *resource, serverResources) {
-            KisPaintOpPreset *preset = static_cast<KisPaintOpPreset*>(resource);
+            KisPaintOpPreset *preset = static_cast<KisPaintOpPreset *>(resource);
 
-            if( preset->paintOp().id() == m_paintopID) {
+            if (preset->paintOp().id() == m_paintopID) {
                 resources.append(preset);
             }
         }
@@ -151,14 +154,15 @@ public:
 
     ///Set id for paintop to be accept by the proxy model, if not filter is set all
     ///presets will be shown.
-    void setPresetFilter(const QString& paintOpId)
+    void setPresetFilter(const QString &paintOpId)
     {
         m_paintopID = paintOpId;
         invalidate();
     }
 
     ///Resets the model connected to the adapter
-    void invalidate() {
+    void invalidate()
+    {
         emitRemovingResource(0);
     }
 
@@ -170,9 +174,9 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     : QWidget(parent)
 {
     setObjectName(name);
-    QVBoxLayout * layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
-    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+    KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
 
     m_adapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KisPresetProxyAdapter(rserver));
 
@@ -212,7 +216,7 @@ void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
     updateViewSettings();
 }
 
-void KisPresetChooser::resizeEvent(QResizeEvent* event)
+void KisPresetChooser::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
     updateViewSettings();
@@ -233,7 +237,7 @@ void KisPresetChooser::updateViewSettings()
     } else if (m_mode == DETAIL) {
         m_chooser->setSynced(false);
         m_chooser->setColumnCount(1);
-        KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+        KoResourceItemChooserSync *chooserSync = KoResourceItemChooserSync::instance();
         m_chooser->setRowHeight(chooserSync->baseLength());
         m_delegate->setShowText(true);
     } else if (m_mode == STRIP) {
@@ -245,7 +249,7 @@ void KisPresetChooser::updateViewSettings()
     }
 }
 
-KoResource* KisPresetChooser::currentResource()
+KoResource *KisPresetChooser::currentResource()
 {
     return m_chooser->currentResource();
 }
@@ -260,12 +264,11 @@ KoResourceItemChooser *KisPresetChooser::itemChooser()
     return m_chooser;
 }
 
-void KisPresetChooser::setPresetFilter(const QString& paintOpId)
+void KisPresetChooser::setPresetFilter(const QString &paintOpId)
 {
-    static_cast<KisPresetProxyAdapter*>(m_adapter.data())->setPresetFilter(paintOpId);
+    static_cast<KisPresetProxyAdapter *>(m_adapter.data())->setPresetFilter(paintOpId);
     updateViewSettings();
 }
-
 
 #include "kis_preset_chooser.moc"
 

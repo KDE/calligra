@@ -74,8 +74,9 @@ void Spreadsheet::generate(QTextStream &out, bool hasPreamble)
 {
     kDebug(30522) << "DOC. GENERATION.";
 
-    if (!Config::instance()->isEmbeded())
+    if (!Config::instance()->isEmbeded()) {
         generatePreamble(out);
+    }
     kDebug(30522) << "preamble :" << hasPreamble;
 
     /* Body */
@@ -86,11 +87,13 @@ void Spreadsheet::generate(QTextStream &out, bool hasPreamble)
 
     _map.generate(out);
 
-    if (hasPreamble)
+    if (hasPreamble) {
         out << "\\end{document}" << endl;
+    }
     unindent();
-    if (getIndentation() != 0)
+    if (getIndentation() != 0) {
         kError(30522) << "Error : indent != 0 at the end ! " << endl;
+    }
 }
 
 /*******************************************/

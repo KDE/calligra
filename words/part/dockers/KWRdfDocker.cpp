@@ -58,8 +58,8 @@ KWRdfDocker::KWRdfDocker()
     m_rdfSemanticTree = KoRdfSemanticTree::createTree(widgetDocker.semanticView);
 
     widgetDocker.semanticView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(widgetDocker.semanticView, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(showSemanticViewContextMenu(const QPoint &)));
+    connect(widgetDocker.semanticView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(showSemanticViewContextMenu(QPoint)));
     setWidget(widget);
 }
 
@@ -77,22 +77,22 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
 
     //kDebug(30015) << "canvas:" << canvas;
     m_canvas = canvas;
-    KWDocument *newDoc = dynamic_cast<KWDocument*>(m_canvas->shapeController()->resourceManager()->odfDocument());
+    KWDocument *newDoc = dynamic_cast<KWDocument *>(m_canvas->shapeController()->resourceManager()->odfDocument());
     if (newDoc != m_document) {
         if (m_document) {
             m_document->disconnect(this);  // "Every connection you make emits a signal, so duplicate connections emit two signals"
         }
 
         m_document = newDoc;
-        widgetDocker.semanticView->setDocumentRdf(static_cast<KoDocumentRdf*>(m_document->documentRdf()));
-        connect(static_cast<KoDocumentRdf*>(m_document->documentRdf()), SIGNAL(semanticObjectAdded(hKoRdfBasicSemanticItem)),
+        widgetDocker.semanticView->setDocumentRdf(static_cast<KoDocumentRdf *>(m_document->documentRdf()));
+        connect(static_cast<KoDocumentRdf *>(m_document->documentRdf()), SIGNAL(semanticObjectAdded(hKoRdfBasicSemanticItem)),
                 this, SLOT(semanticObjectAdded(hKoRdfBasicSemanticItem)));
         connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(hKoRdfBasicSemanticItem)),
                 this, SLOT(semanticObjectUpdated(hKoRdfBasicSemanticItem)));
     }
     widgetDocker.semanticView->setCanvas(m_canvas);
-    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,const QVariant&)),
-            this, SLOT(canvasResourceChanged(int,const QVariant&)));
+    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(canvasResourceChanged(int,QVariant)));
 }
 
 void KWRdfDocker::unsetCanvas()
@@ -102,11 +102,10 @@ void KWRdfDocker::unsetCanvas()
     widgetDocker.semanticView->unsetCanvas();
 }
 
-KoCanvasBase* KWRdfDocker::canvas()
+KoCanvasBase *KWRdfDocker::canvas()
 {
     return m_canvas;
 }
-
 
 void KWRdfDocker::semanticObjectAdded(hKoRdfBasicSemanticItem item)
 {
@@ -127,10 +126,10 @@ void KWRdfDocker::semanticObjectUpdated(hKoRdfBasicSemanticItem item)
  */
 void KWRdfDocker::showSemanticViewContextMenu(const QPoint &position)
 {
-    KMenu* menu = new KMenu(0);
+    KMenu *menu = new KMenu(0);
     QList<KAction *> actions;
     if (QTreeWidgetItem *baseitem = widgetDocker.semanticView->itemAt(position)) {
-        if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {
+        if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem *>(baseitem)) {
             actions = item->actions(menu, m_canvas);
         }
     }
@@ -151,22 +150,23 @@ void KWRdfDocker::updateDataForced()
 
 void KWRdfDocker::updateData()
 {
-    if (!m_document || !m_canvas || !isVisible())
+    if (!m_document || !m_canvas || !isVisible()) {
         return;
+    }
 
     kDebug(30015) << "doc:" << m_document << " canvas:" << m_canvas;
 
     // TODO try to get rid of 'editor' here by remembering the position in the resourceChanged()
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(m_canvas);
-    KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf());
-    if (editor && rdf)
-    {
+    KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(m_document->documentRdf());
+    if (editor && rdf) {
         //kDebug(30015) << "m_lastCursorPosition:" << m_lastCursorPosition;
         //kDebug(30015) << " currentpos:" << handler->position();
 
         // If the cursor hasn't moved, there is no work to do.
-        if (m_lastCursorPosition == editor->position())
+        if (m_lastCursorPosition == editor->position()) {
             return;
+        }
         m_lastCursorPosition = editor->position();
         QSharedPointer<Soprano::Model> model = rdf->findStatements(editor);
         //kDebug(30015) << "----- current Rdf ----- sz:" << model->statementCount();
@@ -186,7 +186,7 @@ void KWRdfDocker::updateData()
 void KWRdfDocker::canvasResourceChanged(int key, const QVariant &value)
 {
     if (key == KoText::CurrentTextDocument) {
-        m_textDocument = static_cast<QTextDocument*>(value.value<void*>());
+        m_textDocument = static_cast<QTextDocument *>(value.value<void *>());
     } else if (key == KoText::CurrentTextPosition) {
         updateData();
     }

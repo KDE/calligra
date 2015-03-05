@@ -37,39 +37,40 @@
 
 #include <kptview.h>
 
-int planScriptingDebugArea() {
-    static int s_area = KDebug::registerArea( "plan (Scripting)" );
+int planScriptingDebugArea()
+{
+    static int s_area = KDebug::registerArea("plan (Scripting)");
     return s_area;
 }
 
-K_EXPORT_PLUGIN( KPlatoScriptingFactory )
+K_EXPORT_PLUGIN(KPlatoScriptingFactory)
 
-KPlatoScriptingFactory::KPlatoScriptingFactory(const char *componentName, const char *catalogName, QObject *parent )
-    : KPluginFactory( componentName, catalogName, parent )
+KPlatoScriptingFactory::KPlatoScriptingFactory(const char *componentName, const char *catalogName, QObject *parent)
+    : KPluginFactory(componentName, catalogName, parent)
 {
-    kDebug(planScriptingDebugArea())<<parent;
+    kDebug(planScriptingDebugArea()) << parent;
 }
 
 QObject *KPlatoScriptingFactory::create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword)
 {
-    kDebug(planScriptingDebugArea())<<iface<<parentWidget<<parent<<args<<keyword;
-    return new KPlatoScriptingPart( parent );
+    kDebug(planScriptingDebugArea()) << iface << parentWidget << parent << args << keyword;
+    return new KPlatoScriptingPart(parent);
 }
 
 //---------------------
 /// \internal d-pointer class.
 class KPlatoScriptingPart::Private
 {
-    public:
+public:
 };
 
-KPlatoScriptingPart::KPlatoScriptingPart(QObject* parent, const QStringList& args)
+KPlatoScriptingPart::KPlatoScriptingPart(QObject *parent, const QStringList &args)
     : KoScriptingPart(new Scripting::Module(parent), args)
     , d(new Private())
 {
     //setComponentData(ScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data", "plan/viewplugins/scripting.rc"), true);
-    kDebug(planScriptingDebugArea()) <<"PlanScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
+    kDebug(planScriptingDebugArea()) << "PlanScripting plugin. Class:" << metaObject()->className() << ", Parent:" << (parent ? parent->metaObject()->className() : "0");
 
 }
 

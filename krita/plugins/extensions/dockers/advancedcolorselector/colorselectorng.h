@@ -22,7 +22,6 @@
 #include <QObject>
 #include <QVariant>
 
-
 /**
  * Template of view plugin
  */

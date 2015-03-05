@@ -26,21 +26,23 @@
 #include <KoColor.h>
 
 KisPressureRotationOption::KisPressureRotationOption()
-        : KisCurveOption(i18n("Rotation"), "Rotation", KisPaintOpOption::generalCategory(), false),
-          m_defaultAngle(0.0),
-          m_canvasAxisXMirrored(false),
-          m_canvasAxisYMirrored(false)
+    : KisCurveOption(i18n("Rotation"), "Rotation", KisPaintOpOption::generalCategory(), false),
+      m_defaultAngle(0.0),
+      m_canvasAxisXMirrored(false),
+      m_canvasAxisYMirrored(false)
 {
-     setMinimumLabel(i18n("0°"));
-     setMaximumLabel(i18n("360°"));
+    setMinimumLabel(i18n("0°"));
+    setMaximumLabel(i18n("360°"));
 }
 
-double KisPressureRotationOption::apply(const KisPaintInformation & info) const
+double KisPressureRotationOption::apply(const KisPaintInformation &info) const
 {
-    if (!isChecked()) return m_defaultAngle;
+    if (!isChecked()) {
+        return m_defaultAngle;
+    }
 
     bool dependsOnViewportTransformations = false;
-    foreach(const KisDynamicSensorSP s, activeSensors()) {
+    foreach (const KisDynamicSensorSP s, activeSensors()) {
         if (s->dependsOnCanvasRotation()) {
             dependsOnViewportTransformations = true;
             break;
@@ -55,25 +57,22 @@ double KisPressureRotationOption::apply(const KisPaintInformation & info) const
         0.5 + computeValue(info);
 
     /* Special Case for Fuzzy Sensor to provide for Positive and Negative Rotation */
-    KisDynamicSensorFuzzy *s = dynamic_cast<KisDynamicSensorFuzzy*>(sensor(FuzzyId.id(), true).data());
+    KisDynamicSensorFuzzy *s = dynamic_cast<KisDynamicSensorFuzzy *>(sensor(FuzzyId.id(), true).data());
     if (s && s->isActive()) {
         if (s->rotationModeEnabled()) {
-            return rand()%2 == 0?fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI):
-                                 ((2.0*M_PI)-fmod(rotationCoeff * 2.0 * M_PI + baseAngle, -2.0 * M_PI));
+            return rand() % 2 == 0 ? fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI) :
+                   ((2.0 * M_PI) - fmod(rotationCoeff * 2.0 * M_PI + baseAngle, -2.0 * M_PI));
 
-        }
-        else {
+        } else {
             return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
         }
-    }
-    else { //If Fuzzy is not selected at all
+    } else { //If Fuzzy is not selected at all
         return fmod(rotationCoeff * 2.0 * M_PI + baseAngle, 2.0 * M_PI);
     }
 
+}
 
- }
-
-void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     m_defaultAngle = setting->getDouble("runtimeCanvasRotation", 0.0) * M_PI / 180.0;
     KisCurveOption::readOptionSetting(setting);
@@ -84,7 +83,7 @@ void KisPressureRotationOption::readOptionSetting(const KisPropertiesConfigurati
 
 void KisPressureRotationOption::applyFanCornersInfo(KisPaintOp *op)
 {
-    KisDynamicSensorDrawingAngle *sensor = dynamic_cast<KisDynamicSensorDrawingAngle*>(this->sensor(DrawingAngleId.id(), true).data());
+    KisDynamicSensorDrawingAngle *sensor = dynamic_cast<KisDynamicSensorDrawingAngle *>(this->sensor(DrawingAngleId.id(), true).data());
 
     /**
      * A special case for the Drawing Angle sensor, because it

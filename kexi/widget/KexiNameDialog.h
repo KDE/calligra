@@ -46,16 +46,16 @@ class KEXIEXTWIDGETS_EXPORT KexiNameDialog : public KDialog
     Q_OBJECT
 
 public:
-    explicit KexiNameDialog(const QString& message, QWidget * parent = 0);
+    explicit KexiNameDialog(const QString &message, QWidget *parent = 0);
 
-    KexiNameDialog(const QString& message,
-                   const QString& nameLabel, const QString& nameText,
-                   const QString& captionLabel, const QString& captionText,
-                   QWidget * parent = 0);
+    KexiNameDialog(const QString &message,
+                   const QString &nameLabel, const QString &nameText,
+                   const QString &captionLabel, const QString &captionText,
+                   QWidget *parent = 0);
 
     virtual ~KexiNameDialog();
 
-    KexiNameWidget* widget() const;
+    KexiNameWidget *widget() const;
 
     void setDialogIcon(const QString &iconName);
 
@@ -86,13 +86,13 @@ protected Q_SLOTS:
 
 protected:
     void init();
-    virtual void showEvent(QShowEvent * event);
+    virtual void showEvent(QShowEvent *event);
     //! Checks if specified name already exists.
     bool canOverwrite();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

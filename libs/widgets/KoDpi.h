@@ -35,15 +35,18 @@ class KOWIDGETS_EXPORT KoDpi
 {
 public:
     /// For KoApplication
-    static void initialize()  {
+    static void initialize()
+    {
         (void)self(); // I don't want to make KoDpi instances public, so self() is private
     }
 
-    static int dpiX() {
+    static int dpiX()
+    {
         return self()->m_dpiX;
     }
 
-    static int dpiY() {
+    static int dpiY()
+    {
         return self()->m_dpiY;
     }
 
@@ -53,7 +56,7 @@ public:
     ~KoDpi();
 
 private:
-    static KoDpi* self();
+    static KoDpi *self();
     KoDpi();
 
     int m_dpiX;

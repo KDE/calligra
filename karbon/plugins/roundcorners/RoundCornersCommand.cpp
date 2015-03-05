@@ -27,8 +27,8 @@
 
 #include <math.h>
 
-RoundCornersCommand::RoundCornersCommand(KoPathShape * path, qreal radius, KUndo2Command * parent)
-        : KUndo2Command(parent), m_path(path), m_copy(0)
+RoundCornersCommand::RoundCornersCommand(KoPathShape *path, qreal radius, KUndo2Command *parent)
+    : KUndo2Command(parent), m_path(path), m_copy(0)
 {
     Q_ASSERT(path);
 
@@ -187,8 +187,9 @@ void RoundCornersCommand::roundPath()
     int subpathCount = m_copy->subpathCount();
     for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
         int pointCount = m_copy->subpathPointCount(subpathIndex);
-        if (! pointCount)
+        if (! pointCount) {
             continue;
+        }
 
         // check if we have sufficient number of points
         if (pointCount < 3) {
@@ -204,9 +205,9 @@ void RoundCornersCommand::roundPath()
         KoPathSegment nextSeg = m_copy->segmentByIndex(KoPathPointIndex(subpathIndex, 0));
         KoPathSegment lastSeg;
 
-        KoPathPoint * currPoint = nextSeg.first();
-        KoPathPoint * firstPoint = 0;
-        KoPathPoint * lastPoint = 0;
+        KoPathPoint *currPoint = nextSeg.first();
+        KoPathPoint *firstPoint = 0;
+        KoPathPoint *lastPoint = 0;
 
         // check if first path point is a smooth join with the closing segment
         bool firstPointIsCorner = m_copy->isClosedSubpath(subpathIndex)
@@ -248,12 +249,14 @@ void RoundCornersCommand::roundPath()
         // Loop:
         for (int pointIndex = 1; pointIndex < pointCount; ++pointIndex) {
             nextSeg = m_copy->segmentByIndex(KoPathPointIndex(subpathIndex, pointIndex));
-            if (! nextSeg.isValid())
+            if (! nextSeg.isValid()) {
                 break;
+            }
 
             currPoint = nextSeg.first();
-            if (! currPoint)
+            if (! currPoint) {
                 continue;
+            }
 
             if (currPoint->isSmooth(prevSeg.first(), nextSeg.second())) {
                 // the current point has a smooth join, so we can add the previous segment
@@ -322,17 +325,18 @@ void RoundCornersCommand::roundPath()
     }
 }
 
-KoPathPoint * RoundCornersCommand::addSegment(KoPathShape * p, KoPathSegment & s)
+KoPathPoint *RoundCornersCommand::addSegment(KoPathShape *p, KoPathSegment &s)
 {
     switch (s.degree()) {
     case 1:
         return p->lineTo(s.second()->point());
         break;
     case 2:
-        if (s.first()->activeControlPoint2())
+        if (s.first()->activeControlPoint2()) {
             return p->curveTo(s.first()->controlPoint2(), s.second()->point());
-        else
+        } else {
             return p->curveTo(s.second()->controlPoint1(), s.second()->point());
+        }
         break;
     case 3:
         return p->curveTo(s.first()->controlPoint2(),
@@ -343,20 +347,21 @@ KoPathPoint * RoundCornersCommand::addSegment(KoPathShape * p, KoPathSegment & s
     return 0;
 }
 
-void RoundCornersCommand::copyPath(KoPathShape * dst, KoPathShape * src)
+void RoundCornersCommand::copyPath(KoPathShape *dst, KoPathShape *src)
 {
     dst->clear();
 
     int subpathCount = src->subpathCount();
     for (int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex) {
         int pointCount = src->subpathPointCount(subpathIndex);
-        if (! pointCount)
+        if (! pointCount) {
             continue;
+        }
 
-        KoSubpath * subpath = new KoSubpath;
+        KoSubpath *subpath = new KoSubpath;
         for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
-            KoPathPoint * p = src->pointByIndex(KoPathPointIndex(subpathIndex, pointIndex));
-            KoPathPoint * c = new KoPathPoint(*p);
+            KoPathPoint *p = src->pointByIndex(KoPathPointIndex(subpathIndex, pointIndex));
+            KoPathPoint *c = new KoPathPoint(*p);
             c->setParent(dst);
             subpath->append(c);
         }
@@ -376,7 +381,7 @@ QPointF RoundCornersCommand::tangentAtStart(const KoPathSegment &s)
 QPointF RoundCornersCommand::tangentAtEnd(const KoPathSegment &s)
 {
     QList<QPointF> cp = s.controlPoints();
-    QPointF tn = cp[cp.count()-2] - cp.last();
+    QPointF tn = cp[cp.count() - 2] - cp.last();
     qreal length = sqrt(tn.x() * tn.x() + tn.y() * tn.y());
     return tn / length;
 }

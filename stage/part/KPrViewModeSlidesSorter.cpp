@@ -184,9 +184,9 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     //install selection manager for Slides Sorter View and Custom Shows View
     m_slidesSorterItemContextBar = new KoViewItemContextBar(m_slidesSorterView);
     new KoViewItemContextBar(m_customSlideShowView);
-    QToolButton *duplicateButton = m_slidesSorterItemContextBar->addContextButton(i18n("Duplicate Slide"),QString("edit-copy"));
-    QToolButton *deleteButton = m_slidesSorterItemContextBar->addContextButton(i18n("Delete Slide"),QString("edit-delete"));
-    QToolButton *startPresentation = m_slidesSorterItemContextBar->addContextButton(i18n("Start Slideshow"),QString("view-presentation"));
+    QToolButton *duplicateButton = m_slidesSorterItemContextBar->addContextButton(i18n("Duplicate Slide"), QString("edit-copy"));
+    QToolButton *deleteButton = m_slidesSorterItemContextBar->addContextButton(i18n("Delete Slide"), QString("edit-delete"));
+    QToolButton *startPresentation = m_slidesSorterItemContextBar->addContextButton(i18n("Start Slideshow"), QString("view-presentation"));
     connect(view->kopaDocument(), SIGNAL(pageRemoved(KoPAPageBase*)), m_slidesSorterItemContextBar, SLOT(update()));
 
     //setup signals for item context bar buttons
@@ -206,15 +206,15 @@ KPrViewModeSlidesSorter::~KPrViewModeSlidesSorter()
     delete m_centralWidget;
 }
 
-void KPrViewModeSlidesSorter::paint(KoPACanvasBase* /*canvas*/, QPainter& /*painter*/, const QRectF &/*paintRect*/)
+void KPrViewModeSlidesSorter::paint(KoPACanvasBase * /*canvas*/, QPainter & /*painter*/, const QRectF &/*paintRect*/)
 {
 }
 
-void KPrViewModeSlidesSorter::paintEvent( KoPACanvas *canvas, QPaintEvent *event )
+void KPrViewModeSlidesSorter::paintEvent(KoPACanvas *canvas, QPaintEvent *event)
 {
     Q_UNUSED(canvas);
     Q_UNUSED(event);
-    Q_ASSERT( m_canvas == canvas );
+    Q_ASSERT(m_canvas == canvas);
 }
 
 void KPrViewModeSlidesSorter::tabletEvent(QTabletEvent *event, const QPointF &point)
@@ -274,7 +274,7 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     updateToActivePageIndex();
 
     //setup signals
-    connect(m_slidesSorterView,SIGNAL(indexChanged(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
+    connect(m_slidesSorterView, SIGNAL(indexChanged(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
     connect(m_slidesSorterView, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
     connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updateToActivePageIndex()));
 
@@ -321,7 +321,7 @@ void KPrViewModeSlidesSorter::deactivate()
     disableEditActions();
 }
 
-void KPrViewModeSlidesSorter::updateActivePage( KoPAPageBase *page )
+void KPrViewModeSlidesSorter::updateActivePage(KoPAPageBase *page)
 {
     if (m_view->activePage() != page) {
         m_view->setActivePage(page);
@@ -342,12 +342,12 @@ void KPrViewModeSlidesSorter::updateActivePageToCurrentIndex()
     m_view->setActivePage(m_view->kopaDocument()->pageByIndex(c_index.row(), false));
 }
 
-void KPrViewModeSlidesSorter::addShape( KoShape *shape )
+void KPrViewModeSlidesSorter::addShape(KoShape *shape)
 {
     Q_UNUSED(shape);
 }
 
-void KPrViewModeSlidesSorter::removeShape( KoShape *shape )
+void KPrViewModeSlidesSorter::removeShape(KoShape *shape)
 {
     Q_UNUSED(shape);
 }
@@ -403,7 +403,7 @@ void KPrViewModeSlidesSorter::itemClicked(const QModelIndex index)
     }
 
     //Avoid deselect slides when dragging
-    if (m_slidesSorterView->selectionModel()->selectedIndexes().length () > 1) {
+    if (m_slidesSorterView->selectionModel()->selectedIndexes().length() > 1) {
         return;
     }
 
@@ -423,16 +423,17 @@ QList<KoPAPageBase *> KPrViewModeSlidesSorter::extractSelectedSlides()
     }
 
     foreach (const QModelIndex &index, selectedItems) {
-        KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(index.row (), false);
+        KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(index.row(), false);
         if (page) {
             slides.append(page);
         }
     }
 
     //order slides
-    QMap<int, KoPAPageBase*> map;
-    foreach (KoPAPageBase *slide, slides)
+    QMap<int, KoPAPageBase *> map;
+    foreach (KoPAPageBase *slide, slides) {
         map.insert(m_view->kopaDocument()->pages(false).indexOf(slide), slide);
+    }
     slides = map.values();
 
     return slides;
@@ -442,10 +443,9 @@ void KPrViewModeSlidesSorter::deleteSlide()
 {
     if (m_slidesSorterView->hasFocus()) {
         // create a list with all selected slides
-        QList<KoPAPageBase*> selectedSlides = extractSelectedSlides();
+        QList<KoPAPageBase *> selectedSlides = extractSelectedSlides();
         m_slidesSorterModel->removeSlides(selectedSlides);
-    }
-    else if (m_customSlideShowView->hasFocus()) {
+    } else if (m_customSlideShowView->hasFocus()) {
         deleteSlidesFromCustomShow();
     }
 }
@@ -470,7 +470,7 @@ void KPrViewModeSlidesSorter::editCut()
 void KPrViewModeSlidesSorter::editCopy()
 {
     // separate selected layers and selected shapes
-    QList<KoPAPageBase*> slides = extractSelectedSlides();
+    QList<KoPAPageBase *> slides = extractSelectedSlides();
     m_slidesSorterModel->copySlides(slides);
 }
 
@@ -485,11 +485,11 @@ void KPrViewModeSlidesSorter::updateZoom(KoZoomMode::Mode mode, qreal zoom)
     //at zoom 100%, iconSize is set in 200 x 200
     //KPrSlidesSorterDocumentModel uses iconSize function in decorate Role.
     //Check if is enough room for context bar
-    int newIconSize = (zoom*DEFAULT_ICON_SIZE > m_slidesSorterItemContextBar->preferredWidth()) ?
-                qRound(zoom*DEFAULT_ICON_SIZE) : m_slidesSorterItemContextBar->preferredWidth();
+    int newIconSize = (zoom * DEFAULT_ICON_SIZE > m_slidesSorterItemContextBar->preferredWidth()) ?
+                      qRound(zoom * DEFAULT_ICON_SIZE) : m_slidesSorterItemContextBar->preferredWidth();
     //Check if slide is not too big
     newIconSize = (newIconSize < qMin(m_centralWidget->size().height(), m_centralWidget->size().width())) ?
-                newIconSize : qMin(m_centralWidget->size().height(), m_centralWidget->size().width());
+                  newIconSize : qMin(m_centralWidget->size().height(), m_centralWidget->size().width());
 
     setIconSize(QSize(newIconSize, newIconSize));
     m_slidesSorterView->setIconSize(iconSize());
@@ -514,7 +514,7 @@ void KPrViewModeSlidesSorter::loadZoomConfig()
         const KConfigGroup interface = config->group("Interface");
         s_zoom = interface.readEntry("ZoomSlidesSorter", s_zoom);
     }
-    m_view->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, s_zoom/100.);
+    m_view->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, s_zoom / 100.);
 }
 
 void KPrViewModeSlidesSorter::saveZoomConfig(int zoom)
@@ -603,8 +603,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
             //Deactivate tool buttons and edition
             disableEditCustomShowButtons();
             m_slidesSorterView->setAutoScroll(true);
-        }
-        else {
+        } else {
             animation->setDuration(duration);
             animation->setStartValue(0);
             animation->setEndValue(m_slidesSorterView->height() / 2);
@@ -635,7 +634,7 @@ void KPrViewModeSlidesSorter::deleteSlidesFromCustomShow()
 void KPrViewModeSlidesSorter::addSlideToCustomShow()
 {
     // create a list with all selected slides
-    QList<KoPAPageBase*> selectedSlides = extractSelectedSlides();
+    QList<KoPAPageBase *> selectedSlides = extractSelectedSlides();
     int row = (m_customSlideShowView->currentIndex().row() >= 0) ? m_customSlideShowView->currentIndex().row() + 1 : 0;
     m_customSlideShowModel->addSlides(selectedSlides, row);
 }
@@ -644,14 +643,12 @@ void KPrViewModeSlidesSorter::addCustomSlideShow()
 {
     //We create a different default name for every SlideShow:
     static int newSlideShowsCount = 1;
-    while(m_customSlideShowModel->customShowsNamesList().contains(i18n("Slide Show %1", newSlideShowsCount)))
-    {
+    while (m_customSlideShowModel->customShowsNamesList().contains(i18n("Slide Show %1", newSlideShowsCount))) {
         ++newSlideShowsCount;
     }
 
     m_customSlideShowModel->addNewCustomShow(i18n("Slide Show %1", newSlideShowsCount));
 }
-
 
 void KPrViewModeSlidesSorter::removeCustomSlideShow()
 {
@@ -687,10 +684,9 @@ void KPrViewModeSlidesSorter::renameCustomSlideShow()
     }
     //If the name is not already in use, use it, otherwise let the user know
     else if (!m_customSlideShowModel->customShowsNamesList().contains(newName)) {
-       m_customSlideShowModel->renameCustomShow(m_customSlideShowModel->activeCustomSlideShow(), newName);
-       updateCustomSlideShowsList();
-    }
-    else {
+        m_customSlideShowModel->renameCustomShow(m_customSlideShowModel->activeCustomSlideShow(), newName);
+        updateCustomSlideShowsList();
+    } else {
         KMessageBox::sorry(m_customSlideShowView, i18n("There cannot be two slideshows with the same name."), i18n("Error"),
                            KMessageBox::Notify);
         updateCustomSlideShowsList();
@@ -734,7 +730,7 @@ void KPrViewModeSlidesSorter::setActiveCustomSlideShow(int index)
 void KPrViewModeSlidesSorter::contextBarDuplicateSlide()
 {
     QList<KoPAPageBase *> slides;
-    KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterItemContextBar->currentIndex().row (), false);
+    KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterItemContextBar->currentIndex().row(), false);
     if (page) {
         slides.append(page);
         updateActivePage(page);
@@ -758,10 +754,10 @@ void KPrViewModeSlidesSorter::contextBarDeleteSlide()
 
 void KPrViewModeSlidesSorter::contextBarStartSlideshow()
 {
-    KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterItemContextBar->currentIndex().row (), false);
+    KoPAPageBase *page = m_view->kopaDocument()->pageByIndex(m_slidesSorterItemContextBar->currentIndex().row(), false);
     updateActivePage(page);
     KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
     if (kPrview) {
-       kPrview->startPresentation();
+        kPrview->startPresentation();
     }
 }

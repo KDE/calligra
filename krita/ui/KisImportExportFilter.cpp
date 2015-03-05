@@ -34,7 +34,7 @@ class KisImportExportFilter::Private
 public:
     QPointer<KoUpdater> updater;
 
-    Private() :updater(0) {}
+    Private() : updater(0) {}
 };
 
 KisImportExportFilter::KisImportExportFilter(QObject *parent)
@@ -44,11 +44,13 @@ KisImportExportFilter::KisImportExportFilter(QObject *parent)
 
 KisImportExportFilter::~KisImportExportFilter()
 {
-    if (d->updater) d->updater->setProgress(100);
+    if (d->updater) {
+        d->updater->setProgress(100);
+    }
     delete d;
 }
 
-void KisImportExportFilter::setUpdater(const QPointer<KoUpdater>& updater)
+void KisImportExportFilter::setUpdater(const QPointer<KoUpdater> &updater)
 {
     if (d->updater && !updater) {
         disconnect(this, SLOT(slotProgress(int)));

@@ -29,8 +29,8 @@
 #include <QDir>
 #include <QApplication>
 
-SQLite2ToSQLite3Migration::SQLite2ToSQLite3Migration(const QString& filePath)
-        : m_filePath(filePath)
+SQLite2ToSQLite3Migration::SQLite2ToSQLite3Migration(const QString &filePath)
+    : m_filePath(filePath)
 {
     m_process = 0;
     m_dlg = 0;
@@ -47,12 +47,14 @@ SQLite2ToSQLite3Migration::~SQLite2ToSQLite3Migration()
 
 tristate SQLite2ToSQLite3Migration::run()
 {
-    if (m_run)
+    if (m_run) {
         return false;
+    }
     m_run = true;
     const QString ksqlite2to3_app = KStandardDirs::findExe("ksqlite2to3");
-    if (ksqlite2to3_app.isEmpty())
+    if (ksqlite2to3_app.isEmpty()) {
         return false;
+    }
 
     QFileInfo fi(m_filePath);
     if (fi.isSymLink()) {
@@ -68,8 +70,9 @@ tristate SQLite2ToSQLite3Migration::run()
     connect(m_process, SIGNAL(receivedStderr(KProcess*,char*,int)),
             this, SLOT(receivedStderr(KProcess*,char*,int)));
     connect(m_process, SIGNAL(processExited(KProcess*)), this, SLOT(processExited(KProcess*)));
-    if (!m_process->start(KProcess::NotifyOnExit, KProcess::Stderr))
+    if (!m_process->start(KProcess::NotifyOnExit, KProcess::Stderr)) {
         return false;
+    }
 
     m_dlg = new KProgressDialog(0, 0, QString(),
                                 i18n("Saving \"%1\" project file to a new \"%2\" database format...",
@@ -83,8 +86,9 @@ tristate SQLite2ToSQLite3Migration::run()
     m_dlg->progressBar()->setProgress(0);
     m_dlg->exec();
 
-    if (result != true)
+    if (result != true) {
         return result;
+    }
 
     return result;
 }
@@ -96,7 +100,7 @@ void SQLite2ToSQLite3Migration::receivedStderr(KProcess *, char *buffer, int buf
     updateProgressBar(m_dlg, buffer, buflen);
 }
 
-void SQLite2ToSQLite3Migration::processExited(KProcess* process)
+void SQLite2ToSQLite3Migration::processExited(KProcess *process)
 {
     kDebug() << "EXIT " << process->name();
 
@@ -116,9 +120,10 @@ void SQLite2ToSQLite3Migration::processExited(KProcess* process)
 void SQLite2ToSQLite3Migration::cancelClicked()
 {
     kDebug() << result.toString() << " cancelClicked() " << m_process->isRunning() << " "
-        << m_process->exitStatus();
-    if (!m_process->isRunning() && 0 == m_process->exitStatus())
+             << m_process->exitStatus();
+    if (!m_process->isRunning() && 0 == m_process->exitStatus()) {
         return;
+    }
     result = cancelled;
     m_process->kill();
 }

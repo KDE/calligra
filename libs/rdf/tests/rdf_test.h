@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #ifndef RDF_TEST_H
 #define RDF_TEST_H
 
@@ -40,13 +38,12 @@ private Q_SLOTS:
     void testEditAndFindMarkers(); // XXX: implement
     void testRemoveMarkers();
 
-
 private:
 
     // @return the xml id for the inserted item
     QString insertTableWithSemItem(KoTextEditor &editor,
-                          KoDocumentRdf &rdfDoc,
-                          const QString name);
+                                   KoDocumentRdf &rdfDoc,
+                                   const QString name);
 };
 
 #endif // RDF_TEST_H

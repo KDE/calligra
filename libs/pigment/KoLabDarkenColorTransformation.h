@@ -26,32 +26,34 @@
 
 template<typename _lab_channels_type_>
 struct KoLabDarkenColorTransformation : public KoColorTransformation {
-    KoLabDarkenColorTransformation(qint32 shade, bool compensate, qreal compensation, const KoColorSpace *colorspace) : m_colorSpace(colorspace), m_shade(shade), m_compensate(compensate), m_compensation(compensation) {
+    KoLabDarkenColorTransformation(qint32 shade, bool compensate, qreal compensation, const KoColorSpace *colorspace) : m_colorSpace(colorspace), m_shade(shade), m_compensate(compensate), m_compensation(compensation)
+    {
 
     }
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const {
-        *((quint32 *)dst)=*((const quint32 *)src);
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
+    {
+        *((quint32 *)dst) = *((const quint32 *)src);
         QColor c;
 
-        for (unsigned int i = 0; i < nPixels*m_colorSpace->pixelSize(); i+=m_colorSpace->pixelSize()) {
+        for (unsigned int i = 0; i < nPixels * m_colorSpace->pixelSize(); i += m_colorSpace->pixelSize()) {
             if (m_compensate) {
-                m_colorSpace->toQColor(src+i,&c);
-                c.setRed((c.red()*m_shade)/(m_compensation*255));
-                c.setGreen((c.green()*m_shade)/(m_compensation*255));
-                c.setBlue((c.blue()*m_shade)/(m_compensation*255));
-                m_colorSpace->fromQColor(c,dst+i);
+                m_colorSpace->toQColor(src + i, &c);
+                c.setRed((c.red()*m_shade) / (m_compensation * 255));
+                c.setGreen((c.green()*m_shade) / (m_compensation * 255));
+                c.setBlue((c.blue()*m_shade) / (m_compensation * 255));
+                m_colorSpace->fromQColor(c, dst + i);
             } else {
-                m_colorSpace->toQColor(src+i,&c);
-                c.setRed((c.red()*m_shade)/255);
-                c.setGreen((c.green()*m_shade)/255);
-                c.setBlue((c.blue()*m_shade)/255);
-                m_colorSpace->fromQColor(c,dst+i);
+                m_colorSpace->toQColor(src + i, &c);
+                c.setRed((c.red()*m_shade) / 255);
+                c.setGreen((c.green()*m_shade) / 255);
+                c.setBlue((c.blue()*m_shade) / 255);
+                m_colorSpace->fromQColor(c, dst + i);
             }
         }
     }
-    const KoColorSpace* m_colorSpace;
-    const KoColorConversionTransformation* m_defaultToLab;
-    const KoColorConversionTransformation* m_defaultFromLab;
+    const KoColorSpace *m_colorSpace;
+    const KoColorConversionTransformation *m_defaultToLab;
+    const KoColorConversionTransformation *m_defaultFromLab;
     qint32 m_shade;
     bool m_compensate;
     qreal m_compensation;

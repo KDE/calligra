@@ -20,33 +20,44 @@ namespace TJ
 {
 
 /*
- * @short Class that stores type and name of a custom attribute. 
+ * @short Class that stores type and name of a custom attribute.
  * @author Chris Schlaeger <cs@kde.org>
  */
 class CustomAttributeDefinition
 {
 public:
-    CustomAttributeDefinition(const QString& n, CustomAttributeType t) :
+    CustomAttributeDefinition(const QString &n, CustomAttributeType t) :
         name(n),
         type(t),
         inherit(false)
     { }
     ~CustomAttributeDefinition() { }
 
-    const QString& getName() const { return name; }
-    CustomAttributeType getType() const { return type; }
-        
-    void setInherit(bool i) { inherit = i; }
-    bool getInherit() const { return inherit; }
+    const QString &getName() const
+    {
+        return name;
+    }
+    CustomAttributeType getType() const
+    {
+        return type;
+    }
+
+    void setInherit(bool i)
+    {
+        inherit = i;
+    }
+    bool getInherit() const
+    {
+        return inherit;
+    }
 
 private:
     QString name;
     CustomAttributeType type;
     bool inherit;
-} ;
+};
 
 } // namespace TJ
 
 #endif
-
 

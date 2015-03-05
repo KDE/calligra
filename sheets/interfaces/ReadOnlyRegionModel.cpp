@@ -32,9 +32,9 @@ public:
     ReadOnlyRegionModel test(Region());
 };
 
-ReadOnlyRegionModel::ReadOnlyRegionModel(const Region& region)
-        : QAbstractProxyModel(region.firstSheet())
-        , d(new Private)
+ReadOnlyRegionModel::ReadOnlyRegionModel(const Region &region)
+    : QAbstractProxyModel(region.firstSheet())
+    , d(new Private)
 {
     Q_ASSERT(region.isContiguous());
     d->region = region;
@@ -45,19 +45,19 @@ ReadOnlyRegionModel::~ReadOnlyRegionModel()
     delete d;
 }
 
-int ReadOnlyRegionModel::columnCount(const QModelIndex& parent) const
+int ReadOnlyRegionModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return d->region.firstRange().width();
 }
 
-int ReadOnlyRegionModel::rowCount(const QModelIndex& parent) const
+int ReadOnlyRegionModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return d->region.firstRange().height();
 }
 
-QModelIndex ReadOnlyRegionModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex ReadOnlyRegionModel::index(int row, int column, const QModelIndex &parent) const
 {
     Q_UNUSED(row);
     Q_UNUSED(column);
@@ -65,13 +65,13 @@ QModelIndex ReadOnlyRegionModel::index(int row, int column, const QModelIndex& p
     return QModelIndex();
 }
 
-QModelIndex ReadOnlyRegionModel::parent(const QModelIndex& index) const
+QModelIndex ReadOnlyRegionModel::parent(const QModelIndex &index) const
 {
     Q_UNUSED(index);
     return QModelIndex();
 }
 
-QModelIndex ReadOnlyRegionModel::mapFromSource(const QModelIndex& sourceIndex) const
+QModelIndex ReadOnlyRegionModel::mapFromSource(const QModelIndex &sourceIndex) const
 {
     if (!d->region.contains(QPoint(sourceIndex.column() + 1, sourceIndex.row() + 1))) {
         return QModelIndex();
@@ -80,7 +80,7 @@ QModelIndex ReadOnlyRegionModel::mapFromSource(const QModelIndex& sourceIndex) c
     return createIndex(sourceIndex.column() - offset.x() + 1, sourceIndex.row() - offset.y() + 1);
 }
 
-QModelIndex ReadOnlyRegionModel::mapToSource(const QModelIndex& proxyIndex) const
+QModelIndex ReadOnlyRegionModel::mapToSource(const QModelIndex &proxyIndex) const
 {
     const QPoint offset = d->region.firstRange().topLeft();
 //     return createIndex(proxyIndex.column() + offset.x() - 1, proxyIndex.row() + offset.y() - 1);

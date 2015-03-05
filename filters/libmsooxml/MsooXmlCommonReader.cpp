@@ -30,13 +30,13 @@
 using namespace MSOOXML;
 
 MsooXmlCommonReader::MsooXmlCommonReader(KoOdfWriters *writers)
-        : MsooXmlReader(writers)
+    : MsooXmlReader(writers)
 {
     init();
 }
 
-MsooXmlCommonReader::MsooXmlCommonReader(QIODevice* io, KoOdfWriters *writers)
-        : MsooXmlReader(io, writers)
+MsooXmlCommonReader::MsooXmlCommonReader(QIODevice *io, KoOdfWriters *writers)
+    : MsooXmlReader(io, writers)
 {
     init();
 }
@@ -56,14 +56,16 @@ void MsooXmlCommonReader::init()
 }
 
 //! CASE #420
-bool MsooXmlCommonReader::isDefaultTocStyle(const QString& name) const
+bool MsooXmlCommonReader::isDefaultTocStyle(const QString &name) const
 {
-    if (name == QLatin1String("TOCHeading"))
+    if (name == QLatin1String("TOCHeading")) {
         return true;
+    }
     if (name.startsWith(QLatin1String("TOC"))) {
         const QString num(name.mid(3));
-        if (num.length() == 1 && num[0].isDigit() && num[0] != '0')
+        if (num.length() == 1 && num[0].isDigit() && num[0] != '0') {
             return true;
+        }
     }
     return false;
 }
@@ -86,7 +88,8 @@ void MsooXmlCommonReader::setupParagraphStyle()
 class MediaTypeMap : public QMap<QByteArray, QByteArray>
 {
 public:
-    MediaTypeMap() {
+    MediaTypeMap()
+    {
         insert("bmp", "image/x-bmp");
         insert("gif", "image/gif");
         insert("jpg", "image/jpeg");
@@ -123,10 +126,11 @@ void MsooXmlCommonReader::popCurrentDrawStyle()
     m_drawStyleStack.removeLast();
 }
 
-void MsooXmlCommonReader::addManifestEntryForFile(const QString& path)
+void MsooXmlCommonReader::addManifestEntryForFile(const QString &path)
 {
-    if (path.isEmpty())
+    if (path.isEmpty()) {
         return;
+    }
 
     if (path.endsWith('/')) { // dir
         manifest->addManifestEntry(path, QString());
@@ -141,8 +145,9 @@ void MsooXmlCommonReader::addManifestEntryForFile(const QString& path)
 //! Adds manifest entry for "Pictures/"
 void MsooXmlCommonReader::addManifestEntryForPicturesDir()
 {
-    if (m_addManifestEntryForPicturesDirExecuted)
+    if (m_addManifestEntryForPicturesDirExecuted) {
         return;
+    }
     m_addManifestEntryForPicturesDirExecuted = true;
     manifest->addManifestEntry("Pictures/", QString());
 }

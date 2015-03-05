@@ -30,7 +30,7 @@
 using namespace Calligra::Sheets;
 
 CSVDataCommand::CSVDataCommand()
-        : AbstractDataManipulator()
+    : AbstractDataManipulator()
 {
 }
 
@@ -38,27 +38,27 @@ CSVDataCommand::~CSVDataCommand()
 {
 }
 
-void CSVDataCommand::setValue(const Value& value)
+void CSVDataCommand::setValue(const Value &value)
 {
     m_value = value;
 }
 
-void CSVDataCommand::setColumnDataTypes(const QList<KoCsvImportDialog::DataType>& dataTypes)
+void CSVDataCommand::setColumnDataTypes(const QList<KoCsvImportDialog::DataType> &dataTypes)
 {
     m_dataTypes = dataTypes;
 }
 
-void CSVDataCommand::setDecimalSymbol(const QString& symbol)
+void CSVDataCommand::setDecimalSymbol(const QString &symbol)
 {
     m_decimalSymbol = symbol;
 }
 
-void CSVDataCommand::setThousandsSeparator(const QString& separator)
+void CSVDataCommand::setThousandsSeparator(const QString &separator)
 {
     m_thousandsSeparator = separator;
 }
 
-Value CSVDataCommand::newValue(Element* element, int col, int row, bool* parse, Format::Type* fmtType)
+Value CSVDataCommand::newValue(Element *element, int col, int row, bool *parse, Format::Type *fmtType)
 {
     Q_UNUSED(fmtType)
     const int colidx = col - element->rect().left();
@@ -86,7 +86,7 @@ Value CSVDataCommand::newValue(Element* element, int col, int row, bool* parse, 
     return value;
 }
 
-bool CSVDataCommand::wantChange(Element* element, int col, int row)
+bool CSVDataCommand::wantChange(Element *element, int col, int row)
 {
     Q_UNUSED(row)
     return (m_dataTypes.value(col - element->rect().left()) != KoCsvImportDialog::None);
@@ -94,8 +94,9 @@ bool CSVDataCommand::wantChange(Element* element, int col, int row)
 
 bool CSVDataCommand::preProcessing()
 {
-    if (!AbstractDataManipulator::preProcessing())
+    if (!AbstractDataManipulator::preProcessing()) {
         return false;
+    }
     // Initialize the decimal symbol and thousands separator to use for parsing.
     m_documentDecimalSymbol = m_sheet->map()->calculationSettings()->locale()->decimalSymbol();
     m_documentThousandsSeparator = m_sheet->map()->calculationSettings()->locale()->thousandsSeparator();
@@ -106,8 +107,9 @@ bool CSVDataCommand::preProcessing()
 
 bool CSVDataCommand::postProcessing()
 {
-    if (!AbstractDataManipulator::postProcessing())
+    if (!AbstractDataManipulator::postProcessing()) {
         return false;
+    }
     // Restore the document's decimal symbol and thousands separator.
     m_sheet->map()->calculationSettings()->locale()->setDecimalSymbol(m_documentDecimalSymbol);
     m_sheet->map()->calculationSettings()->locale()->setThousandsSeparator(m_documentThousandsSeparator);

@@ -21,7 +21,7 @@
 #include <recorder/kis_macro.h>
 #include <recorder/kis_recorded_action.h>
 
-KisMacroModel::KisMacroModel(KisMacro* _macro) : m_macro(_macro)
+KisMacroModel::KisMacroModel(KisMacro *_macro) : m_macro(_macro)
 {
 }
 
@@ -29,13 +29,13 @@ KisMacroModel::~KisMacroModel()
 {
 }
 
-int KisMacroModel::rowCount(const QModelIndex & parent) const
+int KisMacroModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_macro->actions().count();
 }
 
-QVariant KisMacroModel::data(const QModelIndex & index, int role) const
+QVariant KisMacroModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid()) {
         if (role == Qt::DisplayRole || role == Qt::EditRole) {
@@ -45,7 +45,7 @@ QVariant KisMacroModel::data(const QModelIndex & index, int role) const
     return QVariant();
 }
 
-bool KisMacroModel::setData(const QModelIndex & index, const QVariant & value, int role)
+bool KisMacroModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (index.isValid()) {
         if (role == Qt::EditRole) {
@@ -56,17 +56,17 @@ bool KisMacroModel::setData(const QModelIndex & index, const QVariant & value, i
     return false;
 }
 
-Qt::ItemFlags KisMacroModel::flags(const QModelIndex & index) const
+Qt::ItemFlags KisMacroModel::flags(const QModelIndex &index) const
 {
     Q_UNUSED(index);
     return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable;
 }
 
-bool KisMacroModel::removeRows(int row, int count, const QModelIndex & parent)
+bool KisMacroModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, row, row + count);
 
-    QList<KisRecordedAction*> actions;
+    QList<KisRecordedAction *> actions;
     for (int i = row; i < row + count; ++i) {
         actions.push_back(m_macro->actions()[i]);
     }
@@ -76,10 +76,9 @@ bool KisMacroModel::removeRows(int row, int count, const QModelIndex & parent)
     return true;
 }
 
-void KisMacroModel::addAction(const QModelIndex& _after, const KisRecordedAction& _action)
+void KisMacroModel::addAction(const QModelIndex &_after, const KisRecordedAction &_action)
 {
-    if(m_macro->actions().isEmpty())
-    {
+    if (m_macro->actions().isEmpty()) {
         beginInsertRows(QModelIndex(), 0, 0);
         m_macro->addAction(_action);
         endInsertRows();
@@ -91,31 +90,31 @@ void KisMacroModel::addAction(const QModelIndex& _after, const KisRecordedAction
     }
 }
 
-void KisMacroModel::duplicateAction(const QModelIndex& index)
+void KisMacroModel::duplicateAction(const QModelIndex &index)
 {
     if (index.isValid()) {
-        KisRecordedAction* action = m_macro->actions()[index.row()];
+        KisRecordedAction *action = m_macro->actions()[index.row()];
         beginInsertRows(QModelIndex(), index.row(), index.row());
         m_macro->addAction(*action, action);
         endInsertRows();
     }
 }
 
-void KisMacroModel::raise(const QModelIndex& index)
+void KisMacroModel::raise(const QModelIndex &index)
 {
     if (index.isValid()) {
-        KisRecordedAction* action = m_macro->actions()[index.row()];
-        KisRecordedAction* before = m_macro->actions()[index.row() - 1];
+        KisRecordedAction *action = m_macro->actions()[index.row()];
+        KisRecordedAction *before = m_macro->actions()[index.row() - 1];
         m_macro->moveAction(action, before);
         emit(dataChanged(createIndex(index.row() - 1, 0), index));
     }
 }
 
-void KisMacroModel::lower(const QModelIndex& index)
+void KisMacroModel::lower(const QModelIndex &index)
 {
     if (index.isValid()) {
-        KisRecordedAction* before = m_macro->actions()[index.row()];
-        KisRecordedAction* action = m_macro->actions()[index.row() + 1];
+        KisRecordedAction *before = m_macro->actions()[index.row()];
+        KisRecordedAction *action = m_macro->actions()[index.row() + 1];
         m_macro->moveAction(action, before);
         emit(dataChanged(index, createIndex(index.row() + 1, 0)));
     }

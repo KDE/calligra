@@ -46,15 +46,15 @@ class CALLIGRA_SHEETS_ODF_EXPORT RowFormat
 {
 public:
     RowFormat();
-    RowFormat(const RowFormat& other);
-    RowFormat(const RowFormatStorage* rows, int row);
+    RowFormat(const RowFormat &other);
+    RowFormat(const RowFormatStorage *rows, int row);
     ~RowFormat();
 
-    void setSheet(Sheet* sheet);
+    void setSheet(Sheet *sheet);
 
-    QDomElement save(QDomDocument&, int yshift = 0) const;
-    bool load(const KoXmlElement& row, int yshift = 0, Paste::Mode mode = Paste::Normal);
-    bool loadOdf(const KoXmlElement& row, KoXmlElement * rowStyle);
+    QDomElement save(QDomDocument &, int yshift = 0) const;
+    bool load(const KoXmlElement &row, int yshift = 0, Paste::Mode mode = Paste::Normal);
+    bool loadOdf(const KoXmlElement &row, KoXmlElement *rowStyle);
 
     /**
      * \return the row's height
@@ -86,10 +86,10 @@ public:
     int row() const;
     void setRow(int row);
 
-    RowFormat* next() const;
-    RowFormat* previous() const;
-    void setNext(RowFormat* c);
-    void setPrevious(RowFormat* c);
+    RowFormat *next() const;
+    RowFormat *previous() const;
+    void setNext(RowFormat *c);
+    void setPrevious(RowFormat *c);
 
     /**
      * Sets the hide flag
@@ -112,17 +112,18 @@ public:
      */
     bool hasPageBreak() const;
 
-    bool operator==(const RowFormat& other) const;
-    inline bool operator!=(const RowFormat& other) const {
+    bool operator==(const RowFormat &other) const;
+    inline bool operator!=(const RowFormat &other) const
+    {
         return !operator==(other);
     }
 
 private:
     // do not allow assignment
-    RowFormat& operator=(const RowFormat&);
+    RowFormat &operator=(const RowFormat &);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 /**
@@ -132,13 +133,13 @@ class CALLIGRA_SHEETS_ODF_EXPORT ColumnFormat
 {
 public:
     ColumnFormat();
-    ColumnFormat(const ColumnFormat& other);
+    ColumnFormat(const ColumnFormat &other);
     ~ColumnFormat();
 
-    void setSheet(Sheet* sheet);
+    void setSheet(Sheet *sheet);
 
-    QDomElement save(QDomDocument&, int xshift = 0) const;
-    bool load(const KoXmlElement& row, int xshift = 0, Paste::Mode mode = Paste::Normal);
+    QDomElement save(QDomDocument &, int xshift = 0) const;
+    bool load(const KoXmlElement &row, int xshift = 0, Paste::Mode mode = Paste::Normal);
 
     /**
      * \return the column's width
@@ -171,10 +172,10 @@ public:
     int column() const;
     void setColumn(int column);
 
-    ColumnFormat* next() const;
-    ColumnFormat* previous() const;
-    void setNext(ColumnFormat* c);
-    void setPrevious(ColumnFormat* c);
+    ColumnFormat *next() const;
+    ColumnFormat *previous() const;
+    void setNext(ColumnFormat *c);
+    void setPrevious(ColumnFormat *c);
 
     void setHidden(bool _hide);
     bool isHidden() const;
@@ -194,17 +195,18 @@ public:
      */
     bool hasPageBreak() const;
 
-    bool operator==(const ColumnFormat& other) const;
-    inline bool operator!=(const ColumnFormat& other) const {
+    bool operator==(const ColumnFormat &other) const;
+    inline bool operator!=(const ColumnFormat &other) const
+    {
         return !operator==(other);
     }
 
 private:
     // do not allow assignment
-    ColumnFormat& operator=(const ColumnFormat&);
+    ColumnFormat &operator=(const ColumnFormat &);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

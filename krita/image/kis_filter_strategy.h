@@ -34,28 +34,36 @@ public:
     KisFilterStrategy(KoID id) : m_id(id) {}
     virtual ~KisFilterStrategy() {}
 
-    QString id() {
+    QString id()
+    {
         return m_id.id();
     }
-    QString name() {
+    QString name()
+    {
         return m_id.name();
     }
-    virtual qreal valueAt(qreal /*t*/) const {
+    virtual qreal valueAt(qreal /*t*/) const
+    {
         return 0;
     }
-    virtual qint32 intValueAt(qint32 t) const {
-        return qint32(255*valueAt(t / 256.0));
+    virtual qint32 intValueAt(qint32 t) const
+    {
+        return qint32(255 * valueAt(t / 256.0));
     }
-    qreal support() {
+    qreal support()
+    {
         return supportVal;
     }
-    qint32 intSupport() {
+    qint32 intSupport()
+    {
         return intSupportVal;
     }
-    virtual bool boxSpecial() {
+    virtual bool boxSpecial()
+    {
         return false;
     }
-    virtual QString description() {
+    virtual QString description()
+    {
         return QString("");
     }
 
@@ -68,7 +76,8 @@ protected:
 class KRITAIMAGE_EXPORT KisHermiteFilterStrategy : public KisFilterStrategy
 {
 public:
-    KisHermiteFilterStrategy() : KisFilterStrategy(KoID("Hermite", i18n("Hermite"))) {
+    KisHermiteFilterStrategy() : KisFilterStrategy(KoID("Hermite", i18n("Hermite")))
+    {
         supportVal = 1.0; intSupportVal = 256;
     }
     virtual ~KisHermiteFilterStrategy() {}
@@ -80,12 +89,14 @@ public:
 class KRITAIMAGE_EXPORT KisBicubicFilterStrategy : public KisFilterStrategy
 {
 public:
-    KisBicubicFilterStrategy() : KisFilterStrategy(KoID("Bicubic", i18n("Bicubic"))) {
+    KisBicubicFilterStrategy() : KisFilterStrategy(KoID("Bicubic", i18n("Bicubic")))
+    {
         supportVal = 2.0; intSupportVal = 512;
     }
     virtual ~KisBicubicFilterStrategy() {}
 
-    virtual QString description() {
+    virtual QString description()
+    {
         return i18n("Adds pixels using the color of surrounding pixels. Produces smoother tonal gradations than Bilinear.");
     }
 
@@ -94,18 +105,21 @@ public:
 class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
 {
 public:
-    KisBoxFilterStrategy() : KisFilterStrategy(KoID("Box", i18n("Box"))) {
+    KisBoxFilterStrategy() : KisFilterStrategy(KoID("Box", i18n("Box")))
+    {
         supportVal = 0.5; intSupportVal = 128;
     }
     virtual ~KisBoxFilterStrategy() {}
 
-    virtual QString description() {
+    virtual QString description()
+    {
         return i18n("Replicate pixels in the image. Preserves all the original detail, but can produce jagged effects.");
     }
 
     virtual qint32 intValueAt(qint32 t) const;
     virtual qreal valueAt(qreal t) const;
-    virtual bool boxSpecial() {
+    virtual bool boxSpecial()
+    {
         return true;
     }
 };
@@ -113,12 +127,14 @@ public:
 class KRITAIMAGE_EXPORT KisBilinearFilterStrategy : public KisFilterStrategy
 {
 public:
-    KisBilinearFilterStrategy() : KisFilterStrategy(KoID("Bilinear", i18n("Bilinear"))) {
+    KisBilinearFilterStrategy() : KisFilterStrategy(KoID("Bilinear", i18n("Bilinear")))
+    {
         supportVal = 1.0; intSupportVal = 256;
     }
     virtual ~KisBilinearFilterStrategy() {}
 
-    virtual QString description() {
+    virtual QString description()
+    {
         return i18n("Adds pixels averaging the color values of surrounding pixels. Produces medium quality results when the image is scaled from half to two times the original size.");
     }
 
@@ -129,7 +145,8 @@ public:
 class KRITAIMAGE_EXPORT KisBellFilterStrategy : public KisFilterStrategy
 {
 public:
-    KisBellFilterStrategy() : KisFilterStrategy(KoID("Bell", i18n("Bell"))) {
+    KisBellFilterStrategy() : KisFilterStrategy(KoID("Bell", i18n("Bell")))
+    {
         supportVal = 1.5; intSupportVal = 128 + 256;
     }
     virtual ~KisBellFilterStrategy() {}
@@ -140,7 +157,8 @@ public:
 class KRITAIMAGE_EXPORT KisBSplineFilterStrategy : public KisFilterStrategy
 {
 public:
-    KisBSplineFilterStrategy() : KisFilterStrategy(KoID("BSpline", i18n("BSpline"))) {
+    KisBSplineFilterStrategy() : KisFilterStrategy(KoID("BSpline", i18n("BSpline")))
+    {
         supportVal = 2.0; intSupportVal = 512;
     }
     virtual ~KisBSplineFilterStrategy() {}
@@ -151,12 +169,14 @@ public:
 class KRITAIMAGE_EXPORT KisLanczos3FilterStrategy : public KisFilterStrategy
 {
 public:
-    KisLanczos3FilterStrategy() : KisFilterStrategy(KoID("Lanczos3", i18n("Lanczos3"))) {
+    KisLanczos3FilterStrategy() : KisFilterStrategy(KoID("Lanczos3", i18n("Lanczos3")))
+    {
         supportVal = 3.0; intSupportVal = 768;
     }
     virtual ~KisLanczos3FilterStrategy() {}
 
-    virtual QString description() {
+    virtual QString description()
+    {
         return i18n("Offers similar results than Bicubic, but maybe a little bit sharper. Can produce light and dark halos along strong edges.");
     }
 
@@ -168,7 +188,8 @@ private:
 class KRITAIMAGE_EXPORT  KisMitchellFilterStrategy : public KisFilterStrategy
 {
 public:
-    KisMitchellFilterStrategy() : KisFilterStrategy(KoID("Mitchell", i18n("Mitchell"))) {
+    KisMitchellFilterStrategy() : KisFilterStrategy(KoID("Mitchell", i18n("Mitchell")))
+    {
         supportVal = 2.0; intSupportVal = 256;
     }
     virtual ~KisMitchellFilterStrategy() {}
@@ -181,7 +202,7 @@ class KRITAIMAGE_EXPORT KisFilterStrategyRegistry : public KoGenericRegistry<Kis
 
 public:
 
-    static KisFilterStrategyRegistry* instance();
+    static KisFilterStrategyRegistry *instance();
 
     /**
      * This function return a list of all the keys in KoID format by using the name() method
@@ -199,8 +220,8 @@ private:
 
     KisFilterStrategyRegistry();
     ~KisFilterStrategyRegistry();
-    KisFilterStrategyRegistry(const KisFilterStrategyRegistry&);
-    KisFilterStrategyRegistry operator=(const KisFilterStrategyRegistry&);
+    KisFilterStrategyRegistry(const KisFilterStrategyRegistry &);
+    KisFilterStrategyRegistry operator=(const KisFilterStrategyRegistry &);
 
 };
 

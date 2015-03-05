@@ -8,7 +8,7 @@
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -30,44 +30,44 @@ namespace KexiMigration
 
 class xBaseMigrate : public KexiMigrate, protected xbXBase
 {
-  Q_OBJECT
-  KEXIMIGRATION_DRIVER
+    Q_OBJECT
+    KEXIMIGRATION_DRIVER
 
-  public:
-    xBaseMigrate(QObject *parent, const QVariantList& args = QVariantList());
+public:
+    xBaseMigrate(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~xBaseMigrate();
-    
-  protected:
+
+protected:
     //! Driver specific function to return table names
-    virtual bool drv_tableNames(QStringList& tablenames);
-    
+    virtual bool drv_tableNames(QStringList &tablenames);
+
     //! Driver specific implementation to read a table schema
     virtual bool drv_readTableSchema(
-      const QString& originalName, KexiDB::TableSchema& tableSchema);
-    
+        const QString &originalName, KexiDB::TableSchema &tableSchema);
+
     //! Driver specific connection implementation
     virtual bool drv_connect();
-    
+
     virtual bool drv_disconnect();
 
-    virtual bool drv_copyTable(const QString& srcTable, 
-      KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+    virtual bool drv_copyTable(const QString &srcTable,
+                               KexiDB::Connection *destConn, KexiDB::TableSchema *dstTable);
 
 //! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_getTablesList( QStringList &list );
 //! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_containsTable( const QString &tableName );
 
-  private:
+private:
     KexiDB::Field::Type type(char xBaseColumnType);
 
     //! Sets and existing constraints on the field
-    void getConstraints(const QString& tableName, KexiDB::Field* fld);
+    void getConstraints(const QString &tableName, KexiDB::Field *fld);
 
     //! Returns a list of index files corresponding to the specific fieldName
-    QStringList getIndexFileNames(const QString& tableName, const QString& fieldName);
+    QStringList getIndexFileNames(const QString &tableName, const QString &fieldName);
 
     //! Mapping tableNames to actual absoolute file name paths
     //! XBase only deals with absolute names ( with the .dbf extension ) which is pretty cumbersome
-    QHash<QString,QString> m_tableNamePathMap;
+    QHash<QString, QString> m_tableNamePathMap;
 };
 }
 

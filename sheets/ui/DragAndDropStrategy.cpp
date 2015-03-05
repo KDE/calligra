@@ -53,8 +53,8 @@ public:
 
 DragAndDropStrategy::DragAndDropStrategy(CellToolBase *cellTool,
         const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-        : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
-        , d(new Private)
+    : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
+    , d(new Private)
 {
     d->lastPoint = documentPos;
     Selection *const selection = this->selection();
@@ -79,11 +79,12 @@ DragAndDropStrategy::~DragAndDropStrategy()
     delete d;
 }
 
-void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
+void DragAndDropStrategy::handleMouseMove(const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
-    if (d->started)
+    if (d->started) {
         return;
+    }
     const QPointF position = documentPos - cellTool()->offset();
     d->lastPoint = position;
 
@@ -107,7 +108,7 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
         str << doc;
         buffer.close();
 
-        QMimeData* mimeData = new QMimeData();
+        QMimeData *mimeData = new QMimeData();
         mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
         mimeData->setData("application/x-kspread-snippet", buffer.buffer());
 
@@ -118,7 +119,7 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
     }
 }
 
-KUndo2Command* DragAndDropStrategy::createCommand()
+KUndo2Command *DragAndDropStrategy::createCommand()
 {
     //const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = d->lastPoint /*- (shape ? shape->position() : QPointF(0.0, 0.0))*/;

@@ -16,14 +16,12 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #include "kistoolcropconfigwidget.h"
 #include "kis_tool_crop.h"
 #include <KoIcon.h>
 #include <kis_acyclic_signal_connector.h>
 
-
-KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget* parent, KisToolCrop* cropTool)
+KisToolCropConfigWidget::KisToolCropConfigWidget(QWidget *parent, KisToolCrop *cropTool)
     : QWidget(parent)
     , m_cropTool(cropTool)
 {

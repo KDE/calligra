@@ -20,7 +20,6 @@
 
 #include "kis_desaturate_filter.h"
 
-
 #include <math.h>
 
 #include <stdlib.h>
@@ -54,7 +53,7 @@
 #include <kis_iterator_ng.h>
 
 KisDesaturateFilter::KisDesaturateFilter()
-        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Desaturate"))
+    : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Desaturate"))
 {
     setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_U)));
     setSupportsPainting(true);
@@ -70,8 +69,7 @@ KisConfigWidget *KisDesaturateFilter::createConfigurationWidget(QWidget *parent,
     return new KisDesaturateConfigWidget(parent);
 }
 
-
-KoColorTransformation* KisDesaturateFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation *KisDesaturateFilter::createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const
 {
     QHash<QString, QVariant> params;
     if (config) {
@@ -82,12 +80,12 @@ KoColorTransformation* KisDesaturateFilter::createTransformation(const KoColorSp
 
 KisFilterConfiguration *KisDesaturateFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("type", 0);
     return config;
 }
 
-KisDesaturateConfigWidget::KisDesaturateConfigWidget(QWidget * parent, Qt::WFlags f) : KisConfigWidget(parent, f)
+KisDesaturateConfigWidget::KisDesaturateConfigWidget(QWidget *parent, Qt::WFlags f) : KisConfigWidget(parent, f)
 {
     m_page = new Ui_WdgDesaturate();
     m_page->setupUi(this);
@@ -107,14 +105,14 @@ KisDesaturateConfigWidget::~KisDesaturateConfigWidget()
     delete m_page;
 }
 
-KisPropertiesConfiguration * KisDesaturateConfigWidget::configuration() const
+KisPropertiesConfiguration *KisDesaturateConfigWidget::configuration() const
 {
-    KisFilterConfiguration* c = new KisFilterConfiguration(KisDesaturateFilter::id().id(), 0);
+    KisFilterConfiguration *c = new KisFilterConfiguration(KisDesaturateFilter::id().id(), 0);
     c->setProperty("type", m_group->checkedId());
     return c;
 }
 
-void KisDesaturateConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisDesaturateConfigWidget::setConfiguration(const KisPropertiesConfiguration *config)
 {
     m_group->button(config->getInt("type", 0))->setChecked(true);
     emit sigConfigurationItemChanged();

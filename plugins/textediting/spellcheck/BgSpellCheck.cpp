@@ -33,10 +33,11 @@
 BgSpellCheck::BgSpellCheck(const Speller &speller, QObject *parent):
     BackgroundChecker(speller, parent)
 {
-    connect(this, SIGNAL(misspelling(const QString &, int)), this, SLOT(foundMisspelling(const QString &, int)));
+    connect(this, SIGNAL(misspelling(QString,int)), this, SLOT(foundMisspelling(QString,int)));
     QString lang = speller.language();
-    if (lang.isEmpty()) // have *some* default...
+    if (lang.isEmpty()) { // have *some* default...
         lang = "en_US";
+    }
     setDefaultLanguage(lang);
 }
 
@@ -51,7 +52,7 @@ void BgSpellCheck::setDefaultLanguage(const QString &language)
     m_defaultLanguage = language;
     int index = m_defaultLanguage.indexOf('_');
     if (index > 0) {
-        m_defaultCountry = m_defaultLanguage.mid(index+1);
+        m_defaultCountry = m_defaultLanguage.mid(index + 1);
         m_defaultLanguage = m_defaultLanguage.left(index);
     }
 }
@@ -68,7 +69,7 @@ void BgSpellCheck::startRun(QTextDocument *document, int startPosition, int endP
         if (m_currentCountry.isEmpty()) {
             changeLanguage(m_currentLanguage);
         } else {
-            changeLanguage(m_currentLanguage+'_'+m_currentCountry);
+            changeLanguage(m_currentLanguage + '_' + m_currentCountry);
         }
     }
     if (m_currentPosition < m_endPosition) {
@@ -82,8 +83,9 @@ void BgSpellCheck::startRun(QTextDocument *document, int startPosition, int endP
 QString BgSpellCheck::fetchMoreText()
 {
     m_currentPosition = m_nextPosition;
-    if (m_currentPosition >= m_endPosition)
+    if (m_currentPosition >= m_endPosition) {
         return QString();
+    }
 
     QTextBlock block = m_document->findBlock(m_currentPosition);
     QTextBlock::iterator iter;
@@ -110,26 +112,29 @@ QString BgSpellCheck::fetchMoreText()
     int end = m_endPosition;
     QTextCharFormat cf = iter.fragment().charFormat();
     QString language;
-    if (cf.hasProperty(KoCharacterStyle::Language))
+    if (cf.hasProperty(KoCharacterStyle::Language)) {
         language = cf.property(KoCharacterStyle::Language).toString();
-    else
+    } else {
         language = m_defaultLanguage;
+    }
     QString country;
-    if (cf.hasProperty(KoCharacterStyle::Country))
+    if (cf.hasProperty(KoCharacterStyle::Country)) {
         country = cf.property(KoCharacterStyle::Country).toString();
-    else
+    } else {
         country = m_defaultCountry;
+    }
 
     // qDebug() << "init" << language << country << "/" << iter.fragment().position();
-    while(true) {
+    while (true) {
         end = iter.fragment().position() + iter.fragment().length();
         // qDebug() << " + " << iter.fragment().position() << "-" << iter.fragment().position() + iter.fragment().length()
-            // << block.text().mid(iter.fragment().position() - block.position(), iter.fragment().length());
+        // << block.text().mid(iter.fragment().position() - block.position(), iter.fragment().length());
         if (end >= qMin(m_endPosition, m_currentPosition + MaxCharsPerRun)) {
             break;
         }
-        if (!iter.atEnd())
+        if (!iter.atEnd()) {
             ++iter;
+        }
         if (iter.atEnd()) { // end of block.
             m_nextPosition = block.position() + block.length();
             end = m_nextPosition - 1;
@@ -139,17 +144,17 @@ QString BgSpellCheck::fetchMoreText()
         // qDebug() << "Checking for viability forwarding to " << iter.fragment().position();
         cf = iter.fragment().charFormat();
         // qDebug() << " new fragment language;"
-            // << (cf.hasProperty(KoCharacterStyle::Language) ?  cf.property(KoCharacterStyle::Language).toString() : "unset");
+        // << (cf.hasProperty(KoCharacterStyle::Language) ?  cf.property(KoCharacterStyle::Language).toString() : "unset");
 
         if ((cf.hasProperty(KoCharacterStyle::Language)
-                    && language != cf.property(KoCharacterStyle::Language).toString())
+                && language != cf.property(KoCharacterStyle::Language).toString())
                 || (!cf.hasProperty(KoCharacterStyle::Language)
                     && language != m_defaultLanguage)) {
             break;
         }
 
         if ((cf.hasProperty(KoCharacterStyle::Country)
-                    && country != cf.property(KoCharacterStyle::Country).toString())
+                && country != cf.property(KoCharacterStyle::Country).toString())
                 || (!cf.hasProperty(KoCharacterStyle::Country)
                     && country != m_defaultCountry)) {
             break;
@@ -161,11 +166,11 @@ QString BgSpellCheck::fetchMoreText()
         m_currentLanguage = language;
         m_currentCountry = country;
 #if 0
-     Disabling this as sonnet crashes on this. See https://bugs.kde.org/228271
+    Disabling this as sonnet crashes on this. See https://bugs.kde.org/228271
         if (m_currentCountry.isEmpty()) {
             changeLanguage(m_currentLanguage);
         } else {
-            changeLanguage(m_currentLanguage+'_'+m_currentCountry);
+            changeLanguage(m_currentLanguage + '_' + m_currentCountry);
         }
 
 #endif
@@ -174,8 +179,9 @@ QString BgSpellCheck::fetchMoreText()
     QTextCursor cursor(m_document);
     cursor.setPosition(end);
     cursor.setPosition(m_currentPosition, QTextCursor::KeepAnchor);
-    if (m_nextPosition < end)
+    if (m_nextPosition < end) {
         m_nextPosition = end;
+    }
     return cursor.selectedText();
 }
 

@@ -53,8 +53,8 @@ public:
 
     void add(const QList<Pair> &pairs);
 
-    StyleStorageUndoCommand& operator<<(const Pair &pair);
-    StyleStorageUndoCommand& operator<<(const QList<Pair> &pairs);
+    StyleStorageUndoCommand &operator<<(const Pair &pair);
+    StyleStorageUndoCommand &operator<<(const QList<Pair> &pairs);
 
 private:
     StyleStorage *const m_storage;
@@ -62,8 +62,8 @@ private:
 };
 
 StyleStorageUndoCommand::StyleStorageUndoCommand(StyleStorage *storage, KUndo2Command *parent)
-        : KUndo2Command(parent)
-        , m_storage(storage)
+    : KUndo2Command(parent)
+    , m_storage(storage)
 {
 }
 
@@ -75,18 +75,18 @@ void StyleStorageUndoCommand::undo()
     KUndo2Command::undo(); // undo possible child commands
 }
 
-void StyleStorageUndoCommand::add(const QList<Pair>& pairs)
+void StyleStorageUndoCommand::add(const QList<Pair> &pairs)
 {
     m_undoData << pairs;
 }
 
-StyleStorageUndoCommand& StyleStorageUndoCommand::operator<<(const Pair& pair)
+StyleStorageUndoCommand &StyleStorageUndoCommand::operator<<(const Pair &pair)
 {
     m_undoData << pair;
     return *this;
 }
 
-StyleStorageUndoCommand& StyleStorageUndoCommand::operator<<(const QList<Pair>& pairs)
+StyleStorageUndoCommand &StyleStorageUndoCommand::operator<<(const QList<Pair> &pairs)
 {
     m_undoData << pairs;
     return *this;

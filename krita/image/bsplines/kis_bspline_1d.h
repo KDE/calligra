@@ -26,8 +26,8 @@
 
 #include "kis_bspline.h"
 
-
-namespace KisBSplines {
+namespace KisBSplines
+{
 
 class KRITAIMAGE_EXPORT KisBSpline1D
 {
@@ -36,7 +36,8 @@ public:
     ~KisBSpline1D();
 
     template <class FunctionOp>
-        inline void initializeSpline() {
+    inline void initializeSpline()
+    {
 
         FunctionOp op;
         float step = (m_gridEnd - m_gridStart) / (m_numSamples - 1);
@@ -54,11 +55,13 @@ public:
 
     float value(float x) const;
 
-    inline float gridStart() const {
+    inline float gridStart() const
+    {
         return m_gridStart;
     }
 
-    inline float gridEnd() const {
+    inline float gridEnd() const
+    {
         return m_gridEnd;
     }
 

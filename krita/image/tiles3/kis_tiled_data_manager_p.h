@@ -17,15 +17,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-
 /* FIXME: Think over SSE here */
 void KisTiledDataManager::writeBytesBody(const quint8 *data,
-                                         qint32 x, qint32 y,
-                                         qint32 width, qint32 height,
-                                         qint32 dataRowStride)
+        qint32 x, qint32 y,
+        qint32 width, qint32 height,
+        qint32 dataRowStride)
 {
-    if (!data) return;
+    if (!data) {
+        return;
+    }
 
     width  = width < 0  ? 0 : width;
     height = height < 0 ? 0 : height;
@@ -45,15 +45,15 @@ void KisTiledDataManager::writeBytesBody(const quint8 *data,
         qint32 imageX = x;
         qint32 columnsRemaining = width;
         qint32 numContiguousImageRows = numContiguousRows(imageY, imageX,
-                                                          imageX + width - 1);
+                                        imageX + width - 1);
 
         qint32 rowsToWork = qMin(numContiguousImageRows, rowsRemaining);
 
         while (columnsRemaining > 0) {
 
             qint32 numContiguousImageColumns =
-                    numContiguousColumns(imageX, imageY,
-                                         imageY + rowsToWork - 1);
+                numContiguousColumns(imageX, imageY,
+                                     imageY + rowsToWork - 1);
 
             qint32 columnsToWork = qMin(numContiguousImageColumns,
                                         columnsRemaining);
@@ -61,11 +61,10 @@ void KisTiledDataManager::writeBytesBody(const quint8 *data,
             KisTileDataWrapper tw(this, imageX, imageY, KisTileDataWrapper::WRITE);
             quint8 *tileIt = tw.data();
 
-
             const qint32 tileRowStride = rowStride(imageX, imageY);
 
             const quint8 *dataIt = data +
-                    dataX * pixelSize + dataY * dataRowStride;
+                                   dataX * pixelSize + dataY * dataRowStride;
 
             const qint32 lineSize = columnsToWork * pixelSize;
 
@@ -86,13 +85,14 @@ void KisTiledDataManager::writeBytesBody(const quint8 *data,
     }
 }
 
-
 void KisTiledDataManager::readBytesBody(quint8 *data,
                                         qint32 x, qint32 y,
                                         qint32 width, qint32 height,
                                         qint32 dataRowStride) const
 {
-    if (!data) return;
+    if (!data) {
+        return;
+    }
 
     width  = width < 0  ? 0 : width;
     height = height < 0 ? 0 : height;
@@ -112,27 +112,26 @@ void KisTiledDataManager::readBytesBody(quint8 *data,
         qint32 imageX = x;
         qint32 columnsRemaining = width;
         qint32 numContiguousImageRows = numContiguousRows(imageY, imageX,
-                                                          imageX + width - 1);
+                                        imageX + width - 1);
 
         qint32 rowsToWork = qMin(numContiguousImageRows, rowsRemaining);
 
         while (columnsRemaining > 0) {
 
             qint32 numContiguousImageColumns = numContiguousColumns(imageX, imageY,
-                                                                    imageY + rowsToWork - 1);
+                                               imageY + rowsToWork - 1);
 
             qint32 columnsToWork = qMin(numContiguousImageColumns,
                                         columnsRemaining);
 
             // XXX: Ugly const cast because of the old pixelPtr design copied from tiles1.
-            KisTileDataWrapper tw(const_cast<KisTiledDataManager*>(this), imageX, imageY, KisTileDataWrapper::READ);
+            KisTileDataWrapper tw(const_cast<KisTiledDataManager *>(this), imageX, imageY, KisTileDataWrapper::READ);
             quint8 *tileIt = tw.data();
-
 
             const qint32 tileRowStride = rowStride(imageX, imageY);
 
             quint8 *dataIt = data +
-                    dataX * pixelSize + dataY * dataRowStride;
+                             dataX * pixelSize + dataY * dataRowStride;
 
             const qint32 lineSize = columnsToWork * pixelSize;
 
@@ -153,17 +152,16 @@ void KisTiledDataManager::readBytesBody(quint8 *data,
     }
 }
 
-
 #define forEachChannel(_idx, _channelSize)                              \
     for(qint32 _idx=0, _channelSize=channelSizes[_idx];         \
-    _idx<numChannels && (_channelSize=channelSizes[_idx], 1);   \
-    _idx++)
+            _idx<numChannels && (_channelSize=channelSizes[_idx], 1);   \
+            _idx++)
 
 template <bool allChannelsPresent>
-void KisTiledDataManager::writePlanarBytesBody(QVector </*const*/ quint8* > planes,
-                                               QVector<qint32> channelSizes,
-                                               qint32 x, qint32 y,
-                                               qint32 width, qint32 height)
+void KisTiledDataManager::writePlanarBytesBody(QVector </*const*/ quint8 * > planes,
+        QVector<qint32> channelSizes,
+        qint32 x, qint32 y,
+        qint32 width, qint32 height)
 {
     Q_ASSERT(planes.size() == channelSizes.size());
     Q_ASSERT(planes.size() > 0);
@@ -184,32 +182,31 @@ void KisTiledDataManager::writePlanarBytesBody(QVector </*const*/ quint8* > plan
         qint32 imageX = x;
         qint32 columnsRemaining = width;
         qint32 numContiguousImageRows = numContiguousRows(imageY, imageX,
-                                                          imageX + width - 1);
+                                        imageX + width - 1);
 
         qint32 rowsToWork = qMin(numContiguousImageRows, rowsRemaining);
 
         while (columnsRemaining > 0) {
 
             qint32 numContiguousImageColumns =
-                    numContiguousColumns(imageX, imageY,
-                                         imageY + rowsToWork - 1);
+                numContiguousColumns(imageX, imageY,
+                                     imageY + rowsToWork - 1);
             qint32 columnsToWork = qMin(numContiguousImageColumns,
                                         columnsRemaining);
 
             const qint32 dataIdx = dataX + dataY * width;
             const qint32 tileRowStride = rowStride(imageX, imageY) -
-                    columnsToWork * pixelSize;
+                                         columnsToWork * pixelSize;
 
             KisTileDataWrapper tw(this, imageX, imageY,
                                   KisTileDataWrapper::WRITE);
             quint8 *tileItStart = tw.data();
 
-
             forEachChannel(i, channelSize) {
                 if (allChannelsPresent || planes[i]) {
-                    const quint8* planeIt = planes[i] + dataIdx * channelSize;
+                    const quint8 *planeIt = planes[i] + dataIdx * channelSize;
                     qint32 dataStride = (width - columnsToWork) * channelSize;
-                    quint8* tileIt = tileItStart;
+                    quint8 *tileIt = tileItStart;
 
                     for (qint32 row = 0; row < rowsToWork; row++) {
                         for (int col = 0; col < columnsToWork; col++) {
@@ -231,16 +228,15 @@ void KisTiledDataManager::writePlanarBytesBody(QVector </*const*/ quint8* > plan
             columnsRemaining -= columnsToWork;
         }
 
-
         imageY += rowsToWork;
         dataY += rowsToWork;
         rowsRemaining -= rowsToWork;
     }
 }
 
-QVector<quint8*> KisTiledDataManager::readPlanarBytesBody(QVector<qint32> channelSizes,
-                                                          qint32 x, qint32 y,
-                                                          qint32 width, qint32 height) const
+QVector<quint8 *> KisTiledDataManager::readPlanarBytesBody(QVector<qint32> channelSizes,
+        qint32 x, qint32 y,
+        qint32 width, qint32 height) const
 {
     Q_ASSERT(channelSizes.size() > 0);
 
@@ -250,7 +246,7 @@ QVector<quint8*> KisTiledDataManager::readPlanarBytesBody(QVector<qint32> channe
     const qint32 numChannels = channelSizes.size();
     const qint32 pixelSize = this->pixelSize();
 
-    QVector<quint8*> planes;
+    QVector<quint8 *> planes;
     forEachChannel(i, channelSize) {
         planes.append(new quint8[width * height * channelSize]);
     }
@@ -265,32 +261,31 @@ QVector<quint8*> KisTiledDataManager::readPlanarBytesBody(QVector<qint32> channe
         qint32 imageX = x;
         qint32 columnsRemaining = width;
         qint32 numContiguousImageRows = numContiguousRows(imageY, imageX,
-                                                          imageX + width - 1);
+                                        imageX + width - 1);
 
         qint32 rowsToWork = qMin(numContiguousImageRows, rowsRemaining);
 
         while (columnsRemaining > 0) {
 
             qint32 numContiguousImageColumns =
-                    numContiguousColumns(imageX, imageY,
-                                         imageY + rowsToWork - 1);
+                numContiguousColumns(imageX, imageY,
+                                     imageY + rowsToWork - 1);
             qint32 columnsToWork = qMin(numContiguousImageColumns,
                                         columnsRemaining);
 
             const qint32 dataIdx = dataX + dataY * width;
             const qint32 tileRowStride = rowStride(imageX, imageY) -
-                    columnsToWork * pixelSize;
+                                         columnsToWork * pixelSize;
 
             // XXX: Ugly const cast because of the old pixelPtr design copied from tiles1.
-            KisTileDataWrapper tw(const_cast<KisTiledDataManager*>(this), imageX, imageY,
+            KisTileDataWrapper tw(const_cast<KisTiledDataManager *>(this), imageX, imageY,
                                   KisTileDataWrapper::READ);
             quint8 *tileItStart = tw.data();
 
-
             forEachChannel(i, channelSize) {
-                quint8* planeIt = planes[i] + dataIdx * channelSize;
+                quint8 *planeIt = planes[i] + dataIdx * channelSize;
                 qint32 dataStride = (width - columnsToWork) * channelSize;
-                quint8* tileIt = tileItStart;
+                quint8 *tileIt = tileItStart;
 
                 for (qint32 row = 0; row < rowsToWork; row++) {
                     for (int col = 0; col < columnsToWork; col++) {
@@ -310,14 +305,10 @@ QVector<quint8*> KisTiledDataManager::readPlanarBytesBody(QVector<qint32> channe
             columnsRemaining -= columnsToWork;
         }
 
-
         imageY += rowsToWork;
         dataY += rowsToWork;
         rowsRemaining -= rowsToWork;
     }
     return planes;
 }
-
-
-
 

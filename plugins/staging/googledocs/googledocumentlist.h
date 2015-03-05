@@ -33,23 +33,26 @@ public:
     GoogleDocumentList();
 
     void setEtag(const QString &etag);
-    QString etag ();
+    QString etag();
 
-    void setEmail (const QString &email);
-    QString email ();
+    void setEmail(const QString &email);
+    QString email();
 
-    void setTitle (const QString &title);
-    QString title ();
+    void setTitle(const QString &title);
+    QString title();
 
-    void setAuthor (const QString &author);
-    QString author ();
+    void setAuthor(const QString &author);
+    QString author();
 
     void append(GoogleDocument *entry);
     int documentsCount();
 
-    QList<GoogleDocument *> entries ();
+    QList<GoogleDocument *> entries();
 
-    QStandardItemModel * documentModel() {  return docModel; }
+    QStandardItemModel *documentModel()
+    {
+        return docModel;
+    }
 
 private:
     QString m_author;

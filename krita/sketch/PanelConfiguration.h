@@ -33,7 +33,7 @@ class PanelConfiguration : public QObject, public QDeclarativeParserStatus
     Q_INTERFACES(QDeclarativeParserStatus)
 
 public:
-    explicit PanelConfiguration(QObject* parent = 0);
+    explicit PanelConfiguration(QObject *parent = 0);
     virtual ~PanelConfiguration();
 
     virtual void componentComplete();
@@ -48,7 +48,7 @@ public Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // PANELCONFIGURATION_H

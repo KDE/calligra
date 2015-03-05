@@ -27,7 +27,6 @@
 #include <QApplication>
 #include "kis_cursor.h"
 
-
 KisChangePrimarySettingAction::KisChangePrimarySettingAction()
     : KisAbstractInputAction("Change Primary Setting")
 {
@@ -61,7 +60,7 @@ void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);
 
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
     if (mouseEvent) {
         QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
 
@@ -73,7 +72,7 @@ void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)
 
 void KisChangePrimarySettingAction::end(QEvent *event)
 {
-    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
     if (mouseEvent) {
         QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
 
@@ -85,10 +84,10 @@ void KisChangePrimarySettingAction::end(QEvent *event)
     KisAbstractInputAction::end(event);
 }
 
-void KisChangePrimarySettingAction::inputEvent(QEvent* event)
+void KisChangePrimarySettingAction::inputEvent(QEvent *event)
 {
     if (event && event->type() == QEvent::MouseMove) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 
         QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
 

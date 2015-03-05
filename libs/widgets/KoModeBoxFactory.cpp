@@ -23,21 +23,22 @@
 #include "KoModeBox_p.h"
 #include "KoModeBoxDocker_p.h"
 
-class KoModeBoxFactory::Private {
+class KoModeBoxFactory::Private
+{
 public:
     KoCanvasControllerWidget *canvasController;
     QString applicationName;
 };
 
-
-KoModeBoxFactory::KoModeBoxFactory(KoCanvasControllerWidget *canvasController, const QString &applicationName, const QString& /*title*/)
-    : d( new Private())
+KoModeBoxFactory::KoModeBoxFactory(KoCanvasControllerWidget *canvasController, const QString &applicationName, const QString & /*title*/)
+    : d(new Private())
 {
     d->canvasController = canvasController;
     d->applicationName = applicationName;
 }
 
-KoModeBoxFactory::~KoModeBoxFactory() {
+KoModeBoxFactory::~KoModeBoxFactory()
+{
     delete d;
 }
 
@@ -51,7 +52,7 @@ KoDockFactoryBase::DockPosition KoModeBoxFactory::defaultDockPosition() const
     return KoDockFactoryBase::DockRight;
 }
 
-QDockWidget* KoModeBoxFactory::createDockWidget()
+QDockWidget *KoModeBoxFactory::createDockWidget()
 {
     KoModeBox *box = new KoModeBox(d->canvasController, d->applicationName);
     QDockWidget *docker = new KoModeBoxDocker(box);

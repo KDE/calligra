@@ -23,19 +23,20 @@
 
 #include <QImage>
 
-namespace Acs {
-    class PixelCacheRenderer;
+namespace Acs
+{
+class PixelCacheRenderer;
 }
 
 class KisColorSelectorTriangle : public KisColorSelectorComponent
 {
     Q_OBJECT
 public:
-    explicit KisColorSelectorTriangle(KisColorSelector* parent);
+    explicit KisColorSelectorTriangle(KisColorSelector *parent);
     void setColor(const KoColor &color);
 
 protected:
-    void paint(QPainter*);
+    void paint(QPainter *);
     KoColor selectColor(int x, int y);
     bool containsPointInComponentCoords(int x, int y) const;
 
@@ -47,8 +48,8 @@ private:
     int triangleWidth() const;
     int triangleHeight() const;
     void updatePixelCache();
-    QPoint widgetToTriangleCoordinates(const QPoint& point) const;
-    QPoint triangleToWidgetCoordinates(const QPoint& point) const;
+    QPoint widgetToTriangleCoordinates(const QPoint &point) const;
+    QPoint triangleToWidgetCoordinates(const QPoint &point) const;
 
 private:
     QImage m_renderedPixelCache;

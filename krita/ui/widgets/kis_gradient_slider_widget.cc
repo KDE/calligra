@@ -35,11 +35,11 @@
 #define MARGIN 5
 #define HANDLE_SIZE 10
 
-KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* name, Qt::WFlags f)
-        : QWidget(parent, f),
-        m_currentSegment(0),
-        m_selectedSegment(0),
-        m_drag(0)
+KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char *name, Qt::WFlags f)
+    : QWidget(parent, f),
+      m_currentSegment(0),
+      m_selectedSegment(0),
+      m_drag(0)
 {
     setObjectName(name);
     setMinimumHeight(30);
@@ -55,14 +55,14 @@ KisGradientSliderWidget::KisGradientSliderWidget(QWidget *parent, const char* na
     m_segmentMenu->addAction(m_removeSegmentAction);
 }
 
-void KisGradientSliderWidget::setGradientResource(KoSegmentGradient* agr)
+void KisGradientSliderWidget::setGradientResource(KoSegmentGradient *agr)
 {
     m_autogradientResource = agr;
     m_selectedSegment = m_autogradientResource->segmentAt(0.0);
     emit sigSelectedSegment(m_selectedSegment);
 }
 
-void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
+void KisGradientSliderWidget::paintEvent(QPaintEvent *pe)
 {
     QWidget::paintEvent(pe);
     QPainter painter(this);
@@ -78,9 +78,9 @@ void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
 
         painter.fillRect(MARGIN + 1, height() - MARGIN - HANDLE_SIZE, width() - 2 * MARGIN, HANDLE_SIZE, QBrush(Qt::white));
         if (m_selectedSegment) {
-            QRect selection(qRound(m_selectedSegment->startOffset()*(double)(width() - 2 * MARGIN - 2)) + 6,
+            QRect selection(qRound(m_selectedSegment->startOffset() * (double)(width() - 2 * MARGIN - 2)) + 6,
                             height() - HANDLE_SIZE - MARGIN,
-                            qRound((m_selectedSegment->endOffset() - m_selectedSegment->startOffset())*(double)(width() - 12)),
+                            qRound((m_selectedSegment->endOffset() - m_selectedSegment->startOffset()) * (double)(width() - 12)),
                             HANDLE_SIZE);
             painter.fillRect(selection, QBrush(palette().highlight()));
         }
@@ -108,7 +108,7 @@ void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
     }
 }
 
-void KisGradientSliderWidget::mousePressEvent(QMouseEvent * e)
+void KisGradientSliderWidget::mousePressEvent(QMouseEvent *e)
 {
     if ((e->y() < MARGIN || e->y() > height() - MARGIN) || (e->x() < MARGIN || e->x() > width() - MARGIN) || e-> button() != Qt::LeftButton) {
         QWidget::mousePressEvent(e);
@@ -116,37 +116,39 @@ void KisGradientSliderWidget::mousePressEvent(QMouseEvent * e)
     }
 
     double t = (double)(e->x() - MARGIN) / (double)(width() - 2 * MARGIN);
-    KoGradientSegment* segment = 0;
+    KoGradientSegment *segment = 0;
     segment = m_autogradientResource->segmentAt(t);
     if (segment != 0) {
         m_currentSegment = segment;
-        QRect leftHandle(qRound(m_currentSegment->startOffset() *(double)(width() - 2*MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 1)),
+        QRect leftHandle(qRound(m_currentSegment->startOffset() * (double)(width() - 2 * MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 1)),
                          height() - HANDLE_SIZE,
                          HANDLE_SIZE - 1,
                          HANDLE_SIZE);
-        QRect middleHandle(qRound(m_currentSegment->middleOffset() *(double)(width() - 2*MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 2)),
+        QRect middleHandle(qRound(m_currentSegment->middleOffset() * (double)(width() - 2 * MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 2)),
                            height() - HANDLE_SIZE - MARGIN,
                            HANDLE_SIZE - 1,
                            HANDLE_SIZE);
-        QRect rightHandle(qRound(m_currentSegment->endOffset() *(double)(width() - 2*MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 1)),
+        QRect rightHandle(qRound(m_currentSegment->endOffset() * (double)(width() - 2 * MARGIN - 2) + MARGIN - (HANDLE_SIZE / 2 - 1)),
                           height() - HANDLE_SIZE,
                           HANDLE_SIZE - 1,
                           HANDLE_SIZE);
         // Change the activation order of the handles to avoid deadlocks
         if (t > 0.5) {
-            if (leftHandle.contains(e->pos()))
+            if (leftHandle.contains(e->pos())) {
                 m_drag = LEFT_DRAG;
-            else if (middleHandle.contains(e->pos()))
+            } else if (middleHandle.contains(e->pos())) {
                 m_drag = MIDDLE_DRAG;
-            else if (rightHandle.contains(e->pos()))
+            } else if (rightHandle.contains(e->pos())) {
                 m_drag = RIGHT_DRAG;
+            }
         } else {
-            if (rightHandle.contains(e->pos()))
+            if (rightHandle.contains(e->pos())) {
                 m_drag = RIGHT_DRAG;
-            else if (middleHandle.contains(e->pos()))
+            } else if (middleHandle.contains(e->pos())) {
                 m_drag = MIDDLE_DRAG;
-            else if (leftHandle.contains(e->pos()))
+            } else if (leftHandle.contains(e->pos())) {
                 m_drag = LEFT_DRAG;
+            }
         }
 
         if (m_drag == NO_DRAG) {
@@ -157,13 +159,13 @@ void KisGradientSliderWidget::mousePressEvent(QMouseEvent * e)
     repaint();
 }
 
-void KisGradientSliderWidget::mouseReleaseEvent(QMouseEvent * e)
+void KisGradientSliderWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
     m_drag = NO_DRAG;
 }
 
-void KisGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
+void KisGradientSliderWidget::mouseMoveEvent(QMouseEvent *e)
 {
     if ((e->y() < MARGIN || e->y() > height() - MARGIN) || (e->x() < MARGIN || e->x() > width() - MARGIN)) {
         QWidget::mouseMoveEvent(e);
@@ -183,13 +185,14 @@ void KisGradientSliderWidget::mouseMoveEvent(QMouseEvent * e)
         break;
     }
 
-    if (m_drag != NO_DRAG)
+    if (m_drag != NO_DRAG) {
         emit sigChangedSegment(m_currentSegment);
+    }
 
     repaint();
 }
 
-void KisGradientSliderWidget::contextMenuEvent(QContextMenuEvent * e)
+void KisGradientSliderWidget::contextMenuEvent(QContextMenuEvent *e)
 {
     m_removeSegmentAction->setEnabled(m_autogradientResource->removeSegmentPossible());
     m_segmentMenu->popup(e->globalPos());

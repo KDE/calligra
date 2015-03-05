@@ -33,9 +33,6 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 
-
-
-
 #include <kis_debug.h>
 
 #include <KoIcon.h>
@@ -59,13 +56,12 @@
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
-
-KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
-: KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
+KisImageFromClipboard::KisImageFromClipboard(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString &defColorModel, const QString &defColorDepth, const QString &defColorProfile, const QString &imageName)
+    : KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
 {
     setObjectName("KisImageFromClipboard");
-    
-    // create clipboard preview and show it   
+
+    // create clipboard preview and show it
     createClipboardPreview();
     grpClipboard->show();
     imageGroupSpacer->changeSize(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -73,7 +69,7 @@ KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, q
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
-    
+
     disconnect(createButton, SIGNAL(clicked()), 0, 0); //disable normal signal
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
     setNumberOfLayers(1);
@@ -86,10 +82,10 @@ KisImageFromClipboard::~KisImageFromClipboard()
 void KisImageFromClipboard::createImage()
 {
     KisDocument *doc = createNewImage();
-    
+
     KisImageWSP image = doc->image();
     if (image && image->root() && image->root()->firstChild()) {
-        KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
+        KisLayer *layer = dynamic_cast<KisLayer *>(image->root()->firstChild().data());
 
         KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
         if (clip) {
@@ -106,12 +102,10 @@ void KisImageFromClipboard::createImage()
     emit documentSelected(doc);
 }
 
-
 void KisImageFromClipboard::clipboardDataChanged()
 {
     createClipboardPreview();
 }
-
 
 void KisImageFromClipboard::createClipboardPreview()
 {
@@ -119,27 +113,24 @@ void KisImageFromClipboard::createClipboardPreview()
     QImage qimage = cb->image();
     const QMimeData *cbData = cb->mimeData();
     QByteArray mimeType("application/x-krita-selection");
-    
+
     if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
-        QImage* clipboardImage = new QImage(qimage); // qimage needs to be on the heap
-        QGraphicsPixmapItem *item = new QGraphicsPixmapItem( QPixmap::fromImage(*clipboardImage));
-        
-        QGraphicsScene *clipboardScene = new QGraphicsScene();      
+        QImage *clipboardImage = new QImage(qimage); // qimage needs to be on the heap
+        QGraphicsPixmapItem *item = new QGraphicsPixmapItem(QPixmap::fromImage(*clipboardImage));
+
+        QGraphicsScene *clipboardScene = new QGraphicsScene();
         clipboardScene->addItem(item);
-        
+
         clipPreview->setScene(clipboardScene);
-        clipPreview->show();             
+        clipPreview->show();
         createButton->setEnabled(true);
-        
+
         doubleWidth->setValue(clipboardImage->width());
         doubleHeight->setValue(clipboardImage->height());
     } else {
         createButton->setEnabled(false);
         clipPreview->setScene(new QGraphicsScene(this));
     }
-    
-    
+
 }
-
-
 

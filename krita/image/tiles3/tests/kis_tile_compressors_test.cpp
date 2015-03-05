@@ -40,7 +40,7 @@ void KisTileCompressorsTest::doRoundTrip(KisAbstractTileCompressor *compressor)
 
     KoStoreFake fakeStore;
     KisFakePaintDeviceWriter writer(&fakeStore);
-    
+
     compressor->writeTile(tile11, writer);
     tile11 = 0;
 
@@ -75,7 +75,6 @@ void KisTileCompressorsTest::doLowLevelRoundTrip(KisAbstractTileCompressor *comp
     KisTileSP tile = dm.getTile(0, 0, true);
     tile->lockForWrite();
 
-
     KisTileData *td = tile->tileData();
     QVERIFY(memoryIsFilled(oddPixel1, td->data(), TILESIZE));
 
@@ -84,7 +83,6 @@ void KisTileCompressorsTest::doLowLevelRoundTrip(KisAbstractTileCompressor *comp
     qint32 bytesWritten;
     compressor->compressTileData(td, buffer, bufferSize, bytesWritten);
     qDebug() << ppVar(bytesWritten);
-
 
     memset(td->data(), oddPixel2, TILESIZE);
     QVERIFY(memoryIsFilled(oddPixel2, td->data(), TILESIZE));
@@ -104,8 +102,9 @@ void KisTileCompressorsTest::doLowLevelRoundTripIncompressible(KisAbstractTileCo
     quint8 oddPixel2 = 129;
 
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return;
+    }
 
     QByteArray incompressibleArray = file.readAll();
 
@@ -118,7 +117,6 @@ void KisTileCompressorsTest::doLowLevelRoundTripIncompressible(KisAbstractTileCo
     KisTileSP tile = dm.getTile(0, 0, true);
     tile->lockForWrite();
 
-
     KisTileData *td = tile->tileData();
     QVERIFY(memoryIsFilled(oddPixel1, td->data(), TILESIZE));
 
@@ -130,7 +128,6 @@ void KisTileCompressorsTest::doLowLevelRoundTripIncompressible(KisAbstractTileCo
     qint32 bytesWritten;
     compressor->compressTileData(td, buffer, bufferSize, bytesWritten);
     qDebug() << ppVar(bytesWritten);
-
 
     memset(td->data(), oddPixel2, TILESIZE);
     QVERIFY(memoryIsFilled(oddPixel2, td->data(), TILESIZE));
@@ -177,7 +174,6 @@ void KisTileCompressorsTest::testLowLevelRoundTripIncompressible2()
     doLowLevelRoundTripIncompressible(compressor);
     delete compressor;
 }
-
 
 QTEST_KDEMAIN(KisTileCompressorsTest, NoGUI)
 #include "kis_tile_compressors_test.moc"

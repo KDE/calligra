@@ -45,7 +45,7 @@
 #include "KPrPage.h"
 
 KPrViewModeNotes::KPrViewModeNotes(KoPAViewBase *view, KoPACanvasBase *canvas)
-    : KoPAViewMode( view, canvas )
+    : KoPAViewMode(view, canvas)
 {
     setName(i18n("Notes"));
 }
@@ -108,28 +108,28 @@ void KPrViewModeNotes::keyPressEvent(QKeyEvent *event)
         event->accept();
 
         switch (event->key()) {
-            case Qt::Key_Home:
-                pageNavigation = KoPageApp::PageFirst;
-                break;
-            case Qt::Key_PageUp:
-                pageNavigation = KoPageApp::PagePrevious;
-                break;
-            case Qt::Key_PageDown:
-                pageNavigation = KoPageApp::PageNext;
-                break;
-            case Qt::Key_End:
-                pageNavigation = KoPageApp::PageLast;
-                break;
-            default:
-                event->ignore();
-                return;
+        case Qt::Key_Home:
+            pageNavigation = KoPageApp::PageFirst;
+            break;
+        case Qt::Key_PageUp:
+            pageNavigation = KoPageApp::PagePrevious;
+            break;
+        case Qt::Key_PageDown:
+            pageNavigation = KoPageApp::PageNext;
+            break;
+        case Qt::Key_End:
+            pageNavigation = KoPageApp::PageLast;
+            break;
+        default:
+            event->ignore();
+            return;
         }
 
         KoPAPageBase *activePage = m_view->activePage();
         KoPAPageBase *newPage = m_view->kopaDocument()->pageByNavigation(activePage, pageNavigation);
 
         if (newPage != activePage) {
-            updateActivePage( newPage );
+            updateActivePage(newPage);
         }
     }
 }
@@ -146,16 +146,16 @@ void KPrViewModeNotes::wheelEvent(QWheelEvent *event, const QPointF &point)
 
 void KPrViewModeNotes::activate(KoPAViewMode *previousViewMode)
 {
-    Q_UNUSED( previousViewMode );
+    Q_UNUSED(previousViewMode);
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(true));
-    m_view->setActionEnabled( KoPAView::AllActions, false );
-    updateActivePage( m_view->activePage() );
+    m_view->setActionEnabled(KoPAView::AllActions, false);
+    updateActivePage(m_view->activePage());
 }
 
 void KPrViewModeNotes::deactivate()
 {
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(false));
-    m_view->setActionEnabled( KoPAView::AllActions, true );
+    m_view->setActionEnabled(KoPAView::AllActions, true);
     m_view->doUpdateActivePage(m_view->activePage());
 }
 
@@ -171,18 +171,18 @@ void KPrViewModeNotes::updateActivePage(KoPAPageBase *page)
     }
     KPrNotes *notes = prPage->pageNotes();
     notes->updatePageThumbnail();
-    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>(notes->shapes().last());
+    KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(notes->shapes().last());
 
     m_canvas->shapeManager()->setShapes(layer->shapes());
-    m_canvas->masterShapeManager()->setShapes(QList<KoShape*>());
+    m_canvas->masterShapeManager()->setShapes(QList<KoShape *>());
 
-    static_cast<KoPAView*>(m_view)->updateCanvasSize(true);
+    static_cast<KoPAView *>(m_view)->updateCanvasSize(true);
 
     m_view->updatePageNavigationActions();
 
     KoSelection *selection = m_canvas->shapeManager()->selection();
     selection->select(notes->textShape());
-    selection->setActiveLayer( layer );
+    selection->setActiveLayer(layer);
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     // we need to make sue to switch to the default tool so that the text tool does notice the selection chane
     KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
@@ -192,43 +192,43 @@ void KPrViewModeNotes::updateActivePage(KoPAPageBase *page)
     KoToolManager::instance()->switchToolRequested(tool);
 }
 
-void KPrViewModeNotes::addShape( KoShape *shape )
+void KPrViewModeNotes::addShape(KoShape *shape)
 {
     KoShape *parent = shape;
     KPrNotes *notes = 0;
     // similar to KoPADocument::pageByShape()
-    while ( !notes && ( parent = parent->parent() ) ) {
-        notes = dynamic_cast<KPrNotes *>( parent );
+    while (!notes && (parent = parent->parent())) {
+        notes = dynamic_cast<KPrNotes *>(parent);
     }
 
-    if ( notes ) {
+    if (notes) {
         Q_ASSERT(dynamic_cast<KPrPage *>(m_view->activePage()));
         KPrPage *activePage = static_cast<KPrPage *>(m_view->activePage());
-        if ( notes == activePage->pageNotes() ) {
-            m_view->kopaCanvas()->shapeManager()->addShape( shape );
+        if (notes == activePage->pageNotes()) {
+            m_view->kopaCanvas()->shapeManager()->addShape(shape);
         }
     }
 }
 
-void KPrViewModeNotes::removeShape( KoShape *shape )
+void KPrViewModeNotes::removeShape(KoShape *shape)
 {
     KoShape *parent = shape;
     KPrNotes *notes = 0;
-    while ( !notes && ( parent = parent->parent() ) ) {
-        notes = dynamic_cast<KPrNotes *>( parent );
+    while (!notes && (parent = parent->parent())) {
+        notes = dynamic_cast<KPrNotes *>(parent);
     }
 
-    if ( notes ) {
-        KPrPage *activePage = static_cast<KPrPage *>( m_view->activePage() );
-        if ( notes == activePage->pageNotes() ) {
-            m_view->kopaCanvas()->shapeManager()->remove( shape );
+    if (notes) {
+        KPrPage *activePage = static_cast<KPrPage *>(m_view->activePage());
+        if (notes == activePage->pageNotes()) {
+            m_view->kopaCanvas()->shapeManager()->remove(shape);
         }
     }
 }
 
 const KoPageLayout &KPrViewModeNotes::activePageLayout() const
 {
-    KPrPage *activePage = static_cast<KPrPage *>( m_view->activePage() );
+    KPrPage *activePage = static_cast<KPrPage *>(m_view->activePage());
     KPrNotes *notes = activePage->pageNotes();
 
     return notes->pageLayout();

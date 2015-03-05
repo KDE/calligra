@@ -27,7 +27,8 @@ class KisParticleOpOptionsWidget: public QWidget, public Ui::WdgParticleOptions
 {
 public:
     KisParticleOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -57,7 +58,6 @@ KisParticleOpOption::KisParticleOpOption()
     m_options->itersSPBox->setRange(1, 200, 0);
     m_options->itersSPBox->setValue(10);
 
-
     connect(m_options->particleSpinBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->itersSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->gravSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
@@ -83,26 +83,22 @@ qreal KisParticleOpOption::weight() const
     return m_options->weightSPBox->value();
 }
 
-
 QPointF KisParticleOpOption::scale() const
 {
     return QPointF(m_options->dxSPBox->value(), m_options->dySPBox->value());
 }
-
 
 int KisParticleOpOption::iterations() const
 {
     return m_options->itersSPBox->value();
 }
 
-
-
 qreal KisParticleOpOption::gravity() const
 {
     return m_options->gravSPBox->value();
 }
 
-void KisParticleOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisParticleOpOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(PARTICLE_COUNT, particleCount());
     setting->setProperty(PARTICLE_ITERATIONS, iterations());
@@ -112,7 +108,7 @@ void KisParticleOpOption::writeOptionSetting(KisPropertiesConfiguration* setting
     setting->setProperty(PARTICLE_SCALE_Y, scale().y());
 }
 
-void KisParticleOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisParticleOpOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
 
     m_options->particleSpinBox->setValue((qreal)setting->getInt(PARTICLE_COUNT));

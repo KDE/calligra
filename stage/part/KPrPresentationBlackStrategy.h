@@ -27,7 +27,7 @@ public:
     explicit KPrPresentationBlackStrategy(KPrPresentationTool *tool);
     virtual ~KPrPresentationBlackStrategy();
 
-    virtual bool keyPressEvent( QKeyEvent * event );
+    virtual bool keyPressEvent(QKeyEvent *event);
 };
 
 #endif /* KPRPRESENTATIONBLACKSTRATEGY_H */

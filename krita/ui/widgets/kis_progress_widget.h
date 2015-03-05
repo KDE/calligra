@@ -42,12 +42,11 @@ class KRITAUI_EXPORT KisProgressWidget : public QWidget, public KisProgressInter
     Q_OBJECT
 
 public:
-    KisProgressWidget(QWidget* parent = 0);
+    KisProgressWidget(QWidget *parent = 0);
     virtual ~KisProgressWidget();
 
 public:
-    KoProgressProxy* progressProxy();
-
+    KoProgressProxy *progressProxy();
 
     /**
      * create a new KoProgressUpdater instance that is
@@ -56,8 +55,8 @@ public:
      * Note: it is _your_ duty to call deleteLater on the
      * koprogressupdater when you are done!
      */
-    void detachUpdater(KoProgressUpdater* updater);
-    void attachUpdater(KoProgressUpdater* updater);
+    void detachUpdater(KoProgressUpdater *updater);
+    void attachUpdater(KoProgressUpdater *updater);
 
 public Q_SLOTS:
 
@@ -69,9 +68,9 @@ Q_SIGNALS:
 
 private:
 
-    QToolButton* m_cancelButton;
-    KoProgressBar* m_progressBar;
-    QList<KoProgressUpdater*> m_activeUpdaters;
+    QToolButton *m_cancelButton;
+    KoProgressBar *m_progressBar;
+    QList<KoProgressUpdater *> m_activeUpdaters;
 
 };
 

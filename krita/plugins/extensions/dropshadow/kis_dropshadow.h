@@ -28,7 +28,6 @@ typedef enum {
     BLUR_RLE
 } BlurMethod;
 
-
 class QColor;
 class KisViewManager;
 class KoUpdater;
@@ -40,26 +39,26 @@ class KisDropshadow : public QObject
 
 public:
 
-    KisDropshadow(KisViewManager * view);
+    KisDropshadow(KisViewManager *view);
     virtual ~KisDropshadow() {}
 
-    void dropshadow(KoUpdater * progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, const QColor & color, quint8 opacity, bool allowResize);
+    void dropshadow(KoUpdater *progress, qint32 xoffset, qint32 yoffset, qint32 blurradius, const QColor &color, quint8 opacity, bool allowResize);
 
 private:
-    void gaussianblur(KoUpdater * progress, KisPaintDeviceSP src, KisPaintDeviceSP dst,
-                      QRect& rect, double horz, double vert,
+    void gaussianblur(KoUpdater *progress, KisPaintDeviceSP src, KisPaintDeviceSP dst,
+                      QRect &rect, double horz, double vert,
                       BlurMethod method,
-                      KoUpdater * progressDisplay);
+                      KoUpdater *progressDisplay);
     //gaussian blur helper functions
     void find_constants(double n_p[], double n_m[], double d_p[], double d_m[], double bd_p[], double bd_m[], double  std_dev);
     void transfer_pixels(double *src1, double *src2, quint8  *dest, qint32 bytes, qint32 width);
-    qint32* make_curve(double sigma, qint32 *length);
+    qint32 *make_curve(double sigma, qint32 *length);
     void run_length_encode(quint8 *src, qint32 *dest, qint32 bytes, qint32 width);
     void multiply_alpha(quint8 *buf, qint32 width, qint32 bytes);
     void separate_alpha(quint8 *buf, qint32 width, qint32 bytes);
 
 private:
-    KisViewManager * m_view;
+    KisViewManager *m_view;
 
 };
 

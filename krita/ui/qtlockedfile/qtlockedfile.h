@@ -49,8 +49,6 @@
 #  define QT_QTLOCKEDFILE_EXPORT
 #endif
 
-
-
 class QT_QTLOCKEDFILE_EXPORT QtLockedFile : public QFile
 {
 public:

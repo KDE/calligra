@@ -43,23 +43,23 @@ class KisPainter;
 class KisColorSmudgeOp: public KisBrushBasedPaintOp
 {
 public:
-    KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisNodeSP node, KisImageSP image);
+    KisColorSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     virtual ~KisColorSmudgeOp();
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
 
 private:
-    void updateMask(const KisPaintInformation& info, double scale, double rotation, const QPointF &cursorPoint);
+    void updateMask(const KisPaintInformation &info, double scale, double rotation, const QPointF &cursorPoint);
     inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
 
 private:
     bool                      m_firstRun;
     KisImageWSP               m_image;
     KisPaintDeviceSP          m_tempDev;
-    KisPainter*               m_backgroundPainter;
-    KisPainter*               m_smudgePainter;
-    KisPainter*               m_colorRatePainter;
-    const KoAbstractGradient* m_gradient;
+    KisPainter               *m_backgroundPainter;
+    KisPainter               *m_smudgePainter;
+    KisPainter               *m_colorRatePainter;
+    const KoAbstractGradient *m_gradient;
     KisPressureSizeOption     m_sizeOption;
     KisPressureOpacityOption  m_opacityOption;
     KisPressureSpacingOption  m_spacingOption;

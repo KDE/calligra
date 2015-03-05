@@ -52,7 +52,8 @@ public:
     virtual DockPosition defaultDockPosition() const = 0;
 
     /// Returns true if the dock widget should get a collapsable header.
-    virtual bool isCollapsable() const {
+    virtual bool isCollapsable() const
+    {
         return true;
     }
 
@@ -60,13 +61,14 @@ public:
      * In case the docker is collapsable, returns true if the dock widget
      * will start collapsed by default.
      */
-    virtual bool defaultCollapsed() const {
+    virtual bool defaultCollapsed() const
+    {
         return false;
     }
 
     /// Creates the dock widget
     /// @return the created dock widget
-    virtual QDockWidget* createDockWidget() = 0;
+    virtual QDockWidget *createDockWidget() = 0;
 };
 
 #endif

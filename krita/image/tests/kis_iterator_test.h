@@ -31,15 +31,15 @@ class KisIteratorTest : public QObject
     void stressTest();
 
 private:
-    void allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs));
+    void allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace *cs));
 
-    void vLineIter(const KoColorSpace * cs);
-    void writeBytes(const KoColorSpace * cs);
-    void fill(const KoColorSpace * cs);
-    void hLineIter(const KoColorSpace * cs);
-    void randomAccessor(const KoColorSpace * cs);
-    void repeatHLineIter(const KoColorSpace * cs);
-    void repeatVLineIter(const KoColorSpace * cs);
+    void vLineIter(const KoColorSpace *cs);
+    void writeBytes(const KoColorSpace *cs);
+    void fill(const KoColorSpace *cs);
+    void hLineIter(const KoColorSpace *cs);
+    void randomAccessor(const KoColorSpace *cs);
+    void repeatHLineIter(const KoColorSpace *cs);
+    void repeatVLineIter(const KoColorSpace *cs);
 
 private Q_SLOTS:
 

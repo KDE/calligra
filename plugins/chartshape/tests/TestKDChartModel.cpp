@@ -29,7 +29,6 @@
 
 using namespace KChart;
 
-
 TestKDChartModel::TestKDChartModel()
     : m_model(0)
     , m_testModel(0)

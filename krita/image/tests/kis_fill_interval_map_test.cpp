@@ -27,7 +27,7 @@ void KisFillIntervalMapTest::test()
 {
     const int row = 1;
 
-    KisFillInterval i1( 0, 40, row);
+    KisFillInterval i1(0, 40, row);
     KisFillInterval i2(11, 40, row);
     KisFillInterval i3(11, 19, row);
     KisFillInterval i4(11, 20, row);

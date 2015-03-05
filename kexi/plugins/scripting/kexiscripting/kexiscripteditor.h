@@ -62,7 +62,7 @@ public:
      * highlighter will be reset, undo/redo are cleared and
      * setDirty(false) is set.
      */
-    void initialize(Kross::Action* scriptaction);
+    void initialize(Kross::Action *scriptaction);
 
 public Q_SLOTS:
     void slotTextChanged();
@@ -72,7 +72,7 @@ private:
     /// \internal d-pointer class.
     class Private;
     /// \internal d-pointer instance.
-    Private* const d;
+    Private *const d;
 };
 
 #endif

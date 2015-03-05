@@ -23,22 +23,22 @@
 #include "kis_paint_device.h"
 #include "kis_processing_information.h"
 
-KisColorBalanceFilter::KisColorBalanceFilter() 
-		: KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Balance.."))
+KisColorBalanceFilter::KisColorBalanceFilter()
+    : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Balance.."))
 {
     setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_B)));
-	setSupportsPainting(true);
+    setSupportsPainting(true);
 }
 
-KisConfigWidget * KisColorBalanceFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisColorBalanceFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
     return new KisColorBalanceConfigWidget(parent);
 }
 
-KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation *KisColorBalanceFilter::createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const
 {
-	QHash<QString, QVariant> params;
+    QHash<QString, QVariant> params;
     if (config) {
         params["cyan_red_midtones"] = config->getInt("cyan_red_midtones", 0) * 0.01;
         params["magenta_green_midtones"] = config->getInt("magenta_green_midtones", 0) * 0.01;
@@ -54,12 +54,12 @@ KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColo
         params["preserve_luminosity"] = config->getBool("preserve_luminosity", true);
 
     }
-    return cs->createColorTransformation("ColorBalance" , params);
+    return cs->createColorTransformation("ColorBalance", params);
 }
 
-KisFilterConfiguration* KisColorBalanceFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisColorBalanceFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("cyan_red_midtones", 0);
     config->setProperty("yellow_green_midtones", 0);
     config->setProperty("magenta_blue_midtones", 0);
@@ -76,7 +76,7 @@ KisFilterConfiguration* KisColorBalanceFilter::factoryConfiguration(const KisPai
     return config;
 }
 
-KisColorBalanceConfigWidget::KisColorBalanceConfigWidget(QWidget* parent) : KisConfigWidget(parent)
+KisColorBalanceConfigWidget::KisColorBalanceConfigWidget(QWidget *parent) : KisConfigWidget(parent)
 {
     m_page = new Ui_Form();
     m_page->setupUi(this);
@@ -147,9 +147,9 @@ KisColorBalanceConfigWidget::~KisColorBalanceConfigWidget()
     delete m_page;
 }
 
-KisPropertiesConfiguration * KisColorBalanceConfigWidget::configuration() const
+KisPropertiesConfiguration *KisColorBalanceConfigWidget::configuration() const
 {
-    KisFilterConfiguration* c = new KisFilterConfiguration(KisColorBalanceFilter::id().id(), 0);
+    KisFilterConfiguration *c = new KisFilterConfiguration(KisColorBalanceFilter::id().id(), 0);
 
     c->setProperty("cyan_red_shadows", m_page->cyanRedShadowsSlider->value());
     c->setProperty("magenta_green_shadows", m_page->magentaGreenShadowsSlider->value());
@@ -167,19 +167,19 @@ KisPropertiesConfiguration * KisColorBalanceConfigWidget::configuration() const
     return c;
 }
 
-void KisColorBalanceConfigWidget::setConfiguration(const KisPropertiesConfiguration * config)
+void KisColorBalanceConfigWidget::setConfiguration(const KisPropertiesConfiguration *config)
 {
-    m_page->cyanRedMidtonesSlider->setValue( config->getDouble("cyan_red_midtones", 0));
-    m_page->magentaGreenMidtonesSlider->setValue( config->getDouble("magenta_green_midtones", 0));
-    m_page->yellowBlueMidtonesSlider->setValue( config->getDouble("yellow_blue_midtones", 0));
+    m_page->cyanRedMidtonesSlider->setValue(config->getDouble("cyan_red_midtones", 0));
+    m_page->magentaGreenMidtonesSlider->setValue(config->getDouble("magenta_green_midtones", 0));
+    m_page->yellowBlueMidtonesSlider->setValue(config->getDouble("yellow_blue_midtones", 0));
 
-    m_page->cyanRedShadowsSlider->setValue( config->getDouble("cyan_red_shadows", 0));
-    m_page->magentaGreenShadowsSlider->setValue( config->getDouble("magenta_green_shadows", 0));
-    m_page->yellowBlueShadowsSlider->setValue( config->getDouble("yellow_blue_shadows", 0));
+    m_page->cyanRedShadowsSlider->setValue(config->getDouble("cyan_red_shadows", 0));
+    m_page->magentaGreenShadowsSlider->setValue(config->getDouble("magenta_green_shadows", 0));
+    m_page->yellowBlueShadowsSlider->setValue(config->getDouble("yellow_blue_shadows", 0));
 
-    m_page->cyanRedHighlightsSlider->setValue( config->getDouble("cyan_red_highlights", 0));
-    m_page->magentaGreenHighlightsSlider->setValue( config->getDouble("magenta_green_highlights", 0));
-    m_page->yellowBlueHighlightsSlider->setValue( config->getDouble("yellow_blue_highlights", 0));
+    m_page->cyanRedHighlightsSlider->setValue(config->getDouble("cyan_red_highlights", 0));
+    m_page->magentaGreenHighlightsSlider->setValue(config->getDouble("magenta_green_highlights", 0));
+    m_page->yellowBlueHighlightsSlider->setValue(config->getDouble("yellow_blue_highlights", 0));
     m_page->chkPreserveLuminosity->setChecked(config->getBool("preserve_luminosity", true));
 }
 

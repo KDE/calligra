@@ -33,7 +33,6 @@ class QRectF;
 class QPainter;
 class KisCoordinatesConverter;
 
-
 /**
  * This class is the base class for object that draw a decoration on the canvas,
  * for instance, selections, grids, tools, ...
@@ -42,12 +41,12 @@ class KRITAUI_EXPORT KisCanvasDecoration : public QObject
 {
     Q_OBJECT
 public:
-    KisCanvasDecoration(const QString& id, QPointer<KisView>parent);
+    KisCanvasDecoration(const QString &id, QPointer<KisView>parent);
     ~KisCanvasDecoration();
 
     void setView(QPointer<KisView> imageView);
 
-    const QString& id() const;
+    const QString &id() const;
 
     /**
      * @return whether the decoration is visible.
@@ -59,7 +58,7 @@ public:
      *
      * @param updateRect dirty rect in document pixels
      */
-    void paint(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
+    void paint(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
 
 public Q_SLOTS:
     /**
@@ -71,7 +70,7 @@ public Q_SLOTS:
      */
     void toggleVisibility();
 protected:
-    virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter,KisCanvas2* canvas) = 0;
+    virtual void drawDecoration(QPainter &gc, const QRectF &updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas) = 0;
 
     /// XXX: unify view and imageview!
     QPointer<KisView>imageView();
@@ -82,7 +81,7 @@ protected:
     QPointer<KisView> view() const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

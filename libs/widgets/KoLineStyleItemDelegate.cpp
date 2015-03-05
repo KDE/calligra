@@ -22,7 +22,7 @@
 #include <QPen>
 #include <QPainter>
 
-KoLineStyleItemDelegate::KoLineStyleItemDelegate(QObject * parent)
+KoLineStyleItemDelegate::KoLineStyleItemDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
 {
 }
@@ -31,8 +31,9 @@ void KoLineStyleItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 {
     painter->save();
 
-    if (option.state & QStyle::State_Selected)
+    if (option.state & QStyle::State_Selected) {
         painter->fillRect(option.rect, option.palette.highlight());
+    }
 
     QPen pen = index.data(Qt::DecorationRole).value<QPen>();
     pen.setBrush(option.palette.text()); // use the view-specific palette; the model hardcodes this to black

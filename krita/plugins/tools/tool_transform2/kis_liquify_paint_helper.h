@@ -27,7 +27,6 @@ class KoPointerEvent;
 class KisLiquifyProperties;
 class QPainterPath;
 
-
 class KisLiquifyPaintHelper
 {
 public:

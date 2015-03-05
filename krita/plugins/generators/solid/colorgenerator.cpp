@@ -45,7 +45,7 @@ K_PLUGIN_FACTORY(KritaColorGeneratorFactory, registerPlugin<KritaColorGenerator>
 K_EXPORT_PLUGIN(KritaColorGeneratorFactory("krita"))
 
 KritaColorGenerator::KritaColorGenerator(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisGeneratorRegistry::instance()->add(new KisColorGenerator());
 }
@@ -60,9 +60,9 @@ KisColorGenerator::KisColorGenerator() : KisGenerator(id(), KoID("basic"), i18n(
     setSupportsPainting(true);
 }
 
-KisFilterConfiguration* KisColorGenerator::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisColorGenerator::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("color", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("color", 1);
 
     QVariant v;
     v.setValue(KoColor());
@@ -70,16 +70,16 @@ KisFilterConfiguration* KisColorGenerator::factoryConfiguration(const KisPaintDe
     return config;
 }
 
-KisConfigWidget * KisColorGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisColorGenerator::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
     return new KisWdgColor(parent);
 }
 
 void KisColorGenerator::generate(KisProcessingInformation dstInfo,
-                                 const QSize& size,
-                                 const KisFilterConfiguration* config,
-                                 KoUpdater* progressUpdater) const
+                                 const QSize &size,
+                                 const KisFilterConfiguration *config,
+                                 KoUpdater *progressUpdater) const
 {
     KisPaintDeviceSP dst = dstInfo.paintDevice();
 
@@ -89,7 +89,6 @@ void KisColorGenerator::generate(KisProcessingInformation dstInfo,
     KoColor c;
     if (config) {
         c = config->getColor("color");
-
 
         KisFillPainter gc(dst);
         gc.setProgress(progressUpdater);

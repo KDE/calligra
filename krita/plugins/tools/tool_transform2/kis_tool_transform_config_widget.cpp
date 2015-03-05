@@ -27,13 +27,12 @@
 #include "KisMainWindow.h"
 #include "KisViewManager.h"
 
-
-template<typename T> inline T sign(T x) {
+template<typename T> inline T sign(T x)
+{
     return x > 0 ? 1 : x == (T)0 ? 0 : -1;
 }
 
 const int KisToolTransformConfigWidget::DEFAULT_POINTS_PER_LINE = 3;
-
 
 KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionProperties *transaction, KisCanvas2 *canvas, bool workRecursively, QWidget *parent)
     : QWidget(parent),
@@ -59,13 +58,13 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
                                 "<item><interface>Bicubic</interface> for smoother results</item>"
                                 "<item><interface>Lanczos3</interface> for sharp results. May produce aerials.</item>"
                                 "</list></para>"));
-    connect(cmbFilter, SIGNAL(activated(const KoID &)),
-            this, SLOT(slotFilterChanged(const KoID &)));
+    connect(cmbFilter, SIGNAL(activated(KoID)),
+            this, SLOT(slotFilterChanged(KoID)));
 
     // Init Warp Type combo
-    cmbWarpType->insertItem(KisWarpTransformWorker::AFFINE_TRANSFORM,i18n("Default (Affine)"));
-    cmbWarpType->insertItem(KisWarpTransformWorker::RIGID_TRANSFORM,i18n("Strong (Rigid)"));
-    cmbWarpType->insertItem(KisWarpTransformWorker::SIMILITUDE_TRANSFORM,i18n("Strongest (Similitude)"));
+    cmbWarpType->insertItem(KisWarpTransformWorker::AFFINE_TRANSFORM, i18n("Default (Affine)"));
+    cmbWarpType->insertItem(KisWarpTransformWorker::RIGID_TRANSFORM, i18n("Strong (Rigid)"));
+    cmbWarpType->insertItem(KisWarpTransformWorker::SIMILITUDE_TRANSFORM, i18n("Strongest (Similitude)"));
     cmbWarpType->setCurrentIndex(KisWarpTransformWorker::AFFINE_TRANSFORM);
     connect(cmbWarpType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotWarpTypeChanged(int)));
 
@@ -98,7 +97,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     nothingSelected->hide(); // a convenient button for when no button is checked in the group
     m_rotationCenterButtons->addButton(nothingSelected, 9);
 
-
     // initialize values for free transform sliders
     shearXBox->setSuffix(" px");
     shearYBox->setSuffix(" px");
@@ -109,12 +107,10 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     shearXBox->setValue(0.0);
     shearYBox->setValue(0.0);
 
-
     translateXBox->setSuffix(" px");
     translateYBox->setSuffix(" px");
     translateXBox->setRange(-10000, 10000);
     translateYBox->setRange(-10000, 10000);
-
 
     scaleXBox->setSuffix("%");
     scaleYBox->setSuffix("%");
@@ -122,7 +118,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     scaleYBox->setRange(-10000, 10000);
     scaleXBox->setValue(100.0);
     scaleYBox->setValue(100.0);
-
 
     aXBox->setSuffix(QChar(Qt::Key_degree));
     aYBox->setSuffix(QChar(Qt::Key_degree));
@@ -133,9 +128,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     aXBox->setValue(0.0);
     aYBox->setValue(0.0);
     aZBox->setValue(0.0);
-
-
-
 
     connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(slotRotationCenterChanged(int)));
 
@@ -163,9 +155,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     scaleGroup->hide();
     shearGroup->hide();
 
-
-
-    // Init Warp Transform Values  
+    // Init Warp Transform Values
     alphaBox->setSingleStep(0.1);
     alphaBox->setRange(0, 10, 1);
 
@@ -200,11 +190,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(liquifyFlowSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifyFlowChanged(qreal)));
     liquifyFlowSlider->setToolTip(i18nc("@info:tooltip", "When in non-buildup mode, shows how fast the deformation limit is reached."));
 
-
     buidupModeComboBox->setCurrentIndex(0); // set to build-up mode by default
     connect(buidupModeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(liquifyBuildUpChanged(int)));
     buidupModeComboBox->setToolTip(i18nc("@info:tooltip", "Switch between Build Up and Wash mode of painting. Build Up mode adds deformations one on top of the other without any limits. Wash mode gradually deforms the piece to the selected deformation level."));
-
 
     liquifySpacingSlider->setRange(0.0, 3.0, 2);
     liquifySizeSlider->setExponentRatio(3);
@@ -247,12 +235,10 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Connect all edit boxes to the Editing Finished signal
     connect(densityBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
 
-
-
     // Connect other widget (not having editingFinished signal) to
     // the same slot. From Qt 4.6 onwards the sequence of the signal
     // delivery is definite.
-    connect(cmbFilter, SIGNAL(activated(const KoID &)), this, SLOT(notifyEditingFinished()));
+    connect(cmbFilter, SIGNAL(activated(KoID)), this, SLOT(notifyEditingFinished()));
     connect(cmbWarpType, SIGNAL(currentIndexChanged(int)), this, SLOT(notifyEditingFinished()));
     connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(notifyEditingFinished()));
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(notifyEditingFinished()));
@@ -267,7 +253,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // saved to undo, so we don't emit notifyEditingFinished() for them
 
     // Connect Apply/Reset buttons
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotButtonBoxClicked(QAbstractButton *)));
+    connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonBoxClicked(QAbstractButton*)));
 
     // Mode switch buttons
     connect(freeTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetFreeTransformModeButtonClicked(bool)));
@@ -322,8 +308,9 @@ double KisToolTransformConfigWidget::degreeToRadian(double degree)
 {
     if (degree < 0. || degree >= 360.) {
         degree = fmod(degree, 360.);
-        if (degree < 0)
+        if (degree < 0) {
             degree += 360.;
+        }
     }
 
     return (degree * M_PI / 180.);
@@ -349,7 +336,6 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
     liquifyAmountPressureBox->setChecked(props->amountHasPressure());
     liquifyReverseDirectionChk->setChecked(props->reverseDirection());
 
-
     KisLiquifyProperties::LiquifyMode mode =
         static_cast<KisLiquifyProperties::LiquifyMode>(props->mode());
 
@@ -370,7 +356,9 @@ void KisToolTransformConfigWidget::updateLiquifyControls()
 
 void KisToolTransformConfigWidget::slotLiquifyModeChanged(int value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
 
@@ -380,7 +368,9 @@ void KisToolTransformConfigWidget::slotLiquifyModeChanged(int value)
     KisLiquifyProperties::LiquifyMode mode =
         static_cast<KisLiquifyProperties::LiquifyMode>(value);
 
-    if (mode == props->mode()) return;
+    if (mode == props->mode()) {
+        return;
+    }
 
     props->setMode(mode);
     props->loadMode();
@@ -392,7 +382,9 @@ void KisToolTransformConfigWidget::slotLiquifyModeChanged(int value)
 
 void KisToolTransformConfigWidget::liquifySizeChanged(qreal value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     KisLiquifyProperties *props =
@@ -404,7 +396,9 @@ void KisToolTransformConfigWidget::liquifySizeChanged(qreal value)
 
 void KisToolTransformConfigWidget::liquifyAmountChanged(qreal value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     KisLiquifyProperties *props =
@@ -416,7 +410,9 @@ void KisToolTransformConfigWidget::liquifyAmountChanged(qreal value)
 
 void KisToolTransformConfigWidget::liquifyFlowChanged(qreal value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     KisLiquifyProperties *props =
@@ -428,7 +424,9 @@ void KisToolTransformConfigWidget::liquifyFlowChanged(qreal value)
 
 void KisToolTransformConfigWidget::liquifyBuildUpChanged(int value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     KisLiquifyProperties *props =
@@ -444,7 +442,9 @@ void KisToolTransformConfigWidget::liquifyBuildUpChanged(int value)
 
 void KisToolTransformConfigWidget::liquifySpacingChanged(qreal value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     KisLiquifyProperties *props =
@@ -456,7 +456,9 @@ void KisToolTransformConfigWidget::liquifySpacingChanged(qreal value)
 
 void KisToolTransformConfigWidget::liquifySizePressureChanged(bool value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     KisLiquifyProperties *props =
@@ -468,7 +470,9 @@ void KisToolTransformConfigWidget::liquifySizePressureChanged(bool value)
 
 void KisToolTransformConfigWidget::liquifyAmountPressureChanged(bool value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     KisLiquifyProperties *props =
@@ -480,7 +484,9 @@ void KisToolTransformConfigWidget::liquifyAmountPressureChanged(bool value)
 
 void KisToolTransformConfigWidget::liquifyReverseDirectionChanged(bool value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     KisLiquifyProperties *props =
@@ -495,18 +501,15 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
     blockUiSlots();
 
     if (config.mode() == ToolTransformArgs::FREE_TRANSFORM ||
-        config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
+            config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
 
         stackedWidget->setCurrentIndex(0);
 
         bool freeTransformIsActive = config.mode() == ToolTransformArgs::FREE_TRANSFORM;
 
-        if (freeTransformIsActive)
-        {
-            freeTransformButton->setChecked(true);           
-        }
-        else
-        {
+        if (freeTransformIsActive) {
+            freeTransformButton->setChecked(true);
+        } else {
             perspectiveTransformButton->setChecked(true);
         }
 
@@ -526,7 +529,6 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         translateXBox->setValue(config.transformedCenter().x());
         translateYBox->setValue(config.transformedCenter().y());
 
-
         aXBox->setValue(radianToDegree(config.aX()));
         aYBox->setValue(radianToDegree(config.aY()));
         aZBox->setValue(radianToDegree(config.aZ()));
@@ -539,7 +541,7 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 
         for (int i = 0; i < 9; i++) {
             if (qFuzzyCompare(m_handleDir[i].x(), pt.x()) &&
-                qFuzzyCompare(m_handleDir[i].y(), pt.y())) {
+                    qFuzzyCompare(m_handleDir[i].y(), pt.y())) {
 
                 m_rotationCenterButtons->button(i)->setChecked(true);
                 break;
@@ -568,17 +570,17 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
         resetUIOptions();
 
         // we need at least 3 point before we can start actively deforming
-        if (config.origPoints().size() >= 3)
-        {
+        if (config.origPoints().size() >= 3) {
             cageTransformDirections->setText(i18n("Switch between editing and deforming cage"));
             cageAddEditRadio->setVisible(true);
             cageDeformRadio->setVisible(true);
 
             // update to correct radio button
-            if (config.isEditingTransformPoints())
+            if (config.isEditingTransformPoints()) {
                 cageAddEditRadio->setChecked(true);
-            else
-                 cageDeformRadio->setChecked(true);
+            } else {
+                cageDeformRadio->setChecked(true);
+            }
 
         }
 
@@ -694,19 +696,19 @@ void KisToolTransformConfigWidget::unblockUiSlots()
 
 void KisToolTransformConfigWidget::notifyEditingFinished()
 {
-    if (m_uiSlotsBlocked || m_notificationsBlocked || !m_configChanged) return;
+    if (m_uiSlotsBlocked || m_notificationsBlocked || !m_configChanged) {
+        return;
+    }
 
     emit sigEditingFinished();
     m_configChanged = false;
 }
 
-
 void KisToolTransformConfigWidget::resetUIOptions()
 {
     // reset tool states since we are done (probably can encapsulate this later)
     ToolTransformArgs *config = m_transaction->currentConfig();
-    if (config->mode() == ToolTransformArgs::CAGE)
-    {
+    if (config->mode() == ToolTransformArgs::CAGE) {
         cageAddEditRadio->setVisible(false);
         cageAddEditRadio->setChecked(true);
         cageDeformRadio->setVisible(false);
@@ -715,8 +717,6 @@ void KisToolTransformConfigWidget::resetUIOptions()
         // ensure we are on the right options view
         stackedWidget->setCurrentIndex(2);
     }
-
-
 
 }
 
@@ -729,8 +729,7 @@ void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
 
     if (button == applyButton) {
         emit sigApplyTransform();
-    }
-    else if (button == resetButton) {
+    } else if (button == resetButton) {
         emit sigResetTransform();
     }
 
@@ -738,7 +737,9 @@ void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
 
 void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool value)
 {
-    if (!value) return;
+    if (!value) {
+        return;
+    }
 
     lblTransformType->setText(freeTransformButton->toolTip());
 
@@ -749,7 +750,9 @@ void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool va
 
 void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
 {
-    if (!value) return;
+    if (!value) {
+        return;
+    }
 
     lblTransformType->setText(warpButton->toolTip());
 
@@ -760,7 +763,9 @@ void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
 
 void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
 {
-    if (!value) return;
+    if (!value) {
+        return;
+    }
 
     lblTransformType->setText(cageButton->toolTip());
 
@@ -771,7 +776,9 @@ void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
 
 void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
 {
-    if (!value) return;
+    if (!value) {
+        return;
+    }
 
     lblTransformType->setText(liquifyButton->toolTip());
 
@@ -782,7 +789,9 @@ void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
 
 void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool value)
 {
-    if (!value) return;
+    if (!value) {
+        return;
+    }
 
     lblTransformType->setText(perspectiveTransformButton->toolTip());
 
@@ -800,7 +809,9 @@ void KisToolTransformConfigWidget::slotFilterChanged(const KoID &filterId)
 
 void KisToolTransformConfigWidget::slotRotationCenterChanged(int index)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     if (index >= 0 && index <= 8) {
         ToolTransformArgs *config = m_transaction->currentConfig();
@@ -817,7 +828,9 @@ void KisToolTransformConfigWidget::slotRotationCenterChanged(int index)
 
 void KisToolTransformConfigWidget::slotSetScaleX(int value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     qDebug() << "setting scale x";
 
@@ -825,7 +838,7 @@ void KisToolTransformConfigWidget::slotSetScaleX(int value)
     config->setScaleX(value / 100.);
 
     if (config->keepAspectRatio() &&
-        !qFuzzyCompare(config->scaleX(), config->scaleY())) {
+            !qFuzzyCompare(config->scaleX(), config->scaleY())) {
 
         blockNotifications();
         scaleYBox->setValue(sign(scaleYBox->value()) * value);
@@ -838,13 +851,15 @@ void KisToolTransformConfigWidget::slotSetScaleX(int value)
 
 void KisToolTransformConfigWidget::slotSetScaleY(int value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setScaleY(value / 100.);
 
     if (config->keepAspectRatio() &&
-        !qFuzzyCompare(config->scaleX(), config->scaleY())) {
+            !qFuzzyCompare(config->scaleX(), config->scaleY())) {
 
         blockNotifications();
         scaleXBox->setValue(sign(scaleXBox->value()) * value);
@@ -857,7 +872,9 @@ void KisToolTransformConfigWidget::slotSetScaleY(int value)
 
 void KisToolTransformConfigWidget::slotSetShearX(qreal value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setShearX((double)value);
@@ -867,7 +884,9 @@ void KisToolTransformConfigWidget::slotSetShearX(qreal value)
 
 void KisToolTransformConfigWidget::slotSetShearY(qreal value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setShearY((double)value);
@@ -877,7 +896,9 @@ void KisToolTransformConfigWidget::slotSetShearY(qreal value)
 
 void KisToolTransformConfigWidget::slotSetTranslateX(int value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setTransformedCenter(QPointF(value, config->transformedCenter().y()));
@@ -886,7 +907,9 @@ void KisToolTransformConfigWidget::slotSetTranslateX(int value)
 
 void KisToolTransformConfigWidget::slotSetTranslateY(int value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setTransformedCenter(QPointF(config->transformedCenter().x(), value));
@@ -895,7 +918,9 @@ void KisToolTransformConfigWidget::slotSetTranslateY(int value)
 
 void KisToolTransformConfigWidget::slotSetAX(qreal value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setAX(degreeToRadian((double)value));
@@ -905,7 +930,9 @@ void KisToolTransformConfigWidget::slotSetAX(qreal value)
 
 void KisToolTransformConfigWidget::slotSetAY(qreal value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setAY(degreeToRadian((double)value));
@@ -915,14 +942,15 @@ void KisToolTransformConfigWidget::slotSetAY(qreal value)
 
 void KisToolTransformConfigWidget::slotSetAZ(qreal value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setAZ(degreeToRadian((double)value));
     notifyConfigChanged();
     notifyEditingFinished();
 }
-
 
 // change free transform setting we want to alter (all radio buttons call this)
 void KisToolTransformConfigWidget::slotTransformAreaVisible(bool value)
@@ -932,28 +960,19 @@ void KisToolTransformConfigWidget::slotTransformAreaVisible(bool value)
     //QCheckBox sender = (QCheckBox)(*)(QObject::sender());
     QString senderName = QObject::sender()->objectName();
 
-
     // only show setting with what we have selected
     rotationGroup->hide();
     shearGroup->hide();
     scaleGroup->hide();
     moveGroup->hide();
 
-
-    if ("freeMoveRadioButton" == senderName)
-    {
+    if ("freeMoveRadioButton" == senderName) {
         moveGroup->show();
-    }
-    else  if ("freeShearRadioButton" == senderName)
-    {
+    } else  if ("freeShearRadioButton" == senderName) {
         shearGroup->show();
-    }
-    else if ("freeScaleRadioButton" == senderName)
-    {
+    } else if ("freeScaleRadioButton" == senderName) {
         scaleGroup->show();
-    }
-    else
-    {
+    } else {
         rotationGroup->show();
     }
 
@@ -961,7 +980,9 @@ void KisToolTransformConfigWidget::slotTransformAreaVisible(bool value)
 
 void KisToolTransformConfigWidget::slotSetKeepAspectRatio(bool value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setKeepAspectRatio(value);
@@ -983,7 +1004,9 @@ void KisToolTransformConfigWidget::slotSetKeepAspectRatio(bool value)
 
 void KisToolTransformConfigWidget::slotSetWarpAlpha(qreal value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
 
@@ -994,7 +1017,9 @@ void KisToolTransformConfigWidget::slotSetWarpAlpha(qreal value)
 
 void KisToolTransformConfigWidget::slotSetWarpDensity(int value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
     setDefaultWarpPoints(value);
 }
 
@@ -1013,14 +1038,13 @@ void KisToolTransformConfigWidget::setDefaultWarpPoints(int pointsPerLine)
         //there is actually no grid
         origPoints[0] = m_transaction->originalCenterGeometric();
         transfPoints[0] = m_transaction->originalCenterGeometric();
-    }
-    else if (nbPoints > 1) {
+    } else if (nbPoints > 1) {
         gridSpaceX = m_transaction->originalRect().width() / (pointsPerLine - 1);
         gridSpaceY = m_transaction->originalRect().height() / (pointsPerLine - 1);
         double y = m_transaction->originalRect().top();
         for (int i = 0; i < pointsPerLine; ++i) {
             double x = m_transaction->originalRect().left();
-            for (int j = 0 ; j < pointsPerLine; ++j) {
+            for (int j = 0; j < pointsPerLine; ++j) {
                 origPoints[i * pointsPerLine + j] = QPointF(x, y);
                 transfPoints[i * pointsPerLine + j] = QPointF(x, y);
                 x += gridSpaceX;
@@ -1057,28 +1081,36 @@ void KisToolTransformConfigWidget::activateCustomWarpPoints(bool enabled)
 
 void KisToolTransformConfigWidget::slotWarpDefaultPointsButtonClicked(bool value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     activateCustomWarpPoints(!value);
 }
 
 void KisToolTransformConfigWidget::slotWarpCustomPointsButtonClicked(bool value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     activateCustomWarpPoints(value);
 }
 
 void KisToolTransformConfigWidget::slotWarpResetPointsButtonClicked()
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     activateCustomWarpPoints(true);
 }
 
 void KisToolTransformConfigWidget::slotWarpLockPointsButtonClicked()
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setEditingTransformPoints(!config->isEditingTransformPoints());
@@ -1098,7 +1130,9 @@ void KisToolTransformConfigWidget::slotWarpLockPointsButtonClicked()
 
 void KisToolTransformConfigWidget::slotWarpTypeChanged(int index)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
 
@@ -1118,12 +1152,9 @@ void KisToolTransformConfigWidget::slotWarpTypeChanged(int index)
 
 void KisToolTransformConfigWidget::slotCageOptionsChanged(int value)
 {
-    if ( value == 0)
-    {
+    if (value == 0) {
         slotEditCagePoints(true);
-    }
-    else
-    {
+    } else {
         slotEditCagePoints(false);
     }
 
@@ -1132,7 +1163,9 @@ void KisToolTransformConfigWidget::slotCageOptionsChanged(int value)
 
 void KisToolTransformConfigWidget::slotEditCagePoints(bool value)
 {
-    if (m_uiSlotsBlocked) return;
+    if (m_uiSlotsBlocked) {
+        return;
+    }
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->refTransformedPoints() = config->origPoints();

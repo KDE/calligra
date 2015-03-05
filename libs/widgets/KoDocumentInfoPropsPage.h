@@ -36,7 +36,7 @@ public:
 
 private:
     class KoDocumentInfoPropsPagePrivate;
-    KoDocumentInfoPropsPagePrivate * const d;
+    KoDocumentInfoPropsPagePrivate *const d;
 };
 
 #endif

@@ -30,20 +30,22 @@ namespace TJ
  * @see CoreAttributes
  * @author Chris Schlaeger <cs@kde.org>
  */
-class KPLATOTJ_EXPORT CoreAttributesList : public QList<CoreAttributes*>
+class KPLATOTJ_EXPORT CoreAttributesList : public QList<CoreAttributes *>
 {
 public:
     CoreAttributesList() : m_autodelete(false)
     {
-        for (int i = 0; i < maxSortingLevel; i++)
+        for (int i = 0; i < maxSortingLevel; i++) {
             sorting[i] = SequenceUp;
+        }
     }
-    CoreAttributesList(const CoreAttributesList& l) :
-        QList<CoreAttributes*>(l),
+    CoreAttributesList(const CoreAttributesList &l) :
+        QList<CoreAttributes * >(l),
         m_autodelete(false)
     {
-        for (int i = 0; i < maxSortingLevel; i++)
+        for (int i = 0; i < maxSortingLevel; i++) {
             sorting[i] = l.sorting[i];
+        }
     }
 
     virtual ~CoreAttributesList();
@@ -70,15 +72,18 @@ public:
 
     static const int maxSortingLevel = 3;
     void setSorting(int s, int level);
-    int getSorting(int level) const { return level < maxSortingLevel ? sorting[ level ] : 0; }
+    int getSorting(int level) const
+    {
+        return level < maxSortingLevel ? sorting[ level ] : 0;
+    }
     void sort();
     void createIndex(bool initial = false);
-    int getIndex(const QString& id) const;
+    int getIndex(const QString &id) const;
     uint maxDepth() const;
 
     static bool isSupportedSortingCriteria(int sc);
 
-    virtual int compareItemsLevel(CoreAttributes* c1, CoreAttributes* c2,
+    virtual int compareItemsLevel(CoreAttributes *c1, CoreAttributes *c2,
                                   int level);
 
     int inSort(CoreAttributes *attr);
@@ -86,71 +91,77 @@ public:
     static QStringList getSortCriteria();
 
 protected:
-    virtual int compareItems(CoreAttributes* c1, CoreAttributes* c2);
+    virtual int compareItems(CoreAttributes *c1, CoreAttributes *c2);
 
     bool m_autodelete;
     int sorting[maxSortingLevel];
-} ;
+};
 
 /**
  * @short Iterator for CoreAttributesList objects.
  * @author Chris Schlaeger <cs@kde.org>
  */
-class CoreAttributesListIterator : public QListIterator<CoreAttributes*>
+class CoreAttributesListIterator : public QListIterator<CoreAttributes *>
 {
 public:
-    explicit CoreAttributesListIterator(const CoreAttributesList& l) :
-        QListIterator<CoreAttributes*>(l) { }
+    explicit CoreAttributesListIterator(const CoreAttributesList &l) :
+        QListIterator<CoreAttributes * >(l) { }
     virtual ~CoreAttributesListIterator() { }
-    void operator++() { if (hasNext()) next(); }
-    CoreAttributes *operator*() { return hasNext() ? peekNext() : 0; }
-} ;
-
-template<class TL, class T> int compareTreeItemsT(TL* list, T* c1, T* c2)
-{
-    if (c1 == c2)
-        return 0;
-
-    QList<T*> cl1, cl2;
-    int res1 = 0;
-    for ( ; c1 || c2; )
+    void operator++()
     {
-        if (c1)
-        {
-            cl1.prepend(c1);
-            c1 = c1->getParent();
+        if (hasNext()) {
+            next();
         }
-        else
-            res1 = -1;
-        if (c2)
-        {
-            cl2.prepend(c2);
-            c2 = c2->getParent();
-        }
-        else
-            res1 = 1;
+    }
+    CoreAttributes *operator*()
+    {
+        return hasNext() ? peekNext() : 0;
+    }
+};
+
+template<class TL, class T> int compareTreeItemsT(TL *list, T *c1, T *c2)
+{
+    if (c1 == c2) {
+        return 0;
     }
 
-    QListIterator<T*> cal1(cl1);
-    QListIterator<T*> cal2(cl2);
-    while (cal1.hasNext() && cal2.hasNext())
-    {
+    QList<T *> cl1, cl2;
+    int res1 = 0;
+    for (; c1 || c2;) {
+        if (c1) {
+            cl1.prepend(c1);
+            c1 = c1->getParent();
+        } else {
+            res1 = -1;
+        }
+        if (c2) {
+            cl2.prepend(c2);
+            c2 = c2->getParent();
+        } else {
+            res1 = 1;
+        }
+    }
+
+    QListIterator<T *> cal1(cl1);
+    QListIterator<T *> cal2(cl2);
+    while (cal1.hasNext() && cal2.hasNext()) {
         CoreAttributes *a1 = cal1.next();
         CoreAttributes *a2 = cal2.next();
         int res;
-        for (int j = 1; j < CoreAttributesList::maxSortingLevel; ++j)
-        {
-            if ((res = list->compareItemsLevel(a1, a2, j)) != 0)
+        for (int j = 1; j < CoreAttributesList::maxSortingLevel; ++j) {
+            if ((res = list->compareItemsLevel(a1, a2, j)) != 0) {
                 return res;
+            }
         }
-        if ((res = a1->getSequenceNo() - a2->getSequenceNo()) != 0)
+        if ((res = a1->getSequenceNo() - a2->getSequenceNo()) != 0) {
             return res < 0 ? -1 : 1;
+        }
     }
     return res1;
 }
 
 } // namespace TJ
 
-KPLATOTJ_EXPORT QDebug operator<<( QDebug dbg, const TJ::CoreAttributesList& lst );
+KPLATOTJ_EXPORT QDebug operator<<(QDebug dbg, const TJ::CoreAttributesList &lst);
 
 #endif

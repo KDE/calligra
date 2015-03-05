@@ -34,13 +34,14 @@ class KisDynaPaintOp : public KisPaintOp
 
 public:
 
-    KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisDynaPaintOp();
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
 
-    virtual bool incremental() const {
+    virtual bool incremental() const
+    {
         return true;
     }
 

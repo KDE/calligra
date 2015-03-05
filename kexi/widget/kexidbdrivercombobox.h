@@ -29,7 +29,6 @@
 //! \brief Combo box widget for selecting a database driver
 /*! This widget provides a combobox for selecting a database driver.
 
-
 \b Usage: \n
 \code
   KexiDB::DriverManager manager;
@@ -61,7 +60,7 @@ public:
         If \a includeFileBasedDrivers is set to false, then only those drivers
         that are for database servers (those which have X-Kexi-DriverType=Network
         in their .desktop file) are shown. */
-    KexiDBDriverComboBox(QWidget* parent, const KexiDB::Driver::InfoHash& driversInfo,
+    KexiDBDriverComboBox(QWidget *parent, const KexiDB::Driver::InfoHash &driversInfo,
                          Options options = ShowAll);
 
     ~KexiDBDriverComboBox();
@@ -88,11 +87,11 @@ public:
         is case insensitive.
 
         */
-    void setDriverName(const QString& driverName);
+    void setDriverName(const QString &driverName);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

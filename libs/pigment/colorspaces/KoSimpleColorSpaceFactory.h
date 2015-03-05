@@ -31,67 +31,78 @@ class KoSimpleColorSpaceFactory : public KoColorSpaceFactory
 
 public:
 
-    KoSimpleColorSpaceFactory(const QString& id,
-                              const QString& name,
+    KoSimpleColorSpaceFactory(const QString &id,
+                              const QString &name,
                               bool userVisible,
-                              const KoID& colorModelId,
-                              const KoID& colorDepthId,
+                              const KoID &colorModelId,
+                              const KoID &colorDepthId,
                               int referenceDepth)
-            : m_id(id)
-            , m_name(name)
-            , m_userVisible(userVisible)
-            , m_colorModelId(colorModelId)
-            , m_colorDepthId(colorDepthId)
-            , m_referenceDepth(referenceDepth) {
+        : m_id(id)
+        , m_name(name)
+        , m_userVisible(userVisible)
+        , m_colorModelId(colorModelId)
+        , m_colorDepthId(colorDepthId)
+        , m_referenceDepth(referenceDepth)
+    {
     }
 
-
-    virtual QString id() const {
+    virtual QString id() const
+    {
         return m_id;
     }
 
-    virtual QString name() const {
+    virtual QString name() const
+    {
         return m_name;
     }
 
-    virtual bool userVisible() const {
+    virtual bool userVisible() const
+    {
         return m_userVisible;
     }
 
-    virtual KoID colorModelId() const {
+    virtual KoID colorModelId() const
+    {
         return m_colorModelId;
     }
 
-    virtual KoID colorDepthId() const {
+    virtual KoID colorDepthId() const
+    {
         return m_colorDepthId;
     }
 
-    virtual bool profileIsCompatible(const KoColorProfile* profile) const {
-        return dynamic_cast<const KoDummyColorProfile*>(profile);
+    virtual bool profileIsCompatible(const KoColorProfile *profile) const
+    {
+        return dynamic_cast<const KoDummyColorProfile *>(profile);
     }
 
-    virtual QString colorSpaceEngine() const {
+    virtual QString colorSpaceEngine() const
+    {
         return "simple";
     }
 
-    virtual bool isHdr() const {
+    virtual bool isHdr() const
+    {
         return false;
     }
 
-    virtual int referenceDepth() const {
+    virtual int referenceDepth() const
+    {
         return m_referenceDepth;
     }
 
-
-    virtual QList<KoColorConversionTransformationFactory*> colorConversionLinks() const {
-        return QList<KoColorConversionTransformationFactory*>();
+    virtual QList<KoColorConversionTransformationFactory *> colorConversionLinks() const
+    {
+        return QList<KoColorConversionTransformationFactory *>();
     }
 
-    virtual QString defaultProfile() const {
+    virtual QString defaultProfile() const
+    {
         return QString("default");
     }
 protected:
-    virtual KoColorProfile* createColorProfile(const QByteArray& /*rawData*/) const {
+    virtual KoColorProfile *createColorProfile(const QByteArray & /*rawData*/) const
+    {
         return 0;
     }
 private:

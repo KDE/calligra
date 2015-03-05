@@ -29,7 +29,7 @@
 
 # ifndef KOVECTORIMAGE_EXPORT
 #  if defined(KDELIBS_STATIC_LIBS)
-   /* No export/import for static libraries */
+/* No export/import for static libraries */
 #   define KOVECTORIMAGE_EXPORT
 #  elif defined(MAKE_KOVECTORIMAGE_LIB)
 #   define KOVECTORIMAGE_EXPORT KDE_EXPORT

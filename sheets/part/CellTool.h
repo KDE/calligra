@@ -37,22 +37,22 @@ class CALLIGRA_SHEETS_COMMON_EXPORT CellTool : public CellToolBase
     Q_OBJECT
 
 public:
-    explicit CellTool(KoCanvasBase* canvas);
+    explicit CellTool(KoCanvasBase *canvas);
     ~CellTool();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
 
 protected:
-    virtual Selection* selection();
+    virtual Selection *selection();
     virtual QPointF offset() const;
     virtual QSizeF size() const;
     virtual QPointF canvasOffset() const;
     virtual int maxCol() const;
     virtual int maxRow() const;
-    virtual SheetView* sheetView(const Sheet* sheet) const;
+    virtual SheetView *sheetView(const Sheet *sheet) const;
 
 protected Q_SLOTS:
     // -- misc actions --
@@ -62,7 +62,7 @@ private:
     Q_DISABLE_COPY(CellTool)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

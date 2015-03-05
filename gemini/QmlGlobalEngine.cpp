@@ -19,21 +19,21 @@
 
 #include "QmlGlobalEngine.h"
 
-QmlGlobalEngine* QmlGlobalEngine::sm_instance = 0;
+QmlGlobalEngine *QmlGlobalEngine::sm_instance = 0;
 
-QDeclarativeEngine* QmlGlobalEngine::engine() const
+QDeclarativeEngine *QmlGlobalEngine::engine() const
 {
     return m_engine;
 }
 
-void QmlGlobalEngine::setEngine(QDeclarativeEngine* engine)
+void QmlGlobalEngine::setEngine(QDeclarativeEngine *engine)
 {
     m_engine = engine;
 }
 
-QmlGlobalEngine* QmlGlobalEngine::instance()
+QmlGlobalEngine *QmlGlobalEngine::instance()
 {
-    if(!sm_instance) {
+    if (!sm_instance) {
         sm_instance = new QmlGlobalEngine;
     }
     return sm_instance;

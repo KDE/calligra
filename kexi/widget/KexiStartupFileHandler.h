@@ -66,7 +66,7 @@ public:
     false in user do not want to overwrite. Blocks until user 'answers'
     by to signal askForOverwriting(const KexiContextMessage&)
     by triggering 'yes' or 'no' action. */
-    bool askForOverwriting(const QString& filePath);
+    bool askForOverwriting(const QString &filePath);
 
     //! @return mode for the handler.
     Mode mode() const;
@@ -77,20 +77,20 @@ public:
     QSet<QString> additionalFilters() const;
 
     //! Sets additional filters list, e.g. "text/x-csv"
-    void setAdditionalFilters(const QSet<QString>& mimeTypes);
+    void setAdditionalFilters(const QSet<QString> &mimeTypes);
 
     QSet<QString> excludedFilters() const;
 
     //! Excludes filters list
-    void setExcludedFilters(const QSet<QString>& mimeTypes);
+    void setExcludedFilters(const QSet<QString> &mimeTypes);
 
-    void setLocationText(const QString& fn);
+    void setLocationText(const QString &fn);
 
     //! Sets default extension which will be added after accepting
     //! if user didn't provided one. This method is usable when there is
     //! more than one filter so there is no rule what extension should be selected
     //! (by default first one is selected).
-    void setDefaultExtension(const QString& ext);
+    void setDefaultExtension(const QString &ext);
 
     /*! \return true if the current URL meets requies constraints
     (i.e. exists or doesn't exist);
@@ -101,16 +101,15 @@ public:
     This is true by default. */
     void setConfirmOverwrites(bool set);
 
-
     //! Updates the requested URL based on specified name. Performs any necessary character conversions.
     void updateUrl(const QString &name);
 Q_SIGNALS:
-    void askForOverwriting(const KexiContextMessage& message);
+    void askForOverwriting(const KexiContextMessage &message);
 
 protected Q_SLOTS:
     void slotAccepted();
     void saveRecentDir();
-    
+
     void messageWidgetActionYesTriggered();
     void messageWidgetActionNoTriggered();
 
@@ -119,7 +118,7 @@ private:
     void updateFilters();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiStartupFileHandler::Mode)

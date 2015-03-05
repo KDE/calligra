@@ -42,7 +42,7 @@ private Q_SLOTS:
 
 private:
     Ui::SectionFormatDialog m_widget;
-    KoTextEditor* m_editor;
+    KoTextEditor *m_editor;
     QModelIndex m_curIdx;
     KoSectionManager *m_sectionManager;
 

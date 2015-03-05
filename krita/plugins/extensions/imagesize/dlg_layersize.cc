@@ -32,16 +32,16 @@
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
 static const QString percentStr(i18n("Percent (%)"));
 
-DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
+DlgLayerSize::DlgLayerSize(QWidget   *parent, const char *name,
                            int width, int height, double resolution)
-        : KDialog(parent)
-        , m_aspectRatio(((double) width) / height)
-        , m_originalWidth(width)
-        , m_originalHeight(height)
-        , m_width(width)
-        , m_height(height)
-        , m_resolution(resolution)
-        , m_keepAspect(true)
+    : KDialog(parent)
+    , m_aspectRatio(((double) width) / height)
+    , m_originalWidth(width)
+    , m_originalHeight(height)
+    , m_width(width)
+    , m_height(height)
+    , m_resolution(resolution)
+    , m_keepAspect(true)
 {
     setCaption(i18n("Layer Size"));
     setObjectName(name);

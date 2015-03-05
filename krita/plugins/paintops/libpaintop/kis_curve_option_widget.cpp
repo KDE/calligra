@@ -28,18 +28,16 @@
 #include "kis_curve_option.h"
 #include "kis_signals_blocker.h"
 
-
-inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
+inline void setLabel(QLabel *label, const KisCurveLabel &curve_label)
 {
     if (curve_label.icon().isNull()) {
         label->setText(curve_label.name());
-    }
-    else {
+    } else {
         label->setPixmap(QPixmap::fromImage(curve_label.icon()));
     }
 }
 
-KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, bool hideSlider)
+KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption *curveOption, bool hideSlider)
     : KisPaintOpOption(curveOption->label(), curveOption->category(), curveOption->isChecked())
     , m_widget(new QWidget)
     , m_curveOptionWidget(new Ui_WdgCurveOption())
@@ -55,8 +53,8 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, bool hid
 
     connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(emitSettingChanged()));
-    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateSensorCurveLabels(KisDynamicSensorSP )));
-    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateCurve(KisDynamicSensorSP )));
+    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateSensorCurveLabels(KisDynamicSensorSP)));
+    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateCurve(KisDynamicSensorSP)));
     connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(transferCurve()));
 
     m_curveOptionWidget->label_ymin->setText(curveOption->minimumLabel());
@@ -65,14 +63,12 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, bool hid
     m_curveOptionWidget->slider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
     m_curveOptionWidget->slider->setValue(curveOption->value());
 
-    if (hideSlider)
-    {
-         m_curveOptionWidget->slider->hide();
-         m_curveOptionWidget->strengthLabel->hide();
+    if (hideSlider) {
+        m_curveOptionWidget->slider->hide();
+        m_curveOptionWidget->strengthLabel->hide();
     }
 
-
-    connect(m_curveOptionWidget->checkBoxUseCurve, SIGNAL(stateChanged(int))  , SLOT(updateValues()));
+    connect(m_curveOptionWidget->checkBoxUseCurve, SIGNAL(stateChanged(int)), SLOT(updateValues()));
     connect(m_curveOptionWidget->slider, SIGNAL(valueChanged(qreal)), SLOT(updateValues()));
 }
 
@@ -81,12 +77,12 @@ KisCurveOptionWidget::~KisCurveOptionWidget()
     delete m_curveOption;
 }
 
-void KisCurveOptionWidget::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisCurveOptionWidget::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     m_curveOption->writeOptionSetting(setting);
 }
 
-void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     setting->dump();
 
@@ -119,12 +115,12 @@ void KisCurveOptionWidget::setChecked(bool checked)
     m_curveOption->setChecked(checked);
 }
 
-KisCurveOption* KisCurveOptionWidget::curveOption()
+KisCurveOption *KisCurveOptionWidget::curveOption()
 {
     return m_curveOption;
 }
 
-QWidget* KisCurveOptionWidget::curveWidget()
+QWidget *KisCurveOptionWidget::curveWidget()
 {
     return m_widget;
 }

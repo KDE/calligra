@@ -33,7 +33,6 @@ void KisMemoryWindowTest::testWindow()
     quint8 oddBuf[chunkLength];
     memset(oddBuf, oddValue, chunkLength);
 
-
     KisChunkData chunk1(0, chunkLength);
     KisChunkData chunk2(1025, chunkLength);
 

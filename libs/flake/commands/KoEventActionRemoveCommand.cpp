@@ -33,8 +33,9 @@ public:
 
     ~KoEventActionRemoveCommandPrivate()
     {
-        if (deleteEventAction)
+        if (deleteEventAction) {
             delete eventAction;
+        }
     }
 
     KoShape *shape;
@@ -44,7 +45,7 @@ public:
 
 KoEventActionRemoveCommand::KoEventActionRemoveCommand(KoShape *shape, KoEventAction *eventAction, KUndo2Command *parent)
     : KUndo2Command(parent),
-    d(new KoEventActionRemoveCommandPrivate(shape, eventAction))
+      d(new KoEventActionRemoveCommandPrivate(shape, eventAction))
 {
 }
 

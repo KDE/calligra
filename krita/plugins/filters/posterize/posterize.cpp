@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2014 Manuel Riecke <spell1337@gmail.com>
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -59,18 +59,18 @@ KisFilterPosterize::KisFilterPosterize() : KisColorTransformationFilter(id(), ca
     setShowConfigurationWidget(true);
 }
 
-KoColorTransformation* KisFilterPosterize::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
+KoColorTransformation *KisFilterPosterize::createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const
 {
     return new KisPosterizeColorTransformation(config->getInt("steps", 16), cs);
 }
 
-KisPosterizeColorTransformation::KisPosterizeColorTransformation(int steps, const KoColorSpace* cs) : m_colorSpace(cs), m_psize(cs->pixelSize())
+KisPosterizeColorTransformation::KisPosterizeColorTransformation(int steps, const KoColorSpace *cs) : m_colorSpace(cs), m_psize(cs->pixelSize())
 {
     m_step = KoColorSpaceMathsTraits<quint16>::max / steps;
     m_halfStep = m_step / 2;
 }
 
-KisConfigWidget* KisFilterPosterize::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisFilterPosterize::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
 {
     Q_UNUSED(dev);
     vKisIntegerWidgetParam param;
@@ -78,14 +78,14 @@ KisConfigWidget* KisFilterPosterize::createConfigurationWidget(QWidget* parent, 
     return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
 }
 
-KisFilterConfiguration* KisFilterPosterize::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisFilterPosterize::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 0);
     config->setProperty("steps", 16);
     return config;
 }
 
-void KisPosterizeColorTransformation::transform(const quint8* src, quint8* dst, qint32 nPixels) const
+void KisPosterizeColorTransformation::transform(const quint8 *src, quint8 *dst, qint32 nPixels) const
 {
     quint16 m_rgba[4];
     quint16 m_mod[4];

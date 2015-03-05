@@ -33,16 +33,17 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 
-
 class KoTableRowStyle::Private : public QSharedData
 {
 public:
     Private() : QSharedData(), parentStyle(0), next(0) {}
 
-    ~Private() {
+    ~Private()
+    {
     }
 
-    void setProperty(int key, const QVariant &value) {
+    void setProperty(int key, const QVariant &value)
+    {
         stylesPrivate.add(key, value);
     }
 
@@ -58,7 +59,7 @@ KoTableRowStyle::KoTableRowStyle()
 }
 
 KoTableRowStyle::KoTableRowStyle(const KoTableRowStyle &rhs)
-        : d(rhs.d)
+    : d(rhs.d)
 {
 }
 
@@ -111,8 +112,9 @@ void KoTableRowStyle::remove(int key)
 QVariant KoTableRowStyle::value(int key) const
 {
     QVariant var = d->stylesPrivate.value(key);
-    if (var.isNull() && d->parentStyle)
+    if (var.isNull() && d->parentStyle) {
         return d->parentStyle->value(key);
+    }
     return var;
 }
 
@@ -124,24 +126,27 @@ bool KoTableRowStyle::hasProperty(int key) const
 qreal KoTableRowStyle::propertyDouble(int key) const
 {
     QVariant variant = value(key);
-    if (variant.isNull())
+    if (variant.isNull()) {
         return 0.0;
+    }
     return variant.toDouble();
 }
 
 int KoTableRowStyle::propertyInt(int key) const
 {
     QVariant variant = value(key);
-    if (variant.isNull())
+    if (variant.isNull()) {
         return 0;
+    }
     return variant.toInt();
 }
 
 bool KoTableRowStyle::propertyBoolean(int key) const
 {
     QVariant variant = value(key);
-    if (variant.isNull())
+    if (variant.isNull()) {
         return false;
+    }
     return variant.toBool();
 }
 
@@ -209,7 +214,6 @@ void KoTableRowStyle::setMinimumRowHeight(const qreal height)
     setProperty(MinimumRowHeight, height);
 }
 
-
 qreal KoTableRowStyle::minimumRowHeight() const
 {
     return propertyDouble(MinimumRowHeight);
@@ -217,10 +221,11 @@ qreal KoTableRowStyle::minimumRowHeight() const
 
 void KoTableRowStyle::setRowHeight(qreal height)
 {
-    if(height <= 0)
+    if (height <= 0) {
         d->stylesPrivate.remove(RowHeight);
-    else
+    } else {
         setProperty(RowHeight, height);
+    }
 }
 
 qreal KoTableRowStyle::rowHeight() const
@@ -250,8 +255,9 @@ QString KoTableRowStyle::name() const
 
 void KoTableRowStyle::setName(const QString &name)
 {
-    if (name == d->name)
+    if (name == d->name) {
         return;
+    }
     d->name = name;
 }
 
@@ -262,7 +268,9 @@ int KoTableRowStyle::styleId() const
 
 void KoTableRowStyle::setStyleId(int id)
 {
-    setProperty(StyleId, id); if (d->next == 0) d->next = id;
+    setProperty(StyleId, id); if (d->next == 0) {
+        d->next = id;
+    }
 }
 
 QString KoTableRowStyle::masterPageName() const
@@ -277,11 +285,13 @@ void KoTableRowStyle::setMasterPageName(const QString &name)
 
 void KoTableRowStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
 {
-    if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
+    if (element->hasAttributeNS(KoXmlNS::style, "display-name")) {
         d->name = element->attributeNS(KoXmlNS::style, "display-name", QString());
+    }
 
-    if (d->name.isEmpty()) // if no style:display-name is given us the style:name
+    if (d->name.isEmpty()) { // if no style:display-name is given us the style:name
         d->name = element->attributeNS(KoXmlNS::style, "name", QString());
+    }
 
     QString masterPage = element->attributeNS(KoXmlNS::style, "master-page-name", QString());
     if (! masterPage.isEmpty()) {
@@ -296,18 +306,18 @@ void KoTableRowStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &
     context.styleStack().restore();
 }
 
-
 void KoTableRowStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
     // The fo:background-color attribute specifies the background color of a cell.
     if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
         const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
         QBrush brush = background();
-        if (bgcolor == "transparent")
-           setBackground(Qt::NoBrush);
-        else {
-            if (brush.style() == Qt::NoBrush)
+        if (bgcolor == "transparent") {
+            setBackground(Qt::NoBrush);
+        } else {
+            if (brush.style() == Qt::NoBrush) {
                 brush.setStyle(Qt::SolidPattern);
+            }
             brush.setColor(bgcolor); // #rrggbb format
             setBackground(brush);
         }
@@ -360,13 +370,14 @@ bool KoTableRowStyle::isEmpty() const
 void KoTableRowStyle::saveOdf(KoGenStyle &style) const
 {
     QList<int> keys = d->stylesPrivate.keys();
-    foreach(int key, keys) {
+    foreach (int key, keys) {
         if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
-            if (backBrush.style() != Qt::NoBrush)
+            if (backBrush.style() != Qt::NoBrush) {
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableRowType);
-            else
+            } else {
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableRowType);
+            }
         } else if (key == MinimumRowHeight) {
             style.addPropertyPt("style:min-row-height", minimumRowHeight(), KoGenStyle::TableRowType);
         } else if (key == RowHeight) {
@@ -378,10 +389,11 @@ void KoTableRowStyle::saveOdf(KoGenStyle &style) const
         } else if (key == BreakAfter) {
             style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::TableRowType);
         } else if (key == KeepTogether) {
-            if (keepTogether())
+            if (keepTogether()) {
                 style.addProperty("fo:keep-together", "always", KoGenStyle::TableRowType);
-            else
+            } else {
                 style.addProperty("fo:keep-together", "auto", KoGenStyle::TableRowType);
+            }
         }
     }
 }

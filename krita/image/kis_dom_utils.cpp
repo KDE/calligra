@@ -23,9 +23,11 @@
 
 #include "kis_debug.h"
 
-namespace KisDomUtils {
+namespace KisDomUtils
+{
 
-inline int stringToInt(const QString &str) {
+inline int stringToInt(const QString &str)
+{
     bool ok = false;
     int value = 0;
 
@@ -44,7 +46,8 @@ inline int stringToInt(const QString &str) {
     return value;
 }
 
-inline double stringToDouble(const QString &str) {
+inline double stringToDouble(const QString &str)
+{
     bool ok = false;
     double value = 0;
 
@@ -163,36 +166,43 @@ bool findOnlyElement(const QDomElement &parent, const QString &tag, QDomElement 
     return true;
 }
 
-namespace Private {
-    bool checkType(const QDomElement &e, const QString &expectedType)
-    {
-        QString type = e.attribute("type", "unknown-type");
-        if (type != expectedType) {
-            qWarning() << i18n("Error: incorrect type (%2) for value %1. Expected %3", e.tagName(), type, expectedType);
-            return false;
-        }
-
-        return true;
+namespace Private
+{
+bool checkType(const QDomElement &e, const QString &expectedType)
+{
+    QString type = e.attribute("type", "unknown-type");
+    if (type != expectedType) {
+        qWarning() << i18n("Error: incorrect type (%2) for value %1. Expected %3", e.tagName(), type, expectedType);
+        return false;
     }
+
+    return true;
+}
 }
 
 bool loadValue(const QDomElement &e, float *v)
 {
-    if (!Private::checkType(e, "value")) return false;
+    if (!Private::checkType(e, "value")) {
+        return false;
+    }
     *v = stringToDouble(e.attribute("value", "0"));
     return true;
 }
 
 bool loadValue(const QDomElement &e, double *v)
 {
-    if (!Private::checkType(e, "value")) return false;
+    if (!Private::checkType(e, "value")) {
+        return false;
+    }
     *v = stringToDouble(e.attribute("value", "0"));
     return true;
 }
 
 bool loadValue(const QDomElement &e, QSize *size)
 {
-    if (!Private::checkType(e, "size")) return false;
+    if (!Private::checkType(e, "size")) {
+        return false;
+    }
 
     size->setWidth(stringToInt(e.attribute("w", "0")));
     size->setHeight(stringToInt(e.attribute("h", "0")));
@@ -202,7 +212,9 @@ bool loadValue(const QDomElement &e, QSize *size)
 
 bool loadValue(const QDomElement &e, QRect *rc)
 {
-    if (!Private::checkType(e, "rect")) return false;
+    if (!Private::checkType(e, "rect")) {
+        return false;
+    }
 
     rc->setX(stringToInt(e.attribute("x", "0")));
     rc->setY(stringToInt(e.attribute("y", "0")));
@@ -214,7 +226,9 @@ bool loadValue(const QDomElement &e, QRect *rc)
 
 bool loadValue(const QDomElement &e, QPointF *pt)
 {
-    if (!Private::checkType(e, "pointf")) return false;
+    if (!Private::checkType(e, "pointf")) {
+        return false;
+    }
 
     pt->setX(stringToDouble(e.attribute("x", "0")));
     pt->setY(stringToDouble(e.attribute("y", "0")));
@@ -224,7 +238,9 @@ bool loadValue(const QDomElement &e, QPointF *pt)
 
 bool loadValue(const QDomElement &e, QVector3D *pt)
 {
-    if (!Private::checkType(e, "vector3d")) return false;
+    if (!Private::checkType(e, "vector3d")) {
+        return false;
+    }
 
     pt->setX(stringToDouble(e.attribute("x", "0")));
     pt->setY(stringToDouble(e.attribute("y", "0")));
@@ -235,7 +251,9 @@ bool loadValue(const QDomElement &e, QVector3D *pt)
 
 bool loadValue(const QDomElement &e, QTransform *t)
 {
-    if (!Private::checkType(e, "transform")) return false;
+    if (!Private::checkType(e, "transform")) {
+        return false;
+    }
 
     qreal m11 = stringToDouble(e.attribute("m11", "1.0"));
     qreal m12 = stringToDouble(e.attribute("m12", "0.0"));
@@ -256,6 +274,5 @@ bool loadValue(const QDomElement &e, QTransform *t)
 
     return true;
 }
-
 
 }

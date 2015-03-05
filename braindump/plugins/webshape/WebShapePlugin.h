@@ -27,7 +27,7 @@ class WebShapePlugin : public QObject
 {
     Q_OBJECT
 public:
-    WebShapePlugin(QObject *parent, const QVariantList&);
+    WebShapePlugin(QObject *parent, const QVariantList &);
 };
 
 #endif

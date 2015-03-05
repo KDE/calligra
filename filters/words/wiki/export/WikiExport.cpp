@@ -40,13 +40,11 @@
 #include "OdtReaderWikiBackend.h"
 #include "OdfReaderWikiContext.h"
 
-
 K_PLUGIN_FACTORY(WikiExportFactory, registerPlugin<WikiExport>();)
 K_EXPORT_PLUGIN(WikiExportFactory("wordswikiexportng", "calligrafilters"))
 
-
 WikiExport::WikiExport(QObject *parent, const QVariantList &)
-: KoFilter(parent)
+    : KoFilter(parent)
 {
 }
 
@@ -54,7 +52,7 @@ WikiExport::~WikiExport()
 {
 }
 
-KoFilter::ConversionStatus WikiExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus WikiExport::convert(const QByteArray &from, const QByteArray &to)
 {
     // Check for types
     if (from != "application/vnd.oasis.opendocument.text" || to != "text/wiki") {
@@ -63,7 +61,7 @@ KoFilter::ConversionStatus WikiExport::convert(const QByteArray& from, const QBy
 
     // Open the infile and return an error if it fails.
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
-                                             "", KoStore::Auto);
+                        "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
         kError(30503) << "Unable to open input file!" << endl;
         delete odfStore;
@@ -73,7 +71,7 @@ KoFilter::ConversionStatus WikiExport::convert(const QByteArray& from, const QBy
 
     // Create output file.
     QFile outfile(m_chain->outputFile());
-    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text )) {
+    if (!outfile.open(QIODevice::WriteOnly | QIODevice::Text)) {
         kError(30501) << "Unable to open output file!" << endl;
         outfile.close();
         return KoFilter::FileNotFound;

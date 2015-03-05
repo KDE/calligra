@@ -38,7 +38,7 @@ void KoResourceTaggingTest::testInitialization()
 
 void KoResourceTaggingTest::testTagging()
 {
-    KoResourceServer<KoPattern>* patServer = KoResourceServerProvider::instance()->patternServer();
+    KoResourceServer<KoPattern> *patServer = KoResourceServerProvider::instance()->patternServer();
     KoResourceTagStore tagStore(patServer, "ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp");
     KoResource *res = patServer->resources().first();
     QVERIFY(res);
@@ -88,10 +88,10 @@ void KoResourceTaggingTest::testTagging()
 
 void KoResourceTaggingTest::testReadWriteXML()
 {
-    KoResourceServer<KoPattern>* patServer = KoResourceServerProvider::instance()->patternServer();
+    KoResourceServer<KoPattern> *patServer = KoResourceServerProvider::instance()->patternServer();
     KoResourceTagStore tagStore(patServer, "ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp");
 
-    QList<KoPattern*> patterns = patServer->resources();
+    QList<KoPattern *> patterns = patServer->resources();
     Q_ASSERT(patterns.size() > 5);
     tagStore.addTag(patterns[0], "test0");
     tagStore.addTag(patterns[1], "test1");

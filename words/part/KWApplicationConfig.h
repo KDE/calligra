@@ -37,111 +37,139 @@ public:
     /// save the config settings.
     void save();
 
-    void setViewFrameBorders(bool on) {
+    void setViewFrameBorders(bool on)
+    {
         m_viewFrameBorders = on;
     }
-    bool viewFrameBorders() const {
+    bool viewFrameBorders() const
+    {
         return m_viewFrameBorders;
     }
 
-    void setShowFormattingChars(bool on) {
+    void setShowFormattingChars(bool on)
+    {
         m_showFormattingChars = on;
     }
-    bool showFormattingChars() const {
+    bool showFormattingChars() const
+    {
         return m_showFormattingChars;
     }
 
-    void setShowInlineObjectVisualization(bool on) {
+    void setShowInlineObjectVisualization(bool on)
+    {
         m_showInlineObjectVisualization = on;
     }
-    bool showInlineObjectVisualization() const {
+    bool showInlineObjectVisualization() const
+    {
         return m_showInlineObjectVisualization;
     }
 
-    void setShowTableBorders(bool on) {
+    void setShowTableBorders(bool on)
+    {
         m_showTableBorders = on;
     }
 
-    void setShowSectionBounds(bool on) {
+    void setShowSectionBounds(bool on)
+    {
         m_showSectionBounds = on;
     }
 
-    bool showTableBorders() const {
+    bool showTableBorders() const
+    {
         return m_showTableBorders;
     }
 
-    bool showSectionBounds() const {
+    bool showSectionBounds() const
+    {
         return m_showSectionBounds;
     }
 
-    void setViewRulers(bool on) {
+    void setViewRulers(bool on)
+    {
         m_viewRulers = on;
     }
-    bool viewRulers() const {
+    bool viewRulers() const
+    {
         return m_viewRulers;
     }
 
-    void setStatusBarShowPage(bool on) {
+    void setStatusBarShowPage(bool on)
+    {
         m_statusBarShowPage = on;
     }
 
-    bool statusBarShowPage() {
+    bool statusBarShowPage()
+    {
         return m_statusBarShowPage;
     }
 
-    bool statusBarShowPageStyle() {
+    bool statusBarShowPageStyle()
+    {
         return m_statusBarShowPageStyle;
     }
 
-    void setStatusBarShowPageStyle(bool on) {
+    void setStatusBarShowPageStyle(bool on)
+    {
         m_statusBarShowPageStyle = on;
     }
 
-    bool statusBarShowPageSize() {
+    bool statusBarShowPageSize()
+    {
         return m_statusBarShowPageSize;
     }
 
-    void setStatusBarShowPageSize(bool on) {
+    void setStatusBarShowPageSize(bool on)
+    {
         m_statusBarShowPageSize = on;
     }
 
-    void setStatusBarShowLineNumber(bool on) {
+    void setStatusBarShowLineNumber(bool on)
+    {
         m_statusBarShowLineNumber = on;
     }
 
-    bool statusBarShowLineNumber() {
+    bool statusBarShowLineNumber()
+    {
         return m_statusBarShowLineNumber;
     }
 
-    void setStatusBarShowModified(bool on) {
+    void setStatusBarShowModified(bool on)
+    {
         m_statusBarShowModified = on;
     }
 
-    bool statusBarShowModified() {
+    bool statusBarShowModified()
+    {
         return m_statusBarShowModified;
     }
 
-    void setStatusBarShowMouse(bool on) {
+    void setStatusBarShowMouse(bool on)
+    {
         m_statusBarShowMouse = on;
     }
 
-    bool statusBarShowMouse() {
+    bool statusBarShowMouse()
+    {
         return m_statusBarShowMouse;
     }
 
-    void setStatusBarShowZoom(bool on) {
+    void setStatusBarShowZoom(bool on)
+    {
         m_statusBarShowZoom = on;
     }
 
-    bool statusBarShowZoom() {
+    bool statusBarShowZoom()
+    {
         return m_statusBarShowZoom;
     }
 
-    void setStatusBarShowWordCount(bool on) {
+    void setStatusBarShowWordCount(bool on)
+    {
         m_statusBarShowWordCount = on;
     }
 
-    bool statusBarShowWordCount() {
+    bool statusBarShowWordCount()
+    {
         return m_statusBarShowWordCount;
     }
     /**
@@ -151,7 +179,8 @@ public:
      * screen versions should be exactly the same.
      * @param percent the new zoom level to be persisted between sessions.
      */
-    void setZoom(int percent) {
+    void setZoom(int percent)
+    {
         m_zoom = percent;
     }
 
@@ -160,7 +189,8 @@ public:
      * @return the percentage of zoom.
      * @see setZoom(int)
      */
-    int zoom() const {
+    int zoom() const
+    {
         return m_zoom;
     }
 
@@ -168,18 +198,21 @@ public:
      * Set the mode of zooming for new views and to be persisted between sessions.
      * @param mode the new mode
      */
-    void setZoomMode(KoZoomMode::Mode mode) {
+    void setZoomMode(KoZoomMode::Mode mode)
+    {
         m_zoomMode = mode;
     }
 
     /**
      * Return the zoomMode to be used for new views.
      */
-    KoZoomMode::Mode zoomMode() const {
+    KoZoomMode::Mode zoomMode() const
+    {
         return m_zoomMode;
     }
 
-    qreal defaultColumnSpacing() const {
+    qreal defaultColumnSpacing() const
+    {
         return m_defaultColumnSpacing;
     }
 

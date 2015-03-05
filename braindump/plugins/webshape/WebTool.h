@@ -34,7 +34,7 @@ public:
     ~WebTool();
 
     /// reimplemented
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
 
     /// reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
@@ -46,13 +46,13 @@ public:
     /// reimplemented
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 Q_SIGNALS:
-    void shapeChanged(WebShape*);
+    void shapeChanged(WebShape *);
 protected:
     virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
-    WebShape* m_currentShape;
-    KoShape* m_tmpShape;
+    WebShape *m_currentShape;
+    KoShape *m_tmpShape;
     enum DragMode {
         NO_DRAG,
         SCROLL_DRAG,

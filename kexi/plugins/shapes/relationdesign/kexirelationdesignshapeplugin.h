@@ -29,5 +29,4 @@ public:
     KexiRelationDesignShapePlugin(QObject *parent, const QVariantList &);
 };
 
-
 #endif // KEXIRELATIONDESIGNSHAPEPLUGIN_H

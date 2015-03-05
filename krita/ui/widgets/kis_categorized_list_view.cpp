@@ -27,8 +27,7 @@
 #include <klocale.h>
 #include <KoIcon.h>
 
-
-KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget* parent):
+KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget *parent):
     QListView(parent), m_useCheckBoxHack(useCheckBoxHack)
 {
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(slotIndexChanged(QModelIndex)));
@@ -38,7 +37,7 @@ KisCategorizedListView::~KisCategorizedListView()
 {
 }
 
-void KisCategorizedListView::setModel(QAbstractItemModel* model)
+void KisCategorizedListView::setModel(QAbstractItemModel *model)
 {
     QListView::setModel(model);
     updateRows(0, model->rowCount());
@@ -47,7 +46,7 @@ void KisCategorizedListView::setModel(QAbstractItemModel* model)
 
 void KisCategorizedListView::updateRows(int begin, int end)
 {
-    for(; begin!=end; ++begin) {
+    for (; begin != end; ++begin) {
         QModelIndex index    = model()->index(begin, 0);
         bool        isHeader = model()->data(index, __CategorizedListModelBase::IsHeaderRole).toBool();
         bool        expanded = model()->data(index, __CategorizedListModelBase::ExpandCategoryRole).toBool();
@@ -55,22 +54,22 @@ void KisCategorizedListView::updateRows(int begin, int end)
     }
 }
 
-void KisCategorizedListView::slotIndexChanged(const QModelIndex& index)
+void KisCategorizedListView::slotIndexChanged(const QModelIndex &index)
 {
-    if(model()->data(index, __CategorizedListModelBase::IsHeaderRole).toBool()) {
+    if (model()->data(index, __CategorizedListModelBase::IsHeaderRole).toBool()) {
         bool expanded = model()->data(index, __CategorizedListModelBase::ExpandCategoryRole).toBool();
         model()->setData(index, !expanded, __CategorizedListModelBase::ExpandCategoryRole);
         emit sigCategoryToggled(index, !expanded);
     }
 }
 
-void KisCategorizedListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void KisCategorizedListView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
     QListView::dataChanged(topLeft, bottomRight);
-    updateRows(topLeft.row(), bottomRight.row()+1);
+    updateRows(topLeft.row(), bottomRight.row() + 1);
 }
 
-void KisCategorizedListView::rowsInserted(const QModelIndex& parent, int start, int end)
+void KisCategorizedListView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
     QListView::rowsInserted(parent, start, end);
     updateRows(0, model()->rowCount());
@@ -83,7 +82,7 @@ void KisCategorizedListView::rowsAboutToBeRemoved(const QModelIndex &parent, int
     model()->sort(0);
 }
 
-void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
+void KisCategorizedListView::mousePressEvent(QMouseEvent *event)
 {
     if (m_useCheckBoxHack) {
         QModelIndex index = QListView::indexAt(event->pos());
@@ -105,21 +104,21 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 
     QListView::mousePressEvent(event);
 
-    if(event->button() == Qt::RightButton){
+    if (event->button() == Qt::RightButton) {
         QModelIndex index = QListView::indexAt(event->pos());
         QMenu menu(this);
-        if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()) {
+        if (index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()) {
 
             bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
 
             QIcon icon = locked ? koIcon("locked") : koIcon("unlocked");
 
-            QAction* action1 = menu.addAction(icon, locked ? i18n("Unlock (restore settings from preset)") : i18n("Lock"));
+            QAction *action1 = menu.addAction(icon, locked ? i18n("Unlock (restore settings from preset)") : i18n("Lock"));
 
             connect(action1, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuDropSettingsTriggered()));
 
-            if (locked){
-                QAction* action2 = menu.addAction(icon, i18n("Unlock (keep current settings)"));
+            if (locked) {
+                QAction *action2 = menu.addAction(icon, i18n("Unlock (keep current settings)"));
                 connect(action2, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuSaveSettingsTriggered()));
             }
             menu.exec(event->globalPos());
@@ -127,15 +126,13 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
     }
 }
 
-void KisCategorizedListView::mouseReleaseEvent(QMouseEvent* event)
+void KisCategorizedListView::mouseReleaseEvent(QMouseEvent *event)
 {
     QListView::mouseReleaseEvent(event);
 
     QModelIndex index = QListView::indexAt(event->pos());
-    if(index.data(__CategorizedListModelBase::isToggledRole).toBool() && index.isValid()){
+    if (index.data(__CategorizedListModelBase::isToggledRole).toBool() && index.isValid()) {
         emit sigEntryChecked(index);
     }
 }
-
-
 

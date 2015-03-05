@@ -29,7 +29,8 @@ class QSizeF;
 class QRect;
 class QRectF;
 
-namespace KChart {
+namespace KChart
+{
 
 class ScreenConversions
 {

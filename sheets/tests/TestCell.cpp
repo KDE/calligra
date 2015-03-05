@@ -65,14 +65,15 @@ void CellTest::testRichText()
     QString cellStyleName;
 
     Map map;
-    Sheet* sheet = map.addNewSheet();
-    CellStorage* storage = sheet->cellStorage();
+    Sheet *sheet = map.addNewSheet();
+    CellStorage *storage = sheet->cellStorage();
     storage->setValue(1, 1, Value(1));
 
     Cell cell = storage->firstInRow(1);
     QVERIFY(!cell.isNull());
 
-    { // Test the simple case. Only one paragraph with some simple text.
+    {
+        // Test the simple case. Only one paragraph with some simple text.
         KoXmlDocument doc = xmlDocument("<text:p>Some text</text:p>");
         KoXmlElement e = doc.documentElement();
         QVERIFY(!e.isNull());
@@ -82,7 +83,8 @@ void CellTest::testRichText()
         QVERIFY(cell.userInput().split('\n').count() == 1);
     }
 
-    { // Text in the paragraph and in a child text:span means rich-text.
+    {
+        // Text in the paragraph and in a child text:span means rich-text.
         KoXmlDocument doc = xmlDocument("<text:p>First<text:span>Second<text:span>Theird</text:span></text:span></text:p>");
         KoXmlElement e = doc.documentElement();
         QVERIFY(!e.isNull());
@@ -92,7 +94,8 @@ void CellTest::testRichText()
         QVERIFY(cell.userInput().split('\n').count() == 1);
     }
 
-    { // The text:line-break should be translated into a \n newline and since there is no other rich-text it should not be detected as such.
+    {
+        // The text:line-break should be translated into a \n newline and since there is no other rich-text it should not be detected as such.
         KoXmlDocument doc = xmlDocument("<text:p>First<text:line-break/>Second</text:p>");
         KoXmlElement e = doc.documentElement();
         QVERIFY(!e.isNull());
@@ -102,7 +105,8 @@ void CellTest::testRichText()
         QVERIFY(cell.userInput().split('\n').count() == 2);
     }
 
-    { // The text:s and text:tab should be translated into space and tabulator. No rich-text else.
+    {
+        // The text:s and text:tab should be translated into space and tabulator. No rich-text else.
         KoXmlDocument doc = xmlDocument("<text:p>First<text:s/>Second<text:tab/>Theird</text:p>");
         KoXmlElement e = doc.documentElement();
         QVERIFY(!e.isNull());

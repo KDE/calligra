@@ -28,7 +28,7 @@
 
 #include "RememberPositionCommand.h"
 
-ChangeLayoutCommand::ChangeLayoutCommand(Section* _section, const QString& _newLayout) :
+ChangeLayoutCommand::ChangeLayoutCommand(Section *_section, const QString &_newLayout) :
     m_section(_section),
     m_oldLayout(_section->layout()->id()),
     m_newLayout(_newLayout),

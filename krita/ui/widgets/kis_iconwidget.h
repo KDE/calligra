@@ -42,8 +42,8 @@ public:
      */
     void setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter> adapter);
 public Q_SLOTS:
-    void slotSetItem(KoResource * resource);
-    void slotAdapterResourceChanged(KoResource * resource);
+    void slotSetItem(KoResource *resource);
+    void slotAdapterResourceChanged(KoResource *resource);
 
 protected:
     virtual void paintEvent(QPaintEvent *);

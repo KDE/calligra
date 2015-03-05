@@ -36,7 +36,7 @@
 #include <KoPluginLoader.h>
 
 KoToolRegistry::KoToolRegistry()
-  : d(0)
+    : d(0)
 {
 }
 
@@ -58,7 +58,7 @@ void KoToolRegistry::init()
 
     KConfigGroup cfg = KGlobal::config()->group("calligra");
     QStringList toolsBlacklist = cfg.readEntry("ToolsBlacklist", QStringList());
-    foreach (const QString& toolID, toolsBlacklist) {
+    foreach (const QString &toolID, toolsBlacklist) {
         remove(toolID);
     }
 }
@@ -69,7 +69,7 @@ KoToolRegistry::~KoToolRegistry()
     qDeleteAll(values());
 }
 
-KoToolRegistry* KoToolRegistry::instance()
+KoToolRegistry *KoToolRegistry::instance()
 {
     K_GLOBAL_STATIC(KoToolRegistry, s_instance)
     if (!s_instance.exists()) {

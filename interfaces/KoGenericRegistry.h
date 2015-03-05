@@ -60,7 +60,10 @@ class KoGenericRegistry
 {
 public:
     KoGenericRegistry() { }
-    virtual ~KoGenericRegistry() { m_hash.clear(); }
+    virtual ~KoGenericRegistry()
+    {
+        m_hash.clear();
+    }
 
 public:
     /**
@@ -70,10 +73,11 @@ public:
      *
      * @param item the item to add (NOTE: T must have an QString id() const   function)
      */
-    void add(T item) {
-        Q_ASSERT( item );
+    void add(T item)
+    {
+        Q_ASSERT(item);
         QString id = item->id();
-        if(m_hash.contains(id)) {
+        if (m_hash.contains(id)) {
             m_doubleEntries << value(id);
             remove(id);
         }
@@ -85,9 +89,10 @@ public:
      * @param id the id of the object
      * @param item the item to add
      */
-    void add(const QString &id, T item) {
-        Q_ASSERT( item );
-        if(m_hash.contains(id)) {
+    void add(const QString &id, T item)
+    {
+        Q_ASSERT(item);
+        if (m_hash.contains(id)) {
             m_doubleEntries << value(id);
             remove(id);
         }
@@ -97,7 +102,8 @@ public:
     /**
      * This function removes an item from the registry
      */
-    void remove(const QString &id) {
+    void remove(const QString &id)
+    {
         m_hash.remove(id);
     }
 
@@ -107,7 +113,8 @@ public:
      *
      * @param id the id
      */
-    T get(const QString& id) const {
+    T get(const QString &id) const
+    {
         return value(id);
     }
 
@@ -116,7 +123,8 @@ public:
      * by the id.
      * @param id the unique identifier string
      */
-    bool contains(const QString &id) const {
+    bool contains(const QString &id) const
+    {
         return m_hash.contains(id);
     }
 
@@ -124,26 +132,31 @@ public:
      * Retrieve the object from the registry based on the unique identifier string
      * @param id the id
      */
-    const T value(const QString &id) const {
+    const T value(const QString &id) const
+    {
         return m_hash.value(id);
     }
 
     /**
      * @return a list of all keys
      */
-    QList<QString> keys() const {
+    QList<QString> keys() const
+    {
         return m_hash.keys();
     }
 
-    int count() const {
+    int count() const
+    {
         return m_hash.count();
     }
 
-    QList<T> values() const {
+    QList<T> values() const
+    {
         return m_hash.values();
     }
 
-    QList<T> doubleEntries() const {
+    QList<T> doubleEntries() const
+    {
         return m_doubleEntries;
     }
 

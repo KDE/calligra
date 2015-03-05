@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "exporthtml.h"
 
@@ -51,12 +50,10 @@
 #include "SvmParser.h"
 #include "SvmPainterBackend.h"
 
-
 K_PLUGIN_FACTORY(ExportHtmlFactory, registerPlugin<ExportHtml>();)
 K_EXPORT_PLUGIN(ExportHtmlFactory("calligrafilters"))
 
-
-ExportHtml::ExportHtml(QObject *parent, const QVariantList&)
+ExportHtml::ExportHtml(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
@@ -64,7 +61,6 @@ ExportHtml::ExportHtml(QObject *parent, const QVariantList&)
 ExportHtml::~ExportHtml()
 {
 }
-
 
 KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QByteArray &to)
 {
@@ -75,7 +71,7 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
 
     // Open the infile and return an error if it fails.
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
-                                             "", KoStore::Auto);
+                        "", KoStore::Auto);
     if (!odfStore->open("mimetype")) {
         kError(30503) << "Unable to open input file!" << endl;
         delete odfStore;
@@ -147,7 +143,6 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     return KoFilter::OK;
 }
 
-
 KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile *htmlFile)
 {
     // Extract images and add them to htmlFile one by one
@@ -170,63 +165,59 @@ KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile
         QSizeF qSize = m_imagesSrcList.value(imgSrc);
         switch (type) {
 
-        case ExportHtml::VectorTypeSvm:
-            {
-                kDebug(30503) << "Svm file";
-                QSize size(qSize.width(), qSize.height());
-                QByteArray output;
-                if (!convertSvm(imgContent, output, size)) {
-                    kDebug(30503) << "Svm Parse error";
-                    return KoFilter::ParsingError;
-                }
-
-                epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
-                                         "image/svg+xml", output);
-                break;
-            }
-        case ExportHtml::VectorTypeEmf:
-            {
-                kDebug(30503) << "EMF file";
-                QSize size(qSize.width(), qSize.height());
-                QByteArray output;
-                if (!convertEmf(imgContent, output, size)) {
-                    kDebug(30503) << "EMF Parse error";
-                    return KoFilter::ParsingError;
-                }
-
-                epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
-                                         "image/svg+xml", output);
-                break;
-            }
-        case ExportHtml::VectorTypeWmf:
-            {
-                kDebug(30503) << "WMF file";
-                 QByteArray output;
-                if (!convertWmf(imgContent, output, qSize)) {
-                    kDebug(30503) << "WMF Parse error";
-                    return KoFilter::ParsingError;
-                }
-
-                epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
-                                         "image/svg+xml", output);
-                break;
+        case ExportHtml::VectorTypeSvm: {
+            kDebug(30503) << "Svm file";
+            QSize size(qSize.width(), qSize.height());
+            QByteArray output;
+            if (!convertSvm(imgContent, output, size)) {
+                kDebug(30503) << "Svm Parse error";
+                return KoFilter::ParsingError;
             }
 
-            // If it's not one of the types we can convert, let's just
-            // assume that the image can be used as it is. The user
-            // will find out soon anyway when s/he tries to look at
-            // the image.
-        case ExportHtml::VectorTypeOther:
-            {
-                kDebug(30503) << "Other file";
-                epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
-                                         m_manifest.value(imgSrc).toUtf8(), imgContent);
-                break;
+            epubFile->addContentFile(("image" + QString::number(imgId)),
+                                     (epubFile->pathPrefix() + imgSrc.section('/', -1)),
+                                     "image/svg+xml", output);
+            break;
+        }
+        case ExportHtml::VectorTypeEmf: {
+            kDebug(30503) << "EMF file";
+            QSize size(qSize.width(), qSize.height());
+            QByteArray output;
+            if (!convertEmf(imgContent, output, size)) {
+                kDebug(30503) << "EMF Parse error";
+                return KoFilter::ParsingError;
             }
+
+            epubFile->addContentFile(("image" + QString::number(imgId)),
+                                     (epubFile->pathPrefix() + imgSrc.section('/', -1)),
+                                     "image/svg+xml", output);
+            break;
+        }
+        case ExportHtml::VectorTypeWmf: {
+            kDebug(30503) << "WMF file";
+            QByteArray output;
+            if (!convertWmf(imgContent, output, qSize)) {
+                kDebug(30503) << "WMF Parse error";
+                return KoFilter::ParsingError;
+            }
+
+            epubFile->addContentFile(("image" + QString::number(imgId)),
+                                     (epubFile->pathPrefix() + imgSrc.section('/', -1)),
+                                     "image/svg+xml", output);
+            break;
+        }
+
+        // If it's not one of the types we can convert, let's just
+        // assume that the image can be used as it is. The user
+        // will find out soon anyway when s/he tries to look at
+        // the image.
+        case ExportHtml::VectorTypeOther: {
+            kDebug(30503) << "Other file";
+            epubFile->addContentFile(("image" + QString::number(imgId)),
+                                     (epubFile->pathPrefix() + imgSrc.section('/', -1)),
+                                     m_manifest.value(imgSrc).toUtf8(), imgContent);
+            break;
+        }
 
         default:
             kDebug(30503) << "";
@@ -257,7 +248,7 @@ bool ExportHtml::convertSvm(QByteArray &input, QByteArray &output, QSize size)
         return false;
     }
 
-    painter.scale(50,50);
+    painter.scale(50, 50);
     Libsvm::SvmPainterBackend svmPainterBackend(&painter, size);
     svmParser.setBackend(&svmPainterBackend);
     if (!svmParser.parse(input)) {
@@ -287,9 +278,9 @@ bool ExportHtml::convertEmf(QByteArray &input, QByteArray &output, QSize size)
         return false;
     }
 
-    painter.scale(50,50);
-    Libemf::OutputPainterStrategy  emfPaintOutput(painter, size, true );
-    emfParser.setOutput( &emfPaintOutput );
+    painter.scale(50, 50);
+    Libemf::OutputPainterStrategy  emfPaintOutput(painter, size, true);
+    emfParser.setOutput(&emfPaintOutput);
     if (!emfParser.load(input)) {
         kDebug(30503) << "Can not Parse the EMF file";
         return false;
@@ -315,7 +306,7 @@ bool ExportHtml::convertWmf(QByteArray &input, QByteArray &output, QSizeF size)
         return false;
     }
 
-    painter.scale(50,50);
+    painter.scale(50, 50);
     Libwmf::WmfPainterBackend  wmfPainter(&painter, size);
     if (!wmfPainter.load(input)) {
         kDebug(30503) << "Can not Parse the WMF file";
@@ -336,20 +327,24 @@ bool ExportHtml::convertWmf(QByteArray &input, QByteArray &output, QSizeF size)
 
 ExportHtml::VectorType  ExportHtml::vectorType(QByteArray &content)
 {
-    if (isSvm(content))
+    if (isSvm(content)) {
         return ExportHtml::VectorTypeSvm;
-    if (isEmf(content))
+    }
+    if (isEmf(content)) {
         return ExportHtml::VectorTypeEmf;
-    if (isWmf(content))
+    }
+    if (isWmf(content)) {
         return ExportHtml::VectorTypeWmf;
+    }
 
     return ExportHtml::VectorTypeOther;
 }
 
 bool ExportHtml::isSvm(QByteArray &content)
 {
-    if (content.startsWith("VCLMTF"))
+    if (content.startsWith("VCLMTF")) {
         return true;
+    }
     return false;
 }
 
@@ -362,9 +357,9 @@ bool ExportHtml::isEmf(QByteArray &content)
     // 1. Check type
     int offset = 0;
     int result = (int) data[offset];
-    result |= (int) data[offset+1] << 8;
-    result |= (int) data[offset+2] << 16;
-    result |= (int) data[offset+3] << 24;
+    result |= (int) data[offset + 1] << 8;
+    result |= (int) data[offset + 2] << 16;
+    result |= (int) data[offset + 3] << 24;
 
     qint32 mark = result;
     if (mark != 0x00000001) {
@@ -372,7 +367,7 @@ bool ExportHtml::isEmf(QByteArray &content)
     }
 
     // 2. An EMF has the string " EMF" at the start + offset 40.
-    if (size > 44 && data[40] == ' ' && data[41] == 'E' && data[42] == 'M' && data[43] == 'F'){
+    if (size > 44 && data[40] == ' ' && data[41] == 'E' && data[42] == 'M' && data[43] == 'F') {
         return true;
     }
 
@@ -384,19 +379,20 @@ bool ExportHtml::isWmf(QByteArray &content)
     const char *data = content.constData();
     const int   size = content.count();
 
-    if (size < 10)
+    if (size < 10) {
         return false;
+    }
 
     // This is how the 'file' command identifies a WMF.
-    if (data[0] == '\327' && data[1] == '\315' && data[2] == '\306' && data[3] == '\232'){
+    if (data[0] == '\327' && data[1] == '\315' && data[2] == '\306' && data[3] == '\232') {
         return true;
     }
 
-    if (data[0] == '\002' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000'){
+    if (data[0] == '\002' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000') {
         return true;
     }
 
-    if (data[0] == '\001' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000'){
+    if (data[0] == '\001' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000') {
         return true;
     }
 

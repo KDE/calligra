@@ -42,10 +42,10 @@ public:
     /**
      * @return the filter configuration
      */
-    KisFilterConfiguration* configuration(const QModelIndex &index) const;
+    KisFilterConfiguration *configuration(const QModelIndex &index) const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

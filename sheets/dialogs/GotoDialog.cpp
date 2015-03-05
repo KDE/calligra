@@ -40,8 +40,8 @@
 
 using namespace Calligra::Sheets;
 
-GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+GotoDialog::GotoDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent)
 {
     setCaption(i18n("Goto Cell"));
     setObjectName(QLatin1String("GotoDialog"));
@@ -60,7 +60,7 @@ GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
     m_nameCell->setEditable(true);
     lay1->addWidget(m_nameCell);
 
-    const Sheet* sheet = m_selection->activeSheet();
+    const Sheet *sheet = m_selection->activeSheet();
     if (sheet && selection) {
         Cell cell(sheet, selection->cursor());
         m_nameCell->addItem(cell.name());
@@ -87,8 +87,9 @@ void GotoDialog::slotOk()
     QString tmp_upper = m_nameCell->currentText();
     Region region(tmp_upper, m_selection->activeSheet()->map(), m_selection->activeSheet());
     if (region.isValid()) {
-        if (region.firstSheet() != m_selection->activeSheet())
+        if (region.firstSheet() != m_selection->activeSheet()) {
             m_selection->emitVisibleSheetRequested(region.firstSheet());
+        }
         m_selection->initialize(region);
         accept();
     } else {

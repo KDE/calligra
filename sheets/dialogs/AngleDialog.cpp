@@ -42,8 +42,8 @@
 
 using namespace Calligra::Sheets;
 
-AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+AngleDialog::AngleDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent)
 {
     setCaption(i18n("Change Angle"));
     setModal(true);
@@ -62,7 +62,7 @@ AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
     m_pAngle->setSuffix(" ");
     lay->addWidget(m_pAngle);
 
-    QWidget* spacer = new QWidget(page);
+    QWidget *spacer = new QWidget(page);
     spacer->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
     lay->addWidget(spacer);
 
@@ -76,14 +76,14 @@ AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
 
 void AngleDialog::slotOk()
 {
-    KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Change Angle"));
+    KUndo2Command *macroCommand = new KUndo2Command(kundo2_i18n("Change Angle"));
 
-    StyleCommand* manipulator = new StyleCommand(macroCommand);
+    StyleCommand *manipulator = new StyleCommand(macroCommand);
     manipulator->setSheet(m_selection->activeSheet());
     manipulator->setAngle(-m_pAngle->value());
     manipulator->add(*m_selection);
 
-    AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator(macroCommand);
+    AdjustColumnRowManipulator *manipulator2 = new AdjustColumnRowManipulator(macroCommand);
     manipulator2->setSheet(m_selection->activeSheet());
     manipulator2->setAdjustColumn(true);
     manipulator2->setAdjustRow(true);
@@ -97,6 +97,5 @@ void AngleDialog::slotDefault()
 {
     m_pAngle->setValue(0);
 }
-
 
 #include "AngleDialog.moc"

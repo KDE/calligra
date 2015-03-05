@@ -32,8 +32,8 @@
 #include <kis_layer.h>
 #include <kis_painter.h>
 
-ImageBuilder::ImageBuilder(QObject* parent)
-: QObject(parent)
+ImageBuilder::ImageBuilder(QObject *parent)
+    : QObject(parent)
 {
 }
 
@@ -48,7 +48,7 @@ QString ImageBuilder::createBlankImage(int width, int height, int resolution)
     return QString("temp://%1x%2").arg(width).arg(height);
 }
 
-QString ImageBuilder::createBlankImage(const QVariantMap& options)
+QString ImageBuilder::createBlankImage(const QVariantMap &options)
 {
     DocumentManager::instance()->newDocument(options);
     return QString("temp://custom");
@@ -62,8 +62,7 @@ QString ImageBuilder::createImageFromClipboard()
     if (clipDevice) {
         connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(createImageFromClipboardDelayed()));
         DocumentManager::instance()->newDocument(sz.width(), sz.height(), 1.0);
-    }
-    else {
+    } else {
         sz.setWidth(qApp->desktop()->width());
         sz.setHeight(qApp->desktop()->height());
         DocumentManager::instance()->newDocument(sz.width(), sz.height(), 1.0f);
@@ -81,7 +80,7 @@ void ImageBuilder::createImageFromClipboardDelayed()
     KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QRect(0, 0, sz.width(), sz.height()), false);
     KisImageWSP image = DocumentManager::instance()->document()->image();
     if (image && image->root() && image->root()->firstChild()) {
-        KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
+        KisLayer *layer = dynamic_cast<KisLayer *>(image->root()->firstChild().data());
         Q_ASSERT(layer);
         layer->setOpacity(OPACITY_OPAQUE_U8);
         QRect r = clipDevice->exactBounds();
@@ -100,7 +99,7 @@ QString ImageBuilder::createImageFromWebcam(int width, int height, int resolutio
     return QString();
 }
 
-QString ImageBuilder::createImageFromTemplate(const QVariantMap& options)
+QString ImageBuilder::createImageFromTemplate(const QVariantMap &options)
 {
     DocumentManager::instance()->newDocument(options);
     return QString("temp://%1").arg(options.value("template").toString());

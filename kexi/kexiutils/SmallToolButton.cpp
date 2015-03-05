@@ -37,8 +37,9 @@ class KexiSmallToolButton::Private
 {
 public:
     Private()
-            : enableSlotButtonToggled(true)
-            , enableSlotActionToggled(true) {
+        : enableSlotButtonToggled(true)
+        , enableSlotActionToggled(true)
+    {
     }
 
     QPointer<QAction> action;
@@ -48,34 +49,34 @@ public:
 
 //--------------------------------
 
-KexiSmallToolButton::KexiSmallToolButton(QWidget* parent)
-        : QToolButton(parent)
-        , d(new Private)
+KexiSmallToolButton::KexiSmallToolButton(QWidget *parent)
+    : QToolButton(parent)
+    , d(new Private)
 {
     init();
     update(QString(), KIcon());
 }
 
-KexiSmallToolButton::KexiSmallToolButton(const QString& text, QWidget* parent)
-        : QToolButton(parent)
-        , d(new Private)
+KexiSmallToolButton::KexiSmallToolButton(const QString &text, QWidget *parent)
+    : QToolButton(parent)
+    , d(new Private)
 {
     init();
     update(text, KIcon());
 }
 
-KexiSmallToolButton::KexiSmallToolButton(const KIcon& icon, const QString& text,
-        QWidget* parent)
-        : QToolButton(parent)
-        , d(new Private)
+KexiSmallToolButton::KexiSmallToolButton(const KIcon &icon, const QString &text,
+        QWidget *parent)
+    : QToolButton(parent)
+    , d(new Private)
 {
     init();
     update(text, icon);
 }
 
-KexiSmallToolButton::KexiSmallToolButton(QAction* action, QWidget* parent)
-        : QToolButton(parent)
-        , d(new Private)
+KexiSmallToolButton::KexiSmallToolButton(QAction *action, QWidget *parent)
+    : QToolButton(parent)
+    , d(new Private)
 {
     d->action = action;
     init();
@@ -124,14 +125,16 @@ void KexiSmallToolButton::setToolButtonStyle(Qt::ToolButtonStyle style)
     update(text(), icon(), false);
 }
 
-void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool tipToo)
+void KexiSmallToolButton::update(const QString &text, const QIcon &icon, bool tipToo)
 {
     if (!text.isEmpty() && toolButtonStyle() != Qt::ToolButtonIconOnly) {
-        if (toolButtonStyle() != Qt::ToolButtonTextOnly)
+        if (toolButtonStyle() != Qt::ToolButtonTextOnly) {
             QToolButton::setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        }
         QToolButton::setText(text);
-        if (tipToo)
+        if (tipToo) {
             setToolTip(text);
+        }
     }
     if (toolButtonStyle() == Qt::ToolButtonTextOnly) {
         QToolButton::setIcon(QIcon());
@@ -146,7 +149,7 @@ QSize KexiSmallToolButton::sizeHint() const
            - QSize((toolButtonStyle() == Qt::ToolButtonTextBesideIcon) ? 4 : 0, 0);
 }
 
-void KexiSmallToolButton::setIcon(const QIcon& icon)
+void KexiSmallToolButton::setIcon(const QIcon &icon)
 {
     update(text(), icon);
 }
@@ -156,7 +159,7 @@ void KexiSmallToolButton::setIcon(const QString &iconName)
     setIcon(KIcon(iconName));
 }
 
-void KexiSmallToolButton::setText(const QString& text)
+void KexiSmallToolButton::setText(const QString &text)
 {
     update(text, icon());
 }
@@ -169,8 +172,9 @@ void KexiSmallToolButton::slotActionChanged()
 void KexiSmallToolButton::slotButtonToggled(bool checked)
 {
     Q_UNUSED(checked);
-    if (!d->enableSlotButtonToggled)
+    if (!d->enableSlotButtonToggled) {
         return;
+    }
     //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
     //kDebug() << QString("checked=%1 action=%2 view=%3")
     // .arg(checked).arg(d->action ? d->action->text() : QString())
@@ -181,8 +185,9 @@ void KexiSmallToolButton::slotButtonToggled(bool checked)
 
 void KexiSmallToolButton::slotActionToggled(bool checked)
 {
-    if (!d->enableSlotActionToggled)
+    if (!d->enableSlotActionToggled) {
         return;
+    }
     //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
     //kDebug() << QString("checked=%1 action=%2 view=%3")
     // .arg(checked).arg(d->action ? d->action->text() : QString())
@@ -192,7 +197,7 @@ void KexiSmallToolButton::slotActionToggled(bool checked)
     d->enableSlotButtonToggled = true;
 }
 
-QAction* KexiSmallToolButton::action() const
+QAction *KexiSmallToolButton::action() const
 {
     return d->action;
 }
@@ -209,7 +214,7 @@ public:
 };
 
 KexiToolBarSeparator::Private::Private()
-    :orientation(Qt::Horizontal)
+    : orientation(Qt::Horizontal)
 {
 
 }
@@ -220,8 +225,8 @@ KexiToolBarSeparator::Private::~Private()
 }
 
 KexiToolBarSeparator::KexiToolBarSeparator(QWidget *parent)
-        : QWidget(parent)
-        , d(new Private())
+    : QWidget(parent)
+    , d(new Private())
 {
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 //! @todo
@@ -236,8 +241,9 @@ KexiToolBarSeparator::~KexiToolBarSeparator()
 void KexiToolBarSeparator::initStyleOption(QStyleOption *o) const
 {
     o->initFrom(this);
-    if (orientation() == Qt::Horizontal)
+    if (orientation() == Qt::Horizontal) {
         o->state |= QStyle::State_Horizontal;
+    }
 }
 
 void KexiToolBarSeparator::setOrientation(Qt::Orientation o)

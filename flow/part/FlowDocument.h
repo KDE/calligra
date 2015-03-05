@@ -39,11 +39,16 @@ public:
 
     virtual KoOdf::DocumentType documentType() const;
 
-
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return FLOW_MIME_TYPE; }
+    virtual QByteArray nativeFormatMimeType() const
+    {
+        return FLOW_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return FLOW_MIME_TYPE;}
+    virtual QByteArray nativeOasisMimeType() const
+    {
+        return FLOW_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {
@@ -55,7 +60,7 @@ Q_SIGNALS:
     void updateGui();
 
 protected:
-    const char *odfTagName( bool withNamespace );
+    const char *odfTagName(bool withNamespace);
 };
 
 #endif

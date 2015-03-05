@@ -45,7 +45,7 @@ public:
     /*! Reimplemented: resizes a view(). */
     virtual void resize(int w, int h);
 
-    virtual void showFocus(const QRect& r, bool readOnly);
+    virtual void showFocus(const QRect &r, bool readOnly);
 
     virtual void hideFocus();
 
@@ -55,7 +55,7 @@ public:
     virtual void paintFocusBorders(QPainter *p, QVariant &, int x, int y, int w, int h);
 
     /*! Reimplemented to handle the key events. */
-    virtual bool handleKeyPress(QKeyEvent* ke, bool editorActive);
+    virtual bool handleKeyPress(QKeyEvent *ke, bool editorActive);
 
     /*! Handles double click request coming from the table view.
      \return true if it has been consumed.
@@ -64,22 +64,22 @@ public:
 
     /*! Handles action having standard name \a actionName.
      Action could be: "edit_cut", "edit_paste", etc. */
-    virtual void handleAction(const QString& actionName);
+    virtual void handleAction(const QString &actionName);
 
     /*! Handles copy action for value. The \a value is copied to clipboard in format appropriate
      for the editor's impementation, e.g. for image cell it can be a pixmap.
      \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
-    virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
+    virtual void handleCopyAction(const QVariant &value, const QVariant &visibleValue);
 
-    virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
+    virtual void setupContents(QPainter *p, bool focused, const QVariant &val,
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
 
 protected Q_SLOTS:
-    void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+    void slotUpdateActionsAvailabilityRequested(bool &valueIsNull, bool &valueIsReadOnly);
 
-    void handleInsertFromFileAction(const KUrl& url);
-    void handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
-    void handleSaveAsAction(const QString& fileName);
+    void handleInsertFromFileAction(const KUrl &url);
+    void handleAboutToSaveAsAction(QString &origFilename, QString &fileExtension, bool &dataIsEmpty);
+    void handleSaveAsAction(const QString &fileName);
     void handleCutAction();
     void handleCopyAction();
     void handlePasteAction();
@@ -88,7 +88,7 @@ protected Q_SLOTS:
 
 protected:
     //! initializes this editor with \a add value
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
 
     //! @todo QString openWithDlg(const QString& file);
     //! @todo void execute(const QString& app, const QString& file);
@@ -98,24 +98,23 @@ protected:
     //! @todo void execute(const QString& app, const QString& file);
 
     //! @internal
-    void updateFocus(const QRect& r);
+    void updateFocus(const QRect &r);
 
     void signalEditRequested();
 
     //! @internal
-    void executeCopyAction(const QByteArray& data);
+    void executeCopyAction(const QByteArray &data);
 
     virtual bool eventFilter(QObject *o, QEvent *e);
 
     class Private;
-    Private * const d;
+    Private *const d;
     //! @todo  KTemporaryFile* m_tempFile;
     //! @todo  KProcess* m_proc;
     //! @todo  QTextEdit *m_content;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
-
 
 //=======================
 //This class is temporarily here:
@@ -145,22 +144,22 @@ public:
 
     virtual void clear();
 
-    virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
+    virtual void setupContents(QPainter *p, bool focused, const QVariant &val,
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
 
     /*! Handles copy action for value. Does nothing.
      \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
-    virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
+    virtual void handleCopyAction(const QVariant &value, const QVariant &visibleValue);
 
 protected:
     //! initializes this editor with \a add value
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
 
     void showHintButton();
     void init();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiKIconTableEditorFactoryItem)

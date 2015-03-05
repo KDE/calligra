@@ -31,8 +31,8 @@ public:
 
     /*! Reimplement this if your internal part has to return widgets
      or QDialog objects. */
-    virtual QWidget *createWidget(const char* /*widgetClass*/,
-                                  QWidget *parent, const char *objName = 0, QMap<QString, QString>* args = 0);
+    virtual QWidget *createWidget(const char * /*widgetClass*/,
+                                  QWidget *parent, const char *objName = 0, QMap<QString, QString> *args = 0);
 };
 
 #endif

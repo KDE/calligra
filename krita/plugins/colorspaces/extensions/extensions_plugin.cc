@@ -40,11 +40,11 @@ ExtensionsPlugin::ExtensionsPlugin(QObject *parent, const QVariantList &)
 {
     Q_UNUSED(parent);
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisHSVAdjustmentFactory);
-    
+
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisDodgeMidtonesAdjustmentFactory);
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisDodgeHighlightsAdjustmentFactory);
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisDodgeShadowsAdjustmentFactory);
-    
+
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisBurnMidtonesAdjustmentFactory);
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisBurnHighlightsAdjustmentFactory);
     KoColorTransformationFactoryRegistry::addColorTransformationFactory(new KisBurnShadowsAdjustmentFactory);

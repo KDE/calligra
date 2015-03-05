@@ -77,25 +77,26 @@ FindOption::FindOption(QWidget *parent)
 FindOption::searchTypeValue FindOption::searchType() const
 {
     int pos = m_searchIn->currentIndex();
-    if (pos == 0)
+    if (pos == 0) {
         return Value;
-    else if (pos == 1)
+    } else if (pos == 1) {
         return Note;
-    else
+    } else {
         return Value;
+    }
 }
 
 FindOption::searchDirectionValue FindOption::searchDirection() const
 {
     int pos = m_searchDirection->currentIndex();
-    if (pos == 0)
+    if (pos == 0) {
         return Row;
-    else if (pos == 1)
+    } else if (pos == 1) {
         return Column;
-    else
+    } else {
         return Row;
+    }
 }
-
 
 void FindOption::slotMoreOptions()
 {
@@ -115,7 +116,7 @@ bool FindOption::searchInAllSheet() const
 }
 
 FindDlg::FindDlg(QWidget *parent, const QString &name, long options, const QStringList &findStrings, bool hasSelection)
-        : KFindDialog(parent, options, findStrings, hasSelection)
+    : KFindDialog(parent, options, findStrings, hasSelection)
 {
     setObjectName(name);
     m_findOptions = new FindOption(findExtension());
@@ -138,9 +139,8 @@ bool FindDlg::searchInAllSheet() const
     return m_findOptions->searchInAllSheet();
 }
 
-
 SearchDlg::SearchDlg(QWidget *parent, const QString &name, long options, const QStringList &findStrings, const QStringList &replaceStrings, bool hasSelection)
-        : KReplaceDialog(parent, options, findStrings, replaceStrings, hasSelection)
+    : KReplaceDialog(parent, options, findStrings, replaceStrings, hasSelection)
 {
     setObjectName(name);
     m_findOptions = new FindOption(findExtension());
@@ -163,6 +163,5 @@ bool SearchDlg::searchInAllSheet() const
 {
     return m_findOptions->searchInAllSheet();
 }
-
 
 #include "FindDialog.moc"

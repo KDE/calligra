@@ -39,7 +39,7 @@ class DlgImagesplit: public KDialog
 
 public:
 
-    DlgImagesplit(KisViewManager* view,QString suffix,QStringList listMimeType);
+    DlgImagesplit(KisViewManager *view, QString suffix, QStringList listMimeType);
     ~DlgImagesplit();
     bool autoSave();
     int horizontalLines();
@@ -52,7 +52,7 @@ private Q_SLOTS:
     void lineEditEnable();
     void setMimeType(int index);
 private:
-    WdgImagesplit* m_page;
+    WdgImagesplit *m_page;
 };
 
 #endif // DLG_IMAGESPLIT

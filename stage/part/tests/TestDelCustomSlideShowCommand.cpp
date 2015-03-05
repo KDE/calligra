@@ -39,7 +39,7 @@ void TestDelCustomSlideShowCommand::delCustomSlideShow()
     doc.insertPage(page1, 0);
 
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
-    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
+    KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
     QVERIFY(p1 != 0);
     QVERIFY(m1 != 0);
@@ -50,7 +50,7 @@ void TestDelCustomSlideShowCommand::delCustomSlideShow()
     KoPAPage *page3 = new KoPAPage(master1);
     doc.insertPage(page3, 0);
 
-    QList<KoPAPageBase*> slideList;
+    QList<KoPAPageBase *> slideList;
 
     slideList.append(page1);
     slideList.append(page2);
@@ -72,7 +72,6 @@ void TestDelCustomSlideShowCommand::delCustomSlideShow()
     cmd.undo();
     QCOMPARE(doc.customSlideShows()->names().count(), 1);
 }
-
 
 QTEST_KDEMAIN(TestDelCustomSlideShowCommand, GUI)
 #include "TestDelCustomSlideShowCommand.moc"

@@ -37,8 +37,8 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotRedirectLoaded();
-    void sendRequestListFilesFinished(KJob* job);
-    void filesCopyFinished(KJob* job);
+    void sendRequestListFilesFinished(KJob *job);
+    void filesCopyFinished(KJob *job);
 
 private:
     QString uiPath(const QString &fname) const;
@@ -47,7 +47,7 @@ private:
                    QStringList *fileNamesToUpdate);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

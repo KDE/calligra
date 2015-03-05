@@ -45,9 +45,9 @@ class BRUSH_EXPORT KisBrushServer : public QObject
 public:
 
     virtual ~KisBrushServer();
-    KisBrushResourceServer* brushServer(bool block = true);
+    KisBrushResourceServer *brushServer(bool block = true);
 
-    static KisBrushServer* instance();
+    static KisBrushServer *instance();
 
 public Q_SLOTS:
     void slotRemoveBlacklistedResources();
@@ -55,10 +55,10 @@ public Q_SLOTS:
 private:
 
     KisBrushServer();
-    KisBrushServer(const KisBrushServer&);
-    KisBrushServer operator=(const KisBrushServer&);
+    KisBrushServer(const KisBrushServer &);
+    KisBrushServer operator=(const KisBrushServer &);
 
-    KisBrushResourceServer* m_brushServer;
+    KisBrushResourceServer *m_brushServer;
 
 private:
     KoResourceLoaderThread *m_brushThread;

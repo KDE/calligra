@@ -37,13 +37,13 @@
 
 struct KisOpenRasterStackSaveVisitor::Private {
     Private() : currentElement(0) {}
-    KisOpenRasterSaveContext* saveContext;
+    KisOpenRasterSaveContext *saveContext;
     QDomDocument layerStack;
-    QDomElement* currentElement;
+    QDomElement *currentElement;
     vKisNodeSP activeNodes;
 };
 
-KisOpenRasterStackSaveVisitor::KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext* saveContext, vKisNodeSP activeNodes)
+KisOpenRasterStackSaveVisitor::KisOpenRasterStackSaveVisitor(KisOpenRasterSaveContext *saveContext, vKisNodeSP activeNodes)
     : d(new Private)
 {
     d->saveContext = saveContext;
@@ -55,7 +55,7 @@ KisOpenRasterStackSaveVisitor::~KisOpenRasterStackSaveVisitor()
     delete d;
 }
 
-void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* layer)
+void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement &elt, KisLayer *layer)
 {
     elt.setAttribute("name", layer->name());
     elt.setAttribute("opacity", QString().setNum(layer->opacity() / 255.0));
@@ -67,25 +67,45 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
         elt.setAttribute("selected", "true");
     }
     QString compop = layer->compositeOpId();
-    if (layer->compositeOpId() == COMPOSITE_CLEAR) compop = "svg:clear";
-    else if (layer->compositeOpId() == COMPOSITE_OVER) compop = "svg:src-over";
-    else if (layer->compositeOpId() == COMPOSITE_ADD) compop = "svg:add";
-    else if (layer->compositeOpId() == COMPOSITE_MULT) compop = "svg:multiply";
-    else if (layer->compositeOpId() == COMPOSITE_SCREEN) compop = "svg:screen";
-    else if (layer->compositeOpId() == COMPOSITE_OVERLAY) compop = "svg:overlay";
-    else if (layer->compositeOpId() == COMPOSITE_DARKEN) compop = "svg:darken";
-    else if (layer->compositeOpId() == COMPOSITE_LIGHTEN) compop = "svg:lighten";
-    else if (layer->compositeOpId() == COMPOSITE_DODGE) compop = "svg:color-dodge";
-    else if (layer->compositeOpId() == COMPOSITE_BURN) compop = "svg:color-burn";
-    else if (layer->compositeOpId() == COMPOSITE_HARD_LIGHT) compop = "svg:hard-light";
-    else if (layer->compositeOpId() == COMPOSITE_SOFT_LIGHT_SVG) compop = "svg:soft-light";
-    else if (layer->compositeOpId() == COMPOSITE_DIFF) compop = "svg:difference";
-    else if (layer->compositeOpId() == COMPOSITE_COLOR) compop = "svg:color";
-    else if (layer->compositeOpId() == COMPOSITE_LUMINIZE) compop = "svg:luminosity";
-    else if (layer->compositeOpId() == COMPOSITE_HUE) compop = "svg:hue";
-    else if (layer->compositeOpId() == COMPOSITE_SATURATION) compop = "svg:saturation";
-    else if (layer->compositeOpId() == COMPOSITE_EXCLUSION) compop = "svg:exclusion";
-    else compop = "krita:" + layer->compositeOpId();
+    if (layer->compositeOpId() == COMPOSITE_CLEAR) {
+        compop = "svg:clear";
+    } else if (layer->compositeOpId() == COMPOSITE_OVER) {
+        compop = "svg:src-over";
+    } else if (layer->compositeOpId() == COMPOSITE_ADD) {
+        compop = "svg:add";
+    } else if (layer->compositeOpId() == COMPOSITE_MULT) {
+        compop = "svg:multiply";
+    } else if (layer->compositeOpId() == COMPOSITE_SCREEN) {
+        compop = "svg:screen";
+    } else if (layer->compositeOpId() == COMPOSITE_OVERLAY) {
+        compop = "svg:overlay";
+    } else if (layer->compositeOpId() == COMPOSITE_DARKEN) {
+        compop = "svg:darken";
+    } else if (layer->compositeOpId() == COMPOSITE_LIGHTEN) {
+        compop = "svg:lighten";
+    } else if (layer->compositeOpId() == COMPOSITE_DODGE) {
+        compop = "svg:color-dodge";
+    } else if (layer->compositeOpId() == COMPOSITE_BURN) {
+        compop = "svg:color-burn";
+    } else if (layer->compositeOpId() == COMPOSITE_HARD_LIGHT) {
+        compop = "svg:hard-light";
+    } else if (layer->compositeOpId() == COMPOSITE_SOFT_LIGHT_SVG) {
+        compop = "svg:soft-light";
+    } else if (layer->compositeOpId() == COMPOSITE_DIFF) {
+        compop = "svg:difference";
+    } else if (layer->compositeOpId() == COMPOSITE_COLOR) {
+        compop = "svg:color";
+    } else if (layer->compositeOpId() == COMPOSITE_LUMINIZE) {
+        compop = "svg:luminosity";
+    } else if (layer->compositeOpId() == COMPOSITE_HUE) {
+        compop = "svg:hue";
+    } else if (layer->compositeOpId() == COMPOSITE_SATURATION) {
+        compop = "svg:saturation";
+    } else if (layer->compositeOpId() == COMPOSITE_EXCLUSION) {
+        compop = "svg:exclusion";
+    } else {
+        compop = "krita:" + layer->compositeOpId();
+    }
     elt.setAttribute("composite-op", compop);
 }
 
@@ -94,14 +114,14 @@ bool KisOpenRasterStackSaveVisitor::visit(KisPaintLayer *layer)
     return saveLayer(layer);
 }
 
-bool KisOpenRasterStackSaveVisitor::visit(KisGeneratorLayer* layer)
+bool KisOpenRasterStackSaveVisitor::visit(KisGeneratorLayer *layer)
 {
     return saveLayer(layer);
 }
 
 bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
 {
-    QDomElement* previousElt = d->currentElement;
+    QDomElement *previousElt = d->currentElement;
 
     QDomElement elt = d->layerStack.createElement("stack");
     d->currentElement = &elt;
@@ -146,7 +166,7 @@ bool KisOpenRasterStackSaveVisitor::visit(KisCloneLayer *layer)
     return saveLayer(layer);
 }
 
-bool KisOpenRasterStackSaveVisitor::visit(KisExternalLayer * layer)
+bool KisOpenRasterStackSaveVisitor::visit(KisExternalLayer *layer)
 {
     return saveLayer(layer);
 }

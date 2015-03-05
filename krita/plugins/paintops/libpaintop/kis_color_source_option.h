@@ -42,18 +42,18 @@ public:
 public:
     KisColorSourceOption();
     ~KisColorSourceOption();
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
-    KisColorSource* createColorSource(const KisPainter* _painter) const;
+    KisColorSource *createColorSource(const KisPainter *_painter) const;
     QString colorSourceTypeId() const;
     void setColorSourceType(Type _type);
-    void setColorSourceType(const QString& _type);
+    void setColorSourceType(const QString &_type);
     static QList<KoID> sourceIds();
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

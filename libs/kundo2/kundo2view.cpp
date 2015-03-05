@@ -67,7 +67,6 @@
 #include <QPointer>
 #include <QIcon>
 
-
 /*!
     \class KUndo2View
     \brief The KUndo2View class displays the contents of a KUndo2QStack.
@@ -100,12 +99,12 @@ public:
     QPointer<KUndo2Group> group;
 #endif
     KUndo2Model *model;
-    KUndo2View* q;
+    KUndo2View *q;
 
-    void init(KUndo2View* view);
+    void init(KUndo2View *view);
 };
 
-void KUndo2ViewPrivate::init(KUndo2View* view)
+void KUndo2ViewPrivate::init(KUndo2View *view)
 {
     q = view;
     model = new KUndo2Model(q);
@@ -202,9 +201,9 @@ void KUndo2View::setStack(KUndo2QStack *stack)
 void KUndo2View::setGroup(KUndo2Group *group)
 {
 
-
-    if (d->group == group)
+    if (d->group == group) {
         return;
+    }
 
     if (d->group != 0) {
         disconnect(d->group, SIGNAL(activeStackChanged(KUndo2QStack*)),

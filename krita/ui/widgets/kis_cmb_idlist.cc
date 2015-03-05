@@ -24,7 +24,7 @@
 #include <kis_debug.h>
 #include <KoID.h>
 
-KisCmbIDList::KisCmbIDList(QWidget * parent, const char * name)
+KisCmbIDList::KisCmbIDList(QWidget *parent, const char *name)
     : QComboBox(parent)
 {
     setObjectName(name);
@@ -37,8 +37,7 @@ KisCmbIDList::~KisCmbIDList()
 {
 }
 
-
-void KisCmbIDList::setIDList(const QList<KoID>  & list)
+void KisCmbIDList::setIDList(const QList<KoID>   &list)
 {
     m_list = list;
     for (qint32 i = 0; i < m_list.count(); ++i) {
@@ -46,11 +45,12 @@ void KisCmbIDList::setIDList(const QList<KoID>  & list)
     }
 }
 
-
 KoID KisCmbIDList::currentItem() const
 {
     qint32 i = QComboBox::currentIndex();
-    if (i > m_list.count() - 1 || i < 0) return KoID();
+    if (i > m_list.count() - 1 || i < 0) {
+        return KoID();
+    }
 
     return m_list[i];
 }
@@ -68,7 +68,7 @@ void KisCmbIDList::setCurrent(const KoID id)
     }
 }
 
-void KisCmbIDList::setCurrent(const QString & s)
+void KisCmbIDList::setCurrent(const QString &s)
 {
     for (qint32 i = 0; i < m_list.count(); ++i) {
         if (m_list.at(i).id() == s) {
@@ -80,7 +80,9 @@ void KisCmbIDList::setCurrent(const QString & s)
 
 void KisCmbIDList::slotIDActivated(int i)
 {
-    if (i > m_list.count() - 1) return;
+    if (i > m_list.count() - 1) {
+        return;
+    }
 
     emit activated(m_list[i]);
 
@@ -88,7 +90,9 @@ void KisCmbIDList::slotIDActivated(int i)
 
 void KisCmbIDList::slotIDHighlighted(int i)
 {
-    if (i > m_list.count() - 1) return;
+    if (i > m_list.count() - 1) {
+        return;
+    }
 
     emit highlighted(m_list[i]);
 

@@ -26,14 +26,18 @@ class KisCanvas2;
 class KisShadeSelectorLineComboBox;
 class KisColorSelectorBaseProxy;
 
-class KisShadeSelectorLineBase : public QWidget {
+class KisShadeSelectorLineBase : public QWidget
+{
 public:
-    KisShadeSelectorLineBase(QWidget* parent) : QWidget(parent)
+    KisShadeSelectorLineBase(QWidget *parent) : QWidget(parent)
     {}
 
-    void setLineNumber(int n) {m_lineNumber=n;}
+    void setLineNumber(int n)
+    {
+        m_lineNumber = n;
+    }
     virtual QString toString() const = 0;
-    virtual void fromString(const QString& string) = 0;
+    virtual void fromString(const QString &string) = 0;
 
 protected:
     int m_lineNumber;
@@ -52,12 +56,15 @@ public:
     ~KisShadeSelectorLine();
 
     void setParam(qreal hue, qreal sat, qreal val, qreal hueShift, qreal satShift, qreal shiftVal);
-    void setColor(const KoColor& color);
+    void setColor(const KoColor &color);
     void updateSettings();
-    void setCanvas(KisCanvas2* canvas);
-    void showHelpText() {m_displayHelpText=true;}
+    void setCanvas(KisCanvas2 *canvas);
+    void showHelpText()
+    {
+        m_displayHelpText = true;
+    }
     QString toString() const;
-    void fromString(const QString& string);
+    void fromString(const QString &string);
 
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
@@ -83,7 +90,7 @@ private:
 
     friend class KisShadeSelectorLineComboBox;
 
-    KisColorSelectorBaseProxy* m_parentProxy;
+    KisColorSelectorBaseProxy *m_parentProxy;
 };
 
 #endif // KIS_SHADE_SELECTOR_LINE_H

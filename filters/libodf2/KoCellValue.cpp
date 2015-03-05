@@ -30,16 +30,16 @@ KoCellValue::~KoCellValue()
 {
 }
 
-void KoCellValue::saveOdf(KoXmlWriter& writer) const
+void KoCellValue::saveOdf(KoXmlWriter &writer) const
 {
     QString stringType;
 
-    if(!type().isEmpty()) {
+    if (!type().isEmpty()) {
         writer.addAttribute("office:value-type", type());
     }
 
     typedef QPair<QString, QString> Attribute;
-    foreach(const Attribute &attribute, attributes()) {
+    foreach (const Attribute &attribute, attributes()) {
         //TODO is this safe? I think that it didn't use to be
         writer.addAttribute(attribute.first.toLatin1(), attribute.second);
     }

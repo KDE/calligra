@@ -26,7 +26,6 @@
 #include "kis_model_index_converter.h"
 #include "kis_model_index_converter_show_all.h"
 
-
 void KisModelIndexConverterTest::init()
 {
     m_dummiesFacade = new KisDummiesFacade(0);
@@ -50,7 +49,8 @@ void KisModelIndexConverterTest::cleanup()
     delete m_dummiesFacade;
 }
 
-inline void KisModelIndexConverterTest::checkIndexFromDummy(KisNodeSP node, int row) {
+inline void KisModelIndexConverterTest::checkIndexFromDummy(KisNodeSP node, int row)
+{
     QModelIndex index;
     KisNodeDummy *dummy;
 
@@ -63,7 +63,8 @@ inline void KisModelIndexConverterTest::checkIndexFromDummy(KisNodeSP node, int 
     QCOMPARE(m_indexConverter->dummyFromIndex(index), dummy);
 }
 
-inline void KisModelIndexConverterTest::checkInvalidIndexFromDummy(KisNodeSP node) {
+inline void KisModelIndexConverterTest::checkInvalidIndexFromDummy(KisNodeSP node)
+{
     QModelIndex index;
     KisNodeDummy *dummy;
 
@@ -87,26 +88,30 @@ inline void KisModelIndexConverterTest::checkIndexFromAddedDeniedDummy(KisNodeSP
 
 inline void KisModelIndexConverterTest::checkIndexFromAddedDummy(KisNodeSP parent, int index, const QString &type, int parentRow, int childRow, bool parentValid)
 {
-   QModelIndex modelIndex;
-   KisNodeDummy *dummy;
+    QModelIndex modelIndex;
+    KisNodeDummy *dummy;
 
-   int row = 0;
-   bool result;
+    int row = 0;
+    bool result;
 
-   dummy = parent ? m_dummiesFacade->dummyForNode(parent) : 0;
-   result = m_indexConverter->indexFromAddedDummy(dummy, index, type, modelIndex, row);
-   if(!result) qDebug() << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
-   QVERIFY(result);
+    dummy = parent ? m_dummiesFacade->dummyForNode(parent) : 0;
+    result = m_indexConverter->indexFromAddedDummy(dummy, index, type, modelIndex, row);
+    if (!result) {
+        qDebug() << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
+    }
+    QVERIFY(result);
 
-   QCOMPARE(modelIndex.isValid(), parentValid);
+    QCOMPARE(modelIndex.isValid(), parentValid);
 
-   if(modelIndex.isValid()) {
-       QCOMPARE(modelIndex.row(), parentRow);
-       QCOMPARE(modelIndex.column(), 0);
-   }
+    if (modelIndex.isValid()) {
+        QCOMPARE(modelIndex.row(), parentRow);
+        QCOMPARE(modelIndex.column(), 0);
+    }
 
-   if(row != childRow) qDebug() << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
-   QCOMPARE(row, childRow);
+    if (row != childRow) {
+        qDebug() << "Failing parent:" << (parent ? parent->name() : "none") << "index:" << index;
+    }
+    QCOMPARE(row, childRow);
 }
 
 inline void KisModelIndexConverterTest::checkInvalidIndexFromAddedAllowedDummy(KisNodeSP parent, int index)
@@ -139,7 +144,7 @@ inline void KisModelIndexConverterTest::checkDummyFromRow(KisNodeSP parent, int 
     QModelIndex parentIndex;
     KisNodeDummy *parentDummy;
 
-    if(parent) {
+    if (parent) {
         parentDummy = m_dummiesFacade->dummyForNode(parent);
         parentIndex = m_indexConverter->indexFromDummy(parentDummy);
     }
@@ -147,7 +152,7 @@ inline void KisModelIndexConverterTest::checkDummyFromRow(KisNodeSP parent, int 
     KisNodeDummy *resultDummy = m_indexConverter->dummyFromRow(row, parentIndex);
     KisNodeSP resultNode = resultDummy ? resultDummy->node() : 0;
 
-    if(resultNode != expectedNode) {
+    if (resultNode != expectedNode) {
         qDebug() << "Actual node:  " << (resultNode ? resultNode->name() : "none");
         qDebug() << "Expected node:" << (expectedNode ? expectedNode->name() : "none");
         QFAIL("Wrong node");
@@ -159,14 +164,14 @@ inline void KisModelIndexConverterTest::checkRowCount(KisNodeSP parent, int rowC
     QModelIndex parentIndex;
     KisNodeDummy *parentDummy;
 
-    if(parent) {
+    if (parent) {
         parentDummy = m_dummiesFacade->dummyForNode(parent);
         parentIndex = m_indexConverter->indexFromDummy(parentDummy);
     }
 
     int resultRowCount = m_indexConverter->rowCount(parentIndex);
 
-    if(resultRowCount != rowCount) {
+    if (resultRowCount != rowCount) {
         qDebug() << "Wrong row count for:" << (parent ? parent->name() : "none");
         qDebug() << "Actual:  " << resultRowCount;
         qDebug() << "Expected:" << rowCount;
@@ -433,7 +438,6 @@ void KisModelIndexConverterTest::testDummyFromRowShowAll()
     checkDummyFromRow(m_layer3, 0, m_sel3);
     checkDummyFromRow(m_layer3, 1, m_mask1);
 }
-
 
 void KisModelIndexConverterTest::testRowCountShowAll()
 {

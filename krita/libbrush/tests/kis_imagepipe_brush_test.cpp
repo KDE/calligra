@@ -91,7 +91,6 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
     QCOMPARE(oldBrush, newBrush);
 }
 
-
 void KisImagePipeBrushTest::testLoading()
 {
     KisImagePipeBrush *brush = new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih");
@@ -125,7 +124,7 @@ void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
     qreal realScale = 1;
     qreal realAngle = 0;
 
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoColor fillColor(Qt::red, cs);
 
     KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(cs);
@@ -207,7 +206,7 @@ void KisImagePipeBrushTest::testColoredDabWash()
     brush->load();
     QVERIFY(brush->valid());
 
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
     qreal rotation = 0;
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation, 0);
@@ -216,7 +215,7 @@ void KisImagePipeBrushTest::testColoredDabWash()
     KisPainter painter(layer);
     painter.setCompositeOp(COMPOSITE_ALPHA_DARKEN);
 
-    const QVector<KisGbrBrush*> gbrs = brush->testingGetBrushes();
+    const QVector<KisGbrBrush *> gbrs = brush->testingGetBrushes();
 
     KisFixedPaintDeviceSP dab = gbrs.at(0)->paintDevice(cs, 2.0, 0.0, info);
     painter.bltFixed(0, 0, dab, 0, 0, dab->bounds().width(), dab->bounds().height());
@@ -227,7 +226,6 @@ void KisImagePipeBrushTest::testColoredDabWash()
     QRect rc = layer->exactBounds();
 
     QImage result = layer->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
-
 
 #if 0
     // if you want to see the result on white background, set #if 1
@@ -241,8 +239,6 @@ void KisImagePipeBrushTest::testColoredDabWash()
 
     delete brush;
 }
-
-
 
 #include "kis_text_brush.h"
 

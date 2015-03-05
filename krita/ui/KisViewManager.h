@@ -37,7 +37,6 @@
 class KisAction;
 class QPoint;
 
-
 class KisCanvas2;
 class KisCanvasResourceProvider;
 class KisDocument;
@@ -80,7 +79,7 @@ public:
     /**
      * Retrieves the entire action collection.
      */
-    virtual KActionCollection* actionCollection() const;
+    virtual KActionCollection *actionCollection() const;
 
 public:  // Krita specific interfaces
 
@@ -93,16 +92,16 @@ public:  // Krita specific interfaces
 
     /// The resource provider contains all per-view settings, such as
     /// current color, current paint op etc.
-    KisCanvasResourceProvider * resourceProvider();
+    KisCanvasResourceProvider *resourceProvider();
 
     /// Return the canvasbase class
-    KisCanvas2 * canvasBase() const;
+    KisCanvas2 *canvasBase() const;
 
     /// Return the actual widget that is displaying the current image
-    QWidget* canvas() const;
+    QWidget *canvas() const;
 
     /// Return the wrapper class around the statusbar
-    KisStatusBar * statusBar() const;
+    KisStatusBar *statusBar() const;
 
     /**
       * This adds a widget to the statusbar for this view.
@@ -115,14 +114,14 @@ public:  // Krita specific interfaces
       * But you can create a KStatusBarLabel with a dummy id instead, and use
       * it directly, to get the same look and feel.
       */
-    void addStatusBarItem(QWidget * widget, int stretch = 0, bool permanent = false);
+    void addStatusBarItem(QWidget *widget, int stretch = 0, bool permanent = false);
 
     /**
       * Remove a widget from the statusbar for this view.
       */
-    void removeStatusBarItem(QWidget * widget);
+    void removeStatusBarItem(QWidget *widget);
 
-    KisPaintopBox* paintOpBox() const;
+    KisPaintopBox *paintOpBox() const;
 
     /// create a new progress updater
     KoProgressUpdater *createProgressUpdater(KoProgressUpdater::Mode mode = KoProgressUpdater::Threaded);
@@ -175,17 +174,16 @@ public:  // Krita specific interfaces
 
 public:
 
-    KisGridManager * gridManager() const;
-    KisPerspectiveGridManager* perspectiveGridManager() const;
-    KisPaintingAssistantsManager* paintingAssistantsManager() const;
+    KisGridManager *gridManager() const;
+    KisPerspectiveGridManager *perspectiveGridManager() const;
+    KisPaintingAssistantsManager *paintingAssistantsManager() const;
 
     /// disable and enable toolbar controls. used for disabling them during painting.
     void enableControls();
     void disableControls();
 
-
     /// shows a floating message in the top right corner of the canvas
-    void showFloatingMessage(const QString message, const QIcon& icon, int timeout = 4500,
+    void showFloatingMessage(const QString message, const QIcon &icon, int timeout = 4500,
                              KisFloatingMessage::Priority priority = KisFloatingMessage::Medium,
                              int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
@@ -195,11 +193,11 @@ public:
     /// The QMainWindow associated with this view. This is most likely going to be shell(), but
     /// when running as Gemini or Sketch, this will be set to the applications' own QMainWindow.
     /// This can be checked by qobject_casting to KisMainWindow to check the difference.
-    QMainWindow* qtMainWindow() const;
+    QMainWindow *qtMainWindow() const;
 
     /// The mainWindow function will return the shell() value, unless this function is called
     /// with a non-null value. To make it return shell() again, simply pass null to this function.
-    void setQtMainWindow(QMainWindow* newMainWindow);
+    void setQtMainWindow(QMainWindow *newMainWindow);
 
 public Q_SLOTS:
 
@@ -239,11 +237,11 @@ private:
     void createManagers();
 
     /// The zoommanager handles everything action-related to zooming
-    KisZoomManager * zoomManager();
+    KisZoomManager *zoomManager();
 
 private:
     class KisViewManagerPrivate;
-    KisViewManagerPrivate * const d;
+    KisViewManagerPrivate *const d;
 };
 
 #endif

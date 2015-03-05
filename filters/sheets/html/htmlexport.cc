@@ -62,8 +62,8 @@ const QString html_bottom = "bottom";
 const QString html_middle = "middle";
 const QString html_h1 = "h1";
 
-HTMLExport::HTMLExport(QObject* parent, const QVariantList&) :
-        KoFilter(parent), m_dialog(new ExportDialog())
+HTMLExport::HTMLExport(QObject *parent, const QVariantList &) :
+    KoFilter(parent), m_dialog(new ExportDialog())
 {
 }
 
@@ -80,24 +80,25 @@ const QString strGt("&gt;");
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus HTMLExport::convert(const QByteArray &from, const QByteArray &to)
 {
     if (to != "text/html" || from != "application/x-kspread") {
         kWarning(30501) << "Invalid mimetypes " << to << " " << from;
         return KoFilter::NotImplemented;
     }
 
-    KoDocument* document = m_chain->inputDocument();
+    KoDocument *document = m_chain->inputDocument();
 
-    if (!document)
+    if (!document) {
         return KoFilter::StupidError;
+    }
 
     if (!::qobject_cast<const Calligra::Sheets::Doc *>(document)) {   // it's safer that way :)
         kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
 
-    const Doc * ksdoc = static_cast<const Doc *>(document);
+    const Doc *ksdoc = static_cast<const Doc *>(document);
 
     if (ksdoc->mimeType() != "application/x-kspread") {
         kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
@@ -108,7 +109,7 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
     filenameBase = filenameBase.left(filenameBase.lastIndexOf('.'));
 
     QStringList sheets;
-    foreach(Sheet* sheet, ksdoc->map()->sheetList()) {
+    foreach (Sheet *sheet, ksdoc->map()->sheetList()) {
         int rows = 0;
         int columns = 0;
         detectFilledCells(sheet, rows, columns);
@@ -120,19 +121,20 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
         }
     }
     m_dialog->setSheets(sheets);
-    if (!m_chain->manager()->getBatchMode() ) {
+    if (!m_chain->manager()->getBatchMode()) {
         if (m_dialog->exec() == QDialog::Rejected) {
             return KoFilter::UserCancelled;
         }
     }
 
-    Sheet* sheet = 0;
+    Sheet *sheet = 0;
     sheets = m_dialog->sheets();
     QString str;
-    for (int i = 0; i < sheets.count() ; ++i) {
+    for (int i = 0; i < sheets.count(); ++i) {
         sheet = ksdoc->map()->findSheet(sheets[i]);
-        if (!sheet)
+        if (!sheet) {
             continue;
+        }
 
         QString file = fileName(filenameBase, sheet->sheetName(), sheets.count() > 1);
 
@@ -172,8 +174,9 @@ void HTMLExport::openPage(Sheet *sheet, KoDocument *document, QString &str)
 {
     QString title;
     KoDocumentInfo *info = document->documentInfo();
-    if (info && !info->aboutInfo("title").isEmpty())
+    if (info && !info->aboutInfo("title").isEmpty()) {
         title = info->aboutInfo("title") + " - ";
+    }
     title += sheet->sheetName();
 
     // header
@@ -218,8 +221,9 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
     // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
     int iMaxRow = sheet->cellStorage()->rows();
 
-    if (!m_dialog->separateFiles())
+    if (!m_dialog->separateFiles()) {
         str += "<a name=\"" + sheet->sheetName().toLower().trimmed() + "\">\n";
+    }
 
     str += ("<h1>" + sheet->sheetName() + "</h1><br>\n");
 
@@ -234,7 +238,7 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
 
     unsigned int nonempty_cells_prev = 0;
 
-    for (int currentrow = 1 ; currentrow <= iMaxUsedRow ; ++currentrow, ++i) {
+    for (int currentrow = 1; currentrow <= iMaxUsedRow; ++currentrow, ++i) {
         if (i > step) {
             value += 2;
             emit sigProgress(value);
@@ -245,11 +249,12 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
         QString line;
         unsigned int nonempty_cells = 0;
 
-        for (int currentcolumn = 1 ; currentcolumn <= iMaxUsedColumn ; currentcolumn++) {
+        for (int currentcolumn = 1; currentcolumn <= iMaxUsedColumn; currentcolumn++) {
             Cell cell(sheet, currentcolumn, currentrow);
             const Style style = cell.effectiveStyle();
-            if (cell.needsPrinting())
+            if (cell.needsPrinting()) {
                 nonempty_cells++;
+            }
             QString text;
             // FIXME: some formatting seems to be missing with cell.userInput(), e.g.
             // "208.00" in KSpread will be "208" in HTML (not always?!)
@@ -262,8 +267,9 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
                     text = " <A href=\"" + cell.link() + "\">" + cell.userInput() + "</A>";
                     link = true;
                 }
-            } else
+            } else {
                 text = cell.displayText();
+            }
 #if 0
             switch (cell.content()) {
             case Cell::Text:
@@ -282,11 +288,13 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
                    + cell.postfix(currentrow, currentcolumn);
 #endif
             line += "  <" + html_cell_tag + html_cell_options;
-            if (text.isRightToLeft() != (sheet->layoutDirection() == Qt::RightToLeft))
+            if (text.isRightToLeft() != (sheet->layoutDirection() == Qt::RightToLeft)) {
                 line += QString(" dir=\"%1\" ").arg(text.isRightToLeft() ? "rtl" : "ltr");
+            }
             const QColor bgcolor = style.backgroundColor();
-            if (bgcolor.isValid() && bgcolor.name() != "#ffffff") // change color only for non-white cells
+            if (bgcolor.isValid() && bgcolor.name() != "#ffffff") { // change color only for non-white cells
                 line += " bgcolor=\"" + bgcolor.name() + "\"";
+            }
 
             switch ((Style::HAlign)cell.effectiveAlignX()) {
             case Style::Left:
@@ -332,10 +340,10 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
                 text = text.right(text.length() - 1);
             } else if (!link) {
                 // Escape HTML characters.
-                text.replace('&' , strAmp)
-                .replace('<' , strLt)
-                .replace('>' , strGt)
-                .replace(' ' , nbsp);
+                text.replace('&', strAmp)
+                .replace('<', strLt)
+                .replace('>', strGt)
+                .replace(' ', nbsp);
             }
             line += ">\n";
 
@@ -388,12 +396,13 @@ void HTMLExport::createSheetSeparator(QString &str)
 void HTMLExport::writeTOC(const QStringList &sheets, const QString &base, QString &str)
 {
     // don't create TOC for 1 sheet
-    if (sheets.count() == 1)
+    if (sheets.count() == 1) {
         return;
+    }
 
     str += "<p align=\"" + html_center + "\">\n";
 
-    for (int i = 0 ; i < sheets.count() ; ++i) {
+    for (int i = 0; i < sheets.count(); ++i) {
         str += "<a href=\"";
 
         if (m_dialog->separateFiles()) {
@@ -403,8 +412,9 @@ void HTMLExport::writeTOC(const QStringList &sheets, const QString &base, QStrin
         }
 
         str += "\">" + sheets[i] + "</a>\n";
-        if (i != sheets.count() - 1)
+        if (i != sheets.count() - 1) {
             str += " - ";
+        }
     }
 
     str += "</p><hr width=\"80%\">\n";
@@ -429,22 +439,25 @@ void HTMLExport::detectFilledCells(Sheet *sheet, int &rows, int &columns)
     rows = 0;
     columns = 0;
 
-    for (int currentrow = 1 ; currentrow <= iMaxRow ; ++currentrow) {
+    for (int currentrow = 1; currentrow <= iMaxRow; ++currentrow) {
         Cell cell;
         int iUsedColumn = 0;
-        for (int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++) {
+        for (int currentcolumn = 1; currentcolumn <= iMaxColumn; currentcolumn++) {
             cell = Cell(sheet, currentcolumn, currentrow);
             QString text;
             if (!cell.isDefault() && !cell.isEmpty()) {
                 iUsedColumn = currentcolumn;
             }
         }
-        if (!cell.isNull())
+        if (!cell.isNull()) {
             iUsedColumn += cell.mergedXCells();
-        if (iUsedColumn > columns)
+        }
+        if (iUsedColumn > columns) {
             columns = iUsedColumn;
-        if (iUsedColumn > 0)
+        }
+        if (iUsedColumn > 0) {
             rows = currentrow;
+        }
     }
 }
 

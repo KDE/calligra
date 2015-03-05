@@ -48,7 +48,8 @@ public:
     void save(KUndo2Command *command);
 
     /// reimplemented
-    virtual bool showOnShapeCreate() {
+    virtual bool showOnShapeCreate()
+    {
         return true;
     }
 

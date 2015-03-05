@@ -26,8 +26,7 @@
 
 using namespace MusicCore;
 
-
-CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Duration duration, int before, int pitch, int accidentals)
+CreateChordCommand::CreateChordCommand(MusicShape *shape, VoiceBar *voiceBar, Staff *staff, Duration duration, int before, int pitch, int accidentals)
     : m_shape(shape), m_voiceBar(voiceBar), m_before(before)
 {
     setText(kundo2_i18n("Add chord"));
@@ -35,7 +34,7 @@ CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, St
     m_chord->addNote(staff, pitch, accidentals);
 }
 
-CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Duration duration, int before)
+CreateChordCommand::CreateChordCommand(MusicShape *shape, VoiceBar *voiceBar, Staff *staff, Duration duration, int before)
     : m_shape(shape), m_voiceBar(voiceBar), m_before(before)
 {
     setText(kundo2_i18n("Add rest"));

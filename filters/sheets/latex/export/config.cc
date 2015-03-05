@@ -26,7 +26,7 @@
 
 /* Static variable */
 const char Config::SPACE_CHAR = ' ';
-Config* Config::_instance = 0;
+Config *Config::_instance = 0;
 
 /*******************************************/
 /* Constructor                             */
@@ -48,7 +48,9 @@ Config::Config(const Config &config)
     setEmbeded(config.isEmbeded());
 
     setEncoding(config.getEncoding());
-    if (config.isWordsStyleUsed()) useWordsStyle();
+    if (config.isWordsStyleUsed()) {
+        useWordsStyle();
+    }
 }
 
 /*******************************************/
@@ -75,16 +77,17 @@ void Config::unindent()
     }
 }
 
-void Config::writeIndent(QTextStream& out)
+void Config::writeIndent(QTextStream &out)
 {
     for (int index = 0; index < _tabulation; index++) {
         out << " ";
     }
 }
 
-Config* Config::instance()
+Config *Config::instance()
 {
-    if (_instance == 0)
+    if (_instance == 0) {
         _instance = new Config();
+    }
     return _instance;
 }

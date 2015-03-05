@@ -59,7 +59,7 @@ public:
     /**
      * save the bibliography-configuration element
      */
-    void saveOdf(KoXmlWriter * writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
     /**
      * Sort by position
@@ -107,10 +107,10 @@ public:
 private:
 
     class Private;
-    Private * const d;
+    Private *const d;
 
 };
 
-Q_DECLARE_METATYPE(KoOdfBibliographyConfiguration*)
+Q_DECLARE_METATYPE(KoOdfBibliographyConfiguration *)
 
 #endif // KOODFBIBLIOGRAPHYCONFIGURATION_H

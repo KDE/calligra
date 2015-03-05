@@ -25,7 +25,7 @@ Ruler::~Ruler()
 {
 }
 
-QPointF Ruler::project(const QPointF& pt)
+QPointF Ruler::project(const QPointF &pt)
 {
     double x1 = p1.x();
     double y1 = p1.y();
@@ -39,12 +39,12 @@ QPointF Ruler::project(const QPointF& pt)
     return QPointF(xm, xm * a1 + b1);
 }
 
-const QPointF& Ruler::point1() const
+const QPointF &Ruler::point1() const
 {
     return p1;
 }
 
-const QPointF& Ruler::point2() const
+const QPointF &Ruler::point2() const
 {
     return p2;
 }

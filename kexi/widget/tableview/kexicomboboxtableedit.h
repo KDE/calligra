@@ -30,7 +30,8 @@
 #include <QEvent>
 
 class KexiComboBoxPopup;
-namespace KexiDB {
+namespace KexiDB
+{
 class TableViewColumn;
 }
 
@@ -45,23 +46,27 @@ public:
     virtual ~KexiComboBoxTableEdit();
 
     //! Implemented for KexiComboBoxBase
-    virtual KexiDB::TableViewColumn *column() const {
+    virtual KexiDB::TableViewColumn *column() const
+    {
         return m_column;
     }
 
     //! Implemented for KexiComboBoxBase
-    virtual KexiDB::Field *field() const {
+    virtual KexiDB::Field *field() const
+    {
         return m_column->field();
     }
 
     //! Implemented for KexiComboBoxBase
     virtual QVariant origValue() const;
 
-    virtual void setValueInternal(const QVariant& add, bool removeOld) {
+    virtual void setValueInternal(const QVariant &add, bool removeOld)
+    {
         KexiComboBoxBase::setValueInternal(add, removeOld);
     }
 
-    virtual QVariant value() {
+    virtual QVariant value()
+    {
         return KexiComboBoxBase::value();
     }
 
@@ -74,7 +79,7 @@ public:
     /*! Reimplemented: resizes a view(). */
     virtual void resize(int w, int h);
 
-    virtual void showFocus(const QRect& r, bool readOnly);
+    virtual void showFocus(const QRect &r, bool readOnly);
 
     virtual void hideFocus();
 
@@ -84,7 +89,7 @@ public:
      defined, \a val already contains the visible value (usually the text)
      set by \ref KexiTableView::paintcell(), so there is noo need to lookup the value
      in the combo box's popup. */
-    virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
+    virtual void setupContents(QPainter *p, bool focused, const QVariant &val,
                                QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
 
     /*! Used to handle key press events for the item. */
@@ -98,15 +103,15 @@ public:
     /*! \return total size of this editor, including popup button. */
     virtual QSize totalSize() const;
 
-    virtual void createInternalEditor(KexiDB::QuerySchema& schema);
+    virtual void createInternalEditor(KexiDB::QuerySchema &schema);
 
     /*! Reimplemented after KexiInputTableEdit. */
-    virtual void handleAction(const QString& actionName);
+    virtual void handleAction(const QString &actionName);
 
     /*! Reimplemented after KexiInputTableEdit.
      For a special case (combo box), \a visibleValue can be provided,
      so it can be copied to the clipboard instead of unreadable \a value. */
-    virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
+    virtual void handleCopyAction(const QVariant &value, const QVariant &visibleValue);
 
 public Q_SLOTS:
     //! Implemented for KexiDataItemInterface
@@ -120,21 +125,24 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void slotButtonClicked();
-    void slotRowAccepted(KexiDB::RecordData *record, int row) {
+    void slotRowAccepted(KexiDB::RecordData *record, int row)
+    {
         KexiComboBoxBase::slotRowAccepted(record, row);
     }
-    void slotItemSelected(KexiDB::RecordData* record) {
+    void slotItemSelected(KexiDB::RecordData *record)
+    {
         KexiComboBoxBase::slotItemSelected(record);
     }
-    void slotInternalEditorValueChanged(const QVariant& v) {
+    void slotInternalEditorValueChanged(const QVariant &v)
+    {
         KexiComboBoxBase::slotInternalEditorValueChanged(v);
     }
-    void slotLineEditTextChanged(const QString& s);
+    void slotLineEditTextChanged(const QString &s);
     void slotPopupHidden();
 
 protected:
     //! internal
-    void updateFocus(const QRect& r);
+    void updateFocus(const QRect &r);
 
     virtual bool eventFilter(QObject *o, QEvent *e);
 
@@ -148,23 +156,25 @@ protected:
     virtual void selectAllInInternalEditor();
 
     //! Implemented for KexiComboBoxBase
-    virtual void setValueInInternalEditor(const QVariant& value);
+    virtual void setValueInInternalEditor(const QVariant &value);
 
     //! Implemented for KexiComboBoxBase
     virtual QVariant valueFromInternalEditor();
 
     //! Implemented for KexiComboBoxBase
-    virtual void editRequested() {
+    virtual void editRequested()
+    {
         KexiInputTableEdit::editRequested();
     }
 
     //! Implemented for KexiComboBoxBase
-    virtual void acceptRequested() {
+    virtual void acceptRequested()
+    {
         KexiInputTableEdit::acceptRequested();
     }
 
     //! Implemented for KexiComboBoxBase
-    virtual QPoint mapFromParentToGlobal(const QPoint& pos) const;
+    virtual QPoint mapFromParentToGlobal(const QPoint &pos) const;
 
     //! Implemented for KexiComboBoxBase
     virtual int popupWidthHint() const;
@@ -176,7 +186,7 @@ protected:
     virtual void setPopup(KexiComboBoxPopup *popup);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiComboBoxEditorFactoryItem)

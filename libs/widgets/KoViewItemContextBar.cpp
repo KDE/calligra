@@ -45,8 +45,8 @@ KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
     , m_enabled(true)
     , m_showToggleButton(true)
 {
-    connect(parent, SIGNAL(entered(const QModelIndex&)),
-            this, SLOT(slotEntered(const QModelIndex&)));
+    connect(parent, SIGNAL(entered(QModelIndex)),
+            this, SLOT(slotEntered(QModelIndex)));
     connect(parent, SIGNAL(viewportEntered()),
             this, SLOT(slotViewportEntered()));
 
@@ -62,8 +62,8 @@ KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
     connect(m_ToggleSelectionButton, SIGNAL(clicked()),
             this, SLOT(setItemSelected()));
     // Hides context bar if item removed
-    connect(m_view->model(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
-            this, SLOT(slotRowsRemoved(const QModelIndex&, int, int)));
+    connect(m_view->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            this, SLOT(slotRowsRemoved(QModelIndex,int,int)));
 
     connect(m_view->model(), SIGNAL(modelReset()), this, SLOT(slotModelReset()));
 
@@ -95,7 +95,7 @@ bool KoViewItemContextBar::eventFilter(QObject *watched, QEvent *event)
 void KoViewItemContextBar::slotEntered(const QModelIndex &index)
 {
     const bool isSelectionCandidate = index.isValid() &&
-            (QApplication::mouseButtons() == Qt::NoButton);
+                                      (QApplication::mouseButtons() == Qt::NoButton);
 
     if (!m_ContextBar || !m_enabled) {
         return;
@@ -104,8 +104,7 @@ void KoViewItemContextBar::slotEntered(const QModelIndex &index)
     m_ContextBar->hide();
     if (isSelectionCandidate) {
         updateHoverUi(index);
-    }
-    else {
+    } else {
         updateHoverUi(QModelIndex());
     }
 }
@@ -143,7 +142,7 @@ void KoViewItemContextBar::showContextBar(const QRect &rect)
         m_ToggleSelectionButton->setVisible(false);
         width = qMin(m_contextBarButtons.at(0)->width(), MIN_BUTTON_WIDTH);
     }
-    for (int i=m_contextBarButtons.size()-1; i>=0; --i) {
+    for (int i = m_contextBarButtons.size() - 1; i >= 0; --i) {
         if ((rect.width() - 2 * CONTEXTBAR_MARGIN) > ((i + 1) * width)) {
             m_contextBarButtons.at(i)->setVisible(true);
             numButtons++;
@@ -172,8 +171,7 @@ void KoViewItemContextBar::setItemSelected()
         QItemSelectionModel *selModel = m_view->selectionModel();
         if (!selModel->isSelected(m_IndexUnderCursor)) {
             selModel->select(m_IndexUnderCursor, QItemSelectionModel::Select);
-        }
-        else {
+        } else {
             selModel->select(m_IndexUnderCursor, QItemSelectionModel::Deselect);
         }
         selModel->setCurrentIndex(m_IndexUnderCursor, QItemSelectionModel::Current);
@@ -205,13 +203,12 @@ void KoViewItemContextBar::update()
     // Check if the current index is still valid and then update the context bar
     if (m_view->model()->index(currentIndex().row(), currentIndex().column(), currentIndex().parent()).isValid()) {
         updateHoverUi(currentIndex());
-    }
-    else {
+    } else {
         updateHoverUi(QModelIndex());
     }
 }
 
-QToolButton * KoViewItemContextBar::addContextButton(const QString &text, const QString &iconName)
+QToolButton *KoViewItemContextBar::addContextButton(const QString &text, const QString &iconName)
 {
     KoContextBarButton *newContexButton = new KoContextBarButton(iconName);
     newContexButton->setToolTip(text);
@@ -227,7 +224,7 @@ QModelIndex KoViewItemContextBar::currentIndex()
 
 int KoViewItemContextBar::preferredWidth()
 {
-    return ((m_contextBarButtons.count()+1)*m_ToggleSelectionButton->sizeHint().width() + 2*CONTEXTBAR_MARGIN);
+    return ((m_contextBarButtons.count() + 1) * m_ToggleSelectionButton->sizeHint().width() + 2 * CONTEXTBAR_MARGIN);
 }
 
 void KoViewItemContextBar::setShowSelectionToggleButton(bool enabled)

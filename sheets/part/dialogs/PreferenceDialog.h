@@ -55,7 +55,7 @@ public:
         PluginPage = 16
     };
 
-    explicit PreferenceDialog(View* view);
+    explicit PreferenceDialog(View *view);
     ~PreferenceDialog();
 
     void openPage(int flags);
@@ -70,7 +70,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

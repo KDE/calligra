@@ -69,19 +69,21 @@ public:
      * @param nPixels The number of pixels
      * @param colorSpace the colorspace that can decode the pixel data.
      */
-    virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace* colorSpace) = 0;
+    virtual void addRegionToBin(const quint8 *pixels, const quint8 *selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) = 0;
 
     // Methods to set what exactly is being added to the bins
     virtual void setView(qreal from, qreal width) = 0;
-    virtual void setSkipTransparent(bool set) {
+    virtual void setSkipTransparent(bool set)
+    {
         m_skipTransparent = set;
     }
-    virtual void setSkipUnselected(bool set) {
+    virtual void setSkipUnselected(bool set)
+    {
         m_skipUnselected = set;
     }
 
     // Methods with general information about this specific producer
-    virtual const KoID& id() const = 0;
+    virtual const KoID &id() const = 0;
     virtual QList<KoChannelInfo *> channels() = 0;
     virtual qint32 numberOfBins() = 0;
     virtual QString positionToString(qreal pos) const = 0;
@@ -109,13 +111,15 @@ public:
     /// Factory method, generates a new KoHistogramProducer
     virtual KoHistogramProducerSP generate() = 0;
     /// Returns if a colorspace can be used with this producer
-    virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const = 0;
+    virtual bool isCompatibleWith(const KoColorSpace *colorSpace) const = 0;
     /// Returns a float in the [0.0, 1.0] range, 0.0 means this is a very generic method
-    virtual float preferrednessLevelWith(const KoColorSpace* colorSpace) const = 0;
-    virtual QString id() const {
+    virtual float preferrednessLevelWith(const KoColorSpace *colorSpace) const = 0;
+    virtual QString id() const
+    {
         return m_id.id();
     }
-    virtual QString name() const {
+    virtual QString name() const
+    {
         return m_id.name();
     }
 protected:
@@ -123,18 +127,18 @@ protected:
 };
 
 class PIGMENTCMS_EXPORT KoHistogramProducerFactoryRegistry
-        : public KoGenericRegistry<KoHistogramProducerFactory*>
+    : public KoGenericRegistry<KoHistogramProducerFactory *>
 {
 public:
     virtual ~KoHistogramProducerFactoryRegistry();
-    static KoHistogramProducerFactoryRegistry* instance();
+    static KoHistogramProducerFactoryRegistry *instance();
     /// returns a list, sorted by preferrence: higher preferance comes first
-    QList<QString> keysCompatibleWith(const KoColorSpace* colorSpace) const;
+    QList<QString> keysCompatibleWith(const KoColorSpace *colorSpace) const;
 
 private:
     KoHistogramProducerFactoryRegistry();
-    KoHistogramProducerFactoryRegistry(const KoHistogramProducerFactoryRegistry&);
-    KoHistogramProducerFactoryRegistry operator=(const KoHistogramProducerFactoryRegistry&);
+    KoHistogramProducerFactoryRegistry(const KoHistogramProducerFactoryRegistry &);
+    KoHistogramProducerFactoryRegistry operator=(const KoHistogramProducerFactoryRegistry &);
 };
 
 #endif // _KO_HISTOGRAM_PRODUCER

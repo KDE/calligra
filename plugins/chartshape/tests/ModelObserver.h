@@ -47,12 +47,12 @@ public:
     ModelObserver(QAbstractItemModel *source);
 
 private Q_SLOTS:
-    void slotRowsInserted(const QModelIndex & parent, int start, int end);
-    void slotColumnsInserted(const QModelIndex & parent, int start, int end);
-    void slotRowsRemoved(const QModelIndex & parent, int start, int end);
-    void slotColumnsRemoved(const QModelIndex & parent, int start, int end);
+    void slotRowsInserted(const QModelIndex &parent, int start, int end);
+    void slotColumnsInserted(const QModelIndex &parent, int start, int end);
+    void slotRowsRemoved(const QModelIndex &parent, int start, int end);
+    void slotColumnsRemoved(const QModelIndex &parent, int start, int end);
     void slotHeaderDataChanged(Qt::Orientation, int first, int last);
-    void slotDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
+    void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void slotModelReset();
 
 public:

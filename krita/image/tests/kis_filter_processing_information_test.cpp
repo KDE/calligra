@@ -28,11 +28,10 @@
 
 void KisProcessingInformationTest::testCreation()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisProcessingInformation test(dev, QPoint(0, 0));
 }
-
 
 QTEST_KDEMAIN(KisProcessingInformationTest, GUI)
 #include "kis_filter_processing_information_test.moc"

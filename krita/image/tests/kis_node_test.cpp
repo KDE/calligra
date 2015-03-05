@@ -26,12 +26,11 @@
 #include <KoProperties.h>
 #include "testutil.h"
 
-
 void KisNodeTest::testCreation()
 {
     TestUtil::TestGraphListener graphListener;
 
-    KisNode * node = new TestNodeA();
+    KisNode *node = new TestNodeA();
     QVERIFY(node->graphListener() == 0);
 
     node->setGraphListener(&graphListener);
@@ -50,7 +49,6 @@ void KisNodeTest::testCreation()
 
     delete node;
 }
-
 
 void KisNodeTest::testOrdering()
 {
@@ -266,7 +264,6 @@ void KisNodeTest::testSetDirty()
 
 }
 
-
 void KisNodeTest::testChildNodes()
 {
     KisNodeSP root = new TestNodeA();
@@ -325,35 +322,35 @@ void KisNodeTest::testDirtyRegion()
 #define NUM_CYCLES 100000
 #define NUM_THREADS 30
 
-class KisNodeTest::VisibilityKiller : public QRunnable {
+class KisNodeTest::VisibilityKiller : public QRunnable
+{
 public:
     VisibilityKiller(KisNodeSP victimNode, KisNodeSP nastyChild, bool /*isWriter*/)
         : m_victimNode(victimNode),
           m_nastyChild(nastyChild)
     {}
 
-    void run() {
+    void run()
+    {
 
         int visibility = 0;
 
-        for(int i = 0; i < NUM_CYCLES; i++) {
-            if(i % 3 == 0) {
+        for (int i = 0; i < NUM_CYCLES; i++) {
+            if (i % 3 == 0) {
                 m_nastyChild->setVisible(visibility++ & 0x1);
                 // qDebug() << "visibility" << i << m_nastyChild->visible();
-            }
-            else if (i%3 == 1){
+            } else if (i % 3 == 1) {
                 KoProperties props;
                 props.setProperty("visible", true);
 
                 QList<KisNodeSP> visibleNodes =
                     m_victimNode->childNodes(QStringList("TestNodeB"), props);
 
-                foreach(KisNodeSP node, visibleNodes) {
+                foreach (KisNodeSP node, visibleNodes) {
                     m_nastyChild->setVisible(visibility++ & 0x1);
                 }
                 // qDebug() << visibleNodes;
-            }
-            else {
+            } else {
                 Q_ASSERT(m_victimNode->firstChild());
                 Q_ASSERT(m_victimNode->lastChild());
 
@@ -368,9 +365,9 @@ private:
     KisNodeSP m_nastyChild;
 };
 
-
 template <class KillerClass>
-void KisNodeTest::propertiesStressTestImpl() {
+void KisNodeTest::propertiesStressTestImpl()
+{
     KisNodeSP root = new TestNodeA();
 
     KisNodeSP a = new TestNodeA();
@@ -389,7 +386,7 @@ void KisNodeTest::propertiesStressTestImpl() {
     QThreadPool threadPool;
     threadPool.setMaxThreadCount(NUM_THREADS);
 
-    for(int i = 0; i< NUM_THREADS; i++) {
+    for (int i = 0; i < NUM_THREADS; i++) {
         KillerClass *killer = new KillerClass(root, b, i == 0);
 
         threadPool.start(killer);
@@ -398,11 +395,13 @@ void KisNodeTest::propertiesStressTestImpl() {
     threadPool.waitForDone();
 }
 
-void KisNodeTest::propertiesStressTest() {
+void KisNodeTest::propertiesStressTest()
+{
     propertiesStressTestImpl<VisibilityKiller>();
 }
 
-class KisNodeTest::GraphKiller : public QRunnable {
+class KisNodeTest::GraphKiller : public QRunnable
+{
 public:
     GraphKiller(KisNodeSP parentNode, KisNodeSP childNode, bool isWriter)
         : m_parentNode(parentNode),
@@ -410,10 +409,11 @@ public:
           m_isWriter(isWriter)
     {}
 
-    void run() {
+    void run()
+    {
         int numCycles = qMax(10000, NUM_CYCLES / 100);
 
-        for(int i = 0; i < numCycles; i++) {
+        for (int i = 0; i < numCycles; i++) {
             if (m_isWriter) {
                 m_parentNode->remove(m_childNode);
                 m_parentNode->add(m_childNode, 0);
@@ -449,11 +449,11 @@ private:
     bool m_isWriter;
 };
 
-void KisNodeTest::graphStressTest() {
+void KisNodeTest::graphStressTest()
+{
     propertiesStressTestImpl<GraphKiller>();
 }
 
 QTEST_KDEMAIN(KisNodeTest, NoGUI)
 #include "kis_node_test.moc"
-
 

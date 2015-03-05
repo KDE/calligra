@@ -37,22 +37,23 @@ class KisFilterPosterize : public KisColorTransformationFilter
 public:
     KisFilterPosterize();
 public:
-    virtual KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const;
-    virtual KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
-    static inline KoID id() {
+    virtual KoColorTransformation *createTransformation(const KoColorSpace *cs, const KisFilterConfiguration *config) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
+    static inline KoID id()
+    {
         return KoID("posterize", i18n("Posterize"));
     }
 protected:
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
 };
 
 class KisPosterizeColorTransformation : public KoColorTransformation
 {
 public:
-    KisPosterizeColorTransformation(int steps, const KoColorSpace* cs);
-    virtual void transform(const quint8* src, quint8* dst, qint32 nPixels) const;
+    KisPosterizeColorTransformation(int steps, const KoColorSpace *cs);
+    virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
 private:
-    const KoColorSpace* m_colorSpace;
+    const KoColorSpace *m_colorSpace;
     quint32 m_psize;
     quint16 m_step;
     quint16 m_halfStep;

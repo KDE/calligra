@@ -52,12 +52,12 @@ public:
                         KisPaintDeviceSP paintDevice,
                         KisViewManager *view,
                         KisFilterConfiguration *configuration,
-                        const QString & layerName,
-                        const QString & caption,
+                        const QString &layerName,
+                        const QString &caption,
                         QWidget *parent = 0,
                         const char *name = 0);
 
-    KisFilterConfiguration * filterConfiguration() const;
+    KisFilterConfiguration *filterConfiguration() const;
     QString layerName() const;
 
 private Q_SLOTS:

@@ -30,8 +30,6 @@
 
 #include "qtlockedfile.h"
 
-
-
 /*!
     \class QtLockedFile
 

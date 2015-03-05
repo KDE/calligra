@@ -60,7 +60,7 @@ QString CAuSectionRdf::name() const
     return i18n("Author's section");
 }
 
-QWidget* CAuSectionRdf::createEditor(QWidget *parent)
+QWidget *CAuSectionRdf::createEditor(QWidget *parent)
 {
     QWidget *ret = new QWidget(parent);
     m_editWidgetUI.setupUi(ret);

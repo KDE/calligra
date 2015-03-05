@@ -29,12 +29,12 @@
 class KoCanvasBase;
 class KisToolSelectPath;
 
-
-class __KisToolSelectPathLocalTool : public KoCreatePathTool {
+class __KisToolSelectPathLocalTool : public KoCreatePathTool
+{
 public:
-    __KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool);
+    __KisToolSelectPathLocalTool(KoCanvasBase *canvas, KisToolSelectPath *parentTool);
     virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
-    virtual void addPathShape(KoPathShape* pathShape);
+    virtual void addPathShape(KoPathShape *pathShape);
 
     using KoCreatePathTool::createOptionWidgets;
     using KoCreatePathTool::endPathWithoutLastPoint;
@@ -42,7 +42,7 @@ public:
     using KoCreatePathTool::cancelPath;
 
 private:
-    KisToolSelectPath* const m_selectionTool;
+    KisToolSelectPath *const m_selectionTool;
 };
 
 struct __KisToolSelectBaseWrapper : public KisToolSelectBase {
@@ -54,16 +54,16 @@ struct __KisToolSelectBaseWrapper : public KisToolSelectBase {
 };
 
 typedef KisDelegatedTool<__KisToolSelectBaseWrapper,
-                         __KisToolSelectPathLocalTool,
-                         DeselectShapesActivationPolicy> DelegatedSelectPathTool;
+        __KisToolSelectPathLocalTool,
+        DeselectShapesActivationPolicy> DelegatedSelectPathTool;
 
 class KisToolSelectPath : public DelegatedSelectPathTool
 {
     Q_OBJECT
 
 public:
-    KisToolSelectPath(KoCanvasBase * canvas);
-    void mousePressEvent(KoPointerEvent* event);
+    KisToolSelectPath(KoCanvasBase *canvas);
+    void mousePressEvent(KoPointerEvent *event);
 
 protected:
     void requestStrokeCancellation();
@@ -77,8 +77,9 @@ class KisToolSelectPathFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectPathFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolSelectPath") {
+    KisToolSelectPathFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolSelectPath")
+    {
         setToolTip(i18n("Bezier Curve Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -88,12 +89,11 @@ public:
 
     virtual ~KisToolSelectPathFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolSelectPath(canvas);
     }
 };
-
-
 
 #endif // KIS_TOOL_SELECT_PATH_H_
 

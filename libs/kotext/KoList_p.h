@@ -21,7 +21,6 @@
 #ifndef KOLIST_P_H
 #define KOLIST_P_H
 
-
 #include "KoList.h"
 #include "styles/KoListStyle.h"
 #include "KoTextBlockData.h"

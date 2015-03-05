@@ -40,43 +40,43 @@ class KexiMainWelcomePage : public KexiAssistantPage
 {
     Q_OBJECT
 public:
-    explicit KexiMainWelcomePage(KexiWelcomeAssistant* assistant,
-                                 QWidget* parent = 0);
+    explicit KexiMainWelcomePage(KexiWelcomeAssistant *assistant,
+                                 QWidget *parent = 0);
 
     QString selectedTemplate;
     QString selectedCategory;
-    
+
     void updateRecentProjects();
 
 Q_SIGNALS:
-    void openProject(const KexiProjectData& data, const QString& shortcutPath, bool *opened);
+    void openProject(const KexiProjectData &data, const QString &shortcutPath, bool *opened);
 
 private Q_SLOTS:
-    void slotItemClicked(const QModelIndex& index);
+    void slotItemClicked(const QModelIndex &index);
     void loadProjects();
 private:
-    KexiCategorizedView* m_recentProjects;
-    KexiRecentProjectsProxyModel* m_recentProjectsProxyModel;
-    KexiWelcomeAssistant* m_assistant;
-    KexiWelcomeStatusBar* m_statusBar;
+    KexiCategorizedView *m_recentProjects;
+    KexiRecentProjectsProxyModel *m_recentProjectsProxyModel;
+    KexiWelcomeAssistant *m_assistant;
+    KexiWelcomeStatusBar *m_statusBar;
 };
 
 class KexiProjectData;
 class KexiRecentProjects;
 
 class KexiWelcomeAssistant : public KexiAssistantWidget,
-                             public KexiAssistantMessageHandler
+    public KexiAssistantMessageHandler
 {
     Q_OBJECT
 public:
-    explicit KexiWelcomeAssistant(KexiRecentProjects* projects, KexiMainWindow* parent = 0);
+    explicit KexiWelcomeAssistant(KexiRecentProjects *projects, KexiMainWindow *parent = 0);
     ~KexiWelcomeAssistant();
 
-    KexiRecentProjects* projects();
-    
+    KexiRecentProjects *projects();
+
 public Q_SLOTS:
-    virtual void nextPageRequested(KexiAssistantPage* page);
-    virtual void cancelRequested(KexiAssistantPage* page);
+    virtual void nextPageRequested(KexiAssistantPage *page);
+    virtual void cancelRequested(KexiAssistantPage *page);
     void tryAgainActionTriggered();
     void cancelActionTriggered();
 
@@ -90,17 +90,17 @@ Q_SIGNALS:
 protected:
     void openProjectOrShowPasswordPage(KexiProjectData *data);
     void emitOpenProject(KexiProjectData *data);
-    virtual QWidget* calloutWidget() const;
+    virtual QWidget *calloutWidget() const;
 
 private:
     void createProject(
-        const KexiDB::ConnectionData& cdata, const QString& databaseName,
-        const QString& caption);
+        const KexiDB::ConnectionData &cdata, const QString &databaseName,
+        const QString &caption);
 
     friend class KexiMainWelcomePage;
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

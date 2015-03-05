@@ -24,7 +24,6 @@
 #include <kglobal.h>
 #include <klineedit.h>
 
-
 class KexiDateFormatter::Private
 {
 public:
@@ -55,9 +54,9 @@ class KexiTimeFormatter::Private
 public:
     Private()
         : hmsRegExp(new QRegExp(
-            QLatin1String("(\\d*):(\\d*):(\\d*).*( am| pm){,1}"), Qt::CaseInsensitive))
+                        QLatin1String("(\\d*):(\\d*):(\\d*).*( am| pm){,1}"), Qt::CaseInsensitive))
         , hmRegExp(new QRegExp(
-            QLatin1String("(\\d*):(\\d*).*( am| pm){,1}"), Qt::CaseInsensitive))
+                       QLatin1String("(\\d*):(\\d*).*( am| pm){,1}"), Qt::CaseInsensitive))
     {
     }
 
@@ -85,15 +84,16 @@ public:
 };
 
 KexiDateFormatter::KexiDateFormatter()
-  : d(new Private)
+    : d(new Private)
 {
     // use "short date" format system settings
 //! @todo allow to override the format using column property and/or global app settings
     QString df(KGlobal::locale()->dateFormatShort());
-    if (df.length() > 2)
+    if (df.length() > 2) {
         d->separator = df.mid(2, 1);
-    else
+    } else {
         d->separator = "-";
+    }
     const int separatorLen = d->separator.length();
     QString yearMask("9999");
     QString yearDateFormat("yyyy");
@@ -153,8 +153,9 @@ KexiDateFormatter::KexiDateFormatter()
             d->monthpos = 0;
             d->daypos = 2 + separatorLen;
             d->yearpos = d->daypos + 2 + separatorLen;
-        } else
+        } else {
             ok = false;
+        }
     }
     if (!ok || d->order == YMD) {//default: YMD
         d->inputMask = yearMask + d->separator + QLatin1String("99") + d->separator + QLatin1String("99");
@@ -171,12 +172,13 @@ KexiDateFormatter::~KexiDateFormatter()
     delete d;
 }
 
-QDate KexiDateFormatter::fromString(const QString& str) const
+QDate KexiDateFormatter::fromString(const QString &str) const
 {
     bool ok = true;
     int year = str.mid(d->yearpos, d->longYear ? 4 : 2).toInt(&ok);
-    if (!ok)
+    if (!ok) {
         return QDate();
+    }
     if (year < 30) {//2000..2029
         year = 2000 + year;
     } else if (year < 100) {//1930..1999
@@ -184,30 +186,35 @@ QDate KexiDateFormatter::fromString(const QString& str) const
     }
 
     int month = str.mid(d->monthpos, 2).toInt(&ok);
-    if (!ok)
+    if (!ok) {
         return QDate();
+    }
 
     int day = str.mid(d->daypos, 2).toInt(&ok);
-    if (!ok)
+    if (!ok) {
         return QDate();
+    }
 
     QDate date(year, month, day);
-    if (!date.isValid())
+    if (!date.isValid()) {
         return QDate();
+    }
     return date;
 }
 
-QVariant KexiDateFormatter::stringToVariant(const QString& str) const
+QVariant KexiDateFormatter::stringToVariant(const QString &str) const
 {
-    if (isEmpty(str))
+    if (isEmpty(str)) {
         return QVariant();
+    }
     const QDate date(fromString(str));
-    if (date.isValid())
+    if (date.isValid()) {
         return date;
+    }
     return QVariant();
 }
 
-bool KexiDateFormatter::isEmpty(const QString& str) const
+bool KexiDateFormatter::isEmpty(const QString &str) const
 {
     QString s(str);
     return s.remove(d->separator).trimmed().isEmpty();
@@ -223,7 +230,7 @@ QString KexiDateFormatter::separator() const
     return d->separator;
 }
 
-QString KexiDateFormatter::toString(const QDate& date) const
+QString KexiDateFormatter::toString(const QDate &date) const
 {
     return date.toString(d->qtFormat);
 }
@@ -231,7 +238,7 @@ QString KexiDateFormatter::toString(const QDate& date) const
 //------------------------------------------------
 
 KexiTimeFormatter::KexiTimeFormatter()
-        : d(new Private)
+    : d(new Private)
 {
     QString tf(KGlobal::locale()->timeFormat());
     //d->hourpos, d->minpos, d->secpos; are result of tf.indexOf()
@@ -294,7 +301,7 @@ KexiTimeFormatter::~KexiTimeFormatter()
     delete d;
 }
 
-QTime KexiTimeFormatter::fromString(const QString& str) const
+QTime KexiTimeFormatter::fromString(const QString &str) const
 {
     int hour, min, sec;
     bool pm = false;
@@ -305,65 +312,76 @@ QTime KexiTimeFormatter::fromString(const QString& str) const
             hour = d->hmsRegExp->cap(1).toInt();
             min = d->hmsRegExp->cap(2).toInt();
             sec = d->hmsRegExp->cap(3).toInt();
-            if (d->ampmpos >= 0 && d->hmsRegExp->numCaptures() > 3)
+            if (d->ampmpos >= 0 && d->hmsRegExp->numCaptures() > 3) {
                 pm = d->hmsRegExp->cap(4).trimmed().toLower() == "pm";
+            }
             tryWithoutSeconds = false;
         }
     }
     if (tryWithoutSeconds) {
-        if (-1 == d->hmRegExp->indexIn(str))
+        if (-1 == d->hmRegExp->indexIn(str)) {
             return QTime(99, 0, 0);
+        }
         hour = d->hmRegExp->cap(1).toInt();
         min = d->hmRegExp->cap(2).toInt();
         sec = 0;
-        if (d->ampmpos >= 0 && d->hmRegExp->numCaptures() > 2)
+        if (d->ampmpos >= 0 && d->hmRegExp->numCaptures() > 2) {
             pm = d->hmsRegExp->cap(4).toLower() == "pm";
+        }
     }
 
-    if (pm && hour < 12)
-        hour += 12; //PM
+    if (pm && hour < 12) {
+        hour += 12;    //PM
+    }
     return QTime(hour, min, sec);
 }
 
-QVariant KexiTimeFormatter::stringToVariant(const QString& str)
+QVariant KexiTimeFormatter::stringToVariant(const QString &str)
 {
-    if (isEmpty(str))
+    if (isEmpty(str)) {
         return QVariant();
+    }
     const QTime time(fromString(str));
-    if (time.isValid())
+    if (time.isValid()) {
         return time;
+    }
     return QVariant();
 }
 
-bool KexiTimeFormatter::isEmpty(const QString& str) const
+bool KexiTimeFormatter::isEmpty(const QString &str) const
 {
     QString s(str);
     return s.remove(':').trimmed().isEmpty();
 }
 
-QString KexiTimeFormatter::toString(const QTime& time) const
+QString KexiTimeFormatter::toString(const QTime &time) const
 {
-    if (!time.isValid())
+    if (!time.isValid()) {
         return QString();
+    }
 
     QString s(d->outputFormat);
     if (d->is24h) {
-        if (d->hoursWithLeadingZero)
+        if (d->hoursWithLeadingZero) {
             s.replace("%H", QString::fromLatin1(time.hour() < 10 ? "0" : "") + QString::number(time.hour()));
-        else
+        } else {
             s.replace("%k", QString::number(time.hour()));
+        }
     } else {
         int time12 = (time.hour() > 12) ? (time.hour() - 12) : time.hour();
-        if (d->hoursWithLeadingZero)
+        if (d->hoursWithLeadingZero) {
             s.replace("%I", QString::fromLatin1(time12 < 10 ? "0" : "") + QString::number(time12));
-        else
+        } else {
             s.replace("%l", QString::number(time12));
+        }
     }
     s.replace("%M", QString::fromLatin1(time.minute() < 10 ? "0" : "") + QString::number(time.minute()));
-    if (d->secpos >= 0)
+    if (d->secpos >= 0) {
         s.replace("%S", QString::fromLatin1(time.second() < 10 ? "0" : "") + QString::number(time.second()));
-    if (d->ampmpos >= 0)
+    }
+    if (d->ampmpos >= 0) {
         s.replace("%p", time.hour() >= 12 ? i18nc("afternoon", "pm") : i18nc("before noon", "am"));
+    }
     return s;
 }
 
@@ -374,8 +392,8 @@ QString KexiTimeFormatter::inputMask() const
 
 //------------------------------------------------
 
-QString KexiDateTimeFormatter::inputMask(const KexiDateFormatter& dateFormatter,
-                                       const KexiTimeFormatter& timeFormatter)
+QString KexiDateTimeFormatter::inputMask(const KexiDateFormatter &dateFormatter,
+        const KexiTimeFormatter &timeFormatter)
 {
     QString mask(dateFormatter.inputMask());
     mask.truncate(dateFormatter.inputMask().length() - 2);
@@ -383,14 +401,15 @@ QString KexiDateTimeFormatter::inputMask(const KexiDateFormatter& dateFormatter,
 }
 
 QDateTime KexiDateTimeFormatter::fromString(
-    const KexiDateFormatter& dateFormatter,
-    const KexiTimeFormatter& timeFormatter, const QString& str)
+    const KexiDateFormatter &dateFormatter,
+    const KexiTimeFormatter &timeFormatter, const QString &str)
 {
     QString s(str.trimmed());
     const int timepos = s.indexOf(' ');
     const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(s.mid(timepos + 1));
-    if (emptyTime)
+    if (emptyTime) {
         s = s.left(timepos);
+    }
     if (timepos > 0 && !emptyTime) {
         return QDateTime(
                    dateFormatter.fromString(s.left(timepos)),
@@ -414,23 +433,22 @@ QString KexiDateTimeFormatter::toString(const KexiDateFormatter &dateFormatter,
     return QString();
 }
 
-bool KexiDateTimeFormatter::isEmpty(const KexiDateFormatter& dateFormatter,
-                                    const KexiTimeFormatter& timeFormatter,
-                                    const QString& str)
+bool KexiDateTimeFormatter::isEmpty(const KexiDateFormatter &dateFormatter,
+                                    const KexiTimeFormatter &timeFormatter,
+                                    const QString &str)
 {
     int timepos = str.indexOf(' ');
     const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1));
     return timepos >= 0 && dateFormatter.isEmpty(str.left(timepos)) && emptyTime;
 }
 
-bool KexiDateTimeFormatter::isValid(const KexiDateFormatter& dateFormatter,
-                                    const KexiTimeFormatter& timeFormatter, const QString& str)
+bool KexiDateTimeFormatter::isValid(const KexiDateFormatter &dateFormatter,
+                                    const KexiTimeFormatter &timeFormatter, const QString &str)
 {
     int timepos = str.indexOf(' ');
     const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1));
     if (timepos >= 0 && dateFormatter.isEmpty(str.left(timepos))
-            && emptyTime)
-    {
+            && emptyTime) {
         //empty date/time is valid
         return true;
     }

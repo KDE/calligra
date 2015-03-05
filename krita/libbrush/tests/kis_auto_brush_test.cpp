@@ -40,9 +40,9 @@ void KisAutoBrushTest::testCreation()
 
 void KisAutoBrushTest::testMaskGeneration()
 {
-    KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 1.0, 1.0, 1.0, 2, false);
+    KisCircleMaskGenerator *circle = new KisCircleMaskGenerator(10, 1.0, 1.0, 1.0, 2, false);
     KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
 
@@ -93,7 +93,7 @@ void KisAutoBrushTest::testMaskGeneration()
 void KisAutoBrushTest::testSizeRotation()
 {
     {
-        KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 0.5, 1.0, 1.0, 2, false);
+        KisCircleMaskGenerator *circle = new KisCircleMaskGenerator(10, 0.5, 1.0, 1.0, 2, false);
         KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
         QCOMPARE(a->width(), 10);
         QCOMPARE(a->height(), 5);
@@ -127,11 +127,10 @@ void KisAutoBrushTest::testCopyMasking()
     int y = 0;
     QRect rc(x, y, w, h);
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KoColor black(Qt::black, cs);
     KoColor red(Qt::red, cs);
-
 
     KisPaintDeviceSP tempDev = new KisPaintDevice(cs);
     tempDev->fill(0, 0, w, h, red.data());
@@ -139,7 +138,7 @@ void KisAutoBrushTest::testCopyMasking()
     tempDev->convertToQImage(0).save("tempDev.png");
 #endif
 
-    KisCircleMaskGenerator * mask = new KisCircleMaskGenerator(w, 1.0, 0.5, 0.5, 2, true);
+    KisCircleMaskGenerator *mask = new KisCircleMaskGenerator(w, 1.0, 0.5, 0.5, 2, true);
     KisAutoBrush brush(mask, 0, 0);
 
     KisFixedPaintDeviceSP maskDab = new KisFixedPaintDevice(cs);
@@ -169,8 +168,6 @@ void KisAutoBrushTest::testCopyMasking()
     dev->convertToQImage(0).save("final.png");
 #endif
 }
-
-
 
 QTEST_KDEMAIN(KisAutoBrushTest, GUI)
 #include "kis_auto_brush_test.moc"

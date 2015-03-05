@@ -22,39 +22,36 @@
 
 #include <KoOdfChartWriter.h>
 
-
 class KoGenStyles;
 class KoGenStyle;
 
 namespace MSOOXML
 {
-    class DrawingMLTheme;
+class DrawingMLTheme;
 }
-
 
 class XlsxChartOdfWriter : public KoOdfChartWriter
 {
 public:
-    explicit XlsxChartOdfWriter(KoChart::Chart* chart,
-				const MSOOXML::DrawingMLTheme* const contextWithThemeInfo = NULL);
+    explicit XlsxChartOdfWriter(KoChart::Chart *chart,
+                                const MSOOXML::DrawingMLTheme *const contextWithThemeInfo = NULL);
     ~XlsxChartOdfWriter();
-
 
 private:
 
     // All of these are virtual functions called from other functions (mainly
     // saveContent()) in the parent class.
 
-    QString genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles);
-    QString genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles);
-    void addDataThemeToStyle(KoGenStyle& style,
-			     int dataNumber, int maxNumData = 1, bool strokes = true);
+    QString genChartAreaStyle(KoGenStyle &style, KoGenStyles &styles, KoGenStyles &mainStyles);
+    QString genPlotAreaStyle(KoGenStyle &style, KoGenStyles &styles, KoGenStyles &mainStyles);
+    void addDataThemeToStyle(KoGenStyle &style,
+                             int dataNumber, int maxNumData = 1, bool strokes = true);
 
-    QColor calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad);
+    QColor calculateColorFromGradientStop(const KoChart::Gradient::GradientStop &grad);
     QColor labelFontColor() const;
 
 private:
-    const MSOOXML::DrawingMLTheme* m_theme;
+    const MSOOXML::DrawingMLTheme *m_theme;
 };
 
 #endif  // XLSXCHARTODFWRITER_H

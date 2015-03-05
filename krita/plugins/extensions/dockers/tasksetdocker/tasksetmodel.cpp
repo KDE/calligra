@@ -21,7 +21,7 @@
 #include <klocale.h>
 #include <KoIcon.h>
 
-TasksetModel::TasksetModel(QObject* parent): QAbstractTableModel(parent)
+TasksetModel::TasksetModel(QObject *parent): QAbstractTableModel(parent)
 {
 }
 
@@ -29,23 +29,21 @@ TasksetModel::~TasksetModel()
 {
 }
 
-QVariant TasksetModel::data(const QModelIndex& index, int role) const
+QVariant TasksetModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid()) {
 
         switch (role) {
-            case Qt::DisplayRole:
-            {
-                return m_actions.at(index.row())->iconText();
+        case Qt::DisplayRole: {
+            return m_actions.at(index.row())->iconText();
+        }
+        case Qt::DecorationRole: {
+            const QIcon icon = m_actions.at(index.row())->icon();
+            if (icon.isNull()) {
+                return koIcon("tools-wizard");
             }
-            case Qt::DecorationRole:
-            {
-                const QIcon icon = m_actions.at(index.row())->icon();
-                if (icon.isNull()) {
-                    return koIcon("tools-wizard");
-                }
-                return icon;
-            }
+            return icon;
+        }
         }
     }
     return QVariant();
@@ -56,37 +54,36 @@ QVariant TasksetModel::headerData(int /*section*/, Qt::Orientation /*orientation
     return i18n("Task");
 }
 
-
-int TasksetModel::rowCount(const QModelIndex& /*parent*/) const
+int TasksetModel::rowCount(const QModelIndex & /*parent*/) const
 {
     return m_actions.count();
 }
 
-int TasksetModel::columnCount(const QModelIndex& /*parent*/) const
+int TasksetModel::columnCount(const QModelIndex & /*parent*/) const
 {
     return 1;
 }
 
-Qt::ItemFlags TasksetModel::flags(const QModelIndex& /*index*/) const
+Qt::ItemFlags TasksetModel::flags(const QModelIndex & /*index*/) const
 {
     Qt::ItemFlags flags = /*Qt::ItemIsSelectable |*/ Qt::ItemIsEnabled;
     return flags;
 }
 
-void TasksetModel::addAction(QAction* action)
+void TasksetModel::addAction(QAction *action)
 {
     m_actions.append(action);
     reset();
 }
 
-QVector< QAction* > TasksetModel::actions()
+QVector< QAction * > TasksetModel::actions()
 {
     return m_actions;
 }
 
-QAction* TasksetModel::actionFromIndex(const QModelIndex& index)
+QAction *TasksetModel::actionFromIndex(const QModelIndex &index)
 {
-    if(index.isValid()) {
+    if (index.isValid()) {
         return m_actions.at(index.row());
     }
     return 0;

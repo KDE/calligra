@@ -79,7 +79,7 @@ private:
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<QPolygon>& listPa);
+    void  drawPolyPolygon(Libwmf::WmfDeviceContext &context, QList<QPolygon> &listPa);
     void  drawImage(Libwmf::WmfDeviceContext &context, int x, int y, const QImage &,
                     int sx = 0, int sy = 0, int sw = -1, int sh = -1);
     void  patBlt(Libwmf::WmfDeviceContext &context, int x, int y, int width, int height,
@@ -112,7 +112,7 @@ private:
     QSizeF m_pageSize;
 
     struct CoordData {
-        CoordData() : org(0,0), ext(0,0), extIsValid(false) {}
+        CoordData() : org(0, 0), ext(0, 0), extIsValid(false) {}
         QPointF org;
         QSizeF ext;
         bool extIsValid;

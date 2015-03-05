@@ -29,7 +29,7 @@ class KisDelayedActionDoubleInput : public KDoubleNumInput
     Q_OBJECT
 
 public:
-    KisDelayedActionDoubleInput(QWidget * parent, const QString & name);
+    KisDelayedActionDoubleInput(QWidget *parent, const QString &name);
 
     void cancelDelayedSignal();
 
@@ -42,12 +42,11 @@ Q_SIGNALS:
 
 private:
 
-    QTimer * m_timer;
+    QTimer *m_timer;
 };
 
-
 struct KRITAUI_EXPORT KisDoubleWidgetParam {
-    KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, const QString & label, const QString & nname);
+    KisDoubleWidgetParam(double nmin, double nmax, double ninitvalue, const QString &label, const QString &nname);
     double min;
     double max;
     double initvalue;
@@ -61,18 +60,20 @@ class KRITAUI_EXPORT KisMultiDoubleFilterWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisMultiDoubleFilterWidget(const QString & filterid, QWidget * parent, const QString & caption, vKisDoubleWidgetParam dwparam);
-    virtual void setConfiguration(const KisPropertiesConfiguration * cfg);
-    virtual KisPropertiesConfiguration* configuration() const;
+    KisMultiDoubleFilterWidget(const QString &filterid, QWidget *parent, const QString &caption, vKisDoubleWidgetParam dwparam);
+    virtual void setConfiguration(const KisPropertiesConfiguration *cfg);
+    virtual KisPropertiesConfiguration *configuration() const;
 public:
-    inline qint32 nbValues() const {
+    inline qint32 nbValues() const
+    {
         return m_nbdoubleWidgets;
     }
-    inline double valueAt(qint32 i) {
+    inline double valueAt(qint32 i)
+    {
         return m_doubleWidgets[i]->value();
     }
 private:
-    KisDelayedActionDoubleInput** m_doubleWidgets;
+    KisDelayedActionDoubleInput **m_doubleWidgets;
     qint32 m_nbdoubleWidgets;
     QString m_filterid;
 };

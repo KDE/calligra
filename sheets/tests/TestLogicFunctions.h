@@ -50,9 +50,9 @@ private Q_SLOTS:
     void testTRUE();
     void testXOR();
 private:
-    Doc* m_doc;
-    Sheet* m_sheet;
-    Value evaluate(const QString&, Value& ex);
+    Doc *m_doc;
+    Sheet *m_sheet;
+    Value evaluate(const QString &, Value &ex);
 };
 
 } // namespace Sheets

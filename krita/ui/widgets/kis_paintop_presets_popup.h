@@ -42,11 +42,11 @@ class KisPaintOpPresetsPopup : public QWidget
 
 public:
 
-    KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent = 0);
+    KisPaintOpPresetsPopup(KisCanvasResourceProvider *resourceProvider, QWidget *parent = 0);
 
     ~KisPaintOpPresetsPopup();
 
-    void setPaintOpSettingsWidget(QWidget * widget);
+    void setPaintOpSettingsWidget(QWidget *widget);
 
     /**
      * @return the name entered in the preset name lineedit
@@ -57,16 +57,16 @@ public:
     ///@return image cut out from the scratchpad
     QImage cutOutOverlay();
 
-    void setPaintOpList(const QList<KisPaintOpFactory*>& list);
+    void setPaintOpList(const QList<KisPaintOpFactory *> &list);
 
-    void setCurrentPaintOp(const QString & paintOpId);
+    void setCurrentPaintOp(const QString &paintOpId);
     QString currentPaintOp();
-    
+
     ///fill the cutoutOverlay rect with the cotent of an image, used to get the image back when selecting a preset
     ///@param image image that will be used, should be image of an existing preset resource
-    void setPresetImage(const QImage& image);
+    void setPresetImage(const QImage &image);
 
-    virtual void resizeEvent(QResizeEvent* );
+    virtual void resizeEvent(QResizeEvent *);
 
     bool detached() const;
 
@@ -82,17 +82,17 @@ public Q_SLOTS:
     void switchDetached(bool show = true);
     void hideScratchPad();
     void showScratchPad();
-    void resourceSelected(KoResource* resource);
+    void resourceSelected(KoResource *resource);
 
 Q_SIGNALS:
     void savePresetClicked();
     void defaultPresetClicked();
-    void paintopActivated(const QString& presetName);
-    void signalResourceSelected(KoResource* resource);
+    void paintopActivated(const QString &presetName);
+    void signalResourceSelected(KoResource *resource);
     void reloadPresetClicked();
     void dirtyPresetToggled(bool value);
     void eraserBrushSizeToggled(bool value);
-    
+
     void sizeChanged();
 
 private Q_SLOTS:
@@ -102,7 +102,7 @@ private Q_SLOTS:
 private:
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 
 };
 

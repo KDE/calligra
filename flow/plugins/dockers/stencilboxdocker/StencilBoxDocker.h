@@ -38,39 +38,39 @@ class QSortFilterProxyModel;
 class StencilBoxDocker : public QDockWidget
 {
     Q_OBJECT
-    public:
-        explicit StencilBoxDocker(QWidget* parent = 0);
+public:
+    explicit StencilBoxDocker(QWidget *parent = 0);
 
-    protected:
+protected:
 
-        /// Load odf shape collections
-        void loadShapeCollections();
+    /// Load odf shape collections
+    void loadShapeCollections();
 
-        bool addCollection(const QString& path);
-        void removeCollection(const QString& family);
+    bool addCollection(const QString &path);
+    void removeCollection(const QString &family);
 
-    protected Q_SLOTS:
-        /// Called when the docker changes area
-        void locationChanged(Qt::DockWidgetArea area);
-	
-    private:
-        QMap<QString, CollectionItemModel*> m_modelMap;
-        //QMap<QString, QSortFilterProxyModel*> m_proxyMap;
+protected Q_SLOTS:
+    /// Called when the docker changes area
+    void locationChanged(Qt::DockWidgetArea area);
 
-        CollectionTreeWidget *m_treeWidget;
-        QMenu* m_menu;
-        QToolButton* m_button;
-        KLineEdit* m_filterLineEdit;
-        QVBoxLayout* m_layout;
-        QHBoxLayout* m_panelLayout;
+private:
+    QMap<QString, CollectionItemModel *> m_modelMap;
+    //QMap<QString, QSortFilterProxyModel*> m_proxyMap;
 
-    private Q_SLOTS:
-        void reapplyFilter();
+    CollectionTreeWidget *m_treeWidget;
+    QMenu *m_menu;
+    QToolButton *m_button;
+    KLineEdit *m_filterLineEdit;
+    QVBoxLayout *m_layout;
+    QHBoxLayout *m_panelLayout;
+
+private Q_SLOTS:
+    void reapplyFilter();
 #ifdef GHNS
-        void getHotNewStuff();
+    void getHotNewStuff();
 #endif
-        void manageStencilsFolder();
-        //void regenerateProxyMap();
+    void manageStencilsFolder();
+    //void regenerateProxyMap();
 };
 
 #endif //KOSHAPECOLLECTIONDOCKER_H

@@ -4,15 +4,15 @@
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either 
+  License as published by the Free Software Foundation; either
   version 2.1 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public 
+  You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -20,15 +20,13 @@
 
 #include <QDataStream>
 
-
-static void soakBytes( QDataStream &stream, int numBytes )
+static void soakBytes(QDataStream &stream, int numBytes)
 {
     quint8 scratch;
-    for ( int i = 0; i < numBytes; ++i ) {
+    for (int i = 0; i < numBytes; ++i) {
         stream >> scratch;
     }
 }
-
 
 namespace Libsvm
 {
@@ -53,7 +51,6 @@ QDataStream &operator>>(QDataStream &stream, VersionCompat &compat)
     return stream;
 }
 
-
 Fraction::Fraction()
     : numerator(1)
     , denominator(1)
@@ -73,7 +70,6 @@ QDataStream &operator>>(QDataStream &stream, Fraction &fract)
 
     return stream;
 }
-
 
 MapMode::MapMode()
     : version()
@@ -126,11 +122,11 @@ QDataStream &operator>>(QDataStream &stream, SvmHeader &header)
     stream >> header.height;
     stream >> header.actionCount;
 
-    if (header.versionCompat.version > 1)
+    if (header.versionCompat.version > 1) {
         soakBytes(stream, 1);
+    }
 
     return stream;
 }
-
 
 }

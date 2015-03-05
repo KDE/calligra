@@ -39,11 +39,11 @@ public:
 
     virtual ~KisFilterRegistry();
 
-    static KisFilterRegistry* instance();
+    static KisFilterRegistry *instance();
     void add(KisFilterSP item);
     void add(const QString &id, KisFilterSP item);
 
-    KisFilterConfiguration* cloneConfiguration(KisFilterConfiguration*);
+    KisFilterConfiguration *cloneConfiguration(KisFilterConfiguration *);
 Q_SIGNALS:
 
     void filterAdded(QString id);
@@ -51,8 +51,8 @@ Q_SIGNALS:
 private:
 
     KisFilterRegistry(QObject *parent);
-    KisFilterRegistry(const KisFilterRegistry&);
-    KisFilterRegistry operator=(const KisFilterRegistry&);
+    KisFilterRegistry(const KisFilterRegistry &);
+    KisFilterRegistry operator=(const KisFilterRegistry &);
 
 };
 

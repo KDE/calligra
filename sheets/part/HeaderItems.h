@@ -25,8 +25,6 @@
 
 #include "calligra_sheets_export.h"
 
-
-
 namespace Calligra
 {
 namespace Sheets
@@ -44,33 +42,43 @@ public:
     virtual ~ColumnHeaderItem();
 
     void updateColumns(int from, int to);
-    virtual void update() { QGraphicsWidget::update(); }
+    virtual void update()
+    {
+        QGraphicsWidget::update();
+    }
 
 private Q_SLOTS:
     //void slotAutoScroll(const QPoint& distance);
 
 protected:
-    virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void wheelEvent(QGraphicsSceneWheelEvent*);
-    virtual void focusOutEvent(QFocusEvent* ev);
-    virtual void resizeEvent(QGraphicsSceneResizeEvent * _ev);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *_ev);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *_ev);
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *_ev);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *_ev);
+    virtual void wheelEvent(QGraphicsSceneWheelEvent *);
+    virtual void focusOutEvent(QFocusEvent *ev);
+    virtual void resizeEvent(QGraphicsSceneResizeEvent *_ev);
 
     virtual void paintSizeIndicator(int mouseX);
     virtual void removeSizeIndicator();
 
-    virtual QSizeF size() const { return QGraphicsWidget::size(); }
-    virtual void setCursor(const QCursor& cursor) { QGraphicsWidget::setCursor(cursor); }
+    virtual QSizeF size() const
+    {
+        return QGraphicsWidget::size();
+    }
+    virtual void setCursor(const QCursor &cursor)
+    {
+        QGraphicsWidget::setCursor(cursor);
+    }
     virtual void scroll(qreal x, qreal y);
-    virtual QPalette palette() const { return QGraphicsWidget::palette(); }
+    virtual QPalette palette() const
+    {
+        return QGraphicsWidget::palette();
+    }
 /*private */public Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    void toolChanged(const QString &toolId);
 };
-
-
 
 /**
  * The widget left to the cells showing the row headers.
@@ -83,33 +91,46 @@ public:
     virtual ~RowHeaderItem();
 
     void updateRows(int from, int to);
-    virtual void update() { QGraphicsWidget::update(); }
+    virtual void update()
+    {
+        QGraphicsWidget::update();
+    }
 
 private Q_SLOTS:
     //void slotAutoScroll(const QPoint& distance);
 
 protected:
-    virtual void paint (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void wheelEvent(QGraphicsSceneWheelEvent*);
-    virtual void focusOutEvent(QFocusEvent* ev);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *_ev);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *_ev);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *_ev);
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *_ev);
+    virtual void wheelEvent(QGraphicsSceneWheelEvent *);
+    virtual void focusOutEvent(QFocusEvent *ev);
 
     virtual void paintSizeIndicator(int mouseY);
     virtual void removeSizeIndicator();
 
-    virtual QSizeF size() const { return QGraphicsWidget::size(); }
-    virtual void setCursor(const QCursor& cursor) { QGraphicsWidget::setCursor(cursor); }
-    virtual void scroll(qreal x, qreal y) { QGraphicsWidget::scroll(x, y); }
-    virtual QPalette palette() const { return QGraphicsWidget::palette(); }
+    virtual QSizeF size() const
+    {
+        return QGraphicsWidget::size();
+    }
+    virtual void setCursor(const QCursor &cursor)
+    {
+        QGraphicsWidget::setCursor(cursor);
+    }
+    virtual void scroll(qreal x, qreal y)
+    {
+        QGraphicsWidget::scroll(x, y);
+    }
+    virtual QPalette palette() const
+    {
+        return QGraphicsWidget::palette();
+    }
 
 /*private */public Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    void toolChanged(const QString &toolId);
 };
-
-
 
 /**
  * The widget in the top left corner of the canvas,
@@ -119,17 +140,17 @@ class CALLIGRA_SHEETS_COMMON_EXPORT SelectAllButtonItem : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    explicit SelectAllButtonItem(QGraphicsItem *_parent, CanvasBase* canvasBase);
+    explicit SelectAllButtonItem(QGraphicsItem *_parent, CanvasBase *canvasBase);
     virtual ~SelectAllButtonItem();
 
 protected:
-    virtual void paint ( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
 
 private Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    void toolChanged(const QString &toolId);
 };
 
 } // namespace Sheets

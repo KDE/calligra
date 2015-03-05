@@ -43,12 +43,15 @@ public:
     explicit TreeComboBox(QWidget *parent = 0);
 
     QTreeView *view() const;
-    void setModel( QAbstractItemModel *model );
+    void setModel(QAbstractItemModel *model);
     QAbstractItemModel *model() const;
 
-    QList<QPersistentModelIndex> currentIndexes() const { return m_currentIndexes; }
+    QList<QPersistentModelIndex> currentIndexes() const
+    {
+        return m_currentIndexes;
+    }
 
-    void setSelectionMode( QAbstractItemView::SelectionMode mode );
+    void setSelectionMode(QAbstractItemView::SelectionMode mode);
 
     void showPopup();
 
@@ -56,26 +59,25 @@ Q_SIGNALS:
     void changed();
 
 public Q_SLOTS:
-    void setCurrentIndexes( const QModelIndexList &lst );
-    void setCurrentIndexes( const QList<QPersistentModelIndex> &lst );
+    void setCurrentIndexes(const QModelIndexList &lst);
+    void setCurrentIndexes(const QList<QPersistentModelIndex> &lst);
 
 protected:
-    void paintEvent( QPaintEvent *event );
-    
+    void paintEvent(QPaintEvent *event);
+
 protected Q_SLOTS:
-    void updateCurrentIndexes( const QModelIndexList &lst );
+    void updateCurrentIndexes(const QModelIndexList &lst);
     void slotSelectionChanged();
 
 private:
     void updateView();
-    
+
 private:
     QAbstractItemView::SelectionMode m_selectionmode;
     QList<int> m_showcolumns;
     bool m_showheader;
     QList<QPersistentModelIndex> m_currentIndexes;
 };
-
 
 } //namespace KPlato
 

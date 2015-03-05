@@ -22,9 +22,8 @@
 #include <klocale.h>
 #include "kis_image.h"
 
-
 KisImageResizeCommand::KisImageResizeCommand(KisImageWSP image,
-                                             const QSize& newSize)
+        const QSize &newSize)
     : KUndo2Command(kundo2_i18n("Resize Image")),
       m_image(image)
 {

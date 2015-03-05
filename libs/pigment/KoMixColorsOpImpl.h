@@ -28,10 +28,12 @@ template<class _CSTrait>
 class KoMixColorsOpImpl : public KoMixColorsOp
 {
 public:
-    KoMixColorsOpImpl() {
+    KoMixColorsOpImpl()
+    {
     }
     virtual ~KoMixColorsOpImpl() { }
-    virtual void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const {
+    virtual void mixColors(const quint8 *const *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const
+    {
         // Create and initialize to 0 the array of totals
         typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype totals[_CSTrait::channels_nb];
         typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype totalAlpha = 0;
@@ -41,7 +43,7 @@ public:
         // Compute the total for each channel by summing each colors multiplied by the weightlabcache
 
         while (nColors--) {
-            const typename _CSTrait::channels_type* color = _CSTrait::nativeArray(*colors);
+            const typename _CSTrait::channels_type *color = _CSTrait::nativeArray(*colors);
             typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::compositetype alphaTimesWeight;
 
             if (_CSTrait::alpha_pos != -1) {
@@ -70,7 +72,7 @@ public:
             totalAlpha = KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::unitValue * sumOfWeights;
         }
 
-        typename _CSTrait::channels_type* dstColor = _CSTrait::nativeArray(dst);
+        typename _CSTrait::channels_type *dstColor = _CSTrait::nativeArray(dst);
 
         if (totalAlpha > 0) {
 

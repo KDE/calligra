@@ -54,15 +54,15 @@ using namespace Calligra::Sheets;
   class AbstractRegionCommand
 ****************************************************************************/
 
-AbstractRegionCommand::AbstractRegionCommand(KUndo2Command* parent)
-        : Region(),
-        KUndo2Command(parent),
-        m_sheet(0),
-        m_reverse(false),
-        m_firstrun(true),
-        m_register(true),
-        m_success(true),
-        m_checkLock(false)
+AbstractRegionCommand::AbstractRegionCommand(KUndo2Command *parent)
+    : Region(),
+      KUndo2Command(parent),
+      m_sheet(0),
+      m_reverse(false),
+      m_firstrun(true),
+      m_register(true),
+      m_success(true),
+      m_checkLock(false)
 {
 }
 
@@ -70,17 +70,20 @@ AbstractRegionCommand::~AbstractRegionCommand()
 {
 }
 
-bool AbstractRegionCommand::execute(KoCanvasBase* canvas)
+bool AbstractRegionCommand::execute(KoCanvasBase *canvas)
 {
-    if (!m_firstrun)
+    if (!m_firstrun) {
         return false;
-    if (!isApproved())
+    }
+    if (!isApproved()) {
         return false;
+    }
     // registering in undo history?
-    if (m_register)
+    if (m_register) {
         canvas ? canvas->addCommand(this) : m_sheet->map()->addCommand(this);
-    else
+    } else {
         redo();
+    }
     return m_success;
 }
 
@@ -93,11 +96,14 @@ void AbstractRegionCommand::redo()
 #if 0
     if (!m_sheet) {
         kWarning() << "AbstractRegionCommand::redo(): No explicit m_sheet is set. "
-        << "Manipulating all sheets of the region." << endl;
+                   << "Manipulating all sheets of the region." << endl;
     }
 #else
     Q_ASSERT(m_sheet);
-    if (!m_sheet) { m_success = false; return; }
+    if (!m_sheet) {
+        m_success = false;
+        return;
+    }
 #endif
 
     m_success = true;
@@ -141,7 +147,9 @@ bool AbstractRegionCommand::isApproved() const
 {
     //sebsauer; same as in AbstractRegionCommand::redo
     Q_ASSERT(m_sheet);
-    if (!m_sheet) return false;
+    if (!m_sheet) {
+        return false;
+    }
 
     const QList<Element *> elements = cells();
     const int begin = m_reverse ? elements.count() - 1 : 0;
@@ -176,7 +184,9 @@ bool AbstractRegionCommand::mainProcessing()
 {
     //sebsauer; same as in AbstractRegionCommand::redo
     Q_ASSERT(m_sheet);
-    if (!m_sheet) return false;
+    if (!m_sheet) {
+        return false;
+    }
 
     bool successfully = true;
     const QList<Element *> elements = cells();

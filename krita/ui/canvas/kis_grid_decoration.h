@@ -28,12 +28,12 @@ class KisGridDecoration : public KisCanvasDecoration
 {
     Q_OBJECT
 public:
-    KisGridDecoration(KisView* parent);
+    KisGridDecoration(KisView *parent);
     virtual ~KisGridDecoration();
 
 protected:
-    virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter* converter, KisCanvas2* canvas);
-    
+    virtual void drawDecoration(QPainter &gc, const QRectF &updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
+
 };
 
 #endif // KIS_GRID_DECORATION_H

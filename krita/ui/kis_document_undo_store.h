@@ -28,14 +28,14 @@ class KRITAUI_EXPORT KisDocumentUndoStore : public KisUndoStore
 public:
     KisDocumentUndoStore(KisDocument *doc);
 
-    const KUndo2Command* presentCommand();
+    const KUndo2Command *presentCommand();
     void undoLastCommand();
     void addCommand(KUndo2Command *cmd);
-    void beginMacro(const KUndo2MagicString& macroName);
+    void beginMacro(const KUndo2MagicString &macroName);
     void endMacro();
 
 private:
-    KisDocument* m_doc;
+    KisDocument *m_doc;
 };
 
 #endif /* __KIS_DOCUMENT_UNDO_STORES_H */

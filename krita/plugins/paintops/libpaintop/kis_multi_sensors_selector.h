@@ -30,18 +30,18 @@ class KisMultiSensorsSelector : public QWidget
     Q_OBJECT
 public:
 
-    KisMultiSensorsSelector(QWidget* parent);
+    KisMultiSensorsSelector(QWidget *parent);
     ~KisMultiSensorsSelector();
 
     void setCurveOption(KisCurveOption *curveOption);
     void setCurrent(KisDynamicSensorSP _sensor);
     KisDynamicSensorSP currentHighlighted();
-    void setCurrentCurve(const KisCubicCurve& curve, bool useSameCurve);
+    void setCurrentCurve(const KisCubicCurve &curve, bool useSameCurve);
     void reload();
 
 private Q_SLOTS:
 
-    void sensorActivated(const QModelIndex& index);
+    void sensorActivated(const QModelIndex &index);
 
 Q_SIGNALS:
 
@@ -55,6 +55,6 @@ Q_SIGNALS:
     void highlightedSensorChanged(KisDynamicSensorSP sensor);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 #endif

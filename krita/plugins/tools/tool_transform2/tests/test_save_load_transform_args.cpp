@@ -25,7 +25,6 @@
 #include "tool_transform_args.h"
 #include "kis_liquify_transform_worker.h"
 
-
 void TestSaveLoadTransformArgs::testFreeTransform()
 {
     ToolTransformArgs args;
@@ -48,7 +47,6 @@ void TestSaveLoadTransformArgs::testFreeTransform()
     args.setKeepAspectRatio(true);
 
     args.setFlattenedPerspectiveTransform(QTransform::fromScale(12.0, 13.0));
-
 
     QDomDocument doc("test_type");
     QDomElement root = doc.createElement("root");
@@ -95,7 +93,6 @@ void TestSaveLoadTransformArgs::testLiquify()
 
     args.setMode(ToolTransformArgs::LIQUIFY);
     args.initLiquifyTransformMode(QRect(100, 200, 300, 400));
-
 
     args.liquifyProperties()->setMode(KisLiquifyProperties::ROTATE);
     args.liquifyProperties()->setSize(101);

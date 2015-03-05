@@ -57,5 +57,5 @@ private:
     ChartTableModel m_sourceModel;
     Table *m_table;
 };
-    
+
 #endif // KCHART_TESTPROXYMODEL_H

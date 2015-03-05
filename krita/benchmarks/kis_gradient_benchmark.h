@@ -32,20 +32,18 @@ class KisGradientBenchmark : public QObject
 {
     Q_OBJECT
 private:
-    const KoColorSpace * m_colorSpace;
+    const KoColorSpace *m_colorSpace;
     KoColor m_color;
-    KisPaintDeviceSP m_device;        
+    KisPaintDeviceSP m_device;
     int m_startX;
     int m_startY;
-    
+
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    
+
     void benchmarkGradient();
-    
-    
-    
+
 };
 
 #endif

@@ -52,8 +52,8 @@ private Q_SLOTS:
     void testInsertRows();
     void testRemoveRows();
 private:
-    Map* m_map;
-    Sheet* m_sheet;
+    Map *m_map;
+    Sheet *m_sheet;
 };
 
 } // namespace Sheets

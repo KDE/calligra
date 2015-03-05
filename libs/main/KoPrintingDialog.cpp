@@ -38,7 +38,8 @@
 #include <QDialog>
 #include <QThread>
 
-class PrintDialog : public QDialog {
+class PrintDialog : public QDialog
+{
 public:
     PrintDialog(KoPrintingDialogPrivate *d, QWidget *parent)
         : QDialog(parent)
@@ -58,7 +59,6 @@ public:
         grid->setColumnStretch(0, 1);
     }
 };
-
 
 KoPrintingDialog::KoPrintingDialog(QWidget *parent)
     : KoPrintJob(parent),
@@ -87,11 +87,12 @@ KoShapeManager *KoPrintingDialog::shapeManager() const
 
 void KoPrintingDialog::setPageRange(const QList<int> &pages)
 {
-    if (d->index == 0) // can't change after we started
+    if (d->index == 0) { // can't change after we started
         d->pageRange = pages;
+    }
 }
 
-QPainter & KoPrintingDialog::painter() const
+QPainter &KoPrintingDialog::painter() const
 {
     if (d->painter == 0) {
         d->painter = new QPainter(d->printer);
@@ -112,12 +113,14 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
     if (d->pages.isEmpty()) { // auto-fill from min/max
         switch (d->printer->printRange()) {
         case QAbstractPrintDialog::AllPages:
-            for (int i=documentFirstPage(); i <= documentLastPage(); i++)
+            for (int i = documentFirstPage(); i <= documentLastPage(); i++) {
                 d->pages.append(i);
+            }
             break;
         case QAbstractPrintDialog::PageRange:
-            for (int i=d->printer->fromPage(); i <= d->printer->toPage(); i++)
+            for (int i = d->printer->fromPage(); i <= d->printer->toPage(); i++) {
                 d->pages.append(i);
+            }
             break;
 #if QT_VERSION >= 0x040700
         case QAbstractPrintDialog::CurrentPage:
@@ -136,26 +139,29 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
     const bool blocking = property("blocking").toBool();
     const bool noprogressdialog = property("noprogressdialog").toBool();
     if (d->index == 0 && d->pages.count() > 0 && d->printer) {
-        if (!blocking && !noprogressdialog)
+        if (!blocking && !noprogressdialog) {
             d->dialog->show();
+        }
         d->stop = false;
         delete d->painter;
         d->painter = 0;
-        d->zoomer.setZoom( 1.0 );
-        d->zoomer.setDpi( d->printer->resolution(), d->printer->resolution() );
+        d->zoomer.setZoom(1.0);
+        d->zoomer.setDpi(d->printer->resolution(), d->printer->resolution());
 
         d->progress->start(100, i18n("Printing"));
 
         if (d->printer->numCopies() > 1) {
             QList<int> oldPages = d->pages;
             if (d->printer->collateCopies()) { // means we print whole doc at once
-                for (int count = 1; count < d->printer->numCopies(); ++count)
+                for (int count = 1; count < d->printer->numCopies(); ++count) {
                     d->pages.append(oldPages);
+                }
             } else {
                 d->pages.clear();
                 foreach (int page, oldPages) {
-                    for (int count = 1; count < d->printer->numCopies(); ++count)
+                    for (int count = 1; count < d->printer->numCopies(); ++count) {
                         d->pages.append(page);
+                    }
                 }
             }
         }
@@ -169,7 +175,6 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
             } while (iter != pages.begin());
         }
 
-
         d->resetValues();
         foreach (int page, d->pages) {
             d->index++;
@@ -179,13 +184,12 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
             if (!blocking) {
                 qApp->processEvents();
             }
-            
+
         }
         d->painter->end();
         if (blocking) {
             printingDone();
-        }
-        else {
+        } else {
             d->printingDone();
         }
         d->stop = true;

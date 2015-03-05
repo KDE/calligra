@@ -22,7 +22,6 @@
 
 #include <KoColor.h>
 
-
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_params_interface.h"
 
@@ -31,8 +30,6 @@
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
 #include "kis_clone_layer.h"
-
-
 
 inline QString toOctaveFormat(const QTransform &t)
 {
@@ -69,7 +66,7 @@ void KisTransformMaskTest::testSafeTransform()
     ref << QPoint(236, 403);
     ref << QPoint(284, 410);
     QCOMPARE(fwdPoly.toPolygon(), ref);
-    QCOMPARE(fwdRect.toRect(), QRect(10,403,274,211));
+    QCOMPARE(fwdRect.toRect(), QRect(10, 403, 274, 211));
 
     ref.clear();
     ref << QPoint(512, 1024);
@@ -80,41 +77,41 @@ void KisTransformMaskTest::testSafeTransform()
     QCOMPARE(bwdPoly.toPolygon(), ref);
     QCOMPARE(bwdRect.toRect(), QRect(0, 994, 1198, 584));
 
-/*
-    QImage image(2500, 2500, QImage::Format_ARGB32);
-    QPainter gc(&image);
-    gc.setPen(Qt::cyan);
+    /*
+        QImage image(2500, 2500, QImage::Format_ARGB32);
+        QPainter gc(&image);
+        gc.setPen(Qt::cyan);
 
-    gc.setOpacity(0.7);
+        gc.setOpacity(0.7);
 
-    gc.setBrush(Qt::red);
-    gc.drawPolygon(t2.srcClipPolygon());
+        gc.setBrush(Qt::red);
+        gc.drawPolygon(t2.srcClipPolygon());
 
-    gc.setBrush(Qt::green);
-    gc.drawPolygon(t2.dstClipPolygon());
+        gc.setBrush(Qt::green);
+        gc.drawPolygon(t2.dstClipPolygon());
 
-    qDebug() << ppVar(testRect);
-    qDebug() << ppVar(fwdPoly);
-    qDebug() << ppVar(fwdRect);
-    qDebug() << ppVar(bwdPoly);
-    qDebug() << ppVar(bwdRect);
+        qDebug() << ppVar(testRect);
+        qDebug() << ppVar(fwdPoly);
+        qDebug() << ppVar(fwdRect);
+        qDebug() << ppVar(bwdPoly);
+        qDebug() << ppVar(bwdRect);
 
-    gc.setBrush(Qt::yellow);
-    gc.drawPolygon(testRect);
+        gc.setBrush(Qt::yellow);
+        gc.drawPolygon(testRect);
 
-    gc.setBrush(Qt::red);
-    gc.drawPolygon(fwdRect);
-    gc.setBrush(Qt::blue);
-    gc.drawPolygon(fwdPoly);
+        gc.setBrush(Qt::red);
+        gc.drawPolygon(fwdRect);
+        gc.setBrush(Qt::blue);
+        gc.drawPolygon(fwdPoly);
 
-    gc.setBrush(Qt::magenta);
-    gc.drawPolygon(bwdRect);
-    gc.setBrush(Qt::cyan);
-    gc.drawPolygon(bwdPoly);
+        gc.setBrush(Qt::magenta);
+        gc.drawPolygon(bwdRect);
+        gc.setBrush(Qt::cyan);
+        gc.drawPolygon(bwdPoly);
 
-    gc.end();
-    image.save("polygons_safety.png");
-*/
+        gc.end();
+        image.save("polygons_safety.png");
+    */
 }
 
 void KisTransformMaskTest::testSafeTransformUnity()
@@ -163,36 +160,36 @@ void KisTransformMaskTest::testSafeTransformSingleVanishingPoint()
     //QRectF fwdNastyRect(100, 400, 1000, 800);
     QRectF bwdNastyRect = t2.mapRectBackward(fwdNastyRect);
 
-/*
-    qDebug() << ppVar(testRect);
-    qDebug() << ppVar(fwdPoly);
-    qDebug() << ppVar(fwdRect);
-    qDebug() << ppVar(bwdPoly);
-    qDebug() << ppVar(bwdRect);
-    qDebug() << ppVar(bwdNastyRect);
-*/
+    /*
+        qDebug() << ppVar(testRect);
+        qDebug() << ppVar(fwdPoly);
+        qDebug() << ppVar(fwdRect);
+        qDebug() << ppVar(bwdPoly);
+        qDebug() << ppVar(bwdRect);
+        qDebug() << ppVar(bwdNastyRect);
+    */
 
     QPolygon ref;
 
     ref.clear();
-    ref << QPoint(765,648);
+    ref << QPoint(765, 648);
     ref << QPoint(1269, 648);
     ref << QPoint(1601, 847);
     ref << QPoint(629, 847);
     ref << QPoint(765, 648);
     QCOMPARE(fwdPoly.toPolygon(), ref);
-    QCOMPARE(fwdRect.toRect(), QRect(629,648,971,199));
+    QCOMPARE(fwdRect.toRect(), QRect(629, 648, 971, 199));
 
     ref.clear();
-    ref << QPoint(1536,1024);
-    ref << QPoint(2048,1024);
-    ref << QPoint(2048,1536);
-    ref << QPoint(1536,1536);
-    ref << QPoint(1536,1024);
+    ref << QPoint(1536, 1024);
+    ref << QPoint(2048, 1024);
+    ref << QPoint(2048, 1536);
+    ref << QPoint(1536, 1536);
+    ref << QPoint(1536, 1024);
     QCOMPARE(bwdPoly.toPolygon(), ref);
-    QCOMPARE(bwdRect.toRect(), QRect(1398,1024,650,512));
+    QCOMPARE(bwdRect.toRect(), QRect(1398, 1024, 650, 512));
 
-    QCOMPARE(bwdNastyRect.toRect(), QRect(1463,0,585,1232));
+    QCOMPARE(bwdNastyRect.toRect(), QRect(1463, 0, 585, 1232));
 }
 
 bool doPartialTests(const QString &prefix, KisImageSP image, KisLayerSP paintLayer,
@@ -213,12 +210,16 @@ bool doPartialTests(const QString &prefix, KisImageSP image, KisLayerSP paintLay
 
             if (rc.right() > refRect.right()) {
                 rc.setRight(refRect.right());
-                if (rc.isEmpty()) continue;
+                if (rc.isEmpty()) {
+                    continue;
+                }
             }
 
             if (rc.bottom() > refRect.bottom()) {
                 rc.setBottom(refRect.bottom());
-                if (rc.isEmpty()) continue;
+                if (rc.isEmpty()) {
+                    continue;
+                }
             }
 
             paintLayer->setDirty(rc);
@@ -257,7 +258,6 @@ bool doPartialTests(const QString &prefix, KisImageSP image, KisLayerSP paintLay
         image->waitForDone();
         testName = QString("tm_%1_extra_layer_visible_off").arg(testIndex++);
         result &= chk.checkImage(image, testName);
-
 
         visibilityToggleLayer->setVisible(true);
         visibilityToggleLayer->setDirty();
@@ -347,9 +347,8 @@ bool doPartialTests(const QString &prefix, KisImageSP image, KisLayerSP paintLay
     testName = QString("tm_%1_mask_dirty_bounds").arg(testIndex++);
     result &= chk.checkImage(image, testName);
 
-
     KisDumbTransformMaskParams *params =
-        dynamic_cast<KisDumbTransformMaskParams*>(mask->transformParams().data());
+        dynamic_cast<KisDumbTransformMaskParams *>(mask->transformParams().data());
 
     QTransform t = params->testingGetTransform();
     t *= QTransform::fromTranslate(400, 300);
@@ -419,8 +418,8 @@ void KisTransformMaskTest::testMaskOnCloneLayerWithOffset()
 {
     TestUtil::ExternalImageChecker chk("clone_offset_simple", "transform_mask_updates");
 
-    QRect refRect(0,0,512,512);
-    QRect fillRect(400,400,100,100);
+    QRect refRect(0, 0, 512, 512);
+    QRect fillRect(400, 400, 100, 100);
     TestUtil::MaskParent p(refRect);
 
     p.layer->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
@@ -474,8 +473,8 @@ void KisTransformMaskTest::testMultipleMasks()
 {
     TestUtil::ExternalImageChecker chk("multiple_masks", "transform_mask_updates");
 
-    QRect refRect(0,0,512,512);
-    QRect fillRect(400,400,100,100);
+    QRect refRect(0, 0, 512, 512);
+    QRect fillRect(400, 400, 100, 100);
     TestUtil::MaskParent p(refRect);
 
     p.layer->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
@@ -513,7 +512,6 @@ void KisTransformMaskTest::testMultipleMasks()
     p.image->waitForDone();
     chk.checkImage(p.image, "01X_mask1_moved_layer_update");
 
-
     transform = QTransform::fromTranslate(0, -150);
     mask2->setTransformParams(KisTransformMaskParamsInterfaceSP(
                                   new KisDumbTransformMaskParams(transform)));
@@ -538,7 +536,6 @@ void KisTransformMaskTest::testMultipleMasks()
         p.image->waitForDone();
         chk.checkImage(p.image, "03X_mask1_tg_off_refRect");
 
-
         mask1->setVisible(true);
         mask1->setDirty(refRect);
         p.image->waitForDone();
@@ -548,7 +545,6 @@ void KisTransformMaskTest::testMultipleMasks()
         p.image->waitForDone();
         chk.checkImage(p.image, "04X_mask1_tg_on_refRect");
 
-
         mask1->setVisible(false);
         mask1->setDirty();
         p.image->waitForDone();
@@ -557,7 +553,6 @@ void KisTransformMaskTest::testMultipleMasks()
         QTest::qWait(4000);
         p.image->waitForDone();
         chk.checkImage(p.image, "05X_mask1_tg_off_default_rect");
-
 
         mask1->setVisible(true);
         mask1->setDirty();
@@ -570,7 +565,6 @@ void KisTransformMaskTest::testMultipleMasks()
     }
 #endif /* CHECK_MASK1_TOGGLE */
 
-
 #ifdef CHECK_MASK2_TOGGLE
 
     {
@@ -582,7 +576,6 @@ void KisTransformMaskTest::testMultipleMasks()
         QTest::qWait(4000);
         p.image->waitForDone();
         chk.checkImage(p.image, "07X_mask2_tg_off_refRect");
-
 
         mask2->setVisible(true);
         mask2->setDirty(refRect);
@@ -602,7 +595,6 @@ void KisTransformMaskTest::testMultipleMasks()
         p.image->waitForDone();
         chk.checkImage(p.image, "09X_mask2_tg_off_default_rect");
 
-
         mask2->setVisible(true);
         mask2->setDirty(refRect);
         p.image->waitForDone();
@@ -615,7 +607,6 @@ void KisTransformMaskTest::testMultipleMasks()
     }
 
 #endif /* CHECK_MASK2_TOGGLE */
-
 
 #ifdef CHECK_HIDE_ALL
 
@@ -664,7 +655,6 @@ void KisTransformMaskTest::testMultipleMasks()
         QTest::qWait(4000);
         p.image->waitForDone();
         chk.checkImage(p.image, "14X_sh_mask2_on");
-
 
         mask2->setVisible(false);
         mask2->setDirty();
@@ -740,7 +730,6 @@ void KisTransformMaskTest::testMultipleMasks()
         p.image->waitForDone();
         chk.checkImage(p.image, "24X_sh_mask2_on");
 
-
         mask2->setVisible(false);
         mask2->setDirty();
         p.image->waitForDone();
@@ -760,8 +749,8 @@ void KisTransformMaskTest::testMaskWithOffset()
 {
     TestUtil::ExternalImageChecker chk("mask_with_offset", "transform_mask_updates");
 
-    QRect refRect(0,0,512,512);
-    QRect fillRect(400,400,100,100);
+    QRect refRect(0, 0, 512, 512);
+    QRect fillRect(400, 400, 100, 100);
     TestUtil::MaskParent p(refRect);
 
     p.layer->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
@@ -781,7 +770,6 @@ void KisTransformMaskTest::testMaskWithOffset()
     QTest::qWait(4000);
     p.image->waitForDone();
     chk.checkImage(p.image, "00X_initial_layer_update");
-
 
     QTransform transform;
 

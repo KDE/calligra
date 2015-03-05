@@ -22,30 +22,33 @@
 
 #include <db/tableschema.h>
 
-namespace Kexi {
-  class ObjectStatus;
+namespace Kexi
+{
+class ObjectStatus;
 }
 
-namespace KexiMigration {
-  class Data;
+namespace KexiMigration
+{
+class Data;
 }
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 class xBaseConnectionInternal;
 class xBaseExportPrivate;
 
-class xBaseExport : public KexiDB::Object 
+class xBaseExport : public KexiDB::Object
 {
-  public:
-    
-    void setData(KexiMigration::Data* migrateData);
+public:
 
-    //! Exports data 
-    bool performExport(Kexi::ObjectStatus* result = 0);
+    void setData(KexiMigration::Data *migrateData);
 
-  protected:
-    
+    //! Exports data
+    bool performExport(Kexi::ObjectStatus *result = 0);
+
+protected:
+
     xBaseExport();
 
     //! Connect to destination database
@@ -55,21 +58,21 @@ class xBaseExport : public KexiDB::Object
     bool dest_disconnect();
 
     //! Create a table in the destination database
-    bool dest_createTable(const QString& originalName, KexiDB::TableSchema* tableSchema);
+    bool dest_createTable(const QString &originalName, KexiDB::TableSchema *tableSchema);
 
     //! Copy table data from source to destination
-    bool dest_copyTable(const QString& srcTableName, KexiDB::Connection *srcConn, 
-      KexiDB::TableSchema* srcTable);
+    bool dest_copyTable(const QString &srcTableName, KexiDB::Connection *srcConn,
+                        KexiDB::TableSchema *srcTable);
 
     //! Checks whether objectName is a system object name
-    bool dest_isSystemObjectName(const QString& objectName);
+    bool dest_isSystemObjectName(const QString &objectName);
 
-    KexiMigration::Data* m_migrateData;
+    KexiMigration::Data *m_migrateData;
 
-  private:
-    xBaseExportPrivate* d;
+private:
+    xBaseExportPrivate *d;
 
-  friend class KexiDB::xBaseConnectionInternal;
+    friend class KexiDB::xBaseConnectionInternal;
 };
 
 }

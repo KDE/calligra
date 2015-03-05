@@ -51,7 +51,7 @@ public:
     explicit KWOdfLoader(KWDocument *document);
     ~KWOdfLoader();
 
-    KWDocument* document() const;
+    KWDocument *document() const;
 
     /**
      *  @brief Loads an OASIS OpenDocument from a store.
@@ -66,7 +66,6 @@ Q_SIGNALS:
      */
     void progressUpdate(int percent);
 
-
 private:
     enum HFLoadType {
         LoadHeader,
@@ -74,7 +73,7 @@ private:
     };
 
     void loadSettings(const KoXmlDocument &settings, QTextDocument *textDoc);
-    void loadMasterPageStyles(KoShapeLoadingContext& context);
+    void loadMasterPageStyles(KoShapeLoadingContext &context);
     void loadHeaderFooter(KoShapeLoadingContext &context, KWPageStyle &pageStyle, const KoXmlElement &masterPageStyle, HFLoadType headerFooter);
     void loadFinished(KoOdfLoadingContext &context, QTextCursor &cursor);
 

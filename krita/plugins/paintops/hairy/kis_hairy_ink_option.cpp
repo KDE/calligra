@@ -25,7 +25,8 @@ class KisInkOptionsWidget: public QWidget, public Ui::WdgInkOptions
 {
 public:
     KisInkOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -53,7 +54,6 @@ KisHairyInkOption::KisHairyInkOption()
     m_options->inkDepletionSlider->setValue(50);
     m_options->inkDepletionSlider->setSuffix("%");
 
-
     connect(m_options->inkAmountSpinBox, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
     connect(m_options->saturationCBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->opacityCBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
@@ -73,8 +73,7 @@ KisHairyInkOption::~KisHairyInkOption()
     delete m_options;
 }
 
-
-void KisHairyInkOption::readOptionSetting(const KisPropertiesConfiguration* settings)
+void KisHairyInkOption::readOptionSetting(const KisPropertiesConfiguration *settings)
 {
     setChecked(settings->getBool(HAIRY_INK_DEPLETION_ENABLED));
     m_options->inkAmountSpinBox->setValue(settings->getInt(HAIRY_INK_AMOUNT));
@@ -89,7 +88,7 @@ void KisHairyInkOption::readOptionSetting(const KisPropertiesConfiguration* sett
     m_options->soakInkCBox->setChecked(settings->getBool(HAIRY_INK_SOAK));
 }
 
-void KisHairyInkOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisHairyInkOption::writeOptionSetting(KisPropertiesConfiguration *settings) const
 {
     settings->setProperty(HAIRY_INK_DEPLETION_ENABLED, isChecked());
     settings->setProperty(HAIRY_INK_AMOUNT, inkAmount());
@@ -104,52 +103,43 @@ void KisHairyInkOption::writeOptionSetting(KisPropertiesConfiguration* settings)
     settings->setProperty(HAIRY_INK_SOAK, m_options->soakInkCBox->isChecked());
 }
 
-
 int KisHairyInkOption::inkAmount() const
 {
     return m_options->inkAmountSpinBox->value();
 }
-
 
 bool KisHairyInkOption::useOpacity() const
 {
     return m_options->opacityCBox->isChecked();
 }
 
-
 bool KisHairyInkOption::useSaturation() const
 {
     return m_options->saturationCBox->isChecked();
 }
-
 
 bool KisHairyInkOption::useWeights() const
 {
     return m_options->useWeightCHBox->isChecked();
 }
 
-
 int KisHairyInkOption::pressureWeight() const
 {
     return m_options->pressureSlider->value();
 }
-
 
 int KisHairyInkOption::bristleLengthWeight() const
 {
     return m_options->bristleLengthSlider->value();
 }
 
-
 int KisHairyInkOption::bristleInkAmountWeight() const
 {
     return m_options->bristleInkAmountSlider->value();
 }
 
-
 int KisHairyInkOption::inkDepletionWeight() const
 {
     return m_options->inkDepletionSlider->value();
 }
-
 

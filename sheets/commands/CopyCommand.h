@@ -41,7 +41,7 @@ namespace CopyCommand
  *            absolutely (they will be switched back to relative
  *            references during decoding) - used for cut to clipboard
  */
-QDomDocument saveAsXml(const Region&, bool era = false);
+QDomDocument saveAsXml(const Region &, bool era = false);
 
 /**
  * Saves the cell \p region as plain text.
@@ -52,12 +52,12 @@ QString saveAsPlainText(const Region &region);
 /**
  * Saves the cell \p region as HTML.
  */
-QDomDocument saveAsHtml(const Region& region);
+QDomDocument saveAsHtml(const Region &region);
 
 /**
  * Saves the cell \p region as CSV data.
  */
-QString saveAsCSV(const Region& region);
+QString saveAsCSV(const Region &region);
 }
 
 } // namespace Sheets

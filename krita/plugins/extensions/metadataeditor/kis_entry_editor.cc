@@ -27,13 +27,14 @@
 #include <kis_meta_data_entry.h>
 
 struct KisEntryEditor::Private {
-    QObject* object;
+    QObject *object;
     QString propertyName;
-    KisMetaData::Store* store;
+    KisMetaData::Store *store;
     QString key;
     QString structField;
     int arrayIndex;
-    KisMetaData::Value value() {
+    KisMetaData::Value value()
+    {
         KisMetaData::Value value = store->getEntry(key).value();
         if (value.type() == KisMetaData::Value::Structure && !structField.isEmpty()) {
             QMap<QString, KisMetaData::Value> structure = value.asStructure();
@@ -48,8 +49,9 @@ struct KisEntryEditor::Private {
         }
         return value;
     }
-    void setValue(const QVariant& variant) {
-        KisMetaData::Value& value = store->getEntry(key).value();
+    void setValue(const QVariant &variant)
+    {
+        KisMetaData::Value &value = store->getEntry(key).value();
         if (value.type() == KisMetaData::Value::Structure && !structField.isEmpty()) {
             QMap<QString, KisMetaData::Value> structure = value.asStructure();
             value = structure[ structField ];
@@ -63,7 +65,7 @@ struct KisEntryEditor::Private {
     }
 };
 
-KisEntryEditor::KisEntryEditor(QObject* obj, KisMetaData::Store* store, QString key, QString propertyName, QString structField, int arrayIndex) : d(new Private)
+KisEntryEditor::KisEntryEditor(QObject *obj, KisMetaData::Store *store, QString key, QString propertyName, QString structField, int arrayIndex) : d(new Private)
 {
     Q_ASSERT(obj);
     Q_ASSERT(store);

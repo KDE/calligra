@@ -41,11 +41,10 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 
-
 void KisLayerTest::testCreation()
 {
 
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
@@ -70,7 +69,6 @@ void KisLayerTest::testCreation()
     QCOMPARE(layer->channelFlags().at(2), true);
     QCOMPARE(layer->channelFlags().at(3), true);
 
-
     layer->setOpacity(OPACITY_TRANSPARENT_U8);
     QCOMPARE(layer->opacity(), OPACITY_TRANSPARENT_U8);
     layer->setPercentOpacity(100);
@@ -78,12 +76,11 @@ void KisLayerTest::testCreation()
     layer->setPercentOpacity(0);
     QCOMPARE(layer->opacity(), OPACITY_TRANSPARENT_U8);
 
-
 }
 
 void KisLayerTest::testOrdering()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
@@ -133,7 +130,6 @@ void KisLayerTest::testOrdering()
     QVERIFY(layer2->nextSibling() == 0);
     QVERIFY(layer1->nextSibling() == layer3.data());
 
-
     /*
       +---------+
       | layer 3 |
@@ -165,10 +161,9 @@ void KisLayerTest::testOrdering()
 
 }
 
-
 void KisLayerTest::testMoveNode()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
@@ -196,10 +191,9 @@ void KisLayerTest::testMoveNode()
 
 }
 
-
 void KisLayerTest::testMoveLayer()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "layer test");
     image->lock();
 
@@ -226,18 +220,18 @@ void KisLayerTest::testMoveLayer()
 
 }
 
-    /*
-      +----------+
-      |root      |
-      | paint 1  |
-      |  fmask2  |
-      |  fmask1  |
-      +----------+
-     */
+/*
+  +----------+
+  |root      |
+  | paint 1  |
+  |  fmask2  |
+  |  fmask1  |
+  +----------+
+ */
 
 void KisLayerTest::testMasksChangeRect()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
@@ -265,12 +259,12 @@ void KisLayerTest::testMasksChangeRect()
 
     resultRect = paintLayer1->changeRect(testRect, KisNode::N_FILTHY);
     QVERIFY2(resultRect == QRect(0, 0, 120, 120),
-              "KisNode::N_FILTHY node should take masks into account");
+             "KisNode::N_FILTHY node should take masks into account");
 
     resultRect = paintLayer1->changeRect(testRect, KisNode::N_ABOVE_FILTHY);
     QVERIFY2(resultRect == testRect,
-              "KisNode::N_ABOVE_FILTHY node should NOT take "
-              "masks into account");
+             "KisNode::N_ABOVE_FILTHY node should NOT take "
+             "masks into account");
 
     /**
      * KisNode::N_BELOW_FILTHY, KisNode::N_FILTHY_PROJECTION
@@ -291,7 +285,7 @@ void KisLayerTest::testMoveLayerWithMaskThreaded()
      * while its projection is still being updated
      */
 
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 2000, 2000, colorSpace, "walker test");
 
     KisLayerSP paintLayer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
@@ -303,16 +297,15 @@ void KisLayerTest::testMoveLayerWithMaskThreaded()
     transpMask->initSelection(paintLayer);
     image->addNode(transpMask, paintLayer);
 
-    for(int i = 0; i < 100; i++) {
+    for (int i = 0; i < 100; i++) {
         paintLayer->setDirty();
 
         QTest::qSleep(1 + (qrand() & 63));
 
-        paintLayer->setX((i*67) % 1873);
-        paintLayer->setY((i*23) % 1873);
+        paintLayer->setX((i * 67) % 1873);
+        paintLayer->setY((i * 23) % 1873);
     }
 }
-
 
 QTEST_KDEMAIN(KisLayerTest, NoGUI)
 #include "kis_layer_test.moc"

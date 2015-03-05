@@ -28,7 +28,6 @@
 
 //KDE HEADERS
 
-
 //QT HEADERS
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -38,7 +37,6 @@
 #include <QFontMetrics>
 #include <QDebug>
 #include <QScrollBar>
-
 
 //default value for invalid columns and rows index
 const int INVALID = -1;
@@ -164,7 +162,7 @@ int KPrAnimationsTimeLineView::rowsHeight() const
 int KPrAnimationsTimeLineView::totalWidth() const
 {
     int width = 0;
-    for (int i = 0; i < KPrShapeAnimations::Duration; i++){
+    for (int i = 0; i < KPrShapeAnimations::Duration; i++) {
         width = width + widthOfColumn(i);
     }
     return width;
@@ -214,10 +212,10 @@ void KPrAnimationsTimeLineView::changeStartLimit(const int row)
 void KPrAnimationsTimeLineView::adjustScale()
 {
     m_maxLength = 10;
-    for (int row = 0; row < m_model->rowCount(); ++ row){
+    for (int row = 0; row < m_model->rowCount(); ++ row) {
         int startOffSet = calculateStartOffset(row);
         qreal length = m_model->data(m_model->index(row, KPrShapeAnimations::StartTime)).toInt() +
-                m_model->data(m_model->index(row,KPrShapeAnimations:: Duration)).toInt() + startOffSet;
+                       m_model->data(m_model->index(row, KPrShapeAnimations:: Duration)).toInt() + startOffSet;
         length = length / 1000;
         if (length > m_maxLength) {
             m_maxLength = length;
@@ -251,20 +249,21 @@ int KPrAnimationsTimeLineView::stepsScale()
 {
     // Set step size depending on the scale length
     int stepsNumber = numberOfSteps();
-    if (stepsNumber < 15)
+    if (stepsNumber < 15) {
         return 1;
-    else if (stepsNumber < 50)
+    } else if (stepsNumber < 50) {
         return 2;
-    else if (stepsNumber < 100)
+    } else if (stepsNumber < 100) {
         return 5;
-    else if (stepsNumber < 200)
+    } else if (stepsNumber < 200) {
         return 10;
-    else if (stepsNumber < 300)
+    } else if (stepsNumber < 300) {
         return 20;
-    else if (stepsNumber < 500)
+    } else if (stepsNumber < 500) {
         return 25;
-    else
+    } else {
         return 60;
+    }
 }
 
 qreal KPrAnimationsTimeLineView::maxLineLength() const
@@ -283,13 +282,13 @@ QColor KPrAnimationsTimeLineView::barColor(int row)
 {
     Q_ASSERT(m_model);
     KPrShapeAnimation::PresetClass type =
-            static_cast<KPrShapeAnimation::PresetClass>(m_model->data(m_model->index(row, KPrShapeAnimations::AnimationClass)).toInt());
+        static_cast<KPrShapeAnimation::PresetClass>(m_model->data(m_model->index(row, KPrShapeAnimations::AnimationClass)).toInt());
     switch (type) {
-        case KPrShapeAnimation::Entrance: return Qt::darkGreen;
-        case KPrShapeAnimation::Emphasis: return Qt::blue;
-        case KPrShapeAnimation::Custom: return Qt::gray;
-        case KPrShapeAnimation::Exit: return Qt::red;
-        default: return Qt::gray;
+    case KPrShapeAnimation::Entrance: return Qt::darkGreen;
+    case KPrShapeAnimation::Emphasis: return Qt::blue;
+    case KPrShapeAnimation::Custom: return Qt::gray;
+    case KPrShapeAnimation::Exit: return Qt::red;
+    default: return Qt::gray;
     }
 }
 
@@ -297,7 +296,7 @@ int KPrAnimationsTimeLineView::calculateStartOffset(int row) const
 {
     //calculate real start
     KPrShapeAnimation::NodeType triggerEvent = static_cast<KPrShapeAnimation::NodeType>(
-               m_model->data(m_model->index(row, KPrShapeAnimations::NodeType)).toInt());
+                m_model->data(m_model->index(row, KPrShapeAnimations::NodeType)).toInt());
     if (row <= 0) {
         return 0;
     }
@@ -346,9 +345,9 @@ void KPrAnimationsTimeLineView::update()
 
 void KPrAnimationsTimeLineView::updateColumnsWidth()
 {
-    for (int row = 0; row < m_model->rowCount(); ++ row){
+    for (int row = 0; row < m_model->rowCount(); ++ row) {
         qreal length = m_model->data(m_model->index(row, KPrShapeAnimations::StartTime)).toDouble() +
-                m_model->data(m_model->index(row, KPrShapeAnimations::Duration)).toDouble();
+                       m_model->data(m_model->index(row, KPrShapeAnimations::Duration)).toDouble();
         if (length > m_maxLength) {
             m_maxLength = length;
         }

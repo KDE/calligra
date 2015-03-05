@@ -59,12 +59,12 @@ using namespace Calligra::Sheets;
 class CellEditor::Private
 {
 public:
-    CellToolBase*             cellTool;
-    Selection*                selection;
-    KTextEdit*                textEdit;
-    FormulaEditorHighlighter* highlighter;
-    FunctionCompletion*       functionCompletion;
-    QTimer*                   functionCompletionTimer;
+    CellToolBase             *cellTool;
+    Selection                *selection;
+    KTextEdit                *textEdit;
+    FormulaEditorHighlighter *highlighter;
+    FunctionCompletion       *functionCompletion;
+    QTimer                   *functionCompletionTimer;
     QHash<int, QString>       *wordCollection;
     QPoint globalCursorPos;
     QCompleter                *complete;
@@ -234,15 +234,14 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
 
     const int regionLength = regionEnd - regionStart + 1;
     kDebug() << "currentRange:" << currentRange << "regionStart:" << regionStart
-    << "regionEnd:" << regionEnd << "regionLength:" << regionLength;
+             << "regionEnd:" << regionEnd << "regionLength:" << regionLength;
 
     selection->setActiveSubRegion(regionStart, regionLength, currentRange);
 }
 
-
-CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWidget* parent)
-        : KTextEdit(parent)
-        , d(new Private)
+CellEditor::CellEditor(CellToolBase *cellTool, QHash<int, QString> &wordList, QWidget *parent)
+    : KTextEdit(parent)
+    , d(new Private)
 {
     d->cellTool = cellTool;
     d->selection = cellTool->selection();
@@ -273,9 +272,9 @@ CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWid
     setCompletionMode(selection()->view()->doc()->completionMode());
     setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
 #endif
-    
+
     //populateWordCollection();
-    
+
     //AutoCompletion Code
     d->complete = new QCompleter(this);
     d->complete->setModel(model());
@@ -283,20 +282,20 @@ CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWid
     d->complete->setCaseSensitivity(Qt::CaseInsensitive);
     d->complete->setWrapAround(false);
     this->setCompleter(d->complete);
-    
+
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 }
 
 CellEditor::~CellEditor()
 {
-    if (selection()){
+    if (selection()) {
         selection()->endReferenceSelection();
     }
     delete d;
 }
 
-Selection* CellEditor::selection() const
+Selection *CellEditor::selection() const
 {
     return d->selection;
 }
@@ -310,58 +309,61 @@ QPoint CellEditor::globalCursorPosition() const
 
 QAbstractItemModel *CellEditor::model()
 {
-  //ValueConverter *conv;
-  QList<QString> words;
-  QList<QString> wordlist;
-  const Cell cell(d->selection->activeSheet(), d->selection->marker());
-  int col = cell.column();
-  words = d->wordCollection->values(col);
-  for (int i = 0; i < 3 && (!words.isEmpty()) ; i++) {
-    wordlist.push_back(words.front());
-    words.pop_front();
-  }
+    //ValueConverter *conv;
+    QList<QString> words;
+    QList<QString> wordlist;
+    const Cell cell(d->selection->activeSheet(), d->selection->marker());
+    int col = cell.column();
+    words = d->wordCollection->values(col);
+    for (int i = 0; i < 3 && (!words.isEmpty()); i++) {
+        wordlist.push_back(words.front());
+        words.pop_front();
+    }
     return new QStringListModel(wordlist, d->complete);
 }
 
 void CellEditor::setCompleter(QCompleter *completer)
 {
-     if (d->complete)
-         QObject::disconnect(d->complete, 0, this, 0);
+    if (d->complete) {
+        QObject::disconnect(d->complete, 0, this, 0);
+    }
 
-     d->complete = completer;
+    d->complete = completer;
 
-     if (!d->complete)
-         return;
+    if (!d->complete) {
+        return;
+    }
 
-     d->complete->setWidget(this);
-     d->complete->setCompletionMode(QCompleter::PopupCompletion);
-     d->complete->setCaseSensitivity(Qt::CaseInsensitive);
-     QObject::connect(d->complete, SIGNAL(activated(QString)),
-                      this, SLOT(insertCompletion(QString)));
+    d->complete->setWidget(this);
+    d->complete->setCompletionMode(QCompleter::PopupCompletion);
+    d->complete->setCaseSensitivity(Qt::CaseInsensitive);
+    QObject::connect(d->complete, SIGNAL(activated(QString)),
+                     this, SLOT(insertCompletion(QString)));
 }
 
 QCompleter *CellEditor::completer() const
 {
-     return d->complete;
+    return d->complete;
 }
 
- void CellEditor::insertCompletion(const QString& completion)
+void CellEditor::insertCompletion(const QString &completion)
 {
-     if (d->complete->widget() != this)
-         return;
-     QTextCursor tc = textCursor();
-     int extra = completion.length() - d->complete->completionPrefix().length();
-     tc.movePosition(QTextCursor::Left);
-     tc.movePosition(QTextCursor::EndOfWord);
-     tc.insertText(completion.right(extra));
-     setTextCursor(tc);
+    if (d->complete->widget() != this) {
+        return;
+    }
+    QTextCursor tc = textCursor();
+    int extra = completion.length() - d->complete->completionPrefix().length();
+    tc.movePosition(QTextCursor::Left);
+    tc.movePosition(QTextCursor::EndOfWord);
+    tc.insertText(completion.right(extra));
+    setTextCursor(tc);
 }
 
 QString CellEditor::textUnderCursor() const
 {
-     QTextCursor tc = textCursor();
-     tc.select(QTextCursor::WordUnderCursor);
-     return tc.selectedText();
+    QTextCursor tc = textCursor();
+    tc.select(QTextCursor::WordUnderCursor);
+    return tc.selectedText();
 }
 
 void CellEditor::slotCursorPositionChanged()
@@ -433,7 +435,7 @@ void CellEditor::Private::rebuildSelection()
     selectionChangedLocked = false;
 }
 
-void CellEditor::setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter)
+void CellEditor::setEditorFont(QFont const &font, bool updateSize, const KoViewConverter *viewConverter)
 {
     const qreal scaleY = POINT_TO_INCH(static_cast<qreal>((KoDpi::dpiY())));
     setFont(QFont(font.family(), viewConverter->documentToViewY(font.pointSizeF()) / scaleY));
@@ -442,11 +444,13 @@ void CellEditor::setEditorFont(QFont const & font, bool updateSize, const KoView
         QFontMetrics fontMetrics(this->font());
         int width = fontMetrics.width(toPlainText()) + fontMetrics.averageCharWidth();
         // don't make it smaller: then we would have to repaint the obscured cells
-        if (width < this->width())
+        if (width < this->width()) {
             width = this->width();
+        }
         int height = fontMetrics.height();
-        if (height < this->height())
+        if (height < this->height()) {
             height = this->height();
+        }
         setGeometry(x(), y(), width, height);
     }
 }
@@ -528,10 +532,11 @@ void CellEditor::selectionChanged()
         return;
     }
 
-    Selection* choice = selection();
+    Selection *choice = selection();
 
-    if (choice->isEmpty())
+    if (choice->isEmpty()) {
         return;
+    }
 
     const QString text = toPlainText();
     const int textLength = text.length();
@@ -604,9 +609,9 @@ void CellEditor::selectionChanged()
 }
 
 void CellEditor::keyPressEvent(QKeyEvent *event)
- { 
-    const Cell cell_temp(d->selection->activeSheet(), d->selection->marker()); 
-   
+{
+    const Cell cell_temp(d->selection->activeSheet(), d->selection->marker());
+
     switch (event->key()) {
     case Qt::Key_Left:
     case Qt::Key_Right:
@@ -629,10 +634,10 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         // editor.
 
         if (!textUnderCursor().isEmpty() && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())) {
-	  d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
-	}
-	event->ignore();
-	return;
+            d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
+        }
+        event->ignore();
+        return;
     case Qt::Key_Return:
     case Qt::Key_Enter:
         // Shift + Return: manual line wrap
@@ -640,59 +645,61 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
             break; // pass to TextEdit
         }
         if (!textUnderCursor().isEmpty() && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())) {
-	  d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
-	}
-	event->ignore(); // pass to parent
+            d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
+        }
+        event->ignore(); // pass to parent
         return;
     }
-    
+
     if (d->complete && d->complete->popup()->isVisible()) {
-         // The following keys are forwarded by the completer to the widget
+        // The following keys are forwarded by the completer to the widget
         switch (event->key()) {
         case Qt::Key_Enter:
         case Qt::Key_Return:
         case Qt::Key_Escape:
         case Qt::Key_Tab:
         case Qt::Key_Backtab:
-             event->ignore();
-             return; // let the completer do default behavior
+            event->ignore();
+            return; // let the completer do default behavior
         default:
             break;
         }
-     }
-
-
-     bool isShortcut = ((event->modifiers() & Qt::ControlModifier) && event->key() == Qt::Key_E); // CTRL+E
-     if (!d->complete || !isShortcut) // do not process the shortcut when we have a completer
-         QTextEdit::keyPressEvent(event);
-
-     const bool ctrlOrShift = event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
-     if (!d->complete || (ctrlOrShift && event->text().isEmpty()))
-         return;
-
-     static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
-     bool hasModifier = (event->modifiers() != Qt::NoModifier) && !ctrlOrShift;
-     QString completionPrefix = textUnderCursor();
-
-     if (!isShortcut && (hasModifier || event->text().isEmpty()|| completionPrefix.length() < 3||eow.contains(event->text().right(1)))) {
-         d->complete->popup()->hide();
-         return;
-     }
-     if (completionPrefix != d->complete->completionPrefix()) {
-         d->complete->setCompletionPrefix(completionPrefix);
-         d->complete->popup()->setCurrentIndex(d->complete->completionModel()->index(0, 0));
     }
-     QRect cr = cursorRect();
-     cr.setWidth(d->complete->popup()->sizeHintForColumn(0) + d->complete->popup()->verticalScrollBar()->sizeHint().width());
-     d->complete->complete(); // pop it up! 
-    
+
+    bool isShortcut = ((event->modifiers() & Qt::ControlModifier) && event->key() == Qt::Key_E); // CTRL+E
+    if (!d->complete || !isShortcut) { // do not process the shortcut when we have a completer
+        QTextEdit::keyPressEvent(event);
+    }
+
+    const bool ctrlOrShift = event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
+    if (!d->complete || (ctrlOrShift && event->text().isEmpty())) {
+        return;
+    }
+
+    static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
+    bool hasModifier = (event->modifiers() != Qt::NoModifier) && !ctrlOrShift;
+    QString completionPrefix = textUnderCursor();
+
+    if (!isShortcut && (hasModifier || event->text().isEmpty() || completionPrefix.length() < 3 || eow.contains(event->text().right(1)))) {
+        d->complete->popup()->hide();
+        return;
+    }
+    if (completionPrefix != d->complete->completionPrefix()) {
+        d->complete->setCompletionPrefix(completionPrefix);
+        d->complete->popup()->setCurrentIndex(d->complete->completionModel()->index(0, 0));
+    }
+    QRect cr = cursorRect();
+    cr.setWidth(d->complete->popup()->sizeHintForColumn(0) + d->complete->popup()->verticalScrollBar()->sizeHint().width());
+    d->complete->complete(); // pop it up!
+
 }
 
 void CellEditor::focusInEvent(QFocusEvent *event)
 {
-    if (d->complete)
-         d->complete->setWidget(this);
-     KTextEdit::focusInEvent(event);
+    if (d->complete) {
+        d->complete->setWidget(this);
+    }
+    KTextEdit::focusInEvent(event);
     // If the focussing is user induced.
     if (event->reason() != Qt::OtherFocusReason) {
         kDebug() << "induced by user";
@@ -706,9 +713,11 @@ void CellEditor::focusOutEvent(QFocusEvent *event)
     KTextEdit::focusOutEvent(event);
 }
 
-void CellEditor::setText(const QString& text, int cursorPos)
+void CellEditor::setText(const QString &text, int cursorPos)
 {
-    if (text == toPlainText()) return;
+    if (text == toPlainText()) {
+        return;
+    }
 
     setPlainText(text);
 

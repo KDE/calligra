@@ -38,38 +38,38 @@ class KRITAIMAGE_EXPORT KisMacro : public QObject
 {
     Q_OBJECT
 public:
-    KisMacro(QObject* parent = 0);
-    KisMacro(const QList<KisRecordedAction*>& _actions);
+    KisMacro(QObject *parent = 0);
+    KisMacro(const QList<KisRecordedAction *> &_actions);
     ~KisMacro();
 public:
     /**
      * Append a list of actions, and make clone of them.
      */
-    void appendActions(const QList<KisRecordedAction*>& actions);
+    void appendActions(const QList<KisRecordedAction *> &actions);
     /**
      * Remove the list of actions. Actions are deleted.
      */
-    void removeActions(const QList<KisRecordedAction*>& actions);
+    void removeActions(const QList<KisRecordedAction *> &actions);
     /**
      * Move the action before an other one.
      * @param before if null, the action is moved to the end
      */
-    void moveAction(const KisRecordedAction* action, const KisRecordedAction* before);
+    void moveAction(const KisRecordedAction *action, const KisRecordedAction *before);
 public: // serialization functions
 
-    virtual void fromXML(const QDomElement&, const KisRecordedActionLoadContext* loadContext);
-    virtual void toXML(QDomDocument& doc, QDomElement& e, KisRecordedActionSaveContext* saveContext) const;
-    const QList<KisRecordedAction*>& actions() const;
+    virtual void fromXML(const QDomElement &, const KisRecordedActionLoadContext *loadContext);
+    virtual void toXML(QDomDocument &doc, QDomElement &e, KisRecordedActionSaveContext *saveContext) const;
+    const QList<KisRecordedAction *> &actions() const;
 public Q_SLOTS:
     /**
      * add a single action, and make a clone of it.
      * @param before if non null, the action will be added before that action,
      *               otherwise, if null, the action will be added at the end.
      */
-    virtual void addAction(const KisRecordedAction& action, const KisRecordedAction* before = 0);
+    virtual void addAction(const KisRecordedAction &action, const KisRecordedAction *before = 0);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

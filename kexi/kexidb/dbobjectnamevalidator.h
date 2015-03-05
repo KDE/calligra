@@ -38,13 +38,13 @@ public:
     /*! \a drv is a KexiDB driver on which isSystemObjectName() will be
      called inside check(). If \a drv is 0, KexiDB::Driver::isKexiDBSystemObjectName()
      static function is called instead. */
-    explicit ObjectNameValidator(KexiDB::Driver *drv, QObject * parent = 0);
+    explicit ObjectNameValidator(KexiDB::Driver *drv, QObject *parent = 0);
     virtual ~ObjectNameValidator();
 
 protected:
     virtual KexiDB::Validator::Result internalCheck(
-            const QString &valueName, const QVariant& v,
-            QString &message, QString &details);
+        const QString &valueName, const QVariant &v,
+        QString &message, QString &details);
     QPointer<KexiDB::Driver> m_drv;
 };
 }

@@ -37,7 +37,7 @@ class MDBMigrate : public KexiMigrate
     KEXIMIGRATION_DRIVER
 
 public:
-    explicit MDBMigrate(QObject *parent, const QVariantList& args = QVariantList());
+    explicit MDBMigrate(QObject *parent, const QVariantList &args = QVariantList());
     virtual ~MDBMigrate();
 
     //! Convert an MDB type to a KexiDB type, prompting user if necessary.
@@ -50,23 +50,23 @@ public:
         with.
         \return the table definition, or null if no matching table was found
     */
-    MdbTableDef* getTableDef(const QString& tableName);
+    MdbTableDef *getTableDef(const QString &tableName);
 
-    QVariant toQVariant(const char* data, unsigned int len, int type);
+    QVariant toQVariant(const char *data, unsigned int len, int type);
 
-    bool getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef);
+    bool getPrimaryKey(KexiDB::TableSchema *table, MdbTableDef *tableDef);
 
     //! Reimplemented to add support for "sourceDatabaseHasNonUnicodeEncoding" property
     //! @todo this should be in Connection class but Migration framework has no such yet!
-    virtual QVariant propertyValue(const QByteArray& propName);
+    virtual QVariant propertyValue(const QByteArray &propName);
 
 protected:
     //! Driver specific function to return table names
-    virtual bool drv_tableNames(QStringList& tablenames);
+    virtual bool drv_tableNames(QStringList &tablenames);
 
     //! Driver specific implementation to read a table schema
     virtual bool drv_readTableSchema(
-        const QString& originalName, KexiDB::TableSchema& tableSchema);
+        const QString &originalName, KexiDB::TableSchema &tableSchema);
 
     //! Driver specific connection implementation
     virtual bool drv_connect();
@@ -75,13 +75,14 @@ protected:
     virtual bool drv_disconnect();
 
     /*! Copy MDB table to KexiDB database */
-    virtual bool drv_copyTable(const QString& srcTable,
-                               KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+    virtual bool drv_copyTable(const QString &srcTable,
+                               KexiDB::Connection *destConn, KexiDB::TableSchema *dstTable);
 
-    virtual bool drv_progressSupported() {
+    virtual bool drv_progressSupported()
+    {
         return true;
     }
-    virtual bool drv_getTableSize(const QString& table, qulonglong& size);
+    virtual bool drv_getTableSize(const QString &table, qulonglong &size);
 
 private:
     void initBackend();

@@ -9,7 +9,6 @@
 #include <kdebug.h>
 #include <qtest_kde.h>
 
-
 void TestClipToPage::testClipToPage()
 {
     KWDocument doc(new MockPart);

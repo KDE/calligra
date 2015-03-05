@@ -31,7 +31,7 @@ namespace KPlato
 
 ViewListDocker::ViewListDocker(View *view)
 {
-    updateWindowTitle( false );
+    updateWindowTitle(false);
     setView(view);
 }
 
@@ -48,28 +48,29 @@ void ViewListDocker::setView(View *view)
 {
     m_view = view;
     QWidget *wdg = widget();
-    if (wdg)
+    if (wdg) {
         delete wdg;
+    }
     m_viewlist = new ViewListWidget(view->getPart(), this);
     setWidget(m_viewlist);
-    m_viewlist->setProject( &( view->getProject() ) );
-    connect( m_viewlist, SIGNAL(selectionChanged(ScheduleManager*)), view, SLOT(slotSelectionChanged(ScheduleManager*)) );
-    connect( view, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), m_viewlist, SLOT(setSelectedSchedule(ScheduleManager*)) );
-    connect( m_viewlist, SIGNAL(updateViewInfo(ViewListItem*)), view, SLOT(slotUpdateViewInfo(ViewListItem*)) );
+    m_viewlist->setProject(&(view->getProject()));
+    connect(m_viewlist, SIGNAL(selectionChanged(ScheduleManager*)), view, SLOT(slotSelectionChanged(ScheduleManager*)));
+    connect(view, SIGNAL(currentScheduleManagerChanged(ScheduleManager*)), m_viewlist, SLOT(setSelectedSchedule(ScheduleManager*)));
+    connect(m_viewlist, SIGNAL(updateViewInfo(ViewListItem*)), view, SLOT(slotUpdateViewInfo(ViewListItem*)));
 
 }
 
 void ViewListDocker::slotModified()
 {
-    setWindowTitle( i18nc( "@title:window", "View Selector [modified]" ) );
+    setWindowTitle(i18nc("@title:window", "View Selector [modified]"));
 }
 
-void ViewListDocker::updateWindowTitle( bool modified )
+void ViewListDocker::updateWindowTitle(bool modified)
 {
-    if ( modified ) {
-        setWindowTitle( i18nc( "@title:window", "View Selector [modified]" ) );
+    if (modified) {
+        setWindowTitle(i18nc("@title:window", "View Selector [modified]"));
     } else {
-        setWindowTitle(i18nc( "@title:window", "View Selector"));
+        setWindowTitle(i18nc("@title:window", "View Selector"));
     }
 }
 
@@ -84,7 +85,7 @@ QString ViewListDockerFactory::id() const
     return QString("KPlatoViewList");
 }
 
-QDockWidget* ViewListDockerFactory::createDockWidget()
+QDockWidget *ViewListDockerFactory::createDockWidget()
 {
     ViewListDocker *widget = new ViewListDocker(m_view);
     widget->setObjectName(id());

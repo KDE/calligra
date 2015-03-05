@@ -24,7 +24,8 @@
 class DynaFilter
 {
 public:
-    DynaFilter() {
+    DynaFilter()
+    {
         initFilterPosition(0.0, 0.0);
     }
     ~DynaFilter() {}
@@ -33,45 +34,58 @@ public:
     bool applyFilter(qreal cursorX, qreal cursorY);
     void setFixedAngles(qreal angleX, qreal angleY);
     /* setters */
-    void setMass(qreal mass) {
+    void setMass(qreal mass)
+    {
         m_mass = mass;
     }
-    void setDrag(qreal drag) {
+    void setDrag(qreal drag)
+    {
         m_drag = drag;
     }
-    void setUseFixedAngle(bool useFixed) {
+    void setUseFixedAngle(bool useFixed)
+    {
         m_fixedAngle = useFixed;
     }
     /* getters */
-    qreal velocity() const {
+    qreal velocity() const
+    {
         return m_vel;
     }
-    qreal velocityX() const {
+    qreal velocityX() const
+    {
         return m_velx;
     }
-    qreal velocityY() const {
+    qreal velocityY() const
+    {
         return m_vely;
     }
 
-    qreal x() const {
+    qreal x() const
+    {
         return m_filterX;
     }
-    qreal y() const {
+    qreal y() const
+    {
         return m_filterY;
     }
-    qreal prevX() const {
+    qreal prevX() const
+    {
         return m_prevX;
     }
-    qreal prevY() const {
+    qreal prevY() const
+    {
         return m_prevY;
     }
-    qreal angleX() const {
+    qreal angleX() const
+    {
         return m_angleX;
     }
-    qreal angleY() const {
+    qreal angleY() const
+    {
         return m_angleY;
     }
-    qreal acceleration() const {
+    qreal acceleration() const
+    {
         return m_acc;
     }
 
@@ -91,10 +105,10 @@ private:
 
 private:
     // linear interpolation between f0 and f1
-    qreal flerp(qreal f0, qreal f1, qreal p) const {
+    qreal flerp(qreal f0, qreal f1, qreal p) const
+    {
         return ((f0 * (1.0 - p)) + (f1 * p));
     }
-
 
 };
 

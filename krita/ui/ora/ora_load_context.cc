@@ -28,7 +28,7 @@
 
 #include "kis_png_converter.h"
 
-OraLoadContext::OraLoadContext(KoStore* _store) : m_store(_store)
+OraLoadContext::OraLoadContext(KoStore *_store) : m_store(_store)
 {
 }
 
@@ -36,7 +36,7 @@ OraLoadContext::~OraLoadContext()
 {
 }
 
-KisImageWSP OraLoadContext::loadDeviceData(const QString & filename)
+KisImageWSP OraLoadContext::loadDeviceData(const QString &filename)
 {
     if (m_store->open(filename)) {
         KoStoreDevice io(m_store);

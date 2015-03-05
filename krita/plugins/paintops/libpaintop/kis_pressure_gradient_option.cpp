@@ -29,8 +29,9 @@ KisPressureGradientOption::KisPressureGradientOption(): KisCurveOption(i18n("Gra
     setMaximumLabel(i18n("100%"));
 }
 
-void KisPressureGradientOption::apply(KoColor& color, const KoAbstractGradient* gradient, const KisPaintInformation& info) const
+void KisPressureGradientOption::apply(KoColor &color, const KoAbstractGradient *gradient, const KisPaintInformation &info) const
 {
-    if (isChecked() && gradient)
+    if (isChecked() && gradient) {
         gradient->colorAt(color, computeValue(info));
+    }
 }

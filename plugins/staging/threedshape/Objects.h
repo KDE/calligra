@@ -26,12 +26,10 @@
 
 // Calligra
 
-
 // Shape
 #include "Object3D.h"
 
 class KoXmlElement;
-
 
 class Sphere : public Object3D, public KoShape
 {
@@ -48,8 +46,14 @@ public:
     virtual void saveObjectOdf(KoShapeSavingContext &context) const;
 
     // getters
-    QVector3D sphereCenter() const { return m_center; }
-    QVector3D sphereSize()   const { return m_size;   }
+    QVector3D sphereCenter() const
+    {
+        return m_center;
+    }
+    QVector3D sphereSize()   const
+    {
+        return m_size;
+    }
 
 private:
     QVector3D  m_center;
@@ -71,8 +75,14 @@ public:
     virtual void saveObjectOdf(KoShapeSavingContext &context) const;
 
     // getters
-    QVector3D minEdge() const { return m_minEdge;   }
-    QVector3D maxEdge() const { return m_maxEdge; }
+    QVector3D minEdge() const
+    {
+        return m_minEdge;
+    }
+    QVector3D maxEdge() const
+    {
+        return m_maxEdge;
+    }
 
 private:
     QVector3D  m_minEdge;
@@ -91,18 +101,36 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
+    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
 
     // Really save the object.  See the explanation in Object3D.h.
     virtual void saveObjectOdf(KoShapeSavingContext &context) const;
 
     // getters
-    QString path()       const { return m_path; }
-    QString viewBox()    const { return m_viewBox; }
-    int     depth()      const { return m_depth; }
-    bool    closeFront() const { return m_closeFront; }
-    bool    closeBack()  const { return m_closeBack; }
-    qreal   backScale()  const { return m_backScale; }
+    QString path()       const
+    {
+        return m_path;
+    }
+    QString viewBox()    const
+    {
+        return m_viewBox;
+    }
+    int     depth()      const
+    {
+        return m_depth;
+    }
+    bool    closeFront() const
+    {
+        return m_closeFront;
+    }
+    bool    closeBack()  const
+    {
+        return m_closeBack;
+    }
+    qreal   backScale()  const
+    {
+        return m_backScale;
+    }
 
 private:
     QString  m_path;            // The polygon
@@ -126,20 +154,44 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
     virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
+    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
 
     // Really save the object.  See the explanation in Object3D.h.
     virtual void saveObjectOdf(KoShapeSavingContext &context) const;
 
     // getters
-    QString path()               const { return m_path; }
-    QString viewBox()            const { return m_viewBox; }
-    int     horizontalSegments() const { return m_horizontalSegments; }
-    int     verticalSegments()   const { return m_verticalSegments; }
-    qreal   endAngle()           const { return m_endAngle; }
-    bool    closeFront()         const { return m_closeFront; }
-    bool    closeBack()          const { return m_closeBack; }
-    qreal   backScale()          const { return m_backScale; }
+    QString path()               const
+    {
+        return m_path;
+    }
+    QString viewBox()            const
+    {
+        return m_viewBox;
+    }
+    int     horizontalSegments() const
+    {
+        return m_horizontalSegments;
+    }
+    int     verticalSegments()   const
+    {
+        return m_verticalSegments;
+    }
+    qreal   endAngle()           const
+    {
+        return m_endAngle;
+    }
+    bool    closeFront()         const
+    {
+        return m_closeFront;
+    }
+    bool    closeBack()          const
+    {
+        return m_closeBack;
+    }
+    qreal   backScale()          const
+    {
+        return m_backScale;
+    }
 
 private:
     QString  m_path;               // The polygon

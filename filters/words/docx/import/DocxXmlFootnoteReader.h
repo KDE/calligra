@@ -38,7 +38,7 @@ class DocxXmlFootnoteReader : public DocxXmlDocumentReader
 public:
     explicit DocxXmlFootnoteReader(KoOdfWriters *writers);
     virtual ~DocxXmlFootnoteReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
 protected:
     KoFilter::ConversionStatus read_footnotes();
@@ -47,7 +47,7 @@ protected:
 private:
     void init();
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif //DOCXXMLFOOTNOTEREADER_H

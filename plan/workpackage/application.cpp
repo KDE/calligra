@@ -52,16 +52,16 @@
 
 KPlatoWork_Application::KPlatoWork_Application()
     : KUniqueApplication(),
-    m_mainwindow( 0 )
+      m_mainwindow(0)
 {
     // Tell the iconloader about share/apps/calligra/icons
-/*    KIconLoader::global()->addAppDir("calligra");
+    /*    KIconLoader::global()->addAppDir("calligra");
 
-    // Initialize all Calligra directories etc.
-    KoGlobal::initialize();
+        // Initialize all Calligra directories etc.
+        KoGlobal::initialize();
 
-    new KoApplicationAdaptor(this);
-    QDBusConnection::sessionBus().registerObject("/application", this);*/
+        new KoApplicationAdaptor(this);
+        QDBusConnection::sessionBus().registerObject("/application", this);*/
 }
 
 KPlatoWork_Application::~KPlatoWork_Application()
@@ -70,39 +70,39 @@ KPlatoWork_Application::~KPlatoWork_Application()
 
 int KPlatoWork_Application::newInstance()
 {
-    kDebug(planworkDbg())<<"starting------------------------";
+    kDebug(planworkDbg()) << "starting------------------------";
     int status = KUniqueApplication::newInstance(); // bring up window (if any)
-    if ( status != 0 ) {
+    if (status != 0) {
         return status;
     }
-    QList<KMainWindow*> lst = KMainWindow::memberList();
-    kDebug(planworkDbg())<<"windows"<<lst.count();
-    if ( lst.count() > 1 ) {
-        kDebug(planworkDbg())<<"windows"<<lst.count();
+    QList<KMainWindow *> lst = KMainWindow::memberList();
+    kDebug(planworkDbg()) << "windows" << lst.count();
+    if (lst.count() > 1) {
+        kDebug(planworkDbg()) << "windows" << lst.count();
         return 1; // should never happen
     }
-    if ( lst.isEmpty() ) {
-        Q_ASSERT( m_mainwindow == 0 );
+    if (lst.isEmpty()) {
+        Q_ASSERT(m_mainwindow == 0);
     }
-    if ( m_mainwindow == 0 ) {
+    if (m_mainwindow == 0) {
         m_mainwindow = new KPlatoWork_MainWindow();
         m_mainwindow->show();
     }
     // Get the command line arguments which we have to parse
-    KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     int argsCount = args->count();
-    if ( argsCount > 0 ) {
+    if (argsCount > 0) {
         //short int n=0; // number of documents open
-        for(int i=0; i < argsCount; i++ ) {
+        for (int i = 0; i < argsCount; i++) {
             // For now create an empty document
-            if ( ! m_mainwindow->openDocument( args->url(i) ) ) {
-                KMessageBox::error(0, i18n("Failed to open document") );
+            if (! m_mainwindow->openDocument(args->url(i))) {
+                KMessageBox::error(0, i18n("Failed to open document"));
             }
         }
     }
     args->clear();
     // not calling this before since the program will quit there.
-    kDebug(planworkDbg())<<"started------------------------";
+    kDebug(planworkDbg()) << "started------------------------";
     return 0;
 }
 

@@ -21,17 +21,19 @@
 #include "kis_selection.h"
 //#include "kis_node.h"
 
-KisSelectionMoveCommand2::KisSelectionMoveCommand2(KisSelectionSP object, const QPoint& oldPos, const QPoint& newPos, KUndo2Command *parent)
+KisSelectionMoveCommand2::KisSelectionMoveCommand2(KisSelectionSP object, const QPoint &oldPos, const QPoint &newPos, KUndo2Command *parent)
     : KisMoveCommandCommon<KisSelectionSP>(object, oldPos, newPos, parent)
 {
 }
 
-void KisSelectionMoveCommand2::redo() {
+void KisSelectionMoveCommand2::redo()
+{
     KisMoveCommandCommon<KisSelectionSP>::redo();
     m_object->notifySelectionChanged();
 }
 
-void KisSelectionMoveCommand2::undo() {
+void KisSelectionMoveCommand2::undo()
+{
     KisMoveCommandCommon<KisSelectionSP>::undo();
     m_object->notifySelectionChanged();
 }

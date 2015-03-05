@@ -33,8 +33,9 @@ class KoCompositeOpCopy : public KoCompositeOp
 
 public:
 
-    explicit KoCompositeOpCopy(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMix()) {
+    explicit KoCompositeOpCopy(KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMix())
+    {
     }
 
 public:
@@ -48,12 +49,13 @@ public:
                    qint32 rows,
                    qint32 numColumns,
                    quint8 opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray &channelFlags) const
+    {
 
         Q_UNUSED(channelFlags);
         Q_UNUSED(opacity);
 
-        const KoColorSpace* cs = colorSpace();
+        const KoColorSpace *cs = colorSpace();
         qint32 bytesPerPixel = cs->pixelSize();
 
         qint32 srcInc = (srcRowStride == 0) ? 0 : bytesPerPixel;
@@ -62,15 +64,15 @@ public:
         const quint8 *src = srcRowStart;
         const quint8 *mask = maskRowStart;
 
-        if (maskRowStart != 0){
+        if (maskRowStart != 0) {
             while (rows > 0) {
-                quint8* dstN = dst;
-                const quint8* srcN = src;
-                const quint8* maskN = mask;
+                quint8 *dstN = dst;
+                const quint8 *srcN = src;
+                const quint8 *maskN = mask;
                 qint32 columns = numColumns;
 
                 while (columns > 0) {
-                    if (*maskN != 0){
+                    if (*maskN != 0) {
                         memcpy(dstN, srcN, bytesPerPixel);
                     }
 
@@ -85,11 +87,10 @@ public:
                 mask += maskRowStride;
                 --rows;
             }
-        }
-        else {
+        } else {
             while (rows > 0) {
                 if (srcInc == 0) {
-                    quint8* dstN = dst;
+                    quint8 *dstN = dst;
                     qint32 columns = numColumns;
                     while (columns > 0) {
                         memcpy(dstN, src, bytesPerPixel);

@@ -20,7 +20,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KOBORDER_H
 #define KOBORDER_H
 
@@ -105,7 +104,6 @@ public:
         qreal spacing;      ///< Holds the spacing between the outer and inner lines.
     };
 
-
     /// Constructor
     KoBorder();
     KoBorder(const KoBorder &kb);
@@ -118,7 +116,10 @@ public:
 
     /// Compare the border with another one
     bool operator==(const KoBorder &other) const;
-    bool operator!=(const KoBorder &other) const { return !operator==(other); }
+    bool operator!=(const KoBorder &other) const
+    {
+        return !operator==(other);
+    }
 
     void setBorderStyle(BorderSide side, BorderStyle style);
     BorderStyle borderStyle(BorderSide side) const;
@@ -156,7 +157,6 @@ public:
     bool loadOdf(const KoStyleStack &styleStack);
     void saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type = KoGenStyle::DefaultType) const;
 
-
     // Some public functions used in other places where borders are handled.
     // Example: KoParagraphStyle
     // FIXME: These places should be made to use KoBorder instead.
@@ -164,7 +164,7 @@ public:
     static QString odfBorderStyleString(BorderStyle borderstyle);
     static QString msoBorderStyleString(BorderStyle borderstyle);
 
- private:
+private:
     void paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lineEnd,
                          BorderData *borderData, bool isVertical,
                          BorderData *neighbour1, BorderData *neighbor2,
@@ -180,6 +180,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoBorder)
-
 
 #endif

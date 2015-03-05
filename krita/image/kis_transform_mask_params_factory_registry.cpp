@@ -22,7 +22,6 @@
 
 #include "kis_transform_mask_params_interface.h"
 
-
 KisTransformMaskParamsFactoryRegistry::KisTransformMaskParamsFactoryRegistry()
 {
 }
@@ -43,7 +42,7 @@ KisTransformMaskParamsFactoryRegistry::createParams(const QString &id, const QDo
     return it != m_map.end() ? (*it)(e) : KisTransformMaskParamsInterfaceSP(0);
 }
 
-KisTransformMaskParamsFactoryRegistry*
+KisTransformMaskParamsFactoryRegistry *
 KisTransformMaskParamsFactoryRegistry::instance()
 {
     K_GLOBAL_STATIC(KisTransformMaskParamsFactoryRegistry, s_instance);

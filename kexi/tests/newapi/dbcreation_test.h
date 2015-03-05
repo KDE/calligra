@@ -22,22 +22,22 @@
 
 int dbCreationTest()
 {
-/*    if (conn->databaseExists(db_name)) {
-        if (!conn->dropDatabase(db_name)) {
+    /*    if (conn->databaseExists(db_name)) {
+            if (!conn->dropDatabase(db_name)) {
+                conn->debugError();
+                return 1;
+            }
+            kDebug() << "DB '" << db_name << "' dropped";
+        }
+        if (!conn->createDatabase(db_name)) {
             conn->debugError();
             return 1;
         }
-        kDebug() << "DB '" << db_name << "' dropped";
-    }
-    if (!conn->createDatabase(db_name)) {
-        conn->debugError();
-        return 1;
-    }
-    kDebug() << "DB '" << db_name << "' created";
-    if (!conn->useDatabase(db_name)) {
-        conn->debugError();
-        return 1;
-    }*/
+        kDebug() << "DB '" << db_name << "' created";
+        if (!conn->useDatabase(db_name)) {
+            conn->debugError();
+            return 1;
+        }*/
 
     /* KexiDB::Cursor *cursor = conn->executeQuery( "select * from osoby", KexiDB::Cursor::Buffered );
       kDebug()<<"executeQuery() = "<<!!cursor;

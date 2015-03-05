@@ -20,16 +20,15 @@
 #include "FormulaCommand.h"
 #include "FormulaCommandUpdate.h"
 #include "FormulaCursor.h"
-#include <klocale.h> 
+#include <klocale.h>
 #include "FormulaData.h"
 
-
-FormulaCommandUpdate::FormulaCommandUpdate (KoFormulaShape* shape, FormulaCommand* command )
-                    : KUndo2Command ()
+FormulaCommandUpdate::FormulaCommandUpdate(KoFormulaShape *shape, FormulaCommand *command)
+    : KUndo2Command()
 {
-    m_shape=shape;
-    m_command=command;
-    setText( m_command->text() );
+    m_shape = shape;
+    m_command = command;
+    setText(m_command->text());
 }
 
 void FormulaCommandUpdate::redo()
@@ -38,7 +37,7 @@ void FormulaCommandUpdate::redo()
     m_command->redo();
     m_shape->updateLayout();
     m_shape->update();
-    m_shape->formulaData()->notifyDataChange(m_command,false);
+    m_shape->formulaData()->notifyDataChange(m_command, false);
 }
 
 void FormulaCommandUpdate::undo()
@@ -47,6 +46,6 @@ void FormulaCommandUpdate::undo()
     m_command->undo();
     m_shape->updateLayout();
     m_shape->update();
-    m_shape->formulaData()->notifyDataChange(m_command,true);
+    m_shape->formulaData()->notifyDataChange(m_command, true);
 }
 

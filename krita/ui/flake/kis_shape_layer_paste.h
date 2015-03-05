@@ -29,27 +29,30 @@
 class KisShapeLayerShapePaste : public KoOdfPaste
 {
 public:
-    KisShapeLayerShapePaste(KoShapeLayer* _container, KoShapeBasedDocumentBase* _controller)
-            : m_container(_container)
-            , m_controller(_controller) {
+    KisShapeLayerShapePaste(KoShapeLayer *_container, KoShapeBasedDocumentBase *_controller)
+        : m_container(_container)
+        , m_controller(_controller)
+    {
     }
 
-    virtual ~KisShapeLayerShapePaste() {
+    virtual ~KisShapeLayerShapePaste()
+    {
     }
 
-    virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) {
+    virtual bool process(const KoXmlElement &body, KoOdfReadStore &odfStore)
+    {
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
         KoShapeLoadingContext context(loadingContext, m_controller ? m_controller->resourceManager() : 0);
         KoXmlElement child;
-        forEachElement(child, body) {
-            KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
+        forEachElement (child, body) {
+            KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
             if (shape) {
-                KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(m_container);
+                KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer *>(m_container);
                 if (shapeLayer) {
                     //don't update as the setDirty call would create shared pointer that would delete the layer
                     shapeLayer->addShape(shape);
                 } else {
-                    KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>(m_container);
+                    KisShapeSelection *shapeSelection = dynamic_cast<KisShapeSelection *>(m_container);
                     shapeSelection->addShape(shape);
                 }
             }
@@ -57,7 +60,7 @@ public:
         return true;
     }
 private:
-    KoShapeLayer* m_container;
-    KoShapeBasedDocumentBase* m_controller;
+    KoShapeLayer *m_container;
+    KoShapeBasedDocumentBase *m_controller;
 };
 #endif

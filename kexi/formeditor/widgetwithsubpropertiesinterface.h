@@ -46,27 +46,27 @@ public:
     void setSubwidget(QWidget *widget);
 
     //! \return the assigned subwidget.
-    QWidget* subwidget() const;
+    QWidget *subwidget() const;
 
     //! \return a set of subproperties available for this widget.
     QSet<QByteArray> subproperties() const;
 
     //! \return a metaproperty for a widget's subproperty
     //! or invalid metaproperty if there is no such subproperty.
-    QMetaProperty findMetaSubproperty(const char * name) const;
+    QMetaProperty findMetaSubproperty(const char *name) const;
 
     //! \return a value of widget's subproperty. \a ok is set to true on success
     //! and to false on failure.
-    QVariant subproperty(const char * name, bool &ok) const;
+    QVariant subproperty(const char *name, bool &ok) const;
 
     //! Sets a subproperty value \a value for a subproperty \a name
     //! \return true on successful setting and false when there
     //! is no such a subproperty in the subwidget or QObject::setProperty() failed.
-    bool setSubproperty(const char * name, const QVariant & value);
+    bool setSubproperty(const char *name, const QVariant &value);
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 }
 

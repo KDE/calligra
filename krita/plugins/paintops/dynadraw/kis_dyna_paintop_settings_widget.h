@@ -21,16 +21,15 @@
 
 #include <kis_paintop_options_widget.h>
 
-
 class KisDynaPaintOpSettingsWidget : public KisPaintOpOptionsWidget
 {
     Q_OBJECT
 
 public:
-    KisDynaPaintOpSettingsWidget(QWidget* parent = 0);
+    KisDynaPaintOpSettingsWidget(QWidget *parent = 0);
     virtual ~KisDynaPaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 };
 
 #endif

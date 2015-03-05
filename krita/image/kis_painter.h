@@ -74,7 +74,6 @@ class KisPaintOp;
 class KRITAIMAGE_EXPORT KisPainter
 {
 
-
 public:
     /// Construct painter without a device
     KisPainter();
@@ -105,10 +104,10 @@ public:
     /**
      * If set, the painter action is cancelable, if the action supports that.
      */
-    void setProgress(KoUpdater * progressUpdater);
+    void setProgress(KoUpdater *progressUpdater);
 
     /// Begin an undoable paint operation
-    void beginTransaction(const KUndo2MagicString& transactionName = KUndo2MagicString(),int timedID = -1);
+    void beginTransaction(const KUndo2MagicString &transactionName = KUndo2MagicString(), int timedID = -1);
 
     /// Cancel all the changes made by the painter
     void revertTransaction();
@@ -124,7 +123,7 @@ public:
     /**
      * Finishes a transaction and returns a pointer to its undo command
      */
-    KUndo2Command* endAndTakeTransaction();
+    KUndo2Command *endAndTakeTransaction();
 
     /**
      * Finish the transaction and delete it's undo information.
@@ -134,16 +133,14 @@ public:
     void deleteTransaction();
 
     /// continue a transaction started somewhere else
-    void putTransaction(KisTransaction* transaction);
+    void putTransaction(KisTransaction *transaction);
 
     /// take transaction out of the reach of KisPainter
-    KisTransaction* takeTransaction();
+    KisTransaction *takeTransaction();
 
     /// Returns the current paint device.
     const KisPaintDeviceSP device() const;
     KisPaintDeviceSP device();
-
-
 
     /**
      * Blast a region of srcWidth @param srcWidth and srcHeight @param srcHeight from @param
@@ -175,7 +172,7 @@ public:
      * @param srcRect replaces @param srcX, @param srcY, @param srcWidth and @param srcHeight.
      *
      */
-    void bitBlt(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect);
+    void bitBlt(const QPoint &pos, const KisPaintDeviceSP srcDev, const QRect &srcRect);
 
     /**
      * The same as @ref bitBlt() but reads data from oldData() part of the device
@@ -202,7 +199,7 @@ public:
      * @param srcRect replaces @param srcX, @param srcY, @param srcWidth and @param srcHeight.
      *
      */
-    void bitBltOldData(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect);
+    void bitBltOldData(const QPoint &pos, const KisPaintDeviceSP srcDev, const QRect &srcRect);
 
     /**
      * Blasts a @param selection of srcWidth @param srcWidth and srcHeight @param srcHeight
@@ -284,7 +281,7 @@ public:
      * @param srcRect replaces @param srcX, @param srcY, @param srcWidth and @param srcHeight.
      *
      */
-    void bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP srcDev, const QRect & srcRect);
+    void bltFixed(const QPoint &pos, const KisFixedPaintDeviceSP srcDev, const QRect &srcRect);
 
     /**
      * Blasts a @param selection of srcWidth @param srcWidth and srcHeight @param srcHeight
@@ -349,7 +346,7 @@ public:
      * @param height the height of the region to be manipulated
      * @param color the color the area is filled with
      */
-    void fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoColor& color);
+    void fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoColor &color);
 
     /**
      * First you need to setup the painter with setMirrorInformation,
@@ -441,7 +438,7 @@ public:
                               const QPointF &control1,
                               const QPointF &control2,
                               const QPointF &pos2,
-                              vQPointF& points) const;
+                              vQPointF &points) const;
 
     /**
      * Paint a rectangle.
@@ -486,7 +483,7 @@ public:
      * Paint the polygon with the points given in points. It automatically closes the polygon
      * by drawing the line from the last point to the first.
      */
-    void paintPolygon(const vQPointF& points);
+    void paintPolygon(const vQPointF &points);
 
     /** Draw a spot at pos using the currently set paint op, brush and color */
     void paintAt(const KisPaintInformation &pos,
@@ -495,32 +492,32 @@ public:
     /**
      * Stroke the given QPainterPath.
      */
-    void paintPainterPath(const QPainterPath& path);
+    void paintPainterPath(const QPainterPath &path);
 
     /**
      * Fills the area enclosed by the given QPainterPath
      * Convenience method for fillPainterPath(path, rect)
      */
-    void fillPainterPath(const QPainterPath& path);
+    void fillPainterPath(const QPainterPath &path);
 
     /**
      * Fills the portion of an area enclosed by the given QPainterPath
      *
      * \param rect the portion of the path to fill
      */
-    void fillPainterPath(const QPainterPath& path, const QRect &requestedRect);
+    void fillPainterPath(const QPainterPath &path, const QRect &requestedRect);
 
     /**
      * Draw the path using the Pen
      */
-    void drawPainterPath(const QPainterPath& path, const QPen& pen);
+    void drawPainterPath(const QPainterPath &path, const QPen &pen);
 
     /**
      * paint an unstroked one-pixel wide line from specified start position to the
      * specified end position.
      *
      */
-    void drawLine(const QPointF & start, const QPointF & end);
+    void drawLine(const QPointF &start, const QPointF &end);
 
     /**
      * paint an unstroked line with thickness from specified start position to the
@@ -528,26 +525,25 @@ public:
      */
     void drawLine(const QPointF &start, const QPointF &end, qreal width, bool antialias);
 
-
     /**
      * paints an unstroked, aliased one-pixel line using the DDA algorithm from specified start position to the
      * specified end position.
      *
      */
-    void drawDDALine(const QPointF & start, const QPointF & end);
+    void drawDDALine(const QPointF &start, const QPointF &end);
 
     /**
      * Paint an unstroked, wobbly one-pixel wide line from the specified start to the specified
      * end position.
      *
      */
-    void drawWobblyLine(const QPointF & start, const QPointF & end);
+    void drawWobblyLine(const QPointF &start, const QPointF &end);
 
     /**
      * Paint an unstroked, anti-aliased one-pixel wide line from the specified start to the specified
      * end position using the Wu algorithm
      */
-    void drawWuLine(const QPointF & start, const QPointF & end);
+    void drawWuLine(const QPointF &start, const QPointF &end);
 
     /**
      * Paint an unstroked wide line from the specified start to the specified
@@ -556,7 +552,7 @@ public:
      *
      * XXX: the width should be set in doubles, not integers.
      */
-    void drawThickLine(const QPointF & start, const QPointF & end, int startWidth, int endWidth);
+    void drawThickLine(const QPointF &start, const QPointF &end, int startWidth, int endWidth);
 
     /**
      * Set the channelflags: a bit array where true means that the
@@ -590,14 +586,14 @@ public:
      * Return the active paintop (which is created based on the specified preset and
      * will be deleted as soon as the KisPainter instance dies).
      */
-    KisPaintOp* paintOp() const;
+    KisPaintOp *paintOp() const;
 
     void setMirrorInformation(const QPointF &axesCenter, bool mirrorHorizontaly, bool mirrorVerticaly);
 
     /**
      * copy the mirror information to other painter
      */
-    void copyMirrorInformation(KisPainter * painter);
+    void copyMirrorInformation(KisPainter *painter);
 
     /**
      * Returns whether the mirroring methods will do any
@@ -606,16 +602,16 @@ public:
     bool hasMirroring() const;
 
     /// Set the current pattern
-    void setPattern(const KoPattern * pattern);
+    void setPattern(const KoPattern *pattern);
 
     /// Returns the currently set pattern
-    const KoPattern * pattern() const;
+    const KoPattern *pattern() const;
 
     /**
      * Set the color that will be used to paint with, and convert it
      * to the color space of the current paint device.
      */
-    void setPaintColor(const KoColor& color);
+    void setPaintColor(const KoColor &color);
 
     /// Returns the color that will be used to paint with
     const KoColor &paintColor() const;
@@ -624,16 +620,16 @@ public:
      * Set the current background color, and convert it
      * to the color space of the current paint device.
      */
-    void setBackgroundColor(const KoColor& color);
+    void setBackgroundColor(const KoColor &color);
 
     /// Returns the current background color
     const KoColor &backgroundColor() const;
 
     /// Set the current generator (a generator can be used to fill an area
-    void setGenerator(const KisFilterConfiguration * generator);
+    void setGenerator(const KisFilterConfiguration *generator);
 
     /// @return the current generator configuration
-    const KisFilterConfiguration * generator() const;
+    const KisFilterConfiguration *generator() const;
 
     /// This enum contains the styles with which we can fill things like polygons and ellipses
     enum FillStyle {
@@ -688,17 +684,17 @@ public:
     quint8 opacity() const;
 
     /// Set the composite op for this painter
-    void setCompositeOp(const KoCompositeOp * op);
-    const KoCompositeOp * compositeOp();
+    void setCompositeOp(const KoCompositeOp *op);
+    const KoCompositeOp *compositeOp();
 
     /// Set the composite op for this painter by string.
     /// Note: the colorspace must be set previously!
-    void setCompositeOp(const QString& op);
+    void setCompositeOp(const QString &op);
 
     /**
      * Add the r to the current dirty rect.
      */
-    void addDirtyRect(const QRect & r);
+    void addDirtyRect(const QRect &r);
 
     /**
      * Reset the selection to the given selection. All painter actions will be
@@ -711,8 +707,8 @@ public:
      */
     KisSelectionSP selection();
 
-    void setGradient(const KoAbstractGradient* gradient);
-    const KoAbstractGradient* gradient() const;
+    void setGradient(const KoAbstractGradient *gradient);
+    const KoAbstractGradient *gradient() const;
 
     /**
     * Set the size of the tile in fillPainterPath, useful when optimizing the use of fillPainterPath
@@ -744,41 +740,42 @@ protected:
     void init();
 
     /// Fill the polygon defined by points with the fillStyle
-    void fillPolygon(const vQPointF& points, FillStyle fillStyle);
+    void fillPolygon(const vQPointF &points, FillStyle fillStyle);
 
 private:
 
-    KisPainter(const KisPainter&);
-    KisPainter& operator=(const KisPainter&);
+    KisPainter(const KisPainter &);
+    KisPainter &operator=(const KisPainter &);
 
-    float frac(float value) {
+    float frac(float value)
+    {
         float tmp = 0;
-        return modff(value , &tmp);
+        return modff(value, &tmp);
     }
 
-    float invertFrac(float value) {
+    float invertFrac(float value)
+    {
         float tmp = 0;
-        return 1.0f - modff(value , &tmp);
+        return 1.0f - modff(value, &tmp);
     }
 
 protected:
-    KoUpdater * progressUpdater();
+    KoUpdater *progressUpdater();
 
 private:
     template <bool useOldSrcData>
-        void bitBltImpl(qint32 dstX, qint32 dstY,
-                        const KisPaintDeviceSP srcDev,
-                        qint32 srcX, qint32 srcY,
-                        qint32 srcWidth, qint32 srcHeight);
+    void bitBltImpl(qint32 dstX, qint32 dstY,
+                    const KisPaintDeviceSP srcDev,
+                    qint32 srcX, qint32 srcY,
+                    qint32 srcWidth, qint32 srcHeight);
 
     inline void compositeOnePixel(quint8 *dst, const KoColor &color);
 
 private:
 
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 #endif // KIS_PAINTER_H_
 

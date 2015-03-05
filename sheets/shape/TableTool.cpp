@@ -60,28 +60,27 @@ using namespace Calligra::Sheets;
 class TableTool::Private
 {
 public:
-    Selection* selection;
-    TableShape* tableShape;
+    Selection *selection;
+    TableShape *tableShape;
 
-    KComboBox* sheetComboBox;
+    KComboBox *sheetComboBox;
 };
 
-
-TableTool::TableTool(KoCanvasBase* canvas)
-        : CellToolBase(canvas)
-        , d(new Private)
+TableTool::TableTool(KoCanvasBase *canvas)
+    : CellToolBase(canvas)
+    , d(new Private)
 {
     setObjectName(QLatin1String("TableTool"));
 
     d->selection = new Selection(canvas);
     d->tableShape = 0;
 
-    KAction* importAction = new KAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
+    KAction *importAction = new KAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
     importAction->setIconText(i18n("Import"));
     addAction("import", importAction);
     connect(importAction, SIGNAL(triggered()), this, SLOT(importDocument()));
 
-    KAction* exportAction = new KAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
+    KAction *exportAction = new KAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
     exportAction->setIconText(i18n("Export"));
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportDocument()));
@@ -96,28 +95,33 @@ TableTool::~TableTool()
 void TableTool::importDocument()
 {
     QString file = KFileDialog::getOpenFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Import");
-    if (file.isEmpty())
+    if (file.isEmpty()) {
         return;
+    }
 #if 0 // FIXME Stefan: Port!
     d->tableShape->doc()->setModified(false);
-    if (! d->tableShape->doc()->importDocument(file))
+    if (! d->tableShape->doc()->importDocument(file)) {
         return;
+    }
 #endif
     updateSheetsList();
-    if (Sheet* sheet = d->tableShape->sheet()) {
+    if (Sheet *sheet = d->tableShape->sheet()) {
         QRect area = sheet->usedArea();
-        if (area.width() > d->tableShape->columns())
+        if (area.width() > d->tableShape->columns()) {
             d->tableShape->setColumns(area.width());
-        if (area.height() > d->tableShape->rows())
+        }
+        if (area.height() > d->tableShape->rows()) {
             d->tableShape->setRows(area.height());
+        }
     }
 }
 
 void TableTool::exportDocument()
 {
     QString file = KFileDialog::getSaveFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Export");
-    if (file.isEmpty())
+    if (file.isEmpty()) {
         return;
+    }
 #if 0 // FIXME Stefan: Port!
     d->tableShape->doc()->exportDocument(file);
 #endif
@@ -125,22 +129,25 @@ void TableTool::exportDocument()
 
 void TableTool::repaintDecorations()
 {
-    if (!d->tableShape) return;
+    if (!d->tableShape) {
+        return;
+    }
     // TODO Stefan: restrict to the changed area
     canvas()->updateCanvas(d->tableShape->boundingRect());
 }
 
-Selection* TableTool::selection()
+Selection *TableTool::selection()
 {
     return d->selection;
 }
 
-void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
-    foreach(KoShape* shape, shapes) {
-        d->tableShape = dynamic_cast<TableShape*>(shape);
-        if (d->tableShape)
+    foreach (KoShape *shape, shapes) {
+        d->tableShape = dynamic_cast<TableShape *>(shape);
+        if (d->tableShape) {
             break;
+        }
     }
     if (!d->tableShape) {
         kWarning() << "No table shape found in selection.";
@@ -186,7 +193,7 @@ int TableTool::maxRow() const
     return d->tableShape->rows();
 }
 
-SheetView* TableTool::sheetView(const Sheet* sheet) const
+SheetView *TableTool::sheetView(const Sheet *sheet) const
 {
     Q_UNUSED(sheet);
     return d->tableShape->sheetView();
@@ -209,19 +216,21 @@ void TableTool::updateSheetsList()
     d->sheetComboBox->blockSignals(true);
     d->sheetComboBox->clear();
     Map *map = d->tableShape->map();
-    foreach(Sheet* sheet, map->sheetList()) {
-        if (sheet->isHidden())
+    foreach (Sheet *sheet, map->sheetList()) {
+        if (sheet->isHidden()) {
             continue;
+        }
         d->sheetComboBox->addItem(sheet->sheetName());
         //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
     }
     d->sheetComboBox->blockSignals(false);
 }
 
-void TableTool::sheetActivated(const QString& sheetName)
+void TableTool::sheetActivated(const QString &sheetName)
 {
-    if (d->tableShape)
+    if (d->tableShape) {
         d->tableShape->setSheet(sheetName);
+    }
 }
 
 void TableTool::sheetsBtnClicked()
@@ -230,7 +239,7 @@ void TableTool::sheetsBtnClicked()
     dialog->setCaption(i18n("Sheets"));
     dialog->setButtons(KDialog::Ok);
     dialog->setFaceType(KPageDialog::Plain);
-    SheetsEditor* editor = new SheetsEditor(d->tableShape);
+    SheetsEditor *editor = new SheetsEditor(d->tableShape);
     dialog->setMainWidget(editor);
     dialog->exec();
     updateSheetsList();
@@ -239,27 +248,27 @@ void TableTool::sheetsBtnClicked()
 
 QList<QPointer<QWidget> > TableTool::createOptionWidgets()
 {
-    QWidget* optionWidget = new QWidget();
+    QWidget *optionWidget = new QWidget();
     optionWidget->setObjectName(QLatin1String("TableTool/Table Options"));
 
-    QVBoxLayout* l = new QVBoxLayout(optionWidget);
+    QVBoxLayout *l = new QVBoxLayout(optionWidget);
     l->setMargin(0);
     optionWidget->setLayout(l);
 
-    QGridLayout* layout = new QGridLayout();
+    QGridLayout *layout = new QGridLayout();
     l->addLayout(layout);
 
-    QLabel* label = 0;
-    QSpinBox* spinBox = 0;
+    QLabel *label = 0;
+    QSpinBox *spinBox = 0;
 
-    QHBoxLayout* sheetlayout = new QHBoxLayout();
+    QHBoxLayout *sheetlayout = new QHBoxLayout();
     sheetlayout->setMargin(0);
     sheetlayout->setSpacing(3);
     layout->addLayout(sheetlayout, 0, 1);
     d->sheetComboBox = new KComboBox(optionWidget);
     sheetlayout->addWidget(d->sheetComboBox, 1);
     Map *map = d->tableShape->map();
-    foreach(Sheet* s, map->sheetList()) {
+    foreach (Sheet *s, map->sheetList()) {
         d->sheetComboBox->addItem(s->sheetName());
         //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
     }
@@ -299,7 +308,7 @@ QList<QPointer<QWidget> > TableTool::createOptionWidgets()
 //layout->setColumnStretch( 1, 1 );
     layout->setRowStretch(4, 1);
 
-    QToolBar* tb = new QToolBar(optionWidget);
+    QToolBar *tb = new QToolBar(optionWidget);
     l->addWidget(tb);
     tb->setMovable(false);
     tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);

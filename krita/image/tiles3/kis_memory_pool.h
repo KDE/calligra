@@ -67,21 +67,24 @@ template<class T, int SIZE>
 class KisMemoryPool
 {
 public:
-    KisMemoryPool() {
+    KisMemoryPool()
+    {
         INIT_STATUS_VAR();
     }
 
-    ~KisMemoryPool() {
-        for(qint32 i = 0; i < SIZE; i++) {
+    ~KisMemoryPool()
+    {
+        for (qint32 i = 0; i < SIZE; i++) {
             free(m_array[i]);
         }
         REPORT_STATUS();
     }
 
-    inline void push(void *ptr) {
-        if(m_allocated < SIZE) {
-            for(qint32 i = 0; i < SIZE; i++) {
-                if(m_array[i].testAndSetOrdered(0, ptr)) {
+    inline void push(void *ptr)
+    {
+        if (m_allocated < SIZE) {
+            for (qint32 i = 0; i < SIZE; i++) {
+                if (m_array[i].testAndSetOrdered(0, ptr)) {
                     m_allocated.ref();
                     return;
                 }
@@ -90,10 +93,11 @@ public:
         free(ptr);
     }
 
-    inline void* pop() {
-        if(m_allocated > 0) {
+    inline void *pop()
+    {
+        if (m_allocated > 0) {
             void *ptr;
-            for(qint32 i = 0; i < SIZE; i++) {
+            for (qint32 i = 0; i < SIZE; i++) {
                 ptr = m_array[i].fetchAndStoreOrdered(0);
                 if (ptr) {
                     m_allocated.deref();
@@ -112,7 +116,6 @@ private:
     DECLARE_STATUS_VAR()
 };
 
-
 #define POOL_OPERATORS(T)                                               \
     void* operator new(size_t size) {                                   \
         return size == sizeof(T) ? __m_pool.pop() : malloc(size);       \
@@ -127,9 +130,6 @@ private:
 
 #define DEFINE_POOL(T,SIZE)                     \
     KisMemoryPool<T,SIZE> T::__m_pool
-
-
-
 
 #endif /* __KIS_MEMORY_POOL_H */
 

@@ -31,18 +31,17 @@
 #include "kis_debug.h"
 #include "kis_serializable_configuration.h"
 
-
 const char KisBookmarkedConfigurationManager::ConfigDefault[] = "Default";
 const char KisBookmarkedConfigurationManager::ConfigLastUsed[] = "Last Used";
 
 struct KisBookmarkedConfigurationManager::Private {
 
     QString configEntryGroup;
-    KisSerializableConfigurationFactory* configFactory;
+    KisSerializableConfigurationFactory *configFactory;
 
 };
 
-KisBookmarkedConfigurationManager::KisBookmarkedConfigurationManager(const QString & configEntryGroup, KisSerializableConfigurationFactory* configFactory)
+KisBookmarkedConfigurationManager::KisBookmarkedConfigurationManager(const QString &configEntryGroup, KisSerializableConfigurationFactory *configFactory)
     : d(new Private)
 {
     d->configEntryGroup = configEntryGroup;
@@ -55,33 +54,36 @@ KisBookmarkedConfigurationManager::~KisBookmarkedConfigurationManager()
     delete d;
 }
 
-KisSerializableConfiguration* KisBookmarkedConfigurationManager::load(const QString & configname) const
+KisSerializableConfiguration *KisBookmarkedConfigurationManager::load(const QString &configname) const
 {
     if (!exists(configname)) {
-        if (configname == KisBookmarkedConfigurationManager::ConfigDefault)
+        if (configname == KisBookmarkedConfigurationManager::ConfigDefault) {
             return d->configFactory->createDefault();
-        else
+        } else {
             return 0;
+        }
     }
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
 
     QDomDocument doc;
     doc.setContent(cfg.readEntry<QString>(configname, ""));
     QDomElement e = doc.documentElement();
-    KisSerializableConfiguration* config = d->configFactory->create(e);
+    KisSerializableConfiguration *config = d->configFactory->create(e);
     dbgImage << config << endl;
     return config;
 }
 
-void KisBookmarkedConfigurationManager::save(const QString & configname, const KisSerializableConfiguration* config)
+void KisBookmarkedConfigurationManager::save(const QString &configname, const KisSerializableConfiguration *config)
 {
     dbgImage << "Saving configuration " << config << " to " << configname;
-    if (!config) return;
+    if (!config) {
+        return;
+    }
     KConfigGroup cfg = KGlobal::config()->group(configEntryGroup());
     cfg.writeEntry(configname, config->toXML());
 }
 
-bool KisBookmarkedConfigurationManager::exists(const QString & configname) const
+bool KisBookmarkedConfigurationManager::exists(const QString &configname) const
 {
     KSharedConfig::Ptr cfg = KGlobal::config();
     QMap< QString, QString > m = cfg->entryMap(configEntryGroup());
@@ -94,7 +96,7 @@ QList<QString> KisBookmarkedConfigurationManager::configurations() const
     QMap< QString, QString > m = cfg->entryMap(configEntryGroup());
     QList<QString> keys = m.keys();
     QList<QString> configsKey;
-    foreach(const QString & key, keys) {
+    foreach (const QString &key, keys) {
         if (key != KisBookmarkedConfigurationManager::ConfigDefault && key != KisBookmarkedConfigurationManager::ConfigLastUsed) {
             configsKey << key;
         }
@@ -102,7 +104,7 @@ QList<QString> KisBookmarkedConfigurationManager::configurations() const
     return configsKey;
 }
 
-KisSerializableConfiguration* KisBookmarkedConfigurationManager::defaultConfiguration() const
+KisSerializableConfiguration *KisBookmarkedConfigurationManager::defaultConfiguration() const
 {
     if (exists(KisBookmarkedConfigurationManager::ConfigDefault)) {
         return load(KisBookmarkedConfigurationManager::ConfigDefault);
@@ -118,14 +120,14 @@ QString KisBookmarkedConfigurationManager::configEntryGroup() const
     return d->configEntryGroup;
 }
 
-void KisBookmarkedConfigurationManager::remove(const QString & name)
+void KisBookmarkedConfigurationManager::remove(const QString &name)
 {
     KSharedConfig::Ptr cfg = KGlobal::config();
     KConfigGroup group = cfg->group(configEntryGroup());
     group.deleteEntry(name);
 }
 
-QString KisBookmarkedConfigurationManager::uniqueName(const KLocalizedString & base)
+QString KisBookmarkedConfigurationManager::uniqueName(const KLocalizedString &base)
 {
 #ifndef QT_NO_DEBUG
     QString prev;
@@ -133,7 +135,9 @@ QString KisBookmarkedConfigurationManager::uniqueName(const KLocalizedString & b
     int nb = 1;
     while (true) {
         QString cur = base.subs(nb++).toString();
-        if (!exists(cur)) return cur;
+        if (!exists(cur)) {
+            return cur;
+        }
 #ifndef QT_NO_DEBUG
         Q_ASSERT(prev != cur);
         prev = cur;

@@ -48,7 +48,6 @@ void KisColorSourceOption::Private::addType(KisColorSourceOption::Type _type, Ko
     id2type[_id.id()] = _type;
 }
 
-
 KisColorSourceOption::KisColorSourceOption() : d(new Private)
 {
     if (Private::type2id.isEmpty()) {
@@ -66,18 +65,18 @@ KisColorSourceOption::~KisColorSourceOption()
     delete d;
 }
 
-void KisColorSourceOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisColorSourceOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty("ColorSource/Type", Private::type2id.value(d->type).id());
 }
 
-void KisColorSourceOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisColorSourceOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     QString colorSourceType = setting->getString("ColorSource/Type", "plain");
     d->type = Private::id2type.value(colorSourceType, PLAIN);
 }
 
-KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _painter) const
+KisColorSource *KisColorSourceOption::createColorSource(const KisPainter *_painter) const
 {
     switch (d->type) {
     case PLAIN:
@@ -89,12 +88,12 @@ KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _paint
     case TOTAL_RANDOM:
         return new KisTotalRandomColorSource();
     case PATTERN: {
-        KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
+        KisPaintDevice *dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
         dev->convertFromQImage(_painter->pattern()->pattern(), 0);
         return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), false);
     }
     case PATTERN_LOCKED: {
-        KisPaintDevice* dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
+        KisPaintDevice *dev = new KisPaintDevice(_painter->paintColor().colorSpace(), _painter->pattern()->name());
         dev->convertFromQImage(_painter->pattern()->pattern(), 0);
         return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), true);
 
@@ -114,7 +113,7 @@ void KisColorSourceOption::setColorSourceType(Type _type)
     d->type = _type;
 }
 
-void KisColorSourceOption::setColorSourceType(const QString& _id)
+void KisColorSourceOption::setColorSourceType(const QString &_id)
 {
     d->type = Private::id2type[_id];
 }

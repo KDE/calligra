@@ -34,38 +34,35 @@
 // libodfreader
 #include "OdfReaderContext.h"
 
-
 class QFile;
 class KoStore;
 class KoOdfStyle;
 class KoOdfListStyle;
 
-
 class OdfReaderWikiContext : public OdfReaderContext
 {
- public:
+public:
     OdfReaderWikiContext(KoStore *store, QFile &file);
     virtual ~OdfReaderWikiContext();
 
-    void pushStyle(KoOdfStyle*);
+    void pushStyle(KoOdfStyle *);
     KoOdfStyle *popStyle();
     KoOdfStyle *styleTop();
 
-    void pushListStyle(KoOdfListStyle*);
+    void pushListStyle(KoOdfListStyle *);
     KoOdfListStyle *popListStyle();
     KoOdfListStyle *listStyleTop();
 
- private:
+private:
     friend class OdtReaderWikiBackend;
 
     QTextStream outStream;
 
-    QStack<KoOdfStyle*> styleStack;
-    QStack<KoOdfListStyle*> listStyleStack;
+    QStack<KoOdfStyle *> styleStack;
+    QStack<KoOdfListStyle *> listStyleStack;
 
     int listLevelCounter;       // FIXME: rename to currentListLevel
     int outlineLevel;           // FIXME: rename to currentOutlineLevel
 };
-
 
 #endif // ODFREADERWIKICONTEXT_H

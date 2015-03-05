@@ -26,7 +26,6 @@
 #include "recorder/kis_recorded_path_paint_action.h"
 #include "recorder/kis_node_query_path.h"
 
-
 KisRecordingAdapter::KisRecordingAdapter()
     : m_pathPaintAction(0)
 {
@@ -60,7 +59,6 @@ void KisRecordingAdapter::endStroke()
     m_image = 0;
 }
 
-
 void KisRecordingAdapter::addPoint(const KisPaintInformation &pi)
 {
     m_pathPaintAction->addPoint(pi);
@@ -71,7 +69,6 @@ void KisRecordingAdapter::addLine(const KisPaintInformation &pi1,
 {
     m_pathPaintAction->addLine(pi1, pi2);
 }
-
 
 void KisRecordingAdapter::addCurve(const KisPaintInformation &pi1,
                                    const QPointF &control1,

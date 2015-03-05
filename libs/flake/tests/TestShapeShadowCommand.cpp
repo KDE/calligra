@@ -25,10 +25,10 @@
 
 void TestShapeShadowCommand::refCounting()
 {
-    MockShape * shape1 = new MockShape();
-    KoShapeShadow * shadow1 = new KoShapeShadow();
-    KoShapeShadow * shadow2 = new KoShapeShadow();
-    KoShapeShadow * shadow3 = new KoShapeShadow();
+    MockShape *shape1 = new MockShape();
+    KoShapeShadow *shadow1 = new KoShapeShadow();
+    KoShapeShadow *shadow2 = new KoShapeShadow();
+    KoShapeShadow *shadow3 = new KoShapeShadow();
 
     shape1->setShadow(shadow1);
     QVERIFY(shape1->shadow() == shadow1);

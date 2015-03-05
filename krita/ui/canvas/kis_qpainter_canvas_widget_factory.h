@@ -26,7 +26,7 @@
 class KisQPainterCanvasWidgetFactory : public KisAbstractCanvasWidgetFactory
 {
 public:
-    virtual KisCanvasWidgetBase* create(KisCanvas2* canvas, KisCoordinatesConverter* converter, QWidget* parent);
+    virtual KisCanvasWidgetBase *create(KisCanvas2 *canvas, KisCoordinatesConverter *converter, QWidget *parent);
 };
 
 #endif // KISQPAINTERCANVASWIDGETFACTORY_H

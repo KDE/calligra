@@ -23,7 +23,6 @@
 
 #include "kis_mask_generator.h"
 
-
 /**
  * Create, serialize and deserialize an elliptical 8-bit mask.
  */
@@ -41,20 +40,21 @@ public:
 
     virtual bool shouldVectorize() const;
 
-    KisBrushMaskApplicatorBase* applicator();
+    KisBrushMaskApplicatorBase *applicator();
 
     virtual void setSoftness(qreal softness);
     virtual void setScale(qreal scaleX, qreal scaleY);
 
 private:
 
-    qreal norme(qreal a, qreal b) const {
-        return a*a + b * b;
+    qreal norme(qreal a, qreal b) const
+    {
+        return a * a + b * b;
     }
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

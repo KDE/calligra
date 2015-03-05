@@ -27,7 +27,6 @@
 
 #include <QWidget>
 
-
 namespace KPlato
 {
 
@@ -37,36 +36,37 @@ class ScheduleManager;
 class MacroCommand;
 
 //------------------------
-class TaskProgressPanelImpl : public QWidget, public Ui_TaskProgressPanelBase {
+class TaskProgressPanelImpl : public QWidget, public Ui_TaskProgressPanelBase
+{
     Q_OBJECT
 public:
-    explicit TaskProgressPanelImpl( Task &task, QWidget *parent=0 );
-    
+    explicit TaskProgressPanelImpl(Task &task, QWidget *parent = 0);
+
     void enableWidgets();
-    
-    void setYear( int year );
-    
+
+    void setYear(int year);
+
 Q_SIGNALS:
     void changed();
-    
+
 public Q_SLOTS:
     void slotChanged();
-    void slotEditmodeChanged( int idx );
+    void slotEditmodeChanged(int idx);
     void slotStartedChanged(bool state);
     void slotFinishedChanged(bool state);
     void slotPercentFinishedChanged(int value);
-    void slotStartTimeChanged( const QDateTime &dt );
-    void slotFinishTimeChanged( const QDateTime &dt );
+    void slotStartTimeChanged(const QDateTime &dt);
+    void slotFinishTimeChanged(const QDateTime &dt);
     void slotEntryChanged();
-    void slotSelectionChanged( const QItemSelection &sel );
+    void slotSelectionChanged(const QItemSelection &sel);
 
     void slotPrevWeekBtnClicked();
     void slotNextWeekBtnClicked();
-    
+
 protected Q_SLOTS:
     void slotCalculateEffort();
-    void slotFillWeekNumbers( int year );
-    
+    void slotFillWeekNumbers(int year);
+
 protected:
     void setFinished();
 
@@ -74,7 +74,7 @@ protected:
     Completion &m_original;
     Completion m_completion;
     int m_dayLength;
-    
+
     Duration scheduledEffort;
     int m_weekOffset;
     int m_year;
@@ -83,23 +83,24 @@ protected:
 
 };
 
-class KPLATOUI_EXPORT TaskProgressPanel : public TaskProgressPanelImpl {
+class KPLATOUI_EXPORT TaskProgressPanel : public TaskProgressPanelImpl
+{
     Q_OBJECT
 public:
-    explicit TaskProgressPanel( Task &task, ScheduleManager *sm, StandardWorktime *workTime=0, QWidget *parent=0 );
+    explicit TaskProgressPanel(Task &task, ScheduleManager *sm, StandardWorktime *workTime = 0, QWidget *parent = 0);
 
     MacroCommand *buildCommand();
-    
-    static MacroCommand *buildCommand( const Project &project, Completion &org, Completion &curr );
+
+    static MacroCommand *buildCommand(const Project &project, Completion &org, Completion &curr);
 
 protected Q_SLOTS:
-    void slotWeekNumberChanged( int );
+    void slotWeekNumberChanged(int);
     void slotAddResource();
-    void slotEntryAdded( const QDate &date);
+    void slotEntryAdded(const QDate &date);
 
 protected:
-    void setEstimateScales( int day );
-    
+    void setEstimateScales(int day);
+
 };
 
 }  //KPlato namespace

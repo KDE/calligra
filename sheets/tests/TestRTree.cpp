@@ -10,15 +10,18 @@ class TestClass : public QSharedData
 {
 public:
     TestClass() : member() {}
-    TestClass(const QString& m) : member(m) {}
+    TestClass(const QString &m) : member(m) {}
     virtual ~TestClass() {}
-    virtual int type() const {
+    virtual int type() const
+    {
         return 0;
     }
-    bool operator<(const TestClass& other) const {
+    bool operator<(const TestClass &other) const
+    {
         return member < other.member;
     }
-    bool operator==(const TestClass& other) const {
+    bool operator==(const TestClass &other) const
+    {
         return member == other.member;
     }
     QString member;
@@ -28,14 +31,17 @@ class SharedTestClass
 {
 public:
     SharedTestClass() : d(new TestClass()) {}
-    SharedTestClass(TestClass* subStyle) : d(subStyle) {}
-    inline const TestClass *operator->() const {
+    SharedTestClass(TestClass *subStyle) : d(subStyle) {}
+    inline const TestClass *operator->() const
+    {
         return d.data();
     }
-    bool operator<(const SharedTestClass& o) const {
+    bool operator<(const SharedTestClass &o) const
+    {
         return d->operator<(*o.d.data());
     }
-    bool operator==(const SharedTestClass& o) const {
+    bool operator==(const SharedTestClass &o) const
+    {
         return d->operator==(*o.d.data());
     }
 
@@ -47,8 +53,9 @@ class DerivedClass : public TestClass
 {
 public:
     DerivedClass() : TestClass() {}
-    DerivedClass(const QString& s) : TestClass(s) {}
-    virtual int type() const {
+    DerivedClass(const QString &s) : TestClass(s) {}
+    virtual int type() const
+    {
         return 1;
     }
 };

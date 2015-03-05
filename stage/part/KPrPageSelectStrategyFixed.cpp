@@ -20,7 +20,7 @@
 #include "KPrPageSelectStrategyFixed.h"
 
 KPrPageSelectStrategyFixed::KPrPageSelectStrategyFixed(const KoPAPageBase *page)
-: m_page(page)
+    : m_page(page)
 {
 }
 

@@ -73,10 +73,10 @@ Q_SIGNALS:
     void findDocumentSetPrevious(QTextDocument *document);
 
 private:
-    KoFindPrivate * const d;
+    KoFindPrivate *const d;
     friend class KoFindPrivate;
 
-    Q_PRIVATE_SLOT(d, void resourceChanged(int, const QVariant&))
+    Q_PRIVATE_SLOT(d, void resourceChanged(int, const QVariant &))
     Q_PRIVATE_SLOT(d, void findActivated())
     Q_PRIVATE_SLOT(d, void findNextActivated())
     Q_PRIVATE_SLOT(d, void findPreviousActivated())

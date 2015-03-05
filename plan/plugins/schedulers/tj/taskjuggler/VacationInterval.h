@@ -29,22 +29,33 @@ public:
         name()
     { }
 
-    VacationInterval(const QString& n, const Interval& i) :
+    VacationInterval(const QString &n, const Interval &i) :
         Interval(i),
         name(n)
     { }
 
     virtual ~VacationInterval() { }
 
-    void setStart(time_t s) { start = s; }
-    void setEnd(time_t e) { end = e; }
-    void setName(const QString& n) { name = n; }
-    const QString& getName() const { return name; }
-    
+    void setStart(time_t s)
+    {
+        start = s;
+    }
+    void setEnd(time_t e)
+    {
+        end = e;
+    }
+    void setName(const QString &n)
+    {
+        name = n;
+    }
+    const QString &getName() const
+    {
+        return name;
+    }
 
 private:
     QString name;
-} ;
+};
 
 } // namespace TJ
 

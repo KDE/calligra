@@ -65,13 +65,14 @@ void Cell::analyzeText(const QDomNode node)
 /*******************************************/
 /* generate                                */
 /*******************************************/
-void Cell::generate(QTextStream& out, Table* table)
+void Cell::generate(QTextStream &out, Table *table)
 {
     /*if(getMulticol() > 0)
      out << "\\multicol{" << getMulticol() << "}{";
     else*/
-    if (getMultirow() > 0)
+    if (getMultirow() > 0) {
         out << "\\multirow{" << getMultirow() << "}{";
+    }
     kDebug(30522) << "Generate cell...";
 
     out << "\\multicolumn{1}{";
@@ -87,8 +88,9 @@ void Cell::generate(QTextStream& out, Table* table)
 
     /*if(getColSpan() > 0)
      out << "}" << endl;
-    else*/ if (getMultirow() > 0)
+    else*/ if (getMultirow() > 0) {
         out << "}" << endl;
+    }
 
     /*Element* elt = 0;
     kDebug(30522) <<"GENERATION OF A TABLE" << count();

@@ -37,7 +37,6 @@ void MobiFile:: addContentImage(int id, QByteArray content)
     m_imageContent.insert(id, content);
 }
 
-
 KoFilter::ConversionStatus MobiFile::writeMobiFile(QString outputFile, MobiHeaderGenerator &headerGenerator)
 {
     QFile mobi(outputFile);
@@ -212,7 +211,7 @@ void MobiFile::writePalmDataBaseHeader(QDataStream &out, MobiHeaderGenerator &he
     out << headers.m_dbHeader->nextRecordIdList;
     out << headers.m_dbHeader->numberOfRecords;
 
-    for(int offset = 0; offset < headers.m_dbHeader->recordsInfo.size(); offset++) {
+    for (int offset = 0; offset < headers.m_dbHeader->recordsInfo.size(); offset++) {
         out << qint32(headers.m_dbHeader->recordsInfo.key(offset));
         out << qint32((2 * offset));
     }

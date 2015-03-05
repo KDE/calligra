@@ -89,7 +89,7 @@ struct KoPageLayout {
     KoBorder  border;
 
     KOODF_EXPORT bool operator==(const KoPageLayout &l) const;
-    KOODF_EXPORT bool operator!=(const KoPageLayout& l) const;
+    KOODF_EXPORT bool operator!=(const KoPageLayout &l) const;
 
     /**
      * Save this page layout to ODF.

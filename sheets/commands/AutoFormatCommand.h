@@ -47,10 +47,10 @@ public:
      */
     virtual ~AutoFormatCommand();
 
-    void setStyles(const QList<Style>& styles);
+    void setStyles(const QList<Style> &styles);
 
 protected:
-    virtual bool process(Element* element);
+    virtual bool process(Element *element);
     virtual bool preProcessing();
     virtual bool mainProcessing();
 

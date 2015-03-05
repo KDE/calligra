@@ -40,10 +40,12 @@ public:
     virtual QVariant value(unsigned int) const;
     virtual QVariant value(const QString &field) const;
 
-    virtual bool open() {
+    virtual bool open()
+    {
         return true;
     }
-    virtual bool close() {
+    virtual bool close()
+    {
         return true;
     }
     virtual bool moveNext();
@@ -57,7 +59,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

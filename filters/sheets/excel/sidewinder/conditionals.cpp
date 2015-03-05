@@ -56,13 +56,13 @@ Conditional::Conditional(const Conditional &c)
     assign(c);
 }
 
-Conditional& Conditional::operator=(const Conditional& c)
+Conditional &Conditional::operator=(const Conditional &c)
 {
     Format::assign(c);
     return assign(c);
 }
 
-Conditional& Conditional::assign(const Conditional &c)
+Conditional &Conditional::assign(const Conditional &c)
 {
     *d = *c.d;
     cond = c.cond;

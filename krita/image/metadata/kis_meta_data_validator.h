@@ -46,31 +46,31 @@ public:
         };
     private:
         Reason(Type type = UNKNOWN_REASON);
-        Reason(const Reason&);
-        Reason& operator=(const Reason&);
+        Reason(const Reason &);
+        Reason &operator=(const Reason &);
     public:
         ~Reason();
         Type type() const;
     private:
         struct Private;
-        Private* const d;
+        Private *const d;
     };
 public:
     /**
      * Validate a store. This constructore will call the \ref revalidate function.
      */
-    Validator(const Store*);
+    Validator(const Store *);
     ~Validator();
     int countInvalidEntries() const;
     int countValidEntries() const;
-    const QMap<QString, Reason>& invalidEntries() const;
+    const QMap<QString, Reason> &invalidEntries() const;
     /**
      * Call this function to revalidate the store.
      */
     void revalidate();
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 }
 

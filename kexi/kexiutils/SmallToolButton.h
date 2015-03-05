@@ -31,24 +31,24 @@ class KEXIUTILS_EXPORT KexiSmallToolButton : public QToolButton
 {
     Q_OBJECT
 public:
-    explicit KexiSmallToolButton(QWidget* parent = 0);
+    explicit KexiSmallToolButton(QWidget *parent = 0);
 
-    explicit KexiSmallToolButton(const QString& text, QWidget* parent = 0);
+    explicit KexiSmallToolButton(const QString &text, QWidget *parent = 0);
 
-    KexiSmallToolButton(const KIcon& icon, const QString& text, QWidget* parent = 0);
+    KexiSmallToolButton(const KIcon &icon, const QString &text, QWidget *parent = 0);
 
-    explicit KexiSmallToolButton(QAction *action, QWidget* parent = 0);
+    explicit KexiSmallToolButton(QAction *action, QWidget *parent = 0);
 
     virtual ~KexiSmallToolButton();
 
     void updateAction();
 
-    virtual void setIcon(const QIcon& icon);
+    virtual void setIcon(const QIcon &icon);
     virtual void setIcon(const QString &iconName);
-    virtual void setText(const QString& text);
+    virtual void setText(const QString &text);
     void setToolButtonStyle(Qt::ToolButtonStyle style);
     virtual QSize sizeHint() const;
-    QAction* action() const;
+    QAction *action() const;
 
 protected Q_SLOTS:
     void slotActionChanged();
@@ -56,11 +56,11 @@ protected Q_SLOTS:
     void slotActionToggled(bool checked);
 
 protected:
-    void update(const QString& text, const QIcon& icon, bool tipToo = false);
+    void update(const QString &text, const QIcon &icon, bool tipToo = false);
     void init();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 class QStyleOption;
@@ -84,7 +84,7 @@ protected:
 private:
     class Private;
 
-    Private* const d;
+    Private *const d;
 };
 
 #endif

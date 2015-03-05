@@ -27,8 +27,8 @@ public:
 };
 
 KexiDataAwareWidgetInfo::KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f)
-        : KFormDesigner::WidgetInfo(f)
-        , d( new Private )
+    : KFormDesigner::WidgetInfo(f)
+    , d(new Private)
 {
     init();
 }

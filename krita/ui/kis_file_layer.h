@@ -23,8 +23,6 @@
 #include "kis_external_layer_iface.h"
 #include "kis_safe_document_loader.h"
 
-
-
 /**
  * @brief The KisFileLayer class loads a particular file as a layer into the layer stack.
  */
@@ -39,9 +37,9 @@ public:
         ToImagePPI
     };
 
-    explicit KisFileLayer(KisImageWSP image, const QString& basePath, const QString &filename, ScalingMethod scalingMethod, const QString &name, quint8 opacity);
+    explicit KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scalingMethod, const QString &name, quint8 opacity);
     ~KisFileLayer();
-    KisFileLayer(const KisFileLayer& rhs);
+    KisFileLayer(const KisFileLayer &rhs);
 
     void resetCache();
 
@@ -56,15 +54,15 @@ public:
     QString path() const;
 
     ScalingMethod scalingMethod() const;
-    
+
     KisNodeSP clone() const;
     bool allowAsChild(KisNodeSP) const;
 
-    bool accept(KisNodeVisitor&);
+    bool accept(KisNodeVisitor &);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
-    KUndo2Command* crop(const QRect & rect);
-    KUndo2Command* transform(const QTransform &transform);
+    KUndo2Command *crop(const QRect &rect);
+    KUndo2Command *transform(const QTransform &transform);
 
 public Q_SLOTS:
     void slotLoadingFinished(KisImageSP importedImage);

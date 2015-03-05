@@ -38,19 +38,18 @@ public:
     Ui::Pivot mainWidget;
 };
 
-
-Pivot::Pivot(QWidget* parent,Selection* selection):
+Pivot::Pivot(QWidget *parent, Selection *selection):
     KDialog(parent),
     d(new Private)
 {
     setCaption(i18n("Select Source"));
-    
-    QWidget* widget = new QWidget(this);
+
+    QWidget *widget = new QWidget(this);
     d->mainWidget.setupUi(widget);
-    setButtons(Ok|Cancel);   
+    setButtons(Ok | Cancel);
     d->mainWidget.Current->setChecked(true);
     setMainWidget(widget);
-    d->selection=selection;
+    d->selection = selection;
     connect(this, SIGNAL(okClicked()), this, SLOT(slotUser2Clicked()));
 
 }
@@ -62,21 +61,19 @@ Pivot::~Pivot()
 
 void Pivot::slotUser2Clicked()
 {
-	  if(d->mainWidget.Current->isChecked())
-	  {
-	      PivotMain *pMain= new PivotMain(this,d->selection);
-	      pMain->setModal(true);
-	      pMain->exec();
-	  }
-	  
-	  if(d->mainWidget.External->isChecked())
-	  {
-	      QMessageBox msgBox;
-	      msgBox.setText("Functionality Yet to be Added");
-	      msgBox.exec();
-	      
-	      Pivot *p=new Pivot(this,d->selection);
-	      p->setModal(true);
-	      p->exec();
-	  }
+    if (d->mainWidget.Current->isChecked()) {
+        PivotMain *pMain = new PivotMain(this, d->selection);
+        pMain->setModal(true);
+        pMain->exec();
+    }
+
+    if (d->mainWidget.External->isChecked()) {
+        QMessageBox msgBox;
+        msgBox.setText("Functionality Yet to be Added");
+        msgBox.exec();
+
+        Pivot *p = new Pivot(this, d->selection);
+        p->setModal(true);
+        p->exec();
+    }
 }

@@ -29,18 +29,18 @@
 
 using namespace Calligra::Sheets;
 
-SheetPropertiesDialog::SheetPropertiesDialog(QWidget* parent):
-        KDialog(parent)
+SheetPropertiesDialog::SheetPropertiesDialog(QWidget *parent):
+    KDialog(parent)
 {
     setCaption(i18n("Sheet Properties"));
     setObjectName(QLatin1String("sheetPropertiesDialog"));
     setModal(true);
     setButtons(Ok | Cancel | Default);
 
-    KVBox* mainWidget = new KVBox();//makeVBoxMainWidget();
+    KVBox *mainWidget = new KVBox();//makeVBoxMainWidget();
     setMainWidget(mainWidget);
     m_widget = new SheetPropertiesWidget(mainWidget);
-    QWidget* spacer = new QWidget(mainWidget);
+    QWidget *spacer = new QWidget(mainWidget);
     spacer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     showButtonSeparator(true);
     connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
@@ -68,11 +68,13 @@ void SheetPropertiesDialog::slotDefault()
 
 Qt::LayoutDirection SheetPropertiesDialog::layoutDirection() const
 {
-    if (m_widget->directionComboBox->currentText() == i18n("Left to Right"))
+    if (m_widget->directionComboBox->currentText() == i18n("Left to Right")) {
         return Qt::LeftToRight;
+    }
 
-    if (m_widget->directionComboBox->currentText() == i18n("Right to Left"))
+    if (m_widget->directionComboBox->currentText() == i18n("Right to Left")) {
         return Qt::RightToLeft;
+    }
 
     // fallback
     return Qt::LeftToRight;

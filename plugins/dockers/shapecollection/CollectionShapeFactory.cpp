@@ -36,7 +36,7 @@
 #include <QMimeData>
 #include <QBuffer>
 
-CollectionShapeFactory::CollectionShapeFactory(const QString &id, KoShape* shape)
+CollectionShapeFactory::CollectionShapeFactory(const QString &id, KoShape *shape)
     : KoShapeFactoryBase(id, shape->name()), m_shape(shape)
 {
 }
@@ -48,7 +48,7 @@ CollectionShapeFactory::~CollectionShapeFactory()
 
 KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
 
     shapes << m_shape;
 
@@ -57,36 +57,36 @@ KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *d
     KoDrag drag;
     KoShapeOdfSaveHelper saveHelper(shapes);
     drag.setOdf(KoOdf::mimeType(KoOdf::Graphics), saveHelper);
-    QMimeData* data = drag.mimeData();
+    QMimeData *data = drag.mimeData();
 
     QByteArray arr = data->data(KoOdf::mimeType(KoOdf::Graphics));
-    KoShape* shape = 0;
+    KoShape *shape = 0;
 
-    if ( !arr.isEmpty() ) {
-        QBuffer buffer( &arr );
-        KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
-        KoOdfReadStore odfStore( store ); // Note: KoDfReadstore will not delete the KoStore *store;
+    if (!arr.isEmpty()) {
+        QBuffer buffer(&arr);
+        KoStore *store = KoStore::createStore(&buffer, KoStore::Read);
+        KoOdfReadStore odfStore(store);   // Note: KoDfReadstore will not delete the KoStore *store;
 
         QString errorMessage;
-        if ( ! odfStore.loadAndParse( errorMessage ) ) {
+        if (! odfStore.loadAndParse(errorMessage)) {
             kError() << "loading and parsing failed:" << errorMessage << endl;
             delete store;
             return 0;
         }
 
         KoXmlElement content = odfStore.contentDoc().documentElement();
-        KoXmlElement realBody( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
+        KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
 
-        if ( realBody.isNull() ) {
+        if (realBody.isNull()) {
             kError() << "No body tag found!" << endl;
             delete store;
             return 0;
         }
 
-        KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, KoOdf::bodyContentElement( KoOdf::Text, false ) );
+        KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, KoOdf::bodyContentElement(KoOdf::Text, false));
 
-        if ( body.isNull() ) {
-            kError() << "No" << KoOdf::bodyContentElement(KoOdf::Text, true ) << "tag found!" << endl;
+        if (body.isNull()) {
+            kError() << "No" << KoOdf::bodyContentElement(KoOdf::Text, true) << "tag found!" << endl;
             delete store;
             return 0;
         }
@@ -96,10 +96,9 @@ KoShape *CollectionShapeFactory::createDefaultShape(KoDocumentResourceManager *d
 
         KoXmlElement element;
 
-        forEachElement(element, body)
-        {
-            KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( element, context );
-            if ( shape ) {
+        forEachElement (element, body) {
+            KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(element, context);
+            if (shape) {
                 delete data;
                 delete store;
                 return shape;

@@ -18,11 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #include "FormatErrorBarDialog.h"
 
 using namespace KChart;
-
 
 FormatErrorBarDialog::FormatErrorBarDialog(QWidget *parent)
     : QDialog(parent)

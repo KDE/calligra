@@ -30,19 +30,17 @@ public:
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
 
-
     KisDynamicSensorDistance();
     virtual ~KisDynamicSensorDistance() { }
-    virtual qreal value(const KisPaintInformation&);
+    virtual qreal value(const KisPaintInformation &);
     virtual void reset();
-    virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
+    virtual QWidget *createConfigurationWidget(QWidget *parent, QWidget *);
 public Q_SLOTS:
     virtual void setPeriodic(bool periodic);
     virtual void setLength(int length);
 
-
-    virtual void toXML(QDomDocument&, QDomElement&) const;
-    virtual void fromXML(const QDomElement&);
+    virtual void toXML(QDomDocument &, QDomElement &) const;
+    virtual void fromXML(const QDomElement &);
 private:
     qreal m_measuredDistance;
     int m_length;

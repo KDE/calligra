@@ -38,7 +38,6 @@ enum SelectionAction {
 
 #include "kis_pixel_selection.h"
 
-
 class KisSelectionComponent;
 
 /**
@@ -70,8 +69,8 @@ public:
     /**
      * Copy the selection. The selection components are copied, too.
      */
-    KisSelection(const KisSelection& rhs);
-    KisSelection& operator=(const KisSelection &rhs);
+    KisSelection(const KisSelection &rhs);
+    KisSelection &operator=(const KisSelection &rhs);
 
     /**
      * Delete the selection. The shape selection component is deleted, the
@@ -95,7 +94,6 @@ public:
     QPainterPath outlineCache() const;
     void recalculateOutlineCache();
 
-
     /**
      * Tells whether the cached thumbnail of the selection is still valid
      */
@@ -117,7 +115,6 @@ public:
      */
     QTransform thumbnailImageTransform() const;
 
-
     /**
      * return the pixel selection component of this selection. Pixel
      * selection component is always present in the selection. In case
@@ -136,9 +133,9 @@ public:
      * return the vector selection component of this selection or zero
      * if hasShapeSelection() returns false.
      */
-    KisSelectionComponent* shapeSelection() const;
+    KisSelectionComponent *shapeSelection() const;
 
-    void setShapeSelection(KisSelectionComponent* shapeSelection);
+    void setShapeSelection(KisSelectionComponent *shapeSelection);
 
     /**
      * Returns the projection of the selection. It may be the same
@@ -152,7 +149,7 @@ public:
      * method after the every change of the selection components.
      * There is no automatic updates framework present
      */
-    void updateProjection(const QRect& rect);
+    void updateProjection(const QRect &rect);
     void updateProjection();
 
     void setVisible(bool visible);
@@ -162,7 +159,7 @@ public:
      * Convenience functions. Just call the corresponding methods
      * of the underlying projection
      */
-    bool isTotallyUnselected(const QRect & r) const;
+    bool isTotallyUnselected(const QRect &r) const;
 
     QRect selectedRect() const;
 
@@ -191,7 +188,7 @@ public:
      * and throws away the shape selection. This has no effect if there is no
      * shape selection.
      */
-    KUndo2Command* flatten();
+    KUndo2Command *flatten();
 
     void notifySelectionChanged();
 
@@ -210,7 +207,7 @@ private:
 private:
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif // KIS_SELECTION_H_

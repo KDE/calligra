@@ -41,17 +41,17 @@ PSDImageData::PSDImageData(PSDHeader *header)
     m_header = header;
 }
 
-PSDImageData::~PSDImageData() {
+PSDImageData::~PSDImageData()
+{
 
 }
 
-bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
-
-
+bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev)
+{
 
     psdread(io, &m_compression);
     quint64 start = io->pos();
-    m_channelSize = m_header->channelDepth/8;
+    m_channelSize = m_header->channelDepth / 8;
     m_channelDataLength = m_header->height * m_header->width * m_channelSize;
 
     dbgFile << "Reading Image Data Block: compression" << m_compression << "channelsize" << m_channelSize << "number of channels" << m_header->nChannels;
@@ -76,7 +76,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
         case Bitmap:
             break;
         case Grayscale:
-            readGrayscale(io,dev);
+            readGrayscale(io, dev);
             break;
         case Indexed:
             break;
@@ -101,16 +101,14 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
 
         break;
 
-    case 1: // RLE
-    {
+    case 1: { // RLE
 
         quint32 rlelength = 0;
 
         // The start of the actual channel data is _after_ the RLE rowlengths block
         if (m_header->version == 1) {
             start += m_header->nChannels * m_header->height * 2;
-        }
-        else if (m_header->version == 2) {
+        } else if (m_header->version == 2) {
             start += m_header->nChannels * m_header->height * 4;
         }
 
@@ -121,12 +119,11 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
             channelInfo.channelId = channel;
             channelInfo.channelDataStart = start;
             channelInfo.compressionType = Compression::RLE;
-            for (quint32 row = 0; row < m_header->height; row++ ) {
+            for (quint32 row = 0; row < m_header->height; row++) {
                 if (m_header->version == 1) {
-                    psdread(io,(quint16*)&rlelength);
-                }
-                else if (m_header->version == 2) {
-                    psdread(io,&rlelength);
+                    psdread(io, (quint16 *)&rlelength);
+                } else if (m_header->version == 2) {
+                    psdread(io, &rlelength);
                 }
                 channelInfo.rleRowLengths.append(rlelength);
                 sumrlelength += rlelength;
@@ -140,7 +137,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
         case Bitmap:
             break;
         case Grayscale:
-            readGrayscale(io,dev);
+            readGrayscale(io, dev);
             break;
         case Indexed:
             break;
@@ -231,13 +228,13 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
     // now write all the channels in display order
     // fill in the channel chooser, in the display order, but store the pixel index as well.
     QRect rc(0, 0, m_header->width, m_header->height);
-    QVector<quint8* > tmp = dev->readPlanarBytes(0, 0, rc.width(), rc.height());
+    QVector<quint8 * > tmp = dev->readPlanarBytes(0, 0, rc.width(), rc.height());
     // then reorder the planes to fit the psd model -- alpha first, then display order
-    QVector<quint8* > planes;
-    QList<KoChannelInfo*> origChannels = dev->colorSpace()->channels();
+    QVector<quint8 * > planes;
+    QList<KoChannelInfo *> origChannels = dev->colorSpace()->channels();
 
-    quint8* alphaPlane = 0;
-    foreach(KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(origChannels)) {
+    quint8 *alphaPlane = 0;
+    foreach (KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(origChannels)) {
         int channelIndex = KoChannelInfo::displayPositionToChannelIndex(ch->displayPosition(), origChannels);
         //qDebug() << ppVar(ch->name()) << ppVar(ch->pos()) << ppVar(ch->displayPosition()) << ppVar(channelIndex);
         if (ch->channelType() == KoChannelInfo::ALPHA) {
@@ -257,13 +254,12 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
                 for (int j = 0; j < rc.width() * rc.height(); ++j) {
                     planes[i][j] = 255 - planes[i][j];
                 }
-            }
-            else if (m_header->channelDepth == 16) {
+            } else if (m_header->channelDepth == 16) {
                 quint16 val;
                 for (int j = 0; j < rc.width() * rc.height(); ++j) {
-                    val = reinterpret_cast<quint16*>(planes[i])[j];
+                    val = reinterpret_cast<quint16 *>(planes[i])[j];
                     val = quint16_MAX - ntohs(val);
-                    reinterpret_cast<quint16*>(planes[i])[j] = val;
+                    reinterpret_cast<quint16 *>(planes[i])[j] = val;
                 }
             }
         }
@@ -283,7 +279,7 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
         quint32 stride = (m_header->channelDepth / 8) * rc.width();
         for (qint32 row = 0; row < rc.height(); ++row) {
 
-            QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
+            QByteArray uncompressed = QByteArray::fromRawData((const char *)plane + row * stride, stride);
             if (m_header->channelDepth == 8) {
             } else if (m_header->channelDepth == 16) {
                 quint16 *dataPtr = reinterpret_cast<quint16 *>(uncompressed.data());
@@ -304,7 +300,7 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
 
             io->seek(channelLengthPos);
             psdwrite(io, (quint16)compressed.size());
-            channelLengthPos +=2;
+            channelLengthPos += 2;
             io->seek(channelStartPos);
 
             if (io->write(compressed) != compressed.size()) {
@@ -322,7 +318,8 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
     return true;
 }
 
-bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
+bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev)
+{
 
     int channelid = 0;
 
@@ -334,14 +331,12 @@ bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
         for (int channel = 0; channel < m_header->nChannels; channel++) {
 
             switch (m_compression) {
-            case Compression::Uncompressed:
-            {
+            case Compression::Uncompressed: {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
-                channelBytes.append(io->read(m_header->width*m_channelSize));
+                channelBytes.append(io->read(m_header->width * m_channelSize));
             }
-                break;
-            case Compression::RLE:
-            {
+            break;
+            case Compression::RLE: {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
                 int uncompressedLength = m_header->width * m_header->channelDepth / 8;
                 QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
@@ -350,7 +345,7 @@ bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
                 m_channelOffsets[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
 
             }
-                break;
+            break;
             case Compression::ZIP:
                 break;
             case Compression::ZIPWithPrediction:
@@ -362,7 +357,7 @@ bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
 
         }
 
-        if (m_channelInfoRecords[channelid].compressionType == 0){
+        if (m_channelInfoRecords[channelid].compressionType == 0) {
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
 
@@ -417,8 +412,8 @@ bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
     return true;
 }
 
-
-bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
+bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev)
+{
 
     int channelid = 0;
 
@@ -429,20 +424,18 @@ bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
 
-
             switch (m_compression) {
 
             case Compression::Uncompressed:
 
             {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
-                channelBytes.append(io->read(m_header->width*m_channelSize));
+                channelBytes.append(io->read(m_header->width * m_channelSize));
 
             }
-                break;
+            break;
 
-            case Compression::RLE:
-            {
+            case Compression::RLE: {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
                 int uncompressedLength = m_header->width * m_header->channelDepth / 8;
                 QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
@@ -450,7 +443,7 @@ bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
                 channelBytes.append(uncompressedBytes);
                 m_channelOffsets[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
             }
-                break;
+            break;
 
             case Compression::ZIP:
                 break;
@@ -464,7 +457,7 @@ bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
 
         }
 
-        if (m_channelInfoRecords[channelid].compressionType == 0){
+        if (m_channelInfoRecords[channelid].compressionType == 0) {
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
 
@@ -483,36 +476,33 @@ bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
                 dbgFile << "C" << pixel[0] << "M" << pixel[1] << "Y" << pixel[2] << "K" << pixel[3] << "A" << pixel[4];
                 memcpy(it->rawData(), pixel, 5);
 
-
-            }
-            else if (m_channelSize == 2) {
+            } else if (m_channelSize == 2) {
 
                 quint16 C = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                KoCmykTraits<quint16>::setC(it->rawData(),C);
+                KoCmykTraits<quint16>::setC(it->rawData(), C);
 
                 quint16 M = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                KoCmykTraits<quint16>::setM(it->rawData(),M);
+                KoCmykTraits<quint16>::setM(it->rawData(), M);
 
                 quint16 Y = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                KoCmykTraits<quint16>::setY(it->rawData(),Y);
+                KoCmykTraits<quint16>::setY(it->rawData(), Y);
 
                 quint16 K = ntohs(reinterpret_cast<const quint16 *>(channelBytes[3].constData())[col]);
-                KoCmykTraits<quint16>::setK(it->rawData(),K);
+                KoCmykTraits<quint16>::setK(it->rawData(), K);
 
-            }
-            else if (m_channelSize == 4) {
+            } else if (m_channelSize == 4) {
 
                 quint32 C = ntohl(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
-                KoCmykTraits<quint32>::setC(it->rawData(),C);
+                KoCmykTraits<quint32>::setC(it->rawData(), C);
 
                 quint32 M = ntohl(reinterpret_cast<const quint32 *>(channelBytes[1].constData())[col]);
-                KoCmykTraits<quint32>::setM(it->rawData(),M);
+                KoCmykTraits<quint32>::setM(it->rawData(), M);
 
                 quint32 Y = ntohl(reinterpret_cast<const quint32 *>(channelBytes[2].constData())[col]);
-                KoCmykTraits<quint32>::setY(it->rawData(),Y);
+                KoCmykTraits<quint32>::setY(it->rawData(), Y);
 
                 quint32 K = ntohl(reinterpret_cast<const quint32 *>(channelBytes[3].constData())[col]);
-                KoCmykTraits<quint32>::setK(it->rawData(),K);
+                KoCmykTraits<quint32>::setK(it->rawData(), K);
 
             }
 
@@ -526,7 +516,8 @@ bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
 
 }
 
-bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
+bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev)
+{
 
     int channelid = 0;
 
@@ -537,19 +528,17 @@ bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {
 
-
             switch (m_compression) {
 
             case Compression::Uncompressed:
 
             {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
-                channelBytes.append(io->read(m_header->width*m_channelSize));
+                channelBytes.append(io->read(m_header->width * m_channelSize));
             }
-                break;
+            break;
 
-            case Compression::RLE:
-            {
+            case Compression::RLE: {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
                 int uncompressedLength = m_header->width * m_header->channelDepth / 8;
                 QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
@@ -558,7 +547,7 @@ bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
                 m_channelOffsets[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
 
             }
-                break;
+            break;
 
             case Compression::ZIP:
                 break;
@@ -572,7 +561,7 @@ bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
 
         }
 
-        if (m_channelInfoRecords[channelid].compressionType == 0){
+        if (m_channelInfoRecords[channelid].compressionType == 0) {
             m_channelOffsets[channelid] += (m_header->width * m_channelSize);
         }
 
@@ -593,26 +582,26 @@ bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
             else if (m_channelSize == 2) {
 
                 quint16 L = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                KoLabU16Traits::setL(it->rawData(),L);
+                KoLabU16Traits::setL(it->rawData(), L);
 
                 quint16 A = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                KoLabU16Traits::setA(it->rawData(),A);
+                KoLabU16Traits::setA(it->rawData(), A);
 
                 quint16 B = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                KoLabU16Traits::setB(it->rawData(),B);
+                KoLabU16Traits::setB(it->rawData(), B);
 
             }
 
             else if (m_channelSize == 4) {
 
                 quint32 L = ntohl(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
-                KoLabTraits<quint32>::setL(it->rawData(),L);
+                KoLabTraits<quint32>::setL(it->rawData(), L);
 
                 quint32 A = ntohl(reinterpret_cast<const quint32 *>(channelBytes[1].constData())[col]);
-                KoLabTraits<quint32>::setA(it->rawData(),A);
+                KoLabTraits<quint32>::setA(it->rawData(), A);
 
                 quint32 B = ntohl(reinterpret_cast<const quint32 *>(channelBytes[2].constData())[col]);
-                KoLabTraits<quint32>::setB(it->rawData(),B);
+                KoLabTraits<quint32>::setB(it->rawData(), B);
 
             }
 
@@ -625,7 +614,8 @@ bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
     return true;
 }
 
-bool PSDImageData::readGrayscale(QIODevice *io, KisPaintDeviceSP dev) {
+bool PSDImageData::readGrayscale(QIODevice *io, KisPaintDeviceSP dev)
+{
     int channelid = 0;
 
     for (quint32 row = 0; row < m_header->height; row++) {
@@ -636,14 +626,12 @@ bool PSDImageData::readGrayscale(QIODevice *io, KisPaintDeviceSP dev) {
         for (int channel = 0; channel < m_header->nChannels; channel++) {
 
             switch (m_compression) {
-            case Compression::Uncompressed:
-            {
+            case Compression::Uncompressed: {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[0]);
-                channelBytes.append(io->read(m_header->width*m_channelSize));
+                channelBytes.append(io->read(m_header->width * m_channelSize));
             }
-                break;
-            case Compression::RLE:
-            {
+            break;
+            case Compression::RLE: {
                 io->seek(m_channelInfoRecords[channel].channelDataStart + m_channelOffsets[channel]);
                 int uncompressedLength = m_header->width * m_header->channelDepth / 8;
                 QByteArray compressedBytes = io->read(m_channelInfoRecords[channel].rleRowLengths[row]);
@@ -652,7 +640,7 @@ bool PSDImageData::readGrayscale(QIODevice *io, KisPaintDeviceSP dev) {
                 m_channelOffsets[channel] +=  m_channelInfoRecords[channel].rleRowLengths[row];
 
             }
-                break;
+            break;
             case Compression::ZIP:
                 break;
             case Compression::ZIPWithPrediction:

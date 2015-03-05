@@ -29,7 +29,7 @@
 #include "kis_painter.h"
 #include "kis_types.h"
 
-KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter), m_painter(0)
 {
     Q_ASSERT(settings);
@@ -47,22 +47,22 @@ KisCurvePaintOp::~KisCurvePaintOp()
     delete m_painter;
 }
 
-KisSpacingInformation KisCurvePaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisCurvePaintOp::paintAt(const KisPaintInformation &info)
 {
     Q_UNUSED(info);
     return 1.0;
 }
 
-
 void KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
 {
     Q_UNUSED(currentDistance);
-    if (!painter()) return;
+    if (!painter()) {
+        return;
+    }
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
-    }
-    else {
+    } else {
         m_dab->clear();
     }
 
@@ -109,8 +109,7 @@ void KisCurvePaintOp::paintLine(KisPaintDeviceSP dab, const KisPaintInformation 
 
         if (m_curveProperties.smoothing) {
             path.quadTo(m_points.at(maxPoints / 2), m_points.last());
-        }
-        else {
+        } else {
             // control point is at 1/3 of the history, 2/3 of the history and endpoint at 3/3
             int step = maxPoints / 3;
             path.cubicTo(m_points.at(step), m_points.at(step + step), m_points.last());

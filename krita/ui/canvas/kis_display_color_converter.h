@@ -31,7 +31,6 @@ class KoColor;
 class KoColorProfile;
 class KoCanvasResourceManager;
 
-
 /**
  * Special helper class that provides primitives for converting colors when
  * displaying. We have at least 3 color spaces:
@@ -52,11 +51,11 @@ public:
     KisDisplayColorConverter(KoCanvasResourceManager *resourceManager, QObject *parent);
     virtual ~KisDisplayColorConverter();
 
-    static KisDisplayColorConverter* dumbConverterInstance();
+    static KisDisplayColorConverter *dumbConverterInstance();
 
-    KoColorDisplayRendererInterface* displayRendererInterface() const;
+    KoColorDisplayRendererInterface *displayRendererInterface() const;
 
-    const KoColorSpace* paintingColorSpace() const;
+    const KoColorSpace *paintingColorSpace() const;
     void setMonitorProfile(const KoColorProfile *monitorProfile);
     void setDisplayFilter(KisDisplayFilter *displayFilter);
 
@@ -74,20 +73,20 @@ public:
     KoColor fromHsv(int h, int s, int v, int a = 255) const;
     KoColor fromHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
     KoColor fromHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
-	KoColor fromHsiF(qreal h, qreal s, qreal i);
-    KoColor fromHsyF(qreal h, qreal s, qreal y, qreal R=0.2126, qreal G=0.7152, qreal B=0.0722);
+    KoColor fromHsiF(qreal h, qreal s, qreal i);
+    KoColor fromHsyF(qreal h, qreal s, qreal y, qreal R = 0.2126, qreal G = 0.7152, qreal B = 0.0722);
 
     void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const;
     void getHsvF(const KoColor &srcColor, qreal *h, qreal *s, qreal *v, qreal *a = 0);
     void getHslF(const KoColor &srcColor, qreal *h, qreal *s, qreal *l, qreal *a = 0);
-	void getHsiF(const KoColor &srcColor, qreal *h, qreal *s, qreal *i);
-    void getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y, qreal R=0.2126, qreal G=0.7152, qreal B=0.0722);
+    void getHsiF(const KoColor &srcColor, qreal *h, qreal *s, qreal *i);
+    void getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y, qreal R = 0.2126, qreal G = 0.7152, qreal B = 0.0722);
 
     static KoColorConversionTransformation::Intent renderingIntent();
     static KoColorConversionTransformation::ConversionFlags conversionFlags();
 
-    KisDisplayFilter* displayFilter() const;
-    const KoColorProfile* monitorProfile() const;
+    KisDisplayFilter *displayFilter() const;
+    const KoColorProfile *monitorProfile() const;
 
 Q_SIGNALS:
     void displayConfigurationChanged();

@@ -30,18 +30,22 @@
 #define RAD_180  3.14159265358979323846 // 180° = PI
 #define RAD_90   1.57079632679489661923 // 90°  = PI/2.0
 
-
 template<class TReal> class KisRadian;
 
 namespace _Private
 {
-struct Value
-{
+struct Value {
     template<class T>
-    inline static const T& get(const T& value) { return value; }
+    inline static const T &get(const T &value)
+    {
+        return value;
+    }
 
     template<class T>
-    inline static const T& get(const KisRadian<T>& rad) { return rad.value(); }
+    inline static const T &get(const KisRadian<T> &rad)
+    {
+        return rad.value();
+    }
 };
 }
 
@@ -54,139 +58,171 @@ public:
         m_value(TReal(0)) { }
 
     template<class U>
-    KisRadian(const KisRadian<U>& rad):
+    KisRadian(const KisRadian<U> &rad):
         m_value(rad.m_value) { }
-    
+
     template<class U>
-    KisRadian(const U& rad) {
+    KisRadian(const U &rad)
+    {
         m_value = normalizeRadians(_Private::Value::get(rad));
     }
-    
-    static TReal normalizeRadians(TReal rad) {
+
+    static TReal normalizeRadians(TReal rad)
+    {
         rad = std::fmod((TReal)rad, (TReal)PI2);
         return rad < TReal(0) ? (rad + PI2) : rad;
     }
-    
-    static TReal normalizeDegrees(TReal deg) {
+
+    static TReal normalizeDegrees(TReal deg)
+    {
         deg = std::fmod(deg, TReal(360));
         return deg < TReal(0) ? (deg + TReal(360)) : deg;
     }
-    
-    static KisRadian from90Deg() {
+
+    static KisRadian from90Deg()
+    {
         KisRadian rad;
         rad.m_value = RAD_90;
         return rad;
     }
-    
-    static KisRadian from180Deg() {
+
+    static KisRadian from180Deg()
+    {
         KisRadian rad;
         rad.m_value = RAD_180;
         return rad;
     }
-    
-    static KisRadian from270Deg() {
+
+    static KisRadian from270Deg()
+    {
         KisRadian rad;
         rad.m_value = RAD_270;
         return rad;
     }
-    
-    static KisRadian fromDegrees(const TReal& deg) { return KisRadian(deg * TO_RAD); }
-    static TReal     toRadians  (const TReal& deg) { return normalizeDegrees(deg) * TO_RAD; }
-    static TReal     toDegrees  (const TReal& rad) { return normalizeRadians(rad) * TO_DEG; }
-    
-    const TReal& value  () const { return m_value;          }
-    TReal        degrees() const { return m_value * TO_DEG; }
-    
-    TReal scaled(const TReal& min, const TReal& max) const {
+
+    static KisRadian fromDegrees(const TReal &deg)
+    {
+        return KisRadian(deg * TO_RAD);
+    }
+    static TReal     toRadians(const TReal &deg)
+    {
+        return normalizeDegrees(deg) * TO_RAD;
+    }
+    static TReal     toDegrees(const TReal &rad)
+    {
+        return normalizeRadians(rad) * TO_DEG;
+    }
+
+    const TReal &value() const
+    {
+        return m_value;
+    }
+    TReal        degrees() const
+    {
+        return m_value * TO_DEG;
+    }
+
+    TReal scaled(const TReal &min, const TReal &max) const
+    {
         return min + (m_value / PI2) * (max - min);
     }
-    
+
     // ------ operator = ---------------------------------------------------- //
-    
+
     template<class U>
-    KisRadian& operator = (const U& rad) {
+    KisRadian &operator = (const U &rad)
+    {
         m_value = normalizeRadians(_Private::Value::get(rad));
         return *this;
     }
-    
+
     template<class U>
-    KisRadian& operator = (const KisRadian<U>& rad) {
+    KisRadian &operator = (const KisRadian<U> &rad)
+    {
         m_value = rad.m_value;
         return *this;
     }
-    
+
     // ------ operator + ---------------------------------------------------- //
-    
+
     template<class U>
-    KisRadian& operator += (const U& rad) {
+    KisRadian &operator += (const U &rad)
+    {
         m_value = normalizeRadians(m_value + _Private::Value::get(rad));
         return *this;
     }
-    
-    
-    friend KisRadian operator + (const KisRadian& l, const KisRadian& r) {
+
+    friend KisRadian operator + (const KisRadian &l, const KisRadian &r)
+    {
         KisRadian rad(l);
         rad += r;
         return rad;
     }
-    
+
     // ------ operator - ---------------------------------------------------- //
-    
+
     template<class U>
-    KisRadian& operator -= (const U& rad) {
+    KisRadian &operator -= (const U &rad)
+    {
         m_value = normalizeRadians(m_value - _Private::Value::get(rad));
         return *this;
     }
-    
-    friend KisRadian operator - (const KisRadian& l, const KisRadian& r) {
+
+    friend KisRadian operator - (const KisRadian &l, const KisRadian &r)
+    {
         KisRadian rad(l);
         rad -= r;
         return rad;
     }
-    
+
     // ------ operator * ---------------------------------------------------- //
-    
+
     template<class U>
-    KisRadian& operator *= (const U& rad) {
+    KisRadian &operator *= (const U &rad)
+    {
         m_value = normalizeRadians(m_value * _Private::Value::get(rad));
         return *this;
     }
 
-    friend KisRadian operator * (const KisRadian& l, const KisRadian& r) {
+    friend KisRadian operator * (const KisRadian &l, const KisRadian &r)
+    {
         KisRadian rad(l);
         rad *= r;
         return rad;
     }
-    
+
     // ------ operator / ---------------------------------------------------- //
-    
+
     template<class U>
-    KisRadian& operator /= (const U& rad) {
+    KisRadian &operator /= (const U &rad)
+    {
         m_value = normalizeRadians(m_value / _Private::Value::get(rad));
         return *this;
     }
 
-    friend KisRadian operator / (const KisRadian& l, const KisRadian& r) {
+    friend KisRadian operator / (const KisRadian &l, const KisRadian &r)
+    {
         KisRadian rad(l);
         rad /= r;
         return rad;
     }
-    
+
     // ------ operator % ---------------------------------------------------- //
-    
+
     template<class U>
-    KisRadian& operator %= (const U& rad) {
+    KisRadian &operator %= (const U &rad)
+    {
         m_value = normalizeRadians(std::fmod(m_value, TReal(_Private::Value::get(rad))));
         return *this;
     }
-    
-    
-    friend KisRadian operator % (const KisRadian& l, const KisRadian& r) {
+
+    friend KisRadian operator % (const KisRadian &l, const KisRadian &r)
+    {
         KisRadian rad(l);
         rad %= r;
         return rad;
     }
-    
+
 private:
     TReal m_value;
 };

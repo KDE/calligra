@@ -33,8 +33,8 @@
 K_PLUGIN_FACTORY(EpsImportFactory, registerPlugin<EpsImport>();)
 K_EXPORT_PLUGIN(EpsImportFactory("calligrafilters"))
 
-EpsImport::EpsImport(QObject*parent, const QVariantList&)
-        : KoFilter(parent)
+EpsImport::EpsImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
     kDebug() << "###   ###   EPS Import Filter";
 }
@@ -43,7 +43,7 @@ EpsImport::~EpsImport()
 {
 }
 
-KoFilter::ConversionStatus EpsImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus EpsImport::convert(const QByteArray &from, const QByteArray &to)
 {
     if (from != "image/x-eps" &&
             from != "image/eps" &&
@@ -59,16 +59,17 @@ KoFilter::ConversionStatus EpsImport::convert(const QByteArray& from, const QByt
         QString output = m_chain->outputFile();
 
         QString command = QLatin1String("pstoedit -f plot-svg ") +
-                KShell::quoteArg(input) + QLatin1Char(' ') +
-                KShell::quoteArg(output);
+                          KShell::quoteArg(input) + QLatin1Char(' ') +
+                          KShell::quoteArg(output);
 
-        kDebug() << "command to execute is (%s)" << QFile::encodeName(command).data() ;
+        kDebug() << "command to execute is (%s)" << QFile::encodeName(command).data();
 
         // Execute it:
-        if (! system(QFile::encodeName(command)))
+        if (! system(QFile::encodeName(command))) {
             return KoFilter::OK;
-        else
+        } else {
             return KoFilter::StupidError;
+        }
     }
     if (to == "application/illustrator") {
 
@@ -88,8 +89,9 @@ KoFilter::ConversionStatus EpsImport::convert(const QByteArray& from, const QByt
             urx = extractor.urx();
             ury = extractor.ury();
             file.close();
-        } else
+        } else {
             qDebug("file could not be opened");
+        }
 
         // sed filter
         QString sedFilter = QString("sed -e \"s/%%BoundingBox: 0 0 612 792/%%BoundingBox: %1 %2 %3 %4/g\"").
@@ -97,20 +99,21 @@ KoFilter::ConversionStatus EpsImport::convert(const QByteArray& from, const QByt
 
         // Build ghostscript call to convert ps/eps -> ai:
         QString command  = QLatin1String(
-            "gs -q -P- -dBATCH -dNOPAUSE -dSAFER -dPARANOIDSAFER -dNODISPLAY ps2ai.ps ") +
-            KShell::quoteArg(input) +
-            " | " +
-            sedFilter +
-            " > " +
-            KShell::quoteArg(m_chain->outputFile());
+                               "gs -q -P- -dBATCH -dNOPAUSE -dSAFER -dPARANOIDSAFER -dNODISPLAY ps2ai.ps ") +
+                           KShell::quoteArg(input) +
+                           " | " +
+                           sedFilter +
+                           " > " +
+                           KShell::quoteArg(m_chain->outputFile());
 
         qDebug("command to execute is (%s)", QFile::encodeName(command).data());
 
         // Execute it:
-        if (!system(QFile::encodeName(command)))
+        if (!system(QFile::encodeName(command))) {
             return KoFilter::OK;
-        else
+        } else {
             return KoFilter::StupidError;
+        }
     }
 
     return KoFilter::NotImplemented;

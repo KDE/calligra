@@ -19,7 +19,6 @@
 #ifndef SIMPLEENTRY_TOOL_FACTORY
 #define SIMPLEENTRY_TOOL_FACTORY
 
-
 #include <KoToolFactoryBase.h>
 
 class SimpleEntryToolFactory : public KoToolFactoryBase
@@ -28,8 +27,7 @@ public:
     SimpleEntryToolFactory();
     ~SimpleEntryToolFactory();
 
-    KoToolBase* createTool( KoCanvasBase* canvas );
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
-
 
 #endif

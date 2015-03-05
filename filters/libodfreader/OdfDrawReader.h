@@ -32,13 +32,11 @@
 #include "koodfreader_export.h"
 #include "OdfReaderInternals.h"
 
-
 class QSizeF;
 
 class OdfReader;
 class OdfDrawReaderBackend;
 class OdfReaderContext;
-
 
 /** @brief Read the XML tree of the content of an ODT file.
  *
@@ -52,7 +50,7 @@ class OdfReaderContext;
  */
 class KOODFREADER_EXPORT OdfDrawReader
 {
- public:
+public:
     OdfDrawReader();
     ~OdfDrawReader();
 
@@ -77,10 +75,9 @@ class KOODFREADER_EXPORT OdfDrawReader
     // This is the main entry point for draw reading.
     void readCommonGraphicsElements(KoXmlStreamReader &reader);
 
- protected:
+protected:
     // ----------------------------------------------------------------
     // Dr3d elements
-
 
     // ----------------------------------------------------------------
     // Draw functions: circle, rectangle, etc
@@ -114,8 +111,7 @@ class KOODFREADER_EXPORT OdfDrawReader
     // FIXME: Move this to a common file (OdfReaderUtils?)
     void readUnknownElement(KoXmlStreamReader &reader);
 
-
- private:
+private:
     OdfReader             *m_parent;  // The OdfReader controlling this one.
 
     OdfDrawReaderBackend  *m_backend;

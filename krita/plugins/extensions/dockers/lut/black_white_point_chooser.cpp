@@ -28,11 +28,10 @@
 #include <QFormLayout>
 #include "widgets/kis_slider_spin_box.h"
 
-
-BlackWhitePointChooser::BlackWhitePointChooser(QWidget* parent)
+BlackWhitePointChooser::BlackWhitePointChooser(QWidget *parent)
     : QFrame(parent, Qt::Popup)
 {
-    setFrameStyle(QFrame::Panel|QFrame::Raised);
+    setFrameStyle(QFrame::Panel | QFrame::Raised);
 
     m_black = new KisDoubleSliderSpinBox(this);
     m_black->setRange(0.0, 10000, 4);

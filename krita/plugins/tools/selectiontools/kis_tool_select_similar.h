@@ -32,13 +32,13 @@ class KisToolSelectSimilar : public KisToolSelectBase
     Q_OBJECT
 
 public:
-    KisToolSelectSimilar(KoCanvasBase * canvas);
+    KisToolSelectSimilar(KoCanvasBase *canvas);
     void beginPrimaryAction(KoPointerEvent *event);
-    QWidget* createOptionWidget();
-    void paint(QPainter&, const KoViewConverter &) {}
+    QWidget *createOptionWidget();
+    void paint(QPainter &, const KoViewConverter &) {}
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     virtual void slotSetFuzziness(int);
 
 private:
@@ -49,8 +49,9 @@ private:
 class KisToolSelectSimilarFactory : public KoToolFactoryBase
 {
 public:
-    KisToolSelectSimilarFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolSelectSimilar") {
+    KisToolSelectSimilarFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolSelectSimilar")
+    {
         setToolTip(i18n("Similar Color Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -60,12 +61,12 @@ public:
 
     virtual ~KisToolSelectSimilarFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return  new KisToolSelectSimilar(canvas);
     }
 
 };
-
 
 #endif // KIS_TOOL_SELECT_SIMILAR_H_
 

@@ -38,20 +38,24 @@ class KPrClickActionDocker : public QWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    explicit KPrClickActionDocker( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+    explicit KPrClickActionDocker(QWidget *parent = 0, Qt::WindowFlags flags = 0);
 
-    void setView( KoPAViewBase* view );
+    void setView(KoPAViewBase *view);
 
 public Q_SLOTS:
-    void addCommand( KUndo2Command * command );
+    void addCommand(KUndo2Command *command);
 
 private Q_SLOTS:
     /// selection has changed
     void selectionChanged();
 
     /// reimplemented
-    virtual void setCanvas( KoCanvasBase *canvas );
-    virtual void unsetCanvas() { m_canvas = 0; m_view = 0; }
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas()
+    {
+        m_canvas = 0;
+        m_view = 0;
+    }
 private:
     KoPAViewBase *m_view;
     KPrSoundCollection *m_soundCollection;

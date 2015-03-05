@@ -34,7 +34,7 @@ public:
     ColorSliderPlugin(QObject *parent, const QVariantList &);
     virtual ~ColorSliderPlugin();
 private:
-    KisViewManager* m_view;
+    KisViewManager *m_view;
 };
 
 #endif

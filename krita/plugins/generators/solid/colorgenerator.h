@@ -44,16 +44,17 @@ public:
     using KisGenerator::generate;
 
     void generate(KisProcessingInformation dst,
-                  const QSize& size,
-                  const KisFilterConfiguration* config,
-                  KoUpdater* progressUpdater
+                  const QSize &size,
+                  const KisFilterConfiguration *config,
+                  KoUpdater *progressUpdater
                  ) const;
 
-    static inline KoID id() {
+    static inline KoID id()
+    {
         return KoID("color", i18n("Color"));
     }
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const;
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
 };
 
 #endif

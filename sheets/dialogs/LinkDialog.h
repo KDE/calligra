@@ -41,14 +41,14 @@ class LinkDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit LinkDialog(QWidget* parent, Selection* selection);
+    explicit LinkDialog(QWidget *parent, Selection *selection);
     ~LinkDialog();
     QString text() const;
     QString link() const;
 
 public Q_SLOTS:
-    void setText(const QString& text);
-    void setLink(const QString& link);
+    void setText(const QString &text);
+    void setLink(const QString &link);
 
 protected Q_SLOTS:
     void slotOk();
@@ -57,7 +57,7 @@ private:
     Q_DISABLE_COPY(LinkDialog)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

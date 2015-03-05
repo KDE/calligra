@@ -32,7 +32,6 @@
 #include <QGLContext>
 #endif
 
-
 static const int LUT3D_EDGE_SIZE = 32;
 
 OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
@@ -52,7 +51,7 @@ OcioDisplayFilter::~OcioDisplayFilter()
 {
 }
 
-KisExposureGammaCorrectionInterface* OcioDisplayFilter::correctionInterface() const
+KisExposureGammaCorrectionInterface *OcioDisplayFilter::correctionInterface() const
 {
     return m_interface;
 }
@@ -61,7 +60,7 @@ void OcioDisplayFilter::filter(quint8 *pixels, quint32 numPixels)
 {
     // processes that data _in_ place
     if (m_processor) {
-        OCIO::PackedImageDesc img(reinterpret_cast<float*>(pixels), numPixels, 1, 4);
+        OCIO::PackedImageDesc img(reinterpret_cast<float *>(pixels), numPixels, 1, 4);
         m_processor->apply(img);
     }
 }
@@ -70,7 +69,7 @@ void OcioDisplayFilter::approximateInverseTransformation(quint8 *pixels, quint32
 {
     // processes that data _in_ place
     if (m_revereseApproximationProcessor) {
-        OCIO::PackedImageDesc img(reinterpret_cast<float*>(pixels), numPixels, 1, 4);
+        OCIO::PackedImageDesc img(reinterpret_cast<float *>(pixels), numPixels, 1, 4);
         m_revereseApproximationProcessor->apply(img);
     }
 }
@@ -79,7 +78,7 @@ void OcioDisplayFilter::approximateForwardTransformation(quint8 *pixels, quint32
 {
     // processes that data _in_ place
     if (m_forwardApproximationProcessor) {
-        OCIO::PackedImageDesc img(reinterpret_cast<float*>(pixels), numPixels, 1, 4);
+        OCIO::PackedImageDesc img(reinterpret_cast<float *>(pixels), numPixels, 1, 4);
         m_forwardApproximationProcessor->apply(img);
     }
 }
@@ -217,7 +216,7 @@ void OcioDisplayFilter::updateProcessor()
 
     // Post-display transform gamma
     {
-        float exponent = 1.0f/std::max(1e-6f, static_cast<float>(gamma));
+        float exponent = 1.0f / std::max(1e-6f, static_cast<float>(gamma));
         const float exponent4f[] = { exponent, exponent, exponent, exponent };
         OCIO::ExponentTransformRcPtr expTransform =  OCIO::ExponentTransform::Create();
         expTransform->setValue(exponent4f);
@@ -243,7 +242,9 @@ void OcioDisplayFilter::updateProcessor()
     // check whether we are allowed to use shaders -- though that should
     // work for everyone these days
     KisConfig cfg;
-    if (!cfg.useOpenGL()) return;
+    if (!cfg.useOpenGL()) {
+        return;
+    }
 
     if (!QGLContext::currentContext()) {
         /**
@@ -287,11 +288,9 @@ void OcioDisplayFilter::updateProcessor()
     shaderDesc.setFunctionName("OCIODisplay");
     shaderDesc.setLut3DEdgeLen(lut3DEdgeSize);
 
-
     // Step 2: Compute the 3D LUT
     QString lut3dCacheID = QString::fromLatin1(m_processor->getGpuLut3DCacheID(shaderDesc));
-    if(lut3dCacheID != m_lut3dcacheid)
-    {
+    if (lut3dCacheID != m_lut3dcacheid) {
         //qDebug() << "Computing 3DLut " << m_lut3dcacheid;
         m_lut3dcacheid = lut3dCacheID;
         m_processor->getGpuLut3D(&m_lut3d[0], shaderDesc);
@@ -302,7 +301,6 @@ void OcioDisplayFilter::updateProcessor()
                         lut3DEdgeSize, lut3DEdgeSize, lut3DEdgeSize,
                         GL_RGB, GL_FLOAT, &m_lut3d[0]);
     }
-
 
     // Step 3: Generate the shader text
     QString shaderCacheID = QString::fromLatin1(m_processor->getGpuShaderTextCacheID(shaderDesc));
@@ -316,7 +314,6 @@ void OcioDisplayFilter::updateProcessor()
 
         m_program = QString::fromLatin1(os.str().c_str());
     }
-
 
 #endif
 

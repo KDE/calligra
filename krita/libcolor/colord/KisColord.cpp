@@ -27,7 +27,6 @@
 #include "CdProfileInterface.h"
 #include "CdDeviceInterface.h"
 
-
 struct Profile {
     QString kind;
     QString filename;
@@ -38,7 +37,8 @@ struct Profile {
 
 struct Device {
 
-    ~Device() {
+    ~Device()
+    {
         qDeleteAll(profiles);
         profiles.clear();
     }
@@ -49,7 +49,7 @@ struct Device {
     QString vendor;
     QString colorspace;
 
-    QList<Profile*> profiles;
+    QList<Profile *> profiles;
 
 };
 
@@ -77,12 +77,11 @@ KisColord::KisColord(QObject *parent)
     connect(displayWatcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
             this, SLOT(gotDevices(QDBusPendingCallWatcher*)));
 
-
     // Make sure we know is colord is running
     QDBusServiceWatcher *watcher = new QDBusServiceWatcher("org.freedesktop.ColorManager",
-                                                           QDBusConnection::systemBus(),
-                                                           QDBusServiceWatcher::WatchForOwnerChange,
-                                                           this);
+            QDBusConnection::systemBus(),
+            QDBusServiceWatcher::WatchForOwnerChange,
+            this);
 
     connect(watcher, SIGNAL(serviceOwnerChanged(QString,QString,QString)),
             this, SLOT(serviceOwnerChanged(QString,QString,QString)));
@@ -97,7 +96,7 @@ KisColord::~KisColord()
 QStringList KisColord::devices(const QString &type) const
 {
     QStringList res;
-    foreach(Device *dev, m_devices.values()) {
+    foreach (Device *dev, m_devices.values()) {
         if (type == dev->kind) {
             res << dev->id;
         }
@@ -108,7 +107,7 @@ QStringList KisColord::devices(const QString &type) const
 const QString KisColord::deviceName(const QString &id) const
 {
     QString res;
-    foreach(Device *dev, m_devices.values()) {
+    foreach (Device *dev, m_devices.values()) {
         if (dev->id == id) {
             res = dev->model + ", " + dev->vendor;
         }
@@ -121,7 +120,7 @@ QByteArray KisColord::deviceProfile(const QString &id, int p)
     QByteArray ba;
     Device *dev = 0;
     Profile *profile = 0;
-    foreach(Device *d, m_devices.values()) {
+    foreach (Device *d, m_devices.values()) {
         if (d->id == id) {
             dev = d;
             break;
@@ -131,8 +130,7 @@ QByteArray KisColord::deviceProfile(const QString &id, int p)
         if (dev) {
             if (dev->profiles.size() < p) {
                 profile = dev->profiles[p];
-            }
-            else {
+            } else {
                 profile = dev->profiles[0];
             }
         }
@@ -143,16 +141,13 @@ QByteArray KisColord::deviceProfile(const QString &id, int p)
         QFile f(profile->filename);
         if (f.open(QFile::ReadOnly)) {
             ba = f.readAll();
-        }
-        else {
+        } else {
             kWarning() << "Could not load profile" << profile->title << profile->filename;
         }
     }
 
     return ba;
 }
-
-
 
 void KisColord::serviceOwnerChanged(const QString &serviceName, const QString &oldOwner, const QString &newOwner)
 {
@@ -269,7 +264,6 @@ void KisColord::addProfilesToDevice(Device *dev, QList<QDBusObjectPath> profiles
         if (!profile.isValid()) {
             return;
         }
-
 
         Profile *p = new Profile;
 

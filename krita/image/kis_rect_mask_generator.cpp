@@ -90,7 +90,9 @@ bool KisRectangleMaskGenerator::shouldSupersample() const
 
 quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 {
-    if (KisMaskGenerator::d->empty) return 255;
+    if (KisMaskGenerator::d->empty) {
+        return 255;
+    }
 
     double xr = qAbs(x /*- m_xcenter*/);
     double yr = qAbs(y /*- m_ycenter*/);
@@ -98,7 +100,7 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     if (KisMaskGenerator::d->spikes > 2) {
         double angle = (KisFastMath::atan2(yr, xr));
 
-        while (angle > KisMaskGenerator::d->cachedSpikesAngle ){
+        while (angle > KisMaskGenerator::d->cachedSpikesAngle) {
             double sx = xr;
             double sy = yr;
 
@@ -115,7 +117,9 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     qreal nxr = xr * d->xcoeff;
     qreal nyr = yr * d->ycoeff;
 
-    if (nxr > 1.0 || nyr > 1.0) return 255;
+    if (nxr > 1.0 || nyr > 1.0) {
+        return 255;
+    }
 
     if (KisMaskGenerator::d->antialiasEdges) {
         xr += 1.0;

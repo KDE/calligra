@@ -30,30 +30,35 @@
 #define ROUND(x) (roundf(1e10 * x) / 1e10)
 
 // round to get at most 10-digits number
-static Value RoundNumber(const Value& v)
+static Value RoundNumber(const Value &v)
 {
     if (v.isNumber()) {
         double d = numToDouble(v.asFloat());
-        if (fabs(d) < DBL_EPSILON)
+        if (fabs(d) < DBL_EPSILON) {
             d = 0.0;
+        }
         return Value(ROUND(d));
-    } else
+    } else {
         return v;
+    }
 }
 
-Value TestDatabaseFunctions::evaluate(const QString& formula, Value& ex)
+Value TestDatabaseFunctions::evaluate(const QString &formula, Value &ex)
 {
     Formula f(m_map->sheet(0));
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
-    if (result.isFloat() && ex.isInteger())
+    if (result.isFloat() && ex.isInteger()) {
         ex = Value(ex.asFloat());
-    if (result.isInteger() && ex.isFloat())
+    }
+    if (result.isInteger() && ex.isFloat()) {
         result = Value(result.asFloat());
+    }
 
     return RoundNumber(result);
 }
@@ -63,27 +68,30 @@ void TestDatabaseFunctions::initTestCase()
     FunctionModuleRegistry::instance()->loadFunctionModules();
     m_map = new Map(0 /* no Doc */);
     m_map->addNewSheet();
-    Sheet* sheet = m_map->sheet(0);
-    CellStorage* storage = sheet->cellStorage();
+    Sheet *sheet = m_map->sheet(0);
+    CellStorage *storage = sheet->cellStorage();
 
     // TESTDB = A18:I31
     m_map->namedAreaManager()->insert(Region(QRect(QPoint(1, 18), QPoint(9, 31)), sheet), "TESTDB");
     // A18:A31
     storage->setValue(1, 18, Value("TestID"));
-    for (int row = 19; row <= 31; ++row)
+    for (int row = 19; row <= 31; ++row) {
         storage->setValue(1, row, Value((double)::pow(2.0, row - 19)));
+    }
     // B18:B31
     storage->setValue(2, 18, Value("Constellation"));
     QList<QString> constellations = QList<QString>() << "Cancer" << "Canis Major" << "Canis Minor"
                                     << "Carina" << "Draco" << "Eridanus" << "Gemini" << "Hercules" << "Orion" << "Phoenix"
                                     << "Scorpio" << "Ursa Major" << "Ursa Minor";
-    for (int i = 0; i < constellations.count(); ++i)
+    for (int i = 0; i < constellations.count(); ++i) {
         storage->setValue(2, 19 + i, Value(constellations[i]));
+    }
     // C18:C31
     storage->setValue(3, 18, Value("Bright Stars"));
     QList<int> stars = QList<int>() << 0 << 5 << 2 << 5 << 3 << 4 << 4 << 0 << 8 << 1 << 9 << 6 << 2;
-    for (int i = 0; i < stars.count(); ++i)
+    for (int i = 0; i < stars.count(); ++i) {
         storage->setValue(3, 19 + i, Value(stars[i]));
+    }
     // B36:B37
     storage->setValue(2, 36, Value("Bright Stars"));
     storage->setValue(2, 37, Value(4));

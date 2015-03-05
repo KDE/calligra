@@ -50,7 +50,8 @@
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/utils.h>
 
-class KexiFormManagerPrivate {
+class KexiFormManagerPrivate
+{
 public:
     explicit KexiFormManagerPrivate(KexiFormManager *qq) : part(0)
         , q(qq)
@@ -63,11 +64,12 @@ public:
         widgetTree = 0;
         collection = 0;
     }
-    ~KexiFormManagerPrivate() {
+    ~KexiFormManagerPrivate()
+    {
     }
-    KexiFormPart* part;
-    KFormDesigner::WidgetLibrary* lib;
-    KFormDesigner::ActionGroup* widgetActionGroup;
+    KexiFormPart *part;
+    KFormDesigner::WidgetLibrary *lib;
+    KFormDesigner::ActionGroup *widgetActionGroup;
     KFormDesigner::WidgetTreeWidget *widgetTree;
     KActionCollection  *collection;
     KFormDesigner::Form::Features features;
@@ -82,14 +84,14 @@ public:
 
 K_GLOBAL_STATIC(KexiFormManager, g_manager)
 
-KexiFormManager* KexiFormManager::self()
+KexiFormManager *KexiFormManager::self()
 {
     return g_manager;
 }
 
 KexiFormManager::KexiFormManager()
-        : QObject()
-        , d(new KexiFormManagerPrivate(this))
+    : QObject()
+    , d(new KexiFormManagerPrivate(this))
 {
     KexiCustomPropertyFactory::init();
 }
@@ -101,7 +103,7 @@ KexiFormManager::~KexiFormManager()
 
 void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *widgetTree)
 {
-/*! @todo add configuration for supported factory groups */
+    /*! @todo add configuration for supported factory groups */
     QStringList supportedFactoryGroups;
     supportedFactoryGroups += "kexi";
     d->lib = new KFormDesigner::WidgetLibrary(this, supportedFactoryGroups);
@@ -110,12 +112,12 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *
     connect(d->lib, SIGNAL(widgetCreated(QWidget*)),
             this, SLOT(slotWidgetCreatedByFormsLibrary(QWidget*)));
     connect(d->lib, SIGNAL(widgetActionToggled(QByteArray)),
-        this, SLOT(slotWidgetActionToggled(QByteArray)));
+            this, SLOT(slotWidgetActionToggled(QByteArray)));
 
     d->part = part;
     KActionCollection *col = /*tmp*/ new KActionCollection(this);
     if (col) {
-        createActions( col );
+        createActions(col);
         //connect actions provided by widget factories
         connect(col->action("widget_assign_action"), SIGNAL(activated()),
                 this, SLOT(slotAssignAction()));
@@ -138,12 +140,12 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *
     }
 }
 
-KFormDesigner::ActionGroup* KexiFormManager::widgetActionGroup() const
+KFormDesigner::ActionGroup *KexiFormManager::widgetActionGroup() const
 {
     return d->widgetActionGroup;
 }
 
-void KexiFormManager::createActions(KActionCollection* collection)
+void KexiFormManager::createActions(KActionCollection *collection)
 {
     d->collection = collection;
     d->lib->createWidgetActions(d->widgetActionGroup);
@@ -152,8 +154,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #ifdef KFD_SIGSLOTS
     if (d->features & KFormDesigner::Form::EnableConnections) {
         // nothing
-    }
-    else {
+    } else {
         d->dragConnectionAction = new KToggleAction(
             koIcon("signalslot"), futureI18n("Connect Signals/Slots"), d->collection);
         d->dragConnectionAction->setObjectName("drag_connection");
@@ -219,75 +220,72 @@ void KexiFormManager::createActions(KActionCollection* collection)
         // (from obsolete kexiformpartinstui.rc)
         QStringList formActions;
         formActions
-            << "edit_pointer"
-            << QString() //sep
+                << "edit_pointer"
+                << QString() //sep
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
-            << "library_widget_KexiDBAutoField"
+                << "library_widget_KexiDBAutoField"
 #endif
-            << "library_widget_KexiDBLabel"
-            << "library_widget_KexiDBLineEdit"
-            << "library_widget_KexiDBTextEdit"
-            << "library_widget_KexiDBComboBox"
-            << "library_widget_KexiDBCheckBox"
-            << "library_widget_KexiDBImageBox"
-            << QString() //sep
-            << "library_widget_KPushButton"
-            << QString() //sep
-            << "library_widget_KexiFrame"
-            << "library_widget_QGroupBox"
-            << "library_widget_KFDTabWidget"
-            << "library_widget_Line"
-            << QString() //sep
+                << "library_widget_KexiDBLabel"
+                << "library_widget_KexiDBLineEdit"
+                << "library_widget_KexiDBTextEdit"
+                << "library_widget_KexiDBComboBox"
+                << "library_widget_KexiDBCheckBox"
+                << "library_widget_KexiDBImageBox"
+                << QString() //sep
+                << "library_widget_KPushButton"
+                << QString() //sep
+                << "library_widget_KexiFrame"
+                << "library_widget_QGroupBox"
+                << "library_widget_KFDTabWidget"
+                << "library_widget_Line"
+                << QString() //sep
 #ifdef CAN_USE_QTWEBKIT
-            << "library_widget_WebBrowserWidget"
+                << "library_widget_WebBrowserWidget"
 #endif
 #ifdef CAN_USE_MARBLE
-            << "library_widget_MapBrowserWidget"
+                << "library_widget_MapBrowserWidget"
 #endif
-            << "library_widget_KexiDBSlider"
-            << "library_widget_KexiDBProgressBar"
-            << "library_widget_KexiDBCommandLinkButton"
-            << "library_widget_KexiDBDatePicker"
-            << QString() //sep
-            ;
+                << "library_widget_KexiDBSlider"
+                << "library_widget_KexiDBProgressBar"
+                << "library_widget_KexiDBCommandLinkButton"
+                << "library_widget_KexiDBDatePicker"
+                << QString() //sep
+                ;
         KexiMainWindowIface *win = KexiMainWindowIface::global();
-        foreach( const QString& actionName_, formActions ) {
+        foreach (const QString &actionName_, formActions) {
             QAction *a;
             const QString actionName(actionName_.startsWith(':') ? actionName_.mid(1) : actionName_);
             if (actionName.isEmpty()) {
                 a = new QAction(this);
                 a->setSeparator(true);
-            }
-            else {
+            } else {
                 a = d->widgetActionGroup->action(actionName);
             }
             if (actionName_.startsWith(':')) {  // icon only
                 KexiSmallToolButton *btn = new KexiSmallToolButton(a, win->toolBar("form"));
                 btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
                 win->appendWidgetToToolbar("form", btn);
-            }
-            else {
+            } else {
                 win->addToolBarAction("form", a);
             }
         }
 
         QSet<QString> iconOnlyActions;
-        const QList<QAction*> actions( d->collection->actions() );
-        foreach( QAction *a, actions ) {
+        const QList<QAction *> actions(d->collection->actions());
+        foreach (QAction *a, actions) {
             if (iconOnlyActions.contains(a->objectName())) { // icon only
                 KexiSmallToolButton *btn = new KexiSmallToolButton(a, win->toolBar("form"));
                 btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
                 win->appendWidgetToToolbar("form", btn);
                 win->setWidgetVisibleInToolbar(btn, true);
-            }
-            else {
+            } else {
                 win->addToolBarAction("form", a);
             }
         }
     }
 }
 
-void KexiFormManager::slotWidgetCreatedByFormsLibrary(QWidget* widget)
+void KexiFormManager::slotWidgetCreatedByFormsLibrary(QWidget *widget)
 {
     QList<QMetaMethod> _signals(KexiUtils::methodsForMetaObject(
                                     widget->metaObject(), QMetaMethod::Signal));
@@ -295,9 +293,9 @@ void KexiFormManager::slotWidgetCreatedByFormsLibrary(QWidget* widget)
     if (!_signals.isEmpty()) {
         const char *handleDragMoveEventSignal = "handleDragMoveEvent(QDragMoveEvent*)";
         const char *handleDropEventSignal = "handleDropEvent(QDropEvent*)";
-        KexiFormView *formView = KexiUtils::findParent<KexiFormView*>(widget);
+        KexiFormView *formView = KexiUtils::findParent<KexiFormView *>(widget);
 
-        foreach(const QMetaMethod& method, _signals) {
+        foreach (const QMetaMethod &method, _signals) {
             if (0 == qstrcmp(method.signature(), handleDragMoveEventSignal)) {
                 kDebug() << method.signature();
                 if (formView) {
@@ -315,74 +313,81 @@ void KexiFormManager::slotWidgetCreatedByFormsLibrary(QWidget* widget)
     }
 }
 
-void KexiFormManager::slotWidgetActionToggled(const QByteArray& action)
+void KexiFormManager::slotWidgetActionToggled(const QByteArray &action)
 {
-    KexiFormView* fv = activeFormViewWidget();
+    KexiFormView *fv = activeFormViewWidget();
     if (fv) {
         fv->form()->enterWidgetInsertingState(action);
     }
 }
 
-KFormDesigner::WidgetLibrary* KexiFormManager::library() const
+KFormDesigner::WidgetLibrary *KexiFormManager::library() const
 {
     return d->lib;
 }
 
-QAction* KexiFormManager::action(const char* name)
+QAction *KexiFormManager::action(const char *name)
 {
     KActionCollection *col = d->part->actionCollectionForMode(Kexi::DesignViewMode);
-    if (!col)
+    if (!col) {
         return 0;
+    }
     QString n(translateName(name));
     QAction *a = col->action(n);
-    if (a)
+    if (a) {
         return a;
+    }
     if (activeFormViewWidget()) {
         a = KexiMainWindowIface::global()->actionCollection()->action(n);
-        if (a)
+        if (a) {
             return a;
+        }
     }
     return d->collection->action(name);
 }
 
-KexiFormView* KexiFormManager::activeFormViewWidget() const
+KexiFormView *KexiFormManager::activeFormViewWidget() const
 {
     KexiWindow *currentWindow = KexiMainWindowIface::global()->currentWindow();
-    if (!currentWindow)
+    if (!currentWindow) {
         return 0;
+    }
     KexiView *currentView = currentWindow->selectedView();
     KFormDesigner::Form *form;
     if (!currentView
-        || currentView->viewMode()!=Kexi::DesignViewMode
-        || !dynamic_cast<KexiFormView*>(currentView)
-        || !(form = dynamic_cast<KexiFormView*>(currentView)->form())
-       )
-    {
+            || currentView->viewMode() != Kexi::DesignViewMode
+            || !dynamic_cast<KexiFormView *>(currentView)
+            || !(form = dynamic_cast<KexiFormView *>(currentView)->form())
+       ) {
         return 0;
     }
-    KexiDBForm *dbform = dynamic_cast<KexiDBForm*>(form->formWidget());
-    KexiFormScrollView *scrollViewWidget = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
-    if (!scrollViewWidget)
+    KexiDBForm *dbform = dynamic_cast<KexiDBForm *>(form->formWidget());
+    KexiFormScrollView *scrollViewWidget = dynamic_cast<KexiFormScrollView *>(dbform->dataAwareObject());
+    if (!scrollViewWidget) {
         return 0;
-    return dynamic_cast<KexiFormView*>(scrollViewWidget->parent());
+    }
+    return dynamic_cast<KexiFormView *>(scrollViewWidget->parent());
 }
 
-void KexiFormManager::enableAction(const char* name, bool enable)
+void KexiFormManager::enableAction(const char *name, bool enable)
 {
-    KexiFormView* formViewWidget = activeFormViewWidget();
-    if (!formViewWidget)
+    KexiFormView *formViewWidget = activeFormViewWidget();
+    if (!formViewWidget) {
         return;
+    }
     formViewWidget->setAvailable(translateName(name).toLatin1(), enable);
 }
 
-void KexiFormManager::setFormDataSource(const QString& partClass, const QString& name)
+void KexiFormManager::setFormDataSource(const QString &partClass, const QString &name)
 {
-    KexiFormView* formViewWidget = activeFormViewWidget();
-    if (!formViewWidget)
+    KexiFormView *formViewWidget = activeFormViewWidget();
+    if (!formViewWidget) {
         return;
-    KexiDBForm* formWidget = dynamic_cast<KexiDBForm*>(formViewWidget->form()->widget());
-    if (!formWidget)
+    }
+    KexiDBForm *formWidget = dynamic_cast<KexiDBForm *>(formViewWidget->form()->widget());
+    if (!formWidget) {
         return;
+    }
 
     QString oldDataSourcePartClass(formWidget->dataSourcePartClass());
     QString oldDataSource(formWidget->dataSource());
@@ -398,15 +403,17 @@ void KexiFormManager::setFormDataSource(const QString& partClass, const QString&
 }
 
 void KexiFormManager::setDataSourceFieldOrExpression(
-    const QString& string, const QString& caption, KexiDB::Field::Type type)
+    const QString &string, const QString &caption, KexiDB::Field::Type type)
 {
-    KexiFormView* formViewWidget = activeFormViewWidget();
-    if (!formViewWidget)
+    KexiFormView *formViewWidget = activeFormViewWidget();
+    if (!formViewWidget) {
         return;
-    
-    KoProperty::Set& set = formViewWidget->form()->propertySet();
-    if (!set.contains("dataSource"))
+    }
+
+    KoProperty::Set &set = formViewWidget->form()->propertySet();
+    if (!set.contains("dataSource")) {
         return;
+    }
 
     set["dataSource"].setValue(string);
 
@@ -418,17 +425,18 @@ void KexiFormManager::setDataSourceFieldOrExpression(
     }
 }
 
-void KexiFormManager::insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
-                                       const QStringList& fields)
+void KexiFormManager::insertAutoFields(const QString &sourcePartClass, const QString &sourceName,
+                                       const QStringList &fields)
 {
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
     Q_UNUSED(sourcePartClass);
     Q_UNUSED(sourceName);
     Q_UNUSED(fields);
 #else
-    KexiFormView* formViewWidget = activeFormViewWidget();
-    if (!formViewWidget || !formViewWidget->form() || !formViewWidget->form()->activeContainer())
+    KexiFormView *formViewWidget = activeFormViewWidget();
+    if (!formViewWidget || !formViewWidget->form() || !formViewWidget->form()->activeContainer()) {
         return;
+    }
     formViewWidget->insertAutoFields(sourcePartClass, sourceName, fields,
                                      formViewWidget->form()->activeContainer());
 #endif
@@ -437,16 +445,18 @@ void KexiFormManager::insertAutoFields(const QString& sourcePartClass, const QSt
 void KexiFormManager::slotHistoryCommandExecuted(KFormDesigner::Command *command)
 {
     if (command->childCount() == 2) {
-        KexiFormView* formViewWidget = activeFormViewWidget();
-        if (!formViewWidget)
+        KexiFormView *formViewWidget = activeFormViewWidget();
+        if (!formViewWidget) {
             return;
-        KexiDBForm* formWidget = dynamic_cast<KexiDBForm*>(formViewWidget->form()->widget());
-        if (!formWidget)
+        }
+        KexiDBForm *formWidget = dynamic_cast<KexiDBForm *>(formViewWidget->form()->widget());
+        if (!formWidget) {
             return;
-        const KFormDesigner::PropertyCommand* pc1
-            = dynamic_cast<const KFormDesigner::PropertyCommand*>(command->child(0));
-        const KFormDesigner::PropertyCommand* pc2
-            = dynamic_cast<const KFormDesigner::PropertyCommand*>(command->child(1));
+        }
+        const KFormDesigner::PropertyCommand *pc1
+            = dynamic_cast<const KFormDesigner::PropertyCommand *>(command->child(0));
+        const KFormDesigner::PropertyCommand *pc2
+            = dynamic_cast<const KFormDesigner::PropertyCommand *>(command->child(1));
         if (pc1 && pc2 && pc1->propertyName() == "dataSource" && pc2->propertyName() == "dataSourcePartClass") {
             const QHash<QByteArray, QVariant>::const_iterator it1(pc1->oldValues().constBegin());
             const QHash<QByteArray, QVariant>::const_iterator it2(pc2->oldValues().constBegin());
@@ -460,9 +470,10 @@ void KexiFormManager::slotHistoryCommandExecuted(KFormDesigner::Command *command
 void KexiFormManager::showFormUICode()
 {
 #ifdef KEXI_DEBUG_GUI
-    KexiFormView* formView = activeFormViewWidget();
-    if (!formView)
+    KexiFormView *formView = activeFormViewWidget();
+    if (!formView) {
         return;
+    }
     formView->form()->resetInlineEditor();
 
     QString uiCode;
@@ -500,35 +511,39 @@ void KexiFormManager::showFormUICode()
 
 void KexiFormManager::slotAssignAction()
 {
-    KexiFormView* formView = activeFormViewWidget();
-    if (!formView)
+    KexiFormView *formView = activeFormViewWidget();
+    if (!formView) {
         return;
+    }
     KFormDesigner::Form *form = formView->form();
     KexiDBForm *dbform = 0;
     if (form->mode() != KFormDesigner::Form::DesignMode
-        || !(dbform = dynamic_cast<KexiDBForm*>(form->formWidget())))
-    {
+            || !(dbform = dynamic_cast<KexiDBForm *>(form->formWidget()))) {
         return;
     }
 
-    KoProperty::Set& set = form->propertySet();
+    KoProperty::Set &set = form->propertySet();
 
     KexiFormEventAction::ActionData data;
     const KoProperty::Property &onClickActionProp = set.property("onClickAction");
-    if (!onClickActionProp.isNull())
+    if (!onClickActionProp.isNull()) {
         data.string = onClickActionProp.value().toString();
+    }
 
     const KoProperty::Property &onClickActionOptionProp = set.property("onClickActionOption");
-    if (!onClickActionOptionProp.isNull())
+    if (!onClickActionOptionProp.isNull()) {
         data.option = onClickActionOptionProp.value().toString();
+    }
 
     KexiFormScrollView *scrollViewWidget
-        = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
-    if (!scrollViewWidget)
+        = dynamic_cast<KexiFormScrollView *>(dbform->dataAwareObject());
+    if (!scrollViewWidget) {
         return;
-    KexiFormView* formViewWidget = dynamic_cast<KexiFormView*>(scrollViewWidget->parent());
-    if (!formViewWidget)
+    }
+    KexiFormView *formViewWidget = dynamic_cast<KexiFormView *>(scrollViewWidget->parent());
+    if (!formViewWidget) {
         return;
+    }
 
     KexiActionSelectionDialog dlg(dbform, data,
                                   set.property("objectName").value().toString());
@@ -543,19 +558,19 @@ void KexiFormManager::slotAssignAction()
 
 void KexiFormManager::slotPointerClicked()
 {
-    KexiFormView* formView = activeFormViewWidget();
-    if (!formView)
+    KexiFormView *formView = activeFormViewWidget();
+    if (!formView) {
         return;
+    }
     formView->form()->enterWidgetSelectingState();
 }
 
-QString KexiFormManager::translateName(const char* name) const
+QString KexiFormManager::translateName(const char *name) const
 {
     QString n(QString::fromLatin1(name));
     // translate to our name space:
     if (n.startsWith("align_") || n.startsWith("adjust_")
-            || n == "format_raise" || n == "format_lower" || n == "taborder")
-    {
+            || n == "format_raise" || n == "format_lower" || n == "taborder") {
         n.prepend("formpart_");
     }
     return n;

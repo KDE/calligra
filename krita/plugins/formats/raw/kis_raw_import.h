@@ -41,8 +41,7 @@ public:
     virtual ~KisRawImport();
 
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
-
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 private Q_SLOTS:
 
@@ -51,7 +50,7 @@ private:
     KDcrawIface::RawDecodingSettings rawDecodingSettings();
 private:
     Ui::WdgRawImport m_rawWidget;
-    KDialog* m_dialog;
+    KDialog *m_dialog;
 };
 
 #endif // KIS_RAW_IMPORT_H_

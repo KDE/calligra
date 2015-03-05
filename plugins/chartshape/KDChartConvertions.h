@@ -21,14 +21,12 @@
 #ifndef KCHART_KDCHARTCONVERTIONS_H
 #define KCHART_KDCHARTCONVERTIONS_H
 
-
 // KDChart
 #include <KDChartEnums>
 #include <KDChartCartesianAxis>
 
 // KChart
 #include "kchart_global.h"
-
 
 namespace KChart
 {

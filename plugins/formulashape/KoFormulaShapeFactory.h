@@ -32,7 +32,8 @@ class KoShape;
  * It follows the factory design pattern and implements the two virtual methods
  * createDefaultShape() and createShape() of KoShapeFactoryBase.
  */
-class KoFormulaShapeFactory : public KoShapeFactoryBase {
+class KoFormulaShapeFactory : public KoShapeFactoryBase
+{
 public:
     /// The constructor - reimplemented from KoShapeFactoryBase
     explicit KoFormulaShapeFactory();
@@ -43,7 +44,7 @@ public:
     /// reimplemented
     virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
 
-    virtual bool supports(const KoXmlElement& e, KoShapeLoadingContext &context) const;
+    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 };
 
 #endif // KOFORMULASHAPEFACTORY_H

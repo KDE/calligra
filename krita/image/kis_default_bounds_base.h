@@ -36,5 +36,4 @@ public:
     virtual bool wrapAroundMode() const = 0;
 };
 
-
 #endif // KIS_DEFAULT_BOUNDS_BASE_H

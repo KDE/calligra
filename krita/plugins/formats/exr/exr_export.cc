@@ -55,16 +55,18 @@ exrExport::~exrExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "EXR export! From:" << from << ", To:" << to << "";
 
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
     KisDocument *input = m_chain->inputDocument();
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
     KisImageWSP image = input->image();
     Q_CHECK_PTR(image);
 
@@ -83,13 +85,12 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
 
     widget.flatten->setChecked(cfg.getBool("flatten", false));
 
-    if (!m_chain->manager()->getBatchMode() ) {
+    if (!m_chain->manager()->getBatchMode()) {
         QApplication::restoreOverrideCursor();
         if (dialog.exec() == QDialog::Rejected) {
             return KisImportExportFilter::UserCancelled;
         }
-    }
-    else {
+    } else {
         qApp->processEvents(); // For vector layers to be updated
     }
     image->waitForDone();
@@ -98,7 +99,9 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
     KisConfig().setExportConfiguration("EXR", cfg);
 
     QString filename = m_chain->outputFile();
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
     KUrl url;
     url.setPath(filename);
@@ -115,8 +118,7 @@ KisImportExportFilter::ConversionStatus exrExport::convert(const QByteArray& fro
         image->unlock();
 
         res = kpc.buildFile(url, l);
-    }
-    else {
+    } else {
         image->lock();
 
         res = kpc.buildFile(url, image->rootLayer());

@@ -48,8 +48,8 @@ public:
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     virtual bool hitTest(const QPointF &position) const;
     virtual QRectF boundingRect() const;
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext &context) const;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
     Q_DECLARE_PRIVATE(KoShapeLayer)

@@ -39,12 +39,11 @@ using namespace Calligra::Sheets;
 K_PLUGIN_FACTORY(TableShapePluginFactory, registerPlugin<TableShapePlugin>();)
 K_EXPORT_PLUGIN(TableShapePluginFactory("calligra_shape_spreadsheet"))
 
-TableShapePlugin::TableShapePlugin(QObject * parent, const QVariantList&)
+TableShapePlugin::TableShapePlugin(QObject *parent, const QVariantList &)
 {
     Q_UNUSED(parent);
     KoShapeRegistry::instance()->add(new TableShapeFactory());
 }
-
 
 TableShapeFactory::TableShapeFactory()
     : KoShapeFactoryBase(TableShapeId, i18n("Spreadsheet"), "spreadsheetshape-deferred")

@@ -27,7 +27,6 @@ void KisDataManagerTest::testCreation()
     KisDataManager test(1, &c);
 }
 
-
 void KisDataManagerTest::testDefaultPixel()
 {
     {
@@ -37,7 +36,7 @@ void KisDataManagerTest::testDefaultPixel()
         QVERIFY(*dm.defaultPixel() == 0);
     }
     {
-        quint8 * p = new quint8[3];
+        quint8 *p = new quint8[3];
         memset(p, 0, 3);
 
         // The default pixel is copied, we still own the pointer
@@ -46,13 +45,13 @@ void KisDataManagerTest::testDefaultPixel()
 
         // A pointer, not a copy is returned. Changing it changes the
         // default pixel in the data manager.
-        const quint8 * defaultPixelC = dm.defaultPixel();
+        const quint8 *defaultPixelC = dm.defaultPixel();
         QVERIFY(defaultPixelC[0] == 0);
         QVERIFY(defaultPixelC[1] == 0);
         QVERIFY(defaultPixelC[2] == 0);
 
         // unconst it, so we can change it.
-        quint8 * defaultPixel = const_cast<quint8*>(defaultPixelC);
+        quint8 *defaultPixel = const_cast<quint8 *>(defaultPixelC);
         defaultPixel[0] = 50;
         defaultPixel[1] = 150;
         defaultPixel[2] = 200;

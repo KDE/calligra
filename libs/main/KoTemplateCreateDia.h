@@ -42,8 +42,8 @@ class KOMAIN_EXPORT KoTemplateCreateDia : public KDialog
     Q_OBJECT
 
 private:
-    KoTemplateCreateDia( const char *templateType, const KComponentData &instance,
-                         const QString &filePath, const QPixmap &thumbnail, QWidget *parent=0 );
+    KoTemplateCreateDia(const char *templateType, const KComponentData &instance,
+                        const QString &filePath, const QPixmap &thumbnail, QWidget *parent = 0);
     ~KoTemplateCreateDia();
 
 public:
@@ -67,7 +67,7 @@ private:
     void fillGroupTree();
 
 private:
-    KoTemplateCreateDiaPrivate * const d;
+    KoTemplateCreateDiaPrivate *const d;
 };
 
 #endif

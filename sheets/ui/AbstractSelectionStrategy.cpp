@@ -42,8 +42,8 @@ public:
 
 AbstractSelectionStrategy::AbstractSelectionStrategy(CellToolBase *cellTool,
         const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-        : KoInteractionStrategy(cellTool)
-        , d(new Private)
+    : KoInteractionStrategy(cellTool)
+    , d(new Private)
 {
     Q_UNUSED(modifiers)
     d->cellTool = cellTool;
@@ -55,7 +55,7 @@ AbstractSelectionStrategy::~AbstractSelectionStrategy()
     delete d;
 }
 
-void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
+void AbstractSelectionStrategy::handleMouseMove(const QPointF &documentPos, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers)
     Selection *const selection = d->cellTool->selection();
@@ -82,7 +82,7 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
     tool()->repaintDecorations();
 }
 
-KUndo2Command* AbstractSelectionStrategy::createCommand()
+KUndo2Command *AbstractSelectionStrategy::createCommand()
 {
     return 0;
 }
@@ -165,12 +165,12 @@ CellToolBase *AbstractSelectionStrategy::cellTool() const
     return d->cellTool;
 }
 
-Selection* AbstractSelectionStrategy::selection() const
+Selection *AbstractSelectionStrategy::selection() const
 {
     return d->cellTool->selection();
 }
 
-const QPointF& AbstractSelectionStrategy::startPosition() const
+const QPointF &AbstractSelectionStrategy::startPosition() const
 {
     return d->start;
 }

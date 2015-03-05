@@ -45,81 +45,79 @@ public:
     {}
     ~DocumentModel() {}
 
-    QVariant data( const Document *doc, int property, int role = Qt::DisplayRole ) const; 
-    static bool setData( Document *doc, int property, const QVariant & value, int role = Qt::EditRole );
+    QVariant data(const Document *doc, int property, int role = Qt::DisplayRole) const;
+    static bool setData(Document *doc, int property, const QVariant &value, int role = Qt::EditRole);
 
-    static QVariant headerData( int section, int role = Qt::DisplayRole );
+    static QVariant headerData(int section, int role = Qt::DisplayRole);
 
     static int propertyCount();
 
-    QVariant url( const Document *doc, int role ) const;
-    QVariant name( const Document *doc, int role ) const;
-    bool setName( Document *doc, const QVariant &value, int role );
-    QVariant type( const Document *doc, int role ) const;
-    bool setType( Document *doc, const QVariant &value, int role );
-    QVariant status( const Document *doc, int role ) const;
-    QVariant sendAs( const Document *doc, int role ) const;
-    bool setSendAs( Document *doc, const QVariant &value, int role );
+    QVariant url(const Document *doc, int role) const;
+    QVariant name(const Document *doc, int role) const;
+    bool setName(Document *doc, const QVariant &value, int role);
+    QVariant type(const Document *doc, int role) const;
+    bool setType(Document *doc, const QVariant &value, int role);
+    QVariant status(const Document *doc, int role) const;
+    QVariant sendAs(const Document *doc, int role) const;
+    bool setSendAs(Document *doc, const QVariant &value, int role);
 };
 
 class KPLATOMODELS_EXPORT DocumentItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit DocumentItemModel( QObject *parent = 0 );
+    explicit DocumentItemModel(QObject *parent = 0);
     ~DocumentItemModel();
 
-    virtual void setDocuments( Documents *docs );
+    virtual void setDocuments(Documents *docs);
     Documents *documents() const;
 
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex index( const Document *doc ) const;
+    virtual QModelIndex parent(const QModelIndex &index) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+    virtual QModelIndex index(const Document *doc) const;
 
-    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
-    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-
-    virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
-    virtual QStringList mimeTypes () const;
+    virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
+    virtual QStringList mimeTypes() const;
     virtual Qt::DropActions supportedDropActions() const;
-    virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
 
-    Document *document( const QModelIndex &index ) const;
+    Document *document(const QModelIndex &index) const;
 
-    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    QAbstractItemDelegate *createDelegate(int column, QWidget *parent) const;
 
-    QModelIndex insertDocument( Document *doc, Document *after );
+    QModelIndex insertDocument(Document *doc, Document *after);
 
-    bool dropAllowed( Document *on, const QMimeData *data );
+    bool dropAllowed(Document *on, const QMimeData *data);
 
-    virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
+    virtual bool dropAllowed(const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data);
 
 protected Q_SLOTS:
-    void slotDocumentChanged( Document* );
-    void slotDocumentToBeInserted( Documents*, int row );
-    void slotDocumentInserted( Document* );
-    void slotDocumentToBeRemoved( Document* );
-    void slotDocumentRemoved( Document* );
+    void slotDocumentChanged(Document *);
+    void slotDocumentToBeInserted(Documents *, int row);
+    void slotDocumentInserted(Document *);
+    void slotDocumentToBeRemoved(Document *);
+    void slotDocumentRemoved(Document *);
 
 protected:
-    bool setUrl( Document *doc, const QVariant &value, int role );
-    bool setName( Document *doc, const QVariant &value, int role );
-    bool setType( Document *doc, const QVariant &value, int role );
-    bool setSendAs( Document *doc, const QVariant &value, int role );
+    bool setUrl(Document *doc, const QVariant &value, int role);
+    bool setName(Document *doc, const QVariant &value, int role);
+    bool setType(Document *doc, const QVariant &value, int role);
+    bool setSendAs(Document *doc, const QVariant &value, int role);
 
 private:
     Documents *m_documents;
     DocumentModel m_model;
 };
-
 
 } //namespace KPlato
 

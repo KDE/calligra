@@ -21,21 +21,20 @@
 
 #include "kis_dynamic_sensor.h"
 
-
 class KisDynamicSensorDrawingAngle : public QObject, public KisDynamicSensor
 {
     Q_OBJECT
 public:
     KisDynamicSensorDrawingAngle();
-    qreal value(const KisPaintInformation& info);
+    qreal value(const KisPaintInformation &info);
     bool dependsOnCanvasRotation() const;
 
-    QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
+    QWidget *createConfigurationWidget(QWidget *parent, QWidget *);
 
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
-    void toXML(QDomDocument&, QDomElement&) const;
-    void fromXML(const QDomElement&);
+    void toXML(QDomDocument &, QDomElement &) const;
+    void fromXML(const QDomElement &);
 
     bool fanCornersEnabled() const;
     int fanCornersStep() const;

@@ -34,39 +34,43 @@ struct XFigPoint;
 
 template<typename T> class QVector;
 
-
 class XFigParser
 {
 public:
-    static XFigDocument* parse( QIODevice* device );
+    static XFigDocument *parse(QIODevice *device);
 
 private:
-    explicit XFigParser( QIODevice* device );
+    explicit XFigParser(QIODevice *device);
     ~XFigParser();
 
-    XFigDocument* takeDocument() { XFigDocument* result = m_Document; m_Document = 0; return result; }
+    XFigDocument *takeDocument()
+    {
+        XFigDocument *result = m_Document;
+        m_Document = 0;
+        return result;
+    }
 
     bool parseHeader();
 
     void parseColorObject();
 
-    XFigAbstractObject* parseArc();
-    XFigAbstractObject* parseEllipse();
-    XFigAbstractObject* parsePolyline();
-    XFigAbstractObject* parseSpline();
-    XFigAbstractObject* parseText();
-    XFigAbstractObject* parseCompoundObject();
+    XFigAbstractObject *parseArc();
+    XFigAbstractObject *parseEllipse();
+    XFigAbstractObject *parsePolyline();
+    XFigAbstractObject *parseSpline();
+    XFigAbstractObject *parseText();
+    XFigAbstractObject *parseCompoundObject();
 
-    XFigArrowHead* parseArrowHead();
+    XFigArrowHead *parseArrowHead();
     QVector<XFigPoint> parsePoints(int pointCount);
     QVector<double> parseFactors(int pointCount);
 
 private:
-    XFigDocument* m_Document;
+    XFigDocument *m_Document;
 
     int m_XFigVersion;
 
-    QTextDecoder* m_TextDecoder;
+    QTextDecoder *m_TextDecoder;
     XFigStreamLineReader m_XFigStreamLineReader;
 };
 

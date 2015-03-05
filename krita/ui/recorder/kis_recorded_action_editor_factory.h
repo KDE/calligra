@@ -37,14 +37,14 @@ public:
      * The widget is expected to have a 'actionChanged' signal that is emitted
      * when the editor has changed one of the parameter of the action.
      */
-    virtual QWidget* createEditor(QWidget* parent, KisRecordedAction* action) const = 0;
+    virtual QWidget *createEditor(QWidget *parent, KisRecordedAction *action) const = 0;
     /**
      * @return true if this factory can create an editor for the given action.
      */
-    virtual bool canEdit(const KisRecordedAction* action) const = 0;
+    virtual bool canEdit(const KisRecordedAction *action) const = 0;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

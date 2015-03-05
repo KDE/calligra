@@ -22,14 +22,14 @@
 
 using namespace MusicCore;
 
-PartsListModel::PartsListModel(Sheet* sheet)
+PartsListModel::PartsListModel(Sheet *sheet)
     : m_sheet(sheet)
 {
     connect(m_sheet, SIGNAL(partAdded(int,MusicCore::Part*)), this, SLOT(partAdded(int,MusicCore::Part*)));
     connect(m_sheet, SIGNAL(partRemoved(int,MusicCore::Part*)), this, SLOT(partRemoved(int,MusicCore::Part*)));
 }
 
-int PartsListModel::rowCount(const QModelIndex& parent) const
+int PartsListModel::rowCount(const QModelIndex &parent) const
 {
     if (!parent.isValid()) {
         return m_sheet->partCount();
@@ -38,28 +38,30 @@ int PartsListModel::rowCount(const QModelIndex& parent) const
     }
 }
 
-QVariant PartsListModel::data(const QModelIndex& index, int role) const
+QVariant PartsListModel::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::DisplayRole) {
         int row = index.row();
-        if (row < 0 || row >= m_sheet->partCount()) return QString("invalid");
+        if (row < 0 || row >= m_sheet->partCount()) {
+            return QString("invalid");
+        }
         return m_sheet->part(row)->name();
     }
     return QVariant();
 }
 
-void PartsListModel::partAdded(int index, Part* part)
+void PartsListModel::partAdded(int index, Part *part)
 {
-    Q_UNUSED( part );
-    
+    Q_UNUSED(part);
+
     beginInsertRows(QModelIndex(), index, index);
     endInsertRows();
 }
 
-void PartsListModel::partRemoved(int index, Part* part)
+void PartsListModel::partRemoved(int index, Part *part)
 {
-    Q_UNUSED( part );
-    
+    Q_UNUSED(part);
+
     beginRemoveRows(QModelIndex(), index, index);
     endRemoveRows();
 }

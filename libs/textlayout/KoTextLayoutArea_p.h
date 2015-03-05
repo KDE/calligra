@@ -67,8 +67,8 @@ public:
         , footNoteAutoCount(0)
         , extraTextIndent(0)
         , endNotesArea(0)
-        {
-        }
+    {
+    }
 
     KoTextLayoutArea *parent; //  A pointer to the parent
 

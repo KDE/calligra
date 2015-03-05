@@ -24,7 +24,7 @@
 class PresetModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
+    Q_PROPERTY(QObject *view READ view WRITE setView NOTIFY viewChanged)
     Q_PROPERTY(QString currentPreset READ currentPreset WRITE setCurrentPreset NOTIFY currentPresetChanged)
 public:
     enum PresetRoles {
@@ -40,8 +40,8 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
-    QObject* view() const;
-    void setView(QObject* newView);
+    QObject *view() const;
+    void setView(QObject *newView);
 
     QString currentPreset() const;
     void setCurrentPreset(QString presetName);
@@ -54,11 +54,11 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void activatePreset(int index);
-    void resourceChanged(int key, const QVariant& v);
+    void resourceChanged(int key, const QVariant &v);
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // PRESETMODEL_H

@@ -37,10 +37,11 @@ class SvgOutputDev::Private
 {
 public:
     Private(const QString &fname)
-            : svgFile(fname), defs(0), body(0), state(gTrue)
-            , brush(Qt::SolidPattern) {}
+        : svgFile(fname), defs(0), body(0), state(gTrue)
+        , brush(Qt::SolidPattern) {}
 
-    ~Private() {
+    ~Private()
+    {
         delete defs;
         delete body;
     }
@@ -48,8 +49,8 @@ public:
     QFile svgFile;
     QString bodyData;
     QString defsData;
-    QTextStream * defs;
-    QTextStream * body;
+    QTextStream *defs;
+    QTextStream *body;
     GBool state;
     QSizeF pageSize;
     QPen pen;
@@ -57,7 +58,7 @@ public:
 };
 
 SvgOutputDev::SvgOutputDev(const QString &fileName)
-        : d(new Private(fileName))
+    : d(new Private(fileName))
 {
     if (! d->svgFile.open(QIODevice::WriteOnly)) {
         d->state = gFalse;
@@ -100,8 +101,9 @@ void SvgOutputDev::startPage(int pageNum, GfxState *state, XRef */*xref*/)
     kDebug(30516) << "page size =" << d->pageSize;
 
     *d->body << "<g id=\"" << QString("%1").arg(pageNum, (int)3, (int)10, QLatin1Char('0')) << "\"" << endl;
-    if (pageNum != 1)
+    if (pageNum != 1) {
         *d->body << " display=\"none\"";
+    }
     *d->body << ">" << endl;
 }
 
@@ -137,7 +139,7 @@ void SvgOutputDev::dumpContent()
     d->svgFile.close();
 }
 
-void SvgOutputDev::stroke(GfxState * state)
+void SvgOutputDev::stroke(GfxState *state)
 {
     QString path = convertPath(state->getPath());
     *d->body << "<path";
@@ -148,7 +150,7 @@ void SvgOutputDev::stroke(GfxState * state)
     *d->body << "/>" << endl;
 }
 
-void SvgOutputDev::fill(GfxState * state)
+void SvgOutputDev::fill(GfxState *state)
 {
     QString path = convertPath(state->getPath());
     *d->body << "<path";
@@ -172,13 +174,14 @@ void SvgOutputDev::eoFill(GfxState *state)
 
 QString SvgOutputDev::convertPath(GfxPath *path)
 {
-    if (! path)
+    if (! path) {
         return QString();
+    }
 
     QString output;
 
     for (int i = 0; i < path->getNumSubpaths(); ++i) {
-        GfxSubpath * subpath = path->getSubpath(i);
+        GfxSubpath *subpath = path->getSubpath(i);
         if (subpath->getNumPoints() > 0) {
             output += QString("M%1 %2").arg(subpath->getX(0)).arg(subpath->getY(0));
             int j = 1;
@@ -210,7 +213,7 @@ QString SvgOutputDev::convertMatrix(const QMatrix &matrix)
            .arg(matrix.dx()) .arg(matrix.dy());
 }
 
-QString SvgOutputDev::convertMatrix(double * matrix)
+QString SvgOutputDev::convertMatrix(double *matrix)
 {
     return QString("matrix(%1 %2 %3 %4 %5 %6)")
            .arg(matrix[0]).arg(matrix[1])
@@ -336,8 +339,9 @@ QString SvgOutputDev::printFill()
     }
 
     fill += "\"";
-    if (d->brush.color().alphaF() < 1.0)
+    if (d->brush.color().alphaF() < 1.0) {
         fill += QString(" fill-opacity=\"%1\"").arg(d->brush.color().alphaF());
+    }
 
     return fill;
 }
@@ -346,37 +350,41 @@ QString SvgOutputDev::printStroke()
 {
     QString stroke;
     stroke += " stroke=\"";
-    if (d->pen.style() == Qt::NoPen)
+    if (d->pen.style() == Qt::NoPen) {
         stroke += "none";
-    else
+    } else {
         stroke += d->pen.color().name();
+    }
     stroke += "\"";
 
-    if (d->pen.color().alphaF() < 1.0)
+    if (d->pen.color().alphaF() < 1.0) {
         stroke += QString(" stroke-opacity=\"%1\"").arg(d->pen.color().alphaF());
+    }
     stroke += QString(" stroke-width=\"%1\"").arg(d->pen.widthF());
 
-    if (d->pen.capStyle() == Qt::FlatCap)
+    if (d->pen.capStyle() == Qt::FlatCap) {
         stroke += " stroke-linecap=\"butt\"";
-    else if (d->pen.capStyle() == Qt::RoundCap)
+    } else if (d->pen.capStyle() == Qt::RoundCap) {
         stroke += " stroke-linecap=\"round\"";
-    else if (d->pen.capStyle() == Qt::SquareCap)
+    } else if (d->pen.capStyle() == Qt::SquareCap) {
         stroke += " stroke-linecap=\"square\"";
+    }
 
     if (d->pen.joinStyle() == Qt::MiterJoin) {
         stroke += " stroke-linejoin=\"miter\"";
         stroke += QString(" stroke-miterlimit=\"%1\"").arg(d->pen.miterLimit());
-    } else if (d->pen.joinStyle() == Qt::RoundJoin)
+    } else if (d->pen.joinStyle() == Qt::RoundJoin) {
         stroke += " stroke-linejoin=\"round\"";
-    else if (d->pen.joinStyle() == Qt::BevelJoin)
+    } else if (d->pen.joinStyle() == Qt::BevelJoin) {
         stroke += " stroke-linejoin=\"bevel\"";
+    }
 
     // dash
     if (d->pen.style() > Qt::SolidLine) {
         //*stream << " stroke-dashoffset=\"" << line->dashPattern().offset() << "\"";
         stroke += " stroke-dasharray=\" ";
 
-        foreach(qreal dash, d->pen.dashPattern()) {
+        foreach (qreal dash, d->pen.dashPattern()) {
             stroke += dash + ' ';
         }
         stroke += "\"";
@@ -385,22 +393,24 @@ QString SvgOutputDev::printStroke()
     return stroke;
 }
 
-void SvgOutputDev::drawString(GfxState * state, GooString * s)
+void SvgOutputDev::drawString(GfxState *state, GooString *s)
 {
     int render = state->getRender();
     // check for invisible text -- this is used by Acrobat Capture
-    if (render == 3)
+    if (render == 3) {
         return;
+    }
 
     // ignore empty strings
-    if (s->getLength() == 0)
+    if (s->getLength() == 0) {
         return;
+    }
 
-    GfxFont * font = state->getFont();
+    GfxFont *font = state->getFont();
 
     QString str;
 
-    char * p = s->getCString();
+    char *p = s->getCString();
     int len = s->getLength();
     CharCode code;
     Unicode *u = NULL;
@@ -410,14 +420,16 @@ void SvgOutputDev::drawString(GfxState * state, GooString * s)
         int n = font->getNextChar(p, len, &code, &u, &uLen, &dx, &dy, &originX, &originY);
         p += n;
         len -= n;
-        if (!u)
+        if (!u) {
             break;
+        }
         str += QChar(*u);
     }
 
     str = str.simplified();
-    if (str.isEmpty())
+    if (str.isEmpty()) {
         return;
+    }
 
     // escape special characters
     str.replace('&', "&amp;");
@@ -427,7 +439,7 @@ void SvgOutputDev::drawString(GfxState * state, GooString * s)
     double x = state->getCurX();
     double y = state->getCurY();
 
-    double * ctm = state->getCTM();
+    double *ctm = state->getCTM();
     QMatrix transform(ctm[0], ctm[1], ctm[2], ctm[3], ctm[4], ctm[5]);
 
     QMatrix mirror;
@@ -457,15 +469,18 @@ void SvgOutputDev::drawString(GfxState * state, GooString * s)
     }
     *d->body << " font-size=\"" << qMax(state->getFontSize(), state->getTransformedFontSize()) << "px\"";
 
-    if (writeTransform)
+    if (writeTransform) {
         *d->body << " transform=\"" << convertMatrix(transform) << "\"";
+    }
 
     // fill
-    if (!(render & 1))
+    if (!(render & 1)) {
         *d->body << printFill();
+    }
     // stroke
-    if ((render & 3) == 1 || (render & 3) == 2)
+    if ((render & 3) == 1 || (render & 3) == 2) {
         *d->body << printStroke();
+    }
 
     *d->body << ">";
     *d->body << str;
@@ -476,22 +491,22 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
                              int width, int height, GfxImageColorMap *colorMap,
                              int *maskColors, GBool /*inlineImg*/)
 {
-    ImageStream * imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits());
+    ImageStream *imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits());
     imgStr->reset();
 
     unsigned int *dest = 0;
-    unsigned char * buffer = new unsigned char[width * height * 4];
+    unsigned char *buffer = new unsigned char[width * height * 4];
 
-    QImage * image = 0;
+    QImage *image = 0;
     if (maskColors) {
         for (int y = 0; y < height; y++) {
             dest = (unsigned int *)(buffer + y * 4 * width);
-            Guchar * pix = imgStr->getLine();
+            Guchar *pix = imgStr->getLine();
             colorMap->getRGBLine(pix, dest, width);
 
             for (int x = 0; x < width; x++) {
                 for (int i = 0; i < colorMap->getNumPixelComps(); ++i) {
-                    if (pix[i] < maskColors[2*i] * 255 || pix[i] > maskColors[2*i+1] * 255) {
+                    if (pix[i] < maskColors[2 * i] * 255 || pix[i] > maskColors[2 * i + 1] * 255) {
                         *dest = *dest | 0xff000000;
                         break;
                     }
@@ -505,7 +520,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
     } else {
         for (int y = 0; y < height; y++) {
             dest = (unsigned int *)(buffer + y * 4 * width);
-            Guchar * pix = imgStr->getLine();
+            Guchar *pix = imgStr->getLine();
             colorMap->getRGBLine(pix, dest, width);
         }
 
@@ -520,7 +535,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
         return;
     }
 
-    double * ctm = state->getCTM();
+    double *ctm = state->getCTM();
     QMatrix m;
     m.setMatrix(ctm[0] / width, ctm[1] / width, -ctm[2] / height, -ctm[3] / height, ctm[2] + ctm[4], ctm[3] + ctm[5]);
 

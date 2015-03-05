@@ -20,12 +20,11 @@
 
 #include <kglobal.h>
 
-
 KisExposureGammaCorrectionInterface::~KisExposureGammaCorrectionInterface()
 {
 }
 
-KisDumbExposureGammaCorrectionInterface*
+KisDumbExposureGammaCorrectionInterface *
 KisDumbExposureGammaCorrectionInterface::instance()
 {
     K_GLOBAL_STATIC(KisDumbExposureGammaCorrectionInterface, s_instance);

@@ -30,16 +30,19 @@
 #include <records.h>
 #include <QVariantList>
 
-namespace Calligra {
-namespace Sheets {
-    class Sheet;
-    class Tokens;
+namespace Calligra
+{
+namespace Sheets
+{
+class Sheet;
+class Tokens;
 }
 }
 
-namespace Swinder {
-    class SSTRecord;
-    class FormulaToken;
+namespace Swinder
+{
+class SSTRecord;
+class FormulaToken;
 }
 
 class ExcelExport : public KoFilter
@@ -49,19 +52,19 @@ class ExcelExport : public KoFilter
 
 public:
 
-    ExcelExport(QObject *parent, const QVariantList&);
+    ExcelExport(QObject *parent, const QVariantList &);
     virtual ~ExcelExport();
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
-    QList<Swinder::FormulaToken> compileFormula(const Calligra::Sheets::Tokens& tokens, Calligra::Sheets::Sheet* sheet) const;
+    QList<Swinder::FormulaToken> compileFormula(const Calligra::Sheets::Tokens &tokens, Calligra::Sheets::Sheet *sheet) const;
 
-    void convertSheet(Calligra::Sheets::Sheet* sheet, const QHash<QString, unsigned>& sst);
-    void buildStringTable(Calligra::Sheets::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable);
-    void collectStyles(Calligra::Sheets::Sheet* sheet, QList<Swinder::XFRecord>& xfRecords, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
+    void convertSheet(Calligra::Sheets::Sheet *sheet, const QHash<QString, unsigned> &sst);
+    void buildStringTable(Calligra::Sheets::Sheet *sheet, Swinder::SSTRecord &sst, QHash<QString, unsigned> &stringTable);
+    void collectStyles(Calligra::Sheets::Sheet *sheet, QList<Swinder::XFRecord> &xfRecords, QHash<QPair<QFont, QColor>, unsigned> &fontMap);
 private:
     class Private;
-    Private* d;
+    Private *d;
 
 };
 

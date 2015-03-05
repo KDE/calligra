@@ -29,8 +29,8 @@
 class KisDocument;
 
 struct JP2ConvertOptions {
-  int rate;
-  int numberresolution;
+    int rate;
+    int numberresolution;
 };
 
 /**
@@ -66,18 +66,18 @@ public:
     jp2Converter(KisDocument *doc);
     virtual ~jp2Converter();
 public:
-    KisImageBuilder_Result buildImage(const KUrl& uri);
-    KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, const JP2ConvertOptions& options);
+    KisImageBuilder_Result buildImage(const KUrl &uri);
+    KisImageBuilder_Result buildFile(const KUrl &uri, KisPaintLayerSP layer, const JP2ConvertOptions &options);
     /**
      * Retrieve the constructed image
      */
     KisImageWSP getImage();
 private:
-    KisImageBuilder_Result decode(const KUrl& uri);
+    KisImageBuilder_Result decode(const KUrl &uri);
 public Q_SLOTS:
     virtual void cancel();
 private:
-    int getFileFormat(const KUrl& uri) const;
+    int getFileFormat(const KUrl &uri) const;
 private:
     KisImageWSP m_image;
     KisDocument *m_doc;

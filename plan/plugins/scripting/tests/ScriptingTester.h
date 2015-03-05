@@ -24,17 +24,18 @@
 
 class TestResult;
 
-namespace Kross {
-    class Action;
+namespace Kross
+{
+class Action;
 }
 
-namespace Scripting {
-    class Module;
+namespace Scripting
+{
+class Module;
 }
 
 namespace KPlato
 {
-
 
 class ScriptingTester : public QObject
 {
@@ -43,14 +44,14 @@ class ScriptingTester : public QObject
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    
+
     void test();
 
 private:
     QStringList initTestList();
-    
+
 private:
-    QList<Kross::Action*> m_tests;
+    QList<Kross::Action *> m_tests;
     Scripting::Module *m_module;
     TestResult *m_result;
 };

@@ -48,7 +48,7 @@ void OAuth::sign(QString method, QNetworkRequest *nr)
     header += oauth_signature_method() + ",";
     header += oauth_token() + ",";
     header += oauth_version() + ",";
-    header += oauth_signature(method,&url,header) + ",";
+    header += oauth_signature(method, &url, header) + ",";
 
     header.chop(1);
 
@@ -83,35 +83,33 @@ QString OAuth::oauth_version()
     return QString("oauth_version=\"%1\"").arg(OAUTH_VERSION);
 }
 
-QString OAuth::oauth_signature(QString method,QUrl *url,QString oAuthHeader)
+QString OAuth::oauth_signature(QString method, QUrl *url, QString oAuthHeader)
 {
     QString urlSchemeAndHost = url->toString(
-        QUrl::RemovePort |
-        QUrl::RemovePath |
-        QUrl::RemoveQuery |
-        QUrl::RemoveFragment
-        );
+                                   QUrl::RemovePort |
+                                   QUrl::RemovePath |
+                                   QUrl::RemoveQuery |
+                                   QUrl::RemoveFragment
+                               );
     QString urlPath = url->path();
 
     QStringList urlPathParts = urlPath.split("/");
-    for(int i = 0; i < urlPathParts.length(); ++i)
-    {
+    for (int i = 0; i < urlPathParts.length(); ++i) {
         urlPathParts[i] = urlPathParts[i].toUtf8().toPercentEncoding();
     }
     urlPath = urlPathParts.join("/");
 
     QByteArray readyForUseUrl =
-        (urlSchemeAndHost+urlPath).toLatin1().toPercentEncoding();
+        (urlSchemeAndHost + urlPath).toLatin1().toPercentEncoding();
 
-    QList< QPair<QString,QString> > parameters;
+    QList< QPair<QString, QString> > parameters;
 
     parameters.append(url->queryItems());
 
     oAuthHeader.remove("OAuth ");
     QStringList oAuthParameters =
         oAuthHeader.split(",", QString::SkipEmptyParts);
-    foreach(QString oAuthParameter, oAuthParameters)
-    {
+    foreach (QString oAuthParameter, oAuthParameters) {
         QStringList oAuthParameterParts = oAuthParameter.split("=");
         QString first = oAuthParameterParts.at(0);
         QString second = oAuthParameterParts.at(1);
@@ -120,9 +118,8 @@ QString OAuth::oauth_signature(QString method,QUrl *url,QString oAuthHeader)
         parameters.append(parameter);
     }
 
-    for(int i = 0; i < parameters.length(); ++i)
-    {
-        QPair<QString,QString> parameter = parameters[i];
+    for (int i = 0; i < parameters.length(); ++i) {
+        QPair<QString, QString> parameter = parameters[i];
         parameter.second = parameter.second.toUtf8().toPercentEncoding();
         parameters[i] = parameter;
     }
@@ -130,17 +127,18 @@ QString OAuth::oauth_signature(QString method,QUrl *url,QString oAuthHeader)
     qSort(parameters);
 
     QString parametersString;
-    QPair<QString,QString> parameter;
-    foreach(parameter, parameters)
+    QPair<QString, QString> parameter;
+    foreach (parameter, parameters) {
         parametersString += parameter.first + "=" + parameter.second + "&";
+    }
 
     parametersString.chop(1);
 
     QString readyForUseParametersString = parametersString.toLatin1().toPercentEncoding();
 
-    QString base = method+"&"+readyForUseUrl+"&"+readyForUseParametersString;
+    QString base = method + "&" + readyForUseUrl + "&" + readyForUseParametersString;
 
-    QString hash = SHA1(base,m_consumer_secret + "&" + m_secret);
+    QString hash = SHA1(base, m_consumer_secret + "&" + m_secret);
 
     return QString("oauth_signature=\"%1\"").arg(hash);
 }
@@ -149,29 +147,33 @@ QString OAuth::SHA1(QString base, QString key)
 {
     QByteArray ipad;
     ipad.fill(char(0), 64);
-    for(int i = 0; i < key.length(); ++i)
+    for (int i = 0; i < key.length(); ++i) {
         ipad[i] = key[i].toLatin1();
+    }
 
     QByteArray opad;
     opad.fill(char(0), 64);
-    for(int i = 0; i < key.length(); ++i)
+    for (int i = 0; i < key.length(); ++i) {
         opad[i] = key[i].toLatin1();
+    }
 
-    for(int i = 0; i < ipad.length(); ++i)
+    for (int i = 0; i < ipad.length(); ++i) {
         ipad[i] = ipad[i] ^ 0x36;
+    }
 
-    for(int i = 0; i < opad.length(); ++i)
+    for (int i = 0; i < opad.length(); ++i) {
         opad[i] = opad[i] ^ 0x5c;
+    }
 
     QByteArray innerSha1 = QCryptographicHash::hash(
-        ipad + base.toLatin1(),
-        QCryptographicHash::Sha1
-        );
+                               ipad + base.toLatin1(),
+                               QCryptographicHash::Sha1
+                           );
 
     QByteArray outerSha1 = QCryptographicHash::hash(
-        opad + innerSha1,
-        QCryptographicHash::Sha1
-        );
+                               opad + innerSha1,
+                               QCryptographicHash::Sha1
+                           );
 
     return outerSha1.toBase64();
 }

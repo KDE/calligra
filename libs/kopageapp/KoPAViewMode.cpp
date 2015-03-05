@@ -26,11 +26,11 @@
 
 #include <QCloseEvent>
 
-KoPAViewMode::KoPAViewMode( KoPAViewBase * view, KoPACanvasBase * canvas, const QString &name)
-: m_canvas( canvas )
-, m_toolProxy( canvas->toolProxy() )
-, m_view( view )
-, m_name(name)
+KoPAViewMode::KoPAViewMode(KoPAViewBase *view, KoPACanvasBase *canvas, const QString &name)
+    : m_canvas(canvas)
+    , m_toolProxy(canvas->toolProxy())
+    , m_view(view)
+    , m_name(name)
 {
 }
 
@@ -38,12 +38,12 @@ KoPAViewMode::~KoPAViewMode()
 {
 }
 
-void KoPAViewMode::closeEvent( QCloseEvent * event )
+void KoPAViewMode::closeEvent(QCloseEvent *event)
 {
     event->ignore();
 }
 
-void KoPAViewMode::setMasterMode( bool master )
+void KoPAViewMode::setMasterMode(bool master)
 {
     Q_UNUSED(master);
 }
@@ -53,13 +53,13 @@ bool KoPAViewMode::masterMode()
     return false;
 }
 
-void KoPAViewMode::activate( KoPAViewMode * previousViewMode )
+void KoPAViewMode::activate(KoPAViewMode *previousViewMode)
 {
-    Q_UNUSED( previousViewMode );
+    Q_UNUSED(previousViewMode);
     m_canvas->updateSize();
-    updateActivePage( m_view->activePage() );
+    updateActivePage(m_view->activePage());
     // this is done to set the preferred center
-    m_canvas->canvasController()->setCanvasMode( KoCanvasController::Centered );
+    m_canvas->canvasController()->setCanvasMode(KoCanvasController::Centered);
     m_canvas->canvasController()->recenterPreferred();
 }
 
@@ -67,34 +67,34 @@ void KoPAViewMode::deactivate()
 {
 }
 
-KoPACanvasBase * KoPAViewMode::canvas() const
+KoPACanvasBase *KoPAViewMode::canvas() const
 {
     return m_canvas;
 }
 
-KoPAViewBase * KoPAViewMode::view() const
+KoPAViewBase *KoPAViewMode::view() const
 {
     return m_view;
 }
 
-KoViewConverter * KoPAViewMode::viewConverter( KoPACanvasBase * canvas )
+KoViewConverter *KoPAViewMode::viewConverter(KoPACanvasBase *canvas)
 {
-    return m_view->KoPAViewBase::viewConverter( canvas );
+    return m_view->KoPAViewBase::viewConverter(canvas);
 }
 
-void KoPAViewMode::updateActivePage( KoPAPageBase *page )
+void KoPAViewMode::updateActivePage(KoPAPageBase *page)
 {
-    m_view->doUpdateActivePage( page );
+    m_view->doUpdateActivePage(page);
 }
 
-void KoPAViewMode::addShape( KoShape *shape )
+void KoPAViewMode::addShape(KoShape *shape)
 {
-    Q_UNUSED( shape );
+    Q_UNUSED(shape);
 }
 
-void KoPAViewMode::removeShape( KoShape *shape )
+void KoPAViewMode::removeShape(KoShape *shape)
 {
-    Q_UNUSED( shape );
+    Q_UNUSED(shape);
 }
 
 const KoPageLayout &KoPAViewMode::activePageLayout() const
@@ -102,7 +102,7 @@ const KoPageLayout &KoPAViewMode::activePageLayout() const
     return m_view->activePage()->pageLayout();
 }
 
-void KoPAViewMode::changePageLayout( const KoPageLayout &/*pageLayout*/, bool /*applyToDocument*/, KUndo2Command */*parent*/ )
+void KoPAViewMode::changePageLayout(const KoPageLayout &/*pageLayout*/, bool /*applyToDocument*/, KUndo2Command */*parent*/)
 {
 }
 

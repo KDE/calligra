@@ -43,8 +43,8 @@ class KoTextPaste::Private
 {
 public:
     Private(KoTextEditor *editor, KoShapeController *shapeCont, QSharedPointer<Soprano::Model> _rdfModel,
-        KoCanvasBase *c, KUndo2Command *cmd
-    )
+            KoCanvasBase *c, KUndo2Command *cmd
+           )
         : editor(editor)
         , resourceManager(shapeCont->resourceManager())
         , rdfModel(_rdfModel)
@@ -63,7 +63,7 @@ public:
 };
 
 KoTextPaste::KoTextPaste(KoTextEditor *editor, KoShapeController *shapeController, QSharedPointer<Soprano::Model> rdfModel, KoCanvasBase *c, KUndo2Command *cmd)
-        : d(new Private(editor, shapeController, rdfModel, c, cmd))
+    : d(new Private(editor, shapeController, rdfModel, c, cmd))
 {
 }
 
@@ -90,8 +90,7 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "text paste, rdf handling" << d->rdfModel;
     // RDF: Grab RDF metadata from ODF file if present & load it into rdfModel
-    if (d->rdfModel)
-    {
+    if (d->rdfModel) {
         QSharedPointer<Soprano::Model> tmpmodel(Soprano::createModel());
         ok = KoTextRdfCore::loadManifest(odfStore.store(), tmpmodel);
         kDebug(30015) << "ok:" << ok << " tmpmodel.sz:" << tmpmodel->statementCount();

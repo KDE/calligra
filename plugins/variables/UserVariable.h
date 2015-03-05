@@ -40,19 +40,19 @@ class UserVariable : public KoVariable
 public:
     UserVariable();
 
-    QWidget* createOptionsWidget();
+    QWidget *createOptionsWidget();
 
     void readProperties(const KoProperties *props);
     void propertyChanged(Property property, const QVariant &value);
 
     void saveOdf(KoShapeSavingContext &context);
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext & context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     KoVariableManager *variableManager();
 
     int property() const;
 
-    const QString& name() const;
+    const QString &name() const;
     void setName(const QString &name);
 
     KoOdfNumberStyles::NumericStyleFormat numberstyle() const;

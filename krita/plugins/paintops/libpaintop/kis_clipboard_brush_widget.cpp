@@ -43,8 +43,7 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     preview->setFixedSize(preview->size());
     preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
 
-
-    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
+    KisBrushResourceServer *rServer = KisBrushServer::instance()->brushServer();
     m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
 
     m_brush = 0;
@@ -100,8 +99,7 @@ void KisClipboardBrushWidget::slotUseBrushClicked()
 
             emit sigBrushChanged();
         }
-    }
-    else {
+    } else {
         preview->setText(i18n("Nothing copied\n to Clipboard"));
     }
 }
@@ -126,7 +124,7 @@ void KisClipboardBrushWidget::showEvent(QShowEvent *)
 void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     if (m_brush) {
-        static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
+        static_cast<KisGbrBrush *>(m_brush.data())->setUseColorAsMask(useColorAsMask);
         preview->setPixmap(QPixmap::fromImage(m_brush->image()));
     }
 
@@ -151,13 +149,12 @@ void KisClipboardBrushWidget::slotSaveBrush()
     tempFileName = fileInfo.filePath();
 
     if (m_rServerAdapter) {
-        KisGbrBrush* resource = static_cast<KisGbrBrush*>(m_brush.data())->clone();
+        KisGbrBrush *resource = static_cast<KisGbrBrush *>(m_brush.data())->clone();
         resource->setFilename(tempFileName);
 
         if (nameEdit->text().isEmpty()) {
             resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
-        }
-        else {
+        } else {
             resource->setName(name);
         }
 

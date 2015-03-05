@@ -32,19 +32,19 @@
 
 using namespace Calligra::Sheets;
 
-CSVExportDialog::CSVExportDialog(QWidget * parent)
-        : KDialog(parent),
-        m_dialog(new ExportDialogUI(this)),
-        m_delimiter(","),
-        m_textquote('"')
+CSVExportDialog::CSVExportDialog(QWidget *parent)
+    : KDialog(parent),
+      m_dialog(new ExportDialogUI(this)),
+      m_delimiter(","),
+      m_textquote('"')
 {
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
     QApplication::restoreOverrideCursor();
 
     QStringList encodings;
-    encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )" , "UTF-8");
-    encodings << i18nc("Descriptive encoding name", "Locale ( %1 )" , QString(QTextCodec::codecForLocale()->name()));
+    encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )", "UTF-8");
+    encodings << i18nc("Descriptive encoding name", "Locale ( %1 )", QString(QTextCodec::codecForLocale()->name()));
     encodings += KGlobal::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
     const QString description(i18nc("Descriptive encoding name", "Other ( %1 )"));
@@ -101,15 +101,15 @@ void CSVExportDialog::loadSettings()
     if (!codecText.isEmpty()) {
         m_dialog->comboBoxEncoding->setCurrentIndex(m_dialog->comboBoxEncoding->findText(codecText));
     }
-    if (m_delimiter == ",")
+    if (m_delimiter == ",") {
         m_dialog->m_radioComma->setChecked(true);
-    else if (m_delimiter == "\t")
+    } else if (m_delimiter == "\t") {
         m_dialog->m_radioTab->setChecked(true);
-    else if (m_delimiter == " ")
+    } else if (m_delimiter == " ") {
         m_dialog->m_radioSpace->setChecked(true);
-    else if (m_delimiter == ";")
+    } else if (m_delimiter == ";") {
         m_dialog->m_radioSemicolon->setChecked(true);
-    else {
+    } else {
         m_dialog->m_radioOther->setChecked(true);
         m_dialog->m_delimiterEdit->setText(m_delimiter);
     }
@@ -117,12 +117,13 @@ void CSVExportDialog::loadSettings()
     m_dialog->m_selectionOnly->setChecked(selectionOnly);
     m_dialog->m_sheetDelimiter->setText(sheetDelim);
     m_dialog->m_delimiterAboveAll->setChecked(delimAbove);
-    if (eol == "\r\n")
+    if (eol == "\r\n") {
         m_dialog->radioEndOfLineCRLF->setChecked(true);
-    else if (eol == "\r")
+    } else if (eol == "\r") {
         m_dialog->radioEndOfLineCR->setChecked(true);
-    else
+    } else {
         m_dialog->radioEndOfLineLF->setChecked(true);
+    }
 }
 
 void CSVExportDialog::saveSettings()
@@ -138,13 +139,13 @@ void CSVExportDialog::saveSettings()
     configGroup.sync();
 }
 
-void CSVExportDialog::fillSheet(Map * map)
+void CSVExportDialog::fillSheet(Map *map)
 {
     m_dialog->m_sheetList->clear();
     QListWidgetItem *item;
 
-    foreach(Sheet* sheet, map->sheetList()) {
-        item = new QListWidgetItem(sheet->sheetName() ,m_dialog->m_sheetList);
+    foreach (Sheet *sheet, map->sheetList()) {
+        item = new QListWidgetItem(sheet->sheetName(), m_dialog->m_sheetList);
         item->setCheckState(Qt::Checked);
         m_dialog->m_sheetList->addItem(item);
     }
@@ -170,7 +171,7 @@ QString CSVExportDialog::getSheetDelimiter() const
     return m_dialog->m_sheetDelimiter->text();
 }
 
-bool CSVExportDialog::exportSheet(QString const & sheetName) const
+bool CSVExportDialog::exportSheet(QString const &sheetName) const
 {
     for (int i = 0; i < m_dialog->m_sheetList->count(); ++i) {
         QListWidgetItem *const item = m_dialog->m_sheetList->item(i);
@@ -195,8 +196,9 @@ void CSVExportDialog::slotCancel()
 
 void CSVExportDialog::returnPressed()
 {
-    if (!m_dialog->m_radioOther->isChecked())
+    if (!m_dialog->m_radioOther->isChecked()) {
         return;
+    }
 
     m_delimiter = m_dialog->m_delimiterEdit->text();
 }
@@ -219,8 +221,9 @@ void CSVExportDialog::delimiterClicked(int id)
 
     //Erase "Other Delimiter" text box if the user has selected one of
     //the standard options instead (comma, semicolon, tab or space)
-    if (id != 4)
+    if (id != 4) {
         m_dialog->m_delimiterEdit->setText("");
+    }
 
     switch (id) {
     case 0: // comma
@@ -242,7 +245,7 @@ void CSVExportDialog::delimiterClicked(int id)
     }
 }
 
-void CSVExportDialog::textquoteSelected(const QString & mark)
+void CSVExportDialog::textquoteSelected(const QString &mark)
 {
     m_textquote = mark[0];
 }
@@ -252,8 +255,9 @@ void CSVExportDialog::selectionOnlyChanged(bool on)
     m_dialog->m_sheetList->setEnabled(!on);
     m_dialog->m_delimiterLineBox->setEnabled(!on);
 
-    if (on)
+    if (on) {
         m_dialog->m_tabWidget->setCurrentIndex(1);
+    }
 }
 
 bool CSVExportDialog::exportSelectionOnly() const
@@ -261,13 +265,13 @@ bool CSVExportDialog::exportSelectionOnly() const
     return m_dialog->m_selectionOnly->isChecked();
 }
 
-QTextCodec* CSVExportDialog::getCodec(void) const
+QTextCodec *CSVExportDialog::getCodec(void) const
 {
     const QString strCodec(KGlobal::charsets()->encodingForName(m_dialog->comboBoxEncoding->currentText()));
     kDebug(30502) << "Encoding:" << strCodec;
 
     bool ok = false;
-    QTextCodec* codec = QTextCodec::codecForName(strCodec.toUtf8());
+    QTextCodec *codec = QTextCodec::codecForName(strCodec.toUtf8());
 
     // If QTextCodec has not found a valid encoding, so try with KCharsets.
     if (codec) {
@@ -291,14 +295,15 @@ QTextCodec* CSVExportDialog::getCodec(void) const
 QString CSVExportDialog::getEndOfLine(void) const
 {
     QString strReturn;
-    if (m_dialog->radioEndOfLineLF->isChecked())
+    if (m_dialog->radioEndOfLineLF->isChecked()) {
         strReturn = "\n";
-    else if (m_dialog->radioEndOfLineCRLF->isChecked())
+    } else if (m_dialog->radioEndOfLineCRLF->isChecked()) {
         strReturn = "\r\n";
-    else if (m_dialog->radioEndOfLineCR->isChecked())
+    } else if (m_dialog->radioEndOfLineCR->isChecked()) {
         strReturn = "\r";
-    else
+    } else {
         strReturn = "\n";
+    }
 
     return strReturn;
 }

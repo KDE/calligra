@@ -40,7 +40,7 @@ GenValidationStyles::~GenValidationStyles()
 
 }
 
-QString GenValidationStyles::insert(const GenValidationStyle& style)
+QString GenValidationStyles::insert(const GenValidationStyle &style)
 {
     StyleMap::iterator it = m_styles.find(style);
     if (it == m_styles.end()) {
@@ -53,7 +53,7 @@ QString GenValidationStyles::insert(const GenValidationStyle& style)
     return it.value();
 }
 
-QString GenValidationStyles::makeUniqueName(const QString& base) const
+QString GenValidationStyles::makeUniqueName(const QString &base) const
 {
     int num = 1;
     QString name;
@@ -64,7 +64,7 @@ QString GenValidationStyles::makeUniqueName(const QString& base) const
     return name;
 }
 
-void GenValidationStyles::writeStyle(KoXmlWriter& writer)
+void GenValidationStyles::writeStyle(KoXmlWriter &writer)
 {
     if (m_styles.count() > 0) {
         writer.startElement("table:content-validations");
@@ -133,7 +133,7 @@ void GenValidationStyle::initVal(Validity *validity, const ValueConverter *conve
     }
 }
 
-QString GenValidationStyle::createValidationCondition(Validity* validity, const ValueConverter *converter)
+QString GenValidationStyle::createValidationCondition(Validity *validity, const ValueConverter *converter)
 {
     QString result;
     switch (validity->restriction()) {
@@ -164,7 +164,7 @@ QString GenValidationStyle::createValidationCondition(Validity* validity, const 
     return result;
 }
 
-QString GenValidationStyle::createListValidationCondition(Validity* validity)
+QString GenValidationStyle::createListValidationCondition(Validity *validity)
 {
     QString result =
         "oooc:cell-content-is-in-list(" +
@@ -173,13 +173,14 @@ QString GenValidationStyle::createListValidationCondition(Validity* validity)
     return result;
 }
 
-QString GenValidationStyle::createNumberValidationCondition(Validity* validity)
+QString GenValidationStyle::createNumberValidationCondition(Validity *validity)
 {
     QString result;
-    if (validity->restriction() == Validity::Number)
+    if (validity->restriction() == Validity::Number) {
         result = "oooc:cell-content-is-whole-number() and ";
-    else if (validity->restriction() == Validity::Integer)
+    } else if (validity->restriction() == Validity::Integer) {
         result = "oooc:cell-content-is-decimal-number() and ";
+    }
     switch (validity->condition()) {
     case Conditional::None:
     case Conditional::IsTrueFormula:
@@ -233,8 +234,7 @@ QString GenValidationStyle::createNumberValidationCondition(Validity* validity)
     return result;
 }
 
-
-QString GenValidationStyle::createTimeValidationCondition(Validity* validity, const ValueConverter *converter)
+QString GenValidationStyle::createTimeValidationCondition(Validity *validity, const ValueConverter *converter)
 {
     QString result("oooc:cell-content-is-time() and ");
     switch (validity->condition()) {
@@ -290,7 +290,7 @@ QString GenValidationStyle::createTimeValidationCondition(Validity* validity, co
     return result;
 }
 
-QString GenValidationStyle::createDateValidationCondition(Validity* validity, const ValueConverter *converter)
+QString GenValidationStyle::createDateValidationCondition(Validity *validity, const ValueConverter *converter)
 {
     QString result("oooc:cell-content-is-date() and ");
     switch (validity->condition()) {
@@ -346,7 +346,7 @@ QString GenValidationStyle::createDateValidationCondition(Validity* validity, co
     return result;
 }
 
-QString GenValidationStyle::createTextValidationCondition(Validity* validity)
+QString GenValidationStyle::createTextValidationCondition(Validity *validity)
 {
     QString result;
     switch (validity->condition()) {

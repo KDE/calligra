@@ -44,12 +44,12 @@ using namespace Calligra::Sheets;
 class SheetModel::Private
 {
 public:
-    Sheet* sheet;
+    Sheet *sheet;
 };
 
-SheetModel::SheetModel(Sheet* sheet)
-        : QAbstractTableModel(sheet)
-        , d(new Private)
+SheetModel::SheetModel(Sheet *sheet)
+    : QAbstractTableModel(sheet)
+    , d(new Private)
 {
     d->sheet = sheet;
 }
@@ -59,7 +59,7 @@ SheetModel::~SheetModel()
     delete d;
 }
 
-int SheetModel::columnCount(const QModelIndex& parent) const
+int SheetModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid() && parent.internalPointer() != d->sheet->map()) {
         return 0;
@@ -67,7 +67,7 @@ int SheetModel::columnCount(const QModelIndex& parent) const
     return KS_colMax;
 }
 
-QVariant SheetModel::data(const QModelIndex& index, int role) const
+QVariant SheetModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -142,7 +142,7 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-Qt::ItemFlags SheetModel::flags(const QModelIndex& index) const
+Qt::ItemFlags SheetModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return Qt::NoItemFlags;
@@ -192,7 +192,7 @@ QModelIndex SheetModel::index(int row, int column, const QModelIndex &parent) co
     return QModelIndex();
 }
 
-int SheetModel::rowCount(const QModelIndex& parent) const
+int SheetModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid() && parent.internalPointer() != d->sheet->map()) {
         return 0;
@@ -200,7 +200,7 @@ int SheetModel::rowCount(const QModelIndex& parent) const
     return KS_rowMax;
 }
 
-bool SheetModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool SheetModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!index.isValid()) {
         return false;
@@ -265,8 +265,9 @@ bool SheetModel::setData(const QItemSelectionRange &range, const QVariant &value
         break;
     case NamedAreaRole: {
         QString namedAreaName = value.toString();
-        if (namedAreaName.isEmpty())
+        if (namedAreaName.isEmpty()) {
             return false;
+        }
         storage->emitInsertNamedArea(region, namedAreaName);
         break;
     }
@@ -296,7 +297,7 @@ bool SheetModel::setData(const QModelIndex &topLeft, const QModelIndex &bottomRi
     return setData(QItemSelectionRange(topLeft, bottomRight), value, role);
 }
 
-Sheet* SheetModel::sheet() const
+Sheet *SheetModel::sheet() const
 {
     return d->sheet;
 }

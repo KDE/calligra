@@ -29,7 +29,6 @@
 class KoPart;
 class KoDocument;
 
-
 class CalligraCreator : public QObject, public ThumbCreator
 {
     Q_OBJECT
@@ -46,7 +45,7 @@ private:
     KoPart *m_part;
     KoDocument *m_doc;
 
-    bool m_loadingCompleted :1;
+    bool m_loadingCompleted : 1;
     QEventLoop m_eventLoop;
 };
 

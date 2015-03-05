@@ -32,11 +32,9 @@
 #include "kis_signal_compressor.h"
 #include "kis_recalculate_generator_layer_job.h"
 
-
 #define UPDATE_DELAY 100 /*ms */
 
-struct KisGeneratorLayer::Private
-{
+struct KisGeneratorLayer::Private {
     Private()
         : updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::FIRST_INACTIVE)
     {
@@ -44,7 +42,6 @@ struct KisGeneratorLayer::Private
 
     KisSignalCompressor updateSignalCompressor;
 };
-
 
 KisGeneratorLayer::KisGeneratorLayer(KisImageWSP image,
                                      const QString &name,
@@ -57,7 +54,7 @@ KisGeneratorLayer::KisGeneratorLayer(KisImageWSP image,
     update();
 }
 
-KisGeneratorLayer::KisGeneratorLayer(const KisGeneratorLayer& rhs)
+KisGeneratorLayer::KisGeneratorLayer(const KisGeneratorLayer &rhs)
     : KisSelectionBasedLayer(rhs),
       m_d(new Private)
 {
@@ -81,8 +78,10 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
      * meanwhile. Just ignore the updates in the case.
      */
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent().data());
-    if (!parentLayer) return;
+    KisLayerSP parentLayer = dynamic_cast<KisLayer *>(parent().data());
+    if (!parentLayer) {
+        return;
+    }
 
     KisImageSP image = parentLayer->image();
     if (image) {
@@ -100,7 +99,9 @@ void KisGeneratorLayer::update()
     }
 
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value(filterConfig->name());
-    if (!f) return;
+    if (!f) {
+        return;
+    }
 
     QRect processRect = exactBounds();
 
@@ -114,13 +115,12 @@ void KisGeneratorLayer::update()
     filterConfig->setChannelFlags(channelFlags());
     f->generate(dstCfg, processRect.size(), filterConfig.data());
 
-
     // hack alert!
     // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
     KisSelectionBasedLayer::setDirty(extent());
 }
 
-bool KisGeneratorLayer::accept(KisNodeVisitor & v)
+bool KisGeneratorLayer::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
 }
@@ -141,7 +141,7 @@ KisDocumentSectionModel::PropertyList KisGeneratorLayer::sectionModelProperties(
 
     KisDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
     l << KisDocumentSectionModel::Property(i18n("Generator"),
-                                          KisGeneratorRegistry::instance()->value(filterConfig->name())->name());
+                                           KisGeneratorRegistry::instance()->value(filterConfig->name())->name());
     return l;
 }
 
@@ -157,7 +157,7 @@ void KisGeneratorLayer::setY(qint32 y)
     m_d->updateSignalCompressor.start();
 }
 
-void KisGeneratorLayer::setDirty(const QRect & rect)
+void KisGeneratorLayer::setDirty(const QRect &rect)
 {
     KisSelectionBasedLayer::setDirty(rect);
     m_d->updateSignalCompressor.start();

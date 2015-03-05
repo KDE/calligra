@@ -39,16 +39,15 @@ using namespace Calligra::Sheets;
 class MapViewModel::Private
 {
 public:
-    Sheet* activeSheet;
+    Sheet *activeSheet;
     KoCanvasBase *canvas;
     KXMLGUIClient *xmlGuiClient;
     QActionGroup *gotoSheetActionGroup;
 };
 
-
 MapViewModel::MapViewModel(Map *map, KoCanvasBase *canvas, KXMLGUIClient *xmlGuiClient)
-        : MapModel(map)
-        , d(new Private)
+    : MapModel(map)
+    , d(new Private)
 {
     d->activeSheet = 0;
     d->canvas = canvas;
@@ -85,7 +84,7 @@ QVariant MapViewModel::data(const QModelIndex &index, int role) const
     if (index.row() >= map()->count()) {
         return QVariant();
     }
-    const Sheet* const sheet = map()->sheet(index.row());
+    const Sheet *const sheet = map()->sheet(index.row());
     return QVariant(sheet == d->activeSheet);
 }
 
@@ -119,22 +118,22 @@ bool MapViewModel::setData(const QModelIndex &index, const QVariant &value, int 
     if (index.row() >= map()->count()) {
         return false;
     }
-    Sheet* const sheet(map()->sheet(index.row()));
+    Sheet *const sheet(map()->sheet(index.row()));
     setActiveSheet(sheet);
     return true;
 }
 
-Sheet* MapViewModel::activeSheet() const
+Sheet *MapViewModel::activeSheet() const
 {
     return d->activeSheet;
 }
 
-void MapViewModel::setActiveSheet(Sheet* sheet)
+void MapViewModel::setActiveSheet(Sheet *sheet)
 {
     if (d->activeSheet == sheet) {
         return;
     }
-    const QList<Sheet*> list = map()->sheetList();
+    const QList<Sheet *> list = map()->sheetList();
     const int oldRow = list.indexOf(d->activeSheet);
     const int newRow = list.indexOf(sheet);
 
@@ -147,7 +146,7 @@ void MapViewModel::setActiveSheet(Sheet* sheet)
 
     // Unhide, if necessary.
     if (sheet->isHidden()) {
-        KUndo2Command* command = new ShowSheetCommand(sheet);
+        KUndo2Command *command = new ShowSheetCommand(sheet);
         d->canvas->addCommand(command);
     }
 

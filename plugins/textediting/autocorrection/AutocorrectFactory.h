@@ -24,7 +24,8 @@
 
 class KoTextEditingPlugin;
 
-class AutocorrectFactory : public KoTextEditingFactory {
+class AutocorrectFactory : public KoTextEditingFactory
+{
 public:
     explicit AutocorrectFactory();
     ~AutocorrectFactory() {}

@@ -27,8 +27,7 @@
 #include "kis_pixel_selection.h"
 #include <KoColorSpaceRegistry.h>
 
-
-bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
+bool KisCrashFilterTest::applyFilter(const KoColorSpace *cs,  KisFilterSP f)
 {
 
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "lena.png");
@@ -38,7 +37,7 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
     dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
-    KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
+    KisFilterConfiguration *kfc = f->defaultConfiguration(dev);
 
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + f->id() + ".cfg");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -54,7 +53,7 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
     }
     qDebug() << f->id() << ", " << cs->id() << ", " << cs->profile()->name();// << kfc->toXML() << "\n";
 
-    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
+    f->process(dev, QRect(QPoint(0, 0), qimage.size()), kfc);
 
     return true;
 
@@ -62,9 +61,9 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
 
 bool KisCrashFilterTest::testFilter(KisFilterSP f)
 {
-    QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::AllProfiles);
+    QList<const KoColorSpace *> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::AllProfiles);
     bool ok = false;
-    foreach(const KoColorSpace* colorSpace, colorSpaces) {
+    foreach (const KoColorSpace *colorSpace, colorSpaces) {
         // XXX: Let's not check the painterly colorspaces right now
         if (colorSpace->id().startsWith("KS", Qt::CaseInsensitive)) {
             continue;
@@ -83,10 +82,11 @@ void KisCrashFilterTest::testCrashFilters()
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
     qSort(filterList);
     for (QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it) {
-        if (testFilter(KisFilterRegistry::instance()->value(*it)))
+        if (testFilter(KisFilterRegistry::instance()->value(*it))) {
             successes << *it;
-        else
+        } else {
             failures << *it;
+        }
     }
     qDebug() << "Success: " << successes;
     if (failures.size() > 0) {

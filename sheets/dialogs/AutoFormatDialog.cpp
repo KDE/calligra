@@ -61,19 +61,19 @@ struct Entry {
 class AutoFormatDialog::Private
 {
 public:
-    Selection* selection;
-    KComboBox* combo;
-    QLabel* label;
+    Selection *selection;
+    KComboBox *combo;
+    QLabel *label;
     QList<Entry> entries;
     QList<Style> styles;
 
 public:
-    bool parseXML(const KoXmlDocument& doc);
+    bool parseXML(const KoXmlDocument &doc);
 };
 
-AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
-        , d(new Private())
+AutoFormatDialog::AutoFormatDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent)
+    , d(new Private())
 {
     setCaption(i18n("Sheet Style"));
     setObjectName(QLatin1String("AutoAutoFormatDialog"));
@@ -168,35 +168,39 @@ void AutoFormatDialog::slotOk()
     //
     // Set colors, borders etc.
     //
-    AutoFormatCommand* command = new AutoFormatCommand();
+    AutoFormatCommand *command = new AutoFormatCommand();
     command->setSheet(d->selection->activeSheet());
     command->setStyles(d->styles);
     command->add(*d->selection);
-    if (!command->execute(d->selection->canvas()))
+    if (!command->execute(d->selection->canvas())) {
         delete command;
+    }
 
     accept();
 }
 
-bool AutoFormatDialog::Private::parseXML(const KoXmlDocument& doc)
+bool AutoFormatDialog::Private::parseXML(const KoXmlDocument &doc)
 {
     styles.clear();
-    for (int i = 0; i < 16; ++i)
+    for (int i = 0; i < 16; ++i) {
         styles.append(Style());
+    }
 
     KoXmlElement e = doc.documentElement().firstChild().toElement();
     for (; !e.isNull(); e = e.nextSibling().toElement()) {
         if (e.tagName() == "cell") {
             Style style;
             KoXmlElement tmpElement(e.namedItem("format").toElement());
-            if (!style.loadXML(tmpElement))
+            if (!style.loadXML(tmpElement)) {
                 return false;
+            }
 
             int row = e.attribute("row").toInt();
             int column = e.attribute("column").toInt();
             int i = (row - 1) * 4 + (column - 1);
-            if (i < 0 || i >= 16)
+            if (i < 0 || i >= 16) {
                 return false;
+            }
 
             styles[i] = style;
         }

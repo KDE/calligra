@@ -35,22 +35,22 @@ public:
     struct Parameter {
         Parameter() {}
 
-        Parameter(KUrl styleUrl, KPrView *kprView, QList<KoPAPageBase*> slides, KUrl destination,
+        Parameter(KUrl styleUrl, KPrView *kprView, QList<KoPAPageBase *> slides, KUrl destination,
                   QString author, QString title, QStringList slidesNames, bool openBrowser)
-                      : styleUrl(styleUrl)
-                      , kprView(kprView)
-                      , slides(slides)
-                      , destination(destination)
-                      , author(author)
-                      , title(title)
-                      , slidesNames(slidesNames)
-                      , openBrowser(openBrowser)
+            : styleUrl(styleUrl)
+            , kprView(kprView)
+            , slides(slides)
+            , destination(destination)
+            , author(author)
+            , title(title)
+            , slidesNames(slidesNames)
+            , openBrowser(openBrowser)
         {
         }
 
         KUrl styleUrl;
         KPrView *kprView;
-        QList<KoPAPageBase*> slides;
+        QList<KoPAPageBase *> slides;
         KUrl destination;
         QString author;
         QString title;

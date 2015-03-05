@@ -39,7 +39,7 @@ class KRITAUI_EXPORT KisStatusBar : public QObject
 
 public:
 
-    KisStatusBar(KisViewManager * view);
+    KisStatusBar(KisViewManager *view);
     ~KisStatusBar();
 
     void setView(QPointer<KisView> imageView);
@@ -61,9 +61,9 @@ private Q_SLOTS:
 
 private:
 
-    KisViewManager * m_view;
+    KisViewManager *m_view;
     QPointer<KisView> m_imageView;
-    KisProgressWidget * m_progress;
+    KisProgressWidget *m_progress;
 
     QToolButton *m_selectionStatus;
     QLabel *m_imageSizeLabel;

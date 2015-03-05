@@ -29,7 +29,7 @@ public:
     ~KoCanvasObserverBasePrivate()
     {}
 
-    KoCanvasBase* canvas;
+    KoCanvasBase *canvas;
 };
 
 KoCanvasObserverBase::KoCanvasObserverBase()
@@ -42,7 +42,7 @@ KoCanvasObserverBase::~KoCanvasObserverBase()
     delete d;
 }
 
-void KoCanvasObserverBase::setObservedCanvas(KoCanvasBase* canvas)
+void KoCanvasObserverBase::setObservedCanvas(KoCanvasBase *canvas)
 {
     d->canvas = canvas;
     setCanvas(canvas);
@@ -54,7 +54,7 @@ void KoCanvasObserverBase::unsetObservedCanvas()
     unsetCanvas();
 }
 
-KoCanvasBase* KoCanvasObserverBase::observedCanvas()
+KoCanvasBase *KoCanvasObserverBase::observedCanvas()
 {
     return d->canvas;
 }

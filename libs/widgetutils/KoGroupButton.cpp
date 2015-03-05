@@ -41,13 +41,13 @@ public:
     GroupPosition groupPosition;
 };
 
-KoGroupButton::KoGroupButton(GroupPosition position, QWidget* parent)
- : QToolButton(parent), d(new Private(this, position))
+KoGroupButton::KoGroupButton(GroupPosition position, QWidget *parent)
+    : QToolButton(parent), d(new Private(this, position))
 {
 }
 
-KoGroupButton::KoGroupButton(QWidget* parent)
- : QToolButton(parent), d(new Private(this, NoGroup))
+KoGroupButton::KoGroupButton(QWidget *parent)
+    : QToolButton(parent), d(new Private(this, NoGroup))
 {
 }
 
@@ -66,7 +66,7 @@ KoGroupButton::GroupPosition KoGroupButton::groupPosition() const
     return d->groupPosition;
 }
 
-void KoGroupButton::paintEvent(QPaintEvent* event)
+void KoGroupButton::paintEvent(QPaintEvent *event)
 {
     if (groupPosition() == NoGroup) {
         QToolButton::paintEvent(event);
@@ -78,7 +78,7 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
     QStyleOptionToolButton panelOpt = opt;
 
     // Panel
-    QRect& panelRect = panelOpt.rect;
+    QRect &panelRect = panelOpt.rect;
     switch (groupPosition()) {
     case GroupLeft:
         panelRect.setWidth(panelRect.width() * 2);
@@ -138,7 +138,7 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
     // messages so that translators can use Transcript for custom removal.
     // """
     if (!actions().isEmpty()) {
-        QAction* action = actions().first();
+        QAction *action = actions().first();
         setToolTip(i18nc("@info:tooltip of custom triple button", "%1", action->toolTip()));
     }
 }

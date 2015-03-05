@@ -31,7 +31,6 @@
 #include <KoXmlReader.h>
 #include <KoStyleStack.h>
 
-
 class KoBorderPrivate : public QSharedData
 {
 public:
@@ -57,32 +56,33 @@ KoBorder::BorderData::BorderData()
 {
 }
 
-bool KoBorder::BorderData::operator==(const KoBorder::BorderData& other) const
+bool KoBorder::BorderData::operator==(const KoBorder::BorderData &other) const
 {
     // Left Borders
     if (style == BorderNone && other.style == BorderNone) {
         // If both styles are None, then the rest of the values don't
         // need to be compared.
         ;
-    }
-    else if (style != other.style) {
+    } else if (style != other.style) {
         // If any of them are non-None, and they are different, the
         // borders are also different.
         return false;
-    }
-    else {
+    } else {
         // Here we know that the border styles are the same, now
         // compare the rest of the values.
-        if (outerPen != other.outerPen)
+        if (outerPen != other.outerPen) {
             return false;
-        
+        }
+
         // If the border style == BorderDouble, then compare a couple
         // of other values too.
         if (style == BorderDouble) {
-            if (innerPen != other.innerPen)
+            if (innerPen != other.innerPen) {
                 return false;
-            if (spacing != other.spacing)
+            }
+            if (spacing != other.spacing) {
                 return false;
+            }
         }
     }
 
@@ -106,7 +106,6 @@ KoBorder::~KoBorder()
     // No delete because d is a QSharedDataPointer.
 }
 
-
 // ----------------------------------------------------------------
 //                             operators
 
@@ -119,25 +118,27 @@ KoBorder &KoBorder::operator=(const KoBorder &other)
 
 bool KoBorder::operator==(const KoBorder &other) const
 {
-    if (d.data() == other.d.data())
+    if (d.data() == other.d.data()) {
         return true;
+    }
 
-    
-    if (d->data.size() != other.d->data.size())
+    if (d->data.size() != other.d->data.size()) {
         return false;
+    }
 
     KoBorder::BorderSide key;
-    
+
     foreach (key, d->data.keys()) {
-        if (!other.d->data.contains(key))
+        if (!other.d->data.contains(key)) {
             return false;
-        if (!(other.d->data[key] == d->data[key]))
+        }
+        if (!(other.d->data[key] == d->data[key])) {
             return false;
+        }
     }
-    
+
     return true;
 }
-
 
 // ----------------------------------------------------------------
 //                 public, non-class functions
@@ -147,41 +148,58 @@ KoBorder::BorderStyle KoBorder::odfBorderStyle(const QString &borderstyle, bool 
     // Note: the styles marked "Not odf compatible" below are legacies
     //       from the old words format.  There are also lots of border
     //       styles in the MS DOC that we may have to handle at some point.
-    if (converted)
+    if (converted) {
         *converted = true;
-    if (borderstyle == "none")
+    }
+    if (borderstyle == "none") {
         return BorderNone;
-    if (borderstyle == "solid")
+    }
+    if (borderstyle == "solid") {
         return BorderSolid;
-    if (borderstyle == "dashed")
+    }
+    if (borderstyle == "dashed") {
         return BorderDashed;
-    if (borderstyle == "dotted")
+    }
+    if (borderstyle == "dotted") {
         return BorderDotted;
-    if (borderstyle == "dot-dash")
+    }
+    if (borderstyle == "dot-dash") {
         return BorderDashDot;
-    if (borderstyle == "dot-dot-dash")
+    }
+    if (borderstyle == "dot-dot-dash") {
         return BorderDashDotDot;
-    if (borderstyle == "double")
+    }
+    if (borderstyle == "double") {
         return BorderDouble;
-    if (borderstyle == "groove")   // Not odf compatible -- see above
+    }
+    if (borderstyle == "groove") { // Not odf compatible -- see above
         return BorderGroove;
-    if (borderstyle == "ridge")   // Not odf compatible -- see above
+    }
+    if (borderstyle == "ridge") { // Not odf compatible -- see above
         return BorderRidge;
-    if (borderstyle == "inset")   // Not odf compatible -- see above
+    }
+    if (borderstyle == "inset") { // Not odf compatible -- see above
         return BorderInset;
-    if (borderstyle == "outset")   // Not odf compatible -- see above
+    }
+    if (borderstyle == "outset") { // Not odf compatible -- see above
         return BorderOutset;
-    if (borderstyle == "dash-largegap")
+    }
+    if (borderstyle == "dash-largegap") {
         return KoBorder::BorderDashedLong;
-    if (borderstyle == "slash") // not officially odf, but we suppport it anyway
+    }
+    if (borderstyle == "slash") { // not officially odf, but we suppport it anyway
         return KoBorder::BorderSlash;
-    if (borderstyle == "wave") // not officially odf, but we suppport it anyway
+    }
+    if (borderstyle == "wave") { // not officially odf, but we suppport it anyway
         return KoBorder::BorderWave;
-    if (borderstyle == "double-wave") // not officially odf, but we suppport it anyway
+    }
+    if (borderstyle == "double-wave") { // not officially odf, but we suppport it anyway
         return KoBorder::BorderDoubleWave;
+    }
 
-    if (converted)
+    if (converted) {
         *converted = false;
+    }
 
     return BorderSolid;
 }
@@ -236,10 +254,8 @@ QString KoBorder::msoBorderStyleString(BorderStyle borderstyle)
     }
 }
 
-
 // ----------------------------------------------------------------
 //                         Getters and Setters
-
 
 void KoBorder::setBorderStyle(BorderSide side, BorderStyle style)
 {
@@ -286,16 +302,16 @@ void KoBorder::setBorderStyle(BorderSide side, BorderStyle style)
         break;
     }
     case KoBorder::BorderTriple:
-        innerWidth = middleWidth = space = width/6;
+        innerWidth = middleWidth = space = width / 6;
         width -= (space + innerWidth);
         edge.outerPen.setStyle(Qt::SolidLine);
         break;
     case KoBorder::BorderDashDot:
-        dashes << 3 << 3<< 7 << 3;
+        dashes << 3 << 3 << 7 << 3;
         edge.outerPen.setDashPattern(dashes);
         break;
     case KoBorder::BorderDashDotDot:
-        dashes << 2 << 2<< 6 << 2 << 2 << 2;
+        dashes << 2 << 2 << 6 << 2 << 2 << 2;
         edge.outerPen.setDashPattern(dashes);
         break;
     case KoBorder::BorderWave:
@@ -305,7 +321,7 @@ void KoBorder::setBorderStyle(BorderSide side, BorderStyle style)
         edge.outerPen.setStyle(Qt::SolidLine);
         break;
     case KoBorder::BorderDoubleWave:
-        innerWidth = space = width/3; //some nice default look
+        innerWidth = space = width / 3; //some nice default look
         width -= (space + innerWidth);
         edge.outerPen.setStyle(Qt::SolidLine);
         break;
@@ -370,8 +386,9 @@ qreal KoBorder::borderWidth(BorderSide side) const
         if (d->data[side].style == BorderDouble)
             return (d->data[side].outerPen.widthF() + d->data[side].innerPen.widthF()
                     + d->data[side].spacing);
-        else
+        else {
             return d->data[side].outerPen.widthF();
+        }
     }
 }
 
@@ -435,7 +452,6 @@ qreal KoBorder::borderSpacing(BorderSide side) const
     }
 }
 
-
 KoBorder::BorderData KoBorder::borderData(BorderSide side) const
 {
     return d->data.value(side, BorderData());
@@ -446,23 +462,28 @@ void KoBorder::setBorderData(BorderSide side, const BorderData &data)
     d->data[side] = data;
 }
 
-
 // -------------------------------
 
 bool KoBorder::hasBorder() const
 {
-    if (borderStyle(LeftBorder) != BorderNone && borderWidth(LeftBorder) > 0.0)
+    if (borderStyle(LeftBorder) != BorderNone && borderWidth(LeftBorder) > 0.0) {
         return true;
-    if (borderStyle(RightBorder) != BorderNone && borderWidth(RightBorder) > 0.0)
+    }
+    if (borderStyle(RightBorder) != BorderNone && borderWidth(RightBorder) > 0.0) {
         return true;
-    if (borderStyle(TopBorder) != BorderNone && borderWidth(TopBorder) > 0.0)
+    }
+    if (borderStyle(TopBorder) != BorderNone && borderWidth(TopBorder) > 0.0) {
         return true;
-    if (borderStyle(BottomBorder) != BorderNone && borderWidth(BottomBorder) > 0.0)
+    }
+    if (borderStyle(BottomBorder) != BorderNone && borderWidth(BottomBorder) > 0.0) {
         return true;
-    if (borderStyle(TlbrBorder) != BorderNone && borderWidth(TlbrBorder) > 0.0)
+    }
+    if (borderStyle(TlbrBorder) != BorderNone && borderWidth(TlbrBorder) > 0.0) {
         return true;
-    if (borderStyle(BltrBorder) != BorderNone && borderWidth(BltrBorder) > 0.0)
+    }
+    if (borderStyle(BltrBorder) != BorderNone && borderWidth(BltrBorder) > 0.0) {
         return true;
+    }
     return false;
 }
 
@@ -471,10 +492,8 @@ bool KoBorder::hasBorder(KoBorder::BorderSide side) const
     return borderStyle(side) != BorderNone && borderWidth(side) > 0.0;
 }
 
-
 // ----------------------------------------------------------------
 //                         painting
-
 
 void KoBorder::paint(QPainter &painter, const QRectF &borderRect,
                      BorderPaintArea whereToPaint) const
@@ -546,8 +565,7 @@ void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lin
     if (isVertical) {
         lineStart.setX(lineStart.x() + inwardsAcross * displacement);
         lineEnd.setX(lineEnd.x() + inwardsAcross * displacement);
-    }
-    else {
+    } else {
         lineStart.setY(lineStart.y() + inwardsAcross * displacement);
         lineEnd.setY(lineEnd.y() + inwardsAcross * displacement);
     }
@@ -562,8 +580,7 @@ void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lin
         if (isVertical) {
             lineStart.setX(lineStart.x() + inwardsAcross * displacement);
             lineEnd.setX(lineEnd.x() + inwardsAcross * displacement);
-        }
-        else {
+        } else {
             lineStart.setY(lineStart.y() + inwardsAcross * displacement);
             lineEnd.setY(lineEnd.y() + inwardsAcross * displacement);
         }
@@ -573,8 +590,7 @@ void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lin
             displacement = neighbour1->outerPen.widthF() + neighbour1->spacing;
             if (isVertical) {
                 lineStart.setY(lineStart.y() + displacement);
-            }
-            else {
+            } else {
                 lineStart.setX(lineStart.x() + displacement);
             }
         }
@@ -582,8 +598,7 @@ void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lin
             displacement = neighbour2->outerPen.widthF() + neighbour2->spacing;
             if (isVertical) {
                 lineEnd.setY(lineEnd.y() - displacement);
-            }
-            else {
+            } else {
                 lineEnd.setX(lineEnd.x() - displacement);
             }
         }
@@ -594,10 +609,8 @@ void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lin
     }
 }
 
-
 // ----------------------------------------------------------------
 //                         static functions
-
 
 void parseOdfBorder(const QString &border, QColor *color,
                     KoBorder::BorderStyle *borderStyle, bool *hasBorderStyle,
@@ -608,8 +621,7 @@ void parseOdfBorder(const QString &border, QColor *color,
 
     if (!border.isEmpty() && border != "none" && border != "hidden") {
         QStringList borderData = border.split(' ', QString::SkipEmptyParts);
-        if (borderData.length() > 0)
-        {
+        if (borderData.length() > 0) {
             const QColor borderColor = QColor(borderData.last());
             if (borderColor.isValid()) {
                 *color = borderColor;
@@ -656,8 +668,7 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             specialBorderString = style.attributeNS(KoXmlNS::calligra, "specialborder");
         }
         parseAndSetBorder(borderString, hasSpecialBorder, specialBorderString);
-    }
-    else {
+    } else {
         // No common border attributes, check for the individual ones.
         if (style.hasAttributeNS(KoXmlNS::fo, "border-left")) {
             result = true;
@@ -733,8 +744,7 @@ bool KoBorder::loadOdf(const KoXmlElement &style)
             setBorderSpacing(BottomBorder, KoUnit::parseValue(blw[1], 1.0));
             setBorderWidth(BottomBorder, KoUnit::parseValue(blw[2], 0.1));
         }
-    }
-    else {
+    } else {
         if (style.hasAttributeNS(KoXmlNS::style, "border-line-width-left")) {
             result = true;
             QString borderLineWidth = style.attributeNS(KoXmlNS::style, "border-line-width-left");
@@ -963,7 +973,6 @@ bool KoBorder::loadOdf(const KoStyleStack &styleStack)
     return result;
 }
 
-
 // Private
 void KoBorder::parseAndSetBorder(const QString &borderString,
                                  bool hasSpecialBorder, const QString &specialBorderString)
@@ -1024,10 +1033,10 @@ void KoBorder::parseAndSetBorder(const BorderSide borderSide, const QString &bor
     }
 
     if (foundStyle) {
-        setBorderStyle( borderSide, borderStyle);
+        setBorderStyle(borderSide, borderStyle);
     }
     if (foundWidth) {
-        setBorderWidth( borderSide, borderWidth);
+        setBorderWidth(borderSide, borderWidth);
     }
 }
 
@@ -1035,30 +1044,30 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
 {
     // Get the strings that describe respective borders.
     QString leftBorderString = QString("%1pt %2 %3")
-                                 .arg(QString::number(borderWidth(LeftBorder)),
-                                      odfBorderStyleString(borderStyle(LeftBorder)),
-                                      borderColor(LeftBorder).name());
+                               .arg(QString::number(borderWidth(LeftBorder)),
+                                    odfBorderStyleString(borderStyle(LeftBorder)),
+                                    borderColor(LeftBorder).name());
     QString rightBorderString =  QString("%1pt %2 %3")
-                                  .arg(QString::number(borderWidth(RightBorder)),
-                                       odfBorderStyleString(borderStyle(RightBorder)),
-                                       borderColor(RightBorder).name());
+                                 .arg(QString::number(borderWidth(RightBorder)),
+                                      odfBorderStyleString(borderStyle(RightBorder)),
+                                      borderColor(RightBorder).name());
     QString topBorderString = QString("%1pt %2 %3")
-                                .arg(QString::number(borderWidth(TopBorder)),
-                                     odfBorderStyleString(borderStyle(TopBorder)),
-                                     borderColor(TopBorder).name());
+                              .arg(QString::number(borderWidth(TopBorder)),
+                                   odfBorderStyleString(borderStyle(TopBorder)),
+                                   borderColor(TopBorder).name());
     QString bottomBorderString = QString("%1pt %2 %3")
-                                   .arg(QString::number(borderWidth(BottomBorder)),
-                                        odfBorderStyleString(borderStyle(BottomBorder)),
-                                        borderColor(BottomBorder).name());
+                                 .arg(QString::number(borderWidth(BottomBorder)),
+                                      odfBorderStyleString(borderStyle(BottomBorder)),
+                                      borderColor(BottomBorder).name());
 
     QString tlbrBorderString = QString("%1pt %2 %3")
-                                .arg(QString::number(borderWidth(TlbrBorder)),
-                                     odfBorderStyleString(borderStyle(TlbrBorder)),
-                                     borderColor(TlbrBorder).name());
+                               .arg(QString::number(borderWidth(TlbrBorder)),
+                                    odfBorderStyleString(borderStyle(TlbrBorder)),
+                                    borderColor(TlbrBorder).name());
     QString trblBorderString = QString("%1pt %2 %3")
-                                   .arg(QString::number(borderWidth(BltrBorder)),
-                                        odfBorderStyleString(borderStyle(BltrBorder)),
-                                        borderColor(BltrBorder).name());
+                               .arg(QString::number(borderWidth(BltrBorder)),
+                                    odfBorderStyleString(borderStyle(BltrBorder)),
+                                    borderColor(BltrBorder).name());
 
     // Get the strings that describe respective special borders (for special mso support).
     QString leftBorderSpecialString = msoBorderStyleString(borderStyle(LeftBorder));
@@ -1071,8 +1080,8 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
     // Check if we can save all borders in one fo:border attribute, or
     // if we have to use several different ones like fo:border-left, etc.
     if (leftBorderString == rightBorderString
-        && leftBorderString == topBorderString
-        && leftBorderString == bottomBorderString) {
+            && leftBorderString == topBorderString
+            && leftBorderString == bottomBorderString) {
 
         // Yes, they were all the same, so use only fo:border
         style.addProperty("fo:border", leftBorderString, type);
@@ -1083,72 +1092,76 @@ void KoBorder::saveOdf(KoGenStyle &style, KoGenStyle::PropertyType type) const
     } else {
         // No, they were different, so use the individual borders.
         //if (leftBorderStyle() != BorderNone)
-            style.addProperty("fo:border-left", leftBorderString, type);
-            style.addProperty("calligra:specialborder-left", leftBorderSpecialString, type);
+        style.addProperty("fo:border-left", leftBorderString, type);
+        style.addProperty("calligra:specialborder-left", leftBorderSpecialString, type);
         //if (rightBorderStyle() != BorderNone)
-            style.addProperty("fo:border-right", rightBorderString, type);
-            style.addProperty("calligra:specialborder-right", rightBorderSpecialString, type);
+        style.addProperty("fo:border-right", rightBorderString, type);
+        style.addProperty("calligra:specialborder-right", rightBorderSpecialString, type);
         //if (topBorderStyle() != BorderNone)
-            style.addProperty("fo:border-top", topBorderString, type);
-            style.addProperty("calligra:specialborder-top", topBorderSpecialString, type);
+        style.addProperty("fo:border-top", topBorderString, type);
+        style.addProperty("calligra:specialborder-top", topBorderSpecialString, type);
         //if (bottomBorderStyle() != BorderNone)
-            style.addProperty("fo:border-bottom", bottomBorderString, type);
-            style.addProperty("calligra:specialborder-bottom", bottomBorderSpecialString, type);
+        style.addProperty("fo:border-bottom", bottomBorderString, type);
+        style.addProperty("calligra:specialborder-bottom", bottomBorderSpecialString, type);
     }
 
     if (style.type() != KoGenStyle::PageLayoutStyle) {
         //if (tlbrBorderStyle() != BorderNone) {
-            style.addProperty("style:diagonal-tl-br", tlbrBorderString, type);
+        style.addProperty("style:diagonal-tl-br", tlbrBorderString, type);
         //}
         //if (trblBorderStyle() != BorderNone) {
-            style.addProperty("style:diagonal-bl-tr", trblBorderString, type);
+        style.addProperty("style:diagonal-bl-tr", trblBorderString, type);
         //}
     }
 
     // Handle double borders
     QString leftBorderLineWidth = QString("%1pt %2pt %3pt")
-                                    .arg(QString::number(innerBorderWidth(LeftBorder)),
-                                         QString::number(borderSpacing(LeftBorder)),
-                                         QString::number(borderWidth(LeftBorder)));
+                                  .arg(QString::number(innerBorderWidth(LeftBorder)),
+                                       QString::number(borderSpacing(LeftBorder)),
+                                       QString::number(borderWidth(LeftBorder)));
     QString rightBorderLineWidth = QString("%1pt %2pt %3pt")
-                                     .arg(QString::number(innerBorderWidth(RightBorder)),
-                                          QString::number(borderSpacing(RightBorder)),
-                                          QString::number(borderWidth(RightBorder)));
+                                   .arg(QString::number(innerBorderWidth(RightBorder)),
+                                        QString::number(borderSpacing(RightBorder)),
+                                        QString::number(borderWidth(RightBorder)));
     QString topBorderLineWidth = QString("%1pt %2pt %3pt")
-                                   .arg(QString::number(innerBorderWidth(TopBorder)),
-                                        QString::number(borderSpacing(TopBorder)),
-                                        QString::number(borderWidth(TopBorder)));
+                                 .arg(QString::number(innerBorderWidth(TopBorder)),
+                                      QString::number(borderSpacing(TopBorder)),
+                                      QString::number(borderWidth(TopBorder)));
     QString bottomBorderLineWidth = QString("%1pt %2pt %3pt")
-                                      .arg(QString::number(innerBorderWidth(BottomBorder)),
-                                           QString::number(borderSpacing(BottomBorder)),
-                                           QString::number(borderWidth(BottomBorder)));
+                                    .arg(QString::number(innerBorderWidth(BottomBorder)),
+                                         QString::number(borderSpacing(BottomBorder)),
+                                         QString::number(borderWidth(BottomBorder)));
 
     QString tlbrBorderLineWidth = QString("%1pt %2pt %3pt")
-                                   .arg(QString::number(innerBorderWidth(TlbrBorder)),
-                                        QString::number(borderSpacing(TlbrBorder)),
-                                        QString::number(borderWidth(TlbrBorder)));
+                                  .arg(QString::number(innerBorderWidth(TlbrBorder)),
+                                       QString::number(borderSpacing(TlbrBorder)),
+                                       QString::number(borderWidth(TlbrBorder)));
     QString trblBorderLineWidth = QString("%1pt %2pt %3pt")
-                                      .arg(QString::number(innerBorderWidth(BltrBorder)),
-                                           QString::number(borderSpacing(BltrBorder)),
-                                           QString::number(borderWidth(BltrBorder)));
+                                  .arg(QString::number(innerBorderWidth(BltrBorder)),
+                                       QString::number(borderSpacing(BltrBorder)),
+                                       QString::number(borderWidth(BltrBorder)));
 
     if (leftBorderLineWidth == rightBorderLineWidth
-        && leftBorderLineWidth == topBorderLineWidth
-        && leftBorderLineWidth == bottomBorderLineWidth
-        && borderStyle(LeftBorder) == borderStyle(RightBorder)
-        && borderStyle(TopBorder) == borderStyle(BottomBorder)
-        && borderStyle(TopBorder) == borderStyle(LeftBorder)
-        && (borderStyle(LeftBorder) == BorderDouble || borderStyle(LeftBorder) == BorderDoubleWave)) {
+            && leftBorderLineWidth == topBorderLineWidth
+            && leftBorderLineWidth == bottomBorderLineWidth
+            && borderStyle(LeftBorder) == borderStyle(RightBorder)
+            && borderStyle(TopBorder) == borderStyle(BottomBorder)
+            && borderStyle(TopBorder) == borderStyle(LeftBorder)
+            && (borderStyle(LeftBorder) == BorderDouble || borderStyle(LeftBorder) == BorderDoubleWave)) {
         style.addProperty("style:border-line-width", leftBorderLineWidth, type);
     } else {
-        if (borderStyle(LeftBorder) == BorderDouble || borderStyle(LeftBorder) == BorderDoubleWave)
+        if (borderStyle(LeftBorder) == BorderDouble || borderStyle(LeftBorder) == BorderDoubleWave) {
             style.addProperty("style:border-line-width-left", leftBorderLineWidth, type);
-        if (borderStyle(RightBorder) == BorderDouble || borderStyle(RightBorder) == BorderDoubleWave)
+        }
+        if (borderStyle(RightBorder) == BorderDouble || borderStyle(RightBorder) == BorderDoubleWave) {
             style.addProperty("style:border-line-width-right", rightBorderLineWidth, type);
-        if (borderStyle(TopBorder) == BorderDouble || borderStyle(TopBorder) == BorderDoubleWave)
+        }
+        if (borderStyle(TopBorder) == BorderDouble || borderStyle(TopBorder) == BorderDoubleWave) {
             style.addProperty("style:border-line-width-top", topBorderLineWidth, type);
-        if (borderStyle(BottomBorder) == BorderDouble || borderStyle(BottomBorder) == BorderDoubleWave)
+        }
+        if (borderStyle(BottomBorder) == BorderDouble || borderStyle(BottomBorder) == BorderDoubleWave) {
             style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, type);
+        }
     }
 
     if (style.type() != KoGenStyle::PageLayoutStyle) {

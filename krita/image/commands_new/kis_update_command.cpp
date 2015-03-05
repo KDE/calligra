@@ -21,7 +21,6 @@
 #include "kis_image_interfaces.h"
 #include "kis_node.h"
 
-
 KisUpdateCommand::KisUpdateCommand(KisNodeSP node, QRect dirtyRect,
                                    KisUpdatesFacade *updatesFacade,
                                    bool needsFullRefresh)
@@ -51,10 +50,9 @@ void KisUpdateCommand::redo()
 
 void KisUpdateCommand::update()
 {
-    if(m_needsFullRefresh) {
+    if (m_needsFullRefresh) {
         m_updatesFacade->refreshGraphAsync(m_node, m_dirtyRect);
-    }
-    else {
+    } else {
         m_node->setDirty(m_dirtyRect);
     }
 }

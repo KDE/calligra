@@ -36,9 +36,8 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 
-
 KisHistogramWidget::KisHistogramWidget(QWidget *parent, const char *name)
-        : WdgHistogram(parent)
+    : WdgHistogram(parent)
 {
     setObjectName(name);
     m_from = 0.0;
@@ -86,18 +85,20 @@ void KisHistogramWidget::setActiveChannel(int channel)
 
 void KisHistogramWidget::slotTypeSwitched(int id)
 {
-    if (id == LINEAR)
+    if (id == LINEAR) {
         m_histogramView->setHistogramType(LINEAR);
-    else if (id == LOGARITHMIC)
+    } else if (id == LOGARITHMIC) {
         m_histogramView->setHistogramType(LOGARITHMIC);
+    }
 }
 
 void KisHistogramWidget::setView(double from, double size)
 {
     m_from = from;
     m_width = size;
-    if (m_from + m_width > 1.0)
+    if (m_from + m_width > 1.0) {
         m_from = 1.0 - m_width;
+    }
     m_histogramView->setView(m_from, m_width);
     updateEnabled();
 }
@@ -119,7 +120,7 @@ void KisHistogramWidget::slotZoomOut()
 void KisHistogramWidget::slide(int val)
 {
     // Beware: at the END (e.g. 100), we want to still view m_width:
-    setView((static_cast<double>(val) / 100.0) *(1.0 - m_width), m_width);
+    setView((static_cast<double>(val) / 100.0) * (1.0 - m_width), m_width);
 }
 
 void KisHistogramWidget::updateEnabled()
@@ -135,10 +136,11 @@ void KisHistogramWidget::updateEnabled()
         } else {
             zoomOut->setEnabled(false);
         }
-        if (m_width < 1.0)
+        if (m_width < 1.0) {
             currentView->setEnabled(true);
-        else
+        } else {
             currentView->setEnabled(false);
+        }
     } else {
         zoomIn->setEnabled(false);
         zoomOut->setEnabled(false);

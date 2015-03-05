@@ -35,7 +35,7 @@ class KOPAGEAPP_EXPORT KoPACanvasBase : public KoCanvasBase
 {
 
 public:
-    explicit KoPACanvasBase( KoPADocument * doc );
+    explicit KoPACanvasBase(KoPADocument *doc);
     virtual ~KoPACanvasBase();
 
     /// set the viewbase on the canvas; this needs to be called before the canvas can be used.
@@ -45,21 +45,21 @@ public:
     virtual void repaint() = 0;
 
     /// Returns pointer to the KoPADocument
-    KoPADocument* document() const;
+    KoPADocument *document() const;
 
     /// reimplemented method
-    virtual void gridSize( qreal *horizontal, qreal *vertical ) const;
+    virtual void gridSize(qreal *horizontal, qreal *vertical) const;
     /// reimplemented method
     virtual bool snapToGrid() const;
     /// reimplemented method
-    virtual void addCommand( KUndo2Command *command );
+    virtual void addCommand(KUndo2Command *command);
     /// reimplemented method
-    virtual KoShapeManager * shapeManager() const;
-    KoShapeManager * masterShapeManager() const;
+    virtual KoShapeManager *shapeManager() const;
+    KoShapeManager *masterShapeManager() const;
     /// reimplemented from KoCanvasBase
-    virtual KoGuidesData * guidesData();
+    virtual KoGuidesData *guidesData();
 
-    KoToolProxy * toolProxy() const;
+    KoToolProxy *toolProxy() const;
     KoViewConverter *viewConverter() const;
     KoUnit unit() const;
 
@@ -67,20 +67,20 @@ public:
     void setDocumentOffset(const QPoint &offset);
 
     /// XXX
-    const QPoint & documentOffset() const;
+    const QPoint &documentOffset() const;
 
     /// reimplemented in view coordinates
     virtual QPoint documentOrigin() const;
     /// Set the origin of the page inside the canvas in document coordinates
-    void setDocumentOrigin(const QPointF & origin);
+    void setDocumentOrigin(const QPointF &origin);
 
-    KoPAViewBase* koPAView () const;
+    KoPAViewBase *koPAView() const;
 
     /// translate widget coordinates to view coordinates
-    QPoint widgetToView(const QPoint& p) const;
-    QRect widgetToView(const QRect& r) const;
-    QPoint viewToWidget(const QPoint& p) const;
-    QRect viewToWidget(const QRect& r) const;
+    QPoint widgetToView(const QPoint &p) const;
+    QRect widgetToView(const QRect &r) const;
+    QPoint viewToWidget(const QPoint &p) const;
+    QRect viewToWidget(const QRect &r) const;
 
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
     virtual void updateSize() = 0;
@@ -91,7 +91,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOPACANVASBASE_H */

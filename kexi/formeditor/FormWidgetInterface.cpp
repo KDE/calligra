@@ -32,7 +32,7 @@ public:
 };
 
 FormWidgetInterface::FormWidgetInterface()
- : d( new Private )
+    : d(new Private)
 {
 }
 
@@ -49,8 +49,9 @@ bool FormWidgetInterface::designMode() const
 void FormWidgetInterface::setDesignMode(bool design)
 {
     d->design = design;
-    if (design)
-        dynamic_cast<QWidget*>(this)->setCursor(QCursor(Qt::ArrowCursor));
+    if (design) {
+        dynamic_cast<QWidget *>(this)->setCursor(QCursor(Qt::ArrowCursor));
+    }
 }
 
 bool FormWidgetInterface::editingMode() const

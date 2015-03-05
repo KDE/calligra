@@ -36,7 +36,8 @@ class MacroCommand;
 /**
  * The dialog that shows and allows you to alter summary tasks.
  */
-class KPLATOUI_EXPORT SummaryTaskDialog : public KDialog {
+class KPLATOUI_EXPORT SummaryTaskDialog : public KDialog
+{
     Q_OBJECT
 public:
     /**
@@ -44,13 +45,13 @@ public:
      * @param task the task to edit
      * @param parent parent widget
      */
-    explicit SummaryTaskDialog(Task &task,  QWidget *parent=0);
+    explicit SummaryTaskDialog(Task &task,  QWidget *parent = 0);
 
     MacroCommand *buildCommand();
 
 protected Q_SLOTS:
     void slotButtonClicked(int button);
-    void slotTaskRemoved( Node *node );
+    void slotTaskRemoved(Node *node);
 
 private:
     Node *m_node;

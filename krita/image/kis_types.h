@@ -31,12 +31,14 @@ template<class T> class QSharedPointer;
 template<class T> class QWeakPointer;
 
 template <class T>
-uint qHash(KisSharedPtr<T> ptr) {
+uint qHash(KisSharedPtr<T> ptr)
+{
     return qHash(ptr.data());
 }
 
 template <class T>
-uint qHash(KisWeakSharedPtr<T> ptr) {
+uint qHash(KisWeakSharedPtr<T> ptr)
+{
     return qHash(ptr.data());
 }
 
@@ -165,7 +167,6 @@ class KisVLineIterator2;
 template<class T> class KisRepeatVLineIteratorPixelBase;
 typedef KisRepeatVLineIteratorPixelBase< KisVLineIterator2 > KisRepeatVLineConstIteratorNG;
 typedef KisSharedPtr<KisRepeatVLineConstIteratorNG> KisRepeatVLineConstIteratorSP;
-
 
 // NG Iterators
 class KisHLineIteratorNG;

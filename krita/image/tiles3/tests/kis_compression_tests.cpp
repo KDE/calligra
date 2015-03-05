@@ -24,14 +24,11 @@
 #include "../../../sdk/tests/testutil.h"
 #include "tiles3/swap/kis_lzf_compression.h"
 
-
 #define TEST_FILE "tile.png"
 //#define TEST_FILE "hakonepa.png"
 
-
 #define PRINT_COMPRESSION(title,src,dst)                               \
     (qDebug() << title << dst << "/" << src << "\t|" << double(dst)/src)
-
 
 void KisCompressionTests::roundTrip(KisAbstractCompression *compression)
 {
@@ -49,7 +46,7 @@ void KisCompressionTests::roundTrip(KisAbstractCompression *compression)
     compressedBytes = compression->compress(image.bits(), srcSize,
                                             output, outputSize);
     uncompressedBytes = compression->decompress(output, compressedBytes,
-                                                image.bits(), srcSize);
+                        image.bits(), srcSize);
 
     PRINT_COMPRESSION("Single-pass:\t", uncompressedBytes, compressedBytes);
 
@@ -77,10 +74,10 @@ void KisCompressionTests::roundTripTwoPass(KisAbstractCompression *compression)
                                             output, outputSize);
 
     uncompressedBytes = compression->decompress(output, compressedBytes,
-                                                tempBuffer, srcSize);
+                        tempBuffer, srcSize);
 
     KisAbstractCompression::delinearizeColors(tempBuffer, image.bits(),
-                                              srcSize, 4);
+            srcSize, 4);
 
     PRINT_COMPRESSION("Two-pass:\t", uncompressedBytes, compressedBytes);
 
@@ -103,7 +100,7 @@ void KisCompressionTests::benchmarkCompression(KisAbstractCompression *compressi
 
     QBENCHMARK {
         compressedBytes = compression->compress(image.bits(), srcSize,
-                                                output, outputSize);
+        output, outputSize);
     }
     Q_UNUSED(compressedBytes);
 }
@@ -123,9 +120,9 @@ void KisCompressionTests::benchmarkCompressionTwoPass(KisAbstractCompression *co
 
     QBENCHMARK {
         KisAbstractCompression::linearizeColors(image.bits(), tempBuffer,
-                                                srcSize, 4);
+        srcSize, 4);
         compressedBytes = compression->compress(tempBuffer, srcSize,
-                                                output, outputSize);
+        output, outputSize);
     }
     Q_UNUSED(compressedBytes);
 }
@@ -147,7 +144,7 @@ void KisCompressionTests::benchmarkDecompression(KisAbstractCompression *compres
 
     QBENCHMARK {
         uncompressedBytes = compression->decompress(output, compressedBytes,
-                                                    image.bits(), srcSize);
+        image.bits(), srcSize);
     }
     Q_UNUSED(uncompressedBytes);
 }
@@ -172,10 +169,10 @@ void KisCompressionTests::benchmarkDecompressionTwoPass(KisAbstractCompression *
 
     QBENCHMARK {
         uncompressedBytes = compression->decompress(output, compressedBytes,
-                                                    tempBuffer, srcSize);
+        tempBuffer, srcSize);
 
         KisAbstractCompression::delinearizeColors(tempBuffer, image.bits(),
-                                                  srcSize, 4);
+        srcSize, 4);
     }
     Q_UNUSED(uncompressedBytes);
 }
@@ -183,8 +180,9 @@ void KisCompressionTests::benchmarkDecompressionTwoPass(KisAbstractCompression *
 void KisCompressionTests::testOverflow(KisAbstractCompression *compression)
 {
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + TEST_FILE);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return;
+    }
 
     QByteArray array = file.readAll();
 
@@ -194,7 +192,7 @@ void KisCompressionTests::testOverflow(KisAbstractCompression *compression)
     quint8 *output = new quint8[outputSize];
 
     qint32 compressedBytes;
-    compressedBytes = compression->compress((quint8*)array.data(), srcSize,
+    compressedBytes = compression->compress((quint8 *)array.data(), srcSize,
                                             output, outputSize);
 
     PRINT_COMPRESSION("Uncompressable:\t", srcSize, compressedBytes);

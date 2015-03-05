@@ -44,9 +44,9 @@ public:
      */
     virtual void setImage(KisImageWSP image) = 0;
     virtual void setImageSize(qint32 w, qint32 h) = 0;
-    virtual void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) = 0;
+    virtual void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags) = 0;
     virtual void setChannelFlags(const QBitArray &channelFlags) = 0;
-    virtual void setDisplayFilter(KisDisplayFilter* displayFilter) = 0;
+    virtual void setDisplayFilter(KisDisplayFilter *displayFilter) = 0;
 
     /**
      * Updates the cache of the backend by reading from
@@ -68,7 +68,7 @@ public:
      * scaling stuff. That's why KisPrescaledProjection asks
      * a backend to align an image rect before any operations.
      */
-    virtual void alignSourceRect(QRect& rect, qreal scale);
+    virtual void alignSourceRect(QRect &rect, qreal scale);
 
     /**
      * Gets a patch from a backend that can draw a info.imageRect on some
@@ -93,7 +93,7 @@ public:
      * @param info.borderWidth has the same meaning as in getNearestPatch
      * @param info.renderHints - hints, transmitted to QPainter during darwing
      */
-    virtual void drawFromOriginalImage(QPainter& gc,
+    virtual void drawFromOriginalImage(QPainter &gc,
                                        KisPPUpdateInfoSP info) = 0;
 };
 

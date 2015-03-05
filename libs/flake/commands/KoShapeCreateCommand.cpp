@@ -29,14 +29,17 @@ class KoShapeCreateCommand::Private
 {
 public:
     Private(KoShapeBasedDocumentBase *c, KoShape *s)
-            : controller(c),
-            shape(s),
-            shapeParent(shape->parent()),
-            deleteShape(true) {
+        : controller(c),
+          shape(s),
+          shapeParent(shape->parent()),
+          deleteShape(true)
+    {
     }
-    ~Private() {
-        if (shape && deleteShape)
+    ~Private()
+    {
+        if (shape && deleteShape) {
             delete shape;
+        }
     }
 
     KoShapeBasedDocumentBase *controller;
@@ -46,8 +49,8 @@ public:
 };
 
 KoShapeCreateCommand::KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent)
-        : KUndo2Command(parent),
-        d(new Private(controller, shape))
+    : KUndo2Command(parent),
+      d(new Private(controller, shape))
 {
     setText(kundo2_i18n("Create shape"));
 }
@@ -62,8 +65,9 @@ void KoShapeCreateCommand::redo()
     KUndo2Command::redo();
     Q_ASSERT(d->shape);
     Q_ASSERT(d->controller);
-    if (d->shapeParent)
+    if (d->shapeParent) {
         d->shapeParent->addShape(d->shape);
+    }
     // the parent has to be there when it is added to the KoShapeBasedDocumentBase
     d->controller->addShape(d->shape);
     d->shapeParent = d->shape->parent(); // update parent if the 'addShape' changed it
@@ -77,7 +81,8 @@ void KoShapeCreateCommand::undo()
     Q_ASSERT(d->controller);
     // the parent has to be there when it is removed from the KoShapeBasedDocumentBase
     d->controller->removeShape(d->shape);
-    if (d->shapeParent)
+    if (d->shapeParent) {
         d->shapeParent->removeShape(d->shape);
+    }
     d->deleteShape = true;
 }

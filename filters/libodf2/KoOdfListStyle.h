@@ -47,7 +47,7 @@ public:
     bool inUse() const;
     void setInUse(bool inUse);
 
-    QHash<QString, KoOdfStyleProperties*> properties();
+    QHash<QString, KoOdfStyleProperties *> properties();
     /**
       * @brief Return the list of properties in the selected property set.
       * @param name name of the property set.  Example: "text-properties" or "paragraph-properties"
@@ -64,7 +64,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOODFLISTSTYLE_H

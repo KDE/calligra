@@ -16,7 +16,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #ifndef KPLATO_KPTPACKAGE_H
 #define KPLATO_KPTPACKAGE_H
 
@@ -28,7 +27,8 @@
 
 #include <QString>
 
-namespace KPlato {
+namespace KPlato
+{
 
 class Project;
 

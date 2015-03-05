@@ -40,32 +40,49 @@ public:
 
     KoZoomHandler();
     virtual ~KoZoomHandler();
-    
-    /**
-     * @return the conversion factor between document and view, that
-     * includes the zoom and also the DPI setting.
-     */
-    inline qreal zoomedResolutionX() const { return m_zoomedResolutionX; }
 
     /**
      * @return the conversion factor between document and view, that
      * includes the zoom and also the DPI setting.
      */
-    inline qreal zoomedResolutionY() const { return m_zoomedResolutionY; }
+    inline qreal zoomedResolutionX() const
+    {
+        return m_zoomedResolutionX;
+    }
 
-    inline qreal resolutionX() const { return m_resolutionX; }
-    inline qreal resolutionY() const { return m_resolutionY; }
+    /**
+     * @return the conversion factor between document and view, that
+     * includes the zoom and also the DPI setting.
+     */
+    inline qreal zoomedResolutionY() const
+    {
+        return m_zoomedResolutionY;
+    }
+
+    inline qreal resolutionX() const
+    {
+        return m_resolutionX;
+    }
+    inline qreal resolutionY() const
+    {
+        return m_resolutionY;
+    }
 
     /**
      * Zoom factor for X. Equivalent to zoomedResolutionX()/resolutionX()
      */
-    inline qreal zoomFactorX() const { return m_zoomedResolutionX / m_resolutionX; }
+    inline qreal zoomFactorX() const
+    {
+        return m_zoomedResolutionX / m_resolutionX;
+    }
 
     /**
      * Zoom factor for Y. Equivalent to zoomedResolutionY()/resolutionY()
      */
-    inline qreal zoomFactorY() const { return m_zoomedResolutionY / m_resolutionY; }
-
+    inline qreal zoomFactorY() const
+    {
+        return m_zoomedResolutionY / m_resolutionY;
+    }
 
     /**
      * Set resolution expressed in dots-per-inch
@@ -85,7 +102,7 @@ public:
      * Set the resolution for X and Y to the display values reported by KGlobal.
      * The zoom factor is not changed.
      */
-    void setResolutionToStandard( );
+    void setResolutionToStandard();
 
     /**
      * Set the zoomed resolution for X and Y.
@@ -104,40 +121,49 @@ public:
      * Change the zoom mode
      * @param zoomMode the zoom mode.
      */
-    inline void setZoomMode(KoZoomMode::Mode zoomMode) { m_zoomMode = zoomMode; }
+    inline void setZoomMode(KoZoomMode::Mode zoomMode)
+    {
+        m_zoomMode = zoomMode;
+    }
     /**
      * @return the global zoom factor (e.g. 100 for 100%).
      * Only use this to display to the user, don't use in calculations
      */
-    inline int zoomInPercent() const { return qRound(KoViewConverter::zoom() * 100); }
+    inline int zoomInPercent() const
+    {
+        return qRound(KoViewConverter::zoom() * 100);
+    }
     /**
      * @return the global zoom mode (e.g. KoZoomMode::ZOOM_WIDTH).
      * use this to determine how to zoom
      */
-    KoZoomMode::Mode zoomMode() const { return m_zoomMode; }
+    KoZoomMode::Mode zoomMode() const
+    {
+        return m_zoomMode;
+    }
 
     // Input: pt. Output: pixels. Resolution and zoom are applied.
 
     inline qreal zoomItX(qreal z) const
-        {
-            return m_zoomedResolutionX * z;
-        }
+    {
+        return m_zoomedResolutionX * z;
+    }
 
     inline qreal zoomItY(qreal z) const
-        {
-            return m_zoomedResolutionY * z ;
-        }
+    {
+        return m_zoomedResolutionY * z;
+    }
 
     // Input: pixels. Output: pt.
     inline qreal unzoomItX(qreal x) const
-        {
-            return  x / m_zoomedResolutionX;
-        }
+    {
+        return  x / m_zoomedResolutionX;
+    }
 
     inline qreal unzoomItY(qreal y) const
-        {
-            return  y / m_zoomedResolutionY;
-        }
+    {
+        return  y / m_zoomedResolutionY;
+    }
 
     // KoViewConverter-interface methods
 

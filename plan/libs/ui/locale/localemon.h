@@ -38,43 +38,43 @@ class MacroCommand;
 
 class KPLATOUI_EXPORT LocaleConfigMoney : public QWidget, Ui::LocaleConfigMoney
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  LocaleConfigMoney(KLocale *locale, QWidget *parent);
-  virtual ~LocaleConfigMoney();
+    LocaleConfigMoney(KLocale *locale, QWidget *parent);
+    virtual ~LocaleConfigMoney();
 
-  void save();
+    void save();
 
-  MacroCommand *buildCommand();
+    MacroCommand *buildCommand();
 
 public Q_SLOTS:
-  /**
-   * Loads all settings from the current locale into the current widget.
-   */
-  void slotLocaleChanged();
-  /**
-   * Retranslate all objects owned by this object using the current locale.
-   */
-  void slotTranslate();
+    /**
+     * Loads all settings from the current locale into the current widget.
+     */
+    void slotLocaleChanged();
+    /**
+     * Retranslate all objects owned by this object using the current locale.
+     */
+    void slotTranslate();
 
 Q_SIGNALS:
-  void localeChanged();
+    void localeChanged();
 
 private Q_SLOTS:
-  // Money
-  void slotMonCurSymChanged(const QString &t);
-/*  void slotMonDecSymChanged(const QString &t);
-  void slotMonThoSepChanged(const QString &t);*/
-  void slotMonFraDigChanged(int value);
-  void slotMonPosPreCurSymChanged();
-  void slotMonNegPreCurSymChanged();
-  void slotMonPosMonSignPosChanged(int i);
-  void slotMonNegMonSignPosChanged(int i);
+    // Money
+    void slotMonCurSymChanged(const QString &t);
+    /*  void slotMonDecSymChanged(const QString &t);
+      void slotMonThoSepChanged(const QString &t);*/
+    void slotMonFraDigChanged(int value);
+    void slotMonPosPreCurSymChanged();
+    void slotMonNegPreCurSymChanged();
+    void slotMonPosMonSignPosChanged(int i);
+    void slotMonNegMonSignPosChanged(int i);
 //  void slotMonDigSetChanged(int i);
 
 private:
-  KLocale *m_locale;
+    KLocale *m_locale;
 };
 
 } // namespace KPlato

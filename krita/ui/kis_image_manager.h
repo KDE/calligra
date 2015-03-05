@@ -36,8 +36,7 @@ class KRITAUI_EXPORT KisImageManager : public QObject
 
 public:
 
-
-    KisImageManager(KisViewManager * view);
+    KisImageManager(KisViewManager *view);
     ~KisImageManager() {}
 
     void setView(QPointer<KisView>imageView);
@@ -58,7 +57,7 @@ public Q_SLOTS:
      * @param url the url to the image file
      * @return the number of layers added
      */
-    qint32 importImage(const KUrl& url, const QString &layerType = "KisPaintLayer");
+    qint32 importImage(const KUrl &url, const QString &layerType = "KisPaintLayer");
 
     void resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset);
     void scaleCurrentImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
@@ -69,7 +68,7 @@ public Q_SLOTS:
     void slotImageColor();
 
 private:
-    KisViewManager * m_view;
+    KisViewManager *m_view;
 };
 
 #endif // KIS_IMAGE_MANAGER

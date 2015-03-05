@@ -25,7 +25,7 @@
 
 #include <kis_cursor.h>
 
-KisToolPencil::KisToolPencil(KoCanvasBase * canvas)
+KisToolPencil::KisToolPencil(KoCanvasBase *canvas)
     : DelegatedPencilTool(canvas, Qt::ArrowCursor,
                           new __KisToolPencilLocalTool(canvas, this))
 {
@@ -33,12 +33,13 @@ KisToolPencil::KisToolPencil(KoCanvasBase * canvas)
 
 void KisToolPencil::mousePressEvent(KoPointerEvent *event)
 {
-    if (!nodeEditable()) return;
+    if (!nodeEditable()) {
+        return;
+    }
     DelegatedPencilTool::mousePressEvent(event);
 }
 
-
-__KisToolPencilLocalTool::__KisToolPencilLocalTool(KoCanvasBase * canvas, KisToolPencil* parentTool)
+__KisToolPencilLocalTool::__KisToolPencilLocalTool(KoCanvasBase *canvas, KisToolPencil *parentTool)
     : KoPencilTool(canvas), m_parentTool(parentTool) {}
 
 void __KisToolPencilLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
@@ -51,7 +52,7 @@ void __KisToolPencilLocalTool::paintPath(KoPathShape &pathShape, QPainter &paint
     m_parentTool->paintToolOutline(&painter, m_parentTool->pixelToView(matrix.map(pathShape.outline())));
 }
 
-void __KisToolPencilLocalTool::addPathShape(KoPathShape* pathShape, bool closePath)
+void __KisToolPencilLocalTool::addPathShape(KoPathShape *pathShape, bool closePath)
 {
     if (closePath) {
         pathShape->close();

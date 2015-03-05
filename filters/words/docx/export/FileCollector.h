@@ -23,7 +23,6 @@
 #include <QHash>
 #include <KoFilter.h>
 
-
 class QString;
 class QByteArray;
 
@@ -31,12 +30,10 @@ class KoStore;
 
 class FileCollectorPrivate;
 
-
 class FileCollector
 {
 public:
-    struct FileInfo
-    {
+    struct FileInfo {
         FileInfo(const QString &id, const QString &fileName,
                  const QByteArray &mimetype, const QByteArray &fileContents,
                  const QString &label);
@@ -65,8 +62,7 @@ public:
                         const QByteArray &mimetype, const QByteArray &fileContents,
                         const QString &label);
 
-    QList<FileInfo*>  files() const;   // Embedded files
-
+    QList<FileInfo *>  files() const;  // Embedded files
 
 protected:
 
@@ -77,7 +73,7 @@ protected:
     virtual KoFilter::ConversionStatus  writeFiles(KoStore *store);
 
 private:
-    FileCollectorPrivate * const d;
+    FileCollectorPrivate *const d;
 };
 
 #endif // FILECOLLECTOR_H

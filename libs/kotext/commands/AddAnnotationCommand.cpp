@@ -51,13 +51,12 @@ void AddAnnotationCommand::redo()
 
     KoShapeController *shapeController = KoTextDocument(m_annotation->document()).shapeController();
     shapeController->documentBase()->addShape(m_annotation->annotationShape());
- 
+
     m_shape = 0;
 
     //it's a textrange so we need to ask for a layout so we know where it is
     m_annotation->document()->markContentsDirty(m_annotation->rangeStart(), 0);
 }
-
 
 AddAnnotationCommand::~AddAnnotationCommand()
 {

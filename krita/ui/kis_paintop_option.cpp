@@ -36,22 +36,20 @@ QString KisPaintOpOption::textureCategory()
     return i18n("Texture");
 }
 
-
-struct KisPaintOpOption::Private
-{
+struct KisPaintOpOption::Private {
 public:
     bool checked;
     QString label;
     QString category;
-    QWidget * configurationPage;
+    QWidget *configurationPage;
 
     bool updatesBlocked;
     bool isWritingSettings;
 };
 
-KisPaintOpOption::KisPaintOpOption(const QString & label, const QString& category, bool checked)
-        : m_checkable(true)
-        , m_d(new Private())
+KisPaintOpOption::KisPaintOpOption(const QString &label, const QString &category, bool checked)
+    : m_checkable(true)
+    , m_d(new Private())
 
 {
     m_d->checked = checked;
@@ -77,14 +75,14 @@ void KisPaintOpOption::emitSettingChanged()
     }
 }
 
-void KisPaintOpOption::startReadOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPaintOpOption::startReadOptionSetting(const KisPropertiesConfiguration *setting)
 {
     m_d->updatesBlocked = true;
     readOptionSetting(setting);
     m_d->updatesBlocked = false;
 }
 
-void KisPaintOpOption::startWriteOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPaintOpOption::startWriteOptionSetting(KisPropertiesConfiguration *setting) const
 {
     m_d->isWritingSettings = true;
     writeOptionSetting(setting);
@@ -122,12 +120,12 @@ void KisPaintOpOption::setNode(KisNodeWSP node)
     Q_UNUSED(node);
 }
 
-void KisPaintOpOption::setConfigurationPage(QWidget * page)
+void KisPaintOpOption::setConfigurationPage(QWidget *page)
 {
     m_d->configurationPage = page;
 }
 
-QWidget* KisPaintOpOption::configurationPage() const
+QWidget *KisPaintOpOption::configurationPage() const
 {
     return m_d->configurationPage;
 }
@@ -136,11 +134,10 @@ void KisPaintOpOption::setLocked(bool value)
     m_locked = value;
 }
 
-bool KisPaintOpOption::isLocked ()const
+bool KisPaintOpOption::isLocked()const
 {
     return m_locked;
 }
-
 
 #include "kis_paintop_option.moc"
 

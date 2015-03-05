@@ -86,7 +86,7 @@ struct SolidFill {
 struct EffectsLayer {
     quint16 version; // 0
     quint16 effectsCount; //  Effects count: may be 6 (for the 6 effects in Photoshop 5 and 6) or 7 (for Photoshop 7.0)
-    QVector<Effect*> effects;
+    QVector<Effect *> effects;
 };
 
 /**
@@ -99,13 +99,12 @@ class PsdAdditionalLayerInfoBlock
 public:
     PsdAdditionalLayerInfoBlock();
 
-    bool read(QIODevice* io);
-    bool write(QIODevice* io, KisNodeSP node);
+    bool read(QIODevice *io);
+    bool write(QIODevice *io, KisNodeSP node);
 
     bool valid();
 
     QString error;
-
 
     QString key;
 

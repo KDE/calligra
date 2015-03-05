@@ -39,7 +39,7 @@ public:
     virtual void runFromXML(KisViewManager *view, const KisOperationConfiguration &config);
 
 protected:
-    KisProcessingApplicator* beginAction(KisViewManager *view, const KUndo2MagicString &actionName);
+    KisProcessingApplicator *beginAction(KisViewManager *view, const KUndo2MagicString &actionName);
     void endAction(KisProcessingApplicator *applicator, const QString &xmlData);
 private:
     const QString m_id;

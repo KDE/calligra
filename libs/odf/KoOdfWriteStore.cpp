@@ -33,16 +33,16 @@
 #include "KoXmlNS.h"
 
 struct KoOdfWriteStore::Private {
-    Private(KoStore * store)
-            : store(store)
-            , storeDevice(0)
-            , contentWriter(0)
-            , bodyWriter(0)
-            , manifestWriter(0)
-            , contentTmpFile(0) {}
+    Private(KoStore *store)
+        : store(store)
+        , storeDevice(0)
+        , contentWriter(0)
+        , bodyWriter(0)
+        , manifestWriter(0)
+        , contentTmpFile(0) {}
 
-
-    ~Private() {
+    ~Private()
+    {
         // If all the right close methods were called, nothing should remain,
         // so those deletes are really just in case.
         Q_ASSERT(!contentWriter);
@@ -55,17 +55,17 @@ struct KoOdfWriteStore::Private {
         delete manifestWriter;
     }
 
-    KoStore * store;
-    KoStoreDevice * storeDevice;
-    KoXmlWriter * contentWriter;
+    KoStore *store;
+    KoStoreDevice *storeDevice;
+    KoXmlWriter *contentWriter;
 
-    KoXmlWriter * bodyWriter;
-    KoXmlWriter * manifestWriter;
-    KTemporaryFile * contentTmpFile;
+    KoXmlWriter *bodyWriter;
+    KoXmlWriter *manifestWriter;
+    KTemporaryFile *contentTmpFile;
 };
 
-KoOdfWriteStore::KoOdfWriteStore(KoStore* store)
-        : d(new Private(store))
+KoOdfWriteStore::KoOdfWriteStore(KoStore *store)
+    : d(new Private(store))
 {
 }
 
@@ -74,9 +74,9 @@ KoOdfWriteStore::~KoOdfWriteStore()
     delete d;
 }
 
-KoXmlWriter* KoOdfWriteStore::createOasisXmlWriter(QIODevice* dev, const char* rootElementName)
+KoXmlWriter *KoOdfWriteStore::createOasisXmlWriter(QIODevice *dev, const char *rootElementName)
 {
-    KoXmlWriter* writer = new KoXmlWriter(dev);
+    KoXmlWriter *writer = new KoXmlWriter(dev);
     writer->startDocument(rootElementName);
     writer->startElement(rootElementName);
 
@@ -124,12 +124,12 @@ KoXmlWriter* KoOdfWriteStore::createOasisXmlWriter(QIODevice* dev, const char* r
     return writer;
 }
 
-KoStore* KoOdfWriteStore::store() const
+KoStore *KoOdfWriteStore::store() const
 {
     return d->store;
 }
 
-KoXmlWriter* KoOdfWriteStore::contentWriter()
+KoXmlWriter *KoOdfWriteStore::contentWriter()
 {
     if (!d->contentWriter) {
         if (!d->store->open("content.xml")) {
@@ -141,7 +141,7 @@ KoXmlWriter* KoOdfWriteStore::contentWriter()
     return d->contentWriter;
 }
 
-KoXmlWriter* KoOdfWriteStore::bodyWriter()
+KoXmlWriter *KoOdfWriteStore::bodyWriter()
 {
     if (!d->bodyWriter) {
         Q_ASSERT(!d->contentTmpFile);
@@ -186,7 +186,7 @@ bool KoOdfWriteStore::closeContentWriter()
     return true;
 }
 
-KoXmlWriter* KoOdfWriteStore::manifestWriter(const char* mimeType)
+KoXmlWriter *KoOdfWriteStore::manifestWriter(const char *mimeType)
 {
     if (!d->manifestWriter) {
         // the pointer to the buffer is already stored in the KoXmlWriter, no need to store it here as well
@@ -202,7 +202,7 @@ KoXmlWriter* KoOdfWriteStore::manifestWriter(const char* mimeType)
     return d->manifestWriter;
 }
 
-KoXmlWriter* KoOdfWriteStore::manifestWriter()
+KoXmlWriter *KoOdfWriteStore::manifestWriter()
 {
     Q_ASSERT(d->manifestWriter);
     return d->manifestWriter;
@@ -215,7 +215,7 @@ bool KoOdfWriteStore::closeManifestWriter(bool writeMainfest)
     if (writeMainfest) {
         d->manifestWriter->endElement();
         d->manifestWriter->endDocument();
-        QBuffer* buffer = static_cast<QBuffer *>(d->manifestWriter->device());
+        QBuffer *buffer = static_cast<QBuffer *>(d->manifestWriter->device());
         if (d->store->open("META-INF/manifest.xml")) {
             qint64 written = d->store->write(buffer->buffer());
             ok = (written == (qint64) buffer->buffer().size() && d->store->close());

@@ -28,7 +28,7 @@
 #include <QAbstractScrollArea>
 #include <QMouseEvent>
 
-KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
+KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
@@ -37,7 +37,7 @@ KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
     m_resourceItemView = smallPresetChooser->itemChooser()->itemView();
     m_resourceItemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_resourceItemView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    
+
     /* This is an heuristic to fill smallPresetChooser with only the presets
      * for the paintop that comes selected by default: Pixel Brush. */
     const QString PIXEL_BRUSH_ID = "paintbrush";
@@ -48,7 +48,7 @@ KisPresetSelectorStrip::~KisPresetSelectorStrip()
 {
 }
 
-void KisPresetSelectorStrip::setPresetFilter(const QString& paintOpId)
+void KisPresetSelectorStrip::setPresetFilter(const QString &paintOpId)
 {
     smallPresetChooser->setPresetFilter(paintOpId);
     if (m_currentPaintopID != paintOpId) {

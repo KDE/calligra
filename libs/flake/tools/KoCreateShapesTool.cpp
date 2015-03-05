@@ -33,7 +33,7 @@ class KoCreateShapesToolPrivate : public KoInteractionToolPrivate
 public:
     KoCreateShapesToolPrivate(KoToolBase *qq, KoCanvasBase *canvas)
         : KoInteractionToolPrivate(qq, canvas),
-        newShapeProperties(0)
+          newShapeProperties(0)
     {
     }
 
@@ -52,8 +52,9 @@ KoCreateShapesTool::~KoCreateShapesTool()
 
 void KoCreateShapesTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (currentStrategy())
+    if (currentStrategy()) {
         currentStrategy()->paint(painter, converter);
+    }
 }
 
 void KoCreateShapesTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -62,7 +63,7 @@ void KoCreateShapesTool::mouseReleaseEvent(KoPointerEvent *event)
     emit KoToolBase::done();
 }
 
-void KoCreateShapesTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KoCreateShapesTool::activate(ToolActivation, const QSet<KoShape *> &)
 {
     useCursor(Qt::ArrowCursor);
 }
@@ -85,7 +86,7 @@ void KoCreateShapesTool::setShapeProperties(KoProperties *properties)
     d->newShapeProperties = properties;
 }
 
-KoProperties const * KoCreateShapesTool::shapeProperties()
+KoProperties const *KoCreateShapesTool::shapeProperties()
 {
     Q_D(KoCreateShapesTool);
     return d->newShapeProperties;

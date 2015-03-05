@@ -27,13 +27,13 @@
 static const char WORDS_DESCRIPTION[] = I18N_NOOP("Word processor");
 static const char WORDS_VERSION[] = CALLIGRA_VERSION_STRING;
 
-KAboutData * newWordsAboutData()
+KAboutData *newWordsAboutData()
 {
-    KAboutData * aboutData = new KAboutData("words", 0, ki18nc("application name", "Calligra Words"),
-                                            WORDS_VERSION, ki18n(WORDS_DESCRIPTION), KAboutData::License_LGPL,
-                                            ki18n("© 1998-%1, The Words Team").subs(CALLIGRA_YEAR),
-                                            KLocalizedString(),
-                                            "http://www.calligra.org/words/");
+    KAboutData *aboutData = new KAboutData("words", 0, ki18nc("application name", "Calligra Words"),
+                                           WORDS_VERSION, ki18n(WORDS_DESCRIPTION), KAboutData::License_LGPL,
+                                           ki18n("© 1998-%1, The Words Team").subs(CALLIGRA_YEAR),
+                                           KLocalizedString(),
+                                           "http://www.calligra.org/words/");
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
     aboutData->setProgramIconName(QLatin1String("calligrawords"));
     aboutData->addAuthor(ki18n("Pierre Ducroquet"), ki18n("Co maintainer"), "");

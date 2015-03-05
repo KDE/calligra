@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -38,9 +37,10 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(OverviewDockerPluginFactory, registerPlugin<OverviewDockerPlugin>();)
-K_EXPORT_PLUGIN(OverviewDockerPluginFactory( "krita" ) )
+K_EXPORT_PLUGIN(OverviewDockerPluginFactory("krita"))
 
-class OverviewDockerDockFactory : public KoDockFactoryBase {
+class OverviewDockerDockFactory : public KoDockFactoryBase
+{
 public:
     OverviewDockerDockFactory()
     {
@@ -48,7 +48,7 @@ public:
 
     virtual QString id() const
     {
-        return QString( "OverviewDocker" );
+        return QString("OverviewDocker");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
@@ -56,9 +56,9 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    virtual QDockWidget *createDockWidget()
     {
-        OverviewDockerDock * dockWidget = new OverviewDockerDock();
+        OverviewDockerDock *dockWidget = new OverviewDockerDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -70,9 +70,7 @@ public:
     }
 private:
 
-
 };
-
 
 OverviewDockerPlugin::OverviewDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

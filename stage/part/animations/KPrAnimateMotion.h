@@ -33,8 +33,8 @@ public:
     explicit KPrAnimateMotion(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimateMotion();
 
-    virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
-    virtual bool saveOdf(KoPASavingContext & paContext) const;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual bool saveOdf(KoPASavingContext &paContext) const;
     virtual void init(KPrAnimationCache *animationCache, int step);
     QPainterPath pathOutline();
     KoPathShape *path();

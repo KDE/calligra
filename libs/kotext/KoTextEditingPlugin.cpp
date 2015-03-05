@@ -28,11 +28,11 @@
 class KoTextEditingPlugin::Private
 {
 public:
-    QHash<QString, KAction*> actionCollection;
+    QHash<QString, KAction *> actionCollection;
 };
 
 KoTextEditingPlugin::KoTextEditingPlugin()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
@@ -53,13 +53,15 @@ void KoTextEditingPlugin::selectWord(QTextCursor &cursor, int cursorPosition) co
     QString::Iterator iter = string.begin();
     while (iter != string.end()) {
         if (iter->isSpace()) {
-            if (space) ;// double spaces belong to the previous word
-            else if (pos < cursorPosition)
-                cursor.setPosition(pos + block.position() + 1); // +1 because we don't want to set it on the space itself
-            else
+            if (space);// double spaces belong to the previous word
+            else if (pos < cursorPosition) {
+                cursor.setPosition(pos + block.position() + 1);    // +1 because we don't want to set it on the space itself
+            } else {
                 space = true;
-        } else if (space)
+            }
+        } else if (space) {
             break;
+        }
         pos++;
         iter++;
     }
@@ -82,30 +84,33 @@ void KoTextEditingPlugin::checkSection(QTextDocument *document, int startPositio
     QTextBlock block = document->findBlock(startPosition);
     int pos = block.position();
     while (true) {
-        if (!block.contains(startPosition - 1) && !block.contains(endPosition + 1)) // only parags that are completely in
+        if (!block.contains(startPosition - 1) && !block.contains(endPosition + 1)) { // only parags that are completely in
             finishedParagraph(document, block.position());
+        }
 
         QString text = block.text();
         bool space = true;
         QString::Iterator iter = text.begin();
         while (pos < endPosition && iter != text.end()) {
             bool isSpace = iter->isSpace();
-            if (pos >= startPosition && space && !isSpace) // for each word, call finishedWord
+            if (pos >= startPosition && space && !isSpace) { // for each word, call finishedWord
                 finishedWord(document, pos);
-            else if (!isSpace && pos == startPosition)
+            } else if (!isSpace && pos == startPosition) {
                 finishedWord(document, startPosition);
+            }
             space = isSpace;
             pos++;
             iter++;
         }
 
-        if (!(block.isValid() && block.position() + block.length() < endPosition))
+        if (!(block.isValid() && block.position() + block.length() < endPosition)) {
             break;
+        }
         block = block.next();
     }
 }
 
-QHash<QString, KAction*> KoTextEditingPlugin::actions() const
+QHash<QString, KAction *> KoTextEditingPlugin::actions() const
 {
     return d->actionCollection;
 }

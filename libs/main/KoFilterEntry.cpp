@@ -29,9 +29,8 @@ Boston, MA 02110-1301, USA.
 
 #include <limits.h> // UINT_MAX
 
-
-KoFilterEntry::KoFilterEntry(const KService::Ptr& service)
-        : m_service(service)
+KoFilterEntry::KoFilterEntry(const KService::Ptr &service)
+    : m_service(service)
 {
     import = service->property("X-KDE-Import", QVariant::StringList).toStringList();
     export_ = service->property("X-KDE-Export", QVariant::StringList).toStringList();
@@ -61,23 +60,23 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query()
     return lst;
 }
 
-KoFilter* KoFilterEntry::createFilter(KoFilterChain* chain, QObject* parent)
+KoFilter *KoFilterEntry::createFilter(KoFilterChain *chain, QObject *parent)
 {
     KPluginLoader loader(*m_service);
-    KLibFactory* factory = loader.factory();
+    KLibFactory *factory = loader.factory();
 
     if (!factory) {
         kWarning(30003) << loader.errorString();
         return 0;
     }
 
-    QObject* obj = factory->create<KoFilter>(parent);
+    QObject *obj = factory->create<KoFilter>(parent);
     if (!obj || !obj->inherits("KoFilter")) {
         delete obj;
         return 0;
     }
 
-    KoFilter* filter = static_cast<KoFilter*>(obj);
+    KoFilter *filter = static_cast<KoFilter *>(obj);
     filter->m_chain = chain;
     return filter;
 }

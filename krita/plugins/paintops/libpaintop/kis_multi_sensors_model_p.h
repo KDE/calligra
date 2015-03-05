@@ -25,13 +25,12 @@
 class KisCubicCurve;
 class KisCurveOption;
 
-
 class KisMultiSensorsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
 
-    explicit KisMultiSensorsModel(QObject* parent = 0);
+    explicit KisMultiSensorsModel(QObject *parent = 0);
 
     virtual ~KisMultiSensorsModel();
 
@@ -43,11 +42,11 @@ public:
 
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-    virtual Qt::ItemFlags flags(const QModelIndex & index) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    KisDynamicSensorSP getSensor(const QModelIndex& index);
+    KisDynamicSensorSP getSensor(const QModelIndex &index);
 
-    void setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve);
+    void setCurrentCurve(const QModelIndex &currentIndex, const KisCubicCurve &curve, bool useSameCurve);
 
     /**
      * Create an index that correspond to the sensor given in argument.

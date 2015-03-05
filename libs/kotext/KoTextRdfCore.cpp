@@ -26,7 +26,7 @@
 
 using namespace Soprano;
 
-bool KoTextRdfCore::saveRdf( QSharedPointer<Soprano::Model> model, Soprano::StatementIterator triples, KoStore *store, KoXmlWriter *manifestWriter, const QString &fileName)
+bool KoTextRdfCore::saveRdf(QSharedPointer<Soprano::Model> model, Soprano::StatementIterator triples, KoStore *store, KoXmlWriter *manifestWriter, const QString &fileName)
 {
     bool ok = false;
 
@@ -38,9 +38,9 @@ bool KoTextRdfCore::saveRdf( QSharedPointer<Soprano::Model> model, Soprano::Stat
     QTextStream oss(&dev);
 
     QString serialization = "application/rdf+xml";
-    const Soprano::Serializer* serializer
-            = Soprano::PluginManager::instance()->discoverSerializerForSerialization(
-                    Soprano::SerializationRdfXml);
+    const Soprano::Serializer *serializer
+        = Soprano::PluginManager::instance()->discoverSerializerForSerialization(
+              Soprano::SerializationRdfXml);
 
     if (serializer) {
         QString data;
@@ -73,14 +73,14 @@ bool KoTextRdfCore::createAndSaveManifest(QSharedPointer<Soprano::Model> docmode
         QString sparqlQuery;
         QTextStream queryss(&sparqlQuery);
         queryss << ""
-            << "prefix pkg:  <http://docs.oasis-open.org/ns/office/1.2/meta/pkg#> \n"
-            << ""
-            << "select ?s ?p ?o \n"
-            << "where { \n"
-            << " ?s pkg:idref ?xmlid . \n"
-            << " ?s ?p ?o . \n"
-            << " filter( str(?xmlid) = \"" << oldID << "\" ) \n"
-            << "}\n";
+                << "prefix pkg:  <http://docs.oasis-open.org/ns/office/1.2/meta/pkg#> \n"
+                << ""
+                << "select ?s ?p ?o \n"
+                << "where { \n"
+                << " ?s pkg:idref ?xmlid . \n"
+                << " ?s ?p ?o . \n"
+                << " filter( str(?xmlid) = \"" << oldID << "\" ) \n"
+                << "}\n";
 
         Soprano::QueryResultIterator it =
             docmodel->executeQuery(sparqlQuery,
@@ -126,11 +126,11 @@ bool KoTextRdfCore::loadManifest(KoStore *store, QSharedPointer<Soprano::Model> 
     kDebug(30015) << "Found " << allStatements.size() << " triples...";
     foreach (const Soprano::Statement &s, allStatements) {
         Error::ErrorCode err = model->addStatement(s.subject(), s.predicate(),
-                s.object(), context);
+                               s.object(), context);
         if (err != Error::ErrorNone) {
             kDebug(30015) << "Error adding triple! s:" << s.subject()
-                << " p:" << s.predicate()
-                << " o:" << s.object();
+                          << " p:" << s.predicate()
+                          << " o:" << s.object();
             ok = false;
             break;
         }
@@ -230,12 +230,12 @@ void KoTextRdfCore::saveList(QSharedPointer<Soprano::Model> model, Soprano::Node
     model->addStatement(listBNode, rdfRest, rdfNil, context);
 }
 
-void KoTextRdfCore::removeStatementsIfTheyExist( QSharedPointer<Soprano::Model> m, const QList<Soprano::Statement> &removeList)
+void KoTextRdfCore::removeStatementsIfTheyExist(QSharedPointer<Soprano::Model> m, const QList<Soprano::Statement> &removeList)
 {
     foreach (const Soprano::Statement &s, removeList) {
         StatementIterator it = m->listStatements(s.subject(), s.predicate(), s.object(), s.context());
         QList<Statement> allStatements = it.allElements();
-        foreach(const Soprano::Statement &z, allStatements) {
+        foreach (const Soprano::Statement &z, allStatements) {
             kDebug(30015) << "found:" << z;
             m->removeStatement(z);
         }

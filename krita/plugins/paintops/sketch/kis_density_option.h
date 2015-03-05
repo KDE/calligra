@@ -26,7 +26,7 @@ class KisDensityOption : public KisCurveOption
 {
 public:
     KisDensityOption();
-    double apply(const KisPaintInformation & info, double probability) const;
+    double apply(const KisPaintInformation &info, double probability) const;
 };
 
 #endif

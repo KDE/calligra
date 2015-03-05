@@ -24,7 +24,6 @@
 
 #include "kis_global.h"
 
-
 /**
  *    A-----B         The polygons must be initialized in this order:
  *    |     |
@@ -35,7 +34,8 @@
 class KisFourPointInterpolatorBackward
 {
 public:
-    KisFourPointInterpolatorBackward(const QPolygonF &srcPolygon, const QPolygonF &dstPolygon) {
+    KisFourPointInterpolatorBackward(const QPolygonF &srcPolygon, const QPolygonF &dstPolygon)
+    {
         m_a = dstPolygon[1] - dstPolygon[0]; // AB
         m_b = dstPolygon[2] - dstPolygon[1]; // BD
         m_c = dstPolygon[3] - dstPolygon[0]; // AC
@@ -56,13 +56,15 @@ public:
         //m_qB_varY = 0.0;
     }
 
-    inline QPointF map(const QPointF &pt) {
+    inline QPointF map(const QPointF &pt)
+    {
         setX(pt.x());
         setY(pt.y());
         return getValue();
     }
 
-    inline void setX(qreal x) {
+    inline void setX(qreal x)
+    {
         x -= m_dstBase.x();
 
         m_qB_varX = - x * m_d.y();
@@ -70,7 +72,8 @@ public:
         m_px = x;
     }
 
-    inline void setY(qreal y) {
+    inline void setY(qreal y)
+    {
         y -= m_dstBase.y();
 
         m_qB_varY = y * m_d.x();
@@ -78,7 +81,8 @@ public:
         m_py = y;
     }
 
-    inline QPointF getValue() const {
+    inline QPointF getValue() const
+    {
         static const qreal eps = 1e-10;
 
         qreal qB = m_qB_const + m_qB_varX + m_qB_varY;

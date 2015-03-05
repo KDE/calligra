@@ -20,7 +20,7 @@
 
 #include <QCoreApplication>
 
-VirtualKeyboardController* VirtualKeyboardController::sm_instance = 0;
+VirtualKeyboardController *VirtualKeyboardController::sm_instance = 0;
 
 void VirtualKeyboardController::requestShowKeyboard()
 {
@@ -32,16 +32,17 @@ void VirtualKeyboardController::requestHideKeyboard()
     emit hideKeyboard();
 }
 
-VirtualKeyboardController* VirtualKeyboardController::instance()
+VirtualKeyboardController *VirtualKeyboardController::instance()
 {
-    if (!sm_instance)
+    if (!sm_instance) {
         sm_instance = new VirtualKeyboardController(QCoreApplication::instance());
+    }
 
     return sm_instance;
 }
 
-VirtualKeyboardController::VirtualKeyboardController(QObject* parent)
- : QObject(parent)
+VirtualKeyboardController::VirtualKeyboardController(QObject *parent)
+    : QObject(parent)
 {
 
 }

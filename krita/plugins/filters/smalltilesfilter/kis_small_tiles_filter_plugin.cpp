@@ -30,7 +30,7 @@ K_PLUGIN_FACTORY(KisSmallTilesFilterPluginFactory, registerPlugin<KisSmallTilesF
 K_EXPORT_PLUGIN(KisSmallTilesFilterPluginFactory("krita"))
 
 KisSmallTilesFilterPlugin::KisSmallTilesFilterPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisFilterRegistry::instance()->add(new KisSmallTilesFilter());
 }

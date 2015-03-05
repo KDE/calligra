@@ -44,10 +44,10 @@ public:
     int firstIdenticalRow(int row) const;
     void insertRows(int row, int count);
     void removeRows(int row, int count);
-    void insertShiftDown(const QRect& rect);
-    void insertShiftRight(const QRect& rect);
-    void removeShiftUp(const QRect& rect);
-    void removeShiftLeft(const QRect& rect);
+    void insertShiftDown(const QRect &rect);
+    void insertShiftRight(const QRect &rect);
+    void removeShiftUp(const QRect &rect);
+    void removeShiftLeft(const QRect &rect);
     void splitRowRepeat(int row);
     void dump() const;
 private:

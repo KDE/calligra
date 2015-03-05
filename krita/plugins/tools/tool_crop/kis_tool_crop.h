@@ -36,10 +36,8 @@
 #include "ui_wdg_tool_crop.h"
 #include "kis_constrained_rect.h"
 
-
 class QRect;
 struct DecorationLine;
-
 
 /**
  * Crop tool
@@ -70,10 +68,10 @@ public:
         LayerCropType,
         ImageCropType
     };
-    KisToolCrop(KoCanvasBase * canvas);
+    KisToolCrop(KoCanvasBase *canvas);
     virtual ~KisToolCrop();
 
-    virtual QWidget* createOptionWidget();
+    virtual QWidget *createOptionWidget();
 
     void beginPrimaryAction(KoPointerEvent *event);
     void continuePrimaryAction(KoPointerEvent *event);
@@ -99,7 +97,6 @@ public:
     bool growCenter() const;
     bool allowGrow() const;
 
-
 Q_SIGNALS:
     void cropTypeSelectableChanged();
     void cropTypeChanged(int value);
@@ -121,7 +118,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     virtual void deactivate();
 
     void requestStrokeEnd();
@@ -154,7 +151,7 @@ private:
     QRectF boundingRect();
     QRectF borderLineRect();
     QPainterPath handlesPath();
-    void paintOutlineWithHandles(QPainter& gc);
+    void paintOutlineWithHandles(QPainter &gc);
     qint32 mouseOnHandle(const QPointF currentViewPoint);
     void setMoveResizeCursor(qint32 handle);
     QRectF lowerRightHandleRect(QRectF cropBorderRect);
@@ -205,8 +202,9 @@ class KisToolCropFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolCropFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolCrop") {
+    KisToolCropFactory(const QStringList &)
+        : KoToolFactoryBase("KisToolCrop")
+    {
         setToolTip(i18n("Crop the image to an area"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -217,13 +215,12 @@ public:
 
     virtual ~KisToolCropFactory() {}
 
-    virtual KoToolBase * createTool(KoCanvasBase *canvas) {
+    virtual KoToolBase *createTool(KoCanvasBase *canvas)
+    {
         return new KisToolCrop(canvas);
     }
 
 };
-
-
 
 #endif // KIS_TOOL_CROP_H_
 

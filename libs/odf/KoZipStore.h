@@ -29,39 +29,40 @@ class KUrl;
 class KoZipStore : public KoStore
 {
 public:
-    KoZipStore(const QString & _filename, Mode _mode, const QByteArray & appIdentification,
+    KoZipStore(const QString &_filename, Mode _mode, const QByteArray &appIdentification,
                bool writeMimetype = true);
-    KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
+    KoZipStore(QIODevice *dev, Mode mode, const QByteArray &appIdentification,
                bool writeMimetype = true);
     /**
      * KUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
      */
-    KoZipStore(QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode,
-               const QByteArray & appIdentification, bool writeMimetype = true);
+    KoZipStore(QWidget *window, const KUrl &_url, const QString &_filename, Mode _mode,
+               const QByteArray &appIdentification, bool writeMimetype = true);
     ~KoZipStore();
 
     virtual void setCompressionEnabled(bool e);
-    virtual qint64 write(const char* _data, qint64 _len);
+    virtual qint64 write(const char *_data, qint64 _len);
 protected:
-    void init(const QByteArray& appIdentification);
+    void init(const QByteArray &appIdentification);
     virtual bool doFinalize();
-    virtual bool openWrite(const QString& name);
-    virtual bool openRead(const QString& name);
+    virtual bool openWrite(const QString &name);
+    virtual bool openRead(const QString &name);
     virtual bool closeWrite();
-    virtual bool closeRead() {
+    virtual bool closeRead()
+    {
         return true;
     }
-    virtual bool enterRelativeDirectory(const QString& dirName);
-    virtual bool enterAbsoluteDirectory(const QString& path);
-    virtual bool fileExists(const QString& absPath) const;
+    virtual bool enterRelativeDirectory(const QString &dirName);
+    virtual bool enterAbsoluteDirectory(const QString &path);
+    virtual bool fileExists(const QString &absPath) const;
 
     /// The archive
-    KZip * m_pZip;
+    KZip *m_pZip;
 
     /** In "Read" mode this pointer is pointing to the
     current directory in the archive to speed up the verification process */
-    const KArchiveDirectory* m_currentDir;
+    const KArchiveDirectory *m_currentDir;
 private:
     Q_DECLARE_PRIVATE(KoStore)
 };

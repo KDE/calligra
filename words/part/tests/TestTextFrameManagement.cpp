@@ -43,7 +43,7 @@ void TestTextFrameManagement::testFrameRemoval()
     QCOMPARE(tfs.frameCount(), 2); // leave one
 }
 
-KWTextFrame * TestTextFrameManagement::createFrame(const QPointF &position, KWTextFrameSet &fs)
+KWTextFrame *TestTextFrameManagement::createFrame(const QPointF &position, KWTextFrameSet &fs)
 {
     MockShape *shape = new MockShape();
     shape->setUserData(new KoTextShapeData());
@@ -51,7 +51,6 @@ KWTextFrame * TestTextFrameManagement::createFrame(const QPointF &position, KWTe
     shape->setPosition(position);
     return frame;
 }
-
 
 QTEST_KDEMAIN(TestTextFrameManagement, GUI)
 

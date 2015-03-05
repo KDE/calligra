@@ -31,15 +31,15 @@ class KOPAGEAPP_EXPORT KoPACanvas : public QWidget, public KoPACanvasBase
 {
     Q_OBJECT
 public:
-    explicit KoPACanvas( KoPAViewBase * view, KoPADocument * doc, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit KoPACanvas(KoPAViewBase *view, KoPADocument *doc, QWidget *parent = 0, Qt::WindowFlags f = 0);
 
     void repaint();
 
-    QWidget* canvasWidget();
-    const QWidget* canvasWidget() const;
+    QWidget *canvasWidget();
+    const QWidget *canvasWidget() const;
 
     /// reimplemented method
-    virtual void updateCanvas( const QRectF& rc );
+    virtual void updateCanvas(const QRectF &rc);
 
     /// reimplemented method
     virtual void updateInputMethodInfo();
@@ -51,7 +51,10 @@ public:
 
 public Q_SLOTS:
 
-    void slotSetDocumentOffset(const QPoint &offset) { setDocumentOffset(offset); }
+    void slotSetDocumentOffset(const QPoint &offset)
+    {
+        setDocumentOffset(offset);
+    }
 
 Q_SIGNALS:
     void documentSize(const QSize &size);
@@ -60,7 +63,7 @@ Q_SIGNALS:
      * Emitted when the entire controller size changes
      * @param size the size in widget pixels.
      */
-    void sizeChanged( const QSize & size );
+    void sizeChanged(const QSize &size);
 
     /// Emitted when updateCanvas has been called.
     void canvasUpdated();
@@ -69,39 +72,39 @@ protected:
     /// reimplemented method from superclass
     bool event(QEvent *);
     /// reimplemented method from superclass
-    void paintEvent( QPaintEvent* event );
+    void paintEvent(QPaintEvent *event);
     /// reimplemented method from superclass
-    void tabletEvent( QTabletEvent *event );
+    void tabletEvent(QTabletEvent *event);
     /// reimplemented method from superclass
-    void mousePressEvent( QMouseEvent *event );
+    void mousePressEvent(QMouseEvent *event);
     /// reimplemented method from superclass
-    void mouseDoubleClickEvent( QMouseEvent *event );
+    void mouseDoubleClickEvent(QMouseEvent *event);
     /// reimplemented method from superclass
-    void mouseMoveEvent( QMouseEvent *event );
+    void mouseMoveEvent(QMouseEvent *event);
     /// reimplemented method from superclass
-    void mouseReleaseEvent( QMouseEvent *event );
+    void mouseReleaseEvent(QMouseEvent *event);
     /// reimplemented method from superclass
-    void keyPressEvent( QKeyEvent *event );
+    void keyPressEvent(QKeyEvent *event);
     /// reimplemented method from superclass
-    void keyReleaseEvent( QKeyEvent *event );
+    void keyReleaseEvent(QKeyEvent *event);
     /// reimplemented method from superclass
-    void wheelEvent ( QWheelEvent * event );
+    void wheelEvent(QWheelEvent *event);
     /// reimplemented method from superclass
-    void closeEvent( QCloseEvent * event );
+    void closeEvent(QCloseEvent *event);
     /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
     /// reimplemented method from superclass
-    virtual void resizeEvent( QResizeEvent * event );
+    virtual void resizeEvent(QResizeEvent *event);
 
     /**
      * Shows the default context menu
      * @param globalPos global position to show the menu at.
      * @param actionList action list to be inserted into the menu
      */
-    void showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList );
+    void showContextMenu(const QPoint &globalPos, const QList<QAction *> &actionList);
 };
 
 #endif /* KOPACANVAS_H */

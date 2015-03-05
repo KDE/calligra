@@ -66,9 +66,9 @@ private Q_SLOTS:
     void updatePageSize();
     void updateCursorPosition();
     void gotoLine();
-    void updateMousePosition(const QPoint&);
-    void canvasResourceChanged(int, const QVariant&);
-    void updateCurrentTool(KoCanvasController*);
+    void updateMousePosition(const QPoint &);
+    void canvasResourceChanged(int, const QVariant &);
+    void updateCurrentTool(KoCanvasController *);
     void createZoomWidget();
     void showPage(bool visible);
     void showPageStyle(bool visible);
@@ -88,13 +88,13 @@ private:
     * \param view The Words view instance the statusbar belongs to. Each
     * KWStatusBar instance belongs to exactly one view.
     */
-    KWStatusBar(KStatusBar *statusBar, KWView* view);
+    KWStatusBar(KStatusBar *statusBar, KWView *view);
 
     void setCurrentView(KWView *view);
 
     KStatusBar *m_statusbar;
     QPointer<KWView> m_currentView;
-    QMap<KWView*, QWidget*> m_zoomWidgets;
+    QMap<KWView *, QWidget *> m_zoomWidgets;
     QPointer<KoCanvasControllerProxyObject> m_controller;
     int m_currentPageNumber;
     QAction *m_zoomAction;
@@ -106,7 +106,7 @@ private:
     KWStatusBarEditItem *m_lineLabel;
     QLabel *m_mousePosLabel;
     KSqueezedTextLabel *m_statusLabel;
-    QList<KWView*> m_views;
+    QList<KWView *> m_views;
 };
 
 #endif

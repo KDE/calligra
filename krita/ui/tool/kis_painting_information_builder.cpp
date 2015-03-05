@@ -25,14 +25,11 @@
 
 #include "kis_cubic_curve.h"
 
-
 /***********************************************************************/
 /*           KisPaintingInformationBuilder                             */
 /***********************************************************************/
 
-
 const int KisPaintingInformationBuilder::LEVEL_OF_PRESSURE_RESOLUTION = 1024;
-
 
 KisPaintingInformationBuilder::KisPaintingInformationBuilder()
 {
@@ -51,7 +48,7 @@ void KisPaintingInformationBuilder::updateSettings()
 }
 
 KisPaintInformation KisPaintingInformationBuilder::startStroke(KoPointerEvent *event,
-                                                               int timeElapsed)
+        int timeElapsed)
 {
     m_startPoint = event->point;
     return createPaintingInformation(event, timeElapsed);
@@ -59,7 +56,7 @@ KisPaintInformation KisPaintingInformationBuilder::startStroke(KoPointerEvent *e
 }
 
 KisPaintInformation KisPaintingInformationBuilder::continueStroke(KoPointerEvent *event,
-                                                                  int timeElapsed)
+        int timeElapsed)
 {
     return createPaintingInformation(event, timeElapsed);
 }
@@ -80,9 +77,8 @@ qreal KisPaintingInformationBuilder::calculatePerspective(const QPointF &documen
     return 1.0;
 }
 
-
 KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoPointerEvent *event,
-                                                                             int timeElapsed)
+        int timeElapsed)
 {
 
     QPointF adjusted = adjustDocumentPoint(event->point, m_startPoint);
@@ -99,17 +95,17 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
 }
 
 KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoint,
-                                                         const KoPointerEvent *event)
+        const KoPointerEvent *event)
 {
     qreal perspective = calculatePerspective(imagePoint);
 
     if (event) {
         return KisPaintInformation::createHoveringModeInfo(imagePoint,
-                                                           PRESSURE_DEFAULT,
-                                                           event->xTilt(), event->yTilt(),
-                                                           event->rotation(),
-                                                           event->tangentialPressure(),
-                                                           perspective);
+                PRESSURE_DEFAULT,
+                event->xTilt(), event->yTilt(),
+                event->rotation(),
+                event->tangentialPressure(),
+                perspective);
     } else {
         return KisPaintInformation::createHoveringModeInfo(imagePoint);
     }

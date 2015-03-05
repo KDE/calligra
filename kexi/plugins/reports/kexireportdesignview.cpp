@@ -17,7 +17,6 @@
 * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "kexireportdesignview.h"
 #include <core/KexiMainWindowIface.h>
 #include <kdebug.h>
@@ -27,7 +26,7 @@
 #include <KoIcon.h>
 
 KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *s)
-        : KexiView(parent)
+    : KexiView(parent)
 {
     m_scrollArea = new QScrollArea(this);
     layout()->addWidget(m_scrollArea);
@@ -55,7 +54,7 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
     m_itemRaiseAction->setObjectName("itemraise");
     m_itemLowerAction = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
     m_itemLowerAction->setObjectName("itemlower");
-    QList<QAction*> al;
+    QList<QAction *> al;
     KAction *sep = new KAction(QString(), this);
     sep->setSeparator(true);
 
@@ -79,9 +78,9 @@ void KexiReportDesignView::slotDesignerPropertySetChanged()
     propertySetSwitched();
 }
 
-KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData& sdata,
-                                                       KexiView::StoreNewDataOptions options,
-                                                       bool &cancel)
+KexiDB::SchemaData *KexiReportDesignView::storeNewData(const KexiDB::SchemaData &sdata,
+        KexiView::StoreNewDataOptions options,
+        bool &cancel)
 {
     KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
     kDebug() << "new id:" << s->id();
@@ -109,8 +108,9 @@ tristate KexiReportDesignView::storeData(bool dontAsk)
     QDomElement root = doc.createElement("kexireport");
     QDomElement conndata = m_sourceSelector->connectionData();
 
-    if (conndata.isNull())
+    if (conndata.isNull()) {
         kDebug() << "Null conn data!";
+    }
 
     root.appendChild(m_reportDesigner->document());
     root.appendChild(conndata);
@@ -157,7 +157,7 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
 
         m_reportDesigner = new KoReportDesigner(this, tempData()->reportDefinition);
         m_sourceSelector->setConnectionData(tempData()->connectionDefinition);
-    } 
+    }
     connect(m_reportDesigner, SIGNAL(itemInserted(QString)), this, SIGNAL(itemInserted(QString)));
 
     m_scrollArea->setWidget(m_reportDesigner);
@@ -179,12 +179,12 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KexiReportPart::TempData* KexiReportDesignView::tempData() const
+KexiReportPart::TempData *KexiReportDesignView::tempData() const
 {
-    return static_cast<KexiReportPart::TempData*>(window()->data());
+    return static_cast<KexiReportPart::TempData *>(window()->data());
 }
 
-void KexiReportDesignView::slotSetData(KoReportData* kodata)
+void KexiReportDesignView::slotSetData(KoReportData *kodata)
 {
     m_reportDesigner->setReportData(kodata);
     tempData()->connectionDefinition = m_sourceSelector->connectionData();

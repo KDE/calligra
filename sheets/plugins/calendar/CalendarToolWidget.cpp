@@ -35,8 +35,8 @@ namespace Calligra
 namespace Sheets
 {
 
-CalendarToolWidget::CalendarToolWidget(QWidget* parent)
-        : QDialog(parent)
+CalendarToolWidget::CalendarToolWidget(QWidget *parent)
+    : QDialog(parent)
 {
     setupUi(this);
     this->m_datePicker = 0;
@@ -73,8 +73,9 @@ bool CalendarToolWidget::buildDatePickerFrame()
 
     Q_ASSERT(m_datePicker);
 
-    if (!m_datePicker)
+    if (!m_datePicker) {
         return false;
+    }
 
     connect(m_datePicker, SIGNAL(destroyed()), this, SLOT(datePickerDeleted()));
 
@@ -93,8 +94,9 @@ void CalendarToolWidget::datePickerDeleted()
 
 void CalendarToolWidget::emitInsertCalendar()
 {
-    if (m_datePicker)
+    if (m_datePicker) {
         m_datePicker->deleteLater();
+    }
     emit insertCalendar(startDate(), endDate());
 }
 
@@ -116,12 +118,12 @@ void CalendarToolWidget::showEndDatePicker()
     }
 }
 
-void CalendarToolWidget::setStartDate(const QDate& date)
+void CalendarToolWidget::setStartDate(const QDate &date)
 {
     this->m_startDateWidget->setDate(date);
 }
 
-void CalendarToolWidget::setEndDate(const QDate& date)
+void CalendarToolWidget::setEndDate(const QDate &date)
 {
     this->m_endDateWidget->setDate(date);
 }

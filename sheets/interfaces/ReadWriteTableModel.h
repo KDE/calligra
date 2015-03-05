@@ -31,7 +31,7 @@ public:
     /**
      * Constructor.
      */
-    explicit ReadWriteTableModel(Sheet* sheet, int columns = 0, int rows = 0);
+    explicit ReadWriteTableModel(Sheet *sheet, int columns = 0, int rows = 0);
 
     /**
      * Destructor.
@@ -39,12 +39,12 @@ public:
     ~ReadWriteTableModel();
 
     // QAbstractTableModel interface
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace KSpread

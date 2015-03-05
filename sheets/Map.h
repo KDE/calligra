@@ -82,7 +82,7 @@ public:
     /**
      * Created an empty map.
      */
-    explicit Map(DocBase* doc = 0, int syntaxVersion = 1);
+    explicit Map(DocBase *doc = 0, int syntaxVersion = 1);
 
     /**
      * This deletes all sheets contained in this map.
@@ -92,7 +92,7 @@ public:
     /**
      * \return the document this map belongs to
      */
-    DocBase* doc() const;
+    DocBase *doc() const;
 
     /**
      * \brief Sets whether the document can be edited or is read only.
@@ -106,82 +106,82 @@ public:
 
     // KoDataCenterBase interface
     virtual bool completeLoading(KoStore *store);
-    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context);
+    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
 
     /**
      * \return a pointer to the binding manager
      */
-    BindingManager* bindingManager() const;
+    BindingManager *bindingManager() const;
 
     /**
      * \return a pointer to the database manager
      */
-    DatabaseManager* databaseManager() const;
+    DatabaseManager *databaseManager() const;
 
     /**
      * \return a pointer to the dependency manager
      */
-    DependencyManager* dependencyManager() const;
+    DependencyManager *dependencyManager() const;
 
     /**
      * \return a pointer to the named area manager
      */
-    NamedAreaManager* namedAreaManager() const;
+    NamedAreaManager *namedAreaManager() const;
 
     /**
      * \return a pointer to the recalculation manager
      */
-    RecalcManager* recalcManager() const;
+    RecalcManager *recalcManager() const;
 
     /**
      * @return the StyleManager of this Document
      */
-    StyleManager* styleManager() const;
+    StyleManager *styleManager() const;
 
     /**
      * @return the KoStyleManager of this Document
      */
-    KoStyleManager* textStyleManager() const;
+    KoStyleManager *textStyleManager() const;
 
     /**
      * @return the value parser of this Document
      */
-    ValueParser* parser() const;
+    ValueParser *parser() const;
 
     /**
      * @return the value formatter of this Document
      */
-    ValueFormatter* formatter() const;
+    ValueFormatter *formatter() const;
 
     /**
      * @return the value converter of this Document
      */
-    ValueConverter* converter() const;
+    ValueConverter *converter() const;
 
     /**
      * @return the value calculator of this Document
      */
-    ValueCalc* calc() const;
+    ValueCalc *calc() const;
 
     /**
      * \return the application settings
      */
-    ApplicationSettings* settings() const;
+    ApplicationSettings *settings() const;
 
     /**
      * \return the calculation settings
      */
-    CalculationSettings* calculationSettings() const;
+    CalculationSettings *calculationSettings() const;
 
     /**
      * \return the default row format
      */
-    const ColumnFormat* defaultColumnFormat() const;
+    const ColumnFormat *defaultColumnFormat() const;
 
     /**
      * \return the default row format
      */
-    const RowFormat* defaultRowFormat() const;
+    const RowFormat *defaultRowFormat() const;
 
     /**
      * Sets the default column width to \p width.
@@ -201,94 +201,93 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    bool saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext);
+    bool saveOdf(KoXmlWriter &xmlWriter, KoShapeSavingContext &savingContext);
 
     /**
      * \ingroup OpenDocument
      */
-    bool loadOdf(const KoXmlElement& mymap, KoOdfLoadingContext& odfContext);
+    bool loadOdf(const KoXmlElement &mymap, KoOdfLoadingContext &odfContext);
 
     /**
      * \ingroup NativeFormat
      */
-    bool loadXML(const KoXmlElement& mymap);
+    bool loadXML(const KoXmlElement &mymap);
 
     /**
      * \ingroup NativeFormat
      */
-    QDomElement save(QDomDocument& doc);
+    QDomElement save(QDomDocument &doc);
 
-
-    bool loadChildren(KoStore* _store);
+    bool loadChildren(KoStore *_store);
 
     /**
      * The sheet named @p _from is being moved to the sheet @p _to.
      * If @p  _before is true @p _from is inserted before (after otherwise)
      * @p  _to.
      */
-    void moveSheet(const QString & _from, const QString & _to, bool _before = true);
+    void moveSheet(const QString &_from, const QString &_to, bool _before = true);
 
     /**
      * Searches for a sheet named @p name .
      * @return a pointer to the searched sheet
      * @return @c 0 if nothing was found
      */
-    Sheet* findSheet(const QString& name) const;
+    Sheet *findSheet(const QString &name) const;
 
     /**
      * @return a pointer to the next sheet to @p sheet
      */
-    Sheet* nextSheet(Sheet* sheet) const;
+    Sheet *nextSheet(Sheet *sheet) const;
 
     /**
      * @return a pointer to the previous sheet to @p sheet
      */
-    Sheet* previousSheet(Sheet*) const;
+    Sheet *previousSheet(Sheet *) const;
 
     /**
      * Creates a new sheet.
      * The sheet is not added to the map nor added to the GUI.
      * @return a pointer to a new Sheet
      */
-    Sheet* createSheet(const QString& name = QString());
+    Sheet *createSheet(const QString &name = QString());
 
     /**
      * Adds @p sheet to this map.
      * The sheet becomes the active sheet.
     */
-    void addSheet(Sheet* sheet);
+    void addSheet(Sheet *sheet);
 
     /**
      * Creates a new sheet.
      * Adds a new sheet to this map.
      * @return a pointer to the new sheet
      */
-    Sheet* addNewSheet(const QString& name = QString());
+    Sheet *addNewSheet(const QString &name = QString());
 
     /**
      * @return a pointer to the sheet at index @p index in this map
      * @return @c 0 if the index exceeds the list boundaries
      */
-    Sheet* sheet(int index) const;
+    Sheet *sheet(int index) const;
 
     /**
      * @return index of @p sheet in this map
      * @return @c 0 if the index exceeds the list boundaries
      */
-    int indexOf(Sheet* sheet) const;
+    int indexOf(Sheet *sheet) const;
 
     /**
      * @return the list of sheets in this map
      */
-    QList<Sheet*>& sheetList() const;
+    QList<Sheet *> &sheetList() const;
 
     /**
      * @return amount of sheets in this map
      */
     int count() const;
 
-    void removeSheet(Sheet* sheet);
-    void reviveSheet(Sheet* sheet);
+    void removeSheet(Sheet *sheet);
+    void reviveSheet(Sheet *sheet);
 
     QStringList visibleSheets() const;
     QStringList hiddenSheets() const;
@@ -320,7 +319,7 @@ public:
      * Creates the loading info, if it does not exist yet.
      * \return the loading info
      */
-    LoadingInfo* loadingInfo() const;
+    LoadingInfo *loadingInfo() const;
 
     /**
      * \ingroup OpenDocument
@@ -343,7 +342,7 @@ public:
     /**
      * \ingroup Damages
      */
-    void addDamage(Damage* damage);
+    void addDamage(Damage *damage);
 
     /**
      * Return a pointer to the resource manager associated with the
@@ -362,7 +361,7 @@ public Q_SLOTS:
     /**
      * \ingroup Damages
      */
-    void handleDamages(const QList<Damage*>& damages);
+    void handleDamages(const QList<Damage *> &damages);
 
     /**
      * Emits the signal commandAdded(KUndo2Command *).
@@ -375,7 +374,7 @@ Q_SIGNALS:
     /**
      * \ingroup Damages
      */
-    void damagesFlushed(const QList<Damage*>& damages);
+    void damagesFlushed(const QList<Damage *> &damages);
 
     /**
      * Emitted, if a command was added by addCommand(KUndo2Command *).
@@ -385,17 +384,17 @@ Q_SIGNALS:
     /**
      * Emitted, if a newly created sheet was added to the document.
      */
-    void sheetAdded(Sheet* sheet);
+    void sheetAdded(Sheet *sheet);
 
     /**
      * Emitted, if a sheet was deleted from the document.
      */
-    void sheetRemoved(Sheet* sheet);
+    void sheetRemoved(Sheet *sheet);
 
     /**
      * Emitted, if a sheet was revived, i.e. a deleted sheet was reinserted.
      */
-    void sheetRevived(Sheet* sheet);
+    void sheetRevived(Sheet *sheet);
 
     /**
      * Emitted, if a status \p message should be shown in the status bar
@@ -407,7 +406,7 @@ private:
     Q_DISABLE_COPY(Map)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

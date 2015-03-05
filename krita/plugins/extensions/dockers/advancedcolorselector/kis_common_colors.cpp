@@ -38,7 +38,6 @@
 #include "kis_config.h"
 #include "kis_common_colors_recalculation_runner.h"
 
-
 KisCommonColors::KisCommonColors(QWidget *parent) :
     KisColorPatches("commonColors", parent)
 {
@@ -47,7 +46,7 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
     m_reloadButton->setToolTip(i18n("Create a list of colors from the image"));
     connect(m_reloadButton, SIGNAL(clicked()), this, SLOT(recalculate()));
 
-    QList<QWidget*> tmpList;
+    QList<QWidget *> tmpList;
     tmpList.append(m_reloadButton);
     setAdditionalButtons(tmpList);
     updateSettings();
@@ -70,19 +69,18 @@ void KisCommonColors::setCanvas(KisCanvas2 *canvas)
             m_image->disconnect(this);
         }
         if (m_canvas) {
-            connect(m_canvas->image(), SIGNAL(sigImageUpdated(const QRect &)),
+            connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)),
                     &m_recalculationTimer, SLOT(start()), Qt::UniqueConnection);
             m_image = m_canvas->image();
-        }
-        else {
+        } else {
             m_image = 0;
         }
     }
 }
 
-KisColorSelectorBase* KisCommonColors::createPopup() const
+KisColorSelectorBase *KisCommonColors::createPopup() const
 {
-    KisCommonColors* ret = new KisCommonColors();
+    KisCommonColors *ret = new KisCommonColors();
     ret->setCanvas(m_canvas);
     ret->setColors(colors());
     return ret;
@@ -92,17 +90,17 @@ void KisCommonColors::updateSettings()
 {
     KisColorPatches::updateSettings();
 
-    if(!(m_canvas && m_canvas->image()))
+    if (!(m_canvas && m_canvas->image())) {
         return;
+    }
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
-    if(cfg.readEntry("commonColorsAutoUpdate", false)) {
-        connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
+    if (cfg.readEntry("commonColorsAutoUpdate", false)) {
+        connect(m_canvas->image(),     SIGNAL(sigImageUpdated(QRect)),
                 &m_recalculationTimer, SLOT(start()), Qt::UniqueConnection);
-    }
-    else {
-        disconnect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
-                &m_recalculationTimer, SLOT(start()));
+    } else {
+        disconnect(m_canvas->image(),     SIGNAL(sigImageUpdated(QRect)),
+                   &m_recalculationTimer, SLOT(start()));
     }
 
     m_reloadButton->setEnabled(true);
@@ -111,8 +109,8 @@ void KisCommonColors::updateSettings()
 void KisCommonColors::setColors(QList<KoColor> colors)
 {
     QMutexLocker locker(&m_mutex);
-	KisColorPatches::setColors(colors);
-	m_reloadButton->setEnabled(true);
+    KisColorPatches::setColors(colors);
+    m_reloadButton->setEnabled(true);
     m_calculatedColors = colors;
 }
 
@@ -121,7 +119,7 @@ void KisCommonColors::recalculate()
     if (!m_canvas) {
         return;
     }
-    if(m_reloadButton->isEnabled()==false) {
+    if (m_reloadButton->isEnabled() == false) {
         // on old computation is still running
         // try later to recalculate
         m_recalculationTimer.start();
@@ -134,7 +132,7 @@ void KisCommonColors::recalculate()
 
     QImage image = kisImage->projection()->createThumbnail(1024, 1024, kisImage->bounds(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
 
-    KisCommonColorsRecalculationRunner* runner = new KisCommonColorsRecalculationRunner(image, patchCount(), this);
+    KisCommonColorsRecalculationRunner *runner = new KisCommonColorsRecalculationRunner(image, patchCount(), this);
     QThreadPool::globalInstance()->start(runner);
 }
 

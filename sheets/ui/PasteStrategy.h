@@ -48,11 +48,11 @@ public:
      */
     virtual ~PasteStrategy();
 
-    virtual KUndo2Command* createCommand();
+    virtual KUndo2Command *createCommand();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

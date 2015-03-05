@@ -97,7 +97,7 @@ public:
      * Copy Constructor.
      * Copies the validity \p other .
      */
-    Validity(const Validity& other);
+    Validity(const Validity &other);
 
     /**
      * Destructor.
@@ -113,26 +113,26 @@ public:
      * Tests whether the content of \p cell is allowed.
      * \return \c true if the content is valid
      */
-    bool testValidity(const Cell* cell) const;
+    bool testValidity(const Cell *cell) const;
 
     /**
      * \ingroup NativeFormat
      * Loads validity checks.
      */
-    bool loadXML(Cell* const cell, const KoXmlElement& validityElement);
+    bool loadXML(Cell *const cell, const KoXmlElement &validityElement);
 
     /**
      * \ingroup NativeFormat
      * Saves validity checks.
      */
-    QDomElement saveXML(QDomDocument& doc, const ValueConverter *converter) const;
+    QDomElement saveXML(QDomDocument &doc, const ValueConverter *converter) const;
 
     /**
      * \ingroup OpenDocument
      * Loads validity checks.
      */
-    void loadOdfValidation(Cell* const cell, const QString& validationName,
-                           OdfLoadingContext& tableContext);
+    void loadOdfValidation(Cell *const cell, const QString &validationName,
+                           OdfLoadingContext &tableContext);
 
     Action action() const;
     bool allowEmptyCell() const;
@@ -140,16 +140,16 @@ public:
 
     bool displayMessage() const;
     bool displayValidationInformation() const;
-    const QString& messageInfo() const;
-    const QString& message() const;
+    const QString &messageInfo() const;
+    const QString &message() const;
 
     const Value &maximumValue() const;
     const Value &minimumValue() const;
 
     Restriction restriction() const;
-    const QString& title() const;
-    const QString& titleInfo() const;
-    const QStringList& validityList() const;
+    const QString &title() const;
+    const QString &titleInfo() const;
+    const QStringList &validityList() const;
 
     void setAction(Action action);
     void setAllowEmptyCell(bool allow);
@@ -157,28 +157,30 @@ public:
 
     void setDisplayMessage(bool display);
     void setDisplayValidationInformation(bool display);
-    void setMessage(const QString& message);
-    void setMessageInfo(const QString& info);
+    void setMessage(const QString &message);
+    void setMessageInfo(const QString &info);
 
     void setMaximumValue(const Value &value);
     void setMinimumValue(const Value &value);
 
     void setRestriction(Restriction restriction);
-    void setTitle(const QString& title);
-    void setTitleInfo(const QString& info);
-    void setValidityList(const QStringList& list);
+    void setTitle(const QString &title);
+    void setTitleInfo(const QString &info);
+    void setValidityList(const QStringList &list);
 
     /// \note fake implementation to make QMap happy
-    bool operator<(const Validity&) const {
+    bool operator<(const Validity &) const
+    {
         return true;
     }
-    void operator=(const Validity&);
-    bool operator==(const Validity& other) const;
-    inline bool operator!=(const Validity& other) const {
+    void operator=(const Validity &);
+    bool operator==(const Validity &other) const;
+    inline bool operator!=(const Validity &other) const
+    {
         return !operator==(other);
     }
 
-    static QHash<QString, KoXmlElement> preloadValidities(const KoXmlElement& body);
+    static QHash<QString, KoXmlElement> preloadValidities(const KoXmlElement &body);
 
 private:
     /**

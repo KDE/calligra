@@ -30,8 +30,8 @@ class KritaSketchPlugin : public QDeclarativeExtensionPlugin
     Q_OBJECT
 
 public:
-    virtual void registerTypes(const char* uri);
-    virtual void initializeEngine(QDeclarativeEngine* engine, const char* uri);
+    virtual void registerTypes(const char *uri);
+    virtual void initializeEngine(QDeclarativeEngine *engine, const char *uri);
 
 private:
 

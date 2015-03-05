@@ -58,7 +58,8 @@ protected:
  *
  * @see KoToolManager
  */
-class KoModeBox : public QWidget {
+class KoModeBox : public QWidget
+{
     Q_OBJECT
 public:
     /// constructor
@@ -112,7 +113,7 @@ public Q_SLOTS:
     void unsetCanvas();
 
 private Q_SLOTS:
-    void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
+    void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *newLayer);
 
     /// add a tool post-initialization. The tool will also be activated.
     void toolAdded(const KoToolButton &button, KoCanvasController *canvas);
@@ -154,7 +155,7 @@ private:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // _KO_TOOLBOX_H_

@@ -25,7 +25,7 @@
 #include <kdebug.h>
 
 KarbonGradientToolFactory::KarbonGradientToolFactory()
-        : KoToolFactoryBase("KarbonGradientTool")
+    : KoToolFactoryBase("KarbonGradientTool")
 {
     setToolTip(i18n("Gradient editing"));
     setToolType("karbon, krita");
@@ -38,7 +38,7 @@ KarbonGradientToolFactory::~KarbonGradientToolFactory()
 {
 }
 
-KoToolBase * KarbonGradientToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KarbonGradientToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonGradientTool(canvas);
 }

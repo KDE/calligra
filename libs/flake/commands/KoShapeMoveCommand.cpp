@@ -26,13 +26,13 @@
 class KoShapeMoveCommand::Private
 {
 public:
-    QList<KoShape*> shapes;
+    QList<KoShape *> shapes;
     QList<QPointF> previousPositions, newPositions;
 };
 
-KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape*> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions, KUndo2Command *parent)
-        : KUndo2Command(parent),
-        d(new Private())
+KoShapeMoveCommand::KoShapeMoveCommand(const QList<KoShape *> &shapes, QList<QPointF> &previousPositions, QList<QPointF> &newPositions, KUndo2Command *parent)
+    : KUndo2Command(parent),
+      d(new Private())
 {
     d->shapes = shapes;
     d->previousPositions = previousPositions;

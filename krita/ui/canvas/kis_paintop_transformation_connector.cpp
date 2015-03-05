@@ -24,14 +24,13 @@
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 
-
 KisPaintopTransformationConnector::KisPaintopTransformationConnector(KisCanvas2 *canvas, QObject *parent)
     : QObject(parent),
       m_canvas(canvas)
 {
     connect(m_canvas->resourceManager(),
-            SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            SLOT(slotCanvasResourceChanged(int, const QVariant&)));
+            SIGNAL(canvasResourceChanged(int,QVariant)),
+            SLOT(slotCanvasResourceChanged(int,QVariant)));
 }
 
 void KisPaintopTransformationConnector::notifyTransformationChanged()

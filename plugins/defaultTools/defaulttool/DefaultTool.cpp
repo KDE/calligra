@@ -71,14 +71,14 @@
 class NopInteractionStrategy : public KoInteractionStrategy
 {
 public:
-    explicit NopInteractionStrategy(KoToolBase* parent) : KoInteractionStrategy(parent) {}
+    explicit NopInteractionStrategy(KoToolBase *parent) : KoInteractionStrategy(parent) {}
 
-    virtual KUndo2Command* createCommand()
+    virtual KUndo2Command *createCommand()
     {
         return 0;
     }
 
-    virtual void handleMouseMove(const QPointF& /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) {}
+    virtual void handleMouseMove(const QPointF & /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) {}
     virtual void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) {}
 };
 
@@ -91,7 +91,8 @@ public:
         Q_ASSERT(m_selection);
     }
 
-    bool hasSelection() {
+    bool hasSelection()
+    {
         return m_selection->count();
     }
 
@@ -139,16 +140,15 @@ private:
     bool m_selected;
 };
 
-
 DefaultTool::DefaultTool(KoCanvasBase *canvas)
     : KoInteractionTool(canvas),
-    m_lastHandle(KoFlake::NoHandle),
-    m_hotPosition(KoFlake::TopLeftCorner),
-    m_mouseWasInsideHandles(false),
-    m_moveCommand(0),
-    m_selectionHandler(new SelectionHandler(this)),
-    m_customEventStrategy(0),
-    m_guideLine(new GuideLine())
+      m_lastHandle(KoFlake::NoHandle),
+      m_hotPosition(KoFlake::TopLeftCorner),
+      m_mouseWasInsideHandles(false),
+      m_moveCommand(0),
+      m_selectionHandler(new SelectionHandler(this)),
+      m_customEventStrategy(0),
+      m_guideLine(new GuideLine())
 {
     setupActions();
 
@@ -166,16 +166,16 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     m_rotateCursors[5] = QCursor(rotatePixmap.transformed(QTransform().rotate(270)));
     m_rotateCursors[6] = QCursor(rotatePixmap.transformed(QTransform().rotate(315)));
     m_rotateCursors[7] = QCursor(rotatePixmap);
-/*
-    m_rotateCursors[0] = QCursor(Qt::RotateNCursor);
-    m_rotateCursors[1] = QCursor(Qt::RotateNECursor);
-    m_rotateCursors[2] = QCursor(Qt::RotateECursor);
-    m_rotateCursors[3] = QCursor(Qt::RotateSECursor);
-    m_rotateCursors[4] = QCursor(Qt::RotateSCursor);
-    m_rotateCursors[5] = QCursor(Qt::RotateSWCursor);
-    m_rotateCursors[6] = QCursor(Qt::RotateWCursor);
-    m_rotateCursors[7] = QCursor(Qt::RotateNWCursor);
-*/
+    /*
+        m_rotateCursors[0] = QCursor(Qt::RotateNCursor);
+        m_rotateCursors[1] = QCursor(Qt::RotateNECursor);
+        m_rotateCursors[2] = QCursor(Qt::RotateECursor);
+        m_rotateCursors[3] = QCursor(Qt::RotateSECursor);
+        m_rotateCursors[4] = QCursor(Qt::RotateSCursor);
+        m_rotateCursors[5] = QCursor(Qt::RotateSWCursor);
+        m_rotateCursors[6] = QCursor(Qt::RotateWCursor);
+        m_rotateCursors[7] = QCursor(Qt::RotateNWCursor);
+    */
     m_shearCursors[0] = QCursor(shearPixmap);
     m_shearCursors[1] = QCursor(shearPixmap.transformed(QTransform().rotate(45)));
     m_shearCursors[2] = QCursor(shearPixmap.transformed(QTransform().rotate(90)));
@@ -193,7 +193,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     m_sizeCursors[6] = Qt::SizeHorCursor;
     m_sizeCursors[7] = Qt::SizeFDiagCursor;
 
-    KoShapeManager * manager = canvas->shapeManager();
+    KoShapeManager *manager = canvas->shapeManager();
     connect(manager, SIGNAL(selectionChanged()), this, SLOT(updateActions()));
 }
 
@@ -209,64 +209,64 @@ bool DefaultTool::wantsAutoScroll() const
 
 void DefaultTool::setupActions()
 {
-    KAction* actionBringToFront = new KAction(koIcon("object-order-front-calligra"),
-                                               i18n("Bring to &Front"), this);
+    KAction *actionBringToFront = new KAction(koIcon("object-order-front-calligra"),
+            i18n("Bring to &Front"), this);
     addAction("object_order_front", actionBringToFront);
     actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-    KAction* actionRaise = new KAction(koIcon("object-order-raise-calligra"), i18n("&Raise"), this);
+    KAction *actionRaise = new KAction(koIcon("object-order-raise-calligra"), i18n("&Raise"), this);
     addAction("object_order_raise", actionRaise);
     actionRaise->setShortcut(QKeySequence("Ctrl+]"));
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    KAction* actionLower = new KAction(koIcon("object-order-lower-calligra"), i18n("&Lower"), this);
+    KAction *actionLower = new KAction(koIcon("object-order-lower-calligra"), i18n("&Lower"), this);
     addAction("object_order_lower", actionLower);
     actionLower->setShortcut(QKeySequence("Ctrl+["));
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-    KAction* actionSendToBack = new KAction(koIcon("object-order-back-calligra"),
-                                             i18n("Send to &Back"), this);
+    KAction *actionSendToBack = new KAction(koIcon("object-order-back-calligra"),
+                                            i18n("Send to &Back"), this);
     addAction("object_order_back", actionSendToBack);
     actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-    KAction* actionAlignLeft = new KAction(koIcon("object-align-horizontal-left-calligra"),
-                                            i18n("Align Left"), this);
+    KAction *actionAlignLeft = new KAction(koIcon("object-align-horizontal-left-calligra"),
+                                           i18n("Align Left"), this);
     addAction("object_align_horizontal_left", actionAlignLeft);
     connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-    KAction* actionAlignCenter = new KAction(koIcon("object-align-horizontal-center-calligra"),
-                                              i18n("Horizontally Center"), this);
+    KAction *actionAlignCenter = new KAction(koIcon("object-align-horizontal-center-calligra"),
+            i18n("Horizontally Center"), this);
     addAction("object_align_horizontal_center", actionAlignCenter);
     connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
 
-    KAction* actionAlignRight = new KAction(koIcon("object-align-horizontal-right-calligra"),
-                                             i18n("Align Right"), this);
+    KAction *actionAlignRight = new KAction(koIcon("object-align-horizontal-right-calligra"),
+                                            i18n("Align Right"), this);
     addAction("object_align_horizontal_right", actionAlignRight);
     connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
 
-    KAction* actionAlignTop = new KAction(koIcon("object-align-vertical-top-calligra"), i18n("Align Top"), this);
+    KAction *actionAlignTop = new KAction(koIcon("object-align-vertical-top-calligra"), i18n("Align Top"), this);
     addAction("object_align_vertical_top", actionAlignTop);
     connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
 
-    KAction* actionAlignMiddle = new KAction(koIcon("object-align-vertical-center-calligra"),
-                                              i18n("Vertically Center"), this);
+    KAction *actionAlignMiddle = new KAction(koIcon("object-align-vertical-center-calligra"),
+            i18n("Vertically Center"), this);
     addAction("object_align_vertical_center", actionAlignMiddle);
     connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
 
-    KAction* actionAlignBottom = new KAction(koIcon("object-align-vertical-bottom-calligra"),
-                                              i18n("Align Bottom"), this);
+    KAction *actionAlignBottom = new KAction(koIcon("object-align-vertical-bottom-calligra"),
+            i18n("Align Bottom"), this);
     addAction("object_align_vertical_bottom", actionAlignBottom);
     connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 
-    KAction* actionGroupBottom = new KAction(koIcon("object-group-calligra"),
-                                              i18n("Group"), this);
+    KAction *actionGroupBottom = new KAction(koIcon("object-group-calligra"),
+            i18n("Group"), this);
     addAction("object_group", actionGroupBottom);
     connect(actionGroupBottom, SIGNAL(triggered()), this, SLOT(selectionGroup()));
 
-    KAction* actionUngroupBottom = new KAction(koIcon("object-ungroup-calligra"),
-                                                i18n("Ungroup"), this);
+    KAction *actionUngroupBottom = new KAction(koIcon("object-ungroup-calligra"),
+            i18n("Ungroup"), this);
     addAction("object_ungroup", actionUngroupBottom);
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
 }
@@ -280,7 +280,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
     case KoFlake::TopMiddleHandle:
         if (useEdgeRotation) {
             direction = koSelection()->absolutePosition(KoFlake::TopRightCorner)
-                - koSelection()->absolutePosition(KoFlake::TopLeftCorner);
+                        - koSelection()->absolutePosition(KoFlake::TopLeftCorner);
         } else {
             QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopLeftCorner);
             handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::TopRightCorner) - handlePosition);
@@ -293,7 +293,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
     case KoFlake::RightMiddleHandle:
         if (useEdgeRotation) {
             direction = koSelection()->absolutePosition(KoFlake::BottomRightCorner)
-                    - koSelection()->absolutePosition(KoFlake::TopRightCorner);
+                        - koSelection()->absolutePosition(KoFlake::TopRightCorner);
         } else {
             QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopRightCorner);
             handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomRightCorner) - handlePosition);
@@ -306,7 +306,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
     case KoFlake::BottomMiddleHandle:
         if (useEdgeRotation) {
             direction = koSelection()->absolutePosition(KoFlake::BottomLeftCorner)
-                    - koSelection()->absolutePosition(KoFlake::BottomRightCorner);
+                        - koSelection()->absolutePosition(KoFlake::BottomRightCorner);
         } else {
             QPointF handlePosition = koSelection()->absolutePosition(KoFlake::BottomLeftCorner);
             handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomRightCorner) - handlePosition);
@@ -319,7 +319,7 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
     case KoFlake::LeftMiddleHandle:
         if (useEdgeRotation) {
             direction = koSelection()->absolutePosition(KoFlake::TopLeftCorner)
-                    - koSelection()->absolutePosition(KoFlake::BottomLeftCorner);
+                        - koSelection()->absolutePosition(KoFlake::BottomLeftCorner);
         } else {
             QPointF handlePosition = koSelection()->absolutePosition(KoFlake::TopLeftCorner);
             handlePosition += 0.5 * (koSelection()->absolutePosition(KoFlake::BottomLeftCorner) - handlePosition);
@@ -338,37 +338,41 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
 
     switch (handle) {
     case KoFlake::TopMiddleHandle:
-        if (useEdgeRotation)
+        if (useEdgeRotation) {
             rotation -= 0.0;
-        else
+        } else {
             rotation -= 270.0;
+        }
         break;
     case KoFlake::TopRightHandle:
         rotation -= 315.0;
         break;
     case KoFlake::RightMiddleHandle:
-        if (useEdgeRotation)
+        if (useEdgeRotation) {
             rotation -= 90.0;
-        else
+        } else {
             rotation -= 0.0;
+        }
         break;
     case KoFlake::BottomRightHandle:
         rotation -= 45.0;
         break;
     case KoFlake::BottomMiddleHandle:
-        if (useEdgeRotation)
+        if (useEdgeRotation) {
             rotation -= 180.0;
-        else
+        } else {
             rotation -= 90.0;
+        }
         break;
     case KoFlake::BottomLeftHandle:
         rotation -= 135.0;
         break;
     case KoFlake::LeftMiddleHandle:
-        if (useEdgeRotation)
+        if (useEdgeRotation) {
             rotation -= 270.0;
-        else
+        } else {
             rotation -= 180.0;
+        }
         break;
     case KoFlake::TopLeftHandle:
         rotation -= 225.0;
@@ -377,8 +381,9 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
         break;
     }
 
-    if (rotation < 0.0)
+    if (rotation < 0.0) {
         rotation += 360.0;
+    }
 
     return rotation;
 }
@@ -390,7 +395,7 @@ void DefaultTool::updateCursor()
     QString statusText;
 
     if (koSelection()->count() > 0) { // has a selection
-        bool editable=editableShapesCount(koSelection()->selectedShapes(KoFlake::StrippedSelection));
+        bool editable = editableShapesCount(koSelection()->selectedShapes(KoFlake::StrippedSelection));
 
         if (!m_mouseWasInsideHandles) {
             m_angle = rotationOfHandle(m_lastHandle, true);
@@ -398,85 +403,86 @@ void DefaultTool::updateCursor()
 
             bool rotateHandle = false;
             bool shearHandle = false;
-            switch(m_lastHandle) {
+            switch (m_lastHandle) {
             case KoFlake::TopMiddleHandle:
-                cursor = m_shearCursors[(0 +rotOctant)%8];
+                cursor = m_shearCursors[(0 + rotOctant) % 8];
                 shearHandle = true;
                 break;
             case KoFlake::TopRightHandle:
-                cursor = m_rotateCursors[(1 +rotOctant)%8];
+                cursor = m_rotateCursors[(1 + rotOctant) % 8];
                 rotateHandle = true;
                 break;
             case KoFlake::RightMiddleHandle:
-                cursor = m_shearCursors[(2 +rotOctant)%8];
+                cursor = m_shearCursors[(2 + rotOctant) % 8];
                 shearHandle = true;
                 break;
             case KoFlake::BottomRightHandle:
-                cursor = m_rotateCursors[(3 +rotOctant)%8];
+                cursor = m_rotateCursors[(3 + rotOctant) % 8];
                 rotateHandle = true;
                 break;
             case KoFlake::BottomMiddleHandle:
-                cursor = m_shearCursors[(4 +rotOctant)%8];
+                cursor = m_shearCursors[(4 + rotOctant) % 8];
                 shearHandle = true;
                 break;
             case KoFlake::BottomLeftHandle:
-                cursor = m_rotateCursors[(5 +rotOctant)%8];
+                cursor = m_rotateCursors[(5 + rotOctant) % 8];
                 rotateHandle = true;
                 break;
             case KoFlake::LeftMiddleHandle:
-                cursor = m_shearCursors[(6 +rotOctant)%8];
+                cursor = m_shearCursors[(6 + rotOctant) % 8];
                 shearHandle = true;
                 break;
             case KoFlake::TopLeftHandle:
-                cursor = m_rotateCursors[(7 +rotOctant)%8];
+                cursor = m_rotateCursors[(7 + rotOctant) % 8];
                 rotateHandle = true;
                 break;
             case KoFlake::NoHandle:
                 if (m_guideLine->isValid()) {
                     cursor = m_guideLine->orientation() == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor;
                     statusText = i18n("Click and drag to move guide line.");
-                }
-                else
+                } else {
                     cursor = Qt::ArrowCursor;
+                }
                 break;
             }
-            if (rotateHandle)
+            if (rotateHandle) {
                 statusText = i18n("Left click rotates around center, right click around highlighted position.");
-            if (shearHandle)
+            }
+            if (shearHandle) {
                 statusText = i18n("Click and drag to shear selection.");
-        }
-        else {
+            }
+        } else {
             statusText = i18n("Click and drag to resize selection.");
             m_angle = rotationOfHandle(m_lastHandle, false);
             int rotOctant = 8 + int(8.5 + m_angle / 45);
             bool cornerHandle = false;
-            switch(m_lastHandle) {
+            switch (m_lastHandle) {
             case KoFlake::TopMiddleHandle:
-                cursor = m_sizeCursors[(0 +rotOctant)%8];
+                cursor = m_sizeCursors[(0 + rotOctant) % 8];
                 break;
             case KoFlake::TopRightHandle:
-                cursor = m_sizeCursors[(1 +rotOctant)%8];
+                cursor = m_sizeCursors[(1 + rotOctant) % 8];
                 cornerHandle = true;
                 break;
             case KoFlake::RightMiddleHandle:
-                cursor = m_sizeCursors[(2 +rotOctant)%8];
+                cursor = m_sizeCursors[(2 + rotOctant) % 8];
                 break;
             case KoFlake::BottomRightHandle:
-                cursor = m_sizeCursors[(3 +rotOctant)%8];
+                cursor = m_sizeCursors[(3 + rotOctant) % 8];
                 cornerHandle = true;
                 break;
             case KoFlake::BottomMiddleHandle:
-                cursor = m_sizeCursors[(4 +rotOctant)%8];
+                cursor = m_sizeCursors[(4 + rotOctant) % 8];
                 break;
             case KoFlake::BottomLeftHandle:
-                cursor = m_sizeCursors[(5 +rotOctant)%8];
+                cursor = m_sizeCursors[(5 + rotOctant) % 8];
                 cornerHandle = true;
                 break;
             case KoFlake::LeftMiddleHandle:
-                cursor = m_sizeCursors[(6 +rotOctant)%8];
+                cursor = m_sizeCursors[(6 + rotOctant) % 8];
                 break;
             case KoFlake::TopLeftHandle:
-                cursor = m_sizeCursors[(7 +rotOctant)%8];
+                cursor = m_sizeCursors[(7 + rotOctant) % 8];
                 cornerHandle = true;
                 break;
             case KoFlake::NoHandle:
@@ -484,21 +490,23 @@ void DefaultTool::updateCursor()
                 statusText = i18n("Click and drag to move selection.");
                 break;
             }
-            if (cornerHandle)
+            if (cornerHandle) {
                 statusText = i18n("Click and drag to resize selection. Middle click to set highlighted position.");
+            }
         }
-        if (!editable)
+        if (!editable) {
             cursor = Qt::ArrowCursor;
-    }
-    else {
+        }
+    } else {
         if (m_guideLine->isValid()) {
             cursor = m_guideLine->orientation() == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor;
             statusText = i18n("Click and drag to move guide line.");
         }
     }
     useCursor(cursor);
-    if (currentStrategy() == 0)
+    if (currentStrategy() == 0) {
         emit statusTextChanged(statusText);
+    }
 }
 
 void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
@@ -506,7 +514,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
     KoInteractionTool::paint(painter, converter);
     if (currentStrategy() == 0 && koSelection()->count() > 0) {
         SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle,
-                 true, true);
+                                     true, true);
         decorator.setSelection(koSelection());
         decorator.setHandleRadius(handleRadius());
         decorator.setHotPosition(m_hotPosition);
@@ -544,7 +552,7 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
             m_mouseWasInsideHandles = false;
 
             if (m_guideLine->isSelected()) {
-                GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(canvas(), GuidesToolId));
+                GuidesTool *guidesTool = dynamic_cast<GuidesTool *>(KoToolManager::instance()->toolById(canvas(), GuidesToolId));
                 if (guidesTool) {
                     guidesTool->moveGuideLine(m_guideLine->orientation(), m_guideLine->index());
                     activateTemporary(guidesTool->toolId());
@@ -555,7 +563,7 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
         }
     } else {
         if (m_guideLine->isSelected()) {
-            GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(canvas(), GuidesToolId));
+            GuidesTool *guidesTool = dynamic_cast<GuidesTool *>(KoToolManager::instance()->toolById(canvas(), GuidesToolId));
             if (guidesTool) {
                 guidesTool->moveGuideLine(m_guideLine->orientation(), m_guideLine->index());
                 activateTemporary(guidesTool->toolId());
@@ -574,7 +582,7 @@ void DefaultTool::selectGuideAtPosition(const QPointF &position)
     Qt::Orientation orientation = Qt::Horizontal;
 
     // check if we are on a guide line
-    KoGuidesData * guidesData = canvas()->guidesData();
+    KoGuidesData *guidesData = canvas()->guidesData();
     if (guidesData && guidesData->showGuideLines()) {
         qreal minDistance = canvas()->viewConverter()->viewToDocumentX(grabSensitivity());
         uint i = 0;
@@ -588,8 +596,7 @@ void DefaultTool::selectGuideAtPosition(const QPointF &position)
             i++;
         }
         i = 0;
-        foreach (qreal guidePos, guidesData->verticalGuideLines())
-        {
+        foreach (qreal guidePos, guidesData->verticalGuideLines()) {
             qreal distance = qAbs(guidePos - position.x());
             if (distance < minDistance) {
                 orientation = Qt::Vertical;
@@ -601,17 +608,20 @@ void DefaultTool::selectGuideAtPosition(const QPointF &position)
     }
 
     delete m_guideLine;
-    if (index >= 0)
+    if (index >= 0) {
         m_guideLine = new GuideLine(orientation, index);
-    else
+    } else {
         m_guideLine = new GuideLine();
+    }
 }
 
 QRectF DefaultTool::handlesSize()
 {
     QRectF bound = koSelection()->boundingRect();
     // expansion Border
-    if (!canvas() || !canvas()->viewConverter()) return bound;
+    if (!canvas() || !canvas()->viewConverter()) {
+        return bound;
+    }
 
     QPointF border = canvas()->viewConverter()->viewToDocument(QPointF(HANDLE_DISTANCE, HANDLE_DISTANCE));
     bound.adjust(-border.x(), -border.y(), border.x(), border.y());
@@ -626,18 +636,19 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    QList<KoShape*> shapes;
-    foreach(KoShape *shape, koSelection()->selectedShapes()) {
+    QList<KoShape *> shapes;
+    foreach (KoShape *shape, koSelection()->selectedShapes()) {
         if (shape->boundingRect().contains(event->point) && // first 'cheap' check
-                shape->outline().contains(event->point)) // this is more expensive but weeds out the almost hits
+                shape->outline().contains(event->point)) { // this is more expensive but weeds out the almost hits
             shapes.append(shape);
+        }
     }
     if (shapes.count() == 0) { // nothing in the selection was clicked on.
-        KoShape *shape = canvas()->shapeManager()->shapeAt (event->point, KoFlake::ShapeOnTop);
+        KoShape *shape = canvas()->shapeManager()->shapeAt(event->point, KoFlake::ShapeOnTop);
         if (shape) {
             shapes.append(shape);
         } else if (m_guideLine->isSelected()) {
-            GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(canvas(), GuidesToolId));
+            GuidesTool *guidesTool = dynamic_cast<GuidesTool *>(KoToolManager::instance()->toolById(canvas(), GuidesToolId));
             if (guidesTool) {
                 guidesTool->editGuideLine(m_guideLine->orientation(), m_guideLine->index());
                 activateTool(guidesTool->toolId());
@@ -646,9 +657,9 @@ void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
         }
     }
 
-    QList<KoShape*> shapes2;
+    QList<KoShape *> shapes2;
     foreach (KoShape *shape, shapes) {
-        QSet<KoShape*> delegates = shape->toolDelegates();
+        QSet<KoShape *> delegates = shape->toolDelegates();
         if (delegates.isEmpty()) {
             shapes2.append(shape);
         } else {
@@ -658,22 +669,22 @@ void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
         }
     }
 
-
     KoToolManager::instance()->switchToolRequested(
-            KoToolManager::instance()->preferredToolForSelection(shapes2));
+        KoToolManager::instance()->preferredToolForSelection(shapes2));
 }
 
 bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
 {
-    qreal x=0.0, y=0.0;
-    if (direction == Qt::Key_Left)
+    qreal x = 0.0, y = 0.0;
+    if (direction == Qt::Key_Left) {
         x = -5;
-    else if (direction == Qt::Key_Right)
+    } else if (direction == Qt::Key_Right) {
         x = 5;
-    else if (direction == Qt::Key_Up)
+    } else if (direction == Qt::Key_Up) {
         y = -5;
-    else if (direction == Qt::Key_Down)
+    } else if (direction == Qt::Key_Down) {
         y = 5;
+    }
 
     if (x != 0.0 || y != 0.0) { // actually move
         if ((modifiers & Qt::ShiftModifier) != 0) {
@@ -686,10 +697,11 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
 
         QList<QPointF> prevPos;
         QList<QPointF> newPos;
-        QList<KoShape*> shapes;
-        foreach(KoShape* shape, koSelection()->selectedShapes(KoFlake::TopLevelSelection)) {
-            if (shape->isGeometryProtected())
+        QList<KoShape *> shapes;
+        foreach (KoShape *shape, koSelection()->selectedShapes(KoFlake::TopLevelSelection)) {
+            if (shape->isGeometryProtected()) {
                 continue;
+            }
             shapes.append(shape);
             QPointF p = shape->position();
             prevPos.append(p);
@@ -699,8 +711,9 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
         }
         if (shapes.count() > 0) {
             // use a timeout to make sure we don't reuse a command possibly deleted by the commandHistory
-            if (m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000)
+            if (m_lastUsedMoveCommand.msecsTo(QTime::currentTime()) > 5000) {
                 m_moveCommand = 0;
+            }
             if (m_moveCommand) { // alter previous instead of creating new one.
                 m_moveCommand->setNewPositions(newPos);
                 m_moveCommand->redo();
@@ -724,15 +737,16 @@ void DefaultTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Right:
         case Qt::Key_Up:
         case Qt::Key_Down:
-            if (moveSelection(event->key(), event->modifiers()))
+            if (moveSelection(event->key(), event->modifiers())) {
                 event->accept();
+            }
             break;
         case Qt::Key_1:
         case Qt::Key_2:
         case Qt::Key_3:
         case Qt::Key_4:
         case Qt::Key_5:
-            canvas()->resourceManager()->setResource(HotPosition, event->key()-Qt::Key_1);
+            canvas()->resourceManager()->setResource(HotPosition, event->key() - Qt::Key_1);
             event->accept();
             break;
         default:
@@ -741,7 +755,7 @@ void DefaultTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void DefaultTool::customMoveEvent(KoPointerEvent * event)
+void DefaultTool::customMoveEvent(KoPointerEvent *event)
 {
     if (! koSelection()->count()) {
         event->ignore();
@@ -757,8 +771,9 @@ void DefaultTool::customMoveEvent(KoPointerEvent * event)
         if (m_customEventStrategy) {
             m_customEventStrategy->finishInteraction(event->modifiers());
             KUndo2Command *command = m_customEventStrategy->createCommand();
-            if (command)
+            if (command) {
                 canvas()->addCommand(command);
+            }
             delete m_customEventStrategy;
             m_customEventStrategy = 0;
             repaintDecorations();
@@ -770,21 +785,24 @@ void DefaultTool::customMoveEvent(KoPointerEvent * event)
     // check if the z-movement is dominant
     if (zoom > move && zoom > rotate) {
         // zoom
-        if (! m_customEventStrategy)
+        if (! m_customEventStrategy) {
             m_customEventStrategy = new ShapeResizeStrategy(this, event->point, KoFlake::TopLeftHandle);
+        }
     } else if (move > zoom && move > rotate) { // check if x-/y-movement is dominant
         // move
-        if (! m_customEventStrategy)
+        if (! m_customEventStrategy) {
             m_customEventStrategy = new ShapeMoveStrategy(this, event->point);
-    } else if (rotate > zoom && rotate > move) // rotation is dominant
-    {
+        }
+    } else if (rotate > zoom && rotate > move) { // rotation is dominant
         // rotate
-        if (! m_customEventStrategy)
+        if (! m_customEventStrategy) {
             m_customEventStrategy = new ShapeRotateStrategy(this, event->point, event->buttons());
+        }
     }
 
-    if (m_customEventStrategy)
+    if (m_customEventStrategy) {
         m_customEventStrategy->handleCustomEvent(event);
+    }
 
     event->accept();
 }
@@ -792,8 +810,9 @@ void DefaultTool::customMoveEvent(KoPointerEvent * event)
 void DefaultTool::repaintDecorations()
 {
     Q_ASSERT(koSelection());
-    if (koSelection()->count() > 0)
+    if (koSelection()->count() > 0) {
         canvas()->updateCanvas(handlesSize());
+    }
 }
 
 void DefaultTool::copy() const
@@ -811,8 +830,9 @@ void DefaultTool::deleteSelection()
 {
     QList<KoShape *> shapes;
     foreach (KoShape *s, canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        if (s->isGeometryProtected())
+        if (s->isGeometryProtected()) {
             continue;
+        }
         shapes << s;
     }
     if (!shapes.empty()) {
@@ -855,15 +875,17 @@ KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *inner
         KoFlake::NoHandle
     };
 
-    if (koSelection()->count() == 0)
+    if (koSelection()->count() == 0) {
         return KoFlake::NoHandle;
+    }
 
     recalcSelectionBox();
     const KoViewConverter *converter = canvas()->viewConverter();
-    if (!converter) return KoFlake::NoHandle;
+    if (!converter) {
+        return KoFlake::NoHandle;
+    }
 
-    if (innerHandleMeaning != 0)
-    {
+    if (innerHandleMeaning != 0) {
         QPainterPath path;
         path.addPolygon(m_selectionOutline);
         *innerHandleMeaning = path.contains(point) || path.intersects(handlePaintRect(point));
@@ -875,10 +897,10 @@ KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *inner
         // if just inside the outline
         if (qAbs(pt.x()) < HANDLE_DISTANCE &&
                 qAbs(pt.y()) < HANDLE_DISTANCE) {
-            if (innerHandleMeaning != 0)
-            {
-                if (qAbs(pt.x()) < 4 && qAbs(pt.y()) < 4)
+            if (innerHandleMeaning != 0) {
+                if (qAbs(pt.x()) < 4 && qAbs(pt.y()) < 4) {
                     *innerHandleMeaning = true;
+                }
             }
             return handle;
         }
@@ -888,10 +910,11 @@ KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *inner
 
 void DefaultTool::recalcSelectionBox()
 {
-    if (koSelection()->count()==0)
+    if (koSelection()->count() == 0) {
         return;
+    }
 
-    if (koSelection()->count()>1) {
+    if (koSelection()->count() > 1) {
         QTransform matrix = koSelection()->absoluteTransformation(0);
         m_selectionOutline = matrix.map(QPolygonF(QRectF(QPointF(0, 0), koSelection()->size())));
         m_angle = 0.0; //koSelection()->rotation();
@@ -901,13 +924,13 @@ void DefaultTool::recalcSelectionBox()
         m_angle = 0.0; //koSelection()->firstSelectedShape()->rotation();
     }
     QPolygonF outline = m_selectionOutline; //shorter name in the following :)
-    m_selectionBox[KoFlake::TopMiddleHandle] = (outline.value(0)+outline.value(1))/2;
+    m_selectionBox[KoFlake::TopMiddleHandle] = (outline.value(0) + outline.value(1)) / 2;
     m_selectionBox[KoFlake::TopRightHandle] = outline.value(1);
-    m_selectionBox[KoFlake::RightMiddleHandle] = (outline.value(1)+outline.value(2))/2;
+    m_selectionBox[KoFlake::RightMiddleHandle] = (outline.value(1) + outline.value(2)) / 2;
     m_selectionBox[KoFlake::BottomRightHandle] = outline.value(2);
-    m_selectionBox[KoFlake::BottomMiddleHandle] = (outline.value(2)+outline.value(3))/2;
+    m_selectionBox[KoFlake::BottomMiddleHandle] = (outline.value(2) + outline.value(3)) / 2;
     m_selectionBox[KoFlake::BottomLeftHandle] = outline.value(3);
-    m_selectionBox[KoFlake::LeftMiddleHandle] = (outline.value(3)+outline.value(0))/2;
+    m_selectionBox[KoFlake::LeftMiddleHandle] = (outline.value(3) + outline.value(0)) / 2;
     m_selectionBox[KoFlake::TopLeftHandle] = outline.value(0);
     if (koSelection()->count() == 1) {
 #if 0        // TODO detect mirroring
@@ -927,7 +950,7 @@ void DefaultTool::recalcSelectionBox()
     }
 }
 
-void DefaultTool::activate(ToolActivation, const QSet<KoShape*> &)
+void DefaultTool::activate(ToolActivation, const QSet<KoShape *> &)
 {
     m_mouseWasInsideHandles = false;
     m_lastHandle = KoFlake::NoHandle;
@@ -970,15 +993,16 @@ void DefaultTool::selectionAlignVerticalBottom()
 
 void DefaultTool::selectionGroup()
 {
-    KoSelection* selection = koSelection();
-    if (! selection)
+    KoSelection *selection = koSelection();
+    if (! selection) {
         return;
+    }
 
-    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
-    QList<KoShape*> groupedShapes;
+    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> groupedShapes;
 
     // only group shapes with an unselected parent
-    foreach (KoShape* shape, selectedShapes) {
+    foreach (KoShape *shape, selectedShapes) {
         if (! selectedShapes.contains(shape->parent()) && shape->isEditable()) {
             groupedShapes << shape;
         }
@@ -997,15 +1021,16 @@ void DefaultTool::selectionGroup()
 
 void DefaultTool::selectionUngroup()
 {
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    if (! selection)
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    if (! selection) {
         return;
+    }
 
-    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
-    QList<KoShape*> containerSet;
+    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape *> containerSet;
 
     // only ungroup shape groups with an unselected parent
-    foreach (KoShape* shape, selectedShapes) {
+    foreach (KoShape *shape, selectedShapes) {
         if (!selectedShapes.contains(shape->parent()) && shape->isEditable()) {
             containerSet << shape;
         }
@@ -1014,12 +1039,12 @@ void DefaultTool::selectionUngroup()
     KUndo2Command *cmd = 0;
 
     // add a ungroup command for each found shape container to the macro command
-    foreach(KoShape* shape, containerSet) {
-        KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
+    foreach (KoShape *shape, containerSet) {
+        KoShapeGroup *group = dynamic_cast<KoShapeGroup *>(shape);
         if (group) {
             cmd = cmd ? cmd : new KUndo2Command(kundo2_i18n("Ungroup shapes"));
             new KoShapeUngroupCommand(group, group->shapes(),
-                                      group->parent()? QList<KoShape*>(): canvas()->shapeManager()->topLevelShapes(),
+                                      group->parent() ? QList<KoShape *>() : canvas()->shapeManager()->topLevelShapes(),
                                       cmd);
             canvas()->shapeController()->removeShape(group, cmd);
         }
@@ -1031,15 +1056,17 @@ void DefaultTool::selectionUngroup()
 
 void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
 {
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    if (! selection)
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    if (! selection) {
         return;
+    }
 
-    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
-    if (selectedShapes.count() < 1)
+    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    if (selectedShapes.count() < 1) {
         return;
+    }
 
-    QList<KoShape*> editableShapes = filterEditableShapes(selectedShapes);
+    QList<KoShape *> editableShapes = filterEditableShapes(selectedShapes);
 
     // TODO add an option to the widget so that one can align to the page
     // with multiple selected shapes too
@@ -1047,12 +1074,13 @@ void DefaultTool::selectionAlign(KoShapeAlignCommand::Align align)
     QRectF bb;
 
     // single selected shape is automatically aligned to document rect
-    if (editableShapes.count() == 1 ) {
-        if (!canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize))
+    if (editableShapes.count() == 1) {
+        if (!canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize)) {
             return;
-        bb = QRectF(QPointF(0,0), canvas()->resourceManager()->sizeResource(KoCanvasResourceManager::PageSize));
+        }
+        bb = QRectF(QPointF(0, 0), canvas()->resourceManager()->sizeResource(KoCanvasResourceManager::PageSize));
     } else {
-        foreach( KoShape * shape, editableShapes ) {
+        foreach (KoShape *shape, editableShapes) {
             bb |= shape->boundingRect();
         }
     }
@@ -1085,19 +1113,22 @@ void DefaultTool::selectionSendToBack()
 
 void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
 {
-    KoSelection* selection = canvas()->shapeManager()->selection();
-    if (! selection)
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    if (! selection) {
         return;
+    }
 
-    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
-    if (selectedShapes.count() < 1)
+    QList<KoShape *> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    if (selectedShapes.count() < 1) {
         return;
+    }
 
-    QList<KoShape*> editableShapes = filterEditableShapes(selectedShapes);
-    if (editableShapes.count() < 1)
+    QList<KoShape *> editableShapes = filterEditableShapes(selectedShapes);
+    if (editableShapes.count() < 1) {
         return;
+    }
 
-    KUndo2Command * cmd = KoShapeReorderCommand::createCommand(editableShapes, canvas()->shapeManager(), order);
+    KUndo2Command *cmd = KoShapeReorderCommand::createCommand(editableShapes, canvas()->shapeManager(), order);
     if (cmd) {
         canvas()->addCommand(cmd);
     }
@@ -1130,7 +1161,7 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
     return widgets;
 }
 
-void DefaultTool::canvasResourceChanged(int key, const QVariant & res)
+void DefaultTool::canvasResourceChanged(int key, const QVariant &res)
 {
     if (key == HotPosition) {
         m_hotPosition = static_cast<KoFlake::Position>(res.toInt());
@@ -1167,18 +1198,19 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         case KoFlake::BottomRightHandle:
             newHotPosition = KoFlake::BottomRightCorner;
             break;
-        default:
-        {
+        default: {
             // check if we had hit the center point
-            const KoViewConverter * converter = canvas()->viewConverter();
-            QPointF pt = converter->documentToView(event->point-select->absolutePosition());
-            if (qAbs(pt.x()) < HANDLE_DISTANCE && qAbs(pt.y()) < HANDLE_DISTANCE)
+            const KoViewConverter *converter = canvas()->viewConverter();
+            QPointF pt = converter->documentToView(event->point - select->absolutePosition());
+            if (qAbs(pt.x()) < HANDLE_DISTANCE && qAbs(pt.y()) < HANDLE_DISTANCE) {
                 newHotPosition = KoFlake::CenteredPosition;
+            }
             break;
         }
         }
-        if (m_hotPosition != newHotPosition)
+        if (m_hotPosition != newHotPosition) {
             canvas()->resourceManager()->setResource(HotPosition, newHotPosition);
+        }
         return 0;
     }
 
@@ -1190,26 +1222,31 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         if (handle != KoFlake::NoHandle) {
             if (event->buttons() == Qt::LeftButton) {
                 // resizing or shearing only with left mouse button
-                if (insideSelection)
+                if (insideSelection) {
                     return new ShapeResizeStrategy(this, event->point, handle);
+                }
                 if (handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||
-                        handle == KoFlake::BottomMiddleHandle || handle == KoFlake::LeftMiddleHandle)
+                        handle == KoFlake::BottomMiddleHandle || handle == KoFlake::LeftMiddleHandle) {
                     return new ShapeShearStrategy(this, event->point, handle);
+                }
             }
             // rotating is allowed for rigth mouse button too
             if (handle == KoFlake::TopLeftHandle || handle == KoFlake::TopRightHandle ||
-                handle == KoFlake::BottomLeftHandle || handle == KoFlake::BottomRightHandle)
+                    handle == KoFlake::BottomLeftHandle || handle == KoFlake::BottomRightHandle) {
                 return new ShapeRotateStrategy(this, event->point, event->buttons());
+            }
         }
-        if (! (selectMultiple || selectNextInStack) && event->buttons() == Qt::LeftButton) {
+        if (!(selectMultiple || selectNextInStack) && event->buttons() == Qt::LeftButton) {
             const QPainterPath outlinePath = select->transformation().map(select->outline());
-            if (outlinePath.contains(event->point) || outlinePath.intersects(handlePaintRect(event->point)))
+            if (outlinePath.contains(event->point) || outlinePath.intersects(handlePaintRect(event->point))) {
                 return new ShapeMoveStrategy(this, event->point);
+            }
         }
     }
 
-    if ((event->buttons() & Qt::LeftButton) == 0)
-        return 0;  // Nothing to do for middle/right mouse button
+    if ((event->buttons() & Qt::LeftButton) == 0) {
+        return 0;    // Nothing to do for middle/right mouse button
+    }
 
     KoShape *shape = shapeManager->shapeAt(event->point, selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop);
 
@@ -1231,11 +1268,11 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
             repaintDecorations();
             select->deselect(shape);
         }
-    }
-    else if (handle == KoFlake::NoHandle) { // clicked on shape which is not selected
+    } else if (handle == KoFlake::NoHandle) { // clicked on shape which is not selected
         repaintDecorations();
-        if (! selectMultiple)
+        if (! selectMultiple) {
             shapeManager->selection()->deselectAll();
+        }
         select->select(shape, selectNextInStack ? false : true);
         repaintDecorations();
         // tablet selection isn't precise and may lead to a move, preventing that
@@ -1249,7 +1286,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
 void DefaultTool::updateActions()
 {
-    KoSelection * selection(koSelection());
+    KoSelection *selection(koSelection());
     if (!selection) {
         action("object_order_front")->setEnabled(false);
         action("object_order_raise")->setEnabled(false);
@@ -1266,13 +1303,13 @@ void DefaultTool::updateActions()
         return;
     }
 
-    QList<KoShape*> editableShapes = filterEditableShapes(selection->selectedShapes(KoFlake::TopLevelSelection));
-    bool enable = editableShapes.count () > 0;
+    QList<KoShape *> editableShapes = filterEditableShapes(selection->selectedShapes(KoFlake::TopLevelSelection));
+    bool enable = editableShapes.count() > 0;
     action("object_order_front")->setEnabled(enable);
     action("object_order_raise")->setEnabled(enable);
     action("object_order_lower")->setEnabled(enable);
     action("object_order_back")->setEnabled(enable);
-    enable = (editableShapes.count () > 1) || (enable && canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize));
+    enable = (editableShapes.count() > 1) || (enable && canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize));
     action("object_align_horizontal_left")->setEnabled(enable);
     action("object_align_horizontal_center")->setEnabled(enable);
     action("object_align_horizontal_right")->setEnabled(enable);
@@ -1282,7 +1319,7 @@ void DefaultTool::updateActions()
 
     action("object_group")->setEnabled(editableShapes.count() > 1);
     bool groupShape = false;
-    foreach (KoShape * shape, editableShapes) {
+    foreach (KoShape *shape, editableShapes) {
         if (dynamic_cast<KoShapeGroup *>(shape)) {
             groupShape = true;
             break;
@@ -1293,28 +1330,30 @@ void DefaultTool::updateActions()
     emit selectionChanged(selection->count());
 }
 
-KoToolSelection* DefaultTool::selection()
+KoToolSelection *DefaultTool::selection()
 {
     return m_selectionHandler;
 }
 
-QList<KoShape*> DefaultTool::filterEditableShapes( const QList<KoShape*> &shapes )
+QList<KoShape *> DefaultTool::filterEditableShapes(const QList<KoShape *> &shapes)
 {
-    QList<KoShape*> editableShapes;
-    foreach( KoShape * shape, shapes ) {
-        if (shape->isEditable())
+    QList<KoShape *> editableShapes;
+    foreach (KoShape *shape, shapes) {
+        if (shape->isEditable()) {
             editableShapes.append(shape);
+        }
     }
 
     return editableShapes;
 }
 
-uint DefaultTool::editableShapesCount( const QList<KoShape*> &shapes )
+uint DefaultTool::editableShapesCount(const QList<KoShape *> &shapes)
 {
     uint count = 0;
-    foreach( KoShape * shape, shapes ) {
-        if (shape->isEditable())
+    foreach (KoShape *shape, shapes) {
+        if (shape->isEditable()) {
             count++;
+        }
     }
 
     return count;

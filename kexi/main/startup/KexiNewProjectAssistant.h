@@ -42,26 +42,29 @@ class KexiTemplateSelectionPage : public KexiAssistantPage
 {
     Q_OBJECT
 public:
-    explicit KexiTemplateSelectionPage(QWidget* parent = 0);
+    explicit KexiTemplateSelectionPage(QWidget *parent = 0);
 
     QString selectedTemplate;
     QString selectedCategory;
-    
+
 protected Q_SLOTS:
-    void slotItemClicked(const QModelIndex& index);
+    void slotItemClicked(const QModelIndex &index);
 private:
-    KexiCategorizedView* m_templatesList;
+    KexiCategorizedView *m_templatesList;
 };
 
 class KexiProjectStorageTypeSelectionPage : public KexiAssistantPage,
-                                            public Ui::KexiProjectStorageTypeSelectionPage
+    public Ui::KexiProjectStorageTypeSelectionPage
 {
     Q_OBJECT
 public:
-    explicit KexiProjectStorageTypeSelectionPage(QWidget* parent = 0);
+    explicit KexiProjectStorageTypeSelectionPage(QWidget *parent = 0);
     virtual ~KexiProjectStorageTypeSelectionPage();
-    
-    bool fileTypeSelected() const { return m_fileTypeSelected; }
+
+    bool fileTypeSelected() const
+    {
+        return m_fileTypeSelected;
+    }
 private Q_SLOTS:
     void buttonClicked();
 
@@ -76,17 +79,17 @@ class KexiProjectTitleSelectionPage : public KexiAssistantPage
 {
     Q_OBJECT
 public:
-    explicit KexiProjectTitleSelectionPage(QWidget* parent = 0);
+    explicit KexiProjectTitleSelectionPage(QWidget *parent = 0);
     virtual ~KexiProjectTitleSelectionPage();
 
     bool isAcceptable();
 
-    KexiDBTitlePage* contents;
+    KexiDBTitlePage *contents;
     KexiStartupFileHandler *fileHandler;
     QPointer<KexiContextMessageWidget> messageWidget;
-private Q_SLOTS:    
-    void titleTextChanged(const QString & text);
-    void askForOverwriting(const KexiContextMessage& message);
+private Q_SLOTS:
+    void titleTextChanged(const QString &text);
+    void askForOverwriting(const KexiContextMessage &message);
 private:
     void updateUrl();
 };
@@ -97,22 +100,22 @@ class KexiProjectCreationPage : public KexiAssistantPage
 {
     Q_OBJECT
 public:
-    explicit KexiProjectCreationPage(QWidget* parent = 0);
+    explicit KexiProjectCreationPage(QWidget *parent = 0);
     virtual ~KexiProjectCreationPage();
-    
-    QProgressBar* m_progressBar;
+
+    QProgressBar *m_progressBar;
 };
 
 class KexiProjectConnectionSelectionPage : public KexiAssistantPage
 {
     Q_OBJECT
 public:
-    explicit KexiProjectConnectionSelectionPage(QWidget* parent = 0);
+    explicit KexiProjectConnectionSelectionPage(QWidget *parent = 0);
     virtual ~KexiProjectConnectionSelectionPage();
 
-    KexiConnectionSelectorWidget* connSelector;
+    KexiConnectionSelectorWidget *connSelector;
 private:
-	QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
+    QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
 };
 
 class KexiServerDBNamePage;
@@ -126,12 +129,12 @@ class KexiProjectDatabaseNameSelectionPage : public KexiAssistantPage
     Q_OBJECT
 public:
     explicit KexiProjectDatabaseNameSelectionPage(
-        KexiNewProjectAssistant* parent);
+        KexiNewProjectAssistant *parent);
     virtual ~KexiProjectDatabaseNameSelectionPage();
 
-    bool setConnection(KexiDB::ConnectionData* data);
+    bool setConnection(KexiDB::ConnectionData *data);
 
-    KexiServerDBNamePage* contents;
+    KexiServerDBNamePage *contents;
     QPointer<KexiDB::ConnectionData> conndataToShow;
     QPointer<KexiContextMessageWidget> messageWidget;
     bool isAcceptable();
@@ -143,31 +146,31 @@ private Q_SLOTS:
 
 private:
     QString enteredDbName() const;
-    KexiNewProjectAssistant* m_assistant;
-    KexiGUIMessageHandler* m_msgHandler;
+    KexiNewProjectAssistant *m_assistant;
+    KexiGUIMessageHandler *m_msgHandler;
     KexiProjectSet *m_projectSetToShow;
-    KexiProjectSelectorWidget* m_projectSelector;
+    KexiProjectSelectorWidget *m_projectSelector;
 
     bool m_dbNameAutofill;
     bool m_le_dbname_txtchanged_enabled;
-    KexiProjectData* m_projectDataToOverwrite;
-    QAction* m_messageWidgetActionYes;
-    QAction* m_messageWidgetActionNo;
+    KexiProjectData *m_projectDataToOverwrite;
+    QAction *m_messageWidgetActionYes;
+    QAction *m_messageWidgetActionNo;
 };
 
 class KexiProjectData;
 
 class KexiNewProjectAssistant : public KexiAssistantWidget,
-                                public KexiAssistantMessageHandler
+    public KexiAssistantMessageHandler
 {
     Q_OBJECT
 public:
-    explicit KexiNewProjectAssistant(QWidget* parent = 0);
+    explicit KexiNewProjectAssistant(QWidget *parent = 0);
     ~KexiNewProjectAssistant();
 
 public Q_SLOTS:
-    virtual void nextPageRequested(KexiAssistantPage* page);
-    virtual void cancelRequested(KexiAssistantPage* page);
+    virtual void nextPageRequested(KexiAssistantPage *page);
+    virtual void cancelRequested(KexiAssistantPage *page);
     void tryAgainActionTriggered();
     void cancelActionTriggered();
 
@@ -175,15 +178,15 @@ Q_SIGNALS:
     void createProject(const KexiProjectData &data);
 
 protected:
-    virtual QWidget* calloutWidget() const;
+    virtual QWidget *calloutWidget() const;
 
 private:
     void createProject(
-        const KexiDB::ConnectionData& cdata, const QString& databaseName,
-        const QString& caption);
+        const KexiDB::ConnectionData &cdata, const QString &databaseName,
+        const QString &caption);
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

@@ -26,7 +26,7 @@
 #include "KoFind_p.h"
 
 FindDirection::FindDirection(KoCanvasResourceManager *provider)
-        : m_provider(provider)
+    : m_provider(provider)
 {
 }
 
@@ -35,7 +35,7 @@ FindDirection::~FindDirection()
 }
 
 FindForward::FindForward(KoCanvasResourceManager *provider)
-        : FindDirection(provider)
+    : FindDirection(provider)
 {
 }
 
@@ -65,7 +65,7 @@ void FindForward::nextDocument(QTextDocument *document, KoFindPrivate *findPriva
 }
 
 FindBackward::FindBackward(KoCanvasResourceManager *provider)
-        : FindDirection(provider)
+    : FindDirection(provider)
 {
 }
 

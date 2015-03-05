@@ -29,10 +29,11 @@ KisPressureFlowOption::KisPressureFlowOption()
     setMaximumLabel(i18n("100%"));
 }
 
-
-double KisPressureFlowOption::apply(const KisPaintInformation & info) const
+double KisPressureFlowOption::apply(const KisPaintInformation &info) const
 {
-    if (!isChecked()) return 1.0;
+    if (!isChecked()) {
+        return 1.0;
+    }
     return computeValue(info);
 }
- 
+

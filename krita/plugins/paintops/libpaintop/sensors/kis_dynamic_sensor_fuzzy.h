@@ -16,8 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
-
 #ifndef KIS_DYNAMIC_SENSOR_FUZZY_H
 #define KIS_DYNAMIC_SENSOR_FUZZY_H
 
@@ -35,18 +33,19 @@ class KisDynamicSensorFuzzy : public QObject, public KisDynamicSensor
     Q_OBJECT
 public:
     bool dependsOnCanvasRotation() const;
-    QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
+    QWidget *createConfigurationWidget(QWidget *parent, QWidget *);
 
     using KisSerializableConfiguration::fromXML;
     using KisSerializableConfiguration::toXML;
-    void toXML(QDomDocument&, QDomElement&) const;
-    void fromXML(const QDomElement&);
+    void toXML(QDomDocument &, QDomElement &) const;
+    void fromXML(const QDomElement &);
 
     bool rotationModeEnabled() const;
 
     KisDynamicSensorFuzzy();
     virtual ~KisDynamicSensorFuzzy() {}
-    qreal value(const KisPaintInformation &info) {
+    qreal value(const KisPaintInformation &info)
+    {
         return !info.isHoveringMode() ? rand() / (qreal)RAND_MAX : 1.0;
     }
 

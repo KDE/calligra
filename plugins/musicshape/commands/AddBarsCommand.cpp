@@ -24,7 +24,7 @@
 
 using namespace MusicCore;
 
-AddBarsCommand::AddBarsCommand(MusicShape* shape, int bars)
+AddBarsCommand::AddBarsCommand(MusicShape *shape, int bars)
     : m_sheet(shape->sheet()), m_bars(bars), m_shape(shape)
 {
     setText(kundo2_i18n("Add measures"));

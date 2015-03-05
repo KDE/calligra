@@ -41,7 +41,6 @@
 #include "kis_filter_weights_applicator.h"
 #include "kis_progress_update_helper.h"
 
-
 KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
                                        double xscale, double yscale,
                                        double xshear, double yshear,
@@ -150,7 +149,7 @@ QRect KisTransformWorker::rotate180(KisPaintDeviceSP dev,
                                     int portion)
 {
     QRect r = rotateWithTf(180, dev, boundRect, progressUpdater, portion);
-    dev->move(dev->x() - 1, dev->y() -1);
+    dev->move(dev->x() - 1, dev->y() - 1);
     return QRect(- r.x() - r.width(), - r.top() - r.height(), r.width(), r.height());
 }
 
@@ -224,7 +223,8 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
 }
 
 template<typename T>
-void swapValues(T *a, T *b) {
+void swapValues(T *a, T *b)
+{
     T c = *a;
     *a = *b;
     *b = c;
@@ -242,7 +242,9 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
     Q_ASSERT_X(m_xscale != 0, "KisTransformer::run() validation step", "xscale == 0");
     Q_ASSERT_X(m_yscale != 0, "KisTransformer::run() validation step", "yscale == 0");
     // Fallback safety line in case Krita is compiled without ASSERTS
-    if (m_xscale == 0 || m_yscale == 0) return false;
+    if (m_xscale == 0 || m_yscale == 0) {
+        return false;
+    }
 
     m_boundRect = processRect;
 
@@ -301,7 +303,6 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
         qFuzzyCompare(rotation, 0.0) &&
         qFuzzyCompare(xscale, 1.0) &&
         qFuzzyCompare(yscale, 1.0);
-
 
     int progressTotalSteps = qMax(1, 2 * (!simpleTranslation) + (rotQuadrant != 0));
     int progressPortion = 100 / progressTotalSteps;
@@ -384,7 +385,7 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
         xshear = -tan(rotation / 2);
         xtranslate -= int(xshear * ytranslate);
 
-        transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), xscale, yscale*xshear, 0, m_filter, 0);
+        transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), xscale, yscale * xshear, 0, m_filter, 0);
         transformPass <KisVLineIteratorSP>(m_dev.data(), m_dev.data(), yscale, yshear, ytranslate, m_filter, 0);
         if (xshear != 0.0) {
             transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), 1.0, xshear, xtranslate, m_filter, 0);
@@ -415,7 +416,9 @@ void mirror_impl(KisPaintDeviceSP dev, qreal axis, bool isHorizontal)
     KIS_ASSERT_RECOVER_RETURN(qFloor(axis) == axis || (axis - qFloor(axis) == 0.5));
 
     QRect mirrorRect = dev->exactBounds();
-    if (mirrorRect.width() <= 1) return;
+    if (mirrorRect.width() <= 1) {
+        return;
+    }
 
     /**
      * We split the total mirror rect into two halves, which lay to
@@ -450,7 +453,6 @@ void mirror_impl(KisPaintDeviceSP dev, qreal axis, bool isHorizontal)
         rightEnd = mirrorRect.y() + mirrorRect.height();
     }
 
-
     int leftCenterPoint = qFloor(axis) < axis ? qFloor(axis) : qFloor(axis);
     int leftEnd = qMin(leftCenterPoint, rightEnd);
 
@@ -461,8 +463,7 @@ void mirror_impl(KisPaintDeviceSP dev, qreal axis, bool isHorizontal)
     int rightSize = qMax(0, rightEnd - rightStart);
 
     int maxDistanceToAxis = qMax(leftCenterPoint - leftStart,
-                           rightEnd - rightCenterPoint);
-
+                                 rightEnd - rightCenterPoint);
 
     // Main variables for controlling the stages of the algorithm
     bool moveLeftToRight = leftSize > rightSize;
@@ -472,7 +473,6 @@ void mirror_impl(KisPaintDeviceSP dev, qreal axis, bool isHorizontal)
     // Initial position of 'left' and 'right' block iterators
     int initialLeftCol = leftCenterPoint - maxDistanceToAxis;
     int initialRightCol = rightCenterPoint + maxDistanceToAxis - 1;
-
 
     KisRandomAccessorSP leftIt = dev->createRandomAccessorNG(mirrorRect.x(), mirrorRect.y());
     KisRandomAccessorSP rightIt = dev->createRandomAccessorNG(mirrorRect.x(), mirrorRect.y());
@@ -604,7 +604,7 @@ void KisTransformWorker::mirror(KisPaintDeviceSP dev, qreal axis, Qt::Orientatio
     mirror_impl(dev, axis, orientation == Qt::Horizontal);
 }
 
-void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint& offsetPosition, const QRect& wrapRect)
+void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint &offsetPosition, const QRect &wrapRect)
 {
     Q_ASSERT(wrapRect == wrapRect.normalized());
 
@@ -619,18 +619,15 @@ void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint& offsetPos
     int offsetX = offsetPosition.x();
     int offsetY = offsetPosition.y();
 
-    while (offsetX < 0)
-    {
+    while (offsetX < 0) {
         offsetX += width;
     }
 
-    while (offsetY < 0)
-    {
+    while (offsetY < 0) {
         offsetY += height;
     }
 
-    if ((offsetX == 0) && (offsetY == 0))
-    {
+    if ((offsetX == 0) && (offsetY == 0)) {
         return;
     }
 
@@ -647,8 +644,7 @@ void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint& offsetPos
     width = qBound<int>(0, width - offsetX, width);
     height = qBound<int>(0, height - offsetY, height);
 
-    if ((width != 0) && (height != 0))
-    {
+    if ((width != 0) && (height != 0)) {
         // convert back to paint device space
         gc.bitBlt(destX + sx, destY + sy, device, srcX + sx, srcY + sy, width, height);
     }
@@ -659,18 +655,15 @@ void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint& offsetPos
     destX = (srcX + offsetX) % wrapRect.width();
     destY = (srcY + offsetY) % wrapRect.height();
 
-    if (offsetX != 0 && offsetY != 0)
-    {
-          gc.bitBlt(destX + sx, destY + sy, device, srcX + sx, srcY + sy, offsetX, offsetY);
+    if (offsetX != 0 && offsetY != 0) {
+        gc.bitBlt(destX + sx, destY + sy, device, srcX + sx, srcY + sy, offsetX, offsetY);
     }
 
-    if (offsetX != 0)
-    {
+    if (offsetX != 0) {
         gc.bitBlt(destX + sx, (destY + offsetY) + sy, device, srcX + sx, 0 + sy, offsetX, wrapRect.height() - offsetY);
     }
 
-    if (offsetY != 0)
-    {
+    if (offsetY != 0) {
         gc.bitBlt((destX + offsetX) + sx, destY + sy, device, 0 + sx, srcY + sy, wrapRect.width() - offsetX, offsetY);
     }
 
@@ -679,8 +672,7 @@ void KisTransformWorker::offset(KisPaintDeviceSP device, const QPoint& offsetPos
     // bitblt the result back
     KisPainter gc2(device);
     gc2.setCompositeOp(COMPOSITE_COPY);
-    gc2.bitBlt(sx,sy,offsetDevice, sx, sy, wrapRect.width(), wrapRect.height());
+    gc2.bitBlt(sx, sy, offsetDevice, sx, sy, wrapRect.width(), wrapRect.height());
     gc2.end();
 }
-
 

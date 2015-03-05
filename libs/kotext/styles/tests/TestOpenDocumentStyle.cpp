@@ -40,7 +40,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 
-Attribute::Attribute(const QDomElement& element)
+Attribute::Attribute(const QDomElement &element)
     : m_references()
 {
     if (element.firstChildElement() != element.lastChildElement()) {
@@ -52,21 +52,22 @@ Attribute::Attribute(const QDomElement& element)
     }
     m_name = element.attribute("name");
     m_values = listValuesFromNode(element);
-    if (m_name == "style:border-line-width")
+    if (m_name == "style:border-line-width") {
         m_requiredExtraAttributes["fo:border"] = "double";
-    else if (m_name == "style:border-line-width-left")
+    } else if (m_name == "style:border-line-width-left") {
         m_requiredExtraAttributes["fo:border-left"] = "double";
-    else if (m_name == "style:border-line-width-right")
+    } else if (m_name == "style:border-line-width-right") {
         m_requiredExtraAttributes["fo:border-right"] = "double";
-    else if (m_name == "style:border-line-width-top")
+    } else if (m_name == "style:border-line-width-top") {
         m_requiredExtraAttributes["fo:border-top"] = "double";
-    else if (m_name == "style:border-line-width-bottom")
+    } else if (m_name == "style:border-line-width-bottom") {
         m_requiredExtraAttributes["fo:border-bottom"] = "double";
-    else if (m_name == "style:diagonal-tl-br-widths")
+    } else if (m_name == "style:diagonal-tl-br-widths") {
         m_requiredExtraAttributes["style:diagonal-tl-br"] = "double";
-    else if (m_name == "style:diagonal-bl-tr-widths")
+    } else if (m_name == "style:diagonal-bl-tr-widths") {
         m_requiredExtraAttributes["style:diagonal-bl-tr"] = "double";
-    
+    }
+
 }
 
 QString Attribute::name()
@@ -79,7 +80,7 @@ QStringList Attribute::listValues()
     return m_values;
 }
 
-bool Attribute::hasReference (const QString &ref)
+bool Attribute::hasReference(const QString &ref)
 {
     return m_references.contains(ref);
 }
@@ -127,37 +128,42 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                         QStringList mergedAllowedValues;
                         while (mergedAllowedValues.length() != (pow((double) allowedValues.length(), allowedValues.length()))) {
                             foreach (QString baseValue, allowedValues) {
-                                if (!mergedAllowedValues.contains(baseValue))
+                                if (!mergedAllowedValues.contains(baseValue)) {
                                     mergedAllowedValues << baseValue;
+                                }
                                 foreach (QString knownValue, mergedAllowedValues) {
                                     if ((knownValue == baseValue) || (knownValue.contains(baseValue + ' ')) || (knownValue.contains(' ' + baseValue))) {
                                         continue;
                                     }
                                     QString builtValue = knownValue + ' ' + baseValue;
-                                    if (!mergedAllowedValues.contains(builtValue))
+                                    if (!mergedAllowedValues.contains(builtValue)) {
                                         mergedAllowedValues << builtValue;
+                                    }
                                 }
                             }
                         }
                         foreach (QString allowedValue, mergedAllowedValues) {
                             QStringList equivalenceList;
                             equivalenceList << allowedValue;
-                            
+
                             QStringList currentList = allowedValue.split(' ');
                             currentList.sort();
-                            
+
                             foreach (QString otherAllowedValue, mergedAllowedValues) {
-                                if (otherAllowedValue == allowedValue)
+                                if (otherAllowedValue == allowedValue) {
                                     continue;
-                                
+                                }
+
                                 QStringList otherList = otherAllowedValue.split(' ');
                                 otherList.sort();
-                                if (otherList == currentList)
+                                if (otherList == currentList) {
                                     equivalenceList << otherAllowedValue;
+                                }
                             }
                             equivalenceList.sort();
-                            if (!m_equivalences.contains(equivalenceList))
+                            if (!m_equivalences.contains(equivalenceList)) {
                                 m_equivalences << equivalenceList;
+                            }
                         }
                         result << mergedAllowedValues;
                     }
@@ -180,7 +186,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             kFatal() << "Unhandled attribute value node " << content.tagName();
         }
     }
-    
+
     if ((m_name == "fo:line-height") || (m_name == "style:line-height-at-least")) {
         // Here, the OpenDocument specification has problems.
         // A line height can obviously not be zero...
@@ -198,7 +204,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
     if (m_references.contains("lineWidth")) {
         m_references << "positiveInteger" << "percent" << "positiveLength";
     }
-    
+
     foreach (QString reference, m_references) {
         if (reference == "boolean") {
             result << "true" << "false";
@@ -221,7 +227,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "0" << "42";
         } else if (reference == "percent") {
             result << "-50%" << "0%" << "100%" << "42%";
-        } else if (reference == "nonZeroPercent") { 
+        } else if (reference == "nonZeroPercent") {
             // This is not in the spec
             result << "100%" << "42%" << "-30%";
         } else if (reference == "borderWidths") {
@@ -277,7 +283,7 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             // Sorry, I can't do it right now
             result << "";
         } else if (reference == "character") {
-            result << "C" << "a" << "l" << "L" << "i" <<"G" << "r" << "A";
+            result << "C" << "a" << "l" << "L" << "i" << "G" << "r" << "A";
         } else if (reference == "string") {
             // Now, that sucks !
             kWarning() << "Found a string reference in " << m_name;
@@ -289,30 +295,37 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
     return result;
 }
 
-bool Attribute::compare(const QString& initialValue, const QString& outputValue)
+bool Attribute::compare(const QString &initialValue, const QString &outputValue)
 {
-    if (outputValue.isEmpty())
+    if (outputValue.isEmpty()) {
         return false;
-    if (initialValue == outputValue)
+    }
+    if (initialValue == outputValue) {
         return true;
-    if (m_references.contains("percent") && initialValue.contains('%'))
+    }
+    if (m_references.contains("percent") && initialValue.contains('%')) {
         return false;
-    
+    }
+
     // -----------   Special cases
     if (m_name == "style:glyph-orientation-vertical")
-        if ((initialValue.at(0) == '0') && (outputValue.at(0) == '0'))
+        if ((initialValue.at(0) == '0') && (outputValue.at(0) == '0')) {
             return true;
-    if (m_name == "style:writing-mode")
+        }
+    if (m_name == "style:writing-mode") {
         return KoText::directionFromString(initialValue) == KoText::directionFromString(outputValue);
+    }
     // -----------
-    
+
     foreach (QString reference, m_references) {
         if ((reference == "positiveLength") || (reference == "nonNegativeLength") || (reference == "length")) {
-            if (qAbs(KoUnit::parseValue(initialValue) - KoUnit::parseValue(outputValue)) < 0.0001)
+            if (qAbs(KoUnit::parseValue(initialValue) - KoUnit::parseValue(outputValue)) < 0.0001) {
                 return true;
+            }
         } else if (reference == "color") {
-            if (initialValue.toLower() == outputValue.toLower())
+            if (initialValue.toLower() == outputValue.toLower()) {
                 return true;
+            }
         } else if (reference == "angle") {
             return qAbs(KoUnit::parseAngle(initialValue) - KoUnit::parseAngle(outputValue)) < 0.0001;
         } else if (reference == "shadowType") {
@@ -328,11 +341,13 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
             QStringList initials, outputs;
             initials = initialValue.split(" ");
             outputs = outputValue.split(" ");
-            if (initials.length() != outputs.length())
+            if (initials.length() != outputs.length()) {
                 return false;
-            for (int i = 0 ; i < initials.length() ; i++)
-                if (qAbs(KoUnit::parseValue(initials[i]) - KoUnit::parseValue(outputs[i])) > 0.0001)
+            }
+            for (int i = 0; i < initials.length(); i++)
+                if (qAbs(KoUnit::parseValue(initials[i]) - KoUnit::parseValue(outputs[i])) > 0.0001) {
                     return false;
+                }
             return true;
         }
     }
@@ -341,15 +356,15 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
         foreach (QStringList equivalenceList, m_equivalences) {
             if (equivalenceList.contains(outputValue)) {
                 foreach (QString otherValue, equivalenceList) {
-                    if ((otherValue != outputValue) && (compare(initialValue, otherValue)))
+                    if ((otherValue != outputValue) && (compare(initialValue, otherValue))) {
                         return true;
+                    }
                 }
-            }   
+            }
         }
     }
     return false;
 }
-
 
 TestOpenDocumentStyle::TestOpenDocumentStyle()
     : QObject()
@@ -370,7 +385,7 @@ void TestOpenDocumentStyle::initTestCase()
     int count = 0;
     QDomElement mainElement = specDocument.documentElement();
     QDomNode n = mainElement.firstChild();
-    while(!n.isNull()) {
+    while (!n.isNull()) {
         QDomElement e = n.toElement(); // try to convert the node to an element.
         if (!e.isNull()) {
             count++;
@@ -380,14 +395,14 @@ void TestOpenDocumentStyle::initTestCase()
     }
 }
 
-QList<Attribute*> TestOpenDocumentStyle::listAttributesFromRNGName(const QString& name)
+QList<Attribute *> TestOpenDocumentStyle::listAttributesFromRNGName(const QString &name)
 {
-    QList<Attribute*> result;
-    if (!m_rngRules.contains(name))
+    QList<Attribute *> result;
+    if (!m_rngRules.contains(name)) {
         return result;
+    }
     QList<QDomElement> elements = m_rngRules.values(name);
-    if ((elements.count() == 1) && (elements.first().firstChildElement().tagName() == "interleave"))
-    {
+    if ((elements.count() == 1) && (elements.first().firstChildElement().tagName() == "interleave")) {
         QDomElement root = elements.first().firstChildElement();
         elements.clear();
         elements.append(root);
@@ -417,8 +432,8 @@ QList<Attribute*> TestOpenDocumentStyle::listAttributesFromRNGName(const QString
                         do {
                             if (subChoiceChild.tagName() == "attribute") {
                                 result << new Attribute(subChoiceChild);
-                            //} else if (subChoiceChild.tagName() == "choice") {
-                            //    kFatal() << name << child.tagName();
+                                //} else if (subChoiceChild.tagName() == "choice") {
+                                //    kFatal() << name << child.tagName();
                             } else {
                                 kFatal() << "Unrecognized choice element : " << subChoiceChild.tagName() << child.tagName() << name;
                             }
@@ -441,9 +456,7 @@ QList<Attribute*> TestOpenDocumentStyle::listAttributesFromRNGName(const QString
     return result;
 }
 
-
-
-QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString& styleFamily, const QString& attributeName, const QString& attributeValue, const Attribute &attribute)
+QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString &styleFamily, const QString &attributeName, const QString &attributeValue, const Attribute &attribute)
 {
     QBuffer xmlOutputBuffer;
     KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlOutputBuffer);
@@ -455,19 +468,20 @@ QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString& 
     xmlWriter->addAttribute("xmlns:text", KoXmlNS::text);
     xmlWriter->addAttribute("style:name", "TestStyle");
     xmlWriter->addAttribute("style:family", styleFamily);
-    if (styleFamily == "character")
+    if (styleFamily == "character") {
         xmlWriter->startElement("style:text-properties");
-    else
+    } else {
         xmlWriter->startElement(("style:" + styleFamily + "-properties").toLatin1());
+    }
     xmlWriter->addAttribute(attributeName.toLatin1(), attributeValue);
-    
+
     QMap< QString, QString >  extras = attribute.requiredExtraAttributes();
     QMapIterator<QString, QString> i(extras);
     while (i.hasNext()) {
         i.next();
         xmlWriter->addAttribute(i.key().toLatin1(), i.value());
     }
-    
+
     xmlWriter->endElement();
     xmlWriter->endElement();
     xmlWriter->endDocument();
@@ -476,7 +490,7 @@ QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString& 
     return xmlOutputBuffer.data();
 }
 
-QByteArray TestOpenDocumentStyle::generateStyleProperties(const KoGenStyle& genStyle, const QString &styleFamily)
+QByteArray TestOpenDocumentStyle::generateStyleProperties(const KoGenStyle &genStyle, const QString &styleFamily)
 {
     QBuffer xmlOutputBuffer;
     KoXmlWriter *xmlWriter = new KoXmlWriter(&xmlOutputBuffer);
@@ -492,34 +506,34 @@ QByteArray TestOpenDocumentStyle::generateStyleProperties(const KoGenStyle& genS
 }
 
 template<class T>
-void loadOdf(T* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
+void loadOdf(T *genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
 {
     genStyle->loadOdf(mainElement, loadCtxt);
 }
 
 template<>
-void loadOdf<KoTableCellStyle>(KoTableCellStyle* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
+void loadOdf<KoTableCellStyle>(KoTableCellStyle *genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
 {
     KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
     genStyle->loadOdf(mainElement, shapeCtxt);
 }
 
 template<>
-void loadOdf<KoParagraphStyle>(KoParagraphStyle* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
+void loadOdf<KoParagraphStyle>(KoParagraphStyle *genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
 {
     KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
     genStyle->loadOdf(mainElement, shapeCtxt);
 }
 
 template<>
-void loadOdf<KoCharacterStyle>(KoCharacterStyle* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
+void loadOdf<KoCharacterStyle>(KoCharacterStyle *genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
 {
     KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
     genStyle->loadOdf(mainElement, shapeCtxt);
 }
 
 template<class T>
-void saveOdf(T* genStyle, KoGenStyle *styleWriter)
+void saveOdf(T *genStyle, KoGenStyle *styleWriter)
 {
     genStyle->saveOdf(*styleWriter);
 }
@@ -579,16 +593,15 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     KoXmlElement root = generatedXmlReader->documentElement();
     KoXmlElement properties = root.firstChildElement();
     QString outputPropertyValue = properties.attribute(attribute->name());
-    if (properties.attributeNames().count() > 1)
-    {
+    if (properties.attributeNames().count() > 1) {
         //kWarning(32500) << "Warning : got more than one attribute !";
         //kDebug(32500) << generatedXmlOutput;
     }
     if (attribute->hasReference("__border")) {
         KoBorder original, output;
-	original.loadOdf(mainElement);
-	output.loadOdf(properties);
-	return (original == output);
+        original.loadOdf(mainElement);
+        output.loadOdf(properties);
+        return (original == output);
     }
     bool result = attribute->compare(value, outputPropertyValue);
     if (!result) {
@@ -601,8 +614,8 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
 
 void TestOpenDocumentStyle::testTableColumnStyle_data()
 {
-    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-column-properties-attlist");
-    QTest::addColumn<Attribute*>("attribute");
+    QList<Attribute *> attributes = listAttributesFromRNGName("style-table-column-properties-attlist");
+    QTest::addColumn<Attribute *>("attribute");
     QTest::addColumn<QString>("value");
     foreach (Attribute *attribute, attributes) {
         foreach (QString value, attribute->listValues()) {
@@ -613,7 +626,7 @@ void TestOpenDocumentStyle::testTableColumnStyle_data()
 
 void TestOpenDocumentStyle::testTableColumnStyle()
 {
-    QFETCH(Attribute*, attribute);
+    QFETCH(Attribute *, attribute);
     QFETCH(QString, value);
 
     QVERIFY(basicTestFunction<KoTableColumnStyle>(KoGenStyle::TableColumnStyle, "table-column", attribute, value));
@@ -621,8 +634,8 @@ void TestOpenDocumentStyle::testTableColumnStyle()
 
 void TestOpenDocumentStyle::testTableStyle_data()
 {
-    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-properties-attlist");
-    QTest::addColumn<Attribute*>("attribute");
+    QList<Attribute *> attributes = listAttributesFromRNGName("style-table-properties-attlist");
+    QTest::addColumn<Attribute *>("attribute");
     QTest::addColumn<QString>("value");
     foreach (Attribute *attribute, attributes) {
         foreach (QString value, attribute->listValues()) {
@@ -633,7 +646,7 @@ void TestOpenDocumentStyle::testTableStyle_data()
 
 void TestOpenDocumentStyle::testTableStyle()
 {
-    QFETCH(Attribute*, attribute);
+    QFETCH(Attribute *, attribute);
     QFETCH(QString, value);
 
     QVERIFY(basicTestFunction<KoTableStyle>(KoGenStyle::TableStyle, "table", attribute, value));
@@ -641,8 +654,8 @@ void TestOpenDocumentStyle::testTableStyle()
 
 void TestOpenDocumentStyle::testTableRowStyle_data()
 {
-    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-row-properties-attlist");
-    QTest::addColumn<Attribute*>("attribute");
+    QList<Attribute *> attributes = listAttributesFromRNGName("style-table-row-properties-attlist");
+    QTest::addColumn<Attribute *>("attribute");
     QTest::addColumn<QString>("value");
     foreach (Attribute *attribute, attributes) {
         foreach (QString value, attribute->listValues()) {
@@ -653,7 +666,7 @@ void TestOpenDocumentStyle::testTableRowStyle_data()
 
 void TestOpenDocumentStyle::testTableRowStyle()
 {
-    QFETCH(Attribute*, attribute);
+    QFETCH(Attribute *, attribute);
     QFETCH(QString, value);
 
     QVERIFY(basicTestFunction<KoTableRowStyle>(KoGenStyle::TableRowStyle, "table-row", attribute, value));
@@ -661,8 +674,8 @@ void TestOpenDocumentStyle::testTableRowStyle()
 
 void TestOpenDocumentStyle::testTableCellStyle_data()
 {
-    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-cell-properties-attlist");
-    QTest::addColumn<Attribute*>("attribute");
+    QList<Attribute *> attributes = listAttributesFromRNGName("style-table-cell-properties-attlist");
+    QTest::addColumn<Attribute *>("attribute");
     QTest::addColumn<QString>("value");
     foreach (Attribute *attribute, attributes) {
         foreach (QString value, attribute->listValues()) {
@@ -673,7 +686,7 @@ void TestOpenDocumentStyle::testTableCellStyle_data()
 
 void TestOpenDocumentStyle::testTableCellStyle()
 {
-    QFETCH(Attribute*, attribute);
+    QFETCH(Attribute *, attribute);
     QFETCH(QString, value);
 
     QVERIFY(basicTestFunction<KoTableCellStyle>(KoGenStyle::TableCellStyle, "table-cell", attribute, value));
@@ -681,29 +694,28 @@ void TestOpenDocumentStyle::testTableCellStyle()
 
 void TestOpenDocumentStyle::testParagraphStyle_data()
 {
-    QList<Attribute*> attributes = listAttributesFromRNGName("style-paragraph-properties-attlist");
-    QTest::addColumn<Attribute*>("attribute");
+    QList<Attribute *> attributes = listAttributesFromRNGName("style-paragraph-properties-attlist");
+    QTest::addColumn<Attribute *>("attribute");
     QTest::addColumn<QString>("value");
     foreach (Attribute *attribute, attributes) {
         foreach (QString value, attribute->listValues()) {
-            QTest::newRow((attribute->name()+QLatin1Char('/')+value).toLatin1()) << attribute << value;
+            QTest::newRow((attribute->name() + QLatin1Char('/') + value).toLatin1()) << attribute << value;
         }
     }
 }
 
 void TestOpenDocumentStyle::testParagraphStyle()
 {
-    QFETCH(Attribute*, attribute);
+    QFETCH(Attribute *, attribute);
     QFETCH(QString, value);
 
     QVERIFY(basicTestFunction<KoParagraphStyle>(KoGenStyle::ParagraphStyle, "paragraph", attribute, value));
 }
 
-
 void TestOpenDocumentStyle::testCharacterStyle_data()
 {
-    QList<Attribute*> attributes = listAttributesFromRNGName("style-text-properties-attlist");
-    QTest::addColumn<Attribute*>("attribute");
+    QList<Attribute *> attributes = listAttributesFromRNGName("style-text-properties-attlist");
+    QTest::addColumn<Attribute *>("attribute");
     QTest::addColumn<QString>("value");
     foreach (Attribute *attribute, attributes) {
         foreach (QString value, attribute->listValues()) {
@@ -714,7 +726,7 @@ void TestOpenDocumentStyle::testCharacterStyle_data()
 
 void TestOpenDocumentStyle::testCharacterStyle()
 {
-    QFETCH(Attribute*, attribute);
+    QFETCH(Attribute *, attribute);
     QFETCH(QString, value);
     QVERIFY(basicTestFunction<KoCharacterStyle>(KoGenStyle::TextStyle, "character", attribute, value));
 }

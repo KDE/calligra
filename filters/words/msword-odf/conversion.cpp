@@ -40,7 +40,8 @@
 
 //#define CONVERSION_DEBUG_SHD
 
-static QMap<int, qreal> prepareShdPairs() {
+static QMap<int, qreal> prepareShdPairs()
+{
     QMap<int, qreal> shadingTable;
     shadingTable[2] = 0.05;
     shadingTable[3] = 0.10;
@@ -86,10 +87,9 @@ static QMap<int, qreal> prepareShdPairs() {
 
 static const QMap<int, qreal> SHADING_TABLE = prepareShdPairs();
 
-
-QString Conversion::styleName2QString(const wvWare::UString& str)
+QString Conversion::styleName2QString(const wvWare::UString &str)
 {
-    return processStyleName(QString::fromRawData(reinterpret_cast<const QChar*>(str.data()), str.length()));
+    return processStyleName(QString::fromRawData(reinterpret_cast<const QChar *>(str.data()), str.length()));
 }
 
 QString Conversion::processStyleName(QString str)
@@ -115,8 +115,9 @@ QString Conversion::color(int number, int defaultcolor, bool defaultWhite)
 {
     switch (number) {
     case 0:
-        if (defaultWhite)
+        if (defaultWhite) {
             return QString("#FFFFFF");
+        }
     case 1://black
         return QString("#000000");
     case 2://blue
@@ -152,11 +153,13 @@ QString Conversion::color(int number, int defaultcolor, bool defaultWhite)
 
     default:
         kDebug(30513) << " unknown color:" << number;
-        if (defaultcolor == -1) //return black
+        if (defaultcolor == -1) { //return black
             return QString("#000000");
-        else //call this function again with the default color value
+        } else //call this function again with the default color value
             //to see if it works
+        {
             return color(defaultcolor, -1);
+        }
     }
 }
 
@@ -238,15 +241,17 @@ int Conversion::fillPatternStyle(int ipat)
     }
 }
 
-int luma(const QColor &color) {
-     return (5036060U * quint32(color.red()) + 9886846U * quint32(color.green()) + 1920103U * quint32(color.blue())) >> 24;
+int luma(const QColor &color)
+{
+    return (5036060U * quint32(color.red()) + 9886846U * quint32(color.green()) + 1920103U * quint32(color.blue())) >> 24;
 }
 
-int yMix(int yFore, int yBack, qreal pct) {
+int yMix(int yFore, int yBack, qreal pct)
+{
     return yBack + (yFore - yBack) * pct;
 }
 
-QString Conversion::contrastColor(const QString& color)
+QString Conversion::contrastColor(const QString &color)
 {
     if (color.isNull()) {
         return QColor(Qt::black).name();
@@ -268,14 +273,14 @@ QString Conversion::contrastColor(const QString& color)
 #else
     int luminosity = luma(QColor(color));
     if (luminosity <= 60) {
-         return QColor(Qt::white).name();
+        return QColor(Qt::white).name();
     } else {
-         return QColor(Qt::black).name();
+        return QColor(Qt::black).name();
     }
 #endif
 }
 
-QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor)
+QString Conversion::computeAutoColor(const wvWare::Word97::SHD &shd, const QString &bgColor, const QString &fontColor)
 {
     // NOTE: by definition, see
     // http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a02a9a24-efb6-4ba0-a187-0e3d2704882b
@@ -320,16 +325,14 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
 
     if (shd.ipat == ipatAuto) {
         luminosity = luma(backColor);
-    }
-    else if (shd.ipat == ipatSolid) {
+    } else if (shd.ipat == ipatSolid) {
         luminosity = luma(foreColor);
-    }
-    else if ((shd.ipat > 13) && (shd.ipat < 34)) {
+    } else if ((shd.ipat > 13) && (shd.ipat < 34)) {
         luminosity = 61;
     } else {
         if (SHADING_TABLE.contains(shd.ipat)) {
             qreal pct = SHADING_TABLE.value(shd.ipat);
-            luminosity = yMix( luma(foreColor), luma(backColor), pct);
+            luminosity = yMix(luma(foreColor), luma(backColor), pct);
         } else {
             // this should not happen, but it's binary data
             luminosity = 61;
@@ -357,7 +360,7 @@ QString Conversion::computeAutoColor(const wvWare::Word97::SHD& shd, const QStri
 
 } //computeAutoColor
 
-QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor)
+QString Conversion::shdToColorStr(const wvWare::Word97::SHD &shd, const QString &bgColor, const QString &fontColor)
 {
 #ifdef CONVERSION_DEBUG_SHD
     qDebug() << Q_FUNC_INFO;
@@ -389,8 +392,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
         break;
     case ipatNil:
         break;
-    default:
-    {
+    default: {
         //handle remaining ipat values
         quint32 grayClr = shadingPatternToColor(shd.ipat);
         if (grayClr == wvWare::Word97::cvAuto) {
@@ -404,8 +406,7 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
             // if both colors are cvAuto, it messes up the logic -- just return
             // the pattern color
             if ((shd.cvFore == wvWare::Word97::cvAuto) &&
-                (shd.cvBack == wvWare::Word97::cvAuto))
-            {
+                    (shd.cvBack == wvWare::Word97::cvAuto)) {
                 return ret;
             }
 
@@ -430,9 +431,9 @@ QString Conversion::shdToColorStr(const wvWare::Word97::SHD& shd, const QString&
             qreal pct = QColor(ret).red() / 255.0;
             //qDebug() << shd.ipat << "pct" << pct;
             QColor result;
-            result.setRed( yMix(backColor.red(), foreColor.red(), pct) );
-            result.setGreen( yMix(backColor.green(), foreColor.green(), pct) );
-            result.setBlue( yMix(backColor.blue(), foreColor.blue(), pct) );
+            result.setRed(yMix(backColor.red(), foreColor.red(), pct));
+            result.setGreen(yMix(backColor.green(), foreColor.green(), pct));
+            result.setBlue(yMix(backColor.blue(), foreColor.blue(), pct));
             ret = result.name();
         }
     }
@@ -459,7 +460,7 @@ quint32 Conversion::shadingPatternToColor(const quint16 ipat)
     return resultColor;
 }
 
-int Conversion::ditheringToGray(const quint16 ipat, bool* ok)
+int Conversion::ditheringToGray(const quint16 ipat, bool *ok)
 {
     *ok = true; // optimistic ;)
     switch (ipat)  {
@@ -567,7 +568,7 @@ int Conversion::ditheringToGray(const quint16 ipat, bool* ok)
     }
 } //ditheringToGray
 
-void Conversion::setColorAttributes(QDomElement& element, int ico, const QString& prefix, bool defaultWhite)
+void Conversion::setColorAttributes(QDomElement &element, int ico, const QString &prefix, bool defaultWhite)
 {
     QColor color = Conversion::color(ico, -1, defaultWhite);
     element.setAttribute(prefix.isNull() ? QString::fromLatin1("red") : prefix + "Red", color.red());
@@ -579,7 +580,7 @@ void Conversion::setColorAttributes(QDomElement& element, int ico, const QString
 //innerwidth = metric
 //space = metric
 //outerwidth = metric
-QString Conversion::setDoubleBorderAttributes(const wvWare::Word97::BRC& brc)
+QString Conversion::setDoubleBorderAttributes(const wvWare::Word97::BRC &brc)
 {
     qreal w =  brc.dptLineWidth / 8.0;
 
@@ -601,7 +602,7 @@ QString Conversion::setDoubleBorderAttributes(const wvWare::Word97::BRC& brc)
         return QString(); // single lines so just return blank
 
     case 10: // triple
-        return QString::number(w) + "pt " + QString::number(w*3) + "pt " + QString::number(w) + "pt";
+        return QString::number(w) + "pt " + QString::number(w * 3) + "pt " + QString::number(w) + "pt";
     case 13: // thin-thick-thin small gap
     case 16: // thin-thick-thin medium gap
     case 19: // thin-thick-thin large gap
@@ -609,19 +610,19 @@ QString Conversion::setDoubleBorderAttributes(const wvWare::Word97::BRC& brc)
     case 3: // double
         return QString::number(w) + "pt " + QString::number(w) + "pt " + QString::number(w) + "pt";
     case 11: // thin-thick small gap
-        return QString::number(w*0.25) + "pt " + QString::number(w*0.25) + "pt " + QString::number(w) + "pt";
+        return QString::number(w * 0.25) + "pt " + QString::number(w * 0.25) + "pt " + QString::number(w) + "pt";
     case 12: // thick-thin small gap
-        return QString::number(w) + "pt " + QString::number(w*0.25) + "pt " + QString::number(w*0.25) + "pt";
+        return QString::number(w) + "pt " + QString::number(w * 0.25) + "pt " + QString::number(w * 0.25) + "pt";
     case 14: // thin-thick medium gap
-        return QString::number(w*0.5) + "pt " + QString::number(w*0.5) + "pt " + QString::number(w) + "pt";
+        return QString::number(w * 0.5) + "pt " + QString::number(w * 0.5) + "pt " + QString::number(w) + "pt";
     case 15: // thick-thin medium gap
-        return QString::number(w) + "pt " + QString::number(w*0.5) + "pt " + QString::number(w*0.5) + "pt";
+        return QString::number(w) + "pt " + QString::number(w * 0.5) + "pt " + QString::number(w * 0.5) + "pt";
     case 17: // thin-thick large gap
-        return QString::number(w*0.25) + "pt " + QString::number(w) + "pt " + QString::number(w*0.5) + "pt";
+        return QString::number(w * 0.25) + "pt " + QString::number(w) + "pt " + QString::number(w * 0.5) + "pt";
     case 18: //  thick-thin large gap
-        return QString::number(w*0.5) + "pt " + QString::number(w) + "pt " + QString::number(w*0.25) + "pt";
+        return QString::number(w * 0.5) + "pt " + QString::number(w) + "pt " + QString::number(w * 0.25) + "pt";
     case 21: // double wave
-        return QString::number(w*2.5) + "pt " + QString::number(w*1.25) + "pt " + QString::number(w*2.5) + "pt";
+        return QString::number(w * 2.5) + "pt " + QString::number(w * 1.25) + "pt " + QString::number(w * 2.5) + "pt";
     }
 }
 
@@ -629,12 +630,11 @@ QString Conversion::setDoubleBorderAttributes(const wvWare::Word97::BRC& brc)
 //width = thick, thin, or length specification
 //style = none, solid, or double
 //color = six-digit hexadecimal color value
-QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
+QString Conversion::setBorderAttributes(const wvWare::Word97::BRC &brc)
 {
     kDebug(30153) << "brc.brcType      = " << brc.brcType;
     kDebug(30153) << "brc.dptLineWidth = " << brc.dptLineWidth;
     kDebug(30153) << "brc.cv           = " << brc.cv;
-
 
     //set the border width
     qreal w;
@@ -676,7 +676,7 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
         w = 0.01;
         break;
 
-        //ODF doesn't support dot dashed or wavy borders???
+    //ODF doesn't support dot dashed or wavy borders???
 
     case BorderDashed:
     case BorderDashSmallGap:
@@ -715,7 +715,7 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
         break;
     }
 
-    QString width =  QString::number(w,'f') + "pt";
+    QString width =  QString::number(w, 'f') + "pt";
 
     QString value(width);
     value.append(" ");
@@ -726,17 +726,16 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
     return value;
 }
 //get a  calligra:borderspecial value "style"
-QString Conversion::borderCalligraAttributes(const wvWare::Word97::BRC& brc)
+QString Conversion::borderCalligraAttributes(const wvWare::Word97::BRC &brc)
 {
     kDebug(30153) << "brc.brcType      = " << brc.brcType;
     kDebug(30153) << "brc.dptLineWidth = " << brc.dptLineWidth;
     kDebug(30153) << "brc.cv           = " << brc.cv;
 
-
     QString style;   //empty if nothing special is neededreasonable default
 
     switch (brc.brcType) {
-        //ODF doesn't support dot dashed or wavy borders???
+    //ODF doesn't support dot dashed or wavy borders???
 
     case 7: // dash large gap
         style = "dash-largegap";
@@ -757,7 +756,6 @@ QString Conversion::borderCalligraAttributes(const wvWare::Word97::BRC& brc)
     case 23: // slash
         style = "slash";
         break;
-
 
     case 10: // triple
         style = "triple";
@@ -860,8 +858,9 @@ int Conversion::headerMaskToHType(unsigned char mask)
     // Odd is always there. We have even!=odd only if Even is there too.
     bool hasEvenOdd = (mask & wvWare::HeaderData::HeaderEven);
     //kDebug(30513) <<" hasEvenOdd=" << hasEvenOdd;
-    if (hasFirst)
+    if (hasFirst) {
         return hasEvenOdd ? 1 : 2;
+    }
     return hasEvenOdd ? 3 : 0;
 }
 
@@ -871,18 +870,21 @@ int Conversion::headerMaskToFType(unsigned char mask)
     bool hasEvenOdd = (mask & wvWare::HeaderData::FooterEven);
     // Odd is always there. We have even!=odd only if Even is there too.
     kDebug(30513) << " hasEvenOdd=" << hasEvenOdd;
-    if (hasFirst)
+    if (hasFirst) {
         return hasEvenOdd ? 1 : 2;
+    }
     return hasEvenOdd ? 3 : 0;
 }
 
-int Conversion::fldToFieldType(const wvWare::FLD* fld)
+int Conversion::fldToFieldType(const wvWare::FLD *fld)
 {
     // assume unhandled
     int m_fieldType = -1;
 
     // sanity check
-    if (!fld) return -1;
+    if (!fld) {
+        return -1;
+    }
 
     switch (fld->flt) {
     case 15:    m_fieldType = 10; break;  // title
@@ -901,8 +903,9 @@ int Conversion::fldToFieldType(const wvWare::FLD* fld)
     default:    m_fieldType = -1; break;
     }
 
-    if (m_fieldType < 0)
+    if (m_fieldType < 0) {
         kDebug(30513) << "unhandled field: fld.ftl:" << (int)fld->flt;
+    }
 
     return m_fieldType;
 }
@@ -927,7 +930,7 @@ qreal Conversion::twipsToPt(int twips)
     return pt;
 }
 
-const char* Conversion::fpcToFtnPosition(quint16 fpc)
+const char *Conversion::fpcToFtnPosition(quint16 fpc)
 {
     switch (fpc) {
     case 0:
@@ -940,7 +943,7 @@ const char* Conversion::fpcToFtnPosition(quint16 fpc)
     }
 }
 
-const char* Conversion::rncToStartNumberingAt(quint16 rnc)
+const char *Conversion::rncToStartNumberingAt(quint16 rnc)
 {
     switch (rnc) {
     case 0:
@@ -953,7 +956,7 @@ const char* Conversion::rncToStartNumberingAt(quint16 rnc)
     }
 }
 
-const char* Conversion::getHorizontalPos(qint16 dxaAbs)
+const char *Conversion::getHorizontalPos(qint16 dxaAbs)
 {
     // [MS-DOC] — v20101219, sprmPDxaAbs:
     // (-4) center, (-8) right, (-12) inside, (-16) outside
@@ -971,7 +974,7 @@ const char* Conversion::getHorizontalPos(qint16 dxaAbs)
     }
 }
 
-const char* Conversion::getHorizontalRel(uint pcHorz)
+const char *Conversion::getHorizontalRel(uint pcHorz)
 {
     // [MS-DOC] — v20101219:
     // 0 - current column, 1 - margin, 2 - page
@@ -987,7 +990,7 @@ const char* Conversion::getHorizontalRel(uint pcHorz)
     }
 }
 
-const char* Conversion::getVerticalPos(qint16 dyaAbs)
+const char *Conversion::getVerticalPos(qint16 dyaAbs)
 {
     // [MS-DOC] — v20101219, sprmPDyaAbs:
     // (-4) top, (-8) middle, (-12) bottom, (-16) inside, (-20) outside
@@ -1007,7 +1010,7 @@ const char* Conversion::getVerticalPos(qint16 dyaAbs)
     }
 }
 
-const char* Conversion::getVerticalRel(uint pcVert)
+const char *Conversion::getVerticalRel(uint pcVert)
 {
     // [MS-DOC] — v20101219:
     // 0 - margin, 1 - page, 2 - paragraph

@@ -68,15 +68,16 @@ void subMonths( QDate & date, int months )
 
 */
 
-int Calligra::Sheets::daysPerYear(QDate const & date, int basis)
+int Calligra::Sheets::daysPerYear(QDate const &date, int basis)
 {
     switch (basis) {
     case 0:
         return 360;
 
     case 1:
-        if (QDate::isLeapYear(date.year()))
+        if (QDate::isLeapYear(date.year())) {
             return 366;
+        }
         return 365;
 
     case 2:
@@ -90,7 +91,7 @@ int Calligra::Sheets::daysPerYear(QDate const & date, int basis)
     return -1;
 }
 
-int Calligra::Sheets::daysBetweenDates(QDate const & date1, QDate const & date2, int basis)
+int Calligra::Sheets::daysBetweenDates(QDate const &date1, QDate const &date2, int basis)
 {
     int day1, day2, month1, month2, year1, year2;
     bool isLeapYear = false;
@@ -112,18 +113,19 @@ int Calligra::Sheets::daysBetweenDates(QDate const & date1, QDate const & date2,
     switch (basis) {
     case 0:
         if (month1 == 2 && month2 != 2 && year1 == year2) {
-            if (isLeapYear)
+            if (isLeapYear) {
                 return months * 30 + days - 1;
-            else
+            } else {
                 return months * 30 + days - 2;
+            }
         }
         return months * 30 + days;
 
     case 1: // TODO: real days for difference between months!
-        //    return ( month2 - month1 ) * 30 + years * 360 + days;
+    //    return ( month2 - month1 ) * 30 + years * 360 + days;
 
     case 2: // TODO: real days for difference between months!
-        //    return ( month2 - month1 ) * 30 + years * 365 + days;
+    //    return ( month2 - month1 ) * 30 + years * 365 + days;
 
     case 3:
         return date1.daysTo(date2);
@@ -137,8 +139,8 @@ int Calligra::Sheets::daysBetweenDates(QDate const & date1, QDate const & date2,
 
 // the days360 method does implement the 30/360days method as used in e.g. the YEARFRAC function
 int Calligra::Sheets::days360(int day1, int month1, int year1, bool leapYear1,
-                     int day2, int month2, int year2, bool leapYear2,
-                     bool usaMethod)
+                              int day2, int month2, int year2, bool leapYear2,
+                              bool usaMethod)
 {
     if (usaMethod) { // US method
         if (day1 == 31) {
@@ -146,11 +148,9 @@ int Calligra::Sheets::days360(int day1, int month1, int year1, bool leapYear1,
             if (day2 == 31) {
                 day2 = 30;
             }
-        }
-        else if (day1 == 30 && day2 == 31) {
+        } else if (day1 == 30 && day2 == 31) {
             day2 = 30;
-        }
-        else if (month1 == 2 && (day1 == 29 || (day1 == 28 && ! leapYear1))) {
+        } else if (month1 == 2 && (day1 == 29 || (day1 == 28 && ! leapYear1))) {
             day1 = 30;
             if (month2 == 2 && (day2 == 29 || (day2 == 28 && ! leapYear2))) {
                 day2 = 30;
@@ -167,9 +167,8 @@ int Calligra::Sheets::days360(int day1, int month1, int year1, bool leapYear1,
     return day2 + month2 * 30 + year2 * 360 - day1 - month1 * 30 - year1 * 360;
 }
 
-
 // days360
-int Calligra::Sheets::days360(const QDate& _date1, const QDate& _date2, bool european)
+int Calligra::Sheets::days360(const QDate &_date1, const QDate &_date2, bool european)
 {
     int day1, month1, year1, day2, month2, year2;
 
@@ -183,9 +182,6 @@ int Calligra::Sheets::days360(const QDate& _date1, const QDate& _date2, bool eur
 
     return days360(day1, month1, year1, QDate::isLeapYear(_date1.year()), day2, month2, year2, QDate::isLeapYear(_date2.year()), !european);
 }
-
-
-
 
 // // days360
 // int Calligra::Sheets::days360( const QDate& _date1, const QDate& _date2, bool european )
@@ -242,7 +238,7 @@ int Calligra::Sheets::days360(const QDate& _date1, const QDate& _date2, bool eur
 // }
 
 // yearFrac
-long double Calligra::Sheets::yearFrac(const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis)
+long double Calligra::Sheets::yearFrac(const QDate &refDate, const QDate &startDate, const QDate &endDate, int basis)
 {
     Q_UNUSED(refDate);
     QDate date1 = startDate;
@@ -277,9 +273,13 @@ long double Calligra::Sheets::yearFrac(const QDate& refDate, const QDate& startD
         if (QDate(date1.year() + 1, date1.month(), date1.day()) >= date2) {
             nYears = 1;
             peryear = 365;
-            if (QDate::isLeapYear(date1.year()) && date1.month() <= 2) peryear = 366;
-            else if (QDate::isLeapYear(date2.year()) && date2.month() > 2) peryear = 366;
-            else if (date2.month() == 2 && date2.day() == 29) peryear = 366;
+            if (QDate::isLeapYear(date1.year()) && date1.month() <= 2) {
+                peryear = 366;
+            } else if (QDate::isLeapYear(date2.year()) && date2.month() > 2) {
+                peryear = 366;
+            } else if (date2.month() == 2 && date2.day() == 29) {
+                peryear = 366;
+            }
         }
         peryear = peryear / (long double) nYears;
         nYears = 0;
@@ -321,32 +321,33 @@ long double Calligra::Sheets::yearFrac(const QDate& refDate, const QDate& startD
 }
 
 // pow1p calculate (1+x)^y accurately
-long double Calligra::Sheets::pow1p(const long double& x, const long double& y)
+long double Calligra::Sheets::pow1p(const long double &x, const long double &y)
 {
-    if (fabs(x) > 0.5)
+    if (fabs(x) > 0.5) {
         return pow(1 + x, y);
-    else
+    } else {
         return exp(y * log1p(x));
+    }
 }
 
 // pow1pm1 calculate ((1+x)^y)-1 accurately
-long double Calligra::Sheets::pow1pm1(const long double& x, const long double& y)
+long double Calligra::Sheets::pow1pm1(const long double &x, const long double &y)
 {
-    if (x <= -1)
+    if (x <= -1) {
         return pow(1 + x, y) - 1;
-    else
+    } else {
         return expm1(y * log1p(x));
+    }
 }
 
-long double Calligra::Sheets::duration(const QDate& refDate, const QDate& settlement, const QDate& maturity,
-                              const long double& coup_, const long double& yield_, const int& freq, const int& basis, const long double& numOfCoups)
+long double Calligra::Sheets::duration(const QDate &refDate, const QDate &settlement, const QDate &maturity,
+                                       const long double &coup_, const long double &yield_, const int &freq, const int &basis, const long double &numOfCoups)
 {
     long double yield = yield_;
     long double coup = coup_;
 
 //   kDebug(36002)<<"DURATION_HELPER";
 //   kDebug(36002)<<"sett ="<<settlement<<" mat ="<<maturity<<" coup ="<<coup<<" yield ="<<yield<<" freq ="<<freq<<" basis ="<<basis;
-
 
     long double yearfrac = yearFrac(refDate, settlement, maturity, basis);
     long double res = 0.0l;
@@ -360,19 +361,21 @@ long double Calligra::Sheets::duration(const QDate& refDate, const QDate& settle
 
     long double t;
 
-    for (t = 1.0l ; t < numOfCoups ; t += 1.0l)
+    for (t = 1.0l; t < numOfCoups; t += 1.0l) {
         res += (t + diff) * (coup) / pow(yield, t + diff);
+    }
 
     res += (numOfCoups + diff) * (coup + f100) / pow(yield, numOfCoups + diff);
 
     long double p = 0.0l;
-    for (t = 1.0l ; t < numOfCoups ; t += 1.0l)
+    for (t = 1.0l; t < numOfCoups; t += 1.0l) {
         p += coup / pow(yield, t + diff);
+    }
 
     p += (coup + f100) / pow(yield, numOfCoups + diff);
 
     res /= p;
     res /= (long double)(freq);
 
-    return(res);
+    return (res);
 }

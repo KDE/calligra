@@ -29,25 +29,25 @@ class KoPADocument;
 class OkularOdpGenerator : public Okular::Generator
 {
 public:
-    OkularOdpGenerator( QObject *parent, const QVariantList &args );
+    OkularOdpGenerator(QObject *parent, const QVariantList &args);
     ~OkularOdpGenerator();
 
-    bool loadDocument( const QString &fileName, QVector<Okular::Page*> &pages );
+    bool loadDocument(const QString &fileName, QVector<Okular::Page *> &pages);
 
     bool canGeneratePixmap() const;
-    void generatePixmap( Okular::PixmapRequest *request );
+    void generatePixmap(Okular::PixmapRequest *request);
 
 #if OKULAR_IS_VERSION(0, 20, 60)
-    Okular::DocumentInfo generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const;
+    Okular::DocumentInfo generateDocumentInfo(const QSet<Okular::DocumentInfo::Key> &keys) const;
 #else
-    const Okular::DocumentInfo* generateDocumentInfo();
+    const Okular::DocumentInfo *generateDocumentInfo();
 #endif
 
 protected:
     bool doCloseDocument();
 
 private:
-    const KoPADocument* m_doc;
+    const KoPADocument *m_doc;
 
     Okular::DocumentInfo m_documentInfo;
 };

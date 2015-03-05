@@ -24,7 +24,8 @@ class KisGridOpOptionsWidget: public QWidget, public Ui::WdgGridOptions
 {
 public:
     KisGridOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -41,7 +42,6 @@ KisGridOpOption::KisGridOpOption()
     m_options->gridWidthSPBox->setSuffix(" px");
     m_options->gridWidthSPBox->setExponentRatio(3.0);
 
-
     m_options->gridHeightSPBox->setRange(1, 999, 0);
     m_options->gridHeightSPBox->setValue(25);
     m_options->gridHeightSPBox->setSuffix(" px");
@@ -57,10 +57,8 @@ KisGridOpOption::KisGridOpOption()
     m_options->vertBorderDSPBox->setRange(0, 100, 2);
     m_options->vertBorderDSPBox->setValue(0.0);
 
-
     m_options->horizBorderDSPBox->setRange(0, 100, 2);
     m_options->vertBorderDSPBox->setValue(0.0);
-
 
     connect(m_options->gridWidthSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->gridHeightSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
@@ -79,69 +77,57 @@ KisGridOpOption::~KisGridOpOption()
     delete m_options;
 }
 
-
 int KisGridOpOption::divisionLevel() const
 {
     return m_options->divisionLevelSPBox->value();
 }
-
 
 int KisGridOpOption::gridWidth() const
 {
     return m_options->gridWidthSPBox->value();
 }
 
-
 void KisGridOpOption::setWidth(int width) const
 {
     m_options->gridWidthSPBox->setValue(width);
 }
-
 
 int KisGridOpOption::gridHeight() const
 {
     return m_options->gridHeightSPBox->value();
 }
 
-
 void KisGridOpOption::setHeight(int height) const
 {
     m_options->gridHeightSPBox->setValue(height);
 }
-
 
 bool KisGridOpOption::pressureDivision() const
 {
     return m_options->divisionPressureCHBox->isChecked();
 }
 
-
-
 qreal KisGridOpOption::horizBorder() const
 {
     return m_options->vertBorderDSPBox->value();
 }
-
 
 qreal KisGridOpOption::vertBorder() const
 {
     return m_options->horizBorderDSPBox->value();
 }
 
-
-
 bool KisGridOpOption::randomBorder() const
 {
     return m_options->jitterBorderCHBox->isChecked();
 }
-
 
 qreal KisGridOpOption::scale() const
 {
     return m_options->scaleDSPBox->value();
 }
 
-void KisGridOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisGridOpOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(GRID_WIDTH, gridWidth());
     setting->setProperty(GRID_HEIGHT, gridHeight());
@@ -153,7 +139,7 @@ void KisGridOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     setting->setProperty(GRID_RANDOM_BORDER, randomBorder());
 }
 
-void KisGridOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisGridOpOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     m_options->gridWidthSPBox->setValue(setting->getInt(GRID_WIDTH));
     m_options->gridHeightSPBox->setValue(setting->getInt(GRID_HEIGHT));

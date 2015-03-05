@@ -19,7 +19,6 @@
 #include "kis_node_dummies_graph.h"
 #include "kis_node_shape.h"
 
-
 /********************************************************************/
 /*                 KisNodeDummy                                     */
 /********************************************************************/
@@ -36,45 +35,49 @@ KisNodeDummy::~KisNodeDummy()
     qDeleteAll(m_children);
 }
 
-KisNodeDummy* KisNodeDummy::firstChild() const
+KisNodeDummy *KisNodeDummy::firstChild() const
 {
     return !m_children.isEmpty() ? m_children.first() : 0;
 }
 
-KisNodeDummy* KisNodeDummy::lastChild() const
+KisNodeDummy *KisNodeDummy::lastChild() const
 {
     return !m_children.isEmpty() ? m_children.last() : 0;
 }
 
-KisNodeDummy* KisNodeDummy::nextSibling() const
+KisNodeDummy *KisNodeDummy::nextSibling() const
 {
-    if(!m_parent) return 0;
+    if (!m_parent) {
+        return 0;
+    }
 
-    int index = m_parent->m_children.indexOf(const_cast<KisNodeDummy*>(this));
+    int index = m_parent->m_children.indexOf(const_cast<KisNodeDummy *>(this));
     Q_ASSERT(index >= 0);
 
     index++;
     return index < m_parent->m_children.size() ?
-        m_parent->m_children[index] : 0;
+           m_parent->m_children[index] : 0;
 }
 
-KisNodeDummy* KisNodeDummy::prevSibling() const
+KisNodeDummy *KisNodeDummy::prevSibling() const
 {
-    if(!m_parent) return 0;
+    if (!m_parent) {
+        return 0;
+    }
 
-    int index = m_parent->m_children.indexOf(const_cast<KisNodeDummy*>(this));
+    int index = m_parent->m_children.indexOf(const_cast<KisNodeDummy *>(this));
     Q_ASSERT(index >= 0);
 
     index--;
     return index >= 0 ? m_parent->m_children[index] : 0;
 }
 
-KisNodeDummy* KisNodeDummy::parent() const
+KisNodeDummy *KisNodeDummy::parent() const
 {
     return m_parent;
 }
 
-KisNodeShape* KisNodeDummy::nodeShape() const
+KisNodeShape *KisNodeDummy::nodeShape() const
 {
     return m_nodeShape;
 }
@@ -84,7 +87,7 @@ KisNodeSP KisNodeDummy::node() const
     return m_node;
 }
 
-KisNodeDummy* KisNodeDummy::at(int index) const
+KisNodeDummy *KisNodeDummy::at(int index) const
 {
     return m_children.at(index);
 }
@@ -108,7 +111,7 @@ KisNodeDummiesGraph::KisNodeDummiesGraph()
 {
 }
 
-KisNodeDummy* KisNodeDummiesGraph::rootDummy() const
+KisNodeDummy *KisNodeDummiesGraph::rootDummy() const
 {
     return m_rootDummy;
 }
@@ -122,14 +125,13 @@ void KisNodeDummiesGraph::addNode(KisNodeDummy *node, KisNodeDummy *parent, KisN
     Q_ASSERT_X(parent || !m_rootDummy, "KisNodeDummiesGraph::addNode", "Trying to add second root dummy");
     Q_ASSERT_X(!parent || m_rootDummy, "KisNodeDummiesGraph::addNode", "Trying to add non-orphan child with no root dummy set");
 
-    if(!parent) {
+    if (!parent) {
         m_rootDummy = node;
-    }
-    else {
+    } else {
         int insertionIndex = parent->m_children.size();
 
         insertionIndex = aboveThis ?
-            parent->m_children.indexOf(aboveThis) + 1: 0;
+                         parent->m_children.indexOf(aboveThis) + 1 : 0;
 
         Q_ASSERT(!aboveThis || parent->m_children.indexOf(aboveThis) >= 0);
 
@@ -147,10 +149,9 @@ void KisNodeDummiesGraph::removeNode(KisNodeDummy *node)
     KisNodeDummy *parent = node->m_parent;
     Q_ASSERT_X(m_rootDummy, "KisNodeDummiesGraph::removeNode", "Trying to remove a dummy with no root dummy");
 
-    if(!parent) {
+    if (!parent) {
         m_rootDummy = 0;
-    }
-    else {
+    } else {
         parent->m_children.removeOne(node);
     }
 }
@@ -160,12 +161,11 @@ void KisNodeDummiesGraph::unmapDummyRecursively(KisNodeDummy *dummy)
     m_dummiesMap.remove(dummy->node());
 
     KisNodeDummy *child = dummy->firstChild();
-    while(child) {
+    while (child) {
         unmapDummyRecursively(child);
         child = child->nextSibling();
     }
 }
-
 
 void KisNodeDummiesGraph::moveNode(KisNodeDummy *node, KisNodeDummy *parent, KisNodeDummy *aboveThis)
 {
@@ -183,13 +183,12 @@ int KisNodeDummiesGraph::dummiesCount() const
     return m_dummiesMap.size();
 }
 
-KisNodeDummy* KisNodeDummiesGraph::nodeToDummy(KisNodeSP node)
+KisNodeDummy *KisNodeDummiesGraph::nodeToDummy(KisNodeSP node)
 {
     Q_ASSERT(m_dummiesMap.contains(node));
     if (m_dummiesMap.contains(node)) {
         return m_dummiesMap[node];
-    }
-    else {
+    } else {
         return 0;
     }
 }

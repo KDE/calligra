@@ -42,7 +42,7 @@
 using namespace Calligra::Sheets;
 
 StyleManager::StyleManager()
-        : m_defaultStyle(new CustomStyle())
+    : m_defaultStyle(new CustomStyle())
 {
 }
 
@@ -69,13 +69,13 @@ void StyleManager::saveOdf(KoGenStyles &mainStyles)
     }
 }
 
-void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* map)
+void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader &stylesReader, Map *map)
 {
     // reset the map of OpenDocument Styles
     m_oasisStyles.clear();
 
     // loading default style first
-    const KoXmlElement* defStyle = stylesReader.defaultStyle("table-cell");
+    const KoXmlElement *defStyle = stylesReader.defaultStyle("table-cell");
     if (defStyle) {
         kDebug(36003) << "StyleManager: Loading default cell style";
         Conditions conditions;
@@ -102,14 +102,17 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
                 n = n.nextSibling();
             }
         }
-    } else
+    } else {
         resetDefaultStyle();
+    }
 
-    QList<KoXmlElement*> customStyles(stylesReader.customStyles("table-cell").values());
+    QList<KoXmlElement *> customStyles(stylesReader.customStyles("table-cell").values());
     uint nStyles = customStyles.count();
     for (unsigned int item = 0; item < nStyles; item++) {
-        KoXmlElement* styleElem = customStyles[item];
-        if (!styleElem) continue;
+        KoXmlElement *styleElem = customStyles[item];
+        if (!styleElem) {
+            continue;
+        }
 
         // assume the name assigned by the application
         const QString oasisName = styleElem->attributeNS(KoXmlNS::style, "name", QString());
@@ -121,7 +124,7 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
         if (!name.isEmpty()) {
             // The style's parent name will be set in Style::loadOdf(..).
             // After all styles are loaded the pointer to the parent is set.
-            CustomStyle * style = new CustomStyle(name);
+            CustomStyle *style = new CustomStyle(name);
 
             Conditions conditions;
             style->loadOdf(stylesReader, *styleElem, name, conditions, this, map->parser());
@@ -134,10 +137,10 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
     }
 
     // replace all OpenDocument internal parent names by KSpread's style names
-    foreach(CustomStyle* style, m_styles) {
+    foreach (CustomStyle *style, m_styles) {
         if (!style->parentName().isNull()) {
             const QString parentOdfName = style->parentName();
-            const CustomStyle* parentStyle = this->style(m_oasisStyles.value(parentOdfName));
+            const CustomStyle *parentStyle = this->style(m_oasisStyles.value(parentOdfName));
             if (!parentStyle) {
                 kWarning(36003) << parentOdfName << " not found.";
                 continue;
@@ -151,7 +154,7 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
     }
 }
 
-QDomElement StyleManager::save(QDomDocument & doc)
+QDomElement StyleManager::save(QDomDocument &doc)
 {
     QDomElement styles = doc.createElement("styles");
 
@@ -161,7 +164,7 @@ QDomElement StyleManager::save(QDomDocument & doc)
     CustomStyles::iterator end  = m_styles.end();
 
     while (iter != end) {
-        CustomStyle * styleData = iter.value();
+        CustomStyle *styleData = iter.value();
 
         styleData->save(doc, styles, this);
 
@@ -171,36 +174,41 @@ QDomElement StyleManager::save(QDomDocument & doc)
     return styles;
 }
 
-bool StyleManager::loadXML(KoXmlElement const & styles)
+bool StyleManager::loadXML(KoXmlElement const &styles)
 {
     bool ok = true;
     KoXmlElement e = styles.firstChild().toElement();
     while (!e.isNull()) {
         QString name;
-        if (e.hasAttribute("name"))
+        if (e.hasAttribute("name")) {
             name = e.attribute("name");
+        }
         Style::StyleType type = (Style::StyleType)(e.attribute("type").toInt(&ok));
-        if (!ok)
+        if (!ok) {
             return false;
+        }
 
         if (name == "Default" && type == Style::BUILTIN) {
-            if (!m_defaultStyle->loadXML(e, name))
+            if (!m_defaultStyle->loadXML(e, name)) {
                 return false;
+            }
             m_defaultStyle->setType(Style::BUILTIN);
         } else if (!name.isNull()) {
-            CustomStyle* style = 0;
-            if (e.hasAttribute("parent") && e.attribute("parent") == "Default")
+            CustomStyle *style = 0;
+            if (e.hasAttribute("parent") && e.attribute("parent") == "Default") {
                 style = new CustomStyle(name, m_defaultStyle);
-            else
+            } else {
                 style = new CustomStyle(name);
+            }
 
             if (!style->loadXML(e, name)) {
                 delete style;
                 return false;
             }
 
-            if (style->type() == Style::AUTO)
+            if (style->type() == Style::AUTO) {
                 style->setType(Style::CUSTOM);
+            }
             insertStyle(style);
             kDebug(36003) << "Style" << name << ":" << style;
         }
@@ -213,9 +221,10 @@ bool StyleManager::loadXML(KoXmlElement const & styles)
     QStringList::iterator it;
     for (it = names.begin(); it != names.end(); ++it) {
         if (*it != "Default") {
-            CustomStyle * styleData = style(*it);
-            if (styleData && !styleData->parentName().isNull() && m_styles.value(styleData->parentName()))
+            CustomStyle *styleData = style(*it);
+            if (styleData && !styleData->parentName().isNull() && m_styles.value(styleData->parentName())) {
                 styleData->setParentName(m_styles.value(styleData->parentName())->name());
+            }
         }
     }
 
@@ -230,7 +239,7 @@ void StyleManager::resetDefaultStyle()
 
 void StyleManager::createBuiltinStyles()
 {
-    CustomStyle * header1 = new CustomStyle(i18n("Header"), m_defaultStyle);
+    CustomStyle *header1 = new CustomStyle(i18n("Header"), m_defaultStyle);
     QFont f(header1->font());
     f.setItalic(true);
     f.setPointSize(f.pointSize() + 2);
@@ -239,7 +248,7 @@ void StyleManager::createBuiltinStyles()
     header1->setType(Style::BUILTIN);
     m_styles[ header1->name()] = header1;
 
-    CustomStyle * header2 = new CustomStyle(i18n("Header1"), header1);
+    CustomStyle *header2 = new CustomStyle(i18n("Header1"), header1);
     QColor color("#F0F0FF");
     header2->setBackgroundColor(color);
     QPen pen(Qt::black, 1, Qt::SolidLine);
@@ -249,25 +258,29 @@ void StyleManager::createBuiltinStyles()
     m_styles[ header2->name()] = header2;
 }
 
-CustomStyle * StyleManager::style(QString const & name) const
+CustomStyle *StyleManager::style(QString const &name) const
 {
-    if (name.isEmpty())
+    if (name.isEmpty()) {
         return 0;
+    }
     // on OpenDocument loading
 //     if ( !m_oasisStyles.isEmpty() )
     {
-        if (m_oasisStyles.contains(name) && m_styles.contains(m_oasisStyles[name]))
+        if (m_oasisStyles.contains(name) && m_styles.contains(m_oasisStyles[name])) {
             return m_styles.value(m_oasisStyles[name]);
+        }
 //         return 0;
     }
-    if (m_styles.contains(name))
+    if (m_styles.contains(name)) {
         return m_styles[name];
-    if ((name == "Default") || (name == m_defaultStyle->name()))
+    }
+    if ((name == "Default") || (name == m_defaultStyle->name())) {
         return m_defaultStyle;
+    }
     return 0;
 }
 
-void StyleManager::takeStyle(CustomStyle * style)
+void StyleManager::takeStyle(CustomStyle *style)
 {
     const QString parentName = style->parentName();
 
@@ -275,8 +288,9 @@ void StyleManager::takeStyle(CustomStyle * style)
     CustomStyles::iterator end  = m_styles.end();
 
     while (iter != end) {
-        if (iter.value()->parentName() == style->name())
+        if (iter.value()->parentName() == style->name()) {
             iter.value()->setParentName(parentName);
+        }
 
         ++iter;
     }
@@ -289,28 +303,32 @@ void StyleManager::takeStyle(CustomStyle * style)
     }
 }
 
-bool StyleManager::checkCircle(QString const & name, QString const & parent)
+bool StyleManager::checkCircle(QString const &name, QString const &parent)
 {
-    CustomStyle* style = this->style(parent);
-    if (!style || style->parentName().isNull())
+    CustomStyle *style = this->style(parent);
+    if (!style || style->parentName().isNull()) {
         return true;
-    if (style->parentName() == name)
+    }
+    if (style->parentName() == name) {
         return false;
-    else
+    } else {
         return checkCircle(name, style->parentName());
+    }
 }
 
-bool StyleManager::validateStyleName(QString const & name, CustomStyle * style)
+bool StyleManager::validateStyleName(QString const &name, CustomStyle *style)
 {
-    if (m_defaultStyle->name() == name || name == "Default")
+    if (m_defaultStyle->name() == name || name == "Default") {
         return false;
+    }
 
     CustomStyles::const_iterator iter = m_styles.constBegin();
     CustomStyles::const_iterator end  = m_styles.constEnd();
 
     while (iter != end) {
-        if (iter.key() == name && iter.value() != style)
+        if (iter.key() == name && iter.value() != style) {
             return false;
+        }
 
         ++iter;
     }
@@ -318,21 +336,22 @@ bool StyleManager::validateStyleName(QString const & name, CustomStyle * style)
     return true;
 }
 
-void StyleManager::changeName(QString const & oldName, QString const & newName)
+void StyleManager::changeName(QString const &oldName, QString const &newName)
 {
     CustomStyles::iterator iter = m_styles.begin();
     CustomStyles::iterator end  = m_styles.end();
 
     while (iter != end) {
-        if (iter.value()->parentName() == oldName)
+        if (iter.value()->parentName() == oldName) {
             iter.value()->setParentName(newName);
+        }
 
         ++iter;
     }
 
     iter = m_styles.find(oldName);
     if (iter != end) {
-        CustomStyle * s = iter.value();
+        CustomStyle *s = iter.value();
         m_styles.erase(iter);
         m_styles[newName] = s;
     }
@@ -342,16 +361,18 @@ void StyleManager::insertStyle(CustomStyle *style)
 {
     const QString base = style->name();
     // do not add the default style
-    if (base == "Default" && style->type() == Style::BUILTIN)
+    if (base == "Default" && style->type() == Style::BUILTIN) {
         return;
+    }
     int num = 1;
     QString name = base;
     while (name == "Default" || (m_styles.contains(name) && (m_styles[name] != style))) {
         name = base;
         name += QString::number(num++);
     }
-    if (base != name)
+    if (base != name) {
         style->setName(name);
+    }
     m_styles[name] = style;
 }
 
@@ -373,14 +394,14 @@ QStringList StyleManager::styleNames() const
     return list;
 }
 
-Styles StyleManager::loadOdfAutoStyles(KoOdfStylesReader& stylesReader,
-                                       QHash<QString, Conditions>& conditionalStyles,
+Styles StyleManager::loadOdfAutoStyles(KoOdfStylesReader &stylesReader,
+                                       QHash<QString, Conditions> &conditionalStyles,
                                        const ValueParser *parser)
 {
     Styles autoStyles;
-    foreach(KoXmlElement* element, stylesReader.autoStyles("table-cell")) {
-        if (element->hasAttributeNS(KoXmlNS::style , "name")) {
-            QString name = element->attributeNS(KoXmlNS::style , "name" , QString());
+    foreach (KoXmlElement *element, stylesReader.autoStyles("table-cell")) {
+        if (element->hasAttributeNS(KoXmlNS::style, "name")) {
+            QString name = element->attributeNS(KoXmlNS::style, "name", QString());
             kDebug(36003) << "StyleManager: Preloading automatic cell style:" << name;
             autoStyles.remove(name);
             Conditions conditions;
@@ -392,7 +413,7 @@ Styles StyleManager::loadOdfAutoStyles(KoOdfStylesReader& stylesReader,
 
             if (element->hasAttributeNS(KoXmlNS::style, "parent-style-name")) {
                 const QString parentOdfName = element->attributeNS(KoXmlNS::style, "parent-style-name", QString());
-                const CustomStyle* parentStyle = style(m_oasisStyles.value(parentOdfName));
+                const CustomStyle *parentStyle = style(m_oasisStyles.value(parentOdfName));
                 if (!parentStyle) {
                     kWarning(36003) << parentOdfName << " not found.";
                     continue;
@@ -414,7 +435,7 @@ void StyleManager::releaseUnusedAutoStyles(Styles autoStyles)
     m_oasisStyles.clear();
 }
 
-QString StyleManager::openDocumentName(const QString& name) const
+QString StyleManager::openDocumentName(const QString &name) const
 {
     return m_oasisStyles.value(name);
 }
@@ -422,7 +443,7 @@ QString StyleManager::openDocumentName(const QString& name) const
 void StyleManager::dump() const
 {
     kDebug(36006) << "Custom styles:";
-    foreach(const QString &name, m_styles.keys()) {
+    foreach (const QString &name, m_styles.keys()) {
         kDebug(36006) << name;
     }
 }

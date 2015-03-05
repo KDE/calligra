@@ -25,7 +25,6 @@
 
 class KoMarker;
 
-
 class KoMarkerSelector : public QComboBox
 {
     Q_OBJECT
@@ -44,14 +43,14 @@ public:
     /**
      * Set the available markers in the document.
      */
-    void updateMarkers(const QList<KoMarker*> markers);
+    void updateMarkers(const QList<KoMarker *> markers);
 
 protected:
     void paintEvent(QPaintEvent *pe);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* KOMARKERSELECTOR_H */

@@ -19,12 +19,12 @@
 
 #include "PaddedElement.h"
 
-PaddedElement::PaddedElement( BasicElement* parent ) : RowElement( parent )
+PaddedElement::PaddedElement(BasicElement *parent) : RowElement(parent)
 {}
 
-void PaddedElement::layout( const AttributeManager* am )
+void PaddedElement::layout(const AttributeManager *am)
 {
-    Q_UNUSED( am )
+    Q_UNUSED(am)
 }
 
 ElementType PaddedElement::elementType() const
@@ -83,7 +83,7 @@ void PaddedElement::calcSizes( const ContextStyle& context,
     // Check borders
     if ( right < 0 ) right = 0;
     if ( up + down < 0 ) up = down = 0;
-    
+
     if ( ! isEmpty() ) {
         width = left;
         // Let's do all normal elements that have a base line.

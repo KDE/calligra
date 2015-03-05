@@ -31,7 +31,7 @@
 #include "core/kexiprojectset.h"
 #include "core/kexiprojectdata.h"
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     KApplication app(argc, argv, "startup");
 
@@ -98,9 +98,9 @@ int main(int argc, char* argv[])
         } else if (r == KexiStartupDialog::OpenExistingResult) {
             kDebug() << "Existing project --------";
             QString selFile = startup.selectedExistingFile();
-            if (!selFile.isEmpty())
+            if (!selFile.isEmpty()) {
                 kDebug() << "Project File: " << selFile;
-            else if (startup.selectedExistingConnection()) {
+            } else if (startup.selectedExistingConnection()) {
                 kDebug() << "Existing connection: " << startup.selectedExistingConnection()->serverInfoString();
                 //ok, now we are trying to show daabases for this conenction to this user
                 //! @todo
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
             const KexiProjectData *data = startup.selectedProjectData();
             if (data) {
                 kDebug() << "Selected project: database=" << data->databaseName()
-                << " connection=" << data->constConnectionData()->serverInfoString();
+                         << " connection=" << data->constConnectionData()->serverInfoString();
             }
         }
     }

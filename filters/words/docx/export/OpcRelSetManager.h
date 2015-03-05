@@ -18,21 +18,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KOODF_OPC_RELSET_MANAGER_H
 #define KOODF_OPC_RELSET_MANAGER_H
 
 #include "koodf_export.h"
 
-
 class QString;
 class KoStore;
 class OpcRelSet;
 
-
 class OpcRelSetManager
 {
- public:
+public:
     OpcRelSetManager();
     ~OpcRelSetManager();
 
@@ -47,10 +44,9 @@ class OpcRelSetManager
     bool loadRelSets(KoStore *odfStore);
     bool saveRelSets(KoStore *odfStore);
 
- private:
+private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

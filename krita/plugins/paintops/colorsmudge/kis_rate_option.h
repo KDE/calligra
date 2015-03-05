@@ -30,18 +30,20 @@ class KisPainter;
 class KisRateOption: public KisCurveOption
 {
 public:
-    KisRateOption(const QString& name, const QString& label = "", bool checked = true, const QString& category = KisPaintOpOption::generalCategory());
+    KisRateOption(const QString &name, const QString &label = "", bool checked = true, const QString &category = KisPaintOpOption::generalCategory());
 
     /**
      * Set the opacity of the painter based on the rate
      * and the curve (if checked)
      */
-    void apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin = 0.0, qreal scaleMax = 1.0, qreal multiplicator = 1.0) const;
+    void apply(KisPainter &painter, const KisPaintInformation &info, qreal scaleMin = 0.0, qreal scaleMax = 1.0, qreal multiplicator = 1.0) const;
 
-    void setRate(qreal rate) {
+    void setRate(qreal rate)
+    {
         KisCurveOption::setValue(rate);
     }
-    qreal getRate() const {
+    qreal getRate() const
+    {
         return KisCurveOption::value();
     }
 };

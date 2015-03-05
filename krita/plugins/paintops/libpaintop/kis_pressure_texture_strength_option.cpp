@@ -27,13 +27,15 @@ KisPressureTextureStrengthOption::KisPressureTextureStrengthOption()
     setMaximumLabel(i18n("Strong"));
 }
 
-double KisPressureTextureStrengthOption::apply(const KisPaintInformation & info) const
+double KisPressureTextureStrengthOption::apply(const KisPaintInformation &info) const
 {
-    if (!isChecked()) return 1.0;
+    if (!isChecked()) {
+        return 1.0;
+    }
     return computeValue(info);
 }
 
-void KisPressureTextureStrengthOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureTextureStrengthOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOption::readOptionSetting(setting);
 
@@ -51,7 +53,7 @@ void KisPressureTextureStrengthOption::readOptionSetting(const KisPropertiesConf
     }
 }
 
-void KisPressureTextureStrengthOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisPressureTextureStrengthOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
 

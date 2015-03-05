@@ -28,13 +28,12 @@
 
 class QIODevice;
 
-
 class XFigStreamLineReader
 {
 public:
     enum CommentReadModus {DropComments, TakeComment, CollectComments};
 
-    explicit XFigStreamLineReader(QIODevice* device);
+    explicit XFigStreamLineReader(QIODevice *device);
     ~XFigStreamLineReader();
 
     bool atEnd() const;
@@ -50,7 +49,7 @@ public:
     bool readNextLine(CommentReadModus commentModus = DropComments);
 
 private:
-    QIODevice* const m_Device;
+    QIODevice *const m_Device;
     QTextStream m_TextStream;
 
     QString m_Comment;
@@ -60,7 +59,6 @@ private:
     bool m_HasError;
     QString m_ErrorString;
 };
-
 
 inline bool XFigStreamLineReader::hasError() const
 {

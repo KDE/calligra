@@ -32,11 +32,11 @@ public:
      * Creates a connection object and starts the requested connection
      */
     inline KisSignalAutoConnection(const QObject *sender, const char *signal,
-                                  const QObject *receiver, const char *method,
-                                  Qt::ConnectionType type = Qt::AutoConnection)
-        : m_sender(const_cast<QObject*>(sender)),
+                                   const QObject *receiver, const char *method,
+                                   Qt::ConnectionType type = Qt::AutoConnection)
+        : m_sender(const_cast<QObject *>(sender)),
           m_signal(signal),
-          m_receiver(const_cast<QObject*>(receiver)),
+          m_receiver(const_cast<QObject *>(receiver)),
           m_method(method)
     {
         QObject::connect(m_sender, m_signal, m_receiver, m_method, type);
@@ -60,7 +60,6 @@ private:
 
 typedef QSharedPointer<KisSignalAutoConnection> KisSignalAutoConnectionSP;
 
-
 /**
  * A class to store multiple connections and to be able to stop all of
  * them at once. It is handy when you need to reconnect some other
@@ -83,7 +82,7 @@ public:
     {
         m_connections.append(KisSignalAutoConnectionSP(
                                  new KisSignalAutoConnection(sender, signal,
-                                                             receiver, method, type)));
+                                         receiver, method, type)));
     }
 
     /**
@@ -96,13 +95,14 @@ public:
     {
         m_connections.append(KisSignalAutoConnectionSP(
                                  new KisSignalAutoConnection(sender, signal,
-                                                             receiver, method, Qt::UniqueConnection)));
+                                         receiver, method, Qt::UniqueConnection)));
     }
 
     /**
      * Disconnects all the stored connections and removes them from the store
      */
-    inline void clear() {
+    inline void clear()
+    {
         m_connections.clear();
     }
 

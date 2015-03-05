@@ -26,7 +26,6 @@
 
 #include <QWidget>
 
-
 namespace KPlato
 {
 
@@ -38,7 +37,7 @@ class InsertFileDialog : public KDialog
 {
     Q_OBJECT
 public:
-    InsertFileDialog( Project &project, Node *currentNode, QWidget *parent=0 );
+    InsertFileDialog(Project &project, Node *currentNode, QWidget *parent = 0);
 
     KUrl url() const;
     Node *parentNode() const;
@@ -48,12 +47,11 @@ private:
     InsertFilePanel *m_panel;
 };
 
-
 class InsertFilePanel : public QWidget
 {
     Q_OBJECT
 public:
-    InsertFilePanel( Project &project, Node *currentNode, QWidget *parent );
+    InsertFilePanel(Project &project, Node *currentNode, QWidget *parent);
 
     KUrl url() const;
     Node *parentNode() const;
@@ -62,18 +60,17 @@ public:
     Ui::InsertFilePanel ui;
 
 Q_SIGNALS:
-    void enableButtonOk( bool );
+    void enableButtonOk(bool);
 
 protected Q_SLOTS:
-    void changed( const QString& );
+    void changed(const QString &);
 
-    void slotOpenFileDialog( KUrlRequester * );
+    void slotOpenFileDialog(KUrlRequester *);
 
 private:
     Project &m_project;
     Node *m_node;
 };
-
 
 } //KPlato namespace
 

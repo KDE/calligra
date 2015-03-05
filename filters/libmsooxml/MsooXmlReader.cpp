@@ -28,14 +28,14 @@
 #include <KoXmlWriter.h>
 #include <KoCharacterStyle.h>
 
-QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader)
+QDebug operator<<(QDebug dbg, const QXmlStreamReader &reader)
 {
     dbg.nospace() << "QXmlStreamReader(";
     if (reader.isStartElement()) {
         dbg.nospace() << "<";
         dbg.nospace() << reader.qualifiedName().toString().toLocal8Bit().constData();
         QString attrsString;
-        const QXmlStreamAttributes& attrs = reader.attributes();
+        const QXmlStreamAttributes &attrs = reader.attributes();
         for (int i = 0; i < attrs.count(); i++) {
             dbg.nospace() << " " << attrs[i].qualifiedName().toString().toLocal8Bit().constData();
             dbg.nospace() << "=";
@@ -64,8 +64,8 @@ QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader)
 
 using namespace MSOOXML;
 
-MsooXmlReaderContext::MsooXmlReaderContext(MSOOXML::MsooXmlRelationships* _relationships)
-        : relationships(_relationships), graphicObjectIsGroup(false)
+MsooXmlReaderContext::MsooXmlReaderContext(MSOOXML::MsooXmlRelationships *_relationships)
+    : relationships(_relationships), graphicObjectIsGroup(false)
 {
 }
 
@@ -79,15 +79,15 @@ enum State {
 };
 
 MsooXmlReader::MsooXmlReader(KoOdfWriters *writers)
-        : QXmlStreamReader()
-        , KoOdfWriters(*writers)
+    : QXmlStreamReader()
+    , KoOdfWriters(*writers)
 {
     init();
 }
 
-MsooXmlReader::MsooXmlReader(QIODevice* io, KoOdfWriters *writers)
-        : QXmlStreamReader(io)
-        , KoOdfWriters(*writers)
+MsooXmlReader::MsooXmlReader(QIODevice *io, KoOdfWriters *writers)
+    : QXmlStreamReader(io)
+    , KoOdfWriters(*writers)
 {
     init();
 }
@@ -112,7 +112,6 @@ const char MsooXmlReader::constTime[] = "time";
 const char MsooXmlReader::constBoolean[] = "boolean";
 const char MsooXmlReader::constString[] = "string";
 
-
 void MsooXmlReader::init()
 {
     m_readUndoed = false;
@@ -134,12 +133,12 @@ static const char* tokenName(QXmlStreamReader::TokenType t)
 }
 */
 
-bool MsooXmlReader::readBooleanAttr(const char* attrName, bool defaultValue) const
+bool MsooXmlReader::readBooleanAttr(const char *attrName, bool defaultValue) const
 {
     return MSOOXML::Utils::convertBooleanAttr(attributes().value(attrName).toString(), defaultValue);
 }
 
-void MsooXmlReader::raiseError(const QString & message)
+void MsooXmlReader::raiseError(const QString &message)
 {
     QXmlStreamReader::raiseError(
         m_fileName.isEmpty() ?
@@ -167,32 +166,32 @@ void MsooXmlReader::raiseError(const QString & message)
 //     m_readUndoed = true;
 // }
 
-void MsooXmlReader::raiseElNotFoundError(const char* elementName)
+void MsooXmlReader::raiseElNotFoundError(const char *elementName)
 {
     raiseError(i18n("Element \"%1\" not found", QLatin1String(elementName)));
 }
 
-void MsooXmlReader::raiseAttributeNotFoundError(const char* attrName)
+void MsooXmlReader::raiseAttributeNotFoundError(const char *attrName)
 {
     raiseError(i18n("Attribute \"%1\" not found", QLatin1String(attrName)));
 }
 
-void MsooXmlReader::raiseNSNotFoundError(const char* nsName)
+void MsooXmlReader::raiseNSNotFoundError(const char *nsName)
 {
     raiseError(i18n("Namespace \"%1\" not found", nsName));
 }
 
-void MsooXmlReader::raiseUnexpectedAttributeValueError(const QString& value, const char* attrName)
+void MsooXmlReader::raiseUnexpectedAttributeValueError(const QString &value, const char *attrName)
 {
     raiseError(i18n("Unexpected value \"%1\" of attribute \"%2\"", value, attrName));
 }
 
-void MsooXmlReader::raiseUnexpectedSecondOccurenceOfElError(const char* elementName)
+void MsooXmlReader::raiseUnexpectedSecondOccurenceOfElError(const char *elementName)
 {
     raiseError(i18n("Unexpected second occurrence of \"%1\" element", QLatin1String(elementName)));
 }
 
-bool MsooXmlReader::expectElName(const char* elementName)
+bool MsooXmlReader::expectElName(const char *elementName)
 {
     //kDebug() << elementName << "found:" << name();
     if (!isStartElement() || name() != QLatin1String(elementName)) {
@@ -202,7 +201,7 @@ bool MsooXmlReader::expectElName(const char* elementName)
     return true;
 }
 
-bool MsooXmlReader::expectElNameEnd(const char* elementName)
+bool MsooXmlReader::expectElNameEnd(const char *elementName)
 {
     //kDebug() << elementName << "found:" << name();
     if (!isEndElement() || name() != QLatin1String(elementName)) {
@@ -212,7 +211,7 @@ bool MsooXmlReader::expectElNameEnd(const char* elementName)
     return true;
 }
 
-bool MsooXmlReader::expectEl(const char* qualifiedElementName)
+bool MsooXmlReader::expectEl(const char *qualifiedElementName)
 {
     //kDebug() << qualifiedElementName << "found:" << qualifiedName();
     if (!isStartElement() || qualifiedName() != QLatin1String(qualifiedElementName)) {
@@ -222,7 +221,7 @@ bool MsooXmlReader::expectEl(const char* qualifiedElementName)
     return true;
 }
 
-bool MsooXmlReader::expectEl(const QString& qualifiedElementName)
+bool MsooXmlReader::expectEl(const QString &qualifiedElementName)
 {
     //kDebug() << qualifiedElementName << "found:" << qualifiedName();
     if (!isStartElement() || qualifiedName() != qualifiedElementName) {
@@ -232,10 +231,10 @@ bool MsooXmlReader::expectEl(const QString& qualifiedElementName)
     return true;
 }
 
-bool MsooXmlReader::expectEl(const QList<QByteArray>& qualifiedElementNames)
+bool MsooXmlReader::expectEl(const QList<QByteArray> &qualifiedElementNames)
 {
     if (isStartElement()) {
-        foreach (const QByteArray& qualifiedElementName, qualifiedElementNames) {
+        foreach (const QByteArray &qualifiedElementName, qualifiedElementNames) {
             if (qualifiedName().toString() == qualifiedElementName) {
                 //kDebug() << qualifiedElementNames << "found:" << qualifiedName();
                 return true;
@@ -243,16 +242,17 @@ bool MsooXmlReader::expectEl(const QList<QByteArray>& qualifiedElementNames)
         }
     }
     QString list;
-    foreach (const QByteArray& qualifiedElementName, qualifiedElementNames) {
-        if (!list.isEmpty())
+    foreach (const QByteArray &qualifiedElementName, qualifiedElementNames) {
+        if (!list.isEmpty()) {
             list += QLatin1String(", ");
+        }
         list += qualifiedElementName;
     }
     raiseError(i18n("None of expected elements found: %1", list));
     return false;
 }
 
-bool MsooXmlReader::expectElEnd(const QString& qualifiedElementName)
+bool MsooXmlReader::expectElEnd(const QString &qualifiedElementName)
 {
     //kDebug() << qualifiedElementName << "found:" << qualifiedName();
 //    kDebug() << kBacktrace();
@@ -263,12 +263,12 @@ bool MsooXmlReader::expectElEnd(const QString& qualifiedElementName)
     return true;
 }
 
-bool MsooXmlReader::expectElEnd(const char* qualifiedElementName)
+bool MsooXmlReader::expectElEnd(const char *qualifiedElementName)
 {
     return expectElEnd(QLatin1String(qualifiedElementName));
 }
 
-bool MsooXmlReader::expectNS(const char* nsName)
+bool MsooXmlReader::expectNS(const char *nsName)
 {
     kDebug() << namespaceUri() << (namespaceUri().compare(nsName) == 0);
     if (0 != namespaceUri().compare(nsName)) {

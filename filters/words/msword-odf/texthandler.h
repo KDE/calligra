@@ -47,7 +47,6 @@
 #include <vector>
 #include <stack>
 
-
 class Document;
 
 namespace wvWare
@@ -55,7 +54,8 @@ namespace wvWare
 class Style;
 class Parser;
 class FunctorBase;
-namespace Word97 {
+namespace Word97
+{
 struct PAP;
 }
 }
@@ -68,12 +68,11 @@ public:
     virtual wvWare::U8 nonRequiredHyphen();
 };
 
-
 class WordsTextHandler : public QObject, public wvWare::TextHandler
 {
     Q_OBJECT
 public:
-    WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
+    WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter *bodyWriter, KoGenStyles *mainStyles);
     ~WordsTextHandler();
 
     //////// TextHandler interface
@@ -81,28 +80,28 @@ public:
     virtual void sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep);
     virtual void sectionEnd();
     virtual void pageBreak();
-    virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
+    virtual void headersFound(const wvWare::HeaderFunctor &parseHeaders);
     virtual void footnoteFound(wvWare::FootnoteData data, wvWare::UString characters,
                                wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
-                               const wvWare::FootnoteFunctor& parseFootnote);
+                               const wvWare::FootnoteFunctor &parseFootnote);
     virtual void annotationFound(wvWare::UString characters,
                                  wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
-                                 const wvWare::AnnotationFunctor& parseAnnotation);
+                                 const wvWare::AnnotationFunctor &parseAnnotation);
 
     virtual void paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
     virtual void paragraphEnd();
-    virtual void fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
-    virtual void fieldSeparator(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
-    virtual void fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
-    virtual void runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
+    virtual void fieldStart(const wvWare::FLD *fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
+    virtual void fieldSeparator(const wvWare::FLD *fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
+    virtual void fieldEnd(const wvWare::FLD *fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
+    virtual void runOfText(const wvWare::UString &text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
 
-    virtual void tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
+    virtual void tableRowFound(const wvWare::TableRowFunctor &functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
     virtual void tableEndFound();
-    virtual void bookmarkStart( const wvWare::BookmarkData& data );
-    virtual void bookmarkEnd( const wvWare::BookmarkData& data );
+    virtual void bookmarkStart(const wvWare::BookmarkData &data);
+    virtual void bookmarkEnd(const wvWare::BookmarkData &data);
 
-    virtual void msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData* data);
+    virtual void msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData *data);
 
     ///////// Our own interface
 
@@ -117,7 +116,7 @@ public:
      * Paragraph can be present in {header, footer, footnote, endnote,
      * annotation, body}.  @return the actual writer.
      */
-    KoXmlWriter* currentWriter() const;
+    KoXmlWriter *currentWriter() const;
 
     /**
      * @ftc index into the font table provided by Character properties (CHP)
@@ -131,7 +130,10 @@ public:
      *
      * @return font color in the format "#RRGGBB" or an empty string.
      */
-    QString paragraphBaseFontColorBkp() const { return m_paragraphBaseFontColorBkp; }
+    QString paragraphBaseFontColorBkp() const
+    {
+        return m_paragraphBaseFontColorBkp;
+    }
 
     /**
      * Provides access to the background color of the lately processed
@@ -140,12 +142,15 @@ public:
      *
      * @return background color in the format "#RRGGBB" or an empty string.
      */
-    QString paragraphBgColor() const { return m_paragraph ? m_paragraph->currentBgColor() : QString(); }
+    QString paragraphBgColor() const
+    {
+        return m_paragraph ? m_paragraph->currentBgColor() : QString();
+    }
 
     /**
      * TODO:
      */
-    bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
+    bool writeListInfo(KoXmlWriter *writer, const wvWare::Word97::PAP &pap, const wvWare::ListInfo *listInfo);
 
     /**
      * TODO:
@@ -163,24 +168,39 @@ public:
     void closeList();
 
     // Provide access to private attributes for our handlers
-    Document* document() const { return m_document; }
-    void setDocument(Document * document) { m_document = document; }
-    void set_breakBeforePage(bool val) { m_breakBeforePage = val; }
-    bool breakBeforePage(void) const { return m_breakBeforePage; }
-    int sectionNumber(void) const { return m_sectionNumber; }
+    Document *document() const
+    {
+        return m_document;
+    }
+    void setDocument(Document *document)
+    {
+        m_document = document;
+    }
+    void set_breakBeforePage(bool val)
+    {
+        m_breakBeforePage = val;
+    }
+    bool breakBeforePage(void) const
+    {
+        return m_breakBeforePage;
+    }
+    int sectionNumber(void) const
+    {
+        return m_sectionNumber;
+    }
 
     // Communication with Document, without having to know about Document
 Q_SIGNALS:
     void sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
     void sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
-    void subDocFound(const wvWare::FunctorBase* parsingFunctor, int data);
-    void footnoteFound(const wvWare::FunctorBase* parsingFunctor, int data);
-    void annotationFound(const wvWare::FunctorBase* parsingFunctor, int data);
-    void headersFound(const wvWare::FunctorBase* parsingFunctor, int data);
-    void tableFound(Words::Table* table);
-    void inlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer);
-    void floatingObjectFound(unsigned int globalCP, KoXmlWriter* writer);
-/*     void updateListDepth(int); */
+    void subDocFound(const wvWare::FunctorBase *parsingFunctor, int data);
+    void footnoteFound(const wvWare::FunctorBase *parsingFunctor, int data);
+    void annotationFound(const wvWare::FunctorBase *parsingFunctor, int data);
+    void headersFound(const wvWare::FunctorBase *parsingFunctor, int data);
+    void tableFound(Words::Table *table);
+    void inlineObjectFound(const wvWare::PictureData &data, KoXmlWriter *writer);
+    void floatingObjectFound(unsigned int globalCP, KoXmlWriter *writer);
+    /*     void updateListDepth(int); */
 
 private:
 
@@ -193,9 +213,9 @@ private:
      */
     QString paragraphBaseFontColor() const;
 
-    KoGenStyles* m_mainStyles; //this is for collecting most of the styles
-    KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
-    Document* m_document; // The document owning this text handler
+    KoGenStyles *m_mainStyles; //this is for collecting most of the styles
+    KoXmlWriter *m_bodyWriter; //this writes to content.xml inside <office:body>
+    Document *m_document; // The document owning this text handler
 
     wvWare::SharedPtr<const wvWare::Word97::SEP> m_sep; //store section info for section end
     wvWare::SharedPtr<wvWare::Parser> m_parser;
@@ -224,15 +244,15 @@ private:
     bool m_breakBeforePage;
 
     bool m_insideFootnote;
-    KoXmlWriter* m_footnoteWriter; //write the footnote data, then add it to bodyWriter
-    QBuffer* m_footnoteBuffer; //buffer for the footnote data
+    KoXmlWriter *m_footnoteWriter; //write the footnote data, then add it to bodyWriter
+    QBuffer *m_footnoteBuffer; //buffer for the footnote data
 
     bool m_insideAnnotation;
-    KoXmlWriter* m_annotationWriter; //write the annotation data, then add it to bodyWriter
-    QBuffer* m_annotationBuffer; //buffer for the annotation data
+    KoXmlWriter *m_annotationWriter; //write the annotation data, then add it to bodyWriter
+    QBuffer *m_annotationBuffer; //buffer for the annotation data
 
     bool m_insideDrawing;
-    KoXmlWriter* m_drawingWriter; //write the drawing data, then add it to bodyWriter
+    KoXmlWriter *m_drawingWriter; //write the drawing data, then add it to bodyWriter
 
     // ************************************************
     //  Paragraph
@@ -247,9 +267,9 @@ private:
     // ************************************************
     //  Table
     // ************************************************
-    Words::Table* m_currentTable;
-    KoXmlWriter* m_tableWriter;
-    QBuffer* m_tableBuffer;
+    Words::Table *m_currentTable;
+    KoXmlWriter *m_tableWriter;
+    QBuffer *m_tableBuffer;
     QString m_floatingTable;
 
     // ************************************************
@@ -259,7 +279,7 @@ private:
     int m_currentListLevel; // tells us which list level we're on (-1 if not in a list)
     int m_currentListID;    // tracks the ID of the current list - 0 if not a list
 
-    QStack <KoXmlWriter*> m_usedListWriters;
+    QStack <KoXmlWriter *> m_usedListWriters;
 
     // Map of listID keys and listLevel/continue-list pairs
     QMap<int, QPair<quint8, bool> > m_continueListNum;
@@ -274,9 +294,9 @@ private:
 
     //save/restore (very similar to the wv2 method)
     struct State {
-        State(Words::Table* table, Paragraph* paragraph,
+        State(Words::Table *table, Paragraph *paragraph,
               int listDepth, int listID,
-              KoXmlWriter* drawingWriter, bool insideDrawing) :
+              KoXmlWriter *drawingWriter, bool insideDrawing) :
 
             table(table),
             paragraph(paragraph),
@@ -285,11 +305,11 @@ private:
             drawingWriter(drawingWriter),
             insideDrawing(insideDrawing)
         {}
-        Words::Table* table;
-        Paragraph* paragraph;
+        Words::Table *table;
+        Paragraph *paragraph;
         int listDepth; //tells us which list level we're on (-1 if not in a list)
         int listID;    //tracks the id of the current list - 0 if no list
-        KoXmlWriter* drawingWriter;
+        KoXmlWriter *drawingWriter;
         bool insideDrawing;
     };
 
@@ -302,8 +322,7 @@ private:
     // ************************************************
 
     //field type enumeration as defined in [MS-DOC.pdf] page 356
-    enum fldType
-    {
+    enum fldType {
         UNSUPPORTED = 0,
         //PARSE_ERROR = 0x01, ///< Specifies that the field was unable to be parsed.
         REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
@@ -394,8 +413,7 @@ private:
     };
 
     //save/restore for processing field (very similar to the wv2 method)
-    struct fld_State
-    {
+    struct fld_State {
         fld_State(fldType type = UNSUPPORTED) :
             m_type(type),
             m_insideField(false),
@@ -445,12 +463,12 @@ private:
 
         // Stores the field result. NOTE: Disabled, becasue we use either
         // m_writer or save the result as vanilla text.
-/*         QString m_result; */
+        /*         QString m_result; */
 
         // A writer and buffer used to interpret bookmark elements and tabs in
         // the field result (if applicable to the field type).
-        KoXmlWriter* m_writer;
-        QBuffer* m_buffer;
+        KoXmlWriter *m_writer;
+        QBuffer *m_buffer;
     };
 
     std::stack<fld_State *> m_fldStates;
@@ -482,16 +500,16 @@ private:
 public:
     // Write a <FORMAT> tag from the given CHP
     // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
-    void writeFormattedText(KoGenStyle* textStyle, const wvWare::Word97::CHP* chp,
-                            const wvWare::Word97::CHP* refChp, QString text, bool writeText, QString styleName);
+    void writeFormattedText(KoGenStyle *textStyle, const wvWare::Word97::CHP *chp,
+                            const wvWare::Word97::CHP *refChp, QString text, bool writeText, QString styleName);
 
     // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
-    void writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle,
-                     const wvWare::Style* style, bool writeContentTags, QString namedStyle);
+    void writeLayout(const wvWare::ParagraphProperties &paragraphProperties, KoGenStyle *paragraphStyle,
+                     const wvWare::Style *style, bool writeContentTags, QString namedStyle);
 
 protected:
-    QDomElement insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format);
-    QDomElement insertAnchor(const QString& fsname);
+    QDomElement insertVariable(int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString &format);
+    QDomElement insertAnchor(const QString &fsname);
 
 private:
     enum { NoShadow, Shadow, Imprint } m_shadowTextFound;

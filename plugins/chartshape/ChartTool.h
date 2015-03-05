@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KCHART_CHARTTOOL_H
 #define KCHART_CHARTTOOL_H
 
@@ -30,10 +29,8 @@
 
 class QAction;
 
-
 namespace KChart
 {
-
 
 /**
  * This is the tool for the chart shape, which is a flake-based plugin.
@@ -50,13 +47,13 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// reimplemented from superclass
-    virtual void mousePressEvent(KoPointerEvent *event) ;
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseReleaseEvent(KoPointerEvent *event);
     /// reimplemented from superclass
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     /// reimplemented from superclass
     virtual void deactivate();
     /// reimplemented from superclass
@@ -77,7 +74,7 @@ private Q_SLOTS:
     void setDataSetCustomDataRegion(DataSet *dataSet, const CellRegion &region);
     void setDataSetLabelDataRegion(DataSet *dataSet, const CellRegion &region);
     void setDataSetCategoryDataRegion(DataSet *dataSet, const CellRegion &region);
-    
+
     void setDataSetChartType(DataSet *dataSet, ChartType type);
     void setDataSetChartSubType(DataSet *dataSet, ChartSubtype subType);
 
@@ -86,39 +83,39 @@ private Q_SLOTS:
     void setDataSetShowPercent(DataSet *dataSet, bool b);
     void setDataSetShowSymbol(DataSet *dataSet, bool b);
 
-    void setDataSetPen(DataSet *dataSet, const QColor& color);
-    void setDataSetBrush(DataSet *dataSet, const QColor& color);
+    void setDataSetPen(DataSet *dataSet, const QColor &color);
+    void setDataSetBrush(DataSet *dataSet, const QColor &color);
     void setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style);
     void setDataSetAxis(DataSet *dataSet, Axis *axis);
-    
+
     // Plot Area
     void setGapBetweenBars(int percent);
     void setGapBetweenSets(int percent);
     void setPieExplodeFactor(DataSet *dataSet, int percent);
-    
+
     // Axes
-    void addAxis(AxisDimension, const QString& title = QString());
+    void addAxis(AxisDimension, const QString &title = QString());
     void removeAxis(Axis *axis);
     void setAxisShowTitle(Axis *axis, bool show);
-    void setAxisTitle(Axis *axis, const QString& title);
+    void setAxisTitle(Axis *axis, const QString &title);
     void setAxisShowGridLines(Axis *axis, bool b = true);
     void setAxisUseLogarithmicScaling(Axis *axis, bool b = true);
     void setAxisStepWidth(Axis *axis, qreal width);
     void setAxisSubStepWidth(Axis *axis, qreal width);
     void setAxisUseAutomaticStepWidth(Axis *axis, bool automatic);
     void setAxisUseAutomaticSubStepWidth(Axis *axis, bool automatic);
-    void setAxisLabelsFont(Axis *axis, const QFont& font);
+    void setAxisLabelsFont(Axis *axis, const QFont &font);
 
     // Legend
     void setShowLegend(bool show);
-    void setLegendTitle(const QString& title);
-    void setLegendFont(const QFont& font);
+    void setLegendTitle(const QString &title);
+    void setLegendFont(const QFont &font);
     void setLegendFontSize(int size);
     void setLegendOrientation(Qt::Orientation);
     void setLegendAlignment(Qt::Alignment);
     void setLegendFixedPosition(Position position);
-    void setLegendBackgroundColor(const QColor& color);
-    void setLegendFrameColor(const QColor& color);
+    void setLegendBackgroundColor(const QColor &color);
+    void setLegendFrameColor(const QColor &color);
     void setLegendShowFrame(bool show);
 
     // Called upon shape manager's selectionChanged() signal
@@ -126,10 +123,9 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace KChart
-
 
 #endif // KCHART_CHARTTOOL_H

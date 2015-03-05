@@ -39,30 +39,31 @@ KUndo2MagicString KisSelectionFilter::name()
     return KUndo2MagicString();
 }
 
-QRect KisSelectionFilter::changeRect(const QRect& rect)
+QRect KisSelectionFilter::changeRect(const QRect &rect)
 {
     return rect;
 }
 
-void KisSelectionFilter::computeBorder(qint32* circ, qint32 xradius, qint32 yradius)
+void KisSelectionFilter::computeBorder(qint32 *circ, qint32 xradius, qint32 yradius)
 {
     qint32 i;
     qint32 diameter = xradius * 2 + 1;
     double tmp;
 
     for (i = 0; i < diameter; i++) {
-        if (i > xradius)
+        if (i > xradius) {
             tmp = (i - xradius) - 0.5;
-        else if (i < xradius)
+        } else if (i < xradius) {
             tmp = (xradius - i) - 0.5;
-        else
+        } else {
             tmp = 0.0;
+        }
 
         circ[i] = (qint32) RINT(yradius / (double) xradius * sqrt(xradius * xradius - tmp * tmp));
     }
 }
 
-void KisSelectionFilter::rotatePointers(quint8** p, quint32 n)
+void KisSelectionFilter::rotatePointers(quint8 **p, quint32 n)
 {
     quint32 i;
     quint8  *p0 = p[0];
@@ -72,72 +73,78 @@ void KisSelectionFilter::rotatePointers(quint8** p, quint32 n)
     p[i] = p0;
 }
 
-void KisSelectionFilter::computeTransition(quint8* transition, quint8** buf, qint32 width)
+void KisSelectionFilter::computeTransition(quint8 *transition, quint8 **buf, qint32 width)
 {
     qint32 x = 0;
 
     if (width == 1) {
-        if (buf[1][x] > 127 && (buf[0][x] < 128 || buf[2][x] < 128))
+        if (buf[1][x] > 127 && (buf[0][x] < 128 || buf[2][x] < 128)) {
             transition[x] = 255;
-        else
+        } else {
             transition[x] = 0;
+        }
         return;
     }
     if (buf[1][x] > 127) {
         if (buf[0][x] < 128 || buf[0][x + 1] < 128 ||
-            buf[1][x + 1] < 128 ||
-            buf[2][x] < 128 || buf[2][x + 1] < 128)
+                buf[1][x + 1] < 128 ||
+                buf[2][x] < 128 || buf[2][x + 1] < 128) {
             transition[x] = 255;
-        else
+        } else {
             transition[x] = 0;
-    } else
+        }
+    } else {
         transition[x] = 0;
+    }
     for (qint32 x = 1; x < width - 1; x++) {
         if (buf[1][x] >= 128) {
             if (buf[0][x - 1] < 128 || buf[0][x] < 128 || buf[0][x + 1] < 128 ||
-                buf[1][x - 1] < 128           ||          buf[1][x + 1] < 128 ||
-                buf[2][x - 1] < 128 || buf[2][x] < 128 || buf[2][x + 1] < 128)
+                    buf[1][x - 1] < 128           ||          buf[1][x + 1] < 128 ||
+                    buf[2][x - 1] < 128 || buf[2][x] < 128 || buf[2][x + 1] < 128) {
                 transition[x] = 255;
-            else
+            } else {
                 transition[x] = 0;
-        } else
+            }
+        } else {
             transition[x] = 0;
+        }
     }
     if (buf[1][x] >= 128) {
         if (buf[0][x - 1] < 128 || buf[0][x] < 128 ||
-            buf[1][x - 1] < 128 ||
-            buf[2][x - 1] < 128 || buf[2][x] < 128)
+                buf[1][x - 1] < 128 ||
+                buf[2][x - 1] < 128 || buf[2][x] < 128) {
             transition[x] = 255;
-        else
+        } else {
             transition[x] = 0;
-    } else
+        }
+    } else {
         transition[x] = 0;
+    }
 }
-
 
 KUndo2MagicString KisErodeSelectionFilter::name()
 {
     return kundo2_i18n("Erode Selection");
 }
 
-QRect KisErodeSelectionFilter::changeRect(const QRect& rect)
+QRect KisErodeSelectionFilter::changeRect(const QRect &rect)
 {
     const qint32 radius = 1;
     return rect.adjusted(-radius, -radius, radius, radius);
 }
 
-void KisErodeSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)
+void KisErodeSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect &rect)
 {
     // Erode (radius 1 pixel) a mask (1bpp)
-    quint8* buf[3];
+    quint8 *buf[3];
 
     qint32 width = rect.width();
     qint32 height = rect.height();
 
-    quint8* out = new quint8[width];
-    for (qint32 i = 0; i < 3; i++)
+    quint8 *out = new quint8[width];
+    for (qint32 i = 0; i < 3; i++) {
         buf[i] = new quint8[width + 2];
-
+    }
 
     // load top of image
     pixelSelection->readBytes(buf[0] + 1, rect.x(), rect.y(), width, 1);
@@ -157,14 +164,24 @@ void KisErodeSelectionFilter::process(KisPixelSelectionSP pixelSelection, const 
             memcpy(buf[2], buf[1], width + 2);
         }
 
-        for (qint32 x = 0 ; x < width; x++) {
+        for (qint32 x = 0; x < width; x++) {
             qint32 min = 255;
 
-            if (buf[0][x+1] < min) min = buf[0][x+1];
-            if (buf[1][x]   < min) min = buf[1][x];
-            if (buf[1][x+1] < min) min = buf[1][x+1];
-            if (buf[1][x+2] < min) min = buf[1][x+2];
-            if (buf[2][x+1] < min) min = buf[2][x+1];
+            if (buf[0][x + 1] < min) {
+                min = buf[0][x + 1];
+            }
+            if (buf[1][x]   < min) {
+                min = buf[1][x];
+            }
+            if (buf[1][x + 1] < min) {
+                min = buf[1][x + 1];
+            }
+            if (buf[1][x + 2] < min) {
+                min = buf[1][x + 2];
+            }
+            if (buf[2][x + 1] < min) {
+                min = buf[2][x + 1];
+            }
 
             out[x] = min;
         }
@@ -173,35 +190,35 @@ void KisErodeSelectionFilter::process(KisPixelSelectionSP pixelSelection, const 
         rotatePointers(buf, 3);
     }
 
-    for (qint32 i = 0; i < 3; i++)
+    for (qint32 i = 0; i < 3; i++) {
         delete[] buf[i];
+    }
     delete[] out;
 }
-
 
 KUndo2MagicString KisDilateSelectionFilter::name()
 {
     return kundo2_i18n("Dilate Selection");
 }
 
-QRect KisDilateSelectionFilter::changeRect(const QRect& rect)
+QRect KisDilateSelectionFilter::changeRect(const QRect &rect)
 {
     const qint32 radius = 1;
-    return rect.adjusted(-radius, -radius, radius, radius); 
+    return rect.adjusted(-radius, -radius, radius, radius);
 }
 
-void KisDilateSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)
- {
+void KisDilateSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect &rect)
+{
     // dilate (radius 1 pixel) a mask (1bpp)
-    quint8* buf[3];
+    quint8 *buf[3];
 
     qint32 width = rect.width();
     qint32 height = rect.height();
 
-    quint8* out = new quint8[width];
-    for (qint32 i = 0; i < 3; i++)
+    quint8 *out = new quint8[width];
+    for (qint32 i = 0; i < 3; i++) {
         buf[i] = new quint8[width + 2];
-
+    }
 
     // load top of image
     pixelSelection->readBytes(buf[0] + 1, rect.x(), rect.y(), width, 1);
@@ -221,14 +238,24 @@ void KisDilateSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
             memcpy(buf[2], buf[1], width + 2);
         }
 
-        for (qint32 x = 0 ; x < width; x++) {
+        for (qint32 x = 0; x < width; x++) {
             qint32 max = 0;
 
-            if (buf[0][x+1] > max) max = buf[0][x+1];
-            if (buf[1][x]   > max) max = buf[1][x];
-            if (buf[1][x+1] > max) max = buf[1][x+1];
-            if (buf[1][x+2] > max) max = buf[1][x+2];
-            if (buf[2][x+1] > max) max = buf[2][x+1];
+            if (buf[0][x + 1] > max) {
+                max = buf[0][x + 1];
+            }
+            if (buf[1][x]   > max) {
+                max = buf[1][x];
+            }
+            if (buf[1][x + 1] > max) {
+                max = buf[1][x + 1];
+            }
+            if (buf[1][x + 2] > max) {
+                max = buf[1][x + 2];
+            }
+            if (buf[2][x + 1] > max) {
+                max = buf[2][x + 1];
+            }
 
             out[x] = max;
         }
@@ -237,15 +264,15 @@ void KisDilateSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         rotatePointers(buf, 3);
     }
 
-    for (qint32 i = 0; i < 3; i++)
+    for (qint32 i = 0; i < 3; i++) {
         delete[] buf[i];
+    }
     delete[] out;
 }
 
-
 KisBorderSelectionFilter::KisBorderSelectionFilter(qint32 xRadius, qint32 yRadius)
-  : m_xRadius(xRadius),
-    m_yRadius(yRadius)
+    : m_xRadius(xRadius),
+      m_yRadius(yRadius)
 {
 }
 
@@ -254,14 +281,16 @@ KUndo2MagicString KisBorderSelectionFilter::name()
     return kundo2_i18n("Border Selection");
 }
 
-QRect KisBorderSelectionFilter::changeRect(const QRect& rect)
+QRect KisBorderSelectionFilter::changeRect(const QRect &rect)
 {
     return rect.adjusted(-m_xRadius, -m_yRadius, m_xRadius, m_yRadius);
 }
 
-void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)
+void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect &rect)
 {
-    if (m_xRadius <= 0 || m_yRadius <= 0) return;
+    if (m_xRadius <= 0 || m_yRadius <= 0) {
+        return;
+    }
 
     quint8  *buf[3];
     quint8 **density;
@@ -269,46 +298,52 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
 
     if (m_xRadius == 1 && m_yRadius == 1) {
         // optimize this case specifically
-        quint8* source[3];
+        quint8 *source[3];
 
-        for (qint32 i = 0; i < 3; i++)
+        for (qint32 i = 0; i < 3; i++) {
             source[i] = new quint8[rect.width()];
+        }
 
-        quint8* transition = new quint8[rect.width()];
+        quint8 *transition = new quint8[rect.width()];
 
         pixelSelection->readBytes(source[0], rect.x(), rect.y(), rect.width(), 1);
         memcpy(source[1], source[0], rect.width());
-        if (rect.height() > 1)
+        if (rect.height() > 1) {
             pixelSelection->readBytes(source[2], rect.x(), rect.y() + 1, rect.width(), 1);
-        else
+        } else {
             memcpy(source[2], source[1], rect.width());
+        }
 
         computeTransition(transition, source, rect.width());
         pixelSelection->writeBytes(transition, rect.x(), rect.y(), rect.width(), 1);
 
         for (qint32 y = 1; y < rect.height(); y++) {
             rotatePointers(source, 3);
-            if (y + 1 < rect.height())
+            if (y + 1 < rect.height()) {
                 pixelSelection->readBytes(source[2], rect.x(), rect.y() + y + 1, rect.width(), 1);
-            else
+            } else {
                 memcpy(source[2], source[1], rect.width());
+            }
             computeTransition(transition, source, rect.width());
             pixelSelection->writeBytes(transition, rect.x(), rect.y() + y, rect.width(), 1);
         }
 
-        for (qint32 i = 0; i < 3; i++)
+        for (qint32 i = 0; i < 3; i++) {
             delete[] source[i];
+        }
         delete[] transition;
         return;
     }
 
-    qint32* max = new qint32[rect.width() + 2 * m_xRadius];
-    for (qint32 i = 0; i < (rect.width() + 2 * m_xRadius); i++)
+    qint32 *max = new qint32[rect.width() + 2 * m_xRadius];
+    for (qint32 i = 0; i < (rect.width() + 2 * m_xRadius); i++) {
         max[i] = m_yRadius + 2;
+    }
     max += m_xRadius;
 
-    for (qint32 i = 0; i < 3; i++)
+    for (qint32 i = 0; i < 3; i++) {
         buf[i] = new quint8[rect.width()];
+    }
 
     transition = new quint8*[m_yRadius + 1];
     for (qint32 i = 0; i < m_yRadius + 1; i++) {
@@ -316,7 +351,7 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         memset(transition[i], 0, rect.width() + 2 * m_xRadius);
         transition[i] += m_xRadius;
     }
-    quint8* out = new quint8[rect.width()];
+    quint8 *out = new quint8[rect.width()];
     density = new quint8*[2 * m_xRadius + 1];
     density += m_xRadius;
 
@@ -329,26 +364,29 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         double tmpx, tmpy, dist;
         quint8 a;
 
-        if (x > 0)
+        if (x > 0) {
             tmpx = x - 0.5;
-        else if (x < 0)
+        } else if (x < 0) {
             tmpx = x + 0.5;
-        else
+        } else {
             tmpx = 0.0;
+        }
 
         for (qint32 y = 0; y < (m_yRadius + 1); y++) {
-            if (y > 0)
+            if (y > 0) {
                 tmpy = y - 0.5;
-            else if (y < 0)
+            } else if (y < 0) {
                 tmpy = y + 0.5;
-            else
+            } else {
                 tmpy = 0.0;
+            }
             dist = ((tmpy * tmpy) / (m_yRadius * m_yRadius) +
                     (tmpx * tmpx) / (m_xRadius * m_xRadius));
-            if (dist < 1.0)
+            if (dist < 1.0) {
                 a = (quint8)(255 * (1.0 - sqrt(dist)));
-            else
+            } else {
                 a = 0;
+            }
             density[ x][ y] = a;
             density[ x][-y] = a;
             density[-x][ y] = a;
@@ -357,10 +395,11 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
     }
     pixelSelection->readBytes(buf[0], rect.x(), rect.y(), rect.width(), 1);
     memcpy(buf[1], buf[0], rect.width());
-    if (rect.height() > 1)
+    if (rect.height() > 1) {
         pixelSelection->readBytes(buf[2], rect.x(), rect.y() + 1, rect.width(), 1);
-    else
+    } else {
         memcpy(buf[2], buf[1], rect.width());
+    }
     computeTransition(transition[1], buf, rect.width());
 
     for (qint32 y = 1; y < m_yRadius && y + 1 < rect.height(); y++) { // set up top of image
@@ -382,35 +421,40 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         if (y < rect.height() - (m_yRadius + 1)) {
             pixelSelection->readBytes(buf[2], rect.x(), rect.y() + y + m_yRadius + 1, rect.width(), 1);
             computeTransition(transition[m_yRadius], buf, rect.width());
-        } else
+        } else {
             memcpy(transition[m_yRadius], transition[m_yRadius - 1], rect.width());
+        }
 
         for (qint32 x = 0; x < rect.width(); x++) { // update max array
             if (max[x] < 1) {
                 if (max[x] <= -m_yRadius) {
-                    if (transition[m_yRadius][x])
+                    if (transition[m_yRadius][x]) {
                         max[x] = m_yRadius;
-                    else
+                    } else {
                         max[x]--;
-                } else if (transition[-max[x]][x])
+                    }
+                } else if (transition[-max[x]][x]) {
                     max[x] = -max[x];
-                else if (transition[-max[x] + 1][x])
+                } else if (transition[-max[x] + 1][x]) {
                     max[x] = -max[x] + 1;
-                else
+                } else {
                     max[x]--;
-            } else
+                }
+            } else {
                 max[x]--;
-            if (max[x] < -m_yRadius - 1)
+            }
+            if (max[x] < -m_yRadius - 1) {
                 max[x] = -m_yRadius - 1;
+            }
         }
         quint8 last_max =  max[0][density[-1]];
         qint32 last_index = 1;
-        for (qint32 x = 0 ; x < rect.width(); x++) { // render scan line
+        for (qint32 x = 0; x < rect.width(); x++) { // render scan line
             last_index--;
             if (last_index >= 0) {
                 last_max = 0;
                 for (qint32 i = m_xRadius; i >= 0; i--)
-                    if (max[x + i] <= m_yRadius && max[x + i] >= -m_yRadius && density[i][max[x+i]] > last_max) {
+                    if (max[x + i] <= m_yRadius && max[x + i] >= -m_yRadius && density[i][max[x + i]] > last_max) {
                         last_max = density[i][max[x + i]];
                         last_index = i;
                     }
@@ -427,12 +471,14 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
             if (last_max == 0) {
                 qint32 i;
                 for (i = x + 1; i < rect.width(); i++) {
-                    if (max[i] >= -m_yRadius)
+                    if (max[i] >= -m_yRadius) {
                         break;
+                    }
                 }
                 if (i - x > m_xRadius) {
-                    for (; x < i - m_xRadius; x++)
+                    for (; x < i - m_xRadius; x++) {
                         out[x] = 0;
+                    }
                     x--;
                 }
                 last_index = m_xRadius;
@@ -442,8 +488,9 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
     }
     delete [] out;
 
-    for (qint32 i = 0; i < 3; i++)
+    for (qint32 i = 0; i < 3; i++) {
         delete buf[i];
+    }
 
     max -= m_xRadius;
     delete[] max;
@@ -454,14 +501,13 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
     }
     delete[] transition;
 
-    for (qint32 i = 0; i < m_xRadius + 1 ; i++) {
+    for (qint32 i = 0; i < m_xRadius + 1; i++) {
         density[i] -= m_yRadius;
         delete density[i];
     }
     density -= m_xRadius;
     delete[] density;
 }
-
 
 KisFeatherSelectionFilter::KisFeatherSelectionFilter(qint32 radius)
     : m_radius(radius)
@@ -473,13 +519,13 @@ KUndo2MagicString KisFeatherSelectionFilter::name()
     return kundo2_i18n("Feather Selection");
 }
 
-QRect KisFeatherSelectionFilter::changeRect(const QRect& rect)
+QRect KisFeatherSelectionFilter::changeRect(const QRect &rect)
 {
     return rect.adjusted(-m_radius, -m_radius,
                          m_radius, m_radius);
 }
 
-void KisFeatherSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)
+void KisFeatherSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect &rect)
 {
     // compute horizontal kernel
     const uint kernelSize = m_radius * 2 + 1;
@@ -490,7 +536,7 @@ void KisFeatherSelectionFilter::process(KisPixelSelectionSP pixelSelection, cons
 
     for (uint x = 0; x < kernelSize; x++) {
         uint xDistance = qAbs((int)m_radius - (int)x);
-        gaussianMatrix(0, x) = multiplicand * exp( -(qreal)((xDistance * xDistance) + (m_radius * m_radius)) * exponentMultiplicand );
+        gaussianMatrix(0, x) = multiplicand * exp(-(qreal)((xDistance * xDistance) + (m_radius * m_radius)) * exponentMultiplicand);
     }
 
     KisConvolutionKernelSP kernelHoriz = KisConvolutionKernel::fromMatrix(gaussianMatrix, 0, gaussianMatrix.sum());
@@ -508,10 +554,9 @@ void KisFeatherSelectionFilter::process(KisPixelSelectionSP pixelSelection, cons
     verticalPainter.end();
 }
 
-
 KisGrowSelectionFilter::KisGrowSelectionFilter(qint32 xRadius, qint32 yRadius)
     : m_xRadius(xRadius),
-        m_yRadius(yRadius)
+      m_yRadius(yRadius)
 {
 }
 
@@ -520,14 +565,16 @@ KUndo2MagicString KisGrowSelectionFilter::name()
     return kundo2_i18n("Grow Selection");
 }
 
-QRect KisGrowSelectionFilter::changeRect(const QRect& rect)
+QRect KisGrowSelectionFilter::changeRect(const QRect &rect)
 {
     return rect.adjusted(-m_xRadius, -m_yRadius, m_xRadius, m_yRadius);
 }
 
-void KisGrowSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)
+void KisGrowSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect &rect)
 {
-    if (m_xRadius <= 0 || m_yRadius <= 0) return;
+    if (m_xRadius <= 0 || m_yRadius <= 0) {
+        return;
+    }
 
     /**
         * Much code resembles Shrink filter, so please fix bugs
@@ -542,25 +589,27 @@ void KisGrowSelectionFilter::process(KisPixelSelectionSP pixelSelection, const Q
     for (qint32 i = 0; i < m_yRadius + 1; i++) {
         buf[i] = new quint8[rect.width()];
     }
-    quint8* buffer = new quint8[(rect.width() + 2 * m_xRadius) *(m_yRadius + 1)];
+    quint8 *buffer = new quint8[(rect.width() + 2 * m_xRadius) * (m_yRadius + 1)];
     for (qint32 i = 0; i < rect.width() + 2 * m_xRadius; i++) {
-        if (i < m_xRadius)
+        if (i < m_xRadius) {
             max[i] = buffer;
-        else if (i < rect.width() + m_xRadius)
+        } else if (i < rect.width() + m_xRadius) {
             max[i] = &buffer[(m_yRadius + 1) * (i - m_xRadius)];
-        else
+        } else {
             max[i] = &buffer[(m_yRadius + 1) * (rect.width() + m_xRadius - 1)];
+        }
 
-        for (qint32 j = 0; j < m_xRadius + 1; j++)
+        for (qint32 j = 0; j < m_xRadius + 1; j++) {
             max[i][j] = 0;
+        }
     }
     /* offset the max pointer by m_xRadius so the range of the array
         is [-m_xRadius] to [region->w + m_xRadius] */
     max += m_xRadius;
 
-    quint8* out = new quint8[ rect.width()];  // holds the new scan line we are computing
+    quint8 *out = new quint8[ rect.width()];  // holds the new scan line we are computing
 
-    qint32* circ = new qint32[ 2 * m_xRadius + 1 ]; // holds the y coords of the filter's mask
+    qint32 *circ = new qint32[ 2 * m_xRadius + 1 ]; // holds the y coords of the filter's mask
     computeBorder(circ, m_xRadius, m_yRadius);
 
     /* offset the circ pointer by m_xRadius so the range of the array
@@ -572,20 +621,21 @@ void KisGrowSelectionFilter::process(KisPixelSelectionSP pixelSelection, const Q
         pixelSelection->readBytes(buf[i + 1], rect.x(), rect.y() + i, rect.width(), 1);
     }
 
-    for (qint32 x = 0; x < rect.width() ; x++) { // set up max for top of image
+    for (qint32 x = 0; x < rect.width(); x++) { // set up max for top of image
         max[x][0] = 0;         // buf[0][x] is always 0
         max[x][1] = buf[1][x]; // MAX (buf[1][x], max[x][0]) always = buf[1][x]
         for (qint32 j = 2; j < m_yRadius + 1; j++) {
-            max[x][j] = MAX(buf[j][x], max[x][j-1]);
+            max[x][j] = MAX(buf[j][x], max[x][j - 1]);
         }
     }
 
     for (qint32 y = 0; y < rect.height(); y++) {
         rotatePointers(buf, m_yRadius + 1);
-        if (y < rect.height() - (m_yRadius))
+        if (y < rect.height() - (m_yRadius)) {
             pixelSelection->readBytes(buf[m_yRadius], rect.x(), rect.y() + y + m_yRadius, rect.width(), 1);
-        else
+        } else {
             memset(buf[m_yRadius], 0, rect.width());
+        }
         for (qint32 x = 0; x < rect.width(); x++) { /* update max array */
             for (qint32 i = m_yRadius; i > 0; i--) {
                 max[x][i] = MAX(MAX(max[x][i - 1], buf[i - 1][x]), buf[i][x]);
@@ -597,9 +647,9 @@ void KisGrowSelectionFilter::process(KisPixelSelectionSP pixelSelection, const Q
         for (qint32 x = 0; x < rect.width(); x++) { /* render scan line */
             last_index--;
             if (last_index >= 0) {
-                if (last_max == 255)
+                if (last_max == 255) {
                     out[x] = 255;
-                else {
+                } else {
                     last_max = 0;
                     for (qint32 i = m_xRadius; i >= 0; i--)
                         if (last_max < max[x + i][circ[i]]) {
@@ -628,12 +678,12 @@ void KisGrowSelectionFilter::process(KisPixelSelectionSP pixelSelection, const Q
     delete[] circ;
     delete[] buffer;
     delete[] max;
-    for (qint32 i = 0; i < m_yRadius + 1; i++)
+    for (qint32 i = 0; i < m_yRadius + 1; i++) {
         delete[] buf[i];
+    }
     delete[] buf;
     delete[] out;
 }
-
 
 KisShrinkSelectionFilter::KisShrinkSelectionFilter(qint32 xRadius, qint32 yRadius, bool edgeLock)
     : m_xRadius(xRadius),
@@ -647,14 +697,16 @@ KUndo2MagicString KisShrinkSelectionFilter::name()
     return kundo2_i18n("Shrink Selection");
 }
 
-QRect KisShrinkSelectionFilter::changeRect(const QRect& rect)
+QRect KisShrinkSelectionFilter::changeRect(const QRect &rect)
 {
     return rect.adjusted(-m_xRadius, -m_yRadius, m_xRadius, m_yRadius);
 }
 
-void KisShrinkSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)
+void KisShrinkSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect &rect)
 {
-    if (m_xRadius <= 0 || m_yRadius <= 0) return;
+    if (m_xRadius <= 0 || m_yRadius <= 0) {
+        return;
+    }
 
     /*
         pretty much the same as fatten_region only different
@@ -675,66 +727,74 @@ void KisShrinkSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
     }
 
     qint32 buffer_size = (rect.width() + 2 * m_xRadius + 1) * (m_yRadius + 1);
-    quint8* buffer = new quint8[buffer_size];
+    quint8 *buffer = new quint8[buffer_size];
 
-    if (m_edgeLock)
+    if (m_edgeLock) {
         memset(buffer, 255, buffer_size);
-    else
+    } else {
         memset(buffer, 0, buffer_size);
+    }
 
     for (qint32 i = 0; i < rect.width() + 2 * m_xRadius; i++) {
         if (i < m_xRadius)
-            if (m_edgeLock)
+            if (m_edgeLock) {
                 max[i] = buffer;
-            else
+            } else {
                 max[i] = &buffer[(m_yRadius + 1) * (rect.width() + m_xRadius)];
-        else if (i < rect.width() + m_xRadius)
+            }
+        else if (i < rect.width() + m_xRadius) {
             max[i] = &buffer[(m_yRadius + 1) * (i - m_xRadius)];
-        else if (m_edgeLock)
+        } else if (m_edgeLock) {
             max[i] = &buffer[(m_yRadius + 1) * (rect.width() + m_xRadius - 1)];
-        else
+        } else {
             max[i] = &buffer[(m_yRadius + 1) * (rect.width() + m_xRadius)];
+        }
     }
     if (!m_edgeLock)
-        for (qint32 j = 0 ; j < m_xRadius + 1; j++) max[0][j] = 0;
+        for (qint32 j = 0; j < m_xRadius + 1; j++) {
+            max[0][j] = 0;
+        }
 
     // offset the max pointer by m_xRadius so the range of the array is [-m_xRadius] to [region->w + m_xRadius]
     max += m_xRadius;
 
-    quint8* out = new quint8[rect.width()]; // holds the new scan line we are computing
+    quint8 *out = new quint8[rect.width()]; // holds the new scan line we are computing
 
-    qint32* circ = new qint32[2 * m_xRadius + 1]; // holds the y coords of the filter's mask
+    qint32 *circ = new qint32[2 * m_xRadius + 1]; // holds the y coords of the filter's mask
 
     computeBorder(circ, m_xRadius, m_yRadius);
 
     // offset the circ pointer by m_xRadius so the range of the array is [-m_xRadius] to [m_xRadius]
     circ += m_xRadius;
 
-    for (qint32 i = 0; i < m_yRadius && i < rect.height(); i++) // load top of image
+    for (qint32 i = 0; i < m_yRadius && i < rect.height(); i++) { // load top of image
         pixelSelection->readBytes(buf[i + 1], rect.x(), rect.y() + i, rect.width(), 1);
+    }
 
-    if (m_edgeLock)
+    if (m_edgeLock) {
         memcpy(buf[0], buf[1], rect.width());
-    else
+    } else {
         memset(buf[0], 0, rect.width());
-
+    }
 
     for (qint32 x = 0; x < rect.width(); x++) { // set up max for top of image
         max[x][0] = buf[0][x];
-        for (qint32 j = 1; j < m_yRadius + 1; j++)
-            max[x][j] = MIN(buf[j][x], max[x][j-1]);
+        for (qint32 j = 1; j < m_yRadius + 1; j++) {
+            max[x][j] = MIN(buf[j][x], max[x][j - 1]);
+        }
     }
 
     for (qint32 y = 0; y < rect.height(); y++) {
         rotatePointers(buf, m_yRadius + 1);
-        if (y < rect.height() - m_yRadius)
+        if (y < rect.height() - m_yRadius) {
             pixelSelection->readBytes(buf[m_yRadius], rect.x(), rect.y() + y + m_yRadius, rect.width(), 1);
-        else if (m_edgeLock)
+        } else if (m_edgeLock) {
             memcpy(buf[m_yRadius], buf[m_yRadius - 1], rect.width());
-        else
+        } else {
             memset(buf[m_yRadius], 0, rect.width());
+        }
 
-        for (qint32 x = 0 ; x < rect.width(); x++) { // update max array
+        for (qint32 x = 0; x < rect.width(); x++) { // update max array
             for (qint32 i = m_yRadius; i > 0; i--) {
                 max[x][i] = MIN(MIN(max[x][i - 1], buf[i - 1][x]), buf[i][x]);
             }
@@ -743,12 +803,12 @@ void KisShrinkSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         last_max =  max[0][circ[-1]];
         last_index = 0;
 
-        for (qint32 x = 0 ; x < rect.width(); x++) { // render scan line
+        for (qint32 x = 0; x < rect.width(); x++) { // render scan line
             last_index--;
             if (last_index >= 0) {
-                if (last_max == 0)
+                if (last_max == 0) {
                     out[x] = 0;
-                else {
+                } else {
                     last_max = 255;
                     for (qint32 i = m_xRadius; i >= 0; i--)
                         if (last_max > max[x + i][circ[i]]) {
@@ -778,25 +838,25 @@ void KisShrinkSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
     delete[] circ;
     delete[] buffer;
     delete[] max;
-    for (qint32 i = 0; i < m_yRadius + 1; i++)
+    for (qint32 i = 0; i < m_yRadius + 1; i++) {
         delete buf[i];
+    }
     delete[] buf;
     delete[] out;
 }
-
 
 KUndo2MagicString KisSmoothSelectionFilter::name()
 {
     return kundo2_i18n("Smooth Selection");
 }
 
-QRect KisSmoothSelectionFilter::changeRect(const QRect& rect)
+QRect KisSmoothSelectionFilter::changeRect(const QRect &rect)
 {
     const qint32 radius = 1;
     return rect.adjusted(-radius, -radius, radius, radius);
 }
 
-void KisSmoothSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)
+void KisSmoothSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect &rect)
 {
     // Simple convolution filter to smooth a mask (1bpp)
     quint8      *buf[3];
@@ -804,11 +864,10 @@ void KisSmoothSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
     qint32 width = rect.width();
     qint32 height = rect.height();
 
-
-    quint8* out = new quint8[width];
-    for (qint32 i = 0; i < 3; i++)
+    quint8 *out = new quint8[width];
+    for (qint32 i = 0; i < 3; i++) {
         buf[i] = new quint8[width + 2];
-
+    }
 
     // load top of image
     pixelSelection->readBytes(buf[0] + 1, rect.x(), rect.y(), width, 1);
@@ -828,10 +887,10 @@ void KisSmoothSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
             memcpy(buf[2], buf[1], width + 2);
         }
 
-        for (qint32 x = 0 ; x < width; x++) {
-            qint32 value = (buf[0][x] + buf[0][x+1] + buf[0][x+2] +
-                            buf[1][x] + buf[2][x+1] + buf[1][x+2] +
-                            buf[2][x] + buf[1][x+1] + buf[2][x+2]);
+        for (qint32 x = 0; x < width; x++) {
+            qint32 value = (buf[0][x] + buf[0][x + 1] + buf[0][x + 2] +
+                            buf[1][x] + buf[2][x + 1] + buf[1][x + 2] +
+                            buf[2][x] + buf[1][x + 1] + buf[2][x + 2]);
 
             out[x] = value / 9;
         }
@@ -840,24 +899,24 @@ void KisSmoothSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         rotatePointers(buf, 3);
     }
 
-    for (qint32 i = 0; i < 3; i++)
+    for (qint32 i = 0; i < 3; i++) {
         delete[] buf[i];
+    }
     delete[] out;
 }
-
 
 KUndo2MagicString KisInvertSelectionFilter::name()
 {
     return kundo2_i18n("Invert Selection");
 }
 
-QRect KisInvertSelectionFilter::changeRect(const QRect& rect)
+QRect KisInvertSelectionFilter::changeRect(const QRect &rect)
 {
     Q_UNUSED(rect);
     return QRect();
 }
 
-void KisInvertSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)
+void KisInvertSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect &rect)
 {
     Q_UNUSED(rect);
     pixelSelection->invert();

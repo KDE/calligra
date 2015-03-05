@@ -39,9 +39,11 @@ public:
         layoutedMarkupRanges[KoTextBlockData::Grammar] = false;
     }
 
-    ~Private() {
-        if (border && !border->deref())
+    ~Private()
+    {
+        if (border && !border->deref()) {
             delete border;
+        }
         delete paintStrategy;
     }
     qreal counterWidth;
@@ -62,7 +64,7 @@ public:
 
 KoTextBlockData::KoTextBlockData(QTextBlock &block)
     : d(block.userData() ? dynamic_cast<KoTextBlockData::Private *>(block.userData())
-                         : new Private())
+        : new Private())
 {
     block.setUserData(d);
 }
@@ -77,7 +79,6 @@ KoTextBlockData::~KoTextBlockData()
 {
     // explicitly do not delete the d-pointer here
 }
-
 
 void KoTextBlockData::appendMarkup(MarkupType type, int firstChar, int lastChar)
 {
@@ -161,11 +162,13 @@ qreal KoTextBlockData::counterWidth() const
 
 void KoTextBlockData::setBorder(KoTextBlockBorderData *border)
 {
-    if (d->border && !d->border->deref())
+    if (d->border && !d->border->deref()) {
         delete d->border;
+    }
     d->border = border;
-    if (d->border)
+    if (d->border) {
         d->border->ref();
+    }
 }
 
 void KoTextBlockData::setCounterWidth(qreal width)

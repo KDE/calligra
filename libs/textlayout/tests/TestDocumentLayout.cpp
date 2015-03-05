@@ -82,13 +82,17 @@ void TestDocumentLayout::testHitTest()
     int lines = 0, parag = 0;
     qreal paragOffets[3];
     while (1) {
-        if (!block.isValid()) break;
+        if (!block.isValid()) {
+            break;
+        }
         paragOffets[parag++] = offset;
         QTextLayout *txtLayout = block.layout();
         txtLayout->beginLayout();
         while (1) {
             QTextLine line = txtLayout->createLine();
-            if (!line.isValid()) break;
+            if (!line.isValid()) {
+                break;
+            }
             ++lines;
             line.setLineWidth(50);
             line.setPosition(QPointF(20, offset));
@@ -101,7 +105,7 @@ void TestDocumentLayout::testHitTest()
 
     m_layout->layout();
 
-    MockRootAreaProvider *p = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *p = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     QVERIFY(p->m_area);
 
     QCOMPARE(lines, 8);
@@ -135,7 +139,7 @@ void TestDocumentLayout::testRootAreaZeroWidth()
 {
     setupTest("a");
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     provider->setSuggestedRect(QRectF(10., 10., 0., 200.));
 
     m_layout->layout();
@@ -146,9 +150,9 @@ void TestDocumentLayout::testRootAreaZeroWidth()
     QVERIFY(!provider->m_area->virginPage());
     QVERIFY(provider->m_area->nextStartOfArea());
     QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
-    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(10.,10.));
+    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(10., 10.));
     //QCOMPARE(provider->m_area->boundingRect().height(), qreal(14.4));
-    QCOMPARE(provider->m_area->referenceRect().topLeft(), QPointF(10.,10.));
+    QCOMPARE(provider->m_area->referenceRect().topLeft(), QPointF(10., 10.));
     //QCOMPARE(provider->m_area->referenceRect().bottomLeft(), QPointF(0.,14.4));
 }
 
@@ -156,8 +160,8 @@ void TestDocumentLayout::testRootAreaZeroHeight()
 {
     setupTest("a");
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
-    provider->setSuggestedRect(QRectF(10., 10., 200.,0.));
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
+    provider->setSuggestedRect(QRectF(10., 10., 200., 0.));
 
     m_layout->layout();
 
@@ -167,15 +171,15 @@ void TestDocumentLayout::testRootAreaZeroHeight()
     QVERIFY(!provider->m_area->virginPage()); // should not be virigin any longer cause we added text
     QVERIFY(provider->m_area->nextStartOfArea());
     QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea())); // start- and end-iterator should not be equal cause we added text
-    QCOMPARE(provider->m_area->boundingRect(), QRectF(10.,10.,200.,0.));
-    QCOMPARE(provider->m_area->referenceRect(), QRectF(10.,10.,200.,0.));
+    QCOMPARE(provider->m_area->boundingRect(), QRectF(10., 10., 200., 0.));
+    QCOMPARE(provider->m_area->referenceRect(), QRectF(10., 10., 200., 0.));
 }
 
 void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
 {
     setupTest("a");
 
-    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider *>(m_layout->provider());
     provider->setSuggestedRect(QRectF(10., 10., 0., 0.));
 
     m_layout->layout();
@@ -186,10 +190,10 @@ void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
     QVERIFY(!provider->m_area->virginPage());
     QVERIFY(provider->m_area->nextStartOfArea());
     QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
-    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(10.,10.));
+    QCOMPARE(provider->m_area->boundingRect().topLeft(), QPointF(10., 10.));
     QCOMPARE(provider->m_area->boundingRect().height(), qreal(0.));
     //QCOMPARE(provider->m_area->boundingRect().width(), qreal(6.67188));
-    QCOMPARE(provider->m_area->referenceRect(), QRectF(10.,10.,0.,0.));
+    QCOMPARE(provider->m_area->referenceRect(), QRectF(10., 10., 0., 0.));
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)

@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include "ColorSelectorItem.h"
 #include <plugins/extensions/dockers/advancedcolorselector/kis_color_selector_component.h>
 #include <plugins/extensions/dockers/advancedcolorselector/kis_color_selector_ring.h>
@@ -32,11 +31,10 @@
 #include <QTimer>
 #include "kis_display_color_converter.h"
 
-
 class ColorSelectorItem::Private
 {
 public:
-    Private(ColorSelectorItem* qq)
+    Private(ColorSelectorItem *qq)
         : q(qq)
         , selector(new KisColorSelector)
         , view(0)
@@ -74,40 +72,43 @@ public:
     void repaint();
     QImage paintedItem;
 
-    ColorSelectorItem* q;
+    ColorSelectorItem *q;
 
-    KisColorSelector* selector;
+    KisColorSelector *selector;
 
-    KisColorSelectorRing* ring;
-    KisColorSelectorTriangle* triangle;
-    KisColorSelectorSimple* slider;
-    KisColorSelectorSimple* square;
-    KisColorSelectorWheel* wheel;
+    KisColorSelectorRing *ring;
+    KisColorSelectorTriangle *triangle;
+    KisColorSelectorSimple *slider;
+    KisColorSelectorSimple *square;
+    KisColorSelectorWheel *wheel;
 
-    KisColorSelectorComponent* main;
-    KisColorSelectorComponent* sub;
+    KisColorSelectorComponent *main;
+    KisColorSelectorComponent *sub;
 
-    KisViewManager* view;
+    KisViewManager *view;
     Acs::ColorRole colorRole;
     KoColor currentColor;
-    KisColorSelectorComponent* grabbingComponent;
+    KisColorSelectorComponent *grabbingComponent;
 
-    void commitColor(const KoColor& color, Acs::ColorRole role);
+    void commitColor(const KoColor &color, Acs::ColorRole role);
     bool colorUpdateAllowed;
     bool changeBackground;
     bool shown;
-    QTimer* repaintTimer;
+    QTimer *repaintTimer;
 
     void colorChangedImpl(const KoColor &color, Acs::ColorRole role);
 };
 
-void ColorSelectorItem::Private::commitColor(const KoColor& color, Acs::ColorRole role)
+void ColorSelectorItem::Private::commitColor(const KoColor &color, Acs::ColorRole role)
 {
-    if (!view->canvas())
+    if (!view->canvas()) {
         return;
+    }
 
     KoColor currentColor = Acs::currentColor(view->resourceProvider(), role);
-    if (color == currentColor) return;
+    if (color == currentColor) {
+        return;
+    }
 
     colorUpdateAllowed = false;
     Acs::setCurrentColor(view->resourceProvider(), role, color);
@@ -116,12 +117,12 @@ void ColorSelectorItem::Private::commitColor(const KoColor& color, Acs::ColorRol
     colorUpdateAllowed = true;
 }
 
-ColorSelectorItem::ColorSelectorItem(QDeclarativeItem* parent)
+ColorSelectorItem::ColorSelectorItem(QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
     , d(new Private(this))
 {
-    setFlag( QGraphicsItem::ItemHasNoContents, false );
-    setAcceptedMouseButtons( Qt::LeftButton | Qt::RightButton );
+    setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setAcceptedMouseButtons(Qt::LeftButton | Qt::RightButton);
 }
 
 ColorSelectorItem::~ColorSelectorItem()
@@ -129,10 +130,11 @@ ColorSelectorItem::~ColorSelectorItem()
     delete d;
 }
 
-void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void ColorSelectorItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if(!d->shown)
+    if (!d->shown) {
         return;
+    }
     Q_UNUSED(option)
     Q_UNUSED(widget)
     painter->drawImage(boundingRect(), d->paintedItem);
@@ -142,8 +144,9 @@ void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 void ColorSelectorItem::Private::repaint()
 {
     paintedItem = QImage(q->boundingRect().size().toSize(), QImage::Format_ARGB32_Premultiplied);
-    if(paintedItem.isNull())
+    if (paintedItem.isNull()) {
         return;
+    }
     paintedItem.fill(Qt::transparent);
     QPainter painter;
     painter.begin(&paintedItem);
@@ -153,47 +156,35 @@ void ColorSelectorItem::Private::repaint()
     q->update();
 }
 
-void ColorSelectorItem::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+void ColorSelectorItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     QRectF bounds = boundingRect();
-    if (d->selector->configuration().subType==KisColorSelector::Ring)
-    {
-        d->ring->setGeometry(bounds.x(),bounds.y(),bounds.width(), bounds.height());
-        if (d->selector->configuration().mainType==KisColorSelector::Triangle)
-        {
-            d->triangle->setGeometry(bounds.width()/2 - d->ring->innerRadius(),
-                                     bounds.height()/2 - d->ring->innerRadius(),
-                                     d->ring->innerRadius()*2,
-                                     d->ring->innerRadius()*2);
-        }
-        else
-        {
-            int size = d->ring->innerRadius()*2/sqrt(2.);
-            d->square->setGeometry(bounds.width()/2 - size/2,
-                                   bounds.height()/2 - size/2,
+    if (d->selector->configuration().subType == KisColorSelector::Ring) {
+        d->ring->setGeometry(bounds.x(), bounds.y(), bounds.width(), bounds.height());
+        if (d->selector->configuration().mainType == KisColorSelector::Triangle) {
+            d->triangle->setGeometry(bounds.width() / 2 - d->ring->innerRadius(),
+                                     bounds.height() / 2 - d->ring->innerRadius(),
+                                     d->ring->innerRadius() * 2,
+                                     d->ring->innerRadius() * 2);
+        } else {
+            int size = d->ring->innerRadius() * 2 / sqrt(2.);
+            d->square->setGeometry(bounds.width() / 2 - size / 2,
+                                   bounds.height() / 2 - size / 2,
                                    size,
                                    size);
         }
-    }
-    else
-    {
+    } else {
         // type wheel and square
-        if (d->selector->configuration().mainType==KisColorSelector::Wheel)
-        {
-            d->main->setGeometry(bounds.x(), bounds.y() + height()*0.1, bounds.width(), bounds.height()*0.9);
-            d->sub->setGeometry( bounds.x(), bounds.y(),                bounds.width(), bounds.height()*0.1);
-        }
-        else
-        {
-            if (bounds.height()>bounds.width())
-            {
-                d->main->setGeometry(bounds.x(), bounds.y() + bounds.height()*0.1, bounds.width(), bounds.height()*0.9);
-                d->sub->setGeometry( bounds.x(), bounds.y(),                       bounds.width(), bounds.height()*0.1);
-            }
-            else
-            {
-                d->main->setGeometry(bounds.x(), bounds.y() + bounds.height()*0.1, bounds.width(), bounds.height()*0.9);
-                d->sub->setGeometry( bounds.x(), bounds.y(),                       bounds.width(), bounds.height()*0.1);
+        if (d->selector->configuration().mainType == KisColorSelector::Wheel) {
+            d->main->setGeometry(bounds.x(), bounds.y() + height() * 0.1, bounds.width(), bounds.height() * 0.9);
+            d->sub->setGeometry(bounds.x(), bounds.y(),                bounds.width(), bounds.height() * 0.1);
+        } else {
+            if (bounds.height() > bounds.width()) {
+                d->main->setGeometry(bounds.x(), bounds.y() + bounds.height() * 0.1, bounds.width(), bounds.height() * 0.9);
+                d->sub->setGeometry(bounds.x(), bounds.y(),                       bounds.width(), bounds.height() * 0.1);
+            } else {
+                d->main->setGeometry(bounds.x(), bounds.y() + bounds.height() * 0.1, bounds.width(), bounds.height() * 0.9);
+                d->sub->setGeometry(bounds.x(), bounds.y(),                       bounds.width(), bounds.height() * 0.1);
             }
         }
     }
@@ -206,10 +197,10 @@ void ColorSelectorItem::geometryChanged(const QRectF& newGeometry, const QRectF&
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
-void ColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void ColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     d->colorRole = d->changeBackground ?
-        Acs::Background : Acs::buttonToRole(event->button());
+                   Acs::Background : Acs::buttonToRole(event->button());
 
     if (d->main->wantsGrab(event->pos().x(), event->pos().y())) {
         d->grabbingComponent = d->main;
@@ -220,20 +211,19 @@ void ColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
     mouseEvent(event);
 }
 
-void ColorSelectorItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+void ColorSelectorItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     mouseEvent(event);
 }
 
-void ColorSelectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* /*event*/)
+void ColorSelectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent * /*event*/)
 {
-    d->grabbingComponent=0;
+    d->grabbingComponent = 0;
 }
 
-void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent* event)
+void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (d->grabbingComponent && (event->buttons()&Qt::LeftButton || event->buttons()&Qt::RightButton))
-    {
+    if (d->grabbingComponent && (event->buttons()&Qt::LeftButton || event->buttons()&Qt::RightButton)) {
         d->grabbingComponent->mouseEvent(event->pos().x(), event->pos().y());
 
         qreal alpha = d->currentColor.opacityF();
@@ -244,14 +234,14 @@ void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-QObject* ColorSelectorItem::view() const
+QObject *ColorSelectorItem::view() const
 {
     return d->view;
 }
 
-void ColorSelectorItem::setView(QObject* newView)
+void ColorSelectorItem::setView(QObject *newView)
 {
-    d->view = qobject_cast<KisViewManager*>( newView );
+    d->view = qobject_cast<KisViewManager *>(newView);
     if (d->view) {
         connect(d->view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)),
                 this, SLOT(fgColorChanged(KoColor)));
@@ -274,9 +264,9 @@ void ColorSelectorItem::setChangeBackground(bool newChangeBackground)
     d->changeBackground = newChangeBackground;
     d->colorRole = newChangeBackground ? Acs::Background : Acs::Foreground;
     emit changeBackgroundChanged();
-    if (!d->view)
+    if (!d->view) {
         return;
-
+    }
 
     d->currentColor = Acs::currentColor(d->view->resourceProvider(), d->colorRole);
 
@@ -307,10 +297,16 @@ void ColorSelectorItem::setAlpha(int percentValue)
 
 void ColorSelectorItem::Private::colorChangedImpl(const KoColor &newColor, Acs::ColorRole role)
 {
-    if (colorRole != role) return;
-    if (colorUpdateAllowed == false) return;
+    if (colorRole != role) {
+        return;
+    }
+    if (colorUpdateAllowed == false) {
+        return;
+    }
 
-    if(newColor == currentColor) return;
+    if (newColor == currentColor) {
+        return;
+    }
 
     currentColor = newColor;
     main->setColor(newColor);
@@ -321,12 +317,12 @@ void ColorSelectorItem::Private::colorChangedImpl(const KoColor &newColor, Acs::
     repaintTimer->start();
 }
 
-void ColorSelectorItem::fgColorChanged(const KoColor& newColor)
+void ColorSelectorItem::fgColorChanged(const KoColor &newColor)
 {
     d->colorChangedImpl(newColor, Acs::Foreground);
 }
 
-void ColorSelectorItem::bgColorChanged(const KoColor& newColor)
+void ColorSelectorItem::bgColorChanged(const KoColor &newColor)
 {
     d->colorChangedImpl(newColor, Acs::Background);
 }

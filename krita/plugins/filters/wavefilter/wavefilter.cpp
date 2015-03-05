@@ -59,12 +59,14 @@ class KisSinusoidalWaveCurve : public KisWaveCurve
 {
 public:
 
-    KisSinusoidalWaveCurve(int amplitude, int wavelength, int shift) : m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift) {
+    KisSinusoidalWaveCurve(int amplitude, int wavelength, int shift) : m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift)
+    {
     }
 
     virtual ~KisSinusoidalWaveCurve() {}
 
-    virtual double valueAt(int x, int y) {
+    virtual double valueAt(int x, int y)
+    {
         return y + m_amplitude * cos((double)(m_shift + x) / m_wavelength);
     }
 private:
@@ -75,18 +77,20 @@ class KisTriangleWaveCurve : public KisWaveCurve
 {
 public:
 
-    KisTriangleWaveCurve(int amplitude, int wavelength, int shift) :  m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift) {
+    KisTriangleWaveCurve(int amplitude, int wavelength, int shift) :  m_amplitude(amplitude), m_wavelength(wavelength), m_shift(shift)
+    {
     }
 
     virtual ~KisTriangleWaveCurve() {}
 
-    virtual double valueAt(int x, int y) {
-        return y +  m_amplitude * pow(-1.0, (m_shift + x) / m_wavelength)  *(0.5 - (double)((m_shift + x) % m_wavelength) / m_wavelength);
+    virtual double valueAt(int x, int y)
+    {
+        return y +  m_amplitude * pow(-1.0, (m_shift + x) / m_wavelength)  * (0.5 - (double)((m_shift + x) % m_wavelength) / m_wavelength);
     }
 private:
     int m_amplitude, m_wavelength, m_shift;
 }; KritaWaveFilter::KritaWaveFilter(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisFilterRegistry::instance()->add(new KisFilterWave());
 }
@@ -103,9 +107,9 @@ KisFilterWave::KisFilterWave() : KisFilter(id(), categoryOther(), i18n("&Wave...
 
 }
 
-KisFilterConfiguration* KisFilterWave::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisFilterWave::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("wave", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("wave", 1);
     config->setProperty("horizontalwavelength", 50);
     config->setProperty("horizontalshift", 50);
     config->setProperty("horizontalamplitude", 4);
@@ -117,21 +121,23 @@ KisFilterConfiguration* KisFilterWave::factoryConfiguration(const KisPaintDevice
     return config;
 }
 
-KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget *KisFilterWave::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP) const
 {
-    return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
+    return new KisWdgWave((KisFilter *)this, (QWidget *)parent);
 }
 
 void KisFilterWave::processImpl(KisPaintDeviceSP device,
-                                const QRect& applyRect,
-                                const KisFilterConfiguration* config,
-                                KoUpdater* progressUpdater
-                                ) const
+                                const QRect &applyRect,
+                                const KisFilterConfiguration *config,
+                                KoUpdater *progressUpdater
+                               ) const
 {
     Q_ASSERT(device.data() != 0);
 
     int cost = (applyRect.width() * applyRect.height()) / 100;
-    if (cost == 0) cost = 1;
+    if (cost == 0) {
+        cost = 1;
+    }
     int count = 0;
 
     QVariant value;
@@ -144,30 +150,34 @@ void KisFilterWave::processImpl(KisPaintDeviceSP device,
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
     int verticalshape = (config && config->getProperty("verticalshape", value)) ? value.toInt() : 0;
     KisSequentialIterator dstIt(device, applyRect);
-    KisWaveCurve* verticalcurve;
-    if (verticalshape == 1)
+    KisWaveCurve *verticalcurve;
+    if (verticalshape == 1) {
         verticalcurve = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
-    else
+    } else {
         verticalcurve = new KisSinusoidalWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
-    KisWaveCurve* horizontalcurve;
-    if (horizontalshape == 1)
+    }
+    KisWaveCurve *horizontalcurve;
+    if (horizontalshape == 1) {
         horizontalcurve = new KisTriangleWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
-    else
+    } else {
         horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
-    
+    }
+
     KisRandomSubAccessorSP srcRSA = device->createRandomSubAccessor();
     do {
         double xv = horizontalcurve->valueAt(dstIt.y(), dstIt.x());
         double yv = verticalcurve->valueAt(dstIt.x(), dstIt.y());
         srcRSA->moveTo(QPointF(xv, yv));
         srcRSA->sampledOldRawData(dstIt.rawData());
-        if (progressUpdater) progressUpdater->setProgress((++count) / cost);
+        if (progressUpdater) {
+            progressUpdater->setProgress((++count) / cost);
+        }
     } while (dstIt.nextPixel());
     delete horizontalcurve;
     delete verticalcurve;
 }
 
-QRect KisFilterWave::neededRect(const QRect& rect, const KisFilterConfiguration* config) const
+QRect KisFilterWave::neededRect(const QRect &rect, const KisFilterConfiguration *config) const
 {
     QVariant value;
     int horizontalamplitude = (config && config->getProperty("horizontalamplitude", value)) ? value.toInt() : 4;

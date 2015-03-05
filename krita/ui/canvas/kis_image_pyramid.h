@@ -28,7 +28,6 @@
 #include <kis_paint_device.h>
 #include "kis_projection_backend.h"
 
-
 class KisImagePyramid : QObject, public KisProjectionBackend
 {
     Q_OBJECT
@@ -39,21 +38,21 @@ public:
 
     void setImage(KisImageWSP newImage);
     void setImageSize(qint32 w, qint32 h);
-    void setMonitorProfile(const KoColorProfile* monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
+    void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
     void setChannelFlags(const QBitArray &channelFlags);
-    void setDisplayFilter(KisDisplayFilter* displayFilter);
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
     void updateCache(const QRect &dirtyImageRect);
     void recalculateCache(KisPPUpdateInfoSP info);
 
     KisImagePatch getNearestPatch(KisPPUpdateInfoSP info);
-    void drawFromOriginalImage(QPainter& gc, KisPPUpdateInfoSP info);
+    void drawFromOriginalImage(QPainter &gc, KisPPUpdateInfoSP info);
 
     /**
      * Render the projection onto a QImage.
      * Color profiling occurs here
      */
     QImage convertToQImage(qreal scale,
-                           const QRect& unscaledRect,
+                           const QRect &unscaledRect,
                            enum Qt::TransformationMode transformMode);
 
     QImage convertToQImage(qreal scale,
@@ -67,11 +66,11 @@ public:
      * Color profiling accurs here
      */
     void drawImage(qreal scale,
-                   QPainter& gc,
-                   const QPoint& topLeftScaled,
-                   const QRect& unscaledSourceRect);
+                   QPainter &gc,
+                   const QPoint &topLeftScaled,
+                   const QRect &unscaledSourceRect);
 
-    void alignSourceRect(QRect& rect, qreal scale);
+    void alignSourceRect(QRect &rect, qreal scale);
 
 private:
 
@@ -84,8 +83,8 @@ private:
      * result into proper place of @dst paint device
      * Returns modified rect of @dst paintDevice
      */
-    QRect downsampleByFactor2(const QRect& srcRect,
-                              KisPaintDevice* src, KisPaintDevice* dst);
+    QRect downsampleByFactor2(const QRect &srcRect,
+                              KisPaintDevice *src, KisPaintDevice *dst);
 
     /**
      * Auxiliary function. Downsamples two lines in @srcRow0
@@ -102,12 +101,11 @@ private:
 
     int findFirstGoodPlaneIndex(qreal scale, QSize originalSize);
 
-
     /**
      * Fast workaround for converting paintDevices
      */
     QImage convertToQImageFast(KisPaintDeviceSP paintDevice,
-                               const QRect& unscaledRect);
+                               const QRect &unscaledRect);
 
 private Q_SLOTS:
 
@@ -118,14 +116,13 @@ private:
     QVector<KisPaintDeviceSP> m_pyramid;
     KisImageWSP  m_originalImage;
 
-    const KoColorProfile* m_monitorProfile;
-    const KoColorSpace* m_monitorColorSpace;
+    const KoColorProfile *m_monitorProfile;
+    const KoColorSpace *m_monitorColorSpace;
 
-    KisDisplayFilter* m_displayFilter;
+    KisDisplayFilter *m_displayFilter;
 
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
-
 
     /**
      * Number of planes inside pyramid
@@ -138,7 +135,7 @@ private:
     bool m_allChannelsSelected;
     bool m_onlyOneChannelSelected;
     int m_selectedChannelIndex;
-    
+
 };
 
 #endif /* __KIS_IMAGE_PYRAMID */

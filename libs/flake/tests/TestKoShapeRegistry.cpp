@@ -40,7 +40,7 @@
 
 void TestKoShapeRegistry::testGetKoShapeRegistryInstance()
 {
-    KoShapeRegistry * registry = KoShapeRegistry::instance();
+    KoShapeRegistry *registry = KoShapeRegistry::instance();
     QVERIFY(registry != 0);
 }
 
@@ -73,7 +73,7 @@ void TestKoShapeRegistry::testCreateShapes()
     KoXmlElement contentElement = doc.documentElement();
     KoXmlElement bodyElement = contentElement.firstChild().toElement();
 
-    KoShapeRegistry * registry = KoShapeRegistry::instance();
+    KoShapeRegistry *registry = KoShapeRegistry::instance();
 
     // XXX: When loading is implemented, these no doubt have to be
     // sensibly filled.
@@ -81,7 +81,7 @@ void TestKoShapeRegistry::testCreateShapes()
     KoOdfLoadingContext odfContext(stylesReader, 0);
     KoShapeLoadingContext shapeContext(odfContext, 0);
 
-    KoShape * shape = registry->createShapeFromOdf(bodyElement, shapeContext);
+    KoShape *shape = registry->createShapeFromOdf(bodyElement, shapeContext);
     QVERIFY(shape == 0);
 
     KoXmlElement pathElement = bodyElement.firstChild().firstChild().toElement();
@@ -89,7 +89,6 @@ void TestKoShapeRegistry::testCreateShapes()
     QVERIFY(shape != 0);
     QVERIFY(shape->shapeId() == KoPathShapeId);
 }
-
 
 void TestKoShapeRegistry::testCreateFramedShapes()
 {
@@ -120,7 +119,7 @@ void TestKoShapeRegistry::testCreateFramedShapes()
     KoXmlElement contentElement = doc.documentElement();
     KoXmlElement bodyElement = contentElement.firstChild().toElement();
 
-    KoShapeRegistry * registry = KoShapeRegistry::instance();
+    KoShapeRegistry *registry = KoShapeRegistry::instance();
 
     // XXX: When loading is implemented, these no doubt have to be
     // sensibly filled.
@@ -128,7 +127,7 @@ void TestKoShapeRegistry::testCreateFramedShapes()
     KoOdfLoadingContext odfContext(stylesReader, 0);
     KoShapeLoadingContext shapeContext(odfContext, 0);
 
-    KoShape * shape = registry->createShapeFromOdf(bodyElement, shapeContext);
+    KoShape *shape = registry->createShapeFromOdf(bodyElement, shapeContext);
     QVERIFY(shape == 0);
 
     KoXmlElement pathElement = bodyElement.firstChild().firstChild().toElement();

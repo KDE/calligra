@@ -40,38 +40,50 @@ class KisFavoriteResourceManager::ColorDataList
 public:
     static const int MAX_RECENT_COLOR = 12;
 
-    ColorDataList() {
+    ColorDataList()
+    {
         m_key = 0;
     }
 
-    ~ColorDataList() {
+    ~ColorDataList()
+    {
     }
 
-    int size() {
+    int size()
+    {
         return m_guiList.size();
     }
 
-    int leastUsedGuiPos() {
+    int leastUsedGuiPos()
+    {
         return findPos(m_priorityList.valueAt(0));
     }
 
-    const KoColor& guiColor(int pos) {
+    const KoColor &guiColor(int pos)
+    {
         Q_ASSERT_X(pos < size(), "ColorDataList::guiColor", "index out of bound");
         Q_ASSERT_X(pos >= 0, "ColorDataList::guiColor", "negative index");
 
         return m_guiList.at(pos)->data;
     }
 
-    void append(const KoColor& data) {
+    void append(const KoColor &data)
+    {
         int pos = findPos(data);
-        if (pos > -1) updateKey(pos);
-        else appendNew(data);
+        if (pos > -1) {
+            updateKey(pos);
+        } else {
+            appendNew(data);
+        }
     }
 
-    void appendNew(const KoColor& data) {
-        if (size() >= ColorDataList::MAX_RECENT_COLOR) removeLeastUsed();
+    void appendNew(const KoColor &data)
+    {
+        if (size() >= ColorDataList::MAX_RECENT_COLOR) {
+            removeLeastUsed();
+        }
 
-        PriorityNode<KoColor> * node;
+        PriorityNode<KoColor> *node;
         node = new PriorityNode <KoColor>();
         node->data = data;
         node->key = m_key++;
@@ -83,40 +95,51 @@ public:
         node = 0;
     }
 
-    void removeLeastUsed() {
+    void removeLeastUsed()
+    {
         Q_ASSERT_X(size() >= 0, "ColorDataList::removeLeastUsed", "index out of bound");
-        if (size() <= 0) return;
+        if (size() <= 0) {
+            return;
+        }
 
         int pos = findPos(m_priorityList.valueAt(0));
         m_guiList.removeAt(pos);
         m_priorityList.remove(0);
     }
 
-    void updateKey(int guiPos) {
-        if (m_guiList.at(guiPos)->key == m_key - 1) return;
+    void updateKey(int guiPos)
+    {
+        if (m_guiList.at(guiPos)->key == m_key - 1) {
+            return;
+        }
         m_priorityList.changeKey(m_guiList.at(guiPos)->pos, m_key++);
     }
 
     /*find position of the color on the gui list*/
-    int findPos(const KoColor& color) {
+    int findPos(const KoColor &color)
+    {
 
         int low = 0, high = size(), mid = 0;
         while (low < high) {
             mid = (low + high) / 2;
-            if (hsvComparison(color, m_guiList.at(mid)->data) == 0) return mid;
-            else if (hsvComparison(color, m_guiList.at(mid)->data) < 0) high = mid;
-            else low = mid + 1;
+            if (hsvComparison(color, m_guiList.at(mid)->data) == 0) {
+                return mid;
+            } else if (hsvComparison(color, m_guiList.at(mid)->data) < 0) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
         }
 
         return -1;
     }
 
-
 private:
 
     int m_key;
 
-    int guiInsertPos(const KoColor& color) {
+    int guiInsertPos(const KoColor &color)
+    {
         int low = 0, high = size() - 1, mid = (low + high) / 2;
         while (low < high) {
 
@@ -126,7 +149,9 @@ private:
         }
 
         if (m_guiList.size() > 0) {
-            if (hsvComparison(color, m_guiList[mid]->data) == 1) ++mid;
+            if (hsvComparison(color, m_guiList[mid]->data) == 1) {
+                ++mid;
+            }
         }
         return mid;
     }
@@ -135,20 +160,33 @@ private:
       c1 < c2, returns -1
       c1 = c2, returns 0
       c1 > c2, returns 1 */
-    int hsvComparison(const KoColor& c1, const KoColor& c2) {
+    int hsvComparison(const KoColor &c1, const KoColor &c2)
+    {
         QColor qc1 = c1.toQColor();
         QColor qc2 = c2.toQColor();
 
-        if (qc1.hue() < qc2.hue()) return -1;
-        if (qc1.hue() > qc2.hue()) return 1;
+        if (qc1.hue() < qc2.hue()) {
+            return -1;
+        }
+        if (qc1.hue() > qc2.hue()) {
+            return 1;
+        }
 
         // hue is the same, ok let's compare saturation
-        if (qc1.saturation() < qc2.saturation()) return -1;
-        if (qc1.saturation() > qc2.saturation()) return 1;
+        if (qc1.saturation() < qc2.saturation()) {
+            return -1;
+        }
+        if (qc1.saturation() > qc2.saturation()) {
+            return 1;
+        }
 
         // oh, also saturation is same?
-        if (qc1.value() < qc2.value()) return -1;
-        if (qc1.value() > qc2.value()) return 1;
+        if (qc1.value() < qc2.value()) {
+            return -1;
+        }
+        if (qc1.value() > qc2.value()) {
+            return 1;
+        }
 
         // user selected two similar colors
         return 0;
@@ -158,8 +196,6 @@ private:
     QList <PriorityNode <KoColor>*> m_guiList;
 };
 
-
-
 KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox)
     : m_paintopBox(paintopBox)
     , m_colorList(0)
@@ -168,7 +204,7 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
 {
     m_colorList = new ColorDataList();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateFavoritePresets()));
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+    KisPaintOpPresetResourceServer *rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
     rServer->addObserver(this);
 
 }
@@ -178,7 +214,7 @@ KisFavoriteResourceManager::~KisFavoriteResourceManager()
     KisConfig cfg;
     cfg.writeEntry<QString>("favoritePresetsTag", m_currentTag);
 
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer *rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->removeObserver(this);
     delete m_colorList;
 }
@@ -197,8 +233,8 @@ QVector<KisPaintOpPresetSP>  KisFavoriteResourceManager::favoritePresetList()
 QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
     init();
-    QList<QImage> images;   
-    foreach(KisPaintOpPresetSP preset, m_favoritePresetsList) {
+    QList<QImage> images;
+    foreach (KisPaintOpPresetSP preset, m_favoritePresetsList) {
         if (preset) {
             images.append(preset->image());
         }
@@ -207,7 +243,7 @@ QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
     return images;
 }
 
-void KisFavoriteResourceManager::setCurrentTag(const QString& tagName)
+void KisFavoriteResourceManager::setCurrentTag(const QString &tagName)
 {
     m_currentTag = tagName;
     updateFavoritePresets();
@@ -215,9 +251,11 @@ void KisFavoriteResourceManager::setCurrentTag(const QString& tagName)
 
 void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
 {
-    if (pos < 0 || pos >= m_favoritePresetsList.size()) return;
+    if (pos < 0 || pos >= m_favoritePresetsList.size()) {
+        return;
+    }
 
-    KoResource* resource = const_cast<KisPaintOpPreset*>(m_favoritePresetsList.at(pos).data());
+    KoResource *resource = const_cast<KisPaintOpPreset *>(m_favoritePresetsList.at(pos).data());
     m_paintopBox->resourceSelected(resource);
 
     emit hidePalettes();
@@ -241,7 +279,7 @@ void KisFavoriteResourceManager::slotUpdateRecentColor(int pos)
     emit hidePalettes();
 }
 
-void KisFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
+void KisFavoriteResourceManager::slotAddRecentColor(const KoColor &color)
 {
     m_colorList->append(color);
     int pos = m_colorList->findPos(color);
@@ -283,23 +321,24 @@ void KisFavoriteResourceManager::setBlockUpdates(bool block)
     }
 }
 
-void KisFavoriteResourceManager::syncTaggedResourceView() {
+void KisFavoriteResourceManager::syncTaggedResourceView()
+{
     if (m_blockUpdates) {
         return;
     }
-    updateFavoritePresets(); 
+    updateFavoritePresets();
 }
 
-void KisFavoriteResourceManager::syncTagAddition(const QString& /*tag*/) {}
+void KisFavoriteResourceManager::syncTagAddition(const QString & /*tag*/) {}
 
-void KisFavoriteResourceManager::syncTagRemoval(const QString& /*tag*/) {}
+void KisFavoriteResourceManager::syncTagRemoval(const QString & /*tag*/) {}
 
 int KisFavoriteResourceManager::recentColorsTotal()
 {
     return m_colorList->size();
 }
 
-const KoColor& KisFavoriteResourceManager::recentColorAt(int pos)
+const KoColor &KisFavoriteResourceManager::recentColorAt(int pos)
 {
     return m_colorList->guiColor(pos);
 }
@@ -314,21 +353,20 @@ KoColor KisFavoriteResourceManager::bgColor() const
     return m_bgColor;
 }
 
-
 bool sortPresetByName(KisPaintOpPresetSP preset1, KisPaintOpPresetSP preset2)
 {
-     return preset1->name() < preset2->name();
+    return preset1->name() < preset2->name();
 }
 
 void KisFavoriteResourceManager::updateFavoritePresets()
 {
     KisConfig cfg;
     int maxPresets = cfg.favoritePresets();
-    
+
     m_favoritePresetsList.clear();
-    KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+    KisPaintOpPresetResourceServer *rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
     QStringList presetFilenames = rServer->searchTag(m_currentTag);
-    for(int i = 0; i < qMin(maxPresets, presetFilenames.size()); i++) {
+    for (int i = 0; i < qMin(maxPresets, presetFilenames.size()); i++) {
         KisPaintOpPresetSP pr = rServer->resourceByFilename(presetFilenames.at(i));
         m_favoritePresetsList.append(pr.data());
         qSort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
@@ -340,7 +378,7 @@ void KisFavoriteResourceManager::init()
 {
     if (!m_initialized) {
         m_initialized = true;
-        KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer(true);
+        KisPaintOpPresetResourceServer *rServer = KisResourceServerProvider::instance()->paintOpPresetServer(true);
         KConfigGroup group(KGlobal::config(), "favoriteList");
         QStringList oldFavoritePresets = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
 
@@ -349,7 +387,7 @@ void KisFavoriteResourceManager::init()
 
         if (!oldFavoritePresets.isEmpty() && m_currentTag.isEmpty()) {
             m_currentTag = i18n("Favorite Presets");
-            foreach( const QString& name, oldFavoritePresets) {
+            foreach (const QString &name, oldFavoritePresets) {
                 KisPaintOpPresetSP preset = rServer->resourceByName(name);
                 rServer->addTag(preset.data(), m_currentTag);
             }

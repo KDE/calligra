@@ -24,23 +24,26 @@
 class KoPattern;
 class KisPatternChooser;
 
-class PatternDockerDock : public QDockWidget, public KisMainwindowObserver {
+class PatternDockerDock : public QDockWidget, public KisMainwindowObserver
+{
     Q_OBJECT
 public:
-    PatternDockerDock( );
+    PatternDockerDock();
 
-    virtual void setMainWindow(KisViewManager* kisview);
+    virtual void setMainWindow(KisViewManager *kisview);
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
-    QString observerName() { return "PatternDockerDock"; }
+    QString observerName()
+    {
+        return "PatternDockerDock";
+    }
 public Q_SLOTS:
     void patternChanged(KoPattern *pattern);
 private Q_SLOTS:
 
 private:
-    KisPatternChooser* m_patternChooser;
+    KisPatternChooser *m_patternChooser;
 };
-
 
 #endif

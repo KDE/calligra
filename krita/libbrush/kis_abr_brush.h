@@ -36,14 +36,13 @@ typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 class QString;
 class QIODevice;
 
-
 class BRUSH_EXPORT KisAbrBrush : public KisBrush
 {
 
 public:
 
     /// Construct brush to load filename later as brush
-    KisAbrBrush(const QString& filename, const QByteArray &parentMD5, KisAbrBrushCollection *parent);
+    KisAbrBrush(const QString &filename, const QByteArray &parentMD5, KisAbrBrushCollection *parent);
 
     virtual bool load();
 
@@ -51,7 +50,7 @@ public:
 
     virtual bool save();
 
-    virtual bool saveToDevice(QIODevice* dev) const;
+    virtual bool saveToDevice(QIODevice *dev) const;
 
     /**
      * @return default file extension for saving the brush
@@ -62,9 +61,9 @@ public:
 
     friend class KisAbrBrushCollection;
 
-    virtual void setBrushTipImage(const QImage& image);
+    virtual void setBrushTipImage(const QImage &image);
 
-    void toXML(QDomDocument& d, QDomElement& e) const;
+    void toXML(QDomDocument &d, QDomElement &e) const;
 
 private:
     QByteArray m_parentMD5;

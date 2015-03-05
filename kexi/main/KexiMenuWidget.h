@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
    Copyright (C) 2011-2014 Jarosław Staniek <staniek@kde.org>
-   
+
    Based on qmenu.h from Qt 4.7
 
    This library is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ public:
     bool persistentlySelected() const;
 
 protected:
-    KexiMenuWidgetActionPrivate * const d;
+    KexiMenuWidgetActionPrivate *const d;
 };
 
 class KexiMenuWidget : public QWidget
@@ -67,18 +67,21 @@ public:
     explicit KexiMenuWidget(const QString &title, QWidget *parent = 0);
     ~KexiMenuWidget();
 
-    KexiMenuWidgetAction* persistentlySelectedAction() const;
-    void setPersistentlySelectedAction(KexiMenuWidgetAction* action, bool set);
+    KexiMenuWidgetAction *persistentlySelectedAction() const;
+    void setPersistentlySelectedAction(KexiMenuWidgetAction *action, bool set);
 
 #ifdef Q_NO_USING_KEYWORD
-    inline void addAction(QAction *action) { QWidget::addAction(action); }
+    inline void addAction(QAction *action)
+    {
+        QWidget::addAction(action);
+    }
 #else
     using QWidget::addAction;
 #endif
     QAction *addAction(const QString &text);
     QAction *addAction(const QIcon &icon, const QString &text);
-    QAction *addAction(const QString &text, const QObject *receiver, const char* member, const QKeySequence &shortcut = 0);
-    QAction *addAction(const QIcon &icon, const QString &text, const QObject *receiver, const char* member, const QKeySequence &shortcut = 0);
+    QAction *addAction(const QString &text, const QObject *receiver, const char *member, const QKeySequence &shortcut = 0);
+    QAction *addAction(const QIcon &icon, const QString &text, const QObject *receiver, const char *member, const QKeySequence &shortcut = 0);
 
 //    QAction *addMenu(QMenu *menu);
 //    QMenu *addMenu(const QString &title);
@@ -119,7 +122,7 @@ public:
     void setActiveAction(QAction *act);
     QAction *activeAction() const;
 
-    void popup(const QPoint &pos, QAction *at=0);
+    void popup(const QPoint &pos, QAction *at = 0);
     // QAction *exec();
     // QAction *exec(const QPoint &pos, QAction *at=0);
 
@@ -164,7 +167,7 @@ protected:
 #endif
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
-    void showEvent(QShowEvent* event);
+    void showEvent(QShowEvent *event);
     void hideEvent(QHideEvent *);
     void paintEvent(QPaintEvent *);
     void actionEvent(QActionEvent *);
@@ -181,7 +184,7 @@ private Q_SLOTS:
     void overrideMenuActionDestroyed();
 
 protected:
-    const KexiMenuWidgetCaused& causedPopup() const;
+    const KexiMenuWidgetCaused &causedPopup() const;
     enum SelectionReason {
         SelectedFromKeyboard,
         SelectedFromElsewhere
@@ -193,7 +196,7 @@ protected:
 private:
     Q_DISABLE_COPY(KexiMenuWidget)
 
-    KexiMenuWidgetPrivate * const d;
+    KexiMenuWidgetPrivate *const d;
     friend class KexiMenuWidgetPrivate;
 };
 

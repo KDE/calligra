@@ -25,7 +25,7 @@ class ImageDockerPlugin: public QObject
 {
     Q_OBJECT
 public:
-    ImageDockerPlugin(QObject* parent, const QVariantList&);
+    ImageDockerPlugin(QObject *parent, const QVariantList &);
 };
 
 #endif // H_IMAGEDOCKER_H_

@@ -39,11 +39,11 @@ class KRITAUI_EXPORT KisFilterManager : public QObject
 
 public:
 
-    KisFilterManager(KisViewManager * parent);
+    KisFilterManager(KisViewManager *parent);
     ~KisFilterManager();
     void setView(QPointer<KisView>imageView);
 
-    void setup(KActionCollection * ac, KisActionManager *actionManager);
+    void setup(KActionCollection *ac, KisActionManager *actionManager);
     void updateGUI();
 
     void apply(KisSafeFilterConfigurationSP filterConfig);
@@ -62,7 +62,7 @@ private Q_SLOTS:
 
 private:
     struct Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

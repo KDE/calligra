@@ -32,7 +32,6 @@
 namespace Libwmf
 {
 
-
 WmfAbstractBackend::WmfAbstractBackend()
 {
     m_parser = new WmfParser();
@@ -43,8 +42,7 @@ WmfAbstractBackend::~WmfAbstractBackend()
     delete m_parser;
 }
 
-
-bool WmfAbstractBackend::load(const QString& filename)
+bool WmfAbstractBackend::load(const QString &filename)
 {
     QFile file(filename);
 
@@ -59,42 +57,35 @@ bool WmfAbstractBackend::load(const QString& filename)
     return ret;
 }
 
-
-bool WmfAbstractBackend::load(const QByteArray& array)
+bool WmfAbstractBackend::load(const QByteArray &array)
 {
     return m_parser->load(array);
 }
-
 
 bool WmfAbstractBackend::play()
 {
     return m_parser->play(this);
 }
 
-
 bool WmfAbstractBackend::isValid(void) const
 {
     return m_parser->mValid;
 }
-
 
 bool WmfAbstractBackend::isStandard(void) const
 {
     return m_parser->mStandard;
 }
 
-
 bool WmfAbstractBackend::isPlaceable(void) const
 {
     return m_parser->mPlaceable;
 }
 
-
 bool WmfAbstractBackend::isEnhanced(void) const
 {
     return m_parser->mEnhanced;
 }
-
 
 QRect WmfAbstractBackend::boundingRect(void) const
 {
@@ -102,7 +93,6 @@ QRect WmfAbstractBackend::boundingRect(void) const
                  QSize(m_parser->mBBoxRight - m_parser->mBBoxLeft,
                        m_parser->mBBoxBottom - m_parser->mBBoxTop));
 }
-
 
 int WmfAbstractBackend::defaultDpi(void) const
 {
@@ -113,11 +103,9 @@ int WmfAbstractBackend::defaultDpi(void) const
     }
 }
 
-
 void WmfAbstractBackend::setDebug(int nbrFunc)
 {
     m_parser->mNbrFunc = nbrFunc;
 }
-
 
 }

@@ -42,15 +42,10 @@ public:
     void removeFromLockedProperties(KisPropertiesConfiguration *p);
     bool hasProperty(const QString &p);
 
-
-
-
     KisPropertiesConfiguration *lockedProperties();
 
-
 private:
-    KisPropertiesConfiguration* m_lockedProperties;
-
+    KisPropertiesConfiguration *m_lockedProperties;
 
 };
 

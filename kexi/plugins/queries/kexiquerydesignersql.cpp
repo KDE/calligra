@@ -47,8 +47,7 @@
 
 #include "kexisectionheader.h"
 
-
-static bool compareSQL(const QString& sql1, const QString& sql2)
+static bool compareSQL(const QString &sql1, const QString &sql2)
 {
     //! @todo use reformatting functions here
     return sql1.trimmed() == sql2.trimmed();
@@ -61,13 +60,14 @@ class KexiQueryDesignerSQLView::Private
 {
 public:
     Private() :
-            statusPixmapOk(koDesktopIcon("dialog-ok"))
-            , statusPixmapErr(koDesktopIcon("dialog-error"))
-            , statusPixmapInfo(koDesktopIcon("dialog-information"))
-            , parsedQuery(0)
-            , heightForStatusMode(-1)
-            , justSwitchedFromNoViewMode(false)
-            , slotTextChangedEnabled(true) {
+        statusPixmapOk(koDesktopIcon("dialog-ok"))
+        , statusPixmapErr(koDesktopIcon("dialog-error"))
+        , statusPixmapInfo(koDesktopIcon("dialog-information"))
+        , parsedQuery(0)
+        , heightForStatusMode(-1)
+        , justSwitchedFromNoViewMode(false)
+        , slotTextChangedEnabled(true)
+    {
     }
     KexiQueryDesignerSQLEditor *editor;
     QLabel *pixmapStatus, *lblStatus;
@@ -93,8 +93,8 @@ public:
 //===================
 
 KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
-        : KexiView(parent)
-        , d(new Private())
+    : KexiView(parent)
+    , d(new Private())
 {
     d->splitter = new QSplitter(this);
     d->splitter->setOrientation(Qt::Vertical);
@@ -132,7 +132,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
 
     d->pixmapStatus = new QLabel(d->statusMainWidget);
     d->statusHLyr->addWidget(d->pixmapStatus);
-    d->pixmapStatus->setFixedWidth(d->statusPixmapOk.width()*3 / 2);
+    d->pixmapStatus->setFixedWidth(d->statusPixmapOk.width() * 3 / 2);
     d->pixmapStatus->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     d->pixmapStatus->setAutoFillBackground(true);
 
@@ -149,8 +149,8 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     setFocusProxy(d->editor);
 
     // -- setup local actions
-    QList<QAction*> viewActions;
-    QAction* a;
+    QList<QAction *> viewActions;
+    QAction *a;
     viewActions << (a = new KAction(koIcon("test_it"), i18n("Check Query"), this));
     a->setObjectName("querypart_check_query");
     a->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F5));
@@ -182,7 +182,7 @@ void KexiQueryDesignerSQLView::setStatusOk()
     setStatusText("<h3>" + i18n("The query is correct") + "</h3>");
 }
 
-void KexiQueryDesignerSQLView::setStatusError(const QString& msg)
+void KexiQueryDesignerSQLView::setStatusError(const QString &msg)
 {
     d->pixmapStatus->setPixmap(d->statusPixmapErr);
     setStatusText("<h3>" + i18n("The query is incorrect") + "</h3><p>" + msg + "</p>");
@@ -195,7 +195,7 @@ void KexiQueryDesignerSQLView::setStatusEmpty()
         i18n("Please enter your query and execute \"Check query\" function to verify it."));
 }
 
-void KexiQueryDesignerSQLView::setStatusText(const QString& text)
+void KexiQueryDesignerSQLView::setStatusText(const QString &text)
 {
     d->lblStatus->setText(text);
 }
@@ -206,15 +206,14 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
     dontStore = true;
     if (mode == Kexi::DesignViewMode || mode == Kexi::DataViewMode) {
         QString sqlText = d->editor->text().trimmed();
-        KexiQueryPart::TempData * temp = tempData();
+        KexiQueryPart::TempData *temp = tempData();
         if (sqlText.isEmpty()) {
             //special case: empty SQL text
             if (temp->query()) {
                 temp->setQueryChangedInPreviousView(true); //query changed
                 temp->setQuery(0);
             }
-        }
-        else {
+        } else {
             const bool designViewWasVisible = window()->viewForMode(mode) != 0;
             //should we check SQL text?
             if (designViewWasVisible
@@ -262,7 +261,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
         //SQL text should be invalidated.
         d->justSwitchedFromNoViewMode = true;
     }
-    KexiQueryPart::TempData * temp = tempData();
+    KexiQueryPart::TempData *temp = tempData();
     KexiDB::QuerySchema *query = temp->query();
     if (!query) {//try to just get saved schema, instead of temporary one
         query = dynamic_cast<KexiDB::QuerySchema *>(window()->schemaData());
@@ -286,8 +285,9 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
     if (d->origStatement.isEmpty()) {
         //no valid query delivered or query has not been modified:
         // just load sql text, no matter if it's valid
-        if (!loadDataBlock(d->origStatement, "sql", true /*canBeEmpty*/))
+        if (!loadDataBlock(d->origStatement, "sql", true /*canBeEmpty*/)) {
             return false;
+        }
     }
 
     if (!compareSQL(d->origStatement, d->editor->text())) {
@@ -339,8 +339,9 @@ void KexiQueryDesignerSQLView::slotUpdateMode()
 
 void KexiQueryDesignerSQLView::slotTextChanged()
 {
-    if (!d->slotTextChangedEnabled)
+    if (!d->slotTextChangedEnabled) {
         return;
+    }
     setDirty(true);
     setStatusEmpty();
 }
@@ -354,42 +355,39 @@ void KexiQueryDesignerSQLView::updateActions(bool activated)
     KexiView::updateActions(activated);
 }
 
-KexiQueryPart::TempData* KexiQueryDesignerSQLView::tempData() const
+KexiQueryPart::TempData *KexiQueryDesignerSQLView::tempData() const
 {
-    return dynamic_cast<KexiQueryPart::TempData*>(window()->data());
+    return dynamic_cast<KexiQueryPart::TempData *>(window()->data());
 }
 
-KexiDB::SchemaData* KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata,
-                                                           KexiView::StoreNewDataOptions options,
-                                                           bool &cancel)
+KexiDB::SchemaData *KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData &sdata,
+        KexiView::StoreNewDataOptions options,
+        bool &cancel)
 {
     Q_UNUSED(options);
 
     //here: we won't store query layout: it will be recreated 'by hand' in GUI Query Editor
     const bool queryOK = slotCheckQuery();
     bool ok = true;
-    KexiDB::SchemaData* query = 0;
+    KexiDB::SchemaData *query = 0;
     if (queryOK) {
         if (d->parsedQuery) {
             query = d->parsedQuery; //will be returned, so: don't keep it
             d->parsedQuery = 0;
-        }
-        else { //empty query
+        } else { //empty query
             query = new KexiDB::SchemaData(); //just empty
         }
-    }
-    else { //the query is not ok
+    } else { //the query is not ok
         if (KMessageBox::Yes != KMessageBox::questionYesNo(this, i18n("Do you want to save invalid query?"),
-                                         0, KStandardGuiItem::yes(), KStandardGuiItem::no(),
-                                         "askBeforeSavingInvalidQueries"/*config entry*/))
-        {
+                0, KStandardGuiItem::yes(), KStandardGuiItem::no(),
+                "askBeforeSavingInvalidQueries"/*config entry*/)) {
             cancel = true;
             return 0;
         }
         query = new KexiDB::SchemaData(); //just empty
     }
 
-    (KexiDB::SchemaData&)*query = sdata; //copy main attributes
+    (KexiDB::SchemaData &)*query = sdata; //copy main attributes
 
     ok = KexiMainWindowIface::global()->project()->dbConnection()->storeObjectSchemaData(
              *query, true /*newObject*/);
@@ -414,8 +412,9 @@ tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
         KexiMainWindowIface::global()->project()->dbConnection()->setQuerySchemaObsolete(window()->schemaData()->name());
     }
     tristate res = KexiView::storeData(dontAsk);
-    if (~res)
+    if (~res) {
         return res;
+    }
     if (res == true) {
         res = storeDataBlock(d->editor->text(), "sql");
 #if 0
@@ -434,8 +433,9 @@ tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
         QString empty_xml;
         res = storeDataBlock(empty_xml, "query_layout");   //clear
     }
-    if (!res)
+    if (!res) {
         setDirty(true);
+    }
     return res;
 }
 

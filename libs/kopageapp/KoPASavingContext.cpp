@@ -23,12 +23,12 @@
 
 #include "KoPAPage.h"
 
-KoPASavingContext::KoPASavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
-        KoEmbeddedDocumentSaver &embeddedSaver, int page)
+KoPASavingContext::KoPASavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles,
+                                     KoEmbeddedDocumentSaver &embeddedSaver, int page)
     : KoShapeSavingContext(xmlWriter, mainStyles, embeddedSaver)
-, m_page( page )
-, m_masterPageIndex( 0 )
-, m_clearDrawIds( false )
+    , m_page(page)
+    , m_masterPageIndex(0)
+    , m_clearDrawIds(false)
 {
 }
 
@@ -36,29 +36,29 @@ KoPASavingContext::~KoPASavingContext()
 {
 }
 
-void KoPASavingContext::addMasterPage( const KoPAMasterPage * masterPage, const QString &name )
+void KoPASavingContext::addMasterPage(const KoPAMasterPage *masterPage, const QString &name)
 {
-    m_masterPageNames.insert( masterPage, name );
+    m_masterPageNames.insert(masterPage, name);
 }
 
-QString KoPASavingContext::masterPageName( const KoPAMasterPage * masterPage ) const
+QString KoPASavingContext::masterPageName(const KoPAMasterPage *masterPage) const
 {
-    QMap<const KoPAMasterPage *, QString>::const_iterator it( m_masterPageNames.find( masterPage ) );
-    if (  it != m_masterPageNames.constEnd() ) {
+    QMap<const KoPAMasterPage *, QString>::const_iterator it(m_masterPageNames.find(masterPage));
+    if (it != m_masterPageNames.constEnd()) {
         return it.value();
     }
 
     // this should not happen
-    Q_ASSERT( it != m_masterPageNames.constEnd() );
+    Q_ASSERT(it != m_masterPageNames.constEnd());
     return QString();
 }
 
 QString KoPASavingContext::masterPageElementName()
 {
-    if ( ! isSet( KoShapeSavingContext::UniqueMasterPages ) ) {
+    if (! isSet(KoShapeSavingContext::UniqueMasterPages)) {
         ++m_masterPageIndex;
     }
-    return QString( "content_%1" ).arg( m_masterPageIndex );
+    return QString("content_%1").arg(m_masterPageIndex);
 }
 
 void KoPASavingContext::incrementPage()
@@ -71,7 +71,7 @@ int KoPASavingContext::page()
     return m_page;
 }
 
-void KoPASavingContext::setClearDrawIds( bool clear )
+void KoPASavingContext::setClearDrawIds(bool clear)
 {
     m_clearDrawIds = clear;
 }
@@ -81,22 +81,21 @@ bool KoPASavingContext::isSetClearDrawIds()
     return m_clearDrawIds;
 }
 
-QString KoPASavingContext::pageName( const KoPAPage * page )
+QString KoPASavingContext::pageName(const KoPAPage *page)
 {
     QString name;
-    QMap<const KoPAPage *, QString>::iterator it( m_pageToNames.find( page ) );
-    if ( it != m_pageToNames.end() ) {
+    QMap<const KoPAPage *, QString>::iterator it(m_pageToNames.find(page));
+    if (it != m_pageToNames.end()) {
         name = it.value();
-    }
-    else {
+    } else {
         name = page->name();
-        QRegExp rx( "^page[0-9]+$" );
-        if ( name.isEmpty() || m_pageNames.contains( name ) || rx.indexIn( name ) != -1 ) {
-            name = "page" + QString::number( m_page );
+        QRegExp rx("^page[0-9]+$");
+        if (name.isEmpty() || m_pageNames.contains(name) || rx.indexIn(name) != -1) {
+            name = "page" + QString::number(m_page);
         }
-        Q_ASSERT( !m_pageNames.contains( name ) );
-        m_pageNames.insert( name );
-        m_pageToNames.insert( page, name );
+        Q_ASSERT(!m_pageNames.contains(name));
+        m_pageNames.insert(name);
+        m_pageToNames.insert(page, name);
     }
     return name;
 }

@@ -18,7 +18,6 @@
 
 #include "tool_transform_changes_tracker.h"
 
-
 TransformChangesTracker::TransformChangesTracker(TransformTransactionProperties *transaction)
     : m_transaction(transaction)
 {

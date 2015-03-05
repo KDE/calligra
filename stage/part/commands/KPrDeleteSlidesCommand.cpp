@@ -26,9 +26,9 @@
 #include "KoPAPageBase.h"
 
 KPrDeleteSlidesCommand::KPrDeleteSlidesCommand(KPrDocument *document, KoPAPageBase *page, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_document(document)
-, m_deletePages(false)
+    : KUndo2Command(parent)
+    , m_document(document)
+    , m_deletePages(false)
 {
     Q_ASSERT(m_document);
     Q_ASSERT(page);
@@ -38,10 +38,10 @@ KPrDeleteSlidesCommand::KPrDeleteSlidesCommand(KPrDocument *document, KoPAPageBa
     setText(kundo2_i18n("Delete slide"));
 }
 
-KPrDeleteSlidesCommand::KPrDeleteSlidesCommand(KPrDocument *document, const QList<KoPAPageBase*> &pages, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_document(document)
-, m_deletePages(false)
+KPrDeleteSlidesCommand::KPrDeleteSlidesCommand(KPrDocument *document, const QList<KoPAPageBase *> &pages, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_document(document)
+    , m_deletePages(false)
 {
     Q_ASSERT(m_document);
     Q_ASSERT(m_document->pages().count() > pages.count());
@@ -95,7 +95,7 @@ void KPrDeleteSlidesCommand::redo()
 void KPrDeleteSlidesCommand::undo()
 {
     KUndo2Command::undo();
-    QMapIterator<int, KoPAPageBase*> i(m_pages);
+    QMapIterator<int, KoPAPageBase *> i(m_pages);
 
     while (i.hasNext()) {
         i.next();
@@ -103,7 +103,7 @@ void KPrDeleteSlidesCommand::undo()
     }
 
     //Restore custom shows
-    QMapIterator<QString, QList<KoPAPageBase*> > j(m_customSlideShows);
+    QMapIterator<QString, QList<KoPAPageBase *> > j(m_customSlideShows);
 
     while (j.hasNext()) {
         j.next();

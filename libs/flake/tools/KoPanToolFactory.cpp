@@ -25,7 +25,7 @@
 #include <klocale.h>
 
 KoPanToolFactory::KoPanToolFactory()
-        : KoToolFactoryBase(KoPanTool_ID)
+    : KoToolFactoryBase(KoPanTool_ID)
 {
     setToolTip(i18n("Pan"));
     setToolType(navigationToolType());
@@ -34,7 +34,7 @@ KoPanToolFactory::KoPanToolFactory()
     setActivationShapeId("flake/always");
 }
 
-KoToolBase* KoPanToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KoPanToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoPanTool(canvas);
 }

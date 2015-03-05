@@ -35,7 +35,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-
 VectorShapeFactory::VectorShapeFactory()
     : KoShapeFactoryBase(VectorShape_SHAPEID, i18n("Vector image"))
 {
@@ -53,7 +52,7 @@ KoShape *VectorShapeFactory::createDefaultShape(KoDocumentResourceManager */*doc
     return shape;
 }
 
-bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool VectorShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     if (e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw) {
         QString href = e.attribute("href");
@@ -88,9 +87,9 @@ bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
     return false;
 }
 
-QList<KoShapeConfigWidgetBase*> VectorShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> VectorShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> result;
+    QList<KoShapeConfigWidgetBase *> result;
     result.append(new VectorShapeConfigWidget());
     return result;
 }

@@ -31,21 +31,21 @@ class KoFindMatch;
 class CATextDocumentHandler : public CAAbstractDocumentHandler
 {
     Q_OBJECT
-    Q_PROPERTY (QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
-    Q_PROPERTY (int totalPages READ totalPages)
+    Q_PROPERTY(QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
+    Q_PROPERTY(int totalPages READ totalPages)
 
 public:
-    explicit CATextDocumentHandler (CADocumentController* documentController);
+    explicit CATextDocumentHandler(CADocumentController *documentController);
     virtual ~CATextDocumentHandler();
 
     virtual QStringList supportedMimetypes();
-    virtual bool openDocument (const QString& uri);
-    virtual KoDocument* document();
+    virtual bool openDocument(const QString &uri);
+    virtual KoDocument *document();
     virtual QString documentTypeName();
     virtual KoZoomMode::Mode preferredZoomMode() const;
 
     QString searchString() const;
-    void setSearchString (const QString& searchString);
+    void setSearchString(const QString &searchString);
 
     virtual QString bottomToolbarSource() const;
     virtual QString topToolbarSource() const;
@@ -58,7 +58,7 @@ public:
 
 public Q_SLOTS:
     void updateCanvas();
-    void resizeCanvas (const QSizeF& canvasSize);
+    void resizeCanvas(const QSizeF &canvasSize);
 
     void findNext();
     void findPrevious();
@@ -69,12 +69,12 @@ Q_SIGNALS:
     void searchStringChanged();
 
 private Q_SLOTS:
-    void findMatchFound(const KoFindMatch& match);
+    void findMatchFound(const KoFindMatch &match);
     void findNoMatchFound();
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // CATEXTDOCUMENTHANDLER_H

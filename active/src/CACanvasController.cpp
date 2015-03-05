@@ -22,7 +22,6 @@
  * 02110-1301 USA
  */
 
-
 #include "CACanvasController.h"
 #include "CACanvasItem.h"
 #include "CADocumentController.h"
@@ -42,33 +41,33 @@
 
 #include <cmath>
 
-CACanvasController::CACanvasController (QDeclarativeItem* parent)
-    : QDeclarativeItem (parent), KoCanvasController (0), m_zoomHandler (0), m_zoomController (0),
-      m_currentPoint (QPoint (0, 0)), m_documentSize (QSizeF (0, 0)), m_caDocumentHandler(0)
+CACanvasController::CACanvasController(QDeclarativeItem *parent)
+    : QDeclarativeItem(parent), KoCanvasController(0), m_zoomHandler(0), m_zoomController(0),
+      m_currentPoint(QPoint(0, 0)), m_documentSize(QSizeF(0, 0)), m_caDocumentHandler(0)
 {
-    setFlag (QGraphicsItem::ItemHasNoContents, false);
-    setClip (true);
+    setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setClip(true);
 }
 
-void CACanvasController::setVastScrolling (qreal factor)
+void CACanvasController::setVastScrolling(qreal factor)
 {
     Q_UNUSED(factor);
     //kDebug() << factor;
 }
 
-void CACanvasController::setZoomWithWheel (bool zoom)
+void CACanvasController::setZoomWithWheel(bool zoom)
 {
     Q_UNUSED(zoom);
     //kDebug() << zoom;
 }
 
-void CACanvasController::updateDocumentSize (const QSize& sz, bool recalculateCenter)
+void CACanvasController::updateDocumentSize(const QSize &sz, bool recalculateCenter)
 {
     m_caCanvasItem->updateDocumentSize(sz, recalculateCenter);
     KoCanvasController::setDocumentSize(sz);
 }
 
-void CACanvasController::setScrollBarValue (const QPoint& value)
+void CACanvasController::setScrollBarValue(const QPoint &value)
 {
     Q_UNUSED(value);
     //kDebug() << value;
@@ -79,7 +78,7 @@ QPoint CACanvasController::scrollBarValue() const
     return QPoint();
 }
 
-void CACanvasController::pan (const QPoint& distance)
+void CACanvasController::pan(const QPoint &distance)
 {
     setCameraX(cameraX() + distance.x());
     setCameraY(cameraY() + distance.y());
@@ -88,10 +87,10 @@ void CACanvasController::pan (const QPoint& distance)
 QPointF CACanvasController::preferredCenter() const
 {
     //TODO: is this the correct value?
-    return QPointF(width()/2, height()/2);
+    return QPointF(width() / 2, height() / 2);
 }
 
-void CACanvasController::setPreferredCenter (const QPointF& viewPoint)
+void CACanvasController::setPreferredCenter(const QPointF &viewPoint)
 {
     Q_UNUSED(viewPoint);
     //kDebug() << viewPoint;
@@ -101,140 +100,152 @@ void CACanvasController::recenterPreferred()
 {
 }
 
-void CACanvasController::zoomTo (const QRect& rect)
+void CACanvasController::zoomTo(const QRect &rect)
 {
     Q_UNUSED(rect);
     //kDebug() << rect;
 }
 
-void CACanvasController::zoomBy (const QPoint& center, qreal zoom)
+void CACanvasController::zoomBy(const QPoint &center, qreal zoom)
 {
     proxyObject->emitZoomRelative(zoom, center);
     canvas()->canvasItem()->update();
 }
 
-void CACanvasController::zoomOut (const QPoint& center)
+void CACanvasController::zoomOut(const QPoint &center)
 {
     Q_UNUSED(center);
     //kDebug() << center;
 }
 
-void CACanvasController::zoomIn (const QPoint& center)
+void CACanvasController::zoomIn(const QPoint &center)
 {
     Q_UNUSED(center);
     //kDebug() << center;
 }
 
-void CACanvasController::ensureVisible (KoShape* shape)
+void CACanvasController::ensureVisible(KoShape *shape)
 {
     ensureVisible(shape->boundingRect(), false);
 }
 
-void CACanvasController::ensureVisible (const QRectF& rect, bool smooth)
+void CACanvasController::ensureVisible(const QRectF &rect, bool smooth)
 {
-    if (m_caCanvasItem->editable()) return;
+    if (m_caCanvasItem->editable()) {
+        return;
+    }
     QRect currentVisible(canvasOffsetX(), canvasOffsetY(), visibleWidth(), visibleHeight());
 
     QRect viewRect = rect.toRect();
     viewRect.translate(m_caCanvasItem->koCanvas()->documentOrigin());
-    if (!viewRect.isValid() || currentVisible.contains(viewRect))
-        return; // its visible. Nothing to do.
+    if (!viewRect.isValid() || currentVisible.contains(viewRect)) {
+        return;    // its visible. Nothing to do.
+    }
 
     // if we move, we move a little more so the amount of times we have to move is less.
     int jumpWidth = smooth ? 0 : currentVisible.width() / 5;
     int jumpHeight = smooth ? 0 : currentVisible.height() / 5;
-    if (!smooth && viewRect.width() + jumpWidth > currentVisible.width())
+    if (!smooth && viewRect.width() + jumpWidth > currentVisible.width()) {
         jumpWidth = 0;
-    if (!smooth && viewRect.height() + jumpHeight > currentVisible.height())
+    }
+    if (!smooth && viewRect.height() + jumpHeight > currentVisible.height()) {
         jumpHeight = 0;
+    }
 
     int horizontalMove = 0;
-    if (currentVisible.width() <= viewRect.width())      // center view
+    if (currentVisible.width() <= viewRect.width()) {    // center view
         horizontalMove = viewRect.center().x() - currentVisible.center().x();
-    else if (currentVisible.x() > viewRect.x())          // move left
+    } else if (currentVisible.x() > viewRect.x()) {      // move left
         horizontalMove = viewRect.x() - currentVisible.x() - jumpWidth;
-    else if (currentVisible.right() < viewRect.right())  // move right
+    } else if (currentVisible.right() < viewRect.right()) { // move right
         horizontalMove = viewRect.right() - qMax(0, currentVisible.right() - jumpWidth);
+    }
 
     int verticalMove = 0;
-    if (currentVisible.height() <= viewRect.height())       // center view
+    if (currentVisible.height() <= viewRect.height()) {     // center view
         verticalMove = viewRect.center().y() - currentVisible.center().y();
-    if (currentVisible.y() > viewRect.y())               // move up
+    }
+    if (currentVisible.y() > viewRect.y()) {             // move up
         verticalMove = viewRect.y() - currentVisible.y() - jumpHeight;
-    else if (currentVisible.bottom() < viewRect.bottom()) // move down
+    } else if (currentVisible.bottom() < viewRect.bottom()) { // move down
         verticalMove = viewRect.bottom() - qMax(0, currentVisible.bottom() - jumpHeight);
+    }
 
     pan(QPoint(horizontalMove, verticalMove));
 }
 
 int CACanvasController::canvasOffsetY() const
 {
-    return m_caCanvasItem ? cameraY() - height()/2 : 0;
+    return m_caCanvasItem ? cameraY() - height() / 2 : 0;
 }
 
 int CACanvasController::canvasOffsetX() const
 {
-    return m_caCanvasItem ? cameraX() - width()/2 : 0;
+    return m_caCanvasItem ? cameraX() - width() / 2 : 0;
 }
 
 int CACanvasController::visibleHeight() const
 {
-    if (m_caCanvasItem == 0)
+    if (m_caCanvasItem == 0) {
         return 0;
-    QGraphicsWidget *canvasItem = dynamic_cast<QGraphicsWidget*>(m_caCanvasItem->koCanvas()->canvasItem());
+    }
+    QGraphicsWidget *canvasItem = dynamic_cast<QGraphicsWidget *>(m_caCanvasItem->koCanvas()->canvasItem());
 
     int height1;
-    if (canvasItem == 0)
+    if (canvasItem == 0) {
         height1 = height();
-    else
+    } else {
         height1 = qMin(height(), canvasItem->boundingRect().height());
+    }
     int height2 = height();
     return qMin(height1, height2);
 }
 
 int CACanvasController::visibleWidth() const
 {
-    if (m_caCanvasItem == 0)
+    if (m_caCanvasItem == 0) {
         return 0;
-    QGraphicsWidget *canvasItem = dynamic_cast<QGraphicsWidget*>(m_caCanvasItem->koCanvas()->canvasItem());
+    }
+    QGraphicsWidget *canvasItem = dynamic_cast<QGraphicsWidget *>(m_caCanvasItem->koCanvas()->canvasItem());
 
     int width1;
-    if (canvasItem == 0)
+    if (canvasItem == 0) {
         width1 = width();
-    else
+    } else {
         width1 = qMin(width(), canvasItem->boundingRect().width());
+    }
     int width2 = width();
     return qMin(width1, width2);
 }
 
-KoCanvasBase* CACanvasController::canvas() const
+KoCanvasBase *CACanvasController::canvas() const
 {
     return m_caCanvasItem->koCanvas();
 }
 
-KoCanvasControllerProxyObject* CACanvasController::canvasControllerProxyObject()
+KoCanvasControllerProxyObject *CACanvasController::canvasControllerProxyObject()
 {
     return proxyObject;
 }
 
-QObject* CACanvasController::caCanvasItem()
+QObject *CACanvasController::caCanvasItem()
 {
-    return dynamic_cast<QObject*>(m_caCanvasItem);
+    return dynamic_cast<QObject *>(m_caCanvasItem);
 }
 
-void CACanvasController::setCACanvasItem(QObject* caCanvas)
+void CACanvasController::setCACanvasItem(QObject *caCanvas)
 {
-    m_caCanvasItem = static_cast<CACanvasItem*>(caCanvas);
+    m_caCanvasItem = static_cast<CACanvasItem *>(caCanvas);
 }
 
-void CACanvasController::setCanvas (KoCanvasBase* canvas)
+void CACanvasController::setCanvas(KoCanvasBase *canvas)
 {
     canvas->setCanvasController(this);
     m_caCanvasItem->setKoCanvas(canvas);
     emit caCanvasItemChanged();
 }
 
-void CACanvasController::setDrawShadow (bool drawShadow)
+void CACanvasController::setDrawShadow(bool drawShadow)
 {
     Q_UNUSED(drawShadow);
     //kDebug() << drawShadow;
@@ -245,7 +256,7 @@ QSize CACanvasController::viewportSize() const
     return QSize(width(), height());
 }
 
-void CACanvasController::scrollContentsBy (int dx, int dy)
+void CACanvasController::scrollContentsBy(int dx, int dy)
 {
     Q_UNUSED(dx);
     Q_UNUSED(dy);
@@ -262,23 +273,23 @@ int CACanvasController::cameraY() const
     return m_currentPoint.y();
 }
 
-void CACanvasController::setCameraX (int cameraX)
+void CACanvasController::setCameraX(int cameraX)
 {
-    cameraX -= qMin(m_caCanvasItem->width()/2, width()/2);
+    cameraX -= qMin(m_caCanvasItem->width() / 2, width() / 2);
     if (m_caDocumentHandler && m_caDocumentHandler->preferredZoomMode() == KoZoomMode::ZOOM_WIDTH) {
         cameraX = 0;
     }
-    m_currentPoint.setX (cameraX);
+    m_currentPoint.setX(cameraX);
     emit cameraXChanged();
 }
 
-void CACanvasController::setCameraY (int cameraY)
+void CACanvasController::setCameraY(int cameraY)
 {
-    cameraY -= qMin(m_caCanvasItem->height()/2, height()/2);
+    cameraY -= qMin(m_caCanvasItem->height() / 2, height() / 2);
     if (m_caDocumentHandler && m_caDocumentHandler->preferredZoomMode() == KoZoomMode::ZOOM_PAGE) {
         cameraY = 0;
     }
-    m_currentPoint.setY (cameraY);
+    m_currentPoint.setY(cameraY);
     emit cameraYChanged();
 }
 
@@ -307,32 +318,32 @@ void CACanvasController::updateCanvas()
     emit needCanvasUpdate();
 }
 
-void CACanvasController::setDocumentHandler(CAAbstractDocumentHandler* documentHandler)
+void CACanvasController::setDocumentHandler(CAAbstractDocumentHandler *documentHandler)
 {
     m_caDocumentHandler = documentHandler;
 }
 
-void CACanvasController::geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry)
+void CACanvasController::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     if (m_caCanvasItem->koCanvas() && zoomController() && m_caDocumentHandler) {
         zoomController()->setZoomMode(m_caDocumentHandler->preferredZoomMode());
         emit proxyObject->emitSizeChanged(newGeometry.size().toSize());
         updateCanvas();
     }
-    QDeclarativeItem::geometryChanged (newGeometry, oldGeometry);
+    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
-KoZoomController* CACanvasController::zoomController()
+KoZoomController *CACanvasController::zoomController()
 {
     return m_zoomController;
 }
 
-KoZoomHandler* CACanvasController::zoomHandler()
+KoZoomHandler *CACanvasController::zoomHandler()
 {
     return m_zoomHandler;
 }
 
-void CACanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
+void CACanvasController::setZoomHandler(KoZoomHandler *zoomHandler)
 {
     if (!m_zoomController) {
         m_zoomHandler = zoomHandler;

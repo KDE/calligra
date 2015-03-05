@@ -21,19 +21,19 @@
 
 class KisRecordedAction;
 
-class KisRecordedActionCreator : public QWidget {
+class KisRecordedActionCreator : public QWidget
+{
 public:
-    explicit KisRecordedActionCreator(QWidget* parent = 0, Qt::WindowFlags f = 0);
+    explicit KisRecordedActionCreator(QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~KisRecordedActionCreator();
     /**
      * This function is called when the dialog is closed and the action has to be created
      * from the parameters in the widget.
      */
-    virtual KisRecordedAction* createAction() const = 0;
+    virtual KisRecordedAction *createAction() const = 0;
 private:
     struct Private;
-    Private * const d;
+    Private *const d;
 };
-
 
 #endif

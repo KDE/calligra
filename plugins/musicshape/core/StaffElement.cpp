@@ -18,13 +18,14 @@
  */
 #include "StaffElement.h"
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class StaffElement::Private
 {
 public:
-    Staff* staff;
-    Bar* bar;
+    Staff *staff;
+    Bar *bar;
     int startTime;
     qreal x;
     qreal y;
@@ -32,7 +33,7 @@ public:
     qreal height;
 };
 
-StaffElement::StaffElement(Staff* staff, int startTime) : d(new Private)
+StaffElement::StaffElement(Staff *staff, int startTime) : d(new Private)
 {
     d->staff = staff;
     d->bar = NULL;
@@ -48,17 +49,17 @@ StaffElement::~StaffElement()
     delete d;
 }
 
-Staff* StaffElement::staff()
+Staff *StaffElement::staff()
 {
     return d->staff;
 }
 
-Bar* StaffElement::bar()
+Bar *StaffElement::bar()
 {
     return d->bar;
 }
 
-void StaffElement::setBar(Bar* bar)
+void StaffElement::setBar(Bar *bar)
 {
     d->bar = bar;
 }
@@ -70,7 +71,9 @@ qreal StaffElement::x() const
 
 void StaffElement::setX(qreal x)
 {
-    if (d->x == x) return;
+    if (d->x == x) {
+        return;
+    }
     d->x = x;
     emit xChanged(x);
 }
@@ -82,7 +85,9 @@ qreal StaffElement::y() const
 
 void StaffElement::setY(qreal y)
 {
-    if (d->y == y) return;
+    if (d->y == y) {
+        return;
+    }
     d->y = y;
     emit yChanged(y);
 }
@@ -94,7 +99,9 @@ qreal StaffElement::width() const
 
 void StaffElement::setWidth(qreal width)
 {
-    if (d->width == width) return;
+    if (d->width == width) {
+        return;
+    }
     d->width = width;
     emit widthChanged(width);
 }
@@ -106,7 +113,9 @@ qreal StaffElement::height() const
 
 void StaffElement::setHeight(qreal height)
 {
-    if (d->height == height) return;
+    if (d->height == height) {
+        return;
+    }
     d->height = height;
     emit heightChanged(height);
 }
@@ -118,7 +127,9 @@ int StaffElement::startTime() const
 
 void StaffElement::setStartTime(int startTime)
 {
-    if (d->startTime == startTime) return;
+    if (d->startTime == startTime) {
+        return;
+    }
     d->startTime = startTime;
     emit startTimeChanged(startTime);
 }

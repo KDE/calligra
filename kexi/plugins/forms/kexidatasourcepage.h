@@ -47,48 +47,48 @@ public Q_SLOTS:
 
     //! Sets data source of a currently selected form.
     //! This is performed on form initialization and on activating.
-    void setFormDataSource(const QString& partClass, const QString& name);
+    void setFormDataSource(const QString &partClass, const QString &name);
 
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
-    void assignPropertySet(KoProperty::Set* propertySet);
+    void assignPropertySet(KoProperty::Set *propertySet);
 
 Q_SIGNALS:
     //! Signal emitted when helper button 'go to selected data source' is clicked.
-    void jumpToObjectRequested(const QString& mime, const QString& name);
+    void jumpToObjectRequested(const QString &mime, const QString &name);
 
     //! Signal emitted when form's data source has been changed. It's connected to the Form Manager.
-    void formDataSourceChanged(const QString& mime, const QString& name);
+    void formDataSourceChanged(const QString &mime, const QString &name);
 
     /*! Signal emitted when current widget's data source (field/expression)
      has been changed. It's connected to the Form Manager.
      \a caption for this field is also provided (e.g. AutoField form widget use it) */
-    void dataSourceFieldOrExpressionChanged(const QString& string, const QString& caption,
+    void dataSourceFieldOrExpressionChanged(const QString &string, const QString &caption,
                                             KexiDB::Field::Type type);
 
     /*! Signal emitted when 'insert fields' button has been clicked */
-    void insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
-                          const QStringList& fields);
+    void insertAutoFields(const QString &sourcePartClass, const QString &sourceName,
+                          const QStringList &fields);
 
 protected Q_SLOTS:
-    void slotFormDataSourceTextChanged(const QString & string);
+    void slotFormDataSourceTextChanged(const QString &string);
     void slotFormDataSourceChanged();
     void slotFieldSelected();
     void slotGotoSelected();
     void slotInsertSelectedFields();
     void slotFieldListViewSelectionChanged();
-    void slotFieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
-                                const QString& fieldName);
+    void slotFieldDoubleClicked(const QString &sourcePartClass, const QString &sourceName,
+                                const QString &fieldName);
 
 protected:
     void updateSourceFieldWidgetsAvailability();
 
     KexiFieldComboBox *m_widgetDataSourceCombo;
     QWidget *m_widgetDataSourceComboSpacer;
-    KexiDataSourceComboBox* m_formDataSourceCombo;
+    KexiDataSourceComboBox *m_formDataSourceCombo;
     QWidget *m_formDataSourceComboSpacer;
     QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel,
-    *m_widgetDSLabel, *m_availableFieldsLabel,
-    *m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
+           *m_widgetDSLabel, *m_availableFieldsLabel,
+           *m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
     QToolButton *m_gotoButton, *m_addField;
     QString m_noDataSourceAvailableSingleText;
     QString m_noDataSourceAvailableMultiText;
@@ -96,7 +96,7 @@ protected:
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
     KexiDB::TableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
 #else
-    KexiFieldListView* m_fieldListView;
+    KexiFieldListView *m_fieldListView;
 #endif
 
     //! Used only in assignPropertySet() to check whether we already have the set assigned

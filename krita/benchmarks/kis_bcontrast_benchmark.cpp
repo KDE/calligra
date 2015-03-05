@@ -38,38 +38,36 @@
 #include "kis_selection.h"
 #include <kis_iterator_ng.h>
 
-
 void KisBContrastBenchmark::initTestCase()
 {
-    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();    
+    m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     m_device = new KisPaintDevice(m_colorSpace);
     m_color = KoColor(m_colorSpace);
-    
+
     srand(31524744);
-    
-    int r,g,b;
+
+    int r, g, b;
 
     KisSequentialIterator it(m_device, QRect(0, 0, GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT));
     do {
         r = rand() % 255;
         g = rand() % 255;
         b = rand() % 255;
-        
-        m_color.fromQColor(QColor(r,g,b));
+
+        m_color.fromQColor(QColor(r, g, b));
         memcpy(it.rawData(), m_color.data(), m_colorSpace->pixelSize());
     } while (it.nextPixel());
-    
+
 }
 
 void KisBContrastBenchmark::cleanupTestCase()
 {
 }
 
-
 void KisBContrastBenchmark::benchmarkFilter()
 {
     KisFilterSP filter = KisFilterRegistry::instance()->value("brightnesscontrast");
-    KisFilterConfiguration * kfc = filter->defaultConfiguration(m_device);
+    KisFilterConfiguration *kfc = filter->defaultConfiguration(m_device);
 
     // Get the predefined configuration from a file
     QFile file(QString(FILES_DATA_DIR) + QDir::separator() + filter->id() + ".cfg");
@@ -85,11 +83,9 @@ void KisBContrastBenchmark::benchmarkFilter()
     }
 
     QBENCHMARK{
-        filter->process(m_device, QRect(0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT), kfc);
+        filter->process(m_device, QRect(0, 0, GMP_IMAGE_WIDTH, GMP_IMAGE_HEIGHT), kfc);
     }
 }
-
-
 
 QTEST_KDEMAIN(KisBContrastBenchmark, GUI)
 #include "kis_bcontrast_benchmark.moc"

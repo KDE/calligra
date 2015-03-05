@@ -38,7 +38,7 @@
 
 //! TODO Make this more generic to test any migration driver
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     Q_UNUSED(argv);
     Q_UNUSED(argc);
@@ -87,23 +87,22 @@ int main(int argc, char** argv)
     cdata->setFileName(dbname);
     kDebug() << "Current file name: " << dbname;
 
-
     QString sourceDriverName = "xbase";
     // get the source migration driver
-    KexiMigration::KexiMigrate* sourceDriver = 0;
+    KexiMigration::KexiMigrate *sourceDriver = 0;
     sourceDriver = migrateManager.driver(sourceDriverName);
     if (!sourceDriver || migrateManager.error()) {
         kDebug() << "Import migrate driver error...";
         return -1;
     }
 
-    KexiMigration::Data* md = new KexiMigration::Data();
+    KexiMigration::Data *md = new KexiMigration::Data();
     md->keepData = true;
     // delete md->destination;
     md->destination = new KexiProjectData(*cdata, dbname);
 
     // Setup XBase connection data
-    KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
+    KexiDB::ConnectionData *conn_data = new KexiDB::ConnectionData();
     conn_data->setFileName(xBaseSourceDirectory);
 
     md->source = conn_data;

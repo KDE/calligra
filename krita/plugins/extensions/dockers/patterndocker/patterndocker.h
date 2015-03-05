@@ -29,11 +29,11 @@ class KisViewManager;
 class PatternDockerPlugin : public QObject
 {
     Q_OBJECT
-    public:
-        PatternDockerPlugin(QObject *parent, const QVariantList &);
-        virtual ~PatternDockerPlugin();
-    private:
-        KisViewManager* m_view;
+public:
+    PatternDockerPlugin(QObject *parent, const QVariantList &);
+    virtual ~PatternDockerPlugin();
+private:
+    KisViewManager *m_view;
 };
 
 #endif

@@ -24,7 +24,7 @@
 #include <QPainter>
 
 KexiDBTextWidgetInterface::KexiDBTextWidgetInterface()
-        : m_autonumberDisplayParameters(0)
+    : m_autonumberDisplayParameters(0)
 {
 }
 
@@ -33,24 +33,26 @@ KexiDBTextWidgetInterface::~KexiDBTextWidgetInterface()
     delete m_autonumberDisplayParameters;
 }
 
-void KexiDBTextWidgetInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w)
+void KexiDBTextWidgetInterface::setColumnInfo(KexiDB::QueryColumnInfo *cinfo, QWidget *w)
 {
     if (cinfo->field->isAutoIncrement()) {
-        if (!m_autonumberDisplayParameters)
+        if (!m_autonumberDisplayParameters) {
             m_autonumberDisplayParameters = new KexiDisplayUtils::DisplayParameters();
+        }
         KexiDisplayUtils::initDisplayForAutonumberSign(*m_autonumberDisplayParameters, w);
     }
 }
 
 void KexiDBTextWidgetInterface::paint(
-    QWidget *w, QPainter* p, bool textIsEmpty, Qt::Alignment alignment, bool hasFocus)
+    QWidget *w, QPainter *p, bool textIsEmpty, Qt::Alignment alignment, bool hasFocus)
 {
-    KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(w);
+    KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface *>(w);
     KexiDB::QueryColumnInfo *columnInfo = dataItemIface ? dataItemIface->columnInfo() : 0;
     if (columnInfo && columnInfo->field && dataItemIface->cursorAtNewRow() && textIsEmpty) {
         int addMargin = 0;
-        if (dynamic_cast<QFrame*>(w))
-            addMargin += dynamic_cast<QFrame*>(w)->lineWidth() + dynamic_cast<QFrame*>(w)->midLineWidth();
+        if (dynamic_cast<QFrame *>(w)) {
+            addMargin += dynamic_cast<QFrame *>(w)->lineWidth() + dynamic_cast<QFrame *>(w)->midLineWidth();
+        }
         if (columnInfo->field->isAutoIncrement() && m_autonumberDisplayParameters) {
             if (w->hasFocus()) {
                 p->setPen(
@@ -67,10 +69,11 @@ void KexiDBTextWidgetInterface::paint(
     }
 }
 
-void KexiDBTextWidgetInterface::event(QEvent * e, QWidget *w, bool textIsEmpty)
+void KexiDBTextWidgetInterface::event(QEvent *e, QWidget *w, bool textIsEmpty)
 {
     if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {
-        if (m_autonumberDisplayParameters && textIsEmpty)
+        if (m_autonumberDisplayParameters && textIsEmpty) {
             w->repaint();
+        }
     }
 }

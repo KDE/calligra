@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdtMobiHtmlConverter.h"
 
@@ -40,12 +39,8 @@
 // EPUB filter
 #include "FileCollector.h"
 
-
-
-
 // ================================================================
 //                         Style parsing
-
 
 StyleInfo::StyleInfo()
     : isDefaultStyle(false)
@@ -54,7 +49,6 @@ StyleInfo::StyleInfo()
     , inUse(false)
 {
 }
-
 
 OdtMobiHtmlConverter::OdtMobiHtmlConverter()
     : m_currentChapter(1),
@@ -76,26 +70,25 @@ OdtMobiHtmlConverter::~OdtMobiHtmlConverter()
 // ================================================================
 //                         HTML conversion
 
-
 const OdtMobiHtmlConverter::ConversionOptions defaultOptions = {
     true,                       // Put styles into styles.css
     true,                        // Do break the output into chapters
     false                       // It doesn't use Mobi convention
 };
 
-
 KoFilter::ConversionStatus
 OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
-                                 QHash<QString, QString> &metaData,
-                                 OdtMobiHtmlConverter::ConversionOptions *options,
-                                 FileCollector *collector,
-                                 // Out parameters:
-                                 QHash<QString, QSizeF> &images)
+                                     QHash<QString, QString> &metaData,
+                                     OdtMobiHtmlConverter::ConversionOptions *options,
+                                     FileCollector *collector,
+                                     // Out parameters:
+                                     QHash<QString, QSizeF> &images)
 {
-    if (options)
+    if (options) {
         m_options = options;
-    else
+    } else {
         m_options = &defaultOptions;
+    }
     m_collector = collector;
 
     m_doIndent = !m_options->useMobiConventions;
@@ -110,14 +103,14 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
 
 #if 0 // Debug
     kDebug(30503) << "======== >> Styles";
-    foreach(const QString &name, m_styles.keys()) {
+    foreach (const QString &name, m_styles.keys()) {
         kDebug(30503) << "==" << name << ":\t"
                       << m_styles.value(name)->parent
                       << m_styles.value(name)->family
                       << m_styles.value(name)->isDefaultStyle
                       << m_styles.value(name)->shouldBreakChapter
                       << m_styles.value(name)->attributes
-            ;
+                      ;
     }
     kDebug(30503) << "======== << Styles";
 #endif
@@ -126,19 +119,19 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
     fixStyleTree(m_styles);
 
 #if 0
-     //2. Create CSS contents and store it in the file collector.
-        status = createCSS(m_styles, m_cssContent);
-        //kDebug(30503) << "Styles:" << m_styles;
-        //kDebug(30503) << "CSS:" << m_cssContent;
-        if (status != KoFilter::OK) {
-            delete odfStore;
-            return status;
-        }
-        if (m_options->stylesInCssFile) {
-            m_collector->addContentFile("stylesheet",
-                                        m_collector->pathPrefix() + "styles.css",
-                                        "text/css", m_cssContent);
-        }
+    //2. Create CSS contents and store it in the file collector.
+    status = createCSS(m_styles, m_cssContent);
+    //kDebug(30503) << "Styles:" << m_styles;
+    //kDebug(30503) << "CSS:" << m_cssContent;
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
+    if (m_options->stylesInCssFile) {
+        m_collector->addContentFile("stylesheet",
+                                    m_collector->pathPrefix() + "styles.css",
+                                    "text/css", m_cssContent);
+    }
 #endif
 
     // ----------------------------------------------------------------
@@ -186,7 +179,7 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
         // styling that makes us start on a new html file,
         // a.k.a. chapter.
         if (nodeElement.namespaceURI() == KoXmlNS::text && (nodeElement.localName() == "p"
-                                                            || nodeElement.localName() == "h")) {
+                || nodeElement.localName() == "h")) {
 
 #if 0
             // Check if this paragraph should break the text into a new chapter.
@@ -204,8 +197,7 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
                                       || (nodeElement.attribute("outline-level").isEmpty()
                                           && style && style->defaultOutlineLevel == 1));
             if (m_options->doBreakIntoChapters
-                    && (hasOutlineLevel1 || (style && style->shouldBreakChapter)))
-            {
+                    && (hasOutlineLevel1 || (style && style->shouldBreakChapter))) {
                 //kDebug(30503) << "Found paragraph which breaks into new chapter";
 
                 // Write out any footnotes
@@ -221,7 +213,6 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
                 QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
                 m_collector->addContentFile(fileId, fileName,
                                             "application/xhtml+xml", m_htmlContent, currentChapterTitle);
-
 
                 if (nodeElement.localName() == "h") {
                     currentChapterTitle = nodeElement.text();
@@ -239,43 +230,34 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
                 handleTagP(nodeElement, m_htmlWriter);
                 m_htmlWriter->startElement("br");
                 m_htmlWriter->endElement();
-            }
-            else
+            } else {
                 handleTagH(nodeElement, m_htmlWriter);
-        }
-        else if (nodeElement.localName() == "span" && nodeElement.namespaceURI() == KoXmlNS::text) {
+            }
+        } else if (nodeElement.localName() == "span" && nodeElement.namespaceURI() == KoXmlNS::text) {
             handleTagSpan(nodeElement, m_htmlWriter);
-        }
-        else if (nodeElement.localName() == "table" && nodeElement.namespaceURI() == KoXmlNS::table) {
+        } else if (nodeElement.localName() == "table" && nodeElement.namespaceURI() == KoXmlNS::table) {
             // Handle table
             handleTagTable(nodeElement, m_htmlWriter);
-        }
-        else if (nodeElement.localName() == "frame" && nodeElement.namespaceURI() == KoXmlNS::draw)  {
+        } else if (nodeElement.localName() == "frame" && nodeElement.namespaceURI() == KoXmlNS::draw)  {
             // Handle frame
             m_htmlWriter->startElement("div", m_doIndent);
             handleTagFrame(nodeElement, m_htmlWriter);
             m_htmlWriter->endElement(); // end div
-        }
-        else if (nodeElement.localName() == "soft-page-break" &&
-                 nodeElement.namespaceURI() == KoXmlNS::text) {
+        } else if (nodeElement.localName() == "soft-page-break" &&
+                   nodeElement.namespaceURI() == KoXmlNS::text) {
 
             handleTagPageBreak(nodeElement, m_htmlWriter);
-        }
-        else if (nodeElement.localName() == "list" && nodeElement.namespaceURI() == KoXmlNS::text) {
+        } else if (nodeElement.localName() == "list" && nodeElement.namespaceURI() == KoXmlNS::text) {
             handleTagList(nodeElement, m_htmlWriter);
-        }
-        else if (nodeElement.localName() == "a" && nodeElement.namespaceURI() == KoXmlNS::text) {
+        } else if (nodeElement.localName() == "a" && nodeElement.namespaceURI() == KoXmlNS::text) {
             handleTagA(nodeElement, m_htmlWriter);
-        }
-        else if (nodeElement.localName() == "table-of-content" &&
-                 nodeElement.namespaceURI() == KoXmlNS::text) {
+        } else if (nodeElement.localName() == "table-of-content" &&
+                   nodeElement.namespaceURI() == KoXmlNS::text) {
 
             handleTagTableOfContent(nodeElement, m_htmlWriter);
-        }
-        else if (nodeElement.localName() == "line-break" && nodeElement.namespaceURI() == KoXmlNS::text) {
+        } else if (nodeElement.localName() == "line-break" && nodeElement.namespaceURI() == KoXmlNS::text) {
             handleTagLineBreak(m_htmlWriter);
-        }
-        else {
+        } else {
             m_htmlWriter->startElement("div", m_doIndent);
             handleUnknownTags(nodeElement, m_htmlWriter);
             m_htmlWriter->endElement();
@@ -304,26 +286,27 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
 
     // Write output of the last file to the file collector object.
     QString fileId = m_collector->filePrefix();
-    if (m_options->doBreakIntoChapters)
+    if (m_options->doBreakIntoChapters) {
         fileId += QString::number(m_currentChapter);
+    }
     QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
     m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, currentChapterTitle);
 
 #if 0
     // 5. Write any data that we have collected on the way.
 
-        // If we had end notes, make a new chapter for end notes
-        if (!m_endNotes.isEmpty()) {
+    // If we had end notes, make a new chapter for end notes
+    if (!m_endNotes.isEmpty()) {
 
-            // Write the beginning of the output for the next file.
-            beginHtmlFile(metaData);
-            writeEndNotes(m_htmlWriter);
-            endHtmlFile();
+        // Write the beginning of the output for the next file.
+        beginHtmlFile(metaData);
+        writeEndNotes(m_htmlWriter);
+        endHtmlFile();
 
-            QString fileId = "chapter-endnotes";
-            QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
-            m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, i18n("End notes"));
-        }
+        QString fileId = "chapter-endnotes";
+        QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+        m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, i18n("End notes"));
+    }
 #endif
 
     odfStore->close();
@@ -362,8 +345,6 @@ void OdtMobiHtmlConverter::endHtmlFile()
     delete m_outBuf;
 }
 
-
-
 void OdtMobiHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &/*metaData*/)
 {
     writer->startElement("head", m_doIndent);
@@ -371,58 +352,56 @@ void OdtMobiHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QS
     writer->endElement();
     writer->endElement();
 #if 0
-        // We don't have title and meta tags in Mobi.
-        if (!m_options->useMobiConventions) {
-            writer->startElement("title", m_doIndent);
-            writer->addTextNode(metaData.value("title"));
-            writer->endElement(); // title
+    // We don't have title and meta tags in Mobi.
+    if (!m_options->useMobiConventions) {
+        writer->startElement("title", m_doIndent);
+        writer->addTextNode(metaData.value("title"));
+        writer->endElement(); // title
+
+        writer->startElement("meta", m_doIndent);
+        writer->addAttribute("http-equiv", "Content-Type");
+        writer->addAttribute("content", "text/html; charset=utf-8");
+        writer->endElement(); // meta
+
+        // write meta tag
+        // m-meta <Tagname, Text>
+        // <meta name = "Tagname" content = "Text" />
+        foreach (const QString &name, metaData.keys()) {
+            // Title is handled above.
+            if (name == "title") {
+                continue;
+            }
 
             writer->startElement("meta", m_doIndent);
-            writer->addAttribute("http-equiv", "Content-Type");
-            writer->addAttribute("content", "text/html; charset=utf-8");
+            writer->addAttribute("name", name);
+            writer->addAttribute("content", metaData.value(name));
             writer->endElement(); // meta
-
-            // write meta tag
-            // m-meta <Tagname, Text>
-            // <meta name = "Tagname" content = "Text" />
-            foreach (const QString &name, metaData.keys()) {
-                // Title is handled above.
-                if (name == "title")
-                    continue;
-
-                writer->startElement("meta", m_doIndent);
-                writer->addAttribute("name", name);
-                writer->addAttribute("content", metaData.value(name));
-                writer->endElement(); // meta
-            }
         }
+    }
 
-        // Refer to the stylesheet or put the styles in the html file.
-        if (m_options->stylesInCssFile) {
-            writer->startElement("link", m_doIndent);
-            writer->addAttribute("href", "styles.css");
-            writer->addAttribute("type", "text/css");
-            writer->addAttribute("rel", "stylesheet");
-            writer->endElement(); // link
-        }
-        else {
-            writer->startElement("style", m_doIndent);
-            writer->addTextNode(m_cssContent);
-            writer->endElement(); // style
-        }
+    // Refer to the stylesheet or put the styles in the html file.
+    if (m_options->stylesInCssFile) {
+        writer->startElement("link", m_doIndent);
+        writer->addAttribute("href", "styles.css");
+        writer->addAttribute("type", "text/css");
+        writer->addAttribute("rel", "stylesheet");
+        writer->endElement(); // link
+    } else {
+        writer->startElement("style", m_doIndent);
+        writer->addTextNode(m_cssContent);
+        writer->endElement(); // style
+    }
 
-        writer->endElement(); // head
+    writer->endElement(); // head
 #endif
 }
-
 
 // ----------------------------------------------------------------
 //                 Traversal of the XML contents
 
-
 void OdtMobiHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
     //QString styleName = nodeElement.attribute("style-name");
@@ -458,7 +437,7 @@ void OdtMobiHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter
                 //        what is inside a paragraph. (Beside, this
                 //        function has a strange name.)
                 handleInsideElementsTag(cellElement, htmlWriter);
-                if ( m_optionsTag) {
+                if (m_optionsTag) {
                     closeFontOptionsElement(htmlWriter);
                 }
                 // ===================
@@ -475,7 +454,7 @@ void OdtMobiHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter
 void OdtMobiHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
 
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
 
@@ -497,8 +476,8 @@ void OdtMobiHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter
     //        First, there is no way to tell if the unit is 2 chars
     //        Second, it is not sure that there *is* a unit.
     //        Instead, use some function in KoUnit that converts the size.  /IW
-    height = height.left(height.length()-2);
-    width  = width.left(width.length()-2);
+    height = height.left(height.length() - 2);
+    width  = width.left(width.length() - 2);
 
     // Convert them to real.
     qreal qHeight = height.toFloat();
@@ -516,8 +495,7 @@ void OdtMobiHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter
                 // First check for repeated images.
                 if (m_imagesIndex.contains(imgSrc)) {
                     htmlWriter->addAttribute("recindex", QString::number(m_imagesIndex.value(imgSrc)));
-                }
-                else {
+                } else {
                     htmlWriter->addAttribute("recindex", QString::number(m_imgIndex));
                     m_imagesIndex.insert(imgSrc, m_imgIndex);
                     m_imgIndex++;
@@ -525,8 +503,7 @@ void OdtMobiHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter
                 htmlWriter->addAttribute("align", "baseline");
                 htmlWriter->addAttribute("height", height);
                 htmlWriter->addAttribute("width", width);
-            }
-            else {
+            } else {
                 htmlWriter->addAttribute("src", m_collector->filePrefix() + imgSrc);
             }
 
@@ -538,7 +515,7 @@ void OdtMobiHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter
 
 void OdtMobiHtmlConverter::handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
     QString styleName = nodeElement.attribute("style-name");
@@ -550,15 +527,16 @@ void OdtMobiHtmlConverter::handleTagP(KoXmlElement &nodeElement, KoXmlWriter *ht
     if (styleInfo) {
         //        styleInfo->inUse = true;
         //                htmlWriter->addAttribute("class", styleName);
-        if (styleInfo->attributes.value("text-align").isEmpty())
+        if (styleInfo->attributes.value("text-align").isEmpty()) {
             htmlWriter->addAttribute("align", "left");
-        else
+        } else {
             htmlWriter->addAttribute("align", styleInfo->attributes.value("text-align"));
+        }
         openFontOptionsElement(htmlWriter, styleInfo);
     }
     //closeFontOptionsElement(htmlWriter);
     handleInsideElementsTag(nodeElement, htmlWriter);
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
     htmlWriter->endElement();
@@ -572,7 +550,7 @@ void OdtMobiHtmlConverter::handleCharacterData(KoXmlNode &node, KoXmlWriter *htm
 
 void OdtMobiHtmlConverter::handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
     QString styleName = nodeElement.attribute("style-name");
@@ -583,7 +561,7 @@ void OdtMobiHtmlConverter::handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter 
         openFontOptionsElement(htmlWriter, styleInfo);
     }
     handleInsideElementsTag(nodeElement, htmlWriter);
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
     //htmlWriter->endElement(); // span
@@ -598,7 +576,7 @@ void OdtMobiHtmlConverter::handleTagPageBreak(KoXmlElement &nodeElement, KoXmlWr
 
 void OdtMobiHtmlConverter::handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
 
@@ -609,18 +587,19 @@ void OdtMobiHtmlConverter::handleTagH(KoXmlElement &nodeElement, KoXmlWriter *ht
     htmlWriter->addAttribute("height", "6pt");
     htmlWriter->addAttribute("width", "2em");
     if (styleInfo) {
-     //   styleInfo->inUse = true;
-     //        htmlWriter->addAttribute("class", styleName);
-        if (styleInfo->attributes.value("text-align").isEmpty())
+        //   styleInfo->inUse = true;
+        //        htmlWriter->addAttribute("class", styleName);
+        if (styleInfo->attributes.value("text-align").isEmpty()) {
             htmlWriter->addAttribute("align", "left");
-        else
+        } else {
             htmlWriter->addAttribute("align", styleInfo->attributes.value("text-align"));
+        }
 
         openFontOptionsElement(htmlWriter, styleInfo);
     }
     handleInsideElementsTag(nodeElement, htmlWriter);
 
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
     htmlWriter->endElement();
@@ -628,12 +607,12 @@ void OdtMobiHtmlConverter::handleTagH(KoXmlElement &nodeElement, KoXmlWriter *ht
 
 void OdtMobiHtmlConverter::handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
 //        QString styleName = nodeElement.attribute("style-name");
 //        StyleInfo *styleInfo = m_styles.value(styleName);
-        htmlWriter->startElement("ul", m_doIndent);
+    htmlWriter->startElement("ul", m_doIndent);
     //    if (styleInfo) {
     //        styleInfo->inUse = true;
     //        htmlWriter->addAttribute("class", styleName);
@@ -642,12 +621,12 @@ void OdtMobiHtmlConverter::handleTagList(KoXmlElement &nodeElement, KoXmlWriter 
     forEachElement (listItem, nodeElement) {
         htmlWriter->startElement("li", m_doIndent);
         handleInsideElementsTag(listItem, htmlWriter);
-        if ( m_optionsTag) {
+        if (m_optionsTag) {
             closeFontOptionsElement(htmlWriter);
         }
         htmlWriter->endElement();
     }
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
     htmlWriter->endElement();
@@ -655,7 +634,7 @@ void OdtMobiHtmlConverter::handleTagList(KoXmlElement &nodeElement, KoXmlWriter 
 
 void OdtMobiHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
     htmlWriter->startElement("a", m_doIndent);
@@ -669,19 +648,18 @@ void OdtMobiHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *ht
 //        reference = chapter+reference;
 //        htmlWriter->addAttribute("href", reference);
         m_refrencesList.insert(htmlWriter->device()->pos(), mark);
-    }
-    else {
+    } else {
         // This is external link.
         htmlWriter->addAttribute("href", reference);
     }
     handleInsideElementsTag(nodeElement, htmlWriter);
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
     htmlWriter->endElement();
 }
 
-void OdtMobiHtmlConverter::handleTagTab (KoXmlWriter */*htmlWriter*/)
+void OdtMobiHtmlConverter::handleTagTab(KoXmlWriter */*htmlWriter*/)
 {
 //    for (int i = 0; i <10; ++i)
 //        htmlWriter->addTextNode("\u00a0");
@@ -694,14 +672,14 @@ void OdtMobiHtmlConverter::handleTagTableOfContent(KoXmlElement &nodeElement, Ko
     forEachElement (element, indexBody) {
         if (element.localName() == "index-title" && element.namespaceURI() == KoXmlNS::text) {
             handleInsideElementsTag(element, htmlWriter);
-        }
-        else
+        } else {
             handleTagTableOfContentBody(element, htmlWriter);
+        }
     }
 }
 
 void OdtMobiHtmlConverter::handleTagTableOfContentBody(KoXmlElement &nodeElement,
-                                                   KoXmlWriter *htmlWriter)
+        KoXmlWriter *htmlWriter)
 {
     if (nodeElement.localName() == "p" && nodeElement.namespaceURI() == KoXmlNS::text) {
         handleTagP(nodeElement, htmlWriter);
@@ -716,7 +694,7 @@ void OdtMobiHtmlConverter::handleTagLineBreak(KoXmlWriter *htmlWriter)
 
 void OdtMobiHtmlConverter::handleTagBookMark(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
     QString anchor = nodeElement.attribute("name");
@@ -731,7 +709,7 @@ void OdtMobiHtmlConverter::handleTagBookMark(KoXmlElement &nodeElement, KoXmlWri
 
 void OdtMobiHtmlConverter::handleTagBookMarkStart(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    if ( m_optionsTag) {
+    if (m_optionsTag) {
         closeFontOptionsElement(htmlWriter);
     }
 
@@ -752,7 +730,6 @@ void OdtMobiHtmlConverter::handleUnknownTags(KoXmlElement &nodeElement, KoXmlWri
     handleInsideElementsTag(nodeElement, htmlWriter);
 }
 
-
 void OdtMobiHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
     QString noteClass = nodeElement.attribute("note-class");
@@ -762,7 +739,7 @@ void OdtMobiHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter 
 
     QString id = nodeElement.attribute("id");
     KoXmlElement noteElements;
-    forEachElement(noteElements, nodeElement) {
+    forEachElement (noteElements, nodeElement) {
         if (noteElements.localName() == "note-citation" && noteElements.namespaceURI() == KoXmlNS::text) {
             htmlWriter->startElement("sup", m_doIndent);
 
@@ -779,14 +756,14 @@ void OdtMobiHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter 
             htmlWriter->endElement();
 
             htmlWriter->endElement();
-        }
-        else if (noteElements.localName() == "note-body" && noteElements.namespaceURI() == KoXmlNS::text) {
-            if (noteClass == "footnote")
+        } else if (noteElements.localName() == "note-body" && noteElements.namespaceURI() == KoXmlNS::text) {
+            if (noteClass == "footnote") {
                 m_footNotes.insert(id, noteElements);
-            else {
+            } else {
                 QString noteChapter = m_collector->filePrefix();
-                if (m_options->doBreakIntoChapters)
+                if (m_options->doBreakIntoChapters) {
                     noteChapter += QString::number(m_currentChapter);
+                }
 //                m_endNotes.insert(noteChapter + "/" + id, noteElements);
                 m_endNotes.insert(id, nodeElement);
                 // we insert this: m_currentChapter/id
@@ -807,53 +784,37 @@ void OdtMobiHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, Ko
 
         if (node.isText()) {
             handleCharacterData(node, htmlWriter);
-        }
-        else if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text) {
             handleTagP(element, htmlWriter);
-        }
-        else if (element.localName() == "h" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "h" && element.namespaceURI() == KoXmlNS::text) {
             handleTagH(element, htmlWriter);
-        }
-        else if (element.localName() == "table" && element.namespaceURI() == KoXmlNS::table) {
+        } else if (element.localName() == "table" && element.namespaceURI() == KoXmlNS::table) {
             handleTagTable(element, htmlWriter);
-        }
-        else if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text) {
             handleTagSpan(element, htmlWriter);
-        }
-        else if (element.localName() == "frame" && element.namespaceURI() == KoXmlNS::draw) {
+        } else if (element.localName() == "frame" && element.namespaceURI() == KoXmlNS::draw) {
             handleTagFrame(element, htmlWriter);
-        }
-        else if (nodeElement.localName() == "list" && nodeElement.namespaceURI() == KoXmlNS::text) {
+        } else if (nodeElement.localName() == "list" && nodeElement.namespaceURI() == KoXmlNS::text) {
             handleTagList(nodeElement, htmlWriter);
-        }
-        else if (element.localName() == "soft-page-break" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "soft-page-break" && element.namespaceURI() == KoXmlNS::text) {
             handleTagPageBreak(element, htmlWriter);
-        }
-        else if (element.localName() == "a" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "a" && element.namespaceURI() == KoXmlNS::text) {
             handleTagA(element, htmlWriter);
-        }
-        else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
 //            htmlWriter->addTextNode("\u00a0");
-        }
-        else if (element.localName() == "line-break" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "line-break" && element.namespaceURI() == KoXmlNS::text) {
             handleTagLineBreak(htmlWriter);
-        }
-        else if (element.localName() == "tab" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "tab" && element.namespaceURI() == KoXmlNS::text) {
             handleTagTab(htmlWriter);
-        }
-        else if (element.localName() == "bookmark" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "bookmark" && element.namespaceURI() == KoXmlNS::text) {
             handleTagBookMark(element, htmlWriter);
-        }
-        else if (element.localName() == "bookmark-start" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "bookmark-start" && element.namespaceURI() == KoXmlNS::text) {
             handleTagBookMarkStart(element, htmlWriter);
-        }
-        else if (element.localName() == "bookmark-end" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "bookmark-end" && element.namespaceURI() == KoXmlNS::text) {
             handleTagBookMarkEnd(htmlWriter);
-        }
-        else if (element.localName() == "note" && element.namespaceURI() == KoXmlNS::text) {
+        } else if (element.localName() == "note" && element.namespaceURI() == KoXmlNS::text) {
             handleTagNote(element, htmlWriter);
-        }
-        else {
+        } else {
             // FIXME: The same code in convertContent() inserts <div>
             //        around this call.
             handleUnknownTags(element, htmlWriter);
@@ -864,31 +825,28 @@ void OdtMobiHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, Ko
     }
 }
 
-
 // ----------------------------------------------------------------
-
 
 void OdtMobiHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement, int &chapter)
 {
     KoXmlElement nodeElement;
     forEachElement (nodeElement, currentElement) {
-        if ( (nodeElement.localName() == "p" || nodeElement.localName() == "h")
-             && nodeElement.namespaceURI() == KoXmlNS::text)
-        {
+        if ((nodeElement.localName() == "p" || nodeElement.localName() == "h")
+                && nodeElement.namespaceURI() == KoXmlNS::text) {
             // A break-before in the style means create a new chapter here,
             // but only if it is a top-level paragraph and not at the very first node.
             StyleInfo *style = m_styles.value(nodeElement.attribute("style-name"));
             if (m_options->doBreakIntoChapters && style && style->shouldBreakChapter) {
                 chapter++;
             }
-        }
-        else if ((nodeElement.localName() == "bookmark-start" || nodeElement.localName() == "bookmark")
-                  && nodeElement.namespaceURI() == KoXmlNS::text) {
+        } else if ((nodeElement.localName() == "bookmark-start" || nodeElement.localName() == "bookmark")
+                   && nodeElement.namespaceURI() == KoXmlNS::text) {
             QString key = "#" + nodeElement.attribute("name");
 //            QString value = m_collector->filePrefix();
             QString value = nodeElement.attribute("name");
-            if (m_options->doBreakIntoChapters)
+            if (m_options->doBreakIntoChapters) {
                 value += QString::number(chapter);
+            }
             //value += ".xhtml";
             m_linksInfo.insert(key, value);
             continue;
@@ -908,7 +866,7 @@ void OdtMobiHtmlConverter::writeFootNotes(KoXmlWriter *htmlWriter)
 
     htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
-    foreach(const QString &id, m_footNotes.keys()) {
+    foreach (const QString &id, m_footNotes.keys()) {
         htmlWriter->startElement("li", m_doIndent);
 //        htmlWriter->addAttribute("id", id + "n");
 //        htmlWriter->startElement("a", m_doIndent);
@@ -936,7 +894,7 @@ void OdtMobiHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
 
     htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
-    foreach(const QString &id, m_endNotes.keys()) {
+    foreach (const QString &id, m_endNotes.keys()) {
         htmlWriter->startElement("li", m_doIndent);
 //        htmlWriter->addAttribute("id", id.section("/", 1) + "n");
 
@@ -944,7 +902,7 @@ void OdtMobiHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
 //        // id = chapter-endnotes.xhtml/endnoteId
 //        htmlWriter->addAttribute("href",id.section("/", 0, 0) + "#" + id.section("/", 1) + "t");
         m_bookMarksList.insert(id, htmlWriter->device()->pos());
-        htmlWriter->addTextNode("["+QString::number(noteCounts)+"]");
+        htmlWriter->addTextNode("[" + QString::number(noteCounts) + "]");
 //        htmlWriter->endElement();
         KoXmlElement bodyElement = m_endNotes.value(id);
         handleInsideElementsTag(bodyElement, htmlWriter);
@@ -955,13 +913,11 @@ void OdtMobiHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
     htmlWriter->endElement();
 }
 
-
 // ================================================================
 //                         Style handling
 
-
 KoFilter::ConversionStatus OdtMobiHtmlConverter::collectStyles(KoStore *odfStore,
-                                                           QHash<QString, StyleInfo*> &styles)
+        QHash<QString, StyleInfo *> &styles)
 {
     KoXmlDocument doc;
     QString errorMsg;
@@ -1024,15 +980,16 @@ KoFilter::ConversionStatus OdtMobiHtmlConverter::collectStyles(KoStore *odfStore
     return KoFilter::OK;
 }
 
-void OdtMobiHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles)
+void OdtMobiHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString, StyleInfo *> &styles)
 {
     KoXmlElement styleElement;
     forEachElement (styleElement, stylesNode) {
 
         // FIXME: Handle text:outline-style also.
         QString tagName = styleElement.tagName();
-        if (tagName != "style" && tagName != "default-style")
+        if (tagName != "style" && tagName != "default-style") {
             continue;
+        }
 
         StyleInfo *styleInfo = new StyleInfo;
 
@@ -1071,8 +1028,9 @@ void OdtMobiHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString,
         QString dummy = styleElement.attribute("default-outline-level");
         bool  ok;
         styleInfo->defaultOutlineLevel = dummy.toInt(&ok);
-        if (!ok)
+        if (!ok) {
             styleInfo->defaultOutlineLevel = -1;
+        }
 
         // Go through all property lists (like text-properties,
         // paragraph-properties, etc) and collect the relevant
@@ -1116,32 +1074,32 @@ void OdtMobiHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElemen
 
     QStringList attributes;
     attributes
-        // font
-        << "font-style" << "font-variant" << "font-weight" << "font-size"
-        // text
-        << "text-indent" << "text-align" << "text-decoration" << "white-space"
-        // color
-        << "color" << "background-color"
-        // visual formatting
-        << "width" << "min-width" << "max-width"
-        << "height" << "min-height" << "max-height" << "line-height" << "vertical-align"
-        // border
-        << "border-top-width" << "border-bottom-width"
-        << "border-left-width" << "border-right-width" << "border-width"
-        // border
-        << "border-top-color" << "border-bottom-color"
-        << "border-left-color" << "border-right-color" << "border-color"
-        // border
-        << "border-top-style" << "border-bottom-style"
-        << "border-left-style" << "border-right-style" << "border-style"
-        << "border-top" << "border-bottom" << "border-left" << "border-right" << "border"
-        // padding
-        << "padding-top" << "padding-bottom" << "padding-left" << "padding-right" << "padding"
-        << "margin-top" << "margin-bottom" << "margin-left" << "margin-right" //<< "margin"
-        << "auto";
+    // font
+            << "font-style" << "font-variant" << "font-weight" << "font-size"
+            // text
+            << "text-indent" << "text-align" << "text-decoration" << "white-space"
+            // color
+            << "color" << "background-color"
+            // visual formatting
+            << "width" << "min-width" << "max-width"
+            << "height" << "min-height" << "max-height" << "line-height" << "vertical-align"
+            // border
+            << "border-top-width" << "border-bottom-width"
+            << "border-left-width" << "border-right-width" << "border-width"
+            // border
+            << "border-top-color" << "border-bottom-color"
+            << "border-left-color" << "border-right-color" << "border-color"
+            // border
+            << "border-top-style" << "border-bottom-style"
+            << "border-left-style" << "border-right-style" << "border-style"
+            << "border-top" << "border-bottom" << "border-left" << "border-right" << "border"
+            // padding
+            << "padding-top" << "padding-bottom" << "padding-left" << "padding-right" << "padding"
+            << "margin-top" << "margin-bottom" << "margin-left" << "margin-right" //<< "margin"
+            << "auto";
 
     // Handle all general text formatting attributes
-    foreach(const QString &attrName, attributes) {
+    foreach (const QString &attrName, attributes) {
         QString attrVal = propertiesElement.attribute(attrName);
 
         if (!attrVal.isEmpty()) {
@@ -1166,12 +1124,13 @@ void OdtMobiHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElemen
     // Visual Display Model
     attribute = propertiesElement.attribute("writing-mode");
     if (!attribute.isEmpty()) {
-        if (attribute == "rl")
+        if (attribute == "rl") {
             attribute = "rtl";
-        else if (attribute == "lr")
+        } else if (attribute == "lr") {
             attribute = "ltr";
-        else
+        } else {
             attribute = "inherited";
+        }
         styleInfo->attributes.insert("direction", attribute);
     }
 
@@ -1191,7 +1150,7 @@ void OdtMobiHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElemen
         else if (attribute == "left") {
             styleInfo->attributes.insert("display", "inline");
             styleInfo->attributes.insert("float", "left");
-            styleInfo->attributes.insert("margin","5px 15px 5px 0");
+            styleInfo->attributes.insert("margin", "5px 15px 5px 0");
         }
     }
 
@@ -1199,23 +1158,23 @@ void OdtMobiHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElemen
     if (propertiesElement.hasAttribute("num-format")) {
         attribute = propertiesElement.attribute("num-format");
         if (!attribute.isEmpty()) {
-            if (attribute == "1")
+            if (attribute == "1") {
                 attribute = "decimal";
-            else if (attribute == "i")
+            } else if (attribute == "i") {
                 attribute = "lower-roman";
-            else if (attribute == "I")
+            } else if (attribute == "I") {
                 attribute = "upper-roman";
-            else if (attribute == "a")
+            } else if (attribute == "a") {
                 attribute = "lower-alpha";
-            else if (attribute == "A")
+            } else if (attribute == "A") {
                 attribute = "upper-alpha";
-            else
+            } else {
                 attribute = "decimal";
+            }
         }
         styleInfo->attributes.insert("list-style-type:", attribute);
         styleInfo->attributes.insert("list-style-position:", "outside");
-    }
-    else if (propertiesElement.hasAttribute("bullet-char")) {
+    } else if (propertiesElement.hasAttribute("bullet-char")) {
         attribute = propertiesElement.attribute("bullet-char");
         if (!attribute.isEmpty()) {
             switch (attribute[0].unicode()) {
@@ -1241,7 +1200,7 @@ void OdtMobiHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElemen
     }
 }
 
-void OdtMobiHtmlConverter::fixStyleTree(QHash<QString, StyleInfo*> &styles)
+void OdtMobiHtmlConverter::fixStyleTree(QHash<QString, StyleInfo *> &styles)
 {
     // For all styles:
     //    Propagate the shouldBreakChapter bool upwards in the inheritance tree.
@@ -1274,10 +1233,8 @@ void OdtMobiHtmlConverter::fixStyleTree(QHash<QString, StyleInfo*> &styles)
     }
 }
 
-
-
-KoFilter::ConversionStatus OdtMobiHtmlConverter::createCSS(QHash<QString, StyleInfo*> &styles,
-                                                       QByteArray &cssContent)
+KoFilter::ConversionStatus OdtMobiHtmlConverter::createCSS(QHash<QString, StyleInfo *> &styles,
+        QByteArray &cssContent)
 {
     // There is no equivalent to the ODF style inheritance using
     // parent-style-name in CSS. This means that to simulate the same
@@ -1294,8 +1251,9 @@ KoFilter::ConversionStatus OdtMobiHtmlConverter::createCSS(QHash<QString, StyleI
 
         StyleInfo *styleInfo = styles.value(styleName);
         // Disable the test for inUse since we moved the call to before the traversal of the content.
-        if (!styleInfo/* || !styleInfo->inUse*/)
+        if (!styleInfo/* || !styleInfo->inUse*/) {
             continue;
+        }
 
         // The style name
         head = QString('.' + styleName).toUtf8();
@@ -1313,7 +1271,7 @@ KoFilter::ConversionStatus OdtMobiHtmlConverter::createCSS(QHash<QString, StyleI
     return KoFilter::OK;
 }
 
-void OdtMobiHtmlConverter::flattenStyles(QHash<QString, StyleInfo*> &styles)
+void OdtMobiHtmlConverter::flattenStyles(QHash<QString, StyleInfo *> &styles)
 {
     QSet<QString> doneStyles;
     foreach (const QString &styleName, styles.keys()) {
@@ -1323,8 +1281,8 @@ void OdtMobiHtmlConverter::flattenStyles(QHash<QString, StyleInfo*> &styles)
     }
 }
 
-void OdtMobiHtmlConverter::flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
-                                    QSet<QString> &doneStyles)
+void OdtMobiHtmlConverter::flattenStyle(const QString &styleName, QHash<QString, StyleInfo *> &styles,
+                                        QSet<QString> &doneStyles)
 {
     StyleInfo *styleInfo = styles.value(styleName);
     if (!styleInfo) {
@@ -1335,18 +1293,20 @@ void OdtMobiHtmlConverter::flattenStyle(const QString &styleName, QHash<QString,
     //        styleInfo->shouldBreakChapter?
 
     QString parentName = styleInfo->parent;
-    if (parentName.isEmpty())
+    if (parentName.isEmpty()) {
         return;
+    }
 
     flattenStyle(styleInfo->parent, styles, doneStyles);
 
     // Copy all attributes from the parent that is not already in
     // this style into this style.
     StyleInfo *parentInfo = styles.value(parentName);
-    if (!parentInfo)
+    if (!parentInfo) {
         return;
+    }
 
-    foreach(const QString &paramName, parentInfo->attributes.keys()) {
+    foreach (const QString &paramName, parentInfo->attributes.keys()) {
         if (styleInfo->attributes.value(paramName).isEmpty()) {
             styleInfo->attributes.insert(paramName, parentInfo->attributes.value(paramName));
         }
@@ -1357,7 +1317,6 @@ void OdtMobiHtmlConverter::flattenStyle(const QString &styleName, QHash<QString,
 
 void OdtMobiHtmlConverter::openFontOptionsElement(KoXmlWriter *htmlWriter, StyleInfo *styleInfo)
 {
-
 
     if (styleInfo->attributes.value("text-decoration") == "underline") {
         htmlWriter->startElement("u");
@@ -1384,13 +1343,11 @@ void OdtMobiHtmlConverter::openFontOptionsElement(KoXmlWriter *htmlWriter, Style
         htmlWriter->startElement("font");
         htmlWriter->addAttribute("color", styleInfo->attributes.value("color"));
         m_fontColorTag = true;
-    }
-    else if (m_spanTag) {
+    } else if (m_spanTag) {
         htmlWriter->startElement("font");
         htmlWriter->addAttribute("color", "#000");
         m_fontColorTag = true;
     }
-
 
     m_optionsTag = true;
 }
@@ -1436,7 +1393,7 @@ void OdtMobiHtmlConverter::generateMobiInternalLinks()
         foreach (const QString &id, m_bookMarksList.keys()) {
             if (m_bookMarksList.value(id) > refPosition) {
                 qint64 newPos = (qint64)11 + (qint64)QString::number(m_bookMarksList.value(id)).size()
-                        + m_bookMarksList.value(id) + 1;
+                                + m_bookMarksList.value(id) + 1;
                 m_bookMarksList.insert(id, newPos);
             }
         }

@@ -50,13 +50,16 @@ public:
         image = createImage(undoStore);
 
         part = KisPart::instance();
-        doc = qobject_cast<KisDocument*>(part->createDocument());
+        doc = qobject_cast<KisDocument *>(part->createDocument());
         doc->setCurrentImage(image);
 
-        if(useSelection) addGlobalSelection(image);
-        if(useShapeLayer) addShapeLayer(doc, image);
+        if (useSelection) {
+            addGlobalSelection(image);
+        }
+        if (useShapeLayer) {
+            addShapeLayer(doc, image);
+        }
         image->initialRefreshGraph();
-
 
         mainWindow = new KisMainWindow();
         imageView = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
@@ -86,7 +89,8 @@ public:
 
     }
 
-    ~UiManagerTest() {
+    ~UiManagerTest()
+    {
         /**
          * Here is a weird way of precessing pending events.
          * This is needed for the dummies facade could process
@@ -109,21 +113,24 @@ public:
         QApplication::removePostedEvents(0);
     }
 
-    void checkUndo() {
+    void checkUndo()
+    {
         undoStore->undo();
         image->waitForDone();
         QVERIFY(checkLayersInitial());
     }
 
-    void checkDoubleUndo() {
+    void checkDoubleUndo()
+    {
         undoStore->undo();
         undoStore->undo();
         image->waitForDone();
         QVERIFY(checkLayersInitial());
     }
 
-    void startConcurrentTask() {
-        KisFilterStrategy * filter = new KisBoxFilterStrategy();
+    void startConcurrentTask()
+    {
+        KisFilterStrategy *filter = new KisBoxFilterStrategy();
         QSize initialSize = image->size();
 
         image->scaleImage(2 * initialSize, image->xRes(), image->yRes(), filter);
@@ -134,27 +141,32 @@ public:
 
     using QImageBasedTest::checkLayers;
 
-    bool checkLayers(const QString &name) {
+    bool checkLayers(const QString &name)
+    {
         return checkLayers(image, name);
     }
 
     using QImageBasedTest::checkLayersInitial;
 
-    bool checkLayersInitial() {
+    bool checkLayersInitial()
+    {
         return checkLayersInitial(image);
     }
 
-    bool checkLayersFuzzy(const QString &name) {
+    bool checkLayersFuzzy(const QString &name)
+    {
         return checkLayers(image, name, 1);
     }
 
-    bool checkSelectionOnly(const QString &name) {
-        KisNodeSP mask = dynamic_cast<const KisLayer*>(image->root().data())->selectionMask();
+    bool checkSelectionOnly(const QString &name)
+    {
+        KisNodeSP mask = dynamic_cast<const KisLayer *>(image->root().data())->selectionMask();
         return checkOneLayer(image, mask, name);
     }
 
-    bool checkNoSelection() {
-        KisNodeSP mask = dynamic_cast<const KisLayer*>(image->root().data())->selectionMask();
+    bool checkNoSelection()
+    {
+        KisNodeSP mask = dynamic_cast<const KisLayer *>(image->root().data())->selectionMask();
         return !mask && !image->globalSelection();
     }
 

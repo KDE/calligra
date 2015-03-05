@@ -23,9 +23,9 @@ class KexiMigrateReportData::Private
 {
 public:
     Private()
-      : schema(0)
-      , kexiMigrate(0)
-      , position(0)
+        : schema(0)
+        , kexiMigrate(0)
+        , position(0)
     {
     }
 
@@ -53,8 +53,8 @@ public:
 
 //!Connect to an external data source
 //!connStr is in the form driver|connection_string|table
-KexiMigrateReportData::KexiMigrateReportData(const QString & connStr)
-        : d(new Private)
+KexiMigrateReportData::KexiMigrateReportData(const QString &connStr)
+    : d(new Private)
 {
     QStringList extConn = connStr.split('|');
 
@@ -97,7 +97,7 @@ int KexiMigrateReportData::fieldNumber(const QString &fld) const
     if (d->schema) {
         flds = d->schema->columns();
 
-        for (int i = 0; i < flds.size() ; ++i) {
+        for (int i = 0; i < flds.size(); ++i) {
             if (fld.toLower() == flds[i]->aliasOrName().toLower()) {
                 x = i;
             }
@@ -114,7 +114,7 @@ QStringList KexiMigrateReportData::fieldNames() const
     if (d->schema) {
         flds = d->schema->columns();
 
-        for (int i = 0; i < flds.size() ; ++i) {
+        for (int i = 0; i < flds.size(); ++i) {
             names << flds[i]->field->name();
         }
     }
@@ -123,8 +123,9 @@ QStringList KexiMigrateReportData::fieldNames() const
 
 QVariant KexiMigrateReportData::value(unsigned int i) const
 {
-    if (!d->valid)
+    if (!d->valid) {
         return QVariant();
+    }
 
     return d->kexiMigrate->value(i);
 
@@ -132,8 +133,9 @@ QVariant KexiMigrateReportData::value(unsigned int i) const
 
 QVariant KexiMigrateReportData::value(const QString &fld) const
 {
-    if (!d->valid)
+    if (!d->valid) {
         return QVariant();
+    }
 
     int i = fieldNumber(fld);
 
@@ -142,8 +144,9 @@ QVariant KexiMigrateReportData::value(const QString &fld) const
 
 bool KexiMigrateReportData::moveNext()
 {
-    if (!d->valid)
+    if (!d->valid) {
         return false;
+    }
 
     d->position++;
 
@@ -153,18 +156,22 @@ bool KexiMigrateReportData::moveNext()
 
 bool KexiMigrateReportData::movePrevious()
 {
-    if (!d->valid)
+    if (!d->valid) {
         return false;
+    }
 
-    if (d->position > 0) d->position--;
+    if (d->position > 0) {
+        d->position--;
+    }
 
     return d->kexiMigrate->movePrevious();
 }
 
 bool KexiMigrateReportData::moveFirst()
 {
-    if (!d->valid)
+    if (!d->valid) {
         return false;
+    }
 
     d->position = 1;
 
@@ -174,8 +181,9 @@ bool KexiMigrateReportData::moveFirst()
 
 bool KexiMigrateReportData::moveLast()
 {
-    if (!d->valid)
+    if (!d->valid) {
         return false;
+    }
 
     return d->kexiMigrate->moveLast();
 }

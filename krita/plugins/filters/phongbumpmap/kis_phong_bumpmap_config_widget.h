@@ -24,7 +24,6 @@
 #include "kis_config_widget.h"
 #include "kis_image.h"
 
-
 class KisPhongBumpmapWidget : public QWidget, public Ui::WdgPhongBumpmap
 {
     Q_OBJECT
@@ -33,12 +32,12 @@ public:
     KisPhongBumpmapWidget(QWidget *parent) : QWidget(parent)
     {
         setupUi(this);
-        
+
         ambientReflectivityKisDoubleSliderSpinBox  -> setRange(0, 1, 2);
         diffuseReflectivityKisDoubleSliderSpinBox  -> setRange(0, 1, 2);
         specularReflectivityKisDoubleSliderSpinBox -> setRange(0, 1, 2);
         shinynessExponentKisSliderSpinBox          -> setRange(1, 200);
-        
+
         ambientReflectivityKisDoubleSliderSpinBox  -> setValue(0.1);
         diffuseReflectivityKisDoubleSliderSpinBox  -> setValue(0.5);
         specularReflectivityKisDoubleSliderSpinBox -> setValue(0.5);

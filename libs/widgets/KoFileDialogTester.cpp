@@ -42,31 +42,29 @@ KoFileDialogTester::KoFileDialogTester(QWidget *parent) :
     connect(ui->bnSaveFile, SIGNAL(clicked()), SLOT(testSaveFile()));
 
     m_nameFilters << "Documents (*.odt *.doc *.txt)"
-                << "Images (*.png *.jpg *.jpeg)"
-                << "Presentations (*.ppt *.odp)"
-                << "Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)"
-                << "Palettes (*.gpl *.pal *.act *.aco *.colors)";
+                  << "Images (*.png *.jpg *.jpeg)"
+                  << "Presentations (*.ppt *.odp)"
+                  << "Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)"
+                  << "Palettes (*.gpl *.pal *.act *.aco *.colors)";
 
     m_mimeFilter = QStringList()
-            << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-            << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-            << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-            << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-            << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-            << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
-            << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-            << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-            << "image/x-wmf" << "application/x-karbon"
-            << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-            ;
+                   << "application/x-krita" << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
+                   << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
+                   << "image/x-portable-bitmap" << "image/png" << "image/jp2"
+                   << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
+                   << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
+                   << "image/gif" << "image/x-xbitmap" << "application/x-krita-flipbook"
+                   << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
+                   << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
+                   << "image/x-wmf" << "application/x-karbon"
+                   << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
+                   ;
 }
 
 KoFileDialogTester::~KoFileDialogTester()
 {
     delete ui;
 }
-
-
 
 void KoFileDialogTester::testOpenFile()
 {
@@ -78,16 +76,13 @@ void KoFileDialogTester::testOpenFile()
 
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
-    }
-    else {
+    } else {
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
@@ -112,19 +107,16 @@ void KoFileDialogTester::testOpenFiles()
     dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     if (ui->radioName->isChecked()) {
 
-          if (ui->chkSetDefaultFilter->isChecked()) {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
 
-    }
-    else {
-           if (ui->chkSetDefaultFilter->isChecked()) {
+    } else {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
@@ -135,7 +127,7 @@ void KoFileDialogTester::testOpenFiles()
     }
 
     QStringList urls = dlg.urls();
-    foreach(const QString &url, urls) {
+    foreach (const QString &url, urls) {
         ui->listResults->addItem(url);
     }
     ui->lblMime->setText(dlg.selectedMimeType());
@@ -150,19 +142,16 @@ void KoFileDialogTester::testOpenDirectory()
     dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     if (ui->radioName->isChecked()) {
 
-         if (ui->chkSetDefaultFilter->isChecked()) {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
 
-    }
-    else {
-         if (ui->chkSetDefaultFilter->isChecked()) {
+    } else {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
@@ -178,7 +167,6 @@ void KoFileDialogTester::testOpenDirectory()
     ui->txtFilter->setText(dlg.selectedNameFilter());
 }
 
-
 void KoFileDialogTester::testImportFile()
 {
     ui->listResults->clear();
@@ -188,20 +176,17 @@ void KoFileDialogTester::testImportFile()
     dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     if (ui->radioName->isChecked()) {
 
-         if (ui->chkSetDefaultFilter->isChecked()) {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
 
-    }
-    else {
+    } else {
 
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
@@ -225,20 +210,17 @@ void KoFileDialogTester::testImportFiles()
     dlg.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
     if (ui->radioName->isChecked()) {
 
-         if (ui->chkSetDefaultFilter->isChecked()) {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
 
-    }
-    else {
+    } else {
 
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
@@ -248,7 +230,7 @@ void KoFileDialogTester::testImportFiles()
         dlg.setHideNameFilterDetailsOption();
     }
 
-    QStringList urls = dlg.urls(); foreach(const QString &url, urls) {
+    QStringList urls = dlg.urls(); foreach (const QString &url, urls) {
         ui->listResults->addItem(url);
     }
     ui->lblMime->setText(dlg.selectedMimeType());
@@ -265,17 +247,14 @@ void KoFileDialogTester::testImportDirectory()
 
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
 
-    }
-    else {
-            if (ui->chkSetDefaultFilter->isChecked()) {
+    } else {
+        if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
 
@@ -301,17 +280,14 @@ void KoFileDialogTester::testSaveFile()
     if (ui->radioName->isChecked()) {
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setNameFilters(m_nameFilters, m_nameFilters.last());
-        }
-        else {
+        } else {
             dlg.setNameFilters(m_nameFilters);
         }
-    }
-    else {
+    } else {
 
         if (ui->chkSetDefaultFilter->isChecked()) {
             dlg.setMimeTypeFilters(m_mimeFilter, m_mimeFilter[4]);
-        }
-        else {
+        } else {
             dlg.setMimeTypeFilters(m_mimeFilter);
         }
 

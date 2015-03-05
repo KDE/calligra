@@ -21,7 +21,6 @@
 
 #include "kis_tool_freehand_helper.h"
 
-
 class KRITAUI_EXPORT KisToolMultihandHelper : public KisToolFreehandHelper
 {
     Q_OBJECT
@@ -35,18 +34,18 @@ public:
     void setupTransformations(const QVector<QTransform> &transformations);
 
 protected:
-    void createPainters(QVector<PainterInfo*> &painterInfos,
+    void createPainters(QVector<PainterInfo *> &painterInfos,
                         const QPointF &lastPosition,
                         int lastTime);
 
-    void paintAt(const QVector<PainterInfo*> &painterInfos,
+    void paintAt(const QVector<PainterInfo *> &painterInfos,
                  const KisPaintInformation &pi);
 
-    void paintLine(const QVector<PainterInfo*> &painterInfos,
+    void paintLine(const QVector<PainterInfo *> &painterInfos,
                    const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
 
-    void paintBezierCurve(const QVector<PainterInfo*> &painterInfos,
+    void paintBezierCurve(const QVector<PainterInfo *> &painterInfos,
                           const KisPaintInformation &pi1,
                           const QPointF &control1,
                           const QPointF &control2,
@@ -58,7 +57,7 @@ protected:
 
 private:
     struct Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif /* __KIS_TOOL_MULTIHAND_HELPER_H */

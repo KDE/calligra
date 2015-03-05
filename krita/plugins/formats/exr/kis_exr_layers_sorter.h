@@ -24,7 +24,6 @@
 
 class QDomDocument;
 
-
 class KisExrLayersSorter
 {
 public:

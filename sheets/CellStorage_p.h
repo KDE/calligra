@@ -36,35 +36,50 @@ namespace Sheets
 class CellStorageUndoData
 {
 public:
-    bool isEmpty() const {
-        if (!bindings.isEmpty())
+    bool isEmpty() const
+    {
+        if (!bindings.isEmpty()) {
             return false;
-        if (!comments.isEmpty())
+        }
+        if (!comments.isEmpty()) {
             return false;
-        if (!conditions.isEmpty())
+        }
+        if (!conditions.isEmpty()) {
             return false;
-        if (!databases.isEmpty())
+        }
+        if (!databases.isEmpty()) {
             return false;
-        if (!formulas.isEmpty())
+        }
+        if (!formulas.isEmpty()) {
             return false;
-        if (!fusions.isEmpty())
+        }
+        if (!fusions.isEmpty()) {
             return false;
-        if (!links.isEmpty())
+        }
+        if (!links.isEmpty()) {
             return false;
-        if (!matrices.isEmpty())
+        }
+        if (!matrices.isEmpty()) {
             return false;
-        if (!namedAreas.isEmpty())
+        }
+        if (!namedAreas.isEmpty()) {
             return false;
-        if (!styles.isEmpty())
+        }
+        if (!styles.isEmpty()) {
             return false;
-        if (!userInputs.isEmpty())
+        }
+        if (!userInputs.isEmpty()) {
             return false;
-        if (!validities.isEmpty())
+        }
+        if (!validities.isEmpty()) {
             return false;
-        if (!values.isEmpty())
+        }
+        if (!values.isEmpty()) {
             return false;
-        if (!richTexts.isEmpty())
+        }
+        if (!richTexts.isEmpty()) {
             return false;
+        }
         return true;
     }
 

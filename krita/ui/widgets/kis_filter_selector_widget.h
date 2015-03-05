@@ -42,34 +42,34 @@ class KisFilterSelectorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisFilterSelectorWidget(QWidget* parent);
+    KisFilterSelectorWidget(QWidget *parent);
     ~KisFilterSelectorWidget();
     void setFilter(KisFilterSP f);
     void setView(KisViewManager *view);
     void setPaintDevice(bool showAll, KisPaintDeviceSP);
-    KisFilterConfiguration* configuration();
+    KisFilterConfiguration *configuration();
     void showFilterGallery(bool visible);
     bool isFilterGalleryVisible() const;
     KisFilterSP currentFilter() const;
 protected Q_SLOTS:
     void slotBookmarkedFilterConfigurationSelected(int);
-    void setFilterIndex(const QModelIndex&);
+    void setFilterIndex(const QModelIndex &);
     void editConfigurations();
 Q_SIGNALS:
     void configurationChanged();
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
-
-class KisFilterTree: public QTreeView {
+class KisFilterTree: public QTreeView
+{
 
 public:
 
     KisFilterTree(QWidget *parent) : QTreeView(parent) {}
 
-    void setFilterModel(QAbstractItemModel * model);
+    void setFilterModel(QAbstractItemModel *model);
     void activateFilter(QModelIndex idx);
 
 protected:
@@ -78,19 +78,18 @@ protected:
     {
         if (event->size().width() > 10) {
             setModel(m_model);
-        }
-        else {
+        } else {
             setModel(0);
         }
     }
 
-    void showEvent(QShowEvent * event)
+    void showEvent(QShowEvent *event)
     {
         setModel(m_model);
         QTreeView::showEvent(event);
     }
 
-    void hideEvent(QHideEvent * event)
+    void hideEvent(QHideEvent *event)
     {
         setModel(0);
         QTreeView::hideEvent(event);

@@ -39,8 +39,8 @@
 
 using namespace Calligra::Sheets;
 
-CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+CommentDialog::CommentDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent)
 {
     setCaption(i18n("Cell Comment"));
     setModal(true);
@@ -58,8 +58,9 @@ CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
     multiLine->setFocus();
 
     const QString comment = Cell(m_selection->activeSheet(), m_selection->marker()).comment();
-    if (!comment.isEmpty())
+    if (!comment.isEmpty()) {
         multiLine->setText(comment);
+    }
 
     connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
     connect(multiLine, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
@@ -75,7 +76,7 @@ void CommentDialog::slotTextChanged()
 
 void CommentDialog::slotOk()
 {
-    CommentCommand* command = new CommentCommand();
+    CommentCommand *command = new CommentCommand();
     command->setSheet(m_selection->activeSheet());
     command->setText(kundo2_i18n("Add Comment"));
     command->setComment(multiLine->toPlainText().trimmed());

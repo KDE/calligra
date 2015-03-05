@@ -164,7 +164,7 @@ public:
      * Write data into the currently opened file. You can also use the streams
      * for this.
      */
-    virtual qint64 write(const char* data, qint64 length);
+    virtual qint64 write(const char *data, qint64 length);
 
     /**
      * @return the size of the currently opened file, -1 on error.
@@ -312,7 +312,8 @@ protected:
      * Finalize store - called by finalize.
      * @return true on success
      */
-    virtual bool doFinalize() {
+    virtual bool doFinalize()
+    {
         return true;
     }
 
@@ -365,8 +366,8 @@ private:
     Q_DECLARE_PRIVATE(KoStore)
 
 private:
-    KoStore(const KoStore& store);    ///< don't copy
-    KoStore& operator=(const KoStore& store);    ///< don't assign
+    KoStore(const KoStore &store);    ///< don't copy
+    KoStore &operator=(const KoStore &store);    ///< don't assign
 };
 
 #endif

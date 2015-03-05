@@ -76,14 +76,14 @@ public:
      *                   which type of header
      * @return true if the save was successful
      */
-    virtual bool saveTo(Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const = 0;
+    virtual bool saveTo(Store *store, QIODevice *ioDevice, HeaderType headerType = NoHeader) const = 0;
 
     /**
      * @param store the list of metadata
      * @return true if this backend is capable of saving all the metadata
      * of the store
      */
-    virtual bool canSaveAllEntries(Store* store) const = 0;
+    virtual bool canSaveAllEntries(Store *store) const = 0;
 
     /**
      * @return true if this backend support loading
@@ -95,15 +95,15 @@ public:
      * @param ioDevice the device from where the metadata will be loaded
      * @return true if the load was successful
      */
-    virtual bool loadFrom(Store* store, QIODevice* ioDevice) const = 0;
+    virtual bool loadFrom(Store *store, QIODevice *ioDevice) const = 0;
 };
 
-class KRITAIMAGE_EXPORT IOBackendRegistry : public KoGenericRegistry<IOBackend*>
+class KRITAIMAGE_EXPORT IOBackendRegistry : public KoGenericRegistry<IOBackend *>
 {
 
 public:
 
-    static IOBackendRegistry* instance();
+    static IOBackendRegistry *instance();
 
 private:
 
@@ -112,6 +112,5 @@ private:
 };
 
 }
-
 
 #endif

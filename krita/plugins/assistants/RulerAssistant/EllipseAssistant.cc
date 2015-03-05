@@ -29,43 +29,42 @@
 #include <math.h>
 
 EllipseAssistant::EllipseAssistant()
-        : KisPaintingAssistant("ellipse", i18n("Ellipse assistant"))
+    : KisPaintingAssistant("ellipse", i18n("Ellipse assistant"))
 {
 }
 
-QPointF EllipseAssistant::project(const QPointF& pt) const
+QPointF EllipseAssistant::project(const QPointF &pt) const
 {
     Q_ASSERT(handles().size() == 3);
     e.set(*handles()[0], *handles()[1], *handles()[2]);
     return e.project(pt);
 }
 
-QPointF EllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/)
+QPointF EllipseAssistant::adjustPosition(const QPointF &pt, const QPointF & /*strokeBegin*/)
 {
     return project(pt);
 
 }
 
-void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
+void EllipseAssistant::drawAssistant(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, bool cached, KisCanvas2 *canvas, bool assistantVisible, bool previewVisible)
 {
     gc.save();
     gc.resetTransform();
     QPoint mousePos;
-    
-    if (canvas){
+
+    if (canvas) {
         //simplest, cheapest way to get the mouse-position//
-        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-    }
-    else {
+        mousePos = canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
+    } else {
         //...of course, you need to have access to a canvas-widget for that.//
         mousePos = QCursor::pos();//this'll give an offset//
-        dbgFile<<"canvas does not exist in the ellipse assistant, you may have passed arguments incorrectly:"<<canvas;
+        dbgFile << "canvas does not exist in the ellipse assistant, you may have passed arguments incorrectly:" << canvas;
     }
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 
-    if (outline()==true && boundingRect().contains(initialTransform.inverted().map(mousePos), false) && previewVisible==true){
-        if (handles().size() > 2){    
+    if (outline() == true && boundingRect().contains(initialTransform.inverted().map(mousePos), false) && previewVisible == true) {
+        if (handles().size() > 2) {
             if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
                 // valid ellipse
                 gc.setTransform(initialTransform);
@@ -84,13 +83,16 @@ void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, con
 
 }
 
-
-void EllipseAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
+void EllipseAssistant::drawCache(QPainter &gc, const KisCoordinatesConverter *converter, bool assistantVisible)
 {
 
-    if (assistantVisible==false){return;}
-    if (handles().size() < 2) return;
-        QTransform initialTransform = converter->documentToWidgetTransform();
+    if (assistantVisible == false) {
+        return;
+    }
+    if (handles().size() < 2) {
+        return;
+    }
+    QTransform initialTransform = converter->documentToWidgetTransform();
     if (handles().size() == 2) {
         // just draw the axis
         gc.setTransform(initialTransform);
@@ -116,7 +118,9 @@ void EllipseAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *co
 
 QRect EllipseAssistant::boundingRect() const
 {
-    if (handles().size() != 3) return KisPaintingAssistant::boundingRect();
+    if (handles().size() != 3) {
+        return KisPaintingAssistant::boundingRect();
+    }
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
         return e.boundingRect().adjusted(-2, -2, 2, 2).toAlignedRect();
     } else {
@@ -147,7 +151,7 @@ QString EllipseAssistantFactory::name() const
     return i18n("Ellipse");
 }
 
-KisPaintingAssistant* EllipseAssistantFactory::createPaintingAssistant() const
+KisPaintingAssistant *EllipseAssistantFactory::createPaintingAssistant() const
 {
     return new EllipseAssistant;
 }

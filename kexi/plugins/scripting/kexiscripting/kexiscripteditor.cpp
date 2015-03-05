@@ -30,13 +30,13 @@
 class KexiScriptEditor::Private
 {
 public:
-    Kross::Action* scriptaction;
+    Kross::Action *scriptaction;
     Private() : scriptaction(0) {}
 };
 
 KexiScriptEditor::KexiScriptEditor(QWidget *parent)
-        : KexiEditor(parent)
-        , d(new Private())
+    : KexiEditor(parent)
+    , d(new Private())
 {
 }
 
@@ -50,7 +50,7 @@ bool KexiScriptEditor::isInitialized() const
     return d->scriptaction != 0;
 }
 
-void KexiScriptEditor::initialize(Kross::Action* scriptaction)
+void KexiScriptEditor::initialize(Kross::Action *scriptaction)
 {
     d->scriptaction = scriptaction;
     Q_ASSERT(d->scriptaction);

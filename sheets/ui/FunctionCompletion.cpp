@@ -45,15 +45,15 @@ using namespace Calligra::Sheets;
 class FunctionCompletion::Private
 {
 public:
-    CellEditor* editor;
+    CellEditor *editor;
     QFrame *completionPopup;
     KListWidget *completionListBox;
-    QLabel* hintLabel;
+    QLabel *hintLabel;
 };
 
-FunctionCompletion::FunctionCompletion(CellEditor* editor)
-        : QObject(editor)
-        , d(new Private)
+FunctionCompletion::FunctionCompletion(CellEditor *editor)
+    : QObject(editor)
+    , d(new Private)
 {
     d->editor = editor;
     d->hintLabel = 0;
@@ -97,7 +97,7 @@ FunctionCompletion::~FunctionCompletion()
     delete d;
 }
 
-void FunctionCompletion::itemSelected(QListWidgetItem* listItem)
+void FunctionCompletion::itemSelected(QListWidgetItem *listItem)
 {
     QString item;
     if (listItem) {
@@ -109,7 +109,7 @@ void FunctionCompletion::itemSelected(QListWidgetItem* listItem)
         }
     }
 
-    Calligra::Sheets::FunctionDescription* desc;
+    Calligra::Sheets::FunctionDescription *desc;
     desc = Calligra::Sheets::FunctionRepository::self()->functionInfo(item);
     if (!desc) {
         d->hintLabel->hide();
@@ -140,11 +140,12 @@ void FunctionCompletion::itemSelected(QListWidgetItem* listItem)
 
 bool FunctionCompletion::eventFilter(QObject *obj, QEvent *ev)
 {
-    if (obj != d->completionPopup && obj != d->completionListBox)
+    if (obj != d->completionPopup && obj != d->completionListBox) {
         return false;
+    }
 
     if (ev->type() == QEvent::KeyPress) {
-        QKeyEvent *ke = static_cast<QKeyEvent*>(ev);
+        QKeyEvent *ke = static_cast<QKeyEvent *>(ev);
         switch (ke->key()) {
         case Qt::Key_Enter:
         case Qt::Key_Return:
@@ -189,7 +190,9 @@ void FunctionCompletion::doneCompletion()
 
 void FunctionCompletion::showCompletion(const QStringList &choices)
 {
-    if (!choices.count()) return;
+    if (!choices.count()) {
+        return;
+    }
 
     d->completionListBox->clear();
     d->completionListBox->addItems(choices);
@@ -209,10 +212,12 @@ void FunctionCompletion::showCompletion(const QStringList &choices)
     // FIXME check it if it works in Xinerama multihead
     int screen_num = QApplication::desktop()->screenNumber(d->completionPopup);
     QRect screen = QApplication::desktop()->screenGeometry(screen_num);
-    if (pos.y() + h > screen.y() + screen.height())
+    if (pos.y() + h > screen.y() + screen.height()) {
         pos.setY(pos.y() - h - d->editor->height());
-    if (pos.x() + w > screen.x() + screen.width())
+    }
+    if (pos.x() + w > screen.x() + screen.width()) {
         pos.setX(screen.x() + screen.width() - w);
+    }
 
     d->completionPopup->move(pos);
     d->completionListBox->setFocus();

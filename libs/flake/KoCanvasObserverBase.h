@@ -38,7 +38,10 @@ public:
     KoCanvasObserverBase();
     virtual ~KoCanvasObserverBase();
 
-    virtual QString observerName() { return ""; }
+    virtual QString observerName()
+    {
+        return "";
+    }
 
     /**
      * set observed canvas
@@ -55,7 +58,7 @@ public:
      * the currently observed canvas
      * @return observed canvas, can be 0
      */
-    KoCanvasBase* observedCanvas();
+    KoCanvasBase *observedCanvas();
 protected:
     /**
      * re-implement this method in your canvas observer. It will be called
@@ -76,7 +79,7 @@ protected:
     virtual void unsetCanvas() = 0;
 
 private:
-    KoCanvasObserverBasePrivate * const d;
+    KoCanvasObserverBasePrivate *const d;
 };
 
 #endif // KOCANVASOBSERVERBASE_H

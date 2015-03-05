@@ -38,7 +38,7 @@ public:
     KoSnapStrategy(KoSnapGuide::Strategy type);
     virtual ~KoSnapStrategy() {};
 
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) = 0;
+    virtual bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance) = 0;
 
     /// returns the strategies type
     KoSnapGuide::Strategy type() const;
@@ -66,7 +66,7 @@ class FLAKE_TEST_EXPORT OrthogonalSnapStrategy : public KoSnapStrategy
 {
 public:
     OrthogonalSnapStrategy();
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
+    virtual bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance);
     virtual QPainterPath decoration(const KoViewConverter &converter) const;
 private:
     QLineF m_hLine;
@@ -78,7 +78,7 @@ class FLAKE_TEST_EXPORT NodeSnapStrategy : public KoSnapStrategy
 {
 public:
     NodeSnapStrategy();
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
+    virtual bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance);
     virtual QPainterPath decoration(const KoViewConverter &converter) const;
 };
 
@@ -88,12 +88,12 @@ class FLAKE_TEST_EXPORT ExtensionSnapStrategy : public KoSnapStrategy
     friend class TestSnapStrategy;
 public:
     ExtensionSnapStrategy();
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
+    virtual bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance);
     virtual QPainterPath decoration(const KoViewConverter &converter) const;
 private:
-    qreal project(const QPointF &lineStart , const QPointF &lineEnd, const QPointF &point);
-    QPointF extensionDirection(KoPathPoint * point, const QTransform &matrix);
-    bool snapToExtension(QPointF &position, KoPathPoint * point, const QTransform &matrix);
+    qreal project(const QPointF &lineStart, const QPointF &lineEnd, const QPointF &point);
+    QPointF extensionDirection(KoPathPoint *point, const QTransform &matrix);
+    bool snapToExtension(QPointF &position, KoPathPoint *point, const QTransform &matrix);
     QList<QLineF> m_lines;
 };
 
@@ -102,7 +102,7 @@ class FLAKE_TEST_EXPORT IntersectionSnapStrategy : public KoSnapStrategy
 {
 public:
     IntersectionSnapStrategy();
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
+    virtual bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance);
     virtual QPainterPath decoration(const KoViewConverter &converter) const;
 };
 
@@ -111,7 +111,7 @@ class FLAKE_TEST_EXPORT GridSnapStrategy : public KoSnapStrategy
 {
 public:
     GridSnapStrategy();
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
+    virtual bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance);
     virtual QPainterPath decoration(const KoViewConverter &converter) const;
 };
 
@@ -121,7 +121,7 @@ class FLAKE_TEST_EXPORT BoundingBoxSnapStrategy : public KoSnapStrategy
     friend class TestSnapStrategy;
 public:
     BoundingBoxSnapStrategy();
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
+    virtual bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance);
     virtual QPainterPath decoration(const KoViewConverter &converter) const;
 private:
     qreal squareDistanceToLine(const QPointF &lineA, const QPointF &lineB, const QPointF &point, QPointF &pointOnLine);
@@ -133,7 +133,7 @@ class FLAKE_TEST_EXPORT LineGuideSnapStrategy : public KoSnapStrategy
 {
 public:
     LineGuideSnapStrategy();
-    virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
+    virtual bool snap(const QPointF &mousePosition, KoSnapProxy *proxy, qreal maxSnapDistance);
     virtual QPainterPath decoration(const KoViewConverter &converter) const;
 private:
     int m_orientation;

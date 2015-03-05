@@ -23,7 +23,7 @@
 #include "folderitem.h"
 #include "filetransferitem.h"
 
-ListModel::ListModel(ListItem* prototype, QObject *parent) :
+ListModel::ListModel(ListItem *prototype, QObject *parent) :
     QAbstractListModel(parent), m_prototype(prototype)
 {
     QHash<int, QByteArray> roles;
@@ -50,134 +50,148 @@ ListModel::ListModel(ListItem* prototype, QObject *parent) :
 
 int ListModel::rowCount(const QModelIndex &parent) const
 {
-  Q_UNUSED(parent);
-  return m_list.count();
+    Q_UNUSED(parent);
+    return m_list.count();
 }
 
 QVariant ListModel::data(const QModelIndex &index, int role) const
 {
-  if(index.row() < 0 || index.row() >= m_list.size())
-    return QVariant();
-  return m_list.at(index.row())->data(role);
+    if (index.row() < 0 || index.row() >= m_list.size()) {
+        return QVariant();
+    }
+    return m_list.at(index.row())->data(role);
 }
 
-ListModel::~ListModel() {
-  delete m_prototype;
-  qDeleteAll(m_list);
+ListModel::~ListModel()
+{
+    delete m_prototype;
+    qDeleteAll(m_list);
 }
 
 void ListModel::appendRow(ListItem *item)
 {
-  appendRows(QList<ListItem*>() << item);
+    appendRows(QList<ListItem *>() << item);
 }
 
 void ListModel::appendRows(const QList<ListItem *> &items)
 {
-  beginInsertRows(QModelIndex(), rowCount(), rowCount()+items.size()-1);
-  foreach(ListItem *item, items) {
-    connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
-    m_list.append(item);
-  }
-  endInsertRows();
+    beginInsertRows(QModelIndex(), rowCount(), rowCount() + items.size() - 1);
+    foreach (ListItem *item, items) {
+        connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
+        m_list.append(item);
+    }
+    endInsertRows();
 }
 
 void ListModel::insertRow(int row, ListItem *item)
 {
-  beginInsertRows(QModelIndex(), row, row);
-  connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
-  m_list.insert(row, item);
-  endInsertRows();
+    beginInsertRows(QModelIndex(), row, row);
+    connect(item, SIGNAL(dataChanged()), SLOT(handleItemChange()));
+    m_list.insert(row, item);
+    endInsertRows();
 }
 
 void ListModel::handleItemChange()
 {
-  ListItem* item = static_cast<ListItem*>(sender());
-  QModelIndex index = indexFromItem(item);
-  if(index.isValid())
-    emit dataChanged(index, index);
+    ListItem *item = static_cast<ListItem *>(sender());
+    QModelIndex index = indexFromItem(item);
+    if (index.isValid()) {
+        emit dataChanged(index, index);
+    }
 }
 
-ListItem * ListModel::find(const QString &id) const
+ListItem *ListModel::find(const QString &id) const
 {
-  foreach(ListItem* item, m_list) {
-    if(item->id() == id) return item;
-  }
-  return 0;
+    foreach (ListItem *item, m_list) {
+        if (item->id() == id) {
+            return item;
+        }
+    }
+    return 0;
 }
 
 QModelIndex ListModel::indexFromItem(const ListItem *item) const
 {
-  Q_ASSERT(item);
-  for(int row=0; row<m_list.size(); ++row) {
-    if(m_list.at(row) == item) return index(row);
-  }
-  return QModelIndex();
+    Q_ASSERT(item);
+    for (int row = 0; row < m_list.size(); ++row) {
+        if (m_list.at(row) == item) {
+            return index(row);
+        }
+    }
+    return QModelIndex();
 }
 
 void ListModel::clear()
 {
-  beginResetModel();
-  qDeleteAll(m_list);
-  m_list.clear();
-  //reset();
-  endResetModel();
+    beginResetModel();
+    qDeleteAll(m_list);
+    m_list.clear();
+    //reset();
+    endResetModel();
 }
 
 bool ListModel::removeRow(int row, const QModelIndex &parent)
 {
-  Q_UNUSED(parent);
-  if(row < 0 || row >= m_list.size()) return false;
-  beginRemoveRows(QModelIndex(), row, row);
-  delete m_list.takeAt(row);
-  endRemoveRows();
-  //reset();
-  return true;
+    Q_UNUSED(parent);
+    if (row < 0 || row >= m_list.size()) {
+        return false;
+    }
+    beginRemoveRows(QModelIndex(), row, row);
+    delete m_list.takeAt(row);
+    endRemoveRows();
+    //reset();
+    return true;
 }
 
 bool ListModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-  Q_UNUSED(parent);
-  if(row < 0 || (row+count) >= m_list.size()) return false;
-  beginRemoveRows(QModelIndex(), row, row+count-1);
-  for(int i=0; i<count; ++i) {
-    delete m_list.takeAt(row);
-  }
-  endRemoveRows();
-  return true;
+    Q_UNUSED(parent);
+    if (row < 0 || (row + count) >= m_list.size()) {
+        return false;
+    }
+    beginRemoveRows(QModelIndex(), row, row + count - 1);
+    for (int i = 0; i < count; ++i) {
+        delete m_list.takeAt(row);
+    }
+    endRemoveRows();
+    return true;
 }
 
-ListItem * ListModel::takeRow(int row)
+ListItem *ListModel::takeRow(int row)
 {
-  beginRemoveRows(QModelIndex(), row, row);
-  ListItem* item = m_list.takeAt(row);
-  endRemoveRows();
-  return item;
+    beginRemoveRows(QModelIndex(), row, row);
+    ListItem *item = m_list.takeAt(row);
+    endRemoveRows();
+    return item;
 }
 
-ListItem * ListModel::getRow(int row){
-   ListItem* item = m_list.at(row);
-   return item;
+ListItem *ListModel::getRow(int row)
+{
+    ListItem *item = m_list.at(row);
+    return item;
 }
 
 QVariantMap ListModel::get(int row) const
 {
-   /* ListItem * item = m_list.at(row);
-    QMap<QString, QVariant> itemData;
-    QHashIterator<int, QByteArray> hashItr(item->roleNames());
-    while(hashItr.hasNext()){
-        hashItr.next();
-        itemData.insert(hashItr.value(),item->data(hashItr.key()).toString());
-    }
-    return QVariantMap(itemData);*/
+    /* ListItem * item = m_list.at(row);
+     QMap<QString, QVariant> itemData;
+     QHashIterator<int, QByteArray> hashItr(item->roleNames());
+     while(hashItr.hasNext()){
+         hashItr.next();
+         itemData.insert(hashItr.value(),item->data(hashItr.key()).toString());
+     }
+     return QVariantMap(itemData);*/
     QVariantMap elem;
-    if (row < 0 || row > m_list.count())
+    if (row < 0 || row > m_list.count()) {
         return elem;
+    }
 
-    FolderItem *item = (FolderItem*)m_list.at(row);
+    FolderItem *item = (FolderItem *)m_list.at(row);
     elem["section"] = item->xsection();
     return elem;
 }
 
-int ListModel::count() const {
+int ListModel::count() const
+{
     return m_list.count();
 }

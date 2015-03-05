@@ -26,7 +26,6 @@
 
 #include <ui_CalendarToolWidget.h>
 
-
 class KDatePicker;
 
 namespace Calligra
@@ -49,7 +48,7 @@ private:
      * This is useful if we want to delete it manually.
      * @see datePickerDeleted
      */
-    KDatePicker* m_datePicker;
+    KDatePicker *m_datePicker;
 
 public:
 
@@ -110,13 +109,13 @@ public Q_SLOTS:
      * Slot for setting the start date in the KDateWidget.
      * Normally this slot is activated by a KDatePicker widget.
      */
-    void setStartDate(const QDate&);
+    void setStartDate(const QDate &);
 
     /**
      * Slot for setting the end date in the KDateWidget.
      * Normally this slot is activated by a KDatePicker widget.
      */
-    void setEndDate(const QDate&);
+    void setEndDate(const QDate &);
 
 public:
 

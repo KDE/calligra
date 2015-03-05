@@ -31,11 +31,11 @@
 #include "kis_recorded_filter_action_creator.h"
 
 struct KisRecordedActionCreatorFactoryRegistry::Private {
-    KoGenericRegistry<KisRecordedActionCreatorFactory*> factories;
+    KoGenericRegistry<KisRecordedActionCreatorFactory *> factories;
 };
 
 KisRecordedActionCreatorFactoryRegistry::KisRecordedActionCreatorFactoryRegistry()
-        : d(new Private)
+    : d(new Private)
 {
     add(new KisRecordedFilterActionCreatorFactory);
 }
@@ -45,18 +45,18 @@ KisRecordedActionCreatorFactoryRegistry::~KisRecordedActionCreatorFactoryRegistr
     delete d;
 }
 
-KisRecordedActionCreatorFactoryRegistry* KisRecordedActionCreatorFactoryRegistry::instance()
+KisRecordedActionCreatorFactoryRegistry *KisRecordedActionCreatorFactoryRegistry::instance()
 {
     K_GLOBAL_STATIC(KisRecordedActionCreatorFactoryRegistry, s_instance);
     return s_instance;
 }
 
-void KisRecordedActionCreatorFactoryRegistry::add(KisRecordedActionCreatorFactory* factory)
+void KisRecordedActionCreatorFactoryRegistry::add(KisRecordedActionCreatorFactory *factory)
 {
     d->factories.add(factory);
 }
 
-KisRecordedActionCreatorFactory* KisRecordedActionCreatorFactoryRegistry::get(const QString& _id) const
+KisRecordedActionCreatorFactory *KisRecordedActionCreatorFactoryRegistry::get(const QString &_id) const
 {
     return d->factories.get(_id);
 }
@@ -64,9 +64,8 @@ KisRecordedActionCreatorFactory* KisRecordedActionCreatorFactoryRegistry::get(co
 QList<KoID> KisRecordedActionCreatorFactoryRegistry::creators() const
 {
     QList<KoID> cs;
-    foreach(const QString &id, d->factories.keys())
-    {
-	cs.push_back(KoID(id, d->factories.get(id)->name()));
+    foreach (const QString &id, d->factories.keys()) {
+        cs.push_back(KoID(id, d->factories.get(id)->name()));
     }
     return cs;
 }

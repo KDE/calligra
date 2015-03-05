@@ -53,32 +53,32 @@ class FolderItem : public ListItem
 
 public:
     enum Roles {
-      RevisionRole = Qt::UserRole+1,
-      Thumb_existsRole,
-      BytesRole,
-      ModifiedRole,
-      PathRole,
-      Is_dirRole,
-      IconRole,
-      Mime_typeRole,
-      SizeRole,
-      CheckedRole,
-      NameRole,
-      SectionRole
+        RevisionRole = Qt::UserRole + 1,
+        Thumb_existsRole,
+        BytesRole,
+        ModifiedRole,
+        PathRole,
+        Is_dirRole,
+        IconRole,
+        Mime_typeRole,
+        SizeRole,
+        CheckedRole,
+        NameRole,
+        SectionRole
     };
 
     explicit FolderItem(
-                        const qreal &revision,
-                        const bool &thumb_exists,
-                        const qreal &bytes,
-                        const QString &modified,
-                        const QString &path,
-                        const bool &is_dir,
-                        const QString &icon,
-                        const QString &mime_type,
-                        const QString &size,
-                        QObject *parent = 0
-                        ):ListItem(parent),
+        const qreal &revision,
+        const bool &thumb_exists,
+        const qreal &bytes,
+        const QString &modified,
+        const QString &path,
+        const bool &is_dir,
+        const QString &icon,
+        const QString &mime_type,
+        const QString &size,
+        QObject *parent = 0
+    ): ListItem(parent),
         m_revision(revision),
         m_thumb_exists(thumb_exists),
         m_bytes(bytes),
@@ -89,24 +89,57 @@ public:
         m_mime_type(mime_type),
         m_size(size),
         m_checked(false)
-        {}
+    {}
 
     FolderItem(QObject *parent = 0): ListItem(parent) {}
 
     QVariant data(int role) const;
     QHash<int, QByteArray> roleNames() const;
 
-    inline QString id() const { return m_path; }
-    inline qreal revision() const { return m_revision;}
-    inline bool thumb_exists() const { return m_thumb_exists;}
-    inline qreal bytes() const { return m_bytes;}
-    inline QString modified() const { return m_modified;}
-    inline QString path() const { return m_path;}
-    inline bool is_dir() const { return m_is_dir;}
-    inline QString icon() const { return m_icon;}
-    inline QString mime_type() const { return m_mime_type;}
-    inline QString size() const { return m_size;}
-    inline bool checked() const { return m_checked;}
+    inline QString id() const
+    {
+        return m_path;
+    }
+    inline qreal revision() const
+    {
+        return m_revision;
+    }
+    inline bool thumb_exists() const
+    {
+        return m_thumb_exists;
+    }
+    inline qreal bytes() const
+    {
+        return m_bytes;
+    }
+    inline QString modified() const
+    {
+        return m_modified;
+    }
+    inline QString path() const
+    {
+        return m_path;
+    }
+    inline bool is_dir() const
+    {
+        return m_is_dir;
+    }
+    inline QString icon() const
+    {
+        return m_icon;
+    }
+    inline QString mime_type() const
+    {
+        return m_mime_type;
+    }
+    inline QString size() const
+    {
+        return m_size;
+    }
+    inline bool checked() const
+    {
+        return m_checked;
+    }
     QString name() const;
     QString section() const;
     QString xsection();

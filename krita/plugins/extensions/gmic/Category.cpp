@@ -21,18 +21,17 @@
 
 #include <kis_debug.h>
 
-void Category::add(Component* c)
+void Category::add(Component *c)
 {
     m_components.append(c);
 }
 
-
-void Category::processCategoryName(const QString& line)
+void Category::processCategoryName(const QString &line)
 {
     Q_UNUSED(line);
 }
 
-Category::Category(Component * parent):m_parent(parent)
+Category::Category(Component *parent): m_parent(parent)
 {
 
 }
@@ -43,44 +42,39 @@ Category::~Category()
     m_components.clear();
 }
 
-
 void Category::print(int level)
 {
-    if(!m_components.isEmpty())
-    {
-        for(int x=0; x < level; ++x)
-        {
+    if (!m_components.isEmpty()) {
+        for (int x = 0; x < level; ++x) {
             dbgPlugins << "\t";
         }
 
         dbgPlugins << "Category " << qPrintable(name()) << ":\n";
         ++level;
-        for (int i = 0; i < m_components.size(); ++i)
+        for (int i = 0; i < m_components.size(); ++i) {
             m_components[i]->print(level);
+        }
     }
 }
 
-Component* Category::child(int index) const
+Component *Category::child(int index) const
 {
-    if ((index < 0) && (index > m_components.size()))
-    {
+    if ((index < 0) && (index > m_components.size())) {
         return 0;
-    }
-    else {
+    } else {
         return m_components.at(index);
     }
 }
 
-int Category::indexOf(Component* c) const
+int Category::indexOf(Component *c) const
 {
     return m_components.indexOf(c);
 }
 
 int Category::row() const
 {
-    if (m_parent)
-    {
-        return m_parent->indexOf(const_cast<Category*>(this));
+    if (m_parent) {
+        return m_parent->indexOf(const_cast<Category *>(this));
     }
     return 0;
 }
@@ -101,7 +95,7 @@ QVariant Category::data(int column)
     return name();
 }
 
-void Category::replace(int position, Component* c)
+void Category::replace(int position, Component *c)
 {
     delete m_components[position];
     m_components[position] = c;

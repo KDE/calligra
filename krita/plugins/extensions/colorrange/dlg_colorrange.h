@@ -51,7 +51,8 @@ class WdgColorRange : public QWidget, public Ui::WdgColorRange
     Q_OBJECT
 
 public:
-    WdgColorRange(QWidget *parent) : QWidget(parent) {
+    WdgColorRange(QWidget *parent) : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -87,14 +88,13 @@ private:
 
 private:
 
-    WdgColorRange * m_page;
-    KisViewManager * m_view;
+    WdgColorRange *m_page;
+    KisViewManager *m_view;
     SelectionAction m_mode;
     QCursor m_oldCursor;
     enumAction m_currentAction;
     bool m_invert;
     int m_selectionCommandsAdded;
 };
-
 
 #endif // DLG_COLORRANGE

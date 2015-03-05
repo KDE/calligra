@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-
 #include <kpluginfactory.h>
 #include <klocale.h>
 
@@ -38,9 +37,10 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(PatternDockerPluginFactory, registerPlugin<PatternDockerPlugin>();)
-K_EXPORT_PLUGIN(PatternDockerPluginFactory( "krita" ) )
+K_EXPORT_PLUGIN(PatternDockerPluginFactory("krita"))
 
-class PatternDockerDockFactory : public KoDockFactoryBase {
+class PatternDockerDockFactory : public KoDockFactoryBase
+{
 public:
     PatternDockerDockFactory()
     {
@@ -48,7 +48,7 @@ public:
 
     virtual QString id() const
     {
-        return QString( "PatternDocker" );
+        return QString("PatternDocker");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
@@ -56,9 +56,9 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    virtual QDockWidget *createDockWidget()
     {
-        PatternDockerDock * dockWidget = new PatternDockerDock();
+        PatternDockerDock *dockWidget = new PatternDockerDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -70,9 +70,7 @@ public:
     }
 private:
 
-
 };
-
 
 PatternDockerPlugin::PatternDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

@@ -32,23 +32,24 @@ class BRUSH_EXPORT KisAutoBrush : public KisBrush
 
 public:
 
-    KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density = 1.0);
+    KisAutoBrush(KisMaskGenerator *as, qreal angle, qreal randomness, qreal density = 1.0);
 
     virtual ~KisAutoBrush();
 
 public:
 
-    virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
+    virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace *,
             double, double,
-            const KisPaintInformation&,
-            double = 0, double = 0) const {
+            const KisPaintInformation &,
+            double = 0, double = 0) const
+    {
         return 0; // The autobrush does NOT support images!
     }
 
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-            KisBrush::ColoringInformation* src,
+            KisBrush::ColoringInformation *src,
             double scaleX, double scaleY, double angle,
-            const KisPaintInformation& info,
+            const KisPaintInformation &info,
             double subPixelX = 0, double subPixelY = 0,
             qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
@@ -56,24 +57,28 @@ public:
 
 public:
 
-    bool load() {
+    bool load()
+    {
         return false;
     }
 
-    virtual bool loadFromDevice(QIODevice *) {
+    virtual bool loadFromDevice(QIODevice *)
+    {
         return false;
     }
 
-    bool save()  {
+    bool save()
+    {
         return false;
     }
 
-    bool saveToDevice(QIODevice*) const {
+    bool saveToDevice(QIODevice *) const
+    {
         return false;
     }
 
-    void toXML(QDomDocument& , QDomElement&) const;
-    const KisMaskGenerator* maskGenerator() const;
+    void toXML(QDomDocument &, QDomElement &) const;
+    const KisMaskGenerator *maskGenerator() const;
     qreal randomness() const;
     qreal density() const;
 
@@ -86,6 +91,6 @@ private:
     QImage createBrushPreview();
 
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 #endif // _KIS_AUTOBRUSH_RESOURCE_H_

@@ -43,28 +43,28 @@ class ListDialog::Private
 public:
     KSharedConfigPtr config;
 
-    QListWidget* list;
-    KTextEdit* textEdit;
-    QPushButton* addButton;
-    QPushButton* cancelButton;
-    QPushButton* removeButton;
-    QPushButton* newButton;
-    QPushButton* modifyButton;
-    QPushButton* copyButton;
+    QListWidget *list;
+    KTextEdit *textEdit;
+    QPushButton *addButton;
+    QPushButton *cancelButton;
+    QPushButton *removeButton;
+    QPushButton *newButton;
+    QPushButton *modifyButton;
+    QPushButton *copyButton;
     bool changed;
 };
 
 static const int numBuiltinLists = 4;
 
-ListDialog::ListDialog(QWidget* parent)
-        : KDialog(parent)
-        , d(new Private)
+ListDialog::ListDialog(QWidget *parent)
+    : KDialog(parent)
+    , d(new Private)
 {
     setCaption(i18n("Custom Lists"));
     setButtons(Ok | Cancel);
     setModal(true);
 
-    QWidget* page = new QWidget(this);
+    QWidget *page = new QWidget(this);
     setMainWidget(page);
 
     QGridLayout *grid1 = new QGridLayout(page);
@@ -166,7 +166,7 @@ void ListDialog::init()
         i18n("Sep") + ", " +
         i18n("Oct") + ", " +
         i18n("Nov") + ", ";
-        i18n("Dec");
+    i18n("Dec");
     lst.append(smonth);
 
     QString day =
@@ -175,7 +175,7 @@ void ListDialog::init()
         i18n("Wednesday") + ", " +
         i18n("Thursday") + ", " +
         i18n("Friday") + ", " +
-        i18n("Saturday") + ", "+ 
+        i18n("Saturday") + ", " +
         i18n("Sunday");
     lst.append(day);
 

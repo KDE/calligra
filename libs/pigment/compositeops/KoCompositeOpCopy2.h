@@ -41,29 +41,31 @@ class KoCompositeOpCopy2: public KoCompositeOpBase< Traits, KoCompositeOpCopy2<T
     static const qint32 alpha_pos   = Traits::alpha_pos;
 
 public:
-    KoCompositeOpCopy2(const KoColorSpace* cs)
+    KoCompositeOpCopy2(const KoColorSpace *cs)
         : base_class(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMisc()) { }
 
 public:
     template<bool alphaLocked, bool allChannelFlags>
-    inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
-                                                     channels_type*       dst, channels_type dstAlpha, channels_type maskAlpha,
-                                                     channels_type opacity, const QBitArray& channelFlags) {
+    inline static channels_type composeColorChannels(const channels_type *src, channels_type srcAlpha,
+            channels_type       *dst, channels_type dstAlpha, channels_type maskAlpha,
+            channels_type opacity, const QBitArray &channelFlags)
+    {
         using namespace Arithmetic;
         opacity = mul(maskAlpha, opacity);
 
         channels_type newAlpha = zeroValue<channels_type>();
 
-        if(dstAlpha == zeroValue<channels_type>() ||
-           opacity == unitValue<channels_type>()) {
+        if (dstAlpha == zeroValue<channels_type>() ||
+                opacity == unitValue<channels_type>()) {
 
             newAlpha = lerp(dstAlpha, srcAlpha, opacity);
 
             // don't blend if the color of the destination is undefined (has zero opacity)
             // copy the source channel instead
-            for(qint32 i=0; i<channels_nb; ++i)
-                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
+            for (qint32 i = 0; i < channels_nb; ++i)
+                if (i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                     dst[i] = src[i];
+                }
 
         } else if (opacity == zeroValue<channels_type>()) {
             newAlpha = dstAlpha;
@@ -84,8 +86,8 @@ public:
             }
 
             // blend the color channels
-            for(qint32 i=0; i<channels_nb; ++i) {
-                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+            for (qint32 i = 0; i < channels_nb; ++i) {
+                if (i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
 
                     /**
                      * We use the most fundamental OVER algorithm here,

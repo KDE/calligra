@@ -20,7 +20,6 @@
 
 #include <qtest_kde.h>
 
-
 #include "filter/kis_filter_configuration.h"
 #include "kis_config_widget.h"
 
@@ -28,13 +27,16 @@ class TestWidget : public KisConfigWidget
 {
 public:
     TestWidget()
-            : KisConfigWidget(0) {
+        : KisConfigWidget(0)
+    {
     }
 
-    void setConfiguration(const KisPropertiesConfiguration *) {
+    void setConfiguration(const KisPropertiesConfiguration *)
+    {
     }
 
-    KisPropertiesConfiguration * configuration() const {
+    KisPropertiesConfiguration *configuration() const
+    {
         return 0;
     }
 };
@@ -43,7 +45,6 @@ void KisConfigWidgetTest::testCreation()
 {
     TestWidget test;
 }
-
 
 QTEST_KDEMAIN(KisConfigWidgetTest, GUI)
 #include "kis_filter_config_widget_test.moc"

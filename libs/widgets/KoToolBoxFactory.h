@@ -27,7 +27,6 @@
 #include <QString>
 #include <QDockWidget>
 
-
 /**
  * Factory class to create a new KoToolBox that contains the buttons
  * to activate tools.
@@ -40,8 +39,11 @@ public:
 
     virtual QString id() const;
     KoDockFactoryBase::DockPosition defaultDockPosition() const;
-    QDockWidget* createDockWidget();
-    virtual bool isCollapsable() const { return false; }
+    QDockWidget *createDockWidget();
+    virtual bool isCollapsable() const
+    {
+        return false;
+    }
 };
 
 #endif

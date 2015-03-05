@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 KPrFadeCrossStrategy::KPrFadeCrossStrategy()
-: KPrPageEffectStrategy(KPrFadeEffectFactory::CrossFade, "fade", "crossfade", false, true)
+    : KPrPageEffectStrategy(KPrFadeEffectFactory::CrossFade, "fade", "crossfade", false, true)
 {
 }
 
@@ -37,7 +37,7 @@ KPrFadeCrossStrategy::~KPrFadeCrossStrategy()
 {
 }
 
-void KPrFadeCrossStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
+void KPrFadeCrossStrategy::setup(const KPrPageEffect::Data &data, QTimeLine &timeLine)
 {
     timeLine.setFrameRange(0, 1000); // TODO might not be needed
     data.m_oldPageItem->setZValue(1);
@@ -47,20 +47,19 @@ void KPrFadeCrossStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &ti
     data.m_newPageItem->show();
 }
 
-void KPrFadeCrossStrategy::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
+void KPrFadeCrossStrategy::paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data)
 {
     Q_UNUSED(p);
     Q_UNUSED(currPos);
     Q_UNUSED(data);
 }
 
-void KPrFadeCrossStrategy::next( const KPrPageEffect::Data &data )
+void KPrFadeCrossStrategy::next(const KPrPageEffect::Data &data)
 {
     int frame = data.m_timeLine.frameForTime(data.m_currentTime);
     if (frame >= data.m_timeLine.endFrame()) {
         finish(data);
-    }
-    else {
+    } else {
         qreal value = data.m_timeLine.valueForTime(data.m_currentTime);
         data.m_newPageItem->setOpacity(value);
     }

@@ -25,7 +25,7 @@
 #include "kowidgets_export.h"
 
 /**
- * @short A widget for 
+ * @short A widget for
  *
  */
 class KOWIDGETS_EXPORT KoColorPopupButton: public QToolButton
@@ -38,7 +38,7 @@ public:
      *
      * @param parent parent QWidget
      */
-    explicit KoColorPopupButton(QWidget *parent=0);
+    explicit KoColorPopupButton(QWidget *parent = 0);
 
     /**
      * Destructor

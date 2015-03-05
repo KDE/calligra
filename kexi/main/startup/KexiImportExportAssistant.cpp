@@ -29,14 +29,14 @@ static QString stripText(const QString &text)
 
 KexiMainImportExportPage::KexiMainImportExportPage(
     KexiImportExportAssistant *assistant,
-    QWidget* parent)
- : KexiAssistantPage(stripText(assistant->action_project_import_export_send->text()),
-                     QString(),
-                     parent)
+    QWidget *parent)
+    : KexiAssistantPage(stripText(assistant->action_project_import_export_send->text()),
+                        QString(),
+                        parent)
 {
     setNextButtonVisible(false);
 
-    QWidget* contents = new QWidget;
+    QWidget *contents = new QWidget;
     setupUi(contents);
     btn_import->setText(stripText(assistant->action_import_project->text()));
     btn_import->setDescription(assistant->action_import_project->toolTip());
@@ -59,20 +59,22 @@ class KexiImportExportAssistant::Private
 {
 public:
     explicit Private(KexiImportExportAssistant *qq)
-     : q(qq)
+        : q(qq)
     {
     }
-    
+
     ~Private()
     {
     }
-    
-    KexiMainImportExportPage* mainPage() {
+
+    KexiMainImportExportPage *mainPage()
+    {
         return page<KexiMainImportExportPage>(&m_mainImportExportPage, q);
     }
-    
+
     template <class C>
-    C* page(QPointer<C>* p, KexiImportExportAssistant *parent = 0) {
+    C *page(QPointer<C> *p, KexiImportExportAssistant *parent = 0)
+    {
         if (p->isNull()) {
             *p = new C(parent);
             q->addPage(*p);
@@ -81,7 +83,7 @@ public:
     }
 
     QPointer<KexiMainImportExportPage> m_mainImportExportPage;
-    
+
     KexiImportExportAssistant *q;
 };
 
@@ -90,11 +92,11 @@ public:
 KexiImportExportAssistant::KexiImportExportAssistant(
     const KAction *action_project_import_export_send_,
     const KAction *action_import_project_,
-    QWidget* parent)
- : KexiAssistantWidget(parent)
- , action_project_import_export_send(action_project_import_export_send_)
- , action_import_project(action_import_project_)
- , d(new Private(this))
+    QWidget *parent)
+    : KexiAssistantWidget(parent)
+    , action_project_import_export_send(action_project_import_export_send_)
+    , action_import_project(action_import_project_)
+    , d(new Private(this))
 {
     setCurrentPage(d->mainPage());
     setFocusProxy(d->mainPage());
@@ -104,13 +106,13 @@ KexiImportExportAssistant::~KexiImportExportAssistant()
 {
     delete d;
 }
-       
-void KexiImportExportAssistant::nextPageRequested(KexiAssistantPage* page)
+
+void KexiImportExportAssistant::nextPageRequested(KexiAssistantPage *page)
 {
     Q_UNUSED(page);
 }
 
-void KexiImportExportAssistant::cancelRequested(KexiAssistantPage* page)
+void KexiImportExportAssistant::cancelRequested(KexiAssistantPage *page)
 {
     Q_UNUSED(page);
     //! @todo

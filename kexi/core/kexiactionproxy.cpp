@@ -29,9 +29,9 @@
 #include <QIcon>
 #include <kexi_global.h>
 
-KexiSharedActionConnector::KexiSharedActionConnector(KexiActionProxy* proxy, QObject *obj)
-        : m_proxy(proxy)
-        , m_object(obj)
+KexiSharedActionConnector::KexiSharedActionConnector(KexiActionProxy *proxy, QObject *obj)
+    : m_proxy(proxy)
+    , m_object(obj)
 {
 }
 
@@ -39,28 +39,28 @@ KexiSharedActionConnector::~KexiSharedActionConnector()
 {
 }
 
-void KexiSharedActionConnector::plugSharedAction(const QString& action_name, const char *slot)
+void KexiSharedActionConnector::plugSharedAction(const QString &action_name, const char *slot)
 {
     m_proxy->plugSharedAction(action_name, m_object, slot);
 }
 
 //=======================
 
-class KexiActionProxy::Private {
+class KexiActionProxy::Private
+{
 public:
     Private() {}
 
-    QMap<QString, QPair<KexiActionProxySignal*, bool>* > signalsMap;
+    QMap<QString, QPair<KexiActionProxySignal *, bool>* > signalsMap;
 };
 
-
 KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
-        : m_host(host ? host : KexiSharedActionHost::defaultHost())
-        , m_receiver(receiver)
-        , m_actionProxyParent(0)
-        , m_signal_parent(0)
-        , m_focusedChild(0)
-        , d(new Private)
+    : m_host(host ? host : KexiSharedActionHost::defaultHost())
+    , m_receiver(receiver)
+    , m_actionProxyParent(0)
+    , m_signal_parent(0)
+    , m_focusedChild(0)
+    , d(new Private)
 {
     m_signal_parent.setObjectName("signal_parent");
     //m_sharedActionChildren.setAutoDelete(false); //!< @todo port logic to KDE4
@@ -73,41 +73,45 @@ KexiActionProxy::~KexiActionProxy()
     qDeleteAll(d->signalsMap);
     d->signalsMap.clear();
     //detach myself from every child
-    foreach(KexiActionProxy *proxy, m_sharedActionChildren) {
+    foreach (KexiActionProxy *proxy, m_sharedActionChildren) {
         proxy->setActionProxyParent_internal(0);
     }
     //take me from parent
-    if (m_actionProxyParent)
+    if (m_actionProxyParent) {
         m_actionProxyParent->takeActionProxyChild(this);
+    }
 
     m_host->takeActionProxyFor(m_receiver);
 
     delete d;
 }
 
-void KexiActionProxy::plugSharedAction(const QString& action_name, QObject* receiver, const char *slot)
+void KexiActionProxy::plugSharedAction(const QString &action_name, QObject *receiver, const char *slot)
 {
-    if (action_name.isEmpty())// || !receiver || !slot)
+    if (action_name.isEmpty()) { // || !receiver || !slot)
         return;
-    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.value(action_name);
+    }
+    QPair<KexiActionProxySignal *, bool> *p = d->signalsMap.value(action_name);
     if (! p) {
-        p = new QPair<KexiActionProxySignal*, bool>(new KexiActionProxySignal(&m_signal_parent), true);
+        p = new QPair<KexiActionProxySignal *, bool>(new KexiActionProxySignal(&m_signal_parent), true);
         d->signalsMap.insert(action_name, p);
     }
-    if (receiver && slot)
+    if (receiver && slot) {
         QObject::connect(p->first, SIGNAL(invoke()), receiver, slot);
+    }
 }
 
-void KexiActionProxy::unplugSharedAction(const QString& action_name)
+void KexiActionProxy::unplugSharedAction(const QString &action_name)
 {
-    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.take(action_name);
-    if (! p)
+    QPair<KexiActionProxySignal *, bool> *p = d->signalsMap.take(action_name);
+    if (! p) {
         return;
+    }
     delete p->first;
     delete p;
 }
 
-void KexiActionProxy::plugSharedAction(const QString& action_name, QWidget* w)
+void KexiActionProxy::plugSharedAction(const QString &action_name, QWidget *w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
@@ -117,7 +121,7 @@ void KexiActionProxy::plugSharedAction(const QString& action_name, QWidget* w)
     w->addAction(a);
 }
 
-void KexiActionProxy::unplugSharedAction(const QString& action_name, QWidget* w)
+void KexiActionProxy::unplugSharedAction(const QString &action_name, QWidget *w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
@@ -127,7 +131,7 @@ void KexiActionProxy::unplugSharedAction(const QString& action_name, QWidget* w)
     w->removeAction(a);
 }
 
-KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w)
+KAction *KexiActionProxy::plugSharedAction(const QString &action_name, const QString &alternativeText, QWidget *w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
@@ -136,7 +140,7 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
     }
     QString altName = a->objectName() + "_alt";
 
-    KAction *ka = dynamic_cast<KAction*>(a);
+    KAction *ka = dynamic_cast<KAction *>(a);
     Q_ASSERT(ka);
     KAction *alt_act = new KAction(0);
     alt_act->setObjectName(altName);
@@ -154,15 +158,16 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
     return alt_act;
 }
 
-bool KexiActionProxy::activateSharedAction(const QString& action_name, bool alsoCheckInChildren)
+bool KexiActionProxy::activateSharedAction(const QString &action_name, bool alsoCheckInChildren)
 {
-    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.value(action_name);
+    QPair<KexiActionProxySignal *, bool> *p = d->signalsMap.value(action_name);
     if (!p || !p->second) {
         //try in children...
         if (alsoCheckInChildren) {
-            foreach(KexiActionProxy *proxy, m_sharedActionChildren) {
-                if (proxy->activateSharedAction(action_name, alsoCheckInChildren))
+            foreach (KexiActionProxy *proxy, m_sharedActionChildren) {
+                if (proxy->activateSharedAction(action_name, alsoCheckInChildren)) {
                     return true;
+                }
             }
         }
         return m_actionProxyParent ? m_actionProxyParent->activateSharedAction(action_name, false) : false; //last chance: parent
@@ -172,38 +177,42 @@ bool KexiActionProxy::activateSharedAction(const QString& action_name, bool also
     return true;
 }
 
-QAction* KexiActionProxy::sharedAction(const QString& action_name)
+QAction *KexiActionProxy::sharedAction(const QString &action_name)
 {
     return m_host->mainWindow()->actionCollection()->action(action_name);
 }
 
-bool KexiActionProxy::isSupported(const QString& action_name) const
+bool KexiActionProxy::isSupported(const QString &action_name) const
 {
-    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.value(action_name);
+    QPair<KexiActionProxySignal *, bool> *p = d->signalsMap.value(action_name);
     if (!p) {
         //not supported explicitly - try in children...
-        if (m_focusedChild)
+        if (m_focusedChild) {
             return m_focusedChild->isSupported(action_name);
-        foreach(KexiActionProxy *proxy, m_sharedActionChildren) {
-            if (proxy->isSupported(action_name))
+        }
+        foreach (KexiActionProxy *proxy, m_sharedActionChildren) {
+            if (proxy->isSupported(action_name)) {
                 return true;
+            }
         }
         return false; //not suported
     }
     return p != 0;
 }
 
-bool KexiActionProxy::isAvailable(const QString& action_name, bool alsoCheckInChildren) const
+bool KexiActionProxy::isAvailable(const QString &action_name, bool alsoCheckInChildren) const
 {
-    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.value(action_name);
+    QPair<KexiActionProxySignal *, bool> *p = d->signalsMap.value(action_name);
     if (!p) {
         //not supported explicitly - try in children...
         if (alsoCheckInChildren) {
-            if (m_focusedChild)
+            if (m_focusedChild) {
                 return m_focusedChild->isAvailable(action_name, alsoCheckInChildren);
-            foreach(KexiActionProxy *proxy, m_sharedActionChildren) {
-                if (proxy->isSupported(action_name))
+            }
+            foreach (KexiActionProxy *proxy, m_sharedActionChildren) {
+                if (proxy->isSupported(action_name)) {
                     return proxy->isAvailable(action_name, alsoCheckInChildren);
+                }
             }
         }
         return m_actionProxyParent ? m_actionProxyParent->isAvailable(action_name, false) : false; //last chance: parent
@@ -212,32 +221,35 @@ bool KexiActionProxy::isAvailable(const QString& action_name, bool alsoCheckInCh
     return p->second != 0;
 }
 
-void KexiActionProxy::setAvailable(const QString& action_name, bool set)
+void KexiActionProxy::setAvailable(const QString &action_name, bool set)
 {
-    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.value(action_name);
-    if (!p)
+    QPair<KexiActionProxySignal *, bool> *p = d->signalsMap.value(action_name);
+    if (!p) {
         return;
+    }
     p->second = set;
     m_host->updateActionAvailable(action_name, set, m_receiver);
 }
 
-void KexiActionProxy::addActionProxyChild(KexiActionProxy* child)
+void KexiActionProxy::addActionProxyChild(KexiActionProxy *child)
 {
-    if (!child || child == this)
+    if (!child || child == this) {
         return;
+    }
     child->setActionProxyParent_internal(this);
     m_sharedActionChildren.append(child);
 }
 
-void KexiActionProxy::takeActionProxyChild(KexiActionProxy* child)
+void KexiActionProxy::takeActionProxyChild(KexiActionProxy *child)
 {
-kDebug() << child;
+    kDebug() << child;
     const int index = m_sharedActionChildren.indexOf(child);
-    if (index != -1)
+    if (index != -1) {
         m_sharedActionChildren.removeAt(index);
+    }
 }
 
-void KexiActionProxy::setActionProxyParent_internal(KexiActionProxy* parent)
+void KexiActionProxy::setActionProxyParent_internal(KexiActionProxy *parent)
 {
     m_actionProxyParent = parent;
 }

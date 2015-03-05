@@ -20,9 +20,9 @@
 #include "kis_debug.h"
 #include <QTimer>
 
-KisConfigWidget::KisConfigWidget(QWidget * parent, Qt::WFlags f, int delay)
-        : QWidget(parent, f)
-        , m_delay(delay)
+KisConfigWidget::KisConfigWidget(QWidget *parent, Qt::WFlags f, int delay)
+    : QWidget(parent, f)
+    , m_delay(delay)
 {
     m_timer.setSingleShot(true);
     connect(&m_timer, SIGNAL(timeout()), SLOT(slotConfigChanged()));

@@ -36,7 +36,7 @@ class KoCanvasBase;
  * @see KoRdfSemanticItemFactoryBase
  * @see KoRdfSemanticItem
  */
-class KORDF_EXPORT KoRdfSemanticItemRegistry : public KoGenericRegistry<KoRdfSemanticItemFactoryBase*>
+class KORDF_EXPORT KoRdfSemanticItemRegistry : public KoGenericRegistry<KoRdfSemanticItemFactoryBase *>
 {
 public:
     ~KoRdfSemanticItemRegistry();
@@ -90,11 +90,11 @@ public:
 
 private:
     KoRdfSemanticItemRegistry();
-    KoRdfSemanticItemRegistry(const KoRdfSemanticItemRegistry&);
-    KoRdfSemanticItemRegistry operator=(const KoRdfSemanticItemRegistry&);
+    KoRdfSemanticItemRegistry(const KoRdfSemanticItemRegistry &);
+    KoRdfSemanticItemRegistry operator=(const KoRdfSemanticItemRegistry &);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

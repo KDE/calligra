@@ -22,90 +22,108 @@
 #include <boost/operators.hpp>
 #include <QDataStream>
 
-
 class KisFixedPoint : boost::ordered_field_operators<KisFixedPoint>
 {
 public:
-    KisFixedPoint() {
+    KisFixedPoint()
+    {
         d = 0;
     }
 
-    KisFixedPoint(int iValue) {
+    KisFixedPoint(int iValue)
+    {
         d = iValue << 8;
     }
 
-    KisFixedPoint(qreal fValue) {
+    KisFixedPoint(qreal fValue)
+    {
         d = fValue * (1 << 8);
     }
 
-    qint32 toInt() const {
+    qint32 toInt() const
+    {
         return d >= 0 ? d >> 8 : -((-d) >> 8);
     }
 
-    qint32 toIntRound() const {
+    qint32 toIntRound() const
+    {
         return d >= 0 ? (d + (1 << 7)) >> 8 : -((-d + (1 << 7)) >> 8);
     }
 
-    qint32 toIntCeil() const {
+    qint32 toIntCeil() const
+    {
         return d >= 0 ? (d + ((1 << 8) - 1)) >> 8 : -((-d) >> 8);
     }
 
-    qint32 toIntFloor() const {
+    qint32 toIntFloor() const
+    {
         return d >= 0 ? d >> 8 : -((-d + ((1 << 8) - 1)) >> 8);
     }
 
-    qreal toFloat() const {
+    qreal toFloat() const
+    {
         return qreal(d) / qreal(1 << 8);
     }
 
-    KisFixedPoint& from256Frac(qint32 v) {
+    KisFixedPoint &from256Frac(qint32 v)
+    {
         d = v;
         return *this;
     }
 
-    qint32 to256Frac() const {
+    qint32 to256Frac() const
+    {
         return d;
     }
 
-    KisFixedPoint& inc256Frac() {
+    KisFixedPoint &inc256Frac()
+    {
         d++;
         return *this;
     }
 
-    KisFixedPoint& dec256Frac() {
+    KisFixedPoint &dec256Frac()
+    {
         d--;
         return *this;
     }
 
-    bool isInteger() const {
-        return !(d & ((1 << 8) -1 ));
+    bool isInteger() const
+    {
+        return !(d & ((1 << 8) - 1));
     }
 
-    bool operator<(const KisFixedPoint& x) const {
+    bool operator<(const KisFixedPoint &x) const
+    {
         return d < x.d;
     }
 
-    bool operator==(const KisFixedPoint& x) const {
+    bool operator==(const KisFixedPoint &x) const
+    {
         return d == x.d;
     }
 
-    KisFixedPoint& operator+=(const KisFixedPoint& x) {
+    KisFixedPoint &operator+=(const KisFixedPoint &x)
+    {
         d += x.d;
         return *this;
     }
 
-    KisFixedPoint& operator-=(const KisFixedPoint& x) {
+    KisFixedPoint &operator-=(const KisFixedPoint &x)
+    {
         d -= x.d;
         return *this;
     }
 
-    KisFixedPoint& operator*=(const KisFixedPoint& x) {
+    KisFixedPoint &operator*=(const KisFixedPoint &x)
+    {
         d *= x.d;
         d >>= 8;
         return *this;
     }
 
-    KisFixedPoint& operator/=(const KisFixedPoint& x) {
+    KisFixedPoint &operator/=(const KisFixedPoint &x)
+    {
         d <<= 8;
         d /= x.d;
         return *this;
@@ -119,12 +137,14 @@ private:
     qint32 d;
 };
 
-inline KisFixedPoint operator-(KisFixedPoint x) {
+inline KisFixedPoint operator-(KisFixedPoint x)
+{
     x.d = -x.d;
     return x;
 }
 
-QDebug operator<<(QDebug dbg, const KisFixedPoint &v) {
+QDebug operator<<(QDebug dbg, const KisFixedPoint &v)
+{
     dbg.nospace() << v.toFloat() << " (d = " << v.d << ")";
     return dbg.space();
 }

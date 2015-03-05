@@ -80,7 +80,7 @@ public:
     Cluster();
     ~Cluster();
 
-    Cell* lookup(int x, int y) const;
+    Cell *lookup(int x, int y) const;
 
     /**
      * Removes all cells from the sheet and frees memory that
@@ -92,7 +92,7 @@ public:
      * Inserts a cell at the requested position. If there is already
      * a cell, then @ref #remove is called on it.
      */
-    void insert(Cell* cell, int x, int y);
+    void insert(Cell *cell, int x, int y);
     /**
      * Removes the cell at the given position, if there is any.
      */
@@ -101,9 +101,9 @@ public:
     void setAutoDelete(bool);
     bool autoDelete() const;
 
-    Cell* firstCell() const;
+    Cell *firstCell() const;
 
-    bool insertShiftRight(const QPoint& marker);
+    bool insertShiftRight(const QPoint &marker);
     /**
      * Moves all cells in the column marker.x() beginning with
      * the one at marker.y() one position downwards.
@@ -111,14 +111,14 @@ public:
      * @return false if a cell would drop out of the sheet because of that.
      *         In this case the shift is not performed.
      */
-    bool insertShiftDown(const QPoint& marker);
+    bool insertShiftDown(const QPoint &marker);
 
     /**
      * Moves all cells in the column marker.x() beginning with
      * the one at marker.y() + 1 one position upwards.
      */
-    void removeShiftUp(const QPoint& marker);
-    void removeShiftLeft(const QPoint& marker);
+    void removeShiftUp(const QPoint &marker);
+    void removeShiftLeft(const QPoint &marker);
 
     /**
      * Moves all columns beginning with @p col one position
@@ -162,7 +162,7 @@ public:
      * @return Returns a pointer to the cell, or 0 if there are no used cells
      *         in this column
      */
-    Cell* getFirstCellColumn(int col) const;
+    Cell *getFirstCellColumn(int col) const;
 
     /**
      * Retrieve the last used cell in a given column.  Can be used in conjunction
@@ -173,7 +173,7 @@ public:
      * @return Returns a pointer to the cell, or 0 if there are no used cells
      *         in this column
      */
-    Cell* getLastCellColumn(int col) const;
+    Cell *getLastCellColumn(int col) const;
 
     /**
      * Retrieve the first used cell in a given row.  Can be used in conjunction
@@ -184,7 +184,7 @@ public:
      * @return Returns a pointer to the cell, or 0 if there are no used cells
      *         in this row
      */
-    Cell* getFirstCellRow(int row) const;
+    Cell *getFirstCellRow(int row) const;
 
     /**
      * Retrieve the last used cell in a given row.  Can be used in conjunction
@@ -195,7 +195,7 @@ public:
      * @return Returns a pointer to the cell, or 0 if there are no used cells
      *         in this row
      */
-    Cell* getLastCellRow(int row) const;
+    Cell *getLastCellRow(int row) const;
 
     /**
      * Retrieves the next used cell above the given col/row pair.  The given
@@ -206,7 +206,7 @@ public:
      *
      * @return Returns the next used cell above this one, or 0 if there are none
      */
-    Cell* getNextCellUp(int col, int row) const;
+    Cell *getNextCellUp(int col, int row) const;
 
     /**
      * Retrieves the next used cell below the given col/row pair.  The given
@@ -217,7 +217,7 @@ public:
      *
      * @return Returns the next used cell below this one, or 0 if there are none
      */
-    Cell* getNextCellDown(int col, int row) const;
+    Cell *getNextCellDown(int col, int row) const;
 
     /**
      * Retrieves the next used cell to the right of the given col/row pair.
@@ -229,7 +229,7 @@ public:
      * @return Returns the next used cell to the right of this one, or 0 if
      * there are none
      */
-    Cell* getNextCellRight(int col, int row) const;
+    Cell *getNextCellRight(int col, int row) const;
 
     /**
      * Retrieves the next used cell to the left of the given col/row pair.
@@ -241,24 +241,24 @@ public:
      * @return Returns the next used cell to the left of this one, or 0 if
      * there are none
      */
-    Cell* getNextCellLeft(int col, int row) const;
+    Cell *getNextCellLeft(int col, int row) const;
 
 private:
     /**
      * @param work is set to true if the method found some clusters
      *        which belong to the shifted row.
      */
-    bool insertShiftRight(const QPoint& marker, bool& work);
-    bool insertShiftDown(const QPoint& marker, bool& work);
+    bool insertShiftRight(const QPoint &marker, bool &work);
+    bool insertShiftDown(const QPoint &marker, bool &work);
 
-    void removeShiftUp(const QPoint& marker, bool& work);
-    void removeShiftLeft(const QPoint& marker, bool& work);
+    void removeShiftUp(const QPoint &marker, bool &work);
+    void removeShiftLeft(const QPoint &marker, bool &work);
 
     /** helper method used by valueRange */
     Value makeArray(int col1, int row1, int col2, int row2) const;
 
-    Cell*** m_cluster;
-    Cell* m_first;
+    Cell ** *m_cluster;
+    Cell *m_first;
     bool m_autoDelete;
     int m_biggestX, m_biggestY;
 };
@@ -274,12 +274,12 @@ public:
     ColumnCluster();
     ~ColumnCluster();
 
-    const ColumnFormat* lookup(int col) const;
-    ColumnFormat* lookup(int col);
+    const ColumnFormat *lookup(int col) const;
+    ColumnFormat *lookup(int col);
 
     void clear();
 
-    void insertElement(ColumnFormat*, int col);
+    void insertElement(ColumnFormat *, int col);
     void removeElement(int col);
 
     bool insertColumn(int col);
@@ -288,19 +288,20 @@ public:
     void setAutoDelete(bool);
     bool autoDelete() const;
 
-    ColumnFormat* first() const {
+    ColumnFormat *first() const
+    {
         return m_first;
     }
-    ColumnFormat* next(int col) const;
+    ColumnFormat *next(int col) const;
 
-    void operator=(const ColumnCluster& other);
-
-private:
-    ColumnCluster(const ColumnCluster& other);
+    void operator=(const ColumnCluster &other);
 
 private:
-    ColumnFormat*** m_cluster;
-    ColumnFormat* m_first;
+    ColumnCluster(const ColumnCluster &other);
+
+private:
+    ColumnFormat ** *m_cluster;
+    ColumnFormat *m_first;
     bool m_autoDelete;
 };
 
@@ -315,12 +316,12 @@ public:
     RowCluster();
     ~RowCluster();
 
-    const RowFormat* lookup(int col) const;
-    RowFormat* lookup(int col);
+    const RowFormat *lookup(int col) const;
+    RowFormat *lookup(int col);
 
     void clear();
 
-    void insertElement(RowFormat*, int row);
+    void insertElement(RowFormat *, int row);
     void removeElement(int row);
 
     bool insertRow(int row);
@@ -329,18 +330,19 @@ public:
     void setAutoDelete(bool);
     bool autoDelete() const;
 
-    RowFormat* first()const {
+    RowFormat *first()const
+    {
         return m_first;
     }
 
-    void operator=(const RowCluster& other);
+    void operator=(const RowCluster &other);
 
 private:
-    RowCluster(const RowCluster& other);
+    RowCluster(const RowCluster &other);
 
 private:
-    RowFormat*** m_cluster;
-    RowFormat* m_first;
+    RowFormat ** *m_cluster;
+    RowFormat *m_first;
     bool m_autoDelete;
 };
 

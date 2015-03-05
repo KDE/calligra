@@ -29,13 +29,13 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
-KComponentData* FlowFactory::s_instance = 0;
-KAboutData* FlowFactory::s_aboutData = 0;
+KComponentData *FlowFactory::s_instance = 0;
+KAboutData *FlowFactory::s_aboutData = 0;
 
 static int factoryCount = 0;
 
-FlowFactory::FlowFactory(QObject* parent)
-  : KPluginFactory(*aboutData(), parent)
+FlowFactory::FlowFactory(QObject *parent)
+    : KPluginFactory(*aboutData(), parent)
 {
     (void) componentData();
 
@@ -53,19 +53,19 @@ FlowFactory::FlowFactory(QObject* parent)
 
 FlowFactory::~FlowFactory()
 {
-  delete s_instance;
-  s_instance = 0;
-  delete s_aboutData;
-  s_aboutData = 0;
+    delete s_instance;
+    s_instance = 0;
+    delete s_aboutData;
+    s_aboutData = 0;
 }
 
-QObject* FlowFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
-                             const QVariantList& args, const QString& keyword )
+QObject *FlowFactory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent,
+                             const QVariantList &args, const QString &keyword)
 {
-    Q_UNUSED( args );
-    Q_UNUSED( keyword );
+    Q_UNUSED(args);
+    Q_UNUSED(keyword);
     FlowPart *part = new FlowPart(parent);
-    FlowDocument* doc = new FlowDocument(part);
+    FlowDocument *doc = new FlowDocument(part);
     part->setDocument(doc);
 
     return part;
@@ -73,25 +73,25 @@ QObject* FlowFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, 
 
 const KComponentData &FlowFactory::componentData()
 {
-  if (!s_instance) {
-    s_instance = new KComponentData(aboutData());
+    if (!s_instance) {
+        s_instance = new KComponentData(aboutData());
 
-    s_instance->dirs()->addResourceType("flow_template", "data", "flow/templates/");
-    s_instance->dirs()->addResourceType("app_shape_collections", "data", "flow/stencils/");
-    s_instance->dirs()->addResourceType("styles", "data", "flow/styles/");
-    KIconLoader::global()->addAppDir("calligra");
-  }
+        s_instance->dirs()->addResourceType("flow_template", "data", "flow/templates/");
+        s_instance->dirs()->addResourceType("app_shape_collections", "data", "flow/stencils/");
+        s_instance->dirs()->addResourceType("styles", "data", "flow/styles/");
+        KIconLoader::global()->addAppDir("calligra");
+    }
 
-  return *s_instance;
+    return *s_instance;
 }
 
-KAboutData* FlowFactory::aboutData()
+KAboutData *FlowFactory::aboutData()
 {
-  if(!s_aboutData) {
-    s_aboutData = newFlowAboutData();
-  }
+    if (!s_aboutData) {
+        s_aboutData = newFlowAboutData();
+    }
 
-  return s_aboutData;
+    return s_aboutData;
 }
 
 #include "FlowFactory.moc"

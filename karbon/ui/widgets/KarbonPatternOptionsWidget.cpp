@@ -20,13 +20,14 @@
 #include "KarbonPatternOptionsWidget.h"
 #include "ui_KarbonPatternOptionsWidget.h"
 
-class KarbonPatternOptionsWidget::Private {
+class KarbonPatternOptionsWidget::Private
+{
 public:
     Ui_PatternOptionsWidget widget;
 };
 
-KarbonPatternOptionsWidget::KarbonPatternOptionsWidget(QWidget * parent)
-        : QWidget(parent), d(new Private())
+KarbonPatternOptionsWidget::KarbonPatternOptionsWidget(QWidget *parent)
+    : QWidget(parent), d(new Private())
 {
     d->widget.setupUi(this);
 

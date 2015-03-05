@@ -84,8 +84,7 @@ public:
     */
     ~KoTextLoader();
 
-    enum LoadBodyMode
-    {
+    enum LoadBodyMode {
         LoadMode,
         PasteMode
     };
@@ -152,7 +151,7 @@ private:
      *
      * The table and its contents are placed in a new shape.
      */
-    void loadTable(const KoXmlElement &element, QTextCursor& cursor);
+    void loadTable(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
      * Loads a table column
@@ -172,32 +171,32 @@ private:
     /**
      * Load a note \p element into the \p cursor.
      */
-    void loadNote(const KoXmlElement &element, QTextCursor& cursor);
+    void loadNote(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
      * Load a citation \p element into the \p cursor.
      */
-    void loadCite(const KoXmlElement &element, QTextCursor& cursor);
+    void loadCite(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
     * Load the shape element and assign hyperlink to it \p element into the \p cursor .
     */
-    void loadShapeWithHyperLink(const KoXmlElement &element, QTextCursor& cursor);
+    void loadShapeWithHyperLink(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
     * Load the shape element \p element into the \p cursor .
     */
-    KoShape *loadShape(const KoXmlElement &element, QTextCursor& cursor);
+    KoShape *loadShape(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
     * Load the table of content element \p element into the \p cursor .
     */
-    void loadTableOfContents(const KoXmlElement &element, QTextCursor& cursor);
+    void loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
     * Load the bibliography element \p element into the \p cursor .
     */
-    void loadBibliography(const KoXmlElement &element, QTextCursor& cursor);
+    void loadBibliography(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
     * This is called in loadBody before reading the body starts.
@@ -217,7 +216,7 @@ private:
     /// \internal d-pointer class.
     class Private;
     /// \internal d-pointer instance.
-    Private* const d;
+    Private *const d;
 };
 
 #endif

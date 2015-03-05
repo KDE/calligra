@@ -21,9 +21,8 @@
 #define KPTSCHEDULERPLUGINLOADER_H
 
 #include <QObject>
- 
+
 #include "kptschedulerplugin_macros.h"
- 
 
 /// The main namespace.
 namespace KPlato
@@ -35,13 +34,13 @@ class SchedulerPluginLoader : public QObject
 {
     Q_OBJECT
 public:
-    explicit SchedulerPluginLoader(QObject * parent);
+    explicit SchedulerPluginLoader(QObject *parent);
     virtual ~SchedulerPluginLoader();
 
     void loadAllPlugins();
 
 Q_SIGNALS:
-    void pluginLoaded( const QString &key, SchedulerPlugin *plugin);
+    void pluginLoaded(const QString &key, SchedulerPlugin *plugin);
 };
 
 } //namespace KPlato

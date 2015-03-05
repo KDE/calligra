@@ -61,7 +61,6 @@ public:
     KoOdfNotesConfiguration(const KoOdfNotesConfiguration &other);
     KoOdfNotesConfiguration &operator=(const KoOdfNotesConfiguration &other);
 
-
     /**
      * load the notes-configuration element
      */
@@ -70,7 +69,7 @@ public:
     /**
      * save the notes-configuration element
      */
-    void saveOdf(KoXmlWriter * writer) const;
+    void saveOdf(KoXmlWriter *writer) const;
 
     /**
      * Note class
@@ -178,10 +177,10 @@ public:
 private:
 
     class Private;
-    Private * const d;
+    Private *const d;
 
 };
 
-Q_DECLARE_METATYPE(KoOdfNotesConfiguration*)
+Q_DECLARE_METATYPE(KoOdfNotesConfiguration *)
 
 #endif // KOODFNOTESCONFIGURATION_H

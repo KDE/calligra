@@ -22,8 +22,6 @@
 #include <QObject>
 #include "kis_types.h"
 
-
-
 class KisSafeDocumentLoader : public QObject
 {
     Q_OBJECT
@@ -45,7 +43,7 @@ Q_SIGNALS:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* __KIS_SAFE_DOCUMENT_LOADER_H */

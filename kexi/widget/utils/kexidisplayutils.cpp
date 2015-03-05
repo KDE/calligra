@@ -95,7 +95,7 @@ static QString autonumberText()
     return i18nc("Autonumber, make it as short as possible", "(auto)");
 }
 
-void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters& par, QWidget *widget)
+void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters &par, QWidget *widget)
 {
     initDisplayUtilsImages();
 
@@ -108,7 +108,7 @@ void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters& par, QWid
     par.textHeight = fm.height();
 }
 
-void KexiDisplayUtils::initDisplayForDefaultValue(DisplayParameters& par, QWidget *widget)
+void KexiDisplayUtils::initDisplayForDefaultValue(DisplayParameters &par, QWidget *widget)
 {
     par.textColor = SPECIAL_TEXT_COLOR;
 //! @todo check!
@@ -117,19 +117,22 @@ void KexiDisplayUtils::initDisplayForDefaultValue(DisplayParameters& par, QWidge
     par.font.setItalic(true);
 }
 
-void KexiDisplayUtils::paintAutonumberSign(const DisplayParameters& par, QPainter* painter,
+void KexiDisplayUtils::paintAutonumberSign(const DisplayParameters &par, QPainter *painter,
         int x, int y, int width, int height, Qt::Alignment alignment, bool overrideColor)
 {
     painter->save();
 
     painter->setFont(par.font);
-    if (!overrideColor)
+    if (!overrideColor) {
         painter->setPen(par.textColor);
+    }
 
-    if (!(alignment & Qt::AlignVertical_Mask))
+    if (!(alignment & Qt::AlignVertical_Mask)) {
         alignment |= Qt::AlignVCenter;
-    if (!(alignment & Qt::AlignHorizontal_Mask))
+    }
+    if (!(alignment & Qt::AlignHorizontal_Mask)) {
         alignment |= Qt::AlignLeft;
+    }
 
     int y_pixmap_pos = 0;
     if (alignment & Qt::AlignVCenter) {

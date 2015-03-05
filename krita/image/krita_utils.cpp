@@ -29,291 +29,285 @@
 #include "kis_image_config.h"
 #include "kis_debug.h"
 
-
-
-
 namespace KritaUtils
 {
 
-    QSize optimalPatchSize()
-    {
-        KisImageConfig cfg;
-        return QSize(cfg.updatePatchWidth(),
-                     cfg.updatePatchHeight());
-    }
+QSize optimalPatchSize()
+{
+    KisImageConfig cfg;
+    return QSize(cfg.updatePatchWidth(),
+                 cfg.updatePatchHeight());
+}
 
-    QVector<QRect> splitRectIntoPatches(const QRect &rc, const QSize &patchSize)
-    {
-        QVector<QRect> patches;
+QVector<QRect> splitRectIntoPatches(const QRect &rc, const QSize &patchSize)
+{
+    QVector<QRect> patches;
 
-        qint32 firstCol = rc.x() / patchSize.width();
-        qint32 firstRow = rc.y() / patchSize.height();
+    qint32 firstCol = rc.x() / patchSize.width();
+    qint32 firstRow = rc.y() / patchSize.height();
 
-        qint32 lastCol = (rc.x() + rc.width()) / patchSize.width();
-        qint32 lastRow = (rc.y() + rc.height()) / patchSize.height();
+    qint32 lastCol = (rc.x() + rc.width()) / patchSize.width();
+    qint32 lastRow = (rc.y() + rc.height()) / patchSize.height();
 
-        for(qint32 i = firstRow; i <= lastRow; i++) {
-            for(qint32 j = firstCol; j <= lastCol; j++) {
-                QRect maxPatchRect(j * patchSize.width(), i * patchSize.height(),
-                                   patchSize.width(), patchSize.height());
-                QRect patchRect = rc & maxPatchRect;
+    for (qint32 i = firstRow; i <= lastRow; i++) {
+        for (qint32 j = firstCol; j <= lastCol; j++) {
+            QRect maxPatchRect(j * patchSize.width(), i * patchSize.height(),
+                               patchSize.width(), patchSize.height());
+            QRect patchRect = rc & maxPatchRect;
 
-                if (!patchRect.isEmpty()) {
-                    patches.append(patchRect);
-                }
+            if (!patchRect.isEmpty()) {
+                patches.append(patchRect);
             }
         }
-
-        return patches;
     }
 
-    bool checkInTriangle(const QRectF &rect,
-                         const QPolygonF &triangle)
-    {
-        return triangle.intersected(rect).boundingRect().isValid();
+    return patches;
+}
+
+bool checkInTriangle(const QRectF &rect,
+                     const QPolygonF &triangle)
+{
+    return triangle.intersected(rect).boundingRect().isValid();
+}
+
+QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
+        const QVector<QPointF> &points)
+{
+
+    Q_ASSERT(points.size());
+    Q_ASSERT(!(points.size() & 1));
+
+    QVector<QPolygonF> triangles;
+    QRect totalRect;
+
+    for (int i = 0; i < points.size(); i += 2) {
+        QPolygonF triangle;
+        triangle << center;
+        triangle << points[i];
+        triangle << points[i + 1];
+
+        totalRect |= triangle.boundingRect().toAlignedRect();
+        triangles << triangle;
     }
 
+    const int step = 64;
+    const int right = totalRect.x() + totalRect.width();
+    const int bottom = totalRect.y() + totalRect.height();
 
-    QRegion KRITAIMAGE_EXPORT splitTriangles(const QPointF &center,
-                                             const QVector<QPointF> &points)
-    {
+    QRegion dirtyRegion;
 
-        Q_ASSERT(points.size());
-        Q_ASSERT(!(points.size() & 1));
+    for (int y = totalRect.y(); y < bottom;) {
+        int nextY = qMin((y + step) & ~(step - 1), bottom);
 
-        QVector<QPolygonF> triangles;
-        QRect totalRect;
+        for (int x = totalRect.x(); x < right;) {
+            int nextX = qMin((x + step) & ~(step - 1), right);
 
-        for (int i = 0; i < points.size(); i += 2) {
-            QPolygonF triangle;
-            triangle << center;
-            triangle << points[i];
-            triangle << points[i+1];
+            QRect rect(x, y, nextX - x, nextY - y);
 
-            totalRect |= triangle.boundingRect().toAlignedRect();
-            triangles << triangle;
-        }
-
-
-        const int step = 64;
-        const int right = totalRect.x() + totalRect.width();
-        const int bottom = totalRect.y() + totalRect.height();
-
-        QRegion dirtyRegion;
-
-        for (int y = totalRect.y(); y < bottom;) {
-            int nextY = qMin((y + step) & ~(step-1), bottom);
-
-            for (int x = totalRect.x(); x < right;) {
-                int nextX = qMin((x + step) & ~(step-1), right);
-
-                QRect rect(x, y, nextX - x, nextY - y);
-
-                foreach(const QPolygonF &triangle, triangles) {
-                    if(checkInTriangle(rect, triangle)) {
-                        dirtyRegion |= rect;
-                        break;
-                    }
-                }
-
-                x = nextX;
-            }
-            y = nextY;
-        }
-        return dirtyRegion;
-    }
-
-    QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path)
-    {
-        QRect totalRect = path.boundingRect().toAlignedRect();
-
-        // adjust the rect for antialiasing to work
-        totalRect = totalRect.adjusted(-1,-1,1,1);
-
-        const int step = 64;
-        const int right = totalRect.x() + totalRect.width();
-        const int bottom = totalRect.y() + totalRect.height();
-
-        QRegion dirtyRegion;
-
-
-        for (int y = totalRect.y(); y < bottom;) {
-            int nextY = qMin((y + step) & ~(step-1), bottom);
-
-            for (int x = totalRect.x(); x < right;) {
-                int nextX = qMin((x + step) & ~(step-1), right);
-
-                QRect rect(x, y, nextX - x, nextY - y);
-
-                if(path.intersects(rect)) {
+            foreach (const QPolygonF &triangle, triangles) {
+                if (checkInTriangle(rect, triangle)) {
                     dirtyRegion |= rect;
+                    break;
                 }
-
-                x = nextX;
             }
-            y = nextY;
+
+            x = nextX;
         }
+        y = nextY;
+    }
+    return dirtyRegion;
+}
 
-        return dirtyRegion;
+QRegion KRITAIMAGE_EXPORT splitPath(const QPainterPath &path)
+{
+    QRect totalRect = path.boundingRect().toAlignedRect();
+
+    // adjust the rect for antialiasing to work
+    totalRect = totalRect.adjusted(-1, -1, 1, 1);
+
+    const int step = 64;
+    const int right = totalRect.x() + totalRect.width();
+    const int bottom = totalRect.y() + totalRect.height();
+
+    QRegion dirtyRegion;
+
+    for (int y = totalRect.y(); y < bottom;) {
+        int nextY = qMin((y + step) & ~(step - 1), bottom);
+
+        for (int x = totalRect.x(); x < right;) {
+            int nextX = qMin((x + step) & ~(step - 1), right);
+
+            QRect rect(x, y, nextX - x, nextY - y);
+
+            if (path.intersects(rect)) {
+                dirtyRegion |= rect;
+            }
+
+            x = nextX;
+        }
+        y = nextY;
     }
 
-    void KRITAIMAGE_EXPORT initAntsPen(QPen *antsPen, QPen *outlinePen,
-                                       int antLength, int antSpace)
-    {
-        QVector<qreal> antDashPattern;
-        antDashPattern << antLength << antSpace;
+    return dirtyRegion;
+}
 
-        *antsPen = QPen(Qt::CustomDashLine);
-        antsPen->setDashPattern(antDashPattern);
-        antsPen->setCosmetic(true);
-        antsPen->setColor(Qt::black);
+void KRITAIMAGE_EXPORT initAntsPen(QPen *antsPen, QPen *outlinePen,
+                                   int antLength, int antSpace)
+{
+    QVector<qreal> antDashPattern;
+    antDashPattern << antLength << antSpace;
 
-        *outlinePen = QPen(Qt::SolidLine);
-        outlinePen->setCosmetic(true);
-        outlinePen->setColor(Qt::white);
-    }
+    *antsPen = QPen(Qt::CustomDashLine);
+    antsPen->setDashPattern(antDashPattern);
+    antsPen->setCosmetic(true);
+    antsPen->setColor(Qt::black);
 
-    QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value)
-    {
-        return QString("%1").arg(value, 6, 'f', 1);
-    }
+    *outlinePen = QPen(Qt::SolidLine);
+    outlinePen->setCosmetic(true);
+    outlinePen->setColor(Qt::white);
+}
 
-    qreal KRITAIMAGE_EXPORT maxDimensionPortion(const QRectF &bounds, qreal portion, qreal minValue)
-    {
-        qreal maxDimension = qMax(bounds.width(), bounds.height());
-        return qMax(portion * maxDimension, minValue);
-    }
+QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value)
+{
+    return QString("%1").arg(value, 6, 'f', 1);
+}
 
-    bool tryMergePoints(QPainterPath &path,
-                        const QPointF &startPoint,
-                        const QPointF &endPoint,
-                        qreal &distance,
-                        qreal distanceThreshold,
-                        bool lastSegment)
-    {
-        qreal length = (endPoint - startPoint).manhattanLength();
+qreal KRITAIMAGE_EXPORT maxDimensionPortion(const QRectF &bounds, qreal portion, qreal minValue)
+{
+    qreal maxDimension = qMax(bounds.width(), bounds.height());
+    return qMax(portion * maxDimension, minValue);
+}
 
-        if (lastSegment || length > distanceThreshold) {
-            if (lastSegment) {
-                qreal wrappedLength =
-                    (endPoint - QPointF(path.elementAt(0))).manhattanLength();
+bool tryMergePoints(QPainterPath &path,
+                    const QPointF &startPoint,
+                    const QPointF &endPoint,
+                    qreal &distance,
+                    qreal distanceThreshold,
+                    bool lastSegment)
+{
+    qreal length = (endPoint - startPoint).manhattanLength();
 
-                if (length < distanceThreshold ||
+    if (lastSegment || length > distanceThreshold) {
+        if (lastSegment) {
+            qreal wrappedLength =
+                (endPoint - QPointF(path.elementAt(0))).manhattanLength();
+
+            if (length < distanceThreshold ||
                     wrappedLength < distanceThreshold) {
 
-                    return true;
-                }
+                return true;
             }
-
-            distance = 0;
-            return false;
         }
 
-        distance += length;
-
-        if (distance > distanceThreshold) {
-            path.lineTo(endPoint);
-            distance = 0;
-        }
-
-        return true;
+        distance = 0;
+        return false;
     }
 
-    QPainterPath trySimplifyPath(const QPainterPath &path, qreal lengthThreshold)
-    {
-        QPainterPath newPath;
-        QPointF startPoint;
-        qreal distance = 0;
+    distance += length;
 
-        int count = path.elementCount();
-        for (int i = 0; i < count; i++) {
-            QPainterPath::Element e = path.elementAt(i);
-            QPointF endPoint = QPointF(e.x, e.y);
-
-            switch (e.type) {
-            case QPainterPath::MoveToElement:
-                newPath.moveTo(endPoint);
-                break;
-            case QPainterPath::LineToElement:
-                if (!tryMergePoints(newPath, startPoint, endPoint,
-                                    distance, lengthThreshold, i == count - 1)) {
-
-                    newPath.lineTo(endPoint);
-                }
-                break;
-            case QPainterPath::CurveToElement: {
-                Q_ASSERT(i + 2 < count);
-
-                if (!tryMergePoints(newPath, startPoint, endPoint,
-                                    distance, lengthThreshold, i == count - 1)) {
-
-                    e = path.elementAt(i + 1);
-                    Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
-                    QPointF ctrl1 = QPointF(e.x, e.y);
-                    e = path.elementAt(i + 2);
-                    Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
-                    QPointF ctrl2 = QPointF(e.x, e.y);
-                    newPath.cubicTo(ctrl1, ctrl2, endPoint);
-                }
-
-                i += 2;
-            }
-            default:
-                ;
-            }
-            startPoint = endPoint;
-        }
-
-        return newPath;
+    if (distance > distanceThreshold) {
+        path.lineTo(endPoint);
+        distance = 0;
     }
 
-    QList<QPainterPath> splitDisjointPaths(const QPainterPath &path)
-    {
-        QList<QPainterPath> resultList;
-        QList<QPolygonF> inputPolygons = path.toSubpathPolygons();
+    return true;
+}
 
-        foreach (const QPolygonF &poly, inputPolygons) {
-            QPainterPath testPath;
-            testPath.addPolygon(poly);
+QPainterPath trySimplifyPath(const QPainterPath &path, qreal lengthThreshold)
+{
+    QPainterPath newPath;
+    QPointF startPoint;
+    qreal distance = 0;
 
-            if (resultList.isEmpty()) {
-                resultList.append(testPath);
-                continue;
+    int count = path.elementCount();
+    for (int i = 0; i < count; i++) {
+        QPainterPath::Element e = path.elementAt(i);
+        QPointF endPoint = QPointF(e.x, e.y);
+
+        switch (e.type) {
+        case QPainterPath::MoveToElement:
+            newPath.moveTo(endPoint);
+            break;
+        case QPainterPath::LineToElement:
+            if (!tryMergePoints(newPath, startPoint, endPoint,
+                                distance, lengthThreshold, i == count - 1)) {
+
+                newPath.lineTo(endPoint);
+            }
+            break;
+        case QPainterPath::CurveToElement: {
+            Q_ASSERT(i + 2 < count);
+
+            if (!tryMergePoints(newPath, startPoint, endPoint,
+                                distance, lengthThreshold, i == count - 1)) {
+
+                e = path.elementAt(i + 1);
+                Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
+                QPointF ctrl1 = QPointF(e.x, e.y);
+                e = path.elementAt(i + 2);
+                Q_ASSERT(e.type == QPainterPath::CurveToDataElement);
+                QPointF ctrl2 = QPointF(e.x, e.y);
+                newPath.cubicTo(ctrl1, ctrl2, endPoint);
             }
 
-            QList<QPainterPath>::iterator it = resultList.begin();
-            QList<QPainterPath>::iterator end = resultList.end();
-            QList<QPainterPath>::iterator savedIt = end;
+            i += 2;
+        }
+        default:
+            ;
+        }
+        startPoint = endPoint;
+    }
 
-            bool wasMerged = false;
+    return newPath;
+}
 
-            while (it != end) {
-                bool skipIncrement = false;
+QList<QPainterPath> splitDisjointPaths(const QPainterPath &path)
+{
+    QList<QPainterPath> resultList;
+    QList<QPolygonF> inputPolygons = path.toSubpathPolygons();
 
-                if (it->intersects(testPath)) {
-                    if (savedIt == end) {
-                        it->addPath(testPath);
-                        savedIt = it;
-                    } else {
-                        savedIt->addPath(*it);
-                        it = resultList.erase(it);
-                        skipIncrement = true;
-                    }
+    foreach (const QPolygonF &poly, inputPolygons) {
+        QPainterPath testPath;
+        testPath.addPolygon(poly);
 
-                    wasMerged = true;
+        if (resultList.isEmpty()) {
+            resultList.append(testPath);
+            continue;
+        }
+
+        QList<QPainterPath>::iterator it = resultList.begin();
+        QList<QPainterPath>::iterator end = resultList.end();
+        QList<QPainterPath>::iterator savedIt = end;
+
+        bool wasMerged = false;
+
+        while (it != end) {
+            bool skipIncrement = false;
+
+            if (it->intersects(testPath)) {
+                if (savedIt == end) {
+                    it->addPath(testPath);
+                    savedIt = it;
+                } else {
+                    savedIt->addPath(*it);
+                    it = resultList.erase(it);
+                    skipIncrement = true;
                 }
 
-                if (!skipIncrement) {
-                    ++it;
-                }
+                wasMerged = true;
             }
 
-            if (!wasMerged) {
-                resultList.append(testPath);
+            if (!skipIncrement) {
+                ++it;
             }
         }
 
-        return resultList;
+        if (!wasMerged) {
+            resultList.append(testPath);
+        }
     }
+
+    return resultList;
+}
 
 }

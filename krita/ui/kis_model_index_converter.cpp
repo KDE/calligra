@@ -23,10 +23,9 @@
 #include "kis_dummies_facade_base.h"
 #include "kis_node_model.h"
 
-
 KisModelIndexConverter::KisModelIndexConverter(KisDummiesFacadeBase *dummiesFacade,
-                                               KisNodeModel *model,
-                                               bool showGlobalSelection)
+        KisNodeModel *model,
+        bool showGlobalSelection)
     : m_dummiesFacade(dummiesFacade),
       m_model(model),
       m_showGlobalSelection(showGlobalSelection)
@@ -35,36 +34,42 @@ KisModelIndexConverter::KisModelIndexConverter(KisDummiesFacadeBase *dummiesFaca
 
 inline bool KisModelIndexConverter::checkDummyType(KisNodeDummy *dummy)
 {
-    if (m_showGlobalSelection) return true;
+    if (m_showGlobalSelection) {
+        return true;
+    }
 
-    KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(dummy->node().data());
+    KisSelectionMask *mask = dynamic_cast<KisSelectionMask *>(dummy->node().data());
     return !mask;
 }
 
 inline bool KisModelIndexConverter::checkDummyMetaObjectType(const QString &type)
 {
-    if (m_showGlobalSelection) return true;
+    if (m_showGlobalSelection) {
+        return true;
+    }
 
     QString blacklistedType = KisSelectionMask::staticMetaObject.className();
     return type != blacklistedType;
 }
 
-KisNodeDummy* KisModelIndexConverter::dummyFromRow(int row, QModelIndex parent)
+KisNodeDummy *KisModelIndexConverter::dummyFromRow(int row, QModelIndex parent)
 {
 
     KisNodeDummy *parentDummy = parent.isValid() ?
-        dummyFromIndex(parent) : m_dummiesFacade->rootDummy();
+                                dummyFromIndex(parent) : m_dummiesFacade->rootDummy();
 
-    if(!parentDummy) return 0;
+    if (!parentDummy) {
+        return 0;
+    }
 
     KisNodeDummy *resultDummy = 0;
 
     // a child of the root node
-    if(!parentDummy->parent()) {
+    if (!parentDummy->parent()) {
         KisNodeDummy *currentDummy = parentDummy->lastChild();
-        while(currentDummy) {
-            if(checkDummyType(currentDummy)) {
-                if(!row) {
+        while (currentDummy) {
+            if (checkDummyType(currentDummy)) {
+                if (!row) {
                     resultDummy = currentDummy;
                     break;
                 }
@@ -80,15 +85,14 @@ KisNodeDummy* KisModelIndexConverter::dummyFromRow(int row, QModelIndex parent)
         resultDummy = parentDummy->at(index);
     }
 
-
     return resultDummy;
 }
 
-KisNodeDummy* KisModelIndexConverter::dummyFromIndex(QModelIndex index)
+KisNodeDummy *KisModelIndexConverter::dummyFromIndex(QModelIndex index)
 {
     Q_ASSERT(index.isValid());
     Q_ASSERT(index.internalPointer());
-    return static_cast<KisNodeDummy*>(index.internalPointer());
+    return static_cast<KisNodeDummy *>(index.internalPointer());
 }
 
 QModelIndex KisModelIndexConverter::indexFromDummy(KisNodeDummy *dummy)
@@ -97,17 +101,21 @@ QModelIndex KisModelIndexConverter::indexFromDummy(KisNodeDummy *dummy)
     KisNodeDummy *parentDummy = dummy->parent();
 
     // a root node
-    if(!parentDummy) return QModelIndex();
+    if (!parentDummy) {
+        return QModelIndex();
+    }
 
     int row = 0;
 
     // a child of the root node
-    if(!parentDummy->parent()) {
-        if(!checkDummyType(dummy)) return QModelIndex();
+    if (!parentDummy->parent()) {
+        if (!checkDummyType(dummy)) {
+            return QModelIndex();
+        }
 
         KisNodeDummy *currentDummy = parentDummy->lastChild();
-        while(currentDummy && currentDummy != dummy) {
-            if(checkDummyType(currentDummy)) {
+        while (currentDummy && currentDummy != dummy) {
+            if (checkDummyType(currentDummy)) {
                 row++;
             }
             currentDummy = currentDummy->prevSibling();
@@ -120,24 +128,24 @@ QModelIndex KisModelIndexConverter::indexFromDummy(KisNodeDummy *dummy)
         row = rowCount - index - 1;
     }
 
-    return m_model->createIndex(row, 0, (void*)dummy);
+    return m_model->createIndex(row, 0, (void *)dummy);
 }
 
 bool KisModelIndexConverter::indexFromAddedDummy(KisNodeDummy *parentDummy,
-                                                 int index,
-                                                 const QString &newNodeMetaObjectType,
-                                                 QModelIndex &parentIndex,
-                                                 int &row)
+        int index,
+        const QString &newNodeMetaObjectType,
+        QModelIndex &parentIndex,
+        int &row)
 {
     // adding a root node
-    if(!parentDummy) {
+    if (!parentDummy) {
         Q_ASSERT(!index);
         return false;
     }
 
     // adding a child of the root node
-    if(!parentDummy->parent()) {
-        if(!checkDummyMetaObjectType(newNodeMetaObjectType)) {
+    if (!parentDummy->parent()) {
+        if (!checkDummyMetaObjectType(newNodeMetaObjectType)) {
             return false;
         }
 
@@ -146,8 +154,8 @@ bool KisModelIndexConverter::indexFromAddedDummy(KisNodeDummy *parentDummy,
         parentIndex = QModelIndex();
         KisNodeDummy *dummy = parentDummy->lastChild();
         int toScan = parentDummy->childCount() - index;
-        while(dummy && toScan > 0) {
-            if(checkDummyType(dummy)) {
+        while (dummy && toScan > 0) {
+            if (checkDummyType(dummy)) {
                 row++;
             }
             dummy = dummy->prevSibling();
@@ -167,18 +175,20 @@ bool KisModelIndexConverter::indexFromAddedDummy(KisNodeDummy *parentDummy,
 int KisModelIndexConverter::rowCount(QModelIndex parent)
 {
     KisNodeDummy *dummy = parent.isValid() ?
-        dummyFromIndex(parent) : m_dummiesFacade->rootDummy();
+                          dummyFromIndex(parent) : m_dummiesFacade->rootDummy();
 
     // a root node (hidden)
-    if(!dummy) return 0;
+    if (!dummy) {
+        return 0;
+    }
 
     int numChildren = 0;
 
     // children of the root node
-    if(!dummy->parent()) {
+    if (!dummy->parent()) {
         KisNodeDummy *currentDummy = dummy->lastChild();
-        while(currentDummy) {
-            if(checkDummyType(currentDummy)) {
+        while (currentDummy) {
+            if (checkDummyType(currentDummy)) {
                 numChildren++;
             }
 

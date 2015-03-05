@@ -26,7 +26,7 @@
 #include <KDebug>
 
 KexiProjectTreeView::KexiProjectTreeView(QWidget *parent)
-        : QTreeView(parent)
+    : QTreeView(parent)
 {
     setObjectName("KexiProjectTreeView");
     setEditTriggers(QAbstractItemView::EditKeyPressed);
@@ -58,7 +58,7 @@ void KexiProjectTreeView::setModel(KexiProjectModel *model)
 void KexiProjectTreeView::slotHighlightSearchedItem(const QModelIndex &index)
 {
     scrollTo(index);
-    KexiProjectModel* model = qobject_cast<KexiProjectModel*>(this->model());
+    KexiProjectModel *model = qobject_cast<KexiProjectModel *>(this->model());
     update(model->itemWithSearchHighlight());
     update(index);
 }

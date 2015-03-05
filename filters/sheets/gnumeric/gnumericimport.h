@@ -41,10 +41,10 @@ class GNUMERICFilter : public KoFilter
 {
     Q_OBJECT
 public:
-    GNUMERICFilter(QObject* parent, const QVariantList&);
+    GNUMERICFilter(QObject *parent, const QVariantList &);
     virtual ~GNUMERICFilter() {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
     enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal};
 private:
@@ -52,22 +52,22 @@ private:
     {
     public:
         static uint greg2jul(int y, int m, int d);
-        static void jul2greg(double num, int & y, int & m, int & d);
+        static void jul2greg(double num, int &y, int &m, int &d);
         static QTime getTime(double num);
 
     };
 
     void dateInit();
-    QString convertVars(QString const & str, Calligra::Sheets::Sheet * table) const;
-    void ParsePrintInfo(QDomNode const & printInfo, Calligra::Sheets::Sheet * table);
-    void ParseFormat(QString const & formatString, const Calligra::Sheets::Cell& kspread_cell);
-    void setStyleInfo(QDomNode * sheet, Calligra::Sheets::Sheet * table);
-    bool setType(const Calligra::Sheets::Cell& kspread_cell, QString const & formatString, QString & cell_content);
-    void convertFormula(QString & formula) const;
-    void importBorder(QDomElement  border, borderStyle _style, const Calligra::Sheets::Cell&cell);
-    void ParseBorder(QDomElement & gmr_styleborder, const Calligra::Sheets::Cell& kspread_cell);
+    QString convertVars(QString const &str, Calligra::Sheets::Sheet *table) const;
+    void ParsePrintInfo(QDomNode const &printInfo, Calligra::Sheets::Sheet *table);
+    void ParseFormat(QString const &formatString, const Calligra::Sheets::Cell &kspread_cell);
+    void setStyleInfo(QDomNode *sheet, Calligra::Sheets::Sheet *table);
+    bool setType(const Calligra::Sheets::Cell &kspread_cell, QString const &formatString, QString &cell_content);
+    void convertFormula(QString &formula) const;
+    void importBorder(QDomElement  border, borderStyle _style, const Calligra::Sheets::Cell &cell);
+    void ParseBorder(QDomElement &gmr_styleborder, const Calligra::Sheets::Cell &kspread_cell);
     double parseAttribute(const QDomElement &_element);
 
-    void setText(Calligra::Sheets::Sheet* sheet, int row, int column, const QString& text, bool asString = false);
+    void setText(Calligra::Sheets::Sheet *sheet, int row, int column, const QString &text, bool asString = false);
 };
 #endif // GNUMERICIMPORT_H

@@ -38,20 +38,20 @@ public:
      * @param configEntryGroup name of the configuration entry with the
      * bookmarked configurations.
      */
-    KisBookmarkedConfigurationManager(const QString & configEntryGroup, KisSerializableConfigurationFactory*);
+    KisBookmarkedConfigurationManager(const QString &configEntryGroup, KisSerializableConfigurationFactory *);
     ~KisBookmarkedConfigurationManager();
     /**
      * Load the configuration.
      */
-    KisSerializableConfiguration* load(const QString & configname) const;
+    KisSerializableConfiguration *load(const QString &configname) const;
     /**
      * Save the configuration.
      */
-    void save(const QString & configname, const KisSerializableConfiguration*);
+    void save(const QString &configname, const KisSerializableConfiguration *);
     /**
      * @return true if the configuration configname exists
      */
-    bool exists(const QString & configname) const;
+    bool exists(const QString &configname) const;
     /**
      * @return the list of the names of configurations.
      */
@@ -59,11 +59,11 @@ public:
     /**
      * @return the default configuration
      */
-    KisSerializableConfiguration* defaultConfiguration() const;
+    KisSerializableConfiguration *defaultConfiguration() const;
     /**
      * Remove a bookmarked configuration
      */
-    void remove(const QString & name);
+    void remove(const QString &name);
     /**
      * Generate an unique name, for instance when the user is creating a new
      * entry.
@@ -72,15 +72,13 @@ public:
      *      will return the string where %1 will be replaced by the lowest number
      *      and be inexistant in the lists of configuration
      */
-    QString uniqueName(const KLocalizedString & base);
-
-
+    QString uniqueName(const KLocalizedString &base);
 
 private:
     QString configEntryGroup() const;
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

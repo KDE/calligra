@@ -57,7 +57,6 @@ class QDropEvent;
 class QPrintDialog;
 class QCloseEvent;
 
-
 /**
  * This class is used to display a @ref KisDocument.
  *
@@ -72,7 +71,7 @@ public:
      * Creates a new view for the document.
      */
     KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
- ~KisView();
+    ~KisView();
 
     KAction *undoAction() const;
     KAction *redoAction() const;
@@ -103,7 +102,7 @@ public:
      * be constructed that is capable of doing the printing.
      * The default implementation returns 0, which silently cancels printing.
      */
-    KisPrintJob * createPrintJob();
+    KisPrintJob *createPrintJob();
 
     /**
      * @return the page layout to be used for printing.
@@ -120,12 +119,12 @@ public:
     /**
      * @return the KisMainWindow in which this view is currently.
      */
-    KisMainWindow * mainWindow() const;
+    KisMainWindow *mainWindow() const;
 
     /**
      * @return the statusbar of the KisMainWindow in which this view is currently.
      */
-    KStatusBar * statusBar() const;
+    KStatusBar *statusBar() const;
 
     /**
      * This adds a widget to the statusbar for this view.
@@ -138,20 +137,20 @@ public:
      * But you can create a KStatusBarLabel with a dummy id instead, and use
      * it directly, to get the same look and feel.
      */
-    void addStatusBarItem(QWidget * widget, int stretch = 0, bool permanent = false);
+    void addStatusBarItem(QWidget *widget, int stretch = 0, bool permanent = false);
 
     /**
      * Remove a widget from the statusbar for this view.
      */
-    void removeStatusBarItem(QWidget * widget);
+    void removeStatusBarItem(QWidget *widget);
 
     /**
      * Return the zoomController for this view.
      */
-     KoZoomController *zoomController() const;
+    KoZoomController *zoomController() const;
 
     /// create a list of actions that when activated will change the unit on the document.
-    QList<QAction*> createChangeUnitActions(bool addPixelUnit = false);
+    QList<QAction *> createChangeUnitActions(bool addPixelUnit = false);
 
 public:
 
@@ -174,7 +173,7 @@ public:
      *
      * NOTE: May be null while initialization!
      */
-    KisInputManager* globalInputManager() const;
+    KisInputManager *globalInputManager() const;
 
     /**
      * @return the canvas object
@@ -183,7 +182,6 @@ public:
 
     /// @return the image this view is displaying
     KisImageWSP image() const;
-
 
     KisCoordinatesConverter *viewConverter() const;
 
@@ -220,17 +218,17 @@ public Q_SLOTS:
 Q_SIGNALS:
     // From KisImage
     void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
-    void sigProfileChanged(const KoColorProfile *  profile);
-    void sigColorSpaceChanged(const KoColorSpace*  cs);
-    void titleModified(QString,bool);
+    void sigProfileChanged(const KoColorProfile   *profile);
+    void sigColorSpaceChanged(const KoColorSpace  *cs);
+    void titleModified(QString, bool);
 
 protected:
 
     // QWidget overrides
-     void dragEnterEvent(QDragEnterEvent * event);
-     void dropEvent(QDropEvent * event);
-     bool event( QEvent* event );
-     void closeEvent(QCloseEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
+    bool event(QEvent *event);
+    void closeEvent(QCloseEvent *event);
 
     /**
      * Generate a name for this view.
@@ -246,7 +244,7 @@ public Q_SLOTS:
 private:
 
     class Private;
-    Private * const d;
+    Private *const d;
 
     static bool s_firstView;
 };

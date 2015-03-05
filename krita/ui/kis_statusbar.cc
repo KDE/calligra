@@ -53,14 +53,14 @@ enum {
     POINTER_POSITION_ID
 };
 
-KisStatusBar::KisStatusBar(KisViewManager * view)
-        : m_view(view)
-        , m_imageView(0)
+KisStatusBar::KisStatusBar(KisViewManager *view)
+    : m_view(view)
+    , m_imageView(0)
 {
     m_selectionStatus = new QToolButton();
-    m_selectionStatus->setIconSize(QSize(16,16));
+    m_selectionStatus->setIconSize(QSize(16, 16));
     m_selectionStatus->setAutoRaise(true);
-    m_selectionStatus->setEnabled(false);   
+    m_selectionStatus->setEnabled(false);
     updateSelectionIcon();
 
     connect(m_selectionStatus, SIGNAL(clicked()), view->selectionManager(), SLOT(slotToggleSelectionDecoration()));
@@ -87,14 +87,14 @@ KisStatusBar::KisStatusBar(KisViewManager * view)
 
     m_imageSizeLabel = new QLabel(QString());
     m_imageSizeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    m_imageSizeLabel->setContentsMargins(5,5, 5, 5);
+    m_imageSizeLabel->setContentsMargins(5, 5, 5, 5);
     m_imageSizeLabel->setMinimumWidth(100);
     view->addStatusBarItem(m_imageSizeLabel);
 
     m_pointerPositionLabel = new QLabel(QString());
     m_pointerPositionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_pointerPositionLabel->setMinimumWidth(100);
-    m_pointerPositionLabel->setContentsMargins(5,5, 5, 5);
+    m_pointerPositionLabel->setContentsMargins(5, 5, 5, 5);
     view->addStatusBarItem(m_pointerPositionLabel);
     m_pointerPositionLabel->setVisible(false);
 
@@ -122,11 +122,11 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
     if (imageView) {
         m_imageView = imageView;
 
-        connect(m_imageView, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
+        connect(m_imageView, SIGNAL(sigColorSpaceChanged(const KoColorSpace *)),
                 this, SLOT(updateStatusBarProfileLabel()));
-        connect(m_imageView, SIGNAL(sigProfileChanged(const KoColorProfile*)),
+        connect(m_imageView, SIGNAL(sigProfileChanged(const KoColorProfile *)),
                 this, SLOT(updateStatusBarProfileLabel()));
-        connect(m_imageView, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+        connect(m_imageView, SIGNAL(sigSizeChanged(const QPointF &, const QPointF &)),
                 this, SLOT(imageSizeChanged()));
         updateStatusBarProfileLabel();
         imageSizeChanged();
@@ -159,7 +159,7 @@ void KisStatusBar::updateSelectionIcon()
         icon = themedIcon("selection-mode_invisible.png");
     } else if (m_view->selectionManager()->showSelectionAsMask()) {
         icon = themedIcon("selection-mode_mask.png");
-    } else /* if (!m_view->selectionManager()->showSelectionAsMask()) */ {
+    } else { /* if (!m_view->selectionManager()->showSelectionAsMask()) */
         icon = themedIcon("selection-mode_ants.png");
     }
     m_selectionStatus->setIcon(icon);
@@ -203,7 +203,9 @@ void KisStatusBar::setProfile(KisImageWSP image)
         return;
     }
 
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
     if (image->profile() == 0) {
         m_statusBarProfileLabel->setText(i18n("No profile"));
@@ -223,11 +225,9 @@ void KisStatusBar::updateStatusBarProfileLabel()
     setProfile(m_view->image());
 }
 
-
-KisProgressWidget* KisStatusBar::progress()
+KisProgressWidget *KisStatusBar::progress()
 {
     return m_progress;
 }
-
 
 #include "kis_statusbar.moc"

@@ -25,7 +25,6 @@
 class KisRecordedPathPaintAction;
 class KisPaintInformation;
 
-
 class KisRecordingAdapter
 {
 public:

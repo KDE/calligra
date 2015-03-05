@@ -27,20 +27,22 @@
 #include <kstandarddirs.h>
 #include <kmimetype.h>
 
-namespace {
+namespace
+{
 
-    QStringList mimeTypes(KService::Ptr service) {
+QStringList mimeTypes(KService::Ptr service)
+{
 
-        QStringList ret;
+    QStringList ret;
 
-        QStringList serviceTypes = service->serviceTypes();
-        foreach (const QString &sv, serviceTypes) {
-            if (KMimeType::mimeType(sv)) {
-                ret << sv;
-            }
+    QStringList serviceTypes = service->serviceTypes();
+    foreach (const QString &sv, serviceTypes) {
+        if (KMimeType::mimeType(sv)) {
+            ret << sv;
         }
-        return ret;
     }
+    return ret;
+}
 }
 
 struct KoServiceLocator::Private {
@@ -85,16 +87,16 @@ void KoServiceLocator::init()
     QDir servicesDir(qApp->applicationDirPath() + "/../share/kde4/services");
     servicesDirs << servicesDir.absolutePath();
 
-    foreach(const QString &dir, servicesDirs) {
+    foreach (const QString &dir, servicesDirs) {
         QDir servicesDir = QDir(dir + "/calligra");
         servicesDir.setNameFilters(QStringList() << "*.desktop");
         if (servicesDir.exists()) {
-            foreach(const QString &entry, servicesDir.entryList(QDir::Files)) {
+            foreach (const QString &entry, servicesDir.entryList(QDir::Files)) {
                 KService::Ptr service = KService::Ptr(new KService(servicesDir.absoluteFilePath(entry)));
                 const QString key(service->library() + '\n' + service->name());
                 if (!services.contains(key)) {
                     services << key;
-                    foreach(const QString &t, service->serviceTypes()) {
+                    foreach (const QString &t, service->serviceTypes()) {
                         if (!mimeTypes(service).contains(t)) {
                             if (!d->typeToService.contains(t)) {
                                 d->typeToService[t] = KService::List();
@@ -111,11 +113,11 @@ void KoServiceLocator::init()
     QSet<QString> possibleAppLocations = KGlobal::dirs()->findDirs("apps", "").toSet();
     possibleAppLocations << QDir(qApp->applicationDirPath() + "/../share/applications/kde4/calligra").absolutePath();
 
-    foreach(const QString &dir, possibleAppLocations) {
+    foreach (const QString &dir, possibleAppLocations) {
         QDir applicationsDir(dir);
         applicationsDir.setNameFilters(QStringList() << "*.desktop");
         if (applicationsDir.exists()) {
-            foreach(const QString &entry, applicationsDir.entryList(QDir::Files)) {
+            foreach (const QString &entry, applicationsDir.entryList(QDir::Files)) {
                 KService::Ptr service = KService::Ptr(new KService(applicationsDir.absoluteFilePath(entry)));
                 if (!services.contains(service->name())) {
                     services << service->name();

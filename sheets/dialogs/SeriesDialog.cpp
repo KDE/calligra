@@ -23,7 +23,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #include "SeriesDialog.h"
 
 #include "ui/Selection.h"
@@ -47,8 +46,8 @@
 
 using namespace Calligra::Sheets;
 
-SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent)
+SeriesDialog::SeriesDialog(QWidget *parent, Selection *selection)
+    : KDialog(parent)
 {
     setCaption(i18n("Series"));
     setButtons(Ok | Cancel);
@@ -61,7 +60,7 @@ SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
 
     QVBoxLayout *grid1 = new QVBoxLayout(page);
 
-    QGroupBox* gb1 = new QGroupBox(i18n("Insert Values"), page);
+    QGroupBox *gb1 = new QGroupBox(i18n("Insert Values"), page);
     QHBoxLayout *gb1layout = new QHBoxLayout(gb1);
     column = new QRadioButton(i18n("Vertical"), gb1);
     column->setWhatsThis(i18n("Insert the series vertically, one below the other"));
@@ -72,7 +71,7 @@ SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
     gb1layout->addWidget(column);
     gb1layout->addWidget(row);
 
-    QGroupBox* gb2 = new QGroupBox(i18n("Type"), page);
+    QGroupBox *gb2 = new QGroupBox(i18n("Type"), page);
     QHBoxLayout *gb2layout = new QHBoxLayout(gb2);
     linear = new QRadioButton(i18n("Linear (2,4,6,...)"), gb2);
     linear->setWhatsThis(i18n("Generate a series from 'start' to 'end' and for each step add "
@@ -88,10 +87,10 @@ SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
     gb2layout->addWidget(linear);
     gb2layout->addWidget(geometric);
 
-    QGroupBox* gb = new QGroupBox(i18n("Parameters"), page);
+    QGroupBox *gb = new QGroupBox(i18n("Parameters"), page);
     QGridLayout *gb_layout = new QGridLayout(gb);
 
-    QLabel* label = new QLabel(i18n("Start value:"), gb);
+    QLabel *label = new QLabel(i18n("Start value:"), gb);
     gb_layout->addWidget(label, 0, 0);
     start = new KDoubleNumInput(-999999.999, 999999.99, 0.0,
                                 gb, 1.0, 3);
@@ -187,6 +186,5 @@ void SeriesDialog::slotButtonClicked(int button)
 
     accept();
 }
-
 
 #include "SeriesDialog.moc"

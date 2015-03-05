@@ -68,11 +68,11 @@ using namespace Calligra::Sheets;
 class PreferenceDialog::Private
 {
 public:
-    View* view;
-    KPageWidgetItem* page2;
-    KPageWidgetItem* page3;
-    KPageWidgetItem* page4;
-    KPageWidgetItem* pluginPage;
+    View *view;
+    KPageWidgetItem *page2;
+    KPageWidgetItem *page3;
+    KPageWidgetItem *page4;
+    KPageWidgetItem *pluginPage;
 
     // Interface Options
     Ui::InterfaceOptionsWidget interfaceOptions;
@@ -91,10 +91,10 @@ public:
     bool oldCreateBackupFile;
 
     // Plugin Options
-    KPluginSelector* pluginSelector;
+    KPluginSelector *pluginSelector;
 
     // Spellchecker Options
-    Sonnet::ConfigWidget* spellCheckPage;
+    Sonnet::ConfigWidget *spellCheckPage;
 
     // Author Options
     KoConfigAuthorPage *authorPage;
@@ -195,7 +195,6 @@ void PreferenceDialog::Private::applyInterfaceOptions()
         break;
     }
 
-
     if (comboChanged) {
         view->doc()->map()->settings()->setCompletionMode(tmpCompletion);
         parameterGroup.writeEntry("Completion Mode", (int)tmpCompletion);
@@ -247,7 +246,7 @@ void PreferenceDialog::Private::applyOpenSaveOptions()
 {
     KSharedConfigPtr config = Factory::global().config();
     KConfigGroup parameterGroup = config->group("Parameters");
-    Doc* doc = view->doc();
+    Doc *doc = view->doc();
 
     int value = fileOptions.m_recentFilesEntries->value();
     if (value != oldRecentFilesEntries) {
@@ -292,11 +291,9 @@ void PreferenceDialog::Private::resetOpenSaveOptions()
     fileOptions.m_autoSaveDelay->setValue(oldAutoSaveDelay);
 }
 
-
-
-PreferenceDialog::PreferenceDialog(View* view)
-        : KPageDialog(view)
-        , d(new Private)
+PreferenceDialog::PreferenceDialog(View *view)
+    : KPageDialog(view)
+    , d(new Private)
 {
     setObjectName(QLatin1String("PreferenceDialog"));
     setCaption(i18nc("@title:window", "Configure"));
@@ -310,8 +307,8 @@ PreferenceDialog::PreferenceDialog(View* view)
     connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
     connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
 
-    QWidget* widget = 0;
-    KPageWidgetItem* page = 0;
+    QWidget *widget = 0;
+    KPageWidgetItem *page = 0;
 
     // Interface Options Widget
     widget = new QWidget(this);
@@ -336,7 +333,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->interfaceOptions.m_statusBarFunction->addItem(i18n("CountA"), CountA);
     d->interfaceOptions.m_statusBarFunction->addItem(i18n("None"), NoneCalc);
 
-    KComboBox* unitComboBox = d->interfaceOptions.m_unit;
+    KComboBox *unitComboBox = d->interfaceOptions.m_unit;
     unitComboBox->addItems(KoUnit::listOfUnitNameForUi(KoUnit::ListAll));
     connect(unitComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(unitChanged(int)));
@@ -395,14 +392,15 @@ PreferenceDialog::~PreferenceDialog()
 
 void PreferenceDialog::openPage(int flags)
 {
-    if (flags & InterfacePage)
+    if (flags & InterfacePage) {
         setCurrentPage(d->page2);
-    else if (flags & OpenSavePage)
+    } else if (flags & OpenSavePage) {
         setCurrentPage(d->page3);
-    else if (flags & SpellCheckerPage)
+    } else if (flags & SpellCheckerPage) {
         setCurrentPage(d->page4);
-    else if (flags & PluginPage)
+    } else if (flags & PluginPage) {
         setCurrentPage(d->pluginPage);
+    }
 }
 
 void PreferenceDialog::slotApply()
@@ -454,7 +452,6 @@ void PreferenceDialog::unitChanged(int index)
     const KoUnit unit = KoUnit::fromListForUi(index, KoUnit::ListAll);
     d->interfaceOptions.m_indentationStep->setUnit(unit);
 }
-
 
 #if 0 // CALLIGRA_SHEETS_COMPLETION_MODE_SETTING
 QLabel *label = new QLabel(i18n("&Completion mode:"), tmpQGroupBox);

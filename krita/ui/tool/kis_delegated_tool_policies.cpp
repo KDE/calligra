@@ -20,11 +20,9 @@
 
 #include <QWidget>
 
-
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-
 
 void DeselectShapesActivationPolicy::onActivate(KoCanvasBase *canvas)
 {

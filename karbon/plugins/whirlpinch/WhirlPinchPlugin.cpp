@@ -54,7 +54,6 @@
 #include <QLabel>
 #include <QGridLayout>
 
-
 K_PLUGIN_FACTORY(WhirlPinchPluginFactory, registerPlugin<WhirlPinchPlugin>();)
 K_EXPORT_PLUGIN(WhirlPinchPluginFactory("karbonwhirlpinchplugin"))
 
@@ -65,7 +64,7 @@ WhirlPinchPlugin::WhirlPinchPlugin(QObject *parent, const QVariantList &)
     actionCollection()->addAction("path_whirlpinch", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotWhirlPinch()));
 
-    m_whirlPinchDlg = new WhirlPinchDlg(qobject_cast<QWidget*>(parent));
+    m_whirlPinchDlg = new WhirlPinchDlg(qobject_cast<QWidget *>(parent));
     m_whirlPinchDlg->setAngle(180.0);
     m_whirlPinchDlg->setPinch(0.0);
     m_whirlPinchDlg->setRadius(100.0);
@@ -73,54 +72,58 @@ WhirlPinchPlugin::WhirlPinchPlugin(QObject *parent, const QVariantList &)
 
 void WhirlPinchPlugin::slotWhirlPinch()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
-    if (! shape)
+    KoShape *shape = selection->firstSelectedShape();
+    if (! shape) {
         return;
+    }
 
     // check if we have a path based shape
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
-    if (! path)
+    KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
+    if (! path) {
         return;
+    }
 
     // check if it is no parametric shape
-    KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);
-    if (ps && ps->isParametricShape())
+    KoParameterShape *ps = dynamic_cast<KoParameterShape *>(shape);
+    if (ps && ps->isParametricShape()) {
         return;
+    }
 
     m_whirlPinchDlg->setUnit(canvasController->canvas()->unit());
 
-    if (QDialog::Rejected == m_whirlPinchDlg->exec())
+    if (QDialog::Rejected == m_whirlPinchDlg->exec()) {
         return;
+    }
 
     canvasController->canvas()->addCommand(
         new KarbonWhirlPinchCommand(path, m_whirlPinchDlg->angle(), m_whirlPinchDlg->pinch(), m_whirlPinchDlg->radius()));
 }
 
-WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
-        : KDialog(parent)
+WhirlPinchDlg::WhirlPinchDlg(QWidget *parent, const char *name)
+    : KDialog(parent)
 {
     setObjectName(name);
     setModal(true);
     setCaption(i18n("Whirl Pinch"));
     setButtons(Ok | Cancel);
 
-    QWidget * mainWidget = new QWidget(this);
+    QWidget *mainWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
-    QGroupBox* info = new QGroupBox(i18n("Info"), mainWidget);
-    QVBoxLayout * infoLayout = new QVBoxLayout(info);
+    QGroupBox *info = new QGroupBox(i18n("Info"), mainWidget);
+    QVBoxLayout *infoLayout = new QVBoxLayout(info);
     QString infoText = i18n("The result of the Whirlpinch effect can be improved by refining the path shape beforehand.");
-    QLabel * infoLabel = new QLabel(infoText, info);
+    QLabel *infoLabel = new QLabel(infoText, info);
     infoLabel->setWordWrap(true);
     infoLayout->addWidget(infoLabel);
 
     // add input fields:
-    QGroupBox* group = new QGroupBox(i18n("Properties"), mainWidget);
+    QGroupBox *group = new QGroupBox(i18n("Properties"), mainWidget);
 
-    QGridLayout* layout = new QGridLayout(group);
+    QGridLayout *layout = new QGridLayout(group);
 
     layout->addWidget(new QLabel(i18n("Angle:")), 0, 0);
     m_angle = new KDoubleNumInput(group);
@@ -130,7 +133,6 @@ WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
     m_pinch = new KDoubleNumInput(group);
     m_pinch->setRange(-1, 1, 0.01, true);
     layout->addWidget(m_pinch, 1, 1);
-
 
     layout->addWidget(new QLabel(i18n("Radius:")), 2, 0);
     m_radius = new KoUnitDoubleSpinBox(group);

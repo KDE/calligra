@@ -65,14 +65,13 @@ LayerSplit::~LayerSplit()
 {
 }
 
-
 struct Layer {
     KoColor color;
     KisPaintDeviceSP device;
     KisRandomAccessorSP accessor;
     int pixelsWritten;
 
-    bool operator<(const Layer& other) const
+    bool operator<(const Layer &other) const
     {
         return pixelsWritten < other.pixelsWritten;
     }
@@ -88,20 +87,26 @@ void LayerSplit::slotLayerSplit()
 
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        KoProgressUpdater* pu = m_view->createProgressUpdater(KoProgressUpdater::Unthreaded);
+        KoProgressUpdater *pu = m_view->createProgressUpdater(KoProgressUpdater::Unthreaded);
         pu->start(100, i18n("Split into Layers"));
         QPointer<KoUpdater> updater = pu->startSubtask();
 
         KisImageSP image = m_view->image();
-        if (!image) return;
+        if (!image) {
+            return;
+        }
 
         image->lock();
 
         KisNodeSP node = m_view->activeNode();
-        if (!node) return;
+        if (!node) {
+            return;
+        }
 
         KisPaintDeviceSP projection = node->projection();
-        if (!projection) return;
+        if (!projection) {
+            return;
+        }
 
         QList<Layer> colorMap;
 
@@ -132,12 +137,11 @@ void LayerSplit::slotLayerSplit()
                 }
 
                 bool found = false;
-                foreach(const Layer &l, colorMap) {
+                foreach (const Layer &l, colorMap) {
                     if (fuzziness == 0) {
 
                         found = (l.color == c);
-                    }
-                    else {
+                    } else {
                         quint8 match = cs->difference(l.color.data(), c.data());
                         found = (match <= fuzziness);
                     }
@@ -145,7 +149,7 @@ void LayerSplit::slotLayerSplit()
                         KisRandomAccessorSP dstAcc = l.accessor;
                         dstAcc->moveTo(col, row);
                         memcpy(dstAcc->rawData(), acc->rawDataConst(), cs->pixelSize());
-                        const_cast<Layer*>(&l)->pixelsWritten++;
+                        const_cast<Layer *>(&l)->pixelsWritten++;
                         break;
                     }
                 }
@@ -184,10 +188,10 @@ void LayerSplit::slotLayerSplit()
         undo->beginMacro(kundo2_i18n("Split Layer"));
         KisNodeCommandsAdapter adapter(m_view);
 
-        KisGroupLayerSP baseGroup = dynamic_cast<KisGroupLayer*>(node->parent().data());
+        KisGroupLayerSP baseGroup = dynamic_cast<KisGroupLayer *>(node->parent().data());
         if (!baseGroup) {
             // Masks are never nested
-            baseGroup = dynamic_cast<KisGroupLayer*>(node->parent()->parent().data());
+            baseGroup = dynamic_cast<KisGroupLayer *>(node->parent()->parent().data());
         }
 
         if (dlg.hideOriginal()) {
@@ -200,7 +204,7 @@ void LayerSplit::slotLayerSplit()
             baseGroup = grp;
         }
 
-        foreach(const Layer &l, colorMap) {
+        foreach (const Layer &l, colorMap) {
             KisGroupLayerSP grp = baseGroup;
             if (dlg.createSeparateGroups()) {
                 grp = new KisGroupLayer(image, l.device->objectName(), OPACITY_OPAQUE_U8);
@@ -214,7 +218,7 @@ void LayerSplit::slotLayerSplit()
         undo->endMacro();
         image->unlock();
         image->setModified();
-   }
+    }
 
     QApplication::restoreOverrideCursor();
 }

@@ -30,21 +30,22 @@
 using namespace KexiDB;
 
 pqxxTransactionData::pqxxTransactionData(Connection *conn, bool nontransaction)
-        : TransactionData(conn)
+    : TransactionData(conn)
 {
-    if (nontransaction)
-        data = new pqxx::nontransaction(*static_cast<pqxxSqlConnection*>(conn)->d->pqxxsql /* todo: add name? */);
-    else
-        data = new pqxx::transaction<>(*static_cast<pqxxSqlConnection*>(conn)->d->pqxxsql /* todo: add name? */);
-    if (!static_cast<pqxxSqlConnection*>(conn)->m_trans) {
-        static_cast<pqxxSqlConnection*>(conn)->m_trans = this;
+    if (nontransaction) {
+        data = new pqxx::nontransaction(*static_cast<pqxxSqlConnection *>(conn)->d->pqxxsql /* todo: add name? */);
+    } else {
+        data = new pqxx::transaction<>(*static_cast<pqxxSqlConnection *>(conn)->d->pqxxsql /* todo: add name? */);
+    }
+    if (!static_cast<pqxxSqlConnection *>(conn)->m_trans) {
+        static_cast<pqxxSqlConnection *>(conn)->m_trans = this;
     }
 }
 
 pqxxTransactionData::~pqxxTransactionData()
 {
-    if (static_cast<pqxxSqlConnection*>(m_conn)->m_trans == this) {
-        static_cast<pqxxSqlConnection*>(m_conn)->m_trans = 0;
+    if (static_cast<pqxxSqlConnection *>(m_conn)->m_trans == this) {
+        static_cast<pqxxSqlConnection *>(m_conn)->m_trans = 0;
     }
     delete data;
     data = 0;
@@ -53,9 +54,9 @@ pqxxTransactionData::~pqxxTransactionData()
 //==================================================================================
 
 pqxxSqlConnection::pqxxSqlConnection(Driver *driver, ConnectionData &conn_data)
-        : Connection(driver, conn_data)
-        , d(new pqxxSqlConnectionInternal(this))
-        , m_trans(0)
+    : Connection(driver, conn_data)
+    , d(new pqxxSqlConnectionInternal(this))
+    , m_trans(0)
 {
 }
 
@@ -69,7 +70,7 @@ pqxxSqlConnection::~pqxxSqlConnection()
 
 //==================================================================================
 //Return a new query based on a query statment
-Cursor* pqxxSqlConnection::prepareQuery(const QString& statement,  uint cursor_options)
+Cursor *pqxxSqlConnection::prepareQuery(const QString &statement,  uint cursor_options)
 {
     Q_UNUSED(cursor_options);
     return new pqxxSqlCursor(this, statement, 1); //Always used buffered cursor
@@ -77,7 +78,7 @@ Cursor* pqxxSqlConnection::prepareQuery(const QString& statement,  uint cursor_o
 
 //==================================================================================
 //Return a new query based on a query object
-Cursor* pqxxSqlConnection::prepareQuery(QuerySchema& query, uint cursor_options)
+Cursor *pqxxSqlConnection::prepareQuery(QuerySchema &query, uint cursor_options)
 {
     Q_UNUSED(cursor_options);
     return new pqxxSqlCursor(this, query, 1);//Always used buffered cursor
@@ -93,7 +94,7 @@ QString pqxxSqlConnection::escapeName(const QString &name) const
 //==================================================================================
 //Made this a noop
 //We tell kexi we are connected, but we wont actually connect until we use a database!
-bool pqxxSqlConnection::drv_connect(KexiDB::ServerVersionInfo& version)
+bool pqxxSqlConnection::drv_connect(KexiDB::ServerVersionInfo &version)
 {
     KexiDBDrvDbg;
     version.clear();
@@ -139,8 +140,9 @@ bool pqxxSqlConnection::drv_getDatabasesList(QStringList &list)
 bool pqxxSqlConnection::drv_createDatabase(const QString &dbName)
 {
     KexiDBDrvDbg << dbName;
-    if (executeSQL("CREATE DATABASE " + escapeName(dbName)))
+    if (executeSQL("CREATE DATABASE " + escapeName(dbName))) {
         return true;
+    }
 
     return false;
 }
@@ -148,7 +150,7 @@ bool pqxxSqlConnection::drv_createDatabase(const QString &dbName)
 //==================================================================================
 //Use this as our connection instead of connect
 bool pqxxSqlConnection::drv_useDatabase(const QString &dbName, bool *cancelled,
-                                        MessageHandler* msgHandler)
+                                        MessageHandler *msgHandler)
 {
     Q_UNUSED(cancelled);
     Q_UNUSED(msgHandler);
@@ -176,18 +178,21 @@ bool pqxxSqlConnection::drv_useDatabase(const QString &dbName, bool *cancelled,
     }
 
     //Build up the connection string
-    if (data()->port == 0)
+    if (data()->port == 0) {
         data()->port = 5432;
+    }
 
     conninfo += QString::fromLatin1(" port='%1'").arg(data()->port);
 
     conninfo += QString::fromLatin1(" dbname='%1'").arg(dbName);
 
-    if (!data()->userName.isNull())
+    if (!data()->userName.isNull()) {
         conninfo += QString::fromLatin1(" user='%1'").arg(data()->userName);
+    }
 
-    if (!data()->password.isNull())
+    if (!data()->password.isNull()) {
         conninfo += QString::fromLatin1(" password='%1'").arg(data()->password);
+    }
 
     try {
         d->pqxxsql = new pqxx::connection(conninfo.toLatin1());
@@ -223,15 +228,16 @@ bool pqxxSqlConnection::drv_dropDatabase(const QString &dbName)
     KexiDBDrvDbg << dbName;
 
     //! @todo Maybe should check that dbname is no the currentdb
-    if (executeSQL("DROP DATABASE " + escapeName(dbName)))
+    if (executeSQL("DROP DATABASE " + escapeName(dbName))) {
         return true;
+    }
 
     return false;
 }
 
 //==================================================================================
 //Execute an SQL statement
-bool pqxxSqlConnection::drv_executeSQL(const QString& statement)
+bool pqxxSqlConnection::drv_executeSQL(const QString &statement)
 {
 // KexiDBDrvDbg << statement;
     bool ok = false;
@@ -244,8 +250,9 @@ bool pqxxSqlConnection::drv_executeSQL(const QString& statement)
     try {
         //Create a transaction
         const bool implicityStarted = !m_trans;
-        if (implicityStarted)
+        if (implicityStarted) {
             (void)new pqxxTransactionData(this, true);
+        }
 //  KexiDBDrvDbg << "About to execute";
         //Create a result object through the transaction
         d->res = new pqxx::result(m_trans->data->exec(std::string(statement.toUtf8())));
@@ -258,9 +265,9 @@ bool pqxxSqlConnection::drv_executeSQL(const QString& statement)
         }
         //If all went well then return true, errors picked up by the catch block
         ok = true;
-    } catch (const pqxx::sql_error& sqlerr) {
+    } catch (const pqxx::sql_error &sqlerr) {
         KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL: sql_error exception - " << sqlerr.query().c_str();
-    } catch (const pqxx::broken_connection& bcerr) {
+    } catch (const pqxx::broken_connection &bcerr) {
         KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL: broken_connection exception";
     } catch (const std::exception &e) {
         //If an error ocurred then put the error description into _dbError
@@ -302,7 +309,7 @@ quint64 pqxxSqlConnection::drv_lastInsertRowID()
 //<queries taken from pqxxMigrate>
 bool pqxxSqlConnection::drv_containsTable(const QString &tableName)
 {
-    bool success=false;
+    bool success = false;
     return resultExists(QString("select 1 from pg_class where relkind='r' and relname LIKE %1")
                         .arg(driver()->escapeString(tableName)), success) && success;
 }
@@ -329,7 +336,7 @@ bool pqxxSqlConnection::drv_getTablesList(QStringList &list)
 }
 //</taken from pqxxMigrate>
 
-TransactionData* pqxxSqlConnection::drv_beginTransaction()
+TransactionData *pqxxSqlConnection::drv_beginTransaction()
 {
     return new pqxxTransactionData(this, false);
 }
@@ -338,7 +345,7 @@ bool pqxxSqlConnection::drv_commitTransaction(TransactionData *tdata)
 {
     bool result = true;
     try {
-        static_cast<pqxxTransactionData*>(tdata)->data->commit();
+        static_cast<pqxxTransactionData *>(tdata)->data->commit();
     } catch (const std::exception &e) {
         //If an error ocurred then put the error description into _dbError
         d->errmsg = QString::fromUtf8(e.what());
@@ -348,8 +355,9 @@ bool pqxxSqlConnection::drv_commitTransaction(TransactionData *tdata)
         setError();
         result = false;
     }
-    if (m_trans == tdata)
+    if (m_trans == tdata) {
         m_trans = 0;
+    }
     return result;
 }
 
@@ -357,7 +365,7 @@ bool pqxxSqlConnection::drv_rollbackTransaction(TransactionData *tdata)
 {
     bool result = true;
     try {
-        static_cast<pqxxTransactionData*>(tdata)->data->abort();
+        static_cast<pqxxTransactionData *>(tdata)->data->abort();
     } catch (const std::exception &e) {
         //If an error ocurred then put the error description into _dbError
         d->errmsg = QString::fromUtf8(e.what());
@@ -367,8 +375,9 @@ bool pqxxSqlConnection::drv_rollbackTransaction(TransactionData *tdata)
         d->errmsg = kexidb_i18n("Unknown error.");
         result = false;
     }
-    if (m_trans == tdata)
+    if (m_trans == tdata) {
         m_trans = 0;
+    }
     return result;
 }
 
@@ -393,7 +402,7 @@ QString pqxxSqlConnection::serverErrorMsg()
 }
 
 PreparedStatement::Ptr pqxxSqlConnection::prepareStatement(PreparedStatement::StatementType type,
-        FieldList& fields)
+        FieldList &fields)
 {
     return KSharedPtr<PreparedStatement>(new pqxxPreparedStatement(type, *d, fields));
 }

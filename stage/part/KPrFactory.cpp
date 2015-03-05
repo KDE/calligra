@@ -1,4 +1,3 @@
-// -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -28,13 +27,13 @@
 
 #include <KoPluginLoader.h>
 
-KComponentData* KPrFactory::s_instance = 0;
-KAboutData* KPrFactory::s_aboutData = 0;
+KComponentData *KPrFactory::s_instance = 0;
+KAboutData *KPrFactory::s_aboutData = 0;
 
 static int factoryCount = 0;
 
-KPrFactory::KPrFactory( QObject* parent, const char* /*name*/ )
-    : KPluginFactory( *aboutData(), parent )
+KPrFactory::KPrFactory(QObject *parent, const char * /*name*/)
+    : KPluginFactory(*aboutData(), parent)
 {
     (void)componentData();
 
@@ -59,29 +58,29 @@ KPrFactory::~KPrFactory()
     s_instance = 0;
 }
 
-QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
-                             const QVariantList& args, const QString& keyword )
+QObject *KPrFactory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent,
+                            const QVariantList &args, const QString &keyword)
 {
-    Q_UNUSED( args );
-    Q_UNUSED( keyword );
+    Q_UNUSED(args);
+    Q_UNUSED(keyword);
     KPrPart *part = new KPrPart(parent);
     KPrDocument *doc = new KPrDocument(part);
     part->setDocument(doc);
     return part;
 }
 
-KAboutData* KPrFactory::aboutData()
+KAboutData *KPrFactory::aboutData()
 {
-    if( !s_aboutData )
+    if (!s_aboutData) {
         s_aboutData = newKPresenterAboutData();
+    }
 
     return s_aboutData;
 }
 
 const KComponentData &KPrFactory::componentData()
 {
-    if ( !s_instance )
-    {
+    if (!s_instance) {
         s_instance = new KComponentData(aboutData());
 
         s_instance->dirs()->addResourceType("stage_template", "data", "stage/templates/");

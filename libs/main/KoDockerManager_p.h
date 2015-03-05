@@ -39,8 +39,8 @@ class KoDockerManager::Private
 public:
     Private(KoMainWindow *mw) :
         mainWindow(mw)
-        ,ignore(true)
-        ,showOptionsDocker(true)
+        , ignore(true)
+        , showOptionsDocker(true)
     {
     }
 

@@ -44,22 +44,22 @@ public:
 
     QList<QImage> favoritePresetImages();
 
-    void setCurrentTag(const QString& tagName);
+    void setCurrentTag(const QString &tagName);
 
     int numFavoritePresets();
 
     QVector<KisPaintOpPresetSP> favoritePresetList();
 
     int recentColorsTotal();
-    const KoColor& recentColorAt(int pos);
+    const KoColor &recentColorAt(int pos);
 
     // Reimplemented from KoResourceServerObserver
     virtual void removingResource(PointerType resource);
     virtual void resourceAdded(PointerType resource);
     virtual void resourceChanged(PointerType resource);
     virtual void syncTaggedResourceView();
-    virtual void syncTagAddition(const QString& tag);
-    virtual void syncTagRemoval(const QString& tag);
+    virtual void syncTagAddition(const QString &tag);
+    virtual void syncTagRemoval(const QString &tag);
 
     //BgColor;
     KoColor bgColor() const;
@@ -72,8 +72,8 @@ public:
 
 Q_SIGNALS:
 
-    void sigSetFGColor(const KoColor& c);
-    void sigSetBGColor(const KoColor& c);
+    void sigSetFGColor(const KoColor &c);
+    void sigSetBGColor(const KoColor &c);
 
     // This is a flag to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour
@@ -82,7 +82,7 @@ Q_SIGNALS:
     // is not visible
     void sigEnableChangeColor(bool b);
 
-    void sigChangeFGColorSelector(const KoColor&);
+    void sigChangeFGColorSelector(const KoColor &);
 
     void setSelectedColor(int);
 
@@ -98,7 +98,7 @@ public Q_SLOTS:
     void slotUpdateRecentColor(int);
 
     /*add a colour to m_colorList, used by KisCanvasResourceProvider*/
-    void slotAddRecentColor(const KoColor&);
+    void slotAddRecentColor(const KoColor &);
 
     void slotChangeFGColorSelector(KoColor c);
 

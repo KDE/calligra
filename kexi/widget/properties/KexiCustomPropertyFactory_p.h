@@ -32,7 +32,7 @@ class KexiImagePropertyEdit : public KoProperty::PixmapEdit
 
 public:
     explicit KexiImagePropertyEdit(KoProperty::Property *property,
-                          QWidget *parent = 0);
+                                   QWidget *parent = 0);
     virtual ~KexiImagePropertyEdit();
 
     virtual QVariant value() const;

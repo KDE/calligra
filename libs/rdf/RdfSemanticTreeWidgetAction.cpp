@@ -25,8 +25,8 @@
 
 RdfSemanticTreeWidgetAction::RdfSemanticTreeWidgetAction(QWidget *parent,
         KoCanvasBase *canvas, const QString &name)
-        : KAction(name, parent)
-        , m_canvas(canvas)
+    : KAction(name, parent)
+    , m_canvas(canvas)
 {
     connect(this, SIGNAL(triggered(bool)), this, SLOT(activated()));
 }

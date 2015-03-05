@@ -22,7 +22,6 @@
 
 #include "kis_fixed_point_maths.h"
 
-
 void KisFixedPointMathsTest::testOperators()
 {
     KisFixedPoint fp1(1);
@@ -80,13 +79,13 @@ void KisFixedPointMathsTest::testConversions()
     QCOMPARE(fp2.toIntRound(), 3);
     QCOMPARE(fp2.toIntFloor(), 2);
     QCOMPARE(fp2.toIntCeil(), 3);
-    QCOMPARE(fp2.toFloat(), qreal(698.0/256.0));
+    QCOMPARE(fp2.toFloat(), qreal(698.0 / 256.0));
 
     QCOMPARE(fp3.toInt(), 2);
     QCOMPARE(fp3.toIntRound(), 2);
     QCOMPARE(fp3.toIntFloor(), 2);
     QCOMPARE(fp3.toIntCeil(), 3);
-    QCOMPARE(fp3.toFloat(), qreal(599.0/256.0));
+    QCOMPARE(fp3.toFloat(), qreal(599.0 / 256.0));
 }
 
 void KisFixedPointMathsTest::testConversionsNegative()

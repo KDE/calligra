@@ -26,15 +26,15 @@ class KisShadeSelectorLineBase;
 class KisShadeSelectorLineEditor;
 class KisColorSelectorBaseProxy;
 
-
-class KisShadeSelectorLineComboBoxPopup : public QWidget {
+class KisShadeSelectorLineComboBoxPopup : public QWidget
+{
     Q_OBJECT
 public:
     ~KisShadeSelectorLineComboBoxPopup();
 
     const int spacing;
 
-    KisShadeSelectorLineComboBoxPopup(QWidget* parent);
+    KisShadeSelectorLineComboBoxPopup(QWidget *parent);
     void setConfiguration(const QString &string);
 
 private Q_SLOTS:
@@ -42,8 +42,8 @@ private Q_SLOTS:
 
 private:
     void paintEvent(QPaintEvent *);
-    void mouseMoveEvent(QMouseEvent * e);
-    void mousePressEvent(QMouseEvent* e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e);
 
     void updateSelectedArea(const QRect &newRect);
     void updateHighlightedArea(const QRect &newRect);

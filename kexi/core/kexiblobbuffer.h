@@ -89,7 +89,7 @@ public:
     typedef long Id_t;
 
     //! Access to KexiBLOBBuffer singleton
-    static KexiBLOBBuffer* self();
+    static KexiBLOBBuffer *self();
 
     static void setConnection(KexiDB::Connection *conn);
 
@@ -102,32 +102,37 @@ public:
         Handle();
 
         //! Constructs a copy of \a handle.
-        Handle(const Handle& handle);
+        Handle(const Handle &handle);
 
         ~Handle();
 
-        Id_t id() const {
+        Id_t id() const
+        {
             return m_item ? m_item->id : 0;
         }
 
         /*! \return true if this BLOB data pointed by this handle is stored at the db backend
          or false if it is kept in memory. Null handles return false. */
-        bool stored() const {
+        bool stored() const
+        {
             return m_item ? m_item->stored : false;
         }
 
         //! \return true if this is null handle (i.e. one not pointing to any data)
-        operator bool() const {
+        operator bool() const
+        {
             return m_item;
         }
 
-        Handle& operator=(const Handle& handle);
+        Handle &operator=(const Handle &handle);
 
-        QByteArray data() const {
+        QByteArray data() const
+        {
             return m_item ? m_item->data() : QByteArray();
         }
 
-        QPixmap pixmap() const {
+        QPixmap pixmap() const
+        {
             return m_item ? m_item->pixmap() : QPixmap();
         }
 
@@ -135,23 +140,26 @@ public:
          Only call this method for unstored (in memory) BLOBs */
         void setStoredWidthID(Id_t id);
 
-        QString originalFileName() const {
+        QString originalFileName() const
+        {
             return m_item ? m_item->name : QString();
         }
 
-        QString mimeType() const {
+        QString mimeType() const
+        {
             return m_item ? m_item->mimeType : QString();
         }
 
-        Id_t folderId() const {
+        Id_t folderId() const
+        {
             return m_item ? m_item->folderId : 0;
         }
 
     protected:
         //! Constructs a handle based on \a item. Null handle is constructed for null \a item.
-        explicit Handle(Item* item);
+        explicit Handle(Item *item);
     private:
-        Item* m_item;
+        Item *m_item;
         friend class KexiBLOBBuffer;
     };
 
@@ -165,7 +173,7 @@ public:
      and returned instantly. It is assumed that the BLOB is unstored, because it is loaded from
      external source, so stored() will be equal to false for returned handle.
      \return handle to the pixmap data or a null handle if such pixmap could not be loaded. */
-    Handle insertPixmap(const KUrl& url);
+    Handle insertPixmap(const KUrl &url);
 
     /*! Inserts a new BLOB data.
      @param data The data for BLOB object.
@@ -176,11 +184,11 @@ public:
      @param identifier Object's identifier. If positive, the "stored" flag for the data
      will be set to true with \a identifer, otherwise (the default) the BLOB data will
      have "stored" flag set to false, and a new temporary identifier will be assigned. */
-    Handle insertObject(const QByteArray& data, const QString& name,
-                        const QString& caption, const QString& mimeType, Id_t identifier = 0);
+    Handle insertObject(const QByteArray &data, const QString &name,
+                        const QString &caption, const QString &mimeType, Id_t identifier = 0);
 
     /*! Inserts a new pixmap available in memory, e.g. coming from clipboard. */
-    Handle insertPixmap(const QPixmap& pixmap);
+    Handle insertPixmap(const QPixmap &pixmap);
 
     /*! \return an object for a given \a id. If \a stored is true, stored BLOBs buffer
      is browsed, otherwise unstored (in memory) BLOBs buffer is browsed.
@@ -197,22 +205,22 @@ protected:
     void removeItem(Id_t id, bool stored);
 
     /*! Takes an object for a \a item out of the buffer. */
-    void takeItem(Item* item);
+    void takeItem(Item *item);
 
     /*! Inserts an object for a given \a id into the buffer. */
-    void insertItem(Item* item);
+    void insertItem(Item *item);
 
 private:
     class KEXICORE_EXPORT Item
     {
     public:
-        Item(const QByteArray& data, Id_t ident,
+        Item(const QByteArray &data, Id_t ident,
              bool stored,
-             const QString& name = QString(),
-             const QString& caption = QString(),
-             const QString& mimeType = QString(),
+             const QString &name = QString(),
+             const QString &caption = QString(),
+             const QString &mimeType = QString(),
              Id_t folderId = 0,
-             const QPixmap& pixmap = QPixmap());
+             const QPixmap &pixmap = QPixmap());
         ~Item();
         QPixmap pixmap() const;
         QByteArray data() const;
@@ -232,7 +240,7 @@ private:
         friend class KexiBLOBBuffer;
     };
     class Private;
-    Private * const d;
+    Private *const d;
     friend class Handle;
 };
 

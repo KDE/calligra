@@ -36,7 +36,6 @@ void PSDUtilsTest::test_psdwrite_quint8()
     QCOMPARE(buf.buffer().at(0), '\3');
 }
 
-
 void PSDUtilsTest::test_psdwrite_quint16()
 {
     QBuffer buf;
@@ -112,7 +111,6 @@ void PSDUtilsTest::test_psdwrite_pascalstring()
     QCOMPARE(buf.buffer().at(3), 'a');
     QCOMPARE(buf.buffer().at(4), '\0');
 }
-
 
 void PSDUtilsTest::test_psdpad()
 {

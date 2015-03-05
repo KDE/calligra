@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef KPRANIMATIONSELECTORWIDGET_H
 #define KPRANIMATIONSELECTORWIDGET_H
 
@@ -83,7 +82,7 @@ private Q_SLOTS:
      *
      * @param index of the animation selected
      */
-    void setAnimation(const QModelIndex& index);
+    void setAnimation(const QModelIndex &index);
 
     /**
      * @brief Automatic preview checkbox state has changed

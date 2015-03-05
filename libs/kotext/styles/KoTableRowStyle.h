@@ -84,7 +84,7 @@ public:
     KoText::KoTextBreakProperty breakBefore() const;
     void setBreakAfter(KoText::KoTextBreakProperty state);
     KoText::KoTextBreakProperty breakAfter() const;
-    
+
     void setUseOptimalHeight(bool on);
     bool useOptimalHeight() const;
 

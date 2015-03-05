@@ -107,7 +107,7 @@ public:
      * are packed in a QPointer so you can check whether they have
      * been deleted before dereferencing.
      */
-    QPointer<KoUpdater> startSubtask(int weight=1,
+    QPointer<KoUpdater> startSubtask(int weight = 1,
                                      const QString &name = QString());
 
     /**
@@ -147,9 +147,6 @@ private:
     Private *const d;
 
 };
-
-
-
 
 #endif
 

@@ -29,23 +29,23 @@
 
 namespace KPlato
 {
-    class Package;
-    class XMLLoaderObject;
-    class Project;
+class Package;
+class XMLLoaderObject;
+class Project;
 
 class KPlatoXmlLoader : public KPlatoXmlLoaderBase
 {
     Q_OBJECT
 public:
-    KPlatoXmlLoader( XMLLoaderObject &loader, Project *project );
+    KPlatoXmlLoader(XMLLoaderObject &loader, Project *project);
 
     QString errorMessage() const;
     Package *package() const;
     QString timeTag() const;
 
     using KPlatoXmlLoaderBase::load;
-    bool load( const KoXmlElement& plan );
-    bool loadWorkpackage( const KoXmlElement &plan );
+    bool load(const KoXmlElement &plan);
+    bool loadWorkpackage(const KoXmlElement &plan);
 
 private:
     XMLLoaderObject &m_loader;

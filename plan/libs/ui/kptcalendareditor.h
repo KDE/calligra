@@ -24,7 +24,7 @@
 
 #include "kptviewbase.h"
 #include "kptitemmodelbase.h"
-#include "kptcalendar.h" 
+#include "kptcalendar.h"
 #include "kptcalendarmodel.h"
 
 #include <QTableView>
@@ -50,33 +50,42 @@ class KPLATOUI_EXPORT CalendarTreeView : public TreeViewBase
 public:
     explicit CalendarTreeView(QWidget *parent);
 
-    CalendarItemModel *model() const { return static_cast<CalendarItemModel*>( TreeViewBase::model() ); }
+    CalendarItemModel *model() const
+    {
+        return static_cast<CalendarItemModel *>(TreeViewBase::model());
+    }
 
-    Project *project() const { return model()->project(); }
-    void setProject( Project *project ) { model()->setProject( project ); }
+    Project *project() const
+    {
+        return model()->project();
+    }
+    void setProject(Project *project)
+    {
+        model()->setProject(project);
+    }
 
     Calendar *currentCalendar() const;
     Calendar *selectedCalendar() const;
-    QList<Calendar*> selectedCalendars() const;
+    QList<Calendar *> selectedCalendars() const;
 
 Q_SIGNALS:
-    void currentChanged( const QModelIndex& );
-    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
-    void selectionChanged( const QModelIndexList& );
+    void currentChanged(const QModelIndex &);
+    void currentColumnChanged(const QModelIndex &, const QModelIndex &);
+    void selectionChanged(const QModelIndexList &);
 
-    void contextMenuRequested( const QModelIndex&, const QPoint& );
+    void contextMenuRequested(const QModelIndex &, const QPoint &);
     void focusChanged();
 
 protected Q_SLOTS:
-    void headerContextMenuRequested( const QPoint &pos );
+    void headerContextMenuRequested(const QPoint &pos);
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-    virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
+    virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
 
 protected:
-    void contextMenuEvent ( QContextMenuEvent * event );
-    void focusInEvent ( QFocusEvent * event );
-    void focusOutEvent ( QFocusEvent * event );
-    
+    void contextMenuEvent(QContextMenuEvent *event);
+    void focusInEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event);
+
     void dragMoveEvent(QDragMoveEvent *event);
 };
 
@@ -86,51 +95,66 @@ class KPLATOUI_EXPORT CalendarDayView : public QTableView
 public:
     explicit CalendarDayView(QWidget *parent);
 
-    CalendarDayItemModel *model() const { return m_model; }
+    CalendarDayItemModel *model() const
+    {
+        return m_model;
+    }
 
-    Project *project() const { return model()->project(); }
-    void setProject( Project *project ) { model()->setProject( project ); }
+    Project *project() const
+    {
+        return model()->project();
+    }
+    void setProject(Project *project)
+    {
+        model()->setProject(project);
+    }
 
     CalendarDay *selectedDay() const;
     TimeInterval *selectedInterval() const;
-    
+
     QSize sizeHint() const;
-    
-    void setReadWrite( bool on ) { m_readwrite = on; }
-    bool isReadWrite() const { return m_readwrite; }
+
+    void setReadWrite(bool on)
+    {
+        m_readwrite = on;
+    }
+    bool isReadWrite() const
+    {
+        return m_readwrite;
+    }
 
 Q_SIGNALS:
-    void currentChanged( const QModelIndex& );
-    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
-    void selectionChanged( const QModelIndexList& );
+    void currentChanged(const QModelIndex &);
+    void currentColumnChanged(const QModelIndex &, const QModelIndex &);
+    void selectionChanged(const QModelIndexList &);
 
-    void contextMenuRequested( const QModelIndex&, const QPoint& );
+    void contextMenuRequested(const QModelIndex &, const QPoint &);
     void focusChanged();
-    
-    void executeCommand( KUndo2Command *cmd );
-    
+
+    void executeCommand(KUndo2Command *cmd);
+
 public Q_SLOTS:
-    void setCurrentCalendar( Calendar *calendar );
-    
+    void setCurrentCalendar(Calendar *calendar);
+
 protected Q_SLOTS:
-    void headerContextMenuRequested( const QPoint &pos );
+    void headerContextMenuRequested(const QPoint &pos);
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-    virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
+    virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
 
     void slotSetWork();
     void slotSetVacation();
     void slotSetUndefined();
 
-    void slotIntervalEditDialogFinished( int result );
+    void slotIntervalEditDialogFinished(int result);
 
 protected:
-    void contextMenuEvent ( QContextMenuEvent * event );
-    void focusInEvent ( QFocusEvent * event );
-    void focusOutEvent ( QFocusEvent * event );
-    
+    void contextMenuEvent(QContextMenuEvent *event);
+    void focusInEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event);
+
 private:
     CalendarDayItemModel *m_model;
-    
+
     KAction *actionSetUndefined;
     KAction *actionSetVacation;
     KAction *actionSetWork;
@@ -143,43 +167,46 @@ class KPLATOUI_EXPORT CalendarEditor : public ViewBase
     Q_OBJECT
 public:
     CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent);
-    
+
     void setupGui();
-    Project *project() const { return m_calendarview->project(); }
-    virtual void draw( Project &project );
+    Project *project() const
+    {
+        return m_calendarview->project();
+    }
+    virtual void draw(Project &project);
     virtual void draw();
 
-    virtual void updateReadWrite( bool readwrite );
+    virtual void updateReadWrite(bool readwrite);
 
     virtual Calendar *currentCalendar() const;
-    
+
 Q_SIGNALS:
-    void addCalendar( Calendar *calendar );
-    void deleteCalendar( const QList<Calendar*>& );
-    
+    void addCalendar(Calendar *calendar);
+    void deleteCalendar(const QList<Calendar *> &);
+
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
 protected:
-    void updateActionsEnabled( bool on );
-    void insertCalendar( Calendar *calendar, Calendar *parent, int pos = -1 );
-    
+    void updateActionsEnabled(bool on);
+    void insertCalendar(Calendar *calendar, Calendar *parent, int pos = -1);
+
 protected Q_SLOTS:
-    void slotIntervalEditDialogFinished( int result );
+    void slotIntervalEditDialogFinished(int result);
 
 private Q_SLOTS:
-    void slotContextMenuCalendar( const QModelIndex& index, const QPoint& pos );
-    void slotContextMenuDay( const QModelIndex& index, const QPoint& pos );
-    void slotContextMenuDate( KMenu*, const QDate& );
-    void slotContextMenuDate( KMenu*, const QList<QDate>& );
-    
-    void slotCalendarSelectionChanged( const QModelIndexList& );
-    void slotCurrentCalendarChanged( const QModelIndex& );
-    
-    void slotDaySelectionChanged( const QModelIndexList& );
-    void slotCurrentDayChanged( const QModelIndex& );
-    
+    void slotContextMenuCalendar(const QModelIndex &index, const QPoint &pos);
+    void slotContextMenuDay(const QModelIndex &index, const QPoint &pos);
+    void slotContextMenuDate(KMenu *, const QDate &);
+    void slotContextMenuDate(KMenu *, const QList<QDate> &);
+
+    void slotCalendarSelectionChanged(const QModelIndexList &);
+    void slotCurrentCalendarChanged(const QModelIndex &);
+
+    void slotDaySelectionChanged(const QModelIndexList &);
+    void slotCurrentDayChanged(const QModelIndex &);
+
     void slotEnableActions();
 
     void slotAddCalendar();
@@ -199,7 +226,7 @@ private:
     CalendarDayView *m_dayview;
     KDatePicker *m_datePicker;
     DateTableDataModel *m_model;
-    
+
     KAction *actionAddCalendar;
     KAction *actionAddSubCalendar;
     KAction *actionDeleteSelection;
@@ -211,11 +238,10 @@ private:
     KAction *actionSetUndefined;
     KAction *actionSetVacation;
     KAction *actionSetWork;
-    
+
     QList<QDate> m_currentMenuDateList;
 
 };
-
 
 }  //KPlato namespace
 

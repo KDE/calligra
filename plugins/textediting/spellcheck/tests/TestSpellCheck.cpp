@@ -16,7 +16,8 @@ public:
     {
     }
 
-    QString publicFetchMoreText() {
+    QString publicFetchMoreText()
+    {
         return fetchMoreText();
     }
     virtual void start() { }

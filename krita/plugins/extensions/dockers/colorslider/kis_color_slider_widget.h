@@ -35,13 +35,13 @@ class KisColorSliderWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisColorSliderWidget(KoColorDisplayRendererInterface *displayRenderer, QWidget* parent, KisCanvas2* canvas, QBitArray SlidersConfigArray);
+    KisColorSliderWidget(KoColorDisplayRendererInterface *displayRenderer, QWidget *parent, KisCanvas2 *canvas, QBitArray SlidersConfigArray);
     ~KisColorSliderWidget();
 
     //bool customColorSpaceUsed();
 public Q_SLOTS:
     //void setColorSpace(const KoColorSpace*);
-    void setColor(const KoColor&);
+    void setColor(const KoColor &);
     void slotConfigChanged();
 private Q_SLOTS:
     void update();
@@ -53,14 +53,14 @@ private Q_SLOTS:
     void setConfig();
     //void setCustomColorSpace(const KoColorSpace *);
 Q_SIGNALS:
-    void colorChanged(const KoColor&);
+    void colorChanged(const KoColor &);
     void updated();
     void hueUpdated(int);
     void satUpdated(int, int);
     void toneUpdated(int, int);
 private:
-    QList<KisColorSliderInput*> m_inputs;
-    const KoColorSpace* m_colorSpace;
+    QList<KisColorSliderInput *> m_inputs;
+    const KoColorSpace *m_colorSpace;
     QVBoxLayout *m_layout;
     KoColor m_color;
     bool m_updateAllowed;
@@ -68,17 +68,17 @@ private:
     KisSignalCompressor *m_configCompressor;
     KoColorDisplayRendererInterface *m_displayRenderer;
     KisCanvas2 *m_canvas;
-    KisColorSliderInput* hsvH;
-    KisColorSliderInput* hsvS;
-    KisColorSliderInput* hsvV;
-    KisColorSliderInput* hslH;
-    KisColorSliderInput* hslS;
-    KisColorSliderInput* hslL;
-    KisColorSliderInput* hsiH;
-    KisColorSliderInput* hsiS;
-    KisColorSliderInput* hsiI;
-    KisColorSliderInput* hsyH;
-    KisColorSliderInput* hsyS;
-    KisColorSliderInput* hsyY;
+    KisColorSliderInput *hsvH;
+    KisColorSliderInput *hsvS;
+    KisColorSliderInput *hsvV;
+    KisColorSliderInput *hslH;
+    KisColorSliderInput *hslS;
+    KisColorSliderInput *hslL;
+    KisColorSliderInput *hsiH;
+    KisColorSliderInput *hsiS;
+    KisColorSliderInput *hsiI;
+    KisColorSliderInput *hsyH;
+    KisColorSliderInput *hsyS;
+    KisColorSliderInput *hsyY;
 };
 #endif

@@ -82,10 +82,12 @@
 
 using namespace Calligra::Sheets;
 
-void CellToolBase::Private::updateEditor(const Cell& cell)
+void CellToolBase::Private::updateEditor(const Cell &cell)
 {
-    if (!externalEditor) return;
-    const Cell& theCell = cell.isPartOfMerged() ? cell.masterCell() : cell;
+    if (!externalEditor) {
+        return;
+    }
+    const Cell &theCell = cell.isPartOfMerged() ? cell.masterCell() : cell;
     const Style style = theCell.style();
     if (q->selection()->activeSheet()->isProtected() && style.hideFormula()) {
         externalEditor->setPlainText(theCell.displayText());
@@ -103,7 +105,7 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
         a->blockSignals(blocked); \
     }
 
-void CellToolBase::Private::updateActions(const Cell& cell)
+void CellToolBase::Private::updateActions(const Cell &cell)
 {
     const Style style = cell.style();
 
@@ -113,8 +115,8 @@ void CellToolBase::Private::updateActions(const Cell& cell)
     ACTION_EXEC("underline", setChecked(style.underline()));
     ACTION_EXEC("strikeOut", setChecked(style.strikeOut()));
 
-    static_cast<KFontAction*>(q->action("font"))->setFont(style.fontFamily());
-    static_cast<KFontSizeAction*>(q->action("fontSize"))->setFontSize(style.fontSize());
+    static_cast<KFontAction *>(q->action("font"))->setFont(style.fontFamily());
+    static_cast<KFontSizeAction *>(q->action("fontSize"))->setFontSize(style.fontSize());
     // -- horizontal alignment actions --
     ACTION_EXEC("alignLeft", setChecked(style.halign() == Style::Left));
     ACTION_EXEC("alignCenter", setChecked(style.halign() == Style::Center));
@@ -181,11 +183,14 @@ void CellToolBase::Private::updateActions(const Cell& cell)
 void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
 {
     // Enable/disable actions.
-    const QList<KAction*> actions = q->actions().values();
-    for (int i = 0; i < actions.count(); ++i)
+    const QList<KAction *> actions = q->actions().values();
+    for (int i = 0; i < actions.count(); ++i) {
         actions[i]->setEnabled(enable);
+    }
     q->action("insertFormula")->setEnabled(enable);
-    if (externalEditor) externalEditor->setEnabled(enable);
+    if (externalEditor) {
+        externalEditor->setEnabled(enable);
+    }
 
     // These actions are always enabled.
     q->action("copy")->setEnabled(true);
@@ -195,7 +200,7 @@ void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
     q->action("edit_find_last")->setEnabled(true);
 }
 
-void CellToolBase::Private::processEnterKey(QKeyEvent* event)
+void CellToolBase::Private::processEnterKey(QKeyEvent *event)
 {
 // array is true, if ctrl+alt are pressed
     bool array = (event->modifiers() & Qt::AltModifier) &&
@@ -245,9 +250,10 @@ void CellToolBase::Private::processArrowKey(QKeyEvent *event)
     /* NOTE:  hitting the tab key also calls this function.  Don't forget
         to account for it
     */
-    register Sheet * const sheet = q->selection()->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = q->selection()->activeSheet();
+    if (!sheet) {
         return;
+    }
 
     /* save changes to the current editor */
     q->selection()->emitCloseEditor(true);
@@ -263,16 +269,18 @@ void CellToolBase::Private::processArrowKey(QKeyEvent *event)
         direction = Top;
         break;
     case Qt::Key_Left:
-        if (sheet->layoutDirection() == Qt::RightToLeft)
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
             direction = Right;
-        else
+        } else {
             direction = Left;
+        }
         break;
     case Qt::Key_Right:
-        if (sheet->layoutDirection() == Qt::RightToLeft)
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
             direction = Left;
-        else
+        } else {
             direction = Right;
+        }
         break;
     case Qt::Key_Tab:
         direction = Right;
@@ -291,17 +299,18 @@ void CellToolBase::Private::processArrowKey(QKeyEvent *event)
     event->accept(); // QKeyEvent
 }
 
-void CellToolBase::Private::processEscapeKey(QKeyEvent * event)
+void CellToolBase::Private::processEscapeKey(QKeyEvent *event)
 {
     q->selection()->emitCloseEditor(false); // discard changes
     event->accept(); // QKeyEvent
 }
 
-bool CellToolBase::Private::processHomeKey(QKeyEvent* event)
+bool CellToolBase::Private::processHomeKey(QKeyEvent *event)
 {
-    register Sheet * const sheet = q->selection()->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = q->selection()->activeSheet();
+    if (!sheet) {
         return false;
+    }
 
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
 
@@ -333,13 +342,15 @@ bool CellToolBase::Private::processHomeKey(QKeyEvent* event)
             }
 
             int col = (!cell.isNull() ? cell.column() : 1);
-            if (col == marker.x())
+            if (col == marker.x()) {
                 col = 1;
+            }
             destination = QPoint(col, marker.y());
         }
 
-        if (q->selection()->marker() == destination)
+        if (q->selection()->marker() == destination) {
             return false;
+        }
 
         if (makingSelection) {
             q->selection()->update(destination);
@@ -354,9 +365,10 @@ bool CellToolBase::Private::processHomeKey(QKeyEvent* event)
 
 bool CellToolBase::Private::processEndKey(QKeyEvent *event)
 {
-    register Sheet * const sheet = q->selection()->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = q->selection()->activeSheet();
+    if (!sheet) {
         return false;
+    }
 
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
     Cell cell;
@@ -378,8 +390,9 @@ bool CellToolBase::Private::processEndKey(QKeyEvent *event)
         col = (cell.isNull()) ? q->maxCol() : cell.column();
 
         QPoint destination(col, marker.y());
-        if (destination == marker)
+        if (destination == marker) {
             return false;
+        }
 
         if (makingSelection) {
             q->selection()->update(destination);
@@ -400,8 +413,9 @@ bool CellToolBase::Private::processPriorKey(QKeyEvent *event)
     QPoint marker = q->selection()->marker();
 
     QPoint destination(marker.x(), qMax(1, marker.y() - 10));
-    if (destination == marker)
+    if (destination == marker) {
         return false;
+    }
 
     if (makingSelection) {
         q->selection()->update(destination);
@@ -422,8 +436,9 @@ bool CellToolBase::Private::processNextKey(QKeyEvent *event)
     QPoint marker = q->selection()->marker();
     QPoint destination(marker.x(), qMax(1, marker.y() + 10));
 
-    if (marker == destination)
+    if (marker == destination) {
         return false;
+    }
 
     if (makingSelection) {
         q->selection()->update(destination);
@@ -437,7 +452,7 @@ bool CellToolBase::Private::processNextKey(QKeyEvent *event)
 
 void CellToolBase::Private::processOtherKey(QKeyEvent *event)
 {
-    register Sheet * const sheet = q->selection()->activeSheet();
+    register Sheet *const sheet = q->selection()->activeSheet();
 
     // No null character ...
     if (event->text().isEmpty() || !q->selection()->activeSheet()->map()->isReadWrite() ||
@@ -455,9 +470,10 @@ void CellToolBase::Private::processOtherKey(QKeyEvent *event)
 
 bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
 {
-    register Sheet * const sheet = q->selection()->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = q->selection()->activeSheet();
+    if (!sheet) {
         return false;
+    }
 
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
 
@@ -473,7 +489,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
     /* here, we want to move to the first or last cell in the given direction that is
         actually being used.  Ignore empty cells and cells on hidden rows/columns */
     switch (event->key()) {
-        //Ctrl+Qt::Key_Up
+    //Ctrl+Qt::Key_Up
     case Qt::Key_Up:
 
         cell = Cell(sheet, marker.x(), marker.y());
@@ -487,8 +503,9 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                     searchThroughEmpty = false;
                 }
                 row--;
-                if (row > 0)
+                if (row > 0) {
                     cell = Cell(sheet, cell.column(), row);
+                }
             }
             cell = lastCell;
         }
@@ -501,10 +518,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             }
         }
 
-        if (cell.isNull())
+        if (cell.isNull()) {
             row = 1;
-        else
+        } else {
             row = cell.row();
+        }
 
         int lastHiddenOrFiltered;
         while (sheet->rowFormats()->isHiddenOrFiltered(row, &lastHiddenOrFiltered)) {
@@ -515,7 +533,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
         destination.setY(qBound(1, row, q->maxRow()));
         break;
 
-        //Ctrl+Qt::Key_Down
+    //Ctrl+Qt::Key_Down
     case Qt::Key_Down:
 
         cell = Cell(sheet, marker.x(), marker.y());
@@ -542,10 +560,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             }
         }
 
-        if (cell.isNull())
+        if (cell.isNull()) {
             row = marker.y();
-        else
+        } else {
             row = cell.row();
+        }
 
         int firstHiddenOrFiltered;
         while (row >= 1 && sheet->rowFormats()->isHiddenOrFiltered(row, 0, &firstHiddenOrFiltered)) {
@@ -584,10 +603,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 }
             }
 
-            if (cell.isNull())
+            if (cell.isNull()) {
                 col = marker.x();
-            else
+            } else {
                 col = cell.column();
+            }
 
             while (sheet->columnFormat(col)->isHiddenOrFiltered()) {
                 col--;
@@ -607,8 +627,9 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                         searchThroughEmpty = false;
                     }
                     col--;
-                    if (col > 0)
+                    if (col > 0) {
                         cell = Cell(sheet, col, cell.row());
+                    }
                 }
                 cell = lastCell;
             }
@@ -621,10 +642,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 }
             }
 
-            if (cell.isNull())
+            if (cell.isNull()) {
                 col = 1;
-            else
+            } else {
                 col = cell.column();
+            }
 
             while (sheet->columnFormat(col)->isHiddenOrFiltered()) {
                 col++;
@@ -650,8 +672,9 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                         searchThroughEmpty = false;
                     }
                     col--;
-                    if (col > 0)
+                    if (col > 0) {
                         cell = Cell(sheet, col, cell.row());
+                    }
                 }
                 cell = lastCell;
             }
@@ -664,10 +687,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 }
             }
 
-            if (cell.isNull())
+            if (cell.isNull()) {
                 col = 1;
-            else
+            } else {
                 col = cell.column();
+            }
 
             while (sheet->columnFormat(col)->isHiddenOrFiltered()) {
                 col++;
@@ -700,10 +724,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 }
             }
 
-            if (cell.isNull())
+            if (cell.isNull()) {
                 col = marker.x();
-            else
+            } else {
                 col = cell.column();
+            }
 
             while (sheet->columnFormat(col)->isHiddenOrFiltered()) {
                 col--;
@@ -716,8 +741,9 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
 
     }
 
-    if (marker == destination)
+    if (marker == destination) {
         return false;
+    }
 
     if (makingSelection) {
         q->selection()->update(destination);
@@ -728,19 +754,21 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
     return true;
 }
 
-bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
+bool CellToolBase::Private::formatKeyPress(QKeyEvent *_ev)
 {
-    if (!(_ev->modifiers() & Qt::ControlModifier))
+    if (!(_ev->modifiers() & Qt::ControlModifier)) {
         return false;
+    }
 
     int key = _ev->key();
     if (key != Qt::Key_Exclam && key != Qt::Key_At &&
             key != Qt::Key_Ampersand && key != Qt::Key_Dollar &&
             key != Qt::Key_Percent && key != Qt::Key_AsciiCircum &&
-            key != Qt::Key_NumberSign)
+            key != Qt::Key_NumberSign) {
         return false;
+    }
 
-    StyleCommand* command = new StyleCommand();
+    StyleCommand *command = new StyleCommand();
     command->setSheet(q->selection()->activeSheet());
 
     switch (_ev->key()) {
@@ -800,9 +828,10 @@ QRect CellToolBase::Private::moveDirection(Calligra::Sheets::MoveTo direction, b
 {
     kDebug(36005) << "Canvas::moveDirection";
 
-    register Sheet * const sheet = q->selection()->activeSheet();
-    if (!sheet)
+    register Sheet *const sheet = q->selection()->activeSheet();
+    if (!sheet) {
         return QRect();
+    }
 
     QPoint destination;
     QPoint cursor = q->selection()->cursor();
@@ -904,7 +933,7 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
     QPen pen(QApplication::palette().text().color(), q->canvas()->viewConverter()->viewToDocumentX(2.0));
     painter.setPen(pen);
 
-    const Calligra::Sheets::Selection* selection = q->selection();
+    const Calligra::Sheets::Selection *selection = q->selection();
     const QRect currentRange = selection->extendToMergedAreas(QRect(selection->anchor(), selection->marker()));
     Region::ConstIterator end(selection->constEnd());
     for (Region::ConstIterator it(selection->constBegin()); it != end; ++it) {
@@ -1110,7 +1139,7 @@ void CellToolBase::Private::retrieveMarkerInfo(const QRect &cellRange, const QRe
     // Everything is in document coordinates here.
     // The layout direction, which is view dependent, is applied afterwards.
 
-    const Sheet* sheet = q->selection()->activeSheet();
+    const Sheet *sheet = q->selection()->activeSheet();
     const QRectF visibleRect = sheet->cellCoordinatesToDocument(cellRange);
 
     /* these vars are used for clarity, the array for simpler function arguments  */
@@ -1135,9 +1164,9 @@ void CellToolBase::Private::retrieveMarkerInfo(const QRect &cellRange, const QRe
     positions[3] = qMin(bottom, viewRect.bottom());
 }
 
-QList<QAction*> CellToolBase::Private::popupActionList() const
+QList<QAction *> CellToolBase::Private::popupActionList() const
 {
-    QList<QAction*> actions;
+    QList<QAction *> actions;
     const Cell cell = Cell(q->selection()->activeSheet(), q->selection()->marker());
     const bool isProtected = !q->selection()->activeSheet()->map()->isReadWrite() ||
                              (q->selection()->activeSheet()->isProtected() &&
@@ -1171,7 +1200,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             actions.append(q->action("hideColumn"));
 
             q->action("showSelColumns")->setEnabled(false);
-            const ColumnFormat* columnFormat;
+            const ColumnFormat *columnFormat;
             Region::ConstIterator endOfList = q->selection()->constEnd();
             for (Region::ConstIterator it = q->selection()->constBegin(); it != endOfList; ++it) {
                 QRect range = (*it)->rect();
@@ -1250,7 +1279,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
 
 void CellToolBase::Private::createPopupMenuActions()
 {
-    QAction* action = 0;
+    QAction *action = 0;
 
     for (int i = 1; i <= 7; ++i) {
         action = new QAction(q);
@@ -1298,7 +1327,7 @@ void CellToolBase::Private::createPopupMenuActions()
     connect(action, SIGNAL(triggered(bool)), q, SLOT(comment()));
     popupMenuActions.insert("comment", action);
 
-    action = new KAction(koIcon("removecomment"),i18n("Clear Comment"), q);
+    action = new KAction(koIcon("removecomment"), i18n("Clear Comment"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(clearComment()));
     popupMenuActions.insert("clearComment", action);
 

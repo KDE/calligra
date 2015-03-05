@@ -45,7 +45,6 @@
 
 #include "kis_do_something_command.h"
 
-
 KisTransformProcessingVisitor::
 KisTransformProcessingVisitor(qreal  xscale, qreal  yscale,
                               qreal  xshear, qreal  yshear,
@@ -79,8 +78,8 @@ void KisTransformProcessingVisitor::visit(KisPaintLayer *layer, KisUndoAdapter *
 void KisTransformProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter)
 {
     using namespace KisDoSomethingCommandOps;
-    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, false));
-    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, true));
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer *>(layer, false));
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer *>(layer, true));
     transformClones(layer, undoAdapter);
 
 }
@@ -88,9 +87,9 @@ void KisTransformProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *
 void KisTransformProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
 {
     using namespace KisDoSomethingCommandOps;
-    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer*>(layer, false));
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer *>(layer, false));
     transformSelection(layer->internalSelection(), undoAdapter, ProgressHelper(layer));
-    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer*>(layer, true));
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer *>(layer, true));
 
     transformClones(layer, undoAdapter);
 }
@@ -102,8 +101,8 @@ void KisTransformProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapte
                           m_angle, m_tx, m_ty, 0,
                           m_filter);
 
-    KUndo2Command* command = layer->transform(tw.transform() * m_shapesCorrection);
-    if(command) {
+    KUndo2Command *command = layer->transform(tw.transform() * m_shapesCorrection);
+    if (command) {
         undoAdapter->addCommand(command);
     }
 
@@ -113,9 +112,9 @@ void KisTransformProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapte
 void KisTransformProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
 {
     using namespace KisDoSomethingCommandOps;
-    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer*>(layer, false));
+    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer *>(layer, false));
     transformSelection(layer->internalSelection(), undoAdapter, ProgressHelper(layer));
-    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer*>(layer, true));
+    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer *>(layer, true));
 
     transformClones(layer, undoAdapter);
 }
@@ -152,10 +151,12 @@ void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdap
 {
     QList<KisCloneLayerWSP> clones = layer->registeredClones();
 
-    foreach(KisCloneLayerSP clone, clones) {
+    foreach (KisCloneLayerSP clone, clones) {
         // we have just casted an object from a weak pointer,
         // so check validity first
-        if(!clone) continue;
+        if (!clone) {
+            continue;
+        }
 
         KisTransformWorker tw(clone->projection(), m_sx, m_sy, m_shearx, m_sheary,
                               m_shearOrigin.x(), m_shearOrigin.y(),
@@ -188,7 +189,7 @@ void KisTransformProcessingVisitor::transformPaintDevice(KisPaintDeviceSP device
 
 void KisTransformProcessingVisitor::transformSelection(KisSelectionSP selection, KisUndoAdapter *adapter, const ProgressHelper &helper)
 {
-    if(selection->hasPixelSelection()) {
+    if (selection->hasPixelSelection()) {
         transformPaintDevice(selection->pixelSelection(), adapter, helper);
     }
 
@@ -198,7 +199,7 @@ void KisTransformProcessingVisitor::transformSelection(KisSelectionSP selection,
                               m_angle, m_tx, m_ty, 0,
                               m_filter);
 
-        KUndo2Command* command =
+        KUndo2Command *command =
             selection->shapeSelection()->transform(tw.transform() * m_shapesCorrection);
         if (command) {
             adapter->addCommand(command);

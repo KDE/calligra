@@ -34,66 +34,65 @@ class KOWIDGETS_EXPORT KoResourceModel : public KoResourceModelBase
 {
     Q_OBJECT
 public:
-    explicit KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject * parent = 0);
+    explicit KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject *parent = 0);
     virtual ~KoResourceModel();
 
     /// reimplemented
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     /// reimplemented
-    virtual int columnCount ( const QModelIndex & parent = QModelIndex() ) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     /// reimplemented
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     /// reimplemented
-    virtual QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const;
+    virtual QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
     /// Sets the number of columns to display
-    void setColumnCount( int columnCount );
+    void setColumnCount(int columnCount);
 
     /// Extensions to Qt::ItemDataRole.
-    enum ItemDataRole
-    {
+    enum ItemDataRole {
         /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
         LargeThumbnailRole = 33
     };
 
-    QModelIndex indexFromResource(KoResource* resource) const;
+    QModelIndex indexFromResource(KoResource *resource) const;
 
     /// facade for KoAbstractResourceServerAdapter
     QString extensions() const;
     void importResourceFile(const QString &filename);
     void importResourceFile(const QString &filename, bool fileCreation);
-    bool removeResource(KoResource* resource);
-    void removeResourceFile(const QString & filename);
+    bool removeResource(KoResource *resource);
+    void removeResourceFile(const QString &filename);
     QStringList assignedTagsList(KoResource *resource) const;
-    void addTag(KoResource* resource, const QString& tag);
-    void deleteTag( KoResource* resource, const QString& tag);
+    void addTag(KoResource *resource, const QString &tag);
+    void deleteTag(KoResource *resource, const QString &tag);
     QStringList tagNamesList() const;
-    QStringList searchTag(const QString& lineEditText);
+    QStringList searchTag(const QString &lineEditText);
     void enableResourceFiltering(bool enable);
-    void setCurrentTag(const QString& currentTag);
-    void searchTextChanged(const QString& searchString);
+    void setCurrentTag(const QString &currentTag);
+    void searchTextChanged(const QString &searchString);
     void updateServer();
     int resourcesCount() const;
     QList<KoResource *> currentlyVisibleResources() const;
     QList<KoResource *> serverResources() const;
     void tagCategoryMembersChanged();
-    void tagCategoryAdded(const QString& tag);
-    void tagCategoryRemoved(const QString& tag);
+    void tagCategoryAdded(const QString &tag);
+    void tagCategoryRemoved(const QString &tag);
 
     QString serverType() const;
 
 Q_SIGNALS:
     /// XXX: not sure if this is the best place for these
     void tagBoxEntryModified();
-    void tagBoxEntryAdded(const QString& tag);
-    void tagBoxEntryRemoved(const QString& tag);
+    void tagBoxEntryAdded(const QString &tag);
+    void tagBoxEntryRemoved(const QString &tag);
 
 private Q_SLOTS:
     void resourceAdded(KoResource *resource);
     void resourceRemoved(KoResource *resource);
     void resourceChanged(KoResource *resource);
     void tagBoxEntryWasModified();
-    void tagBoxEntryWasAdded(const QString& tag);
-    void tagBoxEntryWasRemoved(const QString& tag);
+    void tagBoxEntryWasAdded(const QString &tag);
+    void tagBoxEntryWasRemoved(const QString &tag);
 
 private:
     QSharedPointer<KoAbstractResourceServerAdapter> m_resourceAdapter;

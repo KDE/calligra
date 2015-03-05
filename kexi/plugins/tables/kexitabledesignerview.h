@@ -71,7 +71,7 @@ public:
 
     virtual ~KexiTableDesignerView();
 
-    KexiTablePart::TempData* tempData() const;
+    KexiTablePart::TempData *tempData() const;
 
     /*! Clears field information entered for row.
      This is performed by removing values from caption and data type columns.
@@ -80,12 +80,12 @@ public:
 
     /*! Inserts a new field with \a caption for \a row.
      Property set is also created.  */
-    virtual void insertField(int row, const QString& caption, bool addCommand = false);
+    virtual void insertField(int row, const QString &caption, bool addCommand = false);
 
     /*! Inserts a new \a field for \a row.
      Property set is also created. \a set will be deeply-copied into the new set.
      Used by InsertFieldCommand to insert a new field. */
-    virtual void insertField(int row, KoProperty::Set& set, bool addCommand = false);
+    virtual void insertField(int row, KoProperty::Set &set, bool addCommand = false);
 
     /*! Inserts a new empty row at position \a row.
      Used by RemoveFieldCommand as a part of undo inserting a new field;
@@ -101,25 +101,25 @@ public:
      If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
      If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
     virtual void changeFieldPropertyForRow(int row,
-                                           const QByteArray& propertyName, const QVariant& newValue,
-                                           KoProperty::Property::ListData* const listData, bool addCommand);
+                                           const QByteArray &propertyName, const QVariant &newValue,
+                                           KoProperty::Property::ListData *const listData, bool addCommand);
 
     /*! Changes property \a propertyName to \a newValue.
      Works exactly like changeFieldPropertyForRow() except the field is pointed by \a fieldUID.
      Used by ChangeFieldPropertyCommand to change field's property. */
-    void changeFieldProperty(int fieldUID, const QByteArray& propertyName,
-                             const QVariant& newValue, KoProperty::Property::ListData* const listData = 0,
+    void changeFieldProperty(int fieldUID, const QByteArray &propertyName,
+                             const QVariant &newValue, KoProperty::Property::ListData *const listData = 0,
                              bool addCommand = false);
 
     /*! Changes visibility of property \a propertyName to \a visible for a field pointed by \a fieldUID.
      Used by ChangePropertyVisibilityCommand. */
-    void changePropertyVisibility(int fieldUID, const QByteArray& propertyName, bool visible);
+    void changePropertyVisibility(int fieldUID, const QByteArray &propertyName, bool visible);
 
     /*! Builds table field's schema by looking at the \a set. */
-    KexiDB::Field * buildField(const KoProperty::Set &set) const;
+    KexiDB::Field *buildField(const KoProperty::Set &set) const;
 
     /*! Creates temporary table for the current design and returns debug string for it. */
-    virtual QString debugStringForCurrentTableSchema(tristate& result);
+    virtual QString debugStringForCurrentTableSchema(tristate &result);
 
     /*! Simulates execution of alter table, and puts debug into \a debugTarget.
      A case when debugTarget is not 0 is true for the alter table test suite. */
@@ -142,7 +142,7 @@ protected Q_SLOTS:
 
     //! Called before cell change in tableview.
     void slotBeforeCellChanged(KexiDB::RecordData *record, int colnum,
-                               QVariant& newValue, KexiDB::ResultInfo* result);
+                               QVariant &newValue, KexiDB::ResultInfo *result);
 
     //! Called on row change in a tableview.
     void slotRowUpdated(KexiDB::RecordData *record);
@@ -151,11 +151,11 @@ protected Q_SLOTS:
     void slotRowInserted();
 
     //! Called before row deleting in tableview.
-    void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint);
+    void slotAboutToDeleteRow(KexiDB::RecordData &record, KexiDB::ResultInfo *result, bool repaint);
 
     /*! Called after any property has been changed in the current property set,
      to perform some actions (like updating other dependent properties) */
-    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    void slotPropertyChanged(KoProperty::Set &set, KoProperty::Property &property);
 
     /*! Toggles primary key for currently selected field.
      Does nothing for empty row. */
@@ -180,7 +180,7 @@ protected:
      The property set will be asigned to \a row, and owned by this dialog.
      If \a newOne is true, the property set will be marked as newly created.
      \return newly created property set. */
-    KoProperty::Set* createPropertySet(int row, const KexiDB::Field& field, bool newOne = false);
+    KoProperty::Set *createPropertySet(int row, const KexiDB::Field &field, bool newOne = false);
 
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
 
@@ -193,14 +193,14 @@ protected:
     /*! Reimplemented from KexiView, because tables creation is more complex.
      No table schema altering is required, so just buildSchema() is used to create a new schema.
     */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
-                                             KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+    virtual KexiDB::SchemaData *storeNewData(const KexiDB::SchemaData &sdata,
+            KexiView::StoreNewDataOptions options,
+            bool &cancel);
 
     /*! Reimplemented from KexiView, because cloning of table objects is more complex. */
-    virtual KexiDB::SchemaData* copyData(const KexiDB::SchemaData& sdata,
-                                          KexiView::StoreNewDataOptions options,
-                                          bool &cancel);
+    virtual KexiDB::SchemaData *copyData(const KexiDB::SchemaData &sdata,
+                                         KexiView::StoreNewDataOptions options,
+                                         bool &cancel);
 
     /*! Reimplemented from KexiView, because table storage is more complex.
      Table schema altering may be required, so just buildSchema() is used to create a new schema.
@@ -225,27 +225,27 @@ protected:
      \a aWasPKey is internal.
      If \a commandGroup is not 0, it is used as parent group for storing actions' history. */
     void switchPrimaryKey(KoProperty::Set &propertySet, bool set, bool aWasPKey = false,
-                          KexiTableDesignerCommands::Command* commandGroup = 0);
+                          KexiTableDesignerCommands::Command *commandGroup = 0);
 
     //! Gets subtype strings and names for type \a fieldType.
     void getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup,
-                            QStringList& stringsList, QStringList& namesList);
+                            QStringList &stringsList, QStringList &namesList);
 
     /*! Adds history command \a command to the undo/redo buffer.
      If \a execute is true, the command is executed afterwards. */
-    void addHistoryCommand(KexiTableDesignerCommands::Command* command, bool execute);
+    void addHistoryCommand(KexiTableDesignerCommands::Command *command, bool execute);
 
     //! Updates undo/redo shared actions availability by looking at command history's action
     void updateUndoRedoActions();
 
 #ifdef KEXI_DEBUG_GUI
-    void debugCommand(const KUndo2Command* command, int nestingLevel);
+    void debugCommand(const KUndo2Command *command, int nestingLevel);
 #endif
 
     /*! Inserts a new \a field for \a row.
      Property set is also created. If \a set is not 0 (the default),
      it will be copied into the new set. Used by insertField(). */
-    void insertFieldInternal(int row, KoProperty::Set* set, const QString& caption, bool addCommand);
+    void insertFieldInternal(int row, KoProperty::Set *set, const QString &caption, bool addCommand);
 
     //! Reimplemented to pass the information also to the "Lookup" tab
     virtual void propertySetSwitched();
@@ -257,7 +257,7 @@ protected:
     bool isPhysicalAlteringNeeded();
 
 private:
-    KexiTableDesignerViewPrivate * const d;
+    KexiTableDesignerViewPrivate *const d;
 };
 
 #endif

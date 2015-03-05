@@ -25,7 +25,6 @@
 
 class KisCanvas2;
 
-
 class KisToolTransformConfigWidget : public QWidget, private Ui::WdgToolTransform
 {
     Q_OBJECT

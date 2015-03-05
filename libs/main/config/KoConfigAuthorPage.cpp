@@ -49,9 +49,8 @@ public:
     QToolButton *deleteUser;
 };
 
-
 KoConfigAuthorPage::KoConfigAuthorPage()
-        : d(new Private)
+    : d(new Private)
 {
     QGridLayout *layout = new QGridLayout;
 
@@ -92,7 +91,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     KConfigGroup authorGroup(config, "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
 
-    foreach (const QString &profile , profiles) {
+    foreach (const QString &profile, profiles) {
         KConfigGroup cgs(&authorGroup, "Author-" + profile);
         aUi = new Ui::KoConfigAuthorPage();
         w = new QWidget;
@@ -137,7 +136,7 @@ void KoConfigAuthorPage::profileChanged(int i)
 void KoConfigAuthorPage::addUser()
 {
     bool ok;
-    QString profileName = QInputDialog::getText(this, i18n("Name of Profile"), i18n("Name (not duplicate or blank name):"),QLineEdit::Normal, "", &ok);
+    QString profileName = QInputDialog::getText(this, i18n("Name of Profile"), i18n("Name (not duplicate or blank name):"), QLineEdit::Normal, "", &ok);
 
     if (!ok) {
         return;
@@ -209,6 +208,5 @@ void KoConfigAuthorPage::apply()
     authorGroup.writeEntry("profile-names", profiles);
     authorGroup.sync();
 }
-
 
 #include <KoConfigAuthorPage.moc>

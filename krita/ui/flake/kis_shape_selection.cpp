@@ -19,7 +19,6 @@
 
 #include "kis_shape_selection.h"
 
-
 #include <QPainter>
 #include <QTimer>
 #include <kundo2command.h>
@@ -62,12 +61,11 @@
 #include "kis_take_all_shapes_command.h"
 #include "kis_image_view_converter.h"
 
-
 #include <kis_debug.h>
 
 KisShapeSelection::KisShapeSelection(KisImageWSP image, KisSelectionWSP selection)
-        : KoShapeLayer(m_model = new KisShapeSelectionModel(image, selection, this))
-        , m_image(image)
+    : KoShapeLayer(m_model = new KisShapeSelectionModel(image, selection, this))
+    , m_image(image)
 {
     Q_ASSERT(m_image);
     setShapeId("KisShapeSelection");
@@ -87,8 +85,8 @@ KisShapeSelection::~KisShapeSelection()
     delete m_converter;
 }
 
-KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection)
-        : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
+KisShapeSelection::KisShapeSelection(const KisShapeSelection &rhs, KisSelection *selection)
+    : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
 {
     m_image = rhs.m_image;
     m_converter = new KisImageViewConverter(m_image);
@@ -98,7 +96,7 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     KoShapeOdfSaveHelper saveHelper(rhs.shapes());
     KoDrag drag;
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
-    QMimeData* mimeData = drag.mimeData();
+    QMimeData *mimeData = drag.mimeData();
 
     Q_ASSERT(mimeData->hasFormat(KoOdf::mimeType(KoOdf::Text)));
 
@@ -110,24 +108,25 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     }
 }
 
-KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
+KisSelectionComponent *KisShapeSelection::clone(KisSelection *selection)
 {
     return new KisShapeSelection(*this, selection);
 }
 
-bool KisShapeSelection::saveSelection(KoStore * store) const
+bool KisShapeSelection::saveSelection(KoStore *store) const
 {
-    
+
     KoOdfWriteStore odfStore(store);
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedSaver;
     KisDocument::SavingContext documentContext(odfStore, embeddedSaver);
 
-    if (!store->open("content.xml"))
+    if (!store->open("content.xml")) {
         return false;
+    }
 
     KoStoreDevice storeDev(store);
-    KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
+    KoXmlWriter *docWriter = KoOdfWriteStore::createOasisXmlWriter(&storeDev, "office:document-content");
 
     // for office:master-styles
     KTemporaryFile masterStyles;
@@ -186,8 +185,9 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
     docWriter->endDocument();
     delete docWriter;
 
-    if (!store->close())
+    if (!store->close()) {
         return false;
+    }
 
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 
@@ -197,8 +197,9 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
 
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
-    if (! shapeContext.saveDataCenter(documentContext.odfStore.store(), documentContext.odfStore.manifestWriter()))
+    if (! shapeContext.saveDataCenter(documentContext.odfStore.store(), documentContext.odfStore.manifestWriter())) {
         return false;
+    }
 
     // Write out manifest file
     if (!odfStore.closeManifestWriter()) {
@@ -209,7 +210,7 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
     return true;
 }
 
-bool KisShapeSelection::loadSelection(KoStore* store)
+bool KisShapeSelection::loadSelection(KoStore *store)
 {
     KoOdfReadStore odfStore(store);
     QString errorMessage;
@@ -250,13 +251,14 @@ bool KisShapeSelection::loadSelection(KoStore* store)
         return false;
     }
 
-    KoXmlElement * master = 0;
-    if (odfStore.styles().masterPages().contains("Standard"))
+    KoXmlElement *master = 0;
+    if (odfStore.styles().masterPages().contains("Standard")) {
         master = odfStore.styles().masterPages().value("Standard");
-    else if (odfStore.styles().masterPages().contains("Default"))
+    } else if (odfStore.styles().masterPages().contains("Default")) {
         master = odfStore.styles().masterPages().value("Default");
-    else if (! odfStore.styles().masterPages().empty())
+    } else if (! odfStore.styles().masterPages().empty()) {
         master = odfStore.styles().masterPages().begin().value();
+    }
 
     if (master) {
         const KoXmlElement *style = odfStore.styles().findStyle(
@@ -273,7 +275,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
     KoShapeLoadingContext shapeContext(context, 0);
 
     KoXmlElement layerElement;
-    forEachElement(layerElement, context.stylesReader().layerSet()) {
+    forEachElement (layerElement, context.stylesReader().layerSet()) {
         if (!loadOdf(layerElement, shapeContext)) {
             kWarning() << "Could not load vector layer!";
             return false;
@@ -281,8 +283,8 @@ bool KisShapeSelection::loadSelection(KoStore* store)
     }
 
     KoXmlElement child;
-    forEachElement(child, page) {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
+    forEachElement (child, page) {
+        KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
         if (shape) {
             addShape(shape);
         }
@@ -302,7 +304,7 @@ bool KisShapeSelection::updatesEnabled() const
     return m_model->updatesEnabled();
 }
 
-KUndo2Command* KisShapeSelection::resetToEmpty()
+KUndo2Command *KisShapeSelection::resetToEmpty()
 {
     return new KisTakeAllShapesCommand(this, true);
 }
@@ -324,10 +326,10 @@ bool KisShapeSelection::outlineCacheValid() const
 
 void KisShapeSelection::recalculateOutlineCache()
 {
-    QList<KoShape*> shapesList = shapes();
+    QList<KoShape *> shapesList = shapes();
 
     QPainterPath outline;
-    foreach(KoShape * shape, shapesList) {
+    foreach (KoShape *shape, shapesList) {
         QTransform shapeMatrix = shape->absoluteTransformation(0);
         outline = outline.united(shapeMatrix.map(shape->outline()));
     }
@@ -338,7 +340,7 @@ void KisShapeSelection::recalculateOutlineCache()
     m_outline = resolutionMatrix.map(outline);
 }
 
-void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
+void KisShapeSelection::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
@@ -353,13 +355,13 @@ void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection)
     renderSelection(projection, boundingRect.toAlignedRect());
 }
 
-void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection, const QRect& r)
+void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection, const QRect &r)
 {
     Q_ASSERT(projection);
     renderSelection(projection, r);
 }
 
-void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect& r)
+void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect &r)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
@@ -391,59 +393,62 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
     }
 }
 
-KoShapeManager* KisShapeSelection::shapeManager() const
+KoShapeManager *KisShapeSelection::shapeManager() const
 {
     return m_canvas->shapeManager();
 }
 
 KisShapeSelectionFactory::KisShapeSelectionFactory()
-        : KoShapeFactoryBase("KisShapeSelection", "selection shape container")
+    : KoShapeFactoryBase("KisShapeSelection", "selection shape container")
 {
     setHidden(true);
 }
 
 void KisShapeSelection::moveX(qint32 x)
 {
-    foreach (KoShape* shape, shapeManager()->shapes()) {
+    foreach (KoShape *shape, shapeManager()->shapes()) {
         if (shape != this) {
             QPointF pos = shape->position();
-            shape->setPosition(QPointF(pos.x() + x/m_image->xRes(), pos.y()));
+            shape->setPosition(QPointF(pos.x() + x / m_image->xRes(), pos.y()));
         }
     }
 }
 
 void KisShapeSelection::moveY(qint32 y)
 {
-    foreach (KoShape* shape, shapeManager()->shapes()) {
+    foreach (KoShape *shape, shapeManager()->shapes()) {
         if (shape != this) {
             QPointF pos = shape->position();
-            shape->setPosition(QPointF(pos.x(), pos.y() + y/m_image->yRes()));
+            shape->setPosition(QPointF(pos.x(), pos.y() + y / m_image->yRes()));
         }
     }
 }
 
 // TODO same code as in vector layer, refactor!
-KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
-    QList<KoShape*> shapes = m_canvas->shapeManager()->shapes();
-    if(shapes.isEmpty()) return 0;
+KUndo2Command *KisShapeSelection::transform(const QTransform &transform)
+{
+    QList<KoShape *> shapes = m_canvas->shapeManager()->shapes();
+    if (shapes.isEmpty()) {
+        return 0;
+    }
 
     QTransform realTransform = m_converter->documentToView() *
-        transform * m_converter->viewToDocument();
+                               transform * m_converter->viewToDocument();
 
     QList<QTransform> oldTransformations;
     QList<QTransform> newTransformations;
 
     // this code won't work if there are shapes, that inherit the transformation from the parent container.
     // the chart and tree shapes are examples for that, but they aren't used in krita and there are no other shapes like that.
-    foreach(const KoShape* shape, shapes) {
+    foreach (const KoShape *shape, shapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-        if (dynamic_cast<const KoShapeGroup*>(shape)) {
+        if (dynamic_cast<const KoShapeGroup *>(shape)) {
             newTransformations.append(oldTransform);
         } else {
             QTransform globalTransform = shape->absoluteTransformation(0);
             QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
-            newTransformations.append(localTransform*oldTransform);
+            newTransformations.append(localTransform * oldTransform);
         }
     }
 

@@ -36,15 +36,15 @@ void TestKoOdfLoadingContext::testFillStyleStack()
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
 #endif
-    const char * mimeType = "application/vnd.oasis.opendocument.text";
-    KoStore * store(KoStore::createStore("test.odt", KoStore::Write, mimeType));
+    const char *mimeType = "application/vnd.oasis.opendocument.text";
+    KoStore *store(KoStore::createStore("test.odt", KoStore::Write, mimeType));
     KoOdfWriteStore odfStore(store);
-    KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
 
-    KoXmlWriter* contentWriter = odfStore.contentWriter();
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
     QVERIFY(contentWriter != 0);
 
-    KoXmlWriter * bodyWriter = odfStore.bodyWriter();
+    KoXmlWriter *bodyWriter = odfStore.bodyWriter();
 
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
@@ -73,7 +73,7 @@ void TestKoOdfLoadingContext::testFillStyleStack()
     QVERIFY(store->open("styles.xml") == true);
 
     KoStoreDevice stylesDev(store);
-    KoXmlWriter* stylesWriter = KoOdfWriteStore::createOasisXmlWriter(&stylesDev, "office:document-styles");
+    KoXmlWriter *stylesWriter = KoOdfWriteStore::createOasisXmlWriter(&stylesDev, "office:document-styles");
 
     stylesWriter->startElement("office:styles");
     stylesWriter->startElement("style:style");
@@ -125,10 +125,10 @@ void TestKoOdfLoadingContext::testFillStyleStack()
     QVERIFY(body.isNull() == false);
 
     KoXmlElement tag;
-    forEachElement(tag, body) {
+    forEachElement (tag, body) {
         //tz: So now that I have a test the fails I can go on implementing the solution
         QCOMPARE(tag.localName(), QString("rect"));
-        KoStyleStack & styleStack = context.styleStack();
+        KoStyleStack &styleStack = context.styleStack();
         styleStack.save();
         context.fillStyleStack(tag, KoXmlNS::draw, "style-name", "graphic");
         styleStack.setTypeProperties("graphic");

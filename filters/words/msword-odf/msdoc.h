@@ -153,8 +153,7 @@
  * Specifies the version number of the file format used.  Superseded by
  * FibRgCswNew.nFibNew if it is present.
  */
-enum nFib
-{
+enum nFib {
     Word2nFib = 0x0063,
     Word6nFib = 0x0065,
     Word7nFib = 0x0067,   //also 0x0068
@@ -171,8 +170,7 @@ enum nFib
  * Specifies the location from which the offset of a page border is measured.
  * [MS-DOC] — v20101219
  */
-enum PgbOffsetFrom
-{
+enum PgbOffsetFrom {
     pgbFromText = 0x0,  //offset measured from the text
     pgbFromEdge         //offset measured from the edge of the page
 };
@@ -183,8 +181,7 @@ enum PgbOffsetFrom
  * case they can be a value in the range of 0x40 to 0xE3, inclusive.
  * [MS-DOC] — v20101219
  */
-enum BrcType
-{
+enum BrcType {
     BorderNone,                  // 0x00  No border.
     BorderSingle,                // 0x01  A single line.
     BorderDouble = 0x03,         // 0x03  A double line.
@@ -211,7 +208,7 @@ enum BrcType
     BorderThreeDEngrave,         // 0x19  A thin black outer border, a thick medium gray middle border, and a thin light gray inner border with no gaps between them.
     BorderOutset,                // 0x1A  A thin light gray outer border and a thin medium gray inner border with a large gap between them.
     BorderInset,                 // 0x1B  A thin medium gray outer border and a thin light gray inner border with a large gap between them.
-                                 // 0x40 - 0xE3  An image border.
+    // 0x40 - 0xE3  An image border.
     BorderNil = 0xFF             // 0xFF  This MUST be ignored.
 };
 
@@ -219,8 +216,7 @@ enum BrcType
  * Specifies the type of the section break that is being described.
  * [MS-DOC] — v20101219
  */
-enum SBkcOperand
-{
+enum SBkcOperand {
     bkcContinuous = 0x00,
     bkcNewColumn,
     bkcNewPage,
@@ -231,8 +227,7 @@ enum SBkcOperand
 /**
  * The Ipat enumeration is an index to a shading pattern.  [MS-DOC] — v20101219
  */
-enum IPAT
-{
+enum IPAT {
     ipatAuto,             //0x0000  Clear, ST_Shd: clear
     ipatSolid,            //0x0001  Solid, ST_Shd: solid
     ipatPct5,             //0x0002  5%,    ST_Shd: pct5
@@ -293,8 +288,7 @@ enum IPAT
  * The Kul enumeration specifies the style of underlining for text.  [MS-DOC] —
  * v20101219
  */
-enum KUL
-{
+enum KUL {
     kulNone,                //0x00 No underlining.
     kulSingle,              //0x01 Normal single underline.
     kulWords,               //0x02 Underline words only.
@@ -319,8 +313,7 @@ enum KUL
  * Specifies the list of numbering formats that can be used for a group of
  * automatically numbered objects.  [MS-OSHARED] — v20101219
  */
-enum MSONFC
-{
+enum MSONFC {
     msonfcArabic = 0x00, //decimal
     msonfcUCRoman,       //upperRoman
     msonfcLCRoman,       //lowerRoman
@@ -388,8 +381,7 @@ enum MSONFC
  * Specifies the Style Type.
  * [ECMA-376]
  */
-enum ST_StyleType
-{
+enum ST_StyleType {
     sgcUnknown = 0,
     sgcPara = 1,   //Paragraph style
     sgcChp = 2,    //Character style
@@ -441,8 +433,7 @@ enum TabLC {
 /**
  * The HALIGN enumeration specifies horizontal alignment.
  */
-enum HALIGN
-{
+enum HALIGN {
     hAlignLeft = 0x0,
     hAlignCenter = 0x1,
     hAlignRight = 0x2
@@ -451,8 +442,7 @@ enum HALIGN
 /**
  * The VALIGN enumeration specifies vertical alignment.
  */
-enum VALIGN
-{
+enum VALIGN {
     vAlignTop = 0x0,
     vAlignMiddle = 0x1,
     vAlignBottom = 0x2

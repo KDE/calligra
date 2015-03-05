@@ -18,7 +18,6 @@
 
 #include "palettedocker.h"
 
-
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -35,9 +34,10 @@
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY(PaletteDockerPluginFactory, registerPlugin<PaletteDockerPlugin>();)
-K_EXPORT_PLUGIN(PaletteDockerPluginFactory( "krita" ) )
+K_EXPORT_PLUGIN(PaletteDockerPluginFactory("krita"))
 
-class PaletteDockerDockFactory : public KoDockFactoryBase {
+class PaletteDockerDockFactory : public KoDockFactoryBase
+{
 public:
     PaletteDockerDockFactory()
     {
@@ -45,7 +45,7 @@ public:
 
     virtual QString id() const
     {
-        return QString( "PaletteDocker" );
+        return QString("PaletteDocker");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
@@ -53,10 +53,10 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    virtual QDockWidget *createDockWidget()
     {
-        PaletteDockerDock * dockWidget = new PaletteDockerDock();
-        
+        PaletteDockerDock *dockWidget = new PaletteDockerDock();
+
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -68,9 +68,7 @@ public:
     }
 private:
 
-
 };
-
 
 PaletteDockerPlugin::PaletteDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

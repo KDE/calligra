@@ -40,17 +40,17 @@ class KPLATOUI_EXPORT WorkPackageSendPanel : public QWidget, public Ui_WorkPacka
 {
     Q_OBJECT
 public:
-    explicit WorkPackageSendPanel( const QList<Node*> &tasks,  ScheduleManager *sm, QWidget *parent=0 );
+    explicit WorkPackageSendPanel(const QList<Node *> &tasks,  ScheduleManager *sm, QWidget *parent = 0);
 
 Q_SIGNALS:
-    void sendWorkpackages( const QList<Node*>&, Resource* );
+    void sendWorkpackages(const QList<Node *> &, Resource *);
 
 protected Q_SLOTS:
     void slotSendClicked();
 
 protected:
-    QMap<Resource*, QList<Node*> > m_resMap;
-    QMap<QPushButton*, Resource*> m_pbMap;
+    QMap<Resource *, QList<Node *> > m_resMap;
+    QMap<QPushButton *, Resource *> m_pbMap;
 };
 
 } //KPlato namespace

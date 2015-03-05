@@ -25,7 +25,7 @@
 
 using namespace MusicCore;
 
-RemoveChordCommand::RemoveChordCommand(MusicShape* shape, Chord* chord)
+RemoveChordCommand::RemoveChordCommand(MusicShape *shape, Chord *chord)
     : m_chord(chord), m_shape(shape), m_index(m_chord->voiceBar()->indexOfElement(m_chord))
 {
     if (chord->noteCount() == 0) {

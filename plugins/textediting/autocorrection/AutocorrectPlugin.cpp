@@ -25,13 +25,13 @@
 
 #include <KoTextEditingRegistry.h>
 
-K_PLUGIN_FACTORY( AutocorrectPluginFactory, registerPlugin<AutocorrectPlugin>(); )
-K_EXPORT_PLUGIN( AutocorrectPluginFactory("calligra_textediting_autocorrect") )
+K_PLUGIN_FACTORY(AutocorrectPluginFactory, registerPlugin<AutocorrectPlugin>();)
+K_EXPORT_PLUGIN(AutocorrectPluginFactory("calligra_textediting_autocorrect"))
 
-AutocorrectPlugin::AutocorrectPlugin( QObject *parent, const QVariantList& )
+AutocorrectPlugin::AutocorrectPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoTextEditingRegistry::instance()->add( new AutocorrectFactory());
+    KoTextEditingRegistry::instance()->add(new AutocorrectFactory());
 }
 
 #include <AutocorrectPlugin.moc>

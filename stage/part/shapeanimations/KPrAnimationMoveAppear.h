@@ -27,10 +27,10 @@
 class KPrAnimationMoveAppear : public KPrTranslateAnimation
 {
 public:
-    KPrAnimationMoveAppear( KoShape * shape, int step );
+    KPrAnimationMoveAppear(KoShape *shape, int step);
     virtual ~KPrAnimationMoveAppear();
 
-    virtual KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect );
+    virtual KPrAnimationData *animationData(KoCanvasBase *canvas, KoShapeManager *shapeManager, const QRectF &pageRect);
 };
 
 #endif /* KPRANIMATIONMOVEAPPEAR_H */

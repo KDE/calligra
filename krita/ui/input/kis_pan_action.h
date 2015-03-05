@@ -50,14 +50,14 @@ public:
 
     void begin(int shortcut, QEvent *event);
 
-    virtual void inputEvent(QEvent* event);
+    virtual void inputEvent(QEvent *event);
     void mouseMoved(const QPointF &lastPos, const QPointF &pos);
 
     virtual bool isShortcutRequired(int shortcut) const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KIS_PAN_ACTION_H

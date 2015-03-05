@@ -53,14 +53,16 @@ public:
     /**
      * \return the Sheet this AbstractRegionCommand works on
      */
-    Sheet* sheet() const {
+    Sheet *sheet() const
+    {
         return m_sheet;
     }
 
     /**
      * Sets \p sheet to be the Sheet to work on.
      */
-    void setSheet(Sheet* sheet) {
+    void setSheet(Sheet *sheet)
+    {
         m_sheet = sheet;
     }
 
@@ -70,7 +72,7 @@ public:
      * \return \c false if the command fails, was already executed once or is not approved
      * \see setRegisterUndo, isApproved
      */
-    virtual bool execute(KoCanvasBase* canvas = 0);
+    virtual bool execute(KoCanvasBase *canvas = 0);
 
     /**
      * Executes the actual operation.
@@ -87,7 +89,8 @@ public:
      * \see redo
      * \see undo
      */
-    virtual void setReverse(bool reverse) {
+    virtual void setReverse(bool reverse)
+    {
         m_reverse = reverse;
     }
 
@@ -95,7 +98,8 @@ public:
      * If \p registerUndo is \c true , this manipulator registers an
      * undo operation for the document.
      */
-    void setRegisterUndo(bool registerUndo) {
+    void setRegisterUndo(bool registerUndo)
+    {
         m_register = registerUndo;
     }
 
@@ -104,14 +108,16 @@ protected:
      * Processes \p element , a Region::Point or a Region::Range .
      * Invoked by mainProcessing() .
      */
-    virtual bool process(Element*) {
+    virtual bool process(Element *)
+    {
         return true;
     }
 
     /**
      * Preprocessing of the region.
      */
-    virtual bool preProcessing() {
+    virtual bool preProcessing()
+    {
         return true;
     }
 
@@ -123,7 +129,8 @@ protected:
     /**
      * Postprocessing of the region.
      */
-    virtual bool postProcessing() {
+    virtual bool postProcessing()
+    {
         return true;
     }
 
@@ -135,7 +142,7 @@ protected:
     bool isApproved() const;
 
 protected:
-    Sheet*  m_sheet;
+    Sheet  *m_sheet;
     bool    m_reverse   : 1;
     bool    m_firstrun  : 1;
     bool    m_register  : 1;

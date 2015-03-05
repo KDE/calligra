@@ -22,8 +22,6 @@
 #include <QSharedPointer>
 #include <krita_export.h>
 
-
-
 class KRITAUI_EXPORT KisSmoothingOptions
 {
 public:

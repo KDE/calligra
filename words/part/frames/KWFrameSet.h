@@ -45,7 +45,11 @@ public:
     /** fetch the frameset of a shape
      * @param shape the shape to fetch the frameset from
      */
-    static KWFrameSet *from(KoShape *shape) {KWFrame *f = dynamic_cast<KWFrame*>(shape->applicationData()); return f ? f->frameSetxx() : 0;}
+    static KWFrameSet *from(KoShape *shape)
+    {
+        KWFrame *f = dynamic_cast<KWFrame *>(shape->applicationData());
+        return f ? f->frameSetxx() : 0;
+    }
 
     /**
      * Add a new shape
@@ -66,20 +70,23 @@ public:
      * users to look for and use.
      * @param name the new name
      */
-    void setName(const QString &name) {
+    void setName(const QString &name)
+    {
         m_name = name;
     }
     /**
      * Return this framesets name.
      */
-    const QString &name() const {
+    const QString &name() const
+    {
         return m_name;
     }
 
     /**
      * List all frames this frameset has.  In the order that any content will flow through them.
      */
-    const QList<KWFrame*> frames() const {
+    const QList<KWFrame *> frames() const
+    {
         QList<KWFrame *> frms;
         foreach (KoShape *shape, m_shapes) {
             frms.append(dynamic_cast<KWFrame *>(shape->applicationData()));
@@ -91,17 +98,20 @@ public:
     /**
      * List all shapes this frameset has.  In the order that any content will flow through them.
      */
-    const QList<KoShape *> shapes() const {
+    const QList<KoShape *> shapes() const
+    {
         return m_shapes;
     }
     /**
      * Return the amount of frames this frameset has.
      */
-    int shapeCount() const {
+    int shapeCount() const
+    {
         return m_shapes.count();
     }
 
-    Words::FrameSetType type() const {
+    Words::FrameSetType type() const
+    {
         return m_type;
     }
 
@@ -133,14 +143,16 @@ protected:
      * Overwrite in inheriting classes to do something with the shape on add.
      * @param shape the shape that has just been added
      */
-    virtual void setupShape(KoShape *shape) {
+    virtual void setupShape(KoShape *shape)
+    {
         Q_UNUSED(shape);
     }
 
     /**
      * @param frame the frame that has just been added
      */
-    virtual void cleanupShape(KoShape *shape) {
+    virtual void cleanupShape(KoShape *shape)
+    {
         Q_UNUSED(shape);
     }
 

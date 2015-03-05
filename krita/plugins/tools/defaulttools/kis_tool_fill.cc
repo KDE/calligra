@@ -56,9 +56,8 @@
 #include <processing/fill_processing_visitor.h>
 #include <kis_processing_applicator.h>
 
-
-KisToolFill::KisToolFill(KoCanvasBase * canvas)
-        : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
+KisToolFill::KisToolFill(KoCanvasBase *canvas)
+    : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
 {
     setObjectName("tool_fill");
     m_feather = 0;
@@ -73,12 +72,11 @@ KisToolFill::~KisToolFill()
 {
 }
 
-void KisToolFill::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void KisToolFill::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     KisToolPaint::activate(toolActivation, shapes);
     m_configGroup = KGlobal::config()->group(toolId());
 }
-
 
 void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
 {
@@ -100,7 +98,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::HOVER_MODE);
 
     if (!currentNode() ||
-        !currentImage()->bounds().contains(m_startPos)) {
+            !currentImage()->bounds().contains(m_startPos)) {
 
         return;
     }
@@ -108,7 +106,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     // TODO: remove this block after recording refactoring
     if (image()) {
         KisNodeSP projectionNode;
-        if(m_unmerged) {
+        if (m_unmerged) {
             projectionNode = currentNode();
         } else {
             projectionNode = image()->root();
@@ -116,7 +114,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
         KisRecordedFillPaintAction paintAction(KisNodeQueryPath::absolutePath(currentNode()), m_startPos, KisNodeQueryPath::absolutePath(projectionNode));
         setupPaintAction(&paintAction);
         paintAction.setPattern(currentPattern());
-        if(m_usePattern) {
+        if (m_usePattern) {
             paintAction.setFillStyle(KisPainter::FillStylePattern);
         }
         image()->actionRecorder()->addAction(paintAction);
@@ -152,7 +150,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
     applicator.end();
 }
 
-QWidget* KisToolFill::createOptionWidget()
+QWidget *KisToolFill::createOptionWidget()
 {
     QWidget *widget = KisToolPaint::createOptionWidget();
     widget->setObjectName(toolId() + " option widget");
@@ -164,13 +162,11 @@ QWidget* KisToolFill::createOptionWidget()
              "mode into account. Selections and other extended "
              "features will also be disabled."));
 
-
     QLabel *lbl_threshold = new QLabel(i18n("Threshold: "), widget);
     m_slThreshold = new KisSliderSpinBox(widget);
     m_slThreshold->setObjectName("int_widget");
     m_slThreshold->setRange(1, 100);
     m_slThreshold->setPageStep(3);
-
 
     QLabel *lbl_sizemod = new QLabel(i18n("Grow selection: "), widget);
     m_sizemodWidget = new KisSliderSpinBox(widget);
@@ -183,7 +179,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_featherWidget = new KisSliderSpinBox(widget);
     m_featherWidget->setObjectName("feather");
     m_featherWidget->setRange(0, 40);
-    m_featherWidget->setSingleStep(1);   
+    m_featherWidget->setSingleStep(1);
     m_featherWidget->setSuffix(" px");
 
     QLabel *lbl_usePattern = new QLabel(i18n("Use pattern:"), widget);
@@ -193,23 +189,22 @@ QWidget* KisToolFill::createOptionWidget()
     QLabel *lbl_sampleMerged = new QLabel(i18n("Limit to current layer:"), widget);
     m_checkSampleMerged = new QCheckBox(QString(), widget);
 
-
     QLabel *lbl_fillSelection = new QLabel(i18n("Fill entire selection:"), widget);
     m_checkFillSelection = new QCheckBox(QString(), widget);
     m_checkFillSelection->setToolTip(i18n("When checked do not look at the current layer colors, but just fill all of the selected area"));
 
-    connect (m_useFastMode       , SIGNAL(toggled(bool))    , this, SLOT(slotSetUseFastMode(bool)));
-    connect (m_slThreshold       , SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
-    connect (m_sizemodWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
-    connect (m_featherWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
-    connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
-    connect (m_checkSampleMerged , SIGNAL(toggled(bool))    , this, SLOT(slotSetSampleMerged(bool)));
-    connect (m_checkFillSelection, SIGNAL(toggled(bool))    , this, SLOT(slotSetFillSelection(bool)));
+    connect(m_useFastMode, SIGNAL(toggled(bool)), this, SLOT(slotSetUseFastMode(bool)));
+    connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
+    connect(m_sizemodWidget, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
+    connect(m_featherWidget, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
+    connect(m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(slotSetUsePattern(bool)));
+    connect(m_checkSampleMerged, SIGNAL(toggled(bool)), this, SLOT(slotSetSampleMerged(bool)));
+    connect(m_checkFillSelection, SIGNAL(toggled(bool)), this, SLOT(slotSetFillSelection(bool)));
 
     addOptionWidgetOption(m_useFastMode, lbl_fastMode);
     addOptionWidgetOption(m_slThreshold, lbl_threshold);
-    addOptionWidgetOption(m_sizemodWidget      , lbl_sizemod);
-    addOptionWidgetOption(m_featherWidget      , lbl_feather);
+    addOptionWidgetOption(m_sizemodWidget, lbl_sizemod);
+    addOptionWidgetOption(m_featherWidget, lbl_feather);
 
     addOptionWidgetOption(m_checkFillSelection, lbl_fillSelection);
     addOptionWidgetOption(m_checkSampleMerged, lbl_sampleMerged);
@@ -218,8 +213,6 @@ QWidget* KisToolFill::createOptionWidget()
     updateGUI();
 
     widget->setFixedHeight(widget->sizeHint().height());
-
-
 
     // load configuration options
     m_useFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));

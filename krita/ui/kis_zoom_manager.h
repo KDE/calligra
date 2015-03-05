@@ -50,12 +50,13 @@ class KisZoomManager : public QObject
 
 public:
 
-    KisZoomManager(QPointer<KisView> view, KoZoomHandler*, KoCanvasController *);
+    KisZoomManager(QPointer<KisView> view, KoZoomHandler *, KoCanvasController *);
     ~KisZoomManager();
 
-    void setup(KActionCollection * actionCollection);
+    void setup(KActionCollection *actionCollection);
     void updateGUI();
-    KoZoomController * zoomController() const {
+    KoZoomController *zoomController() const
+    {
         return m_zoomController;
     }
 
@@ -77,13 +78,13 @@ public Q_SLOTS:
 private:
 
     QPointer<KisView> m_view;
-    KoZoomHandler * m_zoomHandler;
+    KoZoomHandler *m_zoomHandler;
     KoCanvasController *m_canvasController;
     KoZoomController *m_zoomController;
-    KoRuler * m_horizontalRuler;
-    KoRuler * m_verticalRuler;
-    KoZoomAction * m_zoomAction;
-    QWidget * m_zoomActionWidget;
+    KoRuler *m_horizontalRuler;
+    KoRuler *m_verticalRuler;
+    KoZoomAction *m_zoomAction;
+    QWidget *m_zoomActionWidget;
     QPoint m_rulersOffset;
 };
 

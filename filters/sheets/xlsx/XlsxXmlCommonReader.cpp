@@ -40,16 +40,18 @@
 class XlsxXmlCommonReader::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
-    ~Private() {
+    ~Private()
+    {
     }
 private:
 };
 
 XlsxXmlCommonReader::XlsxXmlCommonReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(writers)
-        , d(new Private)
+    : MSOOXML::MsooXmlReader(writers)
+    , d(new Private)
 {
     init();
 }
@@ -64,7 +66,7 @@ void XlsxXmlCommonReader::init()
     m_currentTextStyleProperties = 0;
 }
 
-QColor XlsxXmlCommonReader::tintedColor(const QColor& color, qreal tint)
+QColor XlsxXmlCommonReader::tintedColor(const QColor &color, qreal tint)
 {
     const int HLSMAX = 255; // Used for computing tint
     if (tint == 0.0 || !color.isValid()) {
@@ -73,10 +75,9 @@ QColor XlsxXmlCommonReader::tintedColor(const QColor& color, qreal tint)
     int h, l, s;
     color.getHsl(&h, &l, &s);
     if (tint < 0.0) {
-        l = floor( l * (1.0 + tint) );
-    }
-    else {
-        l = floor( l * (1.0 - tint) + (HLSMAX - HLSMAX * (1.0 - tint)) );
+        l = floor(l * (1.0 + tint));
+    } else {
+        l = floor(l * (1.0 - tint) + (HLSMAX - HLSMAX * (1.0 - tint)));
     }
     int r, g, b;
     color.getRgb(&r, &g, &b);
@@ -252,8 +253,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_vertAlign()
     TRY_READ_ATTR_WITHOUT_NS(val)
     if (val == "subscript") {
         m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSubScript);
-    }
-    else if (val == "superscript") {
+    } else if (val == "superscript") {
         m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     }
 
@@ -498,20 +498,17 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_color()
         }
     }
     if (!rgb.isEmpty()) {
-        m_currentColor = QString("#" + rgb.right(rgb.length()-2));
+        m_currentColor = QString("#" + rgb.right(rgb.length() - 2));
     }
     if (!theme.isEmpty()) {
         // Xlsx seems to switch these indices
-        if (theme == "0" ) {
+        if (theme == "0") {
             theme = "1";
-        }
-        else if (theme == "1" ) {
+        } else if (theme == "1") {
             theme = "0";
-        }
-        else if (theme == "2") {
+        } else if (theme == "2") {
             theme = "3";
-        }
-        else if (theme == "3") {
+        } else if (theme == "3") {
             theme = "2";
         }
         MSOOXML::DrawingMLColorSchemeItemBase *colorItemBase = m_themes->colorScheme.value(theme);

@@ -43,9 +43,9 @@ public:
     virtual ~KoPathToolHandle();
     virtual void paint(QPainter &painter, const KoViewConverter &converter) = 0;
     virtual void repaint() const = 0;
-    virtual KoInteractionStrategy * handleMousePress(KoPointerEvent *event) = 0;
+    virtual KoInteractionStrategy *handleMousePress(KoPointerEvent *event) = 0;
     // test if handle is still valid
-    virtual bool check(const QList<KoPathShape*> &selectedShapes) = 0;
+    virtual bool check(const QList<KoPathShape *> &selectedShapes) = 0;
 
 protected:
     uint handleRadius() const;
@@ -59,7 +59,7 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter);
     void repaint() const;
     KoInteractionStrategy *handleMousePress(KoPointerEvent *event);
-    virtual bool check(const QList<KoPathShape*> &selectedShapes);
+    virtual bool check(const QList<KoPathShape *> &selectedShapes);
     KoPathPoint *activePoint() const;
     KoPathPoint::PointType activePointType() const;
 private:
@@ -75,7 +75,7 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter);
     void repaint() const;
     KoInteractionStrategy *handleMousePress(KoPointerEvent *event);
-    virtual bool check(const QList<KoPathShape*> &selectedShapes);
+    virtual bool check(const QList<KoPathShape *> &selectedShapes);
 protected:
     KoParameterShape *m_parameterShape;
     int m_handleId;

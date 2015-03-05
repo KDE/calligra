@@ -32,20 +32,20 @@
 
 #include <MsooXmlReader_p.h>
 
-DocxXmlFontTableReaderContext::DocxXmlFontTableReaderContext(KoGenStyles& _styles)
-        : styles(&_styles)
+DocxXmlFontTableReaderContext::DocxXmlFontTableReaderContext(KoGenStyles &_styles)
+    : styles(&_styles)
 {
 }
 
 DocxXmlFontTableReader::DocxXmlFontTableReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(writers)
-        , m_context(0)
+    : MSOOXML::MsooXmlReader(writers)
+    , m_context(0)
 {
 }
 
-DocxXmlFontTableReader::DocxXmlFontTableReader(QIODevice* io, KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(io, writers)
-        , m_context(0)
+DocxXmlFontTableReader::DocxXmlFontTableReader(QIODevice *io, KoOdfWriters *writers)
+    : MSOOXML::MsooXmlReader(io, writers)
+    , m_context(0)
 {
 }
 
@@ -53,9 +53,9 @@ DocxXmlFontTableReader::~DocxXmlFontTableReader()
 {
 }
 
-KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus DocxXmlFontTableReader::read(MSOOXML::MsooXmlReaderContext *context)
 {
-    m_context = dynamic_cast<DocxXmlFontTableReaderContext*>(context);
+    m_context = dynamic_cast<DocxXmlFontTableReaderContext *>(context);
     kDebug() << "=============================";
     readNext();
     if (!isStartDocument()) {
@@ -125,8 +125,9 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_fonts()
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(font)) {
                 TRY_READ(font)
-                if (m_currentFontFace.isNull())
+                if (m_currentFontFace.isNull()) {
                     return KoFilter::WrongFormat;
+                }
                 kDebug() << "added font face:" << m_currentFontFace.name();
                 m_context->styles->insertFontFace(m_currentFontFace);
                 m_currentFontFace = KoFontFace();

@@ -44,7 +44,7 @@ public:
      * @param shapes the list of shapes this command works on
      * @param parent the parent command if this is a compound undo command.
      */
-    explicit KoParameterToPathCommand(const QList<KoParameterShape*> &shapes, KUndo2Command *parent = 0);
+    explicit KoParameterToPathCommand(const QList<KoParameterShape *> &shapes, KUndo2Command *parent = 0);
     virtual ~KoParameterToPathCommand();
 
     /// redo the command
@@ -52,7 +52,7 @@ public:
     /// revert the actions done in redo
     void undo();
 private:
-    KoParameterToPathCommandPrivate * const d;
+    KoParameterToPathCommandPrivate *const d;
 };
 
 #endif // KOPARAMETERTOPATHCOMMAND_H

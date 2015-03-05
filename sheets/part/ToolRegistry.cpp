@@ -30,15 +30,13 @@
 
 using namespace Calligra::Sheets;
 
-
 class ToolRegistry::Private
 {
 public:
 };
 
-
 ToolRegistry::ToolRegistry()
-        : d(new Private)
+    : d(new Private)
 {
     // Add the built-in cell tool.
     KoToolRegistry::instance()->add(new CellToolFactory("KSpreadCellToolId"));
@@ -51,7 +49,7 @@ ToolRegistry::~ToolRegistry()
     delete d;
 }
 
-ToolRegistry* ToolRegistry::instance()
+ToolRegistry *ToolRegistry::instance()
 {
     K_GLOBAL_STATIC(ToolRegistry, s_instance)
     return s_instance;
@@ -65,13 +63,13 @@ void ToolRegistry::loadTools()
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
     const KPluginInfo::List pluginInfos = KPluginInfo::fromServices(offers, moduleGroup);
-    foreach(KPluginInfo pluginInfo, pluginInfos) {
+    foreach (KPluginInfo pluginInfo, pluginInfos) {
         KPluginFactory *factory = KPluginLoader(*pluginInfo.service()).factory();
         if (!factory) {
             kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();
             continue;
         }
-        CellToolFactory* toolFactory = new CellToolFactory("KSpreadCellToolId");
+        CellToolFactory *toolFactory = new CellToolFactory("KSpreadCellToolId");
         if (!toolFactory) {
             kDebug(36002) << "Unable to create tool factory for" << pluginInfo.name();
             continue;

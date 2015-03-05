@@ -34,7 +34,7 @@ class DocxXmlNumberingReader : public DocxXmlDocumentReader
 public:
     explicit DocxXmlNumberingReader(KoOdfWriters *writers);
     virtual ~DocxXmlNumberingReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext *context = 0);
 
 protected:
 
@@ -56,9 +56,9 @@ protected:
     // of pPr features which can be used with lists.
     KoFilter::ConversionStatus read_pPr_numbering();
     KoFilter::ConversionStatus read_ind_numbering();
-/*     KoFilter::ConversionStatus read_rPr_numbering(); */
-/*     KoFilter::ConversionStatus read_rFonts_numbering(); */
-/*     KoFilter::ConversionStatus read_color_numbering(); */
+    /*     KoFilter::ConversionStatus read_rPr_numbering(); */
+    /*     KoFilter::ConversionStatus read_rFonts_numbering(); */
+    /*     KoFilter::ConversionStatus read_color_numbering(); */
 
     bool m_bulletStyle;
 
@@ -71,7 +71,7 @@ protected:
 private:
     void init();
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif //DOCXXMLNUMBERINGREADER_H

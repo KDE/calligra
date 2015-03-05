@@ -64,13 +64,12 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     m_myPaintShadeSelector->hide();
     m_minimalShadeSelector->hide();
 
-    connect(m_colorSelector,SIGNAL(settingsButtonClicked()), SIGNAL(openSettings()));
+    connect(m_colorSelector, SIGNAL(settingsButtonClicked()), SIGNAL(openSettings()));
 
     connect(this, SIGNAL(settingsChanged()), m_colorSelector,        SLOT(updateSettings()));
     connect(this, SIGNAL(settingsChanged()), m_myPaintShadeSelector, SLOT(updateSettings()));
     connect(this, SIGNAL(settingsChanged()), this,                   SLOT(updateSettings()));
     connect(this, SIGNAL(settingsChanged()), m_minimalShadeSelector, SLOT(updateSettings()));
-
 
     m_colorSelAction = new KAction("Show color selector", this);
     m_colorSelAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_I));
@@ -84,7 +83,6 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     m_minimalAction->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_N));
     connect(m_minimalAction, SIGNAL(triggered()), m_minimalShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
 
-
 }
 
 void KisColorSelectorContainer::unsetCanvas()
@@ -95,7 +93,7 @@ void KisColorSelectorContainer::unsetCanvas()
     m_canvas = 0;
 }
 
-void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
+void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
 {
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
@@ -117,7 +115,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
             connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
         }
 
-        KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
+        KActionCollection *actionCollection = canvas->viewManager()->actionCollection();
         actionCollection->addAction("show_color_selector", m_colorSelAction);
         actionCollection->addAction("show_mypaint_shade_selector", m_mypaintAction);
         actionCollection->addAction("show_minimal_shade_selector", m_minimalAction);
@@ -133,27 +131,29 @@ void KisColorSelectorContainer::updateSettings()
 
     QString type = cfg.readEntry("shadeSelectorType", "MyPaint");
 
-    QWidget* newShadeSelector;
-    if(type=="MyPaint")
+    QWidget *newShadeSelector;
+    if (type == "MyPaint") {
         newShadeSelector = m_myPaintShadeSelector;
-    else if (type=="Minimal")
+    } else if (type == "Minimal") {
         newShadeSelector = m_minimalShadeSelector;
-    else
+    } else {
         newShadeSelector = 0;
+    }
 
-    if (m_hideColorSelector)
+    if (m_hideColorSelector) {
         m_colorSelector->hide();
-    else
+    } else {
         m_colorSelector->show();
+    }
 
-
-    if(m_shadeSelector!=newShadeSelector && m_shadeSelector!=0) {
+    if (m_shadeSelector != newShadeSelector && m_shadeSelector != 0) {
         m_shadeSelector->hide();
     }
-    m_shadeSelector=newShadeSelector;
+    m_shadeSelector = newShadeSelector;
 
-    if(m_shadeSelector!=0)
+    if (m_shadeSelector != 0) {
         m_shadeSelector->show();
+    }
 
 }
 
@@ -167,8 +167,7 @@ void KisColorSelectorContainer::reactOnLayerChange()
                 m_colorSelAction->setEnabled(true);
                 m_mypaintAction->setEnabled(true);
                 m_minimalAction->setEnabled(true);
-            }
-            else {
+            } else {
                 //            m_colorSelAction->setEnabled(false);
                 //            m_mypaintAction->setEnabled(false);
                 //            m_minimalAction->setEnabled(false);
@@ -177,21 +176,19 @@ void KisColorSelectorContainer::reactOnLayerChange()
     }
 }
 
-void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)
+void KisColorSelectorContainer::resizeEvent(QResizeEvent *e)
 {
-    if(m_shadeSelector!=0) {
-        int minimumHeightForBothWidgets = m_colorSelector->minimumHeight()+m_shadeSelector->minimumHeight()+30; //+30 for the buttons (temporarily)
+    if (m_shadeSelector != 0) {
+        int minimumHeightForBothWidgets = m_colorSelector->minimumHeight() + m_shadeSelector->minimumHeight() + 30; //+30 for the buttons (temporarily)
 
-        if(height()<minimumHeightForBothWidgets && m_shadeSelectorHideable) {
+        if (height() < minimumHeightForBothWidgets && m_shadeSelectorHideable) {
             m_shadeSelector->hide();
-        }
-        else {
+        } else {
             m_shadeSelector->show();
         }
-        if(height() < width() && m_allowHorizontalLayout && m_shadeSelector!=m_minimalShadeSelector) {
+        if (height() < width() && m_allowHorizontalLayout && m_shadeSelector != m_minimalShadeSelector) {
             m_widgetLayout->setDirection(QBoxLayout::LeftToRight);
-        }
-        else {
+        } else {
             m_widgetLayout->setDirection(QBoxLayout::TopToBottom);
         }
     }

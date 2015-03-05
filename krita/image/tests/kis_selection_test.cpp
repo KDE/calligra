@@ -19,7 +19,6 @@
 #include "kis_selection_test.h"
 #include <qtest_kde.h>
 
-
 #include <kis_debug.h>
 #include <QRect>
 
@@ -56,7 +55,7 @@ void KisSelectionTest::testGrayColorspaceConversion()
     QCOMPARE(csNoA->pixelSize(), 1U);
 
     quint8 color1[1] = {128};
-    quint8 color2[2] = {64,32};
+    quint8 color2[2] = {64, 32};
 
     csA->convertPixelsTo(color2, color1, csNoA, 1,
                          KoColorConversionTransformation::InternalRenderingIntent,
@@ -88,8 +87,8 @@ void KisSelectionTest::testGrayColorspaceOverComposition()
     QCOMPARE(csA->pixelSize(), 2U);
     QCOMPARE(csNoA->pixelSize(), 1U);
 
-    quint8 color0[2] = {32,255};
-    quint8 color1[2] = {128,64};
+    quint8 color0[2] = {32, 255};
+    quint8 color1[2] = {128, 64};
     quint8 color3[1] = {32};
 
     KoCompositeOp::ParameterInfo params;
@@ -126,11 +125,11 @@ void KisSelectionTest::testSelectionComponents()
 
     QCOMPARE(selection->hasPixelSelection(), false);
     QCOMPARE(selection->hasShapeSelection(), false);
-    QCOMPARE(selection->shapeSelection(), (void*)0);
+    QCOMPARE(selection->shapeSelection(), (void *)0);
 
-    selection->pixelSelection()->select(QRect(10,10,10,10));
+    selection->pixelSelection()->select(QRect(10, 10, 10, 10));
     QCOMPARE(selection->hasPixelSelection(), true);
-    QCOMPARE(selection->selectedExactRect(), QRect(10,10,10,10));
+    QCOMPARE(selection->selectedExactRect(), QRect(10, 10, 10, 10));
 }
 
 void KisSelectionTest::testSelectionActions()
@@ -166,7 +165,7 @@ void KisSelectionTest::testSelectionActions()
 
 void KisSelectionTest::testInvertSelection()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 1024, 1024, cs, "stest");
 
     KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image));
@@ -184,13 +183,13 @@ void KisSelectionTest::testInvertSelection()
     QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 22, 22), MIN_SELECTED);
     QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 0, 0), MAX_SELECTED);
     QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 512, 512), MAX_SELECTED);
-    QCOMPARE(pixelSelection->selectedExactRect(), QRect(0,0,1024,1024));
-    QCOMPARE(pixelSelection->selectedRect(), QRect(0,0,1024,1024));
+    QCOMPARE(pixelSelection->selectedExactRect(), QRect(0, 0, 1024, 1024));
+    QCOMPARE(pixelSelection->selectedRect(), QRect(0, 0, 1024, 1024));
 
     selection->updateProjection();
 
-    QCOMPARE(selection->selectedExactRect(), QRect(0,0,1024,1024));
-    QCOMPARE(selection->selectedRect(), QRect(0,0,1024,1024));
+    QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 1024, 1024));
+    QCOMPARE(selection->selectedRect(), QRect(0, 0, 1024, 1024));
 
     QCOMPARE(TestUtil::alphaDevicePixel(selection->projection(), 100, 100), MAX_SELECTED);
     QCOMPARE(TestUtil::alphaDevicePixel(selection->projection(), 22, 22), MIN_SELECTED);
@@ -201,7 +200,7 @@ void KisSelectionTest::testInvertSelection()
 
 void KisSelectionTest::testInvertSelectionSemi()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 1024, 1024, cs, "stest");
 
     KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image));
@@ -218,13 +217,13 @@ void KisSelectionTest::testInvertSelectionSemi()
     quint8 invertedSelectedness = MAX_SELECTED - selectedness;
     QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 30, 30), invertedSelectedness);
     QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 0, 0), MAX_SELECTED);
-    QCOMPARE(pixelSelection->selectedExactRect(), QRect(0,0,1024,1024));
-    QCOMPARE(pixelSelection->selectedRect(), QRect(0,0,1024,1024));
+    QCOMPARE(pixelSelection->selectedExactRect(), QRect(0, 0, 1024, 1024));
+    QCOMPARE(pixelSelection->selectedRect(), QRect(0, 0, 1024, 1024));
 
     selection->updateProjection();
 
-    QCOMPARE(selection->selectedExactRect(), QRect(0,0,1024,1024));
-    QCOMPARE(selection->selectedRect(), QRect(0,0,1024,1024));
+    QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 1024, 1024));
+    QCOMPARE(selection->selectedRect(), QRect(0, 0, 1024, 1024));
 
     QCOMPARE(TestUtil::alphaDevicePixel(selection->projection(), 30, 30), invertedSelectedness);
     QCOMPARE(TestUtil::alphaDevicePixel(selection->projection(), 0, 0), MAX_SELECTED);
@@ -252,10 +251,10 @@ void KisSelectionTest::testCopy()
 
 void KisSelectionTest::testSelectionExactBounds()
 {
-    QRect referenceImageRect(0,0,1000,1000);
-    QRect referenceDeviceRect(100,100,1040,1040);
+    QRect referenceImageRect(0, 0, 1000, 1000);
+    QRect referenceDeviceRect(100, 100, 1040, 1040);
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KisImageSP image = new KisImage(0, referenceImageRect.width(),
                                     referenceImageRect.height(),
@@ -278,7 +277,7 @@ void KisSelectionTest::testSelectionExactBounds()
 
 void KisSelectionTest::testSetParentNodeAfterCreation()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
     KisSelectionSP selection = new KisSelection();
     KisPixelSelectionSP pixelSelection = selection->pixelSelection();
@@ -294,7 +293,7 @@ void KisSelectionTest::testSetParentNodeAfterCreation()
 
 void KisSelectionTest::testSetParentNodeBeforeCreation()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
     KisSelectionSP selection = new KisSelection();
 
@@ -309,7 +308,7 @@ void KisSelectionTest::testSetParentNodeBeforeCreation()
 void KisSelectionTest::testOutlineGeneration()
 {
     KisSelectionSP sel = new KisSelection();
-    sel->pixelSelection()->select(QRect(428,436, 430,211), 128);
+    sel->pixelSelection()->select(QRect(428, 436, 430, 211), 128);
 
     QVERIFY(sel->outlineCacheValid());
 
@@ -337,5 +336,4 @@ void KisSelectionTest::testOutlineGeneration()
 
 QTEST_KDEMAIN(KisSelectionTest, NoGUI)
 #include "kis_selection_test.moc"
-
 

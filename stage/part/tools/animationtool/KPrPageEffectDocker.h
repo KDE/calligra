@@ -40,34 +40,34 @@ class KPrPageEffectDocker : public QWidget
 
     Q_OBJECT
 public:
-    explicit KPrPageEffectDocker( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+    explicit KPrPageEffectDocker(QWidget *parent = 0, Qt::WindowFlags flags = 0);
 
-    void setView( KoPAViewBase* view );
+    void setView(KoPAViewBase *view);
 
 public Q_SLOTS:
     void slotActivePageChanged();
     void slotApplyToAllSlides();
-    void slotEffectChanged( int index );
+    void slotEffectChanged(int index);
 
 protected:
-    void updateSubTypes( const KPrPageEffectFactory * factory );
-    KPrPageEffect * createPageEffect( const KPrPageEffectFactory * factory, int subType, double time );
-    KUndo2Command * applyToAllSlidesCommand();
+    void updateSubTypes(const KPrPageEffectFactory *factory);
+    KPrPageEffect *createPageEffect(const KPrPageEffectFactory *factory, int subType, double time);
+    KUndo2Command *applyToAllSlidesCommand();
 
 protected Q_SLOTS:
-    void slotSubTypeChanged( int index );
-    void slotDurationChanged( double duration );
+    void slotSubTypeChanged(int index);
+    void slotDurationChanged(double duration);
 
-    void cleanup( QObject* object );
+    void cleanup(QObject *object);
 
     void setEffectPreview();
 
 private:
-    KoPAViewBase* m_view;
-    QComboBox* m_effectCombo;
-    QComboBox* m_subTypeCombo;
+    KoPAViewBase *m_view;
+    QComboBox *m_effectCombo;
+    QComboBox *m_subTypeCombo;
     QPushButton *m_applyToAllSlidesButton;
-    QDoubleSpinBox* m_durationSpinBox;
+    QDoubleSpinBox *m_durationSpinBox;
     KPrViewModePreviewPageEffect *m_previewMode;
 };
 

@@ -45,8 +45,7 @@
 
 #include "ui_wdgPictureTool.h"
 
-struct PictureToolUI: public QWidget, public Ui::PictureTool
-{
+struct PictureToolUI: public QWidget, public Ui::PictureTool {
     PictureToolUI()
     {
         setupUi(this);
@@ -66,20 +65,21 @@ struct PictureToolUI: public QWidget, public Ui::PictureTool
 
 // ---------------------------------------------------- //
 
-PictureTool::PictureTool(KoCanvasBase* canvas)
+PictureTool::PictureTool(KoCanvasBase *canvas)
     : KoToolBase(canvas),
       m_pictureshape(0),
       m_pictureToolUI(0)
 {
 }
 
-void PictureTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void PictureTool::activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes)
 {
     Q_UNUSED(toolActivation);
 
     foreach (KoShape *shape, shapes) {
-        if ((m_pictureshape = dynamic_cast<PictureShape*>(shape)))
+        if ((m_pictureshape = dynamic_cast<PictureShape *>(shape))) {
             break;
+        }
     }
 
     if (!m_pictureshape) {
@@ -103,10 +103,10 @@ void PictureTool::deactivate()
 QWidget *PictureTool::createOptionWidget()
 {
     m_pictureToolUI = new PictureToolUI();
-    m_pictureToolUI->cmbColorMode->addItem(i18n("Standard")  , PictureShape::Standard);
-    m_pictureToolUI->cmbColorMode->addItem(i18n("Greyscale") , PictureShape::Greyscale);
+    m_pictureToolUI->cmbColorMode->addItem(i18n("Standard"), PictureShape::Standard);
+    m_pictureToolUI->cmbColorMode->addItem(i18n("Greyscale"), PictureShape::Greyscale);
     m_pictureToolUI->cmbColorMode->addItem(i18n("Monochrome"), PictureShape::Mono);
-    m_pictureToolUI->cmbColorMode->addItem(i18n("Watermark") , PictureShape::Watermark);
+    m_pictureToolUI->cmbColorMode->addItem(i18n("Watermark"), PictureShape::Watermark);
     m_pictureToolUI->bnImageFile->setIcon(koIcon("document-open"));
 
     updateControlElements();
@@ -120,7 +120,7 @@ QWidget *PictureTool::createOptionWidget()
     connect(m_pictureToolUI->cbAspect, SIGNAL(toggled(bool)), this, SLOT(aspectCheckBoxChanged(bool)));
     connect(m_pictureToolUI->bnFill, SIGNAL(pressed()), this, SLOT(fillButtonPressed()));
     connect(m_pictureToolUI->cbContour, SIGNAL(toggled(bool)), this, SLOT(contourCheckBoxChanged(bool)));
-    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChanged(QRectF, bool)), this, SLOT(cropRegionChanged(QRectF, bool)));
+    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChanged(QRectF,bool)), this, SLOT(cropRegionChanged(QRectF,bool)));
 
     return m_pictureToolUI;
 }
@@ -157,8 +157,9 @@ void PictureTool::updateControlElements()
 
 void PictureTool::changeUrlPressed()
 {
-    if (m_pictureshape == 0)
+    if (m_pictureshape == 0) {
         return;
+    }
     KUrl url = KFileDialog::getOpenUrl();
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
@@ -181,7 +182,7 @@ void PictureTool::cropEditFieldsChanged()
     m_pictureToolUI->cropWidget->setCropRect(clippingRect.toRect());
 }
 
-void PictureTool::cropRegionChanged(const QRectF& rect, bool undoPrev)
+void PictureTool::cropRegionChanged(const QRectF &rect, bool undoPrev)
 {
     if (undoPrev) {
         canvas()->shapeController()->resourceManager()->undoStack()->undo();
@@ -221,10 +222,11 @@ void PictureTool::fillButtonPressed()
 
 void PictureTool::setImageData(KJob *job)
 {
-    if (m_pictureshape == 0)
-        return; // ugh, the user deselected the image in between. We should move this code to main anyway redesign it
+    if (m_pictureshape == 0) {
+        return;    // ugh, the user deselected the image in between. We should move this code to main anyway redesign it
+    }
 
-    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);
     Q_ASSERT(transferJob);
     if (m_pictureshape->imageCollection()) {
         KoImageData        *data = m_pictureshape->imageCollection()->createImageData(transferJob->data());

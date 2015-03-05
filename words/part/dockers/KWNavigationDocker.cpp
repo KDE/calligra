@@ -41,7 +41,7 @@ KWNavigationDocker::~KWNavigationDocker()
 
 void KWNavigationDocker::setCanvas(KoCanvasBase *_canvas)
 {
-    KWCanvas *canvas = dynamic_cast<KWCanvas*>(_canvas);
+    KWCanvas *canvas = dynamic_cast<KWCanvas *>(_canvas);
     m_navigationWidget->setCanvas(canvas);
 }
 

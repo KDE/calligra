@@ -20,7 +20,6 @@
 
 #include <QtTest>
 
-
 class KisMemoryPoolTest : public QObject
 {
     Q_OBJECT

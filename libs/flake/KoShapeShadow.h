@@ -39,7 +39,7 @@ public:
     ~KoShapeShadow();
 
     KoShapeShadow(const KoShapeShadow &rhs);
-    KoShapeShadow& operator=(const KoShapeShadow &rhs);
+    KoShapeShadow &operator=(const KoShapeShadow &rhs);
 
     /**
      * Fills the style object
@@ -107,7 +107,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOSHAPESHADOW_H

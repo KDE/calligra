@@ -37,7 +37,6 @@ class KoPointerEvent;
 class KoShapeManagerPaintingStrategy;
 class KoShapePaintingContext;
 
-
 class QPainter;
 class QPointF;
 class QRectF;
@@ -74,7 +73,6 @@ public:
     KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &shapes);
     virtual ~KoShapeManager();
 
-
     /**
      * Remove all previously owned shapes and make the argument list the new shapes
      * to be managed by this manager.
@@ -84,12 +82,12 @@ public:
     void setShapes(const QList<KoShape *> &shapes, Repaint repaint = PaintShapeOnAdd);
 
     /// returns the list of maintained shapes
-    QList<KoShape*> shapes() const;
+    QList<KoShape *> shapes() const;
 
     /**
      * Get a list of all shapes that don't have a parent.
      */
-    QList<KoShape*> topLevelShapes() const;
+    QList<KoShape *> topLevelShapes() const;
 
 public Q_SLOTS:
     /**
@@ -215,9 +213,8 @@ private:
     friend class KoShapeManagerPaintingStrategy;
     KoCanvasBase *canvas();
 
-
     class Private;
-    Private * const d;
+    Private *const d;
     Q_PRIVATE_SLOT(d, void updateTree())
 };
 

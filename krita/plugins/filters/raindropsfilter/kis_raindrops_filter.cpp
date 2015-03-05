@@ -51,7 +51,6 @@
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 
-
 KisRainDropsFilter::KisRainDropsFilter()
     : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Raindrops..."))
 {
@@ -79,11 +78,10 @@ KisRainDropsFilter::KisRainDropsFilter()
  *                     and after this, a blur function will finish the effect.
  */
 
-
 void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
-                                     const QRect& applyRect,
-                                     const KisFilterConfiguration* config,
-                                     KoUpdater* progressUpdater ) const
+                                     const QRect &applyRect,
+                                     const KisFilterConfiguration *config,
+                                     KoUpdater *progressUpdater) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);
@@ -99,14 +97,18 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
     }
     int count = 0;
 
-    if (fishEyes <= 0) fishEyes = 1;
+    if (fishEyes <= 0) {
+        fishEyes = 1;
+    }
 
-    if (fishEyes > 100) fishEyes = 100;
+    if (fishEyes > 100) {
+        fishEyes = 100;
+    }
 
     int Width = applyRect.width();
     int Height = applyRect.height();
 
-    bool** BoolMatrix = CreateBoolArray(Width, Height);
+    bool **BoolMatrix = CreateBoolArray(Width, Height);
 
     int       i, j, k, l, m, n;                 // loop variables
     int       Bright;                           // Bright value for shadows and highlights
@@ -126,18 +128,18 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 
     bool      FindAnother = false;              // To search for good coordinates
 
-    const KoColorSpace * cs = device->colorSpace();
+    const KoColorSpace *cs = device->colorSpace();
 
     // Init booleen Matrix.
 
-    for (i = 0 ; (i < Width) && !(progressUpdater && progressUpdater->interrupted()) ; ++i) {
-        for (j = 0 ; (j < Height) && !(progressUpdater && progressUpdater->interrupted()); ++j) {
+    for (i = 0; (i < Width) && !(progressUpdater && progressUpdater->interrupted()); ++i) {
+        for (j = 0; (j < Height) && !(progressUpdater && progressUpdater->interrupted()); ++j) {
             BoolMatrix[i][j] = false;
         }
     }
 
     KisRandomAccessorSP dstAccessor = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
-    
+
     for (uint NumBlurs = 0; (NumBlurs <= number) && !(progressUpdater && progressUpdater->interrupted()); ++NumBlurs) {
         NewSize = (int)(qrand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
         halfSize = NewSize / 2;
@@ -151,14 +153,15 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
             y = (int)(qrand() * ((double)(Width - 1) / RAND_MAX));
             x = (int)(qrand() * ((double)(Height - 1) / RAND_MAX));
 
-            if (BoolMatrix[y][x])
+            if (BoolMatrix[y][x]) {
                 FindAnother = true;
-            else
-                for (i = x - halfSize ; (i <= x + halfSize) && !(progressUpdater && progressUpdater->interrupted()); i++)
-                    for (j = y - halfSize ; (j <= y + halfSize) && !(progressUpdater && progressUpdater->interrupted()); j++)
+            } else
+                for (i = x - halfSize; (i <= x + halfSize) && !(progressUpdater && progressUpdater->interrupted()); i++)
+                    for (j = y - halfSize; (j <= y + halfSize) && !(progressUpdater && progressUpdater->interrupted()); j++)
                         if ((i >= 0) && (i < Height) && (j >= 0) && (j < Width))
-                            if (BoolMatrix[j][i])
+                            if (BoolMatrix[j][i]) {
                                 FindAnother = true;
+                            }
 
             Counter++;
         } while ((FindAnother && (Counter < 10000) && !(progressUpdater && progressUpdater->interrupted())));
@@ -168,8 +171,8 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
             break;
         }
 
-        for (i = -1 * halfSize ; (i < NewSize - halfSize) && !(progressUpdater && progressUpdater->interrupted()); i++) {
-            for (j = -1 * halfSize ; (j < NewSize - halfSize) && !(progressUpdater && progressUpdater->interrupted()); j++) {
+        for (i = -1 * halfSize; (i < NewSize - halfSize) && !(progressUpdater && progressUpdater->interrupted()); i++) {
+            for (j = -1 * halfSize; (j < NewSize - halfSize) && !(progressUpdater && progressUpdater->interrupted()); j++) {
                 r = sqrt((double)i * i + j * j);
                 a = atan2(static_cast<double>(i), static_cast<double>(j));
 
@@ -188,59 +191,67 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
                             Bright = 0;
 
                             if (OldRadius >= 0.9 * Radius) {
-                                if ((a <= 0) && (a > -2.25))
+                                if ((a <= 0) && (a > -2.25)) {
                                     Bright = -80;
-                                else if ((a <= -2.25) && (a > -2.5))
+                                } else if ((a <= -2.25) && (a > -2.5)) {
                                     Bright = -40;
-                                else if ((a <= 0.25) && (a > 0))
+                                } else if ((a <= 0.25) && (a > 0)) {
                                     Bright = -40;
+                                }
                             }
 
                             else if (OldRadius >= 0.8 * Radius) {
-                                if ((a <= -0.75) && (a > -1.50))
+                                if ((a <= -0.75) && (a > -1.50)) {
                                     Bright = -40;
-                                else if ((a <= 0.10) && (a > -0.75))
+                                } else if ((a <= 0.10) && (a > -0.75)) {
                                     Bright = -30;
-                                else if ((a <= -1.50) && (a > -2.35))
+                                } else if ((a <= -1.50) && (a > -2.35)) {
                                     Bright = -30;
+                                }
                             }
 
                             else if (OldRadius >= 0.7 * Radius) {
-                                if ((a <= -0.10) && (a > -2.0))
+                                if ((a <= -0.10) && (a > -2.0)) {
                                     Bright = -20;
-                                else if ((a <= 2.50) && (a > 1.90))
+                                } else if ((a <= 2.50) && (a > 1.90)) {
                                     Bright = 60;
+                                }
                             }
 
                             else if (OldRadius >= 0.6 * Radius) {
-                                if ((a <= -0.50) && (a > -1.75))
+                                if ((a <= -0.50) && (a > -1.75)) {
                                     Bright = -20;
-                                else if ((a <= 0) && (a > -0.25))
+                                } else if ((a <= 0) && (a > -0.25)) {
                                     Bright = 20;
-                                else if ((a <= -2.0) && (a > -2.25))
+                                } else if ((a <= -2.0) && (a > -2.25)) {
                                     Bright = 20;
+                                }
                             }
 
                             else if (OldRadius >= 0.5 * Radius) {
-                                if ((a <= -0.25) && (a > -0.50))
+                                if ((a <= -0.25) && (a > -0.50)) {
                                     Bright = 30;
-                                else if ((a <= -1.75) && (a > -2.0))
+                                } else if ((a <= -1.75) && (a > -2.0)) {
                                     Bright = 30;
+                                }
                             }
 
                             else if (OldRadius >= 0.4 * Radius) {
-                                if ((a <= -0.5) && (a > -1.75))
+                                if ((a <= -0.5) && (a > -1.75)) {
                                     Bright = 40;
+                                }
                             }
 
                             else if (OldRadius >= 0.3 * Radius) {
-                                if ((a <= 0) && (a > -2.25))
+                                if ((a <= 0) && (a > -2.25)) {
                                     Bright = 30;
+                                }
                             }
 
                             else if (OldRadius >= 0.2 * Radius) {
-                                if ((a <= -0.5) && (a > -1.75))
+                                if ((a <= -0.5) && (a > -1.75)) {
                                     Bright = 20;
+                                }
                             }
 
                             BoolMatrix[n][m] = true;
@@ -267,7 +278,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 
         BlurRadius = NewSize / 25 + 1;
 
-        for (i = -1 * halfSize - BlurRadius ; (i < NewSize - halfSize + BlurRadius) && !(progressUpdater && progressUpdater->interrupted()) ; i++) {
+        for (i = -1 * halfSize - BlurRadius; (i < NewSize - halfSize + BlurRadius) && !(progressUpdater && progressUpdater->interrupted()); i++) {
             for (j = -1 * halfSize - BlurRadius;
                     ((j < NewSize - halfSize + BlurRadius) && !(progressUpdater && progressUpdater->interrupted()));
                     ++j) {
@@ -308,7 +319,9 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
             }
         }
 
-        if (progressUpdater) progressUpdater->setValue(++count);
+        if (progressUpdater) {
+            progressUpdater->setValue(++count);
+        }
     }
 
     FreeBoolArray(BoolMatrix, Width);
@@ -323,10 +336,11 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
  *
  * Theory            => An easy to undestand 'for' statement
  */
-void KisRainDropsFilter::FreeBoolArray(bool** lpbArray, uint Columns) const
+void KisRainDropsFilter::FreeBoolArray(bool **lpbArray, uint Columns) const
 {
-    for (uint i = 0; i < Columns; ++i)
+    for (uint i = 0; i < Columns; ++i) {
         free(lpbArray[i]);
+    }
 
     free(lpbArray);
 }
@@ -339,16 +353,17 @@ void KisRainDropsFilter::FreeBoolArray(bool** lpbArray, uint Columns) const
  * Theory            => Using 'for' statement, we can alloc multiple dinamic arrays
  *                      To create more dimentions, just add some 'for's, ok?
  */
-bool** KisRainDropsFilter::CreateBoolArray(uint Columns, uint Rows) const
+bool **KisRainDropsFilter::CreateBoolArray(uint Columns, uint Rows) const
 {
-    bool** lpbArray = NULL;
-    lpbArray = (bool**) malloc(Columns * sizeof(bool*));
+    bool **lpbArray = NULL;
+    lpbArray = (bool **) malloc(Columns * sizeof(bool *));
 
-    if (lpbArray == NULL)
+    if (lpbArray == NULL) {
         return (NULL);
+    }
 
     for (uint i = 0; i < Columns; ++i) {
-        lpbArray[i] = (bool*) malloc(Rows * sizeof(bool));
+        lpbArray[i] = (bool *) malloc(Rows * sizeof(bool));
         if (lpbArray[i] == NULL) {
             FreeBoolArray(lpbArray, Columns);
             return (NULL);
@@ -371,32 +386,33 @@ bool** KisRainDropsFilter::CreateBoolArray(uint Columns, uint Rows) const
 
 uchar KisRainDropsFilter::LimitValues(int ColorValue) const
 {
-    if (ColorValue > 255)        // MAX = 255
+    if (ColorValue > 255) {      // MAX = 255
         ColorValue = 255;
-    if (ColorValue < 0)          // MIN = 0
+    }
+    if (ColorValue < 0) {        // MIN = 0
         ColorValue = 0;
+    }
     return ((uchar) ColorValue);
 }
 
-KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget *KisRainDropsFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(1, 200, 80, i18n("Drop size"), "dropsize"));
     param.push_back(KisIntegerWidgetParam(1, 500, 80, i18n("Number"), "number"));
     param.push_back(KisIntegerWidgetParam(1, 100, 30, i18n("Fish eyes"), "fishEyes"));
-    KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
+    KisMultiIntegerFilterWidget *w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
     w->setConfiguration(factoryConfiguration(0));
     return w;
 }
 
-KisFilterConfiguration* KisRainDropsFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisRainDropsFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("raindrops", 2);
+    KisFilterConfiguration *config = new KisFilterConfiguration("raindrops", 2);
     config->setProperty("dropsize", 80);
     config->setProperty("number", 80);
     config->setProperty("fishEyes", 30);
     config->setProperty("seed", QTime::currentTime().msec());
-
 
     return config;
 }

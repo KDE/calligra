@@ -46,5 +46,4 @@ private:
     QBuffer      m_documentIO;      // IODevice for the XMl writer
 };
 
-
 #endif // DOCXSTYLEWRITER_H

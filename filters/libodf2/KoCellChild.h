@@ -26,7 +26,7 @@ class KoGenStyles;
 /**
  * A \class KoCellChild represents all the elements that can be contained
  * inside a Cell.
- * 
+ *
  * \see ODF1.2 table:table-cell §9.1.4
  */
 
@@ -39,7 +39,7 @@ public:
     virtual ~KoCellChild();
 
 protected:
-    virtual void saveOdf(KoXmlWriter& writer, KoGenStyles& styles) const =0;
+    virtual void saveOdf(KoXmlWriter &writer, KoGenStyles &styles) const = 0;
 };
 
 #endif

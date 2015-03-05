@@ -33,7 +33,7 @@
 /**
  * OdfTextTrackStyles is used to update a list of qtextdocument with
  * any changes made in the style manager.
- * 
+ *
  * It also creates undo commands and adds them to the undo stack
  *
  * Style changes affect a lot of qtextdocuments and we store the changes and apply

@@ -31,21 +31,21 @@ class PictureTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    explicit PictureTool(KoCanvasBase* canvas);
+    explicit PictureTool(KoCanvasBase *canvas);
 
     /// reimplemented from KoToolBase
-    virtual void paint(QPainter&, const KoViewConverter&) {}
+    virtual void paint(QPainter &, const KoViewConverter &) {}
     /// reimplemented from KoToolBase
-    virtual void mousePressEvent(KoPointerEvent*);
+    virtual void mousePressEvent(KoPointerEvent *);
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented from KoToolBase
-    virtual void mouseMoveEvent(KoPointerEvent*) {}
+    virtual void mouseMoveEvent(KoPointerEvent *) {}
     /// reimplemented from KoToolBase
-    virtual void mouseReleaseEvent(KoPointerEvent*) {}
+    virtual void mouseReleaseEvent(KoPointerEvent *) {}
 
     /// reimplemented from KoToolBase
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     /// reimplemented from KoToolBase
     virtual void deactivate();
 
@@ -56,7 +56,7 @@ protected:
 private Q_SLOTS:
     void colorModeChanged(int cmbBoxIndex);
     void changeUrlPressed();
-    void cropRegionChanged(const QRectF& rect, bool undoPrev);
+    void cropRegionChanged(const QRectF &rect, bool undoPrev);
     void cropEditFieldsChanged();
     void aspectCheckBoxChanged(bool checked);
     void contourCheckBoxChanged(bool checked);

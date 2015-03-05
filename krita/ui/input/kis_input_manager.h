@@ -61,8 +61,6 @@ public:
      */
     ~KisInputManager();
 
-
-
     void addTrackedCanvas(KisCanvas2 *canvas);
     void removeTrackedCanvas(KisCanvas2 *canvas);
 
@@ -81,7 +79,7 @@ public:
     /**
      * Event filter method. Overridden from QObject.
      */
-    bool eventFilter(QObject* object, QEvent* event );
+    bool eventFilter(QObject *object, QEvent *event);
 
     void attachPriorityEventFilter(QObject *filter);
     void detachPriorityEventFilter(QObject *filter);
@@ -124,7 +122,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KIS_INPUTMANAGER_H

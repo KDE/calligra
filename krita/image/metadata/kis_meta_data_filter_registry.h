@@ -27,15 +27,15 @@
 namespace KisMetaData
 {
 
-class KRITAIMAGE_EXPORT FilterRegistry : public KoGenericRegistry<const KisMetaData::Filter*>
+class KRITAIMAGE_EXPORT FilterRegistry : public KoGenericRegistry<const KisMetaData::Filter *>
 {
 public:
     virtual ~FilterRegistry();
-    static FilterRegistry* instance();
+    static FilterRegistry *instance();
 private:
     FilterRegistry();
-    FilterRegistry(const FilterRegistry&);
-    FilterRegistry& operator=(const FilterRegistry&);
+    FilterRegistry(const FilterRegistry &);
+    FilterRegistry &operator=(const FilterRegistry &);
 };
 
 }

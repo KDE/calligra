@@ -41,7 +41,7 @@ namespace KFormDesigner
 /////////////////////////////////////////////////////////////////////////////////
 
 EditListViewDialog::EditListViewDialog(QWidget *parent)
-        : KPageDialog(parent)
+    : KPageDialog(parent)
 {
     setObjectName("editlistview_dialog");
     setModal(true);
@@ -198,11 +198,13 @@ EditListViewDialog::exec(QListView *listview)
     }
 
     m_listview->setSelected(m_listview->firstChild(), true);
-    if (!m_listview->firstChild())
+    if (!m_listview->firstChild()) {
         updateButtons(0);
+    }
 
-    for (int i = 0; i < listview->columns(); i++)
+    for (int i = 0; i < listview->columns(); i++) {
         m_listbox->insertItem(listview->columnText(i));
+    }
     m_listbox->setSelected(0, true);
 
     // and we exec the dialog
@@ -211,9 +213,9 @@ EditListViewDialog::exec(QListView *listview)
         listview->clear();
         // We copy the contents of our listview back in the listview
         for (int i = 0; i < m_listview->columns(); i++) {
-            if (listview->columns() <= i)
+            if (listview->columns() <= i) {
                 listview->addColumn(m_listview->columnText(i), m_listview->columnWidth(i));
-            else {
+            } else {
                 listview->setColumnText(i, m_listview->columnText(i));
                 listview->setColumnWidth(i, m_listview->columnWidth(i));
             }
@@ -233,10 +235,11 @@ EditListViewDialog::exec(QListView *listview)
 
 /// Columns page slots ///////
 void
-EditListViewDialog::changeProperty(KoProperty::Set& set, KoProperty::Property& property)
+EditListViewDialog::changeProperty(KoProperty::Set &set, KoProperty::Property &property)
 {
-    if (&set != m_propSet)
+    if (&set != m_propSet) {
         return;
+    }
 
     QString name = property.name();
     QVariant value = property.value();
@@ -245,21 +248,23 @@ EditListViewDialog::changeProperty(KoProperty::Set& set, KoProperty::Property& p
         m_listbox->changeItem(value.toString(), m_listbox->currentItem());
         m_listview->setColumnText(m_listbox->currentItem(), value.toString());
         m_propSet->blockSignals(false);
-    } else if (name == "width")
+    } else if (name == "width") {
         m_listview->setColumnWidth(m_listbox->currentItem(), value.toInt());
-    else if (name == "resizable")
+    } else if (name == "resizable") {
         m_listview->header()->setResizeEnabled(value.toBool(), m_listbox->currentItem());
-    else if (name == "clickable")
+    } else if (name == "clickable") {
         m_listview->header()->setClickEnabled(value.toBool(), m_listbox->currentItem());
-    else if (name == "fullwidth")
+    } else if (name == "fullwidth") {
         m_listview->header()->setStretchEnabled(value.toBool(), m_listbox->currentItem());
+    }
 }
 
 void
 EditListViewDialog::updateItemProperties(QListBoxItem *item)
 {
-    if (!item)
+    if (!item) {
         return;
+    }
 
     int id = m_listbox->index(item);
     if (m_propSet) {
@@ -291,15 +296,17 @@ void
 EditListViewDialog::removeItem()
 {
     int current = m_listbox->currentItem();
-    if (m_listbox->item(current + 1))
+    if (m_listbox->item(current + 1)) {
         m_listbox->setCurrentItem(current + 1);
-    else
+    } else {
         m_listbox->setCurrentItem(current - 1);
+    }
 
     m_listview->removeColumn(current);
     m_listbox->removeItem(current);
-    if (m_listbox->count() == 0)
+    if (m_listbox->count() == 0) {
         m_buttons[BColRem]->setEnabled(false);
+    }
 }
 
 void
@@ -352,7 +359,6 @@ EditListViewDialog::MoveItemDown()
     m_listbox->setCurrentItem(current + 1);
 }
 
-
 /// Contents page slots ////////
 void
 EditListViewDialog::updateButtons(QListViewItem *item)
@@ -375,35 +381,41 @@ EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QLi
 {
     QListViewItem *newItem;
     if (listview->inherits("KListView")) {
-        if (parent)
+        if (parent) {
             newItem = new KListViewItem(parent);
-        else
+        } else {
             newItem = new KListViewItem(listview);
+        }
     } else {
-        if (parent)
+        if (parent) {
             newItem = new QListViewItem(parent);
-        else
+        } else {
             newItem = new QListViewItem(listview);
+        }
     }
 
     // We need to move the item at the end, which is the expected behaviour (by default it is inserted at the beginning)
     QListViewItem *last;
-    if (parent)
+    if (parent) {
         last = parent->firstChild();
-    else
+    } else {
         last = listview->firstChild();
+    }
 
-    while (last->nextSibling())
+    while (last->nextSibling()) {
         last = last->nextSibling();
+    }
     newItem->moveItem(last);
 
     // We copy the text of all the columns
-    for (int i = 0; i < listview->columns(); i++)
+    for (int i = 0; i < listview->columns(); i++) {
         newItem->setText(i, item->text(i));
+    }
 
     QListViewItem *child = item->firstChild();
-    if (child)
+    if (child) {
         newItem->setOpen(true);
+    }
     while (child)  {
         loadChildNodes(listview, child, newItem);
         child = child->nextSibling();
@@ -413,14 +425,16 @@ EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QLi
 void
 EditListViewDialog::newRow()
 {
-    KListViewItem *parent = (KListViewItem*)m_listview->selectedItem();
-    if (parent)
-        parent = (KListViewItem*)parent->parent();
+    KListViewItem *parent = (KListViewItem *)m_listview->selectedItem();
+    if (parent) {
+        parent = (KListViewItem *)parent->parent();
+    }
     KListViewItem *item;
-    if (parent)
+    if (parent) {
         item = new KListViewItem(parent, m_listview->selectedItem());
-    else
+    } else {
         item = new KListViewItem(m_listview, m_listview->selectedItem());
+    }
     item->setText(0, i18n("New Item"));
     m_listview->setCurrentItem(item);
 }
@@ -428,17 +442,19 @@ EditListViewDialog::newRow()
 void
 EditListViewDialog::newChildRow()
 {
-    KListViewItem *parent = (KListViewItem*)m_listview->currentItem();
+    KListViewItem *parent = (KListViewItem *)m_listview->currentItem();
     KListViewItem *item;
-    if (parent)
+    if (parent) {
         item = new KListViewItem(parent);
-    else
+    } else {
         item = new KListViewItem(m_listview, m_listview->currentItem());
+    }
     item->setText(0, i18n("Sub Item"));
 
     m_listview->setCurrentItem(item);
-    if (parent)
+    if (parent) {
         parent->setOpen(true);
+    }
 }
 
 void

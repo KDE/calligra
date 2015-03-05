@@ -32,11 +32,11 @@ class PSDLayerSection
 
 public:
 
-    PSDLayerSection(const PSDHeader& header);
+    PSDLayerSection(const PSDHeader &header);
     ~PSDLayerSection();
 
-    bool read(QIODevice* io);
-    bool write(QIODevice* io, KisNodeSP rootLayer);
+    bool read(QIODevice *io);
+    bool write(QIODevice *io, KisNodeSP rootLayer);
     bool valid();
 
     QString error;
@@ -49,7 +49,7 @@ public:
 
     quint64 layerInfoSize;
     qint16  nLayers; // If layer count is a negative number, its absolute value is the number of layers and the first alpha channel contains the transparency data for the merged result.
-    QVector<PSDLayerRecord*> layers;
+    QVector<PSDLayerRecord *> layers;
 
     // mask info: http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_17115
     struct GlobalLayerMaskInfo {
@@ -59,8 +59,6 @@ public:
         quint8  kind; // Kind. 0 = Color selected--i.e. inverted; 1 = Color protected;128 = use value stored per layer. This value is preferred. The others are for backward compatibility with beta versions.
     };
     GlobalLayerMaskInfo globalLayerMaskInfo;
-
-
 
 private:
 

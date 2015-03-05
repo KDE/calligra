@@ -42,9 +42,9 @@ private Q_SLOTS:
     void testMoveChild();
 
 private:
-    Task *addTask( Node *parent, int after );
-    void removeTask( Node *task );
-    void moveTask( Node *task, Node *newParent, int newPos );
+    Task *addTask(Node *parent, int after);
+    void removeTask(Node *task);
+    void moveTask(Node *task, Node *newParent, int newPos);
 
 private:
     WorkPackageProxyModel m_model;

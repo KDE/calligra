@@ -48,7 +48,6 @@
 #define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
 #endif
 
-
 /*
 * Based on Harmony project http://github.com/mrdoob/harmony/
 */
@@ -67,7 +66,7 @@
 
 // shaded: probabity : paint always - 0.0 density
 
-KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
@@ -99,17 +98,16 @@ KisSketchPaintOp::~KisSketchPaintOp()
     delete m_dabCache;
 }
 
-void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, double lineWidth)
+void KisSketchPaintOp::drawConnection(const QPointF &start, const QPointF &end, double lineWidth)
 {
     if (lineWidth == 1.0) {
         m_painter->drawThickLine(start, end, lineWidth, lineWidth);
-    }
-    else {
+    } else {
         m_painter->drawLine(start, end, lineWidth, true);
     }
 }
 
-void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation)
+void KisSketchPaintOp::updateBrushMask(const KisPaintInformation &info, qreal scale, qreal rotation)
 {
     QRect dstRect;
     m_maskDab = m_dabCache->fetchDab(m_dab->colorSpace(),
@@ -128,14 +126,15 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 {
     Q_UNUSED(currentDistance);
 
-    if (!m_brush || !painter()) return;
+    if (!m_brush || !painter()) {
+        return;
+    }
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
         m_painter = new KisPainter(m_dab);
         m_painter->setPaintColor(painter()->paintColor());
-    }
-    else {
+    } else {
         m_dab->clear();
     }
 
@@ -149,7 +148,9 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     const double currentLineWidth = m_lineWidthOption.apply(pi2, m_sketchProperties.lineWidth);
     const double currentOffsetScale = m_offsetScaleOption.apply(pi2, m_sketchProperties.offset);
 
-    if ((scale * m_brush->width()) <= 0.01 || (scale * m_brush->height()) <= 0.01) return;
+    if ((scale * m_brush->width()) <= 0.01 || (scale * m_brush->height()) <= 0.01) {
+        return;
+    }
 
     // shaded: does not draw this line, chrome does, fur does
     if (m_sketchProperties.makeConnection) {
@@ -192,7 +193,7 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
     int w = m_maskDab->bounds().width();
     quint8 opacityU8 = 0;
-    quint8 * pixel;
+    quint8 *pixel;
     qreal distance;
     QPoint  positionInMask;
     QPointF diff;
@@ -210,8 +211,7 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
                 makeConnection = true;
             }
             // mask test
-        }
-        else {
+        } else {
             if (m_brushBoundingBox.contains(m_points.at(i))) {
                 positionInMask = (diff + m_hotSpot).toPoint();
                 uint pos = ((positionInMask.y() * w + positionInMask.x()) * m_maskDab->pixelSize());
@@ -263,12 +263,9 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
 
             if (m_sketchProperties.magnetify) {
                 drawConnection(mousePosition + offsetPt, m_points.at(i) - offsetPt, currentLineWidth);
-            }
-            else {
+            } else {
                 drawConnection(mousePosition + offsetPt, mousePosition - offsetPt, currentLineWidth);
             }
-
-
 
         }
     }// end of MAIN LOOP
@@ -283,9 +280,7 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     painter()->setOpacity(origOpacity);
 }
 
-
-
-KisSpacingInformation KisSketchPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisSketchPaintOp::paintAt(const KisPaintInformation &info)
 {
     KisDistanceInformation di;
     paintLine(info, info, &di);

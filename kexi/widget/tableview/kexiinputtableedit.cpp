@@ -46,21 +46,23 @@ class MyLineEdit : public KLineEdit
 public:
     explicit MyLineEdit(QWidget *parent) : KLineEdit(parent) {}
 protected:
-    virtual void drawFrame(QPainter * p) {
+    virtual void drawFrame(QPainter *p)
+    {
         p->setPen(QPen(palette().text(), 1.0));
         QRect r = rect();
         p->drawLine(r.topLeft(), r.topRight());
         p->drawLine(r.topRight(), r.bottomRight());
         p->drawLine(r.topRight(), r.bottomLeft());
-        if (pos().x() == 0) //draw left side only when it is @ the edge
+        if (pos().x() == 0) { //draw left side only when it is @ the edge
             p->drawLine(r.bottomLeft(), r.topLeft());
+        }
     }
 };
 
 //======================================================
 
 KexiInputTableEdit::KexiInputTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
-        : KexiTableEdit(column, parent)
+    : KexiTableEdit(column, parent)
 {
     init();
 }
@@ -75,12 +77,13 @@ void KexiInputTableEdit::init()
 // kDebug() << "type== " << field()->typeName();
 // kDebug() << "displayed type== " << displayedField()->typeName();
 
-    m_textFormatter.setField( field() );
+    m_textFormatter.setField(field());
 
     //init settings
     m_decsym = KGlobal::locale()->decimalSymbol();
-    if (m_decsym.isEmpty())
-        m_decsym = ".";//default
+    if (m_decsym.isEmpty()) {
+        m_decsym = ".";    //default
+    }
 
     //create layer for internal editor
     QHBoxLayout *lyr =  new QHBoxLayout(this);
@@ -111,7 +114,7 @@ void KexiInputTableEdit::init()
 #endif
 }
 
-void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
+void KexiInputTableEdit::setValueInternal(const QVariant &add, bool removeOld)
 {
     bool lengthExceeded;
     QString text(m_textFormatter.toString(removeOld ? QVariant() : KexiDataItemInterface::originalValue(), add.toString(),
@@ -152,8 +155,9 @@ KexiInputTableEdit::setRestrictedCompletion()
 //! @todo
 #if 0
     kDebug();
-    if (m_cview->text().isEmpty())
+    if (m_cview->text().isEmpty()) {
         return;
+    }
 
     kDebug() << "something to do";
     m_cview->useGlobalKeyBindings();
@@ -161,8 +165,9 @@ KexiInputTableEdit::setRestrictedCompletion()
     QStringList newC;
     QStringList::ConstIterator it, end(m_comp.constEnd());
     for (it = m_comp.constBegin(); it != end; ++it) {
-        if ((*it).startsWith(m_cview->text()))
+        if ((*it).startsWith(m_cview->text())) {
             newC.append(*it);
+        }
     }
     m_cview->setCompletedItems(newC);
 #endif
@@ -195,8 +200,9 @@ QVariant KexiInputTableEdit::value()
     if (field()->isFPNumericType()) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
         //! js @todo PRESERVE PRECISION!
         QString txt = m_lineedit->text();
-        if (m_decsym != ".")
-            txt.replace(m_decsym, ".");//convert back
+        if (m_decsym != ".") {
+            txt.replace(m_decsym, ".");    //convert back
+        }
         bool ok;
         const double result = txt.toDouble(&ok);
         return ok ? QVariant(result) : QVariant();
@@ -244,12 +250,13 @@ bool KexiInputTableEdit::cursorAtEnd()
 
 QSize KexiInputTableEdit::totalSize() const
 {
-    if (!m_lineedit)
+    if (!m_lineedit) {
         return size();
+    }
     return m_lineedit->size();
 }
 
-void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
+void KexiInputTableEdit::handleCopyAction(const QVariant &value, const QVariant &visibleValue)
 {
     Q_UNUSED(visibleValue);
 //! @todo handle rich text?
@@ -257,7 +264,7 @@ void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant&
     qApp->clipboard()->setText(m_textFormatter.toString(value, QString(), &lengthExceeded));
 }
 
-void KexiInputTableEdit::handleAction(const QString& actionName)
+void KexiInputTableEdit::handleAction(const QString &actionName)
 {
     const bool alreadyVisible = m_lineedit->isVisible();
 
@@ -277,16 +284,16 @@ void KexiInputTableEdit::handleAction(const QString& actionName)
     }
 }
 
-bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect,
-        const QFontMetrics& fm, bool focused)
+bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant &value, const QRect &rect,
+        const QFontMetrics &fm, bool focused)
 {
     bool lengthExceeded;
     QString text(value.type() == QVariant::String
-        ? value.toString() : m_textFormatter.toString(value, QString(), &lengthExceeded));
+                 ? value.toString() : m_textFormatter.toString(value, QString(), &lengthExceeded));
 
     QRect internalRect(rect);
     internalRect.setLeft(rect.x() + leftMargin());
-    internalRect.setWidth(internalRect.width() - rightMargin(focused) - 2*3);
+    internalRect.setWidth(internalRect.width() - rightMargin(focused) - 2 * 3);
     kDebug() << rect << internalRect << fm.width(text);
     return fm.width(text) > internalRect.width();
 }
@@ -306,7 +313,7 @@ void KexiInputTableEdit::selectAll()
     m_lineedit->selectAll();
 }
 
-void KexiInputTableEdit::slotTextEdited(const QString& text)
+void KexiInputTableEdit::slotTextEdited(const QString &text)
 {
     signalValueChanged();
     bool lengthExceeded = m_textFormatter.lengthExceeded(text);
@@ -332,10 +339,10 @@ void KexiInputTableEdit::updateLineEditStyleSheet()
       border: 1px solid %1; \
       border-radius: 0px; \
       padding: 0px %2px 0px %3px; }")
-      .arg(focus.name())
-      .arg(m_rightMarginWhenFocused) // right
-      .arg(align_right ? 0 : 2) // left
-    );
+                              .arg(focus.name())
+                              .arg(m_rightMarginWhenFocused) // right
+                              .arg(align_right ? 0 : 2) // left
+                             );
     kDebug() << m_rightMarginWhenFocused << m_lineedit->styleSheet();
 }
 

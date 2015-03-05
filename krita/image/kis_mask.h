@@ -74,12 +74,12 @@ public:
     /**
      * Create a new KisMask.
      */
-    KisMask(const QString & name);
+    KisMask(const QString &name);
 
     /**
      * Copy the mask
      */
-    KisMask(const KisMask& rhs);
+    KisMask(const KisMask &rhs);
 
     virtual ~KisMask();
 
@@ -107,8 +107,8 @@ public:
      */
     void initSelection(KisLayerSP parentLayer);
 
-    const KoColorSpace * colorSpace() const;
-    const KoCompositeOp * compositeOp() const;
+    const KoColorSpace *colorSpace() const;
+    const KoCompositeOp *compositeOp() const;
 
     /**
      * Return the selection associated with this mask. A selection can
@@ -140,7 +140,7 @@ public:
     /**
      * Selected the specified rect with the specified amount of selectedness.
      */
-    void select(const QRect & rc, quint8 selectedness = MAX_SELECTED);
+    void select(const QRect &rc, quint8 selectedness = MAX_SELECTED);
 
     /**
      * The extent and bounds of the mask are those of the selection inside
@@ -179,19 +179,18 @@ protected:
      * Apply the effect the projection using the mask as a selection.
      * Made public in KisEffectMask
      */
-    void apply(KisPaintDeviceSP projection, const QRect & applyRect, const QRect & needRect, PositionToFilthy maskPos) const;
+    void apply(KisPaintDeviceSP projection, const QRect &applyRect, const QRect &needRect, PositionToFilthy maskPos) const;
     virtual QRect decorateRect(KisPaintDeviceSP &src,
                                KisPaintDeviceSP &dst,
-                               const QRect & rc,
+                               const QRect &rc,
                                PositionToFilthy maskPos) const;
 
 private:
 
     struct Private;
 
-    Private * const m_d;
+    Private *const m_d;
 
 };
-
 
 #endif

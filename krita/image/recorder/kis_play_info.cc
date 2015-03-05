@@ -28,17 +28,17 @@ struct KisPlayInfo::Private {
 };
 
 KisPlayInfo::KisPlayInfo(KisImageWSP image, KisNodeSP currentNode)
-        : d(new Private)
+    : d(new Private)
 {
     d->image = image;
     d->currentNode = currentNode;
 }
 
-KisPlayInfo::KisPlayInfo(const KisPlayInfo& _rhs) : d(new Private(*_rhs.d))
+KisPlayInfo::KisPlayInfo(const KisPlayInfo &_rhs) : d(new Private(*_rhs.d))
 {
 }
 
-KisPlayInfo& KisPlayInfo::operator=(const KisPlayInfo& _rhs)
+KisPlayInfo &KisPlayInfo::operator=(const KisPlayInfo &_rhs)
 {
     *d = *_rhs.d;
     return *this;
@@ -49,7 +49,7 @@ KisPlayInfo::~KisPlayInfo()
     delete d;
 }
 
-KisUndoAdapter* KisPlayInfo::undoAdapter() const
+KisUndoAdapter *KisPlayInfo::undoAdapter() const
 {
     return d->image->undoAdapter();
 }

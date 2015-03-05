@@ -46,7 +46,7 @@ class KexiDataSourcePage;
 class KexiFormPartTempData : public KexiWindowData
 {
 public:
-    explicit KexiFormPartTempData(QObject* parent);
+    explicit KexiFormPartTempData(QObject *parent);
     ~KexiFormPartTempData();
     QPointer<KFormDesigner::Form> form;
     QPointer<KFormDesigner::Form> previewForm;
@@ -55,7 +55,7 @@ public:
     //!< to other view
     int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
     //! Used in KexiFormView::setUnsavedLocalBLOBs()
-    QHash<QWidget*, KexiBLOBBuffer::Id_t> unsavedLocalBLOBs;
+    QHash<QWidget *, KexiBLOBBuffer::Id_t> unsavedLocalBLOBs;
     //! Used when loading a form from (temporary) XML in Data View
     //! to get unsaved blobs collected at design mode.
     QHash<QByteArray, KexiBLOBBuffer::Id_t> unsavedLocalBLOBsByName;
@@ -71,23 +71,23 @@ public:
     KexiFormPart(QObject *parent, const QVariantList &);
     virtual ~KexiFormPart();
 
-    KexiDataSourcePage* dataSourcePage() const;
+    KexiDataSourcePage *dataSourcePage() const;
 
-    KFormDesigner::WidgetTreeWidget* widgetTreePage() const;
+    KFormDesigner::WidgetTreeWidget *widgetTreePage() const;
 
 #ifndef NO_DSWIZARD
     void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
 #endif
 
-    virtual KLocalizedString i18nMessage(const QString& englishMessage,
-                                         KexiWindow* window) const;
+    virtual KLocalizedString i18nMessage(const QString &englishMessage,
+                                         KexiWindow *window) const;
 
 protected:
-    virtual KexiWindowData* createWindowData(KexiWindow* window);
+    virtual KexiWindowData *createWindowData(KexiWindow *window);
 
-    virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, 
-                                 QMap<QString, QVariant>* staticObjectArgs = 0);
+    virtual KexiView *createView(QWidget *parent, KexiWindow *window,
+                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
+                                 QMap<QString, QVariant> *staticObjectArgs = 0);
 
     virtual void initPartActions();
     virtual void initInstanceActions();
@@ -95,8 +95,8 @@ protected:
 
 private:
     class Private;
-    Private* d;
-    const KexiWindow* window;
+    Private *d;
+    const KexiWindow *window;
 };
 
 #endif

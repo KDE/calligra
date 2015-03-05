@@ -40,7 +40,7 @@ KoDeletedRowData *KoDeletedRowColumnDataStore::addDeletedRow(QTextTable *table, 
         tableChangeIdsMap.insert(table, tableChangeIds);
     }
     tableChangeIds->push_back(changeId);
-    return deletedRowData;    
+    return deletedRowData;
 }
 
 KoDeletedColumnData *KoDeletedRowColumnDataStore::addDeletedColumn(QTextTable *table, int columnNumber, int changeId)
@@ -66,12 +66,12 @@ KoDeletedRowColumnDataStore::DeleteType KoDeletedRowColumnDataStore::deleteType(
     KoDeletedRowColumnDataStore::DeleteType retValue;
     if (deletedRowDataMap.value(changeId, NULL)) {
         retValue = KoDeletedRowColumnDataStore::eDeletedRow;
-    } else if(deletedColumnDataMap.value(changeId, NULL)) {
+    } else if (deletedColumnDataMap.value(changeId, NULL)) {
         retValue = KoDeletedRowColumnDataStore::eDeletedColumn;
     } else {
         retValue = KoDeletedRowColumnDataStore::eUnknownDeleteType;
     }
-    
+
     return retValue;
 }
 

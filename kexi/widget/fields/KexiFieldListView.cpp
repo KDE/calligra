@@ -43,9 +43,9 @@ class KexiFieldListView::Private
 {
 public:
     explicit Private(KexiFieldListOptions options_)
-      : schema(0)
-      , model(0)
-      , options(options_)
+        : schema(0)
+        , model(0)
+        , options(options_)
     {
     }
 
@@ -54,15 +54,14 @@ public:
         delete schema;
     }
 
-
-    KexiDB::TableOrQuerySchema* schema;
+    KexiDB::TableOrQuerySchema *schema;
     KexiFieldListModel *model;
     KexiFieldListOptions options;
 };
 
 KexiFieldListView::KexiFieldListView(QWidget *parent, KexiFieldListOptions options)
-        : QListView(parent)
-        , d(new Private(options))
+    : QListView(parent)
+    , d(new Private(options))
 {
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -78,18 +77,21 @@ KexiFieldListView::~KexiFieldListView()
     delete d;
 }
 
-void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
+void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema *schema)
 {
-    if (schema && d->schema == schema)
+    if (schema && d->schema == schema) {
         return;
+    }
 
     delete d->schema;
     d->schema = schema;
-    if (!d->schema)
+    if (!d->schema) {
         return;
+    }
 
-    if (!schema->table() && !schema->query())
+    if (!schema->table() && !schema->query()) {
         return;
+    }
 
     delete d->model;
 
@@ -99,14 +101,16 @@ void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
     setModel(d->model);
 }
 
-KexiDB::TableOrQuerySchema* KexiFieldListView::schema() const {
+KexiDB::TableOrQuerySchema *KexiFieldListView::schema() const
+{
     return d->schema;
 }
 
 QStringList KexiFieldListView::selectedFieldNames() const
 {
-    if (!schema())
+    if (!schema()) {
         return QStringList();
+    }
 
     QStringList selectedFields;
     QModelIndexList idxlist = selectedIndexes();
@@ -115,12 +119,11 @@ QStringList KexiFieldListView::selectedFieldNames() const
         QString field = model()->data(idx).toString();
         if (field.startsWith('*')) {
             selectedFields.append("*");
-        }
-        else {
+        } else {
             selectedFields.append(field);
         }
     }
-    
+
     return selectedFields;
 
 }

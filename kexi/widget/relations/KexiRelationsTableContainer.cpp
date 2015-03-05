@@ -47,7 +47,8 @@
 class KexiRelationsTableContainer::Private
 {
 public:
-    Private() {
+    Private()
+    {
     }
     KexiRelationViewTableContainerHeader *tableHeader;
     KexiRelationsTableFieldList *fieldList;
@@ -57,11 +58,11 @@ public:
 //----------------------
 
 KexiRelationsTableContainer::KexiRelationsTableContainer(
-    QWidget* parent,
+    QWidget *parent,
     KexiRelationsScrollArea *scrollArea,
     KexiDB::TableOrQuerySchema *schema)
-        : QFrame(parent)
-        , d(new Private)
+    : QFrame(parent)
+    , d(new Private)
 {
     d->scrollArea = scrollArea;
     setObjectName("KexiRelationsTableContainer");
@@ -91,8 +92,8 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
 
     lyr->addWidget(d->fieldList);
     connect(d->fieldList, SIGNAL(tableScrolling()), this, SLOT(moved()));
-    
-    connect(d->fieldList, SIGNAL(customContextMenuRequested(QPoint)), 
+
+    connect(d->fieldList, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotContextMenu(QPoint)));
 
     connect(d->fieldList, SIGNAL(doubleClicked(QModelIndex)),
@@ -104,15 +105,15 @@ KexiRelationsTableContainer::~KexiRelationsTableContainer()
     delete d;
 }
 
-KexiDB::TableOrQuerySchema* KexiRelationsTableContainer::schema() const
+KexiDB::TableOrQuerySchema *KexiRelationsTableContainer::schema() const
 {
     return d->fieldList->schema();
 }
 
 void KexiRelationsTableContainer::slotContextMenu(const QPoint &p)
 {
-  emit gotFocus();  
-  emit contextMenuRequest(d->fieldList->mapToGlobal(p));
+    emit gotFocus();
+    emit contextMenuRequest(d->fieldList->mapToGlobal(p));
 }
 
 void KexiRelationsTableContainer::moved()
@@ -129,7 +130,7 @@ int KexiRelationsTableContainer::globalY(const QString &field)
     return d->scrollArea->widget()->mapFromGlobal(o).y();
 }
 
-void KexiRelationsTableContainer::focusInEvent(QFocusEvent* event)
+void KexiRelationsTableContainer::focusInEvent(QFocusEvent *event)
 {
     QFrame::focusInEvent(event);
     setFocus();
@@ -142,8 +143,9 @@ void KexiRelationsTableContainer::setFocus()
 //!TODO
 #if 0
     if (d->fieldList->firstChild()) {
-        if (d->fieldList->selectedItems().isEmpty())
+        if (d->fieldList->selectedItems().isEmpty()) {
             d->fieldList->setSelected(d->fieldList->firstChild(), true);
+        }
     }
     d->tableHeader->setFocus();
     d->fieldList->setFocus();
@@ -153,11 +155,12 @@ void KexiRelationsTableContainer::setFocus()
     emit gotFocus();
 }
 
-void KexiRelationsTableContainer::focusOutEvent(QFocusEvent* event)
+void KexiRelationsTableContainer::focusOutEvent(QFocusEvent *event)
 {
     QFrame::focusOutEvent(event);
-    if (!d->fieldList->hasFocus())
+    if (!d->fieldList->hasFocus()) {
         unsetFocus();
+    }
 }
 
 void KexiRelationsTableContainer::unsetFocus()
@@ -173,9 +176,10 @@ void KexiRelationsTableContainer::unsetFocus()
 void KexiRelationsTableContainer::slotFieldsDoubleClicked(const QModelIndex &idx)
 {
     Q_UNUSED(idx);
-    if (!KexiUtils::objectIsA(sender(), "KexiRelationsTableFieldList"))
+    if (!KexiUtils::objectIsA(sender(), "KexiRelationsTableFieldList")) {
         return;
-    const KexiRelationsTableFieldList* t = static_cast<const KexiRelationsTableFieldList*>(sender());
+    }
+    const KexiRelationsTableFieldList *t = static_cast<const KexiRelationsTableFieldList *>(sender());
     kDebug();
     emit fieldsDoubleClicked(*t->schema(), t->selectedFieldNames());
 }

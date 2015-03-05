@@ -71,31 +71,37 @@ public:
     virtual ~KarbonDocument();
 
     /// reimplemented form KoDocument
-    virtual void paintContent(QPainter& painter, const QRect& rect);
+    virtual void paintContent(QPainter &painter, const QRect &rect);
     /// reimplemented form KoDocument
-    virtual bool loadXML(const KoXmlDocument& document, KoStore *store);
+    virtual bool loadXML(const KoXmlDocument &document, KoStore *store);
     /// reimplemented form KoDocument
-    virtual bool loadOdf(KoOdfReadStore & odfStore);
+    virtual bool loadOdf(KoOdfReadStore &odfStore);
     /// reimplemented form KoDocument
-    virtual bool completeLoading(KoStore* store);
+    virtual bool completeLoading(KoStore *store);
     /// reimplemented form KoDocument
     virtual bool saveOdf(SavingContext &documentContext);
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return KARBON_MIME_TYPE; }
+    virtual QByteArray nativeFormatMimeType() const
+    {
+        return KARBON_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const { return KARBON_MIME_TYPE; }
+    virtual QByteArray nativeOasisMimeType() const
+    {
+        return KARBON_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {
         return QStringList() << "application/vnd.oasis.opendocument.graphics"
-                             << "application/vnd.oasis.opendocument.graphics-template";
+               << "application/vnd.oasis.opendocument.graphics-template";
     }
 
     /// implemented from KoShapeController
-    virtual void addShape(KoShape* shape);
+    virtual void addShape(KoShape *shape);
     /// implemented from KoShapeController
-    virtual void removeShape(KoShape* shape);
+    virtual void removeShape(KoShape *shape);
 
     /// Returns if status bar is shown
     bool showStatusBar() const;
@@ -109,9 +115,9 @@ public:
     uint maxRecentFiles() const;
 
     /// Sets page layout of the document
-    virtual void setPageLayout(const KoPageLayout& layout);
+    virtual void setPageLayout(const KoPageLayout &layout);
 
-    bool mergeNativeFormat(const QString & file);
+    bool mergeNativeFormat(const QString &file);
 
     // merged from original KarbonDocument
 
@@ -124,7 +130,7 @@ public:
      * @param layer the layer to check
      * @return true if layer can be raised, else false
      */
-    bool canRaiseLayer(KoShapeLayer* layer);
+    bool canRaiseLayer(KoShapeLayer *layer);
 
     /**
      * Checks if specified layer can be lowered.
@@ -135,21 +141,21 @@ public:
      * @param layer the layer to check
      * @return true if layer can be lowered, else false
      */
-    bool canLowerLayer(KoShapeLayer* layer);
+    bool canLowerLayer(KoShapeLayer *layer);
 
     /**
      * Raises the layer.
      *
      * @param layer the layer to raise
      */
-    void raiseLayer(KoShapeLayer* layer);
+    void raiseLayer(KoShapeLayer *layer);
 
     /**
      * Lowers the layer.
      *
      * @param layer the layer to lower
      */
-    void lowerLayer(KoShapeLayer* layer);
+    void lowerLayer(KoShapeLayer *layer);
 
     /**
      * Returns the position of the specified layer.
@@ -157,7 +163,7 @@ public:
      * @param layer the layer to retrieve the position for
      * @return the layer position
      */
-    int layerPos(KoShapeLayer* layer);
+    int layerPos(KoShapeLayer *layer);
 
     /**
      * Inserts a new layer.
@@ -166,7 +172,7 @@ public:
      *
      * @param layer the layer to insert
      */
-    void insertLayer(KoShapeLayer* layer);
+    void insertLayer(KoShapeLayer *layer);
 
     /**
      * Removes the layer.
@@ -175,7 +181,7 @@ public:
      *
      * @param layer the layer to remove
      */
-    void removeLayer(KoShapeLayer* layer);
+    void removeLayer(KoShapeLayer *layer);
 
     /**
      * Returns the list of layers.
@@ -184,7 +190,7 @@ public:
      * resembles a root container which can contain other containers in an
      * arbitrary nesting depth.
      */
-    const QList<KoShapeLayer*> layers() const;
+    const QList<KoShapeLayer *> layers() const;
 
     /**
      * Returns the list of all shapes of the document.
@@ -192,26 +198,26 @@ public:
      * For an hierarchical view/access one should retrieve the documents
      * layers with layers().
      */
-    const QList<KoShape*> shapes() const;
+    const QList<KoShape *> shapes() const;
 
-    void saveOasis(KoShapeSavingContext & context) const;
+    void saveOasis(KoShapeSavingContext &context) const;
     bool loadOasis(const KoXmlElement &element, KoShapeLoadingContext &context);
-    void loadOdfStyles(KoShapeLoadingContext & context);
-    void saveOdfStyles(KoShapeSavingContext & context);
+    void loadOdfStyles(KoShapeLoadingContext &context);
+    void saveOdfStyles(KoShapeSavingContext &context);
 
     /**
     * Adds an object to the document.
     *
     * @param shape the object to append
     */
-    void add(KoShape* shape);
+    void add(KoShape *shape);
 
     /**
     * Removes an object from the document.
     *
     * @param shape the object to append
     */
-    void remove(KoShape* shape);
+    void remove(KoShape *shape);
 
     /// Returns the united bounding rectangle of the documents content and the document page
     QRectF boundingRect() const;
@@ -229,15 +235,15 @@ public:
     //void setDocumentPageSize(QSizeF pageSize);
 
     /// Returns the documents image collection
-    KoImageCollection * imageCollection();
+    KoImageCollection *imageCollection();
 
     /// Returns the documents data centers
-    QMap<QString, KoDataCenterBase*> dataCenterMap() const;
+    QMap<QString, KoDataCenterBase *> dataCenterMap() const;
 
     /// Sets the data centers to be used by this document
-    void useExternalDataCenterMap(QMap<QString, KoDataCenterBase*> dataCenters);
+    void useExternalDataCenterMap(QMap<QString, KoDataCenterBase *> dataCenters);
 
-    void addToDataCenterMap(const QString &key, KoDataCenterBase* dataCenter);
+    void addToDataCenterMap(const QString &key, KoDataCenterBase *dataCenter);
 
 public Q_SLOTS:
     void slotDocumentRestored();
@@ -249,17 +255,16 @@ Q_SIGNALS:
 protected:
 
     /// Loads settings like grid and guide lines from given xml document
-    void loadOasisSettings(const KoXmlDocument & settingsDoc);
+    void loadOasisSettings(const KoXmlDocument &settingsDoc);
     /// Saves settings like grid and guide lines to store
-    void saveOasisSettings(KoStore * store); 
+    void saveOasisSettings(KoStore *store);
 
     /// Reads settings from config file
     void initConfig();
 
-
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KARBON_DOCUMENT_H

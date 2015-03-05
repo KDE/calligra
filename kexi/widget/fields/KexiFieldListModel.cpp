@@ -17,7 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #include "KexiFieldListModel.h"
 #include "KexiFieldListModelItem.h"
 #include <klocalizedstring.h>
@@ -33,10 +32,10 @@ class KexiFieldListModel::Private
 public:
     Private();
     ~Private();
-    KexiDB::TableOrQuerySchema* schema;
+    KexiDB::TableOrQuerySchema *schema;
     KexiFieldListOptions options;
     KexiFieldListModelItem *allColumnsItem;
-    QList<KexiFieldListModelItem*> items;
+    QList<KexiFieldListModelItem *> items;
 };
 
 KexiFieldListModel::Private::Private() : schema(0), allColumnsItem(0)
@@ -49,8 +48,8 @@ KexiFieldListModel::Private::~Private()
     qDeleteAll(items);
 }
 
-KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions options): QAbstractTableModel(parent)
-                                      , d(new Private())
+KexiFieldListModel::KexiFieldListModel(QObject *parent, KexiFieldListOptions options): QAbstractTableModel(parent)
+    , d(new Private())
 {
     d->options = options;
 }
@@ -60,15 +59,17 @@ KexiFieldListModel::~KexiFieldListModel()
     delete d;
 }
 
-void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
+void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema *schema)
 {
-    if (schema && d->schema == schema)
+    if (schema && d->schema == schema) {
         return;
+    }
 
     delete d->schema;
     d->schema = schema;
-    if (!d->schema)
+    if (!d->schema) {
         return;
+    }
 
     qDeleteAll(d->items);
     d->items.clear();
@@ -78,12 +79,14 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
     for (int i = -2; i < count; i++) {
         KexiDB::QueryColumnInfo *colinfo = 0;
         if (i == -2) {
-            if (!(d->options & ShowEmptyItem))
+            if (!(d->options & ShowEmptyItem)) {
                 continue;
+            }
             item = new KexiFieldListModelItem(QString(), QString(), false);
         } else if (i == -1) {
-            if (!(d->options & ShowAsterisk))
+            if (!(d->options & ShowAsterisk)) {
                 continue;
+            }
             item = new KexiFieldListModelItem("*", "", false);
             d->allColumnsItem = item;
         } else {
@@ -96,7 +99,7 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
     }
 }
 
-QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
+QVariant KexiFieldListModel::data(const QModelIndex &index, int role) const
 {
     KexiFieldListModelItem *item = 0;
 
@@ -117,20 +120,21 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int KexiFieldListModel::columnCount(const QModelIndex& /*parent*/) const
+int KexiFieldListModel::columnCount(const QModelIndex & /*parent*/) const
 {
     return (d->options & ShowDataTypes) ? 2 : 1;
 }
 
-int KexiFieldListModel::rowCount(const QModelIndex& /*parent*/) const
+int KexiFieldListModel::rowCount(const QModelIndex & /*parent*/) const
 {
     return d->items.count();
 }
 
 QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role != Qt::DisplayRole)
+    if (role != Qt::DisplayRole) {
         return QVariant();
+    }
 
     if (orientation == Qt::Horizontal) {
         if (section == 0) {
@@ -149,7 +153,7 @@ QStringList KexiFieldListModel::mimeTypes() const
     return types;
 }
 
-QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
+QMimeData *KexiFieldListModel::mimeData(const QModelIndexList &indexes) const
 {
     if (!d->schema) {
         return new QMimeData();
@@ -181,12 +185,13 @@ QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
     return mimedata;
 }
 
-Qt::ItemFlags KexiFieldListModel::flags(const QModelIndex& index) const
+Qt::ItemFlags KexiFieldListModel::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags defaultFlags = QAbstractTableModel::flags(index);
 
-    if (index.isValid())
-        return d->items[index.row()]->flags()| defaultFlags;
-    else
+    if (index.isValid()) {
+        return d->items[index.row()]->flags() | defaultFlags;
+    } else {
         return defaultFlags;
+    }
 }

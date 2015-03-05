@@ -44,7 +44,7 @@ KPrSlidesManagerView::KPrSlidesManagerView(QWidget *parent)
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
-    setSpacing(m_itemSize.width()/10);
+    setSpacing(m_itemSize.width() / 10);
     viewport()->installEventFilter(this);
 }
 
@@ -169,12 +169,10 @@ void KPrSlidesManagerView::wheelEvent(QWheelEvent *event)
     if ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
         if (event->delta() > 0) {
             emit zoomIn();
-        }
-        else {
+        } else {
             emit zoomOut();
         }
-    }
-    else {
+    } else {
         QListView::wheelEvent(event);
     }
 }
@@ -183,8 +181,7 @@ void KPrSlidesManagerView::selectionChanged(const QItemSelection &selected, cons
 {
     if (!this->selectionModel()->selection().isEmpty()) {
         emit itemSelected();
-    }
-    else {
+    } else {
         emit selectionCleared();
     }
     QListView::selectionChanged(selected, deselected);
@@ -193,9 +190,8 @@ void KPrSlidesManagerView::selectionChanged(const QItemSelection &selected, cons
 QRect KPrSlidesManagerView::itemSize() const
 {
     if (model()) {
-        return (this->visualRect(model()->index(0,0,QModelIndex())));
-    }
-    else {
+        return (this->visualRect(model()->index(0, 0, QModelIndex())));
+    } else {
         return QRect();
     }
 }
@@ -238,59 +234,58 @@ bool KPrSlidesManagerView::eventFilter(QObject *watched, QEvent *event)
 
 QPixmap KPrSlidesManagerView::createDragPixmap() const
 {
-     const QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
-     Q_ASSERT(!selectedIndexes.isEmpty());
+    const QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
+    Q_ASSERT(!selectedIndexes.isEmpty());
 
-     const int itemCount = selectedIndexes.count();
+    const int itemCount = selectedIndexes.count();
 
-     // If more than one item is dragged, align the items inside a
-     // rectangular grid. The maximum grid size is limited to 4 x 4 items.
-     int xCount = 2;
-     int size = (KIconLoader::SizeHuge + KIconLoader::SizeEnormous) / 2;
-     if (itemCount > 9) {
-         xCount = 4;
-         size = KIconLoader::SizeMedium;
-     }
-     else if (itemCount > 4) {
-         xCount = 3;
-         size = KIconLoader::SizeLarge;
-     }
+    // If more than one item is dragged, align the items inside a
+    // rectangular grid. The maximum grid size is limited to 4 x 4 items.
+    int xCount = 2;
+    int size = (KIconLoader::SizeHuge + KIconLoader::SizeEnormous) / 2;
+    if (itemCount > 9) {
+        xCount = 4;
+        size = KIconLoader::SizeMedium;
+    } else if (itemCount > 4) {
+        xCount = 3;
+        size = KIconLoader::SizeLarge;
+    }
 
-     if (itemCount < xCount) {
-         xCount = itemCount;
-     }
+    if (itemCount < xCount) {
+        xCount = itemCount;
+    }
 
-     int yCount = itemCount / xCount;
-     if (itemCount % xCount != 0) {
-         ++yCount;
-     }
+    int yCount = itemCount / xCount;
+    if (itemCount % xCount != 0) {
+        ++yCount;
+    }
 
-     if (yCount > xCount) {
-         yCount = xCount;
-     }
+    if (yCount > xCount) {
+        yCount = xCount;
+    }
 
-     // Draw the selected items into the grid cells
-     QPixmap dragPixmap(xCount * size + xCount - 1, yCount * size + yCount - 1);
-     dragPixmap.fill(Qt::transparent);
+    // Draw the selected items into the grid cells
+    QPixmap dragPixmap(xCount * size + xCount - 1, yCount * size + yCount - 1);
+    dragPixmap.fill(Qt::transparent);
 
-     QPainter painter(&dragPixmap);
-     int x = 0;
-     int y = 0;
-     foreach (const QModelIndex &selectedIndex, selectedIndexes) {
-         const QIcon icon = (model()->data(selectedIndex, Qt::DecorationRole)).value<QIcon>();
-         painter.drawPixmap(x, y, icon.pixmap(size, size));
+    QPainter painter(&dragPixmap);
+    int x = 0;
+    int y = 0;
+    foreach (const QModelIndex &selectedIndex, selectedIndexes) {
+        const QIcon icon = (model()->data(selectedIndex, Qt::DecorationRole)).value<QIcon>();
+        painter.drawPixmap(x, y, icon.pixmap(size, size));
 
-         x += size + 1;
-         if (x >= dragPixmap.width()) {
-             x = 0;
-             y += size + 1;
-         }
-         if (y >= dragPixmap.height()) {
-             break;
-         }
-     }
+        x += size + 1;
+        if (x >= dragPixmap.width()) {
+            x = 0;
+            y += size + 1;
+        }
+        if (y >= dragPixmap.height()) {
+            break;
+        }
+    }
 
-     return dragPixmap;
+    return dragPixmap;
 }
 
 int KPrSlidesManagerView::cursorSlideIndex() const
@@ -312,9 +307,9 @@ QPair<int, int> KPrSlidesManagerView::cursorRowAndColumn() const
     int numberColumn = qFloor(cursorPosition.x() / size.width());
     int numberRow = qCeil((cursorPosition.y() + scrollBarValue) / (qreal)size.height()) - 1;
     int numberMod = model()->rowCount(QModelIndex()) > 0 ?
-                (numberColumn + slidesNumber * numberRow) % (model()->rowCount(QModelIndex())) : 0;
+                    (numberColumn + slidesNumber * numberRow) % (model()->rowCount(QModelIndex())) : 0;
 
-     int totalRows = qCeil((model()->rowCount(QModelIndex())) / (qreal)slidesNumber);
+    int totalRows = qCeil((model()->rowCount(QModelIndex())) / (qreal)slidesNumber);
 
     if (numberColumn > slidesNumber) {
         numberColumn = slidesNumber;
@@ -327,8 +322,8 @@ QPair<int, int> KPrSlidesManagerView::cursorRowAndColumn() const
     if (numberRow > totalRows - 1) {
         numberRow = totalRows - 1;
         numberColumn = model()->rowCount(QModelIndex()) % slidesNumber != 0 ?
-                    model()->rowCount(QModelIndex()) % slidesNumber : slidesNumber;
+                       model()->rowCount(QModelIndex()) % slidesNumber : slidesNumber;
     }
 
-    return QPair<int,int>(numberColumn, numberRow);
+    return QPair<int, int>(numberColumn, numberRow);
 }

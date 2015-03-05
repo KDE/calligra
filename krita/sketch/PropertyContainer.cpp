@@ -18,7 +18,7 @@
 
 #include "PropertyContainer.h"
 
-PropertyContainer::PropertyContainer(QString name, QObject* parent)
+PropertyContainer::PropertyContainer(QString name, QObject *parent)
     : QObject(parent)
     , m_name(name)
 {
@@ -38,22 +38,22 @@ QVariant PropertyContainer::readProperty(QString name)
     return property(name.toLatin1());
 }
 
-const KisCubicCurve& PropertyContainer::curve() const
+const KisCubicCurve &PropertyContainer::curve() const
 {
     return m_curve;
 }
 
-void PropertyContainer::setCurve(const KisCubicCurve& curve)
+void PropertyContainer::setCurve(const KisCubicCurve &curve)
 {
     m_curve = curve;
 }
 
-QList< KisCubicCurve >& PropertyContainer::curves() const
+QList< KisCubicCurve > &PropertyContainer::curves() const
 {
     return m_curves;
 }
 
-void PropertyContainer::setCurves(const QList< KisCubicCurve >& curves)
+void PropertyContainer::setCurves(const QList< KisCubicCurve > &curves)
 {
     m_curves.clear();
     m_curves = curves;
@@ -66,8 +66,7 @@ int PropertyContainer::curveCount() const
 
 KisCubicCurve PropertyContainer::specificCurve(int index) const
 {
-    if(index > -1 && index < m_curves.count())
-    {
+    if (index > -1 && index < m_curves.count()) {
         return KisCubicCurve(m_curves[index]);
     }
     return KisCubicCurve();
@@ -75,14 +74,13 @@ KisCubicCurve PropertyContainer::specificCurve(int index) const
 
 QString PropertyContainer::specificCurveName(int index) const
 {
-    if(index > -1 && index < m_curves.count())
-    {
+    if (index > -1 && index < m_curves.count()) {
         return m_curves[index].name();
     }
     return QString();
 }
 
-void PropertyContainer::setSpecificCurve(int index, const KisCubicCurve& curve) const
+void PropertyContainer::setSpecificCurve(int index, const KisCubicCurve &curve) const
 {
 
     m_curves[index] = curve;

@@ -28,7 +28,6 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
-
 #define PRESS_CONDITION(_event, _mode, _button, _modifier)              \
     (this->mode() == (_mode) && (_event)->button() == (_button) &&            \
      (_event)->modifiers() == (_modifier))
@@ -81,17 +80,20 @@ static const QString TOOL_TYPE_SELECTED = "5 Krita/Select";          // Tools th
 static const QString KRITA_TOOL_ACTIVATION_ID = "flake/always";
 
 class  KRITAUI_EXPORT KisTool
-        : public KoToolBase
+    : public KoToolBase
 {
     Q_OBJECT
 
 public:
-    enum { FLAG_USES_CUSTOM_PRESET=0x01, FLAG_USES_CUSTOM_COMPOSITEOP=0x02 };
+    enum { FLAG_USES_CUSTOM_PRESET = 0x01, FLAG_USES_CUSTOM_COMPOSITEOP = 0x02 };
 
-    KisTool(KoCanvasBase * canvas, const QCursor & cursor);
+    KisTool(KoCanvasBase *canvas, const QCursor &cursor);
     virtual ~KisTool();
 
-    virtual int flags() const { return 0; }
+    virtual int flags() const
+    {
+        return 0;
+    }
 
     void deleteSelection();
 // KoToolBase Implementation.
@@ -193,7 +195,6 @@ public:
     virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
     virtual void beginAlternateDoubleClickAction(KoPointerEvent *event, AlternateAction action);
 
-
     void mousePressEvent(KoPointerEvent *event);
     void mouseDoubleClickEvent(KoPointerEvent *event);
     void mouseTripleClickEvent(KoPointerEvent *event);
@@ -201,9 +202,9 @@ public:
     void mouseMoveEvent(KoPointerEvent *event);
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     virtual void deactivate();
-    virtual void canvasResourceChanged(int key, const QVariant & res);
+    virtual void canvasResourceChanged(int key, const QVariant &res);
     // Implement this slot in case there are any widgets or properties which need
     // to be updated after certain operations, to reflect the inner state correctly.
     // At the moment this is used for smoothing options in the freehand brush, but
@@ -217,11 +218,11 @@ protected:
     /// Convert from native (postscript points) to image pixel
     /// coordinates.
     QPointF convertToPixelCoord(KoPointerEvent *e);
-    QPointF convertToPixelCoord(const QPointF& pt);
+    QPointF convertToPixelCoord(const QPointF &pt);
 
 protected:
     QPointF widgetCenterInWidgetPixels();
-    QPointF convertDocumentToWidget(const QPointF& pt);
+    QPointF convertDocumentToWidget(const QPointF &pt);
 
     /// Convert from native (postscript points) to integer image pixel
     /// coordinates. This truncates the floating point components and
@@ -254,9 +255,10 @@ protected:
     /// Update the canvas for the given rectangle in view coordinates.
     void updateCanvasViewRect(const QRectF &viewRect);
 
-    virtual QWidget* createOptionWidget();
+    virtual QWidget *createOptionWidget();
 
-    inline void setOutlineStyle(PaintMode mode) {
+    inline void setOutlineStyle(PaintMode mode)
+    {
         m_outlinePaintMode = mode;
     }
 
@@ -268,7 +270,7 @@ protected:
     void notifyModified() const;
 
     KisImageWSP currentImage();
-    KoPattern* currentPattern();
+    KoPattern *currentPattern();
     KoAbstractGradient *currentGradient();
     KisNodeSP currentNode();
     KoColor currentFgColor();
@@ -276,11 +278,11 @@ protected:
     KisPaintOpPresetSP currentPaintOpPreset();
     KisFilterConfiguration *currentGenerator();
 
-    virtual void setupPaintAction(KisRecordedPaintAction* action);
+    virtual void setupPaintAction(KisRecordedPaintAction *action);
 
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
     /// never apply transformations to the painter, they would be useless, if drawing in OpenGL mode. The coordinates in the path should be in view coordinates.
-    void paintToolOutline(QPainter * painter, const QPainterPath &path);
+    void paintToolOutline(QPainter *painter, const QPainterPath &path);
 
     /// Sets the systemLocked for the current node, this will not deactivate the tool buttons
     void setCurrentNodeLocked(bool locked);
@@ -304,7 +306,6 @@ protected:
 
     virtual void setMode(ToolMode mode);
     virtual ToolMode mode() const;
-
 
 protected Q_SLOTS:
     /**
@@ -346,10 +347,8 @@ private:
     ToolMode m_mode;
 
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
-
 
 #endif // KIS_TOOL_H_
 

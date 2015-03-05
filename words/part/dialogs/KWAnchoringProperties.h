@@ -52,7 +52,8 @@ public:
     void save(KUndo2Command *command, KWCanvas *canvas);
 
     /// reimplemented
-    virtual bool showOnShapeCreate() {
+    virtual bool showOnShapeCreate()
+    {
         return true;
     }
 
@@ -67,7 +68,6 @@ private:
     static const int vertRels[4][20];
 
     static const int horizRels[4][20];
-
 
     Ui::KWAnchoringProperties widget;
     FrameConfigSharedState *m_state;

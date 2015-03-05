@@ -56,7 +56,6 @@ void KisConvolutionKernel::setSize(quint32 width, quint32 height)
     d->data.resize(height, width);
 }
 
-
 qreal KisConvolutionKernel::offset() const
 {
     return d->offset;
@@ -72,32 +71,31 @@ void KisConvolutionKernel::setFactor(qreal factor)
     d->factor = factor;
 }
 
-Matrix<qreal, Dynamic, Dynamic>& KisConvolutionKernel::data()
+Matrix<qreal, Dynamic, Dynamic> &KisConvolutionKernel::data()
 {
     return d->data;
 }
 
-const Matrix<qreal, Dynamic, Dynamic>* KisConvolutionKernel::data() const
+const Matrix<qreal, Dynamic, Dynamic> *KisConvolutionKernel::data() const
 {
     return &(d->data);
 }
 
-KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& image)
+KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage &image)
 {
     KisConvolutionKernelSP kernel = new KisConvolutionKernel(image.width(), image.height(), 0, 0);
 
-    Matrix<qreal, Dynamic, Dynamic>& data = kernel->data();
+    Matrix<qreal, Dynamic, Dynamic> &data = kernel->data();
 #if QT_VERSION >= 0x040700
-    const quint8* itImage = image.constBits();
+    const quint8 *itImage = image.constBits();
 #else
-    const quint8* itImage = image.bits();
+    const quint8 *itImage = image.bits();
 #endif
     qreal factor = 0;
 
     for (int r = 0; r < image.height(); r++) {
-        for (int c = 0; c < image.width(); c++, itImage += 4)
-        {
-            uint value = 255 - (*itImage + *(itImage + 1) + *(itImage + 2)) / 3;
+        for (int c = 0; c < image.width(); c++, itImage += 4) {
+            uint value = 255 - (*itImage + * (itImage + 1) + * (itImage + 2)) / 3;
             data(r, c) = value;
             factor += value;
         }
@@ -107,7 +105,7 @@ KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& image)
     return kernel;
 }
 
-KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator* kmg, qreal angle)
+KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator *kmg, qreal angle)
 {
     Q_UNUSED(angle);
 
@@ -121,7 +119,7 @@ KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator*
     qreal xc = 0.5 * width - 0.5;
     qreal yc = 0.5 * height - 0.5;
 
-    Matrix<qreal, Dynamic, Dynamic>& data = kernel->data();
+    Matrix<qreal, Dynamic, Dynamic> &data = kernel->data();
     qreal factor = 0;
 
 //     dbgImage << ppVar(xc) << ppVar(yc);
@@ -143,19 +141,16 @@ KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator*
 
 KisConvolutionKernelSP KisConvolutionKernel::fromMatrix(Matrix<qreal, Dynamic, Dynamic> matrix, qreal offset, qreal factor)
 {
-    KisConvolutionKernelSP kernel = new KisConvolutionKernel(matrix.cols(), matrix.rows(), offset, factor);        
+    KisConvolutionKernelSP kernel = new KisConvolutionKernel(matrix.cols(), matrix.rows(), offset, factor);
     kernel->data() = matrix;
 
     return kernel;
 }
 
-
-
-
 #if 0
 double xr = (x /*- m_xcenter*/);
 double yr = (y /*- m_ycenter*/);
-double n = norme(xr * m_xcoef, yr * m_ycoef);
+double n = norme(xr *m_xcoef, yr *m_ycoef);
 if (n > 1)
 {
     return 255;
@@ -179,7 +174,7 @@ if (n > 1)
         }
         // On the internal limit of the fade area, normeFade is equal to 1
         double normeFadeLimitE = norme(xle * m_xfadecoef, yle * m_yfadecoef);
-        return (uchar)(255 *(normeFade - 1) / (normeFadeLimitE - 1));
+        return (uchar)(255 * (normeFade - 1) / (normeFadeLimitE - 1));
     } else {
         return 0;
     }

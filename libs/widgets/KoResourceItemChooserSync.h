@@ -35,29 +35,29 @@ class KOWIDGETS_EXPORT KoResourceItemChooserSync : public QObject
 public:
     virtual ~KoResourceItemChooserSync();
 
-    static KoResourceItemChooserSync* instance();
+    static KoResourceItemChooserSync *instance();
 
     /// Gets the base length
     /// @returns the base length of items
     int baseLength();
 
-    /// Set the base length 
+    /// Set the base length
     /// @param length base length for the items, will be clamped if ouside range
     void setBaseLength(int length);
-    
+
 Q_SIGNALS:
     /// Signal is emitted when the base length is changed and will trigger and update in
     /// the resource item choosers
     void baseLenghtChanged(int length);
-    
+
 private:
     KoResourceItemChooserSync();
-    KoResourceItemChooserSync(const KoResourceItemChooserSync&);
-    KoResourceItemChooserSync operator=(const KoResourceItemChooserSync&);
+    KoResourceItemChooserSync(const KoResourceItemChooserSync &);
+    KoResourceItemChooserSync operator=(const KoResourceItemChooserSync &);
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KORESOURCEITEMCHOOSERSYNC_H

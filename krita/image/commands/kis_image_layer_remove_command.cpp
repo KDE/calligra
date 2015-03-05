@@ -22,7 +22,6 @@
 #include "kis_image.h"
 #include "kis_image_layer_remove_command_impl.h"
 
-
 KisImageLayerRemoveCommand::KisImageLayerRemoveCommand(KisImageWSP image, KisNodeSP node)
     : KisImageCommand(kundo2_i18n("Remove Layer"), image),
       m_node(node)

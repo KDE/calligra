@@ -27,7 +27,6 @@
 
 #include "../calligra_sheets_export.h"
 
-
 class KoXmlWriter;
 
 namespace Calligra
@@ -59,7 +58,7 @@ public:
     /**
      * Copy Constructor.
      */
-    Database(const Database& other);
+    Database(const Database &other);
 
     /**
      * Destructor.
@@ -74,12 +73,12 @@ public:
     /**
      * \return the database's name
      */
-    const QString& name() const;
+    const QString &name() const;
 
     /**
      * Sets the database's name.
      */
-    void setName(const QString& name);
+    void setName(const QString &name);
 
     /**
      * \return the database's orientation
@@ -109,23 +108,23 @@ public:
     /**
      * \return the actual database cell range
      */
-    const Region& range() const;
+    const Region &range() const;
 
     /**
      * Sets the actual database cell range.
      * \p region has to be contiguous.
      */
-    void setRange(const Region& region);
+    void setRange(const Region &region);
 
-    const Filter& filter() const;
-    void setFilter(const Filter& filter);
+    const Filter &filter() const;
+    void setFilter(const Filter &filter);
 
-    bool loadOdf(const KoXmlElement& element, const Map* map);
-    void saveOdf(KoXmlWriter& xmlWriter) const;
+    bool loadOdf(const KoXmlElement &element, const Map *map);
+    void saveOdf(KoXmlWriter &xmlWriter) const;
 
-    void operator=(const Database& other);
-    bool operator==(const Database& other) const;
-    bool operator<(const Database& other) const;
+    void operator=(const Database &other);
+    bool operator==(const Database &other) const;
+    bool operator<(const Database &other) const;
 
     void dump() const;
 

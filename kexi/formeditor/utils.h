@@ -45,16 +45,17 @@ class Form;
  If the parent is found, \a prevPrev is set to a child of child of the parent,
  what for TabWidget means the page widget. */
 template<class type>
-type* findParent(QObject* o, const char* className, QObject* &prevPrev)
+type *findParent(QObject *o, const char *className, QObject *&prevPrev)
 {
-    if (!o || !className || className[0] == '\0')
+    if (!o || !className || className[0] == '\0') {
         return 0;
+    }
     QObject *prev = o;
     while (((o = o->parent())) && !o->inherits(className)) {
         prevPrev = prev;
         prev = o;
     }
-    return static_cast<type*>(o);
+    return static_cast<type *>(o);
 }
 
 //! A tab widget providing information about height of the tab bar.
@@ -63,9 +64,10 @@ class KFORMEDITOR_EXPORT TabWidget : public TabWidgetBase
     Q_OBJECT
 public:
     explicit TabWidget(QWidget *parent)
-            : TabWidgetBase(parent) {}
+        : TabWidgetBase(parent) {}
     virtual ~TabWidget() {}
-    int tabBarHeight() const {
+    int tabBarHeight() const
+    {
         return tabBar()->height();
     }
 };
@@ -76,7 +78,7 @@ class CustomSortableWidgetList : public QWidgetList
 public:
     CustomSortableWidgetList() : QWidgetList() {}
     //! Copy constructor needed required by foreach()
-    CustomSortableWidgetList(const CustomSortableWidgetList& list) : QWidgetList(list) {}
+    CustomSortableWidgetList(const CustomSortableWidgetList &list) : QWidgetList(list) {}
     virtual ~CustomSortableWidgetList() {}
     virtual void sort() {}
 };
@@ -87,7 +89,7 @@ class HorizontalWidgetList : public CustomSortableWidgetList
 public:
     explicit HorizontalWidgetList(QWidget *topLevelWidget);
     //! Copy constructor needed required by foreach()
-    HorizontalWidgetList(const HorizontalWidgetList& list);
+    HorizontalWidgetList(const HorizontalWidgetList &list);
     virtual ~HorizontalWidgetList();
     virtual void sort();
 protected:
@@ -101,7 +103,7 @@ class VerticalWidgetList : public CustomSortableWidgetList
 public:
     explicit VerticalWidgetList(QWidget *topLevelWidget);
     //! Copy constructor needed required by foreach()
-    VerticalWidgetList(const VerticalWidgetList& list);
+    VerticalWidgetList(const VerticalWidgetList &list);
     virtual ~VerticalWidgetList();
     virtual void sort();
 protected:
@@ -120,43 +122,46 @@ KFORMEDITOR_EXPORT void setRecursiveCursor(QWidget *w, Form *form);
 KFORMEDITOR_EXPORT QSize getSizeFromChildren(QWidget *widget, const char *inheritClass = "QWidget");
 
 //! @return mimetype for the forms XML format
-inline QString mimeType() { return "application/x-kexi-form"; }
+inline QString mimeType()
+{
+    return "application/x-kexi-form";
+}
 
 //! @returns deep copy of the current clipboard contents (for all formats)
 KFORMEDITOR_EXPORT QMimeData *deepCopyOfClipboardData();
 
 //! Copies @a xml data to the clipboard both in the plain text format and forms XML format
-KFORMEDITOR_EXPORT void copyToClipboard(const QString& xml);
+KFORMEDITOR_EXPORT void copyToClipboard(const QString &xml);
 
 //! Recursively saves widget list @a list and form @a form to @a doc XML document
 /*! @a containers hash is filled with containers found within the widget list,
- and @a parents is filled with the parent widgets found within the widget list. 
+ and @a parents is filled with the parent widgets found within the widget list.
  USed in DeleteWidgetCommand ctor. */
-KFORMEDITOR_EXPORT void widgetsToXML(QDomDocument& doc, 
-    QHash<QByteArray, QByteArray>& containers,
-    QHash<QByteArray, QByteArray>& parents,
-    const Form& form, const QWidgetList &list);
+KFORMEDITOR_EXPORT void widgetsToXML(QDomDocument &doc,
+                                     QHash<QByteArray, QByteArray> &containers,
+                                     QHash<QByteArray, QByteArray> &parents,
+                                     const Form &form, const QWidgetList &list);
 
 //! QActionGroup extended by action() method.
 class KFORMEDITOR_EXPORT ActionGroup : public QActionGroup
 {
-    public:
-        explicit ActionGroup( QObject * parent );
-        ~ActionGroup();
-        //! Reimplemented.
-        void addAction(QAction* action);
-        QAction *action(const QString& name) const;
-    private:
-        class Private;
-        Private * const d;
+public:
+    explicit ActionGroup(QObject *parent);
+    ~ActionGroup();
+    //! Reimplemented.
+    void addAction(QAction *action);
+    QAction *action(const QString &name) const;
+private:
+    class Private;
+    Private *const d;
 };
 
 //! @return @a value aligned to the nearest multiple of gridSize
 KFORMEDITOR_EXPORT int alignValueToGrid(int value, int gridSize);
 
-//! Paint semitransparent widget frame. 
+//! Paint semitransparent widget frame.
 //! For example it is useful for design mode to show geometry of label that has no visible frames.
-KFORMEDITOR_EXPORT void paintWidgetFrame(QPainter& p, const QRect& geometry);
+KFORMEDITOR_EXPORT void paintWidgetFrame(QPainter &p, const QRect &geometry);
 
 }
 

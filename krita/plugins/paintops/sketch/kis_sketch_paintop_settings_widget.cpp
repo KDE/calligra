@@ -36,7 +36,7 @@
 #include "kis_linewidth_option.h"
 #include "kis_offset_scale_option.h"
 
-KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
+KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget *parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
     m_sketchOption =  new KisSketchOpOption();
@@ -58,7 +58,7 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
 
     addPaintOpOption(m_paintActionType);
 
-    KisPropertiesConfiguration* reconfigurationCourier = configuration();
+    KisPropertiesConfiguration *reconfigurationCourier = configuration();
     QDomDocument xMLAnalyzer("");
     xMLAnalyzer.setContent(reconfigurationCourier->getString("brush_definition"));
 
@@ -76,10 +76,10 @@ KisSketchPaintOpSettingsWidget::~ KisSketchPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisSketchPaintOpSettingsWidget::configuration() const
+KisPropertiesConfiguration  *KisSketchPaintOpSettingsWidget::configuration() const
 {
-    KisSketchPaintOpSettings* config = new KisSketchPaintOpSettings();
-    config->setOptionsWidget(const_cast<KisSketchPaintOpSettingsWidget*>(this));
+    KisSketchPaintOpSettings *config = new KisSketchPaintOpSettings();
+    config->setOptionsWidget(const_cast<KisSketchPaintOpSettingsWidget *>(this));
     config->setProperty("paintop", "sketchbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

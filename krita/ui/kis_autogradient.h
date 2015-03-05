@@ -31,19 +31,19 @@ class KisAutogradient : public QWidget, public Ui::KisWdgAutogradient
     Q_OBJECT
 
 public:
-    KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption);
+    KisAutogradient(KoSegmentGradient *gradient, QWidget *parent, const char *name, const QString &caption);
     void activate();
 Q_SIGNALS:
     void activatedResource(KoResource *r);
 private:
-    KoSegmentGradient* m_autogradientResource;
+    KoSegmentGradient *m_autogradientResource;
 private Q_SLOTS:
-    void slotSelectedSegment(KoGradientSegment* segment);
-    void slotChangedSegment(KoGradientSegment* segment);
+    void slotSelectedSegment(KoGradientSegment *segment);
+    void slotChangedSegment(KoGradientSegment *segment);
     void slotChangedInterpolation(int type);
     void slotChangedColorInterpolation(int type);
-    void slotChangedLeftColor(const QColor& color);
-    void slotChangedRightColor(const QColor& color);
+    void slotChangedLeftColor(const QColor &color);
+    void slotChangedRightColor(const QColor &color);
     void slotChangedLeftOpacity(int value);
     void slotChangedRightOpacity(int value);
     void slotChangedName();

@@ -45,7 +45,7 @@ class KexiRelationsTableFieldList : public KexiFieldListView
     Q_OBJECT
 
 public:
-    KexiRelationsTableFieldList(KexiDB::TableOrQuerySchema* tableOrQuerySchema,
+    KexiRelationsTableFieldList(KexiDB::TableOrQuerySchema *tableOrQuerySchema,
                                 KexiRelationsScrollArea *scrollArea, QWidget *parent = 0);
     virtual ~KexiRelationsTableFieldList();
 
@@ -60,10 +60,10 @@ protected Q_SLOTS:
     void slotContentsMoving(int, int);
 
 protected:
-    virtual void dragEnterEvent(QDragEnterEvent* event);
-    virtual void dragMoveEvent(QDragMoveEvent* e);
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dragMoveEvent(QDragMoveEvent *e);
     virtual void dropEvent(QDropEvent *e);
-    virtual void contentsMousePressEvent(QMouseEvent * e);
+    virtual void contentsMousePressEvent(QMouseEvent *e);
     virtual bool eventFilter(QObject *o, QEvent *ev);
 
 private:
@@ -75,7 +75,7 @@ class KexiRelationViewTableContainerHeader : public QLabel
 {
     Q_OBJECT
 public:
-    explicit KexiRelationViewTableContainerHeader(const QString& text, QWidget *parent = 0);
+    explicit KexiRelationViewTableContainerHeader(const QString &text, QWidget *parent = 0);
     virtual ~KexiRelationViewTableContainerHeader();
 
     virtual void setFocus();

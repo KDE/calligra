@@ -29,8 +29,8 @@
 #include <cmath>
 
 MorphologyEffect::MorphologyEffect()
-        : KoFilterEffect(MorphologyEffectId, i18n("Morphology"))
-        , m_radius(0,0), m_operator(Erode)
+    : KoFilterEffect(MorphologyEffectId, i18n("Morphology"))
+    , m_radius(0, 0), m_operator(Erode)
 {
 }
 
@@ -67,12 +67,12 @@ QImage MorphologyEffect::processImage(const QImage &image, const KoFilterEffectR
     const int h = result.height();
 
     // setup mask
-    const int maskSize = (1+2*rx)*(1+2*ry);
-    int * mask = new int[maskSize];
+    const int maskSize = (1 + 2 * rx) * (1 + 2 * ry);
+    int *mask = new int[maskSize];
     int index = 0;
     for (int y = -ry; y <= ry; ++y) {
         for (int x = -rx; x <= rx; ++x) {
-            mask[index] = y*w+x;
+            mask[index] = y * w + x;
             index++;
         }
     }
@@ -80,29 +80,29 @@ QImage MorphologyEffect::processImage(const QImage &image, const KoFilterEffectR
     int dstPixel, srcPixel;
     uchar s0, s1, s2, s3;
 #if QT_VERSION >= 0x040700
-    const uchar * src = image.constBits();
+    const uchar *src = image.constBits();
 #else
-    const uchar * src = image.bits();
+    const uchar *src = image.bits();
 #endif
-    uchar * dst = result.bits();
+    uchar *dst = result.bits();
 
     const QRect roi = context.filterRegion().toRect();
     const int minX = qMax(rx, roi.left());
-    const int maxX = qMin(w-rx, roi.right());
+    const int maxX = qMin(w - rx, roi.right());
     const int minY = qMax(ry, roi.top());
-    const int maxY = qMin(h-ry, roi.bottom());
+    const int maxY = qMin(h - ry, roi.bottom());
     const int defValue = m_operator == Erode ? 255 : 0;
 
-    uchar * d = 0;
+    uchar *d = 0;
 
     for (int row = minY; row < maxY; ++row) {
         for (int col = minX; col < maxX; ++col) {
             dstPixel = row * w + col;
             s0 = s1 = s2 = s3 = defValue;
             for (int i = 0; i < maskSize; ++i) {
-                srcPixel = dstPixel+mask[i];
-                const uchar *s = &src[4*srcPixel];
-                if (m_operator == Erode ) {
+                srcPixel = dstPixel + mask[i];
+                const uchar *s = &src[4 * srcPixel];
+                if (m_operator == Erode) {
                     s0 = qMin(s0, s[0]);
                     s1 = qMin(s1, s[1]);
                     s2 = qMin(s2, s[2]);
@@ -114,7 +114,7 @@ QImage MorphologyEffect::processImage(const QImage &image, const KoFilterEffectR
                     s3 = qMax(s3, s[3]);
                 }
             }
-            d = &dst[4*dstPixel];
+            d = &dst[4 * dstPixel];
             d[0] = s0;
             d[1] = s1;
             d[2] = s2;
@@ -129,8 +129,9 @@ QImage MorphologyEffect::processImage(const QImage &image, const KoFilterEffectR
 
 bool MorphologyEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &context)
 {
-    if (element.tagName() != id())
+    if (element.tagName() != id()) {
         return false;
+    }
 
     m_radius = QPointF();
     m_operator = Erode;
@@ -139,16 +140,16 @@ bool MorphologyEffect::load(const KoXmlElement &element, const KoFilterEffectLoa
         QString radiusStr = element.attribute("radius").trimmed();
         QStringList params = radiusStr.replace(',', ' ').simplified().split(' ');
         switch (params.count()) {
-            case 1:
-                m_radius.rx() = params[0].toDouble()*72./90.;
-                m_radius.ry() = m_radius.x();
-                break;
-            case 2:
-                m_radius.rx() = params[0].toDouble()*72./90.;
-                m_radius.ry() = params[1].toDouble()*72./90.;
-                break;
-            default:
-                m_radius = QPointF();
+        case 1:
+            m_radius.rx() = params[0].toDouble() * 72. / 90.;
+            m_radius.ry() = m_radius.x();
+            break;
+        case 2:
+            m_radius.rx() = params[0].toDouble() * 72. / 90.;
+            m_radius.ry() = params[1].toDouble() * 72. / 90.;
+            break;
+        default:
+            m_radius = QPointF();
         }
     }
 
@@ -156,8 +157,9 @@ bool MorphologyEffect::load(const KoXmlElement &element, const KoFilterEffectLoa
 
     if (element.hasAttribute("operator")) {
         QString op = element.attribute("operator");
-        if (op == "dilate")
+        if (op == "dilate") {
             m_operator = Dilate;
+        }
     }
 
     return true;
@@ -169,8 +171,9 @@ void MorphologyEffect::save(KoXmlWriter &writer)
 
     saveCommonAttributes(writer);
 
-    if (m_operator != Erode )
+    if (m_operator != Erode) {
         writer.addAttribute("operator", "dilate");
+    }
     if (!m_radius.isNull()) {
         if (m_radius.x() == m_radius.y()) {
             writer.addAttribute("radius", QString("%1").arg(m_radius.x()));

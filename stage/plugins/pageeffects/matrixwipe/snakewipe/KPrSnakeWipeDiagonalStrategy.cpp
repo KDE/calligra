@@ -19,8 +19,8 @@
 
 #include "KPrSnakeWipeTopLeftDiagonalStrategy.h"
 
-KPrSnakeWipeDiagonalStrategy::KPrSnakeWipeDiagonalStrategy(int subType, const char * smilType, const char *smilSubType, bool reverse)
-    : KPrMatrixWipeStrategy( subType, smilType, smilSubType, reverse )
+KPrSnakeWipeDiagonalStrategy::KPrSnakeWipeDiagonalStrategy(int subType, const char *smilType, const char *smilSubType, bool reverse)
+    : KPrMatrixWipeStrategy(subType, smilType, smilSubType, reverse)
 {
 }
 
@@ -34,7 +34,7 @@ int KPrSnakeWipeDiagonalStrategy::maxIndex(int columns, int rows)
     int idx = 0;
     int i = 0, j = 0;
     int dx = 1, dy = -1;
-    while (idx < columns*rows) {
+    while (idx < columns * rows) {
         m_indices[i * rows + j] = idx;
         idx++;
         i += dx;

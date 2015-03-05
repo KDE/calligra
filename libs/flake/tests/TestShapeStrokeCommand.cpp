@@ -25,7 +25,7 @@
 
 void TestShapeStrokeCommand::refCounting()
 {
-    MockShape * shape1 = new MockShape();
+    MockShape *shape1 = new MockShape();
     KoShapeStrokeModel *whiteStroke = new KoShapeStroke(1.0, QColor(Qt::white));
     KoShapeStrokeModel *blackStroke = new KoShapeStroke(1.0, QColor(Qt::black));
     KoShapeStrokeModel *redStroke   = new KoShapeStroke(1.0, QColor(Qt::red));

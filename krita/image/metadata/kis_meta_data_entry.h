@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef _KIS_META_DATA_ENTRY_H_
 #define _KIS_META_DATA_ENTRY_H_
 
@@ -47,8 +46,8 @@ public:
      * @param namespacePrefix
      * @param value
      */
-    Entry(const KisMetaData::Schema* schema, QString name, const KisMetaData::Value& value);
-    Entry(const Entry&);
+    Entry(const KisMetaData::Schema *schema, QString name, const KisMetaData::Value &value);
+    Entry(const Entry &);
     ~Entry();
     /**
      * @return the name of this entry
@@ -57,7 +56,7 @@ public:
     /**
      * @return the namespace of this entry
      */
-    const KisMetaData::Schema* schema() const;
+    const KisMetaData::Schema *schema() const;
     /**
      * @return the qualified name of this entry, which is the concatenation of the
      * namespace and of the name
@@ -66,11 +65,11 @@ public:
     /**
      * @return the value of this entry
      */
-    const KisMetaData::Value& value() const;
+    const KisMetaData::Value &value() const;
     /**
      * @return the value of this entry
      */
-    KisMetaData::Value& value();
+    KisMetaData::Value &value();
     /**
      * @return true if this entry is valid
      */
@@ -78,16 +77,16 @@ public:
     /**
      * @return true if the name in argument is valid entry name.
      */
-    static bool isValidName(const QString& _name);
+    static bool isValidName(const QString &_name);
     /**
      * Affect the content of entry to this entry if entry is valid
      */
-    Entry& operator=(const Entry& entry);
-    bool operator==(const Entry&) const;
+    Entry &operator=(const Entry &entry);
+    bool operator==(const Entry &) const;
 private:
-    void setSchema(const KisMetaData::Schema* schema);
+    void setSchema(const KisMetaData::Schema *schema);
 private:
-    Private* const d;
+    Private *const d;
 };
 }
 

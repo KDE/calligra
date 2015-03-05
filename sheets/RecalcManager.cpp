@@ -49,7 +49,7 @@ public:
      *
      * \see RecalcManager::regionChanged
      */
-    void cellsToCalculate(const Region& region);
+    void cellsToCalculate(const Region &region);
 
     /**
      * Finds all cells in \p sheet , that have got a formula and hence need
@@ -59,12 +59,12 @@ public:
      * \see RecalcManager::recalcMap
      * \see RecalcManager::recalcSheet
      */
-    void cellsToCalculate(Sheet* sheet = 0);
+    void cellsToCalculate(Sheet *sheet = 0);
 
     /**
      * Helper function for cellsToCalculate(const Region&) and cellsToCalculate(Sheet*).
      */
-    void cellsToCalculate(const Region& region, QSet<Cell>& cells) const;
+    void cellsToCalculate(const Region &region, QSet<Cell> &cells) const;
 
     /*
      * Stores cells ordered by its reference depth.
@@ -82,14 +82,15 @@ public:
      * \li depth(A3) = 2
      */
     QMap<int, Cell> cells;
-    const Map* map;
+    const Map *map;
     bool active;
 };
 
-void RecalcManager::Private::cellsToCalculate(const Region& region)
+void RecalcManager::Private::cellsToCalculate(const Region &region)
 {
-    if (region.isEmpty())
+    if (region.isEmpty()) {
         return;
+    }
 
     // retrieve the cell depths
     QMap<Cell, int> depths = map->dependencyManager()->depths();
@@ -99,12 +100,13 @@ void RecalcManager::Private::cellsToCalculate(const Region& region)
     cellsToCalculate(region, cells);
     const QSet<Cell>::ConstIterator end(cells.end());
     for (QSet<Cell>::ConstIterator it(cells.begin()); it != end; ++it) {
-        if ((*it).sheet()->isAutoCalculationEnabled())
+        if ((*it).sheet()->isAutoCalculationEnabled()) {
             this->cells.insertMulti(depths[*it], *it);
+        }
     }
 }
 
-void RecalcManager::Private::cellsToCalculate(Sheet* sheet)
+void RecalcManager::Private::cellsToCalculate(Sheet *sheet)
 {
     // retrieve the cell depths
     QMap<Cell, int> depths = map->dependencyManager()->depths();
@@ -132,12 +134,12 @@ void RecalcManager::Private::cellsToCalculate(Sheet* sheet)
     }
 }
 
-void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<Cell>& cells) const
+void RecalcManager::Private::cellsToCalculate(const Region &region, QSet<Cell> &cells) const
 {
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         const QRect range = (*it)->rect();
-        const Sheet* sheet = (*it)->sheet();
+        const Sheet *sheet = (*it)->sheet();
         for (int col = range.left(); col <= range.right(); ++col) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
                 Cell cell(sheet, col, row);
@@ -145,12 +147,14 @@ void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<Cell>& 
                 // providers and need to be processed.
 
                 // check for already processed cells
-                if (cells.contains(cell))
+                if (cells.contains(cell)) {
                     continue;
+                }
 
                 // add it to the list
-                if (cell.isFormula())
+                if (cell.isFormula()) {
                     cells.insert(cell);
+                }
 
                 // add its consumers to the list
                 cellsToCalculate(map->dependencyManager()->consumingRegion(cell), cells);
@@ -160,8 +164,8 @@ void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<Cell>& 
 }
 
 RecalcManager::RecalcManager(Map *const map)
-        : QObject(map)
-        , d(new Private)
+    : QObject(map)
+    , d(new Private)
 {
     d->map  = map;
     d->active = false;
@@ -172,10 +176,11 @@ RecalcManager::~RecalcManager()
     delete d;
 }
 
-void RecalcManager::regionChanged(const Region& region)
+void RecalcManager::regionChanged(const Region &region)
 {
-    if (d->active || region.isEmpty())
+    if (d->active || region.isEmpty()) {
         return;
+    }
     d->active = true;
     kDebug(36002) << "RecalcManager::regionChanged" << region.name();
     ElapsedTime et("Overall region recalculation", ElapsedTime::PrintOnlyTime);
@@ -184,10 +189,11 @@ void RecalcManager::regionChanged(const Region& region)
     d->active = false;
 }
 
-void RecalcManager::recalcSheet(Sheet* const sheet)
+void RecalcManager::recalcSheet(Sheet *const sheet)
 {
-    if (d->active)
+    if (d->active) {
         return;
+    }
     d->active = true;
     ElapsedTime et("Overall sheet recalculation", ElapsedTime::PrintOnlyTime);
     d->cellsToCalculate(sheet);
@@ -197,8 +203,9 @@ void RecalcManager::recalcSheet(Sheet* const sheet)
 
 void RecalcManager::recalcMap(KoUpdater *updater)
 {
-    if (d->active)
+    if (d->active) {
         return;
+    }
     d->active = true;
     ElapsedTime et("Overall map recalculation", ElapsedTime::PrintOnlyTime);
     d->cellsToCalculate();
@@ -233,20 +240,23 @@ void RecalcManager::recalc(KoUpdater *updater)
     kDebug(36002) << "Recalculating" << d->cells.count() << " cell(s)..";
     ElapsedTime et("Recalculating cells", ElapsedTime::PrintOnlyTime);
 
-    if (updater)
+    if (updater) {
         updater->setProgress(0);
+    }
 
     const QList<Cell> cells = d->cells.values();
     const int cellsCount = cells.count();
     for (int c = 0; c < cellsCount; ++c) {
         // only recalculate, if no circular dependency occurred
-        if (cells.value(c).value() == Value::errorCIRCLE())
+        if (cells.value(c).value() == Value::errorCIRCLE()) {
             continue;
+        }
         // Check for valid formula; parses the expression, if not done already.
-        if (!cells.value(c).formula().isValid())
+        if (!cells.value(c).formula().isValid()) {
             continue;
+        }
 
-        const Sheet* sheet = cells.value(c).sheet();
+        const Sheet *sheet = cells.value(c).sheet();
 
         // evaluate the formula and set the result
         Value result = cells.value(c).formula().eval();
@@ -264,12 +274,14 @@ void RecalcManager::recalc(KoUpdater *updater)
         } else {
             Cell(cells.value(c)).setValue(result);
         }
-        if (updater)
+        if (updater) {
             updater->setProgress(int(qreal(c) / qreal(cellsCount) * 100.));
+        }
     }
 
-    if (updater)
+    if (updater) {
         updater->setProgress(100);
+    }
 
 //     dump();
     d->cells.clear();
@@ -281,7 +293,9 @@ void RecalcManager::dump() const
     for (QMap<int, Cell>::ConstIterator it(d->cells.constBegin()); it != end; ++it) {
         Cell cell = it.value();
         QString cellName = cell.name();
-        while (cellName.count() < 4) cellName.prepend(' ');
+        while (cellName.count() < 4) {
+            cellName.prepend(' ');
+        }
         kDebug(36002) << "depth(" << cellName << " ) =" << it.key();
     }
 }

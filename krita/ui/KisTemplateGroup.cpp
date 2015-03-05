@@ -28,7 +28,6 @@
 #include <kconfig.h>
 #include <kdebug.h>
 
-
 #include <ksavefile.h>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
@@ -39,8 +38,8 @@
 #include <KisTemplate.h>
 
 KisTemplateGroup::KisTemplateGroup(const QString &name, const QString &dir,
-                                 int _sortingWeight, bool touched) :
-        m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight)
+                                   int _sortingWeight, bool touched) :
+    m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight)
 {
     m_dirs.append(dir);
 }
@@ -53,7 +52,7 @@ KisTemplateGroup::~KisTemplateGroup()
 bool KisTemplateGroup::isHidden() const
 {
 
-    QList<KisTemplate*>::const_iterator it = m_templates.begin();
+    QList<KisTemplate *>::const_iterator it = m_templates.begin();
     bool hidden = true;
     while (it != m_templates.end() && hidden) {
         hidden = (*it)->isHidden();
@@ -64,8 +63,9 @@ bool KisTemplateGroup::isHidden() const
 
 void KisTemplateGroup::setHidden(bool hidden) const
 {
-    foreach (KisTemplate* t, m_templates)
+    foreach (KisTemplate *t, m_templates) {
         t->setHidden(hidden);
+    }
 
     m_touched = true;
 }
@@ -94,8 +94,8 @@ bool KisTemplateGroup::add(KisTemplate *t, bool force, bool touch)
 
 KisTemplate *KisTemplateGroup::find(const QString &name) const
 {
-    QList<KisTemplate*>::const_iterator it = m_templates.begin();
-    KisTemplate* ret = NULL;
+    QList<KisTemplate *>::const_iterator it = m_templates.begin();
+    KisTemplate *ret = NULL;
 
     while (it != m_templates.end()) {
         if ((*it)->name() == name) {

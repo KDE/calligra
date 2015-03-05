@@ -32,7 +32,7 @@ struct KisBookmarkedFilterConfigurationsModel::Private {
 };
 
 KisBookmarkedFilterConfigurationsModel::KisBookmarkedFilterConfigurationsModel(KisPaintDeviceSP thumb, KisFilterSP filter)
-        : KisBookmarkedConfigurationsModel(filter->bookmarkManager()), d(new Private)
+    : KisBookmarkedConfigurationsModel(filter->bookmarkManager()), d(new Private)
 {
     d->thumb = thumb;
     d->filter = filter;
@@ -42,7 +42,6 @@ KisBookmarkedFilterConfigurationsModel::~KisBookmarkedFilterConfigurationsModel(
 {
     delete d;
 }
-
 
 QVariant KisBookmarkedFilterConfigurationsModel::data(const QModelIndex &index, int role) const
 {
@@ -54,10 +53,12 @@ QVariant KisBookmarkedFilterConfigurationsModel::data(const QModelIndex &index, 
 
 }
 
-KisFilterConfiguration* KisBookmarkedFilterConfigurationsModel::configuration(const QModelIndex &index) const
+KisFilterConfiguration *KisBookmarkedFilterConfigurationsModel::configuration(const QModelIndex &index) const
 {
-    KisFilterConfiguration* config = dynamic_cast<KisFilterConfiguration*>(KisBookmarkedConfigurationsModel::configuration(index));
-    if (config) return config;
+    KisFilterConfiguration *config = dynamic_cast<KisFilterConfiguration *>(KisBookmarkedConfigurationsModel::configuration(index));
+    if (config) {
+        return config;
+    }
     return d->filter->defaultConfiguration(d->thumb);
 }
 

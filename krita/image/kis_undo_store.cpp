@@ -20,7 +20,6 @@
 
 #include "kis_debug.h"
 
-
 KisUndoStore::KisUndoStore()
 {
 }

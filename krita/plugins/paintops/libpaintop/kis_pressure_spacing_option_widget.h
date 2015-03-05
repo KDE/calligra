@@ -22,8 +22,6 @@
 
 #include "kis_curve_option_widget.h"
 
-
-
 class PAINTOP_EXPORT KisPressureSpacingOptionWidget : public KisCurveOptionWidget
 {
     Q_OBJECT

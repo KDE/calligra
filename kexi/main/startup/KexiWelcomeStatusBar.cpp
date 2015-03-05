@@ -83,7 +83,7 @@ class KexiWelcomeStatusBarGuiUpdater::Private
 {
 public:
     Private()
-     : configGroup(KConfigGroup(KGlobal::config()->group("User Feedback")))
+        : configGroup(KConfigGroup(KGlobal::config()->group("User Feedback")))
     {
     }
     KConfigGroup configGroup;
@@ -92,8 +92,8 @@ public:
 };
 
 KexiWelcomeStatusBarGuiUpdater::KexiWelcomeStatusBarGuiUpdater()
- : QObject()
- , d(new Private)
+    : QObject()
+    , d(new Private)
 {
 }
 
@@ -106,7 +106,7 @@ QString KexiWelcomeStatusBarGuiUpdater::uiPath(const QString &fname) const
 {
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
     return f->serviceUrl() + QString("/ui/%1/").arg(stableVersionStringDot0())
-        + fname;
+           + fname;
 }
 
 void KexiWelcomeStatusBarGuiUpdater::update()
@@ -114,16 +114,16 @@ void KexiWelcomeStatusBarGuiUpdater::update()
     QDateTime lastStatusBarUpdate = d->configGroup.readEntry("LastStatusBarUpdate", QDateTime());
     if (lastStatusBarUpdate.isValid()) {
         int minutes = lastStatusBarUpdate.secsTo(QDateTime::currentDateTime()) / 60;
-        
+
         if (minutes < GUI_UPDATE_INTERVAL) {
-            kDebug() << "gui updated" << minutes << "min. ago, next auto-update in" 
-                << (GUI_UPDATE_INTERVAL - minutes) << "min.";
+            kDebug() << "gui updated" << minutes << "min. ago, next auto-update in"
+                     << (GUI_UPDATE_INTERVAL - minutes) << "min.";
             return;
         }
     }
-    
+
     d->configGroup.writeEntry("LastStatusBarUpdate", QDateTime::currentDateTime());
-    
+
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
     f->waitForRedirect(this, SLOT(slotRedirectLoaded()));
 }
@@ -131,26 +131,26 @@ void KexiWelcomeStatusBarGuiUpdater::update()
 void KexiWelcomeStatusBarGuiUpdater::slotRedirectLoaded()
 {
     QByteArray postData = stableVersionStringDot0().toLatin1();
-    KIO::Job* sendJob = KIO::storedHttpPost(postData,
+    KIO::Job *sendJob = KIO::storedHttpPost(postData,
                                             KUrl(uiPath(".list")),
                                             KIO::HideProgressInfo);
     connect(sendJob, SIGNAL(result(KJob*)), this, SLOT(sendRequestListFilesFinished(KJob*)));
     sendJob->addMetaData("content-type", "Content-Type: application/x-www-form-urlencoded");
 }
 
-void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
+void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob *job)
 {
     if (job->error()) {
         kWarning() << "Error while receiving .list file - no files will be updated";
         //! @todo error...
         return;
     }
-    KIO::StoredTransferJob* sendJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    KIO::StoredTransferJob *sendJob = qobject_cast<KIO::StoredTransferJob *>(job);
     QString result = sendJob->data();
     if (result.length() > UPDATE_FILES_LIST_SIZE_LIMIT) { // anit-DOS protection
         kWarning() << "Too large .list file (" << result.length()
-            << "); the limit is" << UPDATE_FILES_LIST_SIZE_LIMIT
-            << "- no files will be updated";
+                   << "); the limit is" << UPDATE_FILES_LIST_SIZE_LIMIT
+                   << "- no files will be updated";
         return;
     }
     kDebug() << result;
@@ -159,33 +159,32 @@ void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
     d->fileNamesToUpdate.clear();
     if (data.count() > UPDATE_FILES_COUNT_LIMIT) { // anti-DOS protection
         kWarning() << "Too many files to update (" << data.count()
-            << "); the limit is" << UPDATE_FILES_COUNT_LIMIT
-            << "- no files will be updated";
+                   << "); the limit is" << UPDATE_FILES_COUNT_LIMIT
+                   << "- no files will be updated";
         return;
     }
     // OK, try to update (stage 1: check, stage 2: checking)
     for (int stage = 1; stage <= 2; stage++) {
         int i = 0;
-        for (QStringList::ConstIterator it(data.constBegin()); it!=data.constEnd(); ++it, i++) {
+        for (QStringList::ConstIterator it(data.constBegin()); it != data.constEnd(); ++it, i++) {
             const QByteArray hash((*it).left(32).toLatin1());
             const QString remoteFname((*it).mid(32 + 2));
             if (stage == 1) {
                 if (hash.length() != 32) {
-                    kWarning() << "Invalid hash" << hash << "in line" << i+1 << "- no files will be updated";
+                    kWarning() << "Invalid hash" << hash << "in line" << i + 1 << "- no files will be updated";
                     return;
                 }
                 if ((*it).mid(32, 2) != "  ") {
                     kWarning() << "Two spaces expected but found" << (*it).mid(32, 2)
-                        << "in line" << i+1 << "- no files will be updated";
+                               << "in line" << i + 1 << "- no files will be updated";
                     return;
                 }
                 if (remoteFname.contains(QRegExp("\\s"))) {
                     kWarning() << "Filename expected without whitespace but found" << remoteFname
-                        << "in line" << i+1 << "- no files will be updated";
+                               << "in line" << i + 1 << "- no files will be updated";
                     return;
                 }
-            }
-            else if (stage == 2) {
+            } else if (stage == 2) {
                 checkFile(hash, remoteFname, &d->fileNamesToUpdate);
             }
         }
@@ -200,16 +199,16 @@ void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
     d->tempDir = tempDir.name();
     kDebug() << tempDir.name();
     KIO::CopyJob *copyJob = KIO::copy(sourceFiles,
-                                        KUrl("file://" + tempDir.name()),
-                                        KIO::HideProgressInfo | KIO::Overwrite);
+                                      KUrl("file://" + tempDir.name()),
+                                      KIO::HideProgressInfo | KIO::Overwrite);
     connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(filesCopyFinished(KJob*)));
     //kDebug() << "copying from" << KUrl(uiPath(fname)) << "to"
     //         << (dir + fname);
 }
 
 void KexiWelcomeStatusBarGuiUpdater::checkFile(const QByteArray &hash,
-                                               const QString &remoteFname,
-                                               QStringList *fileNamesToUpdate)
+        const QString &remoteFname,
+        QStringList *fileNamesToUpdate)
 {
     QString localFname = findFilename(remoteFname);
     if (localFname.isEmpty()) {
@@ -235,14 +234,14 @@ void KexiWelcomeStatusBarGuiUpdater::checkFile(const QByteArray &hash,
     }
 }
 
-void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob* job)
+void KexiWelcomeStatusBarGuiUpdater::filesCopyFinished(KJob *job)
 {
     if (job->error()) {
         //! @todo error...
         kDebug() << "ERROR:" << job->errorString();
         return;
     }
-    KIO::CopyJob* copyJob = qobject_cast<KIO::CopyJob*>(job);
+    KIO::CopyJob *copyJob = qobject_cast<KIO::CopyJob *>(job);
     kDebug() << "DONE" << copyJob->destUrl();
 
     QString dir(KStandardDirs::locateLocal("data", basePath() + '/', true /*create*/));
@@ -268,7 +267,8 @@ public:
         setWidgetResizable(true);
     }
 
-    void setEnabled(bool set) {
+    void setEnabled(bool set)
+    {
         if (set != isEnabled()) {
             QScrollArea::setEnabled(set);
             updateColors();
@@ -276,7 +276,7 @@ public:
     }
 
 protected:
-    virtual void changeEvent(QEvent* event)
+    virtual void changeEvent(QEvent *event)
     {
         switch (event->type()) {
         case QEvent::EnabledChange:
@@ -288,14 +288,16 @@ protected:
         QScrollArea::changeEvent(event);
     }
 
-    void updateColors() {
-        if (!widget())
+    void updateColors()
+    {
+        if (!widget()) {
             return;
+        }
         KColorScheme scheme(palette().currentColorGroup());
         QColor linkColor = scheme.foreground(KColorScheme::LinkText).color();
         //kDebug() << "_____________" << isEnabled();
 
-        foreach(QLabel* lbl, widget()->findChildren<QLabel*>()) {
+        foreach (QLabel *lbl, widget()->findChildren<QLabel *>()) {
             QString t = lbl->text();
             QRegExp re("<a.*>");
             re.setMinimal(true);
@@ -315,17 +317,17 @@ protected:
                 int colPos = a.indexOf("color:");
                 if (colPos == -1) { // add color
                     a.insert(a.length() - 1, " style=\"color:" + linkColor.name() + ";\"");
-                }
-                else { // replace color
+                } else { // replace color
                     colPos += qstrlen("color:");
-                    for (;colPos < a.length() && a[colPos] == ' '; colPos++)
+                    for (; colPos < a.length() && a[colPos] == ' '; colPos++)
                         ;
                     if (colPos < a.length() && a[colPos] == '#') {
                         colPos++;
                         int i = colPos;
-                        for (;i < a.length(); i++) {
-                            if (a[i] == ';' || a[i] == ' ' || a[i] == '"' || a[i] == '\'')
+                        for (; i < a.length(); i++) {
+                            if (a[i] == ';' || a[i] == ' ' || a[i] == '"' || a[i] == '\'') {
                                 break;
+                            }
                         }
                         //kDebug() << "******" << a.mid(colPos, i - colPos);
                         a.replace(colPos, i - colPos, linkColor.name().mid(1));
@@ -347,7 +349,7 @@ protected:
 #if 0
         QString text;
         text = QString("<a href=\"%1\" style=\"color:%2;\">%3</a>")
-            .arg(link).arg(linkColor.name()).arg(linkText);
+               .arg(link).arg(linkColor.name()).arg(linkText);
         if (!format.isEmpty()) {
             text = QString(format).replace("%L", text);
         }
@@ -361,9 +363,9 @@ protected:
 class KexiWelcomeStatusBar::Private
 {
 public:
-    explicit Private(KexiWelcomeStatusBar* _q)
-     : statusWidget(0), helpAction(0), shareAction(0), cancelAction(0),
-       q(_q)
+    explicit Private(KexiWelcomeStatusBar *_q)
+        : statusWidget(0), helpAction(0), shareAction(0), cancelAction(0),
+          q(_q)
     {
         rccFname = findFilename("status.rcc");
         if (!rccFname.isEmpty())  {
@@ -382,8 +384,9 @@ public:
         donated = false;
         //kDebug() << "totalFeedbackScore:" << totalFeedbackScore;
     }
-    
-    ~Private() {
+
+    ~Private()
+    {
         delete msgWidget;
         if (!rccFname.isEmpty())  {
             QResource::unregisterResource(rccFname);
@@ -396,8 +399,7 @@ public:
         KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
         KexiUserFeedbackAgent::Areas areas = f->enabledAreas();
         for (QMap<KexiUserFeedbackAgent::Area, int>::ConstIterator it(scores.constBegin());
-             it!=scores.constEnd(); ++it)
-        {
+                it != scores.constEnd(); ++it) {
             if (areas & it.key()) {
                 score += it.value();
             }
@@ -405,7 +407,7 @@ public:
         //kDebug() << score;
         return score;
     }
-    
+
     template<typename T>
     T widgetOfClass(T parent, const char *widgetName) const
     {
@@ -415,15 +417,15 @@ public:
         }
         return w;
     }
-    
-    QWidget* widget(QWidget *parent, const char *widgetName) const
+
+    QWidget *widget(QWidget *parent, const char *widgetName) const
     {
-        return widgetOfClass<QWidget*>(parent, widgetName);
+        return widgetOfClass<QWidget *>(parent, widgetName);
     }
-    
-    QObject* object(QObject *parent, const char *objectName) const
+
+    QObject *object(QObject *parent, const char *objectName) const
     {
-        QObject *o = qFindChild<QObject*>(parent, objectName);
+        QObject *o = qFindChild<QObject *>(parent, objectName);
         if (!o) {
             kWarning() << "NO SUCH object" << objectName << "in" << parent;
         }
@@ -457,14 +459,15 @@ public:
     void animatedHide(QWidget *parent, const char *widgetName)
     {
         QWidget *w = widget(parent, widgetName);
-        if (!w)
+        if (!w) {
             return;
+        }
         KFadeWidgetEffect *animation = new KFadeWidgetEffect(w);
         QObject::connect(animation, SIGNAL(destroyed()), w, SLOT(hide()));
         animation->start();
     }
-    
-    QWidget* loadGui(const QString &guiFileName, QWidget *parentWidget = 0)
+
+    QWidget *loadGui(const QString &guiFileName, QWidget *parentWidget = 0)
     {
         QString fname = findFilename(guiFileName);
         if (fname.isEmpty()) {
@@ -477,7 +480,7 @@ public:
             return 0;
         }
         QUiLoader loader;
-        QWidget* widget = loader.load(&file, parentWidget);
+        QWidget *widget = loader.load(&file, parentWidget);
         if (!widget) {
             kWarning() << "could load ui from file" << fname;
         }
@@ -492,7 +495,7 @@ public:
             return;
         }
         int smallFontSize = qFloor((KGlobalSettings::smallestReadableFont().pointSizeF()
-                                   + q->font().pointSizeF())
+                                    + q->font().pointSizeF())
                                    / 2.0);
         smallFont = q->font();
         smallFont.setPointSizeF(smallFontSize);
@@ -528,7 +531,7 @@ public:
                 q, SLOT(showShareUsageInfo()));
         connect(statusWidget, "link_show_contribution_details", SIGNAL(linkActivated(QString)),
                 q, SLOT(showContributionDetails()));
-        
+
         setProperty(statusWidget, "donation_url", "visible", false);
         connect(statusWidget, "link_donate", SIGNAL(linkActivated(QString)),
                 q, SLOT(showDonation()));
@@ -550,7 +553,7 @@ public:
         }
         setUserProgress(progress);
     }
-    
+
     void updateContributionLinksVisibility()
     {
         KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
@@ -561,14 +564,14 @@ public:
         if (noneEnabled) {
             availableLinks++;
         }
-        setProperty(statusWidget, "share_more_usage_info", "visible", 
+        setProperty(statusWidget, "share_more_usage_info", "visible",
                     !noneEnabled && !allEnabled);
         if (!noneEnabled && !allEnabled) {
             availableLinks++;
         }
         setProperty(statusWidget, "link_share_more_usage_info", "text",
                     link_share_more_usage_info_mask.arg(totalFeedbackScore - currentFeedbackScore()));
-        
+
         setProperty(statusWidget, "lbl_contribute", "visible", availableLinks > 0);
     }
 
@@ -580,10 +583,9 @@ public:
             int days = lastDonation.secsTo(QDateTime::currentDateTime()) / 60 / 60 / 24;
             if (days >= DONATION_INTERVAL) {
                 donated = false;
-                kDebug() << "last donation declared" << days << "days ago, next in" 
-                    << (DONATION_INTERVAL - days) << "days.";
-            }
-            else if (days >= 0) {
+                kDebug() << "last donation declared" << days << "days ago, next in"
+                         << (DONATION_INTERVAL - days) << "days.";
+            } else if (days >= 0) {
                 donated = true;
             }
         }
@@ -594,28 +596,27 @@ public:
         AlignToBar,
         AlignToWidget
     };
-    
+
     //! Aligns callout pointer position of msgWidget to widget named @a alignToWidgetName
     void setMessageWidgetCalloutPointerPosition(
-        const QString& alignToWidgetName,
+        const QString &alignToWidgetName,
         CalloutAlignment calloutAlignment = AlignToBar)
     {
-            //kDebug() << q->pos() << q->mapToGlobal(QPoint(0, 100));
-            QPoint p(q->mapToGlobal(QPoint(0, 100)));
-            QWidget *alignToWidget = this->widget(statusWidget, alignToWidgetName.toLatin1());
-            if (alignToWidget) {
-                p.setY(
-                    alignToWidget->mapToGlobal(
-                        QPoint(-5, alignToWidget->height() / 2)).y());
-                if (calloutAlignment == AlignToWidget) {
-                    p.setX(alignToWidget->mapToGlobal(QPoint(-5, 0)).x());
-                    //kDebug() << p;
-                }
+        //kDebug() << q->pos() << q->mapToGlobal(QPoint(0, 100));
+        QPoint p(q->mapToGlobal(QPoint(0, 100)));
+        QWidget *alignToWidget = this->widget(statusWidget, alignToWidgetName.toLatin1());
+        if (alignToWidget) {
+            p.setY(
+                alignToWidget->mapToGlobal(
+                    QPoint(-5, alignToWidget->height() / 2)).y());
+            if (calloutAlignment == AlignToWidget) {
+                p.setX(alignToWidget->mapToGlobal(QPoint(-5, 0)).x());
+                //kDebug() << p;
             }
-            else {
-                kWarning() << alignToWidgetName << "not found!";
-            }
-            msgWidget->setCalloutPointerPosition(p, alignToWidget);
+        } else {
+            kWarning() << alignToWidgetName << "not found!";
+        }
+        msgWidget->setCalloutPointerPosition(p, alignToWidget);
     }
 
     //! Shows message widget taking maximum space within the welcome page
@@ -625,15 +626,14 @@ public:
     //! Call msgWidget->animatedShow() afterwards.
     void showMaximizedMessageWidget(const QString &alignToWidgetName,
                                     QPointer<QGridLayout> *layout,
-                                    const char* slotToCallAfterShow,
+                                    const char *slotToCallAfterShow,
                                     CalloutAlignment calloutAlignment = AlignToBar)
     {
         QWidget *alignToWidget = this->widget(statusWidget, alignToWidgetName.toLatin1());
         int msgWidth;
         if (alignToWidget && calloutAlignment == AlignToWidget) {
             msgWidth = q->parentWidget()->width() - alignToWidget->width() - 10;
-        }
-        else {
+        } else {
             msgWidth = q->parentWidget()->width() - q->width();
         }
         QWidget *widget = new QWidget;
@@ -644,7 +644,7 @@ public:
         //kDebug() << (q->parentWidget()->width() - q->width()) << "***";
         KexiContextMessage msg(widget);
         if (msgWidget) {
-            delete static_cast<KexiContextMessageWidget*>(msgWidget);
+            delete static_cast<KexiContextMessageWidget *>(msgWidget);
         }
         msgWidget
             = new KexiContextMessageWidget(q->parentWidget()->parentWidget(), 0, 0, msg);
@@ -655,8 +655,7 @@ public:
         if (alignToWidget) {
             offset_y = alignToWidget->mapToGlobal(QPoint(0, 0)).y()
                        - q->parentWidget()->mapToGlobal(QPoint(0, 0)).y();
-        }
-        else {
+        } else {
             kWarning() << alignToWidgetName << "not found!";
         }
         msgWidget->resize(msgWidth, q->parentWidget()->height() - offset_y);
@@ -666,7 +665,7 @@ public:
         // async show to for speed up
         if (slotToCallAfterShow) {
             QObject::connect(msgWidget, SIGNAL(animatedShowFinished()),
-                            q, slotToCallAfterShow);
+                             q, slotToCallAfterShow);
         }
         QObject::connect(msgWidget, SIGNAL(animatedHideFinished()),
                          q, SLOT(slotMessageWidgetClosed()));
@@ -699,9 +698,9 @@ private:
     KexiWelcomeStatusBar *q;
     QMap<QString, QString> dict;
 };
-    
-KexiWelcomeStatusBar::KexiWelcomeStatusBar(QWidget* parent)
- : QWidget(parent), d(new Private(this))
+
+KexiWelcomeStatusBar::KexiWelcomeStatusBar(QWidget *parent)
+    : QWidget(parent), d(new Private(this))
 {
     d->lyr = new QVBoxLayout(this);
 
@@ -754,7 +753,7 @@ void KexiWelcomeStatusBar::showShareUsageInfo()
     if (!widget) {
         return;
     }
-    QLabel *lbl = qFindChild<QLabel*>(widget, "question");
+    QLabel *lbl = qFindChild<QLabel *>(widget, "question");
     if (!lbl) {
         return;
     }
@@ -778,7 +777,7 @@ void KexiWelcomeStatusBar::showShareUsageInfo()
     msg.addAction(d->shareAction);
     msg.addAction(d->cancelAction);
     if (d->msgWidget) {
-        delete static_cast<KexiContextMessageWidget*>(d->msgWidget);
+        delete static_cast<KexiContextMessageWidget *>(d->msgWidget);
     }
     d->msgWidget
         = new KexiContextMessageWidget(parentWidget(), 0, 0, msg);
@@ -797,22 +796,21 @@ void KexiWelcomeStatusBar::showDonation()
     if (!sender()) {
         return;
     }
-    if (KMessageBox::Yes != KMessageBox::questionYesNo(this, 
-       i18n("<p><b>Kexi may be totally free, but its development is costly.</b><br/>"
-            "Power, hardware, office space, internet access, traveling for meetings - everything costs.</p>"
-            "<p>Direct donation is the easiest and fastest way to efficiently support the Kexi Project. "
-            "Everyone, regardless of any degree of involvement can do so.</p>"
-            "<p>What do you receive for your donation? Kexi will become more feature-full and stable as "
-            "contributors will be able to devote more time to Kexi. Not only you can "
-            "expect new features, but you can also have an influence on what features are added!</p>"
-            "<p>Currently we are accepting donations through <b>BountySource</b> (a funding platform "
-            "for open-source software) using secure PayPal, Bitcoin and Google Wallet transfers.</p>"
-            "<p>Contact us at http://community.kde.org/Kexi/Contact for more information.</p>"
-            "<p>Thanks for your support!</p>"),
-       i18n("Donate to the Project"),
-       KGuiItem(i18n("Proceed to the Donation Web Page"), KIcon(QIcon(":/icons/heart.png"))),
-       KGuiItem(i18nc("Do not donate now", "Not Now"))))
-    {
+    if (KMessageBox::Yes != KMessageBox::questionYesNo(this,
+            i18n("<p><b>Kexi may be totally free, but its development is costly.</b><br/>"
+                 "Power, hardware, office space, internet access, traveling for meetings - everything costs.</p>"
+                 "<p>Direct donation is the easiest and fastest way to efficiently support the Kexi Project. "
+                 "Everyone, regardless of any degree of involvement can do so.</p>"
+                 "<p>What do you receive for your donation? Kexi will become more feature-full and stable as "
+                 "contributors will be able to devote more time to Kexi. Not only you can "
+                 "expect new features, but you can also have an influence on what features are added!</p>"
+                 "<p>Currently we are accepting donations through <b>BountySource</b> (a funding platform "
+                 "for open-source software) using secure PayPal, Bitcoin and Google Wallet transfers.</p>"
+                 "<p>Contact us at http://community.kde.org/Kexi/Contact for more information.</p>"
+                 "<p>Thanks for your support!</p>"),
+            i18n("Donate to the Project"),
+            KGuiItem(i18n("Proceed to the Donation Web Page"), KIcon(QIcon(":/icons/heart.png"))),
+            KGuiItem(i18nc("Do not donate now", "Not Now")))) {
         return;
     }
     QUrl donationUrl(d->property(this, "donation_url", "text").toString());
@@ -824,8 +822,7 @@ void KexiWelcomeStatusBar::showDonation()
         int donationsCount = configGroup.readEntry("DonationsCount", 0);
         configGroup.writeEntry("LastDonation", QDateTime::currentDateTime());
         configGroup.writeEntry("DonationsCount", donationsCount + 1);
-    }
-    else {
+    } else {
         kWarning() << "Invalid donation URL" << donationUrl;
     }
 }
@@ -835,8 +832,8 @@ void KexiWelcomeStatusBar::slotShareFeedback()
     d->statusScrollArea->setEnabled(true);
     d->msgWidget->animatedHide();
     KexiMainWindowIface::global()->userFeedbackAgent()
-        ->setEnabledAreas(KexiUserFeedbackAgent::AllAreas);
-    
+    ->setEnabledAreas(KexiUserFeedbackAgent::AllAreas);
+
     d->animatedHide(d->statusWidget, "share_usage_info");
     d->animatedHide(d->statusWidget, "share_more_usage_info");
     d->animatedHide(d->statusWidget, "lbl_contribute");
@@ -858,34 +855,34 @@ void KexiWelcomeStatusBar::showContributionDetails()
                                   KexiWelcomeStatusBar::Private::AlignToWidget);
     d->contributionDetailsLayout->setColumnMinimumWidth(0, 6); // smaller
     d->contributionDetailsWidget = d->loadGui("contribution_details.ui");
-    
+
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
     d->setProperty(d->contributionDetailsWidget, "group_share", "checked",
                    f->enabledAreas() != KexiUserFeedbackAgent::NoAreas);
     d->setProperty(d->contributionDetailsWidget, "group_basic", "title",
                    d->property(d->contributionDetailsWidget, "group_basic", "title")
-                       .toString().arg(d->scores.value(KexiUserFeedbackAgent::BasicArea)));
+                   .toString().arg(d->scores.value(KexiUserFeedbackAgent::BasicArea)));
 
     updateContributionGroupCheckboxes();
-    
+
     d->setProperty(d->contributionDetailsWidget, "group_system", "title",
                    d->property(d->contributionDetailsWidget, "group_system", "title")
-                       .toString().arg(d->scores.value(KexiUserFeedbackAgent::SystemInfoArea)));
+                   .toString().arg(d->scores.value(KexiUserFeedbackAgent::SystemInfoArea)));
     d->connect(d->contributionDetailsWidget, "group_system", SIGNAL(toggled(bool)),
                this, SLOT(slotShareContributionDetailsGroupToggled(bool)));
 
     d->setProperty(d->contributionDetailsWidget, "group_screen", "title",
                    d->property(d->contributionDetailsWidget, "group_screen", "title")
-                       .toString().arg(d->scores.value(KexiUserFeedbackAgent::ScreenInfoArea)));
+                   .toString().arg(d->scores.value(KexiUserFeedbackAgent::ScreenInfoArea)));
     d->connect(d->contributionDetailsWidget, "group_screen", SIGNAL(toggled(bool)),
                this, SLOT(slotShareContributionDetailsGroupToggled(bool)));
 
     d->setProperty(d->contributionDetailsWidget, "group_regional_settings", "title",
                    d->property(d->contributionDetailsWidget, "group_regional_settings", "title")
-                       .toString().arg(d->scores.value(KexiUserFeedbackAgent::RegionalSettingsArea)));
+                   .toString().arg(d->scores.value(KexiUserFeedbackAgent::RegionalSettingsArea)));
     d->connect(d->contributionDetailsWidget, "group_regional_settings", SIGNAL(toggled(bool)),
                this, SLOT(slotShareContributionDetailsGroupToggled(bool)));
-                   
+
     d->detailsDataVisible = false;
     slotShareContributionDetailsToggled(
         d->property(d->contributionDetailsWidget, "group_share", "checked").toBool());
@@ -898,7 +895,7 @@ void KexiWelcomeStatusBar::showContributionDetails()
                this, SLOT(slotToggleContributionDetailsDataVisibility()));
 
     d->setProperty(d->contributionDetailsWidget, "label_where_is_info_sent", "visible", false);
-    
+
     ScrollArea *contributionDetailsArea = new ScrollArea(d->msgWidget);
     d->contributionDetailsLayout->addWidget(contributionDetailsArea, 1, 1);
     contributionDetailsArea->setWidget(d->contributionDetailsWidget);
@@ -920,7 +917,7 @@ void KexiWelcomeStatusBar::updateContributionGroupCheckboxes()
 void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
 {
     //kDebug() << sender();
-    QWidget* group_share = d->widget(d->contributionDetailsWidget,
+    QWidget *group_share = d->widget(d->contributionDetailsWidget,
                                      "group_share");
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
     if (sender() == group_share) {
@@ -930,7 +927,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
     if (!group_share) {
         return;
     }
-    for (int i=0; i < group_share->layout()->count(); i++) {
+    for (int i = 0; i < group_share->layout()->count(); i++) {
         QWidget *w = group_share->layout()->itemAt(i)->widget();
         if (w) {
             w->setVisible(on);
@@ -940,70 +937,64 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
         slotToggleContributionDetailsDataVisibility();
     }
     // fill shared values
-    foreach(QLabel* lbl, d->contributionDetailsWidget->findChildren<QLabel*>()) {
+    foreach (QLabel *lbl, d->contributionDetailsWidget->findChildren<QLabel *>()) {
         if (lbl->objectName().startsWith(QLatin1String("value_"))) {
             QString name = lbl->objectName().mid(6); // cut "value_"
             QVariant value;
             if (name == QLatin1String("screen_size")) {
                 value = QString("%1 x %2").arg(f->value("screen_width").toString())
-                                          .arg(f->value("screen_height").toString());
-            }
-            else if (name == QLatin1String("country")) {
+                        .arg(f->value("screen_height").toString());
+            } else if (name == QLatin1String("country")) {
                 if (d->countryMask.isEmpty()) {
                     d->countryMask = lbl->text();
                 }
                 value = d->countryMask
-                    .arg(KGlobal::locale()->countryCodeToName(f->value(name).toString()))
-                    .arg(f->value(name).toString());
-            }
-            else if (name == QLatin1String("language")) {
+                        .arg(KGlobal::locale()->countryCodeToName(f->value(name).toString()))
+                        .arg(f->value(name).toString());
+            } else if (name == QLatin1String("language")) {
                 if (d->languageMask.isEmpty()) {
                     d->languageMask = lbl->text();
                 }
                 value = d->languageMask
-                    .arg(KGlobal::locale()->languageCodeToName(f->value(name).toString()))
-                    .arg(f->value(name).toString());
-            }
-            else {
+                        .arg(KGlobal::locale()->languageCodeToName(f->value(name).toString()))
+                        .arg(f->value(name).toString());
+            } else {
                 value = f->value(name);
             }
 
             if (value.type() == QVariant::Bool) {
                 value = value.toBool() ? KStandardGuiItem::yes().plainText()
-                                       : KStandardGuiItem::no().plainText();
+                        : KStandardGuiItem::no().plainText();
             }
 
             if (!value.isNull()) {
                 lbl->setText(value.toString());
             }
-        }
-        else if (lbl->objectName().startsWith(QLatin1String("desc_"))) {
+        } else if (lbl->objectName().startsWith(QLatin1String("desc_"))) {
             lbl->setFont(d->smallFont);
         }
     }
-    QLabel* lbl;
+    QLabel *lbl;
     KConfigGroup configGroup(KGlobal::config()->group("User Feedback"));
-    if ((lbl = d->contributionDetailsWidget->findChild<QLabel*>("value_recent_donation"))) {
+    if ((lbl = d->contributionDetailsWidget->findChild<QLabel *>("value_recent_donation"))) {
         QDateTime lastDonation = configGroup.readEntry("LastDonation", QDateTime());
         QString recentDonation = "-";
         if (lastDonation.isValid()) {
             int days = lastDonation.secsTo(QDateTime::currentDateTime()) / 60 / 60 / 24;
             if (days == 0) {
                 recentDonation = i18nc("Donation today", "today");
-            }
-            else if (days > 0) {
+            } else if (days > 0) {
                 recentDonation = i18ncp("Recent donation date (xx days)", "%1 (1 day)", "%1 (%2 days)",
                                         KGlobal::locale()->formatDateTime(lastDonation), days);
             }
         }
         lbl->setText(recentDonation);
     }
-    if ((lbl = d->contributionDetailsWidget->findChild<QLabel*>("value_donations_count"))) {
+    if ((lbl = d->contributionDetailsWidget->findChild<QLabel *>("value_donations_count"))) {
         int donationsCount = configGroup.readEntry("DonationsCount", 0);
         if (donationsCount == 0) {
             lbl->setText(QString::number(donationsCount));
-        }
-        else {
+        } else {
             lbl->setText(i18nc("donations count", "%1 (thanks!)", donationsCount));
         }
     }
@@ -1029,11 +1020,9 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsGroupToggled(bool on)
     //kDebug() << areas;
     if (name == "group_system") {
         setArea(&areas, KexiUserFeedbackAgent::SystemInfoArea, on);
-    }
-    else if (name == "group_screen") {
+    } else if (name == "group_screen") {
         setArea(&areas, KexiUserFeedbackAgent::ScreenInfoArea, on);
-    }
-    else if (name == "group_regional_settings") {
+    } else if (name == "group_regional_settings") {
         setArea(&areas, KexiUserFeedbackAgent::RegionalSettingsArea, on);
     }
     if (areas) {
@@ -1045,7 +1034,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsGroupToggled(bool on)
 
 void KexiWelcomeStatusBar::slotToggleContributionDetailsDataVisibility()
 {
-    QWidget* value_app_ver = d->widget(d->contributionDetailsWidget, "value_app_ver");
+    QWidget *value_app_ver = d->widget(d->contributionDetailsWidget, "value_app_ver");
     if (!value_app_ver) {
         return;
     }
@@ -1055,27 +1044,27 @@ void KexiWelcomeStatusBar::slotToggleContributionDetailsDataVisibility()
         d->setProperty(d->contributionDetailsWidget, "label_where_is_info_sent", "visible", true);
     }
     bool show = d->contributionDetailsWidget->isVisible();
-    QList<QWidget*> list;
+    QList<QWidget *> list;
     d->contributionDetailsWidget->hide();
-    QWidget* group_basic = d->widget(d->contributionDetailsWidget, "group_basic");
+    QWidget *group_basic = d->widget(d->contributionDetailsWidget, "group_basic");
     if (group_basic) {
-        list += group_basic->findChildren<QWidget*>();
+        list += group_basic->findChildren<QWidget *>();
     }
-    QWidget* group_system = d->widget(d->contributionDetailsWidget, "group_system");
+    QWidget *group_system = d->widget(d->contributionDetailsWidget, "group_system");
     if (group_system) {
-        list += group_system->findChildren<QWidget*>();
+        list += group_system->findChildren<QWidget *>();
     }
-    QWidget* group_screen = d->widget(d->contributionDetailsWidget, "group_screen");
+    QWidget *group_screen = d->widget(d->contributionDetailsWidget, "group_screen");
     if (group_screen) {
-        list += group_screen->findChildren<QWidget*>();
+        list += group_screen->findChildren<QWidget *>();
     }
-    QWidget* group_regional_settings = d->widget(d->contributionDetailsWidget, "group_regional_settings");
+    QWidget *group_regional_settings = d->widget(d->contributionDetailsWidget, "group_regional_settings");
     if (group_regional_settings) {
-        list += group_regional_settings->findChildren<QWidget*>();
+        list += group_regional_settings->findChildren<QWidget *>();
     }
 
-    foreach (QWidget* w, list) {
-        if (qobject_cast<QLabel*>(w) && !w->objectName().startsWith(QLatin1String("desc_"))) {
+    foreach (QWidget *w, list) {
+        if (qobject_cast<QLabel *>(w) && !w->objectName().startsWith(QLatin1String("desc_"))) {
             //kDebug() << "+++" << w;
             w->setVisible(d->detailsDataVisible);
         }

@@ -45,14 +45,14 @@ public:
     };
 
     //! Initializes display parameters for autonumber sign
-    static void initDisplayForAutonumberSign(DisplayParameters& par, QWidget *widget);
+    static void initDisplayForAutonumberSign(DisplayParameters &par, QWidget *widget);
 
     //! Paints autonumber sign using \a par parameters
-    static void paintAutonumberSign(const DisplayParameters& par, QPainter* painter,
+    static void paintAutonumberSign(const DisplayParameters &par, QPainter *painter,
                                     int x, int y, int width, int height, Qt::Alignment alignment, bool overrideColor = false);
 
     //! Initializes display parameters for default value
-    static void initDisplayForDefaultValue(DisplayParameters& par, QWidget *widget);
+    static void initDisplayForDefaultValue(DisplayParameters &par, QWidget *widget);
 };
 
 #endif

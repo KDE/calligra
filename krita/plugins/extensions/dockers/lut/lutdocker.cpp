@@ -21,7 +21,6 @@
 
 #include <QTimer>
 
-
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -39,11 +38,11 @@
 #include <OpenColorIO/OpenColorIO.h>
 namespace OCIO = OCIO_NAMESPACE;
 
-
 K_PLUGIN_FACTORY(LutDockerPluginFactory, registerPlugin<LutDockerPlugin>();)
-K_EXPORT_PLUGIN(LutDockerPluginFactory( "krita" ) )
+K_EXPORT_PLUGIN(LutDockerPluginFactory("krita"))
 
-class LutDockerDockFactory : public KoDockFactoryBase {
+class LutDockerDockFactory : public KoDockFactoryBase
+{
 public:
     LutDockerDockFactory()
     {
@@ -51,7 +50,7 @@ public:
 
     virtual QString id() const
     {
-        return QString( "LutDocker" );
+        return QString("LutDocker");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
@@ -59,9 +58,9 @@ public:
         return Qt::RightDockWidgetArea;
     }
 
-    virtual QDockWidget* createDockWidget()
+    virtual QDockWidget *createDockWidget()
     {
-        LutDockerDock * dockWidget = new LutDockerDock();
+        LutDockerDock *dockWidget = new LutDockerDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -75,7 +74,6 @@ private:
 
     OCIO::ConstConfigRcPtr m_config;
 };
-
 
 LutDockerPlugin::LutDockerPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)

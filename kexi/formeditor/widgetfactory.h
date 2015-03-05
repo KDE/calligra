@@ -54,13 +54,13 @@ class KFORMEDITOR_EXPORT InternalPropertyHandlerInterface
 {
 protected:
     InternalPropertyHandlerInterface();
-    
+
     virtual ~InternalPropertyHandlerInterface();
-    
+
     /*! Assigns \a value for internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be provided
      to describe class' details. */
-    virtual void setInternalProperty(const QByteArray& classname, const QByteArray& property, const QVariant& value) = 0;
+    virtual void setInternalProperty(const QByteArray &classname, const QByteArray &property, const QVariant &value) = 0;
 
     friend class WidgetInfo;
 };
@@ -141,7 +141,7 @@ protected:
   and how to deal with complex widgets (eg tabwidget).
   */
 class KFORMEDITOR_EXPORT WidgetFactory : public QObject,
-                                         public InternalPropertyHandlerInterface
+    public InternalPropertyHandlerInterface
 {
     Q_OBJECT
 public:
@@ -171,7 +171,7 @@ public:
     /**
      * \return all classes which are provided by this factory
      */
-    const WidgetInfoHash& classes() const;
+    const WidgetInfoHash &classes() const;
 
     /**
      * Creates a widget (and if needed a KFormDesigner::Container)
@@ -182,13 +182,14 @@ public:
      * \param container the toplevel Container (if a container should get created)
      * \param options options for the created widget: orientation and view mode (see CreateWidgetOptions)
      */
-    virtual QWidget* createWidget(const QByteArray &classname, QWidget *parent, const char *name,
+    virtual QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name,
                                   KFormDesigner::Container *container,
                                   CreateWidgetOptions options = DefaultOptions) = 0;
 
     /*! Creates custom actions. Reimplement this if you need to add some
      actions coming from the factory. */
-    virtual void createCustomActions(KActionCollection *col) {
+    virtual void createCustomActions(KActionCollection *col)
+    {
         Q_UNUSED(col);
     }
 
@@ -200,15 +201,16 @@ public:
     //! Arguments used by Form::createInlineEditor() and startInlineEditing()
     /*! @a text is the text to display by default in the line edit.
        @a widget is the edited widget, @a geometry is the geometry the new line
-       edit should have, and @a alignment is Qt::Alignment of the new line edit. 
-       If @a useFrame is false (the default), the line edit has no frame. 
-       if @a multiLine is false (the default), the line edit has single line. 
-       @a background describes line edit's background. 
+       edit should have, and @a alignment is Qt::Alignment of the new line edit.
+       If @a useFrame is false (the default), the line edit has no frame.
+       if @a multiLine is false (the default), the line edit has single line.
+       @a background describes line edit's background.
        If @a execute is true (the default), createInlineEditor() will be executed. */
-    class KFORMEDITOR_EXPORT InlineEditorCreationArguments {
+    class KFORMEDITOR_EXPORT InlineEditorCreationArguments
+    {
     public:
         InlineEditorCreationArguments(
-            const QByteArray& _classname, QWidget *_widget, Container *_container);
+            const QByteArray &_classname, QWidget *_widget, Container *_container);
         QByteArray classname;
         QString text;
         QWidget *widget;
@@ -222,12 +224,12 @@ public:
         bool transparentBackground;
     };
 
-    /*! Sets up (if necessary) aguments for the inline editor used to edit the contents 
+    /*! Sets up (if necessary) aguments for the inline editor used to edit the contents
        of the widget directly within the Form,
        e.g. creates a line edit to change the text of a label. @a args is
        used to pass the arguments back to the caller.
      */
-    virtual bool startInlineEditing(InlineEditorCreationArguments& args) = 0;
+    virtual bool startInlineEditing(InlineEditorCreationArguments &args) = 0;
 
     /*! This function is called just before the Form is previewed. It allows widgets
      to make changes before switching (ie for a Spring, hiding the cross) */
@@ -262,21 +264,21 @@ public:
 
     /*! \return The i18n'ed name of the property whose name is \a name,
      that will be displayed in PropertyEditor. */
-    QString propertyDescription(const char* name) const;
+    QString propertyDescription(const char *name) const;
 
     /*! \return The i18n'ed name of the property's value whose name is \a name. */
-    QString valueDescription(const char* name) const;
+    QString valueDescription(const char *name) const;
 
     /*! This method is called after form's property set was filled with properties
      of a widget \a w, of class defined by \a info.
      Default implementation does nothing.
      Implement this if you need to set options for properties within the set \a set. */
-    virtual void setPropertyOptions(KoProperty::Set& set, const WidgetInfo& info, QWidget *w);
+    virtual void setPropertyOptions(KoProperty::Set &set, const WidgetInfo &info, QWidget *w);
 
     /*! \return internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be just provided
      to describe class' details. */
-    QVariant internalProperty(const QByteArray& classname, const QByteArray& property) const;
+    QVariant internalProperty(const QByteArray &classname, const QByteArray &property) const;
 
     /*! This function is called when the widget is resized,
      and the @a editor size needs to be updated. */
@@ -287,14 +289,13 @@ public:
      item for the widget itself is returned.
      Used when user clicks on the Widget Tree item or when parent of the current
      widget should to be selected. Defaults can be overridden by reimplementing this method. */
-    virtual ObjectTreeItem* selectableItem(ObjectTreeItem* item);
+    virtual ObjectTreeItem *selectableItem(ObjectTreeItem *item);
 
     /*! Sets the i18n'ed description of a property, which will be shown in PropertyEditor. */
     void setPropertyDescription(const char *property, const QString &description);
 
     /*! Sets the i18n'ed description of a property value, which will be shown in PropertyEditor. */
     void setValueDescription(const char *valueName, const QString &description);
-
 
     void setAdvancedPropertiesVisible(bool set);
 protected:
@@ -306,8 +307,8 @@ protected:
 
     /*! Sometimes property sets should be reloaded when a given property value changed.
      Implement it in the factory. Default implementation always returns false. */
-    virtual bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& classname, QWidget *w,
-            const QByteArray& property);
+    virtual bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray &classname, QWidget *w,
+            const QByteArray &property);
 
     /*! This function provides a simple editing mode: it just disables event filtering
      for the widget, and it install it again when
@@ -317,13 +318,13 @@ protected:
     /*! This function creates a little dialog (a KEditListBox) to modify the contents
      of a list (of strings). It can be used to modify the contents
      of a combo box for instance. The modified list is copied
-     into \a list if the user presses "Ok" and true is returned. 
+     into \a list if the user presses "Ok" and true is returned.
      When user presses "Cancel" false is returned. */
     bool editList(QWidget *w, QStringList &list) const;
 
     /*! This function creates a little editor to modify rich text. It supports alignment,
      subscript and superscript and all basic formatting properties.
-     If the user presses "Ok", the edited text is put into @a text and true is returned. 
+     If the user presses "Ok", the edited text is put into @a text and true is returned.
      If the user presses "Cancel" false is returned. */
     bool editRichText(QWidget *w, QString &text) const;
 
@@ -346,17 +347,17 @@ protected:
     /*! Assigns \a value for internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be provided
      to describe class' details. */
-    void setInternalProperty(const QByteArray& classname, const QByteArray& property, const QVariant& value);
+    void setInternalProperty(const QByteArray &classname, const QByteArray &property, const QVariant &value);
 
-    WidgetInfo* widgetInfoForClassName(const char* classname);
+    WidgetInfo *widgetInfoForClassName(const char *classname);
 
-    const QSet<QByteArray>* hiddenClasses() const;
+    const QSet<QByteArray> *hiddenClasses() const;
 
-    WidgetLibrary* library();
+    WidgetLibrary *library();
 
     bool advancedPropertiesVisible() const;
 
-    void setLibrary(WidgetLibrary* library);
+    void setLibrary(WidgetLibrary *library);
 
 public Q_SLOTS:
     /*! @internal. This slot is called when the editor has lost focus or the user pressed Enter.
@@ -369,10 +370,10 @@ public Q_SLOTS:
     This slot is called when the line edit text changes, and you have to make
     it really change property of the widget using changeProperty() (text, title, etc.). */
     virtual bool changeInlineText(Form *form, QWidget *widget,
-                                  const QString& text, QString &oldText);
+                                  const QString &text, QString &oldText);
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 
     friend class WidgetLibrary;
 };

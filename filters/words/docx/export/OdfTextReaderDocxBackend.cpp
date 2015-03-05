@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdfTextReaderDocxBackend.h"
 
@@ -41,16 +40,14 @@
 #if 0
 #define DEBUG_BACKEND() \
     kDebug(30503) << (reader.isStartElement() ? "start": (reader.isEndElement() ? "end" : "other")) \
-    << reader.qualifiedName().toString()
+                  << reader.qualifiedName().toString()
 #else
 #define DEBUG_BACKEND() \
     //NOTHING
 #endif
 
-
 // ================================================================
 //                 class OdfTextReaderDocxBackend
-
 
 OdfTextReaderDocxBackend::OdfTextReaderDocxBackend()
     : OdfTextReaderBackend()
@@ -69,14 +66,13 @@ OdfTextReaderDocxBackend::~OdfTextReaderDocxBackend()
 {
 }
 
-
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
 void OdfTextReaderDocxBackend::elementOfficeAnnotation(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext*>(context);
+    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext *>(context);
     if (!docxContext) {
         return;
     }
@@ -87,8 +83,7 @@ void OdfTextReaderDocxBackend::elementOfficeAnnotation(KoXmlStreamReader &reader
         m_insideComment = true;
         writer->startElement("w:comment");
         writer->addAttribute("w:id", m_commentIndex);
-    }
-    else {
+    } else {
         writer->endElement(); // w:comment
         m_insideComment = false;
     }
@@ -102,8 +97,7 @@ void OdfTextReaderDocxBackend::elementDcCreator(KoXmlStreamReader &reader, OdfRe
     Q_UNUSED(context);
     if (reader.isStartElement()) {
         m_insideDcCreator = true;
-    }
-    else {
+    } else {
         m_insideDcCreator = false;
     }
 }
@@ -115,8 +109,7 @@ void OdfTextReaderDocxBackend::elementDcDate(KoXmlStreamReader &reader, OdfReade
     Q_UNUSED(context);
     if (reader.isStartElement()) {
         m_insideDcDate = true;
-    }
-    else {
+    } else {
         m_insideDcDate = false;
     }
 }
@@ -132,7 +125,7 @@ void OdfTextReaderDocxBackend::elementTextH(KoXmlStreamReader &reader, OdfReader
 void OdfTextReaderDocxBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext*>(context);
+    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext *>(context);
     if (!docxContext) {
         return;
     }
@@ -172,21 +165,18 @@ void OdfTextReaderDocxBackend::elementTextP(KoXmlStreamReader &reader, OdfReader
         }
         // FIXME: Add paragraph properties (styling) here
         writer->endElement(); // w:pPr
-    }
-    else {
+    } else {
         writer->endElement(); // w:p
     }
 }
 
-
 // ----------------------------------------------------------------
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
-
 
 void OdfTextReaderDocxBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext*>(context);
+    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext *>(context);
     if (!docxContext) {
         return;
     }
@@ -194,8 +184,7 @@ void OdfTextReaderDocxBackend::elementTextSpan(KoXmlStreamReader &reader, OdfRea
     if (reader.isStartElement()) {
         startRun(reader, docxContext);
         ++m_insideSpanLevel;
-    }
-    else {
+    } else {
         endRun(docxContext);
         --m_insideSpanLevel;
     }
@@ -204,10 +193,11 @@ void OdfTextReaderDocxBackend::elementTextSpan(KoXmlStreamReader &reader, OdfRea
 void OdfTextReaderDocxBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    if (!reader.isStartElement())
+    if (!reader.isStartElement()) {
         return;
+    }
 
-    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext*>(context);
+    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext *>(context);
     if (!docxContext) {
         return;
     }
@@ -216,19 +206,19 @@ void OdfTextReaderDocxBackend::elementTextS(KoXmlStreamReader &reader, OdfReader
     QString dummy = element.attribute("text:c", "1");
     bool ok;
     int  numSpaces = dummy.toUInt(&ok);
-    if (!ok)
+    if (!ok) {
         numSpaces = 1;
+    }
 
     // At the end of a paragraph, output two newlines.
     docxContext->outStream << "\n\n";
 #endif
 }
 
-
 void OdfTextReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext*>(context);
+    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext *>(context);
     if (!docxContext) {
         return;
     }
@@ -237,12 +227,10 @@ void OdfTextReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReade
     if (m_insideDcCreator) {
         KoXmlWriter *commentsWriter = docxContext->m_commentsWriter;
         commentsWriter->addAttribute("w:author", reader.text().toString());
-    }
-    else if (m_insideDcDate) {
+    } else if (m_insideDcDate) {
         //KoXmlWriter *commentsWriter = docxContext->m_commentsWriter;
         // todo, convert the date and add as attribute
-    }
-    else {
+    } else {
         // In docx, a text always has to be inside a run (w:r). This is
         // created when a text:span is encountered in odf but text nodes
         // can exist also without a text:span surrounding it.
@@ -265,10 +253,8 @@ void OdfTextReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReade
     }
 }
 
-
 // ----------------------------------------------------------------
 //                         Private functions
-
 
 void OdfTextReaderDocxBackend::startRun(const KoXmlStreamReader &reader, OdfReaderDocxContext *docxContext)
 {

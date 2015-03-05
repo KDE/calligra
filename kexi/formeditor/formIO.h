@@ -147,7 +147,7 @@ public:
         This is used to copy/paste widgets.
     */
     static void loadWidget(Container *container, const QDomElement &el,
-                           QWidget *parent, QHash<QString, QLabel*> *buddies);
+                           QWidget *parent, QHash<QString, QLabel *> *buddies);
 
     /*! Save an element in the \a domDoc as child of \a parentNode.
       The element will be saved like this :
@@ -179,7 +179,7 @@ public:
 
 protected:
     /*! Saves the QVariant \a value as text to be included in an xml file, with \a parentNode.*/
-    static void writeVariant(QDomDocument &parent, QDomElement &parentNode, const QVariant& value);
+    static void writeVariant(QDomDocument &parent, QDomElement &parentNode, const QVariant &value);
 
     /*! Creates a toplevel widget from the QDomElement \a element in the Form \a form,
      with \a parent as parent widget.
@@ -198,12 +198,12 @@ protected:
         This function loads the pixmap named \a name in the DOM document \a domDoc.
         Decoding code is taken from QT Designer.
     */
-    static QPixmap loadImage(QDomDocument domDoc, const QString& name);
+    static QPixmap loadImage(QDomDocument domDoc, const QString &name);
 
     /*! Reads the child nodes of a "widget" element. */
     static void readChildNodes(ObjectTreeItem *tree, Container *container,
                                const QDomElement &el, QWidget *w,
-                               QHash<QString, QLabel*> *buddies);
+                               QHash<QString, QLabel *> *buddies);
 
     /*! Adds an include file name to be saved in the "includehints" part of .ui file,
      which is needed by uic. */
@@ -211,7 +211,7 @@ protected:
 
 private:
     //! This hash stores buddies associations until the Form is completely loaded.
-    static QHash<QString, QLabel*> *m_buddies;
+    static QHash<QString, QLabel *> *m_buddies;
 };
 
 }

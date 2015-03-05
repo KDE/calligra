@@ -64,10 +64,11 @@
 #define koIconNameWanted(comment, wantedName) (QString())
 
 /// Use this function to load an icon that fits the current color theme
-inline KIcon themedIcon(const QString &name, bool fast = false) {
+inline KIcon themedIcon(const QString &name, bool fast = false)
+{
     KIcon icon;
     bool useAdjustedIcons = true;
-    if(!fast) {
+    if (!fast) {
         KIconLoader iconLoader;
         useAdjustedIcons = iconLoader.iconPath(name, KIconLoader::NoGroup, true).isEmpty();
     }

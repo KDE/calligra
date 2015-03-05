@@ -40,14 +40,14 @@ KisBlurFilter::KisBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Blur..."
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget *KisBlurFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP) const
 {
     return new KisWdgBlur(parent);
 }
 
-KisFilterConfiguration* KisBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
+KisFilterConfiguration *KisBlurFilter::factoryConfiguration(const KisPaintDeviceSP) const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("halfWidth", 5);
     config->setProperty("halfHeight", 5);
     config->setProperty("rotate", 0);
@@ -57,14 +57,16 @@ KisFilterConfiguration* KisBlurFilter::factoryConfiguration(const KisPaintDevice
 }
 
 void KisBlurFilter::processImpl(KisPaintDeviceSP device,
-                                const QRect& rect,
-                                const KisFilterConfiguration* config,
-                                KoUpdater* progressUpdater
-                                ) const
+                                const QRect &rect,
+                                const KisFilterConfiguration *config,
+                                KoUpdater *progressUpdater
+                               ) const
 {
     QPoint srcTopLeft = rect.topLeft();
     Q_ASSERT(device != 0);
-    if (!config) config = new KisFilterConfiguration(id().id(), 1);
+    if (!config) {
+        config = new KisFilterConfiguration(id().id(), 1);
+    }
 
     QVariant value;
     int shape = (config->getProperty("shape", value)) ? value.toInt() : 0;
@@ -79,7 +81,7 @@ void KisBlurFilter::processImpl(KisPaintDeviceSP device,
     int hFade = (halfWidth * strength) / 100;
     int vFade = (halfHeight * strength) / 100;
 
-    KisMaskGenerator* kas;
+    KisMaskGenerator *kas;
     dbgKrita << width << "" << height << "" << hFade << "" << vFade;
     switch (shape) {
     case 1:
@@ -94,7 +96,7 @@ void KisBlurFilter::processImpl(KisPaintDeviceSP device,
     QBitArray channelFlags;
     if (config) {
         channelFlags = config->channelFlags();
-    } 
+    }
     if (channelFlags.isEmpty() || !config) {
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
@@ -108,7 +110,7 @@ void KisBlurFilter::processImpl(KisPaintDeviceSP device,
 
 }
 
-QRect KisBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisBlurFilter::neededRect(const QRect &rect, const KisFilterConfiguration *_config) const
 {
     QVariant value;
     const int halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;
@@ -117,7 +119,7 @@ QRect KisBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration
     return rect.adjusted(-halfWidth * 2, -halfHeight * 2, halfWidth * 2, halfHeight * 2);
 }
 
-QRect KisBlurFilter::changedRect(const QRect & rect, const KisFilterConfiguration* _config) const
+QRect KisBlurFilter::changedRect(const QRect &rect, const KisFilterConfiguration *_config) const
 {
     QVariant value;
     const int halfWidth = (_config->getProperty("halfWidth", value)) ? value.toUInt() : 5;

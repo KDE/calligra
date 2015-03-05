@@ -28,24 +28,23 @@
 #include "kis_pressure_scatter_option.h"
 #include "kis_pressure_scatter_option_widget.h"
 
-
 KisPressureScatterOptionWidget::KisPressureScatterOptionWidget()
     : KisCurveOptionWidget(new KisPressureScatterOption())
 {
-    QWidget* w = new QWidget;
+    QWidget *w = new QWidget;
     m_axisX = new QCheckBox(i18n("Axis X"));
     m_axisX->setChecked(true);
     m_axisY = new QCheckBox(i18n("Axis Y"));
     m_axisY->setChecked(true);
 
-    QLabel* scatterLbl = new QLabel(i18n("Scatter amount"));
+    QLabel *scatterLbl = new QLabel(i18n("Scatter amount"));
 
-    QHBoxLayout* hl = new QHBoxLayout;
+    QHBoxLayout *hl = new QHBoxLayout;
     hl->addWidget(scatterLbl);
     hl->addWidget(m_axisX);
     hl->addWidget(m_axisY);
 
-    QVBoxLayout* vl = new QVBoxLayout;
+    QVBoxLayout *vl = new QVBoxLayout;
     vl->setMargin(0);
     vl->addLayout(hl);
     vl->addWidget(curveWidget());
@@ -61,22 +60,21 @@ KisPressureScatterOptionWidget::KisPressureScatterOptionWidget()
     yAxisEnabled(m_axisY->isChecked());
 }
 
-void KisPressureScatterOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisPressureScatterOptionWidget::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
-    m_axisX->setChecked(static_cast<KisPressureScatterOption*>(curveOption())->isAxisXEnabled());
-    m_axisY->setChecked(static_cast<KisPressureScatterOption*>(curveOption())->isAxisYEnabled());
+    m_axisX->setChecked(static_cast<KisPressureScatterOption *>(curveOption())->isAxisXEnabled());
+    m_axisY->setChecked(static_cast<KisPressureScatterOption *>(curveOption())->isAxisYEnabled());
 }
-
 
 void KisPressureScatterOptionWidget::xAxisEnabled(bool enable)
 {
-    static_cast<KisPressureScatterOption*>(curveOption())->enableAxisX(enable);
+    static_cast<KisPressureScatterOption *>(curveOption())->enableAxisX(enable);
     emitSettingChanged();
 }
 
 void KisPressureScatterOptionWidget::yAxisEnabled(bool enable)
 {
-    static_cast<KisPressureScatterOption*>(curveOption())->enableAxisY(enable);
+    static_cast<KisPressureScatterOption *>(curveOption())->enableAxisY(enable);
     emitSettingChanged();
 }

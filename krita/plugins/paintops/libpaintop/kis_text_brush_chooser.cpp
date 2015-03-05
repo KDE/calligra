@@ -30,7 +30,7 @@
 
 #define showSlider(input) input->setRange(input->minimum(), input->maximum())
 
-KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, const QString& caption)
+KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char *name, const QString &caption)
     : QWidget(parent)
     , m_textBrush(new KisTextBrush())
 {
@@ -38,8 +38,8 @@ KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, cons
     setupUi(this);
 
     setWindowTitle(caption);
-    connect((QObject*)lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(rebuildTextBrush()));
-    connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
+    connect((QObject *)lineEdit, SIGNAL(textChanged(QString)), this, SLOT(rebuildTextBrush()));
+    connect((QObject *)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
     connect(pipeModeChbox, SIGNAL(toggled(bool)), this, SLOT(rebuildTextBrush()));
     m_font = font();
     inputSpacing->setRange(0.0, 10, 2);
@@ -47,7 +47,6 @@ KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, cons
     rebuildTextBrush();
     connect(inputSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(rebuildTextBrush()));
 }
-
 
 void KisTextBrushChooser::getFont()
 {
@@ -65,7 +64,7 @@ void KisTextBrushChooser::rebuildTextBrush()
     lblFont->setText(QString(m_font.family() + ", %1").arg(m_font.pointSize()));
     lblFont->setFont(m_font);
 
-    KisTextBrush* textBrush = dynamic_cast<KisTextBrush*>(m_textBrush.data());
+    KisTextBrush *textBrush = dynamic_cast<KisTextBrush *>(m_textBrush.data());
     textBrush->setFont(m_font);
     textBrush->setText(lineEdit->text());
     textBrush->setPipeMode(pipeModeChbox->isChecked());
@@ -81,7 +80,7 @@ void KisTextBrushChooser::setBrush(KisBrushSP brush)
 
     m_textBrush = brush;
 
-    KisTextBrush *textBrush = dynamic_cast<KisTextBrush*>(brush.data());
+    KisTextBrush *textBrush = dynamic_cast<KisTextBrush *>(brush.data());
 
     m_font = textBrush->font();
 

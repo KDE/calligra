@@ -2,7 +2,7 @@
  *
  * This file was written by Henning Makholm <henning@makholm.net>
  * It is hereby in the public domain.
- * 
+ *
  * In jurisdictions that do not recognise grants of copyright to the
  * public domain: I, the author and (presumably, in those jurisdictions)
  * copyright holder, hereby permit anyone to distribute and use this code,
@@ -45,10 +45,10 @@ void nls_init(void);
 #else
 /* These legacy fall-backs will probably work on every system
  * that does not supply a inttypes.h ... */
-typedef unsigned char     uint8_t ;
-typedef unsigned long int uint32_t, uintptr_t ;
-typedef signed char       int8_t ;
-typedef signed long int   int32_t ;
+typedef unsigned char     uint8_t;
+typedef unsigned long int uint32_t, uintptr_t;
+typedef signed char       int8_t;
+typedef signed long int   int32_t;
 # define PRIX32 "lX"
 # define PRIu32 "lu"
 # define PRIXPTR "lX"
@@ -67,8 +67,9 @@ typedef signed long int   int32_t ;
 #elif WORDS_BIGENDIAN
 # define ntohl(x) (x)
 #else
-static inline uint32_t ntohl(uint32_t a) {
-  return (a << 24) + ((a & 0xFF00) << 8) + ((a >> 8) & 0xFF00) + (a >> 24) ;
+static inline uint32_t ntohl(uint32_t a)
+{
+    return (a << 24) + ((a & 0xFF00) << 8) + ((a >> 8) & 0xFF00) + (a >> 24);
 }
 #endif
 
@@ -99,54 +100,54 @@ static inline uint32_t ntohl(uint32_t a) {
 /* The following are exported from am OS-specific source file;
  * io-unix.c on unixish systems.
  */
-void read_or_mmap_xcf(const char* filename, const char *unzipper);
+void read_or_mmap_xcf(const char *filename, const char *unzipper);
 void free_or_close_xcf(void);
 
 /* ****************************************************************** */
 /* utils.c */
 
-extern const char *progname ;
-extern int verboseFlag ;
+extern const char *progname;
+extern int verboseFlag;
 
 void *xcfmalloc(size_t size);
-void xcffree(void*);
+void xcffree(void *);
 
-void FatalGeneric(int status,const char* format,...)
-     __ATTRIBUTE__((format(printf,2,3),noreturn)) ;
-void FatalUnexpected(const char* format,...)
-     __ATTRIBUTE__((format(printf,1,2),noreturn)) ;
-void FatalBadXCF(const char* format,...)
-     __ATTRIBUTE__((format(printf,1,2),noreturn)) ;
-void FatalUnsupportedXCF(const char* format,...)
-     __ATTRIBUTE__((format(printf,1,2),noreturn)) ;
+void FatalGeneric(int status, const char *format, ...)
+__ATTRIBUTE__((format(printf, 2, 3), noreturn));
+void FatalUnexpected(const char *format, ...)
+__ATTRIBUTE__((format(printf, 1, 2), noreturn));
+void FatalBadXCF(const char *format, ...)
+__ATTRIBUTE__((format(printf, 1, 2), noreturn));
+void FatalUnsupportedXCF(const char *format, ...)
+__ATTRIBUTE__((format(printf, 1, 2), noreturn));
 
 void gpl_blurb(void) __ATTRIBUTE__((noreturn));
-     
-FILE* openout(const char*);
-void closeout(FILE *,const char*);
+
+FILE *openout(const char *);
+void closeout(FILE *, const char *);
 
 struct rect {
-  int t, b, l, r ;
+    int t, b, l, r;
 };
 
 #define isSubrect(A,B) \
-  ((A).l >= (B).l && (A).r <= (B).r && (A).t >= (B).t && (A).b <= (B).b)
+    ((A).l >= (B).l && (A).r <= (B).r && (A).t >= (B).t && (A).b <= (B).b)
 #define disjointRects(A,B) \
-  ((A).l >= (B).r || (A).r <= (B).l || (A).t >= (B).b || (A).b <= (B).t)
+    ((A).l >= (B).r || (A).r <= (B).l || (A).t >= (B).b || (A).b <= (B).t)
 
 /* ****************************************************************** */
 /* xcf-general.c */
 
-extern uint8_t *xcf_file ;
-extern size_t xcf_length ;
-extern int use_utf8 ;
+extern uint8_t *xcf_file;
+extern size_t xcf_length;
+extern int use_utf8;
 
-void xcfCheckspace(uint32_t addr,int spaceafter, const char *format,...)
-     __ATTRIBUTE__((format(printf,3,4)));
-uint32_t xcfOffset(uint32_t addr,int spaceafter);
+void xcfCheckspace(uint32_t addr, int spaceafter, const char *format, ...)
+__ATTRIBUTE__((format(printf, 3, 4)));
+uint32_t xcfOffset(uint32_t addr, int spaceafter);
 
-int xcfNextprop(uint32_t *master,uint32_t *body);
-const char* xcfString(uint32_t ptr,uint32_t *after);
+int xcfNextprop(uint32_t *master, uint32_t *body);
+const char *xcfString(uint32_t ptr, uint32_t *after);
 
 /* These are hardcoded in the Gimp sources: */
 #define TILE_SHIFT 6
@@ -162,41 +163,41 @@ const char* xcfString(uint32_t ptr,uint32_t *after);
 #define TILE_NUM(x) ((x) >> TILE_SHIFT)
 
 struct tileDimensions {
-  struct rect c ;
-  unsigned width, height ;
-  unsigned tilesx, tilesy ;
-  unsigned ntiles ;
+    struct rect c;
+    unsigned width, height;
+    unsigned tilesx, tilesy;
+    unsigned ntiles;
 };
 /* computeDimensions assumes that width, height, c.l, and c.t are set */
 void computeDimensions(struct tileDimensions *);
 
 struct xcfTiles {
-  const struct _convertParams *params ;
-  uint32_t *tileptrs ;
-  uint32_t hierarchy ;
+    const struct _convertParams *params;
+    uint32_t *tileptrs;
+    uint32_t hierarchy;
 };
 
 struct xcfLayer {
-  struct tileDimensions dim ;
-  const char *name ;
-  GimpLayerModeEffects mode ;
-  GimpImageType type ;
-  unsigned int opacity ;
-  int isVisible, hasMask ;
-  uint32_t propptr ;
-  struct xcfTiles pixels ;
-  struct xcfTiles mask ;
-}; 
+    struct tileDimensions dim;
+    const char *name;
+    GimpLayerModeEffects mode;
+    GimpImageType type;
+    unsigned int opacity;
+    int isVisible, hasMask;
+    uint32_t propptr;
+    struct xcfTiles pixels;
+    struct xcfTiles mask;
+};
 
 extern struct xcfImage {
-  int version ;
-  unsigned width, height ;
-  GimpImageBaseType type ;
-  XcfCompressionType compression ;
-  int numLayers ;
-  struct xcfLayer *layers ;
-  uint32_t colormapptr ;
-} XCF ;
+    int version;
+    unsigned width, height;
+    GimpImageBaseType type;
+    XcfCompressionType compression;
+    int numLayers;
+    struct xcfLayer *layers;
+    uint32_t colormapptr;
+} XCF;
 
 void getBasicXcfInfo(void);
 

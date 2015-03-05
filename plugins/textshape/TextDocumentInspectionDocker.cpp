@@ -32,11 +32,9 @@
 // Qt
 #include <QTreeView>
 
-
 const int MsecsThresholdForMergingCommands = 2000;
 
-
-TextDocumentInspectionDocker::TextDocumentInspectionDocker(QWidget * parent)
+TextDocumentInspectionDocker::TextDocumentInspectionDocker(QWidget *parent)
     : QDockWidget(parent)
     , m_canvas(0)
     , m_mainWidget(new QTreeView(this))
@@ -55,7 +53,6 @@ TextDocumentInspectionDocker::TextDocumentInspectionDocker(QWidget * parent)
 TextDocumentInspectionDocker::~TextDocumentInspectionDocker()
 {
 }
-
 
 void TextDocumentInspectionDocker::setCanvas(KoCanvasBase *canvas)
 {
@@ -86,7 +83,7 @@ void TextDocumentInspectionDocker::unsetCanvas()
 
 void TextDocumentInspectionDocker::onShapeSelectionChanged()
 {
-    QTextDocument* textDocument = 0;
+    QTextDocument *textDocument = 0;
 
     // TODO: big fail: shapeManager of a canvas still emits signals after unsetCanvas()
     // was called on us. And at least by the current API dox there is no way in unsetCanvas()
@@ -97,7 +94,7 @@ void TextDocumentInspectionDocker::onShapeSelectionChanged()
     if (m_canvas) {
         KoShape *shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
         if (shape) {
-            TextShape *textShape = dynamic_cast<TextShape*>(shape);
+            TextShape *textShape = dynamic_cast<TextShape *>(shape);
             if (textShape) {
                 textDocument = textShape->textShapeData()->document();
             }

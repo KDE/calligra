@@ -26,12 +26,15 @@ class InlineObjectFactoryPrivate
 {
 public:
     InlineObjectFactoryPrivate(const QString &identifier)
-            : id(identifier) {
+        : id(identifier)
+    {
     }
 
-    ~InlineObjectFactoryPrivate() {
-        foreach(const KoInlineObjectTemplate &t, templates)
+    ~InlineObjectFactoryPrivate()
+    {
+        foreach (const KoInlineObjectTemplate &t, templates) {
             delete t.properties;
+        }
         templates.clear();
     }
 
@@ -44,7 +47,7 @@ public:
 };
 
 KoInlineObjectFactoryBase::KoInlineObjectFactoryBase(const QString &id, ObjectType type)
-        : d(new InlineObjectFactoryPrivate(id))
+    : d(new InlineObjectFactoryPrivate(id))
 {
     d->type = type;
 }
@@ -79,7 +82,7 @@ QString KoInlineObjectFactoryBase::odfNameSpace() const
     return d->odfNameSpace;
 }
 
-void KoInlineObjectFactoryBase::setOdfElementNames(const QString & nameSpace, const QStringList &names)
+void KoInlineObjectFactoryBase::setOdfElementNames(const QString &nameSpace, const QStringList &names)
 {
     d->odfNameSpace = nameSpace;
     d->odfElementNames = names;

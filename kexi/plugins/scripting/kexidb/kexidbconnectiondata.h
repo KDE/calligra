@@ -37,9 +37,10 @@ class KexiDBConnectionData : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBConnectionData(QObject* parent, ::KexiDB::ConnectionData* data, bool owner);
+    KexiDBConnectionData(QObject *parent, ::KexiDB::ConnectionData *data, bool owner);
     virtual ~KexiDBConnectionData();
-    ::KexiDB::ConnectionData* data() {
+    ::KexiDB::ConnectionData *data()
+    {
         return m_data;
     }
 
@@ -48,17 +49,17 @@ public Q_SLOTS:
     /** Return the connection name. */
     const QString caption() const;
     /** Set the connection name. */
-    void setCaption(const QString& name);
+    void setCaption(const QString &name);
 
     /** Return the description. */
     const QString description() const;
     /** Set the description. */
-    void setDescription(const QString& desc);
+    void setDescription(const QString &desc);
 
     /** Return drivername. */
     const QString driverName() const;
     /** Set the drivername. */
-    void setDriverName(const QString& driver);
+    void setDriverName(const QString &driver);
 
     /** Return true if a local socket file is used else false. */
     bool localSocketFileUsed() const;
@@ -67,19 +68,19 @@ public Q_SLOTS:
     /** Return the local socket filename. */
     const QString localSocketFileName() const;
     /** Set the local socket filename. */
-    void setLocalSocketFileName(const QString& socketfilename);
+    void setLocalSocketFileName(const QString &socketfilename);
 
     // For serverbased drivers
 
     /** Return the database name. */
     const QString databaseName() const;
     /** Set the database name. */
-    void setDatabaseName(const QString& dbname);
+    void setDatabaseName(const QString &dbname);
 
     /** Return the hostname. */
     const QString hostName() const;
     /** Set the hostname. */
-    void setHostName(const QString& hostname);
+    void setHostName(const QString &hostname);
 
     /** Return the port number. */
     int port() const;
@@ -89,19 +90,19 @@ public Q_SLOTS:
     /** Return the password. */
     const QString password() const;
     /** Set the password. */
-    void setPassword(const QString& passwd);
+    void setPassword(const QString &passwd);
 
     /** Return the username. */
     const QString userName() const;
     /** Set the username. */
-    void setUserName(const QString& username);
+    void setUserName(const QString &username);
 
     // For filebased drivers
 
     /** Return the filename. */
     const QString fileName() const;
     /** Set the filename. */
-    void setFileName(const QString& filename);
+    void setFileName(const QString &filename);
 
     /** Return the database path. */
     const QString dbPath() const;
@@ -112,7 +113,7 @@ public Q_SLOTS:
     const QString serverInfoString() const;
 
 private:
-    ::KexiDB::ConnectionData* m_data;
+    ::KexiDB::ConnectionData *m_data;
     QString m_dbname;
     bool m_owner;
 };

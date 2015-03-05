@@ -22,11 +22,11 @@
 
 using namespace KexiDB;
 pqxxSqlConnectionInternal::pqxxSqlConnectionInternal(Connection *conn)
-        : ConnectionInternal(conn)
-        , pqxxsql(0)
-        , res(0)
-        , version(0)
-        , resultCode(0)
+    : ConnectionInternal(conn)
+    , pqxxsql(0)
+    , res(0)
+    , version(0)
+    , resultCode(0)
 {
 }
 

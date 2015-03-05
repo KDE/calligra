@@ -21,7 +21,6 @@
 
 #include "testutil.h"
 
-
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -43,7 +42,6 @@
 
 #include "commands/kis_selection_commands.h"
 
-
 namespace TestUtil
 {
 
@@ -63,17 +61,18 @@ protected:
     /**
      * Creates a complex image connected to a surrogate undo store
      */
-    KisImageSP createImage(KisSurrogateUndoStore *undoStore) {
+    KisImageSP createImage(KisSurrogateUndoStore *undoStore)
+    {
         QImage sourceImage(fetchDataFileLazy("hakonepa.png"));
 
-        QRect imageRect = QRect(QPoint(0,0), sourceImage.size());
+        QRect imageRect = QRect(QPoint(0, 0), sourceImage.size());
 
-        QRect transpRect(50,50,300,300);
-        QRect blurRect(66,66,300,300);
-        QPoint blurShift(34,34);
-        QPoint cloneShift(75,75);
+        QRect transpRect(50, 50, 300, 300);
+        QRect blurRect(66, 66, 300, 300);
+        QPoint blurShift(34, 34);
+        QPoint cloneShift(75, 75);
 
-        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
         KisImageSP image = new KisImage(undoStore, imageRect.width(), imageRect.height(), cs, "merge test");
 
         KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
@@ -111,10 +110,11 @@ protected:
      * Creates a simple image with one empty layer and connects it to
      * a surrogate undo store
      */
-    KisImageSP createTrivialImage(KisSurrogateUndoStore *undoStore) {
+    KisImageSP createTrivialImage(KisSurrogateUndoStore *undoStore)
+    {
         QRect imageRect = QRect(0, 0, 640, 441);
 
-        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
         KisImageSP image = new KisImage(undoStore, imageRect.width(), imageRect.height(), cs, "merge test");
 
         KisPaintLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
@@ -123,8 +123,9 @@ protected:
         return image;
     }
 
-    void addGlobalSelection(KisImageSP image) {
-        QRect selectionRect(40,40,300,300);
+    void addGlobalSelection(KisImageSP image)
+    {
+        QRect selectionRect(40, 40, 300, 300);
 
         KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(0, image));
         KisPixelSelectionSP pixelSelection = selection->pixelSelection();
@@ -134,7 +135,8 @@ protected:
         image->undoAdapter()->addCommand(cmd);
     }
 
-    void addShapeLayer(KisDocument *doc, KisImageSP image) {
+    void addShapeLayer(KisDocument *doc, KisImageSP image)
+    {
 
         KisShapeLayerSP shapeLayer = new KisShapeLayer(doc->shapeController(), image.data(), "shape", OPACITY_OPAQUE_U8);
         image->addNode(shapeLayer);
@@ -145,8 +147,8 @@ protected:
         KoShape *shape1 = f1->createDefaultShape();
         KoShape *shape2 = f2->createDefaultShape();
 
-        shape1->setPosition(QPointF(100,100));
-        shape2->setPosition(QPointF(200,200));
+        shape1->setPosition(QPointF(100, 100));
+        shape2->setPosition(QPointF(200, 200));
 
         shapeLayer->addShape(shape1);
         shapeLayer->addShape(shape2);
@@ -154,13 +156,15 @@ protected:
         QApplication::processEvents();
     }
 
-    bool checkLayersInitial(KisImageWSP image, int baseFuzzyness = 0) {
+    bool checkLayersInitial(KisImageWSP image, int baseFuzzyness = 0)
+    {
         QString prefix = "initial_with_selection";
         QString prefix2 = findNode(image->root(), "shape") ? "_with_shape" : "";
         return checkLayers(image, prefix + prefix2, baseFuzzyness);
     }
 
-    bool checkLayersInitialRootOnly(KisImageWSP image, int baseFuzzyness = 0) {
+    bool checkLayersInitialRootOnly(KisImageWSP image, int baseFuzzyness = 0)
+    {
         QString prefix = "initial_with_selection";
         QString prefix2 = findNode(image->root(), "shape") ? "_with_shape" : "";
         return checkLayers(image, prefix + prefix2, baseFuzzyness, false);
@@ -170,7 +174,8 @@ protected:
      * Checks the content of image's layers against the set of
      * QImages stored in @p prefix subfolder
      */
-    bool checkLayers(KisImageWSP image, const QString &prefix, int baseFuzzyness = 0, bool recursive = true) {
+    bool checkLayers(KisImageWSP image, const QString &prefix, int baseFuzzyness = 0, bool recursive = true)
+    {
         QVector<QImage> images;
         QVector<QString> names;
 
@@ -179,8 +184,8 @@ protected:
         bool valid = true;
 
         const int stackSize = images.size();
-        for(int i = 0; i < stackSize; i++) {
-            if(!checkOneQImage(images[i], prefix, names[i], baseFuzzyness)) {
+        for (int i = 0; i < stackSize; i++) {
+            if (!checkOneQImage(images[i], prefix, names[i], baseFuzzyness)) {
                 valid = false;
             }
         }
@@ -192,7 +197,8 @@ protected:
      * Checks the content of one image's layer against the QImage
      * stored in @p prefix subfolder
      */
-    bool checkOneLayer(KisImageWSP image, KisNodeSP node,  const QString &prefix, int baseFuzzyness = 0) {
+    bool checkOneLayer(KisImageWSP image, KisNodeSP node,  const QString &prefix, int baseFuzzyness = 0)
+    {
         QVector<QImage> images;
         QVector<QString> names;
 
@@ -211,7 +217,8 @@ protected:
         return checkOneQImage(image, prefix, name, baseFuzzyness);
     }
 
-    KisNodeSP findNode(KisNodeSP root, const QString &name) {
+    KisNodeSP findNode(KisNodeSP root, const QString &name)
+    {
         return TestUtil::findNode(root, name);
     }
 
@@ -248,17 +255,16 @@ private:
 
         {
             QStringList terms = name.split('_');
-            if(terms[0] == "root" ||
-               terms[0] == "blur1" ||
-               terms[0] == "shape") {
+            if (terms[0] == "root" ||
+                    terms[0] == "blur1" ||
+                    terms[0] == "shape") {
 
                 fuzzy++;
             }
         }
 
-        if(ref != image &&
-           !TestUtil::compareQImages(temp, ref, image, fuzzy)) {
-
+        if (ref != image &&
+                !TestUtil::compareQImages(temp, ref, image, fuzzy)) {
 
             qDebug() << "--- Wrong image:" << realName;
             valid = false;
@@ -273,24 +279,25 @@ private:
     void fillNamesImages(KisNodeSP node, const QRect &rc,
                          QVector<QImage> &images,
                          QVector<QString> &names,
-                         bool recursive = true) {
+                         bool recursive = true)
+    {
 
         while (node) {
-            if(node->paintDevice()) {
+            if (node->paintDevice()) {
                 names.append(node->name() + "_paintDevice");
                 images.append(node->paintDevice()->
                               convertToQImage(0, rc.x(), rc.y(),
                                               rc.width(), rc.height()));
             }
 
-            if(node->original() && node->original() != node->paintDevice()) {
+            if (node->original() && node->original() != node->paintDevice()) {
                 names.append(node->name() + "_original");
                 images.append(node->original()->
                               convertToQImage(0, rc.x(), rc.y(),
                                               rc.width(), rc.height()));
             }
 
-            if(node->projection() && node->projection() != node->paintDevice()) {
+            if (node->projection() && node->projection() != node->paintDevice()) {
                 names.append(node->name() + "_projection");
                 images.append(node->projection()->
                               convertToQImage(0, rc.x(), rc.y(),

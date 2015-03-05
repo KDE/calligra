@@ -23,27 +23,28 @@
 
 class SimpleEntryTool;
 class MusicCursor;
-namespace MusicCore {
-    class Staff;
+namespace MusicCore
+{
+class Staff;
 }
 
 class AbstractMusicAction : public KAction
 {
     Q_OBJECT
 public:
-    AbstractMusicAction(const KIcon& icon, const QString& text, SimpleEntryTool* tool);
-    AbstractMusicAction(const QString& text, SimpleEntryTool* tool);
+    AbstractMusicAction(const KIcon &icon, const QString &text, SimpleEntryTool *tool);
+    AbstractMusicAction(const QString &text, SimpleEntryTool *tool);
 
-    virtual void renderPreview(QPainter& painter, const QPointF& point);
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) = 0;
-    virtual void mouseMove(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    virtual void renderPreview(QPainter &painter, const QPointF &point);
+    virtual void mousePress(MusicCore::Staff *staff, int bar, const QPointF &pos) = 0;
+    virtual void mouseMove(MusicCore::Staff *staff, int bar, const QPointF &pos);
     bool isVoiceAware();
-    
-    virtual void renderKeyboardPreview(QPainter& painter, const MusicCursor& cursor);
-    virtual void keyPress(QKeyEvent* event, const MusicCursor& cursor);
+
+    virtual void renderKeyboardPreview(QPainter &painter, const MusicCursor &cursor);
+    virtual void keyPress(QKeyEvent *event, const MusicCursor &cursor);
 protected:
     bool m_isVoiceAware;
-    SimpleEntryTool* m_tool;
+    SimpleEntryTool *m_tool;
 };
 
 #endif // ABSTRACTMUSICACTION_H

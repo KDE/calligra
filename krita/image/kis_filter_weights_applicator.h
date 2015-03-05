@@ -29,21 +29,21 @@
 #include <KoColorSpace.h>
 #include <KoMixColorsOp.h>
 
+namespace tmp
+{
+template <class iter> iter createIterator(KisPaintDeviceSP dev, qint32 start, qint32 lineNum, qint32 len);
 
-namespace tmp {
-    template <class iter> iter createIterator(KisPaintDeviceSP dev, qint32 start, qint32 lineNum, qint32 len);
+template <> KisHLineIteratorSP createIterator <KisHLineIteratorSP>
+(KisPaintDeviceSP dev, qint32 start, qint32 lineNum, qint32 len)
+{
+    return dev->createHLineIteratorNG(start, lineNum, len);
+}
 
-    template <> KisHLineIteratorSP createIterator <KisHLineIteratorSP>
-    (KisPaintDeviceSP dev, qint32 start, qint32 lineNum, qint32 len)
-    {
-        return dev->createHLineIteratorNG(start, lineNum, len);
-    }
-
-    template <> KisVLineIteratorSP createIterator <KisVLineIteratorSP>
-    (KisPaintDeviceSP dev, qint32 start, qint32 lineNum, qint32 len)
-    {
-        return dev->createVLineIteratorNG(lineNum, start, len);
-    }
+template <> KisVLineIteratorSP createIterator <KisVLineIteratorSP>
+(KisPaintDeviceSP dev, qint32 start, qint32 lineNum, qint32 len)
+{
+    return dev->createVLineIteratorNG(lineNum, start, len);
+}
 }
 
 /**
@@ -129,7 +129,8 @@ public:
         KisFixedPoint offsetInc;
     };
 
-    inline BlendSpan calculateBlendSpan(int dst_l, int line, KisFilterWeightsBuffer *buffer) const {
+    inline BlendSpan calculateBlendSpan(int dst_l, int line, KisFilterWeightsBuffer *buffer) const
+    {
         KisFixedPoint dst_c = l_to_c(dst_l);
         KisFixedPoint dst_c_in_src = dstToSrc(dst_c.toFloat(), line);
 
@@ -147,7 +148,8 @@ public:
         return span;
     }
 
-    class LinePos {
+    class LinePos
+    {
     public:
         LinePos()
             : m_start(0), m_size(0)
@@ -159,7 +161,8 @@ public:
         {
         }
 
-        inline int start() const {
+        inline int start() const
+        {
             return m_start;
         }
 
@@ -170,15 +173,18 @@ public:
          * the pixel after(!) the actual last pixel.  See Qt docs for
          * more info about this historical difference.
          */
-        inline int end() const {
+        inline int end() const
+        {
             return m_start + m_size;
         }
 
-        inline int size() const {
+        inline int size() const
+        {
             return m_size;
         }
 
-        inline void unite(const LinePos &rhs) {
+        inline void unite(const LinePos &rhs)
+        {
             if (m_size > 0) {
                 int newStart = qMin(start(), rhs.start());
                 int newEnd = qMax(end(), rhs.end());
@@ -197,7 +203,8 @@ public:
     };
 
     template <class T>
-    LinePos processLine(LinePos srcLine, int line, KisFilterWeightsBuffer *buffer, qreal filterSupport) {
+    LinePos processLine(LinePos srcLine, int line, KisFilterWeightsBuffer *buffer, qreal filterSupport)
+    {
         int dstStart;
         int dstEnd;
 
@@ -238,11 +245,11 @@ public:
             borderPixel = srcIt->rawData();
         }
 
-        for (; i < srcLine.start(); i++, bufPtr+=pixelSize) {
+        for (; i < srcLine.start(); i++, bufPtr += pixelSize) {
             memcpy(bufPtr, borderPixel, pixelSize);
         }
 
-        for (; i < srcLine.end(); i++, bufPtr+=pixelSize) {
+        for (; i < srcLine.end(); i++, bufPtr += pixelSize) {
             quint8 *data = srcIt->rawData();
             memcpy(bufPtr, data, pixelSize);
             memcpy(data, defaultPixel, pixelSize);
@@ -253,7 +260,7 @@ public:
             borderPixel = bufPtr - pixelSize;
         }
 
-        for (; i < rightSrcBorder; i++, bufPtr+=pixelSize) {
+        for (; i < rightSrcBorder; i++, bufPtr += pixelSize) {
             memcpy(bufPtr, borderPixel, pixelSize);
         }
 
@@ -283,39 +290,47 @@ public:
 
 private:
 
-    int findAntialiasedDstStart(int src_l, qreal support, int line) {
+    int findAntialiasedDstStart(int src_l, qreal support, int line)
+    {
         qreal dst = srcToDst(src_l, line);
         return !m_clampToEdge ? floor(dst - support) : floor(dst);
     }
 
-    int findAntialiasedDstEnd(int src_l, qreal support, int line) {
+    int findAntialiasedDstEnd(int src_l, qreal support, int line)
+    {
         qreal dst = srcToDst(src_l, line);
         return !m_clampToEdge ? ceil(dst + support) : ceil(dst);
     }
 
-    int getLeftSrcNeedBorder(int dst_l, int line, KisFilterWeightsBuffer *buffer) {
+    int getLeftSrcNeedBorder(int dst_l, int line, KisFilterWeightsBuffer *buffer)
+    {
         BlendSpan span = calculateBlendSpan(dst_l, line, buffer);
         return span.firstBlendPixel;
     }
 
-    int getRightSrcNeedBorder(int dst_l, int line, KisFilterWeightsBuffer *buffer) {
+    int getRightSrcNeedBorder(int dst_l, int line, KisFilterWeightsBuffer *buffer)
+    {
         BlendSpan span = calculateBlendSpan(dst_l, line, buffer);
         return span.firstBlendPixel + span.weights->span;
     }
 
-    inline KisFixedPoint l_to_c(KisFixedPoint pixel_l) const {
+    inline KisFixedPoint l_to_c(KisFixedPoint pixel_l) const
+    {
         return pixel_l + KisFixedPoint(qreal(0.5));
     }
 
-    inline KisFixedPoint c_to_l(KisFixedPoint pixel_c) const {
+    inline KisFixedPoint c_to_l(KisFixedPoint pixel_c) const
+    {
         return pixel_c - KisFixedPoint(qreal(0.5));
     }
 
-    inline qreal srcToDst(qreal src, int line) const {
+    inline qreal srcToDst(qreal src, int line) const
+    {
         return src * m_realScale + m_dx + line * m_shear;
     }
 
-    inline qreal dstToSrc(qreal dst, int line) const {
+    inline qreal dstToSrc(qreal dst, int line) const
+    {
         return (dst - m_dx - line * m_shear) / m_realScale;
     }
 

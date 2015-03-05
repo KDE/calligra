@@ -30,7 +30,6 @@
 #include <QHash>
 #include <QSet>
 
-
 /**
  * A container to register all the text ranges with.
  */

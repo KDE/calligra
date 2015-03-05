@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "FileCollector.h"
 
@@ -35,10 +34,8 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
-
 // ================================================================
 //                     class FileCollector::FileInfo
-
 
 FileCollector::FileInfo::FileInfo(const QString &id, const QString &fileName,
                                   const QByteArray &mimetype, const QByteArray &fileContents,
@@ -51,10 +48,8 @@ FileCollector::FileInfo::FileInfo(const QString &id, const QString &fileName,
 {
 }
 
-
 // ================================================================
 //                     class FileCollectorPrivate
-
 
 class FileCollectorPrivate
 {
@@ -66,7 +61,7 @@ public:
     QString  fileSuffix;        // default: ".xhtml"
     QString  pathPrefix;        // default: "OEBPS/"
 
-    QList<FileCollector::FileInfo*>  m_files;  // Embedded files
+    QList<FileCollector::FileInfo *>  m_files; // Embedded files
 };
 
 FileCollectorPrivate::FileCollectorPrivate()
@@ -79,7 +74,6 @@ FileCollectorPrivate::FileCollectorPrivate()
 FileCollectorPrivate::~FileCollectorPrivate()
 {
 }
-
 
 // ================================================================
 //                         class FileCollector
@@ -95,7 +89,6 @@ FileCollector::~FileCollector()
 
     delete d;
 }
-
 
 void FileCollector::setFilePrefix(const QString &prefix)
 {
@@ -127,7 +120,6 @@ QString FileCollector::pathPrefix() const
     return d->pathPrefix;
 }
 
-
 // ----------------------------------------------------------------
 
 void FileCollector::addContentFile(const QString &id, const QString &fileName,
@@ -144,7 +136,7 @@ void FileCollector::addContentFile(const QString &id, const QString &fileName,
     d->m_files.append(newFile);
 }
 
-QList<FileCollector::FileInfo*>  FileCollector::files() const
+QList<FileCollector::FileInfo *>  FileCollector::files() const
 {
     return d->m_files;
 }
@@ -175,7 +167,6 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
 
     return KoFilter::OK;
 }
-
 
 // ----------------------------------------------------------------
 //                         Private functions

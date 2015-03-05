@@ -37,18 +37,39 @@ public:
     TaskDependency(QString tri, int maxScenarios);
     ~TaskDependency();
 
-    const QString getTaskRefId() const { return taskRefId; }
+    const QString getTaskRefId() const
+    {
+        return taskRefId;
+    }
 
-    void setTaskRef(const Task* tr) { taskRef = tr; }
-    const Task* getTaskRef() const { return taskRef; }
+    void setTaskRef(const Task *tr)
+    {
+        taskRef = tr;
+    }
+    const Task *getTaskRef() const
+    {
+        return taskRef;
+    }
 
-    void setGapDuration(int sc, long d) { gapDuration[sc] = d; }
+    void setGapDuration(int sc, long d)
+    {
+        gapDuration[sc] = d;
+    }
     long getGapDuration(int sc) const;
-    long getGapDurationNR(int sc) const { return gapDuration[sc]; }
+    long getGapDurationNR(int sc) const
+    {
+        return gapDuration[sc];
+    }
 
-    void setGapLength(int sc, long l) { gapLength[sc] = l; }
+    void setGapLength(int sc, long l)
+    {
+        gapLength[sc] = l;
+    }
     long getGapLength(int sc) const;
-    long getGapLengthNR(int sc) const { return gapLength[sc]; }
+    long getGapLengthNR(int sc) const
+    {
+        return gapLength[sc];
+    }
 
 private:
     /**
@@ -58,17 +79,17 @@ private:
      */
     QString taskRefId;
     // The pointer to the dependent Task.
-    const Task* taskRef;
+    const Task *taskRef;
     // Mininum required gap in calendar time.
-    long* gapDuration;
+    long *gapDuration;
     // Mininum required gap in working time.
-    long* gapLength;
-} ;
+    long *gapLength;
+};
 
 } // namespace TJ
 
-QDebug operator<<( QDebug dbg, const TJ::TaskDependency* dep );
-QDebug operator<<( QDebug dbg, const TJ::TaskDependency& dep );
+QDebug operator<<(QDebug dbg, const TJ::TaskDependency *dep);
+QDebug operator<<(QDebug dbg, const TJ::TaskDependency &dep);
 
 #endif
 

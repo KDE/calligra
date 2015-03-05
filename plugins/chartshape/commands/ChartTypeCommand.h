@@ -27,7 +27,6 @@
 #include "kchart_global.h"
 //#include "ChartShape.h"
 
-
 #if 0
 namespace KDChart
 {
@@ -36,7 +35,6 @@ class AbstractDiagram;
 class Chart;
 }
 #endif
-
 
 namespace KChart
 {
@@ -73,7 +71,6 @@ public:
      * Sets the new chart type.
      */
     void setChartType(ChartType type, ChartSubtype subType);
-
 
 private:
     ChartShape                        *m_chart;

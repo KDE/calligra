@@ -19,7 +19,6 @@
 #ifndef _TRAJECTORY_H_
 #define _TRAJECTORY_H_
 
-
 #include <QVector>
 #include <QPointF>
 
@@ -32,7 +31,8 @@ public:
     const QVector<QPointF> &getLinearTrajectory(const QPointF &start, const QPointF &end, double space);
     QVector<QPointF> getDDATrajectory(QPointF start, QPointF end, double space);
 
-    inline int size() const {
+    inline int size() const
+    {
         return m_size;
     }
 

@@ -24,23 +24,25 @@
 
 #include <QString>
 
-namespace {
-    class VisibilityMap : public QMap<KoColumn::Visibility, QString> {
-    public:
-        VisibilityMap()
+namespace
+{
+class VisibilityMap : public QMap<KoColumn::Visibility, QString>
+{
+public:
+    VisibilityMap()
         : QMap<KoColumn::Visibility, QString>()
-        {
-            insert(KoColumn::Collapse, "colapse");
-            insert(KoColumn::Filter, "filter");
-            insert(KoColumn::Visible, "visible");
-        }
-    } visibilityMap;
+    {
+        insert(KoColumn::Collapse, "colapse");
+        insert(KoColumn::Filter, "filter");
+        insert(KoColumn::Visible, "visible");
+    }
+} visibilityMap;
 }
 
 KoColumn::KoColumn()
-: m_defaultCellStyle(0)
-, m_style(0)
-, m_visibility(Visible)
+    : m_defaultCellStyle(0)
+    , m_style(0)
+    , m_visibility(Visible)
 {
 }
 
@@ -78,13 +80,13 @@ KoColumn::Visibility KoColumn::visibility()
     return m_visibility;
 }
 
-void KoColumn::saveOdf(KoXmlWriter& writer, KoGenStyles& styles)
+void KoColumn::saveOdf(KoXmlWriter &writer, KoGenStyles &styles)
 {
     writer.startElement("table:table-column");
-    if(m_style) {
+    if (m_style) {
         writer.addAttribute("table:style-name", m_style->saveOdf(styles));
     }
-    if(m_defaultCellStyle) {
+    if (m_defaultCellStyle) {
         writer.addAttribute("table:default-cell-style-name", m_defaultCellStyle->saveOdf(styles));
     }
     writer.addAttribute("table:visibility", visibilityMap.value(m_visibility));

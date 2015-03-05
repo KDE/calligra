@@ -59,26 +59,32 @@ public:
     /**
      * getters
      */
-    double getWidth() const {
+    double getWidth() const
+    {
         return _width;
     }
-    int getStyle() const {
+    int getStyle() const
+    {
         return _style;
     }
-    QColor getColor() const {
+    QColor getColor() const
+    {
         return _color;
     }
 
     /**
      * setters
      */
-    void setWidth(double w) {
+    void setWidth(double w)
+    {
         _width = w;
     }
-    void setStyle(int s) {
+    void setStyle(int s)
+    {
         _style = s;
     }
-    void setColor(QString color) {
+    void setColor(QString color)
+    {
         _color.setNamedColor(color);
     }
 
@@ -91,7 +97,7 @@ public:
      */
     virtual void analyze(const QDomNode);
 
-    virtual void generate(QTextStream&);
+    virtual void generate(QTextStream &);
 
 };
 

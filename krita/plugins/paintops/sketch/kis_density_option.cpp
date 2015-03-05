@@ -26,8 +26,7 @@ KisDensityOption::KisDensityOption()
     setMaximumLabel(i18n("100%"));
 }
 
-
-double KisDensityOption::apply(const KisPaintInformation & info, double probability) const
+double KisDensityOption::apply(const KisPaintInformation &info, double probability) const
 {
     if (!isChecked()) {
         return probability;

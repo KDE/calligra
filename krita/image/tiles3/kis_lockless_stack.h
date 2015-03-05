@@ -42,16 +42,18 @@ private:
 
 public:
     KisLocklessStack() { }
-    ~KisLocklessStack() {
+    ~KisLocklessStack()
+    {
         T temp;
 
-        while(pop(temp)) {
+        while (pop(temp)) {
         }
 
         cleanUpNodes();
     }
 
-    void push(T data) {
+    void push(T data)
+    {
         Node *newNode = new Node();
         newNode->data = data;
 
@@ -65,19 +67,22 @@ public:
         m_numNodes.ref();
     }
 
-    bool pop(T &value) {
+    bool pop(T &value)
+    {
         bool result = false;
 
         m_deleteBlockers.ref();
 
-        while(1) {
-            Node *top = (Node*) m_top;
-            if(!top) break;
+        while (1) {
+            Node *top = (Node *) m_top;
+            if (!top) {
+                break;
+            }
 
             // This is safe as we ref'ed m_deleteBlockers
             Node *next = top->next;
 
-            if(m_top.testAndSetOrdered(top, next)) {
+            if (m_top.testAndSetOrdered(top, next)) {
                 m_numNodes.deref();
                 result = true;
 
@@ -92,8 +97,7 @@ public:
                 if (m_deleteBlockers == 1) {
                     cleanUpNodes();
                     delete top;
-                }
-                else {
+                } else {
                     releaseNode(top);
                 }
 
@@ -106,9 +110,12 @@ public:
         return result;
     }
 
-    void clear() {
+    void clear()
+    {
         // a fast-path without write ops
-        if(!m_top) return;
+        if (!m_top) {
+            return;
+        }
 
         m_deleteBlockers.ref();
 
@@ -116,13 +123,13 @@ public:
 
         int removedChunkSize = 0;
         Node *tmp = top;
-        while(tmp) {
+        while (tmp) {
             removedChunkSize++;
             tmp = tmp->next;
         }
         m_numNodes.fetchAndAddOrdered(-removedChunkSize);
 
-        while(top) {
+        while (top) {
             Node *next = top->next;
 
             if (m_deleteBlockers == 1) {
@@ -133,8 +140,7 @@ public:
                 cleanUpNodes();
                 freeList(top);
                 next = 0;
-            }
-            else {
+            } else {
                 releaseNode(top);
             }
 
@@ -149,17 +155,20 @@ public:
      * in highly concurrent environment. So we return approximate
      * value! Do not rely on this value much!
      */
-    qint32 size() {
+    qint32 size()
+    {
         return m_numNodes;
     }
 
-    bool isEmpty() {
+    bool isEmpty()
+    {
         return !m_numNodes;
     }
 
 private:
 
-    inline void releaseNode(Node *node) {
+    inline void releaseNode(Node *node)
+    {
         Node *top;
         do {
             top = m_freeNodes;
@@ -167,14 +176,16 @@ private:
         } while (!m_freeNodes.testAndSetOrdered(top, node));
     }
 
-    inline void cleanUpNodes() {
+    inline void cleanUpNodes()
+    {
         Node *top = m_freeNodes.fetchAndStoreOrdered(0);
-        if(top) {
+        if (top) {
             freeList(top);
         }
     }
 
-    inline void freeList(Node *first) {
+    inline void freeList(Node *first)
+    {
         Node *next;
         while (first) {
             next = first->next;
@@ -182,7 +193,6 @@ private:
             first = next;
         }
     }
-
 
 private:
     Q_DISABLE_COPY(KisLocklessStack)

@@ -21,7 +21,6 @@
 
 #include "kis_algebra_2d.h"
 
-
 class KisTabletEventRateLogger
 {
 public:
@@ -33,8 +32,8 @@ public:
     {
     }
 
-
-    void logTabletEvent(KisTabletEvent *tevent) {
+    void logTabletEvent(KisTabletEvent *tevent)
+    {
         QPointF newPos = tevent->hiResGlobalPos();
 
         if (!m_numSamples) {
@@ -43,7 +42,6 @@ public:
             m_lastPos = newPos;
             return;
         }
-
 
         qreal oldCoeff = m_numSamples;
         qreal newCoeff = ++m_numSamples;
@@ -60,7 +58,8 @@ public:
         }
     }
 
-    void dumpValues() {
+    void dumpValues()
+    {
         qDebug() << "########################";
         qDebug() << ppVar(m_id);
         qDebug() << ppVar(m_avgTime);

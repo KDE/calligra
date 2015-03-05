@@ -72,7 +72,7 @@ public:
 
     Kross::ActionCollectionModel *model() const
     {
-            return static_cast<Kross::ActionCollectionModel*>(Kross::ActionCollectionView::model());
+        return static_cast<Kross::ActionCollectionModel *>(Kross::ActionCollectionView::model());
     }
 
 #ifndef DISABLE_ADD_REMOVE
@@ -92,8 +92,8 @@ public:
             return;
         }
         // get the actions/collections, indexes will change when things are removed
-        QList<Kross::Action*> actions;
-        QList<Kross::ActionCollection*> collections;
+        QList<Kross::Action *> actions;
+        QList<Kross::ActionCollection *> collections;
         foreach (const QModelIndex &idx, itemSelection().indexes()) {
             Kross::Action *a =  model()->action(idx);
             if (a) {
@@ -125,7 +125,7 @@ public:
 
 KoScriptManagerCollection::KoScriptManagerCollection(QWidget *parent)
     : QWidget(parent),
-    m_modified(false)
+      m_modified(false)
 {
     QHBoxLayout *mainlayout = new QHBoxLayout();
     mainlayout->setMargin(0);
@@ -169,8 +169,9 @@ bool KoScriptManagerCollection::isModified() const
 */
 
 #if 0
-bool KoScriptManagerCollection::slotInstall() {
-    KFileDialog* filedialog = new KFileDialog(
+bool KoScriptManagerCollection::slotInstall()
+{
+    KFileDialog *filedialog = new KFileDialog(
         KUrl("kfiledialog:///KrossInstallPackage"), // startdir
         "*.tar.gz *.tgz *.bz2", // filter
         0, // custom widget
@@ -179,17 +180,20 @@ bool KoScriptManagerCollection::slotInstall() {
     filedialog->setCaption(i18n("Install Script Package"));
     return filedialog->exec() ? module()->installPackage(filedialog->selectedUrl().path()) : false;
 }
-void KoScriptManagerView::slotUninstall() {
-    foreach(QModelIndex index, d->selectionmodel->selectedIndexes())
-        if(index.isValid())
-            if(! uninstallPackage( static_cast< Action* >(index.internalPointer()) ))
+void KoScriptManagerView::slotUninstall()
+{
+    foreach (QModelIndex index, d->selectionmodel->selectedIndexes())
+        if (index.isValid())
+            if (! uninstallPackage(static_cast< Action * >(index.internalPointer()))) {
                 break;
+            }
 }
-void KoScriptManagerView::slotNewScripts() {
+void KoScriptManagerView::slotNewScripts()
+{
     const QString appname = KApplication::kApplication()->objectName();
     const QString type = QString("%1/script").arg(appname);
-    krossdebug( QString("ScriptManagerView::slotNewScripts %1").arg(type) );
-    if(! d->newstuff) {
+    krossdebug(QString("ScriptManagerView::slotNewScripts %1").arg(type));
+    if (! d->newstuff) {
         d->newstuff = new KoScriptManagerNewStuff(this, type);
         connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotNewScriptsInstallFinished()));
     }
@@ -201,7 +205,8 @@ void KoScriptManagerView::slotNewScripts() {
     p->load(type, QString("http://download.kde.org/khotnewstuff/%1scripts-providers.xml").arg(appname));
     d->exec();
 }
-void KoScriptManagerView::slotNewScriptsInstallFinished() {
+void KoScriptManagerView::slotNewScriptsInstallFinished()
+{
     // Delete KNewStuff's configuration entries. These entries reflect what has
     // already been installed. As we cannot yet keep them in sync after uninstalling
     // scripts, we deactivate the check marks entirely.
@@ -210,30 +215,30 @@ void KoScriptManagerView::slotNewScriptsInstallFinished() {
 #endif
 
 #if 0
-bool KoScriptManagerModule::installPackage(const QString& scriptpackagefile)
+bool KoScriptManagerModule::installPackage(const QString &scriptpackagefile)
 {
-    KTar archive( scriptpackagefile );
-    if(! archive.open(QIODevice::ReadOnly)) {
+    KTar archive(scriptpackagefile);
+    if (! archive.open(QIODevice::ReadOnly)) {
         KMessageBox::sorry(0, i18n("Could not read the package \"%1\".", scriptpackagefile));
         return false;
     }
 
-    const KArchiveDirectory* archivedir = archive.directory();
-    const KArchiveEntry* entry = archivedir->entry("install.rc");
-    if(! entry || ! entry->isFile()) {
+    const KArchiveDirectory *archivedir = archive.directory();
+    const KArchiveEntry *entry = archivedir->entry("install.rc");
+    if (! entry || ! entry->isFile()) {
         KMessageBox::sorry(0, i18n("The package \"%1\" does not contain a valid install.rc file.", scriptpackagefile));
         return false;
     }
 
-    QString xml = static_cast< const KArchiveFile* >(entry)->data();
+    QString xml = static_cast< const KArchiveFile * >(entry)->data();
     QDomDocument domdoc;
-    if(! domdoc.setContent(xml)) {
+    if (! domdoc.setContent(xml)) {
         KMessageBox::sorry(0, i18n("Failed to parse the install.rc file at package \"%1\".", scriptpackagefile));
         return false;
     }
 
     QString destination = KGlobal::dirs()->saveLocation("appdata", "scripts/", true);
-    if(destination.isNull()) {
+    if (destination.isNull()) {
         KMessageBox::sorry(0, i18n("Failed to determinate location where the package \"%1\" should be installed to.", scriptpackagefile));
         return false;
     }
@@ -242,49 +247,50 @@ bool KoScriptManagerModule::installPackage(const QString& scriptpackagefile)
     destination += packagename; // add the packagename to the name of the destination-directory.
 
     QDir packagepath(destination);
-    if( packagepath.exists() ) {
-        if( KMessageBox::warningContinueCancel(0,
-            i18n("A script package with the name \"%1\" already exists. Replace this package?", packagename),
-            i18n("Replace")) != KMessageBox::Continue )
-                return false;
-        if(! KIO::NetAccess::del(destination, 0) ) {
+    if (packagepath.exists()) {
+        if (KMessageBox::warningContinueCancel(0,
+                                               i18n("A script package with the name \"%1\" already exists. Replace this package?", packagename),
+                                               i18n("Replace")) != KMessageBox::Continue) {
+            return false;
+        }
+        if (! KIO::NetAccess::del(destination, 0)) {
             KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".", destination));
             return false;
         }
     }
 
-    krossdebug( QString("Copy script-package to destination directory: %1").arg(destination) );
+    krossdebug(QString("Copy script-package to destination directory: %1").arg(destination));
     archivedir->copyTo(destination, true);
 
     QDomNodeList nodelist = domdoc.elementsByTagName("ScriptAction");
     int nodelistcount = nodelist.count();
-    for(int i = 0; i < nodelistcount; ++i) {
+    for (int i = 0; i < nodelistcount; ++i) {
         QDomElement element = nodelist.item(i).toElement();
         const QString name = element.attribute("name");
-        Action* action = new Action(Manager::self().actionCollection(), name, packagepath);
+        Action *action = new Action(Manager::self().actionCollection(), name, packagepath);
         action->fromDomElement(element);
-        //connect(action, SIGNAL( failed(const QString&, const QString&) ), this, SLOT( executionFailed(const QString&, const QString&) ));
-        //connect(action, SIGNAL( success() ), this, SLOT( executionSuccessful() ));
-        //connect(action, SIGNAL( activated(Kross::Action*) ), SIGNAL( executionStarted(Kross::Action*)));
+        //connect(action, SIGNAL(failed(QString,QString)), this, SLOT(executionFailed(QString,QString)));
+        //connect(action, SIGNAL(success()), this, SLOT(executionSuccessful()));
+        //connect(action, SIGNAL(activated(Kross::Action*)), SIGNAL(executionStarted(Kross::Action*)));
     }
 
     //d->modified = true;
     return true;
 }
 
-bool KoScriptManagerModule::uninstallPackage(Action* action)
+bool KoScriptManagerModule::uninstallPackage(Action *action)
 {
     const QString name = action->objectName();
     QString file = action->file();
     QFileInfo fi(file);
-    if(file.isNull() || ! fi.exists()) {
-        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\" since the script is not installed.",action->objectName()));
+    if (file.isNull() || ! fi.exists()) {
+        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\" since the script is not installed.", action->objectName()));
         return false;
     }
     const QString scriptpackagepath = fi.absolutePath();
-    krossdebug( QString("Uninstall script-package with destination directory: %1").arg(scriptpackagepath) );
-    if(! KIO::NetAccess::del(scriptpackagepath, 0) ) {
-        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\". You may not have sufficient permissions to delete the folder \"%1\".",action->objectName()).arg(scriptpackagepath));
+    krossdebug(QString("Uninstall script-package with destination directory: %1").arg(scriptpackagepath));
+    if (! KIO::NetAccess::del(scriptpackagepath, 0)) {
+        KMessageBox::sorry(0, i18n("Could not uninstall the script package \"%1\". You may not have sufficient permissions to delete the folder \"%1\".", action->objectName()).arg(scriptpackagepath));
         return false;
     }
     delete action; action = 0; // removes the action from d->actions as well
@@ -317,8 +323,9 @@ void KoScriptManagerDialog::slotAccepted()
         const QString file = QFileInfo(dir, "scripts.rc").absoluteFilePath();
         QFile f(file);
         if (f.open(QIODevice::WriteOnly))
-            if (Kross::Manager::self().actionCollection()->writeXml(&f))
-                kDebug(32010)<<"Successfully saved file:"<<file;
+            if (Kross::Manager::self().actionCollection()->writeXml(&f)) {
+                kDebug(32010) << "Successfully saved file:" << file;
+            }
         f.close();
     }
 }

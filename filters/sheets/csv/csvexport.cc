@@ -52,22 +52,23 @@ public:
     int row, col;
     QString text;
 
-    bool operator < (const Cell & c) const {
+    bool operator < (const Cell &c) const
+    {
         return row < c.row || (row == c.row && col < c.col);
     }
-    bool operator == (const Cell & c) const {
+    bool operator == (const Cell &c) const
+    {
         return row == c.row && col == c.col;
     }
 };
 
-
-CSVExport::CSVExport(QObject* parent, const QVariantList &)
-        : KoFilter(parent), m_eol("\n")
+CSVExport::CSVExport(QObject *parent, const QVariantList &)
+    : KoFilter(parent), m_eol("\n")
 {
 }
 
-QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc* doc, Sheet const * const sheet,
-                                 int col, int row, QChar const & textQuote, QChar csvDelimiter)
+QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc *doc, Sheet const *const sheet,
+                                 int col, int row, QChar const &textQuote, QChar csvDelimiter)
 {
     // This function, given a cell, returns a string corresponding to its export in CSV format
     // It proceeds by:
@@ -80,16 +81,17 @@ QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc* doc, Sheet const *
     QString text;
 
     if (!cell.isDefault() && !cell.isEmpty()) {
-        if (cell.isFormula())
+        if (cell.isFormula()) {
             text = cell.displayText();
-        else if (!cell.link().isEmpty())
-            text = cell.userInput(); // untested
-        else if (cell.isTime())
+        } else if (!cell.link().isEmpty()) {
+            text = cell.userInput();    // untested
+        } else if (cell.isTime()) {
             text = cell.value().asTime(sheet->map()->calculationSettings()).toString("hh:mm:ss");
-        else if (cell.isDate())
+        } else if (cell.isDate()) {
             text = cell.value().asDate(sheet->map()->calculationSettings()).toString("yyyy-MM-dd");
-        else
+        } else {
             text = cell.displayText();
+        }
     }
 
     // quote only when needed (try to mimic excel)
@@ -101,10 +103,11 @@ QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc* doc, Sheet const *
             text.replace(textQuote, doubleTextQuote);
             quote = true;
 
-        } else if (text[0].isSpace() || text[text.length()-1].isSpace())
+        } else if (text[0].isSpace() || text[text.length() - 1].isSpace()) {
             quote = true;
-        else if (text.indexOf(csvDelimiter) != -1)
+        } else if (text.indexOf(csvDelimiter) != -1) {
             quote = true;
+        }
     }
 
     if (quote) {
@@ -117,13 +120,14 @@ QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc* doc, Sheet const *
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QByteArray & to)
+KoFilter::ConversionStatus CSVExport::convert(const QByteArray &from, const QByteArray &to)
 {
     kDebug(30501) << "CSVExport::convert";
-    KoDocument* document = m_chain->inputDocument();
+    KoDocument *document = m_chain->inputDocument();
 
-    if (!document)
+    if (!document) {
         return KoFilter::StupidError;
+    }
 
     if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {
         kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
@@ -157,7 +161,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
         }
     }
 
-    QTextCodec* codec = 0;
+    QTextCodec *codec = 0;
     QChar csvDelimiter;
     if (expDialog) {
         codec = expDialog->getCodec();
@@ -172,7 +176,6 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
         csvDelimiter = ',';
     }
 
-
     // Now get hold of the sheet to export
     // (Hey, this could be part of the dialog too, choosing which sheet to export....
     //  It's great to have parametrable filters... IIRC even MSOffice doesn't have that)
@@ -181,21 +184,22 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
     bool first = true;
     QString str;
     QChar textQuote;
-    if (expDialog)
+    if (expDialog) {
         textQuote = expDialog->getTextQuote();
-    else
+    } else {
         textQuote = '"';
+    }
 
     if (expDialog && expDialog->exportSelectionOnly()) {
         kDebug(30501) << "Export as selection mode";
-        View *view = ksdoc->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->documentPart()->views().first());
+        View *view = ksdoc->documentPart()->views().isEmpty() ? 0 : static_cast<View *>(ksdoc->documentPart()->views().first());
 
         if (!view) { // no view if embedded document
             delete expDialog;
             return KoFilter::StupidError;
         }
 
-        Sheet const * const sheet = view->activeSheet();
+        Sheet const *const sheet = view->activeSheet();
 
         QRect selection = view->selection()->lastRange();
         // Compute the highest row and column indexes (within the selection)
@@ -209,11 +213,13 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
         for (int idxRow = 1, row = selection.top(); row <= bottom; ++row, ++idxRow) {
             for (int idxCol = 1, col = selection.left(); col <= right; ++col, ++idxCol) {
                 if (!Calligra::Sheets::Cell(sheet, col, row).isEmpty()) {
-                    if (idxRow > CSVMaxRow)
+                    if (idxRow > CSVMaxRow) {
                         CSVMaxRow = idxRow;
+                    }
 
-                    if (idxCol > CSVMaxCol)
+                    if (idxCol > CSVMaxCol) {
                         CSVMaxCol = idxCol;
+                    }
                 }
             }
         }
@@ -225,19 +231,21 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
                     col <= right && idxCol <= CSVMaxCol; ++col, ++idxCol) {
                 str += exportCSVCell(ksdoc, sheet, col, row, textQuote, csvDelimiter);
 
-                if (idxCol < CSVMaxCol)
+                if (idxCol < CSVMaxCol) {
                     str += csvDelimiter;
+                }
             }
 
             // This is to deal with the case of non-rectangular selections
-            for (; idxCol < CSVMaxCol; ++idxCol)
+            for (; idxCol < CSVMaxCol; ++idxCol) {
                 str += csvDelimiter;
+            }
 
             str += m_eol;
         }
     } else {
         kDebug(30501) << "Export as full mode";
-        foreach(Sheet const * const sheet, ksdoc->map()->sheetList()) {
+        foreach (Sheet const *const sheet, ksdoc->map()->sheetList()) {
             if (expDialog && !expDialog->exportSheet(sheet->sheetName())) {
                 continue;
             }
@@ -250,34 +258,39 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
             int CSVMaxRow   = 0;
             int CSVMaxCol   = 0;
 
-            for (int row = 1 ; row <= sheetMaxRow ; ++row) {
-                for (int col = 1 ; col <= sheetMaxCol ; col++) {
+            for (int row = 1; row <= sheetMaxRow; ++row) {
+                for (int col = 1; col <= sheetMaxCol; col++) {
                     if (!Calligra::Sheets::Cell(sheet, col, row).isEmpty()) {
-                        if (row > CSVMaxRow)
+                        if (row > CSVMaxRow) {
                             CSVMaxRow = row;
+                        }
 
-                        if (col > CSVMaxCol)
+                        if (col > CSVMaxCol) {
                             CSVMaxCol = col;
+                        }
                     }
                 }
             }
 
             // Skip the sheet altogether if it is empty
-            if (CSVMaxRow + CSVMaxCol == 0)
+            if (CSVMaxRow + CSVMaxCol == 0) {
                 continue;
+            }
 
             kDebug(30501) << "Max row x column:" << CSVMaxRow << " x" << CSVMaxCol;
 
             // Print sheet separators, except for the first sheet
             if (!first || (expDialog && expDialog->printAlwaysSheetDelimiter())) {
-                if (!first)
+                if (!first) {
                     str += m_eol;
+                }
 
                 QString name;
-                if (expDialog)
+                if (expDialog) {
                     name = expDialog->getSheetDelimiter();
-                else
+                } else {
                     name = "********<SHEETNAME>********";
+                }
                 const QString tname(i18n("<SHEETNAME>"));
                 int pos = name.indexOf(tname);
                 if (pos != -1) {
@@ -288,14 +301,13 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
 
             first = false;
 
-
             // this is just a bad approximation which fails for documents with less than 50 rows, but
             // we don't need any progress stuff there anyway :) (Werner)
             int value = 0;
             int step  = CSVMaxRow > 50 ? CSVMaxRow / 50 : 1;
 
             // Print the CSV for the sheet data
-            for (int row = 1, i = 1 ; row <= CSVMaxRow ; ++row, ++i) {
+            for (int row = 1, i = 1; row <= CSVMaxRow; ++row, ++i) {
                 if (i > step) {
                     value += 2;
                     emit sigProgress(value);
@@ -304,7 +316,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
 
                 QString collect;  // buffer delimiters while reading empty cells
 
-                for (int col = 1 ; col <= CSVMaxCol ; col++) {
+                for (int col = 1; col <= CSVMaxCol; col++) {
                     const QString txt = exportCSVCell(ksdoc, sheet, col, row, textQuote, csvDelimiter);
 
                     // if we encounter a non-empty cell, commit the buffered delimiters

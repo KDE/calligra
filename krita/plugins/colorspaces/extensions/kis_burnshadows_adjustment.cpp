@@ -35,17 +35,17 @@
 
 template<typename _channel_type_, typename traits>
 class KisBurnShadowsAdjustment : public KoColorTransformation
- {
+{
     typedef traits RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
-    KisBurnShadowsAdjustment(){}
+    KisBurnShadowsAdjustment() {}
 
- 	void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
- 	{
-        const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
-        RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
+    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
+    {
+        const RGBPixel *src = reinterpret_cast<const RGBPixel *>(srcU8);
+        RGBPixel *dst = reinterpret_cast<RGBPixel *>(dstU8);
         float factor, value_red, value_green, value_blue, new_value_red, new_value_green, new_value_blue;
         while (nPixels > 0) {
 
@@ -54,42 +54,51 @@ public:
             value_green =  KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->green);
             value_blue =  KoColorSpaceMaths<_channel_type_, float>::scaleToA(src->blue);
 
-            if( value_red < factor ) new_value_red = 0;
-            else new_value_red = (value_red - factor)/(1 - factor);
-            if( value_green < factor ) new_value_green = 0;
-            else new_value_green = (value_green - factor)/(1 - factor);
-            if( value_blue < factor ) new_value_blue = 0;
-            else new_value_blue = (value_blue - factor)/(1 - factor);
-            
+            if (value_red < factor) {
+                new_value_red = 0;
+            } else {
+                new_value_red = (value_red - factor) / (1 - factor);
+            }
+            if (value_green < factor) {
+                new_value_green = 0;
+            } else {
+                new_value_green = (value_green - factor) / (1 - factor);
+            }
+            if (value_blue < factor) {
+                new_value_blue = 0;
+            } else {
+                new_value_blue = (value_blue - factor) / (1 - factor);
+            }
+
             dst->red = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(new_value_red);
             dst->green = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(new_value_green);
             dst->blue = KoColorSpaceMaths< float, _channel_type_ >::scaleToA(new_value_blue);
             dst->alpha = src->alpha;
-            
+
             --nPixels;
             ++src;
             ++dst;
         }
- 	}
+    }
 
-	virtual QList<QString> parameters() const
-	{
+    virtual QList<QString> parameters() const
+    {
         QList<QString> list;
         list << "exposure";
         return list;
-	}
+    }
 
-	virtual int parameterId(const QString& name) const
+    virtual int parameterId(const QString &name) const
     {
-        if (name == "exposure")
-        return 0;
+        if (name == "exposure") {
+            return 0;
+        }
         return -1;
     }
 
-    virtual void setParameter(int id, const QVariant& parameter)
+    virtual void setParameter(int id, const QVariant &parameter)
     {
-        switch(id)
-        {
+        switch (id) {
         case 0:
             exposure = parameter.toDouble();
             break;
@@ -99,10 +108,10 @@ public:
     }
 private:
 
-	float exposure;
- };
+    float exposure;
+};
 
- KisBurnShadowsAdjustmentFactory::KisBurnShadowsAdjustmentFactory()
+KisBurnShadowsAdjustmentFactory::KisBurnShadowsAdjustmentFactory()
     : KoColorTransformationFactory("BurnShadows")
 {
 }
@@ -110,16 +119,16 @@ private:
 QList< QPair< KoID, KoID > > KisBurnShadowsAdjustmentFactory::supportedModels() const
 {
     QList< QPair< KoID, KoID > > l;
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer8BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer16BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float16BitsColorDepthID));
-    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float32BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Integer8BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Integer16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Float16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID, Float32BitsColorDepthID));
     return l;
 }
 
-KoColorTransformation* KisBurnShadowsAdjustmentFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
+KoColorTransformation *KisBurnShadowsAdjustmentFactory::createTransformation(const KoColorSpace *colorSpace, QHash<QString, QVariant> parameters) const
 {
-    KoColorTransformation * adj;
+    KoColorTransformation *adj;
     if (colorSpace->colorModelId() != RGBAColorModelID) {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisBurnShadowsAdjustment::createTransformation";
         return 0;

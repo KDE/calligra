@@ -56,7 +56,11 @@
 //! @internal
 struct KexiDBImageBox_Static {
     KexiDBImageBox_Static() : pixmap(0), small(0) {}
-    ~KexiDBImageBox_Static() { delete pixmap; delete small; }
+    ~KexiDBImageBox_Static()
+    {
+        delete pixmap;
+        delete small;
+    }
     QPixmap *pixmap;
     QPixmap *small;
 };
@@ -64,18 +68,18 @@ struct KexiDBImageBox_Static {
 K_GLOBAL_STATIC(KexiDBImageBox_Static, KexiDBImageBox_static)
 
 KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
-        : KexiFrame(parent)
-        , KexiFormDataItemInterface()
-        , m_alignment(Qt::AlignLeft | Qt::AlignTop)
-        , m_readOnly(false)
-        , m_scaledContents(false)
-        , m_smoothTransformation(true)
-        , m_keepAspectRatio(true)
-        , m_insideSetData(false)
-        , m_setFocusOnButtonAfterClosingPopup(false)
-        , m_paintEventEnabled(true)
-        , m_dropDownButtonVisible(true)
-        , m_insideSetPalette(false)
+    : KexiFrame(parent)
+    , KexiFormDataItemInterface()
+    , m_alignment(Qt::AlignLeft | Qt::AlignTop)
+    , m_readOnly(false)
+    , m_scaledContents(false)
+    , m_smoothTransformation(true)
+    , m_keepAspectRatio(true)
+    , m_insideSetData(false)
+    , m_setFocusOnButtonAfterClosingPopup(false)
+    , m_paintEventEnabled(true)
+    , m_dropDownButtonVisible(true)
+    , m_insideSetPalette(false)
 {
     setDesignMode(designMode);
     installEventFilter(this);
@@ -128,7 +132,7 @@ KexiDBImageBox::~KexiDBImageBox()
 {
 }
 
-KexiImageContextMenu* KexiDBImageBox::contextMenu() const
+KexiImageContextMenu *KexiDBImageBox::contextMenu() const
 {
     return m_contextMenu;
 }
@@ -143,15 +147,17 @@ QVariant KexiDBImageBox::value()
     return m_value; //!< @todo
 }
 
-void KexiDBImageBox::setValueInternal(const QVariant& add, bool removeOld, bool loadPixmap)
+void KexiDBImageBox::setValueInternal(const QVariant &add, bool removeOld, bool loadPixmap)
 {
-    if (isReadOnly())
+    if (isReadOnly()) {
         return;
+    }
     m_contextMenu->hide();
-    if (removeOld)
+    if (removeOld) {
         m_value = add.toByteArray();
-    else //do not add "m_origValue" to "add" as this is QByteArray
+    } else { //do not add "m_origValue" to "add" as this is QByteArray
         m_value = KexiDataItemInterface::originalValue().toByteArray();
+    }
     bool ok = !m_value.isEmpty();
     if (ok) {
         ///unused (m_valueMimeType is not available unless the px is inserted) QString type( KImageIO::typeForMime(m_valueMimeType) );
@@ -172,7 +178,7 @@ void KexiDBImageBox::setValueInternal(const QVariant& add, bool removeOld, bool 
     repaint();
 }
 
-void KexiDBImageBox::setInvalidState(const QString& displayText)
+void KexiDBImageBox::setInvalidState(const QString &displayText)
 {
     Q_UNUSED(displayText);
     if (!dataSource().isEmpty()) {
@@ -181,8 +187,9 @@ void KexiDBImageBox::setInvalidState(const QString& displayText)
 
 //! @todo m_pixmapLabel->setText( displayText );
 
-    if (m_chooser)
+    if (m_chooser) {
         m_chooser->hide();
+    }
     setReadOnly(true);
 }
 
@@ -227,8 +234,9 @@ uint KexiDBImageBox::pixmapId() const
 
 void KexiDBImageBox::setPixmapId(uint id)
 {
-    if (m_insideSetData) //avoid recursion
+    if (m_insideSetData) { //avoid recursion
         return;
+    }
     setData(KexiBLOBBuffer::self()->objectForId(id, /*unstored*/false));
     repaint();
 }
@@ -292,7 +300,7 @@ void KexiDBImageBox::setKeepAspectRatio(bool set)
     }
 }
 
-QWidget* KexiDBImageBox::widget()
+QWidget *KexiDBImageBox::widget()
 {
     //! @todo return m_pixmapLabel;
     return this;
@@ -324,16 +332,18 @@ void KexiDBImageBox::insertFromFile()
     m_contextMenu->insertFromFile();
 }
 
-void KexiDBImageBox::handleInsertFromFileAction(const KUrl& url)
+void KexiDBImageBox::handleInsertFromFileAction(const KUrl &url)
 {
-    if (!dataSource().isEmpty() && isReadOnly())
+    if (!dataSource().isEmpty() && isReadOnly()) {
         return;
+    }
 
     if (dataSource().isEmpty()) {
         //static mode
         KexiBLOBBuffer::Handle h = KexiBLOBBuffer::self()->insertPixmap(url);
-        if (!h)
+        if (!h) {
             return;
+        }
         setData(h);
         repaint();
     } else {
@@ -363,7 +373,7 @@ void KexiDBImageBox::handleInsertFromFileAction(const KUrl& url)
 }
 
 void KexiDBImageBox::handleAboutToSaveAsAction(
-    QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
+    QString &origFilename, QString &fileExtension, bool &dataIsEmpty)
 {
     if (data().isEmpty()) {
         kWarning() << "no pixmap!";
@@ -372,14 +382,16 @@ void KexiDBImageBox::handleAboutToSaveAsAction(
     }
     if (dataSource().isEmpty()) { //for static images filename and mimetype can be available
         origFilename = m_data.originalFileName();
-        if (!origFilename.isEmpty())
+        if (!origFilename.isEmpty()) {
             origFilename = QString("/") + origFilename;
-        if (!m_data.mimeType().isEmpty())
+        }
+        if (!m_data.mimeType().isEmpty()) {
             fileExtension = KImageIO::typeForMime(m_data.mimeType()).first().toLower();
+        }
     }
 }
 
-void KexiDBImageBox::handleSaveAsAction(const QString& fileName)
+void KexiDBImageBox::handleSaveAsAction(const QString &fileName)
 {
     QFile f(fileName);
     if (!f.open(QIODevice::WriteOnly)) {
@@ -397,8 +409,9 @@ void KexiDBImageBox::handleSaveAsAction(const QString& fileName)
 
 void KexiDBImageBox::handleCutAction()
 {
-    if (!dataSource().isEmpty() && isReadOnly())
+    if (!dataSource().isEmpty() && isReadOnly()) {
         return;
+    }
     handleCopyAction();
     clear();
 }
@@ -410,14 +423,16 @@ void KexiDBImageBox::handleCopyAction()
 
 void KexiDBImageBox::handlePasteAction()
 {
-    if (isReadOnly() || (!designMode() && !hasFocus()))
+    if (isReadOnly() || (!designMode() && !hasFocus())) {
         return;
+    }
     QPixmap pm(qApp->clipboard()->pixmap(QClipboard::Clipboard));
     if (dataSource().isEmpty()) {
         //static mode
         KexiBLOBBuffer::Handle h = KexiBLOBBuffer::self()->insertPixmap(pm);
-        if (!h)
+        if (!h) {
             return;
+        }
         setData(h);
     } else {
         //db-aware mode
@@ -445,8 +460,9 @@ void KexiDBImageBox::clear()
         //static mode
         setData(KexiBLOBBuffer::Handle());
     } else {
-        if (isReadOnly())
+        if (isReadOnly()) {
             return;
+        }
         //db-aware mode
         setValueInternal(QByteArray(), true);
     }
@@ -464,32 +480,33 @@ void KexiDBImageBox::handleShowPropertiesAction()
     //! @todo
 }
 
-void KexiDBImageBox::slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly)
+void KexiDBImageBox::slotUpdateActionsAvailabilityRequested(bool &valueIsNull, bool &valueIsReadOnly)
 {
     valueIsNull = !(
-                         (dataSource().isEmpty() && !pixmap().isNull()) /*static pixmap available*/
+                      (dataSource().isEmpty() && !pixmap().isNull()) /*static pixmap available*/
                       || (!dataSource().isEmpty() && !this->valueIsNull())  /*db-aware pixmap available*/
                   );
     // read-only if static pixmap or db-aware pixmap for read-only widget:
     valueIsReadOnly =
-           (!designMode() && dataSource().isEmpty())
+        (!designMode() && dataSource().isEmpty())
         || (!dataSource().isEmpty() && isReadOnly())
         || (designMode() && !dataSource().isEmpty());
 }
 
-void KexiDBImageBox::contextMenuEvent(QContextMenuEvent * e)
+void KexiDBImageBox::contextMenuEvent(QContextMenuEvent *e)
 {
-    if (popupMenuAvailable())
+    if (popupMenuAvailable()) {
         m_contextMenu->exec(e->globalPos());
+    }
 }
 
 void KexiDBImageBox::updateActionStrings()
 {
-    if (!m_contextMenu)
+    if (!m_contextMenu) {
         return;
-    if (designMode()) {
     }
-    else {
+    if (designMode()) {
+    } else {
         //update title in data view mode, based on the data source
         if (columnInfo()) {
             KexiImageContextMenu::updateTitle(m_contextMenu, columnInfo()->captionOrAliasOrName(),
@@ -549,17 +566,18 @@ void KexiDBImageBox::setDataSource(const QString &ds)
         QPalette p = palette();
         p.setColor(backgroundRole(),
                    dataSource().isEmpty()
-                     ? parentWidget()->palette().color(parentWidget()->backgroundRole())
-                     : palette().color(QPalette::Active, QPalette::Base)
-        );
+                   ? parentWidget()->palette().color(parentWidget()->backgroundRole())
+                   : palette().color(QPalette::Active, QPalette::Base)
+                  );
         KexiFrame::setPalette(p);
     }
 }
 
 QSize KexiDBImageBox::sizeHint() const
 {
-    if (pixmap().isNull())
+    if (pixmap().isNull()) {
         return QSize(80, 80);
+    }
     return pixmap().size();
 }
 
@@ -595,16 +613,14 @@ int KexiDBImageBox::realLineWidth() const
     }
 }
 
-static QPixmap *scaledImageBoxIcon(const KexiUtils::WidgetMargins& margins, const QSize& size)
+static QPixmap *scaledImageBoxIcon(const KexiUtils::WidgetMargins &margins, const QSize &size)
 {
     const int realHeight = size.height() - margins.top - margins.bottom;
     const int realWidth = size.width() - margins.left - margins.right;
-    if (   realHeight <= KexiDBImageBox_static->pixmap->height()
-        || realWidth <= KexiDBImageBox_static->pixmap->width())
-    {
-        if (   realHeight <= KexiDBImageBox_static->small->height()
-            || realWidth <= KexiDBImageBox_static->small->width())
-        {
+    if (realHeight <= KexiDBImageBox_static->pixmap->height()
+            || realWidth <= KexiDBImageBox_static->pixmap->width()) {
+        if (realHeight <= KexiDBImageBox_static->small->height()
+                || realWidth <= KexiDBImageBox_static->small->width()) {
             return 0;
         }
         return KexiDBImageBox_static->small;
@@ -614,8 +630,9 @@ static QPixmap *scaledImageBoxIcon(const KexiUtils::WidgetMargins& margins, cons
 
 void KexiDBImageBox::paintEvent(QPaintEvent *pe)
 {
-    if (!m_paintEventEnabled)
+    if (!m_paintEventEnabled) {
         return;
+    }
     QPainter p(this);
     p.setClipRect(pe->rect());
     const int _realLineWidth = realLineWidth();
@@ -637,13 +654,12 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
         QString text;
         if (dataSource().isEmpty()) {
             text = objectName() + "\n" + i18nc("Unbound Image Box", "(unbound)");
-        }
-        else {
+        } else {
             text = dataSource();
             const QFontMetrics fm(fontMetrics());
             const QPixmap dataSourceTagIcon(KexiFormUtils::dataSourceTagIcon());
             if (width() >= (dataSourceTagIcon.width() + 2 + fm.boundingRect(r, Qt::AlignCenter, text).width())) {
-                r.setLeft( r.left() + dataSourceTagIcon.width() + 2 ); // make some room for the [>] icon
+                r.setLeft(r.left() + dataSourceTagIcon.width() + 2);   // make some room for the [>] icon
                 QRect bounding = fm.boundingRect(r, Qt::AlignCenter, text);
                 p.drawPixmap(
                     bounding.left() - dataSourceTagIcon.width() - 2,
@@ -652,20 +668,20 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
             }
         }
         p.drawText(r, Qt::AlignCenter, text);
-    }
-    else {
+    } else {
         QSize internalSize(size());
-        if (m_chooser && m_dropDownButtonVisible && !dataSource().isEmpty())
+        if (m_chooser && m_dropDownButtonVisible && !dataSource().isEmpty()) {
             internalSize.setWidth(internalSize.width() - m_chooser->width());
+        }
 
         const QRect internalRect(QPoint(0, 0), internalSize);
         if (m_currentScaledPixmap.isNull() || internalRect != m_currentRect) {
             m_currentRect = internalRect;
             m_currentPixmapPos = QPoint(0, 0);
             m_currentScaledPixmap = KexiUtils::scaledPixmap(
-                margins, m_currentRect, pixmap(), m_currentPixmapPos, m_alignment,
-                m_scaledContents, m_keepAspectRatio,
-                m_smoothTransformation ? Qt::SmoothTransformation : Qt::FastTransformation);
+                                        margins, m_currentRect, pixmap(), m_currentPixmapPos, m_alignment,
+                                        m_scaledContents, m_keepAspectRatio,
+                                        m_smoothTransformation ? Qt::SmoothTransformation : Qt::FastTransformation);
         }
         p.drawPixmap(m_currentPixmapPos, m_currentScaledPixmap);
     }
@@ -676,13 +692,11 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
         if (!hasFrame) {
             KFormDesigner::paintWidgetFrame(p, rect());
         }
-    }
-    else { // data mode
+    } else { // data mode
         // if the widget is focused, draw focus indicator rect _if_ there is no chooser button
-        if (   !dataSource().isEmpty()
-            && hasFocus()
-            && (!m_chooser || !m_chooser->isVisible()))
-        {
+        if (!dataSource().isEmpty()
+                && hasFocus()
+                && (!m_chooser || !m_chooser->isVisible())) {
             QStyleOptionFocusRect option;
             option.initFrom(this);
             style()->drawPrimitive(
@@ -693,22 +707,23 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
 
 void KexiDBImageBox::updatePixmap()
 {
-    if (!(designMode() && pixmap().isNull()))
+    if (!(designMode() && pixmap().isNull())) {
         return;
+    }
 
     if (!KexiDBImageBox_static->pixmap) {
         const QString fname(KStandardDirs::locate("data", QLatin1String("kexi/pics/imagebox.png")));
-        QPixmap pm( KIconLoader::global()->loadMimeTypeIcon(
-            koIconNameCStr("image-x-generic"), KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DisabledState) );
+        QPixmap pm(KIconLoader::global()->loadMimeTypeIcon(
+                       koIconNameCStr("image-x-generic"), KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DisabledState));
         if (!pm.isNull()) {
             KIconEffect::semiTransparent(pm);
             KIconEffect::semiTransparent(pm);
         }
         KexiDBImageBox_static->pixmap = new QPixmap(pm);
-        KexiDBImageBox_static->small = new QPixmap( 
+        KexiDBImageBox_static->small = new QPixmap(
             KexiDBImageBox_static->pixmap->scaled(
-                KexiDBImageBox_static->pixmap->width() / 2, KexiDBImageBox_static->pixmap->height() / 2, 
-                Qt::KeepAspectRatio, Qt::SmoothTransformation) );
+                KexiDBImageBox_static->pixmap->width() / 2, KexiDBImageBox_static->pixmap->height() / 2,
+                Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 }
 
@@ -719,10 +734,11 @@ void KexiDBImageBox::setAlignment(Qt::Alignment alignment)
     repaint();
 }
 
-void KexiDBImageBox::setData(const KexiBLOBBuffer::Handle& handle)
+void KexiDBImageBox::setData(const KexiBLOBBuffer::Handle &handle)
 {
-    if (m_insideSetData) //avoid recursion
+    if (m_insideSetData) { //avoid recursion
         return;
+    }
     m_insideSetData = true;
     m_data = handle;
     m_currentScaledPixmap = QPixmap(); // clear cache
@@ -731,21 +747,21 @@ void KexiDBImageBox::setData(const KexiBLOBBuffer::Handle& handle)
     update();
 }
 
-void KexiDBImageBox::resizeEvent(QResizeEvent * e)
+void KexiDBImageBox::resizeEvent(QResizeEvent *e)
 {
     KexiFrame::resizeEvent(e);
     if (m_chooser) {
         QSize s(m_chooser->sizeHint());
         const int _realLineWidth = realLineWidth();
         QSize margin(_realLineWidth, _realLineWidth);
-        s.setHeight(height() - 2*margin.height());
+        s.setHeight(height() - 2 * margin.height());
         s = s.boundedTo(size() - 2 * margin);
         m_chooser->resize(s);
         m_chooser->move(QRect(QPoint(0, 0), e->size() - m_chooser->size() - margin + QSize(1, 1)).bottomRight());
     }
 }
 
-void KexiDBImageBox::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
+void KexiDBImageBox::setColumnInfo(KexiDB::QueryColumnInfo *cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
     //updating strings and title is needed
@@ -767,8 +783,9 @@ bool KexiDBImageBox::keyPressed(QKeyEvent *ke)
 void KexiDBImageBox::setPalette(const QPalette &pal)
 {
     KexiFrame::setPalette(pal);
-    if (m_insideSetPalette)
+    if (m_insideSetPalette) {
         return;
+    }
     m_insideSetPalette = true;
     setPaletteBackgroundColor(pal.color(QPalette::Active, QPalette::Base));
     QPalette p(palette());
@@ -777,14 +794,15 @@ void KexiDBImageBox::setPalette(const QPalette &pal)
     m_insideSetPalette = false;
 }
 
-void KexiDBImageBox::setPaletteBackgroundColor(const QColor & color)
+void KexiDBImageBox::setPaletteBackgroundColor(const QColor &color)
 {
     m_paletteBackgroundColorChanged = true;
     QPalette pal(palette());
     pal.setColor(backgroundRole(), color);
     setPalette(pal);
-    if (m_chooser)
+    if (m_chooser) {
         m_chooser->setPalette(qApp->palette());
+    }
 }
 
 bool KexiDBImageBox::dropDownButtonVisible() const
@@ -800,24 +818,26 @@ int KexiDBImageBox::lineWidth() const
 void KexiDBImageBox::setDropDownButtonVisible(bool set)
 {
 //! @todo use global default setting for this property
-    if (m_dropDownButtonVisible == set)
+    if (m_dropDownButtonVisible == set) {
         return;
+    }
     m_dropDownButtonVisible = set;
     if (m_chooser) {
-        if (m_dropDownButtonVisible)
+        if (m_dropDownButtonVisible) {
             m_chooser->show();
-        else
+        } else {
             m_chooser->hide();
+        }
     }
 }
 
-bool KexiDBImageBox::subwidgetStretchRequired(KexiDBAutoField* autoField) const
+bool KexiDBImageBox::subwidgetStretchRequired(KexiDBAutoField *autoField) const
 {
     Q_UNUSED(autoField);
     return true;
 }
 
-bool KexiDBImageBox::eventFilter(QObject * watched, QEvent * e)
+bool KexiDBImageBox::eventFilter(QObject *watched, QEvent *e)
 {
     if (watched == this || watched == m_chooser) { //we're watching chooser as well because it's a focus proxy even if invisible
         if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut || e->type() == QEvent::MouseButtonPress) {
@@ -831,15 +851,16 @@ bool KexiDBImageBox::eventFilter(QObject * watched, QEvent * e)
     return KexiFrame::eventFilter(watched, e);
 }
 
-void KexiDBImageBox::setValueInternal(const QVariant& add, bool removeOld)
+void KexiDBImageBox::setValueInternal(const QVariant &add, bool removeOld)
 {
     setValueInternal(add, removeOld, true /*loadPixmap*/);
 }
 
 Qt::FocusPolicy KexiDBImageBox::focusPolicy() const
 {
-    if (dataSource().isEmpty())
+    if (dataSource().isEmpty()) {
         return Qt::NoFocus;
+    }
     return m_focusPolicyInternal;
 }
 

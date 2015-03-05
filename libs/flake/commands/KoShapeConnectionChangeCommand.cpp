@@ -38,9 +38,9 @@ public:
 };
 
 KoShapeConnectionChangeCommand::KoShapeConnectionChangeCommand(
-        KoConnectionShape *connection, KoConnectionShape::HandleId connectionHandle,
-        KoShape *oldConnectedShape, int oldConnectionPointId,
-        KoShape *newConnectedShape, int newConnectionPointId, KUndo2Command *parent)
+    KoConnectionShape *connection, KoConnectionShape::HandleId connectionHandle,
+    KoShape *oldConnectedShape, int oldConnectionPointId,
+    KoShape *newConnectedShape, int newConnectionPointId, KUndo2Command *parent)
     : KUndo2Command(parent), d(new Private)
 {
     d->connection = connection;
@@ -58,11 +58,10 @@ KoShapeConnectionChangeCommand::~KoShapeConnectionChangeCommand()
 
 void KoShapeConnectionChangeCommand::redo()
 {
-    if(d->connection) {
-        if(d->connectionHandle == KoConnectionShape::StartHandle) {
+    if (d->connection) {
+        if (d->connectionHandle == KoConnectionShape::StartHandle) {
             d->connection->connectFirst(d->newConnectedShape, d->newConnectionPointId);
-        }
-        else {
+        } else {
             d->connection->connectSecond(d->newConnectedShape, d->newConnectionPointId);
         }
     }
@@ -74,11 +73,10 @@ void KoShapeConnectionChangeCommand::undo()
 {
     KUndo2Command::undo();
 
-    if(d->connection) {
-        if(d->connectionHandle == KoConnectionShape::StartHandle) {
+    if (d->connection) {
+        if (d->connectionHandle == KoConnectionShape::StartHandle) {
             d->connection->connectFirst(d->oldConnectedShape, d->oldConnectionPointId);
-        }
-        else {
+        } else {
             d->connection->connectSecond(d->oldConnectedShape, d->oldConnectionPointId);
         }
     }

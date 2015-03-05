@@ -23,7 +23,8 @@ class KisSketchOpOptionsWidget: public QWidget, public Ui::WdgSketchOptions
 {
 public:
     KisSketchOpOptionsWidget(QWidget *parent = 0)
-        : QWidget(parent) {
+        : QWidget(parent)
+    {
         setupUi(this);
     }
 };
@@ -32,18 +33,14 @@ KisSketchOpOption::KisSketchOpOption()
     : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::generalCategory(), false)
 {
 
-
-
     m_checkable = false;
     m_options = new KisSketchOpOptionsWidget();
-
 
     // initialize slider values
     m_options->lineWidthSPBox->setRange(1.0, 100.0, 0);
     m_options->lineWidthSPBox->setValue(1.0);
     m_options->lineWidthSPBox->setSuffix(" px");
     m_options->lineWidthSPBox->setExponentRatio(1.5);
-
 
     m_options->offsetSPBox->setRange(0.0, 200.0, 0);
     m_options->offsetSPBox->setValue(30.0);
@@ -52,7 +49,6 @@ KisSketchOpOption::KisSketchOpOption()
     m_options->densitySPBox->setRange(0.0, 100.0, 0);
     m_options->densitySPBox->setValue(50.0);
     m_options->densitySPBox->setSuffix("%");
-
 
     connect(m_options->offsetSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_options->lineWidthSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
@@ -65,7 +61,6 @@ KisSketchOpOption::KisSketchOpOption()
     connect(m_options->distanceDensityCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->distanceOpacityCHbox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
-
     setConfigurationPage(m_options);
 }
 
@@ -74,7 +69,7 @@ KisSketchOpOption::~KisSketchOpOption()
     // delete m_options;
 }
 
-void KisSketchOpOption::writeOptionSetting(KisPropertiesConfiguration* settings) const
+void KisSketchOpOption::writeOptionSetting(KisPropertiesConfiguration *settings) const
 {
     settings->setProperty(SKETCH_OFFSET, m_options->offsetSPBox->value());
     settings->setProperty(SKETCH_PROBABILITY, m_options->densitySPBox->value() * 0.01);
@@ -88,7 +83,7 @@ void KisSketchOpOption::writeOptionSetting(KisPropertiesConfiguration* settings)
     settings->setProperty(SKETCH_DISTANCE_OPACITY, m_options->distanceOpacityCHbox->isChecked());
 }
 
-void KisSketchOpOption::readOptionSetting(const KisPropertiesConfiguration* settings)
+void KisSketchOpOption::readOptionSetting(const KisPropertiesConfiguration *settings)
 {
     m_options->offsetSPBox->setValue(settings->getDouble(SKETCH_OFFSET));
     m_options->simpleModeCHBox->setChecked(settings->getBool(SKETCH_USE_SIMPLE_MODE));
@@ -101,5 +96,4 @@ void KisSketchOpOption::readOptionSetting(const KisPropertiesConfiguration* sett
     m_options->distanceDensityCHBox->setChecked(settings->getBool(SKETCH_DISTANCE_DENSITY));
     m_options->distanceOpacityCHbox->setChecked(settings->getBool(SKETCH_DISTANCE_OPACITY));
 }
-
 

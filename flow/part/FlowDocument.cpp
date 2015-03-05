@@ -28,7 +28,7 @@
 #include "FlowFactory.h"
 
 FlowDocument::FlowDocument(KoPart *part)
-  : KoPADocument(part)
+    : KoPADocument(part)
 {
 }
 
@@ -41,10 +41,9 @@ KoOdf::DocumentType FlowDocument::documentType() const
     return KoOdf::Graphics;
 }
 
-const char * FlowDocument::odfTagName(bool withNamespace)
+const char *FlowDocument::odfTagName(bool withNamespace)
 {
-    return withNamespace ? "office:drawing": "drawing";
+    return withNamespace ? "office:drawing" : "drawing";
 }
-
 
 #include "FlowDocument.moc"

@@ -25,8 +25,9 @@
 class KRITAIMAGE_EXPORT KisTileCompressorFactory
 {
 public:
-    static KisAbstractTileCompressorSP create(qint32 version) {
-        switch(version) {
+    static KisAbstractTileCompressorSP create(qint32 version)
+    {
+        switch (version) {
         case 1:
             return new KisLegacyTileCompressor();
             break;

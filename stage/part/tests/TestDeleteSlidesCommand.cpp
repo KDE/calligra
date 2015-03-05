@@ -8,7 +8,6 @@
 #include "KPrCustomSlideShows.h"
 #include <qtest_kde.h>
 
-
 void TestDeleteSlidesCommand::delSlide()
 {
     MockDocument doc;
@@ -20,7 +19,7 @@ void TestDeleteSlidesCommand::delSlide()
     doc.insertPage(page1, 0);
 
     KoPAPage *p1 = dynamic_cast<KoPAPage *>(doc.pageByIndex(0, false));
-    KoPAMasterPage * m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
+    KoPAMasterPage *m1 = dynamic_cast<KoPAMasterPage *>(doc.pageByIndex(0, true));
 
     QVERIFY(p1 != 0);
     QVERIFY(m1 != 0);
@@ -38,7 +37,7 @@ void TestDeleteSlidesCommand::delSlide()
     doc.insertPage(page5, 0);
 
     //Create List 1 2 4 1 5 2 2 3
-    QList<KoPAPageBase*> slideList1;
+    QList<KoPAPageBase *> slideList1;
 
     slideList1.append(page1);
     slideList1.append(page2);
@@ -50,7 +49,7 @@ void TestDeleteSlidesCommand::delSlide()
     slideList1.append(page3);
 
     //Create List 1 2 3 4 5 4 3 2
-    QList<KoPAPageBase*> slideList2;
+    QList<KoPAPageBase *> slideList2;
 
     slideList2.append(page1);
     slideList2.append(page2);
@@ -62,10 +61,10 @@ void TestDeleteSlidesCommand::delSlide()
     slideList2.append(page2);
 
     //expected Lists
-    QList<KoPAPageBase*> resultSlideList1(slideList1);
+    QList<KoPAPageBase *> resultSlideList1(slideList1);
     resultSlideList1.removeAll(page2);
 
-    QList<KoPAPageBase*> resultSlideList2(slideList2);
+    QList<KoPAPageBase *> resultSlideList2(slideList2);
     resultSlideList2.removeAll(page2);
 
     QString customShowName1 = "test 1";

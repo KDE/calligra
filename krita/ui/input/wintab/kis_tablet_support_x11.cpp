@@ -31,7 +31,6 @@
 
 #include <input/kis_tablet_debugger.h>
 
-
 /**
  * This is an analog of a Qt's variable qt_tabletChokeMouse.  It is
  * intended to block Mouse events after any accepted Tablet event. In
@@ -51,13 +50,12 @@ bool kis_haveEvdevTablets = false;
 #define XINPUT_LOAD(symbol) symbol
 
 typedef int (*PtrXCloseDevice)(Display *, XDevice *);
-typedef XDeviceInfo* (*PtrXListInputDevices)(Display *, int *);
-typedef XDevice* (*PtrXOpenDevice)(Display *, XID);
+typedef XDeviceInfo *(*PtrXListInputDevices)(Display *, int *);
+typedef XDevice *(*PtrXOpenDevice)(Display *, XID);
 typedef void (*PtrXFreeDeviceList)(XDeviceInfo *);
 typedef int (*PtrXSelectExtensionEvent)(Display *, Window, XEventClass *, int);
 
-struct KisX11Data
-{
+struct KisX11Data {
     Display *display;
 
     bool use_xinput;
@@ -152,8 +150,9 @@ static void kis_x11_create_intern_atoms()
     int i = 0;
     while (*ptr) {
         names[i++] = ptr;
-        while (*ptr)
+        while (*ptr) {
             ++ptr;
+        }
         ++ptr;
     }
 
@@ -163,8 +162,9 @@ static void kis_x11_create_intern_atoms()
 #if defined(XlibSpecificationRelease) && (XlibSpecificationRelease >= 6)
     XInternAtoms(KIS_X11->display, (char **)names, i, False, KIS_X11->atoms);
 #else
-    for (i = 0; i < KisX11Data::NAtoms; ++i)
+    for (i = 0; i < KisX11Data::NAtoms; ++i) {
         KIS_X11->atoms[i] = XInternAtom(KIS_X11->display, (char *)names[i], False);
+    }
 #endif
 }
 
@@ -195,7 +195,7 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
         QVector<AxesIndexes> axesMap(nitems, Unused);
 
         for (unsigned int axisIndex = 0; axisIndex < nitems; axisIndex++) {
-            Atom currentAxisName = ((Atom*)prop)[axisIndex];
+            Atom currentAxisName = ((Atom *)prop)[axisIndex];
 
             AxesIndexes mappedIndex =
                 Unused;
@@ -262,7 +262,7 @@ void kis_x11_init_tablet()
             i,
             j;
         bool gotStylus,
-            gotEraser;
+             gotEraser;
         XDeviceInfo *devices = 0, *devs;
         XInputClassInfo *ip;
         XAnyClassPtr any;
@@ -275,11 +275,13 @@ void kis_x11_init_tablet()
 
         if (KIS_X11->ptrXListInputDevices) {
             devices = KIS_X11->ptrXListInputDevices(KIS_X11->display, &ndev);
-            if (!devices)
+            if (!devices) {
                 qWarning("QApplication: Failed to get list of tablet devices");
+            }
         }
-        if (!devices)
+        if (!devices) {
             ndev = -1;
+        }
 
         QTabletEvent::TabletDevice deviceType;
         for (devs = devices, i = 0; i < ndev && devs; i++, devs++) {
@@ -293,51 +295,53 @@ void kis_x11_init_tablet()
 #if defined(Q_OS_IRIX)
 #else
 
-
-                if (devs->type == KIS_ATOM(XWacomStylus) || devs->type == KIS_ATOM(XTabletStylus) ||devs->type == KIS_ATOM(XInputTablet)) {
-                    if (devs->type == KIS_ATOM(XInputTablet)) {
-                        kis_haveEvdevTablets = true;
-                    }
-                    deviceType = QTabletEvent::Stylus;
-                    gotStylus = true;
-                } else if (devs->type == KIS_ATOM(XWacomEraser) || devs->type == KIS_ATOM(XTabletEraser)) {
-                    deviceType = QTabletEvent::XFreeEraser;
-                    gotEraser = true;
-                } else if ((devs->type == KIS_ATOM(XInputKeyboard) ||
-                            devs->type == KIS_ATOM(AiptekStylus))
-                           && QString(devs->name) == "Aiptek") {
-                    /**
-                     * Some really "nice" tablets (more precisely,
-                     * Genius G-Pen 510 (aiptek driver)) report that
-                     * they are a "keyboard". Well, we cannot convince
-                     * them that they are not, so just check if this
-                     * "keyboard" has motion and proximity events. If
-                     * it looks like a duck... :)
-                     */
+            if (devs->type == KIS_ATOM(XWacomStylus) || devs->type == KIS_ATOM(XTabletStylus) || devs->type == KIS_ATOM(XInputTablet)) {
+                if (devs->type == KIS_ATOM(XInputTablet)) {
                     kis_haveEvdevTablets = true;
-                    deviceType = QTabletEvent::Stylus;
-                    gotStylus = true;
-                    needCheckIfItIsReallyATablet = true;
-                } else if (disableTouchOnCanvas &&
-                           devs->type == KIS_ATOM(WacomTouch) &&
-                           QString(devs->name).contains("Wacom")) {
-
-                    kis_haveEvdevTablets = true;
-                    deviceType = QTabletEvent::Stylus;
-                    gotStylus = true;
-                    touchWacomTabletWorkaround = true;
                 }
+                deviceType = QTabletEvent::Stylus;
+                gotStylus = true;
+            } else if (devs->type == KIS_ATOM(XWacomEraser) || devs->type == KIS_ATOM(XTabletEraser)) {
+                deviceType = QTabletEvent::XFreeEraser;
+                gotEraser = true;
+            } else if ((devs->type == KIS_ATOM(XInputKeyboard) ||
+                        devs->type == KIS_ATOM(AiptekStylus))
+                       && QString(devs->name) == "Aiptek") {
+                /**
+                 * Some really "nice" tablets (more precisely,
+                 * Genius G-Pen 510 (aiptek driver)) report that
+                 * they are a "keyboard". Well, we cannot convince
+                 * them that they are not, so just check if this
+                 * "keyboard" has motion and proximity events. If
+                 * it looks like a duck... :)
+                 */
+                kis_haveEvdevTablets = true;
+                deviceType = QTabletEvent::Stylus;
+                gotStylus = true;
+                needCheckIfItIsReallyATablet = true;
+            } else if (disableTouchOnCanvas &&
+                       devs->type == KIS_ATOM(WacomTouch) &&
+                       QString(devs->name).contains("Wacom")) {
+
+                kis_haveEvdevTablets = true;
+                deviceType = QTabletEvent::Stylus;
+                gotStylus = true;
+                touchWacomTabletWorkaround = true;
+            }
 
 #endif
-            if (deviceType == QTabletEvent::NoDevice)
+            if (deviceType == QTabletEvent::NoDevice) {
                 continue;
+            }
 
             if (gotStylus || gotEraser) {
-                if (KIS_X11->ptrXOpenDevice)
+                if (KIS_X11->ptrXOpenDevice) {
                     dev = KIS_X11->ptrXOpenDevice(KIS_X11->display, devs->id);
+                }
 
-                if (!dev)
+                if (!dev) {
                     continue;
+                }
 
                 QTabletDeviceData device_data;
                 device_data.deviceType = deviceType;
@@ -355,41 +359,48 @@ void kis_x11_init_tablet()
 
                 if (dev->num_classes > 0) {
                     for (ip = dev->classes, j = 0; j < dev->num_classes;
-                         ip++, j++) {
+                            ip++, j++) {
                         switch (ip->input_class) {
                         case KeyClass:
                             DeviceKeyPress(dev, device_data.xinput_key_press,
                                            device_data.eventList[device_data.eventCount]);
-                            if (device_data.eventList[device_data.eventCount])
+                            if (device_data.eventList[device_data.eventCount]) {
                                 ++device_data.eventCount;
+                            }
                             DeviceKeyRelease(dev, device_data.xinput_key_release,
                                              device_data.eventList[device_data.eventCount]);
-                            if (device_data.eventList[device_data.eventCount])
+                            if (device_data.eventList[device_data.eventCount]) {
                                 ++device_data.eventCount;
+                            }
                             break;
                         case ButtonClass:
                             DeviceButtonPress(dev, device_data.xinput_button_press,
                                               device_data.eventList[device_data.eventCount]);
-                            if (device_data.eventList[device_data.eventCount])
+                            if (device_data.eventList[device_data.eventCount]) {
                                 ++device_data.eventCount;
+                            }
                             DeviceButtonRelease(dev, device_data.xinput_button_release,
                                                 device_data.eventList[device_data.eventCount]);
-                            if (device_data.eventList[device_data.eventCount])
+                            if (device_data.eventList[device_data.eventCount]) {
                                 ++device_data.eventCount;
+                            }
                             break;
                         case ValuatorClass:
                             // I'm only going to be interested in motion when the
                             // stylus is already down anyway!
                             DeviceMotionNotify(dev, device_data.xinput_motion,
                                                device_data.eventList[device_data.eventCount]);
-                            if (device_data.eventList[device_data.eventCount])
+                            if (device_data.eventList[device_data.eventCount]) {
                                 ++device_data.eventCount;
+                            }
                             ProximityIn(dev, device_data.xinput_proximity_in, device_data.eventList[device_data.eventCount]);
-                            if (device_data.eventList[device_data.eventCount])
+                            if (device_data.eventList[device_data.eventCount]) {
                                 ++device_data.eventCount;
+                            }
                             ProximityOut(dev, device_data.xinput_proximity_out, device_data.eventList[device_data.eventCount]);
-                            if (device_data.eventList[device_data.eventCount])
+                            if (device_data.eventList[device_data.eventCount]) {
                                 ++device_data.eventCount;
+                            }
                         default:
                             break;
                         }
@@ -397,9 +408,9 @@ void kis_x11_init_tablet()
                 }
 
                 if (needCheckIfItIsReallyATablet &&
-                    (device_data.xinput_motion == -1 ||
-                     device_data.xinput_proximity_in == -1 ||
-                     device_data.xinput_proximity_out == -1)) {
+                        (device_data.xinput_motion == -1 ||
+                         device_data.xinput_proximity_in == -1 ||
+                         device_data.xinput_proximity_out == -1)) {
                     continue;
                 }
 
@@ -412,12 +423,12 @@ void kis_x11_init_tablet()
                 device_data.savedAxesData.tryFetchAxesMapping(dev);
 
                 // get the min/max value for pressure!
-                any = (XAnyClassPtr) (devs->inputclassinfo);
+                any = (XAnyClassPtr)(devs->inputclassinfo);
                 for (j = 0; j < devs->num_classes; j++) {
                     if (any->c_class == ValuatorClass) {
                         v = (XValuatorInfoPtr) any;
-                        a = (XAxisInfoPtr) ((char *) v +
-                                            sizeof (XValuatorInfo));
+                        a = (XAxisInfoPtr)((char *) v +
+                                           sizeof(XValuatorInfo));
 #if defined (Q_OS_IRIX)
 #else
                         device_data.minX = a[0].min_value;
@@ -448,23 +459,24 @@ void kis_x11_init_tablet()
                         // got the max pressure no need to go further...
                         break;
                     }
-                    any = (XAnyClassPtr) ((char *) any + any->length);
+                    any = (XAnyClassPtr)((char *) any + any->length);
                 } // end of for loop
 
                 qt_tablet_devices()->append(device_data);
             } // if (gotStylus || gotEraser)
         }
-        if (KIS_X11->ptrXFreeDeviceList)
+        if (KIS_X11->ptrXFreeDeviceList) {
             KIS_X11->ptrXFreeDeviceList(devices);
+        }
     }
 }
 
 void fetchWacomToolId(qint64 &serialId, qint64 &deviceId, QTabletDeviceData *tablet)
 {
-    XDevice *dev = static_cast<XDevice*>(tablet->device);
+    XDevice *dev = static_cast<XDevice *>(tablet->device);
     Atom prop = None, type;
     int format;
-    unsigned char* data;
+    unsigned char *data;
     unsigned long nitems, bytes_after;
 
     prop = XInternAtom(KIS_X11->display, WACOM_PROP_SERIALIDS, True);
@@ -482,7 +494,7 @@ void fetchWacomToolId(qint64 &serialId, qint64 &deviceId, QTabletDeviceData *tab
         return;
     }
 
-    long *l = (long*)data;
+    long *l = (long *)data;
     serialId = l[3]; // serial id of the stylus in proximity
     deviceId = l[4]; // device if of the stylus in proximity
 }
@@ -490,21 +502,24 @@ void fetchWacomToolId(qint64 &serialId, qint64 &deviceId, QTabletDeviceData *tab
 static Qt::MouseButtons translateMouseButtons(int s)
 {
     Qt::MouseButtons ret = 0;
-    if (s & Button1Mask)
+    if (s & Button1Mask) {
         ret |= Qt::LeftButton;
-    if (s & Button2Mask)
+    }
+    if (s & Button2Mask) {
         ret |= Qt::MidButton;
-    if (s & Button3Mask)
+    }
+    if (s & Button3Mask) {
         ret |= Qt::RightButton;
+    }
     return ret;
 }
 
 static Qt::MouseButton translateMouseButton(int b)
 {
     return b == Button1 ? Qt::LeftButton :
-        b == Button2 ? Qt::MidButton :
-        b == Button3 ? Qt::RightButton :
-        Qt::LeftButton /* fallback */;
+           b == Button2 ? Qt::MidButton :
+           b == Button3 ? Qt::RightButton :
+           Qt::LeftButton /* fallback */;
 }
 
 QTabletEvent::TabletDevice parseWacomDeviceId(quint32 deviceId)
@@ -521,8 +536,8 @@ QTabletEvent::TabletDevice parseWacomDeviceId(quint32 deviceId)
     QTabletEvent::TabletDevice device;
 
     if ((((deviceId & 0x0006) == 0x0002) &&
-         ((deviceId & CSR_TYPE_SPECIFIC_MASK) != CSR_TYPE_SPECIFIC_AIRBRUSH_BITS)) || // Bamboo
-        deviceId == 0x4020) { // Surface Pro 2 tablet device
+            ((deviceId & CSR_TYPE_SPECIFIC_MASK) != CSR_TYPE_SPECIFIC_AIRBRUSH_BITS)) || // Bamboo
+            deviceId == 0x4020) { // Surface Pro 2 tablet device
 
         device = QTabletEvent::Stylus;
     } else {
@@ -567,7 +582,7 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
 
     QWidget *w = defaultWidget;
     QPoint global,
-        curr;
+           curr;
     QPointF hiRes;
     qreal pressure = 0;
     int xTilt = 0,
@@ -593,7 +608,7 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
 #endif
 
     if (ev->type == tablet->xinput_motion) {
-        motion = reinterpret_cast<const XDeviceMotionEvent*>(ev);
+        motion = reinterpret_cast<const XDeviceMotionEvent *>(ev);
         t = KisTabletEvent::TabletMoveEx;
         global = QPoint(motion->x_root, motion->y_root);
         curr = QPoint(motion->x, motion->y);
@@ -606,7 +621,7 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         } else {
             t = KisTabletEvent::TabletReleaseEx;
         }
-        button = (XDeviceButtonEvent*)ev;
+        button = (XDeviceButtonEvent *)ev;
         global = QPoint(button->x_root, button->y_root);
         curr = QPoint(button->x, button->y);
 #if !defined (Q_OS_IRIX)
@@ -646,7 +661,9 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
      * Touch events from Wacom tablets should not be sent as real
      * tablet events
      */
-    if (tablet->isTouchWacomTablet) return false;
+    if (tablet->isTouchWacomTablet) {
+        return false;
+    }
 
     fetchWacomToolId(wacomSerialId, wacomDeviceId, tablet);
 
@@ -666,27 +683,28 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
     if (motion) {
         hasSaneData =
             tablet->savedAxesData.updateAxesData(motion->first_axis,
-                                                 motion->axes_count,
-                                                 motion->axis_data);
+                    motion->axes_count,
+                    motion->axis_data);
     } else if (button) {
         hasSaneData =
             tablet->savedAxesData.updateAxesData(button->first_axis,
-                                                 button->axes_count,
-                                                 button->axis_data);
+                    button->axes_count,
+                    button->axis_data);
     }
 
-    if (!hasSaneData) return false;
+    if (!hasSaneData) {
+        return false;
+    }
 
     hiRes = tablet->savedAxesData.position(tablet, screenArea);
     pressure = tablet->savedAxesData.pressure();
     xTilt = tablet->savedAxesData.xTilt();
     yTilt = tablet->savedAxesData.yTilt();
 
-
     if (deviceType == QTabletEvent::Airbrush) {
         tangentialPressure =
             std::fmod(qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
-                      (tablet->maxRotation - tablet->minRotation) , 2.0);
+                      (tablet->maxRotation - tablet->minRotation), 2.0);
     } else {
         rotation =
             std::fmod(qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
@@ -699,8 +717,9 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         w = tablet->widgetToGetPress;
     } else {
         QWidget *child = w->childAt(curr);
-        if (child)
+        if (child) {
             w = child;
+        }
     }
     curr = w->mapFromGlobal(global);
 
@@ -747,7 +766,9 @@ void evdevEventsActivationWorkaround(WId window)
      * do it as it wants
      */
     static QSet<WId> registeredWindows;
-    if (registeredWindows.contains(window)) return;
+    if (registeredWindows.contains(window)) {
+        return;
+    }
 
     registeredWindows.insert(window);
 
@@ -764,13 +785,13 @@ void evdevEventsActivationWorkaround(WId window)
 
 bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
 {
-    XEvent *event = static_cast<XEvent*>(ev);
+    XEvent *event = static_cast<XEvent *>(ev);
 
     // Eat the choked mouse event...
     if (kis_tabletChokeMouse &&
-        (event->type == ButtonRelease ||
-         event->type == ButtonPress ||
-         event->type == MotionNotify)) {
+            (event->type == ButtonRelease ||
+             event->type == ButtonPress ||
+             event->type == MotionNotify)) {
 
         kis_tabletChokeMouse = false;
 
@@ -786,8 +807,8 @@ bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
     for (int i = 0; i < tablets->size(); ++i) {
         QTabletDeviceData &tab = tablets->operator [](i);
         if (event->type == tab.xinput_motion
-            || event->type == tab.xinput_button_release
-            || event->type == tab.xinput_button_press) {
+                || event->type == tab.xinput_button_release
+                || event->type == tab.xinput_button_press) {
 
             QWidget *widget = QApplication::activePopupWidget();
 
@@ -815,14 +836,14 @@ bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
                    event->type == tab.xinput_proximity_out) {
 
             const XProximityNotifyEvent *proximity =
-                reinterpret_cast<const XProximityNotifyEvent*>(event);
+                reinterpret_cast<const XProximityNotifyEvent *>(event);
             XID device_id = proximity->deviceid;
 
             QTabletDeviceDataList *tablet_list = qt_tablet_devices();
             for (int i = 0; i < tablet_list->size(); ++i) {
                 QTabletDeviceData &tab = tablet_list->operator[](i);
                 if (device_id == static_cast<XDevice *>(tab.device)->device_id &&
-                    tab.isTouchWacomTablet) {
+                        tab.isTouchWacomTablet) {
 
                     QWidget *widget = QApplication::activePopupWidget();
 
@@ -843,9 +864,9 @@ bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
                         }
 
                         QEvent::Type type = (QEvent::Type)
-                            (event->type == tab.xinput_proximity_in ?
-                             KisTabletEvent::TouchProximityInEx :
-                             KisTabletEvent::TouchProximityOutEx);
+                                            (event->type == tab.xinput_proximity_in ?
+                                             KisTabletEvent::TouchProximityInEx :
+                                             KisTabletEvent::TouchProximityOutEx);
 
                         QEvent e(type);
                         e.ignore();

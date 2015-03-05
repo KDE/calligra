@@ -27,7 +27,6 @@ class KPrFormulaParser;
 
 class KPrShapeAnimation;
 
-
 class KPrSmilValues : public KPrAnimationValue
 {
 public:

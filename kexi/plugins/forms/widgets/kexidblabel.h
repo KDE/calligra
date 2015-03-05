@@ -40,9 +40,9 @@ class QPainter;
  @author Christian Nitschkowski, Jarosław Staniek
 */
 class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel,
-                                         protected KexiDBTextWidgetInterface,
-                                         public KexiFormDataItemInterface,
-                                         public KFormDesigner::FormWidgetInterface
+    protected KexiDBTextWidgetInterface,
+    public KexiFormDataItemInterface,
+    public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
@@ -53,19 +53,21 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel,
 
 public:
     explicit KexiDBLabel(QWidget *parent = 0, Qt::WFlags f = 0);
-    explicit KexiDBLabel(const QString& text, QWidget *parent = 0, Qt::WFlags f = 0);
+    explicit KexiDBLabel(const QString &text, QWidget *parent = 0, Qt::WFlags f = 0);
     virtual ~KexiDBLabel();
 
-    inline QString dataSource() const {
+    inline QString dataSource() const
+    {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourcePartClass() const {
+    inline QString dataSourcePartClass() const
+    {
         return KexiFormDataItemInterface::dataSourcePartClass();
     }
 
     virtual QVariant value();
 
-    virtual void setInvalidState(const QString& displayText);
+    virtual void setInvalidState(const QString &displayText);
 
     virtual bool valueIsNull();
 
@@ -74,7 +76,7 @@ public:
     //! always true
     virtual bool isReadOnly() const;
 
-    virtual QWidget* widget();
+    virtual QWidget *widget();
 
     //! always false
     virtual bool cursorAtStart();
@@ -85,7 +87,7 @@ public:
     virtual void clear();
 
     //! used to catch setIndent(), etc.
-    virtual bool setProperty(const char * name, const QVariant & value);
+    virtual bool setProperty(const char *name, const QVariant &value);
 
     virtual QColor frameColor() const;
 
@@ -93,19 +95,21 @@ public:
 
 public Q_SLOTS:
     //! Sets the datasource to \a ds
-    inline void setDataSource(const QString &ds) {
+    inline void setDataSource(const QString &ds)
+    {
         KexiFormDataItemInterface::setDataSource(ds);
     }
 
-    inline void setDataSourcePartClass(const QString &partClass) {
+    inline void setDataSourcePartClass(const QString &partClass)
+    {
         KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     }
 
-    virtual void setText(const QString& text);
+    virtual void setText(const QString &text);
 
     virtual void setPalette(const QPalette &pal);
 
-    virtual void setFrameColor(const QColor& color);
+    virtual void setFrameColor(const QColor &color);
 
 protected Q_SLOTS:
     //! empty
@@ -113,19 +117,19 @@ protected Q_SLOTS:
 
 protected:
     void init();
-    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
-    virtual void paintEvent(QPaintEvent*);
-    virtual void resizeEvent(QResizeEvent* e);
+    virtual void setColumnInfo(KexiDB::QueryColumnInfo *cinfo);
+    virtual void paintEvent(QPaintEvent *);
+    virtual void resizeEvent(QResizeEvent *e);
 
     //! Sets value \a value for a widget.
-    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void setValueInternal(const QVariant &add, bool removeOld);
 
-    virtual void fontChange(const QFont& font);
-    virtual void styleChange(QStyle& style);
+    virtual void fontChange(const QFont &font);
+    virtual void styleChange(QStyle &style);
     virtual void enabledChange(bool enabled);
 
-    virtual void paletteChange(const QPalette& oldPal);
-    virtual void showEvent(QShowEvent* e);
+    virtual void paletteChange(const QPalette &oldPal);
+    virtual void showEvent(QShowEvent *e);
 
     //! Reimplemented to paint using real frame color instead of froeground.
     //! Also allows to paint more types of frame.
@@ -134,7 +138,7 @@ protected:
     void updatePixmapLater();
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

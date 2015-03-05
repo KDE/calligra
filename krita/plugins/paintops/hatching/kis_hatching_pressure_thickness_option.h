@@ -32,7 +32,7 @@ class KisHatchingPressureThicknessOption : public KisCurveOption
 {
 public:
     KisHatchingPressureThicknessOption();
-    double apply(const KisPaintInformation & info) const;
+    double apply(const KisPaintInformation &info) const;
 };
 
 #endif

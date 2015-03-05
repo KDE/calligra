@@ -38,10 +38,10 @@ class KOPAGEAPP_EXPORT KoPAPrintJob : public KoPrintJob
 {
     Q_OBJECT
 public:
-    explicit KoPAPrintJob(KoPAView * view);
+    explicit KoPAPrintJob(KoPAView *view);
     virtual ~KoPAPrintJob();
 
-    virtual QPrinter & printer();
+    virtual QPrinter &printer();
     virtual QList<QWidget *> createOptionWidgets() const;
 
 public Q_SLOTS:
@@ -49,7 +49,7 @@ public Q_SLOTS:
 
 protected:
     QPrinter m_printer;
-    QList<KoPAPageBase*> m_pages;
+    QList<KoPAPageBase *> m_pages;
     KoPAPageProvider *m_pageProvider;
 };
 

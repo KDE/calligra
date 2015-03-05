@@ -62,7 +62,7 @@ private Q_SLOTS:
     void fontStyle();
     void color_data();
     void color();
-    
+
     // General layout eleemnts
     void rowElement_data();
     void rowElement();
@@ -112,7 +112,7 @@ private Q_SLOTS:
     // Enlivening elements
     void actionElement_data();
     void actionElement();
-    
+
 };
 
 #endif // _TESTLOADANDSAVE_H_

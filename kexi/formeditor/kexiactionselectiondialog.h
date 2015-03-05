@@ -41,7 +41,7 @@ class KFORMEDITOR_EXPORT KexiActionSelectionDialog : public KDialog
     Q_OBJECT
 public:
     KexiActionSelectionDialog(QWidget *parent,
-                              const KexiFormEventAction::ActionData& action, const QString& actionWidgetName);
+                              const KexiFormEventAction::ActionData &action, const QString &actionWidgetName);
     ~KexiActionSelectionDialog();
 
     /*! \return selected action data or empty action if dialog has been rejected
@@ -49,20 +49,20 @@ public:
     KexiFormEventAction::ActionData currentAction() const;
 
 protected Q_SLOTS:
-    void slotActionCategorySelected(QTreeWidgetItem* item);
-    void slotKActionItemExecuted(QTreeWidgetItem*);
-    void slotKActionItemSelected(QTreeWidgetItem*);
-    void slotActionToExecuteItemExecuted(QTreeWidgetItem* item);
-    void slotActionToExecuteItemSelected(QTreeWidgetItem*);
-    void slotCurrentFormActionItemExecuted(QTreeWidgetItem*);
-    void slotCurrentFormActionItemSelected(QTreeWidgetItem*);
-    void slotItemForOpeningOrExecutingSelected(KexiPart::Item* item);
+    void slotActionCategorySelected(QTreeWidgetItem *item);
+    void slotKActionItemExecuted(QTreeWidgetItem *);
+    void slotKActionItemSelected(QTreeWidgetItem *);
+    void slotActionToExecuteItemExecuted(QTreeWidgetItem *item);
+    void slotActionToExecuteItemSelected(QTreeWidgetItem *);
+    void slotCurrentFormActionItemExecuted(QTreeWidgetItem *);
+    void slotCurrentFormActionItemSelected(QTreeWidgetItem *);
+    void slotItemForOpeningOrExecutingSelected(KexiPart::Item *item);
 
 protected:
     void updateOKButtonStatus();
 
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

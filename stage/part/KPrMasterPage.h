@@ -43,7 +43,7 @@ public:
 
 protected:
     /// reimplemented
-    virtual void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext );
+    virtual void loadOdfPageExtra(const KoXmlElement &element, KoPALoadingContext &loadingContext);
 };
 
 #endif /* KPRMASTERPAGE_H */

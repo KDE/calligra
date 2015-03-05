@@ -29,7 +29,6 @@ const QString SPRAYSHAPE_HEIGHT = "SprayShape/height";
 const QString SPRAYSHAPE_IMAGE_URL = "SprayShape/imageUrl";
 const QString SPRAYSHAPE_USE_ASPECT = "SprayShape/useAspect";
 
-
 class KisShapeOptionsWidget;
 
 class KisSprayShapeOption : public KisPaintOpOption
@@ -42,11 +41,11 @@ public:
     /// 0 - ellipse, 1 - rectangle, 2 - anti-aliased pixel, 2 - pixel
     int shape() const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private:
-    KisShapeOptionsWidget * m_options;
+    KisShapeOptionsWidget *m_options;
     bool m_useAspect;
     qreal m_aspect;
     int m_maxSize;
@@ -80,7 +79,8 @@ public:
 
 public:
 
-    void loadSettings(const KisPropertiesConfiguration* settings, qreal proportionalWidth, qreal proportionalHeight) {
+    void loadSettings(const KisPropertiesConfiguration *settings, qreal proportionalWidth, qreal proportionalHeight)
+    {
         enabled = settings->getBool(SPRAYSHAPE_ENABLED, true);
 
         width = settings->getInt(SPRAYSHAPE_WIDTH);

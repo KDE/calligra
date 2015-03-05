@@ -28,44 +28,53 @@ class TestNode : public KisNode
     Q_OBJECT
 
 public:
-    KisNodeSP clone() {
+    KisNodeSP clone()
+    {
         return new TestNode(*this);
     }
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const
+    {
         return true;
     }
-    const KoColorSpace * colorSpace() const {
+    const KoColorSpace *colorSpace() const
+    {
         return 0;
     }
-    virtual const KoCompositeOp * compositeOp() const {
+    virtual const KoCompositeOp *compositeOp() const
+    {
         return 0;
     }
 
     using KisNode::setDirty;
 
-    void setDirty() {
+    void setDirty()
+    {
         KisNode::setDirty(QRect(-1000, -1000, 2000, 200));
     }
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return new TestNode(*this);
     }
 };
-
 
 class TestNodeA : public KisNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return new TestNodeA(*this);
     }
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const
+    {
         return true;
     }
-    const KoColorSpace * colorSpace() const {
+    const KoColorSpace *colorSpace() const
+    {
         return 0;
     }
-    virtual const KoCompositeOp * compositeOp() const {
+    virtual const KoCompositeOp *compositeOp() const
+    {
         return 0;
     }
 };
@@ -74,16 +83,20 @@ class TestNodeB : public KisNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return new TestNodeB(*this);
     }
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const
+    {
         return true;
     }
-    const KoColorSpace * colorSpace() const {
+    const KoColorSpace *colorSpace() const
+    {
         return 0;
     }
-    virtual const KoCompositeOp * compositeOp() const {
+    virtual const KoCompositeOp *compositeOp() const
+    {
         return 0;
     }
 };
@@ -92,21 +105,23 @@ class TestNodeC : public KisNode
 {
     Q_OBJECT
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return new TestNodeC(*this);
     }
-    bool allowAsChild(KisNodeSP) const {
+    bool allowAsChild(KisNodeSP) const
+    {
         return true;
     }
-    const KoColorSpace * colorSpace() const {
+    const KoColorSpace *colorSpace() const
+    {
         return 0;
     }
-    virtual const KoCompositeOp * compositeOp() const {
+    virtual const KoCompositeOp *compositeOp() const
+    {
         return 0;
     }
 };
-
-
 
 class KisNodeTest : public QObject
 {
@@ -128,7 +143,7 @@ private:
     class GraphKiller;
 
     template <class KillerClass>
-        void propertiesStressTestImpl();
+    void propertiesStressTestImpl();
 };
 
 #endif

@@ -23,7 +23,7 @@
 QString escapeLocals(const QString &text)
 {
     QString t(text);
-    t.replace(',','.');
+    t.replace(',', '.');
     return t;
 }
 

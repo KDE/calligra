@@ -27,7 +27,7 @@
 #include <kdebug.h>
 
 KarbonCalligraphyToolFactory::KarbonCalligraphyToolFactory()
-        : KoToolFactoryBase("KarbonCalligraphyTool")
+    : KoToolFactoryBase("KarbonCalligraphyTool")
 {
     setToolTip(i18n("Calligraphy"));
     setToolType("karbon,krita");
@@ -40,7 +40,7 @@ KarbonCalligraphyToolFactory::~KarbonCalligraphyToolFactory()
 {
 }
 
-KoToolBase * KarbonCalligraphyToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KarbonCalligraphyToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonCalligraphyTool(canvas);
 }

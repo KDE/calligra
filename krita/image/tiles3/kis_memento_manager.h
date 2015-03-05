@@ -29,7 +29,7 @@ typedef QListIterator<KisMementoItemSP> KisMementoItemListIterator;
 
 class KisMemento;
 struct KisHistoryItem {
-    KisMemento* memento;
+    KisMemento *memento;
     KisMementoItemList itemList;
 };
 
@@ -41,12 +41,11 @@ typedef KisSharedPtr<KisMemento> KisMementoSP;
 typedef KisTileHashTableTraits<KisMementoItem> KisMementoItemHashTable;
 typedef KisTileHashTableIteratorTraits<KisMementoItem> KisMementoItemHashTableIterator;
 
-
 class KRITAIMAGE_EXPORT KisMementoManager
 {
 public:
     KisMementoManager();
-    KisMementoManager(const KisMementoManager& rhs);
+    KisMementoManager(const KisMementoManager &rhs);
     ~KisMementoManager();
 
     /**
@@ -68,7 +67,6 @@ public:
      * there was a tile one day
      */
     void registerTileDeleted(KisTile *tile);
-
 
     /**
      * Commits changes, made in  INDEX: appends m_index into m_revisions list
@@ -92,7 +90,8 @@ public:
 
     KisMementoSP getMemento();
 
-    bool hasCurrentMemento() {
+    bool hasCurrentMemento()
+    {
         return m_currentMemento;
     }
 
@@ -101,7 +100,6 @@ public:
     void setDefaultTileData(KisTileData *defaultTileData);
 
     void debugPrintInfo();
-
 
     /**
      * Removes all the history that preceds the revision

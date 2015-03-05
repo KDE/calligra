@@ -26,7 +26,6 @@
 #include <KoDocument.h>
 #include <KoXmlReaderForward.h>
 
-
 class KoView;
 class KoOdfReadStore;
 class QPainter;
@@ -41,32 +40,37 @@ class FormulaDocument : public KoDocument
 public:
     explicit FormulaDocument(KoFormulaShape *parent);
     ~FormulaDocument();
-    
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return FORMULA_MIME_TYPE; }
+    virtual QByteArray nativeFormatMimeType() const
+    {
+        return FORMULA_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return FORMULA_MIME_TYPE; }
+    virtual QByteArray nativeOasisMimeType() const
+    {
+        return FORMULA_MIME_TYPE;
+    }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {
         return QStringList() << "application/x-kformula"
-                             << "application/vnd.oasis.opendocument.formula-template"
-                             << "text/mathml";
+               << "application/vnd.oasis.opendocument.formula-template"
+               << "text/mathml";
 
     }
 
-    bool loadOdf( KoOdfReadStore &odfStore );
-    bool loadXML( const KoXmlDocument &doc, KoStore *store );
-    
-    bool saveOdf( SavingContext &context );
-    KoView *createViewInstance( QWidget *parent );
-    
-    void paintContent( QPainter &painter, const QRect &rect ); 
-    
+    bool loadOdf(KoOdfReadStore &odfStore);
+    bool loadXML(const KoXmlDocument &doc, KoStore *store);
+
+    bool saveOdf(SavingContext &context);
+    KoView *createViewInstance(QWidget *parent);
+
+    void paintContent(QPainter &painter, const QRect &rect);
+
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KFORMULA_FORMULADOCUMENT_H

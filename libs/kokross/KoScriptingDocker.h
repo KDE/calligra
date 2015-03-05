@@ -28,9 +28,10 @@
 #include <QPointer>
 #include <QMap>
 
-namespace Kross {
-    class Action;
-    class ActionCollectionView;
+namespace Kross
+{
+class Action;
+class ActionCollectionView;
 }
 
 class KoScriptingModule;
@@ -106,7 +107,7 @@ protected Q_SLOTS:
     * actions the used \a Kross::ActionCollectionView provides us
     * changed.
     */
-    void slotEnabledChanged(const QString&);
+    void slotEnabledChanged(const QString &);
 
     /**
     * This slot got called on doubleclick on the used
@@ -119,7 +120,7 @@ private:
     /// The view we are using to display the collections and there actions.
     Kross::ActionCollectionView *m_view;
     /// The map of actions we are using to display toolbar-buttons like "run" and "stop".
-    QMap<QString, QAction*> m_actions;
+    QMap<QString, QAction *> m_actions;
 };
 
 /**
@@ -152,12 +153,12 @@ public Q_SLOTS:
     /**
     * Returns the widget that should be displayed within this docker.
     */
-    QWidget* widget();
+    QWidget *widget();
 
     /**
     * Set the widget that should be displayed within this docker.
     */
-    void setWidget(QWidget* widget);
+    void setWidget(QWidget *widget);
 
 Q_SIGNALS:
     //void visibilityChanged(bool visible);

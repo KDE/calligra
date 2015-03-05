@@ -61,10 +61,12 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
     saveSvgStroke(shape, context);
     saveSvgEffects(shape, context);
     saveSvgClipping(shape, context);
-    if (! shape->isVisible())
+    if (! shape->isVisible()) {
         context.shapeWriter().addAttribute("display", "none");
-    if (shape->transparency() > 0.0)
+    }
+    if (shape->transparency() > 0.0) {
         context.shapeWriter().addAttribute("opacity", 1.0 - shape->transparency());
+    }
 }
 
 void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
@@ -77,8 +79,9 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
     QSharedPointer<KoColorBackground>  cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
     if (cbg) {
         context.shapeWriter().addAttribute("fill", cbg->color().name());
-        if (cbg->color().alphaF() < 1.0)
+        if (cbg->color().alphaF() < 1.0) {
             context.shapeWriter().addAttribute("fill-opacity", cbg->color().alphaF());
+        }
     }
     QSharedPointer<KoGradientBackground>  gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
     if (gbg) {
@@ -91,19 +94,21 @@ void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
         context.shapeWriter().addAttribute("fill", "url(#" + patternId + ")");
     }
 
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+    KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
     if (path && shape->background()) {
         // non-zero is default, so only write fillrule if evenodd is set
-        if (path->fillRule() == Qt::OddEvenFill)
+        if (path->fillRule() == Qt::OddEvenFill) {
             context.shapeWriter().addAttribute("fill-rule", "evenodd");
+        }
     }
 }
 
 void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
 {
-    const KoShapeStroke * line = dynamic_cast<const KoShapeStroke*>(shape->stroke());
-    if (! line)
+    const KoShapeStroke *line = dynamic_cast<const KoShapeStroke *>(shape->stroke());
+    if (! line) {
         return;
+    }
 
     QString strokeStr("none");
     if (line->lineBrush().gradient()) {
@@ -112,41 +117,47 @@ void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
     } else {
         strokeStr = line->color().name();
     }
-    if (!strokeStr.isEmpty())
+    if (!strokeStr.isEmpty()) {
         context.shapeWriter().addAttribute("stroke", strokeStr);
+    }
 
-    if (line->color().alphaF() < 1.0)
+    if (line->color().alphaF() < 1.0) {
         context.shapeWriter().addAttribute("stroke-opacity", line->color().alphaF());
+    }
     context.shapeWriter().addAttribute("stroke-width", SvgUtil::toUserSpace(line->lineWidth()));
 
-    if (line->capStyle() == Qt::FlatCap)
+    if (line->capStyle() == Qt::FlatCap) {
         context.shapeWriter().addAttribute("stroke-linecap", "butt");
-    else if (line->capStyle() == Qt::RoundCap)
+    } else if (line->capStyle() == Qt::RoundCap) {
         context.shapeWriter().addAttribute("stroke-linecap", "round");
-    else if (line->capStyle() == Qt::SquareCap)
+    } else if (line->capStyle() == Qt::SquareCap) {
         context.shapeWriter().addAttribute("stroke-linecap", "square");
+    }
 
     if (line->joinStyle() == Qt::MiterJoin) {
         context.shapeWriter().addAttribute("stroke-linejoin", "miter");
         context.shapeWriter().addAttribute("stroke-miterlimit", line->miterLimit());
-    } else if (line->joinStyle() == Qt::RoundJoin)
+    } else if (line->joinStyle() == Qt::RoundJoin) {
         context.shapeWriter().addAttribute("stroke-linejoin", "round");
-    else if (line->joinStyle() == Qt::BevelJoin)
+    } else if (line->joinStyle() == Qt::BevelJoin) {
         context.shapeWriter().addAttribute("stroke-linejoin", "bevel");
+    }
 
     // dash
     if (line->lineStyle() > Qt::SolidLine) {
         qreal dashFactor = line->lineWidth();
 
-        if (line->dashOffset() != 0)
+        if (line->dashOffset() != 0) {
             context.shapeWriter().addAttribute("stroke-dashoffset", dashFactor * line->dashOffset());
+        }
 
         QString dashStr;
         const QVector<qreal> dashes = line->lineDashes();
         int dashCount = dashes.size();
         for (int i = 0; i < dashCount; ++i) {
-            if (i > 0)
+            if (i > 0) {
                 dashStr += ",";
+            }
             dashStr += QString("%1").arg(dashes[i] * dashFactor);
         }
         context.shapeWriter().addAttribute("stroke-dasharray", dashStr);
@@ -155,13 +166,15 @@ void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgEffects(KoShape *shape, SvgSavingContext &context)
 {
-    KoFilterEffectStack * filterStack = shape->filterEffectStack();
-    if (!filterStack)
+    KoFilterEffectStack *filterStack = shape->filterEffectStack();
+    if (!filterStack) {
         return;
+    }
 
-    QList<KoFilterEffect*> filterEffects = filterStack->filterEffects();
-    if (!filterEffects.count())
+    QList<KoFilterEffect *> filterEffects = filterStack->filterEffects();
+    if (!filterEffects.count()) {
         return;
+    }
 
     const QString uid = context.createUID("filter");
 
@@ -173,13 +186,15 @@ void SvgStyleWriter::saveSvgEffects(KoShape *shape, SvgSavingContext &context)
 void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
 {
     KoClipPath *clipPath = shape->clipPath();
-    if (!clipPath)
+    if (!clipPath) {
         return;
+    }
 
     const QSizeF shapeSize = shape->outlineRect().size();
     KoPathShape *path = KoPathShape::createShapeFromPainterPath(clipPath->pathForSize(shapeSize));
-    if (!path)
+    if (!path) {
         return;
+    }
 
     path->close();
 
@@ -196,13 +211,14 @@ void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
     context.styleWriter().endElement(); // clipPath
 
     context.shapeWriter().addAttribute("clip-path", "url(#" + uid + ")");
-    if (clipPath->clipRule() != Qt::WindingFill)
+    if (clipPath->clipRule() != Qt::WindingFill) {
         context.shapeWriter().addAttribute("clip-rule", "evenodd");
+    }
 }
 
 void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavingContext &context)
 {
-    foreach(const QGradientStop &stop, colorStops) {
+    foreach (const QGradientStop &stop, colorStops) {
         context.styleWriter().startElement("stop");
         context.styleWriter().addAttribute("stop-color", stop.second.name());
         context.styleWriter().addAttribute("offset", stop.first);
@@ -213,8 +229,9 @@ void SvgStyleWriter::saveSvgColorStops(const QGradientStops &colorStops, SvgSavi
 
 QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context)
 {
-    if (! gradient)
+    if (! gradient) {
         return QString();
+    }
 
     Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
 
@@ -227,7 +244,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
     const QString uid = context.createUID("gradient");
 
     if (gradient->type() == QGradient::LinearGradient) {
-        const QLinearGradient * g = static_cast<const QLinearGradient*>(gradient);
+        const QLinearGradient *g = static_cast<const QLinearGradient *>(gradient);
         context.styleWriter().startElement("linearGradient");
         context.styleWriter().addAttribute("id", uid);
         context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
@@ -241,7 +258,7 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         saveSvgColorStops(gradient->stops(), context);
         context.styleWriter().endElement();
     } else if (gradient->type() == QGradient::RadialGradient) {
-        const QRadialGradient * g = static_cast<const QRadialGradient*>(gradient);
+        const QRadialGradient *g = static_cast<const QRadialGradient *>(gradient);
         context.styleWriter().startElement("radialGradient");
         context.styleWriter().addAttribute("id", uid);
         context.styleWriter().addAttribute("gradientTransform", SvgUtil::transformToString(gradientTransform));
@@ -358,7 +375,7 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
     buffer.open(QIODevice::WriteOnly);
     if (pattern->pattern().save(&buffer, "PNG")) {
         const QString mimeType(KMimeType::findByContent(ba)->name());
-        context.styleWriter().addAttribute("xlink:href", "data:"+ mimeType + ";base64," + ba.toBase64());
+        context.styleWriter().addAttribute("xlink:href", "data:" + mimeType + ";base64," + ba.toBase64());
     }
 
     context.styleWriter().endElement(); // image

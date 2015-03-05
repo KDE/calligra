@@ -38,7 +38,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 
-KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* parent)
+KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget *parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
     setPrecisionEnabled(true);
@@ -74,7 +74,7 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
 
     //As the name implies, reconfigurationCourier is the KisPropertiesConfiguration*
     //we'll use as an intermediary to edit the default settings
-    KisPropertiesConfiguration* reconfigurationCourier = configuration();
+    KisPropertiesConfiguration *reconfigurationCourier = configuration();
 
     /*xMLAnalyzer is an empty document we'll use to analyze and edit the config string part by part
     I know the important string is "brush_definition" because I read the tree with the snippet
@@ -122,10 +122,10 @@ KisHatchingPaintOpSettingsWidget::~ KisHatchingPaintOpSettingsWidget()
 {
 }
 
-KisPropertiesConfiguration*  KisHatchingPaintOpSettingsWidget::configuration() const
+KisPropertiesConfiguration  *KisHatchingPaintOpSettingsWidget::configuration() const
 {
-    KisHatchingPaintOpSettings* config = new KisHatchingPaintOpSettings();
-    config->setOptionsWidget(const_cast<KisHatchingPaintOpSettingsWidget*>(this));
+    KisHatchingPaintOpSettings *config = new KisHatchingPaintOpSettings();
+    config->setOptionsWidget(const_cast<KisHatchingPaintOpSettingsWidget *>(this));
     config->setProperty("paintop", "hatchingbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;

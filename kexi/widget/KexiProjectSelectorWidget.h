@@ -40,20 +40,20 @@ public:
     information about database driver and connection columns are added.
     \a prj_set may be NULL - you can assign a set later with setProjectSet().
     */
-    explicit KexiProjectSelectorWidget(QWidget* parent = 0,
-                                       KexiProjectSet* prj_set = 0, bool showProjectNameColumn = true,
+    explicit KexiProjectSelectorWidget(QWidget *parent = 0,
+                                       KexiProjectSet *prj_set = 0, bool showProjectNameColumn = true,
                                        bool showConnectionColumns = true);
 
     virtual ~KexiProjectSelectorWidget();
 
     /*! \return data of selected project. Returns NULL if no selection has been made.
     */
-    KexiProjectData* selectedProjectData() const;
+    KexiProjectData *selectedProjectData() const;
 
     /*! Assigns a new project set \a prj_set. Old project set is not destoyed
     - it is just left unassigned.
     If new project set is in error state (Object::error() == true), nothing is displayed. */
-    void setProjectSet(KexiProjectSet* prj_set);
+    void setProjectSet(KexiProjectSet *prj_set);
 
     /*! \return currently assigned project set or NULL if no project set is assigned. */
     KexiProjectSet *projectSet();
@@ -68,22 +68,22 @@ public:
 
     QLabel *label() const;
 
-    QTreeWidget* list() const;
-    
+    QTreeWidget *list() const;
+
 Q_SIGNALS:
-    void projectExecuted(KexiProjectData*);
-    void selectionChanged(KexiProjectData*);
+    void projectExecuted(KexiProjectData *);
+    void selectionChanged(KexiProjectData *);
 
 protected Q_SLOTS:
-    void slotItemExecuted(QTreeWidgetItem*);
+    void slotItemExecuted(QTreeWidgetItem *);
     void slotItemExecuted();
     void slotItemSelected();
 
 protected:
-    virtual bool eventFilter(QObject* watched, QEvent* event);
-    
+    virtual bool eventFilter(QObject *watched, QEvent *event);
+
     class Private;
-    Private * const d;
+    Private *const d;
 
     friend class ProjectDataLVItem;
 };
@@ -98,29 +98,29 @@ public:
      You should test if project set was properly loaded using projectSet()->error().
     */
     KexiProjectSelectorDialog(QWidget *parent,
-                              const KexiDB::ConnectionData& cdata,
+                              const KexiDB::ConnectionData &cdata,
                               bool showProjectNameColumn = true, bool showConnectionColumns = true);
 
     virtual ~KexiProjectSelectorDialog();
 
     /*! \return data of selected project. Returns NULL if no selection has been made.
     */
-    KexiProjectData* selectedProjectData() const;
+    KexiProjectData *selectedProjectData() const;
 
     /*! \return currently assigned project set or NULL if no project set is assigned. */
     KexiProjectSet *projectSet() const;
 
-    virtual void showEvent(QShowEvent * event);
+    virtual void showEvent(QShowEvent *event);
 
 protected Q_SLOTS:
-    void slotProjectExecuted(KexiProjectData*);
-    void slotProjectSelectionChanged(KexiProjectData*);
+    void slotProjectExecuted(KexiProjectData *);
+    void slotProjectSelectionChanged(KexiProjectData *);
 
 protected:
-    void init(KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns);
+    void init(KexiProjectSet *prj_set, bool showProjectNameColumn, bool showConnectionColumns);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

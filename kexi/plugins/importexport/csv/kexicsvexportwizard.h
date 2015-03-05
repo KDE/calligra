@@ -47,8 +47,8 @@ class KexiCSVExportWizard : public KAssistantDialog
     Q_OBJECT
 
 public:
-    explicit KexiCSVExportWizard(const KexiCSVExport::Options& options,
-                                 QWidget * parent = 0);
+    explicit KexiCSVExportWizard(const KexiCSVExport::Options &options,
+                                 QWidget *parent = 0);
 
     virtual ~KexiCSVExportWizard();
 
@@ -59,7 +59,7 @@ protected Q_SLOTS:
     virtual void done(int result);
     void slotShowOptionsButtonClicked();
     void slotDefaultsButtonClicked();
-    void slotCurrentPageChanged(KPageWidgetItem*, KPageWidgetItem*);
+    void slotCurrentPageChanged(KPageWidgetItem *, KPageWidgetItem *);
 
 protected:
 
@@ -76,7 +76,7 @@ protected:
     bool readBoolEntry(const char *key, bool defaultValue);
 
     //! Helper like \ref readBoolEntry(const char *, bool), but for QString values.
-    QString readEntry(const char *key, const QString& defaultValue = QString());
+    QString readEntry(const char *key, const QString &defaultValue = QString());
 
     //! Helper, works like KGlobal::config()->writeEntry(const char*,bool) but if mode is Clipboard,
     //! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy"
@@ -85,25 +85,25 @@ protected:
     void writeEntry(const char *key, bool value);
 
     //! Helper like \ref writeEntry(const char *, bool), but for QString values.
-    void writeEntry(const char *key, const QString& value);
+    void writeEntry(const char *key, const QString &value);
 
     //! Helper like \ref writeEntry(const char *, bool), but for deleting config entry.
     void deleteEntry(const char *key);
 
     KexiCSVExport::Options m_options;
-    KexiFileWidget* m_fileSaveWidget;
-    QWidget* m_exportOptionsWidget;
+    KexiFileWidget *m_fileSaveWidget;
+    QWidget *m_exportOptionsWidget;
     KPageWidgetItem *m_fileSavePage;
     KPageWidgetItem *m_exportOptionsPage;
     KPushButton *m_showOptionsButton;
     KPushButton *m_defaultsBtn;
-    QGroupBox* m_exportOptionsSection;
+    QGroupBox *m_exportOptionsSection;
     KexiCSVInfoLabel *m_infoLblFrom, *m_infoLblTo;
-    KexiCSVDelimiterWidget* m_delimiterWidget;
-    KexiCSVTextQuoteComboBox* m_textQuote;
+    KexiCSVDelimiterWidget *m_delimiterWidget;
+    KexiCSVTextQuoteComboBox *m_textQuote;
     KexiCharacterEncodingComboBox *m_characterEncodingCombo;
-    QCheckBox* m_addColumnNamesCheckBox, *m_alwaysUseCheckBox;
-    KexiDB::TableOrQuerySchema* m_tableOrQuery;
+    QCheckBox *m_addColumnNamesCheckBox, *m_alwaysUseCheckBox;
+    KexiDB::TableOrQuerySchema *m_tableOrQuery;
     KConfigGroup m_importExportGroup;
     bool m_cancelled;
 };

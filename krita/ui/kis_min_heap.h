@@ -32,42 +32,50 @@ template <typename T, int N> class KisMinHeap
 {
 public:
 
-    KisMinHeap(): m_list(0) {
+    KisMinHeap(): m_list(0)
+    {
         m_size = N;
         m_last = 0;
 
-        m_list = new PriorityNode <T>* [N];
+        m_list = new PriorityNode <T> *[N];
     }
 
-    inline KisMinHeap(const T& data, int key) {
+    inline KisMinHeap(const T &data, int key)
+    {
         KisMinHeap();
         append(data, key);
     }
 
-    inline KisMinHeap(PriorityNode<T>* node) {
+    inline KisMinHeap(PriorityNode<T> *node)
+    {
         KisMinHeap();
         append(node);
     }
 
-    ~KisMinHeap() {
+    ~KisMinHeap()
+    {
         delete[] m_list;
     }
 
-    inline void changeKey(int pos, int newKey) {
+    inline void changeKey(int pos, int newKey)
+    {
         m_list[pos]->key = newKey;
         heapifyUp(pos);
         heapifyDown(pos);
     }
 
-    inline int size() {
+    inline int size()
+    {
         return m_last;
     }
 
-    inline T valueAt(int pos) {
+    inline T valueAt(int pos)
+    {
         return m_list[pos]->data;
     }
 
-    void append(PriorityNode<T>* node) {
+    void append(PriorityNode<T> *node)
+    {
         node->pos = m_last;
         m_list[m_last] = node;
         ++m_last;
@@ -76,17 +84,23 @@ public:
         node = 0;
     }
 
-    void append(const T& data, int key) {
-        if (m_last >= m_size) return;
-        PriorityNode <T>* node = new PriorityNode<T>;
+    void append(const T &data, int key)
+    {
+        if (m_last >= m_size) {
+            return;
+        }
+        PriorityNode <T> *node = new PriorityNode<T>;
         node->data = data;
         node->key = key;
 
         append(node);
     }
 
-    void remove(int pos) {
-        if (pos < 0) return;
+    void remove(int pos)
+    {
+        if (pos < 0) {
+            return;
+        }
         swap(pos, m_last - 1);
         --m_last;
         delete m_list[m_last];
@@ -95,14 +109,20 @@ public:
         heapifyDown(pos);
     }
 
-    void remove(const T& data) {
+    void remove(const T &data)
+    {
         int pos = find(data);
-        if (pos >= 0) remove(pos);
+        if (pos >= 0) {
+            remove(pos);
+        }
     }
 
-    int find(const T& data) {
+    int find(const T &data)
+    {
         for (int pos = 0; pos < m_last; pos++) {
-            if (m_list[pos]->data == data) return pos;
+            if (m_list[pos]->data == data) {
+                return pos;
+            }
         }
         return -1;
     }
@@ -113,8 +133,9 @@ private:
     int m_size;
     PriorityNode <T>* *m_list;
 
-    void swap(int pos1, int pos2) {
-        PriorityNode <T>* temp(m_list[pos1]);
+    void swap(int pos1, int pos2)
+    {
+        PriorityNode <T> *temp(m_list[pos1]);
         m_list[pos1] = m_list[pos2];
         m_list[pos1]->pos = pos1;
         m_list[pos2] = temp;
@@ -122,16 +143,19 @@ private:
         temp = 0;
     }
 
-    void heapifyUp(int pos) {
+    void heapifyUp(int pos)
+    {
         while (pos > 0 && m_list[pos]->key < m_list[parentPos(pos)]->key) {
             swap(pos, parentPos(pos));
             pos = parentPos(pos);
         }
     }
 
-    void heapifyDown(int pos) {
-        if (leftChildPos(pos) >= m_last) return; //no children
-        else {
+    void heapifyDown(int pos)
+    {
+        if (leftChildPos(pos) >= m_last) {
+            return;    //no children
+        } else {
             int childPos = 0;
 
             if (rightChildPos(pos) >= m_last) { //1 child
@@ -144,19 +168,24 @@ private:
             if (m_list[childPos]->key < m_list[pos]->key) {
                 swap(pos, childPos);
                 heapifyDown(childPos);
-            } else return;
+            } else {
+                return;
+            }
         }
     }
 
-    inline int leftChildPos(int x) {
+    inline int leftChildPos(int x)
+    {
         return 2 * x + 1;
     }
 
-    inline int rightChildPos(int x) {
+    inline int rightChildPos(int x)
+    {
         return 2 * x + 2;
     }
 
-    inline int parentPos(int x) {
+    inline int parentPos(int x)
+    {
         return (x - 1) / 2;
     }
 

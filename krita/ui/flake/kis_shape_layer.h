@@ -53,8 +53,8 @@ class KRITAUI_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLaye
 
 public:
 
-    KisShapeLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
-    KisShapeLayer(const KisShapeLayer& _rhs);
+    KisShapeLayer(KoShapeBasedDocumentBase *shapeController, KisImageWSP image, const QString &name, quint8 opacity);
+    KisShapeLayer(const KisShapeLayer &_rhs);
     /**
      * Merge constructor.
      *
@@ -62,16 +62,16 @@ public:
      *
      * This is used by createMergedLayer()
      */
-    KisShapeLayer(const KisShapeLayer& _merge, const KisShapeLayer &_addShapes);
+    KisShapeLayer(const KisShapeLayer &_merge, const KisShapeLayer &_addShapes);
     virtual ~KisShapeLayer();
 private:
-    void initShapeLayer(KoShapeBasedDocumentBase* controller);
+    void initShapeLayer(KoShapeBasedDocumentBase *controller);
 public:
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return new KisShapeLayer(*this);
     }
     bool allowAsChild(KisNodeSP) const;
-
 
     virtual void setImage(KisImageWSP image);
 
@@ -79,7 +79,8 @@ public:
 public:
 
     // KoShape overrides
-    bool isSelectable() const {
+    bool isSelectable() const
+    {
         return false;
     }
 
@@ -97,16 +98,16 @@ public:
     void setX(qint32);
     void setY(qint32);
 
-    bool accept(KisNodeVisitor&);
+    bool accept(KisNodeVisitor &);
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     KoShapeManager *shapeManager() const;
 
-    bool saveLayer(KoStore * store) const;
-    bool loadLayer(KoStore* store);
+    bool saveLayer(KoStore *store) const;
+    bool loadLayer(KoStore *store);
 
-    KUndo2Command* crop(const QRect & rect);
-    KUndo2Command* transform(const QTransform &transform);
+    KUndo2Command *crop(const QRect &rect);
+    KUndo2Command *transform(const QTransform &transform);
 
     bool visible(bool recursive = false) const;
     void setVisible(bool visible, bool isLoading = false);
@@ -115,7 +116,7 @@ protected:
     using KoShape::isVisible;
 
     friend class ShapeLayerContainerModel;
-    KoViewConverter* converter() const;
+    KoViewConverter *converter() const;
 
 Q_SIGNALS:
     /**
@@ -142,7 +143,7 @@ private Q_SLOTS:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif

@@ -36,7 +36,7 @@ public:
 
     /*! Tries to load db driver \a name.
       \return db driver, or 0 if error (then error message is also set) */
-    KexiMigrate* driver(const QString& name);
+    KexiMigrate *driver(const QString &name);
 
     static MigrateManagerInternal *self();
 
@@ -60,13 +60,13 @@ protected:
 
     bool lookupDrivers();
 
-    static MigrateManagerInternal* s_self;
+    static MigrateManagerInternal *s_self;
 
     MigrateManager::ServicesMap m_services; //! services map
     MigrateManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
     MigrateManager::ServicesMap m_services_by_mimetype;
 
-    QMap<QByteArray, KexiMigrate*> m_drivers;
+    QMap<QByteArray, KexiMigrate *> m_drivers;
     ulong m_refCount;
 
     QString m_serverErrMsg;

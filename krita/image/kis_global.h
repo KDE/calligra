@@ -80,9 +80,9 @@ const double PRESSURE_THRESHOLD = 5.0 / 255.0;
 #define M_PI 3.14159265358979323846
 #endif
 
-
 // converts \p a to [0, 2 * M_PI) range
-inline qreal normalizeAngle(qreal a) {
+inline qreal normalizeAngle(qreal a)
+{
     if (a < 0.0) {
         a = 2 * M_PI + fmod(a, 2 * M_PI);
     }
@@ -91,7 +91,8 @@ inline qreal normalizeAngle(qreal a) {
 }
 
 // converts \p a to [0, 360.0) range
-inline qreal normalizeAngleDegrees(qreal a) {
+inline qreal normalizeAngleDegrees(qreal a)
+{
     if (a < 0.0) {
         a = 360.0 + fmod(a, 360.0);
     }
@@ -99,14 +100,18 @@ inline qreal normalizeAngleDegrees(qreal a) {
     return a > 360.0 ? fmod(a, 360.0) : a;
 }
 
-inline qreal shortestAngularDistance(qreal a, qreal b) {
+inline qreal shortestAngularDistance(qreal a, qreal b)
+{
     qreal dist = fmod(qAbs(a - b), 2 * M_PI);
-    if (dist > M_PI) dist = 2 * M_PI - dist;
+    if (dist > M_PI) {
+        dist = 2 * M_PI - dist;
+    }
 
     return dist;
 }
 
-inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
+inline qreal incrementInDirection(qreal a, qreal inc, qreal direction)
+{
     qreal b1 = a + inc;
     qreal b2 = a - inc;
 
@@ -117,30 +122,36 @@ inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
 }
 
 template<typename T>
-inline T pow2(const T& x) {
+inline T pow2(const T &x)
+{
     return x * x;
 }
 
 template<typename T>
-inline T kisDegreesToRadians(T degrees) {
+inline T kisDegreesToRadians(T degrees)
+{
     return degrees * M_PI / 180.0;
 }
 
 template<typename T>
-inline T kisRadiansToDegrees(T radians) {
+inline T kisRadiansToDegrees(T radians)
+{
     return radians * 180.0 / M_PI;
 }
 
 template<class T, typename U>
-inline T kisGrowRect(const T &rect, U offset) {
+inline T kisGrowRect(const T &rect, U offset)
+{
     return rect.adjusted(-offset, -offset, offset, offset);
 }
 
-inline qreal kisDistance(const QPointF &pt1, const QPointF &pt2) {
+inline qreal kisDistance(const QPointF &pt1, const QPointF &pt2)
+{
     return std::sqrt(pow2(pt1.x() - pt2.x()) + pow2(pt1.y() - pt2.y()));
 }
 
-inline qreal kisSquareDistance(const QPointF &pt1, const QPointF &pt2) {
+inline qreal kisSquareDistance(const QPointF &pt1, const QPointF &pt2)
+{
     return pow2(pt1.x() - pt2.x()) + pow2(pt1.y() - pt2.y());
 }
 
@@ -181,19 +192,19 @@ inline QPointF kisProjectOnVector(const QPointF &base, const QPointF &v)
 
 inline QRect kisEnsureInRect(QRect rc, const QRect &bounds)
 {
-    if(rc.right() > bounds.right()) {
+    if (rc.right() > bounds.right()) {
         rc.translate(bounds.right() - rc.right(), 0);
     }
 
-    if(rc.left() < bounds.left()) {
+    if (rc.left() < bounds.left()) {
         rc.translate(bounds.left() - rc.left(), 0);
     }
 
-    if(rc.bottom() > bounds.bottom()) {
+    if (rc.bottom() > bounds.bottom()) {
         rc.translate(0, bounds.bottom() - rc.bottom());
     }
 
-    if(rc.top() < bounds.top()) {
+    if (rc.top() < bounds.top()) {
         rc.translate(0, bounds.top() - rc.top());
     }
 
@@ -203,7 +214,8 @@ inline QRect kisEnsureInRect(QRect rc, const QRect &bounds)
 #include <QSharedPointer>
 
 template <class T>
-inline QSharedPointer<T> toQShared(T* ptr) {
+inline QSharedPointer<T> toQShared(T *ptr)
+{
     return QSharedPointer<T>(ptr);
 }
 

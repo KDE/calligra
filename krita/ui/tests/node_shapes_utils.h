@@ -24,29 +24,36 @@
 #include "kis_node_dummies_graph.h"
 #include "testutil.h"
 
-inline KisNodeSP nodeFromId(int id) {
+inline KisNodeSP nodeFromId(int id)
+{
     KisNodeSP node = new TestUtil::TestNode();
     node->setName(QString("node%1").arg(id));
     return node;
 }
 
-inline KisNodeShape* nodeShapeFromId(int id) {
+inline KisNodeShape *nodeShapeFromId(int id)
+{
     return new KisNodeShape(nodeFromId(id));
 }
 
-inline bool checkDummyId(KisNodeDummy *dummy, int id) {
+inline bool checkDummyId(KisNodeDummy *dummy, int id)
+{
     return dummy->node()->name() == QString("node%1").arg(id);
 }
 
-inline KisNodeDummy* findDummyById(KisNodeDummy *root, int id)
+inline KisNodeDummy *findDummyById(KisNodeDummy *root, int id)
 {
-    if(checkDummyId(root, id)) return root;
+    if (checkDummyId(root, id)) {
+        return root;
+    }
 
     KisNodeDummy *foundDummy = 0;
     KisNodeDummy *child = root->firstChild();
-    while(child) {
+    while (child) {
         foundDummy = findDummyById(child, id);
-        if(foundDummy) break;
+        if (foundDummy) {
+            break;
+        }
         child = child->nextSibling();
     }
     return foundDummy;
@@ -60,10 +67,11 @@ inline KisNodeSP findNodeById(KisNodeDummy *root, int id)
     return dummy->node();
 }
 
-inline QString dummyId(KisNodeDummy *dummy, const QString removePrefix) {
+inline QString dummyId(KisNodeDummy *dummy, const QString removePrefix)
+{
     QString nodeName = dummy->node()->name();
 
-    if(!removePrefix.isEmpty()) {
+    if (!removePrefix.isEmpty()) {
         nodeName = QString::number(nodeName.remove(removePrefix).toInt());
     }
 
@@ -75,14 +83,15 @@ inline QString collectGraphPattern(KisNodeDummy *root, const QString removePrefi
     QString result = dummyId(root, removePrefix) + ' ';
 
     KisNodeDummy *child = root->firstChild();
-    while(child) {
+    while (child) {
         result += collectGraphPattern(child, removePrefix) + ' ';
         child = child->nextSibling();
     }
     return result.trimmed();
 }
 
-inline QString collectGraphPatternFull(KisNodeDummy *root) {
+inline QString collectGraphPatternFull(KisNodeDummy *root)
+{
     return collectGraphPattern(root, "");
 }
 
@@ -91,7 +100,7 @@ QString collectGraphPatternReverse(KisNodeDummy *root)
     QString result;
 
     KisNodeDummy *child = root->lastChild();
-    while(child) {
+    while (child) {
         result = collectGraphPattern(child) + ' ' + result;
         child = child->prevSibling();
     }

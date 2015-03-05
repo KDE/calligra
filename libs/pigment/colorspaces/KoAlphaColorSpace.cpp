@@ -45,8 +45,9 @@ class CompositeClear : public KoCompositeOp
 
 public:
 
-    CompositeClear(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear"), KoCompositeOp::categoryMix()) {
+    CompositeClear(KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_CLEAR, i18n("Clear"), KoCompositeOp::categoryMix())
+    {
     }
 
 public:
@@ -62,7 +63,8 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray &channelFlags) const
+    {
         Q_UNUSED(src);
         Q_UNUSED(srcstride);
         Q_UNUSED(opacity);
@@ -71,8 +73,9 @@ public:
         quint8 *d;
         qint32 linesize;
 
-        if (rows <= 0 || cols <= 0)
+        if (rows <= 0 || cols <= 0) {
             return;
+        }
 
         if (maskRowStart == 0) {
 
@@ -118,8 +121,9 @@ class CompositeSubtract : public KoCompositeOp
 
 public:
 
-    CompositeSubtract(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_SUBTRACT, i18n("Subtract"), KoCompositeOp::categoryArithmetic()) {
+    CompositeSubtract(KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_SUBTRACT, i18n("Subtract"), KoCompositeOp::categoryArithmetic())
+    {
     }
 
 public:
@@ -135,18 +139,19 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray &channelFlags) const
+    {
 
         Q_UNUSED(opacity);
         Q_UNUSED(channelFlags);
-
 
         quint8 *d;
         const quint8 *s;
         qint32 i;
 
-        if (rows <= 0 || cols <= 0)
+        if (rows <= 0 || cols <= 0) {
             return;
+        }
 
         while (rows-- > 0) {
             const quint8 *mask = maskRowStart;
@@ -182,16 +187,14 @@ public:
     }
 };
 
-
-
-
 class CompositeMultiply : public KoCompositeOp
 {
 
 public:
 
-    CompositeMultiply(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_MULT, i18n("Multiply"), KoCompositeOp::categoryArithmetic()) {
+    CompositeMultiply(KoColorSpace *cs)
+        : KoCompositeOp(cs, COMPOSITE_MULT, i18n("Multiply"), KoCompositeOp::categoryArithmetic())
+    {
     }
 
 public:
@@ -207,18 +210,19 @@ public:
                    qint32 rows,
                    qint32 cols,
                    quint8 opacity,
-                   const QBitArray & channelFlags) const {
+                   const QBitArray &channelFlags) const
+    {
 
         Q_UNUSED(opacity);
         Q_UNUSED(channelFlags);
-
 
         quint8 *destination;
         const quint8 *source;
         qint32 i;
 
-        if (rows <= 0 || cols <= 0)
+        if (rows <= 0 || cols <= 0) {
             return;
+        }
 
         while (rows-- > 0) {
             const quint8 *mask = maskRowStart;
@@ -254,22 +258,20 @@ public:
 
 }
 
-
-
 KoAlphaColorSpace::KoAlphaColorSpace() :
-        KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"))
+    KoColorSpaceAbstract<AlphaU8Traits>("ALPHA", i18n("Alpha mask"))
 {
     addChannel(new KoChannelInfo(i18n("Alpha"), 0, 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
 
     m_compositeOps << new KoCompositeOpOver<AlphaU8Traits>(this)
-            << new CompositeClear(this)
-            << new KoCompositeOpErase<AlphaU8Traits>(this)
-            << new KoCompositeOpCopy2<AlphaU8Traits>(this)
-            << new CompositeSubtract(this)
-            << new CompositeMultiply(this)
-            << new KoCompositeOpAlphaDarken<AlphaU8Traits>(this);
+                   << new CompositeClear(this)
+                   << new KoCompositeOpErase<AlphaU8Traits>(this)
+                   << new KoCompositeOpCopy2<AlphaU8Traits>(this)
+                   << new CompositeSubtract(this)
+                   << new CompositeMultiply(this)
+                   << new KoCompositeOpAlphaDarken<AlphaU8Traits>(this);
 
-    foreach(KoCompositeOp *op, m_compositeOps) {
+    foreach (KoCompositeOp *op, m_compositeOps) {
         addCompositeOp(op);
     }
     m_profile = new KoDummyColorProfile;
@@ -282,12 +284,12 @@ KoAlphaColorSpace::~KoAlphaColorSpace()
     m_profile = 0;
 }
 
-void KoAlphaColorSpace::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
+void KoAlphaColorSpace::fromQColor(const QColor &c, quint8 *dst, const KoColorProfile * /*profile*/) const
 {
     dst[PIXEL_MASK] = c.alpha();
 }
 
-void KoAlphaColorSpace::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
+void KoAlphaColorSpace::toQColor(const quint8 *src, QColor *c, const KoColorProfile * /*profile*/) const
 {
     c->setRgba(qRgba(255, 255, 255, src[PIXEL_MASK]));
 }
@@ -319,7 +321,7 @@ QString KoAlphaColorSpace::normalisedChannelValueText(const quint8 *pixel, quint
     return QString().setNum(static_cast<float>(pixel[channelPosition]) / UINT8_MAX);
 }
 
-void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray & channelFlags) const
+void KoAlphaColorSpace::convolveColors(quint8 **colors, qreal *kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nColors, const QBitArray &channelFlags) const
 {
     qreal totalAlpha = 0;
 
@@ -333,32 +335,35 @@ void KoAlphaColorSpace::convolveColors(quint8** colors, qreal * kernelValues, qu
         ++kernelValues;
     }
 
-    if (channelFlags.isEmpty() || channelFlags.testBit(PIXEL_MASK))
+    if (channelFlags.isEmpty() || channelFlags.testBit(PIXEL_MASK)) {
         dst[PIXEL_MASK] = CLAMP((totalAlpha / factor) + offset, 0, SCHAR_MAX);
+    }
 }
 
-
 QImage KoAlphaColorSpace::convertToQImage(const quint8 *data, qint32 width, qint32 height,
-                                          const KoColorProfile *  /*dstProfile*/,
-                                          KoColorConversionTransformation::Intent /*renderingIntent*/,
-                                          KoColorConversionTransformation::ConversionFlags /*conversionFlags*/) const
+        const KoColorProfile *  /*dstProfile*/,
+        KoColorConversionTransformation::Intent /*renderingIntent*/,
+        KoColorConversionTransformation::ConversionFlags /*conversionFlags*/) const
 {
     QImage img(width, height, QImage::Format_Indexed8);
     QVector<QRgb> table;
-    for (int i = 0; i < 256; ++i) table.append(qRgb(i, i, i));
+    for (int i = 0; i < 256; ++i) {
+        table.append(qRgb(i, i, i));
+    }
     img.setColorTable(table);
 
-    quint8* data_img;
+    quint8 *data_img;
     for (int i = 0; i < height; ++i) {
-        data_img=img.scanLine(i);
-        for (int j = 0; j < width; ++j)
-            data_img[j]=*(data++);
+        data_img = img.scanLine(i);
+        for (int j = 0; j < width; ++j) {
+            data_img[j] = *(data++);
+        }
     }
 
     return img;
 }
 
-KoColorSpace* KoAlphaColorSpace::clone() const
+KoColorSpace *KoAlphaColorSpace::clone() const
 {
     return new KoAlphaColorSpace();
 }

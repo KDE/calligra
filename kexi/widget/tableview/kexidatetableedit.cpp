@@ -41,9 +41,8 @@
 
 #include <kexiutils/utils.h>
 
-
 KexiDateTableEdit::KexiDateTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
-        : KexiInputTableEdit(column, parent)
+    : KexiInputTableEdit(column, parent)
 {
     setObjectName("KexiDateTableEdit");
 
@@ -59,13 +58,14 @@ KexiDateTableEdit::~KexiDateTableEdit()
 
 void KexiDateTableEdit::setValueInInternalEditor(const QVariant &value)
 {
-    if (value.isValid() && value.toDate().isValid())
+    if (value.isValid() && value.toDate().isValid()) {
         m_lineedit->setText(m_formatter.toString(value.toDate()));
-    else
+    } else {
         m_lineedit->setText(QString());
+    }
 }
 
-void KexiDateTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
+void KexiDateTableEdit::setValueInternal(const QVariant &add_, bool removeOld)
 {
     if (removeOld) {
         //new date entering... just fill the line edit
@@ -79,7 +79,7 @@ void KexiDateTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
     m_lineedit->setCursorPosition(0); //ok?
 }
 
-void KexiDateTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val,
+void KexiDateTableEdit::setupContents(QPainter *p, bool focused, const QVariant &val,
                                       QString &txt, int &align, int &x, int &y_offset, int &w, int &h)
 {
     Q_UNUSED(p);
@@ -92,15 +92,17 @@ void KexiDateTableEdit::setupContents(QPainter *p, bool focused, const QVariant&
 #else
     y_offset = 0;
 #endif
-    if (val.toDate().isValid())
+    if (val.toDate().isValid()) {
         txt = m_formatter.toString(val.toDate());
+    }
     align |= Qt::AlignLeft;
 }
 
 bool KexiDateTableEdit::valueIsNull()
 {
-    if (m_formatter.isEmpty(m_lineedit->text())) //empty date is null
+    if (m_formatter.isEmpty(m_lineedit->text())) { //empty date is null
         return true;
+    }
     return dateValue().isNull();
 }
 
@@ -121,8 +123,9 @@ QVariant KexiDateTableEdit::value()
 
 bool KexiDateTableEdit::valueIsValid()
 {
-    if (m_formatter.isEmpty(m_lineedit->text())) //empty date is valid
+    if (m_formatter.isEmpty(m_lineedit->text())) { //empty date is valid
         return true;
+    }
     return m_formatter.fromString(m_lineedit->text()).isValid();
 }
 
@@ -132,16 +135,17 @@ bool KexiDateTableEdit::valueChanged()
     return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 
-void KexiDateTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
+void KexiDateTableEdit::handleCopyAction(const QVariant &value, const QVariant &visibleValue)
 {
     Q_UNUSED(visibleValue);
-    if (!value.isNull() && value.toDate().isValid())
+    if (!value.isNull() && value.toDate().isValid()) {
         qApp->clipboard()->setText(m_formatter.toString(value.toDate()));
-    else
+    } else {
         qApp->clipboard()->setText(QString());
+    }
 }
 
-void KexiDateTableEdit::handleAction(const QString& actionName)
+void KexiDateTableEdit::handleAction(const QString &actionName)
 {
     const bool alreadyVisible = m_lineedit->isVisible();
 
@@ -152,8 +156,9 @@ void KexiDateTableEdit::handleAction(const QString& actionName)
             m_lineedit->clear();
         }
         setValueInInternalEditor(newValue);
-    } else
+    } else {
         KexiInputTableEdit::handleAction(actionName);
+    }
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiDateEditorFactoryItem, KexiDateTableEdit)

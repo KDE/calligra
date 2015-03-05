@@ -34,26 +34,26 @@ public:
         CategoryRole = 0xA2BEF158
     };
 
-    explicit KexiRecentProjectsModel(const KexiRecentProjects& projects,
+    explicit KexiRecentProjectsModel(const KexiRecentProjects &projects,
                                      QObject *parent = 0);
 
     QModelIndex  index(int row, int column = 0,
-                       const QModelIndex& parent = QModelIndex() ) const;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    QVariant data(const QModelIndex& index, int role) const;
-    Qt::ItemFlags flags( const QModelIndex& index ) const;
+                       const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
 private:
-    const KexiRecentProjects* m_projects;
+    const KexiRecentProjects *m_projects;
 };
- 
+
 class KexiRecentProjectsProxyModel : public KCategorizedSortFilterProxyModel
 {
 public:
     explicit KexiRecentProjectsProxyModel(QObject *parent = 0);
 
 protected:
-    virtual bool subSortLessThan(const QModelIndex& left, const QModelIndex& right) const;
+    virtual bool subSortLessThan(const QModelIndex &left, const QModelIndex &right) const;
 };
 
 #endif

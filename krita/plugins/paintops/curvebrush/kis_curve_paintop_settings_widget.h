@@ -29,14 +29,13 @@ class KisCurvePaintOpSettingsWidget : public KisPaintOpOptionsWidget
     Q_OBJECT
 
 public:
-    KisCurvePaintOpSettingsWidget(QWidget* parent = 0);
+    KisCurvePaintOpSettingsWidget(QWidget *parent = 0);
     virtual ~KisCurvePaintOpSettingsWidget();
 
-    KisPropertiesConfiguration* configuration() const;
+    KisPropertiesConfiguration *configuration() const;
 
 private:
-    KisCurveOpOption * m_options;
+    KisCurveOpOption *m_options;
 };
-
 
 #endif

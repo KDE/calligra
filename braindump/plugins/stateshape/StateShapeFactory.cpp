@@ -25,7 +25,6 @@
 #include <KoIcon.h>
 #include <klocale.h>
 
-
 StateShapeFactory::StateShapeFactory()
     : KoShapeFactoryBase(STATESHAPEID,
                          i18n("State Shape"))
@@ -37,7 +36,7 @@ StateShapeFactory::StateShapeFactory()
 
 KoShape *StateShapeFactory::createDefaultShape(KoDocumentResourceManager */*documentResources*/) const
 {
-    StateShape* fooShape = new StateShape();
+    StateShape *fooShape = new StateShape();
     fooShape->setShapeId(STATESHAPEID);
     // set defaults
     return fooShape;
@@ -46,25 +45,25 @@ KoShape *StateShapeFactory::createDefaultShape(KoDocumentResourceManager */*docu
 KoShape *StateShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager */*documentResources*/) const
 {
     Q_UNUSED(params);
-    StateShape* fooShape = new StateShape();
+    StateShape *fooShape = new StateShape();
     fooShape->setShapeId(STATESHAPEID);
-    if(params->contains("state")) {
+    if (params->contains("state")) {
         fooShape->setStateId(params->stringProperty("state"));
     }
-    if(params->contains("category")) {
+    if (params->contains("category")) {
         fooShape->setCategoryId(params->stringProperty("category"));
     }
     // use the params
     return fooShape;
 }
 
-bool StateShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContext& /*context*/) const
+bool StateShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext & /*context*/) const
 {
     return (e.localName() == "state" && e.namespaceURI() == "http://kde.org/braindump");
 }
 
-QList<KoShapeConfigWidgetBase*> StateShapeFactory::createShapeOptionPanels()
+QList<KoShapeConfigWidgetBase *> StateShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> answer;
+    QList<KoShapeConfigWidgetBase *> answer;
     return answer;
 }

@@ -24,7 +24,7 @@
 #include <klocale.h>
 
 KoPencilToolFactory::KoPencilToolFactory()
-        : KoToolFactoryBase("KoPencilTool")
+    : KoToolFactoryBase("KoPencilTool")
 {
     setToolTip(i18n("Freehand path"));
     setToolType("karbon, krita");
@@ -37,7 +37,7 @@ KoPencilToolFactory::~KoPencilToolFactory()
 {
 }
 
-KoToolBase * KoPencilToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *KoPencilToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoPencilTool(canvas);
 }

@@ -61,13 +61,12 @@ public:
     /**
      * Create a copy of this node.
      */
-    KisBaseNode(const KisBaseNode & rhs);
+    KisBaseNode(const KisBaseNode &rhs);
 
     /**
      * Delete this node
      */
     virtual ~KisBaseNode();
-
 
     /**
      * Return the paintdevice you can use to change pixels on. For a
@@ -127,13 +126,13 @@ public:
      * Return the composite op associated with this layer.
      */
     virtual const KoCompositeOp *compositeOp() const = 0;
-    const QString& compositeOpId() const;
+    const QString &compositeOpId() const;
 
     /**
      * Set a new composite op for this layer. The layer will be marked
      * dirty.
      */
-    void setCompositeOp(const QString& compositeOpId);
+    void setCompositeOp(const QString &compositeOpId);
 
     /**
      * @return unique id, which is now used by clone layers.
@@ -144,13 +143,14 @@ public:
      * Set the uuid of node. This should only be used when loading
      * existing node and in constructor.
      */
-    void setUuid(const QUuid& id);
+    void setUuid(const QUuid &id);
 
     /**
      * return the name of this node. This is the same as the
      * QObject::objectName.
      */
-    QString name() const {
+    QString name() const
+    {
         return objectName();
     }
 
@@ -159,7 +159,8 @@ public:
      * of the layer. The reason for this is that we want to see the
      * layer name also when debugging.
      */
-    void setName(const QString& name) {
+    void setName(const QString &name)
+    {
         setObjectName(name);
         baseNodeChangedCallback();
     }
@@ -168,7 +169,8 @@ public:
      * @return the icon used to represent the node type, for instance
      * in the layerbox and in the menu.
      */
-    virtual QIcon icon() const {
+    virtual QIcon icon() const
+    {
         return QIcon();
     };
 
@@ -198,7 +200,7 @@ public:
      * Return all the properties of this layer as a KoProperties-based
      * serializable key-value list.
      */
-    KoProperties & nodeProperties() const;
+    KoProperties &nodeProperties() const;
 
     /**
      * Merge the specified properties with the properties of this
@@ -207,7 +209,7 @@ public:
      * deleted. If there are new properties in this list, they will be
      * added on the node.
      */
-    void mergeNodeProperties(const KoProperties & properties);
+    void mergeNodeProperties(const KoProperties &properties);
 
     /**
      * Compare the given properties list with the properties of this
@@ -217,7 +219,7 @@ public:
      * but with a different value. Properties that are not in both
      * lists are disregarded.
      */
-    bool check(const KoProperties & properties) const;
+    bool check(const KoProperties &properties) const;
 
     /**
      * Accept the KisNodeVisitor (for the Visitor design pattern),
@@ -228,7 +230,8 @@ public:
      * return false if the visitor could not successfully act on this
      * node instance.
      */
-    virtual bool accept(KisNodeVisitor &) {
+    virtual bool accept(KisNodeVisitor &)
+    {
         return false;
     }
 
@@ -242,7 +245,8 @@ public:
      * that it accepts undo adapter, that allows the processing to
      * be multithreaded
      */
-    virtual void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) {
+    virtual void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+    {
         Q_UNUSED(visitor);
         Q_UNUSED(undoAdapter);
     }
@@ -260,7 +264,8 @@ public:
      * Ask this node to re-read the pertinent settings from the krita
      * configuration.
      */
-    virtual void updateSettings() {
+    virtual void updateSettings()
+    {
     }
 
     /**
@@ -335,7 +340,8 @@ public:
     /**
      * @return the x-offset of this layer in the image plane.
      */
-    virtual qint32 x() const {
+    virtual qint32 x() const
+    {
         return 0;
     }
 
@@ -344,13 +350,15 @@ public:
      * Re-implement this where it makes sense, by default it does
      * nothing. It should not move child nodes.
      */
-    virtual void setX(qint32) {
+    virtual void setX(qint32)
+    {
     }
 
     /**
      * @return the y-offset of this layer in the image plane.
      */
-    virtual qint32 y() const {
+    virtual qint32 y() const
+    {
         return 0;
     }
 
@@ -359,14 +367,16 @@ public:
      * Re-implement this where it makes sense, by default it does
      * nothing. It should not move child nodes.
      */
-    virtual void setY(qint32) {
+    virtual void setY(qint32)
+    {
     }
 
     /**
     * Returns an approximation of where the bounds on actual data are
     * in this node.
     */
-    virtual QRect extent() const {
+    virtual QRect extent() const
+    {
         return QRect();
     }
 
@@ -374,7 +384,8 @@ public:
      * Returns the exact bounds of where the actual data resides in
      * this node.
      */
-    virtual QRect exactBounds() const {
+    virtual QRect exactBounds() const
+    {
         return QRect();
     }
 
@@ -396,11 +407,13 @@ protected:
      * KisNode (in terms of current Krita) to be able to traverse
      * the node stack
      */
-    virtual KisBaseNodeSP parentCallback() const {
+    virtual KisBaseNodeSP parentCallback() const
+    {
         return 0;
     }
 
-    virtual void notifyParentVisibilityChanged(bool value) {
+    virtual void notifyParentVisibilityChanged(bool value)
+    {
         Q_UNUSED(value);
     }
 
@@ -412,7 +425,8 @@ protected:
      * in KisLayerBox, so it can update its controls when information
      * changes.
      */
-    virtual void baseNodeChangedCallback() {
+    virtual void baseNodeChangedCallback()
+    {
     }
 
 Q_SIGNALS:
@@ -433,9 +447,8 @@ Q_SIGNALS:
 private:
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 
 };
-
 
 #endif

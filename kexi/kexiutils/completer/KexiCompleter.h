@@ -87,7 +87,7 @@ public:
     explicit KexiCompleter(QObject *parent = 0);
     explicit KexiCompleter(QAbstractItemModel *model, QObject *parent = 0);
 #ifndef QT_NO_STRINGLISTMODEL
-    explicit KexiCompleter(const QStringList& completions, QObject *parent = 0);
+    explicit KexiCompleter(const QStringList &completions, QObject *parent = 0);
 #endif
     ~KexiCompleter();
 
@@ -136,7 +136,7 @@ public:
 
 public Q_SLOTS:
     void setCompletionPrefix(const QString &prefix);
-    void complete(const QRect& rect = QRect());
+    void complete(const QRect &rect = QRect());
     void setWrapAround(bool wrap);
 
 public:
@@ -157,13 +157,13 @@ private:
     Q_DISABLE_COPY(KexiCompleter)
 
     friend class KexiCompleterPrivate;
-    KexiCompleterPrivate * const d;
+    KexiCompleterPrivate *const d;
 
 private Q_SLOTS:
-    void _q_complete(const QModelIndex&);
-    void _q_completionSelected(const QItemSelection&);
+    void _q_complete(const QModelIndex &);
+    void _q_completionSelected(const QItemSelection &);
     void _q_autoResizePopup();
-    void _q_fileSystemModelDirectoryLoaded(const QString&);
+    void _q_fileSystemModelDirectoryLoaded(const QString &);
 };
 
 #endif // QT_NO_COMPLETER

@@ -28,7 +28,7 @@
 
 #include <kcolorbutton.h>
 
-KisWdgIndexColors::KisWdgIndexColors(QWidget* parent, Qt::WFlags f, int delay): KisConfigWidget(parent, f, delay)
+KisWdgIndexColors::KisWdgIndexColors(QWidget *parent, Qt::WFlags f, int delay): KisConfigWidget(parent, f, delay)
 {
     ui = new Ui::KisWdgIndexColors;
     ui->setupUi(this);
@@ -59,29 +59,27 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
     int collumns = ramps;
 
     m_colorSelectors.resize(rows);
-    m_stepSpinners.resize(rows-1);
+    m_stepSpinners.resize(rows - 1);
     // Labels for the shades
-    for(int row = 0; row < rows; ++row)
-    {
-        QLabel* l = new QLabel(shadesLabels[row], ui->colorsBox);
-        ui->layoutColors->addWidget(l, row+1, 0);
+    for (int row = 0; row < rows; ++row) {
+        QLabel *l = new QLabel(shadesLabels[row], ui->colorsBox);
+        ui->layoutColors->addWidget(l, row + 1, 0);
         m_colorSelectors[row].resize(collumns);
     }
     // Labels for the ramps
     /*for(int col = 0; col < collumns; ++col)
     {
-    	QLabel* l = new QLabel(rampsLabels[col], ui->colorsBox);
-    	l->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    	ui->layoutColors->addWidget(l, 0, col+1);
+        QLabel* l = new QLabel(rampsLabels[col], ui->colorsBox);
+        l->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        ui->layoutColors->addWidget(l, 0, col+1);
     }*/
     // Step selectors for the shade gradients
-    for(int row = 0; row < (rows-1); ++row)
-    {
-        QLabel* l0 = new QLabel(shadesLabels[row+1]);
-        QLabel* l1 = new QLabel(QString::fromUtf8("↔"));
-        QLabel* l2 = new QLabel(shadesLabels[row]);
+    for (int row = 0; row < (rows - 1); ++row) {
+        QLabel *l0 = new QLabel(shadesLabels[row + 1]);
+        QLabel *l1 = new QLabel(QString::fromUtf8("↔"));
+        QLabel *l2 = new QLabel(shadesLabels[row]);
 
-        QSpinBox* s = new QSpinBox();
+        QSpinBox *s = new QSpinBox();
         s->setMinimum(0);
         s->setMaximum(32);
         s->setValue(2);
@@ -95,11 +93,10 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
         ui->layoutRowSteps->addWidget(s,  row, 3);
     }
     // Color selectors
-    for(int y = 0; y < rows; ++y)
-        for(int x = 0; x < collumns; ++x)
-        {
-            KColorButton* b = new KColorButton;
-            QCheckBox* c = new QCheckBox;
+    for (int y = 0; y < rows; ++y)
+        for (int x = 0; x < collumns; ++x) {
+            KColorButton *b = new KColorButton;
+            QCheckBox *c = new QCheckBox;
             c->setChecked(false);
             b->setEnabled(false);
             b->setMaximumWidth(50);
@@ -109,38 +106,37 @@ void KisWdgIndexColors::setup(QStringList shadesLabels, int ramps)
             connect(c, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationItemChanged()));
             connect(b, SIGNAL(changed(QColor)), this, SIGNAL(sigConfigurationItemChanged()));
 
-            QHBoxLayout* cell = new QHBoxLayout();
+            QHBoxLayout *cell = new QHBoxLayout();
             cell->setSpacing(0);
             cell->setContentsMargins(0, 0, 0, 0);
             cell->addWidget(c);
             cell->addWidget(b);
-            ui->layoutColors->addLayout(cell, 1+y, 1+x);
+            ui->layoutColors->addLayout(cell, 1 + y, 1 + x);
 
             m_colorSelectors[y][x].button = b;
             m_colorSelectors[y][x].checkbox = c;
         }
 }
 
-
-KisPropertiesConfiguration* KisWdgIndexColors::configuration() const
+KisPropertiesConfiguration *KisWdgIndexColors::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("indexcolors", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("indexcolors", 1);
 
     PaletteGeneratorConfig palCfg;
 
-    for(int y = 0; y < 4; ++y)
-        for(int x = 0; x < 4; ++x)
-        {
+    for (int y = 0; y < 4; ++y)
+        for (int x = 0; x < 4; ++x) {
             palCfg.colors[y][x] = m_colorSelectors[y][x].button->color();
             palCfg.colorsEnabled[y][x] = m_colorSelectors[y][x].button->isEnabled();
         }
 
-    for(int y = 0; y < 3; ++y)
+    for (int y = 0; y < 3; ++y) {
         palCfg.gradientSteps[y] = m_stepSpinners[y]->value();
+    }
 
     palCfg.diagonalGradients = ui->diagCheck->isChecked();
     palCfg.inbetweenRampSteps = ui->inbetweenSpinBox->value();
-    
+
     IndexColorPalette pal = palCfg.generate();
     ui->colorCount->setText(QString::number(pal.numColors()));
 
@@ -149,7 +145,7 @@ KisPropertiesConfiguration* KisWdgIndexColors::configuration() const
     config->setProperty("LFactor",   ui->luminanceSlider->value() / 100.f);
     config->setProperty("aFactor",   ui->aSlider->value() / 100.f);
     config->setProperty("bFactor",   ui->bSlider->value() / 100.f);
-    
+
     config->setProperty("reduceColorsEnabled", ui->colorLimitCheck->isChecked());
     config->setProperty("colorLimit", ui->colorLimit->value());
 
@@ -157,14 +153,14 @@ KisPropertiesConfiguration* KisWdgIndexColors::configuration() const
     return config;
 }
 
-void KisWdgIndexColors::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgIndexColors::setConfiguration(const KisPropertiesConfiguration *config)
 {
     PaletteGeneratorConfig palCfg;
     palCfg.fromByteArray(config->getProperty("paletteGen").toByteArray());
-    
-    ui->luminanceSlider->setValue(config->getFloat("LFactor")*100);
-    ui->aSlider->setValue(config->getFloat("aFactor")*100);
-    ui->bSlider->setValue(config->getFloat("bFactor")*100);
+
+    ui->luminanceSlider->setValue(config->getFloat("LFactor") * 100);
+    ui->aSlider->setValue(config->getFloat("aFactor") * 100);
+    ui->bSlider->setValue(config->getFloat("bFactor") * 100);
     ui->alphaStepsSpinBox->setValue(config->getInt("alphaSteps"));
     ui->colorLimitCheck->setChecked(config->getBool("reduceColorsEnabled"));
     ui->colorLimit->setEnabled(config->getBool("reduceColorsEnabled"));
@@ -172,17 +168,17 @@ void KisWdgIndexColors::setConfiguration(const KisPropertiesConfiguration* confi
     ui->diagCheck->setChecked(palCfg.diagonalGradients);
     ui->inbetweenSpinBox->setValue(palCfg.inbetweenRampSteps);
 
-    for(int y = 0; y < 4; ++y)
-        for(int x = 0; x < 4; ++x)
-        {
+    for (int y = 0; y < 4; ++y)
+        for (int x = 0; x < 4; ++x) {
             m_colorSelectors[y][x].checkbox->setChecked(palCfg.colorsEnabled[y][x]);
             m_colorSelectors[y][x].button->setEnabled(palCfg.colorsEnabled[y][x]);
             m_colorSelectors[y][x].button->setColor(palCfg.colors[y][x]);
         }
 
-    for(int y = 0; y < 3; ++y)
+    for (int y = 0; y < 3; ++y) {
         m_stepSpinners[y]->setValue(palCfg.gradientSteps[y]);
-    
+    }
+
     IndexColorPalette pal = palCfg.generate();
     ui->colorCount->setText(QString::number(pal.numColors()));
 }

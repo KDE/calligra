@@ -37,14 +37,14 @@ public:
     }
 
 public Q_SLOTS:
-    void start() {
+    void start()
+    {
         m_function();
     }
 
 private:
     TrivialFunction m_function;
 };
-
 
 /**
  * A special class for deferring and comressing events with one
@@ -94,13 +94,15 @@ public:
     {
     }
 
-    void start(T param) {
+    void start(T param)
+    {
         m_currentParamValue = param;
         m_compressor.start();
     }
 
 private:
-    void fakeSlotTimeout() {
+    void fakeSlotTimeout()
+    {
         m_function(m_currentParamValue);
     }
 

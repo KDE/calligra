@@ -30,7 +30,7 @@ K_PLUGIN_FACTORY(KisRoundCornersFilterPluginFactory, registerPlugin<KisRoundCorn
 K_EXPORT_PLUGIN(KisRoundCornersFilterPluginFactory("krita"))
 
 KisRoundCornersFilterPlugin::KisRoundCornersFilterPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     KisFilterRegistry::instance()->add(new KisRoundCornersFilter());
 

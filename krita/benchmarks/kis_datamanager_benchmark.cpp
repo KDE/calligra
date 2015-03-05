@@ -29,7 +29,7 @@
 void KisDatamanagerBenchmark::initTestCase()
 {
     // To make sure all the first-time startup costs are done
-    quint8 * p = new quint8[PIXEL_SIZE];
+    quint8 *p = new quint8[PIXEL_SIZE];
     memset(p, 0, PIXEL_SIZE);
     KisDataManager dm(PIXEL_SIZE, p);
 }
@@ -39,7 +39,7 @@ void KisDatamanagerBenchmark::benchmarkCreation()
     // tests the cost of creating a new datamanager
 
     QBENCHMARK {
-        quint8 * p = new quint8[PIXEL_SIZE];
+        quint8 *p = new quint8[PIXEL_SIZE];
         memset(p, 255, PIXEL_SIZE);
         KisDataManager dm(PIXEL_SIZE, p);
     }
@@ -56,7 +56,8 @@ void KisDatamanagerBenchmark::benchmarkWriteBytes()
 
     QBENCHMARK {
 #ifdef CYCLES
-        for (int i = 0; i < CYCLES; i++){
+        for (int i = 0; i < CYCLES; i++)
+        {
             dm.writeBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
         }
 #else
@@ -83,7 +84,6 @@ void KisDatamanagerBenchmark::benchmarkReadBytes()
     delete[] bytes;
 }
 
-
 void KisDatamanagerBenchmark::benchmarkReadWriteBytes()
 {
     quint8 *p = new quint8[PIXEL_SIZE];
@@ -97,11 +97,12 @@ void KisDatamanagerBenchmark::benchmarkReadWriteBytes()
 
     QBENCHMARK {
 #ifdef CYCLES
-        for (int i = 0; i < 100; i++){
+        for (int i = 0; i < 100; i++)
+        {
             dm.readBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
         }
 #else
-            dm.readBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);    
+        dm.readBytes(bytes, 0, 0, TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);
 #endif
     }
     delete[] bytes;
@@ -112,7 +113,7 @@ void KisDatamanagerBenchmark::benchmarkReadWriteBytes2()
     quint8 *p = new quint8[PIXEL_SIZE];
     memset(p, 0, PIXEL_SIZE);
     KisDataManager dm(PIXEL_SIZE, p);
-    
+
     KisDataManager dab(PIXEL_SIZE, p);
 
     {
@@ -152,7 +153,7 @@ void KisDatamanagerBenchmark::benchmarkExtent()
     dm.writeBytes(bytes, 0, 0, NO_TILE_EXACT_BOUNDARY_WIDTH, NO_TILE_EXACT_BOUNDARY_HEIGHT);
     QBENCHMARK {
         QRect extent = dm.extent();
-	Q_UNUSED(extent);
+        Q_UNUSED(extent);
     }
 }
 
@@ -162,7 +163,7 @@ void KisDatamanagerBenchmark::benchmarkClear()
     memset(p, 128, PIXEL_SIZE);
     KisDataManager dm(PIXEL_SIZE, p);
     quint8 *bytes = new quint8[PIXEL_SIZE * NO_TILE_EXACT_BOUNDARY_WIDTH * NO_TILE_EXACT_BOUNDARY_HEIGHT];
-    
+
     memset(bytes, 0, PIXEL_SIZE * NO_TILE_EXACT_BOUNDARY_WIDTH * NO_TILE_EXACT_BOUNDARY_HEIGHT);
     dm.writeBytes(bytes, 0, 0, NO_TILE_EXACT_BOUNDARY_WIDTH, NO_TILE_EXACT_BOUNDARY_HEIGHT);
 
@@ -176,28 +177,27 @@ void KisDatamanagerBenchmark::benchmarkClear()
 
 }
 
-
 void KisDatamanagerBenchmark::benchmarkMemCpy()
 {
     quint64 imgSize = PIXEL_SIZE * TEST_IMAGE_WIDTH * TEST_IMAGE_HEIGHT;
-    quint8 * src = new quint8[imgSize];
-    quint8 * dst = new quint8[imgSize];
-    memset(src,128, imgSize);
-    memset(dst,0, imgSize);
+    quint8 *src = new quint8[imgSize];
+    quint8 *dst = new quint8[imgSize];
+    memset(src, 128, imgSize);
+    memset(dst, 0, imgSize);
     QBENCHMARK{
 #ifdef CYCLES
-        for (int i = 0; i < 100; i++){
-            memcpy(dst, src , imgSize);
+        for (int i = 0; i < 100; i++)
+        {
+            memcpy(dst, src, imgSize);
         }
 #else
-            memcpy(dst, src , imgSize);
+        memcpy(dst, src, imgSize);
 #endif
     }
 
     delete[] src;
     delete[] dst;
 }
-
 
 QTEST_KDEMAIN(KisDatamanagerBenchmark, GUI)
 #include "kis_datamanager_benchmark.moc"

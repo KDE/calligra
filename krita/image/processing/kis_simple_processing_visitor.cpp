@@ -32,7 +32,6 @@
 
 #include "kis_do_something_command.h"
 
-
 KisSimpleProcessingVisitor::~KisSimpleProcessingVisitor()
 {
 }
@@ -62,24 +61,24 @@ void KisSimpleProcessingVisitor::visit(KisPaintLayer *layer, KisUndoAdapter *und
 void KisSimpleProcessingVisitor::visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter)
 {
     using namespace KisDoSomethingCommandOps;
-    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, false));
-    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer*>(layer, true));
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer *>(layer, false));
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisGroupLayer *>(layer, true));
 }
 
 void KisSimpleProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
 {
     using namespace KisDoSomethingCommandOps;
-    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer*>(layer, false));
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer *>(layer, false));
     visitNodeWithPaintDevice(layer, undoAdapter);
-    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer*>(layer, true));
+    undoAdapter->addCommand(new KisDoSomethingCommand<ResetOp, KisAdjustmentLayer *>(layer, true));
 }
 
 void KisSimpleProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
 {
     using namespace KisDoSomethingCommandOps;
-    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer*>(layer, false));
+    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer *>(layer, false));
     visitNodeWithPaintDevice(layer, undoAdapter);
-    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer*>(layer, true));
+    undoAdapter->addCommand(new KisDoSomethingCommand<UpdateOp, KisGeneratorLayer *>(layer, true));
 }
 
 void KisSimpleProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter)

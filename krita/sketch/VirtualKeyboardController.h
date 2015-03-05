@@ -30,17 +30,17 @@ public:
     Q_INVOKABLE void requestShowKeyboard();
     Q_INVOKABLE void requestHideKeyboard();
 
-    static VirtualKeyboardController* instance();
+    static VirtualKeyboardController *instance();
 
 Q_SIGNALS:
     void showKeyboard();
     void hideKeyboard();
 
 private:
-    explicit VirtualKeyboardController(QObject* parent = 0);
+    explicit VirtualKeyboardController(QObject *parent = 0);
     virtual ~VirtualKeyboardController();
 
-    static VirtualKeyboardController* sm_instance;
+    static VirtualKeyboardController *sm_instance;
 };
 
 #endif // VIRTUALKEYBOARDCONTROLLER_H

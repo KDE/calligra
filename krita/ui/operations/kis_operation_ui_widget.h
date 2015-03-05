@@ -16,7 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KIS_OPERATION_UI_WIDGET_H
 #define KIS_OPERATION_UI_WIDGET_H
 
@@ -32,23 +31,23 @@ class KRITAUI_EXPORT KisOperationUIWidget : public QWidget
 {
 
 public:
-    explicit KisOperationUIWidget(const QString& caption, QWidget* parent = 0);
+    explicit KisOperationUIWidget(const QString &caption, QWidget *parent = 0);
     virtual ~KisOperationUIWidget();
 
-   /**
-    * Caption of the operation widget, used in dialog caption 
-    */
+    /**
+     * Caption of the operation widget, used in dialog caption
+     */
     QString caption() const;
 
-   /**
-    * Fetch the setting from the config widet
-    * @param config configuration to which the setting will be written
-    */
-    virtual void getConfiguration(KisOperationConfiguration* config) = 0;
+    /**
+     * Fetch the setting from the config widet
+     * @param config configuration to which the setting will be written
+     */
+    virtual void getConfiguration(KisOperationConfiguration *config) = 0;
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif // KIS_OPERATION_UI_WIDGET_H

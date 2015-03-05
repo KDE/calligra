@@ -24,20 +24,20 @@
 class ColorProfileModel::Private
 {
 public:
-    Private(ColorProfileModel* qq) : q(qq), defaultProfile(-1) { }
+    Private(ColorProfileModel *qq) : q(qq), defaultProfile(-1) { }
 
     void updateProfiles();
 
-    ColorProfileModel* q;
+    ColorProfileModel *q;
 
     QString colorModelId;
     QString colorDepthId;
     QString colorSpaceId;
     int defaultProfile;
-    QList<const KoColorProfile*> colorProfiles;
+    QList<const KoColorProfile *> colorProfiles;
 };
 
-ColorProfileModel::ColorProfileModel(QObject* parent)
+ColorProfileModel::ColorProfileModel(QObject *parent)
     : QAbstractListModel(parent), d(new Private(this))
 {
     QHash<int, QByteArray> roleNames;
@@ -50,18 +50,19 @@ ColorProfileModel::~ColorProfileModel()
     delete d;
 }
 
-int ColorProfileModel::rowCount(const QModelIndex& parent) const
+int ColorProfileModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return d->colorProfiles.count();
 }
 
-QVariant ColorProfileModel::data(const QModelIndex& index, int role) const
+QVariant ColorProfileModel::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid() || index.row() < 0 || index.row() >= d->colorProfiles.count())
+    if (!index.isValid() || index.row() < 0 || index.row() >= d->colorProfiles.count()) {
         return QVariant();
+    }
 
-    if(role == TextRole) {
+    if (role == TextRole) {
         return d->colorProfiles.at(index.row())->name();
     }
 
@@ -73,9 +74,9 @@ QString ColorProfileModel::colorModelId() const
     return d->colorModelId;
 }
 
-void ColorProfileModel::setColorModelId(const QString& id)
+void ColorProfileModel::setColorModelId(const QString &id)
 {
-    if(id != d->colorModelId) {
+    if (id != d->colorModelId) {
         d->colorModelId = id;
         d->updateProfiles();
         emit colorModelIdChanged();
@@ -87,9 +88,9 @@ QString ColorProfileModel::colorDepthId() const
     return d->colorDepthId;
 }
 
-void ColorProfileModel::setColorDepthId(const QString& id)
+void ColorProfileModel::setColorDepthId(const QString &id)
 {
-    if(id != d->colorDepthId) {
+    if (id != d->colorDepthId) {
         d->colorDepthId = id;
         d->updateProfiles();
         emit colorDepthIdChanged();
@@ -108,8 +109,9 @@ QString ColorProfileModel::id(int index)
 
 void ColorProfileModel::Private::updateProfiles()
 {
-    if(colorDepthId.isEmpty() || colorModelId.isEmpty())
+    if (colorDepthId.isEmpty() || colorModelId.isEmpty()) {
         return;
+    }
 
     q->beginResetModel();
 
@@ -117,8 +119,8 @@ void ColorProfileModel::Private::updateProfiles()
     colorProfiles = KoColorSpaceRegistry::instance()->profilesFor(colorSpaceId);
 
     QString profile = KoColorSpaceRegistry::instance()->colorSpaceFactory(colorSpaceId)->defaultProfile();
-    for(int i = 0; i < colorProfiles.count(); ++i) {
-        if(colorProfiles.at(i)->name() == profile) {
+    for (int i = 0; i < colorProfiles.count(); ++i) {
+        if (colorProfiles.at(i)->name() == profile) {
             defaultProfile = i;
             break;
         }

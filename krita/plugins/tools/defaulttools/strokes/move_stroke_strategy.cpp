@@ -24,7 +24,6 @@
 #include "commands_new/kis_update_command.h"
 #include "commands_new/kis_node_move_command2.h"
 
-
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSP node,
                                        KisUpdatesFacade *updatesFacade,
                                        KisPostExecutionUndoAdapter *undoAdapter)
@@ -43,7 +42,7 @@ void MoveStrokeStrategy::setNode(KisNodeSP node)
 
 void MoveStrokeStrategy::finishStrokeCallback()
 {
-    if(m_node) {
+    if (m_node) {
         KUndo2Command *updateCommand =
             new KisUpdateCommand(m_node, m_dirtyRect, m_updatesFacade, true);
 
@@ -59,7 +58,7 @@ void MoveStrokeStrategy::finishStrokeCallback()
 
 void MoveStrokeStrategy::cancelStrokeCallback()
 {
-    if(m_node) {
+    if (m_node) {
 
         // FIXME: make cancel job exclusive instead
         m_updatesFacade->blockUpdates();
@@ -72,9 +71,9 @@ void MoveStrokeStrategy::cancelStrokeCallback()
 
 void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    Data *d = dynamic_cast<Data*>(data);
+    Data *d = dynamic_cast<Data *>(data);
 
-    if(m_node && d) {
+    if (m_node && d) {
         moveAndUpdate(d->offset);
 
         /**
@@ -82,8 +81,7 @@ void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
          * all our jobs are declared sequential
          */
         m_finalOffset += d->offset;
-    }
-    else {
+    } else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
     }
 }
@@ -106,7 +104,7 @@ QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
     KisNodeMoveCommand2::tryNotifySelection(node);
 
     KisNodeSP child = node->firstChild();
-    while(child) {
+    while (child) {
         dirtyRect |= moveNode(child, offset);
         child = child->nextSibling();
     }
@@ -121,7 +119,7 @@ void MoveStrokeStrategy::addMoveCommands(KisNodeSP node, KUndo2Command *parent)
     new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset, parent);
 
     KisNodeSP child = node->firstChild();
-    while(child) {
+    while (child) {
         addMoveCommands(child, parent);
         child = child->nextSibling();
     }

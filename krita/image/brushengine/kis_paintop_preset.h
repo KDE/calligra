@@ -26,7 +26,6 @@
 #include "kis_shared.h"
 #include "krita_export.h"
 
-
 /**
  * A KisPaintOpPreset contains a particular set of settings
  * associated with a paintop, like brush, paintopsettings.
@@ -40,14 +39,14 @@ public:
 
     KisPaintOpPreset();
 
-    KisPaintOpPreset(const QString& filename);
+    KisPaintOpPreset(const QString &filename);
 
     ~KisPaintOpPreset();
 
     KisPaintOpPresetSP clone() const;
 
     /// set the id of the paintop plugin
-    void setPaintOp(const KoID & paintOp);
+    void setPaintOp(const KoID &paintOp);
 
     /// return the id of the paintop plugin
     KoID paintOp() const;
@@ -64,17 +63,19 @@ public:
     bool loadFromDevice(QIODevice *dev);
 
     bool save();
-    bool saveToDevice(QIODevice* dev) const;
+    bool saveToDevice(QIODevice *dev) const;
 
-    void toXML(QDomDocument& doc, QDomElement& elt) const;
+    void toXML(QDomDocument &doc, QDomElement &elt) const;
 
-    void fromXML(const QDomElement& elt);
+    void fromXML(const QDomElement &elt);
 
-    bool removable() const {
+    bool removable() const
+    {
         return true;
     }
 
-    QString defaultFileExtension() const {
+    QString defaultFileExtension() const
+    {
         return ".kpp";
     }
     void setPresetDirty(bool value);
@@ -87,14 +88,16 @@ public:
      * hard-to-tack-down bugs when the dirty state will not be
      * restored on jumps like 'return', 'break' or exception.
      */
-    class DirtyStateSaver {
+    class DirtyStateSaver
+    {
     public:
         DirtyStateSaver(KisPaintOpPreset *preset)
             : m_preset(preset), m_isDirty(preset->isPresetDirty())
         {
         }
 
-        ~DirtyStateSaver() {
+        ~DirtyStateSaver()
+        {
             m_preset->setPresetDirty(m_isDirty);
         }
 
@@ -110,7 +113,7 @@ protected:
 private:
 
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 Q_DECLARE_METATYPE(KisPaintOpPresetSP)

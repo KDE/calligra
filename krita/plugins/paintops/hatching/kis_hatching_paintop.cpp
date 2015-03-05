@@ -41,7 +41,7 @@
 
 #include <KoColorSpaceRegistry.h>
 
-KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisHatchingPaintOp::KisHatchingPaintOp(const KisHatchingPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_image(image)
 {
@@ -69,14 +69,17 @@ KisHatchingPaintOp::~KisHatchingPaintOp()
     delete m_hatchingBrush;
 }
 
-KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation &info)
 {
     //------START SIMPLE ERROR CATCHING-------
-    if (!painter()->device()) return 1;
-    if (!m_hatchedDab)
+    if (!painter()->device()) {
+        return 1;
+    }
+    if (!m_hatchedDab) {
         m_hatchedDab = source()->createCompositionSourceDevice();
-    else
+    } else {
         m_hatchedDab->clear();
+    }
 
     //Simple convenience renaming, I'm thinking of removing these inherited quirks
     KisBrushSP brush = m_brush;
@@ -86,8 +89,12 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     Q_ASSERT(brush);
 
     //----------SIMPLE error catching code, maybe it's not even needed------
-    if (!brush) return 1;
-    if (!brush->canPaintFor(info)) return 1;
+    if (!brush) {
+        return 1;
+    }
+    if (!brush->canPaintFor(info)) {
+        return 1;
+    }
 
     //SENSOR-depending settings
     m_settings->crosshatchingsensorvalue = m_crosshatchingOption.apply(info);
@@ -95,7 +102,9 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     m_settings->thicknesssensorvalue = m_thicknessOption.apply(info);
 
     double scale = m_sizeOption.apply(info);
-    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
+    if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) {
+        return 1.0;
+    }
 
     setCurrentScale(scale);
 
@@ -132,44 +141,44 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     crosshatching according to user specifications */
     if (m_settings->enabledcurvecrosshatching) {
         if (m_settings->perpendicular) {
-            if (m_settings->crosshatchingsensorvalue > 0.5)
+            if (m_settings->crosshatchingsensorvalue > 0.5) {
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(90), painter()->paintColor());
-        }
-        else if (m_settings->minusthenplus) {
-            if (m_settings->crosshatchingsensorvalue > 0.33)
+            }
+        } else if (m_settings->minusthenplus) {
+            if (m_settings->crosshatchingsensorvalue > 0.33) {
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
-            if (m_settings->crosshatchingsensorvalue > 0.67)
+            }
+            if (m_settings->crosshatchingsensorvalue > 0.67) {
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
-        }
-        else if (m_settings->plusthenminus) {
-            if (m_settings->crosshatchingsensorvalue > 0.33)
+            }
+        } else if (m_settings->plusthenminus) {
+            if (m_settings->crosshatchingsensorvalue > 0.33) {
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
-            if (m_settings->crosshatchingsensorvalue > 0.67)
+            }
+            if (m_settings->crosshatchingsensorvalue > 0.67) {
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
-        }
-        else if (m_settings->moirepattern) {
+            }
+        } else if (m_settings->moirepattern) {
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->crosshatchingsensorvalue) * 180), painter()->paintColor());
             donotbasehatch = true;
         }
     } else {
         if (m_settings->perpendicular) {
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(90), painter()->paintColor());
-        }
-        else if (m_settings->minusthenplus) {
+        } else if (m_settings->minusthenplus) {
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
-        }
-        else if (m_settings->plusthenminus) {
+        } else if (m_settings->plusthenminus) {
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor());
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor());
-        }
-        else if (m_settings->moirepattern) {
+        } else if (m_settings->moirepattern) {
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-10), painter()->paintColor());
         }
     }
 
-    if (!donotbasehatch)
+    if (!donotbasehatch) {
         m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_settings->angle, painter()->paintColor());
+    }
 
     // The most important line, the one that paints to the screen.
     painter()->bitBltWithFixedSelection(x, y, m_hatchedDab, maskDab, sw, sh);
@@ -185,15 +194,17 @@ double KisHatchingPaintOp::spinAngle(double spin)
     double tempangle = m_settings->angle + spin;
     qint8 factor = 1;
 
-    if (tempangle < 0)
+    if (tempangle < 0) {
         factor = -1;
+    }
 
     tempangle = fabs(fmod(tempangle, 180));
 
-    if ((tempangle >= 0) && (tempangle <= 90))
+    if ((tempangle >= 0) && (tempangle <= 90)) {
         return factor * tempangle;
-    else if ((tempangle > 90) && (tempangle <= 180))
+    } else if ((tempangle > 90) && (tempangle <= 180)) {
         return factor * -(180 - tempangle);
+    }
 
     return 0;   // this should never be executed except if NAN
 }

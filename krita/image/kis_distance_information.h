@@ -26,12 +26,12 @@
 
 class KisPaintInformation;
 
-
 /**
  * This structure contains information about the desired spacing
  * requested by the paintAt call
  */
-class KisSpacingInformation {
+class KisSpacingInformation
+{
 public:
     KisSpacingInformation()
         : m_isIsotropic(true)
@@ -44,26 +44,30 @@ public:
     {
     }
 
-KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation)
+    KisSpacingInformation(const QPointF &anisotropicSpacing, qreal rotation)
         : m_spacing(anisotropicSpacing),
           m_isIsotropic(anisotropicSpacing.x() == anisotropicSpacing.y()),
           m_rotation(rotation)
     {
     }
 
-    inline QPointF spacing() const {
+    inline QPointF spacing() const
+    {
         return m_spacing;
     }
 
-    inline bool isIsotropic() const {
+    inline bool isIsotropic() const
+    {
         return m_isIsotropic;
     }
 
-    inline qreal scalarApprox() const {
+    inline qreal scalarApprox() const
+    {
         return m_isIsotropic ? m_spacing.x() : QVector2D(m_spacing).length();
     }
 
-    inline qreal rotation() const {
+    inline qreal rotation() const
+    {
         return m_rotation;
     }
 
@@ -77,30 +81,30 @@ private:
  * This structure is used as return value of paintLine to contain
  * information that is needed to be passed for the next call.
  */
-class KRITAIMAGE_EXPORT KisDistanceInformation {
+class KRITAIMAGE_EXPORT KisDistanceInformation
+{
 public:
     KisDistanceInformation();
     KisDistanceInformation(const QPointF &lastPosition, qreal lastTime);
     KisDistanceInformation(const KisDistanceInformation &rhs);
-    KisDistanceInformation& operator=(const KisDistanceInformation &rhs);
+    KisDistanceInformation &operator=(const KisDistanceInformation &rhs);
 
     ~KisDistanceInformation();
 
-    const KisSpacingInformation& currentSpacing() const;
+    const KisSpacingInformation &currentSpacing() const;
     bool hasLastDabInformation() const;
     QPointF lastPosition() const;
     qreal lastTime() const;
     qreal lastDrawingAngle() const;
 
     bool hasLastPaintInformation() const;
-    const KisPaintInformation& lastPaintInformation() const;
+    const KisPaintInformation &lastPaintInformation() const;
 
     void registerPaintedDab(const KisPaintInformation &info,
                             const KisSpacingInformation &spacing);
 
     qreal getNextPointPosition(const QPointF &start,
                                const QPointF &end);
-
 
 private:
     qreal getNextPointPositionIsotropic(const QPointF &start,
@@ -109,7 +113,7 @@ private:
                                           const QPointF &end);
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif

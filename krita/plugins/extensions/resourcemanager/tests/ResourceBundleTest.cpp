@@ -70,7 +70,6 @@ void ResourceBundleTest::testCreateBundle()
     QVERIFY(bundle.getTagsList().isEmpty());
 }
 
-
 void ResourceBundleTest::testLoadSave()
 {
     ResourceBundle bundle(QString(FILES_OUTPUT_DIR) + "/" + "testloadsavebundle.bundle");
@@ -85,55 +84,55 @@ void ResourceBundleTest::testLoadSave()
 
     int tagCount = 0;
 
-    KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
+    KoResourceServer<KoAbstractGradient> *gradientServer = KoResourceServerProvider::instance()->gradientServer();
     gradientServer->loadResources(gradientServer->fileNames());
     QVERIFY(gradientServer->resourceCount() > 0);
-    foreach(KoAbstractGradient* gradient, gradientServer->resources()) {
-        if (gradient->name() == "Foreground to Transparent" || gradient->name() == "Foreground to Background") continue;
+    foreach (KoAbstractGradient *gradient, gradientServer->resources()) {
+        if (gradient->name() == "Foreground to Transparent" || gradient->name() == "Foreground to Background") {
+            continue;
+        }
         gradientServer->addTag(gradient, QString("testtag: %1").arg(tagCount));
         tagCount++;
         bundle.addResource(gradientServer->type(), gradient->filename(), gradientServer->tagObject()->assignedTagsList(gradient), gradient->md5());
     }
 
-    KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
+    KoResourceServer<KoPattern> *patternServer = KoResourceServerProvider::instance()->patternServer();
     QVERIFY(patternServer->resourceCount() > 0);
-    foreach(KoPattern* pattern, patternServer->resources()) {
+    foreach (KoPattern *pattern, patternServer->resources()) {
         patternServer->addTag(pattern, QString("testtag: %1").arg(tagCount));
         tagCount++;
         bundle.addResource(patternServer->type(), pattern->filename(), patternServer->tagObject()->assignedTagsList(pattern), pattern->md5());
     }
 
-    KisBrushResourceServer* brushServer = KisBrushServer::instance()->brushServer();
+    KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
 
     QVERIFY(brushServer->resourceCount() > 0);
 
-    foreach(KisBrushSP brush, brushServer->resources()) {
+    foreach (KisBrushSP brush, brushServer->resources()) {
         brushServer->addTag(brush.data(), QString("testtag: %1").arg(tagCount));
         tagCount++;
         bundle.addResource(brushServer->type(), brush->filename(), brushServer->tagObject()->assignedTagsList(brush.data()), brush->md5());
     }
 
-
-    KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
+    KoResourceServer<KoColorSet> *paletteServer = KoResourceServerProvider::instance()->paletteServer();
     QVERIFY(paletteServer->resourceCount() > 0);
-    foreach(KoColorSet* palette, paletteServer->resources()) {
+    foreach (KoColorSet *palette, paletteServer->resources()) {
         paletteServer->addTag(palette, QString("testtag: %1").arg(tagCount));
         tagCount++;
         bundle.addResource(paletteServer->type(), palette->filename(), paletteServer->tagObject()->assignedTagsList(palette), palette->md5());
     }
 
-
-    KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
+    KoResourceServer< KisWorkspaceResource > *workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
     QVERIFY(workspaceServer->resourceCount() > 0);
-    foreach(KisWorkspaceResource* workspace, workspaceServer->resources()) {
+    foreach (KisWorkspaceResource *workspace, workspaceServer->resources()) {
         workspaceServer->addTag(workspace, QString("testtag: %1").arg(tagCount));
         tagCount++;
         bundle.addResource(workspaceServer->type(), workspace->filename(), workspaceServer->tagObject()->assignedTagsList(workspace), workspace->md5());
     }
 
-    KisPaintOpPresetResourceServer * paintopServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer *paintopServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QVERIFY(paintopServer->resourceCount() > 0);
-    foreach(KisPaintOpPresetSP preset, paintopServer->resources()) {
+    foreach (KisPaintOpPresetSP preset, paintopServer->resources()) {
         paintopServer->addTag(preset.data(), QString("testtag: %1").arg(tagCount));
         tagCount++;
         bundle.addResource(paintopServer->type(), preset->filename(), paintopServer->tagObject()->assignedTagsList(preset.data()), preset->md5());
@@ -174,7 +173,6 @@ void ResourceBundleTest::testInstallUninstall()
 {
 
 }
-
 
 QTEST_KDEMAIN(ResourceBundleTest, GUI)
 

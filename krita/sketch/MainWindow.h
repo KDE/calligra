@@ -28,9 +28,9 @@ class MainWindow : public QMainWindow
 
     Q_PROPERTY(bool allowClose READ allowClose WRITE setAllowClose)
     Q_PROPERTY(QString currentSketchPage READ currentSketchPage WRITE setCurrentSketchPage NOTIFY currentSketchPageChanged)
-	Q_PROPERTY(QObject* sketchKisView READ sketchKisView WRITE setSketchKisView NOTIFY sketchKisViewChanged)
+    Q_PROPERTY(QObject *sketchKisView READ sketchKisView WRITE setSketchKisView NOTIFY sketchKisViewChanged)
 public:
-    explicit MainWindow(QStringList fileNames, QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    explicit MainWindow(QStringList fileNames, QWidget *parent = 0, Qt::WindowFlags flags = 0);
     virtual ~MainWindow();
 
     bool allowClose() const;
@@ -39,27 +39,27 @@ public:
     QString currentSketchPage() const;
     void setCurrentSketchPage(QString newPage);
 
-	QObject* sketchKisView() const;
-	void setSketchKisView(QObject* newView);
+    QObject *sketchKisView() const;
+    void setSketchKisView(QObject *newView);
 
-    virtual void resizeEvent(QResizeEvent* event);
-    virtual void closeEvent(QCloseEvent* event);
+    virtual void resizeEvent(QResizeEvent *event);
+    virtual void closeEvent(QCloseEvent *event);
 
 public Q_SLOTS:
     void minimize();
     void closeWindow();
-	void adjustZoomOnDocumentChangedAndStuff();
+    void adjustZoomOnDocumentChangedAndStuff();
     void resetWindowTitle();
 
 Q_SIGNALS:
     void closeRequested();
     void switchedToSketch();
     void currentSketchPageChanged();
-	void sketchKisViewChanged();
+    void sketchKisViewChanged();
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // MAINWINDOW_H

@@ -10,8 +10,8 @@
 
 //BEGIN Noise
 Noise::Noise(int wx, int wy) : _wx(wx), _wy(wy),
-                               _image(_wx, _wy, QImage::Format_RGB32),
-                               _hist(256, 256, QImage::Format_RGB32)
+    _image(_wx, _wy, QImage::Format_RGB32),
+    _hist(256, 256, QImage::Format_RGB32)
 {
 }
 
@@ -40,9 +40,15 @@ void Noise::update(quint64 seed, int shift, int cutoff, bool chR, bool chG, bool
             k = (c >> (shift > 32 ? (shift > 40 ? shift - 20 : shift - 8) : shift + 24)) & 0xFF;
             h[r][g]++;
             m = qMax(m, h[r][g]);
-            if (!chR) r = 0;
-            if (!chG) g = 0;
-            if (!chB) b = 0;
+            if (!chR) {
+                r = 0;
+            }
+            if (!chG) {
+                g = 0;
+            }
+            if (!chB) {
+                b = 0;
+            }
             _image.setPixel(x, y, k < cutoff ? qRgb(r, g, b) : qRgb(0, 0, 0));
 
             _min = qMin(_min, c);
@@ -55,7 +61,7 @@ void Noise::update(quint64 seed, int shift, int cutoff, bool chR, bool chG, bool
     for (int i = 0; i < 256; ++i) {
         for (int j = 0; j < 256; ++j) {
             int v = (h[i][j] * 255) / m;
-            _hist.setPixel(i, j, (v < 64 ? qRgb(0, v + 255 - (v<<2), v) : v > 253 ? qRgb(255, 0, 0) : qRgb(0, 0, v)));
+            _hist.setPixel(i, j, (v < 64 ? qRgb(0, v + 255 - (v << 2), v) : v > 253 ? qRgb(255, 0, 0) : qRgb(0, 0, v)));
         }
     }
 }
@@ -82,7 +88,7 @@ quint64 Noise::max() const
 
 quint64 Noise::mean() const
 {
-    return qreal(1<<24) * qreal(_sum) / qreal(_wx * _wy);
+    return qreal(1 << 24) * qreal(_sum) / qreal(_wx * _wy);
 }
 //END Noise
 
@@ -90,7 +96,7 @@ const int WIDTH = 1024;
 const int HEIGHT = 1024;
 Noise noise(WIDTH, HEIGHT);
 
-KisRandomGeneratorDemo::KisRandomGeneratorDemo(QWidget* parent) : QWidget(parent)
+KisRandomGeneratorDemo::KisRandomGeneratorDemo(QWidget *parent) : QWidget(parent)
 {
     _noUpdate = true;
     setupUi(this);
@@ -111,8 +117,9 @@ KisRandomGeneratorDemo::~KisRandomGeneratorDemo()
 
 void KisRandomGeneratorDemo::updateNoise()
 {
-    if (_noUpdate)
+    if (_noUpdate) {
         return;
+    }
 
     union {
         quint64 u64;
@@ -141,7 +148,7 @@ int main(int argc, char **argv)
     KAboutData about("kis_random_generator_demo", 0, ki18n("kis_random_generator_demo"), "0.2",
                      ki18n("Krita Random Generator demo/test application"),
                      KAboutData::License_GPL, ki18n("Copyright 2009 Matthew Woehlke"));
-    about.addAuthor( ki18n("Matthew Woehlke"), KLocalizedString(), "mw_triad@users.sourceforge.net" );
+    about.addAuthor(ki18n("Matthew Woehlke"), KLocalizedString(), "mw_triad@users.sourceforge.net");
     KCmdLineArgs::init(argc, argv, &about);
     KApplication app;
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -153,4 +160,3 @@ int main(int argc, char **argv)
 }
 
 #include "kis_random_generator_demo.moc"
-// kate: hl C++; indent-width 4; replace-tabs on;

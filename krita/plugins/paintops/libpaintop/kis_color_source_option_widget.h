@@ -33,13 +33,13 @@ public:
     KisColorSourceOptionWidget();
     ~KisColorSourceOptionWidget();
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void writeOptionSetting(KisPropertiesConfiguration *setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 private Q_SLOTS:
     void sourceChanged();
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

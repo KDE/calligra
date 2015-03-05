@@ -40,7 +40,6 @@
 #include <QCheckBox>
 #include <QDebug>
 
-
 struct FileItem {
 
     FileItem() : checked(true) {}
@@ -61,7 +60,7 @@ public:
     {
     }
 
-    QList<QWidget*> createItemWidgets() const
+    QList<QWidget *> createItemWidgets() const
     {
         // a lump of coal and a piece of elastic will get you through the world
         QModelIndex idx = property("goya:creatingWidgetForIndex").value<QModelIndex>();
@@ -84,21 +83,21 @@ public:
 
         page->setFixedSize(600, 200);
 
-        return QList<QWidget*>() << page;
+        return QList<QWidget *>() << page;
     }
 
-    void updateItemWidgets(const QList<QWidget*> widgets,
+    void updateItemWidgets(const QList<QWidget *> widgets,
                            const QStyleOptionViewItem &option,
                            const QPersistentModelIndex &index) const
     {
-        FileItem *fileItem = (FileItem*)index.data().value<void*>();
+        FileItem *fileItem = (FileItem *)index.data().value<void *>();
 
-        QWidget* page= widgets[0];
-        QHBoxLayout* layout = qobject_cast<QHBoxLayout*>(page->layout());
-        QCheckBox *checkBox = qobject_cast<QCheckBox*>(layout->itemAt(0)->widget());
-        QLabel *thumbnail = qobject_cast<QLabel*>(layout->itemAt(1)->widget());
-        QLabel *filename = qobject_cast<QLabel*>(layout->itemAt(2)->widget());
-        QLabel *modified = qobject_cast<QLabel*>(layout->itemAt(3)->widget());
+        QWidget *page = widgets[0];
+        QHBoxLayout *layout = qobject_cast<QHBoxLayout *>(page->layout());
+        QCheckBox *checkBox = qobject_cast<QCheckBox *>(layout->itemAt(0)->widget());
+        QLabel *thumbnail = qobject_cast<QLabel *>(layout->itemAt(1)->widget());
+        QLabel *filename = qobject_cast<QLabel *>(layout->itemAt(2)->widget());
+        QLabel *modified = qobject_cast<QLabel *>(layout->itemAt(3)->widget());
 
         checkBox->setChecked(fileItem->checked);
         thumbnail->setPixmap(QPixmap::fromImage(fileItem->thumbnail));
@@ -116,11 +115,10 @@ public:
         itemView()->style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, 0);
     }
 
-    QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
+    QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const
     {
         return QSize(600, 200);
     }
-
 
     KoAutoSaveRecoveryDialog *m_parent;
 };
@@ -128,9 +126,9 @@ public:
 class KoAutoSaveRecoveryDialog::FileItemModel : public QAbstractListModel
 {
 public:
-    FileItemModel(QList<FileItem*> fileItems, QObject *parent)
+    FileItemModel(QList<FileItem *> fileItems, QObject *parent)
         : QAbstractListModel(parent)
-        , m_fileItems(fileItems){}
+        , m_fileItems(fileItems) {}
 
     virtual ~FileItemModel()
     {
@@ -138,24 +136,26 @@ public:
         m_fileItems.clear();
     }
 
-    int rowCount(const QModelIndex &/*parent*/) const { return m_fileItems.size(); }
+    int rowCount(const QModelIndex &/*parent*/) const
+    {
+        return m_fileItems.size();
+    }
 
-    Qt::ItemFlags flags(const QModelIndex& /*index*/) const
+    Qt::ItemFlags flags(const QModelIndex & /*index*/) const
     {
         Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
         return flags;
     }
 
-    QVariant data(const QModelIndex& index, int role) const
+    QVariant data(const QModelIndex &index, int role) const
     {
         if (index.isValid() && index.row() < m_fileItems.size()) {
 
             FileItem *item = m_fileItems.at(index.row());
 
             switch (role) {
-            case Qt::DisplayRole:
-            {
-                return QVariant::fromValue<void*>((void*)item);
+            case Qt::DisplayRole: {
+                return QVariant::fromValue<void *>((void *)item);
             }
             case Qt::SizeHintRole:
                 return QSize(600, 200);
@@ -164,7 +164,7 @@ public:
         return QVariant();
     }
 
-    bool setData(const QModelIndex& index, const QVariant& /*value*/, int role)
+    bool setData(const QModelIndex &index, const QVariant & /*value*/, int role)
     {
         if (index.isValid() && index.row() < m_fileItems.size()) {
             if (role == Qt::CheckStateRole) {
@@ -186,8 +186,7 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
     QVBoxLayout *layout = new QVBoxLayout(page);
     if (filenames.size() == 1) {
         layout->addWidget(new QLabel(i18n("The following autosave file can be recovered:")));
-    }
-    else {
+    } else {
         layout->addWidget(new QLabel(i18n("The following autosave files can be recovered:")));
     }
 
@@ -196,25 +195,25 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
     KWidgetItemDelegate *delegate = new FileItemDelegate(m_listView, this);
     m_listView->setItemDelegate(delegate);
 
-    QList<FileItem*> fileItems;
-    foreach(const QString &filename, filenames) {
+    QList<FileItem *> fileItems;
+    foreach (const QString &filename, filenames) {
 
         FileItem *file = new FileItem();
         file->name = filename;
 
         QString path = QDir::homePath() + "/" + filename;
         // get thumbnail -- all calligra apps save a thumbnail
-        KoStore* store = KoStore::createStore(path, KoStore::Read);
+        KoStore *store = KoStore::createStore(path, KoStore::Read);
 
-        if (store && (    store->open(QString("Thumbnails/thumbnail.png"))
-                          || store->open(QString("preview.png")))) {
+        if (store && (store->open(QString("Thumbnails/thumbnail.png"))
+                      || store->open(QString("preview.png")))) {
             // Hooray! No long delay for the user...
             QByteArray bytes = store->read(store->size());
             store->close();
             delete store;
             QImage img;
             img.loadFromData(bytes);
-            file->thumbnail = img.scaled(QSize(200,200), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            file->thumbnail = img.scaled(QSize(200, 200), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
         // get the date
@@ -230,11 +229,10 @@ KoAutoSaveRecoveryDialog::KoAutoSaveRecoveryDialog(const QStringList &filenames,
     setMainWidget(page);
 }
 
-
 QStringList KoAutoSaveRecoveryDialog::recoverableFiles()
 {
     QStringList files;
-    foreach(FileItem* fileItem, m_model->m_fileItems) {
+    foreach (FileItem *fileItem, m_model->m_fileItems) {
         if (fileItem->checked) {
             files << fileItem->name;
         }
@@ -245,9 +243,9 @@ QStringList KoAutoSaveRecoveryDialog::recoverableFiles()
 void KoAutoSaveRecoveryDialog::toggleFileItem(bool toggle)
 {
     // I've made better man from a piece of putty and matchstick!
-    QVariant v = sender()->property("fileitem") ;
+    QVariant v = sender()->property("fileitem");
     if (v.isValid()) {
-        FileItem *fileItem = (FileItem*)v.value<void*>();
+        FileItem *fileItem = (FileItem *)v.value<void *>();
         fileItem->checked = toggle;
     }
 }

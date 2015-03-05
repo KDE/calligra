@@ -38,22 +38,23 @@
 #include <iostream>
 using namespace std;
 
-class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
+class GradientResourceServer : public KoResourceServer<KoAbstractGradient>
+{
 
 public:
 
-    GradientResourceServer(const QString& type, const QString& extensions) :
-            KoResourceServer<KoAbstractGradient>(type, extensions) , m_foregroundToTransparent(0) , m_foregroundToBackground(0)
+    GradientResourceServer(const QString &type, const QString &extensions) :
+        KoResourceServer<KoAbstractGradient>(type, extensions), m_foregroundToTransparent(0), m_foregroundToBackground(0)
     {
         insertSpecialGradients();
     }
 
     void insertSpecialGradients()
     {
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
         QList<KoGradientStop> stops;
 
-        KoStopGradient* gradient = new KoStopGradient("");
+        KoStopGradient *gradient = new KoStopGradient("");
         gradient->setType(QGradient::LinearGradient);
         gradient->setName("Foreground to Transparent");
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
@@ -80,27 +81,31 @@ private:
 
     friend class KoResourceBundle;
 
-    virtual KoAbstractGradient* createResource( const QString & filename ) {
+    virtual KoAbstractGradient *createResource(const QString &filename)
+    {
 
         QString fileExtension;
         int index = filename.lastIndexOf('.');
 
-        if (index != -1)
+        if (index != -1) {
             fileExtension = filename.mid(index).toLower();
+        }
 
-        KoAbstractGradient* grad = 0;
+        KoAbstractGradient *grad = 0;
 
-        if(fileExtension == ".svg" || fileExtension == ".kgr")
+        if (fileExtension == ".svg" || fileExtension == ".kgr") {
             grad = new KoStopGradient(filename);
-        else if(fileExtension == ".ggr" )
+        } else if (fileExtension == ".ggr") {
             grad = new KoSegmentGradient(filename);
+        }
 
         return grad;
     }
 
-    virtual QList< KoAbstractGradient* > sortedResources() {
-        QList< KoAbstractGradient* > resources = KoResourceServer<KoAbstractGradient>::sortedResources();
-        QList< KoAbstractGradient* > sorted;
+    virtual QList< KoAbstractGradient * > sortedResources()
+    {
+        QList< KoAbstractGradient * > resources = KoResourceServer<KoAbstractGradient>::sortedResources();
+        QList< KoAbstractGradient * > sorted;
         if (m_foregroundToTransparent && resources.contains(m_foregroundToTransparent)) {
             sorted.append(resources.takeAt(resources.indexOf(m_foregroundToTransparent)));
         }
@@ -110,11 +115,11 @@ private:
         return sorted + resources;
     }
 
-    KoAbstractGradient* m_foregroundToTransparent;
-    KoAbstractGradient* m_foregroundToBackground;
+    KoAbstractGradient *m_foregroundToTransparent;
+    KoAbstractGradient *m_foregroundToBackground;
 };
 
-KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
+KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase *server)
     : QThread()
     , m_server(server)
 {
@@ -124,7 +129,7 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
     if (!fileNames.isEmpty()) {
         foreach (const QString &s, fileNames) {
             if (m_fileNames.contains(s)) {
-               m_fileNames.removeAll(s);
+                m_fileNames.removeAll(s);
             }
         }
     }
@@ -142,17 +147,15 @@ void KoResourceLoaderThread::run()
 
 void KoResourceLoaderThread::barrier()
 {
-    if(isRunning()) {
+    if (isRunning()) {
         wait();
     }
 }
 
-
-struct KoResourceServerProvider::Private
-{
-    KoResourceServer<KoPattern>* patternServer;
-    KoResourceServer<KoAbstractGradient>* gradientServer;
-    KoResourceServer<KoColorSet>* paletteServer;
+struct KoResourceServerProvider::Private {
+    KoResourceServer<KoPattern> *patternServer;
+    KoResourceServer<KoAbstractGradient> *gradientServer;
+    KoResourceServer<KoColorSet> *paletteServer;
 
     KoResourceLoaderThread *paletteThread;
     KoResourceLoaderThread *gradientThread;
@@ -177,7 +180,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", "/usr/share/create/swatches");
     KGlobal::mainComponent().dirs()->addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
 
-    d->patternServer = new KoResourceServer<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
+    d->patternServer = new KoResourceServer<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp");
     if (!QFileInfo(d->patternServer->saveLocation()).exists()) {
         QDir().mkpath(d->patternServer->saveLocation());
     }
@@ -224,27 +227,33 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d;
 }
 
-KoResourceServerProvider* KoResourceServerProvider::instance()
+KoResourceServerProvider *KoResourceServerProvider::instance()
 {
     K_GLOBAL_STATIC(KoResourceServerProvider, s_instance);
     return s_instance;
 }
 
-KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer(bool block)
+KoResourceServer<KoPattern> *KoResourceServerProvider::patternServer(bool block)
 {
-    if (block) d->patternThread->barrier();
+    if (block) {
+        d->patternThread->barrier();
+    }
     return d->patternServer;
 }
 
-KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer(bool block)
+KoResourceServer<KoAbstractGradient> *KoResourceServerProvider::gradientServer(bool block)
 {
-    if (block) d->patternThread->barrier();
+    if (block) {
+        d->patternThread->barrier();
+    }
     return d->gradientServer;
 }
 
-KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer(bool block)
+KoResourceServer<KoColorSet> *KoResourceServerProvider::paletteServer(bool block)
 {
-    if (block) d->patternThread->barrier();
+    if (block) {
+        d->patternThread->barrier();
+    }
     return d->paletteServer;
 }
 

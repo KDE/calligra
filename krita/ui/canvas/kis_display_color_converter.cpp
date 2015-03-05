@@ -40,9 +40,7 @@
 #include "kis_paint_device.h"
 #include "kis_iterator_ng.h"
 
-
-struct KisDisplayColorConverter::Private
-{
+struct KisDisplayColorConverter::Private {
     Private(KisDisplayColorConverter *_q, KoCanvasResourceManager *_resourceManager)
         : q(_q),
           resourceManager(_resourceManager),
@@ -58,7 +56,7 @@ struct KisDisplayColorConverter::Private
     {
     }
 
-    KisDisplayColorConverter * const q;
+    KisDisplayColorConverter *const q;
 
     KoCanvasResourceManager *resourceManager;
 
@@ -96,7 +94,8 @@ struct KisDisplayColorConverter::Private
     template <bool flipToBgra>
     QImage convertToQImageDirect(KisPaintDeviceSP device);
 
-    class DisplayRenderer : public KoColorDisplayRendererInterface {
+    class DisplayRenderer : public KoColorDisplayRendererInterface
+    {
     public:
         DisplayRenderer(KisDisplayColorConverter *parent, KoCanvasResourceManager *resourceManager)
             : m_parent(parent),
@@ -106,27 +105,33 @@ struct KisDisplayColorConverter::Private
                             this, SIGNAL(displayConfigurationChanged()));
         }
 
-        QColor toQColor(const KoColor &c) const {
+        QColor toQColor(const KoColor &c) const
+        {
             return m_parent->toQColor(c);
         }
 
-        KoColor approximateFromRenderedQColor(const QColor &c) const {
+        KoColor approximateFromRenderedQColor(const QColor &c) const
+        {
             return m_parent->approximateFromRenderedQColor(c);
         }
 
-        KoColor fromHsv(int h, int s, int v, int a) const {
+        KoColor fromHsv(int h, int s, int v, int a) const
+        {
             return m_parent->fromHsv(h, s, v, a);
         }
 
-        void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a) const {
+        void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a) const
+        {
             m_parent->getHsv(srcColor, h, s, v, a);
         }
 
-        virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const {
+        virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const
+        {
             return chaninfo->getUIMin();
         }
 
-        virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const {
+        virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const
+        {
             qreal maxValue = chaninfo->getUIMax();
 
             if (m_resourceManager) {
@@ -151,11 +156,10 @@ KisDisplayColorConverter::KisDisplayColorConverter(KoCanvasResourceManager *reso
       m_d(new Private(this, resourceManager))
 {
 
-    connect(m_d->resourceManager, SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            SLOT(slotCanvasResourceChanged(int, const QVariant&)));
+    connect(m_d->resourceManager, SIGNAL(canvasResourceChanged(int,QVariant)),
+            SLOT(slotCanvasResourceChanged(int,QVariant)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(selectPaintingColorSpace()));
-
 
     m_d->setCurrentNode(0);
     setMonitorProfile(0);
@@ -179,13 +183,13 @@ KisDisplayColorConverter::~KisDisplayColorConverter()
 {
 }
 
-KisDisplayColorConverter* KisDisplayColorConverter::dumbConverterInstance()
+KisDisplayColorConverter *KisDisplayColorConverter::dumbConverterInstance()
 {
     K_GLOBAL_STATIC(KisDisplayColorConverter, s_instance);
     return s_instance;
 }
 
-KoColorDisplayRendererInterface* KisDisplayColorConverter::displayRendererInterface() const
+KoColorDisplayRendererInterface *KisDisplayColorConverter::displayRendererInterface() const
 {
     return m_d->displayRenderer.data();
 }
@@ -220,7 +224,8 @@ void KisDisplayColorConverter::Private::slotUpdateCurrentNodeColorSpace()
     setCurrentNode(connectedNode);
 }
 
-inline KisPaintDeviceSP findValidDevice(KisNodeSP node) {
+inline KisPaintDeviceSP findValidDevice(KisNodeSP node)
+{
     return node->paintDevice() ? node->paintDevice() : node->original();
 }
 
@@ -238,8 +243,8 @@ void KisDisplayColorConverter::Private::setCurrentNode(KisNodeSP node)
         KisPaintDeviceSP device = findValidDevice(node);
 
         nodeColorSpace = device ?
-            device->compositionSourceColorSpace() :
-            node->colorSpace();
+                         device->compositionSourceColorSpace() :
+                         node->colorSpace();
 
         KIS_ASSERT_RECOVER_NOOP(nodeColorSpace);
 
@@ -270,7 +275,7 @@ void KisDisplayColorConverter::Private::selectPaintingColorSpace()
     emit q->displayConfigurationChanged();
 }
 
-const KoColorSpace* KisDisplayColorConverter::paintingColorSpace() const
+const KoColorSpace *KisDisplayColorConverter::paintingColorSpace() const
 {
     KIS_ASSERT_RECOVER(m_d->paintingColorSpace) {
         return KoColorSpaceRegistry::instance()->rgb8();
@@ -293,7 +298,7 @@ void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorPr
 void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilter *displayFilter)
 {
     if (m_d->displayFilter && displayFilter &&
-        displayFilter->lockCurrentColorVisualRepresentation()) {
+            displayFilter->lockCurrentColorVisualRepresentation()) {
 
         KoColor color(m_d->intermediateFgColor);
         displayFilter->approximateInverseTransformation(color.data(), 1);
@@ -319,15 +324,14 @@ void KisDisplayColorConverter::setDisplayFilter(KisDisplayFilter *displayFilter)
             m_d->resourceManager->foregroundColor());
     }
 
-
-    { // sanity check
+    {
+        // sanity check
         KisConfig cfg;
         //KIS_ASSERT_RECOVER_NOOP(cfg.useOcio() == (bool) m_d->displayFilter);
     }
 
     m_d->selectPaintingColorSpace();
 }
-
 
 KoColorConversionTransformation::Intent
 KisDisplayColorConverter::renderingIntent()
@@ -344,8 +348,12 @@ KisDisplayColorConverter::conversionFlags()
 
     KisConfig cfg;
 
-    if (cfg.useBlackPointCompensation()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
-    if (!cfg.allowLCMSOptimization()) conversionFlags |= KoColorConversionTransformation::NoOptimization;
+    if (cfg.useBlackPointCompensation()) {
+        conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
+    }
+    if (!cfg.allowLCMSOptimization()) {
+        conversionFlags |= KoColorConversionTransformation::NoOptimization;
+    }
 
     return conversionFlags;
 }
@@ -355,7 +363,7 @@ KisDisplayFilter *KisDisplayColorConverter::displayFilter() const
     return m_d->displayFilter;
 }
 
-const KoColorProfile* KisDisplayColorConverter::monitorProfile() const
+const KoColorProfile *KisDisplayColorConverter::monitorProfile() const
 {
     return m_d->monitorProfile;
 }
@@ -367,11 +375,12 @@ bool KisDisplayColorConverter::Private::finalIsRgba(const KoColorSpace *cs) cons
      */
     KoID colorDepthId = cs->colorDepthId();
     return colorDepthId == Float16BitsColorDepthID ||
-        colorDepthId == Float32BitsColorDepthID;
+           colorDepthId == Float32BitsColorDepthID;
 }
 
 template <bool flipToBgra>
-QColor KisDisplayColorConverter::Private::floatArrayToQColor(const float *p) {
+QColor KisDisplayColorConverter::Private::floatArrayToQColor(const float *p)
+{
     if (flipToBgra) {
         return QColor(KoColorSpaceMaths<float, quint8>::scaleToA(p[0]),
                       KoColorSpaceMaths<float, quint8>::scaleToA(p[1]),
@@ -392,7 +401,9 @@ QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor) const
 
     if (!m_d->useOcio()) {
         // we expect the display profile is rgb8, which is BGRA here
-        KIS_ASSERT_RECOVER(m_d->monitorColorSpace->pixelSize() == 4) { return Qt::red; };
+        KIS_ASSERT_RECOVER(m_d->monitorColorSpace->pixelSize() == 4) {
+            return Qt::red;
+        };
 
         c.convertTo(m_d->monitorColorSpace, m_d->renderingIntent, m_d->conversionFlags);
 
@@ -403,22 +414,22 @@ QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor) const
 
         if (m_d->displayFilter->useInternalColorManagement()) {
             srcCS = KoColorSpaceRegistry::instance()->colorSpace(
-                RGBAColorModelID.id(),
-                Float32BitsColorDepthID.id(),
-                m_d->monitorProfile);
+                        RGBAColorModelID.id(),
+                        Float32BitsColorDepthID.id(),
+                        m_d->monitorProfile);
             c.convertTo(srcCS, m_d->renderingIntent, m_d->conversionFlags);
         }
 
         int numChannels = srcCS->channelCount();
         QVector<float> normalizedChannels(numChannels);
         srcCS->normalisedChannelsValue(c.data(), normalizedChannels);
-        m_d->displayFilter->filter((quint8*)normalizedChannels.data(), 1);
+        m_d->displayFilter->filter((quint8 *)normalizedChannels.data(), 1);
 
         const float *p = (const float *)normalizedChannels.constData();
 
         return m_d->finalIsRgba(srcCS) ?
-            m_d->floatArrayToQColor<true>(p) :
-            m_d->floatArrayToQColor<false>(p);
+               m_d->floatArrayToQColor<true>(p) :
+               m_d->floatArrayToQColor<false>(p);
     }
 }
 
@@ -432,7 +443,9 @@ QImage
 KisDisplayColorConverter::Private::convertToQImageDirect(KisPaintDeviceSP device)
 {
     QRect bounds = device->exactBounds();
-    if (bounds.isEmpty()) return QImage();
+    if (bounds.isEmpty()) {
+        return QImage();
+    }
 
     QImage image(bounds.size(), QImage::Format_ARGB32);
 
@@ -445,7 +458,7 @@ KisDisplayColorConverter::Private::convertToQImageDirect(KisPaintDeviceSP device
 
     do {
         cs->normalisedChannelsValue(it.rawDataConst(), normalizedChannels);
-        displayFilter->filter((quint8*)normalizedChannels.data(), 1);
+        displayFilter->filter((quint8 *)normalizedChannels.data(), 1);
 
         const float *p = normalizedChannels.constData();
 
@@ -496,8 +509,8 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice) const
         }
 
         return m_d->finalIsRgba(device->colorSpace()) ?
-            m_d->convertToQImageDirect<true>(device) :
-            m_d->convertToQImageDirect<false>(device);
+               m_d->convertToQImageDirect<true>(device) :
+               m_d->convertToQImageDirect<false>(device);
     }
 
     return QImage();
@@ -529,7 +542,6 @@ QColor KisDisplayColorConverter::Private::approximateToQColor(const KoColor &src
 
     return color.toQColor();
 }
-
 
 KoColor KisDisplayColorConverter::fromHsv(int h, int s, int v, int a) const
 {
@@ -581,47 +593,47 @@ void KisDisplayColorConverter::getHslF(const KoColor &srcColor, qreal *h, qreal 
 KoColor KisDisplayColorConverter::fromHsiF(qreal h, qreal s, qreal i)
 {
     // generate HSI from sRGB!
-	qreal r=0.0;
-	qreal g=0.0;
-	qreal b=0.0;
-	qreal a=1.0;
-	HSIToRGB(h, s, i, &r, &g, &b);
-	QColor qcolor;
-	qcolor.setRgbF(r, g, b, a);
+    qreal r = 0.0;
+    qreal g = 0.0;
+    qreal b = 0.0;
+    qreal a = 1.0;
+    HSIToRGB(h, s, i, &r, &g, &b);
+    QColor qcolor;
+    qcolor.setRgbF(r, g, b, a);
     return m_d->approximateFromQColor(qcolor);
 }
 
 void KisDisplayColorConverter::getHsiF(const KoColor &srcColor, qreal *h, qreal *s, qreal *i)
 {
     // we are going through sRGB here!
-	QColor color = m_d->approximateToQColor(srcColor);
-	qreal r=color.redF();
-	qreal g=color.greenF();
-	qreal b=color.blueF();
-	RGBToHSI(r, g, b, h, s, i);
+    QColor color = m_d->approximateToQColor(srcColor);
+    qreal r = color.redF();
+    qreal g = color.greenF();
+    qreal b = color.blueF();
+    RGBToHSI(r, g, b, h, s, i);
 }
 
 KoColor KisDisplayColorConverter::fromHsyF(qreal h, qreal s, qreal y, qreal R, qreal G, qreal B)
 {
     // generate HSL from sRGB!
-	qreal r=0.0;
-	qreal g=0.0;
-	qreal b=0.0;
-	qreal a=1.0;
-	HSYToRGB(h, s, y, &r, &g, &b, R, G, B);
-	QColor qcolor;
-	qcolor.setRgbF(r, g, b, a);
+    qreal r = 0.0;
+    qreal g = 0.0;
+    qreal b = 0.0;
+    qreal a = 1.0;
+    HSYToRGB(h, s, y, &r, &g, &b, R, G, B);
+    QColor qcolor;
+    qcolor.setRgbF(r, g, b, a);
     return m_d->approximateFromQColor(qcolor);
 }
 
 void KisDisplayColorConverter::getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y, qreal R, qreal G, qreal B)
 {
     // we are going through sRGB here!
-	QColor color = m_d->approximateToQColor(srcColor);
-	qreal r=color.redF();
-	qreal g=color.greenF();
-	qreal b=color.blueF();
-	RGBToHSY(r, g, b, h, s, y, R, G, B);
+    QColor color = m_d->approximateToQColor(srcColor);
+    qreal r = color.redF();
+    qreal g = color.greenF();
+    qreal b = color.blueF();
+    RGBToHSY(r, g, b, h, s, y, R, G, B);
 }
 
 #include "moc_kis_display_color_converter.cpp"

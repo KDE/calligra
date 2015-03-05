@@ -30,13 +30,13 @@
 #include <kdebug.h>
 
 InsertTableColumnCommand::InsertTableColumnCommand(KoTextEditor *te, QTextTable *t, bool right, KUndo2Command *parent)
-    : KUndo2Command (parent)
-    ,m_first(true)
-    ,m_textEditor(te)
-    ,m_table(t)
-    ,m_right(right)
+    : KUndo2Command(parent)
+    , m_first(true)
+    , m_textEditor(te)
+    , m_table(t)
+    , m_right(right)
 {
-    if(right) {
+    if (right) {
         setText(kundo2_i18n("Insert Column Right"));
     } else {
         setText(kundo2_i18n("Insert Column Left"));
@@ -66,11 +66,11 @@ void InsertTableColumnCommand::redo()
         m_table->insertColumns(m_column, 1);
         carsManager.insertColumns(m_column, 1, m_style);
 
-        if (m_right && m_column == m_table->columns()-1) {
+        if (m_right && m_column == m_table->columns() - 1) {
             // Copy the cell style. for the bottomright cell which Qt doesn't
-            QTextTableCell cell = m_table->cellAt(m_table->rows()-1, m_column - 1);
+            QTextTableCell cell = m_table->cellAt(m_table->rows() - 1, m_column - 1);
             QTextCharFormat format = cell.format();
-            cell = m_table->cellAt(m_table->rows()-1, m_column);
+            cell = m_table->cellAt(m_table->rows() - 1, m_column);
             cell.setFormat(format);
         }
 

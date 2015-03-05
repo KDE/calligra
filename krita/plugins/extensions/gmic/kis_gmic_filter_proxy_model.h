@@ -23,7 +23,7 @@ class KisGmicFilterProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 
 public:
-    KisGmicFilterProxyModel (QObject *parent = 0);
+    KisGmicFilterProxyModel(QObject *parent = 0);
 
 protected:
     virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;

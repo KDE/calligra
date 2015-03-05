@@ -42,9 +42,9 @@ public:
 protected:
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
-                                             KexiView::StoreNewDataOptions options,
-                                             bool &cancel);
+    virtual KexiDB::SchemaData *storeNewData(const KexiDB::SchemaData &sdata,
+            KexiView::StoreNewDataOptions options,
+            bool &cancel);
 
     virtual tristate storeData(bool dontAsk = false);
 
@@ -55,7 +55,7 @@ protected:
     tristate executeQuery(KexiDB::QuerySchema *query);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

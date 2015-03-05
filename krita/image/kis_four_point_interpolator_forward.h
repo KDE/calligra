@@ -22,8 +22,6 @@
 #include <QPolygon>
 #include <QPointF>
 
-
-
 /**
  *    A-----B         The polygons must be initialized in this order:
  *    |     |
@@ -34,7 +32,8 @@
 class KisFourPointInterpolatorForward
 {
 public:
-    KisFourPointInterpolatorForward(const QPolygonF &srcPolygon, const QPolygonF &dstPolygon) {
+    KisFourPointInterpolatorForward(const QPolygonF &srcPolygon, const QPolygonF &dstPolygon)
+    {
         m_srcBase = srcPolygon[0];
         m_dstBase = dstPolygon[0];
 
@@ -50,26 +49,30 @@ public:
         m_yProp = 0;
     }
 
-    inline QPointF map(const QPointF &pt) {
+    inline QPointF map(const QPointF &pt)
+    {
         setX(pt.x());
         setY(pt.y());
         return getValue();
     }
 
-    inline void setX(qreal x) {
+    inline void setX(qreal x)
+    {
         qreal diff = x - m_srcBase.x();
         m_xProp = diff * m_forwardCoeffX;
     }
 
-    inline void setY(qreal y) {
+    inline void setY(qreal y)
+    {
         qreal diff = y - m_srcBase.y();
         m_yProp = diff * m_forwardCoeffY;
     }
 
-    inline QPointF getValue() const {
+    inline QPointF getValue() const
+    {
         QPointF dstPoint = m_dstBase +
-            m_yProp * m_v0 +
-            m_xProp * (m_yProp * m_h1 + (1.0 - m_yProp) * m_h0);
+                           m_yProp * m_v0 +
+                           m_xProp * (m_yProp * m_h1 + (1.0 - m_yProp) * m_h0);
 
         return dstPoint;
     }

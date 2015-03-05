@@ -44,7 +44,7 @@
 #include <calligraversion.h>
 #include <calligragitversion.h>
 
-int main( int argc, char** argv )
+int main(int argc, char **argv)
 {
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;
@@ -55,7 +55,6 @@ int main( int argc, char** argv )
 #else
     version = calligraVersion;
 #endif
-
 
     KAboutData aboutData("calligragemini",
                          "calligrawords",
@@ -68,14 +67,14 @@ int main( int argc, char** argv )
                          "http://www.calligra.org",
                          "submit@bugs.kde.org");
 
-    KCmdLineArgs::init (argc, argv, &aboutData);
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
-    options.add( "+[files]", ki18n( "Document to open" ) );
-    options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
-    KCmdLineArgs::addCmdLineOptions( options );
+    options.add("+[files]", ki18n("Document to open"));
+    options.add("vkb", ki18n("Use the virtual keyboard"));
+    KCmdLineArgs::addCmdLineOptions(options);
 
-    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QStringList fileNames;
     if (args->count() > 0) {
         for (int i = 0; i < args->count(); ++i) {
@@ -101,7 +100,7 @@ int main( int argc, char** argv )
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
     //QMessageBox::information(0, "calligra gemini", "KDEHOME: " + env.value("KDEHOME"));
-    if (!env.contains("KDEHOME") ) {
+    if (!env.contains("KDEHOME")) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
         envStringSet.append("KDEHOME ");
     }
@@ -122,11 +121,11 @@ int main( int argc, char** argv )
         envStringSet.append("KDEDIRS");
     }
     _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
-              + appdir.absolutePath() + "/lib" + ";"
-              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
-              + appdir.absolutePath()).toLocal8Bit());
+                              + appdir.absolutePath() + "/lib" + ";"
+                              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+                              + appdir.absolutePath()).toLocal8Bit());
 
-    if(envStringSet.length() > 0) {
+    if (envStringSet.length() > 0) {
         qDebug() << envStringSet << "were set from main, restarting application in new environment!";
         // Pass all the arguments along, but don't include the application name...
         QProcess::startDetached(app.applicationFilePath(), KCmdLineArgs::allArguments().mid(1));
@@ -146,8 +145,8 @@ int main( int argc, char** argv )
 
     if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
-        qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
-        qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
+        qobject_cast<QApplication *>(QApplication::instance())->setStyle("Plastique");
+        qobject_cast<QApplication *>(QApplication::instance())->setStyle("Oxygen");
     }
 
     // then create the pixmap from an xpm: we cannot get the

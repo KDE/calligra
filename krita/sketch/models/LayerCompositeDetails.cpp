@@ -18,7 +18,7 @@
 
 #include "LayerCompositeDetails.h"
 
-LayerCompositeDetails::LayerCompositeDetails(QObject* parent)
+LayerCompositeDetails::LayerCompositeDetails(QObject *parent)
     : QObject(parent)
 {
 }

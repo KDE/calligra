@@ -56,7 +56,7 @@ KPrTimeLineView::KPrTimeLineView(QWidget *parent)
     , startDragPos(0)
     , m_adjust(false)
 {
-    m_mainView = qobject_cast<KPrAnimationsTimeLineView*>(parent);
+    m_mainView = qobject_cast<KPrAnimationsTimeLineView *>(parent);
     Q_ASSERT(m_mainView);
     setFocusPolicy(Qt::WheelFocus);
     setMinimumSize(minimumSizeHint());
@@ -66,14 +66,14 @@ KPrTimeLineView::KPrTimeLineView(QWidget *parent)
 QSize KPrTimeLineView::sizeHint() const
 {
     int rows = m_mainView->model()
-            ? m_mainView->rowCount() : 1;
+               ? m_mainView->rowCount() : 1;
     return QSize(m_mainView->totalWidth(), rows * m_mainView->rowsHeight());
 }
 
 QSize KPrTimeLineView::minimumSizeHint() const
 {
     int rows = m_mainView->model()
-            ? m_mainView->rowCount() : 1;
+               ? m_mainView->rowCount() : 1;
     return QSize(m_mainView->totalWidth(), rows * m_mainView->rowsHeight());
 }
 
@@ -81,7 +81,7 @@ bool KPrTimeLineView::eventFilter(QObject *target, QEvent *event)
 {
     if (QScrollArea *scrollArea = m_mainView->scrollArea()) {
         if (target == scrollArea && event->type() == QEvent::Resize) {
-            if (QResizeEvent *resizeEvent = static_cast<QResizeEvent*>(event)) {
+            if (QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(event)) {
                 const int ExtraWidth = 5;
                 QSize size = resizeEvent->size();
                 size.setHeight(sizeHint().height());
@@ -102,15 +102,12 @@ void KPrTimeLineView::keyPressEvent(QKeyEvent *event)
         int column = INVALID;
         if (event->key() == Qt::Key_Left) {
             column = qMax(m_mainView->startColumn(), m_mainView->selectedColumn() - 1);
-        }
-        else if (event->key() == Qt::Key_Right) {
+        } else if (event->key() == Qt::Key_Right) {
             column = qMin(m_mainView->endColumn(),
                           m_mainView->selectedColumn() + 1);
-        }
-        else if (event->key() == Qt::Key_Up) {
+        } else if (event->key() == Qt::Key_Up) {
             row = qMax(0, m_mainView->selectedRow() - 1);
-        }
-        else if (event->key() == Qt::Key_Down) {
+        } else if (event->key() == Qt::Key_Down) {
             row = qMin(m_mainView->model()->rowCount() - 1,
                        m_mainView->selectedRow() + 1);
         }
@@ -135,7 +132,7 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
     m_mainView->setSelectedRow(row);
     m_mainView->setSelectedColumn(column);
     // Request context menu
-    if (event->button()== Qt::RightButton) {
+    if (event->button() == Qt::RightButton) {
         emit customContextMenuRequested(event->pos());
     }
     // Check if user wants to move the time bars
@@ -162,17 +159,16 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
                     m_resizedRow = row;
                     setCursor(
 #if QT_VERSION >= 0x040700
-                              Qt::DragMoveCursor
+                        Qt::DragMoveCursor
 #else
-                              Qt::ClosedHandCursor
+                        Qt::ClosedHandCursor
 #endif
-                              );
+                    );
                 }
             }
         }
     }
     emit clicked(m_mainView->model()->index(row, column));
-
 
 }
 
@@ -192,19 +188,20 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         qreal start = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() / 1000.0;
         qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
         qreal totalSteps = m_mainView->numberOfSteps();
-        qreal stepSize  = m_mainView->widthOfColumn( KPrShapeAnimations::StartTime) / totalSteps;
+        qreal stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) / totalSteps;
 
-        if ((event->pos().x() > (startPos + startOffSet*stepSize + stepSize * start - 5)) &&
-                ((event->pos().x()) < (startPos + m_mainView->widthOfColumn( KPrShapeAnimations::StartTime)))) {
+        if ((event->pos().x() > (startPos + startOffSet * stepSize + stepSize * start - 5)) &&
+                ((event->pos().x()) < (startPos + m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)))) {
             qreal newLength = (event->pos().x() - startPos - stepSize * start) / (stepSize) - startOffSet;
             newLength = qFloor((newLength - modD(newLength, subSteps)) * 100.0) / 100.0;
             // update bar length
             m_mainView->model()->setData(m_mainView->model()->index(row, KPrShapeAnimations::Duration), newLength * 1000);
             emit timeValuesChanged(m_mainView->model()->index(row, KPrShapeAnimations::Duration));
             m_adjust = false;
-            if (newLength < duration)
+            if (newLength < duration) {
                 m_adjust = true;
-        } else if ( ((event->pos().x()) > (startPos + m_mainView->widthOfColumn( KPrShapeAnimations::StartTime)))) {
+            }
+        } else if (((event->pos().x()) > (startPos + m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)))) {
             m_mainView->incrementScale();
             m_adjust = true;
         }
@@ -226,9 +223,9 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         qreal totalSteps = m_mainView->numberOfSteps();
         qreal stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) / totalSteps;
         qreal Threshold = 0.4;
-        if ((event->pos().x() > (startPos + startDragPos + startOffSet*stepSize)) &&
+        if ((event->pos().x() > (startPos + startDragPos + startOffSet * stepSize)) &&
                 ((event->pos().x() + (duration * stepSize - startDragPos) + Padding * 2)  <
-                 (startPos+m_mainView->widthOfColumn( KPrShapeAnimations::StartTime)))) {
+                 (startPos + m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)))) {
             qreal newPos = (event->pos().x() - (startPos + startDragPos)) / (stepSize) - startOffSet;
             newPos = qFloor((newPos - modD(newPos, subSteps)) * 100.0) / 100.0;
             // update bar position
@@ -238,12 +235,10 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
             if (newPos <= start) {
                 m_adjust = true;
             }
-        }
-        else if (((event->pos().x() + (duration*stepSize-startDragPos) + Padding * 2)  >
-                    (startPos + m_mainView->widthOfColumn( KPrShapeAnimations::StartTime)))) {
+        } else if (((event->pos().x() + (duration * stepSize - startDragPos) + Padding * 2)  >
+                    (startPos + m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)))) {
             m_mainView->incrementScale();
-        }
-        else if (event->pos().x() < (startPos + startDragPos + startOffSet * stepSize + Threshold)) {
+        } else if (event->pos().x() < (startPos + startDragPos + startOffSet * stepSize + Threshold)) {
             m_mainView->changeStartLimit(row);
         }
         update();
@@ -258,18 +253,16 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         // If the user is near the end of the line they could resize
         if (endLineRect.contains(event->x(), event->y())) {
             setCursor(Qt::SizeHorCursor);
-        }
-        else {
+        } else {
             if (lineRect.contains(event->x(), event->y())) {
                 setCursor(
 #if QT_VERSION >= 0x040700
-                          Qt::DragMoveCursor
+                    Qt::DragMoveCursor
 #else
-                          Qt::ClosedHandCursor
+                    Qt::ClosedHandCursor
 #endif
-                          );
-            }
-            else {
+                );
+            } else {
                 setCursor(Qt::ArrowCursor);
             }
         }
@@ -295,7 +288,7 @@ bool KPrTimeLineView::event(QEvent *event)
 {
     if (event->type() == QEvent::ToolTip) {
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
-        QModelIndex index = m_mainView->model()->index(rowAt(helpEvent->pos().y()),columnAt(helpEvent->pos().x()));
+        QModelIndex index = m_mainView->model()->index(rowAt(helpEvent->pos().y()), columnAt(helpEvent->pos().x()));
         if (index.isValid()) {
             QString text = m_mainView->model()->data(index, Qt::ToolTipRole).toString();
             QToolTip::showText(helpEvent->globalPos(), text);
@@ -320,12 +313,10 @@ int KPrTimeLineView::columnAt(int xpos)
     int column;
     if (xpos  < m_mainView->widthOfColumn(KPrShapeAnimations::ShapeThumbnail)) {
         column = KPrShapeAnimations::ShapeThumbnail;
-    }
-    else if (xpos  < m_mainView->widthOfColumn(KPrShapeAnimations::ShapeThumbnail) +
-             m_mainView->widthOfColumn( KPrShapeAnimations::AnimationIcon)) {
+    } else if (xpos  < m_mainView->widthOfColumn(KPrShapeAnimations::ShapeThumbnail) +
+               m_mainView->widthOfColumn(KPrShapeAnimations::AnimationIcon)) {
         column = KPrShapeAnimations::AnimationIcon;
-    }
-    else {
+    } else {
         column = KPrShapeAnimations::StartTime;
     }
     return column;
@@ -338,7 +329,7 @@ QRectF KPrTimeLineView::getRowRect(const int row, const int column)
         startPos = startPos + m_mainView->widthOfColumn(i);
     }
     int y = row * m_mainView->rowsHeight();
-    QRect rect(startPos, y, startPos+m_mainView->widthOfColumn(column), m_mainView->rowsHeight());
+    QRect rect(startPos, y, startPos + m_mainView->widthOfColumn(column), m_mainView->rowsHeight());
 
     const int lineHeight = qMin(LINE_HEIGHT, rect.height());
     const int yCenter = (rect.height() - lineHeight) / 2;
@@ -346,7 +337,7 @@ QRectF KPrTimeLineView::getRowRect(const int row, const int column)
     qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
     int startOffSet = m_mainView->calculateStartOffset(row);
     qreal start = (m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() +
-            startOffSet) / 1000.0;
+                   startOffSet) / 1000.0;
     return QRectF(rect.x() + stepSize * start, rect.y() + yCenter, stepSize * duration, lineHeight);
 }
 
@@ -400,16 +391,16 @@ void KPrTimeLineView::paintRow(QPainter *painter, int row, int y, const int RowH
 void KPrTimeLineView::paintLine(QPainter *painter, int row, const QRect &rect, bool selected)
 {
     QColor m_color = m_mainView->barColor(row);
-    const int lineHeight = qMin(LINE_HEIGHT , rect.height());
+    const int lineHeight = qMin(LINE_HEIGHT, rect.height());
     const int vPadding = (rect.height() - lineHeight) / 2;
     qreal stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) / m_mainView->numberOfSteps();
     qreal startOffSet = m_mainView->calculateStartOffset(row) / 1000.0;
     qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
     qreal start = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() / 1000.0
-            + startOffSet;
+                  + startOffSet;
     QRectF lineRect(rect.x() + stepSize * start, rect.y() + vPadding, stepSize * duration, lineHeight);
 
-    QRectF fillRect (lineRect.x(),lineRect.y() + BAR_MARGIN, lineRect.width(), lineRect.height() - BAR_MARGIN * 2);
+    QRectF fillRect(lineRect.x(), lineRect.y() + BAR_MARGIN, lineRect.width(), lineRect.height() - BAR_MARGIN * 2);
     QLinearGradient s_grad(lineRect.center().x(), lineRect.top(),
                            lineRect.center().x(), lineRect.bottom());
     if (selected) {
@@ -418,8 +409,7 @@ void KPrTimeLineView::paintLine(QPainter *painter, int row, const QRect &rect, b
         s_grad.setColorAt(1, m_color.darker(150));
         s_grad.setSpread(QGradient::ReflectSpread);
         painter->fillRect(fillRect, s_grad);
-    }
-    else {
+    } else {
         s_grad.setColorAt(0, m_color.darker(200));
         s_grad.setColorAt(0.5, m_color.lighter(125));
         s_grad.setColorAt(1, m_color.darker(200));
@@ -434,7 +424,7 @@ void KPrTimeLineView::paintLine(QPainter *painter, int row, const QRect &rect, b
 
 void KPrTimeLineView::paintTextRow(QPainter *painter, int x, int y, int row, int column, const int RowHeight)
 {
-    QRect rect(x,y,m_mainView->widthOfColumn(column), RowHeight);
+    QRect rect(x, y, m_mainView->widthOfColumn(column), RowHeight);
     paintItemBackground(painter, rect,
                         row == m_mainView->selectedRow());
     painter->drawText(rect,
@@ -444,11 +434,11 @@ void KPrTimeLineView::paintTextRow(QPainter *painter, int x, int y, int row, int
 
 void KPrTimeLineView::paintIconRow(QPainter *painter, int x, int y, int row, int column, int iconSize, const int RowHeight)
 {
-    QRect rect(x,y,m_mainView->widthOfColumn(column), RowHeight);
+    QRect rect(x, y, m_mainView->widthOfColumn(column), RowHeight);
     paintItemBackground(painter, rect,
                         row == m_mainView->selectedRow());
-    QPixmap thumbnail =  (m_mainView->model()->data(m_mainView->model()->index(row,column), Qt::DecorationRole)).value<QPixmap>();
-    thumbnail.scaled(iconSize, iconSize , Qt::KeepAspectRatio);
+    QPixmap thumbnail = (m_mainView->model()->data(m_mainView->model()->index(row, column), Qt::DecorationRole)).value<QPixmap>();
+    thumbnail.scaled(iconSize, iconSize, Qt::KeepAspectRatio);
     int width = 0;
     int height = 0;
     if (thumbnail.width() > thumbnail.height()) {
@@ -486,5 +476,5 @@ void KPrTimeLineView::paintItemBackground(QPainter *painter, const QRect &rect, 
     painter->fillRect(rect, selected ? gradient : palette().base());
     m_mainView->paintItemBorder(painter, palette(), rect);
     painter->setPen(selected ? palette().highlightedText().color()
-                             : palette().windowText().color());
+                    : palette().windowText().color());
 }

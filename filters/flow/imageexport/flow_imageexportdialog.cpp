@@ -31,21 +31,21 @@
 namespace Flow
 {
 
-ImageExportDialog::ImageExportDialog(QWidget* parent, const char* name)
-        : KDialogBase(parent, name, false, i18n("Export to Image"), Ok | Cancel)
+ImageExportDialog::ImageExportDialog(QWidget *parent, const char *name)
+    : KDialogBase(parent, name, false, i18n("Export to Image"), Ok | Cancel)
 {
     QApplication::restoreOverrideCursor();
     m_mainWidget = new ImageExportWidget(this);
     setMainWidget(m_mainWidget);
 }
 
-void ImageExportDialog::setPageList(const QStringList& pages)
+void ImageExportDialog::setPageList(const QStringList &pages)
 {
     m_mainWidget->m_pageCombo->clear();
     m_mainWidget->m_pageCombo->insertStringList(pages);
 }
 
-void ImageExportDialog::setInitialCustomSize(const QSize& size)
+void ImageExportDialog::setInitialCustomSize(const QSize &size)
 {
     m_mainWidget->m_widthSpinBox->setValue(size.width());
     m_mainWidget->m_heightSpinBox->setValue(size.height());

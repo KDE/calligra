@@ -31,20 +31,23 @@
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
-Value TestInformationFunctions::evaluate(const QString& formula, Value& ex, const Cell &cell)
+Value TestInformationFunctions::evaluate(const QString &formula, Value &ex, const Cell &cell)
 {
-    Sheet* sheet = m_map->sheet(0);
+    Sheet *sheet = m_map->sheet(0);
     Formula f(sheet, cell);
     QString expr = formula;
-    if (expr[0] != '=')
+    if (expr[0] != '=') {
         expr.prepend('=');
+    }
     f.setExpression(expr);
     Value result = f.eval();
 
-    if (result.isFloat() && ex.isInteger())
+    if (result.isFloat() && ex.isInteger()) {
         ex = Value(ex.asFloat());
-    if (result.isInteger() && ex.isFloat())
+    }
+    if (result.isInteger() && ex.isFloat()) {
         result = Value(result.asFloat());
+    }
 
     return result;
 }
@@ -54,43 +57,42 @@ void TestInformationFunctions::initTestCase()
     FunctionModuleRegistry::instance()->loadFunctionModules();
     m_map = new Map(0 /* no Doc */);
     m_map->addNewSheet();
-    Sheet* sheet = m_map->sheet(0);
+    Sheet *sheet = m_map->sheet(0);
     sheet->setSheetName("Sheet1");
-    CellStorage* storage = sheet->cellStorage();
+    CellStorage *storage = sheet->cellStorage();
 
     //
     // Test case data set
     //
 
+    // A19:A31
+    storage->setValue(1, 19, Value(1));
+    storage->setValue(1, 20, Value(2));
+    storage->setValue(1, 21, Value(4));
+    storage->setValue(1, 22, Value(8));
+    storage->setValue(1, 23, Value(16));
+    storage->setValue(1, 24, Value(32));
+    storage->setValue(1, 25, Value(64));
+    storage->setValue(1, 26, Value(128));
+    storage->setValue(1, 27, Value(256));
+    storage->setValue(1, 28, Value(512));
+    storage->setValue(1, 29, Value(1024));
+    storage->setValue(1, 30, Value(2048));
+    storage->setValue(1, 31, Value(4096));
 
-     // A19:A31
-     storage->setValue(1,19, Value(    1 ) );
-     storage->setValue(1,20, Value(    2 ) );
-     storage->setValue(1,21, Value(    4 ) );
-     storage->setValue(1,22, Value(    8 ) );
-     storage->setValue(1,23, Value(   16 ) );
-     storage->setValue(1,24, Value(   32 ) );
-     storage->setValue(1,25, Value(   64 ) );
-     storage->setValue(1,26, Value(  128 ) );
-     storage->setValue(1,27, Value(  256 ) );
-     storage->setValue(1,28, Value(  512 ) );
-     storage->setValue(1,29, Value( 1024 ) );
-     storage->setValue(1,30, Value( 2048 ) );
-     storage->setValue(1,31, Value( 4096 ) );
+    // B1:B2
+    Formula formula(sheet);
+    formula.setExpression("=SUM(A19:A31)");
+    storage->setFormula(2, 1, formula);
+    storage->setFormula(2, 2, Formula::empty());
 
-     // B1:B2
-     Formula formula(sheet);
-     formula.setExpression("=SUM(A19:A31)");
-     storage->setFormula(2,1, formula);
-     storage->setFormula(2,2, Formula::empty());
-
-     // B3:B17
+    // B3:B17
     storage->setValue(2, 3, Value("7"));
     storage->setValue(2, 4, Value(2));
     storage->setValue(2, 5, Value(3));
     storage->setValue(2, 6, Value(true));
     storage->setValue(2, 7, Value("Hello"));
-     // B8 leave empty
+    // B8 leave empty
     storage->setValue(2, 9, Value::errorDIV0());
     storage->setValue(2, 10, Value(0));
 //     storage->setValue(2,11, Value(      3    ) );
@@ -108,14 +110,14 @@ void TestInformationFunctions::initTestCase()
 //     storage->setValue(3, 6, Value( 7 ) );
     storage->setValue(3, 7, Value("2005-01-31"));
 
-     // C11:C17
-     storage->setValue(3,11, Value( 5 ) );
-     storage->setValue(3,12, Value( 6 ) );
-     storage->setValue(3,13, Value( 8 ) );
-     storage->setValue(3,14, Value( 4 ) );
-     storage->setValue(3,15, Value( 3 ) );
-     storage->setValue(3,16, Value( 2 ) );
-     storage->setValue(3,17, Value( 1 ) );
+    // C11:C17
+    storage->setValue(3, 11, Value(5));
+    storage->setValue(3, 12, Value(6));
+    storage->setValue(3, 13, Value(8));
+    storage->setValue(3, 14, Value(4));
+    storage->setValue(3, 15, Value(3));
+    storage->setValue(3, 16, Value(2));
+    storage->setValue(3, 17, Value(1));
 
 //     // C19:C31
 //     storage->setValue(3,19, Value( 0 ) );
@@ -184,12 +186,12 @@ void TestInformationFunctions::initTestCase()
     storage->setValue(6, 1000, Value("kde"));
     storage->setValue(7, 1000, Value("xxx"));
 
-     // Z19:Z23
-     storage->setValue(26,19, Value(   16 ) );
-     storage->setValue(26,20, Value(    8 ) );
-     storage->setValue(26,21, Value(    4 ) );
-     storage->setValue(26,22, Value(    2 ) );
-     storage->setValue(26,23, Value(    1 ) );
+    // Z19:Z23
+    storage->setValue(26, 19, Value(16));
+    storage->setValue(26, 20, Value(8));
+    storage->setValue(26, 21, Value(4));
+    storage->setValue(26, 22, Value(2));
+    storage->setValue(26, 23, Value(1));
 
     // Add the second sheet
     m_map->addNewSheet();
@@ -198,10 +200,10 @@ void TestInformationFunctions::initTestCase()
     storage = sheet->cellStorage();
 
     // B1:B2
-     Formula formula2(sheet);
-     formula2.setExpression("=SUM(Sheet1!A19:Sheet1!A31)");
-     storage->setFormula(2,1, formula2);
-     storage->setFormula(2,2, Formula::empty());
+    Formula formula2(sheet);
+    formula2.setExpression("=SUM(Sheet1!A19:Sheet1!A31)");
+    storage->setFormula(2, 1, formula2);
+    storage->setFormula(2, 2, Formula::empty());
 
     // Add the third sheet
     m_map->addNewSheet();
@@ -210,8 +212,8 @@ void TestInformationFunctions::initTestCase()
     storage = sheet->cellStorage();
 
     // A1:A2
-     storage->setValue(1,1, Value( 1.1 ) );
-     storage->setValue(1,2, Value( 2.2 ) );
+    storage->setValue(1, 1, Value(1.1));
+    storage->setValue(1, 2, Value(2.2));
 }
 
 //
@@ -229,32 +231,32 @@ void TestInformationFunctions::testAREAS()
 
 void TestInformationFunctions::testCELL()
 {
-    CHECK_EVAL( "CELL(\"COL\";C7)", Value( 3 ) ); // Column C is column number 3.
-    CHECK_EVAL( "CELL(\"COL\";Sheet2!C7)", Value( 3 ) );
+    CHECK_EVAL("CELL(\"COL\";C7)", Value(3));     // Column C is column number 3.
+    CHECK_EVAL("CELL(\"COL\";Sheet2!C7)", Value(3));
 
-    CHECK_EVAL( "CELL(\"ROW\";C7)", Value( 7 ) ); // Row 7 is row number 7.
-    CHECK_EVAL( "CELL(\"ROW\";Sheet2!C7)", Value( 7 ) );
+    CHECK_EVAL("CELL(\"ROW\";C7)", Value(7));     // Row 7 is row number 7.
+    CHECK_EVAL("CELL(\"ROW\";Sheet2!C7)", Value(7));
 
-    CHECK_EVAL( "CELL(\"Sheet\";C7)", Value( 1 ) );
-    CHECK_EVAL( "CELL(\"Sheet\";Sheet2!C7)", Value( 2 ) );
-    CHECK_EVAL( "CELL(\"Sheet\";Sheet3!C7)", Value( 3 ) );
+    CHECK_EVAL("CELL(\"Sheet\";C7)", Value(1));
+    CHECK_EVAL("CELL(\"Sheet\";Sheet2!C7)", Value(2));
+    CHECK_EVAL("CELL(\"Sheet\";Sheet3!C7)", Value(3));
 
-    CHECK_EVAL( "CELL(\"ADDRESS\";B7)", Value( "$B$7" ) );
-    CHECK_EVAL( "CELL(\"ADDRESS\";Sheet2!B7)", Value( "'Sheet2'!$B$7" ) );
+    CHECK_EVAL("CELL(\"ADDRESS\";B7)", Value("$B$7"));
+    CHECK_EVAL("CELL(\"ADDRESS\";Sheet2!B7)", Value("'Sheet2'!$B$7"));
 
-    Value v1( "$B$7" );
+    Value v1("$B$7");
     Value r1 = evaluate("CELL(\"ADDRESS\")", v1, Cell(m_map->sheet(0), 2, 7));
     QCOMPARE(r1, v1);
 
-    Value v2( "$B$7" );
+    Value v2("$B$7");
     Value r2 = evaluate("CELL(\"ADDRESS\")", v2, Cell(m_map->sheet(1), 2, 7));
     QCOMPARE(r2, v2);
 
     //CHECK_EVAL( "CELL(\"ADDRESS\";'x:\\sample.ods'#Sheet3!B7)", Value( "'file:///x:/sample.ods'#$Sheet3.$B$7" ) );
 
     m_map->calculationSettings()->setFileName("/home/sample.ods");
-    CHECK_EVAL( "CELL(\"FILENAME\")", Value( "/home/sample.ods" ) );
-    CHECK_EVAL( "CELL(\"FILENAME\";B7)", Value( "/home/sample.ods" ) );
+    CHECK_EVAL("CELL(\"FILENAME\")", Value("/home/sample.ods"));
+    CHECK_EVAL("CELL(\"FILENAME\";B7)", Value("/home/sample.ods"));
 }
 
 void TestInformationFunctions::testCOLUMN()
@@ -321,11 +323,11 @@ void TestInformationFunctions::testERRORTYPE()
 
 void TestInformationFunctions::testFORMULA()
 {
-    CHECK_EVAL( "FORMULA(B1)", Value( "=SUM(A19:A31)" ) ); // B1 contains a simple SUM formula
-    CHECK_EVAL( "FORMULA(B2)", Value::errorNA() ); // Empty formula means no formula
-    CHECK_EVAL( "FORMULA(B3)", Value::errorNA() ); // Cell constants are not formulas
+    CHECK_EVAL("FORMULA(B1)", Value("=SUM(A19:A31)"));     // B1 contains a simple SUM formula
+    CHECK_EVAL("FORMULA(B2)", Value::errorNA());   // Empty formula means no formula
+    CHECK_EVAL("FORMULA(B3)", Value::errorNA());   // Cell constants are not formulas
 
-    CHECK_EVAL( "LEN(FORMULA(B1))>0", Value( true ) ); // B7 is a formula, so this is fine and will produce a text value
+    CHECK_EVAL("LEN(FORMULA(B1))>0", Value(true));     // B7 is a formula, so this is fine and will produce a text value
 }
 
 void TestInformationFunctions::testINFO()
@@ -394,9 +396,9 @@ void TestInformationFunctions::testISEVEN()
 
 void TestInformationFunctions::testISFORMULA()
 {
-    CHECK_EVAL( "ISFORMULA(B1)", Value( true  ) ); // B1 contains a simple SUM formula
-    CHECK_EVAL( "ISFORMULA(B2)", Value( false ) ); // Empty formula means no formula
-    CHECK_EVAL( "ISFORMULA(B3)", Value( false ) ); // Cell constants are not formulas
+    CHECK_EVAL("ISFORMULA(B1)", Value(true));      // B1 contains a simple SUM formula
+    CHECK_EVAL("ISFORMULA(B2)", Value(false));     // Empty formula means no formula
+    CHECK_EVAL("ISFORMULA(B3)", Value(false));     // Cell constants are not formulas
 }
 
 void TestInformationFunctions::testISLOGICAL()
@@ -511,16 +513,16 @@ void TestInformationFunctions::testSHEET()
 
 void TestInformationFunctions::testSHEETS()
 {
-    CHECK_EVAL( "SHEETS(B7)",  Value( 1 ) ); // If given, the sheet number of the reference is used.
-    CHECK_EVAL( "SHEETS(Sheet1!B7:C9)",  Value( 1 ) );
-    CHECK_EVAL( "SHEETS(Sheet1!A7:Sheet1!C9)",  Value( 1 ) );
+    CHECK_EVAL("SHEETS(B7)",  Value(1));     // If given, the sheet number of the reference is used.
+    CHECK_EVAL("SHEETS(Sheet1!B7:C9)",  Value(1));
+    CHECK_EVAL("SHEETS(Sheet1!A7:Sheet1!C9)",  Value(1));
 
     //TODO this should not fail! :-(
     //CHECK_EVAL( "SHEETS(Sheet1!B7:Sheet2!C9)",  Value( 2 ) );
     //CHECK_EVAL( "SHEETS(Sheet1!B7:Sheet3!C9)",  Value( 2 ) );
     //CHECK_EVAL( "SHEETS(Sheet1!A7:Sheet3!C9)",  Value( 3 ) );
 
-    CHECK_EVAL( "SHEETS()", Value( 3 ) ); // Count all sheets
+    CHECK_EVAL("SHEETS()", Value(3));     // Count all sheets
 }
 
 void TestInformationFunctions::testTYPE()

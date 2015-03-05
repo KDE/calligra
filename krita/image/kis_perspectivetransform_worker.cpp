@@ -41,9 +41,8 @@
 #include "kis_progress_update_helper.h"
 #include "kis_painter.h"
 
-
 KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP dev, QPointF center, double aX, double aY, double distance, KoUpdaterPtr progress)
-        : m_dev(dev), m_progressUpdater(progress)
+    : m_dev(dev), m_progressUpdater(progress)
 
 {
     QMatrix4x4 m;
@@ -65,9 +64,9 @@ KisPerspectiveTransformWorker::KisPerspectiveTransformWorker(KisPaintDeviceSP de
 }
 
 void KisPerspectiveTransformWorker::fillParams(const QRectF &srcRect,
-                                               const QRect &dstBaseClipRect,
-                                               QRegion *dstRegion,
-                                               QPolygonF *dstClipPolygon)
+        const QRect &dstBaseClipRect,
+        QRegion *dstRegion,
+        QPolygonF *dstClipPolygon)
 {
     QPolygonF bounds = srcRect;
     QPolygonF newBounds = m_forwardTransform.map(bounds);
@@ -112,7 +111,9 @@ void KisPerspectiveTransformWorker::run()
 {
     KIS_ASSERT_RECOVER_RETURN(m_dev);
 
-    if (m_isIdentity) return;
+    if (m_isIdentity) {
+        return;
+    }
 
     KisPaintDeviceSP cloneDevice = new KisPaintDevice(*m_dev.data());
 
@@ -127,7 +128,7 @@ void KisPerspectiveTransformWorker::run()
     KisRandomSubAccessorSP srcAcc = cloneDevice->createRandomSubAccessor();
     KisRandomAccessorSP accessor = m_dev->createRandomAccessorNG(0, 0);
 
-    foreach(const QRect &rect, m_dstRegion.rects()) {
+    foreach (const QRect &rect, m_dstRegion.rects()) {
         for (int y = rect.y(); y < rect.y() + rect.height(); ++y) {
             for (int x = rect.x(); x < rect.x() + rect.width(); ++x) {
 
@@ -146,8 +147,8 @@ void KisPerspectiveTransformWorker::run()
 }
 
 void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
-                                                  KisPaintDeviceSP dstDev,
-                                                  const QRect &dstRect)
+        KisPaintDeviceSP dstDev,
+        const QRect &dstRect)
 {
     if (m_isIdentity) {
         KisPainter gc(dstDev);

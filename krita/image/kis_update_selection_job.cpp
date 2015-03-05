@@ -18,7 +18,6 @@
 
 #include "kis_update_selection_job.h"
 
-
 KisUpdateSelectionJob::KisUpdateSelectionJob(KisSelectionSP selection, const QRect &updateRect)
     : m_selection(selection),
       m_updateRect(updateRect)
@@ -28,7 +27,7 @@ KisUpdateSelectionJob::KisUpdateSelectionJob(KisSelectionSP selection, const QRe
 bool KisUpdateSelectionJob::overrides(const KisSpontaneousJob *_otherJob)
 {
     const KisUpdateSelectionJob *otherJob =
-        dynamic_cast<const KisUpdateSelectionJob*>(_otherJob);
+        dynamic_cast<const KisUpdateSelectionJob *>(_otherJob);
 
     bool retval = false;
 

@@ -65,7 +65,7 @@ private Q_SLOTS:
     void testBAHTTEXT();
     void testTEXT();
 private:
-    Value evaluate(const QString&, Value& ex);
+    Value evaluate(const QString &, Value &ex);
 };
 
 } // namespace Sheets

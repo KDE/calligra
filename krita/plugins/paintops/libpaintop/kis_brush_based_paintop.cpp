@@ -31,25 +31,27 @@
 class TextBrushInitializationWorkaround
 {
 public:
-    static TextBrushInitializationWorkaround* instance() {
+    static TextBrushInitializationWorkaround *instance()
+    {
         K_GLOBAL_STATIC(TextBrushInitializationWorkaround, s_instance);
         return s_instance;
     }
 
-    void preinitialize(const KisPropertiesConfiguration *settings) {
+    void preinitialize(const KisPropertiesConfiguration *settings)
+    {
         if (KisBrushOption::isTextBrush(settings)) {
             KisBrushOption brushOption;
             brushOption.readOptionSetting(settings);
             m_brush = brushOption.brush();
             m_settings = settings;
-        }
-        else {
+        } else {
             m_brush = 0;
             m_settings = 0;
         }
     }
 
-    KisBrushSP tryGetBrush(const KisPropertiesConfiguration *settings) {
+    KisBrushSP tryGetBrush(const KisPropertiesConfiguration *settings)
+    {
         return settings && settings == m_settings ? m_brush : 0;
     }
 
@@ -68,8 +70,7 @@ void KisBrushBasedPaintOp::preinitializeOpStatically(const KisPaintOpSettingsSP 
 
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-
-KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration* settings, KisPainter* painter)
+KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfiguration *settings, KisPainter *painter)
     : KisPaintOp(painter)
 {
     Q_ASSERT(settings);
@@ -149,8 +150,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal dabWidth, qre
             spacing = QPointF(dabWidth, dabHeight);
             spacing *= m_brush->spacing();
         }
-    }
-    else {
+    } else {
         qreal significantDimension = qMax(dabWidth, dabHeight);
         if (m_brush->autoSpacingActive()) {
             significantDimension = calcAutoSpacing(significantDimension, m_brush->autoSpacingCoeff());

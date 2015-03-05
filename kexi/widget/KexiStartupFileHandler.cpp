@@ -47,7 +47,7 @@
 // added because of lack of krecentdirs.h
 namespace KRecentDirs
 {
-    KDE_IMPORT void add(const QString &fileClass, const QString &directory);
+KDE_IMPORT void add(const QString &fileClass, const QString &directory);
 };
 
 //! @internal
@@ -55,11 +55,12 @@ class KexiStartupFileHandler::Private
 {
 public:
     Private()
-            : confirmOverwrites(true)
-            //, filtersUpdated(false)
+        : confirmOverwrites(true)
+          //, filtersUpdated(false)
     {
     }
-    ~Private() {
+    ~Private()
+    {
         if (messageWidgetLoop) {
             messageWidgetLoop->exit(0);
             messageWidgetLoop->processEvents(); // for safe exit
@@ -68,12 +69,11 @@ public:
         }
     }
 
-    void setUrl(const KUrl& url)
+    void setUrl(const KUrl &url)
     {
         if (requester) {
             requester->setUrl(url);
-        }
-        else {
+        } else {
             dialog->setUrl(url);
         }
     }
@@ -86,7 +86,7 @@ public:
     QString defaultExtension;
     bool confirmOverwrites;
     QString recentDirClass;
-    
+
     QPointer<QEventLoop> messageWidgetLoop;
     //! Used in KexiStartupFileHandler::askForOverwriting() to remember path that
     //! was recently accepted for overwrite by the user.
@@ -120,15 +120,15 @@ void KexiStartupFileHandler::init(const KUrl &startDirOrVariable, Mode mode)
     KUrl url;
     if (startDirOrVariable.protocol() == "kfiledialog") {
         url = KFileDialog::getStartUrl(startDirOrVariable, d->recentDirClass);
-    }
-    else {
+    } else {
         url = startDirOrVariable;
     }
     d->setUrl(url);
     setMode(mode);
     QAction *previewAction = d->dialog->actionCollection()->action("preview");
-    if (previewAction)
+    if (previewAction) {
         previewAction->setChecked(false);
+    }
 }
 
 KexiStartupFileHandler::~KexiStartupFileHandler()
@@ -141,12 +141,13 @@ void KexiStartupFileHandler::saveRecentDir()
 {
     if (!d->recentDirClass.isEmpty()) {
         kDebug() << d->recentDirClass;
-        
+
         KUrl dirUrl;
-        if (d->requester)
+        if (d->requester) {
             dirUrl = d->requester->url();
-        else if (d->dialog)
+        } else if (d->dialog) {
             dirUrl = d->dialog->selectedUrl();
+        }
         kDebug() << dirUrl;
         if (dirUrl.isValid() && dirUrl.isLocalFile()) {
             dirUrl.setFileName(QString());
@@ -190,7 +191,7 @@ void KexiStartupFileHandler::setExcludedFilters(const QSet<QString> &mimeTypes)
     //delayed
     d->excludedMimeTypes.clear();
     //convert to lowercase
-    foreach(const QString& mimeType, mimeTypes) {
+    foreach (const QString &mimeType, mimeTypes) {
         d->excludedMimeTypes.insert(mimeType.toLower());
     }
     updateFilters();
@@ -239,18 +240,21 @@ void KexiStartupFileHandler::updateFilters()
         }
     }
 
-    foreach(const QString& mimeName, d->additionalMimeTypes) {
-        if (mimeName == "all/allfiles")
+    foreach (const QString &mimeName, d->additionalMimeTypes) {
+        if (mimeName == "all/allfiles") {
             continue;
-        if (d->excludedMimeTypes.contains(mimeName.toLower()))
+        }
+        if (d->excludedMimeTypes.contains(mimeName.toLower())) {
             continue;
+        }
         filter += KexiUtils::fileDialogFilterString(mimeName);
         mime = KMimeType::mimeType(mimeName);
         allfilters += mime->patterns();
     }
 
-    if (!d->excludedMimeTypes.contains("all/allfiles"))
+    if (!d->excludedMimeTypes.contains("all/allfiles")) {
         filter += KexiUtils::fileDialogFilterString("all/allfiles");
+    }
     //remove duplicates made because upper- and lower-case extenstions are used:
     QStringList allfiltersUnique = allfilters.toSet().toList();
     qSort(allfiltersUnique);
@@ -260,8 +264,9 @@ void KexiStartupFileHandler::updateFilters()
                        + i18n("All Supported Files (%1)", allfiltersUnique.join(", ")) + "\n");
     }
 
-    if (filter.right(1) == "\n")
+    if (filter.right(1) == "\n") {
         filter.truncate(filter.length() - 1);
+    }
     d->dialog->setFilter(filter);
 
     if (d->mode & Opening) {
@@ -335,10 +340,11 @@ bool KexiStartupFileHandler::checkSelectedUrl()
     //kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
 
     KUrl url;
-    if (d->requester)
+    if (d->requester) {
         url = d->requester->url();
-    else
-       url = d->dialog->selectedUrl();
+    } else {
+        url = d->dialog->selectedUrl();
+    }
     kDebug() << url;
 #if 0
     if (/*d->highlightedUrl.isEmpty() &&*/ !locationEdit()->lineEdit()->text().isEmpty()) {
@@ -348,10 +354,11 @@ bool KexiStartupFileHandler::checkSelectedUrl()
 
         d->highlightedUrl = baseUrl();
         const QString firstUrl(locationEdit()->lineEdit()->text());   // FIXME: find first...
-        if (QDir::isAbsolutePath(firstUrl))
+        if (QDir::isAbsolutePath(firstUrl)) {
             d->highlightedUrl = KUrl::fromPath(firstUrl);
-        else
+        } else {
             d->highlightedUrl.addPath(firstUrl);
+        }
     }
 #endif
     //kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
@@ -362,20 +369,21 @@ bool KexiStartupFileHandler::checkSelectedUrl()
 
     if (!d->dialog->currentFilter().isEmpty()) {
         if (d->mode & SavingFileBasedDB) {
-            const QStringList filters( d->dialog->currentFilter().split(' ') );
+            const QStringList filters(d->dialog->currentFilter().split(' '));
             QString path = url.toLocalFile();
-            kDebug()<< "filter:" << filters << "path:" << path;
-            QString ext( QFileInfo(path).suffix() );
+            kDebug() << "filter:" << filters << "path:" << path;
+            QString ext(QFileInfo(path).suffix());
             bool hasExtension = false;
-            foreach (const QString& filter, filters) {
-                const QString f( filter.trimmed() );
-                hasExtension = !f.mid(2).isEmpty() && ext==f.mid(2);
-                if (hasExtension)
+            foreach (const QString &filter, filters) {
+                const QString f(filter.trimmed());
+                hasExtension = !f.mid(2).isEmpty() && ext == f.mid(2);
+                if (hasExtension) {
                     break;
+                }
             }
             if (!hasExtension) {
                 //no extension: add one
-                QString defaultExtension( d->defaultExtension );
+                QString defaultExtension(d->defaultExtension);
                 if (defaultExtension.isEmpty()) {
                     defaultExtension = filters.first().trimmed().mid(2); //first one
                 }
@@ -395,7 +403,7 @@ bool KexiStartupFileHandler::checkSelectedUrl()
         if (!fi.exists()) {
             KMessageBox::error(d->dialog->parentWidget(),
                                "<qt>" + i18n("The file \"%1\" does not exist.",
-                               QDir::convertSeparators(url.toLocalFile())));
+                                             QDir::convertSeparators(url.toLocalFile())));
             return false;
         } else if (mode() & KFile::File) {
             if (!fi.isFile()) {
@@ -405,13 +413,11 @@ bool KexiStartupFileHandler::checkSelectedUrl()
             } else if (!fi.isReadable()) {
                 KMessageBox::error(d->dialog->parentWidget(),
                                    "<qt>" + i18n("The file \"%1\" is not readable.",
-                                   QDir::convertSeparators(url.toLocalFile())));
+                                                 QDir::convertSeparators(url.toLocalFile())));
                 return false;
             }
         }
-    }
-    else if (d->confirmOverwrites && !askForOverwriting(url.toLocalFile()))
-    {
+    } else if (d->confirmOverwrites && !askForOverwriting(url.toLocalFile())) {
         return false;
     }
     return true;
@@ -431,21 +437,23 @@ void KexiStartupFileHandler::updateUrl(const QString &name)
 {
     KUrl url = d->requester->url();
     QString fn = KexiUtils::stringToFileName(name);
-    if (!fn.isEmpty() && !fn.endsWith(".kexi"))
+    if (!fn.isEmpty() && !fn.endsWith(".kexi")) {
         fn += ".kexi";
+    }
     url.setFileName(fn);
     d->requester->setUrl(url);
 }
 
-bool KexiStartupFileHandler::askForOverwriting(const QString& filePath)
+bool KexiStartupFileHandler::askForOverwriting(const QString &filePath)
 {
     QFileInfo fi(filePath);
     if (d->recentFilePathConfirmed == filePath) {
         return true;
     }
     d->recentFilePathConfirmed.clear();
-    if (!fi.exists())
+    if (!fi.exists()) {
         return true;
+    }
     KexiContextMessage message(
         i18n("This file already exists. Do you want to overwrite it?"));
     QScopedPointer<QAction> messageWidgetActionYes(new QAction(i18n("Overwrite"), 0));
@@ -468,12 +476,12 @@ bool KexiStartupFileHandler::askForOverwriting(const QString& filePath)
     return ok;
 }
 
-void KexiStartupFileHandler::setLocationText(const QString& fn)
+void KexiStartupFileHandler::setLocationText(const QString &fn)
 {
     d->dialog->locationEdit()->setUrl(KUrl(fn));
 }
 
-void KexiStartupFileHandler::setDefaultExtension(const QString& ext)
+void KexiStartupFileHandler::setDefaultExtension(const QString &ext)
 {
     d->defaultExtension = ext;
 }

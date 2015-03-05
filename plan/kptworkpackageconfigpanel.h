@@ -22,7 +22,6 @@
 
 #include "ui_kptworkpackageconfigpanel.h"
 
-
 namespace KPlato
 {
 

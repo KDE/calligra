@@ -46,29 +46,30 @@
 class CATextDocumentHandler::Private
 {
 public:
-    Private() {
+    Private()
+    {
         document = 0;
         findText = 0;
         taTextDocumentModel = 0;
         copyAction = 0;
     }
-    KWDocument* document;
+    KWDocument *document;
     KWPage currentTextDocPage;
     QString searchString;
-    KoFindText* findText;
+    KoFindText *findText;
     CATextDocumentModel *taTextDocumentModel;
     QAction *copyAction;
 };
 
-CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentController)
-    : CAAbstractDocumentHandler (documentController)
-    , d (new Private())
+CATextDocumentHandler::CATextDocumentHandler(CADocumentController *documentController)
+    : CAAbstractDocumentHandler(documentController)
+    , d(new Private())
 {
-    QList<QTextDocument*> texts;
+    QList<QTextDocument *> texts;
     d->findText = new KoFindText(this);
-    connect (d->findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
-    connect (d->findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
-    connect (d->findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
+    connect(d->findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
+    connect(d->findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
+    connect(d->findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
 }
 
 CATextDocumentHandler::~CATextDocumentHandler()
@@ -89,23 +90,23 @@ KoZoomMode::Mode CATextDocumentHandler::preferredZoomMode() const
     return KoZoomMode::ZOOM_WIDTH;
 }
 
-bool CATextDocumentHandler::openDocument (const QString& uri)
+bool CATextDocumentHandler::openDocument(const QString &uri)
 {
     QString error;
-    QString mimetype = KMimeType::findByPath (uri)->name();
+    QString mimetype = KMimeType::findByPath(uri)->name();
     KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
-                      QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
+                   QLatin1String("Calligra/Part"), 0, QString(), QVariantList(), &error);
 
     if (!part) {
         kDebug() << "Doc can't be openend" << error;
         return false;
     }
 
-    d->document = static_cast<KWDocument*> (part->document());
-    d->document->openUrl (KUrl (uri));
+    d->document = static_cast<KWDocument *>(part->document());
+    d->document->openUrl(KUrl(uri));
 
-    setCanvas (dynamic_cast<KoCanvasBase*> (part->canvasItem(d->document)));
-    KoToolManager::instance()->addController (dynamic_cast<KoCanvasController*> (documentController()->canvasController()));
+    setCanvas(dynamic_cast<KoCanvasBase *>(part->canvasItem(d->document)));
+    KoToolManager::instance()->addController(dynamic_cast<KoCanvasController *>(documentController()->canvasController()));
     KoSelection *sel = canvas()->shapeManager()->selection();
 
     KoShape *textShape = 0;
@@ -119,36 +120,36 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
         KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
     }
 
-    KWCanvasItem* kwCanvasItem = dynamic_cast<KWCanvasItem*> (canvas());
+    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem *>(canvas());
 
     if (!kwCanvasItem) {
         kDebug() << "Failed to get KWCanvasItem";
         return false;
     }
 
-    KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*> (kwCanvasItem->viewConverter());
-    documentController()->canvasController()->setZoomHandler (zoomHandler);
-    KoZoomController* zoomController = documentController()->canvasController()->zoomController();
+    KoZoomHandler *zoomHandler = static_cast<KoZoomHandler *>(kwCanvasItem->viewConverter());
+    documentController()->canvasController()->setZoomHandler(zoomHandler);
+    KoZoomController *zoomController = documentController()->canvasController()->zoomController();
     d->currentTextDocPage = d->document->pageManager()->begin();
-    zoomController->setPageSize (d->currentTextDocPage.rect().size());
-    zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, 1.0);
+    zoomController->setPageSize(d->currentTextDocPage.rect().size());
+    zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
 
     if (kwCanvasItem) {
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
-        connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), zoomController, SLOT(setDocumentSize(QSizeF)));
+        connect(kwCanvasItem, SIGNAL(documentSize(QSizeF)), zoomController, SLOT(setDocumentSize(QSizeF)));
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
-        connect (documentController()->canvasController()->canvasControllerProxyObject(), SIGNAL(moveDocumentOffset(QPoint)),
-                 kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
+        connect(documentController()->canvasController()->canvasControllerProxyObject(), SIGNAL(moveDocumentOffset(QPoint)),
+                kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
         kwCanvasItem->updateSize();
         kDebug() << "HANDLEEEE " << kwCanvasItem->geometry();
     }
 
-    connect (documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
-    connect (documentController()->canvasController(), SIGNAL(needCanvasUpdate()), SLOT(updateCanvas()));
+    connect(documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
+    connect(documentController()->canvasController(), SIGNAL(needCanvasUpdate()), SLOT(updateCanvas()));
 
     documentController()->canvasController()->zoomToFit();
 
-    QList<QTextDocument*> texts;
+    QList<QTextDocument *> texts;
     KoFindText::findTextInShapes(kwCanvasItem->shapeManager()->shapes(), texts);
     d->findText->setDocuments(texts);
 
@@ -160,14 +161,14 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
     return true;
 }
 
-KoDocument* CATextDocumentHandler::document()
+KoDocument *CATextDocumentHandler::document()
 {
     return d->document;
 }
 
 void CATextDocumentHandler::updateCanvas()
 {
-    KWCanvasItem* kwCanvasItem = dynamic_cast<KWCanvasItem*> (canvas());
+    KWCanvasItem *kwCanvasItem = dynamic_cast<KWCanvasItem *>(canvas());
     kwCanvasItem->update();
 }
 
@@ -176,16 +177,16 @@ QString CATextDocumentHandler::documentTypeName()
     return "textdocument";
 }
 
-void CATextDocumentHandler::resizeCanvas (const QSizeF& canvasSize)
+void CATextDocumentHandler::resizeCanvas(const QSizeF &canvasSize)
 {
     qreal width = documentController()->canvasController()->width();
     qreal height = documentController()->canvasController()->height();
-    KWPage currentPage = d->document->pageManager()->page (qreal (documentController()->canvasController()->cameraY()));
+    KWPage currentPage = d->document->pageManager()->page(qreal(documentController()->canvasController()->cameraY()));
     if (currentPage.isValid()) {
-        documentController()->canvasController()->zoomHandler()->setZoom (canvasSize.width() / currentPage.width() * 0.75);
+        documentController()->canvasController()->zoomHandler()->setZoom(canvasSize.width() / currentPage.width() * 0.75);
     }
-    static_cast<QGraphicsWidget*>(canvas()->canvasItem())->setGeometry (0, 0, width, height);
-    static_cast<KWCanvasItem*> (canvas())->updateSize();
+    static_cast<QGraphicsWidget *>(canvas()->canvasItem())->setGeometry(0, 0, width, height);
+    static_cast<KWCanvasItem *>(canvas())->updateSize();
 }
 
 QString CATextDocumentHandler::searchString() const
@@ -193,7 +194,7 @@ QString CATextDocumentHandler::searchString() const
     return d->searchString;
 }
 
-void CATextDocumentHandler::setSearchString (const QString& searchString)
+void CATextDocumentHandler::setSearchString(const QString &searchString)
 {
     d->searchString = searchString;
     d->findText->find(searchString);
@@ -211,23 +212,25 @@ void CATextDocumentHandler::findPrevious()
     d->findText->findPrevious();
 }
 
-void CATextDocumentHandler::findMatchFound (const KoFindMatch& match)
+void CATextDocumentHandler::findMatchFound(const KoFindMatch &match)
 {
     QTextCursor cursor = match.location().value<QTextCursor>();
     canvas()->canvasItem()->update();
 
-    canvas()->resourceManager()->setResource (KoText::CurrentTextAnchor, cursor.anchor());
-    canvas()->resourceManager()->setResource (KoText::CurrentTextPosition, cursor.position());
+    canvas()->resourceManager()->setResource(KoText::CurrentTextAnchor, cursor.anchor());
+    canvas()->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
 }
 
-int CATextDocumentHandler::totalPages() const {
+int CATextDocumentHandler::totalPages() const
+{
     return d->document->pageManager()->pageCount();
 }
 
 void CATextDocumentHandler::gotoPage(int pageNumber)
 {
-    if (pageNumber == d->currentTextDocPage.pageNumber())
+    if (pageNumber == d->currentTextDocPage.pageNumber()) {
         return;
+    }
     d->currentTextDocPage = d->document->pageManager()->page(pageNumber);
     QRectF rect = documentController()->canvasController()->zoomHandler()->documentToView(d->currentTextDocPage.rect());
     documentController()->canvasController()->alignTopWith(rect.top());
@@ -253,7 +256,8 @@ QString CATextDocumentHandler::centerOverlaySource() const
     return "TextDocumentCenterOverlay.qml";
 }
 
-CATextDocumentModel* CATextDocumentHandler::paTextDocumentModel() const {
+CATextDocumentModel *CATextDocumentHandler::paTextDocumentModel() const
+{
     return d->taTextDocumentModel;
 }
 

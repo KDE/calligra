@@ -42,20 +42,24 @@ KisOiioExport::~KisOiioExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisOiioExport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisOiioExport::convert(const QByteArray &from, const QByteArray &to)
 {
     dbgFile << "Oiio export! From:" << from << ", To:" << to << "";
 
-    KisDocument *input = dynamic_cast<KisDocument*>(m_chain->inputDocument());
+    KisDocument *input = dynamic_cast<KisDocument *>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
 
-    if (!input)
+    if (!input) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
-    if (filename.isEmpty()) return KisImportExportFilter::FileNotFound;
+    if (filename.isEmpty()) {
+        return KisImportExportFilter::FileNotFound;
+    }
 
-    if (from != "application/x-krita")
+    if (from != "application/x-krita") {
         return KisImportExportFilter::NotImplemented;
+    }
 
     KUrl url;
     url.setPath(filename);

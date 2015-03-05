@@ -52,7 +52,7 @@
 #include "kis_iterator_ng.h"
 #include "KisView.h"
 
-KisMaskManager::KisMaskManager(KisViewManager * view)
+KisMaskManager::KisMaskManager(KisViewManager *view)
     : m_view(view)
     , m_imageView(0)
     , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
@@ -152,7 +152,7 @@ void KisMaskManager::adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bo
     }
 }
 
-void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString& macroName, const QString &nodeType, const QString &nodeName, bool suppressSelection, bool avoidActiveNode)
+void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString &macroName, const QString &nodeType, const QString &nodeName, bool suppressSelection, bool avoidActiveNode)
 {
     m_commandsAdapter->beginMacro(macroName);
 
@@ -160,7 +160,7 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
     KisNodeSP above;
     adjustMaskPosition(mask, activeNode, avoidActiveNode, parent, above);
 
-    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent.data());
+    KisLayerSP parentLayer = dynamic_cast<KisLayer *>(parent.data());
     Q_ASSERT(parentLayer);
 
     if (!suppressSelection) {
@@ -172,7 +172,7 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
     }
 
     //counting number of KisSelectionMask
-    QList<KisNodeSP> masks = parentLayer->childNodes(QStringList(nodeType),KoProperties());
+    QList<KisNodeSP> masks = parentLayer->childNodes(QStringList(nodeType), KoProperties());
     int number = masks.count() + 1;
     mask->setName(nodeName + QString(" ") + QString::number(number));
 
@@ -207,13 +207,12 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
      */
     KisPaintDeviceSP originalDevice = mask->parent()->original();
 
-
     KisDlgAdjustmentLayer dialog(mask, mask.data(), originalDevice,
                                  mask->name(), i18n("New Filter Mask"),
                                  m_view);
 
     // If we are supposed to not disturb the user, don't start asking them about things.
-    if(quiet) {
+    if (quiet) {
         KisFilterConfiguration *filter = KisFilterRegistry::instance()->values().first()->defaultConfiguration(originalDevice);
         if (filter) {
             mask->setFilter(filter);
@@ -243,14 +242,18 @@ void KisMaskManager::createTransformMask(KisNodeSP activeNode)
 
 void KisMaskManager::duplicateMask()
 {
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
+    if (!activeMask()) {
+        return;
+    }
+    if (!m_view->image()) {
+        return;
+    }
 
-    KisMaskSP newMask = dynamic_cast<KisMask*>(activeMask()->clone().data());
+    KisMaskSP newMask = dynamic_cast<KisMask *>(activeMask()->clone().data());
     newMask->setName(i18n("Duplication of ") + activeMask()->name());
     m_commandsAdapter->addNode(newMask, activeMask()->parent(), activeMask());
 
-    KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(newMask.data());
+    KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask *>(newMask.data());
     if (selectionMask) {
         selectionMask->setActive(true);
     }
@@ -259,23 +262,29 @@ void KisMaskManager::duplicateMask()
 
 void KisMaskManager::removeMask()
 {
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
+    if (!activeMask()) {
+        return;
+    }
+    if (!m_view->image()) {
+        return;
+    }
     m_commandsAdapter->removeNode(activeMask());
     masksUpdated();
 }
 
 void KisMaskManager::maskProperties()
 {
-    if (!activeMask()) return;
+    if (!activeMask()) {
+        return;
+    }
 
     if (activeMask()->inherits("KisFilterMask")) {
-        KisFilterMask *mask = static_cast<KisFilterMask*>(activeMask().data());
+        KisFilterMask *mask = static_cast<KisFilterMask *>(activeMask().data());
 
-        KisLayerSP layer = dynamic_cast<KisLayer*>(mask->parent().data());
-        if (! layer)
+        KisLayerSP layer = dynamic_cast<KisLayer *>(mask->parent().data());
+        if (! layer) {
             return;
-
+        }
 
         KisPaintDeviceSP dev = layer->original();
         if (!dev) {
@@ -296,7 +305,7 @@ void KisMaskManager::maskProperties()
 
             mask->setName(dlg.layerName());
 
-            if(xmlBefore != xmlAfter) {
+            if (xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
                     = new KisChangeFilterCmd(mask,
                                              configBefore->name(),
@@ -310,13 +319,12 @@ void KisMaskManager::maskProperties()
                 m_view->undoAdapter()->addCommand(cmd);
                 m_view->document()->setModified(true);
             }
-        }
-        else {
+        } else {
             KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
             Q_ASSERT(configAfter);
             QString xmlAfter = configAfter->toXML();
 
-            if(xmlBefore != xmlAfter) {
+            if (xmlBefore != xmlAfter) {
                 mask->setFilter(KisFilterRegistry::instance()->cloneConfiguration(configBefore.data()));
                 mask->setDirty();
             }
@@ -329,29 +337,45 @@ void KisMaskManager::maskProperties()
 
 void KisMaskManager::raiseMask()
 {
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
+    if (!activeMask()) {
+        return;
+    }
+    if (!m_view->image()) {
+        return;
+    }
     m_commandsAdapter->raise(activeMask());
 }
 
 void KisMaskManager::lowerMask()
 {
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
+    if (!activeMask()) {
+        return;
+    }
+    if (!m_view->image()) {
+        return;
+    }
     m_commandsAdapter->lower(activeMask());
 }
 
 void KisMaskManager::maskToTop()
 {
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
+    if (!activeMask()) {
+        return;
+    }
+    if (!m_view->image()) {
+        return;
+    }
     m_commandsAdapter->toTop(activeMask());
 }
 
 void KisMaskManager::maskToBottom()
 {
-    if (!activeMask()) return;
-    if (!m_view->image()) return;
+    if (!activeMask()) {
+        return;
+    }
+    if (!m_view->image()) {
+        return;
+    }
     m_commandsAdapter->toBottom(activeMask());
 }
 

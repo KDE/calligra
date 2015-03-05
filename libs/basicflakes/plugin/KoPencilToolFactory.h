@@ -28,7 +28,7 @@ public:
     KoPencilToolFactory();
     ~KoPencilToolFactory();
 
-    KoToolBase * createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas);
 };
 
 #endif // _KOPENCILTOOLFACTORY_H_

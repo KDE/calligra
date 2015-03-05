@@ -42,8 +42,8 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 
-KisImageManager::KisImageManager(KisViewManager * view)
-        : m_view(view)
+KisImageManager::KisImageManager(KisViewManager *view)
+    : m_view(view)
 {
 }
 
@@ -113,8 +113,7 @@ void KisImageManager::slotImportLayerAsSelectionMask()
     importImage(KUrl(), "KisSelectionMask");
 }
 
-
-qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType)
+qint32 KisImageManager::importImage(const KUrl &urlArg, const QString &layerType)
 {
     KisImageWSP currentImage = m_view->image();
 
@@ -131,7 +130,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType
         dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
         dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter("application/x-krita", KisImportExportManager::Import));
         QStringList fileNames = dialog.urls();
-        foreach(const QString &fileName, fileNames) {
+        foreach (const QString &fileName, fileNames) {
             urls << KUrl::fromLocalFile(fileName);
         }
 
@@ -139,8 +138,9 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType
         urls.push_back(urlArg);
     }
 
-    if (urls.empty())
+    if (urls.empty()) {
         return 0;
+    }
 
     for (KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it) {
         new KisImportCatcher(*it, m_view, layerType);
@@ -153,34 +153,43 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, const QString &layerType
 
 void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qint32 yOffset)
 {
-    if (!m_view->image()) return;
+    if (!m_view->image()) {
+        return;
+    }
 
     m_view->image()->resizeImage(QRect(-xOffset, -yOffset, w, h));
 }
 
 void KisImageManager::scaleCurrentImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy)
 {
-    if (!m_view->image()) return;
+    if (!m_view->image()) {
+        return;
+    }
     m_view->image()->scaleImage(size, xres, yres, filterStrategy);
 }
 
 void KisImageManager::rotateCurrentImage(double radians)
 {
-    if (!m_view->image()) return;
+    if (!m_view->image()) {
+        return;
+    }
     m_view->image()->rotateImage(radians);
 }
 
 void KisImageManager::shearCurrentImage(double angleX, double angleY)
 {
-    if (!m_view->image()) return;
+    if (!m_view->image()) {
+        return;
+    }
     m_view->image()->shear(angleX, angleY);
 }
-
 
 void KisImageManager::slotImageProperties()
 {
     KisImageWSP image = m_view->image();
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
     QPointer<KisDlgImageProperties> dlg = new KisDlgImageProperties(image, m_view->mainWindow());
     if (dlg->exec() == QDialog::Accepted) {
@@ -192,7 +201,9 @@ void KisImageManager::slotImageProperties()
 void KisImageManager::slotImageColor()
 {
     KisImageWSP image = m_view->image();
-    if (!image) return;
+    if (!image) {
+        return;
+    }
 
     KColorDialog dlg;
 #if KDE_IS_VERSION(4,5,0)
@@ -209,6 +220,5 @@ void KisImageManager::slotImageColor()
         image->refreshGraphAsync();
     }
 }
-
 
 #include "kis_image_manager.moc"

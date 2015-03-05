@@ -111,7 +111,7 @@ private:
     void setTextFrame(QTextFrame *textFrame);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 // Own
 #include "OdfReaderContext.h"
 
@@ -29,10 +28,8 @@
 // Odftraverse library
 #include "OdfParser.h"
 
-
 // ----------------------------------------------------------------
 //                 class OdfReaderContext::Private
-
 
 class OdfReaderContext::Private
 {
@@ -57,7 +54,6 @@ public:
     QHash<QString, QString>  mediaFiles;
 };
 
-
 OdfReaderContext::Private::Private(KoStore *store)
     : odfStore(store)
     , styleManager(new KoOdfStyleManager())
@@ -70,10 +66,8 @@ OdfReaderContext::Private::~Private()
     delete styleManager;
 }
 
-
 // ----------------------------------------------------------------
 //                     class OdfReaderContext
-
 
 OdfReaderContext::OdfReaderContext(KoStore *store)
     : d(new OdfReaderContext::Private(store))
@@ -84,7 +78,6 @@ OdfReaderContext::~OdfReaderContext()
 {
     delete d;
 }
-
 
 KoFilter::ConversionStatus OdfReaderContext::analyzeOdfFile()
 {
@@ -116,7 +109,6 @@ KoFilter::ConversionStatus OdfReaderContext::analyzeOdfFile()
     return KoFilter::OK;
 }
 
-
 KoStore *OdfReaderContext::odfStore() const
 {
     return d->odfStore;
@@ -137,7 +129,6 @@ QHash<QString, QString> OdfReaderContext::manifest() const
     return d->manifest;
 }
 
-
 bool OdfReaderContext::isInsideParagraph() const
 {
     return d->isInsideParagraph;
@@ -147,7 +138,6 @@ void OdfReaderContext::setIsInsideParagraph(bool isInside)
 {
     d->isInsideParagraph = isInside;
 }
-
 
 QHash<QString, QSizeF> OdfReaderContext::images() const
 {

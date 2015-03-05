@@ -38,21 +38,22 @@
 // - Extract the pasting code from Cell.
 // - Get plain text pasting right.
 
-
 using namespace Calligra::Sheets;
 
 class PasteCellCommand : public AbstractRegionCommand
 {
 public:
     PasteCellCommand(KUndo2Command *parent = 0)
-            : AbstractRegionCommand(parent)
-            , m_pasteMode(Paste::Normal)
-            , m_pasteOperation(Paste::OverWrite)
-            , m_pasteFC(false) {
+        : AbstractRegionCommand(parent)
+        , m_pasteMode(Paste::Normal)
+        , m_pasteOperation(Paste::OverWrite)
+        , m_pasteFC(false)
+    {
     }
     virtual ~PasteCellCommand() {}
 
-    void addXmlElement(const Cell &cell, const KoXmlElement &element) {
+    void addXmlElement(const Cell &cell, const KoXmlElement &element)
+    {
         add(cell.cellPosition(), m_sheet);
         m_elements.insert(cell, element);
     }
@@ -62,7 +63,8 @@ public:
     bool                m_pasteFC; // FIXME What's that? ForceConditions?
 
 protected:
-    bool process(Element *element) {
+    bool process(Element *element)
+    {
         // Destination cell:
         Cell cell(m_sheet, element->rect().topLeft());
         const int xOffset = cell.column() - m_elements[cell].attribute("column").toInt();
@@ -71,14 +73,16 @@ protected:
                          m_pasteMode, m_pasteOperation, m_pasteFC);
     }
 
-    bool preProcessing() {
+    bool preProcessing()
+    {
         if (m_firstrun) {
             m_sheet->cellStorage()->startUndoRecording();
         }
         return true;
     }
 
-    bool mainProcessing() {
+    bool mainProcessing()
+    {
         if (m_reverse) {
             KUndo2Command::undo(); // undo child commands
             return true;
@@ -86,7 +90,8 @@ protected:
         return AbstractRegionCommand::mainProcessing();
     }
 
-    bool postProcessing() {
+    bool postProcessing()
+    {
         if (m_firstrun) {
             m_sheet->cellStorage()->stopUndoRecording(this);
         }
@@ -97,16 +102,14 @@ private:
     QHash<Cell, KoXmlElement> m_elements;
 };
 
-
-
 PasteCommand::PasteCommand(KUndo2Command *parent)
-        : AbstractRegionCommand(parent)
-        , m_mimeData(0)
-        , m_xmlDocument(0)
-        , m_insertMode(NoInsertion)
-        , m_pasteMode(Paste::Normal)
-        , m_operation(Paste::OverWrite)
-        , m_pasteFC(false)
+    : AbstractRegionCommand(parent)
+    , m_mimeData(0)
+    , m_xmlDocument(0)
+    , m_insertMode(NoInsertion)
+    , m_pasteMode(Paste::Normal)
+    , m_operation(Paste::OverWrite)
+    , m_pasteFC(false)
 {
 }
 
@@ -115,7 +118,7 @@ PasteCommand::~PasteCommand()
     delete m_xmlDocument;
 }
 
-const QMimeData* PasteCommand::mimeData() const
+const QMimeData *PasteCommand::mimeData() const
 {
     return m_mimeData;
 }
@@ -197,7 +200,7 @@ bool PasteCommand::unknownShiftDirection(const QMimeData *mimeData)
     if (!d.setContent(byteArray, false, &errorMsg, &errorLine, &errorColumn)) {
         // an error occurred
         kDebug() << "An error occurred."
-        << "line:" << errorLine << "col:" << errorColumn << errorMsg;
+                 << "line:" << errorLine << "col:" << errorColumn << errorMsg;
         return false;
     }
 
@@ -239,7 +242,7 @@ bool PasteCommand::mainProcessing()
                 if (!m_xmlDocument->setContent(data, false, &errorMsg, &errorLine, &errorColumn)) {
                     // an error occurred
                     kDebug(36005) << "An error occurred." << "line:" << errorLine
-                    << "col:" << errorColumn << errorMsg;
+                                  << "col:" << errorColumn << errorMsg;
                     return false;
                 }
             } else if (m_mimeData->hasText()) {
@@ -553,8 +556,8 @@ bool PasteCommand::processXmlData(Element *element, KoXmlDocument *data)
             for (int roff = 0; row + roff <= pasteHeight; roff += sourceHeight) {
                 for (int coff = 0; col + coff <= pasteWidth; coff += sourceWidth) {
                     kDebug(36005) << "cell at" << (col + xOffset + coff) << ',' << (row + yOffset + roff)
-                    << " with roff,coff=" << roff << ',' << coff
-                    << ", xOffset:" << xOffset << ", yOffset:" << yOffset << endl;
+                                  << " with roff,coff=" << roff << ',' << coff
+                                  << ", xOffset:" << xOffset << ", yOffset:" << yOffset << endl;
 
                     // Destination cell:
                     const Cell cell(sheet, col + xOffset + coff, row + yOffset + roff);

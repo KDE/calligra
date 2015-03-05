@@ -29,8 +29,7 @@
 using namespace KChart;
 using namespace KDChart;
 
-
-LegendCommand::LegendCommand(KChart::Legend* legend)
+LegendCommand::LegendCommand(KChart::Legend *legend)
     : m_legend(legend)
 {
     m_newFont = legend->font();
@@ -53,8 +52,9 @@ void LegendCommand::redo()
     m_oldExpansion = m_legend->expansion();
     m_oldShowFrame = m_legend->showFrame();
     if (m_oldTitle == m_newTitle && m_oldFont == m_newFont && m_oldFontSize == m_newFontSize
-            && m_oldExpansion == m_newExpansion && m_oldShowFrame == m_newShowFrame)
+            && m_oldExpansion == m_newExpansion && m_oldShowFrame == m_newShowFrame) {
         return;
+    }
 
     // Actually do the work
     m_legend->setTitle(m_newTitle);
@@ -68,8 +68,9 @@ void LegendCommand::redo()
 void LegendCommand::undo()
 {
     if (m_oldTitle == m_newTitle && m_oldFont == m_newFont && m_oldFontSize == m_newFontSize
-            && m_oldExpansion == m_newExpansion && m_oldShowFrame == m_newShowFrame)
+            && m_oldExpansion == m_newExpansion && m_oldShowFrame == m_newShowFrame) {
         return;
+    }
 
     m_legend->setTitle(m_oldTitle);
     m_legend->setFont(m_oldFont);

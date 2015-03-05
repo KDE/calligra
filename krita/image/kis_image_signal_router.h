@@ -25,7 +25,6 @@
 #include "kis_types.h"
 #include "kis_group_layer.h"
 
-
 class KoColorSpace;
 class KoColorProfile;
 
@@ -65,7 +64,8 @@ struct ComplexSizeChangedSignal {
         newStillPoint = QRectF(QPointF(), QSizeF(transformedIntoImageOfSize)).center();
     }
 
-    ComplexSizeChangedSignal inverted() const {
+    ComplexSizeChangedSignal inverted() const
+    {
         return ComplexSizeChangedSignal(newStillPoint, oldStillPoint);
     }
 
@@ -76,7 +76,7 @@ struct ComplexSizeChangedSignal {
 struct KisImageSignalType {
     KisImageSignalType() {}
     KisImageSignalType(KisImageSignalTypeEnum _id)
-    : id(_id)
+        : id(_id)
     {
     }
 
@@ -86,7 +86,8 @@ struct KisImageSignalType {
     {
     }
 
-    KisImageSignalType inverted() const {
+    KisImageSignalType inverted() const
+    {
         KisImageSignalType t;
         t.id = id;
         t.sizeChangedSignal = sizeChangedSignal.inverted();
@@ -125,8 +126,8 @@ Q_SIGNALS:
     void sigImageModified();
 
     void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
-    void sigProfileChanged(const KoColorProfile *  profile);
-    void sigColorSpaceChanged(const KoColorSpace*  cs);
+    void sigProfileChanged(const KoColorProfile   *profile);
+    void sigColorSpaceChanged(const KoColorSpace  *cs);
     void sigResolutionChanged(double xRes, double yRes);
 
     // Graph change signals

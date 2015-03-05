@@ -20,7 +20,8 @@
 
 #include "ui_kis_random_generator_demo.h"
 
-class Noise {
+class Noise
+{
 public:
     Noise(int wx, int wy);
     virtual ~Noise();
@@ -42,7 +43,7 @@ class KisRandomGeneratorDemo: public QWidget, Ui::NoiseDemoUi
 {
     Q_OBJECT
 public:
-    KisRandomGeneratorDemo(QWidget* parent = 0);
+    KisRandomGeneratorDemo(QWidget *parent = 0);
     virtual ~KisRandomGeneratorDemo();
 
 public Q_SLOTS:
@@ -53,4 +54,3 @@ private:
 };
 
 #endif
-// kate: hl C++; indent-width 4; replace-tabs on;

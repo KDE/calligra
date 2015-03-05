@@ -26,20 +26,20 @@ typedef unsigned int QRgb;
 #include "KoColor.h"
 #include "kis_color_selector_component.h"
 
-namespace Acs {
-    class PixelCacheRenderer;
+namespace Acs
+{
+class PixelCacheRenderer;
 }
-
 
 class KisColorSelectorSimple : public KisColorSelectorComponent
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit KisColorSelectorSimple(KisColorSelector *parent);
     void setColor(const KoColor &color);
 
 protected:
-    void paint(QPainter*);
+    void paint(QPainter *);
     KoColor selectColor(int x, int y);
 
 private:

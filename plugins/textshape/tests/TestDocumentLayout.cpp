@@ -34,7 +34,6 @@
 
 #define FRAME_SPACING 10.0
 
-
 void TestDocumentLayout::initTestCase()
 {
     m_shape1 = 0;
@@ -698,7 +697,7 @@ void TestDocumentLayout::testParagraphBorders()
 
     // borders are positioned outside the padding, lets check that to be the case.
     block = m_doc->begin();
-    KoTextBlockData *data  = dynamic_cast<KoTextBlockData*>(block.userData());
+    KoTextBlockData *data  = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     KoTextBlockBorderData *border = data->border();
     QVERIFY(border);
@@ -771,7 +770,7 @@ void TestDocumentLayout::testBorderData()
     m_layout->layout();
 
     block = m_doc->begin().next();
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData *>(block.userData());
     QVERIFY(data);
     KoTextBlockBorderData *border = data->border();
     QVERIFY(border);
@@ -804,7 +803,7 @@ void TestDocumentLayout::testBorderData()
     QCOMPARE(data->counterPosition(), QPointF(3, 24.4));
 
     block = block.next();
-    data = dynamic_cast<KoTextBlockData*>(block.userData());
+    data = dynamic_cast<KoTextBlockData *>(block.userData());
     QCOMPARE(data->counterPosition(), QPointF(3, 53.8));
 }
 
@@ -842,7 +841,7 @@ void TestDocumentLayout::testDropCaps()
     m_layout->layout();
 
     // dummy version, caps is still false.
-    QTextLayout *blockLayout =block.layout();
+    QTextLayout *blockLayout = block.layout();
     QVERIFY(blockLayout->lineCount() > 2);
     QTextLine line = blockLayout->lineAt(0);
     QVERIFY(line.textLength() > 3);
@@ -906,8 +905,9 @@ void TestDocumentLayout::testNonBreakableLines()
     block = m_doc->begin();
     QTextLayout *l = block.layout();
     // make sure parag1 is in shape 1.
-    for (int i = 0; i < l->lineCount(); i++)
+    for (int i = 0; i < l->lineCount(); i++) {
         QVERIFY(l->lineAt(i).y() < 100.);
+    }
 
     block = block.next();
     l = block.layout();

@@ -99,8 +99,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
     }
 }
 
-
-
 // ================================================================
 //                     Namespace: mc
 // ================================================================
@@ -113,7 +111,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
 // The above is only true when called from XmlWorksheetReader.  For Docx,
 // there are always namespaces, so it doesn't apply.
 // Same is true for READ_EPILOGUE.
-
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "mc"
@@ -134,11 +131,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_AlternateContent()
         if (isStartElement()) {
             if (name() == "Choice") {
                 TRY_READ(Choice)
-            }
-            else if (!m_choiceAccepted && qualifiedName() == "mc:Fallback") {
+            } else if (!m_choiceAccepted && qualifiedName() == "mc:Fallback") {
                 TRY_READ(Fallback)
-            }
-            else {
+            } else {
                 skipCurrentElement();
             }
         }

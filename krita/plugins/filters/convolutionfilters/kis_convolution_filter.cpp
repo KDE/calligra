@@ -32,17 +32,16 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 
-KisConvolutionFilter::KisConvolutionFilter(const KoID& id, const KoID & category, const QString & entry)
-        : KisFilter(id, category, entry)
+KisConvolutionFilter::KisConvolutionFilter(const KoID &id, const KoID &category, const QString &entry)
+    : KisFilter(id, category, entry)
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-
 void KisConvolutionFilter::processImpl(KisPaintDeviceSP device,
-                                       const QRect& applyRect,
-                                       const KisFilterConfiguration* config,
-                                       KoUpdater* progressUpdater) const
+                                       const QRect &applyRect,
+                                       const KisFilterConfiguration *config,
+                                       KoUpdater *progressUpdater) const
 {
     Q_UNUSED(config);
 
@@ -58,7 +57,7 @@ void KisConvolutionFilter::processImpl(KisPaintDeviceSP device,
     if (channelFlags.isEmpty() || !config) {
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
- 
+
     painter.setChannelFlags(channelFlags);
     painter.setProgress(progressUpdater);
     painter.applyMatrix(m_matrix, device, srcTopLeft, srcTopLeft, applyRect.size(), BORDER_REPEAT);

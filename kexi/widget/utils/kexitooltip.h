@@ -30,7 +30,7 @@ class KEXIGUIUTILS_EXPORT KexiToolTip : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KexiToolTip(const QVariant& value, QWidget* parent = 0);
+    explicit KexiToolTip(const QVariant &value, QWidget *parent = 0);
     virtual ~KexiToolTip();
 
     virtual QSize sizeHint() const;
@@ -40,12 +40,12 @@ public Q_SLOTS:
 
 protected:
     virtual void paintEvent(QPaintEvent *pev);
-    virtual void drawFrame(QPainter& p);
-    virtual void drawContents(QPainter& p);
+    virtual void drawFrame(QPainter &p);
+    virtual void drawContents(QPainter &p);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

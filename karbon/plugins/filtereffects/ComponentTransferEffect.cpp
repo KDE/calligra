@@ -28,7 +28,7 @@
 #include <math.h>
 
 ComponentTransferEffect::ComponentTransferEffect()
-        : KoFilterEffect(ComponentTransferEffectId, i18n("Component transfer"))
+    : KoFilterEffect(ComponentTransferEffectId, i18n("Component transfer"))
 {
 }
 
@@ -107,11 +107,11 @@ QImage ComponentTransferEffect::processImage(const QImage &image, const KoFilter
     QImage result = image;
 
 #if QT_VERSION >= 0x040700
-    const QRgb *src = (const QRgb*)image.constBits();
+    const QRgb *src = (const QRgb *)image.constBits();
 #else
-    const QRgb *src = (const QRgb*)image.bits();
+    const QRgb *src = (const QRgb *)image.bits();
 #endif
-    QRgb *dst = (QRgb*)result.bits();
+    QRgb *dst = (QRgb *)result.bits();
     int w = result.width();
 
     qreal sa, sr, sg, sb;
@@ -168,19 +168,21 @@ qreal ComponentTransferEffect::transferChannel(Channel channel, qreal value) con
         return value;
     case Table: {
         qreal valueCount = d.tableValues.count() - 1;
-        if (valueCount < 0.0)
+        if (valueCount < 0.0) {
             return value;
+        }
         qreal k1 = static_cast<int>(value * valueCount);
         qreal k2 = qMin(k1 + 1, valueCount);
         qreal vk1 = d.tableValues[k1];
         qreal vk2 = d.tableValues[k2];
-        return vk1 + (value - static_cast<qreal>(k1) / valueCount)*valueCount *(vk2 - vk1);
+        return vk1 + (value - static_cast<qreal>(k1) / valueCount) * valueCount * (vk2 - vk1);
     }
     case Discrete: {
         qreal valueCount = d.tableValues.count() - 1;
-        if (valueCount < 0.0)
+        if (valueCount < 0.0) {
             return value;
-        return d.tableValues[static_cast<int>(value*valueCount)];
+        }
+        return d.tableValues[static_cast<int>(value * valueCount)];
     }
     case Linear:
         return d.slope * value + d.intercept;
@@ -193,8 +195,9 @@ qreal ComponentTransferEffect::transferChannel(Channel channel, qreal value) con
 
 bool ComponentTransferEffect::load(const KoXmlElement &element, const KoFilterEffectLoadingContext &)
 {
-    if (element.tagName() != id())
+    if (element.tagName() != id()) {
         return false;
+    }
 
     // reset data
     m_data[ChannelR] = Data();
@@ -221,8 +224,9 @@ bool ComponentTransferEffect::load(const KoXmlElement &element, const KoFilterEf
 void ComponentTransferEffect::loadChannel(Channel channel, const KoXmlElement &element)
 {
     QString typeStr = element.attribute("type");
-    if (typeStr.isEmpty())
+    if (typeStr.isEmpty()) {
         return;
+    }
 
     Data &d = m_data[channel];
 
@@ -230,7 +234,7 @@ void ComponentTransferEffect::loadChannel(Channel channel, const KoXmlElement &e
         d.function = typeStr == "table" ? Table : Discrete;
         QString valueStr = element.attribute("tableValues");
         QStringList values = valueStr.split(QRegExp("(\\s+|,)"), QString::SkipEmptyParts);
-        foreach(const QString &v, values) {
+        foreach (const QString &v, values) {
             d.tableValues.append(v.toDouble());
         }
     } else if (typeStr == "linear") {
@@ -273,8 +277,9 @@ void ComponentTransferEffect::saveChannel(Channel channel, KoXmlWriter &writer)
 {
     Function function = m_data[channel].function;
     // we can omit writing the transfer function when
-    if (function == Identity)
+    if (function == Identity) {
         return;
+    }
 
     switch (channel) {
     case ChannelR:
@@ -297,24 +302,29 @@ void ComponentTransferEffect::saveChannel(Channel channel, KoXmlWriter &writer)
     if (function == Linear) {
         writer.addAttribute("type", "linear");
         // only write non default data
-        if (defaultData.slope != currentData.slope)
+        if (defaultData.slope != currentData.slope) {
             writer.addAttribute("slope", QString("%1").arg(currentData.slope));
-        if (defaultData.intercept != currentData.intercept)
+        }
+        if (defaultData.intercept != currentData.intercept) {
             writer.addAttribute("intercept", QString("%1").arg(currentData.intercept));
+        }
     } else if (function == Gamma) {
         writer.addAttribute("type", "gamma");
         // only write non default data
-        if (defaultData.amplitude != currentData.amplitude)
+        if (defaultData.amplitude != currentData.amplitude) {
             writer.addAttribute("amplitude", QString("%1").arg(currentData.amplitude));
-        if (defaultData.exponent != currentData.exponent)
+        }
+        if (defaultData.exponent != currentData.exponent) {
             writer.addAttribute("exponent", QString("%1").arg(currentData.exponent));
-        if (defaultData.offset != currentData.offset)
+        }
+        if (defaultData.offset != currentData.offset) {
             writer.addAttribute("offset", QString("%1").arg(currentData.offset));
+        }
     } else {
         writer.addAttribute("type", function == Table ? "table" : "discrete");
         if (currentData.tableValues.count()) {
             QString tableStr;
-            foreach(qreal v, currentData.tableValues) {
+            foreach (qreal v, currentData.tableValues) {
                 tableStr += QString("%1 ").arg(v);
             }
             writer.addAttribute("tableValues", tableStr.trimmed());

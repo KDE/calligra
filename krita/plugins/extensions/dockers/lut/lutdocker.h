@@ -21,16 +21,15 @@
 #include <QObject>
 #include <QVariant>
 
-
 /**
  * Template of view plugin
  */
 class LutDockerPlugin : public QObject
 {
     Q_OBJECT
-    public:
-        LutDockerPlugin(QObject *parent, const QVariantList &);
-        virtual ~LutDockerPlugin();
+public:
+    LutDockerPlugin(QObject *parent, const QVariantList &);
+    virtual ~LutDockerPlugin();
 };
 
 #endif

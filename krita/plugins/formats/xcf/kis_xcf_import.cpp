@@ -53,7 +53,7 @@ extern "C" {
 
     extern struct Tile *
     getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
-    struct rect want);
+                       struct rect want);
 
 #define GET_RED(x) (x >> RED_SHIFT)
 #define GET_GREEN(x) (x >> GREEN_SHIFT)
@@ -72,18 +72,20 @@ KisXCFImport::~KisXCFImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray &from, const QByteArray &to)
 {
     Q_UNUSED(from);
     dbgFile << "Importing using XCFImport!";
 
-    if (to != "application/x-krita")
+    if (to != "application/x-krita") {
         return KisImportExportFilter::BadMimeType;
+    }
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
 
-    if (!doc)
+    if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     QString filename = m_chain->inputFile();
 
@@ -93,10 +95,10 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(const QByteArray& 
 
     KUrl url(filename);
 
-
     dbgFile << "Import: " << url;
-    if (url.isEmpty())
+    if (url.isEmpty()) {
         return KisImportExportFilter::FileNotFound;
+    }
 
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, qApp -> activeWindow())) {
         dbgFile << "Inexistant file";
@@ -183,18 +185,18 @@ QString layerModeG2K(GimpLayerModeEffects mode)
     return COMPOSITE_OVER;
 }
 
-KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDocument* doc)
+KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice *device, KisDocument *doc)
 {
     dbgFile << "Start decoding file";
     // Read the file into memory
     device->open(QIODevice::ReadOnly);
     QByteArray data = device->readAll();
-    xcf_file = (uint8_t*)data.data();
+    xcf_file = (uint8_t *)data.data();
     xcf_length = data.size();
     device->close();
 
     // Decode the data
-    getBasicXcfInfo() ;
+    getBasicXcfInfo();
     initColormap();
 
     dbgFile << XCF.version << "width = " << XCF.width << "height = " << XCF.height << "layers = " << XCF.numLayers;
@@ -204,13 +206,13 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
 
     // Read layers
     for (int i = 0; i < XCF.numLayers; ++i) {
-        xcfLayer& xcflayer = XCF.layers[i];
+        xcfLayer &xcflayer = XCF.layers[i];
         dbgFile << i << " name = " << xcflayer.name << " opacity = " << xcflayer.opacity;
         dbgFile << ppVar(xcflayer.dim.width) << ppVar(xcflayer.dim.height) << ppVar(xcflayer.dim.tilesx) << ppVar(xcflayer.dim.tilesy) << ppVar(xcflayer.dim.ntiles) << ppVar(xcflayer.dim.c.t) << ppVar(xcflayer.dim.c.l) << ppVar(xcflayer.dim.c.r) << ppVar(xcflayer.dim.c.b);
 
         bool isRgbA = false;
         // Select the color space
-        const KoColorSpace* colorSpace = 0;
+        const KoColorSpace *colorSpace = 0;
         switch (xcflayer.type) {
         case GIMP_INDEXED_IMAGE:
         case GIMP_INDEXEDA_IMAGE:
@@ -250,9 +252,9 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
                 want.t = y + top;
                 want.b = want.t + TILE_HEIGHT;
                 want.r = want.l + TILE_WIDTH;
-                Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
+                Tile *tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
                 KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
-                rgba* data = tile->pixels;
+                rgba *data = tile->pixels;
                 for (int v = 0; v < TILE_HEIGHT; ++v) {
                     if (isRgbA) {
                         // RGB image
@@ -291,9 +293,9 @@ KisImportExportFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* 
                     want.t = y + top;
                     want.b = want.t + TILE_HEIGHT;
                     want.r = want.l + TILE_WIDTH;
-                    Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.mask, want);
+                    Tile *tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.mask, want);
                     KisHLineIteratorSP it = mask->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
-                    rgba* data = tile->pixels;
+                    rgba *data = tile->pixels;
                     for (int v = 0; v < TILE_HEIGHT; ++v) {
                         do {
                             it->rawData()[0] = GET_ALPHA(*data);

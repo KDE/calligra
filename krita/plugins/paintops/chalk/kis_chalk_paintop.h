@@ -33,14 +33,14 @@ class KisChalkPaintOp : public KisPaintOp
 
 public:
 
-    KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     virtual ~KisChalkPaintOp();
 
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
 
 private:
     KisPaintDeviceSP m_dab;
-    ChalkBrush * m_chalkBrush;
+    ChalkBrush *m_chalkBrush;
     KisPressureOpacityOption m_opacityOption;
     ChalkProperties m_properties;
 };

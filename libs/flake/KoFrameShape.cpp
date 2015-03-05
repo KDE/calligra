@@ -26,15 +26,15 @@ class KoFrameShape::Private
 {
 public:
     Private(const QString &ns, const QString &tag)
-            : ns(ns)
-            , tag(tag) {}
+        : ns(ns)
+        , tag(tag) {}
 
     const QString ns;
     const QString tag;
 };
 
 KoFrameShape::KoFrameShape(const QString &ns, const QString &tag)
-        : d(new Private(ns, tag))
+    : d(new Private(ns, tag))
 {
 }
 
@@ -43,9 +43,9 @@ KoFrameShape::~KoFrameShape()
     delete d;
 }
 
-bool KoFrameShape::loadOdfFrame(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool KoFrameShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    const KoXmlElement & frameElement(KoXml::namedItemNS(element, d->ns, d->tag));
+    const KoXmlElement &frameElement(KoXml::namedItemNS(element, d->ns, d->tag));
     if (frameElement.isNull()) {
         kError(30006) << "frame element" << d->tag << "not found";
         return false;

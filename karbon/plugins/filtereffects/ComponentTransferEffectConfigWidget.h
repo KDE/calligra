@@ -36,7 +36,7 @@ public:
     explicit ComponentTransferEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    virtual bool editFilterEffect(KoFilterEffect * filterEffect);
+    virtual bool editFilterEffect(KoFilterEffect *filterEffect);
 
 private Q_SLOTS:
     void slopeChanged(double slope);
@@ -51,16 +51,16 @@ private Q_SLOTS:
 private:
     void updateControls();
 
-    ComponentTransferEffect * m_effect;
-    KComboBox * m_function;
-    QStackedWidget * m_stack;
-    KLineEdit * m_tableValues;
-    KLineEdit * m_discreteValues;
-    KDoubleNumInput * m_slope;
-    KDoubleNumInput * m_intercept;
-    KDoubleNumInput * m_amplitude;
-    KDoubleNumInput * m_exponent;
-    KDoubleNumInput * m_offset;
+    ComponentTransferEffect *m_effect;
+    KComboBox *m_function;
+    QStackedWidget *m_stack;
+    KLineEdit *m_tableValues;
+    KLineEdit *m_discreteValues;
+    KDoubleNumInput *m_slope;
+    KDoubleNumInput *m_intercept;
+    KDoubleNumInput *m_amplitude;
+    KDoubleNumInput *m_exponent;
+    KDoubleNumInput *m_offset;
     ComponentTransferEffect::Channel m_currentChannel;
 };
 

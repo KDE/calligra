@@ -25,7 +25,6 @@
 #include "kis_perchannel_filter.h"
 #include "filter/kis_color_transformation_filter.h"
 
-
 class ColorsFilters : public QObject
 {
     Q_OBJECT
@@ -41,15 +40,15 @@ public:
 public:
 
     void processImpl(KisPaintDeviceSP device,
-                     const QRect& applyRect,
-                     const KisFilterConfiguration* config,
-                     KoUpdater* progressUpdater
-                     ) const;
-    static inline KoID id() {
+                     const QRect &applyRect,
+                     const KisFilterConfiguration *config,
+                     KoUpdater *progressUpdater
+                    ) const;
+    static inline KoID id()
+    {
         return KoID("autocontrast", i18n("Auto Contrast"));
     }
 
 };
-
 
 #endif

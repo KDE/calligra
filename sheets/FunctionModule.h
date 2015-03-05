@@ -85,11 +85,11 @@ protected:
     /**
      * Adds \p function to the list of provided Function objects.
      */
-    void add(Function* function);
+    void add(Function *function);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

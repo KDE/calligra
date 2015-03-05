@@ -45,17 +45,16 @@ public:
     virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
     virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& index) const;
+    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 protected:
     virtual bool eventFilter(QObject *object, QEvent *event);
-
 
 private:
     typedef KoDocumentSectionModel Model;
     typedef KoDocumentSectionView View;
     class Private;
-    Private* const d;
+    Private *const d;
 
     static QStyleOptionViewItemV4 getOptions(const QStyleOptionViewItem &option, const QModelIndex &index);
     int thumbnailHeight(const QStyleOptionViewItem &option, const QModelIndex &index) const;

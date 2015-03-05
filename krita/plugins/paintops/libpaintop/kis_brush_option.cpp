@@ -25,10 +25,11 @@
 
 #include "kis_properties_configuration.h"
 
-void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration *setting) const
 {
-    if (!m_brush)
+    if (!m_brush) {
         return;
+    }
 
     QDomDocument d;
     QDomElement e = d.createElement("Brush");
@@ -42,7 +43,7 @@ void KisBrushOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     setting->setProperty("requiredBrushFile", brushFileName);
 }
 
-QDomElement getBrushXMLElement(const KisPropertiesConfiguration* setting)
+QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
 {
     QDomElement element;
 
@@ -56,7 +57,7 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration* setting)
     return element;
 }
 
-void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     QDomElement element = getBrushXMLElement(setting);
 
@@ -69,7 +70,7 @@ void KisBrushOption::readOptionSetting(const KisPropertiesConfiguration* setting
 
 #include "kis_text_brush_factory.h"
 
-bool KisBrushOption::isTextBrush(const KisPropertiesConfiguration* setting)
+bool KisBrushOption::isTextBrush(const KisPropertiesConfiguration *setting)
 {
     static QString textBrushId = KisTextBrushFactory().id();
 

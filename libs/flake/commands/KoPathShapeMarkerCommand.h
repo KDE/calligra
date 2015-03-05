@@ -41,7 +41,7 @@ public:
      * @param position the position - start or end - of the marker on the shape
      * @param parent the parent command used for macro commands
      */
-    KoPathShapeMarkerCommand(const QList<KoPathShape*> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent = 0);
+    KoPathShapeMarkerCommand(const QList<KoPathShape *> &shapes, KoMarker *marker, KoMarkerData::MarkerPosition position, KUndo2Command *parent = 0);
 
     virtual ~KoPathShapeMarkerCommand();
     /// redo the command
@@ -50,9 +50,9 @@ public:
     void undo();
 
 private:
-    QList<KoPathShape*> m_shapes;  ///< the shapes to set marker for
-    QList<KoMarker*> m_oldMarkers; ///< the old markers, one for each shape
-    KoMarker* m_marker; ///< the new marker to set
+    QList<KoPathShape *> m_shapes; ///< the shapes to set marker for
+    QList<KoMarker *> m_oldMarkers; ///< the old markers, one for each shape
+    KoMarker *m_marker; ///< the new marker to set
     KoMarkerData::MarkerPosition m_position;
 };
 

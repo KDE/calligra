@@ -28,8 +28,8 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  true to construct a modal dialog.
  */
-LatexExportIface::LatexExportIface(KSpreadLatexExportDiaImpl* dia)
-        : DCOPObject("FilterConfigDia")
+LatexExportIface::LatexExportIface(KSpreadLatexExportDiaImpl *dia)
+    : DCOPObject("FilterConfigDia")
 {
     _dialog = dia;
 }

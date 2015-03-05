@@ -32,12 +32,15 @@
 class ChangeUrl : public KUndo2Command
 {
 public:
-    ChangeUrl(WebShape* shape, const QUrl& newUrl) : m_shape(shape), m_newUrl(newUrl), m_oldUrl(shape->url()) {
+    ChangeUrl(WebShape *shape, const QUrl &newUrl) : m_shape(shape), m_newUrl(newUrl), m_oldUrl(shape->url())
+    {
     }
-    virtual void undo() {
+    virtual void undo()
+    {
         m_shape->setUrl(m_oldUrl);
     }
-    virtual void redo() {
+    virtual void redo()
+    {
         m_shape->setUrl(m_newUrl);
     }
 private:
@@ -49,18 +52,21 @@ private:
 class ChangeCached : public KUndo2Command
 {
 public:
-    ChangeCached(WebShape* shape) : m_shape(shape) {
-        if(shape->isCached()) {
+    ChangeCached(WebShape *shape) : m_shape(shape)
+    {
+        if (shape->isCached()) {
             m_cache = shape->cache();
         }
     }
-    virtual void undo() {
+    virtual void undo()
+    {
         m_shape->setCached(!m_shape->isCached());
-        if(m_shape->isCached()) {
+        if (m_shape->isCached()) {
             m_shape->setCache(m_cache);
         }
     }
-    virtual void redo() {
+    virtual void redo()
+    {
         m_shape->setCached(!m_shape->isCached());
     }
 private:
@@ -68,7 +74,7 @@ private:
     QString m_cache;
 };
 
-WebToolWidget::WebToolWidget(WebTool* _tool) : m_tool(_tool), m_shape(0)
+WebToolWidget::WebToolWidget(WebTool *_tool) : m_tool(_tool), m_shape(0)
 {
     m_widget.setupUi(this);
     connect(m_widget.urlEdit, SIGNAL(editingFinished()), SLOT(save()));
@@ -85,8 +91,9 @@ void WebToolWidget::blockChildSignals(bool block)
 void WebToolWidget::open(WebShape *shape)
 {
     m_shape = shape;
-    if(!m_shape)
+    if (!m_shape) {
         return;
+    }
     blockChildSignals(true);
     m_widget.urlEdit->setText(m_shape->url().url());
     m_widget.useCache->setChecked(m_shape->isCached());
@@ -95,31 +102,32 @@ void WebToolWidget::open(WebShape *shape)
 
 void WebToolWidget::save()
 {
-    if(!m_shape)
+    if (!m_shape) {
         return;
+    }
 
     QString newUrl = m_widget.urlEdit->text();
     bool newCached = m_widget.useCache->isChecked();
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    if(canvasController) {
-        KoCanvasBase* canvas = canvasController->canvas();
-        if(newUrl != m_shape->url().url()) {
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    if (canvasController) {
+        KoCanvasBase *canvas = canvasController->canvas();
+        if (newUrl != m_shape->url().url()) {
             canvas->addCommand(new ChangeUrl(m_shape, newUrl));
         }
-        if(newCached != m_shape->isCached()) {
+        if (newCached != m_shape->isCached()) {
             canvas->addCommand(new ChangeCached(m_shape));
         }
     }
 }
 
-KUndo2Command * WebToolWidget::createCommand()
+KUndo2Command *WebToolWidget::createCommand()
 {
     save();
 
     return 0;
 }
 
-WebShape* WebToolWidget::shape()
+WebShape *WebToolWidget::shape()
 {
     return m_shape;
 }

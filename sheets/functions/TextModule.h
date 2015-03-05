@@ -33,7 +33,7 @@ class TextModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    explicit TextModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit TextModule(QObject *parent, const QVariantList &args = QVariantList());
 
     QString descriptionFileName() const;
 };

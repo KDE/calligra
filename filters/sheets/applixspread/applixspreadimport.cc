@@ -34,13 +34,12 @@
 K_PLUGIN_FACTORY(APPLIXSPREADImportFactory, registerPlugin<APPLIXSPREADImport>();)
 K_EXPORT_PLUGIN(APPLIXSPREADImportFactory("calligrafilters"))
 
-
-APPLIXSPREADImport::APPLIXSPREADImport(QObject *parent, const QVariantList&)
-        : KoFilter(parent)
+APPLIXSPREADImport::APPLIXSPREADImport(QObject *parent, const QVariantList &)
+    : KoFilter(parent)
 {
 }
 
-QString APPLIXSPREADImport::nextLine(QTextStream & stream)
+QString APPLIXSPREADImport::nextLine(QTextStream &stream)
 {
     if (!m_nextPendingLine.isNull()) {
         const QString s = m_nextPendingLine;
@@ -81,11 +80,12 @@ struct t_sharedFormula {
     QString formula;
 };
 
-KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray &from, const QByteArray &to)
 {
 
-    if (to != "application/x-kspread" || from != "application/x-applix-spreadsheet")
+    if (to != "application/x-kspread" || from != "application/x-applix-spreadsheet") {
         return KoFilter::NotImplemented;
+    }
 
     QFile in(m_chain->inputFile());
     if (!in.open(QIODevice::ReadOnly)) {
@@ -95,7 +95,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
     }
 
     QString str;
-    QList<t_mycolor*> mcol;
+    QList<t_mycolor *> mcol;
 
     str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
            "<!DOCTYPE spreadsheet>\n"
@@ -109,32 +109,30 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
            " <map markerColumn=\"1\" activeTable=\"Table1\" markerRow=\"1\" >\n";
 //      str += "  <table columnnumber=\"0\" borders=\"0\" hide=\"0\" hidezero=\"0\" firstletterupper=\"0\" grid=\"1\" formular=\"0\" lcmode=\"0\" name=\"Tabelle1\" >\n";
 
-
     // QTextStream
     QTextStream stream(&in);
     m_stepsize = in.size() / 50;
     m_instep   = 0;
     m_progress = 0;
     int  pos;
-    QString  tabctr ;  // Tab control (current tab name)
+    QString  tabctr;  // Tab control (current tab name)
     QStringList typefacetab;
     QHash<QString, t_sharedFormula> sharedFormulas;
 
     t_rc my_rc;
 
-
-
     /**************************************************************************
      * Read header                                                            *
      **************************************************************************/
-    if (! readHeader(stream)) return KoFilter::StupidError;
+    if (! readHeader(stream)) {
+        return KoFilter::StupidError;
+    }
 
     while (!stream.atEnd()) {
         // Read one line
         QString mystr = nextLine(stream);
 
         kDebug() << "INPUT :" << mystr;
-
 
         /**********************************************************************
          *  Looking for the colormap                                          *
@@ -156,7 +154,6 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
         else if (mystr.startsWith("View Start, Name:")) {
             readView(stream, mystr, my_rc);
         }
-
 
         /**********************************************************************
          *   Detect ( at the first place of the Line                          *
@@ -247,8 +244,9 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 mystr.remove(0, pos);
 
                 if (contentType == ';') {
-                    if (mystr.at(0) == '+')
+                    if (mystr.at(0) == '+') {
                         mystr[0] = '=';
+                    }
                     Q_ASSERT(mystr.at(0) == '=');
                 }
             }
@@ -257,7 +255,6 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             mystr.replace(QRegExp("&"), "&amp;");
             mystr.replace(QRegExp("<"), "&lt;");
             mystr.replace(QRegExp(">"), "&gt;");
-
 
             // Replace part for Applix Characters
             bool foundSpecialCharakter;
@@ -274,14 +271,13 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                     foundSpecialCharakter = true;
 
                     // translate the applix special character
-                    const QChar newchar = specCharfind(mystr[pos+1], mystr[pos+2]);
+                    const QChar newchar = specCharfind(mystr[pos + 1], mystr[pos + 2]);
 
                     // replace the character
                     mystr.replace(pos, 3, newchar);
                 }
 
             } while (foundSpecialCharakter == true);
-
 
             // examine the typestring
             // split typestring in 3 parts by an |
@@ -295,7 +291,9 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             // Is it a new table
             if (tabctr != tabnostr) {
                 // is it not the first table
-                if (!(tabctr.isNull()))  str += "  </table>\n";
+                if (!(tabctr.isNull())) {
+                    str += "  </table>\n";
+                }
 
                 str += "  <table columnnumber=\"0\" borders=\"0\" hide=\"0\" hidezero=\"0\" firstletterupper=\"0\" grid=\"1\" formular=\"0\" lcmode=\"0\" name=\"" +
                        tabnostr +
@@ -305,7 +303,9 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
                 // Searching for the rowcol part and adding to the hole string
                 pos = my_rc.tabname.indexOf(tabnostr);
-                if (pos > -1) str += my_rc.rc[pos];
+                if (pos > -1) {
+                    str += my_rc.rc[pos];
+                }
             }
 
             //kDebug()<<" Data : Text :"<<mystr<<" tab :"<<tabnostr<<""<< cellnostr <<"" <<ccol<<"" << irow<<""<< typeFormStr<<"" <<typeCharStr<<"" <<typeCellStr;
@@ -346,7 +346,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             int fg = -1; // fg = foregound
 
             const QStringList typeCharList = typeCharStr.split(',', QString::SkipEmptyParts);
-            Q_FOREACH(const QString& typeChar, typeCharList) {
+            Q_FOREACH (const QString &typeChar, typeCharList) {
                 // Output
                 kDebug() << "typeChar: " << typeChar;
 
@@ -374,14 +374,13 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             }
             kDebug();
 
-
             /********************************************************************
              * examine pos format String, split it up in basic parts           *
              ********************************************************************/
             int align = 0, valign = 0;
 
             const QStringList typeFormList = typeFormStr.split(',', QString::SkipEmptyParts);
-            Q_FOREACH(const QString& typeFormat, typeFormList) {
+            Q_FOREACH (const QString &typeFormat, typeFormList) {
                 // Grep horizontal alignment
                 if (typeFormat == "1") {
                     kDebug() << " = left align";
@@ -409,7 +408,6 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 }
             }
 
-
             /********************************************************************
              * examine cell format String, split it up in basic parts           *
              ********************************************************************/
@@ -422,7 +420,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             int bottombrushstyle = 0, bottombrushcolor = 1, bottomfg_bg = 1;
 
             const QStringList typeCellList = typeCellStr.split(',', QString::SkipEmptyParts);
-            Q_FOREACH(/*can't use const QString&*/ QString typeCell, typeCellList) {
+            Q_FOREACH (/*can't use const QString&*/ QString typeCell, typeCellList) {
 
                 if (typeCell[0] == 'T') {
                     kDebug() << " = top";
@@ -477,10 +475,6 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
             }
 
-
-
-
-
             QString col;
 
             // create kspread fileformat output
@@ -499,8 +493,12 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                            "\"";
                 }
 
-                if (align   != 0)  str += " align=\""  + QString::number(align) + "\" ";
-                if (valign  != 0)  str += " alignY=\"" + QString::number(valign) + "\" ";
+                if (align   != 0) {
+                    str += " align=\""  + QString::number(align) + "\" ";
+                }
+                if (valign  != 0) {
+                    str += " alignY=\"" + QString::number(valign) + "\" ";
+                }
                 if (fg_bg != -1) {
                     str += " bgcolor=\"" +
                            writeColor(mcol.at(fg_bg)) +
@@ -564,9 +562,15 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                     }
                     str += "weight=\"0\"";
 
-                    if (italic    == 1) str += " italic=\"yes\"";
-                    if (bold      == 1) str += " bold=\"yes\"";
-                    if (underline == 1) str += " underline=\"yes\"";
+                    if (italic    == 1) {
+                        str += " italic=\"yes\"";
+                    }
+                    if (bold      == 1) {
+                        str += " bold=\"yes\"";
+                    }
+                    if (underline == 1) {
+                        str += " underline=\"yes\"";
+                    }
 
                     str += " />\n";
                 }
@@ -586,7 +590,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
     kDebug() << "Text" << str;
 
-    KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
+    KoStoreDevice *out = m_chain->storageFile("root", KoStore::Write);
 
     if (!out) {
         kError(38000/*30502*/) << "Unable to open output file!" << endl;
@@ -601,9 +605,6 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
     return KoFilter::OK;
 }
 
-
-
-
 /******************************************************************************
  *  function: specCharfind                                                    *
  ******************************************************************************/
@@ -612,178 +613,316 @@ APPLIXSPREADImport::specCharfind(QChar a, QChar b)
 {
     QChar chr;
 
-    if ((a == 'n') && (b == 'p')) chr = 'ß';
-
-
-    else if ((a == 'n') && (b == 'c')) chr = 'Ò';
-    else if ((a == 'p') && (b == 'c')) chr = 'ò';
-
-    else if ((a == 'n') && (b == 'd')) chr = 'Ó';
-    else if ((a == 'p') && (b == 'd')) chr = 'ó';
-
-    else if ((a == 'n') && (b == 'e')) chr = 'Ô';
-    else if ((a == 'p') && (b == 'e')) chr = 'ô';
-
-    else if ((a == 'n') && (b == 'f')) chr = 'Õ';
-    else if ((a == 'p') && (b == 'f')) chr = 'õ';
-
-    else if ((a == 'p') && (b == 'g')) chr = 'ö';
-    else if ((a == 'n') && (b == 'g')) chr = 'Ö';
-
-
-
-    else if ((a == 'n') && (b == 'j')) chr = 'Ù';
-    else if ((a == 'p') && (b == 'j')) chr = 'ù';
-
-    else if ((a == 'n') && (b == 'k')) chr = 'Ú';
-    else if ((a == 'p') && (b == 'k')) chr = 'ú';
-
-    else if ((a == 'n') && (b == 'l')) chr = 'Û';
-    else if ((a == 'p') && (b == 'l')) chr = 'û';
-
-    else if ((a == 'p') && (b == 'm')) chr = 'ü';
-    else if ((a == 'n') && (b == 'm')) chr = 'Ü';
-
-
-
-    else if ((a == 'm') && (b == 'a')) chr = 'À';
-    else if ((a == 'o') && (b == 'a')) chr = 'à';
-
-    else if ((a == 'm') && (b == 'b')) chr = 'Á';
-    else if ((a == 'o') && (b == 'b')) chr = 'á';
-
-    else if ((a == 'm') && (b == 'c')) chr = 'Â';
-    else if ((a == 'o') && (b == 'c')) chr = 'â';
-
-    else if ((a == 'm') && (b == 'd')) chr = 'Ã';
-    else if ((a == 'o') && (b == 'd')) chr = 'ã';
-
-    else if ((a == 'm') && (b == 'e')) chr = 'Ä';
-    else if ((a == 'o') && (b == 'e')) chr = 'ä';
-
-    else if ((a == 'm') && (b == 'f')) chr = 'Å';
-    else if ((a == 'o') && (b == 'f')) chr = 'å';
-
-    else if ((a == 'm') && (b == 'g')) chr = 'Æ';
-    else if ((a == 'o') && (b == 'g')) chr = 'æ';
-
-
-
-    else if ((a == 'm') && (b == 'i')) chr = 'È';
-    else if ((a == 'o') && (b == 'i')) chr = 'è';
-
-    else if ((a == 'm') && (b == 'j')) chr = 'É';
-    else if ((a == 'o') && (b == 'j')) chr = 'é';
-
-    else if ((a == 'm') && (b == 'k')) chr = 'Ê';
-    else if ((a == 'o') && (b == 'k')) chr = 'ê';
-
-    else if ((a == 'm') && (b == 'l')) chr = 'Ë';
-    else if ((a == 'o') && (b == 'l')) chr = 'ë';
-
-
-
-
-
-
-    else if ((a == 'm') && (b == 'm')) chr = 'Ì';
-    else if ((a == 'o') && (b == 'm')) chr = 'ì';
-
-    else if ((a == 'm') && (b == 'n')) chr = 'Í';
-    else if ((a == 'o') && (b == 'n')) chr = 'í';
-
-    else if ((a == 'm') && (b == 'o')) chr = 'Î';
-    else if ((a == 'o') && (b == 'o')) chr = 'î';
-
-    else if ((a == 'm') && (b == 'p')) chr = 'Ï';
-    else if ((a == 'o') && (b == 'p')) chr = 'ï';
-
-
-    else if ((a == 'n') && (b == 'b')) chr = 'Ñ';
-    else if ((a == 'p') && (b == 'b')) chr = 'ñ';
-
-
-    else if ((a == 'k') && (b == 'c')) chr = '¢';
-    else if ((a == 'k') && (b == 'j')) chr = '©';
-    else if ((a == 'l') && (b == 'f')) chr = 'µ';
-    else if ((a == 'n') && (b == 'i')) chr = 'Ø';
-    else if ((a == 'p') && (b == 'i')) chr = 'ø';
-
-    else if ((a == 'l') && (b == 'j')) chr = '¹';
-    else if ((a == 'l') && (b == 'c')) chr = '²';
-    else if ((a == 'l') && (b == 'd')) chr = '³';
-
-    else if ((a == 'l') && (b == 'm')) chr = '¼';
-    else if ((a == 'l') && (b == 'n')) chr = '½';
-    else if ((a == 'l') && (b == 'o')) chr = '¾';
-
-    else if ((a == 'l') && (b == 'a')) chr = '°';
-
-    else if ((a == 'k') && (b == 'o')) chr = '®';
-    else if ((a == 'k') && (b == 'h')) chr = '§';
-    else if ((a == 'k') && (b == 'd')) chr = '£';
-
-    else if ((a == 'p') && (b == 'a')) chr = 'ð';
-    else if ((a == 'n') && (b == 'a')) chr = 'Ð';
-
-    else if ((a == 'l') && (b == 'l')) chr = '»';
-    else if ((a == 'k') && (b == 'l')) chr = '«';
-
-    else if ((a == 'l') && (b == 'k')) chr = 'º';
-
-    else if ((a == 'l') && (b == 'h')) chr = '·';
-
-    else if ((a == 'k') && (b == 'b')) chr = '¡';
-
-    else if ((a == 'k') && (b == 'e')) chr = '¤';
-
-    else if ((a == 'l') && (b == 'b')) chr = '±';
-
-    else if ((a == 'l') && (b == 'p')) chr = '¿';
-
-    else if ((a == 'k') && (b == 'f')) chr = '¥';
-
-    else if ((a == 'p') && (b == 'o')) chr = 'þ';
-    else if ((a == 'n') && (b == 'o')) chr = 'Þ';
-
-    else if ((a == 'n') && (b == 'n')) chr = 'Ý';
-    else if ((a == 'p') && (b == 'n')) chr = 'ý';
-    else if ((a == 'p') && (b == 'p')) chr = 'ÿ';
-
-    else if ((a == 'k') && (b == 'k')) chr = 'ª';
-
-    else if ((a == 'k') && (b == 'm')) chr = '¬';
-    else if ((a == 'p') && (b == 'h')) chr = '÷';
-
-    else if ((a == 'k') && (b == 'g')) chr = '|';
-
-    else if ((a == 'l') && (b == 'e')) chr = '\'';
-
-    else if ((a == 'k') && (b == 'i')) chr = '¨';
-
-    else if ((a == 'k') && (b == 'n')) chr = '­';
-
-    else if ((a == 'k') && (b == 'p')) chr = '¯';
-
-    else if ((a == 'l') && (b == 'g')) chr = '¶';
-
-    else if ((a == 'l') && (b == 'i')) chr = '¸';
-
-    else if ((a == 'm') && (b == 'h')) chr = 'Ç';
-    else if ((a == 'o') && (b == 'h')) chr = 'ç';
-
-    else if ((a == 'n') && (b == 'h')) chr = '×';
-
-    else if ((a == 'k') && (b == 'a')) chr = ' ';
-
-    else if ((a == 'a') && (b == 'j')) chr = '!';
-
-    else  chr = '#';
+    if ((a == 'n') && (b == 'p')) {
+        chr = 'ß';
+    }
+
+    else if ((a == 'n') && (b == 'c')) {
+        chr = 'Ò';
+    } else if ((a == 'p') && (b == 'c')) {
+        chr = 'ò';
+    }
+
+    else if ((a == 'n') && (b == 'd')) {
+        chr = 'Ó';
+    } else if ((a == 'p') && (b == 'd')) {
+        chr = 'ó';
+    }
+
+    else if ((a == 'n') && (b == 'e')) {
+        chr = 'Ô';
+    } else if ((a == 'p') && (b == 'e')) {
+        chr = 'ô';
+    }
+
+    else if ((a == 'n') && (b == 'f')) {
+        chr = 'Õ';
+    } else if ((a == 'p') && (b == 'f')) {
+        chr = 'õ';
+    }
+
+    else if ((a == 'p') && (b == 'g')) {
+        chr = 'ö';
+    } else if ((a == 'n') && (b == 'g')) {
+        chr = 'Ö';
+    }
+
+    else if ((a == 'n') && (b == 'j')) {
+        chr = 'Ù';
+    } else if ((a == 'p') && (b == 'j')) {
+        chr = 'ù';
+    }
+
+    else if ((a == 'n') && (b == 'k')) {
+        chr = 'Ú';
+    } else if ((a == 'p') && (b == 'k')) {
+        chr = 'ú';
+    }
+
+    else if ((a == 'n') && (b == 'l')) {
+        chr = 'Û';
+    } else if ((a == 'p') && (b == 'l')) {
+        chr = 'û';
+    }
+
+    else if ((a == 'p') && (b == 'm')) {
+        chr = 'ü';
+    } else if ((a == 'n') && (b == 'm')) {
+        chr = 'Ü';
+    }
+
+    else if ((a == 'm') && (b == 'a')) {
+        chr = 'À';
+    } else if ((a == 'o') && (b == 'a')) {
+        chr = 'à';
+    }
+
+    else if ((a == 'm') && (b == 'b')) {
+        chr = 'Á';
+    } else if ((a == 'o') && (b == 'b')) {
+        chr = 'á';
+    }
+
+    else if ((a == 'm') && (b == 'c')) {
+        chr = 'Â';
+    } else if ((a == 'o') && (b == 'c')) {
+        chr = 'â';
+    }
+
+    else if ((a == 'm') && (b == 'd')) {
+        chr = 'Ã';
+    } else if ((a == 'o') && (b == 'd')) {
+        chr = 'ã';
+    }
+
+    else if ((a == 'm') && (b == 'e')) {
+        chr = 'Ä';
+    } else if ((a == 'o') && (b == 'e')) {
+        chr = 'ä';
+    }
+
+    else if ((a == 'm') && (b == 'f')) {
+        chr = 'Å';
+    } else if ((a == 'o') && (b == 'f')) {
+        chr = 'å';
+    }
+
+    else if ((a == 'm') && (b == 'g')) {
+        chr = 'Æ';
+    } else if ((a == 'o') && (b == 'g')) {
+        chr = 'æ';
+    }
+
+    else if ((a == 'm') && (b == 'i')) {
+        chr = 'È';
+    } else if ((a == 'o') && (b == 'i')) {
+        chr = 'è';
+    }
+
+    else if ((a == 'm') && (b == 'j')) {
+        chr = 'É';
+    } else if ((a == 'o') && (b == 'j')) {
+        chr = 'é';
+    }
+
+    else if ((a == 'm') && (b == 'k')) {
+        chr = 'Ê';
+    } else if ((a == 'o') && (b == 'k')) {
+        chr = 'ê';
+    }
+
+    else if ((a == 'm') && (b == 'l')) {
+        chr = 'Ë';
+    } else if ((a == 'o') && (b == 'l')) {
+        chr = 'ë';
+    }
+
+    else if ((a == 'm') && (b == 'm')) {
+        chr = 'Ì';
+    } else if ((a == 'o') && (b == 'm')) {
+        chr = 'ì';
+    }
+
+    else if ((a == 'm') && (b == 'n')) {
+        chr = 'Í';
+    } else if ((a == 'o') && (b == 'n')) {
+        chr = 'í';
+    }
+
+    else if ((a == 'm') && (b == 'o')) {
+        chr = 'Î';
+    } else if ((a == 'o') && (b == 'o')) {
+        chr = 'î';
+    }
+
+    else if ((a == 'm') && (b == 'p')) {
+        chr = 'Ï';
+    } else if ((a == 'o') && (b == 'p')) {
+        chr = 'ï';
+    }
+
+    else if ((a == 'n') && (b == 'b')) {
+        chr = 'Ñ';
+    } else if ((a == 'p') && (b == 'b')) {
+        chr = 'ñ';
+    }
+
+    else if ((a == 'k') && (b == 'c')) {
+        chr = '¢';
+    } else if ((a == 'k') && (b == 'j')) {
+        chr = '©';
+    } else if ((a == 'l') && (b == 'f')) {
+        chr = 'µ';
+    } else if ((a == 'n') && (b == 'i')) {
+        chr = 'Ø';
+    } else if ((a == 'p') && (b == 'i')) {
+        chr = 'ø';
+    }
+
+    else if ((a == 'l') && (b == 'j')) {
+        chr = '¹';
+    } else if ((a == 'l') && (b == 'c')) {
+        chr = '²';
+    } else if ((a == 'l') && (b == 'd')) {
+        chr = '³';
+    }
+
+    else if ((a == 'l') && (b == 'm')) {
+        chr = '¼';
+    } else if ((a == 'l') && (b == 'n')) {
+        chr = '½';
+    } else if ((a == 'l') && (b == 'o')) {
+        chr = '¾';
+    }
+
+    else if ((a == 'l') && (b == 'a')) {
+        chr = '°';
+    }
+
+    else if ((a == 'k') && (b == 'o')) {
+        chr = '®';
+    } else if ((a == 'k') && (b == 'h')) {
+        chr = '§';
+    } else if ((a == 'k') && (b == 'd')) {
+        chr = '£';
+    }
+
+    else if ((a == 'p') && (b == 'a')) {
+        chr = 'ð';
+    } else if ((a == 'n') && (b == 'a')) {
+        chr = 'Ð';
+    }
+
+    else if ((a == 'l') && (b == 'l')) {
+        chr = '»';
+    } else if ((a == 'k') && (b == 'l')) {
+        chr = '«';
+    }
+
+    else if ((a == 'l') && (b == 'k')) {
+        chr = 'º';
+    }
+
+    else if ((a == 'l') && (b == 'h')) {
+        chr = '·';
+    }
+
+    else if ((a == 'k') && (b == 'b')) {
+        chr = '¡';
+    }
+
+    else if ((a == 'k') && (b == 'e')) {
+        chr = '¤';
+    }
+
+    else if ((a == 'l') && (b == 'b')) {
+        chr = '±';
+    }
+
+    else if ((a == 'l') && (b == 'p')) {
+        chr = '¿';
+    }
+
+    else if ((a == 'k') && (b == 'f')) {
+        chr = '¥';
+    }
+
+    else if ((a == 'p') && (b == 'o')) {
+        chr = 'þ';
+    } else if ((a == 'n') && (b == 'o')) {
+        chr = 'Þ';
+    }
+
+    else if ((a == 'n') && (b == 'n')) {
+        chr = 'Ý';
+    } else if ((a == 'p') && (b == 'n')) {
+        chr = 'ý';
+    } else if ((a == 'p') && (b == 'p')) {
+        chr = 'ÿ';
+    }
+
+    else if ((a == 'k') && (b == 'k')) {
+        chr = 'ª';
+    }
+
+    else if ((a == 'k') && (b == 'm')) {
+        chr = '¬';
+    } else if ((a == 'p') && (b == 'h')) {
+        chr = '÷';
+    }
+
+    else if ((a == 'k') && (b == 'g')) {
+        chr = '|';
+    }
+
+    else if ((a == 'l') && (b == 'e')) {
+        chr = '\'';
+    }
+
+    else if ((a == 'k') && (b == 'i')) {
+        chr = '¨';
+    }
+
+    else if ((a == 'k') && (b == 'n')) {
+        chr = '­';
+    }
+
+    else if ((a == 'k') && (b == 'p')) {
+        chr = '¯';
+    }
+
+    else if ((a == 'l') && (b == 'g')) {
+        chr = '¶';
+    }
+
+    else if ((a == 'l') && (b == 'i')) {
+        chr = '¸';
+    }
+
+    else if ((a == 'm') && (b == 'h')) {
+        chr = 'Ç';
+    } else if ((a == 'o') && (b == 'h')) {
+        chr = 'ç';
+    }
+
+    else if ((a == 'n') && (b == 'h')) {
+        chr = '×';
+    }
+
+    else if ((a == 'k') && (b == 'a')) {
+        chr = ' ';
+    }
+
+    else if ((a == 'a') && (b == 'j')) {
+        chr = '!';
+    }
+
+    else {
+        chr = '#';
+    }
 
     return chr;
 }
-
-
 
 /******************************************************************************
  *  function:   writePen                                                      *
@@ -793,21 +932,19 @@ APPLIXSPREADImport::writePen(QString &str, int penwidth, int penstyle, QString f
 {
     str += "     <pen width=\"" +
 
-    // width of the pen
+           // width of the pen
            QString::number(penwidth) +
            "\" style=\"" +
 
-    // style of the pen
+           // style of the pen
            QString::number(penstyle) +
            "\" color=\"" +
 
-    // color of the pen
+           // color of the pen
            framecolor +
            "\" />\n";
 
 }
-
-
 
 /******************************************************************************
  *  function:   writeColor                                                    *
@@ -824,12 +961,8 @@ APPLIXSPREADImport::writeColor(t_mycolor *mc)
     sprintf(rgb, "#%02X%02X%02X", mc->r, mc->g, mc->b);
     QString bla = rgb;
 
-
     return bla;
 }
-
-
-
 
 /******************************************************************************
  *  function:   readTypefaceTable                                             *
@@ -847,8 +980,9 @@ APPLIXSPREADImport::readTypefaceTable(QTextStream &stream, QStringList &typeface
     do {
         mystr = nextLine(stream);
         // FIXME: What happens if the magic words are not present in the stream?
-        if (mystr == "END TYPEFACE TABLE") ok = false;
-        else {
+        if (mystr == "END TYPEFACE TABLE") {
+            ok = false;
+        } else {
             //printf ("  %2d: <%s>\n", tftabCounter, mystr.toLatin1());
             typefacetab.append(mystr);
             tftabCounter++;
@@ -858,13 +992,11 @@ APPLIXSPREADImport::readTypefaceTable(QTextStream &stream, QStringList &typeface
     kDebug() << "... done";
 }
 
-
-
 /******************************************************************************
  *  function:   readColormap                                                  *
  ******************************************************************************/
 void
-APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
+APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor *> &mcol)
 {
     int contcount, pos;
 
@@ -877,8 +1009,9 @@ APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
 
         mystr = nextLine(stream).trimmed();
 
-        if (mystr == "END COLORMAP") ok = false;
-        else {
+        if (mystr == "END COLORMAP") {
+            ok = false;
+        } else {
             kDebug() << "  ->" << mystr;
 
             // Count the number of  whitespaces
@@ -907,13 +1040,19 @@ APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
 
             // Color transformation cmyk -> rgb
             tmc->r = 255 - (tmc->c + tmc->k);
-            if (tmc->r < 0) tmc->r = 0;
+            if (tmc->r < 0) {
+                tmc->r = 0;
+            }
 
             tmc->g = 255 - (tmc->m + tmc->k);
-            if (tmc->g < 0) tmc->g = 0;
+            if (tmc->g < 0) {
+                tmc->g = 0;
+            }
 
             tmc->b = 255 - (tmc->y + tmc->k);
-            if (tmc->b < 0) tmc->b = 0;
+            if (tmc->b < 0) {
+                tmc->b = 0;
+            }
 
             mcol.append(tmc);
         }
@@ -922,14 +1061,11 @@ APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
 
     kDebug() << "... done" << mcol.count();
 
-    foreach(t_mycolor* emp, mcol) {
+    foreach (t_mycolor *emp, mcol) {
         printf(" c:%3d m:%3d y:%3d k:%3d   r:%3d g:%3d b:%3d\n",
                emp->c, emp->m, emp->y, emp->k, emp->r, emp->g, emp->b);
     }
 }
-
-
-
 
 /******************************************************************************
  *  function:   readColormap                                                  *
@@ -953,8 +1089,9 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
         mystr = nextLine(stream);
 
         kDebug() << "" << mystr;
-        if (mystr.startsWith("View End, Name:")) ok = false;
-        else {
+        if (mystr.startsWith("View End, Name:")) {
+            ok = false;
+        } else {
             // COLUMN Widths
             if (mystr.startsWith("View Column Widths")) {
                 kDebug() << "   - Column Widths";
@@ -984,7 +1121,6 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
                     // Translate the column width right from applix to kspread
                     icolumn = icolumn * 5;
 
-
                     rowcolstr += "  <column width=\"" +
                                  QString::number(colwidth) +
                                  "\" column=\"" +
@@ -1011,7 +1147,9 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
                     sscanf((*it).toLatin1(), " %d:%d",
                            &irow, &rowheight);
                     printf("   row: %2d   height: %2d\n", irow, rowheight);
-                    if (rowheight > 32768) rowheight -= 32768;
+                    if (rowheight > 32768) {
+                        rowheight -= 32768;
+                    }
                     printf("              height: %2d\n", rowheight);
                     rowcolstr += "  <row row=\"" +
                                  QString::number(irow) +
@@ -1021,7 +1159,6 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
                                  "   <format/>\n"
                                  "  </row>\n";
                 }
-
 
             }
         } // else != END COLORMAP
@@ -1038,10 +1175,6 @@ APPLIXSPREADImport::readView(QTextStream &stream, QString instr, t_rc &rc)
     printf("...done \n\n");
 }
 
-
-
-
-
 /******************************************************************************
  *  function:   filterSHFGBG                                                  *
  ******************************************************************************/
@@ -1057,7 +1190,9 @@ APPLIXSPREADImport::filterSHFGBG(QString it, int *style, int *bgcolor,
     pos = it.indexOf("SH");
     if (pos > -1) {
         tmpstr = it;
-        if (pos > 0)   tmpstr.remove(0, pos);
+        if (pos > 0) {
+            tmpstr.remove(0, pos);
+        }
         pos = sscanf(tmpstr.toLatin1(), "SH%d",
                      style);
 
@@ -1065,12 +1200,13 @@ APPLIXSPREADImport::filterSHFGBG(QString it, int *style, int *bgcolor,
                *style, pos);
     }
 
-
     // filter FG = FGCOLOR
     pos = it.indexOf("FG");
     if (pos > -1) {
         tmpstr = it;
-        if (pos > 0)   tmpstr.remove(0, pos);
+        if (pos > 0) {
+            tmpstr.remove(0, pos);
+        }
         pos = sscanf(tmpstr.toLatin1(), "FG%d",
                      fgcolor);
         printf("fg: %d(%d)  ",
@@ -1078,12 +1214,13 @@ APPLIXSPREADImport::filterSHFGBG(QString it, int *style, int *bgcolor,
         m2 = 1;
     }
 
-
     // filter BG = BGCOLOR
     pos = it.indexOf("BG");
     if (pos > -1) {
         tmpstr = it;
-        if (pos > 0)   tmpstr.remove(0, pos);
+        if (pos > 0) {
+            tmpstr.remove(0, pos);
+        }
         pos = sscanf(tmpstr.toLatin1(), "BG%d",
                      bgcolor);
         printf("bgcolor: %d(%d)  ",
@@ -1091,41 +1228,56 @@ APPLIXSPREADImport::filterSHFGBG(QString it, int *style, int *bgcolor,
         m3 = 1;
     }
 
-
     printf("\n");
-
 
     // correct the bgcolor to the fgcolor if the background is plain
     if ((*style == 8) && (m2 == 1) && (m3 == 0)) {
         *bgcolor = *fgcolor;
     }
 
-
     // Translate brushstyle to kspread brushstyle
     if (*style != 0) {
-        if (*style ==  1) *style =  0;
-        else if (*style ==  2) *style =  7;
-        else if (*style ==  3) *style =  0;
-        else if (*style ==  4) *style =  4;
-        else if (*style ==  5) *style =  3;
-        else if (*style ==  6) *style =  2;
-        else if (*style ==  7) *style =  0;
-        else if (*style ==  8) *style =  0;
-        else if (*style ==  9) *style = 10;
-        else if (*style == 10) *style =  9;
-        else if (*style == 11) *style = 11;
-        else if (*style == 12) *style = 12;
-        else if (*style == 13) *style = 13;
-        else if (*style == 14) *style = 14;
-        else if (*style == 15) *style =  0;
-        else if (*style == 16) *style =  0;
-        else if (*style == 17) *style =  0;
-        else if (*style == 18) *style =  0;
-        else if (*style == 19) *style =  0;
+        if (*style ==  1) {
+            *style =  0;
+        } else if (*style ==  2) {
+            *style =  7;
+        } else if (*style ==  3) {
+            *style =  0;
+        } else if (*style ==  4) {
+            *style =  4;
+        } else if (*style ==  5) {
+            *style =  3;
+        } else if (*style ==  6) {
+            *style =  2;
+        } else if (*style ==  7) {
+            *style =  0;
+        } else if (*style ==  8) {
+            *style =  0;
+        } else if (*style ==  9) {
+            *style = 10;
+        } else if (*style == 10) {
+            *style =  9;
+        } else if (*style == 11) {
+            *style = 11;
+        } else if (*style == 12) {
+            *style = 12;
+        } else if (*style == 13) {
+            *style = 13;
+        } else if (*style == 14) {
+            *style = 14;
+        } else if (*style == 15) {
+            *style =  0;
+        } else if (*style == 16) {
+            *style =  0;
+        } else if (*style == 17) {
+            *style =  0;
+        } else if (*style == 18) {
+            *style =  0;
+        } else if (*style == 19) {
+            *style =  0;
+        }
     }
 }
-
-
 
 /******************************************************************************
  *  function:   filterSHFGBG                                                  *
@@ -1162,9 +1314,6 @@ APPLIXSPREADImport::transPenFormat(QString it, int *PenWidth, int *PenStyle)
     printf("frame (w:%d - s:%d) \n", *PenWidth, *PenStyle);
 }
 
-
-
-
 /******************************************************************************
  *  function: readHeader                                                       *
  ******************************************************************************/
@@ -1174,7 +1323,6 @@ APPLIXSPREADImport::readHeader(QTextStream &stream)
     QString mystr;
     int     vers[3] = { 0, 0, 0 };
     int     rueck;
-
 
     // Read Headline
     mystr = nextLine(stream);
@@ -1194,19 +1342,17 @@ APPLIXSPREADImport::readHeader(QTextStream &stream)
                                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr),
                               "Okay");
 
-
         return false;
     } else {
         return true;
     }
 }
 
-
 /******************************************************************************
  *  function: translateColumnNumber                                           *
  ******************************************************************************/
 int
-APPLIXSPREADImport::translateColumnNumber(const QString& colstr)
+APPLIXSPREADImport::translateColumnNumber(const QString &colstr)
 {
     int icol = 0;
     const int len = colstr.length();
@@ -1237,7 +1383,7 @@ APPLIXSPREADImport::translateColumnNumber(const QString& colstr)
 }
 
 // Converts =SUM(F1,4) into =SUM(F1;4) -- well, plus possible nesting
-QString APPLIXSPREADImport::convertFormula(const QString& input) const
+QString APPLIXSPREADImport::convertFormula(const QString &input) const
 {
     // Let me be stupid for now
     QString ret = input;

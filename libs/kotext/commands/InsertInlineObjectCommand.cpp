@@ -50,8 +50,7 @@ void InsertInlineObjectCommand::redo()
         doc.inlineTextObjectManager()->insertInlineObject(*editor->cursor(), m_inlineObject);
         m_position = editor->cursor()->position();
         m_first = false;
-    }
-    else {
+    } else {
         doc.inlineTextObjectManager()->addInlineObject(m_inlineObject);
     }
     editor->setPosition(m_position);

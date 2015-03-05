@@ -31,15 +31,15 @@ class PAINTOP_EXPORT KisPressureMirrorOptionWidget : public KisCurveOptionWidget
 public:
     KisPressureMirrorOptionWidget();
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
 private Q_SLOTS:
     void horizontalMirrorChanged(bool mirror);
     void verticalMirrorChanged(bool mirror);
 
 private:
-    QCheckBox* m_horizontalMirror;
-    QCheckBox* m_verticalMirror;
+    QCheckBox *m_horizontalMirror;
+    QCheckBox *m_verticalMirror;
 };
 
 #endif // KIS_PRESSURE_RATE_OPTION_WIDGET_H

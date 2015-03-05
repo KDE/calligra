@@ -42,7 +42,7 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    Map* m_map;
+    Map *m_map;
 };
 
 } // namespace Sheets

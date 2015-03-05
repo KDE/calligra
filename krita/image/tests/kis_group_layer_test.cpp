@@ -19,7 +19,6 @@
 #include "kis_group_layer_test.h"
 #include <qtest_kde.h>
 
-
 #include "kis_group_layer.h"
 #include "kis_types.h"
 #include "KoColorSpaceRegistry.h"
@@ -27,12 +26,11 @@
 
 void KisGroupLayerTest::testProjection()
 {
-    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 512, 512, colorSpace, "merge test");
 
 }
 
 QTEST_KDEMAIN(KisGroupLayerTest, GUI)
 #include "kis_group_layer_test.moc"
-
 

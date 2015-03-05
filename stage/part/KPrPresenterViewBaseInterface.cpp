@@ -19,18 +19,18 @@
 
 #include "KPrPresenterViewBaseInterface.h"
 
-KPrPresenterViewBaseInterface::KPrPresenterViewBaseInterface( const QList<KoPAPageBase *> &pages, QWidget *parent )
-    : QWidget( parent )
-    , m_pages( pages )
+KPrPresenterViewBaseInterface::KPrPresenterViewBaseInterface(const QList<KoPAPageBase *> &pages, QWidget *parent)
+    : QWidget(parent)
+    , m_pages(pages)
 {
 }
 
-void KPrPresenterViewBaseInterface::setActivePage( KoPAPageBase *page )
+void KPrPresenterViewBaseInterface::setActivePage(KoPAPageBase *page)
 {
-    setActivePage( m_pages.indexOf( page ) );
+    setActivePage(m_pages.indexOf(page));
 }
 
-void KPrPresenterViewBaseInterface::setActivePage( int pageIndex )
+void KPrPresenterViewBaseInterface::setActivePage(int pageIndex)
 {
     m_activePage = pageIndex;
 }

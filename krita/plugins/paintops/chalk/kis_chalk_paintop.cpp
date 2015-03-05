@@ -37,7 +37,7 @@
 
 #include <kis_pressure_opacity_option.h>
 
-KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
+KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
 {
     Q_UNUSED(image);
@@ -47,7 +47,7 @@ KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPai
 
     m_properties.readOptionSetting(settings);
 
-    KoColorTransformation* transfo = 0;
+    KoColorTransformation *transfo = 0;
     if (m_properties.inkDepletion && m_properties.useSaturation) {
         transfo = painter->device()->compositionSourceColorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
     }
@@ -59,14 +59,15 @@ KisChalkPaintOp::~KisChalkPaintOp()
     delete m_chalkBrush;
 }
 
-KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation& info)
+KisSpacingInformation KisChalkPaintOp::paintAt(const KisPaintInformation &info)
 {
-    if (!painter()) return 1.0;
+    if (!painter()) {
+        return 1.0;
+    }
 
     if (!m_dab) {
         m_dab = source()->createCompositionSourceDevice();
-    }
-    else {
+    } else {
         m_dab->clear();
     }
 

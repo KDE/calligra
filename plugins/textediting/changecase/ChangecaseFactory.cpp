@@ -26,7 +26,7 @@ ChangecaseFactory::ChangecaseFactory()
     : KoTextEditingFactory("changecase")
 {
     setShowInMenu(true);
-    setTitle(i18n ("Change Case...") );
+    setTitle(i18n("Change Case..."));
 }
 
 KoTextEditingPlugin *ChangecaseFactory::create() const

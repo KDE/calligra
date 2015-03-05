@@ -32,18 +32,18 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit MainWindow (QWidget* parent = 0);
+    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void openFile (const QString& path);
+    void openFile(const QString &path);
 
 private:
-    QDeclarativeView* m_view;
+    QDeclarativeView *m_view;
     KDeclarative kdeclarative;
     QString documentPath;
 
 private Q_SLOTS:
-    void adjustWindowSize (QSize size);
+    void adjustWindowSize(QSize size);
     void checkForAndOpenDocument();
 
 public Q_SLOTS:

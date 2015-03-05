@@ -28,7 +28,6 @@
 #include "WmfAbstractBackend.h"
 #include "WmfDeviceContext.h"
 
-
 /**
    Namespace for Windows Metafile (WMF) classes
 */

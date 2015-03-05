@@ -38,11 +38,14 @@ public:
     ~ViewListDocker();
     View *view();
     void setView(View *view);
-    ViewListWidget *viewList() const { return m_viewlist; }
+    ViewListWidget *viewList() const
+    {
+        return m_viewlist;
+    }
 
 public Q_SLOTS:
     void slotModified();
-    void updateWindowTitle( bool modified );
+    void updateWindowTitle(bool modified);
 
 private:
     View *m_view;
@@ -55,9 +58,12 @@ public:
     explicit ViewListDockerFactory(View *view);
 
     virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
+    virtual QDockWidget *createDockWidget();
     /// @return the dock widget area the widget should appear in by default
-    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const { return DockLeft; }
+    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const
+    {
+        return DockLeft;
+    }
 
 private:
     View *m_view;

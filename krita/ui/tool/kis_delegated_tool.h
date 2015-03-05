@@ -26,9 +26,8 @@
 
 #include "kis_delegated_tool_policies.h"
 
-
 template <class BaseClass, class DelegateTool, class ActivationPolicy = NoopActivationPolicy>
-    class KisDelegatedTool : public BaseClass
+class KisDelegatedTool : public BaseClass
 {
 public:
     KisDelegatedTool(KoCanvasBase *canvas,
@@ -39,11 +38,12 @@ public:
     {
     }
 
-    DelegateTool* localTool() const {
+    DelegateTool *localTool() const
+    {
         return m_localTool.data();
     }
 
-    void activate(typename BaseClass::ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+    void activate(typename BaseClass::ToolActivation toolActivation, const QSet<KoShape *> &shapes)
     {
         BaseClass::activate(toolActivation, shapes);
         m_localTool->activate(toolActivation, shapes);
@@ -58,30 +58,28 @@ public:
 
     void mousePressEvent(KoPointerEvent *event)
     {
-        if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                              Qt::LeftButton, Qt::ShiftModifier |
-                              Qt::ControlModifier | Qt::AltModifier)) {
+        if (PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                               Qt::LeftButton, Qt::ShiftModifier |
+                               Qt::ControlModifier | Qt::AltModifier)) {
 
             this->setMode(KisTool::PAINT_MODE);
 
             Q_ASSERT(m_localTool);
             m_localTool->mousePressEvent(event);
-        }
-        else {
+        } else {
             BaseClass::mousePressEvent(event);
         }
     }
 
     void mouseDoubleClickEvent(KoPointerEvent *event)
     {
-        if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                              Qt::LeftButton, Qt::ShiftModifier |
-                              Qt::ControlModifier | Qt::AltModifier)) {
+        if (PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                               Qt::LeftButton, Qt::ShiftModifier |
+                               Qt::ControlModifier | Qt::AltModifier)) {
 
             Q_ASSERT(m_localTool);
             m_localTool->mouseDoubleClickEvent(event);
-        }
-        else {
+        } else {
             BaseClass::mouseDoubleClickEvent(event);
         }
     }
@@ -96,13 +94,12 @@ public:
 
     void mouseReleaseEvent(KoPointerEvent *event)
     {
-        if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        if (RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
             this->setMode(KisTool::HOVER_MODE);
 
             Q_ASSERT(m_localTool);
             m_localTool->mouseReleaseEvent(event);
-        }
-        else {
+        } else {
             BaseClass::mouseReleaseEvent(event);
         }
     }

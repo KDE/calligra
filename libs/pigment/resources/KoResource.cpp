@@ -33,7 +33,7 @@ struct KoResource::Private {
     QImage image;
 };
 
-KoResource::KoResource(const QString& filename)
+KoResource::KoResource(const QString &filename)
     : d(new Private)
 {
     d->filename = filename;
@@ -60,7 +60,7 @@ void KoResource::setImage(const QImage &image)
 QByteArray KoResource::md5() const
 {
     if (d->md5.isEmpty()) {
-        const_cast<KoResource*>(this)->setMD5(generateMD5());
+        const_cast<KoResource *>(this)->setMD5(generateMD5());
     }
     return d->md5;
 }
@@ -75,7 +75,7 @@ QString KoResource::filename() const
     return d->filename;
 }
 
-void KoResource::setFilename(const QString& filename)
+void KoResource::setFilename(const QString &filename)
 {
     d->filename = filename;
     QFileInfo fileInfo(filename);
@@ -93,7 +93,7 @@ QString KoResource::name() const
     return d->name;
 }
 
-void KoResource::setName(const QString& name)
+void KoResource::setName(const QString &name)
 {
     d->name = name;
 }
@@ -108,7 +108,7 @@ void KoResource::setValid(bool valid)
     d->valid = valid;
 }
 
-void KoResource::toXML(QDomDocument& /*doc*/, QDomElement& element) const
+void KoResource::toXML(QDomDocument & /*doc*/, QDomElement &element) const
 {
     element.setAttribute("name", name());
     element.setAttribute("filename", filename());

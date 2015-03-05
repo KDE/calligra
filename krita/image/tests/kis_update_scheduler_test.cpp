@@ -38,15 +38,14 @@
 
 #include "../../sdk/tests/testutil.h"
 
-
 KisImageSP KisUpdateSchedulerTest::buildTestingImage()
 {
     QImage sourceImage1(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     QImage sourceImage2(QString(FILES_DATA_DIR) + QDir::separator() + "inverted_hakonepa.png");
 
-    QRect imageRect = QRect(QPoint(0,0), sourceImage1.size());
+    QRect imageRect = QRect(QPoint(0, 0), sourceImage1.size());
 
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, imageRect.width(), imageRect.height(), cs, "merge test");
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
@@ -79,7 +78,6 @@ void KisUpdateSchedulerTest::testMerge()
 
     QCOMPARE(paintLayer1->name(), QString("paint1"));
 
-
     KisUpdateScheduler scheduler(image.data());
 
     /**
@@ -104,16 +102,16 @@ void KisUpdateSchedulerTest::testMerge()
 
     QVector<QRect> dirtyRects(num);
 
-    for(qint32 i = 0; i < num-1; i++) {
-        dirtyRects[i] = QRect(width*i, 0, width, imageRect.height());
+    for (qint32 i = 0; i < num - 1; i++) {
+        dirtyRects[i] = QRect(width * i, 0, width, imageRect.height());
     }
-    dirtyRects[num-1] = QRect(width*(num-1), 0, lastWidth, imageRect.height());
+    dirtyRects[num - 1] = QRect(width * (num - 1), 0, lastWidth, imageRect.height());
 
-    for(qint32 i = 0; i < num; i+=2) {
+    for (qint32 i = 0; i < num; i += 2) {
         scheduler.updateProjection(paintLayer1, dirtyRects[i], image->bounds());
     }
 
-    for(qint32 i = 1; i < num; i+=2) {
+    for (qint32 i = 1; i < num; i += 2) {
         scheduler.updateProjection(paintLayer1, dirtyRects[i], image->bounds());
     }
 
@@ -136,7 +134,7 @@ void KisUpdateSchedulerTest::benchmarkOverlappedMerge()
     QRect imageRect = image->bounds();
 
     QCOMPARE(paintLayer1->name(), QString("paint1"));
-    QCOMPARE(imageRect, QRect(0,0,640,441));
+    QCOMPARE(imageRect, QRect(0, 0, 640, 441));
 
     KisUpdateScheduler scheduler(image.data());
 
@@ -147,7 +145,8 @@ void KisUpdateSchedulerTest::benchmarkOverlappedMerge()
     QBENCHMARK{
         QRect dirtyRect(0, 0, 200, imageRect.height());
 
-        for(int i = 0; i < numShifts; i++) {
+        for (int i = 0; i < numShifts; i++)
+        {
             // qDebug() << dirtyRect;
             scheduler.updateProjection(paintLayer1, dirtyRect, image->bounds());
             dirtyRect.translate(xShift, yShift);
@@ -165,18 +164,17 @@ void KisUpdateSchedulerTest::testLocking()
     QRect imageRect = image->bounds();
 
     QCOMPARE(paintLayer1->name(), QString("paint1"));
-    QCOMPARE(imageRect, QRect(0,0,640,441));
+    QCOMPARE(imageRect, QRect(0, 0, 640, 441));
 
     KisTestableUpdateScheduler scheduler(image.data(), 2);
 
-    QRect dirtyRect1(0,0,50,100);
-    QRect dirtyRect2(0,0,100,100);
-    QRect dirtyRect3(50,0,50,100);
-    QRect dirtyRect4(150,150,50,50);
-
+    QRect dirtyRect1(0, 0, 50, 100);
+    QRect dirtyRect2(0, 0, 100, 100);
+    QRect dirtyRect3(50, 0, 50, 100);
+    QRect dirtyRect4(150, 150, 50, 50);
 
     KisTestableUpdaterContext *context = scheduler.updaterContext();
-    QVector<KisUpdateJobItem*> jobs;
+    QVector<KisUpdateJobItem *> jobs;
 
     scheduler.updateProjection(paintLayer1, imageRect, imageRect);
 
@@ -215,13 +213,13 @@ void KisUpdateSchedulerTest::testExclusiveStrokes()
     QRect imageRect = image->bounds();
 
     QCOMPARE(paintLayer1->name(), QString("paint1"));
-    QCOMPARE(imageRect, QRect(0,0,640,441));
+    QCOMPARE(imageRect, QRect(0, 0, 640, 441));
 
-    QRect dirtyRect1(0,0,50,100);
+    QRect dirtyRect1(0, 0, 50, 100);
 
     KisTestableUpdateScheduler scheduler(image.data(), 2);
     KisTestableUpdaterContext *context = scheduler.updaterContext();
-    QVector<KisUpdateJobItem*> jobs;
+    QVector<KisUpdateJobItem *> jobs;
 
     scheduler.updateProjection(paintLayer1, dirtyRect1, imageRect);
 
@@ -341,18 +339,18 @@ public:
     {
     }
 
-    void run() {
+    void run()
+    {
         for (int i = 0; i < NUM_CYCLES; i++) {
-            if(i % NTH_CHECK == 0) {
+            if (i % NTH_CHECK == 0) {
                 m_scheduler->blockUpdates();
                 QTest::qSleep(1); // a bit of salt for crashiness ;)
                 Q_ASSERT(!m_scheduler->haveUpdatesRunning());
                 m_scheduler->unblockUpdates();
-            }
-            else {
-                QRect updateRect(0,0,100,100);
-                updateRect.moveTopLeft(QPoint((i%10)*100, (i%10)*100));
-                m_scheduler->updateProjection(m_node, updateRect, QRect(0,0,1100,1100));
+            } else {
+                QRect updateRect(0, 0, 100, 100);
+                updateRect.moveTopLeft(QPoint((i % 10) * 100, (i % 10) * 100));
+                m_scheduler->updateProjection(m_node, updateRect, QRect(0, 0, 1100, 1100));
             }
         }
     }
@@ -372,7 +370,7 @@ void KisUpdateSchedulerTest::testBlockUpdates()
     QThreadPool threadPool;
     threadPool.setMaxThreadCount(NUM_THREADS);
 
-    for(int i = 0; i< NUM_THREADS; i++) {
+    for (int i = 0; i < NUM_THREADS; i++) {
         UpdatesBlockTester *tester =
             new UpdatesBlockTester(&scheduler, paintLayer1);
 
@@ -381,7 +379,6 @@ void KisUpdateSchedulerTest::testBlockUpdates()
 
     threadPool.waitForDone();
 }
-
 
 QTEST_KDEMAIN(KisUpdateSchedulerTest, NoGUI)
 #include "kis_update_scheduler_test.moc"

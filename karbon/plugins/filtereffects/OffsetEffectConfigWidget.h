@@ -33,15 +33,15 @@ public:
     explicit OffsetEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
-    virtual bool editFilterEffect(KoFilterEffect * filterEffect);
+    virtual bool editFilterEffect(KoFilterEffect *filterEffect);
 
 private Q_SLOTS:
     void offsetChanged(double offset);
 
 private:
-    OffsetEffect * m_effect;
-    KDoubleNumInput * m_offsetX;
-    KDoubleNumInput * m_offsetY;
+    OffsetEffect *m_effect;
+    KDoubleNumInput *m_offsetX;
+    KDoubleNumInput *m_offsetY;
 };
 
 #endif // OFFSETEFFECTCONFIGWIDGET_H

@@ -37,19 +37,20 @@ class MacroCommand;
 class IntervalEditBase : public QWidget, public Ui::IntervalEditBase
 {
 public:
-    explicit IntervalEditBase(QWidget *parent) : QWidget( parent ) {
-    setupUi( this );
-  }
+    explicit IntervalEditBase(QWidget *parent) : QWidget(parent)
+    {
+        setupUi(this);
+    }
 };
 
-
-class IntervalEditImpl : public IntervalEditBase {
+class IntervalEditImpl : public IntervalEditBase
+{
     Q_OBJECT
 public:
     explicit IntervalEditImpl(QWidget *parent);
 
-    QList<TimeInterval*> intervals() const;
-    void setIntervals(const QList<TimeInterval*> &intervals);
+    QList<TimeInterval *> intervals() const;
+    void setIntervals(const QList<TimeInterval *> &intervals);
 
 protected Q_SLOTS:
     void slotClearClicked();
@@ -62,10 +63,11 @@ Q_SIGNALS:
     void changed();
 };
 
-class IntervalEdit : public IntervalEditImpl {
+class IntervalEdit : public IntervalEditImpl
+{
     Q_OBJECT
 public:
-    explicit IntervalEdit( CalendarDay *day, QWidget *parent=0);
+    explicit IntervalEdit(CalendarDay *day, QWidget *parent = 0);
 
 };
 
@@ -73,23 +75,26 @@ class KPLATOUI_EXPORT IntervalEditDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit IntervalEditDialog( Calendar *calendar, const QList<CalendarDay*> &days, QWidget *parent = 0 );
-    
-    explicit IntervalEditDialog( Calendar *calendar, const QList<QDate> &dates, QWidget *parent = 0 );
+    explicit IntervalEditDialog(Calendar *calendar, const QList<CalendarDay *> &days, QWidget *parent = 0);
+
+    explicit IntervalEditDialog(Calendar *calendar, const QList<QDate> &dates, QWidget *parent = 0);
 
     MacroCommand *buildCommand();
-    QList<TimeInterval*> intervals() const { return m_panel->intervals(); }
-    
+    QList<TimeInterval *> intervals() const
+    {
+        return m_panel->intervals();
+    }
+
 protected Q_SLOTS:
     void slotChanged();
-    void slotCalendarRemoved( const Calendar *cal );
+    void slotCalendarRemoved(const Calendar *cal);
 
 protected:
-    MacroCommand *buildCommand( Calendar *calendar, CalendarDay *day );
+    MacroCommand *buildCommand(Calendar *calendar, CalendarDay *day);
 
 private:
     Calendar *m_calendar;
-    QList<CalendarDay*> m_days;
+    QList<CalendarDay *> m_days;
     QList<QDate> m_dates;
     IntervalEdit *m_panel;
 };

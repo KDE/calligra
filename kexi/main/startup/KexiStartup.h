@@ -42,7 +42,10 @@ public:
     KexiStartupHandler();
     virtual ~KexiStartupHandler();
 
-    virtual bool init() { return KexiStartupData::init(); }
+    virtual bool init()
+    {
+        return KexiStartupData::init();
+    }
     virtual tristate init(int argc, char **argv);
 
     /*! Options for detectActionForFile() */
@@ -50,9 +53,9 @@ public:
         DontConvert = 1, //!< Skip asking for conversion (used e.g. when dropdb is called).
         ThisIsAProjectFile = 2, //!< A hint, forces detection of the file as a project file.
         ThisIsAShortcutToAProjectFile = 4,    //!< A hint, forces detection of the file
-                                              //!< as a shortcut to a project file.
+        //!< as a shortcut to a project file.
         ThisIsAShortcutToAConnectionData = 8, //!< A hint, forces detection of the file
-                                              //!< as a shortcut to a connection data.
+        //!< as a shortcut to a connection data.
         SkipMessages = 0x10, //!< Do not display error or warning messages.
         OpenReadOnly = 0x20  //!< Open in readonly mode.
     };
@@ -74,8 +77,8 @@ public:
      \a forceReadOnly points to a flag that will be set to true if it was detected
         that the file cannot be written. */
     static tristate detectActionForFile(
-        KexiStartupData::Import* detectedImportAction, QString* detectedDriverName,
-        const QString& _suggestedDriverName,
+        KexiStartupData::Import *detectedImportAction, QString *detectedDriverName,
+        const QString &_suggestedDriverName,
         const QString &dbFileName, QWidget *parent = 0, int options = 0, bool *forceReadOnly = 0);
 
     /*! Allows user to select a project with KexiProjectSelectorDialog.
@@ -83,7 +86,7 @@ public:
       Returns NULL and sets cancelled to true if the dialog was cancelled.
       Returns NULL and sets cancelled to false if there was an error.
     */
-    KexiProjectData* selectProject(KexiDB::ConnectionData *cdata, bool& cancelled, QWidget *parent = 0);
+    KexiProjectData *selectProject(KexiDB::ConnectionData *cdata, bool &cancelled, QWidget *parent = 0);
 
 protected Q_SLOTS:
     void slotSaveShortcutFileChanges();
@@ -95,13 +98,13 @@ protected:
     bool getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name);
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 namespace Kexi
 {
 //! \return singleton Startup Handler singleton.
-    KexiStartupHandler& startupHandler();
+KexiStartupHandler &startupHandler();
 }
 
 #endif

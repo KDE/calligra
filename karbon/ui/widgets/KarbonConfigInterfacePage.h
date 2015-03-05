@@ -35,7 +35,7 @@ class KarbonConfigInterfacePage : public KVBox
     Q_OBJECT
 
 public:
-    explicit KarbonConfigInterfacePage(KarbonView* view, char* name = 0L);
+    explicit KarbonConfigInterfacePage(KarbonView *view, char *name = 0L);
 
     void apply();
 
@@ -43,20 +43,19 @@ public Q_SLOTS:
     void slotDefault();
 
 private:
-    KarbonView* m_view;
+    KarbonView *m_view;
     KSharedConfigPtr m_config;
 
-    KIntNumInput* m_recentFiles;
+    KIntNumInput *m_recentFiles;
     int m_oldRecentFiles;
 
-    QCheckBox* m_showStatusBar;
+    QCheckBox *m_showStatusBar;
 
-    KIntNumInput* m_dockerFontSize;
+    KIntNumInput *m_dockerFontSize;
     int m_oldDockerFontSize;
 
-    KColorButton* m_canvasColor;
+    KColorButton *m_canvasColor;
     QColor m_oldCanvasColor;
 };
-
 
 #endif // KARBONCONFIGINTERFACEPAGE_H

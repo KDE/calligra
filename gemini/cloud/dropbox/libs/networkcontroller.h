@@ -33,7 +33,6 @@
 #include "libs/folderitem.h"
 #include "libs/filetransferitem.h"
 
-
 class NetworkController : public QObject
 {
     Q_OBJECT
@@ -42,18 +41,19 @@ public:
     explicit NetworkController(QObject *parent = 0);
     ~NetworkController();
 
-    static QString Dropbox_Folder() {
+    static QString Dropbox_Folder()
+    {
         QDir tmpdir = QDir::temp();
         QString folder = tmpdir.canonicalPath().append(QDir::separator()).append("calligra-gemini-dropbox");
-        if(!tmpdir.exists(folder)) {
+        if (!tmpdir.exists(folder)) {
             tmpdir.mkpath(folder);
         }
         return folder;
     }
 
-    enum State{
+    enum State {
         REQUEST_TOKEN,
-        ACCESS_TOKEN ,
+        ACCESS_TOKEN,
         FILES_FOLDERS,
         DELETE, CREATE,
         RENAME, MOVE,
@@ -62,7 +62,7 @@ public:
         ACCOUNT_INFO
     };
 
-    enum TransferState{
+    enum TransferState {
         DOWNLOADING,
         UPLOADING,
         FREE,
@@ -75,12 +75,12 @@ public:
     void authenticate();
     void getfolderlist(QString);
 
-    void upload(FileTransferItem*);
-    void download(FileTransferItem*);
+    void upload(FileTransferItem *);
+    void download(FileTransferItem *);
 
-    void __delete(FolderItem*);
+    void __delete(FolderItem *);
     void __create(QString);
-    void __rename(QString,QString);
+    void __rename(QString, QString);
     void __move(QString);
     void __shares(QString);
     void __copy(QString);
@@ -118,41 +118,39 @@ private:
 Q_SIGNALS:
     void authenticate_finished();
     void network_error(QString error);
-    void getfolder_finished(const QVariantMap&);
+    void getfolder_finished(const QVariantMap &);
     void getfolder_done();
 
-    void progressBarChanged(const int &percent, const double &speed,const qint64 &sent_received);
+    void progressBarChanged(const int &percent, const double &speed, const qint64 &sent_received);
 
     void file_download_finished();
     void file_upload_finished();
 
-    void delete_finished(const bool&);
-    void create_finished(const bool&);
-    void rename_finished(const bool&);
-    void move_finished(const bool&);
-    void copy_finished(const bool&);
+    void delete_finished(const bool &);
+    void create_finished(const bool &);
+    void rename_finished(const bool &);
+    void move_finished(const bool &);
+    void copy_finished(const bool &);
 
     void stop_and_cancel_finished();
 
-    void shares_finished(const bool&);
+    void shares_finished(const bool &);
     void shares_metadata(const QString &url, const QString &expire);
 
-    void accountinfo_finished(const bool&);
-    void accountinfo_metadata(const QVariant&);
+    void accountinfo_finished(const bool &);
+    void accountinfo_metadata(const QVariant &);
 
     void open_oauth_authorize_page(const QString &oauth_token);
 
-
 public Q_SLOTS:
     void uploadProgress(qint64 sent, qint64 total);
-    void downloadProgress(qint64 received,qint64 total);
+    void downloadProgress(qint64 received, qint64 total);
     void sslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
 
-
 private Q_SLOTS:
-    void finished(QNetworkReply*);
+    void finished(QNetworkReply *);
     void readyRead();
-    void file_transfer_finished(QNetworkReply*);
+    void file_transfer_finished(QNetworkReply *);
 };
 
 #endif // NETWORKCONTROLLER_H

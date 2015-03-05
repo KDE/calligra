@@ -26,7 +26,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #include "RefinePathPlugin.h"
 #include "KarbonPathRefineCommand.h"
 
@@ -62,46 +61,50 @@ RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &)
     actionCollection()->addAction("path_refine", actionRefinePath);
     connect(actionRefinePath, SIGNAL(triggered()), this, SLOT(slotRefinePath()));
 
-    m_RefinePathDlg = new RefinePathDlg(qobject_cast<QWidget*>(parent));
+    m_RefinePathDlg = new RefinePathDlg(qobject_cast<QWidget *>(parent));
 }
 
 void RefinePathPlugin::slotRefinePath()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
-    if (! shape)
+    KoShape *shape = selection->firstSelectedShape();
+    if (! shape) {
         return;
+    }
 
     // check if we have a path based shape
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
-    if (! path)
+    KoPathShape *path = dynamic_cast<KoPathShape *>(shape);
+    if (! path) {
         return;
+    }
 
     // check if it is no parametric shape
-    KoParameterShape * ps = dynamic_cast<KoParameterShape*>(shape);
-    if (ps && ps->isParametricShape())
+    KoParameterShape *ps = dynamic_cast<KoParameterShape *>(shape);
+    if (ps && ps->isParametricShape()) {
         return;
+    }
 
-    if (QDialog::Rejected == m_RefinePathDlg->exec())
+    if (QDialog::Rejected == m_RefinePathDlg->exec()) {
         return;
+    }
 
     canvasController->canvas()->addCommand(new KarbonPathRefineCommand(path, m_RefinePathDlg->knots()));
 }
 
-RefinePathDlg::RefinePathDlg(QWidget* parent, const char* name)
-        : KDialog(parent)
+RefinePathDlg::RefinePathDlg(QWidget *parent, const char *name)
+    : KDialog(parent)
 {
     setObjectName(name);
     setModal(true);
     setCaption(i18n("Refine Path"));
     setButtons(Ok | Cancel);
 
-    QGroupBox * group = new QGroupBox(this);
+    QGroupBox *group = new QGroupBox(this);
     group->setTitle(i18n("Properties"));
     setMainWidget(group);
 
-    QHBoxLayout * hbox = new QHBoxLayout(group);
+    QHBoxLayout *hbox = new QHBoxLayout(group);
     hbox->addWidget(new QLabel(i18n("Subdivisions:"), group));
 
     m_knots = new KIntSpinBox(group);

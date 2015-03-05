@@ -26,21 +26,18 @@
 #include "kis_cursor.h"
 #include <kis_cage_transform_worker.h>
 
-
-struct KisCageTransformStrategy::Private
-{
+struct KisCageTransformStrategy::Private {
     Private(KisCageTransformStrategy *_q)
         : q(_q)
     {
     }
 
-    KisCageTransformStrategy * const q;
+    KisCageTransformStrategy *const q;
 };
 
-
 KisCageTransformStrategy::KisCageTransformStrategy(const KisCoordinatesConverter *converter,
-                                                   ToolTransformArgs &currentArgs,
-                                                   TransformTransactionProperties &transaction)
+        ToolTransformArgs &currentArgs,
+        TransformTransactionProperties &transaction)
     : KisWarpTransformStrategy(converter, currentArgs, transaction),
       m_d(new Private(this))
 {
@@ -54,12 +51,14 @@ KisCageTransformStrategy::~KisCageTransformStrategy()
 }
 
 void KisCageTransformStrategy::drawConnectionLines(QPainter &gc,
-                                                   const QVector<QPointF> &origPoints,
-                                                   const QVector<QPointF> &transfPoints,
-                                                   bool isEditingPoints)
+        const QVector<QPointF> &origPoints,
+        const QVector<QPointF> &transfPoints,
+        bool isEditingPoints)
 {
     const int numPoints = origPoints.size();
-    if (numPoints <= 1) return;
+    if (numPoints <= 1) {
+        return;
+    }
 
     QPen antsPen;
     QPen outlinePen;
@@ -80,11 +79,11 @@ void KisCageTransformStrategy::drawConnectionLines(QPainter &gc,
 }
 
 QImage KisCageTransformStrategy::calculateTransformedImage(ToolTransformArgs &currentArgs,
-                                                           const QImage &srcImage,
-                                                           const QVector<QPointF> &origPoints,
-                                                           const QVector<QPointF> &transfPoints,
-                                                           const QPointF &srcOffset,
-                                                           QPointF *dstOffset)
+        const QImage &srcImage,
+        const QVector<QPointF> &origPoints,
+        const QVector<QPointF> &transfPoints,
+        const QPointF &srcOffset,
+        QPointF *dstOffset)
 {
     Q_UNUSED(currentArgs);
 

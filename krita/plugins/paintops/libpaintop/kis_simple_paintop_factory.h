@@ -23,7 +23,6 @@
 #include <kis_paintop_factory.h>
 #include <kis_paintop_settings.h>
 
-
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
 #include <boost/type_traits.hpp>
@@ -35,18 +34,18 @@ struct __impl_has_typedef_needs_preinitialization {
     typedef char no[2];
 
     template <typename C>
-    static yes& test(typename C::needs_preinitialization*);
+    static yes &test(typename C::needs_preinitialization *);
 
     template <typename>
-    static no& test(...);
+    static no &test(...);
 
     static const bool value = sizeof(test<T>(0)) == sizeof(yes);
 };
 
 template <typename T>
 struct has_typedef_needs_preinitialization
-        : public boost::integral_constant <bool, __impl_has_typedef_needs_preinitialization<T>::value>
-{};
+    : public boost::integral_constant <bool, __impl_has_typedef_needs_preinitialization<T>::value> {
+};
 
 template <typename T>
 void preinitializeOpStatically(const KisPaintOpSettingsSP settings, typename boost::enable_if<has_typedef_needs_preinitialization<T> >::type * = 0)
@@ -70,59 +69,69 @@ template <class Op, class OpSettings, class OpSettingsWidget> class KisSimplePai
 
 public:
 
-    KisSimplePaintOpFactory(const QString& id, const QString& name, const QString& category,
-                            const QString& pixmap, const QString& model = QString(),
-                            const QStringList& whiteListedCompositeOps = QStringList(), int priority = 100)
+    KisSimplePaintOpFactory(const QString &id, const QString &name, const QString &category,
+                            const QString &pixmap, const QString &model = QString(),
+                            const QStringList &whiteListedCompositeOps = QStringList(), int priority = 100)
         : KisPaintOpFactory(whiteListedCompositeOps)
         , m_id(id)
         , m_name(name)
         , m_category(category)
         , m_pixmap(pixmap)
-        , m_model(model) {
+        , m_model(model)
+    {
         setPriority(priority);
     }
 
-    virtual ~KisSimplePaintOpFactory() {
+    virtual ~KisSimplePaintOpFactory()
+    {
     }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
-    void preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings) {
+    void preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings)
+    {
         preinitializeOpStatically<Op>(settings);
     }
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-    KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image) {
+    KisPaintOp *createOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
+    {
         const OpSettings *opSettings = dynamic_cast<const OpSettings *>(settings.data());
         Q_ASSERT(settings == 0 || opSettings != 0);
 
-        KisPaintOp * op = new Op(opSettings, painter, node, image);
+        KisPaintOp *op = new Op(opSettings, painter, node, image);
         Q_CHECK_PTR(op);
         return op;
     }
 
-    KisPaintOpSettingsSP settings() {
+    KisPaintOpSettingsSP settings()
+    {
         KisPaintOpSettingsSP settings = new OpSettings();
         settings->setModelName(m_model);
         return settings;
     }
 
-    KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent) {
+    KisPaintOpSettingsWidget *createSettingsWidget(QWidget *parent)
+    {
         return new OpSettingsWidget(parent);
     }
 
-    QString id() const {
+    QString id() const
+    {
         return m_id;
     }
 
-    QString name() const {
+    QString name() const
+    {
         return m_name;
     }
 
-    QString pixmap() {
+    QString pixmap()
+    {
         return m_pixmap;
     }
 
-    QString category() const {
+    QString category() const
+    {
         return m_category;
     }
 private:

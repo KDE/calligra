@@ -49,12 +49,24 @@ public:
                       QObject *o5 = 0,
                       QObject *o6 = 0)
     {
-        if (o1) addObject(o1);
-        if (o2) addObject(o2);
-        if (o3) addObject(o3);
-        if (o4) addObject(o4);
-        if (o5) addObject(o5);
-        if (o6) addObject(o6);
+        if (o1) {
+            addObject(o1);
+        }
+        if (o2) {
+            addObject(o2);
+        }
+        if (o3) {
+            addObject(o3);
+        }
+        if (o4) {
+            addObject(o4);
+        }
+        if (o5) {
+            addObject(o5);
+        }
+        if (o6) {
+            addObject(o6);
+        }
 
         blockObjects();
     }
@@ -67,8 +79,8 @@ public:
 
     ~KisSignalsBlocker()
     {
-        QVector<QObject*>::iterator it = m_objects.end();
-        QVector<QObject*>::iterator begin = m_objects.begin();
+        QVector<QObject *>::iterator it = m_objects.end();
+        QVector<QObject *>::iterator begin = m_objects.begin();
 
         while (it != begin) {
             --it;
@@ -77,13 +89,15 @@ public:
     }
 
 private:
-    void blockObjects() {
+    void blockObjects()
+    {
         foreach (QObject *object, m_objects) {
             object->blockSignals(true);
         }
     }
 
-    inline void addObject(QObject *object) {
+    inline void addObject(QObject *object)
+    {
         m_objects.append(object);
     }
 
@@ -91,7 +105,7 @@ private:
     Q_DISABLE_COPY(KisSignalsBlocker)
 
 private:
-    QVector<QObject*> m_objects;
+    QVector<QObject *> m_objects;
 };
 
 #endif /* __KIS_SIGNALS_BLOCKER_H */

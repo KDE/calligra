@@ -36,12 +36,12 @@
 //         shapeParent(shape->parent()),
 //         deleteShape(true) {
 //     }
-//     
+//
 //     ~Private() {
 //         if (deleteShape)
 //             delete shape;
 //     }
-// 
+//
 //     KWDocument *document;
 //     KoShape *shape;
 //     KoShapeContainer *shapeParent;
@@ -67,9 +67,10 @@ KWShapeCreateCommand::~KWShapeCreateCommand()
 void KWShapeCreateCommand::redo()
 {
     KUndo2Command::redo();
-    
-    if (m_shape->parent())
+
+    if (m_shape->parent()) {
         m_shape->parent()->addShape(m_shape);
+    }
     // the parent has to be there when it is added to the KoShapeBasedDocumentBase
     m_document->addShape(m_shape);
     m_shape->setParent(m_shape->parent()); // update parent if the 'addShape' changed it
@@ -79,12 +80,13 @@ void KWShapeCreateCommand::redo()
 void KWShapeCreateCommand::undo()
 {
     KUndo2Command::undo();
-    
+
     // the parent has to be there when it is removed from the KoShapeBasedDocumentBase
     m_document->removeShape(m_shape);
-    
-    if (m_shape->parent())
+
+    if (m_shape->parent()) {
         m_shape->parent()->removeShape(m_shape);
-    
+    }
+
     m_deleteShape = true;
 }

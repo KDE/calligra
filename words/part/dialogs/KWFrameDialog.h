@@ -82,11 +82,13 @@ public:
     /// constructor
     GuiHelper() : m_state(Unset) { }
     /// Add a new state
-    void addState(State state) {
-        if (m_state == Unset)
+    void addState(State state)
+    {
+        if (m_state == Unset) {
             m_state = state;
-        else if (m_state != state)
+        } else if (m_state != state) {
             m_state = TriState;
+        }
     }
 
     /**
@@ -94,10 +96,12 @@ public:
      * @param checkbox the checkbox to set.
      * @param hide if true the checkbox will be hidden when there was no 'addState' called
      */
-    void updateCheckBox(QCheckBox *checkbox, bool hide) {
+    void updateCheckBox(QCheckBox *checkbox, bool hide)
+    {
         if (m_state == Unset) {
-            if (hide)
+            if (hide) {
                 checkbox->setVisible(false);
+            }
             checkbox->setEnabled(false);
             checkbox->setTristate(true);
             checkbox->setCheckState(Qt::PartiallyChecked);

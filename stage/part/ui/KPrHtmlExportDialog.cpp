@@ -32,15 +32,15 @@
 
 #include "KPrHtmlExport.h"
 
-KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, const QString &title, const QString &author, QWidget *parent)
-: KDialog(parent)
-, m_allSlides(slides)
-, m_title(title)
+KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase *> &slides, const QString &title, const QString &author, QWidget *parent)
+    : KDialog(parent)
+    , m_allSlides(slides)
+    , m_title(title)
 {
     QWidget *widget = new QWidget(this);
     ui.setupUi(widget);
     setMainWidget(widget);
-    setCaption( i18n("Html Export"));
+    setCaption(i18n("Html Export"));
     setButtonText(Ok, i18n("Export"));
     ui.klineedit_title->setText(m_title);
     ui.klineedit_author->setText(author);
@@ -66,9 +66,9 @@ KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, con
     this->generatePreview();
 }
 
-QList<KoPAPageBase*> KPrHtmlExportDialog::checkedSlides()
+QList<KoPAPageBase *> KPrHtmlExportDialog::checkedSlides()
 {
-    QList<KoPAPageBase*> selectedSlides;
+    QList<KoPAPageBase *> selectedSlides;
     int countItems = ui.kListBox_slides->count();
     for (int i = 0; i < countItems; ++i) {
         if (ui.kListBox_slides->item(i)->checkState() == Qt::Checked) {
@@ -81,7 +81,7 @@ QList<KoPAPageBase*> KPrHtmlExportDialog::checkedSlides()
 void KPrHtmlExportDialog::checkAllItems()
 {
     int countItems = ui.kListBox_slides->count();
-    for (int i = 0; i < countItems; ++i ){
+    for (int i = 0; i < countItems; ++i) {
         ui.kListBox_slides->item(i)->setCheckState(Qt::Checked);
     }
 }
@@ -94,7 +94,8 @@ void KPrHtmlExportDialog::uncheckAllItems()
     }
 }
 
-QStringList KPrHtmlExportDialog::slidesNames(){
+QStringList KPrHtmlExportDialog::slidesNames()
+{
     QStringList names;
     int countItems = ui.kListBox_slides->count();
     for (int i = 0; i < countItems; ++i) {
@@ -110,14 +111,13 @@ KUrl KPrHtmlExportDialog::templateUrl()
     return KUrl(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
 }
 
-void KPrHtmlExportDialog::generateSlidesNames(const QList<KoPAPageBase*> &slides)
+void KPrHtmlExportDialog::generateSlidesNames(const QList<KoPAPageBase *> &slides)
 {
     QString slideName;
     for (int i = 0; i < slides.count(); ++i) {
         if (slides.at(i)->name().isEmpty()) {
             slideName = i18n("Slide %1", QString::number(i + 1));
-        }
-        else {
+        } else {
             slideName = slides.at(i)->name();
         }
         QListWidgetItem *listItem = new QListWidgetItem(slideName);
@@ -131,14 +131,14 @@ void KPrHtmlExportDialog::loadTemplatesList()
 {
     KStandardDirs std;
     QStringList dirs = std.findDirs("data", "stage/templates/exportHTML/templates");
-    for (QStringList::ConstIterator path=dirs.constBegin(); path!=dirs.constEnd(); ++path) {
+    for (QStringList::ConstIterator path = dirs.constBegin(); path != dirs.constEnd(); ++path) {
         QDir dir(*path);
         dir.setFilter(QDir::Files);
         QStringList entries = dir.entryList();
-        for (QStringList::ConstIterator entry=entries.constBegin(); entry!=entries.constEnd(); ++entry) {
+        for (QStringList::ConstIterator entry = entries.constBegin(); entry != entries.constEnd(); ++entry) {
             if (*entry != "." && *entry != "..") {
                 QString name = *entry;
-                if(name.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive)){
+                if (name.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive)) {
                     name.chop(4);
                 }
                 ui.kcombobox->addItem(name, QVariant(QString(*path + *entry)));
@@ -153,10 +153,9 @@ void KPrHtmlExportDialog::addSelectedTemplateToFavorite()
     QString savePath = KStandardDirs::locateLocal("data", "stage/templates/exportHTML/templates/");
     KUrl templatePath(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
     savePath += templatePath.fileName();
-    if(!(QFile::copy(templatePath.toLocalFile(), savePath))){
+    if (!(QFile::copy(templatePath.toLocalFile(), savePath))) {
         QMessageBox::information(this, i18n("Error"), i18n("There is already a favorite file with this name"));
-    }
-    else {
+    } else {
         // Update list
         QString name(ui.kcombobox->itemText(ui.kcombobox->currentIndex()));
         // deactivate preview
@@ -165,7 +164,7 @@ void KPrHtmlExportDialog::addSelectedTemplateToFavorite()
         ui.kcombobox->insertItem(0, name, savePath);
         ui.kcombobox->setCurrentIndex(0);
         //reactivate preview
-        connect( ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(generatePreview()));
+        connect(ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(generatePreview()));
     }
 }
 
@@ -182,7 +181,7 @@ void KPrHtmlExportDialog::browserAction()
     KFileDialog dialog(KUrl(), QString("*.zip"), this);
     if (dialog.exec() == QDialog::Accepted) {
         if (verifyZipFile(dialog.selectedFile())) {
-            QString name (dialog.selectedUrl().fileName());
+            QString name(dialog.selectedUrl().fileName());
             if (name.endsWith(QLatin1String(".zip"), Qt::CaseInsensitive)) {
                 name.chop(4);
             }
@@ -193,7 +192,8 @@ void KPrHtmlExportDialog::browserAction()
     }
 }
 
-bool KPrHtmlExportDialog::verifyZipFile(const QString &zipLocalPath){
+bool KPrHtmlExportDialog::verifyZipFile(const QString &zipLocalPath)
+{
     QString message;
     KZip zip(zipLocalPath);
     if (!zip.open(QIODevice::ReadOnly)) {
@@ -205,7 +205,7 @@ bool KPrHtmlExportDialog::verifyZipFile(const QString &zipLocalPath){
             message = i18n("Zip file need to contain style.css");
         }
     }
-    if(!message.isEmpty()){
+    if (!message.isEmpty()) {
         QMessageBox::information(this, i18n("Error"), message);
     }
     return message.isEmpty();
@@ -248,13 +248,13 @@ void KPrHtmlExportDialog::generatePreview(int item)
     ui.toolButton_next->setEnabled(frameToRender < (m_allSlides.size() - 1));
 
     KPrHtmlExport previewGenerator;
-    QList<KoPAPageBase*> slides;
+    QList<KoPAPageBase *> slides;
     QStringList slidesNames;
     slides.append(this->m_allSlides.at(frameToRender));
     slidesNames.append(ui.kListBox_slides->item(frameToRender)->text());
 
-    KUrl url = previewGenerator.exportPreview(KPrHtmlExport::Parameter(this->templateUrl(), (KPrView*)this->parentWidget(), slides, KUrl(),
-                                              this->author(), ui.klineedit_title->text(), slidesNames, false));
+    KUrl url = previewGenerator.exportPreview(KPrHtmlExport::Parameter(this->templateUrl(), (KPrView *)this->parentWidget(), slides, KUrl(),
+               this->author(), ui.klineedit_title->text(), slidesNames, false));
     preview.mainFrame()->load(url);
 }
 
@@ -276,7 +276,7 @@ void KPrHtmlExportDialog::renderPreview()
 bool KPrHtmlExportDialog::selectedTemplateIsFavorite()
 {
     QString templatePath(ui.kcombobox->itemData(ui.kcombobox->currentIndex()).toString());
-    return templatePath.contains(KStandardDirs::locateLocal("data","stage/templates/exportHTML"));
+    return templatePath.contains(KStandardDirs::locateLocal("data", "stage/templates/exportHTML"));
 }
 
 bool KPrHtmlExportDialog::selectedTemplateIsSystemFavorite()
@@ -285,8 +285,8 @@ bool KPrHtmlExportDialog::selectedTemplateIsSystemFavorite()
     QString dir;
 
     QStringList dirs(KStandardDirs().findDirs("data", "stage/templates/exportHTML"));
-    for (QStringList::ConstIterator path=dirs.constBegin(); path!=dirs.constEnd(); ++path) {
-        if (!path->contains(KStandardDirs::locateLocal("data","stage/templates/exportHTML"))) {
+    for (QStringList::ConstIterator path = dirs.constBegin(); path != dirs.constEnd(); ++path) {
+        if (!path->contains(KStandardDirs::locateLocal("data", "stage/templates/exportHTML"))) {
             dir = *path;
         }
     }
@@ -301,13 +301,11 @@ void KPrHtmlExportDialog::updateFavoriteButton()
         if (this->selectedTemplateIsSystemFavorite()) {
             ui.kPushButton_Favorite->setEnabled(false);
             ui.kPushButton_Favorite->setToolTip(i18n("You may not remove the templates provided with the application"));
-        }
-        else {
+        } else {
             ui.kPushButton_Favorite->setEnabled(true);
             ui.kPushButton_Favorite->setToolTip("");
         }
-    }
-    else {
+    } else {
         ui.kPushButton_Favorite->setText(i18n("Add Template"));
         ui.kPushButton_Favorite->setEnabled(true);
         ui.kPushButton_Favorite->setToolTip("");
@@ -316,15 +314,14 @@ void KPrHtmlExportDialog::updateFavoriteButton()
 
 void KPrHtmlExportDialog::favoriteAction()
 {
-   if (this->selectedTemplateIsFavorite()) {
+    if (this->selectedTemplateIsFavorite()) {
         int button = QMessageBox::question(this, i18n("Confirm remove"), i18n("Are you sure you want to remove \"%1\"?",
-            ui.kcombobox->currentText()), QMessageBox::Yes | QMessageBox::No);
+                                           ui.kcombobox->currentText()), QMessageBox::Yes | QMessageBox::No);
 
-        if (button == QMessageBox::Yes){
+        if (button == QMessageBox::Yes) {
             this->delSelectedTemplateFromFavorite();
         }
-    }
-    else {
+    } else {
         this->addSelectedTemplateToFavorite();
     }
 }

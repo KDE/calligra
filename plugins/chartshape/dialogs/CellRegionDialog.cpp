@@ -18,11 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #include "CellRegionDialog.h"
 
 using namespace KChart;
-
 
 CellRegionDialog::CellRegionDialog(QWidget *parent)
     : QDialog(parent)

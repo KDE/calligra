@@ -20,11 +20,11 @@
 
 #include <kglobal.h>
 
-class KisColorManager::Private {
+class KisColorManager::Private
+{
 public:
     // we are too dumb for that :)
 };
-
 
 KisColorManager::KisColorManager()
     : QObject()

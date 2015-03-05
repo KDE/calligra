@@ -20,7 +20,6 @@
 
 #include "KoTextCommandBase.h"
 
-
 KoTextCommandBase::KoTextCommandBase(KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_tool(0)
@@ -31,7 +30,6 @@ KoTextCommandBase::~KoTextCommandBase()
 {
 }
 
-
 void KoTextCommandBase::redo()
 {
     KUndo2Command::redo();
@@ -40,10 +38,10 @@ void KoTextCommandBase::redo()
     }
 }
 
-void KoTextCommandBase::setTool(KoUndoableTool *tool) {
+void KoTextCommandBase::setTool(KoUndoableTool *tool)
+{
     m_tool = tool;
 }
-
 
 void KoTextCommandBase::undo()
 {

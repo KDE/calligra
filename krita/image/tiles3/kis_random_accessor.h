@@ -33,50 +33,55 @@ class KisRandomAccessor2 : public KisRandomAccessorNG
     struct KisTileInfo {
         KisTileSP tile;
         KisTileSP oldtile;
-        quint8* data;
-        const quint8* oldData;
+        quint8 *data;
+        const quint8 *oldData;
         qint32 area_x1, area_y1, area_x2, area_y2;
     };
 
 public:
 
     KisRandomAccessor2(KisTiledDataManager *ktm, qint32 x, qint32 y, qint32 offsetX, qint32 offsetY, bool writable);
-    KisRandomAccessor2(const KisTiledRandomAccessor& lhs);
+    KisRandomAccessor2(const KisTiledRandomAccessor &lhs);
     ~KisRandomAccessor2();
 
-
 private:
-    inline void lockTile(KisTileSP &tile) {
-        if (m_writable)
+    inline void lockTile(KisTileSP &tile)
+    {
+        if (m_writable) {
             tile->lockForWrite();
-        else
+        } else {
             tile->lockForRead();
+        }
     }
 
-    inline void lockOldTile(KisTileSP &tile) {
+    inline void lockOldTile(KisTileSP &tile)
+    {
         // Doesn't depend on access type
         tile->lockForRead();
     }
 
-    inline void unlockTile(KisTileSP &tile) {
+    inline void unlockTile(KisTileSP &tile)
+    {
         tile->unlock();
     }
 
-    inline quint32 xToCol(quint32 x) const {
+    inline quint32 xToCol(quint32 x) const
+    {
         return m_ktm ? m_ktm->xToCol(x) : 0;
     }
-    inline quint32 yToRow(quint32 y) const {
+    inline quint32 yToRow(quint32 y) const
+    {
         return m_ktm ? m_ktm->yToRow(y) : 0;
     }
 
-    KisTileInfo* fetchTileData(qint32 col, qint32 row);
+    KisTileInfo *fetchTileData(qint32 col, qint32 row);
 
 public:
     /// Move to a given x,y position, fetch tiles and data
     void moveTo(qint32 x, qint32 y);
-    quint8* rawData();
-    const quint8* oldRawData() const;
-    const quint8* rawDataConst() const;
+    quint8 *rawData();
+    const quint8 *oldRawData() const;
+    const quint8 *rawDataConst() const;
     qint32 numContiguousColumns(qint32 x) const;
     qint32 numContiguousRows(qint32 y) const;
     qint32 rowStride(qint32 x, qint32 y) const;
@@ -85,11 +90,11 @@ public:
 
 private:
     KisTiledDataManager *m_ktm;
-    KisTileInfo** m_tilesCache;
+    KisTileInfo **m_tilesCache;
     quint32 m_tilesCacheSize;
     qint32 m_pixelSize;
-    quint8* m_data;
-    const quint8* m_oldData;
+    quint8 *m_data;
+    const quint8 *m_oldData;
     bool m_writable;
     int m_lastX, m_lastY;
     qint32 m_offsetX, m_offsetY;

@@ -32,7 +32,7 @@ void KImageFrame::setImage(const QImage &image)
     update();
 }
 
-void KImageFrame::paintEvent(QPaintEvent*)
+void KImageFrame::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
     QStyleOptionFrame opt;
@@ -50,4 +50,3 @@ void KImageFrame::paintEvent(QPaintEvent*)
 }
 
 #include "kimageframe.moc"
-// kate: hl C++; indent-width 4; replace-tabs on;

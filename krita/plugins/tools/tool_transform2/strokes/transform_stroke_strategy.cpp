@@ -32,18 +32,18 @@
 #include "kis_transform_mask_adapter.h"
 #include "kis_transform_utils.h"
 
-
-
-class ModifyTransformMaskCommand : public KUndo2Command {
+class ModifyTransformMaskCommand : public KUndo2Command
+{
 public:
     ModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params)
         : m_mask(mask),
           m_params(params),
           m_oldParams(m_mask->transformParams())
-        {
-        }
+    {
+    }
 
-    void redo() {
+    void redo()
+    {
         m_mask->setTransformParams(m_params);
 
         /**
@@ -57,7 +57,8 @@ public:
         updateMask();
     }
 
-    void undo() {
+    void undo()
+    {
         m_mask->setTransformParams(m_oldParams);
 
         m_mask->recaclulateStaticImage();
@@ -65,7 +66,8 @@ public:
     }
 
 private:
-    void updateMask() {
+    void updateMask()
+    {
         QRect updateRect = m_mask->extent();
 
         KisNodeSP parent = m_mask->parent();
@@ -82,18 +84,17 @@ private:
     KisTransformMaskParamsInterfaceSP m_oldParams;
 };
 
-
 TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
-                                                 KisSelectionSP selection,
-                                                 KisPostExecutionUndoAdapter *undoAdapter)
+        KisSelectionSP selection,
+        KisPostExecutionUndoAdapter *undoAdapter)
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Transform"), false, undoAdapter),
       m_selection(selection)
 {
     if (rootNode->childCount() || !rootNode->paintDevice()) {
         KisPaintDeviceSP device;
 
-        if (KisTransformMask* tmask =
-            dynamic_cast<KisTransformMask*>(rootNode.data())) {
+        if (KisTransformMask *tmask =
+                    dynamic_cast<KisTransformMask *>(rootNode.data())) {
 
             device = tmask->buildPreviewDevice();
 
@@ -175,16 +176,16 @@ KisPaintDeviceSP TransformStrokeStrategy::getDeviceCache(KisPaintDeviceSP src)
 bool TransformStrokeStrategy::checkBelongsToSelection(KisPaintDeviceSP device) const
 {
     return m_selection &&
-        (device == m_selection->pixelSelection().data() ||
-         device == m_selection->projection().data());
+           (device == m_selection->pixelSelection().data() ||
+            device == m_selection->projection().data());
 }
 
 void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    TransformData *td = dynamic_cast<TransformData*>(data);
-    ClearSelectionData *csd = dynamic_cast<ClearSelectionData*>(data);
+    TransformData *td = dynamic_cast<TransformData *>(data);
+    ClearSelectionData *csd = dynamic_cast<ClearSelectionData *>(data);
 
-    if(td) {
+    if (td) {
         if (td->destination == TransformData::PAINT_DEVICE) {
             QRect oldExtent = td->node->extent();
             KisPaintDeviceSP device = td->node->paintDevice();
@@ -205,10 +206,10 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
                 td->node->setDirty(oldExtent | td->node->extent());
             } if (KisExternalLayer *extLayer =
-                  dynamic_cast<KisExternalLayer*>(td->node.data())) {
+                        dynamic_cast<KisExternalLayer *>(td->node.data())) {
 
                 if (td->config.mode() == ToolTransformArgs::FREE_TRANSFORM ||
-                    td->config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
+                        td->config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
 
                     if (td->config.aX() || td->config.aY()) {
                         qWarning() << "Perspective transform of an external layer is not supported:" << extLayer->name();
@@ -224,12 +225,12 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 }
 
             } else if (KisTransformMask *transformMask =
-                       dynamic_cast<KisTransformMask*>(td->node.data())) {
+                           dynamic_cast<KisTransformMask *>(td->node.data())) {
 
                 runAndSaveCommand(KUndo2CommandSP(
                                       new ModifyTransformMaskCommand(transformMask,
-                                                                     KisTransformMaskParamsInterfaceSP(
-                                                                         new KisTransformMaskAdapter(td->config)))),
+                                              KisTransformMaskParamsInterfaceSP(
+                                                  new KisTransformMaskAdapter(td->config)))),
                                   KisStrokeJobData::CONCURRENT,
                                   KisStrokeJobData::NORMAL);
             }
@@ -258,14 +259,14 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             }
             clearSelection(device);
         } else if (KisTransformMask *transformMask =
-                   dynamic_cast<KisTransformMask*>(csd->node.data())) {
+                       dynamic_cast<KisTransformMask *>(csd->node.data())) {
 
             runAndSaveCommand(KUndo2CommandSP(
                                   new ModifyTransformMaskCommand(transformMask,
-                                                                 KisTransformMaskParamsInterfaceSP(
-                                                                     new KisDumbTransformMaskParams(true)))),
-                                  KisStrokeJobData::SEQUENTIAL,
-                                  KisStrokeJobData::NORMAL);
+                                          KisTransformMaskParamsInterfaceSP(
+                                              new KisDumbTransformMaskParams(true)))),
+                              KisStrokeJobData::SEQUENTIAL,
+                              KisStrokeJobData::NORMAL);
         }
     } else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
@@ -288,9 +289,9 @@ void TransformStrokeStrategy::clearSelection(KisPaintDeviceSP device)
 }
 
 void TransformStrokeStrategy::transformAndMergeDevice(const ToolTransformArgs &config,
-                                                      KisPaintDeviceSP src,
-                                                      KisPaintDeviceSP dst,
-                                                      KisProcessingVisitor::ProgressHelper *helper)
+        KisPaintDeviceSP src,
+        KisPaintDeviceSP dst,
+        KisProcessingVisitor::ProgressHelper *helper)
 {
     KoUpdaterPtr mergeUpdater = src != dst ? helper->updater() : 0;
 

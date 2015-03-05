@@ -24,7 +24,8 @@ Boston, MA 02110-1301, USA.
 class QByteArray;
 class KoUpdater;
 
-namespace CalligraFilter {
+namespace CalligraFilter
+{
 
 /**
  * A small private helper class with represents one single filter
@@ -36,31 +37,34 @@ class ChainLink
 
 public:
     ChainLink(KoFilterChain *chain, KoFilterEntry::Ptr filterEntry,
-              const QByteArray& from, const QByteArray& to);
+              const QByteArray &from, const QByteArray &to);
 
     ~ChainLink();
 
-    KoFilter::ConversionStatus invokeFilter(const ChainLink * const parentChainLink);
+    KoFilter::ConversionStatus invokeFilter(const ChainLink *const parentChainLink);
 
-    QByteArray from() const {
+    QByteArray from() const
+    {
         return m_from;
     }
-    QByteArray to() const {
+    QByteArray to() const
+    {
         return m_to;
     }
 
     // debugging
     void dump() const;
 
-    QPointer<KoUpdater> updater() const {
+    QPointer<KoUpdater> updater() const
+    {
         return m_updater;
     }
 
 private:
-    ChainLink(const ChainLink& rhs);
-    ChainLink& operator=(const ChainLink& rhs);
+    ChainLink(const ChainLink &rhs);
+    ChainLink &operator=(const ChainLink &rhs);
 
-    void setupCommunication(const KoFilter * const parentFilter) const;
+    void setupCommunication(const KoFilter *const parentFilter) const;
     void setupConnections(const KoFilter *sender, const KoFilter *receiver) const;
 
     KoFilterChain *m_chain;

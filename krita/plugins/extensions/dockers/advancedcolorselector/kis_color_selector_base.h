@@ -31,30 +31,29 @@ class KisCanvas2;
 class KisColorPreviewPopup;
 class KisDisplayColorConverter;
 
-
 /// Base class for all color selectors, that should support color management and zooming.
 class KisColorSelectorBase : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     enum Move {MoveToMousePosition, DontMove};
     explicit KisColorSelectorBase(QWidget *parent = 0);
     ~KisColorSelectorBase();
 
     void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
-    void setColorSpace(const KoColorSpace* colorSpace);
-    virtual void setCanvas(KisCanvas2* canvas);
+    void setColorSpace(const KoColorSpace *colorSpace);
+    virtual void setCanvas(KisCanvas2 *canvas);
     virtual void unsetCanvas();
-    const KoColorSpace* colorSpace() const;
+    const KoColorSpace *colorSpace() const;
 
-    KisDisplayColorConverter* converter() const;
+    KisDisplayColorConverter *converter() const;
 
 public:
     void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset);
     void updateColorPreview(const KoColor &color);
     void showColorPreview();
 
-    virtual void setColor(const KoColor& color);
+    virtual void setColor(const KoColor &color);
 
 public Q_SLOTS:
     /**
@@ -63,7 +62,7 @@ public Q_SLOTS:
     virtual void reset();
 
     virtual void updateSettings();
-    virtual void showPopup(Move move=MoveToMousePosition);
+    virtual void showPopup(Move move = MoveToMousePosition);
 
 public:
     void enterEvent(QEvent *e);
@@ -74,39 +73,41 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *);
-    virtual KisColorSelectorBase* createPopup() const = 0;
+    virtual KisColorSelectorBase *createPopup() const = 0;
     void dragEnterEvent(QDragEnterEvent *);
     void dropEvent(QDropEvent *);
     void setHidingTime(int time);
-    bool isPopup() const { return m_isPopup; }
+    bool isPopup() const
+    {
+        return m_isPopup;
+    }
 
 private:
-    void commitColor(const KoColor& koColor, Acs::ColorRole role);
-
+    void commitColor(const KoColor &koColor, Acs::ColorRole role);
 
 protected Q_SLOTS:
     void hidePopup();
 
     /// if you overwrite this, keep in mind, that you should set the colour only, if m_colorUpdateAllowed is true
-    virtual void canvasResourceChanged(int key, const QVariant& v);
+    virtual void canvasResourceChanged(int key, const QVariant &v);
 
 private:
     void lazyCreatePopup();
 
 protected:
     QPointer<KisCanvas2> m_canvas;
-    KisColorSelectorBase* m_popup;
-    QWidget* m_parent;
+    KisColorSelectorBase *m_popup;
+    QWidget *m_parent;
     bool m_colorUpdateAllowed;
     bool m_colorUpdateSelf;
 
 private:
-    QTimer* m_hideTimer;
+    QTimer *m_hideTimer;
     bool m_popupOnMouseOver;
     bool m_popupOnMouseClick;
-    mutable const KoColorSpace* m_colorSpace;
+    mutable const KoColorSpace *m_colorSpace;
     bool m_isPopup; //this instance is a popup
-    KisColorPreviewPopup* m_colorPreviewPopup;
+    KisColorPreviewPopup *m_colorPreviewPopup;
 };
 
 #endif

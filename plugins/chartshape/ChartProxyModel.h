@@ -21,26 +21,22 @@
 #ifndef KCHART_PROXYMODEL_H
 #define KCHART_PROXYMODEL_H
 
-
 #define INTERNAL_TABLE_NAME "ChartTable"
-
 
 // KChart
 #include "ChartShape.h"
 #include "CellRegion.h"
 
-
 namespace KoChart
 {
-    class ChartModel;
+class ChartModel;
 }
-
 
 // Qt
 #include <QAbstractTableModel>
 
-
-namespace KChart {
+namespace KChart
+{
 
 /**
  * @brief The ChartProxyModel is a factory for the DataSet's and decorates the ChartTableModel.
@@ -141,7 +137,7 @@ public:
     bool firstRowIsLabel() const;
     bool firstColumnIsLabel() const;
     Qt::Orientation dataDirection();
-    
+
     /**
      * @see setCategoryDataRegion()
      */
@@ -158,7 +154,7 @@ public:
     /**
      * A list of all data sets that are currently being used in the chart.
      */
-    QList<DataSet*> dataSets() const;
+    QList<DataSet *> dataSets() const;
 
     /**
      * Clears the list of data sets, but keeps them in a list of "removed"
@@ -196,7 +192,7 @@ public Q_SLOTS:
     /**
      * Connected to dataChanged() signal of source models in TableSource.
      */
-    virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
     /**
      * Called by the TableSource whenever a table is added to it.

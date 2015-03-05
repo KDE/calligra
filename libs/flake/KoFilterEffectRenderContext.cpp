@@ -32,11 +32,11 @@ public:
 
     QRectF filterRegion;
     QRectF shapeBound;
-    const KoViewConverter & converter;
+    const KoViewConverter &converter;
 };
 
 KoFilterEffectRenderContext::KoFilterEffectRenderContext(const KoViewConverter &converter)
-: d(new Private(converter))
+    : d(new Private(converter))
 {
 }
 
@@ -62,7 +62,7 @@ void KoFilterEffectRenderContext::setShapeBoundingBox(const QRectF &bound)
 
 QPointF KoFilterEffectRenderContext::toUserSpace(const QPointF &value) const
 {
-    return QPointF(value.x()*d->shapeBound.width(), value.y()*d->shapeBound.height());
+    return QPointF(value.x() * d->shapeBound.width(), value.y() * d->shapeBound.height());
 }
 
 qreal KoFilterEffectRenderContext::toUserSpaceX(qreal value) const
@@ -75,7 +75,7 @@ qreal KoFilterEffectRenderContext::toUserSpaceY(qreal value) const
     return value * d->shapeBound.height();
 }
 
-const KoViewConverter * KoFilterEffectRenderContext::viewConverter() const
+const KoViewConverter *KoFilterEffectRenderContext::viewConverter() const
 {
     return &d->converter;
 }

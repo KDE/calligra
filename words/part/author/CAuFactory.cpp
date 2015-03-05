@@ -52,7 +52,7 @@ KComponentData *CAuFactory::s_instance = 0;
 KAboutData *CAuFactory::s_aboutData = 0;
 
 CAuFactory::CAuFactory(QObject *parent)
-        : KPluginFactory(*aboutData(), parent)
+    : KPluginFactory(*aboutData(), parent)
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is Author.
@@ -67,7 +67,7 @@ CAuFactory::~CAuFactory()
     s_instance = 0;
 }
 
-QObject* CAuFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject *CAuFactory::create(const char * /*iface*/, QWidget * /*parentWidget*/, QObject *parent, const QVariantList &args, const QString &keyword)
 {
     Q_UNUSED(args);
     Q_UNUSED(keyword);
@@ -97,7 +97,6 @@ const KComponentData &CAuFactory::componentData()
         s_instance->dirs()->addResourceType("styles", "data", "words/styles/");
 
         KIconLoader::global()->addAppDir("calligra");
-
 
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new KWStatisticsDockerFactory());

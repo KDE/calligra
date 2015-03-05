@@ -33,8 +33,7 @@
 #include "kis_curve_rect_mask_generator.h"
 #include "kis_brush_mask_applicator_factories.h"
 
-
-KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID& id) : d(new Private), m_id(id)
+KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID &id) : d(new Private), m_id(id)
 {
     d->diameter = diameter;
     d->ratio = ratio;
@@ -74,7 +73,7 @@ bool KisMaskGenerator::shouldVectorize() const
     return false;
 }
 
-KisBrushMaskApplicatorBase* KisMaskGenerator::applicator()
+KisBrushMaskApplicatorBase *KisMaskGenerator::applicator()
 {
     if (!d->defaultMaskProcessor) {
         d->defaultMaskProcessor =
@@ -84,7 +83,7 @@ KisBrushMaskApplicatorBase* KisMaskGenerator::applicator()
     return d->defaultMaskProcessor;
 }
 
-void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
+void KisMaskGenerator::toXML(QDomDocument &doc, QDomElement &e) const
 {
     Q_UNUSED(doc);
     //e.setAttribute("radius", d->radius);
@@ -98,19 +97,19 @@ void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
     e.setAttribute("id", id());
 }
 
-KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
+KisMaskGenerator *KisMaskGenerator::fromXML(const QDomElement &elt)
 {
     QLocale c(QLocale::German);
     bool result;
 
     double diameter = 1.0;
     // backward compatibility -- it was mistakenly named radius for 2.2
-    if (elt.hasAttribute("radius")){
+    if (elt.hasAttribute("radius")) {
         diameter = elt.attribute("radius", "1.0").toDouble(&result);
         if (!result) {
             diameter = c.toDouble(elt.attribute("radius"));
         }
-    }else /*if (elt.hasAttribute("diameter"))*/{
+    } else { /*if (elt.hasAttribute("diameter"))*/
         diameter = elt.attribute("diameter", "1.0").toDouble(&result);
         if (!result) {
             diameter = c.toDouble(elt.attribute("diameter"));
@@ -144,7 +143,7 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
 
     if (id == SoftId.id()) {
         KisCubicCurve curve;
-        curve.fromString(elt.attribute("softness_curve","0,0;1,1"));
+        curve.fromString(elt.attribute("softness_curve", "0,0;1,1"));
 
         if (typeShape == "circle") {
             return new KisCurveCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes, curve, antialiasEdges);
@@ -208,12 +207,10 @@ qreal KisMaskGenerator::softness() const
     return d->softness;
 }
 
-
 void KisMaskGenerator::setSoftness(qreal softness)
 {
     d->softness = softness;
 }
-
 
 qreal KisMaskGenerator::horizontalFade() const
 {
@@ -247,7 +244,7 @@ QString KisMaskGenerator::curveString() const
     return d->curveString;
 }
 
-void KisMaskGenerator::setCurveString(const QString& curveString)
+void KisMaskGenerator::setCurveString(const QString &curveString)
 {
     d->curveString = curveString;
 }

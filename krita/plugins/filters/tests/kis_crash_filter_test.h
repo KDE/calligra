@@ -35,7 +35,7 @@ class KisCrashFilterTest : public QObject
     Q_OBJECT
 private:
 
-    bool applyFilter(const KoColorSpace * cs,  KisFilterSP f);
+    bool applyFilter(const KoColorSpace *cs,  KisFilterSP f);
     bool testFilter(KisFilterSP f);
 
 private Q_SLOTS:

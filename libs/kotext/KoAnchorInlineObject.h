@@ -91,7 +91,6 @@ public:
     /// reimplemented from KoInlineObject
     void saveOdf(KoShapeSavingContext &context);
 
-
 private:
     Q_DECLARE_PRIVATE(KoAnchorInlineObject)
 };

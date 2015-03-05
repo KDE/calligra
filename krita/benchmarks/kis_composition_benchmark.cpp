@@ -29,8 +29,6 @@
 #include <KoCompositeOpOver.h>
 #include "KoOptimizedCompositeOpFactory.h"
 
-
-
 // for calculation of the needed alignment
 #include <config-vc.h>
 #ifdef HAVE_VC
@@ -52,7 +50,8 @@ enum AlphaRange {
     ALPHA_RANDOM
 };
 
-inline quint8 generateAlphaValue(AlphaRange range) {
+inline quint8 generateAlphaValue(AlphaRange range)
+{
     quint8 value = 0;
 
     switch (range) {
@@ -74,15 +73,15 @@ void generateDataLine(uint seed, int numPixels, quint8 *srcPixels, quint8 *dstPi
     Q_ASSERT(numPixels >= 4);
 
     for (int i = 0; i < 4; i++) {
-        srcPixels[4*i]   = i * 10 + 30;
-        srcPixels[4*i+1] = i * 10 + 30;
-        srcPixels[4*i+2] = i * 10 + 30;
-        srcPixels[4*i+3] = i * 10 + 35;
+        srcPixels[4 * i]   = i * 10 + 30;
+        srcPixels[4 * i + 1] = i * 10 + 30;
+        srcPixels[4 * i + 2] = i * 10 + 30;
+        srcPixels[4 * i + 3] = i * 10 + 35;
 
-        dstPixels[4*i]   = i * 10 + 160;
-        dstPixels[4*i+1] = i * 10 + 160;
-        dstPixels[4*i+2] = i * 10 + 160;
-        dstPixels[4*i+3] = i * 10 + 165;
+        dstPixels[4 * i]   = i * 10 + 160;
+        dstPixels[4 * i + 1] = i * 10 + 160;
+        dstPixels[4 * i + 2] = i * 10 + 160;
+        dstPixels[4 * i + 3] = i * 10 + 165;
 
         mask[i] = i * 10 + 225;
     }
@@ -110,26 +109,25 @@ void printData(int numPixels, quint8 *srcPixels, quint8 *dstPixels, quint8 *mask
 {
     for (int i = 0; i < numPixels; i++) {
         qDebug() << "Src: "
-                 << srcPixels[i*4] << "\t"
-                 << srcPixels[i*4+1] << "\t"
-                 << srcPixels[i*4+2] << "\t"
-                 << srcPixels[i*4+3] << "\t"
+                 << srcPixels[i * 4] << "\t"
+                 << srcPixels[i * 4 + 1] << "\t"
+                 << srcPixels[i * 4 + 2] << "\t"
+                 << srcPixels[i * 4 + 3] << "\t"
                  << "Msk:" << mask[i];
 
         qDebug() << "Dst: "
-                 << dstPixels[i*4] << "\t"
-                 << dstPixels[i*4+1] << "\t"
-                 << dstPixels[i*4+2] << "\t"
-                 << dstPixels[i*4+3];
+                 << dstPixels[i * 4] << "\t"
+                 << dstPixels[i * 4 + 1] << "\t"
+                 << dstPixels[i * 4 + 2] << "\t"
+                 << dstPixels[i * 4 + 3];
     }
 }
 
 const int rowStride = 64;
 const int totalRows = 64;
-const QRect processRect(0,0,64,64);
+const QRect processRect(0, 0, 64, 64);
 const int numPixels = rowStride * totalRows;
 const int numTiles = 1024;
-
 
 struct Tile {
     quint8 *src;
@@ -151,17 +149,17 @@ QVector<Tile> generateTiles(int size,
     const int vecSize = 1;
 #endif
 
-    const size_t pixelAlignment = qMax(size_t(vecSize * 4), sizeof(void*));
-    const size_t maskAlignment = qMax(size_t(vecSize), sizeof(void*));
+    const size_t pixelAlignment = qMax(size_t(vecSize * 4), sizeof(void *));
+    const size_t maskAlignment = qMax(size_t(vecSize), sizeof(void *));
 
     for (int i = 0; i < size; i++) {
         void *ptr = NULL;
         posix_memalign(&ptr, pixelAlignment, numPixels * 4 + srcAlignmentShift);
-        tiles[i].src = (quint8*)ptr + srcAlignmentShift;
+        tiles[i].src = (quint8 *)ptr + srcAlignmentShift;
         posix_memalign(&ptr, pixelAlignment, numPixels * 4 + dstAlignmentShift);
-        tiles[i].dst = (quint8*)ptr + dstAlignmentShift;
+        tiles[i].dst = (quint8 *)ptr + dstAlignmentShift;
         posix_memalign(&ptr, maskAlignment, numPixels);
-        tiles[i].mask = (quint8*)ptr;
+        tiles[i].mask = (quint8 *)ptr;
         generateDataLine(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask, srcAlphaRange, dstAlphaRange);
     }
 
@@ -179,16 +177,18 @@ void freeTiles(QVector<Tile> tiles,
     }
 }
 
-inline bool fuzzyCompare(quint8 a, quint8 b, quint8 prec) {
+inline bool fuzzyCompare(quint8 a, quint8 b, quint8 prec)
+{
     return qAbs(a - b) <= prec;
 }
 
-inline bool comparePixels(quint8 *p1, quint8*p2, quint8 prec) {
+inline bool comparePixels(quint8 *p1, quint8 *p2, quint8 prec)
+{
     return (p1[3] == p2[3] && p1[3] == 0) ||
-        (fuzzyCompare(p1[0], p2[0], prec) &&
-         fuzzyCompare(p1[1], p2[1], prec) &&
-         fuzzyCompare(p1[2], p2[2], prec) &&
-         fuzzyCompare(p1[3], p2[3], prec));
+           (fuzzyCompare(p1[0], p2[0], prec) &&
+            fuzzyCompare(p1[1], p2[1], prec) &&
+            fuzzyCompare(p1[2], p2[2], prec) &&
+            fuzzyCompare(p1[3], p2[3], prec));
 
 }
 
@@ -202,8 +202,8 @@ bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp 
     params.maskRowStride = rowStride;
     params.rows          = processRect.height();
     params.cols          = processRect.width();
-    params.opacity       = 0.5*1.0f;
-    params.flow          = 0.3*1.0f;
+    params.opacity       = 0.5 * 1.0f;
+    params.flow          = 0.3 * 1.0f;
     params.channelFlags  = QBitArray();
 
     params.dstRowStart   = tiles[0].dst;
@@ -256,8 +256,8 @@ QString getTestName(bool haveMask,
     testName +=
         !srcAlignmentShift && !dstAlignmentShift ? "Aligned   " :
         !srcAlignmentShift &&  dstAlignmentShift ? "SrcUnalig " :
-         srcAlignmentShift && !dstAlignmentShift ? "DstUnalig " :
-         srcAlignmentShift &&  dstAlignmentShift ? "Unaligned " : "###";
+        srcAlignmentShift && !dstAlignmentShift ? "DstUnalig " :
+        srcAlignmentShift &&  dstAlignmentShift ? "Unaligned " : "###";
 
     testName += haveMask ? "Mask   " : "NoMask ";
 
@@ -382,7 +382,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1)
     typename Compositor::OptionalParams optionalParams(params);
 
     for (int i = 0; i < numBlocks; i++) {
-        Compositor::template compositeVector<true,true, VC_IMPL>(src1, dst1, msk1, params.opacity, optionalParams);
+        Compositor::template compositeVector<true, true, VC_IMPL>(src1, dst1, msk1, params.opacity, optionalParams);
         for (int j = 0; j < vecSize; j++) {
 
             //if (8 * i + j == 7080) {
@@ -393,7 +393,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1)
 
             Compositor::template compositeOnePixelScalar<true, VC_IMPL>(src2, dst2, msk2, params.opacity, optionalParams);
 
-            if(!comparePixels(dst1, dst2, 0)) {
+            if (!comparePixels(dst1, dst2, 0)) {
                 qDebug() << "Wrong rounding in pixel:" << 8 * i + j;
                 qDebug() << "Vector version: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
                 qDebug() << "Scalar version: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
@@ -418,39 +418,38 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1)
 
 #endif
 
-
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_03()
 {
 #ifdef HAVE_VC
-    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,0.3);
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5, 0.3);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_05()
 {
 #ifdef HAVE_VC
-    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,0.5);
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5, 0.5);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_07()
 {
 #ifdef HAVE_VC
-    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,0.7);
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5, 0.7);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10()
 {
 #ifdef HAVE_VC
-    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,1.0);
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5, 1.0);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10_08()
 {
 #ifdef HAVE_VC
-    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,1.0,0.8);
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5, 1.0, 0.8);
 #endif
 }
 
@@ -568,7 +567,8 @@ void KisCompositionBenchmark::benchmarkMemcpy()
         generateTiles(numTiles, 0, 0, ALPHA_UNIT, ALPHA_UNIT);
 
     QBENCHMARK_ONCE {
-        foreach (const Tile &tile, tiles) {
+        foreach (const Tile &tile, tiles)
+        {
             memcpy(tile.dst, tile.src, 4 * numPixels);
         }
     }
@@ -577,10 +577,10 @@ void KisCompositionBenchmark::benchmarkMemcpy()
 }
 
 #ifdef HAVE_VC
-    const int vecSize = Vc::float_v::Size;
-    const size_t uint8VecAlignment = qMax(vecSize * sizeof(quint8), sizeof(void*));
-    const size_t uint32VecAlignment = qMax(vecSize * sizeof(quint32), sizeof(void*));
-    const size_t floatVecAlignment = qMax(vecSize * sizeof(float), sizeof(void*));
+const int vecSize = Vc::float_v::Size;
+const size_t uint8VecAlignment = qMax(vecSize *sizeof(quint8), sizeof(void *));
+const size_t uint32VecAlignment = qMax(vecSize *sizeof(quint32), sizeof(void *));
+const size_t floatVecAlignment = qMax(vecSize *sizeof(float), sizeof(void *));
 #endif
 
 void KisCompositionBenchmark::benchmarkUintFloat()
@@ -589,12 +589,13 @@ void KisCompositionBenchmark::benchmarkUintFloat()
     const int dataSize = 4096;
     void *ptr = NULL;
     posix_memalign(&ptr, uint8VecAlignment, dataSize);
-    quint8 *iData = (quint8*)ptr;
+    quint8 *iData = (quint8 *)ptr;
     posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
-    float *fData = (float*)ptr;
+    float *fData = (float *)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::Size)
+        {
             // convert uint -> float directly, this causes
             // static_cast helper be called
             Vc::float_v b(Vc::uint_v(iData + i));
@@ -613,12 +614,13 @@ void KisCompositionBenchmark::benchmarkUintIntFloat()
     const int dataSize = 4096;
     void *ptr = NULL;
     posix_memalign(&ptr, uint8VecAlignment, dataSize);
-    quint8 *iData = (quint8*)ptr;
+    quint8 *iData = (quint8 *)ptr;
     posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
-    float *fData = (float*)ptr;
+    float *fData = (float *)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::Size)
+        {
             // convert uint->int->float, that avoids special sign
             // treating, and gives 2.6 times speedup
             Vc::float_v b(Vc::int_v(Vc::uint_v(iData + i)));
@@ -637,12 +639,13 @@ void KisCompositionBenchmark::benchmarkFloatUint()
     const int dataSize = 4096;
     void *ptr = NULL;
     posix_memalign(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
-    quint32 *iData = (quint32*)ptr;
+    quint32 *iData = (quint32 *)ptr;
     posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
-    float *fData = (float*)ptr;
+    float *fData = (float *)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::Size)
+        {
             // conversion float -> uint
             Vc::uint_v b(Vc::float_v(fData + i));
 
@@ -661,12 +664,13 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
     const int dataSize = 4096;
     void *ptr = NULL;
     posix_memalign(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
-    quint32 *iData = (quint32*)ptr;
+    quint32 *iData = (quint32 *)ptr;
     posix_memalign(&ptr, floatVecAlignment, dataSize * sizeof(float));
-    float *fData = (float*)ptr;
+    float *fData = (float *)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
+        for (int i = 0; i < dataSize; i += Vc::float_v::Size)
+        {
             // conversion float -> int -> uint
             Vc::uint_v b(Vc::int_v(Vc::float_v(fData + i)));
 

@@ -33,9 +33,10 @@
 
 void LoadWaiter::setImageData(KJob *job)
 {
-    if (m_pictureShape == 0)
-        return; // ugh, the shape got deleted meanwhile
-        KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    if (m_pictureShape == 0) {
+        return;    // ugh, the shape got deleted meanwhile
+    }
+    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob *>(job);
     Q_ASSERT(transferJob);
 
     if (m_pictureShape->imageCollection()) {
@@ -57,7 +58,7 @@ void LoadWaiter::setImageData(KJob *job)
 
 PictureShapeConfigWidget::PictureShapeConfigWidget()
     : m_shape(0),
-    m_fileWidget(0)
+      m_fileWidget(0)
 {
 }
 
@@ -68,14 +69,14 @@ PictureShapeConfigWidget::~PictureShapeConfigWidget()
 
 void PictureShapeConfigWidget::open(KoShape *shape)
 {
-    m_shape = dynamic_cast<PictureShape*>(shape);
+    m_shape = dynamic_cast<PictureShape *>(shape);
     Q_ASSERT(m_shape);
     delete m_fileWidget;
     QVBoxLayout *layout = new QVBoxLayout(this);
     m_fileWidget = new KFileWidget(KUrl("kfiledialog:///OpenDialog"), this);
     m_fileWidget->setOperationMode(KFileWidget::Opening);
     QStringList imageFilters;
-    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
+    foreach (const QByteArray &format, QImageReader::supportedImageFormats()) {
         imageFilters << "image/" + format;
     }
     m_fileWidget->setMimeFilter(imageFilters);
@@ -87,8 +88,9 @@ void PictureShapeConfigWidget::open(KoShape *shape)
 
 void PictureShapeConfigWidget::save()
 {
-    if (!m_shape)
+    if (!m_shape) {
         return;
+    }
     m_fileWidget->accept();
     KUrl url = m_fileWidget->selectedUrl();
     if (!url.isEmpty()) {

@@ -25,13 +25,12 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 
-
 #include "kexinewstuff.h"
 
 KexiNewStuff::KexiNewStuff(QWidget *parent)
-        : KNewStuff("kexi/template"
-                    , "http://download.kde.org/khotnewstuff/kexi-providers.xml"
-                    , parent)
+    : KNewStuff("kexi/template"
+                , "http://download.kde.org/khotnewstuff/kexi-providers.xml"
+                , parent)
 {
     // Prevent GHNS to deny downloading a second time. If GHNS
     // fails to download something, it still marks the thing as

@@ -48,21 +48,21 @@ Q_SIGNALS:
      * @arg DeclarativeDragDropEvent description of the dragged content
      * @see DeclarativeDragDropEvent
      */
-    void dragEnter(DeclarativeDragDropEvent* event);
+    void dragEnter(DeclarativeDragDropEvent *event);
 
     /**
      * Emitted when the mouse cursor dragging something leaves the drag area
      * @arg DeclarativeDragDropEvent description of the dragged content
      * @see DeclarativeDragDropEvent
      */
-    void dragLeave(DeclarativeDragDropEvent* event);
+    void dragLeave(DeclarativeDragDropEvent *event);
 
     /**
      * Emitted when the user drops something in the area
      * @arg DeclarativeDragDropEvent description of the dragged content
      * @see DeclarativeDragDropEvent
      */
-    void drop(DeclarativeDragDropEvent* event);
+    void drop(DeclarativeDragDropEvent *event);
 
     void enabledChanged();
 

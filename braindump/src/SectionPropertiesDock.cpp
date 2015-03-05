@@ -27,14 +27,14 @@
 SectionPropertiesDock::SectionPropertiesDock() :
     m_currentSection(0), m_rootSection(0)
 {
-    QWidget* mainWidget = new QWidget(this);
+    QWidget *mainWidget = new QWidget(this);
     setWidget(mainWidget);
     setWindowTitle(i18n("Dump properties"));
 
     m_wdgSectionProperties.setupUi(mainWidget);
 
     typedef QPair<QString, QString> PairType;
-    foreach(const PairType & pair, LayoutFactoryRegistry::instance()->factories()) {
+    foreach (const PairType &pair, LayoutFactoryRegistry::instance()->factories()) {
         m_wdgSectionProperties.comboBoxLayout->addItem(pair.second, pair.first);
     }
     connect(m_wdgSectionProperties.comboBoxLayout, SIGNAL(currentIndexChanged(int)), SLOT(layoutChanged(int)));
@@ -44,14 +44,14 @@ SectionPropertiesDock::~SectionPropertiesDock()
 {
 }
 
-void SectionPropertiesDock::setRootSection(RootSection* _rootSection)
+void SectionPropertiesDock::setRootSection(RootSection *_rootSection)
 {
     Q_ASSERT(m_rootSection == 0);
     m_rootSection = _rootSection;
     connect(m_rootSection, SIGNAL(commandExecuted()), SLOT(reload()));
 }
 
-void SectionPropertiesDock::setSection(Section* _section)
+void SectionPropertiesDock::setSection(Section *_section)
 {
     m_currentSection = _section;
     m_wdgSectionProperties.comboBoxLayout->setEnabled(m_currentSection);
@@ -60,9 +60,9 @@ void SectionPropertiesDock::setSection(Section* _section)
 
 void SectionPropertiesDock::reload()
 {
-    if(m_currentSection) {
-        for(int i = 0; i < m_wdgSectionProperties.comboBoxLayout->count(); ++i) {
-            if(m_wdgSectionProperties.comboBoxLayout->itemData(i) == m_currentSection->layout()->id()) {
+    if (m_currentSection) {
+        for (int i = 0; i < m_wdgSectionProperties.comboBoxLayout->count(); ++i) {
+            if (m_wdgSectionProperties.comboBoxLayout->itemData(i) == m_currentSection->layout()->id()) {
                 bool v = m_wdgSectionProperties.comboBoxLayout->blockSignals(true);
                 m_wdgSectionProperties.comboBoxLayout->setCurrentIndex(i);
                 m_wdgSectionProperties.comboBoxLayout->blockSignals(v);

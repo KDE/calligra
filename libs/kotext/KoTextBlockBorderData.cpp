@@ -42,7 +42,7 @@ public:
 };
 
 KoTextBlockBorderData::KoTextBlockBorderData(const QRectF &paragRect)
-        : d(new Private())
+    : d(new Private())
 {
     ///TODO Remove parameter paragRect and update references to this constructor.
     Q_UNUSED(paragRect);
@@ -54,12 +54,13 @@ KoTextBlockBorderData::~KoTextBlockBorderData()
 }
 
 KoTextBlockBorderData::KoTextBlockBorderData(const KoTextBlockBorderData &other)
-        : d(new Private())
+    : d(new Private())
 {
     d->mergeWithNext = other.d->mergeWithNext;
 
-    for (int i = Top; i <= Right; i++)
+    for (int i = Top; i <= Right; i++) {
         d->edges[i] = other.d->edges[i];
+    }
 }
 
 void KoTextBlockBorderData::setMergeWithNext(bool merge)
@@ -70,8 +71,9 @@ void KoTextBlockBorderData::setMergeWithNext(bool merge)
 bool KoTextBlockBorderData::hasBorders() const
 {
     for (int i = Top; i <= Right; i++)
-        if (d->edges[i].outerPen.widthF() > 0.0)
+        if (d->edges[i].outerPen.widthF() > 0.0) {
             return true;
+        }
     return false;
 }
 
@@ -85,12 +87,15 @@ bool KoTextBlockBorderData::equals(const KoTextBlockBorderData &border) const
         return false;
     }
     for (int i = Top; i <= Right; i++) {
-        if (d->edges[i].outerPen != border.d->edges[i].outerPen)
+        if (d->edges[i].outerPen != border.d->edges[i].outerPen) {
             return false;
-        if (d->edges[i].innerPen != border.d->edges[i].innerPen)
+        }
+        if (d->edges[i].innerPen != border.d->edges[i].innerPen) {
             return false;
-        if (qAbs(d->edges[i].distance - border.d->edges[i].distance) > 1E-10)
+        }
+        if (qAbs(d->edges[i].distance - border.d->edges[i].distance) > 1E-10) {
             return false;
+        }
     }
     return true;
 }

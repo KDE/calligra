@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include <kstandardshortcut.h>
 
-KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)
+KoUndoStackAction::KoUndoStackAction(KUndo2Stack *stack, Type type)
     : KAction(stack)
     , m_type(type)
 {
@@ -49,7 +49,7 @@ KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)
     }
 }
 
-void KoUndoStackAction::slotUndoTextChanged(const QString& text)
+void KoUndoStackAction::slotUndoTextChanged(const QString &text)
 {
     QString actionText = (m_type == UNDO) ? i18n("Undo %1", text) : i18n("Redo %1", text);
     setText(actionText);

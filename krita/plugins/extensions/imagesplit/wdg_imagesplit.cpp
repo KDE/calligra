@@ -26,13 +26,11 @@
 #include <QListWidgetItem>
 #include <QDebug>
 
-
-
 #include "kis_factory2.h"
 #include "kis_config.h"
 
-WdgImagesplit::WdgImagesplit(QWidget* parent)
-        : QWidget(parent)
+WdgImagesplit::WdgImagesplit(QWidget *parent)
+    : QWidget(parent)
 {
     setupUi(this);
 
@@ -43,6 +41,5 @@ WdgImagesplit::WdgImagesplit(QWidget* parent)
 
     chkAutoSave->setChecked(true);
 }
-
 
 #include "wdg_imagesplit.moc"

@@ -44,7 +44,7 @@
 
 KoScriptManagerAddTypeWidget::KoScriptManagerAddTypeWidget(KoScriptManagerAddWizard *wizard)
     : QWidget(wizard),
-    m_wizard(wizard)
+      m_wizard(wizard)
 {
     setObjectName("ScriptManagerAddTypeWidget");
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -92,7 +92,7 @@ void KoScriptManagerAddTypeWidget::slotUpdate()
 
 KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWizard *wizard, const QString &startDirOrVariable)
     : QWidget(wizard),
-    m_wizard(wizard)
+      m_wizard(wizard)
 {
     setObjectName("ScriptManagerAddFileWidget");
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -109,8 +109,8 @@ KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWiz
     m_filewidget->setMimeFilter(mimetypes /*, defaultmime*/);
 
     layout->addWidget(m_filewidget);
-    connect(m_filewidget, SIGNAL(fileHighlighted(const QString&)), this, SLOT(slotFileHighlighted(const QString&)));
-    connect(m_filewidget, SIGNAL(fileSelected(const QString&)), this, SLOT(slotUpdate()));
+    connect(m_filewidget, SIGNAL(fileHighlighted(QString)), this, SLOT(slotFileHighlighted(QString)));
+    connect(m_filewidget, SIGNAL(fileSelected(QString)), this, SLOT(slotUpdate()));
 }
 
 KoScriptManagerAddFileWidget::~KoScriptManagerAddFileWidget()
@@ -142,8 +142,8 @@ void KoScriptManagerAddFileWidget::slotUpdate()
 
 KoScriptManagerAddScriptWidget::KoScriptManagerAddScriptWidget(KoScriptManagerAddWizard *wizard)
     : QWidget(wizard),
-    m_wizard(wizard),
-    m_editor(0)
+      m_wizard(wizard),
+      m_editor(0)
 {
     setObjectName("ScriptManagerAddScriptWidget");
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -160,11 +160,11 @@ void KoScriptManagerAddScriptWidget::slotUpdate()
     //d->wizard->setValid(d->wizard->m_scriptItem, d->editor && d->editor->isValid());
 
     m_wizard->setValid(m_wizard->m_scriptItem,
-                         ! (m_editor == 0 || m_editor->nameEdit()->text().isEmpty()
-                             || m_editor->textEdit()->text().isEmpty()
-                             || m_editor->interpreterEdit()->currentText().isEmpty()
-                             || m_editor->fileEdit()->url().fileName().isEmpty() )
-                        );
+                       !(m_editor == 0 || m_editor->nameEdit()->text().isEmpty()
+                         || m_editor->textEdit()->text().isEmpty()
+                         || m_editor->interpreterEdit()->currentText().isEmpty()
+                         || m_editor->fileEdit()->url().fileName().isEmpty())
+                      );
 }
 
 void KoScriptManagerAddScriptWidget::showEvent(QShowEvent *event)
@@ -174,8 +174,9 @@ void KoScriptManagerAddScriptWidget::showEvent(QShowEvent *event)
         action = m_editor->action();
         delete m_editor;
     }
-    if (! action)
+    if (! action) {
         action = new Kross::Action(0, QString());
+    }
 
     const QString file = m_wizard->m_filewidget->selectedFile();
     QFileInfo fi(file);
@@ -192,9 +193,9 @@ void KoScriptManagerAddScriptWidget::showEvent(QShowEvent *event)
     layout()->addWidget(m_editor);
     m_editor->interpreterEdit()->setEnabled(false);
     m_editor->fileEdit()->setEnabled(false);
-    connect(m_editor->textEdit(), SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdate()));
-    connect(m_editor->interpreterEdit(), SIGNAL(editTextChanged(const QString&)), this, SLOT(slotUpdate()));
-    connect(m_editor->fileEdit(), SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdate()));
+    connect(m_editor->textEdit(), SIGNAL(textChanged(QString)), this, SLOT(slotUpdate()));
+    connect(m_editor->interpreterEdit(), SIGNAL(editTextChanged(QString)), this, SLOT(slotUpdate()));
+    connect(m_editor->fileEdit(), SIGNAL(textChanged(QString)), this, SLOT(slotUpdate()));
 
     QWidget::showEvent(event);
     slotUpdate();
@@ -309,27 +310,30 @@ bool KoScriptManagerAddWizard::invokeWidgetMethod(const char *member)
     KPageWidgetItem *item = pagewidget->currentPage();
     Q_ASSERT(item);
     bool ok = true;
-    QMetaObject::invokeMethod(item->widget(), member, Q_RETURN_ARG(bool,ok));
+    QMetaObject::invokeMethod(item->widget(), member, Q_RETURN_ARG(bool, ok));
     kDebug(32010) << "object=" << item->widget()->objectName() << " member=" << member << " ok=" << ok;
     return ok;
 }
 
 void KoScriptManagerAddWizard::back()
 {
-    if (invokeWidgetMethod("back"))
+    if (invokeWidgetMethod("back")) {
         KAssistantDialog::back();
+    }
 }
 
 void KoScriptManagerAddWizard::next()
 {
-    if (invokeWidgetMethod("next"))
+    if (invokeWidgetMethod("next")) {
         KAssistantDialog::next();
+    }
 }
 
 void KoScriptManagerAddWizard::accept()
 {
-    if (invokeWidgetMethod("accept"))
+    if (invokeWidgetMethod("accept")) {
         KAssistantDialog::accept();
+    }
 }
 
 #include <KoScriptManagerAdd.moc>

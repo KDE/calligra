@@ -67,7 +67,7 @@ public:
     void setEndBookmark(KoTextMeta *bookmark);
 
     /// @return the end bookmark if the type is StartBookmark
-    KoTextMeta* endBookmark() const;
+    KoTextMeta *endBookmark() const;
 
     /// @return the exact cursor position of this bookmark in document
     int position() const;

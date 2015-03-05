@@ -35,12 +35,11 @@ class KisTileDataStore;
 #define __TILE_DATA_WIDTH 64
 #define __TILE_DATA_HEIGHT 64
 
-typedef KisLocklessStack<KisTileData*> KisTileDataCache;
+typedef KisLocklessStack<KisTileData *> KisTileDataCache;
 
-typedef QLinkedList<KisTileData*> KisTileDataList;
+typedef QLinkedList<KisTileData *> KisTileDataList;
 typedef KisTileDataList::iterator KisTileDataListIterator;
 typedef KisTileDataList::const_iterator KisTileDataListConstIterator;
-
 
 /**
  * Stores actual tile's data
@@ -51,7 +50,7 @@ public:
     KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store);
 
 private:
-    KisTileData(const KisTileData& rhs, bool checkFreeMemory = true);
+    KisTileData(const KisTileData &rhs, bool checkFreeMemory = true);
 
 public:
     ~KisTileData();
@@ -65,7 +64,7 @@ public:
     /**
      * Information about data stored
      */
-    inline quint8* data() const;
+    inline quint8 *data() const;
     inline void setData(const quint8 *data);
     inline quint32 pixelSize() const;
 
@@ -99,7 +98,7 @@ public:
      * Creates a clone of the tile data safely.
      * It will try to use the cached clones.
      */
-    inline KisTileData* clone();
+    inline KisTileData *clone();
 
     /**
      * Control the access of swapper to the tile data
@@ -132,7 +131,6 @@ public:
      */
     inline qint32 numUsers() const;
 
-
     /**
      * Used for swapping purposes only.
      * Frees the memory occupied by the tile data.
@@ -164,7 +162,7 @@ public:
 private:
     void fillWithPixel(const quint8 *defPixel);
 
-    static quint8* allocateData(const qint32 pixelSize);
+    static quint8 *allocateData(const qint32 pixelSize);
     static void freeData(quint8 *ptr, const qint32 pixelSize);
 private:
     friend class KisTileDataPooler;
@@ -205,7 +203,6 @@ private:
      */
     KisChunk m_swapChunk;
 
-
     /**
      * The flag is set by KisMementoItem to show this
      * tile data is going down in history.
@@ -223,7 +220,6 @@ private:
     //FIXME: make memory aligned
     int m_age;
 
-
     /**
      * The primitive for controlling swapping of the tile.
      * lockForRead() - used by regular threads to ensure swapper
@@ -240,7 +236,7 @@ private:
      * FIXME: We should be able to work in const environment
      * even when actual data is swapped out to disk
      */
-    mutable quint8* m_data;
+    mutable quint8 *m_data;
 
     /**
      * How many tiles/mementoes use
@@ -252,7 +248,6 @@ private:
      * Shared pointer counter
      */
     mutable QAtomicInt m_refCount;
-
 
     qint32 m_pixelSize;
     //qint32 m_timeStamp;

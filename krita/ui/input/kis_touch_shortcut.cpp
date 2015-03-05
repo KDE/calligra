@@ -31,8 +31,8 @@ public:
     int maxTouchPoints;
 };
 
-KisTouchShortcut::KisTouchShortcut( KisAbstractInputAction* action, int index )
-    : KisAbstractShortcut(action, index), d( new Private )
+KisTouchShortcut::KisTouchShortcut(KisAbstractInputAction *action, int index)
+    : KisAbstractShortcut(action, index), d(new Private)
 {
 
 }
@@ -57,7 +57,7 @@ void KisTouchShortcut::setMaximumTouchPoints(int max)
     d->maxTouchPoints = max;
 }
 
-bool KisTouchShortcut::match( QTouchEvent* event )
+bool KisTouchShortcut::match(QTouchEvent *event)
 {
     return event->touchPoints().count() >= d->minTouchPoints && event->touchPoints().count() <= d->maxTouchPoints;
 }

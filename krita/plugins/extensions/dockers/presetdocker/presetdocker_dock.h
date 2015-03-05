@@ -24,20 +24,27 @@
 class KisPaintOpPresetsChooserPopup;
 class KisCanvas2;
 
-class PresetDockerDock : public QDockWidget, public KoCanvasObserverBase {
+class PresetDockerDock : public QDockWidget, public KoCanvasObserverBase
+{
     Q_OBJECT
 public:
-    PresetDockerDock( );
-    QString observerName() { return "PresetDockerDock"; }
+    PresetDockerDock();
+    QString observerName()
+    {
+        return "PresetDockerDock";
+    }
     virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { m_canvas = 0; setEnabled(false);}
+    virtual void unsetCanvas()
+    {
+        m_canvas = 0;
+        setEnabled(false);
+    }
 public Q_SLOTS:
-    void canvasResourceChanged(int key, const QVariant& v);
+    void canvasResourceChanged(int key, const QVariant &v);
 private Q_SLOTS:
 private:
-    KisCanvas2* m_canvas;
-    KisPaintOpPresetsChooserPopup* m_presetChooser;
+    KisCanvas2 *m_canvas;
+    KisPaintOpPresetsChooserPopup *m_presetChooser;
 };
-
 
 #endif

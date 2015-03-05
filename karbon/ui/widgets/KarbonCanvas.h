@@ -72,7 +72,7 @@ public:
     /// reimplemented from KoCanvasBase
     KoViewConverter *viewConverter() const;
     /// reimplemented from KoCanvasBase
-    KoToolProxy * toolProxy() const;
+    KoToolProxy *toolProxy() const;
     /// reimplemented from KoCanvasBase
     virtual QPoint documentOrigin() const;
     /// reimplemented from KoCanvasBase
@@ -80,11 +80,11 @@ public:
     /// reimplemented from KoCanvasBase
     const QWidget *canvasWidget() const;
     /// reimplemented from KoCanvasBase
-    void updateCanvas(const QRectF& rc);
+    void updateCanvas(const QRectF &rc);
     /// reimplemented from KoCanvasBase
     virtual void updateInputMethodInfo();
     /// reimplemented from KoCanvasBase
-    virtual KoGuidesData * guidesData();
+    virtual KoGuidesData *guidesData();
     virtual void setCursor(const QCursor &cursor);
     /// Enables/disables showing page margins
     void setShowPageMargins(bool on);
@@ -139,7 +139,7 @@ Q_SIGNALS:
 
 protected:
     bool event(QEvent *);
-    void paintEvent(QPaintEvent * ev);
+    void paintEvent(QPaintEvent *ev);
     void mouseEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     void keyReleaseEvent(QKeyEvent *e);
@@ -155,10 +155,10 @@ protected:
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-    QPoint widgetToView(const QPoint& p) const;
-    QRect widgetToView(const QRect& r) const;
-    QPoint viewToWidget(const QPoint& p) const;
-    QRect viewToWidget(const QRect& r) const;
+    QPoint widgetToView(const QPoint &p) const;
+    QRect widgetToView(const QRect &r) const;
+    QPoint viewToWidget(const QPoint &p) const;
+    QRect viewToWidget(const QRect &r) const;
 
 private Q_SLOTS:
     void updateSizeAndOffset();
@@ -168,7 +168,7 @@ private:
     void paintMargins(QPainter &painter, const KoViewConverter &converter);
 
     class KarbonCanvasPrivate;
-    KarbonCanvasPrivate * const d;
+    KarbonCanvasPrivate *const d;
 };
 
 #endif // KARBONCANVAS_H

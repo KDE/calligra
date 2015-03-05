@@ -52,7 +52,7 @@
 K_PLUGIN_FACTORY(HTMLImportFactory, registerPlugin<HTMLImport>();)
 K_EXPORT_PLUGIN(HTMLImportFactory("calligrafilters"))
 
-HTMLImport::HTMLImport(QObject* parent, const QVariantList&)
+HTMLImport::HTMLImport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
@@ -61,7 +61,7 @@ HTMLImport::~HTMLImport()
 {
 }
 
-KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus HTMLImport::convert(const QByteArray &from, const QByteArray &to)
 {
     if (to != "application/vnd.oasis.opendocument.spreadsheet" || from != "text/html") {
         kWarning(30501) << "Invalid mimetypes " << to << " " << from;
@@ -70,17 +70,19 @@ KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QBy
 
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
-    kDebug()<<"inputFile="<<inputFile<<"outputFile="<<outputFile;
+    kDebug() << "inputFile=" << inputFile << "outputFile=" << outputFile;
 
     // check if the inout file exists
     m_inputDir = QFileInfo(m_chain->inputFile()).dir();
-    if(!m_inputDir.exists())
+    if (!m_inputDir.exists()) {
         return KoFilter::StupidError;
+    }
 
     // create output store
-    KoStore* storeout = KoStore::createStore(outputFile, KoStore::Write, "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
-    if (!storeout)
+    KoStore *storeout = KoStore::createStore(outputFile, KoStore::Write, "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
+    if (!storeout) {
         return KoFilter::FileNotFound;
+    }
 
     KoOdfWriteStore oasisStore(storeout);
     m_manifestWriter = oasisStore.manifestWriter("application/vnd.oasis.opendocument.spreadsheet");
@@ -88,23 +90,27 @@ KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QBy
 
     m_mainStyles = new KoGenStyles();
 
-    KoXmlWriter* bodyWriter = m_store->bodyWriter();
+    KoXmlWriter *bodyWriter = m_store->bodyWriter();
     m_store->contentWriter(); // we need to create the instance even if the contentWriter is not used
 
     bodyWriter->startElement("office:body");
     KoFilter::ConversionStatus result = loadUrl(m_chain->inputFile());
-    if(result != KoFilter::OK)
+    if (result != KoFilter::OK) {
         kWarning() << "Failed to load url=" << m_chain->inputFile();
+    }
     bodyWriter->endElement(); // office:body
 
-    if(m_store->closeContentWriter())
+    if (m_store->closeContentWriter()) {
         m_manifestWriter->addManifestEntry("content.xml", "text/xml");
+    }
 
-    if(createStyle())
+    if (createStyle()) {
         m_manifestWriter->addManifestEntry("styles.xml", "text/xml");
+    }
 
-    if(createMeta())
+    if (createMeta()) {
         m_manifestWriter->addManifestEntry("meta.xml", "text/xml");
+    }
 
     m_store->closeManifestWriter();
     delete storeout;
@@ -115,10 +121,11 @@ KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QBy
 
 bool HTMLImport::createStyle()
 {
-    if (!m_store->store()->open("styles.xml"))
+    if (!m_store->store()->open("styles.xml")) {
         return false;
+    }
     KoStoreDevice dev(m_store->store());
-    KoXmlWriter* stylesWriter = new KoXmlWriter(&dev);
+    KoXmlWriter *stylesWriter = new KoXmlWriter(&dev);
 
     stylesWriter->startDocument("office:document-styles");
     stylesWriter->startElement("office:document-styles");
@@ -144,11 +151,12 @@ bool HTMLImport::createStyle()
 
 bool HTMLImport::createMeta()
 {
-    if (!m_store->store()->open("meta.xml"))
+    if (!m_store->store()->open("meta.xml")) {
         return false;
+    }
 
     KoStoreDevice dev(m_store->store());
-    KoXmlWriter* metaWriter = new KoXmlWriter(&dev);
+    KoXmlWriter *metaWriter = new KoXmlWriter(&dev);
     metaWriter->startDocument("office:document-meta");
     metaWriter->startElement("office:document-meta");
     metaWriter->addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
@@ -177,7 +185,7 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
 {
     kDebug() << url;
 
-    KoXmlWriter* bodyWriter = m_store->bodyWriter();
+    KoXmlWriter *bodyWriter = m_store->bodyWriter();
     //KoXmlWriter* contentWriter = m_store->contentWriter();
 
     QStringList sheets;
@@ -192,7 +200,7 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
 
         QEventLoop loop;
         connect(&html, SIGNAL(completed()), &loop, SLOT(quit()));
-        QMetaObject::invokeMethod(&html,"openUrl", Qt::QueuedConnection, Q_ARG(KUrl,url));
+        QMetaObject::invokeMethod(&html, "openUrl", Qt::QueuedConnection, Q_ARG(KUrl, url));
         //if (!html.openUrl(url)) { kWarning(30503) << "Failed loadUrl" << url; return KoFilter::StupidError; }
         loop.exec(QEventLoop::ExcludeUserInputEvents);
 
@@ -212,20 +220,21 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
         DOM::NodeList frameset = doc.getElementsByTagName("frameset");
         DOM::Node frame = frameset.item(0);
         if (!frame.isNull()) {
-            for(uint i = 0; i < frameset.length(); ++i) {
+            for (uint i = 0; i < frameset.length(); ++i) {
                 for (DOM::Node n = frameset.item(i).firstChild(); !n.isNull(); n = n.nextSibling()) {
                     DOM::Element f = n;
-                    if(!f.isNull() && f.nodeName().lower() == "frame" && f.getAttribute("name").string() == "frSheet")
+                    if (!f.isNull() && f.nodeName().lower() == "frame" && f.getAttribute("name").string() == "frSheet") {
                         sheets.append(f.getAttribute("src").string());
+                    }
                 }
             }
         }
     }
 
     // the KHTMLPart and DOM::Document are no more and we can call us recursivly now.
-    if(!sheets.isEmpty()) {
+    if (!sheets.isEmpty()) {
         m_states.push(InFrameset);
-        foreach(const QString &src, sheets) {
+        foreach (const QString &src, sheets) {
             KUrl u(QFileInfo(m_inputDir, src).absoluteFilePath());
             loadUrl(u);
         }
@@ -237,15 +246,15 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
 
 void HTMLImport::parseNode(DOM::Node node)
 {
-    KoXmlWriter* bodyWriter = m_store->bodyWriter();
+    KoXmlWriter *bodyWriter = m_store->bodyWriter();
     //KoXmlWriter* contentWriter = m_store->contentWriter();
 
     // check if this is a text node.
     DOM::Text t = node;
     if (!t.isNull()) {
-        if(!m_states.isEmpty() && m_states.top() == InCell) {
+        if (!m_states.isEmpty() && m_states.top() == InCell) {
             const QString s = t.data().string().trimmed();
-            if(!s.isEmpty()) {
+            if (!s.isEmpty()) {
                 //kDebug()<<"TEXT tagname=" << node.nodeName() << "TEXT="<<t.data().string();
                 bodyWriter->addAttribute("office:value-type", "string");
                 bodyWriter->addAttribute("office:string-value", s);
@@ -256,21 +265,19 @@ void HTMLImport::parseNode(DOM::Node node)
 
     DOM::DOMString tag = node.nodeName().lower();
 
-    if(tag == "table") {
+    if (tag == "table") {
         m_states.push(InTable);
         bodyWriter->startElement("table:table");
 
         // hack to get some name defined
         static int sheetCount = 0;
         bodyWriter->addAttribute("table:name", QString("Sheet %1").arg(++sheetCount));
-    }
-    else if(tag == "tr") {
+    } else if (tag == "tr") {
         m_states.push(InRow);
         bodyWriter->startElement("table:table-row");
         //xmlWriter->addAttribute("table:number-columns-spanned", );
         //xmlWriter->addAttribute("table:number-rows-spanned", );
-    }
-    else if(tag == "td") {
+    } else if (tag == "td") {
         m_states.push(InCell);
         bodyWriter->startElement("table:table-cell");
     } else {
@@ -292,7 +299,7 @@ void HTMLImport::parseNode(DOM::Node node)
     }
 
     State state = m_states.pop();
-    if(state == InTable || state == InRow || state == InCell) {
+    if (state == InTable || state == InRow || state == InCell) {
         bodyWriter->endElement();
     }
 

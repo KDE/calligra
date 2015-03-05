@@ -30,10 +30,10 @@ class KritaNamespace::Private
 public:
     QObject *imageBuilder;
     QObject *mouseTracker;
-    QObject* window;
+    QObject *window;
 };
 
-KritaNamespace::KritaNamespace(QObject* parent)
+KritaNamespace::KritaNamespace(QObject *parent)
     : QObject(parent), d(new Private)
 {
     d->imageBuilder = new ImageBuilder(this);
@@ -46,38 +46,38 @@ KritaNamespace::~KritaNamespace()
     delete d;
 }
 
-QObject* KritaNamespace::imageBuilder() const
+QObject *KritaNamespace::imageBuilder() const
 {
     return d->imageBuilder;
 }
 
-QObject* KritaNamespace::mouseTracker() const
+QObject *KritaNamespace::mouseTracker() const
 {
     return d->mouseTracker;
 }
 
-QObject* KritaNamespace::window() const
+QObject *KritaNamespace::window() const
 {
     return d->window;
 }
 
-void KritaNamespace::setWindow(QObject* window)
+void KritaNamespace::setWindow(QObject *window)
 {
     d->window = window;
     emit windowChanged();
 }
 
-QObject* KritaNamespace::virtualKeyboardController() const
+QObject *KritaNamespace::virtualKeyboardController() const
 {
     return VirtualKeyboardController::instance();
 }
 
-QObject* KritaNamespace::progressProxy() const
+QObject *KritaNamespace::progressProxy() const
 {
     return DocumentManager::instance()->progressProxy();
 }
 
-bool KritaNamespace::fileExists(const QString& filename) const
+bool KritaNamespace::fileExists(const QString &filename) const
 {
     return QDir().exists(filename);
 }

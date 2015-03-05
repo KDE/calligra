@@ -21,14 +21,14 @@
 
 #include "tiles3/kis_lockless_stack.h"
 
-
 class KisCachedPaintDevice
 {
 public:
-    KisPaintDeviceSP getDevice(KisPaintDeviceSP prototype) {
+    KisPaintDeviceSP getDevice(KisPaintDeviceSP prototype)
+    {
         KisPaintDeviceSP device;
 
-        if(!m_stack.pop(device)) {
+        if (!m_stack.pop(device)) {
             device = new KisPaintDevice(prototype->colorSpace());
         }
 
@@ -36,7 +36,8 @@ public:
         return device;
     }
 
-    void putDevice(KisPaintDeviceSP device) {
+    void putDevice(KisPaintDeviceSP device)
+    {
         device->clear();
         m_stack.push(device);
     }

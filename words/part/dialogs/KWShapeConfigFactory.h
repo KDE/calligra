@@ -39,11 +39,13 @@ public:
     void addUser();
     void removeUser();
 
-    KWDocument *document() const {
+    KWDocument *document() const
+    {
         return m_document;
     }
 
-    bool keepAspectRatio() const {
+    bool keepAspectRatio() const
+    {
         return m_protectAspectRatio;
     }
     void setKeepAspectRatio(bool on);
@@ -73,7 +75,8 @@ public:
     /// reimplemented method from superclass
     bool showForShapeId(const QString &id) const;
     /// reimplemented method from superclass
-    int sortingOrder() const {
+    int sortingOrder() const
+    {
         return 15;
     }
 
@@ -94,7 +97,8 @@ public:
     /// reimplemented method from superclass
     QString name() const;
     /// reimplemented method from superclass
-    int sortingOrder() const {
+    int sortingOrder() const
+    {
         return 0;
     }
     /// reimplemented method from superclass
@@ -120,13 +124,13 @@ public:
     bool showForShapeId(const QString &id) const;
 
     /// reimplemented method from superclass
-    int sortingOrder() const {
+    int sortingOrder() const
+    {
         return 5;
     }
 
 private:
     FrameConfigSharedState *m_state;
 };
-
 
 #endif

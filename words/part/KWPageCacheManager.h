@@ -29,8 +29,8 @@ class QSize;
 
 class KWPageCacheManager;
 
-class KWPageCache {
-
+class KWPageCache
+{
 
 public:
 
@@ -41,7 +41,7 @@ public:
     KWPageCache(KWPageCacheManager *manager, int w, int h);
     ~KWPageCache();
 
-    KWPageCacheManager* m_manager;
+    KWPageCacheManager *m_manager;
     QList<QImage> cache;
     int m_tilesx, m_tilesy;
     QSize m_size;
@@ -53,7 +53,8 @@ public:
     bool allExposed;
 };
 
-class KWPageCacheManager {
+class KWPageCacheManager
+{
 
 public:
 

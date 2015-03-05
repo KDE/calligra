@@ -72,21 +72,21 @@ public:
      * \param title the window title
      * \return \c true on success; \c false on failure
      */
-    bool showPasswordDialog(QWidget* parent, Mode mode, const QString& title);
+    bool showPasswordDialog(QWidget *parent, Mode mode, const QString &title);
 
     /**
      * \ingroup NativeFormat
      */
-    void loadXmlProtection(const KoXmlElement& element);
+    void loadXmlProtection(const KoXmlElement &element);
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOdfProtection(const KoXmlElement& element);
+    void loadOdfProtection(const KoXmlElement &element);
 
 private:
     // disable assignment operator
-    void operator=(const ProtectableObject&);
+    void operator=(const ProtectableObject &);
 
     QByteArray m_password;
 };

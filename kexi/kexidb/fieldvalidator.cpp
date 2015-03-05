@@ -26,8 +26,8 @@
 
 using namespace KexiDB;
 
-FieldValidator::FieldValidator(const Field &field, QObject* parent)
-        : KexiUtils::MultiValidator(parent)
+FieldValidator::FieldValidator(const Field &field, QObject *parent)
+    : KexiUtils::MultiValidator(parent)
 {
 //! @todo merge this code with KexiTableEdit code!
 //! @todo set maximum length validator
@@ -51,21 +51,24 @@ FieldValidator::FieldValidator(const Field &field, QObject* parent)
             validator = new KexiUtils::LongLongValidator(0);
         }
 
-        if (!validator)
-            validator = new KIntValidator(bottom, top, 0); //the default
+        if (!validator) {
+            validator = new KIntValidator(bottom, top, 0);    //the default
+        }
         addSubvalidator(validator);
     } else if (field.isFPNumericType()) {
         QValidator *validator;
         if (t == Field::Float) {
-            if (field.isUnsigned()) //ok?
+            if (field.isUnsigned()) { //ok?
                 validator = new KDoubleValidator(0, 3.4e+38, field.scale(), 0);
-            else
+            } else {
                 validator = new KDoubleValidator(this);
+            }
         } else {//double
-            if (field.isUnsigned()) //ok?
+            if (field.isUnsigned()) { //ok?
                 validator = new KDoubleValidator(0, 1.7e+308, field.scale(), 0);
-            else
+            } else {
                 validator = new KDoubleValidator(this);
+            }
         }
         addSubvalidator(validator);
     } else if (t == Field::Date) {

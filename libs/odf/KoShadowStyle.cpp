@@ -22,7 +22,6 @@
 
 #include <KoUnit.h>
 
-
 // KoShadowStyle private class
 class KoShadowStylePrivate: public QSharedData
 {
@@ -69,16 +68,18 @@ KoShadowStyle::~KoShadowStyle()
 
 bool KoShadowStyle::operator==(const KoShadowStyle &other) const
 {
-    if (d.data() == other.d.data())
+    if (d.data() == other.d.data()) {
         return true;
+    }
 
-    if (shadowCount() != other.shadowCount())
+    if (shadowCount() != other.shadowCount()) {
         return false;
+    }
 
-    foreach (const ShadowData &data, d->shadows)
-    {
-        if (!other.d->shadows.contains(data))
+    foreach (const ShadowData &data, d->shadows) {
+        if (!other.d->shadows.contains(data)) {
             return false;
+        }
     }
     return true;
 }
@@ -89,18 +90,20 @@ bool KoShadowStyle::operator!=(const KoShadowStyle &other) const
 }
 
 // load value string as specified by CSS2 §7.16.5 "text-shadow"
-bool KoShadowStyle::loadOdf (const QString &data)
+bool KoShadowStyle::loadOdf(const QString &data)
 {
-    if (data == QLatin1String("none"))
+    if (data == QLatin1String("none")) {
         return true;
+    }
 
     QList<KoShadowStyle::ShadowData> shadow_datas;
 
     const QStringList sub_shadows = data.split(QLatin1Char(','));
     foreach (const QString &shadow, sub_shadows) {
         QStringList words = shadow.split(QLatin1Char(' '), QString::SkipEmptyParts);
-        if (words.isEmpty())
+        if (words.isEmpty()) {
             return false;
+        }
 
         KoShadowStyle::ShadowData currentData;
 
@@ -123,15 +126,17 @@ bool KoShadowStyle::loadOdf (const QString &data)
         // specify a blur radius and a shadow color.", from CSS2 §7.16.5 "text-shadow"
         // But for some reason also no offset has been accepted before. TODO: which?
         if (! words.isEmpty()) {
-            if ((words.length() < 2) || (words.length() > 3))
+            if ((words.length() < 2) || (words.length() > 3)) {
                 return false;
+            }
 
             // Parse offset
             currentData.offset.setX(KoUnit::parseValue(words.at(0), 0.0));
             currentData.offset.setY(KoUnit::parseValue(words.at(1), 0.0));
             // Parse blur radius if present
-            if (words.length() == 3)
+            if (words.length() == 3) {
                 currentData.radius = KoUnit::parseValue(words.at(2), 0.0);
+            }
         }
         d->shadows << currentData;
     }
@@ -145,8 +150,9 @@ int KoShadowStyle::shadowCount() const
 
 QString KoShadowStyle::saveOdf() const
 {
-    if (d->shadows.isEmpty())
+    if (d->shadows.isEmpty()) {
         return QLatin1String("none");
+    }
 
     QStringList parts;
     const QString pt = QLatin1String("%1pt");
@@ -156,8 +162,9 @@ QString KoShadowStyle::saveOdf() const
             elements << data.color.name();
         }
         elements << pt.arg(data.offset.x()) << pt.arg(data.offset.y());
-        if (data.radius != 0)
+        if (data.radius != 0) {
             elements << pt.arg(data.radius);
+        }
 
         parts << elements.join(QLatin1String(" "));
     }

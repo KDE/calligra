@@ -20,9 +20,7 @@
 #ifndef MPXJIMPORT_H
 #define MPXJIMPORT_H
 
-
 #include <KoFilter.h>
-
 
 #include <QObject>
 #include <QVariantList>
@@ -30,20 +28,19 @@
 class QByteArray;
 class QStringList;
 
-
 class MpxjImport : public KoFilter
 {
     Q_OBJECT
 public:
-    MpxjImport(QObject* parent, const QVariantList &);
+    MpxjImport(QObject *parent, const QVariantList &);
     virtual ~MpxjImport() {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
     static QStringList mimeTypes();
 
 protected:
-    KoFilter::ConversionStatus doImport( const QByteArray inFile, const QByteArray outFile );
+    KoFilter::ConversionStatus doImport(const QByteArray inFile, const QByteArray outFile);
 };
 
 #endif // MPXJIMPORT_H

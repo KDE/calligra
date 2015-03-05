@@ -32,7 +32,7 @@ public:
 
     virtual ~KexiTableDesigner_DataView();
 
-    KexiTablePart::TempData* tempData() const;
+    KexiTablePart::TempData *tempData() const;
 
 protected:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);

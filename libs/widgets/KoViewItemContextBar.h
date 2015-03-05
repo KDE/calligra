@@ -77,7 +77,7 @@ private Q_SLOTS:
     /** Hide context bar if the selectem item has been removed */
     void slotRowsRemoved(const QModelIndex &parent, int start, int end);
     /** Updates contex bar buttons state*/
-    void updateHoverUi(const QModelIndex& index);
+    void updateHoverUi(const QModelIndex &index);
     void showContextBar(const QRect &rect);
     /** Updates Selection Button state*/
     void updateToggleSelectionButton();
@@ -93,7 +93,7 @@ private:
     QWidget *m_ContextBar;
     QToolButton *m_ToggleSelectionButton;
     QHBoxLayout *m_Layout;
-    QList <QToolButton*> m_contextBarButtons;
+    QList <QToolButton *> m_contextBarButtons;
     bool m_showToggleButton;
 };
 

@@ -18,7 +18,6 @@
  *  adopted from here http://www.snippetcenter.org/en/a-fast-atan2-function-s1868.aspx
  */
 
-
 #ifndef _KIS_IMAGE_FAST_
 #define _KIS_IMAGE_FAST_
 
@@ -27,10 +26,11 @@
 /**
  * This namespace countains fast but inaccurate version of mathematical function.
  */
-namespace KisFastMath {
+namespace KisFastMath
+{
 
-    /// atan2 replacement
-    KRITAIMAGE_EXPORT qreal atan2(qreal y, qreal x);
+/// atan2 replacement
+KRITAIMAGE_EXPORT qreal atan2(qreal y, qreal x);
 }
 
 #endif

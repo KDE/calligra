@@ -59,7 +59,7 @@
 
 using namespace Calligra::Sheets;
 
-QList<DocBase*> DocBase::Private::s_docs;
+QList<DocBase *> DocBase::Private::s_docs;
 int DocBase::Private::s_docId = 0;
 
 Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
@@ -96,7 +96,7 @@ DocBase::~DocBase()
     delete d;
 }
 
-QList<DocBase*> DocBase::documents()
+QList<DocBase *> DocBase::documents()
 {
     return Private::s_docs;
 }
@@ -117,7 +117,7 @@ int DocBase::syntaxVersion() const
     return d->map->syntaxVersion();
 }
 
-KoDocumentResourceManager* DocBase::resourceManager() const
+KoDocumentResourceManager *DocBase::resourceManager() const
 {
     return d->resourceManager;
 }
@@ -137,17 +137,17 @@ bool DocBase::saveOdf(SavingContext &documentContext)
     return saveOdfHelper(documentContext, SaveAll);
 }
 
-bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
-                        QString* /*plainText*/)
+bool DocBase::saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag,
+                            QString * /*plainText*/)
 {
     Q_UNUSED(saveFlag);
-    KoStore * store = documentContext.odfStore.store();
-    KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
+    KoStore *store = documentContext.odfStore.store();
+    KoXmlWriter *manifestWriter = documentContext.odfStore.manifestWriter();
 
     KoStoreDevice dev(store);
     KoGenStyles mainStyles;//for compile
 
-    KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
+    KoXmlWriter *contentWriter = documentContext.odfStore.contentWriter();
     if (!contentWriter) {
         return false;
     }
@@ -155,7 +155,7 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     // Document Url for FILENAME function and page header/footer.
     d->map->calculationSettings()->setFileName(url().prettyUrl());
 
-    KoXmlWriter* bodyWriter = documentContext.odfStore.bodyWriter();
+    KoXmlWriter *bodyWriter = documentContext.odfStore.bodyWriter();
     KoShapeSavingContext savingContext(*bodyWriter, mainStyles, documentContext.embeddedSaver);
 
     //todo fixme just add a element for testing saving content.xml
@@ -178,10 +178,11 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
 
     mainStyles.saveOdfStylesDotXml(store, manifestWriter);
 
-    if (!store->open("settings.xml"))
+    if (!store->open("settings.xml")) {
         return false;
+    }
 
-    KoXmlWriter* settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-settings");
+    KoXmlWriter *settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-settings");
     settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
@@ -201,8 +202,9 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     settingsWriter->endDocument();
     delete settingsWriter;
 
-    if (!store->close())
+    if (!store->close()) {
         return false;
+    }
 
     if (!savingContext.saveDataCenter(store, manifestWriter)) {
         return false;
@@ -215,7 +217,7 @@ bool DocBase::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
     return true;
 }
 
-bool DocBase::loadOdf(KoOdfReadStore & odfStore)
+bool DocBase::loadOdf(KoOdfReadStore &odfStore)
 {
     QPointer<KoUpdater> updater;
     if (progressUpdater()) {
@@ -238,13 +240,14 @@ bool DocBase::loadOdf(KoOdfReadStore & odfStore)
         kError(32001) << "No office:spreadsheet found!" << endl;
         KoXmlElement childElem;
         QString localName;
-        forEachElement(childElem, realBody) {
+        forEachElement (childElem, realBody) {
             localName = childElem.localName();
         }
-        if (localName.isEmpty())
+        if (localName.isEmpty()) {
             setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body."));
-        else
-            setErrorMessage(i18n("This document is not a spreadsheet, but %1. Please try opening it with the appropriate application." , KoDocument::tagNameToDocumentType(localName)));
+        } else {
+            setErrorMessage(i18n("This document is not a spreadsheet, but %1. Please try opening it with the appropriate application.", KoDocument::tagNameToDocumentType(localName)));
+        }
         map()->deleteLoadingInfo();
         return false;
     }
@@ -268,25 +271,27 @@ bool DocBase::loadOdf(KoOdfReadStore & odfStore)
     initConfig();
 
     //update plugins that rely on bindings, as loading order can mess up the data of the plugins
-    SheetAccessModel* sheetModel = sheetAccessModel();
-    QList< Sheet* > sheets = map()->sheetList();
-    Q_FOREACH( Sheet* sheet, sheets ){
+    SheetAccessModel *sheetModel = sheetAccessModel();
+    QList< Sheet * > sheets = map()->sheetList();
+    Q_FOREACH (Sheet *sheet, sheets) {
         // This region contains the entire sheet
-        const QRect region (0, 0, KS_colMax - 1, KS_rowMax - 1);
-        QModelIndex index = sheetModel->index( 0, map()->indexOf( sheet ) );
-          QVariant bindingModelValue = sheetModel->data( index , Qt::DisplayRole );
-          BindingModel *curBindingModel = dynamic_cast< BindingModel* >( qvariant_cast< QPointer< QAbstractItemModel > >( bindingModelValue ).data() );
-          if ( curBindingModel ){
-              curBindingModel->emitDataChanged( region );
-          }
+        const QRect region(0, 0, KS_colMax - 1, KS_rowMax - 1);
+        QModelIndex index = sheetModel->index(0, map()->indexOf(sheet));
+        QVariant bindingModelValue = sheetModel->data(index, Qt::DisplayRole);
+        BindingModel *curBindingModel = dynamic_cast< BindingModel * >(qvariant_cast< QPointer< QAbstractItemModel > >(bindingModelValue).data());
+        if (curBindingModel) {
+            curBindingModel->emitDataChanged(region);
+        }
     }
 
-    if (updater) updater->setProgress(100);
+    if (updater) {
+        updater->setProgress(100);
+    }
 
     return true;
 }
 
-void DocBase::loadOdfSettings(const KoXmlDocument&settingsDoc)
+void DocBase::loadOdfSettings(const KoXmlDocument &settingsDoc)
 {
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
@@ -319,7 +324,7 @@ void DocBase::saveOdfSettings(KoXmlWriter &settingsWriter)
     settingsWriter.endElement();
 }
 
-void DocBase::loadOdfIgnoreList(const KoOasisSettings& settings)
+void DocBase::loadOdfIgnoreList(const KoOasisSettings &settings)
 {
     KoOasisSettings::Items configurationSettings = settings.itemSet("configuration-settings");
     if (!configurationSettings.isNull()) {
@@ -338,10 +343,10 @@ bool DocBase::loadXML(const KoXmlDocument &, KoStore *)
     return false;
 }
 
-void DocBase::saveOdfViewSettings(KoXmlWriter&)
+void DocBase::saveOdfViewSettings(KoXmlWriter &)
 {
 }
 
-void DocBase::saveOdfViewSheetSettings(Sheet *, KoXmlWriter&)
+void DocBase::saveOdfViewSheetSettings(Sheet *, KoXmlWriter &)
 {
 }

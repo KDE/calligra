@@ -67,17 +67,17 @@ KarbonPart::~KarbonPart()
 void KarbonPart::setDocument(KoDocument *document)
 {
     KoPart::setDocument(document);
-    KarbonDocument *doc = qobject_cast<KarbonDocument*>(document);
+    KarbonDocument *doc = qobject_cast<KarbonDocument *>(document);
     connect(doc, SIGNAL(applyCanvasConfiguration(KarbonCanvas*)), SLOT(applyCanvasConfiguration(KarbonCanvas*)));
 }
 
-KoView * KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
+KoView *KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
 {
-    KarbonDocument *doc = qobject_cast<KarbonDocument*>(_document);
+    KarbonDocument *doc = qobject_cast<KarbonDocument *>(_document);
 
     KarbonView *result = new KarbonView(this, doc, parent);
 
-    KoCanvasResourceManager * provider = result->canvasWidget()->resourceManager();
+    KoCanvasResourceManager *provider = result->canvasWidget()->resourceManager();
     provider->setResource(KoCanvasResourceManager::PageSize, doc->pageSize());
 
     applyCanvasConfiguration(result->canvasWidget());
@@ -90,7 +90,7 @@ KoMainWindow *KarbonPart::createMainWindow()
     return new KoMainWindow(KARBON_MIME_TYPE, componentData());
 }
 
-void KarbonPart::openTemplate(const KUrl& url)
+void KarbonPart::openTemplate(const KUrl &url)
 {
     KoPart::openTemplate(url);
 
@@ -100,7 +100,6 @@ void KarbonPart::openTemplate(const KUrl& url)
         document()->setOutputMimeType("application/vnd.oasis.opendocument.graphics");
     }
 }
-
 
 void KarbonPart::applyCanvasConfiguration(KarbonCanvas *canvas)
 {
@@ -112,6 +111,5 @@ void KarbonPart::applyCanvasConfiguration(KarbonCanvas *canvas)
     }
     canvas->setBackgroundColor(color);
 }
-
 
 #include "KarbonPart.moc"

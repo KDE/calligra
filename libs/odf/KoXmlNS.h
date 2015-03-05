@@ -25,7 +25,7 @@
 #include "koodf_export.h"
 /**
  * Repository of XML namespaces used for ODF documents.
- * 
+ *
  * Please make sure that you do not use the variables provided by this class in
  * the destructor of a static object.
  */
@@ -62,8 +62,8 @@ public:
     static const QString officeooo;
     static const QString ooo;
 
-    static const char* nsURI2NS(const QString &nsURI);
-    
+    static const char *nsURI2NS(const QString &nsURI);
+
     static const QString delta;
     static const QString split;
     static const QString ac;

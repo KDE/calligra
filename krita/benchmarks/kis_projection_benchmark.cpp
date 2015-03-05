@@ -37,7 +37,6 @@ void KisProjectionBenchmark::cleanupTestCase()
 {
 }
 
-
 void KisProjectionBenchmark::benchmarkProjection()
 {
     QBENCHMARK{
@@ -57,7 +56,6 @@ void KisProjectionBenchmark::benchmarkLoading()
         delete doc2;
     }
 }
-
 
 QTEST_KDEMAIN(KisProjectionBenchmark, GUI)
 #include "kis_projection_benchmark.moc"

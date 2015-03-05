@@ -22,12 +22,12 @@
 using namespace MSOOXML;
 
 TableStyleConverterProperties::TableStyleConverterProperties()
-: m_rowCount(1)
-, m_columnCount(1)
-, m_rowBandSize(1)
-, m_columnBandSize(1)
-, m_localStyles()
-, m_localDefaultCellStyle(0)
+    : m_rowCount(1)
+    , m_columnCount(1)
+    , m_rowBandSize(1)
+    , m_columnBandSize(1)
+    , m_localStyles()
+    , m_localDefaultCellStyle(0)
 {
 }
 
@@ -44,7 +44,6 @@ int TableStyleConverterProperties::rowCount() const
 {
     return m_rowCount;
 }
-
 
 void TableStyleConverterProperties::setColumnCount(int columnCount)
 {
@@ -77,7 +76,7 @@ int TableStyleConverterProperties::rowBandSize() const
     return m_rowBandSize;
 }
 
-void TableStyleConverterProperties::setLocalStyles(const MSOOXML::LocalTableStyles& localStyles)
+void TableStyleConverterProperties::setLocalStyles(const MSOOXML::LocalTableStyles &localStyles)
 {
     m_localStyles = localStyles;
 }
@@ -87,19 +86,19 @@ LocalTableStyles TableStyleConverterProperties::localStyles() const
     return m_localStyles;
 }
 
-void TableStyleConverterProperties::setLocalDefaulCelltStyle(TableStyleProperties* properties)
+void TableStyleConverterProperties::setLocalDefaulCelltStyle(TableStyleProperties *properties)
 {
     m_localDefaultCellStyle = properties;
 }
 
-TableStyleProperties* TableStyleConverterProperties::localDefaultCellStyle() const
+TableStyleProperties *TableStyleConverterProperties::localDefaultCellStyle() const
 {
     return m_localDefaultCellStyle;
 }
 
 TableStyleConverter::TableStyleConverter(int row, int column)
-: m_row(row)
-, m_column(column)
+    : m_row(row)
+    , m_column(column)
 {
 }
 
@@ -153,10 +152,10 @@ TableStyleConverter::~TableStyleConverter()
 // the spec, and the border value using this calculation shall be displayed
 // over the alternative border:
 //
-void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+void TableStyleConverter::applyStyle(TableStyleProperties *styleProperties, KoCellStyle::Ptr &style,
                                      int row, int column, const QPair<int, int> &spans)
 {
-    if(!styleProperties) {
+    if (!styleProperties) {
         return;
     }
 
@@ -211,7 +210,7 @@ void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCe
     }
 }
 
-void TableStyleConverter::applyBackground(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
+void TableStyleConverter::applyBackground(TableStyleProperties *styleProperties, KoCellStyle::Ptr &style, int row, int column)
 {
     Q_UNUSED(row);
     Q_UNUSED(column);
@@ -224,8 +223,8 @@ void TableStyleConverter::applyBackground(TableStyleProperties* styleProperties,
     }
 }
 
-void TableStyleConverter::applyTableLevelBordersStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
-                                                      int row, int column, const QPair<int, int> &spans)
+void TableStyleConverter::applyTableLevelBordersStyle(TableStyleProperties *styleProperties, KoCellStyle::Ptr &style,
+        int row, int column, const QPair<int, int> &spans)
 {
     const int lastRow = m_row;
     const int lastColumn = m_column;
@@ -234,7 +233,7 @@ void TableStyleConverter::applyTableLevelBordersStyle(TableStyleProperties* styl
 
     if (setProperties & TableStyleProperties::TopBorder) {
         if (row == 0) {
-            KoBorder::BorderData* topData;
+            KoBorder::BorderData *topData;
             topData = &styleProperties->top;
             style->borders()->setBorderData(KoBorder::TopBorder, *topData);
         }
@@ -242,7 +241,7 @@ void TableStyleConverter::applyTableLevelBordersStyle(TableStyleProperties* styl
 
     if (setProperties & TableStyleProperties::BottomBorder) {
         if ((row + spans.first) == lastRow) {
-            KoBorder::BorderData* bottomData;
+            KoBorder::BorderData *bottomData;
             bottomData = &styleProperties->bottom;
             style->borders()->setBorderData(KoBorder::BottomBorder, *bottomData);
         }
@@ -250,7 +249,7 @@ void TableStyleConverter::applyTableLevelBordersStyle(TableStyleProperties* styl
 
     if (setProperties & TableStyleProperties::LeftBorder) {
         if (column == 0) {
-            KoBorder::BorderData* leftData;
+            KoBorder::BorderData *leftData;
             leftData = &styleProperties->left;
             style->borders()->setBorderData(KoBorder::LeftBorder, *leftData);
         }
@@ -258,14 +257,14 @@ void TableStyleConverter::applyTableLevelBordersStyle(TableStyleProperties* styl
 
     if (setProperties & TableStyleProperties::RightBorder) {
         if ((column + spans.second) == lastColumn) {
-            KoBorder::BorderData* rightData;
+            KoBorder::BorderData *rightData;
             rightData = &styleProperties->right;
             style->borders()->setBorderData(KoBorder::RightBorder, *rightData);
         }
     }
 
     if (setProperties & TableStyleProperties::InsideVBorder) {
-        KoBorder::BorderData* insideVData;
+        KoBorder::BorderData *insideVData;
         insideVData = &styleProperties->insideV;
         if (column != 0) {
             style->borders()->setBorderData(KoBorder::LeftBorder, *insideVData);
@@ -276,7 +275,7 @@ void TableStyleConverter::applyTableLevelBordersStyle(TableStyleProperties* styl
     }
 
     if (setProperties & TableStyleProperties::InsideHBorder) {
-        KoBorder::BorderData* insideHData;
+        KoBorder::BorderData *insideHData;
         insideHData = &styleProperties->insideH;
         if (row != 0) {
             style->borders()->setBorderData(KoBorder::TopBorder, *insideHData);
@@ -294,11 +293,11 @@ void TableStyleConverter::applyTableLevelBordersStyle(TableStyleProperties* styl
     }
 }
 
-void TableStyleConverter::reapplyTableLevelBordersStyle(TableStyleProperties* properties,
-                                                        TableStyleProperties* localProperties,
-                                                        TableStyleProperties* exceptionProperties,
-                                                        KoCellStyle::Ptr& style,
-                                                        int row, int column, const QPair<int, int> &spans)
+void TableStyleConverter::reapplyTableLevelBordersStyle(TableStyleProperties *properties,
+        TableStyleProperties *localProperties,
+        TableStyleProperties *exceptionProperties,
+        KoCellStyle::Ptr &style,
+        int row, int column, const QPair<int, int> &spans)
 {
     const int lastRow = m_row;
     const int lastColumn = m_column;
@@ -454,8 +453,8 @@ void TableStyleConverter::reapplyTableLevelBordersStyle(TableStyleProperties* pr
     //TODO: Tl2brBorder, Tr2blBorder
 }
 
-void TableStyleConverter::applyRowLevelBordersStyle(TableStyleProperties* props, KoCellStyle::Ptr& style,
-                                                    int row, int column, const QPair<int, int> &spans)
+void TableStyleConverter::applyRowLevelBordersStyle(TableStyleProperties *props, KoCellStyle::Ptr &style,
+        int row, int column, const QPair<int, int> &spans)
 {
     const int lastColumn = m_column;
     const int lastRow = m_row;
@@ -483,7 +482,7 @@ void TableStyleConverter::applyRowLevelBordersStyle(TableStyleProperties* props,
     }
 
     if (setProperties & TableStyleProperties::InsideHBorder) {
-        KoBorder::BorderData* insideHData;
+        KoBorder::BorderData *insideHData;
         insideHData = &props->insideH;
         if (row != 0) {
             style->borders()->setBorderData(KoBorder::TopBorder, *insideHData);
@@ -494,7 +493,7 @@ void TableStyleConverter::applyRowLevelBordersStyle(TableStyleProperties* props,
     }
 
     if (setProperties & TableStyleProperties::InsideVBorder) {
-        KoBorder::BorderData* insideVData;
+        KoBorder::BorderData *insideVData;
         insideVData = &props->insideV;
         if (column != 0) {
             style->borders()->setBorderData(KoBorder::LeftBorder, *insideVData);
@@ -512,8 +511,8 @@ void TableStyleConverter::applyRowLevelBordersStyle(TableStyleProperties* props,
     }
 }
 
-void TableStyleConverter::applyColumnLevelBordersStyle(TableStyleProperties* props, KoCellStyle::Ptr& style,
-                                                       int row, int column, const QPair<int, int> &spans)
+void TableStyleConverter::applyColumnLevelBordersStyle(TableStyleProperties *props, KoCellStyle::Ptr &style,
+        int row, int column, const QPair<int, int> &spans)
 {
     const int lastColumn = m_column;
     const int lastRow = m_row;
@@ -541,7 +540,7 @@ void TableStyleConverter::applyColumnLevelBordersStyle(TableStyleProperties* pro
     }
 
     if (setProperties & TableStyleProperties::InsideHBorder) {
-        KoBorder::BorderData* insideHData;
+        KoBorder::BorderData *insideHData;
         insideHData = &props->insideH;
         if (row != 0) {
             style->borders()->setBorderData(KoBorder::TopBorder, *insideHData);
@@ -552,7 +551,7 @@ void TableStyleConverter::applyColumnLevelBordersStyle(TableStyleProperties* pro
     }
 
     if (setProperties & TableStyleProperties::InsideVBorder) {
-        KoBorder::BorderData* insideVData;
+        KoBorder::BorderData *insideVData;
         insideVData = &props->insideV;
         if (column != 0) {
             style->borders()->setBorderData(KoBorder::LeftBorder, *insideVData);
@@ -570,45 +569,45 @@ void TableStyleConverter::applyColumnLevelBordersStyle(TableStyleProperties* pro
     }
 }
 
-void TableStyleConverter::applyCellLevelBordersStyle(TableStyleProperties* props, KoCellStyle::Ptr& style)
+void TableStyleConverter::applyCellLevelBordersStyle(TableStyleProperties *props, KoCellStyle::Ptr &style)
 {
     //NOTE: Let's keep the local variables until it's unstable.
 
     TableStyleProperties::Properties setProperties = props->setProperties;
 
     if (setProperties & TableStyleProperties::TopBorder) {
-        KoBorder::BorderData* data = &props->top;
+        KoBorder::BorderData *data = &props->top;
         style->borders()->setBorderData(KoBorder::TopBorder, *data);
     }
 
     if (setProperties & TableStyleProperties::BottomBorder) {
-        KoBorder::BorderData* data = &props->bottom;
+        KoBorder::BorderData *data = &props->bottom;
         style->borders()->setBorderData(KoBorder::BottomBorder, *data);
     }
 
     if (setProperties & TableStyleProperties::LeftBorder) {
-        KoBorder::BorderData* data = &props->left;
-        style->borders()->setBorderData(KoBorder::LeftBorder,*data);
+        KoBorder::BorderData *data = &props->left;
+        style->borders()->setBorderData(KoBorder::LeftBorder, *data);
     }
 
     if (setProperties & TableStyleProperties::RightBorder) {
-        KoBorder::BorderData* data = &props->right;
+        KoBorder::BorderData *data = &props->right;
         style->borders()->setBorderData(KoBorder::RightBorder, *data);
     }
 
     if (setProperties & TableStyleProperties::Tl2brBorder) {
-        KoBorder::BorderData* data = &props->tl2br;
+        KoBorder::BorderData *data = &props->tl2br;
         style->borders()->setBorderData(KoBorder::TlbrBorder, *data);
     }
     if (setProperties & TableStyleProperties::Tr2blBorder) {
-        KoBorder::BorderData* data = &props->tr2bl;
-        style->borders()->setBorderData(KoBorder::BltrBorder,*data);
+        KoBorder::BorderData *data = &props->tr2bl;
+        style->borders()->setBorderData(KoBorder::BltrBorder, *data);
     }
     //TODO: process InsideHBorder, InsideVBorder
 }
 
 TableStyle::TableStyle()
-: m_id()
+    : m_id()
 {
 }
 
@@ -617,7 +616,7 @@ TableStyle::~TableStyle()
 //     qDeleteAll(m_properties.values());
 }
 
-void TableStyle::setId(const QString& id)
+void TableStyle::setId(const QString &id)
 {
     m_id = id;
 }
@@ -635,14 +634,14 @@ LocalTableStyles::~LocalTableStyles()
 {
 }
 
-TableStyleProperties* LocalTableStyles::localStyle(int row, int column)
+TableStyleProperties *LocalTableStyles::localStyle(int row, int column)
 {
-    const QPair<int,int> key(row,column);
+    const QPair<int, int> key(row, column);
     return m_properties.value(key);
 }
 
-void LocalTableStyles::setLocalStyle(TableStyleProperties* properties, int row, int column)
+void LocalTableStyles::setLocalStyle(TableStyleProperties *properties, int row, int column)
 {
-    const QPair<int,int> key(row,column);
+    const QPair<int, int> key(row, column);
     m_properties.insert(key, properties);
 }

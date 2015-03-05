@@ -31,7 +31,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpListWidget ------------------------------------------------------ //
 
-KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
+KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget *parent):
     KisCategorizedListView(false, parent),
     m_model(new KisSortedCompositeOpListModel(this))
 {
@@ -43,7 +43,8 @@ KisCompositeOpListWidget::~KisCompositeOpListWidget()
 {
 }
 
-KoID KisCompositeOpListWidget::selectedCompositeOp() const {
+KoID KisCompositeOpListWidget::selectedCompositeOp() const
+{
     KoID op;
 
     if (m_model->entryAt(op, currentIndex())) {
@@ -56,7 +57,7 @@ KoID KisCompositeOpListWidget::selectedCompositeOp() const {
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpComboBox -------------------------------------------------------- //
 
-KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
+KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget *parent):
     QComboBox(parent),
     m_model(new KisSortedCompositeOpListModel(this)),
     m_allowToHidePopup(true)
@@ -71,8 +72,8 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     setView(m_view);
     setItemDelegate(new KisCategorizedItemDelegate(true, this));
 
-    connect(m_view, SIGNAL(sigCategoryToggled(const QModelIndex&, bool)), SLOT(slotCategoryToggled(const QModelIndex&, bool)));
-    connect(m_view, SIGNAL(sigEntryChecked(const QModelIndex&)), SLOT(slotEntryChecked(const QModelIndex&)));
+    connect(m_view, SIGNAL(sigCategoryToggled(const QModelIndex &, bool)), SLOT(slotCategoryToggled(const QModelIndex &, bool)));
+    connect(m_view, SIGNAL(sigEntryChecked(const QModelIndex &)), SLOT(slotEntryChecked(const QModelIndex &)));
 
     selectCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp());
 
@@ -264,7 +265,6 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     connect(action, SIGNAL(triggered()), SLOT(slotLuminosity()));
     m_actions << action;
 
-
 }
 
 KisCompositeOpComboBox::~KisCompositeOpComboBox()
@@ -272,16 +272,19 @@ KisCompositeOpComboBox::~KisCompositeOpComboBox()
     delete m_view;
 }
 
-void KisCompositeOpComboBox::validate(const KoColorSpace *cs) {
+void KisCompositeOpComboBox::validate(const KoColorSpace *cs)
+{
     m_model->validate(cs);
 }
 
-void KisCompositeOpComboBox::selectCompositeOp(const KoID &op) {
+void KisCompositeOpComboBox::selectCompositeOp(const KoID &op)
+{
     QModelIndex index = m_model->indexOf(op);
     setCurrentIndex(index.row());
 }
 
-KoID KisCompositeOpComboBox::selectedCompositeOp() const {
+KoID KisCompositeOpComboBox::selectedCompositeOp() const
+{
     KoID op;
 
     if (m_model->entryAt(op, m_model->index(currentIndex(), 0))) {
@@ -290,13 +293,12 @@ KoID KisCompositeOpComboBox::selectedCompositeOp() const {
     return KoCompositeOpRegistry::instance().getDefaultCompositeOp();
 }
 
-
 QList<KAction *> KisCompositeOpComboBox::blendmodeActions()
 {
     return m_actions;
 }
 
-void KisCompositeOpComboBox::slotCategoryToggled(const QModelIndex& index, bool toggled)
+void KisCompositeOpComboBox::slotCategoryToggled(const QModelIndex &index, bool toggled)
 {
     Q_UNUSED(index);
     Q_UNUSED(toggled);
@@ -309,7 +311,7 @@ void KisCompositeOpComboBox::slotCategoryToggled(const QModelIndex& index, bool 
     showPopup();
 }
 
-void KisCompositeOpComboBox::slotEntryChecked(const QModelIndex& index)
+void KisCompositeOpComboBox::slotEntryChecked(const QModelIndex &index)
 {
     Q_UNUSED(index);
     m_allowToHidePopup = false;
@@ -319,8 +321,7 @@ void KisCompositeOpComboBox::hidePopup()
 {
     if (m_allowToHidePopup) {
         QComboBox::hidePopup();
-    }
-    else  {
+    } else  {
         QComboBox::showPopup();
     }
 

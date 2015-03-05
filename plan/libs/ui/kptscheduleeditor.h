@@ -47,26 +47,35 @@ class KPLATOUI_EXPORT ScheduleTreeView : public TreeViewBase
 public:
     explicit ScheduleTreeView(QWidget *parent);
 
-    ScheduleItemModel *model() const { return static_cast<ScheduleItemModel*>( TreeViewBase::model() ); }
+    ScheduleItemModel *model() const
+    {
+        return static_cast<ScheduleItemModel *>(TreeViewBase::model());
+    }
 
-    Project *project() const { return model()->project(); }
-    void setProject( Project *project ) { model()->setProject( project ); }
+    Project *project() const
+    {
+        return model()->project();
+    }
+    void setProject(Project *project)
+    {
+        model()->setProject(project);
+    }
 
-    ScheduleManager *manager( const QModelIndex &idx ) const;
+    ScheduleManager *manager(const QModelIndex &idx) const;
     ScheduleManager *currentManager() const;
     ScheduleManager *selectedManager() const;
 
     QModelIndexList selectedRows() const;
 
 Q_SIGNALS:
-    void currentChanged( const QModelIndex& );
-    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
-    void selectionChanged( const QModelIndexList& );
+    void currentChanged(const QModelIndex &);
+    void currentColumnChanged(const QModelIndex &, const QModelIndex &);
+    void selectionChanged(const QModelIndexList &);
 
 protected Q_SLOTS:
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-    virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
-    
+    virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
+
 };
 
 class KPLATOUI_EXPORT ScheduleEditor : public ViewBase
@@ -74,51 +83,57 @@ class KPLATOUI_EXPORT ScheduleEditor : public ViewBase
     Q_OBJECT
 public:
     ScheduleEditor(KoPart *part, KoDocument *doc, QWidget *parent);
-    
+
     void setupGui();
-    Project *project() const { return m_view->project(); }
-    virtual void draw( Project &project );
+    Project *project() const
+    {
+        return m_view->project();
+    }
+    virtual void draw(Project &project);
     virtual void draw();
-    
-    ScheduleItemModel *model() const { return m_view->model(); }
-    
-    virtual void updateReadWrite( bool readwrite );
+
+    ScheduleItemModel *model() const
+    {
+        return m_view->model();
+    }
+
+    virtual void updateReadWrite(bool readwrite);
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
-    
+    virtual void saveContext(QDomElement &/*context*/) const;
+
     KoPrintJob *createPrintJob();
-    
+
 Q_SIGNALS:
-    void calculateSchedule( Project*, ScheduleManager* );
-    void baselineSchedule( Project*, ScheduleManager* );
-    void addScheduleManager( Project* );
-    void deleteScheduleManager( Project*, ScheduleManager* );
+    void calculateSchedule(Project *, ScheduleManager *);
+    void baselineSchedule(Project *, ScheduleManager *);
+    void addScheduleManager(Project *);
+    void deleteScheduleManager(Project *, ScheduleManager *);
     void SelectionScheduleChanged();
 
     /**
      * Emitted when schedule selection changes.
      * @param sm is the new schedule manager. If @p is 0, no schedule is selected.
     */
-    void scheduleSelectionChanged( ScheduleManager *sm );
-    
-    void moveScheduleManager( ScheduleManager *sm, ScheduleManager *newparent, int index );
+    void scheduleSelectionChanged(ScheduleManager *sm);
+
+    void moveScheduleManager(ScheduleManager *sm, ScheduleManager *newparent, int index);
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
 protected Q_SLOTS:
     virtual void slotOptions();
 
 private Q_SLOTS:
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
 
-    void slotSelectionChanged( const QModelIndexList& );
-    void slotCurrentChanged( const QModelIndex& );
-    void updateActionsEnabled( const QModelIndex &index );
+    void slotSelectionChanged(const QModelIndexList &);
+    void slotCurrentChanged(const QModelIndex &);
+    void updateActionsEnabled(const QModelIndex &index);
     void slotEnableActions();
 
     void slotCalculateSchedule();
@@ -139,7 +154,6 @@ private:
     KAction *actionMoveLeft;
 };
 
-
 //-----------------------------
 class KPLATOUI_EXPORT ScheduleLogTreeView : public QTreeView
 {
@@ -147,34 +161,49 @@ class KPLATOUI_EXPORT ScheduleLogTreeView : public QTreeView
 public:
     explicit ScheduleLogTreeView(QWidget *parent);
 
-    Project *project() const { return logModel()->project(); }
-    void setProject( Project *project ) { logModel()->setProject( project ); }
+    Project *project() const
+    {
+        return logModel()->project();
+    }
+    void setProject(Project *project)
+    {
+        logModel()->setProject(project);
+    }
 
-    ScheduleLogItemModel *logModel() const { return static_cast<ScheduleLogItemModel*>( m_model->sourceModel() ); }
-    
-    ScheduleManager *scheduleManager() const { return logModel()->manager(); }
-    void setScheduleManager( ScheduleManager *manager ) { logModel()->setManager( manager ); }
+    ScheduleLogItemModel *logModel() const
+    {
+        return static_cast<ScheduleLogItemModel *>(m_model->sourceModel());
+    }
 
-    void setFilterWildcard( const QString &filter );
+    ScheduleManager *scheduleManager() const
+    {
+        return logModel()->manager();
+    }
+    void setScheduleManager(ScheduleManager *manager)
+    {
+        logModel()->setManager(manager);
+    }
+
+    void setFilterWildcard(const QString &filter);
     QRegExp filterRegExp() const;
 
 Q_SIGNALS:
-    void currentChanged( const QModelIndex& );
-    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
-    void selectionChanged( const QModelIndexList& );
+    void currentChanged(const QModelIndex &);
+    void currentColumnChanged(const QModelIndex &, const QModelIndex &);
+    void selectionChanged(const QModelIndexList &);
 
-    void contextMenuRequested( const QModelIndex&, const QPoint& );
+    void contextMenuRequested(const QModelIndex &, const QPoint &);
 
 public Q_SLOTS:
     void slotEditCopy();
 
 protected Q_SLOTS:
-    void contextMenuEvent ( QContextMenuEvent *e );
-    void headerContextMenuRequested( const QPoint &pos );
+    void contextMenuEvent(QContextMenuEvent *e);
+    void headerContextMenuRequested(const QPoint &pos);
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-    virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
+    virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
 
-    void slotShowDebug( bool );
+    void slotShowDebug(bool);
 
 private:
     QSortFilterProxyModel *m_model;
@@ -189,27 +218,33 @@ public:
     ScheduleLogView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setupGui();
-    virtual void setProject( Project *project );
-    Project *project() const { return m_view->project(); }
+    virtual void setProject(Project *project);
+    Project *project() const
+    {
+        return m_view->project();
+    }
     using ViewBase::draw;
-    virtual void draw( Project &project );
+    virtual void draw(Project &project);
 
-    ScheduleLogItemModel *baseModel() const { return m_view->logModel(); }
+    ScheduleLogItemModel *baseModel() const
+    {
+        return m_view->logModel();
+    }
 
-    virtual void updateReadWrite( bool readwrite );
+    virtual void updateReadWrite(bool readwrite);
 
     /// Loads context info into this view.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext(const KoXmlElement &/*context*/);
     /// Save context info from this view.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext(QDomElement &/*context*/) const;
 
 Q_SIGNALS:
-    void editNode( Node *node );
-    void editResource( Resource *resource );
+    void editNode(Node *node);
+    void editResource(Resource *resource);
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
     void slotEditCopy();
     void slotEdit();
 
@@ -217,18 +252,17 @@ protected Q_SLOTS:
     virtual void slotOptions();
 
 private Q_SLOTS:
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
-    void slotScheduleSelectionChanged( ScheduleManager *sm );
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
+    void slotScheduleSelectionChanged(ScheduleManager *sm);
 
-    void slotSelectionChanged( const QModelIndexList& );
-    void slotCurrentChanged( const QModelIndex& );
-    void updateActionsEnabled( const QModelIndex &index );
-    void slotEnableActions( const ScheduleManager *sm );
+    void slotSelectionChanged(const QModelIndexList &);
+    void slotCurrentChanged(const QModelIndex &);
+    void updateActionsEnabled(const QModelIndex &index);
+    void slotEnableActions(const ScheduleManager *sm);
 
 private:
     ScheduleLogTreeView *m_view;
 };
-
 
 //-----------------------------
 class KPLATOUI_EXPORT ScheduleHandlerView : public SplitterView
@@ -236,35 +270,40 @@ class KPLATOUI_EXPORT ScheduleHandlerView : public SplitterView
     Q_OBJECT
 public:
     ScheduleHandlerView(KoPart *part, KoDocument *doc, QWidget *parent);
-    
-    Project *project() const { return 0; }
 
-    ScheduleEditor *scheduleEditor() const { return m_scheduleEditor; }
+    Project *project() const
+    {
+        return 0;
+    }
+
+    ScheduleEditor *scheduleEditor() const
+    {
+        return m_scheduleEditor;
+    }
     /// Returns a list of actionlist names for all shown views
     QStringList actionListNames() const;
     /// Returns the list of actions associated with the action list @p name
-    virtual QList<QAction*> actionList( const QString &name ) const;
+    virtual QList<QAction *> actionList(const QString &name) const;
     /// Always returns this (if we are called, we are hit)
-    virtual ViewBase *hitView( const QPoint &glpos );
+    virtual ViewBase *hitView(const QPoint &glpos);
 
 Q_SIGNALS:
-    void currentScheduleManagerChanged( ScheduleManager* );
-    void editNode( Node *node );
-    void editResource( Resource *resource );
+    void currentScheduleManagerChanged(ScheduleManager *);
+    void editNode(Node *node);
+    void editResource(Resource *resource);
 
 public Q_SLOTS:
     /// Activate/deactivate the gui (also of subviews)
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
 protected Q_SLOTS:
     /// Noop, we handle subviews ourselves
-    virtual void slotGuiActivated( ViewBase *v, bool active );
-    virtual void currentTabChanged( int i );
+    virtual void slotGuiActivated(ViewBase *v, bool active);
+    virtual void currentTabChanged(int i);
 
 private:
     ScheduleEditor *m_scheduleEditor;
 };
-
 
 }  //KPlato namespace
 

@@ -41,35 +41,35 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-    typedef struct _HyphenDict HyphenDict;
-    typedef struct _HyphenState HyphenState;
-    typedef struct _HyphenTrans HyphenTrans;
+typedef struct _HyphenDict HyphenDict;
+typedef struct _HyphenState HyphenState;
+typedef struct _HyphenTrans HyphenTrans;
 #define MAX_CHARS 256
 #define MAX_NAME 20
 
-    struct _HyphenDict {
-        int num_states;
-        char cset[MAX_NAME];
-        HyphenState *states;
-    };
+struct _HyphenDict {
+    int num_states;
+    char cset[MAX_NAME];
+    HyphenState *states;
+};
 
-    struct _HyphenState {
-        char *match;
-        int fallback_state;
-        int num_trans;
-        HyphenTrans *trans;
-    };
+struct _HyphenState {
+    char *match;
+    int fallback_state;
+    int num_trans;
+    HyphenTrans *trans;
+};
 
-    struct _HyphenTrans {
-        char ch;
-        int new_state;
-    };
+struct _HyphenTrans {
+    char ch;
+    int new_state;
+};
 
-    HyphenDict *hnj_hyphen_load(const char *fn);
-    void hnj_hyphen_free(HyphenDict *dict);
-    int hnj_hyphen_hyphenate(HyphenDict *dict,
-                             const char *word, int word_size,
-                             char *hyphens);
+HyphenDict *hnj_hyphen_load(const char *fn);
+void hnj_hyphen_free(HyphenDict *dict);
+int hnj_hyphen_hyphenate(HyphenDict *dict,
+                         const char *word, int word_size,
+                         char *hyphens);
 
 #ifdef __cplusplus
 }

@@ -73,8 +73,7 @@ public:
      *
      * XXX: it seems that the guide feature isn't actually implemented yet?
      */
-    void setCurveGuide(const QColor & color);
-
+    void setCurveGuide(const QColor &color);
 
     /**
      * Set a background pixmap. The background pixmap will be drawn under
@@ -83,10 +82,10 @@ public:
      * XXX: or is the pixmap what is drawn to the  left and bottom of the curve
      * itself?
      */
-    void setPixmap(const QPixmap & pix);
+    void setPixmap(const QPixmap &pix);
     QPixmap getPixmap();
-    
-    void setBasePixmap(const QPixmap & pix);
+
+    void setBasePixmap(const QPixmap &pix);
     QPixmap getBasePixmap();
 
     /**
@@ -109,14 +108,13 @@ Q_SIGNALS:
 protected Q_SLOTS:
     void inOutChanged(int);
 
-
 protected:
 
     void keyPressEvent(QKeyEvent *);
     void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent * e);
-    void mouseReleaseEvent(QMouseEvent * e);
-    void mouseMoveEvent(QMouseEvent * e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
     void leaveEvent(QEvent *);
     void resizeEvent(QResizeEvent *e);
 
@@ -152,9 +150,8 @@ public:
 private:
 
     class Private;
-    Private * const d;
+    Private *const d;
 
 };
-
 
 #endif /* KIS_CURVE_WIDGET_H */

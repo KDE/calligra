@@ -31,14 +31,14 @@
 #include "KPrTextBlockPaintStrategy.h"
 
 KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, QTextBlockUserData *textBlockUserData)
-: m_shape(shape)
-, m_textBlockData(textBlockUserData)
-, m_class(KPrShapeAnimation::None)
-, m_step(0)
-, m_subStep(0)
-, m_stepIndex(-1)
-, m_subStepIndex(-1)
-, m_animIndex(-1)
+    : m_shape(shape)
+    , m_textBlockData(textBlockUserData)
+    , m_class(KPrShapeAnimation::None)
+    , m_step(0)
+    , m_subStep(0)
+    , m_stepIndex(-1)
+    , m_subStepIndex(-1)
+    , m_animIndex(-1)
 {
     // this is needed so we save the xml id's on saving and therefor are able to
     // save animation back even when they have not yet run.
@@ -68,11 +68,9 @@ bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bo
     QString l_presetSubType = presetSubType();
     if (startStep && startSubStep) {
         nodeType = QString("on-click");
-    }
-    else if (startSubStep) {
+    } else if (startSubStep) {
         nodeType = QString("after-previous");
-    }
-    else {
+    } else {
         nodeType = QString("with-previous");
     }
 
@@ -86,7 +84,7 @@ bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bo
     if (!l_presetSubType.isEmpty()) {
         writer.addAttribute("presentation:preset-sub-type", l_presetSubType);
     }
-    for(int i = 0 ;i < this->animationCount(); i++) {
+    for (int i = 0; i < this->animationCount(); i++) {
         QAbstractAnimation *animation = this->animationAt(i);
         if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase *>(animation)) {
             a->saveOdf(paContext);
@@ -96,7 +94,7 @@ bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bo
     return true;
 }
 
-KoShape * KPrShapeAnimation::shape() const
+KoShape *KPrShapeAnimation::shape() const
 {
     return m_shape;
 }
@@ -135,15 +133,15 @@ QPair<int, int> KPrShapeAnimation::timeRange() const
     int minStart = INVALID_START;
     int maxEnd = 0;
 
-    for (int i = 0;i < this->animationCount(); i++) {
-        QAbstractAnimation * animation = this->animationAt(i);
+    for (int i = 0; i < this->animationCount(); i++) {
+        QAbstractAnimation *animation = this->animationAt(i);
         if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase *>(animation)) {
             minStart = qMin(minStart, a->begin());
             maxEnd = qMax(maxEnd, a->duration());
         }
     }
     QPair<int, int> pair;
-    pair.first = (minStart == INVALID_START)? 0: minStart;
+    pair.first = (minStart == INVALID_START) ? 0 : minStart;
     pair.second = maxEnd;
     return pair;
 }
@@ -162,7 +160,7 @@ void KPrShapeAnimation::setBeginTime(int timeMS)
     //Add timeMS to all animations begin time, relative to the first animation
     int minStart = timeRange().first;
     int timeDiff = timeMS - minStart;
-    for (int i = 0;i < this->animationCount(); i++) {
+    for (int i = 0; i < this->animationCount(); i++) {
         QAbstractAnimation *animation = this->animationAt(i);
         if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase *>(animation)) {
             a->setBegin(a->begin() + timeDiff);
@@ -181,10 +179,10 @@ void KPrShapeAnimation::setGlobalDuration(int timeMS)
     int maxDuration = range.second - range.first;
     int minStart = range.first;
     qreal timeRatio = timeMS / (qreal)maxDuration;
-    for (int i = 0;i < this->animationCount(); i++) {
+    for (int i = 0; i < this->animationCount(); i++) {
         QAbstractAnimation *animation = this->animationAt(i);
         if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase *>(animation)) {
-            a->setDuration((a->duration()-a->begin()) * timeRatio);
+            a->setDuration((a->duration() - a->begin()) * timeRatio);
             a->setBegin((a->begin() - minStart) * timeRatio + minStart);
         }
     }
@@ -243,23 +241,17 @@ QString KPrShapeAnimation::presetClassText() const
     }
     if (presetClass() == KPrShapeAnimation::Emphasis) {
         return QString("emphasis");
-    }
-    else if (presetClass() == KPrShapeAnimation::Entrance) {
+    } else if (presetClass() == KPrShapeAnimation::Entrance) {
         return QString("entrance");
-    }
-    else if (presetClass() == KPrShapeAnimation::Exit) {
+    } else if (presetClass() == KPrShapeAnimation::Exit) {
         return QString("exit");
-    }
-    else if (presetClass() == KPrShapeAnimation::MotionPath) {
+    } else if (presetClass() == KPrShapeAnimation::MotionPath) {
         return QString("motion-path");
-    }
-    else if (presetClass() == KPrShapeAnimation::OleAction) {
+    } else if (presetClass() == KPrShapeAnimation::OleAction) {
         return QString("ole-action");
-    }
-    else if (presetClass() == KPrShapeAnimation::MediaCall) {
+    } else if (presetClass() == KPrShapeAnimation::MediaCall) {
         return QString("media-call");
-    }
-    else {
+    } else {
         return QString("custom");
     }
 }

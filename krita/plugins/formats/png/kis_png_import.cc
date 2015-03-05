@@ -42,17 +42,19 @@ KisPNGImport::~KisPNGImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisPNGImport::convert(const QByteArray&, const QByteArray& to)
+KisImportExportFilter::ConversionStatus KisPNGImport::convert(const QByteArray &, const QByteArray &to)
 {
     dbgFile << "Importing using PNGImport!";
 
-    if (to != "application/x-krita")
+    if (to != "application/x-krita") {
         return KisImportExportFilter::BadMimeType;
+    }
 
-    KisDocument * doc = m_chain->outputDocument();
+    KisDocument *doc = m_chain->outputDocument();
 
-    if (!doc)
+    if (!doc) {
         return KisImportExportFilter::NoDocumentCreated;
+    }
 
     QString filename = m_chain->inputFile();
 
@@ -62,8 +64,9 @@ KisImportExportFilter::ConversionStatus KisPNGImport::convert(const QByteArray&,
 
         KUrl url(filename);
 
-        if (url.isEmpty())
+        if (url.isEmpty()) {
             return KisImportExportFilter::FileNotFound;
+        }
 
         KisPNGConverter ib(doc);
 

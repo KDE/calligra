@@ -46,5 +46,4 @@ public:
     virtual void undo();
 };
 
-
 #endif

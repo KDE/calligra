@@ -29,13 +29,13 @@ static const QString INFINITY_DECORATION_ID = "infinity-decorations";
 
 class KRITAUI_EXPORT KisInfinityManager : public KisCanvasDecoration
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-KisInfinityManager(QPointer<KisView>view, KisCanvas2 *canvas);
+    KisInfinityManager(QPointer<KisView>view, KisCanvas2 *canvas);
 
 protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
+    void drawDecoration(QPainter &gc, const QRectF &updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas);
     bool eventFilter(QObject *obj, QEvent *event);
 
 public Q_SLOTS:

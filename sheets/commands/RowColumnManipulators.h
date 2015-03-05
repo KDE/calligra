@@ -44,18 +44,18 @@ public:
     explicit ResizeColumnManipulator(KUndo2Command *parent = 0);
     ~ResizeColumnManipulator();
 
-    void setSize(double size) {
+    void setSize(double size)
+    {
         m_newSize = size;
     }
 
 protected:
-    virtual bool process(Element*);
+    virtual bool process(Element *);
 
 private:
     double m_newSize;
     QHash<int, double> m_oldSizes;
 };
-
 
 /**
  * \class ResizeRowManipulator
@@ -68,18 +68,18 @@ public:
     explicit ResizeRowManipulator(KUndo2Command *parent = 0);
     ~ResizeRowManipulator();
 
-    void setSize(double size) {
+    void setSize(double size)
+    {
         m_newSize = size;
     }
 
 protected:
-    virtual bool process(Element*);
+    virtual bool process(Element *);
 
 private:
     double m_newSize;
     QHash<int, double> m_oldSizes;
 };
-
 
 /**
  * \class AdjustColumnRowManipulator
@@ -92,23 +92,25 @@ public:
     explicit AdjustColumnRowManipulator(KUndo2Command *parent = 0);
     virtual ~AdjustColumnRowManipulator();
 
-    virtual bool process(Element*);
+    virtual bool process(Element *);
     virtual bool preProcessing();
     virtual bool postProcessing();
 
-    void setAdjustColumn(bool state) {
+    void setAdjustColumn(bool state)
+    {
         m_adjustColumn = state;
     }
-    void setAdjustRow(bool state) {
+    void setAdjustRow(bool state)
+    {
         m_adjustRow = state;
     }
 
 protected:
     KUndo2MagicString name() const;
 
-    QSizeF textSize(const QString& text, const Style& style) const;
-    double adjustColumnHelper(const Cell& cell);
-    double adjustRowHelper(const Cell& cell);
+    QSizeF textSize(const QString &text, const Style &style) const;
+    double adjustColumnHelper(const Cell &cell);
+    double adjustRowHelper(const Cell &cell);
 
 private:
     bool m_adjustColumn : 1;
@@ -118,8 +120,6 @@ private:
     QMap<int, double> m_newHeights;
     QMap<int, double> m_oldHeights;
 };
-
-
 
 /**
  * \class HideShowManipulator
@@ -132,14 +132,16 @@ public:
     explicit HideShowManipulator(KUndo2Command *parent = 0);
     virtual ~HideShowManipulator();
 
-    virtual bool process(Element*);
+    virtual bool process(Element *);
     virtual bool preProcessing();
     virtual bool postProcessing();
 
-    void setManipulateColumns(bool state) {
+    void setManipulateColumns(bool state)
+    {
         m_manipulateColumns = state;
     }
-    void setManipulateRows(bool state) {
+    void setManipulateRows(bool state)
+    {
         m_manipulateRows = state;
     }
 
@@ -150,8 +152,6 @@ private:
     bool m_manipulateColumns : 1;
     bool m_manipulateRows    : 1;
 };
-
-
 
 /**
  * \class InsertDeleteColumnManipulator
@@ -168,7 +168,7 @@ public:
     virtual void setReverse(bool reverse);
 
 protected:
-    virtual bool process(Element*);
+    virtual bool process(Element *);
     virtual bool preProcessing();
     virtual bool mainProcessing();
     virtual bool postProcessing();
@@ -178,8 +178,6 @@ private:
     Mode m_mode;
     ColumnFormat *m_template;
 };
-
-
 
 /**
  * \class InsertDeleteRowManipulator
@@ -196,7 +194,7 @@ public:
     virtual void setReverse(bool reverse);
 
 protected:
-    virtual bool process(Element*);
+    virtual bool process(Element *);
     virtual bool preProcessing();
     virtual bool mainProcessing();
     virtual bool postProcessing();

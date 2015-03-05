@@ -31,62 +31,94 @@
 
 #include <QDomDocument>
 
-class KisCompositionVisitor : public KisNodeVisitor {
+class KisCompositionVisitor : public KisNodeVisitor
+{
 public:
     enum Mode {
         STORE,
         APPLY
     };
-    
-    KisCompositionVisitor(KisLayerComposition* layerComposition, Mode mode) : m_layerComposition(layerComposition), m_mode(mode)
-    {        
+
+    KisCompositionVisitor(KisLayerComposition *layerComposition, Mode mode) : m_layerComposition(layerComposition), m_mode(mode)
+    {
     }
 
-    virtual bool visit(KisNode* node) { return process(node); }
-    virtual bool visit(KisGroupLayer* layer)
-    { 
+    virtual bool visit(KisNode *node)
+    {
+        return process(node);
+    }
+    virtual bool visit(KisGroupLayer *layer)
+    {
         bool result = visitAll(layer);
-        if(layer == layer->image()->rootLayer()) {
+        if (layer == layer->image()->rootLayer()) {
             return result;
-        }        
+        }
         return result && process(layer);
     }
-    virtual bool visit(KisAdjustmentLayer* layer) { return process(layer); }
-    virtual bool visit(KisPaintLayer* layer) { return process(layer); }
-    virtual bool visit(KisExternalLayer* layer) { return process(layer); }
-    virtual bool visit(KisGeneratorLayer* layer) { return process(layer); }
-    virtual bool visit(KisCloneLayer* layer) { return process(layer); }
-    virtual bool visit(KisFilterMask* mask) { return process(mask); }
-    virtual bool visit(KisTransformMask* mask) { return process(mask); }
-    virtual bool visit(KisTransparencyMask* mask) { return process(mask); }
-    virtual bool visit(KisSelectionMask* mask) { return process(mask); }
+    virtual bool visit(KisAdjustmentLayer *layer)
+    {
+        return process(layer);
+    }
+    virtual bool visit(KisPaintLayer *layer)
+    {
+        return process(layer);
+    }
+    virtual bool visit(KisExternalLayer *layer)
+    {
+        return process(layer);
+    }
+    virtual bool visit(KisGeneratorLayer *layer)
+    {
+        return process(layer);
+    }
+    virtual bool visit(KisCloneLayer *layer)
+    {
+        return process(layer);
+    }
+    virtual bool visit(KisFilterMask *mask)
+    {
+        return process(mask);
+    }
+    virtual bool visit(KisTransformMask *mask)
+    {
+        return process(mask);
+    }
+    virtual bool visit(KisTransparencyMask *mask)
+    {
+        return process(mask);
+    }
+    virtual bool visit(KisSelectionMask *mask)
+    {
+        return process(mask);
+    }
 
-    bool process(KisNode* node) {
-        if(m_mode == STORE) {
+    bool process(KisNode *node)
+    {
+        if (m_mode == STORE) {
             m_layerComposition->m_visibilityMap[node->uuid()] = node->visible();
             m_layerComposition->m_collapsedMap[node->uuid()] = node->collapsed();
         } else {
             bool newState = false;
-            if(m_layerComposition->m_visibilityMap.contains(node->uuid())) {
+            if (m_layerComposition->m_visibilityMap.contains(node->uuid())) {
                 newState = m_layerComposition->m_visibilityMap[node->uuid()];
             }
-            if(node->visible() != newState) {
+            if (node->visible() != newState) {
                 node->setVisible(m_layerComposition->m_visibilityMap[node->uuid()]);
                 node->setDirty();
             }
-            if(m_layerComposition->m_collapsedMap.contains(node->uuid())) {
+            if (m_layerComposition->m_collapsedMap.contains(node->uuid())) {
                 node->setCollapsed(m_layerComposition->m_collapsedMap[node->uuid()]);
             }
         }
-        
+
         return true;
     }
 private:
-    KisLayerComposition* m_layerComposition;
+    KisLayerComposition *m_layerComposition;
     Mode m_mode;
 };
 
-KisLayerComposition::KisLayerComposition(KisImageWSP image, const QString& name): m_image(image), m_name(name), m_exportEnabled(true)
+KisLayerComposition::KisLayerComposition(KisImageWSP image, const QString &name): m_image(image), m_name(name), m_exportEnabled(true)
 {
 
 }
@@ -96,7 +128,7 @@ KisLayerComposition::~KisLayerComposition()
 
 }
 
-void KisLayerComposition::setName(const QString& name)
+void KisLayerComposition::setName(const QString &name)
 {
     m_name = name;
 }
@@ -108,7 +140,7 @@ QString KisLayerComposition::name()
 
 void KisLayerComposition::store()
 {
-    if(m_image.isNull()) {
+    if (m_image.isNull()) {
         return;
     }
     KisCompositionVisitor visitor(this, KisCompositionVisitor::STORE);
@@ -117,7 +149,7 @@ void KisLayerComposition::store()
 
 void KisLayerComposition::apply()
 {
-    if(m_image.isNull()) {
+    if (m_image.isNull()) {
         return;
     }
     KisCompositionVisitor visitor(this, KisCompositionVisitor::APPLY);
@@ -125,7 +157,7 @@ void KisLayerComposition::apply()
     m_image->notifyNodeCollpasedChanged();
 }
 
-void KisLayerComposition::setExportEnabled ( bool enabled )
+void KisLayerComposition::setExportEnabled(bool enabled)
 {
     m_exportEnabled = enabled;
 }
@@ -140,12 +172,12 @@ void KisLayerComposition::setVisible(QUuid id, bool visible)
     m_visibilityMap[id] = visible;
 }
 
-void KisLayerComposition::setCollapsed ( QUuid id, bool collapsed )
+void KisLayerComposition::setCollapsed(QUuid id, bool collapsed)
 {
     m_collapsedMap[id] = collapsed;
 }
 
-void KisLayerComposition::save(QDomDocument& doc, QDomElement& element)
+void KisLayerComposition::save(QDomDocument &doc, QDomElement &element)
 {
     QDomElement compositionElement = doc.createElement("composition");
     compositionElement.setAttribute("name", m_name);

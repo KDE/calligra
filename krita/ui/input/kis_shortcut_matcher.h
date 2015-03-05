@@ -214,16 +214,16 @@ private:
 
     void prepareReadyShortcuts();
 
-    bool tryRunReadyShortcut( Qt::MouseButton button, QMouseEvent* event );
+    bool tryRunReadyShortcut(Qt::MouseButton button, QMouseEvent *event);
     void tryActivateReadyShortcut();
-    bool tryEndRunningShortcut( Qt::MouseButton button, QMouseEvent* event );
+    bool tryEndRunningShortcut(Qt::MouseButton button, QMouseEvent *event);
 
     bool tryRunTouchShortcut(QTouchEvent *event);
     bool tryEndTouchShortcut(QTouchEvent *event);
 
 private:
     class Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* __KIS_SHORTCUT_MATCHER_H */

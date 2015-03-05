@@ -39,28 +39,28 @@ class Sheet;
 class CALLIGRA_SHEETS_ODF_EXPORT SheetModel : public QAbstractTableModel
 {
 public:
-    explicit SheetModel(Sheet* sheet);
+    explicit SheetModel(Sheet *sheet);
     virtual ~SheetModel();
 
     // QAbstractTableModel interface
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     bool setData(const QItemSelectionRange &range, const QVariant &value, int role = Qt::EditRole);
     bool setData(const QModelIndex &topLeft, const QModelIndex &bottomRight,
                  const QVariant &value, int role = Qt::EditRole);
 
 protected:
-    Sheet* sheet() const;
+    Sheet *sheet() const;
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

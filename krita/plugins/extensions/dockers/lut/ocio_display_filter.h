@@ -90,8 +90,6 @@ private:
     QString m_shadercacheid;
 #endif
 
-
-
 };
 
 #endif // OCIO_DISPLAY_FILTER_H

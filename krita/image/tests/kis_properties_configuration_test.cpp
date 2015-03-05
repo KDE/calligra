@@ -18,12 +18,11 @@
 
 #include "kis_properties_configuration_test.h"
 
-
 #include <qtest_kde.h>
 #include "kis_properties_configuration.h"
 
 KisPropertiesConfigurationTest::KisPropertiesConfigurationTest() :
-        v1(10), v2("hello"), v3(1242.0), v4(true)
+    v1(10), v2("hello"), v3(1242.0), v4(true)
 {
     QList<QPointF> pts; pts.push_back(QPointF(0.2, 0.3)); pts.push_back(QPointF(0.5, 0.7));
     v5.setPoints(pts);
@@ -31,9 +30,9 @@ KisPropertiesConfigurationTest::KisPropertiesConfigurationTest() :
 
 void KisPropertiesConfigurationTest::testSerialization()
 {
-    KisPropertiesConfiguration* config = createConfig();
+    KisPropertiesConfiguration *config = createConfig();
     QString xml = config->toXML();
-    KisPropertiesConfiguration* decodedConfig = new KisPropertiesConfiguration();
+    KisPropertiesConfiguration *decodedConfig = new KisPropertiesConfiguration();
     decodedConfig->fromXML(xml);
     testConfig(decodedConfig);
     delete config;
@@ -42,14 +41,14 @@ void KisPropertiesConfigurationTest::testSerialization()
 
 void KisPropertiesConfigurationTest::testSetGet()
 {
-    KisPropertiesConfiguration* config = createConfig();
+    KisPropertiesConfiguration *config = createConfig();
     testConfig(config);
     delete config;
 }
 
 void KisPropertiesConfigurationTest::testDefaultValues()
 {
-    KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
+    KisPropertiesConfiguration *config = new KisPropertiesConfiguration();
     QVERIFY(config->getInt("bouh", v1) == v1);
     QVERIFY(config->getString("bouh", v2) == v2);
     QVERIFY(config->getDouble("bouh", v3) == v3);
@@ -58,9 +57,9 @@ void KisPropertiesConfigurationTest::testDefaultValues()
     delete config;
 }
 
-KisPropertiesConfiguration* KisPropertiesConfigurationTest::createConfig()
+KisPropertiesConfiguration *KisPropertiesConfigurationTest::createConfig()
 {
-    KisPropertiesConfiguration* config = new KisPropertiesConfiguration();
+    KisPropertiesConfiguration *config = new KisPropertiesConfiguration();
     config->setProperty("v1", v1);
     config->setProperty("v2", v2);
     config->setProperty("v3", v3);
@@ -69,7 +68,7 @@ KisPropertiesConfiguration* KisPropertiesConfigurationTest::createConfig()
     return config;
 }
 
-void KisPropertiesConfigurationTest::testConfig(KisPropertiesConfiguration* config)
+void KisPropertiesConfigurationTest::testConfig(KisPropertiesConfiguration *config)
 {
     QVERIFY(config->getInt("v1", 0) == v1);
     QVERIFY(config->getString("v2", "") == v2);
@@ -80,7 +79,7 @@ void KisPropertiesConfigurationTest::testConfig(KisPropertiesConfiguration* conf
 
 void KisPropertiesConfigurationTest::testNotSavedValues()
 {
-    KisPropertiesConfiguration* config = createConfig();
+    KisPropertiesConfiguration *config = createConfig();
     config->setPropertyNotSaved("v3");
     testConfig(config);
     QString s = config->toXML();
@@ -92,7 +91,7 @@ void KisPropertiesConfigurationTest::testNotSavedValues()
     QVERIFY(config->hasProperty("v3") == false);
     QVERIFY(config->getBool("v4", !v4) == v4);
     QVERIFY(config->getCubicCurve("v5") == v5);
-    delete config;   
+    delete config;
 }
 
 QTEST_KDEMAIN(KisPropertiesConfigurationTest, NoGUI)

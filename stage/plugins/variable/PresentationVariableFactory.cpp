@@ -58,8 +58,9 @@ PresentationVariableFactory::PresentationVariableFactory()
 KoInlineObject *PresentationVariableFactory::createInlineObject(const KoProperties *properties) const
 {
     PresentationVariable *var = new PresentationVariable();
-    if (properties)
+    if (properties) {
         var->setProperties(properties);
+    }
     return var;
 }
 

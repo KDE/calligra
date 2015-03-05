@@ -35,7 +35,7 @@ ToolHelper::ToolHelper(KoToolFactoryBase *tool)
     m_uniqueId = (int) qrand();
 }
 
-QToolButton* ToolHelper::createButton()
+QToolButton *ToolHelper::createButton()
 {
     QToolButton *but = new QToolButton();
     but->setObjectName(m_toolFactory->id());
@@ -91,8 +91,8 @@ KShortcut ToolHelper::shortcut() const
 
 //   ************ Connector **********
 Connector::Connector(KoShapeManager *parent)
-        : QObject(parent),
-        m_shapeManager(parent)
+    : QObject(parent),
+      m_shapeManager(parent)
 {
     connect(m_shapeManager, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
@@ -103,10 +103,10 @@ void Connector::selectionChanged()
 }
 
 //   ************ ToolAction **********
-ToolAction::ToolAction(KoToolManager* toolManager, QString id, QString name, QObject *parent)
+ToolAction::ToolAction(KoToolManager *toolManager, QString id, QString name, QObject *parent)
     : KAction(name, parent),
-    m_toolManager(toolManager),
-    m_toolID(id)
+      m_toolManager(toolManager),
+      m_toolID(id)
 {
     connect(this, SIGNAL(triggered(bool)), this, SLOT(actionTriggered()));
 }
@@ -119,7 +119,5 @@ void ToolAction::actionTriggered()
 {
     m_toolManager->switchToolRequested(m_toolID);
 }
-
-
 
 #include <KoToolManager_p.moc>

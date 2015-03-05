@@ -38,7 +38,6 @@
 #include "kis_base_mask_generator.h"
 #include "kis_brush_mask_applicator_factories.h"
 
-
 KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, DefaultId), d(new Private)
 {
@@ -78,21 +77,23 @@ bool KisCircleMaskGenerator::shouldVectorize() const
     return !shouldSupersample() && spikes() == 2;
 }
 
-KisBrushMaskApplicatorBase* KisCircleMaskGenerator::applicator()
+KisBrushMaskApplicatorBase *KisCircleMaskGenerator::applicator()
 {
     return d->applicator;
 }
 
 quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 {
-    if (KisMaskGenerator::d->empty) return 255;
+    if (KisMaskGenerator::d->empty) {
+        return 255;
+    }
     double xr = (x /*- m_xcenter*/);
     double yr = fabs(y /*- m_ycenter*/);
 
     if (KisMaskGenerator::d->spikes > 2) {
         double angle = (KisFastMath::atan2(yr, xr));
 
-        while (angle > KisMaskGenerator::d->cachedSpikesAngle ){
+        while (angle > KisMaskGenerator::d->cachedSpikesAngle) {
             double sx = xr;
             double sy = yr;
 
@@ -104,7 +105,9 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
     }
 
     qreal n = norme(xr * d->xcoef, yr * d->ycoef);
-    if (n > 1.0) return 255;
+    if (n > 1.0) {
+        return 255;
+    }
 
     // we add +1.0 to ensure correct antialising on the border
     if (KisMaskGenerator::d->antialiasEdges) {
@@ -115,7 +118,9 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
     qreal nf = norme(xr * d->transformedFadeX,
                      yr * d->transformedFadeY);
 
-    if (nf < 1.0) return 0;
+    if (nf < 1.0) {
+        return 0;
+    }
     return 255 * n * (nf - 1.0) / (nf - n);
 }
 

@@ -61,22 +61,26 @@ public:
     virtual bool snapToGrid() const;
 
     /// reimplemented method from superclass
-    virtual QWidget *canvasWidget() {
+    virtual QWidget *canvasWidget()
+    {
         return 0;
     }
 
     /// reimplemented method from superclass
-    virtual const QWidget *canvasWidget() const {
+    virtual const QWidget *canvasWidget() const
+    {
         return 0;
     }
 
     /// reimplemented method from superclass
-    virtual QGraphicsObject *canvasItem() {
+    virtual QGraphicsObject *canvasItem()
+    {
         return this;
     }
 
     /// reimplemented method from superclass
-    virtual const QGraphicsObject *canvasItem() const {
+    virtual const QGraphicsObject *canvasItem() const
+    {
         return this;
     }
 
@@ -136,7 +140,10 @@ protected: //QGraphicsWidget
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
     /// reimplemented method from superclass
-    virtual void updateCanvasInternal(const QRectF &clip) { update(clip); }
+    virtual void updateCanvasInternal(const QRectF &clip)
+    {
+        update(clip);
+    }
 
 private Q_SLOTS:
     /// Called whenever there was a page added/removed or simply resized.

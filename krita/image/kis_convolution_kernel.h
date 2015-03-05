@@ -46,15 +46,15 @@ public:
     qreal offset() const;
     qreal factor() const;
     void setFactor(qreal);
-    Matrix<qreal, Dynamic, Dynamic>& data();
-    const Matrix<qreal, Dynamic, Dynamic> * data() const;
+    Matrix<qreal, Dynamic, Dynamic> &data();
+    const Matrix<qreal, Dynamic, Dynamic> *data() const;
 
-    static KisConvolutionKernelSP fromQImage(const QImage& image);
+    static KisConvolutionKernelSP fromQImage(const QImage &image);
     static KisConvolutionKernelSP fromMaskGenerator(KisMaskGenerator *, qreal angle = 0.0);
     static KisConvolutionKernelSP fromMatrix(Matrix<qreal, Dynamic, Dynamic> matrix, qreal offset, qreal factor);
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 
 };
 

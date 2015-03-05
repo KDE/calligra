@@ -26,8 +26,7 @@ KisLineWidthOption::KisLineWidthOption()
     setMaximumLabel(i18n("100%"));
 }
 
-
-double KisLineWidthOption::apply(const KisPaintInformation & info, double lineWidth) const
+double KisLineWidthOption::apply(const KisPaintInformation &info, double lineWidth) const
 {
     if (!isChecked()) {
         return lineWidth;

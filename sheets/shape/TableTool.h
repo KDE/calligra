@@ -22,7 +22,6 @@
 
 #include "CellToolBase.h"
 
-
 namespace Calligra
 {
 namespace Sheets
@@ -33,15 +32,15 @@ class TableTool : public CellToolBase
     Q_OBJECT
 
 public:
-    explicit TableTool(KoCanvasBase* canvas);
+    explicit TableTool(KoCanvasBase *canvas);
     ~TableTool();
 
     virtual void repaintDecorations();
 
-    virtual Selection* selection();
+    virtual Selection *selection();
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
     virtual void deactivate();
 
 protected:
@@ -50,12 +49,12 @@ protected:
     virtual QPointF canvasOffset() const;
     virtual int maxCol() const;
     virtual int maxRow() const;
-    virtual SheetView* sheetView(const Sheet* sheet) const;
+    virtual SheetView *sheetView(const Sheet *sheet) const;
 
 private Q_SLOTS:
     void changeColumns(int num);
     void changeRows(int num);
-    void sheetActivated(const QString& sheetName);
+    void sheetActivated(const QString &sheetName);
     void sheetsBtnClicked();
     void importDocument();
     void exportDocument();
@@ -68,7 +67,7 @@ private:
     Q_DISABLE_COPY(TableTool)
 
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Sheets

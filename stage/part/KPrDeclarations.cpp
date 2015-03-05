@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 *  Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 *
-*  Contact: Amit Aggarwal <amitcs06@gmail.com> 
+*  Contact: Amit Aggarwal <amitcs06@gmail.com>
 *            <amit.5.aggarwal@nokia.com>
 *
 *  Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
@@ -46,17 +46,15 @@ bool KPrDeclarations::loadOdf(const KoXmlElement &body, KoPALoadingContext &cont
     Q_UNUSED(context);
 
     KoXmlElement element;
-    forEachElement( element, body ) {
+    forEachElement (element, body) {
         if (element.namespaceURI() == KoXmlNS::presentation) {
             if (element.tagName() == "header-decl") {
                 const QString name = element.attributeNS(KoXmlNS::presentation, "name", QString());
                 m_declarations[Header].insert(name, element.text());
-            }
-            else if(element.tagName() == "footer-decl") {
+            } else if (element.tagName() == "footer-decl") {
                 const QString name = element.attributeNS(KoXmlNS::presentation, "name", QString());
                 m_declarations[Footer].insert(name, element.text());
-            }
-            else if(element.tagName() == "date-time-decl") {
+            } else if (element.tagName() == "date-time-decl") {
                 QMap<QString, QVariant> data;
                 const QString name = element.attributeNS(KoXmlNS::presentation, "name", QString());
                 data["fixed"] = element.attributeNS(KoXmlNS::presentation, "source", "fixed") == "fixed";
@@ -69,22 +67,19 @@ bool KPrDeclarations::loadOdf(const KoXmlElement &body, KoPALoadingContext &cont
                         QString formatString = (*it).first.prefix + (*it).first.formatStr + (*it).first.suffix;
                         data["format"] = formatString;
                     }
-                }
-                else {
+                } else {
                     data["format"] = QString("");
                     data["fixed value"] = element.text();
                 }
 
                 m_declarations[DateTime].insert(name, data);
             }
-        }
-        else if (element.tagName() == "page" && element.namespaceURI() == KoXmlNS::draw) {
+        } else if (element.tagName() == "page" && element.namespaceURI() == KoXmlNS::draw) {
             break;
         }
     }
     return true;
 }
-
 
 bool KPrDeclarations::saveOdf(KoPASavingContext &paContext) const
 {
@@ -120,13 +115,11 @@ bool KPrDeclarations::saveOdf(KoPASavingContext &paContext) const
                 QString format = data["format"].toString();
                 if (format.isEmpty()) {
                     writer.addTextNode(data["fixed value"].toString());
-                }
-                else {
+                } else {
                     QString styleName = KoOdfNumberStyles::saveOdfDateStyle(paContext.mainStyles(), format, false);
                     writer.addAttribute("style:data-style-name", styleName);
                 }
-            }
-            else {
+            } else {
                 writer.addTextNode(keyIt.value().value<QString>());
             }
             writer.endElement();
@@ -140,28 +133,25 @@ const QString KPrDeclarations::declaration(Type type, const QString &key)
     QString retVal;
     if (type == DateTime) {
         QMap<QString, QVariant> dateTimeDefinition =
-                m_declarations.value(type).value(key).value<QMap<QString, QVariant> >();
+            m_declarations.value(type).value(key).value<QMap<QString, QVariant> >();
 
         // if there is no presenation declaration don't set a value
         if (!dateTimeDefinition.isEmpty()) {
             if (dateTimeDefinition["fixed"].toBool()) {
                 retVal = dateTimeDefinition["fixed value"].toString();
-            }
-            else  {
+            } else  {
                 QDateTime target = QDateTime::currentDateTime();
 
                 QString formatString = dateTimeDefinition["format"].toString();
                 if (!formatString.isEmpty()) {
                     retVal = target.toString(formatString);
-                }
-                else {
+                } else {
                     // XXX: What do we do here?
                     retVal = target.date().toString(Qt::ISODate);
                 }
             }
         }
-    }
-    else {
+    } else {
         retVal = m_declarations.value(type).value(key).toString();
     }
     return retVal;

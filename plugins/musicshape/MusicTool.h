@@ -25,33 +25,33 @@ class KUndo2Command;
 
 class MusicTool : public KoToolBase
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  explicit MusicTool( KoCanvasBase* canvas );
-  ~MusicTool();
+    explicit MusicTool(KoCanvasBase *canvas);
+    ~MusicTool();
 
-  virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
-  virtual void mousePressEvent( KoPointerEvent* event ) ;
-  virtual void mouseMoveEvent( KoPointerEvent* event );
-  virtual void mouseReleaseEvent( KoPointerEvent* event );
+    virtual void mousePressEvent(KoPointerEvent *event);
+    virtual void mouseMoveEvent(KoPointerEvent *event);
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-  void deactivate();
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape *> &shapes);
+    void deactivate();
 
-  void addCommand(KUndo2Command* command);
-    MusicShape* shape();
+    void addCommand(KUndo2Command *command);
+    MusicShape *shape();
 protected:
-  /*
-   * Create default option widget
-   */
-    virtual QWidget * createOptionWidget();
+    /*
+     * Create default option widget
+     */
+    virtual QWidget *createOptionWidget();
 
 protected Q_SLOTS:
 Q_SIGNALS:
-    void shapeChanged(MusicShape* shape);
+    void shapeChanged(MusicShape *shape);
 private:
-   MusicShape *m_musicshape;
+    MusicShape *m_musicshape;
 };
 
 #endif

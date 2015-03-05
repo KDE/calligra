@@ -35,7 +35,7 @@ using namespace MusicCore;
 
 PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
     : QWidget(parent),
-    m_tool(tool)
+      m_tool(tool)
 {
     widget.setupUi(this);
 
@@ -50,9 +50,9 @@ PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
     connect(widget.editPart, SIGNAL(clicked()), this, SLOT(editPart()));
 }
 
-void PartsWidget::setShape(MusicShape* shape)
+void PartsWidget::setShape(MusicShape *shape)
 {
-    Sheet* sheet = shape->sheet();
+    Sheet *sheet = shape->sheet();
     m_shape = shape;
 //    widget.partsList->clear();
 //    for (int i = 0; i < sheet->partCount(); i++) {
@@ -63,15 +63,15 @@ void PartsWidget::setShape(MusicShape* shape)
     m_sheet = sheet;
 }
 
-void PartsWidget::partDoubleClicked(const QModelIndex & index)
+void PartsWidget::partDoubleClicked(const QModelIndex &index)
 {
     int row = index.row();
     PartDetailsDialog::showDialog(m_tool, m_sheet->part(row), this);
 }
 
-void PartsWidget::selectionChanged(const QModelIndex& current, const QModelIndex& prev)
+void PartsWidget::selectionChanged(const QModelIndex &current, const QModelIndex &prev)
 {
-    Q_UNUSED( prev );
+    Q_UNUSED(prev);
     widget.editPart->setEnabled(current.isValid());
     widget.removePart->setEnabled(current.isValid());
 }
@@ -83,7 +83,7 @@ void PartsWidget::addPart()
 
 void PartsWidget::removePart()
 {
-    Part* part = m_sheet->part(widget.partsList->currentIndex().row());
+    Part *part = m_sheet->part(widget.partsList->currentIndex().row());
 
     m_tool->addCommand(new RemovePartCommand(m_shape, part));
 }

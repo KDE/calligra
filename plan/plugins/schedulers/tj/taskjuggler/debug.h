@@ -27,7 +27,7 @@
 #define MADEBUG 32  // Macro Expander
 #define XXDEBUG 64 // Unused
 #define PADEBUG 128 // Critical Path
-                                                          // Analyzer
+// Analyzer
 
 #define DEBUGPF(l) ((DEBUGMODE & 1) && DEBUGLEVEL >= l) // Project File Reader
 #define DEBUGPS(l) ((DEBUGMODE & 2) && DEBUGLEVEL >= l) // Project Scheduler
@@ -37,7 +37,7 @@
 #define DEBUGMA(l) ((DEBUGMODE & 32) && DEBUGLEVEL >= l) // Macro Expander
 #define DEBUGXX(l) ((DEBUGMODE & 64) && DEBUGLEVEL >= l) // Unused
 #define DEBUGPA(l) ((DEBUGMODE & 128) && DEBUGLEVEL >= l) // Critical Path
-                                                          // Analyzer
+// Analyzer
 
 class KPLATOTJ_EXPORT DebugController
 {
@@ -53,18 +53,24 @@ public:
     {
         debugLevel = l;
     }
-    int getDebugLevel() const { return debugLevel; }
+    int getDebugLevel() const
+    {
+        return debugLevel;
+    }
 
     void setDebugMode(int m)
     {
         debugMode = m;
     }
-    int getDebugMode() const { return debugMode; }
+    int getDebugMode() const
+    {
+        return debugMode;
+    }
 
 protected:
     int debugLevel;
     int debugMode;
-} ;
+};
 
 extern KPLATOTJ_EXPORT DebugController DebugCtrl;
 

@@ -48,16 +48,19 @@ public:
     /// so we know when the canvasController changes size
     void setAvailableSize()
     {
-        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH)
+        if (zoomHandler->zoomMode() == KoZoomMode::ZOOM_WIDTH) {
             setZoom(KoZoomMode::ZOOM_WIDTH, -1);
-        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
+        }
+        if (zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE) {
             setZoom(KoZoomMode::ZOOM_PAGE, -1);
-        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_TEXT)
+        }
+        if (zoomHandler->zoomMode() == KoZoomMode::ZOOM_TEXT) {
             setZoom(KoZoomMode::ZOOM_TEXT, -1);
+        }
     }
 
     /// when the canvas controller wants us to change zoom
-    void requestZoomRelative(const qreal factor, const QPointF& stillPoint)
+    void requestZoomRelative(const qreal factor, const QPointF &stillPoint)
     {
         parent->setZoom(KoZoomMode::ZOOM_CONSTANT, factor * zoomHandler->zoom(), stillPoint);
     }

@@ -47,12 +47,14 @@ class KexiComboBoxTableEdit::Private
 {
 public:
     Private()
-            : popup(0)
-            , currentEditorWidth(0)
-            , visibleTableViewColumn(0)
-            , internalEditor(0) {
+        : popup(0)
+        , currentEditorWidth(0)
+        , visibleTableViewColumn(0)
+        , internalEditor(0)
+    {
     }
-    ~Private() {
+    ~Private()
+    {
         delete internalEditor;
         delete visibleTableViewColumn;
     }
@@ -61,17 +63,17 @@ public:
     KexiComboBoxPopup *popup;
     int currentEditorWidth;
     QSize totalSize;
-    KexiDB::TableViewColumn* visibleTableViewColumn;
-    KexiTableEdit* internalEditor;
+    KexiDB::TableViewColumn *visibleTableViewColumn;
+    KexiTableEdit *internalEditor;
     int arrowWidth;
 };
 
 //======================================================
 
 KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
-        : KexiComboBoxBase()
-        , KexiInputTableEdit(column, parent)
-        , d(new Private())
+    : KexiComboBoxBase()
+    , KexiInputTableEdit(column, parent)
+    , d(new Private())
 {
     m_setVisibleValueOnSetValueInternal = true;
     m_reinstantiatePopupOnShow = true; // needed because re-opening of the popup fails for unknown reason
@@ -95,15 +97,17 @@ KexiComboBoxTableEdit::~KexiComboBoxTableEdit()
     delete d;
 }
 
-void KexiComboBoxTableEdit::createInternalEditor(KexiDB::QuerySchema& schema)
+void KexiComboBoxTableEdit::createInternalEditor(KexiDB::QuerySchema &schema)
 {
-    if (!m_column->visibleLookupColumnInfo() || d->visibleTableViewColumn/*sanity*/)
+    if (!m_column->visibleLookupColumnInfo() || d->visibleTableViewColumn/*sanity*/) {
         return;
+    }
     const KexiDB::Field::Type t = m_column->visibleLookupColumnInfo()->field->type();
 //! @todo subtype?
     KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item(t);
-    if (!item || item->className() == "KexiInputTableEdit")
-        return; //unsupported type or there is no need to use subeditor for KexiInputTableEdit
+    if (!item || item->className() == "KexiInputTableEdit") {
+        return;    //unsupported type or there is no need to use subeditor for KexiInputTableEdit
+    }
     //special cases: BLOB, Bool datatypes
 //! @todo
     //find real type to display
@@ -129,7 +133,7 @@ void KexiComboBoxTableEdit::setPopup(KexiComboBoxPopup *popup)
     d->popup = popup;
 }
 
-void KexiComboBoxTableEdit::showFocus(const QRect& r, bool readOnly)
+void KexiComboBoxTableEdit::showFocus(const QRect &r, bool readOnly)
 {
     updateFocus(r);
     d->button->setEnabled(!readOnly);
@@ -148,10 +152,10 @@ void KexiComboBoxTableEdit::resize(int w, int h)
     updateLineEditStyleSheet();
     m_rightMarginWhenFocused += RIGHT_MARGIN_DELTA;
     QRect r(pos().x(), pos().y(), w + 1, h + 1);
-    if (qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())) {
+    if (qobject_cast<KexiTableScrollAreaWidget *>(parentWidget())) {
         r.translate(
-            qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea->horizontalScrollBar()->value(),
-            qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea->verticalScrollBar()->value());
+            qobject_cast<KexiTableScrollAreaWidget *>(parentWidget())->scrollArea->horizontalScrollBar()->value(),
+            qobject_cast<KexiTableScrollAreaWidget *>(parentWidget())->scrollArea->verticalScrollBar()->value());
     }
     updateFocus(r);
     if (popup()) {
@@ -160,13 +164,14 @@ void KexiComboBoxTableEdit::resize(int w, int h)
 }
 
 // internal
-void KexiComboBoxTableEdit::updateFocus(const QRect& r)
+void KexiComboBoxTableEdit::updateFocus(const QRect &r)
 {
     if (!column()->isReadOnly()) {
-        if (d->button->width() > r.width())
+        if (d->button->width() > r.width()) {
             moveChild(d->button, r.right() + 1, r.top());
-        else
+        } else {
             moveChild(d->button, r.right() - d->button->width(), r.top());
+        }
     }
 }
 
@@ -189,8 +194,9 @@ void KexiComboBoxTableEdit::clear()
 bool KexiComboBoxTableEdit::valueChanged()
 {
     const tristate res = valueChangedInternal();
-    if (~res) //no result: just compare values
+    if (~res) { //no result: just compare values
         return KexiInputTableEdit::valueChanged();
+    }
     return res == true;
 }
 
@@ -199,7 +205,7 @@ void KexiComboBoxTableEdit::paintFocusBorders(QPainter *p, QVariant &, int x, in
     p->drawRect(x, y, w, h);
 }
 
-void KexiComboBoxTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val,
+void KexiComboBoxTableEdit::setupContents(QPainter *p, bool focused, const QVariant &val,
         QString &txt, int &align, int &x, int &y_offset, int &w, int &h)
 {
     if (d->internalEditor) {
@@ -212,10 +218,8 @@ void KexiComboBoxTableEdit::setupContents(QPainter *p, bool focused, const QVari
         if (relData) {
             int rowToHighlight;
             txt = valueForString(val.toString(), &rowToHighlight, 0, 1);
-        }
-        else if (lookupFieldSchema()) {
-        }
-        else {
+        } else if (lookupFieldSchema()) {
+        } else {
             //use 'enum hints' model
             txt = field()->enumHint(val.toInt());
         }
@@ -226,8 +230,9 @@ void KexiComboBoxTableEdit::slotButtonClicked()
 {
     // this method is sometimes called by hand:
     // do not allow to simulate clicks when the button is disabled
-    if (column()->isReadOnly() || !d->button->isEnabled())
+    if (column()->isReadOnly() || !d->button->isEnabled()) {
         return;
+    }
 
     if (m_mouseBtnPressedWhenPopupVisible) {
         m_mouseBtnPressedWhenPopupVisible = false;
@@ -285,7 +290,7 @@ bool KexiComboBoxTableEdit::handleKeyPress(QKeyEvent *ke, bool editorActive)
     return false;
 }
 
-void KexiComboBoxTableEdit::slotLineEditTextChanged(const QString& s)
+void KexiComboBoxTableEdit::slotLineEditTextChanged(const QString &s)
 {
     slotInternalEditorValueChanged(s);
 }
@@ -303,11 +308,13 @@ int KexiComboBoxTableEdit::widthForValue(const QVariant &val, const QFontMetrics
     QVector<QString> hints = field()->enumHints();
     bool ok;
     int idx = val.toInt(&ok);
-    if (!ok || idx < 0 || idx > int(hints.size() - 1))
+    if (!ok || idx < 0 || idx > int(hints.size() - 1)) {
         return KEXITV_MINIMUM_COLUMN_WIDTH;
+    }
     QString txt = hints.value(idx);
-    if (txt.isEmpty())
+    if (txt.isEmpty()) {
         return KEXITV_MINIMUM_COLUMN_WIDTH;
+    }
     return fm.width(txt) + d->arrowWidth;
 }
 
@@ -319,22 +326,20 @@ bool KexiComboBoxTableEdit::eventFilter(QObject *o, QEvent *e)
             && e->type() != QEvent::MouseMove
             && e->type() != QEvent::HoverMove
             && e->type() != QEvent::HoverEnter
-            && e->type() != QEvent::HoverLeave)
-    {
+            && e->type() != QEvent::HoverLeave) {
         kDebug() << e << o;
         kDebug() << "FOCUS WIDGET:" << focusWidget();
     }
 #endif
-    KexiTableScrollArea *tv = qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea;
+    KexiTableScrollArea *tv = qobject_cast<KexiTableScrollAreaWidget *>(parentWidget())->scrollArea;
     if (tv && e->type() == QEvent::KeyPress) {
         if (tv->eventFilter(o, e)) {
             return true;
         }
     }
     if (!column()->isReadOnly() && e->type() == QEvent::MouseButtonPress
-        && qobject_cast<KexiTableScrollAreaWidget*>(parentWidget()))
-    {
-        QPoint gp = static_cast<QMouseEvent*>(e)->globalPos() + d->button->pos();
+            && qobject_cast<KexiTableScrollAreaWidget *>(parentWidget())) {
+        QPoint gp = static_cast<QMouseEvent *>(e)->globalPos() + d->button->pos();
         QRect r(d->button->mapToGlobal(d->button->geometry().topLeft()),
                 d->button->mapToGlobal(d->button->geometry().bottomRight()));
         if (o == popup() && popup()->isVisible() && r.contains(gp)) {
@@ -379,7 +384,7 @@ void KexiComboBoxTableEdit::selectAll()
     m_lineedit->selectAll();
 }
 
-void KexiComboBoxTableEdit::setValueInInternalEditor(const QVariant& value)
+void KexiComboBoxTableEdit::setValueInInternalEditor(const QVariant &value)
 {
     KexiUtils::BoolBlocker guard(m_slotInternalEditorValueChanged_enabled, false);
     m_lineedit->setText(value.toString());
@@ -390,11 +395,12 @@ QVariant KexiComboBoxTableEdit::valueFromInternalEditor()
     return m_lineedit->text();
 }
 
-QPoint KexiComboBoxTableEdit::mapFromParentToGlobal(const QPoint& pos) const
+QPoint KexiComboBoxTableEdit::mapFromParentToGlobal(const QPoint &pos) const
 {
-    KexiTableScrollArea *tv = qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea;
-    if (!tv)
+    KexiTableScrollArea *tv = qobject_cast<KexiTableScrollAreaWidget *>(parentWidget())->scrollArea;
+    if (!tv) {
         return QPoint(-1, -1);
+    }
     return tv->viewport()->mapToGlobal(pos);
 }
 
@@ -403,14 +409,14 @@ int KexiComboBoxTableEdit::popupWidthHint() const
     return m_lineedit->width();
 }
 
-void KexiComboBoxTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
+void KexiComboBoxTableEdit::handleCopyAction(const QVariant &value, const QVariant &visibleValue)
 {
     Q_UNUSED(value);
 //! @todo does not work with BLOBs!
     qApp->clipboard()->setText(visibleValue.toString());
 }
 
-void KexiComboBoxTableEdit::handleAction(const QString& actionName)
+void KexiComboBoxTableEdit::handleAction(const QString &actionName)
 {
     const bool alreadyVisible = m_lineedit->isVisible();
 
@@ -421,8 +427,9 @@ void KexiComboBoxTableEdit::handleAction(const QString& actionName)
         }
 //! @todo does not work with BLOBs!
         setValueInInternalEditor(qApp->clipboard()->text());
-    } else
+    } else {
         KexiInputTableEdit::handleAction(actionName);
+    }
 }
 
 QVariant KexiComboBoxTableEdit::origValue() const

@@ -132,37 +132,31 @@ void KisCubicCurveTest::testSerialization()
 void KisCubicCurveTest::testValue()
 {
     KisCubicCurve cc;
-    for(int i = 0; i < 256; ++i)
-    {
-        qreal x = i/255.0;
+    for (int i = 0; i < 256; ++i) {
+        qreal x = i / 255.0;
         QCOMPARE(cc.value(x), x);
     }
 }
-
 
 void KisCubicCurveTest::testTransfer()
 {
     KisCubicCurve cc;
     QCOMPARE(cc.uint16Transfer().size(), 256);
     qreal denom = 1 / 255.0;
-    for(int i = 0; i < 256; ++i)
-    {
-        QCOMPARE(cc.uint16Transfer()[i], quint16( cc.value(i * denom) * 0xFFFF) );
+    for (int i = 0; i < 256; ++i) {
+        QCOMPARE(cc.uint16Transfer()[i], quint16(cc.value(i * denom) * 0xFFFF));
     }
     QCOMPARE(cc.floatTransfer().size(), 256);
-    for(int i = 0; i < 256; ++i)
-    {
+    for (int i = 0; i < 256; ++i) {
         QCOMPARE(cc.floatTransfer()[i], i * denom);
     }
     QCOMPARE(cc.uint16Transfer(1024).size(), 1024);
     denom = 1 / 1023.0;
-    for(int i = 0; i < 1024; ++i)
-    {
-        QCOMPARE(cc.uint16Transfer(1024)[i], quint16( cc.value(i * denom) * 0xFFFF) );
+    for (int i = 0; i < 1024; ++i) {
+        QCOMPARE(cc.uint16Transfer(1024)[i], quint16(cc.value(i * denom) * 0xFFFF));
     }
     QCOMPARE(cc.floatTransfer(1024).size(), 1024);
-    for(int i = 0; i < 1024; ++i)
-    {
+    for (int i = 0; i < 1024; ++i) {
         QCOMPARE(cc.floatTransfer(1024)[i], i * denom);
     }
 }

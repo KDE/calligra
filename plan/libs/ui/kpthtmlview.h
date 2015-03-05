@@ -31,10 +31,8 @@ class KoDocument;
 class KUrl;
 class QPoint;
 
-
 namespace KPlato
 {
-
 
 class KPLATOUI_EXPORT HtmlView : public ViewBase
 {
@@ -42,33 +40,39 @@ class KPLATOUI_EXPORT HtmlView : public ViewBase
 public:
     HtmlView(KoPart *part, KoDocument *doc, QWidget *parent);
 
-    bool openHtml( const KUrl &url );
+    bool openHtml(const KUrl &url);
 
     void setupGui();
 
-    virtual void updateReadWrite( bool readwrite );
+    virtual void updateReadWrite(bool readwrite);
 
     KoPrintJob *createPrintJob();
 
-    KHTMLPart &htmlPart() { return *m_htmlPart; }
-    const KHTMLPart &htmlPart() const { return *m_htmlPart; }
+    KHTMLPart &htmlPart()
+    {
+        return *m_htmlPart;
+    }
+    const KHTMLPart &htmlPart() const
+    {
+        return *m_htmlPart;
+    }
 
 Q_SIGNALS:
-    void openUrlRequest( HtmlView*, const KUrl& );
+    void openUrlRequest(HtmlView *, const KUrl &);
 
 public Q_SLOTS:
     /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
+    virtual void setGuiActive(bool activate);
 
-    void slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &arguments=KParts::OpenUrlArguments(), const KParts::BrowserArguments &browserArguments=KParts::BrowserArguments());
+    void slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &arguments = KParts::OpenUrlArguments(), const KParts::BrowserArguments &browserArguments = KParts::BrowserArguments());
 
 protected:
-    void updateActionsEnabled(  bool on = true );
+    void updateActionsEnabled(bool on = true);
 
 private Q_SLOTS:
-    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
-    
-    void slotEnableActions( bool on );
+    void slotContextMenuRequested(const QModelIndex &index, const QPoint &pos);
+
+    void slotEnableActions(bool on);
 
 private:
     KHTMLPart *m_htmlPart;

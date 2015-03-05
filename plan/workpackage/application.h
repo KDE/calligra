@@ -37,12 +37,13 @@
 
 class KPlatoWork_MainWindow;
 
-namespace KPlatoWork {
+namespace KPlatoWork
+{
 }
-namespace KPlato {
-    class Document;
+namespace KPlato
+{
+class Document;
 }
-
 
 class KPLATOWORKAPP_EXPORT KPlatoWork_Application : public KUniqueApplication
 {
@@ -56,7 +57,6 @@ public:
 private:
     KPlatoWork_MainWindow *m_mainwindow;
 };
-
 
 #endif // KPLATOWORK_APPLICATION_H
 

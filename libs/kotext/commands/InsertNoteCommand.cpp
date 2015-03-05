@@ -26,9 +26,8 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoInlineNote.h>
 
-
 InsertNoteCommand::InsertNoteCommand(KoInlineNote::Type type, QTextDocument *document)
-    : KUndo2Command ()
+    : KUndo2Command()
     , m_document(document)
     , m_first(true)
 {

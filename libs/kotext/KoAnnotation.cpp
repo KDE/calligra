@@ -63,7 +63,6 @@ KoAnnotation::~KoAnnotation()
     delete d;
 }
 
-
 void KoAnnotation::setName(const QString &name)
 {
     d->name = name;
@@ -105,11 +104,10 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 
         // Add inline Rdf to the annotation.
         if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || element.hasAttribute("id")) {
-            KoTextInlineRdf* inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument*>(d->document), this);
+            KoTextInlineRdf *inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument *>(d->document), this);
             if (inlineRdf->loadOdf(element)) {
                 setInlineRdf(inlineRdf);
-            }
-            else {
+            } else {
                 delete inlineRdf;
                 inlineRdf = 0;
             }
@@ -155,12 +153,12 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
         writer->addAttribute("text:name", d->name.toUtf8());
         writer->endElement();
     }
-        // else nothing
+    // else nothing
 
 }
 
-QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager* kam,
-                                                 const QString &annotationName, bool isEndMarker)
+QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager *kam,
+        const QString &annotationName, bool isEndMarker)
 {
     QString ret = annotationName;
     int uniqID = 0;
@@ -171,10 +169,11 @@ QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager* kam,
         } else {
             if (isEndMarker) {
                 --uniqID;
-                if (!uniqID)
+                if (!uniqID) {
                     ret = annotationName;
-                else
+                } else {
                     ret = QString("%1_%2").arg(annotationName).arg(uniqID);
+                }
             }
             break;
         }

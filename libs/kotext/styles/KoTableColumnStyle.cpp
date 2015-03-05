@@ -43,10 +43,12 @@ class KoTableColumnStyle::Private : public QSharedData
 public:
     Private() : QSharedData(), parentStyle(0) {}
 
-    ~Private() {
+    ~Private()
+    {
     }
 
-    void setProperty(int key, const QVariant &value) {
+    void setProperty(int key, const QVariant &value)
+    {
         stylesPrivate.add(key, value);
     }
 
@@ -55,15 +57,14 @@ public:
     StylePrivate stylesPrivate;
 };
 
-
 KoTableColumnStyle::KoTableColumnStyle()
-        :  d(new Private())
+    :  d(new Private())
 {
-    Q_ASSERT (d);
+    Q_ASSERT(d);
 }
 
 KoTableColumnStyle::KoTableColumnStyle(const KoTableColumnStyle &rhs)
-        : d(rhs.d)
+    : d(rhs.d)
 {
 }
 
@@ -116,8 +117,9 @@ void KoTableColumnStyle::remove(int key)
 QVariant KoTableColumnStyle::value(int key) const
 {
     QVariant var = d->stylesPrivate.value(key);
-    if (var.isNull() && d->parentStyle)
+    if (var.isNull() && d->parentStyle) {
         var = d->parentStyle->value(key);
+    }
     return var;
 }
 
@@ -129,24 +131,27 @@ bool KoTableColumnStyle::hasProperty(int key) const
 qreal KoTableColumnStyle::propertyDouble(int key) const
 {
     QVariant variant = value(key);
-    if (variant.isNull())
+    if (variant.isNull()) {
         return 0.0;
+    }
     return variant.toDouble();
 }
 
 int KoTableColumnStyle::propertyInt(int key) const
 {
     QVariant variant = value(key);
-    if (variant.isNull())
+    if (variant.isNull()) {
         return 0;
+    }
     return variant.toInt();
 }
 
 bool KoTableColumnStyle::propertyBoolean(int key) const
 {
     QVariant variant = value(key);
-    if (variant.isNull())
+    if (variant.isNull()) {
         return false;
+    }
     return variant.toBool();
 }
 
@@ -212,8 +217,9 @@ QString KoTableColumnStyle::name() const
 
 void KoTableColumnStyle::setName(const QString &name)
 {
-    if (name == d->name)
+    if (name == d->name) {
         return;
+    }
     d->name = name;
 }
 
@@ -249,11 +255,13 @@ void KoTableColumnStyle::setOptimalColumnWidth(bool state)
 
 void KoTableColumnStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
 {
-    if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
+    if (element->hasAttributeNS(KoXmlNS::style, "display-name")) {
         d->name = element->attributeNS(KoXmlNS::style, "display-name", QString());
+    }
 
-    if (d->name.isEmpty()) // if no style:display-name is given us the style:name
+    if (d->name.isEmpty()) { // if no style:display-name is given us the style:name
         d->name = element->attributeNS(KoXmlNS::style, "name", QString());
+    }
 
     QString masterPage = element->attributeNS(KoXmlNS::style, "master-page-name", QString());
     if (! masterPage.isEmpty()) {
@@ -267,7 +275,6 @@ void KoTableColumnStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContex
     loadOdfProperties(context.styleStack());   // load the KoTableColumnStyle from the stylestack
     context.styleStack().restore();
 }
-
 
 void KoTableColumnStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
@@ -311,7 +318,7 @@ void KoTableColumnStyle::removeDuplicates(const KoTableColumnStyle &other)
 void KoTableColumnStyle::saveOdf(KoGenStyle &style) const
 {
     QList<int> keys = d->stylesPrivate.keys();
-    foreach(int key, keys) {
+    foreach (int key, keys) {
         if (key == KoTableColumnStyle::BreakBefore) {
             style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::BreakAfter) {

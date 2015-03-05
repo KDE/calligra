@@ -20,7 +20,7 @@
 
 #include "recorder/kis_recorded_action.h"
 
-KisActionRecorder::KisActionRecorder(QObject* parent)
+KisActionRecorder::KisActionRecorder(QObject *parent)
     : QObject(parent)
 {
 
@@ -30,7 +30,7 @@ KisActionRecorder::~KisActionRecorder()
 {
 }
 
-void KisActionRecorder::addAction(const KisRecordedAction& action, const KisRecordedAction* before)
+void KisActionRecorder::addAction(const KisRecordedAction &action, const KisRecordedAction *before)
 {
     Q_UNUSED(before);
     emit(addedAction(action));

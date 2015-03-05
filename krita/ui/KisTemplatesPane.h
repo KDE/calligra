@@ -46,8 +46,8 @@ public:
      * @param defaultTemplate pointer to the default template. Used to select a
      * template when none has been selected before.
     */
-    KisTemplatesPane(QWidget* parent, const KComponentData &_componentData, const QString& header,
-                    KisTemplateGroup* group, KisTemplate* defaultTemplate);
+    KisTemplatesPane(QWidget *parent, const KComponentData &_componentData, const QString &header,
+                     KisTemplateGroup *group, KisTemplate *defaultTemplate);
     ~KisTemplatesPane();
 
     /// Returns true if a template in this group was the last one selected
@@ -55,18 +55,18 @@ public:
 
 Q_SIGNALS:
     /// Emitted when the always use checkbox is selected
-    void alwaysUseChanged(KisTemplatesPane* sender, const QString& alwaysUse);
+    void alwaysUseChanged(KisTemplatesPane *sender, const QString &alwaysUse);
 
 protected Q_SLOTS:
-    void selectionChanged(const QModelIndex& index);
+    void selectionChanged(const QModelIndex &index);
 
     void openFile();
-    void openFile(const QModelIndex& index);
+    void openFile(const QModelIndex &index);
     void alwaysUseClicked();
-    void changeAlwaysUseTemplate(KisTemplatesPane* sender, const QString& alwaysUse);
+    void changeAlwaysUseTemplate(KisTemplatesPane *sender, const QString &alwaysUse);
 
 private:
-    KisTemplatesPanePrivate * const d;
+    KisTemplatesPanePrivate *const d;
 };
 
 #endif

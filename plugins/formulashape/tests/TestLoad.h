@@ -41,7 +41,6 @@ private Q_SLOTS:
     void stringElement();
     void glyphElement_data();
     void glyphElement();
-    
 
     // General layout elements
     void rowElement_data();

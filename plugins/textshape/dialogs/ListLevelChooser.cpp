@@ -31,7 +31,6 @@ ListLevelChooser::ListLevelChooser(const int offset, QWidget *parent):
     setMinimumSize(QSize(256, 20));
 }
 
-
 void ListLevelChooser::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
@@ -47,7 +46,7 @@ void ListLevelChooser::paintEvent(QPaintEvent *event)
     painter.drawText(rectang, Qt::AlignVCenter, QString::fromUtf8("●"));
 
     int lineY = rectang.y() + (rectang.height() / 2);
-    painter.drawLine(13, lineY, rectang.bottomRight().x() - m_offset- 15, lineY);
+    painter.drawLine(13, lineY, rectang.bottomRight().x() - m_offset - 15, lineY);
 
     painter.restore();
 }

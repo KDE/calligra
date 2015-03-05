@@ -23,7 +23,6 @@
 
 #include "kis_transform_strategy_base.h"
 
-
 class KoPointerEvent;
 class KisCoordinatesConverter;
 

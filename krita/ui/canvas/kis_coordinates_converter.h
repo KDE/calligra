@@ -35,22 +35,26 @@
 
 namespace _Private
 {
-    template<class T> struct Traits
+template<class T> struct Traits {
+    typedef T Result;
+    static T map(const QTransform &transform, const T &obj)
     {
-        typedef T Result;
-        static T map(const QTransform& transform, const T& obj)  { return transform.map(obj); }
-    };
+        return transform.map(obj);
+    }
+};
 
-    template<> struct Traits<QRectF>
+template<> struct Traits<QRectF> {
+    typedef QRectF Result;
+    static QRectF map(const QTransform &transform, const QRectF &rc)
     {
-        typedef QRectF Result;
-        static QRectF map(const QTransform& transform, const QRectF& rc)  { return transform.mapRect(rc); }
-    };
-    
-    template<> struct Traits<QRect>:    public Traits<QRectF>    { };
-    template<> struct Traits<QPoint>:   public Traits<QPointF>   { };
-    template<> struct Traits<QPolygon>: public Traits<QPolygonF> { };
-    template<> struct Traits<QLine>:    public Traits<QLineF>    { };
+        return transform.mapRect(rc);
+    }
+};
+
+template<> struct Traits<QRect>:    public Traits<QRectF>    { };
+template<> struct Traits<QPoint>:   public Traits<QPointF>   { };
+template<> struct Traits<QPolygon>: public Traits<QPolygonF> { };
+template<> struct Traits<QLine>:    public Traits<QLineF>    { };
 }
 
 class KRITAUI_EXPORT KisCoordinatesConverter: public KoZoomHandler
@@ -65,49 +69,91 @@ public:
 
     QPoint documentOffset() const;
     qreal rotationAngle() const;
-    
+
     QPoint rotate(QPointF center, qreal angle);
-    QPoint mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=false);
+    QPoint mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation = false);
     bool xAxisMirrored() const;
     bool yAxisMirrored() const;
     QPoint resetRotation(QPointF center);
-    
+
     virtual void setZoom(qreal zoom);
-    
-    template<class T> typename _Private::Traits<T>::Result
-    imageToViewport(const T& obj) const { return _Private::Traits<T>::map(imageToViewportTransform(), obj); }
-    template<class T> typename _Private::Traits<T>::Result
-    viewportToImage(const T& obj) const { return _Private::Traits<T>::map(imageToViewportTransform().inverted(), obj); }
-    
-    template<class T> typename _Private::Traits<T>::Result
-    flakeToWidget(const T& obj) const { return _Private::Traits<T>::map(flakeToWidgetTransform(), obj); }
-    template<class T> typename _Private::Traits<T>::Result
-    widgetToFlake(const T& obj) const { return _Private::Traits<T>::map(flakeToWidgetTransform().inverted(), obj); }
-    
-    template<class T> typename _Private::Traits<T>::Result
-    widgetToViewport(const T& obj) const { return _Private::Traits<T>::map(viewportToWidgetTransform().inverted(), obj); }
-    template<class T> typename _Private::Traits<T>::Result
-    viewportToWidget(const T& obj) const { return _Private::Traits<T>::map(viewportToWidgetTransform(), obj); }
-    
-    template<class T> typename _Private::Traits<T>::Result
-    documentToWidget(const T& obj) const { return _Private::Traits<T>::map(documentToWidgetTransform(), obj); }
-    template<class T> typename _Private::Traits<T>::Result
-    widgetToDocument(const T& obj) const { return _Private::Traits<T>::map(documentToWidgetTransform().inverted(), obj); }
-    
-    template<class T> typename _Private::Traits<T>::Result
-    imageToDocument(const T& obj) const { return _Private::Traits<T>::map(imageToDocumentTransform(), obj); }
-    template<class T> typename _Private::Traits<T>::Result
-    documentToImage(const T& obj) const { return _Private::Traits<T>::map(imageToDocumentTransform().inverted(), obj); }
 
     template<class T> typename _Private::Traits<T>::Result
-    documentToFlake(const T& obj) const { return _Private::Traits<T>::map(documentToFlakeTransform(), obj); }
+    imageToViewport(const T &obj) const
+    {
+        return _Private::Traits<T>::map(imageToViewportTransform(), obj);
+    }
     template<class T> typename _Private::Traits<T>::Result
-    flakeToDocument(const T& obj) const { return _Private::Traits<T>::map(documentToFlakeTransform().inverted(), obj); }
-    
+    viewportToImage(const T &obj) const
+    {
+        return _Private::Traits<T>::map(imageToViewportTransform().inverted(), obj);
+    }
+
     template<class T> typename _Private::Traits<T>::Result
-    imageToWidget(const T& obj) const { return _Private::Traits<T>::map(imageToWidgetTransform(), obj); }
+    flakeToWidget(const T &obj) const
+    {
+        return _Private::Traits<T>::map(flakeToWidgetTransform(), obj);
+    }
     template<class T> typename _Private::Traits<T>::Result
-    widgetToImage(const T& obj) const { return _Private::Traits<T>::map(imageToWidgetTransform().inverted(), obj); }
+    widgetToFlake(const T &obj) const
+    {
+        return _Private::Traits<T>::map(flakeToWidgetTransform().inverted(), obj);
+    }
+
+    template<class T> typename _Private::Traits<T>::Result
+    widgetToViewport(const T &obj) const
+    {
+        return _Private::Traits<T>::map(viewportToWidgetTransform().inverted(), obj);
+    }
+    template<class T> typename _Private::Traits<T>::Result
+    viewportToWidget(const T &obj) const
+    {
+        return _Private::Traits<T>::map(viewportToWidgetTransform(), obj);
+    }
+
+    template<class T> typename _Private::Traits<T>::Result
+    documentToWidget(const T &obj) const
+    {
+        return _Private::Traits<T>::map(documentToWidgetTransform(), obj);
+    }
+    template<class T> typename _Private::Traits<T>::Result
+    widgetToDocument(const T &obj) const
+    {
+        return _Private::Traits<T>::map(documentToWidgetTransform().inverted(), obj);
+    }
+
+    template<class T> typename _Private::Traits<T>::Result
+    imageToDocument(const T &obj) const
+    {
+        return _Private::Traits<T>::map(imageToDocumentTransform(), obj);
+    }
+    template<class T> typename _Private::Traits<T>::Result
+    documentToImage(const T &obj) const
+    {
+        return _Private::Traits<T>::map(imageToDocumentTransform().inverted(), obj);
+    }
+
+    template<class T> typename _Private::Traits<T>::Result
+    documentToFlake(const T &obj) const
+    {
+        return _Private::Traits<T>::map(documentToFlakeTransform(), obj);
+    }
+    template<class T> typename _Private::Traits<T>::Result
+    flakeToDocument(const T &obj) const
+    {
+        return _Private::Traits<T>::map(documentToFlakeTransform().inverted(), obj);
+    }
+
+    template<class T> typename _Private::Traits<T>::Result
+    imageToWidget(const T &obj) const
+    {
+        return _Private::Traits<T>::map(imageToWidgetTransform(), obj);
+    }
+    template<class T> typename _Private::Traits<T>::Result
+    widgetToImage(const T &obj) const
+    {
+        return _Private::Traits<T>::map(imageToWidgetTransform().inverted(), obj);
+    }
 
     QTransform imageToWidgetTransform() const;
     QTransform imageToDocumentTransform() const;
@@ -148,7 +194,7 @@ private:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif /* KIS_COORDINATES_CONVERTER_H */

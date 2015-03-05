@@ -26,7 +26,6 @@ class QRect;
 class KisStrokeStrategy;
 class KisStrokeJobData;
 
-
 class KRITAIMAGE_EXPORT KisStrokesFacade
 {
 public:

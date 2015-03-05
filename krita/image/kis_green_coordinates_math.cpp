@@ -23,7 +23,6 @@
 #include <kis_algebra_2d.h>
 using namespace KisAlgebra2D;
 
-
 /**
  * Implementation of the Green Coordinates transformation method
  * by Yaron Lipman, David Levin, Daniel Cohen-Or
@@ -31,16 +30,13 @@ using namespace KisAlgebra2D;
  * http://www.math.tau.ac.il/~lipmanya/GC/gc.htm
  */
 
-struct PrecalculatedCoords
-{
+struct PrecalculatedCoords {
     QVector<qreal> psi; // for each edge
     QVector<qreal> phi; // for each vertex
 };
 
-
-struct KisGreenCoordinatesMath::Private
-{
-    Private () : transformedCageDirection(0) {}
+struct KisGreenCoordinatesMath::Private {
+    Private() : transformedCageDirection(0) {}
 
     QVector<qreal> originalCageEdgeSizes;
     QVector<QPointF> transformedCageNormals;
@@ -94,16 +90,16 @@ Private::precalculateOneEdge(const QPointF &pt,
     static const qreal magicMultiplier = -1.0;
 
     *edge_psi = -magicMultiplier * norm(a) / (4 * M_PI) *
-        ((4 * S - pow2(R) / Q) * A10 + R / (2 * Q) * L10 + L1 - 2);
+                ((4 * S - pow2(R) / Q) * A10 + R / (2 * Q) * L10 + L1 - 2);
 
     *vertex2_phi += -BA / (2 * M_PI) * (L10 / (2 * Q) - A10 * R / Q);
     *vertex1_phi +=  BA / (2 * M_PI) * (L10 / (2 * Q) - A10 * (2 + R / Q));
 }
 
 void KisGreenCoordinatesMath::Private::precalculateOnePoint(const QVector<QPointF> &originalCage,
-                                                            PrecalculatedCoords *coords,
-                                                            const QPointF &pt,
-                                                            int polygonDirection)
+        PrecalculatedCoords *coords,
+        const QPointF &pt,
+        int polygonDirection)
 {
     const int numCagePoints = originalCage.size();
 
@@ -189,7 +185,6 @@ QPointF KisGreenCoordinatesMath::transformedPoint(int pointIndex, const QVector<
     QPointF result;
 
     const int numCagePoints = transformedCage.size();
-
 
     PrecalculatedCoords *coords = &m_d->precalculatedCoords[pointIndex];
 

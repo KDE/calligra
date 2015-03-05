@@ -39,8 +39,8 @@ public:
     QTextLine line;
 private:
     KoTextLayoutArea *m_area;
-    QList<KoTextLayoutObstruction*> m_obstructions;
-    QList<KoTextLayoutObstruction*> m_validObstructions;
+    QList<KoTextLayoutObstruction *> m_obstructions;
+    QList<KoTextLayoutObstruction *> m_validObstructions;
     QList<QRectF> m_lineParts;
     QRectF m_lineRect;
     qreal m_horizontalPosition;

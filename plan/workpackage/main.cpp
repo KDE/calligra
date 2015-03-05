@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #include "kplatowork_export.h"
 #include "aboutdata.h"
 #include "application.h"
@@ -28,16 +27,16 @@
 
 #include <QFile>
 
-
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
-    KCmdLineArgs::init( argc, argv, KPlatoWork::newAboutData());
+extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
+{
+    KCmdLineArgs::init(argc, argv, KPlatoWork::newAboutData());
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
-    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::addCmdLineOptions(options);
 
     if (!KUniqueApplication::start()) {
-       fprintf(stderr, "PlanWork is already running!\n");
-       return 0;
+        fprintf(stderr, "PlanWork is already running!\n");
+        return 0;
     }
 
     KPlatoWork_Application app;

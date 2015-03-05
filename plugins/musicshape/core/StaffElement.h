@@ -21,7 +21,8 @@
 
 #include <QObject>
 
-namespace MusicCore {
+namespace MusicCore
+{
 
 class Staff;
 class Bar;
@@ -38,7 +39,7 @@ public:
      *
      * @param startTime the starttime of the element
      */
-    StaffElement(Staff* staff, int startTime);
+    StaffElement(Staff *staff, int startTime);
 
     /**
      * Destructor.
@@ -48,10 +49,10 @@ public:
     /**
      * Returns the staff this staff element is part of.
      */
-    Staff* staff();
-    Bar* bar();
-    void setBar(Bar* bar);
-    
+    Staff *staff();
+    Bar *bar();
+    void setBar(Bar *bar);
+
     /**
      * Returns the x position of this musical element. The x position of an element is measured relative to the left
      * barline of the bar the element is in.
@@ -79,11 +80,11 @@ public:
      * Returns the start time of this musical elements in ticks.
      */
     int startTime() const;
-    
+
     /**
      * Returns the priority of this staff element with regard to order in which it should be sorted. The higher the
      * priority of an element is, it is sorted more to the left in a group of element with equal start time.
-     */    
+     */
     virtual int priority() const = 0;
 public Q_SLOTS:
     /**
@@ -122,7 +123,7 @@ Q_SIGNALS:
     void heightChanged(qreal height);
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace MusicCore

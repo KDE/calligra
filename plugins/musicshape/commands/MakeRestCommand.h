@@ -22,21 +22,23 @@
 #include <kundo2command.h>
 #include <QList>
 
-namespace MusicCore {
-    class Chord;
-    class Note;
+namespace MusicCore
+{
+class Chord;
+class Note;
 }
 class MusicShape;
 
-class MakeRestCommand : public KUndo2Command {
+class MakeRestCommand : public KUndo2Command
+{
 public:
-    MakeRestCommand(MusicShape* shape, MusicCore::Chord* chord);
+    MakeRestCommand(MusicShape *shape, MusicCore::Chord *chord);
     virtual void redo();
     virtual void undo();
 private:
-    MusicCore::Chord* m_chord;
-    QList<MusicCore::Note*> m_notes;
-    MusicShape* m_shape;
+    MusicCore::Chord *m_chord;
+    QList<MusicCore::Note *> m_notes;
+    MusicShape *m_shape;
 };
 
 #endif // MAKERESTCOMMAND_H

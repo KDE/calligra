@@ -34,23 +34,21 @@ class KisExperimentPaintOp : public KisPaintOp
 
 public:
 
-    KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
+    KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter *painter, KisNodeSP node, KisImageSP image);
     ~KisExperimentPaintOp();
 
-    void paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance);
-    KisSpacingInformation paintAt(const KisPaintInformation& info);
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance);
+    KisSpacingInformation paintAt(const KisPaintInformation &info);
 
 private:
     void paintRegion(const QRegion &changedRegion);
-    QPointF speedCorrectedPosition(const KisPaintInformation& pi1,
-                                   const KisPaintInformation& pi2);
-
+    QPointF speedCorrectedPosition(const KisPaintInformation &pi1,
+                                   const KisPaintInformation &pi2);
 
     static qreal simplifyThreshold(const QRectF &bounds);
     static QPainterPath trySimplifyPath(const QPainterPath &path, qreal lengthThreshold);
-    static QPointF getAngle(const QPointF& p1, const QPointF& p2, qreal distance);
-    static QPainterPath applyDisplace(const QPainterPath& path, int speed);
-
+    static QPointF getAngle(const QPointF &p1, const QPointF &p2, qreal distance);
+    static QPainterPath applyDisplace(const QPainterPath &path, int speed);
 
     bool m_displaceEnabled;
     int m_displaceCoeff;

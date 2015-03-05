@@ -27,8 +27,9 @@
 
 class GoogleDocumentService;
 
-namespace KWallet {
-    class Wallet;
+namespace KWallet
+{
+class Wallet;
 }
 
 class LoginWindow : public QDialog
@@ -38,7 +39,10 @@ class LoginWindow : public QDialog
 public:
     explicit LoginWindow(OnlineDocument::DocumentType docType, QWidget *parent = 0);
     ~LoginWindow();
-    GoogleDocumentService * googleService() {  return gdoc; }
+    GoogleDocumentService *googleService()
+    {
+        return gdoc;
+    }
     void showProgressIndicator(bool visible);
 
 private Q_SLOTS:

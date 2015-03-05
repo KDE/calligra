@@ -38,7 +38,7 @@ public:
      * @param paths the list of paths to combine
      * @param parent the parent command used for macro commands
      */
-    KoPathCombineCommand(KoShapeBasedDocumentBase *controller, const QList<KoPathShape*> &paths, KUndo2Command *parent = 0);
+    KoPathCombineCommand(KoShapeBasedDocumentBase *controller, const QList<KoPathShape *> &paths, KUndo2Command *parent = 0);
     virtual ~KoPathCombineCommand();
     /// redo the command
     void redo();
@@ -47,7 +47,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOPATHCOMBINECOMMAND_H

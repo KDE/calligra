@@ -36,7 +36,7 @@ template <class ObjectSP>
 class KRITAIMAGE_EXPORT KisMoveCommandCommon : public KUndo2Command
 {
 public:
-    KisMoveCommandCommon(ObjectSP object, const QPoint& oldPos, const QPoint& newPos, KUndo2Command *parent = 0)
+    KisMoveCommandCommon(ObjectSP object, const QPoint &oldPos, const QPoint &newPos, KUndo2Command *parent = 0)
         : KUndo2Command(kundo2_i18n("Move"), parent),
           m_oldPos(oldPos),
           m_newPos(newPos),
@@ -44,16 +44,19 @@ public:
     {
     }
 
-    void redo() {
+    void redo()
+    {
         moveTo(m_newPos);
     }
 
-    void undo() {
+    void undo()
+    {
         moveTo(m_oldPos);
     }
 
 private:
-    void moveTo(const QPoint& pos) {
+    void moveTo(const QPoint &pos)
+    {
         /**
          * FIXME: Hack alert:
          * Our iterators don't have guarantees on thread-safety

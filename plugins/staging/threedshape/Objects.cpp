@@ -43,13 +43,11 @@
 // Shape
 #include "utils.h"
 
-
 //#define OdfObjectAttributes (OdfAllAttributes & ~(OdfGeometry | OdfTransformation))
 #define OdfObjectAttributes (OdfAdditionalAttributes | OdfMandatories)
 
 // ================================================================
 //                             Sphere
-
 
 Sphere::Sphere(Object3D *parent)
     : Object3D(parent)
@@ -60,7 +58,6 @@ Sphere::Sphere(Object3D *parent)
 Sphere::~Sphere()
 {
 }
-
 
 void Sphere::paint(QPainter &painter, const KoViewConverter &converter,
                    KoShapePaintingContext &context)
@@ -110,10 +107,8 @@ void Sphere::saveObjectOdf(KoShapeSavingContext &context) const
     writer.endElement(); // dr3d:sphere
 }
 
-
 // ================================================================
 //                             Cube
-
 
 Cube::Cube(Object3D *parent)
     : Object3D(parent)
@@ -124,7 +119,6 @@ Cube::Cube(Object3D *parent)
 Cube::~Cube()
 {
 }
-
 
 void Cube::paint(QPainter &painter, const KoViewConverter &converter,
                  KoShapePaintingContext &context)
@@ -174,10 +168,8 @@ void Cube::saveObjectOdf(KoShapeSavingContext &context) const
     writer.endElement(); // dr3d:cube
 }
 
-
 // ================================================================
 //                             Extrude
-
 
 Extrude::Extrude(Object3D *parent)
     : Object3D(parent)
@@ -193,7 +185,6 @@ Extrude::Extrude(Object3D *parent)
 Extrude::~Extrude()
 {
 }
-
 
 void Extrude::paint(QPainter &painter, const KoViewConverter &converter,
                     KoShapePaintingContext &context)
@@ -238,7 +229,7 @@ void Extrude::saveObjectOdf(KoShapeSavingContext &context) const
     writer.endElement(); // dr3d:extrude
 }
 
-void Extrude::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
+void Extrude::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     // Load the common parts of the style.
     KoShape::loadStyle(element, context);
@@ -276,7 +267,7 @@ void Extrude::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& cont
     }
 }
 
-QString Extrude::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const
+QString Extrude::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     style.addProperty("dr3d:depth", QString("%1").arg(m_depth));
 
@@ -290,10 +281,8 @@ QString Extrude::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) con
     return KoShape::saveStyle(style, context);
 }
 
-
 // ================================================================
 //                             Rotate
-
 
 Rotate::Rotate(Object3D *parent)
     : Object3D(parent)
@@ -311,7 +300,6 @@ Rotate::Rotate(Object3D *parent)
 Rotate::~Rotate()
 {
 }
-
 
 void Rotate::paint(QPainter &painter, const KoViewConverter &converter,
                    KoShapePaintingContext &context)
@@ -356,7 +344,7 @@ void Rotate::saveObjectOdf(KoShapeSavingContext &context) const
     writer.endElement(); // dr3d:rotate
 }
 
-void Rotate::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context)
+void Rotate::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     // Load the common parts of the style.
     KoShape::loadStyle(element, context);
@@ -412,7 +400,7 @@ void Rotate::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& conte
     }
 }
 
-QString Rotate::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const
+QString Rotate::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const
 {
     if (m_horizontalSegments != -1) {
         style.addProperty("dr3d:horizontal-segments", QString("%1").arg(m_horizontalSegments));

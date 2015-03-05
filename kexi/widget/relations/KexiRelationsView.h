@@ -43,29 +43,29 @@ public:
     virtual ~KexiRelationsView();
 
     //! \return a hash of added tables
-    TablesHash* tables() const;
+    TablesHash *tables() const;
 
-    KexiRelationsTableContainer* table(const QString& name) const;
+    KexiRelationsTableContainer *table(const QString &name) const;
 
-    const ConnectionSet* connections() const;
+    const ConnectionSet *connections() const;
 
-    void addTable(const QString& t);
+    void addTable(const QString &t);
 
     virtual QSize sizeHint() const;
 
     /*! Used to add newly created object information to the combo box. */
-    void objectCreated(const QString &mime, const QString& name);
+    void objectCreated(const QString &mime, const QString &name);
 
-    void objectDeleted(const QString &mime, const QString& name);
+    void objectDeleted(const QString &mime, const QString &name);
 
-    void objectRenamed(const QString &mime, const QString& name, const QString& newName);
+    void objectRenamed(const QString &mime, const QString &name, const QString &newName);
 
 Q_SIGNALS:
-    void tableAdded(KexiDB::TableSchema& t);
-    void tableHidden(KexiDB::TableSchema& t);
-    void tablePositionChanged(KexiRelationsTableContainer*);
-    void aboutConnectionRemove(KexiRelationsConnection*);
-    void appendFields(KexiDB::TableOrQuerySchema& tableOrQuery, const QStringList& fieldNames);
+    void tableAdded(KexiDB::TableSchema &t);
+    void tableHidden(KexiDB::TableSchema &t);
+    void tablePositionChanged(KexiRelationsTableContainer *);
+    void aboutConnectionRemove(KexiRelationsConnection *);
+    void appendFields(KexiDB::TableOrQuerySchema &tableOrQuery, const QStringList &fieldNames);
 
 public Q_SLOTS:
     /*! Adds a table \a t to the area. This changes only visual representation.
@@ -74,7 +74,7 @@ public Q_SLOTS:
     void addTable(KexiDB::TableSchema *t, const QRect &rect = QRect());
 
     //! Adds a connection \a con to the area. This changes only visual representation.
-    void addConnection(const SourceConnection& conn);
+    void addConnection(const SourceConnection &conn);
 
     void removeSelectedObject();
 
@@ -85,16 +85,16 @@ public Q_SLOTS:
     void removeAllConnections();
 
     /*! Hides all tables except \a tables. */
-    void hideAllTablesExcept(KexiDB::TableSchema::List* tables);
+    void hideAllTablesExcept(KexiDB::TableSchema::List *tables);
 
 protected Q_SLOTS:
     void slotAddTable();
     void tableViewGotFocus();
     void connectionViewGotFocus();
     void emptyAreaGotFocus();
-    void tableContextMenuRequest(const QPoint& pos);
-    void connectionContextMenuRequest(const QPoint& pos);
-    void emptyAreaContextMenuRequest(const QPoint& pos);
+    void tableContextMenuRequest(const QPoint &pos);
+    void connectionContextMenuRequest(const QPoint &pos);
+    void emptyAreaContextMenuRequest(const QPoint &pos);
     void appendSelectedFields();
     void openSelectedTable();
     void designSelectedTable();
@@ -115,7 +115,7 @@ protected:
 
 private:
     class Private;
-    Private* const d;
+    Private *const d;
 };
 
 #endif

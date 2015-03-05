@@ -26,9 +26,9 @@
 class KRITA_SKETCH_EXPORT KisSketchView : public QDeclarativeItem
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* selectionManager READ selectionManager NOTIFY viewChanged)
-    Q_PROPERTY(QObject* selectionExtras READ selectionExtras NOTIFY viewChanged)
-    Q_PROPERTY(QObject* view READ view NOTIFY viewChanged)
+    Q_PROPERTY(QObject *selectionManager READ selectionManager NOTIFY viewChanged)
+    Q_PROPERTY(QObject *selectionExtras READ selectionExtras NOTIFY viewChanged)
+    Q_PROPERTY(QObject *view READ view NOTIFY viewChanged)
     Q_PROPERTY(QString file READ file WRITE setFile NOTIFY fileChanged)
     Q_PROPERTY(QString fileTitle READ fileTitle NOTIFY fileChanged);
     Q_PROPERTY(bool modified READ isModified NOTIFY modifiedChanged)
@@ -40,23 +40,23 @@ class KRITA_SKETCH_EXPORT KisSketchView : public QDeclarativeItem
     Q_PROPERTY(int imageWidth READ imageWidth NOTIFY imageSizeChanged)
 
 public:
-    KisSketchView(QDeclarativeItem* parent = 0);
+    KisSketchView(QDeclarativeItem *parent = 0);
     virtual ~KisSketchView();
 
-    QObject* selectionManager() const;
-    QObject* selectionExtras() const;
-    QObject* doc() const;
-    QObject* view() const;
+    QObject *selectionManager() const;
+    QObject *selectionExtras() const;
+    QObject *doc() const;
+    QObject *view() const;
     QString file() const;
     QString fileTitle() const;
     bool isModified() const;
 
     virtual void componentComplete();
-    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
+    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
 
     void setFile(const QString &file);
 
-    void showFloatingMessage(const QString message, const QIcon& icon);
+    void showFloatingMessage(const QString message, const QIcon &icon);
 
     bool canUndo() const;
     bool canRedo() const;
@@ -71,7 +71,7 @@ public Q_SLOTS:
     void zoomOut();
 
     void save();
-    void saveAs(const QString& fileName, const QString& mimeType);
+    void saveAs(const QString &fileName, const QString &mimeType);
 
     void documentAboutToBeDeleted();
     void documentChanged();
@@ -96,12 +96,12 @@ Q_SIGNALS:
     void imageSizeChanged();
 
 protected:
-    virtual bool event(QEvent* event);
-    virtual bool sceneEvent(QEvent* event);
+    virtual bool event(QEvent *event);
+    virtual bool sceneEvent(QEvent *event);
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     Q_PRIVATE_SLOT(d, void imageUpdated(const QRect &updated))
     Q_PRIVATE_SLOT(d, void documentOffsetMoved())

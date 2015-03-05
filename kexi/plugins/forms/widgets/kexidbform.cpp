@@ -49,37 +49,44 @@ class KexiDBForm::Private
 {
 public:
     Private()
-            : dataAwareObject(0)
-            , autoTabStops(true)
-            , popupFocused(false)
-            , orderedFocusWidgetsIteratorInitialized(false)
+        : dataAwareObject(0)
+        , autoTabStops(true)
+        , popupFocused(false)
+        , orderedFocusWidgetsIteratorInitialized(false)
     {
     }
 
-    ~Private() {
+    ~Private()
+    {
     }
 
     //! \return index of data-aware widget \a widget
-    int indexOfDataAwareWidget(QWidget *widget) const {
-        if (!dynamic_cast<KexiDataItemInterface*>(widget))
+    int indexOfDataAwareWidget(QWidget *widget) const
+    {
+        if (!dynamic_cast<KexiDataItemInterface *>(widget)) {
             return -1;
-        return indexOfDataItem(dynamic_cast<KexiDataItemInterface*>(widget));
+        }
+        return indexOfDataItem(dynamic_cast<KexiDataItemInterface *>(widget));
     }
 
     //! \return index of data item \a item, or -1 if not found
-    int indexOfDataItem(KexiDataItemInterface* item) const {
-        QHash<KexiDataItemInterface*, uint>::const_iterator indicesForDataAwareWidgetsIt(
+    int indexOfDataItem(KexiDataItemInterface *item) const
+    {
+        QHash<KexiDataItemInterface *, uint>::const_iterator indicesForDataAwareWidgetsIt(
             indicesForDataAwareWidgets.find(item));
-        if (indicesForDataAwareWidgetsIt == indicesForDataAwareWidgets.constEnd())
+        if (indicesForDataAwareWidgetsIt == indicesForDataAwareWidgets.constEnd()) {
             return -1;
+        }
         //kDebug() << "column # for item: " << indicesForDataAwareWidgetsIt.value();
         return indicesForDataAwareWidgetsIt.value();
     }
 
     //! Sets orderedFocusWidgetsIterator member to a position pointing to \a widget
-    void setOrderedFocusWidgetsIteratorTo(QWidget *widget) {
-        if (orderedFocusWidgetsIteratorInitialized && *orderedFocusWidgetsIterator == widget)
+    void setOrderedFocusWidgetsIteratorTo(QWidget *widget)
+    {
+        if (orderedFocusWidgetsIteratorInitialized && *orderedFocusWidgetsIterator == widget) {
             return;
+        }
         orderedFocusWidgetsIterator = orderedFocusWidgets.begin();
         orderedFocusWidgetsIteratorInitialized = true;
         /*foreach (QWidget *w, orderedFocusWidgets) {
@@ -92,14 +99,14 @@ public:
         }
     }
 
-    KexiDataAwareObjectInterface* dataAwareObject;
+    KexiDataAwareObjectInterface *dataAwareObject;
     //! ordered list of focusable widgets (can be both data-widgets or buttons, etc.)
-    QList<QWidget*> orderedFocusWidgets;
+    QList<QWidget *> orderedFocusWidgets;
     //! ordered list of data-aware widgets
-    QList<QWidget*> orderedDataAwareWidgets;
+    QList<QWidget *> orderedDataAwareWidgets;
     //! a subset of orderedFocusWidgets mapped to indices
-    QHash<KexiDataItemInterface*, uint> indicesForDataAwareWidgets;
-    QList<QWidget*>::iterator orderedFocusWidgetsIterator;
+    QHash<KexiDataItemInterface *, uint> indicesForDataAwareWidgets;
+    QList<QWidget *>::iterator orderedFocusWidgetsIterator;
     QRect prev_rect; //!< previously selected rectangle
     bool autoTabStops;
     bool popupFocused; //!< used in KexiDBForm::eventFilter()
@@ -108,10 +115,10 @@ public:
 
 //========================
 
-KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject)
-        : QWidget(parent)
-        , KexiFormDataItemInterface()
-        , d(new Private())
+KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface *dataAwareObject)
+    : QWidget(parent)
+    , KexiFormDataItemInterface()
+    , d(new Private())
 {
     installEventFilter(this);
     editedItem = 0;
@@ -131,12 +138,12 @@ KexiDBForm::~KexiDBForm()
     delete d;
 }
 
-KexiDataAwareObjectInterface* KexiDBForm::dataAwareObject() const
+KexiDataAwareObjectInterface *KexiDBForm::dataAwareObject() const
 {
     return d->dataAwareObject;
 }
 
-void KexiDBForm::setInvalidState(const QString& displayText)
+void KexiDBForm::setInvalidState(const QString &displayText)
 {
     Q_UNUSED(displayText);
 
@@ -153,26 +160,26 @@ void KexiDBForm::setAutoTabStops(bool set)
     d->autoTabStops = set;
 }
 
-QList<QWidget*>* KexiDBForm::orderedFocusWidgets() const
+QList<QWidget *> *KexiDBForm::orderedFocusWidgets() const
 {
     return &d->orderedFocusWidgets;
 }
 
-QList<QWidget*>* KexiDBForm::orderedDataAwareWidgets() const
+QList<QWidget *> *KexiDBForm::orderedDataAwareWidgets() const
 {
     return &d->orderedDataAwareWidgets;
 }
 
-void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
+void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form *form)
 {
     QWidget *fromWidget = 0;
     uint numberOfDataAwareWidgets = 0;
     //generate a new list
-    foreach (KFormDesigner::ObjectTreeItem* titem, *form->tabStops()) {
+    foreach (KFormDesigner::ObjectTreeItem *titem, *form->tabStops()) {
         if (titem->widget()->focusPolicy() & Qt::TabFocus) {
             if (fromWidget) {
                 kDebug() << "tab order: "
-                    << fromWidget->objectName() << "->" << titem->widget()->objectName();
+                         << fromWidget->objectName() << "->" << titem->widget()->objectName();
             }
             fromWidget = titem->widget();
             d->orderedFocusWidgets.append(titem->widget());
@@ -180,19 +187,19 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 
         titem->widget()->installEventFilter(this);
         //also filter events for data-aware children of this widget (i.e. KexiDBAutoField's editors)
-        QList<QWidget*> children(titem->widget()->findChildren<QWidget*>());
-        foreach(QWidget* widget, children) {
+        QList<QWidget *> children(titem->widget()->findChildren<QWidget *>());
+        foreach (QWidget *widget, children) {
             kDebug() << "also adding '"
-                << widget->metaObject()->className()
-                << " " << widget->objectName()
-                << "' child to filtered widgets";
+                     << widget->metaObject()->className()
+                     << " " << widget->objectName()
+                     << "' child to filtered widgets";
             widget->installEventFilter(this);
         }
-        KexiFormDataItemInterface* dataItem
-            = dynamic_cast<KexiFormDataItemInterface*>(titem->widget());
+        KexiFormDataItemInterface *dataItem
+            = dynamic_cast<KexiFormDataItemInterface *>(titem->widget());
         if (dataItem && !dataItem->dataSource().isEmpty()) {
             kDebug() << "#" << numberOfDataAwareWidgets << ": "
-                << dataItem->dataSource() << " (" << titem->widget()->objectName() << ")";
+                     << dataItem->dataSource() << " (" << titem->widget()->objectName() << ")";
 
 //! @todo d->indicesForDataAwareWidgets SHOULD NOT BE UPDATED HERE BECAUSE
 //! THERE CAN BE ALSO NON-TABSTOP DATA WIDGETS!
@@ -218,20 +225,20 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 
 void KexiDBForm::updateTabStopsOrder()
 {
-    for (QList<QWidget*>::iterator it(d->orderedFocusWidgets.begin());
-            it != d->orderedFocusWidgets.end();)
-    {
-        if (!((*it)->focusPolicy() & Qt::TabFocus))
+    for (QList<QWidget *>::iterator it(d->orderedFocusWidgets.begin());
+            it != d->orderedFocusWidgets.end();) {
+        if (!((*it)->focusPolicy() & Qt::TabFocus)) {
             it = d->orderedFocusWidgets.erase(it);
-        else
+        } else {
             ++it;
+        }
     }
 }
 
 void KexiDBForm::updateReadOnlyFlags()
 {
-    foreach(QWidget *w, d->orderedDataAwareWidgets) {
-        KexiFormDataItemInterface* dataItem = dynamic_cast<KexiFormDataItemInterface*>(w);
+    foreach (QWidget *w, d->orderedDataAwareWidgets) {
+        KexiFormDataItemInterface *dataItem = dynamic_cast<KexiFormDataItemInterface *>(w);
         if (dataItem && !dataItem->dataSource().isEmpty()) {
             if (dataAwareObject()->isReadOnly()) {
                 dataItem->setReadOnly(true);
@@ -240,7 +247,7 @@ void KexiDBForm::updateReadOnlyFlags()
     }
 }
 
-bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
+bool KexiDBForm::eventFilter(QObject *watched, QEvent *e)
 {
 #if 0
     if (e->type() != QEvent::Paint
@@ -248,47 +255,51 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
             && e->type() != QEvent::MouseMove
             && e->type() != QEvent::HoverMove
             && e->type() != QEvent::HoverEnter
-            && e->type() != QEvent::HoverLeave)
-    {
+            && e->type() != QEvent::HoverLeave) {
         kDebug() << e << watched;
     }
-    if (e->type() == QEvent::Resize && watched == this)
+    if (e->type() == QEvent::Resize && watched == this) {
         kDebug() << "RESIZE";
+    }
 #endif
     if (e->type() == QEvent::KeyPress || e->type() == QEvent::ShortcutOverride) {
         if (isPreviewing()) {
-            QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+            QKeyEvent *ke = static_cast<QKeyEvent *>(e);
             const int key = ke->key();
             bool tab = ke->modifiers() == Qt::NoModifier && key == Qt::Key_Tab;
             bool backtab = ((ke->modifiers() == Qt::NoModifier || ke->modifiers() == Qt::ShiftModifier) && key == Qt::Key_Backtab)
                            || (ke->modifiers() == Qt::ShiftModifier && key == Qt::Key_Tab);
             QObject *o = watched; //focusWidget();
-            QWidget* realWidget = dynamic_cast<QWidget*>(o); //will beused below (for tab/backtab handling)
+            QWidget *realWidget = dynamic_cast<QWidget *>(o); //will beused below (for tab/backtab handling)
 
             if (!tab && !backtab) {
                 //for buttons, left/up and right/down keys act like tab/backtab (see qbutton.cpp)
                 if (realWidget->inherits("QButton")) {
-                    if (ke->modifiers() == Qt::NoModifier && (key == Qt::Key_Right || key == Qt::Key_Down))
+                    if (ke->modifiers() == Qt::NoModifier && (key == Qt::Key_Right || key == Qt::Key_Down)) {
                         tab = true;
-                    else if (ke->modifiers() == Qt::NoModifier && (key == Qt::Key_Left || key == Qt::Key_Up))
+                    } else if (ke->modifiers() == Qt::NoModifier && (key == Qt::Key_Left || key == Qt::Key_Up)) {
                         backtab = true;
+                    }
                 }
             }
 
             if (!tab && !backtab) {
                 // allow the editor widget to grab the key press event
                 while (true) {
-                    if (!o || o == dynamic_cast<QObject*>(d->dataAwareObject))
+                    if (!o || o == dynamic_cast<QObject *>(d->dataAwareObject)) {
                         break;
-                    if (dynamic_cast<KexiFormDataItemInterface*>(o)) {
-                        realWidget = dynamic_cast<QWidget*>(o); //will be used below
-                        if (realWidget == this) //we have encountered 'this' form surface, give up
+                    }
+                    if (dynamic_cast<KexiFormDataItemInterface *>(o)) {
+                        realWidget = dynamic_cast<QWidget *>(o); //will be used below
+                        if (realWidget == this) { //we have encountered 'this' form surface, give up
                             return false;
-                        KexiFormDataItemInterface* dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(o);
+                        }
+                        KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface *>(o);
                         while (dataItemIface) {
-                            if (dataItemIface->keyPressed(ke))
+                            if (dataItemIface->keyPressed(ke)) {
                                 return false;
-                            dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(dataItemIface->parentDataItemInterface()); //try in parent, e.g. in combobox
+                            }
+                            dataItemIface = dynamic_cast<KexiFormDataItemInterface *>(dataItemIface->parentDataItemInterface()); //try in parent, e.g. in combobox
                         }
                         break;
                     }
@@ -306,26 +317,28 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                         && !ke->isAccepted()
                         && d->dataAwareObject->handleKeyPress(
                             ke, curRow, curCol, false/*!fullRecordSelection*/, &moveToFirstField, &moveToLastField)) {
-                    if (ke->isAccepted())
+                    if (ke->isAccepted()) {
                         return true;
-                    QWidget* widgetToFocus;
+                    }
+                    QWidget *widgetToFocus;
                     if (moveToFirstField) {
                         widgetToFocus = d->orderedFocusWidgets.first(); //?
                         curCol = d->indexOfDataAwareWidget(widgetToFocus);
                     } else if (moveToLastField) {
                         widgetToFocus = d->orderedFocusWidgets.last(); //?
                         curCol = d->indexOfDataAwareWidget(widgetToFocus);
-                    } else
-                        widgetToFocus = d->orderedDataAwareWidgets.at(curCol);   //?
+                    } else {
+                        widgetToFocus = d->orderedDataAwareWidgets.at(curCol);    //?
+                    }
 
                     d->dataAwareObject->setCursorPosition(curRow, curCol);
 
                     if (widgetToFocus) {
                         widgetToFocus->setFocus();
-                        if (dynamic_cast<KexiFormDataItemInterface*>(widgetToFocus))
-                            dynamic_cast<KexiFormDataItemInterface*>(widgetToFocus)->selectAllOnFocusIfNeeded();
-                    }
-                    else {
+                        if (dynamic_cast<KexiFormDataItemInterface *>(widgetToFocus)) {
+                            dynamic_cast<KexiFormDataItemInterface *>(widgetToFocus)->selectAllOnFocusIfNeeded();
+                        }
+                    } else {
                         kWarning() << "widgetToFocus not found!";
                     }
 
@@ -341,17 +354,19 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
             // handle Esc key
             if (ke->modifiers() == Qt::NoModifier && key == Qt::Key_Escape) {
                 //cancel field editing/row editing if possible
-                if (d->dataAwareObject->cancelEditor())
+                if (d->dataAwareObject->cancelEditor()) {
                     return true;
-                else if (d->dataAwareObject->cancelRowEdit())
+                } else if (d->dataAwareObject->cancelRowEdit()) {
                     return true;
+                }
                 return false; // canceling not needed - pass the event to the active widget
             }
             // jstaniek: Fix for Qt bug (handling e.g. Alt+2, Ctrl+2 keys on every platform)
             //           It's important because we're using alt+2 short cut by default
             //           Damn! I've reported this to Trolltech in November 2004 - still not fixed.
-            if (ke->isAccepted() && (ke->modifiers() & Qt::AltModifier) && ke->text() >= "0" && ke->text() <= "9")
+            if (ke->isAccepted() && (ke->modifiers() & Qt::AltModifier) && ke->text() >= "0" && ke->text() <= "9") {
                 return true;
+            }
 
             if (tab || backtab) {
                 //the watched widget can be a subwidget of a real widget, e.g. a drop down button of image box: find it
@@ -359,15 +374,17 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                             realWidget->metaObject()->className())) {
                     realWidget = realWidget->parentWidget();
                 }
-                if (!realWidget)
-                    return true; //ignore
+                if (!realWidget) {
+                    return true;    //ignore
+                }
                 //the watched widget can be a subwidget of a real widget, e.g. autofield: find it
                 //QWidget* realWidget = static_cast<QWidget*>(watched);
-                while (dynamic_cast<KexiDataItemInterface*>(realWidget) && dynamic_cast<KexiDataItemInterface*>(realWidget)->parentDataItemInterface())
-                    realWidget = dynamic_cast<QWidget*>(dynamic_cast<KexiDataItemInterface*>(realWidget)->parentDataItemInterface());
+                while (dynamic_cast<KexiDataItemInterface *>(realWidget) && dynamic_cast<KexiDataItemInterface *>(realWidget)->parentDataItemInterface()) {
+                    realWidget = dynamic_cast<QWidget *>(dynamic_cast<KexiDataItemInterface *>(realWidget)->parentDataItemInterface());
+                }
 
                 d->setOrderedFocusWidgetsIteratorTo(realWidget);
-                dynamic_cast<KexiDataItemInterface*>(realWidget)->moveCursorToEnd();
+                dynamic_cast<KexiDataItemInterface *>(realWidget)->moveCursorToEnd();
 
                 //kDebug() << realWidget->objectName();
 
@@ -377,8 +394,9 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 while (true) {
                     if (tab) {
                         if (!d->orderedFocusWidgets.isEmpty() && realWidget == d->orderedFocusWidgets.last()) {
-                            if (wasAtFirstWidget)
+                            if (wasAtFirstWidget) {
                                 break;
+                            }
                             d->orderedFocusWidgetsIterator = d->orderedFocusWidgets.begin();
                             wasAtFirstWidget = true;
                         } else if (realWidget == *d->orderedFocusWidgetsIterator) {
@@ -402,13 +420,12 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                     QObject *pageFor_widgetToFocus = 0;
                     KFormDesigner::TabWidget *tabWidgetFor_widgetToFocus
                         = KFormDesigner::findParent<KFormDesigner::TabWidget>(
-                            widgetToFocus,
-                            "KFormDesigner::TabWidget",
-                            pageFor_widgetToFocus
-                        );
-                    if (   tabWidgetFor_widgetToFocus
-                        && tabWidgetFor_widgetToFocus->currentWidget() != pageFor_widgetToFocus)
-                    {
+                              widgetToFocus,
+                              "KFormDesigner::TabWidget",
+                              pageFor_widgetToFocus
+                          );
+                    if (tabWidgetFor_widgetToFocus
+                            && tabWidgetFor_widgetToFocus->currentWidget() != pageFor_widgetToFocus) {
                         realWidget = widgetToFocus;
                         continue; // the new widget to focus is placed on invisible tab page:
                         // move to next widget
@@ -432,17 +449,17 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                         (*d->orderedFocusWidgetsIterator)->setFocus();
                         //kDebug() << "focusing " << (*d->orderedFocusWidgetsIterator)->objectName();
                     }
-                    if (dynamic_cast<KexiFormDataItemInterface*>(widgetToSelectAll)) {
+                    if (dynamic_cast<KexiFormDataItemInterface *>(widgetToSelectAll)) {
                         //kDebug() << "widgetToSelectAll:" << widgetToSelectAll;
-                        dynamic_cast<KexiFormDataItemInterface*>(widgetToSelectAll)->selectAllOnFocusIfNeeded();
+                        dynamic_cast<KexiFormDataItemInterface *>(widgetToSelectAll)->selectAllOnFocusIfNeeded();
                     }
                 }
                 return true;
             }
         }
-    } else if (e->type() == QEvent::FocusIn || (e->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent*>(e)->button() == Qt::LeftButton)) {
+    } else if (e->type() == QEvent::FocusIn || (e->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent *>(e)->button() == Qt::LeftButton)) {
         bool focusDataWidget = isPreviewing();
-        if (static_cast<QFocusEvent*>(e)->reason() == Qt::PopupFocusReason) {
+        if (static_cast<QFocusEvent *>(e)->reason() == Qt::PopupFocusReason) {
             //kDebug() << "->>> focus IN, popup" << watched;
             focusDataWidget = !d->popupFocused;
             d->popupFocused = false;
@@ -451,9 +468,9 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
         if (focusDataWidget) {
             //kDebug() << "FocusIn: " << watched->metaObject()->className() << " " << watched->objectName();
             if (d->dataAwareObject) {
-                QWidget *dataItem = dynamic_cast<QWidget*>(watched);
+                QWidget *dataItem = dynamic_cast<QWidget *>(watched);
                 while (dataItem) {
-                    while (dataItem && !dynamic_cast<KexiDataItemInterface*>(dataItem)) {
+                    while (dataItem && !dynamic_cast<KexiDataItemInterface *>(dataItem)) {
                         dataItem = dataItem->parentWidget();
                     }
                     if (!dataItem) {
@@ -478,7 +495,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
             }
         }
     } else if (e->type() == QEvent::FocusOut) {
-        if (static_cast<QFocusEvent*>(e)->reason() == Qt::PopupFocusReason) {
+        if (static_cast<QFocusEvent *>(e)->reason() == Qt::PopupFocusReason) {
             d->popupFocused = true;
         } else {
             d->popupFocused = false;
@@ -500,19 +517,21 @@ bool KexiDBForm::valueIsEmpty()
 
 bool KexiDBForm::isReadOnly() const
 {
-    if (d->dataAwareObject)
+    if (d->dataAwareObject) {
         return d->dataAwareObject->isReadOnly();
+    }
 //! @todo ?
     return false;
 }
 
 void KexiDBForm::setReadOnly(bool readOnly)
 {
-    if (d->dataAwareObject)
-        d->dataAwareObject->setReadOnly(readOnly);   //???
+    if (d->dataAwareObject) {
+        d->dataAwareObject->setReadOnly(readOnly);    //???
+    }
 }
 
-QWidget* KexiDBForm::widget()
+QWidget *KexiDBForm::widget()
 {
     return this;
 }
@@ -534,8 +553,8 @@ void KexiDBForm::clear()
 
 bool KexiDBForm::isPreviewing() const
 {
-    return dynamic_cast<KexiFormScrollView*>(d->dataAwareObject)
-           ? dynamic_cast<KexiFormScrollView*>(d->dataAwareObject)->isPreviewing() : false;
+    return dynamic_cast<KexiFormScrollView *>(d->dataAwareObject)
+           ? dynamic_cast<KexiFormScrollView *>(d->dataAwareObject)->isPreviewing() : false;
 }
 
 void KexiDBForm::dragMoveEvent(QDragMoveEvent *e)

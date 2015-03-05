@@ -36,10 +36,11 @@ class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer
 
 public:
     KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity);
-    KisGroupLayer(const KisGroupLayer& rhs);
+    KisGroupLayer(const KisGroupLayer &rhs);
     virtual ~KisGroupLayer();
 
-    KisNodeSP clone() const {
+    KisNodeSP clone() const
+    {
         return KisNodeSP(new KisGroupLayer(*this));
     }
 
@@ -62,7 +63,7 @@ public:
      * resulting in a grayscale projection that is then merged with an
      * rgb image stack.
      */
-    const KoColorSpace * colorSpace() const;
+    const KoColorSpace *colorSpace() const;
 
     /// @return the projection of the layers in the group before the masks are applied.
     KisPaintDeviceSP original() const;
@@ -93,7 +94,7 @@ public:
     KoColor defaultProjectionColor() const;
 
 protected:
-    KisLayer* onlyMeaningfulChild() const;
+    KisLayer *onlyMeaningfulChild() const;
     KisPaintDeviceSP tryObligeChild() const;
 
 private:
@@ -102,7 +103,7 @@ private:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private *const m_d;
 };
 
 #endif // KIS_GROUP_LAYER_H_

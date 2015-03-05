@@ -44,7 +44,7 @@ public:
     /**
      * Apply a filter on a meta data store.
      */
-    virtual void filter(KisMetaData::Store*) const = 0;
+    virtual void filter(KisMetaData::Store *) const = 0;
 };
 }
 

@@ -58,8 +58,7 @@ class KRITAIMAGE_EXPORT KisBaseProcessor : public KisShared
 
 public:
 
-
-    KisBaseProcessor(const KoID& id, const KoID & category, const QString & entry);
+    KisBaseProcessor(const KoID &id, const KoID &category, const QString &entry);
 
     virtual ~KisBaseProcessor();
 
@@ -72,17 +71,17 @@ public:
      *
      * @return the default configuration of this widget
      */
-    KisFilterConfiguration * defaultConfiguration(const KisPaintDeviceSP) const;
+    KisFilterConfiguration *defaultConfiguration(const KisPaintDeviceSP) const;
 
     /**
      * @return the bookmark manager for this processor
      */
-    KisBookmarkedConfigurationManager* bookmarkManager();
+    KisBookmarkedConfigurationManager *bookmarkManager();
 
     /**
      * @return the bookmark manager for this processor
      */
-    const KisBookmarkedConfigurationManager* bookmarkManager() const;
+    const KisBookmarkedConfigurationManager *bookmarkManager() const;
 
     /// @return Unique identification for this processor
     QString id() const;
@@ -109,7 +108,7 @@ public:
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
      */
-    virtual KisConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const;
     // "Support" functions
 public:
     /**
@@ -139,8 +138,8 @@ public:
     ColorSpaceIndependence colorSpaceIndependence() const;
 
     /// @return the default configuration as defined by whoever wrote the plugin
-    virtual KisFilterConfiguration* factoryConfiguration(const KisPaintDeviceSP) const;
-    
+    virtual KisFilterConfiguration *factoryConfiguration(const KisPaintDeviceSP) const;
+
 protected:
 
     void setSupportsPainting(bool v);
@@ -152,16 +151,15 @@ protected:
     /**
      * Set the default shortcut for activation of this filter.
      */
-    void setShortcut(const KShortcut & shortcut);
+    void setShortcut(const KShortcut &shortcut);
 
 protected:
 
-    void init(const QString& configEntryGroup);
+    void init(const QString &configEntryGroup);
 
 private:
     struct Private;
-    Private* const d;
+    Private *const d;
 };
-
 
 #endif

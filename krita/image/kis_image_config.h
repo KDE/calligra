@@ -22,7 +22,6 @@
 #include <kconfiggroup.h>
 #include "krita_export.h"
 
-
 class KRITAIMAGE_EXPORT KisImageConfig
 {
 public:
@@ -76,7 +75,6 @@ private:
 private:
     KConfigGroup m_config;
 };
-
 
 #endif /* KIS_IMAGE_CONFIG_H_ */
 

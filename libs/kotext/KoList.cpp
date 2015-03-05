@@ -66,14 +66,15 @@ KoList *KoList::applyStyle(const QTextBlock &block, KoListStyle *style, int leve
     }
 
     //the block was already another list but with a different style - remove block from list
-    if (list)
+    if (list) {
         list->remove(block);
+    }
 
     // Ok, so we are now ready to add the block to another list, but which other list?
     // For headers we always want to continue from any previous header
     // For normal lists we either want to continue an adjecent list or create a new one
     if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
-        for (QTextBlock b = block.previous();b.isValid(); b = b.previous()) {
+        for (QTextBlock b = block.previous(); b.isValid(); b = b.previous()) {
             list = document.list(b);
             if (list && *list->style() == *style) {
                 break;
@@ -97,8 +98,9 @@ KoList *KoList::applyStyle(const QTextBlock &block, KoListStyle *style, int leve
 
 void KoList::add(const QTextBlock &block, int level)
 {
-    if (!block.isValid())
+    if (!block.isValid()) {
         return;
+    }
 
     Q_ASSERT(level >= 0 && level <= 10);
     if (level == 0) { // fetch the first proper level we have
@@ -112,15 +114,15 @@ void KoList::add(const QTextBlock &block, int level)
     }
     remove(block);
 
-    QTextList *textList = d->textLists.value(level-1).data();
+    QTextList *textList = d->textLists.value(level - 1).data();
     if (!textList) {
         QTextCursor cursor(block);
         QTextListFormat format = d->style->listFormat(level);
         textList = cursor.createList(format);
         format.setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList));
         textList->setFormat(format);
-        d->textLists[level-1] = textList;
-        d->textListIds[level-1] = (KoListStyle::ListIdType)textList;
+        d->textLists[level - 1] = textList;
+        d->textListIds[level - 1] = (KoListStyle::ListIdType)textList;
     } else {
         textList->add(block);
     }
@@ -173,19 +175,22 @@ void KoList::setStyle(KoListStyle *style)
     }
 
     if (style != d->style) {
-        if (d->style)
+        if (d->style) {
             disconnect(d->style, 0, this, 0);
+        }
         d->style = style->clone(this);
         connect(d->style, SIGNAL(styleChanged(int)), this, SLOT(styleChanged(int)));
     }
 
     for (int i = 0; i < d->textLists.count(); i++) {
         QTextList *textList = d->textLists.value(i).data();
-        if (!textList)
+        if (!textList) {
             continue;
-        KoListLevelProperties properties = d->style->levelProperties(i+1);
-        if (properties.listId())
+        }
+        KoListLevelProperties properties = d->style->levelProperties(i + 1);
+        if (properties.listId()) {
             d->textListIds[i] = properties.listId();
+        }
         QTextListFormat format;
         properties.applyStyle(format);
         textList->setFormat(format);
@@ -213,8 +218,8 @@ void KoList::updateStoredList(const QTextBlock &block)
         int level = block.textList()->format().property(KoListStyle::Level).toInt();
         QTextList *textList = block.textList();
         textList->format().setProperty(KoListStyle::ListId, (KoListStyle::ListIdType)(textList));
-        d->textLists[level-1] = textList;
-        d->textListIds[level-1] = (KoListStyle::ListIdType)textList;
+        d->textLists[level - 1] = textList;
+        d->textListIds[level - 1] = (KoListStyle::ListIdType)textList;
     }
 }
 
@@ -225,8 +230,9 @@ bool KoList::contains(QTextList *list) const
 
 int KoList::level(const QTextBlock &block)
 {
-    if (!block.textList())
+    if (!block.textList()) {
         return 0;
+    }
     int l = block.blockFormat().intProperty(KoParagraphStyle::ListLevel);
     if (!l) { // not a numbered-paragraph
         QTextListFormat format = block.textList()->format();

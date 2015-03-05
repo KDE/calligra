@@ -59,18 +59,19 @@ protected:
      * Processes \p element , a Region::Point or a Region::Range .
      * Invoked by mainProcessing() .
      */
-    virtual bool process(Element* element);
+    virtual bool process(Element *element);
 
     virtual bool mainProcessing();
 
     // dummy
-    virtual Value newValue(Element*, int, int, bool*, Format::Type*) {
+    virtual Value newValue(Element *, int, int, bool *, Format::Type *)
+    {
         return Value();
     }
 
 protected:
-    QSet<ColumnFormat*> m_columnFormats;
-    QSet<RowFormat*>   m_rowFormats;
+    QSet<ColumnFormat *> m_columnFormats;
+    QSet<RowFormat *>   m_rowFormats;
     Mode m_mode;
 };
 

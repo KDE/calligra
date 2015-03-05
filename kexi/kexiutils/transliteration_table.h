@@ -6,6 +6,6 @@
 #define KEXI_TRANSLITERATION_TABLE_H
 
 #define TRANSLITERATION_TABLE_SIZE 65535
-const char* const* transliteration_table();
+const char *const *transliteration_table();
 
 #endif

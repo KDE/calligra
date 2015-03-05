@@ -37,7 +37,8 @@
 
 class KexiRecordNavigator;
 class KexiDBForm;
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 class Form;
 }
 
@@ -53,12 +54,12 @@ class Form;
  * @see KexiTableView
 */
 class KEXIFORMUTILS_EXPORT KexiFormScrollView :
-            public QScrollArea,
-            public KexiRecordNavigatorHandler,
-            public KexiSharedActionClient,
-            public KexiDataAwareObjectInterface,
-            public KexiFormDataProvider,
-            public KexiFormEventHandler
+    public QScrollArea,
+    public KexiRecordNavigatorHandler,
+    public KexiSharedActionClient,
+    public KexiDataAwareObjectInterface,
+    public KexiFormDataProvider,
+    public KexiFormEventHandler
 {
     Q_OBJECT
     KEXI_DATAAWAREOBJECTINTERFACE
@@ -69,7 +70,7 @@ public:
 
     void setForm(KFormDesigner::Form *form);
 
-    KFormDesigner::Form* form() const;
+    KFormDesigner::Form *form() const;
 
     /*! Reimplemented from KexiDataAwareObjectInterface
      for checking 'readOnly' flag from a widget
@@ -85,7 +86,7 @@ public:
      Reimplemented for KexiDataAwareObjectInterface:
      column data corresponding to widget number is used here
      (see fieldNumberForColumn()). */
-    virtual KexiDB::TableViewColumn* column(int col);
+    virtual KexiDB::TableViewColumn *column(int col);
 
     /*! \return field number within data model connected to a data-aware
      widget at column \a col. */
@@ -102,9 +103,9 @@ public:
     virtual int lastVisibleRow() const;
 
     /*! \return vertical scrollbar. Implemented for KexiDataAwareObjectInterface. */
-    virtual QScrollBar* verticalScrollBar() const;
+    virtual QScrollBar *verticalScrollBar() const;
 
-    KexiDBForm* dbFormWidget() const;
+    KexiDBForm *dbFormWidget() const;
 
     //! @return true if snapping to grid is enabled. The defalt value is false.
     bool isSnapToGridEnabled() const;
@@ -118,7 +119,7 @@ public:
 
     void refreshContentsSizeLater();
 
-    KexiRecordNavigator* recordNavigator() const;
+    KexiRecordNavigator *recordNavigator() const;
 
     bool isPreviewing() const;
 
@@ -127,16 +128,22 @@ public:
     void setViewportMargins(const QMargins &margins);
 
     //! @return widget displaying contents of the main area.
-    QWidget* mainAreaWidget() const;
+    QWidget *mainAreaWidget() const;
 
     //! Sets widget for displaying contents of the main area.
-    void setMainAreaWidget(QWidget* widget);
+    void setMainAreaWidget(QWidget *widget);
 
     //! temporary
-    int leftMargin() const { return 0; }
+    int leftMargin() const
+    {
+        return 0;
+    }
 
     //! temporary
-    int bottomMargin() const { return 0; }
+    int bottomMargin() const
+    {
+        return 0;
+    }
 
     //! temporary
     void updateScrollBars() {}
@@ -161,7 +168,8 @@ public Q_SLOTS:
     virtual void moveToPreviousRecordRequested();
     virtual void moveToNextRecordRequested();
     virtual void moveToFirstRecordRequested();
-    virtual void addNewRecordRequested() {
+    virtual void addNewRecordRequested()
+    {
         KexiDataAwareObjectInterface::addNewRecordRequested();
     }
 
@@ -177,19 +185,20 @@ public Q_SLOTS:
     /*! Handles verticalScrollBar()'s valueChanged(int) signal.
      Called when vscrollbar's value has been changed. */
     //! @todo unused for now, will be used for continuous forms
-    virtual void vScrollBarValueChanged(int v) {
+    virtual void vScrollBarValueChanged(int v)
+    {
         KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
     }
 
 Q_SIGNALS:
-    void itemChanged(KexiDB::RecordData*, int row, int col);
-    void itemChanged(KexiDB::RecordData*, int row, int col, QVariant oldValue);
-    void itemDeleteRequest(KexiDB::RecordData*, int row, int col);
+    void itemChanged(KexiDB::RecordData *, int row, int col);
+    void itemChanged(KexiDB::RecordData *, int row, int col, QVariant oldValue);
+    void itemDeleteRequest(KexiDB::RecordData *, int row, int col);
     void currentItemDeleteRequest();
     void newItemAppendedForAfterDeletingInSpreadSheetMode(); //!< does nothing
     void dataRefreshed();
     void dataSet(KexiDB::TableViewData *data);
-    void itemSelected(KexiDB::RecordData*);
+    void itemSelected(KexiDB::RecordData *);
     void cellSelected(int row, int col);
     void sortedColumnChanged(int col);
     void rowEditStarted(int row);
@@ -202,33 +211,37 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
-    virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
+    virtual void slotRowRepaintRequested(KexiDB::RecordData &record);
 
     //! Handles KexiDB::TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-    virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint) {
+    virtual void slotAboutToDeleteRow(KexiDB::RecordData &record, KexiDB::ResultInfo *result, bool repaint)
+    {
         KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint);
     }
 
     //! Handles KexiDB::TableViewData::rowDeleted() signal to repaint when needed.
-    virtual void slotRowDeleted() {
+    virtual void slotRowDeleted()
+    {
         KexiDataAwareObjectInterface::slotRowDeleted();
     }
 
     //! Handles KexiDB::TableViewData::rowInserted() signal to repaint when needed.
-    virtual void slotRowInserted(KexiDB::RecordData* record, bool repaint);
+    virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint);
 
     //! Like above, not db-aware version
-    virtual void slotRowInserted(KexiDB::RecordData* record, uint row, bool repaint);
+    virtual void slotRowInserted(KexiDB::RecordData *record, uint row, bool repaint);
 
-    virtual void slotRowsDeleted(const QList<int>&);
+    virtual void slotRowsDeleted(const QList<int> &);
 
-    virtual void slotDataDestroying() {
+    virtual void slotDataDestroying()
+    {
         KexiDataAwareObjectInterface::slotDataDestroying();
     }
 
     /*! Reloads data for this widget.
      Handles KexiDB::TableViewData::reloadRequested() signal. */
-    virtual void reloadData() {
+    virtual void reloadData()
+    {
         KexiDataAwareObjectInterface::reloadData();
     }
 
@@ -261,7 +274,7 @@ protected:
     virtual void updateGUIAfterSorting(int previousRow);
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void createEditor(int row, int col, const QString& addText = QString(),
+    virtual void createEditor(int row, int col, const QString &addText = QString(),
                               CreateEditorFlags flags = DefaultCreateEditorFlags);
 
     //! Implementation for KexiDataAwareObjectInterface
@@ -291,7 +304,7 @@ protected:
     virtual void updateWidgetContentsSize();
 
     //! Reimplemented from KexiFormDataProvider. Reaction for change of \a item.
-    virtual void valueChanged(KexiDataItemInterface* item);
+    virtual void valueChanged(KexiDataItemInterface *item);
 
     /*! Reimplemented from KexiFormDataProvider.
      \return information whether we're currently at new record or not.
@@ -327,12 +340,12 @@ protected:
 
     /*! @internal
      Used to invoke copy/paste/cut etc. actions at the focused widget's level. */
-    void handleDataWidgetAction(const QString& actionName);
+    void handleDataWidgetAction(const QString &actionName);
 
     /*! @internal */
-    bool shouldDisplayDefaultValueForItem(KexiFormDataItemInterface* itemIface) const;
+    bool shouldDisplayDefaultValueForItem(KexiFormDataItemInterface *itemIface) const;
 
-    virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h);
+    virtual void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
 
     const QTimer *delayedResizeTimer() const;
 
@@ -341,7 +354,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif

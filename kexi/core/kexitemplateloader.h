@@ -53,8 +53,11 @@ public:
     QString name;
     QString caption;
     bool enabled;
-    KexiTemplateInfoList templates() const { return m_templates; }
-    void addTemplate(const KexiTemplateInfo& t);
+    KexiTemplateInfoList templates() const
+    {
+        return m_templates;
+    }
+    void addTemplate(const KexiTemplateInfo &t);
 private:
     KexiTemplateInfoList m_templates;
 };
@@ -66,7 +69,7 @@ class KEXICORE_EXPORT KexiTemplateLoader
 {
 public:
     static KexiTemplateInfoList loadListInfo();
-    static KexiTemplateInfo loadInfo(const QString& directory);
+    static KexiTemplateInfo loadInfo(const QString &directory);
 };
 
 #endif

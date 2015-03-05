@@ -32,14 +32,13 @@ KisDynamicSensorFade::KisDynamicSensorFade() : KisDynamicSensor(FadeId), m_count
     setLength(DEFAULT_LENGTH);
 }
 
-qreal KisDynamicSensorFade::value(const KisPaintInformation&  pi)
+qreal KisDynamicSensorFade::value(const KisPaintInformation  &pi)
 {
     Q_UNUSED(pi);
     if (m_counter > m_length) {
         if (m_periodic) {
             reset();
-        }
-        else {
+        } else {
             m_counter = m_length;
         }
     }
@@ -66,9 +65,9 @@ void KisDynamicSensorFade::setLength(int length)
     setMaximumLabel(i18n("%1", length));
 }
 
-QWidget* KisDynamicSensorFade::createConfigurationWidget(QWidget* parent, QWidget* ss)
+QWidget *KisDynamicSensorFade::createConfigurationWidget(QWidget *parent, QWidget *ss)
 {
-    QWidget* wdg = new QWidget(parent);
+    QWidget *wdg = new QWidget(parent);
     Ui_SensorFadeConfiguration stc;
     stc.setupUi(wdg);
     stc.checkBoxRepeat->setChecked(m_periodic);
@@ -80,14 +79,14 @@ QWidget* KisDynamicSensorFade::createConfigurationWidget(QWidget* parent, QWidge
     return wdg;
 }
 
-void KisDynamicSensorFade::toXML(QDomDocument& doc, QDomElement& e) const
+void KisDynamicSensorFade::toXML(QDomDocument &doc, QDomElement &e) const
 {
     KisDynamicSensor::toXML(doc, e);
     e.setAttribute("periodic", m_periodic);
     e.setAttribute("length", m_length);
 }
 
-void KisDynamicSensorFade::fromXML(const QDomElement& e)
+void KisDynamicSensorFade::fromXML(const QDomElement &e)
 {
     KisDynamicSensor::fromXML(e);
     m_periodic = e.attribute("periodic", "0").toInt();

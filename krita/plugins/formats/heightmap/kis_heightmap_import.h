@@ -24,7 +24,6 @@
 
 #include <KisImportExportFilter.h>
 
-
 class KisHeightMapImport : public KisImportExportFilter
 {
     Q_OBJECT
@@ -32,7 +31,7 @@ public:
     KisHeightMapImport(QObject *parent, const QVariantList &);
     virtual ~KisHeightMapImport();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KisImportExportFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 };
 
 #endif

@@ -65,7 +65,6 @@ KoTextRangePrivate::~KoTextRangePrivate()
     delete rdf;
 }
 
-
 KoTextRange::~KoTextRange()
 {
     if (d_ptr->manager) {
@@ -144,13 +143,13 @@ QString KoTextRange::text() const
     return d->positionOnlyMode ? QString() : d->cursor.selectedText();
 }
 
-void KoTextRange::setInlineRdf(KoTextInlineRdf* rdf)
+void KoTextRange::setInlineRdf(KoTextInlineRdf *rdf)
 {
     Q_D(KoTextRange);
     d->rdf = rdf;
 }
 
-KoTextInlineRdf* KoTextRange::inlineRdf() const
+KoTextInlineRdf *KoTextRange::inlineRdf() const
 {
     Q_D(const KoTextRange);
     return d->rdf;

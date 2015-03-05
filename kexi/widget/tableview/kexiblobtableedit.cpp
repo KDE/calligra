@@ -59,9 +59,10 @@ class KexiBlobTableEdit::Private
 {
 public:
     Private()
-            : menu(0)
-            , readOnly(false)
-            , setValueInternalEnabled(true) {
+        : menu(0)
+        , readOnly(false)
+        , setValueInternalEnabled(true)
+    {
     }
 
     QByteArray value;
@@ -76,8 +77,8 @@ public:
 //======================================================
 
 KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
-        : KexiTableEdit(column, parent)
-        , d(new Private())
+    : KexiTableEdit(column, parent)
+    , d(new Private())
 {
     KexiDataItemInterface::setHasFocusableWidget(false);
     d->button = new KexiDropDownButton(parentWidget() /*usually a viewport*/);
@@ -126,14 +127,16 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
 }
 
 //! initializes this editor with \a add value
-void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
+void KexiBlobTableEdit::setValueInternal(const QVariant &add, bool removeOld)
 {
-    if (!d->setValueInternalEnabled)
+    if (!d->setValueInternalEnabled) {
         return;
-    if (removeOld)
+    }
+    if (removeOld) {
         d->value = add.toByteArray();
-    else //do not add "m_origValue" to "add" as this is QByteArray
+    } else { //do not add "m_origValue" to "add" as this is QByteArray
         d->value = KexiDataItemInterface::originalValue().toByteArray();
+    }
 
 //! @todo
 #if 0 //todo?
@@ -147,7 +150,7 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
     delete m_tempFile;
     m_tempFile = 0;
 
-    KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->fileName());
+    KMimeMagicResult *mmr = KMimeMagic::self()->findFileType(m_tempFile->fileName());
     kDebug() << "Mimetype = " << mmr->mimeType();
 
     setViewWidget(new QWidget(this));
@@ -180,7 +183,7 @@ KexiBlobTableEdit::value()
     QFile f(m_tempFile->fileName());
     f.open(QIODevice::ReadOnly);
     QDataStream stream(&f);
-    char* data = (char*) malloc(f.size());
+    char *data = (char *) malloc(f.size());
     value.resize(f.size());
     stream.readRawBytes(data, f.size());
     value.duplicate(data, f.size());
@@ -196,7 +199,7 @@ void KexiBlobTableEdit::paintFocusBorders(QPainter *p, QVariant &, int x, int y,
 }
 
 void
-KexiBlobTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val,
+KexiBlobTableEdit::setupContents(QPainter *p, bool focused, const QVariant &val,
                                  QString &txt, int &align, int &x, int &y_offset, int &w, int &h)
 {
     Q_UNUSED(focused);
@@ -219,13 +222,13 @@ KexiBlobTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val,
             QPixmap pixmap;
             if (val.canConvert(QVariant::ByteArray) && pixmap.loadFromData(val.toByteArray())) {
 #if 0
-        KexiUtils::drawPixmap(*p, KexiUtils::WidgetMargins()/*lineWidth*/, QRect(x, y_offset, w, h),
-                              pixmap, Qt::AlignCenter, true/*scaledContents*/, true/*keepAspectRatio*/);
+                KexiUtils::drawPixmap(*p, KexiUtils::WidgetMargins()/*lineWidth*/, QRect(x, y_offset, w, h),
+                                      pixmap, Qt::AlignCenter, true/*scaledContents*/, true/*keepAspectRatio*/);
 #endif
                 QPoint pos;
                 pixmap = KexiUtils::scaledPixmap(KexiUtils::WidgetMargins()/*lineWidth*/, QRect(x, y_offset, w, h),
-                             pixmap, pos, Qt::AlignCenter, true/*scaledContents*/, true/*keepAspectRatio*/,
-                             Qt::SmoothTransformation);
+                                                 pixmap, pos, Qt::AlignCenter, true/*scaledContents*/, true/*keepAspectRatio*/,
+                                                 Qt::SmoothTransformation);
                 if (!pixmap.isNull()) {
                     pp = new PixmapAndPos;
                     pp->pixmap = pixmap;
@@ -250,10 +253,11 @@ bool KexiBlobTableEdit::cursorAtEnd()
     return true;
 }
 
-void KexiBlobTableEdit::handleInsertFromFileAction(const KUrl& url)
+void KexiBlobTableEdit::handleInsertFromFileAction(const KUrl &url)
 {
-    if (isReadOnly())
+    if (isReadOnly()) {
         return;
+    }
 
     QString fileName(url.isLocalFile() ? url.toLocalFile() : url.prettyUrl());
 
@@ -276,7 +280,7 @@ void KexiBlobTableEdit::handleInsertFromFileAction(const KUrl& url)
     //emit acceptRequested();
 }
 
-void KexiBlobTableEdit::handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
+void KexiBlobTableEdit::handleAboutToSaveAsAction(QString &origFilename, QString &fileExtension, bool &dataIsEmpty)
 {
     Q_UNUSED(origFilename);
     Q_UNUSED(fileExtension);
@@ -284,7 +288,7 @@ void KexiBlobTableEdit::handleAboutToSaveAsAction(QString& origFilename, QString
 //! @todo no fname stored for now
 }
 
-void KexiBlobTableEdit::handleSaveAsAction(const QString& fileName)
+void KexiBlobTableEdit::handleSaveAsAction(const QString &fileName)
 {
     QFile f(fileName);
     if (!f.open(QIODevice::WriteOnly)) {
@@ -302,8 +306,9 @@ void KexiBlobTableEdit::handleSaveAsAction(const QString& fileName)
 
 void KexiBlobTableEdit::handleCutAction()
 {
-    if (isReadOnly())
+    if (isReadOnly()) {
         return;
+    }
     handleCopyAction();
     clear();
 }
@@ -313,18 +318,20 @@ void KexiBlobTableEdit::handleCopyAction()
     executeCopyAction(d->value);
 }
 
-void KexiBlobTableEdit::executeCopyAction(const QByteArray& data)
+void KexiBlobTableEdit::executeCopyAction(const QByteArray &data)
 {
     QPixmap pixmap;
-    if (!pixmap.loadFromData(data))
+    if (!pixmap.loadFromData(data)) {
         return;
+    }
     qApp->clipboard()->setPixmap(pixmap, QClipboard::Clipboard);
 }
 
 void KexiBlobTableEdit::handlePasteAction()
 {
-    if (isReadOnly())
+    if (isReadOnly()) {
         return;
+    }
     QPixmap pm(qApp->clipboard()->pixmap(QClipboard::Clipboard));
     QByteArray ba;
     QBuffer buffer(&ba);
@@ -351,14 +358,15 @@ void KexiBlobTableEdit::handleShowPropertiesAction()
     //! @todo
 }
 
-void KexiBlobTableEdit::showFocus(const QRect& r, bool readOnly)
+void KexiBlobTableEdit::showFocus(const QRect &r, bool readOnly)
 {
     d->readOnly = readOnly; //cache for slotUpdateActionsAvailabilityRequested()
     updateFocus(r);
-    if (d->readOnly)
+    if (d->readOnly) {
         d->button->hide();
-    else
+    } else {
         d->button->show();
+    }
 }
 
 void KexiBlobTableEdit::resize(int w, int h)
@@ -366,26 +374,28 @@ void KexiBlobTableEdit::resize(int w, int h)
     d->totalSize = QSize(w, h);
     const int addWidth = d->readOnly ? 0 : d->button->width();
     QWidget::resize(w - addWidth, h);
-    if (!d->readOnly)
+    if (!d->readOnly) {
         d->button->resize(h, h);
+    }
     m_rightMarginWhenFocused = m_rightMargin + addWidth;
     QRect r(pos().x(), pos().y(), w + 1, h + 1);
-    r.translate(qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea->horizontalScrollBar()->value(),
-                qobject_cast<KexiTableScrollAreaWidget*>(parentWidget())->scrollArea->verticalScrollBar()->value());
+    r.translate(qobject_cast<KexiTableScrollAreaWidget *>(parentWidget())->scrollArea->horizontalScrollBar()->value(),
+                qobject_cast<KexiTableScrollAreaWidget *>(parentWidget())->scrollArea->verticalScrollBar()->value());
     updateFocus(r);
-/*! @todo
-    if (d->menu) {
-        d->menu->updateSize();
-    }*/
+    /*! @todo
+        if (d->menu) {
+            d->menu->updateSize();
+        }*/
 }
 
-void KexiBlobTableEdit::updateFocus(const QRect& r)
+void KexiBlobTableEdit::updateFocus(const QRect &r)
 {
     if (!d->readOnly) {
-        if (d->button->width() > r.width())
+        if (d->button->width() > r.width()) {
             moveChild(d->button, r.right() + 1, r.top());
-        else
+        } else {
             moveChild(d->button, r.right() - d->button->width(), r.top());
+        }
     }
 }
 
@@ -399,7 +409,7 @@ QSize KexiBlobTableEdit::totalSize() const
     return d->totalSize;
 }
 
-void KexiBlobTableEdit::slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly)
+void KexiBlobTableEdit::slotUpdateActionsAvailabilityRequested(bool &valueIsNull, bool &valueIsReadOnly)
 {
     emit editRequested();
     valueIsNull = this->valueIsNull();
@@ -413,7 +423,7 @@ void KexiBlobTableEdit::signalEditRequested()
     d->setValueInternalEnabled = true;
 }
 
-bool KexiBlobTableEdit::handleKeyPress(QKeyEvent* ke, bool editorActive)
+bool KexiBlobTableEdit::handleKeyPress(QKeyEvent *ke, bool editorActive)
 {
     Q_UNUSED(editorActive);
 
@@ -428,10 +438,12 @@ bool KexiBlobTableEdit::handleKeyPress(QKeyEvent* ke, bool editorActive)
         } else if (ke->modifiers() == Qt::NoButton
                    && (k == Qt::Key_F2 || k == Qt::Key_Space || k == Qt::Key_Enter || k == Qt::Key_Return)) {
             d->menu->insertFromFile();
-        } else
+        } else {
             return false;
-    } else
+        }
+    } else {
         return false;
+    }
     return true;
 }
 
@@ -441,13 +453,13 @@ bool KexiBlobTableEdit::handleDoubleClick()
     return true;
 }
 
-void KexiBlobTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
+void KexiBlobTableEdit::handleCopyAction(const QVariant &value, const QVariant &visibleValue)
 {
     Q_UNUSED(visibleValue);
     executeCopyAction(value.toByteArray());
 }
 
-void KexiBlobTableEdit::handleAction(const QString& actionName)
+void KexiBlobTableEdit::handleAction(const QString &actionName)
 {
     if (actionName == "edit_paste") {
         d->menu->paste();
@@ -460,7 +472,7 @@ void KexiBlobTableEdit::handleAction(const QString& actionName)
 bool KexiBlobTableEdit::eventFilter(QObject *o, QEvent *e)
 {
     if (o == d->menu && e->type() == QEvent::KeyPress) {
-        QKeyEvent* ke = static_cast<QKeyEvent*>(e);
+        QKeyEvent *ke = static_cast<QKeyEvent *>(e);
         const int mods = ke->modifiers();
         const int k = ke->key();
         if ((mods == Qt::NoButton && (k == Qt::Key_Tab || k == Qt::Key_Left || k == Qt::Key_Right))
@@ -484,7 +496,8 @@ class KexiKIconTableEdit::Private
 {
 public:
     Private()
-            : pixmapCache(17) {
+        : pixmapCache(17)
+    {
     }
     //! We've no editor widget that would store current value, so we do this here
     QVariant currentValue;
@@ -493,8 +506,8 @@ public:
 };
 
 KexiKIconTableEdit::KexiKIconTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
-        : KexiTableEdit(column, parent)
-        , d(new Private())
+    : KexiTableEdit(column, parent)
+    , d(new Private())
 {
     init();
 }
@@ -509,7 +522,7 @@ void KexiKIconTableEdit::init()
     KexiDataItemInterface::setHasFocusableWidget(false);
 }
 
-void KexiKIconTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
+void KexiKIconTableEdit::setValueInternal(const QVariant & /*add*/, bool /*removeOld*/)
 {
     d->currentValue = KexiDataItemInterface::originalValue();
 }
@@ -544,7 +557,7 @@ bool KexiKIconTableEdit::cursorAtEnd()
     return true;
 }
 
-void KexiKIconTableEdit::setupContents(QPainter *p, bool /*focused*/, const QVariant& val,
+void KexiKIconTableEdit::setupContents(QPainter *p, bool /*focused*/, const QVariant &val,
                                        QString &/*txt*/, int &/*align*/, int &/*x*/, int &y_offset, int &w, int &h)
 {
     Q_UNUSED(y_offset);
@@ -558,7 +571,7 @@ void KexiKIconTableEdit::setupContents(QPainter *p, bool /*focused*/, const QVar
     int s = qMax(h - 5, 12);
     s = qMin(h - 3, s);
     s = qMin(w - 3, s);//avoid too large box
-    QRect r(qMax(w / 2 - s / 2, 0) , h / 2 - s / 2 /*- 1*/, s, s);
+    QRect r(qMax(w / 2 - s / 2, 0), h / 2 - s / 2 /*- 1*/, s, s);
     p->setPen(QPen(colorGroup().text(), 1));
     p->drawRect(r);
     if (val.asBool()) {
@@ -571,22 +584,25 @@ void KexiKIconTableEdit::setupContents(QPainter *p, bool /*focused*/, const QVar
     QPixmap pm;
     if (!key.isEmpty()) {
         QPixmap *cached = d->pixmapCache[ key ];
-        if (cached)
+        if (cached) {
             pm = *cached;
+        }
         if (pm.isNull()) {
             //cache pixmap
             pm = KIconLoader::global()->loadIcon(key, KIconLoader::Small,
-                                                 0, KIconLoader::DefaultState , QStringList() , 0L, true/*canReturnNull*/);
-            if (!pm.isNull())
+                                                 0, KIconLoader::DefaultState, QStringList(), 0L, true/*canReturnNull*/);
+            if (!pm.isNull()) {
                 d->pixmapCache.insert(key, new QPixmap(pm));
+            }
         }
     }
 
-    if (p && !pm.isNull())
+    if (p && !pm.isNull()) {
         p->drawPixmap((w - pm.width()) / 2, (h - pm.height()) / 2, pm);
+    }
 }
 
-void KexiKIconTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
+void KexiKIconTableEdit::handleCopyAction(const QVariant &value, const QVariant &visibleValue)
 {
     Q_UNUSED(value);
     Q_UNUSED(visibleValue);

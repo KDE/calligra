@@ -165,8 +165,9 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
 
-    if (d->label.isEmpty())
+    if (d->label.isEmpty()) {
         return;
+    }
     QFont font(format.font(), pd);
     QTextLayout layout(d->label, font, pd);
     layout.setCacheEnabled(true);
@@ -188,7 +189,7 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     layout.draw(&painter, rect.topLeft());
 }
 
-bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
+bool KoInlineNote::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     KoTextLoader loader(context);
     QTextCursor cursor(d->textFrame);
@@ -198,18 +199,17 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
         QString className = element.attributeNS(KoXmlNS::text, "note-class");
         if (className == "footnote") {
             d->type = Footnote;
-        }
-        else if (className == "endnote") {
+        } else if (className == "endnote") {
             d->type = Endnote;
-        }
-        else {
+        } else {
             return false;
         }
 
         for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
             KoXmlElement ts = node.toElement();
-            if (ts.namespaceURI() != KoXmlNS::text)
+            if (ts.namespaceURI() != KoXmlNS::text) {
                 continue;
+            }
             if (ts.localName() == "note-body") {
                 loader.loadBody(ts, cursor);
             } else if (ts.localName() == "note-citation") {
@@ -220,25 +220,23 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
                 }
             }
         }
-    }
-    else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {
+    } else if (element.namespaceURI() == KoXmlNS::office && element.localName() == "annotation") {
         d->author = element.attributeNS(KoXmlNS::text, "dc-creator");
         d->date = QDateTime::fromString(element.attributeNS(KoXmlNS::text, "dc-date"), Qt::ISODate);
         loader.loadBody(element, cursor); // would skip author and date, and do just the <text-p> and <text-list> elements
-    }
-    else {
+    } else {
         return false;
     }
 
     return true;
 }
 
-void KoInlineNote::saveOdf(KoShapeSavingContext & context)
+void KoInlineNote::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
 
     if (d->type == Footnote || d->type == Endnote) {
-        text_note note(writer, (d->type == Footnote) ?"footnote" :"endnote");
+        text_note note(writer, (d->type == Footnote) ? "footnote" : "endnote");
         text_note_citation cite(note.add_text_note_citation());
         if (!autoNumbering()) {
             cite.set_text_label(d->label);
@@ -248,8 +246,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         text_note_body body(note.add_text_note_body());
         KoTextWriter textWriter(context);
         textWriter.write(d->document, d->textFrame->firstPosition(), d->textFrame->lastPosition());
-    }
-    else if (d->type == Annotation) {
+    } else if (d->type == Annotation) {
         office_annotation annotation(writer);
         if (!d->author.isEmpty()) {
             dc_creator creator(annotation.add_dc_creator());
@@ -261,7 +258,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         }
 
         KoTextWriter textWriter(context);
-        textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
+        textWriter.write(d->document, d->textFrame->firstPosition(), d->textFrame->lastPosition());
     }
 }
 

@@ -24,10 +24,10 @@
 #include <db/queryschema.h>
 
 KexiDBCheckBox::KexiDBCheckBox(const QString &text, QWidget *parent)
-        : QCheckBox(text, parent), KexiFormDataItemInterface()
-        , m_invalidState(false)
-        , m_tristateChanged(false)
-        , m_tristate(TristateDefault)
+    : QCheckBox(text, parent), KexiFormDataItemInterface()
+    , m_invalidState(false)
+    , m_tristateChanged(false)
+    , m_tristate(TristateDefault)
 {
     setFocusPolicy(Qt::StrongFocus);
     setMinimumHeight(sizeHint().height());
@@ -40,22 +40,24 @@ KexiDBCheckBox::~KexiDBCheckBox()
 {
 }
 
-void KexiDBCheckBox::setInvalidState(const QString& displayText)
+void KexiDBCheckBox::setInvalidState(const QString &displayText)
 {
     setEnabled(false);
     setCheckState(Qt::PartiallyChecked);
     m_invalidState = true;
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-    if (focusPolicy() & Qt::TabFocus)
+    if (focusPolicy() & Qt::TabFocus) {
         setFocusPolicy(Qt::ClickFocus);
+    }
     setText(displayText);
 }
 
 void
 KexiDBCheckBox::setEnabled(bool enabled)
 {
-    if (enabled && m_invalidState)
+    if (enabled && m_invalidState) {
         return;
+    }
     QCheckBox::setEnabled(enabled);
 }
 
@@ -71,14 +73,16 @@ void KexiDBCheckBox::setValueInternal(const QVariant &add, bool removeOld)
     if (isTristateInternal())
         setCheckState(KexiDataItemInterface::originalValue().isNull()
                       ? Qt::PartiallyChecked : (KexiDataItemInterface::originalValue().toBool() ? Qt::Checked : Qt::Unchecked));
-    else
+    else {
         setCheckState(KexiDataItemInterface::originalValue().toBool() ? Qt::Checked : Qt::Unchecked);
+    }
 }
 
 QVariant KexiDBCheckBox::value()
 {
-    if (checkState() == Qt::PartiallyChecked)
+    if (checkState() == Qt::PartiallyChecked) {
         return QVariant();
+    }
     return checkState() == Qt::Checked;
 }
 
@@ -102,7 +106,7 @@ bool KexiDBCheckBox::isReadOnly() const
     return !isEnabled();
 }
 
-QWidget*
+QWidget *
 KexiDBCheckBox::widget()
 {
     return this;
@@ -137,8 +141,9 @@ KexiDBCheckBox::Tristate KexiDBCheckBox::isTristate() const
 
 bool KexiDBCheckBox::isTristateInternal() const
 {
-    if (m_tristate == TristateDefault)
+    if (m_tristate == TristateDefault) {
         return !dataSource().isEmpty();
+    }
 
     return m_tristate == TristateOn;
 }
@@ -163,14 +168,14 @@ void KexiDBCheckBox::setDisplayDefaultValue(QWidget *widget, bool displayDefault
 {
     KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
     // initialize display parameters for default / entered value
-    KexiDisplayUtils::DisplayParameters * const params
+    KexiDisplayUtils::DisplayParameters *const params
         = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
     QPalette pal(palette());
     pal.setColor(QPalette::Active, QPalette::Foreground, params->textColor);
     setPalette(pal);
 }
 
-void KexiDBCheckBox::paintEvent(QPaintEvent* e)
+void KexiDBCheckBox::paintEvent(QPaintEvent *e)
 {
     QPalette origPal;
     if (editingMode()) {

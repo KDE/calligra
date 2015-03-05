@@ -33,7 +33,6 @@
 #include "OdfReader.h"
 #include "OdfReaderInternals.h"
 
-
 class QSizeF;
 
 class KoXmlWriter;
@@ -43,7 +42,6 @@ class OdsReaderBackend;
 class OdfReaderContext;
 
 class OdfTextReader;
-
 
 /** @brief Read the XML tree of the content of an ODS file.
  *
@@ -68,18 +66,18 @@ class OdfTextReader;
  */
 class KOODFREADER_EXPORT OdsReader : public OdfReader
 {
- public:
+public:
     OdsReader();
     ~OdsReader();
 
- protected:
+protected:
     // All readElement*() are named after the full qualifiedName of
     // the element in ODF that they handle.
 
     // ODS document level functions
     DECLARE_READER_FUNCTION(OfficeSpreadsheet);
 
- private:
+private:
     // Not much here. Most are already in OdfReader.
 };
 

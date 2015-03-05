@@ -37,16 +37,17 @@ public:
 
     void resize(int radius);
 
-
     /// starts at 0,0
-    inline qreal valueAt(int x, int y) {
+    inline qreal valueAt(int x, int y)
+    {
         return m_data[qAbs(y) * m_width + qAbs(x)];
     }
 
     QImage toQImage();
 
     void smooth(qreal edge0, qreal edge1);
-    inline int radius() {
+    inline int radius()
+    {
         return m_radius;
     }
     /// set sigma, compute sigma constant and precompute squared sigma
@@ -55,7 +56,7 @@ public:
 
 private:
     qreal smoothstep(qreal edge0, qreal edge1, qreal x);
-    qreal * m_data;
+    qreal *m_data;
     int m_radius;
     int m_width;
     int m_size;
@@ -64,10 +65,12 @@ private:
     qreal m_sigmaSquared;
     qreal m_sigmaConst;
 
-    inline qreal gaussAt(qreal x, qreal y) {
+    inline qreal gaussAt(qreal x, qreal y)
+    {
         return exp((x * x + y * y) / m_sigmaSquared) * m_sigmaConst;
     }
-    inline qreal optGaussAt(qreal xx, qreal yy) {
+    inline qreal optGaussAt(qreal xx, qreal yy)
+    {
         return exp((xx + yy) / m_sigmaSquared) * m_sigmaConst;
     }
     inline void initSigma(qreal sigma);

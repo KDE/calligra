@@ -32,7 +32,7 @@
 using namespace Calligra::Sheets;
 
 SheetSelectPage::SheetSelectPage(QWidget *parent)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     setupUi(this);
     setWindowTitle(i18n("Sheets"));
@@ -109,16 +109,16 @@ void SheetSelectPage::setOptions( const QMap<QString,QString>& opts )
 }
 */
 
-void SheetSelectPage::setAvailableSheets(const QStringList& sheetlist)
+void SheetSelectPage::setAvailableSheets(const QStringList &sheetlist)
 {
-    foreach(const QString &sname, sheetlist) {
+    foreach (const QString &sname, sheetlist) {
         kDebug() << " adding sheet to list of printed sheets:" << sname;
         this->prependSelectedSheet(sname);
     }
 
 }
 
-bool SheetSelectPage::isValid(QString& /*msg*/)
+bool SheetSelectPage::isValid(QString & /*msg*/)
 {
     // we print the activeSheet() by default if no sheet is selected,
     // so we return true in any case
@@ -136,12 +136,12 @@ QString SheetSelectPage::printOptionForIndex(unsigned int index)
     return QString("sheetprintorder%1").arg(index);
 }
 
-void SheetSelectPage::prependAvailableSheet(const QString& sheetname)
+void SheetSelectPage::prependAvailableSheet(const QString &sheetname)
 {
     ListViewAvailable->insertItem(0, sheetname);
 }
 
-void SheetSelectPage::prependSelectedSheet(const QString& sheetname)
+void SheetSelectPage::prependSelectedSheet(const QString &sheetname)
 {
     ListViewSelected->insertItem(0, sheetname);
 }
@@ -149,8 +149,9 @@ void SheetSelectPage::prependSelectedSheet(const QString& sheetname)
 QStringList SheetSelectPage::selectedSheets()
 {
     QStringList list;
-    for (int row = 0; row < ListViewSelected->count(); ++row)
+    for (int row = 0; row < ListViewSelected->count(); ++row) {
         list.append(ListViewSelected->item(row)->text());
+    }
     return list;
 }
 
@@ -177,8 +178,9 @@ void SheetSelectPage::selectAll()
 {
     //we have to add all the stuff in reverse order
     // because inserted items (prependSelectedSheet) are prepended
-    for (int row = ListViewAvailable->count() - 1; row >= 0; --row)
+    for (int row = ListViewAvailable->count() - 1; row >= 0; --row) {
         this->prependSelectedSheet(ListViewAvailable->item(row)->text());
+    }
 }
 
 void SheetSelectPage::select()
@@ -186,17 +188,19 @@ void SheetSelectPage::select()
     //we have to add all the stuff in reverse order
     // because inserted items (prependSelectedSheet) are prepended
     for (int row = ListViewAvailable->count() - 1; row >= 0; --row)
-        if (ListViewAvailable->item(row)->isSelected())
+        if (ListViewAvailable->item(row)->isSelected()) {
             this->prependSelectedSheet(ListViewAvailable->item(row)->text());
+        }
 }
 
 void SheetSelectPage::remove()
 {
     for (int row = 0; row < ListViewSelected->count();) {
-        if (ListViewSelected->item(row)->isSelected())
+        if (ListViewSelected->item(row)->isSelected()) {
             delete ListViewSelected->takeItem(row);
-        else
+        } else {
             row++;
+        }
     }
 }
 
@@ -205,11 +209,10 @@ void SheetSelectPage::removeAll()
     ListViewSelected->clear();
 }
 
-
 void SheetSelectPage::moveTop()
 {
     // moves the selected item to the top of the list
-    QListWidgetItem* item = ListViewSelected->takeItem(ListViewSelected->currentRow());
+    QListWidgetItem *item = ListViewSelected->takeItem(ListViewSelected->currentRow());
     ListViewSelected->insertItem(0, item);
     ListViewSelected->setCurrentItem(item);
 }
@@ -219,7 +222,7 @@ void SheetSelectPage::moveUp()
     // moves the selected item up one row
     int row = ListViewSelected->currentRow();
     if (row > 0) {
-        QListWidgetItem* item = ListViewSelected->takeItem(row);
+        QListWidgetItem *item = ListViewSelected->takeItem(row);
         ListViewSelected->insertItem(row - 1, item);
         ListViewSelected->setCurrentItem(item);
     }
@@ -230,7 +233,7 @@ void SheetSelectPage::moveDown()
     // moves the selected item down one row
     int row = ListViewSelected->currentRow();
     if (row < ListViewSelected->count() - 1) {
-        QListWidgetItem* item = ListViewSelected->takeItem(row);
+        QListWidgetItem *item = ListViewSelected->takeItem(row);
         ListViewSelected->insertItem(row + 1, item);
         ListViewSelected->setCurrentItem(item);
     }
@@ -239,7 +242,7 @@ void SheetSelectPage::moveDown()
 void SheetSelectPage::moveBottom()
 {
     // moves the selected item to the bottom of the list
-    QListWidgetItem* item = ListViewSelected->takeItem(ListViewSelected->currentRow());
+    QListWidgetItem *item = ListViewSelected->takeItem(ListViewSelected->currentRow());
     ListViewSelected->addItem(item);
     ListViewSelected->setCurrentItem(item);
 }

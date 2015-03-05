@@ -22,7 +22,6 @@
 
 #include "qpro/tablenames.h"
 
-
 // ------------------------------------------------------------------
 
 QpTableNames::QpTableNames()
@@ -40,20 +39,19 @@ QpTableNames::~QpTableNames()
     }
 }
 
-
 void
-QpTableNames::name(unsigned pIdx, const char* pName)
+QpTableNames::name(unsigned pIdx, const char *pName)
 {
     if (pIdx < cNameCnt) {
         delete [] cName[pIdx];
-        cName[pIdx] = strcpy(new char[strlen(pName)+1], pName);
+        cName[pIdx] = strcpy(new char[strlen(pName) + 1], pName);
     }
 }
 
-const char*
+const char *
 QpTableNames::name(unsigned pIdx)
 {
-    char* lResult = 0;
+    char *lResult = 0;
 
     if (pIdx < cNameCnt) {
         if ((lResult = cName[pIdx]) == 0) {
@@ -72,7 +70,6 @@ QpTableNames::name(unsigned pIdx)
 
     return lResult;
 }
-
 
 int
 QpTableNames::allocated(unsigned pIdx)

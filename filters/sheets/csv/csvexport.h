@@ -40,14 +40,14 @@ class CSVExport : public KoFilter
     Q_OBJECT
 
 public:
-    CSVExport(QObject* parent, const QVariantList &);
+    CSVExport(QObject *parent, const QVariantList &);
     virtual ~CSVExport() {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray & from, const QByteArray & to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
 private:
-    QString exportCSVCell(const Calligra::Sheets::Doc* doc, Calligra::Sheets::Sheet const * const sheet,
-                          int col, int row, QChar const & textQuote, QChar csvDelimiter);
+    QString exportCSVCell(const Calligra::Sheets::Doc *doc, Calligra::Sheets::Sheet const *const sheet,
+                          int col, int row, QChar const &textQuote, QChar csvDelimiter);
 
 private:
     QString m_eol; ///< End of line (LF, CR or CRLF)

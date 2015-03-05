@@ -31,7 +31,7 @@ KoColorProfile::KoColorProfile(const QString &fileName) : d(new Private)
     d->fileName = fileName;
 }
 
-KoColorProfile::KoColorProfile(const KoColorProfile& profile)
+KoColorProfile::KoColorProfile(const KoColorProfile &profile)
     : d(new Private(*profile.d))
 {
 }
@@ -46,12 +46,11 @@ bool KoColorProfile::load()
     return false;
 }
 
-bool KoColorProfile::save(const QString & filename)
+bool KoColorProfile::save(const QString &filename)
 {
     Q_UNUSED(filename);
     return false;
 }
-
 
 QString KoColorProfile::name() const
 {

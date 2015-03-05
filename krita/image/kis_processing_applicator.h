@@ -26,7 +26,6 @@
 #include "kis_image_signal_router.h"
 #include "kundo2magicstring.h"
 
-
 class KRITAIMAGE_EXPORT KisProcessingApplicator
 {
 public:
@@ -87,6 +86,5 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisProcessingApplicator::ProcessingFlags)
-
 
 #endif /* __KIS_PROCESSING_APPLICATOR_H */

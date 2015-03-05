@@ -31,11 +31,11 @@ class KoStartupDialog : public QDialog
     Q_OBJECT
 public:
     explicit KoStartupDialog(QWidget *parent = 0);
-    
+
 Q_SIGNALS:
-    
+
 public Q_SLOTS:
-    
+
 };
 
 #endif // KOSTARTUPDIALOG_H

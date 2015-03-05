@@ -26,7 +26,6 @@
 #include <QHBoxLayout>
 #include <kis_slider_spin_box.h>
 
-
 KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle()
     : KisDynamicSensor(DrawingAngleId),
       m_fanCornersEnabled(false),
@@ -37,14 +36,15 @@ KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle()
     setMaximumLabel(i18n("360°"));
 }
 
-qreal KisDynamicSensorDrawingAngle::value(const KisPaintInformation& info)
+qreal KisDynamicSensorDrawingAngle::value(const KisPaintInformation &info)
 {
     /* so that we are in 0.0..1.0 */
-    qreal ret = 0.5 + info.drawingAngle() / (2.0 * M_PI) + m_angleOffset/360.0;
+    qreal ret = 0.5 + info.drawingAngle() / (2.0 * M_PI) + m_angleOffset / 360.0;
 
     // check if m_angleOffset pushed us out of bounds
-    if (ret > 1.0)
+    if (ret > 1.0) {
         ret -= 1.0;
+    }
 
     return ret;
 }
@@ -54,7 +54,7 @@ bool KisDynamicSensorDrawingAngle::dependsOnCanvasRotation() const
     return false;
 }
 
-QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent, QWidget *ss)
+QWidget *KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget *parent, QWidget *ss)
 {
     QWidget *w = new QWidget(parent);
 
@@ -85,7 +85,7 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
 
     angleOffset->setValue(m_angleOffset);
 
-    QVBoxLayout* l = new QVBoxLayout(w);
+    QVBoxLayout *l = new QVBoxLayout(w);
     l->addWidget(fanCornersEnabled);
     l->addWidget(fanCornersStep);
     l->addWidget(new QLabel(i18n("Angle Offset")));

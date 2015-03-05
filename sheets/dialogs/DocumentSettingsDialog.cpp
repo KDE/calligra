@@ -56,15 +56,14 @@ class DocumentSettingsDialog::Private
 public:
     KPageWidgetItem *page1, *page2;
     // Calculation Settings
-    calcSettings* calcPage;
+    calcSettings *calcPage;
     // Locale Options
-    parameterLocale* localePage;
+    parameterLocale *localePage;
 };
 
-
-DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* parent)
-        : KPageDialog(parent)
-        , d(new Private)
+DocumentSettingsDialog::DocumentSettingsDialog(Selection *selection, QWidget *parent)
+    : KPageDialog(parent)
+    , d(new Private)
 {
     setObjectName(QLatin1String("DocumentSettingsDialog"));
     setCaption(i18n("Document Settings"));
@@ -108,9 +107,8 @@ void DocumentSettingsDialog::slotReset()
 {
 }
 
-
-calcSettings::calcSettings(Selection* selection, KVBox *box)
-        : QObject(box->parent())
+calcSettings::calcSettings(Selection *selection, KVBox *box)
+    : QObject(box->parent())
 {
     m_cs = selection->activeSheet()->map()->calculationSettings();
 
@@ -136,7 +134,7 @@ calcSettings::calcSettings(Selection* selection, KVBox *box)
     matchModeLabel->setBuddy(m_matchModeCombobox);
     m_matchModeCombobox->setEditable(false);
     m_matchModeCombobox->addItems(QStringList() << i18n("None") << i18n("Wildcards") << i18n("Regular Expressions"));
-    m_matchModeCombobox->setCurrentIndex(m_cs->useWildcards() ? 1 : m_cs->useRegularExpressions() ? 2 : 0 );
+    m_matchModeCombobox->setCurrentIndex(m_cs->useWildcards() ? 1 : m_cs->useRegularExpressions() ? 2 : 0);
 
     QHBoxLayout *m_nullYearLayout = new QHBoxLayout();
     m_nullYearLayout->setMargin(0);
@@ -163,13 +161,13 @@ void calcSettings::apply()
     m_cs->setReferenceYear(m_nullYearEdit->value());
 }
 
-parameterLocale::parameterLocale(Selection* selection, KVBox *box)
-        : QObject(box->parent())
+parameterLocale::parameterLocale(Selection *selection, KVBox *box)
+    : QObject(box->parent())
 {
     m_selection = selection;
     m_bUpdateLocale = false;
 
-    KLocale* locale = selection->activeSheet()->map()->calculationSettings()->locale();
+    KLocale *locale = selection->activeSheet()->map()->calculationSettings()->locale();
 
     m_language = new QLabel(box);
     m_number = new QLabel(box);
@@ -189,8 +187,8 @@ parameterLocale::parameterLocale(Selection* selection, KVBox *box)
 void parameterLocale::apply()
 {
     if (m_bUpdateLocale) {
-        const QList<Sheet*> sheets = m_selection->activeSheet()->map()->sheetList();
-        foreach(Sheet* sheet, sheets) {
+        const QList<Sheet *> sheets = m_selection->activeSheet()->map()->sheetList();
+        foreach (Sheet *sheet, sheets) {
             sheet->updateLocale();
         }
     }
@@ -199,17 +197,17 @@ void parameterLocale::apply()
 void parameterLocale::updateDefaultSystemConfig()
 {
     m_bUpdateLocale = true;
-    KLocale* const locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
-    static_cast<Localization*>(locale)->defaultSystemConfig();
+    KLocale *const locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
+    static_cast<Localization *>(locale)->defaultSystemConfig();
     updateToMatchLocale(locale);
 }
 
-void parameterLocale::updateToMatchLocale(KLocale* locale)
+void parameterLocale::updateToMatchLocale(KLocale *locale)
 {
     m_language->setText(i18n("Language: %1", locale->language()));
     m_number->setText(i18n("Default number format: %1", locale->formatNumber(12.55)));   // krazy:exclude=i18ncheckarg
     m_date->setText(i18n("Long date format: %1", locale->formatDate(QDate::currentDate())));
-    m_shortDate->setText(i18n("Short date format: %1", locale->formatDate(QDate::currentDate() , KLocale::ShortDate)));
+    m_shortDate->setText(i18n("Short date format: %1", locale->formatDate(QDate::currentDate(), KLocale::ShortDate)));
     m_time->setText(i18n("Time format: %1", locale->formatTime(QTime::currentTime())));
     m_money->setText(i18n("Currency format: %1", locale->formatMoney(12.55)));
 }

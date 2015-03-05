@@ -49,27 +49,31 @@
 K_PLUGIN_FACTORY(SvgExportFactory, registerPlugin<SvgExport>();)
 K_EXPORT_PLUGIN(SvgExportFactory("calligrafilters"))
 
-SvgExport::SvgExport(QObject*parent, const QVariantList&)
+SvgExport::SvgExport(QObject *parent, const QVariantList &)
     : KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus SvgExport::convert(const QByteArray &from, const QByteArray &to)
 {
-    if (to != "image/svg+xml" || from != "application/vnd.oasis.opendocument.graphics")
+    if (to != "image/svg+xml" || from != "application/vnd.oasis.opendocument.graphics") {
         return KoFilter::NotImplemented;
+    }
 
-    KoDocument * document = m_chain->inputDocument();
-    if (!document)
+    KoDocument *document = m_chain->inputDocument();
+    if (!document) {
         return KoFilter::ParsingError;
+    }
 
-    KarbonDocument * karbonPart = dynamic_cast<KarbonDocument*>(document);
-    if (!karbonPart)
+    KarbonDocument *karbonPart = dynamic_cast<KarbonDocument *>(document);
+    if (!karbonPart) {
         return KoFilter::WrongFormat;
+    }
 
     SvgWriter writer(karbonPart->layers(), karbonPart->pageSize());
-    if (!writer.save(m_chain->outputFile(), true))
+    if (!writer.save(m_chain->outputFile(), true)) {
         return KoFilter::CreationError;
+    }
 
     return KoFilter::OK;
 }

@@ -26,10 +26,9 @@
 // Qt
 #include <QAction>
 
-
 KoPageNavigatorButton::KoPageNavigatorButton(const char *iconName, QWidget *parent)
-  : QToolButton(parent)
-  , m_action(0)
+    : QToolButton(parent)
+    , m_action(0)
 {
     setIcon(KIcon(QLatin1String(iconName)));
     setFocusPolicy(Qt::NoFocus);
@@ -39,11 +38,11 @@ KoPageNavigatorButton::KoPageNavigatorButton(const char *iconName, QWidget *pare
 void KoPageNavigatorButton::setAction(QAction *action)
 {
     if (! action) {
-        kWarning()<<"Attempt to set a null action";
+        kWarning() << "Attempt to set a null action";
         return;
     }
     if (m_action) {
-        kWarning()<<"Attempt to set a second action";
+        kWarning() << "Attempt to set a second action";
         return;
     }
 
@@ -54,7 +53,6 @@ void KoPageNavigatorButton::setAction(QAction *action)
 
     onActionChanged();
 }
-
 
 void KoPageNavigatorButton::onActionChanged()
 {

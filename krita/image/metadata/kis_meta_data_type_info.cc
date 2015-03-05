@@ -27,58 +27,58 @@
 
 using namespace KisMetaData;
 
-QHash< const TypeInfo*, const TypeInfo*> TypeInfo::Private::orderedArrays;
-QHash< const TypeInfo*, const TypeInfo*> TypeInfo::Private::unorderedArrays;
-QHash< const TypeInfo*, const TypeInfo*> TypeInfo::Private::alternativeArrays;
+QHash< const TypeInfo *, const TypeInfo *> TypeInfo::Private::orderedArrays;
+QHash< const TypeInfo *, const TypeInfo *> TypeInfo::Private::unorderedArrays;
+QHash< const TypeInfo *, const TypeInfo *> TypeInfo::Private::alternativeArrays;
 
-const TypeInfo* TypeInfo::Private::Boolean = new TypeInfo(TypeInfo::BooleanType);
-const TypeInfo* TypeInfo::Private::Integer = new TypeInfo(TypeInfo::IntegerType);
-const TypeInfo* TypeInfo::Private::Date = new TypeInfo(TypeInfo::DateType);
-const TypeInfo* TypeInfo::Private::Text = new TypeInfo(TypeInfo::TextType);
-const TypeInfo* TypeInfo::Private::Rational = new TypeInfo(TypeInfo::RationalType);
-const TypeInfo* TypeInfo::Private::GPSCoordinate = new TypeInfo(TypeInfo::GPSCoordinateType);
+const TypeInfo *TypeInfo::Private::Boolean = new TypeInfo(TypeInfo::BooleanType);
+const TypeInfo *TypeInfo::Private::Integer = new TypeInfo(TypeInfo::IntegerType);
+const TypeInfo *TypeInfo::Private::Date = new TypeInfo(TypeInfo::DateType);
+const TypeInfo *TypeInfo::Private::Text = new TypeInfo(TypeInfo::TextType);
+const TypeInfo *TypeInfo::Private::Rational = new TypeInfo(TypeInfo::RationalType);
+const TypeInfo *TypeInfo::Private::GPSCoordinate = new TypeInfo(TypeInfo::GPSCoordinateType);
 
-const TypeInfo* TypeInfo::Private::orderedArray(const TypeInfo* _typeInfo)
+const TypeInfo *TypeInfo::Private::orderedArray(const TypeInfo *_typeInfo)
 {
     if (Private::orderedArrays.contains(_typeInfo)) {
         return Private::orderedArrays[ _typeInfo ];
     }
-    const TypeInfo* info = new TypeInfo(TypeInfo::OrderedArrayType, _typeInfo);
+    const TypeInfo *info = new TypeInfo(TypeInfo::OrderedArrayType, _typeInfo);
     Private::orderedArrays[ _typeInfo ] = info;
     return info;
 }
 
-const TypeInfo* TypeInfo::Private::unorderedArray(const TypeInfo* _typeInfo)
+const TypeInfo *TypeInfo::Private::unorderedArray(const TypeInfo *_typeInfo)
 {
     if (Private::unorderedArrays.contains(_typeInfo)) {
         return Private::unorderedArrays[ _typeInfo ];
     }
-    const TypeInfo* info = new TypeInfo(TypeInfo::UnorderedArrayType, _typeInfo);
+    const TypeInfo *info = new TypeInfo(TypeInfo::UnorderedArrayType, _typeInfo);
     Private::unorderedArrays[ _typeInfo ] = info;
     return info;
 }
 
-const TypeInfo* TypeInfo::Private::alternativeArray(const TypeInfo* _typeInfo)
+const TypeInfo *TypeInfo::Private::alternativeArray(const TypeInfo *_typeInfo)
 {
     if (Private::alternativeArrays.contains(_typeInfo)) {
         return Private::alternativeArrays[ _typeInfo ];
     }
-    const TypeInfo* info = new TypeInfo(TypeInfo::AlternativeArrayType, _typeInfo);
+    const TypeInfo *info = new TypeInfo(TypeInfo::AlternativeArrayType, _typeInfo);
     Private::alternativeArrays[ _typeInfo ] = info;
     return info;
 }
 
-const TypeInfo* TypeInfo::Private::createChoice(PropertyType _propertiesType, const TypeInfo* _embedded, const QList< Choice >& _choices)
+const TypeInfo *TypeInfo::Private::createChoice(PropertyType _propertiesType, const TypeInfo *_embedded, const QList< Choice > &_choices)
 {
     return new TypeInfo(_propertiesType, _embedded, _choices);
 }
 
-const TypeInfo* TypeInfo::Private::createStructure(Schema* _structureSchema, const QString& name)
+const TypeInfo *TypeInfo::Private::createStructure(Schema *_structureSchema, const QString &name)
 {
     return new TypeInfo(_structureSchema, name);
 }
 
-const TypeInfo* TypeInfo::Private::LangArray = new TypeInfo(TypeInfo::LangArrayType);
+const TypeInfo *TypeInfo::Private::LangArray = new TypeInfo(TypeInfo::LangArrayType);
 
 TypeInfo::TypeInfo(TypeInfo::PropertyType _propertyType) : d(new Private)
 {
@@ -109,17 +109,17 @@ struct TypeInfo::Choice::Private {
     QString hint;
 };
 
-TypeInfo::Choice::Choice(const Value& value, const QString& hint) : d(new Private)
+TypeInfo::Choice::Choice(const Value &value, const QString &hint) : d(new Private)
 {
     d->value = value;
     d->hint = hint;
 }
 
-TypeInfo::Choice::Choice(const Choice& _rhs) : d(new Private(*_rhs.d))
+TypeInfo::Choice::Choice(const Choice &_rhs) : d(new Private(*_rhs.d))
 {
 }
 
-TypeInfo::Choice& TypeInfo::Choice::operator=(const Choice & _rhs)
+TypeInfo::Choice &TypeInfo::Choice::operator=(const Choice &_rhs)
 {
     *d = *_rhs.d;
     return *this;
@@ -129,24 +129,24 @@ TypeInfo::Choice::~Choice()
 {
     delete d;
 }
-const Value& TypeInfo::Choice::value() const
+const Value &TypeInfo::Choice::value() const
 {
     return d->value;
 }
 
-const QString& TypeInfo::Choice::hint() const
+const QString &TypeInfo::Choice::hint() const
 {
     return d->hint;
 }
 
-TypeInfo::TypeInfo(PropertyType _propertyType, const TypeInfo* _embedded) : d(new Private)
+TypeInfo::TypeInfo(PropertyType _propertyType, const TypeInfo *_embedded) : d(new Private)
 {
     Q_ASSERT(_propertyType == OrderedArrayType || _propertyType == UnorderedArrayType || _propertyType == AlternativeArrayType);
     d->propertyType = _propertyType;
     d->embeddedTypeInfo = _embedded;
 }
 
-TypeInfo::TypeInfo(PropertyType _propertyType, const TypeInfo* _embedded, const QList< Choice >& _choices) : d(new Private)
+TypeInfo::TypeInfo(PropertyType _propertyType, const TypeInfo *_embedded, const QList< Choice > &_choices) : d(new Private)
 {
     Q_ASSERT(_propertyType == ClosedChoice || _propertyType == OpenedChoice);
     d->propertyType = _propertyType;
@@ -155,7 +155,7 @@ TypeInfo::TypeInfo(PropertyType _propertyType, const TypeInfo* _embedded, const 
     d->choices = _choices;
 }
 
-TypeInfo::TypeInfo(Schema* _structureSchema, const QString& name) : d(new Private)
+TypeInfo::TypeInfo(Schema *_structureSchema, const QString &name) : d(new Private)
 {
     d->propertyType = TypeInfo::StructureType;
     d->structureSchema = _structureSchema;
@@ -173,35 +173,35 @@ TypeInfo::PropertyType TypeInfo::propertyType() const
     return d->propertyType;
 }
 
-const TypeInfo* TypeInfo::embeddedPropertyType() const
+const TypeInfo *TypeInfo::embeddedPropertyType() const
 {
     return d->embeddedTypeInfo;
 }
 
-const QList< TypeInfo::Choice >& TypeInfo::choices() const
+const QList< TypeInfo::Choice > &TypeInfo::choices() const
 {
     return d->choices;
 }
 
-Schema* TypeInfo::structureSchema() const
+Schema *TypeInfo::structureSchema() const
 {
     return d->structureSchema;
 }
 
-const QString& TypeInfo::structureName() const
+const QString &TypeInfo::structureName() const
 {
     return d->structureName;
 }
 
-const Parser* TypeInfo::parser() const
+const Parser *TypeInfo::parser() const
 {
     return d->parser;
 }
 
-bool checkArray(const Value& value, const TypeInfo* typeInfo)
+bool checkArray(const Value &value, const TypeInfo *typeInfo)
 {
     QList< Value > values = value.asArray();
-    foreach(const Value& val, values) {
+    foreach (const Value &val, values) {
         if (!typeInfo->hasCorrectType(val)) {
             return false;
         }
@@ -209,7 +209,7 @@ bool checkArray(const Value& value, const TypeInfo* typeInfo)
     return true;
 }
 
-bool TypeInfo::hasCorrectType(const Value& value) const
+bool TypeInfo::hasCorrectType(const Value &value) const
 {
     switch (d->propertyType) {
     case BooleanType:
@@ -242,7 +242,7 @@ bool TypeInfo::hasCorrectType(const Value& value) const
     case LangArrayType:
         if (value.type() == Value::LangArray) {
             QList< Value > values = value.asArray();
-            foreach(const Value& vallang, values) {
+            foreach (const Value &vallang, values) {
                 if (!Private::Text->hasCorrectType(vallang) ||
                         !Private::Text->hasCorrectType(vallang.propertyQualifiers()["xml:lang"])) {
                     return false;
@@ -256,7 +256,7 @@ bool TypeInfo::hasCorrectType(const Value& value) const
             QMap<QString, KisMetaData::Value> structure = value.asStructure();
             for (QMap<QString, KisMetaData::Value>::iterator it = structure.begin();
                     it != structure.end(); ++it) {
-                const TypeInfo* typeInfo = d->structureSchema->propertyType(it.key());
+                const TypeInfo *typeInfo = d->structureSchema->propertyType(it.key());
                 if (!typeInfo || !typeInfo->hasCorrectType(it.value())) {
                     return false;
                 }
@@ -274,10 +274,10 @@ bool TypeInfo::hasCorrectType(const Value& value) const
     return false;
 }
 
-bool TypeInfo::hasCorrectValue(const Value& value) const
+bool TypeInfo::hasCorrectValue(const Value &value) const
 {
     if (d->propertyType == ClosedChoice) {
-        foreach(const Choice& choice, d->choices) {
+        foreach (const Choice &choice, d->choices) {
             if (choice.value() == value) {
                 return true;
             }

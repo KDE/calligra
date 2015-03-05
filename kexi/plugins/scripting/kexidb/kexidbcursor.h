@@ -83,7 +83,7 @@ class KexiDBCursor : public QObject
 {
     Q_OBJECT
 public:
-    KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner);
+    KexiDBCursor(QObject *parent, ::KexiDB::Cursor *cursor, bool owner);
     virtual ~KexiDBCursor();
 
 public Q_SLOTS:
@@ -133,19 +133,21 @@ private:
     {
     public:
         ::KexiDB::RecordData rowdata;
-        ::KexiDB::RowEditBuffer* buffer;
-        Record(::KexiDB::Cursor* cursor)
-                : buffer(new ::KexiDB::RowEditBuffer(true)) {
+        ::KexiDB::RowEditBuffer *buffer;
+        Record(::KexiDB::Cursor *cursor)
+            : buffer(new ::KexiDB::RowEditBuffer(true))
+        {
             cursor->storeCurrentRow(rowdata);
         }
-        ~Record() {
+        ~Record()
+        {
             delete buffer;
         }
     };
-    QMap<qint64, Record*> m_modifiedrecords;
+    QMap<qint64, Record *> m_modifiedrecords;
     void clearBuffers();
 
-    ::KexiDB::Cursor* m_cursor;
+    ::KexiDB::Cursor *m_cursor;
     bool m_owner;
 };
 

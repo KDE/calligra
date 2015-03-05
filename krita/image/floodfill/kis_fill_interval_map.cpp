@@ -21,7 +21,6 @@
 
 #include "kis_fill_sanity_checks.h"
 
-
 KisFillIntervalMap::KisFillIntervalMap()
     : m_d(new Private)
 {
@@ -122,7 +121,7 @@ KisFillIntervalMap::Private::findFirstIntersectingInterval(const KisFillInterval
     LineIntervalMap::iterator it = rowMap->begin();
     LineIntervalMap::iterator end = rowMap->end();
 
-    while(it != end) {
+    while (it != end) {
         if (it->end < interval.start) {
             ++it;
         } else if (it->start > interval.end) {
@@ -147,7 +146,7 @@ QStack<KisFillInterval> KisFillIntervalMap::fetchAllIntervals(int rowCorrection)
         Private::LineIntervalMap::const_iterator it = rowMapIt->constBegin();
         Private::LineIntervalMap::const_iterator end = rowMapIt->constEnd();
 
-        while(it != end) {
+        while (it != end) {
             KisFillInterval interval = *it;
             interval.row += rowCorrection;
             intervals.append(interval);

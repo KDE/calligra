@@ -34,13 +34,13 @@ namespace Swinder
 class GlobalsSubStreamHandler::Private
 {
 public:
-    Workbook* workbook;
+    Workbook *workbook;
 
     // version of workbook
     unsigned version;
 
     // mapping from BOF pos to actual Sheet
-    std::map<unsigned, Sheet*> bofMap;
+    std::map<unsigned, Sheet *> bofMap;
 
     // for EXTERNBOOK and EXTERNSHEET
     std::vector<QString> externBookTable;
@@ -54,7 +54,7 @@ public:
     // password protection flag
     // TODO: password hash for record decryption
     bool passwordProtected;
-    RC4Decryption* decryption;
+    RC4Decryption *decryption;
 
     // table of font
     std::vector<FontRecord> fontTable;
@@ -73,11 +73,11 @@ public:
     std::vector<XFRecord> xfTable;
 
     // list of chart sheets
-    QList< Sheet* > chartSheets;
+    QList< Sheet * > chartSheets;
 };
 
-GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned version)
-        : SubStreamHandler(), FormulaDecoder(), d(new Private)
+GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook *workbook, unsigned version)
+    : SubStreamHandler(), FormulaDecoder(), d(new Private)
 {
     d->workbook = workbook;
     d->version = version;
@@ -91,7 +91,7 @@ GlobalsSubStreamHandler::~GlobalsSubStreamHandler()
     delete d;
 }
 
-Workbook* GlobalsSubStreamHandler::workbook() const
+Workbook *GlobalsSubStreamHandler::workbook() const
 {
     return d->workbook;
 }
@@ -108,24 +108,28 @@ bool GlobalsSubStreamHandler::encryptionTypeSupported() const
 
 void GlobalsSubStreamHandler::decryptionSkipBytes(int count)
 {
-    if (d->decryption) d->decryption->skipBytes(count);
+    if (d->decryption) {
+        d->decryption->skipBytes(count);
+    }
 }
 
-void GlobalsSubStreamHandler::decryptRecord(unsigned type, unsigned size, unsigned char* buffer)
+void GlobalsSubStreamHandler::decryptRecord(unsigned type, unsigned size, unsigned char *buffer)
 {
-    if (!d->decryption) return;
+    if (!d->decryption) {
+        return;
+    }
 
     if (type == BOFRecord::id ||
-        type == FilepassRecord::id ||
-        type == UsrExclRecord::id ||
-        type == FileLockRecord::id ||
-        type == InterfaceHdrRecord::id ||
-        type == RRDInfoRecord::id ||
-        type == RRDHeadRecord::id) {
+            type == FilepassRecord::id ||
+            type == UsrExclRecord::id ||
+            type == FileLockRecord::id ||
+            type == InterfaceHdrRecord::id ||
+            type == RRDInfoRecord::id ||
+            type == RRDHeadRecord::id) {
         d->decryption->skipBytes(size);
     } else if (type == BoundSheetRecord::id && size >= 4) { /* skip only first 4 bytes */
         d->decryption->skipBytes(4);
-        d->decryption->decryptBytes(size-4, buffer+4);
+        d->decryption->decryptBytes(size - 4, buffer + 4);
     } else {
         d->decryption->decryptBytes(size, buffer);
     }
@@ -136,29 +140,32 @@ unsigned GlobalsSubStreamHandler::version() const
     return d->version;
 }
 
-Sheet* GlobalsSubStreamHandler::sheetFromPosition(unsigned position) const
+Sheet *GlobalsSubStreamHandler::sheetFromPosition(unsigned position) const
 {
-    std::map<unsigned, Sheet*>::iterator iter = d->bofMap.find(position);
-    if (iter != d->bofMap.end())
+    std::map<unsigned, Sheet *>::iterator iter = d->bofMap.find(position);
+    if (iter != d->bofMap.end()) {
         return iter->second;
-    else
+    } else {
         return 0;
+    }
 }
 
 QString GlobalsSubStreamHandler::stringFromSST(unsigned index) const
 {
-    if (index < d->stringTable.size())
+    if (index < d->stringTable.size()) {
         return d->stringTable[index];
-    else
+    } else {
         return QString();
+    }
 }
 
 std::map<unsigned, FormatFont> GlobalsSubStreamHandler::formatRunsFromSST(unsigned index) const
 {
-    if (index < d->formatRunsTable.size())
+    if (index < d->formatRunsTable.size()) {
         return d->formatRunsTable[index];
-    else
+    } else {
         return std::map<unsigned, FormatFont>();
+    }
 }
 
 unsigned GlobalsSubStreamHandler::fontCount() const
@@ -168,10 +175,11 @@ unsigned GlobalsSubStreamHandler::fontCount() const
 
 FontRecord GlobalsSubStreamHandler::fontRecord(unsigned index) const
 {
-    if (index < d->fontTable.size())
+    if (index < d->fontTable.size()) {
         return d->fontTable[index];
-    else
+    } else {
         return FontRecord(d->workbook);
+    }
 }
 
 unsigned GlobalsSubStreamHandler::xformatCount() const
@@ -181,38 +189,42 @@ unsigned GlobalsSubStreamHandler::xformatCount() const
 
 XFRecord GlobalsSubStreamHandler::xformat(unsigned index) const
 {
-    if (index < d->xfTable.size())
+    if (index < d->xfTable.size()) {
         return d->xfTable[index];
-    else
+    } else {
         return XFRecord(d->workbook);
+    }
 }
 
 QString GlobalsSubStreamHandler::valueFormat(unsigned index) const
 {
     std::map<unsigned, QString>::iterator it = d->formatsTable.find(index);
-    if (it != d->formatsTable.end())
+    if (it != d->formatsTable.end()) {
         return it->second;
-    else
+    } else {
         return QString();
+    }
 }
 
-const std::vector<QString>& GlobalsSubStreamHandler::externSheets() const
+const std::vector<QString> &GlobalsSubStreamHandler::externSheets() const
 {
     return d->externSheetTable;
 }
 
 QString GlobalsSubStreamHandler::nameFromIndex(unsigned index) const
 {
-    if (index < d->nameTable.size())
+    if (index < d->nameTable.size()) {
         return d->nameTable[index];
+    }
     std::cerr << "Invalid index in GlobalsSubStreamHandler::nameFromIndex index=" << index << " size=" << d->externNameTable.size() << std::endl;
     return QString();
 }
 
 QString GlobalsSubStreamHandler::externNameFromIndex(unsigned index) const
 {
-    if (index < d->externNameTable.size())
+    if (index < d->externNameTable.size()) {
         return d->externNameTable[index];
+    }
     std::cerr << "Invalid index in GlobalsSubStreamHandler::externNameFromIndex index=" << index << " size=" << d->externNameTable.size() << std::endl;
     return QString();
 }
@@ -317,13 +329,17 @@ static unsigned convertPatternStyle(unsigned pattern)
 }
 
 // big task: convert Excel XFormat into Swinder::Format
-const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
+const Format *GlobalsSubStreamHandler::convertedFormat(unsigned index) const
 {
     static const Format blankFormat;
-    if (index >= xformatCount()) return &blankFormat;
+    if (index >= xformatCount()) {
+        return &blankFormat;
+    }
 
-    int& formatIt = d->formatCache[index];
-    if (formatIt) return workbook()->format(formatIt-1);
+    int &formatIt = d->formatCache[index];
+    if (formatIt) {
+        return workbook()->format(formatIt - 1);
+    }
     Format format;
 
     XFRecord xf = xformat(index);
@@ -420,7 +436,9 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     alignment.setWrap(xf.isTextWrap());
 
     unsigned angle = xf.rotationAngle();
-    if (angle > 90) angle = 360 - (angle - 90);
+    if (angle > 90) {
+        angle = 360 - (angle - 90);
+    }
     alignment.setRotationAngle(angle);
 
     alignment.setStackedLetters(xf.stackedLetters());
@@ -449,13 +467,13 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     pen.color = d->workbook->color(xf.bottomBorderColor());
     borders.setBottomBorder(pen);
 
-    if(xf.isDiagonalTopLeftBorder()) {
+    if (xf.isDiagonalTopLeftBorder()) {
         pen = convertBorderStyle(xf.diagonalBorderStyle());
         pen.color = d->workbook->color(xf.diagonalBorderColor());
         borders.setTopLeftBorder(pen);
     }
 
-    if(xf.isDiagonalBottomLeftBorder()) {
+    if (xf.isDiagonalBottomLeftBorder()) {
         pen = convertBorderStyle(xf.diagonalBorderStyle());
         pen.color = d->workbook->color(xf.diagonalBorderColor());
         borders.setBottomLeftBorder(pen);
@@ -470,49 +488,51 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     format.setBackground(background);
 
     formatIt = workbook()->addFormat(format) + 1;
-    return workbook()->format(formatIt-1);
+    return workbook()->format(formatIt - 1);
 }
 
-void GlobalsSubStreamHandler::handleRecord(Record* record)
+void GlobalsSubStreamHandler::handleRecord(Record *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     const unsigned type = record->rtti();
-    if (type == BOFRecord::id)
-        handleBOF(static_cast<BOFRecord*>(record));
-    else if (type == BoundSheetRecord::id)
-        handleBoundSheet(static_cast<BoundSheetRecord*>(record));
-    else if (type == ExternBookRecord::id)
-        handleExternBook(static_cast<ExternBookRecord*>(record));
-    else if (type == ExternNameRecord::id)
-        handleExternName(static_cast<ExternNameRecord*>(record));
-    else if (type == ExternSheetRecord::id)
-        handleExternSheet(static_cast<ExternSheetRecord*>(record));
-    else if (type == FilepassRecord::id)
-        handleFilepass(static_cast<FilepassRecord*>(record));
-    else if (type == FormatRecord::id)
-        handleFormat(static_cast<FormatRecord*>(record));
-    else if (type == FontRecord::id)
-        handleFont(static_cast<FontRecord*>(record));
-    else if (type == NameRecord::id)
-        handleName(static_cast<NameRecord*>(record));
-    else if (type == PaletteRecord::id)
-        handlePalette(static_cast<PaletteRecord*>(record));
-    else if (type == SSTRecord::id)
-        handleSST(static_cast<SSTRecord*>(record));
-    else if (type == XFRecord::id)
-        handleXF(static_cast<XFRecord*>(record));
-    else if (type == ProtectRecord::id)
-        handleProtect(static_cast<ProtectRecord*>(record));
-    else if (type == MsoDrawingGroupRecord::id)
-        handleMsoDrawingGroup(static_cast<MsoDrawingGroupRecord*>(record));
-    else if (type == Window1Record::id)
-        handleWindow1(static_cast<Window1Record*>(record));
-    else if (type == PasswordRecord::id)
-        handlePassword(static_cast<PasswordRecord*>(record));
-    else if (type == DateModeRecord::id)
-        handleDateMode(static_cast<DateModeRecord*>(record));
-    else if (type == 0x40) {} //BackupRecord
+    if (type == BOFRecord::id) {
+        handleBOF(static_cast<BOFRecord *>(record));
+    } else if (type == BoundSheetRecord::id) {
+        handleBoundSheet(static_cast<BoundSheetRecord *>(record));
+    } else if (type == ExternBookRecord::id) {
+        handleExternBook(static_cast<ExternBookRecord *>(record));
+    } else if (type == ExternNameRecord::id) {
+        handleExternName(static_cast<ExternNameRecord *>(record));
+    } else if (type == ExternSheetRecord::id) {
+        handleExternSheet(static_cast<ExternSheetRecord *>(record));
+    } else if (type == FilepassRecord::id) {
+        handleFilepass(static_cast<FilepassRecord *>(record));
+    } else if (type == FormatRecord::id) {
+        handleFormat(static_cast<FormatRecord *>(record));
+    } else if (type == FontRecord::id) {
+        handleFont(static_cast<FontRecord *>(record));
+    } else if (type == NameRecord::id) {
+        handleName(static_cast<NameRecord *>(record));
+    } else if (type == PaletteRecord::id) {
+        handlePalette(static_cast<PaletteRecord *>(record));
+    } else if (type == SSTRecord::id) {
+        handleSST(static_cast<SSTRecord *>(record));
+    } else if (type == XFRecord::id) {
+        handleXF(static_cast<XFRecord *>(record));
+    } else if (type == ProtectRecord::id) {
+        handleProtect(static_cast<ProtectRecord *>(record));
+    } else if (type == MsoDrawingGroupRecord::id) {
+        handleMsoDrawingGroup(static_cast<MsoDrawingGroupRecord *>(record));
+    } else if (type == Window1Record::id) {
+        handleWindow1(static_cast<Window1Record *>(record));
+    } else if (type == PasswordRecord::id) {
+        handlePassword(static_cast<PasswordRecord *>(record));
+    } else if (type == DateModeRecord::id) {
+        handleDateMode(static_cast<DateModeRecord *>(record));
+    } else if (type == 0x40) {} //BackupRecord
     else if (type == 0xA) {} //EofRecord
     //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
     else {
@@ -521,9 +541,11 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
 
 }
 
-void GlobalsSubStreamHandler::handleBOF(BOFRecord* record)
+void GlobalsSubStreamHandler::handleBOF(BOFRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     if (record->type() == BOFRecord::Workbook) {
         d->version = record->version();
@@ -532,60 +554,72 @@ void GlobalsSubStreamHandler::handleBOF(BOFRecord* record)
     }
 }
 
-void GlobalsSubStreamHandler::handleBoundSheet(BoundSheetRecord* record)
+void GlobalsSubStreamHandler::handleBoundSheet(BoundSheetRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     switch (record->sheetType()) {
-        case BoundSheetRecord::Chart: // chartsheets are worksheets too
-        case BoundSheetRecord::Worksheet: {
-            // create a new sheet
-            Sheet* sheet = new Sheet(d->workbook);
-            sheet->setName(record->sheetName());
-            sheet->setVisible(record->sheetState() == BoundSheetRecord::Visible);
+    case BoundSheetRecord::Chart: // chartsheets are worksheets too
+    case BoundSheetRecord::Worksheet: {
+        // create a new sheet
+        Sheet *sheet = new Sheet(d->workbook);
+        sheet->setName(record->sheetName());
+        sheet->setVisible(record->sheetState() == BoundSheetRecord::Visible);
 
-            d->workbook->appendSheet(sheet);
+        d->workbook->appendSheet(sheet);
 
-            if(record->sheetType() == BoundSheetRecord::Chart)
-                d->chartSheets << sheet;
+        if (record->sheetType() == BoundSheetRecord::Chart) {
+            d->chartSheets << sheet;
+        }
 
-            // update bof position map
-            unsigned bofPos = record->bofPosition();
-            d->bofMap[ bofPos ] = sheet;
-        } break;
-        default:
-            std::cout << "GlobalsSubStreamHandler::handleBoundSheet: Unhandled type=" << record->sheetType() << std::endl;
-            break;
+        // update bof position map
+        unsigned bofPos = record->bofPosition();
+        d->bofMap[ bofPos ] = sheet;
+    } break;
+    default:
+        std::cout << "GlobalsSubStreamHandler::handleBoundSheet: Unhandled type=" << record->sheetType() << std::endl;
+        break;
     }
 }
 
-void GlobalsSubStreamHandler::handleDateMode(DateModeRecord* record)
+void GlobalsSubStreamHandler::handleDateMode(DateModeRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
-    if (record->isBase1904())
+    if (record->isBase1904()) {
         d->workbook->setBaseDate(QDateTime(QDate(1904, 1, 1)));
-    else
+    } else {
         d->workbook->setBaseDate(QDateTime(QDate(1899, 12, 30)));
+    }
 }
 
-void GlobalsSubStreamHandler::handleExternBook(ExternBookRecord* record)
+void GlobalsSubStreamHandler::handleExternBook(ExternBookRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     d->externBookTable.push_back(record->bookName());
 }
 
-void GlobalsSubStreamHandler::handleExternName(ExternNameRecord* record)
+void GlobalsSubStreamHandler::handleExternName(ExternNameRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     d->externNameTable.push_back(record->externName());
 }
 
-void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)
+void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     d->externSheetTable.resize(record->refCount());
 
@@ -613,10 +647,11 @@ void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)
             // escape string
             QString outp("'");
             for (int idx = 0; idx < result.length(); idx++) {
-                if (result[idx] == '\'')
+                if (result[idx] == '\'') {
                     outp.append(QString("''"));
-                else
+                } else {
                     outp.append(QString(result[idx]));
+                }
             }
             result = outp + QString("'");
         }
@@ -625,9 +660,11 @@ void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)
     }
 }
 
-void GlobalsSubStreamHandler::handleFilepass(FilepassRecord* record)
+void GlobalsSubStreamHandler::handleFilepass(FilepassRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     if (record->encryptionType() == FilepassRecord::RC4Encryption && record->encryptionVersionMajor() == 1) {
         d->decryption = new RC4Decryption(record->salt(), record->encryptedVerifier(), record->encryptedVerifierHash());
@@ -636,16 +673,18 @@ void GlobalsSubStreamHandler::handleFilepass(FilepassRecord* record)
             d->decryption = 0;
             fprintf(stderr, "Invalid password\n");
         } else {
-            d->decryption->setInitialPosition(record->position() + 54+4);
+            d->decryption->setInitialPosition(record->position() + 54 + 4);
         }
     }
 
     d->passwordProtected = true;
 }
 
-void GlobalsSubStreamHandler::handleFont(FontRecord* record)
+void GlobalsSubStreamHandler::handleFont(FontRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     d->fontTable.push_back(*record);
 
@@ -667,20 +706,24 @@ void GlobalsSubStreamHandler::handleFont(FontRecord* record)
     }
 }
 
-void GlobalsSubStreamHandler::handleFormat(FormatRecord* record)
+void GlobalsSubStreamHandler::handleFormat(FormatRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     d->formatsTable[record->index()] = record->formatString();
 }
 
-void GlobalsSubStreamHandler::handleName(NameRecord* record)
+void GlobalsSubStreamHandler::handleName(NameRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     d->nameTable.push_back(record->definedName());
 
-    if(record->m_formula.id() != FormulaToken::Unused) {
+    if (record->m_formula.id() != FormulaToken::Unused) {
         if (record->isBuiltin()) {
             if (record->definedName() == "_FilterDatabase") {
                 if (record->m_formula.id() == FormulaToken::Area3d) {
@@ -696,7 +739,7 @@ void GlobalsSubStreamHandler::handleName(NameRecord* record)
             FormulaTokens tokens;
             tokens.push_back(record->m_formula);
             QString f = decodeFormula(0, 0, false, tokens);
-            if(!f.isEmpty()) {
+            if (!f.isEmpty()) {
                 QString n = record->definedName();
                 d->workbook->setNamedArea(record->sheetIndex(), n, f);
             }
@@ -704,19 +747,24 @@ void GlobalsSubStreamHandler::handleName(NameRecord* record)
     }
 }
 
-void GlobalsSubStreamHandler::handlePalette(PaletteRecord* record)
+void GlobalsSubStreamHandler::handlePalette(PaletteRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     QList<QColor> colorTable;
-    for (unsigned i = 0; i < record->count(); ++i)
+    for (unsigned i = 0; i < record->count(); ++i) {
         colorTable.append(QColor(record->red(i), record->green(i), record->blue(i)));
+    }
     d->workbook->setColorTable(colorTable);
 }
 
-void GlobalsSubStreamHandler::handleSST(SSTRecord* record)
+void GlobalsSubStreamHandler::handleSST(SSTRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     d->stringTable.clear();
     d->formatRunsTable.clear();
@@ -732,38 +780,48 @@ void GlobalsSubStreamHandler::handleSST(SSTRecord* record)
     }
 }
 
-void GlobalsSubStreamHandler::handleXF(XFRecord* record)
+void GlobalsSubStreamHandler::handleXF(XFRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     d->xfTable.push_back(*record);
 }
 
-void GlobalsSubStreamHandler::handleProtect(ProtectRecord* record)
+void GlobalsSubStreamHandler::handleProtect(ProtectRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
 
     if (record->isLocked()) {
         std::cout << "TODO: The workbook is protected but protected workbooks is not supported yet!" << std::endl;
     }
 }
 
-void GlobalsSubStreamHandler::handleWindow1(Window1Record* record)
+void GlobalsSubStreamHandler::handleWindow1(Window1Record *record)
 {
-    d->workbook->setActiveTab( record->itabCur() );
+    d->workbook->setActiveTab(record->itabCur());
 }
 
-void GlobalsSubStreamHandler::handlePassword(PasswordRecord* record)
+void GlobalsSubStreamHandler::handlePassword(PasswordRecord *record)
 {
-    if (!record) return;
-    if (!record->wPassword()) return;
+    if (!record) {
+        return;
+    }
+    if (!record->wPassword()) {
+        return;
+    }
     std::cout << "GlobalsSubStreamHandler::handlePassword passwordHash=" << record->wPassword() << std::endl;
     d->workbook->setPassword(record->wPassword());
 }
 
-void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* record)
+void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord *record)
 {
-    if (!record) return;
+    if (!record) {
+        return;
+    }
     printf("GlobalsSubStreamHandler::handleMsoDrawingGroup\n");
 
     static int validMsoDrawingGroups = 0;
@@ -778,13 +836,12 @@ void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* recor
 
 }
 
-
-QList< Sheet* >& GlobalsSubStreamHandler::chartSheets()
+QList< Sheet * > &GlobalsSubStreamHandler::chartSheets()
 {
     return d->chartSheets;
 }
 
-KoStore* GlobalsSubStreamHandler::store() const
+KoStore *GlobalsSubStreamHandler::store() const
 {
     return d->workbook->store();
 }

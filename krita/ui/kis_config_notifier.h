@@ -50,8 +50,8 @@ Q_SIGNALS:
 private:
     KisConfigNotifier();
     ~KisConfigNotifier();
-    KisConfigNotifier(const KisConfigNotifier&);
-    KisConfigNotifier operator=(const KisConfigNotifier&);
+    KisConfigNotifier(const KisConfigNotifier &);
+    KisConfigNotifier operator=(const KisConfigNotifier &);
 };
 
 #endif // KIS_CONFIG_NOTIFIER_H_

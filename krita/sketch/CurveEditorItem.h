@@ -32,9 +32,9 @@ class CurveEditorItem : public QDeclarativeItem
     Q_PROPERTY(KisCubicCurve curve READ curve WRITE setCurve NOTIFY curveChanged);
     Q_PROPERTY(bool pointSelected READ pointSelected NOTIFY pointSelectedChanged);
 public:
-    CurveEditorItem(QDeclarativeItem* parent = 0);
+    CurveEditorItem(QDeclarativeItem *parent = 0);
     virtual ~CurveEditorItem();
-    virtual void paint(QPainter* p, const QStyleOptionGraphicsItem* o, QWidget* w);
+    virtual void paint(QPainter *p, const QStyleOptionGraphicsItem *o, QWidget *w);
 
     KisCubicCurve curve() const;
     void setCurve(KisCubicCurve curve);
@@ -47,14 +47,14 @@ Q_SIGNALS:
     void pointSelectedChanged();
 
 protected:
-    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
     class Private;
-    Private* d;
+    Private *d;
 };
 
 #endif // CURVEEDITORITEM_H

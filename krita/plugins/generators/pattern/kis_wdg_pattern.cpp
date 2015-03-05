@@ -31,8 +31,8 @@
 #include <kis_pattern_chooser.h>
 #include "ui_wdgpatternoptions.h"
 
-KisWdgPattern::KisWdgPattern(QWidget* parent)
-        : KisConfigWidget(parent)
+KisWdgPattern::KisWdgPattern(QWidget *parent)
+    : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgPatternOptions();
     m_widget->setupUi(this);
@@ -45,20 +45,19 @@ KisWdgPattern::~KisWdgPattern()
     delete m_widget;
 }
 
-
-void KisWdgPattern::setConfiguration(const KisPropertiesConfiguration* config)
+void KisWdgPattern::setConfiguration(const KisPropertiesConfiguration *config)
 {
     KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
     KoPattern *pattern = rserver->resourceByName(config->getString("pattern", "Grid01.pat"));
     if (pattern) {
-       widget()->patternChooser->setCurrentPattern(pattern);
+        widget()->patternChooser->setCurrentPattern(pattern);
     }
 
 }
 
-KisPropertiesConfiguration* KisWdgPattern::configuration() const
+KisPropertiesConfiguration *KisWdgPattern::configuration() const
 {
-    KisFilterConfiguration* config = new KisFilterConfiguration("pattern", 1);
+    KisFilterConfiguration *config = new KisFilterConfiguration("pattern", 1);
     QVariant v;
     v.setValue(widget()->patternChooser->currentResource()->name());
     config->setProperty("pattern", v);
